@@ -60,16 +60,33 @@ canon2gfcc cgr@(M.MGrammar ((a,M.ModMod abm):cms)) =
   adefs = [C.Fun f' (mkType ty) (C.Tr (C.AC f') []) | 
             (f,GFC.AbsFun ty _) <- tree2list (M.jments abm), let f' = i2i f]
   cncs  = [C.Cnc (i2i lang) (concr m) | (lang,M.ModMod m) <- cms]
-  concr mo = optConcrete 
-               [C.Lin (i2i f) (mkTerm tr) | 
-                 (f,GFC.CncFun _ _ tr _) <- tree2list (M.jments mo)]
+  concr mo = cats mo ++ 
+               optConcrete 
+                 [C.Lin (i2i f) (mkTerm tr) | 
+                   (f,GFC.CncFun _ _ tr _) <- tree2list (M.jments mo)]
+  cats mo = [C.Lin (i2ic c) (mkCType ty) | 
+                   (c,GFC.CncCat ty _ _) <- tree2list (M.jments mo)]
 
 i2i :: Ident -> C.CId
 i2i (IC c) = C.CId c
+i2ic (IC c) = C.CId ("__" ++ c) -- for category symbols
 
 mkType :: A.Type -> C.Type
 mkType t = case GM.catSkeleton t of
   Ok (cs,c) -> C.Typ (map (i2i . snd) cs) (i2i $ snd c)
+
+mkCType :: CType -> C.Term
+mkCType t = case t of
+  TInts i      -> C.C i
+  -- record parameter alias - created in gfc preprocessing
+  RecType [Lbg (L (IC "_")) i, Lbg (L (IC "__")) t] -> C.RP (mkCType i) (mkCType t)
+  RecType rs     -> C.R [mkCType t | Lbg _ t <- rs]
+  Table pt vt -> C.R $ replicate (getI (mkCType pt)) $ mkCType vt
+  TStr     -> C.S []
+ where
+  getI pt = case pt of
+    C.C i -> fromInteger i
+    C.RP i _ -> getI i
 
 mkTerm :: Term -> C.Term
 mkTerm tr = case tr of
@@ -156,8 +173,10 @@ canon2canon = recollect . map cl2cl . repartition where
       _ -> (c,m)
     j2j (f,j) = case j of
       GFC.CncFun x y tr z -> (f,GFC.CncFun x y (t2t tr) z)
+      GFC.CncCat ty x y   -> (f,GFC.CncCat (ty2ty ty) x y)
       _ -> (f,j)
     t2t = term2term cg pv
+    ty2ty = type2type cg pv
     pv@(labels,untyps,typs) = paramValues cg
     tr = trace $
      (unlines [A.prt c ++ "." ++ unwords (map A.prt l) +++ "=" +++ show i  | 
@@ -218,6 +237,25 @@ paramValues cgr = (labels,untyps,typs) where
        RecType rs -> [rs]
        Table _ t  -> getRec t
        _ -> []
+
+type2type :: CanonGrammar -> ParamEnv -> CType -> CType
+type2type cgr env@(labels,untyps,typs) ty = case ty of
+  RecType rs ->
+    let
+      rs' = [Lbg (mkLab i) (t2t t) | 
+               (i,Lbg l t) <- zip [0..] (unlockTyp rs)]
+    in if (any isStrType [t | Lbg _ t <- rs])
+      then RecType rs'
+      else RecType [Lbg (L (IC "_")) (look ty), Lbg (L (IC "__")) (RecType rs')]
+
+  Table pt vt -> Table (t2t pt) (t2t vt)
+  Cn _ -> look ty
+  _ -> ty
+ where
+   t2t = type2type cgr env
+   look ty = TInts $ toInteger $ case Map.lookup ty typs of
+     Just vs -> length $ Map.assocs vs
+     _ -> trace ("unknown partype " ++ show ty) 1 ---- 66669
 
 term2term :: CanonGrammar -> ParamEnv -> Term -> Term
 term2term cgr env@(labels,untyps,typs) tr = case tr of
@@ -288,8 +326,6 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
      _ | tr == x -> t
      _ -> composSafeOp (mkBranch x t) tr     
 
-   mkLab k = L (IC ("_" ++ show k))
-
    valNum tr = maybe (tryPerm tr) EInt $ Map.lookup tr untyps
     where
       tryPerm tr = case tr of
@@ -320,15 +356,18 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
             _ -> True ---- TODO?
        _ -> True
      _ -> True ----
-   isStrType ty = case ty of
-     TStr -> True
-     RecType ts -> any isStrType [t | Lbg _ t <- ts]
-     Table _ t -> isStrType t
-     _ -> False
    trmAss (Ass _ t) = t
 
    --- this is mainly needed for parameter record projections
    comp t = errVal t $ Look.ccompute cgr [] t
+
+isStrType ty = case ty of
+     TStr -> True
+     RecType ts -> any isStrType [t | Lbg _ t <- ts]
+     Table _ t -> isStrType t
+     _ -> False
+
+mkLab k = L (IC ("_" ++ show k))
 
 -- remove lock fields; in fact, any empty records and record types
 unlock = filter notlock where
