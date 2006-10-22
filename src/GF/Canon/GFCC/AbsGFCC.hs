@@ -21,12 +21,10 @@ data Concrete =
 
 data AbsDef =
    Fun CId Type Exp
- | AFl CId String
   deriving (Eq,Ord,Show)
 
 data CncDef =
    Lin CId Term
- | CFl CId String
   deriving (Eq,Ord,Show)
 
 data Type =
@@ -57,6 +55,8 @@ data Term =
  | W String Term
  | RP Term Term
  | TM
+ | L CId Term
+ | BV CId
   deriving (Eq,Ord,Show)
 
 data Tokn =

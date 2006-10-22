@@ -30,6 +30,9 @@ W.   Term     ::= "(" String "+" Term ")" ; -- prefix + suffix table
 RP.  Term     ::= "(" Term "@" Term ")";    -- record parameter alias
 TM.  Term     ::= "?" ;                     -- lin of metavariable
 
+L.   Term     ::= "(" CId "->" Term ")" ;   -- lambda abstracted table
+BV.  Term     ::= "#" CId ;                 -- lambda-bound variable
+
 KS.  Tokn     ::= String ;
 KP.  Tokn     ::= "[" "pre" [String] "[" [Variant] "]" "]" ;
 Var. Variant  ::= [String] "/" [String] ;
