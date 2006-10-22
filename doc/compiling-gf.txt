@@ -1,13 +1,23 @@
 Compiling GF
 Aarne Ranta
+Proglog meeting, 1 November 2006
+
+% to compile: txt2tags -thtml compiling-gf.txt ; htmls compiling-gf.html
+
+%!target:html
+%!postproc(html): #NEW <!-- NEW -->
+
+#NEW
 
 ==The compilation task==
 
 GF is a grammar formalism, i.e. a special purpose programming language
 for writing grammars.
 
-Cf: BNF, YACC, Happy (grammars for programming languages); 
-PATR, HPSG, LFG (grammars for natural languages).
+Other grammar formalisms: 
+- BNF, YACC, Happy (grammars for programming languages); 
+- PATR, HPSG, LFG (grammars for natural languages).
+
 
 The grammar compiler prepares a GF grammar for two computational tasks:
 - linearization: take syntax trees to strings
@@ -15,18 +25,39 @@ The grammar compiler prepares a GF grammar for two computational tasks:
 
 
 The grammar gives a declarative description of these functionalities,
-preferably on a high abstraction level enhancing grammar writing
+on a high abstraction level that helps grammar writing
 productivity.
 
+Some of the ideas in GF and experience gained from it 
+can be useful for other special-purpose functional languages.
+
+#NEW
 
 ==Characteristics of GF language==
 
 Functional language with types, both built-in and user-defined.
+```
+  Str : Type
 
-Pattern matching and higher-order functions.
+  param Number = Sg | Pl
+
+  param AdjForm = ASg Gender | APl
+
+  Noun : Type = {s : Number => Str ; g : Gender}
+```
+Pattern matching.
+```
+  svart_A = table {
+    ASg _ => "svart" ;
+    _ => "svarta"
+    }
+```
+Higher-order functions.
 
 Module system reminiscent of ML (signatures, structures, functors).
 
+
+#NEW
 
 ==GF vs. Haskell==
 
@@ -43,17 +74,19 @@ Some things that GF hasn't:
 - classes, polymorphism
 
 
+#NEW
+
 ==GF vs. most linguistic grammar formalisms==
 
-GF separates abstract syntax from concrete syntax
+GF separates abstract syntax from concrete syntax.
 
-GF has a module system with separate compilation
+GF has a module system with separate compilation.
 
-GF is generation-oriented (as opposed to parsing)
+GF is generation-oriented (as opposed to parsing).
 
-GF has unidirectional matching (as opposed to unification)
+GF has unidirectional matching (as opposed to unification).
 
-GF has a static type system (as opposed to a type-free universe)
+GF has a static type system (as opposed to a type-free universe).
 
 "I was - and I still am - firmly convinced that a program composed
 out of statically type-checked parts is more likely to faithfully
@@ -62,11 +95,13 @@ weakly-typed interfaces or dynamically-checked interfaces."
 (B. Stroustrup, 1994, p. 107)
 
 
+#NEW
+
 ==The computation model==
 
 An abstract syntax defines a free algebra of trees (using
-dependent types, recursion, higher-order abstract syntax: GF has a
-complete Logical Framework).
+dependent types, recursion, higher-order abstract syntax: 
+GF includes a complete Logical Framework).
 
 A concrete syntax defines a homomorphism (compositional mapping)
 from the abstract syntax to a system of tuples of strings.
@@ -76,6 +111,8 @@ The homomorphism can as such be used as linearization algorithm.
 The parsing problem can be reduced to that of MPCFG (Multiple
 Parallel Context Free Grammars), see P. Ljunglöf's thesis (2004).
 
+
+#NEW
 
 ==The compilation task, again==
 
@@ -97,6 +134,8 @@ Moreover, we generate supplementary formats such as grammars
 required by various speech recognition systems.
 
 
+#NEW
+
 ==An overview of compilation phases==
 
 Legend:
@@ -110,18 +149,22 @@ Legend:
 [gf-compiler.png]
 
 
+#NEW
+
 ==Using the compiler==
 
-Batch mode (cf. GHC)
+Batch mode (cf. GHC).
 
 Interactive mode, building the grammar incrementally from
 different files, with the possibility of testing them
-(cf. GHCI)
+(cf. GHCI).
 
 The interactive mode was first, built on the model of ALF-2
 (L. Magnusson), and there was no file output of compiled
 grammars.
 
+
+#NEW
 
 ==Modules and separate compilation==
 
@@ -137,10 +180,12 @@ details (although it would be beneficial to make explicit the
 rules that are right now just in the implementation...)
 
 Separate compilation is //extremely important// when developing
-big grammars, especially when using grammar libraries. Compiling
+big grammars, especially when using grammar libraries. Example: compiling
 the GF resource grammar library takes 5 minutes, whereas reading
 in the compiled image takes 10 seconds.
 
+
+#NEW
 
 ==Techniques used==
 
@@ -149,13 +194,16 @@ This has helped to make the formats portable.
 
 "Almost compositional functions" (``composOp``) are used in
 many compiler passes, making them easier to write and understand. 
-A grep on the sources reveals 40 uses (outside the definition itself).
+A grep on the sources reveals 40 uses (outside the definition 
+of ``composOp`` itself).
 
 The key algorithmic ideas are
 - type-driven partial evaluation in GF-to-GFC generation
 - common subexpression elimination as back-end optimization
 - some ideas in GFC-to-MCFG encoding
 
+
+#NEW
 
 ==Type-driven partial evaluation==
 
@@ -180,10 +228,253 @@ and library functions.
 The compilation technique proceeds as follows:
 - use eta-expansion on ``t`` to determine the canonical form of the term
 ```
-  \ <C1>, ...., <Cn> -> (t <C1> .... <Cn>)
+  \ $C1, ...., $Cn -> (t $C1 .... $Cn)
 ```
-with unique variables ``<C1> .... <Cn>`` for the arguments; repeat this
+with unique variables ``$C1 .... $Cn`` for the arguments; repeat this
 inside the term for records and tables
 - evaluate the resulting term using the computation rules of GF
-- what remains is a canonical term with ``<C1> .... <Cn>`` the only
+- what remains is a canonical term with ``$C1 .... $Cn`` the only
 variables (the run-time input of the linearization function)
+
+
+#NEW
+
+==Eta-expanding records and tables==
+
+For records that are valied via subtyping, eta expansion 
+eliminates superfluous fields:
+```
+  {r1 = t1 ; r2 = t2} : {r1 : T1}  ---->  {r1 = t1}
+```
+For tables, the effect is always expansion, since
+pattern matching can be used to represent tables
+compactly:
+```
+  table {n => "fish"} : Number => Str   --->
+
+  table {
+    Sg => "fish" ;
+    Pl => "fish"
+    }
+```
+This can be helped by back-end optimizations (see below).
+
+
+#NEW
+
+==Eliminating functions==
+
+"Everything is finite": parameter types, records, tables;
+finite number of string tokens per grammar.
+
+But "inifinite types" such as function types are useful when
+writing grammars, to enable abstractions.
+
+Since function types do not appear in linearization types,
+we want functions to be eliminated from linearization terms.
+
+This is similar to the **subformula property** in logic.
+Also the main problem is similar: function depending on
+a run-time variable,
+```
+  (table {P => f ; Q = g} ! x) a
+```
+This is not a redex, but we can make it closer to one by moving
+the application inside the table,
+```
+  table {P => f a ; Q = g a} ! x
+```
+The transformation is the same as Prawitz's (1965) elimination
+of maximal segments:
+```
+                                            A           B
+                                          C -> D  C   C -> D  C
+           A       B                      ---------   ---------
+  A v B  C -> D  C -> D            A v B       D          D
+  ---------------------     ===>   -------------------------
+      C -> D             C                    D
+      --------------------
+              D
+```
+
+
+
+#NEW
+
+==Size effects of partial evaluation==
+
+Irrelevant table branches are thrown away, which can reduce the size.
+
+But, since tables are expanded and auxiliary functions are inlined,
+the size can grow exponentially.
+
+How can we keep the first and eliminate the second?
+
+
+#NEW
+
+==Parametrization of tables==
+
+Algorithm: for each branch in a table, consider replacing the
+argument by a variable:
+```
+  table {             table {
+    P => t ;    --->    x => t[P->x] ;
+    Q => t              x => t[Q->x]
+    }                   }
+```
+If the resulting branches are all equal, you can replace the table
+by a lambda abstract
+```
+  \\x => t[P->x]
+```
+If each created variable ``x`` is unique in the grammar, computation
+with the lambda abstract is efficient.
+
+
+
+#NEW
+
+==Common subexpression elimination==
+
+Algorithm: 
++ Go through all terms and subterms in a module, creating
+  a symbol table mapping terms to the number of occurrences.
++ For each subterm appearing at least twice, create a fresh
+  constant defined as that subterm.
++ Go through all rules (incl. rules for the new constants),
+  replacing largest possible subterms with such new constants.
+
+
+This algorithm, in a way, creates the strongest possible abstractions.
+
+In general, the new constants have open terms as definitions.
+But since all variables (and constants) are unique, they can
+be computed by simple replacement.
+
+
+#NEW
+
+==Course-of-values tables==
+
+By maintaining a canonical order of parameters in a type, we can
+eliminate the left hand sides of branches.
+```
+  table {              table T [
+    P => t ;    --->     P ;
+    Q => u               Q
+    }                    ]
+```
+The treatment is similar to ``Enum`` instances in Haskell.
+
+Actually, all parameter types could be translated to
+initial segments of integers. This is done in the GFCC format.
+
+
+#NEW
+
+==Size effects of optimizations==
+
+Example: the German resource grammar
+``LangGer``
+
+|| optimization |  lines |  characters |  size % | blow-up |
+| none       |  5394 |  3208435 |   100 |  25 |
+| all        |  5394 |   750277 |    23 |   6 |
+| none_subs  |  5772 |  1290866 |    40 |  10 |
+| all_subs   |  5644 |   414119 |    13 |   3 |
+| gfcc       |  3279 |   190004 |     6 |   1.5 |
+| gf source  |  3976 |   121939 |     4 |   1 |
+
+
+Optimization "all" means parametrization + course-of-values.
+
+The source code size is an estimate, since it includes
+potentially irrelevant library modules.
+
+The GFCC format is not reusable in separate compilation.
+
+
+
+#NEW
+
+==The shared prefix optimization==
+
+This is currently performed in GFCC only.
+
+The idea works for languages that have a rich morphology
+based on suffixes. Then we can replace a course of values
+with a pair of a prefix and a suffix set:
+```
+  ["apa", "apan", "apor", "aporna"] ---> 
+  ("ap" + ["a", "an", "or", "orna"])
+```
+The real gain comes via common subexpression elimination:
+```
+  _34 = ["a", "an", "or", "orna"]
+  apa = ("ap" + _34)
+  blomma = ("blomm" + _34)
+  flicka = ("flick" + _34)
+```
+Notice that it now matters a lot how grammars are written.
+For instance, if German verbs are treated as a one-dimensional
+table,
+```
+  ["lieben", "liebe", "liebst", ...., "geliebt", "geliebter",...]
+```
+no shared prefix optimization is possible. A better form is
+separate tables for non-"ge" and "ge" forms:
+```
+  [["lieben", "liebe", "liebst", ....], ["geliebt", "geliebter",...]]
+```
+
+
+#NEW
+
+==Reuse of grammars as libraries==
+
+The idea of resource grammars: take care of all aspects of
+surface grammaticality (inflection, agreement, word order).
+
+Reuse in application grammar: via translations
+```
+  cat C          --->  oper C : Type = T
+  lincat C = T 
+
+  fun f : A      --->  oper f : A* = t
+  lin f = t 
+```
+The user only needs to know the type signatures (abstract syntax).
+
+However, this does not quite guarantee grammaticality, because
+different categories can have the same lincat:
+```
+  lincat Conj = {s : Str}
+  lincat Adv  = {s : Str}
+```
+Thus someone may by accident use "and" as an adverb!
+
+
+#NEW
+
+==Forcing the type checker to act as a grammar checker==
+
+We just have to make linearization types unique for each category.
+
+The technique is reminiscent of Haskell's ``newtype`` but uses
+records instead: we add **lock fields** e.g.
+```
+  lincat Conj = {s : Str ; lock_Conj : {}}
+  lincat Adv  = {s : Str ; lock_Adv  : {}}
+```
+Thanks to record subtyping, the translation is simple:
+```
+  fun f : C1 -> ... -> Cn -> C        
+  lin f = t
+
+                  --->
+
+  oper f : C1* -> ... -> Cn* -> C* = 
+    \x1,...,xn -> (t x1 ... xn) ** {lock_C = {}}
+```
+
