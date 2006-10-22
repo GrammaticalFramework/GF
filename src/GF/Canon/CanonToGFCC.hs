@@ -97,6 +97,10 @@ mkTerm tr = case tr of
   -- ordinary record
   R rs     -> C.R [mkTerm t | Ass _ t <- rs]
   P t l    -> C.P (mkTerm t) (C.C (mkLab l))
+
+  LI x     -> C.BV $ i2i x
+  T _ [Cas [PV x] t] -> C.L (i2i x) (mkTerm t)
+
   T _ cs   -> error $ "improper optimization for gfcc in" +++ A.prt tr
   V _ cs   -> C.R [mkTerm t | t <- cs]
   S t p    -> C.P (mkTerm t) (mkTerm p)
@@ -268,6 +272,9 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
       then R rs'
       else R [Ass (L (IC "_")) (mkValCase tr), Ass (L (IC "__")) (R rs')]
   P t l    -> r2r tr
+
+  T ti [Cas ps@[PV _] t] -> T ti [Cas ps (t2t t)]
+
   T _ cs0  -> case expandLinTables cgr tr of  -- normalize order of cases
     Ok (T ty cs) -> checkCases cs $ V ty [t2t t | Cas _ t <- cs]
     _ -> K (KS (A.prt tr +++ prtTrace tr "66668"))
@@ -338,7 +345,7 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
         FV ts -> ts
         _ -> [tr]
       valNumFV ts = case ts of
-        [tr] -> K (KS (A.prt tr +++ prtTrace tr "66667"))
+        [tr] -> EInt 66667 ----K (KS (A.prt tr +++ prtTrace tr "66667"))
         _ -> FV $ map valNum ts
    isStr tr = case tr of
      Par _ _ -> False
@@ -398,7 +405,7 @@ optTerm tr = case tr of
     C.R ts@(_:_:_) | all isK ts -> mkSuff $ optToks [s | C.K (C.KS s) <- ts]
     C.R ts  -> C.R $ map optTerm ts
     C.P t v -> C.P (optTerm t) v
---    C.A x t -> C.A x (optTerm t)
+    C.L x t -> C.L x (optTerm t)
     _ -> tr
  where
   optToks ss = prf : suffs where
@@ -434,12 +441,12 @@ addSubexpConsts tree lins =
    recomp f t = case Map.lookup t tree of
      Just (_,id) | fid id /= f -> C.F $ fid id -- not to replace oper itself
      _ -> case t of
-       C.R ts  -> C.R $ map (recomp f) ts
-       C.S ts  -> C.S $ map (recomp f) ts
-       C.W s t -> C.W s (recomp f t)
-       C.P t p -> C.P (recomp f t) (recomp f p)
+       C.R ts   -> C.R $ map (recomp f) ts
+       C.S ts   -> C.S $ map (recomp f) ts
+       C.W s t  -> C.W s (recomp f t)
+       C.P t p  -> C.P (recomp f t) (recomp f p)
        C.RP t p -> C.RP (recomp f t) (recomp f p)
---       C.A x t -> C.A x (recomp f t)
+       C.L x t  -> C.L x (recomp f t)
        _ -> t
    fid n = C.CId $ "_" ++ show n
    list = Map.toList tree
@@ -466,6 +473,10 @@ collectSubterms t = case t of
     mapM collectSubterms ts
     add t
   C.W s u -> do
+    collectSubterms u
+    add t
+  C.P p u -> do
+    collectSubterms p
     collectSubterms u
     add t
   _ -> return ()

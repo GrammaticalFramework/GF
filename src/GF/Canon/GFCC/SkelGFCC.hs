@@ -37,13 +37,11 @@ transConcrete x = case x of
 transAbsDef :: AbsDef -> Result
 transAbsDef x = case x of
   Fun cid type' exp  -> failure x
-  AFl cid str  -> failure x
 
 
 transCncDef :: CncDef -> Result
 transCncDef x = case x of
   Lin cid term  -> failure x
-  CFl cid str  -> failure x
 
 
 transType :: Type -> Result
@@ -78,6 +76,8 @@ transTerm x = case x of
   W str term  -> failure x
   RP term0 term  -> failure x
   TM  -> failure x
+  L cid term  -> failure x
+  BV cid  -> failure x
 
 
 transTokn :: Tokn -> Result

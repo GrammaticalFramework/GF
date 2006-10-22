@@ -29,8 +29,8 @@ render d = rend 0 (map ($ "") $ d []) "" where
     t  : "]" :ts -> showString t . showChar ']' . rend i ts
     t        :ts -> space t . rend i ts
     _            -> id
-  new i   = showChar '\n' . replicateS (0) (showChar ' ') . dropWhile isSpace
-  space t = showString t . id ----(\s -> if null s then "" else (' ':s))
+  new i   = showChar '\n' . replicateS (2*i) (showChar ' ') . dropWhile isSpace
+  space t = showString t ---- . (\s -> if null s then "" else (' ':s))
 
 parenth :: Doc -> Doc
 parenth ss = doc (showChar '(') . ss . doc (showChar ')')
@@ -99,7 +99,7 @@ instance Print Header where
 
 instance Print Abstract where
   prt i e = case e of
-   Abs absdefs -> prPrec i 0 (concatD [doc (showString "abstract") , doc (showString "{") , prt 0 absdefs , doc (showString "}")])
+   Abs absdefs -> prPrec i 0 (concatD [doc (showString "abstract ") , doc (showString "{") , prt 0 absdefs , doc (showString "}")])
 
 
 instance Print Concrete where
@@ -113,7 +113,6 @@ instance Print Concrete where
 instance Print AbsDef where
   prt i e = case e of
    Fun cid type' exp -> prPrec i 0 (concatD [prt 0 cid , doc (showString ":") , prt 0 type' , doc (showString "=") , prt 0 exp])
-   AFl cid str -> prPrec i 0 (concatD [doc (showString "%") , prt 0 cid , doc (showString "=") , prt 0 str])
 
   prtList es = case es of
    [] -> (concatD [])
@@ -122,7 +121,6 @@ instance Print AbsDef where
 instance Print CncDef where
   prt i e = case e of
    Lin cid term -> prPrec i 0 (concatD [prt 0 cid , doc (showString "=") , prt 0 term])
-   CFl cid str -> prPrec i 0 (concatD [doc (showString "%") , prt 0 cid , doc (showString "=") , prt 0 str])
 
   prtList es = case es of
    [] -> (concatD [])
@@ -163,6 +161,8 @@ instance Print Term where
    W str term -> prPrec i 0 (concatD [doc (showString "(") , prt 0 str , doc (showString "+") , prt 0 term , doc (showString ")")])
    RP term0 term -> prPrec i 0 (concatD [doc (showString "(") , prt 0 term0 , doc (showString "@") , prt 0 term , doc (showString ")")])
    TM  -> prPrec i 0 (concatD [doc (showString "?")])
+   L cid term -> prPrec i 0 (concatD [doc (showString "(") , prt 0 cid , doc (showString "->") , prt 0 term , doc (showString ")")])
+   BV cid -> prPrec i 0 (concatD [doc (showString "#") , prt 0 cid])
 
   prtList es = case es of
    [] -> (concatD [])
