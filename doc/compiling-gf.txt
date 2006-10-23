@@ -54,7 +54,13 @@ Pattern matching.
 ```
 Higher-order functions.
 
+Dependent types.
+
 Module system reminiscent of ML (signatures, structures, functors).
+```
+
+```
+
 
 
 #NEW
@@ -108,7 +114,12 @@ from the abstract syntax to a system of tuples of strings.
 
 The homomorphism can as such be used as linearization algorithm.
 
-The parsing problem can be reduced to that of MPCFG (Multiple
+It is a functional program, but a restricted one, since it works 
+in the end on finite data structures only.
+
+GFC = Canonical GF: the "machine code" of GF.
+
+The parsing problem of GFC can be reduced to that of MPCFG (Multiple
 Parallel Context Free Grammars), see P. Ljunglöf's thesis (2004).
 
 
@@ -116,8 +127,7 @@ Parallel Context Free Grammars), see P. Ljunglöf's thesis (2004).
 
 ==The compilation task, again==
 
-1. From a GF source grammar, derive a canonical GF grammar 
-(a much simpler format)
+1. From a GF source grammar, derive a canonical GF grammar.
 
 2. From the canonical GF grammar derive an MPCFG grammar
 
@@ -187,7 +197,76 @@ in the compiled image takes 10 seconds.
 
 #NEW
 
+==Module dependencies and recompilation==
+
+(For later use, not for the Proglog talk)
+
+For each module M, there are 3 kinds of files:
+- M.gf, source file
+- M.gfc, compiled file ("object file")
+- M.gfr, type-checked and optimized source file (for resource modules only)
+
+
+The compiler reads gf files and writes gfc files (and gfr files if appropriate)
+
+The Main module is the one used as argument when calling GF.
+
+A module M (immediately) depends on the module K, if either
+- M is a concrete of K
+- M is an instance of K
+- M extends K
+- M opens K
+- M is a completion of K with something
+- M is a completion of some module with K instantiated with something
+
+
+A module M (transitively) depends on the module K, if either
+- M immediately depends on K
+- M depends on some L such that L immediately depends on K
+
+
+Immediate dependence is readable from the module header without parsing
+the whole module.
+
+The compiler reads recursively the headers of all modules that Main depends on.
+
+These modules are arranged in a dependency graph, which is checked to be acyclic.
+
+To decide whether a module M has to be compiled, do:
++ Get the time stamps t() of M.gf and M.gfc (if a file doesn't exist, its
+  time is minus infinity).
++ If t(M.gf) > t(M.gfc), M must be compiled.
++ If M depends on K and K must be compiled, then M must be compiled.
++ If M depends on K and t(K.gf) > t(M.gfc), then M must be compiled.
+
+
+Decorate the dependency graph by information on whether the gf or the gfc (and gfr)
+format is to be read.
+
+Topologically sort the decorated graph, and read each file in the chosen format.
+
+The gfr file is generated for these module types only:
+- resource
+- instance
+
+
+When reading K.gfc, also K.gfr is read if some M depending on K has to be compiled.
+In other cases, it is enough to read K.gfc.
+
+In an interactive GF session, some modules may be in memory already.
+When read to the memory, each module M is given time stamp t(M.m).
+The additional rule now is:
+- If M.gfc is to be read, and t(M.m) > t(M.gfc), don't read M.gfc.
+
+
+
+
+#NEW
+
 ==Techniques used==
+
+The compiler is written in Haskell, using some C foreign function calls
+(readline, killing threads).
 
 BNFC is used for generating both the parsers and printers.
 This has helped to make the formats portable.
