@@ -25,11 +25,9 @@ The grammar compiler prepares a GF grammar for two computational tasks:
 
 
 The grammar gives a declarative description of these functionalities,
-on a high abstraction level that helps grammar writing
+on a high abstraction level that improves grammar writing
 productivity.
 
-Some of the ideas in GF and experience gained from it 
-can be useful for other special-purpose functional languages.
 
 #NEW
 
@@ -557,3 +555,17 @@ Thanks to record subtyping, the translation is simple:
     \x1,...,xn -> (t x1 ... xn) ** {lock_C = {}}
 ```
 
+#NEW
+
+==Things to do==
+
+Better compression of gfc file format.
+
+Type checking of dependent-type pattern matching in abstract syntax.
+
+Compilation-related modules that need rewriting
+- ``ReadFiles``: clarify the logic of dependencies
+- ``Compile``: clarify the logic of what to do with each module
+- ``Compute``: make the evaluation more efficient
+- ``Parsing/*``, ``OldParsing/*``, ``Conversion/*``: reduce the number
+  of parser formats and algorithms
