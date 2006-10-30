@@ -28,6 +28,10 @@ The grammar gives a declarative description of these functionalities,
 on a high abstraction level that improves grammar writing
 productivity.
 
+For efficiency, the grammar is compiled to lower-level formats.
+
+Type checking is another essential compilation phase.
+
 
 #NEW
 
@@ -53,11 +57,41 @@ Pattern matching.
 Higher-order functions.
 
 Dependent types.
-
-Module system reminiscent of ML (signatures, structures, functors).
+```
+  flip : (a, b, c : Type) -> (a -> b -> c) -> b -> a -> c = 
+    \_,_,_,f,y,x -> f x y ;
 ```
 
+
+#NEW
+
+==The module system of GF==
+
+Main division: abstract syntax and concrete syntax
 ```
+  abstract Greeting = {
+    cat Greet ;
+    fun Hello : Greet ;
+  }
+
+  concrete GreetingEng of Greeting = {
+    lincat Greet = {s : Str} ;
+    lin Hello = {s = "hello"} ;
+  }
+
+  concrete GreetingIta of Greeting = {
+    param Politeness = Familiar | Polite ;
+    lincat Greet = {s : Politeness => Str} ;
+    lin Hello = {s = table {
+      Familiar => "ciao" ;
+      Polite => "buongiorno"
+    } ;
+  }
+```
+Other features of the module system:
+- extension and opening
+- parametrized modules (cf. ML: signatures, structures, functors)
+
 
 
 
@@ -110,7 +144,7 @@ GF includes a complete Logical Framework).
 A concrete syntax defines a homomorphism (compositional mapping)
 from the abstract syntax to a system of tuples of strings.
 
-The homomorphism can as such be used as linearization algorithm.
+The homomorphism can as such be used as linearization function.
 
 It is a functional program, but a restricted one, since it works 
 in the end on finite data structures only.
@@ -136,7 +170,7 @@ The MPCFG grammar can be used for parsing, with (unbounded)
 polynomial time complexity (w.r.t. the size of the string).
 
 For these target formats, we have also built interpreters in
-different programming languages (C++, Haskell, Java, Prolog).
+different programming languages (C, C++, Haskell, Java, Prolog).
 
 Moreover, we generate supplementary formats such as grammars
 required by various speech recognition systems.
@@ -183,9 +217,7 @@ built for sets of modules: GFCC and the parser formats.)
 When the grammar compiler is called, it has a main module as its
 argument. It then builds recursively a dependency graph with all
 the other modules, and decides which ones must be recompiled.
-The behaviour is rather similar to GHC, and we don't go into
-details (although it would be beneficial to make explicit the
-rules that are right now just in the implementation...)
+The behaviour is rather similar to GHC.
 
 Separate compilation is //extremely important// when developing
 big grammars, especially when using grammar libraries. Example: compiling
@@ -271,7 +303,7 @@ This has helped to make the formats portable.
 
 "Almost compositional functions" (``composOp``) are used in
 many compiler passes, making them easier to write and understand. 
-A grep on the sources reveals 40 uses (outside the definition 
+A ``grep`` on the sources reveals 40 uses (outside the definition 
 of ``composOp`` itself).
 
 The key algorithmic ideas are
@@ -361,8 +393,8 @@ the application inside the table,
 ```
   table {P => f a ; Q = g a} ! x
 ```
-The transformation is the same as Prawitz's (1965) elimination
-of maximal segments:
+This transformation is the same as Prawitz's (1965) elimination
+of maximal segments in natural deduction:
 ```
                                             A           B
                                           C -> D  C   C -> D  C
@@ -397,7 +429,7 @@ argument by a variable:
 ```
   table {             table {
     P => t ;    --->    x => t[P->x] ;
-    Q => t              x => t[Q->x]
+    Q => u              x => u[Q->x]
     }                   }
 ```
 If the resulting branches are all equal, you can replace the table
@@ -408,26 +440,6 @@ by a lambda abstract
 If each created variable ``x`` is unique in the grammar, computation
 with the lambda abstract is efficient.
 
-
-
-#NEW
-
-==Common subexpression elimination==
-
-Algorithm: 
-+ Go through all terms and subterms in a module, creating
-  a symbol table mapping terms to the number of occurrences.
-+ For each subterm appearing at least twice, create a fresh
-  constant defined as that subterm.
-+ Go through all rules (incl. rules for the new constants),
-  replacing largest possible subterms with such new constants.
-
-
-This algorithm, in a way, creates the strongest possible abstractions.
-
-In general, the new constants have open terms as definitions.
-But since all variables (and constants) are unique, they can
-be computed by simple replacement.
 
 
 #NEW
@@ -450,6 +462,27 @@ initial segments of integers. This is done in the GFCC format.
 
 #NEW
 
+==Common subexpression elimination==
+
+Algorithm: 
++ Go through all terms and subterms in a module, creating
+  a symbol table mapping terms to the number of occurrences.
++ For each subterm appearing at least twice, create a fresh
+  constant defined as that subterm.
++ Go through all rules (incl. rules for the new constants),
+  replacing largest possible subterms with such new constants.
+
+
+This algorithm, in a way, creates the strongest possible abstractions.
+
+In general, the new constants have open terms as definitions.
+But since all variables (and constants) are unique, they can
+be computed by simple replacement.
+
+
+
+#NEW
+
 ==Size effects of optimizations==
 
 Example: the German resource grammar
@@ -467,7 +500,7 @@ Example: the German resource grammar
 Optimization "all" means parametrization + course-of-values.
 
 The source code size is an estimate, since it includes
-potentially irrelevant library modules.
+potentially irrelevant library modules, and comments.
 
 The GFCC format is not reusable in separate compilation.
 
