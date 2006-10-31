@@ -434,7 +434,8 @@ oper
     lek + "a"  => conj1 leker ; --- bw compat
     lek + "ar" => conj1 (lek + "a") ;
     lek + "er" => conj2 (lek + "a") ;
-    bo  + "r"  => conj3 bo
+    bo  + "r"  => conj3 bo ;
+    _          => conj3 leker
     } ;
 
   mk2V leka lekte = case <leka,lekte> of {
