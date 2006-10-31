@@ -275,3 +275,9 @@ VerbGerman.UseCompl. Want to say "ich bin nicht alt" and "ich liebe sie nicht".
 Added inherent Case to RS, RCl and Gender to Agr in order to handle it clefts
 properly. (In the meantime, the module IdiomGer had required some incremental
 work.)
+
+26/6
+
+The German resource implementation is considered complete, and it is released
+in the resource grammar version 1.0.
+
