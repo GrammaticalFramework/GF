@@ -1,0 +1,4 @@
+abstract BigSwedishAbs = 
+  SwedishAbs,
+  BigLexSweAbs
+  ** {} ;
