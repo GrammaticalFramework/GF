@@ -967,15 +967,16 @@ The structure looks like this.
 ==Current status==
 
  | Language  | v0.6 | v0.9 | v1.0 | Paradigms | Lexicon | Verbs |
- | Danish    | -    | X    | -    | -         | -       | -
+ | Arabic    | -    | -    | +    | X         | X       | -
+ | Danish    | -    | X    | X    | X         | X       | X
  | English   | X    | X    | X    | X         | X       | X
- | Finnish   | X    | +    | -    | X         | X       | 0
+ | Finnish   | X    | +    | X    | X         | X       | 0
  | French    | X    | X    | X    | X         | X       | X
- | German    | X    | -    | X    | X         | -       | -
+ | German    | X    | -    | X    | X         | X       | X
  | Italian   | X    | X    | X    | X         | X       | X
  | Norwegian | -    | X    | X    | X         | X       | X
- | Russian   | X    | X    | -    | *         | -       | -
- | Spanish   | -    | X    | -    | X         | X       | X
+ | Russian   | X    | X    | X    | X         | X       | -
+ | Spanish   | -    | X    | X    | X         | X       | X
  | Swedish   | X    | X    | X    | X         | X       | X
 
 X = implemented (few exceptions may occur)
@@ -997,38 +998,28 @@ the previous page//.)
 
 Danish            
 
-English:      
-missing uncontracted negations.
+English
 
 Finnish:
-compiling the heuristic paradigms is slow;
+compiling the heuristic regular paradigms is slow;
 possessive and interrogative suffixes have no proper lexer.
 
 French:
-no inverted questions;
-some verbs in Basic should be reflexive
+no inverted questions
 
 German   
 
 Italian:
-no omission of unstressed subject pronouns;
-some verbs in Basic should be reflexive;
-bad forms of reflexive infinitives
+no binding of clitics with infinitive 
 
-Norwegian:
-possessives of type //bilen min// not included
+Norwegian
 
-Russian
+Russian:
+missing rules for ordinal numbers
 
-Spanish:
-no omission of unstressed subject pronouns;
-no switch to dative case for human objects;
-some verbs in Basic should be reflexive;
-bad forms of reflexive infinitives;
-spurious parameter for verb auxiliary inherited from Romance
+Spanish
 
-
-Swedish:
+Swedish
 
 
 
@@ -1038,11 +1029,12 @@ Swedish:
 Get the grammar package from
 [http://sourceforge.net/project/showfiles.php?group_id=132285 
 GF Download Page]. The current libraries are in
-``lib/resource``. Version 0.6 is in
+``lib/resource-1.0``. Version 0.9 is in
+``lib/resource-0.9``. Version 0.6 is in
 ``lib/resource-0.6``.
 
 
 
-The very very latest version of GF and its libraries is in
-[http://www.cs.chalmers.se/~bringert/gf/downloads/snapshots/ Snapshots].
+The very very latest version of GF and its libraries is in the
+[Darcs repository http://www.cs.chalmers.se/Cs/Research/Language-technology/darcs/GF/doc/darcs.html].
 
