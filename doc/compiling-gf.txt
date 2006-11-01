@@ -30,7 +30,10 @@ productivity.
 
 For efficiency, the grammar is compiled to lower-level formats.
 
-Type checking is another essential compilation phase.
+Type checking is another essential compilation phase. Its purpose is
+twofold, as usual:
+- checking the correctness of the grammar
+- type-annotating expressions for code generation
 
 
 #NEW
@@ -133,26 +136,169 @@ weakly-typed interfaces or dynamically-checked interfaces."
 (B. Stroustrup, 1994, p. 107)
 
 
+
 #NEW
 
-==The computation model==
+==The computation model: abstract syntax==
 
 An abstract syntax defines a free algebra of trees (using
 dependent types, recursion, higher-order abstract syntax: 
 GF includes a complete Logical Framework).
+```
+  cat C (x_1 : A_1)...(x_n : A_n)  
+  a_1 : A_1 
+  ... 
+  a_n : A_n{x_1 : A_1,...,x_n-1 : A_n-1}
+  ----------------------------------------------------
+  (C a_1 ... a_n) : Type 
+
+
+  fun f : (x_1 : A_1) -> ... -> (x_n : A_n) -> A
+  a_1 : A_1 
+  ... 
+  a_n : A_n{x_1 : A_1,...,x_n-1 : A_n-1}
+  ----------------------------------------------------
+  (f a_1 ... a_n) : A{x_1 : A_1,...,x_n : A_n}
+
+
+ A : Type  x : A |- B : Type       x : A |- b : B        f : (x : A) -> B   a : A
+ ----------------------------   ----------------------   ------------------------
+     (x : A) -> B : Type        \x -> b : (x : A) -> B       f a : B{x := A}
+```
+Notice that all syntax trees are in eta-long form.
+
+
+#NEW
+
+==The computation model: concrete syntax==
 
 A concrete syntax defines a homomorphism (compositional mapping)
-from the abstract syntax to a system of tuples of strings.
+from the abstract syntax to a system of concrete syntax objects.
+```
+  cat C _
+  --------------------
+  lincat C = C* : Type
 
+  fun f : (x_1 : A_1) -> ... -> (x_n : A_n) -> A
+  -----------------------------------------------
+  lin f = f* : A_1* -> ... -> A_n* -> A*
+
+  (f a_1 ... a_n)*  =  f* a_1* ... a_n*
+```
 The homomorphism can as such be used as linearization function.
 
 It is a functional program, but a restricted one, since it works 
 in the end on finite data structures only.
 
+But a more efficient program is obtained via compilation to 
 GFC = Canonical GF: the "machine code" of GF.
 
 The parsing problem of GFC can be reduced to that of MPCFG (Multiple
 Parallel Context Free Grammars), see P. Ljunglöf's thesis (2004).
+
+
+
+#NEW
+
+==The core type system of concrete syntax: basic types==
+
+```
+                   param P      P : PType
+  PType : Type    ---------     ---------
+                  P : PType      P : Type
+
+                                          s : Str  t : Str
+  Str : type     "foo" : Str   [] : Str   ----------------
+                                            s ++ t : Str
+```
+
+
+#NEW
+
+==The core type system of concrete syntax: functions and tables==
+
+```
+ A : Type  x : A |- B : Type       x : A |- b : B        f : (x : A) -> B   a : A
+ ----------------------------   ----------------------   ------------------------
+     (x : A) -> B : Type        \x -> b : (x : A) -> B       f a : B{x := A}
+
+
+        P : PType   A : Type      t : P => A  p : p
+        --------------------      -----------------
+            P => A : Type            t ! p : A
+
+                   v_1,...,v_n : A
+       ---------------------------------------------- P = {C_1,...,C_n}
+       table {C_1 => v_1 ; ... ; C_n => v_n} : P => A 
+```
+Pattern matching is treated as an abbreviation for tables. Notice that
+```
+  case e of {...}  ==  table {...} ! e
+```
+
+
+#NEW
+
+==The core type system of concrete syntax: records==
+
+```
+              A_1,...,A_n : Type
+     ------------------------------------ n >= 0
+     {r_1 : A_1 ; ... ; r_n : A_n} : Type
+
+
+                 a_1 : A_1  ...  a_n : A_n
+     ------------------------------------------------------------
+     {r_1 = a_1 ; ... ; r_n = a_n} : {r_1 : A_1 ; ... ; r_n : A_n}
+
+
+             r : {r_1 : A_1 ; ... ; r_n : A_n}
+            ----------------------------------- i = 1,...,n
+                          r.r_1 : A_1
+```
+Subtyping: if ``r : R`` then ``r : R ** {r : A}``
+
+
+
+#NEW
+
+==Computation rules==
+
+```
+  (\x -> b) a = b{x := a}
+
+  (table {C_1 => v_1 ; ... ; C_n => v_n} : P => A) ! C_i  =  v_i
+
+  {r_1 = a_1 ; ... ; r_n = a_n}.r_i  =  a_i
+```
+
+
+
+#NEW
+
+==Canonical GF==
+
+Concrete syntax type system:
+```
+                             A_1 : Type ... A_n : Type
+  Str : Type   Int : Type    -------------------------   $i : A
+                               [A_1, ..., A_n] : Type
+
+
+     a_1 : A_1  ...  a_n : A_n         t : [A_1, ..., A_n]
+  ---------------------------------    ------------------- i = 1,..,n
+  [a_1, ..., a_n] : [A_1, ..., A_n]        t ! i : A_i 
+```
+Tuples represent both records and tables.
+
+There are no functions.
+
+Linearization:
+```
+  lin f = f*
+
+  (f a_1 ... a_n)*  =  f*{$1 = a_1*, ..., $n = a_n*} 
+```
 
 
 #NEW
@@ -295,8 +441,8 @@ The additional rule now is:
 
 ==Techniques used==
 
-The compiler is written in Haskell, using some C foreign function calls
-(readline, killing threads).
+The compiler is written in Haskell, with some C foreign function calls
+in the interactive version (readline, killing threads).
 
 BNFC is used for generating both the parsers and printers.
 This has helped to make the formats portable.
@@ -417,7 +563,7 @@ Irrelevant table branches are thrown away, which can reduce the size.
 But, since tables are expanded and auxiliary functions are inlined,
 the size can grow exponentially.
 
-How can we keep the first and eliminate the second?
+How can we keep the first property and eliminate the second?
 
 
 #NEW
@@ -450,14 +596,14 @@ By maintaining a canonical order of parameters in a type, we can
 eliminate the left hand sides of branches.
 ```
   table {              table T [
-    P => t ;    --->     P ;
-    Q => u               Q
+    P => t ;    --->     t ;
+    Q => u               u
     }                    ]
 ```
 The treatment is similar to ``Enum`` instances in Haskell.
 
-Actually, all parameter types could be translated to
-initial segments of integers. This is done in the GFCC format.
+In the end, all parameter types can be translated to
+initial segments of integers.
 
 
 #NEW
