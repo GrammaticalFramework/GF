@@ -1,6 +1,6 @@
 --# -path=.:alltenses:prelude
 
-concrete ShallowFre of Shallow = GrammarFre - [
+concrete ShallowSwe of Shallow = GrammarSwe - [
   VP, 
   ImpersCl, 
   GenericCl,
@@ -29,5 +29,5 @@ concrete ShallowFre of Shallow = GrammarFre - [
   ]
 
 ** ShallowI with 
-  (Grammar = GrammarFre) ;
+  (Grammar = GrammarSwe) ;
 

@@ -1,6 +1,6 @@
 --# -path=.:alltenses:prelude
 
-concrete ShallowEng of Shallow = LexiconEng, GrammarEng - [
+concrete ShallowEng of Shallow = GrammarEng - [
   VP, 
   ImpersCl, 
   GenericCl,
