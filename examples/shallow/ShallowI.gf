@@ -1,4 +1,4 @@
-incomplete concrete ShallowI of Shallow = Lexicon, Grammar-[
+incomplete concrete ShallowI of Shallow = Grammar-[
   VP, 
   ImpersCl,  -- : VP -> Cl ;        -- it rains
   GenericCl, -- : VP -> Cl ;        -- one sleeps
@@ -39,16 +39,34 @@ incomplete concrete ShallowI of Shallow = Lexicon, Grammar-[
 
     PredUseV np adVs v advs = 
       PredVP np (AdvVP (AdVVP adVs (UseV v)) advs) ;
-    PredComplV2 np adVs v ob advs = 
-      PredVP np (AdvVP (AdVVP adVs (ComplV2 v ob)) advs) ;
+    PredComplV2 np adVs v ob = 
+      PredVP np (AdVVP adVs (ComplV2 v ob)) ;
+    PredComplVS np adVs v ob = 
+      PredVP np (AdVVP adVs (ComplVS v ob)) ;
     PredUseComp np adVs v advs = 
       PredVP np (AdvVP (AdVVP adVs (UseComp v)) advs) ;
 
+    PredComplVV_V np adVs vv v advs = 
+      PredVP np (AdvVP (AdVVP adVs (ComplVV vv (UseV v))) advs) ;
+    PredComplVV_V2 np adVs vv v2 ob = 
+      PredVP np (AdVVP adVs (ComplVV vv (ComplV2 v2 ob))) ;
+    PredComplVV_Comp np adVs vv v advs = 
+      PredVP np (AdvVP (AdVVP adVs (ComplVV vv (UseComp v))) advs) ;
+
     QuestUseV np adVs v advs = 
       QuestVP np (AdvVP (AdVVP adVs (UseV v)) advs) ;
-    QuestComplV2 np adVs v ob advs = 
-      QuestVP np (AdvVP (AdVVP adVs (ComplV2 v ob)) advs) ;
+    QuestComplV2 np adVs v ob = 
+      QuestVP np (AdVVP adVs (ComplV2 v ob)) ;
+    QuestComplVS np adVs v ob = 
+      QuestVP np (AdVVP adVs (ComplVS v ob)) ;
     QuestUseComp np adVs v advs = 
       QuestVP np (AdvVP (AdVVP adVs (UseComp v)) advs) ;
+
+    QuestComplVV_V np adVs vv v advs = 
+      QuestVP np (AdvVP (AdVVP adVs (ComplVV vv (UseV v))) advs) ;
+    QuestComplVV_V2 np adVs vv v2 ob = 
+      QuestVP np (AdVVP adVs (ComplVV vv (ComplV2 v2 ob))) ;
+    QuestComplVV_Comp np adVs vv v advs = 
+      QuestVP np (AdvVP (AdVVP adVs (ComplVV vv (UseComp v))) advs) ;
 
 }
