@@ -1,4 +1,4 @@
---# -path=.:../abstract:../common:prelude
+--# -path=.:alltenses:prelude
 
 concrete BigEnglish of BigEnglishAbs = 
   English,
