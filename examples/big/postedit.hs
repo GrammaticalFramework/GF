@@ -7,13 +7,24 @@ tmp = "tm"
 main = do
   writeFile tmp ""
   s <- readFile infile
-  mapM_ (appendFile tmp . mkOne) $ lines s --- $ chop s
+  mapM_ (appendFile tmp . mkTwo) $ lines s --- $ chop s
+  system "cp BigLexEng.gf bak"
   system "mv tm BigLexEng.gf"
 
 chop s = case s of
   ';':cs -> ";\n"++chop cs
   c:cs -> c:chop cs
   _ -> s
+
+mkTwo s = case words s of
+  lin:tie:eq:"dirV3":tie_V:ws ->
+    let prep = case reverse (takeWhile (/='_') (reverse tie)) of
+          "loc" -> "in" ---
+          p -> p
+    in unwords $ 
+      [lin,tie,eq,"dirV3",show (take (length tie_V - 2) tie_V),show prep] ++ 
+      ws ++ ["\n"]
+  _ -> s ++ "\n"
 
 mkOne s = case words s of
   lin:a2:eq:pa2:ws | take 6 pa2 == "prepA2" -> 
