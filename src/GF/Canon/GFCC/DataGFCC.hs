@@ -33,7 +33,7 @@ lookMap d c m = maybe d id $ Data.Map.lookup c m
 
 lookLin :: GFCC -> CId -> CId -> Term
 lookLin mcfg lang fun = 
-  lookMap (term0 fun) fun $ lookMap undefined lang $ concretes mcfg
+  lookMap TM fun $ lookMap undefined lang $ concretes mcfg
 
 linearize :: GFCC -> CId -> Exp -> String
 linearize mcfg lang = realize . linExp mcfg lang
