@@ -1,0 +1,14 @@
+7/11/2006
+
+14.10 write Lisp.cf
+
+14.20 able to parse biglex
+
+14.30 MkBig main program compiles
+
+16.25 writing 5842 lemmas in files
+
+17.15 compiles fine but get conflicts with Irreg and Structural
+
+17.37 compiles fine in BigShallowEng, but not BigEnglish, because the latter
+imports too much conflicting lexicon to remove manually

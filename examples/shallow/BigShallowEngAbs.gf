@@ -3,7 +3,7 @@
 abstract BigShallowEngAbs = 
   Shallow,
   BigLexEngAbs,
-  IrregEngAbs,
+--  IrregEngAbs,
   ExtraEngAbs-[
     ComplBareVS, -- : VS -> S -> VP ;     -- know you go
     MkVPI        -- : VP -> VPI ;
