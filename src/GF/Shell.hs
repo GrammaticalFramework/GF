@@ -444,8 +444,8 @@ execC co@(comm, opts0) sa@(sh@(st,(h,_,_,_)),a) = checkOptions st co >> case com
   CPrintLanguages     -> justOutput opts 
                          (putStrLn $ unwords $ map prLanguage $ allLanguages st) sa
   CPrintMultiGrammar  -> do
-    sa' <- changeState purgeShellState sa
-    returnArg (AString (optPrintMultiGrammar opts cgr)) sa'
+    let cgr' = canModules $ purgeShellState st
+    returnArg (AString (optPrintMultiGrammar opts cgr')) sa
   CShowGrammarGraph  -> do
     ---- sa' <- changeState purgeShellState sa
     let g0 = writeFile "grphtmp.dot" $ visualizeCanonGrammar opts cgr
