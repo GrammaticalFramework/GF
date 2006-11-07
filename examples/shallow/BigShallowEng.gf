@@ -3,7 +3,7 @@
 concrete BigShallowEng of BigShallowEngAbs = 
   ShallowEng,
   BigLexEng,
-  IrregEng,
+--  IrregEng,
   ExtraEng-[
     ComplBareVS,MkVPI
   ]

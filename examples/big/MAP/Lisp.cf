@@ -1,0 +1,20 @@
+-- Lisp as used in the Alvey grammar
+
+entrypoints Prog, Exp ;
+
+Pro.    Prog ::= [Exp] ;
+
+App.    Exp ::= "(" [Exp] ")" ;
+At.     Exp ::= Id ;
+IdPlus. Exp ::= IdPl ;
+IdStr.  Exp ::= String ;
+Plus.   Exp ::= "+" ;
+Minus.  Exp ::= "-" ;
+Num.    Exp ::= Integer ;
+
+token IdPl ('+' letter (letter | digit | '-' | '_')*) ;
+token Id (letter (letter | digit | '-' | '_')*) ;
+
+terminator Exp "" ;
+
+comment ";;" ;
