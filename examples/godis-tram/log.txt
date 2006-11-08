@@ -1,0 +1,36 @@
+8/11/2006
+
+10.15 installed Swe and Eng from package, tried them.
+
+10.25 started Fin.
+
+11.15 Finnish modules completed from Eng modules, start testing.
+  optimize=noexpand necessary in GodisLangEng.
+  Some decisions feel wrong: it seems the parametrized implementation
+  cannot be fully used. Find some probable bugs in Eng as well.
+
+11.45 Have to add VPI to ExtraFin.
+
+12.00 TramSystemFin compiles. And compiles. And compiles. Going to lunch and a
+  talk.
+
+14.30 Back from lunch and talk. TramSystemFin has compiled in 15 minutes.
+  Running with random examples, mostly OK Finnish. Thus a "baseline" was
+  accomplished in 2 hours.
+
+
+15.00 Change the inflection of stop names that end with a vowel. Convers
+  all Finnish files to iso-latin-1 to conform with the resource library.
+  After some forking, comment out the linearization of issue and fail in
+  GodisSystemFin - the two functions that took the most time to compile.
+  Now TramSystemFin compiles in 2.5 minutes.
+
+15.50 TramUserFin also compiles, and even the parser works very well
+  here. But errors in the grammar get evident. Fixed some by renaming
+  the Finnish instance of TramUserI to TramUserFin0, and defining
+  TramUserFin by subtracting from this.
+
+
+
+
+
