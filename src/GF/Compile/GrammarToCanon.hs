@@ -192,6 +192,7 @@ redCType t = case t of
   App (Q (IC "Predef") (IC "Ints")) (EInt n) -> return $ G.TInts (toInteger n)
 
   Sort "Str" -> return $ G.TStr
+  Sort "Tok" -> return $ G.TStr
   _ -> prtBad "cannot reduce to canonical the type" t
 
 redCTerm :: Term -> Err G.Term
