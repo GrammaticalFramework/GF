@@ -14,7 +14,9 @@
 -- lookup in resource and concrete in compiling; for abstract, use 'Look'
 -----------------------------------------------------------------------------
 
-module GF.Grammar.Lookup (lookupResDef,
+module GF.Grammar.Lookup (
+               lookupResDef,
+               lookupResDefKind,
 	       lookupResType, 
 	       lookupParams, 
 	       lookupParamValues, 
@@ -38,30 +40,34 @@ lock c = lockRecType c -- return
 unlock c = unlockRecord c -- return
 
 lookupResDef :: SourceGrammar -> Ident -> Ident -> Err Term
-lookupResDef gr m c = look True m c where 
+lookupResDef gr m c = liftM fst $ lookupResDefKind gr m c
+
+-- 0 = oper, 1 = lin, 2 = canonical. v > 0 means: no need to be recomputed
+lookupResDefKind :: SourceGrammar -> Ident -> Ident -> Err (Term,Int)
+lookupResDefKind gr m c = look True m c where 
   look isTop m c = do
     mi   <- lookupModule gr m
     case mi of
       ModMod mo -> do
         info <- lookupIdentInfo mo c
         case info of
-          ResOper _ (Yes t) -> return $ qualifAnnot m t 
-          ResOper _ Nope    -> return (Q m c) ---- if isTop then lookExt m c 
+          ResOper _ (Yes t) -> return (qualifAnnot m t, 0) 
+          ResOper _ Nope    -> return (Q m c, 0) ---- if isTop then lookExt m c 
                                  ---- else prtBad "cannot find in exts" c 
 
-          CncCat (Yes ty) _ _ -> lock c ty
-          CncCat _ _ _        -> lock c defLinType
-          CncFun (Just (cat,_)) (Yes tr) _ -> unlock cat tr
+          CncCat (Yes ty) _ _ -> liftM (flip (,) 1) $ lock c ty
+          CncCat _ _ _        -> liftM (flip (,) 1) $ lock c defLinType
+          CncFun (Just (cat,_)) (Yes tr) _ -> liftM (flip (,) 1) $ unlock cat tr
 
-          CncFun _ (Yes tr) _ -> unlock c tr
+          CncFun _ (Yes tr) _ -> liftM (flip (,) 1) $ unlock c tr
 
           AnyInd _ n        -> look False n c
-          ResParam _        -> return $ QC m c
-          ResValue _        -> return $ QC m c
+          ResParam _        -> return (QC m c,2)
+          ResValue _        -> return (QC m c,2)
           _   -> Bad $ prt c +++ "is not defined in resource" +++ prt m
       _ -> Bad $ prt m +++ "is not a resource"
   lookExt m c =
-    checks ([look False n c | n <- allExtensions gr m] ++ [return (Q m c)])
+    checks ([look False n c | n <- allExtensions gr m] ++ [return (Q m c,3)])
 
 lookupResType :: SourceGrammar -> Ident -> Ident -> Err Type
 lookupResType gr m c = do
