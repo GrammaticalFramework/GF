@@ -25,6 +25,7 @@ import GF.Grammar.Compute
 import GF.Compile.BackOpt
 import GF.Compile.CheckGrammar
 import GF.Compile.Update
+import GF.Compile.Evaluate
 
 import GF.Data.Operations
 import GF.Infra.CheckM
@@ -33,12 +34,16 @@ import GF.Infra.Option
 import Control.Monad
 import Data.List
 
+-- experimental evaluation, option to import
+oEval = iOpt "eval"
+
 -- | partial evaluation of concrete syntax. AR 6\/2001 -- 16\/5\/2003 -- 5\/2\/2005.
 -- only do this for resource: concrete is optimized in gfc form
 optimizeModule :: Options -> [(Ident,SourceModInfo)] -> (Ident,SourceModInfo) -> 
                   Err (Ident,SourceModInfo)
 optimizeModule opts ms mo@(_,mi) = case mi of
-  ModMod m0@(Module mt st fs me ops js) | st == MSComplete && isModRes m0 -> do
+  ModMod m0@(Module mt st fs me ops js) | 
+    st == MSComplete && isModRes m0 && not (oElem oEval oopts)-> do
       mo1 <- evalModule oopts ms mo
       return $ case optim of
         "parametrize" -> shareModule paramOpt mo1  -- parametrization and sharing
@@ -57,11 +62,17 @@ evalModule :: Options -> [(Ident,SourceModInfo)] -> (Ident,SourceModInfo) ->
 evalModule oopts ms mo@(name,mod) = case mod of
 
   ModMod m0@(Module mt st fs me ops js) | st == MSComplete -> case mt of
-    _ | isModRes m0 -> do
+    _ | isModRes m0 && not (oElem oEval oopts) -> do
       let deps = allOperDependencies name js
       ids <- topoSortOpers deps
       MGrammar (mod' : _) <- foldM evalOp gr ids
       return $ mod'
+
+    MTConcrete a | oElem oEval oopts -> do
+      js0 <- appEvalConcrete gr js
+      js' <- mapMTree (evalCncInfo oopts gr name a) js0 ---- <- gr0 6/12/2005 
+      return $ (name, ModMod (Module mt st fs me ops js'))
+
     MTConcrete a -> do
       js' <- mapMTree (evalCncInfo oopts gr name a) js ---- <- gr0 6/12/2005
       return $ (name, ModMod (Module mt st fs me ops js'))
@@ -120,8 +131,9 @@ evalCncInfo opts gr cnc abs (c,info) = errIn ("optimizing" +++ prt c) $ case inf
   CncFun (mt@(Just (_,ty@(cont,val)))) pde ppr -> 
        eIn ("linearization in type" +++ prt (mkProd (cont,val,[])) ++++ "of function") $ do
     pde' <- case pde of
-      Yes de -> do
+      Yes de | notNewEval -> do
         liftM yes $ pEval ty de
+
       _ -> return pde
     ppr' <-  liftM yes $ evalPrintname gr c ppr pde'
     return $ (c, CncFun mt pde' ppr') -- only cat in type actually needed
@@ -130,6 +142,7 @@ evalCncInfo opts gr cnc abs (c,info) = errIn ("optimizing" +++ prt c) $ case inf
  where
    pEval = partEval opts gr
    eIn cat = errIn ("Error optimizing" +++ cat +++ prt c +++ ":")
+   notNewEval = not (oElem oEval opts)
 
 -- | the main function for compiling linearizations
 partEval :: Options -> SourceGrammar -> (Context,Type) -> Term -> Err Term
