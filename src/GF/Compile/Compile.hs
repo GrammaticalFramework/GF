@@ -36,6 +36,7 @@ import GF.Compile.Rename
 import GF.Grammar.Refresh
 import GF.Compile.CheckGrammar
 import GF.Compile.Optimize
+import GF.Compile.Evaluate
 import GF.Compile.GrammarToCanon
 import GF.Canon.Share
 import GF.Canon.Subexpressions (elimSubtermsMod,unSubelimModule)
@@ -93,10 +94,10 @@ compileModule opts st0 file |
  where
    suff = fileSuffix file
    comp putpp path env sm0 = do
-     (k',sm)  <- makeSourceModule opts (fst env) sm0
+     (k',sm,eenv')  <- makeSourceModule opts (fst env) sm0
      cm  <- putpp "  generating code... " $ generateModuleCode opts path sm
      ft <- getReadTimes file ---
-     extendCompileEnvInt env (k',sm,cm) ft
+     extendCompileEnvInt env (k',sm,cm) eenv' ft
 
 compileModule opts1 st0 file = do
   opts0 <- ioeIO $ getOptionsFromFile file
@@ -130,12 +131,13 @@ getReadTimes file = do
   return $ (m,(file,t)) : [(resModName m,(file,t)) | not (isGFC file)]
 
 compileEnvShSt :: ShellState -> [ModName] -> TimedCompileEnv
-compileEnvShSt st fs = ((0,sgr,cgr),fts) where
+compileEnvShSt st fs = ((0,sgr,cgr,eenv),fts) where
   cgr = MGrammar [m | m@(i,_) <- modules (canModules st), notInc i]
   sgr = MGrammar [m | m@(i,_) <- modules (srcModules st), notIns i]
   notInc i = notElem (prt i) $ map fileBody fs
   notIns i = notElem (prt i) $ map fileBody fs
   fts = readFiles st
+  eenv = evalEnv st
 
 pathListOpts :: Options -> FileName -> IO [InitPath]
 pathListOpts opts file = return $ maybe [file] pFilePaths $ getOptVal opts pathList
@@ -150,23 +152,23 @@ keepResModules opts gr =
 
 
 -- | the environment
-type CompileEnv = (Int,SourceGrammar, GFC.CanonGrammar)
+type CompileEnv = (Int,SourceGrammar, GFC.CanonGrammar,EEnv)
 
 emptyCompileEnv :: TimedCompileEnv
-emptyCompileEnv = ((0,emptyMGrammar,emptyMGrammar),[])
+emptyCompileEnv = ((0,emptyMGrammar,emptyMGrammar,emptyEEnv),[])
 
-extendCompileEnvInt ((_,MGrammar ss, MGrammar cs),fts) (k,sm,cm) ft = 
-  return ((k,MGrammar (sm:ss), MGrammar (cm:cs)),ft++fts) --- reverse later
+extendCompileEnvInt ((_,MGrammar ss, MGrammar cs,_),fts) (k,sm,cm) eenv ft = 
+  return ((k,MGrammar (sm:ss), MGrammar (cm:cs),eenv),ft++fts) --- reverse later
 
-extendCompileEnv e@((k,_,_),_) (sm,cm) = extendCompileEnvInt e (k,sm,cm)
+extendCompileEnv e@((k,_,_,_),_) (sm,cm) = extendCompileEnvInt e (k,sm,cm)
 
-extendCompileEnvCanon ((k,s,c),fts) cgr ft = 
-  return ((k,s, MGrammar (modules cgr ++ modules c)),ft++fts)
+extendCompileEnvCanon ((k,s,c,e),fts) cgr eenv ft = 
+  return ((k,s, MGrammar (modules cgr ++ modules c),eenv),ft++fts)
 
 type TimedCompileEnv = (CompileEnv,[(String,(FilePath,ModTime))])
 
 compileOne :: Options -> TimedCompileEnv -> FullPath -> IOE TimedCompileEnv
-compileOne opts env@((_,srcgr,cancgr0),_) file = do
+compileOne opts env@((_,srcgr,cancgr0,eenv),_) file = do
 
   let putp = putPointE opts
   let putpp = putPointEsil opts
@@ -185,7 +187,7 @@ compileOne opts env@((_,srcgr,cancgr0),_) file = do
     "gfcm" -> do
        cgr <- putp ("+ reading" +++ file) $ getCanonGrammar file
        ft <- getReadTimes file
-       extendCompileEnvCanon env cgr ft
+       extendCompileEnvCanon env cgr eenv ft
 
     -- for canonical gf, read the file and update environment, also source env
     "gfc" -> do
@@ -193,7 +195,7 @@ compileOne opts env@((_,srcgr,cancgr0),_) file = do
        let cancgr = updateMGrammar (MGrammar [cm]) cancgr0 
        sm <- ioeErr $ CG.canon2sourceModule $ unoptimizeCanonMod cancgr $ unSubelimModule cm
        ft <- getReadTimes file
-       extendCompileEnv env (sm, cm) ft
+       extendCompileEnv env (sm, cm) eenv ft
 
     -- for compiled resource, parse and organize, then update environment
     "gfr" -> do
@@ -204,7 +206,7 @@ compileOne opts env@((_,srcgr,cancgr0),_) file = do
        let gfc = gfcFile name 
        cm  <- putp ("+ reading" +++ gfc) $ getCanonModule gfc
        ft  <- getReadTimes file
-       extendCompileEnv env (sm,cm) ft
+       extendCompileEnv env (sm,cm) eenv ft
 
     -- for gf source, do full compilation
 
@@ -219,7 +221,7 @@ compileOne opts env@((_,srcgr,cancgr0),_) file = do
 
        sm0 <- putpOpt ("- parsing" +++ file) ("- compiling" +++ file ++ "... ") $ 
                                            getSourceModule opts file
-       (k',sm)  <- makeSourceModule opts (fst env) sm0
+       (k',sm,eenv')  <- makeSourceModule opts (fst env) sm0
        cm  <- putpp "  generating code... " $ generateModuleCode opts path sm
        ft <- getReadTimes file
 
@@ -227,11 +229,12 @@ compileOne opts env@((_,srcgr,cancgr0),_) file = do
 ----         ModMod n | isModRes n -> putp "  optimizing " $ ioeErr $ evalModule mos sm
          _ -> return [sm]
 
-       extendCompileEnvInt env (k',sm',cm) ft
+       extendCompileEnvInt env (k',sm',cm) eenv' ft
 
 -- | dispatch reused resource at early stage
-makeSourceModule :: Options -> CompileEnv -> SourceModule -> IOE (Int,SourceModule)
-makeSourceModule opts env@(k,gr,can) mo@(i,mi) = case mi of
+makeSourceModule :: Options -> CompileEnv -> 
+                    SourceModule -> IOE (Int,SourceModule,EEnv)
+makeSourceModule opts env@(k,gr,can,eenv) mo@(i,mi) = case mi of
 
   ModMod m -> case mtype m of
     MTReuse c -> do
@@ -239,7 +242,7 @@ makeSourceModule opts env@(k,gr,can) mo@(i,mi) = case mi of
       let mo2 = (i, ModMod sm)
           mos = modules gr
       --- putp "  type checking reused" $ ioeErr $ showCheckModule mos mo2
-      return $ (k,mo2)
+      return $ (k,mo2,eenv)
 {- ---- obsolete
     MTUnion ty imps -> do
       mo' <- ioeErr $ makeUnion gr i ty imps
@@ -252,8 +255,8 @@ makeSourceModule opts env@(k,gr,can) mo@(i,mi) = case mi of
    putp = putPointE opts
 
 compileSourceModule :: Options -> CompileEnv -> 
-                       SourceModule -> IOE (Int,SourceModule)
-compileSourceModule opts env@(k,gr,can) mo@(i,mi) = do
+                       SourceModule -> IOE (Int,SourceModule,EEnv)
+compileSourceModule opts env@(k,gr,can,eenv) mo@(i,mi) = do
 
   let putp  = putPointE opts
       putpp = putPointEsil opts
@@ -271,7 +274,7 @@ compileSourceModule opts env@(k,gr,can) mo@(i,mi) = do
 
   case mo1b of
     (_,ModMod n) | not (isCompleteModule n) -> do
-      return (k,mo1b)   -- refresh would fail, since not renamed
+      return (k,mo1b,eenv)   -- refresh would fail, since not renamed
     _ -> do
       mo2:_ <- putpp "  renaming " $ ioeErr $ renameModule mos mo1b
 
@@ -280,10 +283,10 @@ compileSourceModule opts env@(k,gr,can) mo@(i,mi) = do
 
       (k',mo3r:_) <- ioeErr $ refreshModule (k,mos) mo3
 
-      mo4 <- 
+      (mo4,eenv') <- 
         ---- if oElem "check_only" opts 
-          putpp "  optimizing " $ ioeErr $ optimizeModule opts mos mo3r
-      return (k',mo4)
+          putpp "  optimizing " $ ioeErr $ optimizeModule opts (mos,eenv) mo3r
+      return (k',mo4,eenv')
  where
    ----   prDebug mo = ioeIO $ putStrLn $ prGrammar $ MGrammar [mo] ---- debug
    prDebug mo = ioeIO $ print $ length $ lines $ prGrammar $ MGrammar [mo]
@@ -346,7 +349,7 @@ compileOld opts file = do
   let putp = putPointE opts
   grammar1 <- putp ("- parsing old gf" +++ file) $ getOldGrammar opts file
   files <- mapM writeNewGF $ modules grammar1
-  ((_,_,grammar),_) <- foldM (compileOne opts) emptyCompileEnv files
+  ((_,_,grammar,_),_) <- foldM (compileOne opts) emptyCompileEnv files
   return grammar
 
 writeNewGF :: SourceModule -> IOE FilePath

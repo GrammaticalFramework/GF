@@ -19,6 +19,11 @@ fun
 
   SymbS    : Symb -> S ;                 -- A
 
+--2 Symbols as numerals
+
+  SymbNum  : Symb -> Num ;               -- n
+  SymbOrd  : Symb -> Num ;               -- n'th
+
 --2 Symbol lists
 
 -- A symbol list has at least two elements. The last two are separated
