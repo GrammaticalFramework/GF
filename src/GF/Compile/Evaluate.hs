@@ -49,7 +49,8 @@ lookupComputed mc = do
   return $ Map.lookup mc $ computd env
 
 updateComputed :: (Ident,Ident) -> FTerm -> STM EEnv ()
-updateComputed mc t = updateSTM (\e -> e{computd = Map.insert mc t (computd e)})
+updateComputed mc t = 
+  updateSTM (\e -> e{computd = Map.insert mc t (computd e)})
 
 getTemp :: STM EEnv Ident
 getTemp = do
@@ -70,7 +71,8 @@ term2fterm t = case t of
   Abs x b -> FTF (\t -> term2fterm (subst [(x,t)] b))
   _ -> FTC t
 
-traceFTerm c ft = ft ----trace ("\n" ++ prt c +++ "=" +++ take 60 (prFTerm 0 ft)) ft
+traceFTerm c ft = ft ----
+----trace ("\n" ++ prt c +++ "=" +++ take 60 (prFTerm 0 ft)) ft
 
 fterm2term :: FTerm -> STM EEnv Term
 fterm2term t = case t of
@@ -138,7 +140,7 @@ evalConcrete gr mo = mapMTree evaldef mo where
 
   comp g t = case t of
 
-    Q (IC "Predef") _ -> trace ("\nPredef:\n" ++ prt t) $ return t
+    Q (IC "Predef") _ -> return t ----trace ("\nPredef:\n" ++ prt t) $ return t
 
     Q p c -> do
       md <- lookupComputed (p,c) 
@@ -354,7 +356,7 @@ evalConcrete gr mo = mapMTree evaldef mo where
      -- if already expanded, don't expand again
     T i@(TComp _) cs -> do
        -- if there are no variables, don't even go inside
-       cs' <- if (null g) then return cs else mapPairsM (comp g) cs
+       cs' <- {-if (null g) then return cs else-} mapPairsM (comp g) cs
        return $ T i cs'
 
      --- this means some extra work; should implement TSh directly
