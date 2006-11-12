@@ -108,9 +108,10 @@ oper
 
   nKukko : (kukko,kukon,kukkoja : Str) -> N ;
 
--- A special case are nouns with no alternations: 
+-- A special case:
 -- the vowel harmony is inferred from the last letter,
--- which must be one of "o", "u", "ö", "y".
+-- which must be one of "o", "u", "ö", "y". Regular weak-grade alternation
+-- is performed.
 
   nTalo : (talo : Str) -> N ;
 
@@ -357,7 +358,8 @@ oper
     \c,p -> {c = NPCase c ; s = p ; isPre = True ; lock_Prep = <>} ;
   postPrep : Case -> Str -> Prep =
     \c,p -> {c = NPCase c ; s = p ; isPre = False ; lock_Prep = <>} ;
-  postGenPrep p = {c = NPCase genitive ; s = p ; isPre = False ; lock_Prep = <>} ;
+  postGenPrep p = {
+    c = NPCase genitive ; s = p ; isPre = False ; lock_Prep = <>} ;
   casePrep : Case -> Prep =
     \c -> {c = NPCase c ; s = [] ; isPre = True ; lock_Prep = <>} ;
   accPrep =  {c = NPAcc ; s = [] ; isPre = True ; lock_Prep = <>} ;

@@ -43,6 +43,7 @@ generateRandom gen gfcc cat = genTrees (randomRs (0.0, 1.0) gen) cat where
     gett ds (CId "Int")    = (Tr (AI 12345) [], 1)
     gett [] _ = (Tr (AS "TIMEOUT") [], 1) ----
     gett ds cat = case fns cat of
+      [] -> (Tr AM [],1)
       fs -> let 
           d:ds2    = ds
           (f,args) = getf d fs

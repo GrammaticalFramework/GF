@@ -88,7 +88,7 @@ compute mcfg lang args = comp where
 
   look = lookLin mcfg lang
 
-  idx xs i = xs !! i 
+  idx xs i = if i > length xs - 1 then trace "overrun !!\n" (last xs) else xs !! i 
 
   proj r p = case (r,p) of
     (_,     FV ts) -> FV $ Prelude.map (proj r) ts
