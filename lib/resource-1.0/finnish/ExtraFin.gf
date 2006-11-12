@@ -1,4 +1,6 @@
-concrete ExtraFin of ExtraFinAbs = CatFin ** open ResFin, Coordination, Prelude in {
+--# -path=.:abstract:common:prelude
+
+concrete ExtraFin of ExtraFinAbs = CatFin ** open ResFin, MorphoFin, Coordination, Prelude, StructuralFin in {
 
   lin
     GenNP np = {
@@ -29,5 +31,15 @@ concrete ExtraFin of ExtraFinAbs = CatFin ** open ResFin, Coordination, Prelude 
     AdvPredNP  adv v np =
       mkClause (\_ -> adv.s) np.a (insertObj 
         (\\_,b,_ => np.s ! NPCase Nom) (predV v)) ;
+
+    i_implicPron = mkPronoun [] "minun" "minua" "minuna" "minuun" Sg P1 ;
+    whatPart_IP = {
+      s = table {
+        NPCase Nom | NPAcc => "mitä" ;
+        c => whatSg_IP.s ! c
+        } ;
+      n = Sg
+    } ;
+
 
 } 
