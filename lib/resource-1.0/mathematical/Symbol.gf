@@ -22,7 +22,7 @@ fun
 --2 Symbols as numerals
 
   SymbNum  : Symb -> Num ;               -- n
-  SymbOrd  : Symb -> Num ;               -- n'th
+  SymbOrd  : Symb -> Ord ;               -- n'th
 
 --2 Symbol lists
 
