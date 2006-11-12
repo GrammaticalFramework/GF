@@ -39,46 +39,48 @@ oEval = iOpt "eval"
 
 -- | partial evaluation of concrete syntax. AR 6\/2001 -- 16\/5\/2003 -- 5\/2\/2005.
 -- only do this for resource: concrete is optimized in gfc form
-optimizeModule :: Options -> [(Ident,SourceModInfo)] -> (Ident,SourceModInfo) -> 
-                  Err (Ident,SourceModInfo)
-optimizeModule opts ms mo@(_,mi) = case mi of
+optimizeModule :: Options -> ([(Ident,SourceModInfo)],EEnv) -> 
+                  (Ident,SourceModInfo) -> Err ((Ident,SourceModInfo),EEnv)
+optimizeModule opts mse@(ms,eenv) mo@(_,mi) = case mi of
   ModMod m0@(Module mt st fs me ops js) | 
     st == MSComplete && isModRes m0 && not (oElem oEval oopts)-> do
-      mo1 <- evalModule oopts ms mo
-      return $ case optim of
+      (mo1,_) <- evalModule oopts mse mo
+      let 
+       mo2 = case optim of
         "parametrize" -> shareModule paramOpt mo1  -- parametrization and sharing
         "values"      -> shareModule valOpt mo1    -- tables as courses-of-values
         "share"       -> shareModule shareOpt mo1  -- sharing of branches
         "all"         -> shareModule allOpt mo1    -- first parametrize then values
         "none"        -> mo1                       -- no optimization
         _             -> mo1                       -- none; default for src
-  _ -> evalModule oopts ms mo
+      return (mo2,eenv)
+  _ -> evalModule oopts mse mo
  where
    oopts = addOptions opts (iOpts (flagsModule mo))
    optim = maybe "all" id $ getOptVal oopts useOptimizer
 
-evalModule :: Options -> [(Ident,SourceModInfo)] -> (Ident,SourceModInfo) -> 
-               Err (Ident,SourceModInfo)
-evalModule oopts ms mo@(name,mod) = case mod of
+evalModule :: Options -> ([(Ident,SourceModInfo)],EEnv) -> (Ident,SourceModInfo) -> 
+               Err ((Ident,SourceModInfo),EEnv)
+evalModule oopts (ms,eenv) mo@(name,mod) = case mod of
 
   ModMod m0@(Module mt st fs me ops js) | st == MSComplete -> case mt of
     _ | isModRes m0 && not (oElem oEval oopts) -> do
       let deps = allOperDependencies name js
       ids <- topoSortOpers deps
       MGrammar (mod' : _) <- foldM evalOp gr ids
-      return $ mod'
+      return $ (mod',eenv)
 
     MTConcrete a | oElem oEval oopts -> do
-      js0 <- appEvalConcrete gr js
+      (js0,eenv') <- appEvalConcrete gr js eenv
       js' <- mapMTree (evalCncInfo oopts gr name a) js0 ---- <- gr0 6/12/2005 
-      return $ (name, ModMod (Module mt st fs me ops js'))
+      return $ ((name, ModMod (Module mt st fs me ops js')),eenv')
 
     MTConcrete a -> do
       js' <- mapMTree (evalCncInfo oopts gr name a) js ---- <- gr0 6/12/2005
-      return $ (name, ModMod (Module mt st fs me ops js'))
+      return $ ((name, ModMod (Module mt st fs me ops js')),eenv)
 
-    _ -> return $ (name,mod)
-  _ -> return $ (name,mod)
+    _ -> return $ ((name,mod),eenv)
+  _ -> return $ ((name,mod),eenv)
  where
    gr0 = MGrammar $ ms
    gr  = MGrammar $ (name,mod) : ms

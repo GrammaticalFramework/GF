@@ -24,6 +24,7 @@ import GF.Canon.Look
 import GF.Canon.Subexpressions
 import GF.Grammar.LookAbs
 import GF.Compile.ModDeps
+import GF.Compile.Evaluate
 import qualified GF.Infra.Modules as M
 import qualified GF.Grammar.Grammar as G
 import qualified GF.Grammar.PrGrammar as P
@@ -76,8 +77,9 @@ data ShellState = ShSt {
                   [((G.Fun,Int),G.Type)]))],   -- ^ cats, (their contexts, 
                                                -- functions to them,
                                                -- functions on them)
-  statistics :: [Statistics],        -- ^ statistics on grammars
-  transfers  :: [(Ident,T.Env)]      -- ^ transfer modules
+  statistics :: [Statistics],         -- ^ statistics on grammars
+  transfers  :: [(Ident,T.Env)],      -- ^ transfer modules
+  evalEnv    :: EEnv                  -- ^ evaluation environment
   }                             
 
 type Treebank = Map.Map String [String] -- string, trees
@@ -118,7 +120,8 @@ emptyShellState = ShSt {
   readFiles  = [],
   absCats    = [],
   statistics = [],
-  transfers  = []
+  transfers  = [],
+  evalEnv    = emptyEEnv
   }
 
 optInitShellState :: Options -> ShellState
@@ -198,14 +201,13 @@ cncModuleIdST = stateGrammarST
 -- | form a shell state from a canonical grammar
 grammar2shellState :: Options -> (CanonGrammar, G.SourceGrammar) -> Err ShellState 
 grammar2shellState opts (gr,sgr) = 
-  updateShellState opts doParseAll Nothing emptyShellState ((0,sgr,gr),[]) --- is 0 safe?
+  updateShellState opts doParseAll Nothing emptyShellState ((0,sgr,gr,emptyEEnv),[]) --- is 0 safe?
 
 -- | update a shell state from a canonical grammar
 updateShellState :: Options -> NoParse -> Maybe Ident -> ShellState -> 
-                    ((Int,G.SourceGrammar,CanonGrammar),[(String,(FilePath,ModTime))]) ->
-               ---- (CanonGrammar,(G.SourceGrammar,[(String,(FilePath,ModTime))])) -> 
-                    Err ShellState 
-updateShellState opts ign mcnc sh ((_,sgr,gr),rts) = do 
+   ((Int,G.SourceGrammar,CanonGrammar,EEnv),[(String,(FilePath,ModTime))]) ->
+   Err ShellState 
+updateShellState opts ign mcnc sh ((_,sgr,gr,eenv),rts) = do 
   let cgr0 = M.updateMGrammar (canModules sh) gr
 
   -- a0 = abstract of old state
@@ -283,7 +285,8 @@ updateShellState opts ign mcnc sh ((_,sgr,gr),rts) = do
     readFiles  = [ft | ft@(_,(f,_)) <- readFiles sh, notInrts f] ++ rts,
     absCats    = csi,
     statistics = [StDepTypes deps,StBoundVars binds],
-    transfers  = transfers sh
+    transfers  = transfers sh,
+    evalEnv    = eenv
     }            
 
 prShellStateInfo :: ShellState -> String
@@ -335,7 +338,8 @@ purgeShellState sh = ShSt {
   readFiles  = [],
   absCats    = absCats sh,
   statistics = statistics sh,
-  transfers  = transfers sh
+  transfers  = transfers sh,
+  evalEnv    = emptyEEnv
   }
  where
    abstr = abstract sh
@@ -347,17 +351,17 @@ purgeShellState sh = ShSt {
    complete = not . isIncompleteCanon
 
 changeMain :: Maybe Ident -> ShellState -> Err ShellState
-changeMain Nothing (ShSt _ _ cs ms ss cfs old_pis mcfgs fcfgs cfgs pinfos mos tbs pbs os rs acs s trs) = 
-  return (ShSt Nothing Nothing [] ms ss cfs old_pis mcfgs fcfgs cfgs pinfos mos tbs pbs os rs acs s trs)
+changeMain Nothing (ShSt _ _ cs ms ss cfs old_pis mcfgs fcfgs cfgs pinfos mos tbs pbs os rs acs s trs ee) = 
+  return (ShSt Nothing Nothing [] ms ss cfs old_pis mcfgs fcfgs cfgs pinfos mos tbs pbs os rs acs s trs ee)
 changeMain 
-  (Just c) st@(ShSt _ _ cs ms ss cfs old_pis mcfgs fcfgs cfgs pinfos mos tbs pbs os rs acs s trs) = 
+  (Just c) st@(ShSt _ _ cs ms ss cfs old_pis mcfgs fcfgs cfgs pinfos mos tbs pbs os rs acs s trs ee) = 
    case lookup c (M.modules ms) of 
     Just _ -> do
       a   <- M.abstractOfConcrete ms c
       let cas = M.allConcretes ms a
       let cs' = [((c,c),True) | c <- cas]
       return (ShSt (Just a) (Just c) cs' ms ss cfs old_pis mcfgs fcfgs cfgs
-        pinfos mos tbs pbs os rs acs s trs) 
+        pinfos mos tbs pbs os rs acs s trs ee) 
     _ -> P.prtBad "The state has no concrete syntax named" c
 
 -- | form just one state grammar, if unique, from a canonical grammar

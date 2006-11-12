@@ -154,7 +154,7 @@ optFile2grammar :: Options -> FilePath -> IOE GFGrammar
 optFile2grammar os f  
   | fileSuffix f == "gfcm" = ioeIO $ liftM firstStateGrammar $ EA.file2grammar f
   | otherwise = do
-      ((_,_,gr),_) <- compileModule os emptyShellState f
+      ((_,_,gr,_),_) <- compileModule os emptyShellState f
       ioeErr $ grammar2stateGrammar os gr
 
 optFile2grammarE :: Options -> FilePath -> IOE GFGrammar

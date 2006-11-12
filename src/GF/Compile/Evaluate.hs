@@ -12,7 +12,7 @@
 -- Computation of source terms. Used in compilation and in @cc@ command.
 -----------------------------------------------------------------------------
 
-module GF.Compile.Evaluate (appEvalConcrete) where
+module GF.Compile.Evaluate (appEvalConcrete, EEnv, emptyEEnv) where
 
 import GF.Data.Operations
 import GF.Grammar.Grammar
@@ -98,7 +98,7 @@ apps t = case t of
   App f a -> (f',xs ++ [a]) where (f',xs) = apps f
   _ -> (t,[])
 
-appEvalConcrete gr bt = liftM fst $ appSTM (evalConcrete gr bt) emptyEEnv
+appEvalConcrete gr bt env = appSTM (evalConcrete gr bt) env
 
 evalConcrete :: SourceGrammar -> BinTree Ident Info -> STM EEnv (BinTree Ident Info)
 evalConcrete gr mo = mapMTree evaldef mo where
@@ -350,6 +350,9 @@ evalConcrete gr mo = mapMTree evaldef mo where
 
          (R rs, R ss) -> stmErr $ plusRecord r' s'
          (RecType rs, RecType ss) -> stmErr $ plusRecType r' s'
+
+         (_, FV ss) -> liftM FV $ mapM (comp g) [ExtR t u | u <- ss]
+
          _ -> return $ ExtR r' s'
 
      -- case-expand tables

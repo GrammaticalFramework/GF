@@ -15,6 +15,9 @@ lin
 
   SymbS sy = sy ; 
 
+  SymbNum sy = sy ;
+  SymbOrd sy = {s = sy.s ++ "th"} ;
+
 lincat 
 
   Symb, [Symb] = SS ;
