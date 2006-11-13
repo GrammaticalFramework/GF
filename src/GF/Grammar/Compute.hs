@@ -17,6 +17,7 @@ module GF.Grammar.Compute (computeConcrete, computeTerm,computeConcreteRec) wher
 import GF.Data.Operations
 import GF.Grammar.Grammar
 import GF.Infra.Ident
+import GF.Infra.Option
 import GF.Data.Str
 import GF.Grammar.PrGrammar
 import GF.Infra.Modules
@@ -286,6 +287,19 @@ computeTermOpt rec gr = comp where
      look p c
        | rec       = lookupResDef gr p c >>= comp []
        | otherwise = lookupResDef gr p c
+
+{-
+     look p c = case lookupResDefKind gr p c of
+       Ok (t,_) | noExpand p || rec -> comp [] t
+       Ok (t,_) -> return t
+       Bad s -> raise s
+
+     noExpand p = errVal False $ do
+       mo <- lookupModMod gr p
+       return $ case getOptVal (iOpts (flags mo)) useOptimizer of
+         Just "noexpand" -> True
+         _ -> False
+-}
 
      ext x a g = (x,a):g
 
