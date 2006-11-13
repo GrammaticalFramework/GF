@@ -222,6 +222,9 @@ evalConcrete gr mo = mapMTree evaldef mo where
          ExtR a (R b) -> case lookup l b of  ----comp g (P (R b) l) of
            Just (_,v) -> comp g v
            _ -> comp g (P a l)
+         ExtR (R a) b -> case lookup l a of  ----comp g (P (R b) l) of
+           Just (_,v) -> comp g v
+           _ -> comp g (P b l)
 
          S (T i cs) e -> prawitz g i (flip P l) cs e
 
