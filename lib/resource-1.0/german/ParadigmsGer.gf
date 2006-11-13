@@ -307,9 +307,9 @@ oper
     MorphoGer.mkA a aa b (init c) ** {lock_A = <>} ;
 
   regA : Str -> A = \a -> case a of {
-    teu + "er" => mkA a (teu + "rer") (teu + "rest") ;
-    _ + "e"    => mkA a (a + "r") (a + "st") ;
-    _          => mkA a (a + "er") (a + "est")
+    teu + "er" => mkA a (teu + "rer") (teu + "reste") ;
+    _ + "e"    => mkA a (a + "r") (a + "ste") ;
+    _          => mkA a (a + "er") (a + "este")
     } ;
 
   invarA = \s -> {s = \\_,_ => s ; lock_A = <>} ; ---- comparison

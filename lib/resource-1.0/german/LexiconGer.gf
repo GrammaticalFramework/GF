@@ -172,7 +172,7 @@ lin
   shirt_N = reg2N "Hemd" "Hemden" neuter ; ---- infl
   shoe_N = regN "Schuh" ;
   shop_N = reg2N "Laden" "Läden" masculine ;
-  short_A = regA "kurz" ;
+  short_A =  mkA "kurz" "kürzer" "kürzeste" ;
   silver_N = reg2N "Silber" "Silber" neuter ; ---- infl
   sister_N = reg2N "Schwester" "Schwestern" feminine ;
   sleep_V = irregV "schlafen" "schläft" "schlief" "schliefe" "geschlafen" ;
