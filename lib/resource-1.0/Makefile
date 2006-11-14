@@ -32,6 +32,7 @@ alltenses:
 	$(GFC) russian/Russian.gf
 	$(GFC) spanish/Spanish.gf
 	$(GFC) swedish/Swedish.gf
+	$(GFC) common/ConstructX.gf
 	cp -p */*.gfc */*.gfr ../alltenses
 
 langs:
@@ -50,6 +51,7 @@ present:
 	$(GFCP) russian/LangRus.gf
 	$(GFCP) spanish/Spanish.gf
 	$(GFCP) swedish/Swedish.gf
+	$(GFCP) common/ConstructX.gf
 	mv */*.gfc */*.gfr ../present
 
 mathematical:

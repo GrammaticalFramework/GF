@@ -151,6 +151,13 @@ evalConcrete gr mo = mapMTree evaldef mo where
           return d
         Just d -> fterm2term d >>= comp g
     App f a -> case apps t of
+{- ----
+      (h@(QC p c),xs) -> do
+        xs' <- mapM (comp g) xs
+        case lookupValueIndex gr ty t of 
+        Ok v -> return v
+        _ -> return t
+-}
       (h@(Q p c),xs) | p == IC "Predef" -> do
         xs' <- mapM (comp g) xs
         (t',b) <- stmErr $ appPredefined (foldl App h xs')

@@ -21,6 +21,8 @@ module GF.Grammar.Lookup (
 	       lookupParams, 
 	       lookupParamValues, 
 	       lookupFirstTag, 
+               lookupValueIndex,
+               lookupIndexValue,
 	       allParamValues, 
 	       lookupAbsDef, 
 	       lookupLincat, 
@@ -87,7 +89,7 @@ lookupResType gr m c = do
         CncFun _ _ _      -> lookFunType m m c
         AnyInd _ n        -> lookupResType gr n c
         ResParam _        -> return $ typePType
-        ResValue (Yes t)  -> return $ qualifAnnotPar m t
+        ResValue (Yes (t,_))  -> return $ qualifAnnotPar m t
         _   -> Bad $ prt c +++ "has no type defined in resource" +++ prt m
     _ -> Bad $ prt m +++ "is not a resource"
   where
@@ -104,7 +106,7 @@ lookupResType gr m c = do
             _ -> prtBad "cannot find type of reused function" c
 
 
-lookupParams :: SourceGrammar -> Ident -> Ident -> Err [Param]
+lookupParams :: SourceGrammar -> Ident -> Ident -> Err ([Param],Maybe PValues)
 lookupParams gr = look True where 
   look isTop m c = do
     mi   <- lookupModule gr m
@@ -112,9 +114,8 @@ lookupParams gr = look True where
       ModMod mo -> do
         info <- lookupIdentInfo mo c
         case info of
-          ResParam (Yes ps) -> return ps
-          ---- ResParam   Nope   -> if isTop then lookExt m c 
-          ----                       else prtBad "cannot find params in exts" c 
+          ResParam (Yes psm) -> return psm
+
           AnyInd _ n        -> look False n c
           _   -> Bad $ prt c +++ "has no parameters defined in resource" +++ prt m
       _ -> Bad $ prt m +++ "is not a resource"
@@ -123,8 +124,10 @@ lookupParams gr = look True where
 
 lookupParamValues :: SourceGrammar -> Ident -> Ident -> Err [Term]
 lookupParamValues gr m c = do
-  ps <- lookupParams gr m c
-  liftM concat $ mapM mkPar ps
+  (ps,mpv) <- lookupParams gr m c
+  case mpv of
+    Just ts -> return ts
+    _ -> liftM concat $ mapM mkPar ps
  where
    mkPar (f,co) = do
      vs <- liftM combinations $ mapM (\ (_,ty) -> allParamValues gr ty) co
@@ -136,6 +139,20 @@ lookupFirstTag gr m c = do
   case vs of
     v:_ -> return v
     _ -> prtBad "no parameter values given to type" c
+
+lookupValueIndex :: SourceGrammar -> Type -> Term -> Err Term
+lookupValueIndex gr ty tr = do
+  ts <- allParamValues gr ty
+  case lookup tr $ zip ts [0..] of
+    Just i -> return $ Val ty i
+    _ -> Bad $ "no index for" +++ prt tr +++ "in" +++ prt ty
+
+lookupIndexValue :: SourceGrammar -> Type -> Int -> Err Term
+lookupIndexValue gr ty i = do
+  ts <- allParamValues gr ty
+  if i < length ts
+    then return $ ts !! i
+    else Bad $ "no value for index" +++ show i +++ "in" +++ prt ty
 
 allParamValues :: SourceGrammar -> Type -> Err [Term]
 allParamValues cnc ptyp = case ptyp of

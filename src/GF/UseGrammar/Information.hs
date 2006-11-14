@@ -129,10 +129,10 @@ getInformation opts st c = allChecks $ [
          rs <- return []
          returnm i $ IFunCnc i tr rs tr ---       
        ResOper (Yes ty) (Yes tr) -> returnm i $ IOper i ty tr
-       ResParam (Yes ps) -> do
+       ResParam (Yes (ps,_)) -> do
          ts <- allParamValues src (QC i c)
          returnm i $ IParam i ps ts
-       ResValue (Yes ty) -> returnm i $ IValue i ty ---
+       ResValue (Yes (ty,_)) -> returnm i $ IValue i ty ---
        
        _ -> prtBad "nothing available for" i
    lookInCan (i,m) = do

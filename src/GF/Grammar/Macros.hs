@@ -496,6 +496,7 @@ linDefStr = Abs s (R [assign (linLabel 0) (Vr s)]) where s = zIdent "s"
 term2patt :: Term -> Err Patt
 term2patt trm = case termForm trm of
   Ok ([], Vr x, []) -> return (PV x)
+  Ok ([], Val ty x, []) -> return (PVal ty x)
   Ok ([], Con c, aa) -> do
     aa' <- mapM term2patt aa
     return (PC c aa')
@@ -535,7 +536,8 @@ term2patt trm = case termForm trm of
 patt2term :: Patt -> Term
 patt2term pt = case pt of
   PV x      -> Vr x
-  PW        -> Vr wildIdent                      --- not parsable, should not occur
+  PW        -> Vr wildIdent             --- not parsable, should not occur
+  PVal t i  -> Val t i
   PC c pp   -> mkApp (Con c) (map patt2term pp)
   PP p c pp -> mkApp (QC p c) (map patt2term pp)
   PR r      -> R [assign l (patt2term p) | (l,p) <- r] 
@@ -693,6 +695,10 @@ composOp co trm =
      do ty' <- co ty
         vs' <- mapM co vs
         return (V ty' vs')
+
+   Val ty i ->
+     do ty' <- co ty
+        return (Val ty' i)
 
    Let (x,(mt,a)) b -> 
      do a'  <- co a

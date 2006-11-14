@@ -56,6 +56,9 @@ tryMatch (p,t) = do
  where
   trym p t' =
     case (p,t') of
+      (PVal _ i, (_,Val _ j,_)) 
+          | i == j -> return []
+          | otherwise -> Bad $ "no match of values"
       (_,(x,Empty,y)) -> trym p (x,K [],y)   -- because "" = [""] = []
       (PV IW, _) | isInConstantForm t -> return [] -- optimization with wildcard
       (PV x,  _) | isInConstantForm t -> return [(x,t)]

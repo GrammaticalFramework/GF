@@ -61,7 +61,7 @@ checkModule ms (name,mod) = checkIn ("checking module" +++ prt name) $ case mod 
 
       MTTransfer a b -> mapMTree (checkAbsInfo gr name) js
 
-      MTResource -> mapMTree (checkResInfo gr) js
+      MTResource -> mapMTree (checkResInfo gr name) js
 
       MTConcrete a -> do
         checkErr $ topoSortOpers $ allOperDependencies name js
@@ -69,12 +69,12 @@ checkModule ms (name,mod) = checkIn ("checking module" +++ prt name) $ case mod 
         js1 <- checkCompleteGrammar abs mo
         mapMTree (checkCncInfo gr name (a,abs)) js1
 
-      MTInterface -> mapMTree (checkResInfo gr) js
+      MTInterface -> mapMTree (checkResInfo gr name) js
 
       MTInstance a -> do
         ModMod abs <- checkErr $ lookupModule gr a
         -- checkCompleteInstance abs mo -- this is done in Rebuild
-        mapMTree (checkResInfo gr) js
+        mapMTree (checkResInfo gr name) js
 
     return $ (name, ModMod (Module mt st fs me ops js')) : ms
 
@@ -167,8 +167,8 @@ checkCompleteGrammar abs cnc = do
 
 -- | General Principle: only Yes-values are checked. 
 -- A May-value has always been checked in its origin module.
-checkResInfo :: SourceGrammar -> (Ident,Info) -> Check (Ident,Info)
-checkResInfo gr (c,info) = do
+checkResInfo :: SourceGrammar -> Ident -> (Ident,Info) -> Check (Ident,Info)
+checkResInfo gr mo (c,info) = do
   checkReservedId c
   case info of
 
@@ -187,10 +187,11 @@ checkResInfo gr (c,info) = do
          _ -> return (pty, pde) --- other cases are uninteresting
       return (c, ResOper pty' pde')
 
-    ResParam (Yes pcs) -> chIn "parameter type" $ do
+    ResParam (Yes (pcs,_)) -> chIn "parameter type" $ do
 ----      mapM ((mapM (computeLType gr . snd)) . snd) pcs
       mapM_ ((mapM_ (checkIfParType gr . snd)) . snd) pcs
-      return (c,info)
+      ts <- checkErr $ lookupParamValues gr mo c
+      return (c,ResParam (Yes (pcs, Just ts)))
 
     _ ->  return (c,info)
  where
@@ -226,7 +227,7 @@ checkCncInfo gr m (a,abs) (c,info) = do
       checkPrintname gr mpr
       return (c,CncCat (Yes typ') mdef' mpr)
 
-    _ -> checkResInfo gr (c,info)
+    _ -> checkResInfo gr m (c,info)
 
  where
    env = gr
@@ -360,12 +361,14 @@ inferLType gr trm = case trm of
    QC m ident | isPredef m -> termWith trm $ checkErr (typPredefined ident)
 
    QC m ident -> checks [
-     termWith trm $ checkErr (lookupResType gr m ident) >>= comp
-     ,
-     checkErr (lookupResDef gr m ident) >>= infer
-     ,
-     prtFail "cannot infer type of canonical constant" trm
-     ]
+       termWith trm $ checkErr (lookupResType gr m ident) >>= comp
+       ,
+       checkErr (lookupResDef gr m ident) >>= infer
+       ,
+       prtFail "cannot infer type of canonical constant" trm
+       ]
+
+   Val ty i -> termWith trm $ return ty
 
    Vr ident -> termWith trm $ checkLookup ident
 
@@ -384,7 +387,7 @@ inferLType gr trm = case trm of
                   then return val
                   else substituteLType [(z,a')] val
          return (App f' a',ty) 
-       _ -> prtFail ("function type expected for" +++ prt f +++ "instead of") fty
+       _ -> prtFail ("function type expected for"+++ prt f +++"instead of") fty
 
    S f x -> do
      (f', fty) <- infer f

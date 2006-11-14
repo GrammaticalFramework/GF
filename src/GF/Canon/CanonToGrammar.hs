@@ -69,7 +69,9 @@ redInfo (c,info) = errIn ("decompiling abstract" +++ show c) $ do
     AbsTrans t -> do
       return $ G.AbsTrans t
 
-    ResPar par -> liftM (G.ResParam . Yes) $ mapM redParam par
+    ResPar par -> do
+      par' <- mapM redParam par
+      return $ G.ResParam (Yes (par',Nothing)) ---- list of values
 
     CncCat pty ptr ppr -> do
       ty'  <- redCType pty
