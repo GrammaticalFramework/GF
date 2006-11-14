@@ -104,7 +104,7 @@ redInfo am (c,info) = errIn ("translating definition of" +++ prt c) $ do
     AbsTrans t -> 
       returns c' $ C.AbsTrans t
 
-    ResParam (Yes ps) -> do
+    ResParam (Yes (ps,_)) -> do
       ps' <- mapM redParam ps
       returns c' $ C.ResPar ps'
 

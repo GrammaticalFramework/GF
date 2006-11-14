@@ -293,8 +293,9 @@ transResDef x = case x of
     pardefs' <- mapM transParDef pardefs
     returnl $ [(p, G.ResParam (if null pars 
                                   then nope -- abstract param type 
-                                  else (yes pars))) | (p,pars) <- pardefs']
-           ++ [(f, G.ResValue (yes (M.mkProdSimple co (G.Cn p)))) |
+                                  else (yes (pars,Nothing)))) 
+                                     | (p,pars) <- pardefs']
+           ++ [(f, G.ResValue (yes (M.mkProdSimple co (G.Cn p),Nothing))) |
                      (p,pars) <- pardefs', (f,co) <- pars]
   DefOper defs -> do
     defs' <- liftM concat $ mapM getDefs defs

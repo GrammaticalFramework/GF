@@ -90,7 +90,7 @@ trAnyDef (i,info) = let i' = tri i in case info of
 
   ResOper pty ptr -> [P.DefOper [trDef i' pty ptr]]
   ResParam pp -> [P.DefPar [case pp of
-    Yes ps -> P.ParDefDir i' [P.ParConstr (tri c) (map trDecl co) | (c,co) <- ps]
+    Yes (ps,_) -> P.ParDefDir i' [P.ParConstr (tri c) (map trDecl co) | (c,co) <- ps]
     May b  -> P.ParDefIndir i' $ tri b
     _      -> P.ParDefAbs i']]
 

@@ -91,29 +91,3 @@ checkCompleteInstance abs cnc = ifNull (return ()) (Bad . unlines) $
                       then id
                       else (("Error: no definition given to" +++ prt f):)
 
-{- ---- should not be needed
-qualifInstanceInfo :: [(Ident,Ident)] -> (Ident,Info) -> (Ident,Info)
-qualifInstanceInfo insts (c,i) = (c,qualInfo i) where
-
-  qualInfo i = case i of
-    ResOper pty pt -> ResOper (qualP pty) (qualP pt)
-    CncCat  pty pt pp -> CncCat (qualP pty) (qualP pt) (qualP pp)
-    CncFun  mp pt pp -> CncFun (qualLin mp) (qualP pt) (qualP pp) ---- mp
-    ResParam (Yes ps) -> ResParam (yes (map qualParam ps)) 
-    ResValue pty ->  ResValue (qualP pty)
-    _ -> i
-  qualP pt = case pt of
-     Yes t -> yes $ qual t
-     May m -> may $ qualId m
-     _ -> pt
-  qualId x = maybe x id $ lookup x insts
-  qual t = case t of
-     Q m c  -> Q  (qualId m) c
-     QC m c -> QC (qualId m) c
-     _ -> composSafeOp qual t
-  qualParam (p,co) = (p,[(x,qual t) | (x,t) <- co])
-  qualLin (Just (c,(co,t))) = (Just (c,([(x,qual t) | (x,t) <- co], qual t)))
-  qualLin Nothing = Nothing
-
-   -- NB constructor patterns never appear in interfaces so we need not rename them
--}

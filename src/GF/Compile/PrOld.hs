@@ -49,7 +49,7 @@ stripInfo (c,i) = case i of
   AbsCat   (Yes co) (Yes fs) -> rc $ AbsCat (Yes (stripContext co)) nope
   AbsFun   (Yes ty) (Yes tr) -> rc $ AbsFun (Yes (stripTerm ty)) (Yes(stripTerm tr))
   AbsFun   (Yes ty) _ -> rc $ AbsFun (Yes (stripTerm ty)) nope
-  ResParam (Yes ps)       -> rc $ ResParam (Yes [(c,stripContext co) | (c,co)<- ps])
+  ResParam (Yes (ps,m))       -> rc $ ResParam (Yes ([(c,stripContext co) | (c,co)<- ps],Nothing))
   CncCat   (Yes ty) _ _ -> rc $
     CncCat (Yes (stripTerm ty)) nope nope
   CncFun   _ (Yes tr) _ -> rc $ CncFun Nothing (Yes (stripTerm tr)) nope

@@ -1,3 +1,5 @@
+--# -path=.:../abstract:prelude
+
 resource ConstructX = open CommonX in {
 
   oper

@@ -21,6 +21,7 @@ module GF.Grammar.Grammar (SourceGrammar,
 		SourceRes,
 		SourceCnc,
 		Info(..),
+                PValues,
 		Perh,
 		MPr,
 		Type,
@@ -68,6 +69,9 @@ type SourceAbs = Module Ident Option Info
 type SourceRes = Module Ident Option Info
 type SourceCnc = Module Ident Option Info
 
+-- this is created in CheckGrammar, and so are Val and PVal
+type PValues = [Term]
+
 -- | the constructors are judgements in 
 --
 --   - abstract syntax (/ABS/)
@@ -84,8 +88,8 @@ data Info =
  | AbsTrans Term                           -- ^ (/ABS/)
 
 -- judgements in resource
- | ResParam (Perh [Param])                 -- ^ (/RES/)
- | ResValue (Perh Type)                    -- ^ (/RES/) to mark parameter constructors for lookup
+ | ResParam (Perh ([Param],Maybe PValues)) -- ^ (/RES/)
+ | ResValue (Perh (Type,Maybe Int))        -- ^ (/RES/) to mark parameter constructors for lookup
  | ResOper  (Perh Type) (Perh Term)        -- ^ (/RES/)
 
 -- judgements in concrete syntax
@@ -139,6 +143,7 @@ data Term =
  | TSh TInfo [Cases]    -- ^ table with discjunctive patters (only back end opt)
  | V Type [Term]        -- ^ table given as course of values: @table T [c1 ; ... ; cn]@
  | S Term Term          -- ^ selection:   @t ! p@
+ | Val Type Int         -- ^ parameter value number: @T # i#
 
  | Let LocalDef Term    -- ^ local definition: @let {t : T = a} in b@
 
@@ -172,6 +177,8 @@ data Patt =
  | PInt    Integer        -- ^ integer literal pattern: @12@    -- only abstract
  | PFloat Double          -- ^ float literal pattern: @1.2@    -- only abstract
  | PT Type Patt           -- ^ type-annotated pattern
+
+ | PVal Type Int          -- ^ parameter value number: @T # i#
 
  | PAs Ident Patt         -- ^ as-pattern: x@p
 
