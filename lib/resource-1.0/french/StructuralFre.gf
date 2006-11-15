@@ -1,3 +1,5 @@
+--# -path=.:../abstract:../romance:../common:prelude
+
 concrete StructuralFre of Structural = CatFre ** 
   open PhonoFre, MorphoFre, ParadigmsFre, IrregFre, Prelude in {
 
@@ -114,10 +116,10 @@ lin
     mkPronoun "nous" "nous" "nous" "nous" "notre" "notre" "nos"
     Masc Pl P1 ;
   whatSg_IP = 
-    {s = \\c => artDef a.g a.n c + quelPron ! a ; a = a}
+    {s = \\c => prepCase c ++ quelPron ! a ; a = a}
     where {a = aagr Masc Sg} ;
   whatPl_IP = 
-    {s = \\c => artDef a.g a.n c + quelPron ! a ; a = a}
+    {s = \\c => prepCase c ++ quelPron ! a ; a = a}
     where {a = aagr Masc Pl} ;
   when_IAdv = ss "quand" ;
   when_Subj = ss "quand" ** {m = Indic} ;
