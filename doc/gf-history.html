@@ -14,6 +14,18 @@ Changes in functionality since May 17, 2005, release of GF Version 2.2
 
 <p>
 
+17/11 (AR) Operation overloading: an <tt>oper</tt> can have many types,
+from which one is picked at compile time. The types must have different
+argument lists. Exact match with the arguments given to the <tt>oper</tt>
+is required. An example is given in 
+<a href="../lib/resource-1.0/common/Overload.gf"><tt>Overload.gf</tt></a>.
+The purpose of overloading is to make libraries easier to use, since
+only one name for each grammatical operation is needed: predication, modification,
+coordination, etc. The concrete syntax is, at this experimental level, not
+extended but relies on using a record with the function name repeated
+as label name (see the example). The treatment of overloading is inspired
+by C++, and was first suggested by Björn Nringert.
+
 <p>
 
 
