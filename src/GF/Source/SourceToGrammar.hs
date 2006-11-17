@@ -299,7 +299,7 @@ transResDef x = case x of
                      (p,pars) <- pardefs', (f,co) <- pars]
   DefOper defs -> do
     defs' <- liftM concat $ mapM getDefs defs
-    returnl [(f, G.ResOper pt pe) | (f,(pt,pe)) <- defs']
+    returnl [mkOverload (f, G.ResOper pt pe) | (f,(pt,pe)) <- defs']
 
   DefLintype defs -> do
     defs' <- liftM concat $ mapM getDefs defs
@@ -307,6 +307,12 @@ transResDef x = case x of
 
   DefFlag defs -> liftM Right $ mapM transFlagDef defs
   _ -> Bad $ "illegal definition form in resource" +++ printTree x
+ where
+   mkOverload (c,j) = case j of
+     G.ResOper Nope (Yes (G.R fs@(_:_:_))) | isOverloading c fs -> 
+       (c,G.ResOverload [(ty,fu) | (_,(Just ty,fu)) <- fs])
+     _ -> (c,j)
+   isOverloading c fs = all (== GP.prt c) (map (GP.prt . fst) fs)
 
 transParDef :: ParDef -> Err (Ident, [G.Param])
 transParDef x = case x of

@@ -171,7 +171,6 @@ checkResInfo :: SourceGrammar -> Ident -> (Ident,Info) -> Check (Ident,Info)
 checkResInfo gr mo (c,info) = do
   checkReservedId c
   case info of
-
     ResOper pty pde -> chIn "operation" $ do
       (pty', pde') <- case (pty,pde) of
          (Yes ty, Yes de) -> do
@@ -187,6 +186,11 @@ checkResInfo gr mo (c,info) = do
          _ -> return (pty, pde) --- other cases are uninteresting
       return (c, ResOper pty' pde')
 
+    ResOverload tysts -> chIn "overloading" $ do
+      tysts' <- mapM (uncurry $ flip check) tysts
+      ---- TODO: check uniqueness of arg type lists
+      return (c,ResOverload [(y,x) | (x,y) <- tysts'])
+
     ResParam (Yes (pcs,_)) -> chIn "parameter type" $ do
 ----      mapM ((mapM (computeLType gr . snd)) . snd) pcs
       mapM_ ((mapM_ (checkIfParType gr . snd)) . snd) pcs
@@ -199,6 +203,8 @@ checkResInfo gr mo (c,info) = do
    check = checkLType gr
    chIn cat = checkIn ("Happened in" +++ cat +++ prt c +++ ":")
    comp = computeLType gr
+
+
 
 checkCncInfo :: SourceGrammar -> Ident -> (Ident,SourceAbs) -> 
                 (Ident,Info) -> Check (Ident,Info)
@@ -378,16 +384,20 @@ inferLType gr trm = case trm of
      return (e,t')
 
    App f a -> do
-     (f',fty) <- infer f
-     fty' <- comp fty
-     case fty' of
-       Prod z arg val -> do 
-         a' <- justCheck a arg
-         ty <- if isWildIdent z 
-                  then return val
-                  else substituteLType [(z,a')] val
-         return (App f' a',ty) 
-       _ -> prtFail ("function type expected for"+++ prt f +++"instead of") fty
+     over <- getOverload trm
+     case over of
+       Just trty -> return trty
+       _ -> do
+         (f',fty) <- infer f
+         fty' <- comp fty
+         case fty' of
+           Prod z arg val -> do 
+             a' <- justCheck a arg
+             ty <- if isWildIdent z 
+                      then return val
+                      else substituteLType [(z,a')] val
+             return (App f' a',ty) 
+           _ -> prtFail ("function type expected for"+++ prt f +++"instead of") fty
 
    S f x -> do
      (f', fty) <- infer f
@@ -549,6 +559,27 @@ inferLType gr trm = case trm of
      PSeq _ _ -> return $ typeTok
      PRep _   -> return $ typeTok
      _ -> infer (patt2term p) >>= return . snd
+
+   getOverload t = case appForm t of
+     (f@(Q m c), ts) -> case lookupOverload gr m c of
+       Ok typs -> do
+         ttys <- mapM infer ts
+         v <- matchOverload f typs ttys
+         return $ Just v
+       _ -> return Nothing
+     _ -> return Nothing
+ 
+   matchOverload f typs ttys = do
+     let (tts,tys) = unzip ttys
+     case lookupOverloadInstance tys typs of
+       Just (val,fun) -> return (mkApp fun tts, val)
+       _ -> fail $ "no overload instance of" +++ prt f +++ 
+         "for" +++ unwords (map prt_ tys) +++ "among" ++++ 
+         unlines [unwords (map prt_ ty) | (ty,_) <- typs]
+         ++++ "DEBUG" +++ unwords (map show tys) +++ ";" ++++ 
+               unlines (map (show . fst) typs) ----
+
+   lookupOverloadInstance tys typs = lookup tys typs ---- use Map
 
 checkLType :: SourceGrammar -> Term -> Type -> Check (Term, Type)
 checkLType env trm typ0 = do
