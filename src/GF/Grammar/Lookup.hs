@@ -18,6 +18,7 @@ module GF.Grammar.Lookup (
                lookupResDef,
                lookupResDefKind,
 	       lookupResType, 
+               lookupOverload,
 	       lookupParams, 
 	       lookupParamValues, 
 	       lookupFirstTag, 
@@ -105,6 +106,20 @@ lookupResType gr m c = do
             AnyInd _ n -> lookFun e m c n
             _ -> prtBad "cannot find type of reused function" c
 
+lookupOverload :: SourceGrammar -> Ident -> Ident -> Err [([Type],(Type,Term))]
+lookupOverload gr m c = do
+    mi   <- lookupModule gr m
+    case mi of
+      ModMod mo -> do
+        info <- lookupIdentInfo mo c
+        case info of
+          ResOverload tysts -> 
+            return [(map snd args,(val,tr)) | 
+                      (ty,tr) <- tysts, Ok (args,val) <- [typeFormCnc ty]]
+
+          AnyInd _ n  -> lookupOverload gr n c
+          _   -> Bad $ prt c +++ "is not an overloaded operation"
+      _ -> Bad $ prt m +++ "is not a resource"
 
 lookupParams :: SourceGrammar -> Ident -> Ident -> Err ([Param],Maybe PValues)
 lookupParams gr = look True where 

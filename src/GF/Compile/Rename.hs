@@ -159,6 +159,8 @@ renameInfo status (i,info) = errIn ("renaming definition of" +++ prt i) $
   AbsTrans f -> liftM AbsTrans (rent f)
 
   ResOper pty ptr -> liftM2 ResOper (ren pty) (ren ptr)
+  ResOverload tysts -> liftM ResOverload $ mapM (pairM rent) tysts
+
   ResParam (Yes (pp,m)) -> do
     pp' <- mapM (renameParam status) pp
     return $ ResParam $ Yes (pp',m)
