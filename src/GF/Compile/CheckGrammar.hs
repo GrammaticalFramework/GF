@@ -189,7 +189,9 @@ checkResInfo gr mo (c,info) = do
     ResOverload tysts -> chIn "overloading" $ do
       tysts' <- mapM (uncurry $ flip check) tysts
       ---- TODO: check uniqueness of arg type lists
-      return (c,ResOverload [(y,x) | (x,y) <- tysts'])
+      let tysts2 = [(y,x) | (x,y) <- tysts']
+      checkUniq $ sort [map snd xs | (x,_) <- tysts2, Ok (xs,_) <- [typeFormCnc x]]
+      return (c,ResOverload tysts2)
 
     ResParam (Yes (pcs,_)) -> chIn "parameter type" $ do
 ----      mapM ((mapM (computeLType gr . snd)) . snd) pcs
@@ -204,6 +206,12 @@ checkResInfo gr mo (c,info) = do
    chIn cat = checkIn ("Happened in" +++ cat +++ prt c +++ ":")
    comp = computeLType gr
 
+   checkUniq xss = case xss of
+     x:y:xs 
+      | x == y -> raise $ "ambiguous for argument list" +++ 
+                         unwords (map prtType x)  
+      | otherwise -> checkUniq $ y:xs
+     _ -> return ()
 
 
 checkCncInfo :: SourceGrammar -> Ident -> (Ident,SourceAbs) -> 
@@ -397,7 +405,8 @@ inferLType gr trm = case trm of
                       then return val
                       else substituteLType [(z,a')] val
              return (App f' a',ty) 
-           _ -> prtFail ("function type expected for"+++ prt f +++"instead of") fty
+           _ -> raise ("function type expected for"+++ 
+                      prt f +++"instead of" +++ prtType fty)
 
    S f x -> do
      (f', fty) <- infer f
@@ -573,9 +582,9 @@ inferLType gr trm = case trm of
      let (tts,tys) = unzip ttys
      case lookupOverloadInstance tys typs of
        Just (val,fun) -> return (mkApp fun tts, val)
-       _ -> fail $ "no overload instance of" +++ prt f +++ 
-         "for" +++ unwords (map prt_ tys) +++ "among" ++++ 
-         unlines [unwords (map prt_ ty) | (ty,_) <- typs]
+       _ -> raise $ "no overload instance of" +++ prt f +++ 
+         "for" +++ unwords (map prtType tys) +++ "among" ++++ 
+         unlines [unwords (map prtType ty) | (ty,_) <- typs]
          ++++ "DEBUG" +++ unwords (map show tys) +++ ";" ++++ 
                unlines (map (show . fst) typs) ----
 
@@ -599,7 +608,7 @@ checkLType env trm typ0 = do
                           check c b'
           checkReset
           return $ (Abs x c', Prod x a b')
-        _ -> prtFail "product expected instead of" typ
+        _ -> raise $ "product expected instead of" +++ prtType typ
 
     T _ [] ->
       prtFail "found empty table in type" typ
@@ -617,7 +626,7 @@ checkLType env trm typ0 = do
           _ -> return () -- happens with variable types
         cs' <- mapM (checkCase arg val) cs
         return (T (TTyped arg) cs', typ)
-      _ -> prtFail "table type expected for table instead of" typ
+      _ -> raise $ "table type expected for table instead of" +++ prtType typ
 
     R r -> case typ of --- why needed? because inference may be too difficult
        RecType rr -> do
@@ -672,7 +681,8 @@ checkLType env trm typ0 = do
           (arg',val) <- check arg p
           checkEq typ t trm
           return (S tab' arg', t)
-        _ -> prtFail "table type expected for applied table instead of" ty'
+        _ -> raise $ "table type expected for applied table instead of" +++ 
+                   prtType ty'
      , do
       (arg',ty) <- infer arg
       ty'       <- comp ty
@@ -812,7 +822,8 @@ checkEqLType env t u trm = do
         checkWarn $ "WARNING: missing lock field" +++ unwords (map prt lo)
         return t'
       Bad s -> raise (s +++ "type of" +++ prt trm +++ 
-                ": expected" ++++ prt t' ++++ "inferred" ++++ prt u' ++++ show u')
+                ": expected" ++++ prtType t' ++++ 
+                "inferred" ++++ prtType u' ++++ show u')
  where
 
    -- t is a subtype of u 
@@ -872,6 +883,15 @@ checkEqLType env t u trm = do
 
    sTypes = [typeStr, typeTok, typeString]
    comp = computeLType env
+
+-- printing a type with a lock field lock_C as C
+prtType :: Type -> String
+prtType ty = case ty of
+  RecType fs -> case filter isLockLabel $ map fst fs of
+    [lock] -> drop 5 $ prt lock
+    _ -> prt ty
+  Prod x a b -> prtType a +++ "->" +++ prtType b
+  _ -> prt ty
 
 -- | linearization types and defaults
 linTypeOfType :: SourceGrammar -> Ident -> Type -> Check (Context,Type)
