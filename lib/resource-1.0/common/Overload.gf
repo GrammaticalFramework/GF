@@ -17,21 +17,22 @@ incomplete resource Overload = open Grammar in {
 
     mod = overload {
       mod : A -> N -> CN
-                                  = \a,n -> AdjCN (PositA a) (UseN n) ;
+                                       = \a,n -> AdjCN (PositA a) (UseN n) ;
       mod : AP -> N -> CN
-                                  = \a,n -> AdjCN a (UseN n) ;
+                                       = \a,n -> AdjCN a (UseN n) ;
       mod : AP -> CN -> CN
-                                  = \a,n -> AdjCN a n ;
+                                       = \a,n -> AdjCN a n ;
       mod : AdA -> A -> AP
-                                  = \m,a -> AdAP m (PositA a) ;
+                                       = \m,a -> AdAP m (PositA a) ;
       mod : Quant -> N -> NP
-                                  = \q,n -> DetCN (DetSg (SgQuant q) NoOrd) 
-                                              (UseN n) ;
+                                       = \q,n -> DetCN (DetSg (SgQuant q) 
+                                          NoOrd) (UseN n) ;
       mod : Quant -> CN -> NP
-                                  = \q,n -> DetCN (DetSg (SgQuant q) NoOrd) n ;
+                                       = \q,n -> DetCN (DetSg 
+                                         (SgQuant q) NoOrd) n ;
       mod : Predet -> N -> NP 
-                                  = \q,n -> PredetNP q (DetCN (DetPl 
-                                   (PlQuant IndefArt)  NoNum NoOrd) (UseN n)) ;
+                                       = \q,n -> PredetNP q (DetCN (DetPl 
+                                       (PlQuant IndefArt)  NoNum NoOrd) (UseN n)) ;
       mod : Num -> N -> NP
                                   = \nu,n -> DetCN (DetPl (PlQuant 
                                     IndefArt) nu NoOrd) (UseN n)
