@@ -339,8 +339,12 @@ computeLType gr t = do
       r' <- comp r
       s' <- comp s
       case (r',s') of
-        (RecType rs, RecType ss) -> checkErr $ plusRecType r' s'
+        (RecType rs, RecType ss) -> checkErr (plusRecType r' s') >>= comp
         _ -> return $ ExtR r' s'
+
+    RecType fs -> do
+      let fs' = sortBy (\x y -> compare (fst x) (fst y)) fs
+      liftM RecType $ mapPairsM comp fs'
 
     _ | isPredefConstant ty -> return ty
 
@@ -585,8 +589,8 @@ inferLType gr trm = case trm of
        _ -> raise $ "no overload instance of" +++ prt f +++ 
          "for" +++ unwords (map prtType tys) +++ "among" ++++ 
          unlines [unwords (map prtType ty) | (ty,_) <- typs]
-         ++++ "DEBUG" +++ unwords (map show tys) +++ ";" ++++ 
-               unlines (map (show . fst) typs) ----
+        ++++ "DEBUG" +++ unwords (map show tys) +++ ";" 
+        ++++ unlines (map (show . fst) typs) ----
 
    lookupOverloadInstance tys typs = lookup tys typs ---- use Map
 
@@ -822,8 +826,10 @@ checkEqLType env t u trm = do
         checkWarn $ "WARNING: missing lock field" +++ unwords (map prt lo)
         return t'
       Bad s -> raise (s +++ "type of" +++ prt trm +++ 
-                ": expected" ++++ prtType t' ++++ 
-                "inferred" ++++ prtType u' ++++ show u')
+                ": expected:" +++ prtType t' ++++ 
+                "inferred:" +++ prtType u'
+            ----    +++++ "DEBUG:" ++++ show t' ++++ show u'
+                )
  where
 
    -- t is a subtype of u 
