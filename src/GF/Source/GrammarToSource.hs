@@ -96,7 +96,8 @@ trAnyDef (i,info) = let i' = tri i in case info of
 
   ResOverload tysts -> 
     [P.DefOper [P.DDef [mkName i'] (
-      P.ERecord [P.LDFull [i'] (trt ty) (trt fu) | (ty,fu) <- tysts])]]
+      P.EApp (P.EIdent $ identC "overload") 
+        (P.ERecord [P.LDFull [i'] (trt ty) (trt fu) | (ty,fu) <- tysts]))]]
 
   CncCat (Yes ty) Nope _ -> 
     [P.DefLincat [P.PrintDef [mkName i'] (trt ty)]] 
