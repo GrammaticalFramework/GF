@@ -589,8 +589,8 @@ inferLType gr trm = case trm of
        _ -> raise $ "no overload instance of" +++ prt f +++ 
          "for" +++ unwords (map prtType tys) +++ "among" ++++ 
          unlines [unwords (map prtType ty) | (ty,_) <- typs]
-        ++++ "DEBUG" +++ unwords (map show tys) +++ ";" 
-        ++++ unlines (map (show . fst) typs) ----
+      ----  ++++ "DEBUG" +++ unwords (map show tys) +++ ";" 
+      ----  ++++ unlines (map (show . fst) typs) ----
 
    lookupOverloadInstance tys typs = lookup tys typs ---- use Map
 
