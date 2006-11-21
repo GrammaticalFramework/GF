@@ -41,5 +41,5 @@ lin pot2 d = ss (d.s ! ental ++ "hundre") ;
 lin pot2plus d e = ss (d.s ! ental ++ "hundre" ++ "og" ++ e.s) ;
 lin pot2as3 n = n ;
 lin pot3 n = ss (n.s ++ "tusen") ;
-lin pot3plus n m = ss (n.s ++ "tusen" m.s) ;
+lin pot3plus n m = ss (n.s ++ "tusen" ++ m.s) ;
 
