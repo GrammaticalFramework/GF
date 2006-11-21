@@ -28,10 +28,10 @@ lin n7 = mkTal "sju"  "sytten" "sytti" ;
 lin n8 = mkTal "åtte" "atten"   "åtti" ;
 lin n9 = mkTal "ni"  "nitten"   "nitti" ;
 
-lin pot01 = {s = table {f => "et"}} ;
+lin pot01 = {s = table {f => "ett"}} ;
 lin pot0 d = {s = table {f => d.s ! f}} ;
 lin pot110 = ss "ti" ;
-lin pot111 = ss "elve" ;
+lin pot111 = ss "elleve" ;
 lin pot1to19 d = ss (d.s ! ton) ;
 lin pot0as1 n = ss (n.s ! ental) ;
 lin pot1 d = ss (d.s ! tiotal) ;
@@ -41,5 +41,5 @@ lin pot2 d = ss (d.s ! ental ++ "hundre") ;
 lin pot2plus d e = ss (d.s ! ental ++ "hundre" ++ "og" ++ e.s) ;
 lin pot2as3 n = n ;
 lin pot3 n = ss (n.s ++ "tusen") ;
-lin pot3plus n m = ss (n.s ++ "tusen" ++ "og" ++ m.s) ;
+lin pot3plus n m = ss (n.s ++ "tusen" m.s) ;
 
