@@ -1,0 +1,324 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<META NAME="generator" CONTENT="http://txt2tags.sf.net">
+<TITLE> Constructors: the High-Level Syntax API</TITLE>
+</HEAD><BODY BGCOLOR="white" TEXT="black">
+<P ALIGN="center"><CENTER><H1> Constructors: the High-Level Syntax API</H1>
+<FONT SIZE="4">
+<I>Last update: 2006-11-21 19:14:38 CET</I><BR>
+</FONT></CENTER>
+
+<P></P>
+<HR NOSHADE SIZE=1>
+<P></P>
+    <UL>
+    <LI><A HREF="#toc1">Texts, phrases, and utterances</A>
+    <LI><A HREF="#toc2">Sentences, and clauses</A>
+    <LI><A HREF="#toc3">Verb phrases and imperatives</A>
+    <LI><A HREF="#toc4">Noun phrases and determiners</A>
+    <LI><A HREF="#toc5">Numerals - cardinal and ordinal</A>
+    <LI><A HREF="#toc6">Common nouns</A>
+    <LI><A HREF="#toc7">Adjectival phrases</A>
+    <LI><A HREF="#toc8">Adverbs</A>
+    <LI><A HREF="#toc9">Questions and interrogative pronouns</A>
+    <LI><A HREF="#toc10">Relative clauses and relative pronouns</A>
+    <LI><A HREF="#toc11">Objectless sentences and sentence complements</A>
+    </UL>
+
+<P></P>
+<HR NOSHADE SIZE=1>
+<P></P>
+<P>
+Produced by 
+gfdoc - a rudimentary GF document generator.
+(c) Aarne Ranta (<A HREF="mailto:aarne@cs.chalmers.se">aarne@cs.chalmers.se</A>) 2002 under GNU GPL.
+</P>
+<P>
+This module gives access to (almost) all functions in the resource
+syntax API defined in <A HREF="Grammar.html">Grammar</A>. It uses overloaded
+function names to reduce the burden of remembering different names.
+</P>
+<P>
+The principle is simply:
+to construct an object of type <CODE>C</CODE>, use the function <CODE>mkC</CODE>.
+</P>
+<P>
+For example, to the object
+</P>
+<P>
+<CODE>PredVP (UsePron she_Pron) (ComplV2 love_V2 (UsePN paris_PN))</CODE>
+</P>
+<P>
+can now also be written
+</P>
+<P>
+<CODE>mkCl (mkNP she_Pron) (mkVP love_V2 (mkNP paris_PN))</CODE>
+</P>
+<P>
+In addition to exact variants of the <CODE>Grammar</CODE> functions, the module
+gives some common special cases using deeper terms and default arguments.
+An example of deeper terms is two-place coordination such as
+</P>
+<P>
+<CODE>mkNP : Conj -&gt; NP -&gt; NP -&gt; NP</CODE>. 
+</P>
+<P>
+An example of default arguments is present-tense sentences,
+</P>
+<P>
+<CODE>mkS : Cl -&gt; S</CODE>.
+</P>
+<P>
+The <I>old</I> API can of course be used simultaneously with this one.
+Typically, <CODE>Grammar</CODE> and <CODE>Paradigms</CODE> are needed to be <CODE>open</CODE>ed in addition
+to this. 
+</P>
+<PRE>
+    incomplete resource Constructors = open Grammar in {
+    
+      oper
+</PRE>
+<P></P>
+<A NAME="toc1"></A>
+<H2>Texts, phrases, and utterances</H2>
+<PRE>
+        mkText : overload {
+          mkText : Text               ;   -- [empty text]
+          mkText : Phr -&gt; Text -&gt; Text;   -- John walks. ...
+          } ;
+    
+        mkPhr : overload {
+          mkPhr : PConj -&gt; Utt -&gt; Voc -&gt; Phr;   -- But go home my friend
+          mkPhr : Utt -&gt; Phr                ;   -- Go home
+          mkPhr : S -&gt; Phr                      -- I go home
+          } ;
+    
+        mkUtt : overload {
+          mkUtt : S -&gt; Utt                  ;   -- John walks
+          mkUtt : QS -&gt; Utt                 ;   -- is it good
+          mkUtt : Pol -&gt; Imp -&gt; Utt         ;   -- (don't) help yourself
+          mkUtt : Imp -&gt; Utt                ;   -- help yourself
+          mkUtt : IP   -&gt; Utt               ;   -- who
+          mkUtt : IAdv -&gt; Utt               ;   -- why
+          mkUtt : NP   -&gt; Utt               ;   -- this man
+          mkUtt : Adv  -&gt; Utt               ;   -- here
+          mkUtt : VP   -&gt; Utt                   -- to sleep
+          } ;
+</PRE>
+<P></P>
+<A NAME="toc2"></A>
+<H2>Sentences, and clauses</H2>
+<PRE>
+        mkS : overload {
+          mkS : Tense -&gt; Ant -&gt; Pol -&gt; Cl -&gt; S ; -- John wouldn't have walked
+          mkS : Cl  -&gt; S ;                       -- John walks
+          mkS : Conj -&gt; S -&gt; S -&gt; S ;            -- John walks and Mary talks   
+          mkS : DConj -&gt; S -&gt; S -&gt; S ;           -- either I leave or you come
+          mkS : Conj -&gt; ListS -&gt; S ;             -- John walks, Mary talks, and Bob runs
+          mkS : DConj -&gt; ListS -&gt; S              -- either I leave, you come, or he runs
+    
+          } ;
+    
+        mkCl : overload {
+          mkCl : NP -&gt; VP -&gt; Cl   ;   -- John walks
+          mkCl : VP -&gt; Cl         ;   -- it rains
+          mkCl : NP  -&gt; RS -&gt; Cl  ;   -- it is you who did it
+          mkCl : Adv -&gt; S  -&gt; Cl  ;   -- it is yesterday she arrived
+          mkCl : NP -&gt; Cl             -- there is a house
+          } ;
+</PRE>
+<P></P>
+<A NAME="toc3"></A>
+<H2>Verb phrases and imperatives</H2>
+<PRE>
+        mkVP : overload {
+          mkVP : V   -&gt; VP            ;   -- sleep
+          mkVP : V2  -&gt; NP -&gt; VP      ;   -- use it
+          mkVP : V3  -&gt; NP -&gt; NP -&gt; VP ;  -- send a message to her
+          mkVP : VV  -&gt; VP -&gt; VP      ;   -- want to run
+          mkVP : VS  -&gt; S  -&gt; VP      ;   -- know that she runs
+          mkVP : VQ  -&gt; QS -&gt; VP      ;   -- ask if she runs
+          mkVP : VA  -&gt; AP -&gt; VP      ;   -- look red
+          mkVP : V2A -&gt; NP -&gt; AP -&gt; VP ;  -- paint the house red
+          mkVP : AP -&gt; VP             ;   -- be warm
+          mkVP : NP -&gt; VP             ;   -- be a man
+          mkVP : Adv -&gt; VP            ;   -- be here
+          mkVP : VP -&gt; Adv -&gt; VP      ;   -- sleep here
+          mkVP : AdV -&gt; VP -&gt; VP          -- always sleep
+          } ;
+    
+        mkImp : overload {
+          mkImp : VP -&gt; Imp              ;   -- go there now
+          mkImp : V  -&gt; Imp              ;   -- go
+          mkImp : V2 -&gt; NP -&gt; Imp            -- take it
+          } ;
+</PRE>
+<P></P>
+<A NAME="toc4"></A>
+<H2>Noun phrases and determiners</H2>
+<PRE>
+        mkNP : overload {
+          mkNP : Det -&gt; CN -&gt; NP  ;        -- the old man
+          mkNP : Det -&gt; N -&gt; NP   ;        -- the man
+          mkNP : PN -&gt; NP         ;        -- John
+          mkNP : Pron -&gt; NP       ;        -- he
+          mkNP : Predet -&gt; NP -&gt; NP ;      -- all the men
+          mkNP : NP -&gt; V2  -&gt; NP  ;        -- the number squared
+          mkNP : NP -&gt; Adv -&gt; NP  ;        -- Paris at midnight
+          mkNP : Conj -&gt; NP -&gt; NP -&gt; NP ;  -- John and Mary walk
+          mkNP : DConj -&gt; NP -&gt; NP -&gt; NP ; -- both John and Mary walk
+          mkNP : Conj -&gt; ListNP -&gt; NP ;    -- John, Mary, and Bill walk
+          mkNP : DConj -&gt; ListNP -&gt; NP     -- both John, Mary, and Bill walk
+    
+          } ;
+    
+        mkDet : overload {
+          mkDet : QuantSg -&gt; Ord -&gt; Det        ;   -- this best (man)
+          mkDet : Det                          ;   -- the (man)
+          mkDet : QuantSg -&gt;  Det              ;   -- this (man)
+          mkDet : QuantPl -&gt; Num -&gt; Ord -&gt; Det ;   -- these five best (men)
+          mkDet : QuantPl -&gt; Det               ;   -- these (men)
+          mkDet : Quant -&gt;  Det                ;   -- this (man)
+          mkDet : Num -&gt;  Det                  ;   -- five (men)
+          mkDet : Pron -&gt; Det                      -- my (house)
+          } ;
+</PRE>
+<P></P>
+<A NAME="toc5"></A>
+<H2>Numerals - cardinal and ordinal</H2>
+<PRE>
+        mkNum : overload {
+          mkNum : Num            ;   -- [no num]
+          mkNum : Int -&gt; Num     ;   -- 51
+          mkNum : Digit -&gt; Num
+          } ;
+    
+        mkOrd : overload {
+          mkOrd : Ord            ;   -- [no ord]
+          mkOrd : Int -&gt; Ord     ;   -- 51st
+          mkOrd : Digit -&gt; Ord   ;   -- fifth
+          mkOrd : A -&gt; Ord           -- largest
+          } ;
+</PRE>
+<P></P>
+<A NAME="toc6"></A>
+<H2>Common nouns</H2>
+<PRE>
+        mkCN : overload {
+          mkCN : N  -&gt; CN               ;   -- house
+          mkCN : N2 -&gt; NP -&gt; CN         ;   -- son of the king
+          mkCN : N3 -&gt; NP -&gt; NP -&gt; CN   ;   -- flight from Moscow (to Paris)
+          mkCN : N2 -&gt; CN               ;   -- son
+          mkCN : N3 -&gt; CN               ;   -- flight
+          mkCN : AP -&gt; CN  -&gt; CN        ;   -- big house
+          mkCN : CN -&gt; AP  -&gt; CN        ;   -- big house
+          mkCN : CN -&gt; RS  -&gt; CN        ;   -- house that John owns
+          mkCN : CN -&gt; Adv -&gt; CN        ;   -- house on the hill
+          mkCN : CN -&gt; SC  -&gt; CN        ;   -- fact that John smokes, question if he does
+          mkCN : CN -&gt; NP  -&gt; CN            -- number x, numbers x and y
+          } ;
+</PRE>
+<P></P>
+<A NAME="toc7"></A>
+<H2>Adjectival phrases</H2>
+<PRE>
+        mkAP : overload {
+          mkAP : A -&gt; AP        ;         -- warm
+          mkAP : A -&gt; NP -&gt; AP  ;         -- warmer than Spain
+          mkAP : A2 -&gt; NP -&gt; AP ;         -- divisible by 2
+          mkAP : A2 -&gt; AP       ;         -- divisible by itself
+          mkAP : AP -&gt; SC -&gt; AP ;         -- great that she won; uncertain if she did
+          mkAP : AdA -&gt; AP -&gt; AP ;        -- very uncertain
+          mkAP : Conj -&gt; AP -&gt; AP -&gt; AP ; -- warm and nice
+          mkAP : DConj -&gt; AP -&gt; AP -&gt; AP ;-- both warm and nice
+          mkAP : Conj -&gt; ListAP -&gt; AP ;   -- warm, nice, and cheap
+          mkAP : DConj -&gt; ListAP -&gt; AP    -- both warm, nice, and cheap
+    
+          } ;
+</PRE>
+<P></P>
+<A NAME="toc8"></A>
+<H2>Adverbs</H2>
+<PRE>
+        mkAdv : overload {
+          mkAdv : A -&gt; Adv               ;    -- quickly
+          mkAdv : Prep -&gt; NP -&gt; Adv      ;    -- in the house
+          mkAdv : CAdv -&gt; A -&gt; NP -&gt; Adv ;    -- more quickly than John
+          mkAdv : CAdv -&gt; A -&gt; S -&gt; Adv  ;    -- more quickly than he runs
+          mkAdv : AdA -&gt; Adv -&gt; Adv      ;    -- very quickly
+          mkAdv : Subj -&gt; S -&gt; Adv       ;    -- when he arrives
+          mkAdv : Conj -&gt; Adv -&gt; Adv -&gt; Adv;  -- here and now
+          mkAdv : DConj -&gt; Adv -&gt; Adv -&gt; Adv; -- both here and now
+          mkAdv : Conj -&gt; ListAdv -&gt; Adv ;    -- here, now, and with you
+          mkAdv : DConj -&gt; ListAdv -&gt; Adv     -- both here, now, and with you
+          } ;
+</PRE>
+<P></P>
+<A NAME="toc9"></A>
+<H2>Questions and interrogative pronouns</H2>
+<PRE>
+        mkQS : overload {
+          mkQS : Tense -&gt; Ant -&gt; Pol -&gt; QCl -&gt; QS ; -- wouldn't John have walked
+          mkQS : QCl  -&gt; QS                         -- does John walk
+          } ;
+    
+        mkQCl : overload {
+          mkQCl : Cl -&gt; QCl                ;   -- does John walk
+          mkQCl : IP -&gt; VP -&gt; QCl          ;   -- who walks
+          mkQCl : IP -&gt; Slash -&gt; QCl       ;   -- who does John love
+          mkQCl : IP -&gt; NP -&gt; V2 -&gt; QCl    ;   -- who does John love
+          mkQCl : IAdv -&gt; Cl -&gt; QCl        ;   -- why does John walk
+          mkQCl : Prep -&gt; IP -&gt; Cl -&gt; QCl  ;   -- with whom does John walk
+          mkQCl : IAdv -&gt; NP -&gt; QCl        ;   -- where is John
+          mkQCl : IP -&gt; QCl                    -- which houses are there
+          } ;
+    
+        mkIP : overload {
+          mkIP : IDet -&gt; Num -&gt; Ord -&gt; CN -&gt; IP ; -- which five best songs
+          mkIP : IDet -&gt; N -&gt; IP              ;   -- which song
+          mkIP : IP -&gt; Adv -&gt; IP                  -- who in Europe
+          } ;
+</PRE>
+<P></P>
+<A NAME="toc10"></A>
+<H2>Relative clauses and relative pronouns</H2>
+<PRE>
+        mkRS : overload {
+          mkRS : Tense -&gt; Ant -&gt; Pol -&gt; RCl -&gt; RS ; -- who wouldn't have walked
+          mkRS : RCl  -&gt; RS                         -- who walks
+          } ;
+    
+        mkRCl : overload {
+          mkRCl : Cl -&gt; RCl          ;   -- such that John loves her
+          mkRCl : RP -&gt; VP -&gt; RCl    ;   -- who loves John
+          mkRCl : RP -&gt; Slash -&gt; RCl     -- whom John loves
+          } ;
+    
+        mkRP : overload {
+          mkRP : RP                    ;   -- which
+          mkRP : Prep -&gt; NP -&gt; RP -&gt; RP    -- all the roots of which
+          } ;
+</PRE>
+<P></P>
+<A NAME="toc11"></A>
+<H2>Objectless sentences and sentence complements</H2>
+<PRE>
+        mkSlash : overload {
+          mkSlash : NP -&gt; V2 -&gt; Slash    ;    -- (whom) he sees
+          mkSlash : NP -&gt; VV -&gt; V2 -&gt; Slash ; -- (whom) he wants to see
+          mkSlash : Slash -&gt; Adv -&gt; Slash ;   -- (whom) he sees tomorrow
+          mkSlash : Cl -&gt; Prep -&gt; Slash       -- (with whom) he walks
+          } ;
+    
+        mkSC : overload {
+          mkSC : S  -&gt; SC             ;   -- that you go
+          mkSC : QS -&gt; SC             ;   -- whether you go
+          mkSC : VP -&gt; SC                 -- to go
+          } ;
+</PRE>
+<P></P>
+
+<!-- html code generated by txt2tags 2.3 (http://txt2tags.sf.net) -->
+<!-- cmdline: txt2tags -thtml -\-toc api/Constructors.txt -->
+</BODY></HTML>

@@ -70,7 +70,7 @@ unifyAnyInfo c i j = errIn ("combining information for" +++ prt c) $ case (i,j) 
   (_,CncFun Nothing Nope (Yes pr)) -> 
     unifyAnyInfo c i (CncCat Nope Nope (Yes pr)) 
 
-  _ -> Bad $ "cannot unify informations in" +++ show i +++ "and" +++ show j
+  _ -> Bad $ "cannot unify informations in" ++++ show i ++++ "and" ++++ show j
 
 --- these auxiliaries should be somewhere else since they don't use the info types
 
