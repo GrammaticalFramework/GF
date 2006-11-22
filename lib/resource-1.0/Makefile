@@ -4,7 +4,10 @@ RTSS=+RTS -M1000M -K100M
 GFCA=$(GF) -nocf
 GFCC=$(GF) -nocf -make
 GFC=$(GFCC) -src
+
+# comment the first and uncomment the second in Windows
 GFCP=$(GFC) -preproc=./mkPresent
+#GFCP=$(GFC) -preproc=mkPresent
 
 
 .PHONY: show-path all test alltenses pretest langs present mathematical multimodal compiled treebank stat gfdoc clean
@@ -55,7 +58,7 @@ present:
 	mv */*.gfc */*.gfr ../present
 
 mathematical:
-	$(GF) -make -nocf -preproc=./mkPresent mathematical/Mathematical???.gf
+	$(GF) -make -nocf $(GFCP) mathematical/Mathematical???.gf
 	mv mathematical/*.gfc ../mathematical
 
 multimodal:

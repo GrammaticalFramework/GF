@@ -15,7 +15,7 @@ lin n2 =
         "segundo" "duodécimo" "vigésimo" "ducentésimo" ;
 lin n3 = 
   mkTal "tres"   "trece"      "treinta"   "trescientos"   
-        "terzero" "decimotercero" "trigésimo" "tricentesimo" ;
+        "tercero" "decimotercero" "trigésimo" "tricentesimo" ;
 lin n4 = 
   mkTal "cuatro" "catorce"    "cuarenta"  "cuatrocientos" 
         "cuarto" "decimocuarto" "cuadragésimo" "cuadringentesimo" ;
