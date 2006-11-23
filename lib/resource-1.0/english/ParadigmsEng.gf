@@ -62,32 +62,38 @@ oper
 
 --2 Nouns
 
+-- Nouns are constructed by the function $mkN$, which takes a varying
+-- number of arguments.
+
+  mkN : overload {
+
 -- Worst case: give all four forms.
 
-  mkN  : (man,men,man's,men's : Str) -> N ;
+    mkN : (man,men,man's,men's : Str) -> N ;
 
 -- The regular function captures the variants for nouns ending with
 -- "s","sh","x","z" or "y": "kiss - kisses", "flash - flashes"; 
 -- "fly - flies" (but "toy - toys"),
 
-  regN : Str -> N ;
+    mkN : (flash : Str) -> N ;
 
 -- In practice the worst case is just: give singular and plural nominative.
 
-  mk2N : (man,men : Str) -> N ;
+    mkN : (man,men : Str) -> N ;
 
 -- All nouns created by the previous functions are marked as
 -- $nonhuman$. If you want a $human$ noun, wrap it with the following
 -- function:
 
-  genderN : Gender -> N -> N ;
+    mkN : Gender -> N -> N ;
 
 --3 Compound nouns 
 --
 -- A compound noun ia an uninflected string attached to an inflected noun,
 -- such as "baby boom", "chief executive officer".
 
-  compoundN : Str -> N -> N ;
+    mkN : Str -> N -> N
+  } ;
 
 
 --3 Relational nouns 
@@ -334,9 +340,9 @@ oper
       _   => men + "'s"
       }
     in
-    mkN man men (man + "'s") mens ;
+    mk4N man men (man + "'s") mens ;
 
-  mkN = \man,men,man's,men's -> 
+  mk4N = \man,men,man's,men's -> 
     mkNoun man man's men men's ** {g = Neutr ; lock_N = <>} ;
 
   genderN g man = {s = man.s ; g = g ; lock_N = <>} ;
@@ -468,5 +474,23 @@ oper
   mkA2S v p = mkA2 v p ** {lock_A = <>} ;
   mkAV  v = v ** {lock_A = <>} ;
   mkA2V v p = mkA2 v p ** {lock_A2 = <>} ;
+
+
+-- pre-overload API and overload definitions
+
+  mk4N : (man,men,man's,men's : Str) -> N ;
+  regN : Str -> N ;
+  mk2N : (man,men : Str) -> N ;
+  genderN : Gender -> N -> N ;
+  compoundN : Str -> N -> N ;
+
+  mkN = overload {
+    mkN : (man,men,man's,men's : Str) -> N = mk4N ;
+    mkN : Str -> N = regN ;
+    mkN : (man,men : Str) -> N = mk2N ;
+    mkN : Gender -> N -> N = genderN ;
+    mkN : Str -> N -> N = compoundN
+    } ;
+
 
 } ;
