@@ -15,6 +15,11 @@ lin
     a = detcn.a ;
     isPron = False
     } ;
+  CNNumNP cn i = {
+    s = \\c => cn.s ! NCase Sg (npform2case Sg c) ++ i.s ! Sg ! Nom ;
+    a = agrP3 Sg ;
+    isPron = False
+    } ;
 
   SymbS sy = sy ;
 

@@ -16,6 +16,11 @@ lin
     a = agrP3 g det.n ;
     hasClit = False
     } ;
+  CNNumNP cn i = {
+    s = \\c => cn.s ! Sg ++ i.s ! Masc ;
+    a = agrP3 cn.g Sg ;
+    hasClit = False
+    } ;
   SymbS sy = {s = \\_ => sy.s} ;
 
   SymbNum n = {s = \\_ => n.s ; isNum = True} ;
