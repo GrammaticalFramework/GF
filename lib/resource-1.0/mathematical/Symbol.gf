@@ -12,8 +12,9 @@ fun
   SymbPN   : Symb -> PN ;                -- x
   IntPN    : Int -> PN ;                 -- 27
   FloatPN  : Float -> PN ;               -- 3.14159
-  CNIntNP  : CN -> Int -> NP ;           -- level 53
+  CNNumNP  : CN -> Num -> NP ;           -- level five ; level 5
   CNSymbNP : Det -> CN -> [Symb] -> NP ; -- (the) (2) numbers x and y
+
 
 --2 Sentence consisting of a formula
 
@@ -36,5 +37,9 @@ cat
 
 fun
   MkSymb : String -> Symb ;
+
+--2 Obsolescent
+
+  CNIntNP  : CN -> Int -> NP ;           -- level 53 (covered by CNNumNP)
 
 }

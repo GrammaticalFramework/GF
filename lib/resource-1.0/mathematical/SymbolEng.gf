@@ -12,6 +12,10 @@ lin
     s = \\c => det.s ++ cn.s ! det.n ! c ++ xs.s ; 
     a = agrP3 det.n
     } ;
+  CNNumNP cn i = {
+    s = \\c => (cn.s ! Sg ! Nom ++ i.s) ;
+    a = agrP3 Sg
+    } ;
 
   SymbS sy = sy ; 
 

@@ -13,6 +13,10 @@ lin
     s = \\c => det.s ! cn.isMod ! g ++ cn.s ! det.n ! det.det ! caseNP c ++ xs.s ; 
     a = agrP3 g det.n
     } ;
+  CNNumNP cn i = {
+    s = \\c => (cn.s ! Sg ! DIndef ! Nom ++ i.s ! neutrum) ;
+    a = agrP3 cn.g Sg
+    } ;
 
   SymbS sy = {s = \\_ => sy.s} ;
 

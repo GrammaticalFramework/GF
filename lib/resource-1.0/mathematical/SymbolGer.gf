@@ -15,6 +15,12 @@ lin
     a = agrP3 det.n ;
     isPron = False
     } ;
+  CNNumNP cn i = {
+    s = \\c => cn.s ! Weak ! Sg ! Nom ++ i.s ;
+    a = agrP3 Sg ;
+    isPron = False
+    } ;
+
   SymbS sy = {s = \\_ => sy.s} ;
 
   SymbNum n = {s = n.s} ;
