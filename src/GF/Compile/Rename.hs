@@ -235,9 +235,13 @@ renamePattern env patt = case patt of
       _ -> prtBad "unresolved pattern" c' ---- (PC c ps', concat vs)
 
   PP p c ps -> do
+
+    (p', c') <- case renameIdentTerm env (QC p c) of
+      Ok (QC p' c') -> return (p',c')
+      _ -> return (p,c) --- temporarily, for bw compat
     psvss <- mapM renp ps
     let (ps',vs) = unzip psvss
-    return (PP p c ps', concat vs)
+    return (PP p' c' ps', concat vs)
 
   PV x -> case renid patt of
     Ok p -> return (p,[])
