@@ -33,6 +33,7 @@ module GF.Data.Parsers (-- * Main types and functions
 
 import GF.Data.Operations
 import Data.Char
+import Data.List
 
 
 infixr 2 |||, +||
@@ -51,10 +52,12 @@ type Parser a b = [a] -> [(b,[a])]
 parseResults :: Parser a b -> [a] -> [b]
 parseResults p s = [x | (x,r) <- p s, null r]
 
-parseResultErr :: Parser a b -> [a] -> Err b
+parseResultErr :: Show a => Parser a b -> [a] -> Err b
 parseResultErr p s = case parseResults p s of
   [x] -> return x
-  []  -> Bad "no parse"
+  []  -> case 
+       maximumBy (\x y -> compare (length y) (length x)) (s:[r | (_,r) <- p s]) of
+    r -> Bad $ "\nno parse; reached" ++++ take 300 (show r)
   _   -> Bad "ambiguous"
 
 (...) :: Parser a b -> Parser a c -> Parser a (b,c)
