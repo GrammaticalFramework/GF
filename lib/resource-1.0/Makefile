@@ -58,7 +58,14 @@ present:
 	mv */*.gfc */*.gfr ../present
 
 mathematical:
-	$(GF) -make -nocf $(GFCP) mathematical/Mathematical???.gf
+	$(GFCC) mathematical/MathematicalEng.gf
+	$(GFCC) mathematical/MathematicalNor.gf
+	$(GFCC) mathematical/MathematicalGer.gf
+	$(GFCC) mathematical/MathematicalSpa.gf
+	$(GFCC) mathematical/MathematicalIta.gf
+	$(GFCC) mathematical/MathematicalFre.gf
+	$(GFCC) mathematical/MathematicalSwe.gf
+	$(GFCC) mathematical/MathematicalFin.gf
 	mv mathematical/*.gfc ../mathematical
 
 multimodal:
