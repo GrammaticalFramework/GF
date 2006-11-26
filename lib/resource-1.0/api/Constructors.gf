@@ -38,7 +38,7 @@ incomplete resource Constructors = open Grammar in {
 
     mkText : overload {
       mkText : Text               ;   -- [empty text]
-      mkText : Phr -> Text -> Text;   -- John walks. ...
+      mkText : Phr -> Text -> Text    -- John walks. ...
       } ;
 
     mkPhr : overload {

@@ -20,7 +20,10 @@ incomplete resource Combinators = open Grammar in {
                                        = \a,x,y -> PredVP (ConjNP and_Conj (BaseNP x y)) (UseComp (CompAP (PositA a))) ;
       pred : N -> NP -> Cl
                                        = \n,x -> PredVP x (UseComp (CompNP (DetCN (DetSg (SgQuant IndefArt) NoOrd) (UseN n)))) ;
-      pred : N2 -> NP -> NP -> Cl 
+      pred : CN -> NP -> Cl
+                                       = \n,x -> PredVP x (UseComp (CompNP (DetCN (DetSg (SgQuant IndefArt) NoOrd) n))) ;
+      pred : NP -> NP -> Cl
+                                       = \n,x -> PredVP x (UseComp (CompNP n)) ;      pred : N2 -> NP -> NP -> Cl 
                                        = \n,x,y -> PredVP x (UseComp (CompNP (DetCN (DetSg (SgQuant IndefArt) NoOrd) (ComplN2 n y)))) ;
       pred : N -> NP -> NP -> Cl 
                                        = \n,x,y -> PredVP (ConjNP and_Conj (BaseNP x y)) (UseComp (CompNP (DetCN (DetPl (PlQuant IndefArt) NoNum NoOrd) (UseN n)))) ;
@@ -97,5 +100,9 @@ incomplete resource Combinators = open Grammar in {
 
       } ;
 
+-- This is not in ground API, because it would destroy parsing.
+
+    appendText : Text -> Text -> Text 
+                = \x,y -> {s = x.s ++ y.s ; lock_Text = <>} ;
 
 }
