@@ -12,7 +12,7 @@ GFCP=$(GFC) -preproc=./mkPresent
 
 .PHONY: show-path all test alltenses pretest langs present mathematical multimodal compiled treebank stat gfdoc clean
 
-all: show-path present alltenses langs multimodal mathematical compiled
+all: show-path present alltenses mathematical multimodal compiled langs
 
 show-path:
 	@echo GF_LIB_PATH=$(GF_LIB_PATH)
