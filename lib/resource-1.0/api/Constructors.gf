@@ -67,8 +67,8 @@ incomplete resource Constructors = open Grammar in {
       mkS : Conj -> S -> S -> S ;            -- John walks and Mary talks   
       mkS : DConj -> S -> S -> S ;           -- either I leave or you come
       mkS : Conj -> ListS -> S ;             -- John walks, Mary talks, and Bob runs
-      mkS : DConj -> ListS -> S              -- either I leave, you come, or he runs
-
+      mkS : DConj -> ListS -> S ;            -- either I leave, you come, or he runs
+      mkS : Adv -> S -> S                    -- today, I will sleep
       } ;
 
     mkCl : overload {
@@ -522,7 +522,9 @@ incomplete resource Constructors = open Grammar in {
       mkS : Conj -> ListS -> S
                                         = \c,xy -> ConjS c xy ;
       mkS : DConj -> ListS -> S
-                                        = \c,xy -> DConjS c xy
+                                        = \c,xy -> DConjS c xy ;
+      mkS : Adv -> S -> S 
+                                        = AdvS
 
       } ;
 

@@ -35,6 +35,7 @@ concrete StructuralGer of Structural = CatGer **
   everywhere_Adv = ss "überall" ;
   few_Det = detLikeAdj Pl "wenig" ;
   first_Ord = {s = (regA "erst").s ! Posit} ;
+  for_Prep = mkPrep "für" Acc ;
   from_Prep = mkPrep "aus" Dat ;
   he_Pron = mkPronPers "er" "ihn" "ihm" "seiner" "sein"  Masc Sg P3 ;
   here7to_Adv = ss ["hierher"] ;

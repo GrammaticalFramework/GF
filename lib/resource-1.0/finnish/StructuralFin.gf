@@ -39,6 +39,7 @@ concrete StructuralFin of Structural = CatFin **
   everywhere_Adv = ss "kaikkialla" ;
   few_Det  = mkDet Sg (regN "harva") ;
   first_Ord = {s = \\n,c => (regN "ensimm‰inen").s ! NCase n c} ;
+  for_Prep = casePrep allative ;
   from_Prep = casePrep elative ;
   he_Pron = mkPronoun "h‰n" "h‰nen" "h‰nt‰"  "h‰nen‰" "h‰neen" Sg P3 ;
   here_Adv = ss "t‰‰ll‰" ;
