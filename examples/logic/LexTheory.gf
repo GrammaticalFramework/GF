@@ -8,4 +8,6 @@ interface LexTheory = open Grammar in {
     hypothesis_N : N ;
     ifthen_DConj : DConj ;
 
+    defNP : Str -> NP ;
+
 }

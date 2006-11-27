@@ -2,13 +2,11 @@ abstract Arithm = Logic ** {
 
 -- arithmetic
 fun 
-  Nat, Real  : Dom ;
+  Nat  : Dom ;
 data
   Zero : Elem Nat ;
   Succ : Elem Nat -> Elem Nat ;
 fun
-  trunc : Elem Real -> Elem Nat ;
-
   EqNat : (m,n : Elem Nat) -> Prop ;
   LtNat : (m,n : Elem Nat) -> Prop ;
   Div   : (m,n : Elem Nat) -> Prop ;
@@ -24,8 +22,10 @@ data
   evax1 : Proof (Even Zero) ;
   evax2 : (n : Elem Nat) -> Proof (Even n) -> Proof (Odd (Succ n)) ;
   evax3 : (n : Elem Nat) -> Proof (Odd n)  -> Proof (Even (Succ n)) ;
+
   eqax1 : Proof (EqNat Zero Zero) ;
-  eqax2 : (m,n : Elem Nat) -> Proof (EqNat m n) -> Proof (EqNat (Succ m) (Succ n)) ;
+  eqax2 : (m,n : Elem Nat) -> Proof (EqNat m n) -> 
+             Proof (EqNat (Succ m) (Succ n)) ;
 fun
   IndNat : (C : Elem Nat -> Prop) -> 
              Proof (C Zero) -> 
@@ -41,9 +41,9 @@ def
   prod m Zero = Zero ;
   LtNat m n = Exist Nat (\x -> EqNat n (sum m (Succ x))) ;
   Div m n = Exist Nat (\x -> EqNat m (prod x n)) ;
-  Prime n = Conj 
-              (LtNat one n) 
-              (Univ Nat (\x -> Impl (Conj (LtNat one x) (Div n x)) (EqNat x n))) ;
+  Prime n = 
+    Conj (LtNat one n) 
+           (Univ Nat (\x -> Impl (Conj (LtNat one x) (Div n x)) (EqNat x n))) ;
 
 fun ex1 : Text ;
 def ex1 = 
@@ -52,7 +52,7 @@ def ex1 =
     (IndNat 
        (\x -> Disj (Even x) (Odd x)) 
        (DisjIl (Even Zero) (Odd Zero) evax1) 
-       (\x -> \h -> DisjE (Even x) (Odd x) (Disj (Even (Succ x)) (Odd (Succ x))) 
+       (\x -> \h -> DisjE (Even x) (Odd x) (Disj (Even (Succ x)) (Odd (Succ x)))
          (Hypoth (Disj (Even x) (Odd x)) h) 
          (\a -> DisjIr (Even (Succ x)) (Odd (Succ x)) 
             (evax2 x (Hypoth (Even x) a))) 

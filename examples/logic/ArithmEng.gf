@@ -16,8 +16,8 @@ lin
   Succ = appN2 (regN2 "successor") ;
 
   EqNat x y = mkS (predA2 (mkA2 (regA "equal") (mkPrep "to")) x y) ;
---  LtNat = adj2 ["smaller than"] ;
---  Div   = adj2 ["divisible by"] ;
+  LtNat x y = mkS (predAComp (regA "equal") x y) ;
+  Div   x y = mkS (predA2 (mkA2 (regA "divisible") (mkPrep "by")) x y) ;
   Even  x = mkS (predA (regA "even") x) ;
   Odd   x = mkS (predA (regA "odd") x) ;
   Prime x = mkS (predA (regA "prime") x) ;
@@ -33,19 +33,24 @@ lin
   evax2 n c = 
     appendText c 
       (proof (by (ref (mkLabel ["the second axiom of evenness ,"]))) 
-      (mkS (pred (regA "odd") (appN2 (regN2 "successor") (UsePN (regPN "zero")))))) ;
+        (mkS (pred (regA "odd") (appN2 (regN2 "successor") n)))) ;
   evax3 n c = 
     appendText c 
       (proof (by (ref (mkLabel ["the third axiom of evenness ,"]))) 
-      (mkS (pred (regA "even") (appN2 (regN2 "successor") (UsePN (regPN "zero")))))) ;
+        (mkS (pred (regA "even") (appN2 (regN2 "successor") n)))) ;
 
-{-
 
-  eqax1 = ss ["by the first axiom of equality , zero is equal to zero"] ;
-  eqax2 m n c = {s = 
-    c.s ++ ["by the second axiom of equality , the successor of"] ++ m.s ++ 
-    ["is equal to the successor of"] ++ n.s} ;
--}
+  eqax1 = 
+    proof (by (ref (mkLabel ["the first axiom of equality ,"]))) 
+      (mkS (predA2 (mkA2 (regA "equal") (mkPrep "to")) 
+         (UsePN (regPN "zero")) 
+         (UsePN (regPN "zero")))) ;
+
+  eqax2 m n c = 
+    appendText c 
+      (proof (by (ref (mkLabel ["the second axiom of equality ,"]))) 
+        (mkS (predA2 (mkA2 (regA "equal") (mkPrep "to")) 
+          (appN2 (regN2 "successor") m) (appN2 (regN2 "successor") n)))) ;
 
   IndNat C d e = {s = 
     ["we proceed by induction . for the basis ,"] ++ d.s ++ 
