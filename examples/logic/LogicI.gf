@@ -4,8 +4,7 @@ incomplete concrete LogicI of Logic =
     Prooftext, 
     Grammar, 
     Constructors, 
-    Combinators,
-    ParamX ---
+    Combinators
   in {
 
 lincat 
@@ -19,10 +18,12 @@ lincat
 lin
   ThmWithProof = theorem ;
 
+  Conj A B = coord and_Conj A B ;
   Disj A B = coord or_Conj A B ;
   Impl A B = coord ifthen_DConj A B ;
 
-  Abs = mkS (pred have_V2 (mkNP we_Pron) (mkNP (mkDet IndefArt) contradiction_N)) ;
+  Abs = 
+    mkS (pred have_V2 (mkNP we_Pron) (mkNP (mkDet IndefArt) contradiction_N)) ;
 
   Univ A B = 
     AdvS 
@@ -45,13 +46,14 @@ lin
         (proof therefore C)) ;
 
   ImplI A B b = 
-    proof (assumption A) (appendText b (proof therefore (coord ifthen_DConj A B))) ;
+    proof 
+      (assumption A) 
+      (appendText b (proof therefore (coord ifthen_DConj A B))) ;
 
   Hypoth A h = proof hypothesis A ;
 
 
---- this should not be here, but is needed for variables
 lindef
-  Elem s = {s = \\_ => s ; a = {n = Sg ; p = P3} ; lock_NP = <>} ;
+  Elem = defNP ;
 
 }
