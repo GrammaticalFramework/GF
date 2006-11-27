@@ -34,6 +34,9 @@ oper
     = \decl,a,b -> 
         appendText decl (mkUtt (mkS (pred b a))) ;
 
+  theorem : Prop -> Proof -> Section 
+    = \prop,prf -> appendText (mkText (mkPhr prop) TEmpty) prf ;
+
   assumption : Prop -> Decl 
     = \p -> 
         mkText (mkPhr (mkUtt (mkImp (mkVP assume_VS p)))) TEmpty ;
@@ -45,6 +48,8 @@ oper
   proof = overload {
     proof : Prop -> Proof 
       = \p -> mkText (mkPhr p) TEmpty ;
+    proof : Str -> Proof
+      = \s -> {s = s ++ "." ; lock_Text = <>} ;
     proof : Adverb -> Prop -> Proof
       = \a,p -> mkText (mkPhr a (mkUtt p) NoVoc) TEmpty ;
     proof : Decl -> Proof
@@ -75,5 +80,7 @@ oper
     = \h -> h ;
   refs : Refs -> Ref
     = \rs -> mkNP and_Conj rs ;
+
+  mkLabel : Str -> Label ;
 
 }

@@ -50,4 +50,6 @@ incomplete concrete SentenceRomance of Sentence =
       c = cl.c
       } ;
 
+    AdvS a s = {s = \\o => a.s ++ "," ++ s.s ! o} ;
+
 }

@@ -16,10 +16,15 @@ lincat
   Text  = Section ;
 
 lin
+  ThmWithProof = theorem ;
+
   Disj A B = coord or_Conj A B ;
   Impl A B = coord ifthen_DConj A B ;
 
   Abs = mkS (pred have_V2 (mkNP we_Pron) (mkNP (mkDet IndefArt) contradiction_N)) ;
+
+  Univ A B = 
+    mkS (mkAdv for_Prep (mkNP all_Predet (mkNP (mkDet IndefArt (mkCN A $0))))) B ;
 
   DisjIl A B a = proof a (proof afortiori (coord or_Conj A B)) ;
   DisjIr A B b = proof b (proof afortiori (coord or_Conj A B)) ;

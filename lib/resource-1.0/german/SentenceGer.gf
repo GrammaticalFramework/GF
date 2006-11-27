@@ -44,4 +44,6 @@ concrete SentenceGer of Sentence = CatGer ** open ResGer in {
       c = cl.c
       } ;
 
+    AdvS a s = {s = \\o => a.s ++ "," ++ s.s ! o} ;
+
 }

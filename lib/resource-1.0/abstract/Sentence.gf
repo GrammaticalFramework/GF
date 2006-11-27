@@ -61,6 +61,10 @@ abstract Sentence = Cat ** {
     UseQCl : Tense -> Ant -> Pol -> QCl -> QS ;
     UseRCl : Tense -> Ant -> Pol -> RCl -> RS ;
 
+-- An adverb can be added to the beginning of a sentence.
+
+    AdvS   : Adv -> S  -> S ;            -- today, I will go home
+
 }
 
 --.

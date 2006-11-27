@@ -32,6 +32,7 @@ concrete StructuralEng of Structural = CatEng **
   everywhere_Adv = ss "everywhere" ;
   few_Det = mkDeterminer Pl "few" ;
   first_Ord = ss "first" ;
+  for_Prep = ss "for" ;
   from_Prep = ss "from" ;
   he_Pron = mkNP "he" "him" "his" Sg P3 ;
   here_Adv = ss "here" ;

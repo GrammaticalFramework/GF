@@ -35,6 +35,7 @@ lin
   everywhere_Adv = ss "partout" ;
   few_Det  = {s = \\g,c => prepCase c ++ "peu" ++ elisDe ; n = Pl} ;
   first_Ord = {s = \\ag => (regA "premier").s ! Posit ! AF ag.g ag.n} ;
+  for_Prep = mkPreposition "pour" ;
   from_Prep = complGen ; ---
   he_Pron = 
     mkPronoun

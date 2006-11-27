@@ -64,4 +64,6 @@ concrete SentenceFin of Sentence = CatFin ** open Prelude, ResFin in {
       c = cl.c
       } ;
 
+    AdvS a s = {s = a.s ++ "," ++ s.s} ;
+
 }

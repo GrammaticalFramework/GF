@@ -33,6 +33,7 @@ lin
   everywhere_Adv = ss "dappertutto" ;
   few_Det  = {s = \\g,c => prepCase c ++ genForms "pochi" "poche" ! g ; n = Pl} ;
   first_Ord = {s = \\ag => (regA "primo").s ! Posit ! AF ag.g ag.n} ;
+  for_Prep = mkPrep "per" ;
   from_Prep = complGen ; ---
   he_Pron = 
     mkPronoun

@@ -30,6 +30,7 @@ concrete StructuralSwe of Structural = CatSwe **
   everywhere_Adv = ss "överallt" ;
   few_Det  = {s = \\_,_ => "få" ; n = Pl ; det = DDef Indef} ;
   first_Ord = {s = "första" ; isDet = True} ;
+  for_Prep = ss "för" ;
   from_Prep = ss "från" ;
   he_Pron = MorphoSwe.mkNP "han"  "honom"  "hans" "hans" "hans"  SgUtr P3 ;
   here_Adv = ss "här" ;

@@ -47,4 +47,5 @@ incomplete concrete SentenceScand of Sentence =
       c = cl.c
       } ;
 
+    AdvS a s = {s = \\o => a.s ++ "," ++ s.s ! o} ;
 }
