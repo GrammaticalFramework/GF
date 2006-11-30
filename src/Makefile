@@ -59,7 +59,7 @@ else
   BUILD_JAR=
 endif
 
-.PHONY: all unix jar gfdoc windows install install-gf \
+.PHONY: all unix jar tags gfdoc windows install install-gf \
         temp install-gfdoc install-editor \
         today help clean windows-msi
 
@@ -154,7 +154,8 @@ ghci-trace: ghci
 prof: GHCOPTFLAGS += -prof -auto-all -auto-dicts
 prof: all
 
-
+tags:
+	find GF Transfer -name '*.hs' | xargs hasktags
 
 #
 # Help file
