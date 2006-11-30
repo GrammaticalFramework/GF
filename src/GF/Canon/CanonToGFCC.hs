@@ -12,7 +12,7 @@
 -- GFC to GFCC compiler. AR Aug-Oct 2006
 -----------------------------------------------------------------------------
 
-module GF.Canon.CanonToGFCC (prCanon2gfcc) where
+module GF.Canon.CanonToGFCC (prCanon2gfcc, mkCanon2gfcc) where
 
 import GF.Canon.AbsGFC
 import qualified GF.Canon.GFC as GFC
@@ -41,8 +41,10 @@ import Debug.Trace ----
 -- the main function: generate GFCC from GFCM.
 
 prCanon2gfcc :: CanonGrammar -> String
-prCanon2gfcc = 
-  Pr.printTree . canon2gfcc . reorder . utf8Conv . canon2canon . normalize
+prCanon2gfcc = Pr.printTree . prCanon2gfcc
+
+mkCanon2gfcc :: CanonGrammar -> C.Grammar
+mkCanon2gfcc = canon2gfcc . reorder . utf8Conv . canon2canon . normalize
 
 -- This is needed to reorganize the grammar. GFCC has its own back-end optimization.
 -- But we need to have the canonical order in tables, created by valOpt
