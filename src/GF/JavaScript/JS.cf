@@ -1,0 +1,33 @@
+entrypoints Program;
+
+Program. Program ::= [Element];
+
+FunDef.  Element ::= "function" Ident "(" [Ident] ")" "{" [Stmt] "}" ;
+ElStmt.  Element ::= Stmt;
+separator Element "" ;
+
+separator Ident "," ;
+
+Compound.   Stmt ::= "{" [Stmt] "}" ;
+ReturnVoid. Stmt ::= "return" ";" ;
+Return.     Stmt ::= "return" Expr ";" ;
+separator Stmt "" ;
+
+ENew.    Expr14 ::= "new" Ident "(" [Expr] ")" ;
+
+EMember. Expr15 ::= Expr15 "." Expr16 ;
+EIndex.  Expr15 ::= Expr15 "[" Expr "]" ;
+ECall.   Expr15 ::= Expr15 "(" [Expr] ")" ;
+
+EVar.    Expr16 ::= Ident ;
+EInt.    Expr16 ::= Integer ;
+EDbl.    Expr16 ::= Double ;
+EStr.    Expr16 ::= String ;
+ETrue.   Expr16 ::= "true" ;
+EFalse.  Expr16 ::= "false" ;
+ENull.   Expr16 ::= "null" ;
+EThis.   Expr16 ::= "this" ;
+
+separator Expr "," ;
+coercions Expr 16 ;
+
