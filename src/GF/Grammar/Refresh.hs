@@ -119,6 +119,10 @@ refreshModule (k,ms) mi@(i,m) = case m of
     ResOper ptyp (Yes trm) -> do   ---- refresh ptyp
       (k',trm') <- refreshTermKN k trm
       return $ (k', (c, ResOper ptyp (Yes trm')):cs)
+    ResOverload tyts -> do
+      (k',tyts') <- liftM (\ (t,(_,i)) -> (i,t)) $ 
+                    appSTM (mapPairsM refresh tyts) (initIdStateN k)
+      return $ (k', (c, ResOverload tyts'):cs)
     CncCat mt (Yes trm) pn -> do   ---- refresh mt, pn
       (k',trm') <- refreshTermKN k trm
       return $ (k', (c, CncCat mt (Yes trm') pn):cs)
