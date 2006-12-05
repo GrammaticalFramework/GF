@@ -16,7 +16,7 @@ $i = [$l $d _ ']          -- identifier character
 $u = [\0-\255]          -- universal: any character
 
 @rsyms =    -- symbols and non-identifier-like reserved words
-   \( | \) | \{ | \} | \, | \; | \. | \[ | \]
+   \( | \) | \{ | \} | \, | \; | \= | \. | \[ | \]
 
 :-
 
@@ -77,7 +77,7 @@ eitherResIdent tv s = treeFind resWords
                               | s > a  = treeFind right
                               | s == a = t
 
-resWords = b "null" (b "function" (b "false" N N) (b "new" N N)) (b "this" (b "return" N N) (b "true" N N))
+resWords = b "return" (b "new" (b "function" (b "false" N N) N) (b "null" N N)) (b "true" (b "this" N N) (b "var" N N))
    where b s = B s (TS s)
 
 unescapeInitTail :: String -> String

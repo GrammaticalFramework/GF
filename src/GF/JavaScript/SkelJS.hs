@@ -27,15 +27,29 @@ transElement x = case x of
 
 transStmt :: Stmt -> Result
 transStmt x = case x of
-  Compound stmts  -> failure x
-  ReturnVoid  -> failure x
-  Return expr  -> failure x
+  SCompound stmts  -> failure x
+  SReturnVoid  -> failure x
+  SReturn expr  -> failure x
+  SDeclOrExpr declorexpr  -> failure x
+
+
+transDeclOrExpr :: DeclOrExpr -> Result
+transDeclOrExpr x = case x of
+  Decl declvars  -> failure x
+  DExpr expr  -> failure x
+
+
+transDeclVar :: DeclVar -> Result
+transDeclVar x = case x of
+  DVar id  -> failure x
+  DInit id expr  -> failure x
 
 
 transExpr :: Expr -> Result
 transExpr x = case x of
+  EAssign expr0 expr  -> failure x
   ENew id exprs  -> failure x
-  EMember expr0 expr  -> failure x
+  EMember expr id  -> failure x
   EIndex expr0 expr  -> failure x
   ECall expr exprs  -> failure x
   EVar id  -> failure x
@@ -46,6 +60,7 @@ transExpr x = case x of
   EFalse  -> failure x
   ENull  -> failure x
   EThis  -> failure x
+  EFun ids stmts  -> failure x
 
 
 

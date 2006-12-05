@@ -102,18 +102,36 @@ instance Print Element where
 
 instance Print Stmt where
   prt i e = case e of
-   Compound stmts -> prPrec i 0 (concatD [doc (showString "{") , prt 0 stmts , doc (showString "}")])
-   ReturnVoid  -> prPrec i 0 (concatD [doc (showString "return") , doc (showString ";")])
-   Return expr -> prPrec i 0 (concatD [doc (showString "return") , prt 0 expr , doc (showString ";")])
+   SCompound stmts -> prPrec i 0 (concatD [doc (showString "{") , prt 0 stmts , doc (showString "}")])
+   SReturnVoid  -> prPrec i 0 (concatD [doc (showString "return") , doc (showString ";")])
+   SReturn expr -> prPrec i 0 (concatD [doc (showString "return") , prt 0 expr , doc (showString ";")])
+   SDeclOrExpr declorexpr -> prPrec i 0 (concatD [prt 0 declorexpr , doc (showString ";")])
 
   prtList es = case es of
    [] -> (concatD [])
    x:xs -> (concatD [prt 0 x , prt 0 xs])
 
+instance Print DeclOrExpr where
+  prt i e = case e of
+   Decl declvars -> prPrec i 0 (concatD [doc (showString "var") , prt 0 declvars])
+   DExpr expr -> prPrec i 0 (concatD [prt 0 expr])
+
+
+instance Print DeclVar where
+  prt i e = case e of
+   DVar id -> prPrec i 0 (concatD [prt 0 id])
+   DInit id expr -> prPrec i 0 (concatD [prt 0 id , doc (showString "=") , prt 0 expr])
+
+  prtList es = case es of
+   [] -> (concatD [])
+   [x] -> (concatD [prt 0 x])
+   x:xs -> (concatD [prt 0 x , doc (showString ",") , prt 0 xs])
+
 instance Print Expr where
   prt i e = case e of
+   EAssign expr0 expr -> prPrec i 13 (concatD [prt 14 expr0 , doc (showString "=") , prt 13 expr])
    ENew id exprs -> prPrec i 14 (concatD [doc (showString "new") , prt 0 id , doc (showString "(") , prt 0 exprs , doc (showString ")")])
-   EMember expr0 expr -> prPrec i 15 (concatD [prt 15 expr0 , doc (showString ".") , prt 16 expr])
+   EMember expr id -> prPrec i 15 (concatD [prt 15 expr , doc (showString ".") , prt 0 id])
    EIndex expr0 expr -> prPrec i 15 (concatD [prt 15 expr0 , doc (showString "[") , prt 0 expr , doc (showString "]")])
    ECall expr exprs -> prPrec i 15 (concatD [prt 15 expr , doc (showString "(") , prt 0 exprs , doc (showString ")")])
    EVar id -> prPrec i 16 (concatD [prt 0 id])
@@ -124,6 +142,7 @@ instance Print Expr where
    EFalse  -> prPrec i 16 (concatD [doc (showString "false")])
    ENull  -> prPrec i 16 (concatD [doc (showString "null")])
    EThis  -> prPrec i 16 (concatD [doc (showString "this")])
+   EFun ids stmts -> prPrec i 16 (concatD [doc (showString "function") , doc (showString "(") , prt 0 ids , doc (showString ")") , doc (showString "{") , prt 0 stmts , doc (showString "}")])
 
   prtList es = case es of
    [] -> (concatD [])
