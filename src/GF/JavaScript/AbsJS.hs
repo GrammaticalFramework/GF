@@ -13,14 +13,26 @@ data Element =
   deriving (Eq,Ord,Show)
 
 data Stmt =
-   Compound [Stmt]
- | ReturnVoid
- | Return Expr
+   SCompound [Stmt]
+ | SReturnVoid
+ | SReturn Expr
+ | SDeclOrExpr DeclOrExpr
+  deriving (Eq,Ord,Show)
+
+data DeclOrExpr =
+   Decl [DeclVar]
+ | DExpr Expr
+  deriving (Eq,Ord,Show)
+
+data DeclVar =
+   DVar Ident
+ | DInit Ident Expr
   deriving (Eq,Ord,Show)
 
 data Expr =
-   ENew Ident [Expr]
- | EMember Expr Expr
+   EAssign Expr Expr
+ | ENew Ident [Expr]
+ | EMember Expr Ident
  | EIndex Expr Expr
  | ECall Expr [Expr]
  | EVar Ident
@@ -31,5 +43,6 @@ data Expr =
  | EFalse
  | ENull
  | EThis
+ | EFun [Ident] [Stmt]
   deriving (Eq,Ord,Show)
 

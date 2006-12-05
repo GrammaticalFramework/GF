@@ -20,6 +20,7 @@ import GF.JavaScript.ErrM
  '}' { PT _ (TS "}") }
  ',' { PT _ (TS ",") }
  ';' { PT _ (TS ";") }
+ '=' { PT _ (TS "=") }
  '.' { PT _ (TS ".") }
  '[' { PT _ (TS "[") }
  ']' { PT _ (TS "]") }
@@ -30,6 +31,7 @@ import GF.JavaScript.ErrM
  'return' { PT _ (TS "return") }
  'this' { PT _ (TS "this") }
  'true' { PT _ (TS "true") }
+ 'var' { PT _ (TS "var") }
 
 L_ident  { PT _ (TV $$) }
 L_integ  { PT _ (TI $$) }
@@ -66,14 +68,36 @@ ListIdent : {- empty -} { [] }
 
 
 Stmt :: { Stmt }
-Stmt : '{' ListStmt '}' { Compound (reverse $2) } 
-  | 'return' ';' { ReturnVoid }
-  | 'return' Expr ';' { Return $2 }
+Stmt : '{' ListStmt '}' { SCompound (reverse $2) } 
+  | 'return' ';' { SReturnVoid }
+  | 'return' Expr ';' { SReturn $2 }
+  | DeclOrExpr ';' { SDeclOrExpr $1 }
 
 
 ListStmt :: { [Stmt] }
 ListStmt : {- empty -} { [] } 
   | ListStmt Stmt { flip (:) $1 $2 }
+
+
+DeclOrExpr :: { DeclOrExpr }
+DeclOrExpr : 'var' ListDeclVar { Decl $2 } 
+  | Expr { DExpr $1 }
+
+
+DeclVar :: { DeclVar }
+DeclVar : Ident { DVar $1 } 
+  | Ident '=' Expr { DInit $1 $3 }
+
+
+ListDeclVar :: { [DeclVar] }
+ListDeclVar : {- empty -} { [] } 
+  | DeclVar { (:[]) $1 }
+  | DeclVar ',' ListDeclVar { (:) $1 $3 }
+
+
+Expr13 :: { Expr }
+Expr13 : Expr14 '=' Expr13 { EAssign $1 $3 } 
+  | Expr14 { $1 }
 
 
 Expr14 :: { Expr }
@@ -82,7 +106,7 @@ Expr14 : 'new' Ident '(' ListExpr ')' { ENew $2 $4 }
 
 
 Expr15 :: { Expr }
-Expr15 : Expr15 '.' Expr16 { EMember $1 $3 } 
+Expr15 : Expr15 '.' Ident { EMember $1 $3 } 
   | Expr15 '[' Expr ']' { EIndex $1 $3 }
   | Expr15 '(' ListExpr ')' { ECall $1 $3 }
   | Expr16 { $1 }
@@ -97,6 +121,7 @@ Expr16 : Ident { EVar $1 }
   | 'false' { EFalse }
   | 'null' { ENull }
   | 'this' { EThis }
+  | 'function' '(' ListIdent ')' '{' ListStmt '}' { EFun $3 (reverse $6) }
   | '(' Expr ')' { $2 }
 
 
@@ -156,10 +181,6 @@ Expr11 : Expr12 { $1 }
 
 Expr12 :: { Expr }
 Expr12 : Expr13 { $1 } 
-
-
-Expr13 :: { Expr }
-Expr13 : Expr14 { $1 } 
 
 
 
