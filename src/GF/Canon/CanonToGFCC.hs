@@ -41,7 +41,7 @@ import Debug.Trace ----
 -- the main function: generate GFCC from GFCM.
 
 prCanon2gfcc :: CanonGrammar -> String
-prCanon2gfcc = Pr.printTree . prCanon2gfcc
+prCanon2gfcc = Pr.printTree . mkCanon2gfcc
 
 mkCanon2gfcc :: CanonGrammar -> C.Grammar
 mkCanon2gfcc = canon2gfcc . reorder . utf8Conv . canon2canon . normalize
