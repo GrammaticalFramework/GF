@@ -66,6 +66,10 @@ oper
 
   mkPrep : Str -> Prep ;
 
+-- The following prepositions also have special contracted forms.
+
+  con_Prep, da_Prep, in_Prep, su_Prep : Prep ;
+
 --2 Nouns
 
 -- Worst case: give both two forms and the gender. 
@@ -292,6 +296,11 @@ oper
   genitive = complGen ;
   dative = complDat ;
   mkPrep p = {s = p ; c = Acc ; isDir = False} ;
+
+  con_Prep = {s = [] ; c = CPrep P_con ; isDir = False} ;
+  da_Prep = {s = [] ; c = CPrep P_da ; isDir = False} ;
+  in_Prep = {s = [] ; c = CPrep P_in ; isDir = False} ;
+  su_Prep = {s = [] ; c = CPrep P_su ; isDir = False} ;
 
   mkN x y g = mkNounIrreg x y g ** {lock_N = <>} ;
   regN x = mkNomReg x ** {lock_N = <>} ;
