@@ -7,7 +7,7 @@ resource PhonoIta = open Prelude in {
 
 oper 
   vocale : Strs = strs {
-    "a" ; "e" ; "h" ; "i" ; "o" ; "u" ; "è"
+    "a" ; "e" ; "h" ; "i" ; "o" ; "u" ; "è" ; "y"
     } ;
 
   sImpuro : Strs = strs {
