@@ -47,7 +47,7 @@ prSrgsXml sisr (SRG{grammarName=name,startCat=start,
                origStartCat=origStart,grammarLanguage=l,rules=rs})
     = showsXMLDoc xmlGr
     where
-    root = prCat start
+    root = cfgCatToGFCat origStart 
     xmlGr = grammar root l ([meta "description" 
                              ("SRGS XML speech recognition grammar for " ++ name
                               ++ ". " ++ "Original start category: " ++ origStart),
