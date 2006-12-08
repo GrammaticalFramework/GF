@@ -61,7 +61,7 @@ import GF.Canon.MkGFC
 import GF.CF.CFtoSRG
 import GF.Speech.PrGSL (gslPrinter)
 import GF.Speech.PrJSGF (jsgfPrinter)
-import GF.Speech.PrSRGS (srgsXmlPrinter)
+import qualified GF.Speech.PrSRGS as SRGS
 import GF.Speech.PrSLF
 import GF.Speech.PrFA (faGraphvizPrinter,regularPrinter,faCPrinter)
 import GF.Speech.GrammarToVoiceXML (grammar2vxml)
@@ -254,16 +254,16 @@ customGrammarPrinter =
                                  in jsgfPrinter name start opts Nothing $ stateCFG s)
   ,(strCI "srgs_xml", \opts s -> let name = cncId s
                                      start = getStartCatCF opts s
-                                  in srgsXmlPrinter name start opts False Nothing $ stateCFG s)
+                                  in SRGS.srgsXmlPrinter name start opts Nothing Nothing $ stateCFG s)
   ,(strCI "srgs_xml_prob", 
               \opts s -> let name = cncId s
                              probs = stateProbs s
                              start = getStartCatCF opts s
-                          in srgsXmlPrinter name start opts False (Just probs) $ stateCFG s)
-  ,(strCI "srgs_xml_ms_sem", 
+                          in SRGS.srgsXmlPrinter name start opts Nothing (Just probs) $ stateCFG s)
+  ,(strCI "srgs_xml_sisr_old", 
               \opts s -> let name = cncId s
                              start = getStartCatCF opts s
-                          in srgsXmlPrinter name start opts True Nothing $ stateCFG s)
+                          in SRGS.srgsXmlPrinter name start opts (Just SRGS.SISROld) Nothing $ stateCFG s)
   ,(strCI "vxml", \opts s -> let start = getStartCat opts s
                               in grammar2vxml start s)
   ,(strCI "slf",  \opts s -> let start = getStartCatCF opts s

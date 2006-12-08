@@ -5,20 +5,17 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- > CVS $Date: 2005/11/01 20:09:04 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.2 $
---
 -- This module prints a CFG as an SRGS XML grammar.
 --
 -- FIXME: remove \/ warn \/ fail if there are int \/ string literal
 -- categories in the grammar
 -----------------------------------------------------------------------------
 
-module GF.Speech.PrSRGS (srgsXmlPrinter) where
+module GF.Speech.PrSRGS (SISRFormat(..), srgsXmlPrinter) where
 
 import GF.Data.Utilities
 import GF.Data.XML
+import GF.Speech.SISR as SISR
 import GF.Speech.SRG
 import GF.Infra.Ident
 import GF.Today
@@ -35,16 +32,17 @@ import Data.List
 import qualified Data.Map as Map
 import qualified Data.Set as Set
 
+
 srgsXmlPrinter :: Ident -- ^ Grammar name
                -> String    -- ^ Start category
 	       -> Options 
-               -> Bool  -- ^ Whether to include semantic interpretation 
+               -> Maybe SISRFormat 
 	       -> Maybe Probs
 	       -> CGrammar -> String
 srgsXmlPrinter name start opts sisr probs cfg = prSrgsXml sisr srg ""
     where srg = makeSRG name start opts probs cfg
 
-prSrgsXml :: Bool -> SRG -> ShowS
+prSrgsXml :: Maybe SISRFormat -> SRG -> ShowS
 prSrgsXml sisr (SRG{grammarName=name,startCat=start,
                origStartCat=origStart,grammarLanguage=l,rules=rs})
     = showsXMLDoc xmlGr
@@ -66,11 +64,11 @@ prSrgsXml sisr (SRG{grammarName=name,startCat=start,
             cs = sortNub [f | SRGAlt _ (Name f _) _ <- alts]
     prRhs isList rhss = [oneOf (map (mkProd sisr isList) rhss)] 
     -- externally visible rules for each of the GF categories
-    topCatRules = [topRule tc [oneOf (map it cs)] | (tc,cs) <- topCats]
+    topCatRules = [topRule tc [oneOf (map (it tc) cs)] | (tc,cs) <- topCats]
         where topCats = buildMultiMap [(cfgCatToGFCat origCat, cat) | SRGRule cat origCat _ <- rs]
-              it c = symItem [] (Cat c) 0
-              topRule i is = Tag "rule" [("id",i),("scope","public")] 
-                             (is ++ [tag ["$."++i++ " = $$"]])
+              it i c = Tag "item" [] [Tag "ruleref" [("uri","#" ++ prCat c)] [],
+                                      tag sisr [(EThis :. i) := (ERef c)]]
+              topRule i is = Tag "rule" [("id",i),("scope","public")] is
 
 rule :: String -> [XML] -> XML
 rule i = Tag "rule" [("id",i)]
@@ -84,51 +82,49 @@ isBase f = "Base" `isPrefixOf` prIdent f
 isCons :: Fun -> Bool
 isCons f = "Cons" `isPrefixOf` prIdent f
 
-mkProd :: Bool -> Bool -> SRGAlt -> XML
+mkProd :: Maybe SISRFormat -> Bool -> SRGAlt -> XML
 mkProd sisr isList (SRGAlt p n@(Name f pr) rhs) 
-    | sisr = prodItem (Just n) p (r ++ if isList then [buildList] else [])
-    | otherwise = prodItem Nothing p (map (\s -> symItem [] s 0) rhs)
+    = prodItem sisr n p (r ++ if isList then [tag sisr buildList] else [])
   where 
-  r = map (uncurry (symItem pr)) (numberCats 0 rhs)
-  buildList | isBase f = 
-                tag ["$ = new Array(" ++ join "," args ++ ")"]
-            | isCons f = tag ["$.arg1.unshift($.arg0); $ = $.arg1;"]
-    where args = ["$.arg"++show n | n <- [0..length pr-1]]
+  r = map (uncurry (symItem sisr pr)) (numberCats 0 rhs)
+  buildList | isBase f = [EThis := (ENew "Array" args)]
+            | isCons f = [EApp (EThis :. "arg1" :. "unshift") [EThis :. "arg0"], 
+                          EThis := (EThis :. "arg1")]
+    where args = [EThis :. ("arg"++show n) | n <- [0..length pr-1]]
   numberCats _ [] = []
   numberCats n (s@(Cat _):ss) = (s,n):numberCats (n+1) ss
   numberCats n (s:ss) = (s,n):numberCats n ss
   
 
-prodItem :: Maybe Name -> Maybe Double -> [XML] -> XML
-prodItem n mp xs = Tag "item" w (t++cs)
+prodItem :: Maybe SISRFormat -> Name -> Maybe Double -> [XML] -> XML
+prodItem sisr n mp xs = Tag "item" w (t++cs)
   where 
   w = maybe [] (\p -> [("weight", show p)]) mp
-  t = maybe [] prodTag n
+  t = prodTag sisr n
   cs = case xs of
 	       [Tag "item" [] xs'] -> xs'
 	       _ -> xs
 
-prodTag :: Name -> [XML]
-prodTag (Name f prs) = [tag ts]
+prodTag :: Maybe SISRFormat -> Name -> [XML]
+prodTag sisr (Name f prs) = [tag sisr ts]
   where 
-  ts = ["$.name=" ++ showFun f] ++
-       ["$.arg" ++ show n ++ "=" ++ argInit (prs!!n) 
+  ts = [(EThis :. "name") := (EStr (prIdent f))] ++
+       [(EThis :. ("arg" ++ show n)) := (EStr (argInit (prs!!n))) 
             | n <- [0..length prs-1]]
-  argInit (Unify _) = metavar
-  argInit (Constant f) = maybe metavar showFun (forestName f)
-  showFun = show . prIdent
-  metavar = show "?"
+  argInit (Unify _) = "?"
+  argInit (Constant f) = maybe "?" prIdent (forestName f)
 
-symItem :: [Profile a] -> Symbol String Token -> Int -> XML
-symItem prs (Cat c) x = Tag "item" [] ([Tag "ruleref" [("uri","#" ++ prCat c)] []]++t)
+symItem :: Maybe SISRFormat -> [Profile a] -> Symbol String Token -> Int -> XML
+symItem sisr prs (Cat c) x = Tag "item" [] ([Tag "ruleref" [("uri","#" ++ prCat c)] []]++t)
   where 
-  t = if null ts then [] else [tag ts]
-  ts = ["$.arg" ++ show n ++ "=$$" 
+  t = if null ts then [] else [tag sisr ts]
+  ts = [(EThis :. ("arg" ++ show n)) := (ERef (prCat c)) 
             | n <- [0..length prs-1], inProfile x (prs!!n)]
-symItem _ (Tok t) _ = Tag "item" [] [Data (showToken t)]
+symItem _ _ (Tok t) _ = Tag "item" [] [Data (showToken t)]
 
-tag :: [String] -> XML
-tag ts = Tag "tag" [] [Data (join "; " ts)]
+tag :: Maybe SISRFormat -> [SISRExpr] -> XML
+tag Nothing _ = Empty
+tag (Just fmt) ts = Tag "tag" [] [Data (join "; " (map (prSISR fmt) ts))]
 
 inProfile :: Int -> Profile a -> Bool
 inProfile x (Unify xs) = x `elem` xs
