@@ -11,12 +11,12 @@ prCanon2js :: CanonGrammar -> String
 prCanon2js gr = gfcc2js $ mkCanon2gfcc gr
 
 gfcc2js :: C.Grammar -> String
-gfcc2js (C.Grm _ _ cs) = JS.printTree (concrete2js (head cs)) -- FIXME
+gfcc2js (C.Grm _ _ cs) = JS.printTree $ JS.Program $ concatMap concrete2js cs
 
-concrete2js :: C.Concrete -> JS.Program
+concrete2js :: C.Concrete -> [JS.Element]
 concrete2js (C.Cnc (C.CId c) ds) = 
-    JS.Program ([JS.ElStmt $ JS.SDeclOrExpr $ JS.Decl [JS.DInit l (new "Linearizer" [])]] 
-                ++ concatMap (cncdef2js l) ds)
+    [JS.ElStmt $ JS.SDeclOrExpr $ JS.Decl [JS.DInit l (new "Linearizer" [])]] 
+    ++ concatMap (cncdef2js l) ds
   where l = JS.Ident c
 
 cncdef2js :: JS.Ident -> C.CncDef -> [JS.Element]
