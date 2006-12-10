@@ -17,7 +17,10 @@ import Data.List
 infixl 8 :.
 infixr 1 :=
 
-data SISRFormat = SISROld
+data SISRFormat = 
+    -- SISR Working draft 1 April 2003
+    -- http://www.w3.org/TR/2003/WD-semantic-interpretation-20030401/
+    SISROld
  deriving Show
 
 data SISRExpr = SISRExpr := SISRExpr
