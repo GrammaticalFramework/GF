@@ -29,6 +29,7 @@ import GF.Probabilistic.Probabilistic (Probs)
 
 import Data.Char (toUpper,toLower)
 import Data.List
+import Data.Maybe
 import qualified Data.Map as Map
 import qualified Data.Set as Set
 
@@ -48,13 +49,14 @@ prSrgsXml sisr (SRG{grammarName=name,startCat=start,
     = showsXMLDoc xmlGr
     where
     root = cfgCatToGFCat origStart 
-    xmlGr = grammar root l ([meta "description" 
-                             ("SRGS XML speech recognition grammar for " ++ name
-                              ++ ". " ++ "Original start category: " ++ origStart),
-                             meta "generator" ("Grammatical Framework " ++ version 
-                                               ++ " (compiled " ++ today ++ ")")]
-                            ++ topCatRules
-			    ++ map ruleToXML rs)
+    xmlGr = grammar sisr root l $
+              [meta "description" 
+               ("SRGS XML speech recognition grammar for " ++ name
+                ++ ". " ++ "Original start category: " ++ origStart),
+               meta "generator" ("Grammatical Framework " ++ version 
+                                 ++ " (compiled " ++ today ++ ")")]
+            ++ topCatRules
+	    ++ map ruleToXML rs
     ruleToXML (SRGRule cat origCat alts) = 
 	rule (prCat cat) (comments ["Category " ++ origCat] ++ prRhs isList alts)
       where isList = False 
@@ -67,7 +69,7 @@ prSrgsXml sisr (SRG{grammarName=name,startCat=start,
     topCatRules = [topRule tc [oneOf (map (it tc) cs)] | (tc,cs) <- topCats]
         where topCats = buildMultiMap [(cfgCatToGFCat origCat, cat) | SRGRule cat origCat _ <- rs]
               it i c = Tag "item" [] [Tag "ruleref" [("uri","#" ++ prCat c)] [],
-                                      tag sisr [(EThis :. i) := (ERef c)]]
+                                      tag sisr [EThis := (ERef c)]]
               topRule i is = Tag "rule" [("id",i),("scope","public")] is
 
 rule :: String -> [XML] -> XML
@@ -140,14 +142,17 @@ oneOf :: [XML] -> XML
 oneOf [x] = x
 oneOf xs = Tag "one-of" [] xs
 
-grammar :: String  -- ^ root
+grammar :: Maybe SISRFormat
+        -> String  -- ^ root
         -> String -- ^language
 	-> [XML] -> XML
-grammar root l = Tag "grammar" [("xml:lang", l),
-                                ("xmlns","http://www.w3.org/2001/06/grammar"),
-			        ("version","1.0"),
-			        ("mode","voice"),
-			        ("root",root)]
+grammar sisr root l = 
+    Tag "grammar" $ [("xml:lang", l),
+                     ("xmlns","http://www.w3.org/2001/06/grammar"),
+		     ("version","1.0"),
+		     ("mode","voice"),
+		     ("root",root)]
+                 ++ (if isJust sisr then [("tag-format","semantics/1.0")] else [])
 
 meta :: String -> String -> XML
 meta n c = Tag "meta" [("name",n),("content",c)] []
