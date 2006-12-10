@@ -106,7 +106,7 @@ skel2vxml name start skel qs =
   where 
   gr = grammarURI name
   prelude = var "debug" (Just "1") : scriptLib
-  startForm = Tag "form" [] [subdialog "sub" [("srcexpr","'#'+"++string start)] []]
+  startForm = Tag "form" [] [subdialog "sub" [("src", "#"++start)] []]
 
 grammarURI :: String -> String
 grammarURI name = name ++ ".grxml"
@@ -174,7 +174,7 @@ fun2form gr fun args =
   where 
   argNames = zip ["arg"++show n | n <- [0..]] args
   ss = map (uncurry mkSub) argNames
-  mkSub a t = subdialog a [("srcexpr","'#'+"++string t)] 
+  mkSub a t = subdialog a [("src","#"++t)] 
                 [param "value" ("value."++a),
                  filled [] [assign ("value."++a) (a++"."++t)]]
   ret = block [return_ ["value"]]
