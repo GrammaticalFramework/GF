@@ -69,7 +69,7 @@ prSrgsXml sisr (SRG{grammarName=name,startCat=start,
     topCatRules = [topRule tc [oneOf (map (it tc) cs)] | (tc,cs) <- topCats]
         where topCats = buildMultiMap [(cfgCatToGFCat origCat, cat) | SRGRule cat origCat _ <- rs]
               it i c = Tag "item" [] [Tag "ruleref" [("uri","#" ++ prCat c)] [],
-                                      tag sisr [EThis := (ERef c)]]
+                                      tag sisr [(EThis :. i) := (ERef c)]]
               topRule i is = Tag "rule" [("id",i),("scope","public")] is
 
 rule :: String -> [XML] -> XML
