@@ -37,10 +37,10 @@ debugLog xs | debug = blockCond "debug == 1" [prompt xs]
 
 -- | the main function
 grammar2vxml :: String -> StateGrammar -> String
-grammar2vxml startcat gr = showsXMLDoc (skel2vxml name startcat gr' qs) ""
+grammar2vxml startcat gr = showsXMLDoc (skel2vxml name language startcat gr' qs) ""
     where (name, gr') = vSkeleton (stateGrammarST gr)
           qs = catQuestions gr (map fst gr')
-
+          language = "en" -- FIXME: use speechLanguage tag
 --
 -- * VSkeleton: a simple description of the abstract syntax.
 --
@@ -105,9 +105,9 @@ getCatQuestion c qs =
 -- * Generate VoiceXML
 --
 
-skel2vxml :: String -> VIdent -> VSkeleton -> CatQuestions -> XML
-skel2vxml name start skel qs = 
-    vxml (prelude ++ [startForm] ++ concatMap (uncurry (catForms gr qs)) skel)
+skel2vxml :: String -> String -> VIdent -> VSkeleton -> CatQuestions -> XML
+skel2vxml name language start skel qs = 
+    vxml language (prelude ++ [startForm] ++ concatMap (uncurry (catForms gr qs)) skel)
   where 
   gr = grammarURI name
   prelude = (if debug then [var "debug" (Just "0")] else []) ++ scriptLib
@@ -187,8 +187,10 @@ formDebug id = debugLog [Data ("Entering form " ++ id ++ ". value = "), value "d
 -- * VoiceXML stuff
 --
 
-vxml :: [XML] -> XML
-vxml = Tag "vxml" [("version","2.0"),("xmlns","http://www.w3.org/2001/vxml")]
+vxml :: String -> [XML] -> XML
+vxml language = Tag "vxml" [("version","2.0"),
+                            ("xmlns","http://www.w3.org/2001/vxml"),
+                            ("xml:lang", language)]
 
 form :: String -> [XML] -> XML
 form id xs = Tag "form" [("id", id)] xs
