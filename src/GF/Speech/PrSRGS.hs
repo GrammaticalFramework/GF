@@ -99,7 +99,7 @@ mkProd sisr isList (SRGAlt p n@(Name f pr) rhs)
   
 
 prodItem :: Maybe SISRFormat -> Name -> Maybe Double -> [XML] -> XML
-prodItem sisr n mp xs = Tag "item" w (t++cs)
+prodItem sisr n mp xs = Tag "item" w (cs++t)
   where 
   w = maybe [] (\p -> [("weight", show p)]) mp
   t = prodTag sisr n
@@ -111,10 +111,11 @@ prodTag :: Maybe SISRFormat -> Name -> [XML]
 prodTag sisr (Name f prs) = [tag sisr ts]
   where 
   ts = [(EThis :. "name") := (EStr (prIdent f))] ++
-       [(EThis :. ("arg" ++ show n)) := (EStr (argInit (prs!!n))) 
-            | n <- [0..length prs-1]]
-  argInit (Unify _) = "?"
-  argInit (Constant f) = maybe "?" prIdent (forestName f)
+       [(EThis :. ("arg" ++ show n)) := (EStr v) 
+            | n <- [0..length prs-1], v <- argInit (prs!!n)]
+  argInit (Unify []) = ["?"]
+  argInit (Unify _) = []
+  argInit (Constant f) = [maybe "?" prIdent (forestName f)]
 
 symItem :: Maybe SISRFormat -> [Profile a] -> Symbol String Token -> Int -> XML
 symItem sisr prs (Cat c) x = Tag "item" [] ([Tag "ruleref" [("uri","#" ++ prCat c)] []]++t)
