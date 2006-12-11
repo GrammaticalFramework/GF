@@ -30,6 +30,11 @@ import Data.Maybe (fromMaybe)
 
 import Debug.Trace
 
+debug = False
+
+debugLog xs | debug = blockCond "debug == 1" [prompt xs]
+            | otherwise = Empty
+
 -- | the main function
 grammar2vxml :: String -> StateGrammar -> String
 grammar2vxml startcat gr = showsXMLDoc (skel2vxml name startcat gr' qs) ""
@@ -105,7 +110,7 @@ skel2vxml name start skel qs =
     vxml (prelude ++ [startForm] ++ concatMap (uncurry (catForms gr qs)) skel)
   where 
   gr = grammarURI name
-  prelude = var "debug" (Just "0") : scriptLib
+  prelude = (if debug then [var "debug" (Just "0")] else []) ++ scriptLib
   startForm = Tag "form" [] [subdialog "sub" [("src", "#"++start)] []]
 
 grammarURI :: String -> String
@@ -163,8 +168,8 @@ cat2form gr qs cat fs =
            ++ concatMap (uncurry (fun2sub gr cat)) fs
            ++ [block [return_ [cat]]]
   where feedback = []
-        catDebug = blockCond "debug == 1" [prompt [Data (cat ++ " = "), value ("dump("++cat++")")]]
-        retDebug = blockCond "debug == 1" [prompt [Data "return ", value ("dump("++cat++")")]]
+        catDebug = debugLog [Data (cat ++ " = "), value ("dump("++cat++")")]
+        retDebug = debugLog [Data "return ", value ("dump("++cat++")")]
 
 fun2sub :: String -> VIdent -> VIdent -> [VIdent] -> [XML]
 fun2sub gr cat fun args = comments [fun ++ " : " ++ cat] ++ ss
@@ -176,7 +181,7 @@ fun2sub gr cat fun args = comments [fun ++ " : " ++ cat] ++ ss
                filled [] [assign (cat++"."++a) (s++"."++t)]]
     where s = fun ++ "_" ++ a
 
-formDebug id = blockCond "debug == 1" [prompt [Data ("Entering form " ++ id ++ ". value = "), value "dump(value)"]]
+formDebug id = debugLog [Data ("Entering form " ++ id ++ ". value = "), value "dump(value)"]
 
 --
 -- * VoiceXML stuff
