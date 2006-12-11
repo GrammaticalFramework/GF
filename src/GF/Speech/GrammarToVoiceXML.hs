@@ -105,7 +105,7 @@ skel2vxml name start skel qs =
     vxml (prelude ++ [startForm] ++ concatMap (uncurry (catForms gr qs)) skel)
   where 
   gr = grammarURI name
-  prelude = var "debug" (Just "1") : scriptLib
+  prelude = var "debug" (Just "0") : scriptLib
   startForm = Tag "form" [] [subdialog "sub" [("src", "#"++start)] []]
 
 grammarURI :: String -> String
@@ -149,35 +149,32 @@ catForms :: String -> CatQuestions -> VIdent -> [(VIdent, [VIdent])] -> [XML]
 catForms gr qs cat fs = 
     comments [cat ++ " category."]
     ++ [cat2form gr qs cat fs] 
-    ++ map (uncurry (fun2form gr)) fs
 
 cat2form :: String -> CatQuestions -> VIdent -> [(VIdent, [VIdent])] -> XML
 cat2form gr qs cat fs = 
-    form cat [var "value" (Just "'?'"), formDebug cat,
+  form cat $ [var "value" (Just "'?'"), formDebug cat,
               blockCond "value != '?'" [assign cat "value"],
               field cat [] [promptString (getCatQuestion cat qs), 
                             grammar (gr++"#"++cat),
                             nomatch [Data "I didn't understand you.", reprompt],
                             help [Data ("help_"++cat)],
                             filled [] [if_else (cat ++ " == '?'") [reprompt] feedback]],
-              blockCond "debug == 1" [prompt [Data (cat ++ " = "), value ("dump("++cat++")")]],
-              subdialog "sub" [("srcexpr","'#'+"++cat++".name")] 
-                             [param "value" cat, filled [] subDone]]
-  where subDone = [assign cat "sub.value", return_ [cat]]
-        feedback = []
+              catDebug]
+           ++ concatMap (uncurry (fun2sub gr cat)) fs
+           ++ [block [return_ [cat]]]
+  where feedback = []
+        catDebug = blockCond "debug == 1" [prompt [Data (cat ++ " = "), value ("dump("++cat++")")]]
+        retDebug = blockCond "debug == 1" [prompt [Data "return ", value ("dump("++cat++")")]]
 
-fun2form :: String -> VIdent -> [VIdent] -> XML
-fun2form gr fun args = 
-    form fun ([var "value" Nothing] ++ [formDebug fun]
-              ++ ss
-              ++ [ret])
+fun2sub :: String -> VIdent -> VIdent -> [VIdent] -> [XML]
+fun2sub gr cat fun args = comments [fun ++ " : " ++ cat] ++ ss
   where 
   argNames = zip ["arg"++show n | n <- [0..]] args
   ss = map (uncurry mkSub) argNames
-  mkSub a t = subdialog a [("src","#"++t)] 
-                [param "value" ("value."++a),
-                 filled [] [assign ("value."++a) (a++"."++t)]]
-  ret = block [return_ ["value"]]
+  mkSub a t = subdialog s [("src","#"++t),("cond",cat++".name == "++string fun)] 
+              [param "value" (cat++"."++a),
+               filled [] [assign (cat++"."++a) (s++"."++t)]]
+    where s = fun ++ "_" ++ a
 
 formDebug id = blockCond "debug == 1" [prompt [Data ("Entering form " ++ id ++ ". value = "), value "dump(value)"]]
 
