@@ -1,0 +1,32 @@
+Library-Based Grammar Engineering
+VR Project 2006-2008
+
+
+=Staff=
+
+Lars Borin (co-leader)
+
+Robin Cooper (co-leader)
+
+Aarne Ranta (project responsible)
+
+Sibylle Schupp (co-leader)
+
+
+
+=Publications=
+
+Ali El Dada, MSc Thesis
+
+Muhammad Humayoun, MSc Thesis
+
+Janna Khegai,
+Language Engineering in GF, PhD Thesis, Chalmers. 2006.
+
+
+
+=Links=
+
+[GF http://www.cs.chalmers.se/~aarne/GF/]
+
+[Functional Morphology http://www.cs.chalmers.se/~markus/FM/]
