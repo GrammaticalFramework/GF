@@ -88,18 +88,14 @@ mkProd :: Maybe SISRFormat -> Bool -> SRGAlt -> XML
 mkProd sisr isList (SRGAlt p n@(Name f pr) rhs) 
     = prodItem sisr n p (r ++ if isList then [tag sisr buildList] else [])
   where 
-  r = map (uncurry (symItem sisr pr)) (numberCats 0 rhs)
+  r = map (symItem sisr) rhs
   buildList | isBase f = [EThis := (ENew "Array" args)]
             | isCons f = [EApp (EThis :. "arg1" :. "unshift") [EThis :. "arg0"], 
                           EThis := (EThis :. "arg1")]
     where args = [EThis :. ("arg"++show n) | n <- [0..length pr-1]]
-  numberCats _ [] = []
-  numberCats n (s@(Cat _):ss) = (s,n):numberCats (n+1) ss
-  numberCats n (s:ss) = (s,n):numberCats n ss
-  
 
 prodItem :: Maybe SISRFormat -> Name -> Maybe Double -> [XML] -> XML
-prodItem sisr n mp xs = Tag "item" w (cs++t)
+prodItem sisr n mp xs = Tag "item" w (t++cs)
   where 
   w = maybe [] (\p -> [("weight", show p)]) mp
   t = prodTag sisr n
@@ -111,27 +107,21 @@ prodTag :: Maybe SISRFormat -> Name -> [XML]
 prodTag sisr (Name f prs) = [tag sisr ts]
   where 
   ts = [(EThis :. "name") := (EStr (prIdent f))] ++
-       [(EThis :. ("arg" ++ show n)) := (EStr v) 
-            | n <- [0..length prs-1], v <- argInit (prs!!n)]
-  argInit (Unify []) = ["?"]
-  argInit (Unify _) = []
-  argInit (Constant f) = [maybe "?" prIdent (forestName f)]
+       [(EThis :. ("arg" ++ show n)) := (EStr (argInit (prs!!n))) 
+            | n <- [0..length prs-1]]
+  argInit (Unify _) = "?"
+  argInit (Constant f) = maybe "?" prIdent (forestName f)
 
-symItem :: Maybe SISRFormat -> [Profile a] -> Symbol String Token -> Int -> XML
-symItem sisr prs (Cat c) x = Tag "item" [] ([Tag "ruleref" [("uri","#" ++ prCat c)] []]++t)
+symItem :: Maybe SISRFormat -> Symbol SRGNT Token -> XML
+symItem sisr (Cat (c,slots)) = Tag "item" [] ([Tag "ruleref" [("uri","#" ++ prCat c)] []]++t)
   where 
   t = if null ts then [] else [tag sisr ts]
-  ts = [(EThis :. ("arg" ++ show n)) := (ERef (prCat c)) 
-            | n <- [0..length prs-1], inProfile x (prs!!n)]
-symItem _ _ (Tok t) _ = Tag "item" [] [Data (showToken t)]
+  ts = [(EThis :. ("arg" ++ show s)) := (ERef (prCat c)) | s <- slots]
+symItem _ (Tok t) = Tag "item" [] [Data (showToken t)]
 
 tag :: Maybe SISRFormat -> [SISRExpr] -> XML
 tag Nothing _ = Empty
 tag (Just fmt) ts = Tag "tag" [] [Data (join "; " (map (prSISR fmt) ts))]
-
-inProfile :: Int -> Profile a -> Bool
-inProfile x (Unify xs) = x `elem` xs
-inProfile _ (Constant _) = False
 
 prCat :: String -> String
 prCat c = c

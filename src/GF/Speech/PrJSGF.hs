@@ -54,11 +54,11 @@ prJSGF (SRG{grammarName=name,startCat=start,origStartCat=origStart,rules=rs})
 	| null rhs' = showString "<NULL>"
 	| otherwise = wrap "(" (unwordsS (map prSymbol rhs')) ")"
 	    where rhs' = rmPunct rhs
-    prSymbol (Cat c) = prCat c
+    prSymbol (Cat (c,_)) = prCat c
     prSymbol (Tok t) = wrap "\"" (prtS t) "\""
     prCat c = showChar '<' . showString c . showChar '>'
 
-rmPunct :: [Symbol String Token] -> [Symbol String Token] 
+rmPunct :: [Symbol c Token] -> [Symbol c Token] 
 rmPunct [] = []
 rmPunct (Tok t:ss) | all isPunct (prt t) = rmPunct ss
 rmPunct (s:ss) = s : rmPunct ss
