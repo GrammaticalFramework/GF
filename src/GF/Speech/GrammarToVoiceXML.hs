@@ -110,7 +110,7 @@ skel2vxml name language start skel qs =
     vxml language (prelude ++ [startForm] ++ concatMap (uncurry (catForms gr qs)) skel)
   where 
   gr = grammarURI name
-  prelude = (if debug then [var "debug" (Just "0")] else []) ++ scriptLib
+  prelude = if debug then [var "debug" (Just "0")] ++ scriptLib else []
   startForm = Tag "form" [] [subdialog "sub" [("src", "#"++start)] []]
 
 grammarURI :: String -> String

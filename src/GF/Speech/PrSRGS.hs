@@ -56,9 +56,9 @@ prSrgsXml sisr (SRG{grammarName=name,startCat=start,
                meta "generator" ("Grammatical Framework " ++ version 
                                  ++ " (compiled " ++ today ++ ")")]
             ++ topCatRules
-	    ++ map ruleToXML rs
+	    ++ concatMap ruleToXML rs
     ruleToXML (SRGRule cat origCat alts) = 
-	rule (prCat cat) (comments ["Category " ++ origCat] ++ prRhs isList alts)
+        comments ["Category " ++ origCat] ++ [rule (prCat cat) (prRhs isList alts)]
       where isList = False 
                      -- Disabled list build since OptimTalk can't handle it ATM
                      {- "List" `isPrefixOf` origCat && length cs == 2
