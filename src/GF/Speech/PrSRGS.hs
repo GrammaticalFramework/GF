@@ -46,7 +46,7 @@ srgsXmlPrinter name start opts sisr probs cfg = prSrgsXml sisr srg ""
 prSrgsXml :: Maybe SISRFormat -> SRG -> ShowS
 prSrgsXml sisr (SRG{grammarName=name,startCat=start,
                origStartCat=origStart,grammarLanguage=l,rules=rs})
-    = showsXMLDoc xmlGr
+    = showsXMLDoc $ optimizeSRGS xmlGr
     where
     root = cfgCatToGFCat origStart 
     xmlGr = grammar sisr root l $
@@ -58,13 +58,8 @@ prSrgsXml sisr (SRG{grammarName=name,startCat=start,
             ++ topCatRules
 	    ++ concatMap ruleToXML rs
     ruleToXML (SRGRule cat origCat alts) = 
-        comments ["Category " ++ origCat] ++ [rule (prCat cat) (prRhs isList alts)]
-      where isList = False 
-                     -- Disabled list build since OptimTalk can't handle it ATM
-                     {- "List" `isPrefixOf` origCat && length cs == 2
-                        && isBase (cs!!0) && isCons (cs!!1) -}
-            cs = sortNub [f | SRGAlt _ (Name f _) _ <- alts]
-    prRhs isList rhss = [oneOf (map (mkProd sisr isList) rhss)] 
+        comments ["Category " ++ origCat] ++ [rule (prCat cat) (prRhs $ ebnfSRGAlts alts)]
+    prRhs rhss = [oneOf (map (mkProd sisr) rhss)] 
     -- externally visible rules for each of the GF categories
     topCatRules = [topRule tc [oneOf (map (it tc) cs)] | (tc,cs) <- topCats]
         where topCats = buildMultiMap [(cfgCatToGFCat origCat, cat) | SRGRule cat origCat _ <- rs]
@@ -78,39 +73,21 @@ rule i = Tag "rule" [("id",i)]
 cfgCatToGFCat :: String -> String
 cfgCatToGFCat = takeWhile (/='{')
 
-isBase :: Fun -> Bool
-isBase f = "Base" `isPrefixOf` prIdent f
+mkProd :: Maybe SISRFormat -> EBnfSRGAlt -> XML
+mkProd sisr (EBnfSRGAlt mp n@(Name f prs) rhs) = Tag "item" w (t ++ xs)
+  where xs = [mkItem sisr rhs]
+        w = maybe [] (\p -> [("weight", show p)]) mp
+        t = [tag sisr ts]
+        ts = [(EThis :. "name") := (EStr (prIdent f))] ++
+             [(EThis :. ("arg" ++ show n)) := (EStr (argInit (prs!!n))) 
+                  | n <- [0..length prs-1]]
+        argInit (Unify _) = "?"
+        argInit (Constant f) = maybe "?" prIdent (forestName f)
 
-isCons :: Fun -> Bool
-isCons f = "Cons" `isPrefixOf` prIdent f
-
-mkProd :: Maybe SISRFormat -> Bool -> SRGAlt -> XML
-mkProd sisr isList (SRGAlt p n@(Name f pr) rhs) 
-    = prodItem sisr n p (r ++ if isList then [tag sisr buildList] else [])
-  where 
-  r = map (symItem sisr) rhs
-  buildList | isBase f = [EThis := (ENew "Array" args)]
-            | isCons f = [EApp (EThis :. "arg1" :. "unshift") [EThis :. "arg0"], 
-                          EThis := (EThis :. "arg1")]
-    where args = [EThis :. ("arg"++show n) | n <- [0..length pr-1]]
-
-prodItem :: Maybe SISRFormat -> Name -> Maybe Double -> [XML] -> XML
-prodItem sisr n mp xs = Tag "item" w (t++cs)
-  where 
-  w = maybe [] (\p -> [("weight", show p)]) mp
-  t = prodTag sisr n
-  cs = case xs of
-	       [Tag "item" [] xs'] -> xs'
-	       _ -> xs
-
-prodTag :: Maybe SISRFormat -> Name -> [XML]
-prodTag sisr (Name f prs) = [tag sisr ts]
-  where 
-  ts = [(EThis :. "name") := (EStr (prIdent f))] ++
-       [(EThis :. ("arg" ++ show n)) := (EStr (argInit (prs!!n))) 
-            | n <- [0..length prs-1]]
-  argInit (Unify _) = "?"
-  argInit (Constant f) = maybe "?" prIdent (forestName f)
+mkItem :: Maybe SISRFormat -> EBnfSRGItem -> XML
+mkItem sisr (EBnfOneOf xs) = oneOf (map (mkItem sisr) xs)
+mkItem sisr (EBnfSeq xs)   = Tag "item" [] (map (mkItem sisr) xs)
+mkItem sisr (EBnfSymbol s) = symItem sisr s
 
 symItem :: Maybe SISRFormat -> Symbol SRGNT Token -> XML
 symItem sisr (Cat (c,slots)) = Tag "item" [] ([Tag "ruleref" [("uri","#" ++ prCat c)] []]++t)
@@ -147,6 +124,12 @@ grammar sisr root l =
 
 meta :: String -> String -> XML
 meta n c = Tag "meta" [("name",n),("content",c)] []
+
+optimizeSRGS :: XML -> XML
+optimizeSRGS = bottomUpXML f 
+  where f (Tag "item" [] [x@(Tag "item" [] _)]) = x
+        f (Tag "one-of" [] [x]) = x
+        f x = x
 
 {-
 
