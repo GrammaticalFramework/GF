@@ -8,7 +8,7 @@
 -- Utilities for creating XML documents.
 -----------------------------------------------------------------------------
 
-module GF.Data.XML (XML(..), Attr, comments, showsXMLDoc, showsXML) where
+module GF.Data.XML (XML(..), Attr, comments, showsXMLDoc, showsXML, bottomUpXML) where
 
 import GF.Data.Utilities
 
@@ -48,3 +48,7 @@ escape = concatMap escChar
   escChar '&'  = "&amp;"
   escChar '"'  = "&quot;"
   escChar c    = [c]
+
+bottomUpXML :: (XML -> XML) -> XML -> XML
+bottomUpXML f (Tag n attrs cs) = f (Tag n attrs (map (bottomUpXML f) cs))
+bottomUpXML f x = f x

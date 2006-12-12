@@ -22,7 +22,10 @@ module GF.Speech.SRG (SRG(..), SRGRule(..), SRGAlt(..),
                       SRGCat, SRGNT,
                       makeSimpleSRG, makeSRG
                      , lookupFM_, prtS
-                     , topDownFilter) where
+                     , topDownFilter
+                     , EBnfSRGAlt(..), EBnfSRGItem(..)
+                     , ebnfSRGAlts
+                     ) where
 
 import GF.Data.Operations
 import GF.Data.Utilities
@@ -162,6 +165,26 @@ topDownFilter srg@(SRG { startCat = start, rules = rs }) = srg { rules = rs' }
 
 allSRGCats :: SRG -> [String]
 allSRGCats SRG { rules = rs } = [c | SRGRule c _ _ <- rs]
+
+--
+-- * Size-optimized EBNF SRGs
+--
+
+data EBnfSRGAlt = EBnfSRGAlt (Maybe Double) Name EBnfSRGItem
+	     deriving (Eq,Show)
+
+data EBnfSRGItem = 
+      EBnfOneOf [EBnfSRGItem]
+    | EBnfSeq [EBnfSRGItem]
+    | EBnfSymbol (Symbol SRGNT Token)
+	     deriving (Eq,Show)
+
+ebnfSRGAlts :: [SRGAlt] -> [EBnfSRGAlt]
+ebnfSRGAlts alts = [EBnfSRGAlt p n (ebnfSRGItem sss) 
+                    | ((p,n),sss) <- buildMultiMap [((p,n),ss) | SRGAlt p n ss <- alts]]
+
+ebnfSRGItem :: [[Symbol SRGNT Token]] -> EBnfSRGItem
+ebnfSRGItem sss = EBnfOneOf (map (EBnfSeq . map EBnfSymbol) sss)
 
 --
 -- * Utilities for building and printing SRGs
