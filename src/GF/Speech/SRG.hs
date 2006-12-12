@@ -19,6 +19,7 @@
 -----------------------------------------------------------------------------
 
 module GF.Speech.SRG (SRG(..), SRGRule(..), SRGAlt(..),
+                      SRGCat, SRGNT,
                       makeSimpleSRG, makeSRG
                      , lookupFM_, prtS
                      , topDownFilter) where
@@ -28,7 +29,8 @@ import GF.Data.Utilities
 import GF.Infra.Ident
 import GF.Formalism.CFG
 import GF.Formalism.Utilities (Symbol(..), NameProfile(..)
-                              , Profile, SyntaxForest, filterCats)
+                              , Profile(..), SyntaxForest
+                              , filterCats, mapSymbol)
 import GF.Conversion.Types
 import GF.Infra.Print
 import GF.Speech.TransformCFG
@@ -52,16 +54,21 @@ data SRG = SRG { grammarName :: String    -- ^ grammar name
 	       }
 	 deriving (Eq,Show)
 
-data SRGRule = SRGRule String String [SRGAlt] -- ^ SRG category name, original category name
+data SRGRule = SRGRule SRGCat String [SRGAlt] -- ^ SRG category name, original category name
 	                                      --   and productions
 	     deriving (Eq,Show)
 
 -- | maybe a probability, a rule name and a list of symbols
-data SRGAlt = SRGAlt (Maybe Double) Name [Symbol String Token]
+data SRGAlt = SRGAlt (Maybe Double) Name [Symbol SRGNT Token]
 	      deriving (Eq,Show)
 
+type SRGCat = String
+
+-- | An SRG non-terminal. Category name and slots which it fills in.
+type SRGNT = (SRGCat, [Int])
+
 -- | SRG category name and original name
-type CatName = (String,String) 
+type CatName = (SRGCat,String) 
 
 type CatNames = Map String String
 
@@ -112,13 +119,21 @@ makeSRG_ f i origStart opts probs gr
 -- FIXME: merge alternatives with same rhs and profile but different probabilities
 cfgRulesToSRGRule :: Map String String -> Maybe Probs -> [CFRule_] -> SRGRule
 cfgRulesToSRGRule names probs rs@(r:_) = SRGRule cat origCat rhs
-    where origCat = lhsCat r
-	  cat = lookupFM_ names origCat
-	  rhs = nub $ map ruleToAlt rs
-	  ruleToAlt r@(CFRule c ss n) 
-              = SRGAlt (ruleProb probs r) n (map renameCat ss)
-	  renameCat (Cat c) = Cat (lookupFM_ names c)
-	  renameCat t = t
+    where 
+      origCat = lhsCat r
+      cat = lookupFM_ names origCat
+      rhs = nub $ map ruleToAlt rs
+      ruleToAlt r@(CFRule c ss n@(Name _ prs)) 
+          = SRGAlt (ruleProb probs r) n (mkSRGSymbols 0 ss)
+            where
+              mkSRGSymbols _ [] = []
+              mkSRGSymbols i (Cat c:ss) = Cat (c',slots) : mkSRGSymbols (i+1) ss
+                  where c' = lookupFM_ names c
+                        slots = [x | x <- [0..length prs-1], inProfile i (prs!!x)]
+              mkSRGSymbols i (Tok t:ss) = Tok t : mkSRGSymbols i ss
+      inProfile :: Int -> Profile a -> Bool
+      inProfile x (Unify xs) = x `elem` xs
+      inProfile _ (Constant _) = False
 
 ruleProb :: Maybe Probs -> CFRule_ -> Maybe Double
 ruleProb mp r = mp >>= \probs -> lookupProb probs (ruleFun r)
@@ -141,7 +156,7 @@ topDownFilter srg@(SRG { startCat = start, rules = rs }) = srg { rules = rs' }
   rs' = [ r | r@(SRGRule c _ _) <- rs, c `Set.member` keep]
   rhsCats = [ (c,c') | r@(SRGRule c _ ps) <- rs, 
                        SRGAlt _ _ ss <- ps, 
-                       c' <- filterCats ss]
+                       (c',_) <- filterCats ss]
   uses = reflexiveClosure_ (allSRGCats srg) $ transitiveClosure $ mkRel rhsCats
   keep = allRelated uses start
 

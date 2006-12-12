@@ -50,7 +50,7 @@ prGSL (SRG{grammarName=name,startCat=start,origStartCat=origStart,rules=rs})
         . prCat cat . sp . wrap "[" (unwordsS (map prAlt rhs)) "]" . nl
     -- FIXME: use the probability
     prAlt (SRGAlt mp _ rhs) = wrap "(" (unwordsS (map prSymbol rhs)) ")"
-    prSymbol (Cat c) = prCat c
+    prSymbol (Cat (c,_)) = prCat c
     prSymbol (Tok t) = wrap "\"" (showString (showToken t)) "\""
     -- GSL requires an upper case letter in category names
     prCat c = showString (firstToUpper c)
