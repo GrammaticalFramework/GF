@@ -53,7 +53,7 @@ incomplete concrete CatRomance of Cat =
     QuantSg = {s : Gender => Case => Str} ;
     QuantPl = {s : Bool => Gender => Case => Str} ;
     Quant   = {s : Bool => Number => Gender => Case => Str} ;
-    Predet  = {s : AAgr   => Case => Str ; c : Case} ; -- la plupart de...
+    Predet  = {s : AAgr   => Case => Str ; c : Case} ; -- c : la plupart de
     Num     = {s : Gender => Str ; isNum : Bool} ;
     Ord     = {s : AAgr   => Str} ;
 
