@@ -139,6 +139,8 @@ instance DiffFre of DiffRomance = open CommonRomance, PhonoFre, Prelude in {
     conjThan = elisQue ;
     conjThat = elisQue ;
 
+    subjIf = "si" ; --- s'
+
     clitInf _ cli inf = cli ++ inf ;
 
     relPron : Bool => AAgr => Case => Str = \\b,a,c => 
@@ -159,7 +161,7 @@ instance DiffFre of DiffRomance = open CommonRomance, PhonoFre, Prelude in {
 
     quelPron : AAgr => Str = aagrForms "quel" "quelle" "quels" "quelles" ;
 
-    partQIndir = elision "c" ;
+    partQIndir = [] ; --- only for qui,que: elision "c" ;
 
     reflPron : Number -> Person -> Case -> Str = \n,p,c ->
       let pron = argPron Fem n p c in

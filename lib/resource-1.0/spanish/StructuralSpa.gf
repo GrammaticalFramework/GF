@@ -126,8 +126,8 @@ lin
   when_IAdv = ss "cuando" ;
   when_Subj = ss "cuando" ** {m = Indic} ;
   where_IAdv = ss "donde" ;
-  whichSg_IDet = {s = \\g,c => prepCase c ++ "cuale" ; n = Sg} ;
-  whichPl_IDet = {s = \\g,c => prepCase c ++ "cuales" ; n = Pl} ;
+  whichSg_IDet = {s = \\g,c => prepCase c ++ "qué" ; n = Sg} ; --- cual
+  whichPl_IDet = {s = \\g,c => prepCase c ++ "qué" ; n = Pl} ;
   whoPl_IP = {s = \\c => prepCase c ++ "quién" ; a = aagr Masc Pl} ;
   whoSg_IP = {s = \\c => prepCase c ++ "quién" ; a = aagr Masc Sg} ;
   why_IAdv = ss "porqué" ;

@@ -281,3 +281,9 @@ work.)
 The German resource implementation is considered complete, and it is released
 in the resource grammar version 1.0.
 
+--------------
+
+13/12
+
+When adding polite imperatives, have to change the lincat of Imp: ImpForm instead
+of Number. But the required inflections exist already.

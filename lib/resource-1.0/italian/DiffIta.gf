@@ -128,6 +128,8 @@ instance DiffIta of DiffRomance = open CommonRomance, PhonoIta, BeschIta, Prelud
     conjThan = "che" ; --- di
     conjThat = "che" ;
 
+    subjIf = "se" ;
+
     clitInf b cli inf = inf ++ bindIf b ++ cli ;
 
     relPron : Bool => AAgr => Case => Str = \\b,a,c => 
@@ -141,7 +143,7 @@ instance DiffIta of DiffRomance = open CommonRomance, PhonoIta, BeschIta, Prelud
 
     quelPron : AAgr => Str = aagrForms "quale" "quale" "quali" "quali" ;
 
-    partQIndir = "ciò" ;
+    partQIndir = [] ; --- "ciò" ;
 
     reflPron : Number -> Person -> Case -> Str = 
       let 

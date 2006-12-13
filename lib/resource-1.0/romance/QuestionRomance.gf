@@ -10,7 +10,7 @@ incomplete concrete QuestionRomance of Question =
             let cls = cl.s ! t ! a ! p 
             in table {
               QDir   => cls ! Indic ;
-              QIndir => "si" ++ cls ! Indic ---- subjIf
+              QIndir => subjIf ++ cls ! Indic
               }
       } ;
 

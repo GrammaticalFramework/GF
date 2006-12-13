@@ -83,6 +83,8 @@ interface DiffRomance = open CommonRomance, Prelude in {
   conjThan  : Str ;
   conjThat  : Str ;
 
+  subjIf    : Str ;
+
   relPron   : Bool => AAgr => Case => Str ;
   pronSuch  : AAgr => Str ;
 
