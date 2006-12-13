@@ -11,7 +11,7 @@ concrete SentenceEng of Sentence = CatEng ** open Prelude, ResEng in {
     ImpVP vp = {
       s = \\pol,n => 
         let 
-          agr   = {n = n ; p = P2} ;
+          agr   = {n = numImp n ; p = P2} ;
           verb  = infVP True vp agr ;
           dont  = case pol of {
             CNeg True => "don't" ;

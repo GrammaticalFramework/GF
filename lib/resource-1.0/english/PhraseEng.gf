@@ -5,8 +5,9 @@ concrete PhraseEng of Phrase = CatEng ** open Prelude, ResEng in {
 
     UttS s = s ;
     UttQS qs = {s = qs.s ! QDir} ;
-    UttImpSg pol imp = {s = pol.s ++ imp.s ! contrNeg True pol.p ! Sg} ;
-    UttImpPl pol imp = {s = pol.s ++ imp.s ! contrNeg True pol.p ! Pl} ;
+    UttImpSg pol imp = {s = pol.s ++ imp.s ! contrNeg True pol.p ! ImpF Sg False} ;
+    UttImpPl pol imp = {s = pol.s ++ imp.s ! contrNeg True pol.p ! ImpF Pl False} ;
+    UttImpPol pol imp = {s = pol.s ++ imp.s ! contrNeg True pol.p ! ImpF Sg True} ;
 
     UttIP ip = {s = ip.s ! Nom} ; --- Acc also
     UttIAdv iadv = iadv ;

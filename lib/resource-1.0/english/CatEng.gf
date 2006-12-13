@@ -17,7 +17,7 @@ concrete CatEng of Cat = CommonX ** open ResEng, Prelude in {
       s : Tense => Anteriority => CPolarity => Order => Str ;
       c2 : Str
       } ;
-    Imp = {s : CPolarity => Number => Str} ;
+    Imp = {s : CPolarity => ImpForm => Str} ;
 
 -- Question
 

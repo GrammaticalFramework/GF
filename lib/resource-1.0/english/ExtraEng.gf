@@ -40,8 +40,8 @@ concrete ExtraEng of ExtraEngAbs = CatEng **
       s = \\r => t.s ++ a.s ++ cl.s ! t.t ! a.a ! neg ! r ;
       c = cl.c
       } ;
-    UncNegImpSg imp = {s = imp.s ! neg ! Sg} ;
-    UncNegImpPl imp = {s = imp.s ! neg ! Pl} ;
+    UncNegImpSg imp = {s = imp.s ! neg ! ImpF Sg False} ;
+    UncNegImpPl imp = {s = imp.s ! neg ! ImpF Pl False} ;
 
 
   oper

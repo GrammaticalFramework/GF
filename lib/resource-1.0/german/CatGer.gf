@@ -15,7 +15,7 @@ concrete CatGer of Cat = CommonX ** open ResGer, Prelude in {
     Cl = {s : Tense => Anteriority => Polarity => Order => Str} ;
     Slash = {s : Tense => Anteriority => Polarity => Order => Str} ** 
             {c2 : Preposition} ;
-    Imp = {s : Polarity => Number => Str} ;
+    Imp = {s : Polarity => ImpForm => Str} ;
 
 -- Question
 

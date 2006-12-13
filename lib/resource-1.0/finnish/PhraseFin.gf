@@ -5,8 +5,9 @@ concrete PhraseFin of Phrase = CatFin ** open ResFin in {
 
     UttS s = s ;
     UttQS qs = {s = qs.s} ;
-    UttImpSg pol imp = {s = pol.s ++ imp.s ! pol.p ! Sg} ;
-    UttImpPl pol imp = {s = pol.s ++ imp.s ! pol.p ! Pl} ;
+    UttImpSg  pol imp = {s = pol.s ++ imp.s ! pol.p ! Sg} ;
+    UttImpPl  pol imp = {s = pol.s ++ imp.s ! pol.p ! Pl} ;
+    UttImpPol pol imp = {s = pol.s ++ imp.s ! pol.p ! Pl} ;
 
     UttIP ip = {s = ip.s ! NPCase Nom} ;
     UttIAdv iadv = iadv ;

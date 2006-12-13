@@ -22,7 +22,16 @@ resource ParamX = open Prelude in {
 
     QForm = QDir | QIndir ;
 
+-- Imperatives: True = polite, False = familiar.
+
+    ImpForm = ImpF Number Bool ; 
+
   oper
+    numImp : ImpForm -> Number = \i -> 
+      case i of {
+        ImpF n _ => n
+        } ;
+
     conjNumber : Number -> Number -> Number = \m,n -> 
       case <m,n> of {
         <Sg,Sg> => Sg ;
