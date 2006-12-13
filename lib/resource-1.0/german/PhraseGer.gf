@@ -14,7 +14,7 @@ concrete PhraseGer of Phrase = CatGer ** open Prelude, ResGer in {
     UttIP ip = {s = ip.s ! Nom} ; --- Acc also
     UttIAdv iadv = iadv ;
     UttNP np = {s = np.s ! Acc} ;
-    UttVP vp = {s = useInfVP vp} ;
+    UttVP vp = {s = useInfVP False vp} ;
     UttAdv adv = adv ;
 
     NoPConj = {s = []} ;

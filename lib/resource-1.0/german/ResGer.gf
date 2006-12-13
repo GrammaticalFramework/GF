@@ -530,8 +530,8 @@ resource ResGer = ParamX ** open Prelude in {
      vp.inf ++ vp.ext
     > ;
 
-  useInfVP : VP -> Str = \vp ->
-    let vpi = infVP False vp in
+  useInfVP : Bool -> VP -> Str = \isAux,vp ->
+    let vpi = infVP isAux vp in
     vpi.p1 ! agrP3 Sg ++ vpi.p3 ++ vpi.p2 ;
 
 -- The nominative case is not used as reflexive, but defined here
