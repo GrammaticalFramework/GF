@@ -93,6 +93,8 @@ instance DiffSpa of DiffRomance = open CommonRomance, PhonoSpa, BeschSpa, Prelud
 
     conjThan = "que" ;
     conjThat = "que" ;
+    subjIf = "si" ;
+
 
     clitInf b cli inf = inf ++ bindIf b ++ cli ;
 
