@@ -8,8 +8,9 @@ incomplete concrete PhraseRomance of Phrase =
 
     UttS s = {s = s.s ! Indic} ;
     UttQS qs = {s = qs.s ! QDir} ;
-    UttImpSg pol imp = {s = pol.s ++ imp.s ! pol.p ! aagr Fem Sg} ;
-    UttImpPl pol imp = {s = pol.s ++ imp.s ! pol.p ! aagr Fem Pl} ;
+    UttImpSg pol imp  = {s = pol.s ++ imp.s ! pol.p ! ImpF Sg False ! Fem} ;
+    UttImpPl pol imp  = {s = pol.s ++ imp.s ! pol.p ! ImpF Pl False ! Fem} ;
+    UttImpPol pol imp = {s = pol.s ++ imp.s ! pol.p ! ImpF Sg True  ! Fem} ;
 
     UttIP ip = {s = ip.s ! Nom} ; --- Acc also
     UttIAdv iadv = iadv ;

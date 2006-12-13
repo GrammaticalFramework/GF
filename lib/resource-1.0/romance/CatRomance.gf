@@ -19,7 +19,7 @@ incomplete concrete CatRomance of Cat =
       s  : AAgr => RTense => Anteriority => Polarity => Mood => Str ; 
       c2 : Compl
       } ;
-    Imp   = {s : Polarity => AAgr => Str} ;
+    Imp   = {s : Polarity => ImpForm => Gender => Str} ;
 
 -- Question
 

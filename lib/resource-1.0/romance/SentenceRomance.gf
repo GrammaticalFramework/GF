@@ -8,7 +8,12 @@ incomplete concrete SentenceRomance of Sentence =
 
     PredSCVP sc vp = mkClause sc.s (agrP3 Masc Sg) vp ;
 
-    ImpVP = mkImperative P2 ;
+    ImpVP vp = {
+      s = \\p,i,g => case i of {
+        ImpF n True  => (mkImperative P2 vp).s ! p ! (aagr g Pl) ; --- fix for Spa,Ita
+        ImpF n False => (mkImperative P2 vp).s ! p ! (aagr g n)
+        }
+      } ;
 
     SlashV2 np v2 = 
       {s = \\ag =>case <v2.c2.c,v2.c2.isDir> of {

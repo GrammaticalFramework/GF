@@ -7,8 +7,9 @@ concrete PhraseGer of Phrase = CatGer ** open Prelude, ResGer in {
 
     UttS s = {s = s.s ! Main} ;
     UttQS qs = {s = qs.s ! QDir} ;
-    UttImpSg pol imp = {s = pol.s ++ imp.s ! pol.p ! Sg} ;
-    UttImpPl pol imp = {s = pol.s ++ imp.s ! pol.p ! Pl} ;
+    UttImpSg pol imp = {s = pol.s ++ imp.s ! pol.p ! ImpF Sg False} ;
+    UttImpPl pol imp = {s = pol.s ++ imp.s ! pol.p ! ImpF Pl False} ;
+    UttImpPol pol imp = {s = pol.s ++ imp.s ! pol.p ! ImpF Sg True} ;
 
     UttIP ip = {s = ip.s ! Nom} ; --- Acc also
     UttIAdv iadv = iadv ;

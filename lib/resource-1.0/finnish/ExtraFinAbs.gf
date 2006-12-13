@@ -8,4 +8,6 @@ abstract ExtraFinAbs = Extra [
     i_implicPron : Pron ;                 -- (minä), minut, ...
     whatPart_IP : IP ;
 
+    vai_Conj : Conj ;                     -- minä vai sinä? ("or" in question)
+
 }

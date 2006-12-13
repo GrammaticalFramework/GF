@@ -59,7 +59,7 @@ resource ResGer = ParamX ** open Prelude in {
 
   param VPForm =
      VPFinite Tense Anteriority
-   | VPImperat
+   | VPImperat Bool
    | VPInfinit Anteriority ;
 
   param VAux = VHaben | VSein ;
@@ -371,7 +371,8 @@ resource ResGer = ParamX ** open Prelude in {
         Fut  => vf (wird a) (vpart ++ haben) ;   --# notpresent
         Cond => vf (wuerde a) (vpart ++ haben)   --# notpresent
         } ;                                      --# notpresent
-      VPImperat => vf (verb.s ! VImper a.n) [] ;
+      VPImperat False => vf (verb.s ! VImper a.n) [] ;
+      VPImperat True  => vf (verb.s ! VPresSubj Pl P3) [] ;
       VPInfinit Anter => vf [] (vpart ++ haben) ; --# notpresent
       VPInfinit Simul => vf [] vinf
       } ;
@@ -424,8 +425,8 @@ resource ResGer = ParamX ** open Prelude in {
       VPresInd Pl (P1 | P3) => "sind" ;
       VPresSubj Sg P2 => (variants {"seiest" ; "seist"}) ;
       VPresSubj Sg _  => "sei" ;
-      VPresSubj Pl P2 => "seien" ;
-      VPresSubj Pl _  => "seiet" ;
+      VPresSubj Pl P2 => "seiet" ;
+      VPresSubj Pl _  => "seien" ;
       VPresPart a => (regA "seiend").s ! Posit ! a ;
       v => sein.s ! v 
       } ;

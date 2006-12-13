@@ -1,4 +1,4 @@
-concrete SentenceGer of Sentence = CatGer ** open ResGer in {
+concrete SentenceGer of Sentence = CatGer ** open ResGer, Prelude in {
 
   flags optimize=all_subs ;
 
@@ -11,10 +11,15 @@ concrete SentenceGer of Sentence = CatGer ** open ResGer in {
     ImpVP vp = {
       s = \\pol,n => 
         let 
-          agr   = {g = Fem ; n = n ; p = P2} ; --- g does not matter
-          verb  = vp.s ! agr ! VPImperat ;
+          ps = case n of {
+            ImpF _ True => <P3,"Sie",True> ; -- setzen Sie sich
+            _ => <P2,[],False>
+            } ;
+          agr  = {g = Fem ; n = numImp n ; p = ps.p1} ; --- g does not matter
+          verb = vp.s ! agr ! VPImperat ps.p3 ;
         in
-        verb.fin ++ vp.a1 ! pol ++ verb.inf ++ vp.n2 ! agr ++ vp.a2 ++ vp.inf ++ vp.ext
+        verb.fin ++ ps.p2 ++ verb.inf ++ 
+        vp.n2 ! agr ++ vp.a1 ! pol ++ vp.a2 ++ vp.inf ++ vp.ext
     } ;
 
     SlashV2 np v2 = 
