@@ -38,10 +38,14 @@ instance DiffSpa of DiffRomance = open CommonRomance, PhonoSpa, BeschSpa, Prelud
 
     possCase = \_,_,c -> prepCase c ;
 
+    partitive = \_,c -> prepCase c ;
+
+{-
     partitive = \g,c -> case c of {
       CPrep P_de => "de" ;
       _ => prepCase c ++ artDef g Sg (CPrep P_de)
       } ;
+-}
 
     conjunctCase : NPForm -> NPForm = \c -> case c of {
       Ton Nom | Aton Nom => Ton Nom ;

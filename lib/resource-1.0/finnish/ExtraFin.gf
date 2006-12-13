@@ -42,4 +42,5 @@ concrete ExtraFin of ExtraFinAbs = CatFin ** open ResFin, MorphoFin, Coordinatio
     } ;
 
     vai_Conj = {s = "vai" ; n = Sg} ;
+
 } 

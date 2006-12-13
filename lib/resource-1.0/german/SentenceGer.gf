@@ -40,7 +40,7 @@ concrete SentenceGer of Sentence = CatGer ** open ResGer, Prelude in {
 
     EmbedS  s  = {s = conjThat ++ s.s ! Sub} ;
     EmbedQS qs = {s = qs.s ! QIndir} ;
-    EmbedVP vp = {s = useInfVP vp} ;
+    EmbedVP vp = {s = useInfVP False vp} ;
 
     UseCl  t a p cl = {s = \\o => t.s ++ a.s ++ p.s ++ cl.s ! t.t ! a.a ! p.p ! o} ;
     UseQCl t a p cl = {s = \\q => t.s ++ a.s ++ p.s ++ cl.s ! t.t ! a.a ! p.p ! q} ;
