@@ -10,8 +10,7 @@ incomplete concrete SentenceRomance of Sentence =
 
     ImpVP vp = {
       s = \\p,i,g => case i of {
-        ImpF n True  => (mkImperative P2 vp).s ! p ! (aagr g Pl) ; --- fix for Spa,Ita
-        ImpF n False => (mkImperative P2 vp).s ! p ! (aagr g n)
+        ImpF n b => (mkImperative b P2 vp).s ! p ! (aagr g n)
         }
       } ;
 

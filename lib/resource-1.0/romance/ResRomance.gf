@@ -61,11 +61,12 @@ oper
       habet  : TMood -> Agr -> Str = \tm,a -> aux ! VFin tm a.n a.p ;
       habere : Str = aux ! VInfin False ;
 
-      vimp : Agr -> Str = \a -> verb.s ! VImper (case <a.n,a.p> of {
-        <Pl,P1> => PlP1 ;
-        <Sg,_>  => SgP2 ;
-        <Pl,_>  => PlP2
-        }) ;
+      vimp : Agr -> Str = \a -> case <a.n,a.p> of {
+        <Pl,P1> => verb.s ! VImper PlP1 ;
+        <_, P3> => verb.s ! VFin (VPres Conjunct) a.n P3 ;
+        <Sg,_>  => verb.s ! VImper SgP2 ;
+        <Pl,_>  => verb.s ! VImper PlP2
+        } ;
 
       vf : (Agr -> Str) -> (AAgr -> Str) -> {
           fin : Agr => Str ; 

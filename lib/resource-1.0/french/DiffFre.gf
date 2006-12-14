@@ -114,7 +114,7 @@ instance DiffFre of DiffRomance = open CommonRomance, PhonoFre, Prelude in {
           _ => <pdat ++ pacc, []>
           } ;
 
-    mkImperative p vp = {
+    mkImperative b p vp = {
       s = \\pol,aag => 
         let 
           agr   = aag ** {p = p} ;

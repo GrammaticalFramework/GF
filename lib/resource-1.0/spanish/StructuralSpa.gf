@@ -147,7 +147,7 @@ lin
     mkPronoun
       "usted" "la" "le" "usted"
       "su" "su" "sus" "sus"
-      Masc Pl P2 ;
+      Masc Sg P3 ;
 
 oper
   etConj : {s : Str ; n : Number} = {s = pre {
