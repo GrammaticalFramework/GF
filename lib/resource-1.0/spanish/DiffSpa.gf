@@ -75,12 +75,13 @@ instance DiffSpa of DiffRomance = open CommonRomance, PhonoSpa, BeschSpa, Prelud
          _       => <pdatp.p1 ++ paccp.p1, [],orB paccp.p3 pdatp.p3>
          } ;
 
-    mkImperative p vp = {
+    mkImperative b p vp = {
       s = \\pol,aag => 
         let 
-          agr   = aag ** {p = p} ;
-          verb  = case <aag.n, pol> of {
-            <Sg,Neg> => (vp.s ! VPFinite (VPres Conjunct) Simul).fin ! agr ;
+          pe    = case b of {True => P3 ; _ => p} ;
+          agr   = aag ** {p = pe} ;
+          verb  = case <aag.n, pol, pe> of {
+            <Sg,Neg,P2> => (vp.s ! VPFinite (VPres Conjunct) Simul).fin ! agr ;
             _ => (vp.s ! VPImperat).fin ! agr
             } ;
           neg   = vp.neg ! pol ;

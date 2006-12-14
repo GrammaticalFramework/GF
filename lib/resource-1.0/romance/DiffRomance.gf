@@ -49,7 +49,7 @@ interface DiffRomance = open CommonRomance, Prelude in {
 
 -- To render imperatives (with their clitics etc).
 
-  oper mkImperative : Person -> CommonRomance.VP -> {s : Polarity => AAgr => Str} ;
+  oper mkImperative : Bool -> Person -> CommonRomance.VP -> {s : Polarity => AAgr => Str} ;
 
 
 --2 Constants that must derivatively depend on language
