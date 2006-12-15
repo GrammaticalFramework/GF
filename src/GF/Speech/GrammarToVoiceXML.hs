@@ -157,7 +157,9 @@ catForms gr qs cat fs =
 
 cat2form :: String -> CatQuestions -> VIdent -> [(VIdent, [VIdent])] -> XML
 cat2form gr qs cat fs = 
-  form cat $ [var "value" (Just "'?'"), formDebug cat,
+  form cat $ [var "value" (Just "'?'"), 
+              var "update" Nothing, 
+              formDebug cat,
               blockCond "value != '?'" [assign cat "value"],
               field cat [] [promptString (getCatQuestion cat qs), 
                             grammar (gr++"#"++cat),
@@ -167,7 +169,7 @@ cat2form gr qs cat fs =
               catDebug]
            ++ concatMap (uncurry (fun2sub gr cat)) fs
            ++ [block [return_ [cat]]]
-  where feedback = []
+  where feedback = [if_ ("typeof update != 'undefined' && !update("++string cat++","++ cat ++ ")") [return_ []]]
         catDebug = debugLog [Data (cat ++ " = "), value ("dump("++cat++")")]
         retDebug = debugLog [Data "return ", value ("dump("++cat++")")]
 
@@ -178,6 +180,7 @@ fun2sub gr cat fun args = comments [fun ++ " : " ++ cat] ++ ss
   ss = map (uncurry mkSub) argNames
   mkSub a t = subdialog s [("src","#"++t),("cond",cat++".name == "++string fun)] 
               [param "value" (cat++"."++a),
+               param "update" "update",
                filled [] [assign (cat++"."++a) (s++"."++t)]]
     where s = fun ++ "_" ++ a
 
