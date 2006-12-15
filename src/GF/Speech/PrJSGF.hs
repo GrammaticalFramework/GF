@@ -28,6 +28,7 @@ import GF.Infra.Print
 import GF.Infra.Option
 import GF.Probabilistic.Probabilistic (Probs)
 import GF.Speech.SRG
+import GF.Speech.RegExp
 
 jsgfPrinter :: Ident -- ^ Grammar name
             -> String    -- ^ Start category
@@ -48,20 +49,27 @@ prJSGF (SRG{grammarName=name,startCat=start,origStartCat=origStart,rules=rs})
 	      . showString "public <MAIN> = " . prCat start . showChar ';' . nl . nl
     prRule (SRGRule cat origCat rhs) = 
 	comments [origCat] . nl
-        . prCat cat . showString " = " . joinS " | " (map prAlt rhs) . nl
+        . prCat cat . showString " = " . joinS " | " (map prAlt (ebnfSRGAlts rhs)) . nl
     -- FIXME: use the probability
-    prAlt (SRGAlt mp _ rhs)
-	| null rhs' = showString "<NULL>"
-	| otherwise = wrap "(" (unwordsS (map prSymbol rhs')) ")"
-	    where rhs' = rmPunct rhs
-    prSymbol (Cat (c,_)) = prCat c
-    prSymbol (Tok t) = wrap "\"" (prtS t) "\""
-    prCat c = showChar '<' . showString c . showChar '>'
+    prAlt (EBnfSRGAlt mp _ rhs) = prItem rhs
 
-rmPunct :: [Symbol c Token] -> [Symbol c Token] 
-rmPunct [] = []
-rmPunct (Tok t:ss) | all isPunct (prt t) = rmPunct ss
-rmPunct (s:ss) = s : rmPunct ss
+prCat :: SRGCat -> ShowS
+prCat c = showChar '<' . showString c . showChar '>'
+
+prItem :: EBnfSRGItem -> ShowS
+prItem = f
+  where
+    f (REUnion [])  = showString "<VOID>"
+    f (REUnion xs)  = wrap "(" (joinS " | " (map f xs)) ")"
+    f (REConcat []) = showString "<NULL>"
+    f (REConcat xs) = wrap "(" (unwordsS (map f xs)) ")"
+    f (RERepeat x)  = wrap "(" (f x) ")" . showString "*"
+    f (RESymbol s)  = prSymbol s
+
+prSymbol :: Symbol SRGNT Token -> ShowS
+prSymbol (Cat (c,_)) = prCat c
+prSymbol (Tok t) | all isPunct (prt t) = id -- removes punctuation
+                 | otherwise = wrap "\"" (prtS t) "\""
 
 isPunct :: Char -> Bool
 isPunct c = c `elem` "-_.;.,?!"

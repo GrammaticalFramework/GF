@@ -14,11 +14,17 @@
 module GF.Speech.FiniteState (FA(..), State, NFA, DFA,
 			      startState, finalStates,
 			      states, transitions,
+                              isInternal,
 			      newFA, 
 			      addFinalState,
 			      newState, newStates,
                               newTransition, newTransitions,
+                              insertTransitionWith, insertTransitionsWith,
 			      mapStates, mapTransitions,
+                              modifyTransitions,
+                              nonLoopTransitionsTo, nonLoopTransitionsFrom, 
+                              loops,
+                              removeState,
                               oneFinalState,
                               insertNFA,
                               onGraph,
@@ -41,6 +47,7 @@ import qualified GF.Visualization.Graphviz as Dot
 
 type State = Int
 
+-- | Type parameters: node id type, state label type, edge label type
 data FA n a b = FA !(Graph n a b) !n ![n]
 
 type NFA a = FA State () (Maybe a)
@@ -82,17 +89,45 @@ newTransition f t l = onGraph (newEdge (f,t,l))
 newTransitions :: [(n, n, b)] -> FA n a b -> FA n a b
 newTransitions es = onGraph (newEdges es)
 
+insertTransitionWith :: Eq n => 
+                        (b -> b -> b) -> (n, n, b) -> FA n a b -> FA n a b
+insertTransitionWith f t = onGraph (insertEdgeWith f t)
+
+insertTransitionsWith :: Eq n => 
+                         (b -> b -> b) -> [(n, n, b)] -> FA n a b -> FA n a b
+insertTransitionsWith f ts fa = 
+    foldl' (flip (insertTransitionWith f)) fa ts
+
 mapStates :: (a -> c) -> FA n a b -> FA n c b
 mapStates f = onGraph (nmap f)
 
 mapTransitions :: (b -> c) -> FA n a b -> FA n a c
 mapTransitions f = onGraph (emap f)
 
+modifyTransitions :: ([(n,n,b)] -> [(n,n,b)]) -> FA n a b -> FA n a b
+modifyTransitions f = onGraph (\ (Graph r ns es) -> Graph r ns (f es))
+
+removeState :: Ord n => n -> FA n a b -> FA n a b
+removeState n = onGraph (removeNode n)
+
 minimize :: Ord a => NFA a -> DFA a
 minimize = determinize . reverseNFA . dfa2nfa . determinize . reverseNFA
 
 unusedNames :: FA n a b -> [n]
 unusedNames (FA (Graph names _ _) _ _) = names
+
+-- | Gets all incoming transitions to a given state, excluding
+-- transtions from the state itself.
+nonLoopTransitionsTo :: Eq n => n -> FA n a b -> [(n,b)]
+nonLoopTransitionsTo s fa = 
+    [(f,l) | (f,t,l) <- transitions fa, t == s && f /= s]
+
+nonLoopTransitionsFrom :: Eq n => n -> FA n a b -> [(n,b)]
+nonLoopTransitionsFrom s fa = 
+    [(t,l) | (f,t,l) <- transitions fa, f == s && t /= s]
+
+loops :: Eq n => n -> FA n a b -> [b]
+loops s fa = [l | (f,t,l) <- transitions fa, f == s && t == s]
 
 -- | Give new names to all nodes.
 renameStates :: Ord x => [y] -- ^ Infinite supply of new names

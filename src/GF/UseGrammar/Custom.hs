@@ -64,6 +64,7 @@ import GF.Speech.PrJSGF (jsgfPrinter)
 import qualified GF.Speech.PrSRGS as SRGS
 import GF.Speech.PrSLF
 import GF.Speech.PrFA (faGraphvizPrinter,regularPrinter,faCPrinter)
+import GF.Speech.PrRegExp (regexpPrinter)
 import GF.Speech.GrammarToVoiceXML (grammar2vxml)
 
 import GF.Data.Zipper
@@ -284,6 +285,9 @@ customGrammarPrinter =
   ,(strCI "fa_c", \opts s -> let start = getStartCatCF opts s
                                  name = cncId s
                               in faCPrinter name start $ stateCFG s)
+  ,(strCI "regexp", \opts s -> let start = getStartCatCF opts s
+                                   name = cncId s
+                                in regexpPrinter name start $ stateCFG s)
   ,(strCI "regular", \_ -> regularPrinter . stateCFG)
   ,(strCI "plbnf",   \_ -> prLBNF True)
   ,(strCI "lbnf",    \_ -> prLBNF False)

@@ -14,7 +14,8 @@
 module GF.Speech.Graph ( Graph(..), Node, Edge, NodeInfo
                         , newGraph, nodes, edges
                         , nmap, emap, newNode, newNodes, newEdge, newEdges
-                        , removeNodes
+                        , insertEdgeWith
+                        , removeNode, removeNodes
                         , nodeInfo
                         , getIncoming, getOutgoing, getNodeLabel
                         , inDegree, outDegree
@@ -81,6 +82,17 @@ newEdges :: [Edge n b] -> Graph n a b -> Graph n a b
 newEdges es g = foldl' (flip newEdge) g es
 -- lazy version:
 -- newEdges es' (Graph c ns es) = Graph c ns (es'++es)
+
+insertEdgeWith :: Eq n => 
+                  (b -> b -> b) -> Edge n b -> Graph n a b -> Graph n a b
+insertEdgeWith f e@(x,y,l) (Graph c ns es) = Graph c ns (h es)
+  where h [] = [e]
+        h (e'@(x',y',l'):es') | x' == x && y' == y = (x',y', f l l'):es'
+                              | otherwise = e':h es'
+
+-- | Remove a node and all edges to and from that node.
+removeNode :: Ord n => n -> Graph n a b -> Graph n a b
+removeNode n = removeNodes (Set.singleton n)
 
 -- | Remove a set of nodes and all edges to and from those nodes.
 removeNodes :: Ord n => Set n -> Graph n a b -> Graph n a b
