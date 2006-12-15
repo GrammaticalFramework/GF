@@ -23,7 +23,7 @@ module GF.Speech.SRG (SRG(..), SRGRule(..), SRGAlt(..),
                       makeSimpleSRG, makeSRG
                      , lookupFM_, prtS
                      , topDownFilter
-                     , EBnfSRGAlt(..), EBnfSRGItem(..)
+                     , EBnfSRGAlt(..), EBnfSRGItem
                      , ebnfSRGAlts
                      ) where
 
@@ -38,6 +38,8 @@ import GF.Conversion.Types
 import GF.Infra.Print
 import GF.Speech.TransformCFG
 import GF.Speech.Relation
+import GF.Speech.FiniteState
+import GF.Speech.RegExp
 import GF.Infra.Option
 import GF.Probabilistic.Probabilistic (Probs)
 
@@ -173,18 +175,25 @@ allSRGCats SRG { rules = rs } = [c | SRGRule c _ _ <- rs]
 data EBnfSRGAlt = EBnfSRGAlt (Maybe Double) Name EBnfSRGItem
 	     deriving (Eq,Show)
 
-data EBnfSRGItem = 
-      EBnfOneOf [EBnfSRGItem]
-    | EBnfSeq [EBnfSRGItem]
-    | EBnfSymbol (Symbol SRGNT Token)
-	     deriving (Eq,Show)
+type EBnfSRGItem = RE (Symbol SRGNT Token)
+
 
 ebnfSRGAlts :: [SRGAlt] -> [EBnfSRGAlt]
 ebnfSRGAlts alts = [EBnfSRGAlt p n (ebnfSRGItem sss) 
                     | ((p,n),sss) <- buildMultiMap [((p,n),ss) | SRGAlt p n ss <- alts]]
 
 ebnfSRGItem :: [[Symbol SRGNT Token]] -> EBnfSRGItem
-ebnfSRGItem sss = EBnfOneOf (map (EBnfSeq . map EBnfSymbol) sss)
+ebnfSRGItem = dfa2re . mkSRGFA
+
+mkSRGFA :: [[Symbol SRGNT Token]] -> DFA (Symbol SRGNT Token)
+mkSRGFA = minimize . dfa2nfa . foldr addString (newFA ())
+
+addString :: [a] -> DFA a -> DFA a
+addString xs fa = addFinalState (last sts0) $ newTransitions ts fa'
+  where (fa',ss) = newStates (replicate (length xs) ()) fa
+        sts0 = startState fa : sts1
+        sts1 = map fst ss
+        ts = zip3 sts0 sts1 xs
 
 --
 -- * Utilities for building and printing SRGs

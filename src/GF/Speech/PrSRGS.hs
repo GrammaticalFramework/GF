@@ -15,6 +15,7 @@ module GF.Speech.PrSRGS (SISRFormat(..), srgsXmlPrinter) where
 
 import GF.Data.Utilities
 import GF.Data.XML
+import GF.Speech.RegExp
 import GF.Speech.SISR as SISR
 import GF.Speech.SRG
 import GF.Infra.Ident
@@ -85,9 +86,12 @@ mkProd sisr (EBnfSRGAlt mp n@(Name f prs) rhs) = Tag "item" w (t ++ xs)
         argInit (Constant f) = maybe "?" prIdent (forestName f)
 
 mkItem :: Maybe SISRFormat -> EBnfSRGItem -> XML
-mkItem sisr (EBnfOneOf xs) = oneOf (map (mkItem sisr) xs)
-mkItem sisr (EBnfSeq xs)   = Tag "item" [] (map (mkItem sisr) xs)
-mkItem sisr (EBnfSymbol s) = symItem sisr s
+mkItem sisr = f
+  where 
+    f (REUnion xs)  = oneOf (map f xs)
+    f (REConcat xs) = Tag "item" [] (map f xs)
+    f (RERepeat x)  = Tag "item" [("repeat","0-")] [f x]
+    f (RESymbol s)  = symItem sisr s
 
 symItem :: Maybe SISRFormat -> Symbol SRGNT Token -> XML
 symItem sisr (Cat (c,slots)) = Tag "item" [] ([Tag "ruleref" [("uri","#" ++ prCat c)] []]++t)
@@ -107,8 +111,7 @@ showToken :: Token -> String
 showToken t = t
 
 oneOf :: [XML] -> XML
-oneOf [x] = x
-oneOf xs = Tag "one-of" [] xs
+oneOf = Tag "one-of" []
 
 grammar :: Maybe SISRFormat
         -> String  -- ^ root
@@ -130,61 +133,3 @@ optimizeSRGS = bottomUpXML f
   where f (Tag "item" [] [x@(Tag "item" [] _)]) = x
         f (Tag "one-of" [] [x]) = x
         f x = x
-
-{-
-
---
--- * SRGS minimization
---
-
-minimizeRule :: XML -> XML
-minimizeRule (Tag "rule" attrs cs) 
-    = Tag "rule" attrs (map minimizeOneOf cs)
-      
-minimizeOneOf :: XML -> XML
-minimizeOneOf (Tag "one-of" attrs cs) 
-    = Tag "item" [] (p++[Tag "one-of" attrs cs'])
-  where
-  (pref,cs') = factor cs
-  p = if null pref then [] else [Tag "one-of" [] pref]
-minimizeOneOf x = x
-
-factor :: [XML] -> ([XML],[XML])
-factor xs = case f of
-                    Just (ps,xs') -> (map it ps, map it xs')
-                    Nothing -> ([],xs)
-  where 
-  -- FIXME: maybe getting all the longest terminal prefixes
-  -- is not optimal?
-  f = cartesianFactor $ map (terminalPrefix . unIt) xs
-  unIt (Tag "item" [] cs) = cs
-  it cs = Tag "item" [] cs
-
-terminalPrefix :: [XML] -> ([XML],[XML])
-terminalPrefix cs = (terms, tags ++ cs'')
-  where (tags,cs') = span isTag cs
-        (terms,cs'') = span isTerminalItem cs'
-
-isTag :: XML -> Bool
-isTag (Tag t _ _) = t == "tag"
-isTag _ = False
-
-isTerminalItem :: XML -> Bool
-isTerminalItem (Tag "item" [] [Data _]) = True
-isTerminalItem _ = False
-
--- 
--- * Utilities
---
-
-allEqual :: Eq a => [a] -> Bool
-allEqual [] = True
-allEqual (x:xs) = all (x==) xs
-
-cartesianFactor :: (Ord a, Ord b) => [(a,b)] -> Maybe ([a],[b])
-cartesianFactor xs 
-    | not (null es) && allEqual es = Just (Map.keys m, Set.elems (head es))
-    | otherwise = Nothing
-  where m = Map.fromListWith Set.union [(x,Set.singleton y) | (x,y) <- xs]
-        es = Map.elems m
--}
