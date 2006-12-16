@@ -30,11 +30,6 @@ import Data.Maybe (fromMaybe)
 
 import Debug.Trace
 
-debug = False
-
-debugLog xs | debug = blockCond "debug == 1" [prompt xs]
-            | otherwise = Empty
-
 -- | the main function
 grammar2vxml :: String -> StateGrammar -> String
 grammar2vxml startcat gr = showsXMLDoc (skel2vxml name language startcat gr' qs) ""
@@ -107,47 +102,13 @@ getCatQuestion c qs =
 
 skel2vxml :: String -> String -> VIdent -> VSkeleton -> CatQuestions -> XML
 skel2vxml name language start skel qs = 
-    vxml language (prelude ++ [startForm] ++ concatMap (uncurry (catForms gr qs)) skel)
+    vxml language ([startForm] ++ concatMap (uncurry (catForms gr qs)) skel)
   where 
   gr = grammarURI name
-  prelude = if debug then [var "debug" (Just "0")] ++ scriptLib else []
-  startForm = Tag "form" [] [subdialog "sub" [("src", "#"++start)] []]
+  startForm = Tag "form" [] [subdialog "sub" [("src", "#"++catFormId start)] []]
 
 grammarURI :: String -> String
 grammarURI name = name ++ ".grxml"
-
-scriptLib :: [XML]
-scriptLib = [script (unlines s)]
- where 
- s = ["function dump(r, p) {",
-      "  if (isUndefined(p)) { p = 0 }",
-      "  if (isUndefined(r)) {",
-      "    return '*undefined*';",
-      "  } else if (isArray(r)) {",
-      "    var s = '[';",
-      "    for (var i = 0; i < r.length; r++) {",
-      "       s += dump(r[0], 0);",
-      "       if (i < r.length-1) { s += ',' }",
-      "    }",
-      "    s += ']';",
-      "    return s;",
-      "  } else if (r == '?') {",
-      "    return '?';",
-      "  } else {",
-      "    var s = r.name;",
-      "    var i;",
-      "    for (i = 0; ; i++) {",
-      "      var c = r['arg'+i];",
-      "      if (isUndefined(c)) { break; }",
-      "      s += ' ' + dump(c, 1);",
-      "    }",
-      "    if (i > 0 && p > 0) { s = '(' + s + ')'; }",
-      "    return s;",
-      "  }",
-      "}",
-      "function isArray(a) { return a && typeof a == 'object' && a.constructor == Array; }",
-      "function isUndefined(a) { return typeof a == 'undefined'; }"
-     ]
 
 
 catForms :: String -> CatQuestions -> VIdent -> [(VIdent, [VIdent])] -> [XML]
@@ -157,34 +118,37 @@ catForms gr qs cat fs =
 
 cat2form :: String -> CatQuestions -> VIdent -> [(VIdent, [VIdent])] -> XML
 cat2form gr qs cat fs = 
-  form cat $ [var "value" (Just "'?'"), 
-              var "update" Nothing, 
-              formDebug cat,
-              blockCond "value != '?'" [assign cat "value"],
-              field cat [] [promptString (getCatQuestion cat qs), 
-                            grammar (gr++"#"++cat),
-                            nomatch [Data "I didn't understand you.", reprompt],
-                            help [Data ("help_"++cat)],
-                            filled [] [if_else (cat ++ " == '?'") [reprompt] feedback]],
-              catDebug]
-           ++ concatMap (uncurry (fun2sub gr cat)) fs
-           ++ [block [return_ [cat]]]
-  where feedback = [if_ ("typeof update != 'undefined' && !update("++string cat++","++ cat ++ ")") [return_ []]]
-        catDebug = debugLog [Data (cat ++ " = "), value ("dump("++cat++")")]
-        retDebug = debugLog [Data "return ", value ("dump("++cat++")")]
+  form (catFormId cat) $ 
+      [var "value" (Just "'?'"), 
+       var "update" Nothing, 
+       blockCond "value != '?'" [assign (catFieldId cat) "value"],
+       field (catFieldId cat) [] 
+           [promptString (getCatQuestion cat qs), 
+            grammar (gr++"#"++catFormId cat),
+            nomatch [Data "I didn't understand you.", reprompt],
+            help [Data ("help_"++cat)],
+            filled [] [if_else (catFieldId cat ++ " == '?'") [reprompt] feedback]]
+      ]
+     ++ concatMap (uncurry (fun2sub gr cat)) fs
+  ++ [block [return_ [catFieldId cat]]]
+  where feedback = [if_ ("typeof update != 'undefined' && !update("++string cat++","++ catFieldId cat ++ ")") [return_ []]]
 
 fun2sub :: String -> VIdent -> VIdent -> [VIdent] -> [XML]
 fun2sub gr cat fun args = comments [fun ++ " : " ++ cat] ++ ss
   where 
   argNames = zip ["arg"++show n | n <- [0..]] args
   ss = map (uncurry mkSub) argNames
-  mkSub a t = subdialog s [("src","#"++t),("cond",cat++".name == "++string fun)] 
-              [param "value" (cat++"."++a),
+  mkSub a t = subdialog s [("src","#"++catFormId t),("cond",catFieldId cat++".name == "++string fun)] 
+              [param "value" (catFieldId cat++"."++a),
                param "update" "update",
-               filled [] [assign (cat++"."++a) (s++"."++t)]]
+               filled [] [assign (catFieldId cat++"."++a) (s++"."++catFieldId t)]]
     where s = fun ++ "_" ++ a
 
-formDebug id = debugLog [Data ("Entering form " ++ id ++ ". value = "), value "dump(value)"]
+catFormId :: VIdent -> String
+catFormId = (++ "_cat")
+
+catFieldId :: VIdent -> String
+catFieldId = (++ "_field")
 
 --
 -- * VoiceXML stuff

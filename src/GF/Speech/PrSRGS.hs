@@ -50,7 +50,7 @@ prSrgsXml sisr (SRG{grammarName=name,startCat=start,
     = showsXMLDoc $ optimizeSRGS xmlGr
     where
     root = cfgCatToGFCat origStart 
-    xmlGr = grammar sisr root l $
+    xmlGr = grammar sisr (catFormId root) l $
               [meta "description" 
                ("SRGS XML speech recognition grammar for " ++ name
                 ++ ". " ++ "Original start category: " ++ origStart),
@@ -59,14 +59,14 @@ prSrgsXml sisr (SRG{grammarName=name,startCat=start,
             ++ topCatRules
 	    ++ concatMap ruleToXML rs
     ruleToXML (SRGRule cat origCat alts) = 
-        comments ["Category " ++ origCat] ++ [rule (prCat cat) (prRhs $ ebnfSRGAlts alts)]
+        comments ["Category " ++ origCat] ++ [rule cat (prRhs $ ebnfSRGAlts alts)]
     prRhs rhss = [oneOf (map (mkProd sisr) rhss)] 
     -- externally visible rules for each of the GF categories
     topCatRules = [topRule tc [oneOf (map (it tc) cs)] | (tc,cs) <- topCats]
         where topCats = buildMultiMap [(cfgCatToGFCat origCat, cat) | SRGRule cat origCat _ <- rs]
-              it i c = Tag "item" [] [Tag "ruleref" [("uri","#" ++ prCat c)] [],
-                                      tag sisr [(EThis :. i) := (ERef c)]]
-              topRule i is = Tag "rule" [("id",i),("scope","public")] is
+              it i c = Tag "item" [] [Tag "ruleref" [("uri","#" ++ c)] [],
+                                      tag sisr [(EThis :. catFieldId i) := (ERef c)]]
+              topRule i is = Tag "rule" [("id",catFormId i),("scope","public")] is
 
 rule :: String -> [XML] -> XML
 rule i = Tag "rule" [("id",i)]
@@ -94,18 +94,23 @@ mkItem sisr = f
     f (RESymbol s)  = symItem sisr s
 
 symItem :: Maybe SISRFormat -> Symbol SRGNT Token -> XML
-symItem sisr (Cat (c,slots)) = Tag "item" [] ([Tag "ruleref" [("uri","#" ++ prCat c)] []]++t)
+symItem sisr (Cat (c,slots)) = Tag "item" [] ([Tag "ruleref" [("uri","#" ++ c)] []]++t)
   where 
   t = if null ts then [] else [tag sisr ts]
-  ts = [(EThis :. ("arg" ++ show s)) := (ERef (prCat c)) | s <- slots]
+  ts = [(EThis :. ("arg" ++ show s)) := (ERef c) | s <- slots]
 symItem _ (Tok t) = Tag "item" [] [Data (showToken t)]
 
 tag :: Maybe SISRFormat -> [SISRExpr] -> XML
 tag Nothing _ = Empty
 tag (Just fmt) ts = Tag "tag" [] [Data (join "; " (map (prSISR fmt) ts))]
 
-prCat :: String -> String
-prCat c = c
+
+catFormId :: String -> String
+catFormId = (++ "_cat")
+
+catFieldId :: String -> String
+catFieldId = (++ "_field")
+
 
 showToken :: Token -> String
 showToken t = t
