@@ -56,14 +56,6 @@ cfgToCFRules cfg = groupProds [CFRule (catToString c) (map symb r) n | CFRule c 
 	  -- symb (Tok t) = Tok t
 	  catToString = prt
 
--- | Group productions by their lhs categories
-groupProds :: [CFRule_] -> CFRules
-groupProds = Map.toList . Map.fromListWith (++) . map (\r -> (lhsCat r,[r]))
-
-ungroupProds :: CFRules -> [CFRule_]
-ungroupProds = concat . map snd
-
-
 -- | Remove productions which use categories which have no productions
 removeEmptyCats :: CFRules -> CFRules
 removeEmptyCats = fix removeEmptyCats'
@@ -83,6 +75,8 @@ removeIdenticalRules g = [(c,sortNubBy cmpRules rs) | (c,rs) <- g]
     where 
     cmpRules (CFRule c1 ss1 _) (CFRule c2 ss2 _) = 
               mconcat [c1 `compare` c2, ss1 `compare` ss2]
+
+-- * Removing left recursion
 
 -- Paull's algorithm, see
 -- http://research.microsoft.com/users/bobmoore/naacl2k-proc-rev.pdf
@@ -125,6 +119,8 @@ isDirectLeftRecursive :: CFRule_ -> Bool
 isDirectLeftRecursive (CFRule c (Cat c':_) _) = c == c'
 isDirectLeftRecursive _ = False
 
+-- * Removing cycles
+
 removeCycles :: CFRules -> CFRules 
 removeCycles = groupProds . removeCycles_ . ungroupProds
   where removeCycles_ rs = [r | r@(CFRule c rhs n) <- rs, rhs /= [Cat c]]
@@ -132,6 +128,13 @@ removeCycles = groupProds . removeCycles_ . ungroupProds
 --
 -- * CFG rule utilities
 --
+
+-- | Group productions by their lhs categories
+groupProds :: [CFRule_] -> CFRules
+groupProds = buildMultiMap . map (\r -> (lhsCat r,r))
+
+ungroupProds :: CFRules -> [CFRule_]
+ungroupProds = concat . map snd
 
 allCats :: CFRules -> [Cat_]
 allCats = map fst
