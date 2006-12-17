@@ -11,7 +11,7 @@
 -- categories in the grammar
 -----------------------------------------------------------------------------
 
-module GF.Speech.PrSRGS (SISRFormat(..), srgsXmlPrinter) where
+module GF.Speech.PrSRGS (srgsXmlPrinter) where
 
 import GF.Data.Utilities
 import GF.Data.XML
@@ -71,19 +71,11 @@ prSrgsXml sisr (SRG{grammarName=name,startCat=start,
 rule :: String -> [XML] -> XML
 rule i = Tag "rule" [("id",i)]
 
-cfgCatToGFCat :: String -> String
-cfgCatToGFCat = takeWhile (/='{')
-
 mkProd :: Maybe SISRFormat -> EBnfSRGAlt -> XML
-mkProd sisr (EBnfSRGAlt mp n@(Name f prs) rhs) = Tag "item" w (t ++ xs)
+mkProd sisr (EBnfSRGAlt mp n rhs) = Tag "item" w (t ++ xs)
   where xs = [mkItem sisr rhs]
         w = maybe [] (\p -> [("weight", show p)]) mp
-        t = [tag sisr ts]
-        ts = [(EThis :. "name") := (EStr (prIdent f))] ++
-             [(EThis :. ("arg" ++ show n)) := (EStr (argInit (prs!!n))) 
-                  | n <- [0..length prs-1]]
-        argInit (Unify _) = "?"
-        argInit (Constant f) = maybe "?" prIdent (forestName f)
+        t = [tag sisr (profileInitSISR n)]
 
 mkItem :: Maybe SISRFormat -> EBnfSRGItem -> XML
 mkItem sisr = f
@@ -94,15 +86,14 @@ mkItem sisr = f
     f (RESymbol s)  = symItem sisr s
 
 symItem :: Maybe SISRFormat -> Symbol SRGNT Token -> XML
-symItem sisr (Cat (c,slots)) = Tag "item" [] ([Tag "ruleref" [("uri","#" ++ c)] []]++t)
-  where 
-  t = if null ts then [] else [tag sisr ts]
-  ts = [(EThis :. ("arg" ++ show s)) := (ERef c) | s <- slots]
+symItem sisr (Cat n@(c,_)) = 
+    Tag "item" [] [Tag "ruleref" [("uri","#" ++ c)] [], tag sisr (catSISR n)]
 symItem _ (Tok t) = Tag "item" [] [Data (showToken t)]
 
 tag :: Maybe SISRFormat -> [SISRExpr] -> XML
 tag Nothing _ = Empty
-tag (Just fmt) ts = Tag "tag" [] [Data (join "; " (map (prSISR fmt) ts))]
+tag _ [] = Empty
+tag (Just fmt) ts = Tag "tag" [] [Data (prSISR fmt ts)]
 
 
 catFormId :: String -> String

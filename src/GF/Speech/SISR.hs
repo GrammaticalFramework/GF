@@ -10,9 +10,18 @@
 --
 -----------------------------------------------------------------------------
 
-module GF.Speech.SISR (SISRFormat(..), SISRExpr(..), prSISR) where
+module GF.Speech.SISR (SISRFormat(..), SISRExpr(..), prSISR, 
+                       profileInitSISR, catSISR) where
 
 import Data.List
+
+import GF.Conversion.Types
+import GF.Data.Utilities
+import GF.Formalism.CFG
+import GF.Formalism.Utilities (Symbol(..), NameProfile(..), Profile(..), forestName)
+import GF.Infra.Ident
+import GF.Speech.SRG
+
 
 infixl 8 :.
 infixr 1 :=
@@ -32,8 +41,8 @@ data SISRExpr = SISRExpr := SISRExpr
               | ENew String [SISRExpr]
   deriving Show
 
-prSISR :: SISRFormat -> SISRExpr -> String
-prSISR fmt = f
+prSISR :: SISRFormat -> [SISRExpr] -> String
+prSISR fmt = join "; " . map f
   where
    f e = 
     case e of
@@ -44,3 +53,14 @@ prSISR fmt = f
       EStr s -> show s
       EApp x ys -> f x ++ "(" ++ concat (intersperse "," (map f ys)) ++ ")"
       ENew n ys -> "new " ++ n ++ "(" ++ concat (intersperse "," (map f ys)) ++ ")"
+
+profileInitSISR :: Name -> [SISRExpr]
+profileInitSISR (Name f prs) =
+    [(EThis :. "name") := (EStr (prIdent f))] ++
+    [(EThis :. ("arg" ++ show n)) := (EStr (argInit (prs!!n))) 
+                  | n <- [0..length prs-1]]
+  where argInit (Unify _) = "?"
+        argInit (Constant f) = maybe "?" prIdent (forestName f)
+
+catSISR :: SRGNT -> [SISRExpr]
+catSISR (c,slots) = [(EThis :. ("arg" ++ show s)) := (ERef c) | s <- slots]

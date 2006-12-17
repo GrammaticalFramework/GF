@@ -22,7 +22,7 @@ module GF.Speech.SRG (SRG(..), SRGRule(..), SRGAlt(..),
                       SRGCat, SRGNT,
                       makeSimpleSRG, makeSRG
                      , lookupFM_, prtS
-                     , topDownFilter
+                     , topDownFilter, cfgCatToGFCat
                      , EBnfSRGAlt(..), EBnfSRGItem
                      , ebnfSRGAlts
                      ) where
@@ -167,6 +167,9 @@ topDownFilter srg@(SRG { startCat = start, rules = rs }) = srg { rules = rs' }
 
 allSRGCats :: SRG -> [String]
 allSRGCats SRG { rules = rs } = [c | SRGRule c _ _ <- rs]
+
+cfgCatToGFCat :: SRGCat -> String
+cfgCatToGFCat = takeWhile (/='{')
 
 --
 -- * Size-optimized EBNF SRGs
