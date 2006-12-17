@@ -62,6 +62,7 @@ import GF.CF.CFtoSRG
 import GF.Speech.PrGSL (gslPrinter)
 import GF.Speech.PrJSGF (jsgfPrinter)
 import qualified GF.Speech.PrSRGS as SRGS
+import qualified GF.Speech.SISR as SISR
 import GF.Speech.PrSLF
 import GF.Speech.PrFA (faGraphvizPrinter,regularPrinter,faCPrinter)
 import GF.Speech.PrRegExp (regexpPrinter)
@@ -252,7 +253,11 @@ customGrammarPrinter =
                                  in gslPrinter name start opts Nothing $ stateCFG s)
   ,(strCI "jsgf",    \opts s -> let name = cncId s
                                     start = getStartCatCF opts s
-                                 in jsgfPrinter name start opts Nothing $ stateCFG s)
+                                 in jsgfPrinter name start opts Nothing Nothing $ stateCFG s)
+  ,(strCI "jsgf_sisr_old", 
+                     \opts s -> let name = cncId s
+                                    start = getStartCatCF opts s
+                                 in jsgfPrinter name start opts (Just SISR.SISROld) Nothing $ stateCFG s)
   ,(strCI "srgs_xml", \opts s -> let name = cncId s
                                      start = getStartCatCF opts s
                                   in SRGS.srgsXmlPrinter name start opts Nothing Nothing $ stateCFG s)
@@ -264,7 +269,7 @@ customGrammarPrinter =
   ,(strCI "srgs_xml_sisr_old", 
               \opts s -> let name = cncId s
                              start = getStartCatCF opts s
-                          in SRGS.srgsXmlPrinter name start opts (Just SRGS.SISROld) Nothing $ stateCFG s)
+                          in SRGS.srgsXmlPrinter name start opts (Just SISR.SISROld) Nothing $ stateCFG s)
   ,(strCI "vxml", \opts s -> let start = getStartCat opts s
                               in grammar2vxml start s)
   ,(strCI "slf",  \opts s -> let start = getStartCatCF opts s
