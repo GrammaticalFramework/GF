@@ -31,14 +31,16 @@ import GF.Speech.SISR
 import GF.Speech.SRG
 import GF.Speech.RegExp
 
+import Data.List
 import Debug.Trace
+
 
 jsgfPrinter :: Ident -- ^ Grammar name
             -> String    -- ^ Start category
 	    -> Options 
             -> Maybe SISRFormat
             -> Maybe Probs -> CGrammar -> String
-jsgfPrinter name start opts sisr probs cfg = trace (show srg) $ prJSGF srg sisr ""
+jsgfPrinter name start opts sisr probs cfg = prJSGF srg sisr ""
     where srg = makeSimpleSRG name start opts probs cfg
 
 prJSGF :: SRG -> Maybe SISRFormat -> ShowS
@@ -77,7 +79,10 @@ prItem :: Maybe SISRFormat -> EBnfSRGItem -> ShowS
 prItem sisr = f 1
   where
     f _ (REUnion [])  = showString "<VOID>"
-    f p (REUnion xs)  = (if p >= 1 then paren else id) (joinS " | " (map (f 1) xs))
+    f p (REUnion xs) 
+        | not (null es) = wrap "[" (f 0 (REUnion nes)) "]"
+        | otherwise = (if p >= 1 then paren else id) (joinS " | " (map (f 1) xs))
+      where (es,nes) = partition (== REConcat []) xs
     f _ (REConcat []) = showString "<NULL>"
     f p (REConcat xs) = (if p >= 3 then paren else id) (unwordsS (map (f 2) xs))
     f p (RERepeat x)  = f 3 x . showString "*"
