@@ -44,7 +44,7 @@ jsgfPrinter name start opts sisr probs cfg = prJSGF srg sisr ""
     where srg = makeSimpleSRG name start opts probs cfg
 
 prJSGF :: SRG -> Maybe SISRFormat -> ShowS
-prJSGF (SRG{grammarName=name,startCat=start,origStartCat=origStart,rules=rs}) sisr
+prJSGF srg@(SRG{grammarName=name,startCat=start,origStartCat=origStart,rules=rs}) sisr
     = header . nl
       . mainCat . nl
       . unlinesS topCatRules . nl
@@ -62,9 +62,8 @@ prJSGF (SRG{grammarName=name,startCat=start,origStartCat=origStart,rules=rs}) si
     -- FIXME: use the probability
     prAlt (EBnfSRGAlt mp n rhs) = tag sisr (profileInitSISR n) . showChar ' '. prItem sisr rhs
 
-    topCatRules = [rule True (catFormId tc) (map (it tc) cs) | (tc,cs) <- topCats]
-        where topCats = buildMultiMap [(cfgCatToGFCat origCat, cat) | SRGRule cat origCat _ <- rs]
-              it i c = prCat c . tag sisr [(EThis :. catFieldId i) := (ERef c)]
+    topCatRules = [rule True (catFormId tc) (map (it tc) cs) | (tc,cs) <- srgTopCats srg]
+        where it i c = prCat c . tag sisr [(EThis :. catFieldId i) := (ERef c)]
 
 catFormId :: String -> String
 catFormId = (++ "_cat")

@@ -12,12 +12,13 @@
 -- A simple module for relations.
 -----------------------------------------------------------------------------
 
-module GF.Speech.Relation (Rel, mkRel
+module GF.Speech.Relation (Rel, mkRel, mkRel'
                            , allRelated , isRelatedTo
                            , transitiveClosure
                            , reflexiveClosure, reflexiveClosure_
                            , symmetricClosure
                            , symmetricSubrelation, reflexiveSubrelation
+                           , reflexiveElements
                            , equivalenceClasses
                            , isTransitive, isReflexive, isSymmetric
                            , isEquivalence
@@ -37,6 +38,11 @@ type Rel a = Map a (Set a)
 -- | Creates a relation from a list of related pairs.
 mkRel :: Ord a => [(a,a)] -> Rel a
 mkRel ps = relates ps Map.empty
+
+-- | Creates a relation from a list pairs of elements and the elements
+--   related to them.
+mkRel' :: Ord a => [(a,[a])] -> Rel a
+mkRel' xs = Map.fromListWith Set.union [(x,Set.fromList ys) | (x,ys) <- xs]
 
 relToList :: Rel a -> [(a,a)]
 relToList r = [ (x,y) | (x,ys) <- Map.toList r, y <- Set.toList ys ]

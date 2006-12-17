@@ -45,11 +45,11 @@ srgsXmlPrinter name start opts sisr probs cfg = prSrgsXml sisr srg ""
     where srg = makeSRG name start opts probs cfg
 
 prSrgsXml :: Maybe SISRFormat -> SRG -> ShowS
-prSrgsXml sisr (SRG{grammarName=name,startCat=start,
-               origStartCat=origStart,grammarLanguage=l,rules=rs})
+prSrgsXml sisr srg@(SRG{grammarName=name,startCat=start,
+                        origStartCat=origStart,grammarLanguage=l,rules=rs})
     = showsXMLDoc $ optimizeSRGS xmlGr
     where
-    root = cfgCatToGFCat origStart 
+    Just root = cfgCatToGFCat origStart 
     xmlGr = grammar sisr (catFormId root) l $
               [meta "description" 
                ("SRGS XML speech recognition grammar for " ++ name
@@ -62,9 +62,8 @@ prSrgsXml sisr (SRG{grammarName=name,startCat=start,
         comments ["Category " ++ origCat] ++ [rule cat (prRhs $ ebnfSRGAlts alts)]
     prRhs rhss = [oneOf (map (mkProd sisr) rhss)] 
     -- externally visible rules for each of the GF categories
-    topCatRules = [topRule tc [oneOf (map (it tc) cs)] | (tc,cs) <- topCats]
-        where topCats = buildMultiMap [(cfgCatToGFCat origCat, cat) | SRGRule cat origCat _ <- rs]
-              it i c = Tag "item" [] [Tag "ruleref" [("uri","#" ++ c)] [],
+    topCatRules = [topRule tc [oneOf (map (it tc) cs)] | (tc,cs) <- srgTopCats srg]
+        where it i c = Tag "item" [] [Tag "ruleref" [("uri","#" ++ c)] [],
                                       tag sisr [(EThis :. catFieldId i) := (ERef c)]]
               topRule i is = Tag "rule" [("id",catFormId i),("scope","public")] is
 

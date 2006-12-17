@@ -22,7 +22,7 @@ module GF.Speech.SRG (SRG(..), SRGRule(..), SRGAlt(..),
                       SRGCat, SRGNT,
                       makeSimpleSRG, makeSRG
                      , lookupFM_, prtS
-                     , topDownFilter, cfgCatToGFCat
+                     , topDownFilter, cfgCatToGFCat, srgTopCats
                      , EBnfSRGAlt(..), EBnfSRGItem
                      , ebnfSRGAlts
                      ) where
@@ -44,7 +44,7 @@ import GF.Infra.Option
 import GF.Probabilistic.Probabilistic (Probs)
 
 import Data.List
-import Data.Maybe (fromMaybe)
+import Data.Maybe (fromMaybe, maybeToList)
 import Data.Map (Map)
 import qualified Data.Map as Map
 import Data.Set (Set)
@@ -86,8 +86,11 @@ makeSimpleSRG :: Ident     -- ^ Grammar name
 	      -> Maybe Probs -- ^ Probabilities
 	      -> CGrammar -- ^ A context-free grammar
 	      -> SRG
-makeSimpleSRG 
-    = makeSRG_ (removeLeftRecursion . removeIdenticalRules . removeEmptyCats . removeCycles)
+makeSimpleSRG i origStart opts probs =
+    makeSRG_ i origStart opts probs 
+                 . removeLeftRecursion origStart . removeIdenticalRules 
+                 . removeEmptyCats . removeCycles
+                 . cfgToCFRules
 
 -- | Create a SRG preserving the names, profiles and probabilities of the 
 --   input grammar. The returned grammar may be left-recursive.
@@ -97,18 +100,17 @@ makeSRG :: Ident     -- ^ Grammar name
 	-> Maybe Probs -- ^ Probabilities
 	-> CGrammar -- ^ A context-free grammar
 	-> SRG
-makeSRG = makeSRG_ removeEmptyCats
+makeSRG i origStart opts probs = 
+    makeSRG_ i origStart opts probs . removeEmptyCats . cfgToCFRules
 
-makeSRG_ :: (CFRules -> CFRules) -- ^ Transformations to apply to the
-                                 --   CFG before converting to SRG
-         -> Ident     -- ^ Grammar name
+makeSRG_ :: Ident     -- ^ Grammar name
          -> String    -- ^ Start category
 	 -> Options   -- ^ Grammar options
 	 -> Maybe Probs -- ^ Probabilities
-	 -> CGrammar -- ^ A context-free grammar
+	 -> CFRules -- ^ A context-free grammar
 	 -> SRG
-makeSRG_ f i origStart opts probs gr 
-    = SRG { grammarName = name,
+makeSRG_ i origStart opts probs gr =
+      SRG { grammarName = name,
 	    startCat = lookupFM_ names origStart,
 	    origStartCat = origStart,
             grammarLanguage = l,
@@ -116,8 +118,7 @@ makeSRG_ f i origStart opts probs gr
     where 
     name = prIdent i
     l = fromMaybe "en_UK" (getOptVal opts speechLanguage)
-    gr' = f (cfgToCFRules gr)
-    (cats,cfgRules) = unzip gr'
+    (cats,cfgRules) = unzip gr
     names = mkCatNames name cats
     rs = map (cfgRulesToSRGRule names probs) cfgRules
 
@@ -168,8 +169,14 @@ topDownFilter srg@(SRG { startCat = start, rules = rs }) = srg { rules = rs' }
 allSRGCats :: SRG -> [String]
 allSRGCats SRG { rules = rs } = [c | SRGRule c _ _ <- rs]
 
-cfgCatToGFCat :: SRGCat -> String
-cfgCatToGFCat = takeWhile (/='{')
+cfgCatToGFCat :: SRGCat -> Maybe String
+cfgCatToGFCat c 
+    | '-' `elem` c = Nothing -- categories introduced by removeLeftRecursion contain dashes
+    | otherwise = Just $ takeWhile (/='{') c
+
+srgTopCats :: SRG -> [(String,[SRGCat])]
+srgTopCats srg = buildMultiMap [(oc, cat) | SRGRule cat origCat _ <- rules srg, 
+                                            oc <- maybeToList $ cfgCatToGFCat origCat]
 
 --
 -- * Size-optimized EBNF SRGs
@@ -189,7 +196,7 @@ ebnfSRGItem :: [[Symbol SRGNT Token]] -> EBnfSRGItem
 ebnfSRGItem = dfa2re . mkSRGFA
 
 mkSRGFA :: [[Symbol SRGNT Token]] -> DFA (Symbol SRGNT Token)
-mkSRGFA = minimize . dfa2nfa . foldr addString (newFA ())
+mkSRGFA = {- minimize . dfa2nfa . -} foldr addString (newFA ())
 
 addString :: [a] -> DFA a -> DFA a
 addString xs fa = addFinalState (last sts0) $ newTransitions ts fa'
