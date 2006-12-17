@@ -31,6 +31,7 @@ import GF.Formalism.Utilities (Symbol(..), mapSymbol, filterCats, symbol,
 import GF.Infra.Ident
 import GF.Infra.Option
 import GF.Infra.Print
+import GF.Speech.Relation
 
 import Control.Monad
 import Control.Monad.State (State, get, put, evalState)
@@ -46,6 +47,7 @@ import qualified Data.Set as Set
 -- | not very nice to replace the structured CFCat type with a simple string
 type CFRule_ = CFRule Cat_ Name Token
 type Cat_ = String
+type CFSymbol_ = Symbol Cat_ Token
 
 type CFRules = [(Cat_,[CFRule_])]
 
@@ -78,10 +80,65 @@ removeIdenticalRules g = [(c,sortNubBy cmpRules rs) | (c,rs) <- g]
 
 -- * Removing left recursion
 
+{-
+
+-- The LC_LR algorithm from
+-- http://research.microsoft.com/users/bobmoore/naacl2k-proc-rev.pdf
+-- Not used since I haven't figured out how to make proper profiles. /Bjorn
+removeLeftRecursion :: Cat_ -> CFRules -> CFRules
+removeLeftRecursion start gr 
+    = groupProds $ concat [scheme1, scheme2, scheme3, scheme4]
+  where
+    scheme1 = [CFRule a [x,Cat a_x] (Name (IC "phony1") []) | 
+               a <- retainedLeftRecursive, 
+               x <- properLeftCornersOf a,
+               not (isLeftRecursive x),
+               let a_x = mkCat (Cat a) x]
+    scheme2 = [CFRule a_x (beta++[Cat a_b]) (Name (IC "phony2") []) | 
+               a <- retainedLeftRecursive, 
+               b@(Cat b') <- properLeftCornersOf a,
+               isLeftRecursive b,
+               CFRule _ (x:beta) n <- catRules gr b', 
+               let a_x = mkCat (Cat a) x,
+               let a_b = mkCat (Cat a) b]
+    scheme3 = [CFRule a_x beta n | -- FIXME: remove 0 from all profile elements
+               a <- retainedLeftRecursive, 
+               x <- properLeftCornersOf a,
+               CFRule _ (x':beta) n <- catRules gr a,
+               x == x',
+               let a_x = mkCat (Cat a) x]
+    scheme4 = catSetRules gr $ Set.fromList $ filter (not . isLeftRecursive . Cat) cats
+
+    cats = allCats gr
+    rules = ungroupProds gr
+
+    directLeftCorner = mkRel' [(Cat s,[t | CFRule _ (t:_) _ <- rs]) | (s,rs) <- gr]
+    leftCorner = reflexiveClosure_ (map Cat cats) $ transitiveClosure directLeftCorner
+    properLeftCorner = transitiveClosure directLeftCorner
+    properLeftCornersOf = Set.toList . allRelated properLeftCorner . Cat
+    isProperLeftCornerOf = flip (isRelatedTo properLeftCorner)
+
+    leftRecursive = reflexiveElements properLeftCorner
+    isLeftRecursive = (`Set.member` leftRecursive)
+
+    -- FIXME: include start cat
+    retained = start `Set.insert`
+                Set.fromList [a | (c,rs) <- gr, not (isLeftRecursive (Cat c)), 
+                                   r <- rs, Cat a <- ruleRhs r]
+    isRetained = (`Set.member` retained)
+
+    retainedLeftRecursive = filter (isLeftRecursive . Cat) $ Set.toList retained
+
+mkCat :: CFSymbol_ -> CFSymbol_ -> Cat_
+mkCat x y = showSymbol x ++ "-" ++ showSymbol y
+  where showSymbol = symbol id ("$"++) -- FIXME !!!!!
+
+-}
+
 -- Paull's algorithm, see
 -- http://research.microsoft.com/users/bobmoore/naacl2k-proc-rev.pdf
-removeLeftRecursion :: CFRules -> CFRules
-removeLeftRecursion rs = removeDirectLeftRecursions $ map handleProds rs
+removeLeftRecursion :: Cat_ -> CFRules -> CFRules
+removeLeftRecursion start rs = removeDirectLeftRecursions $ map handleProds rs
     where 
     handleProds (c, r) = (c, concatMap handleProd r)
     handleProd (CFRule ai (Cat aj:alpha) n) | aj < ai  =
@@ -113,17 +170,29 @@ removeDirectLeftRecursion (a,rs)
         return [(a, as), (a', a's)]
     where 
     (dr,nr) = partition isDirectLeftRecursive rs
-    fresh x = do { n <- get; put (n+1); return $ x ++ "'" ++ show n }
+    fresh x = do { n <- get; put (n+1); return $ x ++ "-" ++ show n }
 
 isDirectLeftRecursive :: CFRule_ -> Bool
 isDirectLeftRecursive (CFRule c (Cat c':_) _) = c == c'
 isDirectLeftRecursive _ = False
+
 
 -- * Removing cycles
 
 removeCycles :: CFRules -> CFRules 
 removeCycles = groupProds . removeCycles_ . ungroupProds
   where removeCycles_ rs = [r | r@(CFRule c rhs n) <- rs, rhs /= [Cat c]]
+
+
+-- | Get the sets of mutually recursive non-terminals for a grammar.
+mutRecCats :: Bool    -- ^ If true, all categories will be in some set.
+                      --   If false, only recursive categories will be included.
+           -> CFRules -> [Set Cat_]
+mutRecCats incAll g = equivalenceClasses $ refl $ symmetricSubrelation $ transitiveClosure r
+  where r = mkRel [(c,c') | (_,rs) <- g, CFRule c ss _ <- rs, Cat c' <- ss]
+        allCats = map fst g
+        refl = if incAll then reflexiveClosure_ allCats else reflexiveSubrelation
+
 
 --
 -- * CFG rule utilities
@@ -142,8 +211,8 @@ allCats = map fst
 catRules :: CFRules -> Cat_ -> [CFRule_]
 catRules rs c = fromMaybe [] (lookup c rs)
 
-catSetRules :: CFRules -> [Cat_] -> [CFRule_]
-catSetRules g s = concatMap (catRules g) s
+catSetRules :: CFRules -> Set Cat_ -> [CFRule_]
+catSetRules g cs = concat [rs | (c,rs) <- g, c `Set.member` cs]
 
 lhsCat :: CFRule c n t -> c
 lhsCat (CFRule c _ _) = c

@@ -75,7 +75,7 @@ makeRegular g = groupProds $ concatMap trSet (mutRecCats True g)
   where trSet cs | allXLinear cs rs = rs
                  | otherwise = concatMap handleCat csl
             where csl = Set.toList cs 
-                  rs = catSetRules g csl
+                  rs = catSetRules g cs
                   handleCat c = [CFRule c' [] (mkName (c++"-empty"))] -- introduce A' -> e
                                 ++ concatMap (makeRightLinearRules c) (catRules g c)
                       where c' = newCat c
@@ -89,15 +89,6 @@ makeRegular g = groupProds $ concatMap trSet (mutRecCats True g)
                             newRule c rhs n | rhs == [Cat c] = []
                                             | otherwise = [CFRule c rhs n]
         newCat c = c ++ "$"
-
--- | Get the sets of mutually recursive non-terminals for a grammar.
-mutRecCats :: Bool    -- ^ If true, all categories will be in some set.
-                      --   If false, only recursive categories will be included.
-           -> CFRules -> [Set Cat_]
-mutRecCats incAll g = equivalenceClasses $ refl $ symmetricSubrelation $ transitiveClosure r
-  where r = mkRel [(c,c') | (_,rs) <- g, CFRule c ss _ <- rs, Cat c' <- ss]
-        allCats = map fst g
-        refl = if incAll then reflexiveClosure_ allCats else reflexiveSubrelation
 
 --
 -- * Compile strongly regular grammars to NFAs
@@ -271,7 +262,7 @@ mutRecSets g = Map.fromList . concatMap mkMutRecSet
   where 
   mkMutRecSet cs = [ (c,ms) | c <- csl ]
    where csl = Set.toList cs
-         rs = catSetRules g csl
+         rs = catSetRules g cs
          (nrs,rrs) = partition (ruleIsNonRecursive cs) rs
          ms = MutRecSet {
                          mrCats = cs,
