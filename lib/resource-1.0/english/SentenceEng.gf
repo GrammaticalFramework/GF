@@ -53,3 +53,12 @@ concrete SentenceEng of Sentence = CatEng ** open Prelude, ResEng in {
   oper
     ctr = contrNeg True ;  -- contracted negations
 }
+
+{-
+--- todo: tense of embedded Slash
+
+    SlashVSS np vs s = 
+      mkClause (np.s ! Nom) np.a 
+        (insertObj (\\_ => conjThat ++ s.s) (predV vs)) **
+        {c2 = s.c2} ;
+-}

@@ -28,10 +28,10 @@ abstract Sentence = Cat ** {
 -- the style of CCG.
 -- *Note* the set is not complete and lacks e.g. verbs with more than 2 places.
 
-    SlashV2   : NP -> V2 -> Slash ;      -- (whom) he sees
-    SlashVVV2 : NP -> VV -> V2 -> Slash; -- (whom) he wants to see 
-    AdvSlash  : Slash -> Adv -> Slash ;  -- (whom) he sees tomorrow
-    SlashPrep : Cl -> Prep -> Slash ;    -- (with whom) he walks 
+    SlashV2   : NP -> V2 -> Slash ;         -- (whom) he sees
+    SlashVVV2 : NP -> VV -> V2 -> Slash;    -- (whom) he wants to see 
+    AdvSlash  : Slash -> Adv -> Slash ;     -- (whom) he sees tomorrow
+    SlashPrep : Cl -> Prep -> Slash ;       -- (with whom) he walks 
 
 --2 Imperatives
 
@@ -68,6 +68,10 @@ abstract Sentence = Cat ** {
 }
 
 --.
+
+--- todo: tense of embedded Slash
+--    SlashVSS  : NP -> VS -> Slash -> Slash; -- (whom) I think he sees
+
 -- Examples for English $S$/$Cl$:
 {-
   Pres  Simul  Pos  ODir  : he sleeps
