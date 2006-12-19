@@ -18,7 +18,7 @@ lincat
 lin
   ThmWithProof = theorem ;
 
-  Conj A B = coord and_Conj A B ;
+  Conj A = coord and_Conj A ;
   Disj A B = coord or_Conj A B ;
   Impl A B = coord ifthen_DConj A B ;
 
