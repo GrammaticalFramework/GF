@@ -189,7 +189,10 @@ checkResInfo gr mo (c,info) = do
     ResOverload tysts -> chIn "overloading" $ do
       tysts' <- mapM (uncurry $ flip check) tysts
       let tysts2 = [(y,x) | (x,y) <- tysts']
-      checkUniq $ sort [map snd xs | (x,_) <- tysts2, Ok (xs,_) <- [typeFormCnc x]]
+      --- this can only be a partial guarantee, since matching
+      --- with value type is only possible if expected type is given
+      checkUniq $ 
+        sort [t : map snd xs | (x,_) <- tysts2, Ok (xs,t) <- [typeFormCnc x]]
       return (c,ResOverload tysts2)
 
     ResParam (Yes (pcs,_)) -> chIn "parameter type" $ do
@@ -395,7 +398,7 @@ inferLType gr trm = case trm of
      return (e,t')
 
    App f a -> do
-     over <- getOverload trm
+     over <- getOverload gr Nothing trm
      case over of
        Just trty -> return trty
        _ -> do
@@ -572,7 +575,11 @@ inferLType gr trm = case trm of
      PRep _   -> return $ typeTok
      _ -> infer (patt2term p) >>= return . snd
 
-   getOverload t = case appForm t of
+
+-- type inference: Nothing, type checking: Just t
+-- the latter permits matching with value type
+getOverload :: SourceGrammar -> Maybe Type -> Term -> Check (Maybe (Term,Type))
+getOverload env@gr mt t = case appForm t of
      (f@(Q m c), ts) -> case lookupOverload gr m c of
        Ok typs -> do
          ttys <- mapM infer ts
@@ -580,30 +587,33 @@ inferLType gr trm = case trm of
          return $ Just v
        _ -> return Nothing
      _ -> return Nothing
- 
+ where
+   infer = inferLType env
    matchOverload f typs ttys = do
      let (tts,tys) = unzip ttys
-     case lookupOverloadInstance tys typs of
-       [((val,fun),_)] -> return (mkApp fun tts, val)
+     let vfs = lookupOverloadInstance tys typs
+
+     case [vf | vf@(v,f) <- vfs, elem mt [Nothing,Just v]] of
+       [(val,fun)] -> return (mkApp fun tts, val)
        [] -> raise $ "no overload instance of" +++ prt f +++ 
+         maybe [] (("when expecting" +++) . prtType) mt +++
          "for" +++ unwords (map prtType tys) +++ "among" ++++ 
          unlines [unwords (map prtType ty) | (ty,_) <- typs]
       ----  ++++ "DEBUG" +++ unwords (map show tys) +++ ";" 
       ----  ++++ unlines (map (show . fst) typs) ----
-       vfs -> case filter snd vfs of
-         [((val,fun),_)] -> return (mkApp fun tts, val) 
-         _ -> raise $ "ambiguous overloading of" +++ prt f +++
-           "for" +++ unwords (map prtType tys) ++++ "with alternatives" ++++ 
-           unlines [prtType ty | ((ty,_),_) <- vfs]
+       _ -> raise $ "ambiguous overloading of" +++ prt f +++
+         "for" +++ unwords (map prtType tys) ++++ "with alternatives" ++++ 
+         unlines [prtType ty | (ty,_) <- vfs]
 
    ---- TODO: accept subtypes
    ---- TODO: use a trie
    lookupOverloadInstance tys typs = 
-     [((mkFunType rest val, t),null rest) | 
+     [(mkFunType rest val, t) | 
        (ty,(val,t)) <- typs, 
        let (pre,rest) = splitAt (length tys) ty, 
        pre == tys
      ]
+
 
 checkLType :: SourceGrammar -> Term -> Type -> Check (Term, Type)
 checkLType env trm typ0 = do
@@ -624,6 +634,14 @@ checkLType env trm typ0 = do
           checkReset
           return $ (Abs x c', Prod x a b')
         _ -> raise $ "product expected instead of" +++ prtType typ
+
+    App f a -> do
+       over <- getOverload env (Just typ) trm
+       case over of
+         Just trty -> return trty
+         _ -> do
+          (trm',ty') <- infer trm
+          termWith trm' $ checkEq typ ty' trm'
 
     T _ [] ->
       prtFail "found empty table in type" typ

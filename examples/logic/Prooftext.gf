@@ -32,7 +32,7 @@ oper
 
   definition : Decls -> Object -> Object -> Section 
     = \decl,a,b -> 
-        appendText decl (mkUtt (mkS (pred b a))) ;
+        appendText decl (mkText (mkPhr (mkUtt (mkS (pred b a)))) TEmpty) ;
 
   theorem : Prop -> Proof -> Section 
     = \prop,prf -> appendText (mkText (mkPhr prop) TEmpty) prf ;
@@ -64,17 +64,17 @@ oper
     = appendText ;
 
   cases : Num -> Branching 
-    = \nu -> 
-        mkS (pred have_V2 (mkNP we_Pron) (mkNP (mkDet nu) case_N)) ;
+    = \n -> 
+        mkS (pred have_V2 (mkNP we_Pron) (mkNP (mkDet n) case_N)) ;
 
   by : Ref -> Adverb 
-    = \h -> mkAdv by8means_Prep h ;
+    = \h -> C.mkPConj (mkAdv by8means_Prep h).s ;
   therefore : Adverb
     = therefore_PConj ;
   afortiori : Adverb
     = C.mkPConj ["a fortiori"] ;
   hypothesis : Adverb
-    = mkAdv by8means_Prep (mkNP (mkDet DefArt) hypothesis_N) ;
+    = C.mkPConj (mkAdv by8means_Prep (mkNP (mkDet DefArt) hypothesis_N)).s ;
 
   ref : Label -> Ref
     = \h -> h ;

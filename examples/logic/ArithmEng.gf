@@ -29,15 +29,15 @@ lin
 
   evax1 = 
     proof (by (ref (mkLabel ["the first axiom of evenness ,"]))) 
-      (mkS (pred (regA "even") (UsePN (regPN "zero")))) ;
+      (mkS (predA (regA "even") (UsePN (regPN "zero")))) ;
   evax2 n c = 
     appendText c 
       (proof (by (ref (mkLabel ["the second axiom of evenness ,"]))) 
-        (mkS (pred (regA "odd") (appN2 (regN2 "successor") n)))) ;
+        (mkS (predA (regA "odd") (appN2 (regN2 "successor") n)))) ;
   evax3 n c = 
     appendText c 
       (proof (by (ref (mkLabel ["the third axiom of evenness ,"]))) 
-        (mkS (pred (regA "even") (appN2 (regN2 "successor") n)))) ;
+        (mkS (predA (regA "even") (appN2 (regN2 "successor") n)))) ;
 
 
   eqax1 = 

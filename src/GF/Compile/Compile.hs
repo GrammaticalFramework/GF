@@ -281,7 +281,7 @@ compileSourceModule opts env@(k,gr,can,eenv) mo@(i,mi) = do
       (mo3:_,warnings) <- putpp "  type checking" $ ioeErr $ showCheckModule mos mo2
       if null warnings then return () else putp warnings $ return ()
 
-      (k',mo3r:_) <- ioeErr $ refreshModule (k,mos) mo3
+      (k',mo3r:_) <- putpp "  refreshing " $ ioeErr $ refreshModule (k,mos) mo3
 
       (mo4,eenv') <- 
         ---- if oElem "check_only" opts 
