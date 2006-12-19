@@ -62,16 +62,19 @@ canon2gfcc cgr@(M.MGrammar ((a,M.ModMod abm):cms)) =
   adefs = [C.Fun f' (mkType ty) (C.Tr (C.AC f') []) | 
             (f,GFC.AbsFun ty _) <- tree2list (M.jments abm), let f' = i2i f]
   cncs  = [C.Cnc (i2i lang) (concr m) | (lang,M.ModMod m) <- cms]
-  concr mo = cats mo ++ 
+  concr mo = cats mo ++ lindefs mo ++ 
                optConcrete 
                  [C.Lin (i2i f) (mkTerm tr) | 
                    (f,GFC.CncFun _ _ tr _) <- tree2list (M.jments mo)]
   cats mo = [C.Lin (i2ic c) (mkCType ty) | 
                    (c,GFC.CncCat ty _ _) <- tree2list (M.jments mo)]
+  lindefs mo = [C.Lin (i2id c) (mkTerm tr) | 
+                   (c,GFC.CncCat _ tr _) <- tree2list (M.jments mo)]
 
 i2i :: Ident -> C.CId
 i2i (IC c) = C.CId c
-i2ic (IC c) = C.CId ("__" ++ c) -- for category symbols
+i2ic (IC c) = C.CId ("__" ++ c) -- for lincat of category symbols
+i2id (IC c) = C.CId ("_d" ++ c) -- for lindef of category symbols
 
 mkType :: A.Type -> C.Type
 mkType t = case GM.catSkeleton t of
@@ -179,7 +182,7 @@ canon2canon = recollect . map cl2cl . repartition where
       _ -> (c,m)
     j2j (f,j) = case j of
       GFC.CncFun x y tr z -> (f,GFC.CncFun x y (t2t tr) z)
-      GFC.CncCat ty x y   -> (f,GFC.CncCat (ty2ty ty) x y)
+      GFC.CncCat ty x y   -> (f,GFC.CncCat (ty2ty ty) (t2t x) y)
       _ -> (f,j)
     t2t = term2term cg pv
     ty2ty = type2type cg pv
