@@ -188,7 +188,6 @@ checkResInfo gr mo (c,info) = do
 
     ResOverload tysts -> chIn "overloading" $ do
       tysts' <- mapM (uncurry $ flip check) tysts
-      ---- TODO: check uniqueness of arg type lists
       let tysts2 = [(y,x) | (x,y) <- tysts']
       checkUniq $ sort [map snd xs | (x,_) <- tysts2, Ok (xs,_) <- [typeFormCnc x]]
       return (c,ResOverload tysts2)
@@ -585,14 +584,26 @@ inferLType gr trm = case trm of
    matchOverload f typs ttys = do
      let (tts,tys) = unzip ttys
      case lookupOverloadInstance tys typs of
-       Just (val,fun) -> return (mkApp fun tts, val)
-       _ -> raise $ "no overload instance of" +++ prt f +++ 
+       [((val,fun),_)] -> return (mkApp fun tts, val)
+       [] -> raise $ "no overload instance of" +++ prt f +++ 
          "for" +++ unwords (map prtType tys) +++ "among" ++++ 
          unlines [unwords (map prtType ty) | (ty,_) <- typs]
       ----  ++++ "DEBUG" +++ unwords (map show tys) +++ ";" 
       ----  ++++ unlines (map (show . fst) typs) ----
+       vfs -> case filter snd vfs of
+         [((val,fun),_)] -> return (mkApp fun tts, val) 
+         _ -> raise $ "ambiguous overloading of" +++ prt f +++
+           "for" +++ unwords (map prtType tys) ++++ "with alternatives" ++++ 
+           unlines [prtType ty | ((ty,_),_) <- vfs]
 
-   lookupOverloadInstance tys typs = lookup tys typs ---- use Map
+   ---- TODO: accept subtypes
+   ---- TODO: use a trie
+   lookupOverloadInstance tys typs = 
+     [((mkFunType rest val, t),null rest) | 
+       (ty,(val,t)) <- typs, 
+       let (pre,rest) = splitAt (length tys) ty, 
+       pre == tys
+     ]
 
 checkLType :: SourceGrammar -> Term -> Type -> Check (Term, Type)
 checkLType env trm typ0 = do
@@ -894,7 +905,7 @@ checkEqLType env t u trm = do
 prtType :: Type -> String
 prtType ty = case ty of
   RecType fs -> case filter isLockLabel $ map fst fs of
-    [lock] -> drop 5 $ prt lock
+    [lock] -> (drop 5 $ prt lock) --- ++++ "Full form" +++ prt ty
     _ -> prt ty
   Prod x a b -> prtType a +++ "->" +++ prtType b
   _ -> prt ty
