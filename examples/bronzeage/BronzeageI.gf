@@ -1,7 +1,7 @@
 incomplete concrete BronzeageI of Bronzeage = open Lang in {
 
   flags 
-    startcat = Phr ; optimize = share_subs ;
+    startcat = Phr ; optimize = all_subs ; --optimize = share_subs ;
     unlexer = text ; lexer = text ;
 
   lincat
