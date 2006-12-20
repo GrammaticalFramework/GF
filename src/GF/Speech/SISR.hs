@@ -60,8 +60,12 @@ catSISR t (c,i) fmt
         | otherwise = []
 
 profileFinalSISR :: CFTerm -> SISRFormat -> SISRTag
-profileFinalSISR term fmt = [fmtOut fmt `ass` f term]
-  where f (CFObj n ts) = 
+profileFinalSISR term fmt = g term
+  where 
+        -- optimization for tokens
+        g (CFObj n []) = [field (fmtOut fmt) "name" `ass` JS.EStr (prIdent n)] 
+        g t = [fmtOut fmt `ass` f t]
+        f (CFObj n ts) = 
             JS.ESeq $ [ret `ass` JS.ENew (JS.Ident "Object") [], 
                            field ret "name" `ass` JS.EStr (prIdent n)] 
                   ++ [field ret ("arg"++show i) `ass` f t 
