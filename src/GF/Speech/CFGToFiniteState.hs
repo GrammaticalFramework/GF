@@ -76,7 +76,7 @@ makeRegular g = groupProds $ concatMap trSet (mutRecCats True g)
                  | otherwise = concatMap handleCat csl
             where csl = Set.toList cs 
                   rs = catSetRules g cs
-                  handleCat c = [CFRule c' [] (mkName (c++"-empty"))] -- introduce A' -> e
+                  handleCat c = [CFRule c' [] (mkCFTerm (c++"-empty"))] -- introduce A' -> e
                                 ++ concatMap (makeRightLinearRules c) (catRules g c)
                       where c' = newCat c
                   makeRightLinearRules b' (CFRule c ss n) = 

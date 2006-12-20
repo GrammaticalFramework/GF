@@ -27,7 +27,7 @@ import GF.Conversion.Types
 import GF.Data.Utilities
 import GF.Formalism.CFG 
 import GF.Formalism.Utilities (Symbol(..), mapSymbol, filterCats, symbol, 
-			       NameProfile(..), name2fun)
+			       NameProfile(..), Profile(..), name2fun, forestName)
 import GF.Infra.Ident
 import GF.Infra.Option
 import GF.Infra.Print
@@ -44,19 +44,34 @@ import Data.Set (Set)
 import qualified Data.Set as Set
 
 
--- | not very nice to replace the structured CFCat type with a simple string
-type CFRule_ = CFRule Cat_ Name Token
+-- not very nice to replace the structured CFCat type with a simple string
+type CFRule_ = CFRule Cat_ CFTerm Token
+
+data CFTerm
+    = CFObj Fun [CFTerm]
+    | CFAbs Int CFTerm
+    | CFApp CFTerm CFTerm
+    | CFRes Int
+    | CFVar Int
+    | CFConst String
+  deriving (Eq,Show)
+
 type Cat_ = String
 type CFSymbol_ = Symbol Cat_ Token
 
 type CFRules = [(Cat_,[CFRule_])]
 
+
 cfgToCFRules :: CGrammar -> CFRules
-cfgToCFRules cfg = groupProds [CFRule (catToString c) (map symb r) n | CFRule c r n <- cfg]
+cfgToCFRules cfg = 
+    groupProds [CFRule (catToString c) (map symb r) (nameToTerm n) 
+                    | CFRule c r n <- cfg]
     where symb = mapSymbol catToString id
-          -- symb (Cat c) = Cat (catToString c)
-	  -- symb (Tok t) = Tok t
 	  catToString = prt
+          nameToTerm (Name f prs) = CFObj f (map profileToTerm prs)
+          profileToTerm (Unify []) = CFConst "?"
+          profileToTerm (Unify xs) = CFRes (last xs) -- FIXME: unify
+          profileToTerm (Constant f) = CFConst (maybe "?" prIdent (forestName f))
 
 -- | Remove productions which use categories which have no productions
 removeEmptyCats :: CFRules -> CFRules
@@ -80,34 +95,43 @@ removeIdenticalRules g = [(c,sortNubBy cmpRules rs) | (c,rs) <- g]
 
 -- * Removing left recursion
 
-{-
-
 -- The LC_LR algorithm from
 -- http://research.microsoft.com/users/bobmoore/naacl2k-proc-rev.pdf
--- Not used since I haven't figured out how to make proper profiles. /Bjorn
 removeLeftRecursion :: Cat_ -> CFRules -> CFRules
 removeLeftRecursion start gr 
     = groupProds $ concat [scheme1, scheme2, scheme3, scheme4]
   where
-    scheme1 = [CFRule a [x,Cat a_x] (Name (IC "phony1") []) | 
+    scheme1 = [CFRule a [x,Cat a_x] n' | 
                a <- retainedLeftRecursive, 
                x <- properLeftCornersOf a,
                not (isLeftRecursive x),
-               let a_x = mkCat (Cat a) x]
-    scheme2 = [CFRule a_x (beta++[Cat a_b]) (Name (IC "phony2") []) | 
+               let a_x = mkCat (Cat a) x,
+               let n' = symbol (\_ -> CFApp (CFRes 1) (CFRes 0))
+                               (\_ -> CFRes 0) x] 
+    scheme2 = [CFRule a_x (beta++[Cat a_b]) n' | 
                a <- retainedLeftRecursive, 
                b@(Cat b') <- properLeftCornersOf a,
                isLeftRecursive b,
                CFRule _ (x:beta) n <- catRules gr b', 
                let a_x = mkCat (Cat a) x,
-               let a_b = mkCat (Cat a) b]
-    scheme3 = [CFRule a_x beta n | -- FIXME: remove 0 from all profile elements
+               let a_b = mkCat (Cat a) b,
+               let i = length $ filterCats beta,
+               let n' = symbol (\_ -> CFAbs 1 (CFApp (CFRes i) (shiftTerm n)))
+                               (\_ -> CFApp (CFRes i) n) x]
+    scheme3 = [CFRule a_x beta n' |
                a <- retainedLeftRecursive, 
                x <- properLeftCornersOf a,
                CFRule _ (x':beta) n <- catRules gr a,
                x == x',
-               let a_x = mkCat (Cat a) x]
+               let a_x = mkCat (Cat a) x,
+               let n' = symbol (\_ -> CFAbs 1 (shiftTerm n)) 
+                               (\_ -> n) x]
     scheme4 = catSetRules gr $ Set.fromList $ filter (not . isLeftRecursive . Cat) cats
+
+    shiftTerm :: CFTerm -> CFTerm
+    shiftTerm (CFObj f ts) = CFObj f (map shiftTerm ts)
+    shiftTerm (CFRes 0) = CFVar 1
+    shiftTerm t = t
 
     cats = allCats gr
     rules = ungroupProds gr
@@ -121,7 +145,6 @@ removeLeftRecursion start gr
     leftRecursive = reflexiveElements properLeftCorner
     isLeftRecursive = (`Set.member` leftRecursive)
 
-    -- FIXME: include start cat
     retained = start `Set.insert`
                 Set.fromList [a | (c,rs) <- gr, not (isLeftRecursive (Cat c)), 
                                    r <- rs, Cat a <- ruleRhs r]
@@ -131,9 +154,9 @@ removeLeftRecursion start gr
 
 mkCat :: CFSymbol_ -> CFSymbol_ -> Cat_
 mkCat x y = showSymbol x ++ "-" ++ showSymbol y
-  where showSymbol = symbol id ("$"++) -- FIXME !!!!!
+  where showSymbol = symbol id show
 
--}
+{-
 
 -- Paull's algorithm, see
 -- http://research.microsoft.com/users/bobmoore/naacl2k-proc-rev.pdf
@@ -176,12 +199,13 @@ isDirectLeftRecursive :: CFRule_ -> Bool
 isDirectLeftRecursive (CFRule c (Cat c':_) _) = c == c'
 isDirectLeftRecursive _ = False
 
+-}
 
 -- * Removing cycles
 
 removeCycles :: CFRules -> CFRules 
 removeCycles = groupProds . removeCycles_ . ungroupProds
-  where removeCycles_ rs = [r | r@(CFRule c rhs n) <- rs, rhs /= [Cat c]]
+  where removeCycles_ rs = [r | r@(CFRule c rhs _) <- rs, rhs /= [Cat c]]
 
 
 -- | Get the sets of mutually recursive non-terminals for a grammar.
@@ -221,7 +245,11 @@ ruleRhs :: CFRule c n t ->  [Symbol c t]
 ruleRhs (CFRule _ ss _) = ss
 
 ruleFun :: CFRule_ -> Fun
-ruleFun (CFRule _ _ n) = name2fun n 
+ruleFun (CFRule _ _ t) = f t
+  where f (CFObj n _) = n
+        f (CFApp _ x) = f x
+        f (CFAbs _ x) = f x
+        f _ = IC ""
 
 -- | Checks if a symbol is a non-terminal of one of the given categories.
 catElem :: Symbol Cat_ t -> Set Cat_ -> Bool
@@ -232,7 +260,5 @@ catElem s cs = symbol (`Set.member` cs) (const False) s
 anyUsedBy :: Eq c => [c] -> CFRule c n t -> Bool
 anyUsedBy cs (CFRule _ ss _) = any (`elem` cs) (filterCats ss)
 
-mkName :: String -> Name
-mkName n = Name (IC n) []
-
-
+mkCFTerm :: String -> CFTerm
+mkCFTerm n = CFObj (IC n) []

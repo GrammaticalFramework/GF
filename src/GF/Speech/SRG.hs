@@ -19,12 +19,12 @@
 -----------------------------------------------------------------------------
 
 module GF.Speech.SRG (SRG(..), SRGRule(..), SRGAlt(..),
-                      SRGCat, SRGNT,
+                      SRGCat, SRGNT, CFTerm,
                       makeSimpleSRG, makeSRG
                      , lookupFM_, prtS
                      , topDownFilter, cfgCatToGFCat, srgTopCats
-                     , EBnfSRGAlt(..), EBnfSRGItem
-                     , ebnfSRGAlts
+                     --, EBnfSRGAlt(..), EBnfSRGItem
+                     --, ebnfSRGAlts
                      ) where
 
 import GF.Data.Operations
@@ -64,13 +64,13 @@ data SRGRule = SRGRule SRGCat String [SRGAlt] -- ^ SRG category name, original c
 	     deriving (Eq,Show)
 
 -- | maybe a probability, a rule name and a list of symbols
-data SRGAlt = SRGAlt (Maybe Double) Name [Symbol SRGNT Token]
+data SRGAlt = SRGAlt (Maybe Double) CFTerm [Symbol SRGNT Token]
 	      deriving (Eq,Show)
 
 type SRGCat = String
 
--- | An SRG non-terminal. Category name and slots which it fills in.
-type SRGNT = (SRGCat, [Int])
+-- | An SRG non-terminal. Category name and its number in the profile.
+type SRGNT = (SRGCat, Int)
 
 -- | SRG category name and original name
 type CatName = (SRGCat,String) 
@@ -129,17 +129,13 @@ cfgRulesToSRGRule names probs rs@(r:_) = SRGRule cat origCat rhs
       origCat = lhsCat r
       cat = lookupFM_ names origCat
       rhs = nub $ map ruleToAlt rs
-      ruleToAlt r@(CFRule c ss n@(Name _ prs)) 
+      ruleToAlt r@(CFRule c ss n) 
           = SRGAlt (ruleProb probs r) n (mkSRGSymbols 0 ss)
             where
               mkSRGSymbols _ [] = []
-              mkSRGSymbols i (Cat c:ss) = Cat (c',slots) : mkSRGSymbols (i+1) ss
-                  where c' = lookupFM_ names c
-                        slots = [x | x <- [0..length prs-1], inProfile i (prs!!x)]
+              mkSRGSymbols i (Cat c:ss) = Cat (renameCat c,0) : mkSRGSymbols (i+1) ss
               mkSRGSymbols i (Tok t:ss) = Tok t : mkSRGSymbols i ss
-      inProfile :: Int -> Profile a -> Bool
-      inProfile x (Unify xs) = x `elem` xs
-      inProfile _ (Constant _) = False
+      renameCat = lookupFM_ names
 
 ruleProb :: Maybe Probs -> CFRule_ -> Maybe Double
 ruleProb mp r = mp >>= \probs -> lookupProb probs (ruleFun r)
@@ -182,6 +178,7 @@ srgTopCats srg = buildMultiMap [(oc, cat) | SRGRule cat origCat _ <- rules srg,
 -- * Size-optimized EBNF SRGs
 --
 
+{-
 data EBnfSRGAlt = EBnfSRGAlt (Maybe Double) Name EBnfSRGItem
 	     deriving (Eq,Show)
 
@@ -204,6 +201,7 @@ addString xs fa = addFinalState (last sts0) $ newTransitions ts fa'
         sts0 = startState fa : sts1
         sts1 = map fst ss
         ts = zip3 sts0 sts1 xs
+-}
 
 --
 -- * Utilities for building and printing SRGs
