@@ -32,19 +32,19 @@ data SISRFormat =
     SISROld
  deriving Show
 
-type SISRTag = [JS.Expr]
+type SISRTag = [JS.DeclOrExpr]
 
 
 prSISR :: SISRTag -> String
 prSISR = JS.printTree
 
 topCatSISR :: String -> String -> SISRFormat -> SISRTag
-topCatSISR i c fmt = [field (fmtOut fmt) i `ass` fmtRef fmt c]
+topCatSISR i c fmt = map JS.DExpr [field (fmtOut fmt) i `ass` fmtRef fmt c]
 
 profileInitSISR :: CFTerm -> SISRFormat -> SISRTag
 profileInitSISR t fmt 
     | null (usedChildren t) = []
-    | otherwise = [children `ass` JS.ENew (JS.Ident "Array") []]
+    | otherwise = [JS.Decl [JS.DInit children (JS.ENew (JS.Ident "Array") [])]]
 
 usedChildren :: CFTerm -> [Int]
 usedChildren (CFObj _ ts) = foldr union [] (map usedChildren ts)
@@ -55,12 +55,12 @@ usedChildren _ = []
 
 catSISR :: CFTerm -> SRGNT -> SISRFormat -> SISRTag
 catSISR t (c,i) fmt
-        | i `elem` usedChildren t = 
-            [JS.EIndex children (JS.EInt (fromIntegral i)) `ass` fmtRef fmt c]
+        | i `elem` usedChildren t = map JS.DExpr 
+            [JS.EIndex (JS.EVar children) (JS.EInt (fromIntegral i)) `ass` fmtRef fmt c]
         | otherwise = []
 
 profileFinalSISR :: CFTerm -> SISRFormat -> SISRTag
-profileFinalSISR term fmt = g term
+profileFinalSISR term fmt = map JS.DExpr $ g term
   where 
         -- optimization for tokens
         g (CFObj n []) = [field (fmtOut fmt) "name" `ass` JS.EStr (prIdent n)] 
@@ -74,7 +74,7 @@ profileFinalSISR term fmt = g term
           where ret = JS.EVar (JS.Ident "ret")
         f (CFAbs v x) = JS.EFun [var v] [JS.SReturn (f x)]
         f (CFApp x y) = JS.ECall (f x) [f y]
-        f (CFRes i) = JS.EIndex children (JS.EInt (fromIntegral i))
+        f (CFRes i) = JS.EIndex (JS.EVar children) (JS.EInt (fromIntegral i))
         f (CFVar v) = JS.EVar (var v)
         f (CFConst s) = JS.EStr s
 
@@ -83,7 +83,7 @@ fmtOut SISROld = JS.EVar (JS.Ident "$")
 
 fmtRef SISROld c = JS.EVar (JS.Ident ("$" ++ c))
 
-children = JS.EVar (JS.Ident "c")
+children = JS.Ident "c"
 
 var v = JS.Ident ("x" ++ show v)
 
