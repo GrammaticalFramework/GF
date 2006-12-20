@@ -22,7 +22,7 @@ module GF.Speech.PrJSGF (jsgfPrinter) where
 import GF.Conversion.Types
 import GF.Data.Utilities
 import GF.Formalism.CFG
-import GF.Formalism.Utilities (Symbol(..), NameProfile(..), Profile(..))
+import GF.Formalism.Utilities (Symbol(..), NameProfile(..), Profile(..), filterCats)
 import GF.Infra.Ident
 import GF.Infra.Print
 import GF.Infra.Option
@@ -31,6 +31,7 @@ import GF.Speech.SISR
 import GF.Speech.SRG
 import GF.Speech.RegExp
 
+import Data.Char
 import Data.List
 import Debug.Trace
 
@@ -45,7 +46,7 @@ jsgfPrinter name start opts sisr probs cfg = prJSGF srg sisr ""
 
 prJSGF :: SRG -> Maybe SISRFormat -> ShowS
 prJSGF srg@(SRG{grammarName=name,startCat=start,origStartCat=origStart,rules=rs}) sisr
-    = header . nl
+    = trace (show srg) $ header . nl
       . mainCat . nl
       . unlinesS topCatRules . nl
       . unlinesS (map prRule rs)
@@ -58,12 +59,17 @@ prJSGF srg@(SRG{grammarName=name,startCat=start,origStartCat=origStart,rules=rs}
 	      . rule True "MAIN" [prCat start]
     prRule (SRGRule cat origCat rhs) = 
 	comment origCat
-        . rule False cat (map prAlt (ebnfSRGAlts rhs))
+--        . rule False cat (map prAlt (ebnfSRGAlts rhs))
+        . rule False cat (map prAlt rhs)
     -- FIXME: use the probability
-    prAlt (EBnfSRGAlt mp n rhs) = tag sisr (profileInitSISR n) . showChar ' '. prItem sisr rhs
+--    prAlt (EBnfSRGAlt mp n rhs) = tag sisr (profileInitSISR n) . showChar ' '. prItem sisr rhs
+    prAlt (SRGAlt mp n rhs) = initTag . showChar ' '. prItem sisr n rhs . tag sisr (profileFinalSISR n)
+      where initTag | null (t "") = id
+                    | otherwise = showString "<NULL>" . showChar ' ' . t
+                where t = tag sisr (profileInitSISR n)
 
     topCatRules = [rule True (catFormId tc) (map (it tc) cs) | (tc,cs) <- srgTopCats srg]
-        where it i c = prCat c . tag sisr [(EThis :. catFieldId i) := (ERef c)]
+        where it i c = prCat c . tag sisr (topCatSISR (catFieldId i) c)
 
 catFormId :: String -> String
 catFormId = (++ "_cat")
@@ -74,6 +80,7 @@ catFieldId = (++ "_field")
 prCat :: SRGCat -> ShowS
 prCat c = showChar '<' . showString c . showChar '>'
 
+{-
 prItem :: Maybe SISRFormat -> EBnfSRGItem -> ShowS
 prItem sisr = f 1
   where
@@ -86,16 +93,26 @@ prItem sisr = f 1
     f p (REConcat xs) = (if p >= 3 then paren else id) (unwordsS (map (f 2) xs))
     f p (RERepeat x)  = f 3 x . showString "*"
     f _ (RESymbol s)  = prSymbol sisr s
+-}
 
-prSymbol :: Maybe SISRFormat -> Symbol SRGNT Token -> ShowS
-prSymbol sisr (Cat n@(c,_)) = prCat c . tag sisr (catSISR n)
-prSymbol _ (Tok t) | all isPunct (prt t) = id -- removes punctuation
-                   | otherwise = prtS t -- FIXME: quote if there is whitespace or odd chars
+prItem :: Maybe SISRFormat -> CFTerm -> [Symbol SRGNT Token] -> ShowS
+prItem _ _ [] = showString "<NULL>"
+prItem sisr cn ss = paren $ unwordsS $ map (prSymbol sisr cn) ss
 
-tag :: Maybe SISRFormat -> [SISRExpr] -> ShowS
+prSymbol :: Maybe SISRFormat -> CFTerm -> Symbol SRGNT Token -> ShowS
+prSymbol sisr cn (Cat n@(c,_)) = prCat c . tag sisr (catSISR cn n)
+prSymbol _ cn (Tok t) | all isPunct (prt t) = id -- removes punctuation
+                      | otherwise = prtS t -- FIXME: quote if there is whitespace or odd chars
+
+tag :: Maybe SISRFormat -> (SISRFormat -> SISRTag) -> ShowS
 tag Nothing _ = id
-tag _ [] = id
-tag (Just fmt) t = showString "{" . showString (prSISR fmt t) . showString "}"
+tag (Just fmt) t = case t fmt of
+                     [] -> id
+                     ts -> showString "{" . showString (e $ prSISR ts) . showString "}"
+  where e [] = []
+        e ('}':xs) = '\\':'}':e xs
+        e ('\n':xs) = ' ' : e (dropWhile isSpace xs)
+        e (x:xs) = x:e xs
 
 isPunct :: Char -> Bool
 isPunct c = c `elem` "-_.;.,?!"

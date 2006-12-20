@@ -44,5 +44,6 @@ data Expr =
  | ENull
  | EThis
  | EFun [Ident] [Stmt]
+ | ESeq [Expr]
   deriving (Eq,Ord,Show)
 

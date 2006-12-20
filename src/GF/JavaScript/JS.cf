@@ -39,6 +39,10 @@ ENull.   Expr16 ::= "null" ;
 EThis.   Expr16 ::= "this" ;
 EFun.    Expr16 ::= "function" "(" [Ident] ")" "{" [Stmt] "}" ;
 
+eseq1.   Expr16  ::= "(" Expr "," [Expr] ")";
+internal ESeq. Expr16 ::= "(" [Expr] ")" ;
+define eseq1 x xs = ESeq (x:xs); 
+
 separator Expr "," ;
 coercions Expr 16 ;
 
