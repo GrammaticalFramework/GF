@@ -133,7 +133,7 @@ cfgRulesToSRGRule names probs rs@(r:_) = SRGRule cat origCat rhs
           = SRGAlt (ruleProb probs r) n (mkSRGSymbols 0 ss)
             where
               mkSRGSymbols _ [] = []
-              mkSRGSymbols i (Cat c:ss) = Cat (renameCat c,0) : mkSRGSymbols (i+1) ss
+              mkSRGSymbols i (Cat c:ss) = Cat (renameCat c,i) : mkSRGSymbols (i+1) ss
               mkSRGSymbols i (Tok t:ss) = Tok t : mkSRGSymbols i ss
       renameCat = lookupFM_ names
 
