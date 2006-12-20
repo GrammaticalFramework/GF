@@ -46,7 +46,7 @@ jsgfPrinter name start opts sisr probs cfg = prJSGF srg sisr ""
 
 prJSGF :: SRG -> Maybe SISRFormat -> ShowS
 prJSGF srg@(SRG{grammarName=name,startCat=start,origStartCat=origStart,rules=rs}) sisr
-    = trace (show srg) $ header . nl
+    = header . nl
       . mainCat . nl
       . unlinesS topCatRules . nl
       . unlinesS (map prRule rs)
