@@ -145,6 +145,7 @@ instance Print Expr where
    ENull  -> prPrec i 16 (concatD [doc (showString "null")])
    EThis  -> prPrec i 16 (concatD [doc (showString "this")])
    EFun ids stmts -> prPrec i 16 (concatD [doc (showString "function") , doc (showString "(") , prt 0 ids , doc (showString ")") , doc (showString "{") , prt 0 stmts , doc (showString "}")])
+   EArray exprs -> prPrec i 16 (concatD [doc (showString "[") , prt 0 exprs , doc (showString "]")])
    ESeq exprs -> prPrec i 16 (concatD [doc (showString "(") , prt 0 exprs , doc (showString ")")])
 
   prtList es = case es of
