@@ -33,6 +33,24 @@ investigated later.
 
 <p>
 
+21/12 (BB) Java Speech Grammar Format with SISR tags can now be generated.
+Use <tt>pg -printer=jsgf_sisr_old</tt>. The SISR tags are in Working Draft
+20030401 format, which is supported by the OptimTALK VoiceXML interpreter
+and the IBM XHTML+Voice implementation use by the Opera web browser.
+
+<p>
+
+21/12 (BB) VoiceXML 2.0 dialog systems can now be generated from GF grammars.
+Use <tt>pg -printer=vxml</tt>.
+
+<p>
+
+21/12 (BB) JavaScript code for linearization and type annotation can now be
+generated from a multilingual GF grammar. Use <tt>pm -printer=js</tt>.
+
+
+<p>
+
 20/11 (AR) Type error messages in concrete syntax are printed with a
 heuristic where a type of the form <tt>{... ; lock_C : {} ; ...}</tt>
 is printed as <tt>C</tt>. This gives more readable error messages, but
