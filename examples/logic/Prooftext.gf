@@ -55,7 +55,7 @@ oper
     proof : Decl -> Proof
       = \d -> d ;
     proof : Proof -> Proof -> Proof
-      = \p,q -> appendText p q ;
+      = appendText ;
     proof : Branching -> Proofs -> Proof
       = \b,ps -> mkText (mkPhr b) ps
     } ;

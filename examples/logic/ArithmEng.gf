@@ -24,8 +24,8 @@ lin
 
   one = UsePN (regPN "one") ;
   two = UsePN (regPN "two") ;
-  sum = appColl (regN2 "sum") ;
-  prod = appColl (regN2 "product") ;
+  sum = app (regN2 "sum") ;
+  prod = app (regN2 "product") ;
 
   evax1 = 
     proof (by (ref (mkLabel ["the first axiom of evenness ,"]))) 
@@ -42,14 +42,14 @@ lin
 
   eqax1 = 
     proof (by (ref (mkLabel ["the first axiom of equality ,"]))) 
-      (mkS (predA2 (mkA2 (regA "equal") (mkPrep "to")) 
+      (mkS (pred (mkA2 (regA "equal") (mkPrep "to")) 
          (UsePN (regPN "zero")) 
          (UsePN (regPN "zero")))) ;
 
   eqax2 m n c = 
     appendText c 
       (proof (by (ref (mkLabel ["the second axiom of equality ,"]))) 
-        (mkS (predA2 (mkA2 (regA "equal") (mkPrep "to")) 
+        (mkS (pred (mkA2 (regA "equal") (mkPrep "to")) 
           (appN2 (regN2 "successor") m) (appN2 (regN2 "successor") n)))) ;
 
   IndNat C d e = {s = 

@@ -14,6 +14,33 @@ Changes in functionality since May 17, 2005, release of GF Version 2.2
 
 <p>
 
+21/12 (AR) Overloading rules for GF version 2.7:
+<ol>
+<li> If a unique instance is found by exact match with argument types,
+  that instance is used.
+<li> Otherwise, if exact match with the expected value type gives a
+  uniques instance, that instance is used.
+<li> Otherwise, if among possible instances only one returns a non-function
+  type, that instance is used, but a warning is issued.
+<li> Otherwise, an error results, and the list of possible instances is shown.
+</ol>
+These rules are still temporary, but all future developments will guarantee
+that their type-correct use will work. Rule (3) is only needed because the 
+current type checker does not always know an expected type. It can give
+an incorrect result which is captured later in the compilation. To be noticed,
+in particular, is that exact match is required. Match by subtyping will be
+investigated later.
+
+<p>
+
+20/11 (AR) Type error messages in concrete syntax are printed with a
+heuristic where a type of the form <tt>{... ; lock_C : {} ; ...}</tt>
+is printed as <tt>C</tt>. This gives more readable error messages, but
+can produce wrong results if lock fields are hand-written or if subtypes
+of lock-fielded categories are used.
+
+<p>
+
 17/11 (AR) Operation overloading: an <tt>oper</tt> can have many types,
 from which one is picked at compile time. The types must have different
 argument lists. Exact match with the arguments given to the <tt>oper</tt>

@@ -211,7 +211,7 @@ checkResInfo gr mo (c,info) = do
    checkUniq xss = case xss of
      x:y:xs 
       | x == y -> raise $ "ambiguous for argument list" +++ 
-                         unwords (map prtType x)  
+                         unwords (map (prtType gr) x)  
       | otherwise -> checkUniq $ y:xs
      _ -> return ()
 
@@ -412,7 +412,7 @@ inferLType gr trm = case trm of
                       else substituteLType [(z,a')] val
              return (App f' a',ty) 
            _ -> raise ("function type expected for"+++ 
-                      prt f +++"instead of" +++ prtType fty)
+                      prt f +++"instead of" +++ prtType env fty)
 
    S f x -> do
      (f', fty) <- infer f
@@ -596,14 +596,22 @@ getOverload env@gr mt t = case appForm t of
      case [vf | vf@(v,f) <- vfs, elem mt [Nothing,Just v]] of
        [(val,fun)] -> return (mkApp fun tts, val)
        [] -> raise $ "no overload instance of" +++ prt f +++ 
-         maybe [] (("when expecting" +++) . prtType) mt +++
-         "for" +++ unwords (map prtType tys) +++ "among" ++++ 
-         unlines [unwords (map prtType ty) | (ty,_) <- typs]
+         maybe [] (("when expecting" +++) . prtType env) mt +++
+         "for" +++ unwords (map (prtType env) tys) +++ "among" ++++ 
+         unlines [unwords (map (prtType env) ty) | (ty,_) <- typs]
       ----  ++++ "DEBUG" +++ unwords (map show tys) +++ ";" 
       ----  ++++ unlines (map (show . fst) typs) ----
-       _ -> raise $ "ambiguous overloading of" +++ prt f +++
-         "for" +++ unwords (map prtType tys) ++++ "with alternatives" ++++ 
-         unlines [prtType ty | (ty,_) <- vfs]
+
+       vfs' -> case [(v,f) | (v,f) <- vfs', noProd v] of
+         [(val,fun)] -> do
+           checkWarn $ "WARNING: overloading of" +++ prt f +++ 
+             "resolved by excluding partial applications:" ++++
+             unlines [prtType env ty | (ty,_) <- vfs', not (noProd ty)]
+           return (mkApp fun tts, val)
+
+         _ -> raise $ "ambiguous overloading of" +++ prt f +++
+           "for" +++ unwords (map (prtType env) tys) ++++ "with alternatives" ++++ 
+           unlines [prtType env ty | (ty,_) <- vfs']
 
    ---- TODO: accept subtypes
    ---- TODO: use a trie
@@ -614,6 +622,9 @@ getOverload env@gr mt t = case appForm t of
        pre == tys
      ]
 
+   noProd ty = case ty of
+     Prod _ _ _ -> False
+     _ -> True
 
 checkLType :: SourceGrammar -> Term -> Type -> Check (Term, Type)
 checkLType env trm typ0 = do
@@ -633,7 +644,7 @@ checkLType env trm typ0 = do
                           check c b'
           checkReset
           return $ (Abs x c', Prod x a b')
-        _ -> raise $ "product expected instead of" +++ prtType typ
+        _ -> raise $ "product expected instead of" +++ prtType env typ
 
     App f a -> do
        over <- getOverload env (Just typ) trm
@@ -659,7 +670,7 @@ checkLType env trm typ0 = do
           _ -> return () -- happens with variable types
         cs' <- mapM (checkCase arg val) cs
         return (T (TTyped arg) cs', typ)
-      _ -> raise $ "table type expected for table instead of" +++ prtType typ
+      _ -> raise $ "table type expected for table instead of" +++ prtType env typ
 
     R r -> case typ of --- why needed? because inference may be too difficult
        RecType rr -> do
@@ -715,7 +726,7 @@ checkLType env trm typ0 = do
           checkEq typ t trm
           return (S tab' arg', t)
         _ -> raise $ "table type expected for applied table instead of" +++ 
-                   prtType ty'
+                   prtType env ty'
      , do
       (arg',ty) <- infer arg
       ty'       <- comp ty
@@ -844,21 +855,26 @@ check2 chk con a b t = do
 
 checkEqLType :: LTEnv -> Type -> Type -> Term -> Check Type
 checkEqLType env t u trm = do
+  (b,t',u',s) <- checkIfEqLType env t u trm
+  case b of
+    True  -> return t'
+    False -> raise $ s +++ "type of" +++ prt trm +++ 
+                        ": expected:" +++ prtType env t ++++ 
+                        "inferred:" +++ prtType env u
+
+checkIfEqLType :: LTEnv -> Type -> Type -> Term -> Check (Bool,Type,Type,String)
+checkIfEqLType env t u trm = do
   t' <- comp t 
   u' <- comp u
   case t' == u' || alpha [] t' u' of
-    True -> return t'
+    True -> return (True,t',u',[])
     -- forgive missing lock fields by only generating a warning.
     --- better: use a flag to forgive? (AR 31/1/2006)
     _ -> case missingLock [] t' u' of
       Ok lo -> do
         checkWarn $ "WARNING: missing lock field" +++ unwords (map prt lo)
-        return t'
-      Bad s -> raise (s +++ "type of" +++ prt trm +++ 
-                ": expected:" +++ prtType t' ++++ 
-                "inferred:" +++ prtType u'
-            ----    +++++ "DEBUG:" ++++ show t' ++++ show u'
-                )
+        return (True,t',u',[])
+      Bad s -> return (False,t',u',s)
  where
 
    -- t is a subtype of u 
@@ -920,13 +936,17 @@ checkEqLType env t u trm = do
    comp = computeLType env
 
 -- printing a type with a lock field lock_C as C
-prtType :: Type -> String
-prtType ty = case ty of
+prtType :: LTEnv -> Type -> String
+prtType env ty = case ty of
   RecType fs -> case filter isLockLabel $ map fst fs of
     [lock] -> (drop 5 $ prt lock) --- ++++ "Full form" +++ prt ty
-    _ -> prt ty
-  Prod x a b -> prtType a +++ "->" +++ prtType b
-  _ -> prt ty
+    _ -> prtt ty
+  Prod x a b -> prtType env a +++ "->" +++ prtType env b
+  _ -> prtt ty
+ where
+   prtt t = prt t
+   ---- use computeLType gr to check if really equal to the cat with lock
+
 
 -- | linearization types and defaults
 linTypeOfType :: SourceGrammar -> Ident -> Type -> Check (Context,Type)
