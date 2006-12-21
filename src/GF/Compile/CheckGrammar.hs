@@ -617,8 +617,9 @@ getOverload env@gr mt t = case appForm t of
    ---- TODO: use a trie
    lookupOverloadInstance tys typs = 
      [(mkFunType rest val, t) | 
-       (ty,(val,t)) <- typs, 
-       let (pre,rest) = splitAt (length tys) ty, 
+       let lt = length tys,
+       (ty,(val,t)) <- typs, length ty >= lt,
+       let (pre,rest) = splitAt lt ty, 
        pre == tys
      ]
 
