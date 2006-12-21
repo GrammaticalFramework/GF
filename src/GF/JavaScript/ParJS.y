@@ -122,6 +122,7 @@ Expr16 : Ident { EVar $1 }
   | 'null' { ENull }
   | 'this' { EThis }
   | 'function' '(' ListIdent ')' '{' ListStmt '}' { EFun $3 (reverse $6) }
+  | '[' ListExpr ']' { EArray $2 }
   | '(' Expr ',' ListExpr ')' { eseq1_ $2 $4 }
   | '(' Expr ')' { $2 }
 

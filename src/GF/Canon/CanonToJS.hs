@@ -11,11 +11,22 @@ prCanon2js :: CanonGrammar -> String
 prCanon2js gr = gfcc2js $ mkCanon2gfcc gr
 
 gfcc2js :: C.Grammar -> String
-gfcc2js (C.Grm _ _ cs) = JS.printTree $ JS.Program $ concatMap concrete2js cs
+gfcc2js (C.Grm (C.Hdr n _) as cs) = JS.printTree $ JS.Program $ abstract2js n as ++ concatMap (concrete2js n) cs
 
-concrete2js :: C.Concrete -> [JS.Element]
-concrete2js (C.Cnc (C.CId c) ds) = 
-    [JS.ElStmt $ JS.SDeclOrExpr $ JS.Decl [JS.DInit l (new "Linearizer" [])]] 
+abstract2js :: C.CId -> C.Abstract -> [JS.Element]
+abstract2js (C.CId n) (C.Abs ds) = 
+    [JS.ElStmt $ JS.SDeclOrExpr $ JS.Decl [JS.DInit a (new "Abstract" [])]] 
+    ++ concatMap (absdef2js a) ds
+  where a = JS.Ident n
+
+absdef2js :: JS.Ident -> C.AbsDef -> [JS.Element]
+absdef2js a (C.Fun (C.CId f) (C.Typ args (C.CId cat)) _) = 
+    [JS.ElStmt $ JS.SDeclOrExpr $ JS.DExpr $ JS.ECall (JS.EMember (JS.EVar a) (JS.Ident "addType")) 
+           [JS.EStr f, JS.EArray [JS.EStr x | C.CId x <- args], JS.EStr cat]]
+
+concrete2js :: C.CId -> C.Concrete -> [JS.Element]
+concrete2js (C.CId a) (C.Cnc (C.CId c) ds) = 
+    [JS.ElStmt $ JS.SDeclOrExpr $ JS.Decl [JS.DInit l (new "Concrete" [JS.EVar (JS.Ident a)])]] 
     ++ concatMap (cncdef2js l) ds
   where l = JS.Ident c
 

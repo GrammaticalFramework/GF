@@ -38,6 +38,7 @@ EFalse.  Expr16 ::= "false" ;
 ENull.   Expr16 ::= "null" ;
 EThis.   Expr16 ::= "this" ;
 EFun.    Expr16 ::= "function" "(" [Ident] ")" "{" [Stmt] "}" ;
+EArray.  Expr16 ::= "[" [Expr] "]" ;
 
 eseq1.   Expr16  ::= "(" Expr "," [Expr] ")";
 internal ESeq. Expr16 ::= "(" [Expr] ")" ;

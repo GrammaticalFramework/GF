@@ -61,6 +61,7 @@ transExpr x = case x of
   ENull  -> failure x
   EThis  -> failure x
   EFun ids stmts  -> failure x
+  EArray exprs  -> failure x
   ESeq exprs  -> failure x
 
 
