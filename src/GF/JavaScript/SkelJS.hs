@@ -62,7 +62,13 @@ transExpr x = case x of
   EThis  -> failure x
   EFun ids stmts  -> failure x
   EArray exprs  -> failure x
+  EObj propertys  -> failure x
   ESeq exprs  -> failure x
+
+
+transProperty :: Property -> Result
+transProperty x = case x of
+  Prop id expr  -> failure x
 
 
 

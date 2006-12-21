@@ -119,22 +119,22 @@ catForms gr qs cat fs =
 cat2form :: String -> CatQuestions -> VIdent -> [(VIdent, [VIdent])] -> XML
 cat2form gr qs cat fs = 
   form (catFormId cat) $ 
-      [var "value" (Just "'?'"), 
+      [var "value" (Just "{ name : '?' }"), 
        var "update" Nothing, 
-       blockCond "value != '?'" [assign (catFieldId cat) "value"],
+       blockCond "value.name != '?'" [assign (catFieldId cat) "value"],
        field (catFieldId cat) [] 
            [promptString (getCatQuestion cat qs), 
             grammar (gr++"#"++catFormId cat),
             nomatch [Data "I didn't understand you.", reprompt],
             help [Data ("help_"++cat)],
-            filled [] [if_else (catFieldId cat ++ " == '?'") [reprompt] feedback]]
+            filled [] [if_else (catFieldId cat ++ ".name == '?'") [reprompt] feedback]]
       ]
      ++ concatMap (uncurry (fun2sub gr cat)) fs
   ++ [block [return_ [catFieldId cat]]]
-  where feedback = [if_ ("typeof update != 'undefined' && !update("++string cat++","++ catFieldId cat ++ ")") [return_ []]]
+  where feedback = [if_ ("typeof update != 'undefined' && !update("++string cat++","++ catFieldId cat ++ ")") [return_ [catFieldId cat]]]
 
 fun2sub :: String -> VIdent -> VIdent -> [VIdent] -> [XML]
-fun2sub gr cat fun args = comments [fun ++ " : " ++ cat] ++ ss
+fun2sub gr cat fun args = comments [fun ++ " : (" ++ concat (intersperse ", " args) ++ ") " ++ cat] ++ ss
   where 
   argNames = zip ["arg"++show n | n <- [0..]] args
   ss = map (uncurry mkSub) argNames

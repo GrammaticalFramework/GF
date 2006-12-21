@@ -54,6 +54,7 @@ data CFTerm
     | CFRes Int
     | CFVar Int
     | CFConst String
+    | CFMeta
   deriving (Eq,Show)
 
 type Cat_ = String
@@ -69,7 +70,7 @@ cfgToCFRules cfg =
     where symb = mapSymbol catToString id
 	  catToString = prt
           nameToTerm (Name f prs) = CFObj f (map profileToTerm prs)
-          profileToTerm (Unify []) = CFConst "?"
+          profileToTerm (Unify []) = CFMeta
           profileToTerm (Unify xs) = CFRes (last xs) -- FIXME: unify
           profileToTerm (Constant f) = CFConst (maybe "?" prIdent (forestName f))
 
