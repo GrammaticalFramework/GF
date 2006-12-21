@@ -28,7 +28,7 @@ lin
   Univ A B = 
     AdvS 
       (mkAdv for_Prep (mkNP all_Predet 
-        (mkNP (mkDet (PlQuant IndefArt) NoNum NoOrd) (mkCN A (symb B.$0)))))
+        (mkNP (mkDet (PlQuant IndefArt)) (mkCN A (symb B.$0)))))
       B ;
 
   DisjIl A B a = proof a (proof afortiori (coord or_Conj A B)) ;
