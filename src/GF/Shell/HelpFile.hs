@@ -652,10 +652,12 @@ txtHelpFile =
   "\n    -printer=probs          show probabilities of all functions" ++
   "\n    -printer=gsl            Nuance GSL speech recognition grammar" ++
   "\n    -printer=jsgf           Java Speech Grammar Format" ++
+  "\n    -printer=jsgf_sisr_old   Java Speech Grammar Format with semantic tags in " ++
+  "\n                                         SISR  WD 20030401 format" ++
   "\n    -printer=srgs_xml       SRGS XML format" ++
   "\n    -printer=srgs_xml_prob  SRGS XML format, with weights" ++
-  "\n    -printer=srgs_xml_ms_sem SRGS XML format, with semantic tags for the" ++
-  "\n                             Microsoft Speech API." ++
+  "\n    -printer=srgs_xml_sisr_old SRGS XML format, with semantic tags in" ++
+  "\n                                         SISR  WD 20030401 format" ++
   "\n    -printer=vxml           Generate a dialogue system in VoiceXML." ++
   "\n    -printer=slf            a finite automaton in the HTK SLF format" ++
   "\n    -printer=slf_graphviz   the same automaton as slf, but in Graphviz format" ++
@@ -669,13 +671,14 @@ txtHelpFile =
   "\n    -printer=functiongraph  abstract syntax functions in 'dot' format" ++
   "\n    -printer=typegraph      abstract syntax categories in 'dot' format" ++
   "\n    -printer=transfer       Transfer language datatype (.tr file format)" ++
-  "\n    -printer=gfcm        M  gfcm file (default for pm)" ++
-  "\n    -printer=header      M  gfcm file with header (for GF embedded in Java)" ++
-  "\n    -printer=graph       M  module dependency graph in 'dot' (graphviz) format" ++
-  "\n    -printer=missing     M  the missing linearizations of each concrete" ++
-  "\n    -printer=gfc-prolog  M  gfc in prolog format (also pg)" ++
-  "\n    -printer=mcfg-prolog M  mcfg in prolog format (also pg)" ++
   "\n    -printer=cfg-prolog  M  cfg in prolog format (also pg)" ++
+  "\n    -printer=gfc-prolog  M  gfc in prolog format (also pg)" ++
+  "\n    -printer=gfcm        M  gfcm file (default for pm)" ++
+  "\n    -printer=graph       M  module dependency graph in 'dot' (graphviz) format" ++
+  "\n    -printer=header      M  gfcm file with header (for GF embedded in Java)" ++
+  "\n    -printer=js  M  JavaScript type annotator and linearizer" ++
+  "\n    -printer=mcfg-prolog M  mcfg in prolog format (also pg)" ++
+  "\n    -printer=missing     M  the missing linearizations of each concrete" ++
   "\n" ++
   "\n-startcat, like -cat, but used in grammars (to avoid clash with keyword cat)" ++
   "\n" ++

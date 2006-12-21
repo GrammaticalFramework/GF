@@ -623,10 +623,12 @@ q, quit: q
     -printer=probs          show probabilities of all functions
     -printer=gsl            Nuance GSL speech recognition grammar
     -printer=jsgf           Java Speech Grammar Format
+    -printer=jsgf_sisr_old   Java Speech Grammar Format with semantic tags in 
+                                         SISR  WD 20030401 format
     -printer=srgs_xml       SRGS XML format
     -printer=srgs_xml_prob  SRGS XML format, with weights
-    -printer=srgs_xml_ms_sem SRGS XML format, with semantic tags for the
-                             Microsoft Speech API.
+    -printer=srgs_xml_sisr_old SRGS XML format, with semantic tags in
+                                         SISR  WD 20030401 format
     -printer=vxml           Generate a dialogue system in VoiceXML.
     -printer=slf            a finite automaton in the HTK SLF format
     -printer=slf_graphviz   the same automaton as slf, but in Graphviz format
@@ -640,13 +642,14 @@ q, quit: q
     -printer=functiongraph  abstract syntax functions in 'dot' format
     -printer=typegraph      abstract syntax categories in 'dot' format
     -printer=transfer       Transfer language datatype (.tr file format)
-    -printer=gfcm        M  gfcm file (default for pm)
-    -printer=header      M  gfcm file with header (for GF embedded in Java)
-    -printer=graph       M  module dependency graph in 'dot' (graphviz) format
-    -printer=missing     M  the missing linearizations of each concrete
-    -printer=gfc-prolog  M  gfc in prolog format (also pg)
-    -printer=mcfg-prolog M  mcfg in prolog format (also pg)
     -printer=cfg-prolog  M  cfg in prolog format (also pg)
+    -printer=gfc-prolog  M  gfc in prolog format (also pg)
+    -printer=gfcm        M  gfcm file (default for pm)
+    -printer=graph       M  module dependency graph in 'dot' (graphviz) format
+    -printer=header      M  gfcm file with header (for GF embedded in Java)
+    -printer=js  M  JavaScript type annotator and linearizer
+    -printer=mcfg-prolog M  mcfg in prolog format (also pg)
+    -printer=missing     M  the missing linearizations of each concrete
 
 -startcat, like -cat, but used in grammars (to avoid clash with keyword cat)
 
