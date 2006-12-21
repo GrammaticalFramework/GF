@@ -24,6 +24,7 @@ import GF.JavaScript.ErrM
  '.' { PT _ (TS ".") }
  '[' { PT _ (TS "[") }
  ']' { PT _ (TS "]") }
+ ':' { PT _ (TS ":") }
  'false' { PT _ (TS "false") }
  'function' { PT _ (TS "function") }
  'new' { PT _ (TS "new") }
@@ -81,7 +82,7 @@ ListStmt : {- empty -} { [] }
 
 DeclOrExpr :: { DeclOrExpr }
 DeclOrExpr : 'var' ListDeclVar { Decl $2 } 
-  | Expr { DExpr $1 }
+  | Expr1 { DExpr $1 }
 
 
 DeclVar :: { DeclVar }
@@ -123,6 +124,7 @@ Expr16 : Ident { EVar $1 }
   | 'this' { EThis }
   | 'function' '(' ListIdent ')' '{' ListStmt '}' { EFun $3 (reverse $6) }
   | '[' ListExpr ']' { EArray $2 }
+  | '{' ListProperty '}' { EObj $2 }
   | '(' Expr ',' ListExpr ')' { eseq1_ $2 $4 }
   | '(' Expr ')' { $2 }
 
@@ -183,6 +185,16 @@ Expr11 : Expr12 { $1 }
 
 Expr12 :: { Expr }
 Expr12 : Expr13 { $1 } 
+
+
+Property :: { Property }
+Property : Ident ':' Expr { Prop $1 $3 } 
+
+
+ListProperty :: { [Property] }
+ListProperty : {- empty -} { [] } 
+  | Property { (:[]) $1 }
+  | Property ',' ListProperty { (:) $1 $3 }
 
 
 

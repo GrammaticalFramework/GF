@@ -44,7 +44,7 @@ topCatSISR i c fmt = map JS.DExpr [field (fmtOut fmt) i `ass` fmtRef fmt c]
 profileInitSISR :: CFTerm -> SISRFormat -> SISRTag
 profileInitSISR t fmt 
     | null (usedChildren t) = []
-    | otherwise = [JS.Decl [JS.DInit children (JS.ENew (JS.Ident "Array") [])]]
+    | otherwise = [JS.Decl [JS.DInit children (JS.EArray [])]]
 
 usedChildren :: CFTerm -> [Int]
 usedChildren (CFObj _ ts) = foldr union [] (map usedChildren ts)
@@ -60,24 +60,15 @@ catSISR t (c,i) fmt
         | otherwise = []
 
 profileFinalSISR :: CFTerm -> SISRFormat -> SISRTag
-profileFinalSISR term fmt = map JS.DExpr $ g term
+profileFinalSISR term fmt = [JS.DExpr $ fmtOut fmt `ass` f term]
   where 
-        -- optimization for tokens
-        g (CFObj n []) = [field (fmtOut fmt) "name" `ass` JS.EStr (prIdent n)] 
-        g t = [fmtOut fmt `ass` f t]
-        f (CFObj n ts) = 
-            JS.ESeq $ [ret `ass` JS.ENew (JS.Ident "Object") [], 
-                           field ret "name" `ass` JS.EStr (prIdent n)] 
-                  ++ [field ret ("arg"++show i) `ass` f t 
-                          | (i,t) <- zip [0..] ts ]
-                  ++ [ret]
-          where ret = JS.EVar (JS.Ident "ret")
+        f (CFObj n ts) = tree (prIdent n) (map f ts)
         f (CFAbs v x) = JS.EFun [var v] [JS.SReturn (f x)]
         f (CFApp x y) = JS.ECall (f x) [f y]
         f (CFRes i) = JS.EIndex (JS.EVar children) (JS.EInt (fromIntegral i))
         f (CFVar v) = JS.EVar (var v)
         f (CFConst s) = JS.EStr s
-
+        f CFMeta = tree "?" []
 
 fmtOut SISROld = JS.EVar (JS.Ident "$")
 
@@ -90,3 +81,6 @@ var v = JS.Ident ("x" ++ show v)
 field x y = JS.EMember x (JS.Ident y)
 
 ass = JS.EAssign
+
+tree n xs = JS.EObj $ [JS.Prop (JS.Ident "name") (JS.EStr n)]
+                   ++ [JS.Prop (JS.Ident ("arg"++show i)) x | (i,x) <- zip [0..] xs]

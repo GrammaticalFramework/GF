@@ -45,6 +45,11 @@ data Expr =
  | EThis
  | EFun [Ident] [Stmt]
  | EArray [Expr]
+ | EObj [Property]
  | ESeq [Expr]
+  deriving (Eq,Ord,Show)
+
+data Property =
+   Prop Ident Expr
   deriving (Eq,Ord,Show)
 

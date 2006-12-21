@@ -116,7 +116,7 @@ instance Print Stmt where
 instance Print DeclOrExpr where
   prt i e = case e of
    Decl declvars -> prPrec i 0 (concatD [doc (showString "var") , prt 0 declvars])
-   DExpr expr -> prPrec i 0 (concatD [prt 0 expr])
+   DExpr expr -> prPrec i 0 (concatD [prt 1 expr])
 
 
 instance Print DeclVar where
@@ -146,7 +146,17 @@ instance Print Expr where
    EThis  -> prPrec i 16 (concatD [doc (showString "this")])
    EFun ids stmts -> prPrec i 16 (concatD [doc (showString "function") , doc (showString "(") , prt 0 ids , doc (showString ")") , doc (showString "{") , prt 0 stmts , doc (showString "}")])
    EArray exprs -> prPrec i 16 (concatD [doc (showString "[") , prt 0 exprs , doc (showString "]")])
+   EObj propertys -> prPrec i 16 (concatD [doc (showString "{") , prt 0 propertys , doc (showString "}")])
    ESeq exprs -> prPrec i 16 (concatD [doc (showString "(") , prt 0 exprs , doc (showString ")")])
+
+  prtList es = case es of
+   [] -> (concatD [])
+   [x] -> (concatD [prt 0 x])
+   x:xs -> (concatD [prt 0 x , doc (showString ",") , prt 0 xs])
+
+instance Print Property where
+  prt i e = case e of
+   Prop id expr -> prPrec i 0 (concatD [prt 0 id , doc (showString ":") , prt 0 expr])
 
   prtList es = case es of
    [] -> (concatD [])
