@@ -6,7 +6,7 @@
 </HEAD><BODY BGCOLOR="white" TEXT="black">
 <P ALIGN="center"><CENTER><H1> Symbolic expressions</H1>
 <FONT SIZE="4">
-<I>Last update: 2006-03-17 12:02:40 CET</I><BR>
+<I>Last update: 2006-11-23 12:18:08 CET</I><BR>
 </FONT></CENTER>
 
 <P></P>
@@ -15,7 +15,9 @@
     <UL>
     <LI><A HREF="#toc1">Noun phrases with symbols and numbers</A>
     <LI><A HREF="#toc2">Sentence consisting of a formula</A>
-    <LI><A HREF="#toc3">Symbol lists</A>
+    <LI><A HREF="#toc3">Symbols as numerals</A>
+    <LI><A HREF="#toc4">Symbol lists</A>
+    <LI><A HREF="#toc5">Obsolescent</A>
     </UL>
 
 <P></P>
@@ -42,7 +44,7 @@ grammar <A HREF="Lang.html">Lang</A>.
       SymbPN   : Symb -&gt; PN ;                -- x
       IntPN    : Int -&gt; PN ;                 -- 27
       FloatPN  : Float -&gt; PN ;               -- 3.14159
-      CNIntNP  : CN -&gt; Int -&gt; NP ;           -- level 53
+      CNNumNP  : CN -&gt; Num -&gt; NP ;           -- level five ; level 5
       CNSymbNP : Det -&gt; CN -&gt; [Symb] -&gt; NP ; -- (the) (2) numbers x and y
 </PRE>
 <P></P>
@@ -53,6 +55,13 @@ grammar <A HREF="Lang.html">Lang</A>.
 </PRE>
 <P></P>
 <A NAME="toc3"></A>
+<H2>Symbols as numerals</H2>
+<PRE>
+      SymbNum  : Symb -&gt; Num ;               -- n
+      SymbOrd  : Symb -&gt; Ord ;               -- n'th
+</PRE>
+<P></P>
+<A NAME="toc4"></A>
 <H2>Symbol lists</H2>
 <P>
 A symbol list has at least two elements. The last two are separated
@@ -66,6 +75,12 @@ This produces <I>x, y and z</I>, in English.
     
     fun
       MkSymb : String -&gt; Symb ;
+</PRE>
+<P></P>
+<A NAME="toc5"></A>
+<H2>Obsolescent</H2>
+<PRE>
+      CNIntNP  : CN -&gt; Int -&gt; NP ;           -- level 53 (covered by CNNumNP)
     
     }
 </PRE>

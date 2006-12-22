@@ -99,9 +99,13 @@ gfdoc:
 	gfdoc -txthtml mathematical/Predication.gf
 	gfdoc -txthtml multimodal/Multi.gf
 	gfdoc -txthtml ../prelude/*.gf
+	gfdoc -txthtml api/Combinators.gf
+	gfdoc -txthtml api/Constructors.gf
+	gfdoc -txthtml api/Symbolic.gf
 	mv abstract/*.html doc/gfdoc
 	mv mathematical/*.html doc/gfdoc
 	mv multimodal/*.html doc/gfdoc
+	mv api/*.html doc/gfdoc
 	mv */Paradigms*.html doc/gfdoc
 	cp */Irreg???.gf doc/gfdoc
 	mv ../prelude/*.html doc/gfdoc

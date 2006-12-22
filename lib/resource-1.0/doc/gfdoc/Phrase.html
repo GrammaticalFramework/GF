@@ -6,7 +6,7 @@
 </HEAD><BODY BGCOLOR="white" TEXT="black">
 <P ALIGN="center"><CENTER><H1> Phrase: Phrases and Utterances</H1>
 <FONT SIZE="4">
-<I>Last update: 2006-06-14 22:58:47 CEST</I><BR>
+<I>Last update: 2006-12-13 09:36:48 CET</I><BR>
 </FONT></CENTER>
 
 <P></P>
@@ -38,10 +38,11 @@ and suffixing with a vocative (typically a noun phrase).
 Utterances are formed from sentences, questions, and imperatives.
 </P>
 <PRE>
-        UttS     : S -&gt; Utt ;                   -- John walks
-        UttQS    : QS -&gt; Utt ;                  -- is it good
-        UttImpSg : Pol -&gt; Imp -&gt; Utt;           -- (don't) help yourself
-        UttImpPl : Pol -&gt; Imp -&gt; Utt;           -- (don't) help yourselves
+        UttS      : S   -&gt; Utt ;                -- John walks
+        UttQS     : QS  -&gt; Utt ;                -- is it good
+        UttImpSg  : Pol -&gt; Imp -&gt; Utt;          -- (don't) help yourself
+        UttImpPl  : Pol -&gt; Imp -&gt; Utt;          -- (don't) help yourselves
+        UttImpPol : Pol -&gt; Imp -&gt; Utt ;         -- (don't) help (polite)
 </PRE>
 <P></P>
 <P>

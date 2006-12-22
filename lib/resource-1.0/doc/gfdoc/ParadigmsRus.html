@@ -6,7 +6,7 @@
 </HEAD><BODY BGCOLOR="white" TEXT="black">
 <P ALIGN="center"><CENTER><H1> Russian Lexical Paradigms</H1>
 <FONT SIZE="4">
-<I>Last update: 2006-06-22 17:53:54 CEST</I><BR>
+<I>Last update: 2006-09-06 14:59:55 CEST</I><BR>
 </FONT></CENTER>
 
 <P></P>
@@ -327,9 +327,10 @@ The worst case need 6 forms of the present tense in indicative mood
 a past form (singular, masculine: <I>я бежал</I>), an imperative form 
 (singular, second person: <I>беги</I>), an infinitive (<I>бежать</I>).
 Inherent aspect should also be specified.
+mkVerbum : Aspect -&gt; (presentSgP1,presentSgP2,presentSgP3,
 </P>
 <PRE>
-       mkVerbum : Aspect -&gt; (presentSgP1,presentSgP2,presentSgP3,
+       mkV : Aspect -&gt; (presentSgP1,presentSgP2,presentSgP3,
                              presentPlP1,presentPlP2,presentPlP3,
                              pastSgMasculine,imperative,infinitive: Str) -&gt; V ;
 </PRE>
@@ -352,14 +353,6 @@ regV Imperfective Second <I>люб</I> <I>лю</I> <I>любил</I> <I>люби
 </PRE>
 <P></P>
 <P>
-For writing an application grammar one usualy doesn't need
-the whole inflection table, since each verb is used in 
-a particular context that determines some of the parameters
-(Tense and Voice while Aspect is fixed from the beginning) for certain usage. 
-The <I>V</I> type, that have these parameters fixed. 
-We can extract the <I>V</I> from the lexicon.
-mkV: Verbum -&gt; Voice -&gt;  V ;
-mkPresentV: Verbum -&gt; Voice -&gt; V ;
 Two-place verbs, and the special case with direct object. Notice that
 a particle can be included in a <CODE>V</CODE>.
 </P>
