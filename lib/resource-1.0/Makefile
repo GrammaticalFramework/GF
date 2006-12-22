@@ -3,8 +3,8 @@ RTS=+RTS -M800M -K100M
 RTSS=+RTS -M1000M -K100M
 
 #may need this on amd64
-#RTS=+RTS -M2000M -K200M
-#RTSS=+RTS -M2000M -K200M
+RTS=+RTS -M2000M -K200M
+RTSS=+RTS -M2000M -K200M
 
 GFCA=$(GF) -nocf
 GFCC=$(GF) -nocf -make
@@ -47,9 +47,9 @@ langs:
 	echo "s ;; pm | wf langs.gfcm" | $(GFCA) -path=alltenses:prelude ../alltenses/Lang???.gfc $(RTSS)
 
 api:
-	$(GFC) api/Constructors???.gf
-	$(GFC) api/Combinators???.gf
-	$(GFC) api/Symbolic???.gf
+	$(GFCC) api/Constructors???.gf
+	$(GFCC) api/Combinators???.gf
+	$(GFCC) api/Symbolic???.gf
 	cp -p api/*.gfc api/*.gfr ../api
 
 present:

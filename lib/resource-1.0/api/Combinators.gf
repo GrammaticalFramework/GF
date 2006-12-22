@@ -1,6 +1,85 @@
+--1 Combinators: a High-Level Syntax API
+
+-- This module defines some "grammatical functions" that give shortcuts to
+-- typical constructions. [``Constructors`` Constructors.html] and the
+-- language-specific ``Paradigms`` modules are usually needed
+-- to construct arguments of these functions.
+
 incomplete resource Combinators = open Grammar in {
 
   oper
+
+--2 Predication
+
+    pred : overload {
+      pred : V  -> NP -> Cl ;
+      pred : V2 -> NP -> NP -> Cl ;
+      pred : V3 -> NP -> NP -> NP -> Cl ; 
+      pred : V  -> NP -> NP -> Cl ;
+      pred : A  -> NP -> Cl ; 
+      pred : A2 -> NP -> NP -> Cl ;
+      pred : A  -> NP -> NP -> Cl ;      
+      pred : N -> NP -> Cl ;
+      pred : CN -> NP -> Cl ;
+      pred : NP -> NP -> Cl ;
+      pred : N -> NP -> NP -> Cl ; 
+      pred : Adv -> NP -> Cl ; 
+      pred : Prep -> NP -> NP -> Cl
+      } ;
+
+--2 Function application
+
+    app : overload {
+      app : N  -> NP ;
+      app : N2 -> NP -> NP ; 
+      app : N3 -> NP -> NP -> NP ;
+      app : N2 -> NP -> NP -> NP ;
+      app : N2 -> N -> CN
+      } ;
+
+--2 Coordination
+
+    coord : overload {
+      coord : Conj  -> Adv -> Adv -> Adv ;
+      coord : Conj  -> AP -> AP -> AP ;
+      coord : Conj  -> NP -> NP -> NP ;
+      coord : Conj  -> S  -> S  -> S ;
+      coord : DConj -> Adv -> Adv -> Adv ;
+      coord : DConj -> AP -> AP -> AP ;
+      coord : DConj -> NP -> NP -> NP ;
+      coord : DConj -> S  -> S  -> S ;
+      coord : Conj  -> ListAdv -> Adv ;
+      coord : Conj  -> ListAP -> AP ;
+      coord : Conj  -> ListNP -> NP ;
+      coord : Conj  -> ListS  -> S ;
+      coord : DConj -> ListAdv -> Adv ;
+      coord : DConj -> ListAP -> AP ;
+      coord : DConj -> ListNP -> NP ;
+      coord : DConj -> ListS  -> S  
+
+      } ;
+
+--2 Modification
+
+    mod : overload {
+      mod : A -> N -> CN ;
+      mod : AP -> CN -> CN ;
+      mod : AdA -> A -> AP ;
+      mod : Quant -> N -> NP ;
+      mod : Quant -> CN -> NP ;
+      mod : Predet -> N -> NP ;
+      mod : Numeral -> N -> NP
+
+
+      } ;
+
+--2 Text append
+
+-- This is not in ground API, because it would destroy parsing.
+
+    appendText : Text -> Text -> Text ;
+
+--.
 
     pred = overload {
       pred : V  -> NP -> Cl
