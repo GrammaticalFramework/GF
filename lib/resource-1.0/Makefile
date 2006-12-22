@@ -15,9 +15,9 @@ GFCP=$(GFC) -preproc=./mkPresent
 #GFCP=$(GFC) -preproc=mkPresent
 
 
-.PHONY: show-path all test alltenses pretest langs present mathematical multimodal compiled treebank stat gfdoc clean
+.PHONY: show-path all test alltenses pretest langs present mathematical multimodal compiled treebank stat gfdoc clean api
 
-all: show-path present alltenses mathematical multimodal compiled langs
+all: show-path present alltenses mathematical api multimodal compiled langs
 
 show-path:
 	@echo GF_LIB_PATH=$(GF_LIB_PATH)
@@ -46,6 +46,11 @@ alltenses:
 langs:
 	echo "s ;; pm | wf langs.gfcm" | $(GFCA) -path=alltenses:prelude ../alltenses/Lang???.gfc $(RTSS)
 
+api:
+	$(GFC) api/Constructors???.gf
+	$(GFC) api/Combinators???.gf
+	$(GFC) api/Symbolic???.gf
+	cp -p api/*.gfc api/*.gfr ../api
 
 present:
 #	$(GFCP) arabic/LangAra.gf

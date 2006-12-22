@@ -1,4 +1,4 @@
---# -path=.:../abstract:../common:../english:../mathematical:prelude
+--# -path=.:present:mathematical:prelude
 
 resource SymbolicEng = Symbolic with 
   (Symbol = SymbolEng),
