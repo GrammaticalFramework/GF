@@ -1,6 +1,7 @@
 --# -path=.:alltenses:prelude
 
 concrete BigSwedish of BigSwedishAbs = 
-  Swedish,
+  GrammarSwe,
+  ExtraSwe,
   BigLexSwe
   ** {} ;

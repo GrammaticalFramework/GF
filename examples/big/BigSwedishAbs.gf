@@ -1,4 +1,5 @@
 abstract BigSwedishAbs = 
-  SwedishAbs,
+  Grammar,
+  ExtraSweAbs,
   BigLexSweAbs
   ** {} ;
