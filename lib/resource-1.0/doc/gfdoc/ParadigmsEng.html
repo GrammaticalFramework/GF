@@ -6,7 +6,7 @@
 </HEAD><BODY BGCOLOR="white" TEXT="black">
 <P ALIGN="center"><CENTER><H1> English Lexical Paradigms</H1>
 <FONT SIZE="4">
-<I>Last update: 2006-06-22 20:54:15 CEST</I><BR>
+<I>Last update: 2006-11-23 14:34:29 CET</I><BR>
 </FONT></CENTER>
 
 <P></P>
@@ -122,10 +122,18 @@ The resource category <CODE>Prep</CODE> is used.
 <A NAME="toc2"></A>
 <H2>Nouns</H2>
 <P>
+Nouns are constructed by the function <CODE>mkN</CODE>, which takes a varying
+number of arguments.
+</P>
+<PRE>
+      mkN : overload {
+</PRE>
+<P></P>
+<P>
 Worst case: give all four forms.
 </P>
 <PRE>
-      mkN  : (man,men,man's,men's : Str) -&gt; N ;
+        mkN : (man,men,man's,men's : Str) -&gt; N ;
 </PRE>
 <P></P>
 <P>
@@ -134,14 +142,14 @@ The regular function captures the variants for nouns ending with
 <I>fly - flies</I> (but <I>toy - toys</I>),
 </P>
 <PRE>
-      regN : Str -&gt; N ;
+        mkN : (flash : Str) -&gt; N ;
 </PRE>
 <P></P>
 <P>
 In practice the worst case is just: give singular and plural nominative.
 </P>
 <PRE>
-      mk2N : (man,men : Str) -&gt; N ;
+        mkN : (man,men : Str) -&gt; N ;
 </PRE>
 <P></P>
 <P>
@@ -150,7 +158,7 @@ All nouns created by the previous functions are marked as
 function:
 </P>
 <PRE>
-      genderN : Gender -&gt; N -&gt; N ;
+        mkN : Gender -&gt; N -&gt; N ;
 </PRE>
 <P></P>
 <A NAME="toc3"></A>
@@ -160,7 +168,8 @@ A compound noun ia an uninflected string attached to an inflected noun,
 such as <I>baby boom</I>, <I>chief executive officer</I>.
 </P>
 <PRE>
-      compoundN : Str -&gt; N -&gt; N ;
+        mkN : Str -&gt; N -&gt; N
+      } ;
 </PRE>
 <P></P>
 <A NAME="toc4"></A>

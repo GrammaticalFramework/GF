@@ -2,47 +2,14 @@
 <HTML>
 <HEAD>
 <META NAME="generator" CONTENT="http://txt2tags.sf.net">
-<TITLE>GF Resource Grammar Library v. 1.0</TITLE>
+<TITLE>GF Resource Grammar Library v. 1.1</TITLE>
 </HEAD><BODY BGCOLOR="white" TEXT="black">
-<P ALIGN="center"><CENTER><H1>GF Resource Grammar Library v. 1.0</H1>
+<P ALIGN="center"><CENTER><H1>GF Resource Grammar Library v. 1.1</H1>
 <FONT SIZE="4">
 <I>Author: Aarne Ranta &lt;aarne (at) cs.chalmers.se&gt;</I><BR>
-Last update: Mon Jun 26 13:35:19 2006
+Last update: Fri Dec 22 14:22:49 2006
 </FONT></CENTER>
 
-<P></P>
-<HR NOSHADE SIZE=1>
-<P></P>
-    <UL>
-    <LI><A HREF="#toc1">Authors</A>
-    <LI><A HREF="#toc2">License</A>
-    <LI><A HREF="#toc3">Scope</A>
-    <LI><A HREF="#toc4">Quick start</A>
-    <LI><A HREF="#toc5">Encoding</A>
-      <UL>
-      <LI><A HREF="#toc6">The language independent ground API</A>
-      <LI><A HREF="#toc7">The language-dependent APIs</A>
-      <LI><A HREF="#toc8">Special-purpose APIs</A>
-      </UL>
-    <LI><A HREF="#toc9">Using the library</A>
-      <UL>
-      <LI><A HREF="#toc10">The compiled version</A>
-      <LI><A HREF="#toc11">Linking applications to libraries</A>
-      <LI><A HREF="#toc12">Using the libraries as top-level grammars</A>
-      </UL>
-    <LI><A HREF="#toc13">Example applications</A>
-      <UL>
-      <LI><A HREF="#toc14">Bronzeage</A>
-      <LI><A HREF="#toc15">Dialogue</A>
-      <LI><A HREF="#toc16">Animals</A>
-      </UL>
-    <LI><A HREF="#toc17">Known bugs and missing components</A>
-    <LI><A HREF="#toc18">More reading</A>
-    </UL>
-
-<P></P>
-<HR NOSHADE SIZE=1>
-<P></P>
 <P>
 The GF Resource Grammar Library defines the basic grammar of
 ten languages: 
@@ -52,13 +19,28 @@ A still incomplete implementation for Arabic is also
 included.
 </P>
 <P>
-<B>New</B>: <A HREF="../../../doc/resource.pdf">User manual of the resource library</A>.
+<B>New in Version 1.1</B>
 </P>
+<UL>
+<LI>Simpler APIs using overloading:
+  <UL>
+  <LI><A HREF="gfdoc/Constructors.html">Constructors</A>: almost all trees in a category <CODE>C</CODE>
+    can be built by the function <CODE>mkC</CODE>.
+  <LI><A HREF="gfdoc/Combinators.html">Combinators</A>: cross-cut grammatical functions: 
+    predication, application, modification, coordination.
+  <LI><A HREF="gfdoc/Symbolig.html">Symbolic</A>: noun phrases with mathematical symbols.
+  </UL>
+</UL>
+
 <P>
-<B>Notice</B>. This document concerns the API v. 1.0 released
-on June 22, 2006.
+  An example of use is <A HREF="../../../examples/logic"><CODE>logic</CODE></A>.
+  The API of version 1.0 remains valid and can be used in combination with this.
 </P>
-<A NAME="toc1"></A>
+<UL>
+<LI>Some new functions.
+<LI>Bug fixes.
+</UL>
+
 <H2>Authors</H2>
 <P>
 Inger Andersson and Therese Soderberg (Spanish morphology),
@@ -93,14 +75,12 @@ Saara Myllyntausta,
 Wanjiku Ng'ang'a,
 Jordi Saludes.
 </P>
-<A NAME="toc2"></A>
 <H2>License</H2>
 <P>
 The GF Resource Grammar Library is open-source software licensed under
 GNU General Public License. See the file <A HREF="../LICENSE">LICENSE</A> for more
 details.
 </P>
-<A NAME="toc3"></A>
 <H2>Scope</H2>
 <P>
 Coverage, for each language:
@@ -131,7 +111,6 @@ Presentation:
 <LI>example collections
 </UL>
 
-<A NAME="toc4"></A>
 <H2>Quick start</H2>
 <P>
 Go to the main directory, compile the grammars, and run a test.
@@ -166,7 +145,6 @@ For more examples, see the <A HREF="clt2006.html">Overview slides</A>.
 The <CODE>make</CODE> procedure does not make Arabic, but it can
 be compiled in a similar way as the other languages.
 </P>
-<A NAME="toc5"></A>
 <H2>Encoding</H2>
 <P>
 Finnish, German, Romance, and Scandinavian languages are in isolatin-1.
@@ -177,7 +155,6 @@ Arabic and Russian are in UTF-8.
 <P>
 English is in pure ASCII.
 </P>
-<A NAME="toc6"></A>
 <H3>The language independent ground API</H3>
 <P>
 This API is accessible by both <CODE>present</CODE> and <CODE>alltenses</CODE>.
@@ -211,7 +188,6 @@ The documentation of the individual modules:
 <LI><A HREF="gfdoc/Lang.html">Lang</A>: the main module comprising both <CODE>Grammar</CODE> and <CODE>Lexicon</CODE>
 </UL>
 
-<A NAME="toc7"></A>
 <H3>The language-dependent APIs</H3>
 <UL>
 <LI><A HREF="gfdoc/ParadigmsDan.html">ParadigmsDan</A>: Danish lexical paradigms
@@ -269,7 +245,6 @@ This is the structure of each language-dependent top module.
 <LI><A HREF="../swedish/SwedishAbs.gf">Swedish</A>: Swedish with all extras
 </UL>
 
-<A NAME="toc8"></A>
 <H3>Special-purpose APIs</H3>
 <H4>Present</H4>
 <P>
@@ -297,9 +272,7 @@ gesture. Some functions for constructing demonstratives are provided.
 <LI><A HREF="gfdoc/Symbol.html">Symbol</A>: symbols and numbers in text
 </UL>
 
-<A NAME="toc9"></A>
 <H2>Using the library</H2>
-<A NAME="toc10"></A>
 <H3>The compiled version</H3>
 <P>
 The simplest way to get the library is to install the precompiled version
@@ -321,7 +294,6 @@ library. Use one (or several) of the following packages instead:
   multimodal dialogue applications
 </UL>
 
-<A NAME="toc11"></A>
 <H3>Linking applications to libraries</H3>
 <P>
 Typically, open one of
@@ -360,7 +332,6 @@ The <CODE>mathematical</CODE> API shares modules with
 <CODE>present</CODE>. It is therefore not a good idea to use it in combination with
 <CODE>alltenses</CODE>.
 </P>
-<A NAME="toc12"></A>
 <H3>Using the libraries as top-level grammars</H3>
 <P>
 If you have done <CODE>make</CODE> in <CODE>lib/resource-1.0</CODE>, you will have 
@@ -399,14 +370,12 @@ It is also possible to parse in Scandinavian languages
 (Danish, Norwegian, Swedish) and, with enough memory (<CODE>gf +RTS -K512M</CODE>),
 German.
 </P>
-<A NAME="toc13"></A>
 <H2>Example applications</H2>
 <P>
 These applications are meant to serve as starting points for
 new applications, showing how the libraries can be used in
 typical situations.
 </P>
-<A NAME="toc14"></A>
 <H3>Bronzeage</H3>
 <P>
 The <A HREF="../../../examples/bronzeage">examples/bronzeage</A> 
@@ -414,7 +383,6 @@ grammar set implements a language fragment
 based on the Swadesh list of 200 words. It is useful for
 things like language training.
 </P>
-<A NAME="toc15"></A>
 <H3>Dialogue</H3>
 <P>
 The <A HREF="../../../examples/dialogue">examples/dialogue</A> 
@@ -423,7 +391,6 @@ multimodal dialogue system.
 Its purpose is to serve as a prototype for applications in the
 TALK project.
 </P>
-<A NAME="toc16"></A>
 <H3>Animals</H3>
 <P>
 The <A HREF="../../../examples/animal">examples/animal</A> 
@@ -431,7 +398,6 @@ grammar set implements some queries about animals.
 Its purpose is to serve as a prototype for example-based 
 grammar writing.
 </P>
-<A NAME="toc17"></A>
 <H2>Known bugs and missing components</H2>
 <P>
 Danish
@@ -494,11 +460,10 @@ Spanish
 <P>
 Swedish
 </P>
-<A NAME="toc18"></A>
 <H2>More reading</H2>
 <P>
 <A HREF="../../../doc/resource.pdf">GF Resource Grammar Library</A> (pdf).
-Printable user manual with API documentation.
+Printable user manual with API documentation (version 1.0).
 </P>
 <P>
 <A HREF="gslt-sem-2006.html">Grammars as Software Libraries</A>. Slides
@@ -528,5 +493,5 @@ examples are from <CODE>multimodal/old</CODE>, which is a reduced-size API.
 </P>
 
 <!-- html code generated by txt2tags 2.3 (http://txt2tags.sf.net) -->
-<!-- cmdline: txt2tags -\-toc index.txt -->
+<!-- cmdline: txt2tags index.txt -->
 </BODY></HTML>

@@ -6,7 +6,7 @@
 </HEAD><BODY BGCOLOR="white" TEXT="black">
 <P ALIGN="center"><CENTER><H1> Sentence: Sentences, Clauses, and Imperatives</H1>
 <FONT SIZE="4">
-<I>Last update: 2006-06-22 19:24:56 CEST</I><BR>
+<I>Last update: 2006-12-18 16:59:02 CET</I><BR>
 </FONT></CENTER>
 
 <P></P>
@@ -66,10 +66,10 @@ the style of CCG.
 <B>Note</B> the set is not complete and lacks e.g. verbs with more than 2 places.
 </P>
 <PRE>
-        SlashV2   : NP -&gt; V2 -&gt; Slash ;      -- (whom) he sees
-        SlashVVV2 : NP -&gt; VV -&gt; V2 -&gt; Slash; -- (whom) he wants to see 
-        AdvSlash  : Slash -&gt; Adv -&gt; Slash ;  -- (whom) he sees tomorrow
-        SlashPrep : Cl -&gt; Prep -&gt; Slash ;    -- (with whom) he walks 
+        SlashV2   : NP -&gt; V2 -&gt; Slash ;         -- (whom) he sees
+        SlashVVV2 : NP -&gt; VV -&gt; V2 -&gt; Slash;    -- (whom) he wants to see 
+        AdvSlash  : Slash -&gt; Adv -&gt; Slash ;     -- (whom) he sees tomorrow
+        SlashPrep : Cl -&gt; Prep -&gt; Slash ;       -- (with whom) he walks 
 </PRE>
 <P></P>
 <A NAME="toc3"></A>
@@ -107,6 +107,13 @@ anteriority, which are defined in <A HREF="Common.html"><CODE>Common</CODE></A>.
         UseCl  : Tense -&gt; Ant -&gt; Pol -&gt; Cl  -&gt; S ;
         UseQCl : Tense -&gt; Ant -&gt; Pol -&gt; QCl -&gt; QS ;
         UseRCl : Tense -&gt; Ant -&gt; Pol -&gt; RCl -&gt; RS ;
+</PRE>
+<P></P>
+<P>
+An adverb can be added to the beginning of a sentence.
+</P>
+<PRE>
+        AdvS   : Adv -&gt; S  -&gt; S ;            -- today, I will go home
     
     }
 </PRE>

@@ -1,4 +1,4 @@
-GF Resource Grammar Library v. 1.0
+GF Resource Grammar Library v. 1.1
 Author: Aarne Ranta <aarne (at) cs.chalmers.se>
 Last update: %%date(%c)
 
@@ -16,10 +16,23 @@ Italian, Norwegian, Russian, Spanish, Swedish.
 A still incomplete implementation for Arabic is also
 included.
 
-**New**: [User manual of the resource library ../../../doc/resource.pdf].
+**New in Version 1.1**
+- Simpler APIs using overloading:
+  - [Constructors gfdoc/Constructors.html]: almost all trees in a category ``C``
+    can be built by the function ``mkC``.
+  - [Combinators gfdoc/Combinators.html]: cross-cut grammatical functions: 
+    predication, application, modification, coordination.
+  - [Symbolic gfdoc/Symbolig.html]: noun phrases with mathematical symbols.
 
-**Notice**. This document concerns the API v. 1.0 released
-on June 22, 2006.
+
+  An example of use is [``logic`` ../../../examples/logic].
+  The API of version 1.0 remains valid and can be used in combination with this.
+- Some new functions.
+- Bug fixes.
+
+
+
+
 
 
 ==Authors==
@@ -400,7 +413,7 @@ Swedish
 ==More reading==
 
 [GF Resource Grammar Library ../../../doc/resource.pdf] (pdf).
-Printable user manual with API documentation.
+Printable user manual with API documentation (version 1.0).
 
 [Grammars as Software Libraries gslt-sem-2006.html]. Slides
 with background and motivation for the resource grammar library.

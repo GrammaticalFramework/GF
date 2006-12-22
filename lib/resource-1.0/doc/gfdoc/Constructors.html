@@ -6,7 +6,7 @@
 </HEAD><BODY BGCOLOR="white" TEXT="black">
 <P ALIGN="center"><CENTER><H1> Constructors: the High-Level Syntax API</H1>
 <FONT SIZE="4">
-<I>Last update: 2006-11-21 19:14:38 CET</I><BR>
+<I>Last update: 2006-11-27 17:15:06 CET</I><BR>
 </FONT></CENTER>
 
 <P></P>
@@ -85,7 +85,7 @@ to this.
 <PRE>
         mkText : overload {
           mkText : Text               ;   -- [empty text]
-          mkText : Phr -&gt; Text -&gt; Text;   -- John walks. ...
+          mkText : Phr -&gt; Text -&gt; Text    -- John walks. ...
           } ;
     
         mkPhr : overload {
@@ -116,8 +116,8 @@ to this.
           mkS : Conj -&gt; S -&gt; S -&gt; S ;            -- John walks and Mary talks   
           mkS : DConj -&gt; S -&gt; S -&gt; S ;           -- either I leave or you come
           mkS : Conj -&gt; ListS -&gt; S ;             -- John walks, Mary talks, and Bob runs
-          mkS : DConj -&gt; ListS -&gt; S              -- either I leave, you come, or he runs
-    
+          mkS : DConj -&gt; ListS -&gt; S ;            -- either I leave, you come, or he runs
+          mkS : Adv -&gt; S -&gt; S                    -- today, I will sleep
           } ;
     
         mkCl : overload {
