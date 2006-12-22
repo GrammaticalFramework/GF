@@ -1,6 +1,8 @@
 --# -path=.:alltenses:prelude
 
 concrete BigEnglish of BigEnglishAbs = 
-  English,
+  GrammarEng,
+---  IrregEng,
+  ExtraEng,
   BigLexEng
   ** {} ;

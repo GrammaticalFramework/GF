@@ -1,6 +1,8 @@
 --# -path=.:alltenses:prelude
 
 abstract BigEnglishAbs = 
-  EnglishAbs,
+  Grammar,
+---  IrregEngAbs,
+  ExtraEngAbs,
   BigLexEngAbs
   ** {} ;

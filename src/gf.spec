@@ -1,5 +1,5 @@
 %define name GF
-%define version 2.6t
+%define version 2.7
 %define release 1
 
 Name: %{name}

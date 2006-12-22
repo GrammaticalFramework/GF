@@ -14,7 +14,12 @@ Changes in functionality since May 17, 2005, release of GF Version 2.2
 
 <p>
 
-21/12 (AR) Overloading rules for GF version 2.7:
+<hr>
+
+22/12 (AR) <b>Release of GF version 2.7</b>.
+
+21/12 (AR) 
+Overloading rules for GF version 2.7:
 <ol>
 <li> If a unique instance is found by exact match with argument types,
   that instance is used.
@@ -24,7 +29,7 @@ Changes in functionality since May 17, 2005, release of GF Version 2.2
   type, that instance is used, but a warning is issued.
 <li> Otherwise, an error results, and the list of possible instances is shown.
 </ol>
-These rules are still temporary, but all future developments will guarantee
+These rules are still experimental, but all future developments will guarantee
 that their type-correct use will work. Rule (3) is only needed because the 
 current type checker does not always know an expected type. It can give
 an incorrect result which is captured later in the compilation. To be noticed,
@@ -40,18 +45,21 @@ and the IBM XHTML+Voice implementation use by the Opera web browser.
 
 <p>
 
-21/12 (BB) VoiceXML 2.0 dialog systems can now be generated from GF grammars.
+21/12 (BB) <a name="voicexml">
+VoiceXML 2.0 dialog systems can now be generated from GF grammars.
 Use <tt>pg -printer=vxml</tt>.
 
 <p>
 
-21/12 (BB) JavaScript code for linearization and type annotation can now be
+21/12 (BB) <a name="javascript">
+JavaScript code for linearization and type annotation can now be
 generated from a multilingual GF grammar. Use <tt>pm -printer=js</tt>.
 
 
 <p>
 
-5/12 (BB) A new tool for generating C linearization libraries
+5/12 (BB) <a name="gfcc2c">
+A new tool for generating C linearization libraries
 from a GFCC file. <tt>make gfcc2c</tt> in <tt>src</tt>
 compiles the tool. The generated
 code includes header files in <tt>lib/c</tt> and should be linked
@@ -73,11 +81,12 @@ of lock-fielded categories are used.
 
 <p>
 
-17/11 (AR) Operation overloading: an <tt>oper</tt> can have many types,
+17/11 (AR) <a name="overloading">
+Operation overloading: an <tt>oper</tt> can have many types,
 from which one is picked at compile time. The types must have different
 argument lists. Exact match with the arguments given to the <tt>oper</tt>
 is required. An example is given in 
-<a href="../lib/resource-1.0/common/Overload.gf"><tt>Overload.gf</tt></a>.
+<a href="../lib/resource-1.0/doc/gfdoc/Constructors.gf"><tt>Constructors.gf</tt></a>.
 The purpose of overloading is to make libraries easier to use, since
 only one name for each grammatical operation is needed: predication, modification,
 coordination, etc. The concrete syntax is, at this experimental level, not
