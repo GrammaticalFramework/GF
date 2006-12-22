@@ -51,6 +51,20 @@ generated from a multilingual GF grammar. Use <tt>pm -printer=js</tt>.
 
 <p>
 
+5/12 (BB) A new tool for generating C linearization libraries
+from a GFCC file. <tt>make gfcc2c</tt> in <tt>src</tt>
+compiles the tool. The generated
+code includes header files in <tt>lib/c</tt> and should be linked
+against <tt>libgfcc.a</tt> in <tt>lib/c</tt>. For an example of
+using the generated code, see <tt>src/tools/c/examples/bronzeage</tt>.
+<tt>make</tt> in that directory generates a GFCC file, then generates
+C code from that, and then compiles a program <tt>bronzeage-test</tt>.
+The <tt>main</tt> function for that program is defined in
+<tt>bronzeage-test.c</tt>.
+
+
+<p>
+
 20/11 (AR) Type error messages in concrete syntax are printed with a
 heuristic where a type of the form <tt>{... ; lock_C : {} ; ...}</tt>
 is printed as <tt>C</tt>. This gives more readable error messages, but
