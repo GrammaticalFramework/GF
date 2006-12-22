@@ -112,6 +112,9 @@ clean:
 	-rm -f $(GFEDITOR)/de/uka/ilkd/key/ocl/gf/*.class
 	-rm -f gf.wixobj
 	-rm -f ../bin/$(GF_EXE)
+	$(MAKE) -C tools/c clean
+	$(MAKE) -C ../lib/c clean
+	-rm -f ../bin/gfcc2c
 
 distclean: clean
 	-rm -f JavaGUI/gf-java.jar jgf
@@ -182,6 +185,12 @@ gfcc:
 	$(GHMAKE) $(GHCOPTFLAGS) -o gfcc GF/Canon/GFCC/RunGFCC.hs
 	strip gfcc
 	mv gfcc ../bin/
+
+gfcc2c:
+	$(MAKE) -C tools/c
+	$(MAKE) -C ../lib/c
+	mv tools/c/gfcc2c ../bin
+
 #
 # Distribution
 #
