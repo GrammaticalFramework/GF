@@ -1,3 +1,5 @@
+--1 Symbolic: Noun Phrases with mathematical symbols
+
 incomplete resource Symbolic = open Symbol, Grammar in {
 
   oper
