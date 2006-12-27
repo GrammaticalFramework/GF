@@ -115,6 +115,8 @@ buildarchtranslate: i686: i586
 
 18. Add new GF package release to SourceForge:
 
+    - https://sourceforge.net/projects/gf-tools
+
     - Project page -> Admin -> File releases -> Add release (for the
       GF package)
 
@@ -143,14 +145,9 @@ buildarchtranslate: i686: i586
         figured out how to make noarch rpms from the same spec as 
 	arch-specific ones)
 
-20. (Only if releasing a new grammars distribution)
-    Add new GF-grammars release. Repeat the steps above, but with
-    GF-grammars:
-
-      - Add files and set properties:
-
-      * grammar tarball -> Platform independent/Source .gz
+20. Mail to gf-tools-users@lists.sourceforge.net
 
 21. Update website.
 
 22. Party!
+
