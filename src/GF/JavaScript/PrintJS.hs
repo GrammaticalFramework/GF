@@ -68,7 +68,7 @@ prPrec :: Int -> Int -> Doc -> Doc
 prPrec i j = if j<i then parenth else id
 
 
-instance Print Integer where
+instance Print Int where
   prt _ x = doc (shows x)
 
 
