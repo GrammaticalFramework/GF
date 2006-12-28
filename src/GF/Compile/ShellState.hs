@@ -17,6 +17,7 @@ module GF.Compile.ShellState where
 import GF.Data.Operations
 import GF.Canon.GFC
 import GF.Canon.AbsGFC
+import GF.Canon.CanonToGFCC as C2GFCC
 import GF.Grammar.Macros
 import GF.Grammar.MMacros
 
@@ -43,6 +44,7 @@ import qualified Transfer.InterpreterAPI as T
 
 import qualified GF.OldParsing.ConvertGrammar as CnvOld -- OBSOLETE
 import qualified GF.Conversion.GFC as Cnv
+import qualified GF.Conversion.SimpleToFCFG as FCnv
 import qualified GF.Parsing.GFC as Prs
 
 import Control.Monad (mplus)
@@ -229,8 +231,11 @@ updateShellState opts ign mcnc sh ((_,sgr,gr,eenv),rts) = do
 
   let abstrs = nubBy (\ (x,_) (y,_) -> x == y) $ 
                maybe id (\a -> ((a,concrs0):)) abstr0 $ abstracts sh
-
-  let cgr = cgr0 ---- filterAbstracts (map fst abstrs) cgr0
+               
+  let needed = nub $ concatMap (requiredCanModules (length abstrs == 1) cgr0) (maybe [] singleton abstr0 ++ concrs0)
+      purge  = nubBy (\x y -> fst x == fst y) . filter (\(m,mo) -> elem m needed && not (isIncompleteCanon (m,mo)))
+      
+  let cgr = M.MGrammar $ purge $ M.modules cgr0
 
   let oldConcrs = map (snd . fst) (concretes sh)
       newConcrs = maybe [] (M.allConcretes gr) abstr0
@@ -238,7 +243,8 @@ updateShellState opts ign mcnc sh ((_,sgr,gr,eenv),rts) = do
   let complete m = case M.lookupModule gr m of
         Ok mo -> not $ isIncompleteCanon (m,mo)
         _ -> False
-  let concrs = filter complete $ nub $ newConcrs ++ oldConcrs
+        
+  let concrs = filter (\i -> complete i && elem i needed) $ nub $ newConcrs ++ oldConcrs
       concr0 = ifNull Nothing (return . head) concrs
       notInrts f = notElem f $ map fst rts
       subcgr = unSubelimCanon cgr
@@ -252,9 +258,12 @@ updateShellState opts ign mcnc sh ((_,sgr,gr,eenv),rts) = do
   let probss = [] -----
 
 
-  let fromGFC              = snd . snd . Cnv.convertGFC opts
-      (mcfgs, fcfgs, cfgs) = unzip3 $ map (curry fromGFC cgr) concrs
-      pInfos               = zipWith3 Prs.buildPInfo mcfgs fcfgs cfgs
+  let fromGFC       = snd . snd . Cnv.convertGFC opts
+      (mcfgs, cfgs) = unzip $ map (curry fromGFC cgr) concrs
+      fcfgs         = FCnv.convertGrammar (C2GFCC.mkCanon2gfcc cgr)
+      pInfos        = zipWith3 Prs.buildPInfo mcfgs (map snd fcfgs) cfgs
+      
+      
 
   let funs = funRulesOf cgr
   let cats = allCatsOf cgr
@@ -273,9 +282,9 @@ updateShellState opts ign mcnc sh ((_,sgr,gr,eenv),rts) = do
     canModules = cgr,
     srcModules = src,
     cfs        = cf's,
-    abstracts  = abstrs,
+    abstracts  = maybe [] (\a -> [(a,concrs)]) abstr0,
     mcfgs      = zip concrs mcfgs,
-    fcfgs      = zip concrs fcfgs,
+    fcfgs      = fcfgs,
     cfgs       = zip concrs cfgs,
     pInfos     = zip concrs pInfos,
     morphos    = morphs,

@@ -20,6 +20,7 @@ import GF.Formalism.MCFG(Lin(..))
 import GF.Formalism.Utilities
 
 import GF.Infra.Ident
+import GF.Infra.Print
 
 import GF.Parsing.FCFG.Range
 import GF.Parsing.FCFG.PInfo
@@ -34,7 +35,7 @@ import Data.Array
 ----------------------------------------------------------------------
 -- * parsing
 
-parse :: (Ord c, Ord n, Ord t) => String -> FCFParser c n t
+parse :: (Print c, Ord c, Ord n, Print t, Ord t) => String -> FCFParser c n t
 parse strategy pinfo starts toks = xchart2syntaxchart chart pinfo
     where chart = process strategy pinfo toks axioms emptyXChart
           axioms | isBU  strategy = literals pinfo toks ++ initialBU pinfo toks
@@ -47,7 +48,7 @@ isTD  s = s=="t"
 emptyChildren :: RuleId -> FCFPInfo c n t -> SyntaxNode RuleId RangeRec
 emptyChildren ruleid pinfo = SNode ruleid (replicate (length rhs) [])
   where
-    FRule (Abs _ rhs _) _ = allRules pinfo ! ruleid
+    FRule _ rhs _ _ = allRules pinfo ! ruleid
 
 updateChildren :: SyntaxNode RuleId RangeRec -> Int -> RangeRec -> [SyntaxNode RuleId RangeRec]
 updateChildren (SNode ruleid recs) i rec = do
@@ -59,7 +60,7 @@ updateChildren (SNode ruleid recs) i rec = do
 makeMaxRange (Range _ j) = Range j j
 makeMaxRange EmptyRange  = EmptyRange
 
-process :: (Ord c, Ord n, Ord t) => String -> FCFPInfo c n t -> Input t -> [(c,Item)] -> XChart c -> XChart c
+process :: (Print c, Ord c, Ord n, Print t, Ord t) => String -> FCFPInfo c n t -> Input t -> [(c,Item)] -> XChart c -> XChart c
 process strategy pinfo toks []               chart = chart
 process strategy pinfo toks ((c,item):items) chart = process strategy pinfo toks items $! univRule c item chart
   where
@@ -86,22 +87,22 @@ process strategy pinfo toks ((c,item):items) chart = process strategy pinfo toks
              then univRule cat (Active          (rng:found)  EmptyRange (lbl+1) 0 node) chart
              else univRule cat (Final  (reverse (rng:found))                      node) chart
       where
-        (FRule (Abs cat _ fn) lins) = allRules pinfo ! ruleid
-        lin            = lins ! lbl
+        (FRule fn _ cat lins) = allRules pinfo ! ruleid
+        lin                   = lins ! lbl
     univRule cat item@(Final found' node) chart =
       case insertXChart chart item cat of
         Nothing    -> chart
         Just chart -> let items = do (Active found rng l ppos node@(SNode ruleid _)) <- lookupXChartAct chart cat
-                                     let FRule _ lins    = allRules pinfo ! ruleid
-                                         FSymCat cat r d = lins ! l ! ppos
+                                     let FRule _ _ _ lins = allRules pinfo ! ruleid
+                                         FSymCat cat r d  = lins ! l ! ppos
                                      rng  <- concatRange rng (found' !! r)
                                      node <- updateChildren node d found'
                                      return (cat, Active found rng l (ppos+1) node)
                                   ++
     			          do guard (isBU strategy)
 			             ruleid <- leftcornerCats pinfo ? cat
-			             let FRule _ lins = allRules pinfo ! ruleid
-			                 FSymCat cat r d = lins ! 0 ! 0
+			             let FRule _ _ _ lins = allRules pinfo ! ruleid
+			                 FSymCat cat r d  = lins ! 0 ! 0
 			             node <- updateChildren (emptyChildren ruleid pinfo) d found'
                                      return (cat, Active [] (found' !! r) 0 1 node)
                       in process strategy pinfo toks items chart
@@ -140,7 +141,7 @@ xchart2syntaxchart :: (Ord c, Ord n, Ord t) => XChart c -> FCFPInfo c n t -> Syn
 xchart2syntaxchart (XChart actives finals) pinfo =
   accumAssoc groupSyntaxNodes $
     [ case node of
-        SNode ruleid rrecs -> let FRule (Abs cat rhs fun) _ = allRules pinfo ! ruleid
+        SNode ruleid rrecs -> let FRule fun rhs cat _ = allRules pinfo ! ruleid
 		              in ((cat,found), SNode fun (zip rhs rrecs))
         SString s          ->    ((cat,found), SString s)
         SInt    n          ->    ((cat,found), SInt    n)
@@ -171,5 +172,5 @@ initialBU pinfo toks =
     do tok <- aElems (inputToken toks)
        ruleid <- leftcornerTokens pinfo ? tok ++
                  epsilonRules pinfo
-       let FRule (Abs cat _ _) _ = allRules pinfo ! ruleid
+       let FRule _ _ cat _ = allRules pinfo ! ruleid
        return (cat,Active [] EmptyRange 0 0 (emptyChildren ruleid pinfo))

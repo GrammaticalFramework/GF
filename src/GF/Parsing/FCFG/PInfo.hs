@@ -87,18 +87,18 @@ buildFCFPInfo lexer grammar =
 	     }
 
     where allrules = listArray (0,length grammar-1) grammar
-	  topdownrules  = accumAssoc id [(cat,  ruleid) | (ruleid, FRule (Abs cat _ _)  _) <- assocs allrules]
-	  -- emptyrules    = [ruleid | (ruleid, FRule (Abs _ [] _) _) <- assocs allrules]
-	  epsilonrules  = [ ruleid | (ruleid, FRule _ lins) <- assocs allrules,
+	  topdownrules  = accumAssoc id [(cat,  ruleid) | (ruleid, FRule _ _ cat _) <- assocs allrules]
+	  -- emptyrules    = [ruleid | (ruleid, FRule _ [] _ _) <- assocs allrules]
+	  epsilonrules  = [ ruleid | (ruleid, FRule _ _ _ lins) <- assocs allrules,
                             not (inRange (bounds (lins ! 0)) 0) ]
 	  leftcorncats  = accumAssoc id
 			  [ (fromJust (getLeftCornerCat lins), ruleid) | 
-			    (ruleid, FRule _ lins) <- assocs allrules, isJust (getLeftCornerCat lins) ]
+			    (ruleid, FRule _ _ _ lins) <- assocs allrules, isJust (getLeftCornerCat lins) ]
 	  leftcorntoks  = accumAssoc id 
 			  [ (fromJust (getLeftCornerTok lins), ruleid) | 
-			    (ruleid, FRule _ lins) <- assocs allrules, isJust (getLeftCornerTok lins) ]
+			    (ruleid, FRule _ _ _ lins) <- assocs allrules, isJust (getLeftCornerTok lins) ]
 	  grammarcats   = aElems topdownrules
-	  grammartoks   = nubsort [t | (FRule _ lins) <- grammar, lin <- elems lins, FSymTok t <- elems lin]
+	  grammartoks   = nubsort [t | (FRule _ _ _ lins) <- grammar, lin <- elems lins, FSymTok t <- elems lin]
 
 ----------------------------------------------------------------------
 -- pretty-printing of statistics
