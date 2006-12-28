@@ -3,6 +3,8 @@ include numerals.Abs.gf ;
 -- Thai transliteration, produces thaiU.gf by GF/Text/Thai.hs
 -- AR 28/12/2006
 
+flags coding=utf8 ;
+
 lincat 
   Numeral    = {s : Str} ;
   Digit      = {s : DForm => Str} ;
@@ -18,10 +20,10 @@ lin
 
   n2 = mkNum  "s-Og" "y'i:E" "s-Og" ;
   n3 = regNum "s-a:m" ;
-  n4 = regNum "s-i:E" ;
-  n5 = regNum "ha:E" ; 
+  n4 = regNum "s-i:E" ;  -- E = E48 '
+  n5 = regNum "hTa:" ;   -- T = E49 9
   n6 = regNum "ho?k" ;
-  n7 = regNum "ecMd'" ;
+  n7 = regNum "ecMd'" ;  -- M = E47 w
   n8 = regNum "e:pd'" ; 
   n9 = regNum "eka:" ;
 
@@ -63,5 +65,5 @@ oper
 
 
   sip  = table {Unit => "s'ib"  ; Thousand => "hmv:En"} ;
-  roy  = table {Unit => "rEOy'" ; Thousand => "se:n"} ;
+  roy  = table {Unit => "rTOy'" ; Thousand => "se:n"} ;
   phan = table {Unit => []      ; Thousand => "p2an"} ;

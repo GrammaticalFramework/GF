@@ -1,6 +1,7 @@
 include numerals.Abs.gf ;
 
--- Thai UTF8, produced from thai.gf by GF/Text/Thai.hs.  AR 28/12/2006
+-- Thai transliteration, produces thaiU.gf by GF/Text/Thai.hs
+-- AR 28/12/2006
 
 flags coding=utf8 ;
 
@@ -19,10 +20,10 @@ lin
 
   n2 = mkNum  "สอง" "ยี่" "สอง" ;
   n3 = regNum "สาม" ;
-  n4 = regNum "สี่" ;
-  n5 = regNum "หา่" ; 
+  n4 = regNum "สี่" ;  -- E = E48 '
+  n5 = regNum "ห้า" ;   -- T = E49 9
   n6 = regNum "หก" ;
-  n7 = regNum "เจ็ด" ;
+  n7 = regNum "เจ็ด" ;  -- M = E47 w
   n8 = regNum "แปด" ; 
   n9 = regNum "เกา" ;
 
@@ -64,5 +65,5 @@ oper
 
 
   sip  = table {Unit => "ศิบ"  ; Thousand => "หมื่น"} ;
-  roy  = table {Unit => "ร่อย" ; Thousand => "ซแน"} ;
+  roy  = table {Unit => "ร้อย" ; Thousand => "ซแน"} ;
   phan = table {Unit => []      ; Thousand => "พะน"} ;

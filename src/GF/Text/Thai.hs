@@ -102,12 +102,13 @@ thaiFinalMap = Map.fromList $ zip allThaiTrans finals
 
 thaiTable :: String
 thaiTable = unlines [
+  "\t" ++ 
   hex c ++ "\t" ++ 
   encodeUTF8 (showThai s) ++ "\t" ++ 
   s ++ "\t" ++ 
   pronThai s ++ "\t" ++
   [f] ++ "\t" ++
-  [q]
+  [q] ++ "\t"
     |
       (c,q,f,s) <- zip4 allThaiCodes heights finals allThaiTrans
   ]
@@ -119,7 +120,7 @@ showThai s = case s of
 
 pronThai s = case s of
   [c,p]
-    | isUpper c && isDigit p -> show p
+    | isUpper c && isDigit p -> [p]
     | isDigit p   -> c:"h"
     | p==':'      -> c:[c]
     | elem p "%&" -> c:"y"
