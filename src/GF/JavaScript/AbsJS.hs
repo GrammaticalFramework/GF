@@ -36,7 +36,7 @@ data Expr =
  | EIndex Expr Expr
  | ECall Expr [Expr]
  | EVar Ident
- | EInt Integer
+ | EInt Int
  | EDbl Double
  | EStr String
  | ETrue
