@@ -53,21 +53,18 @@ term2js l t = f t
       C.R xs           -> new "Arr" (map f xs)
       C.P x y          -> JS.ECall (JS.EMember (f x) (JS.Ident "sel")) [f y]
       C.S xs           -> new "Seq" (map f xs)
-      C.K t            -> tokn2js t
+      C.KS s           -> new "Str" [JS.EStr s]
+      C.KP ss vs       -> new "Seq" (map JS.EStr ss) -- FIXME
       C.V i            -> JS.EIndex (JS.EVar children) (JS.EInt i)
       C.C i            -> new "Int" [JS.EInt i]
       C.F (C.CId f)    -> JS.ECall (JS.EMember (JS.EVar l) (JS.Ident "rule")) [JS.EStr f, JS.EVar children]
       C.FV xs          -> new "Variants" (map f xs)
-      C.W str x        -> new "Suffix" [JS.EStr str, f x]
+      C.W str ss       -> new "Suffix" (JS.EStr str : map JS.EStr ss)
       C.RP x y         -> new "Rp" [f x, f y]
       C.TM             -> new "Meta" []
 
 argIdent :: Integer -> JS.Ident
 argIdent n = JS.Ident ("x" ++ show n)
-
-tokn2js :: C.Tokn -> JS.Expr
-tokn2js (C.KS s) = new "Str" [JS.EStr s]
-tokn2js (C.KP ss vs) = new "Seq" (map JS.EStr ss) -- FIXME
 
 children :: JS.Ident
 children = JS.Ident "cs"
