@@ -11,27 +11,32 @@
 module GF.Speech.GrammarToVoiceXML (grammar2vxml) where
 
 import qualified GF.Canon.GFC as GFC
-import GF.Canon.CMacros (noMark)
+import GF.Canon.AbsGFC (Term)
+import GF.Canon.PrintGFC (printTree)
+import GF.Canon.CMacros (noMark, strsFromTerm)
 import GF.Canon.Unlex (formatAsText)
-import GF.Compile.ShellState (StateGrammar,stateGrammarST,cncId)
-import GF.Grammar.Macros hiding (assign)
+import GF.Compile.ShellState (StateGrammar,stateGrammarST,cncId,grammar)
+import GF.Data.Str (sstrV)
+import GF.Grammar.Macros hiding (assign,strsFromTerm)
 import GF.Grammar.Grammar (Fun)
 import GF.Grammar.Values (Tree)
 import GF.UseGrammar.GetTree (string2treeErr)
 import GF.UseGrammar.Linear (linTree2strings)
 
+import GF.Infra.Ident
 import GF.Infra.Modules
 import GF.Data.Operations
 
 import GF.Data.XML
 
+import Control.Monad (liftM)
 import Data.List (isPrefixOf, find, intersperse)
 import Data.Maybe (fromMaybe)
 
 import Debug.Trace
 
 -- | the main function
-grammar2vxml :: String -> StateGrammar -> String
+grammar2vxml :: Ident -> StateGrammar -> String
 grammar2vxml startcat gr = showsXMLDoc (skel2vxml name language startcat gr' qs) ""
     where (name, gr') = vSkeleton (stateGrammarST gr)
           qs = catQuestions gr (map fst gr')
@@ -40,25 +45,23 @@ grammar2vxml startcat gr = showsXMLDoc (skel2vxml name language startcat gr' qs)
 -- * VSkeleton: a simple description of the abstract syntax.
 --
 
-type VIdent = String
+type VSkeleton = [(Ident, [(Ident, [Ident])])]
+type VIdent = Ident
 
-type VSkeleton = [(VIdent, [(VIdent, [VIdent])])]
-
-vSkeleton :: GFC.CanonGrammar -> (String,VSkeleton)
+vSkeleton :: GFC.CanonGrammar -> (VIdent,VSkeleton)
 vSkeleton gr = (name,collectR rules [(c,[]) | c <- cats]) where
   collectR rr hh =
    case rr of
      (fun,typ):rs -> case catSkeleton typ of
         Ok (cats,cat) -> 
-             collectR rs (updateSkeleton (symid (snd cat)) hh (fun,
-	                                                    map (symid . snd) cats))
+             collectR rs (updateSkeleton (snd cat) hh (fun, map snd cats))
         _ -> collectR rs hh
      _ -> hh
-  cats =  [symid cat | (cat,GFC.AbsCat _ _) <- defs]
-  rules = [(symid fun, typ) | (fun,GFC.AbsFun typ _) <- defs]
+  cats =  [cat | (cat,GFC.AbsCat _ _) <- defs]
+  rules = [(fun, typ) | (fun,GFC.AbsFun typ _) <- defs]
 
   defs = concat [tree2list (jments m) | im@(_,ModMod m) <- modules gr, isModAbs m]
-  name = ifNull "UnknownModule" (symid . last) [n | (n,ModMod m) <- modules gr, isModAbs m]
+  name = ifNull (error "No abstract module") last [n | (n,ModMod m) <- modules gr, isModAbs m]
 
 updateSkeleton :: VIdent -> VSkeleton -> (VIdent, [VIdent]) -> VSkeleton
 updateSkeleton cat skel rule =
@@ -75,12 +78,23 @@ type CatQuestions = [(VIdent,String)]
 catQuestions :: StateGrammar -> [VIdent] -> CatQuestions
 catQuestions gr cats = [(c,catQuestion gr c) | c <- cats]
 
-catQuestion :: StateGrammar -> VIdent -> String
-catQuestion gr cat = err errHandler id (lin gr fun)
-  where fun = "quest_" ++ cat
-        errHandler e = trace ("GrammarToVoiceXML: " ++ e) fun
-        -- FIXME: use some better warning facility
+catQuestion :: StateGrammar -> Ident -> String
+catQuestion gr cat = err errHandler id (getPrintname gr cat >>= term2string)
+  where -- FIXME: use some better warning facility
+        errHandler e = trace ("GrammarToVoiceXML: " ++ e) ("quest_"++prIdent cat)
+        term2string = liftM sstrV . strsFromTerm
 
+getPrintname :: StateGrammar -> Ident -> Err Term
+getPrintname gr cat = 
+    do m <- lookupModMod (grammar gr) (cncId gr)
+       i <- lookupInfo m cat
+       case i of
+         GFC.CncCat _ _ p -> return p
+         _ -> fail $ "getPrintname " ++ prIdent cat
+                      ++ ": Expected CncCat, got " ++ show i
+
+
+{-
 lin :: StateGrammar -> String -> Err String
 lin gr fun = do
              tree <- string2treeErr gr fun
@@ -91,20 +105,21 @@ lin gr fun = do
   where c = cncId gr
         g = stateGrammarST gr
         unt = formatAsText 
+-}
 
 getCatQuestion :: VIdent -> CatQuestions -> String
 getCatQuestion c qs = 
-    fromMaybe (error "No question for category " ++ c) (lookup c qs)
+    fromMaybe (error "No question for category " ++ prIdent c) (lookup c qs)
 
 --
 -- * Generate VoiceXML
 --
 
-skel2vxml :: String -> String -> VIdent -> VSkeleton -> CatQuestions -> XML
+skel2vxml :: VIdent -> String -> VIdent -> VSkeleton -> CatQuestions -> XML
 skel2vxml name language start skel qs = 
     vxml language ([startForm] ++ concatMap (uncurry (catForms gr qs)) skel)
   where 
-  gr = grammarURI name
+  gr = grammarURI (prIdent name)
   startForm = Tag "form" [] [subdialog "sub" [("src", "#"++catFormId start)] []]
 
 grammarURI :: String -> String
@@ -113,42 +128,58 @@ grammarURI name = name ++ ".grxml"
 
 catForms :: String -> CatQuestions -> VIdent -> [(VIdent, [VIdent])] -> [XML]
 catForms gr qs cat fs = 
-    comments [cat ++ " category."]
+    comments [prIdent cat ++ " category."]
     ++ [cat2form gr qs cat fs] 
 
 cat2form :: String -> CatQuestions -> VIdent -> [(VIdent, [VIdent])] -> XML
 cat2form gr qs cat fs = 
   form (catFormId cat) $ 
       [var "value" (Just "{ name : '?' }"), 
-       var "update" Nothing, 
+       var "callbacks" Nothing, 
        blockCond "value.name != '?'" [assign (catFieldId cat) "value"],
+       block [doCallback "entered" cat [return_ [catFieldId cat]] []],
        field (catFieldId cat) [] 
            [promptString (getCatQuestion cat qs), 
-            grammar (gr++"#"++catFormId cat),
+            vxmlGrammar (gr++"#"++catFormId cat),
             nomatch [Data "I didn't understand you.", reprompt],
-            help [Data ("help_"++cat)],
-            filled [] [if_else (catFieldId cat ++ ".name == '?'") [reprompt] feedback]]
+            help [Data (mkHelpText cat)],
+            filled [] [if_else (catFieldId cat ++ ".name == '?'") 
+                       [reprompt] 
+                       [doCallback "refined" cat [return_ [catFieldId cat]] []]]
+           ]
       ]
      ++ concatMap (uncurry (fun2sub gr cat)) fs
-  ++ [block [return_ [catFieldId cat]]]
-  where feedback = [if_ ("typeof update != 'undefined' && !update("++string cat++","++ catFieldId cat ++ ")") [return_ [catFieldId cat]]]
+     ++ [block [doCallback "done" cat [return_ [catFieldId cat]] [return_ [catFieldId cat]]]]
+
+mkHelpText :: VIdent -> String
+mkHelpText cat = "help_"++ prIdent cat
 
 fun2sub :: String -> VIdent -> VIdent -> [VIdent] -> [XML]
-fun2sub gr cat fun args = comments [fun ++ " : (" ++ concat (intersperse ", " args) ++ ") " ++ cat] ++ ss
+fun2sub gr cat fun args = 
+    comments [prIdent fun ++ " : (" 
+              ++ concat (intersperse ", " (map prIdent args))
+              ++ ") " ++ prIdent cat] ++ ss
   where 
   argNames = zip ["arg"++show n | n <- [0..]] args
   ss = map (uncurry mkSub) argNames
-  mkSub a t = subdialog s [("src","#"++catFormId t),("cond",catFieldId cat++".name == "++string fun)] 
+  mkSub a t = subdialog s [("src","#"++catFormId t),
+                           ("cond",catFieldId cat++".name == "++string (prIdent fun))] 
               [param "value" (catFieldId cat++"."++a),
-               param "update" "update",
+               param "callbacks" "callbacks",
                filled [] [assign (catFieldId cat++"."++a) (s++"."++catFieldId t)]]
-    where s = fun ++ "_" ++ a
+    where s = prIdent fun ++ "_" ++ a
+
+doCallback :: String -> VIdent -> [XML] -> [XML] -> XML
+doCallback f cat i e = 
+ if_else ("callbacks && " ++ cf ++ " && !" ++ cf ++ "("++string (prIdent cat)++","++ catFieldId cat ++ ")") 
+         i e
+  where cf = "callbacks." ++ f
 
 catFormId :: VIdent -> String
-catFormId = (++ "_cat")
+catFormId c = prIdent c ++ "_cat"
 
 catFieldId :: VIdent -> String
-catFieldId = (++ "_field")
+catFieldId c = prIdent c ++ "_field"
 
 --
 -- * VoiceXML stuff
@@ -171,8 +202,8 @@ subdialog name attrs = Tag "subdialog" ([("name",name)]++attrs)
 filled :: [(String,String)] -> [XML] -> XML
 filled = Tag "filled"
 
-grammar :: String -> XML
-grammar uri = Tag "grammar" [("src",uri)] []
+vxmlGrammar :: String -> XML
+vxmlGrammar uri = Tag "grammar" [("src",uri)] []
 
 prompt :: [XML] -> XML
 prompt = Tag "prompt" []
@@ -243,26 +274,24 @@ string s = "'" ++ concatMap esc s ++ "'"
   where esc '\'' = "\\'"
         esc c    = [c]
 
+{-
 --
 -- * List stuff
 --
 
 isListCat :: (VIdent, [(VIdent, [VIdent])]) -> Bool
-isListCat (cat,rules) = "List" `isPrefixOf` cat && length rules == 2
+isListCat (cat,rules) = "List" `isPrefixOf` prIdent cat && length rules == 2
 		    && ("Base"++c) `elem` fs && ("Cons"++c) `elem` fs
-    where c = elemCat cat
-	  fs = map fst rules
-
--- | Gets the element category of a list category.
-elemCat :: VIdent -> VIdent
-elemCat = drop 4
+    where c = drop 4 (prIdent cat)
+	  fs = map (prIdent . fst) rules
 
 isBaseFun :: VIdent -> Bool
-isBaseFun f = "Base" `isPrefixOf` f
+isBaseFun f = "Base" `isPrefixOf` prIdent f
 
 isConsFun :: VIdent -> Bool
-isConsFun f = "Cons" `isPrefixOf` f
+isConsFun f = "Cons" `isPrefixOf` prIdent f
 
 baseSize :: (VIdent, [(VIdent, [VIdent])]) -> Int
 baseSize (_,rules) = length bs
-    where Just (_,bs) = find (("Base" `isPrefixOf`) . fst) rules
+    where Just (_,bs) = find (isBaseFun . fst) rules
+-}
