@@ -22,7 +22,7 @@ import Data.List
 
 
 mkThai :: String -> String
-mkThai = unwords . map mkThaiWord . words
+mkThai = concat . map mkThaiWord . words
 
 type ThaiChar = Char
 
@@ -35,6 +35,15 @@ mkThaiChar c = maybe 0 id $ Map.lookup c thaiMap
 thaiMap :: Map.Map String Int
 thaiMap = Map.fromList $ zip allThaiTrans allThaiCodes
 
+-- convert all string literals in a text
+
+thaiStrings :: String -> String
+thaiStrings s = case s of
+  '"':cs -> let (t,_:r) = span (/='"') cs in
+            '"':mkThai t ++ "\"" ++ thaiStrings r
+  c:cs -> c:thaiStrings cs
+  _ -> s
+
 
 -- each character is either [letter] or [letter+nonletter]
 
@@ -42,6 +51,7 @@ unchar :: String -> [String]
 unchar s = case s of
   c:d:cs 
    | isAlpha d -> [c]   : unchar (d:cs)
+   | d == '?'  ->         unchar cs -- use "o?" to represent implicit 'o'
    | otherwise -> [c,d] : unchar cs
   [_]          -> [s]
   _            -> []
@@ -52,7 +62,9 @@ allThaiTrans = words $
   "t1 t2 t3 n  d' t' t4 t5 t6 n  b  p  p1 f  p2 f' " ++
   "p3 m  y' r  -  l  -  w  s' r' s- h  l' O  h' -  " ++
   "a  a. a: a+ i  i: v  v: u  u: -  -  -  -  -  -  " ++
-  "e  e: o: a% a& "
+  "e  e: o: a% a& L  R  M  E  T  -  -  -  -  -  -  " ++
+  "N0 N1 N2 N3 N4 N5 N6 N7 N8 N9 -  -  -  -  -  -  "
+
 
 allThaiCodes :: [Int]
 allThaiCodes = [0x0e00 .. 0x0e7f]
@@ -72,6 +84,12 @@ testThai :: String -> IO ()
 testThai s = do
   putStrLn $ encodeUTF8 $ mkThai s
   putStrLn $ unwords $ map mkThaiPron $ words s
+
+thaiFile :: FilePath -> Maybe FilePath -> IO ()
+thaiFile f mo = do
+  s <- readFile f
+  let put = maybe putStr writeFile mo
+  put $ encodeUTF8 $ thaiStrings s
 
 mkThaiPron = concat . render . unchar where
   render s = case s of
@@ -101,12 +119,13 @@ showThai s = case s of
 
 pronThai s = case s of
   [c,p]
+    | isUpper c && isDigit p -> show p
     | isDigit p   -> c:"h"
     | p==':'      -> c:[c]
     | elem p "%&" -> c:"y"
     | p=='+'      -> c:"m"
     | otherwise   -> [c]
-  "O"             -> ""
+  [c] | isUpper c -> "" --- O
   _ -> s
 
 hex = map hx . reverse . digs where
@@ -116,5 +135,7 @@ hex = map hx . reverse . digs where
 
 heights :: String
 finals  :: String
-heights = " MHHLLLLMHLLLLMMHLLLMMHLLLMMHHLLLLLL-L-LHHHHLML                   "
-finals  = " kkkkkkgt-tt-ntttttntttttnpp--pppmyn-n-wttt-n--                   "
+heights = 
+  " MHHLLLLMHLLLLMMHLLLMMHLLLMMHHLLLLLL-L-LHHHHLML" ++ replicate 99 ' '
+finals  = 
+  " kkkkkkgt-tt-ntttttntttttnpp--pppmyn-n-wttt-n--" ++ replicate 99 ' '
