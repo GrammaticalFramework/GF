@@ -30,13 +30,13 @@ data FSymbol cat tok
   | FSymTok tok
 
 type FCFGrammar cat name tok = [FCFRule cat name tok]
-data FCFRule    cat name tok = FRule (Abstract cat name) (Array FLabel (Array FPointPos (FSymbol cat tok)))
+data FCFRule    cat name tok = FRule name [cat] cat (Array FLabel (Array FPointPos (FSymbol cat tok)))
 
 ------------------------------------------------------------
 -- pretty-printing
 
 instance (Print c, Print t) => Print (FSymbol c t) where
-    prt (FSymCat c l n) = prt c ++ "[" ++ prt n ++ "," ++ prt l ++ "]"
+    prt (FSymCat c l n) = "($" ++ prt n ++ "!" ++ prt l ++ ")"
     prt (FSymTok t)     = simpleShow (prt t)
       where simpleShow str = "\"" ++ concatMap mkEsc str ++ "\""
             mkEsc '\\' = "\\\\"
@@ -47,5 +47,6 @@ instance (Print c, Print t) => Print (FSymbol c t) where
     prtList = prtSep " "
 
 instance (Print c, Print n, Print t) => Print (FCFRule n c t) where
-    prt (FRule abs lins) = prt abs ++ " := \n" ++ prtSep "\n" ["  | "++prtSep " " [prt sym | (_,sym) <- assocs syms] | (_,syms) <- assocs lins]
+    prt (FRule name args res lins) = prt name ++ " : " ++ (if null args then "" else prtSep " " args ++ " -> ") ++ prt res ++
+                                     " =\n   [" ++ prtSep "\n    " ["("++prtSep " " [prt sym | (_,sym) <- assocs syms]++")" | (_,syms) <- assocs lins]++"]"
     prtList = prtSep "\n"

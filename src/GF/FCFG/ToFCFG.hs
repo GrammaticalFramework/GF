@@ -30,8 +30,8 @@ import GF.Infra.Print
 
 
 -- this is the main function used
-printFGrammar :: FCFGrammar FCat Name Token -> String
-printFGrammar = printTree . fgrammar
+printFGrammar :: FCFGrammar FCat FName Token -> String
+printFGrammar = undefined {- printTree . fgrammar
 
 fgrammar :: FCFGrammar FCat Name Token -> F.FGrammar
 fgrammar = F.FGr . map frule
@@ -98,3 +98,4 @@ ident :: Ident -> F.Ident
 ident = F.Ident . prIdent --- is information lost?
 
 constr (C.CIQ m c) = F.CIQ (ident m) (ident c)
+-}

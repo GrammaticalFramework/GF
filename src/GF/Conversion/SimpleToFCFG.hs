@@ -22,11 +22,10 @@ import GF.Infra.Ident
 import Control.Monad
 
 import GF.Formalism.Utilities
-import GF.Formalism.GCFG 
 import GF.Formalism.FCFG
-import GF.Formalism.SimpleGFC 
 import GF.Conversion.Types
-import GF.Canon.AbsGFC(CIdent(..))
+import GF.Canon.GFCC.AbsGFCC
+import GF.Canon.GFCC.DataGFCC
 
 import GF.Data.BacktrackM
 import GF.Data.SortedList
@@ -36,40 +35,47 @@ import qualified Data.Map as Map
 import qualified Data.Set as Set
 import qualified Data.List as List
 import Data.Array
+import Data.Maybe
 
 ----------------------------------------------------------------------
 -- main conversion function
 
-convertGrammar :: SGrammar -> FGrammar
-convertGrammar srules = getFRules (loop frulesEnv)
+convertGrammar :: Grammar -> [(Ident,FGrammar)]
+convertGrammar g@(Grm hdr (Abs abs_defs) cncs) = [(i2i cncname,convert abs_defs conc) | cncname <- cncnames gfcc, conc <- Map.lookup cncname (concretes gfcc)]
   where
-    (srulesMap,frulesEnv) = List.foldl' helper (Map.empty,emptyFRulesEnv) srules
+    gfcc = mkGFCC g
+
+    i2i (CId i) = IC i
+
+    convert :: [AbsDef] -> TermMap -> FGrammar
+    convert abs_defs cnc_defs = getFRules (loop frulesEnv)
       where
-        helper (srulesMap,frulesEnv) rule@(Rule (Abs decl _ _) (Cnc ctype _ _)) = 
-          let srulesMap' = Map.insertWith (++) (decl2cat decl) [rule] srulesMap
-              frulesEnv' = List.foldl' (\env selector -> convertRule selector rule env) 
-                                       frulesEnv
-                                       (mkSingletonSelectors ctype)
-          in srulesMap' `seq` frulesEnv' `seq` (srulesMap',frulesEnv')
+        srules = [(XRule id args res (map findLinType args) (findLinType res) term) | Fun id (Typ args res) exp <- abs_defs, term <- Map.lookup id cnc_defs]
+        
+        findLinType (CId id) = fromJust (Map.lookup (CId ("__"++id)) cnc_defs)
 
-    loop frulesEnv =
-      let (todo, frulesEnv') = takeToDoRules srulesMap frulesEnv
-      in case todo of
-           [] -> frulesEnv'
-           _  -> loop $! List.foldl' (\env (srules,selector) -> 
-                         List.foldl' (\env srule             -> convertRule selector srule env) env srules) frulesEnv' todo
+        (srulesMap,frulesEnv) = List.foldl' helper (Map.empty,emptyFRulesEnv) srules
+           where
+	     helper (srulesMap,frulesEnv) rule@(XRule id abs_args abs_res cnc_args cnc_res term) = 
+	       let srulesMap' = Map.insertWith (++) abs_res [rule] srulesMap
+	           frulesEnv' = List.foldl' (\env selector -> convertRule cnc_defs selector rule env)
+	                                    frulesEnv
+	                                    (mkSingletonSelectors cnc_res)
+               in srulesMap' `seq` frulesEnv' `seq` (srulesMap',frulesEnv')
 
+        loop frulesEnv =
+          let (todo, frulesEnv') = takeToDoRules srulesMap frulesEnv
+          in case todo of
+               [] -> frulesEnv'
+               _  -> loop $! List.foldl' (\env (srules,selector) -> 
+                             List.foldl' (\env srule             -> convertRule cnc_defs selector srule env) env srules) frulesEnv' todo
 
-----------------------------------------------------------------------
--- rule conversion
-
-convertRule :: STermSelector -> SRule -> FRulesEnv -> FRulesEnv
-convertRule selector (Rule (Abs decl decls (Name fun profile)) (Cnc ctype ctypes (Just term))) frulesEnv =
+convertRule :: TermMap -> TermSelector -> XRule -> FRulesEnv -> FRulesEnv
+convertRule cnc_defs selector (XRule fun args cat ctypes ctype term) frulesEnv =
   foldBM addRule
          frulesEnv
-         (convertTerm selector term [Lin emptyPath []])
-         (let cat : args = map decl2cat (decl : decls)
-          in (initialFCat cat, map (\scat -> (initialFCat scat,[])) args, ctype, ctypes))
+         (convertTerm cnc_defs selector term [([],[])])
+         (initialFCat cat, map (\scat -> (initialFCat scat,[])) args, ctype, ctypes)
   where
     addRule linRec (newCat', newArgs', _, _) env0 =
       let (env1, newCat)          = genFCatHead env0 newCat'
@@ -79,7 +85,7 @@ convertRule selector (Rule (Abs decl decls (Name fun profile)) (Cnc ctype ctypes
                                        in case fcat of
                                             FCat _ _ [] _ -> (env ,        args,             all_args)
                                             _             -> (env1,xargs1++args,(idx,xargs1):all_args)) (env1,[],[]) (zip3 newArgs' ctypes [0..])
-          
+
           newLinRec = listArray (0,length linRec-1) [translateLin idxArgs path linRec | path <- case newCat of {FCat _ _ rcs _ -> rcs}]
 
           (_,newProfile) = List.mapAccumL accumProf 0 newArgs'
@@ -88,16 +94,15 @@ convertRule selector (Rule (Abs decl decls (Name fun profile)) (Cnc ctype ctypes
               accumProf nr (_            ,xpaths) = (nr+cnt+1, Unify [nr..nr+cnt])
                 where cnt = length xpaths
 
-          rule = FRule (Abs newCat newArgs (Name fun newProfile)) newLinRec
+          rule = FRule (Name fun newProfile) newArgs newCat newLinRec
       in addFCatRule env2 rule
-convertRule selector _ frulesEnv = frulesEnv
 
 translateLin idxArgs lbl' []                    = array (0,-1) []
-translateLin idxArgs lbl' (Lin lbl syms : lins)
+translateLin idxArgs lbl' ((lbl,syms) : lins)
   | lbl' == lbl = listArray (0,length syms-1) (map instSym syms)
   | otherwise   = translateLin idxArgs lbl' lins
   where
-    instSym = symbol (\(_, lbl, nr, xnr) -> instCat lbl nr xnr 0 idxArgs) FSymTok
+    instSym = symbol (\(lbl, nr, xnr) -> instCat lbl nr xnr 0 idxArgs) FSymTok
     instCat lbl nr xnr nr' ((idx,xargs):idxArgs)
       | nr == idx = let arg@(FCat _ _ rcs _) = xargs !! xnr
                     in FSymCat arg (index lbl rcs 0) (nr'+xnr)
@@ -107,139 +112,115 @@ translateLin idxArgs lbl' (Lin lbl syms : lins)
       | lbl' == lbl = idx
       | otherwise   = index lbl' lbls $! (idx+1)
 
+
 ----------------------------------------------------------------------
 -- term conversion
 
 type CnvMonad a = BacktrackM Env a
 
-type Env    = (FCat, [(FCat,[SPath])], SLinType, [SLinType])
-type LinRec = [Lin SCat SPath Token]
+type Env     = (FCat, [(FCat,[FPath])], Term, [Term])
+type LinRec  = [(FPath, [Symbol (FPath, FIndex, Int) Token])]
 
-data Lin cat lbl tok = Lin lbl [Symbol (cat, lbl, Int, Int) tok]
+type TermMap = Map.Map CId Term
+
+convertTerm :: TermMap -> TermSelector -> Term -> LinRec -> CnvMonad LinRec
+convertTerm cnc_defs selector (V nr)       ((lbl_path,lin) : lins) = convertArg selector nr []    lbl_path lin lins
+convertTerm cnc_defs selector (C nr)       ((lbl_path,lin) : lins) = convertCon selector nr       lbl_path lin lins
+convertTerm cnc_defs selector (R record)   ((lbl_path,lin) : lins) = convertRec cnc_defs selector 0 record lbl_path lin lins
+convertTerm cnc_defs selector (P term sel)                   lins  = do nr <- evalTerm cnc_defs [] sel
+                                                                        convertTerm cnc_defs (TuplePrj nr selector) term lins
+convertTerm cnc_defs selector (FV vars)                      lins  = do term <- member vars
+                                                                        convertTerm cnc_defs selector term lins
+convertTerm cnc_defs selector (S ts)       ((lbl_path,lin) : lins) = do projectHead lbl_path
+                                                                        foldM (\lins t -> convertTerm cnc_defs selector t lins) ((lbl_path,lin) : lins) (reverse ts)
+convertTerm cnc_defs selector (KS str)     ((lbl_path,lin) : lins) = do projectHead lbl_path
+                                                                        return ((lbl_path,Tok str : lin) : lins)
+convertTerm cnc_defs selector (KP (str:_)_)((lbl_path,lin) : lins) = do projectHead lbl_path
+                                                                        return ((lbl_path,Tok str : lin) : lins)
+convertTerm cnc_defs selector (RP alias _)                   lins  = convertTerm cnc_defs selector alias lins
+convertTerm cnc_defs selector (F id)                         lins  = do term <- Map.lookup id cnc_defs
+                                                                        convertTerm cnc_defs selector term lins
+convertTerm cnc_defs selector (W s ss)     ((lbl_path,lin) : lins) = convertRec cnc_defs selector 0 [KS (s ++ s1) | s1 <- ss] lbl_path lin lins
+convertTerm cnc_defs selector x lins  = error ("convertTerm ("++show x++")")
 
 
-convertTerm :: STermSelector -> STerm -> LinRec -> CnvMonad LinRec
-convertTerm selector (Arg nr cat path) (Lin lbl_path lin : lins) = convertArg selector nr cat path lbl_path lin lins
-convertTerm selector (con   :^   args) (Lin lbl_path lin : lins) = convertCon selector con args lbl_path lin lins
-convertTerm selector (Rec      record) (Lin lbl_path lin : lins) = convertRec selector record lbl_path lin lins
-convertTerm selector (term  :.    lbl)                     lins  = convertTerm (RecPrj lbl selector) term lins
-convertTerm selector (Tbl       table) (Lin lbl_path lin : lins) = convertTbl selector table  lbl_path lin lins
-convertTerm selector (term  :!    sel)                     lins  = do sel <- evalTerm sel
-                                                                      convertTerm (TblPrj sel selector) term lins
-convertTerm selector (Variants   vars)                     lins  = do term <- member vars
-                                                                      convertTerm selector term lins
-convertTerm selector (t1    :++    t2)                     lins  = do lins <- convertTerm selector t2 lins
-                                                                      lins <- convertTerm selector t1 lins
-                                                                      return lins
-convertTerm selector (Token       str) (Lin lbl_path lin : lins) = do projectHead lbl_path
-                                                                      return (Lin lbl_path (Tok str : lin) : lins)
-convertTerm selector (Empty          ) (Lin lbl_path lin : lins) = do projectHead lbl_path
-                                                                      return (Lin lbl_path lin : lins)
-
-convertArg (RecSel record)  nr cat path lbl_path lin lins =
-  foldM (\lins (lbl,  selector) -> convertArg selector nr cat (path ++. lbl)  (lbl_path ++.  lbl) lin lins) lins record
-convertArg (TblSel cases)   nr cat path lbl_path lin lins =
-  foldM (\lins (term, selector) -> convertArg selector nr cat (path ++! term) (lbl_path ++! term) lin lins) lins cases
-convertArg (RecPrj lbl  selector) nr cat path lbl_path lin lins = 
-  convertArg selector nr cat (path ++. lbl ) lbl_path lin lins
-convertArg (TblPrj term selector) nr cat path lbl_path lin lins = 
-  convertArg selector nr cat (path ++! term) lbl_path lin lins
-convertArg (ConSel terms)   nr cat path lbl_path lin lins = do
-  sel <- member terms
-  restrictHead   lbl_path sel
-  restrictArg nr path sel
+convertArg (TupleSel record)  nr path lbl_path lin lins =
+  foldM (\lins (lbl,  selector) -> convertArg selector nr (lbl:path)  (lbl:lbl_path) lin lins) lins record
+convertArg (TuplePrj lbl selector) nr path lbl_path lin lins = 
+  convertArg selector nr (lbl:path) lbl_path lin lins
+convertArg (ConSel indices) nr path lbl_path lin lins = do
+  index <- member indices
+  restrictHead lbl_path index
+  restrictArg nr path index
   return lins
-convertArg StrSel          nr cat path lbl_path lin lins = do
+convertArg StrSel nr path lbl_path lin lins = do
   projectHead lbl_path
   xnr <- projectArg nr path
-  return (Lin lbl_path (Cat (cat, path, nr, xnr) : lin) : lins)
+  return ((lbl_path, Cat (path, nr, xnr) : lin) : lins)
 
-convertCon (ConSel terms) con args lbl_path lin lins = do
-  args <- mapM evalTerm args
-  let term = con :^ args
-  guard (term `elem` terms)
-  restrictHead lbl_path term
+convertCon (ConSel indices) index lbl_path lin lins = do
+  guard (index `elem` indices)
+  restrictHead lbl_path index
   return lins
 
-convertRec selector                 []                    lbl_path lin lins = return lins
-convertRec selector@(RecSel fields) ((label, val):record) lbl_path lin lins = select fields
+convertRec cnc_defs selector                   index []           lbl_path lin lins = return lins
+convertRec cnc_defs selector@(TupleSel fields) index (val:record) lbl_path lin lins = select fields
   where
-    select []                          = convertRec selector record lbl_path lin lins
-    select ((label',sub_sel) : fields)
-      | label == label'                = do lins <- convertTerm sub_sel val (Lin (lbl_path ++. label) lin : lins)
-                                            convertRec selector record lbl_path lin lins
+    select []                          = convertRec cnc_defs selector (index+1) record lbl_path lin lins
+    select ((index',sub_sel) : fields)
+      | index == index'                = do lins <- convertTerm cnc_defs sub_sel val ((index:lbl_path,lin) : lins)
+                                            convertRec cnc_defs selector (index+1) record lbl_path lin lins
       | otherwise                      = select fields
-convertRec (RecPrj label sub_sel) record lbl_path lin lins = do
-  (label',val) <- member record
-  guard (label==label')
-  convertTerm sub_sel val (Lin lbl_path lin : lins)
-
-convertTbl selector                []                  lbl_path lin lins = return lins
-convertTbl selector@(TblSel cases) ((term, val):table) lbl_path lin lins = case selector of { TblSel cases -> select cases }
-  where
-    select []                          = convertTbl selector table lbl_path lin lins
-    select ((term',sub_sel)  : cases)
-      | term == term'                  = do lins <- convertTerm sub_sel val (Lin (lbl_path ++! term) lin : lins)
-                                            convertTbl selector table lbl_path lin lins
-      | otherwise                      = select cases
-convertTbl (TblPrj term sub_sel) table lbl_path lin lins = do
-  (term',val) <- member table
-  guard (term==term')
-  convertTerm sub_sel val (Lin lbl_path lin : lins)
+convertRec cnc_defs (TuplePrj index' sub_sel) index record lbl_path lin lins = do
+  convertTerm cnc_defs sub_sel (record !! (fromIntegral (index'-index))) ((lbl_path,lin) : lins)
 
 
 ------------------------------------------------------------
 -- eval a term to ground terms
 
-evalTerm :: STerm -> CnvMonad STerm
-evalTerm arg@(Arg nr _ path) = do ctype <- readArgCType nr
-	                          unifyPType arg $ lintypeFollowPath path ctype
-evalTerm (con :^ terms)      = do terms <- mapM evalTerm terms
-                                  return (con :^ terms)
-evalTerm (Rec record)        = do record <- mapM evalAssign record
-                                  return (Rec record)
-evalTerm (term :. lbl)       = do term <- evalTerm term
-                                  evalTerm (term +. lbl)
-evalTerm (Tbl table)         = do table <- mapM evalCase table
-                                  return (Tbl table)
-evalTerm (term :! sel)       = do sel  <- evalTerm sel
-	                          evalTerm (term +! sel)
-evalTerm (Variants terms)    = member terms >>= evalTerm
-evalTerm (t1 :++ t2)         = do t1 <- evalTerm t1
-                                  t2 <- evalTerm t2
-                                  return (t1 :++ t2)
-evalTerm (Token str)         = do return (Token str)
-evalTerm Empty               = do return Empty
+evalTerm :: TermMap -> FPath -> Term -> CnvMonad FIndex
+evalTerm cnc_defs path (V nr)       = do term <- readArgCType nr
+                                         unifyPType nr (reverse path) (selectTerm path term)
+evalTerm cnc_defs path (C nr)       = return nr
+evalTerm cnc_defs path (R record)   = case path of
+                                        (index:path) -> evalTerm cnc_defs path (record !! (fromIntegral index))
+evalTerm cnc_defs path (P term sel) = do index <- evalTerm cnc_defs [] sel
+                                         evalTerm cnc_defs (index:path) term
+evalTerm cnc_defs path (FV terms)   = member terms >>= evalTerm cnc_defs path
+evalTerm cnc_defs path (RP alias _) = evalTerm cnc_defs path alias
+evalTerm cnc_defs path (F id)       = do term <- Map.lookup id cnc_defs
+                                         evalTerm cnc_defs path term
+evalTerm cnc_defs path x = error ("evalTerm ("++show x++")")
 
-evalAssign :: (Label, STerm) -> CnvMonad (Label, STerm)
-evalAssign (lbl, term) = liftM ((,) lbl) $ evalTerm term
-
-evalCase :: (STerm, STerm) -> CnvMonad (STerm, STerm)
-evalCase (pat, term) = liftM2 (,) (evalTerm pat) (evalTerm term)
-
-unifyPType :: STerm -> SLinType -> CnvMonad STerm
-unifyPType arg (RecT prec) = 
-    liftM Rec $
-    sequence [ liftM ((,) lbl) $
-	       unifyPType (arg +. lbl) ptype |
-	       (lbl, ptype) <- prec ]
-unifyPType (Arg nr _ path) (ConT terms) = 
+unifyPType :: FIndex -> FPath -> Term -> CnvMonad FIndex
+unifyPType nr path (C max_index) =
     do (_, args, _, _) <- readState
-       let (FCat _ _ _ tcs,_) = args !! nr
+       let (FCat _ _ _ tcs,_) = args !! (fromIntegral nr)
        case lookup path tcs of
-         Just term -> return term
-         Nothing   -> do term <- member terms
-		         restrictArg nr path term
-		         return term
+         Just index -> return index
+         Nothing    -> do index <- member [0..max_index-1]
+		          restrictArg nr path index
+		          return index
+unifyPType nr path (RP alias _) = unifyPType nr path alias
 
+selectTerm :: FPath -> Term -> Term
+selectTerm []           term        = term
+selectTerm (index:path) (R  record) = selectTerm path (record !! fromIntegral index)
+selectTerm path         (RP _ term) = selectTerm path term
 
 ----------------------------------------------------------------------
 -- FRulesEnv
 
 data FRulesEnv = FRulesEnv {-# UNPACK #-} !Int FCatSet [FRule]
 
-type SRulesMap = Map.Map SCat [SRule]
-type FCatSet = Map.Map SCat (Map.Map [SPath] (Map.Map [(SPath,STerm)] (Either FCat FCat)))
+type XRulesMap = Map.Map CId [XRule]
+data XRule     = XRule CId     {- function -}
+                       [CId]   {- argument types -}
+                       CId     {- result   type  -}
+                       [Term]  {- argument lin-types representation -}
+                       Term    {- result   lin-type  representation -}
+                       Term    {- body -}
+type FCatSet   = Map.Map CId (Map.Map [FPath] (Map.Map [(FPath,FIndex)] (Either FCat FCat)))
 
 
 emptyFRulesEnv = FRulesEnv 0 (ins fcatString (ins fcatInt (ins fcatFloat Map.empty))) []
@@ -266,7 +247,7 @@ genFCatHead env@(FRulesEnv last_id fcatSet rules) m1@(FCat _ cat rcs tcs) =
         tmap_s = Map.singleton tcs x_fcat
         rmap_s = Map.singleton rcs tmap_s
 
-genFCatArg :: SLinType -> FRulesEnv -> FCat -> (FRulesEnv, FCat)
+genFCatArg :: Term -> FRulesEnv -> FCat -> (FRulesEnv, FCat)
 genFCatArg ctype env@(FRulesEnv last_id fcatSet rules) m1@(FCat _ cat rcs tcs) =
   case Map.lookup cat fcatSet >>= Map.lookup rcs of
     Just tmap -> case Map.lookup tcs tmap of
@@ -281,13 +262,13 @@ genFCatArg ctype env@(FRulesEnv last_id fcatSet rules) m1@(FCat _ cat rcs tcs) =
           (x_fcat,last_id1,tmap1,rules1)
                   = foldBM (\tcs st (x_fcat,last_id,tmap,rules) ->
                                    let (last_id1,tmap1,fcat_arg) = addArg tcs last_id tmap
-                                       rule = FRule (Abs fcat  [fcat_arg] coercionName)
+                                       rule = FRule (Name (CId "_") [Unify [0]]) [fcat_arg] fcat
                                                     (listArray (0,length rcs-1) [listArray (0,0) [FSymCat fcat_arg lbl 0] | lbl <- [0..length rcs-1]])
                                    in if st
                                         then (Right fcat,last_id1,tmap1,rule:rules)
                                         else (x_fcat,    last_id,  tmap,     rules))
                            (Left fcat,next_id,Map.insert tcs x_fcat tmap,rules)
-                           (gen_tcs ctype emptyPath [])
+                           (gen_tcs ctype [] [])
                            False
           rmap1 = Map.singleton rcs tmap1
       in (FRulesEnv last_id1 (Map.insertWith (\_ -> Map.insert rcs tmap1) cat rmap1 fcatSet) rules1, fcat)
@@ -300,22 +281,22 @@ genFCatArg ctype env@(FRulesEnv last_id fcatSet rules) m1@(FCat _ cat rcs tcs) =
 	                             fcat    = FCat next_id cat rcs tcs
                                  in (next_id, Map.insert tcs (Left fcat) tmap, fcat)
 
-    gen_tcs :: SLinType -> SPath -> [(SPath,STerm)] -> BacktrackM Bool [(SPath,STerm)]
-    gen_tcs (RecT record)      path acc = foldM (\acc (label,ctype) -> gen_tcs ctype (path ++. label) acc) acc record
-    gen_tcs (TblT terms ctype) path acc = foldM (\acc term          -> gen_tcs ctype (path ++! term ) acc) acc terms
-    gen_tcs (StrT)             path acc = return acc
-    gen_tcs (ConT terms)       path acc =
+    gen_tcs :: Term -> FPath -> [(FPath,FIndex)] -> BacktrackM Bool [(FPath,FIndex)]
+    gen_tcs (R record)    path acc = foldM (\acc (label,ctype) -> gen_tcs ctype (label:path) acc) acc (zip [0..] record)
+    gen_tcs (S _)         path acc = return acc
+    gen_tcs (RP alias _)   path acc = gen_tcs alias path acc
+    gen_tcs (C max_index) path acc =
       case List.lookup path tcs of
-        Just term -> return $! addConstraint path term acc
-        Nothing   -> do writeState True
-                        term <- member terms
-                        return $! addConstraint path term acc
+        Just index -> return $! addConstraint path index acc
+        Nothing    -> do writeState True
+                         index <- member [0..max_index-1]
+                         return $! addConstraint path index acc
       where
-        addConstraint path0 term0 (c@(path,term) : cs)
-	  | path0 >  path = c:addConstraint path0 term0 cs
-        addConstraint path0 term0 cs  = (path0,term0) : cs
+        addConstraint path0 index0 (c@(path,index) : cs)
+	  | path0 > path = c:addConstraint path0 index0 cs
+        addConstraint path0 index0 cs  = (path0,index0) : cs
 
-takeToDoRules :: SRulesMap -> FRulesEnv -> ([([SRule], STermSelector)], FRulesEnv)
+takeToDoRules :: XRulesMap -> FRulesEnv -> ([([XRule], TermSelector)], FRulesEnv)
 takeToDoRules srulesMap (FRulesEnv last_id fcatSet rules) = (todo,FRulesEnv last_id fcatSet' rules)
   where
     (todo,fcatSet') =
@@ -343,97 +324,82 @@ getFRules (FRulesEnv last_id fcatSet rules) = rules
 
 
 ------------------------------------------------------------
--- The STermSelector
+-- The TermSelector
 
-data STermSelector
-  = RecSel [(Label, STermSelector)]
-  | TblSel [(STerm, STermSelector)]
-  | RecPrj   Label  STermSelector
-  | TblPrj   STerm  STermSelector
-  | ConSel [STerm]
+data TermSelector
+  = TupleSel [(FIndex, TermSelector)]
+  | TuplePrj   FIndex  TermSelector
+  | ConSel   [FIndex]
   | StrSel
+  deriving Show
 
-mkSingletonSelectors :: SLinType -> [STermSelector]
-mkSingletonSelectors ctype = sels0
+mkSingletonSelectors :: Term               -- ^ Type representation term
+                     -> [TermSelector]     -- ^ list of selectors containing just one string field
+mkSingletonSelectors term = sels0
   where
-    (sels0,tcss0) = loop emptyPath ([],[]) ctype
-    
-    loop path st          (RecT record)      = List.foldl' (\st (lbl,ctype) -> loop (path ++. lbl ) st ctype) st record
-    loop path st          (TblT terms ctype) = List.foldl' (\st term        -> loop (path ++! term) st ctype) st terms
-    loop path (sels,tcss) (ConT terms)       = (                          sels,map ((,) path) terms : tcss)
-    loop path (sels,tcss) (StrT)             = (mkSelector [path] tcss0 : sels,                       tcss)
+    (sels0,tcss0) = loop [] ([],[]) term
 
+    loop path st          (R record) = List.foldl' (\st (index,term) -> loop (index:path) st term) st (zip [0..] record)
+    loop path st          (RP t _)   = loop path st t
+    loop path (sels,tcss) (C i)      = (                          sels,map ((,) path) [0..i-1] : tcss)
+    loop path (sels,tcss) (S _)      = (mkSelector [path] tcss0 : sels,                          tcss)
 
-mkSelector :: [SPath] -> [[(SPath,STerm)]] -> STermSelector
+mkSelector :: [FPath] -> [[(FPath,FIndex)]] -> TermSelector
 mkSelector rcs tcss =
   List.foldl' addRestriction (case xs of
                                 (path:xs) -> List.foldl' addProjection (path2selector StrSel path) xs) ys
   where
-    xs = [ reverse path       |               Path path       <- rcs]
-    ys = [(reverse path,term) | tcs <- tcss, (Path path,term) <- tcs]
+    xs = [ reverse path       |               path       <- rcs]
+    ys = [(reverse path,term) | tcs <- tcss, (path,term) <- tcs]
     
-    addProjection :: STermSelector -> [Either Label STerm] -> STermSelector
-    addProjection StrSel          []                 = StrSel
-    addProjection (RecSel fields) (Left  lbl : path) = RecSel (add fields)
+    addRestriction :: TermSelector -> (FPath,FIndex) -> TermSelector
+    addRestriction (ConSel indices)  ([]          ,n_index) = ConSel (add indices)
       where
-        add []                      = [(lbl,path2selector StrSel path)]
-        add (field@(lbl',sub_sel):fields)
-          | lbl == lbl'             = (lbl',addProjection sub_sel path):fields
+        add []                      = [n_index]
+        add (index':indices)
+          | n_index == index'       = index':    indices
+          | otherwise               = index':add indices
+    addRestriction (TupleSel fields) (index : path,n_index) = TupleSel (add fields)
+      where
+        add []                      = [(index,path2selector (ConSel [n_index]) path)]
+        add (field@(index',sub_sel):fields)
+          | index == index'         = (index',addRestriction sub_sel (path,n_index)):fields
           | otherwise               = field : add fields
-    addProjection (TblSel cases)  (Right pat : path) = TblSel (add cases)
-      where
-        add []                      = [(pat,path2selector StrSel path)]
-        add (cas@(pat',sub_sel):cases)
-          | pat == pat'             = (pat',addProjection sub_sel path):cases
-          | otherwise               = cas : add cases
 
-    addRestriction :: STermSelector -> ([Either Label STerm],STerm) -> STermSelector
-    addRestriction (ConSel terms)  ([]              ,term) = ConSel (add terms)
+    addProjection :: TermSelector -> FPath -> TermSelector
+    addProjection StrSel            []             = StrSel
+    addProjection (TupleSel fields) (index : path) = TupleSel (add fields)
       where
-        add []                      = [term]
-        add (term':terms)
-          | term == term'           = term':    terms
-          | otherwise               = term':add terms
-    addRestriction (RecSel fields) (Left  lbl : path,term) = RecSel (add fields)
-      where
-        add []                      = [(lbl,path2selector (ConSel [term]) path)]
-        add (field@(lbl',sub_sel):fields)
-          | lbl == lbl'             = (lbl',addRestriction sub_sel (path,term)):fields
+        add []                      = [(index,path2selector StrSel path)]
+        add (field@(index',sub_sel):fields)
+          | index == index'         = (index',addProjection sub_sel path):fields
           | otherwise               = field : add fields
-    addRestriction (TblSel cases)  (Right pat : path,term) = TblSel (add cases)
-      where
-        add []                      = [(pat,path2selector (ConSel [term]) path)]
-        add (field@(pat',sub_sel):cases)
-          | pat == pat'             = (pat',addRestriction sub_sel (path,term)):cases
-          | otherwise               = field : add cases
-
-    path2selector base []                 = base
-    path2selector base (Left  lbl : path) = RecSel [(lbl,path2selector base path)]
-    path2selector base (Right sel : path) = TblSel [(sel,path2selector base path)]
-
+    
+    path2selector base []             = base
+    path2selector base (index : path) = TupleSel [(index,path2selector base path)]
 
 ------------------------------------------------------------
 -- updating the MCF rule
 
-readArgCType :: Int -> CnvMonad SLinType
-readArgCType arg = do (_, _, _, ctypes) <- readState
-		      return (ctypes !! arg)
+readArgCType :: FIndex -> CnvMonad Term
+readArgCType nr = do (_, _, _, ctypes) <- readState
+		     return (ctypes !! fromIntegral nr)
 
-restrictArg :: Int -> SPath -> STerm -> CnvMonad ()
-restrictArg nr path term = do
+restrictArg :: FIndex -> FPath -> FIndex -> CnvMonad ()
+restrictArg nr path index = do
   (head, args, ctype, ctypes) <- readState 
-  args' <- updateNthM (\(fcat,xs) -> do fcat <- restrictFCat path term fcat
-                                        return (fcat,xs)                   ) nr args
+  args' <- updateNthM (\(fcat,xs) -> do fcat <- restrictFCat path index fcat
+                                        return (fcat,xs)                    ) (fromIntegral nr) args
   writeState (head, args', ctype, ctypes)
 
-projectArg :: Int -> SPath -> CnvMonad Int
+projectArg :: FIndex -> FPath -> CnvMonad Int
 projectArg nr path = do
   (head, args, ctype, ctypes) <- readState
   (xnr,args') <- updateArgs nr args
   writeState (head, args', ctype, ctypes)
   return xnr
   where
-    updateArgs :: Int -> [(FCat,[SPath])] -> CnvMonad (Int,[(FCat,[SPath])])
+    updateArgs :: FIndex -> [(FCat,[FPath])] -> CnvMonad (Int,[(FCat,[FPath])])
     updateArgs 0 ((a@(FCat _ _ rcs _),xpaths) : as)
       | path `elem` rcs = return (length xpaths+1,(a,path:xpaths):as)
       | otherwise       = do a <- projectFCat path a
@@ -442,34 +408,34 @@ projectArg nr path = do
       (xnr,as) <- updateArgs (n-1) as
       return (xnr,a:as)
 
-readHeadCType :: CnvMonad SLinType
+readHeadCType :: CnvMonad Term
 readHeadCType = do (_, _, ctype, _) <- readState
 		   return ctype
 
-restrictHead :: SPath -> STerm -> CnvMonad ()
+restrictHead :: FPath -> FIndex -> CnvMonad ()
 restrictHead path term
     = do (head, args, ctype, ctypes) <- readState
 	 head' <- restrictFCat path term head
 	 writeState (head', args, ctype, ctypes)
 
-projectHead :: SPath -> CnvMonad ()
+projectHead :: FPath -> CnvMonad ()
 projectHead path
     = do (head, args, ctype, ctypes) <- readState
 	 head' <- projectFCat path head
 	 writeState (head', args, ctype, ctypes)
 
-restrictFCat :: SPath -> STerm -> FCat -> CnvMonad FCat
-restrictFCat path0 term0 (FCat id cat rcs tcs) = do
+restrictFCat :: FPath -> FIndex -> FCat -> CnvMonad FCat
+restrictFCat path0 index0 (FCat id cat rcs tcs) = do
   tcs <- addConstraint tcs
   return (FCat id cat rcs tcs)
   where
-    addConstraint (c@(path,term) : cs)
+    addConstraint (c@(path,index) : cs)
         | path0 >  path = liftM (c:) (addConstraint cs)
-        | path0 == path = guard (term0 == term) >>
+        | path0 == path = guard (index0 == index) >>
                           return (c : cs)
-    addConstraint cs    = return ((path0,term0) : cs)
+    addConstraint cs    = return ((path0,index0) : cs)
 
-projectFCat :: SPath -> FCat -> CnvMonad FCat
+projectFCat :: FPath -> FCat -> CnvMonad FCat
 projectFCat path0 (FCat id cat rcs tcs) = do
   return (FCat id cat (addConstraint rcs) tcs)
   where

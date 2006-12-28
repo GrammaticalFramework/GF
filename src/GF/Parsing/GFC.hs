@@ -24,6 +24,7 @@ import GF.Data.Operations (Err(..))
 import qualified GF.Grammar.Grammar as Grammar
 import qualified GF.Grammar.Macros as Macros
 import qualified GF.Canon.AbsGFC as AbsGFC
+import qualified GF.Canon.GFCC.AbsGFCC as AbsGFCC
 import qualified GF.Infra.Ident as Ident
 import GF.CF.CFIdent (CFCat, cfCat2Ident, CFTok, wordsCFTok)
 
@@ -49,7 +50,7 @@ data PInfo = PInfo { mcfPInfo :: MCFPInfo
 		   }
 
 type MCFPInfo = PM.MCFPInfo MCat Name MLabel Token
-type FCFPInfo = PF.FCFPInfo FCat Name Token
+type FCFPInfo = PF.FCFPInfo FCat FName Token
 type CFPInfo  = PC.CFPInfo CCat Name Token
 
 buildPInfo :: MGrammar -> FGrammar -> CGrammar -> PInfo
@@ -128,17 +129,33 @@ selectParser "m" strategy pinfo startCat inTokens
 -- parsing via FCFG
 selectParser "f" strategy pinfo startCat inTokens
     = do let startCats = filter isStart $ PF.grammarCats fcfpi
-	     isStart cat = fcat2scat cat == cfCat2Ident startCat
+	     isStart cat = cat' == cfCat2Ident startCat
+	       where AbsGFCC.CId x = fcat2cid cat
+	             cat'          = Ident.IC x
 	     fcfpi = fcfPInfo pinfo
 	 fcfParser <- PF.parseFCF strategy
 	 let chart = fcfParser fcfpi startCats inTokens
 	     (i,j) = inputBounds inTokens
 	     finalEdges = [PF.makeFinalEdge cat i j | cat <- startCats]
-	 return $ chart2forests chart (const False) finalEdges
+	 return $ map cnv_forests $ chart2forests chart (const False) finalEdges
 
 -- error parser: 
 selectParser prs strategy _ _ _ = Bad $ "Parser '" ++ prs ++ "' not defined with strategy: " ++ strategy 
 
+cnv_forests FMeta         = FMeta
+cnv_forests (FNode (Name (AbsGFCC.CId n) p) fss) = FNode (Name (Ident.IC n) (map cnv_profile p)) (map (map cnv_forests) fss)
+cnv_forests (FString x)   = FString x
+cnv_forests (FInt    x)   = FInt    x
+cnv_forests (FFloat  x)   = FFloat  x
+
+cnv_profile (Unify    x) = Unify x
+cnv_profile (Constant x) = Constant (cnv_forests2 x)
+
+cnv_forests2 FMeta         = FMeta
+cnv_forests2 (FNode (AbsGFCC.CId n) fss) = FNode (Ident.IC n) (map (map cnv_forests2) fss)
+cnv_forests2 (FString x)   = FString x
+cnv_forests2 (FInt    x)   = FInt    x
+cnv_forests2 (FFloat  x)   = FFloat  x
 
 ----------------------------------------------------------------------
 -- parse trees to GF terms
