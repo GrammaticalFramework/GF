@@ -89,7 +89,7 @@ oper
 
 --3 Compound nouns 
 --
--- A compound noun ia an uninflected string attached to an inflected noun,
+-- A compound noun is an uninflected string attached to an inflected noun,
 -- such as "baby boom", "chief executive officer".
 
     mkN : Str -> N -> N
