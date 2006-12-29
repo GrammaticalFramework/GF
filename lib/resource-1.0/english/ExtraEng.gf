@@ -43,6 +43,8 @@ concrete ExtraEng of ExtraEngAbs = CatEng **
     UncNegImpSg imp = {s = imp.s ! neg ! ImpF Sg False} ;
     UncNegImpPl imp = {s = imp.s ! neg ! ImpF Pl False} ;
 
+    CompoundCN a b = {s = \\n,c => a.s ! Sg ! Nom ++ b.s ! n ! c} ;
+
 
   oper
     neg = CNeg False ; 

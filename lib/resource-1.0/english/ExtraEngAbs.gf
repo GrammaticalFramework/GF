@@ -9,4 +9,8 @@ abstract ExtraEngAbs = Extra ** {
     UncNegImpSg : Imp -> Utt;           -- do not help yourself
     UncNegImpPl : Imp -> Utt;           -- do not help yourselves
 
+-- freely compounded nouns
+
+    CompoundCN : CN -> CN -> CN ;       -- rock album
+
 }
