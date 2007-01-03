@@ -72,7 +72,7 @@ cfgToCFRules cfg =
           nameToTerm (Name f prs) = CFObj f (map profileToTerm prs)
           profileToTerm (Unify []) = CFMeta
           profileToTerm (Unify xs) = CFRes (last xs) -- FIXME: unify
-          profileToTerm (Constant f) = CFConst (maybe "?" prIdent (forestName f))
+          profileToTerm (Constant f) = maybe CFMeta (\x -> CFObj x []) (forestName f)
 
 -- | Remove productions which use categories which have no productions
 removeEmptyCats :: CFRules -> CFRules
