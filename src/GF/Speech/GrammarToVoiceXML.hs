@@ -171,7 +171,7 @@ fun2sub gr cat fun args =
 
 doCallback :: String -> VIdent -> [XML] -> [XML] -> XML
 doCallback f cat i e = 
- if_else ("callbacks && " ++ cf ++ " && !" ++ cf ++ "("++string (prIdent cat)++","++ catFieldId cat ++ ")") 
+ if_else ("typeof callbacks != 'undefined' && typeof " ++ cf ++ " != 'undefined' && !" ++ cf ++ "("++string (prIdent cat)++","++ catFieldId cat ++ ")") 
          i e
   where cf = "callbacks." ++ f
 
