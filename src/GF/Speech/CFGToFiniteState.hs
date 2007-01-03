@@ -104,7 +104,7 @@ compileAutomaton start g = make_fa (g,ns) s [Cat start] f fa
   ns = mutRecSets g $ mutRecCats False g
 
 -- | The make_fa algorithm from \"Regular approximation of CFLs: a grammatical view\",
---   Mark-Jan Nederhof. International Workshop on Parsing Technologies, 1997.
+--   Mark-Jan Nederhof, Advances in Probabilistic and other Parsing Technologies, 2000.
 make_fa :: (CFRules,MutRecSets) -> State -> [Symbol Cat_ Token] -> State 
           -> NFA Token -> NFA Token
 make_fa c@(g,ns) q0 alpha q1 fa = 
