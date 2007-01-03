@@ -218,7 +218,7 @@ compileAutomata g = [(c, makeOneFA c) | c <- allCats g]
 
 
 -- | The make_fa algorithm from \"Regular approximation of CFLs: a grammatical view\",
---   Mark-Jan Nederhof. International Workshop on Parsing Technologies, 1997,
+--   Mark-Jan Nederhof, Advances in Probabilistic and other Parsing Technologies, 2000,
 --   adapted to build a finite automaton for a single (mutually recursive) set only.
 --   Categories not in the set will result in category-labelled edges.
 make_fa1 :: MutRecSet -- ^ The set of (mutually recursive) categories for which
