@@ -68,13 +68,10 @@ prJSGF srg@(SRG{grammarName=name,startCat=start,origStartCat=origStart,rules=rs}
             finalTag = tag sisr (profileFinalSISR n)
 
     topCatRules = [rule True (catFormId tc) (map (it tc) cs) | (tc,cs) <- srgTopCats srg]
-        where it i c = prCat c <+> tag sisr (topCatSISR (catFieldId i) c)
+        where it i c = prCat c <+> tag sisr (topCatSISR c)
 
 catFormId :: String -> String
 catFormId = (++ "_cat")
-
-catFieldId :: String -> String
-catFieldId = (++ "_field")
 
 prCat :: SRGCat -> Doc
 prCat c = char '<' <> text c <> char '>'

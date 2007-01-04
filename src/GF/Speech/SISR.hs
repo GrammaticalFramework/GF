@@ -38,8 +38,8 @@ type SISRTag = [JS.DeclOrExpr]
 prSISR :: SISRTag -> String
 prSISR = JS.printTree
 
-topCatSISR :: String -> String -> SISRFormat -> SISRTag
-topCatSISR i c fmt = map JS.DExpr [field (fmtOut fmt) i `ass` fmtRef fmt c]
+topCatSISR :: String -> SISRFormat -> SISRTag
+topCatSISR c fmt = map JS.DExpr [fmtOut fmt `ass` fmtRef fmt c]
 
 profileInitSISR :: CFTerm -> SISRFormat -> SISRTag
 profileInitSISR t fmt 
