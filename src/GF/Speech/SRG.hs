@@ -167,7 +167,13 @@ allSRGCats SRG { rules = rs } = [c | SRGRule c _ _ <- rs]
 
 cfgCatToGFCat :: SRGCat -> Maybe String
 cfgCatToGFCat c 
-    | '-' `elem` c = Nothing -- categories introduced by removeLeftRecursion contain dashes
+    -- categories introduced by removeLeftRecursion contain dashes
+    | '-' `elem` c = Nothing 
+    -- some categories introduced by -conversion=finite have the form
+    -- "{fun:cat}..."
+    | "{" `isPrefixOf` c = case dropWhile (/=':') $ takeWhile (/='}') $ tail c of
+                             ':':c' -> Just c'
+                             _ -> error $ "cfgCatToGFCat: Strange category " ++ show c
     | otherwise = Just $ takeWhile (/='{') c
 
 srgTopCats :: SRG -> [(String,[SRGCat])]
