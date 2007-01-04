@@ -64,7 +64,7 @@ prSrgsXml sisr srg@(SRG{grammarName=name,startCat=start,
     -- externally visible rules for each of the GF categories
     topCatRules = [topRule tc [oneOf (map (it tc) cs)] | (tc,cs) <- srgTopCats srg]
         where it i c = Tag "item" [] [Tag "ruleref" [("uri","#" ++ c)] [],
-                                      tag sisr (topCatSISR (catFieldId i) c)]
+                                      tag sisr (topCatSISR c)]
               topRule i is = Tag "rule" [("id",catFormId i),("scope","public")] is
 
 rule :: String -> [XML] -> XML
@@ -110,9 +110,6 @@ tag (Just fmt) t = case t fmt of
 
 catFormId :: String -> String
 catFormId = (++ "_cat")
-
-catFieldId :: String -> String
-catFieldId = (++ "_field")
 
 
 showToken :: Token -> String
