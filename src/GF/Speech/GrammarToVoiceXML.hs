@@ -135,9 +135,9 @@ cat2form :: String -> CatQuestions -> VIdent -> [(VIdent, [VIdent])] -> XML
 cat2form gr qs cat fs = 
   form (catFormId cat) $ 
       [var "value" (Just "{ name : '?' }"), 
-       var "callbacks" Nothing, 
+--       var "callbacks" Nothing, 
        blockCond "value.name != '?'" [assign (catFieldId cat) "value"],
-       block [doCallback "entered" cat [return_ [catFieldId cat]] []],
+--       block [doCallback "entered" cat [return_ [catFieldId cat]] []],
        field (catFieldId cat) [] 
            [promptString (getCatQuestion cat qs), 
             vxmlGrammar (gr++"#"++catFormId cat),
@@ -145,11 +145,11 @@ cat2form gr qs cat fs =
             help [Data (mkHelpText cat)],
             filled [] [if_else (catFieldId cat ++ ".name == '?'") 
                        [reprompt] 
-                       [doCallback "refined" cat [return_ [catFieldId cat]] []]]
+                       [{-doCallback "refined" cat [return_ [catFieldId cat]] []-}]]
            ]
       ]
      ++ concatMap (uncurry (fun2sub gr cat)) fs
-     ++ [block [doCallback "done" cat [return_ [catFieldId cat]] [return_ [catFieldId cat]]]]
+     ++ [block [{- doCallback "done" cat [return_ [catFieldId cat]] [-} return_ [catFieldId cat]{-]-}]]
 
 mkHelpText :: VIdent -> String
 mkHelpText cat = "help_"++ prIdent cat
@@ -165,7 +165,7 @@ fun2sub gr cat fun args =
   mkSub a t = subdialog s [("src","#"++catFormId t),
                            ("cond",catFieldId cat++".name == "++string (prIdent fun))] 
               [param "value" (catFieldId cat++"."++a),
-               param "callbacks" "callbacks",
+--               param "callbacks" "callbacks",
                filled [] [assign (catFieldId cat++"."++a) (s++"."++catFieldId t)]]
     where s = prIdent fun ++ "_" ++ a
 
