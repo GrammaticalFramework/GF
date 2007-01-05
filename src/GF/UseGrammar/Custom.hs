@@ -248,51 +248,22 @@ customGrammarPrinter =
   ,(strCI "cf",      \_ -> prCF . stateCF)
   ,(strCI "old",     \_ -> printGrammarOld . stateGrammarST)
   ,(strCI "srg",     \_ -> prSRG . stateCF)
-  ,(strCI "gsl",     \opts s -> let name = cncId s
-                                    start = getStartCatCF opts s
-                                 in gslPrinter name start opts s)
-  ,(strCI "jsgf",    \opts s -> let name = cncId s
-                                    start = getStartCatCF opts s
-                                 in jsgfPrinter name start opts Nothing s)
-  ,(strCI "jsgf_sisr_old", 
-                     \opts s -> let name = cncId s
-                                    start = getStartCatCF opts s
-                                 in jsgfPrinter name start opts (Just SISR.SISROld) s)
-  ,(strCI "srgs_xml", \opts s -> let name = cncId s
-                                     start = getStartCatCF opts s
-                                  in SRGS.srgsXmlPrinter name start opts Nothing False s)
-  ,(strCI "srgs_xml_prob", 
-              \opts s -> let name = cncId s
-                             start = getStartCatCF opts s
-                          in SRGS.srgsXmlPrinter name start opts Nothing True s)
-  ,(strCI "srgs_xml_sisr_old", 
-              \opts s -> let name = cncId s
-                             start = getStartCatCF opts s
-                          in SRGS.srgsXmlPrinter name start opts (Just SISR.SISROld) False s)
+  ,(strCI "gsl",     gslPrinter)
+  ,(strCI "jsgf",    jsgfPrinter Nothing)
+  ,(strCI "jsgf_sisr_old", jsgfPrinter (Just SISR.SISROld))
+  ,(strCI "srgs_xml", SRGS.srgsXmlPrinter Nothing False)
+  ,(strCI "srgs_xml_prob", SRGS.srgsXmlPrinter Nothing True)
+  ,(strCI "srgs_xml_sisr_old", SRGS.srgsXmlPrinter (Just SISR.SISROld) False)
   ,(strCI "vxml", \opts s -> let start = cfCat2Ident (startCatStateOpts opts s)
                               in grammar2vxml start s)
-  ,(strCI "slf",  \opts s -> let start = getStartCatCF opts s
-                                 name = cncId s
-                              in slfPrinter name start s)
-  ,(strCI "slf_graphviz", \opts s -> let start = getStartCatCF opts s
-                                         name = cncId s
-                                      in slfGraphvizPrinter name start s)
-  ,(strCI "slf_sub", \opts s -> let start = getStartCatCF opts s
-                                    name = cncId s
-                                 in slfSubPrinter name start s)
-  ,(strCI "slf_sub_graphviz", \opts s -> let start = getStartCatCF opts s
-                                             name = cncId s
-                                          in slfSubGraphvizPrinter name start s)
-  ,(strCI "fa_graphviz", \opts s -> let start = getStartCatCF opts s
-                                        name = cncId s
-                                     in faGraphvizPrinter name start s)
-  ,(strCI "fa_c", \opts s -> let start = getStartCatCF opts s
-                                 name = cncId s
-                              in faCPrinter name start s)
-  ,(strCI "regexp", \opts s -> let start = getStartCatCF opts s
-                                   name = cncId s
-                                in regexpPrinter name start s)
-  ,(strCI "regular", \_ -> regularPrinter)
+  ,(strCI "slf",  slfPrinter)
+  ,(strCI "slf_graphviz", slfGraphvizPrinter)
+  ,(strCI "slf_sub", slfSubPrinter)
+  ,(strCI "slf_sub_graphviz", slfSubGraphvizPrinter)
+  ,(strCI "fa_graphviz", faGraphvizPrinter)
+  ,(strCI "fa_c",  faCPrinter)
+  ,(strCI "regexp", regexpPrinter)
+  ,(strCI "regular", regularPrinter)
   ,(strCI "plbnf",   \_ -> prLBNF True)
   ,(strCI "lbnf",    \_ -> prLBNF False)
   ,(strCI "bnf",     \_ -> prBNF False)
@@ -345,9 +316,6 @@ customGrammarPrinter =
 --  ,(strCI "cfg-old",  PrtOld.prt . CnvOld.cfg . statePInfoOld)
   ] 
   where stateGrammarLangOpts s = (stateOptions s, stateGrammarLang s)
-        getStartCat,getStartCatCF :: Options -> StateGrammar -> String
-        getStartCat opts sgr = prCFCat (startCatStateOpts opts sgr)
-        getStartCatCF opts sgr = getStartCat opts sgr ++ "{}.s"
 
 customMultiGrammarPrinter = 
   customData "Printers for multiple grammars, selected by option -printer=x" $

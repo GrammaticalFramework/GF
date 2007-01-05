@@ -36,14 +36,11 @@ import qualified Data.Map as Map
 import qualified Data.Set as Set
 
 
-srgsXmlPrinter :: Ident -- ^ Grammar name
-               -> String    -- ^ Start category
-	       -> Options 
-               -> Maybe SISRFormat 
+srgsXmlPrinter :: Maybe SISRFormat 
 	       -> Bool -- ^ Include probabilities
-	       -> StateGrammar -> String
-srgsXmlPrinter name start opts sisr probs = 
-    prSrgsXml sisr probs . makeSRG name start opts
+	       -> Options 
+               -> StateGrammar -> String
+srgsXmlPrinter sisr probs opts s = prSrgsXml sisr probs $ makeSRG opts s
 
 prSrgsXml :: Maybe SISRFormat -> Bool -> SRG -> String
 prSrgsXml sisr probs srg@(SRG{grammarName=name,startCat=start,
