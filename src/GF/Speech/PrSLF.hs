@@ -26,6 +26,7 @@ import GF.Conversion.Types
 import GF.Formalism.CFG
 import GF.Formalism.Utilities (Symbol(..),symbol)
 import GF.Infra.Ident
+import GF.Infra.Option (Options)
 import GF.Infra.Print
 import GF.Speech.CFGToFiniteState
 import GF.Speech.FiniteState
@@ -54,9 +55,9 @@ data SLFEdge = SLFEdge { eId :: Int, eStart :: Int, eEnd :: Int }
 
 type SLF_FA = FA State (Maybe (MFALabel String)) ()
 
-mkFAs :: String -> StateGrammar -> (SLF_FA, [(String,SLF_FA)])
-mkFAs start s = (slfStyleFA main, [(c,slfStyleFA n) | (c,n) <- subs])
-  where MFA main subs = {- renameSubs $ -} cfgToMFA start s
+mkFAs :: Options -> StateGrammar -> (SLF_FA, [(String,SLF_FA)])
+mkFAs opts s = (slfStyleFA main, [(c,slfStyleFA n) | (c,n) <- subs])
+  where MFA main subs = {- renameSubs $ -} cfgToMFA opts s
 
 slfStyleFA :: Eq a => DFA a -> FA State (Maybe a) ()
 slfStyleFA = renameStates [0..] . removeTrivialEmptyNodes . oneFinalState Nothing ()
@@ -76,9 +77,9 @@ renameSubs (MFA main subs) = MFA (renameLabels main) subs'
 -- * SLF graphviz printing (without sub-networks)
 --
 
-slfGraphvizPrinter :: Ident -> String -> StateGrammar -> String
-slfGraphvizPrinter name start 
-    = prFAGraphviz . gvFA . slfStyleFA . cfgToFA' start
+slfGraphvizPrinter :: Options -> StateGrammar -> String
+slfGraphvizPrinter opts s
+    = prFAGraphviz $ gvFA $ slfStyleFA $ cfgToFA' opts s
   where 
   gvFA = mapStates (fromMaybe "") . mapTransitions (const "")
 
@@ -86,10 +87,9 @@ slfGraphvizPrinter name start
 -- * SLF graphviz printing (with sub-networks)
 --
 
-slfSubGraphvizPrinter :: Ident -- ^ Grammar name
-	           -> String -> StateGrammar -> String
-slfSubGraphvizPrinter name start s = Dot.prGraphviz g
-  where (main, subs) = mkFAs start s
+slfSubGraphvizPrinter :: Options -> StateGrammar -> String
+slfSubGraphvizPrinter opts s = Dot.prGraphviz g
+  where (main, subs) = mkFAs opts s
         g = STM.evalState (liftM2 Dot.addSubGraphs ss m) [0..] 
         ss = mapM (\ (c,f) -> gvSLFFA (Just c) f) subs
         m = gvSLFFA Nothing main
@@ -114,20 +114,19 @@ gvSLFFA n fa =
 -- * SLF printing (without sub-networks)
 --
 
-slfPrinter :: Ident -> String -> StateGrammar -> String
-slfPrinter name start
-    = prSLF . automatonToSLF mkSLFNode . slfStyleFA . cfgToFA' start
+slfPrinter :: Options -> StateGrammar -> String
+slfPrinter opts s 
+    = prSLF $ automatonToSLF mkSLFNode $ slfStyleFA $ cfgToFA' opts s
 
 --
 -- * SLF printing (with sub-networks)
 --
 
 -- | Make a network with subnetworks in SLF
-slfSubPrinter :: Ident -- ^ Grammar name
-	   -> String -> StateGrammar -> String
-slfSubPrinter name start s = prSLFs slfs
+slfSubPrinter :: Options -> StateGrammar -> String
+slfSubPrinter opts s = prSLFs slfs
   where 
-  (main,subs) = mkFAs start s
+  (main,subs) = mkFAs opts s
   slfs = SLFs [(c, faToSLF fa) | (c,fa) <- subs] (faToSLF main)
   faToSLF = automatonToSLF mfaNodeToSLFNode
 

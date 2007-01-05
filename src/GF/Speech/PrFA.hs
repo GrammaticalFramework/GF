@@ -23,6 +23,7 @@ import GF.Conversion.Types
 import GF.Formalism.CFG
 import GF.Formalism.Utilities (Symbol(..),symbol)
 import GF.Infra.Ident
+import GF.Infra.Option (Options)
 import GF.Infra.Print
 import GF.Speech.CFGToFiniteState
 import GF.Speech.FiniteState
@@ -36,23 +37,21 @@ import Data.Maybe (fromMaybe)
 
 
 
-faGraphvizPrinter :: Ident -- ^ Grammar name
-		   -> String -> StateGrammar -> String
-faGraphvizPrinter name start = 
-    prFAGraphviz . mapStates (const "") . cfgToFA start
+faGraphvizPrinter :: Options -> StateGrammar -> String
+faGraphvizPrinter opts s = 
+    prFAGraphviz $ mapStates (const "") $ cfgToFA opts s
 
 -- | Convert the grammar to a regular grammar and print it in BNF
-regularPrinter :: StateGrammar -> String
-regularPrinter = prCFRules . makeSimpleRegular
+regularPrinter :: Options -> StateGrammar -> String
+regularPrinter opts s = prCFRules $ makeSimpleRegular s
   where
   prCFRules :: CFRules -> String
   prCFRules g = unlines [ c ++ " ::= " ++ join " | " (map (showRhs . ruleRhs) rs) | (c,rs) <- g]
   join g = concat . intersperse g
   showRhs = unwords . map (symbol id show)
 
-faCPrinter :: Ident -- ^ Grammar name
-	   -> String -> StateGrammar -> String
-faCPrinter name start = fa2c . cfgToFA start
+faCPrinter :: Options -> StateGrammar -> String
+faCPrinter opts s = fa2c $ cfgToFA opts s
 
 fa2c :: DFA String -> String
 fa2c fa = undefined

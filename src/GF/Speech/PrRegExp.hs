@@ -12,11 +12,11 @@ module GF.Speech.PrRegExp (regexpPrinter) where
 
 import GF.Conversion.Types
 import GF.Infra.Ident
+import GF.Infra.Option (Options)
 import GF.Speech.CFGToFiniteState
 import GF.Speech.RegExp
 import GF.Compile.ShellState (StateGrammar)
 
 
-regexpPrinter :: Ident -- ^ Grammar name
-	      -> String -> StateGrammar -> String
-regexpPrinter name start = prRE . dfa2re . cfgToFA start
+regexpPrinter :: Options -> StateGrammar -> String
+regexpPrinter opts s = prRE $ dfa2re $ cfgToFA opts s

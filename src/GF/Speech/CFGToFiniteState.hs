@@ -27,6 +27,7 @@ import GF.Formalism.CFG
 import GF.Formalism.Utilities (Symbol(..), mapSymbol, filterCats, symbol, NameProfile(..))
 import GF.Conversion.Types
 import GF.Infra.Ident (Ident)
+import GF.Infra.Option (Options)
 import GF.Compile.ShellState (StateGrammar)
 
 import GF.Speech.FiniteState
@@ -57,8 +58,9 @@ data MFA a = MFA (DFA (MFALabel a)) [(String,DFA (MFALabel a))]
 
 
 
-cfgToFA :: String -> StateGrammar -> DFA String
-cfgToFA start = minimize . compileAutomaton start . makeSimpleRegular
+cfgToFA :: Options -> StateGrammar -> DFA String
+cfgToFA opts s = minimize $ compileAutomaton start $ makeSimpleRegular s
+  where start = getStartCatCF opts s
 
 makeSimpleRegular :: StateGrammar -> CFRules
 makeSimpleRegular = makeRegular . removeIdenticalRules . removeEmptyCats . cfgToCFRules
@@ -145,12 +147,13 @@ make_fa c@(g,ns) q0 alpha q1 fa =
 -- * Compile a strongly regular grammar to a DFA with sub-automata
 --
 
-cfgToMFA :: String -> StateGrammar -> MFA String
-cfgToMFA start g = buildMFA start g
+cfgToMFA :: Options -> StateGrammar -> MFA String
+cfgToMFA opts s = buildMFA start s
+  where start = getStartCatCF opts s
 
 -- | Build a DFA by building and expanding an MFA
-cfgToFA' :: String -> StateGrammar -> DFA String
-cfgToFA' start = mfaToDFA . cfgToMFA start
+cfgToFA' :: Options -> StateGrammar -> DFA String
+cfgToFA' opts s = mfaToDFA $ cfgToMFA opts s
 
 buildMFA :: Cat_ -- ^ Start category
          -> StateGrammar -> MFA String

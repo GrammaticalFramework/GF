@@ -38,13 +38,10 @@ import Text.PrettyPrint.HughesPJ
 import Debug.Trace
 
 
-jsgfPrinter :: Ident -- ^ Grammar name
-            -> String    -- ^ Start category
+jsgfPrinter :: Maybe SISRFormat
 	    -> Options 
-            -> Maybe SISRFormat
             -> StateGrammar -> String
-jsgfPrinter name start opts sisr = 
-    show . prJSGF sisr . makeSimpleSRG name start opts
+jsgfPrinter sisr opts s = show $ prJSGF sisr $ makeSimpleSRG opts s
 
 prJSGF :: Maybe SISRFormat -> SRG -> Doc
 prJSGF sisr srg@(SRG{grammarName=name,startCat=start,origStartCat=origStart,rules=rs})

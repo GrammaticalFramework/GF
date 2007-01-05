@@ -42,7 +42,7 @@ import GF.Speech.FiniteState
 import GF.Speech.RegExp
 import GF.Infra.Option
 import GF.Probabilistic.Probabilistic (Probs)
-import GF.Compile.ShellState (StateGrammar, stateProbs)
+import GF.Compile.ShellState (StateGrammar, stateProbs, cncId)
 
 import Data.List
 import Data.Maybe (fromMaybe, maybeToList)
@@ -81,45 +81,37 @@ type CatNames = Map String String
 -- | Create a non-left-recursive SRG. 
 --   FIXME: the probabilities, names and profiles in the returned 
 --   grammar may be meaningless.
-makeSimpleSRG :: Ident     -- ^ Grammar name
-              -> String    -- ^ Start category
-	      -> Options   -- ^ Grammar options
+makeSimpleSRG :: Options   -- ^ Grammar options
 	      -> StateGrammar
 	      -> SRG
-makeSimpleSRG i origStart opts s =
-    makeSRG_ i origStart opts probs $ preprocess $ cfgToCFRules s
- where preprocess = removeLeftRecursion origStart . removeIdenticalRules 
-                    . removeEmptyCats . removeCycles
-       probs = stateProbs s
+makeSimpleSRG opts s =
+    makeSRG_ (removeLeftRecursion origStart . removeIdenticalRules 
+              . removeEmptyCats . removeCycles) opts s
+  where origStart = getStartCatCF opts s
 
 -- | Create a SRG preserving the names, profiles and probabilities of the 
 --   input grammar. The returned grammar may be left-recursive.
-makeSRG :: Ident     -- ^ Grammar name
-        -> String    -- ^ Start category
-	-> Options   -- ^ Grammar options
+makeSRG :: Options   -- ^ Grammar options
 	-> StateGrammar
 	-> SRG
-makeSRG i origStart opts s = 
-    makeSRG_ i origStart opts probs $ preprocess $ cfgToCFRules s
-  where preprocess = removeEmptyCats
-        probs = stateProbs s
+makeSRG = makeSRG_ removeEmptyCats
 
-makeSRG_ :: Ident     -- ^ Grammar name
-         -> String    -- ^ Start category
-	 -> Options   -- ^ Grammar options
-	 -> Probs -- ^ Probabilities
-	 -> CFRules -- ^ A context-free grammar
+makeSRG_ :: (CFRules -> CFRules)
+         -> Options   -- ^ Grammar options
+	 -> StateGrammar
 	 -> SRG
-makeSRG_ i origStart opts probs gr =
+makeSRG_ preprocess opts s =
       SRG { grammarName = name,
 	    startCat = lookupFM_ names origStart,
 	    origStartCat = origStart,
             grammarLanguage = l,
 	    rules = rs }
     where 
-    name = prIdent i
+    name = prIdent (cncId s)
+    origStart = getStartCatCF opts s
+    probs = stateProbs s
     l = fromMaybe "en_UK" (getOptVal opts speechLanguage)
-    (cats,cfgRules) = unzip gr
+    (cats,cfgRules) = unzip $ preprocess $ cfgToCFRules s
     names = mkCatNames name cats
     rs = map (cfgRulesToSRGRule names probs) cfgRules
 

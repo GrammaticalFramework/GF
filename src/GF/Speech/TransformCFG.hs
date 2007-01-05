@@ -24,6 +24,7 @@ module GF.Speech.TransformCFG {- (CFRule_, CFRules,
 			       removeEmptyCats, removeIdenticalRules) -} where
 
 import GF.Conversion.Types
+import GF.CF.PPrCF (prCFCat)
 import GF.Data.Utilities
 import GF.Formalism.CFG 
 import GF.Formalism.Utilities (Symbol(..), mapSymbol, filterCats, symbol, 
@@ -32,7 +33,7 @@ import GF.Infra.Ident
 import GF.Infra.Option
 import GF.Infra.Print
 import GF.Speech.Relation
-import GF.Compile.ShellState (StateGrammar, stateCFG)
+import GF.Compile.ShellState (StateGrammar, stateCFG, startCatStateOpts)
 
 import Control.Monad
 import Control.Monad.State (State, get, put, evalState)
@@ -75,6 +76,13 @@ cfgToCFRules s =
           profileToTerm (Unify []) = CFMeta
           profileToTerm (Unify xs) = CFRes (last xs) -- FIXME: unify
           profileToTerm (Constant f) = maybe CFMeta (\x -> CFObj x []) (forestName f)
+
+getStartCat :: Options -> StateGrammar -> String
+getStartCat opts sgr = prCFCat (startCatStateOpts opts sgr)
+
+getStartCatCF :: Options -> StateGrammar -> String
+getStartCatCF opts sgr = getStartCat opts sgr ++ "{}.s"
+
 
 -- | Remove productions which use categories which have no productions
 removeEmptyCats :: CFRules -> CFRules

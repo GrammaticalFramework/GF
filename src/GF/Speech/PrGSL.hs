@@ -31,11 +31,8 @@ import GF.Compile.ShellState (StateGrammar)
 
 import Data.Char (toUpper,toLower)
 
-gslPrinter :: Ident   -- ^ Grammar name
-           -> String  -- ^ Start category
-	   -> Options -> StateGrammar -> String
-gslPrinter name start opts = 
-    prGSL . topDownFilter . makeSimpleSRG name start opts
+gslPrinter :: Options -> StateGrammar -> String
+gslPrinter opts s = prGSL $ topDownFilter $ makeSimpleSRG opts s
 
 prGSL :: SRG -> String
 prGSL (SRG{grammarName=name,startCat=start,origStartCat=origStart,rules=rs})
