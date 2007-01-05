@@ -68,7 +68,7 @@ profileFinalSISR term fmt = [JS.DExpr $ fmtOut fmt `ass` f term]
         f (CFRes i) = JS.EIndex (JS.EVar children) (JS.EInt (fromIntegral i))
         f (CFVar v) = JS.EVar (var v)
         f (CFConst s) = JS.EStr s
-        f CFMeta = tree "?" []
+        f (CFMeta typ) = obj [("name",JS.EStr "?"), ("type",JS.EStr typ)]
 
 fmtOut SISROld = JS.EVar (JS.Ident "$")
 
@@ -82,5 +82,7 @@ field x y = JS.EMember x (JS.Ident y)
 
 ass = JS.EAssign
 
-tree n xs = JS.EObj $ [JS.Prop (JS.Ident "name") (JS.EStr n)]
-                   ++ [JS.Prop (JS.Ident ("arg"++show i)) x | (i,x) <- zip [0..] xs]
+tree n xs = obj $ [("name", JS.EStr n)] ++ [("arg"++show i, x) | (i,x) <- zip [0..] xs]
+
+obj ps = JS.EObj [JS.Prop (JS.Ident x) y | (x,y) <- ps]
+
