@@ -12,6 +12,7 @@ module GF.Speech.GrammarToVoiceXML (grammar2vxml) where
 
 import GF.Canon.CanonToGFCC (mkCanon2gfcc)
 import qualified GF.Canon.GFCC.AbsGFCC as C
+import GF.Canon.GFCC.DataGFCC (GFCC(..), Abstr(..), mkGFCC, lookMap)
 
 import qualified GF.Canon.GFC as GFC
 import GF.Canon.AbsGFC (Term)
@@ -37,6 +38,7 @@ import GF.Data.XML
 
 import Control.Monad (liftM)
 import Data.List (isPrefixOf, find, intersperse)
+import qualified Data.Map as Map
 import Data.Maybe (fromMaybe)
 
 import Debug.Trace
@@ -60,11 +62,14 @@ prid :: VIdent -> String
 prid (C.CId x) = x
 
 vSkeleton :: GFC.CanonGrammar -> (VIdent,VSkeleton)
-vSkeleton = gfccSkeleton . mkCanon2gfcc
+vSkeleton = gfccSkeleton . mkGFCC . mkCanon2gfcc
 
-gfccSkeleton :: C.Grammar -> (VIdent,VSkeleton)
-gfccSkeleton (C.Grm (C.Hdr n _) (C.Abs as) _) = 
-    (n, buildMultiMap [(cat,(f,args)) | C.Fun f (C.Typ args cat) _ <- as])
+gfccSkeleton :: GFCC -> (VIdent,VSkeleton)
+gfccSkeleton gfcc = (absname gfcc, ts)
+  where a = abstract gfcc
+        ts = [(c,[(f,ft f) | f <- fs]) | (c,fs) <- Map.toList (cats a)]
+        ft f = case lookMap (error $ prid f) f (funs a) of
+                 C.Typ args _ -> args
 
 --
 -- * Questions to ask 
