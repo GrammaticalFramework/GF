@@ -42,6 +42,7 @@ import GF.Speech.FiniteState
 import GF.Speech.RegExp
 import GF.Infra.Option
 import GF.Probabilistic.Probabilistic (Probs)
+import GF.Compile.ShellState (StateGrammar, stateProbs)
 
 import Data.List
 import Data.Maybe (fromMaybe, maybeToList)
@@ -83,30 +84,30 @@ type CatNames = Map String String
 makeSimpleSRG :: Ident     -- ^ Grammar name
               -> String    -- ^ Start category
 	      -> Options   -- ^ Grammar options
-	      -> Maybe Probs -- ^ Probabilities
-	      -> CGrammar -- ^ A context-free grammar
+	      -> StateGrammar
 	      -> SRG
-makeSimpleSRG i origStart opts probs =
-    makeSRG_ i origStart opts probs 
-                 . removeLeftRecursion origStart . removeIdenticalRules 
-                 . removeEmptyCats . removeCycles
-                 . cfgToCFRules
+makeSimpleSRG i origStart opts s =
+    makeSRG_ i origStart opts probs $ preprocess $ cfgToCFRules s
+ where preprocess = removeLeftRecursion origStart . removeIdenticalRules 
+                    . removeEmptyCats . removeCycles
+       probs = stateProbs s
 
 -- | Create a SRG preserving the names, profiles and probabilities of the 
 --   input grammar. The returned grammar may be left-recursive.
 makeSRG :: Ident     -- ^ Grammar name
         -> String    -- ^ Start category
 	-> Options   -- ^ Grammar options
-	-> Maybe Probs -- ^ Probabilities
-	-> CGrammar -- ^ A context-free grammar
+	-> StateGrammar
 	-> SRG
-makeSRG i origStart opts probs = 
-    makeSRG_ i origStart opts probs . removeEmptyCats . cfgToCFRules
+makeSRG i origStart opts s = 
+    makeSRG_ i origStart opts probs $ preprocess $ cfgToCFRules s
+  where preprocess = removeEmptyCats
+        probs = stateProbs s
 
 makeSRG_ :: Ident     -- ^ Grammar name
          -> String    -- ^ Start category
 	 -> Options   -- ^ Grammar options
-	 -> Maybe Probs -- ^ Probabilities
+	 -> Probs -- ^ Probabilities
 	 -> CFRules -- ^ A context-free grammar
 	 -> SRG
 makeSRG_ i origStart opts probs gr =
@@ -123,7 +124,7 @@ makeSRG_ i origStart opts probs gr =
     rs = map (cfgRulesToSRGRule names probs) cfgRules
 
 -- FIXME: merge alternatives with same rhs and profile but different probabilities
-cfgRulesToSRGRule :: Map String String -> Maybe Probs -> [CFRule_] -> SRGRule
+cfgRulesToSRGRule :: Map String String -> Probs -> [CFRule_] -> SRGRule
 cfgRulesToSRGRule names probs rs@(r:_) = SRGRule cat origCat rhs
     where 
       origCat = lhsCat r
@@ -137,8 +138,8 @@ cfgRulesToSRGRule names probs rs@(r:_) = SRGRule cat origCat rhs
               mkSRGSymbols i (Tok t:ss) = Tok t : mkSRGSymbols i ss
       renameCat = lookupFM_ names
 
-ruleProb :: Maybe Probs -> CFRule_ -> Maybe Double
-ruleProb mp r = mp >>= \probs -> lookupProb probs (ruleFun r)
+ruleProb :: Probs -> CFRule_ -> Maybe Double
+ruleProb probs r = lookupProb probs (ruleFun r)
 
 -- FIXME: move to GF.Probabilistic.Probabilistic?
 lookupProb :: Probs -> Ident -> Maybe Double

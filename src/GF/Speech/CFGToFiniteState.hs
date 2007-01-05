@@ -27,6 +27,7 @@ import GF.Formalism.CFG
 import GF.Formalism.Utilities (Symbol(..), mapSymbol, filterCats, symbol, NameProfile(..))
 import GF.Conversion.Types
 import GF.Infra.Ident (Ident)
+import GF.Compile.ShellState (StateGrammar)
 
 import GF.Speech.FiniteState
 import GF.Speech.Graph
@@ -56,10 +57,10 @@ data MFA a = MFA (DFA (MFALabel a)) [(String,DFA (MFALabel a))]
 
 
 
-cfgToFA :: String -> CGrammar -> DFA String
+cfgToFA :: String -> StateGrammar -> DFA String
 cfgToFA start = minimize . compileAutomaton start . makeSimpleRegular
 
-makeSimpleRegular :: CGrammar -> CFRules
+makeSimpleRegular :: StateGrammar -> CFRules
 makeSimpleRegular = makeRegular . removeIdenticalRules . removeEmptyCats . cfgToCFRules
 
 --
@@ -144,15 +145,15 @@ make_fa c@(g,ns) q0 alpha q1 fa =
 -- * Compile a strongly regular grammar to a DFA with sub-automata
 --
 
-cfgToMFA :: String -> CGrammar -> MFA String
+cfgToMFA :: String -> StateGrammar -> MFA String
 cfgToMFA start g = buildMFA start g
 
 -- | Build a DFA by building and expanding an MFA
-cfgToFA' :: String -> CGrammar -> DFA String
-cfgToFA' start g = mfaToDFA $ cfgToMFA start g
+cfgToFA' :: String -> StateGrammar -> DFA String
+cfgToFA' start = mfaToDFA . cfgToMFA start
 
 buildMFA :: Cat_ -- ^ Start category
-         -> CGrammar -> MFA String
+         -> StateGrammar -> MFA String
 buildMFA start g = sortSubLats $ removeUnusedSubLats mfa
   where startFA = let (fa,s,f) = newFA_
                    in newTransition s f (MFASub start) fa

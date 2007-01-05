@@ -27,18 +27,19 @@ import GF.Conversion.Types
 import GF.Infra.Print
 import GF.Infra.Option
 import GF.Probabilistic.Probabilistic (Probs)
+import GF.Compile.ShellState (StateGrammar)
 
 import Data.Char (toUpper,toLower)
 
-gslPrinter :: Ident -- ^ Grammar name
-           -> String    -- ^ Start category
-	   -> Options -> Maybe Probs -> CGrammar -> String
-gslPrinter name start opts probs cfg = prGSL srg ""
-    where srg = topDownFilter $ makeSimpleSRG name start opts probs $ rmPunctCFG cfg
+gslPrinter :: Ident   -- ^ Grammar name
+           -> String  -- ^ Start category
+	   -> Options -> StateGrammar -> String
+gslPrinter name start opts = 
+    prGSL . topDownFilter . makeSimpleSRG name start opts
 
-prGSL :: SRG -> ShowS
+prGSL :: SRG -> String
 prGSL (SRG{grammarName=name,startCat=start,origStartCat=origStart,rules=rs})
-    = header . mainCat . unlinesS (map prRule rs)
+    = (header . mainCat . unlinesS (map prRule rs)) ""
     where
     header = showString ";GSL2.0" . nl 
 	     . comments ["Nuance speech recognition grammar for " ++ name,
@@ -59,12 +60,14 @@ firstToUpper :: String -> String
 firstToUpper [] = []
 firstToUpper (x:xs) = toUpper x : xs
 
+{-
 rmPunctCFG :: CGrammar -> CGrammar
 rmPunctCFG g = [CFRule c (filter keepSymbol ss) n | CFRule c ss n <- g]
 
 keepSymbol :: Symbol c Token -> Bool
 keepSymbol (Tok t) = not (all isPunct (prt t))
 keepSymbol _ = True
+-}
 
 -- Nuance does not like upper case characters in tokens
 showToken :: Token -> String

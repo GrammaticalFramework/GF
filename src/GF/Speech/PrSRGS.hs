@@ -27,6 +27,7 @@ import GF.Conversion.Types
 import GF.Infra.Print
 import GF.Infra.Option
 import GF.Probabilistic.Probabilistic (Probs)
+import GF.Compile.ShellState (StateGrammar)
 
 import Data.Char (toUpper,toLower)
 import Data.List
@@ -39,15 +40,15 @@ srgsXmlPrinter :: Ident -- ^ Grammar name
                -> String    -- ^ Start category
 	       -> Options 
                -> Maybe SISRFormat 
-	       -> Maybe Probs
-	       -> CGrammar -> String
-srgsXmlPrinter name start opts sisr probs cfg = prSrgsXml sisr srg ""
-    where srg = makeSRG name start opts probs cfg
+	       -> Bool -- ^ Include probabilities
+	       -> StateGrammar -> String
+srgsXmlPrinter name start opts sisr probs = 
+    prSrgsXml sisr probs . makeSRG name start opts
 
-prSrgsXml :: Maybe SISRFormat -> SRG -> ShowS
-prSrgsXml sisr srg@(SRG{grammarName=name,startCat=start,
+prSrgsXml :: Maybe SISRFormat -> Bool -> SRG -> String
+prSrgsXml sisr probs srg@(SRG{grammarName=name,startCat=start,
                         origStartCat=origStart,grammarLanguage=l,rules=rs})
-    = showsXMLDoc $ optimizeSRGS xmlGr
+    = showXMLDoc (optimizeSRGS xmlGr)
     where
     Just root = cfgCatToGFCat origStart 
     xmlGr = grammar sisr (catFormId root) l $
@@ -60,7 +61,7 @@ prSrgsXml sisr srg@(SRG{grammarName=name,startCat=start,
 	    ++ concatMap ruleToXML rs
     ruleToXML (SRGRule cat origCat alts) = 
         comments ["Category " ++ origCat] ++ [rule cat (prRhs alts)]
-    prRhs rhss = [oneOf (map (mkProd sisr) rhss)] 
+    prRhs rhss = [oneOf (map (mkProd sisr probs) rhss)] 
     -- externally visible rules for each of the GF categories
     topCatRules = [topRule tc [oneOf (map (it tc) cs)] | (tc,cs) <- srgTopCats srg]
         where it i c = Tag "item" [] [Tag "ruleref" [("uri","#" ++ c)] [],
@@ -86,10 +87,11 @@ mkItem sisr = f
     f (RESymbol s)  = symItem sisr s
 -}
 
-mkProd :: Maybe SISRFormat -> SRGAlt -> XML
-mkProd sisr (SRGAlt mp n rhs) = Tag "item" w (ti ++ xs ++ tf)
+mkProd :: Maybe SISRFormat -> Bool -> SRGAlt -> XML
+mkProd sisr probs (SRGAlt mp n rhs) = Tag "item" w (ti ++ xs ++ tf)
   where xs = mkItem sisr n rhs
-        w = maybe [] (\p -> [("weight", show p)]) mp
+        w | probs = maybe [] (\p -> [("weight", show p)]) mp
+          | otherwise = []
         ti = [tag sisr (profileInitSISR n)]
         tf = [tag sisr (profileFinalSISR n)]
 

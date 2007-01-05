@@ -28,6 +28,7 @@ import GF.Speech.CFGToFiniteState
 import GF.Speech.FiniteState
 import GF.Speech.SRG
 import GF.Speech.TransformCFG
+import GF.Compile.ShellState (StateGrammar)
 
 import Data.Char (toUpper,toLower)
 import Data.List
@@ -36,14 +37,12 @@ import Data.Maybe (fromMaybe)
 
 
 faGraphvizPrinter :: Ident -- ^ Grammar name
-		   -> String -> CGrammar -> String
-faGraphvizPrinter name start cfg = 
-    prFAGraphviz $ mapStates (const "") fa
-  where fa = cfgToFA start cfg
-
+		   -> String -> StateGrammar -> String
+faGraphvizPrinter name start = 
+    prFAGraphviz . mapStates (const "") . cfgToFA start
 
 -- | Convert the grammar to a regular grammar and print it in BNF
-regularPrinter :: CGrammar -> String
+regularPrinter :: StateGrammar -> String
 regularPrinter = prCFRules . makeSimpleRegular
   where
   prCFRules :: CFRules -> String
@@ -52,8 +51,8 @@ regularPrinter = prCFRules . makeSimpleRegular
   showRhs = unwords . map (symbol id show)
 
 faCPrinter :: Ident -- ^ Grammar name
-	   -> String -> CGrammar -> String
-faCPrinter name start cfg = fa2c $ cfgToFA start cfg
+	   -> String -> StateGrammar -> String
+faCPrinter name start = fa2c . cfgToFA start
 
 fa2c :: DFA String -> String
 fa2c fa = undefined

@@ -30,6 +30,7 @@ import GF.Probabilistic.Probabilistic (Probs)
 import GF.Speech.SISR
 import GF.Speech.SRG
 import GF.Speech.RegExp
+import GF.Compile.ShellState (StateGrammar)
 
 import Data.Char
 import Data.List
@@ -41,12 +42,12 @@ jsgfPrinter :: Ident -- ^ Grammar name
             -> String    -- ^ Start category
 	    -> Options 
             -> Maybe SISRFormat
-            -> Maybe Probs -> CGrammar -> String
-jsgfPrinter name start opts sisr probs cfg = show (prJSGF srg sisr)
-    where srg = makeSimpleSRG name start opts probs cfg
+            -> StateGrammar -> String
+jsgfPrinter name start opts sisr = 
+    show . prJSGF sisr . makeSimpleSRG name start opts
 
-prJSGF :: SRG -> Maybe SISRFormat -> Doc
-prJSGF srg@(SRG{grammarName=name,startCat=start,origStartCat=origStart,rules=rs}) sisr
+prJSGF :: Maybe SISRFormat -> SRG -> Doc
+prJSGF sisr srg@(SRG{grammarName=name,startCat=start,origStartCat=origStart,rules=rs})
     = header $++$ mainCat $++$ vcat topCatRules $++$ foldr ($++$) empty (map prRule rs)
     where
     header = text "#JSGF V1.0 UTF-8;" $$
