@@ -15,11 +15,13 @@ import GF.Canon.AbsGFC (Term)
 import GF.Canon.PrintGFC (printTree)
 import GF.Canon.CMacros (noMark, strsFromTerm)
 import GF.Canon.Unlex (formatAsText)
-import GF.Compile.ShellState (StateGrammar,stateGrammarST,cncId,grammar)
+import GF.CF.CFIdent (cfCat2Ident)
+import GF.Compile.ShellState (StateGrammar,stateGrammarST,cncId,grammar,startCatStateOpts)
 import GF.Data.Str (sstrV)
 import GF.Grammar.Macros hiding (assign,strsFromTerm)
 import GF.Grammar.Grammar (Fun)
 import GF.Grammar.Values (Tree)
+import GF.Infra.Option (Options)
 import GF.UseGrammar.GetTree (string2treeErr)
 import GF.UseGrammar.Linear (linTree2strings)
 
@@ -36,11 +38,13 @@ import Data.Maybe (fromMaybe)
 import Debug.Trace
 
 -- | the main function
-grammar2vxml :: Ident -> StateGrammar -> String
-grammar2vxml startcat gr = showsXMLDoc (skel2vxml name language startcat gr' qs) ""
-    where (name, gr') = vSkeleton (stateGrammarST gr)
-          qs = catQuestions gr (map fst gr')
+grammar2vxml :: Options -> StateGrammar -> String
+grammar2vxml opts s = showsXMLDoc (skel2vxml name language startcat gr' qs) ""
+    where (name, gr') = vSkeleton (stateGrammarST s)
+          qs = catQuestions s (map fst gr')
           language = "en" -- FIXME: use speechLanguage tag
+          startcat = cfCat2Ident (startCatStateOpts opts s)
+
 --
 -- * VSkeleton: a simple description of the abstract syntax.
 --
