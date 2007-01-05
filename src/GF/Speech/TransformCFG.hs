@@ -23,6 +23,9 @@ module GF.Speech.TransformCFG {- (CFRule_, CFRules,
 			       removeLeftRecursion,
 			       removeEmptyCats, removeIdenticalRules) -} where
 
+import GF.Canon.CanonToGFCC (mkCanon2gfcc)
+import qualified GF.Canon.GFCC.AbsGFCC as C
+import GF.Canon.GFCC.DataGFCC (GFCC, mkGFCC, lookType)
 import GF.Conversion.Types
 import GF.CF.PPrCF (prCFCat)
 import GF.Data.Utilities
@@ -33,7 +36,7 @@ import GF.Infra.Ident
 import GF.Infra.Option
 import GF.Infra.Print
 import GF.Speech.Relation
-import GF.Compile.ShellState (StateGrammar, stateCFG, startCatStateOpts)
+import GF.Compile.ShellState (StateGrammar, stateCFG, stateGrammarST, startCatStateOpts)
 
 import Control.Monad
 import Control.Monad.State (State, get, put, evalState)
@@ -56,7 +59,7 @@ data CFTerm
     | CFRes Int
     | CFVar Int
     | CFConst String
-    | CFMeta
+    | CFMeta String
   deriving (Eq,Show)
 
 type Cat_ = String
@@ -72,10 +75,13 @@ cfgToCFRules s =
     where cfg = stateCFG s
           symb = mapSymbol catToString id
 	  catToString = prt
-          nameToTerm (Name f prs) = CFObj f (map profileToTerm prs)
-          profileToTerm (Unify []) = CFMeta
-          profileToTerm (Unify xs) = CFRes (last xs) -- FIXME: unify
-          profileToTerm (Constant f) = maybe CFMeta (\x -> CFObj x []) (forestName f)
+          gfcc = stateGFCC s
+          nameToTerm (Name f prs) = CFObj f (zipWith profileToTerm args prs)
+            where C.Typ args _ = lookType gfcc (i2i f)
+                  i2i (IC c) = C.CId c
+          profileToTerm (C.CId t) (Unify []) = CFMeta t
+          profileToTerm _ (Unify xs) = CFRes (last xs) -- FIXME: unify
+          profileToTerm (C.CId t) (Constant f) = maybe (CFMeta t) (\x -> CFObj x []) (forestName f)
 
 getStartCat :: Options -> StateGrammar -> String
 getStartCat opts sgr = prCFCat (startCatStateOpts opts sgr)
@@ -83,6 +89,8 @@ getStartCat opts sgr = prCFCat (startCatStateOpts opts sgr)
 getStartCatCF :: Options -> StateGrammar -> String
 getStartCatCF opts sgr = getStartCat opts sgr ++ "{}.s"
 
+stateGFCC :: StateGrammar -> GFCC
+stateGFCC = mkGFCC . mkCanon2gfcc . stateGrammarST
 
 -- | Remove productions which use categories which have no productions
 removeEmptyCats :: CFRules -> CFRules

@@ -35,6 +35,10 @@ lookLin :: GFCC -> CId -> CId -> Term
 lookLin mcfg lang fun = 
   lookMap TM fun $ lookMap undefined lang $ concretes mcfg
 
+-- | Look up the type of a function.
+lookType :: GFCC -> CId -> Type
+lookType gfcc f = lookMap (error $ "lookType " ++ show f) f (funs (abstract gfcc))
+
 linearize :: GFCC -> CId -> Exp -> String
 linearize mcfg lang = realize . linExp mcfg lang
 
