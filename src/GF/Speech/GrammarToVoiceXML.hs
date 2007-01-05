@@ -10,11 +10,15 @@
 
 module GF.Speech.GrammarToVoiceXML (grammar2vxml) where
 
+import GF.Canon.CanonToGFCC (mkCanon2gfcc)
+import qualified GF.Canon.GFCC.AbsGFCC as C
+
 import qualified GF.Canon.GFC as GFC
 import GF.Canon.AbsGFC (Term)
 import GF.Canon.PrintGFC (printTree)
 import GF.Canon.CMacros (noMark, strsFromTerm)
 import GF.Canon.Unlex (formatAsText)
+import GF.Data.Utilities
 import GF.CF.CFIdent (cfCat2Ident)
 import GF.Compile.ShellState (StateGrammar,stateGrammarST,cncId,grammar,startCatStateOpts)
 import GF.Data.Str (sstrV)
@@ -43,35 +47,24 @@ grammar2vxml opts s = showsXMLDoc (skel2vxml name language startcat gr' qs) ""
     where (name, gr') = vSkeleton (stateGrammarST s)
           qs = catQuestions s (map fst gr')
           language = "en" -- FIXME: use speechLanguage tag
-          startcat = cfCat2Ident (startCatStateOpts opts s)
+          startcat = C.CId $ prIdent $ cfCat2Ident $ startCatStateOpts opts s
 
 --
 -- * VSkeleton: a simple description of the abstract syntax.
 --
 
-type VSkeleton = [(Ident, [(Ident, [Ident])])]
-type VIdent = Ident
+type VSkeleton = [(VIdent, [(VIdent, [VIdent])])]
+type VIdent = C.CId
+
+prid :: VIdent -> String
+prid (C.CId x) = x
 
 vSkeleton :: GFC.CanonGrammar -> (VIdent,VSkeleton)
-vSkeleton gr = (name,collectR rules [(c,[]) | c <- cats]) where
-  collectR rr hh =
-   case rr of
-     (fun,typ):rs -> case catSkeleton typ of
-        Ok (cats,cat) -> 
-             collectR rs (updateSkeleton (snd cat) hh (fun, map snd cats))
-        _ -> collectR rs hh
-     _ -> hh
-  cats =  [cat | (cat,GFC.AbsCat _ _) <- defs]
-  rules = [(fun, typ) | (fun,GFC.AbsFun typ _) <- defs]
+vSkeleton = gfccSkeleton . mkCanon2gfcc
 
-  defs = concat [tree2list (jments m) | im@(_,ModMod m) <- modules gr, isModAbs m]
-  name = ifNull (error "No abstract module") last [n | (n,ModMod m) <- modules gr, isModAbs m]
-
-updateSkeleton :: VIdent -> VSkeleton -> (VIdent, [VIdent]) -> VSkeleton
-updateSkeleton cat skel rule =
- case skel of
-   (cat0,rules):rr | cat0 == cat -> (cat0, rule:rules) : rr
-   (cat0,rules):rr               -> (cat0, rules) : updateSkeleton cat rr rule
+gfccSkeleton :: C.Grammar -> (VIdent,VSkeleton)
+gfccSkeleton (C.Grm (C.Hdr n _) (C.Abs as) _) = 
+    (n, buildMultiMap [(cat,(f,args)) | C.Fun f (C.Typ args cat) _ <- as])
 
 --
 -- * Questions to ask 
@@ -82,19 +75,19 @@ type CatQuestions = [(VIdent,String)]
 catQuestions :: StateGrammar -> [VIdent] -> CatQuestions
 catQuestions gr cats = [(c,catQuestion gr c) | c <- cats]
 
-catQuestion :: StateGrammar -> Ident -> String
+catQuestion :: StateGrammar -> VIdent -> String
 catQuestion gr cat = err errHandler id (getPrintname gr cat >>= term2string)
   where -- FIXME: use some better warning facility
-        errHandler e = trace ("GrammarToVoiceXML: " ++ e) ("quest_"++prIdent cat)
+        errHandler e = trace ("GrammarToVoiceXML: " ++ e) ("quest_"++prid cat)
         term2string = liftM sstrV . strsFromTerm
 
-getPrintname :: StateGrammar -> Ident -> Err Term
+getPrintname :: StateGrammar -> VIdent -> Err Term
 getPrintname gr cat = 
     do m <- lookupModMod (grammar gr) (cncId gr)
-       i <- lookupInfo m cat
+       i <- lookupInfo m (IC (prid cat))
        case i of
          GFC.CncCat _ _ p -> return p
-         _ -> fail $ "getPrintname " ++ prIdent cat
+         _ -> fail $ "getPrintname " ++ prid cat
                       ++ ": Expected CncCat, got " ++ show i
 
 
@@ -113,7 +106,7 @@ lin gr fun = do
 
 getCatQuestion :: VIdent -> CatQuestions -> String
 getCatQuestion c qs = 
-    fromMaybe (error "No question for category " ++ prIdent c) (lookup c qs)
+    fromMaybe (error "No question for category " ++ prid c) (lookup c qs)
 
 --
 -- * Generate VoiceXML
@@ -123,7 +116,7 @@ skel2vxml :: VIdent -> String -> VIdent -> VSkeleton -> CatQuestions -> XML
 skel2vxml name language start skel qs = 
     vxml language ([startForm] ++ concatMap (uncurry (catForms gr qs)) skel)
   where 
-  gr = grammarURI (prIdent name)
+  gr = grammarURI (prid name)
   startForm = Tag "form" [] [subdialog "sub" [("src", "#"++catFormId start)] []]
 
 grammarURI :: String -> String
@@ -132,7 +125,7 @@ grammarURI name = name ++ ".grxml"
 
 catForms :: String -> CatQuestions -> VIdent -> [(VIdent, [VIdent])] -> [XML]
 catForms gr qs cat fs = 
-    comments [prIdent cat ++ " category."]
+    comments [prid cat ++ " category."]
     ++ [cat2form gr qs cat fs] 
 
 cat2form :: String -> CatQuestions -> VIdent -> [(VIdent, [VIdent])] -> XML
@@ -156,34 +149,34 @@ cat2form gr qs cat fs =
      ++ [block [{- doCallback "done" cat [return_ [catFieldId cat]] [-} return_ [catFieldId cat]{-]-}]]
 
 mkHelpText :: VIdent -> String
-mkHelpText cat = "help_"++ prIdent cat
+mkHelpText cat = "help_"++ prid cat
 
 fun2sub :: String -> VIdent -> VIdent -> [VIdent] -> [XML]
 fun2sub gr cat fun args = 
-    comments [prIdent fun ++ " : (" 
-              ++ concat (intersperse ", " (map prIdent args))
-              ++ ") " ++ prIdent cat] ++ ss
+    comments [prid fun ++ " : (" 
+              ++ concat (intersperse ", " (map prid args))
+              ++ ") " ++ prid cat] ++ ss
   where 
   argNames = zip ["arg"++show n | n <- [0..]] args
   ss = map (uncurry mkSub) argNames
   mkSub a t = subdialog s [("src","#"++catFormId t),
-                           ("cond",catFieldId cat++".name == "++string (prIdent fun))] 
+                           ("cond",catFieldId cat++".name == "++string (prid fun))] 
               [param "value" (catFieldId cat++"."++a),
 --               param "callbacks" "callbacks",
                filled [] [assign (catFieldId cat++"."++a) (s++"."++catFieldId t)]]
-    where s = prIdent fun ++ "_" ++ a
+    where s = prid fun ++ "_" ++ a
 
 doCallback :: String -> VIdent -> [XML] -> [XML] -> XML
 doCallback f cat i e = 
- if_else ("typeof callbacks != 'undefined' && typeof " ++ cf ++ " != 'undefined' && !" ++ cf ++ "("++string (prIdent cat)++","++ catFieldId cat ++ ")") 
+ if_else ("typeof callbacks != 'undefined' && typeof " ++ cf ++ " != 'undefined' && !" ++ cf ++ "("++string (prid cat)++","++ catFieldId cat ++ ")") 
          i e
   where cf = "callbacks." ++ f
 
 catFormId :: VIdent -> String
-catFormId c = prIdent c ++ "_cat"
+catFormId c = prid c ++ "_cat"
 
 catFieldId :: VIdent -> String
-catFieldId c = prIdent c ++ "_field"
+catFieldId c = prid c ++ "_field"
 
 --
 -- * VoiceXML stuff
