@@ -14,8 +14,9 @@ import GF.Conversion.Types
 import GF.Infra.Ident
 import GF.Speech.CFGToFiniteState
 import GF.Speech.RegExp
+import GF.Compile.ShellState (StateGrammar)
 
 
 regexpPrinter :: Ident -- ^ Grammar name
-	      -> String -> CGrammar -> String
-regexpPrinter name start cfg = prRE $ dfa2re $ cfgToFA start cfg
+	      -> String -> StateGrammar -> String
+regexpPrinter name start = prRE . dfa2re . cfgToFA start

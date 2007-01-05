@@ -32,6 +32,7 @@ import GF.Infra.Ident
 import GF.Infra.Option
 import GF.Infra.Print
 import GF.Speech.Relation
+import GF.Compile.ShellState (StateGrammar, stateCFG)
 
 import Control.Monad
 import Control.Monad.State (State, get, put, evalState)
@@ -63,11 +64,12 @@ type CFSymbol_ = Symbol Cat_ Token
 type CFRules = [(Cat_,[CFRule_])]
 
 
-cfgToCFRules :: CGrammar -> CFRules
-cfgToCFRules cfg = 
+cfgToCFRules :: StateGrammar -> CFRules
+cfgToCFRules s = 
     groupProds [CFRule (catToString c) (map symb r) (nameToTerm n) 
                     | CFRule c r n <- cfg]
-    where symb = mapSymbol catToString id
+    where cfg = stateCFG s
+          symb = mapSymbol catToString id
 	  catToString = prt
           nameToTerm (Name f prs) = CFObj f (map profileToTerm prs)
           profileToTerm (Unify []) = CFMeta

@@ -8,7 +8,7 @@
 -- Utilities for creating XML documents.
 -----------------------------------------------------------------------------
 
-module GF.Data.XML (XML(..), Attr, comments, showsXMLDoc, showsXML, bottomUpXML) where
+module GF.Data.XML (XML(..), Attr, comments, showXMLDoc, showsXMLDoc, showsXML, bottomUpXML) where
 
 import GF.Data.Utilities
 
@@ -19,6 +19,9 @@ type Attr = (String,String)
 
 comments :: [String] -> [XML]
 comments = map Comment
+
+showXMLDoc :: XML -> String
+showXMLDoc xml = showsXMLDoc xml ""
 
 showsXMLDoc :: XML -> ShowS
 showsXMLDoc xml = showString header . showsXML xml 

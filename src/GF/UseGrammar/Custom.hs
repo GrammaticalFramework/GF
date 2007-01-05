@@ -250,50 +250,49 @@ customGrammarPrinter =
   ,(strCI "srg",     \_ -> prSRG . stateCF)
   ,(strCI "gsl",     \opts s -> let name = cncId s
                                     start = getStartCatCF opts s
-                                 in gslPrinter name start opts Nothing $ stateCFG s)
+                                 in gslPrinter name start opts s)
   ,(strCI "jsgf",    \opts s -> let name = cncId s
                                     start = getStartCatCF opts s
-                                 in jsgfPrinter name start opts Nothing Nothing $ stateCFG s)
+                                 in jsgfPrinter name start opts Nothing s)
   ,(strCI "jsgf_sisr_old", 
                      \opts s -> let name = cncId s
                                     start = getStartCatCF opts s
-                                 in jsgfPrinter name start opts (Just SISR.SISROld) Nothing $ stateCFG s)
+                                 in jsgfPrinter name start opts (Just SISR.SISROld) s)
   ,(strCI "srgs_xml", \opts s -> let name = cncId s
                                      start = getStartCatCF opts s
-                                  in SRGS.srgsXmlPrinter name start opts Nothing Nothing $ stateCFG s)
+                                  in SRGS.srgsXmlPrinter name start opts Nothing False s)
   ,(strCI "srgs_xml_prob", 
               \opts s -> let name = cncId s
-                             probs = stateProbs s
                              start = getStartCatCF opts s
-                          in SRGS.srgsXmlPrinter name start opts Nothing (Just probs) $ stateCFG s)
+                          in SRGS.srgsXmlPrinter name start opts Nothing True s)
   ,(strCI "srgs_xml_sisr_old", 
               \opts s -> let name = cncId s
                              start = getStartCatCF opts s
-                          in SRGS.srgsXmlPrinter name start opts (Just SISR.SISROld) Nothing $ stateCFG s)
+                          in SRGS.srgsXmlPrinter name start opts (Just SISR.SISROld) False s)
   ,(strCI "vxml", \opts s -> let start = cfCat2Ident (startCatStateOpts opts s)
                               in grammar2vxml start s)
   ,(strCI "slf",  \opts s -> let start = getStartCatCF opts s
                                  name = cncId s
-                              in slfPrinter name start $ stateCFG s)
+                              in slfPrinter name start s)
   ,(strCI "slf_graphviz", \opts s -> let start = getStartCatCF opts s
                                          name = cncId s
-                                      in slfGraphvizPrinter name start $ stateCFG s)
+                                      in slfGraphvizPrinter name start s)
   ,(strCI "slf_sub", \opts s -> let start = getStartCatCF opts s
                                     name = cncId s
-                                 in slfSubPrinter name start $ stateCFG s)
+                                 in slfSubPrinter name start s)
   ,(strCI "slf_sub_graphviz", \opts s -> let start = getStartCatCF opts s
                                              name = cncId s
-                                          in slfSubGraphvizPrinter name start $ stateCFG s)
+                                          in slfSubGraphvizPrinter name start s)
   ,(strCI "fa_graphviz", \opts s -> let start = getStartCatCF opts s
                                         name = cncId s
-                                     in faGraphvizPrinter name start $ stateCFG s)
+                                     in faGraphvizPrinter name start s)
   ,(strCI "fa_c", \opts s -> let start = getStartCatCF opts s
                                  name = cncId s
-                              in faCPrinter name start $ stateCFG s)
+                              in faCPrinter name start s)
   ,(strCI "regexp", \opts s -> let start = getStartCatCF opts s
                                    name = cncId s
-                                in regexpPrinter name start $ stateCFG s)
-  ,(strCI "regular", \_ -> regularPrinter . stateCFG)
+                                in regexpPrinter name start s)
+  ,(strCI "regular", \_ -> regularPrinter)
   ,(strCI "plbnf",   \_ -> prLBNF True)
   ,(strCI "lbnf",    \_ -> prLBNF False)
   ,(strCI "bnf",     \_ -> prBNF False)
