@@ -133,6 +133,18 @@ catForms gr qs cat fs =
     comments [prid cat ++ " category."]
     ++ [cat2form gr qs cat fs] 
 
+{-
+cat2form :: String -> CatQuestions -> VIdent -> [(VIdent, [VIdent])] -> XML
+cat2form gr qs cat fs = 
+    form (catFormId cat) 
+      [field "value" [] 
+         [promptString (getCatQuestion cat qs), 
+          vxmlGrammar (gr++"#"++catFormId cat),
+          filled [] [return_ ["value"]]
+         ]
+      ]
+-}
+
 cat2form :: String -> CatQuestions -> VIdent -> [(VIdent, [VIdent])] -> XML
 cat2form gr qs cat fs = 
   form (catFormId cat) $ 
@@ -152,6 +164,7 @@ cat2form gr qs cat fs =
       ]
      ++ concatMap (uncurry (fun2sub gr cat)) fs
      ++ [block [{- doCallback "done" cat [return_ [catFieldId cat]] [-} return_ [catFieldId cat]{-]-}]]
+
 
 mkHelpText :: VIdent -> String
 mkHelpText cat = "help_"++ prid cat
@@ -177,11 +190,12 @@ doCallback f cat i e =
          i e
   where cf = "callbacks." ++ f
 
+catFieldId :: VIdent -> String
+catFieldId c = prid c ++ "_field"
+
 catFormId :: VIdent -> String
 catFormId c = prid c ++ "_cat"
 
-catFieldId :: VIdent -> String
-catFieldId c = prid c ++ "_field"
 
 --
 -- * VoiceXML stuff
