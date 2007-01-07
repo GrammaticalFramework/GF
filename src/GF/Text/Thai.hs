@@ -27,7 +27,7 @@ mkThai = concat . map mkThaiWord . words
 type ThaiChar = Char
 
 mkThaiWord :: String -> [ThaiChar]
-mkThaiWord = map (toEnum . mkThaiChar) . unchar
+mkThaiWord = map (toEnum . mkThaiChar) . unchar . snd . pronAndOrth
 
 mkThaiChar :: String -> Int
 mkThaiChar c = maybe 0 id $ Map.lookup c thaiMap
@@ -56,18 +56,82 @@ unchar s = case s of
   [_]          -> [s]
   _            -> []
 
+-- you can prefix transliteration by irregular phonology in []
+
+pronAndOrth :: String -> (Maybe String, String)
+pronAndOrth s = case s of
+  '[':cs -> case span (/=']') cs of
+    (p,_:o) -> (Just p,o)
+    _ -> (Nothing,s)
+  _ -> (Nothing,s)
+
 allThaiTrans :: [String]
 allThaiTrans = words $
   "-  k  k1 -  k2 -  k3 g  c  c1 c2 s  c3 y  d  t  " ++
   "t1 t2 t3 n  d' t' t4 t5 t6 n  b  p  p1 f  p2 f' " ++
   "p3 m  y' r  -  l  -  w  s' r' s- h  l' O  h' -  " ++
   "a  a. a: a+ i  i: v  v: u  u: -  -  -  -  -  -  " ++
-  "e  e: o: a% a& L  R  M  E  T  -  -  -  -  -  -  " ++
+  "e  e' o: a% a& L  R  M  T1 T2 T3 T4 -  -  -  -  " ++
   "N0 N1 N2 N3 N4 N5 N6 N7 N8 N9 -  -  -  -  -  -  "
 
 
 allThaiCodes :: [Int]
 allThaiCodes = [0x0e00 .. 0x0e7f]
+
+
+-- derive the pronunciation of a syllable
+
+pronSyll :: [Int] -> String
+pronSyll s = cons1 ++ voc ++ cons2 where
+  voc = toned tone $ pronThaiChar vo
+
+  cons1 = concatMap pronThaiChar co1 ----
+  cons2 = mkThaiPron $ unwords $ map recodeThai co2 -- takes care of final ----
+
+  (vo,cc@(co1,co2)) = case s of
+    c:cs    | initVowel c -> (c,getCons cs)
+    c1:c:c2 | internVowel c -> (c,([c1],getFinal c2))
+    c1:0x0e2d:c2 -> (0x0e42,([c1],getFinal c2))
+    c0:c1:c:c2 | cluster c0 c1 && internVowel c -> (c,([c0,c1],getFinal c2))
+    c0:c1:0x0e2d:c2 | cluster c0 c1 -> (0x0e42,([c0,c1],getFinal c2))
+    _ -> (0x0e42,getCons s) ---- "o"
+
+  getCons cs = case cs of
+    c0:c1:c2 | cluster c1 c1 -> ([c0,c1],getFinal c2)
+    c:c2 -> ([c],getFinal c2)
+
+  getFinal = snd . getToneFinal
+  toneMark = fst . getToneFinal
+
+  getToneFinal c = case c of
+    [  _,0x0e4c] -> ([], []) -- killer
+    [t,_,0x0e4c] -> ([t],[]) -- killer
+    _ -> splitAt (length c - 1) c
+
+  initVowel   c = 0x0e40 <= c && c <= 0x0e44
+  internVowel c = 0x0e30 <= c && c <= 0x0e39
+
+  cluster c0 c1 = 
+       c0 == 0x0e2b -- h
+    || c1 == 0x0e23 -- r
+    || c1 == 0x0e25 -- l
+    || c1 == 0x0e27 -- w
+
+  classC = case co1 of
+    _ -> "L" ----
+
+  lengthV = case vo of
+    _ -> False ----
+
+  liveness = case co2 of
+    _ -> False ----
+
+  tone = case (classC,lengthV,liveness,toneMark) of
+    _ -> ""
+
+  toned t v = t ++ v ----
+
+-- [0x0e00 .. 0x0e7f]
 
 
 -- to test
@@ -91,13 +155,20 @@ thaiFile f mo = do
   let put = maybe putStr writeFile mo
   put $ encodeUTF8 $ thaiStrings s
 
-mkThaiPron = concat . render . unchar where
+mkThaiPron s = case fst $ pronAndOrth s of
+  Just p -> p
+  _ -> concat $ render $ unchar s 
+ where
   render s = case s of
-    [c]  -> maybe c return (Map.lookup c thaiFinalMap): []
+    [c]  -> finalThai c : []
     c:cs -> pronThai c : render cs
     _ -> []
 
+finalThai c = maybe c return (Map.lookup c thaiFinalMap)
 thaiFinalMap = Map.fromList $ zip allThaiTrans finals
+
+classThai c = maybe c return (Map.lookup c thaiClassMap)
+thaiClassMap = Map.fromList $ zip allThaiTrans heights
 
 
 thaiTable :: String
@@ -118,13 +189,20 @@ showThai s = case s of
 ---  v:_ | elem v "ivu" -> map (toEnum . mkThaiChar) ["O",s] 
   _   -> [toEnum $ mkThaiChar s]
 
+
+pronThaiChar = pronThai . recodeThai
+  
+recodeThai c = allThaiTrans !! (c - 0x0e00)
+
 pronThai s = case s of
   [c,p]
-    | isUpper c && isDigit p -> [p]
+    | c == 'N' && isDigit p -> [p]
+    | c == 'T' && isDigit p -> ['\'',p]
     | isDigit p   -> c:"h"
     | p==':'      -> c:[c]
     | elem p "%&" -> c:"y"
     | p=='+'      -> c:"m"
+    | s == "e'"   -> "ä"
     | otherwise   -> [c]
   [c] | isUpper c -> "" --- O
   _ -> s
