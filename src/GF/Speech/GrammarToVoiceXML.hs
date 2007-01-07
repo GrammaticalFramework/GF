@@ -148,7 +148,7 @@ cat2form gr qs cat fs =
 cat2form :: String -> CatQuestions -> VIdent -> [(VIdent, [VIdent])] -> XML
 cat2form gr qs cat fs = 
   form (catFormId cat) $ 
-      [var "value" (Just "{ name : '?' }"), 
+      [var "value" Nothing, 
 --       var "callbacks" Nothing, 
        blockCond "value.name != '?'" [assign (catFieldId cat) "value"],
 --       block [doCallback "entered" cat [return_ [catFieldId cat]] []],
@@ -175,14 +175,14 @@ fun2sub gr cat fun args =
               ++ concat (intersperse ", " (map prid args))
               ++ ") " ++ prid cat] ++ ss
   where 
-  argNames = zip ["arg"++show n | n <- [0..]] args
-  ss = map (uncurry mkSub) argNames
-  mkSub a t = subdialog s [("src","#"++catFormId t),
+  ss = zipWith mkSub [0..] args
+  mkSub n t = subdialog s [("src","#"++catFormId t),
                            ("cond",catFieldId cat++".name == "++string (prid fun))] 
-              [param "value" (catFieldId cat++"."++a),
+              [param "value" v,
 --               param "callbacks" "callbacks",
-               filled [] [assign (catFieldId cat++"."++a) (s++"."++catFieldId t)]]
-    where s = prid fun ++ "_" ++ a
+               filled [] [assign v (s++"."++catFieldId t)]]
+    where s = prid fun ++ "_" ++ show n
+          v = catFieldId cat++".children["++show n++"]"
 
 doCallback :: String -> VIdent -> [XML] -> [XML] -> XML
 doCallback f cat i e = 
