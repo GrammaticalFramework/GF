@@ -2,7 +2,8 @@ module GF.Speech.RegExp (RE(..),
                          epsilonRE, nullRE, 
                          isEpsilon, isNull,
                          unionRE, concatRE, seqRE,
-                         repeatRE,
+                         repeatRE, minimizeRE,
+                         mapRE, joinRE,
                          dfa2re, prRE) where
 
 import Data.List
@@ -84,6 +85,38 @@ finalRE fa = concatRE [repeatRE r1, r2,
     r2 = unionRE $ map snd $ nonLoopTransitionsTo sF fa
     r3 = unionRE $ loops sF fa
     r4 = unionRE $ map snd $ nonLoopTransitionsFrom sF fa
+
+reverseRE :: RE a -> RE a
+reverseRE (REConcat xs) = REConcat $ map reverseRE $ reverse xs
+reverseRE (REUnion xs) = REUnion (map reverseRE xs)
+reverseRE (RERepeat x) = RERepeat (reverseRE x)
+reverseRE x = x
+
+minimizeRE :: Ord a => RE a -> RE a
+minimizeRE = reverseRE . mergeForward . reverseRE . mergeForward
+
+mergeForward :: Ord a => RE a -> RE a
+mergeForward (REUnion xs) = 
+    unionRE [concatRE [mergeForward y,mergeForward (unionRE rs)] | (y,rs) <- buildMultiMap (map firstRE xs)]
+mergeForward (REConcat (x:xs)) = concatRE [mergeForward x,mergeForward (REConcat xs)]
+mergeForward (RERepeat r) = repeatRE (mergeForward r)
+mergeForward r = r
+
+firstRE :: RE a -> (RE a, RE a)
+firstRE (REConcat (x:xs)) = (x, REConcat xs)
+firstRE r = (r,epsilonRE)
+
+mapRE :: (a -> b) -> RE a -> RE b
+mapRE f (REConcat xs) = REConcat (map (mapRE f) xs)
+mapRE f (REUnion xs) = REUnion (map (mapRE f) xs)
+mapRE f (RERepeat xs) = RERepeat (mapRE f xs)
+mapRE f (RESymbol s) = RESymbol (f s)
+
+joinRE :: RE (RE a) -> RE a
+joinRE (REConcat xs) = REConcat (map joinRE xs)
+joinRE (REUnion xs) = REUnion (map joinRE xs)
+joinRE (RERepeat xs) = RERepeat (joinRE xs)
+joinRE (RESymbol ss) = ss
 
 -- Debugging
 

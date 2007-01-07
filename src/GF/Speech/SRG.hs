@@ -190,17 +190,20 @@ ebnfSRGAlts alts = [EBnfSRGAlt p n (ebnfSRGItem sss)
 ebnfSRGItem :: [[Symbol SRGNT Token]] -> EBnfSRGItem
 ebnfSRGItem = unionRE . map mergeItems . sortGroupBy (compareBy filterCats)
 
--- ^ Merges a list of right-hand sides which all have the same 
+-- | Merges a list of right-hand sides which all have the same 
 -- sequence of non-terminals.
 mergeItems :: [[Symbol SRGNT Token]] -> EBnfSRGItem
---mergeItems = unionRE . map seqRE
-mergeItems [] = nullRE
-mergeItems sss | any null rss = t
-               | otherwise = concatRE [t,seqRE (head cs), mergeItems nss]
-  where (tss,rss) = unzip $ map (span isToken) sss
-        t = unionRE (map seqRE tss)
-        (cs,nss) = unzip $ map (splitAt 1) rss
-        isToken = symbol (const False) (const True)
+mergeItems = minimizeRE . ungroupTokens . minimizeRE . unionRE . map seqRE . map groupTokens
+
+groupTokens :: [Symbol SRGNT Token] -> [Symbol SRGNT [Token]]
+groupTokens [] = []
+groupTokens (Tok t:ss) = case groupTokens ss of
+                           Tok ts:ss' -> Tok (t:ts):ss'
+                           ss'        -> Tok [t]:ss'
+groupTokens (Cat c:ss) = Cat c : groupTokens ss
+
+ungroupTokens :: RE (Symbol SRGNT [Token]) -> RE (Symbol SRGNT Token)
+ungroupTokens = joinRE . mapRE (symbol (RESymbol . Cat) (REConcat . map (RESymbol . Tok)))
 
 --
 -- * Utilities for building and printing SRGs
