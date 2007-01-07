@@ -219,7 +219,7 @@ filled :: [(String,String)] -> [XML] -> XML
 filled = Tag "filled"
 
 vxmlGrammar :: String -> XML
-vxmlGrammar uri = Tag "grammar" [("src",uri)] []
+vxmlGrammar uri = ETag "grammar" [("src",uri)]
 
 prompt :: [XML] -> XML
 prompt = Tag "prompt" []
@@ -228,13 +228,13 @@ promptString :: String -> XML
 promptString p = prompt [Data p]
 
 reprompt :: XML
-reprompt = Tag "reprompt" [] []
+reprompt = ETag "reprompt" []
 
 assign :: String -> String -> XML
-assign n e = Tag "assign" [("name",n),("expr",e)] []
+assign n e = ETag "assign" [("name",n),("expr",e)]
 
 value :: String -> XML
-value expr = Tag "value" [("expr",expr)] []
+value expr = ETag "value" [("expr",expr)]
 
 if_ :: String -> [XML] -> XML
 if_ c b = if_else c b []
@@ -248,10 +248,10 @@ cond ((c,b):rest) els = Tag "if" [("cond",c)] (b ++ es)
              ++ if null els then [] else (Tag "else" [] []:els)
 
 goto_item :: String -> XML
-goto_item nextitem = Tag "goto" [("nextitem",nextitem)] []
+goto_item nextitem = ETag "goto" [("nextitem",nextitem)]
 
 return_ :: [String] -> XML
-return_ names = Tag "return" [("namelist", unwords names)] []
+return_ names = ETag "return" [("namelist", unwords names)]
 
 block :: [XML] -> XML
 block = Tag "block" []
@@ -269,10 +269,10 @@ help :: [XML] -> XML
 help = Tag "help" []
 
 param :: String -> String -> XML
-param name expr = Tag "param" [("name",name),("expr",expr)] []
+param name expr = ETag "param" [("name",name),("expr",expr)]
 
 var :: String -> Maybe String -> XML
-var name expr = Tag "var" ([("name",name)]++e) []
+var name expr = ETag "var" ([("name",name)]++e)
   where e = maybe [] ((:[]) . (,) "expr") expr
 
 script :: String -> XML

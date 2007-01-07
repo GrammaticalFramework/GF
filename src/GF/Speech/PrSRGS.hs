@@ -61,7 +61,7 @@ prSrgsXml sisr probs srg@(SRG{grammarName=name,startCat=start,
     prRhs rhss = [oneOf (map (mkProd sisr probs) rhss)] 
     -- externally visible rules for each of the GF categories
     topCatRules = [topRule tc [oneOf (map (it tc) cs)] | (tc,cs) <- srgTopCats srg]
-        where it i c = Tag "item" [] [Tag "ruleref" [("uri","#" ++ c)] [],
+        where it i c = Tag "item" [] [ETag "ruleref" [("uri","#" ++ c)],
                                       tag sisr (topCatSISR c)]
               topRule i is = Tag "rule" [("id",catFormId i),("scope","public")] is
 
@@ -98,7 +98,7 @@ mkItem sisr cn ss = map (symItem sisr cn) ss
 
 symItem :: Maybe SISRFormat -> CFTerm -> Symbol SRGNT Token -> XML
 symItem sisr cn (Cat n@(c,_)) = 
-    Tag "item" [] $ [Tag "ruleref" [("uri","#" ++ c)] [], tag sisr (catSISR cn n)]
+    Tag "item" [] $ [ETag "ruleref" [("uri","#" ++ c)], tag sisr (catSISR cn n)]
 symItem _ _ (Tok t) = Tag "item" [] [Data (showToken t)]
 
 tag :: Maybe SISRFormat -> (SISRFormat -> SISRTag) -> XML
