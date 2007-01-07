@@ -18,13 +18,13 @@ lin
 
   pot01 = mkNum "hnvg" "hnvg" "eOMd'" ;
 
-  n2 = mkNum  "s-Og" "y'i:E" "s-Og" ;
+  n2 = mkNum  "s-Og" "y'i:T1" "s-Og" ;
   n3 = regNum "s-a:m" ;
-  n4 = regNum "s-i:E" ;  -- E = E48 '
-  n5 = regNum "hTa:" ;   -- T = E49 9
+  n4 = regNum "s-i:T1" ; -- T1 = E48 '
+  n5 = regNum "hT2a:" ;  -- T2 = E49 9
   n6 = regNum "ho?k" ;
-  n7 = regNum "ecMd'" ;  -- M = E47 w
-  n8 = regNum "e:pd'" ; 
+  n7 = regNum "ecMd'" ;  -- M  = E47 w
+  n8 = regNum "e'pd'" ; 
   n9 = regNum "eka:" ;
 
 
@@ -33,12 +33,12 @@ lin
   pot110 = {s = sip} ;
   pot111 = {s = table {
     Unit => ["s'ib et"] ; 
-    Thousand => ["hnvg hmv:En hnvg p2an"]
+    Thousand => ["hnvg hmv:T1n hnvg p2an"]
     }
   } ;
   pot1to19 d = {s = table {
     Unit => "s'ib" ++ d.s ! After ; 
-    Thousand => ["hnvg hmv:En"] ++ d.s ! Indep ++ "p2an"
+    Thousand => ["hnvg hmv:T1n"] ++ d.s ! Indep ++ "p2an"
     }
   } ;
   pot0as1 d = {s = \\n => d.s ! Indep ++ phan ! n} ;
@@ -64,6 +64,6 @@ oper
     mkNum x x x ;
 
 
-  sip  = table {Unit => "s'ib"  ; Thousand => "hmv:En"} ;
-  roy  = table {Unit => "rTOy'" ; Thousand => "se:n"} ;
-  phan = table {Unit => []      ; Thousand => "p2an"} ;
+  sip  = table {Unit => "s'ib"   ; Thousand => "hmv:T1n"} ;
+  roy  = table {Unit => "rT2Oy'" ; Thousand => "e'sn"} ;
+  phan = table {Unit => []       ; Thousand => "p2an"} ;
