@@ -60,7 +60,7 @@ data CFTerm
     | CFVar Int
     | CFConst String
     | CFMeta String
-  deriving (Eq,Show)
+  deriving (Eq,Ord,Show)
 
 type Cat_ = String
 type CFSymbol_ = Symbol Cat_ Token

@@ -55,11 +55,11 @@ prJSGF sisr srg@(SRG{grammarName=name,startCat=start,origStartCat=origStart,rule
 	      rule True "MAIN" [prCat start]
     prRule (SRGRule cat origCat rhs) = 
 	comment origCat $$
---        rule False cat (map prAlt (ebnfSRGAlts rhs))
-        rule False cat (map prAlt rhs)
+        rule False cat (map prAlt (ebnfSRGAlts rhs))
+--        rule False cat (map prAlt rhs)
     -- FIXME: use the probability
---    prAlt (EBnfSRGAlt mp n rhs) = tag sisr (profileInitSISR n) . showChar ' '. prItem sisr rhs
-    prAlt (SRGAlt mp n rhs) = initTag <+> prItem sisr n rhs <+> finalTag
+    prAlt (EBnfSRGAlt mp n rhs) = sep [initTag, prItem sisr n rhs, finalTag]
+--    prAlt (SRGAlt mp n rhs) = initTag <+> prItem sisr n rhs <+> finalTag
       where initTag | isEmpty t = empty
                     | otherwise = text "<NULL>" <+>  t
                 where t = tag sisr (profileInitSISR n)
@@ -74,25 +74,25 @@ catFormId = (++ "_cat")
 prCat :: SRGCat -> Doc
 prCat c = char '<' <> text c <> char '>'
 
-{-
-prItem :: Maybe SISRFormat -> EBnfSRGItem -> ShowS
-prItem sisr = f 1
+prItem :: Maybe SISRFormat -> CFTerm -> EBnfSRGItem -> Doc
+prItem sisr t = f 1
   where
-    f _ (REUnion [])  = showString "<VOID>"
+    f _ (REUnion [])  = text "<VOID>"
     f p (REUnion xs) 
-        | not (null es) = wrap "[" (f 0 (REUnion nes)) "]"
-        | otherwise = (if p >= 1 then paren else id) (joinS " | " (map (f 1) xs))
-      where (es,nes) = partition (== REConcat []) xs
-    f _ (REConcat []) = showString "<NULL>"
-    f p (REConcat xs) = (if p >= 3 then paren else id) (unwordsS (map (f 2) xs))
-    f p (RERepeat x)  = f 3 x . showString "*"
-    f _ (RESymbol s)  = prSymbol sisr s
--}
+        | not (null es) = brackets (f 0 (REUnion nes))
+        | otherwise = (if p >= 1 then parens else id) (alts (map (f 1) xs))
+      where (es,nes) = partition isEpsilon xs
+    f _ (REConcat []) = text "<NULL>"
+    f p (REConcat xs) = (if p >= 3 then parens else id) (hsep (map (f 2) xs))
+    f p (RERepeat x)  = f 3 x <> char '*'
+    f _ (RESymbol s)  = prSymbol sisr t s
 
+{-
 prItem :: Maybe SISRFormat -> CFTerm -> [Symbol SRGNT Token] -> Doc
 prItem _ _ [] = text "<NULL>"
 prItem sisr cn ss = paren $ hsep $ map (prSymbol sisr cn) ss
   where paren = if length ss == 1 then id else parens
+-}
 
 prSymbol :: Maybe SISRFormat -> CFTerm -> Symbol SRGNT Token -> Doc
 prSymbol sisr cn (Cat n@(c,_)) = prCat c <+> tag sisr (catSISR cn n)
@@ -103,7 +103,7 @@ tag :: Maybe SISRFormat -> (SISRFormat -> SISRTag) -> Doc
 tag Nothing _ = empty
 tag (Just fmt) t = case t fmt of
                      [] -> empty
-                     ts -> char '{' <+> text (e $ prSISR ts) <+> char '}'
+                     ts -> char '{' <+> (text (e $ prSISR ts)) <+> char '}'
   where e [] = []
         e ('}':xs) = '\\':'}':e xs
         e ('\n':xs) = ' ' : e (dropWhile isSpace xs)
@@ -115,11 +115,11 @@ isPunct c = c `elem` "-_.;.,?!"
 comment :: String -> Doc
 comment s = text "//" <+> text s
 
-
+alts :: [Doc] -> Doc
+alts = sep . prepunctuate (text "| ")
 
 rule :: Bool -> SRGCat -> [Doc] -> Doc
-rule pub c xs = p <+> prCat c <+> char '=' 
-                $$ nest 2 (sep (prepunctuate (text "| ") xs) <+> char ';')
+rule pub c xs = sep [p <+> prCat c <+> char '=', nest 2 (alts xs) <+> char ';']
   where p = if pub then text "public" else empty
 
 -- Pretty-printing utilities
@@ -133,3 +133,4 @@ prepunctuate p (x:xs) = x : map (p <>) xs
 
 ($++$) :: Doc -> Doc -> Doc
 x $++$ y = x $$ emptyLine $$ y
+
