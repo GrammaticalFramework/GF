@@ -23,8 +23,8 @@ module GF.Speech.SRG (SRG(..), SRGRule(..), SRGAlt(..),
                       makeSimpleSRG, makeSRG
                      , lookupFM_, prtS
                      , topDownFilter, cfgCatToGFCat, srgTopCats
-                     --, EBnfSRGAlt(..), EBnfSRGItem
-                     --, ebnfSRGAlts
+                     , EBnfSRGAlt(..), EBnfSRGItem
+                     , ebnfSRGAlts
                      ) where
 
 import GF.Data.Operations
@@ -33,7 +33,7 @@ import GF.Infra.Ident
 import GF.Formalism.CFG
 import GF.Formalism.Utilities (Symbol(..), NameProfile(..)
                               , Profile(..), SyntaxForest
-                              , filterCats, mapSymbol)
+                              , filterCats, mapSymbol, symbol)
 import GF.Conversion.Types
 import GF.Infra.Print
 import GF.Speech.TransformCFG
@@ -177,8 +177,7 @@ srgTopCats srg = buildMultiMap [(oc, cat) | SRGRule cat origCat _ <- rules srg,
 -- * Size-optimized EBNF SRGs
 --
 
-{-
-data EBnfSRGAlt = EBnfSRGAlt (Maybe Double) Name EBnfSRGItem
+data EBnfSRGAlt = EBnfSRGAlt (Maybe Double) CFTerm EBnfSRGItem
 	     deriving (Eq,Show)
 
 type EBnfSRGItem = RE (Symbol SRGNT Token)
@@ -186,21 +185,22 @@ type EBnfSRGItem = RE (Symbol SRGNT Token)
 
 ebnfSRGAlts :: [SRGAlt] -> [EBnfSRGAlt]
 ebnfSRGAlts alts = [EBnfSRGAlt p n (ebnfSRGItem sss) 
-                    | ((p,n),sss) <- buildMultiMap [((p,n),ss) | SRGAlt p n ss <- alts]]
+                    | ((n,p),sss) <- buildMultiMap [((n,p),ss) | SRGAlt p n ss <- alts]]
 
 ebnfSRGItem :: [[Symbol SRGNT Token]] -> EBnfSRGItem
-ebnfSRGItem = dfa2re . mkSRGFA
+ebnfSRGItem = unionRE . map mergeItems . sortGroupBy (compareBy filterCats)
 
-mkSRGFA :: [[Symbol SRGNT Token]] -> DFA (Symbol SRGNT Token)
-mkSRGFA = {- minimize . dfa2nfa . -} foldr addString (newFA ())
-
-addString :: [a] -> DFA a -> DFA a
-addString xs fa = addFinalState (last sts0) $ newTransitions ts fa'
-  where (fa',ss) = newStates (replicate (length xs) ()) fa
-        sts0 = startState fa : sts1
-        sts1 = map fst ss
-        ts = zip3 sts0 sts1 xs
--}
+-- ^ Merges a list of right-hand sides which all have the same 
+-- sequence of non-terminals.
+mergeItems :: [[Symbol SRGNT Token]] -> EBnfSRGItem
+--mergeItems = unionRE . map seqRE
+mergeItems [] = nullRE
+mergeItems sss | any null rss = t
+               | otherwise = concatRE [t,seqRE (head cs), mergeItems nss]
+  where (tss,rss) = unzip $ map (span isToken) sss
+        t = unionRE (map seqRE tss)
+        (cs,nss) = unzip $ map (splitAt 1) rss
+        isToken = symbol (const False) (const True)
 
 --
 -- * Utilities for building and printing SRGs

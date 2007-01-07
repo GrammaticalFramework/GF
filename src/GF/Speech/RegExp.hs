@@ -1,4 +1,9 @@
-module GF.Speech.RegExp (RE(..), dfa2re, prRE) where
+module GF.Speech.RegExp (RE(..), 
+                         epsilonRE, nullRE, 
+                         isEpsilon, isNull,
+                         unionRE, concatRE, seqRE,
+                         repeatRE,
+                         dfa2re, prRE) where
 
 import Data.List
 
@@ -10,17 +15,17 @@ data RE a =
     | REConcat [RE a] -- ^ REConcat [] is epsilon
     | RERepeat (RE a)
     | RESymbol a
-      deriving (Eq,Show)
+      deriving (Eq,Ord,Show)
 
 
-dfa2re :: Show a => DFA a -> RE a
+dfa2re :: (Show a,Ord a) => DFA a -> RE a
 dfa2re = finalRE . elimStates . modifyTransitions merge . addLoops
              . oneFinalState () epsilonRE . mapTransitions RESymbol 
   where addLoops fa = newTransitions [(s,s,nullRE) | (s,_) <- states fa] fa
         merge es = [(f,t,unionRE ls) 
                         | ((f,t),ls) <- buildMultiMap [((f,t),l) | (f,t,l) <- es]]
 
-elimStates :: Show a => DFA (RE a) -> DFA (RE a)
+elimStates :: (Show a, Ord a) => DFA (RE a) -> DFA (RE a)
 elimStates fa =
     case [s | (s,_) <- states fa, isInternal fa s] of
       [] -> fa
@@ -31,18 +36,22 @@ elimStates fa =
                 ts = [(sA, sB, r r1 r3) | (sA,r1) <- sAs, (sB,r3) <- sBs]
                 r r1 r3 = concatRE [r1, repeatRE r2, r3]
 
+epsilonRE :: RE a
 epsilonRE = REConcat []
 
+nullRE :: RE a
 nullRE = REUnion []
 
+isNull :: RE a -> Bool
 isNull (REUnion []) = True
 isNull _ = False
 
+isEpsilon :: RE a -> Bool
 isEpsilon (REConcat []) = True
 isEpsilon _ = False
 
-unionRE :: [RE a] -> RE a
-unionRE = unionOrId . concatMap toList 
+unionRE :: Ord a => [RE a] -> RE a
+unionRE = unionOrId . sortNub . concatMap toList 
   where 
     toList (REUnion xs) = xs
     toList x = [x]
@@ -58,11 +67,14 @@ concatRE xs | any isNull xs = nullRE
     toList (REConcat xs) = xs
     toList x = [x]
 
+seqRE :: [a] -> RE a
+seqRE = concatRE . map RESymbol
+
 repeatRE :: RE a -> RE a
 repeatRE x | isNull x || isEpsilon x = epsilonRE
            | otherwise = RERepeat x
 
-finalRE :: DFA (RE a) -> RE a
+finalRE :: Ord a => DFA (RE a) -> RE a
 finalRE fa = concatRE [repeatRE r1, r2, 
                        repeatRE (unionRE [r3, concatRE [r4, repeatRE r1, r2]])]
   where 
