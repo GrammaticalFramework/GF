@@ -82,7 +82,7 @@ field x y = JS.EMember x (JS.Ident y)
 
 ass = JS.EAssign
 
-tree n xs = obj $ [("name", JS.EStr n)] ++ [("arg"++show i, x) | (i,x) <- zip [0..] xs]
+tree n xs = obj [("name", JS.EStr n), ("children", JS.EArray xs)]
 
 obj ps = JS.EObj [JS.Prop (JS.Ident x) y | (x,y) <- ps]
 
