@@ -12,7 +12,7 @@ module GF.Data.XML (XML(..), Attr, comments, showXMLDoc, showsXMLDoc, showsXML, 
 
 import GF.Data.Utilities
 
-data XML = Data String | CData String | Tag String [Attr] [XML] | Comment String | Empty
+data XML = Data String | CData String | Tag String [Attr] [XML] | ETag String [Attr] | Comment String | Empty
  deriving (Ord,Eq,Show)
 
 type Attr = (String,String)
@@ -30,7 +30,7 @@ showsXMLDoc xml = showString header . showsXML xml
 showsXML :: XML -> ShowS
 showsXML (Data s) = showString s
 showsXML (CData s) = showString "<![CDATA[" . showString s .showString "]]>"
-showsXML (Tag t as []) = showChar '<' . showString t . showsAttrs as . showString "/>"
+showsXML (ETag t as) = showChar '<' . showString t . showsAttrs as . showString "/>"
 showsXML (Tag t as cs) = 
     showChar '<' . showString t . showsAttrs as . showChar '>' 
 		 . concatS (map showsXML cs) . showString "</" . showString t . showChar '>'
