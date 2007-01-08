@@ -20,6 +20,8 @@ import Data.Char
 import GF.Text.UTF8 
 import Data.List
 
+import Debug.Trace
+
 
 mkThai :: String -> String
 mkThai = concat . map mkThaiWord . words
@@ -79,59 +81,101 @@ allThaiCodes :: [Int]
 allThaiCodes = [0x0e00 .. 0x0e7f]
 
 
--- derive the pronunciation of a syllable
+---------------------
+-- heuristic pronunciation of codes
+---------------------
 
-pronSyll :: [Int] -> String
-pronSyll s = cons1 ++ voc ++ cons2 where
-  voc = toned tone $ pronThaiChar vo
+-- this works for one syllable
 
-  cons1 = concatMap pronThaiChar co1 ----
-  cons2 = mkThaiPron $ unwords $ map recodeThai co2 -- takes care of final ----
+mkPronSyllable s = pronSyllable $ getSyllable $ map mkThaiChar $ unchar s
 
-  (vo,cc@(co1,co2)) = case s of
-    c:cs    | initVowel c -> (c,getCons cs)
-    c1:c:c2 | internVowel c -> (c,([c1],getFinal c2))
-    c1:0x0e2d:c2 -> (0x0e42,([c1],getFinal c2))
-    c0:c1:c:c2 | cluster c0 c1 && internVowel c -> (c,([c0,c1],getFinal c2))
-    c0:c1:0x0e2d:c2 | cluster c0 c1 -> (0x0e42,([c0,c1],getFinal c2))
-    _ -> (0x0e42,getCons s) ---- "o"
+data Syllable = Syll {
+  initv   :: [Int],
+  initc   :: [Int],
+  midv    :: [Int],
+  finalc  :: [Int],
+  finalv  :: [Int],
+  tone    :: [Int],
+  shorten :: Bool,
+  kill    :: Bool
+  }
+   deriving Show
 
-  getCons cs = case cs of
-    c0:c1:c2 | cluster c1 c1 -> ([c0,c1],getFinal c2)
-    c:c2 -> ([c],getFinal c2)
+data Tone = TMid | TLow | THigh | TRise | TFall
+  deriving Show
 
-  getFinal = snd . getToneFinal
-  toneMark = fst . getToneFinal
+data CClass = CLow | CMid | CHigh
+  deriving Show
 
-  getToneFinal c = case c of
-    [  _,0x0e4c] -> ([], []) -- killer
-    [t,_,0x0e4c] -> ([t],[]) -- killer
-    _ -> splitAt (length c - 1) c
+pronSyllable :: Syllable -> String
+pronSyllable s = 
+  concatMap pronThaiChar (reverse $ initc s) ++
+  tonem ++
+  vowel ++
+  finalCons
+  -- concatMap pronThaiChar (reverse $ finalc s)
 
-  initVowel   c = 0x0e40 <= c && c <= 0x0e44
-  internVowel c = 0x0e30 <= c && c <= 0x0e39
+ where
 
-  cluster c0 c1 = 
-       c0 == 0x0e2b -- h
-    || c1 == 0x0e23 -- r
-    || c1 == 0x0e25 -- l
-    || c1 == 0x0e27 -- w
+  vowel = case (initv s, midv s, finalv s, shorten s, tone s) of
+    (i,m,f,_,_) -> concatMap pronThaiChar (reverse $ f ++ m ++ i) ----
 
-  classC = case co1 of
-    _ -> "L" ----
+  finalCons =
+    let (c,cs) = splitAt 1 $ finalc s
+    in
+    case c of
+      [] -> []
+      [k] -> concatMap pronThaiChar (reverse cs) ++ finalThai k
 
-  lengthV = case vo of
-    _ -> False ----
+  iclass = case take 1 (reverse $ initc s) of
+    [c] -> classThai c
+    []  -> CMid -- O
 
-  liveness = case co2 of
-    _ -> False ----
+  isLong = not (shorten s) && case vowel of
+    _:_:_ -> True ----
+    _ -> False
 
-  tone = case (classC,lengthV,liveness,toneMark) of
-    _ -> ""
+  isLive = case finalCons of
+    c | elem c ["n","m","g"] -> True
+    "" -> isLong
+    _ -> False
 
-  toned t v = t ++ v ----
+  tonem = case (iclass,isLive,isLong,tone s) of
+    (_,_,_,   [0x0e4a])    -> tHigh
+    (_,_,_,   [0x0e4b])    -> tRise
+    (CLow,_,_,[0x0e49])    -> tRise
+    (_,_,_,   [0x0e49])    -> tFall
+    (CLow,_,_,[0x0e48])    -> tFall
+    (_,   _,_,[0x0e48])    -> tLow
+    (CHigh,True,_,_)       -> tRise
+    (_,    True,_,_)       -> tMid
+    (CLow,False,False,_)   -> tHigh
+    (CLow,False,_,_)       -> tFall
+    _                      -> tLow
 
--- [0x0e00 .. 0x0e7f]
+(tMid,tHigh,tLow,tRise,tFall) = ("-","'","`","~","^")
+
+isVowel c = 0x0e30 <= c && c <= 0x0e44 ----
+isCons c  = 0x0e01 <= c && c <= 0x0e2f ----
+isTone c  = 0x0e48 <= c && c <= 0x0e4b
+
+getSyllable :: [Int] -> Syllable
+getSyllable = foldl get (Syll [] [] [] [] [] [] False False) where
+  get syll c = case c of
+    0x0e47 -> syll {shorten = True}
+    0x0e4c -> syll {kill = True, finalc = tail (finalc syll)} --- always last
+    0x0e2d 
+      | null (initc syll) -> syll {initc = [c]}  -- "O"
+      | otherwise -> syll {midv = c : midv syll}
+    _ 
+      | isVowel c -> if null (initc syll) 
+                       then syll {initv = c : initv syll}
+                       else syll {midv  = c : midv syll}
+      | isCons c  -> if null (midv syll) 
+                       then syll {initc  = c : initc syll}
+                       else syll {finalc = c : finalc syll}
+      | isTone c  -> syll {tone = [c]}
+    _ -> syll ---- check this
 
 
 -- to test
@@ -147,7 +191,12 @@ test3 = do
 testThai :: String -> IO ()
 testThai s = do
   putStrLn $ encodeUTF8 $ mkThai s
-  putStrLn $ unwords $ map mkThaiPron $ words s
+  putStrLn $ unwords $ map mkPronSyllable $ words s
+
+testSyllable s =
+  let y = getSyllable $ map mkThaiChar $ unchar s 
+  in
+  putStrLn $ pronSyllable $ trace (show y) y
 
 thaiFile :: FilePath -> Maybe FilePath -> IO ()
 thaiFile f mo = do
@@ -155,20 +204,16 @@ thaiFile f mo = do
   let put = maybe putStr writeFile mo
   put $ encodeUTF8 $ thaiStrings s
 
-mkThaiPron s = case fst $ pronAndOrth s of
-  Just p -> p
-  _ -> concat $ render $ unchar s 
- where
-  render s = case s of
-    [c]  -> finalThai c : []
-    c:cs -> pronThai c : render cs
-    _ -> []
+finalThai c = maybe "" return (Map.lookup c thaiFinalMap)
+thaiFinalMap = Map.fromList $ zip allThaiCodes finals
 
-finalThai c = maybe c return (Map.lookup c thaiFinalMap)
-thaiFinalMap = Map.fromList $ zip allThaiTrans finals
+classThai c = maybe CLow readClass (Map.lookup c thaiClassMap)
+thaiClassMap = Map.fromList $ zip allThaiCodes heights
 
-classThai c = maybe c return (Map.lookup c thaiClassMap)
-thaiClassMap = Map.fromList $ zip allThaiTrans heights
+readClass s = case s of
+  'L' -> CLow
+  'M' -> CMid
+  'H' -> CHigh
 
 
 thaiTable :: String
