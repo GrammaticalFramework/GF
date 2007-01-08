@@ -29,9 +29,10 @@ import qualified GF.CFGM.AbsCFG as AbsCFG
 import GF.Formalism.Utilities (Symbol(..))
 
 import GF.Data.ErrM
+import GF.Data.Utilities (compareBy)
 import qualified GF.Infra.Option as Option
 
-import Data.List (intersperse)
+import Data.List (intersperse, sortBy)
 import Data.Maybe (listToMaybe, maybeToList, maybe)
 
 import GF.Infra.Print
@@ -68,8 +69,11 @@ prCFGrammarAsCFGM :: GT.CGrammar -> Ident -> Maybe String -> String
 prCFGrammarAsCFGM gr i start = PrintCFG.printTree $ cfGrammarToCFGM gr i start
 
 cfGrammarToCFGM :: GT.CGrammar -> Ident -> Maybe String -> AbsCFG.Grammar
-cfGrammarToCFGM gr i start = AbsCFG.Grammar (identToCFGMIdent i) flags (map ruleToCFGMRule gr)
+cfGrammarToCFGM gr i start = 
+    AbsCFG.Grammar (identToCFGMIdent i) flags $ sortCFGMRules $ map ruleToCFGMRule gr
     where flags = maybe [] (\c -> [AbsCFG.StartCat $ strToCFGMCat (c++"{}.s")]) start
+          sortCFGMRules = sortBy (compareBy ruleKey)
+          ruleKey (AbsCFG.Rule f ps cat rhs) = (cat,f)
 
 ruleToCFGMRule :: GT.CRule -> AbsCFG.Rule
 ruleToCFGMRule (CFRule c rhs (GU.Name fun profile)) 
