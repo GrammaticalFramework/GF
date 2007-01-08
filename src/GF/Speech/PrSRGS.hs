@@ -57,7 +57,7 @@ prSrgsXml sisr probs srg@(SRG{grammarName=name,startCat=start,
             ++ topCatRules
 	    ++ concatMap ruleToXML rs
     ruleToXML (SRGRule cat origCat alts) = 
-        comments ["Category " ++ origCat] ++ [rule cat (prRhs alts)]
+        comments ["Category " ++ origCat] ++ [rule cat (prRhs (ebnfSRGAlts alts))]
     prRhs rhss = [oneOf (map (mkProd sisr probs) rhss)] 
     -- externally visible rules for each of the GF categories
     topCatRules = [topRule tc [oneOf (map (it tc) cs)] | (tc,cs) <- srgTopCats srg]
@@ -68,22 +68,28 @@ prSrgsXml sisr probs srg@(SRG{grammarName=name,startCat=start,
 rule :: String -> [XML] -> XML
 rule i = Tag "rule" [("id",i)]
 
-{-
-mkProd :: Maybe SISRFormat -> EBnfSRGAlt -> XML
-mkProd sisr (EBnfSRGAlt mp n rhs) = Tag "item" w (t ++ xs)
-  where xs = [mkItem sisr rhs]
-        w = maybe [] (\p -> [("weight", show p)]) mp
-        t = [tag sisr (profileInitSISR n)]
+mkProd :: Maybe SISRFormat -> Bool -> EBnfSRGAlt -> XML
+mkProd sisr probs (EBnfSRGAlt mp n rhs) = Tag "item" w (ti ++ [x] ++ tf)
+  where x = mkItem sisr n rhs
+        w | probs = maybe [] (\p -> [("weight", show p)]) mp
+          | otherwise = []
+        ti = [tag sisr (profileInitSISR n)]
+        tf = [tag sisr (profileFinalSISR n)]
 
-mkItem :: Maybe SISRFormat -> EBnfSRGItem -> XML
-mkItem sisr = f
+mkItem :: Maybe SISRFormat -> CFTerm -> EBnfSRGItem -> XML
+mkItem sisr cn = f
   where 
-    f (REUnion xs)  = oneOf (map f xs)
+    f (REUnion [])  = ETag "ruleref" [("special","VOID")]
+    f (REUnion xs) 
+        | not (null es) = Tag "item" [("repeat","0-1")] [f (REUnion nes)]
+        | otherwise = oneOf (map f xs)
+      where (es,nes) = partition isEpsilon xs
+    f (REConcat []) = ETag "ruleref" [("special","NULL")]
     f (REConcat xs) = Tag "item" [] (map f xs)
     f (RERepeat x)  = Tag "item" [("repeat","0-")] [f x]
-    f (RESymbol s)  = symItem sisr s
--}
+    f (RESymbol s)  = symItem sisr cn s
 
+{-
 mkProd :: Maybe SISRFormat -> Bool -> SRGAlt -> XML
 mkProd sisr probs (SRGAlt mp n rhs) = Tag "item" w (ti ++ xs ++ tf)
   where xs = mkItem sisr n rhs
@@ -95,6 +101,7 @@ mkProd sisr probs (SRGAlt mp n rhs) = Tag "item" w (ti ++ xs ++ tf)
 
 mkItem :: Maybe SISRFormat -> CFTerm -> [Symbol SRGNT Token] -> [XML]
 mkItem sisr cn ss = map (symItem sisr cn) ss
+-}
 
 symItem :: Maybe SISRFormat -> CFTerm -> Symbol SRGNT Token -> XML
 symItem sisr cn (Cat n@(c,_)) = 
@@ -134,6 +141,8 @@ meta n c = Tag "meta" [("name",n),("content",c)] []
 
 optimizeSRGS :: XML -> XML
 optimizeSRGS = bottomUpXML f 
-  where f (Tag "item" [] [x@(Tag "item" [] _)]) = x
+  where f (Tag "item" [] [x@(Tag "item" _ _)]) = x
+        f (Tag "item" [] [x@(Tag "one-of" _ _)]) = x
+        f (Tag "item" as [Tag "item" [] xs]) = Tag "item" as xs
         f (Tag "one-of" [] [x]) = x
         f x = x

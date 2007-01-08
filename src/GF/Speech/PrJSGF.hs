@@ -58,7 +58,7 @@ prJSGF sisr srg@(SRG{grammarName=name,startCat=start,origStartCat=origStart,rule
         rule False cat (map prAlt (ebnfSRGAlts rhs))
 --        rule False cat (map prAlt rhs)
     -- FIXME: use the probability
-    prAlt (EBnfSRGAlt mp n rhs) = sep [initTag, prItem sisr n rhs, finalTag]
+    prAlt (EBnfSRGAlt mp n rhs) = sep [initTag, parens (prItem sisr n rhs), finalTag]
 --    prAlt (SRGAlt mp n rhs) = initTag <+> prItem sisr n rhs <+> finalTag
       where initTag | isEmpty t = empty
                     | otherwise = text "<NULL>" <+>  t
