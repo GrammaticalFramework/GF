@@ -25,6 +25,8 @@ import Debug.Trace
 
 mkThai :: String -> String
 mkThai = concat . map mkThaiWord . words
+mkThaiPron = unwords . map mkPronSyllable . words
+
 
 type ThaiChar = Char
 
@@ -40,10 +42,15 @@ thaiMap = Map.fromList $ zip allThaiTrans allThaiCodes
 -- convert all string literals in a text
 
 thaiStrings :: String -> String
-thaiStrings s = case s of
+thaiStrings = convStrings mkThai
+
+thaiPronStrings :: String -> String
+thaiPronStrings = convStrings mkThaiPron
+
+convStrings conv s = case s of
   '"':cs -> let (t,_:r) = span (/='"') cs in
-            '"':mkThai t ++ "\"" ++ thaiStrings r
-  c:cs -> c:thaiStrings cs
+            '"': conv t ++ "\"" ++ convStrings conv r
+  c:cs -> c : convStrings conv cs
   _ -> s
 
 
@@ -69,13 +76,12 @@ pronAndOrth s = case s of
 
 allThaiTrans :: [String]
 allThaiTrans = words $
-  "-  k  k1 -  k2 -  k3 g  c  c1 c2 s  c3 y  d  t  " ++
-  "t1 t2 t3 n  d' t' t4 t5 t6 n  b  p  p1 f  p2 f' " ++
-  "p3 m  y' r  -  l  -  w  s' r' s- h  l' O  h' -  " ++
+  "-  k  k1 -  k2 -  k3 g  c  c1 c2 s' c3 y' d' t' " ++
+  "t1 t2 t3 n' d  t  t4 t5 t6 n  b  p  p1 f  p2 f' " ++
+  "p3 m  y  r  -  l  -  w  s- r' s  h  l' O  h' -  " ++
   "a  a. a: a+ i  i: v  v: u  u: -  -  -  -  -  -  " ++
-  "e  e' o: a% a& L  R  M  T1 T2 T3 T4 -  -  -  -  " ++
+  "e  e' o: a% a& L  R  S  T1 T2 T3 T4 K  -  -  -  " ++
   "N0 N1 N2 N3 N4 N5 N6 N7 N8 N9 -  -  -  -  -  -  "
-
 
 allThaiCodes :: [Int]
 allThaiCodes = [0x0e00 .. 0x0e7f]
@@ -109,16 +115,18 @@ data CClass = CLow | CMid | CHigh
 
 pronSyllable :: Syllable -> String
 pronSyllable s = 
-  concatMap pronThaiChar (reverse $ initc s) ++
-  tonem ++
-  vowel ++
-  finalCons
-  -- concatMap pronThaiChar (reverse $ finalc s)
-
+  initCons ++ tonem ++ vowel ++ finalCons
  where
 
   vowel = case (initv s, midv s, finalv s, shorten s, tone s) of
+    ([0x0e40],[0x0e30,0x0e2d],_,_,_) -> "ö" -- eOa
+    ([0x0e40],[0x0e30,0x0e32],_,_,_) -> "o" -- ea:a 
     (i,m,f,_,_) -> concatMap pronThaiChar (reverse $ f ++ m ++ i) ----
+
+  initCons = concatMap pronThaiChar $ case (reverse $ initc s) of
+    0x0e2b:cs@(_:_) -> cs -- high h
+    0x0e2d:cs@(_:_) -> cs -- O
+    cs -> cs
 
   finalCons =
     let (c,cs) = splitAt 1 $ finalc s
@@ -204,6 +212,12 @@ thaiFile f mo = do
   let put = maybe putStr writeFile mo
   put $ encodeUTF8 $ thaiStrings s
 
+thaiPronFile :: FilePath -> Maybe FilePath -> IO ()
+thaiPronFile f mo = do
+  s <- readFile f
+  let put = maybe putStr writeFile mo
+  put $ encodeUTF8 $ thaiPronStrings s
+
 finalThai c = maybe "" return (Map.lookup c thaiFinalMap)
 thaiFinalMap = Map.fromList $ zip allThaiCodes finals
 
@@ -249,7 +263,8 @@ pronThai s = case s of
     | p=='+'      -> c:"m"
     | s == "e'"   -> "ä"
     | otherwise   -> [c]
-  [c] | isUpper c -> "" --- O
+  "O"             -> "O"
+  [c] | isUpper c -> "" 
   _ -> s
 
 hex = map hx . reverse . digs where

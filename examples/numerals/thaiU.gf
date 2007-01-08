@@ -20,10 +20,10 @@ lin
 
   n2 = mkNum  "สอง" "ยี่" "สอง" ;
   n3 = regNum "สาม" ;
-  n4 = regNum "สี่" ;  -- E = E48 '
-  n5 = regNum "ห้า" ;   -- T = E49 9
+  n4 = regNum "สี่" ; -- T1 = E48 '
+  n5 = regNum "ห้า" ;  -- T2 = E49 9
   n6 = regNum "หก" ;
-  n7 = regNum "เจ็ด" ;  -- M = E47 w
+  n7 = regNum "เจ็ด" ;   -- S  = E47 w
   n8 = regNum "แปด" ; 
   n9 = regNum "เกา" ;
 
@@ -32,12 +32,12 @@ lin
 
   pot110 = {s = sip} ;
   pot111 = {s = table {
-    Unit => ["ศิบเฏ"] ; 
+    Unit => ["สิบเอ็ด"] ; 
     Thousand => ["หนึงหมื่นหนึงพะน"]
     }
   } ;
   pot1to19 d = {s = table {
-    Unit => "ศิบ" ++ d.s ! After ; 
+    Unit => "สิบ" ++ d.s ! After ; 
     Thousand => ["หนึงหมื่น"] ++ d.s ! Indep ++ "พะน"
     }
   } ;
@@ -64,6 +64,6 @@ oper
     mkNum x x x ;
 
 
-  sip  = table {Unit => "ศิบ"  ; Thousand => "หมื่น"} ;
-  roy  = table {Unit => "ร้อย" ; Thousand => "ซแน"} ;
+  sip  = table {Unit => "สิบ"   ; Thousand => "หมื่น"} ;
+  roy  = table {Unit => "ร้อย" ; Thousand => "แสน"} ;
   phan = table {Unit => []      ; Thousand => "พะน"} ;
