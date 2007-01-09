@@ -121,6 +121,7 @@ pronSyllable s =
   vowel = case (initv s, midv s, finalv s, shorten s, tone s) of
     ([0x0e40],[0x0e30,0x0e2d],_,_,_) -> "ö" -- eOa
     ([0x0e40],[0x0e30,0x0e32],_,_,_) -> "o" -- ea:a 
+    ([],[],[],_,_) -> "o"
     (i,m,f,_,_) -> concatMap pronThaiChar (reverse $ f ++ m ++ i) ----
 
   initCons = concatMap pronThaiChar $ case (reverse $ initc s) of
@@ -179,12 +180,14 @@ getSyllable = foldl get (Syll [] [] [] [] [] [] False False) where
       | isVowel c -> if null (initc syll) 
                        then syll {initv = c : initv syll}
                        else syll {midv  = c : midv syll}
-      | isCons c  -> if null (midv syll) 
+      | isCons c  -> if  null (initc syll) || 
+                        (null (midv syll) && isCluster (initc syll) c) 
                        then syll {initc  = c : initc syll}
                        else syll {finalc = c : finalc syll}
       | isTone c  -> syll {tone = [c]}
     _ -> syll ---- check this
 
+  isCluster s c = length s == 1 && (c == 0x0e23 || s == [0x0e2b])
 
 -- to test
 
