@@ -154,8 +154,8 @@ partEval opts gr (context, val) trm = errIn ("parteval" +++ prt_ trm) $ do
       subst = [(v, Vr v) | v <- vars]
       trm1  = mkApp trm args
   trm3 <- if globalTable 
-             then etaExpand trm1 >>= comp subst >>= outCase subst
-             else etaExpand trm1 >>= comp subst
+             then etaExpand subst trm1 >>= outCase subst
+             else etaExpand subst trm1
   return $ mkAbs vars trm3
 
  where 
@@ -164,7 +164,7 @@ partEval opts gr (context, val) trm = errIn ("parteval" +++ prt_ trm) $ do
 
    comp g t = {- refreshTerm t >>= -} computeTerm gr g t
 
-   etaExpand t = recordExpand val t   --- >>= caseEx  -- done by comp
+   etaExpand su t = comp su t >>= recordExpand val >>= comp su
 
    outCase subst t = do
      pts <- getParams context

@@ -125,8 +125,22 @@ allParamValues cnc ptyp = case ptyp of
 -- runtime computation on GFC objects
 
 ccompute :: CanonGrammar -> [Term] -> Term -> Err Term
-ccompute cnc = comp [] 
+ccompute cnc = vcomp
  where
+
+  vcomp xs t = do
+    let xss = variations xs
+    ts <- mapM (\xx -> comp [] xx t) xss
+    return $ variants ts
+
+  variations xs = combinations [getVariants t | t <- xs]
+  variants ts = case ts of
+    [t] -> t
+    _ -> FV ts
+  getVariants t = case t of
+    FV ts -> ts
+    _ -> [t]
+
   comp g xs t = case t of
     Arg (A _ i)    -> err (const (return t)) return $ xs !? fromInteger i
     Arg (AB _ _ i) -> err (const (return t)) return $ xs !? fromInteger i

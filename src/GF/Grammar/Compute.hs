@@ -80,10 +80,12 @@ computeTermOpt rec gr = comp where
        f' <- comp g f
        a' <- comp g a
        case (f',a') of
+         (Abs x b, FV as) -> 
+           mapM (\c -> comp (ext x c g) b) as >>= return . variants
+         (_, FV as)  -> mapM (\c -> comp g (App f' c)) as >>= return . variants
+         (FV fs, _)  -> mapM (\c -> comp g (App c a')) fs >>= return . variants
          (Abs x b,_) -> comp (ext x a' g) b
          (QC _ _,_)  -> returnC $ App f' a'
-         (FV fs, _)  -> mapM (\c -> comp g (App c a')) fs >>= return . variants
-         (_, FV as)  -> mapM (\c -> comp g (App f' c)) as >>= return . variants
 
          (Alias _ _ d, _) -> comp g (App d a')
 
@@ -140,13 +142,14 @@ computeTermOpt rec gr = comp where
        t'     <- comp g t
        v'     <- comp g v
        case t' of
+         FV ccs -> mapM (\c -> comp g (S c v')) ccs >>= returnC . variants
+
          T _ [(PV IW,c)] -> comp g c           --- an optimization
          T _ [(PT _ (PV IW),c)] -> comp g c
 
          T _ [(PV z,c)] -> comp (ext z v' g) c --- another optimization
          T _ [(PT _ (PV z),c)] -> comp (ext z v' g) c
 
-         FV ccs -> mapM (\c -> comp g (S c v')) ccs >>= returnC . variants
 
          V ptyp ts -> do
            vs <- allParamValues gr ptyp
@@ -180,6 +183,13 @@ computeTermOpt rec gr = comp where
        x <- comp g x0
        y <- comp g y0
        case (x,y) of
+         (FV ks,_)         -> do
+           kys <- mapM (comp g . flip Glue y) ks
+           return $ variants kys
+         (_,FV ks)         -> do
+           xks <- mapM (comp g . Glue x) ks
+           return $ variants xks
+
          (Alias _ _ d, y)  -> comp g $ Glue d y
          (x, Alias _ _ d)  -> comp g $ Glue x d
 
@@ -201,12 +211,6 @@ computeTermOpt rec gr = comp where
 ----              foldr1 C (map K (str2strings (glueStr v (str a)))) | v <- x']
            ,return $ Glue x y
            ]
-         (FV ks,_)         -> do
-           kys <- mapM (comp g . flip Glue y) ks
-           return $ variants kys
-         (_,FV ks)         -> do
-           xks <- mapM (comp g . Glue x) ks
-           return $ variants xks
 
          _ -> do
            mapM_ checkNoArgVars [x,y]
