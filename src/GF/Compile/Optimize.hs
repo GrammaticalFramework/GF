@@ -164,7 +164,11 @@ partEval opts gr (context, val) trm = errIn ("parteval" +++ prt_ trm) $ do
 
    comp g t = {- refreshTerm t >>= -} computeTerm gr g t
 
-   etaExpand su t = comp su t >>= recordExpand val >>= comp su
+   etaExpand su t = do
+     t' <- comp su t 
+     case t' of
+       R _ -> comp su t' --- return t' wo noexpand...
+       _ -> recordExpand val t' >>= comp su
 
    outCase subst t = do
      pts <- getParams context
