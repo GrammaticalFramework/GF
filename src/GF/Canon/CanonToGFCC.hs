@@ -175,7 +175,7 @@ canon2canon :: CanonGrammar -> CanonGrammar
 canon2canon = recollect . map cl2cl . repartition where
   recollect = 
     M.MGrammar . nubBy (\ (i,_) (j,_) -> i==j) . concatMap M.modules
-  cl2cl cg = {-tr $-} M.MGrammar $ map c2c $ M.modules cg where
+  cl2cl cg = tr $ M.MGrammar $ map c2c $ M.modules cg where
     c2c (c,m) = case m of
       M.ModMod mo@(M.Module _ _ _ _ _ js) ->
         (c, M.ModMod $ M.replaceJudgements mo $ mapTree j2j js)
