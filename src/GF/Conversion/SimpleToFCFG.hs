@@ -172,7 +172,7 @@ convertRec cnc_defs selector@(TupleSel fields) index (val:record) lbl_path lin l
                                             convertRec cnc_defs selector (index+1) record lbl_path lin lins
       | otherwise                      = select fields
 convertRec cnc_defs (TuplePrj index' sub_sel) index record lbl_path lin lins = do
-  convertTerm cnc_defs sub_sel (record !! (fromIntegral (index'-index))) ((lbl_path,lin) : lins)
+  convertTerm cnc_defs sub_sel (record !! (index'-index)) ((lbl_path,lin) : lins)
 
 
 ------------------------------------------------------------
@@ -183,7 +183,7 @@ evalTerm cnc_defs path (V nr)       = do term <- readArgCType nr
                                          unifyPType nr (reverse path) (selectTerm path term)
 evalTerm cnc_defs path (C nr)       = return nr
 evalTerm cnc_defs path (R record)   = case path of
-                                        (index:path) -> evalTerm cnc_defs path (record !! (fromIntegral index))
+                                        (index:path) -> evalTerm cnc_defs path (record !! index)
 evalTerm cnc_defs path (P term sel) = do index <- evalTerm cnc_defs [] sel
                                          evalTerm cnc_defs (index:path) term
 evalTerm cnc_defs path (FV terms)   = member terms >>= evalTerm cnc_defs path
@@ -195,7 +195,7 @@ evalTerm cnc_defs path x = error ("evalTerm ("++show x++")")
 unifyPType :: FIndex -> FPath -> Term -> CnvMonad FIndex
 unifyPType nr path (C max_index) =
     do (_, args, _, _) <- readState
-       let (FCat _ _ _ tcs,_) = args !! (fromIntegral nr)
+       let (FCat _ _ _ tcs,_) = args !! nr
        case lookup path tcs of
          Just index -> return index
          Nothing    -> do index <- member [0..max_index-1]
@@ -205,7 +205,7 @@ unifyPType nr path (RP alias _) = unifyPType nr path alias
 
 selectTerm :: FPath -> Term -> Term
 selectTerm []           term        = term
-selectTerm (index:path) (R  record) = selectTerm path (record !! fromIntegral index)
+selectTerm (index:path) (R  record) = selectTerm path (record !! index)
 selectTerm path         (RP _ term) = selectTerm path term
 
 ----------------------------------------------------------------------
@@ -383,13 +383,13 @@ mkSelector rcs tcss =
 
 readArgCType :: FIndex -> CnvMonad Term
 readArgCType nr = do (_, _, _, ctypes) <- readState
-		     return (ctypes !! fromIntegral nr)
+		     return (ctypes !! nr)
 
 restrictArg :: FIndex -> FPath -> FIndex -> CnvMonad ()
 restrictArg nr path index = do
   (head, args, ctype, ctypes) <- readState 
   args' <- updateNthM (\(fcat,xs) -> do fcat <- restrictFCat path index fcat
-                                        return (fcat,xs)                    ) (fromIntegral nr) args
+                                        return (fcat,xs)                    ) nr args
   writeState (head, args', ctype, ctypes)
 
 projectArg :: FIndex -> FPath -> CnvMonad Int
