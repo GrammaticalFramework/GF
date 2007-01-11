@@ -37,7 +37,6 @@ import qualified GF.Conversion.MCFGtoCFG as M2C
 import GF.Infra.Print
 
 import GF.System.Tracing
-import qualified Debug.Trace as D
 
 ----------------------------------------------------------------------
 -- * GFC -> MCFG & CFG, using options to decide which conversion is used
@@ -47,7 +46,7 @@ convertGFC :: Options -> (CanonGrammar, Ident)
 convertGFC opts = \g -> let s = g2s g
                             e = s2e s 
                             m = e2m e
-                        in D.trace (show ((M.greatestAbstract (fst g),snd g))) $ trace2 "Options" (show opts) (s, (e, (m, e2c e)))
+                        in trace2 "Options" (show opts) (s, (e, (m, e2c e)))
     where e2c = M2C.convertGrammar
 	  e2m = case getOptVal opts firstCat of
 		  Just cat -> flip erasing [identC cat]
