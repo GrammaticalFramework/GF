@@ -167,8 +167,12 @@ partEval opts gr (context, val) trm = errIn ("parteval" +++ prt_ trm) $ do
    etaExpand su t = do
      t' <- comp su t 
      case t' of
-       R _ -> comp su t' --- return t' wo noexpand...
+       R _ | rightType t' -> comp su t' --- return t' wo noexpand...
        _ -> recordExpand val t' >>= comp su
+   -- don't eta expand records of right length (correct by type checking)
+   rightType t = case (t,val) of
+     (R rs, RecType ts) -> length rs == length ts
+     _ -> False
 
    outCase subst t = do
      pts <- getParams context

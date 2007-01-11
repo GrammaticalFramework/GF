@@ -35,7 +35,7 @@ concrete ExtraFin of ExtraFinAbs = CatFin ** open ResFin, MorphoFin, Coordinatio
     i_implicPron = mkPronoun [] "minun" "minua" "minuna" "minuun" Sg P1 ;
     whatPart_IP = {
       s = table {
-        NPCase Nom | NPAcc => "mitÃ¤" ;
+        NPCase Nom | NPAcc => "mitä" ;
         c => whatSg_IP.s ! c
         } ;
       n = Sg
