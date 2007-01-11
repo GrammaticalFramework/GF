@@ -137,7 +137,7 @@ convertTerm cnc_defs selector (KS str)     ((lbl_path,lin) : lins) = do projectH
                                                                         return ((lbl_path,Tok str : lin) : lins)
 convertTerm cnc_defs selector (KP (str:_)_)((lbl_path,lin) : lins) = do projectHead lbl_path
                                                                         return ((lbl_path,Tok str : lin) : lins)
-convertTerm cnc_defs selector (RP alias _)                   lins  = convertTerm cnc_defs selector alias lins
+convertTerm cnc_defs selector (RP _ term)                    lins  = convertTerm cnc_defs selector term lins
 convertTerm cnc_defs selector (F id)                         lins  = do term <- Map.lookup id cnc_defs
                                                                         convertTerm cnc_defs selector term lins
 convertTerm cnc_defs selector (W s ss)     ((lbl_path,lin) : lins) = convertRec cnc_defs selector 0 [KS (s ++ s1) | s1 <- ss] lbl_path lin lins
@@ -284,7 +284,7 @@ genFCatArg ctype env@(FRulesEnv last_id fcatSet rules) m1@(FCat _ cat rcs tcs) =
     gen_tcs :: Term -> FPath -> [(FPath,FIndex)] -> BacktrackM Bool [(FPath,FIndex)]
     gen_tcs (R record)    path acc = foldM (\acc (label,ctype) -> gen_tcs ctype (label:path) acc) acc (zip [0..] record)
     gen_tcs (S _)         path acc = return acc
-    gen_tcs (RP alias _)   path acc = gen_tcs alias path acc
+    gen_tcs (RP _ term)   path acc = gen_tcs term path acc
     gen_tcs (C max_index) path acc =
       case List.lookup path tcs of
         Just index -> return $! addConstraint path index acc
@@ -340,7 +340,7 @@ mkSingletonSelectors term = sels0
     (sels0,tcss0) = loop [] ([],[]) term
 
     loop path st          (R record) = List.foldl' (\st (index,term) -> loop (index:path) st term) st (zip [0..] record)
-    loop path st          (RP t _)   = loop path st t
+    loop path st          (RP _ t)   = loop path st t
     loop path (sels,tcss) (C i)      = (                          sels,map ((,) path) [0..i-1] : tcss)
     loop path (sels,tcss) (S _)      = (mkSelector [path] tcss0 : sels,                          tcss)
 
