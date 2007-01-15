@@ -480,6 +480,7 @@ oper
             "yer" => conj1payer parler ;
             _ => case Predef.dp 2 parler of {
               "ir" => conj2finir parler ;
+              "re" => conj3rendre parler ;
               _ => conj1aimer parler
               }
             }

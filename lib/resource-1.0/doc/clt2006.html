@@ -7,82 +7,12 @@
 <P ALIGN="center"><CENTER><H1>The GF Resource Grammar Library Version 1.0</H1>
 <FONT SIZE="4">
 <I>Author: Aarne Ranta &lt;aarne (at) cs.chalmers.se&gt;</I><BR>
-Last update: Wed Mar  8 22:40:25 2006
+Last update: Sat Jan 13 17:48:13 2007
 </FONT></CENTER>
 
-<P></P>
-<HR NOSHADE SIZE=1>
-<P></P>
-    <UL>
-    <LI><A HREF="#toc1">Plan</A>
-    <LI><A HREF="#toc2">Purpose</A>
-      <UL>
-      <LI><A HREF="#toc3">Library for applications</A>
-      <LI><A HREF="#toc4">Not primarily code for a parser</A>
-      <LI><A HREF="#toc5">Grammar as language definition</A>
-      <LI><A HREF="#toc6">Usability by non-linguists</A>
-      <LI><A HREF="#toc7">Scientific interest</A>
-      </UL>
-    <LI><A HREF="#toc8">Background</A>
-      <UL>
-      <LI><A HREF="#toc9">History</A>
-      <LI><A HREF="#toc10">Authors</A>
-      <LI><A HREF="#toc11">Related work</A>
-      <LI><A HREF="#toc12">Slightly less related work</A>
-      </UL>
-    <LI><A HREF="#toc13">Coverage</A>
-      <UL>
-      <LI><A HREF="#toc14">Languages</A>
-      <LI><A HREF="#toc15">Morphology and lexicon</A>
-      <LI><A HREF="#toc16">Syntactic structures</A>
-      <LI><A HREF="#toc17">Quantitative measures</A>
-      </UL>
-    <LI><A HREF="#toc18">Structure of the API</A>
-      <UL>
-      <LI><A HREF="#toc19">Language-independent ground API</A>
-      <LI><A HREF="#toc20">The structure of a text sentence</A>
-      <LI><A HREF="#toc21">The structure in the syntax editor</A>
-      <LI><A HREF="#toc22">Language-dependent paradigm modules</A>
-      <LI><A HREF="#toc23">Language-dependent syntax extensions</A>
-      <LI><A HREF="#toc24">Special-purpose APIs</A>
-      <LI><A HREF="#toc25">How to use the resource as top-level grammar</A>
-      <LI><A HREF="#toc26">Compiling</A>
-      <LI><A HREF="#toc27">Parsing</A>
-      <LI><A HREF="#toc28">Treebank generation</A>
-      <LI><A HREF="#toc29">The multilingual treebank format</A>
-      <LI><A HREF="#toc30">Treebank-based parsing</A>
-      <LI><A HREF="#toc31">Morphology</A>
-      <LI><A HREF="#toc32">Syntax editing</A>
-      <LI><A HREF="#toc33">Efficient parsing via application grammar</A>
-      </UL>
-    <LI><A HREF="#toc34">How to use as library</A>
-      <UL>
-      <LI><A HREF="#toc35">Specialization through parametrized modules</A>
-      <LI><A HREF="#toc36">Compile-time transfer</A>
-      <LI><A HREF="#toc37">A natural division into modules</A>
-      <LI><A HREF="#toc38">Example-based grammar writing</A>
-      </UL>
-    <LI><A HREF="#toc39">How to implement a new language</A>
-    <LI><A HREF="#toc40">Ordinary modules</A>
-    <LI><A HREF="#toc41">Parametrized modules</A>
-      <UL>
-      <LI><A HREF="#toc42">The core API</A>
-      <LI><A HREF="#toc43">The core API in Latin: parameters</A>
-      <LI><A HREF="#toc44">The core API in Latin: linearization types</A>
-      <LI><A HREF="#toc45">The core API in Latin: predication and complementization</A>
-      <LI><A HREF="#toc46">The core API in Latin: determination and modification</A>
-      <LI><A HREF="#toc47">How to proceed</A>
-      </UL>
-    <LI><A HREF="#toc48">How to extend the API</A>
-    </UL>
-
-<P></P>
-<HR NOSHADE SIZE=1>
-<P></P>
 <P>
 <!-- NEW --> 
 </P>
-<A NAME="toc1"></A>
 <H2>Plan</H2>
 <P>
 Purpose
@@ -108,9 +38,7 @@ How to extend the API
 <P>
 <!-- NEW -->
 </P>
-<A NAME="toc2"></A>
 <H2>Purpose</H2>
-<A NAME="toc3"></A>
 <H3>Library for applications</H3>
 <P>
 High-level access to grammatical rules
@@ -135,7 +63,6 @@ Usability for different purposes
 <P>
 <!-- NEW -->
 </P>
-<A NAME="toc4"></A>
 <H3>Not primarily code for a parser</H3>
 <P>
 Often in NLP, a grammar is just high-level code for a parser.
@@ -162,7 +89,6 @@ Moreover, a grammar fine-tuned for parsing may not be reusable
 <P>
 <!-- NEW -->
 </P>
-<A NAME="toc5"></A>
 <H3>Grammar as language definition</H3>
 <P>
 Linguistic ontology: <B>abstract syntax</B>
@@ -198,7 +124,6 @@ Resource grammars have generation perspective, rather than parsing
 <P>
 <!-- NEW -->
 </P>
-<A NAME="toc6"></A>
 <H3>Usability by non-linguists</H3>
 <P>
 Division of labour: resource grammars hide linguistic details
@@ -240,7 +165,6 @@ Example-based grammar writing
 <P>
 <!-- NEW -->
 </P>
-<A NAME="toc7"></A>
 <H3>Scientific interest</H3>
 <P>
 Linguistics
@@ -267,9 +191,7 @@ Computer science
 <P>
 <!-- NEW -->
 </P>
-<A NAME="toc8"></A>
 <H2>Background</H2>
-<A NAME="toc9"></A>
 <H3>History</H3>
 <P>
 2002: v. 0.2
@@ -308,7 +230,6 @@ Computer science
 <P>
 <!-- NEW -->
 </P>
-<A NAME="toc10"></A>
 <H3>Authors</H3>
 <P>
 Janna Khegai (Russian modules, forthcoming),
@@ -338,7 +259,6 @@ Jordi Saludes.
 <P>
 <!-- NEW -->
 </P>
-<A NAME="toc11"></A>
 <H3>Related work</H3>
 <P>
 CLE (Core Language Engine, 
@@ -355,7 +275,6 @@ CLE (Core Language Engine,
 <P>
 <!-- NEW -->
 </P>
-<A NAME="toc12"></A>
 <H3>Slightly less related work</H3>
 <P>
 <A HREF="http://www.delph-in.net/matrix/">LinGO Grammar Matrix</A>
@@ -388,9 +307,7 @@ Rosetta Machine Translation (<A HREF="http://citeseer.ist.psu.edu/181924.html">B
 <P>
 <!-- NEW -->
 </P>
-<A NAME="toc13"></A>
 <H2>Coverage</H2>
-<A NAME="toc14"></A>
 <H3>Languages</H3>
 <P>
 The current GF Resource Project covers ten languages:
@@ -417,7 +334,6 @@ API 1.0 not yet implemented for Danish and Russian
 <P>
 <!-- NEW -->
 </P>
-<A NAME="toc15"></A>
 <H3>Morphology and lexicon</H3>
 <P>
 Complete inflection engine
@@ -448,7 +364,6 @@ provide a huge lexicon.
 <P>
 <!-- NEW -->
 </P>
-<A NAME="toc16"></A>
 <H3>Syntactic structures</H3>
 <P>
 Texts: 
@@ -479,9 +394,12 @@ Noun phrases:
 proper names, pronouns, determiners, possessives, cardinals and ordinals
 </P>
 <P>
+Coordination:
+lists of sentences, noun phrases, adverbs, adjectival phrases
+</P>
+<P>
 <!-- NEW -->
 </P>
-<A NAME="toc17"></A>
 <H3>Quantitative measures</H3>
 <P>
 67 categories
@@ -515,9 +433,7 @@ proper names, pronouns, determiners, possessives, cardinals and ordinals
 <P>
 <!-- NEW -->
 </P>
-<A NAME="toc18"></A>
 <H2>Structure of the API</H2>
-<A NAME="toc19"></A>
 <H3>Language-independent ground API</H3>
 <P>
 <IMG ALIGN="middle" SRC="Lang.png" BORDER="0" ALT="">
@@ -525,7 +441,6 @@ proper names, pronouns, determiners, possessives, cardinals and ordinals
 <P>
 <!-- NEW -->
 </P>
-<A NAME="toc20"></A>
 <H3>The structure of a text sentence</H3>
 <PRE>
   John walks.
@@ -550,7 +465,6 @@ proper names, pronouns, determiners, possessives, cardinals and ordinals
 <P>
 <!-- NEW -->
 </P>
-<A NAME="toc21"></A>
 <H3>The structure in the syntax editor</H3>
 <P>
 <IMG ALIGN="middle" SRC="editor.png" BORDER="0" ALT="">
@@ -558,7 +472,6 @@ proper names, pronouns, determiners, possessives, cardinals and ordinals
 <P>
 <!-- NEW -->
 </P>
-<A NAME="toc22"></A>
 <H3>Language-dependent paradigm modules</H3>
 <H4>Regular paradigms</H4>
 <P>
@@ -650,7 +563,6 @@ Goal: eliminate the user's need of worst-case functions.
 <P>
 <!-- NEW -->
 </P>
-<A NAME="toc23"></A>
 <H3>Language-dependent syntax extensions</H3>
 <P>
 Syntactic structures that are not shared by all languages.
@@ -673,7 +585,6 @@ Candidates:
 <P>
 <!-- NEW -->
 </P>
-<A NAME="toc24"></A>
 <H3>Special-purpose APIs</H3>
 <P>
 Mathematical
@@ -693,9 +604,7 @@ Shallow
 <P>
 <!-- NEW -->
 </P>
-<A NAME="toc25"></A>
 <H3>How to use the resource as top-level grammar</H3>
-<A NAME="toc26"></A>
 <H3>Compiling</H3>
 <P>
 It is a good idea to compile the library, so that it can be opened faster
@@ -722,7 +631,6 @@ files again. Just do some of
 <P>
 <!-- NEW -->
 </P>
-<A NAME="toc27"></A>
 <H3>Parsing</H3>
 <P>
 The default parser does not work! (It is obsolete anyway.)
@@ -753,7 +661,6 @@ Remedies:
 <P>
 <!-- NEW -->
 </P>
-<A NAME="toc28"></A>
 <H3>Treebank generation</H3>
 <P>
 Multilingual treebank entry = tree + linearizations
@@ -782,7 +689,6 @@ Updating a treebank
 <P>
 <!-- NEW -->
 </P>
-<A NAME="toc29"></A>
 <H3>The multilingual treebank format</H3>
 <P>
 Tree + linearizations
@@ -805,7 +711,6 @@ These can also be wrapped in XML tags (<CODE>tb -xml</CODE>)
 <P>
 <!-- NEW -->
 </P>
-<A NAME="toc30"></A>
 <H3>Treebank-based parsing</H3>
 <P>
 Brute-force method that helps if real parsing is more expensive.
@@ -827,7 +732,6 @@ Brute-force method that helps if real parsing is more expensive.
 <P>
 <!-- NEW -->
 </P>
-<A NAME="toc31"></A>
 <H3>Morphology</H3>
 <P>
 Use morphological analyser
@@ -855,7 +759,6 @@ Try out inflection patterns
 <P>
 <!-- NEW -->
 </P>
-<A NAME="toc32"></A>
 <H3>Syntax editing</H3>
 <P>
 The simplest way to start editing with all grammars is
@@ -871,7 +774,6 @@ parts of an application grammar remain to be implemented.
 <P>
 <!-- NEW -->
 </P>
-<A NAME="toc33"></A>
 <H3>Efficient parsing via application grammar</H3>
 <P>
 Get rid of discontinuous constituents (in particular, <CODE>VP</CODE>)
@@ -888,9 +790,7 @@ instead of <CODE>PredVP np (ComplV2 v2 np')</CODE>
 <P>
 <!-- NEW -->
 </P>
-<A NAME="toc34"></A>
 <H2>How to use as library</H2>
-<A NAME="toc35"></A>
 <H3>Specialization through parametrized modules</H3>
 <P>
 The application grammar is implemented with reference to
@@ -905,7 +805,6 @@ Example: <A HREF="../../../examples/tram/TramI.gf">tram</A>
 <P>
 <!-- NEW -->
 </P>
-<A NAME="toc36"></A>
 <H3>Compile-time transfer</H3>
 <P>
 Instead of parametrized modules:
@@ -919,7 +818,6 @@ Example: imperative vs. infinitive in mathematical exercises
 <P>
 <!-- NEW -->
 </P>
-<A NAME="toc37"></A>
 <H3>A natural division into modules</H3>
 <P>
 Lexicon in language-dependent moduls
@@ -930,7 +828,6 @@ Combination rules in a parametrized module
 <P>
 <!-- NEW -->
 </P>
-<A NAME="toc38"></A>
 <H3>Example-based grammar writing</H3>
 <P>
 Example: <A HREF="../../../examples/animal/QuestionsI.gfe">animal</A>
@@ -956,12 +853,10 @@ Example: <A HREF="../../../examples/animal/QuestionsI.gfe">animal</A>
 <P>
 <!-- NEW -->
 </P>
-<A NAME="toc39"></A>
 <H2>How to implement a new language</H2>
 <P>
 See <A HREF="Resource-HOWTO.html">Resource-HOWTO</A>
 </P>
-<A NAME="toc40"></A>
 <H2>Ordinary modules</H2>
 <P>
 Write a concrete syntax module for each abstract module in the API
@@ -975,7 +870,6 @@ Examples: English, Finnish, German, Russian
 <P>
 <!-- NEW -->
 </P>
-<A NAME="toc41"></A>
 <H2>Parametrized modules</H2>
 <P>
 Examples: Romance (French, Italian, Spanish), Scandinavian (Danish, Norwegian, Swedish)
@@ -1008,7 +902,6 @@ Problems:
 <P>
 <!-- NEW -->
 </P>
-<A NAME="toc42"></A>
 <H3>The core API</H3>
 <P>
 Everything else is variations of this
@@ -1033,7 +926,6 @@ Everything else is variations of this
 <P>
 <!-- NEW -->
 </P>
-<A NAME="toc43"></A>
 <H3>The core API in Latin: parameters</H3>
 <P>
 This <A HREF="latin.gf">toy Latin grammar</A> shows in a nutshell how the core
@@ -1054,7 +946,6 @@ can be implemented.
 <P>
 <!-- NEW -->
 </P>
-<A NAME="toc44"></A>
 <H3>The core API in Latin: linearization types</H3>
 <PRE>
   lincat
@@ -1090,7 +981,6 @@ can be implemented.
 <P>
 <!-- NEW -->
 </P>
-<A NAME="toc45"></A>
 <H3>The core API in Latin: predication and complementization</H3>
 <PRE>
   lin
@@ -1115,7 +1005,6 @@ can be implemented.
 <P>
 <!-- NEW -->
 </P>
-<A NAME="toc46"></A>
 <H3>The core API in Latin: determination and modification</H3>
 <PRE>
     DetCN det cn = 
@@ -1139,7 +1028,6 @@ can be implemented.
 <P>
 <!-- NEW -->
 </P>
-<A NAME="toc47"></A>
 <H3>How to proceed</H3>
 <OL>
 <LI>put up a directory with dummy modules by copying from e.g. English and
@@ -1159,7 +1047,6 @@ commenting out the contents
 <P>
 <!-- NEW -->
 </P>
-<A NAME="toc48"></A>
 <H2>How to extend the API</H2>
 <P>
 Extend old modules or add a new one?
@@ -1173,6 +1060,6 @@ Exception: if you are working with a language-specific API extension,
 you can work directly in that module.
 </P>
 
-<!-- html code generated by txt2tags 2.3 (http://txt2tags.sf.net) -->
-<!-- cmdline: txt2tags -\-toc clt2006.txt -->
+<!-- html code generated by txt2tags 2.0 (http://txt2tags.sf.net) -->
+<!-- cmdline: txt2tags clt2006.txt -->
 </BODY></HTML>
