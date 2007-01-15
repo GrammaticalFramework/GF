@@ -101,7 +101,9 @@ lin
     Masc Pl P3 ;
   this_Quant = {s = \\_ => 
     table {
-      Sg => \\g,c => prepCase c ++ genForms "ce" "cette" ! g ;  ---- cet ; ci
+      Sg => \\g,c => 
+        prepCase c ++ 
+        genForms (pre {"ce" ; "cet" / voyelle}) "cette" ! g ;  --- ci
       Pl => \\_,_ => "ces"
       }
     } ;
