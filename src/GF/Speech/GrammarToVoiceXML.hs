@@ -122,7 +122,8 @@ skel2vxml name language start skel qs =
     vxml language ([startForm] ++ concatMap (uncurry (catForms gr qs)) skel)
   where 
   gr = grammarURI (prid name)
-  startForm = Tag "form" [] [subdialog "sub" [("src", "#"++catFormId start)] []]
+  startForm = Tag "form" [] [subdialog "sub" [("src", "#"++catFormId start)] 
+                                           [param "old" "{ name : '?' }"]]
 
 grammarURI :: String -> String
 grammarURI name = name ++ ".grxml"
@@ -133,41 +134,17 @@ catForms gr qs cat fs =
     comments [prid cat ++ " category."]
     ++ [cat2form gr qs cat fs] 
 
-{-
-cat2form :: String -> CatQuestions -> VIdent -> [(VIdent, [VIdent])] -> XML
-cat2form gr qs cat fs = 
-    form (catFormId cat) 
-      [field "value" [] 
-         [promptString (getCatQuestion cat qs), 
-          vxmlGrammar (gr++"#"++catFormId cat),
-          filled [] [return_ ["value"]]
-         ]
-      ]
--}
-
 cat2form :: String -> CatQuestions -> VIdent -> [(VIdent, [VIdent])] -> XML
 cat2form gr qs cat fs = 
   form (catFormId cat) $ 
-      [var "value" Nothing, 
---       var "callbacks" Nothing, 
-       blockCond "value.name != '?'" [assign (catFieldId cat) "value"],
---       block [doCallback "entered" cat [return_ [catFieldId cat]] []],
-       field (catFieldId cat) [] 
+      [var "old" Nothing, 
+       field "term" [("expr", "old.name != '?' ? old : undefined")]
            [promptString (getCatQuestion cat qs), 
             vxmlGrammar (gr++"#"++catFormId cat)
-            -- , nomatch [Data "I didn't understand you.", reprompt],
-            -- help [Data (mkHelpText cat)],
-            --filled [] [if_else (catFieldId cat ++ ".name == '?'") 
-            --           [reprompt] 
-            --           [{-doCallback "refined" cat [return_ [catFieldId cat]] []-}]]
            ]
       ]
      ++ concatMap (uncurry (fun2sub gr cat)) fs
-     ++ [block [{- doCallback "done" cat [return_ [catFieldId cat]] [-} return_ [catFieldId cat]{-]-}]]
-
-
-mkHelpText :: VIdent -> String
-mkHelpText cat = "help_"++ prid cat
+     ++ [block [return_ ["term"]{-]-}]]
 
 fun2sub :: String -> VIdent -> VIdent -> [VIdent] -> [XML]
 fun2sub gr cat fun args = 
@@ -177,21 +154,11 @@ fun2sub gr cat fun args =
   where 
   ss = zipWith mkSub [0..] args
   mkSub n t = subdialog s [("src","#"++catFormId t),
-                           ("cond",catFieldId cat++".name == "++string (prid fun))] 
-              [param "value" v,
---               param "callbacks" "callbacks",
-               filled [] [assign v (s++"."++catFieldId t)]]
+                           ("cond","term.name == "++string (prid fun))] 
+              [param "old" v,
+               filled [] [assign v (s++".term")]]
     where s = prid fun ++ "_" ++ show n
-          v = catFieldId cat++".children["++show n++"]"
-
-doCallback :: String -> VIdent -> [XML] -> [XML] -> XML
-doCallback f cat i e = 
- if_else ("typeof callbacks != 'undefined' && typeof " ++ cf ++ " != 'undefined' && !" ++ cf ++ "("++string (prid cat)++","++ catFieldId cat ++ ")") 
-         i e
-  where cf = "callbacks." ++ f
-
-catFieldId :: VIdent -> String
-catFieldId c = prid c ++ "_field"
+          v = "term.children["++show n++"]"
 
 catFormId :: VIdent -> String
 catFormId c = prid c ++ "_cat"
