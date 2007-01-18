@@ -154,12 +154,12 @@ cat2form gr qs cat fs =
 --       block [doCallback "entered" cat [return_ [catFieldId cat]] []],
        field (catFieldId cat) [] 
            [promptString (getCatQuestion cat qs), 
-            vxmlGrammar (gr++"#"++catFormId cat),
-            nomatch [Data "I didn't understand you.", reprompt],
-            help [Data (mkHelpText cat)],
-            filled [] [if_else (catFieldId cat ++ ".name == '?'") 
-                       [reprompt] 
-                       [{-doCallback "refined" cat [return_ [catFieldId cat]] []-}]]
+            vxmlGrammar (gr++"#"++catFormId cat)
+            -- , nomatch [Data "I didn't understand you.", reprompt],
+            -- help [Data (mkHelpText cat)],
+            --filled [] [if_else (catFieldId cat ++ ".name == '?'") 
+            --           [reprompt] 
+            --           [{-doCallback "refined" cat [return_ [catFieldId cat]] []-}]]
            ]
       ]
      ++ concatMap (uncurry (fun2sub gr cat)) fs
