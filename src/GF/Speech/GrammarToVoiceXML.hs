@@ -138,7 +138,8 @@ cat2form :: String -> CatQuestions -> VIdent -> [(VIdent, [VIdent])] -> XML
 cat2form gr qs cat fs = 
   form (catFormId cat) $ 
       [var "old" Nothing, 
-       field "term" [("expr", "old.name != '?' ? old : undefined")]
+       blockCond "old.name != '?'" [assign "term" "old"],
+       field "term" []
            [promptString (getCatQuestion cat qs), 
             vxmlGrammar (gr++"#"++catFormId cat)
            ]
