@@ -52,8 +52,7 @@ prSrgsXml sisr probs srg@(SRG{grammarName=name,startCat=start,
               [meta "description" 
                ("SRGS XML speech recognition grammar for " ++ name
                 ++ ". " ++ "Original start category: " ++ origStart),
-               meta "generator" ("Grammatical Framework " ++ version 
-                                 ++ " (compiled " ++ today ++ ")")]
+               meta "generator" ("Grammatical Framework " ++ version)]
             ++ topCatRules
 	    ++ concatMap ruleToXML rs
     ruleToXML (SRGRule cat origCat alts) = 
