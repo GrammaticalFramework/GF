@@ -61,7 +61,8 @@ import GF.Canon.MkGFC
 import GF.CF.CFtoSRG
 import GF.Speech.PrGSL (gslPrinter)
 import GF.Speech.PrJSGF (jsgfPrinter)
-import qualified GF.Speech.PrSRGS as SRGS
+import GF.Speech.PrSRGS
+import GF.Speech.PrSRGS_ABNF
 import qualified GF.Speech.SISR as SISR
 import GF.Speech.PrSLF
 import GF.Speech.PrFA (faGraphvizPrinter,regularPrinter,faCPrinter)
@@ -251,9 +252,11 @@ customGrammarPrinter =
   ,(strCI "gsl",     gslPrinter)
   ,(strCI "jsgf",    jsgfPrinter Nothing)
   ,(strCI "jsgf_sisr_old", jsgfPrinter (Just SISR.SISROld))
-  ,(strCI "srgs_xml", SRGS.srgsXmlPrinter Nothing False)
-  ,(strCI "srgs_xml_prob", SRGS.srgsXmlPrinter Nothing True)
-  ,(strCI "srgs_xml_sisr_old", SRGS.srgsXmlPrinter (Just SISR.SISROld) False)
+  ,(strCI "srgs_xml",           srgsXmlPrinter Nothing False)
+  ,(strCI "srgs_xml_prob",      srgsXmlPrinter Nothing True)
+  ,(strCI "srgs_xml_sisr_old",  srgsXmlPrinter (Just SISR.SISROld) False)
+  ,(strCI "srgs_abnf",          srgsAbnfPrinter Nothing False)
+  ,(strCI "srgs_abnf_sisr_old", srgsAbnfPrinter (Just SISR.SISROld) False)
   ,(strCI "vxml", grammar2vxml)
   ,(strCI "slf",  slfPrinter)
   ,(strCI "slf_graphviz", slfGraphvizPrinter)
