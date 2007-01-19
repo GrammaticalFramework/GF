@@ -58,7 +58,6 @@ import GF.CF.PrLBNF
 import GF.Grammar.PrGrammar
 import GF.Compile.PrOld
 import GF.Canon.MkGFC
-import GF.CF.CFtoSRG
 import GF.Speech.PrGSL (gslPrinter)
 import GF.Speech.PrJSGF (jsgfPrinter)
 import GF.Speech.PrSRGS
@@ -248,7 +247,7 @@ customGrammarPrinter =
   ,(strCI "gf",      \_ -> err id prGrammar . canon2sourceGrammar . stateGrammarST)
   ,(strCI "cf",      \_ -> prCF . stateCF)
   ,(strCI "old",     \_ -> printGrammarOld . stateGrammarST)
-  ,(strCI "srg",     \_ -> prSRG . stateCF)
+  ,(strCI "srg",     srgsAbnfPrinter Nothing False)
   ,(strCI "gsl",     gslPrinter)
   ,(strCI "jsgf",    jsgfPrinter Nothing)
   ,(strCI "jsgf_sisr_old", jsgfPrinter (Just SISR.SISROld))
