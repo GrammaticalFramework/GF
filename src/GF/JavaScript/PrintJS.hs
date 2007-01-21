@@ -18,21 +18,18 @@ doc = (:)
 render :: Doc -> String
 render d = rend 0 (map ($ "") $ d []) "" where
   rend i ss = case ss of
-    "["      :ts -> showChar '[' . rend i ts
-    "("      :ts -> showChar '(' . rend i ts
-    "{"      :ts -> showChar '{' . new (i+1) . rend (i+1) ts
-    "}" : ";":ts -> new (i-1) . space "}" . showChar ';' . new (i-1) . rend (i-1) ts
-    "}"      :ts -> new (i-1) . showChar '}' . new (i-1) . rend (i-1) ts
-    ";"      :ts -> showChar ';' . new i . rend i ts
-    t  : "," :ts -> showString t . space "," . rend i ts
-    t  : "." :ts -> showString t . showString "." . rend i ts
-    t  : ")" :ts -> showString t . showChar ')' . rend i ts
-    t  : "]" :ts -> showString t . showChar ']' . rend i ts
-    t  : "[" :ts -> showString t . showChar '[' . rend i ts
-    t        :ts -> space t . rend i ts
-    _            -> id
+    t:ts | not (spaceAfter t) -> showString t . rend i ts
+    t:ts@(t':_) | not (spaceBefore t') -> showString t . rend i ts
+    t:ts -> space t . rend i ts
+    []   -> id
   new i   = showChar '\n' . replicateS (2*i) (showChar ' ') . dropWhile isSpace
   space t = showString t . (\s -> if null s then "" else (' ':s))
+
+spaceAfter :: String -> Bool
+spaceAfter = (`notElem` [".","(","["])
+
+spaceBefore :: String -> Bool
+spaceBefore = (`notElem` [",",".",":",";","(",")","[","]","{","}"])
 
 parenth :: Doc -> Doc
 parenth ss = doc (showChar '(') . ss . doc (showChar ')')
@@ -100,7 +97,7 @@ instance Print Element where
 
   prtList es = case es of
    [] -> (concatD [])
-   x:xs -> (concatD [prt 0 x , prt 0 xs])
+   x:xs -> (concatD [prt 0 x , doc (showString "\n"), prt 0 xs]) -- HACKED!
 
 instance Print Stmt where
   prt i e = case e of
