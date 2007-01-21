@@ -60,7 +60,9 @@ prABNF sisr probs srg@(SRG{grammarName=name,grammarLanguage=ml,
     language = maybe empty (\l -> text "language" <+> text l <> char ';') ml
     tagFormat | isJust sisr = text "tag-format" <+> text "<semantics/1.0>" <> char ';'
               | otherwise = empty
-    mainCat = text "root" <+> prCat start <> char ';'
+    mainCat = case cfgCatToGFCat origStart of
+                Just c  -> text "root" <+> prCat (catFormId c) <> char ';'
+                Nothing -> empty
     prRule (SRGRule cat origCat rhs) = 
 	comment origCat $$
         rule False cat (map prAlt (ebnfSRGAlts rhs))
