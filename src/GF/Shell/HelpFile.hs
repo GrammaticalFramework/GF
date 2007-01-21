@@ -641,7 +641,6 @@ txtHelpFile =
   "\n    -printer=lbnf           labelled context-free grammar for BNF Converter" ++
   "\n    -printer=plbnf          grammar for BNF Converter, with precedence levels" ++
   "\n   *-printer=happy          source file for Happy parser generator (use lbnf!)" ++
-  "\n    -printer=srg            speech recognition grammar" ++
   "\n    -printer=haskell        abstract syntax in Haskell, with transl to/from GF" ++
   "\n    -printer=morpho         full-form lexicon, long format" ++
   "\n   *-printer=latex          LaTeX file (for the tg command)" ++
@@ -653,6 +652,9 @@ txtHelpFile =
   "\n    -printer=gsl            Nuance GSL speech recognition grammar" ++
   "\n    -printer=jsgf           Java Speech Grammar Format" ++
   "\n    -printer=jsgf_sisr_old   Java Speech Grammar Format with semantic tags in " ++
+  "\n                                         SISR  WD 20030401 format" ++
+  "\n    -printer=srgs_abnf       SRGS ABNF format" ++
+  "\n    -printer=srgs_abnf_sisr_old SRGS ABNF format, with semantic tags in" ++
   "\n                                         SISR  WD 20030401 format" ++
   "\n    -printer=srgs_xml       SRGS XML format" ++
   "\n    -printer=srgs_xml_prob  SRGS XML format, with weights" ++
