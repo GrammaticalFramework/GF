@@ -47,7 +47,7 @@ srgsAbnfPrinter :: Maybe SISRFormat
 srgsAbnfPrinter sisr probs opts s = show $ prABNF sisr probs $ makeSimpleSRG opts s
 
 prABNF :: Maybe SISRFormat -> Bool -> SRG -> Doc
-prABNF sisr probs srg@(SRG{grammarName=name,grammarLanguage = l,
+prABNF sisr probs srg@(SRG{grammarName=name,grammarLanguage=ml,
                      startCat=start,origStartCat=origStart,rules=rs})
     = header $++$ vcat topCatRules $++$ foldr ($++$) empty (map prRule rs)
     where
@@ -57,7 +57,7 @@ prABNF sisr probs srg@(SRG{grammarName=name,grammarLanguage = l,
                 ++ ". " ++ "Original start category: " ++ origStart) $$
              meta "generator" ("Grammatical Framework " ++ version) $$
              language $$ tagFormat $$ mainCat
-    language = text "language" <+> text l <> char ';'
+    language = maybe empty (\l -> text "language" <+> text l <> char ';') ml
     tagFormat | isJust sisr = text "tag-format" <+> text "<semantics/1.0>" <> char ';'
               | otherwise = empty
     mainCat = text "root" <+> prCat start <> char ';'

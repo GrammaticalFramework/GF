@@ -42,7 +42,7 @@ import GF.Speech.FiniteState
 import GF.Speech.RegExp
 import GF.Infra.Option
 import GF.Probabilistic.Probabilistic (Probs)
-import GF.Compile.ShellState (StateGrammar, stateProbs, cncId)
+import GF.Compile.ShellState (StateGrammar, stateProbs, stateOptions, cncId)
 
 import Data.List
 import Data.Maybe (fromMaybe, maybeToList)
@@ -54,8 +54,8 @@ import qualified Data.Set as Set
 data SRG = SRG { grammarName :: String    -- ^ grammar name
 		 , startCat :: String     -- ^ start category name
 		 , origStartCat :: String -- ^ original start category name
-                 , grammarLanguage :: String -- ^ The language for which the grammar 
-                                             --   is intended, e.g. en_UK
+                 , grammarLanguage :: Maybe String -- ^ The language for which the grammar 
+                                                   --   is intended, e.g. en-UK
 	         , rules :: [SRGRule] 
 	       }
 	 deriving (Eq,Show)
@@ -100,17 +100,18 @@ makeSRG_ :: (CFRules -> CFRules)
          -> Options   -- ^ Grammar options
 	 -> StateGrammar
 	 -> SRG
-makeSRG_ preprocess opts s =
+makeSRG_ preprocess opt s = 
       SRG { grammarName = name,
 	    startCat = lookupFM_ names origStart,
 	    origStartCat = origStart,
             grammarLanguage = l,
 	    rules = rs }
     where 
+    opts = addOptions opt (stateOptions s)
     name = prIdent (cncId s)
     origStart = getStartCatCF opts s
     probs = stateProbs s
-    l = fromMaybe "en_UK" (getOptVal opts speechLanguage)
+    l = fmap (replace '_' '-') $ getOptVal opts speechLanguage
     (cats,cfgRules) = unzip $ preprocess $ cfgToCFRules s
     names = mkCatNames name cats
     rs = map (cfgRulesToSRGRule names probs) cfgRules

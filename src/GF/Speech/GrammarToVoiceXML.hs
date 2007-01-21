@@ -21,12 +21,13 @@ import GF.Canon.CMacros (noMark, strsFromTerm)
 import GF.Canon.Unlex (formatAsText)
 import GF.Data.Utilities
 import GF.CF.CFIdent (cfCat2Ident)
-import GF.Compile.ShellState (StateGrammar,stateGrammarST,cncId,grammar,startCatStateOpts)
+import GF.Compile.ShellState (StateGrammar,stateGrammarST,cncId,grammar,
+                              startCatStateOpts,stateOptions)
 import GF.Data.Str (sstrV)
 import GF.Grammar.Macros hiding (assign,strsFromTerm)
 import GF.Grammar.Grammar (Fun)
 import GF.Grammar.Values (Tree)
-import GF.Infra.Option (Options)
+import GF.Infra.Option (Options, addOptions, getOptVal, speechLanguage)
 import GF.UseGrammar.GetTree (string2treeErr)
 import GF.UseGrammar.Linear (linTree2strings)
 
@@ -45,10 +46,11 @@ import Debug.Trace
 
 -- | the main function
 grammar2vxml :: Options -> StateGrammar -> String
-grammar2vxml opts s = showsXMLDoc (skel2vxml name language startcat gr' qs) ""
+grammar2vxml opt s = showsXMLDoc (skel2vxml name language startcat gr' qs) ""
     where (name, gr') = vSkeleton (stateGrammarST s)
           qs = catQuestions s (map fst gr')
-          language = "en" -- FIXME: use speechLanguage tag
+          opts = addOptions opt (stateOptions s)
+          language = fmap (replace '_' '-') $ getOptVal opts speechLanguage
           startcat = C.CId $ prIdent $ cfCat2Ident $ startCatStateOpts opts s
 
 --
@@ -117,7 +119,7 @@ getCatQuestion c qs =
 -- * Generate VoiceXML
 --
 
-skel2vxml :: VIdent -> String -> VIdent -> VSkeleton -> CatQuestions -> XML
+skel2vxml :: VIdent -> Maybe String -> VIdent -> VSkeleton -> CatQuestions -> XML
 skel2vxml name language start skel qs = 
     vxml language ([startForm] ++ concatMap (uncurry (catForms gr qs)) skel)
   where 
@@ -169,10 +171,10 @@ catFormId c = prid c ++ "_cat"
 -- * VoiceXML stuff
 --
 
-vxml :: String -> [XML] -> XML
-vxml language = Tag "vxml" [("version","2.0"),
-                            ("xmlns","http://www.w3.org/2001/vxml"),
-                            ("xml:lang", language)]
+vxml :: Maybe String -> [XML] -> XML
+vxml ml = Tag "vxml" $ [("version","2.0"),
+                        ("xmlns","http://www.w3.org/2001/vxml")]
+                      ++ maybe [] (\l -> [("xml:lang", l)]) ml
 
 form :: String -> [XML] -> XML
 form id xs = Tag "form" [("id", id)] xs
