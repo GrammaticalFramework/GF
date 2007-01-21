@@ -39,12 +39,12 @@ concrete TravelTha of Travel = open Prelude in {
     MkSpeaker = cc2 ;
     MkHearer _ _ = ss [] ;
 
-    Male = ss "k2rab" ;
-    Female = ss "k2T1a" ;
+    Male = ss "k2ra.b" ;
+    Female = ss "k2T1a." ;
 
     Single, Many = ss [] ;
 
-    Hello = ss ["swa.s di:"] ;
+    Hello = ss ["swas di:"] ;
     Thanks = ss ["k1Ob k2un'"] ;
 
     IWant = prefixSS "eOa:" ;
@@ -64,7 +64,7 @@ concrete TravelTha of Travel = open Prelude in {
     Five = ss "ha:" ;
     Ten  = ss "sib" ;
 
-    Mango = cls ["ma mT1wg"] "lu:k" ;
+    Mango = cls ["ma. mT1wg"] "lu:k" ;
     Green = ss ["si: ek1i:yw"] ;
 
   oper

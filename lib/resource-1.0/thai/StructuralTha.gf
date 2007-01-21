@@ -1,5 +1,5 @@
 concrete StructuralTha of Structural = CatTha ** 
-  open StringsTha, Prelude in {
+  open StringsTha, ResTha, Prelude in {
 
   flags optimize=all ;
 
@@ -19,11 +19,8 @@ concrete StructuralTha of Structural = CatTha **
 --  but_PConj = ss "but" ;
 --  by8agent_Prep = ss "by" ;
 --  by8means_Prep = ss "by" ;
---  can8know_VV, can_VV = {
---    s = table VVForm [["be able to"] ; "can" ; ["been able to"] ;  
---         ["being able to"] ; "could" ; "can't" ; "couldn't"] ; 
---    isAux = True
---    } ;
+  can8know_VV = {s = pen_s ; typ = VVPost} ;
+  can_VV = {s = way_s ; typ = VVPost} ;
 --  during_Prep = ss "during" ;
 --  either7or_DConj = sd2 "either" "or" ** {n = Sg} ;
 --  everybody_NP = regNP "everybody" Sg ;
@@ -50,11 +47,7 @@ concrete StructuralTha of Structural = CatTha **
 --  more_CAdv = ss "more" ;
 --  most_Predet = ss "most" ;
 --  much_Det = mkDeterminer Sg "much" ;
---  must_VV = {
---    s = table VVForm [["have to"] ; "must" ; ["had to"] ; 
---         ["having to"] ; ["had to"] ; "mustn't" ; ["hadn't to"]] ; ---- 
---    isAux = True
---    } ;
+  must_VV = {s = tog_s ; typ = VVPre} ;
 --  no_Phr = ss "no" ;
 --  on_Prep = ss "on" ;
 --  one_Quant = mkDeterminer Sg "one" ;
@@ -88,8 +81,8 @@ concrete StructuralTha of Structural = CatTha **
 --  to_Prep = ss "to" ;
 --  under_Prep = ss "under" ;
 --  very_AdA = ss "very" ;
---  want_VV = P.mkVV (P.regV "want") ;
---  we_Pron = mkNP "we" "us" "our" Pl P1 ;
+  want_VV = {s = yaak_s ; typ = VVMid} ;
+  we_Pron = ss raw_s ;
 --  whatPl_IP = mkIP "what" "what" "what's" Sg ;
 --  whatSg_IP = mkIP "what" "what" "what's" Sg ;
 --  when_IAdv = ss "when" ;

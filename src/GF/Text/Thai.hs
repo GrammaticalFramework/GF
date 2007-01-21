@@ -79,7 +79,7 @@ allThaiTrans = words $
   "-  k  k1 -  k2 -  k3 g  c  c1 c2 s' c3 y' d' t' " ++
   "t1 t2 t3 n' d  t  t4 t5 t6 n  b  p  p1 f  p2 f' " ++
   "p3 m  y  r  -  l  -  w  s- r' s  h  l' O  h' -  " ++
-  "a  a. a: a+ i  i: v  v: u  u: -  -  -  -  -  -  " ++
+  "a. a  a: a+ i  i: v  v: u  u: -  -  -  -  -  -  " ++
   "e  e' o: a% a& L  R  S  T1 T2 T3 T4 K  -  -  -  " ++
   "N0 N1 N2 N3 N4 N5 N6 N7 N8 N9 -  -  -  -  -  -  "
 

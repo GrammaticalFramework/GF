@@ -7,7 +7,7 @@
 ---- implement $Test$, it moreover contains regular lexical
 ---- patterns needed for $Lex$.
 --
-resource ResTha = ParamX ** open Prelude in {
+resource ResTha = ParamX ** open StringsTha, Prelude in {
 
   oper
 
@@ -21,7 +21,44 @@ resource ResTha = ParamX ** open Prelude in {
 
     Determiner = {s1, s2 : Str ; hasC : Bool} ; 
 
-    mkDet : Str -> Str -> Determiner = \s,c -> {s1 = s ; s2 = c ; hasC = True} ;
+    mkDet : Str -> Str -> Determiner = 
+      \s,c -> {s1 = s ; s2 = c ; hasC = True} ;
+
+-- Part before and after negation (mai_s)
+
+   Verb = {s1,s2 : Str} ;
+
+   resV : Str -> Str -> Verb = \s,c -> {s1 = s ; s2 = c} ;
+
+   regV : Str -> Verb = \s -> resV [] s ;
+
+   dirV2 : Verb -> Verb ** {c2 : Str} = \v -> v ** {c2 = []} ;
+
+-- Auxiliary verbs, according to order and negation.
+-- The three types are $VV may VP | may VV VP | VP may VV$
+
+   param VVTyp = VVPre | VVMid | VVPost ;
+
+   oper VVerb = {s : Str ; typ : VVTyp} ;
+
+-- Verb phrases: form negation and question, too.
+
+   VP = {
+     s   : Polarity => Str 
+     } ;
+
+   mkVP : Verb -> VP = \v -> {
+     s = \\p => v.s1 ++ polStr may_s p ++ v.s2
+     } ;
+
+   insertObject : Str -> VP -> VP = \np,vp -> {
+     s = \\p => vp.s ! p ++ np
+     } ;
+
+   polStr : Str -> Polarity -> Str = \m,p -> case p of {
+     Pos => [] ;
+     Neg => m
+     } ;
 
 --  flags optimize=all ;
 --
