@@ -35,6 +35,7 @@ import GF.Today
 
 import Data.Char
 import Data.List
+import Data.Maybe
 import Text.PrettyPrint.HughesPJ
 import Debug.Trace
 
@@ -48,23 +49,24 @@ srgsAbnfPrinter sisr probs opts s = show $ prABNF sisr probs $ makeSimpleSRG opt
 prABNF :: Maybe SISRFormat -> Bool -> SRG -> Doc
 prABNF sisr probs srg@(SRG{grammarName=name,grammarLanguage = l,
                      startCat=start,origStartCat=origStart,rules=rs})
-    = header $++$ mainCat $++$ vcat topCatRules $++$ foldr ($++$) empty (map prRule rs)
+    = header $++$ vcat topCatRules $++$ foldr ($++$) empty (map prRule rs)
     where
     header = text "#ABNF 1.0 UTF-8;" $$
              meta "description" 
                ("Speech recognition grammar for " ++ name
                 ++ ". " ++ "Original start category: " ++ origStart) $$
              meta "generator" ("Grammatical Framework " ++ version) $$
-             text "language" <+> text l <> char ';'
+             language $$ tagFormat $$ mainCat
+    language = text "language" <+> text l <> char ';'
+    tagFormat | isJust sisr = text "tag-format" <+> text "<semantics/1.0>" <> char ';'
+              | otherwise = empty
     mainCat = text "root" <+> prCat start <> char ';'
     prRule (SRGRule cat origCat rhs) = 
 	comment origCat $$
         rule False cat (map prAlt (ebnfSRGAlts rhs))
     -- FIXME: use the probability
     prAlt (EBnfSRGAlt mp n rhs) = sep [initTag, parens (prItem sisr n rhs), finalTag]
-      where initTag | isEmpty t = empty
-                    | otherwise = text "$NULL" <+>  t
-                where t = tag sisr (profileInitSISR n)
+      where initTag = tag sisr (profileInitSISR n)
             finalTag = tag sisr (profileFinalSISR n)
 
     topCatRules = [rule True (catFormId tc) (map (it tc) cs) | (tc,cs) <- srgTopCats srg]
@@ -119,7 +121,7 @@ rule pub c xs = sep [p <+> prCat c <+> char '=', nest 2 (alts xs) <+> char ';']
   where p = if pub then text "public" else empty
 
 meta :: String -> String -> Doc
-meta n v = text "meta" <+> text (show n) <+> text "is" <+> text (show v)
+meta n v = text "meta" <+> text (show n) <+> text "is" <+> text (show v) <> char ';'
 
 -- Pretty-printing utilities
 
