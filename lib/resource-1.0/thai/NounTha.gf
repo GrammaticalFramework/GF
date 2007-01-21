@@ -30,7 +30,7 @@ concrete NounTha of Noun = CatTha ** open StringsTha, ResTha, Prelude in {
       hasC = quant.hasC ;
       } ;
     DetPl quant num ord = {
-      s1 = [] ;
+      s1 = num.s ;
       s2 = quant.s ++ ord.s ;
       hasC = orB num.hasC quant.hasC ;
       } ;
@@ -59,8 +59,8 @@ concrete NounTha of Noun = CatTha ** open StringsTha, ResTha, Prelude in {
     DefArt = {s = [] ; hasC = False} ;
     IndefArt = {s = [] ; hasC = False} ;
 
---    MassDet = {s = [] ; n = Sg} ;
---
+    MassDet = {s = [] ; hasC = False} ;
+
     UseN n = n ;
 --    UseN2 n = n ;
 --    UseN3 n = n ;

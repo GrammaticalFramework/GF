@@ -18,7 +18,7 @@ lin
 --  bank_N = regN "bank" ;
 --  beautiful_A = regADeg "beautiful" ;
 --  become_VA = mkVA (irregV "become" "became" "become") ;
---  beer_N = regN "beer" ;
+  beer_N = mkN biar_s kew_s ; 
 --  beg_V2V = mkV2V (regDuplV "beg") noPrep toP ;
   big_A = ss yay_s ;
 --  bike_N = regN "bike" ;
@@ -64,7 +64,7 @@ lin
 --  doctor_N = regN "doctor" ;
 --  dog_N = regN "dog" ;
 --  door_N = regN "door" ;
---  drink_V2 = dirV2 (irregV "drink" "drank" "drunk") ;
+  drink_V2 = dirV2 (regV dvm_s) ;
 --  easy_A2V = mkA2V (regA "easy") forP ;
 --  eat_V2 = dirV2 (irregV "eat" "ate" "eaten") ;
 --  empty_A = regADeg "empty" ;
@@ -206,7 +206,7 @@ lin
 --  window_N = regN "window" ;
 --  wine_N = regN "wine" ;
 --  win_V2 = dirV2 (irregDuplV "win" "won" "won") ;
-  woman_N = mkN yig_s khon_s ;
+  woman_N = mkN (puu_s ++ yig_s) khon_s ;
 --  wonder_VQ = mkVQ (regV "wonder") ;
 --  wood_N = regN "wood" ;
 --  write_V2 = dirV2 (irregV "write" "wrote" "written") ;

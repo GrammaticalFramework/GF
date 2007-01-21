@@ -9,22 +9,17 @@ Literal strings are defined as constants, all in the generated file
 
   StringsTha.gf
 
-This file is obtained from
+This file is obtained by 'make strings' from
 
   StringsThai.gf
 
-by
-
-  make strings
-
-using the transliteration defined in
-
-  GF/src/GF/Text/Thai.hs
-
-and documented in
-
-  thai.html
+using the transliteration defined in GF/src/GF/Text/Thai.hs
+and documented in thai.html.
 
 From this, also approximate pronunciation can be derived.
-We also plan to use this unique word list for segmenting
+Use then the command 'make pronstrings' and the main file
+
+  LangThaiPron.gf
+
+We also plan to use the unique word list for segmenting
 Thai strings.

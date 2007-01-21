@@ -7,15 +7,18 @@ resource StringsTha = {
 oper
 
 baan_s = "bT2a:n" ; -- house
+biar_s = "ebi:OrK" ;
 ca_s = "ca." ; -- Modal
 cet_s = "ecSd" ; -- seven
 chan_s = "c1an" ; -- I
 chay_s = "a&c2T1" ; -- be-not
+dvm_s = "dvm" ; -- drink
 et_s = "eOSd" ; -- one'
 haa_s = "hT2a:" ; -- five
 hay_s = "a%hT2" ; -- give
 hok_s = "ho?k" ; -- six
 kaaw_s = "eka:" ; -- nine
+kew_s = "e'kT2w" ; -- glass (drink Classif)
 khaw_s = "ek1w" ; -- he
 khon_s = "k2n" ; -- people Classif
 khoog_s = "k1Og" ; -- Possessive
