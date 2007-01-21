@@ -7,15 +7,18 @@ resource StringsTha = {
 oper
 
 baan_s = "บ้าน" ; -- house
+biar_s = "เบีอร์" ;
 ca_s = "จะ" ; -- Modal
 cet_s = "เจ็ด" ; -- seven
 chan_s = "ฉัน" ; -- I
 chay_s = "ไช่" ; -- be-not
+dvm_s = "ดึม" ; -- drink
 et_s = "เอ็ด" ; -- one'
 haa_s = "ห้า" ; -- five
 hay_s = "ให้" ; -- give
 hok_s = "หก" ; -- six
 kaaw_s = "เกา" ; -- nine
+kew_s = "แก้ว" ; -- glass (drink Classif)
 khaw_s = "เขว" ; -- he
 khon_s = "คน" ; -- people Classif
 khoog_s = "ของ" ; -- Possessive
