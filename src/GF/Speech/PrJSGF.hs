@@ -55,7 +55,9 @@ prJSGF sisr srg@(SRG{grammarName=name,grammarLanguage=ml,
 	     text ("grammar " ++ name ++ ";") 
     lang = maybe empty text ml
     mainCat = comment ("Start category: " ++ origStart) $$
-	      rule True "MAIN" [prCat start]
+              case cfgCatToGFCat origStart of
+                Just c  -> rule True "MAIN" [prCat (catFormId c)]
+                Nothing -> empty
     prRule (SRGRule cat origCat rhs) = 
 	comment origCat $$
         rule False cat (map prAlt (ebnfSRGAlts rhs))
