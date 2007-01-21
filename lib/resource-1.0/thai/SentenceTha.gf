@@ -1,15 +1,20 @@
-concrete SentenceTha of Sentence = CatTha ** open Prelude, ResTha in {
+concrete SentenceTha of Sentence = CatTha ** 
+  open Prelude, StringsTha, ResTha in {
 
   flags optimize=all_subs ;
 
   lin
 
-    PredVP = cc2 ;
+    PredVP np vp = {s = \\p => np.s ++ vp.s ! p} ;
 
 --    PredSCVP sc vp = mkClause sc.s (agrP3 Sg) vp ;
 
-    ImpVP vp = vp ;
-
+    ImpVP vp = {
+      s = table {
+        Pos => vp.s ! Pos ++ si_s ;
+        Neg => yaa_s ++ vp.s ! Pos
+        }
+      } ;
 --    SlashV2 np v2 = 
 --      mkClause (np.s ! Nom) np.a (predV v2) ** {c2 = v2.c2} ;
 --
@@ -29,8 +34,12 @@ concrete SentenceTha of Sentence = CatTha ** open Prelude, ResTha in {
 --    EmbedQS qs = {s = qs.s ! QIndir} ;
 --    EmbedVP vp = {s = infVP False vp (agrP3 Sg)} ; --- agr
 --
---    UseCl  t a p cl = {s = t.s ++ a.s ++ p.s ++ cl.s ! t.t ! a.a ! ctr p.p ! ODir} ;
---    UseQCl t a p cl = {s = \\q => t.s ++ a.s ++ p.s ++ cl.s ! t.t ! a.a ! ctr p.p ! q} ;
+    UseCl  t a p cl = {s = t.s ++ a.s ++ p.s ++ cl.s ! p.p} ;
+    UseQCl t a p cl = {
+      s = \\q => t.s ++ a.s ++ p.s ++
+                 case q of {QIndir => waa_s ; _ => []} ++ 
+                 cl.s ! p.p
+      } ;
 --    UseRCl t a p cl = {
 --      s = \\r => t.s ++ a.s ++ p.s ++ cl.s ! t.t ! a.a ! ctr p.p ! r ;
 --      c = cl.c

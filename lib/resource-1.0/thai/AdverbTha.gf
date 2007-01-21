@@ -1,7 +1,9 @@
---concrete AdverbTha of Adverb = CatTha ** open ResTha, Prelude in {
---
---  lin
---    PositAdvAdj a = {s = a.s ! AAdv} ;
+concrete AdverbTha of Adverb = CatTha ** 
+  open ResTha, StringsTha, Prelude in {
+
+  lin
+    PositAdvAdj a = a ;
+
 --    ComparAdvAdj cadv a np = {
 --      s = cadv.s ++ a.s ! AAdv ++ "than" ++ np.s ! Nom
 --      } ;
@@ -18,4 +20,4 @@
 --
 --    AdnCAdv cadv = {s = cadv.s ++ "than"} ;
 --
---}
+}

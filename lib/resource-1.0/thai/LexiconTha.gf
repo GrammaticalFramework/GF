@@ -85,7 +85,7 @@ lin
 --  glove_N = regN "glove" ;
 --  gold_N = regN "gold" ;
 --  good_A = mkADeg "good" "well" "better" "best" ;
-  go_V = ss pay_s ;
+  go_V = regV pay_s ;
 --  green_A = regADeg "green" ;
 --  harbour_N = regN "harbour" ;
 --  hate_V2 = dirV2 (regV "hate") ;
@@ -113,7 +113,7 @@ lin
 --  long_A = regADeg "long" ;
 --  lose_V2 = dirV2 (irregV "lose" "lost" "lost") ;
 --  love_N = regN "love" ;
-  love_V2 = ss rak_s ;
+  love_V2 = dirV2 (regV rak_s) ;
 --  man_N = mk2N "man" "men" ;
 --  married_A2 = mkA2 (regA "married") toP ;
 --  meat_N = regN "meat" ;
@@ -167,7 +167,7 @@ lin
 --  short_A = regADeg "short" ;
 --  silver_N = regN "silver" ;
 --  sister_N = regN "sister" ;
---  sleep_V = (irregV "sleep" "slept" "slept") ;
+  sleep_V = resV noon_s lap_s ;
 --  small_A = regADeg "small" ;
 --  snake_N = regN "snake" ;
 --  sock_N = regN "sock" ;

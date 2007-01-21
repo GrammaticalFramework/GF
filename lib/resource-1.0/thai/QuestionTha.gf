@@ -1,17 +1,14 @@
---concrete QuestionTha of Question = CatTha ** open ResTha, Prelude in {
---
---  flags optimize=all_subs ;
---
---  lin
---
---    QuestCl cl = {
---      s = \\t,a,p => 
---            let cls = cl.s ! t ! a ! p 
---            in table {
---              QDir   => cls ! OQuest ;
---              QIndir => "if" ++ cls ! ODir
---              } ---- "whether" in ExtTha
---      } ;
+concrete QuestionTha of Question = CatTha ** 
+  open ResTha, StringsTha, Prelude in {
+
+  flags optimize=all_subs ;
+
+  lin
+
+-- pos. may, neg. chay may - not always the proper forms ---
+
+    QuestCl cl = {s = \\p => cl.s ! Pos ++ polStr chay_s p ++ m'ay_s} ; 
+
 --
 --    QuestVP qp vp = 
 --      let cl = mkClause (qp.s ! Nom) {n = qp.n ; p = P3} vp
@@ -41,4 +38,4 @@
 --
 --    CompIAdv a = a ;
 --
---}
+}
