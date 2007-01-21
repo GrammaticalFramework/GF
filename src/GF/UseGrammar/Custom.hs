@@ -247,7 +247,6 @@ customGrammarPrinter =
   ,(strCI "gf",      \_ -> err id prGrammar . canon2sourceGrammar . stateGrammarST)
   ,(strCI "cf",      \_ -> prCF . stateCF)
   ,(strCI "old",     \_ -> printGrammarOld . stateGrammarST)
-  ,(strCI "srg",     srgsAbnfPrinter Nothing False)
   ,(strCI "gsl",     gslPrinter)
   ,(strCI "jsgf",    jsgfPrinter Nothing)
   ,(strCI "jsgf_sisr_old", jsgfPrinter (Just SISR.SISROld))
