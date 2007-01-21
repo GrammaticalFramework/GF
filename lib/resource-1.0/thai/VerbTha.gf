@@ -1,0 +1,36 @@
+concrete VerbTha of Verb = CatTha ** open ResTha, StringsTha, Prelude in {
+
+  flags optimize=all_subs ;
+
+  lin
+    UseV v = v ;
+    ComplV2 = cc2 ;
+--    ComplV3 v np np2 = 
+--      insertObj (\\_ => v.c2 ++ np.s ! Acc ++ v.c3 ++ np2.s ! Acc) (predV v) ;
+--
+--    ComplVV v vp = insertObj (\\a => infVP v.isAux vp a) (predVV v) ;
+--
+--    ComplVS v s  = insertObj (\\_ => conjThat ++ s.s) (predV v) ;
+--    ComplVQ v q  = insertObj (\\_ => q.s ! QIndir) (predV v) ;
+--
+--    ComplVA  v    ap = insertObj (ap.s) (predV v) ;
+--    ComplV2A v np ap = 
+--      insertObj (\\_ => v.c2 ++ np.s ! Acc ++ ap.s ! np.a) (predV v) ;
+--
+    UseComp comp = comp ;
+--
+--    AdvVP vp adv = insertObj (\\_ => adv.s) vp ;
+--
+--    AdVVP adv vp = insertAdV adv.s vp ;
+--
+--    ReflV2 v = insertObj (\\a => v.c2 ++ reflPron ! a) (predV v) ;
+--
+--    PassV2 v = insertObj (\\_ => v.s ! VPPart) (predAux auxBe) ;
+--
+--    UseVS, UseVQ = \vv -> {s = vv.s ; c2 = [] ; isRefl = vv.isRefl} ; -- no "to"
+--
+    CompAP ap = ap ;
+    CompNP = prefixSS pen_s ;
+--    CompAdv a = {s = \\_ => a.s} ;
+--
+}

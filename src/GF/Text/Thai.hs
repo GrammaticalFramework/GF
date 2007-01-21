@@ -11,7 +11,7 @@
 
 -- AR 27/12/2006. Execute test2 to see the transliteration table.
 
-module GF.Text.Thai (mkThai) where
+module GF.Text.Thai (mkThai,thaiFile,thaiPronFile) where
 
 import qualified Data.Map as Map
 import Data.Char

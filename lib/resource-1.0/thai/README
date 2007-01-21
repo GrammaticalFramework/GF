@@ -1,0 +1,30 @@
+AR 21/1/2007
+
+Started Thai resource implementation following
+
+  David Smyth, Thai An Essential Grammar,
+    Routledge, London and New York, 2002.
+
+Literal strings are defined as constants, all in the generated file
+
+  StringsTha.gf
+
+This file is obtained from
+
+  StringsThai.gf
+
+by
+
+  make strings
+
+using the transliteration defined in
+
+  GF/src/GF/Text/Thai.hs
+
+and documented in
+
+  thai.html
+
+From this, also approximate pronunciation can be derived.
+We also plan to use this unique word list for segmenting
+Thai strings.
