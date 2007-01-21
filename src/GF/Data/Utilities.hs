@@ -104,6 +104,10 @@ buildMultiMap :: Ord a => [(a,b)] -> [(a,[b])]
 buildMultiMap = map (\g -> (fst (head g), map snd g) )
                  . sortGroupBy (compareBy fst)
 
+-- | Replace all occurences of an element by another element.
+replace :: Eq a => a -> a -> [a] -> [a]
+replace x y = map (\z -> if z == x then y else z)
+
 -- * equality functions
 
 -- | Use an ordering function as an equality predicate.

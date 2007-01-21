@@ -125,15 +125,15 @@ oneOf = Tag "one-of" []
 
 grammar :: Maybe SISRFormat
         -> String  -- ^ root
-        -> String -- ^language
+        -> Maybe String -- ^language
 	-> [XML] -> XML
-grammar sisr root l = 
-    Tag "grammar" $ [("xml:lang", l),
-                     ("xmlns","http://www.w3.org/2001/06/grammar"),
+grammar sisr root ml = 
+    Tag "grammar" $ [("xmlns","http://www.w3.org/2001/06/grammar"),
 		     ("version","1.0"),
 		     ("mode","voice"),
 		     ("root",root)]
                  ++ (if isJust sisr then [("tag-format","semantics/1.0")] else [])
+                 ++ maybe [] (\l -> [("xml:lang", l)]) ml
 
 meta :: String -> String -> XML
 meta n c = Tag "meta" [("name",n),("content",c)] []
