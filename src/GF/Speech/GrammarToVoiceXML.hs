@@ -161,7 +161,7 @@ fun2sub gr cat fun args =
               [param "old" v,
                filled [] [assign v (s++".term")]]
     where s = prid fun ++ "_" ++ show n
-          v = "term.children["++show n++"]"
+          v = "term.args["++show n++"]"
 
 catFormId :: VIdent -> String
 catFormId c = prid c ++ "_cat"
