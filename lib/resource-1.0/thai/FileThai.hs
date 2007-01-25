@@ -14,6 +14,7 @@
 module Main (main) where
 
 import GF.Text.Thai
+import GF.Text.UTF8
 import Data.List
 import System
 
@@ -22,5 +23,21 @@ main = do
   xx <- getArgs
   case xx of
     "-p":f:[] -> thaiPronFile f Nothing
+    "-w":f:[] -> thaiWordList f
     f     :[] -> thaiFile f Nothing
     _ -> putStrLn "usage: filethai (-p) File"
+
+
+-- adapted to the format of StringsThai
+
+thaiWordList :: FilePath -> IO ()
+thaiWordList f = do
+  ss <- readFile f >>= return . lines
+  mapM_ mkLine ss
+ where
+  mkLine s = case words s of
+    o : "=" : s : ";" : "--" : es -> 
+      putStrLn $ thai s ++ "\t" ++ pron s ++ "\t" ++ unwords es
+    _ -> return ()
+  thai = encodeUTF8 . mkThaiWord . init . tail
+  pron = mkThaiPron . init . tail
