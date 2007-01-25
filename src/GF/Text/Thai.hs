@@ -11,7 +11,7 @@
 
 -- AR 27/12/2006. Execute test2 to see the transliteration table.
 
-module GF.Text.Thai (mkThai,thaiFile,thaiPronFile) where
+module GF.Text.Thai (mkThai,mkThaiWord,mkThaiPron,thaiFile,thaiPronFile) where
 
 import qualified Data.Map as Map
 import Data.Char
@@ -93,7 +93,9 @@ allThaiCodes = [0x0e00 .. 0x0e7f]
 
 -- this works for one syllable
 
-mkPronSyllable s = pronSyllable $ getSyllable $ map mkThaiChar $ unchar s
+mkPronSyllable s = case fst $ pronAndOrth s of
+  Just p -> p
+  _ -> pronSyllable $ getSyllable $ map mkThaiChar $ unchar s
 
 data Syllable = Syll {
   initv   :: [Int],
@@ -118,11 +120,13 @@ pronSyllable s =
   initCons ++ tonem ++ vowel ++ finalCons
  where
 
-  vowel = case (initv s, midv s, finalv s, shorten s, tone s) of
-    ([0x0e40],[0x0e30,0x0e2d],_,_,_) -> "ö" -- eOa
-    ([0x0e40],[0x0e30,0x0e32],_,_,_) -> "o" -- ea:a 
-    ([],[],[],_,_) -> "o"
-    (i,m,f,_,_) -> concatMap pronThaiChar (reverse $ f ++ m ++ i) ----
+  vowel = case (initv s, midv s, finalv s, finalc s, shorten s, tone s) of
+    ([0x0e40],[0x0e35],[0x0e2d],[0x0e22],_,_) -> "ia" -- ei:-ya.
+    ([0x0e40],[0x0e35],_,[0x0e22],_,_) -> "ia" -- ei:-y
+    ([0x0e40],[0x0e30,0x0e2d],_,_,_,_) -> "ö" -- eOa.
+    ([0x0e40],[0x0e30,0x0e32],_,_,_,_) -> "o" -- ea:a. 
+    ([],[],[],_,_,_) -> "o"
+    (i,m,f,_,_,_) -> concatMap pronThaiChar (reverse $ f ++ m ++ i) ----
 
   initCons = concatMap pronThaiChar $ case (reverse $ initc s) of
     0x0e2b:cs@(_:_) -> cs -- high h
