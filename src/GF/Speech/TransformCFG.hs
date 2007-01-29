@@ -75,9 +75,11 @@ cfgToCFRules s =
           symb = mapSymbol catToString id
 	  catToString = prt
           gfcc = stateGFCC s
-          nameToTerm (Name f prs) = CFObj f (zipWith profileToTerm args prs)
-            where C.Typ args _ = lookType gfcc (i2i f)
-                  i2i (IC c) = C.CId c
+          nameToTerm (Name IW [Unify [n]]) = CFRes n
+          nameToTerm (Name f@(IC c) prs) = 
+              CFObj f (zipWith profileToTerm args prs)
+            where C.Typ args _ = lookType gfcc (C.CId c)
+          nameToTerm n = error $ "cfgToCFRules.nameToTerm" ++ show n
           profileToTerm (C.CId t) (Unify []) = CFMeta t
           profileToTerm _ (Unify xs) = CFRes (last xs) -- FIXME: unify
           profileToTerm (C.CId t) (Constant f) = maybe (CFMeta t) (\x -> CFObj x []) (forestName f)
