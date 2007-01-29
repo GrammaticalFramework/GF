@@ -67,7 +67,6 @@ profileFinalSISR term fmt = [JS.DExpr $ fmtOut fmt `ass` f term]
         f (CFApp x y) = JS.ECall (f x) [f y]
         f (CFRes i) = JS.EIndex (JS.EVar args) (JS.EInt (fromIntegral i))
         f (CFVar v) = JS.EVar (var v)
-        f (CFConst s) = JS.EStr s
         f (CFMeta typ) = obj [("name",JS.EStr "?"), ("type",JS.EStr typ)]
 
 fmtOut SISROld = JS.EVar (JS.Ident "$")

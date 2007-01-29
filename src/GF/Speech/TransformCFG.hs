@@ -58,7 +58,6 @@ data CFTerm
     | CFApp CFTerm CFTerm -- ^ Application
     | CFRes Int -- ^ The result of the n:th non-terminal
     | CFVar Int -- ^ A lambda-bound variable
-    | CFConst String 
     | CFMeta String -- ^ A metavariable
   deriving (Eq,Ord,Show)
 
