@@ -53,13 +53,13 @@ import qualified Data.Set as Set
 type CFRule_ = CFRule Cat_ CFTerm Token
 
 data CFTerm
-    = CFObj Fun [CFTerm]
-    | CFAbs Int CFTerm
-    | CFApp CFTerm CFTerm
-    | CFRes Int
-    | CFVar Int
-    | CFConst String
-    | CFMeta String
+    = CFObj Fun [CFTerm] -- ^ an abstract syntax function with arguments
+    | CFAbs Int CFTerm -- ^ A lambda abstraction. The Int is the variable id.
+    | CFApp CFTerm CFTerm -- ^ Application
+    | CFRes Int -- ^ The result of the n:th non-terminal
+    | CFVar Int -- ^ A lambda-bound variable
+    | CFConst String 
+    | CFMeta String -- ^ A metavariable
   deriving (Eq,Ord,Show)
 
 type Cat_ = String
