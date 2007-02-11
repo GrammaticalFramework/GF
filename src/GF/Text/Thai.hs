@@ -138,6 +138,9 @@ pronSyllable s =
 
     ([0x0e42],[0x0e30],_,_,_,_) -> "o"         -- o:-a.
 
+    ([],[0x0e2d],_,[0x0e22],_,_) -> "OOy"      -- Oy
+    ([],[0x0e2d],_,_,_,_)        -> "OO"       -- O
+
     ([],[],[],_,_,_) -> "o"
 
     (i,m,f,_,_,_) -> concatMap pronThaiChar (reverse $ f ++ m ++ i) ----
