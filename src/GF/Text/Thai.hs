@@ -121,11 +121,25 @@ pronSyllable s =
  where
 
   vowel = case (initv s, midv s, finalv s, finalc s, shorten s, tone s) of
-    ([0x0e40],[0x0e35],[0x0e2d],[0x0e22],_,_) -> "ia" -- ei:-ya.
-    ([0x0e40],[0x0e35],_,[0x0e22],_,_) -> "ia" -- ei:-y
-    ([0x0e40],[0x0e30,0x0e2d],_,_,_,_) -> "ö" -- eOa.
-    ([0x0e40],[0x0e30,0x0e32],_,_,_,_) -> "o" -- ea:a. 
+    ([0x0e40],[0x0e35],_,[0x0e22],_,_) -> "ia" -- e-i:y
+    ([0x0e40],[0x0e2d,0x0e35],_,_,_,_) -> "va" -- e-i:O
+    ([0x0e40],[0x0e30,0x0e35],_,[0x0e22],_,_) -> "ia" -- e-i:ya.
+    ([0x0e40],[0x0e30,0x0e2d],_,_,_,_) -> "ö"  -- e-Oa.
+    ([0x0e40],[0x0e30,0x0e32],_,_,_,_) -> "O"  -- e-a:a. -- open o 
+    ([0x0e40],[0x0e2d],_,_,_,_) -> "öö"        -- e-O
+    ([0x0e40],[0x0e34],_,_,_,_) -> "öö"        -- e-i
+    ([0x0e40],[0x0e30],_,_,_,_) -> "e"         -- e-a.
+    ([0x0e40],[0x0e32],_,_,_,_) -> "aw"        -- e-a:
+    ([0x0e40],[],[],[0x0e22],_,_) -> "ööy"     -- e-y
+    ([0x0e40],[],[],_,True,_) -> "e"
+
+    ([0x0e41],[0x0e30],_,_,_,_) -> "ä"         -- ä-a.
+    ([0x0e41],[],[],_,True,_)   -> "ä"
+
+    ([0x0e42],[0x0e30],_,_,_,_) -> "o"         -- o:-a.
+
     ([],[],[],_,_,_) -> "o"
+
     (i,m,f,_,_,_) -> concatMap pronThaiChar (reverse $ f ++ m ++ i) ----
 
   initCons = concatMap pronThaiChar $ case (reverse $ initc s) of
@@ -138,6 +152,7 @@ pronSyllable s =
     in
     case c of
       [] -> []
+      [0x0e22] -> [] --- y
       [k] -> concatMap pronThaiChar (reverse cs) ++ finalThai k
 
   iclass = case take 1 (reverse $ initc s) of
@@ -268,9 +283,10 @@ pronThai s = case s of
     | p==':'      -> c:[c]
     | elem p "%&" -> c:"y"
     | p=='+'      -> c:"m"
-    | s == "e'"   -> "ä"
+    | s == "e'"   -> "ää"
     | otherwise   -> [c]
   "O"             -> "O"
+  "e"             -> "ee"
   [c] | isUpper c -> "" 
   _ -> s
 
