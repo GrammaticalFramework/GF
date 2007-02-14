@@ -1,0 +1,4 @@
+abstract UrduHindiAbs = 
+      CatUrduHindiAbs,
+      Lexicon
+      **{} ;
