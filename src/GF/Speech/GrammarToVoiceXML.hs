@@ -47,7 +47,8 @@ import Debug.Trace
 -- | the main function
 grammar2vxml :: Options -> StateGrammar -> String
 grammar2vxml opt s = showsXMLDoc (skel2vxml name language startcat gr' qs) ""
-    where (name, gr') = vSkeleton (stateGrammarST s)
+    where (_, gr') = vSkeleton (stateGrammarST s)
+          name = prIdent (cncId s)
           qs = catQuestions s (map fst gr')
           opts = addOptions opt (stateOptions s)
           language = fmap (replace '_' '-') $ getOptVal opts speechLanguage
@@ -119,11 +120,11 @@ getCatQuestion c qs =
 -- * Generate VoiceXML
 --
 
-skel2vxml :: VIdent -> Maybe String -> VIdent -> VSkeleton -> CatQuestions -> XML
+skel2vxml :: String -> Maybe String -> VIdent -> VSkeleton -> CatQuestions -> XML
 skel2vxml name language start skel qs = 
     vxml language ([startForm] ++ concatMap (uncurry (catForms gr qs)) skel)
   where 
-  gr = grammarURI (prid name)
+  gr = grammarURI name
   startForm = Tag "form" [] [subdialog "sub" [("src", "#"++catFormId start)] 
                                            [param "old" "{ name : '?' }"]]
 
