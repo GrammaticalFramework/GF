@@ -307,7 +307,7 @@ oper
   mkA a b c d e = 
     compADeg {s = \\_ => (mkAdj a b c d e).s ; isPre = False ; lock_A = <>} ;
   regA a = compADeg {s = \\_ => (mkAdjReg a).s ; isPre = False ; lock_A = <>} ;
---  prefA a = {s = a.s ; isPre = True ; lock_A = <>} ;
+  prefA a = {s = a.s ; isPre = True ; lock_A = <>} ;
 --
    mkA2 a p = a ** {c2 = p ; lock_A2 = <>} ;
 --
