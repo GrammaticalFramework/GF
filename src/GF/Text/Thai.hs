@@ -216,9 +216,11 @@ getSyllable = foldl get (Syll [] [] [] [] [] [] False False) where
 test1 = testThai "k2wa:mrak"
 test2 = putStrLn $ thaiTable
 test3 = do
-  writeFile  "thai.html" "<html><body><pre>"
-  appendFile "thai.html" thaiTable
-  appendFile "thai.html" "</pre></body></html>"
+  writeFile  "thai.txt" "Thai Character Coding in GF\nAR 2007\n"
+  appendFile "thai.txt" thaiTable
+test4 = do
+  writeFile  "alphthai.txt" "Thai Characters by Pronunciation\nAR 2007\n"
+  appendFile "alphthai.txt" thaiTableAlph
 
 
 testThai :: String -> IO ()
@@ -256,17 +258,32 @@ readClass s = case s of
 
 
 thaiTable :: String
-thaiTable = unlines [
-  "\t" ++ 
-  hex c ++ "\t" ++ 
-  encodeUTF8 (showThai s) ++ "\t" ++ 
-  s ++ "\t" ++ 
-  pronThai s ++ "\t" ++
-  [f] ++ "\t" ++
-  [q] ++ "\t"
+thaiTable = unlines $ ("\n|| hex | thai | trans | pron | fin | class |" ) : [
+  "| " ++ 
+  hex c ++ " | " ++ 
+  encodeUTF8 (showThai s) ++ " | " ++ 
+  s ++ " | " ++ 
+  pronThai s ++ " | " ++
+  [f] ++ " | " ++
+  [q] ++ " | "
     |
       (c,q,f,s) <- zip4 allThaiCodes heights finals allThaiTrans
   ]
+
+thaiTableAlph :: String
+thaiTableAlph = unlines $ ("\n|| pron | thai | trans |" ) : [
+  "| " ++ a ++
+  " | " ++ unwords (map (encodeUTF8 . showThai) ss) ++ 
+  " | " ++ unwords ss ++
+  " |"
+   |
+    (a,ss) <- allProns
+  ]
+ where
+   prons = sort $ nub 
+     [p | s <- allThaiTrans, let p = pronThai s, not (null p),isAlpha (head p)]
+   allProns = 
+     [(a,[s | s <- allThaiTrans, pronThai s == a]) | a <- prons]
 
 showThai s = case s of
   "-" -> "-"
