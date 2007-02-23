@@ -336,7 +336,10 @@ oper
           _        => mkN bil (bil + "en") bilar (bilar + "na")   -- ros,rosor
           } ;
        "ar" => decl2Noun bil ;
-       "er" => decl3gNoun bil bilar ;                   -- fot, fötter
+       "er" => case bil of {
+         _ + "or" => mkN bil (bil + "n") bilar (bilar + "na") ; -- motor,motorn
+         _   => decl3gNoun bil bilar                      -- fot, fötter
+         } ;
        "en" => decl4Noun bil ;                             -- rike, riken
        _    => mkN bil (bil + "et") bilar (bilar + "n") -- centrum, centra 
       }) ;
