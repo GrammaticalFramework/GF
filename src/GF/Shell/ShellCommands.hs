@@ -197,7 +197,7 @@ optionsOfCommand co = case co of
   CApplyTransfer _ -> flags "lang transfer"
   CMorphoAnalyse -> both "short" "lang"
   CTestTokenizer -> flags "lexer"
-  CComputeConcrete _ -> flags "res"
+  CComputeConcrete _ -> both "table" "res"
   CShowOpers _ -> flags "res"
 
   CTranslationQuiz _ _ -> flags "cat"

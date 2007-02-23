@@ -375,11 +375,12 @@ execC co@(comm, opts0) sa@(sh@(st,(h,_,_,_)),a) = checkOptions st co >> case com
   CTestTokenizer -> changeArg (AString . optTokenizer opts gro . prCommandArg) sa
 
   CComputeConcrete t -> do
+    let prin = if (oElem (iOpt "table") opts) then printParadigm else prt 
     m <- return $
          maybe (I.identC "?") id $  -- meaningful if no opers in t 
            maybe (resourceOfShellState st) (return . I.identC) $ -- topmost res
              getOptVal opts useResource             -- flag -res=m
-    justOutput opts (putStrLn (err id (prt . stripTerm) (
+    justOutput opts (putStrLn (err id (prin . stripTerm) (
                 string2srcTerm src m t >>= 
                 Ch.justCheckLTerm src  >>=
                 Co.computeConcrete src))) sa

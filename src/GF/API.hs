@@ -434,3 +434,24 @@ nonLiteralsToUTF8 ('"':cs) = '"' : l ++ nonLiteralsToUTF8 rs
     takeStringLit (c:cs) = (c:xs,ys)
       where (xs,ys) = takeStringLit cs
 nonLiteralsToUTF8 (c:cs) = encodeUTF8 [c] ++ nonLiteralsToUTF8 cs 
+
+
+printParadigm :: G.Term -> String
+printParadigm term = 
+  if hasTable term then
+    (unlines . map prBranch . branches . head . tables) term
+  else
+    prt term
+ where
+   tables t = case t of
+     G.R rs   -> concatMap (tables . snd . snd) rs
+     G.T _ cs -> [cs]
+     _        -> []
+   hasTable t = not $ null $ tables t
+   branches cs = [(p:ps,s) | 
+                    (p,t) <- cs, 
+                    let ts = tables t,
+                    (ps,s) <- if null ts then [([],t)] 
+                                else concatMap branches ts
+                 ]
+   prBranch (ps,s) = unwords (map prt ps ++ [prt s])

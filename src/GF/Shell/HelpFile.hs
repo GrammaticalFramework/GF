@@ -299,6 +299,7 @@ txtHelpFile =
   "\n      N.B.' The resulting Term is not a term in the sense of abstract syntax," ++
   "\n      and hence not a valid input to a Tree-demanding command." ++
   "\n  flags:" ++
+  "\n     -table    show output in a similar readable format as 'l -table'" ++
   "\n     -res      use another module than the topmost one" ++
   "\n  examples:" ++
   "\n     cc -res=ParadigmsFin (nLukko \"hyppy\")   -- inflect \"hyppy\" with nLukko" ++

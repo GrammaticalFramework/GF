@@ -270,6 +270,7 @@ cc, compute_concrete: cc Term
       N.B.' The resulting Term is not a term in the sense of abstract syntax,
       and hence not a valid input to a Tree-demanding command.
   flags:
+     -table    show output in a similar readable format as 'l -table'
      -res      use another module than the topmost one
   examples:
      cc -res=ParadigmsFin (nLukko "hyppy")   -- inflect "hyppy" with nLukko
