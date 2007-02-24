@@ -155,7 +155,7 @@ oper
 -- - 2p sg imperative, 
 -- - 1/3p sg imperfect indicative, 
 -- - 1/3p sg imperfect subjunctive (because this uncommon form can have umlaut)
--- - the perfect participle
+-- - the perfect participle 
 --
 --
   mkV : (x1,_,_,_,_,x6 : Str) -> V ;   -- geben, gibt, gib, gab, gäbe, gegeben
