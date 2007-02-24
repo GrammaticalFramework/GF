@@ -117,7 +117,8 @@ instance DiffFre of DiffRomance = open CommonRomance, PhonoFre, Prelude in {
     mkImperative b p vp = {
       s = \\pol,aag => 
         let 
-          agr   = aag ** {p = p} ;
+          num   = if_then_else Number b Pl aag.n ;
+          agr   = {g = aag.g ; n = num ; p = p} ;
           verb  = (vp.s ! VPImperat).fin ! agr ;
           neg   = vp.neg ! pol ;
           hascl = (pronArg agr.n agr.p vp.clAcc vp.clDat).p3 ;
