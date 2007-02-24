@@ -1,6 +1,7 @@
 --# -path=.:abstract:common:prelude
 
-concrete ExtraFin of ExtraFinAbs = CatFin ** open ResFin, MorphoFin, Coordination, Prelude, StructuralFin in {
+concrete ExtraFin of ExtraFinAbs = CatFin ** 
+  open ResFin, MorphoFin, Coordination, Prelude, StructuralFin in {
 
   lin
     GenNP np = {
@@ -27,6 +28,20 @@ concrete ExtraFin of ExtraFinAbs = CatFin ** open ResFin, MorphoFin, Coordinatio
     AdvExistNP adv np = 
       mkClause (\_ -> adv.s) np.a (insertObj 
         (\\_,b,_ => np.s ! NPCase Nom) (predV (verbOlla ** {sc = NPCase Nom}))) ;
+
+    RelExistNP prep rp np = {
+      s = \\t,ant,bo,ag => 
+      let cl = 
+        mkClause 
+          (\_ -> appCompl True Pos prep (rp2np ag.n rp))
+          np.a 
+          (insertObj 
+            (\\_,b,_ => np.s ! NPCase Nom) 
+            (predV (verbOlla ** {sc = NPCase Nom}))) ;
+      in 
+      cl.s ! t ! ant ! bo ! SDecl ;
+      c = NPCase Nom
+      } ;
 
     AdvPredNP  adv v np =
       mkClause (\_ -> adv.s) np.a (insertObj 
