@@ -16,7 +16,7 @@ lin
     isPron = False
     } ;
   CNNumNP cn i = {
-    s = \\c => cn.s ! Weak ! Sg ! Nom ++ i.s ;
+    s = \\c => artDef (GSg cn.g) c ++ cn.s ! Weak ! Sg ! Nom ++ i.s ;
     a = agrP3 Sg ;
     isPron = False
     } ;
