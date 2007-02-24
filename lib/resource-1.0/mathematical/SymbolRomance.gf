@@ -17,7 +17,7 @@ lin
     hasClit = False
     } ;
   CNNumNP cn i = {
-    s = \\c => cn.s ! Sg ++ i.s ! Masc ;
+    s = \\c => artDef cn.g Sg (npform2case c) ++ cn.s ! Sg ++ i.s ! Masc ;
     a = agrP3 cn.g Sg ;
     hasClit = False
     } ;
