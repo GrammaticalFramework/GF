@@ -21,6 +21,8 @@ param
 
   Mood   = Indic | Conjunct ;
 
+  Direct = DDir | DInv ;
+
 -- Adjectives are inflected in gender and number, and there is also an 
 -- adverbial form (e.g. "infiniment"), which has different paradigms and 
 -- can even be irregular ("bien").

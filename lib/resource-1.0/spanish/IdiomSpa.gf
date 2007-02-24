@@ -22,7 +22,7 @@ concrete IdiomSpa of Idiom = CatSpa **
     ExistIP ip = {
       s = \\t,a,p,_ =>
         ip.s ! Nom ++ 
-        (mkClause [] (agrP3 Masc Sg) (predV (verboV (hay_3 "haber")))).s ! t ! a ! p ! Indic
+        (mkClause [] (agrP3 Masc Sg) (predV (verboV (hay_3 "haber")))).s ! DDir ! t ! a ! p ! Indic
       } ;
 
     ProgrVP vp = 

@@ -381,7 +381,9 @@ Finnish
 
 French
 - multiple clitics (with V3) not always right
-- no pronominal questions with inverted word order
+- third person pronominal questions with inverted word order
+  have wrong form and position w.r.t. "pas" 
+  (e.g. "comment ne fera-t-il pas " becomes "comment ne fera pas il")
 
 
 German

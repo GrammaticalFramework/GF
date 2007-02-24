@@ -14,9 +14,9 @@ incomplete concrete CatRomance of Cat =
 
 -- Sentence
 
-    Cl    = {s : RTense => Anteriority => Polarity => Mood => Str} ;
+    Cl    = {s : Direct => RTense => Anteriority => Polarity => Mood => Str} ;
     Slash = {
-      s  : AAgr => RTense => Anteriority => Polarity => Mood => Str ; 
+      s  : Direct => AAgr => RTense => Anteriority => Polarity => Mood => Str ; 
       c2 : Compl
       } ;
     Imp   = {s : Polarity => ImpForm => Gender => Str} ;
