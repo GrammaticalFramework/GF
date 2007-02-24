@@ -5,6 +5,8 @@ abstract ExtraFinAbs = Extra [
     AdvExistNP : Adv -> NP -> Cl ;        -- kuvassa olemme me
     AdvPredNP  : Adv -> V  -> NP -> Cl ;  -- kuvassa hymyilee Veikko
 
+    RelExistNP : Prep -> RP -> NP -> RCl ; -- jossa on jazzia
+
     i_implicPron : Pron ;                 -- (minä), minut, ...
     whatPart_IP : IP ;
 

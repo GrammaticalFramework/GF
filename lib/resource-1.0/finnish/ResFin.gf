@@ -563,4 +563,10 @@ oper
   possSuffix : Agr -> Str = \agr -> 
     table Agr ["ni" ; "si" ; "nsa" ; "mme" ; "nne" ; "nsa"] ! agr ;
 
+oper
+  rp2np : Number -> {s : Number => NPForm => Str ; a : RAgr} -> NP = \n,rp -> {
+    s = rp.s ! n ;
+    a = agrP3 Sg ;  -- does not matter (--- at least in Slash)
+    isPron = False  -- has no special accusative
+    } ;
 }
