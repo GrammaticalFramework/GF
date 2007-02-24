@@ -380,11 +380,11 @@ execC co@(comm, opts0) sa@(sh@(st,(h,_,_,_)),a) = checkOptions st co >> case com
          maybe (I.identC "?") id $  -- meaningful if no opers in t 
            maybe (resourceOfShellState st) (return . I.identC) $ -- topmost res
              getOptVal opts useResource             -- flag -res=m
-    justOutput opts (putStrLn (err id (prin . stripTerm) (
+    returnArg (AString (err id (prin . stripTerm) (
                 string2srcTerm src m t >>= 
                 Ch.justCheckLTerm src  >>=
                 Co.computeConcrete src))) sa
----                Co.computeConcreteRec src))) sa
+---                Co.computeConcreteRec src)) sa
   CShowOpers t -> do
     m <- return $
          maybe (I.identC "?") id $  -- meaningful if no opers in t 
