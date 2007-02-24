@@ -195,9 +195,9 @@ oper
     } ;
 
   mkClause : Str -> Agr -> VP -> 
-    {s : RTense => Anteriority => Polarity => Mood => Str} =
+    {s : Direct => RTense => Anteriority => Polarity => Mood => Str} =
     \subj,agr,vp -> {
-      s = \\t,a,b,m => 
+      s = \\d,t,a,b,m => 
         let 
           tm = case t of {
             RPast  => VImperf m ;   --# notpresent
@@ -213,8 +213,17 @@ oper
           clpr  = pronArg agr.n agr.p vp.clAcc vp.clDat ;
           compl = clpr.p2 ++ vp.comp ! agr ++ vp.ext ! b
         in
-        subj ++ neg.p1 ++ clpr.p1 ++ vp.clit2 ++ verb ++ neg.p2 ++ inf ++ compl
+        case d of {
+          DDir => 
+            subj ++ neg.p1 ++ clpr.p1 ++ vp.clit2 ++ verb ++ neg.p2 ++ inf ;
+          DInv => 
+            neg.p1 ++ clpr.p1 ++ vp.clit2 ++ verb ++ neg.p2 ++ inf ++ subj
+          }
+        ++ compl
     } ;
+--- in French, pronouns should be before neg.v2 in inverted clauses
+--- and have a "-" with possibly a special verb form with "t":
+--- "comment ne fera-t-il pas" vs. "comment ne fera pas Pierre"
 
   infVP : VP -> Agr -> Str = \vp,agr ->
       let

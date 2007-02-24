@@ -26,7 +26,7 @@ concrete IdiomIta of Idiom = CatIta **
         ip.s ! Nom ++ 
         (mkClause [] (agrP3 ip.a.g ip.a.n) 
            (insertClit2 (elision "ci" "c'" "ci") 
-              (predV copula))).s ! t ! a ! p ! Indic
+              (predV copula))).s ! DDir ! t ! a ! p ! Indic
       } ;
 
     ProgrVP vp = 

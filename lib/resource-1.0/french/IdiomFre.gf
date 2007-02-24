@@ -14,7 +14,8 @@ concrete IdiomFre of Idiom = CatFre **
     ExistIP ip = {
       s = \\t,a,p,_ => 
         ip.s ! Nom ++ 
-        (mkClause "il" (agrP3 Masc Sg) (insertClit2 "y" (predV avoir_V))).s ! t ! a ! p ! Indic
+        (mkClause "il" (agrP3 Masc Sg) (insertClit2 "y" (predV avoir_V))).s 
+           ! DDir ! t ! a ! p ! Indic ---- DInv
       } ;
 
     CleftNP np rs = mkClause elisCe (agrP3 Masc Sg) 

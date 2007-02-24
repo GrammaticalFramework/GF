@@ -6,7 +6,8 @@ incomplete concrete RelativeRomance of Relative =
   lin
 
     RelCl cl = {
-      s = \\ag,t,a,p,m => pronSuch ! ag ++ conjThat ++ cl.s ! t ! a ! p ! m ;
+      s = \\ag,t,a,p,m => pronSuch ! ag ++ conjThat ++ 
+                          cl.s ! DDir ! t ! a ! p ! m ;
       c = Nom
       } ;
 
@@ -16,12 +17,12 @@ incomplete concrete RelativeRomance of Relative =
           (mkClause
                     (rp.s ! False ! {g = ag.g ; n = ag.n} ! Nom)
                     {g = rp.a.g ; n = rp.a.n ; p = P3}
-                    vp).s ; c = Nom} ;
+                    vp).s ! DDir ; c = Nom} ;
       False => {s = \\ag =>
           (mkClause
                     (rp.s ! False ! {g = ag.g ; n = ag.n} ! Nom)
                     ag
-                    vp).s ; c = Nom
+                    vp).s ! DDir ; c = Nom
          }
       } ;
 
@@ -31,7 +32,7 @@ incomplete concrete RelativeRomance of Relative =
           in
           slash.c2.s ++ 
           rp.s ! False ! aag ! slash.c2.c ++ 
-          slash.s ! aag ! t ! a ! p ! m ;    --- ragr
+          slash.s ! DDir ! aag ! t ! a ! p ! m ;    --- ragr
       c = Acc
       } ;
 

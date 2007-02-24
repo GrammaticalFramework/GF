@@ -1,5 +1,5 @@
 incomplete concrete QuestionRomance of Question = 
-  CatRomance ** open CommonRomance, ResRomance in {
+  CatRomance ** open CommonRomance, ResRomance, Prelude in {
 
   flags optimize=all_subs ;
 
@@ -7,7 +7,7 @@ incomplete concrete QuestionRomance of Question =
 
     QuestCl cl = {
       s = \\t,a,p => 
-            let cls = cl.s ! t ! a ! p 
+            let cls = cl.s ! DDir ! t ! a ! p ---- DInv? 
             in table {
               QDir   => cls ! Indic ;
               QIndir => subjIf ++ cls ! Indic
@@ -19,24 +19,25 @@ incomplete concrete QuestionRomance of Question =
         let
           cl = mkClause (qp.s ! Nom) (agrP3 qp.a.g qp.a.n) vp  
         in
-        cl.s ! t ! a ! b ! Indic
+        cl.s ! DDir ! t ! a ! b ! Indic
       } ;   
 
     QuestSlash ip slash = {
       s = \\t,a,p => 
             let 
-              cls = slash.s ! ip.a ! t ! a ! p ! Indic ;
+              cls : Direct -> Str = 
+                    \d -> slash.s ! d ! ip.a ! t ! a ! p ! Indic ;
               who = slash.c2.s ++ ip.s ! slash.c2.c
             in table {
-              QDir   => who ++ cls ;
-              QIndir => partQIndir ++ who ++ cls
+              QDir   => who ++ cls DInv ;
+              QIndir => partQIndir ++ who ++ cls DDir
               }
       } ;
 
     QuestIAdv iadv cl = {
       s = \\t,a,p,_ => 
             let 
-              cls = cl.s ! t ! a ! p ! Indic ;
+              cls = cl.s ! DInv ! t ! a ! p ! Indic ;
               why = iadv.s
             in why ++ cls
       } ;
@@ -45,7 +46,8 @@ incomplete concrete QuestionRomance of Question =
       s = \\t,a,p,_ => 
             let 
               vp  = predV copula ;
-              cls = (mkClause (np.s ! Aton Nom) np.a vp).s ! t ! a ! p ! Indic ;
+              cls = (mkClause (np.s ! Aton Nom) np.a vp).s ! 
+                       DInv ! t ! a ! p ! Indic ;
               why = icomp.s ! {g = np.a.g ; n = np.a.n}
             in why ++ cls
       } ;
