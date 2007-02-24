@@ -1,7 +1,7 @@
 --# -path=.:abstract:common:prelude
 
 concrete ExtraFin of ExtraFinAbs = CatFin ** 
-  open ResFin, MorphoFin, Coordination, Prelude, StructuralFin in {
+  open ResFin, MorphoFin, Coordination, Prelude, NounFin, StructuralFin in {
 
   lin
     GenNP np = {
@@ -55,6 +55,19 @@ concrete ExtraFin of ExtraFinAbs = CatFin **
         } ;
       n = Sg
     } ;
+
+    PartCN cn = 
+      let 
+        acn = DetCN (DetSg (SgQuant IndefArt) NoOrd) cn
+      in {
+        s = table {
+          NPCase Nom | NPAcc => acn.s ! NPCase Part ;
+          c => acn.s ! c
+          } ; 
+        a = acn.a ;
+        isPron = False
+        } ;
+
 
     vai_Conj = {s = "vai" ; n = Sg} ;
 
