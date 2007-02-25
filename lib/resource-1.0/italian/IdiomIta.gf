@@ -4,19 +4,19 @@ concrete IdiomIta of Idiom = CatIta **
   flags optimize=all_subs ;
 
   lin
-    ImpersCl vp = mkClause [] (agrP3 Masc Sg) vp ;
-    GenericCl vp = mkClause "si" (agrP3 Masc Sg) vp ; ---- non se ci fanno cose
+    ImpersCl vp = mkClause [] True (agrP3 Masc Sg) vp ;
+    GenericCl vp = mkClause "si" True (agrP3 Masc Sg) vp ; ---- non se ci fanno cose
 
-    CleftNP np rs = mkClause [] (agrP3 Masc Sg) 
+    CleftNP np rs = mkClause [] True (agrP3 Masc Sg) 
       (insertComplement (\\_ => rs.s ! Indic ! np.a)
         (insertComplement (\\_ => np.s ! Ton rs.c) (predV copula))) ;
 
-    CleftAdv ad s = mkClause [] (agrP3 Masc Sg) 
+    CleftAdv ad s = mkClause [] True (agrP3 Masc Sg) 
       (insertComplement (\\_ => conjThat ++ s.s ! Indic)
         (insertComplement (\\_ => ad.s) (predV copula))) ;
 
     ExistNP np = 
-      mkClause [] (agrP3 np.a.g np.a.n) 
+      mkClause [] True (agrP3 np.a.g np.a.n) 
         (insertClit2 (elision "ci" "c'" "ci") 
           (insertComplement (\\_ => np.s ! Ton Nom) 
             (predV copula))) ;
@@ -24,7 +24,7 @@ concrete IdiomIta of Idiom = CatIta **
     ExistIP ip = {
       s = \\t,a,p,_ =>
         ip.s ! Nom ++ 
-        (mkClause [] (agrP3 ip.a.g ip.a.n) 
+        (mkClause [] True (agrP3 ip.a.g ip.a.n) 
            (insertClit2 (elision "ci" "c'" "ci") 
               (predV copula))).s ! DDir ! t ! a ! p ! Indic
       } ;

@@ -4,25 +4,26 @@ concrete IdiomFre of Idiom = CatFre **
   flags optimize=all_subs ;
 
   lin
-    ImpersCl vp = mkClause "il" (agrP3 Masc Sg) vp ;
-    GenericCl vp = mkClause "on" (agrP3 Masc Sg) vp ;
+    ImpersCl vp = mkClause "il" True (agrP3 Masc Sg) vp ;
+    GenericCl vp = mkClause "on" True (agrP3 Masc Sg) vp ;
 
     ExistNP np = 
-      mkClause "il" (agrP3 Masc Sg) 
+      mkClause "il" True (agrP3 Masc Sg)
         (insertClit2 "y" (insertComplement (\\_ => np.s ! Ton Acc) (predV avoir_V))) ;
 
     ExistIP ip = {
       s = \\t,a,p,_ => 
         ip.s ! Nom ++ 
-        (mkClause "il" (agrP3 Masc Sg) (insertClit2 "y" (predV avoir_V))).s 
+        (mkClause "il" True (agrP3 Masc Sg)
+              (insertClit2 "y" (predV avoir_V))).s 
            ! DDir ! t ! a ! p ! Indic ---- DInv
       } ;
 
-    CleftNP np rs = mkClause elisCe (agrP3 Masc Sg) 
+    CleftNP np rs = mkClause elisCe True (agrP3 Masc Sg) 
       (insertComplement (\\_ => rs.s ! Indic ! np.a)
         (insertComplement (\\_ => np.s ! Ton rs.c) (predV copula))) ;
 
-    CleftAdv ad s = mkClause elisCe (agrP3 Masc Sg) 
+    CleftAdv ad s = mkClause elisCe True (agrP3 Masc Sg) 
       (insertComplement (\\_ => conjThat ++ s.s ! Indic)
         (insertComplement (\\_ => ad.s) (predV copula))) ;
 

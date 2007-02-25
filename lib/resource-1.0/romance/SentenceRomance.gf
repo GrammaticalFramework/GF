@@ -4,9 +4,9 @@ incomplete concrete SentenceRomance of Sentence =
   flags optimize=all_subs ;
 
   lin
-    PredVP np vp = mkClause (np.s ! Aton Nom) np.a vp ;
+    PredVP np vp = mkClause (np.s ! Aton Nom) np.hasClit np.a vp ;
 
-    PredSCVP sc vp = mkClause sc.s (agrP3 Masc Sg) vp ;
+    PredSCVP sc vp = mkClause sc.s False (agrP3 Masc Sg) vp ;
 
     ImpVP vp = {
       s = \\p,i,g => case i of {
@@ -17,9 +17,9 @@ incomplete concrete SentenceRomance of Sentence =
     SlashV2 np v2 = 
       {s = \\d,ag =>case <v2.c2.c,v2.c2.isDir> of {
           <Acc,True> => 
-               (mkClause (np.s ! Aton Nom) np.a 
+               (mkClause (np.s ! Aton Nom) np.hasClit np.a 
                                  (insertAgr ag (predV v2))).s ! d ;
-          _ => (mkClause (np.s ! Aton Nom) np.a (predV v2)).s ! d
+          _ => (mkClause (np.s ! Aton Nom) np.hasClit np.a (predV v2)).s ! d
           } ;
        c2 = v2.c2
       } ;
@@ -27,7 +27,7 @@ incomplete concrete SentenceRomance of Sentence =
     SlashVVV2 np vv v2 = 
       {s = \\d,_ =>
         (mkClause
-         (np.s ! Aton Nom) np.a
+         (np.s ! Aton Nom) np.hasClit np.a
          (insertComplement 
            (\\a => prepCase vv.c2.c ++ v2.s ! VInfin False) (predV vv))).s ! d;
        c2 = v2.c2
