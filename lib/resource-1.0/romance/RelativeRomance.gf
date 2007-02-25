@@ -15,12 +15,12 @@ incomplete concrete RelativeRomance of Relative =
     RelVP rp vp = case rp.hasAgr of {
       True => {s = \\ag =>
           (mkClause
-                    (rp.s ! False ! {g = ag.g ; n = ag.n} ! Nom)
+                    (rp.s ! False ! {g = ag.g ; n = ag.n} ! Nom) False
                     {g = rp.a.g ; n = rp.a.n ; p = P3}
                     vp).s ! DDir ; c = Nom} ;
       False => {s = \\ag =>
           (mkClause
-                    (rp.s ! False ! {g = ag.g ; n = ag.n} ! Nom)
+                    (rp.s ! False ! {g = ag.g ; n = ag.n} ! Nom) False
                     ag
                     vp).s ! DDir ; c = Nom
          }

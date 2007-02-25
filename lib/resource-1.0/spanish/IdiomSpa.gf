@@ -4,25 +4,25 @@ concrete IdiomSpa of Idiom = CatSpa **
   flags optimize=all_subs ;
 
   lin
-    ImpersCl vp = mkClause [] (agrP3 Masc Sg) vp ;
-    GenericCl vp = mkClause "se" (agrP3 Masc Sg) vp ; ---- just Italian ?
+    ImpersCl vp = mkClause [] True (agrP3 Masc Sg) vp ;
+    GenericCl vp = mkClause "se" True (agrP3 Masc Sg) vp ; ---- just Italian ?
 
-    CleftNP np rs = mkClause [] (agrP3 Masc Sg) 
+    CleftNP np rs = mkClause [] True (agrP3 Masc Sg) 
       (insertComplement (\\_ => rs.s ! Indic ! np.a)
         (insertComplement (\\_ => np.s ! Ton rs.c) (predV copula))) ;
 
-    CleftAdv ad s = mkClause [] (agrP3 Masc Sg) 
+    CleftAdv ad s = mkClause [] True (agrP3 Masc Sg) 
       (insertComplement (\\_ => conjThat ++ s.s ! Indic)
         (insertComplement (\\_ => ad.s) (predV copula))) ;
 
 
     ExistNP np = 
-      mkClause [] (agrP3 Masc Sg)
+      mkClause [] True (agrP3 Masc Sg)
         (insertComplement (\\_ => np.s ! Ton Acc) (predV (verboV (hay_3 "haber")))) ;
     ExistIP ip = {
       s = \\t,a,p,_ =>
         ip.s ! Nom ++ 
-        (mkClause [] (agrP3 Masc Sg) (predV (verboV (hay_3 "haber")))).s ! DDir ! t ! a ! p ! Indic
+        (mkClause [] True (agrP3 Masc Sg) (predV (verboV (hay_3 "haber")))).s ! DDir ! t ! a ! p ! Indic
       } ;
 
     ProgrVP vp = 
