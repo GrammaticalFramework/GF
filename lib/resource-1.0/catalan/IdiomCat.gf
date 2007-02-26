@@ -4,10 +4,10 @@ concrete IdiomCat of Idiom = CatCat **
   flags optimize=all_subs ;
 
   lin
-    ExistNP np = mkClause [] (agrP3 Masc Sg) 
+    ExistNP np = mkClause [] True (agrP3 Masc Sg) 
         (insertClit2 "hi" (insertComplement (\\_ => np.s ! Ton Acc) (predV haver_V))) ;
-    GenericCl vp = mkClause "hom" (agrP3 Masc Sg) vp ;
-    ImpersCl vp = mkClause [] (agrP3 Masc Sg) vp ;
+    GenericCl vp = mkClause "hom" True (agrP3 Masc Sg) vp ;
+    ImpersCl vp = mkClause [] True (agrP3 Masc Sg) vp ;
 
 
     ProgrVP vp = 

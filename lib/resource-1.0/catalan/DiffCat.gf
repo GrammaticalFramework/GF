@@ -104,7 +104,10 @@ oper
 
     conjThan = "que" ;
     conjThat = "que" ;
+    subjIf = "si" ;
 
+
+   
     clitInf b cli inf = inf ++ bindIf b ++ cli ; --- JS copied from DiffSpa
 
     relPron : Bool => AAgr => Case => Str = \\b,a,c => 
