@@ -1,0 +1,382 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<META NAME="generator" CONTENT="http://txt2tags.sf.net">
+<TITLE>A Tutorial on Resource Grammar Applications</TITLE>
+</HEAD><BODY BGCOLOR="white" TEXT="black">
+<P ALIGN="center"><CENTER><H1>A Tutorial on Resource Grammar Applications</H1>
+<FONT SIZE="4">
+<I>Aarne Ranta</I><BR>
+28 February 2007
+</FONT></CENTER>
+
+<P></P>
+<HR NOSHADE SIZE=1>
+<P></P>
+    <UL>
+    <LI><A HREF="#toc1">Writing GF grammars</A>
+      <UL>
+      <LI><A HREF="#toc2">Creating the first grammar</A>
+      <LI><A HREF="#toc3">Testing</A>
+      <LI><A HREF="#toc4">Adding a new language</A>
+      <LI><A HREF="#toc5">Extending the language</A>
+      </UL>
+    <LI><A HREF="#toc6">Building a user program</A>
+      <UL>
+      <LI><A HREF="#toc7">Producing a compiled grammar package</A>
+      <LI><A HREF="#toc8">Writing the Haskell application</A>
+      <LI><A HREF="#toc9">Compiling the Haskell grammar</A>
+      <LI><A HREF="#toc10">Building a distribution</A>
+      <LI><A HREF="#toc11">Using a Makefile</A>
+      </UL>
+    </UL>
+
+<P></P>
+<HR NOSHADE SIZE=1>
+<P></P>
+<P>
+In this directory, we have a minimal resource grammar
+application whose architecture scales up to much
+larger applications. The application is run from the
+shell by the command
+</P>
+<PRE>
+    math
+</PRE>
+<P>
+whereafter it reads user input in English and French.
+To each input line, it answers by the truth value of
+the sentence.
+</P>
+<PRE>
+    ./math
+    zéro est pair
+    True
+    zero is odd
+    False
+    zero is even and zero is odd
+    False
+</PRE>
+<P>
+The source of the application consists of the following
+files:
+</P>
+<PRE>
+    LexEng.gf    -- English instance of Lex
+    LexFre.gf    -- French instance of Lex
+    Lex.gf       -- lexicon interface
+    Makefile     -- a makefile
+    MathEng.gf   -- English instantiation of MathI
+    MathFre.gf   -- French instantiation of MathI
+    Math.gf      -- abstract syntax
+    MathI.gf     -- concrete syntax functor for Math
+    Run.hs       -- Haskell Main module
+</PRE>
+<P>
+The system was built in 22 steps explained below.
+</P>
+<A NAME="toc1"></A>
+<H2>Writing GF grammars</H2>
+<A NAME="toc2"></A>
+<H3>Creating the first grammar</H3>
+<P>
+1. Write <CODE>Math.gf</CODE>, which defines what you want to say.
+</P>
+<PRE>
+  abstract Math = {
+  
+    cat Prop ; Elem ;
+  
+    fun 
+      And  : Prop -&gt; Prop -&gt; Prop ;
+      Even : Elem -&gt; Prop ;
+      Zero : Elem ;
+  
+  }
+</PRE>
+<P>
+2. Write <CODE>Lex.gf</CODE>, which defines which language-dependent
+parts are needed in the concrete syntax. These are mostly
+words (lexicon), but can in fact be any operations. The definitions
+only use resource abstract syntax, which is opened.
+</P>
+<PRE>
+  interface Lex = open Grammar in {
+  
+    oper
+      even_A : A ;
+      zero_PN : PN ;
+  
+  } 
+</PRE>
+<P>
+3. Write <CODE>LexEng.gf</CODE>, the English implementation of <CODE>Lex.gf</CODE>
+This module uses English resource libraries.
+</P>
+<PRE>
+  instance LexEng of Lex = open GrammarEng, ParadigmsEng in {
+  
+    oper
+      even_A = regA "even" ;
+      zero_PN = regPN "zero" ;
+  
+  }
+</PRE>
+<P>
+4. Write <CODE>MathI.gf</CODE>, a language-independent concrete syntax of
+<CODE>Math.gf</CODE>. It opens interfaces can resource abstract syntaxes,
+which makes it an incomplete module, aka. parametrized module, aka.
+functor.
+</P>
+<PRE>
+  incomplete concrete MathI of Math = 
+    open Grammar, Combinators, Predication, Lex in {
+  
+    flags startcat = Prop ;
+  
+    lincat 
+      Prop = S ;
+      Elem = NP ;
+  
+    lin 
+      And x y = coord and_Conj x y ;
+      Even x = PosCl (pred even_A x) ;
+      Zero = UsePN zero_PN ;
+  }
+</PRE>
+<P>
+5. Write <CODE>MathEng.gf</CODE>, which is just an instatiation of <CODE>MathI.gf</CODE>,
+replacing the interfaces by their English instances. This is the module
+that will be used as a top module in GF, so it contains a path to
+the libraries.
+</P>
+<PRE>
+  --# -path=.:api:present:prelude:mathematical
+  
+  concrete MathEng of Math = MathI with
+    (Grammar = GrammarEng), 
+    (Combinators = CombinatorsEng), 
+    (Predication = PredicationEng), 
+    (Lex = LexEng) ;
+</PRE>
+<P></P>
+<A NAME="toc3"></A>
+<H3>Testing</H3>
+<P>
+6. Test the grammar in GF by random generation and parsing.
+</P>
+<PRE>
+    $ gf 
+    &gt; i MathEng.gf
+    &gt; gr -tr | l -tr | p
+    And (Even Zero) (Even Zero)
+    zero is evenand zero is even
+    And (Even Zero) (Even Zero)
+</PRE>
+<P>
+When importing the grammar, you will fail if you haven't 
+</P>
+<UL>
+<LI>correctly defined your <CODE>GF_LIB_PATH</CODE> as <CODE>GF/lib</CODE>
+<LI>compiled the resourcec by <CODE>make</CODE> in <CODE>GF/lib/resource-1.0</CODE>
+</UL>
+
+<A NAME="toc4"></A>
+<H3>Adding a new language</H3>
+<P>
+7. Now it is time to add a new language. Write a French lexicon <CODE>LexFre.gf</CODE>:
+</P>
+<PRE>
+  instance LexFre of Lex = open GrammarFre, ParadigmsFre in {
+  
+    oper
+      even_A = regA "pair" ;
+      zero_PN = regPN "zéro" ;
+  }
+</PRE>
+<P>
+8. You also need a French concrete syntax, <CODE>MathFre.gf</CODE>:
+</P>
+<PRE>
+  --# -path=.:api:present:prelude:mathematical
+  
+  concrete MathFre of Math = MathI with
+    (Grammar = GrammarFre), 
+    (Combinators = CombinatorsFre), 
+    (Predication = PredicationFre), 
+    (Lex = LexFre) ;
+</PRE>
+<P>
+9. This time, you can test multilingual generation:
+</P>
+<PRE>
+    &gt; i MathFre.gf
+    &gt; gr -tr | l -multi
+    Even Zero
+    zéro est pair
+    zero is even
+</PRE>
+<P></P>
+<A NAME="toc5"></A>
+<H3>Extending the language</H3>
+<P>
+10. You want to add a predicate saying that a number is odd.
+It is first added to <CODE>Math.gf</CODE>:
+</P>
+<PRE>
+    fun Odd : Elem -&gt; Prop ;
+</PRE>
+<P>
+11. You need a new word in <CODE>Lex.gf</CODE>.
+</P>
+<PRE>
+    oper odd_A : A ;
+</PRE>
+<P>
+12. Then you can give a language-independent concrete syntax in
+<CODE>MathI.gf</CODE>:
+</P>
+<PRE>
+    lin Odd x = PosCl (pred odd_A x) ;
+</PRE>
+<P>
+13. The new word is implemented in <CODE>LexEng.gf</CODE>.
+</P>
+<PRE>
+    oper odd_A = regA "odd" ;
+</PRE>
+<P>
+14. The new word is implemented in <CODE>LexFre.gf</CODE>.
+</P>
+<PRE>
+    oper odd_A = regA "impair" ;
+</PRE>
+<P>
+15. Now you can test with the extended lexicon. First empty
+the environment to get rid of the old abstract syntax, then
+import the new versions of the grammars.
+</P>
+<PRE>
+    &gt; e
+    &gt; i MathEng.gf
+    &gt; i MathFre.gf
+    &gt; gr -tr | l -multi
+    And (Odd Zero) (Even Zero)
+    zéro est impair et zéro est pair
+    zero is odd and zero is even
+</PRE>
+<P></P>
+<A NAME="toc6"></A>
+<H2>Building a user program</H2>
+<A NAME="toc7"></A>
+<H3>Producing a compiled grammar package</H3>
+<P>
+16. Your grammar is going to be used by persons wh<CODE>MathEng.gf</CODE>o do not need
+to compile it again. They may not have access to the resource library,
+either. Therefore it is advisable to produce a multilingual grammar
+package in a single file. We call this package <CODE>math.gfcm</CODE> and
+produce it, when we have <CODE>MathEng.gf</CODE> and 
+<CODE>MathEng.gf</CODE> in the GF state, by the command
+</P>
+<PRE>
+    &gt; pm | wf math.gfcm
+</PRE>
+<P></P>
+<A NAME="toc8"></A>
+<H3>Writing the Haskell application</H3>
+<P>
+17. Write the Haskell main file <CODE>Run.hs</CODE>. It uses the <CODE>EmbeddedAPI</CODE>
+module defining some basic functionalities such as parsing.
+The answer is produced by an interpreter of trees returned by the parser.
+</P>
+<PRE>
+  module Main where
+  
+  import GSyntax
+  import GF.Embed.EmbedAPI
+  
+  main :: IO () 
+  main = do
+    gr &lt;- file2grammar "math.gfcm"
+    loop gr
+  
+  loop :: MultiGrammar -&gt; IO ()
+  loop gr = do
+    s &lt;- getLine
+    interpret gr s
+    loop gr
+  
+  interpret :: MultiGrammar -&gt; String -&gt; IO ()
+  interpret gr s = do
+    let tss = parseAll gr "Prop" s
+    case (concat tss) of
+      [] -&gt;  putStrLn "no parse"
+      t:_ -&gt; print $ answer $ fg t
+  
+  answer :: GProp -&gt; Bool
+  answer p = case p of
+    (GOdd x1) -&gt; odd (value x1)
+    (GEven x1) -&gt; even (value x1)
+    (GAnd x1 x2) -&gt; answer x1 &amp;&amp; answer x2
+  
+  value :: GElem -&gt; Int
+  value e = case e of
+    GZero -&gt; 0
+</PRE>
+<P></P>
+<P>
+18. The syntax trees manipulated by the interpreter are not raw
+GF trees, but objects of the Haskell datatype <CODE>GProp</CODE>.
+From any GF grammar, a file <CODE>GFSyntax.hs</CODE> with
+datatypes corresponding to its abstract
+syntax can be produced by the command
+</P>
+<PRE>
+    &gt; pg -printer=haskell | wf GSyntax.hs
+</PRE>
+<P>
+The module also defines the overloaded functions
+<CODE>gf</CODE> and <CODE>fg</CODE> for translating from these types to
+raw trees and back.
+</P>
+<A NAME="toc9"></A>
+<H3>Compiling the Haskell grammar</H3>
+<P>
+19. Before compiling <CODE>Run.hs</CODE>, you must check that the
+embedded GF modules are found. The easiest way to do this
+is by two symbolic links to your GF source directories:
+</P>
+<PRE>
+    $ ln -s /home/aarne/GF/src/GF
+    $ ln -s /home/aarne/GF/src/Transfer/
+</PRE>
+<P></P>
+<P>
+20. Now you can run the GHC Haskell compiler to produce the program.
+</P>
+<PRE>
+    $ ghc --make -o math Run.hs
+</PRE>
+<P>
+The program can be tested with the command <CODE>./math</CODE>.
+</P>
+<A NAME="toc10"></A>
+<H3>Building a distribution</H3>
+<P>
+21. For a stand-alone binary-only distribution, only
+the two files <CODE>math</CODE> and <CODE>math.gfcm</CODE> are needed.
+For a source distribution, the files mentioned in
+the beginning of this documents are needed.
+</P>
+<A NAME="toc11"></A>
+<H3>Using a Makefile</H3>
+<P>
+22. As a part of the source distribution, a <CODE>Makefile</CODE> is
+essential. The <CODE>Makefile</CODE> is also useful when developing the
+application. It should always be possible to build an executable
+from source by typing <CODE>make</CODE>.
+</P>
+
+<!-- html code generated by txt2tags 2.3 (http://txt2tags.sf.net) -->
+<!-- cmdline: txt2tags -thtml -\-toc model-resource-app.txt -->
+</BODY></HTML>
