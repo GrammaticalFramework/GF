@@ -1,0 +1,301 @@
+A Tutorial on Resource Grammar Applications
+Aarne Ranta
+28 February 2007
+
+
+
+In this directory, we have a minimal resource grammar
+application whose architecture scales up to much
+larger applications. The application is run from the
+shell by the command
+```
+  math
+```
+whereafter it reads user input in English and French.
+To each input line, it answers by the truth value of
+the sentence.
+```
+  ./math
+  zéro est pair
+  True
+  zero is odd
+  False
+  zero is even and zero is odd
+  False
+```
+The source of the application consists of the following
+files:
+```
+  LexEng.gf    -- English instance of Lex
+  LexFre.gf    -- French instance of Lex
+  Lex.gf       -- lexicon interface
+  Makefile     -- a makefile
+  MathEng.gf   -- English instantiation of MathI
+  MathFre.gf   -- French instantiation of MathI
+  Math.gf      -- abstract syntax
+  MathI.gf     -- concrete syntax functor for Math
+  Run.hs       -- Haskell Main module
+```
+The system was built in 22 steps explained below.
+
+
+
+==Writing GF grammars==
+
+===Creating the first grammar===
+
+1. Write ``Math.gf``, which defines what you want to say.
+```
+abstract Math = {
+
+  cat Prop ; Elem ;
+
+  fun 
+    And  : Prop -> Prop -> Prop ;
+    Even : Elem -> Prop ;
+    Zero : Elem ;
+
+}
+```
+2. Write ``Lex.gf``, which defines which language-dependent
+parts are needed in the concrete syntax. These are mostly
+words (lexicon), but can in fact be any operations. The definitions
+only use resource abstract syntax, which is opened.
+```
+interface Lex = open Grammar in {
+
+  oper
+    even_A : A ;
+    zero_PN : PN ;
+
+} 
+```
+3. Write ``LexEng.gf``, the English implementation of ``Lex.gf``
+This module uses English resource libraries.
+```
+instance LexEng of Lex = open GrammarEng, ParadigmsEng in {
+
+  oper
+    even_A = regA "even" ;
+    zero_PN = regPN "zero" ;
+
+}
+```
+4. Write ``MathI.gf``, a language-independent concrete syntax of
+``Math.gf``. It opens interfaces can resource abstract syntaxes,
+which makes it an incomplete module, aka. parametrized module, aka.
+functor.
+```
+incomplete concrete MathI of Math = 
+  open Grammar, Combinators, Predication, Lex in {
+
+  flags startcat = Prop ;
+
+  lincat 
+    Prop = S ;
+    Elem = NP ;
+
+  lin 
+    And x y = coord and_Conj x y ;
+    Even x = PosCl (pred even_A x) ;
+    Zero = UsePN zero_PN ;
+}
+```
+5. Write ``MathEng.gf``, which is just an instatiation of ``MathI.gf``,
+replacing the interfaces by their English instances. This is the module
+that will be used as a top module in GF, so it contains a path to
+the libraries.
+```
+--# -path=.:api:present:prelude:mathematical
+
+concrete MathEng of Math = MathI with
+  (Grammar = GrammarEng), 
+  (Combinators = CombinatorsEng), 
+  (Predication = PredicationEng), 
+  (Lex = LexEng) ;
+```
+
+===Testing===
+
+6. Test the grammar in GF by random generation and parsing.
+```
+  $ gf 
+  > i MathEng.gf
+  > gr -tr | l -tr | p
+  And (Even Zero) (Even Zero)
+  zero is evenand zero is even
+  And (Even Zero) (Even Zero)
+```
+When importing the grammar, you will fail if you haven't 
+- correctly defined your ``GF_LIB_PATH`` as ``GF/lib``
+- compiled the resourcec by ``make`` in ``GF/lib/resource-1.0``
+
+
+===Adding a new language===
+
+7. Now it is time to add a new language. Write a French lexicon ``LexFre.gf``:
+```
+instance LexFre of Lex = open GrammarFre, ParadigmsFre in {
+
+  oper
+    even_A = regA "pair" ;
+    zero_PN = regPN "zéro" ;
+}
+```
+8. You also need a French concrete syntax, ``MathFre.gf``:
+```
+--# -path=.:api:present:prelude:mathematical
+
+concrete MathFre of Math = MathI with
+  (Grammar = GrammarFre), 
+  (Combinators = CombinatorsFre), 
+  (Predication = PredicationFre), 
+  (Lex = LexFre) ;
+```
+9. This time, you can test multilingual generation:
+```
+  > i MathFre.gf
+  > gr -tr | l -multi
+  Even Zero
+  zéro est pair
+  zero is even
+```
+
+===Extending the language===
+
+10. You want to add a predicate saying that a number is odd.
+It is first added to ``Math.gf``:
+```
+  fun Odd : Elem -> Prop ;
+```
+11. You need a new word in ``Lex.gf``.
+```
+  oper odd_A : A ;
+```
+12. Then you can give a language-independent concrete syntax in
+``MathI.gf``:
+```
+  lin Odd x = PosCl (pred odd_A x) ;
+```
+13. The new word is implemented in ``LexEng.gf``.
+```
+  oper odd_A = regA "odd" ;
+```
+14. The new word is implemented in ``LexFre.gf``.
+```
+  oper odd_A = regA "impair" ;
+```
+15. Now you can test with the extended lexicon. First empty
+the environment to get rid of the old abstract syntax, then
+import the new versions of the grammars.
+```
+  > e
+  > i MathEng.gf
+  > i MathFre.gf
+  > gr -tr | l -multi
+  And (Odd Zero) (Even Zero)
+  zéro est impair et zéro est pair
+  zero is odd and zero is even
+```
+
+==Building a user program==
+
+===Producing a compiled grammar package===
+
+16. Your grammar is going to be used by persons wh``MathEng.gf``o do not need
+to compile it again. They may not have access to the resource library,
+either. Therefore it is advisable to produce a multilingual grammar
+package in a single file. We call this package ``math.gfcm`` and
+produce it, when we have ``MathEng.gf`` and 
+``MathEng.gf`` in the GF state, by the command
+```
+  > pm | wf math.gfcm
+```
+
+
+===Writing the Haskell application===
+
+17. Write the Haskell main file ``Run.hs``. It uses the ``EmbeddedAPI``
+module defining some basic functionalities such as parsing.
+The answer is produced by an interpreter of trees returned by the parser.
+```
+module Main where
+
+import GSyntax
+import GF.Embed.EmbedAPI
+
+main :: IO () 
+main = do
+  gr <- file2grammar "math.gfcm"
+  loop gr
+
+loop :: MultiGrammar -> IO ()
+loop gr = do
+  s <- getLine
+  interpret gr s
+  loop gr
+
+interpret :: MultiGrammar -> String -> IO ()
+interpret gr s = do
+  let tss = parseAll gr "Prop" s
+  case (concat tss) of
+    [] ->  putStrLn "no parse"
+    t:_ -> print $ answer $ fg t
+
+answer :: GProp -> Bool
+answer p = case p of
+  (GOdd x1) -> odd (value x1)
+  (GEven x1) -> even (value x1)
+  (GAnd x1 x2) -> answer x1 && answer x2
+
+value :: GElem -> Int
+value e = case e of
+  GZero -> 0
+```
+
+18. The syntax trees manipulated by the interpreter are not raw
+GF trees, but objects of the Haskell datatype ``GProp``.
+From any GF grammar, a file ``GFSyntax.hs`` with
+datatypes corresponding to its abstract
+syntax can be produced by the command
+```
+  > pg -printer=haskell | wf GSyntax.hs
+```
+The module also defines the overloaded functions
+``gf`` and ``fg`` for translating from these types to
+raw trees and back.
+
+
+===Compiling the Haskell grammar===
+
+19. Before compiling ``Run.hs``, you must check that the
+embedded GF modules are found. The easiest way to do this
+is by two symbolic links to your GF source directories:
+```
+  $ ln -s /home/aarne/GF/src/GF
+  $ ln -s /home/aarne/GF/src/Transfer/
+```
+
+20. Now you can run the GHC Haskell compiler to produce the program.
+```
+  $ ghc --make -o math Run.hs
+```
+The program can be tested with the command ``./math``.
+
+
+===Building a distribution===
+
+21. For a stand-alone binary-only distribution, only
+the two files ``math`` and ``math.gfcm`` are needed.
+For a source distribution, the files mentioned in
+the beginning of this documents are needed.
+
+
+===Using a Makefile===
+
+22. As a part of the source distribution, a ``Makefile`` is
+essential. The ``Makefile`` is also useful when developing the
+application. It should always be possible to build an executable
+from source by typing ``make``.
+
+
