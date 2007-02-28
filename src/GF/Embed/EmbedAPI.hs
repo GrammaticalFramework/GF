@@ -31,7 +31,7 @@ import GF.Infra.Modules (emptyMGrammar)
 import GF.CF.CFIdent (string2CFCat)
 import GF.Infra.UseIO
 import GF.Data.Operations
-import GF.Infra.Option (noOptions,useUntokenizer)
+import GF.Infra.Option (noOptions,useUntokenizer,options,iOpt)
 import GF.Infra.Ident (prIdent)
 import GF.Embed.EmbedCustom
 
@@ -68,7 +68,8 @@ categories   :: MultiGrammar -> [Category]
 
 file2grammar file = do
   can <- useIOE (error "cannot parse grammar file") $ getCanonGrammar file
-  return $ errVal (error "cannot build multigrammar") $ grammar2shellState noOptions (can,emptyMGrammar) 
+  return $ errVal (error "cannot build multigrammar") $ 
+    grammar2shellState (options [iOpt "docf"]) (can,emptyMGrammar) 
 
 linearize mgr lang = 
   untok .
