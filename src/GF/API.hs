@@ -241,11 +241,11 @@ optLinearizeTree opts0 gr t = case getOptVal opts transferFun of
   lin mk
     | oElem showRecord opts = liftM prt . linearizeNoMark g c
     | oElem tableLin opts   = liftM (unlines . map untok . prLinTable True) . 
-                                allLinTables g c
+                                allLinTables True g c
     | oElem showFields opts = liftM (unlines . map untok) .
                                 allLinBranchFields g c
     | oElem showAll opts    = liftM (unlines . map untok . prLinTable False) . 
-                                allLinTables g c
+                                allLinTables False g c
     | otherwise = return . unlines . map untok . optIntOrOne . linTree2strings mk g c
   g = grammar gr
   c = cncId gr
@@ -306,7 +306,8 @@ optParseArgErrMsg opts gr s = do
 
 -- | analyses word by word
 morphoAnalyse :: Options -> GFGrammar -> String -> String
-morphoAnalyse opts gr 
+morphoAnalyse opts gr
+  | oElem (iOpt "status") opts = morphoTextStatus mo 
   | oElem beShort opts = morphoTextShort mo 
   | otherwise = morphoText mo 
  where

@@ -346,6 +346,7 @@ ma, morphologically_analyse: ma String
       the results line by line.
   options:
       -short   show analyses in bracketed words, instead of separate lines
+      -status  show just the work at success, prefixed with "*" at failure
   flags:
       -lang
   examples:

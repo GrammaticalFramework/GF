@@ -113,9 +113,14 @@ allMorphoWords = map fst . collapse
 
 -- analyse running text and show results either in short form or on separate lines
 
--- | analyse running text and show results in short form
+-- | analyse running text and show just the word, with "*" if not found
+morphoTextStatus :: Morpho -> String -> String
+morphoTextStatus mo = unlines . map (prMark . appMorpho mo) . words where
+  prMark (w,fs) = if null fs then "*" +++ w else w
+
+-- | analyse running text and show results in short form, one word per line
 morphoTextShort :: Morpho -> String -> String
-morphoTextShort mo = unwords . map (prMorphoAnalysisShort . appMorpho mo) . words
+morphoTextShort mo = unlines . map (prMorphoAnalysisShort . appMorpho mo) . words
 
 -- | analyse running text and show results on separate lines
 morphoText :: Morpho -> String -> String

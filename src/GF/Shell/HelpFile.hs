@@ -375,6 +375,7 @@ txtHelpFile =
   "\n      the results line by line." ++
   "\n  options:" ++
   "\n      -short   show analyses in bracketed words, instead of separate lines" ++
+  "\n      -status  show just the work at success, prefixed with \"*\" at failure" ++
   "\n  flags:" ++
   "\n      -lang" ++
   "\n  examples:" ++

@@ -213,14 +213,16 @@ allLinsAsRec gr c t = linearizeNoMark gr c t >>= expandLinTables gr >>= allLinVa
 
 -- | the value is a list of structures arranged as records of tables of strings
 -- only taking into account string fields
-allLinTables :: CanonGrammar ->Ident ->A.Tree ->Err [[(Label,[([Patt],[String])])]]
-allLinTables gr c t = do
+-- True: sep. by /, False: sep by \n
+allLinTables :: 
+  Bool -> CanonGrammar ->Ident ->A.Tree ->Err [[(Label,[([Patt],[String])])]]
+allLinTables slash gr c t = do
   r' <- allLinsAsRec gr c t
   mapM (mapM getS) r'
  where 
    getS (lab,pss) = liftM (curry id lab) $ mapM gets pss
    gets (ps,t) = liftM (curry id ps . cc . map str2strings) $ strsFromTerm t
-   cc = concat . intersperse ["/"]
+   cc = concat . intersperse [if slash then "/" else "\n"]
 
 -- | the value is a list of strings gathered from all fields
 
