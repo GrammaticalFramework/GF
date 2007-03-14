@@ -241,9 +241,9 @@ linearize opts mgr lang = lin where
   lin   
     | oElem showRecord opts = err id id . liftM prt . linearizeNoMark cgr zlang
     | oElem tableLin opts = 
-        err id id . liftM (unlines . map untok . prLinTable True) .  allLinTables cgr zlang
+        err id id . liftM (unlines . map untok . prLinTable True) .  allLinTables True cgr zlang
     | oElem showAll opts =  
-        err id id . liftM (unlines . map untok . prLinTable False) . allLinTables cgr zlang
+        err id id . liftM (unlines . map untok . prLinTable False) . allLinTables False cgr zlang
 
     | otherwise = untok . linTree2string noMark cgr zlang 
 

@@ -3,7 +3,10 @@
 -- adapted from verb list in
 -- http://www.iee.et.tu-dresden.de/~wernerr/grammar/verben_dt.html
 
-concrete IrregGer of IrregGerAbs = CatGer ** open ParadigmsGer in {
+concrete IrregGer of IrregGerAbs = CatGer ** open 
+  ParadigmsGer,
+  (M = MorphoGer)
+in {
 
   flags optimize=values ;
 
@@ -185,7 +188,13 @@ concrete IrregGer of IrregGerAbs = CatGer ** open ParadigmsGer in {
   lin wiegen_V =  irregV "wiegen" "wiegt" "wog" "wöge" "gewogen" ;
   lin winden_V =  irregV "winden" "windt" "wand" "wände" "gewunden" ;
   lin wissen_V =  irregV "wissen" "weiß" "wußte" "wüßte" "gewußt" ;
-  lin wollen_V =  irregV "wollen" "will" "wollte" "wollte" "gewollt" ;
+  lin wollen_V =  M.mkV 
+        "wollen" "will" "willst" "will" "wollt" "woll" 
+        "wollte" "wolltest" "wollten" "wolltet"
+        "wollte" "gewollen" [] 
+        M.VHaben ** {lock_V = <>} ;
+
+
   lin wringen_V =  irregV "wringen" "wringt" "wrang" "wränge" "gewrungen" ;
   lin zeihen_V =  irregV "zeihen" "zeiht" "zieh" "ziehe" "geziehen" ;
   lin ziehen_V =  irregV "ziehen" "zieht" "zog" "zöge" "gezogen" ;

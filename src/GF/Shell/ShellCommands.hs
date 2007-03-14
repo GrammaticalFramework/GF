@@ -195,7 +195,7 @@ optionsOfCommand co = case co of
   CLookupTreebank -> both "assocs raw strings trees" "treebank"
   CWrapTerm _ -> opts "c"
   CApplyTransfer _ -> flags "lang transfer"
-  CMorphoAnalyse -> both "short" "lang"
+  CMorphoAnalyse -> both "short status" "lang"
   CTestTokenizer -> flags "lexer"
   CComputeConcrete _ -> both "table" "res"
   CShowOpers _ -> flags "res"

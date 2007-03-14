@@ -58,7 +58,7 @@ morphoTrainList opts ig number = do
   mkOnes gen ts
  where
    mkOnes gen (t:ts) = do
-     psss    <- ioeErr $ allLinTables gr cnc t
+     psss    <- ioeErr $ allLinTables True gr cnc t
      let pss = concat $ map snd $ concat psss
      let (i,gen') = randomR (0, length pss - 1) gen
      (ps,ss) <- ioeErr $ pss !? i
