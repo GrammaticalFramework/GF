@@ -22,10 +22,11 @@ import System
 main = do
   xx <- getArgs
   case xx of
+    "-f":f:[] -> thaiFakeFile f Nothing
     "-p":f:[] -> thaiPronFile f Nothing
     "-w":f:[] -> thaiWordList f
     f     :[] -> thaiFile f Nothing
-    _ -> putStrLn "usage: filethai (-p) File"
+    _ -> putStrLn "usage: filethai (-f|-p|-w) File"
 
 
 -- adapted to the format of StringsThai
@@ -37,7 +38,9 @@ thaiWordList f = do
  where
   mkLine s = case words s of
     o : "=" : s : ";" : "--" : es -> 
-      putStrLn $ thai s ++ "\t" ++ pron s ++ "\t" ++ unwords es
+      putStrLn $ 
+        thai s ++ "\t" ++ pron s ++ "\t" ++ fake s ++ "\t" ++ unwords es
     _ -> return ()
   thai = encodeUTF8 . mkThaiWord . init . tail
   pron = mkThaiPron . init . tail
+  fake = mkThaiFake . init . tail
