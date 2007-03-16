@@ -1,0 +1,39 @@
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <title>Pizza Demo - GF XHTML+Voice</title>
+    <link href="style.css" rel="stylesheet" type="text/css"></link>
+    <script type="text/javascript" src="flash-controls.js"></script>
+</head>
+<body>
+
+<h1>Pizza Demo - GF XHTML+Voice</h1>
+
+<p>This is a demo of a dialog system built with GF and XHTML+Voice.
+There is <a href="index.html">more information about this demo here</a>.</p>
+
+
+<form class="flashControls">
+<p>
+<input type="button" onclick="flashPlay('pizzaSmall')" value="Play"/>
+<input type="button" onclick="flashPause('pizzaSmall')" value="Pause"/>
+</p>
+</form>
+
+<p>
+<object id="pizzaLarge" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="762" height="578"
+ codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=5,0,0,0">
+ <param name="movie" value="pizza-movie-large.swf" />
+ <param name="play" value="false" />
+ <param name="loop" value="false" />
+ <param name="quality" value="autohigh" />
+<embed id="pizzaLarge" name="pizzaLarge" src="pizza-movie-large.swf" width="762" height="578" play="false"
+ loop="false" quality="autohigh" type="application/x-shockwave-flash"
+ pluginspage="http://www.macromedia.com/go/getflashplayer">
+</embed></object>
+</p>
+
+</body>
+</html>

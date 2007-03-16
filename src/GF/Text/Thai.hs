@@ -11,7 +11,9 @@
 
 -- AR 27/12/2006. Execute test2 to see the transliteration table.
 
-module GF.Text.Thai (mkThai,mkThaiWord,mkThaiPron,thaiFile,thaiPronFile) where
+module GF.Text.Thai (
+  mkThai,mkThaiWord,mkThaiPron,mkThaiFake,thaiFile,thaiPronFile,thaiFakeFile
+  ) where
 
 import qualified Data.Map as Map
 import Data.Char
@@ -26,6 +28,7 @@ import Debug.Trace
 mkThai :: String -> String
 mkThai = concat . map mkThaiWord . words
 mkThaiPron = unwords . map mkPronSyllable . words
+mkThaiFake = unwords . map (fakeEnglish . mkPronSyllable) . words
 
 
 type ThaiChar = Char
@@ -78,7 +81,7 @@ allThaiTrans :: [String]
 allThaiTrans = words $
   "-  k  k1 -  k2 -  k3 g  c  c1 c2 s' c3 y' d' t' " ++
   "t1 t2 t3 n' d  t  t4 t5 t6 n  b  p  p1 f  p2 f' " ++
-  "p3 m  y  r  -  l  -  w  s- r' s  h  l' O  h' -  " ++
+  "p3 m  y  r  -  l  -  w  s- s. s  h  l' O  h' -  " ++
   "a. a  a: a+ i  i: v  v: u  u: -  -  -  -  -  -  " ++
   "e  e' o: a% a& L  R  S  T1 T2 T3 T4 K  -  -  -  " ++
   "N0 N1 N2 N3 N4 N5 N6 N7 N8 N9 -  -  -  -  -  -  "
@@ -90,6 +93,42 @@ allThaiCodes = [0x0e00 .. 0x0e7f]
 ---------------------
 -- heuristic pronunciation of codes
 ---------------------
+
+-- fake English for TTS, a la Teach Yourself Thai
+
+fakeEnglish :: String -> String
+fakeEnglish s = case s of
+  'a':'a':cs -> "ah"  ++ fakeEnglish cs
+  'a':'y':cs -> "ai"  ++ fakeEnglish cs
+  'a'    :cs -> "ah"  ++ fakeEnglish cs
+  'c':'h':cs -> "ch"  ++ fakeEnglish cs
+  'c'    :cs -> "j"   ++ fakeEnglish cs
+  'e':'e':cs -> "aih" ++ fakeEnglish cs
+  'g'    :cs -> "ng"  ++ fakeEnglish cs
+  'i':'i':cs -> "ee"  ++ fakeEnglish cs
+  'k':'h':cs -> "k"   ++ fakeEnglish cs
+  'k'    :cs -> "g"   ++ fakeEnglish cs
+  'O':'O':cs -> "or"  ++ fakeEnglish cs
+  'O'    :cs -> "or"  ++ fakeEnglish cs
+  'o':'o':cs -> "or"  ++ fakeEnglish cs
+  'p':'h':cs -> "p"   ++ fakeEnglish cs
+  'p'    :cs -> "b"   ++ fakeEnglish cs
+  't':'h':cs -> "t"   ++ fakeEnglish cs
+  't'    :cs -> "d"   ++ fakeEnglish cs
+  'u':'u':cs -> "oo"  ++ fakeEnglish cs
+  'u'    :cs -> "oo"  ++ fakeEnglish cs
+  'v':'v':cs -> "eu"  ++ fakeEnglish cs
+  'v'    :cs -> "eu"  ++ fakeEnglish cs
+  '\228':'\228':cs -> "air" ++ fakeEnglish cs
+  '\228'    :cs -> "a"   ++ fakeEnglish cs
+  '\246':'\246':cs -> "er"  ++ fakeEnglish cs
+  '\246'    :cs -> "er"  ++ fakeEnglish cs
+  c:cs | isTone c -> fakeEnglish cs
+  c:cs -> c : fakeEnglish cs
+  _ -> s
+ where
+   isTone = flip elem "'`^~"
+
 
 -- this works for one syllable
 
@@ -124,17 +163,17 @@ pronSyllable s =
     ([0x0e40],[0x0e35],_,[0x0e22],_,_) -> "ia" -- e-i:y
     ([0x0e40],[0x0e2d,0x0e35],_,_,_,_) -> "va" -- e-i:O
     ([0x0e40],[0x0e30,0x0e35],_,[0x0e22],_,_) -> "ia" -- e-i:ya.
-    ([0x0e40],[0x0e30,0x0e2d],_,_,_,_) -> "ö"  -- e-Oa.
+    ([0x0e40],[0x0e30,0x0e2d],_,_,_,_) -> "\246"  -- e-Oa.
     ([0x0e40],[0x0e30,0x0e32],_,_,_,_) -> "O"  -- e-a:a. -- open o 
-    ([0x0e40],[0x0e2d],_,_,_,_) -> "öö"        -- e-O
-    ([0x0e40],[0x0e34],_,_,_,_) -> "öö"        -- e-i
+    ([0x0e40],[0x0e2d],_,_,_,_) -> "\246\246"        -- e-O
+    ([0x0e40],[0x0e34],_,_,_,_) -> "\246\246"        -- e-i
     ([0x0e40],[0x0e30],_,_,_,_) -> "e"         -- e-a.
     ([0x0e40],[0x0e32],_,_,_,_) -> "aw"        -- e-a:
-    ([0x0e40],[],[],[0x0e22],_,_) -> "ööy"     -- e-y
+    ([0x0e40],[],[],[0x0e22],_,_) -> "\246\246y"     -- e-y
     ([0x0e40],[],[],_,True,_) -> "e"
 
-    ([0x0e41],[0x0e30],_,_,_,_) -> "ä"         -- ä-a.
-    ([0x0e41],[],[],_,True,_)   -> "ä"
+    ([0x0e41],[0x0e30],_,_,_,_) -> "\228"         -- ä-a.
+    ([0x0e41],[],[],_,True,_)   -> "\228"
 
     ([0x0e42],[0x0e30],_,_,_,_) -> "o"         -- o:-a.
 
@@ -245,6 +284,12 @@ thaiPronFile f mo = do
   let put = maybe putStr writeFile mo
   put $ encodeUTF8 $ thaiPronStrings s
 
+thaiFakeFile :: FilePath -> Maybe FilePath -> IO ()
+thaiFakeFile f mo = do
+  s <- readFile f
+  let put = maybe putStr writeFile mo
+  put $ encodeUTF8 $ (convStrings mkThaiFake) s
+
 finalThai c = maybe "" return (Map.lookup c thaiFinalMap)
 thaiFinalMap = Map.fromList $ zip allThaiCodes finals
 
@@ -303,7 +348,7 @@ pronThai s = case s of
     | p==':'      -> c:[c]
     | elem p "%&" -> c:"y"
     | p=='+'      -> c:"m"
-    | s == "e'"   -> "ää"
+    | s == "e'"   -> "\228\228"
     | otherwise   -> [c]
   "O"             -> "O"
   "e"             -> "ee"

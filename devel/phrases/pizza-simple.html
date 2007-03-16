@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<!DOCTYPE html PUBLIC "-//VoiceXML Forum//DTD XHTML+Voice 1.2//EN" "http://www.voicexml.org/specs/multimodal/x+v/12/dtd/xhtml+voice12.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:vxml="http://www.w3.org/2001/vxml" 
+    xmlns:ev="http://www.w3.org/2001/xml-events"
+    xmlns:xv="http://www.voicexml.org/2002/xhtml+voice"
+    xml:lang="en-US">
+
+<head>
+<title>Order a Pizza</title>
+<script type="text/javascript" src="gflib.js"></script>
+<script type="text/javascript" src="pizza-simple.js"></script>
+<script type="text/javascript" src="order-simple.js"></script>
+
+  <vxml:form id="talker">
+<vxml:block>
+<vxml:value expr="talkText"/>
+    </vxml:block>
+  </vxml:form>
+
+<vxml:form id="getorder">
+<vxml:var name="dummy" />
+<vxml:subdialog name="sub" src="Pizza.vxml#Order_cat">
+<vxml:param name="old" expr="currentOrder" />
+<vxml:filled>
+<vxml:assign name="dummy" expr="done(sub.term)"/>
+</vxml:filled>
+</vxml:subdialog>
+</vxml:form>
+
+</head>
+
+<body>
+
+<p><button  onclick="newOrder()">I want to say a phrase</button></p>
+
+<div class="box">
+<form>
+<input type="text" id="ordertext" size="100" style="width:100%" />
+</form>
+</div>
+<div class="box">
+<form>
+<input type="text" id="ordertextf" size="100" style="width:100%" />
+</form>
+<form>
+<input type="text" id="ordertextt" size="100" style="width:100%" />
+</form>
+</div>
+
+<div class="box">
+<form>
+<p>
+Current order state<br />
+<input type="text" id="top_img" size="70" /><br />
+<textarea id="top_abs" rows="4" cols="52"></textarea>
+</p>
+</form>
+</div>
+
+</body>
+</html>
