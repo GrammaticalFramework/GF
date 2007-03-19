@@ -220,6 +220,12 @@ oper
 
   special_ppV : V -> Str -> V ; 
 
+-- Verbs with vowel alternatition in the stem - easiest to give with
+-- two forms, e.g. "mostrar"/"muestro".
+
+  regAltV : (mostrar,muestro : Str) -> V ;
+
+
 --3 Two-place verbs
 --
 -- Two-place verbs need a preposition, except the special case with direct object.
@@ -366,6 +372,8 @@ oper
     lock_V = <> ;
     vtyp = VHabere
     } ;
+
+  regAltV x y = verboV (regAlternV x y) ;
 
   mkV2 v p = {s = v.s ; vtyp = v.vtyp ; c2 = p ; lock_V2 = <>} ;
   dirV2 v = mkV2 v accusative ;

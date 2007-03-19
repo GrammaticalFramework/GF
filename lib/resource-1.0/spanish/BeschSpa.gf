@@ -5888,5 +5888,76 @@ param
    | VP VPers   
    ;
 
+oper
+  regAlternV : Str -> Str -> Verbum = 
+  \mostrar, muestro -> 
+    let 
+      mostr  = Predef.tk 2 mostrar ;
+      muestr = Predef.tk 1 muestro 
+    in
+   {s = table {
+    VI Infn => mostr + "ar" ;
+    VI Ger => mostr + "ando" ;
+    VI Part => mostr + "ado" ;
+    VP (Pres Ind Sg P1) => muestr + "o" ;
+    VP (Pres Ind Sg P2) => muestr + "as" ;
+    VP (Pres Ind Sg P3) => muestr + "a" ;
+    VP (Pres Ind Pl P1) => mostr + "amos" ;
+    VP (Pres Ind Pl P2) => mostr + "áis" ;
+    VP (Pres Ind Pl P3) => muestr + "an" ;
+    VP (Pres Subj Sg P1) => muestr + "ue" ;
+    VP (Pres Subj Sg P2) => muestr + "ues" ;
+    VP (Pres Subj Sg P3) => muestr + "ue" ;
+    VP (Pres Subj Pl P1) => mostr + "uemos" ;
+    VP (Pres Subj Pl P2) => mostr + "uéis" ;
+    VP (Pres Subj Pl P3) => muestr + "uen" ;
+    VP (Impf Ind Sg P1) => mostr + "aba" ; --# notpresent
+    VP (Impf Ind Sg P2) => mostr + "abas" ; --# notpresent
+    VP (Impf Ind Sg P3) => mostr + "aba" ; --# notpresent
+    VP (Impf Ind Pl P1) => mostr + "ábamos" ; --# notpresent
+    VP (Impf Ind Pl P2) => mostr + "abais" ; --# notpresent
+    VP (Impf Ind Pl P3) => mostr + "aban" ; --# notpresent
+    VP (Impf Subj Sg P1) => variants {mostr + "ara" ; mostr + "ase"} ; --# notpresent
+    VP (Impf Subj Sg P2) => variants {mostr + "aras" ; mostr + "ases"} ; --# notpresent
+    VP (Impf Subj Sg P3) => variants {mostr + "ara" ; mostr + "ase"} ; --# notpresent
+    VP (Impf Subj Pl P1) => variants {mostr + "áramos" ; mostr + "ásemos"} ; --# notpresent
+    VP (Impf Subj Pl P2) => variants {mostr + "arais" ; mostr + "aseis"} ; --# notpresent
+    VP (Impf Subj Pl P3) => variants {mostr + "aran" ; mostr + "asen"} ; --# notpresent
+    VP (Pret Sg P1) => mostr + "ué" ; --# notpresent
+    VP (Pret Sg P2) => mostr + "aste" ; --# notpresent
+    VP (Pret Sg P3) => mostr + "ó" ; --# notpresent
+    VP (Pret Pl P1) => mostr + "amos" ; --# notpresent
+    VP (Pret Pl P2) => mostr + "asteis" ; --# notpresent
+    VP (Pret Pl P3) => mostr + "aron" ; --# notpresent
+    VP (Fut Ind Sg P1) => mostr + "aré" ; --# notpresent
+    VP (Fut Ind Sg P2) => mostr + "arás" ; --# notpresent
+    VP (Fut Ind Sg P3) => mostr + "ará" ; --# notpresent
+    VP (Fut Ind Pl P1) => mostr + "aremos" ; --# notpresent
+    VP (Fut Ind Pl P2) => mostr + "aréis" ; --# notpresent
+    VP (Fut Ind Pl P3) => mostr + "arán" ; --# notpresent
+    VP (Fut Subj Sg P1) => mostr + "are" ; --# notpresent
+    VP (Fut Subj Sg P2) => mostr + "ares" ; --# notpresent
+    VP (Fut Subj Sg P3) => mostr + "are" ; --# notpresent
+    VP (Fut Subj Pl P1) => mostr + "áremos" ; --# notpresent
+    VP (Fut Subj Pl P2) => mostr + "areis" ; --# notpresent
+    VP (Fut Subj Pl P3) => mostr + "aren" ; --# notpresent
+    VP (Cond Sg P1) => mostr + "aría" ; --# notpresent
+    VP (Cond Sg P2) => mostr + "arías" ; --# notpresent
+    VP (Cond Sg P3) => mostr + "aría" ; --# notpresent
+    VP (Cond Pl P1) => mostr + "aríamos" ; --# notpresent
+    VP (Cond Pl P2) => mostr + "aríais" ; --# notpresent
+    VP (Cond Pl P3) => mostr + "arían" ; --# notpresent
+    VP (Imp Sg P1) => variants {} ;
+    VP (Imp Sg P2) => muestr + "a" ;
+    VP (Imp Sg P3) => muestr + "ue" ;
+    VP (Imp Pl P1) => mostr + "uemos" ;
+    VP (Imp Pl P2) => mostr + "ad" ;
+    VP (Imp Pl P3) => muestr + "uen" ;
+    VP (Pass Sg Masc) => mostr + "ado" ;
+    VP (Pass Sg Fem) => mostr + "ada" ;
+    VP (Pass Pl Masc) => mostr + "ados" ;
+    VP (Pass Pl Fem) => mostr + "adas"
+    }
+  } ;
 
 }
