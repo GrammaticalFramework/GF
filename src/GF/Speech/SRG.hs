@@ -20,9 +20,9 @@
 
 module GF.Speech.SRG (SRG(..), SRGRule(..), SRGAlt(..),
                       SRGCat, SRGNT, CFTerm,
-                      makeSimpleSRG, makeSRG
+                       makeSimpleSRG
                      , lookupFM_, prtS
-                     , topDownFilter, cfgCatToGFCat, srgTopCats
+                     , cfgCatToGFCat, srgTopCats
                      , EBnfSRGAlt(..), EBnfSRGItem
                      , ebnfSRGAlts
                      ) where
@@ -79,28 +79,12 @@ type CatName = (SRGCat,String)
 type CatNames = Map String String
 
 -- | Create a non-left-recursive SRG. 
---   FIXME: the probabilities, names and profiles in the returned 
+--   FIXME: the probabilities in the returned 
 --   grammar may be meaningless.
 makeSimpleSRG :: Options   -- ^ Grammar options
 	      -> StateGrammar
 	      -> SRG
-makeSimpleSRG opts s =
-    makeSRG_ (removeLeftRecursion origStart . removeIdenticalRules 
-              . removeEmptyCats . removeCycles) opts s
-  where origStart = getStartCatCF opts s
-
--- | Create a SRG preserving the names, profiles and probabilities of the 
---   input grammar. The returned grammar may be left-recursive.
-makeSRG :: Options   -- ^ Grammar options
-	-> StateGrammar
-	-> SRG
-makeSRG = makeSRG_ removeEmptyCats
-
-makeSRG_ :: (CFRules -> CFRules)
-         -> Options   -- ^ Grammar options
-	 -> StateGrammar
-	 -> SRG
-makeSRG_ preprocess opt s = 
+makeSimpleSRG opt s =
       SRG { grammarName = name,
 	    startCat = lookupFM_ names origStart,
 	    origStartCat = origStart,
@@ -113,6 +97,11 @@ makeSRG_ preprocess opt s =
     probs = stateProbs s
     l = fmap (replace '_' '-') $ getOptVal opts speechLanguage
     (cats,cfgRules) = unzip $ preprocess $ cfgToCFRules s
+    preprocess = removeLeftRecursion origStart 
+                 . removeEmptyCats 
+                 . topDownFilter origStart
+                 . removeIdenticalRules 
+                 . removeCycles
     names = mkCatNames name cats
     rs = map (cfgRulesToSRGRule names probs) cfgRules
 
@@ -144,17 +133,6 @@ mkCatNames :: String   -- ^ Category name prefix
 mkCatNames prefix origNames = Map.fromList (zip origNames names)
     where names = [prefix ++ "_" ++ show x | x <- [0..]]
 
-
--- | Remove categories which are not reachable from the start category.
-topDownFilter :: SRG -> SRG
-topDownFilter srg@(SRG { startCat = start, rules = rs }) = srg { rules = rs' }
-  where 
-  rs' = [ r | r@(SRGRule c _ _) <- rs, c `Set.member` keep]
-  rhsCats = [ (c,c') | r@(SRGRule c _ ps) <- rs, 
-                       SRGAlt _ _ ss <- ps, 
-                       (c',_) <- filterCats ss]
-  uses = reflexiveClosure_ (allSRGCats srg) $ transitiveClosure $ mkRel rhsCats
-  keep = allRelated uses start
 
 allSRGCats :: SRG -> [String]
 allSRGCats SRG { rules = rs } = [c | SRGRule c _ _ <- rs]
