@@ -40,7 +40,7 @@ srgsXmlPrinter :: Maybe SISRFormat
 	       -> Bool -- ^ Include probabilities
 	       -> Options 
                -> StateGrammar -> String
-srgsXmlPrinter sisr probs opts s = prSrgsXml sisr probs $ makeSRG opts s
+srgsXmlPrinter sisr probs opts s = prSrgsXml sisr probs $ makeSimpleSRG opts s
 
 prSrgsXml :: Maybe SISRFormat -> Bool -> SRG -> String
 prSrgsXml sisr probs srg@(SRG{grammarName=name,startCat=start,

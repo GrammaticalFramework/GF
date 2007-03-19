@@ -32,7 +32,7 @@ import GF.Compile.ShellState (StateGrammar)
 import Data.Char (toUpper,toLower)
 
 gslPrinter :: Options -> StateGrammar -> String
-gslPrinter opts s = prGSL $ topDownFilter $ makeSimpleSRG opts s
+gslPrinter opts s = prGSL $ makeSimpleSRG opts s
 
 prGSL :: SRG -> String
 prGSL (SRG{grammarName=name,startCat=start,origStartCat=origStart,rules=rs})

@@ -227,6 +227,15 @@ removeCycles :: CFRules -> CFRules
 removeCycles = groupProds . removeCycles_ . ungroupProds
   where removeCycles_ rs = [r | r@(CFRule c rhs _) <- rs, rhs /= [Cat c]]
 
+-- * Top-down filtering
+
+-- | Remove categories which are not reachable from the start category.
+topDownFilter :: Cat_ -> CFRules -> CFRules
+topDownFilter start rules = filter ((`Set.member` keep) . fst) rules
+  where
+    rhsCats = [ (c, c') | (c,rs) <- rules, r <- rs, c' <- filterCats (ruleRhs r) ]
+    uses = reflexiveClosure_ (allCats rules) $ transitiveClosure $ mkRel rhsCats
+    keep = allRelated uses start
 
 -- | Get the sets of mutually recursive non-terminals for a grammar.
 mutRecCats :: Bool    -- ^ If true, all categories will be in some set.
