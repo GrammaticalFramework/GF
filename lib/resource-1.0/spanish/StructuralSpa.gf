@@ -83,7 +83,7 @@ lin
   so_AdA = ss "tanto" ;
   somebody_NP = pn2np (mkPN ["algún"] Masc) ;
   somePl_Det = {s = \\g,c => prepCase c ++ genForms "algunos" "algunas" ! g ; n = Pl} ;
-  someSg_Det = {s = \\g,c => prepCase c ++ "algun" ; n = Sg} ;
+  someSg_Det = {s = \\g,c => prepCase c ++ genForms "algun" "alguna" ! g ; n = Sg} ;
   something_NP = pn2np (mkPN ["algo"] Masc) ;
   somewhere_Adv = ss ["en ninguna parte"] ;
   that_Quant = {
