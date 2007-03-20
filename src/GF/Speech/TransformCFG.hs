@@ -86,7 +86,14 @@ getStartCatCF opts sgr = getStartCat opts sgr ++ "{}.s"
 stateGFCC :: StateGrammar -> GFCC
 stateGFCC = mkGFCC . mkCanon2gfcc . stateGrammarST
 
--- | Remove productions which use categories which have no productions
+-- * Grammar filtering
+
+-- | Removes all directly cyclic productions.
+removeCycles :: CFRules -> CFRules 
+removeCycles = groupProds . removeCycles_ . ungroupProds
+  where removeCycles_ rs = [r | r@(CFRule c rhs _) <- rs, rhs /= [Cat c]]
+
+-- | Removes productions which use categories which have no productions
 bottomUpFilter :: CFRules -> CFRules
 bottomUpFilter = fix removeEmptyCats'
     where
@@ -97,6 +104,14 @@ bottomUpFilter = fix removeEmptyCats'
 	allCats = nub [c | (_,r) <- rs, CFRule _ rhs _ <- r, Cat c <- rhs]
 	emptyCats = filter (nothingOrNull . flip lookup rs) allCats
 	k' = map (\ (c,xs) -> (c, filter (not . anyUsedBy emptyCats) xs)) keep
+
+-- | Removes categories which are not reachable from the start category.
+topDownFilter :: Cat_ -> CFRules -> CFRules
+topDownFilter start rules = filter ((`Set.member` keep) . fst) rules
+  where
+    rhsCats = [ (c, c') | (c,rs) <- rules, r <- rs, c' <- filterCats (ruleRhs r) ]
+    uses = reflexiveClosure_ (allCats rules) $ transitiveClosure $ mkRel rhsCats
+    keep = allRelated uses start
 
 -- | Remove rules which have the same rhs. 
 --   FIXME: this messes up probabilities, names and profiles
@@ -213,22 +228,6 @@ isDirectLeftRecursive (CFRule c (Cat c':_) _) = c == c'
 isDirectLeftRecursive _ = False
 
 -}
-
--- * Removing cycles
-
-removeCycles :: CFRules -> CFRules 
-removeCycles = groupProds . removeCycles_ . ungroupProds
-  where removeCycles_ rs = [r | r@(CFRule c rhs _) <- rs, rhs /= [Cat c]]
-
--- * Top-down filtering
-
--- | Remove categories which are not reachable from the start category.
-topDownFilter :: Cat_ -> CFRules -> CFRules
-topDownFilter start rules = filter ((`Set.member` keep) . fst) rules
-  where
-    rhsCats = [ (c, c') | (c,rs) <- rules, r <- rs, c' <- filterCats (ruleRhs r) ]
-    uses = reflexiveClosure_ (allCats rules) $ transitiveClosure $ mkRel rhsCats
-    keep = allRelated uses start
 
 -- | Get the sets of mutually recursive non-terminals for a grammar.
 mutRecCats :: Bool    -- ^ If true, all categories will be in some set.
