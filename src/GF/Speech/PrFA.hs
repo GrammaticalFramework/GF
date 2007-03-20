@@ -43,7 +43,7 @@ faGraphvizPrinter opts s =
 
 -- | Convert the grammar to a regular grammar and print it in BNF
 regularPrinter :: Options -> StateGrammar -> String
-regularPrinter opts s = prCFRules $ makeSimpleRegular s
+regularPrinter opts s = prCFRules $ makeSimpleRegular opts s
   where
   prCFRules :: CFRules -> String
   prCFRules g = unlines [ c ++ " ::= " ++ join " | " (map (showRhs . ruleRhs) rs) | (c,rs) <- g]
