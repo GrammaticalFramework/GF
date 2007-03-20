@@ -16,7 +16,7 @@ concrete SentenceGer of Sentence = CatGer ** open ResGer, Prelude in {
             _ => <P2,[],False>
             } ;
           agr  = {g = Fem ; n = numImp n ; p = ps.p1} ; --- g does not matter
-          verb = vp.s ! agr ! VPImperat ps.p3 ;
+          verb = vp.s ! False ! agr ! VPImperat ps.p3 ;
           inf  = vp.inf ++ verb.inf ;
         in
         verb.fin ++ ps.p2 ++ 
@@ -28,7 +28,7 @@ concrete SentenceGer of Sentence = CatGer ** open ResGer, Prelude in {
 
     SlashVVV2 np vv v2 = 
         mkClause (np.s ! Nom) np.a 
-          (insertInf (v2.prefix ++ infPart vv.isAux  ++ v2.s ! VInf) 
+          (insertInf (v2.prefix ++ v2.s ! VInf (notB vv.isAux)) 
              (predVGen vv.isAux vv)) **
         {c2 = v2.c2} ;
 

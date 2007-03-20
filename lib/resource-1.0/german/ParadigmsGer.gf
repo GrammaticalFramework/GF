@@ -355,7 +355,30 @@ oper
     mkV singen singt sing sang saenge gesungen ;
 
   prefixV p v = 
-    {s = v.s ; prefix = p ; lock_V = v.lock_V ; aux = v.aux ; vtype = v.vtype} ;
+    let
+      vs = v.s ; 
+      v1 = MorphoGer.mkV 
+        (vs ! (VInf False))
+        (vs ! (VFin False (VPresInd Sg P1)))
+        (vs ! (VFin False (VPresInd Sg P2)))
+        (vs ! (VFin False (VPresInd Sg P3)))
+        (vs ! (VFin False (VPresInd Pl P2)))
+        (vs ! VImper Sg)
+        (vs ! (VFin False (VImpfInd Sg P1)))
+        (vs ! (VFin False (VImpfInd Sg P2)))
+        (vs ! (VFin False (VImpfInd Pl P1)))
+        (vs ! (VFin False (VImpfInd Pl P2)))
+        (vs ! (VFin False (VImpfSubj Sg P2)))
+        (vs ! VPastPart APred)
+        p
+        v.aux
+    in {
+    s = v1.s ; 
+    prefix = p ; 
+    lock_V = v.lock_V ; 
+    aux = v.aux ; 
+    vtype = v.vtype
+    } ;
   habenV v = 
     {s = v.s ; prefix = v.prefix ; lock_V = v.lock_V ; aux = VHaben ; vtype = v.vtype} ;
   seinV v = 
