@@ -96,7 +96,7 @@ makeSimpleSRG opt s =
     l = fmap (replace '_' '-') $ getOptVal opts speechLanguage
     (cats,cfgRules) = unzip $ preprocess $ cfgToCFRules s
     preprocess = removeLeftRecursion origStart 
-                 . removeEmptyCats 
+                 . bottomUpFilter 
                  . topDownFilter origStart
                  . removeIdenticalRules 
                  . removeCycles
