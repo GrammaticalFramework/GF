@@ -97,7 +97,6 @@ makeSimpleSRG opt s =
     (cats,cfgRules) = unzip $ preprocess $ cfgToCFRules s
     preprocess = removeLeftRecursion origStart 
                  . fix (topDownFilter origStart . bottomUpFilter)
-                 . removeIdenticalRules 
                  . removeCycles
     names = mkCatNames name cats
     rs = map (cfgRulesToSRGRule names probs) cfgRules

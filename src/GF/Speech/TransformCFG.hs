@@ -112,14 +112,6 @@ topDownFilter start rules = filter ((`Set.member` keep) . fst) rules
     uses = reflexiveClosure_ (allCats rules) $ transitiveClosure $ mkRel rhsCats
     keep = allRelated uses start
 
--- | Remove rules which have the same rhs. 
---   FIXME: this messes up probabilities, names and profiles
-removeIdenticalRules :: CFRules -> CFRules
-removeIdenticalRules g = [(c,sortNubBy cmpRules rs) | (c,rs) <- g]
-    where 
-    cmpRules (CFRule c1 ss1 _) (CFRule c2 ss2 _) = 
-              mconcat [c1 `compare` c2, ss1 `compare` ss2]
-
 -- * Removing left recursion
 
 -- The LC_LR algorithm from

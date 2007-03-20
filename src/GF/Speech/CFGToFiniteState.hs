@@ -66,7 +66,6 @@ makeSimpleRegular :: Options -> StateGrammar -> CFRules
 makeSimpleRegular opts s = makeRegular $ preprocess $ cfgToCFRules s
   where start = getStartCatCF opts s
         preprocess = fix (topDownFilter start . bottomUpFilter)
-                     . removeIdenticalRules 
                      . removeCycles
 
 --
