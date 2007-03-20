@@ -1,4 +1,6 @@
-concrete CatGer of Cat = CommonX ** open ResGer, Prelude in {
+concrete CatGer of Cat = 
+  CommonX - [Tense,TPres,TPast,TFut,TCond] ** 
+  open ResGer, Prelude in {
 
   flags optimize=all_subs ;
 
@@ -12,21 +14,21 @@ concrete CatGer of Cat = CommonX ** open ResGer, Prelude in {
 
 -- Sentence
 
-    Cl = {s : Tense => Anteriority => Polarity => Order => Str} ;
-    Slash = {s : Tense => Anteriority => Polarity => Order => Str} ** 
+    Cl = {s : Mood => Tense => Anteriority => Polarity => Order => Str} ;
+    Slash = {s : Mood => Tense => Anteriority => Polarity => Order => Str} ** 
             {c2 : Preposition} ;
     Imp = {s : Polarity => ImpForm => Str} ;
 
 -- Question
 
-    QCl = {s : Tense => Anteriority => Polarity => QForm => Str} ;
+    QCl = {s : Mood => Tense => Anteriority => Polarity => QForm => Str} ;
     IP = {s : Case => Str ; n : Number} ;
     IComp = {s : Agr => Str} ; 
     IDet = {s : Gender => Case => Str ; n : Number} ;
 
 -- Relative
 
-    RCl = {s : Tense => Anteriority => Polarity => GenNum => Str ; c : Case} ;
+    RCl = {s : Mood => Tense => Anteriority => Polarity => GenNum => Str ; c : Case} ;
     RP = {s : GenNum => Case => Str ; a : RAgr} ;
 
 -- Verb
@@ -76,4 +78,13 @@ concrete CatGer of Cat = CommonX ** open ResGer, Prelude in {
     N3 = {s : Number => Case => Str ; g : Gender} ** {c2,c3 : Preposition} ;
     PN = {s : Case => Str} ;
 
+-- tense with possibility to choose conjunctive forms
+
+    Tense = {s : Str ; t : Tense ; m : Mood} ;
+
+  lin
+    TPres = {s = [] ; t = Pres ; m = MIndic} ;
+    TPast = {s = [] ; t = Past ; m = MIndic} ;   --# notpresent
+    TFut  = {s = [] ; t = Fut  ; m = MIndic} ;   --# notpresent
+    TCond = {s = [] ; t = Cond ; m = MIndic} ;   --# notpresent
 }

@@ -62,7 +62,7 @@ resource ResGer = ParamX ** open Prelude in {
    ;
 
   param VPForm =
-     VPFinite Tense Anteriority
+     VPFinite  Mood Tense Anteriority
    | VPImperat Bool
    | VPInfinit Anteriority ;
 
@@ -76,6 +76,10 @@ resource ResGer = ParamX ** open Prelude in {
   param  
     Order = Main | Inv | Sub ;
 
+-- Main clause mood: "es sei, es wäre, es werde sein".
+-- Not relevant for $Fut$. ---
+
+    Mood = MIndic | MConjunct ;
 
 --2 For $Relative$
  
@@ -133,10 +137,12 @@ resource ResGer = ParamX ** open Prelude in {
          _ => Weak
          } ;      
 
-    vFin : Bool -> Tense -> Agr -> VForm = \b,t,a ->
-      case t of {
-        Pres => VFin b (VPresInd  a.n a.p) ;
-        Past => VFin b (VImpfInd  a.n a.p) ;  --# notpresent
+    vFin : Bool -> Mood -> Tense -> Agr -> VForm = \b,m,t,a ->
+      case <t,m> of {
+        <Pres,MIndic>    => VFin b (VPresInd   a.n a.p) ;
+        <Pres,MConjunct> => VFin b (VPresSubj  a.n a.p) ;
+        <Past,MIndic>    => VFin b (VImpfInd   a.n a.p) ;  --# notpresent
+        <Past,MConjunct> => VFin b (VImpfSubj  a.n a.p) ;  --# notpresent
         _ => VInf False --- never used
         } ;
 
@@ -203,8 +209,9 @@ resource ResGer = ParamX ** open Prelude in {
     } ;
 
   mkV : (x1,_,_,_,_,_,_,_,_,_,_,x12 : Str) -> Str -> VAux -> Verb = 
-    \geben,gebe,gibst,gibt,gebt,gib,gab,gabst,gaben,
-     gabt,gaebe,gegeben,ein,aux ->
+    \geben,gebe,gibst,gibt,gebt,gib,
+     gab,gabst,gaben,gabt,
+     gaebe,gegeben,ein,aux ->
     let 
       einb : Bool -> Str -> Str = \b,geb -> 
         if_then_Str b (ein + geb) geb ;
@@ -241,6 +248,30 @@ resource ResGer = ParamX ** open Prelude in {
      aux = aux ;
      vtype = VAct
      } ;
+
+-- To add a prefix (like "ein") to an already existing verb.
+
+  prefixV : Str -> Verb -> Verb = \ein,verb ->
+    let
+      vs = verb.s ;
+      geben = vs ! VInf False ;
+      einb : Bool -> Str -> Str = \b,geb -> 
+        if_then_Str b (ein + geb) geb ;
+    in
+    {s = table {
+      VInf False => ein + geben ;
+      VInf True  => 
+        if_then_Str (isNil ein) ("zu" ++ geben) (ein + "zu" + geben) ;
+      VFin b vf => einb b (vs ! VFin b vf) ;
+      VImper n    => vs ! VImper n ;
+      VPresPart a => ein + (regA (geben + "d")).s ! Posit ! a ;
+      VPastPart a => ein + vs ! VPastPart a
+      } ;
+     prefix = ein ;
+     aux = verb.aux ;
+     vtype = verb.vtype
+     } ;
+
 
 -- These functions cover many regular cases; full coverage inflectional patterns are
 -- defined in $MorphoGer$.
@@ -353,16 +384,20 @@ resource ResGer = ParamX ** open Prelude in {
 
   predVGen : Bool -> Verb -> VP = \isAux, verb ->
     let
-      vfin : Bool -> Tense -> Agr -> Str = \b,t,a -> verb.s ! vFin b t a ;
+      vfin : Bool -> Mood -> Tense -> Agr -> Str = \b,m,t,a -> 
+        verb.s ! vFin b m t a ;
       vinf = verb.s ! VInf False ;
       vpart = if_then_Str isAux vinf (verb.s ! VPastPart APred) ;
 
       vHaben = auxPerfect verb ;
-      hat : Tense -> Agr -> Str = \t,a -> vHaben ! vFin False t a ;
+      hat : Mood -> Tense -> Agr -> Str = \m,t,a -> 
+        vHaben ! vFin False m t a ;
       haben : Str = vHaben ! VInf False ;
 
-      wird : Agr -> Str = \a -> 
-        werden_V.s ! VFin False (VPresInd a.n a.p) ;  
+      wird : Mood -> Agr -> Str = \m,a -> case m of {
+        MIndic => werden_V.s ! VFin False (VPresInd a.n a.p) ;  
+        MConjunct => werden_V.s ! VFin False (VPresSubj a.n a.p)
+        } ;  
       wuerde : Agr -> Str = \a ->                      --# notpresent
         werden_V.s ! VFin False (VImpfSubj a.n a.p) ;  --# notpresent
 
@@ -375,16 +410,16 @@ resource ResGer = ParamX ** open Prelude in {
 
     in {
     s = \\b,a => table {
-      VPFinite t Simul => case t of {
---        Pres | Past => vf (vfin t a) [] ; -- the general rule
-        Past => vf b (vfin b t a) [] ;   --# notpresent
-        Fut  => vf True (wird a) vinf ;     --# notpresent
+      VPFinite m t Simul => case t of {
+--        Pres | Past => vf (vfin m t a) [] ; -- the general rule
+        Past => vf b (vfin b m t a) [] ;    --# notpresent
+        Fut  => vf True (wird m a) vinf ;   --# notpresent
         Cond => vf True (wuerde a) vinf ;   --# notpresent
-        Pres => vf b (vfin b t a) []
+        Pres => vf b (vfin b m t a) []
         } ;
-      VPFinite t Anter => case t of {              --# notpresent
-        Pres | Past => vf True (hat t a) vpart ;      --# notpresent
-        Fut  => vf True (wird a) (vpart ++ haben) ;   --# notpresent
+      VPFinite m t Anter => case t of {               --# notpresent
+        Pres | Past => vf True (hat m t a) vpart ;      --# notpresent
+        Fut  => vf True (wird m a) (vpart ++ haben) ;   --# notpresent
         Cond => vf True (wuerde a) (vpart ++ haben)   --# notpresent
         } ;                                        --# notpresent
       VPImperat False => vf False (verb.s ! VImper a.n) [] ;
@@ -513,28 +548,28 @@ resource ResGer = ParamX ** open Prelude in {
 -- For $Sentence$.
 
   Clause : Type = {
-    s : Tense => Anteriority => Polarity => Order => Str
+    s : Mood => Tense => Anteriority => Polarity => Order => Str
     } ;
 
   mkClause : Str -> Agr -> VP -> Clause = \subj,agr,vp -> {
-      s = \\t,a,b,o =>
+      s = \\m,t,a,b,o =>
         let
           ord   = case o of {
             Sub => True ;  -- glue prefix to verb
             _ => False
             } ;
-          verb  = vp.s  ! ord ! agr ! VPFinite t a ;
+          verb  = vp.s  ! ord ! agr ! VPFinite m t a ;
           neg   = vp.a1 ! b ;
           obj   = vp.n2 ! agr ;
           compl = obj ++ neg ++ vp.a2 ;
           inf   = vp.inf ++ verb.inf ;
           extra = vp.ext ;
           inffin = 
-            case <a,vp.isAux> of {                       --# notpresent
-              <Anter,True> => verb.fin ++ inf ; -- double infinitive   --# notpresent
-              _ =>                                      --# notpresent
+            case <a,vp.isAux> of {                              --# notpresent
+              <Anter,True> => verb.fin ++ inf ; -- double inf   --# notpresent
+              _ =>                                              --# notpresent
               inf ++ verb.fin              --- or just auxiliary vp
-            }                                            --# notpresent
+            }                                                   --# notpresent
         in
         case o of {
           Main => subj ++ verb.fin ++ compl ++ inf ++ extra ;

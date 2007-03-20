@@ -11,7 +11,7 @@ concrete GrammarGer of Grammar =
   RelativeGer,
   ConjunctionGer,
   PhraseGer,
-  TextX,
+  TextX - [Tense,TPres,TPast,TFut,TCond],
   IdiomGer,
   StructuralGer
   ** {
