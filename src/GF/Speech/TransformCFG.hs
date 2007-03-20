@@ -11,8 +11,6 @@
 --
 --  This module does some useful transformations on CFGs.
 --
--- FIXME: remove cycles
---
 -- peb thinks: most of this module should be moved to GF.Conversion...
 -----------------------------------------------------------------------------
 
