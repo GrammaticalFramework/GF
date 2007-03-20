@@ -87,8 +87,8 @@ stateGFCC :: StateGrammar -> GFCC
 stateGFCC = mkGFCC . mkCanon2gfcc . stateGrammarST
 
 -- | Remove productions which use categories which have no productions
-removeEmptyCats :: CFRules -> CFRules
-removeEmptyCats = fix removeEmptyCats'
+bottomUpFilter :: CFRules -> CFRules
+bottomUpFilter = fix removeEmptyCats'
     where
     removeEmptyCats' :: CFRules -> CFRules
     removeEmptyCats' rs = k'

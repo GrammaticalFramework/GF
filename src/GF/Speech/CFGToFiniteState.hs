@@ -63,7 +63,7 @@ cfgToFA opts s = minimize $ compileAutomaton start $ makeSimpleRegular s
   where start = getStartCatCF opts s
 
 makeSimpleRegular :: StateGrammar -> CFRules
-makeSimpleRegular = makeRegular . removeIdenticalRules . removeEmptyCats . cfgToCFRules
+makeSimpleRegular = makeRegular . removeIdenticalRules . bottomUpFilter . cfgToCFRules
 
 --
 -- * Approximate context-free grammars with regular grammars.
