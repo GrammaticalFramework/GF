@@ -59,11 +59,15 @@ data MFA a = MFA (DFA (MFALabel a)) [(String,DFA (MFALabel a))]
 
 
 cfgToFA :: Options -> StateGrammar -> DFA String
-cfgToFA opts s = minimize $ compileAutomaton start $ makeSimpleRegular s
+cfgToFA opts s = minimize $ compileAutomaton start $ makeSimpleRegular opts s
   where start = getStartCatCF opts s
 
-makeSimpleRegular :: StateGrammar -> CFRules
-makeSimpleRegular = makeRegular . removeIdenticalRules . bottomUpFilter . cfgToCFRules
+makeSimpleRegular :: Options -> StateGrammar -> CFRules
+makeSimpleRegular opts s = makeRegular $ preprocess $ cfgToCFRules s
+  where start = getStartCatCF opts s
+        preprocess = fix (topDownFilter start . bottomUpFilter)
+                     . removeIdenticalRules 
+                     . removeCycles
 
 --
 -- * Approximate context-free grammars with regular grammars.
@@ -148,7 +152,7 @@ make_fa c@(g,ns) q0 alpha q1 fa =
 --
 
 cfgToMFA :: Options -> StateGrammar -> MFA String
-cfgToMFA opts s = buildMFA start s
+cfgToMFA opts s = buildMFA start $ makeSimpleRegular opts s
   where start = getStartCatCF opts s
 
 -- | Build a DFA by building and expanding an MFA
@@ -156,11 +160,11 @@ cfgToFA' :: Options -> StateGrammar -> DFA String
 cfgToFA' opts s = mfaToDFA $ cfgToMFA opts s
 
 buildMFA :: Cat_ -- ^ Start category
-         -> StateGrammar -> MFA String
+         -> CFRules -> MFA String
 buildMFA start g = sortSubLats $ removeUnusedSubLats mfa
   where startFA = let (fa,s,f) = newFA_
                    in newTransition s f (MFASub start) fa
-        fas = compileAutomata $ makeSimpleRegular g
+        fas = compileAutomata g
         mkMFALabel (Cat c) = MFASub c
         mkMFALabel (Tok t) = MFASym t
         toMFA = mapTransitions mkMFALabel
