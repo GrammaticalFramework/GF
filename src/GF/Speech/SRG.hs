@@ -14,8 +14,6 @@
 --
 -- FIXME: remove \/ warn \/ fail if there are int \/ string literal
 -- categories in the grammar
---
--- FIXME: figure out name prefix from grammar name
 -----------------------------------------------------------------------------
 
 module GF.Speech.SRG (SRG(..), SRGRule(..), SRGAlt(..),
