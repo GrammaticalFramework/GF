@@ -14,12 +14,7 @@
 -- peb thinks: most of this module should be moved to GF.Conversion...
 -----------------------------------------------------------------------------
 
--- FIXME: lots of this stuff is used by CFGToFiniteState, thus
--- the missing explicit expot list.
-module GF.Speech.TransformCFG {- (CFRule_, CFRules, 
-			       cfgToCFRules,
-			       removeLeftRecursion,
-			       removeEmptyCats, removeIdenticalRules) -} where
+module GF.Speech.TransformCFG where
 
 import GF.Canon.CanonToGFCC (mkCanon2gfcc)
 import qualified GF.Canon.GFCC.AbsGFCC as C
