@@ -93,12 +93,10 @@ removeCycles :: CFRules -> CFRules
 removeCycles = groupProds . removeCycles_ . ungroupProds
   where removeCycles_ rs = [r | r@(CFRule c rhs _) <- rs, rhs /= [Cat c]]
 
--- | Removes productions which use categories which have no productions
+-- | Removes productions which use categories which have no productions.
+-- Only does one pass through the grammar.
 bottomUpFilter :: CFRules -> CFRules
-bottomUpFilter = fix removeEmptyCats'
-    where
-    removeEmptyCats' :: CFRules -> CFRules
-    removeEmptyCats' rs = k'
+bottomUpFilter rs = k'
 	where
 	keep = filter (not . null . snd) rs
 	allCats = nub [c | (_,r) <- rs, CFRule _ rhs _ <- r, Cat c <- rhs]
@@ -106,6 +104,7 @@ bottomUpFilter = fix removeEmptyCats'
 	k' = map (\ (c,xs) -> (c, filter (not . anyUsedBy emptyCats) xs)) keep
 
 -- | Removes categories which are not reachable from the start category.
+-- Only does one pass through the grammar.
 topDownFilter :: Cat_ -> CFRules -> CFRules
 topDownFilter start rules = filter ((`Set.member` keep) . fst) rules
   where
