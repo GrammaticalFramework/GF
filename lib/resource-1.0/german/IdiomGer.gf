@@ -22,9 +22,10 @@ concrete IdiomGer of Idiom = CatGer **
           (predV geben)) ;
 
     ExistIP ip = {
-      s = \\t,a,p => 
+      s = \\m,t,a,p => 
             let 
-              cls = (mkClause "es" (agrP3 Sg)  (predV geben)).s ! t ! a ! p ;
+              cls = 
+                (mkClause "es" (agrP3 Sg)  (predV geben)).s ! m ! t ! a ! p ;
               who = ip.s ! Acc
             in table {
               QDir   => who ++ cls ! Inv ;
@@ -35,7 +36,8 @@ concrete IdiomGer of Idiom = CatGer **
     ProgrVP = insertAdv "eben" ; ----
 
     ImpPl1 vp = {s = 
-      (mkClause "wir" {g = Fem ; n = Pl ; p = P1} vp).s ! Pres ! Simul ! Pos ! Inv 
+      (mkClause "wir" {g = Fem ; n = Pl ; p = P1} vp).s ! 
+                           MConjunct ! Pres ! Simul ! Pos ! Inv 
       } ;
 
   oper

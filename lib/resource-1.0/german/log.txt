@@ -287,3 +287,11 @@ in the resource grammar version 1.0.
 
 When adding polite imperatives, have to change the lincat of Imp: ImpForm instead
 of Number. But the required inflections exist already.
+
+--------------
+
+20/3/2007
+
+Spent half a day adding prefix gluing to the morphology and also
+making conjunctive forms accessible as top-level tenses. These facilities
+were requested by Nadine Perera writing a paper with me.

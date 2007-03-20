@@ -5,8 +5,8 @@ concrete QuestionGer of Question = CatGer ** open ResGer in {
   lin
 
     QuestCl cl = {
-      s = \\t,a,p => 
-            let cls = cl.s ! t ! a ! p 
+      s = \\m,t,a,p => 
+            let cls = cl.s ! m ! t ! a ! p 
             in table {
               QDir   => cls ! Inv ;
               QIndir => "ob" ++ cls ! Sub
@@ -14,9 +14,9 @@ concrete QuestionGer of Question = CatGer ** open ResGer in {
       } ;
 
     QuestVP qp vp = {
-      s = \\t,a,b,q => 
+      s = \\m,t,a,b,q => 
         let 
-          cl = (mkClause (qp.s ! Nom) (agrP3 qp.n) vp).s ! t ! a ! b
+          cl = (mkClause (qp.s ! Nom) (agrP3 qp.n) vp).s ! m ! t ! a ! b
         in
         case q of {
             QIndir => cl ! Sub ;
@@ -25,9 +25,9 @@ concrete QuestionGer of Question = CatGer ** open ResGer in {
       } ;
 
     QuestSlash ip slash = {
-      s = \\t,a,p => 
+      s = \\m,t,a,p => 
             let 
-              cls = slash.s ! t ! a ! p ;
+              cls = slash.s ! m ! t ! a ! p ;
               who = appPrep slash.c2 ip.s
             in table {
               QDir   => who ++ cls ! Inv ;
@@ -36,9 +36,9 @@ concrete QuestionGer of Question = CatGer ** open ResGer in {
       } ;
 
     QuestIAdv iadv cl = {
-      s = \\t,a,p => 
+      s = \\m,t,a,p => 
             let 
-              cls = cl.s ! t ! a ! p ;
+              cls = cl.s ! m ! t ! a ! p ;
               why = iadv.s
             in table {
               QDir   => why ++ cls ! Inv ;
@@ -47,10 +47,10 @@ concrete QuestionGer of Question = CatGer ** open ResGer in {
       } ;
 
     QuestIComp icomp np = {
-      s = \\t,a,p => 
+      s = \\m,t,a,p => 
             let 
               vp  = predV sein_V ;
-              cls = (mkClause (np.s ! Nom) np.a vp).s ! t ! a ! p ;
+              cls = (mkClause (np.s ! Nom) np.a vp).s ! m ! t ! a ! p ;
               why = icomp.s ! np.a
             in table {
               QDir   => why ++ cls ! Inv ;

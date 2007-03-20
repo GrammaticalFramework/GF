@@ -33,7 +33,7 @@ concrete SentenceGer of Sentence = CatGer ** open ResGer, Prelude in {
         {c2 = v2.c2} ;
 
     AdvSlash slash adv = {
-      s  = \\t,a,b,o => slash.s ! t ! a ! b ! o ++ adv.s ;
+      s  = \\m,t,a,b,o => slash.s ! m ! t ! a ! b ! o ++ adv.s ;
       c2 = slash.c2
     } ;
 
@@ -43,10 +43,14 @@ concrete SentenceGer of Sentence = CatGer ** open ResGer, Prelude in {
     EmbedQS qs = {s = qs.s ! QIndir} ;
     EmbedVP vp = {s = useInfVP False vp} ;
 
-    UseCl  t a p cl = {s = \\o => t.s ++ a.s ++ p.s ++ cl.s ! t.t ! a.a ! p.p ! o} ;
-    UseQCl t a p cl = {s = \\q => t.s ++ a.s ++ p.s ++ cl.s ! t.t ! a.a ! p.p ! q} ;
+    UseCl  t a p cl = {
+      s = \\o => t.s ++ a.s ++ p.s ++ cl.s ! t.m ! t.t ! a.a ! p.p ! o
+      } ;
+    UseQCl t a p cl = {
+      s = \\q => t.s ++ a.s ++ p.s ++ cl.s ! t.m ! t.t ! a.a ! p.p ! q
+      } ;
     UseRCl t a p cl = {
-      s = \\r => t.s ++ a.s ++ p.s ++ cl.s ! t.t ! a.a ! p.p ! r ;
+      s = \\r => t.s ++ a.s ++ p.s ++ cl.s ! t.m ! t.t ! a.a ! p.p ! r ;
       c = cl.c
       } ;
 

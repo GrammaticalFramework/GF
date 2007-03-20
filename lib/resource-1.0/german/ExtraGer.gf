@@ -1,5 +1,5 @@
 concrete ExtraGer of ExtraGerAbs = CatGer ** 
-  open ResGer, Coordination, Prelude in {
+  open ResGer, Coordination, Prelude, IrregGer in {
 
   lincat
     VPI   = {s : Bool => Str} ;
@@ -20,5 +20,15 @@ concrete ExtraGer of ExtraGerAbs = CatGer **
           insertObj vpi.p1 (
             predVGen v.isAux v))) ;
 -}
+
+    PPzuAdv cn = {s = case cn.g of {
+      Masc | Neutr => "zum" ;
+      Fem => "zur"
+      } ++ cn.s ! adjfCase Weak Dat ! Sg ! Dat 
+    } ;
+
+    TImpfSubj  = {s = [] ; t = Past ; m = MConjunct} ;   --# notpresent
+
+    moegen_VV = auxVV mögen_V ;
 
 } 

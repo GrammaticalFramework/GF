@@ -94,7 +94,12 @@ in {
   lin melken_V =  irregV "melken" (variants {"melkt" ; "milkt"}) (variants {"melkte" ; "molk"}) "gemolken" "gemelkt" ;
   lin messen_V =  irregV "messen" "mißt" "maß" "mäße" "gemessen" ;
   lin mißlingen_V =  irregV "mißlingen" "mißlingt" "mißlang" "mißlungen" "mißlänge" ;
-  lin mögen_V =  irregV "mögen" "mag" "mochte" "möchte" "gemocht" ;
+  lin mögen_V =  M.mkV 
+        "mögen" "mag" "magst" "mag" "mögt" "mög" 
+        "mochte" "mochtest" "mochten" "mochtet"
+        "möchte" "gemocht" [] 
+        M.VHaben ** {lock_V = <>} ;
+
   lin müssen_V =  irregV "müssen" "muß" "mußte" "müßte" "gemußt" ;
   lin nehmen_V = mkV "nehmen" "nimmt" "nimm" "nahm" "nähme" "genommen" ;
   lin nennen_V =  irregV "nennen" "nennt" "nannte" "nennte" "genannt" ;
