@@ -11,7 +11,7 @@ concrete MathematicalGer of Mathematical =
   RelativeGer,
   ConjunctionGer,
   PhraseGer,
-  TextX,
+  TextX - [Tense,TPres],
   IdiomGer,
   StructuralGer,
 
