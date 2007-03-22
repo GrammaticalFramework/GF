@@ -3,7 +3,10 @@
 -- adapted from verb list in
 -- http://www.iee.et.tu-dresden.de/~wernerr/grammar/verben_dt.html
 
-concrete IrregGer of IrregGerAbs = CatGer ** open ParadigmsGer in {
+concrete IrregGer of IrregGerAbs = CatGer ** open 
+  ParadigmsGer,
+  (M = MorphoGer)
+in {
 
   flags optimize=values ;
 
@@ -91,9 +94,14 @@ concrete IrregGer of IrregGerAbs = CatGer ** open ParadigmsGer in {
   lin melken_V =  irregV "melken" (variants {"melkt" ; "milkt"}) (variants {"melkte" ; "molk"}) "gemolken" "gemelkt" ;
   lin messen_V =  irregV "messen" "mißt" "maß" "mäße" "gemessen" ;
   lin mißlingen_V =  irregV "mißlingen" "mißlingt" "mißlang" "mißlungen" "mißlänge" ;
-  lin mögen_V =  irregV "mögen" "mag" "mochte" "möchte" "gemocht" ;
+  lin mögen_V =  M.mkV 
+        "mögen" "mag" "magst" "mag" "mögt" "mög" 
+        "mochte" "mochtest" "mochten" "mochtet"
+        "möchte" "gemocht" [] 
+        M.VHaben ** {lock_V = <>} ;
+
   lin müssen_V =  irregV "müssen" "muß" "mußte" "müßte" "gemußt" ;
-  lin nehmen_V =  irregV "nehmen" "nimmt" "nahm" "nähme" "genommen" ;
+  lin nehmen_V = mkV "nehmen" "nimmt" "nimm" "nahm" "nähme" "genommen" ;
   lin nennen_V =  irregV "nennen" "nennt" "nannte" "nennte" "genannt" ;
   lin pfeifen_V =  irregV "pfeifen" "pfeift" "pfiff" "pfiffe" "gepfiffen" ;
   lin preisen_V =  irregV "preisen" "preist" "pries" "priese" "gepriesen" ;
@@ -185,7 +193,13 @@ concrete IrregGer of IrregGerAbs = CatGer ** open ParadigmsGer in {
   lin wiegen_V =  irregV "wiegen" "wiegt" "wog" "wöge" "gewogen" ;
   lin winden_V =  irregV "winden" "windt" "wand" "wände" "gewunden" ;
   lin wissen_V =  irregV "wissen" "weiß" "wußte" "wüßte" "gewußt" ;
-  lin wollen_V =  irregV "wollen" "will" "wollte" "wollte" "gewollt" ;
+  lin wollen_V =  M.mkV 
+        "wollen" "will" "willst" "will" "wollt" "woll" 
+        "wollte" "wolltest" "wollten" "wolltet"
+        "wollte" "gewollen" [] 
+        M.VHaben ** {lock_V = <>} ;
+
+
   lin wringen_V =  irregV "wringen" "wringt" "wrang" "wränge" "gewrungen" ;
   lin zeihen_V =  irregV "zeihen" "zeiht" "zieh" "ziehe" "geziehen" ;
   lin ziehen_V =  irregV "ziehen" "zieht" "zog" "zöge" "gezogen" ;
