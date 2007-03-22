@@ -65,6 +65,8 @@ incomplete resource Combinators = open Grammar in {
       mod : A -> N -> CN ;
       mod : AP -> CN -> CN ;
       mod : AdA -> A -> AP ;
+      mod : Det -> N -> NP ;
+      mod : Det -> CN -> NP ;
       mod : Quant -> N -> NP ;
       mod : Quant -> CN -> NP ;
       mod : Predet -> N -> NP ;
@@ -168,6 +170,11 @@ incomplete resource Combinators = open Grammar in {
                                   = \a,n -> AdjCN a n ;
       mod : AdA -> A -> AP
                                   = \m,a -> AdAP m (PositA a) ;
+
+      mod : Det -> N -> NP 
+	                          = \d,n -> DetCN d (UseN n) ;
+      mod : Det -> CN -> NP 
+	                          = \d,n -> DetCN d n ;
       mod : Quant -> N -> NP
                                   = \q,n -> DetCN (DetSg (SgQuant q) NoOrd) (UseN n) ;
       mod : Quant -> CN -> NP
