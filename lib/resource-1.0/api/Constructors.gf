@@ -127,7 +127,8 @@ incomplete resource Constructors = open Grammar in {
       mkDet : QuantPl -> Num -> Ord -> Det ;   -- these five best (men)
       mkDet : QuantPl -> Det               ;   -- these (men)
       mkDet : Quant ->  Det                ;   -- this (man)
-      mkDet : Num ->  Det                  ;   -- five (men)
+      mkDet : Num -> Det                   ;   -- forty-five (men)
+      mkDet : Digit -> Det                 ;   -- five (men)
       mkDet : Pron -> Det                      -- my (house)
       } ;
 
@@ -354,8 +355,11 @@ incomplete resource Constructors = open Grammar in {
                                          =    \q -> DetPl q NoNum NoOrd   ;
       mkDet : Quant ->  Det       -- this man
                                          =    \q -> DetSg (SgQuant q) NoOrd  ;
-      mkDet : Num ->  Det       -- five men
+      mkDet : Num ->  Det       -- forty-five men
                                          =    \n -> DetPl (PlQuant IndefArt) n NoOrd  ;
+      mkDet : Digit -> Det  -- five (men)
+	                                 =    \d -> DetPl (PlQuant IndefArt) (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 d)))))) NoOrd ;   
+
       mkDet : Pron -> Det      -- my (house)
                                          =    \p -> DetSg (SgQuant (PossPron p)) NoOrd
       } ;
