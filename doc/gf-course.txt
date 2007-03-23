@@ -1,0 +1,76 @@
+Graduate Course: GF (Grammatical Framework)
+Aarne Ranta
+%%date(%c)
+
+% NOTE: this is a txt2tags file.
+% Create an html file from this file using:
+% txt2tags -thtml --toc gf-reference.html
+
+%!target:html
+
+GSLT and Department of Computer Science and Engineering, 
+Chalmers University of Technology and Gothenburg University.
+
+Autumn Term 2007.
+
+
+=Purpose=
+
+[GF http://www.cs.chalmers.se/~aarne/GF/]
+(Grammatical Framework) is a grammar formalism, i.e. a special-purpose
+programming language for writing grammars. It is suitable for many
+natural language processing tasks, in particular,
+- multilingual applications
+- systems where grammars are embedded as components performing e.g.
+  parsing, translation, or speech recognition
+
+
+The goal of the course is to develop an understanding of GF and 
+practical skills in using it.
+
+
+=Contents=
+
+The course consists of two modules. The first module is a one-week
+intensive course (during the first intensive week of GSLT), which
+is as such usable as a one-week intensive course for doctoral studies.
+
+The second module is an independent programming project, written
+by each student (possibly working in groups) during the Autumn term.
+This module ends with a three days' meeting where the projects are
+presented and discussed.
+
+The first module goes through the basics of GF, including
+- using the GF programming language
+- writing multilingual grammars
+- using the 
+  [GF resource grammar library http://www.cs.chalmers.se/~aarne/GF/lib/resource-1.0/doc/]
+- generating speech recognition systems from GF grammars
+- using embedded grammars as components of software systems
+
+
+The lectures follow the
+[GF Tutorial http://www.cs.chalmers.se/~aarne/GF/doc/tutorial/gf-tutorial2.html].
+Those who just want to do the first module will write a simple application
+as their course work during the intensive week.
+
+Those who continue with the second module will choose a more substantial
+project. Possible topics are
+- building a dialogue system by using GF
+- implementing a multilingual document generator 
+- experimenting with synthetized multilingual tree banks
+- extending the GF resource grammar library
+
+
+
+=Prerequisites=
+
+Experience in programming. No earlier natural language processing
+experience is necessary.
+
+The course is thus suitable both for GSLT and NGSLT students,
+and for graduate students in computer science.
+
+We will in particular welcome students from the Baltic countries
+who wish to build resources for their own language in GF.
+
