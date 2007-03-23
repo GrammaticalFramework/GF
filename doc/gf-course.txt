@@ -21,7 +21,7 @@ Autumn Term 2007.
 programming language for writing grammars. It is suitable for many
 natural language processing tasks, in particular,
 - multilingual applications
-- systems where grammars are embedded as components performing e.g.
+- systems where grammar-based components are needed for e.g.
   parsing, translation, or speech recognition
 
 
