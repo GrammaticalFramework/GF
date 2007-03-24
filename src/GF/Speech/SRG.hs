@@ -95,7 +95,8 @@ makeSimpleSRG opt s =
     probs = stateProbs s
     l = fmap (replace '_' '-') $ getOptVal opts speechLanguage
     (cats,cfgRules) = unzip $ preprocess $ cfgToCFRules s
-    preprocess = removeLeftRecursion origStart 
+    preprocess = mergeIdentical
+                 . removeLeftRecursion origStart 
                  . fix (topDownFilter origStart . bottomUpFilter)
                  . removeCycles
     names = mkCatNames name cats
