@@ -1,9 +1,9 @@
 cat S; E; 
 
-fun es : E -> S ;
-fun sx : S -> S ;
+fun f : E -> S ;
+fun g : S -> S ;
 fun e : E ;
 
-lin es e = { s = e.s } ;
-lin sx s = { s = s.s ++ "x" } ;
+lin f e = { s = e.s } ;
+lin g s = { s = s.s ++ "x" } ;
 lin e = { s = "e" } ;
