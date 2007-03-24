@@ -1,0 +1,64 @@
+Gr.  Grammar ::= [Def] ;
+
+DPar.  Def ::= "param" Ident "=" [Constr] ;
+DOper. Def ::= "oper" Ident ":" Type "=" Exp ;
+DOpty. Def ::= "oper" Ident "=" Type ;
+DLin.  Def ::= "lin" Ident ":" Type "=" Exp ;
+
+terminator Def ";" ;
+
+Con. Constr ::= Ident [Type] ;
+
+separator nonempty Constr "|" ;
+
+TBas. Type1 ::= Ident ;
+TVal. Type1 ::= "Ints" Integer ;
+TRec. Type1 ::= "{" [Typing] "}" ;
+TFun. Type  ::= Type1 "->" Type ;
+
+coercions Type 1 ;
+
+terminator Type "" ;
+
+FTyp. Typing ::= Ident ":" Type ;
+
+separator Typing ";" ;
+
+EVar. Exp2 ::= "$" Ident ;
+ECon. Exp2 ::= Ident ;
+EVal. Exp2 ::= Integer ;
+EStr. Exp2 ::= String ;
+ERec. Exp2 ::= "{" [Assign] "}" ;
+EApp. Exp1 ::= Exp1 Exp2 ;
+ESel. Exp1 ::= Exp1 "!" Exp2 ;
+EPro. Exp1 ::= Exp1 "." Exp2 ;
+ETab. Exp1  ::= "table" "{" [Case] "}" ;
+ETbv. Exp1  ::= "table" "(" Type ")" "{" [Exp] "}" ;
+ECat. Exp  ::= Exp "++" Exp1 ;
+EAbs. Exp  ::= "\\" Ident "->" Exp ;
+
+coercions Exp 2 ;
+
+separator Exp ";" ;
+
+FExp. Assign ::= Ident "=" Exp ;
+
+separator Assign ";" ;
+
+Cas.  Case ::= Patt "=>" Exp ;
+
+separator Case ";" ;
+
+PVal. Patt ::= Integer ;
+PVar. Patt ::= "$" Ident ;
+PRec. Patt ::= "{" [AssPatt] "}" ;
+PCon. Patt ::= "(" Ident [Patt] ")" ;
+
+terminator Patt "" ;
+
+FPatt. AssPatt ::= Ident "=" Patt ;
+
+separator AssPatt ";" ;
+
+comment "--" ;
+comment "{-" "-}" ;
