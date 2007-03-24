@@ -125,6 +125,7 @@ removeLeftRecursion start gr
                x <- properLeftCornersOf a,
                not (isLeftRecursive x),
                let a_x = mkCat (Cat a) x,
+               a_x `Set.member` newCats,
                let n' = symbol (\_ -> CFApp (CFRes 1) (CFRes 0))
                                (\_ -> CFRes 0) x] 
     scheme2 = [CFRule a_x (beta++[Cat a_b]) n' | 
@@ -146,6 +147,8 @@ removeLeftRecursion start gr
                let n' = symbol (\_ -> CFAbs 1 (shiftTerm n)) 
                                (\_ -> n) x]
     scheme4 = catSetRules gr $ Set.fromList $ filter (not . isLeftRecursive . Cat) cats
+
+    newCats = Set.fromList (map lhsCat (scheme2 ++ scheme3))
 
     shiftTerm :: CFTerm -> CFTerm
     shiftTerm (CFObj f ts) = CFObj f (map shiftTerm ts)
