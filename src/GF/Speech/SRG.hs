@@ -185,7 +185,9 @@ ungroupTokens = joinRE . mapRE (symbol (RESymbol . Cat) (REConcat . map (RESymbo
 --
 
 lookupFM_ :: (Ord key, Show key) => Map key elt -> key -> elt
-lookupFM_ fm k = Map.findWithDefault (error $ "Key not found: " ++ show k) k fm
+lookupFM_ fm k = Map.findWithDefault err k fm
+  where err = error $ "Key not found: " ++ show k
+                      ++ "\namong " ++ show (Map.keys fm)
 
 prtS :: Print a => a -> ShowS
 prtS = showString . prt
