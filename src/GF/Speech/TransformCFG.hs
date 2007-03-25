@@ -112,6 +112,18 @@ topDownFilter start rules = filter ((`Set.member` keep) . fst) rules
     uses = reflexiveClosure_ (allCats rules) $ transitiveClosure $ mkRel rhsCats
     keep = allRelated uses start
 
+-- | Merges categories with identical right-hand-sides.
+-- FIXME: handle probabilities
+mergeIdentical :: CFRules -> CFRules
+mergeIdentical g = sortNubBy (compareBy fst) [(substCat c, map subst rs) | (c,rs) <- g]
+  where
+    -- maps categories to their replacement
+    m = Map.fromList [(y,concat (intersperse "+" xs)) | (_,xs) <- buildMultiMap [(rulesKey rs,c) | (c,rs) <- g], y <- xs]
+    -- build data to compare for each category: a set of name,rhs pairs
+    rulesKey rs = Set.fromList [(n,r) | CFRule _ r n <- rs]
+    subst (CFRule c r n) = CFRule (substCat c) (map (mapSymbol substCat id) r) n
+    substCat c = Map.findWithDefault (error $ "mergeIdentical: " ++ c) c m
+
 -- * Removing left recursion
 
 -- The LC_LR algorithm from
