@@ -48,6 +48,7 @@ import qualified GF.Visualization.Graphviz as Dot
 type State = Int
 
 -- | Type parameters: node id type, state label type, edge label type
+--   Data constructor arguments: nodes and edges, start state, final states
 data FA n a b = FA !(Graph n a b) !n ![n]
 
 type NFA a = FA State () (Maybe a)
