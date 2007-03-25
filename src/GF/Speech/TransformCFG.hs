@@ -88,7 +88,7 @@ stateGFCC = mkGFCC . mkCanon2gfcc . stateGrammarST
 
 -- * Grammar filtering
 
--- | Removes all directly cyclic productions.
+-- | Removes all directly and indirectly cyclic productions.
 removeCycles :: CFRules -> CFRules 
 removeCycles = groupProds . removeCycles_ . ungroupProds
   where removeCycles_ rs = [r | r@(CFRule c rhs _) <- rs, rhs /= [Cat c]]
