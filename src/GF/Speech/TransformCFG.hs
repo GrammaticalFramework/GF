@@ -145,6 +145,8 @@ removeLeftRecursion start gr
                x <- properLeftCornersOf a,
                not (isLeftRecursive x),
                let a_x = mkCat (Cat a) x,
+               -- this is an extension of LC_LR to avoid generating
+               -- A-X categories for which there are no productions:
                a_x `Set.member` newCats,
                let n' = symbol (\_ -> CFApp (CFRes 1) (CFRes 0))
                                (\_ -> CFRes 0) x] 
