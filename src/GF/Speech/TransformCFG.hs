@@ -89,9 +89,17 @@ stateGFCC = mkGFCC . mkCanon2gfcc . stateGrammarST
 -- * Grammar filtering
 
 -- | Removes all directly and indirectly cyclic productions.
+--   FIXME: this may be too aggressive, only one production
+--   needs to be removed to break a given cycle. But which
+--   one should we pick?
+--   FIXME: Does not (yet) remove productions which are cyclic
+--   because of empty productions.
 removeCycles :: CFRules -> CFRules 
-removeCycles = groupProds . removeCycles_ . ungroupProds
-  where removeCycles_ rs = [r | r@(CFRule c rhs _) <- rs, rhs /= [Cat c]]
+removeCycles = groupProds . f . ungroupProds
+  where f rs = filter (not . isCycle) rs
+          where alias = transitiveClosure $ mkRel [(c,c') | CFRule c [Cat c'] _ <- rs]
+                isCycle (CFRule c [Cat c'] _) = isRelatedTo alias c' c
+                isCycle _ = False
 
 -- | Removes productions which use categories which have no productions.
 -- Only does one pass through the grammar.
