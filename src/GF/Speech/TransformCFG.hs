@@ -49,7 +49,7 @@ data CFTerm
     = CFObj Fun [CFTerm] -- ^ an abstract syntax function with arguments
     | CFAbs Int CFTerm -- ^ A lambda abstraction. The Int is the variable id.
     | CFApp CFTerm CFTerm -- ^ Application
-    | CFRes Int -- ^ The result of the n:th non-terminal
+    | CFRes Int -- ^ The result of the n:th (0-based) non-terminal
     | CFVar Int -- ^ A lambda-bound variable
     | CFMeta String -- ^ A metavariable
   deriving (Eq,Ord,Show)
@@ -175,7 +175,9 @@ removeLeftRecursion start gr
     shiftTerm :: CFTerm -> CFTerm
     shiftTerm (CFObj f ts) = CFObj f (map shiftTerm ts)
     shiftTerm (CFRes 0) = CFVar 1
+    shiftTerm (CFRes n) = CFRes (n-1)
     shiftTerm t = t
+    -- note: the rest don't occur in the original grammar
 
     cats = allCats gr
     rules = ungroupProds gr
