@@ -19,6 +19,7 @@ module GF.Speech.PrGSL (gslPrinter) where
 
 import GF.Data.Utilities
 import GF.Speech.SRG
+import GF.Speech.RegExp
 import GF.Infra.Ident
 
 import GF.Formalism.CFG
@@ -30,6 +31,7 @@ import GF.Probabilistic.Probabilistic (Probs)
 import GF.Compile.ShellState (StateGrammar)
 
 import Data.Char (toUpper,toLower)
+import Data.List (partition)
 
 gslPrinter :: Options -> StateGrammar -> String
 gslPrinter opts s = prGSL $ makeSimpleSRG opts s
@@ -45,13 +47,36 @@ prGSL (SRG{grammarName=name,startCat=start,origStartCat=origStart,rules=rs})
 	      . showString ".MAIN " . prCat start . nl . nl
     prRule (SRGRule cat origCat rhs) = 
 	showString "; " . prtS origCat . nl
-        . prCat cat . sp . wrap "[" (unwordsS (map prAlt rhs)) "]" . nl
+        . prCat cat . sp . brackets (unwordsS (map prAlt (ebnfSRGAlts rhs))) . nl
     -- FIXME: use the probability
-    prAlt (SRGAlt mp _ rhs) = wrap "(" (unwordsS (map prSymbol rhs)) ")"
-    prSymbol (Cat (c,_)) = prCat c
-    prSymbol (Tok t) = wrap "\"" (showString (showToken t)) "\""
-    -- GSL requires an upper case letter in category names
-    prCat c = showString (firstToUpper c)
+    prAlt (EBnfSRGAlt mp _ rhs) = prItem rhs
+
+
+prItem :: EBnfSRGItem -> ShowS
+prItem = f
+  where
+    f (REUnion xs) 
+        | not (null es) = showString "?" . f (REUnion nes)
+        | otherwise = brackets (unwordsS (map f xs))
+      where (es,nes) = partition isEpsilon xs
+    f (REConcat [x]) = f x
+    f (REConcat xs) = parens (unwordsS (map f xs))
+    f (RERepeat x)  = showString "*" . f x
+    f (RESymbol s)  = prSymbol s
+
+parens x = wrap "(" x ")"
+
+brackets x = wrap "[" x "]"
+
+
+prSymbol :: Symbol SRGNT Token -> ShowS
+prSymbol (Cat (c,_)) = prCat c
+prSymbol (Tok t) = wrap "\"" (showString (showToken t)) "\""
+
+-- GSL requires an upper case letter in category names
+prCat :: SRGCat -> ShowS
+prCat c = showString (firstToUpper c)
+
 
 firstToUpper :: String -> String
 firstToUpper [] = []
