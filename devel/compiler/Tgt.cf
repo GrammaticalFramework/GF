@@ -1,0 +1,16 @@
+--- target language
+
+Tg. Object ::= [Fun] ;
+
+FVal. Fun ::= Ident "=" Val ;
+
+terminator Fun ";" ;
+
+VRec. Val ::= "[" [Val] "]" ;
+VPro. Val ::= "(" Val "." Val ")" ;
+VTok. Val ::= String ;
+VArg. Val ::= "$" Integer ;
+VPar. Val ::= Integer ;
+VCat. Val ::= "(" Val Val ")" ;
+
+terminator Val "," ;
