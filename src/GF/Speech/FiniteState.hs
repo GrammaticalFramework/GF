@@ -184,8 +184,7 @@ moveLabelsToNodes = onGraph f
 removeTrivialEmptyNodes :: (Eq a, Ord n) => FA n (Maybe a) () -> FA n (Maybe a) ()
 removeTrivialEmptyNodes = pruneUnusable . skipSimpleEmptyNodes
 
--- | Move edges to empty nodes with exactly one outgoing edge 
---   or exactly one incoming edge to point to the next node(s).
+-- | Move edges to empty nodes to point to the next node(s).
 --   This is not done if the pointed-to node is a final node.
 skipSimpleEmptyNodes :: (Eq a, Ord n) => FA n (Maybe a) () -> FA n (Maybe a) ()
 skipSimpleEmptyNodes fa = onGraph og fa
@@ -196,10 +195,12 @@ skipSimpleEmptyNodes fa = onGraph og fa
     info = nodeInfo g
     changeEdge e@(f,t,()) 
       | isNothing (getNodeLabel info t)
-        && (inDegree info t == 1 || outDegree info t == 1)
+       -- && (i * o <= i + o)
         && not (isFinal fa t)
           = [ (f,t',()) | (_,t',()) <- getOutgoing info t]
       | otherwise = [e]
+--     where i = inDegree info t
+--           o = outDegree info t
 
 isInternal :: Eq n => FA n a b -> n -> Bool
 isInternal (FA _ start final) n = n /= start && n `notElem` final
