@@ -2,21 +2,57 @@ module Eval where
 
 import AbsSrc
 import AbsTgt
+import SMacros
+import TMacros
 
-import qualified Data.Map as M
+import ComposOp
+import STM
+import Env
 
-eval :: Env -> Exp -> Val
-eval env e = case e of
-  ECon c -> look c
-  EStr s -> VTok s
-  ECat x y -> VCat (ev x) (ev y)
- where 
-   look = lookCons env
-   ev = eval env
+eval :: Exp -> STM Env Val
+eval e = case e of
+  EAbs x b -> do
+    addVar x ---- adds new VArg i
+    eval b
+  EApp _ _ -> do
+    let (f,xs) = apps e
+    xs' <- mapM eval xs
+    case f of
+      ECon c -> checks [
+        do
+        v <- lookEnv values c
+        return $ appVal v xs'  
+       ,
+        do
+        e <- lookEnv opers c
+        v <- eval e
+        return $ appVal v xs'
+        ]
+  ECon c -> lookEnv values c
+  EVar x -> lookEnv vars x
+  ECst _ _ -> lookEnv parvals e
+  EStr s -> return $ VTok s
+  ECat x y -> do
+    x' <- eval x
+    y' <- eval y
+    return $ VCat x' y'
+  ERec fs -> do
+    vs <- mapM eval [e | FExp _ e <- fs]
+    return $ VRec vs
 
-data Env = Env {
-  constants :: M.Map Ident Val
-  }
+  ETab cs -> do
+    vs <- mapM eval [e | Cas _ e <- cs] ---- expand and pattern match
+    return $ VRec vs
+   
 
-lookCons :: Env -> Ident -> Val
-lookCons env c = maybe undefined id $ M.lookup c $ constants env
+  ESel t v -> do
+    t' <- eval t
+    v' <- eval v
+    ---- pattern match first
+    return $ compVal [] $ VPro t' v' ---- []
+
+  EPro t v -> do
+    t' <- eval t
+    ---- project first
+    return $ VPro t' (VPar 666) ---- lookup label
+

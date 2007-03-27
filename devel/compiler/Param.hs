@@ -1,38 +1,34 @@
-type Param  = (Id,[Constr])
-type Constr = (Id,[Id])
-type Source = [Param] 
-type Id     = String
+module Param where
 
-type Target = [(Id,((Int,Int),[Id]))]
+import AbsSrc
+import SMacros
 
-compile :: Source -> Target
-compile src = ctyps ++ incss where
-  ctyps = map compT src
-  (typs,cons) = unzip src
-  compT (ty,cs) = 
-    (ty,((sum [product [size t | t <- ts] | (_,ts) <- cs],length cs),[]))
-  size ty = maybe undefined (fst . fst) $ lookup ty ctyps
-  incss = concat $ map (incs 0) cons
-  incs k cs = case cs of
-    (c,ts):cs2 -> 
-      let s = product (map size ts) in (c,((s,k),ts)) : incs (k+s) cs2
-    _ -> []
+import Env
+import STM
 
-newtype Value = V (Id,[Value])
+sizeParType :: [Constr] -> STM Env (Int,Int)
+sizeParType cs = do
+  scs <- mapM sizeC cs
+  return (sum scs, length cs)
+ where
+  sizeC (Con c ts) = do
+    ats <- mapM lookParTypeSize ts
+    return $ product ats
 
-value :: Target -> Value -> Int
-value tg (V (f,xs)) = maybe undefined (snd . fst) (lookup f tg) + posit xs where
-  posit xs = 
-    sum [value tg x * product [size p | (_,p) <- xs2] | 
-                                i         <- [0..length xs -1], 
-                                let (x,_):xs2 = drop i (zip xs args)
-        ]
-  args = maybe undefined snd $ lookup f tg
-  size p = maybe undefined (fst . fst) $ lookup p tg
+lookParTypeSize :: Type -> STM Env Int
+lookParTypeSize ty = case ty of
+  TBas c -> do
+    ty' <- lookEnv typedefs c
+    lookParTypeSize ty'
+  TVal i -> return $ fromInteger i
 
-ex1 :: Source
-ex1 = [
-  ("B",[("T",[]),("F",[])]),
-  ("G",[("M",[]),("Fe",[]),("N",[])]),
-  ("Q",[("Q1",["B"]),("Q2",["B","B"]),("Q3",["B","B","B"])])
-  ]
+allParVals :: [Constr] -> STM Env [Exp]
+allParVals cs = do
+  ess <- mapM alls cs
+  return $ concat ess
+ where
+  alls (Con c []) = do
+    return [constr c []]
+  alls (Con c ts) = do
+    ess <- mapM (lookEnv partypes) ts
+    return [constr c es | es <- sequence ess]

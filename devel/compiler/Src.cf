@@ -36,10 +36,11 @@ ETab. Exp1  ::= "table" "{" [Case] "}" ;
 ETbv. Exp1  ::= "table" "(" Type ")" "{" [Exp] "}" ;
 ECat. Exp  ::= Exp "++" Exp1 ;
 EAbs. Exp  ::= "\\" Ident "->" Exp ;
+ECst. Exp2 ::= "(" Ident "@" [Exp] ")" ;
 
 coercions Exp 2 ;
 
-separator Exp ";" ;
+separator Exp "," ;
 
 FExp. Assign ::= Ident "=" Exp ;
 

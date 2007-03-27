@@ -2,7 +2,7 @@
 
 Tg. Object ::= [Fun] ;
 
-FVal. Fun ::= Ident "=" Val ;
+FVal. Fun ::= Id "=" Val ;
 
 terminator Fun ";" ;
 
@@ -14,3 +14,5 @@ VPar. Val ::= Integer ;
 VCat. Val ::= "(" Val Val ")" ;
 
 terminator Val "," ;
+
+token Id (letter | '_') (letter | digit | '_' | '\'')* ;
