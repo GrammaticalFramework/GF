@@ -1,6 +1,8 @@
 param Num = Sg | Pl ;
 param Gen = Masc | Fem ;
 
+param AG = A Num Gen ;
+
 oper Agr = {g : Gen ; n : Num} ;
 
 oper CN = {s : Num -> Str ; g : Gen} ;
@@ -9,7 +11,7 @@ oper NP = {s : Str ; a : Agr} ;
 oper artDef : Gen -> Str = \g -> table {
   (Masc) => "le" ;
   (Fem) => "la"
-} ! g ;
+} ! $g ;
 
 
 lin Voiture : CN = {
@@ -17,15 +19,18 @@ lin Voiture : CN = {
     (Sg) => "voiture" ;
     (Pl) => "voitures"
   } ;
-  g = Fem
+  g = (Fem@)
 } ;
 
+{-
 lin Bus : CN = {
   s = table {$x => "bus"} ;
-  g = Masc
+  g = (Masc@)
 } ;
 
+
 lin Def : CN -> NP = \cn -> {
-  s = artDef cn.g ++ cn.s ! Sg ;
-  a = {g = cn.g ; n = Sg} 
+  s = artDef $cn.g ++ $cn.s ! (Sg@) ;
+  a = {g = $cn.g ; n = (Sg@)} 
 } ;
+-}
