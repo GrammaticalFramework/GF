@@ -18,17 +18,15 @@ eval e = case e of
     let (f,xs) = apps e
     xs' <- mapM eval xs
     case f of
-      ECon c -> checks [
-        do
+      ECon c -> do
         v <- lookEnv values c
         return $ appVal v xs'  
-       ,
-        do
+      EOpr c -> do
         e <- lookEnv opers c
-        v <- eval e
+        v <- eval e           ---- not possible in general
         return $ appVal v xs'
-        ]
   ECon c -> lookEnv values c
+  EOpr c -> lookEnv opers c >>= eval ---- not possible in general
   EVar x -> lookEnv vars x
   ECst _ _ -> lookEnv parvals e
   EStr s -> return $ VTok s

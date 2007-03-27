@@ -25,9 +25,11 @@ FTyp. Typing ::= Ident ":" Type ;
 separator Typing ";" ;
 
 EVar. Exp2 ::= "$" Ident ;
+EOpr. Exp2 ::= "&" Ident ;
 ECon. Exp2 ::= Ident ;
 EVal. Exp2 ::= Integer ;
 EStr. Exp2 ::= String ;
+ECst. Exp2 ::= "(" Ident "@" [Exp] ")" ;
 ERec. Exp2 ::= "{" [Assign] "}" ;
 EApp. Exp1 ::= Exp1 Exp2 ;
 ESel. Exp1 ::= Exp1 "!" Exp2 ;
@@ -36,7 +38,6 @@ ETab. Exp1  ::= "table" "{" [Case] "}" ;
 ETbv. Exp1  ::= "table" "(" Type ")" "{" [Exp] "}" ;
 ECat. Exp  ::= Exp "++" Exp1 ;
 EAbs. Exp  ::= "\\" Ident "->" Exp ;
-ECst. Exp2 ::= "(" Ident "@" [Exp] ")" ;
 
 coercions Exp 2 ;
 
