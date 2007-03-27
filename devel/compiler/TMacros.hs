@@ -11,6 +11,10 @@ compVal args = comp where
     VRec vs  -> VRec $ map comp vs
     VPro r p -> case (comp r, comp p) of
       (VRec vs, VPar i) -> vs !! fromInteger i 
-    VArg i   -> args !! fromInteger i
+      (r',p') -> VPro r' p' ---- not at runtime
+    VArg j
+      | i < length args -> args !! i ---- not needed at runtime
+      | otherwise -> val   ---- not the right thing at compiletime either
+          where i = fromInteger j
     VCat x y -> VCat (comp x) (comp y)
     _ -> val

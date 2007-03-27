@@ -8,14 +8,13 @@ oper Agr = {g : Gen ; n : Num} ;
 oper CN = {s : Num -> Str ; g : Gen} ;
 oper NP = {s : Str ; a : Agr} ;
 
-oper artDef : Gen -> Str = \g -> table {
+oper artDef : Gen -> Str = \g -> table Gen {
   (Masc) => "le" ;
   (Fem) => "la"
 } ! $g ;
 
-
 lin Voiture : CN = {
-  s = table {
+  s = table Num {
     (Sg) => "voiture" ;
     (Pl) => "voitures"
   } ;
@@ -24,13 +23,20 @@ lin Voiture : CN = {
 
 
 lin Bus : CN = {
-  s = table {$x => "bus"} ;
+  s = table Num {$x => "bus"} ;
   g = (Masc@)
 } ;
 
-{-
+lin Indef : CN -> NP = \cn -> {
+  s = table Gen {
+        (Masc) => "un" ;
+        $x     => "une"
+        } ! $cn.g ++ $cn.s ! (Sg@) ;
+  a = {g = $cn.g ; n = (Sg@)} 
+} ;
+
+
 lin Def : CN -> NP = \cn -> {
   s = &artDef $cn.g ++ $cn.s ! (Sg@) ;
   a = {g = $cn.g ; n = (Sg@)} 
 } ;
--}
