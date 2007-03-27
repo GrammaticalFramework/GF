@@ -12,9 +12,6 @@ import qualified Data.Map as M
 
 prEnv :: Env -> IO ()
 prEnv env = do
-  putStrLn "--# values"
-  mapM_ putStrLn 
-    [prs c ++ " = " ++ prt val | (c,val) <- M.toList $ values env]
   putStrLn "--# types"
   mapM_ putStrLn 
     [prs c ++ " : " ++ prs val | (c,val) <- M.toList $ types env]
@@ -27,6 +24,10 @@ prEnv env = do
   putStrLn "--# parvals"
   mapM_ putStrLn 
     [prs c ++ " = " ++ prt val | (c,val) <- M.toList $ parvals env]
+  putStrLn "--# values"
+  mapM_ putStrLn 
+    [prs c ++ " = " ++ prt val | (c,val) <- M.toList $ values env]
+
 
 prs :: (S.Print a) => a -> String
 prs = S.printTree

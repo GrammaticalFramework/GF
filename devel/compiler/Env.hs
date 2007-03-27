@@ -11,13 +11,14 @@ data Env = Env {
   types    :: M.Map Ident Type,
   opers    :: M.Map Ident Exp,
   typedefs :: M.Map Ident Type,
+  parsizes :: M.Map Type  Int,
   partypes :: M.Map Type  [Exp],
   parvals  :: M.Map Exp   Val,
   vars     :: M.Map Ident Val
 ---  constrs  :: M.Map Ident ([Int] -> Int)
   }
 
-emptyEnv = Env M.empty M.empty M.empty M.empty M.empty M.empty M.empty
+emptyEnv = Env M.empty M.empty M.empty M.empty M.empty M.empty M.empty M.empty
 
 lookEnv :: (Show i, Ord i) => (Env -> M.Map i a) -> i -> STM Env a
 lookEnv field c = do
@@ -35,6 +36,9 @@ addOper c v = updateSTM (\env -> (env{opers = M.insert c v (opers env)}))
 
 addTypedef :: Ident -> Type -> STM Env ()
 addTypedef c v = updateSTM (\env -> (env{typedefs = M.insert c v (typedefs env)}))
+
+addParsize :: Type -> Int -> STM Env ()
+addParsize c v = updateSTM (\env -> (env{parsizes = M.insert c v (parsizes env)}))
 
 addPartype :: Type -> [Exp] -> STM Env ()
 addPartype c v = updateSTM (\env -> (env{partypes = M.insert c v (partypes env)}))

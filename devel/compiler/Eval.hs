@@ -4,10 +4,11 @@ import AbsSrc
 import AbsTgt
 import SMacros
 import TMacros
-
-import ComposOp
-import STM
+import Match
 import Env
+
+import STM
+
 
 eval :: Exp -> STM Env Val
 eval e = case e of
@@ -38,11 +39,13 @@ eval e = case e of
     vs <- mapM eval [e | FExp _ e <- fs]
     return $ VRec vs
 
-  ETab cs -> do
-    vs <- mapM eval [e | Cas _ e <- cs] ---- expand and pattern match
+  ETab ty cs -> do
+--    sz <- lookEnv parsizes ty
+--    let ps = map (VPar . toInteger) [0..sz-1]
+    ps <- lookEnv partypes ty
+    vs <- mapM (\p -> match cs p >>= eval) ps
     return $ VRec vs
    
-
   ESel t v -> do
     t' <- eval t
     v' <- eval v

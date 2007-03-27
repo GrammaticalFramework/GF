@@ -27,9 +27,10 @@ compDef d = case d of
     addOper f exp
   DPar  p cs -> do
     v <- sizeParType cs
-    addTypedef p $ TVal $ toInteger $ fst v
+    let ty = TBas p
+    addParsize ty $ fst v
     vals <- allParVals cs
-    addPartype (TBas p) vals
+    addPartype ty vals
     mapM_ (uncurry addParVal) (zip vals (map VPar [0..])) 
   DOpty a ty -> do
     addTypedef a ty

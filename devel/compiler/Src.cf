@@ -34,8 +34,7 @@ ERec. Exp2 ::= "{" [Assign] "}" ;
 EApp. Exp1 ::= Exp1 Exp2 ;
 ESel. Exp1 ::= Exp1 "!" Exp2 ;
 EPro. Exp1 ::= Exp1 "." Exp2 ;
-ETab. Exp1  ::= "table" "{" [Case] "}" ;
-ETbv. Exp1  ::= "table" "(" Type ")" "{" [Exp] "}" ;
+ETab. Exp1 ::= "table" Type "{" [Case] "}" ;
 ECat. Exp  ::= Exp "++" Exp1 ;
 EAbs. Exp  ::= "\\" Ident "->" Exp ;
 

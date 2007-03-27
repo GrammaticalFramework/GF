@@ -12,15 +12,8 @@ sizeParType cs = do
   return (sum scs, length cs)
  where
   sizeC (Con c ts) = do
-    ats <- mapM lookParTypeSize ts
+    ats <- mapM (lookEnv parsizes) ts
     return $ product ats
-
-lookParTypeSize :: Type -> STM Env Int
-lookParTypeSize ty = case ty of
-  TBas c -> do
-    ty' <- lookEnv typedefs c
-    lookParTypeSize ty'
-  TVal i -> return $ fromInteger i
 
 allParVals :: [Constr] -> STM Env [Exp]
 allParVals cs = do
