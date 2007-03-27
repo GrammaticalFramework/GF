@@ -22,15 +22,15 @@ lin Voiture : CN = {
   g = (Fem@)
 } ;
 
-{-
+
 lin Bus : CN = {
   s = table {$x => "bus"} ;
   g = (Masc@)
 } ;
 
-
+{-
 lin Def : CN -> NP = \cn -> {
-  s = artDef $cn.g ++ $cn.s ! (Sg@) ;
+  s = &artDef $cn.g ++ $cn.s ! (Sg@) ;
   a = {g = $cn.g ; n = (Sg@)} 
 } ;
 -}
