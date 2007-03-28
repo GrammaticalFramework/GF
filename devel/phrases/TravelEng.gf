@@ -66,21 +66,20 @@ printname cat
   Kind = "what kind of product do you mean?" ;
 
 lin
-  HowMuchCost p = {s = ["how much does"] ++ 
-    variants {
-    p.s ;
-    -- no kind given
-    "this" ;
-    -- no product given at all
-    "it"
-    } ++ 
-    "cost"} ;
+  HowMuchCost p = {s = ["how much does"] ++ item p ++ "cost"} ;
+  IWantToHave p = {s = ["I would like to have"] ++ item p} ;
 
-  This k = {s = "this" ++ k.s} ;
+  This k = {s = "this" ++ variants {k.s ; []}} ;
 
   Beer = {s = "beer"} ;
   Shirt = {s = "shirt"} ;
 
-
+oper
+  item : SS -> Str = \p ->
+    variants {
+    p.s ;
+    -- no product given at all
+    "it"
+    } ;
 
 }

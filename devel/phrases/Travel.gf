@@ -45,6 +45,7 @@ cat
 
 fun
   HowMuchCost : Product -> Order ;
+  IWantToHave : Product -> Order ;
 
   This : Kind -> Product ;
 
