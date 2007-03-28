@@ -70,6 +70,7 @@ printname cat
 
 lin
   HowMuchCost p = ss (p.s ++ thao_s ++ rai_s) ;
+  IWantToHave p = ss (khoo_s ++ p.s ++ noi_s) ;
 
   This k = ss (k.s ++ nii_s) ;
 
