@@ -9,7 +9,7 @@ Aarne Ranta
 %!target:html
 
 [GSLT   http://www.gslt.hum.gu.se],
-[NGSLT  http://ngslt.org/},
+[NGSLT  http://ngslt.org/],
 and 
 [Department of Computer Science and Engineering http://www.chalmers.se/cse/EN/], 
 Chalmers University of Technology and Gothenburg University.
