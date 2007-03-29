@@ -8,7 +8,10 @@ Aarne Ranta
 
 %!target:html
 
-GSLT and Department of Computer Science and Engineering, 
+[GSLT   http://www.gslt.hum.gu.se],
+[NGSLT  http://ngslt.org/},
+and 
+[Department of Computer Science and Engineering http://www.chalmers.se/cse/EN/], 
 Chalmers University of Technology and Gothenburg University.
 
 Autumn Term 2007.
