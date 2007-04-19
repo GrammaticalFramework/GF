@@ -6,7 +6,7 @@
 </HEAD><BODY BGCOLOR="white" TEXT="black">
 <P ALIGN="center"><CENTER><H1> Constructors: the High-Level Syntax API</H1>
 <FONT SIZE="4">
-<I>Last update: 2007-04-19 23:04:43 CEST</I><BR>
+<I>Last update: 2007-04-19 23:22:26 CEST</I><BR>
 </FONT></CENTER>
 
 <P></P>
@@ -184,8 +184,15 @@ to this.
           mkDet : Digit -&gt; Det                 ;   -- five (men)
           mkDet : Pron -&gt; Det                      -- my (house)
           } ;
+    
+       def_Det : Det ;   -- the (man)
+       indef_Det : Det ; -- a (man)
+       mass_Det : Det ;  -- (water)
 </PRE>
 <P></P>
+<P>
+More determiners are available in the Structural module
+</P>
 <A NAME="toc5"></A>
 <H2>Numerals - cardinal and ordinal</H2>
 <PRE>
