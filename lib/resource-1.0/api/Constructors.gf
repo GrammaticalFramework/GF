@@ -157,11 +157,17 @@ incomplete resource Constructors = open Grammar in {
       mkCN : N2 -> CN               ;   -- son
       mkCN : N3 -> CN               ;   -- flight
       mkCN : AP -> CN  -> CN        ;   -- big house
+      mkCN : AP ->  N  -> CN        ;   -- big house
       mkCN : CN -> AP  -> CN        ;   -- big house
+      mkCN :  N -> AP  -> CN        ;   -- big house
       mkCN : CN -> RS  -> CN        ;   -- house that John owns
+      mkCN :  N -> RS  -> CN        ;   -- house that John owns
       mkCN : CN -> Adv -> CN        ;   -- house on the hill
+      mkCN :  N -> Adv -> CN        ;   -- house on the hill
       mkCN : CN -> SC  -> CN        ;   -- fact that John smokes, question if he does
-      mkCN : CN -> NP  -> CN            -- number x, numbers x and y
+      mkCN :  N -> SC  -> CN        ;   -- fact that John smokes, question if he does
+      mkCN : CN -> NP  -> CN        ;   -- number x, numbers x and y
+      mkCN :  N -> NP  -> CN            -- number x, numbers x and y
       } ;
 
 --2 Adjectival phrases
@@ -397,16 +403,28 @@ incomplete resource Constructors = open Grammar in {
                                          =    UseN3    ;
       mkCN : AP -> CN  -> CN     -- big house
                                          =    AdjCN    ;
+      mkCN : AP ->  N  -> CN     -- big house
+                                         =    \x,y -> AdjCN x (UseN y)   ;
       mkCN : CN -> AP  -> CN     -- big house
                                          =    \x,y -> AdjCN y x    ;
+      mkCN :  N -> AP  -> CN     -- big house
+                                         =    \x,y -> AdjCN y (UseN x)    ;
       mkCN : CN -> RS  -> CN     -- house that John owns
                                          =    RelCN    ;
+      mkCN :  N -> RS  -> CN     -- house that John owns
+                                         =    \x,y -> RelCN (UseN x) y   ;
       mkCN : CN -> Adv -> CN     -- house on the hill
                                          =    AdvCN    ;
+      mkCN :  N -> Adv -> CN     -- house on the hill
+                                         =    \x,y -> AdvCN (UseN x) y  ;
       mkCN : CN -> SC  -> CN     -- fact that John smokes, question if he does
                                          =    SentCN   ;
+      mkCN :  N -> SC  -> CN     -- fact that John smokes, question if he does
+                                         =    \x,y -> SentCN (UseN x) y  ;
       mkCN : CN -> NP  -> CN     -- number x, numbers x and y
-                                         =    ApposCN
+                                         =    ApposCN ;
+      mkCN :  N -> NP  -> CN     -- number x, numbers x and y
+                                         =    \x,y -> ApposCN (UseN x) y
       } ;
 
 
