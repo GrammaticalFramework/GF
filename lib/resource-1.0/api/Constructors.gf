@@ -132,6 +132,12 @@ incomplete resource Constructors = open Grammar in {
       mkDet : Pron -> Det                      -- my (house)
       } ;
 
+   def_Det : Det ;   -- the (man)
+   indef_Det : Det ; -- a (man)
+   mass_Det : Det ;  -- (water)
+
+-- More determiners are available in the Structural module
+   
 
 --2 Numerals - cardinal and ordinal 
 
@@ -369,6 +375,12 @@ incomplete resource Constructors = open Grammar in {
       mkDet : Pron -> Det      -- my (house)
                                          =    \p -> DetSg (SgQuant (PossPron p)) NoOrd
       } ;
+
+
+    def_Det : Det = DetSg (SgQuant DefArt) NoOrd ;   -- the (man)
+    indef_Det : Det = DetSg (SgQuant IndefArt) NoOrd ; -- a (man)
+    mass_Det : Det = DetSg MassDet NoOrd;  -- (water)
+
 
     mkNum = overload {
       mkNum : Num                -- [no num]
