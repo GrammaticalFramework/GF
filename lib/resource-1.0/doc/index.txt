@@ -22,7 +22,7 @@ included.
     can be built by the function ``mkC``.
   - [Combinators gfdoc/Combinators.html]: cross-cut grammatical functions: 
     predication, application, modification, coordination.
-  - [Symbolic gfdoc/Symbolig.html]: noun phrases with mathematical symbols.
+  - [Symbolic gfdoc/Symbolic.html]: noun phrases with mathematical symbols.
 
 
   An example of use is [``logic`` ../../../examples/logic].
