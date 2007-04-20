@@ -20,9 +20,11 @@ coercions Type 1 ;
 
 terminator Type "" ;
 
-FTyp. Typing ::= Ident ":" Type ;
+FTyp. Typing ::= Label ":" Type ;
 
 separator Typing ";" ;
+
+Lab.  Label ::= Ident "#" Integer ;
 
 EVar. Exp2 ::= "$" Ident ;
 EOpr. Exp2 ::= "&" Ident ;
@@ -33,7 +35,7 @@ ECst. Exp2 ::= "(" Ident "@" [Exp] ")" ;
 ERec. Exp2 ::= "{" [Assign] "}" ;
 EApp. Exp1 ::= Exp1 Exp2 ;
 ESel. Exp1 ::= Exp1 "!" Exp2 ;
-EPro. Exp1 ::= Exp1 "." Exp2 ;
+EPro. Exp1 ::= Exp1 "." Label ;
 ETab. Exp1 ::= "table" Type "{" [Case] "}" ;
 ECat. Exp  ::= Exp "++" Exp1 ;
 EAbs. Exp  ::= "\\" Ident "->" Exp ;
@@ -42,7 +44,7 @@ coercions Exp 2 ;
 
 separator Exp "," ;
 
-FExp. Assign ::= Ident "=" Exp ;
+FExp. Assign ::= Label "=" Exp ;
 
 separator Assign ";" ;
 
@@ -57,7 +59,7 @@ PCon. Patt ::= "(" Ident [Patt] ")" ;
 
 terminator Patt "" ;
 
-FPatt. AssPatt ::= Ident "=" Patt ;
+FPatt. AssPatt ::= Label "=" Patt ;
 
 separator AssPatt ";" ;
 
