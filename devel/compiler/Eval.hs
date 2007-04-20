@@ -52,8 +52,6 @@ eval e = case e of
     ---- pattern match first
     return $ compVal [] $ VPro t' v' ---- []
 
-  EPro t v -> do
+  EPro t v@(Lab _ i) -> do
     t' <- eval t
-    ---- project first
-    return $ VPro t' (VPar 666) ---- lookup label
-
+    return $ compVal [] $ VPro t' (VPar i)

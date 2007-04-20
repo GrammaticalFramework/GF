@@ -3,10 +3,10 @@ param Gen = Masc | Fem ;
 
 param AG = A Num Gen ;
 
-oper Agr = {g : Gen ; n : Num} ;
+oper Agr = {g#0 : Gen ; n#1 : Num} ;
 
-oper CN = {s : Num -> Str ; g : Gen} ;
-oper NP = {s : Str ; a : Agr} ;
+oper CN = {s#1 : Num -> Str ; g#0 : Gen} ;
+oper NP = {s#1 : Str ; a#0 : Agr} ;
 
 oper artDef : Gen -> Str = \g -> table Gen {
   (Masc) => "le" ;
@@ -14,29 +14,32 @@ oper artDef : Gen -> Str = \g -> table Gen {
 } ! $g ;
 
 lin Voiture : CN = {
-  s = table Num {
+  s#1 = table Num {
     (Sg) => "voiture" ;
     (Pl) => "voitures"
   } ;
-  g = (Fem@)
+  g#0 = (Fem@)
 } ;
 
 
 lin Bus : CN = {
-  s = table Num {$x => "bus"} ;
-  g = (Masc@)
+  s#1 = table Num {$x => "bus"} ;
+  g#0 = (Masc@)
 } ;
 
 lin Indef : CN -> NP = \cn -> {
-  s = table Gen {
+  s#1 = table Gen {
         (Masc) => "un" ;
         $x     => "une"
-        } ! $cn.g ++ $cn.s ! (Sg@) ;
-  a = {g = $cn.g ; n = (Sg@)} 
+        } ! $cn.g#0 ++ $cn.s#1 ! (Sg@) ;
+  a#0 = {g#0 = $cn.g#0 ; n#1 = (Sg@)} 
 } ;
 
 
 lin Def : CN -> NP = \cn -> {
-  s = &artDef $cn.g ++ $cn.s ! (Sg@) ;
-  a = {g = $cn.g ; n = (Sg@)} 
+  s#1 = &artDef $cn.g#0 ++ $cn.s#1 ! (Sg@) ;
+  a#0 = {g#0 = $cn.g#0 ; n#1 = (Sg@)} 
 } ;
+
+lin UneVoiture : NP = Indef Voiture ;
+lin LaVoiture : NP = Def Voiture ;
