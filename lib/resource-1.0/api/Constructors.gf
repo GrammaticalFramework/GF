@@ -38,6 +38,7 @@ incomplete resource Constructors = open Grammar in {
 
     mkText : overload {
       mkText : Text               ;   -- [empty text]
+      mkText : Phr -> Text        ;   -- John walks.
       mkText : Phr -> Text -> Text    -- John walks. ...
       } ;
 
@@ -591,6 +592,8 @@ incomplete resource Constructors = open Grammar in {
     mkText = overload {
       mkText : Text                   -- [empty text]
                                          =    TEmpty      ;
+      mkText : Phr -> Text            -- John walks.
+                                         =    \x -> TFullStop x TEmpty  ;
       mkText : Phr -> Text -> Text    -- John walks. ...
                                          =    TFullStop
       } ;
