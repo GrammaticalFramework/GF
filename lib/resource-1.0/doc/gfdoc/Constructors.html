@@ -6,7 +6,7 @@
 </HEAD><BODY BGCOLOR="white" TEXT="black">
 <P ALIGN="center"><CENTER><H1> Constructors: the High-Level Syntax API</H1>
 <FONT SIZE="4">
-<I>Last update: 2007-04-19 23:22:26 CEST</I><BR>
+<I>Last update: 2007-04-21 00:55:05 CEST</I><BR>
 </FONT></CENTER>
 
 <P></P>
@@ -85,6 +85,7 @@ to this.
 <PRE>
         mkText : overload {
           mkText : Text               ;   -- [empty text]
+          mkText : Phr -&gt; Text        ;   -- John walks.
           mkText : Phr -&gt; Text -&gt; Text    -- John walks. ...
           } ;
     
@@ -125,7 +126,10 @@ to this.
           mkCl : VP -&gt; Cl         ;   -- it rains
           mkCl : NP  -&gt; RS -&gt; Cl  ;   -- it is you who did it
           mkCl : Adv -&gt; S  -&gt; Cl  ;   -- it is yesterday she arrived
-          mkCl : NP -&gt; Cl             -- there is a house
+          mkCl : NP -&gt; Cl         ;   -- there is a house
+          mkCl : NP -&gt; AP -&gt; Cl   ;   -- John is warm
+          mkCl : NP -&gt; NP -&gt; Cl   ;   -- John is a man
+          mkCl : NP -&gt; Adv -&gt; Cl      -- John is here
           } ;
 </PRE>
 <P></P>
@@ -274,7 +278,8 @@ More determiners are available in the Structural module
 <PRE>
         mkQS : overload {
           mkQS : Tense -&gt; Ant -&gt; Pol -&gt; QCl -&gt; QS ; -- wouldn't John have walked
-          mkQS : QCl  -&gt; QS                         -- does John walk
+          mkQS : QCl  -&gt; QS                       ; -- who walks
+          mkQS : Cl   -&gt; QS                         -- does John walk
           } ;
     
         mkQCl : overload {
