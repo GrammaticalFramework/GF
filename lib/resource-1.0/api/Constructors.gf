@@ -76,7 +76,10 @@ incomplete resource Constructors = open Grammar in {
       mkCl : VP -> Cl         ;   -- it rains
       mkCl : NP  -> RS -> Cl  ;   -- it is you who did it
       mkCl : Adv -> S  -> Cl  ;   -- it is yesterday she arrived
-      mkCl : NP -> Cl             -- there is a house
+      mkCl : NP -> Cl         ;   -- there is a house
+      mkCl : NP -> AP -> Cl   ;   -- John is warm
+      mkCl : NP -> NP -> Cl   ;   -- John is a man
+      mkCl : NP -> Adv -> Cl      -- John is here
       } ;
 
 --2 Verb phrases and imperatives
@@ -211,7 +214,8 @@ incomplete resource Constructors = open Grammar in {
 
     mkQS : overload {
       mkQS : Tense -> Ant -> Pol -> QCl -> QS ; -- wouldn't John have walked
-      mkQS : QCl  -> QS                         -- does John walk
+      mkQS : QCl  -> QS                       ; -- who walks
+      mkQS : Cl   -> QS                         -- does John walk
       } ;
 
     mkQCl : overload {
@@ -326,7 +330,13 @@ incomplete resource Constructors = open Grammar in {
       mkCl : Adv -> S  -> Cl   -- it is yesterday she arrived
                                          =    CleftAdv   ;
       mkCl : NP -> Cl          -- there is a house
-                                         =    ExistNP
+                                         =    ExistNP    ;
+      mkCl : NP -> AP -> Cl    -- John is warm
+	                                =     \x,y -> PredVP x (UseComp (CompAP y)) ;
+      mkCl : NP -> NP -> Cl    -- John is a man
+	                                 =    \x,y -> PredVP x (UseComp (CompNP y)) ;
+      mkCl : NP -> Adv -> Cl   -- John is here
+	                                 =    \x,y -> PredVP x (UseComp (CompAdv y))
       } ;
 
     mkNP = overload {
@@ -566,7 +576,9 @@ incomplete resource Constructors = open Grammar in {
       mkQS : Tense -> Ant -> Pol -> QCl -> QS
                                          =    UseQCl  ;
       mkQS : QCl  -> QS
-                                         =    UseQCl TPres ASimul PPos
+                                         =    UseQCl TPres ASimul PPos ;
+      mkQS : Cl   -> QS                  
+	                                 =    \x -> UseQCl TPres ASimul PPos (QuestCl x)
       } ;
 
     mkRS = overload {
