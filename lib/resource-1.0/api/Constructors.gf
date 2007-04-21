@@ -89,8 +89,10 @@ incomplete resource Constructors = open Grammar in {
       mkCl : NP  -> RS -> Cl  ;   -- it is you who did it
       mkCl : Adv -> S  -> Cl  ;   -- it is yesterday she arrived
       mkCl : NP -> Cl         ;   -- there is a house
-      mkCl : NP -> AP -> Cl   ;   -- John is warmer than Mary
+      mkCl : NP -> AP -> Cl   ;   -- John is nice and warm
       mkCl : NP -> A  -> Cl   ;   -- John is warm
+      mkCl : NP -> A -> NP -> Cl; -- John is warmer than Mary
+      mkCl : NP -> A2 -> NP -> Cl; -- John is married to Mary
       mkCl : NP -> NP -> Cl   ;   -- John is a man
       mkCl : NP -> Adv -> Cl      -- John is here
       } ;
@@ -344,10 +346,14 @@ incomplete resource Constructors = open Grammar in {
                                          =    CleftAdv   ;
       mkCl : NP -> Cl          -- there is a house
                                          =    ExistNP    ;
-      mkCl : NP -> AP -> Cl    -- John is warmer than Mary
+      mkCl : NP -> AP -> Cl    -- John is nice and warm
 	                                =     \x,y -> PredVP x (UseComp (CompAP y)) ;
       mkCl : NP -> A  -> Cl    -- John is warm
 	                                =     \x,y -> PredVP x (UseComp (CompAP (PositA y))) ;
+      mkCl : NP -> A -> NP -> Cl -- John is warmer than Mary
+	                                =     \x,y,z -> PredVP x (UseComp (CompAP (ComparA y z))) ;
+      mkCl : NP -> A2 -> NP -> Cl -- John is married to Mary
+	                                =     \x,y,z -> PredVP x (UseComp (CompAP (ComplA2 y z))) ;
       mkCl : NP -> NP -> Cl    -- John is a man
 	                                 =    \x,y -> PredVP x (UseComp (CompNP y)) ;
       mkCl : NP -> Adv -> Cl   -- John is here
