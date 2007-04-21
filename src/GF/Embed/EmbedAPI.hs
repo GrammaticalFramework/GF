@@ -15,7 +15,7 @@
 
 module GF.Embed.EmbedAPI where
 
-import GF.Compile.ShellState (ShellState,grammar2shellState,canModules,stateGrammarOfLang,abstract,grammar,firstStateGrammar,allLanguages,allCategories)
+import GF.Compile.ShellState (ShellState,grammar2shellState,canModules,stateGrammarOfLang,abstract,grammar,firstStateGrammar,allLanguages,allCategories,stateOptions)
 import GF.UseGrammar.Linear (linTree2string)
 import GF.UseGrammar.GetTree (string2tree)
 import GF.Embed.EmbedParsing (parseString)
@@ -79,7 +79,7 @@ linearize mgr lang =
  where
    gr    = grammar sgr
    sgr   = stateGrammarOfLang mgr (zIdent lang)
-   untok = customOrDefault noOptions useUntokenizer customUntokenizer sgr
+   untok = customOrDefault (stateOptions sgr) useUntokenizer customUntokenizer sgr
 
 parse mgr lang cat = 
   map tree2exp . 
