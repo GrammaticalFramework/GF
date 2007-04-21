@@ -75,6 +75,15 @@ incomplete resource Combinators = open Grammar in {
 
       } ;
 
+--2 Negation
+
+    neg : overload {
+      neg : Imp -> Utt ;
+      neg : Cl -> S ;
+      neg : QCl -> QS ;
+      neg : RCl -> RS 
+    };
+
 --2 Text append
 
 -- This is not in ground API, because it would destroy parsing.
@@ -185,6 +194,17 @@ incomplete resource Combinators = open Grammar in {
                                   = \nu,n -> DetCN (DetPl (PlQuant IndefArt) (NumNumeral nu) NoOrd) (UseN n)
 
       } ;
+
+    neg = overload {
+      neg : Imp -> Utt 
+	                 = UttImpSg PNeg ;
+      neg : Cl -> S 
+	                 = UseCl TPres ASimul PNeg;
+      neg : QCl -> QS 
+	                 = UseQCl TPres ASimul PNeg;
+      neg : RCl -> RS 
+	                 = UseRCl TPres ASimul PNeg
+    };
 
 -- This is not in ground API, because it would destroy parsing.
 
