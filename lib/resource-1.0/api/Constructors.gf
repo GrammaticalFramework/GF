@@ -85,7 +85,9 @@ incomplete resource Constructors = open Grammar in {
       } ;
 
     mkCl : overload {
-      mkCl : NP -> VP -> Cl   ;   -- John walks
+      mkCl : NP -> VP -> Cl   ;   -- John wants to walk
+      mkCl : NP -> V -> Cl    ;   -- John walks
+      mkCl : NP -> V2 -> NP -> Cl ; -- John uses it
       mkCl : VP -> Cl         ;   -- it rains
       mkCl : NP  -> RS -> Cl  ;   -- it is you who did it
       mkCl : Adv -> S  -> Cl  ;   -- it is yesterday she arrived
@@ -339,8 +341,12 @@ incomplete resource Constructors = open Grammar in {
       } ;
 
     mkCl = overload {
-      mkCl : NP -> VP -> Cl           -- John walks
+      mkCl : NP -> VP -> Cl           -- John wants to walk walks
                                          =    PredVP  ;
+      mkCl : NP -> V -> Cl           -- John walks
+                                         =    \s,v -> PredVP s (UseV v);
+      mkCl : NP -> V2 -> NP -> Cl    -- John uses it
+                                         =    \s,v,o -> PredVP s (ComplV2 v o);
       mkCl : VP -> Cl          -- it rains
                                          =    ImpersCl   ;
       mkCl : NP  -> RS -> Cl   -- it is you who did it
