@@ -180,10 +180,12 @@ incomplete resource Constructors = open Grammar in {
       mkCN : N3 -> NP -> NP -> CN   ;   -- flight from Moscow (to Paris)
       mkCN : N2 -> CN               ;   -- son
       mkCN : N3 -> CN               ;   -- flight
-      mkCN : AP -> CN  -> CN        ;   -- big house
-      mkCN : AP ->  N  -> CN        ;   -- big house
-      mkCN : CN -> AP  -> CN        ;   -- big house
-      mkCN :  N -> AP  -> CN        ;   -- big house
+      mkCN : AP -> CN  -> CN        ;   -- nice and big blue house
+      mkCN : AP ->  N  -> CN        ;   -- nice and big house
+      mkCN : CN -> AP  -> CN        ;   -- nice and big blue house
+      mkCN :  N -> AP  -> CN        ;   -- nice and big house
+      mkCN :  A -> CN  -> CN        ;   -- big blue house
+      mkCN :  A ->  N  -> CN        ;   -- big house
       mkCN : CN -> RS  -> CN        ;   -- house that John owns
       mkCN :  N -> RS  -> CN        ;   -- house that John owns
       mkCN : CN -> Adv -> CN        ;   -- house on the hill
@@ -444,14 +446,18 @@ incomplete resource Constructors = open Grammar in {
                                          =    UseN2    ;
       mkCN : N3 -> CN            -- flight
                                          =    UseN3    ;
-      mkCN : AP -> CN  -> CN     -- big house
+      mkCN : AP -> CN  -> CN     -- nice and big blue house
                                          =    AdjCN    ;
-      mkCN : AP ->  N  -> CN     -- big house
+      mkCN : AP ->  N  -> CN     -- nice and big house
                                          =    \x,y -> AdjCN x (UseN y)   ;
-      mkCN : CN -> AP  -> CN     -- big house
+      mkCN : CN -> AP  -> CN     -- nice and big blue house
                                          =    \x,y -> AdjCN y x    ;
-      mkCN :  N -> AP  -> CN     -- big house
+      mkCN :  N -> AP  -> CN     -- nice and big house
                                          =    \x,y -> AdjCN y (UseN x)    ;
+      mkCN :  A -> CN  -> CN     -- big blue house
+	                                 =    \x,y -> AdjCN (PositA x) y;
+      mkCN :  A ->  N  -> CN     -- big house
+	                                 =    \x,y -> AdjCN (PositA x) (UseN y);
       mkCN : CN -> RS  -> CN     -- house that John owns
                                          =    RelCN    ;
       mkCN :  N -> RS  -> CN     -- house that John owns
