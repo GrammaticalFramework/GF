@@ -6,7 +6,7 @@
 </HEAD><BODY BGCOLOR="white" TEXT="black">
 <P ALIGN="center"><CENTER><H1> Constructors: the High-Level Syntax API</H1>
 <FONT SIZE="4">
-<I>Last update: 2007-04-21 00:55:05 CEST</I><BR>
+<I>Last update: 2007-04-21 12:01:55 CEST</I><BR>
 </FONT></CENTER>
 
 <P></P>
@@ -86,6 +86,11 @@ to this.
         mkText : overload {
           mkText : Text               ;   -- [empty text]
           mkText : Phr -&gt; Text        ;   -- John walks.
+          mkText : Utt -&gt; Text        ;   -- John walks.
+          mkText : S -&gt; Text          ;   -- John walks.
+          mkText : QS -&gt; Text         ;   -- Does John walk?
+          mkText : Imp -&gt; Text        ;   -- Walk!
+          mkText : Pol -&gt; Imp -&gt; Text ;   -- Don't walk!
           mkText : Phr -&gt; Text -&gt; Text    -- John walks. ...
           } ;
     
@@ -112,8 +117,14 @@ to this.
 <H2>Sentences, and clauses</H2>
 <PRE>
         mkS : overload {
+          mkS : Cl -&gt; S ;                        -- John walks
+          mkS : Tense -&gt; Cl -&gt; S ;               -- John walked
+          mkS : Ant -&gt; Cl -&gt; S ;                 -- John is walking
+          mkS : Pol -&gt; Cl -&gt; S ;                 -- John doesn't walk
+          mkS : Tense -&gt; Ant -&gt; Cl -&gt; S ;        -- John was walking
+          mkS : Tense -&gt; Pol -&gt; Cl -&gt; S ;        -- John didn't walk
+          mkS : Ant -&gt; Pol -&gt; Cl -&gt; S ;          -- John isn't walking
           mkS : Tense -&gt; Ant -&gt; Pol -&gt; Cl -&gt; S ; -- John wouldn't have walked
-          mkS : Cl  -&gt; S ;                       -- John walks
           mkS : Conj -&gt; S -&gt; S -&gt; S ;            -- John walks and Mary talks   
           mkS : DConj -&gt; S -&gt; S -&gt; S ;           -- either I leave or you come
           mkS : Conj -&gt; ListS -&gt; S ;             -- John walks, Mary talks, and Bob runs
