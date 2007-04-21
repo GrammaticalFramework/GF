@@ -63,8 +63,14 @@ incomplete resource Constructors = open Grammar in {
 --2 Sentences, and clauses
 
     mkS : overload {
+      mkS : Cl -> S ;                        -- John walks
+      mkS : Tense -> Cl -> S ;               -- John walked
+      mkS : Ant -> Cl -> S ;                 -- John is walking
+      mkS : Pol -> Cl -> S ;                 -- John doesn't walk
+      mkS : Tense -> Ant -> Cl -> S ;        -- John was walking
+      mkS : Tense -> Pol -> Cl -> S ;        -- John didn't walk
+      mkS : Ant -> Pol -> Cl -> S ;          -- John isn't walking
       mkS : Tense -> Ant -> Pol -> Cl -> S ; -- John wouldn't have walked
-      mkS : Cl  -> S ;                       -- John walks
       mkS : Conj -> S -> S -> S ;            -- John walks and Mary talks   
       mkS : DConj -> S -> S -> S ;           -- either I leave or you come
       mkS : Conj -> ListS -> S ;             -- John walks, Mary talks, and Bob runs
@@ -556,10 +562,22 @@ incomplete resource Constructors = open Grammar in {
       } ;
 
     mkS = overload {
-      mkS : Tense -> Ant -> Pol -> Cl  -> S
-                                         =    UseCl   ;
       mkS : Cl  -> S
                                          =    UseCl TPres ASimul PPos ;
+      mkS : Tense -> Cl -> S 
+	                                 =    \t -> UseCl t ASimul PPos ;
+      mkS : Ant -> Cl -> S
+                                         =    \a -> UseCl TPres a PPos ;
+      mkS : Pol -> Cl -> S
+                                         =    \p -> UseCl TPres ASimul p ;
+      mkS : Tense -> Ant -> Cl -> S
+                                         =    \t,a -> UseCl t a PPos ;
+      mkS : Tense -> Pol -> Cl -> S
+                                         =    \t,p -> UseCl t ASimul p ;
+      mkS : Ant -> Pol -> Cl -> S
+                                         =    \a,p -> UseCl TPres a p ;
+      mkS : Tense -> Ant -> Pol -> Cl  -> S
+                                         =    UseCl   ;
       mkS : Conj -> S -> S -> S
                                         = \c,x,y -> ConjS c (BaseS x y) ;
       mkS : DConj -> S -> S -> S
