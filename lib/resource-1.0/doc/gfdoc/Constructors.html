@@ -6,7 +6,7 @@
 </HEAD><BODY BGCOLOR="white" TEXT="black">
 <P ALIGN="center"><CENTER><H1> Constructors: the High-Level Syntax API</H1>
 <FONT SIZE="4">
-<I>Last update: 2007-04-21 16:56:43 CEST</I><BR>
+<I>Last update: 2007-04-21 20:28:53 CEST</I><BR>
 </FONT></CENTER>
 
 <P></P>
@@ -134,7 +134,9 @@ to this.
           } ;
     
         mkCl : overload {
-          mkCl : NP -&gt; VP -&gt; Cl   ;   -- John walks
+          mkCl : NP -&gt; VP -&gt; Cl   ;   -- John wants to walk
+          mkCl : NP -&gt; V -&gt; Cl    ;   -- John walks
+          mkCl : NP -&gt; V2 -&gt; NP -&gt; Cl ; -- John uses it
           mkCl : VP -&gt; Cl         ;   -- it rains
           mkCl : NP  -&gt; RS -&gt; Cl  ;   -- it is you who did it
           mkCl : Adv -&gt; S  -&gt; Cl  ;   -- it is yesterday she arrived
