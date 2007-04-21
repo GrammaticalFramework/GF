@@ -41,6 +41,7 @@ incomplete resource Constructors = open Grammar in {
       mkText : Phr -> Text        ;   -- John walks.
       mkText : Utt -> Text        ;   -- John walks.
       mkText : S -> Text          ;   -- John walks.
+      mkText : Cl -> Text         ;   -- John walks.
       mkText : QS -> Text         ;   -- Does John walk?
       mkText : Imp -> Text        ;   -- Walk!
       mkText : Pol -> Imp -> Text ;   -- Don't walk!
@@ -636,6 +637,8 @@ incomplete resource Constructors = open Grammar in {
 	                                 =    \u -> TFullStop (PhrUtt NoPConj u NoVoc) TEmpty ;
       mkText : S -> Text
 	                                 =    \s -> TFullStop (PhrUtt NoPConj (UttS s) NoVoc) TEmpty;
+      mkText : Cl -> Text
+	                                 =    \c -> TFullStop (PhrUtt NoPConj (UttS (UseCl TPres ASimul PPos c)) NoVoc) TEmpty;
       mkText : QS -> Text
 	                                 =    \q -> TQuestMark (PhrUtt NoPConj (UttQS q) NoVoc) TEmpty ;
       mkText : Imp -> Text
