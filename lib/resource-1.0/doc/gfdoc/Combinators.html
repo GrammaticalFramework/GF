@@ -6,7 +6,7 @@
 </HEAD><BODY BGCOLOR="white" TEXT="black">
 <P ALIGN="center"><CENTER><H1> Combinators: a High-Level Syntax API</H1>
 <FONT SIZE="4">
-<I>Last update: 2007-03-24 23:08:17 CET</I><BR>
+<I>Last update: 2007-04-21 11:38:28 CEST</I><BR>
 </FONT></CENTER>
 
 <P></P>
@@ -17,7 +17,8 @@
     <LI><A HREF="#toc2">Function application</A>
     <LI><A HREF="#toc3">Coordination</A>
     <LI><A HREF="#toc4">Modification</A>
-    <LI><A HREF="#toc5">Text append</A>
+    <LI><A HREF="#toc5">Negation</A>
+    <LI><A HREF="#toc6">Text append</A>
     </UL>
 
 <P></P>
@@ -114,6 +115,17 @@ to construct arguments of these functions.
 </PRE>
 <P></P>
 <A NAME="toc5"></A>
+<H2>Negation</H2>
+<PRE>
+        neg : overload {
+          neg : Imp -&gt; Utt ;
+          neg : Cl -&gt; S ;
+          neg : QCl -&gt; QS ;
+          neg : RCl -&gt; RS 
+        };
+</PRE>
+<P></P>
+<A NAME="toc6"></A>
 <H2>Text append</H2>
 <P>
 This is not in ground API, because it would destroy parsing.
