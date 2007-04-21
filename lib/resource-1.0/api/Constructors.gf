@@ -39,6 +39,11 @@ incomplete resource Constructors = open Grammar in {
     mkText : overload {
       mkText : Text               ;   -- [empty text]
       mkText : Phr -> Text        ;   -- John walks.
+      mkText : Utt -> Text        ;   -- John walks.
+      mkText : S -> Text          ;   -- John walks.
+      mkText : QS -> Text         ;   -- Does John walk?
+      mkText : Imp -> Text        ;   -- Walk!
+      mkText : Pol -> Imp -> Text ;   -- Don't walk!
       mkText : Phr -> Text -> Text    -- John walks. ...
       } ;
 
@@ -612,6 +617,16 @@ incomplete resource Constructors = open Grammar in {
                                          =    TEmpty      ;
       mkText : Phr -> Text            -- John walks.
                                          =    \x -> TFullStop x TEmpty  ;
+      mkText : Utt -> Text
+	                                 =    \u -> TFullStop (PhrUtt NoPConj u NoVoc) TEmpty ;
+      mkText : S -> Text
+	                                 =    \s -> TFullStop (PhrUtt NoPConj (UttS s) NoVoc) TEmpty;
+      mkText : QS -> Text
+	                                 =    \q -> TQuestMark (PhrUtt NoPConj (UttQS q) NoVoc) TEmpty ;
+      mkText : Imp -> Text
+	                                 =    \i -> TExclMark (PhrUtt NoPConj (UttImpSg PPos i) NoVoc) TEmpty;
+      mkText : Pol -> Imp -> Text 
+	                                 =    \p,i -> TExclMark (PhrUtt NoPConj (UttImpSg p i) NoVoc) TEmpty;
       mkText : Phr -> Text -> Text    -- John walks. ...
                                          =    TFullStop
       } ;
