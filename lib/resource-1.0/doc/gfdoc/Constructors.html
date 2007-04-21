@@ -6,7 +6,7 @@
 </HEAD><BODY BGCOLOR="white" TEXT="black">
 <P ALIGN="center"><CENTER><H1> Constructors: the High-Level Syntax API</H1>
 <FONT SIZE="4">
-<I>Last update: 2007-04-21 12:23:25 CEST</I><BR>
+<I>Last update: 2007-04-21 12:43:52 CEST</I><BR>
 </FONT></CENTER>
 
 <P></P>
@@ -138,8 +138,10 @@ to this.
           mkCl : NP  -&gt; RS -&gt; Cl  ;   -- it is you who did it
           mkCl : Adv -&gt; S  -&gt; Cl  ;   -- it is yesterday she arrived
           mkCl : NP -&gt; Cl         ;   -- there is a house
-          mkCl : NP -&gt; AP -&gt; Cl   ;   -- John is warmer than Mary
+          mkCl : NP -&gt; AP -&gt; Cl   ;   -- John is nice and warm
           mkCl : NP -&gt; A  -&gt; Cl   ;   -- John is warm
+          mkCl : NP -&gt; A -&gt; NP -&gt; Cl; -- John is warmer than Mary
+          mkCl : NP -&gt; A2 -&gt; NP -&gt; Cl; -- John is married to Mary
           mkCl : NP -&gt; NP -&gt; Cl   ;   -- John is a man
           mkCl : NP -&gt; Adv -&gt; Cl      -- John is here
           } ;
@@ -235,10 +237,12 @@ More determiners are available in the Structural module
           mkCN : N3 -&gt; NP -&gt; NP -&gt; CN   ;   -- flight from Moscow (to Paris)
           mkCN : N2 -&gt; CN               ;   -- son
           mkCN : N3 -&gt; CN               ;   -- flight
-          mkCN : AP -&gt; CN  -&gt; CN        ;   -- big house
-          mkCN : AP -&gt;  N  -&gt; CN        ;   -- big house
-          mkCN : CN -&gt; AP  -&gt; CN        ;   -- big house
-          mkCN :  N -&gt; AP  -&gt; CN        ;   -- big house
+          mkCN : AP -&gt; CN  -&gt; CN        ;   -- nice and big blue house
+          mkCN : AP -&gt;  N  -&gt; CN        ;   -- nice and big house
+          mkCN : CN -&gt; AP  -&gt; CN        ;   -- nice and big blue house
+          mkCN :  N -&gt; AP  -&gt; CN        ;   -- nice and big house
+          mkCN :  A -&gt; CN  -&gt; CN        ;   -- big blue house
+          mkCN :  A -&gt;  N  -&gt; CN        ;   -- big house
           mkCN : CN -&gt; RS  -&gt; CN        ;   -- house that John owns
           mkCN :  N -&gt; RS  -&gt; CN        ;   -- house that John owns
           mkCN : CN -&gt; Adv -&gt; CN        ;   -- house on the hill
