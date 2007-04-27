@@ -1,5 +1,7 @@
 --# -path=.:../common:../abstract:../../prelude
 
+-- work by Aarne Ranta, Andreas Priesnitz, and Henning Thielemann.
+
 concrete LexiconGer of Lexicon = CatGer ** 
   open Prelude, ParadigmsGer, (Mo = MorphoGer), IrregGer in {
 
@@ -165,7 +167,7 @@ lin
   sea_N = reg2N "Meer" "Meere" neuter ;
   seek_V2 = dirV2 (regV "suchen") ;
   see_V2 = dirV2 (irregV "sehen" "sieht" "sah" "sähe" "gesehen") ;
-  sell_V3 = accdatV3 (regV "verkaufen") ;
+  sell_V3 = accdatV3 (no_geV (regV "verkaufen")) ;
   send_V3 = accdatV3 (regV "schicken") ;
   sheep_N = reg2N "Schaf" "Schafe" neuter ;
   ship_N = reg2N "Schiff" "Schiffe" neuter ;
@@ -195,7 +197,7 @@ lin
   talk_V3 = mkV3 (regV "reden") datPrep von_Prep ;
   teacher_N = reg2N "Lehrer" "Lehrer" masculine ;
   teach_V2 = dirV2 (no_geV (regV "unterrichten")) ;
-  television_N = reg2N "Ferhsehen" "Fernsehen" neuter;
+  television_N = reg2N "Fernsehen" "Fernsehen" neuter;
   thick_A = regA "dick" ;
   thin_A = regA "dünn" ;
   train_N = reg2N "Zug" "Züge" masculine  ;
@@ -327,26 +329,26 @@ lin
   turn_V = regV "drehen" ;
   vomit_V = regV "kotzen" ;
 
-  bite_V2 = dirV2 (regV "beissen") ;
+  bite_V2 = dirV2 (irregV "beißen" "beißt" "biss" "bisse" "gebissen") ;
   count_V2 = dirV2 (regV "zählen") ;
-  cut_V2 = dirV2 (regV "schneiden") ;
+  cut_V2 = dirV2 (irregV "schneiden" "schneidet" "schnitt" "schnitte" "geschnitten") ;
   fear_V2 = dirV2 (regV "fürchten") ;
   fight_V2 = dirV2 (regV "bekämpfen") ;
-  hit_V2 = dirV2 (regV "schlagen") ;
-  hold_V2 = dirV2 (regV "halten") ;
+  hit_V2 = dirV2 (irregV "schlagen" "schlägt" "schlug" "schlüge" "geschlagen") ;
+  hold_V2 = dirV2 (irregV "halten" "hält" "hielt" "hielte" "gehalten") ;
   hunt_V2 = dirV2 (regV "jagen") ;
   kill_V2 = dirV2 (regV "töten") ;
-  pull_V2 = dirV2 (regV "ziehen") ;
-  push_V2 = dirV2 (regV "schieben") ;
-  rub_V2 = dirV2 (regV "reiben") ;
+  pull_V2 = dirV2 (irregV "ziehen" "zieht" "zog" "zöge" "gezogen") ;
+  push_V2 = dirV2 (irregV "schieben" "schiebt" "schub" "schübe" "geschoben") ;
+  rub_V2 = dirV2 (irregV "reiben" "reibt" "rieb" "riebe" "gerieben") ;
   scratch_V2 = dirV2 (regV "kratzen") ;
   split_V2 = dirV2 (prefixV "auf" (regV "teilen")) ;
   squeeze_V2 = dirV2 (regV "pressen") ;
-  stab_V2 = dirV2 (regV "stechen") ;
+  stab_V2 = dirV2 (irregV "stechen" "sticht" "stach" "stäche" "gestochen") ;
   suck_V2 = dirV2 (regV "saugen") ;
-  throw_V2 = dirV2 (regV "werfen") ;
-  tie_V2 = dirV2 (regV "binden") ;
-  wash_V2 = dirV2 (regV "waschen") ;
+  throw_V2 = dirV2 (irregV "werfen" "wirft" "warf" "würfe" "geworfen") ;
+  tie_V2 = dirV2 (irregV "binden" "bindet" "band" "bände" "gebunden") ;
+  wash_V2 = dirV2 (irregV "waschen" "wäscht" "wusch" "wüsche" "gewaschen") ;
   wipe_V2 = dirV2 (regV "wischen") ;
 
   grammar_N = reg2N "Grammatik" "Grammatiken" feminine ;
