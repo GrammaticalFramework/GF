@@ -348,6 +348,7 @@ computeLType gr t = do
       let fs' = sortBy (\x y -> compare (fst x) (fst y)) fs
       liftM RecType $ mapPairsM comp fs'
 
+    _ | ty == typeTok -> return typeStr
     _ | isPredefConstant ty -> return ty
 
     _ -> composOp comp ty
@@ -460,13 +461,13 @@ inferLType gr trm = case trm of
         then checkWarn ("Warning: space in token \"" ++ s ++ 
                         "\". Lexical analysis may fail.")
         else return ()
-     return (trm, typeTok)
+     return (trm, typeStr)
 
    EInt i -> return (trm, typeInt)
 
    EFloat i -> return (trm, typeFloat)
 
-   Empty -> return (trm, typeTok)
+   Empty -> return (trm, typeStr)
 
    C s1 s2 -> 
      check2 (flip justCheck typeStr) C s1 s2 typeStr
@@ -571,8 +572,8 @@ inferLType gr trm = case trm of
      PAs _ p  -> inferPatt p
      PNeg p   -> inferPatt p
      PAlt p q -> checks [inferPatt p, inferPatt q]
-     PSeq _ _ -> return $ typeTok
-     PRep _   -> return $ typeTok
+     PSeq _ _ -> return $ typeStr
+     PRep _   -> return $ typeStr
      _ -> infer (patt2term p) >>= return . snd
 
 
