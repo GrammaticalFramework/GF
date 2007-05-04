@@ -56,6 +56,67 @@ June 29, 2007, Prague.
 #BR
 //An experiment in porting an in-car dialogue system from two to six languages.// 
 
+
+
+A. Ranta.
+The GF Grammar Compiler.
+//Workshop on New Directions in Type-theoretic Grammars//,
+Dublin, August 2007 (ESSLLI workshop).
+2007.
+#BR
+//Describes the compilation of GF source code to lower-level run-time formats.//
+
+M. Humayoun, H. Hammarström, and A. Ranta.
+Urdu Morphology, Orthography and Lexicon Extraction.
+//CAASL-2: The Second Workshop on Computational Approaches to Arabic Script-based Languages//,
+July 21-22, 2007, LSA 2007 Linguistic Institute, Stanford University.
+2007.
+#BR
+//Fairly complete open-source Urdu morphology and elemenraty syntax in GF.//
+
+N. Perera and A. Ranta.
+Dialogue System Localization with the GF Resource Grammar Library.
+//SPEECHGRAM 2007: ACL Workshop on Grammar-Based Approaches to Spoken Language Processing//,
+June 29, 2007, Prague.
+2007.
+#BR
+//An experiment in porting an in-car dialogue system from two to six languages.// 
+
+
+
+A. Ranta.
+The GF Grammar Compiler.
+//Workshop on New Directions in Type-theoretic Grammars//,
+Dublin, August 2007 (ESSLLI workshop).
+2007.
+#BR
+//Describes the compilation of GF source code to lower-level run-time formats.//
+
+M. Humayoun, H. Hammarström, and A. Ranta.
+Urdu Morphology, Orthography and Lexicon Extraction.
+//CAASL-2: The Second Workshop on Computational Approaches to Arabic Script-based Languages//,
+July 21-22, 2007, LSA 2007 Linguistic Institute, Stanford University.
+2007.
+#BR
+//Fairly complete open-source Urdu morphology and elemenraty syntax in GF.//
+
+N. Perera and A. Ranta.
+Dialogue System Localization with the GF Resource Grammar Library.
+//SPEECHGRAM 2007: ACL Workshop on Grammar-Based Approaches to Spoken Language Processing//,
+June 29, 2007, Prague.
+2007.
+#BR
+//An experiment in porting an in-car dialogue system from two to six languages.// 
+
+B. Bringert.
+Speech Recognition Grammar Compilation in Grammatical Framework
+//SPEECHGRAM 2007: ACL Workshop on Grammar-Based Approaches to Spoken Language Processing//,
+June 29, 2007, Prague.
+2007.
+#BR
+//Generation of speech recognition language models from GF in several formats:// 
+//GSL (Nuance), SRGS, JSGF, and HTK SLF, with embedded semantic interpretation.//
+
 A. Ranta.
 Features in Abstract and Concrete Syntax.
 //The 2nd International Workshop on Typed Feature Structure Grammars//,
