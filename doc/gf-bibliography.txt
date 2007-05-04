@@ -1,0 +1,472 @@
+Grammatical Framework Bibliography
+Aarne Ranta
+%%date(%c)
+
+% NOTE: this is a txt2tags file.
+% Create an html file from this file using:
+% txt2tags -thtml --toc gf-reference.html
+
+%!target:html
+%!postproc(html): #BR <br>
+
+==Publications on GF==
+
+In reverse temporal order:
+
+A. El Dada and A. Ranta.
+Implementing an Open Source Arabic Resource Grammar in GF.
+In M. Mughazy (ed),
+//Perspectives on Arabic Linguistics XX. Papers from the Twentieth Annual Symposium on Arabic Linguistics, Kalamazoo, March 26//
+John Benjamins Publishing Company.
+2007.
+#BR
+//An outline of the Arabic resource grammar project, focusing on linguistic aspects.//
+
+A. Ranta.
+The GF Grammar Compiler.
+//Workshop on New Directions in Type-theoretic Grammars//,
+Dublin, August 2007 (ESSLLI workshop).
+2007.
+#BR
+//Describes the compilation of GF source code to lower-level run-time formats.//
+
+M. Humayoun, H. Hammarström, and A. Ranta.
+Urdu Morphology, Orthography and Lexicon Extraction.
+//CAASL-2: The Second Workshop on Computational Approaches to Arabic Script-based Languages//,
+July 21-22, 2007, LSA 2007 Linguistic Institute, Stanford University.
+2007.
+#BR
+//Fairly complete open-source Urdu morphology and elemenraty syntax in GF.//
+
+N. Perera and A. Ranta.
+Dialogue System Localization with the GF Resource Grammar Library.
+//SPEECHGRAM 2007: ACL Workshop on Grammar-Based Approaches to Spoken Language Processing//,
+June 29, 2007, Prague.
+2007.
+#BR
+//An experiment in porting an in-car dialogue system from two to six languages.// 
+
+A. Ranta.
+Features in Abstract and Concrete Syntax.
+//The 2nd International Workshop on Typed Feature Structure Grammars//,
+Tartu, 24 May 2007 (NODALIDA workshop).
+2007.
+#BR
+//Explores the design choices of incorporating features in a GF-like grammar,//
+//with comparisons to feature-based unification grammars.//
+
+
+O. Caprotti and M. Seppälä.
+Multilingual Delivery of Online Tests in mathematics.
+Proceedings of Online Educa Berlin 2006. 29 November - 1 December 2006. 
+  Berlin, Germany.
+2006.
+[pdf http://webalt.math.helsinki.fi/content/e16/e301/e785/MultilingualDeliveryofOnlineTestsinMathematics_eng.pdf]
+#BR
+//This papers shows screenshots of multilingual generation in the//
+//WebALT project, using GF and the resource grammar library.//
+
+J. Khegai. 
+Language engineering in Grammatical Framework (GF).
+Phd thesis, Computer Science, Chalmers University of Technology,
+2006.
+[pdf http://www.cs.chalmers.se/~janna/Janna_Khegai_phd.pdf]
+#BR
+//Collection of articles and technical reports on multilingual authoring//
+//and the Russian resource grammar.//
+
+B. Bringert and A. Ranta.
+A Pattern for Almost Compositional Functions.
+//ICFP 2006, The 11th ACM SIGPLAN International Conference on Functional Programming, Portland, Oregon, September 18-20, 2006//,
+2006.
+[pdf http://www.cs.chalmers.se/~bringert/publ/composOp/composOp.pdf].
+#BR
+//A method of generic programming useful for compiler construction//
+//and transfer-based translation.//
+
+M. Forsberg, H. Hammarstrom, and A. Ranta.
+Morphological Lexicon Extraction from Raw Text Data. 
+//FinTAL 2006//, 
+Turku, August 23-25, 2006.
+Springer LNCS/LNAI 4139,
+pp. 488-499,
+2006.
+#BR
+//A method for automatical production of morphological lexica based//
+//on inflection engines such as those of GF resource grammar library.//
+
+A. Ranta.
+Type Theory and Universal Grammar.
+//Philosophia Scientiae, Constructivism: Mathematics, Logic, Philosophy and Linguistics//,
+cahier spécial 6,
+pp. 115-131,
+2006.
+#BR
+//A philosophical study of the medieval thesis that//
+//grammar is the same in all languages and the difference is only in words.//
+
+J Khegai. 
+GF parallel resource grammars and Russian.
+In proceedings of ACL2006 
+  (The joint conference of the International Committee on Computational 
+  Linguistics and the Association for Computational Linguistics) (pp. 475-482),
+  Sydney, Australia, July 2006.
+#BR
+//Gives an outline of the Russian resource grammar project.//
+
+J. Khegai. 
+Grammatical Framework (GF) for MT in sublanguage domains. 
+Proceedings of 11th Annual conference of the European Association for 
+      Machine Translation, , Oslo.
+pp. 95-104,
+2005.
+#BR
+//Shows how GF is used in controlled language translation.//
+
+
+
+W. Ng'ang'a. 
+Multilingual content development for eLearning in Africa. 
+eLearning Africa: 1st Pan-African Conference on ICT for Development, 
+  Education and Training. 24-26 May 2006, Addis Ababa, Ethiopia.
+2006.
+[pdf http://webalt.math.helsinki.fi/content/e16/e301/e583/MultilingualContentDevelopmentforeLearninginAfrica-final1_eng.pdf]
+#BR
+//Presents a programme for producing educational material in African languages//
+//via multilingual generation in GF.//
+
+R. Jonson. 
+Generating statistical language models from interpretation grammars in dialogue system. 
+In Proceedings of EACL'06, Trento, Italy.
+2006.
+#BR
+//Uses GF grammars to generate statistical language models for speech recognition.//
+
+A. El Dada and A. Ranta.
+Arabic Resource Grammar.
+//Arabic Language Processing (JETALA)//, 
+5-6 June 2006, IERA, Rabat, Morocco,
+2006.
+#BR
+//An outline of the Arabic resource grammar project, focusing on software aspects.//
+
+D. A. Burke and K. Johannisson.
+Translating Formal Software Specifications to Natural Language. A Grammar-Based Approach.
+In P. Blache, E. Stabler, J. Busquets and R. Moot (eds),
+Logical Aspects of Computational Linguistics (LACL 2005), 
+Springer LNAI 3402, 
+pp. 51-66, 
+2005.
+#BR
+//A paper explaining how a multilingual GF grammar is completed with//
+//Natural Language Generation techniques to improve text quality.//
+
+
+B. Bringert, R. Cooper, P. Ljunglöf, A. Ranta, 
+Multimodal Dialogue System Grammars.
+//Proceedings of DIALOR'05, Ninth Workshop on the Semantics and Pragmatics of Dialogue, Nancy, France, June 9-11, 2005//,
+2005.
+[pdf http://www.cs.chalmers.se/~bringert/publ/mm-grammars-dialor/mm-grammars-dialor.pdf].
+#BR
+//Shows how mouse clicks can be integrated in GF grammars//
+//alongside with speech input.//
+
+
+
+K.  Johannisson,
+Formal and Informal Software Specifications.
+PhD thesis,
+Computer Science, Göteborg University, 
+2005.
+[http://www.cs.chalmers.se/~krijo/thesis/thesisA4.pdf]
+#BR
+//Collection of articles in the GF-KeY project, with an introduction.//
+
+A. Ranta.
+Modular Grammar Engineering in GF.
+//Research on Language and Computation//, 
+2007, to appear.
+Draft available as [pdf http://www.cs.chalmers.se/~aarne/articles/multieng3.pdf].
+#BR
+//Adapts library-based software engineering methods to grammar writing// 
+//and introduces the module system of GF.//
+
+
+P. Ljunglöf.
+Expressivity and Complexity of the  Grammatical Framework.
+PhD thesis, Computer Science, 
+Göteborg University, 
+2004.
+[pdf http://www.cs.chalmers.se/~peb/pubs/p04-PhD-thesis.pdf]
+#BR
+//Language-theoretical study of GF and its parsing problem.//
+
+A. Ranta.
+Grammatical Framework: A Type-Theoretical Grammar Formalism.
+//Journal of Functional Programming//, 14(2),
+pp. 145-189, 
+2004.
+Draft available as [ps.gz http://www.cs.chalmers.se/~aarne/articles/gf-jfp.ps.gz].
+#BR
+//Theoretical paper explaining the GF formalism and its implementation.//
+//The standard reference on GF, but doesn't cover the module system.//
+
+
+A. Ranta.
+Computational semantics in type theory.
+//Mathematics and Social Sciences//, 165,
+pp. 31-57, 
+2004.
+Draft available as [pdf http://www.cs.chalmers.se/~aarne/articles/3formsem.pdf].
+#BR
+// Shows how Montague-style grammars are implemented in GF and extends//
+//this to type-theoretical grammars for anaphoric expressions.//
+
+H. Hammarström and A. Ranta.
+Cardinal Numerals Revisited in GF.
+//Workshop on Numerals in the World's Languages//. 
+Dept. of Linguistics Max Planck Institute for Evolutionary Anthropology, Leipzig,
+2004.
+#BR
+//An overview of the numeral grammar project.//
+
+
+A. Ranta.
+Grammatical Framework Tutorial.
+In A. Beckmann and N. Preining, editors, 
+//ESSLLI 2003 Course Material I//, 
+//Collegium Logicum//, 
+volume V,
+pp. 1-86. 
+Kurt Gödel Society, 
+Vienna,
+2004.
+#BR
+//A revised version of the on-line GF tutorial, v1.0.//
+
+
+J. Khegai and A. Ranta.
+Building and Using a Russian Resource Grammar in GF.
+In A. Gelbukh (ed), 
+//Intelligent Text Processing and Computational Linguistics (CICLing-2004)//, 
+Seoul, Korea, February 2003,
+Springer LNCS 945, 
+pp. 38-41,
+2004.
+[ps.gz http://www.cs.chalmers.se/~aarne/articles/mexico.ps.gz].
+#BR
+//An introduction to the GF resource grammar project, with Russian as prime example.//
+
+
+A. Ranta and R. Cooper.
+Dialogue Systems as Proof Editors.
+ //Journal of Logic, Language and Information//, 13,
+pp. 225-240, 
+2004.
+Conference version (IJCAR/ICoS-3, Siena, June 2001) available as
+  [ps.gz http://www.cs.chalmers.se/~aarne/articles/dialogue3.ps.gz].
+//Shows a close analogy between task-oriented dialogue systems//
+//and metavariable-based proof editors.//
+
+
+J. Khegai and A. Ranta.
+Building and Using a Russian Resource Grammar in GF.
+In A. Gelbukh (ed), 
+//Intelligent Text Processing and Computational Linguistics (CICLing-2004)//, 
+Seoul, Korea, February 2003,
+Springer LNCS 945, 
+pp. 38-41,
+2004.
+[ps.gz http://www.cs.chalmers.se/~aarne/articles/mexico.ps.gz].
+#BR
+//Explains how the GF GUI is used in syntax editing and discusses//
+//how new grammars are created.//
+
+
+R. Hähnle, K. Johannisson, and A. Ranta.
+An Authoring Tool for Informal and Formal Requirements Specifications.
+In R. D. Kutsche and H. Weber (eds),
+//ETAPS/FASE-2002: Fundamental Approaches to Software Engineering//,
+Springer LNCS, 
+vol. 2306,
+pp. 233--248, 
+2002.
+[pdf http://www.cs.chalmers.se/~krijo/GF/FASE.pdf]
+#BR
+//Describes a GF-based authoring tool for object-oriented//
+//specifications in OCL and English. Carries out in full//
+//the work proposed in the position paper (Hähnle & Ranta 2001).//
+
+
+
+K. Johannisson and A.Ranta,
+Formal Verification of Multilingual Instructions.
+//Proceedings of the Joint Winter Meeting 2001//.
+Departments of Computer Science and Computer Engineering,
+Chalmers University of Technology and Göteborg University.
+2001.
+[ps.gz http://www.cs.chalmers.se/~aarne/articles/aarne+krijo.ps.gz].
+#BR
+//Instructions for an alarm system in four languages, verified in the proof editor Alfa.//
+
+
+R. Hähnle and A. Ranta,
+Connecting OCL with the Rest of the World.
+//ETAPS 2001 Workshop on Transformations in UML (WTUML)//, 
+Genova, 
+2001.
+[ps.gz http://www.cs.chalmers.se/~reiner/papers/wtuml.ps.gz].
+#BR
+//A position paper explaining how GF can be used to help in object-oriented//
+//modelling, with some examples on natural-language interaction with//
+//OCL (Object Constraint Language)//.
+
+
+
+T. Hallgren, "The Correctness of Insertion Sort",
+Manuscript, Chalmers University, Göteborg, 2001.
+Available in
+[ps http://www.cs.chalmers.se/~hallgren/Papers/insertion_sort.ps]
+#BR
+//A seven-page text generated by GF-Alfa//.
+
+
+A. Ranta. "Bescherelle bricolé",
+[ps.gz ../../GF2.0/doc/BeschBric.ps.gz], 
+2001.
+#BR
+//A machine-generated book on French conjugation implemented in GF.//
+
+
+T. Hallgren and A. Ranta,
+An Extensible Proof Text Editor.
+In M. Parigot and A. Voronkov (eds),
+//Logic for Programming and Automated Reasoning (LPAR'2000)//,
+LNCS/LNAI 1955, 
+pp. 70-84,
+Springer Verlag, Heidelberg, 
+2000.
+[ps.gz http://www.cs.chalmers.se/~aarne/articles/lpar2000.ps.gz].
+#BR
+//Describes an interface to the proof editor Alfa written in GF//.
+
+
+M. Dymetman, V. Lux, and A. Ranta,
+XML and multilingual document authoring: converging trends.
+//Proceedings of the The 18th International Conference on Computational Linguistics (COLING 2000)//,
+pp. 243-249,
+Saarbruecken, 
+2000.
+[ps.gz http://www.cs.chalmers.se/~aarne/articles/coling2000.ps.gz].
+#BR
+//Relates GF not only with XML but also with definite clause grammars//.
+
+
+
+P. Mäenpää and A. Ranta.
+The type theory and type checker of GF.
+//Colloquium on Principles, Logics, and Implementations of High-Level Programming Languages, Workshop on Logical Frameworks and Meta-languages, Paris, 28 September 1999//.
+1999. 
+[ps.gz href=http://www.cs.chalmers.se/~aarne/papers/lfm1999.ps.gz].
+#BR
+//Concise theoretical presentation of GF, using the old notation prior to v0.9//.
+
+
+
+
+
+
+
+
+==Background for GF==
+
+In alphabetical order:
+
+
+
+L. Magnusson.
+//The Implementation of ALF - a Proof Editor based on Martin-Löf's//
+//Monomorphic Type Theory with Explicit Substitutions//.
+PhD Thesis, Department of Computing Science,
+Chalmers University of Technology and Göteborg University,
+1994.
+#BR
+//Back in 1992 the most wonderful program in the world, ALF is//
+//a model that GF directly follows: GF is Yet ALF.//
+
+
+
+P. Martin-Löf.
+//Intuitionistic Type Theory//.
+Bibliopolis, Naples, 1984.
+#BR
+//A very accessible book (if you have access to it!) on type theory directly from the source.//
+
+
+
+B. Nordström, K. Petersson, and J. Smith.
+//Programming in Martin-Löf's Type Theory: an Introduction//.
+Oxford University Press, 1990.
+ The book is out of print, but a free version can be picked up from
+[www.cs.chalmers.se/Cs/Research/Logic/book/ http://www.cs.chalmers.se/Cs/Research/Logic/book/]
+#BR
+//Standard reference on the subject//.
+
+
+A. Ranta.
+//Type Theoretical Grammar//.
+Oxford University Press, Oxford, 
+1994.
+#BR
+//Monograph on type theory in linguistics. Includes an introduction//
+//to type theory. Focused on semantics, in particular anaphora. A first,// 
+//very rudimentary implementation of linearization in the proof system ALF.//
+
+
+A. Ranta.
+Syntactic categories in the language of mathematics.
+In P. Dybjer, B. Nordström, and J. Smith, eds.,
+//Types for Proofs and Programs//, 
+pp. 162-182,
+Lecture Notes in Computer Science
+996,  
+Springer-Verlag, 
+Heidelberg, 
+1995.
+[ps.gz http://www.cs.chalmers.se/~aarne/articles/baastad.ps.gz]
+#BR
+//Predecessor of GF: grammar defined in type theory and implemented in ALF//. 
+
+A. Ranta.
+Context-relative syntactic categories and the formalization of mathematical text.
+In S. Berardi and M. Coppo, eds.,
+//Types for Proofs and Programs//, 
+pp. 231-248,
+Lecture Notes in Computer Science 
+1158, 
+Springer-Verlag, 
+Heidelberg, 
+1996.
+[ps.gz http://www.cs.chalmers.se/~aarne/articles/torino.ps.gz].
+#BR
+//Extending the theory of the previous paper. The implementation in ALF// 
+//eventually became so heavy that the need arose for GF.//
+
+
+A. Ranta.
+Structures grammaticales dans le français mathématique. 
+//Mathématiques, informatique et Sciences Humaines.//,
+vol. 138 pp. 5-56 and 139 pp. 5-36, 
+1997.
+#BR
+//A rather comprehensive French grammar presented in a type-theoretical style.//
+
+
+A. Ranta.
+ Syntactic calculus with dependent types.
+ //Journal of Logic, Language and Information//, vol. 4,
+  pp. 413-431, 1998.
+#BR
+//Interprets Lambek Calculus in type theory and defines some extensions//.
+
+
