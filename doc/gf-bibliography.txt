@@ -22,6 +22,16 @@ John Benjamins Publishing Company.
 #BR
 //An outline of the Arabic resource grammar project, focusing on linguistic aspects.//
 
+A. El Dada.
+Implementation of the Arabic Numerals and their Syntax in GF.
+Computational Approaches to Semitic Languages: Common Issues and Resources, 
+  ACL-2007 Workshop,
+June 28, 2007, Prague.
+2007.
+#BR
+//A case study with the resource grammar, focusing on the morphosyntax//
+//and agreement of constructions with numerals.//
+
 A. Ranta.
 The GF Grammar Compiler.
 //Workshop on New Directions in Type-theoretic Grammars//,
@@ -228,7 +238,7 @@ Cardinal Numerals Revisited in GF.
 Dept. of Linguistics Max Planck Institute for Evolutionary Anthropology, Leipzig,
 2004.
 #BR
-//An overview of the numeral grammar project.//
+//An overview of the numeral grammar project, covering 88 languages.//
 
 
 A. Ranta.
