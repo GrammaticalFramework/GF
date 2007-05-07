@@ -6,7 +6,7 @@
 </HEAD><BODY BGCOLOR="white" TEXT="black">
 <P ALIGN="center"><CENTER><H1> Constructors: the High-Level Syntax API</H1>
 <FONT SIZE="4">
-<I>Last update: 2007-04-21 20:28:53 CEST</I><BR>
+<I>Last update: 2007-05-07 14:48:26 CEST</I><BR>
 </FONT></CENTER>
 
 <P></P>
@@ -182,6 +182,12 @@ to this.
         mkNP : overload {
           mkNP : Det -&gt; CN -&gt; NP  ;        -- the old man
           mkNP : Det -&gt; N -&gt; NP   ;        -- the man
+          mkNP : Num -&gt; CN -&gt; NP  ;        -- forty-five old men
+          mkNP : Num -&gt; N -&gt; NP   ;        -- forty-five men
+          mkNP : Int -&gt; CN -&gt; NP  ;        -- 51 old men
+          mkNP : Int -&gt; N -&gt; NP   ;        -- 51 men
+          mkNP : Digit -&gt; CN -&gt; NP;        -- five old men
+          mkNP : Digit -&gt; N -&gt; NP ;        -- five men
           mkNP : PN -&gt; NP         ;        -- John
           mkNP : Pron -&gt; NP       ;        -- he
           mkNP : Predet -&gt; NP -&gt; NP ;      -- all the men
@@ -202,6 +208,7 @@ to this.
           mkDet : QuantPl -&gt; Det               ;   -- these (men)
           mkDet : Quant -&gt;  Det                ;   -- this (man)
           mkDet : Num -&gt; Det                   ;   -- forty-five (men)
+          mkDet : Int -&gt; Det                   ;   -- 51 (men)
           mkDet : Digit -&gt; Det                 ;   -- five (men)
           mkDet : Pron -&gt; Det                      -- my (house)
           } ;
