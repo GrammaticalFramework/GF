@@ -129,6 +129,12 @@ incomplete resource Constructors = open Grammar in {
     mkNP : overload {
       mkNP : Det -> CN -> NP  ;        -- the old man
       mkNP : Det -> N -> NP   ;        -- the man
+      mkNP : Num -> CN -> NP  ;        -- forty-five old men
+      mkNP : Num -> N -> NP   ;        -- forty-five men
+      mkNP : Int -> CN -> NP  ;        -- 51 old men
+      mkNP : Int -> N -> NP   ;        -- 51 men
+      mkNP : Digit -> CN -> NP;        -- five old men
+      mkNP : Digit -> N -> NP ;        -- five men
       mkNP : PN -> NP         ;        -- John
       mkNP : Pron -> NP       ;        -- he
       mkNP : Predet -> NP -> NP ;      -- all the men
@@ -149,6 +155,7 @@ incomplete resource Constructors = open Grammar in {
       mkDet : QuantPl -> Det               ;   -- these (men)
       mkDet : Quant ->  Det                ;   -- this (man)
       mkDet : Num -> Det                   ;   -- forty-five (men)
+      mkDet : Int -> Det                   ;   -- 51 (men)
       mkDet : Digit -> Det                 ;   -- five (men)
       mkDet : Pron -> Det                      -- my (house)
       } ;
@@ -370,10 +377,22 @@ incomplete resource Constructors = open Grammar in {
       } ;
 
     mkNP = overload {
-      mkNP : Det -> CN -> NP      -- the man
+      mkNP : Det -> CN -> NP      -- the old man
                                          =    DetCN    ;
       mkNP : Det -> N -> NP       -- the man
                                          =    \d,n -> DetCN d (UseN n)   ;
+      mkNP : Num -> CN -> NP      -- forty-five old men
+	                                 =    \d,n -> DetCN (DetPl (PlQuant IndefArt) d NoOrd) n ;
+      mkNP : Num -> N -> NP       -- forty-five men
+	                                 =    \d,n -> DetCN (DetPl (PlQuant IndefArt) d NoOrd) (UseN n) ;
+      mkNP : Int -> CN -> NP      -- 51 old men
+	                                 =    \d,n -> DetCN (DetPl (PlQuant IndefArt) (NumInt d) NoOrd) n ;
+      mkNP : Int -> N -> NP       -- 51 men
+	                                 =    \d,n -> DetCN (DetPl (PlQuant IndefArt) (NumInt d) NoOrd) (UseN n) ;
+      mkNP : Digit -> CN -> NP    -- five old men
+	                                 =    \d,n -> DetCN (DetPl (PlQuant IndefArt) (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 d)))))) NoOrd) n ;
+      mkNP : Digit -> N -> NP     -- five men
+	                                 =    \d,n -> DetCN (DetPl (PlQuant IndefArt) (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 d)))))) NoOrd) (UseN n) ;
       mkNP : PN -> NP             -- John
                                          =    UsePN    ;
       mkNP : Pron -> NP           -- he
@@ -409,6 +428,8 @@ incomplete resource Constructors = open Grammar in {
                                          =    \q -> DetSg (SgQuant q) NoOrd  ;
       mkDet : Num ->  Det       -- forty-five men
                                          =    \n -> DetPl (PlQuant IndefArt) n NoOrd  ;
+      mkDet : Int -> Det          -- 51 (men)
+                                         =    \n -> DetPl (PlQuant IndefArt) (NumInt n) NoOrd  ;
       mkDet : Digit -> Det  -- five (men)
 	                                 =    \d -> DetPl (PlQuant IndefArt) (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 d)))))) NoOrd ;   
 
