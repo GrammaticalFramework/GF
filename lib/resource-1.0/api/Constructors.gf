@@ -55,7 +55,8 @@ incomplete resource Constructors = open Grammar in {
       } ;
 
     mkUtt : overload {
-      mkUtt : S -> Utt                  ;   -- John walks
+      mkUtt : S -> Utt                  ;   -- John walked
+      mkUtt : Cl -> Utt                 ;   -- John walks
       mkUtt : QS -> Utt                 ;   -- is it good
       mkUtt : Pol -> Imp -> Utt         ;   -- (don't) help yourself
       mkUtt : Imp -> Utt                ;   -- help yourself
@@ -515,8 +516,10 @@ incomplete resource Constructors = open Grammar in {
       } ;
 
     mkUtt = overload {
-      mkUtt : S -> Utt                     -- John walks
+      mkUtt : S -> Utt                     -- John walked
                                          =    UttS      ;
+      mkUtt : Cl -> Utt                     -- John walks
+	                                 =    \c -> UttS (UseCl TPres ASimul PPos c);
       mkUtt : QS -> Utt                    -- is it good
                                          =    UttQS     ;
       mkUtt : Pol -> Imp -> Utt            -- (don't) help yourself
