@@ -6,7 +6,7 @@
 </HEAD><BODY BGCOLOR="white" TEXT="black">
 <P ALIGN="center"><CENTER><H1> Constructors: the High-Level Syntax API</H1>
 <FONT SIZE="4">
-<I>Last update: 2007-05-09 17:49:53 CEST</I><BR>
+<I>Last update: 2007-05-09 17:52:28 CEST</I><BR>
 </FONT></CENTER>
 
 <P></P>
@@ -102,7 +102,8 @@ to this.
           } ;
     
         mkUtt : overload {
-          mkUtt : S -&gt; Utt                  ;   -- John walks
+          mkUtt : S -&gt; Utt                  ;   -- John walked
+          mkUtt : Cl -&gt; Utt                 ;   -- John walks
           mkUtt : QS -&gt; Utt                 ;   -- is it good
           mkUtt : Pol -&gt; Imp -&gt; Utt         ;   -- (don't) help yourself
           mkUtt : Imp -&gt; Utt                ;   -- help yourself
