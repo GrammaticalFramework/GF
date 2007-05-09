@@ -71,11 +71,11 @@ incomplete resource Constructors = open Grammar in {
     mkS : overload {
       mkS : Cl -> S ;                        -- John walks
       mkS : Tense -> Cl -> S ;               -- John walked
-      mkS : Ant -> Cl -> S ;                 -- John is walking
+      mkS : Ant -> Cl -> S ;                 -- John has walked
       mkS : Pol -> Cl -> S ;                 -- John doesn't walk
-      mkS : Tense -> Ant -> Cl -> S ;        -- John was walking
+      mkS : Tense -> Ant -> Cl -> S ;        -- John had walked
       mkS : Tense -> Pol -> Cl -> S ;        -- John didn't walk
-      mkS : Ant -> Pol -> Cl -> S ;          -- John isn't walking
+      mkS : Ant -> Pol -> Cl -> S ;          -- John hasn't walked
       mkS : Tense -> Ant -> Pol -> Cl -> S ; -- John wouldn't have walked
       mkS : Conj -> S -> S -> S ;            -- John walks and Mary talks   
       mkS : DConj -> S -> S -> S ;           -- either I leave or you come
