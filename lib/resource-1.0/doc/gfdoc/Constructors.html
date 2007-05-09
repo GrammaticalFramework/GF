@@ -6,7 +6,7 @@
 </HEAD><BODY BGCOLOR="white" TEXT="black">
 <P ALIGN="center"><CENTER><H1> Constructors: the High-Level Syntax API</H1>
 <FONT SIZE="4">
-<I>Last update: 2007-05-07 14:48:26 CEST</I><BR>
+<I>Last update: 2007-05-09 17:49:53 CEST</I><BR>
 </FONT></CENTER>
 
 <P></P>
@@ -120,11 +120,11 @@ to this.
         mkS : overload {
           mkS : Cl -&gt; S ;                        -- John walks
           mkS : Tense -&gt; Cl -&gt; S ;               -- John walked
-          mkS : Ant -&gt; Cl -&gt; S ;                 -- John is walking
+          mkS : Ant -&gt; Cl -&gt; S ;                 -- John has walked
           mkS : Pol -&gt; Cl -&gt; S ;                 -- John doesn't walk
-          mkS : Tense -&gt; Ant -&gt; Cl -&gt; S ;        -- John was walking
+          mkS : Tense -&gt; Ant -&gt; Cl -&gt; S ;        -- John had walked
           mkS : Tense -&gt; Pol -&gt; Cl -&gt; S ;        -- John didn't walk
-          mkS : Ant -&gt; Pol -&gt; Cl -&gt; S ;          -- John isn't walking
+          mkS : Ant -&gt; Pol -&gt; Cl -&gt; S ;          -- John hasn't walked
           mkS : Tense -&gt; Ant -&gt; Pol -&gt; Cl -&gt; S ; -- John wouldn't have walked
           mkS : Conj -&gt; S -&gt; S -&gt; S ;            -- John walks and Mary talks   
           mkS : DConj -&gt; S -&gt; S -&gt; S ;           -- either I leave or you come
