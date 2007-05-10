@@ -644,6 +644,7 @@ txtHelpFile =
   "\n    -printer=plbnf          grammar for BNF Converter, with precedence levels" ++
   "\n   *-printer=happy          source file for Happy parser generator (use lbnf!)" ++
   "\n    -printer=haskell        abstract syntax in Haskell, with transl to/from GF" ++
+  "\n    -printer=haskell_gadt   abstract syntax GADT in Haskell, with transl to/from GF" ++
   "\n    -printer=morpho         full-form lexicon, long format" ++
   "\n   *-printer=latex          LaTeX file (for the tg command)" ++
   "\n    -printer=fullform       full-form lexicon, short format" ++

@@ -615,6 +615,7 @@ q, quit: q
     -printer=plbnf          grammar for BNF Converter, with precedence levels
    *-printer=happy          source file for Happy parser generator (use lbnf!)
     -printer=haskell        abstract syntax in Haskell, with transl to/from GF
+    -printer=haskell_gadt   abstract syntax GADT in Haskell, with transl to/from GF
     -printer=morpho         full-form lexicon, long format
    *-printer=latex          LaTeX file (for the tg command)
     -printer=fullform       full-form lexicon, short format

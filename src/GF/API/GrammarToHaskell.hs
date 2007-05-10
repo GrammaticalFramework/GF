@@ -14,7 +14,7 @@
 -- AR 11/11/1999 -- 7/12/2000 -- 18/5/2004
 -----------------------------------------------------------------------------
 
-module GF.API.GrammarToHaskell (grammar2haskell) where
+module GF.API.GrammarToHaskell (grammar2haskell, grammar2haskellGADT) where
 
 import qualified GF.Canon.GFC as GFC
 import GF.Grammar.Macros
@@ -28,6 +28,12 @@ import Data.List (isPrefixOf, find, intersperse)
 grammar2haskell :: GFC.CanonGrammar -> String
 grammar2haskell gr = foldr (++++) [] $  
   haskPreamble ++ [datatypes gr', gfinstances gr', fginstances gr']
+    where gr' = hSkeleton gr
+
+grammar2haskellGADT :: GFC.CanonGrammar -> String
+grammar2haskellGADT gr = foldr (++++) [] $  
+  ["{-# OPTIONS_GHC -fglasgow-exts #-}"] ++ 
+  haskPreamble ++ [datatypesGADT gr', gfinstances gr', fginstances gr']
     where gr' = hSkeleton gr
 
 -- | by this you can prefix all identifiers with stg; the default is 'G'
@@ -96,6 +102,26 @@ hDatatype (cat,rules) =
         [gId f +++ foldr (+++) "" (map gId xx) | (f,xx) <- rules] ++++
  "  deriving Show"
 
+-- GADT version of data types
+datatypesGADT :: (String,HSkeleton) -> String
+datatypesGADT (_,skel) = 
+    unlines (concatMap hCatTypeGADT skel)
+    +++++
+    "data Tree :: * -> * where" ++++ unlines (concatMap (map ("  "++) . hDatatypeGADT) skel)
+
+hCatTypeGADT :: (OIdent, [(OIdent, [OIdent])]) -> [String]
+hCatTypeGADT (cat,rules)
+    = ["type"+++gId cat+++"="+++"Tree"+++gId cat++"_",
+       "data"+++gId cat++"_"]
+
+hDatatypeGADT :: (OIdent, [(OIdent, [OIdent])]) -> [String]
+hDatatypeGADT (cat, rules) 
+    | isListCat (cat,rules) = [gId cat+++"::"+++"["++gId (elemCat cat)++"]" +++ "->" +++ t]
+    | otherwise =
+        [ gId f +++ "::" +++ concatMap (\a -> gId a +++ "-> ") args ++ t | (f,args) <- rules ]
+  where t = "Tree" +++ gId cat ++ "_"
+
+
 ----hInstance m ("Cn",_) = "" --- seems to belong to an old applic. AR 18/5/2004
 hInstance m (cat,[]) = "" 
 hInstance m (cat,rules) 
@@ -104,8 +130,9 @@ hInstance m (cat,rules)
      " gf (" ++ gId cat +++ "[" ++ concat (intersperse "," baseVars) ++ "])" 
            +++ "=" +++ mkRHS ("Base"++ec) baseVars ++++
      " gf (" ++ gId cat +++ "(x:xs)) = " 
-           ++ mkRHS ("Cons"++ec) ["x",prParenth (gId cat+++"xs")] ++++
-     " gf (" ++ gId cat +++ "xs) = error (\"Bad " ++ cat ++ " value: \" ++ show xs)" 
+           ++ mkRHS ("Cons"++ec) ["x",prParenth (gId cat+++"xs")] 
+-- no show for GADTs
+--     ++++ " gf (" ++ gId cat +++ "xs) = error (\"Bad " ++ cat ++ " value: \" ++ show xs)" 
  | otherwise =
   "instance Gf" +++ gId cat +++ "where" ++
   (if length rules == 1 then "" else "\n") +++
