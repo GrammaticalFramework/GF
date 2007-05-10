@@ -4,18 +4,6 @@
 -- This is useful for treebank generation.
 
 abstract Minimal = 
-  Noun,
-  Verb, 
-  Adjective,
-  Adverb,
-  Numeral,
-  Sentence, 
-  Question,
-  Relative,
-  Conjunction,
-  Phrase,
-  Text,
-  MinStructural,
-  Idiom,
+  Grammar,
   MinLexicon
   ** {} ;
