@@ -96,6 +96,7 @@ import qualified GF.Conversion.Prolog as CnvProlog
 import qualified GF.Conversion.TypeGraph as CnvTypeGraph
 import GF.Canon.Unparametrize
 import GF.Canon.Subexpressions
+import GF.Canon.AbsToBNF
 
 import GF.Canon.GFC
 import qualified GF.Canon.MkGFC as MC
@@ -267,6 +268,7 @@ customGrammarPrinter =
   ,(strCI "plbnf",   \_ -> prLBNF True)
   ,(strCI "lbnf",    \_ -> prLBNF False)
   ,(strCI "bnf",     \_ -> prBNF False)
+  ,(strCI "absbnf",  \_ -> abstract2bnf . stateGrammarST)
   ,(strCI "haskell", \_ -> grammar2haskell . stateGrammarST)
   ,(strCI "transfer", \_ -> grammar2transfer . stateGrammarST)
   ,(strCI "morpho",  \_ -> prMorpho . stateMorpho)
