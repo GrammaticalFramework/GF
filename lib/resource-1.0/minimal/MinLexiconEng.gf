@@ -1,2 +1,2 @@
-concrete MinLexiconEng of MinLexicon = MinLexiconI with
+concrete MinLexiconEng of MinLexicon = CatEng ** MinLexiconI with
   (Lexicon = LexiconEng) ;
