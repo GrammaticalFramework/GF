@@ -270,6 +270,7 @@ customGrammarPrinter =
   ,(strCI "bnf",     \_ -> prBNF False)
   ,(strCI "absbnf",  \_ -> abstract2bnf . stateGrammarST)
   ,(strCI "haskell", \_ -> grammar2haskell . stateGrammarST)
+  ,(strCI "haskell_gadt", \_ -> grammar2haskellGADT . stateGrammarST)
   ,(strCI "transfer", \_ -> grammar2transfer . stateGrammarST)
   ,(strCI "morpho",  \_ -> prMorpho . stateMorpho)
   ,(strCI "fullform",\_ -> prFullForm . stateMorpho)
