@@ -61,24 +61,23 @@ oper
 
 --2 Nouns
 
--- Worst case: give all four singular forms, two plural forms (others + dative),
--- and the gender.
 
-  mkN : (x1,_,_,_,_,x6 : Str) -> Gender -> N ; 
-                       -- mann, mann, manne, mannes, männer, männern
-
+mkN : overload {
 -- The regular heuristics recognizes some suffixes, from which it
 -- guesses the gender and the declension: "e, ung, ion" give the
 -- feminine with plural ending "-n, -en", and the rest are masculines
 -- with the plural "-e" (without Umlaut).
-
-  regN : Str -> N ;
-
+  mkN : Str -> N ;
 -- The 'almost regular' case is much like the information given in an ordinary
 -- dictionary. It takes the singular and plural nominative and the
 -- gender, and infers the other forms from these.
+  mkN : (x1,x2 : Str) -> Gender -> N ;
+-- Worst case: give all four singular forms, two plural forms (others + dative),
+-- and the gender.
+  mkN : (x1,_,_,_,_,x6 : Str) -> Gender -> N
+                       -- mann, mann, manne, mannes, männer, männern
+};
 
-  reg2N : (x1,x2 : Str) -> Gender -> N ;
 
 -- Relational nouns need a preposition. The most common is "von" with
 -- the dative. Some prepositions are constructed in [StructuralGer StructuralGer.html].
@@ -254,13 +253,13 @@ mkV : overload {
   singular = Sg ;
   plural = Pl ;
 
-  mkN a b c d e f g = MorphoGer.mkN a b c d e f g ** {lock_N = <>} ;
+  mk6N a b c d e f g = MorphoGer.mkN a b c d e f g ** {lock_N = <>} ;
 
   regN : Str -> N = \hund -> case hund of {
-    _ + "e" => mkN hund hund hund hund (hund + "n") (hund + "n") Fem ;
-    _ + ("ion" | "ung") => mkN hund hund hund hund (hund + "en") (hund + "en") Fem ;
-    _ + ("er" | "en" | "el") => mkN hund hund hund (genitS hund) hund (pluralN hund) Masc ; 
-    _  => mkN hund hund hund (genitS hund) (hund + "e") (pluralN hund) Masc
+    _ + "e" => mk6N hund hund hund hund (hund + "n") (hund + "n") Fem ;
+    _ + ("ion" | "ung") => mk6N hund hund hund hund (hund + "en") (hund + "en") Fem ;
+    _ + ("er" | "en" | "el") => mk6N hund hund hund (genitS hund) hund (pluralN hund) Masc ; 
+    _  => mk6N hund hund hund (genitS hund) (hund + "e") (pluralN hund) Masc
     } ;
 
   reg2N : (x1,x2 : Str) -> Gender -> N = \hund,hunde,g -> 
@@ -271,17 +270,17 @@ mkV : overload {
     in
     case <hund,hunde,g> of {                                        -- Duden p. 223
       <_,_ + ("e" | "er"), Masc | Neutr> =>                         -- I,IV 
-        mkN hund hund hundE hunds hunde hunden g ;
+        mk6N hund hund hundE hunds hunde hunden g ;
       <_ + ("el"|"er"|"en"),_ + ("el"|"er"|"en"), Masc | Neutr> =>  -- II
-        mkN hund hund hund hunds hunde hunden g ;
+        mk6N hund hund hund hunds hunde hunden g ;
       <_,_ + "s", Masc | Neutr> =>                                  -- V 
-        mkN hund hund hund (hund + "s") hunde hunde g ;
+        mk6N hund hund hund (hund + "s") hunde hunde g ;
       <_,_ + "en", Masc> =>                                         -- VI 
-        mkN hund hunde hunde hunde hunde hunde g ;
+        mk6N hund hunde hunde hunde hunde hunde g ;
       <_,_ + ("e" | "er"), Fem> =>                                  -- VII,VIII 
-        mkN hund hund hund hund hunde hunden g ;
+        mk6N hund hund hund hund hunde hunden g ;
       <_,_ + ("n" | "s"), Fem> =>                                   -- IX,X 
-        mkN hund hund hund hund hunde hunde g ;
+        mk6N hund hund hund hund hunde hunde g ;
       _ => regN hund
     } ;
    
@@ -402,6 +401,17 @@ mkV : overload {
   mkA2V v p = mkA2 v p ** {lock_A2 = <>} ;
 
 -- pre-overload API and overload definitions
+
+  regN : Str -> N ;
+  reg2N : (x1,x2 : Str) -> Gender -> N ;
+  mk6N : (x1,_,_,_,_,x6 : Str) -> Gender -> N ; 
+
+  mkN = overload {
+    mkN : Str -> N = regN ;
+    mkN : (x1,x2 : Str) -> Gender -> N = reg2N ;
+    mkN : (x1,_,_,_,_,x6 : Str) -> Gender -> N = mk6N
+    };
+
 
   regV : Str -> V ;
   irregV : (x1,_,_,_,x5 : Str) -> V ;
