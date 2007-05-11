@@ -43,7 +43,7 @@ concrete NounGer of Noun = CatGer ** open ResGer, Prelude in {
         } ;
     DetPl quant num ord = 
       let 
-        n = Pl ;
+        n = num.n ;
         a = quant.a
       in {
         s = \\g,c => quant.s ! g ! c ++ 
@@ -66,16 +66,20 @@ concrete NounGer of Noun = CatGer ** open ResGer, Prelude in {
       a = Strong --- need separately weak for Pl ?
       } ;
 
-    NoNum = {s = []} ; 
+    NoNum = {s = []; n = Pl } ; 
     NoOrd = {s = \\_ => []} ;
 
-    NumInt n = {s = n.s} ;
+    NumInt n = {s = n.s; n = table (Predef.Ints 1 * Predef.Ints 9) {
+			        <0,1>  => Sg ;
+				_ => Pl
+			   } ! <n.size,n.last> 
+      } ;
     OrdInt n = {s = \\_   => n.s ++ "."} ;
 
-    NumNumeral numeral = {s = numeral.s ! NCard} ;
+    NumNumeral numeral = {s = numeral.s ! NCard; n = numeral.n } ;
     OrdNumeral numeral = {s = \\af => numeral.s ! NOrd af} ;
 
-    AdNum adn num = {s = adn.s ++ num.s} ;
+    AdNum adn num = {s = adn.s ++ num.s; n = num.n } ;
 
     OrdSuperl a = {s = a.s ! Superl} ;
 

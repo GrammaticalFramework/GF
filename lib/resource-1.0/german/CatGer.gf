@@ -49,12 +49,12 @@ concrete CatGer of Cat =
     QuantSg, QuantPl = {s : Gender => Case => Str ; a : Adjf} ;
     Quant = {s : Number => Gender => Case => Str ; a : Adjf} ;
     Predet = {s : Number => Gender => Case => Str} ;
-    Num = {s : Str} ;
+    Num = {s : Str; n : Number } ;
     Ord = {s : AForm => Str} ;
 
 -- Numeral
 
-    Numeral = {s : CardOrd => Str} ;
+    Numeral = {s : CardOrd => Str; n : Number } ;
 
 -- Structural
 
