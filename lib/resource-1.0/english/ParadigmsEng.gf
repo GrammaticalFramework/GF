@@ -230,15 +230,15 @@ oper
 -- Except for "be", the worst case needs five forms: the infinitive and
 -- the third person singular present, the past indicative, and the
 -- past and present participles.
-    mkV : (go, goes, went, gone, going : Str) -> V ;
--- Verbs with a particle.
--- The particle, such as in "switch on", is given as a string.
-    mkV : V -> Str -> V ;
--- Reflexive verbs.
--- By default, verbs are not reflexive; this function makes them that.
-    mkV : V -> V
+    mkV : (go, goes, went, gone, going : Str) -> V
   };
 
+-- Verbs with a particle.
+-- The particle, such as in "switch on", is given as a string.
+  partV  : V -> Str -> V ;
+-- Reflexive verbs.
+-- By default, verbs are not reflexive; this function makes them that.
+  reflV  : V -> V ;
 
 --3 Two-place verbs
 --
@@ -508,8 +508,6 @@ oper
   reg2V : (stop, stopped : Str) -> V;
   irregV : (drink, drank, drunk  : Str) -> V ;
   irreg4V : (run, ran, run, running  : Str) -> V ;
-  partV  : V -> Str -> V ;
-  reflV  : V -> V ;
 
   -- Use reg2V instead
   regDuplV : Str -> V ;
@@ -521,9 +519,7 @@ oper
     mkV : (stop, stopped : Str) -> V = reg2V ;
     mkV : (drink, drank, drunk  : Str) -> V = irregV ;
     mkV : (run, ran, run, running  : Str) -> V = irreg4V ;
-    mkV : (go, goes, went, gone, going : Str) -> V = mk5V ;
-    mkV : V -> Str -> V = partV ;
-    mkV : V -> V = reflV
+    mkV : (go, goes, went, gone, going : Str) -> V = mk5V
   };
 
   prepV2 : V -> Prep -> V2 ;
