@@ -115,7 +115,7 @@ lin
   leather_N = reg2N "Leder" "Leder" neuter ;
   leave_V2 = dirV2 (irregV "verlassen" "verläßt" "verließ" "verließe" "verlassen") ;
   like_V2 = dirV2 (irregV "mögen" "mag" "mochte" "möchte" "gemocht") ;
-  listen_V2 = mkV2 (prefixV "zu" (regV "hören")) datPrep ; ---- dat
+  listen_V2 = prepV2 (prefixV "zu" (regV "hören")) datPrep ; ---- dat
   live_V = regV "leben" ;
   long_A = mk3A "lang" "länger" "längste" ;
   lose_V2 = dirV2 (irregV "verlieren" "verliert" "verlor" "verlöre" "verloren") ;
@@ -209,11 +209,11 @@ lin
     dirV2 (irregV "verstehen" "versteht" "verstand" "verstände" "verstanden") ;
   university_N = reg2N "Universität" "Universitäten" feminine  ;
   village_N = reg2N "Dorf" "Dörfer" neuter ;
-  wait_V2 = mkV2 (regV "warten") (mkPrep "auf" accusative) ;
+  wait_V2 = prepV2 (regV "warten") (mkPrep "auf" accusative) ;
   walk_V = seinV (irregV "gehen" "geht" "ging" "ginge" "gegangen") ;
   warm_A = mk3A "warm" "wärmer" "wärmste" ;
   war_N = regN "Krieg" ;
-  watch_V2 = mkV2 (regV "schauen") (mkPrep "an" accusative) ;
+  watch_V2 = prepV2 (regV "schauen") (mkPrep "an" accusative) ;
   water_N = reg2N "Wasser" "Wasser" neuter ;
   white_A = regA "weiß" ;
   window_N = reg2N "Fenster" "Fenster" neuter ;
