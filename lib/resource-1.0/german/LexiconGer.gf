@@ -21,9 +21,9 @@ lin
   bad_A = regA "schlecht" ;
   bank_N = reg2N "Bank" "Banken" feminine ;
   beautiful_A = regA "schön" ;
-  become_VA = mkVA (mkV "werde" "wird" "werd" "wurde" "würde" "geworden") ;
+  become_VA = mkVA (mk6V "werde" "wird" "werd" "wurde" "würde" "geworden") ;
   beer_N = reg2N "Bier" "Biere" neuter ;
-  beg_V2V = mkV2V (mkV "bitten" "bittet" "bitte" "bat" "bäte" "gebeten") accPrep ;
+  beg_V2V = mkV2V (mk6V "bitten" "bittet" "bitte" "bat" "bäte" "gebeten") accPrep ;
   big_A = mkA "groß" "größer" "größte" ;
   bike_N = reg2N "Fahrrad" "Fahrräder" neuter ;
   bird_N = reg2N "Vogel" "Vögel" masculine ;
@@ -58,7 +58,7 @@ lin
   close_V2 = dirV2 (irregV "schließen" "schließt" "schloß" "schlösse" "geschlossen") ;
   coat_N = regN "Jacke" ;
   cold_A = regA "kalt" ;
-  come_V = seinV (mkV "kommen" "kommt" "komm" "kam" "käme" "gekommen") ;
+  come_V = seinV (mk6V "kommen" "kommt" "komm" "kam" "käme" "gekommen") ;
   computer_N = reg2N "Rechner" "Rechner" masculine ;
   country_N = reg2N "Land" "Länder" neuter ;
   cousin_N = reg2N "Vetter" "Vetter" masculine ; --- Kusine

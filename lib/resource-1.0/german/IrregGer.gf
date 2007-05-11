@@ -101,7 +101,7 @@ in {
         M.VHaben ** {lock_V = <>} ;
 
   lin müssen_V =  irregV "müssen" "muß" "mußte" "müßte" "gemußt" ;
-  lin nehmen_V = mkV "nehmen" "nimmt" "nimm" "nahm" "nähme" "genommen" ;
+  lin nehmen_V = mk6V "nehmen" "nimmt" "nimm" "nahm" "nähme" "genommen" ;
   lin nennen_V =  irregV "nennen" "nennt" "nannte" "nennte" "genannt" ;
   lin pfeifen_V =  irregV "pfeifen" "pfeift" "pfiff" "pfiffe" "gepfiffen" ;
   lin preisen_V =  irregV "preisen" "preist" "pries" "priese" "gepriesen" ;
