@@ -142,16 +142,16 @@ oper
 
 --2 Adjectives
 
--- Non-comparison one-place adjectives need two forms: one for
--- the adjectival and one for the adverbial form ("free - freely")
-
-  mkA : (free,freely : Str) -> A ;
-
+  mkA : overload {
 -- For regular adjectives, the adverbial form is derived. This holds
 -- even for cases with the variation "happy - happily".
+    mkA : Str -> A ;
+-- Non-comparison one-place adjectives need two forms: one for
+-- the adjectival and one for the adverbial form ("free - freely")
+    mkA : (free,freely : Str) -> A ;
+  };
 
-  regA : Str -> A ;
- 
+
 --3 Two-place adjectives
 --
 -- Two-place adjectives need a preposition for their second argument.
@@ -209,17 +209,28 @@ oper
 
 --2 Verbs
 --
--- Except for "be", the worst case needs five forms: the infinitive and
--- the third person singular present, the past indicative, and the
--- past and present participles.
 
-  mkV : (go, goes, went, gone, going : Str) -> V ;
 
+  mkV : overload {
 -- The regular verb function recognizes the special cases where the last
 -- character is "y" ("cry - cries" but "buy - buys") or "s", "sh", "x", "z"
 -- ("fix - fixes", etc).
-
-  regV : Str -> V ;
+    mkV : Str -> V ;
+-- There is an extensive list of irregular verbs in the module $IrregularEng$.
+-- In practice, it is enough to give three forms, 
+-- e.g. "drink - drank - drunk".
+    mkV     : (drink, drank, drunk  : Str) -> V ;
+-- Except for "be", the worst case needs five forms: the infinitive and
+-- the third person singular present, the past indicative, and the
+-- past and present participles.
+    mkV : (go, goes, went, gone, going : Str) -> V ;
+-- Verbs with a particle.
+-- The particle, such as in "switch on", is given as a string.
+    mkV : V -> Str -> V ;
+-- Reflexive verbs.
+-- By default, verbs are not reflexive; this function makes them that.
+    mkV : V -> V
+  };
 
 -- The following variant duplicates the last letter in the forms like
 -- "rip - ripped - ripping".
@@ -235,26 +246,16 @@ oper
   irregDuplV : (get,   got,   gotten : Str) -> V ;
 
 
---3 Verbs with a particle.
---
--- The particle, such as in "switch on", is given as a string.
-
-  partV  : V -> Str -> V ;
-
---3 Reflexive verbs
---
--- By default, verbs are not reflexive; this function makes them that.
-
-  reflV  : V -> V ;
 
 --3 Two-place verbs
 --
 -- Two-place verbs need a preposition, except the special case with direct object.
 -- (transitive verbs). Notice that a particle comes from the $V$.
 
-  mkV2  : V -> Prep -> V2 ;
-
-  dirV2 : V -> V2 ;
+  mkV2 : overload {
+    mkV2  : V -> Prep -> V2 ; -- believe in
+    mkV2  : V -> V2           -- kill
+  };
 
 --3 Three-place verbs
 --
@@ -361,7 +362,7 @@ oper
   mkNP x y n g = {s = table {Gen => x ; _ => y} ; a = agrP3 n ;
   lock_NP = <>} ;
 
-  mkA a b = mkAdjective a a a b ** {lock_A = <>} ;
+  mk2A a b = mkAdjective a a a b ** {lock_A = <>} ;
   regA a = regAdjective a ** {lock_A = <>} ;
 
   mkA2 a p = a ** {c2 = p.s ; lock_A2 = <>} ;
@@ -402,7 +403,7 @@ oper
   mkPrep p = ss p ** {lock_Prep = <>} ;
   noPrep = mkPrep [] ;
 
-  mkV a b c d e = mkVerb a b c d e ** {s1 = [] ; lock_V = <>} ;
+  mk5V a b c d e = mkVerb a b c d e ** {s1 = [] ; lock_V = <>} ;
 
   regV cry = 
     let
@@ -421,7 +422,7 @@ oper
            } ;
         _   => cry + "ing"
         }
-    in mkV cry cries cried cried crying ;
+    in mk5V cry cries cried cried crying ;
 
   regDuplV fit = 
     case last fit of {
@@ -429,23 +430,23 @@ oper
         Predef.error (["final duplication makes no sense for"] ++ fit) ;
       t =>
        let fitt = fit + t in
-       mkV fit (fit + "s") (fitt + "ed") (fitt + "ed") (fitt + "ing")
+       mk5V fit (fit + "s") (fitt + "ed") (fitt + "ed") (fitt + "ing")
       } ;
 
   irregV x y z = let reg = (regV x).s in
-    mkV x (reg ! VPres) y z (reg ! VPresPart) ** {s1 = [] ; lock_V = <>} ;
+    mk5V x (reg ! VPres) y z (reg ! VPresPart) ** {s1 = [] ; lock_V = <>} ;
 
   irregDuplV fit y z = 
     let 
       fitting = (regDuplV fit).s ! VPresPart
     in
-    mkV fit (fit + "s") y z fitting ;
+    mk5V fit (fit + "s") y z fitting ;
 
   partV v p = verbPart v p ** {lock_V = <>} ;
   reflV v = {s = v.s ; part = v.part ; lock_V = v.lock_V ; isRefl = True} ;
 
-  mkV2 v p = v ** {s = v.s ; s1 = v.s1 ; c2 = p.s ; lock_V2 = <>} ;
-  dirV2 v = mkV2 v noPrep ;
+  prepV2 v p = v ** {s = v.s ; s1 = v.s1 ; c2 = p.s ; lock_V2 = <>} ;
+  dirV2 v = prepV2 v noPrep ;
 
   mkV3 v p q = v ** {s = v.s ; s1 = v.s1 ; c2 = p.s ; c3 = q.s ; lock_V3 = <>} ;
   dirV3 v p = mkV3 v noPrep p ;
@@ -464,11 +465,11 @@ oper
   A2V : Type = A2 ;
 
   mkV0  v = v ** {lock_V = <>} ;
-  mkV2S v p = mkV2 v p ** {lock_V2 = <>} ;
-  mkV2V v p t = mkV2 v p ** {s4 = t ; lock_V2 = <>} ;
+  mkV2S v p = prepV2 v p ** {lock_V2 = <>} ;
+  mkV2V v p t = prepV2 v p ** {s4 = t ; lock_V2 = <>} ;
   mkVA  v = v ** {lock_VA = <>} ;
-  mkV2A v p = mkV2 v p ** {lock_V2A = <>} ;
-  mkV2Q v p = mkV2 v p ** {lock_V2 = <>} ;
+  mkV2A v p = prepV2 v p ** {lock_V2A = <>} ;
+  mkV2Q v p = prepV2 v p ** {lock_V2 = <>} ;
 
   mkAS  v = v ** {lock_A = <>} ;
   mkA2S v p = mkA2 v p ** {lock_A = <>} ;
@@ -491,6 +492,37 @@ oper
     mkN : Gender -> N -> N = genderN ;
     mkN : Str -> N -> N = compoundN
     } ;
+
+
+  mk2A : (free,freely : Str) -> A ;
+  regA : Str -> A ;
+
+  mkA = overload {
+    mkA : Str -> A = regA ;
+    mkA : (free,freely : Str) -> A = mk2A
+  };
+
+
+  mk5V : (go, goes, went, gone, going : Str) -> V ;
+  regV : Str -> V ;
+  partV  : V -> Str -> V ;
+  reflV  : V -> V ;
+
+  mkV = overload {
+    mkV : Str -> V = regV ;
+    mkV : (drink, drank, drunk  : Str) -> V = irregV ;
+    mkV : (go, goes, went, gone, going : Str) -> V = mk5V ;
+    mkV : V -> Str -> V = partV ;
+    mkV : V -> V = reflV
+  };
+
+  prepV2 : V -> Prep -> V2 ;
+  dirV2 : V -> V2 ;
+
+  mkV2 = overload {
+    mkV2  : V -> Prep -> V2 = prepV2;
+    mkV2  : V -> V2 = dirV2
+  }; 
 
 
 } ;
