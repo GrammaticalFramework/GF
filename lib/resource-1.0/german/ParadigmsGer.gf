@@ -184,14 +184,16 @@ mkV : overload {
 
 
 --3 Two-place verbs
---
--- Two-place verbs need a preposition, except the special case with direct object
--- (accusative, transitive verbs). There is also a case for dative objects.
 
-  mkV2  : V -> Prep -> V2 ;
+mkV2 : overload {
+-- Two-place verbs with a preposition.
+  mkV2 : V -> Prep -> V2 ;
+-- Two-place verbs with direct object (accusative, transitive verbs).
+  mkV2 : V -> V2 ;
+-- Two-place verbs with object in the given case.
+  mkV2 : V -> Case -> V2
+};
 
-  dirV2 : V -> V2 ;
-  datV2 : V -> V2 ;
 
 --3 Three-place verbs
 --
@@ -370,9 +372,9 @@ mkV : overload {
   sein_V = MorphoGer.sein_V ** {lock_V = <>} ;
   werden_V = MorphoGer.werden_V ** {lock_V = <>} ;
 
-  mkV2 v c   = v ** {c2 = c ; lock_V2 = <>} ;
-  dirV2 v = mkV2 v (mkPrep [] accusative) ;
-  datV2 v = mkV2 v (mkPrep [] dative) ;
+  prepV2 v c   = v ** {c2 = c ; lock_V2 = <>} ;
+  dirV2 v = prepV2 v (mkPrep [] accusative) ;
+  datV2 v = prepV2 v (mkPrep [] dative) ;
 
   mkV3 v c d = v ** {c2 = c ; c3 = d ; lock_V3 = <>} ;
   dirV3 v p = mkV3 v (mkPrep [] accusative) p ;
@@ -388,11 +390,11 @@ mkV : overload {
   A2V : Type = A2 ;
 
   mkV0  v = v ** {lock_V = <>} ;
-  mkV2S v p = mkV2 v p ** {lock_V2 = <>} ;
-  mkV2V v p = mkV2 v p ** {lock_V2 = <>} ;
+  mkV2S v p = prepV2 v p ** {lock_V2 = <>} ;
+  mkV2V v p = prepV2 v p ** {lock_V2 = <>} ;
   mkVA  v = v ** {lock_VA = <>} ;
-  mkV2A v p = mkV2 v p ** {lock_V2A = <>} ;
-  mkV2Q v p = mkV2 v p ** {lock_V2 = <>} ;
+  mkV2A v p = prepV2 v p ** {lock_V2A = <>} ;
+  mkV2Q v p = prepV2 v p ** {lock_V2 = <>} ;
 
   mkAS  v = v ** {lock_A = <>} ;
   mkA2S v p = mkA2 v p ** {lock_A = <>} ;
@@ -434,6 +436,19 @@ mkV : overload {
     mkV : (x1,_,_,_,x5 : Str) -> V = irregV ;
     mkV : (x1,_,_,_,_,x6 : Str) -> V = mk6V ;
     mkV : Str -> V -> V = prefixV
+    };
+
+
+  prepV2  : V -> Prep -> V2 ;
+
+  dirV2 : V -> V2 ;
+
+  datV2 : V -> V2 ;
+
+  mkV2 = overload {
+    mkV2 : V -> Prep -> V2 = prepV2;
+    mkV2 : V -> V2 = dirV2 ;
+    mkV2 : V -> Case -> V2 = \v,c -> prepV2 v (mkPrep [] c)
     };
 
 
