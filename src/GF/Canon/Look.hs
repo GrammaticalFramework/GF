@@ -118,6 +118,7 @@ allParamValues cnc ptyp = case ptyp of
     let (ls,tys) = unzip [(l,t) | Lbg l t <- r]
     tss <- mapM allPV tys
     return [R (map (uncurry Ass) (zip ls ts)) | ts <- combinations tss]
+  TInts n -> return [EInt i | i <- [0..n]]
   _ -> prtBad "cannot possibly find parameter values for" ptyp
  where
    allPV = allParamValues cnc
