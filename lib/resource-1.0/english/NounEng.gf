@@ -32,7 +32,7 @@ concrete NounEng of Noun = CatEng ** open ResEng, Prelude in {
 
     DetPl quant num ord = {
       s = quant.s ++ num.s ++ ord.s ; 
-      n = Pl
+      n = num.n
       } ;
 
     SgQuant quant = {s = quant.s ! Sg} ;
@@ -40,15 +40,21 @@ concrete NounEng of Noun = CatEng ** open ResEng, Prelude in {
 
     PossPron p = {s = \\_ => p.s ! Gen} ;
 
-    NoNum, NoOrd = {s = []} ;
+    NoNum = {s = []; n = Pl } ;
+    NoOrd = {s = []} ;
 
-    NumInt n = n ;
+    NumInt n = {s = n.s; n = table (Predef.Ints 1 * Predef.Ints 9) {
+			        <0,1>  => Sg ;
+				_ => Pl
+			   } ! <n.size,n.last>
+    } ;
+
     OrdInt n = {s = n.s ++ "th"} ; ---
 
-    NumNumeral numeral = {s = numeral.s ! NCard} ;
+    NumNumeral numeral = {s = numeral.s ! NCard; n = numeral.n } ;
     OrdNumeral numeral = {s = numeral.s ! NOrd} ;
 
-    AdNum adn num = {s = adn.s ++ num.s} ;
+    AdNum adn num = {s = adn.s ++ num.s; n = num.n } ;
 
     OrdSuperl a = {s = a.s ! AAdj Superl} ;
 
