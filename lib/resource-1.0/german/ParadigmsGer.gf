@@ -149,6 +149,11 @@ oper
 
 --2 Verbs
 
+mkV : overload {
+-- Weak verbs are sometimes called regular verbs.
+  mkV : Str -> V ;                    -- führen
+-- Irregular verbs use Ablaut and, in the worst cases, also Umlaut.
+  mkV : (x1,_,_,_,x5 : Str) -> V ; -- sehen, sieht, sah, sähe, gesehen
 -- The worst-case constructor needs six forms:
 -- - Infinitive, 
 -- - 3p sg pres. indicative, 
@@ -156,26 +161,18 @@ oper
 -- - 1/3p sg imperfect indicative, 
 -- - 1/3p sg imperfect subjunctive (because this uncommon form can have umlaut)
 -- - the perfect participle 
---
---
   mkV : (x1,_,_,_,_,x6 : Str) -> V ;   -- geben, gibt, gib, gab, gäbe, gegeben
+-- To add a movable suffix e.g. "auf(fassen)".
+  mkV : Str -> V -> V
+};
 
--- Weak verbs are sometimes called regular verbs.
-  
-  regV : Str -> V ;                    -- führen
 
--- Irregular verbs use Ablaut and, in the worst cases, also Umlaut.
-
-  irregV : (x1,_,_,_,x5 : Str) -> V ; -- sehen, sieht, sah, sähe, gesehen
 
 -- To remove the past participle prefix "ge", e.g. for the verbs
 -- prefixed by "be-, ver-".
 
   no_geV : V -> V ;
 
--- To add a movable suffix e.g. "auf(fassen)".
-
-  prefixV : Str -> V -> V ;
 
 -- To change the auxiliary from "haben" (default) to "sein" and
 -- vice-versa.
@@ -325,7 +322,7 @@ oper
   von_Prep = mkPrep "von" dative ;
   zu_Prep = mkPrep "zu" dative ;
 
-  mkV geben gibt gib gab gaebe gegeben = 
+  mk6V geben gibt gib gab gaebe gegeben = 
     let
       geb   = stemVerb geben ;
       gebe  = geb + "e" ;
@@ -346,13 +343,13 @@ oper
       fragte  = fragt + "e" ;
       gefragt = "ge" + fragt ;
     in
-    mkV fragen fragt (frag + "e") fragte fragte gefragt ;
+    mk6V fragen fragt (frag + "e") fragte fragte gefragt ;
 
   irregV singen singt sang saenge gesungen = 
     let
       sing = stemVerb singen ;
     in
-    mkV singen singt sing sang saenge gesungen ;
+    mk6V singen singt sing sang saenge gesungen ;
 
   prefixV p v = MorphoGer.prefixV p v ** {lock_V = v.lock_V} ;
 
@@ -403,5 +400,21 @@ oper
   mkA2S v p = mkA2 v p ** {lock_A = <>} ;
   mkAV  v = v ** {lock_A = <>} ;
   mkA2V v p = mkA2 v p ** {lock_A2 = <>} ;
+
+-- pre-overload API and overload definitions
+
+  regV : Str -> V ;
+  irregV : (x1,_,_,_,x5 : Str) -> V ;
+  mk6V : (x1,_,_,_,_,x6 : Str) -> V ;
+
+  prefixV : Str -> V -> V ;
+
+  mkV = overload {
+    mkV : Str -> V = regV ;
+    mkV : (x1,_,_,_,x5 : Str) -> V = irregV ;
+    mkV : (x1,_,_,_,_,x6 : Str) -> V = mk6V ;
+    mkV : Str -> V -> V = prefixV
+    };
+
 
 } ;
