@@ -85,12 +85,12 @@ lin
   glove_N = regN "glove" ;
   gold_N = regN "gold" ;
   good_A = mkADeg "good" "well" "better" "best" ;
-  go_V = mkV "go" "goes" "went" "gone" "going" ;
+  go_V = mk5V "go" "goes" "went" "gone" "going" ;
   green_A = regADeg "green" ;
   harbour_N = regN "harbour" ;
   hate_V2 = dirV2 (regV "hate") ;
   hat_N = regN "hat" ;
-  have_V2 = dirV2 (mkV "have" "has" "had" "had" "having") ;
+  have_V2 = dirV2 (mk5V "have" "has" "had" "had" "having") ;
   hear_V2 = dirV2 (irregV "hear" "heard" "heard") ;
   hill_N = regN "hill" ;
   hope_VS = mkVS (regV "hope") ;
@@ -108,7 +108,7 @@ lin
   leather_N = regN "leather" ;
   leave_V2 = dirV2 (irregV "leave" "left" "left") ;
   like_V2 = dirV2 (regV "like") ;
-  listen_V2 = mkV2 (regV "listen") toP ;
+  listen_V2 = prepV2 (regV "listen") toP ;
   live_V = (regV "live") ;
   long_A = regADeg "long" ;
   lose_V2 = dirV2 (irregV "lose" "lost" "lost") ;
@@ -196,7 +196,7 @@ lin
   understand_V2 = dirV2 (irregV "understand" "understood" "understood") ;
   university_N = regN "university" ;
   village_N = regN "village" ;
-  wait_V2 = mkV2 (regV "wait") forP ;
+  wait_V2 = prepV2 (regV "wait") forP ;
   walk_V = (regV "walk") ;
   warm_A = regADeg "warm" ;
   war_N = regN "war" ;
@@ -213,13 +213,13 @@ lin
   yellow_A = regADeg "yellow" ;
   young_A = regADeg "young" ;
 
-  do_V2 = dirV2 (mkV "do" "does" "did" "done" "doing") ;
+  do_V2 = dirV2 (mk5V "do" "does" "did" "done" "doing") ;
   now_Adv = mkAdv "now" ;
   already_Adv = mkAdv "already" ;
   song_N = regN "song" ;
   add_V3 = dirV3 (regV "add") toP ;
   number_N = regN "number" ;
-  put_V2 = mkV2 (irregDuplV "put" "put" "put") noPrep ;
+  put_V2 = prepV2 (irregDuplV "put" "put" "put") noPrep ;
   stop_V = regDuplV "stop" ;
   jump_V = regV "jump" ;
 
