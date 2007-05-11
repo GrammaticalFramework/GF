@@ -24,7 +24,7 @@ lin
   become_VA = mkVA (mk6V "werde" "wird" "werd" "wurde" "würde" "geworden") ;
   beer_N = reg2N "Bier" "Biere" neuter ;
   beg_V2V = mkV2V (mk6V "bitten" "bittet" "bitte" "bat" "bäte" "gebeten") accPrep ;
-  big_A = mkA "groß" "größer" "größte" ;
+  big_A = mk3A "groß" "größer" "größte" ;
   bike_N = reg2N "Fahrrad" "Fahrräder" neuter ;
   bird_N = reg2N "Vogel" "Vögel" masculine ;
   black_A = regA "schwarz" ;
@@ -54,7 +54,7 @@ lin
   church_N = regN "Kirche" ;
   city_N = reg2N "Stadt" "Städte" feminine ;
   clean_A = regA "rein" ;
-  clever_A = mkA "klug" "klüger" "klügste" ;
+  clever_A = mk3A "klug" "klüger" "klügste" ;
   close_V2 = dirV2 (irregV "schließen" "schließt" "schloß" "schlösse" "geschlossen") ;
   coat_N = regN "Jacke" ;
   cold_A = regA "kalt" ;
@@ -90,7 +90,7 @@ lin
   girl_N = reg2N "Mädchen" "Mädchen" neuter ;
   glove_N = regN "Handschuh" ;
   gold_N = reg2N "Gold" "Golde" neuter ; ---- infl
-  good_A = mkA "gut" "besser" "beste" ;
+  good_A = mk3A "gut" "besser" "beste" ;
   go_V = seinV (irregV "gehen" "geht" "ging" "ginge" "gegangen") ;
   green_A = regA "grün" ;
   harbour_N = reg2N "Hafen" "Häfen" masculine ;
@@ -117,7 +117,7 @@ lin
   like_V2 = dirV2 (irregV "mögen" "mag" "mochte" "möchte" "gemocht") ;
   listen_V2 = mkV2 (prefixV "zu" (regV "hören")) datPrep ; ---- dat
   live_V = regV "leben" ;
-  long_A = mkA "lang" "länger" "längste" ;
+  long_A = mk3A "lang" "länger" "längste" ;
   lose_V2 = dirV2 (irregV "verlieren" "verliert" "verlor" "verlöre" "verloren") ;
   love_N = regN "Liebe" ;
   love_V2 = dirV2 (regV "lieben") ;
@@ -135,7 +135,7 @@ lin
   now_Adv = mkAdv "jetzt" ;
   number_N = reg2N "Zahl" "Zahlen" feminine ;
   oil_N = reg2N "Öl" "Öle" neuter ;
-  old_A = mkA "alt" "älter" "älteste" ;
+  old_A = mk3A "alt" "älter" "älteste" ;
   open_V2 = dirV2 (regV "öffnen") ;
   paint_V2A = mkV2A (regV "malen") accPrep ;
   paper_N = reg2N "Papier" "Papiere" neuter ;
@@ -174,7 +174,7 @@ lin
   shirt_N = reg2N "Hemd" "Hemden" neuter ; ---- infl
   shoe_N = regN "Schuh" ;
   shop_N = reg2N "Laden" "Läden" masculine ;
-  short_A =  mkA "kurz" "kürzer" "kürzeste" ;
+  short_A =  mk3A "kurz" "kürzer" "kürzeste" ;
   silver_N = reg2N "Silber" "Silber" neuter ; ---- infl
   sister_N = reg2N "Schwester" "Schwestern" feminine ;
   sleep_V = irregV "schlafen" "schläft" "schlief" "schliefe" "geschlafen" ;
@@ -189,7 +189,7 @@ lin
   stop_V = seinV (irregV "halten" "hält" "hielt" "hielte" "gehalten") ;
   stove_N = regN "Herd" ;
   student_N = reg2N "Student" "Studenten" masculine ;
-  stupid_A = mkA "dumm" "dümmer" "dümmste" ; ----
+  stupid_A = mk3A "dumm" "dümmer" "dümmste" ; ----
   sun_N = regN "Sonne" ;
   switch8off_V2 = dirV2 (prefixV "aus" (regV "schalten")) ;
   switch8on_V2 = dirV2 (prefixV "ein" (regV "schalten")) ;
@@ -211,7 +211,7 @@ lin
   village_N = reg2N "Dorf" "Dörfer" neuter ;
   wait_V2 = mkV2 (regV "warten") (mkPrep "auf" accusative) ;
   walk_V = seinV (irregV "gehen" "geht" "ging" "ginge" "gegangen") ;
-  warm_A = mkA "warm" "wärmer" "wärmste" ;
+  warm_A = mk3A "warm" "wärmer" "wärmste" ;
   war_N = regN "Krieg" ;
   watch_V2 = mkV2 (regV "schauen") (mkPrep "an" accusative) ;
   water_N = reg2N "Wasser" "Wasser" neuter ;
@@ -224,7 +224,7 @@ lin
   wood_N = reg2N "Holz" "Hölzer" neuter ;
   write_V2 = dirV2 (irregV "schreiben" "schreibt" "schrieb" "schriebe" "geschrieben") ;
   yellow_A = regA "gelb" ;
-  young_A = mkA "jung" "jünger" "jüngste" ;
+  young_A = mk3A "jung" "jünger" "jüngste" ;
   left_Ord = Mo.mkOrd (regA "link") ;
   right_Ord = Mo.mkOrd (regA "recht") ;
   far_Adv = mkAdv "weit" ;
@@ -233,10 +233,10 @@ lin
   dull_A = regA "stumpf" ;
   full_A = regA "voll" ;
   heavy_A = regA "schwer" ;
-  near_A = mkA "nahe" "näher" "nächste" ;
+  near_A = mk3A "nahe" "näher" "nächste" ;
   rotten_A = regA "verdorben" ;
   round_A = regA "rund" ;
-  sharp_A = mkA "scharf" "schärfer" "schärfste" ;
+  sharp_A = mk3A "scharf" "schärfer" "schärfste" ;
   smooth_A = regA "glatt" ;
   straight_A = regA "gerade" ;
   wet_A = regA "naß" ;
