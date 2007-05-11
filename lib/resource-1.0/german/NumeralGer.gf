@@ -4,9 +4,9 @@ flags optimize = all_subs ;
 
 lincat 
   Digit = {s : DForm => CardOrd => Str} ;
-  Sub10 = {s : DForm => CardOrd => Str} ;
+  Sub10 = {s : DForm => CardOrd => Str ; n : Number} ;
   Sub100, Sub1000, Sub1000000 = 
-          {s :          CardOrd => Str} ;
+          {s :          CardOrd => Str ; n : Number} ;
 
 lin 
   num x = x ;
@@ -28,20 +28,20 @@ lin
     n = Sg
     } ;
   pot0 d = {s = \\f,g => d.s ! f ! g ; n = Pl} ;
-  pot110 = {s = cardReg "zehn"} ;
-  pot111 = {s = cardReg "elf"} ;
-  pot1to19 d = {s = d.s ! DTeen} ;
-  pot0as1 n = {s = n.s ! DUnit} ;
-  pot1 d = {s = d.s ! DTen} ;
-  pot1plus d e = {s = \\g => e.s ! DUnit ! invNum ++ "und" ++ d.s ! DTen ! g} ;
+  pot110 = {s = cardReg "zehn"; n = Pl} ;
+  pot111 = {s = cardReg "elf"; n = Pl} ;
+  pot1to19 d = {s = d.s ! DTeen; n = Pl} ;
+  pot0as1 n = {s = n.s ! DUnit; n = n.n } ;
+  pot1 d = {s = d.s ! DTen; n = Pl} ;
+  pot1plus d e = {s = \\g => e.s ! DUnit ! invNum ++ "und" ++ d.s ! DTen ! g; n = Pl} ;
   pot1as2 n = n ;
   pot2 d = 
-    {s = \\g => d.s ! DUnit ! invNum ++ cardOrd "hundert" "hunderte" ! g} ;
+    {s = \\g => d.s ! DUnit ! invNum ++ cardOrd "hundert" "hunderte" ! g ; n = Pl} ;
   pot2plus d e = 
-    {s = \\g => d.s ! DUnit ! invNum ++ "hundert" ++ e.s ! g} ;
+    {s = \\g => d.s ! DUnit ! invNum ++ "hundert" ++ e.s ! g ; n = Pl} ;
   pot2as3 n = n ;
   pot3 n = 
-    {s = \\g => n.s ! invNum ++ cardOrd "tausend" "tausendte" ! g} ; ----
+    {s = \\g => n.s ! invNum ++ cardOrd "tausend" "tausendte" ! g ; n = Pl} ; ----
   pot3plus n m = 
     {s = \\g => n.s ! invNum ++ "tausend" ++ m.s ! g ; n = Pl} ;
 
