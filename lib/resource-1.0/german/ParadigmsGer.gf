@@ -105,14 +105,13 @@ mkN : overload {
 
 --2 Adjectives
 
--- Adjectives need three forms, one for each degree.
-
-  mkA : (x1,_,x3 : Str) -> A ; -- gut,besser,beste 
-
+  mkA : overload {
 -- The regular adjective formation works for most cases, and includes
 -- variations such as "teuer - teurer", "böse - böser".
-
-  regA : Str -> A ;
+    mkA : Str -> A ;
+-- Adjectives need three forms, one for each degree.
+    mkA : (gut,besser,beste : Str) -> A -- gut,besser,beste 
+    };
 
 -- Invariable adjective are a special case. 
 
@@ -294,7 +293,7 @@ mkV : overload {
   regPN = \horst -> 
     mkPN horst (ifTok Tok (Predef.dp 1 horst) "s" horst (horst + "s")) ;
 
-  mkA : (x1,_,x3 : Str) -> A = \a,b,c ->
+  mk3A : (gut,besser,beste : Str) -> A = \a,b,c ->
     let aa : Str = case a of {
       teu + "er" => teu + "r" ;
       mud + "e" => mud ;
@@ -303,9 +302,9 @@ mkV : overload {
     MorphoGer.mkA a aa b (init c) ** {lock_A = <>} ;
 
   regA : Str -> A = \a -> case a of {
-    teu + "er" => mkA a (teu + "rer") (teu + "reste") ;
-    _ + "e"    => mkA a (a + "r") (a + "ste") ;
-    _          => mkA a (a + "er") (a + "este")
+    teu + "er" => mk3A a (teu + "rer") (teu + "reste") ;
+    _ + "e"    => mk3A a (a + "r") (a + "ste") ;
+    _          => mk3A a (a + "er") (a + "este")
     } ;
 
   invarA = \s -> {s = \\_,_ => s ; lock_A = <>} ; ---- comparison
@@ -411,6 +410,17 @@ mkV : overload {
     mkN : (x1,x2 : Str) -> Gender -> N = reg2N ;
     mkN : (x1,_,_,_,_,x6 : Str) -> Gender -> N = mk6N
     };
+
+
+
+  regA : Str -> A ;
+  mk3A : (gut,besser,beste : Str) -> A ;
+
+  mkA = overload {
+    mkA : Str -> A = regA ;
+    mkA : (gut,besser,beste : Str) -> A = mk3A
+    };
+
 
 
   regV : Str -> V ;
