@@ -202,11 +202,11 @@ value <tt>0</tt> for other integers (which are never negative). This parameter c
 be used e.g. in calculating number agreement,
 <pre>
     Risala i = {s = i.s ++ table (Predef.Ints 1 * Predef.Ints 9) {
-      <0,1>  => "risalah" ;
-      <0,2>  => "risalatan" ;
-      <0,_> | <1,0> => "rasail" ; 
-      _ => "risalah"
-      } ! <i.size,i.last>
+      &lt;0,1&gt;  =&gt; "risalah" ;
+      &lt;0,2&gt;  =&gt; "risalatan" ;
+      &lt;0,_&gt; | &lt;1,0&gt; =&gt; "rasail" ; 
+      _ =&gt; "risalah"
+      } ! &lt;i.size,i.last&gt;
     } ;
 </pre>
 Notice that the table has to be typed explicitly for <tt>Ints k</tt>, 
