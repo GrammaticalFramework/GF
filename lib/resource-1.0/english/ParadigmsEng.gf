@@ -210,16 +210,23 @@ oper
 --2 Verbs
 --
 
-
+-- Verbs are constructed by the function $mkV$, which takes a varying
+-- number of arguments.
   mkV : overload {
 -- The regular verb function recognizes the special cases where the last
 -- character is "y" ("cry - cries" but "buy - buys") or "s", "sh", "x", "z"
 -- ("fix - fixes", etc).
-    mkV : Str -> V ;
+    mkV : (cry : Str) -> V ;
+-- Give the present and past forms for regular verbs where
+-- the last letter is duplicated in some forms,
+-- e.g. "rip - ripped - ripping".
+    mkV : (stop, stopped : Str) -> V ;
 -- There is an extensive list of irregular verbs in the module $IrregularEng$.
 -- In practice, it is enough to give three forms, 
 -- e.g. "drink - drank - drunk".
     mkV     : (drink, drank, drunk  : Str) -> V ;
+-- Irregular verbs with duplicated consonant in the present participle.
+    mkV     : (run, ran, run, running  : Str) -> V ;
 -- Except for "be", the worst case needs five forms: the infinitive and
 -- the third person singular present, the past indicative, and the
 -- past and present participles.
@@ -231,20 +238,6 @@ oper
 -- By default, verbs are not reflexive; this function makes them that.
     mkV : V -> V
   };
-
--- The following variant duplicates the last letter in the forms like
--- "rip - ripped - ripping".
-
-  regDuplV : Str -> V ;
-
--- There is an extensive list of irregular verbs in the module $IrregularEng$.
--- In practice, it is enough to give three forms, 
--- e.g. "drink - drank - drunk", with a variant indicating consonant
--- duplication in the present participle.
-
-  irregV     : (drink, drank, drunk  : Str) -> V ;
-  irregDuplV : (get,   got,   gotten : Str) -> V ;
-
 
 
 --3 Two-place verbs
@@ -424,6 +417,10 @@ oper
         }
     in mk5V cry cries cried cried crying ;
 
+  reg2V fit fitted =
+   let fitt = Predef.tk 2 fitted ;
+   in mk5V fit (fit + "s") (fitt + "ed") (fitt + "ed") (fitt + "ing") ;
+
   regDuplV fit = 
     case last fit of {
       ("a" | "e" | "i" | "o" | "u" | "y") => 
@@ -435,6 +432,9 @@ oper
 
   irregV x y z = let reg = (regV x).s in
     mk5V x (reg ! VPres) y z (reg ! VPresPart) ** {s1 = [] ; lock_V = <>} ;
+
+  irreg4V x y z w = let reg = (regV x).s in
+    mk5V x (reg ! VPres) y z w ** {s1 = [] ; lock_V = <>} ;
 
   irregDuplV fit y z = 
     let 
@@ -504,13 +504,23 @@ oper
 
 
   mk5V : (go, goes, went, gone, going : Str) -> V ;
-  regV : Str -> V ;
+  regV : (cry : Str) -> V ;
+  reg2V : (stop, stopped : Str) -> V;
+  irregV : (drink, drank, drunk  : Str) -> V ;
+  irreg4V : (run, ran, run, running  : Str) -> V ;
   partV  : V -> Str -> V ;
   reflV  : V -> V ;
 
+  -- Use reg2V instead
+  regDuplV : Str -> V ;
+  -- Use irreg4V instead
+  irregDuplV : (get,   got,   gotten : Str) -> V ;
+
   mkV = overload {
-    mkV : Str -> V = regV ;
+    mkV : (cry : Str) -> V = regV ;
+    mkV : (stop, stopped : Str) -> V = reg2V ;
     mkV : (drink, drank, drunk  : Str) -> V = irregV ;
+    mkV : (run, ran, run, running  : Str) -> V = irreg4V ;
     mkV : (go, goes, went, gone, going : Str) -> V = mk5V ;
     mkV : V -> Str -> V = partV ;
     mkV : V -> V = reflV
