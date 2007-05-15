@@ -364,6 +364,14 @@ checkReservedId x = let c = prt x in
             then checkWarn ("Warning: reserved word used as identifier:" +++ c)
             else return ()
 
+-- to normalize records and record types
+labelIndex :: Type -> Label -> Int
+labelIndex ty lab = case ty of
+  RecType ts -> maybe (error ("label index" +++ prt lab)) id $ lookup lab $ labs ts
+  _ -> error $ "label index" +++ prt ty
+ where 
+  labs ts = zip (map fst (sortBy (\ x y -> compare (fst x) (fst y)) ts)) [0..]
+
 -- the underlying algorithms
 
 inferLType :: SourceGrammar -> Term -> Check (Term, Type)
@@ -426,10 +434,13 @@ inferLType gr trm = case trm of
    P t i -> do
      (t',ty) <- infer t   --- ??
      ty' <- comp ty
-     termWith (P t' i) $ checkErr $ case ty' of
+-----     let tr2 = PI t' i (labelIndex ty' i)
+     let tr2 = P t' i
+     termWith tr2 $ checkErr $ case ty' of
        RecType ts -> maybeErr ("unknown label" +++ prt i +++ "in" +++ prt ty') $ 
                      lookup i ts
        _ -> prtBad ("record type expected for" +++ prt t +++ "instead of") ty'
+   PI t i _ -> infer $ P t i
 
    R r -> do
      let (ls,fs) = unzip r

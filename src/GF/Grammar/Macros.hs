@@ -672,6 +672,9 @@ composOp co trm =
    P t i ->
      do t' <- co t
         return (P t' i)
+   PI t i j ->
+     do t' <- co t
+        return (PI t' i j)
    ExtR a c -> 
      do a' <- co a
         c' <- co c

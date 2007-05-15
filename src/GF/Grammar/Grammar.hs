@@ -138,11 +138,12 @@ data Term =
  | RecType [Labelling]  -- ^ record type: @{ p : A ; ...}@
  | R [Assign]           -- ^ record:      @{ p = a ; ...}@
  | P Term Label         -- ^ projection:  @r.p@
+ | PI Term Label Int    -- ^ index-annotated projection
  | ExtR Term Term       -- ^ extension:   @R ** {x : A}@ (both types and terms)
  
  | Table Term Term      -- ^ table type:  @P => A@
  | T TInfo [Case]       -- ^ table:       @table {p => c ; ...}@
- | TSh TInfo [Cases]    -- ^ table with discjunctive patters (only back end opt)
+ | TSh TInfo [Cases]    -- ^ table with disjunctive patters (only back end opt)
  | V Type [Term]        -- ^ table given as course of values: @table T [c1 ; ... ; cn]@
  | S Term Term          -- ^ selection:   @t ! p@
  | Val Type Int         -- ^ parameter value number: @T # i#
