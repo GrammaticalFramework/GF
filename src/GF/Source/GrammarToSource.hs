@@ -153,6 +153,7 @@ trt trm = case trm of
     RecType r -> P.ERecord $ map trLabelling r
     ExtR x y -> P.EExtend (trt x) (trt y)
     P t l -> P.EProj (trt t) (trLabel l)
+    PI t l _ -> P.EProj (trt t) (trLabel l)
     Q t l -> P.EQCons (tri t) (tri l)
     QC t l -> P.EQConstr (tri t) (tri l)
     TSh (TComp ty) cc -> P.ETTable (trt ty) (map trCases cc)

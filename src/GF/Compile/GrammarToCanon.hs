@@ -218,6 +218,7 @@ redCTerm t = case t of
   P tr l -> do
     tr' <- redCTerm tr
     return $ G.P tr' (redLabel l)
+  PI tr l _ -> redCTerm $ P tr l -----
   T i cs     -> do
     ty  <- getTableType i
     ty' <- redCType ty
