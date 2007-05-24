@@ -45,7 +45,7 @@ instance DiffNor of DiffScand = open CommonScand, Prelude in {
       } ;
 
     verbHave = 
-      mkVerb "ha" "har" "ha" "hadde" "hatt" nonExist nonExist nonExist 
+      mkVerb "ha" "har" "ha" "hadde" "hatt" "haven" "havet" "havne"
       **       {part = [] ; isVaere = False} ;
     verbBe = 
       mkVerb "være" "er" "var" "var" "vært" "væren" "været" "værne" 
