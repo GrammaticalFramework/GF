@@ -7,6 +7,9 @@ Last update: %%date(%c)
 % txt2tags --toc gf-tutorial2.txt
 
 %!target:html
+%!encoding: iso-8859-1
+
+%!postproc(tex): "subsection\*" "section"
 
 % workaround for some missing things in the format
 % %!postproc(html): C- <center>
@@ -71,7 +74,7 @@ other tasks are readily available for GF grammars:
 A typical GF application is based on a **multilingual grammar** involving
 translation on a special domain. Existing applications of this idea include
 
-- [Alfa: http://www.cs.chalmers.se/%7Ehallgren/Alfa/Tutorial/GFplugin.html]:
+- [Alfa: http://www.cs.chalmers.se/~hallgren/Alfa/Tutorial/GFplugin.html]:
   a natural-language interface to a proof editor
   (languages: English, French, Swedish)
 - [KeY http://www.key-project.org/]: 
@@ -79,6 +82,7 @@ translation on a special domain. Existing applications of this idea include
   (languages: OCL, English, German)
 - [TALK http://www.talk-project.org]:
   multilingual and multimodal dialogue systems
+  (languages: English, Finnish, French, German, Italian, Spanish, Swedish)
 - [WebALT http://webalt.math.helsinki.fi/content/index_eng.html]: 
   a multilingual translator of mathematical exercises
   (languages: Catalan, English, Finnish, French, Spanish, Swedish)
@@ -126,7 +130,9 @@ languages are solved in GF.
 The tutorial gives a hands-on introduction to grammar writing.
 We start by building a small grammar for the domain of food:
 in this grammar, you can say things like
-``` this Italian cheese is delicious
+``` 
+  this Italian cheese is delicious
+```
 in English and Italian.
 
 The first English grammar 
@@ -140,7 +146,9 @@ good for multilingual grammars. While it is possible to
 BNF grammar to words of some other
 language, proper translation usually involves more.
 For instance, the order of words may have to be changed:
-``` Italian cheese ===> formaggio italiano
+``` 
+  Italian cheese ===> formaggio italiano
+```
 The full GF grammar format is designed to support such
 changes, by separating between the **abstract syntax**
 (the logical structure) and the **concrete syntax** (the
@@ -160,7 +168,7 @@ forms of its words. While the complete description of morphology
 belongs to resource grammars, this tutorial will explain the
 programming concepts involved in morphology. This will moreover
 make it possible to grow the fragment covered by the food example.
-The tutorial will in fact build a toy resource grammar in order
+The tutorial will in fact build a miniature resource grammar in order
 to illustrate the module structure of library-based application
 grammar writing.
 
@@ -177,8 +185,8 @@ quiz systems, can be built simply by writing scripts for the
 system. More complicated applications, such as natural-language
 interfaces and dialogue systems, also require programming in
 some general-purpose language. We will briefly explain how
-GF grammars are used as components of Haskell, Java, and
-Prolog grammars. The tutorial concludes with a couple of
+GF grammars are used as components of Haskell, Java, Javascript,
+and Prolog grammars. The tutorial concludes with a couple of
 case studies showing how such complete systems can be built.
 
 
@@ -186,12 +194,11 @@ case studies showing how such complete systems can be built.
 %--!
 ===Getting the GF program===
 
-The program is open-source free software, which you can download via the
+The GF program is open-source free software, which you can download via the
 GF Homepage:
 [``http://www.cs.chalmers.se/~aarne/GF`` http://www.cs.chalmers.se/~aarne/GF]
 
 There you can download
-
 - binaries for Linux, Solaris, Macintosh, and Windows
 - source code and documentation
 - grammar libraries and examples
@@ -226,38 +233,61 @@ follow them.
 ==The .cf grammar format==
 
 Now you are ready to try out your first grammar.
-We start with one that is not written in GF language, but
-in the ubiquitous BNF notation (Backus Naur Form), which GF can also
-understand. Type (or copy) the following lines in a file named
+We start with one that is not written in the GF language, but
+in the much more common BNF notation (Backus Naur Form). The GF 
+program understands a variant of this notation and translates it
+internally to GF's own representation. 
+
+To get started, type (or copy) the following lines into a file named
 ``food.cf``:
 ```
-  S       ::= Item "is" Quality ;
-  Item    ::= "this" Kind | "that" Kind ;
-  Kind    ::= Quality Kind ;
-  Kind    ::= "wine" | "cheese" | "fish" ;
-  Quality ::= "very" Quality ;
-  Quality ::= "fresh" | "warm" | "Italian" | "expensive" | "delicious" | "boring" ;
+Is.        S       ::= Item "is" Quality ;
+That.      Item    ::= "that" Kind ;
+This.      Item    ::= "this" Kind ;
+QKind.     Kind    ::= Quality Kind ;
+Cheese.    Kind    ::= "cheese" ;
+Fish.      Kind    ::= "fish" ;
+Wine.      Kind    ::= "wine" ;
+Italian.   Quality ::= "Italian" ;
+Boring.    Quality ::= "boring" ;
+Delicious. Quality ::= "delicious" ;
+Expensive. Quality ::= "expensive" ;
+Fresh.     Quality ::= "fresh" ;
+Very.      Quality ::= "very" Quality ;
+Warm.      Quality ::= "warm" ;
 ```
-This grammar defines a set of phrases usable to speak about food.
-It builds **sentences** (``S``) by assigning ``Qualities`` to
-``Item``s. The grammar shows a typical character of GF grammars:
-they are small grammars describing some more or less well-defined
-domain, such as in this case food.
+For those who know ordinary BNF, the
+notation we use includes one extra element: a **label** appearing
+as the first element of each rule and terminated by a full stop.
+
+The grammar we wrote defines a set of phrases usable for speaking about food.
+It builds **sentences** (``S``) by assigning ``Quality``s to
+``Item``s. ``Item``s are build from ``Kind``s by prepending the
+word "this" or "that". ``Kind``s are either **atomic**, such as
+"cheese" and "wine", or formed by prepending a ``Quality`` to a
+``Kind``. A ``Quality`` is either atomic, such as "Italian" and "boring",
+or built by another ``Quality`` by prepending "very". Those familiar with
+the context-free grammar notation will notice that, for instance, the
+following sentence can be built using this grammar:
+```
+  this delicious Italian wine is very very expensive
+```
+
 
 
 %--!
 ===Importing grammars and parsing strings===
 
-The first GF command when using a grammar is to **import** it.
+The first GF command needed when using a grammar is to **import** it.
 The command has a long name, ``import``, and a short name, ``i``.
 You can type either
-
-```> import food.cf
-
+```
+  > import food.cf
+```
 or
-
-```> i food.cf
-
+```
+  > i food.cf
+```
 to get the same effect.
 The effect is that the GF program **compiles** your grammar into an internal
 representation, and shows a new prompt when it is ready.
@@ -265,17 +295,17 @@ representation, and shows a new prompt when it is ready.
 You can now use GF for **parsing**:
 ```
   > parse "this cheese is delicious"
-  S_Item_is_Quality (Item_this_Kind Kind_cheese) Quality_delicious
+  Is (This Cheese) Delicious
 
   > p "that wine is very very Italian"
-  S_Item_is_Quality (Item_that_Kind Kind_wine) 
-    (Quality_very_Quality (Quality_very_Quality Quality_Italian))
+  Is (That Wine) (Very (Very Italian))
 ```
 The ``parse`` (= ``p``) command takes a **string**
 (in double quotes) and returns an **abstract syntax tree** - the thing
-beginning with ``S_Item_Is_Quality``. We will see soon how to make sense
-of the abstract syntax trees - now you should just notice that the tree
-is different for the two strings. 
+beginning with ``Is``. Trees are built from the rule labels given in the
+grammar, and record the ways in which the rules are used to produce the
+strings. A tree is, in general, something easier than a string 
+for a machine to understand and to process further.
 
 Strings that return a tree when parsed do so in virtue of the grammar
 you imported. Try parsing something else, and you fail
@@ -294,7 +324,7 @@ You can also use GF for **linearizing**
 (``linearize = l``). This is the inverse of
 parsing, taking trees into strings:
 ```
-  > linearize S_Item_is_Quality (Item_that_Kind Kind_wine) Quality_warm
+  > linearize Is (That Wine) Warm
   that wine is warm
 ```
 What is the use of this? Typically not that you type in a tree at
@@ -303,36 +333,40 @@ you can obtain a tree from somewhere else. One way to do so is
 **random generation** (``generate_random = gr``):
 ```
   > generate_random
-  S_Item_is_Quality (Item_this_Kind Kind_wine) Quality_delicious
+  Is (This (QKind Italian Fish)) Fresh
 ```
 Now you can copy the tree and paste it to the ``linearize command``.
-Or, more efficiently, feed random generation into linearization by using
+Or, more conveniently, feed random generation into linearization by using
 a **pipe**.
 ```
   > gr | l
-  this fresh cheese is delicious
+  this Italian fish is fresh
 ```
 
 %--!
 ===Visualizing trees===
 
 The gibberish code with parentheses returned by the parser does not
-look like trees. Why is it called so? Trees are a data structure that
-represent **nesting**: trees are branching entities, and the branches
+look like trees. Why is it called so? From the abstract mathematical
+point of view, trees are a data structure that
+represents **nesting**: trees are branching entities, and the branches
 are themselves trees. Parentheses give a linear representation of trees,
 useful for the computer. But the human eye may prefer to see a visualization;
 for this purpose, GF provides the command ``visualizre_tree = vt``, to which
 parsing (and any other tree-producing command) can be piped:
 
-``` parse "this delicious cheese is very Italian" | vt
+``` 
+  parse "this delicious cheese is very Italian" | vt
+```
 
-[Tree.png]
+[Tree2.png]
 
 
 %--!
 ===Some random-generated sentences===
 
-Random generation can be quite amusing. So you may want to
+Random generation is a good way to test a grammar; it can also
+be quite amusing. So you may want to
 generate ten strings with one and the same command:
 ```
   > gr -number=10 | l
@@ -385,17 +419,15 @@ A pipe of GF commands can have any length, but the "output type"
 (either string or tree) of one command must always match the "input type"
 of the next command. 
 
-
-
 The intermediate results in a pipe can be observed by putting the
 **tracing** flag ``-tr`` to each command whose output you
 want to see:
 ```
   > gr -tr | l -tr | p
 
-  S_Item_is_Quality (Item_this_Kind Kind_cheese) Quality_boring
+  Is (This Cheese) Boring
   this cheese is boring
-  S_Item_is_Quality (Item_this_Kind Kind_cheese) Quality_boring
+  Is (This Cheese) Boring  
 ```
 This facility is good for test purposes: for instance, you
 may want to see if a grammar is **ambiguous**, i.e.
@@ -424,86 +456,13 @@ a sentence but a sequence of ten sentences.
 
 
 
-%--!
-===Labelled context-free grammars===
-
-The syntax trees returned by GF's parser in the previous examples
-are not so nice to look at. The identifiers that form the tree
-are **labels** of the BNF rules. To see which label corresponds to
-which rule, you can use the ``print_grammar = pg`` command
-with the ``printer`` flag set to ``cf`` (which means context-free):
-```
-  > print_grammar -printer=cf
-
-  S_Item_is_Quality. S ::= Item "is" Quality ;
-  Quality_Italian. Quality ::= "Italian" ;
-  Quality_boring. Quality ::= "boring" ;
-  Quality_delicious. Quality ::= "delicious" ;
-  Quality_expensive. Quality ::= "expensive" ;
-  Quality_fresh. Quality ::= "fresh" ;
-  Quality_very_Quality. Quality ::= "very" Quality ;
-  Quality_warm. Quality ::= "warm" ;
-  Kind_Quality_Kind. Kind ::= Quality Kind ;
-  Kind_cheese. Kind ::= "cheese" ;
-  Kind_fish. Kind ::= "fish" ;
-  Kind_wine. Kind ::= "wine" ;
-  Item_that_Kind. Item ::= "that" Kind ;
-  Item_this_Kind. Item ::= "this" Kind ;
-```
-A syntax tree such as
-```
-  S_Item_is_Quality (Item_this_Kind Kind_wine) Quality_delicious
-```
-encodes the sequence of grammar rules used for building the
-tree. If you look at this tree, you will notice that ``Item_this_Kind``
-is the label of the rule prefixing ``this`` to a ``Kind``,
-thereby forming an ``Item``.
-``Kind_wine`` is the label of the kind ``"wine"``,
-and so on. These labels are formed automatically when the grammar
-is compiled by GF, in a way that guarantees that different rules
-get different labels.
-
-
-%--!
-===The labelled context-free format===
-
-The **labelled context-free grammar** format permits user-defined
-labels to each rule.
-In files with the suffix ``.cf``, you can prefix rules with
-labels that you provide yourself - these may be more useful
-than the automatically generated ones. The following is a possible
-labelling of ``food.cf`` with nicer-looking labels.
-```
-  Is.        S       ::= Item "is" Quality ;
-  That.      Item    ::= "that" Kind ;
-  This.      Item    ::= "this" Kind ;
-  QKind.     Kind    ::= Quality Kind ;
-  Cheese.    Kind    ::= "cheese" ;
-  Fish.      Kind    ::= "fish" ;
-  Wine.      Kind    ::= "wine" ;
-  Italian.   Quality ::= "Italian" ;
-  Boring.    Quality ::= "boring" ;
-  Delicious. Quality ::= "delicious" ;
-  Expensive. Quality ::= "expensive" ;
-  Fresh.     Quality ::= "fresh" ;
-  Very.      Quality ::= "very" Quality ;
-  Warm.      Quality ::= "warm" ;
-```
-With this grammar, the trees look as follows:
-```
-  > parse -tr "this delicious cheese is very Italian" | vt
-  Is (This (QKind Delicious Cheese)) (Very Italian)
-```
-
-[Tree2.png]
-
 
 %--!
 ==The .gf grammar format==
 
-To see what there is in GF's shell state when a grammar
-has been imported, you can give the plain command
-``print_grammar = pg``.
+To see GF's internal representation of a grammar
+that you have imported, you can give the command
+``print_grammar = pg``,
 ```
   > print_grammar
 ```
@@ -515,10 +474,10 @@ However, we will now start the demonstration
 how GF's own notation gives you
 much more expressive power than the ``.cf``
 format. We will introduce the ``.gf`` format by presenting
-one more way of defining the same grammar as in
+another way of defining the same grammar as in
 ``food.cf``.
 Then we will show how the full GF grammar format enables you
-to do things that are not possible in the weaker formats.
+to do things that are not possible in the context-free format.
 
 
 %--!
@@ -530,12 +489,12 @@ A GF grammar consists of two main parts:
 - **concrete syntax**, defining how trees are linearized into strings 
 
 
-The CF format fuses these two things together, but it is possible
-to take them apart. For instance, the sentence formation rule
+The context-free format fuses these two things together, but it is always
+possible to take them apart. For instance, the sentence formation rule
 ```
   Is. S ::= Item "is" Quality ;
 ```
-is interpreted as the following pair of rules:
+is interpreted as the following pair of GF rules:
 ```
   fun Is : Item -> Quality -> S ;
   lin Is item quality = {s = item.s ++ "is" ++ quality.s} ;
@@ -646,7 +605,7 @@ a file ``Food.gf``, we write two kinds of judgements:
 
 
 ```
-abstract Food = {
+  abstract Food = {
 
   cat
     S ; Item ; Kind ; Quality ;
@@ -658,11 +617,21 @@ abstract Food = {
     Wine, Cheese, Fish : Kind ;
     Very : Quality -> Quality ;
     Fresh, Warm, Italian, Expensive, Delicious, Boring : Quality ;
-}
+  }
 ```
 Notice the use of shorthands permitting the sharing of
-the keyword in subsequent judgements, and of the type
-in subsequent ``fun`` judgements.
+the keyword in subsequent judgements, 
+```
+  cat S ; Item ;   ===   cat S ; cat Item ; 
+```
+and of the type in subsequent ``fun`` judgements,
+```
+  fun Wine, Fish : Kind ;            ===
+  fun Wine : Kind ; Fish : Kind ;    ===
+  fun Wine : Kind ; fun Fish : Kind ;
+```
+The order of judgements in a module is free.
+
 
 
 %--!
@@ -673,7 +642,7 @@ given a ``lincat`` rule, and each
 function is given a ``lin`` rule. Similar shorthands
 apply as in ``abstract`` modules.
 ```
-concrete FoodEng of Food = {
+  concrete FoodEng of Food = {
 
   lincat
     S, Item, Kind, Quality = {s : Str} ;
@@ -693,16 +662,16 @@ concrete FoodEng of Food = {
     Expensive = {s = "expensive"} ;
     Delicious = {s = "delicious"} ;
     Boring = {s = "boring"} ;
-}
+  }
 ```
 
 
 %--!
 ===Modules and files===
 
-Module name + ``.gf`` = file name
+Source files: Module name + ``.gf`` = file name
 
-Each module is compiled into a ``.gfc`` file.
+Target files: each module is compiled into a ``.gfc`` file.
 
 Import ``FoodEng.gf`` and see what happens
 ```
@@ -1087,7 +1056,7 @@ opened in a new version of ``FoodEng``.
 
   }
 ```
-The same string operations could be use to write ``FoodIta``
+The same string operations could be used to write ``FoodIta``
 more concisely.
 
 
@@ -1098,7 +1067,7 @@ Using operations defined in resource modules is a
 way to avoid repetitive code.
 In addition, it enables a new kind of modularity
 and division of labour in grammar writing: grammarians familiar with
-the linguistic details of a language can put this knowledge
+the linguistic details of a language can make this knowledge
 available through resource grammar modules, whose users only need
 to pick the right operations and not to know their implementation
 details.
@@ -1120,9 +1089,9 @@ singular forms.
 
 The introduction of plural forms requires two things:
 
-- to **inflect** nouns and verbs in singular and plural number
-- to describe the **agreement** of the verb to subject: the
-  rule that the verb must have the same number as the subject
+- the **inflection** of nouns and verbs in singular and plural
+- the **agreement** of the verb to subject: 
+  the verb must have the same number as the subject
 
 
 Different languages have different rules of inflection and agreement.
@@ -1162,24 +1131,30 @@ example shows such a table:
     }
   } ;
 ```
+The table consists of **branches**, where a **pattern** on the
+left of the arrow ``=>`` is assigned a **value** on the right.
+
 The application of a table to a parameter is done by the **selection**
 operator ``!``. For instance,
 ```
    table {Sg => "cheese" ; Pl => "cheeses"} ! Pl
 ```
-is a selection, whose value is ``"cheeses"``.
+is a selection that computes into the value ``"cheeses"``.
+This computation is performed by **pattern matching**: return
+the value from the first branch whose pattern matches the
+selection argument.
 
 
 %--!
 ===Inflection tables, paradigms, and ``oper`` definitions===
 
 All English common nouns are inflected in number, most of them in the
-same way: the plural form is formed from the singular form by adding the
+same way: the plural form is obtained from the singular by adding the
 ending //s//. This rule is an example of 
 a **paradigm** - a formula telling how the inflection
 forms of a word are formed.
 
-From GF point of view, a paradigm is a function that takes a **lemma** -
+From the GF point of view, a paradigm is a function that takes a **lemma** -
 also known as a **dictionary form** - and returns an inflection
 table of desired type. Paradigms are not functions in the sense of the
 ``fun`` judgements of abstract syntax (which operate on trees and not
@@ -1260,7 +1235,7 @@ all characters but the last) of a string:
 ```
   yNoun : Str -> Noun = \fly -> mkNoun fly (init fly  + "ies") ;  
 ```
-The operator ``init`` belongs to a set of operations in the
+The operation ``init`` belongs to a set of operations in the
 resource module ``Prelude``, which therefore has to be
 ``open``ed so that ``init`` can be used.
 
@@ -1298,13 +1273,10 @@ apply if the second-last character is a vowel.
 %--!
 ===Pattern matching===
 
-Expressions of the ``table`` form are built from lists of
-argument-value pairs. These pairs are called the **branches**
-of the table. In addition to constants introduced in
-``param`` definitions, the left-hand side of a branch can more
-generally be a **pattern**, and the computation of selection is
-then performed by **pattern matching**:
-
+We have so far built all expressions of the ``table`` form 
+from branches whose patterns are constants introduced in
+``param`` definitions, as well as constant strings. 
+But there are more expressive patterns. Here is a summary of the possible forms:
 - a variable pattern (identifier other than constant parameter) matches anything
 - the wild card ``_`` matches anything
 - a string literal pattern, e.g. ``"s"``, matches the same string 
@@ -1327,7 +1299,7 @@ programming languages are syntactic sugar for table selections:
 
 
 %--!
-===Morphological ``resource`` modules===
+===Morphological resource modules===
 
 A common idiom is to
 gather the ``oper`` and ``param`` definitions
@@ -1377,16 +1349,16 @@ directory.
 
 
 %--!
-===Testing ``resource`` modules===
+===Testing resource modules===
 
-To test a ``resource`` module independently, you can import it
-with a flag that tells GF to retain the ``oper`` definitions
+To test a ``resource`` module independently, you must import it
+with the flag ``-retain``, which tells GF to retain ``oper`` definitions
 in the memory; the usual behaviour is that ``oper`` definitions
 are just applied to compile linearization rules 
 (this is called **inlining**) and then thrown away.
-
-```  > i -retain MorphoEng.gf
-
+```
+  > i -retain MorphoEng.gf
+```
 The command ``compute_concrete = cc`` computes any expression
 formed by operations and other GF constructs. For example,
 ```
@@ -1443,7 +1415,7 @@ whereas the number of  ``NP`` is a **variable feature** (or a
 **parametric feature**).
 
 The agreement rule itself is expressed in the linearization rule of
-the predication structure:
+the predication function:
 ```
   lin PredVP np vp = {s = np.s ++ vp.s ! np.n} ;
 ```
@@ -1578,7 +1550,7 @@ the category is set to be something else than ``S``. For instance,
   Score 0/1
 ```
 Finally, a list of morphological exercises can be generated
-off-line saved in a
+off-line and saved in a
 file for later use, by the command ``morpho_list = ml``
 ```
   > morpho_list -number=25 -cat=V | wf exx.txt
@@ -1634,7 +1606,7 @@ Local definitions ("``let`` expressions") are used in functional
 programming for two reasons: to structure the code into smaller
 expressions, and to avoid repeated computation of one and
 the same expression. Here is an example, from 
-[``MorphoIta resource/MorphoIta.gf]:
+[``MorphoIta`` resource/MorphoIta.gf]:
 ```
   oper regNoun : Str -> Noun = \vino -> 
         let 
@@ -1671,21 +1643,22 @@ can be used e.g. if a word lacks a certain form.
 In general, ``variants`` should be used cautiously. It is not
 recommended for modules aimed to be libraries, because the
 user of the library has no way to choose among the variants.
-Moreover, ``variants`` is only defined for basic types (``Str``
-and parameter types). The grammar compiler will admit
-``variants`` for any types, but it will push it to the
-level of basic types in a way that may be unwanted.
-For instance, German has two words meaning "car", 
-//Wagen//, which is Masculine, and //Auto//, which is Neuter.
-However, if one writes
-```
-  variants {{s = "Wagen" ; g = Masc} ; {s = "Auto" ; g = Neutr}}
-```
-this will compute to
-```
-  {s = variants {"Wagen" ; "Auto"} ; g = variants {Masc ; Neutr}}
-```
-which will also accept erroneous combinations of strings and genders.
+
+%Moreover, ``variants`` is only defined for basic types (``Str``
+%and parameter types). The grammar compiler will admit
+%``variants`` for any types, but it will push it to the
+%level of basic types in a way that may be unwanted.
+%For instance, German has two words meaning "car", 
+%//Wagen//, which is Masculine, and //Auto//, which is Neuter.
+%However, if one writes
+%```
+%  variants {{s = "Wagen" ; g = Masc} ; {s = "Auto" ; g = Neutr}}
+%```
+%this will compute to
+%```
+%  {s = variants {"Wagen" ; "Auto"} ; g = variants {Masc ; Neutr}}
+%```
+%which will also accept erroneous combinations of strings and genders.
 
 
 
@@ -1723,7 +1696,7 @@ Product types and tuples are syntactic sugar for record types and records:
   T1 * ... * Tn   ===   {p1 : T1 ; ... ; pn : Tn}
   <t1, ...,  tn>  ===   {p1 = T1 ; ... ; pn = Tn}
 ```
-Thus the labels ``p1, p2,...``` are hard-coded.
+Thus the labels ``p1, p2,...`` are hard-coded.
 
 
 ===Record and tuple patterns===
@@ -1825,7 +1798,7 @@ such tokens, the ``pre`` construct exemplified in
 Thus
 ```
   artIndef ++ "cheese"  --->  "a" ++ "cheese"
-  artIndef ++ "apple"   --->  "an" ++ "cheese"
+  artIndef ++ "apple"   --->  "an" ++ "apple"
 ```
 This very example does not work in all situations: the prefix
 //u// has no general rules, and some problematic words are
@@ -1857,7 +1830,8 @@ they can be used as arguments. For example:
 
   -- e.g. (StreetAddress 10 "Downing Street") : Address
 ```
-The linearization type is ``{s : Str}`` for all these categories.
+FIXME: The linearization type is ``{s : Str}`` for all these categories.
+
 
 
 ==More concepts of abstract syntax==
@@ -2036,8 +2010,7 @@ is shorthand for
 or any other naming of the variables. Actually the use of variables
 sometimes shortens the code, since we can write e.g.
 ```
-  fun  ConjNP : Conj -> (x,y : NP) -> NP ;
-  oper triple : (x,y,z : Str) -> Str = \x,y,z -> x ++ y ++ z ;
+  oper triple : (x,y,z : Str) -> Str = ...
 ```
 
 
@@ -2331,6 +2304,7 @@ We then define what it means for a number //x// to be less than
 a number //y//. Our definition is based on two axioms:
 - ``Zero`` is less than ``Succ y`` for any ``y``.
 - If ``x`` is less than ``y``, then``Succ x`` is less than ``Succ y``.
+
 
 The most straightforward way of expressing these axioms in type theory
 is as typing judgements that introduce objects of a type ``Less x y``:
