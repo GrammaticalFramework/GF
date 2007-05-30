@@ -25,8 +25,7 @@
 resource ParadigmsFin = open 
   (Predef=Predef), 
   Prelude, 
-  MorphoFin,
-  CatFin
+  MorphoFin
   in {
 
   flags optimize=noexpand ;

@@ -1,4 +1,4 @@
-concrete CatFin of Cat = CommonX ** open ResFin, Prelude in {
+concrete CatFin of Cat = CommonX - [Adv] ** open ResFin, Prelude in {
 
   flags optimize=all_subs ;
 
@@ -70,24 +70,28 @@ concrete CatFin of Cat = CommonX ** open ResFin, Prelude in {
     Conj = {s : Str ; n : Number} ;
     DConj = {s1,s2 : Str ; n : Number} ;
     Subj = {s : Str} ;
-    Prep = Compl ;
 
 -- Open lexical classes, e.g. Lexicon
 
-    V, VS, VQ = Verb1 ; -- = {s : VForm => Str ; sc : Case} ;
-    V2, VA = Verb1 ** {c2 : Compl} ;
-    V2A = Verb1 ** {c2, c3 : Compl} ;
-    VV = Verb1 ; ---- infinitive form
-    V3 = Verb1 ** {c2, c3 : Compl} ;
+    V = ResFin.V ;
+    V2 = ResFin.V2 ;
+    VA = ResFin.VA ;
+    VS = ResFin.VS ;
+    VQ = ResFin.VQ ;
+    V2A = ResFin.V2A ;
+    VV = ResFin.VV ;
+    V3 = ResFin.V3 ;
 
-    A  = {s : Degree => AForm => Str} ;
-    A2 = {s : Degree => AForm => Str ; c2 : Compl} ;
+    A  = ResFin.A ;
+    A2 = ResFin.A2 ;
 
-    N  = {s : NForm => Str} ;
-    N2 = {s : NForm => Str} ** {c2 : Compl} ;
-    N3 = {s : NForm => Str} ** {c2,c3 : Compl} ;
-    PN = {s : Case  => Str} ;
+    N  = ResFin.N ;
+    N2 = ResFin.N2 ;
+    N3 = ResFin.N3 ;
+    PN = ResFin.PN ;
 
-oper Verb1 = {s : VForm => Str ; sc : NPForm} ;
+    Adv = ResFin.Adv ;
+    Prep = ResFin.Prep ;
+
 
 }

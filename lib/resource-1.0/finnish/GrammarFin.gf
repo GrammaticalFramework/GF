@@ -11,7 +11,7 @@ concrete GrammarFin of Grammar =
   RelativeFin,
   ConjunctionFin,
   PhraseFin,
-  TextX,
+  TextX - [Adv],
   IdiomFin,
   StructuralFin
   ** {

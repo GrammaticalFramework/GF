@@ -569,4 +569,26 @@ oper
     a = agrP3 Sg ;  -- does not matter (--- at least in Slash)
     isPron = False  -- has no special accusative
     } ;
+
+-- To export
+
+    N : Type =  {s : NForm => Str} ;
+    N2 = {s : NForm => Str} ** {c2 : Compl} ;
+    N3 = {s : NForm => Str} ** {c2,c3 : Compl} ;
+    PN = {s : Case  => Str} ;
+
+    A  = {s : Degree => AForm => Str} ;
+    A2 = {s : Degree => AForm => Str ; c2 : Compl} ;
+
+    V, VS, VQ = Verb1 ; -- = {s : VForm => Str ; sc : Case} ;
+    V2, VA = Verb1 ** {c2 : Compl} ;
+    V2A = Verb1 ** {c2, c3 : Compl} ;
+    VV = Verb1 ; ---- infinitive form
+    V3 = Verb1 ** {c2, c3 : Compl} ;
+
+    Verb1 = {s : VForm => Str ; sc : NPForm} ;  
+
+    Prep = Compl ;
+    Adv = {s : Str} ;
+
 }
