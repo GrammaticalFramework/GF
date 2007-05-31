@@ -80,6 +80,8 @@ VP?
 
 -- Comp: already eliminated
 
+-- DConj /= Conj ?
+
 --------------------------------------------
 --- granted special cases
 
@@ -102,3 +104,9 @@ VP?
   Num - Numeral | Digit | Int
 
   ListX - X X
+
+--------
+
+  open ResourceX, ParadigmsX in ...
+
+  ResourceX = ConstructorsX, StructuralX, CatX 
