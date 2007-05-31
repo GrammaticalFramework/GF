@@ -37,29 +37,30 @@ incomplete resource Constructors = open Grammar in {
 --2 Texts, phrases, and utterances
 
     mkText : overload {
-      mkText : Text               ;   -- [empty text]
-      mkText : Phr -> Text        ;   -- John walks.
-      mkText : Utt -> Text        ;   -- John walks.
-      mkText : S -> Text          ;   -- John walks.
-      mkText : Cl -> Text         ;   -- John walks.
-      mkText : QS -> Text         ;   -- Does John walk?
-      mkText : Imp -> Text        ;   -- Walk!
-      mkText : Pol -> Imp -> Text ;   -- Don't walk!
-      mkText : Phr -> Text -> Text    -- John walks. ...
+      mkText : Text                ;  -- [empty text]
+      mkText : Phr -> Text -> Text ;  -- John walks. ...
+      mkText : Phr -> Text         ;  -- John walks.
+      mkText : Utt -> Text         ;  -- John walks.
+      mkText : S   -> Text         ;  -- John walks.
+      mkText : Cl  -> Text         ;  -- John walks.
+      mkText : QS  -> Text         ;  -- Does John walk?
+      mkText : Imp -> Text         ;  -- Walk!
+      mkText : Pol -> Imp -> Text     -- Don't walk!
       } ;
 
     mkPhr : overload {
-      mkPhr : PConj -> Utt -> Voc -> Phr;   -- But go home my friend
-      mkPhr : Utt -> Phr                ;   -- Go home
-      mkPhr : S -> Phr                      -- I go home
+      mkPhr : PConj -> Utt -> Voc -> Phr ;  -- But go home my friend
+      mkPhr : Utt -> Phr                 ;  -- Go home
+      mkPhr : S   -> Phr                 ;  -- I go home
+      mkPhr : Cl  -> Phr                    -- I go home
       } ;
 
     mkUtt : overload {
-      mkUtt : S -> Utt                  ;   -- John walked
-      mkUtt : Cl -> Utt                 ;   -- John walks
-      mkUtt : QS -> Utt                 ;   -- is it good
-      mkUtt : Pol -> Imp -> Utt         ;   -- (don't) help yourself
-      mkUtt : Imp -> Utt                ;   -- help yourself
+      mkUtt : S    -> Utt               ;   -- John walked
+      mkUtt : Cl   -> Utt               ;   -- John walks
+      mkUtt : QS   -> Utt               ;   -- is it good
+      mkUtt : Pol  -> Imp -> Utt        ;   -- (don't) help yourself
+      mkUtt : Imp  -> Utt               ;   -- help yourself
       mkUtt : IP   -> Utt               ;   -- who
       mkUtt : IAdv -> Utt               ;   -- why
       mkUtt : NP   -> Utt               ;   -- this man
@@ -86,54 +87,54 @@ incomplete resource Constructors = open Grammar in {
       } ;
 
     mkCl : overload {
-      mkCl : NP -> VP -> Cl   ;   -- John wants to walk
-      mkCl : NP -> V -> Cl    ;   -- John walks
+      mkCl : NP -> VP -> Cl   ;     -- John wants to walk
+      mkCl : NP -> V -> Cl    ;     -- John walks
       mkCl : NP -> V2 -> NP -> Cl ; -- John uses it
-      mkCl : VP -> Cl         ;   -- it rains
-      mkCl : NP  -> RS -> Cl  ;   -- it is you who did it
-      mkCl : Adv -> S  -> Cl  ;   -- it is yesterday she arrived
-      mkCl : NP -> Cl         ;   -- there is a house
-      mkCl : NP -> AP -> Cl   ;   -- John is nice and warm
-      mkCl : NP -> A  -> Cl   ;   -- John is warm
-      mkCl : NP -> A -> NP -> Cl; -- John is warmer than Mary
-      mkCl : NP -> A2 -> NP -> Cl; -- John is married to Mary
-      mkCl : NP -> NP -> Cl   ;   -- John is a man
-      mkCl : NP -> Adv -> Cl      -- John is here
+      mkCl : VP -> Cl         ;     -- it rains
+      mkCl : NP  -> RS -> Cl  ;     -- it is you who did it
+      mkCl : Adv -> S  -> Cl  ;     -- it is yesterday she arrived
+      mkCl : NP -> Cl         ;     -- there is a house
+      mkCl : NP -> AP -> Cl   ;     -- John is nice and warm
+      mkCl : NP -> A  -> Cl   ;     -- John is warm
+      mkCl : NP -> A -> NP -> Cl;   -- John is warmer than Mary
+      mkCl : NP -> A2 -> NP -> Cl;  -- John is married to Mary
+      mkCl : NP -> NP -> Cl   ;     -- John is a man
+      mkCl : NP -> Adv -> Cl        -- John is here
       } ;
 
 --2 Verb phrases and imperatives
 
     mkVP : overload {
-      mkVP : V   -> VP            ;   -- sleep
-      mkVP : V2  -> NP -> VP      ;   -- use it
+      mkVP : V   -> VP             ;  -- sleep
+      mkVP : V2  -> NP -> VP       ;  -- use it
       mkVP : V3  -> NP -> NP -> VP ;  -- send a message to her
-      mkVP : VV  -> VP -> VP      ;   -- want to run
-      mkVP : VS  -> S  -> VP      ;   -- know that she runs
-      mkVP : VQ  -> QS -> VP      ;   -- ask if she runs
-      mkVP : VA  -> AP -> VP      ;   -- look red
+      mkVP : VV  -> VP -> VP       ;  -- want to run
+      mkVP : VS  -> S  -> VP       ;  -- know that she runs
+      mkVP : VQ  -> QS -> VP       ;  -- ask if she runs
+      mkVP : VA  -> AP -> VP       ;  -- look red
       mkVP : V2A -> NP -> AP -> VP ;  -- paint the house red
-      mkVP : AP -> VP             ;   -- be warm
-      mkVP : NP -> VP             ;   -- be a man
-      mkVP : Adv -> VP            ;   -- be here
-      mkVP : VP -> Adv -> VP      ;   -- sleep here
-      mkVP : AdV -> VP -> VP          -- always sleep
+      mkVP : AP  -> VP             ;  -- be warm
+      mkVP : NP  -> VP             ;  -- be a man
+      mkVP : Adv -> VP             ;  -- be here
+      mkVP : VP  -> Adv -> VP      ;  -- sleep here
+      mkVP : AdV -> VP  -> VP         -- always sleep
       } ;
 
     mkImp : overload {
-      mkImp : VP -> Imp              ;   -- go there now
-      mkImp : V  -> Imp              ;   -- go
-      mkImp : V2 -> NP -> Imp            -- take it
+      mkImp : VP -> Imp            ;  -- go there now
+      mkImp : V  -> Imp            ;  -- go
+      mkImp : V2 -> NP -> Imp         -- take it
       } ;
 
 --2 Noun phrases and determiners
 
     mkNP : overload {
       mkNP : Det -> CN -> NP  ;        -- the old man
-      mkNP : Det -> N -> NP   ;        -- the man
+      mkNP : Det -> N  -> NP   ;       -- the man
       mkNP : Num -> CN -> NP  ;        -- forty-five old men
-      mkNP : Num -> N -> NP   ;        -- forty-five men
+      mkNP : Num -> N  -> NP   ;       -- forty-five men
       mkNP : Int -> CN -> NP  ;        -- 51 old men
-      mkNP : Int -> N -> NP   ;        -- 51 men
+      mkNP : Int -> N  -> NP   ;       -- 51 men
       mkNP : Digit -> CN -> NP;        -- five old men
       mkNP : Digit -> N -> NP ;        -- five men
       mkNP : PN -> NP         ;        -- John
@@ -141,29 +142,29 @@ incomplete resource Constructors = open Grammar in {
       mkNP : Predet -> NP -> NP ;      -- all the men
       mkNP : NP -> V2  -> NP  ;        -- the number squared
       mkNP : NP -> Adv -> NP  ;        -- Paris at midnight
-      mkNP : Conj -> NP -> NP -> NP ;  -- John and Mary walk
-      mkNP : DConj -> NP -> NP -> NP ; -- both John and Mary walk
-      mkNP : Conj -> ListNP -> NP ;    -- John, Mary, and Bill walk
-      mkNP : DConj -> ListNP -> NP     -- both John, Mary, and Bill walk
+      mkNP : Conj -> NP -> NP -> NP ;  -- John and Mary
+      mkNP : DConj -> NP -> NP -> NP ; -- both John and Mary
+      mkNP : Conj -> ListNP -> NP ;    -- John, Mary, and Bill
+      mkNP : DConj -> ListNP -> NP     -- both John, Mary, and Bill
 
       } ;
 
     mkDet : overload {
       mkDet : QuantSg -> Ord -> Det        ;   -- this best (man)
       mkDet : Det                          ;   -- the (man)
-      mkDet : QuantSg ->  Det              ;   -- this (man)
+      mkDet : QuantSg -> Det               ;   -- this (man)
       mkDet : QuantPl -> Num -> Ord -> Det ;   -- these five best (men)
       mkDet : QuantPl -> Det               ;   -- these (men)
-      mkDet : Quant ->  Det                ;   -- this (man)
-      mkDet : Num -> Det                   ;   -- forty-five (men)
-      mkDet : Int -> Det                   ;   -- 51 (men)
-      mkDet : Digit -> Det                 ;   -- five (men)
-      mkDet : Pron -> Det                      -- my (house)
+      mkDet : Quant   -> Det               ;   -- this (man)
+      mkDet : Num     -> Det               ;   -- forty-five (men)
+      mkDet : Int     -> Det               ;   -- 51 (men)
+      mkDet : Digit   -> Det               ;   -- five (men)
+      mkDet : Pron    -> Det                   -- my (house)
       } ;
 
-   def_Det : Det ;   -- the (man)
-   indef_Det : Det ; -- a (man)
-   mass_Det : Det ;  -- (water)
+   def_Det   : Det ;   -- the (man)
+   indef_Det : Det ;   -- a (man)
+   mass_Det  : Det ;   -- (water)
 
 -- More determiners are available in the Structural module
    
@@ -172,15 +173,15 @@ incomplete resource Constructors = open Grammar in {
 
     mkNum : overload {
       mkNum : Num            ;   -- [no num]
-      mkNum : Int -> Num     ;   -- 51
+      mkNum : Int  -> Num    ;   -- 51
       mkNum : Digit -> Num
       } ;
 
     mkOrd : overload {
       mkOrd : Ord            ;   -- [no ord]
-      mkOrd : Int -> Ord     ;   -- 51st
+      mkOrd : Int   -> Ord   ;   -- 51st
       mkOrd : Digit -> Ord   ;   -- fifth
-      mkOrd : A -> Ord           -- largest
+      mkOrd : A     -> Ord       -- largest
       } ;
 
 --2 Common nouns

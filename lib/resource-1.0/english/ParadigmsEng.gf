@@ -115,15 +115,7 @@ oper
   mkN3 : N -> Prep -> Prep -> N3 ;
 
 
---3 Relational common noun phrases
---
--- In some cases, you may want to make a complex $CN$ into a
--- relational noun (e.g. "the old town hall of").
 
-  cnN2 : CN -> Prep -> N2 ;
-  cnN3 : CN -> Prep -> Prep -> N3 ;
-
--- 
 --3 Proper names and noun phrases
 --
 -- Proper names, with a regular genitive, are formed as follows
@@ -346,6 +338,16 @@ oper
   mkN2 = \n,p -> n ** {lock_N2 = <> ; c2 = p.s} ;
   regN2 n = mkN2 (regN n) (mkPrep "of") ;
   mkN3 = \n,p,q -> n ** {lock_N3 = <> ; c2 = p.s ; c3 = q.s} ;
+
+--3 Relational common noun phrases
+--
+-- In some cases, you may want to make a complex $CN$ into a
+-- relational noun (e.g. "the old town hall of").
+
+  cnN2 : CN -> Prep -> N2 ;
+  cnN3 : CN -> Prep -> Prep -> N3 ;
+
+-- This is obsolete.
   cnN2 = \n,p -> n ** {lock_N2 = <> ; c2 = p.s} ;
   cnN3 = \n,p,q -> n ** {lock_N3 = <> ; c2 = p.s ; c3 = q.s} ;
 
