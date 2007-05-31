@@ -9,8 +9,8 @@ abstract Adjective = Cat ** {
 -- elliptic-relational.
 -- (The superlative use is covered in [Noun Noun.html].$SuperlA$.)
 
-    PositA  : A -> AP ;         -- warm
-    ComparA : A -> NP -> AP ;   -- warmer than Spain
+    PositA  : A  -> AP ;        -- warm
+    ComparA : A  -> NP -> AP ;  -- warmer than Spain
     ComplA2 : A2 -> NP -> AP ;  -- divisible by 2
     ReflA2  : A2 -> AP ;        -- divisible by itself
     UseA2   : A2 -> A ;         -- divisible
