@@ -127,10 +127,6 @@ oper
 
   nounPN : N -> PN ;
 
--- To form a noun phrase that can also be plural and have an irregular
--- genitive, you can use the worst-case function.
-
-  mkNP : Str -> Str -> Number -> Gender -> NP ; 
 
 --2 Adjectives
 
@@ -271,12 +267,12 @@ oper
   mkAV  : A -> AV ;
   mkA2V : A -> Prep -> A2V ;
 
--- Notice: categories $V2S, V2V, V2A, V2Q$ are in v 1.0 treated
+-- Notice: categories $V2S, V2V, V2Q$ are in v 1.0 treated
 -- just as synonyms of $V2$, and the second argument is given
 -- as an adverb. Likewise $AS, A2S, AV, A2V$ are just $A$.
 -- $V0$ is just $V$.
 
-  V0, V2S, V2V, V2A, V2Q : Type ;
+  V0, V2S, V2V, V2Q : Type ;
   AS, A2S, AV, A2V : Type ;
 
 --.
@@ -354,8 +350,6 @@ oper
   regPN n = regGenPN n human ;
   regGenPN n g = nameReg n g ** {lock_PN = <>} ;
   nounPN n = {s = n.s ! singular ; g = n.g ; lock_PN = <>} ;
-  mkNP x y n g = {s = table {Gen => x ; _ => y} ; a = agrP3 n ;
-  lock_NP = <>} ;
 
   mk2A a b = mkAdjective a a a b ** {lock_A = <>} ;
   regA a = regAdjective a ** {lock_A = <>} ;
@@ -462,7 +456,7 @@ oper
   mkVQ  v = v ** {lock_VQ = <>} ;
 
   V0 : Type = V ;
-  V2S, V2V, V2Q, V2A : Type = V2 ;
+  V2S, V2V, V2Q : Type = V2 ;
   AS, A2S, AV : Type = A ;
   A2V : Type = A2 ;
 

@@ -71,19 +71,19 @@ incomplete resource Constructors = open Grammar in {
 --2 Sentences, and clauses
 
     mkS : overload {
-      mkS :                        Cl -> S ;                        -- John walks
-      mkS : Tense ->               Cl -> S ;               -- John walked
-      mkS :          Ant ->        Cl -> S ;                 -- John has walked
-      mkS :                 Pol -> Cl -> S ;                 -- John doesn't walk
-      mkS : Tense -> Ant ->        Cl -> S ;        -- John had walked
-      mkS : Tense ->        Pol -> Cl -> S ;        -- John didn't walk
-      mkS :          Ant -> Pol -> Cl -> S ;          -- John hasn't walked
-      mkS : Tense -> Ant -> Pol -> Cl -> S ; -- John wouldn't have walked
-      mkS : Conj -> S -> S -> S ;            -- John walks and Mary talks   
-      mkS : DConj -> S -> S -> S ;           -- either I leave or you come
-      mkS : Conj -> ListS -> S ;             -- John walks, Mary talks, and Bob runs
-      mkS : DConj -> ListS -> S ;            -- either I leave, you come, or he runs
-      mkS : Adv -> S -> S                    -- today, I will sleep
+      mkS :                        Cl -> S ;  -- John walks
+      mkS : Tense ->               Cl -> S ;  -- John walked
+      mkS :          Ant ->        Cl -> S ;  -- John has walked
+      mkS :                 Pol -> Cl -> S ;  -- John doesn't walk
+      mkS : Tense -> Ant ->        Cl -> S ;  -- John had walked
+      mkS : Tense ->        Pol -> Cl -> S ;  -- John didn't walk
+      mkS :          Ant -> Pol -> Cl -> S ;  -- John hasn't walked
+      mkS : Tense -> Ant -> Pol -> Cl -> S ;  -- John wouldn't have walked
+      mkS : Conj  -> S -> S -> S ;            -- John walks and Mary talks   
+      mkS : DConj -> S -> S -> S ;            -- either I leave or you come
+      mkS : Conj  -> ListS  -> S ;            -- John walks, Mary talks, and Bob runs
+      mkS : DConj -> ListS  -> S ;            -- either I leave, you come, or he runs
+      mkS : Adv -> S -> S                     -- today, I will sleep
       } ;
 
     mkCl : overload {
