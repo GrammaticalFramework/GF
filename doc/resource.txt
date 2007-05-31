@@ -1,5 +1,5 @@
-The GF Resource Grammar Library
-Author: Aarne Ranta, Ali El Dada, and Janna Khegai
+The GF Resource Grammar Library, Version 1.2
+Authors: Aarne Ranta, Ali El Dada, Janna Khegai, and Björn Bringert
 Last update: %%date(%c)
 
 % NOTE: this is a txt2tags file.
