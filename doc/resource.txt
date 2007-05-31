@@ -45,7 +45,8 @@ is also available on-line in HTML format in
 =Motivation=
 
 The GF Resource Grammar Library contains grammar rules for
-10 languages (some more are under construction). Its purpose
+10 languages (in addition, 2 languages are available as incomplete
+implementations, and a few more are under construction). Its purpose
 is to make these rules available for application programmers,
 who can thereby concentrate on the semantic and stylistic
 aspects of their grammars, without having to think about 
@@ -59,6 +60,7 @@ software to new languages.
 
 The current resource languages are
 - ``Ara``bic
+- ``Cat``alan
 - ``Dan``ish
 - ``Eng``lish
 - ``Fin``nish
@@ -72,8 +74,8 @@ The current resource languages are
 
 
 The first three letters (``Eng`` etc) are used in grammar module names.
-The Arabic implementation is still incomplete, but enough to be used in
-examples like ``GF/examples/bronzeage``.
+The Arabic and Catalan implementations are still incomplete, but 
+enough to be used in many applications.
 
 To give an example application, consider
 music playing devices. In the application,
@@ -85,11 +87,11 @@ produced in both singular and plural, and in four different
 cases. By using the resource grammar library, it is enough to
 write
 ```
-  lin Song = reg2N "Lied" "Lieder" neuter
+  lin Song = mkN "Lied" "Lieder" neuter
 ```
 and the eight forms are correctly generated. The resource grammar
 library contains a complete set of inflectional paradigms (such as
-``reg2N`` here), enabling the definition of any lexical items.
+``mkN`` here), enabling the definition of any lexical items.
 
 The resource grammar library is not only about inflectional paradigms - it
 also has syntax rules. The music player application
@@ -122,12 +124,29 @@ and language-independent parts. To put it roughly,
 Thus, to render the above example in French instead of German, we need to
 pick a different linearization of ``Song``,
 ```
-  lin Song = regGenN "chanson" feminine
+  lin Song = mkN "chanson" feminine
 ```
 But to linearize ``PropKind``, we can use the very same rule as in German.
 The resource function ``AdjCN`` has different implementations in the two
 languages (e.g. a different word order in French), 
 but the application programmer need not care about the difference.
+
+
+==Note on APIs==
+
+From version 1.1 onwards, the resource library is available via two
+APIs:
+- original ``fun`` and ``oper`` definitions
+- overloaded ``oper`` definitions
+
+
+Introducing overloading in GF version 2.7 has been a success in improving
+the accessibility of libraries. It has also created a layer of abstraction
+between the writers and users of libraries, and thereby makes the library
+easier to modify. We shall therefore use the overloaded API
+in this document. The original function names are mainly interesting
+for those who want to write or modify libraries.
+
 
 
 ==A complete example==
@@ -146,7 +165,7 @@ The abstract syntax defines a "domain ontology":
       American : Property ;
     }
 ```
-The concrete syntax is defined by a functor (parametrize module),
+The concrete syntax is defined by a functor (parametrized module),
 independently of language, by opening
 two interfaces: the resource ``Grammar`` and an application lexicon.
 ```
@@ -351,7 +370,7 @@ can be used:
 ```
   > i -retain german/ParadigmsGer.gf
 
-  > cc regN "Schlange"
+  > cc mkN "Schlange"
   {
     s : Number => Case => Str = table Number {
       Sg => table Case {
@@ -373,15 +392,15 @@ can be used:
 For the sake of convenience, every language implements these five paradigms:
 ```
   oper
-    regN  : Str -> N ;   -- regular nouns
-    regA  : Str -> A :   -- regular adjectives
-    regV  : Str -> V ;   -- regular verbs
-    regPN : Str -> PN ;  -- regular proper names
-    dirV  : V   -> V2 ;  -- direct transitive verbs
+    mkN  : Str -> N ;   -- regular nouns
+    mkA  : Str -> A :   -- regular adjectives
+    mkV  : Str -> V ;   -- regular verbs
+    mkPN : Str -> PN ;  -- regular proper names
+    mkV2 : V   -> V2 ;  -- direct transitive verbs
 ```
 It is often possible to initialize a lexicon by just using these functions,
 and later revise it by using the more involved paradigms. For instance, in
-German we cannot use ``regN "Lied"`` for ``Song``, because the result would be a
+German we cannot use ``mkN "Lied"`` for ``Song``, because the result would be a
 Masculine noun with the plural form ``"Liede"``. 
 The individual ``Paradigms`` modules
 tell what cases are covered by the regular heuristics.
@@ -395,17 +414,53 @@ English - maybe not so strange in certain technical domains.
 
 ==Syntax rules==
 
-Syntax rules should be looked for in the abstract modules defining the
-API. There are around 10 such modules, each defining constructors for
+Syntax rules should be looked for in the module ``Constructors``.
+Below this top-level module exposing overloaded constructors,
+there are around 10 abstract modules, each defining constructors for
 a group of one or more related categories. For instance, the module
 ``Noun`` defines how to construct common nouns, noun phrases, and determiners.
-Thus the proper place to find out how nouns are modified with adjectives
-is ``Noun``, because the result of the construction is again a common noun.
+But these special modules are seldom needed by the users of the library.
+
+TODO: when are they needed?
 
 Browsing the libraries is helped by the gfdoc-generated HTML pages,
 whose LaTeX versions are included in the present document.
-However, this is still not easy, and the most efficient way is 
-probably to use the parser.
+
+
+==Special-purpose APIs==
+
+To give an analogy with the well-known type setting software, GF can be compared
+with TeX and the resource grammar library with LaTeX. 
+Just like TeX frees the author
+from thinking about low-level problems of page layout, so GF frees the grammarian
+from writing parsing and generation algorithms. But quite a lot of knowledge of
+//how// to write grammars is still needed, and the resource grammar library helps
+GF grammarians in a way similar to how the LaTeX macro package helps TeX authors.
+
+But even LaTeX is often too detailed and low-level, and users are encouraged to
+develop their own macro packages. The same applies to GF resource grammars:
+the application grammarian might not need all the choices that the resource
+provides, but would prefer less writing and higher-level programming.
+To this end, application grammarians may want to write their own views on the
+resource grammar. One example of this is the overloaded predication
+operation ``pred`` available in ``api/Combinators``.
+Instead of the ``NP-VP`` structure, it permits clause construction directly from
+verbs and adjectives and their arguments:
+```
+  pred : V  -> NP -> Cl ;             -- x converges
+  pred : V2 -> NP -> NP -> Cl ;       -- x intersects y
+  pred : V3 -> NP -> NP -> NP -> Cl ; -- x intersects y at z
+  pred : V  -> NP -> NP -> Cl ;       -- x and y intersect
+  pred : A  -> NP -> Cl ;             -- x is even
+  pred : A2 -> NP -> NP -> Cl ;       -- x is divisible by y
+  pred : A  -> NP -> NP -> Cl ;       -- x and y are equal
+```
+
+
+==Browsing by the parser==
+
+A method alternative to browsing library documentation is
+to use the parser.
 Even though parsing is not an intended end-user application 
 of resource grammars, it is a useful technique for application grammarians
 to browse the library. To find out which resource function implements
@@ -419,6 +474,8 @@ transitive verbs, write
 
   PredVP (UsePron she_Pron) (ComplV2 love_V2 (UsePron he_Pron))
 ```
+The parser returns original constructors, not overloaded ones.
+
 Parsing with the English resource grammar has an acceptable speed, but
 with most languages it takes just too much resources even to build the
 parser. However, examples parsed in one language can always be linearized into
@@ -443,6 +500,7 @@ This can be built by parsing "I have beer" in LanEng and then writing
       (DetCN (DetSg MassDet NoOrd) (UseN beer_N))) ;
 ```
 which uses ParadigmsIta.regGenN. 
+
 
 
 ==Example-based grammar writing==
@@ -490,58 +548,6 @@ all those categories that can be used as arguments, for instance,
 and then use this lexicon instead of the standard one included in ``Lang``.
 
 
-
-==Special-purpose APIs==
-
-To give an analogy with the well-known type setting software, GF can be compared
-with TeX and the resource grammar library with LaTeX. 
-Just like TeX frees the author
-from thinking about low-level problems of page layout, so GF frees the grammarian
-from writing parsing and generation algorithms. But quite a lot of knowledge of
-//how// to write grammars is still needed, and the resource grammar library helps
-GF grammarians in a way similar to how the LaTeX macro package helps TeX authors.
-
-But even LaTeX is often too detailed and low-level, and users are encouraged to
-develop their own macro packages. The same applies to GF resource grammars:
-the application grammarian might not need all the choises that the resource
-provides, but would prefer less writing and higher-level programming.
-To this end, application grammarians may want to write their own views on the
-resource grammar. An example of this is already provided, in 
-``mathematical/Predication``.
-Instead of the ``NP-VP`` structure, it permits clause construction directly from
-verbs and adjectives and their arguments:
-```
-  predV     : V  -> NP -> Cl ;             -- "x converges"
-  predV2    : V2 -> NP -> NP -> Cl ;       -- "x intersects y"
-  predV3    : V3 -> NP -> NP -> NP -> Cl ; -- "x intersects y at z"
-  predVColl : V  -> NP -> NP -> Cl ;       -- "x and y intersect"
-  predA     : A  -> NP -> Cl ;             -- "x is even"
-  predA2    : A2 -> NP -> NP -> Cl ;       -- "x is divisible by y"
-```
-The implementation of this module is the functor ``PredicationI``:
-```
-  predV v x = PredVP x (UseV v) ;
-  predV2 v x y = PredVP x (ComplV2 v y) ;
-  predV3 v x y z = PredVP x (ComplV3 v y z) ;
-  predVColl v x y = PredVP (ConjNP and_Conj (BaseNP x y)) (UseV v) ;
-  predA a x = PredVP x (UseComp (CompAP (PositA a))) ;
-  predA2 a x y = PredVP x (UseComp (CompAP (ComplA2 a y))) ;
-```
-Of course, ``Predication`` can be opened together with ``Grammar``, but using
-the resulting grammar for parsing can be frustrating, since having both
-ways of building clauses simultaneously available will produce spurious
-ambiguities. But using just ``Predication`` without ``Verb`` 
-for parsing is a good idea,
-since parsing is more efficient without rules producing verb phrases.
-
-The use of special-purpose APIs is to some extent just an alternative
-to grammar writing by parsing, and its importance may decrease as parsing
-with resource grammars becomes more practical.
-
-
-
-
-
 =Overview of syntactic structures=
 
 ==Texts. phrases, and utterances==
@@ -581,6 +587,8 @@ and an optional tailing vocative ("John", "please").
 
 
 ==Sentences and clauses==
+
+TODO: use overloaded operations in the examples.
 
 The richest of the categories below Utterance is ``S``, Sentence. A Sentence
 is formed from a Clause (``Cl``), by fixing its Tense, Anteriority, and Polarity.
@@ -727,6 +735,10 @@ How to construct ``Adv``s. The main ways are
 
 
 ==Modules and their names==
+
+This section is not necessary for users of the library.
+
+TODO: explain the overloaded API.
 
 The resource modules are named after the kind of 
 phrases that are constructed in them,
