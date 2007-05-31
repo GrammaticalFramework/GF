@@ -380,6 +380,12 @@ inferLType gr trm = case trm of
    Q m ident | isPredef m -> termWith trm $ checkErr (typPredefined ident)
 
    Q m ident -> checks [
+----     do
+----       over <- getOverload gr Nothing trm
+----       case over of
+----         Just trty -> return trty
+----         _ -> fail "not overloaded"
+----     ,
      termWith trm $ checkErr (lookupResType gr m ident) >>= comp
      ,
      checkErr (lookupResDef gr m ident) >>= infer
@@ -605,12 +611,13 @@ getOverload env@gr mt t = case appForm t of
      let (tts,tys) = unzip ttys
      let vfs = lookupOverloadInstance tys typs
 
-     case [vf | vf@(v,f) <- vfs, elem mt [Nothing,Just v]] of
+     case [vf | vf@(v,f) <- vfs, matchVal mt v] of
        [(val,fun)] -> return (mkApp fun tts, val)
        [] -> raise $ "no overload instance of" +++ prt f +++ 
-         maybe [] (("when expecting" +++) . prtType env) mt +++
          "for" +++ unwords (map (prtType env) tys) +++ "among" ++++ 
-         unlines [unwords (map (prtType env) ty) | (ty,_) <- typs]
+         unlines ["  " ++ unwords (map (prtType env) ty) | (ty,_) <- typs] ++
+         maybe [] (("with value type" +++) . prtType env) mt
+
       ----  ++++ "DEBUG" +++ unwords (map show tys) +++ ";" 
       ----  ++++ unlines (map (show . fst) typs) ----
 
@@ -625,6 +632,10 @@ getOverload env@gr mt t = case appForm t of
            "for" +++ unwords (map (prtType env) tys) ++++ "with alternatives" ++++ 
            unlines [prtType env ty | (ty,_) <- vfs']
 
+   matchVal mt v = elem mt ([Nothing,Just v] ++ unlocked) where
+     unlocked = case v of
+       RecType fs -> [Just $ RecType $ filter (not . isLockLabel . fst) fs]
+       _ -> []
    ---- TODO: accept subtypes
    ---- TODO: use a trie
    lookupOverloadInstance tys typs = 
@@ -660,6 +671,14 @@ checkLType env trm typ0 = do
         _ -> raise $ "product expected instead of" +++ prtType env typ
 
     App f a -> do
+       over <- getOverload env (Just typ) trm
+       case over of
+         Just trty -> return trty
+         _ -> do
+          (trm',ty') <- infer trm
+          termWith trm' $ checkEq typ ty' trm'
+
+    Q _ _ -> do
        over <- getOverload env (Just typ) trm
        case over of
          Just trty -> return trty

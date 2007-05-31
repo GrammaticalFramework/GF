@@ -12,19 +12,19 @@ incomplete resource Combinators = open Grammar in {
 --2 Predication
 
     pred : overload {
-      pred : V  -> NP -> Cl ;
-      pred : V2 -> NP -> NP -> Cl ;
-      pred : V3 -> NP -> NP -> NP -> Cl ; 
-      pred : V  -> NP -> NP -> Cl ;
-      pred : A  -> NP -> Cl ; 
-      pred : A2 -> NP -> NP -> Cl ;
-      pred : A  -> NP -> NP -> Cl ;      
-      pred : N -> NP -> Cl ;
-      pred : CN -> NP -> Cl ;
-      pred : NP -> NP -> Cl ;
-      pred : N -> NP -> NP -> Cl ; 
-      pred : Adv -> NP -> Cl ; 
-      pred : Prep -> NP -> NP -> Cl
+      pred : V  -> NP -> Cl ;             -- x converges
+      pred : V2 -> NP -> NP -> Cl ;       -- x intersects y
+      pred : V3 -> NP -> NP -> NP -> Cl ; -- x intersects y at z
+      pred : V  -> NP -> NP -> Cl ;       -- x and y intersect
+      pred : A  -> NP -> Cl ;             -- x is even
+      pred : A2 -> NP -> NP -> Cl ;       -- x is divisible by y
+      pred : A  -> NP -> NP -> Cl ;       -- x and y are equal
+      pred : N  -> NP -> Cl ;             -- x is a maximum
+      pred : CN -> NP -> Cl ;             -- x is a local maximum
+      pred : NP -> NP -> Cl ;             -- x is the neutral element
+      pred : N  -> NP -> NP -> Cl ;       -- x and y are inverses 
+      pred : Adv -> NP -> Cl ;            -- x is in scope
+      pred : Prep -> NP -> NP -> Cl       -- x is outside y
       } ;
 
 --2 Function application
