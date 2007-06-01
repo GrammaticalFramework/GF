@@ -1,132 +1,340 @@
---1 Constructors: the High-Level Syntax API
-
--- This module gives access to (almost) all functions in the resource
--- syntax API defined in [Grammar Grammar.html]. It uses overloaded
--- function names to reduce the burden of remembering different names.
---
--- The principle is simply:
--- to construct an object of type $C$, use the function $mkC$.
---
--- For example, to the object
---
--- $PredVP (UsePron she_Pron) (ComplV2 love_V2 (UsePN paris_PN))$
---
--- can now also be written
---
--- $mkCl (mkNP she_Pron) (mkVP love_V2 (mkNP paris_PN))$
---
--- In addition to exact variants of the $Grammar$ functions, the module
--- gives some common special cases using deeper terms and default arguments.
--- An example of deeper terms is two-place coordination such as
---
--- $mkNP : Conj -> NP -> NP -> NP$. 
---
--- An example of default arguments is present-tense sentences,
---
--- $mkS : Cl -> S$.
---
--- The "old" API can of course be used simultaneously with this one.
--- Typically, $Grammar$ and $Paradigms$ are needed to be $open$ed in addition
--- to this. 
-
+--1 Constructors: the Resource Syntax API
 
 incomplete resource Constructors = open Grammar in {
 
-  oper
+-- This module gives access to the syntactic constructions of the
+-- GF Resource Grammar library. Its main principle is simple:
+-- to construct an object of type $C$, use the function $mkC$.
+--
+-- For example, an object of type $S$ corresponding to the string
+--
+-- $John loves Mary$
+--
+-- is written
+--
+-- $mkS (mkCl (mkPN "John") (mkV2 "love") (mkPN "Mary"))$
+--
+-- This module defines the syntactic constructors, which take trees as arguments.
+-- Lexical constructors, which take strings as arguments, are defined in the
+-- $Paradigms$ modules separately for each language.
+--
+-- The recommended usage of this module is via the wrapper module $Syntax$, 
+-- which also contains the $Structural$ (structural words). 
+-- Together with $Paradigms$, $Syntax$ gives everything that is needed
+-- to implement the concrete syntax for a langauge.
+
+--2 Principles of organization
+
+-- To make the library easier to grasp and navigate, we have followed
+-- a set of principles when organizing it:
+-- + Each category $C$ has an overloaded constructor $mkC$, with value type $C$.
+-- + With $mkC$, it is possible to construct any tree of type $C$, except
+--   atomic ones, i.e. those that take no arguments, and
+--   those whose argument types are exactly the same as in some other instance
+-- + To achieve completeness, the library therefore also has
+--   for each atomic tree of type $C$, a constant suffixed $C$, and,
+--   for other missing constructions, some operation suffixed $C$.
+--   These constructors are listed immediately after the $mkC$ group.
+-- + Those atomic constructors that are given in $Structural$ are not repeated here.
+-- + In addition to the minimally complete set of constructions, many $mkC$ groups
+--   include some frequently needed special cases, with two possible logics:
+--   default value (to decrease the number of arguments), and
+--   direct arguments of an intervening constructor (to flatten the terms).
+-- + If such a special case is applied to some category in some rule, it is
+--   also applied to all other rules in which the category appears.
+-- + The constructors in a group are listed, roughly, 
+--   *from the most common to the most general*. This does not of course specify
+--   a total order. Often the most common is also the most general.
+-- + Each constructor case is equipped with an example that is built by that
+--   case but could not be built with any other one.
+--
+--
+-- *NB* the ones marked with $--%$ are currently not implemented.
 
 --2 Texts, phrases, and utterances
 
+--3 Text: texts
+
+-- A text is a list of phrases separated by punctuation marks.
+-- The default punctuation mark is the full stop, and the default
+-- continuation of a text is empty.
+
+  oper
     mkText : overload {
-      mkText : Text                ;  -- [empty text]
-      mkText : Phr -> Text -> Text ;  -- John walks. ...
-      mkText : Phr -> Text         ;  -- John walks.
-      mkText : Utt -> Text         ;  -- John walks.
-      mkText : S   -> Text         ;  -- John walks.
-      mkText : Cl  -> Text         ;  -- John walks.
-      mkText : QS  -> Text         ;  -- Does John walk?
-      mkText : Imp -> Text         ;  -- Walk!
-      mkText : Pol -> Imp -> Text     -- Don't walk!
+      mkText : Phr ->                  Text ; -- John walks.
+      mkText : Phr ->          Text -> Text ; -- John walks. Yes!
+      mkText : Phr -> Punct ->         Text ; -- John walks!
+      mkText : Phr -> Punct -> Text -> Text ; -- John walks? Yes!
+
+-- A text can also be directly built from utterances, which in turn can
+-- be directly built from sentences, present-tense clauses, questions, or
+-- positive imperatives. 
+
+      mkText : Utt ->                  Text ; -- John.
+      mkText : S   ->                  Text ; -- John walked.
+      mkText : Cl  ->                  Text ; -- John walks.
+      mkText : QS  ->                  Text ; -- Did John walk?
+      mkText : Imp ->                  Text   -- Walk!
       } ;
+
+-- A text can also be empty.
+
+      emptyText :                      Text ; -- [empty text]
+
+
+--3 Punct: punctuation marks
+
+-- There are three punctuation marks that can separate phrases in a text.
+
+      fullStopPunct  : Punct ;     -- .
+      questMarkPunct : Punct ;     -- ?
+      exclMarkPunct  : Punct ;     -- !
+
+--3 Phr: phrases in a text
+
+-- Phrases are built from utterances by adding a phrasal conjunction
+-- and a vocative, both of which are by default empty.
 
     mkPhr : overload {
-      mkPhr : PConj -> Utt -> Voc -> Phr ;  -- But go home my friend
-      mkPhr : Utt -> Phr                 ;  -- Go home
-      mkPhr : S   -> Phr                 ;  -- I go home
-      mkPhr : Cl  -> Phr                    -- I go home
+      mkPhr :          Utt ->        Phr ;  -- why
+      mkPhr :          Utt -> Voc -> Phr ;  --% why John
+      mkPhr : PConj -> Utt ->        Phr ;  --% but why
+      mkPhr : PConj -> Utt -> Voc -> Phr ;  -- but why John
+
+
+-- A phrase can also be directly built by a sentence, a present-tense
+-- clause, a question, or an imperative. Imperatives have by default 
+-- positive polarity.
+
+      mkPhr : S   ->                 Phr ; -- John walked
+      mkPhr : Cl  ->                 Phr ; -- John walks
+      mkPhr : QS  ->                 Phr ; --% Did John walk?
+      mkPhr : Imp ->                 Phr   --% Walk!
       } ;
+
+--3 PConj, phrasal conjunctions
+
+-- Any conjunction can be used as a phrasal conjunction.
+-- More phrasal conjunctions are defined in $Structural$.
+
+      mkPConj : Conj -> PConj ;            -- and
+
+--3 Voc, vocatives
+
+-- Any noun phrase can be turned into a vocative.
+-- More vocatives are defined in $Structural$.
+
+      mkVoc   : NP -> Voc ;                -- John
+
+--3 Utt, utterances
+
+-- Utterances are formed from sentences, questions, and imperatives.
 
     mkUtt : overload {
-      mkUtt : S    -> Utt               ;   -- John walked
-      mkUtt : Cl   -> Utt               ;   -- John walks
-      mkUtt : QS   -> Utt               ;   -- is it good
-      mkUtt : Pol  -> Imp -> Utt        ;   -- (don't) help yourself
-      mkUtt : Imp  -> Utt               ;   -- help yourself
-      mkUtt : IP   -> Utt               ;   -- who
-      mkUtt : IAdv -> Utt               ;   -- why
-      mkUtt : NP   -> Utt               ;   -- this man
-      mkUtt : Adv  -> Utt               ;   -- here
-      mkUtt : VP   -> Utt                   -- to sleep
+      mkUtt : S ->                      Utt ;  -- John walked
+      mkUtt : Cl ->                     Utt ;  -- John walks
+      mkUtt : QS ->                     Utt ;  -- did John walk
+
+-- Imperatives vary in $ImpForm$ (number/politeness) and 
+-- polarity.
+
+      mkUtt :                    Imp -> Utt ;  -- help yourself
+      mkUtt :            Pol  -> Imp -> Utt ;  -- don't help yourself
+      mkUtt : ImpForm ->         Imp -> Utt ;  -- help yourselves
+      mkUtt : ImpForm -> Pol  -> Imp -> Utt ;  -- don't help yourselves
+
+-- Utterances can also be formed from interrogative phrases and
+-- interrogative adverbials, noun phrases, adverbs, and verb phrases.
+
+      mkUtt : IP   ->                   Utt ;  -- who
+      mkUtt : IAdv ->                   Utt ;  -- why
+      mkUtt : NP   ->                   Utt ;  -- this man
+      mkUtt : Adv  ->                   Utt ;  -- here
+      mkUtt : VP   ->                   Utt    -- to walk
       } ;
 
---2 Sentences, and clauses
+-- The plural first-person imperative is a special construction.
+
+      letsUtt : VP ->                   Utt ;  -- let's walk
+
+
+--2 Auxiliary parameters for phrases and sentences
+
+--3 Pol, polarity
+
+-- Polarity is a parameter that sets a clause to positive or negative
+-- form. Since positive is the default, it need never be given explicitly.
+
+      posPol : Pol ;             -- (John walks) [default]
+      negPol : Pol ;             -- (John doesn't walk)
+
+--3 Ant, anteriority
+
+-- Anteriority is a parameter that presents an event as simultaneous or
+-- anterior to some other reference time.
+-- Since simultaneous is the default, it need never be given explicitly.
+
+      simulAnt : Ant ;           -- (John walks) [default]
+      anterAnt : Ant ;           -- (John has walked)       --# notpresent
+
+--3 Tense, tense
+
+-- Tense is a parameter that relates the time of an event 
+-- to the time of speaking about it.
+-- Since present is the default, it need never be given explicitly.
+
+      presentTense     : Tense ; -- (John walks) [default]
+      pastTense        : Tense ; -- (John walked)           --# notpresent
+      futureTense      : Tense ; -- (John will walk)        --# notpresent
+      conditionalTense : Tense ; -- (John would walk)       --# notpresent
+
+--3 ImpForm, imperative form
+
+-- Imperative form is a parameter that sets the form of imperative
+-- by reference to the person or persons addressed.
+-- Since singular is the default, it need never be given explicitly.
+
+      sgImpForm  : ImpForm ;     -- (help yourself) [default]
+      plImpForm  : ImpForm ;     -- (help yourselves)
+      polImpForm : ImpForm ;     -- (help yourself) [polite singular]
+
+
+--2 Sentences and clauses
+
+--3 S, sentences
+
+-- A sentence has a fixed tense, anteriority and polarity.
 
     mkS : overload {
       mkS :                        Cl -> S ;  -- John walks
-      mkS : Tense ->               Cl -> S ;  -- John walked
-      mkS :          Ant ->        Cl -> S ;  -- John has walked
       mkS :                 Pol -> Cl -> S ;  -- John doesn't walk
-      mkS : Tense -> Ant ->        Cl -> S ;  -- John had walked
-      mkS : Tense ->        Pol -> Cl -> S ;  -- John didn't walk
+      mkS :          Ant ->        Cl -> S ;  -- John has walked
       mkS :          Ant -> Pol -> Cl -> S ;  -- John hasn't walked
+      mkS : Tense ->               Cl -> S ;  -- John walked
+      mkS : Tense ->        Pol -> Cl -> S ;  -- John didn't walk
+      mkS : Tense -> Ant ->        Cl -> S ;  -- John had walked
       mkS : Tense -> Ant -> Pol -> Cl -> S ;  -- John wouldn't have walked
-      mkS : Conj  -> S -> S -> S ;            -- John walks and Mary talks   
-      mkS : DConj -> S -> S -> S ;            -- either I leave or you come
-      mkS : Conj  -> ListS  -> S ;            -- John walks, Mary talks, and Bob runs
-      mkS : DConj -> ListS  -> S ;            -- either I leave, you come, or he runs
-      mkS : Adv -> S -> S                     -- today, I will sleep
+
+-- Sentences can be combined with conjunctions. This can apply to a pair
+-- of sentences, but also to a list of more than two.
+
+      mkS : Conj  ->           S -> S -> S ;  -- John walks and Mary talks   
+      mkS : Conj  -> ListS ->            S ;  -- John walks, Mary talks, and Bob runs
+      mkS : DConj ->           S -> S -> S ;  -- either John walks or Mary runs
+      mkS : DConj -> ListS  ->           S ;  -- either John walks, Mary talks, or Bob runs
+
+-- A sentence can be prefixed by an adverb.
+
+      mkS : Adv -> S                  -> S    -- today, John will walk
       } ;
 
+--3 Cl, clauses
+
+-- A clause has a variable tense, anteriority and polarity.
+-- A clause can be built from a subject noun phrase 
+-- with a verb and appropriate arguments.
+
     mkCl : overload {
-      mkCl : NP -> VP -> Cl   ;     -- John wants to walk
-      mkCl : NP -> V -> Cl    ;     -- John walks
-      mkCl : NP -> V2 -> NP -> Cl ; -- John uses it
-      mkCl : VP -> Cl         ;     -- it rains
-      mkCl : NP  -> RS -> Cl  ;     -- it is you who did it
-      mkCl : Adv -> S  -> Cl  ;     -- it is yesterday she arrived
-      mkCl : NP -> Cl         ;     -- there is a house
-      mkCl : NP -> AP -> Cl   ;     -- John is nice and warm
-      mkCl : NP -> A  -> Cl   ;     -- John is warm
-      mkCl : NP -> A -> NP -> Cl;   -- John is warmer than Mary
-      mkCl : NP -> A2 -> NP -> Cl;  -- John is married to Mary
-      mkCl : NP -> NP -> Cl   ;     -- John is a man
-      mkCl : NP -> Adv -> Cl        -- John is here
+      mkCl : NP  -> V  ->             Cl ;    -- John walks
+      mkCl : NP  -> V2 -> NP ->       Cl ;    -- John loves her
+      mkCl : NP  -> V3 -> NP -> NP -> Cl ;    --% John sends it to her
+      mkCl : NP  -> AP ->             Cl ;    -- John is nice and warm
+      mkCl : NP  -> A  ->             Cl ;    -- John is nice
+      mkCl : NP  -> A  -> NP ->       Cl ;    -- John is nicer than Mary
+      mkCl : NP  -> A2 -> NP ->       Cl ;    -- John is married to Mary
+      mkCl : NP  -> NP ->             Cl ;    -- John is the man
+      mkCl : NP  -> CN ->             Cl ;    --% John is an old man
+      mkCl : NP  -> N  ->             Cl ;    --% John is a man
+      mkCl : NP  -> Adv ->            Cl ;    -- John is here
+
+-- More generally, clause can be built from a subject noun phrase and 
+-- a verb phrase.
+
+      mkCl : NP  -> VP ->             Cl ;    -- John wants to walk
+
+-- Subjectless verb phrases are used for impersonal actions.
+
+      mkCl : V   ->                   Cl ;    --% it rains
+      mkCl : VP  ->                   Cl ;    -- it is getting warm
+
+-- Existentials are a special form of clauses.
+
+      mkCl : NP  ->                   Cl ;    -- there is a house
+
+-- There are also special forms in which a noun phrase or an adverb is
+-- emphasized.
+
+      mkCl : NP  -> RS ->             Cl ;    -- it is John who walks
+      mkCl : Adv -> S  ->             Cl      -- it is here John walks
       } ;
+
+-- Generic clauses have an impersonal subject.
+
+      genericCl : VP ->               Cl ;    -- one walks              
+
 
 --2 Verb phrases and imperatives
 
+--3 VP, verb phrases
+
+-- A verb phrase is formed from a verb with appropriate arguments.
+
     mkVP : overload {
-      mkVP : V   -> VP             ;  -- sleep
-      mkVP : V2  -> NP -> VP       ;  -- use it
-      mkVP : V3  -> NP -> NP -> VP ;  -- send a message to her
-      mkVP : VV  -> VP -> VP       ;  -- want to run
-      mkVP : VS  -> S  -> VP       ;  -- know that she runs
-      mkVP : VQ  -> QS -> VP       ;  -- ask if she runs
-      mkVP : VA  -> AP -> VP       ;  -- look red
+      mkVP : V   ->             VP ;  -- walk
+      mkVP : V2  -> NP ->       VP ;  -- love her
+      mkVP : V3  -> NP -> NP -> VP ;  -- send it to her
+      mkVP : VV  -> VP ->       VP ;  -- want to walk
+      mkVP : VS  -> S  ->       VP ;  -- know that she walks
+      mkVP : VQ  -> QS ->       VP ;  -- ask if she walks
+      mkVP : VA  -> AP ->       VP ;  -- become warm
       mkVP : V2A -> NP -> AP -> VP ;  -- paint the house red
-      mkVP : AP  -> VP             ;  -- be warm
-      mkVP : NP  -> VP             ;  -- be a man
-      mkVP : Adv -> VP             ;  -- be here
-      mkVP : VP  -> Adv -> VP      ;  -- sleep here
-      mkVP : AdV -> VP  -> VP         -- always sleep
+
+-- The verb can also be a copula ("be"), and the relevant argument is
+-- then the complement adjective or noun phrase.
+
+      mkVP : A   ->             VP ;  --% be warm
+      mkVP : AP  ->             VP ;  -- be very warm
+      mkVP : N   ->             VP ;  --% be a man
+      mkVP : CN  ->             VP ;  --% be an old man
+      mkVP : NP  ->             VP ;  -- be the old man
+      mkVP : Adv ->             VP ;  -- be here
+
+-- A verb phrase can be modified with a postverbal or a preverbial adverb.
+
+      mkVP : VP  -> Adv ->      VP ;  -- sleep here
+      mkVP : AdV -> VP  ->      VP    -- always sleep
       } ;
+
+-- Two-place verbs can be used reflexively.
+
+      reflexiveVP : V2 -> VP ;        -- love itself
+
+-- Two-place verbs can also be used in the passive, with or without an agent.
+
+    passiveVP : overload {
+      passiveVP : V2 ->       VP ;    --% be loved
+      passiveVP : V2 -> NP -> VP ;    --% be loved by her
+      } ;
+
+-- A verb phrase can be turned into the progressive form.
+
+      progressiveVP : VP -> VP ;      -- be sleeping
+
+--3 Imp, imperatives
+
+-- Imperatives are formed from verbs and their arguments; in the general
+-- case, from verb phrases.
 
     mkImp : overload {
-      mkImp : VP -> Imp            ;  -- go there now
-      mkImp : V  -> Imp            ;  -- go
-      mkImp : V2 -> NP -> Imp         -- take it
+      mkImp : V  ->          Imp  ;   -- go
+      mkImp : V2 -> NP ->    Imp  ;   -- take it
+      mkImp : VP ->          Imp      -- go there now
       } ;
 
+
+
 --2 Noun phrases and determiners
+
 
     mkNP : overload {
       mkNP : Det -> CN -> NP  ;        -- the old man
@@ -150,17 +358,22 @@ incomplete resource Constructors = open Grammar in {
       } ;
 
     mkDet : overload {
-      mkDet : QuantSg -> Ord -> Det        ;   -- this best (man)
-      mkDet : Det                          ;   -- the (man)
-      mkDet : QuantSg -> Det               ;   -- this (man)
-      mkDet : QuantPl -> Num -> Ord -> Det ;   -- these five best (men)
-      mkDet : QuantPl -> Det               ;   -- these (men)
-      mkDet : Quant   -> Det               ;   -- this (man)
-      mkDet : Num     -> Det               ;   -- forty-five (men)
-      mkDet : Int     -> Det               ;   -- 51 (men)
-      mkDet : Digit   -> Det               ;   -- five (men)
-      mkDet : Pron    -> Det                   -- my (house)
+      mkDet : QuantSg ->        Ord -> Det ; -- this best
+      mkDet : QuantSg ->               Det ; -- this
+      mkDet : QuantPl -> Num -> Ord -> Det ; -- these five best
+      mkDet : QuantPl ->               Det ; -- these
+      mkDet : Quant ->                 Det ; -- this
+      mkDet : Quant ->          Num -> Det ; -- these five
+      mkDet : Num ->                   Det ; -- forty-five
+      mkDet : Int ->                   Det ; -- 51
+      mkDet : Digit ->                 Det ; -- five
+      mkDet : Pron  ->                 Det   -- my
       } ;
+
+      mkQuantSg : Quant -> QuantSg ;
+
+      mkQuantPl : Quant -> QuantPl ;
+
 
    def_Det   : Det ;   -- the (man)
    indef_Det : Det ;   -- a (man)
@@ -172,17 +385,27 @@ incomplete resource Constructors = open Grammar in {
 --2 Numerals - cardinal and ordinal 
 
     mkNum : overload {
-      mkNum : Num            ;   -- [no num]
-      mkNum : Int  -> Num    ;   -- 51
-      mkNum : Digit -> Num
+      mkNum : Numeral    -> Num ;
+      mkNum : Digit      -> Num ;
+      mkNum : Int        -> Num ;   -- 51
+      mkNum : AdN -> Num -> Num 
       } ;
 
+      noNum : Num            ;      -- [no num]
+
+      mkAdN : CAdv -> AdN ;         -- more (than five)
+
+
     mkOrd : overload {
-      mkOrd : Ord            ;   -- [no ord]
-      mkOrd : Int   -> Ord   ;   -- 51st
+      mkOrd : Numeral -> Ord ;
       mkOrd : Digit -> Ord   ;   -- fifth
+      mkOrd : Int   -> Ord   ;   -- 51st
       mkOrd : A     -> Ord       -- largest
       } ;
+
+      noOrd : Ord            ;   -- [no ord]
+
+
 
 --2 Common nouns
 
@@ -202,8 +425,9 @@ incomplete resource Constructors = open Grammar in {
       mkCN :  N -> RS  -> CN        ;   -- house that John owns
       mkCN : CN -> Adv -> CN        ;   -- house on the hill
       mkCN :  N -> Adv -> CN        ;   -- house on the hill
-      mkCN : CN -> SC  -> CN        ;   -- fact that John smokes, question if he does
-      mkCN :  N -> SC  -> CN        ;   -- fact that John smokes, question if he does
+      mkCN : CN -> S   -> CN        ;   -- fact that John smokes
+      mkCN : CN -> QS  -> CN        ;   -- question if John smokes
+      mkCN : CN -> VP  -> CN        ;   -- reason to smoke
       mkCN : CN -> NP  -> CN        ;   -- number x, numbers x and y
       mkCN :  N -> NP  -> CN            -- number x, numbers x and y
       } ;
@@ -215,7 +439,9 @@ incomplete resource Constructors = open Grammar in {
       mkAP : A -> NP -> AP  ;         -- warmer than Spain
       mkAP : A2 -> NP -> AP ;         -- divisible by 2
       mkAP : A2 -> AP       ;         -- divisible by itself
-      mkAP : AP -> SC -> AP ;         -- great that she won; uncertain if she did
+      mkAP : AP -> S  -> AP ;         -- great that she won
+      mkAP : AP -> QS -> AP ;         -- uncertain if she won
+      mkAP : AP -> VP -> AP ;         -- ready to go
       mkAP : AdA -> AP -> AP ;        -- very uncertain
       mkAP : Conj -> AP -> AP -> AP ; -- warm and nice
       mkAP : DConj -> AP -> AP -> AP ;-- both warm and nice
@@ -264,6 +490,8 @@ incomplete resource Constructors = open Grammar in {
       mkIP : IP -> Adv -> IP                  -- who in Europe
       } ;
 
+    mkIAdv : Prep -> IP -> IAdv ;             -- in which city
+
 --2 Relative clauses and relative pronouns
 
     mkRS : overload {
@@ -274,7 +502,8 @@ incomplete resource Constructors = open Grammar in {
     mkRCl : overload {
       mkRCl : Cl -> RCl          ;   -- such that John loves her
       mkRCl : RP -> VP -> RCl    ;   -- who loves John
-      mkRCl : RP -> Slash -> RCl     -- whom John loves
+      mkRCl : RP -> Slash -> RCl ;   -- whom John wants to love
+      mkRCl : RP -> NP -> V2 -> RCl  -- whom John loves
       } ;
 
     mkRP : overload {
@@ -291,11 +520,28 @@ incomplete resource Constructors = open Grammar in {
       mkSlash : Cl -> Prep -> Slash       -- (with whom) he walks
       } ;
 
-    mkSC : overload {
-      mkSC : S  -> SC             ;   -- that you go
-      mkSC : QS -> SC             ;   -- whether you go
-      mkSC : VP -> SC                 -- to go
-      } ;
+
+--2 Lists for coordination
+
+    mkListS : overload {
+     mkListS : S -> S -> ListS ;
+     mkListS : S -> ListS -> ListS
+     } ;
+
+    mkListAdv : overload {
+     mkListAdv : Adv -> Adv -> ListAdv ;
+     mkListAdv : Adv -> ListAdv -> ListAdv
+     } ;
+
+    mkListAP : overload {
+     mkListAP : AP -> AP -> ListAP ;
+     mkListAP : AP -> ListAP -> ListAP
+     } ;
+  
+    mkListNP : overload {
+     mkListNP : NP -> NP -> ListNP ;
+     mkListNP : NP -> ListNP -> ListNP
+     } ;
 
 
 --. 
@@ -310,8 +556,12 @@ incomplete resource Constructors = open Grammar in {
                                          =    ComplA2  ;
       mkAP : A2 -> AP          -- divisible by itself
                                          =    ReflA2   ;
-      mkAP : AP -> SC -> AP    -- great that she won, uncertain if she did
-                                         =    SentAP   ;
+      mkAP : AP -> S -> AP    -- great that she won
+                                         =  \ap,s -> SentAP ap (EmbedS s) ;
+      mkAP : AP -> QS -> AP    -- great that she won
+                                         =  \ap,s -> SentAP ap (EmbedQS s) ;
+      mkAP : AP -> VP -> AP    -- great that she won
+                                         =  \ap,s -> SentAP ap (EmbedVP s) ;
       mkAP : AdA -> AP -> AP   -- very uncertain
                                          =    AdAP ;
       mkAP : Conj -> AP -> AP -> AP
@@ -378,6 +628,8 @@ incomplete resource Constructors = open Grammar in {
 	                                 =    \x,y -> PredVP x (UseComp (CompAdv y))
       } ;
 
+    genericCl : VP -> Cl = GenericCl ;
+
     mkNP = overload {
       mkNP : Det -> CN -> NP      -- the old man
                                          =    DetCN    ;
@@ -418,8 +670,6 @@ incomplete resource Constructors = open Grammar in {
     mkDet = overload {
       mkDet : QuantSg ->        Ord -> Det     -- this best man
                                          =    DetSg     ;
-      mkDet : Det   -- the man
-                                         = DetSg (SgQuant DefArt) NoOrd ;
       mkDet : QuantSg ->  Det       -- this man
                                          =    \q -> DetSg q NoOrd  ;
       mkDet : QuantPl -> Num -> Ord -> Det     -- these five best men
@@ -428,6 +678,8 @@ incomplete resource Constructors = open Grammar in {
                                          =    \q -> DetPl q NoNum NoOrd   ;
       mkDet : Quant ->  Det       -- this man
                                          =    \q -> DetSg (SgQuant q) NoOrd  ;
+      mkDet : Quant -> Num -> Det       -- these five man
+                                         =    \q,nu -> DetPl (PlQuant q) nu NoOrd  ;
       mkDet : Num ->  Det       -- forty-five men
                                          =    \n -> DetPl (PlQuant IndefArt) n NoOrd  ;
       mkDet : Int -> Det          -- 51 (men)
@@ -439,6 +691,9 @@ incomplete resource Constructors = open Grammar in {
                                          =    \p -> DetSg (SgQuant (PossPron p)) NoOrd
       } ;
 
+    mkQuantSg : Quant -> QuantSg = SgQuant ;
+    mkQuantPl : Quant -> QuantPl = PlQuant ;
+
 
     def_Det : Det = DetSg (SgQuant DefArt) NoOrd ;   -- the (man)
     indef_Det : Det = DetSg (SgQuant IndefArt) NoOrd ; -- a (man)
@@ -446,24 +701,35 @@ incomplete resource Constructors = open Grammar in {
 
 
     mkNum = overload {
-      mkNum : Num                -- [no num]
-                                         =    NoNum       ;
+      mkNum : Numeral -> Num = NumNumeral ;
       mkNum : Int -> Num         -- 51
                                          =    NumInt      ;
       mkNum : Digit -> Num
-                                         =    \d -> NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 d)))))
+                                         =    \d -> 
+        NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 d))))) ;
+
+      mkNum : AdN -> Num -> Num = AdNum
       } ;
 
+      noNum : Num                -- [no num]
+                                         =    NoNum       ;
+
+    mkAdN : CAdv -> AdN = AdnCAdv ;                  -- more (than five)
+
     mkOrd = overload {
-      mkOrd : Ord                -- [no ord]
-                                         =    NoOrd       ;
+      mkOrd : Numeral -> Ord = OrdNumeral ;
       mkOrd : Int -> Ord         -- 51st
                                          =    OrdInt      ;
       mkOrd : Digit -> Ord       -- fifth
-                                         =    \d -> OrdNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 d))))) ;
+                                         =    \d -> 
+        OrdNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 d))))) ;
       mkOrd : A -> Ord           -- largest
                                          =    OrdSuperl
       } ;
+
+      noOrd : Ord                -- [no ord]
+                                         =    NoOrd       ;
+
 
     mkCN = overload {
       mkCN : N  -> CN            -- house
@@ -496,10 +762,12 @@ incomplete resource Constructors = open Grammar in {
                                          =    AdvCN    ;
       mkCN :  N -> Adv -> CN     -- house on the hill
                                          =    \x,y -> AdvCN (UseN x) y  ;
-      mkCN : CN -> SC  -> CN     -- fact that John smokes, question if he does
-                                         =    SentCN   ;
-      mkCN :  N -> SC  -> CN     -- fact that John smokes, question if he does
-                                         =    \x,y -> SentCN (UseN x) y  ;
+      mkCN : CN -> S   -> CN     -- fact that John smokes
+                                         =    \cn,s -> SentCN cn (EmbedS s) ;
+      mkCN : CN -> QS  -> CN     -- question if John smokes
+                                         =    \cn,s -> SentCN cn (EmbedQS s) ;
+      mkCN : CN -> VP  -> CN     -- reason to smoke
+                                         =    \cn,s -> SentCN cn (EmbedVP s) ;
       mkCN : CN -> NP  -> CN     -- number x, numbers x and y
                                          =    ApposCN ;
       mkCN :  N -> NP  -> CN     -- number x, numbers x and y
@@ -516,6 +784,36 @@ incomplete resource Constructors = open Grammar in {
                                          =    \s -> PhrUtt NoPConj (UttS s) NoVoc 
       } ;
 
+    mkPConj : Conj -> PConj = PConjConj ;
+    noPConj : PConj = NoPConj ;
+
+    mkVoc   : NP -> Voc  = VocNP ;
+    noVoc   : Voc  = NoVoc ;
+
+    posPol : Pol = PPos ; 
+    negPol : Pol = PNeg ;
+
+    simulAnt : Ant = ASimul ; 
+    anterAnt : Ant = AAnter ; --# notpresent
+
+    presentTense     : Tense = TPres ;
+    pastTense        : Tense = TPast ; --# notpresent
+    futureTense      : Tense = TFut ;  --# notpresent
+    conditionalTense : Tense = TCond ; --# notpresent
+
+  param ImpForm = IFSg | IFPl | IFPol ;
+
+  oper
+    sgImpForm  : ImpForm = IFSg ;
+    plImpForm  : ImpForm = IFPl ;
+    polImpForm : ImpForm = IFPol ;
+
+    mkUttImp : ImpForm -> Pol -> Imp -> Utt = \f,p,i -> case f of {
+      IFSg  => UttImpSg p i ;
+      IFPl  => UttImpPl p i ;
+      IFPol => UttImpPol p i
+      } ;
+
     mkUtt = overload {
       mkUtt : S -> Utt                     -- John walked
                                          =    UttS      ;
@@ -523,6 +821,10 @@ incomplete resource Constructors = open Grammar in {
 	                                 =    \c -> UttS (UseCl TPres ASimul PPos c);
       mkUtt : QS -> Utt                    -- is it good
                                          =    UttQS     ;
+      mkUtt : ImpForm -> Pol -> Imp -> Utt -- don't help yourselves
+                                         =    mkUttImp  ;
+      mkUtt : ImpForm ->        Imp -> Utt -- help yourselves
+                                         =  \f -> mkUttImp f PPos ;
       mkUtt : Pol -> Imp -> Utt            -- (don't) help yourself
                                          =    UttImpSg  ;
       mkUtt : Imp -> Utt                    -- help yourself
@@ -538,6 +840,8 @@ incomplete resource Constructors = open Grammar in {
       mkUtt : VP   -> Utt                   -- to sleep
                                          =    UttVP 
       } ;
+
+    letsUtt : VP -> Utt = ImpPl1 ;
 
     mkQCl = overload {
 
@@ -556,7 +860,8 @@ incomplete resource Constructors = open Grammar in {
       mkQCl : IAdv -> NP -> QCl   -- where is John
                                          =    \a -> QuestIComp (CompIAdv a)   ;
       mkQCl : IP -> QCl         -- which houses are there
-                                         =    ExistIP
+                                         =    ExistIP 
+
       } ;
 
     mkIP = overload {
@@ -568,13 +873,17 @@ incomplete resource Constructors = open Grammar in {
                                          =    AdvIP
       } ;
 
+    mkIAdv : Prep -> IP -> IAdv = PrepIP ;
+
     mkRCl = overload {
       mkRCl : Cl -> RCl              -- such that John loves her
                                          =    RelCl     ;
       mkRCl : RP -> VP -> RCl        -- who loves John
                                          =    RelVP     ;
       mkRCl : RP -> Slash -> RCl     -- whom John loves
-                                         =    RelSlash
+                                         =    RelSlash ;
+      mkRCl : RP -> NP -> V2 -> RCl     -- whom John loves
+                                         =  \rp,np,v2 -> RelSlash rp (SlashV2 np v2)
       } ;
 
     mkRP = overload {
@@ -602,15 +911,6 @@ incomplete resource Constructors = open Grammar in {
                                          =    \v -> ImpVP (UseV v)  ;
       mkImp : V2 -> NP -> Imp
                                          =    \v,np -> ImpVP (ComplV2 v np)
-      } ;
-
-    mkSC = overload {
-      mkSC : S  -> SC                 -- that you go
-                                         =    EmbedS     ;
-      mkSC : QS -> SC                 -- whether you go
-                                         =    EmbedQS    ;
-      mkSC : VP -> SC                 -- to go
-                                         =    EmbedVP
       } ;
 
     mkS = overload {
@@ -659,9 +959,29 @@ incomplete resource Constructors = open Grammar in {
                                          =    UseRCl TPres ASimul PPos
       } ;
 
+  param Punct = PFullStop | PExclMark | PQuestMark ;
+
+  oper
+    emptyText : Text = TEmpty ;       -- [empty text]
+
+    fullStopPunct  : Punct = PFullStop ; -- .
+    questMarkPunct : Punct = PQuestMark ; -- ?
+    exclMarkPunct  : Punct = PExclMark ; -- !
+
+
     mkText = overload {
-      mkText : Text                   -- [empty text]
-                                         =    TEmpty      ;
+      mkText : Phr -> Punct -> Text -> Text =
+        \phr,punct,text -> case punct of {
+          PFullStop => TFullStop phr text ; 
+          PExclMark => TExclMark phr text ;
+          PQuestMark => TQuestMark phr text
+          } ;
+      mkText : Phr -> Punct -> Text =
+        \phr,punct -> case punct of {
+          PFullStop => TFullStop phr TEmpty ; 
+          PExclMark => TExclMark phr TEmpty ;
+          PQuestMark => TQuestMark phr TEmpty
+          } ;
       mkText : Phr -> Text            -- John walks.
                                          =    \x -> TFullStop x TEmpty  ;
       mkText : Utt -> Text
@@ -693,6 +1013,8 @@ incomplete resource Constructors = open Grammar in {
                                          =    ComplVS   ;
       mkVP : VQ  -> QS -> VP          -- ask if she runs
                                          =    ComplVQ   ;
+---      mkVP : VS  -> NP -> VP = \v -> ComplV2 (UseVS v) ;
+---      mkVP : VQ  -> NP -> VP = \v -> ComplV2 (UseVQ v) ;
       mkVP : VA  -> AP -> VP          -- look red
                                          =    ComplVA   ;
       mkVP : V2A -> NP -> AP -> VP    -- paint the house red
@@ -708,4 +1030,32 @@ incomplete resource Constructors = open Grammar in {
       mkVP : AdV -> VP -> VP          -- always sleep
                                          =    AdVVP
       } ;
+
+  reflexiveVP   : V2 -> VP = ReflV2 ;
+  passiveVP     : V2 -> VP = PassV2 ;
+  progressiveVP : VP -> VP = ProgrVP ;
+
+
+  mkListS = overload {
+   mkListS : S -> S -> ListS = BaseS ;
+   mkListS : S -> ListS -> ListS = ConsS
+   } ;
+
+  mkListAP = overload {
+   mkListAP : AP -> AP -> ListAP = BaseAP ;
+   mkListAP : AP -> ListAP -> ListAP = ConsAP
+   } ;
+
+  mkListAdv = overload {
+   mkListAdv : Adv -> Adv -> ListAdv = BaseAdv ;
+   mkListAdv : Adv -> ListAdv -> ListAdv = ConsAdv
+   } ;
+
+  mkListNP = overload {
+   mkListNP : NP -> NP -> ListNP = BaseNP ;
+   mkListNP : NP -> ListNP -> ListNP = ConsNP
+   } ;
+
+
+
 }

@@ -1,74 +1,12 @@
--- Text
-    TQuestMark : Phr -> Text -> Text ;  -- Are you OK? ...
-    TExclMark  : Phr -> Text -> Text ;  -- John walks! ...
-
--- Utt
-    UttImpPl  : Pol -> Imp -> Utt;          -- (don't) help yourselves
-    UttImpPol : Pol -> Imp -> Utt ;         -- (don't) help (polite)
-    ImpPl1    : VP -> Utt ;       -- let's go
-
--- Cl
-    GenericCl : VP -> Cl ;        -- one sleeps
-
-
--- VP
-    ReflV2   : V2 -> VP ;               -- use itself
-    PassV2   : V2 -> VP ;               -- be used
-    ProgrVP  : VP -> VP ;        -- be sleeping
-
-
--- Verb: coercions
-    UseVQ   : VQ -> V2 ;                -- ask (a question)
-    UseVS   : VS -> V2 ;                -- know (a secret)
-
 -- how to arrange and extend these
+
    def_Det   : Det ;   -- the (man)
    indef_Det : Det ;   -- a (man)
    mass_Det  : Det ;   -- (water)
 
--- Num
-    NumNumeral : Numeral -> Num ;    -- fifty-one
-    AdNum      : AdN -> Num -> Num ; -- almost 51
-
--- Ord
-    OrdNumeral : Numeral -> Ord ; -- fifty-first
-
--- Adjective: strange rule, not covered
-    UseA2   : A2 -> A ;         -- divisible
-
--- CAdv (in Adverb)
-    AdnCAdv : CAdv -> AdN ;                  -- more (than five)
-
--- QCl
-    QuestIComp  : IComp -> NP -> QCl ;         -- where is John
-
--- mkIAdv
-    PrepIP  : Prep -> IP -> IAdv ;             -- with whom
-
--- mkIComp
-    CompIAdv : IAdv -> IComp ;                 -- where
-
--- ListX = ListAdv, ListAP, ListNP, ListS
-    BaseX
-    ConsX
-
--- RS, QS: all special cases found in S?
-
--- Pol, Tense, Ant
-    PPos, PNeg : Pol ;           -- I sleep/don't sleep
-    TPres  : Tense ;                
-    ASimul : Ant ;
-    TPast, TFut, TCond : Tense ; -- I slept/will sleep/would sleep --# notpresent
-    AAnter : Ant ;               -- I have slept                   --# notpresent
-
 
 ------------------------------------------
 --- strange cats: 
-
-SC
-      mkCN : CN -> SC -> CN ;   -- fact that John smokes, question if he does
-      mkCN :  N -> SC -> CN ;   -- fact that John smokes, question if he does
-      mkAP : AP -> SC -> AP ;   -- great that she won; uncertain if she did
 
 Slash
       mkQCl : IP -> Slash -> QCl       ;   -- who does John love
@@ -110,3 +48,19 @@ VP?
   open ResourceX, ParadigmsX in ...
 
   ResourceX = ConstructorsX, StructuralX, CatX 
+
+
+--------------------
+
+-- to be left out of coverage:
+-- Verb: coercions
+    UseVQ   : VQ -> V2 ;                -- ask (a question)
+    UseVS   : VS -> V2 ;                -- know (a secret)
+-- Adjective: strange rule, not covered
+    UseA2   : A2 -> A ;         -- divisible
+
+
+
+-- mkIComp
+    CompIAdv : IAdv -> IComp ;                 -- where
+
