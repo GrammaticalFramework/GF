@@ -8,6 +8,7 @@ incomplete concrete PhraseScand of Phrase =
     UttQS qs = {s = qs.s ! QDir} ;
     UttImpSg pol imp = {s = pol.s ++ imp.s ! pol.p ! Sg} ;
     UttImpPl pol imp = {s = pol.s ++ imp.s ! pol.p ! Pl} ;
+    UttImpPol pol imp = {s = pol.s ++ imp.s ! pol.p ! Sg} ; --- works for adj but not for refl
 
     UttIP ip = {s = ip.s ! nominative} ; --- Acc also
     UttIAdv iadv = iadv ;

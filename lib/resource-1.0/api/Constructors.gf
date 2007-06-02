@@ -64,8 +64,8 @@ incomplete resource Constructors = open Grammar in {
 
   oper
     mkText : overload {
-      mkText : Phr ->                      Text ; -- John walks.
-      mkText : Phr -> (Punct) -> (Text) -> Text ; -- John walks? Yes!
+      mkText : Phr ->                      Text ; -- But John walks.
+      mkText : Phr -> (Punct) -> (Text) -> Text ; -- John walks? Yes.
 
 -- A text can also be directly built from utterances, which in turn can
 -- be directly built from sentences, present-tense clauses, questions, or
@@ -132,12 +132,12 @@ incomplete resource Constructors = open Grammar in {
       mkUtt : S   -> Utt ;  -- John walked
       mkUtt : Cl  -> Utt ;  -- John walks
       mkUtt : QS  -> Utt ;  -- did John walk
-      mkUtt : Imp -> Utt ;  -- help yourself
+      mkUtt : Imp -> Utt ;  -- love yourself
 
 -- Imperatives can also vary in $ImpForm$ (number/politeness) and 
 -- polarity.
 
-      mkUtt : (ImpForm) -> (Pol) -> Imp -> Utt ;  -- don't help yourselves
+      mkUtt : (ImpForm) -> (Pol) -> Imp -> Utt ;  -- don't love yourselves
 
 -- Utterances can also be formed from interrogative phrases and
 -- interrogative adverbials, noun phrases, adverbs, and verb phrases.
@@ -151,7 +151,7 @@ incomplete resource Constructors = open Grammar in {
 
 -- The plural first-person imperative is a special construction.
 
-      letsUtt : VP ->  Utt ;  -- let's walk
+      lets_Utt : VP ->  Utt ;  -- let's walk
 
 
 --2 Auxiliary parameters for phrases and sentences
@@ -161,8 +161,8 @@ incomplete resource Constructors = open Grammar in {
 -- Polarity is a parameter that sets a clause to positive or negative
 -- form. Since positive is the default, it need never be given explicitly.
 
-      posPol : Pol ;  -- (John walks) [default]
-      negPol : Pol ;  -- (John doesn't walk)
+      positivePol : Pol ;  -- (John walks) [default]
+      negativePol : Pol ;  -- (John doesn't walk)
 
 --3 Ant, anteriority
 
@@ -170,8 +170,8 @@ incomplete resource Constructors = open Grammar in {
 -- anterior to some other reference time.
 -- Since simultaneous is the default, it need never be given explicitly.
 
-      simulAnt : Ant ;  -- (John walks) [default]
-      anterAnt : Ant ;  -- (John has walked)       --# notpresent
+      simultaneousAnt : Ant ;  -- (John walks) [default]
+      anteriorAnt     : Ant ;  -- (John has walked)       --# notpresent
 
 --3 Tense, tense
 
@@ -190,9 +190,9 @@ incomplete resource Constructors = open Grammar in {
 -- by reference to the person or persons addressed.
 -- Since singular is the default, it need never be given explicitly.
 
-      sgImpForm  : ImpForm ;  -- (help yourself) [default]
-      plImpForm  : ImpForm ;  -- (help yourselves)
-      polImpForm : ImpForm ;  -- (help yourself) [polite singular]
+      singularImpForm : ImpForm ;  -- (help yourself) [default]
+      pluralImpForm   : ImpForm ;  -- (help yourselves)
+      politeImpForm   : ImpForm ;  -- (help yourself) [polite singular]
 
 
 --2 Sentences and clauses
@@ -208,10 +208,10 @@ incomplete resource Constructors = open Grammar in {
 -- Sentences can be combined with conjunctions. This can apply to a pair
 -- of sentences, but also to a list of more than two.
 
-      mkS : Conj  -> S -> S -> S ;  -- John walks and Mary talks   
-      mkS : Conj  -> ListS  -> S ;  -- John walks, Mary talks, and Bob runs
-      mkS : DConj -> S -> S -> S ;  -- either John walks or Mary runs
-      mkS : DConj -> ListS  -> S ;  -- either John walks, Mary talks, or Bob runs
+      mkS : Conj  -> S -> S -> S ;  -- John walks and I run   
+      mkS : Conj  -> ListS  -> S ;  -- John walks, I run and you sleep
+      mkS : DConj -> S -> S -> S ;  -- either John walk or I run
+      mkS : DConj -> ListS  -> S ;  -- either John walks, I run or you sleep
 
 -- A sentence can be prefixed by an adverb.
 
@@ -1053,10 +1053,16 @@ incomplete resource Constructors = open Grammar in {
     mkPhr = overload {
       mkPhr : PConj -> Utt -> Voc -> Phr   -- But go home my friend
                                          =    PhrUtt    ;
+      mkPhr : Utt -> Voc -> Phr
+                                         =    \u,v -> PhrUtt NoPConj u v ;
+      mkPhr : PConj -> Utt -> Phr
+                                         =    \u,v -> PhrUtt u v NoVoc ;
       mkPhr : Utt -> Phr   -- Go home
                                          =    \u -> PhrUtt NoPConj u NoVoc   ;
       mkPhr : S -> Phr   -- I go home
                                          =    \s -> PhrUtt NoPConj (UttS s) NoVoc ; 
+      mkPhr : Cl -> Phr   -- I go home
+                                         =    \s -> PhrUtt NoPConj (UttS (UseCl TPres ASimul PPos s)) NoVoc ; 
       mkPhr : QS -> Phr   -- I go home
                                          =    \s -> PhrUtt NoPConj (UttQS s) NoVoc ;
       mkPhr : Imp -> Phr   -- I go home
@@ -1070,11 +1076,11 @@ incomplete resource Constructors = open Grammar in {
     mkVoc   : NP -> Voc  = VocNP ;
     noVoc   : Voc  = NoVoc ;
 
-    posPol : Pol = PPos ; 
-    negPol : Pol = PNeg ;
+    positivePol : Pol = PPos ; 
+    negativePol : Pol = PNeg ;
 
-    simulAnt : Ant = ASimul ; 
-    anterAnt : Ant = AAnter ; --# notpresent
+    simultaneousAnt : Ant = ASimul ; 
+    anteriorAnt : Ant = AAnter ; --# notpresent
 
     presentTense     : Tense = TPres ;
     pastTense        : Tense = TPast ; --# notpresent
@@ -1084,9 +1090,9 @@ incomplete resource Constructors = open Grammar in {
   param ImpForm = IFSg | IFPl | IFPol ;
 
   oper
-    sgImpForm  : ImpForm = IFSg ;
-    plImpForm  : ImpForm = IFPl ;
-    polImpForm : ImpForm = IFPol ;
+    singularImpForm  : ImpForm = IFSg ;
+    pluralImpForm  : ImpForm = IFPl ;
+    politeImpForm : ImpForm = IFPol ;
 
     mkUttImp : ImpForm -> Pol -> Imp -> Utt = \f,p,i -> case f of {
       IFSg  => UttImpSg p i ;
@@ -1121,7 +1127,7 @@ incomplete resource Constructors = open Grammar in {
                                          =    UttVP 
       } ;
 
-    letsUtt : VP -> Utt = ImpPl1 ;
+    lets_Utt : VP -> Utt = ImpPl1 ;
 
     mkQCl = overload {
 

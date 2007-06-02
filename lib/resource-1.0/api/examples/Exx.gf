@@ -1,0 +1,21 @@
+abstract Exx = Cat ** {
+
+fun
+
+  ex1_Text, ex2_Text, ex3_Text, ex4_Text, ex5_Text, ex6_Text, ex7_Text, ex8_Text : Text ;
+
+  ex1_Phr, ex2_Phr, ex3_Phr, ex4_Phr, ex5_Phr, ex6_Phr : Phr ;
+
+  ex1_PConj : PConj ;
+
+  ex1_Voc : Voc ;
+
+  ex1_Utt, ex2_Utt, ex3_Utt, ex4_Utt, ex5_Utt, ex6_Utt, ex7_Utt, ex8_Utt, ex8_Utt, ex9_Utt, ex10_Utt, ex11_Utt : Utt ;
+
+  ex1_S, ex2_S, ex3_S, ex4_S, ex5_S, ex6_S, ex7_S : S ;
+
+  ex1_Cl, ex2_Cl, ex3_Cl, ex4_Cl, ex5_Cl, ex6_Cl, ex7_Cl, ex8_Cl, ex8_Cl, ex10_Cl, 
+                    ex11_Cl, ex12_Cl, ex13_Cl, ex14_Cl, ex15_Cl, ex16_Cl, ex17_Cl, ex18_Cl : Cl ;
+
+
+}
