@@ -41,10 +41,37 @@ incomplete concrete ExxI of Exx = Cat ** open Lang, Constructors in {
     ex4_S = mkS and_Conj (mkListS (mkS (mkCl john_NP walk_V)) (mkListS (mkS (mkCl (mkNP i_Pron) run_V)) (mkS (mkCl (mkNP youSg_Pron) sleep_V)))) ;
     ex5_S = mkS either7or_DConj (mkS (mkCl john_NP walk_V)) (mkS (mkCl (mkNP i_Pron) run_V)) ;
     ex6_S = mkS either7or_DConj (mkListS (mkS (mkCl john_NP walk_V)) (mkListS (mkS (mkCl (mkNP i_Pron) run_V)) (mkS (mkCl (mkNP youSg_Pron) sleep_V)))) ;
+    ex7_S = mkS today_Adv (mkS futureTense (mkCl john_NP walk_V)) ;
 
-
+    ex1_Cl = mkCl john_NP walk_V ;
+    ex2_Cl = mkCl john_NP love_V2 (mkNP she_Pron) ;
+    ex3_Cl = mkCl john_NP send_V3 (mkNP it_Pron) (mkNP she_Pron) ;
+    ex4_Cl = mkCl john_NP want_VV (mkVP walk_V) ;
+    ex5_Cl = mkCl john_NP say_VS (mkS (mkCl (mkNP it_Pron) good_A)) ;
+    ex6_Cl = mkCl john_NP wonder_VQ (mkQS (mkCl (mkNP it_Pron) good_A)) ;
+    ex7_Cl = mkCl john_NP become_VA (mkAP old_A) ;
+    ex8_Cl = mkCl john_NP paint_V2A (mkNP it_Pron) (mkAP red_A) ;
+    ex9_Cl = mkCl john_NP (mkAP very_AdA (mkAP old_A)) ;
+    ex10_Cl = mkCl john_NP old_A ;
+    ex11_Cl = mkCl john_NP old_A (mkNP she_Pron) ;
+    ex12_Cl = mkCl john_NP married_A2 (mkNP she_Pron) ;
+    ex13_Cl = mkCl john_NP man_N ;
+    ex14_Cl = mkCl john_NP (mkCN old_A man_N) ;
+    ex15_Cl = mkCl john_NP (mkNP defSgDet man_N) ;
+    ex16_Cl = mkCl john_NP here_Adv ;
+    ex17_Cl = mkCl john_NP (mkVP (mkVP walk_V) here_Adv) ;
+    ex18_Cl = mkCl rain_V0 ;
+    ex19_Cl = mkCl (progressiveVP (mkVP rain_V0)) ;
+    ex20_Cl = mkCl house_N ;
+    ex21_Cl = mkCl (mkCN old_A house_N) ;
+    ex22_Cl = mkCl (mkNP n5_Numeral house_N) ;
+    ex23_Cl = mkCl john_NP (mkRS (mkRCl which_RP (mkVP walk_V))) ;
+    ex24_Cl = mkCl here_Adv (mkS (mkCl john_NP walk_V)) ;
+    ex25_Cl = mkCl (mkVP walk_V) ;
 
   oper
     john_PN = paris_PN ; ----
+    today_Adv = here_Adv ; ----
+
     john_NP = mkNP john_PN ;
 }
