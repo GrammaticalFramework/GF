@@ -18,5 +18,13 @@ fun
   ex11_Cl, ex12_Cl, ex13_Cl, ex14_Cl, ex15_Cl, ex16_Cl, ex17_Cl, ex18_Cl, ex19_Cl, ex20_Cl,
   ex21_Cl, ex22_Cl, ex23_Cl, ex24_Cl, ex25_Cl : Cl ;
 
+  ex1_VP, ex2_VP, ex3_VP, ex4_VP, ex5_VP, ex6_VP, ex7_VP, ex8_VP, ex9_VP, ex10_VP, 
+  ex11_VP, ex12_VP, ex13_VP, ex14_VP, ex15_VP, ex16_VP, ex17_VP, ex18_VP, ex19_VP, ex20_VP, 
+  ex21_VP, ex22_VP : VP ;
+
+
+-- auxiliary to show VP's
+
+  utt : VP -> Utt ;
 
 }

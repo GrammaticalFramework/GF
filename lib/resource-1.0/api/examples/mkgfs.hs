@@ -11,6 +11,9 @@ mkgfs = do
 
 
 addLin s = case words s of
-  c@('e':'x':_):_ -> appendFile script ("l " ++ c ++ "\n")
+  c@('e':'x':_):_ -> appendFile script ("l " ++ cc ++ "\n") where
+    cc = case take 2 (reverse c) of
+      --- "PV" -> "utt " ++ c
+      _ -> c 
   _ -> return ()
 
