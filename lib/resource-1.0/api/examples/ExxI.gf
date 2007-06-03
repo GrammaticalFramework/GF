@@ -1,6 +1,8 @@
-incomplete concrete ExxI of Exx = Cat ** open Lang, Constructors in {
+incomplete concrete ExxI of Exx = Cat-[VP] ** open Lang, Constructors in {
 
 -- examples for Constructors.
+
+  lincat VP = Lang.VP ; --- hack to circumvent missing lockfields in overload resolution
 
   lin
     ex1_Text = mkText (mkPhr but_PConj (mkUtt (mkCl john_NP walk_V))) ;
@@ -79,8 +81,8 @@ incomplete concrete ExxI of Exx = Cat ** open Lang, Constructors in {
     ex8_VP = mkVP paint_V2A (mkNP it_Pron) (mkAP red_A) ;
 
     ex9_VP = mkVP old_A ;
----    ex10_VP = mkVP old_A (mkNP she_Pron) ;
----    ex11_VP = mkVP married_A2 (mkNP she_Pron) ;
+    ex10_VP = mkVP old_A (mkNP she_Pron) ;
+    ex11_VP = mkVP married_A2 (mkNP she_Pron) ;
     ex12_VP = mkVP (mkAP very_AdA (mkAP old_A)) ;
 
     ex13_VP = mkVP man_N ;
@@ -94,9 +96,33 @@ incomplete concrete ExxI of Exx = Cat ** open Lang, Constructors in {
     ex21_VP = passiveVP love_V2 (mkNP she_Pron) ;
     ex22_VP = progressiveVP (mkVP sleep_V) ;
 
+    ex1_NP = mkNP (mkDet (mkQuantSg defQuant) first_Ord) man_N ;
+    ex2_NP = mkNP (mkDet (mkQuantSg defQuant) first_Ord) (mkCN old_A man_N) ;
+    ex3_NP = mkNP (mkQuantSg this_Quant) man_N ;
+    ex4_NP = mkNP (mkQuantSg this_Quant) (mkCN old_A man_N) ;
+    ex5_NP = mkNP (mkQuantPl this_Quant) man_N ;
+    ex6_NP = mkNP (mkQuantPl this_Quant) (mkCN old_A man_N) ;
+    ex7_NP = mkNP n20_Numeral man_N ;
+    ex8_NP = mkNP n20_Numeral (mkCN old_A man_N) ;
+---    ex9_NP = mkNP (mkInt "45") man_N ;
+---    ex10_NP = mkNP (mkInt "45") (mkCN old_A man_N) ;
+    ex11_NP = mkNP (mkNum almost_AdN (mkNum n20_Numeral)) man_N ;
+    ex12_NP = mkNP (mkNum almost_AdN (mkNum n20_Numeral)) (mkCN old_A man_N) ;
+    ex13_NP = mkNP i_Pron man_N ;
+    ex14_NP = mkNP i_Pron (mkCN old_A man_N) ;
+    ex15_NP = mkNP john_PN ;
+    ex16_NP = mkNP i_Pron ;
+    ex17_NP = mkNP only_Predet john_NP ;
+    ex18_NP = mkNP john_NP kill_V2 ;
+    ex19_NP = mkNP john_NP (mkAdv in_Prep (mkNP paris_PN)) ;
+    ex20_NP = mkNP and_Conj john_NP (mkNP i_Pron) ;
+    ex21_NP = mkNP and_Conj (mkListNP john_NP (mkListNP (mkNP i_Pron) that_NP)) ;
+    ex22_NP = mkNP either7or_DConj john_NP (mkNP i_Pron) ;
+    ex23_NP = mkNP either7or_DConj (mkListNP john_NP (mkListNP (mkNP i_Pron) that_NP)) ;
 
 
----    utt u = mkUtt u ;
+
+    utt u = mkUtt u ;  -- a hack to linearize VPs
 
   oper
     john_PN = paris_PN ; ----
