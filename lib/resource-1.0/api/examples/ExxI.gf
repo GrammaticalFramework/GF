@@ -51,10 +51,10 @@ incomplete concrete ExxI of Exx = Cat ** open Lang, Constructors in {
     ex6_Cl = mkCl john_NP wonder_VQ (mkQS (mkCl (mkNP it_Pron) good_A)) ;
     ex7_Cl = mkCl john_NP become_VA (mkAP old_A) ;
     ex8_Cl = mkCl john_NP paint_V2A (mkNP it_Pron) (mkAP red_A) ;
-    ex9_Cl = mkCl john_NP (mkAP very_AdA (mkAP old_A)) ;
-    ex10_Cl = mkCl john_NP old_A ;
-    ex11_Cl = mkCl john_NP old_A (mkNP she_Pron) ;
-    ex12_Cl = mkCl john_NP married_A2 (mkNP she_Pron) ;
+    ex9_Cl = mkCl john_NP old_A ;
+    ex10_Cl = mkCl john_NP old_A (mkNP she_Pron) ;
+    ex11_Cl = mkCl john_NP married_A2 (mkNP she_Pron) ;
+    ex12_Cl = mkCl john_NP (mkAP very_AdA (mkAP old_A)) ;
     ex13_Cl = mkCl john_NP man_N ;
     ex14_Cl = mkCl john_NP (mkCN old_A man_N) ;
     ex15_Cl = mkCl john_NP (mkNP defSgDet man_N) ;
@@ -68,6 +68,35 @@ incomplete concrete ExxI of Exx = Cat ** open Lang, Constructors in {
     ex23_Cl = mkCl john_NP (mkRS (mkRCl which_RP (mkVP walk_V))) ;
     ex24_Cl = mkCl here_Adv (mkS (mkCl john_NP walk_V)) ;
     ex25_Cl = mkCl (mkVP walk_V) ;
+
+    ex1_VP = mkVP walk_V ;
+    ex2_VP = mkVP love_V2 (mkNP she_Pron) ;
+    ex3_VP = mkVP send_V3 (mkNP it_Pron) (mkNP she_Pron) ;
+    ex4_VP = mkVP want_VV (mkVP walk_V) ;
+    ex5_VP = mkVP say_VS (mkS (mkCl (mkNP it_Pron) good_A)) ;
+    ex6_VP = mkVP wonder_VQ (mkQS (mkCl (mkNP it_Pron) good_A)) ;
+    ex7_VP = mkVP become_VA (mkAP old_A) ;
+    ex8_VP = mkVP paint_V2A (mkNP it_Pron) (mkAP red_A) ;
+
+    ex9_VP = mkVP old_A ;
+---    ex10_VP = mkVP old_A (mkNP she_Pron) ;
+---    ex11_VP = mkVP married_A2 (mkNP she_Pron) ;
+    ex12_VP = mkVP (mkAP very_AdA (mkAP old_A)) ;
+
+    ex13_VP = mkVP man_N ;
+    ex14_VP = mkVP (mkCN old_A man_N) ;
+    ex15_VP = mkVP (mkNP defSgDet man_N) ;
+    ex16_VP = mkVP here_Adv ;
+    ex17_VP = mkVP (mkVP sleep_V) here_Adv ;
+    ex18_VP = mkVP always_AdV (mkVP sleep_V) ;
+    ex19_VP = reflexiveVP love_V2 ;
+    ex20_VP = passiveVP love_V2 ;
+    ex21_VP = passiveVP love_V2 (mkNP she_Pron) ;
+    ex22_VP = progressiveVP (mkVP sleep_V) ;
+
+
+
+---    utt u = mkUtt u ;
 
   oper
     john_PN = paris_PN ; ----

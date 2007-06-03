@@ -233,10 +233,10 @@ incomplete resource Constructors = open Grammar in {
       mkCl : NP  -> VQ -> QS ->       Cl ;  -- 6. John wonders if it is good
       mkCl : NP  -> VA -> AP ->       Cl ;  -- 7. John becomes old
       mkCl : NP  -> V2A ->NP -> AP -> Cl ;  -- 8. John paints it red
-      mkCl : NP  -> AP ->             Cl ;  -- 9. John is very old
-      mkCl : NP  -> A  ->             Cl ;  -- 10. John is old
-      mkCl : NP  -> A  -> NP ->       Cl ;  -- 11. John is older than her
-      mkCl : NP  -> A2 -> NP ->       Cl ;  -- 12. John is married to her
+      mkCl : NP  -> A  ->             Cl ;  -- 9. John is old
+      mkCl : NP  -> A  -> NP ->       Cl ;  -- 10. John is older than her
+      mkCl : NP  -> A2 -> NP ->       Cl ;  -- 11. John is married to her
+      mkCl : NP  -> AP ->             Cl ;  -- 12. John is very old
       mkCl : NP  -> N  ->             Cl ;  -- 13. John is a man
       mkCl : NP  -> CN ->             Cl ;  -- 14. John is an old man
       mkCl : NP  -> NP ->             Cl ;  -- 15. John is the man
@@ -277,45 +277,45 @@ incomplete resource Constructors = open Grammar in {
 -- A verb phrase is formed from a verb with appropriate arguments.
 
     mkVP : overload {
-      mkVP : V   ->             VP ;  -- walk
-      mkVP : V2  -> NP ->       VP ;  -- love her
-      mkVP : V3  -> NP -> NP -> VP ;  -- send it to her
-      mkVP : VV  -> VP ->       VP ;  -- want to walk
-      mkVP : VS  -> S  ->       VP ;  -- know that she walks
-      mkVP : VQ  -> QS ->       VP ;  -- ask if she walks
-      mkVP : VA  -> AP ->       VP ;  -- become warm
-      mkVP : V2A -> NP -> AP -> VP ;  -- paint the house red
+      mkVP : V   ->             VP ;  -- 1. walk
+      mkVP : V2  -> NP ->       VP ;  -- 2. love her
+      mkVP : V3  -> NP -> NP -> VP ;  -- 3. send it to her
+      mkVP : VV  -> VP ->       VP ;  -- 4. want to walk
+      mkVP : VS  -> S  ->       VP ;  -- 5. know that she walks
+      mkVP : VQ  -> QS ->       VP ;  -- 6. ask if she walks
+      mkVP : VA  -> AP ->       VP ;  -- 7. become old
+      mkVP : V2A -> NP -> AP -> VP ;  -- 8. paint it red
 
 -- The verb can also be a copula ("be"), and the relevant argument is
 -- then the complement adjective or noun phrase.
 
-      mkVP : A   ->             VP ;  -- be warm
-      mkVP : AP  ->             VP ;  -- be very warm
-      mkVP : N   ->             VP ;  -- be a man
-      mkVP : CN  ->             VP ;  -- be an old man
-      mkVP : NP  ->             VP ;  -- be the old man
-      mkVP : Adv ->             VP ;  -- be here
+      mkVP : A   ->  VP ;  -- 9. be warm
+      mkVP : AP  ->  VP ;  -- 12. be very warm
+      mkVP : N   ->  VP ;  -- 13. be a man
+      mkVP : CN  ->  VP ;  -- 14. be an old man
+      mkVP : NP  ->  VP ;  -- 15. be the man
+      mkVP : Adv ->  VP ;  -- 16. be here
 
--- A verb phrase can be modified with a postverbal or a preverbial adverb.
+-- A verb phrase can be modified with a postverbal or a preverbal adverb.
 
-      mkVP : VP  -> Adv -> VP ;  -- sleep here
-      mkVP : AdV -> VP  -> VP    -- always sleep
+      mkVP : VP  -> Adv -> VP ;  -- 17. sleep here
+      mkVP : AdV -> VP  -> VP    -- 18. always sleep
       } ;
 
 -- Two-place verbs can be used reflexively.
 
-      reflexiveVP : V2 -> VP ; -- love itself
+      reflexiveVP : V2 -> VP ; -- 19. love itself
 
 -- Two-place verbs can also be used in the passive, with or without an agent.
 
     passiveVP : overload {
-      passiveVP : V2 ->       VP ;  -- be loved
-      passiveVP : V2 -> NP -> VP ;  -- be loved by her
+      passiveVP : V2 ->       VP ;  -- 20. be loved
+      passiveVP : V2 -> NP -> VP ;  -- 21. be loved by her
       } ;
 
 -- A verb phrase can be turned into the progressive form.
 
-      progressiveVP : VP -> VP ;  -- be sleeping
+      progressiveVP : VP -> VP ;  -- 22. be sleeping
 
 --3 Imp, imperatives
 
