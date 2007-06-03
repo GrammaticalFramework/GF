@@ -28,6 +28,15 @@ fun
   ex11_NP, ex12_NP, ex13_NP, ex14_NP, ex15_NP, ex16_NP, ex17_NP, ex18_NP, ex19_NP, ex20_NP, 
   ex21_NP, ex22_NP, ex23_NP : NP ;
 
+  ex1_Det, ex2_Det, ex3_Det, ex4_Det, ex5_Det, ex6_Det, ex7_Det, ex8_Det, ex9_Det, ex10_Det, 
+  ex11_Det, ex12_Det, ex13_Det, ex14_Det : Det ;
+
+  ex1_Quant, ex2_Quant : Quant ;
+
+  ex1_QuantSg, ex2_QuantSg : QuantSg ;
+
+  ex1_QuantPl : QuantPl ;
+
 
 -- auxiliary to show VP's
 

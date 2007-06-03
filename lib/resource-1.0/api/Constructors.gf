@@ -387,32 +387,32 @@ incomplete resource Constructors = open Grammar in {
 -- determiner also has an optional numeral.
 
     mkDet : overload {
-      mkDet : QuantSg ->                   Det ; -- this
-      mkDet : QuantSg ->          (Ord) -> Det ; -- this best
-      mkDet : QuantPl ->                   Det ; -- these
-      mkDet : QuantPl -> (Num) -> (Ord) -> Det ; -- these five best
+      mkDet : QuantSg ->                   Det ; -- 1. this
+      mkDet : QuantSg ->          (Ord) -> Det ; -- 2. this first
+      mkDet : QuantPl ->                   Det ; -- 3. these
+      mkDet : QuantPl -> (Num) -> (Ord) -> Det ; -- 4. these five best
 
 -- Quantifiers that have both singular and plural forms are by default used as
 -- singular determiners. If a numeral is added, the plural form is chosen.
 
-      mkDet : Quant ->        Det ;  -- this
-      mkDet : Quant -> Num -> Det ;  -- these five
+      mkDet : Quant ->        Det ;  -- 5. this
+      mkDet : Quant -> Num -> Det ;  -- 6. these five
 
 -- Numerals, their special cases integers and digits, and possessive pronouns can be
 -- used as determiners.
 
-      mkDet : Num     ->  Det ;  -- almost forty-five
-      mkDet : Numeral ->  Det ;  -- five
-      mkDet : Int     ->  Det ;  -- 51
-      mkDet : Pron    ->  Det    -- my
+      mkDet : Num     ->  Det ;  --  7. almost twenty
+      mkDet : Numeral ->  Det ;  --  8. five
+      mkDet : Int     ->  Det ;  --  9. 51
+      mkDet : Pron    ->  Det    -- 10. my
       } ;
 
 -- The definite and indefinite articles are commonly used determiners.
 
-      defSgDet   : Det ;  -- the (house)
-      defPlDet   : Det ;  -- the (houses)
-      indefSgDet : Det ;  -- a (house)
-      indefPlDet : Det ;  -- (houses)
+      defSgDet   : Det ;  -- 11. the (house)
+      defPlDet   : Det ;  -- 12. the (houses)
+      indefSgDet : Det ;  -- 13. a (house)
+      indefPlDet : Det ;  -- 14. (houses)
 
 
 --3 Quant, QuantSg, and QuantPl, quantifiers
@@ -420,20 +420,20 @@ incomplete resource Constructors = open Grammar in {
 -- Definite and indefinite articles have both singular and plural forms (even though the
 -- plural indefinite is empty in most languages).
 
-      defQuant   : Quant ;  -- the
-      indefQuant : Quant ;  -- a
+      defQuant   : Quant ;  -- 1. the
+      indefQuant : Quant ;  -- 2. a
 
 -- From quantifiers that can have both forms, these constructors build the singular and
 -- the plural forms.
 
-      mkQuantSg : Quant -> QuantSg ;  -- (this)
-      mkQuantPl : Quant -> QuantPl ;  -- (these)
+      mkQuantSg : Quant -> QuantSg ;  -- 1. this
+      mkQuantPl : Quant -> QuantPl ;  -- 1. these
 
 -- The mass noun phrase constructor is treated as a singular quantifier.
 
-      massQuant : QuantSg ;  -- (mass terms)
+      massQuant : QuantSg ;  -- 2. (mass terms)
 
--- More quantifiers are available in the $Structural$ module
+-- More quantifiers are available in the $Structural$ module.
    
 
 --3 Num, cardinal numerals 
@@ -442,7 +442,7 @@ incomplete resource Constructors = open Grammar in {
 -- and from symbolic integers.
 
     mkNum : overload {
-      mkNum : Numeral -> Num ;   -- forty-six
+      mkNum : Numeral -> Num ;   -- twenty
       mkNum : Int     -> Num ;   -- 51
 
 -- A numeral can be modified by an adnumeral.
@@ -461,7 +461,7 @@ incomplete resource Constructors = open Grammar in {
 
 -- Also adjectives in the superlative form can appear on ordinal positions.
 
-      mkOrd : A  -> Ord  -- largest
+      mkOrd : A  -> Ord  -- best
       } ;
 
 --3 AdN, adnumerals
