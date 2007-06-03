@@ -14,8 +14,9 @@ fun
 
   ex1_S, ex2_S, ex3_S, ex4_S, ex5_S, ex6_S, ex7_S : S ;
 
-  ex1_Cl, ex2_Cl, ex3_Cl, ex4_Cl, ex5_Cl, ex6_Cl, ex7_Cl, ex8_Cl, ex8_Cl, ex10_Cl, 
-                    ex11_Cl, ex12_Cl, ex13_Cl, ex14_Cl, ex15_Cl, ex16_Cl, ex17_Cl, ex18_Cl : Cl ;
+  ex1_Cl, ex2_Cl, ex3_Cl, ex4_Cl, ex5_Cl, ex6_Cl, ex7_Cl, ex8_Cl, ex9_Cl, ex10_Cl, 
+  ex11_Cl, ex12_Cl, ex13_Cl, ex14_Cl, ex15_Cl, ex16_Cl, ex17_Cl, ex18_Cl, ex19_Cl, ex20_Cl,
+  ex21_Cl, ex22_Cl, ex23_Cl, ex24_Cl, ex25_Cl : Cl ;
 
 
 }

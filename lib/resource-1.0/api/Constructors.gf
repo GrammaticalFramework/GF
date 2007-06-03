@@ -64,23 +64,23 @@ incomplete resource Constructors = open Grammar in {
 
   oper
     mkText : overload {
-      mkText : Phr ->                      Text ; -- But John walks.
-      mkText : Phr -> (Punct) -> (Text) -> Text ; -- John walks? Yes.
+      mkText : Phr ->                      Text ; -- 1. But John walks.
+      mkText : Phr -> (Punct) -> (Text) -> Text ; -- 2. John walks? Yes.
 
 -- A text can also be directly built from utterances, which in turn can
 -- be directly built from sentences, present-tense clauses, questions, or
 -- positive imperatives. 
 
-      mkText : Utt ->  Text ;  -- John.
-      mkText : S   ->  Text ;  -- John walked.
-      mkText : Cl  ->  Text ;  -- John walks.
-      mkText : QS  ->  Text ;  -- Did John walk?
-      mkText : Imp ->  Text    -- Walk!
+      mkText : Utt ->  Text ;  -- 3. John.
+      mkText : S   ->  Text ;  -- 4. John walked.
+      mkText : Cl  ->  Text ;  -- 5. John walks.
+      mkText : QS  ->  Text ;  -- 6. Did John walk?
+      mkText : Imp ->  Text    -- 7. Walk!
       } ;
 
 -- A text can also be empty.
 
-      emptyText :      Text ;  -- [empty text]
+      emptyText :      Text ;  -- 8. [empty text]
 
 
 --3 Punct: punctuation marks
@@ -97,17 +97,17 @@ incomplete resource Constructors = open Grammar in {
 -- and a vocative, both of which are by default empty.
 
     mkPhr : overload {
-      mkPhr :            Utt ->          Phr ;  -- why
-      mkPhr : (PConj) -> Utt -> (Voc) -> Phr ;  -- but why John
+      mkPhr :            Utt ->          Phr ;  -- 1. why
+      mkPhr : (PConj) -> Utt -> (Voc) -> Phr ;  -- 2. but why John
 
 
 -- A phrase can also be directly built by a sentence, a present-tense
 -- clause, a question, or a positive singular imperative. 
 
-      mkPhr : S   ->  Phr ; -- John walked
-      mkPhr : Cl  ->  Phr ; -- John walks
-      mkPhr : QS  ->  Phr ; -- did John walk
-      mkPhr : Imp ->  Phr   -- walk
+      mkPhr : S   ->  Phr ; -- 3. John walked
+      mkPhr : Cl  ->  Phr ; -- 4. John walks
+      mkPhr : QS  ->  Phr ; -- 5. did John walk
+      mkPhr : Imp ->  Phr   -- 6. walk
       } ;
 
 --3 PConj, phrasal conjunctions
@@ -115,43 +115,43 @@ incomplete resource Constructors = open Grammar in {
 -- Any conjunction can be used as a phrasal conjunction.
 -- More phrasal conjunctions are defined in $Structural$.
 
-      mkPConj : Conj -> PConj ;  -- and
+      mkPConj : Conj -> PConj ;  -- 1. and
 
 --3 Voc, vocatives
 
 -- Any noun phrase can be turned into a vocative.
 -- More vocatives are defined in $Structural$.
 
-      mkVoc : NP -> Voc ;   -- John
+      mkVoc : NP -> Voc ;   -- 1. John
 
 --3 Utt, utterances
 
 -- Utterances are formed from sentences, clauses, questions, and positive singular imperatives.
 
     mkUtt : overload {
-      mkUtt : S   -> Utt ;  -- John walked
-      mkUtt : Cl  -> Utt ;  -- John walks
-      mkUtt : QS  -> Utt ;  -- did John walk
-      mkUtt : Imp -> Utt ;  -- love yourself
+      mkUtt : S   -> Utt ;  -- 1. John walked
+      mkUtt : Cl  -> Utt ;  -- 2. John walks
+      mkUtt : QS  -> Utt ;  -- 3. did John walk
+      mkUtt : Imp -> Utt ;  -- 4. love yourself
 
 -- Imperatives can also vary in $ImpForm$ (number/politeness) and 
 -- polarity.
 
-      mkUtt : (ImpForm) -> (Pol) -> Imp -> Utt ;  -- don't love yourselves
+      mkUtt : (ImpForm) -> (Pol) -> Imp -> Utt ;  -- 5. don't love yourselves
 
 -- Utterances can also be formed from interrogative phrases and
 -- interrogative adverbials, noun phrases, adverbs, and verb phrases.
 
-      mkUtt : IP   ->  Utt ;  -- who
-      mkUtt : IAdv ->  Utt ;  -- why
-      mkUtt : NP   ->  Utt ;  -- John
-      mkUtt : Adv  ->  Utt ;  -- here
-      mkUtt : VP   ->  Utt    -- to walk
+      mkUtt : IP   ->  Utt ;  -- 6. who
+      mkUtt : IAdv ->  Utt ;  -- 7. why
+      mkUtt : NP   ->  Utt ;  -- 8. John
+      mkUtt : Adv  ->  Utt ;  -- 9. here
+      mkUtt : VP   ->  Utt    -- 10. to walk
       } ;
 
 -- The plural first-person imperative is a special construction.
 
-      lets_Utt : VP ->  Utt ;  -- let's walk
+      lets_Utt : VP ->  Utt ;  -- 11. let's walk
 
 
 --2 Auxiliary parameters for phrases and sentences
@@ -202,20 +202,20 @@ incomplete resource Constructors = open Grammar in {
 -- A sentence has a fixed tense, anteriority and polarity.
 
     mkS : overload {
-      mkS :                              Cl -> S ;  -- John walks
-      mkS : (Tense) -> (Ant) -> (Pol) -> Cl -> S ;  -- John wouldn't have walked
+      mkS :                              Cl -> S ;  -- 1. John walks
+      mkS : (Tense) -> (Ant) -> (Pol) -> Cl -> S ;  -- 2. John wouldn't have walked
 
 -- Sentences can be combined with conjunctions. This can apply to a pair
 -- of sentences, but also to a list of more than two.
 
-      mkS : Conj  -> S -> S -> S ;  -- John walks and I run   
-      mkS : Conj  -> ListS  -> S ;  -- John walks, I run and you sleep
-      mkS : DConj -> S -> S -> S ;  -- either John walk or I run
-      mkS : DConj -> ListS  -> S ;  -- either John walks, I run or you sleep
+      mkS : Conj  -> S -> S -> S ;  -- 3. John walks and I run   
+      mkS : Conj  -> ListS  -> S ;  -- 4. John walks, I run and you sleep
+      mkS : DConj -> S -> S -> S ;  -- 5. either John walk or I run
+      mkS : DConj -> ListS  -> S ;  -- 6. either John walks, I run or you sleep
 
 -- A sentence can be prefixed by an adverb.
 
-      mkS : Adv -> S -> S    -- today, John will walk
+      mkS : Adv -> S -> S    -- 7. today, John walks
       } ;
 
 --3 Cl, clauses
@@ -225,42 +225,49 @@ incomplete resource Constructors = open Grammar in {
 -- with a verb and appropriate arguments.
 
     mkCl : overload {
-      mkCl : NP  -> V  ->             Cl ;    -- John walks
-      mkCl : NP  -> V2 -> NP ->       Cl ;    -- John loves her
-      mkCl : NP  -> V3 -> NP -> NP -> Cl ;    -- John sends it to her
-      mkCl : NP  -> AP ->             Cl ;    -- John is nice and warm
-      mkCl : NP  -> A  ->             Cl ;    -- John is nice
-      mkCl : NP  -> A  -> NP ->       Cl ;    -- John is nicer than Mary
-      mkCl : NP  -> A2 -> NP ->       Cl ;    -- John is married to Mary
-      mkCl : NP  -> NP ->             Cl ;    -- John is the man
-      mkCl : NP  -> CN ->             Cl ;    -- John is an old man
-      mkCl : NP  -> N  ->             Cl ;    -- John is a man
-      mkCl : NP  -> Adv ->            Cl ;    -- John is here
+      mkCl : NP  -> V  ->             Cl ;  -- 1. John walks
+      mkCl : NP  -> V2 -> NP ->       Cl ;  -- 2. John loves her
+      mkCl : NP  -> V3 -> NP -> NP -> Cl ;  -- 3. John sends it to her
+      mkCl : NP  -> VV -> VP ->       Cl ;  -- 4. John wants to walk 
+      mkCl : NP  -> VS -> S  ->       Cl ;  -- 5. John says that it is good
+      mkCl : NP  -> VQ -> QS ->       Cl ;  -- 6. John wonders if it is good
+      mkCl : NP  -> VA -> AP ->       Cl ;  -- 7. John becomes old
+      mkCl : NP  -> V2A ->NP -> AP -> Cl ;  -- 8. John paints it red
+      mkCl : NP  -> AP ->             Cl ;  -- 9. John is very old
+      mkCl : NP  -> A  ->             Cl ;  -- 10. John is old
+      mkCl : NP  -> A  -> NP ->       Cl ;  -- 11. John is older than her
+      mkCl : NP  -> A2 -> NP ->       Cl ;  -- 12. John is married to her
+      mkCl : NP  -> N  ->             Cl ;  -- 13. John is a man
+      mkCl : NP  -> CN ->             Cl ;  -- 14. John is an old man
+      mkCl : NP  -> NP ->             Cl ;  -- 15. John is the man
+      mkCl : NP  -> Adv ->            Cl ;  -- 16. John is here
 
 -- As the general rule, a clause can be built from a subject noun phrase and 
 -- a verb phrase.
 
-      mkCl : NP  -> VP -> Cl ;    -- John wants to walk
+      mkCl : NP  -> VP -> Cl ;  -- 17. John walks here
 
 -- Subjectless verb phrases are used for impersonal actions.
 
-      mkCl : V   ->  Cl ;  -- it rains
-      mkCl : VP  ->  Cl ;  -- it is getting warm
+      mkCl : V   ->  Cl ;  -- 18. it rains
+      mkCl : VP  ->  Cl ;  -- 19. it is raining
 
 -- Existentials are a special form of clauses.
 
-      mkCl : NP  ->  Cl ;  -- there is a house
+      mkCl : N   ->  Cl ;  -- 20. there is a house
+      mkCl : CN  ->  Cl ;  -- 21. there is an old houses
+      mkCl : NP  ->  Cl ;  -- 22. there are five houses
 
 -- There are also special forms in which a noun phrase or an adverb is
 -- emphasized.
 
-      mkCl : NP  -> RS -> Cl ;  -- it is John who walks
-      mkCl : Adv -> S  -> Cl    -- it is here John walks
+      mkCl : NP  -> RS -> Cl ;  -- 23. it is John that walks
+      mkCl : Adv -> S  -> Cl    -- 24. it is here John walks
       } ;
 
 -- Generic clauses are one with an impersonal subject.
 
-      genericCl : VP ->  Cl ;   -- one walks              
+      genericCl : VP ->  Cl ;   -- 25. one walks              
 
 
 --2 Verb phrases and imperatives
@@ -339,10 +346,12 @@ incomplete resource Constructors = open Grammar in {
       mkNP : QuantSg -> N  -> NP ;       -- this man
       mkNP : QuantPl -> CN -> NP ;       -- these old men
       mkNP : QuantPl -> N  -> NP ;       -- these men
-      mkNP : Num     -> CN -> NP ;       -- forty-five old men
-      mkNP : Num     -> N  -> NP ;       -- forty-five men
+      mkNP : Numeral -> CN -> NP ;       -- forty-five old men
+      mkNP : Numeral -> N  -> NP ;       -- forty-five men
       mkNP : Int     -> CN -> NP ;       -- 45 old men
       mkNP : Int     -> N  -> NP ;       -- 45 men
+      mkNP : Num     -> CN -> NP ;       -- almost forty-five old men
+      mkNP : Num     -> N  -> NP ;       -- almost forty-five men
       mkNP : Pron    -> CN -> NP;        -- my old man
       mkNP : Pron    -> N  -> NP ;       -- my man
 
@@ -834,12 +843,25 @@ incomplete resource Constructors = open Grammar in {
                                          =    \s,v,o -> PredVP s (ComplV2 v o);
       mkCl : NP -> V3 -> NP -> NP -> Cl
                                          =    \s,v,o,i -> PredVP s (ComplV3 v o i);
+
+      mkCl : NP  -> VV -> VP -> Cl = \s,v,vp -> PredVP s (ComplVV v vp) ;
+      mkCl : NP  -> VS -> S  -> Cl = \s,v,p -> PredVP s (ComplVS v p) ;
+      mkCl : NP  -> VQ -> QS -> Cl = \s,v,q -> PredVP s (ComplVQ v q) ;
+      mkCl : NP  -> VA -> AP -> Cl = \s,v,q -> PredVP s (ComplVA v q) ;
+      mkCl : NP  -> V2A ->NP -> AP -> Cl = \s,v,n,q -> PredVP s (ComplV2A v n q) ;
+
+
+
       mkCl : VP -> Cl          -- it rains
                                          =    ImpersCl   ;
       mkCl : NP  -> RS -> Cl   -- it is you who did it
                                          =    CleftNP    ;
       mkCl : Adv -> S  -> Cl   -- it is yesterday she arrived
                                          =    CleftAdv   ;
+      mkCl : N -> Cl          -- there is a house
+                                         =    \y -> ExistNP (DetCN (DetSg (SgQuant IndefArt) NoOrd) (UseN y)) ;
+      mkCl : CN -> Cl          -- there is a house
+                                         =    \y -> ExistNP (DetCN (DetSg (SgQuant IndefArt) NoOrd) y) ;
       mkCl : NP -> Cl          -- there is a house
                                          =    ExistNP    ;
       mkCl : NP -> AP -> Cl    -- John is nice and warm
@@ -882,6 +904,10 @@ incomplete resource Constructors = open Grammar in {
       mkNP : Pron    -> CN -> NP = \p,n -> DetCN (DetSg (SgQuant (PossPron p)) NoOrd) n ;
       mkNP : Pron    -> N  -> NP = \p,n -> DetCN (DetSg (SgQuant (PossPron p)) NoOrd) (UseN n) ;
 
+      mkNP : Numeral -> CN -> NP      -- 51 old men
+	                                 =    \d,n -> DetCN (DetPl (PlQuant IndefArt) (NumNumeral d) NoOrd) n ;
+      mkNP : Numeral -> N -> NP       -- 51 men
+	                                 =    \d,n -> DetCN (DetPl (PlQuant IndefArt) (NumNumeral d) NoOrd) (UseN n) ;
       mkNP : Int -> CN -> NP      -- 51 old men
 	                                 =    \d,n -> DetCN (DetPl (PlQuant IndefArt) (NumInt d) NoOrd) n ;
       mkNP : Int -> N -> NP       -- 51 men
