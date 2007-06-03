@@ -14,9 +14,9 @@ lin
   art_N = regN "art" ;
   ask_V2Q = mkV2Q (regV "ask") noPrep ;
   baby_N = regN "baby" ;
-  bad_A = mkADeg "bad" "badly" "worse" "worst" ;
+  bad_A = mkADeg "bad" "worse" "worst" "badly" ;
   bank_N = regN "bank" ;
-  beautiful_A = regADeg "beautiful" ;
+  beautiful_A = compoundADeg (regA "beautiful") ;
   become_VA = mkVA (irregV "become" "became" "become") ;
   beer_N = regN "beer" ;
   beg_V2V = mkV2V (regDuplV "beg") noPrep toP ;
@@ -84,7 +84,7 @@ lin
   girl_N = regN "girl" ;
   glove_N = regN "glove" ;
   gold_N = regN "gold" ;
-  good_A = mkADeg "good" "well" "better" "best" ;
+  good_A = mkADeg "good" "better" "best" "well" ;
   go_V = mk5V "go" "goes" "went" "gone" "going" ;
   green_A = regADeg "green" ;
   harbour_N = regN "harbour" ;

@@ -120,6 +120,30 @@ incomplete concrete ExxI of Exx = Cat-[VP] ** open Lang, Constructors in {
     ex22_NP = mkNP either7or_DConj john_NP (mkNP i_Pron) ;
     ex23_NP = mkNP either7or_DConj (mkListNP john_NP (mkListNP (mkNP i_Pron) that_NP)) ;
 
+    ex1_Det = mkDet (mkQuantSg this_Quant) ;
+    ex2_Det = mkDet (mkQuantSg this_Quant) first_Ord ;
+    ex3_Det = mkDet (mkQuantPl this_Quant) ;
+    ex4_Det = mkDet (mkQuantPl this_Quant) (mkNum n5_Numeral) (mkOrd good_A) ;
+    ex5_Det = mkDet this_Quant ;
+    ex6_Det = mkDet this_Quant (mkNum n5_Numeral) ;
+    ex7_Det = mkDet (mkNum almost_AdN (mkNum n20_Numeral)) ;
+    ex8_Det = mkDet n5_Numeral ;
+---    ex9_Det = mkDet 51 ;
+    ex10_Det = mkDet i_Pron ;
+    ex11_Det = defSgDet ;
+    ex12_Det = defPlDet ;
+    ex13_Det = indefSgDet ;
+    ex14_Det = indefPlDet ;
+
+    ex1_Quant = defQuant ;
+    ex2_Quant = indefQuant ;
+
+    ex1_QuantSg = mkQuantSg this_Quant ;
+
+    ex1_QuantPl = mkQuantSg this_Quant ;
+
+    ex2_QuantSg = massQuant ;
+
 
 
     utt u = mkUtt u ;  -- a hack to linearize VPs
