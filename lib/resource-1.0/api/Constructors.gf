@@ -289,12 +289,14 @@ incomplete resource Constructors = open Grammar in {
 -- The verb can also be a copula ("be"), and the relevant argument is
 -- then the complement adjective or noun phrase.
 
-      mkVP : A   ->  VP ;  -- 9. be warm
-      mkVP : AP  ->  VP ;  -- 12. be very warm
-      mkVP : N   ->  VP ;  -- 13. be a man
-      mkVP : CN  ->  VP ;  -- 14. be an old man
-      mkVP : NP  ->  VP ;  -- 15. be the man
-      mkVP : Adv ->  VP ;  -- 16. be here
+      mkVP : A   ->      VP ;  --  9. be warm
+      mkVP : AP  ->      VP ;  -- 12. be very warm
+      mkVP : A  -> NP -> VP ;  -- 10. be older than her
+      mkVP : A2 -> NP -> VP ;  -- 11. be married to her
+      mkVP : N   ->      VP ;  -- 13. be a man
+      mkVP : CN  ->      VP ;  -- 14. be an old man
+      mkVP : NP  ->      VP ;  -- 15. be the man
+      mkVP : Adv ->      VP ;  -- 16. be here
 
 -- A verb phrase can be modified with a postverbal or a preverbal adverb.
 
@@ -340,42 +342,43 @@ incomplete resource Constructors = open Grammar in {
 -- special case of a simple common noun ($N$) is always provided.
 
     mkNP : overload {
-      mkNP : Det     -> CN -> NP ;       -- the first old man
-      mkNP : Det     -> N  -> NP ;       -- the first man
-      mkNP : QuantSg -> CN -> NP ;       -- this old man
-      mkNP : QuantSg -> N  -> NP ;       -- this man
-      mkNP : QuantPl -> CN -> NP ;       -- these old men
-      mkNP : QuantPl -> N  -> NP ;       -- these men
-      mkNP : Numeral -> CN -> NP ;       -- forty-five old men
-      mkNP : Numeral -> N  -> NP ;       -- forty-five men
-      mkNP : Int     -> CN -> NP ;       -- 45 old men
-      mkNP : Int     -> N  -> NP ;       -- 45 men
-      mkNP : Num     -> CN -> NP ;       -- almost forty-five old men
-      mkNP : Num     -> N  -> NP ;       -- almost forty-five men
-      mkNP : Pron    -> CN -> NP;        -- my old man
-      mkNP : Pron    -> N  -> NP ;       -- my man
+      mkNP : Det     -> N  -> NP ;       --  1. the first man
+      mkNP : Det     -> CN -> NP ;       --  2. the first old man
+      mkNP : QuantSg -> N  -> NP ;       --  3. this man
+      mkNP : QuantSg -> CN -> NP ;       --  4. this old man
+      mkNP : QuantPl -> N  -> NP ;       --  5. these men
+      mkNP : QuantPl -> CN -> NP ;       --  6. these old men
+      mkNP : Numeral -> N  -> NP ;       --  7. twenty men
+      mkNP : Numeral -> CN -> NP ;       --  8. twenty old men
+      mkNP : Int     -> N  -> NP ;       --  9. 45 men
+      mkNP : Int     -> CN -> NP ;       -- 10. 45 old men
+      mkNP : Num     -> N  -> NP ;       -- 11. almost twenty men
+      mkNP : Num     -> CN -> NP ;       -- 12. almost twenty old men
+      mkNP : Pron    -> N  -> NP ;       -- 13. my man
+      mkNP : Pron    -> CN -> NP;        -- 14. my old man
 
 -- Proper names and pronouns can be used as noun phrases.
 
-      mkNP : PN    -> NP ;   -- John
-      mkNP : Pron  -> NP ;   -- he
+      mkNP : PN    -> NP ;  -- 15. John
+      mkNP : Pron  -> NP ;  -- 16. he
 
 -- A noun phrase once formed can be prefixed by a predeterminer and
 -- suffixed by a past participle or an adverb.
 
-      mkNP : Predet -> NP -> NP ;  -- only John
-      mkNP : NP ->    V2  -> NP ;  -- the number squared
-      mkNP : NP ->    Adv -> NP ;  -- Paris at midnight
+      mkNP : Predet -> NP -> NP ;  -- 17. only John
+      mkNP : NP ->    V2  -> NP ;  -- 18. John killed
+      mkNP : NP ->    Adv -> NP ;  -- 19. John in Paris
 
 -- A conjunction can be formed both from two noun phrases and a longer
 -- list of them.
 
-      mkNP : Conj  -> NP -> NP -> NP ; -- John and Mary
-      mkNP : DConj -> NP -> NP -> NP ; -- both John and Mary
-      mkNP : Conj  -> ListNP ->   NP ; -- John, Mary, and Bill
-      mkNP : DConj -> ListNP ->   NP   -- both John, Mary, and Bill
+      mkNP : Conj  -> NP -> NP -> NP ; -- 20. John and I
+      mkNP : Conj  -> ListNP ->   NP ; -- 21. John, I, and that
+      mkNP : DConj -> NP -> NP -> NP ; -- 22. either John or I
+      mkNP : DConj -> ListNP ->   NP   -- 23. either John, I, or that
 
       } ;
+
 
 --3 Det, determiners
 
@@ -1362,7 +1365,11 @@ incomplete resource Constructors = open Grammar in {
       mkVP : V2A -> NP -> AP -> VP    -- paint the house red
                                          =    ComplV2A  ;
       mkVP : A -> VP               -- be warm
-                                         =    \a -> UseComp (CompAP (PositA a))   ;
+                                         =    \a -> UseComp (CompAP (PositA a)) ;
+      mkVP : A -> NP -> VP -- John is warmer than Mary
+	                                =     \y,z -> (UseComp (CompAP (ComparA y z))) ;
+      mkVP : A2 -> NP -> VP -- John is married to Mary
+	                                =     \y,z -> (UseComp (CompAP (ComplA2 y z))) ;
       mkVP : AP -> VP               -- be warm
                                          =    \a -> UseComp (CompAP a)   ;
       mkVP : NP -> VP               -- be a man
@@ -1409,5 +1416,19 @@ incomplete resource Constructors = open Grammar in {
    } ;
 
 
+    mkInt : Str -> {s : Str ; size : Predef.Ints 1 ; last : Predef.Ints 9 ; lock_Int : {}} = \s -> {
+      s = s ;
+      last = case s of {
+        _ + "0" => 0 ;
+        _ + "1" => 1 ;
+        _ + "2" => 2 ;
+        _ => 3 ----
+        } ;
+      size = case s of {
+        "1" => 0 ;
+        _ => 1
+        } ;
+      lock_Int = <>
+      } ;
 
 }
