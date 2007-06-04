@@ -355,6 +355,14 @@ lin
   language_N = regN "language" ;
   rule_N = regN "rule" ;
 
+-- added 4/6/2007
+    john_PN = regPN "John" ;
+    question_N = regN "question" ;
+    ready_A = regA "ready" ;
+    reason_N = regN "reason" ;
+    today_Adv = mkAdv "today" ;
+    uncertain_A = regA "uncertain" ;
+
 oper
   aboutP = mkPrep "about" ;
   atP = mkPrep "at" ;

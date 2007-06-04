@@ -356,5 +356,12 @@ lin
   language_N = regN "langue" ;
   rule_N = regN "règle" ;
 
+    john_PN = regPN "Jean" ;
+    question_N = regN "question" ;
+    ready_A = regA "prêt" ;
+    reason_N = regGenN "raison" feminine ;
+    today_Adv = mkAdv "aujourd'hui" ;
+    uncertain_A = regA "incertain" ;
+
 
 } ;
