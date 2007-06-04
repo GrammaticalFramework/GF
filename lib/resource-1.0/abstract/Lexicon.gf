@@ -157,6 +157,7 @@ fun
   important_A : A ;
   industry_N : N ;
   iron_N : N ;
+  john_PN : PN ;
   jump_V : V ;
   kill_V2 : V2 ;
   king_N : N ;
@@ -185,7 +186,6 @@ fun
   love_V2 : V2 ;
   man_N : N ;
   married_A2 : A2 ;
-  meat_N : N ;
   meat_N : N ;
   milk_N : N ;
   moon_N : N ;
@@ -223,10 +223,13 @@ fun
   push_V2 : V2 ;
   put_V2 : V2 ;
   queen_N : N ;
+  question_N : N ;
   radio_N : N ;
   rain_N : N ;
   rain_V0 : V ;
   read_V2 : V2 ;
+  ready_A : A ;
+  reason_N : N ;
   red_A : A ;
   religion_N : N ;
   restaurant_N : N ;
@@ -311,6 +314,7 @@ fun
   think_V : V ;
   throw_V2 : V2 ;
   tie_V2 : V2 ;
+  today_Adv : Adv ;
   tongue_N : N ;
   tooth_N : N ;
   train_N : N ;
@@ -318,6 +322,7 @@ fun
   tree_N : N ;
   turn_V : V ;
   ugly_A : A ;
+  uncertain_A : A ;
   understand_V2 : V2 ;
   university_N : N ;
   village_N : N ;
@@ -328,7 +333,6 @@ fun
   war_N : N ;
   wash_V2 : V2 ;
   watch_V2 : V2 ;
-  water_N : N ;
   water_N : N ;
   wet_A : A ;
   white_A : A ;

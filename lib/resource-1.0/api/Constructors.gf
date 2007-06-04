@@ -415,25 +415,40 @@ incomplete resource Constructors = open Grammar in {
       indefPlDet : Det ;  -- 14. (houses)
 
 
---3 Quant, QuantSg, and QuantPl, quantifiers
+--3 Quant, quantifiers with both sincular and plural forms
 
--- Definite and indefinite articles have both singular and plural forms (even though the
+-- Definite and indefinite articles have both singular and plural 
+-- forms (even though the
 -- plural indefinite is empty in most languages).
 
       defQuant   : Quant ;  -- 1. the
       indefQuant : Quant ;  -- 2. a
 
--- From quantifiers that can have both forms, these constructors build the singular and
--- the plural forms.
+-- More quantifiers are available in the $Structural$ module.
+
+
+--3 QuantSg, singular quantifiers
+
+-- From quantifiers that can have both forms, this constructor 
+-- builds the singular form.
 
       mkQuantSg : Quant -> QuantSg ;  -- 1. this
-      mkQuantPl : Quant -> QuantPl ;  -- 1. these
 
 -- The mass noun phrase constructor is treated as a singular quantifier.
 
       massQuant : QuantSg ;  -- 2. (mass terms)
 
--- More quantifiers are available in the $Structural$ module.
+-- More singular quantifiers are available in the $Structural$ module.
+
+
+--3 QuantPl, plural quantifiers
+
+-- From quantifiers that can have both forms, this constructor 
+-- builds the plural form.
+
+      mkQuantPl : Quant -> QuantPl ;  -- 1. these
+
+-- More plural quantifiers are available in the $Structural$ module.
    
 
 --3 Num, cardinal numerals 
@@ -442,51 +457,52 @@ incomplete resource Constructors = open Grammar in {
 -- and from symbolic integers.
 
     mkNum : overload {
-      mkNum : Numeral -> Num ;   -- twenty
-      mkNum : Int     -> Num ;   -- 51
+      mkNum : Numeral -> Num ;   -- 1. twenty
+      mkNum : Int     -> Num ;   -- 2. 51
 
 -- A numeral can be modified by an adnumeral.
 
-      mkNum : AdN -> Num -> Num  -- almost ten
+      mkNum : AdN -> Num -> Num  -- 3. almost ten
       } ;
+
 
 --3 Ord, ordinal numerals
 
--- Just like cardinals, ordinals can be formed from number words ($Numeral$), their special case digits,
+-- Just like cardinals, ordinals can be formed from number words ($Numeral$)
 -- and from symbolic integers.
 
     mkOrd : overload {
-      mkOrd : Numeral -> Ord ;  -- sixtieth
-      mkOrd : Int     -> Ord ;  -- 51st
+      mkOrd : Numeral -> Ord ;  -- 1. twentieth
+      mkOrd : Int     -> Ord ;  -- 2. 51st
 
 -- Also adjectives in the superlative form can appear on ordinal positions.
 
-      mkOrd : A  -> Ord  -- best
+      mkOrd : A  -> Ord  -- 3. best
       } ;
 
 --3 AdN, adnumerals
 
 -- Comparison adverbs can be used as adnumerals.
 
-      mkAdN : CAdv -> AdN ;  -- more (than five)
+      mkAdN : CAdv -> AdN ;  -- 1. more than
 
 --3 Numeral, number words
 
 -- Digits and some "round" numbers are here given as shorthands.
 
-      n1_Numeral    : Numeral ; -- one
-      n2_Numeral    : Numeral ; -- two
-      n3_Numeral    : Numeral ; -- three
-      n4_Numeral    : Numeral ; -- four
-      n5_Numeral    : Numeral ; -- five
-      n6_Numeral    : Numeral ; -- six
-      n7_Numeral    : Numeral ; -- seven
-      n8_Numeral    : Numeral ; -- eight
-      n9_Numeral    : Numeral ; -- nine
-      n10_Numeral   : Numeral ; -- ten
-      n20_Numeral   : Numeral ; -- twenty
-      n100_Numeral  : Numeral ; -- hundred
-      n1000_Numeral : Numeral ; -- thousand
+      n1_Numeral    : Numeral ; -- 1. one
+      n2_Numeral    : Numeral ; -- 2. two
+      n3_Numeral    : Numeral ; -- 3. three
+      n4_Numeral    : Numeral ; -- 4. four
+      n5_Numeral    : Numeral ; -- 5. five
+      n6_Numeral    : Numeral ; -- 6. six
+      n7_Numeral    : Numeral ; -- 7. seven
+      n8_Numeral    : Numeral ; -- 8. eight
+      n9_Numeral    : Numeral ; -- 9. nine
+      n10_Numeral   : Numeral ; -- 10. ten
+      n20_Numeral   : Numeral ; -- 11. twenty
+      n100_Numeral  : Numeral ; -- 12. hundred
+      n1000_Numeral : Numeral ; -- 13. thousand
 
 -- See $Numeral$ for the full set of constructors, or use $Int$ for other numbers.
 
@@ -499,43 +515,45 @@ incomplete resource Constructors = open Grammar in {
 
 -- The most frequent way of forming common noun phrases is from atomic nouns $N$.
 
-      mkCN : N -> CN ;   -- house
+      mkCN : N -> CN ;   -- 1. house
 
 -- Common noun phrases can be formed from relational nouns by providing arguments.
 
-      mkCN : N2 -> NP ->       CN ;   -- son of the king
-      mkCN : N3 -> NP -> NP -> CN ;   -- flight from Moscow to Paris
+      mkCN : N2 -> NP ->       CN ; -- 2. mother of John
+      mkCN : N3 -> NP -> NP -> CN ; -- 3. distance from this city to Paris
 
 -- Relational nouns can also be used without their arguments.
 
-      mkCN : N2 -> CN ;   -- son
-      mkCN : N3 -> CN ;   -- flight
+      mkCN : N2 -> CN ;   -- 4. son
+      mkCN : N3 -> CN ;   -- 5. flight
 
 -- A common noun phrase can be modified by adjectival phrase. We give special 
 -- cases of this, where one or both of the arguments are atomic.
 
-      mkCN : AP -> CN  -> CN ;   -- very big blue house
-      mkCN : A  -> CN  -> CN ;   -- big blue house
-      mkCN : AP -> N   -> CN ;   -- very big house
-      mkCN : A  -> N   -> CN ;   -- big house
+      mkCN : A  -> N   -> CN ;   -- 6. big house
+      mkCN : A  -> CN  -> CN ;   -- 7. big blue house
+      mkCN : AP -> N   -> CN ;   -- 8. very big house
+      mkCN : AP -> CN  -> CN ;   -- 9. very big blue house
 
 -- A common noun phrase can be modified by a relative clause or an adverb.
 
-      mkCN : CN -> RS  -> CN ;   -- big house that John loves
-      mkCN : N  -> RS  -> CN ;   -- house that John loves
-      mkCN : CN -> Adv -> CN ;   -- big house on the mountain
-      mkCN : N  -> Adv -> CN ;   -- house on the mountain
+      mkCN : N  -> RS  -> CN ;   -- 10. house that John loves
+      mkCN : CN -> RS  -> CN ;   -- 11. big house that John loves
+      mkCN : N  -> Adv -> CN ;   -- 12. house in the city
+      mkCN : CN -> Adv -> CN ;   -- 13. big house in the city
 
--- For some nouns it makes sense to modify them by sentences, questions, or infinitives.
+-- For some nouns it makes sense to modify them by sentences, 
+-- questions, or infinitives. But syntactically this is possible for
+-- all nouns.
 
-      mkCN : CN -> S   -> CN ;   -- fact that John walks
-      mkCN : CN -> QS  -> CN ;   -- question if John smokes
-      mkCN : CN -> VP  -> CN ;   -- reason to smoke
+      mkCN : CN -> S   -> CN ;   -- 14. rule that John walks
+      mkCN : CN -> QS  -> CN ;   -- 15. question if John walks
+      mkCN : CN -> VP  -> CN ;   -- 16. reason to walk
 
 -- A noun can be used in apposition to a noun phrase, especially a proper name.
 
-      mkCN : CN -> NP  -> CN ;   -- old king John
-      mkCN : N  -> NP  -> CN     -- king John
+      mkCN : N  -> NP  -> CN ;   -- 17. king John
+      mkCN : CN -> NP  -> CN     -- 18. old king John
       } ;
 
 
@@ -548,30 +566,33 @@ incomplete resource Constructors = open Grammar in {
 -- Adjectival phrases can be formed from atomic adjectives by using the positive form or
 -- the comparative with a complement
 
-      mkAP : A  -> AP ;        -- old
-      mkAP : A  -> NP -> AP ;  -- older than John
+      mkAP : A  ->       AP ;  -- 1. old
+      mkAP : A  -> NP -> AP ;  -- 2. older than John
 
 -- Relational adjectives can be used with a complement or a reflexive
 
-      mkAP : A2 -> NP -> AP ;  -- married to her
-      mkAP : A2 ->       AP ;  -- married to himself
+      mkAP : A2 -> NP -> AP ;  -- 3. married to her
+      mkAP : A2 ->       AP ;  -- 4. married to myself
 
--- Some adjectival phrases can take as complements sentences, questions, or infinitives.
+-- Some adjectival phrases can take as complements sentences, 
+-- questions, or infinitives. Syntactically this is possible for
+-- all adjectives.
 
-      mkAP : AP -> S  -> AP ;  -- great that she won
-      mkAP : AP -> QS -> AP ;  -- uncertain if she won
-      mkAP : AP -> VP -> AP ;  -- ready to go
+      mkAP : AP -> S  -> AP ;  -- 5. probable that John walks
+      mkAP : AP -> QS -> AP ;  -- 6. uncertain if John walks
+      mkAP : AP -> VP -> AP ;  -- 7. ready to go
 
 -- An adjectival phrase can be modified by an adadjective.
 
-      mkAP : AdA  -> AP -> AP ;  -- very big
+      mkAP : AdA  -> A  -> AP ;  -- 8. very old
+      mkAP : AdA  -> AP -> AP ;  -- 9. very very old
 
 -- Conjunction can be formed from two or more adjectival phrases.
 
-      mkAP : Conj  -> AP -> AP -> AP ; -- warm and big
-      mkAP : Conj  -> ListAP   -> AP ; -- warm, big, and cheap
-      mkAP : DConj -> AP -> AP -> AP ; -- both warm and big
-      mkAP : DConj -> ListAP ->   AP   -- both warm, big, and cheap
+      mkAP : Conj  -> AP -> AP -> AP ; -- 10. old and big
+      mkAP : Conj  -> ListAP   -> AP ; -- 11. old, big, and warm
+      mkAP : DConj -> AP -> AP -> AP ; -- 12. either old or big
+      mkAP : DConj -> ListAP ->   AP   -- 13. either old, big, or warm
 
       } ;
 
@@ -581,32 +602,33 @@ incomplete resource Constructors = open Grammar in {
 
 -- Adverbs can be formed from adjectives.
 
-      mkAdv : A -> Adv  ;   -- quickly
+      mkAdv : A -> Adv  ;   -- 1. warmly
 
 -- Prepositional phrases are treated as adverbs.
 
-      mkAdv : Prep -> NP -> Adv ;  -- in the house
+      mkAdv : Prep -> NP -> Adv ;  -- 2. with John
 
 -- Subordinate sentences are treated as adverbs.
 
-      mkAdv : Subj -> S -> Adv  ;  -- when he arrives
+      mkAdv : Subj -> S -> Adv  ;  -- 3. when John walks
 
 -- An adjectival adverb can be compared to a noun phrase or a sentence.
 
-      mkAdv : CAdv -> A -> NP -> Adv ;  -- more slowly than John
-      mkAdv : CAdv -> A -> S  -> Adv ;  -- more slowly than he runs
+      mkAdv : CAdv -> A -> NP -> Adv ;  -- 4. more warmly than John
+      mkAdv : CAdv -> A -> S  -> Adv ;  -- 5. more warmly than John walks
 
 -- Adverbs can be modified by adadjectives.
 
-      mkAdv : AdA -> Adv -> Adv ;  -- very quickly
+      mkAdv : AdA -> Adv -> Adv ;  -- 6. very warmly
 
 -- Conjunction can be formed from two or more adverbial phrases.
 
-      mkAdv : Conj  -> Adv -> Adv -> Adv ; -- here and now
-      mkAdv : Conj  -> ListAdv ->    Adv ; -- here, now, and with you
-      mkAdv : DConj -> Adv -> Adv -> Adv ; -- both here and now
-      mkAdv : DConj -> ListAdv ->    Adv   -- both here, now, and with you
+      mkAdv : Conj  -> Adv -> Adv -> Adv ; -- 7. here and now
+      mkAdv : Conj  -> ListAdv ->    Adv ; -- 8. with John, here and now
+      mkAdv : DConj -> Adv -> Adv -> Adv ; -- 9. either here or now
+      mkAdv : DConj -> ListAdv ->    Adv   -- 10. either here, now, or with John
       } ;
+
 
 --2 Questions and relatives
 
@@ -614,18 +636,21 @@ incomplete resource Constructors = open Grammar in {
 
     mkQS : overload {
 
--- Just like a sentence $S$ is built from a clause $Cl$, a question sentence $QS$ is built from
--- a question clause $QCl$ by fixing tense, anteriority and polarity. Any of these arguments
--- can be omitted, which results in the default (present, simultaneous, and positive, respectively).
+-- Just like a sentence $S$ is built from a clause $Cl$, 
+-- a question sentence $QS$ is built from
+-- a question clause $QCl$ by fixing tense, anteriority and polarity. 
+-- Any of these arguments can be omitted, which results in the 
+-- default (present, simultaneous, and positive, respectively).
 
-      mkQS :                              QCl -> QS ;  -- who walks
-      mkQS : (Tense) -> (Ant) -> (Pol) -> QCl -> QS ;  -- wouldn't John have walked
+      mkQS :                              QCl -> QS ;  -- 1. who walks
+      mkQS : (Tense) -> (Ant) -> (Pol) -> QCl -> QS ;  -- 2. who wouldn't have walked
 
--- Since 'yes-no' question clauses can be built from clauses (see below), we give a shortcus
+-- Since 'yes-no' question clauses can be built from clauses (see below), 
+-- we give a shortcut
 -- for building a question sentence directly from a clause, using the defaults
 -- present, simultaneous, and positive.
 
-      mkQS : Cl -> QS  -- does John walk
+      mkQS : Cl -> QS  -- 3. does John walk
       } ;
 
 
@@ -635,45 +660,49 @@ incomplete resource Constructors = open Grammar in {
 
 -- 'Yes-no' question clauses are built from 'declarative' clauses.
 
-      mkQCl : Cl -> QCl ;   -- does John walk
+      mkQCl : Cl -> QCl ;   -- 1. does John walk
  
--- 'Wh' questions are built from interrogative pronouns in subject or object position.
--- The latter uses the 'slash' category of objectless clauses (see below); we give the
--- common special case with a two-place verb.
+-- 'Wh' questions are built from interrogative pronouns in subject 
+-- or object position. The former uses a verb phrase; we don't give
+-- shortcuts for verb-argument sequences as we do for clauses.
+-- The latter uses the 'slash' category of objectless clauses 
+-- (see below); we give the common special case with a two-place verb.
 
-      mkQCl : IP -> VP ->       QCl ;  -- who walks
-      mkQCl : IP -> Slash ->    QCl ;  -- who does John love
-      mkQCl : IP -> NP -> V2 -> QCl ;  -- who does John love
+      mkQCl : IP -> VP ->       QCl ;  -- 2. who walks
+      mkQCl : IP -> NP -> V2 -> QCl ;  -- 3. whom does John love
+      mkQCl : IP -> Slash ->    QCl ;  -- 4. whom does John love today
 
 -- Adverbial 'wh' questions are built with interrogative adverbials, with the
 -- special case of prepositional phrases with interrogative pronouns.
 
-      mkQCl : IAdv -> Cl ->       QCl ;   -- why does John walk
-      mkQCl : Prep -> IP -> Cl -> QCl ;   -- with whom does John walk
+      mkQCl : IAdv -> Cl ->       QCl ;   -- 5. why does John walk
+      mkQCl : Prep -> IP -> Cl -> QCl ;   -- 6. with who does John walk
 
 -- An interrogative adverbial can serve as the complement of a copula.
 
-      mkQCl : IAdv -> NP -> QCl ;  -- where is John
+      mkQCl : IAdv -> NP -> QCl ;  -- 7. where is John
 
 -- Existentials are a special construction.
 
-      mkQCl : IP -> QCl  -- which houses are there
+      mkQCl : IP -> QCl  -- 8. what is there
       } ;
 
 --3 IP, interrogative pronouns
 
     mkIP : overload {
 
--- In addition to the interrogative pronouns defined in the $Structural$ lexicon, they
+-- Interrogative pronouns 
 -- can be formed much like noun phrases, by using interrogative determiners.
 
-      mkIP : IDet ->                   N  -> IP ; -- which song
-      mkIP : IDet -> (Num) -> (Ord) -> CN -> IP ; -- which five best songs
+      mkIP : IDet ->                   N  -> IP ; -- 1. which city
+      mkIP : IDet -> (Num) -> (Ord) -> CN -> IP ; -- 2. which five best cities
 
 -- An interrogative pronoun can be modified by an adverb.
 
-      mkIP : IP -> Adv -> IP  -- who in Europe
+      mkIP : IP -> Adv -> IP  -- 3. who in Paris
       } ;
+
+-- More interrogative pronouns and determiners can be found in $Structural$.
 
 
 --3 IAdv, interrogative adverbs.
@@ -681,18 +710,23 @@ incomplete resource Constructors = open Grammar in {
 -- In addition to the interrogative adverbs defined in the $Structural$ lexicon, they
 -- can be formed as prepositional phrases from interrogative pronouns.
 
-    mkIAdv : Prep -> IP -> IAdv ;             -- in which city
+    mkIAdv : Prep -> IP -> IAdv ;  -- 1. in which city
+
+-- More interrogative adverbs are given in $Structural$.
 
 
 --3 RS, relative sentences
 
--- Just like a sentence $S$ is built from a clause $Cl$, a relative sentence $RS$ is built from
--- a relative clause $RCl$ by fixing the tense, anteriority and polarity. Any of these arguments
--- can be omitted, which results in the default (present, simultaneous, and positive, respectively).
+-- Just like a sentence $S$ is built from a clause $Cl$, 
+-- a relative sentence $RS$ is built from
+-- a relative clause $RCl$ by fixing the tense, anteriority and polarity. 
+-- Any of these arguments
+-- can be omitted, which results in the default (present, simultaneous,
+-- and positive, respectively).
 
     mkRS : overload {
-      mkRS : RCl ->                              RS ; -- who walks
-      mkRS : (Tense) -> (Ant) -> (Pol) -> RCl -> RS   -- who wouldn't have walked
+      mkRS : RCl ->                              RS ; -- 1. that walk
+      mkRS : (Tense) -> (Ant) -> (Pol) -> RCl -> RS   -- 2. that wouldn't have walked
       } ;
 
 --3 RCl, relative clauses
@@ -700,27 +734,30 @@ incomplete resource Constructors = open Grammar in {
     mkRCl : overload {
 
 -- Relative clauses are built from relative pronouns in subject or object position.
--- The latter uses the 'slash' category of objectless clauses (see below); we give the
--- common special case with a two-place verb.
+-- The former uses a verb phrase; we don't give
+-- shortcuts for verb-argument sequences as we do for clauses.
+-- The latter uses the 'slash' category of objectless clauses (see below); 
+-- we give the common special case with a two-place verb.
 
-      mkRCl : RP -> VP ->       RCl ;  -- who loves John
-      mkRCl : RP -> NP -> V2 -> RCl ;  -- whom John loves
-      mkRCl : RP -> Slash ->    RCl ;  -- whom John wants to love
+      mkRCl : RP -> VP ->       RCl ;  -- 1. that walk
+      mkRCl : RP -> NP -> V2 -> RCl ;  -- 2. which John loves
+      mkRCl : RP -> Slash ->    RCl ;  -- 3. which John loves today
 
--- There is a simple 'such that' construction for forming relative clauses from clauses.
+-- There is a simple 'such that' construction for forming relative 
+-- clauses from clauses.
 
-      mkRCl : Cl -> RCl    -- such that John loves her
+      mkRCl : Cl -> RCl  -- 4. such that John loves her
       } ;
 
 --3 RP, relative pronouns
 
 -- There is an atomic relative pronoun
 
-      which_RP : RP ;   -- which
+      which_RP : RP ;   -- 1. which
 
 -- A relative pronoun can be made into a kind of a prepositional phrase.
 
-      mkRP : Prep -> NP -> RP -> RP ;  -- all the houses in which
+      mkRP : Prep -> NP -> RP -> RP ;  -- 2. all the houses in which
 
 
 --3 Slash, objectless sentences
@@ -731,19 +768,19 @@ incomplete resource Constructors = open Grammar in {
 -- The most common way of constructing them is by using a two-place verb
 -- with a subject but without an object.
 
-      mkSlash : NP -> V2       -> Slash ;  -- (whom) he sees
+      mkSlash : NP -> V2 -> Slash ;  -- 1. (whom) John loves
 
 -- The two-place verb can be separated from the subject by a verb-complement verb.
 
-      mkSlash : NP -> VV -> V2 -> Slash ;  -- (whom) he wants to see
+      mkSlash : NP -> VV -> V2 -> Slash ;  -- 2. (whom) John wants to see
 
 -- The missing object can also be the noun phrase in a prepositional phrase.
 
-      mkSlash : Cl -> Prep -> Slash ;  -- (with whom) he walks
+      mkSlash : Cl -> Prep -> Slash ;  -- 3. (with whom) John walks
 
 -- An objectless sentence can be modified by an adverb.
 
-      mkSlash : Slash -> Adv -> Slash    -- (whom) he sees tomorrow
+      mkSlash : Slash -> Adv -> Slash  -- 4. (whom) John loves today
       } ;
 
 
@@ -755,30 +792,30 @@ incomplete resource Constructors = open Grammar in {
 --3 ListS, sentence lists
 
     mkListS : overload {
-     mkListS : S -> S ->     ListS ;  -- he walks, she runs
-     mkListS : S -> ListS -> ListS    -- I sleep, he walks, she runs
+     mkListS : S -> S ->     ListS ;  -- 1. he walks, I run
+     mkListS : S -> ListS -> ListS    -- 2. John walks, I run, you sleep
      } ;
 
 --3 ListAdv, adverb lists
 
     mkListAdv : overload {
-     mkListAdv : Adv -> Adv ->     ListAdv ;  -- here, now
-     mkListAdv : Adv -> ListAdv -> ListAdv    -- to me, here, now
+     mkListAdv : Adv -> Adv ->     ListAdv ;  -- 1. here, now
+     mkListAdv : Adv -> ListAdv -> ListAdv    -- 2. to me, here, now
      } ;
 
 --3 ListAP, adjectival phrase lists
 
     mkListAP : overload {
-     mkListAP : AP -> AP ->     ListAP ;  -- big, old
-     mkListAP : AP -> ListAP -> ListAP    -- warm, big, old
+     mkListAP : AP -> AP ->     ListAP ;  -- 1. old, big
+     mkListAP : AP -> ListAP -> ListAP    -- 2. old, big, warm
      } ;
   
 
 --3 ListNP, noun phrase lists
 
     mkListNP : overload {
-     mkListNP : NP -> NP ->     ListNP ;  -- John, Mary
-     mkListNP : NP -> ListNP -> ListNP    -- you, John, Mary
+     mkListNP : NP -> NP ->     ListNP ;  -- 1. John, I
+     mkListNP : NP -> ListNP -> ListNP    -- 2. John, I, that
      } ;
 
 
@@ -800,6 +837,8 @@ incomplete resource Constructors = open Grammar in {
                                          =  \ap,s -> SentAP ap (EmbedQS s) ;
       mkAP : AP -> VP -> AP    -- great that she won
                                          =  \ap,s -> SentAP ap (EmbedVP s) ;
+      mkAP : AdA -> A -> AP   -- very uncertain
+                                         =   \x,y -> AdAP x (PositA y) ;
       mkAP : AdA -> AP -> AP   -- very uncertain
                                          =    AdAP ;
       mkAP : Conj -> AP -> AP -> AP

@@ -355,5 +355,12 @@ lin
   language_N = mk2N "språk" "språk" ;
   rule_N = mkN "regel" "regeln" "regler" "reglerna" ;
 
+    john_PN = regPN "Johan" ;
+    question_N = regN "fråga" ;
+    ready_A = regA "färdig" ;
+    reason_N = regN "anledning" ;
+    today_Adv = mkAdv "idag" ;
+    uncertain_A = mk3A "osäker" "osäkert" "osäkra" ;
+
 
 } ;

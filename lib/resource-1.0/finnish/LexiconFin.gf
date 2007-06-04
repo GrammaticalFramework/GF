@@ -371,6 +371,13 @@ lin
   language_N = reg2N "kieli" "kieliä" ;
   rule_N = regN "sääntö" ;
 
+    john_PN = regPN "Jussi" ;
+    question_N = regN "kysymys" ;
+    ready_A = regA "valmis" ;
+    reason_N = regN "syy" ;
+    today_Adv = mkAdv "tänään" ;
+    uncertain_A = regA "epävarma" ;
+
  oper
     mkOrd : N -> Ord ;
     mkOrd x = {s = \\n,c => x.s ! NCase n c; lock_Ord = <> } ;

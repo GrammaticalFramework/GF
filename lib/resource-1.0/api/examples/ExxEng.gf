@@ -1,6 +1,6 @@
 --# -path=.:..:alltenses:prelude
 
-concrete ExxEng of Exx = CatEng-[VP] ** ExxI with
+concrete ExxEng of Exx = CatEng-[VP], ConjunctionEng-[VP] ** ExxI with
   (Lang = LangEng),
   (Constructors = ConstructorsEng) ;
 
