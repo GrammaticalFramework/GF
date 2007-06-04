@@ -7,7 +7,7 @@ gfs:
 	runghc mkgfs.hs
 
 exx:
-	gf ExxSwe.gf ExGer.gf ExFre.gf ExFin.gf ExxEng.gf <exx.gfs
+	gf ExxSwe.gf ExxGer.gf ExxFre.gf ExxFin.gf ExxEng.gf <exx.gfs
 
 html:
 	cp ../Constructors.gf .
