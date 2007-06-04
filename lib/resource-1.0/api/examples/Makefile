@@ -1,9 +1,14 @@
-Eng:
-	gf -nocpu ExxEng.gf <exx.gfs >exxEng.txt
-Fin:
-	gf -nocpu ExxFin.gf <exx.gfs >exxFin.txt
-Swe:
-	gf -nocpu ExxSwe.gf <exx.gfs >exxSwe.txt
+all: html gfs exx links 
+
+links:
+	runghc MkLinks
 
 gfs:
 	runghc mkgfs.hs
+
+exx:
+	gf ExxSwe.gf ExGer.gf ExFre.gf ExFin.gf ExxEng.gf <exx.gfs
+
+html:
+	cp ../Constructors.gf .
+	gfdoc -txthtml Constructors.gf
