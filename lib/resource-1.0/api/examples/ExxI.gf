@@ -142,7 +142,7 @@ incomplete concrete ExxI of Exx = Cat-[VP], Conjunction-[VP] **
     ex1_QuantSg = mkQuantSg this_Quant ;
     ex2_QuantSg = massQuant ;
 
-    ex1_QuantPl = mkQuantSg this_Quant ;
+    ex1_QuantPl = mkQuantPl this_Quant ;
 
 
     ex1_Num = mkNum n20_Numeral ;
