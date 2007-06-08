@@ -7,7 +7,11 @@ gfs:
 	runghc mkgfs.hs
 
 exx:
-	gf ExxSwe.gf ExxGer.gf ExxFre.gf ExxFin.gf ExxEng.gf <exx.gfs
+	gf exxs.gfcm <exx.gfs
+
+gfcm:
+	echo "pm | wf exxs.gfcm" | gf ExxSwe.gf ExxGer.gf ExxFin.gf ExxEng.gf 
+#ExxFre takes too long
 
 html:
 	cp ../Constructors.gf .
