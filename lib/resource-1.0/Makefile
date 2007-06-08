@@ -12,6 +12,7 @@ GFC=$(GFCC) -src
 
 # comment the first and uncomment the second in Windows
 GFCP=$(GFC) -preproc=./mkPresent
+GFCCP=$(GFCC) -preproc=./mkPresent
 #GFCP=$(GFC) -preproc=mkPresent
 
 
@@ -42,6 +43,11 @@ alltenses:
 	$(GFC) swedish/Swedish.gf
 	$(GFC) common/ConstructX.gf
 	cp -p */*.gfc */*.gfr ../alltenses
+	touch api/Constructors.gf
+	$(GFCC) api/Constructors???.gf
+	cp -p api/Constructors*.gfc api/Constructors*.gfr ../alltenses
+
+
 
 langs:
 	echo "s ;; pm | wf langs.gfcm" | $(GFCA) -path=alltenses:prelude ../alltenses/Lang???.gfc $(RTSS)
@@ -66,6 +72,9 @@ present:
 	$(GFCP) swedish/Swedish.gf
 	$(GFCP) common/ConstructX.gf
 	mv */*.gfc */*.gfr ../present
+	touch api/Constructors.gf
+	$(GFCCP) api/Constructors???.gf
+	mv api/Constructors*.gfc api/Constructors*.gfr ../alltenses
 
 mathematical:
 	$(GFCC) mathematical/MathematicalEng.gf

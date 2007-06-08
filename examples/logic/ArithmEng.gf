@@ -1,4 +1,4 @@
---# -path=.:mathematical:present:api:prelude
+--# -path=.:mathematical:present:prelude
 
 concrete ArithmEng of Arithm = LogicEng ** 
   open
