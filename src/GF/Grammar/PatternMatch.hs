@@ -29,8 +29,11 @@ import Control.Monad
 
 matchPattern :: [(Patt,Term)] -> Term -> Err (Term, Substitution)
 matchPattern pts term = 
-  errIn ("trying patterns" +++ unwords (intersperse "," (map (prt . fst) pts))) $
-  findMatch [([p],t) | (p,t) <- pts] [term]
+  if not (isInConstantForm term)
+    then prtBad "variables occur in" term
+  else 
+    errIn ("trying patterns" +++ unwords (intersperse "," (map (prt . fst) pts))) $
+    findMatch [([p],t) | (p,t) <- pts] [term]
 
 testOvershadow :: [Patt] -> [Term] -> Err [Patt]
 testOvershadow pts vs = do
@@ -54,14 +57,15 @@ tryMatch (p,t) = do
   t' <- termForm t
   trym p t'
  where
+  isInConstantFormt = True -- tested already
   trym p t' =
     case (p,t') of
       (PVal _ i, (_,Val _ j,_)) 
           | i == j -> return []
           | otherwise -> Bad $ "no match of values"
       (_,(x,Empty,y)) -> trym p (x,K [],y)   -- because "" = [""] = []
-      (PV IW, _) | isInConstantForm t -> return [] -- optimization with wildcard
-      (PV x,  _) | isInConstantForm t -> return [(x,t)]
+      (PV IW, _) | isInConstantFormt -> return [] -- optimization with wildcard
+      (PV x,  _) | isInConstantFormt -> return [(x,t)]
       (PString s, ([],K i,[])) | s==i -> return []
       (PInt s, ([],EInt i,[])) | s==i -> return []
       (PFloat s,([],EFloat i,[])) | s==i -> return [] --- rounding?

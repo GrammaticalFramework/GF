@@ -34,6 +34,14 @@ import GF.Infra.Option
 import Control.Monad
 import Data.List
 
+import Debug.Trace
+
+
+-- conditional trace
+
+prtIf :: (Print a) => Bool -> a -> a
+prtIf b t = if b then trace (" " ++ prt t) t else t
+
 -- experimental evaluation, option to import
 oEval = iOpt "eval"
 
@@ -113,10 +121,13 @@ evalResInfo oopts gr (c,info) = case info of
 
 evalCncInfo :: 
   Options -> SourceGrammar -> Ident -> Ident -> (Ident,Info) -> Err (Ident,Info)
-evalCncInfo opts gr cnc abs (c,info) = errIn ("optimizing" +++ prt c) $ case info of
+evalCncInfo opts gr cnc abs (c,info) = do
+
+ seq (prtIf (oElem beVerbose opts) c) $ return ()
+
+ errIn ("optimizing" +++ prt c) $ case info of
 
   CncCat ptyp pde ppr -> do
-
     pde' <- case (ptyp,pde) of
       (Yes typ, Yes de) -> 
         liftM yes $ pEval ([(strVar, typeStr)], typ) de

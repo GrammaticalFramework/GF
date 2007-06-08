@@ -141,9 +141,11 @@ computeTermOpt rec gr = comp where
              return $ S t' v' -- if v' is not canonical
 
      S t v -> do
-       t'     <- comp g t
-       v'     <- comp g v
-       case t' of
+      t'     <- comp g t
+      v'     <- comp g v
+      case v' of
+       FV vs -> mapM (\c -> comp g (S t' c)) vs >>= returnC . variants        
+       _ -> case t' of
          FV ccs -> mapM (\c -> comp g (S c v')) ccs >>= returnC . variants
 
          T _ [(PV IW,c)] -> comp g c           --- an optimization
@@ -152,21 +154,21 @@ computeTermOpt rec gr = comp where
          T _ [(PV z,c)] -> comp (ext z v' g) c --- another optimization
          T _ [(PT _ (PV z),c)] -> comp (ext z v' g) c
 
-
+         -- course-of-values table: look up by index, no pattern matching needed
          V ptyp ts -> do
            vs <- allParamValues gr ptyp
-           ps <- mapM term2patt vs
-           let cc = zip ps ts
-           case v' of
-             FV vs -> mapM (\c -> comp g (S t' c)) vs >>= returnC . variants
-             _ -> case matchPattern cc v' of
-               Ok (c,g') -> comp (g' ++ g) c
-               _ | isCan v' -> prtBad ("missing case" +++ prt v' +++ "in") t 
-               _ -> return $ S t' v' -- if v' is not canonical
+           case lookup v' (zip vs [0 .. length vs - 1]) of
+             Just i -> comp g $ ts !! i
+             _ -> return $ S t' v' -- if v' is not canonical
 
-         T _ cc -> case v' of
-	   FV vs -> mapM (\c -> comp g (S t' c)) vs >>= returnC . variants
-           _ -> case matchPattern cc v' of
+         T (TComp _) cs -> do
+           case term2patt v' of
+             Ok p' -> case lookup p' cs of
+               Just u -> comp g u
+               _ -> return $ S t' v' -- if v' is not canonical
+             _ -> return $ S t' v'
+
+         T _ cc -> case matchPattern cc v' of
              Ok (c,g') -> comp (g' ++ g) c
              _ | isCan v' -> prtBad ("missing case" +++ prt v' +++ "in") t 
              _ -> return $ S t' v' -- if v' is not canonical
