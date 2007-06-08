@@ -118,26 +118,43 @@ oper
 
 --3 Proper names and noun phrases
 --
--- Proper names, with a regular genitive, are formed as follows
+-- Proper names, with a regular genitive, are formed from strings.
 
-  regPN    : Str -> PN ;          
-  regGenPN : Str -> Gender -> PN ;     -- John, John's
+  mkPN : overload {
 
--- Sometimes you can reuse a common noun as a proper name, e.g. "Bank".
+    mkPN : Str -> PN ;
 
-  nounPN : N -> PN ;
+-- Sometimes a common noun can be reused as a proper name, e.g. "Bank"
+
+    mkPN : N -> PN
+  } ;
 
 
 --2 Adjectives
 
   mkA : overload {
--- For regular adjectives, the adverbial form is derived. This holds
--- even for cases with the variation "happy - happily".
-    mkA : Str -> A ;
--- Non-comparison one-place adjectives need two forms: one for
--- the adjectival and one for the adverbial form ("free - freely")
-    mkA : (free,freely : Str) -> A ;
-  };
+
+-- For regular adjectives, the adverbial and comparison forms are derived. This holds
+-- even for cases with the variations "happy - happily - happier - happiest",
+-- "free - freely - freer - freest", and "rude - rudest".
+
+    mkA : (happy : Str) -> A ;
+
+-- However, the duplication of the final consonant cannot be predicted,
+-- but a separate case is used to give the comparative
+
+    mkA : (fat,fatter : Str) -> A ;
+
+-- As many as four forms may be needed.
+
+    mkA : (good,better,best,well : Str) -> A 
+    } ;
+
+-- To force comparison to be formed by "more - most", 
+-- the following function is used:
+
+    compoundA : A -> A ; -- -/more/most ridiculous
+
 
 
 --3 Two-place adjectives
@@ -146,31 +163,6 @@ oper
 
   mkA2 : A -> Prep -> A2 ;
 
--- Comparison adjectives may two more forms. 
-
-  ADeg : Type ;
-
-  mkADeg : (good,better,best,well : Str) -> ADeg ;
-
--- The regular pattern recognizes two common variations: 
--- "-e" ("rude" - "ruder" - "rudest") and
--- "-y" ("happy - happier - happiest - happily")
-
-  regADeg : Str -> ADeg ;      -- long, longer, longest
-
--- However, the duplication of the final consonant is nor predicted,
--- but a separate pattern is used:
-
-  duplADeg : Str -> ADeg ;      -- fat, fatter, fattest
-
--- If comparison is formed by "more", "most", as in general for
--- long adjective, the following pattern is used:
-
-  compoundADeg : A -> ADeg ; -- -/more/most ridiculous
-
--- From a given $ADeg$, it is possible to get back to $A$.
-
-  adegA : ADeg -> A ;
 
 
 --2 Adverbs
@@ -200,32 +192,47 @@ oper
 
 -- Verbs are constructed by the function $mkV$, which takes a varying
 -- number of arguments.
+
   mkV : overload {
+
 -- The regular verb function recognizes the special cases where the last
--- character is "y" ("cry - cries" but "buy - buys") or "s", "sh", "x", "z"
--- ("fix - fixes", etc).
+-- character is "y" ("cry-cries" but "buy-buys") or a sibilant
+-- ("kiss-"kisses", "jazz-jazzes", "rush-rushes", "munch - munches", 
+-- "fix - fixes").
+
     mkV : (cry : Str) -> V ;
+
 -- Give the present and past forms for regular verbs where
 -- the last letter is duplicated in some forms,
 -- e.g. "rip - ripped - ripping".
+
     mkV : (stop, stopped : Str) -> V ;
+
 -- There is an extensive list of irregular verbs in the module $IrregularEng$.
 -- In practice, it is enough to give three forms, 
 -- e.g. "drink - drank - drunk".
+
     mkV     : (drink, drank, drunk  : Str) -> V ;
+
 -- Irregular verbs with duplicated consonant in the present participle.
-    mkV     : (run, ran, run, running  : Str) -> V ;
+ 
+   mkV     : (run, ran, run, running  : Str) -> V ;
+
 -- Except for "be", the worst case needs five forms: the infinitive and
 -- the third person singular present, the past indicative, and the
 -- past and present participles.
+
     mkV : (go, goes, went, gone, going : Str) -> V
   };
 
 -- Verbs with a particle.
 -- The particle, such as in "switch on", is given as a string.
+
   partV  : V -> Str -> V ;
+
 -- Reflexive verbs.
 -- By default, verbs are not reflexive; this function makes them that.
+
   reflV  : V -> V ;
 
 --3 Two-place verbs
@@ -296,25 +303,18 @@ oper
   Preposition : Type = Str ; -- obsolete
 
   regN = \ray -> 
-    let
-      ra  = Predef.tk 1 ray ; 
-      y   = Predef.dp 1 ray ; 
-      r   = Predef.tk 2 ray ; 
-      ay  = Predef.dp 2 ray ;
-      rays =
-        case y of {
-          "y" => y2ie ray "s" ; 
-          "s" => ray + "es" ;
-          "z" => ray + "es" ;
-          "x" => ray + "es" ;
-          _ => case ay of {
-            "sh" => ray + "es" ;
-            "ch" => ray + "es" ;
-            _    => ray + "s"
-            }
-         }
+    let rays = add_s ray
      in
        mk2N ray rays ;
+
+
+  add_s : Str -> Str = \w -> case w of {
+    _ + ("io" | "oo")                         => w + "s" ;   -- radio, bamboo
+    _ + ("s" | "z" | "x" | "sh" | "ch" | "o") => w + "es" ;  -- bus, hero
+    _ + ("a" | "o" | "u" | "e") + "y"  => w + "s" ;   -- boy
+    x + "y"                            => x + "ies" ; -- fly
+    _                                  => w + "s"     -- car
+    } ;
 
   mk2N = \man,men -> 
     let mens = case last men of {
@@ -330,6 +330,12 @@ oper
   genderN g man = {s = man.s ; g = g ; lock_N = <>} ;
 
   compoundN s n = {s = \\x,y => s ++ n.s ! x ! y ; g=n.g ; lock_N = <>} ;
+
+  mkPN = overload {
+    mkPN : Str -> PN = regPN ;
+    mkPN : N -> PN = nounPN
+  } ;
+
 
   mkN2 = \n,p -> n ** {lock_N2 = <> ; c2 = p.s} ;
   regN2 n = mkN2 (regN n) (mkPrep "of") ;
@@ -352,7 +358,7 @@ oper
   nounPN n = {s = n.s ! singular ; g = n.g ; lock_PN = <>} ;
 
   mk2A a b = mkAdjective a a a b ** {lock_A = <>} ;
-  regA a = regAdjective a ** {lock_A = <>} ;
+  regA a = regADeg a ** {lock_A = <>} ;
 
   mkA2 a p = a ** {c2 = p.s ; lock_A2 = <>} ;
 
@@ -369,8 +375,9 @@ oper
         "e" => happy ;
         _   => happy + "e"
         } ;
-      happily = case y of {
-        "y" => happ + "ily" ;
+      happily : Str = case happy of {
+        _ + "y" => happ + "ily" ;
+        _ + "ll" => happy + "y" ;
         _   => happy + "ly"
         } ;
     in mkADeg happy (happie + "r") (happie + "st") happily ;
@@ -495,8 +502,13 @@ oper
 
   mkA = overload {
     mkA : Str -> A = regA ;
-    mkA : (free,freely : Str) -> A = mk2A
-  };
+    mkA : (fat,fatter : Str) -> A = \fat,fatter -> 
+      mkAdjective fat fatter (init fatter + "st") (fat + "ly") ** {lock_A = <>} ;
+    mkA : (good,better,best,well : Str) -> A = \a,b,c,d ->
+      mkAdjective a b c d  ** {lock_A = <>}
+    } ;
+
+  compoundA = compoundADeg ;
 
 
   mk5V : (go, goes, went, gone, going : Str) -> V ;
@@ -525,6 +537,44 @@ oper
     mkV2  : V -> Prep -> V2 = prepV2;
     mkV2  : V -> V2 = dirV2
   }; 
+
+
+---- obsolete
+
+-- Comparison adjectives may two more forms. 
+
+  ADeg : Type ;
+
+  mkADeg : (good,better,best,well : Str) -> ADeg ;
+
+-- The regular pattern recognizes two common variations: 
+-- "-e" ("rude" - "ruder" - "rudest") and
+-- "-y" ("happy - happier - happiest - happily")
+
+  regADeg : Str -> ADeg ;      -- long, longer, longest
+
+-- However, the duplication of the final consonant is nor predicted,
+-- but a separate pattern is used:
+
+  duplADeg : Str -> ADeg ;      -- fat, fatter, fattest
+
+-- If comparison is formed by "more", "most", as in general for
+-- long adjective, the following pattern is used:
+
+  compoundADeg : A -> ADeg ; -- -/more/most ridiculous
+
+-- From a given $ADeg$, it is possible to get back to $A$.
+
+  adegA : ADeg -> A ;
+
+
+  regPN    : Str -> PN ;          
+  regGenPN : Str -> Gender -> PN ;     -- John, John's
+
+-- Sometimes you can reuse a common noun as a proper name, e.g. "Bank".
+
+  nounPN : N -> PN ;
+
 
 
 } ;
