@@ -69,27 +69,31 @@ oper
 -- The following overloaded paradigm takes care of all noun formation.
 
   mkN : overload {
-    mkN : (apa : Str) -> N ;
-    mkN : (lik : Str) -> Gender -> N ; 
-    mkN : (nyckel,nycklar : Str) -> N ; 
-    mkN : (museum,museet,museer,museerna : Str) -> N
-  } ;
 
 -- The one-argument case takes the singular indefinite form and computes 
 -- the other forms and the gender by a simple heuristic. The heuristic is currently 
 -- to treat all words ending with "a" like "apa-apor", with "e" like "rike-riken",
 -- and otherwise like "bil-bilar".
 
+    mkN : (apa : Str) -> N ;
+
 -- The case with a string and gender makes it possible to treat 
 -- "lik" (neutrum) and "pojke" (utrum).
+
+    mkN : (lik : Str) -> Gender -> N ; 
 
 -- Giving two forms - the singular and plural indefinite - is sufficient for
 -- most nouns. The paradigm deals correctly with the vowel contractions in 
 -- "nyckel - nycklar" such as "pojke - pojkar".
 
+    mkN : (nyckel,nycklar : Str) -> N ; 
+
 -- In the worst case, four forms are needed.
 
--- All the functions above work quite as well to form **compound nouns**,
+    mkN : (museum,museet,museer,museerna : Str) -> N
+  } ;
+
+-- All the functions above work quite as well to form *compound nouns*,
 -- such as "fotboll". 
 
 
@@ -122,12 +126,14 @@ oper
 --3 Proper names and noun phrases
 --
 -- Proper names, with a regular genitive, are formed from strings and
--- have the default gender utrum. In the worst case, the genitive form
--- is irregular.
+-- have the default gender utrum. 
 
   mkPN : overload {
     mkPN : Str -> PN ;
     mkPN : Str -> Gender -> PN ;
+
+-- In the worst case, the genitive form is irregular.
+
     mkPN : (jesus,jesu : Str) -> Gender -> PN
     } ;
 
@@ -137,16 +143,35 @@ oper
 -- Adjectives need one to seven forms. 
 
   mkA : overload {
+
+-- Most adjectives are formed simply by adding endings to a stem.
+
     mkA : (billig : Str) -> A ;
-    mkA : (bred,brett : Str) -> A ; -- also galen-galet(-galna)
+
+-- Some adjectives have a deviant neuter form. The following pattern
+-- also recognizes the neuter formation "galen-galet" and forms the
+-- proper plural and comparison forms "galna-galnare-galnast".
+
+    mkA : (bred,brett : Str) -> A ;
+
+-- Umlaut in comparison forms is 
+
     mkA : (tung,tyngre,tyngst : Str) -> A ;
-    mkA : (god,gott,goda,battre,bast : Str) -> A ; 
+
+-- A few adjectives need 5 forms.
+    mkA : (god,gott,goda,battre,bast : Str) -> A ;
+
+-- Hardly any other adjective than "liten" needs the full 7 forms.
+ 
     mkA : (liten,litet,lilla,sma,mindre,minst,minsta : Str) -> A
     } ;
 
--- Comparison forms may be compound ("mera svensk" - "mest svensk").
+-- Comparison forms may be compound ("mera svensk" - "mest svensk");
+-- this behaviour can be forced on any adjective.
 
   compoundA : A -> A ;
+
+
 
 
 --3 Two-place adjectives
@@ -174,11 +199,6 @@ oper
 -- All verbs can be defined by the overloaded paradigm $mkV$.
 
   mkV : overload {
-    mkV : (stämmer : Str) -> V ;
-    mkV : (dricka,drack,druckit : Str) -> V ;
-    mkV : (gå,går,gå,gick,gått,gången : Str) -> V ;
-    mkV : V -> Str -> V
-    } ;
 
 -- The 'regular verb' (= one-place) case is inspired by Lexin. It uses the
 -- present tense indicative form. The value is the first conjugation if the
@@ -188,24 +208,33 @@ oper
 -- the third in other cases ("bo" - "bor" - "bodde" - "bott").
 -- It is also possible to give the infinite form to it; they are treated
 -- as if they were implicitly suffixed by "r". Moreover, deponent verbs
--- are recognized from the final "s".
+-- are recognized from the final "s" ("hoppas").
+
+    mkV : (stämmer : Str) -> V ;
 
 -- Most irregular verbs need just the conventional three forms.
 
+    mkV : (dricka,drack,druckit : Str) -> V ;
+
 -- In the worst case, six forms are given.
 
--- The last case of $mkV$ is for particle verbs, such as "passa på".
+    mkV : (gå,går,gå,gick,gått,gången : Str) -> V ;
 
+-- Particle verbs, such as "passa på", are formed by adding a string to a verb.
 
+    mkV : V -> Str -> V
+    } ;
 
 
 --3 Deponent verbs.
 --
 -- Some words are used in passive forms only, e.g. "hoppas", some as
--- reflexive e.g. "ångra sig".
+-- reflexive e.g. "ångra sig". Regular deponent verbs are also
+-- handled by $mkV$ and recognized from the ending "s".
 
   depV  : V -> V ;
   reflV : V -> V ;
+
 
 --3 Two-place verbs
 --
