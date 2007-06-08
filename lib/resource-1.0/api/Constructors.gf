@@ -12,7 +12,7 @@ incomplete resource Constructors = open Grammar in {
 --
 -- is written
 --
--- $mkS (mkCl (mkPN "John") (mkV2 "love") (mkPN "Mary"))$
+-- $mkS (mkCl (mkNP (mkPN "John")) (mkV2 "love") (mkNP (mkPN "Mary")))$
 --
 -- This module defines the syntactic constructors, which take trees as arguments.
 -- Lexical constructors, which take strings as arguments, are defined in the

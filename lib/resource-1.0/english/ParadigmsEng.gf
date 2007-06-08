@@ -212,11 +212,11 @@ oper
 -- In practice, it is enough to give three forms, 
 -- e.g. "drink - drank - drunk".
 
-    mkV     : (drink, drank, drunk  : Str) -> V ;
+    mkV : (drink, drank, drunk  : Str) -> V ;
 
 -- Irregular verbs with duplicated consonant in the present participle.
  
-   mkV     : (run, ran, run, running  : Str) -> V ;
+    mkV : (run, ran, run, running  : Str) -> V ;
 
 -- Except for "be", the worst case needs five forms: the infinitive and
 -- the third person singular present, the past indicative, and the
