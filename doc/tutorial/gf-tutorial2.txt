@@ -2123,7 +2123,7 @@ ending with an //s// and used in the formation of both plural nouns and
 third-person present-tense verbs.
 ```
   add_s : Str -> Str = \w -> case w of {
-    _ + "oo"                           => s + "s" ;   -- bamboo
+    _ + "oo"                           => w + "s" ;   -- bamboo
     _ + ("s" | "z" | "x" | "sh" | "o") => w + "es" ;  -- bus, hero
     _ + ("a" | "o" | "u" | "e") + "y"  => w + "s" ;   -- boy
     x + "y"                            => x + "ies" ; -- fly
