@@ -134,7 +134,7 @@ computeTermOpt rec gr = comp where
            ts' <- mapM (comp g . S t) vs
            return $ variants ts' 
          _ -> case ti of
-
+{-
            TComp _  -> do
              case term2patt v' of
                Ok p' -> case lookup p' cc of
@@ -145,7 +145,7 @@ computeTermOpt rec gr = comp where
                _ -> do
                   t' <- comp g t
                   return $ S t' v'
-
+-}
            _ -> case matchPattern cc v' of
              Ok (c,g') -> comp (g' ++ g) c
              _ | isCan v' -> prtBad ("missing case" +++ prt v' +++ "in") t 
@@ -158,7 +158,7 @@ computeTermOpt rec gr = comp where
 
       t'     <- case t of
 --        T _ _ -> return t
-        V _ _ -> return t
+--        V _ _ -> return t
         _ -> comp g t
 
       v'     <- comp g v

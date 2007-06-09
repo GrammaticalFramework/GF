@@ -73,8 +73,8 @@ present:
 	$(GFCP) common/ConstructX.gf
 	mv */*.gfc */*.gfr ../present
 	touch api/Constructors.gf
-	$(GFCCP) api/Constructors???.gf
-	mv api/Constructors*.gfc api/Constructors*.gfr ../alltenses
+	$(GFCCP) -path=api:present:prelude api/Constructors???.gf
+	mv api/Constructors*.gfc api/Constructors*.gfr ../present
 
 mathematical:
 	$(GFCC) mathematical/MathematicalEng.gf
