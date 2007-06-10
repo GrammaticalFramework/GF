@@ -57,22 +57,6 @@ June 29, 2007, Prague.
 //An experiment in porting an in-car dialogue system from two to six languages.// 
 
 
-M. Humayoun, H. Hammarström, and A. Ranta.
-Urdu Morphology, Orthography and Lexicon Extraction.
-//CAASL-2: The Second Workshop on Computational Approaches to Arabic Script-based Languages//,
-July 21-22, 2007, LSA 2007 Linguistic Institute, Stanford University.
-2007.
-#BR
-//Fairly complete open-source Urdu morphology and elemenraty syntax in GF.//
-
-N. Perera and A. Ranta.
-Dialogue System Localization with the GF Resource Grammar Library.
-//SPEECHGRAM 2007: ACL Workshop on Grammar-Based Approaches to Spoken Language Processing//,
-June 29, 2007, Prague.
-2007.
-#BR
-//An experiment in porting an in-car dialogue system from two to six languages.// 
-
 B. Bringert.
 Speech Recognition Grammar Compilation in Grammatical Framework
 //SPEECHGRAM 2007: ACL Workshop on Grammar-Based Approaches to Spoken Language Processing//,
