@@ -75,6 +75,7 @@ import GF.Infra.UseIO
 import GF.Data.Zipper
 
 import Data.List (nub)
+import Data.Char (toLower)
 import Data.Maybe (fromMaybe)
 import Control.Monad (liftM)
 import System (system)
@@ -314,9 +315,16 @@ morphoAnalyse opts gr
   mo = morpho gr
 
 isKnownWord :: GFGrammar -> String -> Bool
-isKnownWord gr s = case morphoAnalyse (options [beShort]) gr s of
-  a@(_:_:_) -> last (init a) /= '*'  -- [word *]
-  _ -> False
+isKnownWord gr s = GF.UseGrammar.Morphology.isKnownWord (morpho gr) s
+
+unknownTokens :: GFGrammar -> [CFTok] -> [String]
+unknownTokens gr ts = 
+  [w | TC w <- ts, unk w && unk (uncap w)] ++ [w | TS w <- ts, unk w]
+ where
+   unk w = not $ GF.API.isKnownWord gr w
+   uncap (c:cs) = toLower c : cs
+   uncap s = s
+
 
 {-
 prExpXML :: StateGrammar -> Term -> [String]
@@ -397,8 +405,11 @@ optTransfer opts g = case getOptVal opts transferFun of
   _ -> id
 -}
 
+optTokenizerResult :: Options -> GFGrammar -> String -> [[CFTok]]
+optTokenizerResult opts gr = customOrDefault opts useTokenizer customTokenizer gr
+
 optTokenizer :: Options -> GFGrammar -> String -> String
-optTokenizer opts gr = show . customOrDefault opts useTokenizer customTokenizer gr
+optTokenizer opts gr = show . optTokenizerResult opts gr
 
 -- performs UTF8 if the language does not have flag coding=utf8; replaces name*U
 
