@@ -44,8 +44,8 @@ alltenses:
 	$(GFC) common/ConstructX.gf
 	cp -p */*.gfc */*.gfr ../alltenses
 	touch api/Constructors.gf
-	$(GFCC) api/Constructors???.gf
-	cp -p api/Constructors*.gfc api/Constructors*.gfr ../alltenses
+	$(GFCC) api/Syntax???.gf
+	cp -p api/Syntax*.gfc api/Syntax*.gfr ../alltenses
 
 
 
@@ -73,8 +73,8 @@ present:
 	$(GFCP) common/ConstructX.gf
 	mv */*.gfc */*.gfr ../present
 	touch api/Constructors.gf
-	$(GFCCP) -path=api:present:prelude api/Constructors???.gf
-	mv api/Constructors*.gfc api/Constructors*.gfr ../present
+	$(GFCCP) -path=api:present:prelude api/Syntax???.gf
+	mv api/Syntax*.gfc api/Syntax*.gfr ../present
 
 mathematical:
 	$(GFCC) mathematical/MathematicalEng.gf

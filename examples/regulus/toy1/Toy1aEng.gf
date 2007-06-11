@@ -24,7 +24,7 @@ lin
   UQuestion q = q ;
 
   CAction _ act dev = ss (act.s ! VImp ++ bothWays act.part dev.s) ;
-  QAction _ act st dev = ss (be dev.n ++ dev.s ++ act.s ! VPart ++ act.part ++ st.s) ;
+  QAction _ act dev = ss (be dev.n ++ dev.s ++ act.s ! VPart ++ act.part) ;
 
   DKindOne  k = {
     s = "the" ++ k.s ! Sg ; 
@@ -42,10 +42,10 @@ lin
   light = mkNoun "light" ;
   fan = mkNoun "fan" ;
 
-  switchOn _ _ = mkVerb "switch" "swithced" "on" ;
-  switchOff _ _ = mkVerb "switch" "swithced" "off" ;
+  switchOn _ = mkVerb "switch" "swithced" "on" ;
+  switchOff _ = mkVerb "switch" "swithced" "off" ;
 
-  dim _ _ = mkVerb "dim" "dimmed" [] ;
+  dim = mkVerb "dim" "dimmed" [] ;
 
   kitchen = ss "kitchen" ;
   livingRoom = ss ["living room"] ;
@@ -70,14 +70,6 @@ oper
     Sg => "is" ;
     Pl => "are"
     } ;
-
-lin
-  switchable_light = ss [] ;
-  switchable_fan  = ss [] ;
-  dimmable_fan  = ss [] ;
-
-  statelike_switchOn _ _ = ss [] ;
-  statelike_switchOff _ _ = ss [] ;
 
 
 }
