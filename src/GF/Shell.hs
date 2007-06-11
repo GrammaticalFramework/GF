@@ -254,7 +254,7 @@ execC co@(comm, opts0) sa@(sh@(st,(h,_,_,_)),a) = checkOptions st co >> case com
     | otherwise -> parse $ prCommandArg a
    where 
       parse x = do
-       warnDiscont opts 
+       warnDiscont opts
        let p = optParseArgErrMsg opts gro x
        case p of
          Ok (ts,msg) 

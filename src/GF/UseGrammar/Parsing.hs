@@ -29,6 +29,7 @@ import GF.Grammar.TypeCheck
 import GF.Grammar.Values
 --import CFMethod
 import GF.UseGrammar.Tokenize
+import GF.UseGrammar.Morphology (isKnownWord)
 import GF.CF.Profile
 import GF.Infra.Option
 import GF.UseGrammar.Custom
@@ -41,6 +42,7 @@ import qualified GF.Parsing.GFC as New
 import GF.Data.Operations
 
 import Data.List (nub,sortBy)
+import Data.Char (toLower)
 import Control.Monad (liftM)
 
 -- AR 26/1/2000 -- 8/4 -- 28/1/2001 -- 9/12/2002
@@ -82,10 +84,21 @@ parseStringC opts0 sg cat s
       toks = case tokenizer s of
                t:_ -> t
                _ -> [] ---- no support for undet. tok.
-  ts <- checkErr $ New.parse algorithm strategy (pInfo sg) (absId sg) cat toks
-  ts' <- checkErr $ 
-           allChecks $ map (annotate (stateGrammarST sg) . refreshMetas []) ts
-  return $ optIntOrAll opts flagNumber ts'
+      unknowns = 
+        [w | TC w <- toks, unk w && unk (uncap w)] ++ [w | TS w <- toks, unk w]
+       where
+        unk w = not $ isKnownWord (morpho sg) w
+        uncap (c:cs) = toLower c : cs
+        uncap s = s
+
+  case unknowns of
+    _:_ -> fail $ "Unknown words:" +++ unwords unknowns
+    _ -> do  
+  
+     ts <- checkErr $ New.parse algorithm strategy (pInfo sg) (absId sg) cat toks
+     ts' <- checkErr $ 
+             allChecks $ map (annotate (stateGrammarST sg) . refreshMetas []) ts
+     return $ optIntOrAll opts flagNumber ts'
 
 
 tokens2trms :: Options ->StateGrammar ->Ident -> CFParser -> [CFTok] -> Check [Tree]
