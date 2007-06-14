@@ -12,7 +12,7 @@
 -- Backtracking state monad, with r\/o environment
 -----------------------------------------------------------------------------
 
-
+{-# OPTIONS_GHC -fglasgow-exts #-}
 module GF.Data.BacktrackM ( -- * the backtracking state monad
 		    BacktrackM,
 		    -- * controlling the monad
