@@ -60,10 +60,10 @@ buildPInfo mcfg fcfg cfg = PInfo { mcfPInfo = PM.buildMCFPInfo mcfg
   where
     grammarLexer s =
       case reads s of
-        [(n::Integer,"")] -> (fcatInt, SInt n)
-        _                 -> case reads s of
-                               [(f::Double,"")] -> (fcatFloat, SFloat  f)
-                               _                -> (fcatString,SString s)
+        [(n,"")] -> (fcatInt, SInt (n::Integer))
+        _        -> case reads s of
+                      [(f,"")] -> (fcatFloat, SFloat  (f::Double))
+                      _        -> (fcatString,SString s)
 
 
 instance Print PInfo where
