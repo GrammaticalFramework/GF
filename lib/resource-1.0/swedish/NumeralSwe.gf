@@ -1,4 +1,4 @@
-concrete NumeralSwe of Numeral = CatSwe ** open ResScand, MorphoSwe in {
+concrete NumeralSwe of Numeral = CatSwe ** open ResSwe, MorphoSwe in {
 
 lincat 
   Digit = {s : DForm => CardOrd => Str} ;

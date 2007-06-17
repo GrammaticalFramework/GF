@@ -8,18 +8,18 @@ flags
 
 lin
   airplane_N = regN "aereo" ;
-  answer_V2S = mkV2S (verboV (rispondere_76 "rispondere")) dative ;
+  answer_V2S = mkV2S (verboV (rispondere_76 "rispondere")) ParadigmsIta.dative ;
   apartment_N = regN "apartamento" ;
   apple_N = regN "mela" ;
   art_N = femN (regN "arte") ;
-  ask_V2Q = mkV2Q (verboV (rispondere_76 "chiedere")) dative ;
+  ask_V2Q = mkV2Q (verboV (rispondere_76 "chiedere")) ParadigmsIta.dative ;
   baby_N = regN "bambino" ;
   bad_A = prefA (mkADeg (regA "cattivo") (regA "peggio")) ;
   bank_N = regN "banca" ;
   beautiful_A = prefA (regADeg "bello") ;
   become_VA = essereV (regV "diventare") ;
   beer_N = regN "birra" ;
-  beg_V2V = mkV2V (regV "pregare") accusative dative ;
+  beg_V2V = mkV2V (regV "pregare") ParadigmsIta.accusative ParadigmsIta.dative ;
   big_A = prefA (regADeg "grande") ;
   bike_N = regN "bicicletta" ;
   bird_N = regN "uccello" ;
@@ -60,12 +60,12 @@ lin
   cow_N = regN "vacca" ;
   die_V = verboV (morire_105 "morire") ;
   dirty_A = regADeg "sporco" ;
-  distance_N3 = mkN3 (regN "distanza") genitive dative ;
+  distance_N3 = mkN3 (regN "distanza") ParadigmsIta.genitive ParadigmsIta.dative ;
   doctor_N = mkN "medico" "medici" masculine ;
   dog_N = regN "cane" ;
   door_N = regN "porta" ;
   drink_V2 = dirV2 (verboV (bere_27 "bere")) ;
-  easy_A2V = mkA2V (regA "facile") dative genitive ;
+  easy_A2V = mkA2V (regA "facile") ParadigmsIta.dative ParadigmsIta.genitive ;
   eat_V2 = dirV2 (regV "mangiare") ;
   empty_A = regADeg "vuoto" ;
   enemy_N = regN "nemico" ;
@@ -79,7 +79,7 @@ lin
   fridge_N = regN "frigorifero" ;
   friend_N = regN "amico" ;
   fruit_N = regN "frutta" ;
-  fun_AV = mkAV (regA "divertente") genitive ;
+  fun_AV = mkAV (regA "divertente") ParadigmsIta.genitive ;
   garden_N = regN "giardino" ;
   girl_N = regN "ragazza" ;
   glove_N = regN "guanto" ;
@@ -116,7 +116,7 @@ lin
   love_N = regN "amore" ;
   love_V2 = dirV2 (regV "amare") ;
   man_N = mkN "uomo" "uomini" masculine ;
-  married_A2 = mkA2 (regA "sposato") dative ;
+  married_A2 = mkA2 (regA "sposato") ParadigmsIta.dative ;
   meat_N = femN (regN "carne") ;
   milk_N = regN "latte" ;
   moon_N = regN "luna" ;
@@ -130,7 +130,7 @@ lin
   old_A =  prefA (regADeg "vecchio") ;
   open_V2 = dirV2 (verboV (aprire_102 "aprire")) ;
   paint_V2A = 
-    mkV2A (verboV (cingere_31 "pingere")) accusative (mkPrep "in") ; ----
+    mkV2A (verboV (cingere_31 "pingere")) ParadigmsIta.accusative (mkPrep "in") ; ----
   paper_N = regN "carta" ;
   paris_PN = mkPN "Parigi" masculine ;
   peace_N = femN (regN "pace") ;
@@ -159,8 +159,8 @@ lin
   sea_N = regN "mare" ;
   seek_V2 = dirV2 (regV "cercare") ;
   see_V2 = dirV2 (verboV (vedere_93 "vedere")) ;
-  sell_V3 = dirV3 (verboV (scendere_80 "vendere")) dative ; ---- except some forms
-  send_V3 = dirV3 (regV "mandare") dative ;
+  sell_V3 = dirV3 (verboV (scendere_80 "vendere")) ParadigmsIta.dative ; ---- except some forms
+  send_V3 = dirV3 (regV "mandare") ParadigmsIta.dative ;
   sheep_N = regN "agnello" ;
   ship_N = femN (regN "nave") ;
   shirt_N = regN "camicia" ;
@@ -184,7 +184,7 @@ lin
   switch8off_V2 = dirV2 (verboV (cingere_31 "spingere")) ;
   switch8on_V2 = dirV2 (regV "allumare") ; ----
   table_N = regN "tavola" ; --- tavolo
-  talk_V3 = mkV3 (regV "parlare") dative genitive ;
+  talk_V3 = mkV3 (regV "parlare") ParadigmsIta.dative ParadigmsIta.genitive ;
   teacher_N = regN "professore" ;
   teach_V2 = dirV2 (regV "insegnare") ;
   television_N = femN (regN "televisione") ;
@@ -198,7 +198,7 @@ lin
   understand_V2 = dirV2 (regV "capire") ;
   university_N = regN "università" ;
   village_N = regN "paese" ;
-  wait_V2 = mkV2 (regV "aspettare") dative ;
+  wait_V2 = mkV2 (regV "aspettare") ParadigmsIta.dative ;
   walk_V = regV "camminare" ;
   warm_A = regADeg "caldo" ;
   war_N = regN "guerra" ;
@@ -219,7 +219,7 @@ lin
   now_Adv = mkAdv "adesso" ;
   already_Adv = mkAdv "già" ;
   song_N = femN (regN "canzone") ;
-  add_V3 = dirV3 (verboV (giungere_55 "aggiungere")) dative ;
+  add_V3 = dirV3 (verboV (giungere_55 "aggiungere")) ParadigmsIta.dative ;
   number_N = regN "numero" ;
   put_V2 = dirV2 (verboV (mettere_57 "mettere")) ;
   stop_V = reflV (regV "fermare") ;

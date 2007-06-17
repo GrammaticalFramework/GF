@@ -13,20 +13,20 @@ incomplete concrete CatScand of Cat =
 
 -- Sentence
 
-    Cl = {s : Tense => Anteriority => Polarity => Order => Str} ;
-    Slash = {s : Tense => Anteriority => Polarity => Order => Str} ** {c2 : Str} ;
+    Cl = {s : R.Tense => Anteriority => Polarity => Order => Str} ;
+    Slash = {s : R.Tense => Anteriority => Polarity => Order => Str} ** {c2 : Str} ;
     Imp = {s : Polarity => Number => Str} ;
 
 -- Question
 
-    QCl = {s : Tense => Anteriority => Polarity => QForm => Str} ;
+    QCl = {s : R.Tense => Anteriority => Polarity => QForm => Str} ;
     IP = {s : NPForm => Str ; gn : GenNum} ;
     IComp = {s : AFormPos => Str} ; 
     IDet = {s : Gender => Str ; n : Number ; det : DetSpecies} ;
 
 -- Relative; the case $c$ is for "det" clefts.
 
-    RCl = {s : Tense => Anteriority => Polarity => Agr => Str ; c : NPForm} ;
+    RCl = {s : R.Tense => Anteriority => Polarity => Agr => Str ; c : NPForm} ;
     RP  = {s : GenNum => RCase => Str ; a : RAgr} ;
 
 -- Verb

@@ -202,7 +202,6 @@ oper
 
   regPN : Str -> PN ;
   mkPN  : N -> PN ;
-  mkNP  : N -> Number -> NP ; 
 
 --2 Adjectives
 
@@ -475,6 +474,8 @@ reg3N = \vesi,veden,vesiä ->
   genN2 = \n -> mkN2 n (casePrep genitive) ;
   regPN m = mkPN (regN m) ;
   mkPN n = mkProperName n ** {lock_PN = <>} ;
+
+  mkNP  : N -> Number -> CatFin.NP ; 
   mkNP noun num = {
     s = \\c => noun.s ! NCase num (npform2case num c) ; 
     a = agrP3 num ;

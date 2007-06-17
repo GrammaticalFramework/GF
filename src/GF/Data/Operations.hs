@@ -34,7 +34,7 @@ module GF.Data.Operations (-- * misc functions
 
 		   -- * binary search trees; now with FiniteMap
 		   BinTree, emptyBinTree, isInBinTree, justLookupTree,
-		   lookupTree, lookupTreeMany, updateTree,
+		   lookupTree, lookupTreeMany, lookupTreeManyAll, updateTree,
 		   buildTree, filterBinTree,
 		   sorted2tree, mapTree, mapMTree, tree2list,
  
@@ -317,6 +317,12 @@ lookupTreeMany pr (t:ts) x = case lookupTree pr x t of
   Ok v -> return v
   _ -> lookupTreeMany pr ts x
 lookupTreeMany pr [] x = Bad $ "failed to find" +++ pr x
+
+lookupTreeManyAll :: Ord a => (a -> String) -> [BinTree a b] -> a -> [b]
+lookupTreeManyAll pr (t:ts) x = case lookupTree pr x t of
+  Ok v -> v : lookupTreeManyAll pr ts x
+  _ -> lookupTreeManyAll pr ts x
+lookupTreeManyAll pr [] x = []
 
 -- | destructive update
 updateTree :: (Ord a) => (a,b) -> BinTree a b -> BinTree a b

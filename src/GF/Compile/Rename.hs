@@ -39,6 +39,7 @@ import GF.Compile.Extend
 import GF.Data.Operations
 
 import Control.Monad
+import Data.List (nub)
 
 renameGrammar :: SourceGrammar -> Err SourceGrammar
 renameGrammar g = liftM (MGrammar . reverse) $ foldM renameModule [] (modules g)
@@ -69,12 +70,22 @@ renameIdentTerm :: Status -> Term -> Err Term
 renameIdentTerm env@(act,imps) t = 
  errIn ("atomic term" +++ prt t +++ "given" +++ unwords (map (prt . fst) qualifs)) $
    case t of
-  Vr c -> do
-    f <- err (predefAbs c) return $ lookupTreeMany prt opens c
-    return $ f c
-  Cn c -> do
-    f <- lookupTreeMany prt opens c
-    return $ f c
+  Vr c -> case lookupTree prt c act of
+    Ok f -> return $ f c
+    _ -> case lookupTreeManyAll prt opens c of
+      [f] -> return $ f c
+      []  -> predefAbs c ("constant not found:" +++ prt c)
+      fs -> case nub [f c | f <- fs]  of
+        [tr] -> return tr
+        ts -> Bad $ "conflicting imports:" +++ unwords (map prt ts) 
+  Cn c -> case lookupTree prt c act of
+    Ok f -> return $ f c
+    _ -> case lookupTreeManyAll prt opens c of
+      [f] -> return $ f c
+      []  -> Bad ("constant not found:" +++ prt c)
+      fs -> case nub [f c | f <- fs]  of
+        [tr] -> return tr
+        ts -> Bad $ "conflicting imports:" +++ unwords (map prt ts) 
   Q m' c | m' == cPredef {- && isInPredefined c -} -> return t
   Q m' c -> do
     m <- lookupErr m' qualifs
@@ -87,15 +98,15 @@ renameIdentTerm env@(act,imps) t =
     return $ f c
   _ -> return t
  where
-   opens   = act : [st  | (OSimple _ _,st) <- imps]
+   opens  = [st  | (OSimple _ _,st) <- imps]
    qualifs = [(m, st) | (OQualif _ m _, st) <- imps] ++ 
              [(m, st) | (OSimple _ m, st) <- imps] -- qualif is always possible
 
    -- this facility is mainly for BWC with GF1: you need not import PredefAbs
    predefAbs c s = case c of
-     IC "Int" -> return $ const $ Q cPredefAbs cInt
-     IC "Float" -> return $ const $ Q cPredefAbs cFloat
-     IC "String" -> return $ const $ Q cPredefAbs cString
+     IC "Int" -> return $ Q cPredefAbs cInt
+     IC "Float" -> return $ Q cPredefAbs cFloat
+     IC "String" -> return $ Q cPredefAbs cString
      _ -> Bad s
 
 --- | would it make sense to optimize this by inlining?
@@ -124,7 +135,7 @@ buildStatus :: SourceGrammar -> Ident -> SourceModInfo -> Err Status
 buildStatus gr c mo = let mo' = self2status c mo in case mo of
   ModMod m -> do
     let gr1 = MGrammar $ (c,mo) : modules gr 
-        ops = [OSimple OQNormal e | e <- allExtendsPlus gr1 c] ++ allOpens m
+        ops = [OSimple OQNormal e | e <- allExtends gr1 c] ++ allOpens m
     mods <- mapM (lookupModule gr1 . openedModule) ops
     let sts = map modInfo2status $ zip ops mods    
     return $ if isModCnc m
