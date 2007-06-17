@@ -1,7 +1,7 @@
 --# -path=.:../romance:../common:../abstract:../../prelude
 
 concrete LexiconCat of Lexicon = CatCat ** open 
-  MorphoCat, ParadigmsCat, BeschCat in {
+  (M=MorphoCat), ParadigmsCat, BeschCat in {
 
 flags 
   optimize=values ;

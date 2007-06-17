@@ -9,11 +9,11 @@ concrete IdiomGer of Idiom = CatGer **
 
     CleftNP np rs = mkClause "es" (agrP3 Sg) 
       (insertExtrapos (rs.s ! gennum np.a.g np.a.n) ----
-        (insertObj (\\_ => np.s ! rs.c) (predV sein_V))) ;
+        (insertObj (\\_ => np.s ! rs.c) (predV MorphoGer.sein_V))) ;
 
     CleftAdv ad s = mkClause "es" (agrP3 Sg) 
       (insertExtrapos (conjThat ++ s.s ! Sub)
-        (insertObj (\\_ => ad.s) (predV sein_V))) ;
+        (insertObj (\\_ => ad.s) (predV MorphoGer.sein_V))) ;
 
 
     ExistNP np = 
@@ -41,6 +41,6 @@ concrete IdiomGer of Idiom = CatGer **
       } ;
 
   oper
-    geben = dirV2 (mkV "geben" "gibt" "gib" "gab" "gäbe" "gegeben") ;
+    geben = dirV2 (mk6V "geben" "gibt" "gib" "gab" "gäbe" "gegeben") ;
 }
 

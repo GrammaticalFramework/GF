@@ -5,7 +5,7 @@ instance DiffSpa of DiffRomance = open CommonRomance, PhonoSpa, BeschSpa, Prelud
   flags optimize=noexpand ;
 
   param 
-    Prep = P_de | P_a ;
+    Prepos = P_de | P_a ;
     VType = VHabere | VRefl ;
 
   oper

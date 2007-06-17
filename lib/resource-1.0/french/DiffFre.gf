@@ -6,7 +6,7 @@ instance DiffFre of DiffRomance = open CommonRomance, PhonoFre, Prelude in {
 --  flags optimize=all ;
 
   param 
-    Prep = P_de | P_a ;
+    Prepos = P_de | P_a ;
     VType = VHabere | VEsse | VRefl ;
 
   oper

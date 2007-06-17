@@ -149,7 +149,7 @@ lin
       Fem Pl P2 ;
 
 oper
-  etConj : {s : Str ; n : Number} = {s = "i" } ** {n = Pl} ;
+  etConj : {s : Str ; n : MorphoCat.Number} = {s = "i" } ** {n = Pl} ;
 
 }
 
