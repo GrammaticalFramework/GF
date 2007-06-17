@@ -6,9 +6,9 @@ concrete NumeralFin of Numeral = CatFin **  open Prelude, ParadigmsFin, MorphoFi
 flags optimize = all_subs ;
 
 lincat 
-  Sub1000000 = {s : CardOrd => Str ; n : Number} ;
+  Sub1000000 = {s : CardOrd => Str ; n : MorphoFin.Number} ;
   Digit = {s : CardOrd => Str} ;
-  Sub10, Sub100, Sub1000 = {s : NumPlace => CardOrd => Str ; n : Number} ;
+  Sub10, Sub100, Sub1000 = {s : NumPlace => CardOrd => Str ; n : MorphoFin.Number} ;
 
 lin 
   num x = x ;
@@ -120,7 +120,7 @@ oper
       }
     } ;
 
-  sataaN : {s : Number => CardOrd => Str} = {s = table {
+  sataaN : {s : MorphoFin.Number => CardOrd => Str} = {s = table {
     Sg => sataN.s ;
     Pl => table {
       NCard (NCase Sg Nom) => "sataa" ;

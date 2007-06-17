@@ -12,20 +12,20 @@ concrete CatFin of Cat = CommonX ** open ResFin, Prelude in {
 
 -- Sentence
 
-    Cl    = {s : Tense => Anteriority => Polarity => SType => Str} ;
-    Slash = {s : Tense => Anteriority => Polarity => Str ; c2 : Compl} ;
+    Cl    = {s : ResFin.Tense => Anteriority => Polarity => SType => Str} ;
+    Slash = {s : ResFin.Tense => Anteriority => Polarity => Str ; c2 : Compl} ;
     Imp   = {s : Polarity => Number => Str} ;
 
 -- Question
 
-    QCl   = {s : Tense => Anteriority => Polarity => Str} ;
+    QCl   = {s : ResFin.Tense => Anteriority => Polarity => Str} ;
     IP    = {s : NPForm => Str ; n : Number} ;
     IComp = {s : Agr => Str} ; 
     IDet  = {s : Case => Str ; n : Number} ;
 
 -- Relative
 
-    RCl   = {s : Tense => Anteriority => Polarity => Agr => Str ; c : NPForm} ;
+    RCl   = {s : ResFin.Tense => Anteriority => Polarity => Agr => Str ; c : NPForm} ;
     RP    = {s : Number => NPForm => Str ; a : RAgr} ;
 
 -- Verb

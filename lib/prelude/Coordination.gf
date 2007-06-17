@@ -4,8 +4,6 @@ param
   ListSize = TwoElem | ManyElem ;
 
 oper 
-  SS = {s : Str} ; ----
-
   ListX = {s1,s2 : Str} ;
 
   twoStr : (x,y : Str) -> ListX = \x,y -> 

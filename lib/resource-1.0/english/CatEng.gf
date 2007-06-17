@@ -12,29 +12,29 @@ concrete CatEng of Cat = CommonX ** open ResEng, Prelude in {
 
 -- Sentence
 
-    Cl = {s : Tense => Anteriority => CPolarity => Order => Str} ;
+    Cl = {s : ResEng.Tense => Anteriority => CPolarity => Order => Str} ;
     Slash = {
-      s : Tense => Anteriority => CPolarity => Order => Str ;
+      s : ResEng.Tense => Anteriority => CPolarity => Order => Str ;
       c2 : Str
       } ;
     Imp = {s : CPolarity => ImpForm => Str} ;
 
 -- Question
 
-    QCl = {s : Tense => Anteriority => CPolarity => QForm => Str} ;
+    QCl = {s : ResEng.Tense => Anteriority => CPolarity => QForm => Str} ;
     IP = {s : Case => Str ; n : Number} ;
     IComp = {s : Str} ;    
     IDet = {s : Str ; n : Number} ;
 
 -- Relative
 
-    RCl = {s : Tense => Anteriority => CPolarity => Agr => Str ; c : Case} ;
+    RCl = {s : ResEng.Tense => Anteriority => CPolarity => Agr => Str ; c : Case} ;
     RP = {s : RCase => Str ; a : RAgr} ;
 
 -- Verb
 
     VP = {
-      s : Tense => Anteriority => CPolarity => Order => Agr => {fin, inf : Str} ;
+      s : ResEng.Tense => Anteriority => CPolarity => Order => Agr => {fin, inf : Str} ;
       prp : Str ; -- present participle 
       inf : Str ; -- infinitive
       ad  : Str ;
