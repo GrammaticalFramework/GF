@@ -12,7 +12,7 @@ GFC=$(GFCC) -src
 
 # comment the first and uncomment the second in Windows
 GFCP=$(GFC) -preproc=./mkPresent
-GFCCP=$(GFCC) -preproc=./mkPresent
+GFCCP=$(GFCC) -preproc=./mkPresent -p
 #GFCP=$(GFC) -preproc=mkPresent
 
 
