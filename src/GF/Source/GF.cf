@@ -1,6 +1,11 @@
 -- AR 2/5/2003, 14-16 o'clock, Torino
 
-entrypoints Grammar, ModDef, OldGrammar, Exp ; -- let's see if more are needed
+-- 17/6/2007: marked with suffix --% those lines that are obsolete and
+-- should not be included in documentation
+
+entrypoints Grammar, ModDef, 
+  OldGrammar, --%
+  Exp ; -- let's see if more are needed
 
 comment "--" ;
 comment "{-" "-}" ;
@@ -14,18 +19,18 @@ Gr. Grammar ::= [ModDef] ;
 terminator ModDef "" ;
 _. ModDef ::= ModDef ";" ;
 
--- The $main$ multilingual grammar structure
+-- The $main$ multilingual grammar structure --%
 
-MMain. ModDef ::= "grammar" Ident "=" "{" "abstract" "=" Ident ";" [ConcSpec] "}" ;
+MMain. ModDef ::= "grammar" Ident "=" "{" "abstract" "=" Ident ";" [ConcSpec] "}" ;--%
 
-ConcSpec. ConcSpec ::= Ident "=" ConcExp ;
-separator ConcSpec ";" ;
+ConcSpec. ConcSpec ::= Ident "=" ConcExp ;--%
+separator ConcSpec ";" ;--%
 
-ConcExp. ConcExp ::= Ident [Transfer] ;
+ConcExp. ConcExp ::= Ident [Transfer] ;--%
 
-separator Transfer "" ;
-TransferIn.  Transfer ::= "(" "transfer" "in" Open ")" ;  
-TransferOut. Transfer ::= "(" "transfer" "out" Open ")" ;  
+separator Transfer "" ;--%
+TransferIn.  Transfer ::= "(" "transfer" "in" Open ")" ;  --%
+TransferOut. Transfer ::= "(" "transfer" "out" Open ")" ;  --%
 
 -- the individual modules
 
@@ -41,8 +46,8 @@ MTTransfer.  ModType ::= "transfer" Ident ":" Open "->" Open ;
 MBody.  ModBody ::= Extend Opens "{" [TopDef] "}" ;
 MWith.  ModBody ::=              Ident "with" [Open] ;
 MWithE. ModBody ::= [Included] "**" Ident "with" [Open] ;
-MReuse. ModBody ::= "reuse" Ident ;
-MUnion. ModBody ::= "union" [Included] ;
+MReuse. ModBody ::= "reuse" Ident ; --%
+MUnion. ModBody ::= "union" [Included] ;--%
 
 separator TopDef "" ;
 
@@ -61,8 +66,8 @@ CMCompl.   ComplMod ::= ;
 CMIncompl. ComplMod ::= "incomplete" ;
 
 QOCompl.     QualOpen ::= ;
-QOIncompl.   QualOpen ::= "incomplete" ;
-QOInterface. QualOpen ::= "interface" ;
+QOIncompl.   QualOpen ::= "incomplete" ;--%
+QOInterface. QualOpen ::= "interface" ;--%
 
 separator Included "," ;
 
@@ -85,7 +90,7 @@ DefFunData.TopDef ::= "data" [FunDef] ;
 DefDef.    TopDef ::= "def" [Def] ;
 DefData.   TopDef ::= "data" [DataDef] ;
 
-DefTrans.  TopDef ::= "transfer" [Def] ;
+DefTrans.  TopDef ::= "transfer" [Def] ;--%
 
 DefPar.    TopDef ::= "param" [ParDef] ;
 DefOper.   TopDef ::= "oper"  [Def] ;
@@ -151,8 +156,8 @@ separator LocDef ";" ;
 -- terms and types
 
 EIdent.    Exp6 ::= Ident ;
-EConstr.   Exp6 ::= "{" Ident "}" ;
-ECons.     Exp6 ::= "%" Ident "%" ;
+EConstr.   Exp6 ::= "{" Ident "}" ;--%
+ECons.     Exp6 ::= "%" Ident "%" ;--%
 ESort.     Exp6 ::= Sort ;
 EString.   Exp6 ::= String ;
 EInt.      Exp6 ::= Integer ;
@@ -164,12 +169,12 @@ EList.     Exp6 ::= "[" Ident Exps "]" ;
 EStrings.  Exp6 ::= "[" String "]" ;
 ERecord.   Exp6 ::= "{" [LocDef] "}" ; -- !
 ETuple.    Exp6 ::= "<" [TupleComp] ">" ;  --- needed for separator ","
-EIndir.    Exp6 ::= "(" "in" Ident ")" ;   -- indirection, used in judgements
+EIndir.    Exp6 ::= "(" "in" Ident ")" ;   -- indirection, used in judgements --%
 ETyped.    Exp6 ::= "<" Exp ":" Exp ">" ;  -- typing, used for annotations
 
 EProj.     Exp5 ::= Exp5 "." Label ;
-EQConstr.  Exp5 ::= "{" Ident "." Ident "}" ;  -- qualified constructor
-EQCons.    Exp5 ::= "%" Ident "." Ident  ;     -- qualified constant
+EQConstr.  Exp5 ::= "{" Ident "." Ident "}" ;  -- qualified constructor --%
+EQCons.    Exp5 ::= "%" Ident "." Ident  ;     -- qualified constant --%
 
 EApp.      Exp4 ::= Exp4 Exp5 ;
 ETable.    Exp4 ::= "table" "{" [Case] "}" ;
@@ -196,7 +201,7 @@ ETType.    Exp  ::= Exp3 "=>" Exp ; -- these are thus right associative
 ELet.      Exp  ::= "let" "{" [LocDef] "}" "in" Exp ;
 ELetb.     Exp  ::= "let" [LocDef] "in" Exp ;
 EWhere.    Exp  ::= Exp3 "where" "{" [LocDef] "}" ;
-EEqs.      Exp  ::= "fn" "{" [Equation] "}" ;
+EEqs.      Exp  ::= "fn" "{" [Equation] "}" ; --%
 
 EExample.  Exp  ::= "in" Exp5 String ;
 
@@ -212,7 +217,7 @@ ConsExp. Exps ::= Exp6 Exps ; -- Exp6 to force parantheses
 
 PW.     Patt2  ::= "_" ;
 PV.     Patt2  ::= Ident ;
-PCon.   Patt2  ::= "{" Ident "}" ;
+PCon.   Patt2  ::= "{" Ident "}" ; --%
 PQ.     Patt2  ::= Ident "." Ident ;
 PInt.   Patt2  ::= Integer ;
 PFloat. Patt2  ::= Double ;
@@ -238,7 +243,12 @@ LVar.   Label ::= "$" Integer ;
 
 -- basic types
 
-rules Sort ::= "Type" | "PType" | "Tok" | "Str" | "Strs" ;
+rules Sort ::= 
+    "Type" 
+  | "PType" 
+  | "Tok"  --%
+  | "Str" 
+  | "Strs" ;
 
 separator PattAss ";" ;
 
@@ -274,11 +284,11 @@ Case. Case ::= Patt "=>" Exp ;
 
 separator nonempty Case ";" ;
 
--- cases in abstract syntax
+-- cases in abstract syntax --%
 
-Equ. Equation ::= [Patt] "->" Exp ;
+Equ. Equation ::= [Patt] "->" Exp ; --%
 
-separator Equation ";" ;
+separator Equation ";" ; --%
 
 -- prefix alternatives
 
@@ -294,36 +304,36 @@ DDExp.  DDecl ::= Exp6 ;  -- can thus *not* be an application
 separator DDecl "" ;
 
 
---------------------------------------
+-------------------------------------- --%
 
--- for backward compatibility
+-- for backward compatibility --%
 
-OldGr.  OldGrammar ::= Include [TopDef] ;
+OldGr.  OldGrammar ::= Include [TopDef] ; --%
 
-NoIncl. Include ::= ;
-Incl.   Include ::= "include" [FileName] ;
+NoIncl. Include ::= ; --%
+Incl.   Include ::= "include" [FileName] ; --%
 
-FString. FileName ::= String ;
+FString. FileName ::= String ; --%
 
-terminator nonempty FileName ";" ;
+terminator nonempty FileName ";" ; --%
 
-FIdent.  FileName ::= Ident ;
-FSlash.  FileName ::= "/" FileName ;
-FDot.    FileName ::= "." FileName ;
-FMinus.  FileName ::= "-" FileName ;
-FAddId.  FileName ::= Ident FileName ;
+FIdent.  FileName ::= Ident ; --%
+FSlash.  FileName ::= "/" FileName ; --%
+FDot.    FileName ::= "." FileName ; --%
+FMinus.  FileName ::= "-" FileName ; --%
+FAddId.  FileName ::= Ident FileName ; --%
 
-token LString '\'' (char - '\'')* '\'' ;
-ELString.  Exp6 ::= LString ;
-ELin.      Exp4 ::= "Lin" Ident ;
+token LString '\'' (char - '\'')* '\'' ; --%
+ELString.  Exp6 ::= LString ; --%
+ELin.      Exp4 ::= "Lin" Ident ; --%
 
-DefPrintOld.  TopDef ::= "printname" [PrintDef] ;
-DefLintype.   TopDef ::= "lintype"   [Def] ;
-DefPattern.   TopDef ::= "pattern"   [Def] ;
+DefPrintOld.  TopDef ::= "printname" [PrintDef] ; --%
+DefLintype.   TopDef ::= "lintype"   [Def] ; --%
+DefPattern.   TopDef ::= "pattern"   [Def] ; --%
 
--- deprecated packages are attempted to be interpreted
-DefPackage.   TopDef ::= "package" Ident "=" "{" [TopDef] "}" ";" ;
+-- deprecated packages are attempted to be interpreted --%
+DefPackage.   TopDef ::= "package" Ident "=" "{" [TopDef] "}" ";" ; --%
 
--- these two are just ignored after parsing
-DefVars.      TopDef ::= "var" [Def] ;
-DefTokenizer. TopDef ::= "tokenizer" Ident ";" ;
+-- these two are just ignored after parsing --%
+DefVars.      TopDef ::= "var" [Def] ; --%
+DefTokenizer. TopDef ::= "tokenizer" Ident ";" ; --%
