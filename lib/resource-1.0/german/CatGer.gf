@@ -14,21 +14,21 @@ concrete CatGer of Cat =
 
 -- Sentence
 
-    Cl = {s : Mood => Tense => Anteriority => Polarity => Order => Str} ;
-    Slash = {s : Mood => Tense => Anteriority => Polarity => Order => Str} ** 
+    Cl = {s : Mood => ResGer.Tense => Anteriority => Polarity => Order => Str} ;
+    Slash = {s : Mood => ResGer.Tense => Anteriority => Polarity => Order => Str} ** 
             {c2 : Preposition} ;
     Imp = {s : Polarity => ImpForm => Str} ;
 
 -- Question
 
-    QCl = {s : Mood => Tense => Anteriority => Polarity => QForm => Str} ;
+    QCl = {s : Mood => ResGer.Tense => Anteriority => Polarity => QForm => Str} ;
     IP = {s : Case => Str ; n : Number} ;
     IComp = {s : Agr => Str} ; 
     IDet = {s : Gender => Case => Str ; n : Number} ;
 
 -- Relative
 
-    RCl = {s : Mood => Tense => Anteriority => Polarity => GenNum => Str ; c : Case} ;
+    RCl = {s : Mood => ResGer.Tense => Anteriority => Polarity => GenNum => Str ; c : Case} ;
     RP = {s : GenNum => Case => Str ; a : RAgr} ;
 
 -- Verb
@@ -80,7 +80,7 @@ concrete CatGer of Cat =
 
 -- tense with possibility to choose conjunctive forms
 
-    Tense = {s : Str ; t : Tense ; m : Mood} ;
+    Tense = {s : Str ; t : ResGer.Tense ; m : Mood} ;
 
   lin
     TPres = {s = [] ; t = Pres ; m = MIndic} ;

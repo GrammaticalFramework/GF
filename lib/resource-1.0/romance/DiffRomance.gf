@@ -14,7 +14,7 @@ interface DiffRomance = open CommonRomance, Prelude in {
 -- Prepositions that fuse with the article
 -- (Fre, Spa "de", "a"; Ita also "con", "da", "in", "su).
 
-  param Prep ;
+  param Prepos ;
 
 -- Which types of verbs exist, in terms of auxiliaries.
 -- (Fre, Ita "avoir", "être", and refl; Spa only "haber" and refl).
@@ -99,7 +99,7 @@ interface DiffRomance = open CommonRomance, Prelude in {
 --2 Contants needed in type signatures above
 
 param
-  Case = Nom | Acc | CPrep Prep ; 
+  Case = Nom | Acc | CPrep Prepos ; 
 
 oper
   Verb = {s : VF => Str ; vtyp : VType} ;

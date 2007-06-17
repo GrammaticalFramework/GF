@@ -1,7 +1,7 @@
 --# -path=.:../romance:../common:../abstract:../../prelude
 
 concrete LexiconSpa of Lexicon = CatSpa ** open 
-  MorphoSpa, ParadigmsSpa, BeschSpa in {
+  (M=MorphoSpa), ParadigmsSpa, BeschSpa in {
 
 flags 
   optimize=values ;
@@ -223,8 +223,8 @@ lin
    stop_V = regV "parar" ; 
    jump_V = regV "saltar" ;
 
-  left_Ord = mkOrd (regA "izquierda") ;
-  right_Ord = mkOrd (regA "derecha") ;
+  left_Ord = M.mkOrd (regA "izquierda") ;
+  right_Ord = M.mkOrd (regA "derecha") ;
   far_Adv = mkAdv "lejos" ; ----?
    correct_A = regA "correcto" ;
    dry_A = regA "seco" ;

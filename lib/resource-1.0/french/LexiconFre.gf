@@ -1,7 +1,7 @@
 --# -path=.:../romance:../common:../abstract:../../prelude
 
 concrete LexiconFre of Lexicon = CatFre ** 
-  open MorphoFre, ParadigmsFre, IrregFre in {
+  open (M = MorphoFre), ParadigmsFre, IrregFre in {
 
 flags 
   optimize=values ;
@@ -226,8 +226,8 @@ lin
   stop_V = reflV (regV "arrêter") ;
   jump_V = regV "sauter" ;
 
-  left_Ord = mkOrd (regA "gauche") ;
-  right_Ord = mkOrd (regA "droite") ;
+  left_Ord = M.mkOrd (regA "gauche") ;
+  right_Ord = M.mkOrd (regA "droite") ;
   far_Adv = mkAdv "loin" ;
   correct_A = regA "correct" ;
   dry_A = (mkA "sec" "sèche" "secs" "sèches") ;

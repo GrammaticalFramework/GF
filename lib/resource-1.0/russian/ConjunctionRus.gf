@@ -70,19 +70,22 @@ concrete ConjunctionRus of Conjunction =
 
 
 oper
-  -- We have to define a calculus of numbers of persons. For numbers,
--- it is like the conjunction with $Pl$ corresponding to $False$.
 
-  conjNumber : Number -> Number -> Number = \m,n -> case <m,n> of {
-    <Sg,Sg> => Sg ;
-    _ => Pl 
-    } ;
+-- We have to define a calculus of numbers of persons. For numbers,
+-- it is like the conjunction with $Pl$ corresponding to $False$.
+--
+-- The following are given in $ParamX$.
+--
+--  conjNumber : Number -> Number -> Number = \m,n -> case <m,n> of {
+--    <Sg,Sg> => Sg ;
+--    _ => Pl 
+--    } ;
 
 -- For persons, we let the latter argument win ("либо ты, либо я пойду"
 -- but "либо я, либо ты пойдешь"). This is not quite clear.
 
-  conjPerson : Person -> Person -> Person = \_,p -> 
-    p ;
+--  conjPerson : Person -> Person -> Person = \_,p -> 
+--    p ;
 
 -- For pron, we let the latter argument win - "Маша или моя мама" (Nominative case)
 -- but - "моей или Машина мама" (Genetive case) both corresponds to 

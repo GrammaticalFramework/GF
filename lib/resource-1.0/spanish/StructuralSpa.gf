@@ -150,7 +150,7 @@ lin
       Masc Sg P3 ;
 
 oper
-  etConj : {s : Str ; n : Number} = {s = pre {
+  etConj : {s : Str ; n : MorphoSpa.Number} = {s = pre {
     "y" ; 
     "y" / strs {"ya" ; "ye" ; "yo" ; "yu"} ;
     "e" / strs {"i" ; "hi" ; "y"}

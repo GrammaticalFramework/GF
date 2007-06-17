@@ -5,7 +5,7 @@ instance DiffCat of DiffRomance = open CommonRomance, PhonoCat, BeschCat, Prelud
   flags optimize=noexpand ;
 
   param 
-    Prep = P_de | P_a ;
+    Prepos = P_de | P_a ;
     VType = VHabere | VRefl ;
 
 oper

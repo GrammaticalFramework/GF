@@ -4,27 +4,27 @@ concrete IdiomDan of Idiom = CatDan **
   flags optimize=all_subs ;
 
   lin
-    ImpersCl vp = mkClause "det" (agrP3 neutrum Sg) vp ;
-    GenericCl vp = mkClause "man" (agrP3 utrum Sg) vp ;
+    ImpersCl vp = mkClause "det" (agrP3 MorphoDan.neutrum Sg) vp ;
+    GenericCl vp = mkClause "man" (agrP3 MorphoDan.utrum Sg) vp ;
 
-    CleftNP np rs = mkClause "det" (agrP3 neutrum Sg) 
+    CleftNP np rs = mkClause "det" (agrP3 MorphoDan.neutrum Sg) 
       (insertObj (\\_ => rs.s ! np.a)
         (insertObj (\\_ => np.s ! rs.c) (predV verbBe))) ;
 
-    CleftAdv ad s = mkClause "det" (agrP3 neutrum Sg) 
+    CleftAdv ad s = mkClause "det" (agrP3 MorphoDan.neutrum Sg) 
       (insertObj (\\_ => "som" ++ s.s ! Sub)
         (insertObj (\\_ => ad.s) (predV verbBe))) ;
 
 
     ExistNP np = 
-      mkClause "det" (agrP3 neutrum Sg) (insertObj 
+      mkClause "det" (agrP3 MorphoDan.neutrum Sg) (insertObj 
         (\\_ => np.s ! accusative) (predV (depV finde_V))) ;
 
     ExistIP ip = {
       s = \\t,a,p => 
             let 
               cls = 
-               (mkClause "det" (agrP3 neutrum Sg) (predV (depV finde_V))).s ! t ! a ! p ;
+               (mkClause "det" (agrP3 MorphoDan.neutrum Sg) (predV (depV finde_V))).s ! t ! a ! p ;
               who = ip.s ! accusative
             in table {
               QDir   => who ++ cls ! Inv ;

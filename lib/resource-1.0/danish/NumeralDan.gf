@@ -1,4 +1,4 @@
-concrete NumeralDan of Numeral = CatDan ** open ResScand, MorphoDan in {
+concrete NumeralDan of Numeral = CatDan ** open MorphoDan in {
 
 
 -- AR 12/10/2002 following www.geocities.com/tsca.geo/dansk/dknummer.html

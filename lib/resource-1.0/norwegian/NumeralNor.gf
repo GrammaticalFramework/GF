@@ -1,4 +1,4 @@
-concrete NumeralNor of Numeral = CatNor ** open ResScand, MorphoNor in {
+concrete NumeralNor of Numeral = CatNor ** open MorphoNor in {
 
 lincat 
   Digit = {s : DForm => CardOrd => Str} ;

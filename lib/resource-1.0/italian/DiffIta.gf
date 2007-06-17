@@ -5,7 +5,7 @@ instance DiffIta of DiffRomance = open CommonRomance, PhonoIta, BeschIta, Prelud
   flags optimize=all ;
 
   param 
-    Prep = P_di | P_a | P_da | P_in | P_su | P_con ;
+    Prepos = P_di | P_a | P_da | P_in | P_su | P_con ;
     VType = VHabere | VEsse | VRefl ;
 
   oper
