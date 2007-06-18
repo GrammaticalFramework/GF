@@ -18,18 +18,14 @@ To precompile a multilingual numeral grammar:
 
   gf <mkNumerals.gfs
 
-To open a translation session,
+To test,
 
-  gf numerals.gfcm  -- in the OS shell
-    ts -lang        -- in the GF shell
+  gf numerals.gfcm             -- in the OS shell
+  generate_random | tree_bank  -- in the GF shell
 
-To create an example HTML page with translations of a numeral:
+  parse -lang=danish "tres" | linearize -lang=english
 
-  echo "x=2341" | gft numerals.gfcm >2341.html
-
-(Requires the gft program, produced by "make gft" in GF sources)
-
-Document last updated August 3, 2004 by Aarne Ranta.
+Document last updated 18 June 2007 by Aarne Ranta.
 
 Copyright (c) Koen Claessen, Carlos Gonzalía, Qiao Haiyan, Harald
 Hammarström, Patrik Jansson, Peter Ljunglöf, Wojciech Mostowski, Aarne

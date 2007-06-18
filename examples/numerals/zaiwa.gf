@@ -1,5 +1,7 @@
 include numerals.Abs.gf ;
 
+flags lexer = words ;
+
 param Size = sg | sub10 | pl ;
 
 oper LinDigit = {s : Str ; size : Size} ;
