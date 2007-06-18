@@ -460,10 +460,23 @@ oper
 -- This is a collective dispatcher.
 
   mkVerbReg : Str -> Verbe = \parler ->
+    case parler of {
+      _ + "ir"              => conj2finir parler ;
+      _ + "re"              => conj3rendre parler ;
+      _ + "éger"            => conj1assiéger parler ;
+      _ + ("eler" | "eter") => conj1jeter parler ;
+      _ + "éder"            => conj1céder parler ;
+      _ + "cer"             => conj1placer parler ;
+      _ + "ger"             => conj1manger parler ;
+      _ + "yer"             => conj1payer parler ;
+      _                     => conj1aimer parler
+    } ;
+
+{-
     let
       e = last (Predef.tk 4 parler) ;
       c = last (Predef.tk 3 parler) ;
-      verb_é = pbool2bool (occur "é" (e + last (Predef.tk 5 parler))) ;
+      verb_é = pbool2bool (occur "é" (e + last (Predef.tk 3 parler))) ;
       verb_e = andB (pbool2bool (occur e "e")) (pbool2bool (occur c "cmnprsv"))
     in
     case Predef.dp 4 parler of {
@@ -487,6 +500,7 @@ oper
           }
         }
       } ;
+-}
 
 -- The following can be more reliable.
 

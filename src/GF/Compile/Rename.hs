@@ -40,6 +40,7 @@ import GF.Data.Operations
 
 import Control.Monad
 import Data.List (nub)
+import Debug.Trace (trace)
 
 renameGrammar :: SourceGrammar -> Err SourceGrammar
 renameGrammar g = liftM (MGrammar . reverse) $ foldM renameModule [] (modules g)
@@ -70,22 +71,8 @@ renameIdentTerm :: Status -> Term -> Err Term
 renameIdentTerm env@(act,imps) t = 
  errIn ("atomic term" +++ prt t +++ "given" +++ unwords (map (prt . fst) qualifs)) $
    case t of
-  Vr c -> case lookupTree prt c act of
-    Ok f -> return $ f c
-    _ -> case lookupTreeManyAll prt opens c of
-      [f] -> return $ f c
-      []  -> predefAbs c ("constant not found:" +++ prt c)
-      fs -> case nub [f c | f <- fs]  of
-        [tr] -> return tr
-        ts -> Bad $ "conflicting imports:" +++ unwords (map prt ts) 
-  Cn c -> case lookupTree prt c act of
-    Ok f -> return $ f c
-    _ -> case lookupTreeManyAll prt opens c of
-      [f] -> return $ f c
-      []  -> Bad ("constant not found:" +++ prt c)
-      fs -> case nub [f c | f <- fs]  of
-        [tr] -> return tr
-        ts -> Bad $ "conflicting imports:" +++ unwords (map prt ts) 
+  Vr c -> ident predefAbs c
+  Cn c -> ident (\_ s -> Bad s) c
   Q m' c | m' == cPredef {- && isInPredefined c -} -> return t
   Q m' c -> do
     m <- lookupErr m' qualifs
@@ -108,6 +95,17 @@ renameIdentTerm env@(act,imps) t =
      IC "Float" -> return $ Q cPredefAbs cFloat
      IC "String" -> return $ Q cPredefAbs cString
      _ -> Bad s
+
+   ident alt c = case lookupTree prt c act of
+      Ok f -> return $ f c
+      _ -> case lookupTreeManyAll prt opens c of
+        [f] -> return $ f c
+        []  -> alt c ("constant not found:" +++ prt c) 
+        fs -> case nub [f c | f <- fs]  of
+          [tr] -> return tr
+          ts@(tr:_) -> 
+            Bad $ "conflicting imports:" +++ unwords (map prt ts) 
+
 
 --- | would it make sense to optimize this by inlining?
 renameIdentPatt :: Status -> Patt -> Err Patt
