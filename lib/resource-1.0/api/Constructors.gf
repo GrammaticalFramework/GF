@@ -2,6 +2,8 @@
 
 incomplete resource Constructors = open Grammar in {
 
+  flags optimize=noexpand ;
+
 -- This module gives access to the syntactic constructions of the
 -- GF Resource Grammar library. Its main principle is simple:
 -- to construct an object of type $C$, use the function $mkC$.
