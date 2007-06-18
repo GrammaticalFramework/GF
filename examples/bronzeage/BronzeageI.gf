@@ -28,14 +28,14 @@ incomplete concrete BronzeageI of Bronzeage = open Lang in {
     ImpV v = ImpVP (UseV v) ;
     ImpV2 v x = ImpVP (ComplV2 v x) ;
 
-    UsePron p = UsePron p ;
-    DetCN d n = DetCN d n ;
-    NumCN k cn = DetCN (DetPl (PlQuant IndefArt) k NoOrd) cn ;
+    UsePron p = Lang.UsePron p ;
+    DetCN d n = Lang.DetCN d n ;
+    NumCN k cn = Lang.DetCN (DetPl (PlQuant IndefArt) k NoOrd) cn ;
 
-    UseN n = UseN n ;
+    UseN n = Lang.UseN n ;
     ModCN a cn = AdjCN (PositA a) cn ;
 
-    UseMassN mn = UseN mn ;
+    UseMassN mn = Lang.UseN mn ;
     ModMass a cn = AdjCN (PositA a) cn ;
 
   param
@@ -47,13 +47,13 @@ incomplete concrete BronzeageI of Bronzeage = open Lang in {
       let cl = PredVP np vp
       in {
         s = table {
-          SPos   => Predef.toStr S  (UseCl TPres ASimul PPos cl) ;
-          SNeg   => Predef.toStr S  (UseCl TPres ASimul PNeg cl) ;
-          SQuest => Predef.toStr QS (UseQCl TPres ASimul PPos (QuestCl cl))
+          SPos   => Predef.toStr S  (UseCl Lang.TPres ASimul PPos cl) ;
+          SNeg   => Predef.toStr S  (UseCl Lang.TPres ASimul PNeg cl) ;
+          SQuest => Predef.toStr QS (UseQCl Lang.TPres ASimul PPos (QuestCl cl))
           } ;
         lock_Sent = <>
       } ;
 
-    massNP : CN -> NP = \mcn -> DetCN (DetSg MassDet NoOrd) mcn ;
+    massNP : CN -> NP = \mcn -> Lang.DetCN (DetSg MassDet NoOrd) mcn ;
 
 }
