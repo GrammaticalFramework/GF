@@ -9,6 +9,7 @@ concrete PhraseRus of Phrase = CatRus ** open Prelude, ResRus in {
     UttQS qs = {s = qs.s ! QDir} ;
     UttImpSg pol imp = {s = pol.s ++ imp.s ! pol.p ! Masc! Sg} ;
     UttImpPl pol imp = {s = pol.s ++ imp.s ! pol.p ! Masc!Pl} ;
+    UttImpPol pol imp = {s = pol.s ++ imp.s ! pol.p ! Masc! Sg} ; ---- ?? AR
 
     UttIP ip = {s = ip.s ! PF Nom No NonPoss} ; --- Acc also
     UttIAdv iadv = iadv ;
