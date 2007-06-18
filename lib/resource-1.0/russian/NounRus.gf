@@ -82,12 +82,13 @@ concrete NounRus of Noun = CatRus ** open ResRus, Prelude, MorphoRus in {
 -- so just leave a decimal representation, without case-suffixes:
     NumInt i =  {s = table { _ => table {_ => i.s } } } ;
 
- --   OrdInt n = case n of {
+   OrdInt n = variants {} ; ---- TODO
+ -- case n of {
  --      0|2|6 => (uy_oj_EndDecl n.s) ; 
  --      3 => (ti_j_EndDecl n.s) ; 
  --      _ => uy_j_EndDecl n.s }  ;
 
- -- OrdNumeral numeral = 
+   OrdNumeral numeral = variants {} ; ---- TODO
  --  {s = \\ af => (uy_j_EndDecl (numeral.s ! caseAF af ! genAF af)).s!af} ;
 
     NumNumeral n = n ;

@@ -148,7 +148,7 @@ checkCompleteGrammar abs cnc = do
      AbsFun (Yes _) _ -> case lookupIdent c js of
        Ok _ -> return js
        _ -> do
-         checkWarn $ "Warning: no linearization of" +++ prt c
+         checkWarn $ "WARNING: no linearization of" +++ prt c
          return js
      AbsCat (Yes _) _ -> case lookupIdent c js of
        Ok (AnyInd _ _) -> return js
@@ -475,7 +475,7 @@ inferLType gr trm = case trm of
 
    K s  -> do
      if elem ' ' s
-        then checkWarn ("Warning: space in token \"" ++ s ++ 
+        then checkWarn ("WARNING: space in token \"" ++ s ++ 
                         "\". Lexical analysis may fail.")
         else return ()
      return (trm, typeStr)
@@ -491,6 +491,11 @@ inferLType gr trm = case trm of
 
    Glue s1 s2 -> 
      check2 (flip justCheck typeStr) Glue s1 s2 typeStr ---- typeTok
+
+---- hack from Rename.identRenameTerm, to live with files with naming conflicts 18/6/2007
+   Strs (Cn (IC "#conflict") : ts) -> do
+     checkWarn ("WARNING: unresolved constant, could be any of" +++ unwords (map prt ts))
+     infer $ head ts
 
    Strs ts -> do
      ts' <- mapM (\t -> justCheck t typeStr) ts 
@@ -696,7 +701,7 @@ checkLType env trm typ0 = do
             ps <- checkErr $ testOvershadow ps0 vs
             if null ps 
               then return () 
-              else checkWarn $ "Warning: patterns never reached:" +++ 
+              else checkWarn $ "WARNING: patterns never reached:" +++ 
                                concat (intersperse ", " (map prt ps))
 
           _ -> return () -- happens with variable types
