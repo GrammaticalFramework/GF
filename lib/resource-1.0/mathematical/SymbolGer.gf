@@ -23,7 +23,7 @@ lin
 
   SymbS sy = {s = \\_ => sy.s} ;
 
-  SymbNum n = {s = n.s} ;
+  SymbNum n = {s = n.s ; n = Pl} ;
   SymbOrd n = {s = \\_   => n.s ++ "."} ;
 
 

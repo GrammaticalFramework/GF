@@ -217,7 +217,7 @@ compileOne opts env@((_,srcgr,cancgr0,eenv),_) file = do
 
       b <- ioeIO $ doesFileExist file
       if not b 
-        then compileOne opts env $ gfcFile (init (init file))
+        then compileOne opts env $ gfcFile $ unsuffixFile file
         else do
 
        sm0 <- putpOpt ("- parsing" +++ file) ("- compiling" +++ file ++ "... ") $ 

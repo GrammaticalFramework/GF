@@ -1,4 +1,4 @@
-GF=gf
+GF=gf -s
 RTS=+RTS -M800M -K100M
 RTSS=+RTS -M1000M -K100M
 
@@ -12,7 +12,7 @@ GFC=$(GFCC) -src
 
 # comment the first and uncomment the second in Windows
 GFCP=$(GFC) -preproc=./mkPresent
-GFCCP=$(GFCC) -preproc=./mkPresent -p
+GFCCP=$(GFCC) -preproc=./mkPresent
 #GFCP=$(GFC) -preproc=mkPresent
 
 
@@ -45,6 +45,7 @@ alltenses:
 	cp -p */*.gfc */*.gfr ../alltenses
 	touch api/Constructors.gf
 	$(GFCC) api/Syntax???.gf
+	cp -p api/Constructors*.gfc api/Constructors*.gfr ../alltenses
 	cp -p api/Syntax*.gfc api/Syntax*.gfr ../alltenses
 
 
@@ -53,7 +54,7 @@ langs:
 	echo "s ;; pm | wf langs.gfcm" | $(GFCA) -path=alltenses:prelude ../alltenses/Lang???.gfc $(RTSS)
 
 api:
-	$(GFCC) api/Constructors???.gf
+#	$(GFCC) api/Constructors???.gf
 	$(GFCC) api/Combinators???.gf
 	$(GFCC) api/Symbolic???.gf
 	cp -p api/*.gfc api/*.gfr ../api
@@ -67,13 +68,14 @@ present:
 	$(GFCP) german/German.gf
 	$(GFCP) italian/Italian.gf
 	$(GFCP) norwegian/Norwegian.gf
-	$(GFCP) russian/LangRus.gf
+	$(GFCP) russian/Russian.gf
 	$(GFCP) spanish/Spanish.gf
 	$(GFCP) swedish/Swedish.gf
 	$(GFCP) common/ConstructX.gf
 	mv */*.gfc */*.gfr ../present
 	touch api/Constructors.gf
 	$(GFCCP) -path=api:present:prelude api/Syntax???.gf
+	mv api/Constructors*.gfc api/Constructors*.gfr ../present
 	mv api/Syntax*.gfc api/Syntax*.gfr ../present
 
 mathematical:
@@ -92,7 +94,7 @@ multimodal:
 	mv multimodal/*.gfc ../multimodal
 
 compiled:
-	cd .. ; tar cvfz compiled.tgz alltenses/ mathematical/ multimodal/ present/ prelude/*.gf?
+	cd .. ; tar cfz compiled.tgz alltenses/ mathematical/ multimodal/ present/ prelude/*.gf?
 
 treebank:
 	gf <mkTreebank.gfs

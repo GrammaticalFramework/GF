@@ -3,8 +3,8 @@ incomplete concrete PredicationI of Predication = Cat ** open ParamX, Lang in {
 flags optimize = all_subs ;
 
 lin
-  PosCl cl = UseCl TPres ASimul PPos cl ;
-  NegCl cl = UseCl TPres ASimul PNeg cl ;
+  PosCl cl = UseCl Lang.TPres ASimul PPos cl ;
+  NegCl cl = UseCl Lang.TPres ASimul PNeg cl ;
 
 --2 Predication patterns.
 
