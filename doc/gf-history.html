@@ -16,7 +16,24 @@ Changes in functionality since May 17, 2005, release of GF Version 2.2
 
 <hr>
 
+18/6 (AR)
+Added a warning for clashing constants. A constant coming from multiple opened modules
+was interpreted as "the first" found by the compiler, which was a source of difficult
+errors. Clashing is officially forbidden, but we chose to give a warning instead of
+raising an error to begin with (in version 2.8).
+
+<p>
+
+30/1/2007 (AR)
+Semantics of variants fixed for complex types. Officially, it was only
+defined for basic types (Str and parameters). When used for records, results were
+multiplicative, which was nor usable. But now variants should work for any type.
+
+<p>
+
 22/12 (AR) <b>Release of GF version 2.7</b>.
+
+<p>
 
 21/12 (AR) 
 Overloading rules for GF version 2.7:

@@ -56,7 +56,7 @@ incomplete concrete MultiI of Multi =
     ComparAdvAdjS ca a s = Lang.ComparAdvAdjS ca a s ** {point = s.point} ;
     AdAdv ad a = Lang.AdAdv ad a ** {point = a.point} ;
     SubjS su s = Lang.SubjS su s ** {point = s.point} ;
-    AdvSC sc = AdvSC sc ** {point = sc.point} ;
+    AdvSC sc = Lang.AdvSC sc ** {point = sc.point} ;
 
     UseV v = Lang.UseV v ** noPoint ;
     ComplV2 v np = Lang.ComplV2 v np ** {point = np.point} ;
