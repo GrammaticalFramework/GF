@@ -25,13 +25,15 @@ Last update: %%date(%c)
 
 #CLEARPAGE
 
-This document is about the 
+This document is a guide for using the
 GF Resource Grammar Library. It presupposes knowledge of GF and its
-module system, knowledge that can be acquired e.g. from the GF
-tutorial. We start with an introduction to the library, and proceed to
+module system, knowledge that can be acquired e.g. from the 
+GF tutorial. 
+We start with an introduction to the library, and proceed to
 details with the goal of covering all that one needs to know 
 in order to use the library. 
-How to write one's own resource grammar (i.e. to implement the API for
+
+How to //write// one's own resource grammar (i.e. to implement the API for
 a new language), is covered by a separate Resource-HOWTO document (available in
 the www address below).
 
@@ -39,7 +41,7 @@ The main part of the document (the API documentation) is generated
 from the actual GF code by using the ``gfdoc`` tool. This documentation
 is also available on-line in HTML format in
 
-[``http://www.cs.chalmers.se/~aarne/GF/lib/resource-1.0/doc/`` http://www.cs.chalmers.se/~aarne/GF/lib/resource-1.0/doc/].
+[``http://www.cs.chalmers.se/~aarne/GF/lib/resource-1.2/doc/`` http://www.cs.chalmers.se/~aarne/GF/lib/resource-1.2/doc/].
 
 
 =Motivation=
@@ -55,7 +57,7 @@ is that of a skilled programmer with
 a practical knowledge of the target languages, but without
 theoretical knowledge about their grammars.
 Such a combination of
-skills is typical of programmers who want to localize
+skills is typical of programmers who, for instance, want to localize
 software to new languages.
 
 The current resource languages are
@@ -77,8 +79,11 @@ The first three letters (``Eng`` etc) are used in grammar module names.
 The Arabic and Catalan implementations are still incomplete, but 
 enough to be used in many applications.
 
-To give an example application, consider
-music playing devices. In the application,
+
+==An example application==
+
+To give an example application, consider a system for steering
+music playing devices by voice commands. In the application,
 we may have a semantical category ``Kind``, examples
 of ``Kind``s being ``Song`` and ``Artist``. In German, for instance, ``Song`` 
 is linearized into the noun "Lied", but knowing this is not
@@ -102,13 +107,13 @@ number, and case, and also depend on what determiner is used
 ("ein amerikanisches Lied" vs. "das amerikanische Lied"). All this
 variation is taken care of by the resource grammar function
 ```
-  fun AdjCN : AP -> CN -> CN
+  mkCN : AP -> CN -> CN
 ```
-(see the tables in the end of this document for the list of all resource grammar
+(see the table in the end of this document for the list of all resource grammar
 functions). The resource grammar implementation of the rule adding properties
 to kinds is
 ```
-  lin PropKind kind prop = AdjCN prop kind
+  lin PropKind kind prop = mkCN prop kind
 ```
 given that 
 ```
@@ -127,7 +132,7 @@ pick a different linearization of ``Song``,
   lin Song = mkN "chanson" feminine
 ```
 But to linearize ``PropKind``, we can use the very same rule as in German.
-The resource function ``AdjCN`` has different implementations in the two
+The resource function ``mkCN`` has different implementations in the two
 languages (e.g. a different word order in French), 
 but the application programmer need not care about the difference.
 
@@ -156,64 +161,67 @@ here is the complete implementation of a small system with songs and properties.
 The abstract syntax defines a "domain ontology":
 ```
   abstract Music = {
-    cat 
-      Kind, 
-      Property ;
-    fun 
-      PropKind : Kind -> Property -> Kind ; 
-      Song : Kind ;
-      American : Property ;
-    }
+    
+  cat 
+    Kind, 
+    Property ;
+  fun 
+    PropKind : Kind -> Property -> Kind ; 
+    Song : Kind ;
+    American : Property ;
+  }
 ```
 The concrete syntax is defined by a functor (parametrized module),
 independently of language, by opening
-two interfaces: the resource ``Grammar`` and an application lexicon.
+two interfaces: the resource ``Syntax`` and an application lexicon.
 ```
-  incomplete concrete MusicI of Music = open Grammar, MusicLex in {
-    lincat 
-      Kind = CN ;
-      Property = AP ;
-    lin
-      PropKind k p = AdjCN p k ;
-      Song = UseN song_N ;
-      American = PositA american_A ;
-    }
+  incomplete concrete MusicI of Music = open Syntax, MusicLex in {
+    
+  lincat 
+    Kind = CN ;
+    Property = AP ;
+  lin
+    PropKind k p = mkCN p k ;
+    Song = mkCN song_N ;
+    American = mkAP american_A ;
+  }
 ```
 The application lexicon ``MusicLex`` has an abstract syntax that extends
 the resource category system ``Cat``.
 ```
   abstract MusicLex = Cat ** {
-    fun
-      song_N : N ;
-      american_A : A ;
-    }
+    
+  fun
+    song_N : N ;
+    american_A : A ;
+  }
 ```
 Each language has its own concrete syntax, which opens the 
 inflectional paradigms module for that language:
 ```
   concrete MusicLexGer of MusicLex = 
-      CatGer ** open ParadigmsGer in {
-    lin
-      song_N = reg2N "Lied" "Lieder" neuter ;
-      american_A = regA "amerikanisch" ;
-    }
+      CatGer ** open ParadigmsGer in {    
+  lin
+    song_N = mkN "Lied" "Lieder" neuter ;
+    american_A = mkA "amerikanisch" ;
+  }
 
   concrete MusicLexFre of MusicLex = 
       CatFre ** open ParadigmsFre in {
-    lin
-      song_N = regGenN "chanson" feminine ;
-      american_A = regA "américain" ;
-    }
+  lin
+    song_N = mkN "chanson" feminine ;
+    american_A = mkA "américain" ;
+  }
 ```
 The top-level ``Music`` grammars are obtained by 
 instantiating the two interfaces of ``MusicI``:
 ```
   concrete MusicGer of Music = MusicI with
-    (Grammar = GrammarGer),
+    (Syntax = SyntaxGer),
     (MusicLex = MusicLexGer) ;
 
   concrete MusicFre of Music = MusicI with
-    (Grammar = GrammarFre),
+    (Syntax = SyntaxFre),
     (MusicLex = MusicLexFre) ;
 ```
 Both of these files can use the same ``path``, defined as
@@ -232,13 +240,13 @@ vocabulary and inflectional paradigms. For instance, Finnish is added as follows
 ```
   concrete MusicLexFin of MusicLex = 
       CatFin ** open ParadigmsFin in {
-    lin
-      song_N = regN "kappale" ;
-      american_A = regA "amerikkalainen" ;
-    }
+  lin
+    song_N = mkN "kappale" ;
+    american_A = mkA "amerikkalainen" ;
+  }
 
   concrete MusicFin of Music = MusicI with
-    (Grammar = GrammarFin),
+    (Syntax = SyntaxFin),
     (MusicLex = MusicLexFin) ;
 ```
 More work is of course needed if the language-independent linearizations in
@@ -251,13 +259,13 @@ before,
 ```
   concrete MusicLexEng of MusicLex = 
       CatEng ** open ParadigmsEng in {
-    lin
-      song_N = regN "song" ;
-      american_A = regA "American" ;
-    }
+  lin
+    song_N = mkN "song" ;
+    american_A = mkA "American" ;
+  }
 
   concrete MusicEng0 of Music = MusicI with
-    (Grammar = GrammarEng),
+    (Syntax = SyntaxEng),
     (MusicLex = MusicLexEng) ;
 ```
 The module ``MusicEng0`` would not be used on the top level, however, but
@@ -266,16 +274,19 @@ another module would be built on top of it, with a restricted import from
 except ``PropKind``, and
 gives its own definition of this function:
 ```
-  concrete MusicEng of Music = 
-      MusicEng0 - [PropKind] ** open GrammarEng in {
-    lin
-      PropKind k p = 
-        RelCN k (UseRCl TPres ASimul PPos 
-          (RelVP IdRP (UseComp (CompAP p)))) ;
-    }
+  concrete MusicEng of Music = MusicEng0 - [PropKind] ** 
+      open SyntaxEng in {
+  lin
+    PropKind k p = mkCN k (mkRS (mkRCl which_RP (mkVP p))) ;
+  }
 ```
 
+
 ==Lock fields==
+
+//This section is only relevant as a guide to error messages that have to do with lock fields, and can be skipped otherwise.//
+
+FIXME: this section may become obsolete.
 
 When the categories of the resource grammar are used
 in applications, a **lock field** is added to their linearization types.
@@ -419,7 +430,7 @@ Below this top-level module exposing overloaded constructors,
 there are around 10 abstract modules, each defining constructors for
 a group of one or more related categories. For instance, the module
 ``Noun`` defines how to construct common nouns, noun phrases, and determiners.
-But these special modules are seldom needed by the users of the library.
+But these special modules are seldom or never needed by the users of the library.
 
 TODO: when are they needed?
 
