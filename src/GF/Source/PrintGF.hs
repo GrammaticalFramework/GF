@@ -144,12 +144,14 @@ instance Print ModType where
 
 instance Print ModBody where
   prt i e = case e of
+   MNoBody includeds -> prPrec i 0 (concatD [prt 0 includeds])
+   MWithBody included opens0 opens topdefs -> prPrec i 0 (concatD [prt 0 included , doc (showString "with") , prt 0 opens0 , doc (showString "**") , prt 0 opens , doc (showString "{") , prt 0 topdefs , doc (showString "}")])
+   MWithEBody includeds included opens0 opens topdefs -> prPrec i 0 (concatD [prt 0 includeds , doc (showString "**") , prt 0 included , doc (showString "with") , prt 0 opens0 , doc (showString "**") , prt 0 opens , doc (showString "{") , prt 0 topdefs , doc (showString "}")])
    MBody extend opens topdefs -> prPrec i 0 (concatD [prt 0 extend , prt 0 opens , doc (showString "{") , prt 0 topdefs , doc (showString "}")])
-   MWith id opens -> prPrec i 0 (concatD [prt 0 id , doc (showString "with") , prt 0 opens])
-   MWithE includeds id opens -> prPrec i 0 (concatD [prt 0 includeds , doc (showString "**") , prt 0 id , doc (showString "with") , prt 0 opens])
+   MWith included opens -> prPrec i 0 (concatD [prt 0 included , doc (showString "with") , prt 0 opens])
+   MWithE includeds included opens -> prPrec i 0 (concatD [prt 0 includeds , doc (showString "**") , prt 0 included , doc (showString "with") , prt 0 opens])
    MReuse id -> prPrec i 0 (concatD [doc (showString "reuse") , prt 0 id])
    MUnion includeds -> prPrec i 0 (concatD [doc (showString "union") , prt 0 includeds])
-
 
 instance Print Extend where
   prt i e = case e of

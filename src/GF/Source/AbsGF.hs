@@ -38,9 +38,12 @@ data ModType =
   deriving (Eq,Ord,Show)
 
 data ModBody =
-   MBody Extend Opens [TopDef]
- | MWith Ident [Open]
- | MWithE [Included] Ident [Open]
+   MNoBody [Included]
+ | MWithBody Included [Open] Opens [TopDef]
+ | MWithEBody [Included] Included [Open] Opens [TopDef]
+ | MBody Extend Opens [TopDef]
+ | MWith Included [Open]
+ | MWithE [Included] Included [Open]
  | MReuse Ident
  | MUnion [Included]
   deriving (Eq,Ord,Show)
