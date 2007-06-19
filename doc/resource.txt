@@ -80,7 +80,8 @@ The Arabic and Catalan implementations are still incomplete, but
 enough to be used in many applications.
 
 
-==An example application==
+
+==A first example==
 
 To give an example application, consider a system for steering
 music playing devices by voice commands. In the application,
@@ -137,6 +138,7 @@ languages (e.g. a different word order in French),
 but the application programmer need not care about the difference.
 
 
+
 ==Note on APIs==
 
 From version 1.1 onwards, the resource library is available via two
@@ -175,8 +177,8 @@ The concrete syntax is defined by a functor (parametrized module),
 independently of language, by opening
 two interfaces: the resource ``Syntax`` and an application lexicon.
 ```
-  incomplete concrete MusicI of Music = open Syntax, MusicLex in {
-    
+  incomplete concrete MusicI of Music = 
+      open Syntax, MusicLex in {
   lincat 
     Kind = CN ;
     Property = AP ;

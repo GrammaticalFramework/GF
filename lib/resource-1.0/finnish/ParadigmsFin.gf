@@ -72,7 +72,30 @@ oper
 -- stems, vowel alternation, and vowel harmony.
 
 oper
-  mkN : (talo,   talon,   talona, taloa, taloon,
+
+-- The regular noun heuristic takes just one form (singular
+-- nominative) and analyses it to pick the correct paradigm.
+-- It does automatic grade alternation, and is hence not usable
+-- for words like "auto" (whose genitive would become "audon").
+
+
+-- If $regN$ does not give the correct result, one can try and give 
+-- two or three forms as follows. Examples of the use of these
+-- functions are given in $BasicFin$. Most notably, $reg2N$ is used
+-- for nouns like "kivi - kiviä", which would otherwise become like
+-- "rivi - rivejä". $regN3$ is used e.g. for 
+-- "sydän - sydämen - sydämiä", which would otherwise become
+-- "sydän - sytämen".
+
+  mkN = overload {
+    mkN : (talo : Str) -> N = regN ;
+    mkN : (savi,savia : Str) -> N = reg2N ;
+    mkN : (vesi,veden,vesiä : Str) -> N = reg3N ;
+    mkN : (talo,   talon,   talona, taloa, taloon,
+           taloina,taloissa,talojen,taloja,taloihin : Str) -> N = mk10N
+  } ;
+
+  mk10N: (talo,   talon,   talona, taloa, taloon,
          taloina,taloissa,talojen,taloja,taloihin : Str) -> N ;
 
 -- The regular noun heuristic takes just one form (singular
@@ -207,7 +230,13 @@ oper
 
 -- Non-comparison one-place adjectives are just like nouns.
 
-  mkA : N -> A ;
+  mkA = overload {
+    mkA : Str -> A = regA ;
+    mkA : N -> A = mk1A ;
+    mkA : N -> (kivempaa,kivinta : Str) -> A = mkADeg
+  } ;
+
+  mk1A : N -> A ;
 
 -- Two-place adjectives need a case for the second argument.
 
@@ -231,7 +260,18 @@ oper
 -- a table.
 -- The worst case needs twelve forms, as shown in the following.
 
-  mkV   : (tulla,tulee,tulen,tulevat,tulkaa,tullaan,
+
+-- The following heuristics cover more and more verbs.
+{-
+  regV  : (soutaa : Str) -> V ;
+  reg2V : (soutaa,souti : Str) -> V ;
+  reg3V : (soutaa,soudan,souti : Str) -> V ;
+  mk12V   : (tulla,tulee,tulen,tulevat,tulkaa,tullaan,
+           tuli,tulin,tulisi,tullut,tultu,tullun : Str) -> V ;
+  subjcaseV : V -> Case -> V ;
+-}
+
+  mk12V   : (tulla,tulee,tulen,tulevat,tulkaa,tullaan,
            tuli,tulin,tulisi,tullut,tultu,tullun : Str) -> V ;
 
 -- The following heuristics cover more and more verbs.
@@ -240,7 +280,7 @@ oper
   reg2V : (soutaa,souti : Str) -> V ;
   reg3V : (soutaa,soudan,souti : Str) -> V ;
 
--- The subject case of verbs is by default nominative. This dunction can change it.
+-- The subject case of verbs is by default nominative. This function can change it.
 
   subjcaseV : V -> Case -> V ;
 
@@ -363,7 +403,7 @@ oper
     \c -> {c = NPCase c ; s = [] ; isPre = True ; lock_Prep = <>} ;
   accPrep =  {c = NPAcc ; s = [] ; isPre = True ; lock_Prep = <>} ;
 
-  mkN = \a,b,c,d,e,f,g,h,i,j -> 
+  mk10N= \a,b,c,d,e,f,g,h,i,j -> 
     mkNoun a b c d e f g h i j ** {lock_N = <>} ;
 
   regN = \vesi -> 
@@ -483,7 +523,7 @@ reg3N = \vesi,veden,vesiä ->
     lock_NP = <>
     } ;
 
-  mkA = \x -> {s = \\_ => (noun2adj x).s ; lock_A = <>} ;
+  mk1A = \x -> {s = \\_ => (noun2adj x).s ; lock_A = <>} ;
   mkA2 = \x,c -> x ** {c2 = c ; lock_A2 = <>} ;
   mkADeg x kivempi kivin = 
     let
@@ -502,7 +542,7 @@ reg3N = \vesi,veden,vesiä ->
 
   regADeg = regA ; -- for bw compat
 
-  mkV a b c d e f g h i j k l = mkVerb a b c d e f g h i j k l ** 
+  mk12V a b c d e f g h i j k l = mkVerb a b c d e f g h i j k l ** 
     {sc = NPCase Nom ; lock_V = <>} ;
 
   regV soutaa = v2v (regVerbH soutaa) ** {sc = NPCase Nom ; lock_V = <>} ;
