@@ -25,6 +25,8 @@ import GF.Infra.Ident
 import GF.Infra.Modules
 import GF.Data.Operations
 
+import Data.List (nub)
+
 -- | rebuilding instance + interface, and "with" modules, prior to renaming. 
 -- AR 24/10/2003
 rebuildModule :: [SourceModule] -> SourceModule -> Err SourceModule
@@ -58,7 +60,8 @@ rebuildModule ms mo@(i,mi) = do
         _ -> return mi
 
     -- add the instance opens to an incomplete module "with" instances
-    ModWith mt stat ext me ops -> do
+    --      ModWith mt stat ext me ops -> do
+    ModWith (Module mt stat fs_ me ops_ js_) (ext,incl) ops -> do
       let insts = [(inf,inst) | OQualif _ inf inst <- ops]
       let infs  = map fst insts
       let stat' = ifNull MSComplete (const MSIncomplete)
@@ -66,12 +69,17 @@ rebuildModule ms mo@(i,mi) = do
       testErr (stat' == MSComplete || stat == MSIncomplete) 
               ("module" +++ prt i +++ "remains incomplete")
       Module mt0 _ fs me' ops0 js <- lookupModMod gr ext
-      let ops1 = ops ++ [o | o <- ops0, notElem (openedModule o) infs]
-                     ++ [oQualif i i | i <- map snd insts] ----
-                     ++ [oSimple i   | i <- map snd insts] ----
-               ----      ++ [oSimple ext] ---- to encode dependence
+      let ops1 = nub $
+                   ops_ ++ -- N.B. js has been name-resolved already
+                   ops ++ [o | o <- ops0, notElem (openedModule o) infs]
+                       ++ [oQualif i i | i <- map snd insts] ----
+                       ++ [oSimple i   | i <- map snd insts] ----
+
       --- check if me is incomplete
-      return $ ModMod $ Module mt0 stat' fs me ops1 js 
+      let fs1 = fs_ ++ fs                            -- new flags have priority
+      let js0 = [ci | ci@(c,_) <- tree2list js, isInherited incl c]
+      let js1 = buildTree (tree2list js_ ++ js0)
+      return $ ModMod $ Module mt0 stat' fs1 me ops1 js1 
                           ---- (mapTree (qualifInstanceInfo insts) js) -- not needed
 
     _ -> return mi

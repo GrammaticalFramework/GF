@@ -58,7 +58,7 @@ data MGrammar i f a = MGrammar {modules :: [(i,ModInfo i f a)]}
 data ModInfo i f a =
     ModMainGrammar (MainGrammar i)
   | ModMod  (Module i f a)
-  | ModWith (ModuleType i) ModuleStatus i [(i,MInclude i)] [OpenSpec i]
+  | ModWith (Module i f a) (i,MInclude i) [OpenSpec i]
   deriving Show
 
 data Module i f a = Module {
@@ -213,7 +213,8 @@ partOfGrammar gr (i,m) = MGrammar [mo | mo@(j,_) <- mods, elem j modsFor]
     mods = modules gr
     modsFor = case m of
       ModMod n -> (i:) $ map openedModule $ allDepsModule gr n
-      _ -> [i] ---- ModWith?
+      ---- ModWith n i os -> i : map openedModule os ++ partOfGrammar (ModMod n) ----
+      _ -> [i]
 
 
 -- | all modules that a module extends, directly or indirectly

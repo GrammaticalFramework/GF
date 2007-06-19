@@ -43,9 +43,14 @@ MTConcrete.  ModType ::= "concrete" Ident "of" Ident ;
 MTInstance.  ModType ::= "instance" Ident "of" Ident ;
 MTTransfer.  ModType ::= "transfer" Ident ":" Open "->" Open ;
 
-MBody.  ModBody ::= Extend Opens "{" [TopDef] "}" ;
-MWith.  ModBody ::=              Ident "with" [Open] ;
-MWithE. ModBody ::= [Included] "**" Ident "with" [Open] ;
+
+MBody.      ModBody ::= Extend Opens "{" [TopDef] "}" ;
+MNoBody.    ModBody ::= [Included] ;
+MWith.      ModBody ::=                 Included "with" [Open] ;
+MWithBody.  ModBody ::=                 Included "with" [Open] "**" Opens "{" [TopDef] "}" ; 
+MWithE.     ModBody ::= [Included] "**" Included "with" [Open] ;
+MWithEBody. ModBody ::= [Included] "**" Included "with" [Open] "**" Opens "{" [TopDef] "}" ; 
+
 MReuse. ModBody ::= "reuse" Ident ; --%
 MUnion. ModBody ::= "union" [Included] ;--%
 
