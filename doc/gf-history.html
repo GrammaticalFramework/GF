@@ -16,6 +16,24 @@ Changes in functionality since May 17, 2005, release of GF Version 2.2
 
 <hr>
 
+19/6 (AR)
+Extended the functor syntax (<tt>with</tt> modules) so that the functor can have
+restricted import and a module body (whose function is normally to complete restricted
+import). Thus the following format is now possible:
+<pre>
+  concrete C of A = E ** CI - [f,g] with (...) ** open R in {...}
+</pre>
+At the same time, the possibility of an empty module body was added to other modules
+for symmetry. This can be useful for "proxy modules" that just collect other modules
+without adding anything, e.g.
+<pre>
+  abstract Math = Arithmetic, Geometry ;
+</pre>
+
+
+<p>
+
+
 18/6 (AR)
 Added a warning for clashing constants. A constant coming from multiple opened modules
 was interpreted as "the first" found by the compiler, which was a source of difficult
