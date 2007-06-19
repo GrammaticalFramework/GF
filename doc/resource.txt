@@ -256,30 +256,26 @@ MusicI are not satisfactory for some language. The resource grammar guarantees
 that the linearizations are possible in all languages, in the sense of grammatical,
 but they might of course be inadequate for stylistic reasons. Assume, 
 for the sake of argument, that adjectival modification does not sound good in
-English, but that a relative clause would be preferrable. One can then start as
-before,
+English, but that a relative clause would be preferrable. One can then use
+restricted inheritance of the functor:
+```
+  concrete MusicEng of Music = 
+    MusicI - [PropKind] 
+      with
+        (Syntax = SyntaxEng),
+        (MusicLex = MusicLexEng) ** 
+    open SyntaxEng in {
+  lin
+    PropKind k p = mkCN k (mkRS (mkRCl which_RP (mkVP p))) ;
+  }
+```
+The lexicon is as expected:
 ```
   concrete MusicLexEng of MusicLex = 
       CatEng ** open ParadigmsEng in {
   lin
     song_N = mkN "song" ;
     american_A = mkA "American" ;
-  }
-
-  concrete MusicEng0 of Music = MusicI with
-    (Syntax = SyntaxEng),
-    (MusicLex = MusicLexEng) ;
-```
-The module ``MusicEng0`` would not be used on the top level, however, but
-another module would be built on top of it, with a restricted import from
-``MusicEng0``. ``MusicEng`` inherits everything from ``MusicEng0`` 
-except ``PropKind``, and
-gives its own definition of this function:
-```
-  concrete MusicEng of Music = MusicEng0 - [PropKind] ** 
-      open SyntaxEng in {
-  lin
-    PropKind k p = mkCN k (mkRS (mkRCl which_RP (mkVP p))) ;
   }
 ```
 
