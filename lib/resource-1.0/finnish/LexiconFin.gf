@@ -108,7 +108,7 @@ lin
   lake_N = nSylki "j‰rvi" ;
   lamp_N = nLukko "lamppu" ;
   learn_V2 = 
-    dirV2 (mkV "oppia" "oppii" "opin" "oppivat" "oppikaa" "opitaan"
+    dirV2 (mk12V "oppia" "oppii" "opin" "oppivat" "oppikaa" "opitaan"
       "oppi" "opin" "oppisi" "oppinut" "opittu" "opitun") ;
   leather_N = nLukko "nahka" ; --- nahan
   leave_V2 = dirV2 (regV "j‰tt‰‰") ;
@@ -164,7 +164,7 @@ lin
   sea_N = nMeri "meri" ;
   seek_V2 = dirV2 (regV "etsi‰") ;
   see_V2 = dirV2 (
-    mkV "n‰hd‰" "n‰kee" "n‰en" "n‰kev‰t" "n‰hk‰‰" "n‰hd‰‰n"
+    mk12V "n‰hd‰" "n‰kee" "n‰en" "n‰kev‰t" "n‰hk‰‰" "n‰hd‰‰n"
       "n‰ki" "n‰in" "n‰kisi" "n‰hnyt" "n‰hty" "n‰hdyn") ; 
   sell_V3 = dirV3 (regV "myyd‰") allative ;
   send_V3 = dirV3 (regV "l‰hett‰‰") allative ;
@@ -227,7 +227,7 @@ lin
   young_A = mkADeg (nArpi "nuori") "nuorempi" "nuorin" ;
 
   do_V2 = dirV2 (
-    mkV "tehd‰" "tekee" "teen" "tekev‰t" "tehk‰‰" "tehd‰‰n"
+    mk12V "tehd‰" "tekee" "teen" "tekev‰t" "tehk‰‰" "tehd‰‰n"
       "teki" "tein" "tekisi" "tehnyt" "tehty" "tehdyn") ; 
 
   now_Adv = mkAdv "nyt" ;
@@ -351,10 +351,10 @@ lin
   split_V2 = dirV2 (reg2V "halkaista" "halkaisi") ;
   squeeze_V2 = dirV2 (regV "puristaa") ;
   stab_V2 = dirV2 (regV "pist‰‰") ;
-  stand_V = mkV "seist‰" "seisoo" "seison" "seisovat" "seisk‰‰" "seist‰‰n"
+  stand_V = mk12V "seist‰" "seisoo" "seison" "seisovat" "seisk‰‰" "seist‰‰n"
       "seisoi" "seisoin" "seisoisi" "seissyt" "seisty" "seistyn" ; --- *seisoiv‰t
   suck_V2 = dirV2 (regV "ime‰") ;
-  swell_V = mkV "turvota" "turpoaa" "turpoan" "turpoavat" "turvotkaa" "turvotaan"
+  swell_V = mk12V "turvota" "turpoaa" "turpoan" "turpoavat" "turvotkaa" "turvotaan"
       "turposi" "turposin" "turpoaisi" "turvonnut" "turvottu" "turvotun" ;
   swim_V = reg3V "uida" "uin" "ui" ;
   think_V = reg3V "ajatella" "ajattelen" "ajatteli" ;
