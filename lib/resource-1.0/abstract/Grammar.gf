@@ -17,5 +17,6 @@ abstract Grammar =
   Phrase,
   Text,
   Structural,
-  Idiom
-  ** {} ;
+  Idiom ;
+
+
