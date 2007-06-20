@@ -65,7 +65,7 @@ import GF.Speech.PrSRGS_ABNF
 import qualified GF.Speech.SISR as SISR
 import GF.Speech.PrSLF
 import GF.Speech.PrFA (faGraphvizPrinter,regularPrinter,faCPrinter)
-import GF.Speech.PrRegExp (regexpPrinter)
+import GF.Speech.PrRegExp (regexpPrinter,multiRegexpPrinter)
 import GF.Speech.GrammarToVoiceXML (grammar2vxml)
 
 import GF.Data.Zipper
@@ -264,6 +264,7 @@ customGrammarPrinter =
   ,(strCI "fa_graphviz", faGraphvizPrinter)
   ,(strCI "fa_c",  faCPrinter)
   ,(strCI "regexp", regexpPrinter)
+  ,(strCI "regexps", multiRegexpPrinter)
   ,(strCI "regular", regularPrinter)
   ,(strCI "plbnf",   \_ -> prLBNF True)
   ,(strCI "lbnf",    \_ -> prLBNF False)

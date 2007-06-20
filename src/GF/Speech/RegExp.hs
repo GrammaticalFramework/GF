@@ -19,14 +19,14 @@ data RE a =
       deriving (Eq,Ord,Show)
 
 
-dfa2re :: (Show a,Ord a) => DFA a -> RE a
+dfa2re :: (Ord a) => DFA a -> RE a
 dfa2re = finalRE . elimStates . modifyTransitions merge . addLoops
              . oneFinalState () epsilonRE . mapTransitions RESymbol 
   where addLoops fa = newTransitions [(s,s,nullRE) | (s,_) <- states fa] fa
         merge es = [(f,t,unionRE ls) 
                         | ((f,t),ls) <- buildMultiMap [((f,t),l) | (f,t,l) <- es]]
 
-elimStates :: (Show a, Ord a) => DFA (RE a) -> DFA (RE a)
+elimStates :: (Ord a) => DFA (RE a) -> DFA (RE a)
 elimStates fa =
     case [s | (s,_) <- states fa, isInternal fa s] of
       [] -> fa
@@ -120,10 +120,10 @@ joinRE (RESymbol ss) = ss
 
 -- Debugging
 
-prRE :: Show a => RE a -> String
+prRE :: RE String -> String
 prRE (REUnion []) = "<NULL>"
 prRE (REUnion xs) = "(" ++ concat (intersperse " | " (map prRE xs)) ++ ")"
 prRE (REConcat xs) = "(" ++ unwords (map prRE xs) ++ ")"
 prRE (RERepeat x) = "(" ++ prRE x ++ ")*"
-prRE (RESymbol s) = show s
+prRE (RESymbol s) = s
 

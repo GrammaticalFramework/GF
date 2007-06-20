@@ -52,7 +52,7 @@ type MutRecSets = Map Cat_ MutRecSet
 --
 
 data MFALabel a = MFASym a | MFASub String
-                deriving Eq
+                deriving (Eq,Ord)
 
 data MFA a = MFA (DFA (MFALabel a)) [(String,DFA (MFALabel a))]
 
