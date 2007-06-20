@@ -77,44 +77,22 @@ oper
 -- nominative) and analyses it to pick the correct paradigm.
 -- It does automatic grade alternation, and is hence not usable
 -- for words like "auto" (whose genitive would become "audon").
-
-
--- If $regN$ does not give the correct result, one can try and give 
--- two or three forms as follows. Examples of the use of these
--- functions are given in $BasicFin$. Most notably, $reg2N$ is used
+--
+-- If the one-argument paradigm does not give the correct result, one can try and give 
+-- two or three forms. Most notably, the two-argument variant is used
 -- for nouns like "kivi - kiviä", which would otherwise become like
--- "rivi - rivejä". $regN3$ is used e.g. for 
+-- "rivi - rivejä". Three arguments are used e.g. for 
 -- "sydän - sydämen - sydämiä", which would otherwise become
 -- "sydän - sytämen".
 
-  mkN = overload {
-    mkN : (talo : Str) -> N = regN ;
-    mkN : (savi,savia : Str) -> N = reg2N ;
-    mkN : (vesi,veden,vesiä : Str) -> N = reg3N ;
+  mkN : overload {
+    mkN : (talo : Str) -> N ;
+    mkN : (savi,savia : Str) -> N ;
+    mkN : (vesi,veden,vesiä : Str) -> N ;
     mkN : (talo,   talon,   talona, taloa, taloon,
-           taloina,taloissa,talojen,taloja,taloihin : Str) -> N = mk10N
+           taloina,taloissa,talojen,taloja,taloihin : Str) -> N 
   } ;
 
-  mk10N: (talo,   talon,   talona, taloa, taloon,
-         taloina,taloissa,talojen,taloja,taloihin : Str) -> N ;
-
--- The regular noun heuristic takes just one form (singular
--- nominative) and analyses it to pick the correct paradigm.
--- It does automatic grade alternation, and is hence not usable
--- for words like "auto" (whose genitive would become "audon").
-
-  regN : (talo : Str) -> N ;
-
--- If $regN$ does not give the correct result, one can try and give 
--- two or three forms as follows. Examples of the use of these
--- functions are given in $BasicFin$. Most notably, $reg2N$ is used
--- for nouns like "kivi - kiviä", which would otherwise become like
--- "rivi - rivejä". $regN3$ is used e.g. for 
--- "sydän - sydämen - sydämiä", which would otherwise become
--- "sydän - sytämen".
-
-  reg2N : (savi,savia : Str) -> N ;
-  reg3N : (vesi,veden,vesiä : Str) -> N ;
 
 -- Some nouns have an unexpected singular partitive, e.g. "meri", "lumi".
 
@@ -212,45 +190,43 @@ oper
 
   compN : Str -> N -> N ;
 
--- Nouns used as functions need a case, of which by far the commonest is
+-- Nouns used as functions need a case, of which the default is
 -- the genitive.
 
-  mkN2  : N -> Prep -> N2 ;
-  genN2 : N -> N2 ;
+  mkN2 = overload {
+    mkN2 : N -> N2 = genN2 ;
+    mkN2 : N -> Prep -> N2 = mmkN2
+    } ;
 
   mkN3  : N -> Prep -> Prep -> N3 ;
 
 -- Proper names can be formed by using declensions for nouns.
 -- The plural forms are filtered away by the compiler.
 
-  regPN : Str -> PN ;
-  mkPN  : N -> PN ;
+  mkPN : overload {
+    mkPN : Str -> PN ;
+    mkPN : N -> PN
+    } ;
 
 --2 Adjectives
 
 -- Non-comparison one-place adjectives are just like nouns.
+-- The regular adjectives are based on $regN$ in the positive.
+-- Comparison adjectives have three forms. 
+-- The comparative and the superlative
+-- are always inflected in the same way, so the nominative of them is actually
+-- enough (except for the superlative "paras" of "hyvä").
 
-  mkA = overload {
-    mkA : Str -> A = regA ;
-    mkA : N -> A = mk1A ;
-    mkA : N -> (kivempaa,kivinta : Str) -> A = mkADeg
+  mkA : overload {
+    mkA : Str -> A ;
+    mkA : N -> A ;
+    mkA : N -> (kivempaa,kivinta : Str) -> A
   } ;
-
-  mk1A : N -> A ;
 
 -- Two-place adjectives need a case for the second argument.
 
   mkA2 : A -> Prep -> A2 ;
 
--- Comparison adjectives have three forms. The comparative and the superlative
--- are always inflected in the same way, so the nominative of them is actually
--- enough (except for the superlative "paras" of "hyvä").
-
-  mkADeg : (kiva : N) -> (kivempaa,kivinta : Str) -> A ;
-
--- The regular adjectives are based on $regN$ in the positive.
-
-  regA : (punainen : Str) -> A ;
 
 
 --2 Verbs
@@ -262,27 +238,19 @@ oper
 
 
 -- The following heuristics cover more and more verbs.
-{-
-  regV  : (soutaa : Str) -> V ;
-  reg2V : (soutaa,souti : Str) -> V ;
-  reg3V : (soutaa,soudan,souti : Str) -> V ;
-  mk12V   : (tulla,tulee,tulen,tulevat,tulkaa,tullaan,
+
+  mkV : overload {
+    mkV : (soutaa : Str) -> V ;
+    mkV : (soutaa,souti : Str) -> V ;
+    mkV : (soutaa,soudan,souti : Str) -> V ;
+    mkV : (tulla,tulee,tulen,tulevat,tulkaa,tullaan,
            tuli,tulin,tulisi,tullut,tultu,tullun : Str) -> V ;
-  subjcaseV : V -> Case -> V ;
--}
-
-  mk12V   : (tulla,tulee,tulen,tulevat,tulkaa,tullaan,
-           tuli,tulin,tulisi,tullut,tultu,tullun : Str) -> V ;
-
--- The following heuristics cover more and more verbs.
-
-  regV  : (soutaa : Str) -> V ;
-  reg2V : (soutaa,souti : Str) -> V ;
-  reg3V : (soutaa,soudan,souti : Str) -> V ;
 
 -- The subject case of verbs is by default nominative. This function can change it.
 
-  subjcaseV : V -> Case -> V ;
+    mkV : V -> Case -> V
+  } ;
+
 
 -- The rest of the paradigms are special cases mostly covered by the heuristics.
 -- A simple special case is the one with just one stem and without grade alternation.
@@ -406,6 +374,14 @@ oper
   mk10N= \a,b,c,d,e,f,g,h,i,j -> 
     mkNoun a b c d e f g h i j ** {lock_N = <>} ;
 
+  mkN = overload {
+    mkN : (talo : Str) -> N = regN ;
+    mkN : (savi,savia : Str) -> N = reg2N ;
+    mkN : (vesi,veden,vesiä : Str) -> N = reg3N ;
+    mkN : (talo,   talon,   talona, taloa, taloon,
+           taloina,taloissa,talojen,taloja,taloihin : Str) -> N = mk10N
+  } ;
+
   regN = \vesi -> 
   let
     esi = Predef.dp 3 vesi ;   -- analysis: suffixes      
@@ -509,11 +485,6 @@ reg3N = \vesi,veden,vesiä ->
 
   compN = \s,n -> {s = \\c => s ++ n.s ! c ; g = n.g ; lock_N = <>} ;
 
-  mkN2 = \n,c -> n ** {c2 = c ; lock_N2 = <>} ;
-  mkN3 = \n,c,e -> n ** {c2 = c ; c3 = e ; lock_N3 = <>} ;
-  genN2 = \n -> mkN2 n (casePrep genitive) ;
-  regPN m = mkPN (regN m) ;
-  mkPN n = mkProperName n ** {lock_PN = <>} ;
 
   mkNP  : N -> Number -> CatFin.NP ; 
   mkNP noun num = {
@@ -522,6 +493,17 @@ reg3N = \vesi,veden,vesiä ->
     isPron = False ;
     lock_NP = <>
     } ;
+
+  mkPN = overload {
+    mkPN : Str -> PN = regPN ;
+    mkPN : N -> PN = mmkPN
+    } ;
+
+  mkA = overload {
+    mkA : Str -> A = regA ;
+    mkA : N -> A = mk1A ;
+    mkA : N -> (kivempaa,kivinta : Str) -> A = mkADeg
+  } ;
 
   mk1A = \x -> {s = \\_ => (noun2adj x).s ; lock_A = <>} ;
   mkA2 = \x,c -> x ** {c2 = c ; lock_A2 = <>} ;
@@ -544,6 +526,15 @@ reg3N = \vesi,veden,vesiä ->
 
   mk12V a b c d e f g h i j k l = mkVerb a b c d e f g h i j k l ** 
     {sc = NPCase Nom ; lock_V = <>} ;
+
+  mkV = overload {
+    mkV  : (soutaa : Str) -> V = regV ;
+    mkV : (soutaa,souti : Str) -> V = reg2V ;
+    mkV : (soutaa,soudan,souti : Str) -> V = reg3V ;
+    mkV : (tulla,tulee,tulen,tulevat,tulkaa,tullaan,
+           tuli,tulin,tulisi,tullut,tultu,tullun : Str) -> V = mk12V ;
+    mkV : V -> Case -> V = subjcaseV
+  } ;
 
   regV soutaa = v2v (regVerbH soutaa) ** {sc = NPCase Nom ; lock_V = <>} ;
 
@@ -600,5 +591,39 @@ reg3N = \vesi,veden,vesiä ->
   mkAV  v = v ** {lock_A = <>} ;
   mkA2V v p = mkA2 v p ** {lock_A2 = <>} ;
 
+
+--- old stuff
+
+  reg2N : (savi,savia : Str) -> N ;
+  reg3N : (vesi,veden,vesiä : Str) -> N ;
+
+  mk10N: (talo,   talon,   talona, taloa, taloon,
+         taloina,taloissa,talojen,taloja,taloihin : Str) -> N ;
+
+  regN : (talo : Str) -> N ;
+
+  mmkN2 : N -> Prep -> N2 = \n,c -> n ** {c2 = c ; lock_N2 = <>} ;
+  mkN3 = \n,c,e -> n ** {c2 = c ; c3 = e ; lock_N3 = <>} ;
+  genN2 = \n -> mmkN2 n (casePrep genitive) ;
+  regPN m = mmkPN (regN m) ;
+  mmkPN : N -> PN = \n -> mkProperName n ** {lock_PN = <>} ;
+
+  genN2 : N -> N2 ;
+
+
+  mk1A : N -> A ;
+  mkADeg : (kiva : N) -> (kivempaa,kivinta : Str) -> A ;
+  regA : (punainen : Str) -> A ;
+
+  mk12V   : (tulla,tulee,tulen,tulevat,tulkaa,tullaan,
+           tuli,tulin,tulisi,tullut,tultu,tullun : Str) -> V ;
+
+  regV  : (soutaa : Str) -> V ;
+  reg2V : (soutaa,souti : Str) -> V ;
+  reg3V : (soutaa,soudan,souti : Str) -> V ;
+
+  subjcaseV : V -> Case -> V ;
+
+  regPN : Str -> PN ;
 
 } ;
