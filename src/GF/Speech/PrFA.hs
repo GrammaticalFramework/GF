@@ -27,7 +27,6 @@ import GF.Infra.Option (Options)
 import GF.Infra.Print
 import GF.Speech.CFGToFiniteState
 import GF.Speech.FiniteState
-import GF.Speech.SRG
 import GF.Speech.TransformCFG
 import GF.Compile.ShellState (StateGrammar)
 
