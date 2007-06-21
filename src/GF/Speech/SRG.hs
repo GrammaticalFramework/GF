@@ -17,8 +17,9 @@
 -----------------------------------------------------------------------------
 
 module GF.Speech.SRG (SRG(..), SRGRule(..), SRGAlt(..), SRGItem,
-                      SRGCat, SRGNT, CFTerm,
-                       makeSimpleSRG
+                      SRGCat, SRGNT, CFTerm
+                     , makeSRG
+                     , makeSimpleSRG
                      , lookupFM_, prtS
                      , cfgCatToGFCat, srgTopCats
                      ) where
@@ -82,7 +83,18 @@ type CatNames = Map String String
 makeSimpleSRG :: Options   -- ^ Grammar options
 	      -> StateGrammar
 	      -> SRG
-makeSimpleSRG opt s =
+makeSimpleSRG opt s = makeSRG preprocess opt s
+    where
+      preprocess origStart = mergeIdentical
+                             . removeLeftRecursion origStart 
+                             . fix (topDownFilter origStart . bottomUpFilter)
+                             . removeCycles
+
+makeSRG :: (Cat_ -> CFRules -> CFRules)
+        -> Options   -- ^ Grammar options
+	-> StateGrammar
+	-> SRG
+makeSRG preprocess opt s =
       SRG { grammarName = name,
 	    startCat = lookupFM_ names origStart,
 	    origStartCat = origStart,
@@ -94,11 +106,7 @@ makeSimpleSRG opt s =
     origStart = getStartCatCF opts s
     probs = stateProbs s
     l = fmap (replace '_' '-') $ getOptVal opts speechLanguage
-    (cats,cfgRules) = unzip $ preprocess $ cfgToCFRules s
-    preprocess = mergeIdentical
-                 . removeLeftRecursion origStart 
-                 . fix (topDownFilter origStart . bottomUpFilter)
-                 . removeCycles
+    (cats,cfgRules) = unzip $ preprocess origStart $ cfgToCFRules s
     names = mkCatNames name cats
     rs = map (cfgRulesToSRGRule names probs) cfgRules
 

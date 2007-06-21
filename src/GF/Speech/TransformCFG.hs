@@ -29,7 +29,7 @@ import GF.Infra.Ident
 import GF.Infra.Option
 import GF.Infra.Print
 import GF.Speech.Relation
-import GF.Compile.ShellState (StateGrammar, stateCFG, stateGrammarST, startCatStateOpts)
+import GF.Compile.ShellState (StateGrammar, stateCFG, stateGrammarST, startCatStateOpts, stateOptions)
 
 import Control.Monad
 import Control.Monad.State (State, get, put, evalState)
@@ -78,7 +78,8 @@ cfgToCFRules s =
           profileToTerm (C.CId t) (Constant f) = maybe (CFMeta t) (\x -> CFObj x []) (forestName f)
 
 getStartCat :: Options -> StateGrammar -> String
-getStartCat opts sgr = prCFCat (startCatStateOpts opts sgr)
+getStartCat opts sgr = prCFCat (startCatStateOpts opts' sgr)
+  where opts' = addOptions opts (stateOptions sgr)
 
 getStartCatCF :: Options -> StateGrammar -> String
 getStartCatCF opts sgr = getStartCat opts sgr ++ "{}.s"
