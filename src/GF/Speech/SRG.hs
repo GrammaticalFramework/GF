@@ -16,13 +16,11 @@
 -- categories in the grammar
 -----------------------------------------------------------------------------
 
-module GF.Speech.SRG (SRG(..), SRGRule(..), SRGAlt(..),
+module GF.Speech.SRG (SRG(..), SRGRule(..), SRGAlt(..), SRGItem,
                       SRGCat, SRGNT, CFTerm,
                        makeSimpleSRG
                      , lookupFM_, prtS
                      , cfgCatToGFCat, srgTopCats
-                     , EBnfSRGAlt(..), EBnfSRGItem
-                     , ebnfSRGAlts
                      ) where
 
 import GF.Data.Operations
@@ -63,8 +61,10 @@ data SRGRule = SRGRule SRGCat String [SRGAlt] -- ^ SRG category name, original c
 	     deriving (Eq,Show)
 
 -- | maybe a probability, a rule name and a list of symbols
-data SRGAlt = SRGAlt (Maybe Double) CFTerm [Symbol SRGNT Token]
+data SRGAlt = SRGAlt (Maybe Double) CFTerm SRGItem
 	      deriving (Eq,Show)
+
+type SRGItem = RE (Symbol SRGNT Token)
 
 type SRGCat = String
 
@@ -108,13 +108,13 @@ cfgRulesToSRGRule names probs rs@(r:_) = SRGRule cat origCat rhs
     where 
       origCat = lhsCat r
       cat = lookupFM_ names origCat
-      rhs = nub $ map ruleToAlt rs
-      ruleToAlt r@(CFRule c ss n) 
-          = SRGAlt (ruleProb probs r) n (mkSRGSymbols 0 ss)
-            where
-              mkSRGSymbols _ [] = []
-              mkSRGSymbols i (Cat c:ss) = Cat (renameCat c,i) : mkSRGSymbols (i+1) ss
-              mkSRGSymbols i (Tok t:ss) = Tok t : mkSRGSymbols i ss
+      alts = [((n,ruleProb probs r),mkSRGSymbols 0 ss) | CFRule c ss n <- rs]
+      rhs = [SRGAlt p n (srgItem sss) | ((n,p),sss) <- buildMultiMap alts ]
+
+      mkSRGSymbols _ [] = []
+      mkSRGSymbols i (Cat c:ss) = Cat (renameCat c,i) : mkSRGSymbols (i+1) ss
+      mkSRGSymbols i (Tok t:ss) = Tok t : mkSRGSymbols i ss
+
       renameCat = lookupFM_ names
 
 ruleProb :: Probs -> CFRule_ -> Maybe Double
@@ -153,22 +153,12 @@ srgTopCats srg = buildMultiMap [(oc, cat) | SRGRule cat origCat _ <- rules srg,
 -- * Size-optimized EBNF SRGs
 --
 
-data EBnfSRGAlt = EBnfSRGAlt (Maybe Double) CFTerm EBnfSRGItem
-	     deriving (Eq,Show)
-
-type EBnfSRGItem = RE (Symbol SRGNT Token)
-
-
-ebnfSRGAlts :: [SRGAlt] -> [EBnfSRGAlt]
-ebnfSRGAlts alts = [EBnfSRGAlt p n (ebnfSRGItem sss) 
-                    | ((n,p),sss) <- buildMultiMap [((n,p),ss) | SRGAlt p n ss <- alts]]
-
-ebnfSRGItem :: [[Symbol SRGNT Token]] -> EBnfSRGItem
-ebnfSRGItem = unionRE . map mergeItems . sortGroupBy (compareBy filterCats)
+srgItem :: [[Symbol SRGNT Token]] -> SRGItem
+srgItem = unionRE . map mergeItems . sortGroupBy (compareBy filterCats)
 
 -- | Merges a list of right-hand sides which all have the same 
 -- sequence of non-terminals.
-mergeItems :: [[Symbol SRGNT Token]] -> EBnfSRGItem
+mergeItems :: [[Symbol SRGNT Token]] -> SRGItem
 mergeItems = minimizeRE . ungroupTokens . minimizeRE . unionRE . map seqRE . map groupTokens
 
 groupTokens :: [Symbol SRGNT Token] -> [Symbol SRGNT [Token]]

@@ -48,12 +48,12 @@ prGSL (SRG{grammarName=name,startCat=start,origStartCat=origStart,rules=rs})
 	      text ".MAIN" <+> prCat start
     prRule (SRGRule cat origCat rhs) = 
 	comment (prt origCat) $$ 
-        prCat cat <+> union (map prAlt (ebnfSRGAlts rhs))
+        prCat cat <+> union (map prAlt rhs)
     -- FIXME: use the probability
-    prAlt (EBnfSRGAlt mp _ rhs) = prItem rhs
+    prAlt (SRGAlt mp _ rhs) = prItem rhs
 
 
-prItem :: EBnfSRGItem -> Doc
+prItem :: SRGItem -> Doc
 prItem = f
   where
     f (REUnion xs) = (if null es then empty else text "?") <> union (map f nes)

@@ -56,7 +56,7 @@ prSrgsXml sisr probs srg@(SRG{grammarName=name,startCat=start,
             ++ topCatRules
 	    ++ concatMap ruleToXML rs
     ruleToXML (SRGRule cat origCat alts) = 
-        comments ["Category " ++ origCat] ++ [rule cat (prRhs (ebnfSRGAlts alts))]
+        comments ["Category " ++ origCat] ++ [rule cat (prRhs alts)]
     prRhs rhss = [oneOf (map (mkProd sisr probs) rhss)] 
     -- externally visible rules for each of the GF categories
     topCatRules = [topRule tc [oneOf (map (it tc) cs)] | (tc,cs) <- srgTopCats srg]
@@ -67,15 +67,15 @@ prSrgsXml sisr probs srg@(SRG{grammarName=name,startCat=start,
 rule :: String -> [XML] -> XML
 rule i = Tag "rule" [("id",i)]
 
-mkProd :: Maybe SISRFormat -> Bool -> EBnfSRGAlt -> XML
-mkProd sisr probs (EBnfSRGAlt mp n rhs) = Tag "item" w (ti ++ [x] ++ tf)
+mkProd :: Maybe SISRFormat -> Bool -> SRGAlt -> XML
+mkProd sisr probs (SRGAlt mp n rhs) = Tag "item" w (ti ++ [x] ++ tf)
   where x = mkItem sisr n rhs
         w | probs = maybe [] (\p -> [("weight", show p)]) mp
           | otherwise = []
         ti = [tag sisr (profileInitSISR n)]
         tf = [tag sisr (profileFinalSISR n)]
 
-mkItem :: Maybe SISRFormat -> CFTerm -> EBnfSRGItem -> XML
+mkItem :: Maybe SISRFormat -> CFTerm -> SRGItem -> XML
 mkItem sisr cn = f
   where 
     f (REUnion [])  = ETag "ruleref" [("special","VOID")]
