@@ -21,7 +21,7 @@ import GF.Formalism.CFG
 import GF.Formalism.Utilities (Symbol(..), NameProfile(..), Profile(..), forestName)
 import GF.Infra.Ident
 import GF.Speech.TransformCFG
-import GF.Speech.SRG
+import GF.Speech.SRG (SRGNT)
 
 import qualified GF.JavaScript.AbsJS   as JS
 import qualified GF.JavaScript.PrintJS as JS
