@@ -1,0 +1,28 @@
+Morphological Paradigms in the GF Resource Grammar Library
+Aarne Ranta
+
+
+This is a synopsis of the main morphological paradigms for 
+nouns (``N``), adjectives (``A``), and verbs (``V``).
+
+
+=English=
+
+```
+  mkN : (flash : Str) -> N ;                 -- car, bus, ax, hero, fly, boy
+  mkN : (man,men : Str) -> N ;               -- index, indices
+  mkN : (man,men,man's,men's : Str) -> N ; 
+  mkN : Str -> N -> N ;                      -- baby boom
+
+  mkA : (happy : Str) -> A ;                 -- small, happy, free
+  mkA : (fat,fatter : Str) -> A ;
+  mkA : (good,better,best,well : Str) -> A 
+  compoundA : A -> A ;                       -- -/more/most ridiculous
+
+  mkV : (cry : Str) -> V ;                   -- call, kiss, echo, cry, pray
+  mkV : (stop,stopped : Str) -> V ;
+  mkV : (drink,drank,drunk  : Str) -> V ;
+  mkV : (run,ran,run,running  : Str) -> V ;
+  mkV : (go,goes,went,gone,going : Str) -> V
+```
+

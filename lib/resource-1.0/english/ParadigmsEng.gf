@@ -67,25 +67,19 @@ oper
 
   mkN : overload {
 
--- Worst case: give all four forms.
-
-    mkN : (man,men,man's,men's : Str) -> N ;
-
 -- The regular function captures the variants for nouns ending with
 -- "s","sh","x","z" or "y": "kiss - kisses", "flash - flashes"; 
 -- "fly - flies" (but "toy - toys"),
 
     mkN : (flash : Str) -> N ;
 
--- In practice the worst case is just: give singular and plural nominative.
+-- In practice the worst case is to give singular and plural nominative.
 
     mkN : (man,men : Str) -> N ;
 
--- All nouns created by the previous functions are marked as
--- $nonhuman$. If you want a $human$ noun, wrap it with the following
--- function:
+-- The theoretical worst case: give all four forms.
 
-    mkN : Gender -> N -> N ;
+    mkN : (man,men,man's,men's : Str) -> N ;
 
 --3 Compound nouns 
 --
