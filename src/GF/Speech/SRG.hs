@@ -20,6 +20,7 @@ module GF.Speech.SRG (SRG(..), SRGRule(..), SRGAlt(..), SRGItem,
                       SRGCat, SRGNT, CFTerm
                      , makeSRG
                      , makeSimpleSRG
+                     , makeNonRecursiveSRG
                      , lookupFM_, prtS
                      , cfgCatToGFCat, srgTopCats
                      ) where
@@ -87,6 +88,16 @@ makeSimpleSRG opt s = makeSRG preprocess opt s
     where
       preprocess origStart = mergeIdentical
                              . removeLeftRecursion origStart 
+                             . fix (topDownFilter origStart . bottomUpFilter)
+                             . removeCycles
+
+makeNonRecursiveSRG :: Options 
+                    -> StateGrammar
+                    -> SRG
+makeNonRecursiveSRG opt s = removeRecursion $ makeSRG preprocess opt s
+    where
+      preprocess origStart = mergeIdentical
+                             . makeRegular 
                              . fix (topDownFilter origStart . bottomUpFilter)
                              . removeCycles
 
@@ -180,6 +191,67 @@ groupTokens (Cat c:ss) = Cat c : groupTokens ss
 
 ungroupTokens :: RE (Symbol SRGNT [Token]) -> RE (Symbol SRGNT Token)
 ungroupTokens = joinRE . mapRE (symbol (RESymbol . Cat) (REConcat . map (RESymbol . Tok)))
+
+--
+-- * Full recursion removal
+--
+
+{-
+S -> foo
+S -> apa
+S -> bar S
+S -> baz S
+=>
+S -> (bar|baz)* (foo|apa)
+-}
+
+-- | Removes recursion from a right-linear SRG by converting to EBNF.
+-- FIXME: corrupts semantics and probabilities
+removeRecursion :: SRG -> SRG
+removeRecursion srg = srg'
+    where
+      srg' = srg { rules = [SRGRule lhs orig [SRGAlt Nothing dummyCFTerm (f lhs alts)] 
+                               | SRGRule lhs orig alts <- rules srg] }
+      dummyCFTerm = CFMeta "dummy"
+      getRHS cat = unionRE [ rhs | SRGRule lhs _ alts <- rules srg', lhs == cat,
+                                   SRGAlt _ _ rhs <- alts]
+      mutRec = srgMutRec srg
+      -- Replaces all cats in same mutually recursive set as LHS 
+      -- (except the LHS category itself) with
+      -- their respective right-hand sides.
+      -- This makes all rules either non-recursive, or directly right-recursive.
+      -- NOTE: this fails (loops) if the input grammar is not right-linear.
+      -- Then replaces all direct right-recursion by Kleene stars.
+      f lhs alts = recToKleene $ mapRE' g $ unionRE [rhs | SRGAlt _ _ rhs <- alts]
+          where
+            g (Cat (c,_)) | isRelatedTo mutRec lhs c && c /= lhs = getRHS c
+            g t = RESymbol t
+            recToKleene rhs = concatRE [repeatRE (unionRE r), unionRE nr]
+                where (r,nr) = partition isRecursive (normalSplitRE rhs)
+            isRecursive re = lhs `elem` srgItemUses re
+
+-- | Converts any regexp which does not contain Kleene stars to a
+-- disjunctive normal form.
+{-
+(a|b) (c|d) => [a c, a d, b c, b d]
+(a|b) | (c d) => [a, b, c d]
+(a b) | (c d) => [a b, c d]
+-}
+normalSplitRE :: SRGItem -> [SRGItem]
+normalSplitRE (REUnion xs)  = concatMap normalSplitRE xs
+normalSplitRE (REConcat xs) = map concatRE $ sequence $ map normalSplitRE xs
+normalSplitRE x = [x]
+
+srgMutRec :: SRG -> Rel SRGCat
+srgMutRec = reflexiveSubrelation . symmetricSubrelation . transitiveClosure . srgUses
+
+srgUses :: SRG -> Rel SRGCat
+srgUses srg = mkRel [(lhs,c) | SRGRule lhs _ alts <- rules srg,
+                               SRGAlt _ _ rhs <- alts,
+                               c <- srgItemUses rhs]
+
+srgItemUses :: SRGItem -> [SRGCat]
+srgItemUses rhs = [c | Cat (c,_) <- symbolsRE rhs]
 
 --
 -- * Utilities for building and printing SRGs

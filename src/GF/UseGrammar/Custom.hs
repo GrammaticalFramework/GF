@@ -252,6 +252,7 @@ customGrammarPrinter =
   ,(strCI "jsgf",    jsgfPrinter Nothing)
   ,(strCI "jsgf_sisr_old", jsgfPrinter (Just SISR.SISROld))
   ,(strCI "srgs_xml",           srgsXmlPrinter Nothing False)
+  ,(strCI "srgs_xml_non_rec",   srgsXmlNonRecursivePrinter)
   ,(strCI "srgs_xml_prob",      srgsXmlPrinter Nothing True)
   ,(strCI "srgs_xml_sisr_old",  srgsXmlPrinter (Just SISR.SISROld) False)
   ,(strCI "srgs_abnf",          srgsAbnfPrinter Nothing False)
