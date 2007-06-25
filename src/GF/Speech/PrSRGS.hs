@@ -11,7 +11,7 @@
 -- categories in the grammar
 -----------------------------------------------------------------------------
 
-module GF.Speech.PrSRGS (srgsXmlPrinter) where
+module GF.Speech.PrSRGS (srgsXmlPrinter, srgsXmlNonRecursivePrinter) where
 
 import GF.Data.Utilities
 import GF.Data.XML
@@ -41,6 +41,10 @@ srgsXmlPrinter :: Maybe SISRFormat
 	       -> Options 
                -> StateGrammar -> String
 srgsXmlPrinter sisr probs opts s = prSrgsXml sisr probs $ makeSimpleSRG opts s
+
+srgsXmlNonRecursivePrinter :: Options -> StateGrammar -> String
+srgsXmlNonRecursivePrinter opts s = prSrgsXml Nothing False $ makeNonRecursiveSRG opts s
+
 
 prSrgsXml :: Maybe SISRFormat -> Bool -> SRG -> String
 prSrgsXml sisr probs srg@(SRG{grammarName=name,startCat=start,
