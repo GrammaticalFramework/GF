@@ -256,6 +256,7 @@ customGrammarPrinter =
   ,(strCI "srgs_xml_prob",      srgsXmlPrinter Nothing True)
   ,(strCI "srgs_xml_sisr_old",  srgsXmlPrinter (Just SISR.SISROld) False)
   ,(strCI "srgs_abnf",          srgsAbnfPrinter Nothing False)
+  ,(strCI "srgs_abnf_non_rec",  srgsAbnfNonRecursivePrinter)
   ,(strCI "srgs_abnf_sisr_old", srgsAbnfPrinter (Just SISR.SISROld) False)
   ,(strCI "vxml", grammar2vxml)
   ,(strCI "slf",  slfPrinter)

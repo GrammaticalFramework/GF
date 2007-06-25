@@ -17,7 +17,7 @@
 -- FIXME: convert to UTF-8
 -----------------------------------------------------------------------------
 
-module GF.Speech.PrSRGS_ABNF (srgsAbnfPrinter) where
+module GF.Speech.PrSRGS_ABNF (srgsAbnfPrinter, srgsAbnfNonRecursivePrinter) where
 
 import GF.Conversion.Types
 import GF.Data.Utilities
@@ -45,6 +45,9 @@ srgsAbnfPrinter :: Maybe SISRFormat
 	        -> Options 
                 -> StateGrammar -> String
 srgsAbnfPrinter sisr probs opts s = show $ prABNF sisr probs $ makeSimpleSRG opts s
+
+srgsAbnfNonRecursivePrinter :: Options -> StateGrammar -> String
+srgsAbnfNonRecursivePrinter opts s = show $ prABNF Nothing False $ makeNonRecursiveSRG opts s
 
 prABNF :: Maybe SISRFormat -> Bool -> SRG -> Doc
 prABNF sisr probs srg@(SRG{grammarName=name,grammarLanguage=ml,
