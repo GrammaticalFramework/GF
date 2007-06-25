@@ -38,6 +38,7 @@ import GF.Speech.TransformCFG
 import GF.Speech.Relation
 import GF.Speech.FiniteState
 import GF.Speech.RegExp
+import GF.Speech.CFGToFiniteState
 import GF.Infra.Option
 import GF.Probabilistic.Probabilistic (Probs)
 import GF.Compile.ShellState (StateGrammar, stateProbs, stateOptions, cncId)
@@ -94,47 +95,62 @@ makeSimpleSRG opt s = makeSRG preprocess opt s
 makeNonRecursiveSRG :: Options 
                     -> StateGrammar
                     -> SRG
-makeNonRecursiveSRG opt s = removeRecursion $ makeSRG preprocess opt s
-    where
-      preprocess origStart = mergeIdentical
-                             . makeRegular 
-                             . fix (topDownFilter origStart . bottomUpFilter)
-                             . removeCycles
+makeNonRecursiveSRG opt s = renameSRG $ 
+      SRG { grammarName = prIdent (cncId s),
+	    startCat = start,
+	    origStartCat = origStart,
+            grammarLanguage = getSpeechLanguage opt s,
+	    rules = rs }
+  where
+    origStart = getStartCatCF opt s
+    MFA start dfas = cfgToMFA opt s
+    rs = [SRGRule l l [SRGAlt Nothing dummyCFTerm (dfaToSRGItem dfa)] | (l,dfa) <- dfas]
+      where dfaToSRGItem = mapRE dummySRGNT . minimizeRE . dfa2re
+            dummyCFTerm = CFMeta "dummy"
+            dummySRGNT = mapSymbol (\c -> (c,0)) id
 
 makeSRG :: (Cat_ -> CFRules -> CFRules)
         -> Options   -- ^ Grammar options
 	-> StateGrammar
 	-> SRG
-makeSRG preprocess opt s =
+makeSRG preprocess opt s = renameSRG $ 
       SRG { grammarName = name,
-	    startCat = lookupFM_ names origStart,
+	    startCat = origStart,
 	    origStartCat = origStart,
-            grammarLanguage = l,
+            grammarLanguage = getSpeechLanguage opt s,
 	    rules = rs }
     where 
-    opts = addOptions opt (stateOptions s)
     name = prIdent (cncId s)
-    origStart = getStartCatCF opts s
-    probs = stateProbs s
-    l = fmap (replace '_' '-') $ getOptVal opts speechLanguage
+    origStart = getStartCatCF opt s
     (cats,cfgRules) = unzip $ preprocess origStart $ cfgToCFRules s
-    names = mkCatNames name cats
-    rs = map (cfgRulesToSRGRule names probs) cfgRules
+    rs = map (cfgRulesToSRGRule (stateProbs s)) cfgRules
+
+-- | Give names on the form NameX to all categories.
+renameSRG :: SRG -> SRG
+renameSRG srg = srg { startCat = renameCat (startCat srg),
+                      rules = map renameRule (rules srg) }
+  where
+    names = mkCatNames (grammarName srg) (allSRGCats srg)
+    renameRule (SRGRule _ origCat alts) = SRGRule (renameCat origCat) origCat (map renameAlt alts)
+    renameAlt (SRGAlt mp n rhs) = SRGAlt mp n (mapRE renameSymbol rhs) 
+    renameSymbol = mapSymbol (\ (c,x) -> (renameCat c, x)) id
+    renameCat = lookupFM_ names
+
+getSpeechLanguage :: Options -> StateGrammar -> Maybe String
+getSpeechLanguage opt s = 
+    fmap (replace '_' '-') $ getOptVal (addOptions opt (stateOptions s)) speechLanguage
 
 -- FIXME: merge alternatives with same rhs and profile but different probabilities
-cfgRulesToSRGRule :: Map String String -> Probs -> [CFRule_] -> SRGRule
-cfgRulesToSRGRule names probs rs@(r:_) = SRGRule cat origCat rhs
+cfgRulesToSRGRule :: Probs -> [CFRule_] -> SRGRule
+cfgRulesToSRGRule probs rs@(r:_) = SRGRule origCat origCat rhs
     where 
       origCat = lhsCat r
-      cat = lookupFM_ names origCat
       alts = [((n,ruleProb probs r),mkSRGSymbols 0 ss) | CFRule c ss n <- rs]
       rhs = [SRGAlt p n (srgItem sss) | ((n,p),sss) <- buildMultiMap alts ]
 
       mkSRGSymbols _ [] = []
-      mkSRGSymbols i (Cat c:ss) = Cat (renameCat c,i) : mkSRGSymbols (i+1) ss
+      mkSRGSymbols i (Cat c:ss) = Cat (c,i) : mkSRGSymbols (i+1) ss
       mkSRGSymbols i (Tok t:ss) = Tok t : mkSRGSymbols i ss
-
-      renameCat = lookupFM_ names
 
 ruleProb :: Probs -> CFRule_ -> Maybe Double
 ruleProb probs r = lookupProb probs (ruleFun r)
@@ -191,67 +207,6 @@ groupTokens (Cat c:ss) = Cat c : groupTokens ss
 
 ungroupTokens :: RE (Symbol SRGNT [Token]) -> RE (Symbol SRGNT Token)
 ungroupTokens = joinRE . mapRE (symbol (RESymbol . Cat) (REConcat . map (RESymbol . Tok)))
-
---
--- * Full recursion removal
---
-
-{-
-S -> foo
-S -> apa
-S -> bar S
-S -> baz S
-=>
-S -> (bar|baz)* (foo|apa)
--}
-
--- | Removes recursion from a right-linear SRG by converting to EBNF.
--- FIXME: corrupts semantics and probabilities
-removeRecursion :: SRG -> SRG
-removeRecursion srg = srg'
-    where
-      srg' = srg { rules = [SRGRule lhs orig [SRGAlt Nothing dummyCFTerm (f lhs alts)] 
-                               | SRGRule lhs orig alts <- rules srg] }
-      dummyCFTerm = CFMeta "dummy"
-      getRHS cat = unionRE [ rhs | SRGRule lhs _ alts <- rules srg', lhs == cat,
-                                   SRGAlt _ _ rhs <- alts]
-      mutRec = srgMutRec srg
-      -- Replaces all cats in same mutually recursive set as LHS 
-      -- (except the LHS category itself) with
-      -- their respective right-hand sides.
-      -- This makes all rules either non-recursive, or directly right-recursive.
-      -- NOTE: this fails (loops) if the input grammar is not right-linear.
-      -- Then replaces all direct right-recursion by Kleene stars.
-      f lhs alts = recToKleene $ mapRE' g $ unionRE [rhs | SRGAlt _ _ rhs <- alts]
-          where
-            g (Cat (c,_)) | isRelatedTo mutRec lhs c && c /= lhs = getRHS c
-            g t = RESymbol t
-            recToKleene rhs = concatRE [repeatRE (unionRE r), unionRE nr]
-                where (r,nr) = partition isRecursive (normalSplitRE rhs)
-            isRecursive re = lhs `elem` srgItemUses re
-
--- | Converts any regexp which does not contain Kleene stars to a
--- disjunctive normal form.
-{-
-(a|b) (c|d) => [a c, a d, b c, b d]
-(a|b) | (c d) => [a, b, c d]
-(a b) | (c d) => [a b, c d]
--}
-normalSplitRE :: SRGItem -> [SRGItem]
-normalSplitRE (REUnion xs)  = concatMap normalSplitRE xs
-normalSplitRE (REConcat xs) = map concatRE $ sequence $ map normalSplitRE xs
-normalSplitRE x = [x]
-
-srgMutRec :: SRG -> Rel SRGCat
-srgMutRec = reflexiveSubrelation . symmetricSubrelation . transitiveClosure . srgUses
-
-srgUses :: SRG -> Rel SRGCat
-srgUses srg = mkRel [(lhs,c) | SRGRule lhs _ alts <- rules srg,
-                               SRGAlt _ _ rhs <- alts,
-                               c <- srgItemUses rhs]
-
-srgItemUses :: SRGItem -> [SRGCat]
-srgItemUses rhs = [c | Cat (c,_) <- symbolsRE rhs]
 
 --
 -- * Utilities for building and printing SRGs
