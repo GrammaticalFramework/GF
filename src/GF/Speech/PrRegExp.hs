@@ -11,6 +11,7 @@
 module GF.Speech.PrRegExp (regexpPrinter,multiRegexpPrinter) where
 
 import GF.Conversion.Types
+import GF.Formalism.Utilities
 import GF.Infra.Ident
 import GF.Infra.Option (Options)
 import GF.Speech.CFGToFiniteState
@@ -26,10 +27,7 @@ multiRegexpPrinter opts s = prREs $ mfa2res $ cfgToMFA opts s
 
 prREs :: [(String,RE (MFALabel String))] -> String
 prREs res = unlines [l ++ " = " ++ prRE (mapRE showLabel re) | (l,re) <- res]
-  where showLabel (MFASym s) = s
-        showLabel (MFASub l) = "<" ++ l ++ ">"
+  where showLabel = symbol (\l -> "<" ++ l ++ ">") id
 
 mfa2res :: MFA String -> [(String,RE (MFALabel String))]
-mfa2res (MFA start dfas) = 
-    [("START",f start)] ++ [(l,f dfa) | (l,dfa) <- dfas]
-  where f = minimizeRE . dfa2re
+mfa2res (MFA _ dfas) = [(l, minimizeRE (dfa2re dfa)) | (l,dfa) <- dfas]

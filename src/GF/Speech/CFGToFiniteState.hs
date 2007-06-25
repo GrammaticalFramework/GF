@@ -13,7 +13,7 @@
 -----------------------------------------------------------------------------
 
 module GF.Speech.CFGToFiniteState (cfgToFA, makeSimpleRegular,
-                                   MFALabel(..), MFA(..), cfgToMFA,cfgToFA') where
+                                   MFA(..), MFALabel, cfgToMFA,cfgToFA') where
 
 import Data.List
 import Data.Maybe
@@ -51,14 +51,13 @@ type MutRecSets = Map Cat_ MutRecSet
 -- * Multiple DFA type
 --
 
-data MFALabel a = MFASym a | MFASub String
-                deriving (Eq,Ord)
+type MFALabel a = Symbol String a    
 
-data MFA a = MFA (DFA (MFALabel a)) [(String,DFA (MFALabel a))]
-
+data MFA a = MFA String [(String,DFA (MFALabel a))]
 
 
-cfgToFA :: Options -> StateGrammar -> DFA String
+
+cfgToFA :: Options -> StateGrammar -> DFA Token
 cfgToFA opts s = minimize $ compileAutomaton start $ makeSimpleRegular opts s
   where start = getStartCatCF opts s
 
@@ -123,27 +122,26 @@ make_fa c@(g,ns) q0 alpha q1 fa =
 -- * Compile a strongly regular grammar to a DFA with sub-automata
 --
 
-cfgToMFA :: Options -> StateGrammar -> MFA String
+cfgToMFA :: Options -> StateGrammar -> MFA Token
 cfgToMFA opts s = buildMFA start $ makeSimpleRegular opts s
   where start = getStartCatCF opts s
 
 -- | Build a DFA by building and expanding an MFA
-cfgToFA' :: Options -> StateGrammar -> DFA String
+cfgToFA' :: Options -> StateGrammar -> DFA Token
 cfgToFA' opts s = mfaToDFA $ cfgToMFA opts s
 
 buildMFA :: Cat_ -- ^ Start category
-         -> CFRules -> MFA String
+         -> CFRules -> MFA Token
 buildMFA start g = sortSubLats $ removeUnusedSubLats mfa
-  where startFA = let (fa,s,f) = newFA_
-                   in newTransition s f (MFASub start) fa
-        fas = compileAutomata g
-        mkMFALabel (Cat c) = MFASub c
-        mkMFALabel (Tok t) = MFASym t
-        toMFA = mapTransitions mkMFALabel
-        mfa = MFA startFA [(c, toMFA (minimize fa)) | (c,fa) <- fas]
+  where fas = compileAutomata g
+        mfa = MFA start [(c, minimize fa) | (c,fa) <- fas]
+
+mfaStartDFA :: MFA a -> DFA (MFALabel a)
+mfaStartDFA (MFA start subs) = 
+    fromMaybe (error $ "Bad start MFA: " ++ start) $ lookup start subs
 
 mfaToDFA :: Ord a => MFA a -> DFA a
-mfaToDFA (MFA main subs) = minimize $ expand $ dfa2nfa main
+mfaToDFA mfa@(MFA _ subs) = minimize $ expand $ dfa2nfa $ mfaStartDFA mfa
   where
   subs' = Map.fromList [(c, dfa2nfa n) | (c,n) <- subs]
   getSub l = fromJust $ Map.lookup l subs'
@@ -152,14 +150,14 @@ mfaToDFA (MFA main subs) = minimize $ expand $ dfa2nfa main
   expandEdge fa (f,t,x) = 
       case x of
              Nothing         -> newTransition f t Nothing  fa
-             Just (MFASym s) -> newTransition f t (Just s) fa
-             Just (MFASub l) -> insertNFA fa (f,t) (expand $ getSub l)
+             Just (Tok s) -> newTransition f t (Just s) fa
+             Just (Cat l) -> insertNFA fa (f,t) (expand $ getSub l)
 
 removeUnusedSubLats :: MFA a -> MFA a
-removeUnusedSubLats mfa@(MFA main subs) = MFA main [(c,s) | (c,s) <- subs, isUsed c]
+removeUnusedSubLats mfa@(MFA start subs) = MFA start [(c,s) | (c,s) <- subs, isUsed c]
   where
   usedMap = subLatUseMap mfa
-  used = growUsedSet (usedSubLats main)
+  used = growUsedSet (Set.singleton start)
   isUsed c = c `Set.member` used
   growUsedSet = fix (\s -> foldl Set.union s $ mapMaybe (flip Map.lookup usedMap) $ Set.toList s)
 
@@ -167,7 +165,7 @@ subLatUseMap :: MFA a -> Map String (Set String)
 subLatUseMap (MFA _ subs) = Map.fromList [(c,usedSubLats n) | (c,n) <- subs]
 
 usedSubLats :: DFA (MFALabel a) -> Set String
-usedSubLats fa = Set.fromList [s | (_,_,MFASub s) <- transitions fa]
+usedSubLats fa = Set.fromList [s | (_,_,Cat s) <- transitions fa]
 
 revMultiMap :: (Ord a, Ord b) => Map a (Set b) -> Map b (Set a)
 revMultiMap m = Map.fromListWith Set.union [ (y,Set.singleton x) | (x,s) <- Map.toList m, y <- Set.toList s]
@@ -257,14 +255,6 @@ mutRecSets g = Map.fromList . concatMap mkMutRecSet
 --
 -- * Utilities
 --
-
--- | Create a new finite automaton with an initial and a final state.
-newFA_ :: Enum n => (FA n () b, n, n)
-newFA_ = (fa'', s, f)
-    where fa = newFA ()
-          s = startState fa
-          (fa',f) = newState () fa
-          fa'' = addFinalState f fa'
 
 -- | Add a state for the given NFA for each of the categories
 --   in the given set. Returns a map of categories to their
