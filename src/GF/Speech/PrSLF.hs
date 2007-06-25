@@ -24,7 +24,7 @@ module GF.Speech.PrSLF (slfPrinter,slfGraphvizPrinter,
 import GF.Data.Utilities
 import GF.Conversion.Types
 import GF.Formalism.CFG
-import GF.Formalism.Utilities (Symbol(..),symbol)
+import GF.Formalism.Utilities (Symbol(..),symbol,mapSymbol)
 import GF.Infra.Ident
 import GF.Infra.Option (Options)
 import GF.Infra.Print
@@ -56,7 +56,8 @@ type SLF_FA = FA State (Maybe (MFALabel String)) ()
 
 mkFAs :: Options -> StateGrammar -> (SLF_FA, [(String,SLF_FA)])
 mkFAs opts s = (slfStyleFA main, [(c,slfStyleFA n) | (c,n) <- subs])
-  where MFA main subs = {- renameSubs $ -} cfgToMFA opts s
+  where MFA start subs = {- renameSubs $ -} cfgToMFA opts s
+        main = let (fa,s,f) = newFA_ in newTransition s f (Cat start) fa        
 
 slfStyleFA :: Eq a => DFA a -> FA State (Maybe a) ()
 slfStyleFA = renameStates [0..] . removeTrivialEmptyNodes . oneFinalState Nothing ()
@@ -64,13 +65,11 @@ slfStyleFA = renameStates [0..] . removeTrivialEmptyNodes . oneFinalState Nothin
 
 -- | Give sequential names to subnetworks.
 renameSubs :: MFA String -> MFA String
-renameSubs (MFA main subs) = MFA (renameLabels main) subs'
+renameSubs (MFA start subs) = MFA (newName start) subs'
   where newNames = zip (map fst subs) ["sub"++show n | n <- [0..]]
         newName s = lookup' s newNames
         subs' = [(newName s,renameLabels n) | (s,n) <- subs]
-        renameLabels = mapTransitions renameLabel
-        renameLabel (MFASub x) = MFASub (newName x)
-        renameLabel l = l
+        renameLabels = mapTransitions (mapSymbol newName id)
 
 --
 -- * SLF graphviz printing (without sub-networks)
@@ -97,8 +96,7 @@ gvSLFFA :: Maybe String -> SLF_FA -> STM.State [State] Dot.Graph
 gvSLFFA n fa = 
     liftM (mkCluster n . faToGraphviz . mapStates (maybe "" mfaLabelToGv) 
             . mapTransitions (const "")) (rename fa)
-  where mfaLabelToGv (MFASym s) = s
-        mfaLabelToGv (MFASub s) = "#" ++ s
+  where mfaLabelToGv = symbol ("#"++) id
         mkCluster Nothing = id
         mkCluster (Just x) 
             = Dot.setName ("cluster_"++x) . Dot.setAttr "label" x
@@ -137,8 +135,8 @@ automatonToSLF mkNode fa = SLF { slfNodes = ns, slfEdges = es }
 mfaNodeToSLFNode :: Int -> Maybe (MFALabel String) -> SLFNode
 mfaNodeToSLFNode i l = case l of
                               Nothing -> mkSLFNode i Nothing
-                              Just (MFASym x) -> mkSLFNode i (Just x)
-                              Just (MFASub s) -> mkSLFSubLat i s
+                              Just (Tok x) -> mkSLFNode i (Just x)
+                              Just (Cat s) -> mkSLFSubLat i s
 
 mkSLFNode :: Int -> Maybe String -> SLFNode
 mkSLFNode i Nothing = SLFNode { nId = i, nWord = Nothing, nTag = Nothing }

@@ -15,7 +15,7 @@ module GF.Speech.FiniteState (FA(..), State, NFA, DFA,
 			      startState, finalStates,
 			      states, transitions,
                               isInternal,
-			      newFA, 
+			      newFA, newFA_,
 			      addFinalState,
 			      newState, newStates,
                               newTransition, newTransitions,
@@ -72,6 +72,14 @@ newFA :: Enum n => a -- ^ Start node label
       -> FA n a b
 newFA l = FA g s []
     where (g,s) = newNode l (newGraph [toEnum 0..])
+
+-- | Create a new finite automaton with an initial and a final state.
+newFA_ :: Enum n => (FA n () b, n, n)
+newFA_ = (fa'', s, f)
+    where fa = newFA ()
+          s = startState fa
+          (fa',f) = newState () fa
+          fa'' = addFinalState f fa'
 
 addFinalState :: n -> FA n a b -> FA n a b
 addFinalState f (FA g s ss) = FA g s (f:ss)
