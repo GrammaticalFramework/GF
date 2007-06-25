@@ -71,14 +71,14 @@ oper
     Pl => "are"
     } ;
 
+  hidden : SS = ss [] ;
 lin
-  switchable_light = ss [] ;
-  switchable_fan  = ss [] ;
-  dimmable_fan  = ss [] ;
+  switchable_light = hidden ;
+  switchable_fan = hidden ;
+  dimmable_light = hidden ;
 
-  statelike_switchOn _ _ = ss [] ;
-  statelike_switchOff _ _ = ss [] ;
-
+  statelike_switchOn _ _ = hidden ;
+  statelike_switchOff _ _ = hidden ;
 
 }
 

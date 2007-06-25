@@ -38,7 +38,7 @@ fun
 
   switchable_light : Switchable light ;
   switchable_fan : Switchable fan ;
-  dimmable_fan : Dimmable fan ;
+  dimmable_light : Dimmable light ;
 
   statelike_switchOn  : (k : Kind) -> (s : Switchable k) -> Statelike k (switchOn k s) ;
   statelike_switchOff : (k : Kind) -> (s : Switchable k) -> Statelike k (switchOff k s) ;

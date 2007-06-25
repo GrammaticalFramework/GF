@@ -2,13 +2,12 @@ abstract Toy0 = {
 
 -- grammar from Chapter 2 of the Regulus book
 
-flags startcat=MAIN ;
+flags startcat=NP ;
 
 cat 
-  MAIN ; NP ; Noun ; Spec ;
+  NP ; Noun ; Spec ;
 
 fun
-  Main : NP -> MAIN ;
   SpecNoun : Spec -> Noun -> NP ;
 
   One, Two : Spec ;
