@@ -86,7 +86,7 @@ oper
 lin
   switchable_light = ss [] ;
   switchable_fan  = ss [] ;
-  dimmable_fan  = ss [] ;
+  dimmable_light  = ss [] ;
 
   statelike_switchOn _ _ = ss [] ;
   statelike_switchOff _ _ = ss [] ;
