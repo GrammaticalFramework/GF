@@ -3,7 +3,8 @@ module GF.Speech.RegExp (RE(..),
                          isEpsilon, isNull,
                          unionRE, concatRE, seqRE,
                          repeatRE, minimizeRE,
-                         mapRE, joinRE,
+                         mapRE, mapRE', joinRE,
+                         symbolsRE,
                          dfa2re, prRE) where
 
 import Data.List
@@ -107,16 +108,25 @@ firstRE (REConcat (x:xs)) = (x, REConcat xs)
 firstRE r = (r,epsilonRE)
 
 mapRE :: (a -> b) -> RE a -> RE b
-mapRE f (REConcat xs) = REConcat (map (mapRE f) xs)
-mapRE f (REUnion xs) = REUnion (map (mapRE f) xs)
-mapRE f (RERepeat xs) = RERepeat (mapRE f xs)
-mapRE f (RESymbol s) = RESymbol (f s)
+mapRE f = mapRE' (RESymbol . f)
+
+mapRE' :: (a -> RE b) -> RE a -> RE b
+mapRE' f (REConcat xs) = REConcat (map (mapRE' f) xs)
+mapRE' f (REUnion xs) = REUnion (map (mapRE' f) xs)
+mapRE' f (RERepeat x) = RERepeat (mapRE' f x)
+mapRE' f (RESymbol s) = f s
 
 joinRE :: RE (RE a) -> RE a
 joinRE (REConcat xs) = REConcat (map joinRE xs)
 joinRE (REUnion xs) = REUnion (map joinRE xs)
 joinRE (RERepeat xs) = RERepeat (joinRE xs)
 joinRE (RESymbol ss) = ss
+
+symbolsRE :: RE a -> [a]
+symbolsRE (REConcat xs) = concatMap symbolsRE xs
+symbolsRE (REUnion xs) = concatMap symbolsRE xs
+symbolsRE (RERepeat x) = symbolsRE x
+symbolsRE (RESymbol x) = [x]
 
 -- Debugging
 
