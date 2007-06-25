@@ -657,9 +657,11 @@ txtHelpFile =
   "\n    -printer=jsgf_sisr_old   Java Speech Grammar Format with semantic tags in " ++
   "\n                                         SISR  WD 20030401 format" ++
   "\n    -printer=srgs_abnf       SRGS ABNF format" ++
+  "\n    -printer=srgs_abnf_non_rec  SRGS ABNF format, without any recursion." ++
   "\n    -printer=srgs_abnf_sisr_old SRGS ABNF format, with semantic tags in" ++
   "\n                                         SISR  WD 20030401 format" ++
   "\n    -printer=srgs_xml       SRGS XML format" ++
+  "\n    -printer=srgs_xml_non_rec     SRGS XML format, without any recursion." ++
   "\n    -printer=srgs_xml_prob  SRGS XML format, with weights" ++
   "\n    -printer=srgs_xml_sisr_old SRGS XML format, with semantic tags in" ++
   "\n                                         SISR  WD 20030401 format" ++
