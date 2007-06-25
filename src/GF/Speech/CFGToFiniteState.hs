@@ -68,33 +68,6 @@ makeSimpleRegular opts s = makeRegular $ cfgToCFRules s
         preprocess = fix (topDownFilter start . bottomUpFilter)
                      . removeCycles
 
---
--- * Approximate context-free grammars with regular grammars.
---
-
--- Use the transformation algorithm from \"Regular Approximation of Context-free
--- Grammars through Approximation\", Mohri and Nederhof, 2000
--- to create an over-generating regular frammar for a context-free 
--- grammar
-makeRegular :: CFRules -> CFRules
-makeRegular g = groupProds $ concatMap trSet (mutRecCats True g)
-  where trSet cs | allXLinear cs rs = rs
-                 | otherwise = concatMap handleCat csl
-            where csl = Set.toList cs 
-                  rs = catSetRules g cs
-                  handleCat c = [CFRule c' [] (mkCFTerm (c++"-empty"))] -- introduce A' -> e
-                                ++ concatMap (makeRightLinearRules c) (catRules g c)
-                      where c' = newCat c
-                  makeRightLinearRules b' (CFRule c ss n) = 
-                      case ys of
-                              [] -> newRule b' (xs ++ [Cat (newCat c)]) n -- no non-terminals left
-                              (Cat b:zs) -> newRule b' (xs ++ [Cat b]) n 
-                                        ++ makeRightLinearRules (newCat b) (CFRule c zs n)
-                      where (xs,ys) = break (`catElem` cs) ss
-                            -- don't add rules on the form A -> A
-                            newRule c rhs n | rhs == [Cat c] = []
-                                            | otherwise = [CFRule c rhs n]
-        newCat c = c ++ "$"
 
 --
 -- * Compile strongly regular grammars to NFAs
@@ -300,26 +273,3 @@ addStatesForCats :: Set Cat_ -> NFA t -> (NFA t, Map Cat_ State)
 addStatesForCats cs fa = (fa', m)
   where (fa', ns) = newStates (replicate (Set.size cs) ()) fa
         m = Map.fromList (zip (Set.toList cs) (map fst ns))
-
-ruleIsNonRecursive :: Set Cat_ -> CFRule_ -> Bool
-ruleIsNonRecursive cs = noCatsInSet cs . ruleRhs
-
-noCatsInSet :: Set Cat_ -> [Symbol Cat_ t] -> Bool
-noCatsInSet cs = not . any (`catElem` cs)
-
--- | Check if all the rules are right-linear, or all the rules are
---   left-linear, with respect to given categories.
-allXLinear :: Set Cat_ -> [CFRule_] -> Bool
-allXLinear cs rs = all (isRightLinear cs) rs || all (isLeftLinear cs) rs
-
--- | Checks if a context-free rule is right-linear.
-isRightLinear :: Set Cat_  -- ^ The categories to consider
-              -> CFRule_   -- ^ The rule to check for right-linearity
-              -> Bool
-isRightLinear cs = noCatsInSet cs . safeInit . ruleRhs
-
--- | Checks if a context-free rule is left-linear.
-isLeftLinear ::  Set Cat_  -- ^ The categories to consider
-              -> CFRule_   -- ^ The rule to check for right-linearity
-              -> Bool
-isLeftLinear cs = noCatsInSet cs . drop 1 . ruleRhs

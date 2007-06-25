@@ -257,6 +257,33 @@ mutRecCats incAll g = equivalenceClasses $ refl $ symmetricSubrelation $ transit
         allCats = map fst g
         refl = if incAll then reflexiveClosure_ allCats else reflexiveSubrelation
 
+--
+-- * Approximate context-free grammars with regular grammars.
+--
+
+-- Use the transformation algorithm from \"Regular Approximation of Context-free
+-- Grammars through Approximation\", Mohri and Nederhof, 2000
+-- to create an over-generating regular frammar for a context-free 
+-- grammar
+makeRegular :: CFRules -> CFRules
+makeRegular g = groupProds $ concatMap trSet (mutRecCats True g)
+  where trSet cs | allXLinear cs rs = rs
+                 | otherwise = concatMap handleCat csl
+            where csl = Set.toList cs 
+                  rs = catSetRules g cs
+                  handleCat c = [CFRule c' [] (mkCFTerm (c++"-empty"))] -- introduce A' -> e
+                                ++ concatMap (makeRightLinearRules c) (catRules g c)
+                      where c' = newCat c
+                  makeRightLinearRules b' (CFRule c ss n) = 
+                      case ys of
+                              [] -> newRule b' (xs ++ [Cat (newCat c)]) n -- no non-terminals left
+                              (Cat b:zs) -> newRule b' (xs ++ [Cat b]) n 
+                                        ++ makeRightLinearRules (newCat b) (CFRule c zs n)
+                      where (xs,ys) = break (`catElem` cs) ss
+                            -- don't add rules on the form A -> A
+                            newRule c rhs n | rhs == [Cat c] = []
+                                            | otherwise = [CFRule c rhs n]
+        newCat c = c ++ "$"
 
 --
 -- * CFG rule utilities
@@ -292,7 +319,7 @@ ruleFun (CFRule _ _ t) = f t
         f _ = IC ""
 
 -- | Checks if a symbol is a non-terminal of one of the given categories.
-catElem :: Symbol Cat_ t -> Set Cat_ -> Bool
+catElem :: Ord c => Symbol c t -> Set c -> Bool
 catElem s cs = symbol (`Set.member` cs) (const False) s
 
 -- | Check if any of the categories used on the right-hand side
@@ -302,3 +329,28 @@ anyUsedBy cs (CFRule _ ss _) = any (`elem` cs) (filterCats ss)
 
 mkCFTerm :: String -> CFTerm
 mkCFTerm n = CFObj (IC n) []
+
+ruleIsNonRecursive :: Ord c => Set c -> CFRule c n t -> Bool
+ruleIsNonRecursive cs = noCatsInSet cs . ruleRhs
+
+noCatsInSet :: Ord c => Set c -> [Symbol c t] -> Bool
+noCatsInSet cs = not . any (`catElem` cs)
+
+-- | Check if all the rules are right-linear, or all the rules are
+--   left-linear, with respect to given categories.
+allXLinear :: Ord c => Set c -> [CFRule c n t] -> Bool
+allXLinear cs rs = all (isRightLinear cs) rs || all (isLeftLinear cs) rs
+
+-- | Checks if a context-free rule is right-linear.
+isRightLinear :: Ord c => 
+                 Set c  -- ^ The categories to consider
+              -> CFRule c n t   -- ^ The rule to check for right-linearity
+              -> Bool
+isRightLinear cs = noCatsInSet cs . safeInit . ruleRhs
+
+-- | Checks if a context-free rule is left-linear.
+isLeftLinear :: Ord c => 
+                Set c  -- ^ The categories to consider
+             -> CFRule c n t   -- ^ The rule to check for left-linearity
+             -> Bool
+isLeftLinear cs = noCatsInSet cs . drop 1 . ruleRhs

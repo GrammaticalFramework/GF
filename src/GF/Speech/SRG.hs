@@ -49,7 +49,7 @@ import Data.Set (Set)
 import qualified Data.Set as Set
 
 data SRG = SRG { grammarName :: String    -- ^ grammar name
-		 , startCat :: String     -- ^ start category name
+		 , startCat :: SRGCat     -- ^ start category name
 		 , origStartCat :: String -- ^ original start category name
                  , grammarLanguage :: Maybe String -- ^ The language for which the grammar 
                                                    --   is intended, e.g. en-UK
@@ -61,7 +61,7 @@ data SRGRule = SRGRule SRGCat String [SRGAlt] -- ^ SRG category name, original c
 	                                      --   and productions
 	     deriving (Eq,Show)
 
--- | maybe a probability, a rule name and a list of symbols
+-- | maybe a probability, a rule name and an EBNF right-hand side
 data SRGAlt = SRGAlt (Maybe Double) CFTerm SRGItem
 	      deriving (Eq,Show)
 
@@ -163,6 +163,8 @@ srgTopCats srg = buildMultiMap [(oc, cat) | SRGRule cat origCat _ <- rules srg,
 
 srgItem :: [[Symbol SRGNT Token]] -> SRGItem
 srgItem = unionRE . map mergeItems . sortGroupBy (compareBy filterCats)
+-- non-optimizing version:
+--srgItem = unionRE . map seqRE
 
 -- | Merges a list of right-hand sides which all have the same 
 -- sequence of non-terminals.
