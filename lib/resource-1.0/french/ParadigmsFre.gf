@@ -76,11 +76,11 @@ oper
 -- The gender heuristic is less reliable: it treats as feminine all
 -- nouns ending with "e" and "ion", all others as masculine.
 
-    mkN : Str -> N ;
+    mkN : (cheval : Str) -> N ;
 
 -- Adding gender information widens the scope of the regular pattern.
 
-    mkN : Str -> Gender -> N ; 
+    mkN : (foie : Str) -> Gender -> N ; 
 
 -- In the worst case, both singular and plural forms and the gender are needed. 
 
@@ -96,7 +96,6 @@ oper
     mkN : N -> Str -> N
   } ; 
 
-  compN : N -> Str -> N ;
 
 
 
@@ -147,7 +146,7 @@ oper
 -- "heureux-heureuse-heureux", "italien-italienne", "jeune-jeune",
 -- "amer-amère", "carré- - -carrément", "joli- - -joliment".
 
-    mkA : Str -> A ;
+    mkA : (cher : Str) -> A ;
 
 -- Often just the feminine singular is deviant.
 

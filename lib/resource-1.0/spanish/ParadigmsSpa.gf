@@ -68,10 +68,7 @@ oper
 
 --2 Nouns
 
--- Worst case: two forms (singular + plural),
--- and the gender.
-
-  mkN  : (_,_ : Str) -> Gender -> N ;   -- bastón, bastones, masculine
+  mkN : overload {
 
 -- The regular function takes the singular form and the gender,
 -- and computes the plural and the gender by a heuristic. 
@@ -81,12 +78,17 @@ oper
 -- those ending with "z" have "ces" in plural; all other nouns
 -- have "es" as plural ending. The accent is not dealt with.
 
-  regN : Str -> N ;
+    mkN : (luz : Str) -> N ;
 
--- To force a different gender, use one of the following functions.
+-- A different gender can be forced.
 
-  mascN : N -> N ;
-  femN  : N -> N ;
+    mkN : Str -> Gender -> N ;
+
+-- The worst case has two forms (singular + plural) and the gender.
+
+    mkN : (baston,bastones : Str) -> Gender -> N 
+    } ;
+
 
 --3 Compound nouns 
 --
@@ -126,35 +128,42 @@ oper
 --3 Proper names and noun phrases
 --
 -- Proper names need a string and a gender.
+-- The default gender is feminine for names ending with "a", otherwise masculine.
 
-  mkPN  : Str -> Gender -> PN ; -- Juan
-  regPN : Str -> PN ;           -- feminine for "-a", otherwise masculine
+  mkPN : overload {
+    mkPN : (Anna : Str) -> PN ;
+    mkPN : (Pilar : Str) -> Gender -> PN
+    } ;
 
-
--- To form a noun phrase that can also be plural,
--- you can use the worst-case function.
-
-  mkNP : Str -> Gender -> Number -> NP ; 
 
 --2 Adjectives
 
--- Non-comparison one-place adjectives need five forms in the worst
+  mkA : overload {
+
+-- For regular adjectives, all forms are derived from the
+-- masculine singular. The types of adjectives that are recognized are
+-- "alto", "fuerte", "util". Comparison is formed by "mas".
+
+    mkA : (util : Str) -> A ;
+
+-- One-place adjectives compared with "mas" need five forms in the worst
 -- case (masc and fem singular, masc plural, adverbial).
 
-  mkA : (solo,sola,solos,solas, solamiento : Str) -> A ;
+    mkA : (solo,sola,solos,solas,solamiento : Str) -> A ;
 
--- For regular adjectives, all other forms are derived from the
--- masculine singular. The types of adjectives that are recognized are
--- "alto", "fuerte", "util".
+-- In the worst case, two separate adjectives are given: 
+-- the positive ("bueno"), and the comparative ("mejor"). 
 
-  regA : Str -> A ;
+    mkA : (bueno : A) -> (mejor : A) -> A
+    } ;
 
--- These functions create postfix adjectives. To switch
+-- The functions above create postfix adjectives. To switch
 -- them to prefix ones (i.e. ones placed before the noun in
 -- modification, as in "bueno vino"), the following function is
 -- provided.
 
-  prefA : A -> A ;
+  prefixA : A -> A ;
+
 
 --3 Two-place adjectives
 --
@@ -162,22 +171,6 @@ oper
 
   mkA2 : A -> Prep -> A2 ;
 
---3 Comparison adjectives 
-
--- Comparison adjectives are in the worst case put up from two
--- adjectives: the positive ("bueno"), and the comparative ("mejor"). 
-
-  mkADeg : A -> A -> A ;
-
--- If comparison is formed by "mas", as usual in Spanish,
--- the following pattern is used:
-
-  compADeg : A -> A ;
-
--- The regular pattern is the same as $regA$ for plain adjectives, 
--- with comparison by "mas".
-
-  regADeg : Str -> A ;
 
 
 --2 Adverbs
@@ -197,19 +190,28 @@ oper
 
 
 --2 Verbs
---
+
+  mkV : overload {
+
 -- Regular verbs are ones inflected like "cortar", "deber", or "vivir".
 -- The regular verb function is the first conjugation ("ar") recognizes
 -- the variations corresponding to the patterns
 -- "actuar, cazar, guiar, pagar, sacar". The module $BeschSpa$ gives
 -- the complete set of "Bescherelle" conjugations.
 
-  regV : Str -> V ;
+    mkV : (pagar : Str) -> V ;
 
--- The module $BeschSpa$ gives all the patterns of the "Bescherelle"
+-- Verbs with vowel alternatition in the stem - easiest to give with
+-- two forms, e.g. "mostrar"/"muestro".
+
+    mkV : (mostrar,muestro : Str) -> V ;
+
+-- Most irreguler verbs are found in $IrregSpa$. If this is not enough,
+-- the module $BeschSpa$ gives all the patterns of the "Bescherelle"
 -- book. To use them in the category $V$, wrap them with the function
 
-  verboV : Verbum -> V ;
+    mkV : Verbum -> V 
+    } ;
 
 -- To form reflexive verbs:
 
@@ -220,20 +222,19 @@ oper
 
   special_ppV : V -> Str -> V ; 
 
--- Verbs with vowel alternatition in the stem - easiest to give with
--- two forms, e.g. "mostrar"/"muestro".
-
-  regAltV : (mostrar,muestro : Str) -> V ;
 
 
 --3 Two-place verbs
 --
 -- Two-place verbs need a preposition, except the special case with direct object.
--- (transitive verbs). Notice that a particle comes from the $V$.
+-- (transitive verbs). 
 
-  mkV2  : V -> Prep -> V2 ;
+  mkV2 : overload {
+    mkV2 : Str -> V2 ;
+    mkV2 : V -> V2 ;  
+    mkV2 : V -> Prep -> V2
+    } ;
 
-  dirV2 : V -> V2 ;
 
 -- You can reuse a $V2$ verb in $V$.
 
@@ -299,7 +300,7 @@ oper
   mkPrep p = {s = p ; c = Acc ; isDir = False} ;
 
 
-  mkN x y g = mkNounIrreg x y g ** {lock_N = <>} ;
+  mk2N x y g = mkNounIrreg x y g ** {lock_N = <>} ;
   regN x = mkNomReg x ** {lock_N = <>} ;
   compN x y = {s = \\n => x.s ! n ++ y ; g = x.g ; lock_N = <>} ;
   femN x = {s = x.s ; g = feminine ; lock_N = <>} ;
@@ -310,17 +311,17 @@ oper
   aN2 n = mkN2 n dative ;
   mkN3 = \n,p,q -> n ** {lock_N3 = <> ; c2 = p ; c3 = q} ;
 
-  mkPN x g = {s = x ; g = g} ** {lock_PN = <>} ;
-  regPN x = mkPN x g where {
+  mk2PN x g = {s = x ; g = g} ** {lock_PN = <>} ;
+  regPN x = mk2PN x g where {
     g = case last x of {
       "a" => feminine ;
       _ => masculine
       }
     } ;
 
-  mkNP x g n = {s = (pn2np (mkPN x g)).s; a = agrP3 g n ; hasClit = False} ** {lock_NP = <>} ;
+  mkNP x g n = {s = (pn2np (mk2PN x g)).s; a = agrP3 g n ; hasClit = False} ** {lock_NP = <>} ;
 
-  mkA a b c d e = 
+  mk5A a b c d e = 
    compADeg {s = \\_ => (mkAdj a b c d e).s ; isPre = False ; lock_A = <>} ;
   regA a = compADeg {s = \\_ => (mkAdjReg a).s ; isPre = False ; lock_A = <>} ;
   prefA a = {s = a.s ; isPre = True ; lock_A = <>} ;
@@ -375,8 +376,8 @@ oper
 
   regAltV x y = verboV (regAlternV x y) ;
 
-  mkV2 v p = {s = v.s ; vtyp = v.vtyp ; c2 = p ; lock_V2 = <>} ;
-  dirV2 v = mkV2 v accusative ;
+  mk2V2 v p = {s = v.s ; vtyp = v.vtyp ; c2 = p ; lock_V2 = <>} ;
+  dirV2 v = mk2V2 v accusative ;
   v2V v = v ** {lock_V = <>} ;
 
   mkV3 v p q = {s = v.s ; vtyp = v.vtyp ; 
@@ -391,19 +392,77 @@ oper
 
   mkV0  v = v ** {lock_V0 = <>} ;
   mkVS  v = v ** {m = \\_ => Indic ; lock_VS = <>} ;  ---- more moods
-  mkV2S v p = mkV2 v p ** {mn,mp = Indic ; lock_V2S = <>} ;
+  mkV2S v p = mk2V2 v p ** {mn,mp = Indic ; lock_V2S = <>} ;
   mkVV  v = v ** {c2 = complAcc ; lock_VV = <>} ;
   deVV  v = v ** {c2 = complGen ; lock_VV = <>} ;
   aVV  v = v ** {c2 = complDat ; lock_VV = <>} ;
-  mkV2V v p t = mkV2 v p ** {c3 = t.p1  ; s3 = p.p2 ; lock_V2V = <>} ;
+  mkV2V v p t = mk2V2 v p ** {c3 = t.p1  ; s3 = p.p2 ; lock_V2V = <>} ;
   mkVA  v = v ** {lock_VA = <>} ;
   mkV2A v p q = mkV3 v p q ** {lock_V2A = <>} ;
   mkVQ  v = v ** {lock_VQ = <>} ;
-  mkV2Q v p = mkV2 v p ** {lock_V2Q = <>} ;
+  mkV2Q v p = mk2V2 v p ** {lock_V2Q = <>} ;
 
   mkAS  v = v ** {lock_AS = <>} ; ---- more moods
   mkA2S v p = mkA2 v p ** {lock_A2S = <>} ;
   mkAV  v p = v ** {c = p.p1 ; s2 = p.p2 ; lock_AV = <>} ;
   mkA2V v p q = mkA2 v p ** {s3 = q.p2 ; c3 = q.p1 ; lock_A2V = <>} ;
+
+---
+
+  mkN = overload {
+    mkN : (luz : Str) -> N = regN ;
+    mkN : Str -> Gender -> N = \s,g -> {s = (regN s).s ; g = g ; lock_N = <>};
+    mkN : (baston,bastones : Str) -> Gender -> N = mk2N
+    } ;
+  regN : Str -> N ;
+  mk2N : (baston,bastones : Str) -> Gender -> N ;
+  mascN : N -> N ;
+  femN  : N -> N ;
+
+
+  mkPN = overload {
+    mkPN : (Anna : Str) -> PN = regPN ;
+    mkPN : (Pilar : Str) -> Gender -> PN = mk2PN
+    } ;
+  mk2PN  : Str -> Gender -> PN ; -- Juan
+  regPN : Str -> PN ;           -- feminine for "-a", otherwise masculine
+
+-- To form a noun phrase that can also be plural,
+-- you can use the worst-case function.
+
+  mkNP : Str -> Gender -> Number -> NP ; 
+
+  mkA = overload {
+    mkA : (util : Str) -> A  = regA ;
+    mkA : (solo,sola,solos,solas,solamiento : Str) -> A = mk5A ;
+    mkA : (bueno : A) -> (mejor : A) -> A = mkADeg ;
+    } ;
+
+  mk5A : (solo,sola,solos,solas, solamiento : Str) -> A ;
+  regA : Str -> A ;
+  mkADeg : A -> A -> A ;
+  compADeg : A -> A ;
+  regADeg : Str -> A ;
+  prefA : A -> A ;
+  prefixA = prefA ;
+
+  mkV = overload {
+    mkV : (pagar : Str) -> V = regV ;
+    mkV : (mostrar,muestro : Str) -> V = regAltV ;
+    mkV : Verbum -> V = verboV
+    } ;
+  regV : Str -> V ;
+  regAltV : (mostrar,muestro : Str) -> V ;
+  verboV : Verbum -> V ;
+
+  mkV2 = overload {
+    mkV2 : Str -> V2 = \s -> dirV2 (regV s) ;
+    mkV2 : V -> V2 = dirV2 ;  
+    mkV2 : V -> Prep -> V2 = mk2V2
+    } ;
+  mk2V2  : V -> Prep -> V2 ;
+  dirV2 : V -> V2 ;
+
+
 
 } ;
