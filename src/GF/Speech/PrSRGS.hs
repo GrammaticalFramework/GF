@@ -139,7 +139,7 @@ grammar sisr root ml =
                  ++ maybe [] (\l -> [("xml:lang", l)]) ml
 
 meta :: String -> String -> XML
-meta n c = Tag "meta" [("name",n),("content",c)] []
+meta n c = ETag "meta" [("name",n),("content",c)]
 
 optimizeSRGS :: XML -> XML
 optimizeSRGS = bottomUpXML f 
