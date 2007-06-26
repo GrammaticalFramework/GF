@@ -63,12 +63,13 @@ prJSGF sisr srg@(SRG{grammarName=name,grammarLanguage=ml,
         rule False cat (map prAlt rhs)
 --        rule False cat (map prAlt rhs)
     -- FIXME: use the probability
-    prAlt (SRGAlt mp n rhs) = sep [initTag, parens (prItem sisr n rhs), finalTag]
+    prAlt (SRGAlt mp n rhs) = sep [initTag, p (prItem sisr n rhs), finalTag]
 --    prAlt (SRGAlt mp n rhs) = initTag <+> prItem sisr n rhs <+> finalTag
       where initTag | isEmpty t = empty
                     | otherwise = text "<NULL>" <+>  t
                 where t = tag sisr (profileInitSISR n)
             finalTag = tag sisr (profileFinalSISR n)
+            p = if isEmpty initTag && isEmpty finalTag then id else parens
 
     topCatRules = [rule True (catFormId tc) (map (it tc) cs) | (tc,cs) <- srgTopCats srg]
         where it i c = prCat c <+> tag sisr (topCatSISR c)
@@ -80,7 +81,7 @@ prCat :: SRGCat -> Doc
 prCat c = char '<' <> text c <> char '>'
 
 prItem :: Maybe SISRFormat -> CFTerm -> SRGItem -> Doc
-prItem sisr t = f 1
+prItem sisr t = f 0
   where
     f _ (REUnion [])  = text "<VOID>"
     f p (REUnion xs) 
