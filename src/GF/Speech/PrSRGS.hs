@@ -35,7 +35,6 @@ import Data.Maybe
 import qualified Data.Map as Map
 import qualified Data.Set as Set
 
-
 srgsXmlPrinter :: Maybe SISRFormat 
 	       -> Bool -- ^ Include probabilities
 	       -> Options 
@@ -64,8 +63,8 @@ prSrgsXml sisr probs srg@(SRG{grammarName=name,startCat=start,
     prRhs rhss = [oneOf (map (mkProd sisr probs) rhss)] 
     -- externally visible rules for each of the GF categories
     topCatRules = [topRule tc [oneOf (map (it tc) cs)] | (tc,cs) <- srgTopCats srg]
-        where it i c = Tag "item" [] [ETag "ruleref" [("uri","#" ++ c)],
-                                      tag sisr (topCatSISR c)]
+        where it i c = Tag "item" [] ([ETag "ruleref" [("uri","#" ++ c)]] 
+                                      ++ tag sisr (topCatSISR c))
               topRule i is = Tag "rule" [("id",catFormId i),("scope","public")] is
 
 rule :: String -> [XML] -> XML
@@ -76,8 +75,8 @@ mkProd sisr probs (SRGAlt mp n rhs) = Tag "item" w (ti ++ [x] ++ tf)
   where x = mkItem sisr n rhs
         w | probs = maybe [] (\p -> [("weight", show p)]) mp
           | otherwise = []
-        ti = [tag sisr (profileInitSISR n)]
-        tf = [tag sisr (profileFinalSISR n)]
+        ti = tag sisr (profileInitSISR n)
+        tf = tag sisr (profileFinalSISR n)
 
 mkItem :: Maybe SISRFormat -> CFTerm -> SRGItem -> XML
 mkItem sisr cn = f
@@ -108,14 +107,14 @@ mkItem sisr cn ss = map (symItem sisr cn) ss
 
 symItem :: Maybe SISRFormat -> CFTerm -> Symbol SRGNT Token -> XML
 symItem sisr cn (Cat n@(c,_)) = 
-    Tag "item" [] $ [ETag "ruleref" [("uri","#" ++ c)], tag sisr (catSISR cn n)]
+    Tag "item" [] $ [ETag "ruleref" [("uri","#" ++ c)]] ++ tag sisr (catSISR cn n)
 symItem _ _ (Tok t) = Tag "item" [] [Data (showToken t)]
 
-tag :: Maybe SISRFormat -> (SISRFormat -> SISRTag) -> XML
-tag Nothing _ = Empty
+tag :: Maybe SISRFormat -> (SISRFormat -> SISRTag) -> [XML]
+tag Nothing _ = []
 tag (Just fmt) t = case t fmt of
-                     [] -> Empty
-                     ts -> Tag "tag" [] [Data (prSISR ts)]
+                     [] -> []
+                     ts -> [Tag "tag" [] [Data (prSISR ts)]]
 
 catFormId :: String -> String
 catFormId = (++ "_cat")
