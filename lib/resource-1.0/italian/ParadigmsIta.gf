@@ -72,43 +72,43 @@ oper
 
 --2 Nouns
 
--- Worst case: give both two forms and the gender. 
-
-  mkN  : (uomo,uomini : Str) -> Gender -> N ;
+  mkN : overload {
 
 -- The regular function takes the singular form and the gender,
 -- and computes the plural and the gender by a heuristic. 
 -- The heuristic says that the gender is feminine for nouns
 -- ending with "a", and masculine for all other words.
 
-  regN : Str -> N ;
+    mkN : (cane : Str) -> N ;
 
--- To force a different gender, use one of the following functions.
+-- To force a different gender, give it explicitly.
 
-  mascN : N -> N ;
-  femN  : N -> N ;
+    mkN : (carne : Str) -> Gender -> N ; 
 
---3 Compound nouns 
---
--- Some nouns are ones where the first part is inflected as a noun but
+-- Worst case: give both two forms and the gender. 
+
+    mkN : (uomo,uomini : Str) -> Gender -> N ;
+
+-- In *compound nouns*, the first part is inflected as a noun but
 -- the second part is not inflected. e.g. "numero di telefono". 
 -- They could be formed in syntax, but we give a shortcut here since
 -- they are frequent in lexica.
 
-  compN : N -> Str -> N ;
+    mkN : N -> Str -> N
+    } ;
+
+
 
 
 --3 Relational nouns 
 -- 
 -- Relational nouns ("figlio di x") need a case and a preposition. 
+-- The default is regular nouns with the genitive "di".
 
-  mkN2 : N -> Prep -> N2 ;
-
--- The most common cases are the genitive "di" and the dative "a", 
--- with the empty preposition.
-
-  diN2 : N -> N2 ;
-  aN2  : N -> N2 ;
+  mkN2 : overload {
+    mkN2 : Str -> N2 ;
+    mkN2 : N -> Prep -> N2
+  } ;
 
 -- Three-place relational nouns ("la connessione di x a y") need two prepositions.
 
@@ -125,34 +125,45 @@ oper
 -- 
 --3 Proper names and noun phrases
 --
--- Proper names need a string and a gender.
+-- Proper names need a string and a gender. The gender is by default feminine if
+-- the name ends with an "a", and masculine otherwise.
 
-  mkPN  : Str -> Gender -> PN ;
-  regPN : Str -> PN ;           -- feminine if "-a", otherwise masculine
+  mkPN : overload {
+    mkPN : Str -> PN ;
+    mkPN : Str -> Gender -> PN
+  } ;
 
--- To form a noun phrase that can also be plural,
--- you can use the worst-case function.
 
-  mkNP : Str -> Gender -> Number -> NP ; 
 
 --2 Adjectives
 
--- Non-comparison one-place adjectives need five forms in the worst
--- case (masc and fem singular, masc plural, adverbial).
+  mkA : overload {
 
-  mkA : (solo,sola,soli,sole, solamente : Str) -> A ;
+-- For regular adjectives, all forms are derived from the
+-- masculine singular. Comparison is formed by "più".
 
--- For regular adjectives, all other forms are derived from the
--- masculine singular. 
+    mkA : (bianco : Str) -> A ;
 
-  regA : Str -> A ;
+-- Five forms are needed in the worst
+-- case (masc and fem singular, masc plural, adverbial), given that
+-- comparison is formed by "più".
 
--- These functions create postfix adjectives. To switch
+    mkA : (solo,sola,soli,sole,solamente : Str) -> A ;
+
+-- With irregular comparison, there are as it were two adjectives:
+-- the positive ("buono") and the comparative ("migliore"). 
+
+    mkA : A -> A -> A
+    } ;
+
+-- All the functions above create postfix adjectives. To switch
 -- them to prefix ones (i.e. ones placed before the noun in
 -- modification, as in "vecchia chiesa"), the following function is
 -- provided.
 
-  prefA : A -> A ;
+    prefixA : A -> A = prefA ;
+
+
 
 --3 Two-place adjectives
 --
@@ -160,22 +171,6 @@ oper
 
   mkA2 : A -> Prep -> A2 ;
 
---3 Comparison adjectives 
-
--- Comparison adjectives are in the worst case put up from two
--- adjectives: the positive ("buono"), and the comparative ("migliore"). 
-
-  mkADeg : A -> A -> A ;
-
--- If comparison is formed by "più", as usual in Italian,
--- the following pattern is used:
-
-  compADeg : A -> A ;
-
--- The regular pattern is the same as $regA$ for plain adjectives, 
--- with comparison by "più".
-
-  regADeg : Str -> A ;
 
 
 --2 Adverbs
@@ -195,19 +190,29 @@ oper
 
 
 --2 Verbs
---
+
+  mkV : overload {
+
 -- Regular verbs are ones with the infinitive "are" or "ire", the
 -- latter with singular present indicative forms as "finisco".
 -- The regular verb function is the first conjugation recognizes
 -- these endings, as well as the variations among
 -- "amare, cominciare, mangiare, legare, cercare".
 
-  regV : Str -> V ;
+    mkV : Str -> V ;
  
 -- The module $BeschIta$ gives (almost) all the patterns of the "Bescherelle"
 -- book. To use them in the category $V$, wrap them with the function
 
-  verboV : Verbo -> V ;
+    mkV : Verbo -> V ;
+
+-- If $BeschIta$ does not give the desired result or feels difficult
+-- to consult, here is a worst-case function for "-ire" and "-ere" verbs,
+-- taking 11 arguments.
+
+    mkV : 
+      (udire,odo,ode,udiamo,udiro,udii,udisti,udi,udirono,odi,udito : Str) -> V 
+    } ;
 
 -- The function $regV$ gives all verbs the compound auxiliary "avere".
 -- To change it to "essere", use the following function.
@@ -216,21 +221,17 @@ oper
   essereV : V -> V ;
   reflV : V -> V ;
 
--- If $BeschIta$ does not give the desired result or feels difficult
--- to consult, here is a worst-case function for "-ire" and "-ere" verbs,
--- taking 11 arguments.
-
-  mkV : 
-    (udire,odo,ode,udiamo,udiro,udii,udisti,udi,udirono,odi,udito : Str) -> V ; 
 
 --3 Two-place verbs
 --
 -- Two-place verbs need a preposition, except the special case with direct object.
 -- (transitive verbs). Notice that a particle comes from the $V$.
 
-  mkV2  : V -> Prep -> V2 ;
-
-  dirV2 : V -> V2 ;
+  mkV2 : overload {
+    mkV2 : Str -> V2 ;
+    mkV2 : V -> V2 ;
+    mkV2 : V -> Prep -> V2
+    } ;
 
 -- You can reuse a $V2$ verb in $V$.
 
@@ -302,29 +303,30 @@ oper
   in_Prep = {s = [] ; c = CPrep P_in ; isDir = False} ;
   su_Prep = {s = [] ; c = CPrep P_su ; isDir = False} ;
 
-  mkN x y g = mkNounIrreg x y g ** {lock_N = <>} ;
+  mk2N x y g = mkNounIrreg x y g ** {lock_N = <>} ;
   regN x = mkNomReg x ** {lock_N = <>} ;
   compN x y = {s = \\n => x.s ! n ++ y ; g = x.g ; lock_N = <>} ;
   femN x = {s = x.s ; g = feminine ; lock_N = <>} ;
   mascN x = {s = x.s ; g = masculine ; lock_N = <>} ;
 
 
-  mkN2 = \n,p -> n ** {lock_N2 = <> ; c2 = p} ;
-  diN2 n = mkN2 n genitive ;
-  aN2 n = mkN2 n dative ;
+  mk2N2 = \n,p -> n ** {lock_N2 = <> ; c2 = p} ;
+  diN2 n = mk2N2 n genitive ;
+  aN2 n = mk2N2 n dative ;
   mkN3 = \n,p,q -> n ** {lock_N3 = <> ; c2 = p ; c3 = q} ;
 
-  mkPN x g = {s = x ; g = g} ** {lock_PN = <>} ;
-  regPN x = mkPN x g where {
+  mk2PN : Str -> Gender -> PN ;
+  mk2PN x g = {s = x ; g = g} ** {lock_PN = <>} ;
+  regPN x = mk2PN x g where {
     g = case last x of {
       "a" => feminine ;
       _ => masculine
       }
     } ;
 
-  mkNP x g n = {s = (pn2np (mkPN x g)).s; a = agrP3 g n ; hasClit = False} ** {lock_NP = <>} ;
+  mkNP x g n = {s = (pn2np (mk2PN x g)).s; a = agrP3 g n ; hasClit = False} ** {lock_NP = <>} ;
 
-  mkA a b c d e = 
+  mk5A a b c d e = 
    compADeg {s = \\_ => (mkAdj a b c d e).s ; isPre = False ; lock_A = <>} ;
   regA a = compADeg {s = \\_ => (mkAdjReg a).s ; isPre = False ; lock_A = <>} ;
   prefA a = {s = a.s ; isPre = True ; lock_A = <>} ;
@@ -365,7 +367,7 @@ oper
 
   verboV ve = verbBesch ve ** {vtyp = VHabere ; lock_V = <>} ;
 
-  mkV 
+  mk11V 
     dovere devo deve dobbiamo dovro 
     dovetti dovesti dovette dovettero dovi dovuto = verboV (mkVerbo
       dovere devo deve dobbiamo dovro 
@@ -375,8 +377,8 @@ oper
   essereV v = {s = v.s ; vtyp = VEsse ; lock_V = <>} ;
   reflV v = {s = v.s ; vtyp = VRefl ; lock_V = <>} ;
 
-  mkV2 v p = {s = v.s ; vtyp = v.vtyp ; c2 = p ; lock_V2 = <>} ;
-  dirV2 v = mkV2 v accusative ;
+  mk2V2 v p = {s = v.s ; vtyp = v.vtyp ; c2 = p ; lock_V2 = <>} ;
+  dirV2 v = mk2V2 v accusative ;
   v2V v = v ** {lock_V = <>} ;
 
   mkV3 v p q = {s = v.s ; vtyp = v.vtyp ; 
@@ -391,19 +393,85 @@ oper
 
   mkV0  v = v ** {lock_V0 = <>} ;
   mkVS  v = v ** {m = \\_ => Indic ; lock_VS = <>} ;  ---- more moods
-  mkV2S v p = mkV2 v p ** {mn,mp = Indic ; lock_V2S = <>} ;
+  mkV2S v p = mk2V2 v p ** {mn,mp = Indic ; lock_V2S = <>} ;
   mkVV  v = v ** {c2 = complAcc ; lock_VV = <>} ;
   deVV  v = v ** {c2 = complGen ; lock_VV = <>} ;
   aVV  v = v ** {c2 = complDat ; lock_VV = <>} ;
-  mkV2V v p t = mkV2 v p ** {c3 = t.p1  ; s3 = p.p2 ; lock_V2V = <>} ;
+  mkV2V v p t = mk2V2 v p ** {c3 = t.p1  ; s3 = p.p2 ; lock_V2V = <>} ;
   mkVA  v = v ** {lock_VA = <>} ;
   mkV2A v p q = mkV3 v p q ** {lock_V2A = <>} ;
   mkVQ  v = v ** {lock_VQ = <>} ;
-  mkV2Q v p = mkV2 v p ** {lock_V2Q = <>} ;
+  mkV2Q v p = mk2V2 v p ** {lock_V2Q = <>} ;
 
   mkAS  v = v ** {lock_AS = <>} ; ---- more moods
   mkA2S v p = mkA2 v p ** {lock_A2S = <>} ;
   mkAV  v p = v ** {c = p.p1 ; s2 = p.p2 ; lock_AV = <>} ;
   mkA2V v p q = mkA2 v p ** {s3 = q.p2 ; c3 = q.p1 ; lock_A2V = <>} ;
+
+------------------------
+
+  mkN = overload {
+    mkN : (cane : Str) -> N = regN ;
+    mkN : (carne : Str) -> Gender -> N = \n,g -> {s = (regN n).s ; g = g ; lock_N = <>} ;
+    mkN : (uomo,uomini : Str) -> Gender -> N = mk2N ;
+    mkN : N -> Str -> N = compN
+    } ;
+
+  compN : N -> Str -> N ;
+  mk2N  :(uomo,uomini : Str) -> Gender -> N ;
+  regN  : Str -> N ;
+  mascN : N -> N ;
+  femN  : N -> N ;
+
+  mkN2 = overload {
+    mkN2 : Str -> N2 = \s -> diN2 (regN s) ;
+    mkN2 : N -> Prep -> N2 = mk2N2
+  } ;
+
+  mk2N2 : N -> Prep -> N2 ;
+  diN2 : N -> N2 ;
+  aN2  : N -> N2 ;
+
+  regPN : Str -> PN ;           -- feminine if "-a", otherwise masculine
+
+-- obsolete
+  mkNP : Str -> Gender -> Number -> NP ; 
+
+  mkPN = overload {
+    mkPN : Str -> PN = regPN ;
+    mkPN : Str -> Gender -> PN = mk2PN
+  } ;
+
+  mkA = overload {
+    mkA : (bianco : Str) -> A = regA ;
+    mkA : (solo,sola,soli,sole, solamente : Str) -> A = mk5A ;
+    mkA : A -> A -> A = mkADeg
+    } ;
+  mk5A : (solo,sola,soli,sole, solamente : Str) -> A ;
+  regA : Str -> A ;
+  prefA : A -> A ;
+  mkADeg : A -> A -> A ;
+  compADeg : A -> A ;
+  regADeg : Str -> A ;
+
+  mkV = overload {
+    mkV : Str -> V = regV ;
+    mkV : Verbo -> V = verboV ;
+    mkV : 
+     (udire,odo,ode,udiamo,udiro,udii,udisti,udi,udirono,odi,udito : Str) -> V = mk11V ; 
+    } ;
+
+  regV : Str -> V ;
+  verboV : Verbo -> V ;
+  mk11V : 
+    (udire,odo,ode,udiamo,udiro,udii,udisti,udi,udirono,odi,udito : Str) -> V ; 
+
+  mkV2 = overload {
+    mkV2 : Str -> V2 = \s -> dirV2 (regV s) ;
+    mkV2 : V -> V2 = dirV2 ;
+    mkV2 : V -> Prep -> V2 = mk2V2
+    } ;
+  mk2V2  : V -> Prep -> V2 ;
+  dirV2 : V -> V2 ;
 
 } ;
