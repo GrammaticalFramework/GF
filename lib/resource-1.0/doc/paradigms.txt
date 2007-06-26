@@ -26,3 +26,23 @@ nouns (``N``), adjectives (``A``), and verbs (``V``).
   mkV : (go,goes,went,gone,going : Str) -> V
 ```
 
+=French=
+
+```
+  mkN : (cheval : Str) -> N ;              -- pas, prix, nez, bijou, cheval
+  mkN : (foie : Str) -> Gender -> N ; 
+  mkN : (oeil,yeux : Str) -> Gender -> N ;
+  mkN : N -> Str -> N
+
+  mkA : (cher : Str) -> A ;   -- banal, heureux, italien, jeune, amer, carré, joli
+  mkA : (sec,seche : Str) -> A ;
+  mkA : (banal,banale,banaux,banalement : Str) -> A ;
+  mkA : (bon : A) -> (meilleur : A) -> A
+  prefixA : A -> A ;
+
+  mkV : (finir : Str) -> V ;  -- aimer, céder, placer, manger, payer, finir
+  mkV : (jeter,jette,jettera : Str) -> V ;
+  mkV : V2 -> V
+  etreV : V -> V ;
+  reflV : V -> V ;
+```
