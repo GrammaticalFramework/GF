@@ -35,7 +35,7 @@ import Data.List (partition)
 import Text.PrettyPrint.HughesPJ
 
 width :: Int
-width = 80
+width = 75
 
 gslPrinter :: Options -> StateGrammar -> String
 gslPrinter opts s = renderStyle st $ prGSL $ makeSimpleSRG opts s
@@ -63,13 +63,13 @@ prItem = f
     f (REUnion xs) = (if null es then empty else text "?") <> union (map f nes)
       where (es,nes) = partition isEpsilon xs
     f (REConcat [x]) = f x
-    f (REConcat xs) = text "(" <> sep (map f xs) <> text ")"
+    f (REConcat xs) = text "(" <> fsep (map f xs) <> text ")"
     f (RERepeat x)  = text "*" <> f x
     f (RESymbol s)  = prSymbol s
 
 union :: [Doc] -> Doc
 union [x] = x
-union xs = text "[" <> sep xs <> text "]"
+union xs = text "[" <> fsep xs <> text "]"
 
 prSymbol :: Symbol SRGNT Token -> Doc
 prSymbol (Cat (c,_)) = prCat c
