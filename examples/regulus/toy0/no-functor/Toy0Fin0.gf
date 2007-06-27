@@ -1,4 +1,4 @@
---# -path=present:prelude
+--# -path=..:present:prelude
 
 concrete Toy0Fin0 of Toy0 = open SyntaxFin, ParadigmsFin in {
 

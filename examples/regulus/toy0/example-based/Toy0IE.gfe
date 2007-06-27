@@ -1,5 +1,5 @@
---# -resource=/home/aarne/GF/lib/present/LangEng.gfc
---# -path=.:present:prelude
+--# -resource=present/LangEng.gfc
+--# -path=..:present:prelude
 
 -- to compile: gf -examples Toy0IE.gfe
 

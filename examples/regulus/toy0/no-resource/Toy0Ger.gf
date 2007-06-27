@@ -1,3 +1,4 @@
+--# -path=..
 concrete Toy0Ger of Toy0 = {
 
 param
