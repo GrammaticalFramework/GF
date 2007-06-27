@@ -41,7 +41,6 @@ import Data.Monoid (mconcat)
 import Data.Set (Set)
 import qualified Data.Set as Set
 
-
 -- not very nice to replace the structured CFCat type with a simple string
 type CFRule_ = CFRule Cat_ CFTerm Token
 
@@ -104,13 +103,20 @@ removeCycles = groupProds . f . ungroupProds
 
 -- | Removes productions which use categories which have no productions.
 -- Only does one pass through the grammar.
-bottomUpFilter :: CFRules -> CFRules
-bottomUpFilter rs = k'
+bottomUpFilter_old :: CFRules -> CFRules
+bottomUpFilter_old rs = k'
 	where
 	keep = filter (not . null . snd) rs
 	allCats = nub [c | (_,r) <- rs, CFRule _ rhs _ <- r, Cat c <- rhs]
 	emptyCats = filter (nothingOrNull . flip lookup rs) allCats
 	k' = map (\ (c,xs) -> (c, filter (not . anyUsedBy emptyCats) xs)) keep
+
+-- | Better bottom-up filter that also removes categories which contain no finite
+-- strings.
+bottomUpFilter :: CFRules -> CFRules
+bottomUpFilter gr = fix grow []
+  where grow g = g `unionCFRules` filterCFRules (all (okSym g) . ruleRhs) gr
+        okSym g = symbol (`elem` allCats g) (const True)
 
 -- | Removes categories which are not reachable from the start category.
 -- Only does one pass through the grammar.
@@ -304,6 +310,15 @@ catRules rs c = fromMaybe [] (lookup c rs)
 
 catSetRules :: CFRules -> Set Cat_ -> [CFRule_]
 catSetRules g cs = concat [rs | (c,rs) <- g, c `Set.member` cs]
+
+unionCFRules :: CFRules -> CFRules -> CFRules
+unionCFRules x y = Map.toList $ Map.map Set.toList $ Map.unionWith Set.union (fromCFRules x) (fromCFRules y)
+  where 
+    fromCFRules :: CFRules -> Map Cat_ (Set CFRule_)
+    fromCFRules g = Map.fromListWith Set.union [(c, Set.fromList rs) | (c,rs) <- g]
+
+filterCFRules :: (CFRule_ -> Bool) -> CFRules -> CFRules
+filterCFRules p gr = [(c,rs') | (c,rs) <- gr, let rs' = filter p rs, not (null rs')]
 
 lhsCat :: CFRule c n t -> c
 lhsCat (CFRule c _ _) = c
