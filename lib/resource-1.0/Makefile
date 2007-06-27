@@ -32,8 +32,8 @@ pretest:
 	echo "gr -cat=Cl -number=11 -prob | tb" | $(GF) -probs=lang.gfprob -path=present:prelude -nocf ../present/Lang???.gfc
 
 alltenses:
-	$(GFC) arabic/LangAra.gf
-	$(GFC) catalan/LangCat.gf
+#	$(GFC) arabic/GrammarAra.gf
+#	$(GFC) catalan/Catalan.gf
 	$(GFC) danish/Danish.gf
 	$(GFC) english/English.gf
 	$(GFC) finnish/Finnish.gf
@@ -62,8 +62,17 @@ api:
 	$(GFCC) api/Symbolic???.gf
 	cp -p api/*.gfc api/*.gfr ../api
 
+arabic:
+	$(GFCP) arabic/GrammarAra.gf
+	$(GFC) arabic/GrammarAra.gf
+
+catalan:
+	$(GFCP) catalan/Catalan.gf
+	$(GFC) catalan/Catalan.gf
+
 present:
-#	$(GFCP) arabic/LangAra.gf
+#	$(GFCP) arabic/GrammarAra.gf
+#	$(GFCP) catalan/Catalan.gf
 	$(GFCP) danish/Danish.gf
 	$(GFCP) english/English.gf
 	$(GFCP) finnish/Finnish.gf

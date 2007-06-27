@@ -1,22 +1,12 @@
 --# -path=.:../abstract:../common:prelude
 
 concrete LangAra of Lang = 
-  NounAra, 
-  VerbAra, 
-  AdjectiveAra,
-  AdverbAra,
-  NumeralAra,
-  SentenceAra,
-  QuestionAra,
-  RelativeAra,
-  ConjunctionAra,
-  PhraseAra,
-  TextX - [Utt],
-  StructuralAra,
-  IdiomAra,
+  GrammarAra,
   LexiconAra
   ** {
 
-flags startcat = Phr ; unlexer = text ; lexer = text ;
+  flags startcat = Phr ; unlexer = text ; lexer = text ;
 
-} ;
+}
+
+

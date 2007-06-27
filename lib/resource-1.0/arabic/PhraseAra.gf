@@ -8,7 +8,7 @@ concrete PhraseAra of Phrase = CatAra ** open
 
 --    UttS s = s ;
 --    UttQS qs = {s = qs.s ! QDir} ;
-    UttImpSg pol imp = {s = \\g => imp.s ! pol.p ! g ! Sg} ;
+    UttImpSg pol imp = {s = \\g => imp.s ! pol.p ! g ! ResAra.Sg} ;
 --    UttImpPl pol imp = {s = pol.s ++ imp.s ! pol.p ! Pl} ;
 --
 --    UttIP ip = {s = ip.s ! Nom} ; --- Acc also
