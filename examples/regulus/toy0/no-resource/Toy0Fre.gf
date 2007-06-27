@@ -1,3 +1,4 @@
+--# -path=..
 concrete Toy0Fre of Toy0 = {
 
 param
