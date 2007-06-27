@@ -89,8 +89,7 @@ oper
     mkN : (talo : Str) -> N ;
     mkN : (savi,savia : Str) -> N ;
     mkN : (vesi,veden,vesiä : Str) -> N ;
-    mkN : (talo,   talon,   talona, taloa, taloon,
-           taloina,taloissa,talojen,taloja,taloihin : Str) -> N 
+    mkN : (olo,oln,olona,oloa,oloon,oloina,oloissa,olojen,oloja,oloihin : Str) -> N 
   } ;
 
 
@@ -243,8 +242,7 @@ oper
     mkV : (soutaa : Str) -> V ;
     mkV : (soutaa,souti : Str) -> V ;
     mkV : (soutaa,soudan,souti : Str) -> V ;
-    mkV : (tulla,tulee,tulen,tulevat,tulkaa,tullaan,
-           tuli,tulin,tulisi,tullut,tultu,tullun : Str) -> V ;
+    mkV : (tulla,tulee,tulen,tulevat,tulkaa,tullaan,tuli,tulin,tulisi,tullut,tultu,tullun : Str) -> V ;
 
 -- The subject case of verbs is by default nominative. This function can change it.
 

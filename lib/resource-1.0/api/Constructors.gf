@@ -82,7 +82,7 @@ incomplete resource Constructors = open Grammar in {
 
 -- A text can also be empty.
 
-      emptyText :      Text ;  -- 8. [empty text]
+      emptyText :      Text ;  -- 8. (empty text)
 
 
 --3 Punct: punctuation marks
@@ -194,7 +194,7 @@ incomplete resource Constructors = open Grammar in {
 
       singularImpForm : ImpForm ;  -- (help yourself) [default]
       pluralImpForm   : ImpForm ;  -- (help yourselves)
-      politeImpForm   : ImpForm ;  -- (help yourself) [polite singular]
+      politeImpForm   : ImpForm ;  -- (help yourself) (polite singular)
 
 
 --2 Sentences and clauses

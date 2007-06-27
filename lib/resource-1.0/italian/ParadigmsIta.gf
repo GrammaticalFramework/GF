@@ -210,8 +210,7 @@ oper
 -- to consult, here is a worst-case function for "-ire" and "-ere" verbs,
 -- taking 11 arguments.
 
-    mkV : 
-      (udire,odo,ode,udiamo,udiro,udii,udisti,udi,udirono,odi,udito : Str) -> V 
+    mkV : (udire,odo,ode,udiamo,udiro,udii,udisti,udi,udirono,odi,udito : Str) -> V 
     } ;
 
 -- The function $regV$ gives all verbs the compound auxiliary "avere".
