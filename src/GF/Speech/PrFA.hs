@@ -45,7 +45,7 @@ regularPrinter :: Options -> StateGrammar -> String
 regularPrinter opts s = prCFRules $ makeSimpleRegular opts s
   where
   prCFRules :: CFRules -> String
-  prCFRules g = unlines [ c ++ " ::= " ++ join " | " (map (showRhs . ruleRhs) rs) | (c,rs) <- g]
+  prCFRules g = unlines [ c ++ " ::= " ++ join " | " (map (showRhs . ruleRhs) rs) | (c,rs) <- allRulesGrouped g]
   join g = concat . intersperse g
   showRhs = unwords . map (symbol id show)
 

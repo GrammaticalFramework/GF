@@ -56,7 +56,7 @@ data CFTerm
 type Cat_ = String
 type CFSymbol_ = Symbol Cat_ Token
 
-type CFRules = [(Cat_,[CFRule_])]
+type CFRules = Map Cat_ (Set CFRule_)
 
 
 cfgToCFRules :: StateGrammar -> CFRules
@@ -95,47 +95,37 @@ stateGFCC = mkGFCC . mkCanon2gfcc . stateGrammarST
 --   FIXME: Does not (yet) remove productions which are cyclic
 --   because of empty productions.
 removeCycles :: CFRules -> CFRules 
-removeCycles = groupProds . f . ungroupProds
+removeCycles = groupProds . f . allRules
   where f rs = filter (not . isCycle) rs
           where alias = transitiveClosure $ mkRel [(c,c') | CFRule c [Cat c'] _ <- rs]
                 isCycle (CFRule c [Cat c'] _) = isRelatedTo alias c' c
                 isCycle _ = False
 
--- | Removes productions which use categories which have no productions.
--- Only does one pass through the grammar.
-bottomUpFilter_old :: CFRules -> CFRules
-bottomUpFilter_old rs = k'
-	where
-	keep = filter (not . null . snd) rs
-	allCats = nub [c | (_,r) <- rs, CFRule _ rhs _ <- r, Cat c <- rhs]
-	emptyCats = filter (nothingOrNull . flip lookup rs) allCats
-	k' = map (\ (c,xs) -> (c, filter (not . anyUsedBy emptyCats) xs)) keep
-
 -- | Better bottom-up filter that also removes categories which contain no finite
 -- strings.
 bottomUpFilter :: CFRules -> CFRules
-bottomUpFilter gr = fix grow []
+bottomUpFilter gr = fix grow Map.empty
   where grow g = g `unionCFRules` filterCFRules (all (okSym g) . ruleRhs) gr
         okSym g = symbol (`elem` allCats g) (const True)
 
 -- | Removes categories which are not reachable from the start category.
 -- Only does one pass through the grammar.
 topDownFilter :: Cat_ -> CFRules -> CFRules
-topDownFilter start rules = filter ((`Set.member` keep) . fst) rules
+topDownFilter start rules = filterCFRulesCats (isRelatedTo uses start) rules
   where
-    rhsCats = [ (c, c') | (c,rs) <- rules, r <- rs, c' <- filterCats (ruleRhs r) ]
+    rhsCats = [ (lhsCat r, c') | r <- allRules rules, c' <- filterCats (ruleRhs r) ]
     uses = reflexiveClosure_ (allCats rules) $ transitiveClosure $ mkRel rhsCats
-    keep = allRelated uses start
 
 -- | Merges categories with identical right-hand-sides.
 -- FIXME: handle probabilities
 mergeIdentical :: CFRules -> CFRules
-mergeIdentical g = sortNubBy (compareBy fst) [(substCat c, map subst rs) | (c,rs) <- g]
+mergeIdentical g = groupProds $ map subst $ allRules g
   where
     -- maps categories to their replacement
-    m = Map.fromList [(y,concat (intersperse "+" xs)) | (_,xs) <- buildMultiMap [(rulesKey rs,c) | (c,rs) <- g], y <- xs]
+    m = Map.fromList [(y,concat (intersperse "+" xs)) 
+                          | (_,xs) <- buildMultiMap [(rulesKey rs,c) | (c,rs) <- Map.toList g], y <- xs]
     -- build data to compare for each category: a set of name,rhs pairs
-    rulesKey rs = Set.fromList [(n,r) | CFRule _ r n <- rs]
+    rulesKey = Set.map (\ (CFRule _ r n) -> (n,r))
     subst (CFRule c r n) = CFRule (substCat c) (map (mapSymbol substCat id) r) n
     substCat c = Map.findWithDefault (error $ "mergeIdentical: " ++ c) c m
 
@@ -187,9 +177,9 @@ removeLeftRecursion start gr
     -- note: the rest don't occur in the original grammar
 
     cats = allCats gr
-    rules = ungroupProds gr
+    rules = allRules gr
 
-    directLeftCorner = mkRel' [(Cat s,[t | CFRule _ (t:_) _ <- rs]) | (s,rs) <- gr]
+    directLeftCorner = mkRel [(Cat c,t) | CFRule c (t:_) _ <- allRules gr]
     leftCorner = reflexiveClosure_ (map Cat cats) $ transitiveClosure directLeftCorner
     properLeftCorner = transitiveClosure directLeftCorner
     properLeftCornersOf = Set.toList . allRelated properLeftCorner . Cat
@@ -199,8 +189,8 @@ removeLeftRecursion start gr
     isLeftRecursive = (`Set.member` leftRecursive)
 
     retained = start `Set.insert`
-                Set.fromList [a | (c,rs) <- gr, not (isLeftRecursive (Cat c)), 
-                                   r <- rs, Cat a <- ruleRhs r]
+                Set.fromList [a | r <- allRules (filterCFRulesCats (not . isLeftRecursive . Cat) gr),
+                                  Cat a <- ruleRhs r]
     isRetained = (`Set.member` retained)
 
     retainedLeftRecursive = filter (isLeftRecursive . Cat) $ Set.toList retained
@@ -259,9 +249,8 @@ mutRecCats :: Bool    -- ^ If true, all categories will be in some set.
                       --   If false, only recursive categories will be included.
            -> CFRules -> [Set Cat_]
 mutRecCats incAll g = equivalenceClasses $ refl $ symmetricSubrelation $ transitiveClosure r
-  where r = mkRel [(c,c') | (_,rs) <- g, CFRule c ss _ <- rs, Cat c' <- ss]
-        allCats = map fst g
-        refl = if incAll then reflexiveClosure_ allCats else reflexiveSubrelation
+  where r = mkRel [(c,c') | CFRule c ss _ <- allRules g, Cat c' <- ss]
+        refl = if incAll then reflexiveClosure_ (allCats g) else reflexiveSubrelation
 
 --
 -- * Approximate context-free grammars with regular grammars.
@@ -297,28 +286,40 @@ makeRegular g = groupProds $ concatMap trSet (mutRecCats True g)
 
 -- | Group productions by their lhs categories
 groupProds :: [CFRule_] -> CFRules
-groupProds = buildMultiMap . map (\r -> (lhsCat r,r))
+groupProds = Map.fromListWith Set.union . map (\r -> (lhsCat r,Set.singleton r))
 
-ungroupProds :: CFRules -> [CFRule_]
-ungroupProds = concat . map snd
+allRules :: CFRules -> [CFRule_]
+allRules = concat . map Set.toList . Map.elems
+
+allRulesGrouped :: CFRules -> [(Cat_,[CFRule_])]
+allRulesGrouped = Map.toList . Map.map Set.toList
 
 allCats :: CFRules -> [Cat_]
-allCats = map fst
+allCats = Map.keys
 
 catRules :: CFRules -> Cat_ -> [CFRule_]
-catRules rs c = fromMaybe [] (lookup c rs)
+catRules rs c = Set.toList $ Map.findWithDefault Set.empty c rs
 
 catSetRules :: CFRules -> Set Cat_ -> [CFRule_]
-catSetRules g cs = concat [rs | (c,rs) <- g, c `Set.member` cs]
+catSetRules g cs = allRules $ Map.filterWithKey (\c _ -> c `Set.member` cs) g
+
+cleanCFRules :: CFRules -> CFRules
+cleanCFRules = Map.filter (not . Set.null)
 
 unionCFRules :: CFRules -> CFRules -> CFRules
-unionCFRules x y = Map.toList $ Map.map Set.toList $ Map.unionWith Set.union (fromCFRules x) (fromCFRules y)
-  where 
-    fromCFRules :: CFRules -> Map Cat_ (Set CFRule_)
-    fromCFRules g = Map.fromListWith Set.union [(c, Set.fromList rs) | (c,rs) <- g]
+unionCFRules = Map.unionWith Set.union
 
 filterCFRules :: (CFRule_ -> Bool) -> CFRules -> CFRules
-filterCFRules p gr = [(c,rs') | (c,rs) <- gr, let rs' = filter p rs, not (null rs')]
+filterCFRules p = cleanCFRules . Map.map (Set.filter p)
+
+filterCFRulesCats :: (Cat_ -> Bool) -> CFRules -> CFRules
+filterCFRulesCats p = Map.filterWithKey (\c _ -> p c)
+
+countCats :: CFRules -> Int
+countCats = Map.size . cleanCFRules
+
+countRules :: CFRules -> Int
+countRules = length . allRules
 
 lhsCat :: CFRule c n t -> c
 lhsCat (CFRule c _ _) = c
