@@ -40,7 +40,7 @@ import Text.PrettyPrint.HughesPJ
 import Debug.Trace
 
 width :: Int
-width = 80
+width = 75
 
 srgsAbnfPrinter :: Maybe SISRFormat
                 -> Bool -- ^ Include probabilities
@@ -97,7 +97,7 @@ prItem sisr t = f 0
         | otherwise = (if p >= 1 then parens else id) (alts (map (f 1) xs))
       where (es,nes) = partition isEpsilon xs
     f _ (REConcat []) = text "$NULL"
-    f p (REConcat xs) = (if p >= 3 then parens else id) (hsep (map (f 2) xs))
+    f p (REConcat xs) = (if p >= 3 then parens else id) (fsep (map (f 2) xs))
     f p (RERepeat x)  = f 3 x <> text "<0->"
     f _ (RESymbol s)  = prSymbol sisr t s
 
@@ -124,10 +124,10 @@ comment :: String -> Doc
 comment s = text "//" <+> text s
 
 alts :: [Doc] -> Doc
-alts = sep . prepunctuate (text "| ")
+alts = fsep . prepunctuate (text "| ")
 
 rule :: Bool -> SRGCat -> [Doc] -> Doc
-rule pub c xs = sep [p <+> prCat c <+> char '=', nest 2 (alts xs) <+> char ';']
+rule pub c xs = p <+> prCat c <+> char '=' <+> nest 2 (alts xs) <+> char ';'
   where p = if pub then text "public" else empty
 
 meta :: String -> String -> Doc
