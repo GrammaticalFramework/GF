@@ -50,6 +50,8 @@ import qualified Data.Map as Map
 import Data.Set (Set)
 import qualified Data.Set as Set
 
+import Debug.Trace
+
 data SRG = SRG { grammarName :: String    -- ^ grammar name
 		 , startCat :: SRGCat     -- ^ start category name
 		 , origStartCat :: String -- ^ original start category name
@@ -87,10 +89,22 @@ makeSimpleSRG :: Options   -- ^ Grammar options
 	      -> SRG
 makeSimpleSRG opt s = makeSRG preprocess opt s
     where
-      preprocess origStart = mergeIdentical
+      preprocess origStart = traceStats "After mergeIdentical"
+                             . mergeIdentical
+                             . traceStats "After removeLeftRecursion"
                              . removeLeftRecursion origStart 
-                             . fix (topDownFilter origStart . bottomUpFilter)
-                             . removeCycles
+                             . fix (traceStats "After topDownFilter" 
+                                    . topDownFilter origStart 
+                                    . traceStats "After bottomUpFilter" 
+                                    . bottomUpFilter)
+                             . traceStats "After removeCycles"
+                             . removeCycles 
+                             . traceStats "Inital CFG"
+
+traceStats s g = trace (s ++ ": " ++ stats g) g
+
+stats g = "Categories: " ++ show (length (filter (not . null . snd) g))
+          ++ " Rules: " ++ show (length (concatMap snd g))
 
 makeNonRecursiveSRG :: Options 
                     -> StateGrammar
