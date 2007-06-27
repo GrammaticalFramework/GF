@@ -1,0 +1,4354 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<META NAME="generator" CONTENT="http://txt2tags.sf.net">
+<TITLE>GF Resource Grammar Library: Synopsis</TITLE>
+</HEAD><BODY BGCOLOR="white" TEXT="black">
+<P ALIGN="center"><CENTER><H1>GF Resource Grammar Library: Synopsis</H1>
+<FONT SIZE="4">
+<I>Aarne Ranta</I><BR>
+</FONT></CENTER>
+
+<P></P>
+<HR NOSHADE SIZE=1>
+<P></P>
+  <UL>
+  <LI><A HREF="#toc1">Syntax</A>
+  <LI><A HREF="#toc2">Paradigms for Danish</A>
+  <LI><A HREF="#toc3">Paradigms for English</A>
+  <LI><A HREF="#toc4">Paradigms for Finnish</A>
+  <LI><A HREF="#toc5">Paradigms for French</A>
+  <LI><A HREF="#toc6">Paradigms for German</A>
+  <LI><A HREF="#toc7">Paradigms for Italian</A>
+  <LI><A HREF="#toc8">Paradigms for Norwegian</A>
+  <LI><A HREF="#toc9">Paradigms for Russian</A>
+  <LI><A HREF="#toc10">Paradigms for Spanish</A>
+  <LI><A HREF="#toc11">Paradigms for Swedish</A>
+  </UL>
+
+<P></P>
+<HR NOSHADE SIZE=1>
+<P></P>
+<A NAME="toc1"></A>
+<H1>Syntax</H1>
+<P>
+<A HREF="../api/Constructors.gf">source</A>
+</P>
+<TABLE CELLPADDING="4" BORDER="1">
+<TR>
+<TH>Function</TH>
+<TH>Type</TH>
+<TH COLSPAN="2">Example</TH>
+</TR>
+<TR>
+<TD><CODE>mkText</CODE></TD>
+<TD><CODE>Phr -&gt; Text</CODE></TD>
+<TD><I>But John walks.</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkText</CODE></TD>
+<TD><CODE>Phr -&gt; (Punct) -&gt; (Text) -&gt; Text</CODE></TD>
+<TD><I>John walks? Yes.</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkText</CODE></TD>
+<TD><CODE>Utt -&gt; Text</CODE></TD>
+<TD><I>John.</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkText</CODE></TD>
+<TD><CODE>S -&gt; Text</CODE></TD>
+<TD><I>John walked.</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkText</CODE></TD>
+<TD><CODE>Cl -&gt; Text</CODE></TD>
+<TD><I>John walks.</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkText</CODE></TD>
+<TD><CODE>QS -&gt; Text</CODE></TD>
+<TD><I>Did John walk?</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkText</CODE></TD>
+<TD><CODE>Imp -&gt; Text</CODE></TD>
+<TD><I>Walk!</I></TD>
+</TR>
+<TR>
+<TD><CODE>emptyText</CODE></TD>
+<TD><CODE>Text</CODE></TD>
+<TD><I>(empty text)</I></TD>
+</TR>
+<TR>
+<TD><CODE>fullStopPunct</CODE></TD>
+<TD><CODE>Punct</CODE></TD>
+<TD><I>.</I></TD>
+</TR>
+<TR>
+<TD><CODE>questMarkPunct</CODE></TD>
+<TD><CODE>Punct</CODE></TD>
+<TD><I>?</I></TD>
+</TR>
+<TR>
+<TD><CODE>exclMarkPunct</CODE></TD>
+<TD><CODE>Punct</CODE></TD>
+<TD><I>!</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkPhr</CODE></TD>
+<TD><CODE>Utt -&gt; Phr</CODE></TD>
+<TD><I>why</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkPhr</CODE></TD>
+<TD><CODE>(PConj) -&gt; Utt -&gt; (Voc) -&gt; Phr</CODE></TD>
+<TD><I>but why John</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkPhr</CODE></TD>
+<TD><CODE>S -&gt; Phr</CODE></TD>
+<TD><I>John walked</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkPhr</CODE></TD>
+<TD><CODE>Cl -&gt; Phr</CODE></TD>
+<TD><I>John walks</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkPhr</CODE></TD>
+<TD><CODE>QS -&gt; Phr</CODE></TD>
+<TD><I>did John walk</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkPhr</CODE></TD>
+<TD><CODE>Imp -&gt; Phr</CODE></TD>
+<TD><I>walk</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkPConj</CODE></TD>
+<TD><CODE>Conj -&gt; PConj</CODE></TD>
+<TD><I>and</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkVoc</CODE></TD>
+<TD><CODE>NP -&gt; Voc</CODE></TD>
+<TD><I>John</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkUtt</CODE></TD>
+<TD><CODE>S -&gt; Utt</CODE></TD>
+<TD><I>John walked</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkUtt</CODE></TD>
+<TD><CODE>Cl -&gt; Utt</CODE></TD>
+<TD><I>John walks</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkUtt</CODE></TD>
+<TD><CODE>QS -&gt; Utt</CODE></TD>
+<TD><I>did John walk</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkUtt</CODE></TD>
+<TD><CODE>Imp -&gt; Utt</CODE></TD>
+<TD><I>love yourself</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkUtt</CODE></TD>
+<TD><CODE>(ImpForm) -&gt; (Pol) -&gt; Imp -&gt; Utt</CODE></TD>
+<TD><I>don't love yourselves</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkUtt</CODE></TD>
+<TD><CODE>IP -&gt; Utt</CODE></TD>
+<TD><I>who</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkUtt</CODE></TD>
+<TD><CODE>IAdv -&gt; Utt</CODE></TD>
+<TD><I>why</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkUtt</CODE></TD>
+<TD><CODE>NP -&gt; Utt</CODE></TD>
+<TD><I>John</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkUtt</CODE></TD>
+<TD><CODE>Adv -&gt; Utt</CODE></TD>
+<TD><I>here</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkUtt</CODE></TD>
+<TD><CODE>VP -&gt; Utt</CODE></TD>
+<TD><I>to walk</I></TD>
+</TR>
+<TR>
+<TD><CODE>lets_Utt</CODE></TD>
+<TD><CODE>VP -&gt; Utt</CODE></TD>
+<TD><I>let's walk</I></TD>
+</TR>
+<TR>
+<TD><CODE>positivePol</CODE></TD>
+<TD><CODE>Pol</CODE></TD>
+<TD><I>(John walks) [default]</I></TD>
+</TR>
+<TR>
+<TD><CODE>negativePol</CODE></TD>
+<TD><CODE>Pol</CODE></TD>
+<TD><I>(John doesn't walk)</I></TD>
+</TR>
+<TR>
+<TD><CODE>simultaneousAnt</CODE></TD>
+<TD><CODE>Ant</CODE></TD>
+<TD><I>(John walks) [default]</I></TD>
+</TR>
+<TR>
+<TD><CODE>anteriorAnt</CODE></TD>
+<TD><CODE>Ant</CODE></TD>
+<TD><I>(John has walked) --# notpresent</I></TD>
+</TR>
+<TR>
+<TD><CODE>presentTense</CODE></TD>
+<TD><CODE>Tense</CODE></TD>
+<TD><I>(John walks) [default]</I></TD>
+</TR>
+<TR>
+<TD><CODE>pastTense</CODE></TD>
+<TD><CODE>Tense</CODE></TD>
+<TD><I>(John walked) --# notpresent</I></TD>
+</TR>
+<TR>
+<TD><CODE>futureTense</CODE></TD>
+<TD><CODE>Tense</CODE></TD>
+<TD><I>(John will walk) --# notpresent</I></TD>
+</TR>
+<TR>
+<TD><CODE>conditionalTense</CODE></TD>
+<TD><CODE>Tense</CODE></TD>
+<TD><I>(John would walk) --# notpresent</I></TD>
+</TR>
+<TR>
+<TD><CODE>singularImpForm</CODE></TD>
+<TD><CODE>ImpForm</CODE></TD>
+<TD><I>(help yourself) [default]</I></TD>
+</TR>
+<TR>
+<TD><CODE>pluralImpForm</CODE></TD>
+<TD><CODE>ImpForm</CODE></TD>
+<TD><I>(help yourselves)</I></TD>
+</TR>
+<TR>
+<TD><CODE>politeImpForm</CODE></TD>
+<TD><CODE>ImpForm</CODE></TD>
+<TD><I>(help yourself) (polite singular)</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkS</CODE></TD>
+<TD><CODE>Cl -&gt; S</CODE></TD>
+<TD><I>John walks</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkS</CODE></TD>
+<TD><CODE>(Tense) -&gt; (Ant) -&gt; (Pol) -&gt; Cl -&gt; S</CODE></TD>
+<TD><I>John wouldn't have walked</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkS</CODE></TD>
+<TD><CODE>Conj -&gt; S -&gt; S -&gt; S</CODE></TD>
+<TD><I>John walks and I run</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkS</CODE></TD>
+<TD><CODE>Conj -&gt; ListS -&gt; S</CODE></TD>
+<TD><I>John walks, I run and you sleep</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkS</CODE></TD>
+<TD><CODE>DConj -&gt; S -&gt; S -&gt; S</CODE></TD>
+<TD><I>either John walk or I run</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkS</CODE></TD>
+<TD><CODE>DConj -&gt; ListS -&gt; S</CODE></TD>
+<TD><I>either John walks, I run or you sleep</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkS</CODE></TD>
+<TD><CODE>Adv -&gt; S -&gt; S</CODE></TD>
+<TD><I>today, John walks</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkCl</CODE></TD>
+<TD><CODE>NP -&gt; V -&gt; Cl</CODE></TD>
+<TD><I>John walks</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkCl</CODE></TD>
+<TD><CODE>NP -&gt; V2 -&gt; NP -&gt; Cl</CODE></TD>
+<TD><I>John loves her</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkCl</CODE></TD>
+<TD><CODE>NP -&gt; V3 -&gt; NP -&gt; NP -&gt; Cl</CODE></TD>
+<TD><I>John sends it to her</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkCl</CODE></TD>
+<TD><CODE>NP -&gt; VV -&gt; VP -&gt; Cl</CODE></TD>
+<TD><I>John wants to walk</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkCl</CODE></TD>
+<TD><CODE>NP -&gt; VS -&gt; S -&gt; Cl</CODE></TD>
+<TD><I>John says that it is good</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkCl</CODE></TD>
+<TD><CODE>NP -&gt; VQ -&gt; QS -&gt; Cl</CODE></TD>
+<TD><I>John wonders if it is good</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkCl</CODE></TD>
+<TD><CODE>NP -&gt; VA -&gt; AP -&gt; Cl</CODE></TD>
+<TD><I>John becomes old</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkCl</CODE></TD>
+<TD><CODE>NP -&gt; V2A -&gt;NP -&gt; AP -&gt; Cl</CODE></TD>
+<TD><I>John paints it red</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkCl</CODE></TD>
+<TD><CODE>NP -&gt; A -&gt; Cl</CODE></TD>
+<TD><I>John is old</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkCl</CODE></TD>
+<TD><CODE>NP -&gt; A -&gt; NP -&gt; Cl</CODE></TD>
+<TD><I>John is older than her</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkCl</CODE></TD>
+<TD><CODE>NP -&gt; A2 -&gt; NP -&gt; Cl</CODE></TD>
+<TD><I>John is married to her</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkCl</CODE></TD>
+<TD><CODE>NP -&gt; AP -&gt; Cl</CODE></TD>
+<TD><I>John is very old</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkCl</CODE></TD>
+<TD><CODE>NP -&gt; N -&gt; Cl</CODE></TD>
+<TD><I>John is a man</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkCl</CODE></TD>
+<TD><CODE>NP -&gt; CN -&gt; Cl</CODE></TD>
+<TD><I>John is an old man</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkCl</CODE></TD>
+<TD><CODE>NP -&gt; NP -&gt; Cl</CODE></TD>
+<TD><I>John is the man</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkCl</CODE></TD>
+<TD><CODE>NP -&gt; Adv -&gt; Cl</CODE></TD>
+<TD><I>John is here</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkCl</CODE></TD>
+<TD><CODE>NP -&gt; VP -&gt; Cl</CODE></TD>
+<TD><I>John walks here</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkCl</CODE></TD>
+<TD><CODE>V -&gt; Cl</CODE></TD>
+<TD><I>it rains</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkCl</CODE></TD>
+<TD><CODE>VP -&gt; Cl</CODE></TD>
+<TD><I>it is raining</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkCl</CODE></TD>
+<TD><CODE>N -&gt; Cl</CODE></TD>
+<TD><I>there is a house</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkCl</CODE></TD>
+<TD><CODE>CN -&gt; Cl</CODE></TD>
+<TD><I>there is an old houses</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkCl</CODE></TD>
+<TD><CODE>NP -&gt; Cl</CODE></TD>
+<TD><I>there are five houses</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkCl</CODE></TD>
+<TD><CODE>NP -&gt; RS -&gt; Cl</CODE></TD>
+<TD><I>it is John that walks</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkCl</CODE></TD>
+<TD><CODE>Adv -&gt; S -&gt; Cl</CODE></TD>
+<TD><I>it is here John walks</I></TD>
+</TR>
+<TR>
+<TD><CODE>genericCl</CODE></TD>
+<TD><CODE>VP -&gt; Cl</CODE></TD>
+<TD><I>one walks</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkVP</CODE></TD>
+<TD><CODE>V -&gt; VP</CODE></TD>
+<TD><I>walk</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkVP</CODE></TD>
+<TD><CODE>V2 -&gt; NP -&gt; VP</CODE></TD>
+<TD><I>love her</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkVP</CODE></TD>
+<TD><CODE>V3 -&gt; NP -&gt; NP -&gt; VP</CODE></TD>
+<TD><I>send it to her</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkVP</CODE></TD>
+<TD><CODE>VV -&gt; VP -&gt; VP</CODE></TD>
+<TD><I>want to walk</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkVP</CODE></TD>
+<TD><CODE>VS -&gt; S -&gt; VP</CODE></TD>
+<TD><I>know that she walks</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkVP</CODE></TD>
+<TD><CODE>VQ -&gt; QS -&gt; VP</CODE></TD>
+<TD><I>ask if she walks</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkVP</CODE></TD>
+<TD><CODE>VA -&gt; AP -&gt; VP</CODE></TD>
+<TD><I>become old</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkVP</CODE></TD>
+<TD><CODE>V2A -&gt; NP -&gt; AP -&gt; VP</CODE></TD>
+<TD><I>paint it red</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkVP</CODE></TD>
+<TD><CODE>A -&gt; VP</CODE></TD>
+<TD><I>be warm</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkVP</CODE></TD>
+<TD><CODE>AP -&gt; VP</CODE></TD>
+<TD><I>be very warm</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkVP</CODE></TD>
+<TD><CODE>A -&gt; NP -&gt; VP</CODE></TD>
+<TD><I>be older than her</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkVP</CODE></TD>
+<TD><CODE>A2 -&gt; NP -&gt; VP</CODE></TD>
+<TD><I>be married to her</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkVP</CODE></TD>
+<TD><CODE>N -&gt; VP</CODE></TD>
+<TD><I>be a man</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkVP</CODE></TD>
+<TD><CODE>CN -&gt; VP</CODE></TD>
+<TD><I>be an old man</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkVP</CODE></TD>
+<TD><CODE>NP -&gt; VP</CODE></TD>
+<TD><I>be the man</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkVP</CODE></TD>
+<TD><CODE>Adv -&gt; VP</CODE></TD>
+<TD><I>be here</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkVP</CODE></TD>
+<TD><CODE>VP -&gt; Adv -&gt; VP</CODE></TD>
+<TD><I>sleep here</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkVP</CODE></TD>
+<TD><CODE>AdV -&gt; VP -&gt; VP</CODE></TD>
+<TD><I>always sleep</I></TD>
+</TR>
+<TR>
+<TD><CODE>reflexiveVP</CODE></TD>
+<TD><CODE>V2 -&gt; VP</CODE></TD>
+<TD><I>love itself</I></TD>
+</TR>
+<TR>
+<TD><CODE>passiveVP</CODE></TD>
+<TD><CODE>V2 -&gt; VP</CODE></TD>
+<TD><I>be loved</I></TD>
+</TR>
+<TR>
+<TD><CODE>passiveVP</CODE></TD>
+<TD><CODE>V2 -&gt; NP -&gt; VP</CODE></TD>
+<TD><I>be loved by her</I></TD>
+</TR>
+<TR>
+<TD><CODE>progressiveVP</CODE></TD>
+<TD><CODE>VP -&gt; VP</CODE></TD>
+<TD><I>be sleeping</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkImp</CODE></TD>
+<TD><CODE>V -&gt; Imp</CODE></TD>
+<TD><I>go</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkImp</CODE></TD>
+<TD><CODE>V2 -&gt; NP -&gt; Imp</CODE></TD>
+<TD><I>take it</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkImp</CODE></TD>
+<TD><CODE>VP -&gt; Imp</CODE></TD>
+<TD><I>go there now</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkNP</CODE></TD>
+<TD><CODE>Det -&gt; N -&gt; NP</CODE></TD>
+<TD><I>the first man</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkNP</CODE></TD>
+<TD><CODE>Det -&gt; CN -&gt; NP</CODE></TD>
+<TD><I>the first old man</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkNP</CODE></TD>
+<TD><CODE>QuantSg -&gt; N -&gt; NP</CODE></TD>
+<TD><I>this man</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkNP</CODE></TD>
+<TD><CODE>QuantSg -&gt; CN -&gt; NP</CODE></TD>
+<TD><I>this old man</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkNP</CODE></TD>
+<TD><CODE>QuantPl -&gt; N -&gt; NP</CODE></TD>
+<TD><I>these men</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkNP</CODE></TD>
+<TD><CODE>QuantPl -&gt; CN -&gt; NP</CODE></TD>
+<TD><I>these old men</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkNP</CODE></TD>
+<TD><CODE>Numeral -&gt; N -&gt; NP</CODE></TD>
+<TD><I>twenty men</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkNP</CODE></TD>
+<TD><CODE>Numeral -&gt; CN -&gt; NP</CODE></TD>
+<TD><I>twenty old men</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkNP</CODE></TD>
+<TD><CODE>Int -&gt; N -&gt; NP</CODE></TD>
+<TD><I>45 men</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkNP</CODE></TD>
+<TD><CODE>Int -&gt; CN -&gt; NP</CODE></TD>
+<TD><I>45 old men</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkNP</CODE></TD>
+<TD><CODE>Num -&gt; N -&gt; NP</CODE></TD>
+<TD><I>almost twenty men</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkNP</CODE></TD>
+<TD><CODE>Num -&gt; CN -&gt; NP</CODE></TD>
+<TD><I>almost twenty old men</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkNP</CODE></TD>
+<TD><CODE>Pron -&gt; N -&gt; NP</CODE></TD>
+<TD><I>my man</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkNP</CODE></TD>
+<TD><CODE>Pron -&gt; CN -&gt; NP;</CODE></TD>
+<TD><I>my old man</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkNP</CODE></TD>
+<TD><CODE>PN -&gt; NP</CODE></TD>
+<TD><I>John</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkNP</CODE></TD>
+<TD><CODE>Pron -&gt; NP</CODE></TD>
+<TD><I>he</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkNP</CODE></TD>
+<TD><CODE>Predet -&gt; NP -&gt; NP</CODE></TD>
+<TD><I>only John</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkNP</CODE></TD>
+<TD><CODE>NP -&gt; V2 -&gt; NP</CODE></TD>
+<TD><I>John killed</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkNP</CODE></TD>
+<TD><CODE>NP -&gt; Adv -&gt; NP</CODE></TD>
+<TD><I>John in Paris</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkNP</CODE></TD>
+<TD><CODE>Conj -&gt; NP -&gt; NP -&gt; NP</CODE></TD>
+<TD><I>John and I</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkNP</CODE></TD>
+<TD><CODE>Conj -&gt; ListNP -&gt; NP</CODE></TD>
+<TD><I>John, I, and that</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkNP</CODE></TD>
+<TD><CODE>DConj -&gt; NP -&gt; NP -&gt; NP</CODE></TD>
+<TD><I>either John or I</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkNP</CODE></TD>
+<TD><CODE>DConj -&gt; ListNP -&gt; NP</CODE></TD>
+<TD><I>either John, I, or that</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkDet</CODE></TD>
+<TD><CODE>QuantSg -&gt; Det</CODE></TD>
+<TD><I>this</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkDet</CODE></TD>
+<TD><CODE>QuantSg -&gt; (Ord) -&gt; Det</CODE></TD>
+<TD><I>this first</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkDet</CODE></TD>
+<TD><CODE>QuantPl -&gt; Det</CODE></TD>
+<TD><I>these</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkDet</CODE></TD>
+<TD><CODE>QuantPl -&gt; (Num) -&gt; (Ord) -&gt; Det</CODE></TD>
+<TD><I>these five best</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkDet</CODE></TD>
+<TD><CODE>Quant -&gt; Det</CODE></TD>
+<TD><I>this</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkDet</CODE></TD>
+<TD><CODE>Quant -&gt; Num -&gt; Det</CODE></TD>
+<TD><I>these five</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkDet</CODE></TD>
+<TD><CODE>Num -&gt; Det</CODE></TD>
+<TD><I>almost twenty</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkDet</CODE></TD>
+<TD><CODE>Numeral -&gt; Det</CODE></TD>
+<TD><I>five</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkDet</CODE></TD>
+<TD><CODE>Int -&gt; Det</CODE></TD>
+<TD><I>51</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkDet</CODE></TD>
+<TD><CODE>Pron -&gt; Det</CODE></TD>
+<TD><I>my</I></TD>
+</TR>
+<TR>
+<TD><CODE>defSgDet</CODE></TD>
+<TD><CODE>Det</CODE></TD>
+<TD><I>the (house)</I></TD>
+</TR>
+<TR>
+<TD><CODE>defPlDet</CODE></TD>
+<TD><CODE>Det</CODE></TD>
+<TD><I>the (houses)</I></TD>
+</TR>
+<TR>
+<TD><CODE>indefSgDet</CODE></TD>
+<TD><CODE>Det</CODE></TD>
+<TD><I>a (house)</I></TD>
+</TR>
+<TR>
+<TD><CODE>indefPlDet</CODE></TD>
+<TD><CODE>Det</CODE></TD>
+<TD><I>(houses)</I></TD>
+</TR>
+<TR>
+<TD><CODE>defQuant</CODE></TD>
+<TD><CODE>Quant</CODE></TD>
+<TD><I>the</I></TD>
+</TR>
+<TR>
+<TD><CODE>indefQuant</CODE></TD>
+<TD><CODE>Quant</CODE></TD>
+<TD><I>a</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkQuantSg</CODE></TD>
+<TD><CODE>Quant -&gt; QuantSg</CODE></TD>
+<TD><I>this</I></TD>
+</TR>
+<TR>
+<TD><CODE>massQuant</CODE></TD>
+<TD><CODE>QuantSg</CODE></TD>
+<TD><I>(mass terms)</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkQuantPl</CODE></TD>
+<TD><CODE>Quant -&gt; QuantPl</CODE></TD>
+<TD><I>these</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkNum</CODE></TD>
+<TD><CODE>Numeral -&gt; Num</CODE></TD>
+<TD><I>twenty</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkNum</CODE></TD>
+<TD><CODE>Int -&gt; Num</CODE></TD>
+<TD><I>51</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkNum</CODE></TD>
+<TD><CODE>AdN -&gt; Num -&gt; Num</CODE></TD>
+<TD><I>almost ten</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkOrd</CODE></TD>
+<TD><CODE>Numeral -&gt; Ord</CODE></TD>
+<TD><I>twentieth</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkOrd</CODE></TD>
+<TD><CODE>Int -&gt; Ord</CODE></TD>
+<TD><I>51st</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkOrd</CODE></TD>
+<TD><CODE>A -&gt; Ord</CODE></TD>
+<TD><I>best</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkAdN</CODE></TD>
+<TD><CODE>CAdv -&gt; AdN</CODE></TD>
+<TD><I>more than</I></TD>
+</TR>
+<TR>
+<TD><CODE>n1_Numeral</CODE></TD>
+<TD><CODE>Numeral</CODE></TD>
+<TD><I>one</I></TD>
+</TR>
+<TR>
+<TD><CODE>n2_Numeral</CODE></TD>
+<TD><CODE>Numeral</CODE></TD>
+<TD><I>two</I></TD>
+</TR>
+<TR>
+<TD><CODE>n3_Numeral</CODE></TD>
+<TD><CODE>Numeral</CODE></TD>
+<TD><I>three</I></TD>
+</TR>
+<TR>
+<TD><CODE>n4_Numeral</CODE></TD>
+<TD><CODE>Numeral</CODE></TD>
+<TD><I>four</I></TD>
+</TR>
+<TR>
+<TD><CODE>n5_Numeral</CODE></TD>
+<TD><CODE>Numeral</CODE></TD>
+<TD><I>five</I></TD>
+</TR>
+<TR>
+<TD><CODE>n6_Numeral</CODE></TD>
+<TD><CODE>Numeral</CODE></TD>
+<TD><I>six</I></TD>
+</TR>
+<TR>
+<TD><CODE>n7_Numeral</CODE></TD>
+<TD><CODE>Numeral</CODE></TD>
+<TD><I>seven</I></TD>
+</TR>
+<TR>
+<TD><CODE>n8_Numeral</CODE></TD>
+<TD><CODE>Numeral</CODE></TD>
+<TD><I>eight</I></TD>
+</TR>
+<TR>
+<TD><CODE>n9_Numeral</CODE></TD>
+<TD><CODE>Numeral</CODE></TD>
+<TD><I>nine</I></TD>
+</TR>
+<TR>
+<TD><CODE>n10_Numeral</CODE></TD>
+<TD><CODE>Numeral</CODE></TD>
+<TD><I>ten</I></TD>
+</TR>
+<TR>
+<TD><CODE>n20_Numeral</CODE></TD>
+<TD><CODE>Numeral</CODE></TD>
+<TD><I>twenty</I></TD>
+</TR>
+<TR>
+<TD><CODE>n100_Numeral</CODE></TD>
+<TD><CODE>Numeral</CODE></TD>
+<TD><I>hundred</I></TD>
+</TR>
+<TR>
+<TD><CODE>n1000_Numeral</CODE></TD>
+<TD><CODE>Numeral</CODE></TD>
+<TD><I>thousand</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkCN</CODE></TD>
+<TD><CODE>N -&gt; CN</CODE></TD>
+<TD><I>house</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkCN</CODE></TD>
+<TD><CODE>N2 -&gt; NP -&gt; CN</CODE></TD>
+<TD><I>mother of John</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkCN</CODE></TD>
+<TD><CODE>N3 -&gt; NP -&gt; NP -&gt; CN</CODE></TD>
+<TD><I>distance from this city to Paris</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkCN</CODE></TD>
+<TD><CODE>N2 -&gt; CN</CODE></TD>
+<TD><I>son</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkCN</CODE></TD>
+<TD><CODE>N3 -&gt; CN</CODE></TD>
+<TD><I>flight</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkCN</CODE></TD>
+<TD><CODE>A -&gt; N -&gt; CN</CODE></TD>
+<TD><I>big house</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkCN</CODE></TD>
+<TD><CODE>A -&gt; CN -&gt; CN</CODE></TD>
+<TD><I>big blue house</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkCN</CODE></TD>
+<TD><CODE>AP -&gt; N -&gt; CN</CODE></TD>
+<TD><I>very big house</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkCN</CODE></TD>
+<TD><CODE>AP -&gt; CN -&gt; CN</CODE></TD>
+<TD><I>very big blue house</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkCN</CODE></TD>
+<TD><CODE>N -&gt; RS -&gt; CN</CODE></TD>
+<TD><I>house that John loves</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkCN</CODE></TD>
+<TD><CODE>CN -&gt; RS -&gt; CN</CODE></TD>
+<TD><I>big house that John loves</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkCN</CODE></TD>
+<TD><CODE>N -&gt; Adv -&gt; CN</CODE></TD>
+<TD><I>house in the city</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkCN</CODE></TD>
+<TD><CODE>CN -&gt; Adv -&gt; CN</CODE></TD>
+<TD><I>big house in the city</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkCN</CODE></TD>
+<TD><CODE>CN -&gt; S -&gt; CN</CODE></TD>
+<TD><I>rule that John walks</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkCN</CODE></TD>
+<TD><CODE>CN -&gt; QS -&gt; CN</CODE></TD>
+<TD><I>question if John walks</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkCN</CODE></TD>
+<TD><CODE>CN -&gt; VP -&gt; CN</CODE></TD>
+<TD><I>reason to walk</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkCN</CODE></TD>
+<TD><CODE>N -&gt; NP -&gt; CN</CODE></TD>
+<TD><I>king John</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkCN</CODE></TD>
+<TD><CODE>CN -&gt; NP -&gt; CN</CODE></TD>
+<TD><I>old king John</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkAP</CODE></TD>
+<TD><CODE>A -&gt; AP</CODE></TD>
+<TD><I>old</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkAP</CODE></TD>
+<TD><CODE>A -&gt; NP -&gt; AP</CODE></TD>
+<TD><I>older than John</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkAP</CODE></TD>
+<TD><CODE>A2 -&gt; NP -&gt; AP</CODE></TD>
+<TD><I>married to her</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkAP</CODE></TD>
+<TD><CODE>A2 -&gt; AP</CODE></TD>
+<TD><I>married to myself</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkAP</CODE></TD>
+<TD><CODE>AP -&gt; S -&gt; AP</CODE></TD>
+<TD><I>probable that John walks</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkAP</CODE></TD>
+<TD><CODE>AP -&gt; QS -&gt; AP</CODE></TD>
+<TD><I>uncertain if John walks</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkAP</CODE></TD>
+<TD><CODE>AP -&gt; VP -&gt; AP</CODE></TD>
+<TD><I>ready to go</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkAP</CODE></TD>
+<TD><CODE>AdA -&gt; A -&gt; AP</CODE></TD>
+<TD><I>very old</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkAP</CODE></TD>
+<TD><CODE>AdA -&gt; AP -&gt; AP</CODE></TD>
+<TD><I>very very old</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkAP</CODE></TD>
+<TD><CODE>Conj -&gt; AP -&gt; AP -&gt; AP</CODE></TD>
+<TD><I>old and big</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkAP</CODE></TD>
+<TD><CODE>Conj -&gt; ListAP -&gt; AP</CODE></TD>
+<TD><I>old, big, and warm</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkAP</CODE></TD>
+<TD><CODE>DConj -&gt; AP -&gt; AP -&gt; AP</CODE></TD>
+<TD><I>either old or big</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkAP</CODE></TD>
+<TD><CODE>DConj -&gt; ListAP -&gt; AP</CODE></TD>
+<TD><I>either old, big, or warm</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkAdv</CODE></TD>
+<TD><CODE>A -&gt; Adv</CODE></TD>
+<TD><I>warmly</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkAdv</CODE></TD>
+<TD><CODE>Prep -&gt; NP -&gt; Adv</CODE></TD>
+<TD><I>with John</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkAdv</CODE></TD>
+<TD><CODE>Subj -&gt; S -&gt; Adv</CODE></TD>
+<TD><I>when John walks</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkAdv</CODE></TD>
+<TD><CODE>CAdv -&gt; A -&gt; NP -&gt; Adv</CODE></TD>
+<TD><I>more warmly than John</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkAdv</CODE></TD>
+<TD><CODE>CAdv -&gt; A -&gt; S -&gt; Adv</CODE></TD>
+<TD><I>more warmly than John walks</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkAdv</CODE></TD>
+<TD><CODE>AdA -&gt; Adv -&gt; Adv</CODE></TD>
+<TD><I>very warmly</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkAdv</CODE></TD>
+<TD><CODE>Conj -&gt; Adv -&gt; Adv -&gt; Adv</CODE></TD>
+<TD><I>here and now</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkAdv</CODE></TD>
+<TD><CODE>Conj -&gt; ListAdv -&gt; Adv</CODE></TD>
+<TD><I>with John, here and now</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkAdv</CODE></TD>
+<TD><CODE>DConj -&gt; Adv -&gt; Adv -&gt; Adv</CODE></TD>
+<TD><I>either here or now</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkAdv</CODE></TD>
+<TD><CODE>DConj -&gt; ListAdv -&gt; Adv</CODE></TD>
+<TD><I>either here, now, or with John</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkQS</CODE></TD>
+<TD><CODE>QCl -&gt; QS</CODE></TD>
+<TD><I>who walks</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkQS</CODE></TD>
+<TD><CODE>(Tense) -&gt; (Ant) -&gt; (Pol) -&gt; QCl -&gt; QS</CODE></TD>
+<TD><I>who wouldn't have walked</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkQS</CODE></TD>
+<TD><CODE>Cl -&gt; QS</CODE></TD>
+<TD><I>does John walk</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkQCl</CODE></TD>
+<TD><CODE>Cl -&gt; QCl</CODE></TD>
+<TD><I>does John walk</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkQCl</CODE></TD>
+<TD><CODE>IP -&gt; VP -&gt; QCl</CODE></TD>
+<TD><I>who walks</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkQCl</CODE></TD>
+<TD><CODE>IP -&gt; NP -&gt; V2 -&gt; QCl</CODE></TD>
+<TD><I>whom does John love</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkQCl</CODE></TD>
+<TD><CODE>IP -&gt; Slash -&gt; QCl</CODE></TD>
+<TD><I>whom does John love today</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkQCl</CODE></TD>
+<TD><CODE>IAdv -&gt; Cl -&gt; QCl</CODE></TD>
+<TD><I>why does John walk</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkQCl</CODE></TD>
+<TD><CODE>Prep -&gt; IP -&gt; Cl -&gt; QCl</CODE></TD>
+<TD><I>with who does John walk</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkQCl</CODE></TD>
+<TD><CODE>IAdv -&gt; NP -&gt; QCl</CODE></TD>
+<TD><I>where is John</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkQCl</CODE></TD>
+<TD><CODE>IP -&gt; QCl</CODE></TD>
+<TD><I>what is there</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkIP</CODE></TD>
+<TD><CODE>IDet -&gt; N -&gt; IP</CODE></TD>
+<TD><I>which city</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkIP</CODE></TD>
+<TD><CODE>IDet -&gt; (Num) -&gt; (Ord) -&gt; CN -&gt; IP</CODE></TD>
+<TD><I>which five best cities</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkIP</CODE></TD>
+<TD><CODE>IP -&gt; Adv -&gt; IP</CODE></TD>
+<TD><I>who in Paris</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkIAdv</CODE></TD>
+<TD><CODE>Prep -&gt; IP -&gt; IAdv</CODE></TD>
+<TD><I>in which city</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkRS</CODE></TD>
+<TD><CODE>RCl -&gt; RS</CODE></TD>
+<TD><I>that walk</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkRS</CODE></TD>
+<TD><CODE>(Tense) -&gt; (Ant) -&gt; (Pol) -&gt; RCl -&gt; RS</CODE></TD>
+<TD><I>that wouldn't have walked</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkRCl</CODE></TD>
+<TD><CODE>RP -&gt; VP -&gt; RCl</CODE></TD>
+<TD><I>that walk</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkRCl</CODE></TD>
+<TD><CODE>RP -&gt; NP -&gt; V2 -&gt; RCl</CODE></TD>
+<TD><I>which John loves</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkRCl</CODE></TD>
+<TD><CODE>RP -&gt; Slash -&gt; RCl</CODE></TD>
+<TD><I>which John loves today</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkRCl</CODE></TD>
+<TD><CODE>Cl -&gt; RCl</CODE></TD>
+<TD><I>such that John loves her</I></TD>
+</TR>
+<TR>
+<TD><CODE>which_RP</CODE></TD>
+<TD><CODE>RP</CODE></TD>
+<TD><I>which</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkRP</CODE></TD>
+<TD><CODE>Prep -&gt; NP -&gt; RP -&gt; RP</CODE></TD>
+<TD><I>all the houses in which</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkSlash</CODE></TD>
+<TD><CODE>NP -&gt; V2 -&gt; Slash</CODE></TD>
+<TD><I>(whom) John loves</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkSlash</CODE></TD>
+<TD><CODE>NP -&gt; VV -&gt; V2 -&gt; Slash</CODE></TD>
+<TD><I>(whom) John wants to see</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkSlash</CODE></TD>
+<TD><CODE>Cl -&gt; Prep -&gt; Slash</CODE></TD>
+<TD><I>(with whom) John walks</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkSlash</CODE></TD>
+<TD><CODE>Slash -&gt; Adv -&gt; Slash</CODE></TD>
+<TD><I>(whom) John loves today</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkListS</CODE></TD>
+<TD><CODE>S -&gt; S -&gt; ListS</CODE></TD>
+<TD><I>he walks, I run</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkListS</CODE></TD>
+<TD><CODE>S -&gt; ListS -&gt; ListS</CODE></TD>
+<TD><I>John walks, I run, you sleep</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkListAdv</CODE></TD>
+<TD><CODE>Adv -&gt; Adv -&gt; ListAdv</CODE></TD>
+<TD><I>here, now</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkListAdv</CODE></TD>
+<TD><CODE>Adv -&gt; ListAdv -&gt; ListAdv</CODE></TD>
+<TD><I>to me, here, now</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkListAP</CODE></TD>
+<TD><CODE>AP -&gt; AP -&gt; ListAP</CODE></TD>
+<TD><I>old, big</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkListAP</CODE></TD>
+<TD><CODE>AP -&gt; ListAP -&gt; ListAP</CODE></TD>
+<TD><I>old, big, warm</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkListNP</CODE></TD>
+<TD><CODE>NP -&gt; NP -&gt; ListNP</CODE></TD>
+<TD><I>John, I</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkListNP</CODE></TD>
+<TD><CODE>NP -&gt; ListNP -&gt; ListNP</CODE></TD>
+<TD><I>John, I, that</I></TD>
+</TR>
+</TABLE>
+
+<P></P>
+<A NAME="toc2"></A>
+<H1>Paradigms for Danish</H1>
+<P>
+<A HREF="../danish/ParadigmsDan.gf">source</A>
+</P>
+<TABLE CELLPADDING="4" BORDER="1">
+<TR>
+<TH>Function</TH>
+<TH>Type</TH>
+<TH COLSPAN="2">Example</TH>
+</TR>
+<TR>
+<TD><CODE>Gender</CODE></TD>
+<TD><CODE>Type</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>utrum</CODE></TD>
+<TD><CODE>Gender</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>neutrum</CODE></TD>
+<TD><CODE>Gender</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>Number</CODE></TD>
+<TD><CODE>Type</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>singular</CODE></TD>
+<TD><CODE>Number</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>plural</CODE></TD>
+<TD><CODE>Number</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>Case</CODE></TD>
+<TD><CODE>Type</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>nominative</CODE></TD>
+<TD><CODE>Case</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>genitive</CODE></TD>
+<TD><CODE>Case</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkPrep</CODE></TD>
+<TD><CODE>Str -&gt; Prep</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>noPrep</CODE></TD>
+<TD><CODE>Prep</CODE></TD>
+<TD><I>empty string</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkN</CODE></TD>
+<TD><CODE>(dreng,drengen,drenge,drengene : Str) -&gt; N</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>regN</CODE></TD>
+<TD><CODE>Str -&gt; N</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>regGenN</CODE></TD>
+<TD><CODE>Str -&gt; Gender -&gt; N</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mk2N</CODE></TD>
+<TD><CODE>(bil,bilen : Str) -&gt; N</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mk3N</CODE></TD>
+<TD><CODE>(bil,bilen,biler : Str) -&gt; N</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkN2</CODE></TD>
+<TD><CODE>N -&gt; Prep -&gt; N2</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>regN2</CODE></TD>
+<TD><CODE>Str -&gt; Gender -&gt; N2</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkN3</CODE></TD>
+<TD><CODE>N -&gt; Prep -&gt; Prep -&gt; N3</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkPN</CODE></TD>
+<TD><CODE>Str -&gt; Gender -&gt; PN</CODE></TD>
+<TD><I>Paris neutrum</I></TD>
+</TR>
+<TR>
+<TD><CODE>regPN</CODE></TD>
+<TD><CODE>Str -&gt; PN</CODE></TD>
+<TD><I>utrum gender</I></TD>
+</TR>
+<TR>
+<TD><CODE>nounPN</CODE></TD>
+<TD><CODE>N -&gt; PN</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkNP</CODE></TD>
+<TD><CODE>Str -&gt; Str -&gt; Number -&gt; Gender -&gt; NP</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkA</CODE></TD>
+<TD><CODE>(galen,galet,galne : Str) -&gt; A</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>regA</CODE></TD>
+<TD><CODE>Str -&gt; A</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mk2A</CODE></TD>
+<TD><CODE>(stor,stort : Str) -&gt; A</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkA2</CODE></TD>
+<TD><CODE>A -&gt; Prep -&gt; A2</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkADeg</CODE></TD>
+<TD><CODE>(stor,stort,store,storre,storst : Str) -&gt; A</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>regADeg</CODE></TD>
+<TD><CODE>Str -&gt; A</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>irregADeg</CODE></TD>
+<TD><CODE>(tung,tyngre,tyngst : Str) -&gt; A</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mk3ADeg</CODE></TD>
+<TD><CODE>(galen,galet,galna : Str) -&gt; A</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mk2ADeg</CODE></TD>
+<TD><CODE>(bred,bredt : Str) -&gt; A</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>compoundA</CODE></TD>
+<TD><CODE>A -&gt; A</CODE></TD>
+<TD><I>-/mer/mest norsk</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkAdv</CODE></TD>
+<TD><CODE>Str -&gt; Adv</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkAdV</CODE></TD>
+<TD><CODE>Str -&gt; AdV</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkAdA</CODE></TD>
+<TD><CODE>Str -&gt; AdA</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV</CODE></TD>
+<TD><CODE>(spise,spiser,spises,spiste,spist,spis : Str) -&gt; V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>regV</CODE></TD>
+<TD><CODE>(snakke : Str) -&gt; V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mk2V</CODE></TD>
+<TD><CODE>(leve,levde : Str) -&gt; V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>irregV</CODE></TD>
+<TD><CODE>(drikke, drak, drukket : Str) -&gt; V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>vaereV</CODE></TD>
+<TD><CODE>V -&gt; V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>partV</CODE></TD>
+<TD><CODE>V -&gt; Str -&gt; V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>depV</CODE></TD>
+<TD><CODE>V -&gt; V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>reflV</CODE></TD>
+<TD><CODE>V -&gt; V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV2</CODE></TD>
+<TD><CODE>V -&gt; Prep -&gt; V2</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>dirV2</CODE></TD>
+<TD><CODE>V -&gt; V2</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV3</CODE></TD>
+<TD><CODE>V -&gt; Prep -&gt; Prep -&gt; V3</CODE></TD>
+<TD><I>snakke, med, om</I></TD>
+</TR>
+<TR>
+<TD><CODE>dirV3</CODE></TD>
+<TD><CODE>V -&gt; Prep -&gt; V3</CODE></TD>
+<TD><I>give,_,til</I></TD>
+</TR>
+<TR>
+<TD><CODE>dirdirV3</CODE></TD>
+<TD><CODE>V -&gt; V3</CODE></TD>
+<TD><I>give,_,_</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkV0</CODE></TD>
+<TD><CODE>V -&gt; V0</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkVS</CODE></TD>
+<TD><CODE>V -&gt; VS</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV2S</CODE></TD>
+<TD><CODE>V -&gt; Prep -&gt; V2S</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkVV</CODE></TD>
+<TD><CODE>V -&gt; VV</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV2V</CODE></TD>
+<TD><CODE>V -&gt; Prep -&gt; Prep -&gt; V2V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkVA</CODE></TD>
+<TD><CODE>V -&gt; VA</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV2A</CODE></TD>
+<TD><CODE>V -&gt; Prep -&gt; V2A</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkVQ</CODE></TD>
+<TD><CODE>V -&gt; VQ</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV2Q</CODE></TD>
+<TD><CODE>V -&gt; Prep -&gt; V2Q</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkAS</CODE></TD>
+<TD><CODE>A -&gt; AS</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkA2S</CODE></TD>
+<TD><CODE>A -&gt; Prep -&gt; A2S</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkAV</CODE></TD>
+<TD><CODE>A -&gt; AV</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkA2V</CODE></TD>
+<TD><CODE>A -&gt; Prep -&gt; A2V</CODE></TD>
+<TD>-</TD>
+</TR>
+</TABLE>
+
+<P></P>
+<A NAME="toc3"></A>
+<H1>Paradigms for English</H1>
+<P>
+<A HREF="../english/ParadigmsEng.gf">source</A>
+</P>
+<TABLE CELLPADDING="4" BORDER="1">
+<TR>
+<TH>Function</TH>
+<TH>Type</TH>
+<TH COLSPAN="2">Example</TH>
+</TR>
+<TR>
+<TD><CODE>Gender</CODE></TD>
+<TD><CODE>Type</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>human</CODE></TD>
+<TD><CODE>Gender</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>nonhuman</CODE></TD>
+<TD><CODE>Gender</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>masculine</CODE></TD>
+<TD><CODE>Gender</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>Number</CODE></TD>
+<TD><CODE>Type</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>singular</CODE></TD>
+<TD><CODE>Number</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>plural</CODE></TD>
+<TD><CODE>Number</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>Case</CODE></TD>
+<TD><CODE>Type</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>nominative</CODE></TD>
+<TD><CODE>Case</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>genitive</CODE></TD>
+<TD><CODE>Case</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkN</CODE></TD>
+<TD><CODE>(flash : Str) -&gt; N</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkN</CODE></TD>
+<TD><CODE>(man,men : Str) -&gt; N</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkN</CODE></TD>
+<TD><CODE>(man,men,man's,men's : Str) -&gt; N</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkN</CODE></TD>
+<TD><CODE>Str -&gt; N -&gt; N</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkN2</CODE></TD>
+<TD><CODE>N -&gt; Prep -&gt; N2</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>regN2</CODE></TD>
+<TD><CODE>Str -&gt; N2</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkN3</CODE></TD>
+<TD><CODE>N -&gt; Prep -&gt; Prep -&gt; N3</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkPN</CODE></TD>
+<TD><CODE>Str -&gt; PN</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkPN</CODE></TD>
+<TD><CODE>N -&gt; PN</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkA</CODE></TD>
+<TD><CODE>(happy : Str) -&gt; A</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkA</CODE></TD>
+<TD><CODE>(fat,fatter : Str) -&gt; A</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkA</CODE></TD>
+<TD><CODE>(good,better,best,well : Str) -&gt; A</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>compoundA</CODE></TD>
+<TD><CODE>A -&gt; A</CODE></TD>
+<TD><I>-/more/most ridiculous</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkA2</CODE></TD>
+<TD><CODE>A -&gt; Prep -&gt; A2</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkAdv</CODE></TD>
+<TD><CODE>Str -&gt; Adv</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkAdV</CODE></TD>
+<TD><CODE>Str -&gt; AdV</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkAdA</CODE></TD>
+<TD><CODE>Str -&gt; AdA</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkPrep</CODE></TD>
+<TD><CODE>Str -&gt; Prep</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>noPrep</CODE></TD>
+<TD><CODE>Prep</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV</CODE></TD>
+<TD><CODE>(cry : Str) -&gt; V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV</CODE></TD>
+<TD><CODE>(stop, stopped : Str) -&gt; V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV</CODE></TD>
+<TD><CODE>(drink, drank, drunk : Str) -&gt; V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV</CODE></TD>
+<TD><CODE>(run, ran, run, running : Str) -&gt; V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV</CODE></TD>
+<TD><CODE>(go, goes, went, gone, going : Str) -&gt; V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>partV</CODE></TD>
+<TD><CODE>V -&gt; Str -&gt; V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>reflV</CODE></TD>
+<TD><CODE>V -&gt; V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV2</CODE></TD>
+<TD><CODE>V -&gt; Prep -&gt; V2</CODE></TD>
+<TD><I>believe in</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkV2</CODE></TD>
+<TD><CODE>V -&gt; V2</CODE></TD>
+<TD><I>kill</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkV3</CODE></TD>
+<TD><CODE>V -&gt; Prep -&gt; Prep -&gt; V3</CODE></TD>
+<TD><I>speak, with, about</I></TD>
+</TR>
+<TR>
+<TD><CODE>dirV3</CODE></TD>
+<TD><CODE>V -&gt; Prep -&gt; V3</CODE></TD>
+<TD><I>give,_,to</I></TD>
+</TR>
+<TR>
+<TD><CODE>dirdirV3</CODE></TD>
+<TD><CODE>V -&gt; V3</CODE></TD>
+<TD><I>give,_,_</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkV0</CODE></TD>
+<TD><CODE>V -&gt; V0</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkVS</CODE></TD>
+<TD><CODE>V -&gt; VS</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV2S</CODE></TD>
+<TD><CODE>V -&gt; Prep -&gt; V2S</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkVV</CODE></TD>
+<TD><CODE>V -&gt; VV</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV2V</CODE></TD>
+<TD><CODE>V -&gt; Prep -&gt; Prep -&gt; V2V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkVA</CODE></TD>
+<TD><CODE>V -&gt; VA</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV2A</CODE></TD>
+<TD><CODE>V -&gt; Prep -&gt; V2A</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkVQ</CODE></TD>
+<TD><CODE>V -&gt; VQ</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV2Q</CODE></TD>
+<TD><CODE>V -&gt; Prep -&gt; V2Q</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkAS</CODE></TD>
+<TD><CODE>A -&gt; AS</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkA2S</CODE></TD>
+<TD><CODE>A -&gt; Prep -&gt; A2S</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkAV</CODE></TD>
+<TD><CODE>A -&gt; AV</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkA2V</CODE></TD>
+<TD><CODE>A -&gt; Prep -&gt; A2V</CODE></TD>
+<TD>-</TD>
+</TR>
+</TABLE>
+
+<P></P>
+<A NAME="toc4"></A>
+<H1>Paradigms for Finnish</H1>
+<P>
+<A HREF="../finnish/ParadigmsFin.gf">source</A>
+</P>
+<TABLE CELLPADDING="4" BORDER="1">
+<TR>
+<TH>Function</TH>
+<TH>Type</TH>
+<TH COLSPAN="2">Example</TH>
+</TR>
+<TR>
+<TD><CODE>Number</CODE></TD>
+<TD><CODE>Type</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>singular</CODE></TD>
+<TD><CODE>Number</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>plural</CODE></TD>
+<TD><CODE>Number</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>Case</CODE></TD>
+<TD><CODE>Type</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>nominative</CODE></TD>
+<TD><CODE>Case</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>genitive</CODE></TD>
+<TD><CODE>Case</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>partitive</CODE></TD>
+<TD><CODE>Case</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>translative</CODE></TD>
+<TD><CODE>Case</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>inessive</CODE></TD>
+<TD><CODE>Case</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>elative</CODE></TD>
+<TD><CODE>Case</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>illative</CODE></TD>
+<TD><CODE>Case</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>adessive</CODE></TD>
+<TD><CODE>Case</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>ablative</CODE></TD>
+<TD><CODE>Case</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>allative</CODE></TD>
+<TD><CODE>Case</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>prePrep</CODE></TD>
+<TD><CODE>Case -&gt; Str -&gt; Prep</CODE></TD>
+<TD><I>ilman, partitive</I></TD>
+</TR>
+<TR>
+<TD><CODE>postPrep</CODE></TD>
+<TD><CODE>Case -&gt; Str -&gt; Prep</CODE></TD>
+<TD><I>takana, genitive</I></TD>
+</TR>
+<TR>
+<TD><CODE>postGenPrep</CODE></TD>
+<TD><CODE>Str -&gt; Prep</CODE></TD>
+<TD><I>takana</I></TD>
+</TR>
+<TR>
+<TD><CODE>casePrep</CODE></TD>
+<TD><CODE>Case -&gt; Prep</CODE></TD>
+<TD><I>adessive</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkN</CODE></TD>
+<TD><CODE>(talo : Str) -&gt; N</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkN</CODE></TD>
+<TD><CODE>(savi,savia : Str) -&gt; N</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkN</CODE></TD>
+<TD><CODE>(vesi,veden,vesi� : Str) -&gt; N</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkN</CODE></TD>
+<TD><CODE>(olo,oln,olona,oloa,oloon,oloina,oloissa,olojen,oloja,oloihin : Str) -&gt; N</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>sgpartN</CODE></TD>
+<TD><CODE>(meri : N) -&gt; (merta : Str) -&gt; N</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>nMeri</CODE></TD>
+<TD><CODE>(meri : Str) -&gt; N</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>nKukko</CODE></TD>
+<TD><CODE>(kukko,kukon,kukkoja : Str) -&gt; N</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>nTalo</CODE></TD>
+<TD><CODE>(talo : Str) -&gt; N</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>nLukko</CODE></TD>
+<TD><CODE>(lukko : Str) -&gt; N</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>nArpi</CODE></TD>
+<TD><CODE>(arpi : Str) -&gt; N</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>nSylki</CODE></TD>
+<TD><CODE>(sylki : Str) -&gt; N</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>nLinux</CODE></TD>
+<TD><CODE>(linuxia : Str) -&gt; N</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>nPeruna</CODE></TD>
+<TD><CODE>(peruna : Str) -&gt; N</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>nRae</CODE></TD>
+<TD><CODE>(rae, rakeena : Str) -&gt; N</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>nSusi</CODE></TD>
+<TD><CODE>(susi,suden,sutta : Str) -&gt; N</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>nPuu</CODE></TD>
+<TD><CODE>(puu : Str) -&gt; N</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>nSuo</CODE></TD>
+<TD><CODE>(suo : Str) -&gt; N</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>nNainen</CODE></TD>
+<TD><CODE>(naista : Str) -&gt; N</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>nTilaus</CODE></TD>
+<TD><CODE>(tilaus,tilauksena : Str) -&gt; N</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>nKulaus</CODE></TD>
+<TD><CODE>(kulaus : Str) -&gt; N</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>nNauris</CODE></TD>
+<TD><CODE>(naurista : Str) -&gt; N</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>compN</CODE></TD>
+<TD><CODE>Str -&gt; N -&gt; N</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkN2</CODE></TD>
+<TD><CODE>N -&gt; N2 = genN2</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkN2</CODE></TD>
+<TD><CODE>N -&gt; Prep -&gt; N2 = mmkN2</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkN3</CODE></TD>
+<TD><CODE>N -&gt; Prep -&gt; Prep -&gt; N3</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkPN</CODE></TD>
+<TD><CODE>Str -&gt; PN</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkPN</CODE></TD>
+<TD><CODE>N -&gt; PN</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkA</CODE></TD>
+<TD><CODE>Str -&gt; A</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkA</CODE></TD>
+<TD><CODE>N -&gt; A</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkA</CODE></TD>
+<TD><CODE>N -&gt; (kivempaa,kivinta : Str) -&gt; A</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkA2</CODE></TD>
+<TD><CODE>A -&gt; Prep -&gt; A2</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV</CODE></TD>
+<TD><CODE>(soutaa : Str) -&gt; V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV</CODE></TD>
+<TD><CODE>(soutaa,souti : Str) -&gt; V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV</CODE></TD>
+<TD><CODE>(soutaa,soudan,souti : Str) -&gt; V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV</CODE></TD>
+<TD><CODE>(tulla,tulee,tulen,tulevat,tulkaa,tullaan,tuli,tulin,tulisi,tullut,tultu,tullun : Str) -&gt; V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV</CODE></TD>
+<TD><CODE>V -&gt; Case -&gt; V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>vValua</CODE></TD>
+<TD><CODE>(valua : Str) -&gt; V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>vKattaa</CODE></TD>
+<TD><CODE>(kattaa, katan : Str) -&gt; V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>vOstaa</CODE></TD>
+<TD><CODE>(ostaa : Str) -&gt; V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>vNousta</CODE></TD>
+<TD><CODE>(nousta, nousen : Str) -&gt; V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>vTuoda</CODE></TD>
+<TD><CODE>(tuoda : Str) -&gt; V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>caseV</CODE></TD>
+<TD><CODE>Case -&gt; V -&gt; V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>vOlla</CODE></TD>
+<TD><CODE>V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV2</CODE></TD>
+<TD><CODE>V -&gt; Prep -&gt; V2</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>caseV2</CODE></TD>
+<TD><CODE>V -&gt; Case -&gt; V2</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>dirV2</CODE></TD>
+<TD><CODE>V -&gt; V2</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV3</CODE></TD>
+<TD><CODE>V -&gt; Prep -&gt; Prep -&gt; V3</CODE></TD>
+<TD><I>puhua, allative, elative</I></TD>
+</TR>
+<TR>
+<TD><CODE>dirV3</CODE></TD>
+<TD><CODE>V -&gt; Case -&gt; V3</CODE></TD>
+<TD><I>siirt��, (accusative), illative</I></TD>
+</TR>
+<TR>
+<TD><CODE>dirdirV3</CODE></TD>
+<TD><CODE>V -&gt; V3</CODE></TD>
+<TD><I>antaa, (accusative), (allative)</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkV0</CODE></TD>
+<TD><CODE>V -&gt; V0</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkVS</CODE></TD>
+<TD><CODE>V -&gt; VS</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV2S</CODE></TD>
+<TD><CODE>V -&gt; Prep -&gt; V2S</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkVV</CODE></TD>
+<TD><CODE>V -&gt; VV</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV2V</CODE></TD>
+<TD><CODE>V -&gt; Prep -&gt; V2V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkVA</CODE></TD>
+<TD><CODE>V -&gt; Prep -&gt; VA</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV2A</CODE></TD>
+<TD><CODE>V -&gt; Prep -&gt; Prep -&gt; V2A</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkVQ</CODE></TD>
+<TD><CODE>V -&gt; VQ</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV2Q</CODE></TD>
+<TD><CODE>V -&gt; Prep -&gt; V2Q</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkAS</CODE></TD>
+<TD><CODE>A -&gt; AS</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkA2S</CODE></TD>
+<TD><CODE>A -&gt; Prep -&gt; A2S</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkAV</CODE></TD>
+<TD><CODE>A -&gt; AV</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkA2V</CODE></TD>
+<TD><CODE>A -&gt; Prep -&gt; A2V</CODE></TD>
+<TD>-</TD>
+</TR>
+</TABLE>
+
+<P></P>
+<A NAME="toc5"></A>
+<H1>Paradigms for French</H1>
+<P>
+<A HREF="../french/ParadigmsFre.gf">source</A>
+</P>
+<TABLE CELLPADDING="4" BORDER="1">
+<TR>
+<TH>Function</TH>
+<TH>Type</TH>
+<TH COLSPAN="2">Example</TH>
+</TR>
+<TR>
+<TD><CODE>Gender</CODE></TD>
+<TD><CODE>Type</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>masculine</CODE></TD>
+<TD><CODE>Gender</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>feminine</CODE></TD>
+<TD><CODE>Gender</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>Number</CODE></TD>
+<TD><CODE>Type</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>singular</CODE></TD>
+<TD><CODE>Number</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>plural</CODE></TD>
+<TD><CODE>Number</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>accusative</CODE></TD>
+<TD><CODE>Prep</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>genitive</CODE></TD>
+<TD><CODE>Prep</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>dative</CODE></TD>
+<TD><CODE>Prep</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkPrep</CODE></TD>
+<TD><CODE>Str -&gt; Prep</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkN</CODE></TD>
+<TD><CODE>(cheval : Str) -&gt; N</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkN</CODE></TD>
+<TD><CODE>(foie : Str) -&gt; Gender -&gt; N</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkN</CODE></TD>
+<TD><CODE>(oeil,yeux : Str) -&gt; Gender -&gt; N</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkN</CODE></TD>
+<TD><CODE>N -&gt; Str -&gt; N</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkN2</CODE></TD>
+<TD><CODE>N -&gt; Prep -&gt; N2</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>deN2</CODE></TD>
+<TD><CODE>N -&gt; N2</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>aN2</CODE></TD>
+<TD><CODE>N -&gt; N2</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkN3</CODE></TD>
+<TD><CODE>N -&gt; Prep -&gt; Prep -&gt; N3</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkPN</CODE></TD>
+<TD><CODE>Str -&gt; PN</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkPN</CODE></TD>
+<TD><CODE>Str -&gt; Gender -&gt; PN</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkA</CODE></TD>
+<TD><CODE>(cher : Str) -&gt; A</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkA</CODE></TD>
+<TD><CODE>(sec,seche : Str) -&gt; A</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkA</CODE></TD>
+<TD><CODE>(banal,banale,banaux,banalement : Str) -&gt; A</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkA</CODE></TD>
+<TD><CODE>A -&gt; A -&gt; A</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>prefixA</CODE></TD>
+<TD><CODE>A -&gt; A</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkA2</CODE></TD>
+<TD><CODE>A -&gt; Prep -&gt; A2</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkAdv</CODE></TD>
+<TD><CODE>Str -&gt; Adv</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkAdV</CODE></TD>
+<TD><CODE>Str -&gt; AdV</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkAdA</CODE></TD>
+<TD><CODE>Str -&gt; AdA</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV</CODE></TD>
+<TD><CODE>(finir : Str) -&gt; V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV</CODE></TD>
+<TD><CODE>(jeter,jette,jettera : Str) -&gt; V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV</CODE></TD>
+<TD><CODE>V2 -&gt; V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>etreV</CODE></TD>
+<TD><CODE>V -&gt; V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>reflV</CODE></TD>
+<TD><CODE>V -&gt; V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV2</CODE></TD>
+<TD><CODE>V -&gt; V2 = dirV2</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV2</CODE></TD>
+<TD><CODE>V -&gt; Prep -&gt; V2 = mmkV2</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV3</CODE></TD>
+<TD><CODE>V -&gt; V3</CODE></TD>
+<TD><I>donner,_,_</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkV3</CODE></TD>
+<TD><CODE>V -&gt; Prep -&gt; V3</CODE></TD>
+<TD><I>placer,_,dans</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkV3</CODE></TD>
+<TD><CODE>V -&gt; Prep -&gt; Prep -&gt; V3</CODE></TD>
+<TD><I>parler, �, de</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkV0</CODE></TD>
+<TD><CODE>V -&gt; V0</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkVS</CODE></TD>
+<TD><CODE>V -&gt; VS</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV2S</CODE></TD>
+<TD><CODE>V -&gt; Prep -&gt; V2S</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkVV</CODE></TD>
+<TD><CODE>V -&gt; VV</CODE></TD>
+<TD><I>plain infinitive: "je veux parler"</I></TD>
+</TR>
+<TR>
+<TD><CODE>deVV</CODE></TD>
+<TD><CODE>V -&gt; VV</CODE></TD>
+<TD><I>"j'essaie de parler"</I></TD>
+</TR>
+<TR>
+<TD><CODE>aVV</CODE></TD>
+<TD><CODE>V -&gt; VV</CODE></TD>
+<TD><I>"j'arrive � parler"</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkV2V</CODE></TD>
+<TD><CODE>V -&gt; Prep -&gt; Prep -&gt; V2V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkVA</CODE></TD>
+<TD><CODE>V -&gt; VA</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV2A</CODE></TD>
+<TD><CODE>V -&gt; Prep -&gt; Prep -&gt; V2A</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkVQ</CODE></TD>
+<TD><CODE>V -&gt; VQ</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV2Q</CODE></TD>
+<TD><CODE>V -&gt; Prep -&gt; V2Q</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkAS</CODE></TD>
+<TD><CODE>A -&gt; AS</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkA2S</CODE></TD>
+<TD><CODE>A -&gt; Prep -&gt; A2S</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkAV</CODE></TD>
+<TD><CODE>A -&gt; Prep -&gt; AV</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkA2V</CODE></TD>
+<TD><CODE>A -&gt; Prep -&gt; Prep -&gt; A2V</CODE></TD>
+<TD>-</TD>
+</TR>
+</TABLE>
+
+<P></P>
+<A NAME="toc6"></A>
+<H1>Paradigms for German</H1>
+<P>
+<A HREF="../german/ParadigmsGer.gf">source</A>
+</P>
+<TABLE CELLPADDING="4" BORDER="1">
+<TR>
+<TH>Function</TH>
+<TH>Type</TH>
+<TH COLSPAN="2">Example</TH>
+</TR>
+<TR>
+<TD><CODE>Gender</CODE></TD>
+<TD><CODE>Type</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>masculine</CODE></TD>
+<TD><CODE>Gender</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>feminine</CODE></TD>
+<TD><CODE>Gender</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>neuter</CODE></TD>
+<TD><CODE>Gender</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>Case</CODE></TD>
+<TD><CODE>Type</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>nominative</CODE></TD>
+<TD><CODE>Case</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>accusative</CODE></TD>
+<TD><CODE>Case</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>dative</CODE></TD>
+<TD><CODE>Case</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>genitive</CODE></TD>
+<TD><CODE>Case</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>Number</CODE></TD>
+<TD><CODE>Type</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>singular</CODE></TD>
+<TD><CODE>Number</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>plural</CODE></TD>
+<TD><CODE>Number</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkN</CODE></TD>
+<TD><CODE>(Stufe : Str) -&gt; N</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkN</CODE></TD>
+<TD><CODE>(Bild,Bilder : Str) -&gt; Gender -&gt; N</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkN</CODE></TD>
+<TD><CODE>(x1,_,_,_,_,x6 : Str) -&gt; Gender -&gt; N</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkN2</CODE></TD>
+<TD><CODE>Str -&gt; N2</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkN2</CODE></TD>
+<TD><CODE>N -&gt; N2</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkN2</CODE></TD>
+<TD><CODE>N -&gt; Prep -&gt; N2</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkN3</CODE></TD>
+<TD><CODE>N -&gt; Prep -&gt; Prep -&gt; N3</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkPN</CODE></TD>
+<TD><CODE>Str -&gt; PN</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkPN</CODE></TD>
+<TD><CODE>(nom,gen : Str) -&gt; PN</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkPN</CODE></TD>
+<TD><CODE>(nom,acc,dat,gen : Str) -&gt; PN</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkA</CODE></TD>
+<TD><CODE>Str -&gt; A</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkA</CODE></TD>
+<TD><CODE>(gut,besser,beste : Str) -&gt; A</CODE></TD>
+<TD><I>gut,besser,beste</I></TD>
+</TR>
+<TR>
+<TD><CODE>invarA</CODE></TD>
+<TD><CODE>Str -&gt; A</CODE></TD>
+<TD><I>prima</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkA2</CODE></TD>
+<TD><CODE>A -&gt; Prep -&gt; A2</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkAdv</CODE></TD>
+<TD><CODE>Str -&gt; Adv</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkPrep</CODE></TD>
+<TD><CODE>Str -&gt; Case -&gt; Prep</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>accPrep</CODE></TD>
+<TD><CODE>Prep</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>datPrep</CODE></TD>
+<TD><CODE>Prep</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>genPrep</CODE></TD>
+<TD><CODE>Prep</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>von_Prep</CODE></TD>
+<TD><CODE>Prep</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>zu_Prep</CODE></TD>
+<TD><CODE>Prep</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV</CODE></TD>
+<TD><CODE>(f�hren : Str) -&gt; V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV</CODE></TD>
+<TD><CODE>(sehen,sieht,sah,s�he,gesehen : Str) -&gt; V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV</CODE></TD>
+<TD><CODE>(geben, gibt, gib, gab, g�be, gegeben : Str) -&gt; V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV</CODE></TD>
+<TD><CODE>Str -&gt; V -&gt; V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>no_geV</CODE></TD>
+<TD><CODE>V -&gt; V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>seinV</CODE></TD>
+<TD><CODE>V -&gt; V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>habenV</CODE></TD>
+<TD><CODE>V -&gt; V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>reflV</CODE></TD>
+<TD><CODE>V -&gt; Case -&gt; V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV2</CODE></TD>
+<TD><CODE>V -&gt; Prep -&gt; V2</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV2</CODE></TD>
+<TD><CODE>V -&gt; V2</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV2</CODE></TD>
+<TD><CODE>V -&gt; Case -&gt; V2</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV3</CODE></TD>
+<TD><CODE>V -&gt; Prep -&gt; Prep -&gt; V3</CODE></TD>
+<TD><I>sprechen, mit, �ber</I></TD>
+</TR>
+<TR>
+<TD><CODE>dirV3</CODE></TD>
+<TD><CODE>V -&gt; Prep -&gt; V3</CODE></TD>
+<TD><I>senden,(accusative),nach</I></TD>
+</TR>
+<TR>
+<TD><CODE>accdatV3</CODE></TD>
+<TD><CODE>V -&gt; V3</CODE></TD>
+<TD><I>give,accusative,dative</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkV0</CODE></TD>
+<TD><CODE>V -&gt; V0</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkVS</CODE></TD>
+<TD><CODE>V -&gt; VS</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV2S</CODE></TD>
+<TD><CODE>V -&gt; Prep -&gt; V2S</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkVV</CODE></TD>
+<TD><CODE>V -&gt; VV</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV2V</CODE></TD>
+<TD><CODE>V -&gt; Prep -&gt; V2V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkVA</CODE></TD>
+<TD><CODE>V -&gt; VA</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV2A</CODE></TD>
+<TD><CODE>V -&gt; Prep -&gt; V2A</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkVQ</CODE></TD>
+<TD><CODE>V -&gt; VQ</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV2Q</CODE></TD>
+<TD><CODE>V -&gt; Prep -&gt; V2Q</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkAS</CODE></TD>
+<TD><CODE>A -&gt; AS</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkA2S</CODE></TD>
+<TD><CODE>A -&gt; Prep -&gt; A2S</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkAV</CODE></TD>
+<TD><CODE>A -&gt; AV</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkA2V</CODE></TD>
+<TD><CODE>A -&gt; Prep -&gt; A2V</CODE></TD>
+<TD>-</TD>
+</TR>
+</TABLE>
+
+<P></P>
+<A NAME="toc7"></A>
+<H1>Paradigms for Italian</H1>
+<P>
+<A HREF="../italian/ParadigmsIta.gf">source</A>
+</P>
+<TABLE CELLPADDING="4" BORDER="1">
+<TR>
+<TH>Function</TH>
+<TH>Type</TH>
+<TH COLSPAN="2">Example</TH>
+</TR>
+<TR>
+<TD><CODE>Gender</CODE></TD>
+<TD><CODE>Type</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>masculine</CODE></TD>
+<TD><CODE>Gender</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>feminine</CODE></TD>
+<TD><CODE>Gender</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>Number</CODE></TD>
+<TD><CODE>Type</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>singular</CODE></TD>
+<TD><CODE>Number</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>plural</CODE></TD>
+<TD><CODE>Number</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>Prep</CODE></TD>
+<TD><CODE>Type</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>accusative</CODE></TD>
+<TD><CODE>Prep</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>genitive</CODE></TD>
+<TD><CODE>Prep</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>dative</CODE></TD>
+<TD><CODE>Prep</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkPrep</CODE></TD>
+<TD><CODE>Str -&gt; Prep</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkN</CODE></TD>
+<TD><CODE>(cane : Str) -&gt; N</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkN</CODE></TD>
+<TD><CODE>(carne : Str) -&gt; Gender -&gt; N</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkN</CODE></TD>
+<TD><CODE>(uomo,uomini : Str) -&gt; Gender -&gt; N</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkN</CODE></TD>
+<TD><CODE>N -&gt; Str -&gt; N</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkN2</CODE></TD>
+<TD><CODE>Str -&gt; N2</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkN2</CODE></TD>
+<TD><CODE>N -&gt; Prep -&gt; N2</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkN3</CODE></TD>
+<TD><CODE>N -&gt; Prep -&gt; Prep -&gt; N3</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkPN</CODE></TD>
+<TD><CODE>Str -&gt; PN</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkPN</CODE></TD>
+<TD><CODE>Str -&gt; Gender -&gt; PN</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkA</CODE></TD>
+<TD><CODE>(bianco : Str) -&gt; A</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkA</CODE></TD>
+<TD><CODE>(solo,sola,soli,sole,solamente : Str) -&gt; A</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkA</CODE></TD>
+<TD><CODE>A -&gt; A -&gt; A</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>prefixA</CODE></TD>
+<TD><CODE>A -&gt; A = prefA</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkA2</CODE></TD>
+<TD><CODE>A -&gt; Prep -&gt; A2</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkAdv</CODE></TD>
+<TD><CODE>Str -&gt; Adv</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkAdV</CODE></TD>
+<TD><CODE>Str -&gt; AdV</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkAdA</CODE></TD>
+<TD><CODE>Str -&gt; AdA</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV</CODE></TD>
+<TD><CODE>Str -&gt; V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV</CODE></TD>
+<TD><CODE>Verbo -&gt; V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV</CODE></TD>
+<TD><CODE>(udire,odo,ode,udiamo,udiro,udii,udisti,udi,udirono,odi,udito : Str) -&gt; V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>essereV</CODE></TD>
+<TD><CODE>V -&gt; V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>reflV</CODE></TD>
+<TD><CODE>V -&gt; V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV2</CODE></TD>
+<TD><CODE>Str -&gt; V2</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV2</CODE></TD>
+<TD><CODE>V -&gt; V2</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV2</CODE></TD>
+<TD><CODE>V -&gt; Prep -&gt; V2</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>v2V</CODE></TD>
+<TD><CODE>V2 -&gt; V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV3</CODE></TD>
+<TD><CODE>V -&gt; Prep -&gt; Prep -&gt; V3</CODE></TD>
+<TD><I>parlare, a, di</I></TD>
+</TR>
+<TR>
+<TD><CODE>dirV3</CODE></TD>
+<TD><CODE>V -&gt; Prep -&gt; V3</CODE></TD>
+<TD><I>dare,_,a</I></TD>
+</TR>
+<TR>
+<TD><CODE>dirdirV3</CODE></TD>
+<TD><CODE>V -&gt; V3</CODE></TD>
+<TD><I>dare,_,_</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkV0</CODE></TD>
+<TD><CODE>V -&gt; V0</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkVS</CODE></TD>
+<TD><CODE>V -&gt; VS</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV2S</CODE></TD>
+<TD><CODE>V -&gt; Prep -&gt; V2S</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkVV</CODE></TD>
+<TD><CODE>V -&gt; VV</CODE></TD>
+<TD><I>plain infinitive: "voglio parlare"</I></TD>
+</TR>
+<TR>
+<TD><CODE>deVV</CODE></TD>
+<TD><CODE>V -&gt; VV</CODE></TD>
+<TD><I>"cerco di parlare"</I></TD>
+</TR>
+<TR>
+<TD><CODE>aVV</CODE></TD>
+<TD><CODE>V -&gt; VV</CODE></TD>
+<TD><I>"arrivo a parlare"</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkV2V</CODE></TD>
+<TD><CODE>V -&gt; Prep -&gt; Prep -&gt; V2V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkVA</CODE></TD>
+<TD><CODE>V -&gt; VA</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV2A</CODE></TD>
+<TD><CODE>V -&gt; Prep -&gt; Prep -&gt; V2A</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkVQ</CODE></TD>
+<TD><CODE>V -&gt; VQ</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV2Q</CODE></TD>
+<TD><CODE>V -&gt; Prep -&gt; V2Q</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkAS</CODE></TD>
+<TD><CODE>A -&gt; AS</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkA2S</CODE></TD>
+<TD><CODE>A -&gt; Prep -&gt; A2S</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkAV</CODE></TD>
+<TD><CODE>A -&gt; Prep -&gt; AV</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkA2V</CODE></TD>
+<TD><CODE>A -&gt; Prep -&gt; Prep -&gt; A2V</CODE></TD>
+<TD>-</TD>
+</TR>
+</TABLE>
+
+<P></P>
+<A NAME="toc8"></A>
+<H1>Paradigms for Norwegian</H1>
+<P>
+<A HREF="../norwegian/ParadigmsNor.gf">source</A>
+</P>
+<TABLE CELLPADDING="4" BORDER="1">
+<TR>
+<TH>Function</TH>
+<TH>Type</TH>
+<TH COLSPAN="2">Example</TH>
+</TR>
+<TR>
+<TD><CODE>Gender</CODE></TD>
+<TD><CODE>Type</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>masculine</CODE></TD>
+<TD><CODE>Gender</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>feminine</CODE></TD>
+<TD><CODE>Gender</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>neutrum</CODE></TD>
+<TD><CODE>Gender</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>Number</CODE></TD>
+<TD><CODE>Type</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>singular</CODE></TD>
+<TD><CODE>Number</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>plural</CODE></TD>
+<TD><CODE>Number</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>Case</CODE></TD>
+<TD><CODE>Type</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>nominative</CODE></TD>
+<TD><CODE>Case</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>genitive</CODE></TD>
+<TD><CODE>Case</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkPrep</CODE></TD>
+<TD><CODE>Str -&gt; Prep</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>noPrep</CODE></TD>
+<TD><CODE>Prep</CODE></TD>
+<TD><I>empty string</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkN</CODE></TD>
+<TD><CODE>(dreng,drengen,drenger,drengene : Str) -&gt; N</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>regN</CODE></TD>
+<TD><CODE>Str -&gt; N</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>regGenN</CODE></TD>
+<TD><CODE>Str -&gt; Gender -&gt; N</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mk2N</CODE></TD>
+<TD><CODE>(bil,bilen : Str) -&gt; N</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkN2</CODE></TD>
+<TD><CODE>N -&gt; Prep -&gt; N2</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>regN2</CODE></TD>
+<TD><CODE>Str -&gt; Gender -&gt; N2</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkN3</CODE></TD>
+<TD><CODE>N -&gt; Prep -&gt; Prep -&gt; N3</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>regPN</CODE></TD>
+<TD><CODE>Str -&gt; PN</CODE></TD>
+<TD><I>utrum</I></TD>
+</TR>
+<TR>
+<TD><CODE>regGenPN</CODE></TD>
+<TD><CODE>Str -&gt; Gender -&gt; PN</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>nounPN</CODE></TD>
+<TD><CODE>N -&gt; PN</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkNP</CODE></TD>
+<TD><CODE>Str -&gt; Str -&gt; Number -&gt; Gender -&gt; NP</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkA</CODE></TD>
+<TD><CODE>(galen,galet,galne : Str) -&gt; A</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>regA</CODE></TD>
+<TD><CODE>Str -&gt; A</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mk2A</CODE></TD>
+<TD><CODE>(stor,stort : Str) -&gt; A</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkA2</CODE></TD>
+<TD><CODE>A -&gt; Prep -&gt; A2</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkADeg</CODE></TD>
+<TD><CODE>(stor,stort,store,storre,storst : Str) -&gt; A</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>regADeg</CODE></TD>
+<TD><CODE>Str -&gt; A</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>irregADeg</CODE></TD>
+<TD><CODE>(tung,tyngre,tyngst : Str) -&gt; A</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mk3ADeg</CODE></TD>
+<TD><CODE>(galen,galet,galne : Str) -&gt; A</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mk2ADeg</CODE></TD>
+<TD><CODE>(bred,bredt : Str) -&gt; A</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>compoundA</CODE></TD>
+<TD><CODE>A -&gt; A</CODE></TD>
+<TD><I>-/mer/mest norsk</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkAdv</CODE></TD>
+<TD><CODE>Str -&gt; Adv</CODE></TD>
+<TD><I>e.g. her</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkAdV</CODE></TD>
+<TD><CODE>Str -&gt; AdV</CODE></TD>
+<TD><I>e.g. altid</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkAdA</CODE></TD>
+<TD><CODE>Str -&gt; AdA</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV</CODE></TD>
+<TD><CODE>(spise,spiser,spises,spiste,spist,spis : Str) -&gt; V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>regV</CODE></TD>
+<TD><CODE>(snakke : Str) -&gt; V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mk2V</CODE></TD>
+<TD><CODE>(leve,levde : Str) -&gt; V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>irregV</CODE></TD>
+<TD><CODE>(drikke, drakk, drukket : Str) -&gt; V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>vaereV</CODE></TD>
+<TD><CODE>V -&gt; V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>partV</CODE></TD>
+<TD><CODE>V -&gt; Str -&gt; V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>depV</CODE></TD>
+<TD><CODE>V -&gt; V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>reflV</CODE></TD>
+<TD><CODE>V -&gt; V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV2</CODE></TD>
+<TD><CODE>V -&gt; Prep -&gt; V2</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>dirV2</CODE></TD>
+<TD><CODE>V -&gt; V2</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV3</CODE></TD>
+<TD><CODE>V -&gt; Prep -&gt; Prep -&gt; V3</CODE></TD>
+<TD><I>snakke, med, om</I></TD>
+</TR>
+<TR>
+<TD><CODE>dirV3</CODE></TD>
+<TD><CODE>V -&gt; Prep -&gt; V3</CODE></TD>
+<TD><I>gi,_,til</I></TD>
+</TR>
+<TR>
+<TD><CODE>dirdirV3</CODE></TD>
+<TD><CODE>V -&gt; V3</CODE></TD>
+<TD><I>gi,_,_</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkV0</CODE></TD>
+<TD><CODE>V -&gt; V0</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkVS</CODE></TD>
+<TD><CODE>V -&gt; VS</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV2S</CODE></TD>
+<TD><CODE>V -&gt; Prep -&gt; V2S</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkVV</CODE></TD>
+<TD><CODE>V -&gt; VV</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV2V</CODE></TD>
+<TD><CODE>V -&gt; Prep -&gt; Prep -&gt; V2V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkVA</CODE></TD>
+<TD><CODE>V -&gt; VA</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV2A</CODE></TD>
+<TD><CODE>V -&gt; Prep -&gt; V2A</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkVQ</CODE></TD>
+<TD><CODE>V -&gt; VQ</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV2Q</CODE></TD>
+<TD><CODE>V -&gt; Prep -&gt; V2Q</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkAS</CODE></TD>
+<TD><CODE>A -&gt; AS</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkA2S</CODE></TD>
+<TD><CODE>A -&gt; Prep -&gt; A2S</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkAV</CODE></TD>
+<TD><CODE>A -&gt; AV</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkA2V</CODE></TD>
+<TD><CODE>A -&gt; Prep -&gt; A2V</CODE></TD>
+<TD>-</TD>
+</TR>
+</TABLE>
+
+<P></P>
+<A NAME="toc9"></A>
+<H1>Paradigms for Russian</H1>
+<P>
+<A HREF="../russian/ParadigmsRus.gf">source</A>
+</P>
+<TABLE CELLPADDING="4" BORDER="1">
+<TR>
+<TH>Function</TH>
+<TH>Type</TH>
+<TH COLSPAN="2">Example</TH>
+</TR>
+<TR>
+<TD><CODE>Gender</CODE></TD>
+<TD><CODE>Type</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>masculine</CODE></TD>
+<TD><CODE>Gender</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>feminine</CODE></TD>
+<TD><CODE>Gender</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>neuter</CODE></TD>
+<TD><CODE>Gender</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>Case</CODE></TD>
+<TD><CODE>Type</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>nominative</CODE></TD>
+<TD><CODE>Case</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>genitive</CODE></TD>
+<TD><CODE>Case</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>dative</CODE></TD>
+<TD><CODE>Case</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>accusative</CODE></TD>
+<TD><CODE>Case</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>instructive</CODE></TD>
+<TD><CODE>Case</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>prepositional</CODE></TD>
+<TD><CODE>Case</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>Number</CODE></TD>
+<TD><CODE>Type</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>singular</CODE></TD>
+<TD><CODE>Number</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>plural</CODE></TD>
+<TD><CODE>Number</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkN</CODE></TD>
+<TD><CODE>(nomSg, genSg, datSg, accSg, instSg, preposSg,</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>regN</CODE></TD>
+<TD><CODE>Str -&gt; N</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>nMashina</CODE></TD>
+<TD><CODE>Str -&gt; N</CODE></TD>
+<TD><I>feminine, inanimate, ending with "-а", Inst -"машин-ой"</I></TD>
+</TR>
+<TR>
+<TD><CODE>nEdinica</CODE></TD>
+<TD><CODE>Str -&gt; N</CODE></TD>
+<TD><I>feminine, inanimate, ending with "-а", Inst -"единиц-ей"</I></TD>
+</TR>
+<TR>
+<TD><CODE>nZhenchina</CODE></TD>
+<TD><CODE>Str -&gt; N</CODE></TD>
+<TD><I>feminine, animate, ending with "-a"</I></TD>
+</TR>
+<TR>
+<TD><CODE>nNoga</CODE></TD>
+<TD><CODE>Str -&gt; N</CODE></TD>
+<TD><I>feminine, inanimate, ending with "г_к_х-a"</I></TD>
+</TR>
+<TR>
+<TD><CODE>nMalyariya</CODE></TD>
+<TD><CODE>Str -&gt; N</CODE></TD>
+<TD><I>feminine, inanimate, ending with "-ия"</I></TD>
+</TR>
+<TR>
+<TD><CODE>nTetya</CODE></TD>
+<TD><CODE>Str -&gt; N</CODE></TD>
+<TD><I>feminine, animate, ending with "-я"</I></TD>
+</TR>
+<TR>
+<TD><CODE>nBol</CODE></TD>
+<TD><CODE>Str -&gt; N</CODE></TD>
+<TD><I>feminine, inanimate, ending with "-ь"(soft sign)</I></TD>
+</TR>
+<TR>
+<TD><CODE>nObezbolivauchee</CODE></TD>
+<TD><CODE>Str -&gt; N</CODE></TD>
+<TD><I>neutral, inanimate, ending with "-ee"</I></TD>
+</TR>
+<TR>
+<TD><CODE>nProizvedenie</CODE></TD>
+<TD><CODE>Str -&gt; N</CODE></TD>
+<TD><I>neutral, inanimate, ending with "-e"</I></TD>
+</TR>
+<TR>
+<TD><CODE>nChislo</CODE></TD>
+<TD><CODE>Str -&gt; N</CODE></TD>
+<TD><I>neutral, inanimate, ending with "-o"</I></TD>
+</TR>
+<TR>
+<TD><CODE>nZhivotnoe</CODE></TD>
+<TD><CODE>Str -&gt; N</CODE></TD>
+<TD><I>masculine, inanimate, ending with "-ень"</I></TD>
+</TR>
+<TR>
+<TD><CODE>nPepel</CODE></TD>
+<TD><CODE>Str -&gt; N</CODE></TD>
+<TD><I>masculine, inanimate, ending with "-ел"- "пеп-ла"</I></TD>
+</TR>
+<TR>
+<TD><CODE>nMalush</CODE></TD>
+<TD><CODE>Str -&gt; N</CODE></TD>
+<TD><I>малышей</I></TD>
+</TR>
+<TR>
+<TD><CODE>nPotolok</CODE></TD>
+<TD><CODE>Str -&gt; N</CODE></TD>
+<TD><I>потол-ок - потол-ка</I></TD>
+</TR>
+<TR>
+<TD><CODE>nStomatolog</CODE></TD>
+<TD><CODE>Str -&gt; N</CODE></TD>
+<TD><I>same as above, but animate</I></TD>
+</TR>
+<TR>
+<TD><CODE>nAdres</CODE></TD>
+<TD><CODE>Str -&gt; N</CODE></TD>
+<TD><I>адрес-а (Nom=Acc)</I></TD>
+</TR>
+<TR>
+<TD><CODE>nTelefon</CODE></TD>
+<TD><CODE>Str -&gt; N</CODE></TD>
+<TD><I>телефон-ы (Nom=Acc)</I></TD>
+</TR>
+<TR>
+<TD><CODE>nNol</CODE></TD>
+<TD><CODE>Str -&gt; N</CODE></TD>
+<TD><I>masculine, inanimate, ending with "-ь" (soft sign)</I></TD>
+</TR>
+<TR>
+<TD><CODE>nUroven</CODE></TD>
+<TD><CODE>Str -&gt; N</CODE></TD>
+<TD><I>masculine, inanimate, ending with "-ень"</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkFun</CODE></TD>
+<TD><CODE>N -&gt; Prep -&gt; N2</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkN2</CODE></TD>
+<TD><CODE>N -&gt; N2</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkN3</CODE></TD>
+<TD><CODE>N -&gt; Prep -&gt; Prep -&gt; N3</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkPN</CODE></TD>
+<TD><CODE>Str -&gt; Gender -&gt; Animacy -&gt; PN</CODE></TD>
+<TD><I>"Иван", "Маша"</I></TD>
+</TR>
+<TR>
+<TD><CODE>nounPN</CODE></TD>
+<TD><CODE>N -&gt; PN</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkCN</CODE></TD>
+<TD><CODE>N -&gt; CN</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkNP</CODE></TD>
+<TD><CODE>Str -&gt; Gender -&gt; Animacy -&gt; NP</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>regA</CODE></TD>
+<TD><CODE>Str -&gt; Str -&gt; A</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>adjInvar</CODE></TD>
+<TD><CODE>Str -&gt; A</CODE></TD>
+<TD><I>khaki, mini, hindi, netto</I></TD>
+</TR>
+<TR>
+<TD><CODE>AStaruyj</CODE></TD>
+<TD><CODE>Str -&gt; Str -&gt; A</CODE></TD>
+<TD><I>ending with "-ый"</I></TD>
+</TR>
+<TR>
+<TD><CODE>AMalenkij</CODE></TD>
+<TD><CODE>Str -&gt; Str -&gt; A</CODE></TD>
+<TD><I>ending with "-ий", Gen - "маленьк-ого"</I></TD>
+</TR>
+<TR>
+<TD><CODE>AKhoroshij</CODE></TD>
+<TD><CODE>Str -&gt; Str -&gt; A</CODE></TD>
+<TD><I>ending with "-ий", Gen - "хорош-его"</I></TD>
+</TR>
+<TR>
+<TD><CODE>AMolodoj</CODE></TD>
+<TD><CODE>Str -&gt; Str -&gt; A</CODE></TD>
+<TD><I>ending with "-ой",</I></TD>
+</TR>
+<TR>
+<TD><CODE>AKakoj_Nibud</CODE></TD>
+<TD><CODE>Str -&gt; Str -&gt; Str -&gt; A</CODE></TD>
+<TD><I>ending with "-ой",</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkA2</CODE></TD>
+<TD><CODE>A -&gt; Str -&gt; Case -&gt; A2</CODE></TD>
+<TD><I>"делим на"</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkAdv</CODE></TD>
+<TD><CODE>Str -&gt; Adv</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV</CODE></TD>
+<TD><CODE>Aspect -&gt; (presentSgP1,presentSgP2,presentSgP3,</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>pastSgP1,imperative,infinitive</CODE></TD>
+<TD><CODE>Str) -&gt; V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV2</CODE></TD>
+<TD><CODE>V -&gt; Str -&gt; Case -&gt; V2</CODE></TD>
+<TD><I>"войти в дом"; "в", accusative</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkV3</CODE></TD>
+<TD><CODE>V -&gt; Str -&gt; Str -&gt; Case -&gt; Case -&gt; V3</CODE></TD>
+<TD><I>"сложить письмо в конверт"</I></TD>
+</TR>
+<TR>
+<TD><CODE>dirV2</CODE></TD>
+<TD><CODE>V -&gt; V2</CODE></TD>
+<TD><I>"видеть", "любить"</I></TD>
+</TR>
+<TR>
+<TD><CODE>tvDirDir</CODE></TD>
+<TD><CODE>V -&gt; V3</CODE></TD>
+<TD>-</TD>
+</TR>
+</TABLE>
+
+<P></P>
+<A NAME="toc10"></A>
+<H1>Paradigms for Spanish</H1>
+<P>
+<A HREF="../spanish/ParadigmsSpa.gf">source</A>
+</P>
+<TABLE CELLPADDING="4" BORDER="1">
+<TR>
+<TH>Function</TH>
+<TH>Type</TH>
+<TH COLSPAN="2">Example</TH>
+</TR>
+<TR>
+<TD><CODE>Gender</CODE></TD>
+<TD><CODE>Type</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>masculine</CODE></TD>
+<TD><CODE>Gender</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>feminine</CODE></TD>
+<TD><CODE>Gender</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>Number</CODE></TD>
+<TD><CODE>Type</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>singular</CODE></TD>
+<TD><CODE>Number</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>plural</CODE></TD>
+<TD><CODE>Number</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>Prep</CODE></TD>
+<TD><CODE>Type</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>accusative</CODE></TD>
+<TD><CODE>Prep</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>genitive</CODE></TD>
+<TD><CODE>Prep</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>dative</CODE></TD>
+<TD><CODE>Prep</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkPrep</CODE></TD>
+<TD><CODE>Str -&gt; Prep</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkN</CODE></TD>
+<TD><CODE>(luz : Str) -&gt; N</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkN</CODE></TD>
+<TD><CODE>Str -&gt; Gender -&gt; N</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkN</CODE></TD>
+<TD><CODE>(baston,bastones : Str) -&gt; Gender -&gt; N</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>compN</CODE></TD>
+<TD><CODE>N -&gt; Str -&gt; N</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkN2</CODE></TD>
+<TD><CODE>N -&gt; Prep -&gt; N2</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>deN2</CODE></TD>
+<TD><CODE>N -&gt; N2</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>aN2</CODE></TD>
+<TD><CODE>N -&gt; N2</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkN3</CODE></TD>
+<TD><CODE>N -&gt; Prep -&gt; Prep -&gt; N3</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkPN</CODE></TD>
+<TD><CODE>(Anna : Str) -&gt; PN</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkPN</CODE></TD>
+<TD><CODE>(Pilar : Str) -&gt; Gender -&gt; PN</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkA</CODE></TD>
+<TD><CODE>(util : Str) -&gt; A</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkA</CODE></TD>
+<TD><CODE>(solo,sola,solos,solas,solamiento : Str) -&gt; A</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkA</CODE></TD>
+<TD><CODE>(bueno : A) -&gt; (mejor : A) -&gt; A</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>prefixA</CODE></TD>
+<TD><CODE>A -&gt; A</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkA2</CODE></TD>
+<TD><CODE>A -&gt; Prep -&gt; A2</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkAdv</CODE></TD>
+<TD><CODE>Str -&gt; Adv</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkAdV</CODE></TD>
+<TD><CODE>Str -&gt; AdV</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkAdA</CODE></TD>
+<TD><CODE>Str -&gt; AdA</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV</CODE></TD>
+<TD><CODE>(pagar : Str) -&gt; V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV</CODE></TD>
+<TD><CODE>(mostrar,muestro : Str) -&gt; V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV</CODE></TD>
+<TD><CODE>Verbum -&gt; V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>reflV</CODE></TD>
+<TD><CODE>V -&gt; V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>special_ppV</CODE></TD>
+<TD><CODE>V -&gt; Str -&gt; V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV2</CODE></TD>
+<TD><CODE>Str -&gt; V2</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV2</CODE></TD>
+<TD><CODE>V -&gt; V2</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV2</CODE></TD>
+<TD><CODE>V -&gt; Prep -&gt; V2</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>v2V</CODE></TD>
+<TD><CODE>V2 -&gt; V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV3</CODE></TD>
+<TD><CODE>V -&gt; Prep -&gt; Prep -&gt; V3</CODE></TD>
+<TD><I>hablar, a, di</I></TD>
+</TR>
+<TR>
+<TD><CODE>dirV3</CODE></TD>
+<TD><CODE>V -&gt; Prep -&gt; V3</CODE></TD>
+<TD><I>dar,(accusative),a</I></TD>
+</TR>
+<TR>
+<TD><CODE>dirdirV3</CODE></TD>
+<TD><CODE>V -&gt; V3</CODE></TD>
+<TD><I>dar,(dative),(accusative)</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkV0</CODE></TD>
+<TD><CODE>V -&gt; V0</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkVS</CODE></TD>
+<TD><CODE>V -&gt; VS</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV2S</CODE></TD>
+<TD><CODE>V -&gt; Prep -&gt; V2S</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkVV</CODE></TD>
+<TD><CODE>V -&gt; VV</CODE></TD>
+<TD><I>plain infinitive: "quiero hablar"</I></TD>
+</TR>
+<TR>
+<TD><CODE>deVV</CODE></TD>
+<TD><CODE>V -&gt; VV</CODE></TD>
+<TD><I>"terminar de hablar"</I></TD>
+</TR>
+<TR>
+<TD><CODE>aVV</CODE></TD>
+<TD><CODE>V -&gt; VV</CODE></TD>
+<TD><I>"aprender a hablar"</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkV2V</CODE></TD>
+<TD><CODE>V -&gt; Prep -&gt; Prep -&gt; V2V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkVA</CODE></TD>
+<TD><CODE>V -&gt; VA</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV2A</CODE></TD>
+<TD><CODE>V -&gt; Prep -&gt; Prep -&gt; V2A</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkVQ</CODE></TD>
+<TD><CODE>V -&gt; VQ</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV2Q</CODE></TD>
+<TD><CODE>V -&gt; Prep -&gt; V2Q</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkAS</CODE></TD>
+<TD><CODE>A -&gt; AS</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkA2S</CODE></TD>
+<TD><CODE>A -&gt; Prep -&gt; A2S</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkAV</CODE></TD>
+<TD><CODE>A -&gt; Prep -&gt; AV</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkA2V</CODE></TD>
+<TD><CODE>A -&gt; Prep -&gt; Prep -&gt; A2V</CODE></TD>
+<TD>-</TD>
+</TR>
+</TABLE>
+
+<P></P>
+<A NAME="toc11"></A>
+<H1>Paradigms for Swedish</H1>
+<P>
+<A HREF="../swedish/ParadigmsSwe.gf">source</A>
+</P>
+<TABLE CELLPADDING="4" BORDER="1">
+<TR>
+<TH>Function</TH>
+<TH>Type</TH>
+<TH COLSPAN="2">Example</TH>
+</TR>
+<TR>
+<TD><CODE>Gender</CODE></TD>
+<TD><CODE>Type</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>utrum</CODE></TD>
+<TD><CODE>Gender</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>neutrum</CODE></TD>
+<TD><CODE>Gender</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>Number</CODE></TD>
+<TD><CODE>Type</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>singular</CODE></TD>
+<TD><CODE>Number</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>plural</CODE></TD>
+<TD><CODE>Number</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>Case</CODE></TD>
+<TD><CODE>Type</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>nominative</CODE></TD>
+<TD><CODE>Case</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>genitive</CODE></TD>
+<TD><CODE>Case</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkPrep</CODE></TD>
+<TD><CODE>Str -&gt; Prep</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>noPrep</CODE></TD>
+<TD><CODE>Prep</CODE></TD>
+<TD><I>empty string</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkN</CODE></TD>
+<TD><CODE>(apa : Str) -&gt; N</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkN</CODE></TD>
+<TD><CODE>(lik : Str) -&gt; Gender -&gt; N</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkN</CODE></TD>
+<TD><CODE>(nyckel,nycklar : Str) -&gt; N</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkN</CODE></TD>
+<TD><CODE>(museum,museet,museer,museerna : Str) -&gt; N</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkN2</CODE></TD>
+<TD><CODE>Str -&gt; N2</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkN2</CODE></TD>
+<TD><CODE>N -&gt; Prep -&gt; N2</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkN3</CODE></TD>
+<TD><CODE>N -&gt; Prep -&gt; Prep -&gt; N3</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkPN</CODE></TD>
+<TD><CODE>Str -&gt; PN</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkPN</CODE></TD>
+<TD><CODE>Str -&gt; Gender -&gt; PN</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkPN</CODE></TD>
+<TD><CODE>(jesus,jesu : Str) -&gt; Gender -&gt; PN</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkA</CODE></TD>
+<TD><CODE>(billig : Str) -&gt; A</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkA</CODE></TD>
+<TD><CODE>(bred,brett : Str) -&gt; A</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkA</CODE></TD>
+<TD><CODE>(tung,tyngre,tyngst : Str) -&gt; A</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkA</CODE></TD>
+<TD><CODE>(god,gott,goda,battre,bast : Str) -&gt; A</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkA</CODE></TD>
+<TD><CODE>(liten,litet,lilla,sma,mindre,minst,minsta : Str) -&gt; A</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>compoundA</CODE></TD>
+<TD><CODE>A -&gt; A</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkA2</CODE></TD>
+<TD><CODE>A -&gt; Prep -&gt; A2</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkAdv</CODE></TD>
+<TD><CODE>Str -&gt; Adv</CODE></TD>
+<TD><I>h�r</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkAdV</CODE></TD>
+<TD><CODE>Str -&gt; AdV</CODE></TD>
+<TD><I>alltid</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkAdA</CODE></TD>
+<TD><CODE>Str -&gt; AdA</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV</CODE></TD>
+<TD><CODE>(st�mmer : Str) -&gt; V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV</CODE></TD>
+<TD><CODE>(dricka,drack,druckit : Str) -&gt; V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV</CODE></TD>
+<TD><CODE>(g�,g�r,g�,gick,g�tt,g�ngen : Str) -&gt; V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV</CODE></TD>
+<TD><CODE>V -&gt; Str -&gt; V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>depV</CODE></TD>
+<TD><CODE>V -&gt; V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>reflV</CODE></TD>
+<TD><CODE>V -&gt; V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV2</CODE></TD>
+<TD><CODE>Str -&gt; V2</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV2</CODE></TD>
+<TD><CODE>V -&gt; V2</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV2</CODE></TD>
+<TD><CODE>V -&gt; Prep -&gt; V2</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV3</CODE></TD>
+<TD><CODE>Str -&gt; V3</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV3</CODE></TD>
+<TD><CODE>V -&gt; V3</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV3</CODE></TD>
+<TD><CODE>V -&gt; Prep -&gt; V3</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV3</CODE></TD>
+<TD><CODE>V -&gt; Prep -&gt; Prep -&gt; V3</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV0</CODE></TD>
+<TD><CODE>V -&gt; V0</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkVS</CODE></TD>
+<TD><CODE>V -&gt; VS</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV2S</CODE></TD>
+<TD><CODE>V -&gt; Prep -&gt; V2S</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkVV</CODE></TD>
+<TD><CODE>V -&gt; VV</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV2V</CODE></TD>
+<TD><CODE>V -&gt; Prep -&gt; Prep -&gt; V2V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkVA</CODE></TD>
+<TD><CODE>V -&gt; VA</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV2A</CODE></TD>
+<TD><CODE>V -&gt; Prep -&gt; V2A</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkVQ</CODE></TD>
+<TD><CODE>V -&gt; VQ</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV2Q</CODE></TD>
+<TD><CODE>V -&gt; Prep -&gt; V2Q</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkAS</CODE></TD>
+<TD><CODE>A -&gt; AS</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkA2S</CODE></TD>
+<TD><CODE>A -&gt; Prep -&gt; A2S</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkAV</CODE></TD>
+<TD><CODE>A -&gt; AV</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkA2V</CODE></TD>
+<TD><CODE>A -&gt; Prep -&gt; A2V</CODE></TD>
+<TD>-</TD>
+</TR>
+</TABLE>
+
+<P></P>
+
+<!-- html code generated by txt2tags 2.3 (http://txt2tags.sf.net) -->
+<!-- cmdline: txt2tags -thtml -\-toc synopsis.txt -->
+</BODY></HTML>

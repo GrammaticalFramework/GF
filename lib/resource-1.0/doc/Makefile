@@ -1,3 +1,5 @@
+synopsis:
+	runghc MkSynopsis.hs
 clt:
 	txt2tags clt2006.txt
 	htmls clt2006.html
