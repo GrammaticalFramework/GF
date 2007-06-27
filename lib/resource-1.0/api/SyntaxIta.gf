@@ -1,4 +1,4 @@
 --# -path=.:alltenses:prelude
 
-instance SyntaxIta of Syntax = ConstructorsIta, CatIta, StructuralIta ** {} ;
+instance SyntaxIta of Syntax = ConstructorsIta, CatIta, StructuralIta, NumeralIta ;
 

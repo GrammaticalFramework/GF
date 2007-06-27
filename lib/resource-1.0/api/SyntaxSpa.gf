@@ -1,4 +1,4 @@
 --# -path=.:alltenses:prelude
 
-instance SyntaxSpa of Syntax = ConstructorsSpa, CatSpa, StructuralSpa ** {} ;
+instance SyntaxSpa of Syntax = ConstructorsSpa, CatSpa, StructuralSpa, NumeralSpa ;
 
