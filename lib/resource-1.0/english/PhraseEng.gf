@@ -11,7 +11,7 @@ concrete PhraseEng of Phrase = CatEng ** open Prelude, ResEng in {
 
     UttIP ip = {s = ip.s ! Nom} ; --- Acc also
     UttIAdv iadv = iadv ;
-    UttNP np = {s = np.s ! Acc} ;
+    UttNP np = {s = np.s ! Nom} ;
     UttVP vp = {s = infVP False vp (agrP3 Sg)} ;
     UttAdv adv = adv ;
 
