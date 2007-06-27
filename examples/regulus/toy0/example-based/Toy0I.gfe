@@ -1,9 +1,9 @@
 --# -resource=present/LangEng.gfc
---# -path=..:present:prelude
+--# -path=.:present:prelude
 
--- to compile: gf -examples Toy0IE.gfe
+-- to compile: gf -examples Toy0I.gfe
 
-incomplete concrete Toy0IE of Toy0 = open Grammar, Lexicon in {
+incomplete concrete Toy0I of Toy0 = open Grammar, Lexicon in {
 
 lincat
   Spec = Det ;

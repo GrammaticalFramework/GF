@@ -1,4 +1,3 @@
---# -path=..
 concrete Toy0Ger of Toy0 = {
 
 param
@@ -8,10 +7,9 @@ param
 lincat
   Spec = {s : Gender => Str ; n : Number} ;
   Noun = {s : Number => Str ; g : Gender} ;
-  MAIN,NP = {s : Str} ;
+  NP = {s : Str} ;
 
 lin
-  Main np = np ;
   SpecNoun spec noun = {s = spec.s ! noun.g ++ noun.s ! spec.n} ;
 
   One = {s = table {Fem => "eine" ; _ => "ein"} ; n = Sg} ;

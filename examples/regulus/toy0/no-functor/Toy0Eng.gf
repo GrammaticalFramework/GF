@@ -1,4 +1,4 @@
---# -path=..:present:api:prelude
+--# -path=.:present:api:prelude
 concrete Toy0Eng of Toy0 = 
     open SyntaxEng, ParadigmsEng in {
 
