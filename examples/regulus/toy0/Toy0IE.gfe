@@ -1,0 +1,23 @@
+--# -resource=/home/aarne/GF/lib/present/LangEng.gfc
+--# -path=.:present:prelude
+
+-- to compile: gf -examples Toy0IE.gfe
+
+incomplete concrete Toy0IE of Toy0 = open Grammar, Lexicon in {
+
+lincat
+  Spec = Det ;
+  Noun = N ;
+  NP   = Utt ;
+
+lin
+  SpecNoun every_Det house_N = in Utt "every house" ;
+
+  One = in Det "one" ;
+  Two = in Det "two" ;
+
+  Felis = in N "cat" ;
+  Canis = in N "dog" ;
+
+}
+
