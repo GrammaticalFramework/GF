@@ -109,7 +109,6 @@ bottomUpFilter gr = fix grow Map.empty
         okSym g = symbol (`elem` allCats g) (const True)
 
 -- | Removes categories which are not reachable from the start category.
--- Only does one pass through the grammar.
 topDownFilter :: Cat_ -> CFRules -> CFRules
 topDownFilter start rules = filterCFRulesCats (isRelatedTo uses start) rules
   where
