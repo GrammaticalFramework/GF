@@ -124,5 +124,6 @@ gfdoc:
 	mv ../prelude/*.html doc/gfdoc
 
 clean:
-	-rm */*.gfc */*.gfr */*.gf~
+	-rm */*.gfc */*.gfr */*.gf~ ../*/*.gfc ../*/*.gfr ../*/*.gf~ ../compiled.tgz langs.gfcm
+
 
