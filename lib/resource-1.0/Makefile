@@ -32,7 +32,8 @@ pretest:
 	echo "gr -cat=Cl -number=11 -prob | tb" | $(GF) -probs=lang.gfprob -path=present:prelude -nocf ../present/Lang???.gfc
 
 alltenses:
-#	$(GFC) arabic/LangAra.gf
+	$(GFC) arabic/LangAra.gf
+	$(GFC) catalan/LangCat.gf
 	$(GFC) danish/Danish.gf
 	$(GFC) english/English.gf
 	$(GFC) finnish/Finnish.gf
