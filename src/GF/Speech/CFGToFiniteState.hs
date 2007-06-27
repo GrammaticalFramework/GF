@@ -64,7 +64,7 @@ cfgToFA opts s = minimize $ compileAutomaton start $ makeSimpleRegular opts s
 makeSimpleRegular :: Options -> StateGrammar -> CFRules
 makeSimpleRegular opts s = makeRegular $ preprocess $ cfgToCFRules s
   where start = getStartCatCF opts s
-        preprocess = fix (topDownFilter start . bottomUpFilter)
+        preprocess = topDownFilter start . bottomUpFilter
                      . removeCycles
 
 

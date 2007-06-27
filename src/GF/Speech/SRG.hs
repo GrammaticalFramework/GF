@@ -93,10 +93,10 @@ makeSimpleSRG opt s = makeSRG preprocess opt s
                              . mergeIdentical
                              . traceStats "After removeLeftRecursion"
                              . removeLeftRecursion origStart 
-                             . fix (traceStats "After topDownFilter" 
-                                    . topDownFilter origStart 
-                                    . traceStats "After bottomUpFilter" 
-                                    . bottomUpFilter)
+                             . traceStats "After topDownFilter" 
+                             . topDownFilter origStart
+                             . traceStats "After bottomUpFilter"
+                             . bottomUpFilter
                              . traceStats "After removeCycles"
                              . removeCycles 
                              . traceStats "Inital CFG"
