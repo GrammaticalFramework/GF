@@ -103,8 +103,8 @@ makeSimpleSRG opt s = makeSRG preprocess opt s
 
 traceStats s g = trace (s ++ ": " ++ stats g) g
 
-stats g = "Categories: " ++ show (length (filter (not . null . snd) g))
-          ++ " Rules: " ++ show (length (concatMap snd g))
+stats g = "Categories: " ++ show (countCats g)
+          ++ " Rules: " ++ show (countRules g)
 
 makeNonRecursiveSRG :: Options 
                     -> StateGrammar
@@ -136,7 +136,7 @@ makeSRG preprocess opt s = renameSRG $
     where 
     name = prIdent (cncId s)
     origStart = getStartCatCF opt s
-    (cats,cfgRules) = unzip $ preprocess origStart $ cfgToCFRules s
+    (_,cfgRules) = unzip $ allRulesGrouped $ preprocess origStart $ cfgToCFRules s
     rs = map (cfgRulesToSRGRule (stateProbs s)) cfgRules
 
 -- | Give names on the form NameX to all categories.
