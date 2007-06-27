@@ -34,8 +34,12 @@ import Data.Char (toUpper,toLower)
 import Data.List (partition)
 import Text.PrettyPrint.HughesPJ
 
+width :: Int
+width = 80
+
 gslPrinter :: Options -> StateGrammar -> String
-gslPrinter opts s = show $ prGSL $ makeSimpleSRG opts s
+gslPrinter opts s = renderStyle st $ prGSL $ makeSimpleSRG opts s
+  where st = style { lineLength = width } 
 
 prGSL :: SRG -> Doc
 prGSL (SRG{grammarName=name,startCat=start,origStartCat=origStart,rules=rs})

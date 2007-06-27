@@ -39,15 +39,19 @@ import Data.Maybe
 import Text.PrettyPrint.HughesPJ
 import Debug.Trace
 
+width :: Int
+width = 80
 
 srgsAbnfPrinter :: Maybe SISRFormat
                 -> Bool -- ^ Include probabilities
 	        -> Options 
                 -> StateGrammar -> String
-srgsAbnfPrinter sisr probs opts s = show $ prABNF sisr probs $ makeSimpleSRG opts s
+srgsAbnfPrinter sisr probs opts s = showDoc $ prABNF sisr probs $ makeSimpleSRG opts s
 
 srgsAbnfNonRecursivePrinter :: Options -> StateGrammar -> String
-srgsAbnfNonRecursivePrinter opts s = show $ prABNF Nothing False $ makeNonRecursiveSRG opts s
+srgsAbnfNonRecursivePrinter opts s = showDoc $ prABNF Nothing False $ makeNonRecursiveSRG opts s
+
+showDoc = renderStyle (style { lineLength = width })
 
 prABNF :: Maybe SISRFormat -> Bool -> SRG -> Doc
 prABNF sisr probs srg@(SRG{grammarName=name,grammarLanguage=ml,

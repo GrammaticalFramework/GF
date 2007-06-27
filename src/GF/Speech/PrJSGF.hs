@@ -38,11 +38,14 @@ import Data.Maybe
 import Text.PrettyPrint.HughesPJ
 import Debug.Trace
 
+width :: Int
+width = 80
 
 jsgfPrinter :: Maybe SISRFormat
 	    -> Options 
             -> StateGrammar -> String
-jsgfPrinter sisr opts s = show $ prJSGF sisr $ makeSimpleSRG opts s
+jsgfPrinter sisr opts s = renderStyle st $ prJSGF sisr $ makeSimpleSRG opts s
+  where st = style { lineLength = width }
 
 prJSGF :: Maybe SISRFormat -> SRG -> Doc
 prJSGF sisr srg@(SRG{grammarName=name,grammarLanguage=ml,
