@@ -369,3 +369,9 @@ isLeftLinear :: Ord c =>
              -> CFRule c n t   -- ^ The rule to check for left-linearity
              -> Bool
 isLeftLinear cs = noCatsInSet cs . drop 1 . ruleRhs
+
+prCFRules :: CFRules -> String
+prCFRules = unlines . map prRule . allRules
+    where 
+      prRule r = lhsCat r ++ " --> " ++ unwords (map prSym (ruleRhs r))
+      prSym = symbol id (\t -> "\""++ t ++"\"")

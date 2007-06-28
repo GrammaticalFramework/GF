@@ -101,7 +101,7 @@ makeSimpleSRG opt s = makeSRG preprocess opt s
                              . removeCycles 
                              . traceStats "Inital CFG"
 
-traceStats s g = trace (s ++ ": " ++ stats g) g
+traceStats s g = trace ("---- " ++ s ++ ": " ++ stats g {- ++ "\n" ++ prCFRules g ++ "----" -}) g
 
 stats g = "Categories: " ++ show (countCats g)
           ++ " Rules: " ++ show (countRules g)
