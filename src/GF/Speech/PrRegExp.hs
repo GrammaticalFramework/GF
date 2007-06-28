@@ -20,7 +20,7 @@ import GF.Compile.ShellState (StateGrammar)
 
 
 regexpPrinter :: Options -> StateGrammar -> String
-regexpPrinter opts s = prRE $ dfa2re $ cfgToFA opts s
+regexpPrinter opts s = (++"\n") $ prRE $ dfa2re $ cfgToFA opts s
 
 multiRegexpPrinter :: Options -> StateGrammar -> String
 multiRegexpPrinter opts s = prREs $ mfa2res $ cfgToMFA opts s
