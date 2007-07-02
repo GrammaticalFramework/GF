@@ -5,6 +5,18 @@ main = do
   writeFile abstr "abstract OverGrammar = Structural,Numeral,Conjunction[ListS,ListNP,ListAP,ListAdv] ** {\n"
   appendFile abstr "cat ImpForm ; Punct ;\n"
   writeFile concr "concrete OverGrammarEng of OverGrammar = StructuralEng,NumeralEng,ConjunctionEng[ListS,ListNP,ListAP,ListAdv] ** open GrammarEng in {\n"
+  mapM_ (appendFile concr) [
+    "lincat ImpForm = {p : PImpForm ; s : Str} ;\n",
+    "lincat Punct = {p : PPunct ; s : Str} ;\n",
+    "param PImpForm = IFSg | IFPl | IFPol ;\n",
+    "param PPunct = PFullStop | PExclMark | PQuestMark ;\n",
+    "oper  mkUttImp : PImpForm -> Str -> Pol -> Imp -> Utt = \\f,s,p,i -> {s = s ++ (case f of {\n",
+    "  IFSg  => UttImpSg p i ; IFPl  => UttImpPl p i ; IFPol => UttImpPol p i}).s ; lock_Utt = <>} ;\n",
+    "oper  mkPhrPunct : Phr -> PPunct -> Str -> Text -> Text = \\p,f,s,t -> {s = s ++ (case f of {\n",
+    "  PFullStop => TFullStop p t ; PExclMark => TExclMark p t ; PQuestMark => TQuestMark p t}).s ;\n", 
+    "  lock_Text = <>} ;\n"
+    ]
+
   foldM process ("",0) ss
   appendFile abstr "}\n"
   appendFile concr "}\n"
