@@ -30,6 +30,7 @@ import GF.Grammar.Values
 import GF.UseGrammar.GetTree
 import GF.UseGrammar.Generate (generateAll) ---- should be in API
 import GF.UseGrammar.Treebank
+import GF.UseGrammar.MakeOverload (getOverloadResults)
 
 import GF.Shell.ShellCommands
 
@@ -242,6 +243,9 @@ execC co@(comm, opts0) sa@(sh@(st,(h,_,_,_)),a) = checkOptions st co >> case com
 
   CParse 
 ----    | oElem showMulti opts -> do
+    | oElem (iOpt "overload") opts -> do
+       p <- parse $ prCommandArg a
+       changeArg (opTTs2CommandArg getOverloadResults) p
     | oElem byLines opts -> do
         let ss = (if oElem showAll opts then id else filter (not . null)) $ 
                      lines $ prCommandArg a
@@ -576,3 +580,9 @@ opTT2CommandArg :: (Tree -> Err [Tree]) -> CommandArg -> CommandArg
 opTT2CommandArg f (ATrms ts) = err AError (ATrms . concat) $ mapM f ts
 opTT2CommandArg _ (AError s) = AError ("expected term, but got error:" ++++ s)
 opTT2CommandArg _ a = AError ("expected term, but got:" ++++ prCommandArg a)
+
+opTTs2CommandArg :: ([Tree] -> [Tree]) -> CommandArg -> CommandArg
+opTTs2CommandArg f (ATrms ts) = ATrms $ f ts
+opTTs2CommandArg _ (AError s) = AError ("expected terms, but got error:" ++++ s)
+opTTs2CommandArg _ a = AError ("expected terms, but got:" ++++ prCommandArg a)
+
