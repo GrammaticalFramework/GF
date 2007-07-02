@@ -912,7 +912,8 @@ checkIfEqLType env t u trm = do
         checkWarn $ "WARNING: missing lock field" +++ unwords (map prt lo)
         return (True,t',u',[])
       Bad s -> return (False,t',u',s)
- where
+
+  where
 
    -- t is a subtype of u 
    --- quick hack version of TC.eqVal
@@ -967,6 +968,12 @@ checkIfEqLType env t u trm = do
        in case others of
          _:_ -> Bad $ "missing record fields" +++ unwords (map prt others)
          _ -> return locks
+     -- contravariance
+     (Prod x a b, Prod y c d) -> do
+        ls1 <- missingLock g c a
+        ls2 <- missingLock g b d
+        return $ ls1 ++ ls2
+
      _ -> Bad ""
 
    sTypes = [typeStr, typeTok, typeString]
