@@ -319,9 +319,12 @@
     futureTense      : Tense = TFut ;  --# notpresent
     conditionalTense : Tense = TCond ; --# notpresent
 
---    singularImpForm  : ImpForm = ss [] ;
---    pluralImpForm  : ImpForm = ss [] ;
---    politeImpForm : ImpForm = ss [] ;
+    singularImpForm  : ImpForm 
+         = {p= IFSg; s= []} ;
+    pluralImpForm  : ImpForm 
+         = {p= IFPl; s= []} ;
+    politeImpForm : ImpForm 
+         = {p= IFPol; s= []} ;
 
 --    mkUttImp : ImpForm -> Pol -> Imp -> Utt = \f,p,i -> case f of {
       IFSg  => UttImpSg p i ;
@@ -335,11 +338,11 @@
       mkUtt : Cl -> Utt                     -- John walks
 	                                 =    \c -> UttS (UseCl TPres ASimul PPos c) ;
       mkUtt : QS -> Utt                    -- is it good
-                                         =    UttQS     ;
---      mkUtt : ImpForm -> Pol -> Imp -> Utt -- don't help yourselves
---                                         =    mkUttImp  ;
---      mkUtt : ImpForm ->        Imp -> Utt -- help yourselves
---                                        =  \f -> mkUttImp f PPos ;
+                                         =    UttQS    
+      mkUtt : ImpForm -> Pol -> Imp -> Utt -- don't help yourselves
+                                         = \f -> mkUttImp f.p f.s ;
+      mkUtt : ImpForm ->        Imp -> Utt -- help yourselves
+                                        =  \f -> mkUttImp f.p f.s PPos ;
       mkUtt : Pol -> Imp -> Utt            -- (don't) help yourself
                                          =    UttImpSg  ;
       mkUtt : Imp -> Utt                    -- help yourself
@@ -509,9 +512,12 @@
   oper
     emptyText : Text = TEmpty ;       -- [empty text]
 
---    fullStopPunct  : Punct = {p = PFullStop ; s = []} ; -- .
---    questMarkPunct : Punct = {p = PQuestMark ; s = []} ; -- .
---    exclMarkPunct  : Punct = {p = PExclMark ; s = []} ; -- .
+    fullStopPunct  : Punct 
+     = {p= PFullStop; s= []} ; -- .
+    questMarkPunct : Punct 
+     = {p= PQuestMark; s= []} ; -- .
+    exclMarkPunct  : Punct 
+     = {p= PExclMark; s= []} ; -- .
 
 -- lincat Impform = {p : PImpForm ; s : Str} ;
 -- lincat Punct = {p : PPunct ; s : Str} ;
@@ -519,18 +525,10 @@
 -- param PPunct = PFullStop | PExclMark | PQuestMark ;
 
     mkText = overload {
---      mkText : Phr -> Punct -> Text -> Text =
---        \phr,punct,text -> case punct of {
---          PFullStop => TFullStop phr text ; 
---          PExclMark => TExclMark phr text ;
---          PQuestMark => TQuestMark phr text
---          } ;
---      mkText : Phr -> Punct -> Text =
---        \phr,punct -> case punct of {
---          PFullStop => TFullStop phr TEmpty ; 
---          PExclMark => TExclMark phr TEmpty ;
---          PQuestMark => TQuestMark phr TEmpty
---          } ;
+      mkText : Phr -> Punct -> Text -> Text 
+        = \p,f -> mkPhrPunct p f.p f.s ;
+      mkText : Phr -> Punct -> Text 
+        = \p,f -> mkPhrPunct p f.p f.s TEmpty ;
       mkText : Phr -> Text            -- John walks.
                                          =    \x -> TFullStop x TEmpty  ;
       mkText : Utt -> Text
