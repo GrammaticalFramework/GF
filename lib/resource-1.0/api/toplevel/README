@@ -1,0 +1,18 @@
+Parsing overloaded resource constructors.
+
+AR 2/7/2007.
+
+Do this way in gf:
+
+  > i OverLangEng.gf
+
+  > p -overload -cat=S "I loved her"
+
+  mkS pastTense (mkCl (mkNP i_Pron) love_V2 (mkNP she_Pron))
+
+The program FromOverload.hs creates the files OverGrammar.gf and OverGrammarEng.gf
+from constr.gf (which in turn is the latter part of ../Constructors.gf).
+
+
+Some imperative and punctuation forms are still missing, since they are treated
+with special parameters.
