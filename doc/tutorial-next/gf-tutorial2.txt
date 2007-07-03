@@ -2938,3 +2938,22 @@ A simpler example will be explained here.
 
 See TALK project deliverables, [TALK homepage http://www.talk-project.org]
 
+
+
+
+% Appendices
+
+=Appendix A: The GF Command Help=
+
+%!include: ../gf-help.txt
+
+
+=Appendix B: GF Quick Reference=
+
+%!include: ../gf-reference.txt
+
+
+=Appendix C: Resource Grammar Synopsis=
+
+%!include: ../resource-synopsis.txt
+
