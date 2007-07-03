@@ -30,7 +30,7 @@ import GF.Grammar.Values
 import GF.UseGrammar.GetTree
 import GF.UseGrammar.Generate (generateAll) ---- should be in API
 import GF.UseGrammar.Treebank
-import GF.UseGrammar.MakeOverload (getOverloadResults)
+import GF.UseGrammar.TreeSelections (getOverloadResults)
 
 import GF.Shell.ShellCommands
 
