@@ -1,6 +1,6 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : MakeOverload
+-- Module      : TreeSelections
 -- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
@@ -8,7 +8,11 @@
 -- choose shallowest trees, and remove an overload resolution prefix
 -----------------------------------------------------------------------------
 
-module GF.UseGrammar.MakeOverload where
+module GF.UseGrammar.TreeSelections (
+
+  getOverloadResults, smallestTrs, sizeTr, depthTr
+
+  ) where
 
 import GF.Grammar.Abstract
 import GF.Grammar.Macros
@@ -23,9 +27,10 @@ import Data.List
 -- In addition, the overload prefix "ovrld123_", is removed
 -- from each constructor in which it appears. This is used for 
 -- showing the library API constructors in a parsable grammar.
+-- TODO: access the generic functions smallestTrs, sizeTr, depthTr from shell
 
 getOverloadResults :: [Tree] -> [Tree]
-getOverloadResults = smallestTrs . map mkOverload 
+getOverloadResults = smallestTrs sizeTr . map (mkOverload "ovrld") 
 
 -- NB: this does not always give the desired result, since
 -- some genuine alternatives may be deeper: now we will exclude the 
@@ -48,12 +53,10 @@ getOverloadResults = smallestTrs . map mkOverload
 --   mkS presentTense (mkCl (mkNP he_Pron) love_V2 that_NP)
 --
 
-
-smallestTrs :: [Tr a] -> [Tr a]
-smallestTrs ts = map fst $ filter ((==mx) . snd) tds where
+smallestTrs :: (Tr a -> Int) -> [Tr a] -> [Tr a]
+smallestTrs size ts = map fst $ filter ((==mx) . snd) tds where
   tds = [(t, size t) | t <- ts]
   mx = minimum $ map snd tds
-  size = sizeTr -- depthTr
 
 depthTr :: Tr a -> Int
 depthTr (Tr (_, ts)) = case ts of
@@ -63,11 +66,12 @@ depthTr (Tr (_, ts)) = case ts of
 sizeTr :: Tr a -> Int
 sizeTr (Tr (_, ts)) = 1 + sum (map sizeTr ts)
 
--- format: ovrld123_mkNP
+-- remove from each constant a prefix starting with "pref", up to first "_"
+-- example format: ovrld123_mkNP
 
-mkOverload :: Tree -> Tree
-mkOverload = mapTr (changeAtom overAtom) where
+mkOverload :: String -> Tree -> Tree
+mkOverload pref = mapTr (changeAtom overAtom) where
   overAtom a = case a of
-    AtC (m, IC f) | take 5 f == "ovrld" -> 
+    AtC (m, IC f) | isPrefixOf pref f ->
       AtC (m, IC (tail (dropWhile (/='_') f)))
     _ -> a
