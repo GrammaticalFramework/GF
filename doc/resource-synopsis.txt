@@ -1,0 +1,893 @@
+==GF Resource Grammar Library: Synopsis==
+
+
+==Syntax==
+
+[source ../api/Constructors.gf]
+
+
+|| Function  | Type  | Example  ||
+| ``mkText`` | ``Phr -> Text`` | //But John walks.// |
+| ``mkText`` | ``Phr -> (Punct) -> (Text) -> Text`` | //John walks? Yes.// |
+| ``mkText`` | ``Utt -> Text`` | //John.// |
+| ``mkText`` | ``S -> Text`` | //John walked.// |
+| ``mkText`` | ``Cl -> Text`` | //John walks.// |
+| ``mkText`` | ``QS -> Text`` | //Did John walk?// |
+| ``mkText`` | ``Imp -> Text`` | //Walk!// |
+| ``emptyText`` | ``Text`` | //(empty text)// |
+| ``fullStopPunct`` | ``Punct`` | //.// |
+| ``questMarkPunct`` | ``Punct`` | //?// |
+| ``exclMarkPunct`` | ``Punct`` | //!// |
+| ``mkPhr`` | ``Utt -> Phr`` | //why// |
+| ``mkPhr`` | ``(PConj) -> Utt -> (Voc) -> Phr`` | //but why John// |
+| ``mkPhr`` | ``S -> Phr`` | //John walked// |
+| ``mkPhr`` | ``Cl -> Phr`` | //John walks// |
+| ``mkPhr`` | ``QS -> Phr`` | //did John walk// |
+| ``mkPhr`` | ``Imp -> Phr`` | //walk// |
+| ``mkPConj`` | ``Conj -> PConj`` | //and// |
+| ``mkVoc`` | ``NP -> Voc`` | //John// |
+| ``mkUtt`` | ``S -> Utt`` | //John walked// |
+| ``mkUtt`` | ``Cl -> Utt`` | //John walks// |
+| ``mkUtt`` | ``QS -> Utt`` | //did John walk// |
+| ``mkUtt`` | ``Imp -> Utt`` | //love yourself// |
+| ``mkUtt`` | ``(ImpForm) -> (Pol) -> Imp -> Utt`` | //don't love yourselves// |
+| ``mkUtt`` | ``IP -> Utt`` | //who// |
+| ``mkUtt`` | ``IAdv -> Utt`` | //why// |
+| ``mkUtt`` | ``NP -> Utt`` | //John// |
+| ``mkUtt`` | ``Adv -> Utt`` | //here// |
+| ``mkUtt`` | ``VP -> Utt`` | //to walk// |
+| ``lets_Utt`` | ``VP -> Utt`` | //let's walk// |
+| ``positivePol`` | ``Pol`` | //(John walks) [default]// |
+| ``negativePol`` | ``Pol`` | //(John doesn't walk)// |
+| ``simultaneousAnt`` | ``Ant`` | //(John walks) [default]// |
+| ``anteriorAnt`` | ``Ant`` | //(John has walked) --# notpresent// |
+| ``presentTense`` | ``Tense`` | //(John walks) [default]// |
+| ``pastTense`` | ``Tense`` | //(John walked) --# notpresent// |
+| ``futureTense`` | ``Tense`` | //(John will walk) --# notpresent// |
+| ``conditionalTense`` | ``Tense`` | //(John would walk) --# notpresent// |
+| ``singularImpForm`` | ``ImpForm`` | //(help yourself) [default]// |
+| ``pluralImpForm`` | ``ImpForm`` | //(help yourselves)// |
+| ``politeImpForm`` | ``ImpForm`` | //(help yourself) (polite singular)// |
+| ``mkS`` | ``Cl -> S`` | //John walks// |
+| ``mkS`` | ``(Tense) -> (Ant) -> (Pol) -> Cl -> S`` | //John wouldn't have walked// |
+| ``mkS`` | ``Conj -> S -> S -> S`` | //John walks and I run// |
+| ``mkS`` | ``Conj -> ListS -> S`` | //John walks, I run and you sleep// |
+| ``mkS`` | ``DConj -> S -> S -> S`` | //either John walk or I run// |
+| ``mkS`` | ``DConj -> ListS -> S`` | //either John walks, I run or you sleep// |
+| ``mkS`` | ``Adv -> S -> S`` | //today, John walks// |
+| ``mkCl`` | ``NP -> V -> Cl`` | //John walks// |
+| ``mkCl`` | ``NP -> V2 -> NP -> Cl`` | //John loves her// |
+| ``mkCl`` | ``NP -> V3 -> NP -> NP -> Cl`` | //John sends it to her// |
+| ``mkCl`` | ``NP -> VV -> VP -> Cl`` | //John wants to walk// |
+| ``mkCl`` | ``NP -> VS -> S -> Cl`` | //John says that it is good// |
+| ``mkCl`` | ``NP -> VQ -> QS -> Cl`` | //John wonders if it is good// |
+| ``mkCl`` | ``NP -> VA -> AP -> Cl`` | //John becomes old// |
+| ``mkCl`` | ``NP -> V2A ->NP -> AP -> Cl`` | //John paints it red// |
+| ``mkCl`` | ``NP -> A -> Cl`` | //John is old// |
+| ``mkCl`` | ``NP -> A -> NP -> Cl`` | //John is older than her// |
+| ``mkCl`` | ``NP -> A2 -> NP -> Cl`` | //John is married to her// |
+| ``mkCl`` | ``NP -> AP -> Cl`` | //John is very old// |
+| ``mkCl`` | ``NP -> N -> Cl`` | //John is a man// |
+| ``mkCl`` | ``NP -> CN -> Cl`` | //John is an old man// |
+| ``mkCl`` | ``NP -> NP -> Cl`` | //John is the man// |
+| ``mkCl`` | ``NP -> Adv -> Cl`` | //John is here// |
+| ``mkCl`` | ``NP -> VP -> Cl`` | //John walks here// |
+| ``mkCl`` | ``V -> Cl`` | //it rains// |
+| ``mkCl`` | ``VP -> Cl`` | //it is raining// |
+| ``mkCl`` | ``N -> Cl`` | //there is a house// |
+| ``mkCl`` | ``CN -> Cl`` | //there is an old houses// |
+| ``mkCl`` | ``NP -> Cl`` | //there are five houses// |
+| ``mkCl`` | ``NP -> RS -> Cl`` | //it is John that walks// |
+| ``mkCl`` | ``Adv -> S -> Cl`` | //it is here John walks// |
+| ``genericCl`` | ``VP -> Cl`` | //one walks// |
+| ``mkVP`` | ``V -> VP`` | //walk// |
+| ``mkVP`` | ``V2 -> NP -> VP`` | //love her// |
+| ``mkVP`` | ``V3 -> NP -> NP -> VP`` | //send it to her// |
+| ``mkVP`` | ``VV -> VP -> VP`` | //want to walk// |
+| ``mkVP`` | ``VS -> S -> VP`` | //know that she walks// |
+| ``mkVP`` | ``VQ -> QS -> VP`` | //ask if she walks// |
+| ``mkVP`` | ``VA -> AP -> VP`` | //become old// |
+| ``mkVP`` | ``V2A -> NP -> AP -> VP`` | //paint it red// |
+| ``mkVP`` | ``A -> VP`` | //be warm// |
+| ``mkVP`` | ``AP -> VP`` | //be very warm// |
+| ``mkVP`` | ``A -> NP -> VP`` | //be older than her// |
+| ``mkVP`` | ``A2 -> NP -> VP`` | //be married to her// |
+| ``mkVP`` | ``N -> VP`` | //be a man// |
+| ``mkVP`` | ``CN -> VP`` | //be an old man// |
+| ``mkVP`` | ``NP -> VP`` | //be the man// |
+| ``mkVP`` | ``Adv -> VP`` | //be here// |
+| ``mkVP`` | ``VP -> Adv -> VP`` | //sleep here// |
+| ``mkVP`` | ``AdV -> VP -> VP`` | //always sleep// |
+| ``reflexiveVP`` | ``V2 -> VP`` | //love itself// |
+| ``passiveVP`` | ``V2 -> VP`` | //be loved// |
+| ``passiveVP`` | ``V2 -> NP -> VP`` | //be loved by her// |
+| ``progressiveVP`` | ``VP -> VP`` | //be sleeping// |
+| ``mkImp`` | ``V -> Imp`` | //go// |
+| ``mkImp`` | ``V2 -> NP -> Imp`` | //take it// |
+| ``mkImp`` | ``VP -> Imp`` | //go there now// |
+| ``mkNP`` | ``Det -> N -> NP`` | //the first man// |
+| ``mkNP`` | ``Det -> CN -> NP`` | //the first old man// |
+| ``mkNP`` | ``QuantSg -> N -> NP`` | //this man// |
+| ``mkNP`` | ``QuantSg -> CN -> NP`` | //this old man// |
+| ``mkNP`` | ``QuantPl -> N -> NP`` | //these men// |
+| ``mkNP`` | ``QuantPl -> CN -> NP`` | //these old men// |
+| ``mkNP`` | ``Numeral -> N -> NP`` | //twenty men// |
+| ``mkNP`` | ``Numeral -> CN -> NP`` | //twenty old men// |
+| ``mkNP`` | ``Int -> N -> NP`` | //45 men// |
+| ``mkNP`` | ``Int -> CN -> NP`` | //45 old men// |
+| ``mkNP`` | ``Num -> N -> NP`` | //almost twenty men// |
+| ``mkNP`` | ``Num -> CN -> NP`` | //almost twenty old men// |
+| ``mkNP`` | ``Pron -> N -> NP`` | //my man// |
+| ``mkNP`` | ``Pron -> CN -> NP;`` | //my old man// |
+| ``mkNP`` | ``PN -> NP`` | //John// |
+| ``mkNP`` | ``Pron -> NP`` | //he// |
+| ``mkNP`` | ``Predet -> NP -> NP`` | //only John// |
+| ``mkNP`` | ``NP -> V2 -> NP`` | //John killed// |
+| ``mkNP`` | ``NP -> Adv -> NP`` | //John in Paris// |
+| ``mkNP`` | ``Conj -> NP -> NP -> NP`` | //John and I// |
+| ``mkNP`` | ``Conj -> ListNP -> NP`` | //John, I, and that// |
+| ``mkNP`` | ``DConj -> NP -> NP -> NP`` | //either John or I// |
+| ``mkNP`` | ``DConj -> ListNP -> NP`` | //either John, I, or that// |
+| ``mkDet`` | ``QuantSg -> Det`` | //this// |
+| ``mkDet`` | ``QuantSg -> (Ord) -> Det`` | //this first// |
+| ``mkDet`` | ``QuantPl -> Det`` | //these// |
+| ``mkDet`` | ``QuantPl -> (Num) -> (Ord) -> Det`` | //these five best// |
+| ``mkDet`` | ``Quant -> Det`` | //this// |
+| ``mkDet`` | ``Quant -> Num -> Det`` | //these five// |
+| ``mkDet`` | ``Num -> Det`` | //almost twenty// |
+| ``mkDet`` | ``Numeral -> Det`` | //five// |
+| ``mkDet`` | ``Int -> Det`` | //51// |
+| ``mkDet`` | ``Pron -> Det`` | //my// |
+| ``defSgDet`` | ``Det`` | //the (house)// |
+| ``defPlDet`` | ``Det`` | //the (houses)// |
+| ``indefSgDet`` | ``Det`` | //a (house)// |
+| ``indefPlDet`` | ``Det`` | //(houses)// |
+| ``defQuant`` | ``Quant`` | //the// |
+| ``indefQuant`` | ``Quant`` | //a// |
+| ``mkQuantSg`` | ``Quant -> QuantSg`` | //this// |
+| ``massQuant`` | ``QuantSg`` | //(mass terms)// |
+| ``mkQuantPl`` | ``Quant -> QuantPl`` | //these// |
+| ``mkNum`` | ``Numeral -> Num`` | //twenty// |
+| ``mkNum`` | ``Int -> Num`` | //51// |
+| ``mkNum`` | ``AdN -> Num -> Num`` | //almost ten// |
+| ``mkOrd`` | ``Numeral -> Ord`` | //twentieth// |
+| ``mkOrd`` | ``Int -> Ord`` | //51st// |
+| ``mkOrd`` | ``A -> Ord`` | //best// |
+| ``mkAdN`` | ``CAdv -> AdN`` | //more than// |
+| ``n1_Numeral`` | ``Numeral`` | //one// |
+| ``n2_Numeral`` | ``Numeral`` | //two// |
+| ``n3_Numeral`` | ``Numeral`` | //three// |
+| ``n4_Numeral`` | ``Numeral`` | //four// |
+| ``n5_Numeral`` | ``Numeral`` | //five// |
+| ``n6_Numeral`` | ``Numeral`` | //six// |
+| ``n7_Numeral`` | ``Numeral`` | //seven// |
+| ``n8_Numeral`` | ``Numeral`` | //eight// |
+| ``n9_Numeral`` | ``Numeral`` | //nine// |
+| ``n10_Numeral`` | ``Numeral`` | //ten// |
+| ``n20_Numeral`` | ``Numeral`` | //twenty// |
+| ``n100_Numeral`` | ``Numeral`` | //hundred// |
+| ``n1000_Numeral`` | ``Numeral`` | //thousand// |
+| ``mkCN`` | ``N -> CN`` | //house// |
+| ``mkCN`` | ``N2 -> NP -> CN`` | //mother of John// |
+| ``mkCN`` | ``N3 -> NP -> NP -> CN`` | //distance from this city to Paris// |
+| ``mkCN`` | ``N2 -> CN`` | //son// |
+| ``mkCN`` | ``N3 -> CN`` | //flight// |
+| ``mkCN`` | ``A -> N -> CN`` | //big house// |
+| ``mkCN`` | ``A -> CN -> CN`` | //big blue house// |
+| ``mkCN`` | ``AP -> N -> CN`` | //very big house// |
+| ``mkCN`` | ``AP -> CN -> CN`` | //very big blue house// |
+| ``mkCN`` | ``N -> RS -> CN`` | //house that John loves// |
+| ``mkCN`` | ``CN -> RS -> CN`` | //big house that John loves// |
+| ``mkCN`` | ``N -> Adv -> CN`` | //house in the city// |
+| ``mkCN`` | ``CN -> Adv -> CN`` | //big house in the city// |
+| ``mkCN`` | ``CN -> S -> CN`` | //rule that John walks// |
+| ``mkCN`` | ``CN -> QS -> CN`` | //question if John walks// |
+| ``mkCN`` | ``CN -> VP -> CN`` | //reason to walk// |
+| ``mkCN`` | ``N -> NP -> CN`` | //king John// |
+| ``mkCN`` | ``CN -> NP -> CN`` | //old king John// |
+| ``mkAP`` | ``A -> AP`` | //old// |
+| ``mkAP`` | ``A -> NP -> AP`` | //older than John// |
+| ``mkAP`` | ``A2 -> NP -> AP`` | //married to her// |
+| ``mkAP`` | ``A2 -> AP`` | //married to myself// |
+| ``mkAP`` | ``AP -> S -> AP`` | //probable that John walks// |
+| ``mkAP`` | ``AP -> QS -> AP`` | //uncertain if John walks// |
+| ``mkAP`` | ``AP -> VP -> AP`` | //ready to go// |
+| ``mkAP`` | ``AdA -> A -> AP`` | //very old// |
+| ``mkAP`` | ``AdA -> AP -> AP`` | //very very old// |
+| ``mkAP`` | ``Conj -> AP -> AP -> AP`` | //old and big// |
+| ``mkAP`` | ``Conj -> ListAP -> AP`` | //old, big, and warm// |
+| ``mkAP`` | ``DConj -> AP -> AP -> AP`` | //either old or big// |
+| ``mkAP`` | ``DConj -> ListAP -> AP`` | //either old, big, or warm// |
+| ``mkAdv`` | ``A -> Adv`` | //warmly// |
+| ``mkAdv`` | ``Prep -> NP -> Adv`` | //with John// |
+| ``mkAdv`` | ``Subj -> S -> Adv`` | //when John walks// |
+| ``mkAdv`` | ``CAdv -> A -> NP -> Adv`` | //more warmly than John// |
+| ``mkAdv`` | ``CAdv -> A -> S -> Adv`` | //more warmly than John walks// |
+| ``mkAdv`` | ``AdA -> Adv -> Adv`` | //very warmly// |
+| ``mkAdv`` | ``Conj -> Adv -> Adv -> Adv`` | //here and now// |
+| ``mkAdv`` | ``Conj -> ListAdv -> Adv`` | //with John, here and now// |
+| ``mkAdv`` | ``DConj -> Adv -> Adv -> Adv`` | //either here or now// |
+| ``mkAdv`` | ``DConj -> ListAdv -> Adv`` | //either here, now, or with John// |
+| ``mkQS`` | ``QCl -> QS`` | //who walks// |
+| ``mkQS`` | ``(Tense) -> (Ant) -> (Pol) -> QCl -> QS`` | //who wouldn't have walked// |
+| ``mkQS`` | ``Cl -> QS`` | //does John walk// |
+| ``mkQCl`` | ``Cl -> QCl`` | //does John walk// |
+| ``mkQCl`` | ``IP -> VP -> QCl`` | //who walks// |
+| ``mkQCl`` | ``IP -> NP -> V2 -> QCl`` | //whom does John love// |
+| ``mkQCl`` | ``IP -> Slash -> QCl`` | //whom does John love today// |
+| ``mkQCl`` | ``IAdv -> Cl -> QCl`` | //why does John walk// |
+| ``mkQCl`` | ``Prep -> IP -> Cl -> QCl`` | //with who does John walk// |
+| ``mkQCl`` | ``IAdv -> NP -> QCl`` | //where is John// |
+| ``mkQCl`` | ``IP -> QCl`` | //what is there// |
+| ``mkIP`` | ``IDet -> N -> IP`` | //which city// |
+| ``mkIP`` | ``IDet -> (Num) -> (Ord) -> CN -> IP`` | //which five best cities// |
+| ``mkIP`` | ``IP -> Adv -> IP`` | //who in Paris// |
+| ``mkIAdv`` | ``Prep -> IP -> IAdv`` | //in which city// |
+| ``mkRS`` | ``RCl -> RS`` | //that walk// |
+| ``mkRS`` | ``(Tense) -> (Ant) -> (Pol) -> RCl -> RS`` | //that wouldn't have walked// |
+| ``mkRCl`` | ``RP -> VP -> RCl`` | //that walk// |
+| ``mkRCl`` | ``RP -> NP -> V2 -> RCl`` | //which John loves// |
+| ``mkRCl`` | ``RP -> Slash -> RCl`` | //which John loves today// |
+| ``mkRCl`` | ``Cl -> RCl`` | //such that John loves her// |
+| ``which_RP`` | ``RP`` | //which// |
+| ``mkRP`` | ``Prep -> NP -> RP -> RP`` | //all the houses in which// |
+| ``mkSlash`` | ``NP -> V2 -> Slash`` | //(whom) John loves// |
+| ``mkSlash`` | ``NP -> VV -> V2 -> Slash`` | //(whom) John wants to see// |
+| ``mkSlash`` | ``Cl -> Prep -> Slash`` | //(with whom) John walks// |
+| ``mkSlash`` | ``Slash -> Adv -> Slash`` | //(whom) John loves today// |
+| ``mkListS`` | ``S -> S -> ListS`` | //he walks, I run// |
+| ``mkListS`` | ``S -> ListS -> ListS`` | //John walks, I run, you sleep// |
+| ``mkListAdv`` | ``Adv -> Adv -> ListAdv`` | //here, now// |
+| ``mkListAdv`` | ``Adv -> ListAdv -> ListAdv`` | //to me, here, now// |
+| ``mkListAP`` | ``AP -> AP -> ListAP`` | //old, big// |
+| ``mkListAP`` | ``AP -> ListAP -> ListAP`` | //old, big, warm// |
+| ``mkListNP`` | ``NP -> NP -> ListNP`` | //John, I// |
+| ``mkListNP`` | ``NP -> ListNP -> ListNP`` | //John, I, that// |
+
+
+==Paradigms for Danish==
+
+
+[source ../danish/ParadigmsDan.gf]
+
+
+
+
+|| Function  | Type  | Example  ||
+| ``Gender`` | ``Type`` | - |
+| ``utrum`` | ``Gender`` | - |
+| ``neutrum`` | ``Gender`` | - |
+| ``Number`` | ``Type`` | - |
+| ``singular`` | ``Number`` | - |
+| ``plural`` | ``Number`` | - |
+| ``Case`` | ``Type`` | - |
+| ``nominative`` | ``Case`` | - |
+| ``genitive`` | ``Case`` | - |
+| ``mkPrep`` | ``Str -> Prep`` | - |
+| ``noPrep`` | ``Prep`` | //empty string// |
+| ``mkN`` | ``(dreng,drengen,drenge,drengene : Str) -> N`` | - |
+| ``regN`` | ``Str -> N`` | - |
+| ``regGenN`` | ``Str -> Gender -> N`` | - |
+| ``mk2N`` | ``(bil,bilen : Str) -> N`` | - |
+| ``mk3N`` | ``(bil,bilen,biler : Str) -> N`` | - |
+| ``mkN2`` | ``N -> Prep -> N2`` | - |
+| ``regN2`` | ``Str -> Gender -> N2`` | - |
+| ``mkN3`` | ``N -> Prep -> Prep -> N3`` | - |
+| ``mkPN`` | ``Str -> Gender -> PN`` | //Paris neutrum// |
+| ``regPN`` | ``Str -> PN`` | //utrum gender// |
+| ``nounPN`` | ``N -> PN`` | - |
+| ``mkNP`` | ``Str -> Str -> Number -> Gender -> NP`` | - |
+| ``mkA`` | ``(galen,galet,galne : Str) -> A`` | - |
+| ``regA`` | ``Str -> A`` | - |
+| ``mk2A`` | ``(stor,stort : Str) -> A`` | - |
+| ``mkA2`` | ``A -> Prep -> A2`` | - |
+| ``mkADeg`` | ``(stor,stort,store,storre,storst : Str) -> A`` | - |
+| ``regADeg`` | ``Str -> A`` | - |
+| ``irregADeg`` | ``(tung,tyngre,tyngst : Str) -> A`` | - |
+| ``mk3ADeg`` | ``(galen,galet,galna : Str) -> A`` | - |
+| ``mk2ADeg`` | ``(bred,bredt : Str) -> A`` | - |
+| ``compoundA`` | ``A -> A`` | //-/mer/mest norsk// |
+| ``mkAdv`` | ``Str -> Adv`` | - |
+| ``mkAdV`` | ``Str -> AdV`` | - |
+| ``mkAdA`` | ``Str -> AdA`` | - |
+| ``mkV`` | ``(spise,spiser,spises,spiste,spist,spis : Str) -> V`` | - |
+| ``regV`` | ``(snakke : Str) -> V`` | - |
+| ``mk2V`` | ``(leve,levde : Str) -> V`` | - |
+| ``irregV`` | ``(drikke, drak, drukket : Str) -> V`` | - |
+| ``vaereV`` | ``V -> V`` | - |
+| ``partV`` | ``V -> Str -> V`` | - |
+| ``depV`` | ``V -> V`` | - |
+| ``reflV`` | ``V -> V`` | - |
+| ``mkV2`` | ``V -> Prep -> V2`` | - |
+| ``dirV2`` | ``V -> V2`` | - |
+| ``mkV3`` | ``V -> Prep -> Prep -> V3`` | //snakke, med, om// |
+| ``dirV3`` | ``V -> Prep -> V3`` | //give,_,til// |
+| ``dirdirV3`` | ``V -> V3`` | //give,_,_// |
+| ``mkV0`` | ``V -> V0`` | - |
+| ``mkVS`` | ``V -> VS`` | - |
+| ``mkV2S`` | ``V -> Prep -> V2S`` | - |
+| ``mkVV`` | ``V -> VV`` | - |
+| ``mkV2V`` | ``V -> Prep -> Prep -> V2V`` | - |
+| ``mkVA`` | ``V -> VA`` | - |
+| ``mkV2A`` | ``V -> Prep -> V2A`` | - |
+| ``mkVQ`` | ``V -> VQ`` | - |
+| ``mkV2Q`` | ``V -> Prep -> V2Q`` | - |
+| ``mkAS`` | ``A -> AS`` | - |
+| ``mkA2S`` | ``A -> Prep -> A2S`` | - |
+| ``mkAV`` | ``A -> AV`` | - |
+| ``mkA2V`` | ``A -> Prep -> A2V`` | - |
+
+
+==Paradigms for English==
+
+
+[source ../english/ParadigmsEng.gf]
+
+
+
+
+|| Function  | Type  | Example  ||
+| ``Gender`` | ``Type`` | - |
+| ``human`` | ``Gender`` | - |
+| ``nonhuman`` | ``Gender`` | - |
+| ``masculine`` | ``Gender`` | - |
+| ``Number`` | ``Type`` | - |
+| ``singular`` | ``Number`` | - |
+| ``plural`` | ``Number`` | - |
+| ``Case`` | ``Type`` | - |
+| ``nominative`` | ``Case`` | - |
+| ``genitive`` | ``Case`` | - |
+| ``mkN`` | ``(flash : Str) -> N`` | - |
+| ``mkN`` | ``(man,men : Str) -> N`` | - |
+| ``mkN`` | ``(man,men,man's,men's : Str) -> N`` | - |
+| ``mkN`` | ``Str -> N -> N`` | - |
+| ``mkN2`` | ``N -> Prep -> N2`` | - |
+| ``regN2`` | ``Str -> N2`` | - |
+| ``mkN3`` | ``N -> Prep -> Prep -> N3`` | - |
+| ``mkPN`` | ``Str -> PN`` | - |
+| ``mkPN`` | ``N -> PN`` | - |
+| ``mkA`` | ``(happy : Str) -> A`` | - |
+| ``mkA`` | ``(fat,fatter : Str) -> A`` | - |
+| ``mkA`` | ``(good,better,best,well : Str) -> A`` | - |
+| ``compoundA`` | ``A -> A`` | //-/more/most ridiculous// |
+| ``mkA2`` | ``A -> Prep -> A2`` | - |
+| ``mkAdv`` | ``Str -> Adv`` | - |
+| ``mkAdV`` | ``Str -> AdV`` | - |
+| ``mkAdA`` | ``Str -> AdA`` | - |
+| ``mkPrep`` | ``Str -> Prep`` | - |
+| ``noPrep`` | ``Prep`` | - |
+| ``mkV`` | ``(cry : Str) -> V`` | - |
+| ``mkV`` | ``(stop, stopped : Str) -> V`` | - |
+| ``mkV`` | ``(drink, drank, drunk : Str) -> V`` | - |
+| ``mkV`` | ``(run, ran, run, running : Str) -> V`` | - |
+| ``mkV`` | ``(go, goes, went, gone, going : Str) -> V`` | - |
+| ``partV`` | ``V -> Str -> V`` | - |
+| ``reflV`` | ``V -> V`` | - |
+| ``mkV2`` | ``V -> Prep -> V2`` | //believe in// |
+| ``mkV2`` | ``V -> V2`` | //kill// |
+| ``mkV3`` | ``V -> Prep -> Prep -> V3`` | //speak, with, about// |
+| ``dirV3`` | ``V -> Prep -> V3`` | //give,_,to// |
+| ``dirdirV3`` | ``V -> V3`` | //give,_,_// |
+| ``mkV0`` | ``V -> V0`` | - |
+| ``mkVS`` | ``V -> VS`` | - |
+| ``mkV2S`` | ``V -> Prep -> V2S`` | - |
+| ``mkVV`` | ``V -> VV`` | - |
+| ``mkV2V`` | ``V -> Prep -> Prep -> V2V`` | - |
+| ``mkVA`` | ``V -> VA`` | - |
+| ``mkV2A`` | ``V -> Prep -> V2A`` | - |
+| ``mkVQ`` | ``V -> VQ`` | - |
+| ``mkV2Q`` | ``V -> Prep -> V2Q`` | - |
+| ``mkAS`` | ``A -> AS`` | - |
+| ``mkA2S`` | ``A -> Prep -> A2S`` | - |
+| ``mkAV`` | ``A -> AV`` | - |
+| ``mkA2V`` | ``A -> Prep -> A2V`` | - |
+
+
+==Paradigms for Finnish==
+
+
+[source ../finnish/ParadigmsFin.gf]
+
+
+
+
+|| Function  | Type  | Example  ||
+| ``Number`` | ``Type`` | - |
+| ``singular`` | ``Number`` | - |
+| ``plural`` | ``Number`` | - |
+| ``Case`` | ``Type`` | - |
+| ``nominative`` | ``Case`` | - |
+| ``genitive`` | ``Case`` | - |
+| ``partitive`` | ``Case`` | - |
+| ``translative`` | ``Case`` | - |
+| ``inessive`` | ``Case`` | - |
+| ``elative`` | ``Case`` | - |
+| ``illative`` | ``Case`` | - |
+| ``adessive`` | ``Case`` | - |
+| ``ablative`` | ``Case`` | - |
+| ``allative`` | ``Case`` | - |
+| ``prePrep`` | ``Case -> Str -> Prep`` | //ilman, partitive// |
+| ``postPrep`` | ``Case -> Str -> Prep`` | //takana, genitive// |
+| ``postGenPrep`` | ``Str -> Prep`` | //takana// |
+| ``casePrep`` | ``Case -> Prep`` | //adessive// |
+| ``mkN`` | ``(talo : Str) -> N`` | - |
+| ``mkN`` | ``(savi,savia : Str) -> N`` | - |
+| ``mkN`` | ``(vesi,veden,vesiä : Str) -> N`` | - |
+| ``mkN`` | ``(olo,oln,olona,oloa,oloon,oloina,oloissa,olojen,oloja,oloihin : Str) -> N`` | - |
+| ``sgpartN`` | ``(meri : N) -> (merta : Str) -> N`` | - |
+| ``nMeri`` | ``(meri : Str) -> N`` | - |
+| ``nKukko`` | ``(kukko,kukon,kukkoja : Str) -> N`` | - |
+| ``nTalo`` | ``(talo : Str) -> N`` | - |
+| ``nLukko`` | ``(lukko : Str) -> N`` | - |
+| ``nArpi`` | ``(arpi : Str) -> N`` | - |
+| ``nSylki`` | ``(sylki : Str) -> N`` | - |
+| ``nLinux`` | ``(linuxia : Str) -> N`` | - |
+| ``nPeruna`` | ``(peruna : Str) -> N`` | - |
+| ``nRae`` | ``(rae, rakeena : Str) -> N`` | - |
+| ``nSusi`` | ``(susi,suden,sutta : Str) -> N`` | - |
+| ``nPuu`` | ``(puu : Str) -> N`` | - |
+| ``nSuo`` | ``(suo : Str) -> N`` | - |
+| ``nNainen`` | ``(naista : Str) -> N`` | - |
+| ``nTilaus`` | ``(tilaus,tilauksena : Str) -> N`` | - |
+| ``nKulaus`` | ``(kulaus : Str) -> N`` | - |
+| ``nNauris`` | ``(naurista : Str) -> N`` | - |
+| ``compN`` | ``Str -> N -> N`` | - |
+| ``mkN2`` | ``N -> N2`` | - |
+| ``mkN2`` | ``N -> Prep -> N2`` | - |
+| ``mkN3`` | ``N -> Prep -> Prep -> N3`` | - |
+| ``mkPN`` | ``Str -> PN`` | - |
+| ``mkPN`` | ``N -> PN`` | - |
+| ``mkA`` | ``Str -> A`` | - |
+| ``mkA`` | ``N -> A`` | - |
+| ``mkA`` | ``N -> (kivempaa,kivinta : Str) -> A`` | - |
+| ``mkA2`` | ``A -> Prep -> A2`` | - |
+| ``mkV`` | ``(soutaa : Str) -> V`` | - |
+| ``mkV`` | ``(soutaa,souti : Str) -> V`` | - |
+| ``mkV`` | ``(soutaa,soudan,souti : Str) -> V`` | - |
+| ``mkV`` | ``(tulla,tulee,tulen,tulevat,tulkaa,tullaan,tuli,tulin,tulisi,tullut,tultu,tullun : Str) -> V`` | - |
+| ``mkV`` | ``V -> Case -> V`` | - |
+| ``vValua`` | ``(valua : Str) -> V`` | - |
+| ``vKattaa`` | ``(kattaa, katan : Str) -> V`` | - |
+| ``vOstaa`` | ``(ostaa : Str) -> V`` | - |
+| ``vNousta`` | ``(nousta, nousen : Str) -> V`` | - |
+| ``vTuoda`` | ``(tuoda : Str) -> V`` | - |
+| ``caseV`` | ``Case -> V -> V`` | - |
+| ``vOlla`` | ``V`` | - |
+| ``mkV2`` | ``V -> Prep -> V2`` | - |
+| ``caseV2`` | ``V -> Case -> V2`` | - |
+| ``dirV2`` | ``V -> V2`` | - |
+| ``mkV3`` | ``V -> Prep -> Prep -> V3`` | //puhua, allative, elative// |
+| ``dirV3`` | ``V -> Case -> V3`` | //siirtää, (accusative), illative// |
+| ``dirdirV3`` | ``V -> V3`` | //antaa, (accusative), (allative)// |
+| ``mkV0`` | ``V -> V0`` | - |
+| ``mkVS`` | ``V -> VS`` | - |
+| ``mkV2S`` | ``V -> Prep -> V2S`` | - |
+| ``mkVV`` | ``V -> VV`` | - |
+| ``mkV2V`` | ``V -> Prep -> V2V`` | - |
+| ``mkVA`` | ``V -> Prep -> VA`` | - |
+| ``mkV2A`` | ``V -> Prep -> Prep -> V2A`` | - |
+| ``mkVQ`` | ``V -> VQ`` | - |
+| ``mkV2Q`` | ``V -> Prep -> V2Q`` | - |
+| ``mkAS`` | ``A -> AS`` | - |
+| ``mkA2S`` | ``A -> Prep -> A2S`` | - |
+| ``mkAV`` | ``A -> AV`` | - |
+| ``mkA2V`` | ``A -> Prep -> A2V`` | - |
+
+
+==Paradigms for French==
+
+
+[source ../french/ParadigmsFre.gf]
+
+
+
+
+|| Function  | Type  | Example  ||
+| ``Gender`` | ``Type`` | - |
+| ``masculine`` | ``Gender`` | - |
+| ``feminine`` | ``Gender`` | - |
+| ``Number`` | ``Type`` | - |
+| ``singular`` | ``Number`` | - |
+| ``plural`` | ``Number`` | - |
+| ``accusative`` | ``Prep`` | - |
+| ``genitive`` | ``Prep`` | - |
+| ``dative`` | ``Prep`` | - |
+| ``mkPrep`` | ``Str -> Prep`` | - |
+| ``mkN`` | ``(cheval : Str) -> N`` | - |
+| ``mkN`` | ``(foie : Str) -> Gender -> N`` | - |
+| ``mkN`` | ``(oeil,yeux : Str) -> Gender -> N`` | - |
+| ``mkN`` | ``N -> Str -> N`` | - |
+| ``mkN2`` | ``N -> Prep -> N2`` | - |
+| ``deN2`` | ``N -> N2`` | - |
+| ``aN2`` | ``N -> N2`` | - |
+| ``mkN3`` | ``N -> Prep -> Prep -> N3`` | - |
+| ``mkPN`` | ``Str -> PN`` | - |
+| ``mkPN`` | ``Str -> Gender -> PN`` | - |
+| ``mkA`` | ``(cher : Str) -> A`` | - |
+| ``mkA`` | ``(sec,seche : Str) -> A`` | - |
+| ``mkA`` | ``(banal,banale,banaux,banalement : Str) -> A`` | - |
+| ``mkA`` | ``A -> A -> A`` | - |
+| ``prefixA`` | ``A -> A`` | - |
+| ``mkA2`` | ``A -> Prep -> A2`` | - |
+| ``mkAdv`` | ``Str -> Adv`` | - |
+| ``mkAdV`` | ``Str -> AdV`` | - |
+| ``mkAdA`` | ``Str -> AdA`` | - |
+| ``mkV`` | ``(finir : Str) -> V`` | - |
+| ``mkV`` | ``(jeter,jette,jettera : Str) -> V`` | - |
+| ``mkV`` | ``V2 -> V`` | - |
+| ``etreV`` | ``V -> V`` | - |
+| ``reflV`` | ``V -> V`` | - |
+| ``mkV2`` | ``V -> V2 = dirV2`` | - |
+| ``mkV2`` | ``V -> Prep -> V2 = mmkV2`` | - |
+| ``mkV3`` | ``V -> V3`` | //donner,_,_// |
+| ``mkV3`` | ``V -> Prep -> V3`` | //placer,_,dans// |
+| ``mkV3`` | ``V -> Prep -> Prep -> V3`` | //parler, à, de// |
+| ``mkV0`` | ``V -> V0`` | - |
+| ``mkVS`` | ``V -> VS`` | - |
+| ``mkV2S`` | ``V -> Prep -> V2S`` | - |
+| ``mkVV`` | ``V -> VV`` | //plain infinitive: "je veux parler"// |
+| ``deVV`` | ``V -> VV`` | //"j'essaie de parler"// |
+| ``aVV`` | ``V -> VV`` | //"j'arrive à parler"// |
+| ``mkV2V`` | ``V -> Prep -> Prep -> V2V`` | - |
+| ``mkVA`` | ``V -> VA`` | - |
+| ``mkV2A`` | ``V -> Prep -> Prep -> V2A`` | - |
+| ``mkVQ`` | ``V -> VQ`` | - |
+| ``mkV2Q`` | ``V -> Prep -> V2Q`` | - |
+| ``mkAS`` | ``A -> AS`` | - |
+| ``mkA2S`` | ``A -> Prep -> A2S`` | - |
+| ``mkAV`` | ``A -> Prep -> AV`` | - |
+| ``mkA2V`` | ``A -> Prep -> Prep -> A2V`` | - |
+
+
+==Paradigms for German==
+
+
+[source ../german/ParadigmsGer.gf]
+
+
+
+
+|| Function  | Type  | Example  ||
+| ``Gender`` | ``Type`` | - |
+| ``masculine`` | ``Gender`` | - |
+| ``feminine`` | ``Gender`` | - |
+| ``neuter`` | ``Gender`` | - |
+| ``Case`` | ``Type`` | - |
+| ``nominative`` | ``Case`` | - |
+| ``accusative`` | ``Case`` | - |
+| ``dative`` | ``Case`` | - |
+| ``genitive`` | ``Case`` | - |
+| ``Number`` | ``Type`` | - |
+| ``singular`` | ``Number`` | - |
+| ``plural`` | ``Number`` | - |
+| ``mkN`` | ``(Stufe : Str) -> N`` | - |
+| ``mkN`` | ``(Bild,Bilder : Str) -> Gender -> N`` | - |
+| ``mkN`` | ``(x1,_,_,_,_,x6 : Str) -> Gender -> N`` | - |
+| ``mkN2`` | ``Str -> N2`` | - |
+| ``mkN2`` | ``N -> N2`` | - |
+| ``mkN2`` | ``N -> Prep -> N2`` | - |
+| ``mkN3`` | ``N -> Prep -> Prep -> N3`` | - |
+| ``mkPN`` | ``Str -> PN`` | - |
+| ``mkPN`` | ``(nom,gen : Str) -> PN`` | - |
+| ``mkPN`` | ``(nom,acc,dat,gen : Str) -> PN`` | - |
+| ``mkA`` | ``Str -> A`` | - |
+| ``mkA`` | ``(gut,besser,beste : Str) -> A`` | //gut,besser,beste// |
+| ``invarA`` | ``Str -> A`` | //prima// |
+| ``mkA2`` | ``A -> Prep -> A2`` | - |
+| ``mkAdv`` | ``Str -> Adv`` | - |
+| ``mkPrep`` | ``Str -> Case -> Prep`` | - |
+| ``accPrep`` | ``Prep`` | - |
+| ``datPrep`` | ``Prep`` | - |
+| ``genPrep`` | ``Prep`` | - |
+| ``von_Prep`` | ``Prep`` | - |
+| ``zu_Prep`` | ``Prep`` | - |
+| ``mkV`` | ``(führen : Str) -> V`` | - |
+| ``mkV`` | ``(sehen,sieht,sah,sähe,gesehen : Str) -> V`` | - |
+| ``mkV`` | ``(geben, gibt, gib, gab, gäbe, gegeben : Str) -> V`` | - |
+| ``mkV`` | ``Str -> V -> V`` | - |
+| ``no_geV`` | ``V -> V`` | - |
+| ``seinV`` | ``V -> V`` | - |
+| ``habenV`` | ``V -> V`` | - |
+| ``reflV`` | ``V -> Case -> V`` | - |
+| ``mkV2`` | ``V -> Prep -> V2`` | - |
+| ``mkV2`` | ``V -> V2`` | - |
+| ``mkV2`` | ``V -> Case -> V2`` | - |
+| ``mkV3`` | ``V -> Prep -> Prep -> V3`` | //sprechen, mit, über// |
+| ``dirV3`` | ``V -> Prep -> V3`` | //senden,(accusative),nach// |
+| ``accdatV3`` | ``V -> V3`` | //give,accusative,dative// |
+| ``mkV0`` | ``V -> V0`` | - |
+| ``mkVS`` | ``V -> VS`` | - |
+| ``mkV2S`` | ``V -> Prep -> V2S`` | - |
+| ``mkVV`` | ``V -> VV`` | - |
+| ``mkV2V`` | ``V -> Prep -> V2V`` | - |
+| ``mkVA`` | ``V -> VA`` | - |
+| ``mkV2A`` | ``V -> Prep -> V2A`` | - |
+| ``mkVQ`` | ``V -> VQ`` | - |
+| ``mkV2Q`` | ``V -> Prep -> V2Q`` | - |
+| ``mkAS`` | ``A -> AS`` | - |
+| ``mkA2S`` | ``A -> Prep -> A2S`` | - |
+| ``mkAV`` | ``A -> AV`` | - |
+| ``mkA2V`` | ``A -> Prep -> A2V`` | - |
+
+
+==Paradigms for Italian==
+
+
+[source ../italian/ParadigmsIta.gf]
+
+
+
+
+|| Function  | Type  | Example  ||
+| ``Gender`` | ``Type`` | - |
+| ``masculine`` | ``Gender`` | - |
+| ``feminine`` | ``Gender`` | - |
+| ``Number`` | ``Type`` | - |
+| ``singular`` | ``Number`` | - |
+| ``plural`` | ``Number`` | - |
+| ``Prep`` | ``Type`` | - |
+| ``accusative`` | ``Prep`` | - |
+| ``genitive`` | ``Prep`` | - |
+| ``dative`` | ``Prep`` | - |
+| ``mkPrep`` | ``Str -> Prep`` | - |
+| ``mkN`` | ``(cane : Str) -> N`` | - |
+| ``mkN`` | ``(carne : Str) -> Gender -> N`` | - |
+| ``mkN`` | ``(uomo,uomini : Str) -> Gender -> N`` | - |
+| ``mkN`` | ``N -> Str -> N`` | - |
+| ``mkN2`` | ``Str -> N2`` | - |
+| ``mkN2`` | ``N -> Prep -> N2`` | - |
+| ``mkN3`` | ``N -> Prep -> Prep -> N3`` | - |
+| ``mkPN`` | ``Str -> PN`` | - |
+| ``mkPN`` | ``Str -> Gender -> PN`` | - |
+| ``mkA`` | ``(bianco : Str) -> A`` | - |
+| ``mkA`` | ``(solo,sola,soli,sole,solamente : Str) -> A`` | - |
+| ``mkA`` | ``A -> A -> A`` | - |
+| ``prefixA`` | ``A -> A = prefA`` | - |
+| ``mkA2`` | ``A -> Prep -> A2`` | - |
+| ``mkAdv`` | ``Str -> Adv`` | - |
+| ``mkAdV`` | ``Str -> AdV`` | - |
+| ``mkAdA`` | ``Str -> AdA`` | - |
+| ``mkV`` | ``Str -> V`` | - |
+| ``mkV`` | ``Verbo -> V`` | - |
+| ``mkV`` | ``(udire,odo,ode,udiamo,udiro,udii,udisti,udi,udirono,odi,udito : Str) -> V`` | - |
+| ``essereV`` | ``V -> V`` | - |
+| ``reflV`` | ``V -> V`` | - |
+| ``mkV2`` | ``Str -> V2`` | - |
+| ``mkV2`` | ``V -> V2`` | - |
+| ``mkV2`` | ``V -> Prep -> V2`` | - |
+| ``v2V`` | ``V2 -> V`` | - |
+| ``mkV3`` | ``V -> Prep -> Prep -> V3`` | //parlare, a, di// |
+| ``dirV3`` | ``V -> Prep -> V3`` | //dare,_,a// |
+| ``dirdirV3`` | ``V -> V3`` | //dare,_,_// |
+| ``mkV0`` | ``V -> V0`` | - |
+| ``mkVS`` | ``V -> VS`` | - |
+| ``mkV2S`` | ``V -> Prep -> V2S`` | - |
+| ``mkVV`` | ``V -> VV`` | //plain infinitive: "voglio parlare"// |
+| ``deVV`` | ``V -> VV`` | //"cerco di parlare"// |
+| ``aVV`` | ``V -> VV`` | //"arrivo a parlare"// |
+| ``mkV2V`` | ``V -> Prep -> Prep -> V2V`` | - |
+| ``mkVA`` | ``V -> VA`` | - |
+| ``mkV2A`` | ``V -> Prep -> Prep -> V2A`` | - |
+| ``mkVQ`` | ``V -> VQ`` | - |
+| ``mkV2Q`` | ``V -> Prep -> V2Q`` | - |
+| ``mkAS`` | ``A -> AS`` | - |
+| ``mkA2S`` | ``A -> Prep -> A2S`` | - |
+| ``mkAV`` | ``A -> Prep -> AV`` | - |
+| ``mkA2V`` | ``A -> Prep -> Prep -> A2V`` | - |
+
+
+==Paradigms for Norwegian==
+
+
+[source ../norwegian/ParadigmsNor.gf]
+
+
+
+
+|| Function  | Type  | Example  ||
+| ``Gender`` | ``Type`` | - |
+| ``masculine`` | ``Gender`` | - |
+| ``feminine`` | ``Gender`` | - |
+| ``neutrum`` | ``Gender`` | - |
+| ``Number`` | ``Type`` | - |
+| ``singular`` | ``Number`` | - |
+| ``plural`` | ``Number`` | - |
+| ``Case`` | ``Type`` | - |
+| ``nominative`` | ``Case`` | - |
+| ``genitive`` | ``Case`` | - |
+| ``mkPrep`` | ``Str -> Prep`` | - |
+| ``noPrep`` | ``Prep`` | //empty string// |
+| ``mkN`` | ``(dreng,drengen,drenger,drengene : Str) -> N`` | - |
+| ``regN`` | ``Str -> N`` | - |
+| ``regGenN`` | ``Str -> Gender -> N`` | - |
+| ``mk2N`` | ``(bil,bilen : Str) -> N`` | - |
+| ``mkN2`` | ``N -> Prep -> N2`` | - |
+| ``regN2`` | ``Str -> Gender -> N2`` | - |
+| ``mkN3`` | ``N -> Prep -> Prep -> N3`` | - |
+| ``regPN`` | ``Str -> PN`` | //utrum// |
+| ``regGenPN`` | ``Str -> Gender -> PN`` | - |
+| ``nounPN`` | ``N -> PN`` | - |
+| ``mkNP`` | ``Str -> Str -> Number -> Gender -> NP`` | - |
+| ``mkA`` | ``(galen,galet,galne : Str) -> A`` | - |
+| ``regA`` | ``Str -> A`` | - |
+| ``mk2A`` | ``(stor,stort : Str) -> A`` | - |
+| ``mkA2`` | ``A -> Prep -> A2`` | - |
+| ``mkADeg`` | ``(stor,stort,store,storre,storst : Str) -> A`` | - |
+| ``regADeg`` | ``Str -> A`` | - |
+| ``irregADeg`` | ``(tung,tyngre,tyngst : Str) -> A`` | - |
+| ``mk3ADeg`` | ``(galen,galet,galne : Str) -> A`` | - |
+| ``mk2ADeg`` | ``(bred,bredt : Str) -> A`` | - |
+| ``compoundA`` | ``A -> A`` | //-/mer/mest norsk// |
+| ``mkAdv`` | ``Str -> Adv`` | //e.g. her// |
+| ``mkAdV`` | ``Str -> AdV`` | //e.g. altid// |
+| ``mkAdA`` | ``Str -> AdA`` | - |
+| ``mkV`` | ``(spise,spiser,spises,spiste,spist,spis : Str) -> V`` | - |
+| ``regV`` | ``(snakke : Str) -> V`` | - |
+| ``mk2V`` | ``(leve,levde : Str) -> V`` | - |
+| ``irregV`` | ``(drikke, drakk, drukket : Str) -> V`` | - |
+| ``vaereV`` | ``V -> V`` | - |
+| ``partV`` | ``V -> Str -> V`` | - |
+| ``depV`` | ``V -> V`` | - |
+| ``reflV`` | ``V -> V`` | - |
+| ``mkV2`` | ``V -> Prep -> V2`` | - |
+| ``dirV2`` | ``V -> V2`` | - |
+| ``mkV3`` | ``V -> Prep -> Prep -> V3`` | //snakke, med, om// |
+| ``dirV3`` | ``V -> Prep -> V3`` | //gi,_,til// |
+| ``dirdirV3`` | ``V -> V3`` | //gi,_,_// |
+| ``mkV0`` | ``V -> V0`` | - |
+| ``mkVS`` | ``V -> VS`` | - |
+| ``mkV2S`` | ``V -> Prep -> V2S`` | - |
+| ``mkVV`` | ``V -> VV`` | - |
+| ``mkV2V`` | ``V -> Prep -> Prep -> V2V`` | - |
+| ``mkVA`` | ``V -> VA`` | - |
+| ``mkV2A`` | ``V -> Prep -> V2A`` | - |
+| ``mkVQ`` | ``V -> VQ`` | - |
+| ``mkV2Q`` | ``V -> Prep -> V2Q`` | - |
+| ``mkAS`` | ``A -> AS`` | - |
+| ``mkA2S`` | ``A -> Prep -> A2S`` | - |
+| ``mkAV`` | ``A -> AV`` | - |
+| ``mkA2V`` | ``A -> Prep -> A2V`` | - |
+
+
+==Paradigms for Russian==
+
+
+[source ../russian/ParadigmsRus.gf]
+
+(To appear)
+
+
+==Paradigms for Spanish==
+
+
+[source ../spanish/ParadigmsSpa.gf]
+
+
+
+
+|| Function  | Type  | Example  ||
+| ``Gender`` | ``Type`` | - |
+| ``masculine`` | ``Gender`` | - |
+| ``feminine`` | ``Gender`` | - |
+| ``Number`` | ``Type`` | - |
+| ``singular`` | ``Number`` | - |
+| ``plural`` | ``Number`` | - |
+| ``Prep`` | ``Type`` | - |
+| ``accusative`` | ``Prep`` | - |
+| ``genitive`` | ``Prep`` | - |
+| ``dative`` | ``Prep`` | - |
+| ``mkPrep`` | ``Str -> Prep`` | - |
+| ``mkN`` | ``(luz : Str) -> N`` | - |
+| ``mkN`` | ``Str -> Gender -> N`` | - |
+| ``mkN`` | ``(baston,bastones : Str) -> Gender -> N`` | - |
+| ``compN`` | ``N -> Str -> N`` | - |
+| ``mkN2`` | ``N -> Prep -> N2`` | - |
+| ``deN2`` | ``N -> N2`` | - |
+| ``aN2`` | ``N -> N2`` | - |
+| ``mkN3`` | ``N -> Prep -> Prep -> N3`` | - |
+| ``mkPN`` | ``(Anna : Str) -> PN`` | - |
+| ``mkPN`` | ``(Pilar : Str) -> Gender -> PN`` | - |
+| ``mkA`` | ``(util : Str) -> A`` | - |
+| ``mkA`` | ``(solo,sola,solos,solas,solamiento : Str) -> A`` | - |
+| ``mkA`` | ``(bueno : A) -> (mejor : A) -> A`` | - |
+| ``prefixA`` | ``A -> A`` | - |
+| ``mkA2`` | ``A -> Prep -> A2`` | - |
+| ``mkAdv`` | ``Str -> Adv`` | - |
+| ``mkAdV`` | ``Str -> AdV`` | - |
+| ``mkAdA`` | ``Str -> AdA`` | - |
+| ``mkV`` | ``(pagar : Str) -> V`` | - |
+| ``mkV`` | ``(mostrar,muestro : Str) -> V`` | - |
+| ``mkV`` | ``Verbum -> V`` | - |
+| ``reflV`` | ``V -> V`` | - |
+| ``special_ppV`` | ``V -> Str -> V`` | - |
+| ``mkV2`` | ``Str -> V2`` | - |
+| ``mkV2`` | ``V -> V2`` | - |
+| ``mkV2`` | ``V -> Prep -> V2`` | - |
+| ``v2V`` | ``V2 -> V`` | - |
+| ``mkV3`` | ``V -> Prep -> Prep -> V3`` | //hablar, a, di// |
+| ``dirV3`` | ``V -> Prep -> V3`` | //dar,(accusative),a// |
+| ``dirdirV3`` | ``V -> V3`` | //dar,(dative),(accusative)// |
+| ``mkV0`` | ``V -> V0`` | - |
+| ``mkVS`` | ``V -> VS`` | - |
+| ``mkV2S`` | ``V -> Prep -> V2S`` | - |
+| ``mkVV`` | ``V -> VV`` | //plain infinitive: "quiero hablar"// |
+| ``deVV`` | ``V -> VV`` | //"terminar de hablar"// |
+| ``aVV`` | ``V -> VV`` | //"aprender a hablar"// |
+| ``mkV2V`` | ``V -> Prep -> Prep -> V2V`` | - |
+| ``mkVA`` | ``V -> VA`` | - |
+| ``mkV2A`` | ``V -> Prep -> Prep -> V2A`` | - |
+| ``mkVQ`` | ``V -> VQ`` | - |
+| ``mkV2Q`` | ``V -> Prep -> V2Q`` | - |
+| ``mkAS`` | ``A -> AS`` | - |
+| ``mkA2S`` | ``A -> Prep -> A2S`` | - |
+| ``mkAV`` | ``A -> Prep -> AV`` | - |
+| ``mkA2V`` | ``A -> Prep -> Prep -> A2V`` | - |
+
+
+==Paradigms for Swedish==
+
+
+[source ../swedish/ParadigmsSwe.gf]
+
+
+
+
+|| Function  | Type  | Example  ||
+| ``Gender`` | ``Type`` | - |
+| ``utrum`` | ``Gender`` | - |
+| ``neutrum`` | ``Gender`` | - |
+| ``Number`` | ``Type`` | - |
+| ``singular`` | ``Number`` | - |
+| ``plural`` | ``Number`` | - |
+| ``Case`` | ``Type`` | - |
+| ``nominative`` | ``Case`` | - |
+| ``genitive`` | ``Case`` | - |
+| ``mkPrep`` | ``Str -> Prep`` | - |
+| ``noPrep`` | ``Prep`` | //empty string// |
+| ``mkN`` | ``(apa : Str) -> N`` | - |
+| ``mkN`` | ``(lik : Str) -> Gender -> N`` | - |
+| ``mkN`` | ``(nyckel,nycklar : Str) -> N`` | - |
+| ``mkN`` | ``(museum,museet,museer,museerna : Str) -> N`` | - |
+| ``mkN2`` | ``Str -> N2`` | - |
+| ``mkN2`` | ``N -> Prep -> N2`` | - |
+| ``mkN3`` | ``N -> Prep -> Prep -> N3`` | - |
+| ``mkPN`` | ``Str -> PN`` | - |
+| ``mkPN`` | ``Str -> Gender -> PN`` | - |
+| ``mkPN`` | ``(jesus,jesu : Str) -> Gender -> PN`` | - |
+| ``mkA`` | ``(billig : Str) -> A`` | - |
+| ``mkA`` | ``(bred,brett : Str) -> A`` | - |
+| ``mkA`` | ``(tung,tyngre,tyngst : Str) -> A`` | - |
+| ``mkA`` | ``(god,gott,goda,battre,bast : Str) -> A`` | - |
+| ``mkA`` | ``(liten,litet,lilla,sma,mindre,minst,minsta : Str) -> A`` | - |
+| ``compoundA`` | ``A -> A`` | - |
+| ``mkA2`` | ``A -> Prep -> A2`` | - |
+| ``mkAdv`` | ``Str -> Adv`` | //här// |
+| ``mkAdV`` | ``Str -> AdV`` | //alltid// |
+| ``mkAdA`` | ``Str -> AdA`` | - |
+| ``mkV`` | ``(stämmer : Str) -> V`` | - |
+| ``mkV`` | ``(dricka,drack,druckit : Str) -> V`` | - |
+| ``mkV`` | ``(gå,går,gå,gick,gått,gången : Str) -> V`` | - |
+| ``mkV`` | ``V -> Str -> V`` | - |
+| ``depV`` | ``V -> V`` | - |
+| ``reflV`` | ``V -> V`` | - |
+| ``mkV2`` | ``Str -> V2`` | - |
+| ``mkV2`` | ``V -> V2`` | - |
+| ``mkV2`` | ``V -> Prep -> V2`` | - |
+| ``mkV3`` | ``Str -> V3`` | - |
+| ``mkV3`` | ``V -> V3`` | - |
+| ``mkV3`` | ``V -> Prep -> V3`` | - |
+| ``mkV3`` | ``V -> Prep -> Prep -> V3`` | - |
+| ``mkV0`` | ``V -> V0`` | - |
+| ``mkVS`` | ``V -> VS`` | - |
+| ``mkV2S`` | ``V -> Prep -> V2S`` | - |
+| ``mkVV`` | ``V -> VV`` | - |
+| ``mkV2V`` | ``V -> Prep -> Prep -> V2V`` | - |
+| ``mkVA`` | ``V -> VA`` | - |
+| ``mkV2A`` | ``V -> Prep -> V2A`` | - |
+| ``mkVQ`` | ``V -> VQ`` | - |
+| ``mkV2Q`` | ``V -> Prep -> V2Q`` | - |
+| ``mkAS`` | ``A -> AS`` | - |
+| ``mkA2S`` | ``A -> Prep -> A2S`` | - |
+| ``mkAV`` | ``A -> AV`` | - |
+| ``mkA2V`` | ``A -> Prep -> A2V`` | - |
+
