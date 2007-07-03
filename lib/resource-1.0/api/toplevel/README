@@ -13,6 +13,3 @@ Do this way in gf:
 The program FromOverload.hs creates the files OverGrammar.gf and OverGrammarEng.gf
 from constr.gf (which in turn is the latter part of ../Constructors.gf).
 
-
-Some imperative and punctuation forms are still missing, since they are treated
-with special parameters.

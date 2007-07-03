@@ -531,7 +531,7 @@ oper
         in mk6V leka (lek + "er") gom (gom +"de") (gom +"t") (gom +"d") ;
       "r" =>
         mk6V leka lek lek (lek +"de") (lek +"t") (lek +"d") ;
-      _ => case leka of {
+      _ => case lek of {
         _ + "nd" => 
           mk6V leka (lek + "er") lek (lek +"e") (init lek +"t") lek ;
         _ => 
