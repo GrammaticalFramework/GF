@@ -30,7 +30,6 @@ Last update: %%date(%c)
 ==GF = Grammatical Framework==
 
 The term GF is used for different things:
-
 - a **program** used for working with grammars
 - a **programming language** in which grammars can be written
 - a **theory** about grammars and languages
@@ -39,7 +38,6 @@ The term GF is used for different things:
 This tutorial is primarily about the GF program and 
 the GF programming language.
 It will guide you
-
 - to use the GF program
 - to write GF grammars
 - to write programs in which GF grammars are used as components
@@ -52,28 +50,26 @@ It will guide you
 A grammar is a definition of a language.
 From this definition, different language processing components 
 can be derived:
-
-- parsing: to analyse the language
-- linearization: to generate the language
-- translation: to analyse one language and generate another
+- **parsing**: to analyse the language
+- **linearization**: to generate the language
+- **translation**: to analyse one language and generate another
 
 
 A GF grammar can be seen as a declarative program from which these
 processing tasks can be automatically derived. In addition, many
 other tasks are readily available for GF grammars:
-
-- morphological analysis: find out the possible inflection forms of words
-- morphological synthesis: generate all inflection forms of words
-- random generation: generate random expressions
-- corpus generation: generate all expressions
-- teaching quizzes: train morphology and translation
-- multilingual authoring: create a document in many languages simultaneously
-- speech input: optimize a speech recognition system for your grammar
+- **morphological analysis**: find out the possible inflection forms of words
+- **morphological synthesis**: generate all inflection forms of words
+- **random generation**: generate random expressions
+- **corpus generation**: generate all expressions
+- **treebank generation**: generate a list of trees with multiple linearizations
+- **teaching quizzes**: train morphology and translation
+- **multilingual authoring**: create a document in many languages simultaneously
+- **speech input**: optimize a speech recognition system for your grammar
 
 
 A typical GF application is based on a **multilingual grammar** involving
 translation on a special domain. Existing applications of this idea include
-
 - [Alfa: http://www.cs.chalmers.se/~hallgren/Alfa/Tutorial/GFplugin.html]:
   a natural-language interface to a proof editor
   (languages: English, French, Swedish)
@@ -169,8 +165,7 @@ belongs to resource grammars, this tutorial will explain the
 programming concepts involved in morphology. This will moreover
 make it possible to grow the fragment covered by the food example.
 The tutorial will in fact build a miniature resource grammar in order
-to illustrate the module structure of library-based application
-grammar writing.
+to give an introduction to linguistically oriented grammar writing.
 
 Thus it is by elaborating the initial ``food.cf`` example that
 the tutorial makes a guided tour through all concepts of GF.
@@ -179,15 +174,17 @@ also the commands of the GF system are introduced as they
 are needed. 
 
 To learn how to write GF grammars is not the only goal of
-this tutorial. To learn the commands of the GF system means
-that simple applications of grammars, such as translation and
+this tutorial. We will also explain the most important 
+commands of the GF system. With these commands,
+simple applications of grammars, such as translation and
 quiz systems, can be built simply by writing scripts for the
 system. More complicated applications, such as natural-language
-interfaces and dialogue systems, also require programming in
-some general-purpose language. We will briefly explain how
+interfaces and dialogue systems, moreover require programming in
+some general-purpose language. Thus will briefly explain how
 GF grammars are used as components of Haskell, Java, Javascript,
-and Prolog grammars. The tutorial concludes with a couple of
-case studies showing how such complete systems can be built.
+and Prolog grammars. 
+%The tutorial concludes with a couple of
+%case studies showing how such complete systems can be built.
 
 
 
@@ -196,6 +193,7 @@ case studies showing how such complete systems can be built.
 
 The GF program is open-source free software, which you can download via the
 GF Homepage:
+
 [``http://www.cs.chalmers.se/~aarne/GF`` http://www.cs.chalmers.se/~aarne/GF]
 
 There you can download
@@ -204,13 +202,18 @@ There you can download
 - grammar libraries and examples
 
 
-If you want to compile GF from source, you need Haskell and Java
-compilers. But normally you don't have to compile, and you definitely
+If you want to compile GF from source, you need a Haskell compiler.
+For the interactive editor, you also need a Java compilers. 
+But normally you don't have to compile, and you definitely
 don't need to know Haskell or Java to use GF.
 
-We are assuming the availability of a Unix shell. Mac OS X users
-have it automatically, under the name "terminal".
+We are assuming the availability of a Unix shell. Linux and Mac OS X users
+have it automatically, the latter under the name "terminal".
 Windows users are recommended to install Cywgin, the free Unix shell for Windows.
+
+
+%--!
+==Running the GF program==
 
 To start the GF program, assuming you have installed it, just type
 ```
@@ -325,6 +328,29 @@ you imported. Try parsing something else, and you fail
   Unknown words: hello world
 ```
 
+**Exercise**. Extend the grammar ``food.cf`` by ten new food kinds and
+qualities, and run the parser with new kinds of examples.
+
+
+**Exercise**. Add a rule that enables questions of the form 
+//is this cheese Italian//.
+
+
+
+**Exercise**. Add the rule
+```
+  IsVery. S ::= Item "is" "very" Quality ;
+```
+and see what happens when parsing ``this wine is very very Italian``.
+You have just made the grammar **ambiguous**: it now assigns several
+trees to some strings.
+
+
+**Exercise**. Modify the grammar so that at most one ``Quality`` may
+attach to a given ``Kind``. Thus //boring Italian fish// will no longer
+be recognized.
+
+
 
 
 %--!
@@ -422,10 +448,21 @@ You get quite a few trees but not all of them: only up to a given
 **depth** of trees. To see how you can get more, use the
 ``help = h`` command,
 ```
-  help gt
+  > help gt
 ```
-**Quiz**. If the command ``gt`` generated all
+
+**Exercise**. If the command ``gt`` generated all
 trees in your grammar, it would never terminate. Why?
+
+**Exercise**. Measure how many trees the grammar gives with depths 4 and 5,
+respectively. You use the Unix **word count** command ``wc`` to count lines.
+**Hint**. You can pipe the output of a GF command into a Unix command by
+using the escape ``?``, as follows:
+```
+  > generate_trees | ? wc
+```
+
+
 
 
 
@@ -450,7 +487,9 @@ This facility is good for test purposes: for instance, you
 may want to see if a grammar is **ambiguous**, i.e.
 contains strings that can be parsed in more than one way.
 
-**Exercise**. Extend the grammar ``food.cf`` so that it produces ambiguous strings.
+**Exercise**. Extend the grammar ``food.cf`` so that it produces ambiguous strings,
+and try out the ambiguity test.
+
 
 
 
@@ -670,6 +709,10 @@ and of the type in subsequent ``fun`` judgements,
 ```
 The order of judgements in a module is free.
 
+**Exercise**. Extend the abstract syntax ``Food`` with ten new
+kinds and qualities, and with questions of the form
+//is this wine Italian//.
+ 
 
 
 %--!
@@ -702,6 +745,13 @@ apply as in ``abstract`` modules.
     Boring = {s = "boring"} ;
   }
 ```
+
+**Exercise**. Extend the concrete syntax ``FoodEng`` so that it
+matches the abstract syntax defined in the exercise of the previous
+section. What happens if the concrete syntax lacks some of the
+new functions?
+
+ 
 
 
 %--!
@@ -1011,6 +1061,11 @@ are available:
   > help pm
   > help -printer
   > help help
+```
+Another form of system commands are those usable in GF pipes. The escape symbol
+is then ``?``.
+```
+  > generate_trees | ? wc
 ```
 
 

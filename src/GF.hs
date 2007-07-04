@@ -31,7 +31,7 @@ import GF.Shell.JGF
 import GF.System.Signal
 import GF.Text.UTF8
 
-import GF.Today (today,version)
+import GF.Today (today,version,libdir)
 import GF.System.Arch
 import System (getArgs,system,getEnv)
 import Control.Monad (foldM,liftM)
@@ -121,7 +121,7 @@ helpMsg = unlines [
 welcomeMsgLib = do
   lib <- catch 
     (getEnv "GF_LIB_PATH" >>= return . ("GF_LIB_PATH is set to" +++)) 
-    (const (return "Warning: GF_LIB_PATH is not defined."))
+    (const (return $ "GF_LIB_PATH is set to the default, " ++ libdir))
   return $ welcomeMsg lib
 
 welcomeMsg lib = 
