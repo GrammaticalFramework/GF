@@ -1,0 +1,305 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<META NAME="generator" CONTENT="http://txt2tags.sf.net">
+<TITLE>GF Resource Grammar Library v. 1.2</TITLE>
+</HEAD><BODY BGCOLOR="white" TEXT="black">
+<P ALIGN="center"><CENTER><H1>GF Resource Grammar Library v. 1.2</H1>
+<FONT SIZE="4">
+<I>Author: Aarne Ranta &lt;aarne (at) cs.chalmers.se&gt;</I><BR>
+Last update: Wed Jul  4 23:00:32 2007
+</FONT></CENTER>
+
+<P>
+The GF Resource Grammar Library defines the basic grammar of
+ten languages: 
+Danish, English, Finnish, French, German,
+Italian, Norwegian, Russian, Spanish, Swedish.
+Still incomplete implementations for Arabic and Catalan are also
+included.
+</P>
+<P>
+<B>New in Version 1.2</B>
+</P>
+<UL>
+<LI>Simpler APIs using overloading: see <A HREF="synopsis.html">Synopsis</A>.
+  The API of version 1.0 remains valid and can be used in combination with this.
+<LI>Bug fixes.
+</UL>
+
+<H2>Authors</H2>
+<P>
+Inger Andersson and Therese Soderberg (Spanish morphology),
+Nicolas Barth and Sylvain Pogodalla (French verb list),
+Ali El Dada (Arabic modules),
+Janna Khegai (Russian modules),
+Bjorn Bringert (many Swadesh lexica),
+Carlos Gonzalía (Spanish cardinals), 
+Harald Hammarström (German morphology),
+Patrik Jansson (Swedish cardinals),
+Andreas Priesnitz (German lexicon),
+Aarne Ranta,
+Jordi Saludes (Catalan modules),
+Henning Thielemann (German lexicon).
+</P>
+<P>
+We are grateful for contributions and 
+comments to several other people who have used this and 
+the previous versions of the resource library, including
+Ludmilla Bogavac,
+Ana Bove,
+David Burke,
+Lauri Carlson,
+Gloria Casanellas,
+Karin Cavallin,
+Robin Cooper,
+Hans-Joachim Daniels,
+Elisabet Engdahl,
+Markus Forsberg,
+Kristofer Johannisson,
+Anni Laine,
+Peter Ljunglöf,
+Saara Myllyntausta,
+Wanjiku Ng'ang'a,
+Nadine Perera,
+Jordi Saludes.
+</P>
+<H2>License</H2>
+<P>
+The GF Resource Grammar Library is open-source software licensed under
+GNU Lesser General Public License (LGPL). See the file <A HREF="../LICENSE">LICENSE</A> for more
+details.
+</P>
+<H2>Scope</H2>
+<P>
+Coverage, for each language:
+</P>
+<UL>
+<LI>complete morphology
+<LI>lexicon of the ca. 100 most important structural words
+<LI>test lexicon of ca. 300 content words (rough equivalents in each language)
+<LI>list of irregular verbs (separately for each language)
+<LI>representative fragment of syntax (cf. CLE (Core Language Engine))
+<LI>rather flat semantics (cf. Quasi-Logical Form of CLE)
+</UL>
+
+<P>
+Organization:
+</P>
+<UL>
+<LI>top-level (API) modules
+<LI>Ground API + special-purpose APIs
+<LI>"school grammar" concepts rather than advanced linguistic theory
+</UL>
+
+<P>
+Presentation:
+</P>
+<UL>
+<LI>tool <CODE>gfdoc</CODE> for generating HTML from grammars
+<LI>example collections
+</UL>
+
+<H2>Location</H2>
+<P>
+Assuming you have installed the libraries, you will find the precompiled
+<CODE>gfc</CODE> and <CODE>gfr</CODE> files directly under <CODE>$GF_LIB_PATH</CODE>, whose default
+value is <CODE>/usr/local/share/GF/</CODE>. The precompiled subdirectories are
+</P>
+<PRE>
+    alltenses
+    mathematical
+    multimodal
+    present
+</PRE>
+<P>
+Do for instance
+</P>
+<PRE>
+    cd $GF_LIB_PATH
+    gf alltenses/langs.gfcm
+      
+    &gt; p -cat=S -lang=LangEng "this grammar is too big" | tb
+</PRE>
+<P>
+For more details, see the <A HREF="synopsis.html">Synopsis</A>.
+</P>
+<H2>Compilation</H2>
+<P>
+If you want to compile the library from scratch, use <CODE>make</CODE>:
+</P>
+<PRE>
+    cd $GF_LIB_PATH/resource-1.0
+    make
+</PRE>
+<P>
+The <CODE>make</CODE> procedure does not by default make Arabic and Catalan, but you
+can uncomment the relevant lines in <CODE>Makefile</CODE> to compile them.
+</P>
+<H2>Encoding</H2>
+<P>
+Finnish, German, Romance, and Scandinavian languages are in isolatin-1.
+</P>
+<P>
+Arabic and Russian are in UTF-8.
+</P>
+<P>
+English is in pure ASCII.
+</P>
+<P>
+The different encodings imply, unfortunately, that it is hard to get
+a nice view of all languages simultaneously. The easiest way to achieve this is
+to use <CODE>gfeditor</CODE>, which automatically converts grammars to UTF-8.
+</P>
+<H2>Using the resource as library</H2>
+<P>
+This API is accessible by both <CODE>present</CODE> and <CODE>alltenses</CODE>. The modules you most often need are
+</P>
+<UL>
+<LI><CODE>Syntax</CODE>, the interface to syntactic structures
+<LI><CODE>Syntax</CODE><I>L</I>, the implementations of <CODE>Syntax</CODE> for each language <I>L</I>
+<LI><CODE>Paradigms</CODE><I>L</I>, the morphological paradigms for each language <I>L</I>
+</UL>
+
+<P>
+The <A HREF="synopsis.html">Synopsis</A> gives examples on the typical usage of these 
+modules.
+</P>
+<H2>Using the resource as top level grammar</H2>
+<P>
+The following modules can be used for parsing and linearization. They are accessible from both
+<CODE>present</CODE> and <CODE>alltenses</CODE>.
+</P>
+<UL>
+<LI><CODE>Lang</CODE><I>L</I> for each language <I>L</I>, implementing a common abstract syntax <CODE>Lang</CODE>
+<LI><CODE>Danish</CODE>, <CODE>English</CODE>, etc, implementing <CODE>Lang</CODE> with language-specific extensions
+</UL>
+
+<P>
+In addition, there is in both <CODE>present</CODE> and <CODE>alltenses</CODE> the file
+</P>
+<UL>
+<LI><CODE>langs.gfcm</CODE>, a package with precompiled  <CODE>Lang</CODE><I>L</I> grammars
+</UL>
+
+<P>
+A way to test and view the resource grammar is to load <CODE>langs.gfcm</CODE> either into <CODE>gfeditor</CODE>
+or into the <CODE>gf</CODE> shell and perform actions such as syntax editing and treebank generation.
+For instance, the command
+</P>
+<PRE>
+    &gt; p -lang=LangEng -cat=S "this grammar is too big" | tb
+</PRE>
+<P>
+creates a treebank entry with translations of this sentence.
+</P>
+<P>
+For parsing, currently only English and the Scandinavian languages are within the limits ofr
+reasonable resources. For other languages <I>L</I>, parsing with <CODE>Lang</CODE><I>L</I> will probably eat
+up the computer resources before finishing the parser generation.
+</P>
+<H2>Accessing the lower level ground API</H2>
+<P>
+The <CODE>Syntax</CODE> API is implemented in terms a bunch of <CODE>abstract</CODE> modules, which
+as of version 1.2 are mainly interesting for implementors of the resource.
+See the <A HREF="index-1.1.html">documentation for version 1.1</A> for more details.
+</P>
+<H2>Known bugs and missing components</H2>
+<P>
+Danish
+</P>
+<UL>
+<LI>the lexicon and chosen inflections are only partially verified
+</UL>
+
+<P>
+English 
+</P>
+<P>
+Finnish
+</P>
+<UL>
+<LI>wrong cases in some passive constructions
+</UL>
+
+<P>
+French
+</P>
+<UL>
+<LI>multiple clitics (with V3) not always right
+<LI>third person pronominal questions with inverted word order
+  have wrong forms if "t" is required e.g.
+  (e.g. "comment fera-t-il" becomes "comment fera il")
+</UL>
+
+<P>
+German
+</P>
+<P>
+Italian
+</P>
+<UL>
+<LI>multiple clitics (with V3) not always right
+</UL>
+
+<P>
+Norwegian
+</P>
+<UL>
+<LI>the lexicon and chosen inflections are only partially verified
+</UL>
+
+<P>
+Russian
+</P>
+<UL>
+<LI>some functions missing
+<LI>some regular paradigms are missing
+</UL>
+
+<P>
+Spanish
+</P>
+<UL>
+<LI>multiple clitics (with V3) not always right
+<LI>missing contractions with imperatives and clitics
+</UL>
+
+<P>
+Swedish
+</P>
+<H2>More reading</H2>
+<P>
+<A HREF="../../../doc/resource.pdf">GF Resource Grammar Library</A> (pdf).
+Printable user manual with API documentation.
+</P>
+<P>
+<A HREF="gslt-sem-2006.html">Grammars as Software Libraries</A>. Slides
+with background and motivation for the resource grammar library.
+</P>
+<P>
+<A HREF="clt2006.html">GF Resource Grammar Library Version 1.0</A>. Slides
+giving an overview of the library and practical hints on its use.
+</P>
+<P>
+<A HREF="Resource-HOWTO.html">How to write resource grammars</A>. Helps you
+start if you want to add another language to the library.
+</P>
+<P>
+<A HREF="http://www.cs.chalmers.se/~aarne/geocal2006.pdf">Parametrized modules for Romance languages</A>. 
+Slides explaining some ideas in the implementation of
+French, Italian, and Spanish.
+</P>
+<P>
+<A HREF="http://www.cs.chalmers.se/~aarne/slides/webalt-2005.pdf">Grammar writing by examples</A>.
+Slides showing how linearization rules are written as strings parsable by the resource grammar.
+</P>
+<P>
+<A HREF="http://www.cs.chalmers.se/~aarne/slides/talk-edin2005.pdf">Multimodal Resource Grammars</A>.
+Slides showing how to use the multimodal resource library. N.B. the library
+examples are from <CODE>multimodal/old</CODE>, which is a reduced-size API.
+</P>
+
+<!-- html code generated by txt2tags 2.4 (http://txt2tags.sf.net) -->
+<!-- cmdline: txt2tags -thtml index.txt -->
+</BODY></HTML>

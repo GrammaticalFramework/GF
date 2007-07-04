@@ -1,0 +1,256 @@
+GF Resource Grammar Library v. 1.2
+Author: Aarne Ranta <aarne (at) cs.chalmers.se>
+Last update: %%date(%c)
+
+% NOTE: this is a txt2tags file.
+% Create an html file from this file using:
+% txt2tags --toc -thtml index.txt
+
+%!target:html
+
+
+The GF Resource Grammar Library defines the basic grammar of
+ten languages: 
+Danish, English, Finnish, French, German,
+Italian, Norwegian, Russian, Spanish, Swedish.
+Still incomplete implementations for Arabic and Catalan are also
+included.
+
+**New in Version 1.2**
+- Simpler APIs using overloading: see [Synopsis synopsis.html].
+  The API of version 1.0 remains valid and can be used in combination with this.
+- Bug fixes.
+
+
+
+
+
+
+==Authors==
+
+Inger Andersson and Therese Soderberg (Spanish morphology),
+Nicolas Barth and Sylvain Pogodalla (French verb list),
+Ali El Dada (Arabic modules),
+Janna Khegai (Russian modules),
+Bjorn Bringert (many Swadesh lexica),
+Carlos Gonzalía (Spanish cardinals), 
+Harald Hammarström (German morphology),
+Patrik Jansson (Swedish cardinals),
+Andreas Priesnitz (German lexicon),
+Aarne Ranta,
+Jordi Saludes (Catalan modules),
+Henning Thielemann (German lexicon).
+
+
+We are grateful for contributions and 
+comments to several other people who have used this and 
+the previous versions of the resource library, including
+Ludmilla Bogavac,
+Ana Bove,
+David Burke,
+Lauri Carlson,
+Gloria Casanellas,
+Karin Cavallin,
+Robin Cooper,
+Hans-Joachim Daniels,
+Elisabet Engdahl,
+Markus Forsberg,
+Kristofer Johannisson,
+Anni Laine,
+Peter Ljunglöf,
+Saara Myllyntausta,
+Wanjiku Ng'ang'a,
+Nadine Perera,
+Jordi Saludes.
+
+
+==License==
+
+The GF Resource Grammar Library is open-source software licensed under
+GNU Lesser General Public License (LGPL). See the file [LICENSE ../LICENSE] for more
+details.
+
+
+==Scope==
+
+Coverage, for each language:
+- complete morphology
+- lexicon of the ca. 100 most important structural words
+- test lexicon of ca. 300 content words (rough equivalents in each language)
+- list of irregular verbs (separately for each language)
+- representative fragment of syntax (cf. CLE (Core Language Engine))
+- rather flat semantics (cf. Quasi-Logical Form of CLE)
+
+
+Organization:
+- top-level (API) modules
+- Ground API + special-purpose APIs
+- "school grammar" concepts rather than advanced linguistic theory
+
+
+Presentation:
+- tool ``gfdoc`` for generating HTML from grammars
+- example collections
+
+
+==Location==
+
+Assuming you have installed the libraries, you will find the precompiled
+``gfc`` and ``gfr`` files directly under ``$GF_LIB_PATH``, whose default
+value is ``/usr/local/share/GF/``. The precompiled subdirectories are
+```
+  alltenses
+  mathematical
+  multimodal
+  present
+```
+Do for instance
+```
+  cd $GF_LIB_PATH
+  gf alltenses/langs.gfcm
+    
+  > p -cat=S -lang=LangEng "this grammar is too big" | tb
+```
+For more details, see the [Synopsis synopsis.html].
+
+
+==Compilation==
+
+If you want to compile the library from scratch, use ``make``:
+```
+  cd $GF_LIB_PATH/resource-1.0
+  make
+```
+The ``make`` procedure does not by default make Arabic and Catalan, but you
+can uncomment the relevant lines in ``Makefile`` to compile them.
+
+
+==Encoding==
+
+Finnish, German, Romance, and Scandinavian languages are in isolatin-1.
+
+Arabic and Russian are in UTF-8.
+
+English is in pure ASCII.
+
+The different encodings imply, unfortunately, that it is hard to get
+a nice view of all languages simultaneously. The easiest way to achieve this is
+to use ``gfeditor``, which automatically converts grammars to UTF-8.
+
+
+==Using the resource as library==
+
+This API is accessible by both ``present`` and ``alltenses``. The modules you most often need are
+- ``Syntax``, the interface to syntactic structures
+- ``Syntax``//L//, the implementations of ``Syntax`` for each language //L//
+- ``Paradigms``//L//, the morphological paradigms for each language //L//
+
+
+The [Synopsis synopsis.html] gives examples on the typical usage of these 
+modules.
+
+
+==Using the resource as top level grammar==
+
+The following modules can be used for parsing and linearization. They are accessible from both
+``present`` and ``alltenses``.
+- ``Lang``//L// for each language //L//, implementing a common abstract syntax ``Lang``
+- ``Danish``, ``English``, etc, implementing ``Lang`` with language-specific extensions
+
+
+In addition, there is in both ``present`` and ``alltenses`` the file
+- ``langs.gfcm``, a package with precompiled  ``Lang``//L// grammars
+
+
+A way to test and view the resource grammar is to load ``langs.gfcm`` either into ``gfeditor``
+or into the ``gf`` shell and perform actions such as syntax editing and treebank generation.
+For instance, the command
+```
+  > p -lang=LangEng -cat=S "this grammar is too big" | tb
+```
+creates a treebank entry with translations of this sentence.
+
+For parsing, currently only English and the Scandinavian languages are within the limits ofr
+reasonable resources. For other languages //L//, parsing with ``Lang``//L// will probably eat
+up the computer resources before finishing the parser generation.
+
+
+
+==Accessing the lower level ground API==
+
+The ``Syntax`` API is implemented in terms a bunch of ``abstract`` modules, which
+as of version 1.2 are mainly interesting for implementors of the resource.
+See the [documentation for version 1.1 index-1.1.html] for more details.
+
+
+==Known bugs and missing components==
+
+Danish
+- the lexicon and chosen inflections are only partially verified
+
+
+English 
+
+
+Finnish
+- wrong cases in some passive constructions
+
+
+French
+- multiple clitics (with V3) not always right
+- third person pronominal questions with inverted word order
+  have wrong forms if "t" is required e.g.
+  (e.g. "comment fera-t-il" becomes "comment fera il")
+
+
+German
+
+
+Italian
+- multiple clitics (with V3) not always right
+
+
+Norwegian
+- the lexicon and chosen inflections are only partially verified
+
+
+Russian
+- some functions missing
+- some regular paradigms are missing
+
+
+Spanish
+- multiple clitics (with V3) not always right
+- missing contractions with imperatives and clitics
+
+
+Swedish
+
+
+
+
+==More reading==
+
+[GF Resource Grammar Library ../../../doc/resource.pdf] (pdf).
+Printable user manual with API documentation.
+
+[Grammars as Software Libraries gslt-sem-2006.html]. Slides
+with background and motivation for the resource grammar library.
+
+[GF Resource Grammar Library Version 1.0 clt2006.html]. Slides
+giving an overview of the library and practical hints on its use.
+
+[How to write resource grammars  Resource-HOWTO.html]. Helps you
+start if you want to add another language to the library.
+
+[Parametrized modules for Romance languages http://www.cs.chalmers.se/~aarne/geocal2006.pdf]. 
+Slides explaining some ideas in the implementation of
+French, Italian, and Spanish.
+
+[Grammar writing by examples http://www.cs.chalmers.se/~aarne/slides/webalt-2005.pdf].
+Slides showing how linearization rules are written as strings parsable by the resource grammar.
+
+[Multimodal Resource Grammars http://www.cs.chalmers.se/~aarne/slides/talk-edin2005.pdf].
+Slides showing how to use the multimodal resource library. N.B. the library
+examples are from ``multimodal/old``, which is a reduced-size API.
+
