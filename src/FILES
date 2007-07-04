@@ -258,4 +258,3 @@ util/HelpFile              source of ../HelpFile.hs
 util/Htmls.hs              utility for chopping a HTML document to slides
 util/MkHelpFile.hs
 util/WriteF.hs
-util/mktoday.sh            [SHELL-SCRIPT] utility for producing Today.hs
