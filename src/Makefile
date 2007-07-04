@@ -24,6 +24,9 @@ GRAMMAR_DIST_DIR=gf-grammars-$(GRAMMAR_PACKAGE_VERSION)
 MSI_FILE=gf-$(subst .,_,$(PACKAGE_VERSION)).msi
 
 GF_DATA_DIR=$(datadir)/GF-$(PACKAGE_VERSION)
+GF_LIB_DIR=$(GF_DATA_DIR)/lib
+
+GF_LIB_PACKAGES = alltenses mathematical multimodal prelude present
 
 EMBED = GF/Embed/TemplateApp
 
@@ -138,7 +141,7 @@ today:
 	echo 'version = "'$(PACKAGE_VERSION)'"' >> GF/Today.hs
 	echo '{-# NOINLINE libdir #-}' >> GF/Today.hs
 	echo 'libdir :: String' >> GF/Today.hs
-	echo 'libdir = "'$(GF_DATA_DIR)/lib'"' >> GF/Today.hs
+	echo 'libdir = "'$(GF_LIB_DIR)'"' >> GF/Today.hs
 
 javac:
 	$(JAVAC) $(JAVAFLAGS) -classpath $(GFEDITOR)/jargs-1.0.jar $(GFEDITOR)/de/uka/ilkd/key/ocl/gf/*.java
@@ -235,6 +238,9 @@ binary-dist:
 	$(INSTALL) -m 0644 ../README ../LICENSE $(BIN_DIST_DIR)
 	$(INSTALL) -m 0644 INSTALL.binary $(BIN_DIST_DIR)/INSTALL
 	$(INSTALL) -m 0644 Makefile.binary $(BIN_DIST_DIR)/Makefile
+	$(MAKE) -C ../lib $(GF_LIB_PACKAGES)
+	$(INSTALL) -d $(addprefix $(BIN_DIST_DIR)/lib/, $(GF_LIB_PACKAGES))
+	(cd ../lib && find $(GF_LIB_PACKAGES) -type f -name '*.gf?' -exec $(INSTALL) -m 0644 '{}' '../src/$(BIN_DIST_DIR)/lib/{}' ';')
 	$(TAR) -zcf GF-$(PACKAGE_VERSION)-$(host).tgz $(BIN_DIST_DIR)
 	rm -rf $(BIN_DIST_DIR)
 
@@ -257,7 +263,7 @@ windows-msi: gf.wxs
 # Installation
 #
 
-install: install-gf install-gfdoc install-editor
+install: install-gf install-gfdoc install-lib install-editor
 
 install-gf:
 	$(INSTALL) -d $(bindir)
@@ -266,6 +272,11 @@ install-gf:
 install-gfdoc: 
 	$(INSTALL) -d $(bindir)
 	$(INSTALL) tools/$(GF_DOC_EXE) $(bindir)
+
+install-lib:
+	$(INSTALL) -d $(GF_LIB_DIR)
+	$(INSTALL) -d $(addprefix $(GF_LIB_DIR)/, $(GF_LIB_PACKAGES))
+	(cd ../lib && find $(GF_LIB_PACKAGES) -type f -name '*.gf?' -exec $(INSTALL) -m 0644 '{}' '$(GF_LIB_DIR)/{}' ';')
 
 install-editor:
 	$(INSTALL) -d $(GF_DATA_DIR)
