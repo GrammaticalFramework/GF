@@ -17,6 +17,7 @@ module GF.Infra.UseIO where
 import GF.Data.Operations
 import GF.System.Arch (prCPU)
 import GF.Infra.Option
+import GF.Today (libdir)
 
 import System.Directory
 import System.IO
@@ -114,8 +115,8 @@ doesFileExistPath paths file = do
 -- | path in environment variable has lower priority
 extendPathEnv :: String -> String -> [FilePath] -> IO [FilePath]
 extendPathEnv lib var ps = do
-  b <- catch (getEnv lib) (const (return "")) -- e.g. GF_LIB_PATH
-  s <- catch (getEnv var) (const (return "")) -- e.g. GF_GRAMMAR_PATH
+  b <- catch (getEnv lib) (const (return libdir)) -- e.g. GF_LIB_PATH
+  s <- catch (getEnv var) (const (return ""))     -- e.g. GF_GRAMMAR_PATH
   let fs = pFilePaths s
   let ss = ps ++ fs
   liftM concat $ mapM allSubdirs $ ss ++ [b ++ "/" ++ s | s <- ss]
@@ -322,7 +323,7 @@ readFileLibraryIOE ini f =
 		initPath = addInitFilePath ini f
 		getLibPath :: IO String
 		getLibPath = do {
-			lp <- getEnv gfLibraryPath;
+			lp <- catch (getEnv gfLibraryPath) (const (return libdir)) ;
 			return (if isSep (last lp) then lp else lp ++ ['/']);
 		} 
 		reportOn f = "File " ++ f ++ " not found."

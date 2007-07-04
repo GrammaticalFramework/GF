@@ -44,6 +44,7 @@ main = do
   space
   let format = if isLatex then "tex" else "html"
   system $ "txt2tags -t" ++ format ++ " --toc " ++ synopsis
+  if isLatex then (system $ "pdflatex synopsis.tex") >> return () else return ()
 
 getCats isLatex isBeg file = do
   ss <- readFile file >>= return . lines
