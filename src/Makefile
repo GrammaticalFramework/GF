@@ -225,9 +225,7 @@ rpm: dist
 binary-dist: 
 	rm -rf $(BIN_DIST_DIR)
 	mkdir $(BIN_DIST_DIR)
-	./configure --host="$(host)" \
-                    CPPFLAGS="`lib__readline -I` `lib__ncurses -I`" \
-                    LDFLAGS="`lib__readline -l` `lib__ncurses -l`"
+	./configure --host="$(host)" --build="$(build)"
 	$(MAKE) all
 	$(INSTALL) ../bin/$(GF_EXE) tools/$(GF_DOC_EXE) $(BIN_DIST_DIR)
 	$(INSTALL) -m 0644 JavaGUI/gf-java.jar $(BIN_DIST_DIR)
