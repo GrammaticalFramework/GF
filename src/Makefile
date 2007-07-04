@@ -129,7 +129,14 @@ ghci-nofud:
 	$(GHCI) $(GHCFLAGS)
 
 today:
-	tools/mktoday.sh $(PACKAGE_VERSION)
+	echo 'module GF.Today (today,version,libdir) where' > GF/Today.hs
+	echo '{-# NOINLINE today,version,libdir #-}' >> GF/Today.hs
+	echo 'today :: String' >> GF/Today.hs
+	echo 'today = "'`date`'"' >> GF/Today.hs
+	echo 'version :: String' >> GF/Today.hs
+	echo 'version = "'$(PACKAGE_VERSION)'"' >> GF/Today.hs
+	echo 'libdir :: String' >> GF/Today.hs
+	echo 'libdir = "'$(GF_DATA_DIR)/lib'"' >> GF/Today.hs
 
 javac:
 	$(JAVAC) $(JAVAFLAGS) -classpath $(GFEDITOR)/jargs-1.0.jar $(GFEDITOR)/de/uka/ilkd/key/ocl/gf/*.java
@@ -200,7 +207,6 @@ dist:
 	cp -r ../_darcs/current $(DIST_DIR)
 	cd $(DIST_DIR)/src && perl -pi -e "s/^AC_INIT\(\[GF\],\[[^\]]*\]/AC_INIT([GF],[$(PACKAGE_VERSION)]/" configure.ac
 	cd $(DIST_DIR)/src && autoconf && rm -rf autom4te.cache
-	cd $(DIST_DIR)/src && chmod a+x tools/mktoday.sh
 #	cd $(DIST_DIR)/grammars && sh mkLib.sh
 	cd $(DIST_DIR) && rm -rf $(NOT_IN_DIST)
 	$(TAR) -zcf $(DIST_DIR).tgz $(DIST_DIR)
