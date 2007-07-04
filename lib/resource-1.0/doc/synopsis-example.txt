@@ -1,0 +1,49 @@
+The standard way of building an application has the following modules.
+
+An abstract syntax:
+```
+  abstract Music = {    
+  cat 
+    Kind, 
+    Property ;
+  fun 
+    PropKind : Kind -> Property -> Kind ; 
+    Song : Kind ;
+    American : Property ;
+  }
+```
+A domain lexicon interface:
+```
+  interface MusicLex = open Cat in {
+  oper
+    song_N : N ;
+    american_A : A ;
+  }
+```
+A functor on ``Syntax`` and the domain lexicon interface:
+```
+  incomplete concrete MusicI of Music = open Syntax, MusicLex in {
+  lincat 
+    Kind = CN ;
+    Property = AP ;
+  lin
+    PropKind k p = mkCN p k ;
+    Song = mkCN song_N ;
+    American = mkAP american_A ;
+  }
+```
+For each language, an instance of the domain lexicon:
+```
+  instance MusicLexGer of MusicLex = CatGer ** open ParadigmsGer in {    
+  oper
+    song_N = mkN "Lied" "Lieder" neuter ;
+    american_A = mkA "amerikanisch" ;
+  }
+```
+For each language, an instantiation of the functor:
+```
+  --# -path=.:present:prelude
+  concrete MusicGer of Music = MusicI with
+    (Syntax = SyntaxGer),
+    (MusicLex = MusicLexGer) ;
+```

@@ -13,26 +13,321 @@
 <HR NOSHADE SIZE=1>
 <P></P>
   <UL>
-  <LI><A HREF="#toc1">Syntax</A>
-  <LI><A HREF="#toc2">Paradigms for Danish</A>
-  <LI><A HREF="#toc3">Paradigms for English</A>
-  <LI><A HREF="#toc4">Paradigms for Finnish</A>
-  <LI><A HREF="#toc5">Paradigms for French</A>
-  <LI><A HREF="#toc6">Paradigms for German</A>
-  <LI><A HREF="#toc7">Paradigms for Italian</A>
-  <LI><A HREF="#toc8">Paradigms for Norwegian</A>
-  <LI><A HREF="#toc9">Paradigms for Russian</A>
-  <LI><A HREF="#toc10">Paradigms for Spanish</A>
-  <LI><A HREF="#toc11">Paradigms for Swedish</A>
+  <LI><A HREF="#toc1">Categories</A>
+  <LI><A HREF="#toc2">Syntax Rules</A>
+  <LI><A HREF="#toc3">Structural Words</A>
+  <LI><A HREF="#toc4">Paradigms for Danish</A>
+  <LI><A HREF="#toc5">Paradigms for English</A>
+  <LI><A HREF="#toc6">Paradigms for Finnish</A>
+  <LI><A HREF="#toc7">Paradigms for French</A>
+  <LI><A HREF="#toc8">Paradigms for German</A>
+  <LI><A HREF="#toc9">Paradigms for Italian</A>
+  <LI><A HREF="#toc10">Paradigms for Norwegian</A>
+  <LI><A HREF="#toc11">Paradigms for Russian</A>
+  <LI><A HREF="#toc12">Paradigms for Spanish</A>
+  <LI><A HREF="#toc13">Paradigms for Swedish</A>
+  <LI><A HREF="#toc14">Example Usage</A>
   </UL>
 
 <P></P>
 <HR NOSHADE SIZE=1>
 <P></P>
 <A NAME="toc1"></A>
-<H1>Syntax</H1>
+<H1>Categories</H1>
 <P>
-<A HREF="../api/Constructors.gf">source</A>
+Source 1: <A HREF="../abstract/Common.gf"><CODE>http://www.cs.chalmers.se/~aarne/GF/lib/resource/abstract/Common.gf</CODE></A>
+</P>
+<P>
+Source 2: <A HREF="../abstract/Cat.gf"><CODE>http://www.cs.chalmers.se/~aarne/GF/lib/resource/abstract/Cat.gf</CODE></A>
+</P>
+<TABLE CELLPADDING="4" BORDER="1">
+<TR>
+<TH>Category</TH>
+<TH>Explanation</TH>
+<TH COLSPAN="2">Example</TH>
+</TR>
+<TR>
+<TD><CODE>Text</CODE></TD>
+<TD>text consisting of several phrases</TD>
+<TD>"He is here. Why?"</TD>
+</TR>
+<TR>
+<TD><CODE>Phr</CODE></TD>
+<TD>phrase in a text</TD>
+<TD>"but be quiet please"</TD>
+</TR>
+<TR>
+<TD><CODE>Utt</CODE></TD>
+<TD>sentence, question, word...</TD>
+<TD>"be quiet"</TD>
+</TR>
+<TR>
+<TD><CODE>Voc</CODE></TD>
+<TD>vocative or "please"</TD>
+<TD>"my darling"</TD>
+</TR>
+<TR>
+<TD><CODE>PConj</CODE></TD>
+<TD>phrase-beginning conj.</TD>
+<TD>"therefore"</TD>
+</TR>
+<TR>
+<TD><CODE>SC</CODE></TD>
+<TD>embedded sentence or question</TD>
+<TD>"that it rains"</TD>
+</TR>
+<TR>
+<TD><CODE>Adv</CODE></TD>
+<TD>verb-phrase-modifying adverb,</TD>
+<TD>"in the house"</TD>
+</TR>
+<TR>
+<TD><CODE>AdV</CODE></TD>
+<TD>adverb directly attached to verb</TD>
+<TD>"always"</TD>
+</TR>
+<TR>
+<TD><CODE>AdA</CODE></TD>
+<TD>adjective-modifying adverb,</TD>
+<TD>"very"</TD>
+</TR>
+<TR>
+<TD><CODE>AdN</CODE></TD>
+<TD>numeral-modifying adverb,</TD>
+<TD>"more than"</TD>
+</TR>
+<TR>
+<TD><CODE>IAdv</CODE></TD>
+<TD>interrogative adverb</TD>
+<TD>"why"</TD>
+</TR>
+<TR>
+<TD><CODE>CAdv</CODE></TD>
+<TD>comparative adverb</TD>
+<TD>"more"</TD>
+</TR>
+<TR>
+<TD><CODE>Tense</CODE></TD>
+<TD>tense</TD>
+<TD>present, past, future</TD>
+</TR>
+<TR>
+<TD><CODE>Pol</CODE></TD>
+<TD>polarity</TD>
+<TD>positive, negative</TD>
+</TR>
+<TR>
+<TD><CODE>Ant</CODE></TD>
+<TD>anteriority</TD>
+<TD>simultaneous, anterior</TD>
+</TR>
+<TR>
+<TD><CODE>S</CODE></TD>
+<TD>declarative sentence</TD>
+<TD>"she lived here"</TD>
+</TR>
+<TR>
+<TD><CODE>QS</CODE></TD>
+<TD>question</TD>
+<TD>"where did she live"</TD>
+</TR>
+<TR>
+<TD><CODE>RS</CODE></TD>
+<TD>relative</TD>
+<TD>"in which she lived"</TD>
+</TR>
+<TR>
+<TD><CODE>Cl</CODE></TD>
+<TD>declarative clause, with all tenses</TD>
+<TD>"she looks at this"</TD>
+</TR>
+<TR>
+<TD><CODE>Slash</CODE></TD>
+<TD>clause missing NP (S/NP in GPSG)</TD>
+<TD>"she looks at"</TD>
+</TR>
+<TR>
+<TD><CODE>Imp</CODE></TD>
+<TD>imperative</TD>
+<TD>"look at this"</TD>
+</TR>
+<TR>
+<TD><CODE>QCl</CODE></TD>
+<TD>question clause, with all tenses</TD>
+<TD>"why does she walk"</TD>
+</TR>
+<TR>
+<TD><CODE>IP</CODE></TD>
+<TD>interrogative pronoun</TD>
+<TD>"who"</TD>
+</TR>
+<TR>
+<TD><CODE>IComp</CODE></TD>
+<TD>interrogative complement of copula</TD>
+<TD>"where"</TD>
+</TR>
+<TR>
+<TD><CODE>IDet</CODE></TD>
+<TD>interrogative determiner</TD>
+<TD>"which"</TD>
+</TR>
+<TR>
+<TD><CODE>RCl</CODE></TD>
+<TD>relative clause, with all tenses</TD>
+<TD>"in which she lives"</TD>
+</TR>
+<TR>
+<TD><CODE>RP</CODE></TD>
+<TD>relative pronoun</TD>
+<TD>"in which"</TD>
+</TR>
+<TR>
+<TD><CODE>VP</CODE></TD>
+<TD>verb phrase</TD>
+<TD>"is very warm"</TD>
+</TR>
+<TR>
+<TD><CODE>Comp</CODE></TD>
+<TD>complement of copula, such as AP</TD>
+<TD>"very warm"</TD>
+</TR>
+<TR>
+<TD><CODE>AP</CODE></TD>
+<TD>adjectival phrase</TD>
+<TD>"very warm"</TD>
+</TR>
+<TR>
+<TD><CODE>CN</CODE></TD>
+<TD>common noun (without determiner)</TD>
+<TD>"red house"</TD>
+</TR>
+<TR>
+<TD><CODE>NP</CODE></TD>
+<TD>noun phrase (subject or object)</TD>
+<TD>"the red house"</TD>
+</TR>
+<TR>
+<TD><CODE>Pron</CODE></TD>
+<TD>personal pronoun</TD>
+<TD>"she"</TD>
+</TR>
+<TR>
+<TD><CODE>Det</CODE></TD>
+<TD>determiner phrase</TD>
+<TD>"those seven"</TD>
+</TR>
+<TR>
+<TD><CODE>Quant</CODE></TD>
+<TD>quantifier with both sg and pl</TD>
+<TD>"this/these"</TD>
+</TR>
+<TR>
+<TD><CODE>Num</CODE></TD>
+<TD>cardinal number (used with QuantPl)</TD>
+<TD>"seven"</TD>
+</TR>
+<TR>
+<TD><CODE>Ord</CODE></TD>
+<TD>ordinal number (used in Det)</TD>
+<TD>"seventh"</TD>
+</TR>
+<TR>
+<TD><CODE>Conj</CODE></TD>
+<TD>conjunction,</TD>
+<TD>"and"</TD>
+</TR>
+<TR>
+<TD><CODE>DConj</CODE></TD>
+<TD>distributed conj.</TD>
+<TD>"both - and"</TD>
+</TR>
+<TR>
+<TD><CODE>Subj</CODE></TD>
+<TD>subjunction,</TD>
+<TD>"if"</TD>
+</TR>
+<TR>
+<TD><CODE>Prep</CODE></TD>
+<TD>preposition, or just case</TD>
+<TD>"in"</TD>
+</TR>
+<TR>
+<TD><CODE>V</CODE></TD>
+<TD>one-place verb</TD>
+<TD>"sleep"</TD>
+</TR>
+<TR>
+<TD><CODE>V2</CODE></TD>
+<TD>two-place verb</TD>
+<TD>"love"</TD>
+</TR>
+<TR>
+<TD><CODE>V3</CODE></TD>
+<TD>three-place verb</TD>
+<TD>"show"</TD>
+</TR>
+<TR>
+<TD><CODE>VV</CODE></TD>
+<TD>verb-phrase-complement verb</TD>
+<TD>"want"</TD>
+</TR>
+<TR>
+<TD><CODE>VS</CODE></TD>
+<TD>sentence-complement verb</TD>
+<TD>"claim"</TD>
+</TR>
+<TR>
+<TD><CODE>VQ</CODE></TD>
+<TD>question-complement verb</TD>
+<TD>"ask"</TD>
+</TR>
+<TR>
+<TD><CODE>VA</CODE></TD>
+<TD>adjective-complement verb</TD>
+<TD>"look"</TD>
+</TR>
+<TR>
+<TD><CODE>V2A</CODE></TD>
+<TD>verb with NP and AP complement</TD>
+<TD>"paint"</TD>
+</TR>
+<TR>
+<TD><CODE>A</CODE></TD>
+<TD>one-place adjective</TD>
+<TD>"warm"</TD>
+</TR>
+<TR>
+<TD><CODE>A2</CODE></TD>
+<TD>two-place adjective</TD>
+<TD>"divisible"</TD>
+</TR>
+<TR>
+<TD><CODE>N</CODE></TD>
+<TD>common noun</TD>
+<TD>"house"</TD>
+</TR>
+<TR>
+<TD><CODE>N2</CODE></TD>
+<TD>relational noun</TD>
+<TD>"son"</TD>
+</TR>
+<TR>
+<TD><CODE>N3</CODE></TD>
+<TD>three-place relational noun</TD>
+<TD>"connection"</TD>
+</TR>
+<TR>
+<TD><CODE>PN</CODE></TD>
+<TD>proper name</TD>
+<TD>"Paris"</TD>
+</TR>
+</TABLE>
+
+<P></P>
+<A NAME="toc2"></A>
+<H1>Syntax Rules</H1>
+<P>
+Source: <A HREF="../api/Constructors.gf"><CODE>http://www.cs.chalmers.se/~aarne/GF/lib/resource/api/Constructors.gf</CODE></A>
 </P>
 <TABLE CELLPADDING="4" BORDER="1">
 <TR>
@@ -1223,10 +1518,504 @@
 </TABLE>
 
 <P></P>
-<A NAME="toc2"></A>
+<A NAME="toc3"></A>
+<H1>Structural Words</H1>
+<P>
+Source: <A HREF="../abstract/Structural.gf"><CODE>http://www.cs.chalmers.se/~aarne/GF/lib/resource/abstract/Structural.gf</CODE></A>
+</P>
+<TABLE CELLPADDING="4" BORDER="1">
+<TR>
+<TH>Function</TH>
+<TH>Type</TH>
+<TH COLSPAN="2">Example</TH>
+</TR>
+<TR>
+<TD><CODE>above_Prep</CODE></TD>
+<TD><CODE>Prep</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>after_Prep</CODE></TD>
+<TD><CODE>Prep</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>all_Predet</CODE></TD>
+<TD><CODE>Predet</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>almost_AdA</CODE></TD>
+<TD><CODE>AdA</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>almost_AdN</CODE></TD>
+<TD><CODE>AdN</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>although_Subj</CODE></TD>
+<TD><CODE>Subj</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>always_AdV</CODE></TD>
+<TD><CODE>AdV</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>and_Conj</CODE></TD>
+<TD><CODE>Conj</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>because_Subj</CODE></TD>
+<TD><CODE>Subj</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>before_Prep</CODE></TD>
+<TD><CODE>Prep</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>behind_Prep</CODE></TD>
+<TD><CODE>Prep</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>between_Prep</CODE></TD>
+<TD><CODE>Prep</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>both7and_DConj</CODE></TD>
+<TD><CODE>DConj</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>but_PConj</CODE></TD>
+<TD><CODE>PConj</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>by8agent_Prep</CODE></TD>
+<TD><CODE>Prep</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>by8means_Prep</CODE></TD>
+<TD><CODE>Prep</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>can8know_VV</CODE></TD>
+<TD><CODE>VV</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>can_VV</CODE></TD>
+<TD><CODE>VV</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>during_Prep</CODE></TD>
+<TD><CODE>Prep</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>either7or_DConj</CODE></TD>
+<TD><CODE>DConj</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>every_Det</CODE></TD>
+<TD><CODE>Det</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>everybody_NP</CODE></TD>
+<TD><CODE>NP</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>everything_NP</CODE></TD>
+<TD><CODE>NP</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>everywhere_Adv</CODE></TD>
+<TD><CODE>Adv</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>first_Ord</CODE></TD>
+<TD><CODE>Ord</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>few_Det</CODE></TD>
+<TD><CODE>Det</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>for_Prep</CODE></TD>
+<TD><CODE>Prep</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>from_Prep</CODE></TD>
+<TD><CODE>Prep</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>he_Pron</CODE></TD>
+<TD><CODE>Pron</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>here_Adv</CODE></TD>
+<TD><CODE>Adv</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>here7to_Adv</CODE></TD>
+<TD><CODE>Adv</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>here7from_Adv</CODE></TD>
+<TD><CODE>Adv</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>how_IAdv</CODE></TD>
+<TD><CODE>IAdv</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>how8many_IDet</CODE></TD>
+<TD><CODE>IDet</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>i_Pron</CODE></TD>
+<TD><CODE>Pron</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>if_Subj</CODE></TD>
+<TD><CODE>Subj</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>in8front_Prep</CODE></TD>
+<TD><CODE>Prep</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>in_Prep</CODE></TD>
+<TD><CODE>Prep</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>it_Pron</CODE></TD>
+<TD><CODE>Pron</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>less_CAdv</CODE></TD>
+<TD><CODE>CAdv</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>many_Det</CODE></TD>
+<TD><CODE>Det</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>more_CAdv</CODE></TD>
+<TD><CODE>CAdv</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>most_Predet</CODE></TD>
+<TD><CODE>Predet</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>much_Det</CODE></TD>
+<TD><CODE>Det</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>must_VV</CODE></TD>
+<TD><CODE>VV</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>no_Phr</CODE></TD>
+<TD><CODE>Phr</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>on_Prep</CODE></TD>
+<TD><CODE>Prep</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>one_Quant</CODE></TD>
+<TD><CODE>QuantSg</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>only_Predet</CODE></TD>
+<TD><CODE>Predet</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>or_Conj</CODE></TD>
+<TD><CODE>Conj</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>otherwise_PConj</CODE></TD>
+<TD><CODE>PConj</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>part_Prep</CODE></TD>
+<TD><CODE>Prep</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>please_Voc</CODE></TD>
+<TD><CODE>Voc</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>possess_Prep</CODE></TD>
+<TD><CODE>Prep</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>quite_Adv</CODE></TD>
+<TD><CODE>AdA</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>she_Pron</CODE></TD>
+<TD><CODE>Pron</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>so_AdA</CODE></TD>
+<TD><CODE>AdA</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>someSg_Det</CODE></TD>
+<TD><CODE>Det</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>somePl_Det</CODE></TD>
+<TD><CODE>Det</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>somebody_NP</CODE></TD>
+<TD><CODE>NP</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>something_NP</CODE></TD>
+<TD><CODE>NP</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>somewhere_Adv</CODE></TD>
+<TD><CODE>Adv</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>that_Quant</CODE></TD>
+<TD><CODE>Quant</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>that_NP</CODE></TD>
+<TD><CODE>NP</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>there_Adv</CODE></TD>
+<TD><CODE>Adv</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>there7to_Adv</CODE></TD>
+<TD><CODE>Adv</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>there7from_Adv</CODE></TD>
+<TD><CODE>Adv</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>therefore_PConj</CODE></TD>
+<TD><CODE>PConj</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>these_NP</CODE></TD>
+<TD><CODE>NP</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>they_Pron</CODE></TD>
+<TD><CODE>Pron</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>this_Quant</CODE></TD>
+<TD><CODE>Quant</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>this_NP</CODE></TD>
+<TD><CODE>NP</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>those_NP</CODE></TD>
+<TD><CODE>NP</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>through_Prep</CODE></TD>
+<TD><CODE>Prep</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>to_Prep</CODE></TD>
+<TD><CODE>Prep</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>too_AdA</CODE></TD>
+<TD><CODE>AdA</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>under_Prep</CODE></TD>
+<TD><CODE>Prep</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>very_AdA</CODE></TD>
+<TD><CODE>AdA</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>want_VV</CODE></TD>
+<TD><CODE>VV</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>we_Pron</CODE></TD>
+<TD><CODE>Pron</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>whatPl_IP</CODE></TD>
+<TD><CODE>IP</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>whatSg_IP</CODE></TD>
+<TD><CODE>IP</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>when_IAdv</CODE></TD>
+<TD><CODE>IAdv</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>when_Subj</CODE></TD>
+<TD><CODE>Subj</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>where_IAdv</CODE></TD>
+<TD><CODE>IAdv</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>whichPl_IDet</CODE></TD>
+<TD><CODE>IDet</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>whichSg_IDet</CODE></TD>
+<TD><CODE>IDet</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>whoPl_IP</CODE></TD>
+<TD><CODE>IP</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>whoSg_IP</CODE></TD>
+<TD><CODE>IP</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>why_IAdv</CODE></TD>
+<TD><CODE>IAdv</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>with_Prep</CODE></TD>
+<TD><CODE>Prep</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>without_Prep</CODE></TD>
+<TD><CODE>Prep</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>yes_Phr</CODE></TD>
+<TD><CODE>Phr</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>youSg_Pron</CODE></TD>
+<TD><CODE>Pron</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>youPl_Pron</CODE></TD>
+<TD><CODE>Pron</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>youPol_Pron</CODE></TD>
+<TD><CODE>Pron</CODE></TD>
+<TD>-</TD>
+</TR>
+</TABLE>
+
+<P></P>
+<A NAME="toc4"></A>
 <H1>Paradigms for Danish</H1>
 <P>
-<A HREF="../danish/ParadigmsDan.gf">source</A>
+source <A HREF="../danish/ParadigmsDan.gf"><CODE>http://www.cs.chalmers.se/~aarne/GF/lib/resource/danish/ParadigmsDan.gf</CODE></A>
 </P>
 <TABLE CELLPADDING="4" BORDER="1">
 <TR>
@@ -1547,10 +2336,10 @@
 </TABLE>
 
 <P></P>
-<A NAME="toc3"></A>
+<A NAME="toc5"></A>
 <H1>Paradigms for English</H1>
 <P>
-<A HREF="../english/ParadigmsEng.gf">source</A>
+source <A HREF="../english/ParadigmsEng.gf"><CODE>http://www.cs.chalmers.se/~aarne/GF/lib/resource/english/ParadigmsEng.gf</CODE></A>
 </P>
 <TABLE CELLPADDING="4" BORDER="1">
 <TR>
@@ -1831,10 +2620,10 @@
 </TABLE>
 
 <P></P>
-<A NAME="toc4"></A>
+<A NAME="toc6"></A>
 <H1>Paradigms for Finnish</H1>
 <P>
-<A HREF="../finnish/ParadigmsFin.gf">source</A>
+source <A HREF="../finnish/ParadigmsFin.gf"><CODE>http://www.cs.chalmers.se/~aarne/GF/lib/resource/finnish/ParadigmsFin.gf</CODE></A>
 </P>
 <TABLE CELLPADDING="4" BORDER="1">
 <TR>
@@ -2245,10 +3034,10 @@
 </TABLE>
 
 <P></P>
-<A NAME="toc5"></A>
+<A NAME="toc7"></A>
 <H1>Paradigms for French</H1>
 <P>
-<A HREF="../french/ParadigmsFre.gf">source</A>
+source <A HREF="../french/ParadigmsFre.gf"><CODE>http://www.cs.chalmers.se/~aarne/GF/lib/resource/french/ParadigmsFre.gf</CODE></A>
 </P>
 <TABLE CELLPADDING="4" BORDER="1">
 <TR>
@@ -2529,10 +3318,10 @@
 </TABLE>
 
 <P></P>
-<A NAME="toc6"></A>
+<A NAME="toc8"></A>
 <H1>Paradigms for German</H1>
 <P>
-<A HREF="../german/ParadigmsGer.gf">source</A>
+source <A HREF="../german/ParadigmsGer.gf"><CODE>http://www.cs.chalmers.se/~aarne/GF/lib/resource/german/ParadigmsGer.gf</CODE></A>
 </P>
 <TABLE CELLPADDING="4" BORDER="1">
 <TR>
@@ -2843,10 +3632,10 @@
 </TABLE>
 
 <P></P>
-<A NAME="toc7"></A>
+<A NAME="toc9"></A>
 <H1>Paradigms for Italian</H1>
 <P>
-<A HREF="../italian/ParadigmsIta.gf">source</A>
+source <A HREF="../italian/ParadigmsIta.gf"><CODE>http://www.cs.chalmers.se/~aarne/GF/lib/resource/italian/ParadigmsIta.gf</CODE></A>
 </P>
 <TABLE CELLPADDING="4" BORDER="1">
 <TR>
@@ -3132,10 +3921,10 @@
 </TABLE>
 
 <P></P>
-<A NAME="toc8"></A>
+<A NAME="toc10"></A>
 <H1>Paradigms for Norwegian</H1>
 <P>
-<A HREF="../norwegian/ParadigmsNor.gf">source</A>
+source <A HREF="../norwegian/ParadigmsNor.gf"><CODE>http://www.cs.chalmers.se/~aarne/GF/lib/resource/norwegian/ParadigmsNor.gf</CODE></A>
 </P>
 <TABLE CELLPADDING="4" BORDER="1">
 <TR>
@@ -3456,10 +4245,10 @@
 </TABLE>
 
 <P></P>
-<A NAME="toc9"></A>
+<A NAME="toc11"></A>
 <H1>Paradigms for Russian</H1>
 <P>
-<A HREF="../russian/ParadigmsRus.gf">source</A>
+source <A HREF="../russian/ParadigmsRus.gf"><CODE>http://www.cs.chalmers.se/~aarne/GF/lib/resource/russian/ParadigmsRus.gf</CODE></A>
 </P>
 <TABLE CELLPADDING="4" BORDER="1">
 <TR>
@@ -3755,10 +4544,10 @@
 </TABLE>
 
 <P></P>
-<A NAME="toc10"></A>
+<A NAME="toc12"></A>
 <H1>Paradigms for Spanish</H1>
 <P>
-<A HREF="../spanish/ParadigmsSpa.gf">source</A>
+source <A HREF="../spanish/ParadigmsSpa.gf"><CODE>http://www.cs.chalmers.se/~aarne/GF/lib/resource/spanish/ParadigmsSpa.gf</CODE></A>
 </P>
 <TABLE CELLPADDING="4" BORDER="1">
 <TR>
@@ -4049,10 +4838,10 @@
 </TABLE>
 
 <P></P>
-<A NAME="toc11"></A>
+<A NAME="toc13"></A>
 <H1>Paradigms for Swedish</H1>
 <P>
-<A HREF="../swedish/ParadigmsSwe.gf">source</A>
+source <A HREF="../swedish/ParadigmsSwe.gf"><CODE>http://www.cs.chalmers.se/~aarne/GF/lib/resource/swedish/ParadigmsSwe.gf</CODE></A>
 </P>
 <TABLE CELLPADDING="4" BORDER="1">
 <TR>
@@ -4347,6 +5136,69 @@
 </TR>
 </TABLE>
 
+<P></P>
+<A NAME="toc14"></A>
+<H1>Example Usage</H1>
+<P>
+The standard way of building an application has the following modules.
+</P>
+<P>
+An abstract syntax:
+</P>
+<PRE>
+    abstract Music = {    
+    cat 
+      Kind, 
+      Property ;
+    fun 
+      PropKind : Kind -&gt; Property -&gt; Kind ; 
+      Song : Kind ;
+      American : Property ;
+    }
+</PRE>
+<P>
+A domain lexicon interface:
+</P>
+<PRE>
+    interface MusicLex = open Cat in {
+    oper
+      song_N : N ;
+      american_A : A ;
+    }
+</PRE>
+<P>
+A functor on <CODE>Syntax</CODE> and the domain lexicon interface:
+</P>
+<PRE>
+    incomplete concrete MusicI of Music = open Syntax, MusicLex in {
+    lincat 
+      Kind = CN ;
+      Property = AP ;
+    lin
+      PropKind k p = mkCN p k ;
+      Song = mkCN song_N ;
+      American = mkAP american_A ;
+    }
+</PRE>
+<P>
+For each language, an instance of the domain lexicon:
+</P>
+<PRE>
+    instance MusicLexGer of MusicLex = CatGer ** open ParadigmsGer in {    
+    oper
+      song_N = mkN "Lied" "Lieder" neuter ;
+      american_A = mkA "amerikanisch" ;
+    }
+</PRE>
+<P>
+For each language, an instantiation of the functor:
+</P>
+<PRE>
+    --# -path=.:present:prelude
+    concrete MusicGer of Music = MusicI with
+      (Syntax = SyntaxGer),
+      (MusicLex = MusicLexGer) ;
+</PRE>
 <P></P>
 
 <!-- html code generated by txt2tags 2.3 (http://txt2tags.sf.net) -->

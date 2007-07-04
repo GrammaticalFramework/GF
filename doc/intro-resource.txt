@@ -143,29 +143,32 @@ two interfaces: the resource ``Syntax`` and an application lexicon.
     American = mkAP american_A ;
   }
 ```
-The application lexicon ``MusicLex`` has an abstract syntax that extends
-the resource category system ``Cat``.
+The application lexicon ``MusicLex`` is an interface
+opening the resource category system ``Cat``. 
 ```
-  abstract MusicLex = Cat ** {
-    
-  fun
+  interface MusicLex = Cat ** { 
+  oper
     song_N : N ;
     american_A : A ;
   }
 ```
+It could also be an abstract syntax that extends ``Cat``, but
+this would limit the kind of constructions that are possible in
+the interface
+
 Each language has its own concrete syntax, which opens the 
 inflectional paradigms module for that language:
 ```
-  concrete MusicLexGer of MusicLex = 
+  interface MusicLexGer of MusicLex = 
       CatGer ** open ParadigmsGer in {    
-  lin
+  oper
     song_N = mkN "Lied" "Lieder" neuter ;
     american_A = mkA "amerikanisch" ;
   }
 
-  concrete MusicLexFre of MusicLex = 
+  interface MusicLexFre of MusicLex = 
       CatFre ** open ParadigmsFre in {
-  lin
+  oper
     song_N = mkN "chanson" feminine ;
     american_A = mkA "américain" ;
   }
@@ -195,9 +198,9 @@ instantiating ``Music``. The latter is
 completely trivial, whereas the former one involves the choice of correct
 vocabulary and inflectional paradigms. For instance, Finnish is added as follows:
 ```
-  concrete MusicLexFin of MusicLex = 
+  instance MusicLexFin of MusicLex = 
       CatFin ** open ParadigmsFin in {
-  lin
+  oper
     song_N = mkN "kappale" ;
     american_A = mkA "amerikkalainen" ;
   }
@@ -226,9 +229,9 @@ restricted inheritance of the functor:
 ```
 The lexicon is as expected:
 ```
-  concrete MusicLexEng of MusicLex = 
+  instance MusicLexEng of MusicLex = 
       CatEng ** open ParadigmsEng in {
-  lin
+  oper
     song_N = mkN "song" ;
     american_A = mkA "American" ;
   }
