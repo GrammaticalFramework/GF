@@ -1,4 +1,4 @@
-abstract Toy1 = {
+abstract Toy1a = {
 
 flags startcat = Utterance ;
 

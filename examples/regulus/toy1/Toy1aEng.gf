@@ -1,6 +1,6 @@
 --# -path=.:prelude
 
-concrete Toy1Eng of Toy1 = open Prelude in {
+concrete Toy1aEng of Toy1a = open Prelude in {
 
 -- grammar Toy1 from the Regulus book
 
@@ -42,8 +42,8 @@ lin
   light = mkNoun "light" ;
   fan = mkNoun "fan" ;
 
-  switchOn _ = mkVerb "switch" "swithced" "on" ;
-  switchOff _ = mkVerb "switch" "swithced" "off" ;
+  switchOn _ = mkVerb "switch" "switched" "on" ;
+  switchOff _ = mkVerb "switch" "switched" "off" ;
 
   dim = mkVerb "dim" "dimmed" [] ;
 
