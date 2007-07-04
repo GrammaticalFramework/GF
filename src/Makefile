@@ -130,11 +130,13 @@ ghci-nofud:
 
 today:
 	echo 'module GF.Today (today,version,libdir) where' > GF/Today.hs
-	echo '{-# NOINLINE today,version,libdir #-}' >> GF/Today.hs
+	echo '{-# NOINLINE today #-}' >> GF/Today.hs
 	echo 'today :: String' >> GF/Today.hs
 	echo 'today = "'`date`'"' >> GF/Today.hs
+	echo '{-# NOINLINE version #-}' >> GF/Today.hs
 	echo 'version :: String' >> GF/Today.hs
 	echo 'version = "'$(PACKAGE_VERSION)'"' >> GF/Today.hs
+	echo '{-# NOINLINE libdir #-}' >> GF/Today.hs
 	echo 'libdir :: String' >> GF/Today.hs
 	echo 'libdir = "'$(GF_DATA_DIR)/lib'"' >> GF/Today.hs
 
