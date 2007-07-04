@@ -1,3 +1,7 @@
+all: index synopsis
+
+index:
+	txt2tags -thtml index.txt
 synopsis:
 	runghc MkSynopsis.hs
 clt:

@@ -20,7 +20,7 @@ GFCCP=$(GFCC) -preproc=./mkPresent
 
 .PHONY: show-path all prelude test alltenses pretest langs present mathematical multimodal compiled treebank stat gfdoc clean api
 
-all: show-path prelude present alltenses mathematical api multimodal compiled langs
+all: show-path prelude present alltenses mathematical api multimodal langs compiled
 
 show-path:
 	@echo GF_LIB_PATH=$(GF_LIB_PATH)
@@ -53,11 +53,14 @@ alltenses:
 	$(GFCC) api/Syntax???.gf
 	cp -p api/Constructors*.gfc api/Constructors*.gfr ../alltenses
 	cp -p api/Syntax*.gfc api/Syntax*.gfr ../alltenses
-
-
+	$(GFCC) -path=alltenses:prelude:api:api/toplevel api/toplevel/OverLangEng.gf
+	mv api/toplevel/Over*.gfc ../alltenses
 
 langs:
+	echo "s ;; pm | wf langs.gfcm" | $(GFCA) -path=present:prelude ../present/Lang???.gfc $(RTSS)
+	mv langs.gfcm ../present
 	echo "s ;; pm | wf langs.gfcm" | $(GFCA) -path=alltenses:prelude ../alltenses/Lang???.gfc $(RTSS)
+	mv langs.gfcm ../alltenses
 
 api:
 #	$(GFCC) api/Constructors???.gf
@@ -92,6 +95,9 @@ present:
 	$(GFCCP) -path=api:present:prelude api/Syntax???.gf
 	mv api/Constructors*.gfc api/Constructors*.gfr ../present
 	mv api/Syntax*.gfc api/Syntax*.gfr ../present
+	$(GFCCP) -path=present:prelude:api:api/toplevel api/toplevel/OverLangEng.gf
+	mv api/toplevel/Over*.gfc ../present
+
 
 mathematical:
 	$(GFCC) mathematical/MathematicalEng.gf
@@ -137,6 +143,6 @@ gfdoc:
 	mv ../prelude/*.html doc/gfdoc
 
 clean:
-	-rm */*.gfc */*.gfr */*.gf~ ../*/*.gfc ../*/*.gfr ../*/*.gf~ ../compiled.tgz langs.gfcm
+	-rm */*.gfc */*.gfr */*.gf~ ../*/*.gfc ../*/*.gfr ../*/*.gf~ ../*/langs.gfcm ../compiled.tgz langs.gfcm
 
 

@@ -1,0 +1,23 @@
+
+=Browsing the libraries with GF commands=
+
+All of the following assume
+```
+  cd $GF_LIB_PATH
+```
+To try out inflection paradigms:
+```
+  > i -path=alltenses:prelude -retain alltenses/ParadigmsGer.gfr
+  > cc mkN "Farbe"
+```
+To look for a syntax tree in the overload API by parsing:
+```
+  > i -path=alltenses:prelude alltenses/OverLangEng.gfc
+  > p -cat=S -overload "this grammar is too big"
+```
+To view linearizations in all languages by parsing from English:
+```
+  > i alltenses/langs.gfcm
+  > p -cat=S -lang=LangEng "this grammar is too big" | tb
+```
+

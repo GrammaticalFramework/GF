@@ -157,11 +157,11 @@ lin ovrld145_noVoc = NoVoc ;
 lin ovrld146_positivePol = PPos ;
 lin ovrld147_negativePol = PNeg ;
 lin ovrld148_simultaneousAnt = ASimul ;
-lin ovrld149_anteriorAnt = AAnter ;
+lin ovrld149_anteriorAnt = AAnter ; --# notpresent
 lin ovrld150_presentTense = TPres ;
-lin ovrld151_pastTense = TPast ;
-lin ovrld152_futureTense = TFut ;
-lin ovrld153_conditionalTense = TCond ;
+lin ovrld151_pastTense = TPast ; --# notpresent
+lin ovrld152_futureTense = TFut ; --# notpresent
+lin ovrld153_conditionalTense = TCond ; --# notpresent
 lin ovrld154_singularImpForm = {p= IFSg; s= []} ;
 lin ovrld155_pluralImpForm = {p= IFPl; s= []} ;
 lin ovrld156_politeImpForm = {p= IFPol; s= []} ;
