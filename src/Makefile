@@ -63,7 +63,7 @@ else
 endif
 
 .PHONY: all unix jar tags gfdoc windows install install-gf \
-        temp install-gfdoc install-editor \
+        lib temp install-gfdoc install-editor \
         today help clean windows-msi
 
 all: unix gfdoc $(BUILD_JAR)
@@ -204,6 +204,13 @@ gfcc2c:
 	mv tools/c/gfcc2c ../bin
 
 #
+# Resource grammars
+#
+
+lib:
+	$(MAKE) -C ../lib/resource-1.0 $(GF_LIB_PACKAGES)
+
+#
 # Distribution
 #
 
@@ -238,7 +245,7 @@ binary-dist:
 	$(INSTALL) -m 0644 ../README ../LICENSE $(BIN_DIST_DIR)
 	$(INSTALL) -m 0644 INSTALL.binary $(BIN_DIST_DIR)/INSTALL
 	$(INSTALL) -m 0644 Makefile.binary $(BIN_DIST_DIR)/Makefile
-	$(MAKE) -C ../lib $(GF_LIB_PACKAGES)
+	$(MAKE) lib
 	$(INSTALL) -d $(addprefix $(BIN_DIST_DIR)/lib/, $(GF_LIB_PACKAGES))
 	(cd ../lib && find $(GF_LIB_PACKAGES) -type f -name '*.gf?' -exec $(INSTALL) -m 0644 '{}' '../src/$(BIN_DIST_DIR)/lib/{}' ';')
 	$(TAR) -zcf GF-$(PACKAGE_VERSION)-$(host).tgz $(BIN_DIST_DIR)
