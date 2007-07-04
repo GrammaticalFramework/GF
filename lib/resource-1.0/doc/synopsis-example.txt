@@ -1,3 +1,4 @@
+
 The standard way of building an application has the following modules.
 
 An abstract syntax:

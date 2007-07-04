@@ -1,0 +1,9 @@
+
+This document contains the most important parts of the GF Resource Grammar API.
+It has been machine-generated from the source files; each chapter gives a link
+to the relevant source files, which give more information.
+
+The last chapter contains a brief example of how application grammars can
+import resource modules. It also illustrates a "design pattern" for using
+the resource API to build functor-based applications
+

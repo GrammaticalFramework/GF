@@ -1,47 +1,55 @@
 import System
 import Char
+import List
 
 main = do
+  xx <- getArgs
+  let isLatex = case xx of
+        "-tex":_ -> True
+        _ -> False 
   writeFile synopsis "GF Resource Grammar Library: Synopsis"
   append "Aarne Ranta"
   space
+  include "synopsis-intro.txt"
   title "Categories"
   space
   link "Source 1:" commonAPI
   space
   link "Source 2:" catAPI
   space
-  cs1 <- getCats True commonAPI
-  cs2 <- getCats False catAPI
-  delimit $ cs1 ++ cs2
+  cs1 <- getCats isLatex True  commonAPI
+  cs2 <- getCats isLatex False catAPI
+  let cs = cs1 ++ cs2
+  delimit cs
   space
   title "Syntax Rules"
   space
   link "Source:" syntaxAPI
   space
-  rs <- getRules syntaxAPI
+  rs <- getRules isLatex syntaxAPI
   delimit rs
   space
   title "Structural Words"
   space
   link "Source:" structuralAPI
   space
-  rs <- getRules structuralAPI
+  rs <- getRules isLatex structuralAPI
   delimit rs
   space
-  mapM_ putParadigms paradigmFiles
+  mapM_ (putParadigms isLatex) paradigmFiles
   space
-  title "Example Usage"
+  title "An Example of Usage"
   space
-  ss <- readFile "synopsis-example.txt" >>= return . lines
-  mapM_ append ss
+  include "synopsis-example.txt"
   space
-  system $ "txt2tags -thtml --toc " ++ synopsis
+  let format = if isLatex then "tex" else "html"
+  system $ "txt2tags -t" ++ format ++ " --toc " ++ synopsis
 
-getCats isBeg file = do
+getCats isLatex isBeg file = do
   ss <- readFile file >>= return . lines
-  return $ mkCatTable isBeg $ getrs [] ss
+  return $ inChunks chsize (mkCatTable (isLatex || isBeg)) $ getrs [] ss
  where
+   chsize = if isLatex then 40 else 1000
    getrs rs ss = case ss of
      ('-':'-':'.':_):_ -> reverse rs
      [] -> reverse rs
@@ -51,10 +59,11 @@ getCats isBeg file = do
          (expl,ex) = span (/="e.g.") exp
        _ -> getrs rs ss2
 
-getRules file = do
+getRules isLatex file = do
   ss <- readFile file >>= return . lines
-  return $ mkTable $ getrs [] ss
+  return $ inChunks chsize mkTable $ getrs [] ss
  where
+   chsize = if isLatex then 40 else 1000
    getrs rs ss = case ss of
      ('-':'-':'.':_):_ -> reverse rs
      [] -> reverse rs
@@ -65,18 +74,23 @@ getRules file = do
        _ -> getrs rs ss2
    layout s = "  " ++ dropWhile isSpace s
 
-putParadigms (lang,file) = do
+putParadigms isLatex (lang,file) = do
   title ("Paradigms for " ++ lang)
   space
   link "source" file
   space
-  rs <- getRules file
+  rs <- getRules isLatex file
   space
   delimit rs
   space
 
+inChunks :: Int -> ([a] -> [String]) -> [a] -> [String]
+inChunks i f = concat . intersperse ["\n\n"] . map f . chunks i where
+  chunks _ [] = []
+  chunks i xs = x : chunks i y where (x,y) = splitAt i xs
 
-mkTable rs = "|| Function  | Type  | Example  ||" : map (unwords . row . words) rs where
+mkTable rs = header : map (unwords . row . words) rs where
+  header = "|| Function  | Type  | Example  ||"
   row ws = ["|", name, "|", typ, "|", ex, "|"] where
     name = ttf (head ws)
     (t,e) = span (/="--") (tail ws)
@@ -113,6 +127,7 @@ paradigmFiles = [
 
 append s = appendFile synopsis ('\n':s)
 title s = append $ "=" ++ s ++ "="
+include s = append $ "%!include: " ++ s
 space = append "\n"
 delimit ss = mapM_ append ss
 link s f = append $ s ++ " [``" ++ fa ++ "`` " ++ f ++ "]" where
