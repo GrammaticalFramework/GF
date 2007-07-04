@@ -143,6 +143,6 @@ gfdoc:
 	mv ../prelude/*.html doc/gfdoc
 
 clean:
-	-rm */*.gfc */*.gfr */*.gf~ ../*/*.gfc ../*/*.gfr ../*/*.gf~ ../*/langs.gfcm ../compiled.tgz langs.gfcm
+	-rm */*.gfc */*.gfr */*.gf~ ../*/*.gfc ../*/*.gfr ../*/*.gf~ ../*/langs.gfcm ../compiled.tgz
 
 

@@ -116,9 +116,10 @@ For more details, see the [Synopsis synopsis.html].
 
 ==Compilation==
 
-If you want to compile the library from scratch, use ``make``:
+If you want to compile the library from scratch, use ``make`` in the root of
+the source directory:
 ```
-  cd $GF_LIB_PATH/resource-1.0
+  cd GF/lib/resource-1.0
   make
 ```
 The ``make`` procedure does not by default make Arabic and Catalan, but you
