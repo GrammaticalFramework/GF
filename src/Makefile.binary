@@ -1,17 +1,27 @@
 include config.mk
 
 GF_DATA_DIR=$(datadir)/GF-$(PACKAGE_VERSION)
+GF_LIB_DIR=$(GF_DATA_DIR)/lib
 
-.PHONY: install
+GF_LIB_PACKAGES = alltenses mathematical multimodal prelude present
+
+.PHONY: install uninstall
+
 install: 
 	$(INSTALL) -d $(bindir)
 	$(INSTALL) gf$(EXEEXT) gfdoc$(EXEEXT) jgf gfeditor $(bindir)
 	$(INSTALL) -d $(GF_DATA_DIR)
 	$(INSTALL) -m 0644 gf-java.jar $(GF_DATA_DIR)
 	$(INSTALL) -m 0644 gfeditor.jar $(GF_DATA_DIR)
+	$(INSTALL) -d $(GF_LIB_DIR)
+	$(INSTALL) -d $(addprefix $(GF_LIB_DIR)/, $(GF_LIB_PACKAGES))
+	(cd lib && find $(GF_LIB_PACKAGES) -type f -name '*.gf?' -exec $(INSTALL) -m 0644 '{}' '$(GF_LIB_DIR)/{}' ';')
 
 uninstall:
 	-rm -f $(bindir)/gf$(EXEEXT) $(bindir)/gfdoc$(EXEEXT) $(bindir)/jgf $(bindir)/gfeditor
 	-rm -f $(GF_DATA_DIR)/gf-java.jar
 	-rm -f $(GF_DATA_DIR)/gfeditor.jar
+	-rm -f $(addsuffix /*.gf?, $(addprefix $(GF_LIB_DIR)/, $(GF_LIB_PACKAGES)))
+	-rmdir $(addprefix $(GF_LIB_DIR)/, $(GF_LIB_PACKAGES))
+	-rmdir $(GF_LIB_DIR)
 	-rmdir $(GF_DATA_DIR)
