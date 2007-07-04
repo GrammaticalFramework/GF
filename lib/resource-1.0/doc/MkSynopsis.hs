@@ -38,6 +38,8 @@ main = do
   space
   mapM_ (putParadigms isLatex) paradigmFiles
   space
+  include "synopsis-browse.txt"
+  space
   title "An Example of Usage"
   space
   include "synopsis-example.txt"
