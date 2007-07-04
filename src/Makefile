@@ -216,7 +216,8 @@ lib:
 
 dist:
 	-rm -rf $(DIST_DIR)
-	cp -r ../_darcs/current $(DIST_DIR)
+	darcs get --repo-name=$(DIST_DIR) ..
+	rm -rf $(DIST_DIR)/_darcs
 	cd $(DIST_DIR)/src && perl -pi -e "s/^AC_INIT\(\[GF\],\[[^\]]*\]/AC_INIT([GF],[$(PACKAGE_VERSION)]/" configure.ac
 	cd $(DIST_DIR)/src && autoconf && rm -rf autom4te.cache
 #	cd $(DIST_DIR)/grammars && sh mkLib.sh
