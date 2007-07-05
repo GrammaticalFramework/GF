@@ -19,8 +19,8 @@ included.
 **New in Version 1.2**
 - Simpler APIs using overloading: see [Synopsis synopsis.html].
   The API of version 1.0 remains valid and can be used in combination with this.
-- Bug fixes.
-
+- Bug fixes and new paradigms.
+- Licensed under LGPL.
 
 
 
@@ -57,6 +57,7 @@ Elisabet Engdahl,
 Markus Forsberg,
 Kristofer Johannisson,
 Anni Laine,
+Hans Leiß,
 Peter Ljunglöf,
 Saara Myllyntausta,
 Wanjiku Ng'ang'a,

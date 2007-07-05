@@ -5193,7 +5193,7 @@ An abstract syntax:
 A domain lexicon interface:
 </P>
 <PRE>
-    interface MusicLex = open Cat in {
+    interface LexMusic = open Cat in {
     oper
       song_N : N ;
       american_A : A ;
@@ -5217,7 +5217,7 @@ A functor on <CODE>Syntax</CODE> and the domain lexicon interface:
 For each language, an instance of the domain lexicon:
 </P>
 <PRE>
-    instance MusicLexGer of MusicLex = CatGer ** open ParadigmsGer in {    
+    instance LexMusicGer of LexMusic = CatGer ** open ParadigmsGer in {    
     oper
       song_N = mkN "Lied" "Lieder" neuter ;
       american_A = mkA "amerikanisch" ;
@@ -5228,9 +5228,10 @@ For each language, an instantiation of the functor:
 </P>
 <PRE>
     --# -path=.:present:prelude
+  
     concrete MusicGer of Music = MusicI with
       (Syntax = SyntaxGer),
-      (MusicLex = MusicLexGer) ;
+      (LexMusic = LexMusicGer) ;
 </PRE>
 <P></P>
 
