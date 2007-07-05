@@ -105,7 +105,8 @@ renameIdentTerm env@(act,imps) t =
           [tr] -> return tr
           ts -> return $ Strs $ (cnIC "#conflict") : reverse ts
             -- a warning will be generated in CheckGrammar, and the head returned
-            -- in next V: Bad $ "conflicting imports:" +++ unwords (map prt ts) 
+            -- in next V: 
+            -- Bad $ "conflicting imports:" +++ unwords (map prt ts) 
 
 
 --- | would it make sense to optimize this by inlining?

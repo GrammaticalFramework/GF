@@ -1,6 +1,6 @@
 GF=gf -s
 RTS=+RTS -M800M -K100M
-RTSS=+RTS -M1000M -K100M
+RTSS=+RTS -M1300M -K100M
 
 #may need this on amd64
 RTS=+RTS -M2000M -K200M
