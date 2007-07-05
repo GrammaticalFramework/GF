@@ -1,0 +1,969 @@
+<html>
+
+<body bgcolor="#FFFFFF" text="#000000">
+
+<center>
+
+
+<img src="gf-logo.gif">
+
+
+<h1>The Module System of GF</h1>
+
+<p>
+
+8/4/2005 - 10/4
+
+<p>
+
+<a href="http://www.cs.chalmers.se/~aarne">Aarne Ranta</a>
+
+</center>
+
+A GF grammar consists of a set of <b>modules</b>, which can be
+combined in different ways to build different grammars.
+There are several different <b>types of modules</b>:
+<ul>
+<li> <tt>abstract</tt>
+<li> <tt>concrete</tt>
+<li> <tt>resource</tt>
+<li> <tt>interface</tt>
+<li> <tt>instance</tt>
+<li> <tt>incomplete concrete</tt>
+<li> <tt>transfer</tt>
+</ul>
+We will go through the module types in this order, which is also
+their order of "importance" from the most frequently used to
+the more esoteric/advanced ones. 
+
+<p>
+
+This document is meant as an appendix to the GF tutorial, and
+presupposes knowledge of GF judgements and expressions. It aims
+just to tell what module system adds to the old functionality;
+some information is repeated to give understanding on how the
+module system relates to the already familiar uses of GF grammars.
+
+
+
+<h2>The principal module types</h2>
+
+<h3>Abstract syntax</h3>
+
+Any GF grammar that is used in an application
+will probably contain at least one module
+of the <tt>abstract</tt> module type. Here is an example of
+such a module, defining a fragment of propositional logic.
+<pre>
+  abstract Logic = {
+    cat Prop ;
+    fun Conj : Prop -> Prop -> Prop ;
+    fun Disj : Prop -> Prop -> Prop ;
+    fun Impl : Prop -> Prop -> Prop ;
+    fun Falsum : Prop ;
+    }
+</pre>
+The <b>name</b> of this module is <tt>Logic</tt>.
+
+<p>
+
+An <tt>abstract</tt> module defines an <b>abstract syntax</b>, which
+is a language-independent representation of a fragment of language.
+It consists of two kinds of <b>judgements</b>:
+<ul>
+<li> <tt>cat</tt> judgements telling what <b>categories</b> there are
+  (types of abstract syntax trees)
+<li> <tt>fun</tt> judgements telling what <b>functions</b> there are
+  (to build abstract syntax trees)
+</ul>  
+There can also be <tt>def</tt> and <tt>data</tt> judgements in an
+abstract syntax.
+
+
+<h4>Compilation of abstract syntax</h4>
+
+The GF grammar compiler expects to find the module <tt>Logic</tt> in a file named
+<tt>Logic.gf</tt>. When the compiler is run, it produces
+another file, named <tt>Logic.gfc</tt>. This file is in the
+format called <b>canonical GF</b>, which is the "machine language"
+of GF. Next time that the module <tt>Logic</tt> is needed in
+compiling a grammar, it can be read from the compiled (<tt>gfc</tt>)
+file instead of the source (<tt>gf</tt>) file, unless the source
+has been changed after the compilation.
+
+
+<h3>Concrete syntax</h3>
+
+In order for a GF grammar to describe a concrete language, the abstract
+syntax must be completed with a <b>concrete syntax</b> of it.
+For this purpose, we use modules of type <tt>concrete</tt>: for instance,
+<pre>
+  concrete LogicEng of Logic = {
+    lincat Prop = {s : Str} ;
+    lin Conj a b = {s = a.s ++ "and" ++ b.s} ;
+    lin Disj a b = {s = a.s ++ "or"  ++ b.s} ;
+    lin Impl a b = {s = "if" ++ a.s ++ "then"  ++ b.s} ;
+    lin Falsum = {s = ["we have a contradiction"]} ;
+    }
+</pre>
+The module <tt>LogicEng</tt> is a concrete syntax <tt>of</tt> the
+abstract syntax <tt>Logic</tt>. The GF grammar compiler checks that
+the concrete is valid with respect to the abstract syntax <tt>of</tt>
+which it is claimed to be. The validity requires that there has to be
+<ul>
+<li> a <tt>lincat</tt> judgement for each <tt>cat</tt> judgement, telling what the
+  <b>linearization types</b> of categories are
+<li> a <tt>lin</tt> judgement for each <tt>fun</tt> judgement, telling what the
+  <b>linearization functions</b> corresponding to functions are
+</ul>  
+Validity also requires that the linearization functions defined by
+<tt>lin</tt> judgements are type-correct with respect to the
+linearization types of the arguments and value of the function.
+
+<p>
+
+There can also be <tt>lindef</tt> and <tt>printname</tt> judgements in a
+concrete syntax.
+
+
+<h3>Top-level grammar</h3>
+
+When a <tt>concrete</tt> module is successfully compiled, a <tt>gfc</tt>
+file is produced in the same way as for <tt>abstract</tt> modules. The
+pair of an <tt>abstract</tt> and a corresponding <tt>concrete</tt> module
+is a <b>top-level grammar</b>, which can be used in the GF system to
+perform various tasks. The most fundamental tasks are
+<ul>
+<li> <b>linearization</b>: take an abstract syntax tree and find the corresponding string
+<li> <b>parsing</b>: take a string and find the corresponding abstract syntax
+  trees (which can be zero, one, or many)
+</ul>
+In the current grammar, infinitely many trees and strings are recognized, although
+no very interesting ones. For example, the tree
+<pre>
+  Impl (Disj Falsum Falsum) Falsum
+</pre>
+has the linearization
+<pre>
+  if we have a contradiction or we have a contradiction then we have a contradiction
+</pre>
+which in turn can be parsed uniquely as that tree.
+
+
+<h4>Compiling top-level grammars</h4>
+
+When GF compiles the module <tt>LogicEng</tt> it also has to compile
+all modules that it <b>depends</b> on (in this case, just <tt>Logic</tt>).
+The compilation process starts with dependency analysis to find
+all these modules, recursively, starting from the explicitly imported one.
+The compiler then reads either <tt>gf</tt> or <tt>gfc</tt> files, in
+a dependency order. The decision on which files to read depends on
+time stamps and dependencies in a natural way, so that all and only
+those modules that have to be compiled are compiled. (This behaviour can
+be changed with flags, see below.)
+
+
+<h4>Using top-level grammars</h4>
+
+To use a top-level grammar in the GF system, one uses the <tt>import</tt>
+command (short name <tt>i</tt>). For instance,
+<pre>
+  i LogicEng.gf
+</pre>
+It is also possible to specify the imported grammar(s) on the command
+line when invoking GF:
+<pre>
+  gf LogicEng.gf
+</pre>
+Various <b>compilation flags</b> can be added to both ways of compiling a module:
+<ul>
+<li> <tt>-src</tt> forces compilation form source files
+<li> <tt>-v</tt> gives more verbose information on compilation
+<li> <tt>-s</tt> makes compilation silent (except if it fails with an error message)
+</ul>
+Importing a grammar makes it visible in GF's <b>internal state</b>. To see
+what modules are available, use the command <tt>print_options</tt> (<tt>po</tt>).
+You can empty the state with the command <tt>empty</tt> (<tt>e</tt>); this is
+needed if you want to read in grammars with a different abstract syntax
+than the current one without exiting GF.
+
+<p>
+
+Grammar modules can reside in different directories. They can then be found
+by means of a <b>search path</b>, which is a flag such as
+<pre>
+  -path=.:../prelude
+</pre>
+given to the <tt>import</tt> command or the shell command invoking GF.
+(It can also be defined in the grammar file; see below.) The compiler
+writes every <tt>gfc</tt> file in the same directory as the corresponding
+<tt>gf</tt> file.
+
+<p>
+
+Parsing and linearization can be performed with the <tt>parse</tt>
+(<tt>p</tt>) and <tt>linearize</tt> (<tt>l</tt>) commands, respectively.
+For instance,
+<pre>
+  > l Impl (Disj Falsum Falsum) Falsum
+   if we have a contradiction or we have a contradiction then we have a contradiction
+
+  > p -cat=Prop "we have a contradiction"
+  Falsum
+</pre>
+Notice that the <tt>parse</tt> command needs the parsing category
+as a flag. This necessary since a grammar can have several
+possible parsing categories ("entry points").
+
+
+
+<h3>Multilingual grammar</h3>
+
+One <tt>abstract</tt> syntax can have several <tt>concrete</tt> syntaxes.
+Here are two new ones for <tt>Logic</tt>:
+<pre>
+  concrete LogicFre of Logic = {
+    lincat Prop = {s : Str} ;
+    lin Conj a b = {s = a.s ++ "et" ++ b.s} ;
+    lin Disj a b = {s = a.s ++ "ou"  ++ b.s} ;
+    lin Impl a b = {s = "si" ++ a.s ++ "alors"  ++ b.s} ;
+    lin Falsum = {s = ["nous avons une contradiction"]} ;
+    }
+
+  concrete LogicSymb of Logic = {
+    lincat Prop = {s : Str} ;
+    lin Conj a b = {s = "(" ++ a.s ++ "&" ++ b.s ++ ")"} ;
+    lin Disj a b = {s = "(" ++ a.s ++ "v" ++ b.s ++ ")"} ;
+    lin Impl a b = {s = "(" ++ a.s ++ "->" ++ b.s ++ ")"} ;
+    lin Falsum = {s = "_|_"} ;
+    }
+</pre>
+The four modules <tt>Logic</tt>,  <tt>LogicEng</tt>,  <tt>LogicFre</tt>, and
+<tt>LogicSymb</tt> together form a <b>multilingual grammar</b>, in which
+it is possible to perform parsing and linearization with respect to any
+of the concrete syntaxes. As a combination of parsing and linearization,
+one can also perform <b>translation</b> from one language to another.
+(By <b>language</b> we mean the set of expressions generated by one
+concrete syntax.)
+
+
+<h4>Using multilingual grammars</h4>
+
+Any combination of abstract syntax and corresponding concrete syntaxes
+is thus a multilingual grammar. With many languages and other enrichments
+(as described below), a multilingual grammar easily grows to the size of
+tens of modules. The grammar developer, having finished her job, can
+package the result in a <b>multilingual canonical grammar</b>, a file
+with the suffix <tt>.gfcm</tt>. For instance, to compile the set of grammars
+described by now, the following sequence of GF commands can be used:
+<pre>
+  i LogicEng.gf
+  i LogicFre.gf
+  i LogicSymb.gf
+  pm | wf logic.gfcm
+</pre>
+The "end user" of the grammar only needs the file <tt>logic.gfcm</tt> to
+access all the functionality of the multilingual grammar. It can be
+imported in the GF system in the same way as <tt>.gf</tt> files. But
+it can also be used in the <b>Embedded Java Interpreter for GF</b> to
+build Java programs of which the multilingual grammar functionalities
+(linearization, parsing, translation) form a part.
+
+<p>
+
+In a multilingual grammar, the concrete syntax module names work as
+names of languages that can be selected for linearization and parsing:
+<pre>
+  > l -lang=LogicFre Impl Falsum Falsum
+  si nous avons une contradiction alors nous avons une contradiction
+
+  > l -lang=LogicSymb Impl Falsum Falsum
+  ( _|_ -> _|_ )
+
+  > p -cat=Prop -lang=LogicSymb "( _|_ & _|_ )"
+  Conj Falsum Falsum
+</pre>
+The option <tt>-multi</tt> gives linearization to all languages:
+<pre>
+  > l -multi Impl Falsum Falsum
+  if we have a contradiction then we have a contradiction
+  si nous avons une contradiction alors nous avons une contradiction
+  ( _|_ -> _|_ )
+</pre>
+Translation can be obtained by using a <b>pipe</b> from a parser
+to a linearizer:
+<pre>
+  > p -cat=Prop -lang=LogicSymb "( _|_ & _|_ )" | l -lang=LogicEng
+  if we have a contradiction then we have a contradiction
+</pre>
+
+
+<h4>Exercise</h4>
+
+Write yet another concrete syntax of <tt>Logic</tt>, for
+a language or symbolic notation of your choice.
+
+
+<h3>Resource modules</h3>
+
+The <tt>concrete</tt> modules shown above would look much nicer if
+we used the main idea of functional programming: avoid repetitive
+code by using <b>functions</b> that capture repeated patterns of
+expressions. A collection of such functions can be a valuable
+<b>resource</b> for a programmer, reusable in many different
+top-level grammars. Thus we introduce the <tt>resource</tt>
+module type, with the first example
+<pre>
+  resource Util = {
+    oper SS : Type = {s : Str} ;
+    oper ss : Str -> SS = \s -> {s = s} ;
+    oper paren : Str -> Str = \s -> "(" ++ s ++ ")" ;
+    oper infix : Str -> SS -> SS -> SS = \h,x,y ->
+      ss (x.s ++ h ++ y.s) ;
+    oper infixp : Str -> SS -> SS -> SS = \h,x,y ->
+      ss (paren (infix h x y)) ;
+    }
+</pre>
+Modules of <tt>resource</tt> type have two forms of judgement:
+<ul>
+<li> <tt>oper</tt> defining auxiliary operations
+<li> <tt>param</tt> defining parameter types
+</ul>
+A <tt>resource</tt> can be used in a <tt>concrete</tt> (or another
+<tt>resource</tt>) by <tt>open</tt>ing it. This means that
+all operations (and parameter types) defined in the resource
+module become usable in module that opens it. For instance,
+we can rewrite the module <tt>LogicSymb</tt> much more concisely:
+<pre>
+  concrete LogicSymb of Logic = open Util in {
+    lincat Prop = SS ;
+    lin Conj = infixp "&" ;
+    lin Disj = infixp "v" ;
+    lin Impl = infixp "->" ;
+    lin Falsum = ss "_|_" ;
+    }
+</pre>
+What happens when this variant of <tt>LogicSymb</tt> is
+compiled is that the <tt>oper</tt>-defined constants
+of <tt>Util</tt> are <b>inlined</b> in the
+right-hand-sides of the judgements of <tt>LogicSymb</tt>,
+and these expressions are <b>partially evaluated</b>, i.e.
+computed as far as possible. The generated <tt>gfc</tt> file
+will look just like the file generated for the first version
+of <tt>LogicSymb</tt> - at least, it will do the same job.
+
+<p>
+
+Several <tt>resource</tt> modules can be <tt>open</tt>ed
+at the same time. If the modules contain same names, the
+conflict can be resolved by <b>qualified</b> opening and
+reference. For instance,
+<pre>
+  concrete LogicSymb of Logic = open Util, Prelude in { ...
+    } ;
+</pre>
+(where <tt>Prelude</tt> is a standard library of GF) brings
+into scope two definitions of the constant <tt>SS</tt>.
+To specify which one is used, you can write
+<tt>Util.SS</tt> or <tt>Prelude.SS</tt> instead of just <tt>SS</tt>.
+You can also introduce abbreviations to avoid long qualifiers, e.g.
+<pre>
+  concrete LogicSymb of Logic = open (U=Util), (P=Prelude) in { ...
+    } ;
+</pre>
+which means that you can write <tt>U.SS</tt> and <tt>P.SS</tt>.
+
+
+<h4>Compiling resource modules</h4>
+
+The compilation of a <tt>resource</tt> module differs
+from the compilation of <tt>abstract</tt> and
+<tt>concrete</tt> modules because <tt>oper</tt> operations
+do not in general have values in <tt>gfc</tt>. A <tt>gfc</tt>
+file <i>is</i> generated, but it contains only
+<tt>param</tt> judgements (also recall that <tt>oper</tt>s
+are inlined in their top-level use sites, so it is not
+necessary to save them in the compiled grammar).
+However, since computing the operations over and over
+again can be time comsuming, and since type checking
+<tt>resource</tt> modules also takes time, a third kind
+of file is generated for resource modules: a <tt>.gfr</tt>
+file. This file is written in the GF source code notation,
+but it is type checked and type annotated, and <tt>oper</tt>s 
+are computed as far as possible.
+
+<p>
+
+If you look at any <tt>gfc</tt> or <tt>gfr</tt> file generated
+by the GF compiler, you see that all names have been replaced by
+their qualified variants. This is an important first step (after parsing)
+the compiler does. As for the commands in the GF shell, some output
+qualified names and some not. The difference does not always result
+from firm principles.
+
+
+<h4>Using resource modules</h4>
+
+The typical use is through <tt>open</tt> in a
+<tt>concrete</tt> module, which means that
+<tt>resource</tt> modules are not imported on their own.
+However, in the developing and testing phase of grammars, it
+can be useful to evaluate <tt>oper</tt>s with different
+arguments. To prevent them from being thrown away after inlining, the
+<tt>-retain</tt> option can be used:
+<pre>
+  > i -retain Util.gf
+</pre>
+The command <tt>compute_concrete</tt> (<tt>cc</tt>)
+can now be used for evaluating expressions that may contain
+operations defined in <tt>Util</tt>:
+<pre>
+  > cc ss (paren "foo")
+  {s = "(" ++ "foo" ++ ")"}
+</pre>
+To find out what <tt>oper</tt>s are available for a given type,
+the command <tt>show_operations</tt> (<tt>so</tt>) can be used:
+<pre>
+  > so SS
+  Util.ss : Str -> SS ;
+  Util.infix : Str -> SS -> SS -> SS ;
+  Util.infixp : Str -> SS -> SS -> SS ;
+</pre>
+
+
+<h4>Exercise</h4>
+
+Rewrite the modules <tt>LogicEng</tt> and <tt>LogicFre</tt>
+by making use of the resource.
+
+
+<h3>Inheritance</h3>
+
+The most characteristic modularity of GF lies in the division of
+grammars into <tt>abstract</tt>, <tt>concrete</tt>, and
+<tt>resource</tt> modules. This permits writing multilingual
+grammar and sharing the maximum of code between different
+languages.
+
+<p>
+
+In addition to this special kind of modularity, GF provides <b>inheritance</b>,
+which is familiar from other programming languages (in particular,
+object-oriented ones). Inheritance means that a module inherits all
+judgements from another module; we also say that it <b>extends</b>
+the other module. Inheritance is useful to divide big grammars into
+smaller units, and also to reuse the same units in different bigger
+grammars.
+
+<p>
+
+The first example of inheritance is for abstract syntax. Let us
+extend the module <tt>Logic</tt> to <tt>Arithmetic</tt>:
+<pre>
+  abstract Arithmetic = Logic ** {
+    cat Nat ;
+    fun Even : Nat -> Prop ;
+    fun Odd  : Nat -> Prop ;
+    fun Zero : Nat ;
+    fun Succ : Nat -> Nat ;
+    }
+</pre>
+In parallel with the extension of the abstract syntax
+<tt>Logic</tt> to <tt>Arithmetic</tt>, we can extend
+the concrete syntax <tt>LogicEng</tt> to <tt>ArithmeticEng</tt>:
+<pre>
+  concrete ArithmeticEng of Arithmetic = LogicEng ** open Util in {
+    lincat Nat = SS ;
+    lin Even x = ss (x.s ++ "is" ++ "even") ;
+    lin Odd x = ss (x.s ++ "is" ++ "odd") ;
+    lin Zero = ss "zero" ;
+    lin Succ x = ss ("the" ++ "successor" ++ "of" ++ x.s) ;
+    }
+</pre>
+Another extension of <tt>Logic</tt> is <tt>Geometry</tt>,
+<pre>
+  abstract Geometry = Logic ** {
+    cat Point ;
+    cat Line ;
+    fun Incident : Point -> Line -> Prop ;
+    }
+</pre>
+The corresponding concrete syntax is left as exercise.
+
+<p>
+
+Inheritance can be <b>multiple</b>, which means that a module
+may extend many modules at the same time. Suppose, for instance,
+that we want to build a module for mathematics covering both
+arithmetic and geometry, and the underlying logic. We then write
+<pre>
+  abstract Mathematics = Arithmetic, Geometry ** {
+    } ;
+</pre>
+We could of course add some new judgements in this module, but
+it is not necessary to do so.
+
+<p>
+
+The module <tt>Mathematics</tt> also shows that it is possibe
+to extend a module already built by extension. The correctness
+criterion for extensions is that the same name
+(<tt>cat</tt>, <tt>fun</tt>, <tt>oper</tt>, or <tt>param</tt>)
+may not be defined twice in the resulting union of names. 
+That the names defined in <tt>Logic</tt> are "inherited twice"
+by <tt>Mathematics</tt> (via both <tt>Arithmetic</tt> and
+<tt>Geometry</tt>) is no violation of this rule; the usual
+problems of multiple inheritance do not arise, since
+the definitions of inherited constants cannot be changed.
+
+
+<h4>Compiling inheritance</h4>
+
+Inherited judgements are not copied into the inheriting modules.
+Instead, an <b>indirection</b> is created for each inherited name,
+as can be seen by looking into the generated <tt>gfc</tt> (and
+<tt>gfr</tt>) files. Thus for instance the names
+<pre>
+  Mathematics.Prop  Arithmetic.Prop  Geometry.Prop Logic.Prop
+</pre>
+all refer to the same category, declared in the module
+<tt>Logic</tt>.
+
+
+
+<h4>Inspecting grammar hierarchies</h4>
+
+The command <tt>visualize_graph</tt> (<tt>vg</tt>) shows the
+dependency graph in the current GF shell state. The graph can
+also be saved in a file and used e.g. in documentation, by the
+command <tt>print_multi -graph</tt> (<tt>pm -graph</tt>).
+
+
+<h3>Reuse of top-level grammars as resources</h3>
+
+Top-level grammars have a straightforward translation to
+<tt>resource</tt> modules. The translation concerns
+pairs of abstract-concrete judgements:
+<pre>
+  cat C ;               ===>  oper C : Type = T ;
+  lincat C = T ;
+
+  fun f : A ;           ===>  oper f : A = t ;
+  lin f = t ;
+</pre>
+Due to this translation, a <tt>concrete</tt> module
+can be <tt>open</tt>ed in the same way as a
+<tt>resource</tt> module; the translation is done
+on the fly (it is computationally very cheap).
+
+<p>
+
+Modular grammar engineering often means that some grammarians
+focus on the semantics of the domain whereas others take care
+of linguistic details. Thus a typical reuse opens a
+linguistically oriented <b>resource grammar</b>,
+<pre>
+  abstract Resource = {
+    cat S ; NP ; A ;
+    fun PredA : NP -> A -> S ;
+    }
+  concrete ResourceEng of Resource = {
+    lincat S = ... ; 
+    lin PredA = ... ;
+    }
+</pre>
+The <b>application grammar</b>, instead of giving linearizations
+explicitly, just reduces them to categories and functions in the
+resource grammar:
+<pre>
+  concrete ArithmeticEng of Arithmetic = LogicEng ** open ResourceEng in {
+    lincat Nat = NP ;
+    lin Even x = PredA x (regA "even") ;
+    }
+</pre>
+If the resource grammar is only capable of generating grammatically
+correct expressions, then the grammaticality of the application
+grammar is also guaranteed: the type checker of GF is used as
+grammar checker.
+To guarantee distinctions between categories that have
+the same linearization type, the actual translation used
+in GF adds to every linearization type and linearization
+a <b>lock field</b>,
+<pre>
+  cat C ;                    ===>  oper C : Type = T ** {lock_C : {}} ;
+  lincat C = T ;
+
+  fun f : C_1 ... C_n -> C ; ===>  oper f : C_1 ... C_n -> C = \x_1,...,x_n -> 
+  lin f = t ;                        t x_1 ... x_n ** {lock_C = &lt;>};
+</pre>
+(Notice that the latter translation is type-correct because of
+record subtyping, which means that <tt>t</tt> can ignore the
+lock fields of its arguments.) An application grammarian who
+only uses resource grammar categories and functions never
+needs to write these lock fields herself. Having to do so
+serves as a warning that the grammaticality guarantee given
+by the resource grammar no longer holds.
+
+
+<h2>Additional module types</h2>
+
+<h3>Interfaces, instances, and incomplete grammars</h3>
+
+One difference between top-level grammars and <tt>resource</tt>
+modules is that the former systematically separete the
+declarations of categories and functions from their definitions.
+In the reuse translation creating and <tt>oper</tt> judgement,
+the declaration coming from the <tt>abstract</tt> module is put
+together with the definition coming from the <tt>concrete</tt>
+module.
+
+<p>
+
+However, the separation of declarations and definitions is so
+useful a notion that GF also has specific modules types that
+<tt>resource</tt> modules into two parts. In this splitting,
+an <tt>interface</tt> module corresponds to an abstract syntax,
+in giving the declarations of operations (and parameter types).
+For instance, a generic markup interface would look as follows:
+<pre>
+  interface Markup = open Util in {
+    oper Boldface : Str -> Str ;
+    oper Heading  : Str -> Str ;
+    oper markupSS : (Str -> Str) -> SS -> SS = \f,r ->
+      ss (f r.s) ;
+    } 
+</pre>
+The definitions of the constants declared in an <tt>interface</tt>
+are given in an <tt>instance</tt> module (which is always <tt>of</tt>
+an interface, in the same way as a <tt>concrete</tt> is always
+<tt>of</tt> an abstract). The following <tt>instance</tt>s
+define markup in HTML and latex.
+<pre>
+  instance MarkupHTML of Markup = open Util in {
+    oper Boldface s = "&lt;b>" ++ s ++ "&lt;/b>" ; 
+    oper Heading  s = "&lt;h2>" ++ s ++ "&lt;/h2>" ; 
+    } 
+
+  instance MarkupLatex of Markup = open Util in {
+    oper Boldface s = "\\textbf{" ++ s ++ "}" ; 
+    oper Heading  s = "\\section{" ++ s ++ "}" ; 
+    } 
+</pre>
+Notice that both <tt>interface</tt>s and <tt>instance</tt>s may
+<tt>open</tt> <tt>resource</tt>s (and also reused top-level grammars).
+An <tt>interface</tt> may moreover define some of the operations it
+declares; these definitions are inherited by all instances and cannot
+be changed in them. Inheritance by module extension
+is possible, as always, between modules of the same type.
+
+
+<h4>Using an interface</h4>
+
+An <tt>interface</tt> or an <tt>instance</tt>
+can be <tt>open</tt>ed in
+a <tt>concrete</tt> using the same syntax as when opening
+a <tt>resource</tt>. For an <tt>instance</tt>, the semantics
+is the same as when opening the definitions together with
+the type signatures - one can think of an <tt>interface</tt>
+and an <tt>instance</tt> of it together forming an ordinary
+<tt>resource</tt>. Opening an <tt>interface</tt>, however,
+is different:  functions that are only declared without
+having a definition cannot be compiled (inlined); neither
+can functions whose definitions depend on undefined functions.
+
+<p>
+
+A module that <tt>open</tt>s an <tt>interface</tt> is therefore
+<b>incomplete</b>, and has to be <b>completed</b> with an
+<tt>instance</tt> of the interface to become complete. To make
+this situation clear, GF requires any module that opens an
+<tt>interface</tt> to be marked as <tt>incomplete</tt>. Thus
+the module
+<pre>
+  incomplete concrete DocMarkup of Doc = open Markup in {
+    ...
+    }
+</pre>
+uses the interface <tt>Markup</tt> to place markup in
+chosen places in its linearization rules, but the
+implementation of markup - whether in HTML or in LaTeX - is
+left unspecified. This is a powerful way of sharing
+the code of a whole module with just differences in
+the definitions of some constants.
+
+<p>
+
+Another terminology for <tt>incomplete</tt> modules is
+<b>parametrized modules</b> or <b>functors</b>.
+The <tt>interface</tt> gives the list of parameters
+that the functor depends on.
+
+
+<h4>Instantiating an interface</h4>
+
+To complete an <tt>incomplete</tt> module, each <tt>inteface</tt>
+that it opens has to be provided an <tt>instance</tt>. The following
+syntax is used for this:
+<pre>
+  concrete DocHTML of Doc = DocMarkup with (Markup = MarkupHTML) ;
+</pre>
+Instantiation of <tt>Markup</tt> with <tt>MarkupLatex</tt> is
+another one-liner.
+
+<p>
+
+If more interfaces than one are instantiated, a comma-separated
+list of equations in parentheses is used, e.g.
+<pre>
+  concrete RulesIta = CategoriesIta ** RulesRomance with
+    (TypesRomance = TypesIta), (SyntaxRomance = SyntaxIta) ;
+</pre>
+(an example from the GF resource grammar library, where languages for
+Romance languages share two interfaces).
+All interfaces that are <tt>open</tt>ed in the completed model
+must be completed.
+
+<p>
+
+Notice that the completion of an <tt>incomplete</tt> module
+may at the same time extend modules of the same type (which need
+not be completions). But it cannot add new judgements.
+
+
+<h4>Compiling interfaces, instances, and parametrized modules</h4>
+
+Interfaces, instances, and parametric modules are purely a
+front-end feature of GF: these module types do not exist in
+the <tt>gfc</tt> and <tt>gfr</tt> formats. The compiler has
+nevertheless to keep track of their dependencies and modification
+times. Here is a summary of how they are compiled:
+<ul>
+<li> an <tt>interface</tt> is compiled into a <tt>resource</tt> with an empty body
+<li> an <tt>instance</tt> is compiled into a <tt>resource</tt> in union with its
+  <tt>interface</tt>
+<li> an <tt>incomplete</tt> module (<tt>concrete</tt> or <tt>resource</tt>) is compiled
+  into a module of the same type with an empty body
+<li> a completion module (<tt>concrete</tt> or <tt>resource</tt>) is compiled
+  into a module of the same type by compiling its functor so that, instead of
+  each <tt>interface</tt>, its given <tt>instance</tt> is used
+</ul>
+This means that some generated code is duplicated, because those operations that
+do have complete definitions in an <tt>interface</tt> are copied to each of
+the <tt>instances</tt>.
+
+
+<h3>Transfer modules</h3>
+
+<b>Translation by transfer</b> means that syntax trees are manipulated
+by non-compositional functions (<b>transfer rules</b>) between the
+source and target languages. They are being introduce to GF as a module
+type of its own, but their development is still in progress. What
+will be available are at least <tt>fun</tt> and <tt>def</tt>
+judgements, but more is needed. It has not yet been defined how
+transfer modules are integrated in multilingual grammars, i.e.\
+where in the grammar it is specified what transfer to use.
+(Both GF and GFC have a syntax for transfer modules and
+multilingual headers, but their compilation further than parsing
+has not been implemented.)
+
+
+
+<h2>Summary of module syntax and semantics</h2>
+
+
+<h4>Abstract syntax modules</h4>
+
+Syntax: 
+<p>
+<tt>abstract</tt> A <tt>=</tt> (A<sub>1</sub>,...,A<sub>n</sub> <tt>**</tt>)?
+<tt>{</tt>J<sub>1</sub> <tt>;</tt> ... <tt>;</tt> J<sub>m</sub> <tt>; }</tt>
+
+<p>
+
+where
+<ul>
+<li> i >= 0
+<li> each <i>A<sub>i</sub></i> is itself an abstract module
+<li> each <i>J<sub>i</sub></i> is a judgement of one of the forms
+     <tt>cat, fun, def, data</tt>
+</ul>
+Semantic conditions:
+<ul>
+<li> all names declared in each <i>A<sub>i</sub></i> and <i>A</i> must be distinct
+</ul>
+
+<h4>Concrete syntax modules</h4>
+
+Syntax: 
+<p>
+<tt>incomplete</tt>? <tt>concrete</tt> C <tt>of</tt> A <tt>=</tt>
+(C<sub>1</sub>,...,C<sub>n</sub> <tt>**</tt>)?
+(<tt>open</tt> O<sub>1</sub>,...,O<sub>k</sub> <tt>in</tt>)?
+<tt>{</tt>J<sub>1</sub> <tt>;</tt> ... <tt>;</tt> J<sub>m</sub> <tt>; }</tt>
+
+<p>
+
+where
+<ul>
+<li> i >= 0
+<li> <i>A</i> is an abstract module
+<li> each <i>C<sub>i</sub></i> is a concrete module
+<li> each <i>O<sub>i</sub></i> is an open specification, of one of the forms
+  <ul>
+    <li> <i>R</i> 
+    <li> <tt>(</tt><i>Q</i><tt>=</tt><i>R</i><tt>)</tt> 
+  </ul>
+where <i>R</i> is a resource, instance, or concrete, and
+<i>Q</i> is any identifier
+<li> each <i>J<sub>i</sub></i> is a judgement of one of the forms
+     <tt>lincat, lin, lindef, printname</tt>
+</ul>
+
+<p>
+
+If the modifier <tt>incomplete</tt> appears, then any <i>R</i> in
+an open specification may also be an interface.
+
+<p>
+
+Semantic conditions:
+<ul>
+<li> each <tt>cat</tt> judgement in <i>A</i>
+     must have a corresponding, unique
+     <tt>lincat</tt> judgement in <i>C</i>
+<li> each <tt>fun</tt> judgement in <i>A</i>
+     must have a corresponding, unique
+     <tt>lin</tt> judgement in <i>C</i>
+</ul>
+
+
+<h4>Resource modules</h4>
+
+Syntax: 
+<p>
+<tt>resource</tt> R <tt>=</tt>
+(R<sub>1</sub>,...,R<sub>n</sub> <tt>**</tt>)?
+(<tt>open</tt> O<sub>1</sub>,...,O<sub>k</sub> <tt>in</tt>)?
+<tt>{</tt>J<sub>1</sub> <tt>;</tt> ... <tt>;</tt> J<sub>m</sub> <tt>; }</tt>
+
+<p>
+where
+<ul>
+<li> i >= 0
+<li> each <i>R<sub>i</sub></i> is a resource module
+<li> each <i>O<sub>i</sub></i> is an open specification, of one of the forms
+  <ul>
+    <li> <i>P</i> 
+    <li> <tt>(</tt><i>Q</i><tt>=</tt><i>R</i><tt>)</tt> 
+  </ul>
+where <i>P</i> is a resource, instance, or concrete, and
+<i>Q</i> is any identifier
+<li> each <i>J<sub>i</sub></i> is a judgement of one of the forms
+     <tt>oper, param</tt>
+</ul>
+
+<p>
+
+Semantic conditions:
+<ul>
+<li> all names declared in each <i>R<sub>i</sub></i> and <i>R</i> must be distinct
+<li> all constants declared must have a definition
+</ul>
+
+
+<h4>Interface modules</h4>
+
+Syntax: 
+<p>
+<tt>interface</tt> R <tt>=</tt>
+(R<sub>1</sub>,...,R<sub>n</sub> <tt>**</tt>)?
+(<tt>open</tt> O<sub>1</sub>,...,O<sub>k</sub> <tt>in</tt>)?
+<tt>{</tt>J<sub>1</sub> <tt>;</tt> ... <tt>;</tt> J<sub>m</sub> <tt>; }</tt>
+
+<p>
+where
+<ul>
+<li> i >= 0
+<li> each <i>R<sub>i</sub></i> is an interface module
+<li> each <i>O<sub>i</sub></i> is an open specification, of one of the forms
+  <ul>
+    <li> <i>P</i> 
+    <li> <tt>(</tt><i>Q</i><tt>=</tt><i>R</i><tt>)</tt> 
+  </ul>
+where <i>P</i> is a resource, instance, or concrete, and
+<i>Q</i> is any identifier
+<li> each <i>J<sub>i</sub></i> is a judgement of one of the forms
+     <tt>oper, param</tt>
+</ul>
+
+<p>
+
+Semantic conditions:
+<ul>
+<li> all names declared in each <i>R<sub>i</sub></i> and <i>R</i> must be distinct
+</ul>
+
+
+
+<h4>Instance modules</h4>
+
+Syntax: 
+<p>
+<tt>instance</tt> R <tt>of</tt> I <tt>=</tt>
+(R<sub>1</sub>,...,R<sub>n</sub> <tt>**</tt>)?
+(<tt>open</tt> O<sub>1</sub>,...,O<sub>k</sub> <tt>in</tt>)?
+<tt>{</tt>J<sub>1</sub> <tt>;</tt> ... <tt>;</tt> J<sub>m</sub> <tt>; }</tt>
+
+<p>
+where
+<ul>
+<li> i >= 0
+<li> <i>I</i> is an interface module
+<li> each <i>R<sub>i</sub></i> is an instance module
+<li> each <i>O<sub>i</sub></i> is an open specification, of one of the forms
+  <ul>
+    <li> <i>P</i> 
+    <li> <tt>(</tt><i>Q</i><tt>=</tt><i>R</i><tt>)</tt> 
+  </ul>
+where <i>P</i> is a resource, instance, or concrete, and
+<i>Q</i> is any identifier
+<li> each <i>J<sub>i</sub></i> is a judgement of one of the forms
+     <tt>oper, param</tt>
+</ul>
+
+<p>
+
+Semantic conditions:
+<ul>
+<li> all names declared in each <i>R<sub>i</sub></i>, <i>I</i>, and <i>R</i> must be distinct
+<li> all constants declared in <i>I</i> must have a definition either in
+  <i>I</i> or <i>R</i>
+</ul>
+
+
+<h4>Instantiated concrete syntax modules</h4>
+
+Syntax: 
+<p>
+<tt>concrete</tt> C <tt>of</tt> A <tt>=</tt>
+(C<sub>1</sub>,...,C<sub>n</sub> <tt>**</tt>)?
+B
+<tt>with</tt>
+<tt>(</tt>I<sub>1</sub> <tt>=</tt>J<sub>1</sub><tt>),</tt> ... 
+<tt>, (</tt>I<sub>m</sub> <tt>=</tt>J<sub>m</sub><tt>) ;</tt>
+
+<p>
+
+where
+<ul>
+<li> i >= 0
+<li> <i>A</i> is an abstract module
+<li> each <i>C<sub>i</sub></i> is a concrete module
+<li> <i>B</i> is an incomplete concrete syntax of <i>A</i>
+<li> each <i>I<sub>i</sub></i> is an interface
+<li> each <i>J<sub>i</sub></i> is an instance of <i>I<sub>i</sub></i>
+</ul>
+
+
+</body>
+</html>
