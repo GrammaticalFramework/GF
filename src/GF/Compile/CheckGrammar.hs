@@ -45,6 +45,8 @@ import GF.Infra.CheckM
 
 import Data.List
 import Control.Monad
+import Debug.Trace ---
+
 
 showCheckModule :: [SourceModule] -> SourceModule -> Err ([SourceModule],String)
 showCheckModule mos m = do
@@ -380,16 +382,18 @@ inferLType gr trm = case trm of
    Q m ident | isPredef m -> termWith trm $ checkErr (typPredefined ident)
 
    Q m ident -> checks [
-----     do
-----       over <- getOverload gr Nothing trm
-----       case over of
-----         Just trty -> return trty
-----         _ -> fail "not overloaded"
-----     ,
      termWith trm $ checkErr (lookupResType gr m ident) >>= comp
      ,
      checkErr (lookupResDef gr m ident) >>= infer
      ,
+{-
+     do
+       over <- getOverload gr Nothing trm
+       case over of
+         Just trty -> return trty
+         _ -> prtFail "not overloaded" trm
+     ,
+-}
      prtFail "cannot infer type of constant" trm
      ]
 
@@ -494,8 +498,9 @@ inferLType gr trm = case trm of
 
 ---- hack from Rename.identRenameTerm, to live with files with naming conflicts 18/6/2007
    Strs (Cn (IC "#conflict") : ts) -> do
-     checkWarn ("WARNING: unresolved constant, could be any of" +++ unwords (map prt ts))
-     infer $ head ts
+     trace ("WARNING: unresolved constant, could be any of" +++ unwords (map prt ts)) (infer $ head ts)
+--     checkWarn ("WARNING: unresolved constant, could be any of" +++ unwords (map prt ts))
+--     infer $ head ts
 
    Strs ts -> do
      ts' <- mapM (\t -> justCheck t typeStr) ts 

@@ -768,7 +768,6 @@ Import ``FoodEng.gf`` and see what happens:
   > i FoodEng.gf
   - compiling Food.gf...   wrote file Food.gfc 16 msec
   - compiling FoodEng.gf...   wrote file FoodEng.gfc 20 msec
-
 ```
 The GF program does not only read the file 
 ``FoodEng.gf``, but also all other files that it
@@ -833,8 +832,17 @@ concrete FoodIta of Food = {
     Boring = {s = "noioso"} ;
 
 }
-
 ```
+
+**Exercise**. Write a concrete syntax of ``Food`` for some other language.
+You will probably end up with grammatically incorrect output - but don't
+worry about this yet.
+
+**Exercise**. If you have written ``Food`` for German, Swedish, or some
+other language, test with random or exhaustive generation what constructs
+come out incorrect, and prepare a list of those ones that cannot be helped
+with the currently available fragment of GF.
+
 
 %--!
 ==Using a multilingual grammar==
@@ -861,9 +869,11 @@ Generate a **multilingual treebank**, i.e. a set of trees with their
 translations in different languages:
 ```
   > gr -number=2 | tree_bank
+
   Is (That Cheese) (Very Boring)
   quello formaggio è molto noioso
   that cheese is very boring
+
   Is (That Cheese) Fresh
   quello formaggio è fresco
   that cheese is fresh
@@ -876,6 +886,13 @@ To see what grammars are in scope and which is the main one, use the command
   > print_options
   main abstract :     Food
   main concrete :     FoodIta
+  actual concretes :  FoodIta FoodEng
+```
+You can change the main grammar by the command ``change_main = cm``:
+```
+  > change_main FoodEng
+  main abstract :     Food
+  main concrete :     FoodEng
   actual concretes :  FoodIta FoodEng
 ```
 
@@ -936,9 +953,10 @@ makes this in a subshell of GF.
 You can also generate a list of translation exercises and save it in a
 file for later use, by the command ``translation_list = tl``
 ```
-  > translation_list -number=25 FoodEng FoodIta
+  > translation_list -number=25 FoodEng FoodIta | write_file transl.txt
 ```
 The ``number`` flag gives the number of sentences generated.
+
 
 
 
@@ -1083,7 +1101,6 @@ avoid repeating work.
 
 However, there is a more elegant way to avoid repeating work than the copy-and-paste
 method. The **golden rule of functional programming** says that
-
 - whenever you find yourself programming by copy-and-paste, write a function instead.
 
 
@@ -1183,11 +1200,6 @@ opened in a new version of ``FoodEng``.
 **Exercise**. Use the same string operations to write ``FoodIta``
 more concisely.
 
-**Exercise**. Define an operation ``infix`` analogous to ``prefix``,
-such that it allows you to write
-```
-  lin Is = infix "is" ;
-```
 
 
 %--!
@@ -1216,6 +1228,33 @@ function ``SS -> SS``. The expected linearization of ``This`` is exactly
 a function of such a type, operating on an argument of type ``Kind``
 whose linearization is of type ``SS``. Thus we can define the
 linearization directly as ``prefix "this"``.
+
+**Exercise**. Define an operation ``infix`` analogous to ``prefix``,
+such that it allows you to write
+```
+  lin Is = infix "is" ;
+```
+
+
+%--!
+==Testing resource modules==
+
+To test a ``resource`` module independently, you must import it
+with the flag ``-retain``, which tells GF to retain ``oper`` definitions
+in the memory; the usual behaviour is that ``oper`` definitions
+are just applied to compile linearization rules 
+(this is called **inlining**) and then thrown away.
+```
+  > i -retain StringOper.gf
+```
+The command ``compute_concrete = cc`` computes any expression
+formed by operations and other GF constructs. For example,
+```
+  > compute_concrete prefix "in" (ss "addition")
+  {
+    s : Str = "in" ++ "addition"
+  }
+```
 
 
 
@@ -1254,7 +1293,6 @@ of nouns and verbs (//wines, are//), as opposed to their
 singular forms.
 
 The introduction of plural forms requires two things:
-
 - the **inflection** of nouns and verbs in singular and plural
 - the **agreement** of the verb to subject: 
   the verb must have the same number as the subject
@@ -1269,6 +1307,9 @@ To be able to do all this, we need one new judgement form
 and many new expression forms.
 We also need to generalize linearization types
 from strings to more complex types.
+
+**Exercise**. Make a list of the possible forms that nouns,
+adjectives, and verbs can have in some languages that you know.
 
 
 %--!
@@ -1314,9 +1355,16 @@ selection argument. Thus
    ===> "cheeses"
 ```
 
+**Exercise**. In a previous exercise, we make a list of the possible 
+forms that nouns, adjectives, and verbs can have in some languages that 
+you know. Now take some of the results and implement them by
+using parameter type definitions and tables. Write them into a ``resource``
+module, which you can test by using the command ``compute_concrete``.
+
+
 
 %--!
-==Inflection tables, paradigms, and ``oper`` definitions==
+==Inflection tables and paradigms==
 
 All English common nouns are inflected in number, most of them in the
 same way: the plural form is obtained from the singular by adding the
@@ -1345,6 +1393,13 @@ are written together to form one **token**. Thus, for instance,
   (regNoun "cheese").s ! Pl  ---> "cheese" + "s"  --->  "cheeses"
 ```
 
+**Exercise**. Identify cases in which the ``regNoun`` paradigm does not
+apply in English, and implement some alternative paradigms.
+
+**Exercise**. Implement a paradigm for regular verbs in English.
+
+**Exercise**. Implement some regular paradigms for other languages you have
+considered in earlier exercises.
 
 
 %--!
@@ -1407,36 +1462,30 @@ all characters but the last) of a string:
 ```
 The operation ``init`` belongs to a set of operations in the
 resource module ``Prelude``, which therefore has to be
-``open``ed so that ``init`` can be used.
-
-
-
-%--!
-==An intelligent noun paradigm using ``case`` expressions==
-
-It may be hard for the user of a resource morphology to pick the right
-inflection paradigm. A way to help this is to define a more intelligent
-paradigm, which chooses the ending by first analysing the lemma.
-The following variant for English regular nouns puts together all the
-previously shown paradigms, and chooses one of them on the basis of
-the final letter of the lemma (found by the prelude operator ``last``).
+``open``ed so that ``init`` can be used. Its dual is ``last``:
 ```
-  regNoun : Str -> Noun = \s -> case last s of {
-    "s" | "z" => mkNoun s (s + "es") ;
-    "y"       => mkNoun s (init s + "ies") ;
-    _         => mkNoun s (s + "s")
-    } ;
-```
-This definition displays many GF expression forms not shown befores;
-these forms are explained in the next section.
+  > cc init "curry"
+  "curr"
 
-The paradigms ``regNoun`` does not give the correct forms for
-all nouns. For instance, //mouse - mice// and
-//fish - fish// must be given by using ``mkNoun``.
-Also the word //boy// would be inflected incorrectly; to prevent
-this, either use ``mkNoun`` or modify 
-``regNoun`` so that the ``"y"`` case does not
-apply if the second-last character is a vowel.
+  > cc last "curry"
+  "y"
+```
+As generalizations of the library functions ``init`` and ``last``, GF has
+two predefined funtions:
+``Predef.dp``, which "drops" suffixes of any length, 
+and ``Predef.tk``, which "takes" a prefix
+just omitting a number of characters from the end. For instance,
+```
+  > cc Predef.tk 3 "worried"
+  "worr"
+  > cc Predef.dp 3 "worried"
+  "ied"
+```
+The prefix ``Predef`` is given to a handful of functions that could
+not be defined internally in GF. They are available in all modules
+without explicit ``open`` of the module ``Predef``.
+
+
 
 
 
@@ -1466,6 +1515,49 @@ programming languages are syntactic sugar for table selections:
 ```
   case e of {...} ===  table {...} ! e
 ```
+
+
+%--!
+==An intelligent noun paradigm using pattern matching==
+
+It may be hard for the user of a resource morphology to pick the right
+inflection paradigm. A way to help this is to define a more intelligent
+paradigm, which chooses the ending by first analysing the lemma.
+The following variant for English regular nouns puts together all the
+previously shown paradigms, and chooses one of them on the basis of
+the final letter of the lemma (found by the prelude operator ``last``).
+```
+  regNoun : Str -> Noun = \s -> case last s of {
+    "s" | "z" => mkNoun s (s + "es") ;
+    "y"       => mkNoun s (init s + "ies") ;
+    _         => mkNoun s (s + "s")
+    } ;
+```
+This definition displays many GF expression forms not shown befores;
+these forms are explained in the next section.
+
+The paradigms ``regNoun`` does not give the correct forms for
+all nouns. For instance, //mouse - mice// and
+//fish - fish// must be given by using ``mkNoun``.
+Also the word //boy// would be inflected incorrectly; to prevent
+this, either use ``mkNoun`` or modify 
+``regNoun`` so that the ``"y"`` case does not
+apply if the second-last character is a vowel.
+
+**Exercise**. Extend the ``regNoun`` paradigm so that it takes care
+of all variations there are in English. Test it with the nouns
+//ax//, //bamboo//, //boy//, //bush//, //hero//, //match//. 
+**Hint**. The library functions ``Predef.dp`` and ``Predef.tk``
+are useful in this task.
+
+**Exercise**. The same rules that form plural nouns in English also
+apply in the formation of third-person singular verbs. 
+Write a regular verb paradigm that uses this idea, but first
+rewrite ``regNoun`` so that the analysis needed to build //s//-forms
+is factored out as a separate ``oper``, which is shared with
+``regVerb``.
+
+
 
 
 %--!
@@ -1516,43 +1608,6 @@ module depends on. The directory ``prelude`` is a subdirectory of
 ``GF/lib``; to be able to refer to it in this simple way, you can
 set the environment variable ``GF_LIB_PATH`` to point to this
 directory.
-
-
-%--!
-==Testing resource modules==
-
-To test a ``resource`` module independently, you must import it
-with the flag ``-retain``, which tells GF to retain ``oper`` definitions
-in the memory; the usual behaviour is that ``oper`` definitions
-are just applied to compile linearization rules 
-(this is called **inlining**) and then thrown away.
-```
-  > i -retain MorphoEng.gf
-```
-The command ``compute_concrete = cc`` computes any expression
-formed by operations and other GF constructs. For example,
-```
-  > cc regVerb "echo"
-  {s : Number => Str = table Number {
-    Sg => "echoes" ;
-    Pl => "echo"
-    }
-  }
-```
-
-The command ``show_operations = so``` shows the type signatures
-of all operations returning a given value type:
-```
-  > so Verb
-  MorphoEng.mkNoun : Str -> Str -> {s : {MorphoEng.Number} => Str}
-  MorphoEng.mkVerb : Str -> Str -> {s : {MorphoEng.Number} => Str}
-  MorphoEng.regNoun : Str -> {s : {MorphoEng.Number} => Str}
-  MorphoEng.regVerb : Str -> { s : {MorphoEng.Number} => Str}
-```
-Why does the command also show the operations that form
-``Noun``s? The reason is that the type expression
-``Verb`` is first computed, and its value happens to be
-the same as the value of ``Noun``.
 
 
 
@@ -1640,7 +1695,6 @@ concrete FoodsEng of Foods = open Prelude, MorphoEng in {
       s = d ++ cn.s ! n ;
       n = n
       } ;
-
 }
 ```
 
@@ -1787,6 +1841,7 @@ can be used e.g. if a word lacks a certain form.
 In general, ``variants`` should be used cautiously. It is not
 recommended for modules aimed to be libraries, because the
 user of the library has no way to choose among the variants.
+
 
 
 ==Overloading of operations==
@@ -1962,9 +2017,9 @@ unstressed pre-final vowel //e// disappears in the plural
 
 Semantics: variables are always bound to the **first match**, which is the first
 in the sequence of binding lists ``Match p v`` defined as follows. In the definition,
-``p`` is a pattern and ``v`` is a value.
+``p`` is a pattern and ``v`` is a value. The semantics is given in Haskell notation.
 ```
-  Match (p1|p2) v = Match p1 v ++ Match p2 v
+  Match (p1|p2) v = Match p1 ++ U Match p2 v
   Match (p1+p2) s = [Match p1 s1 ++ Match p2 s2 | 
                        i <- [0..length s], (s1,s2) = splitAt i s]
   Match p*      s = [[]] if Match "" s ++ Match p s ++ Match (p+p) s ++... /= []
@@ -2012,7 +2067,7 @@ This very example does not work in all situations: the prefix
 ```
 
 
-==Predefined types and operations==
+==Predefined types==
 
 GF has the following predefined categories in abstract syntax:
 ```
@@ -2227,7 +2282,7 @@ sometimes shortens the code, since we can write e.g.
 ```
   oper triple : (x,y,z : Str) -> Str = ...
 ```
-If a bound variable is not used, it can here, as elswhere in GF, be replaced by
+If a bound variable is not used, it can here, as elsewhere in GF, be replaced by
 a wildcard:
 ```
   oper triple : (_,_,_ : Str) -> Str = ...
