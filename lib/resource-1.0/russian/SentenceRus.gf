@@ -72,15 +72,15 @@ concrete SentenceRus of Sentence = CatRus ** open Prelude, ResRus in {
     EmbedVP vp = {s = vp.s2  ++ vp.s!ClInfinit!(ASg Masc) !P3 ++ vp.s3!Masc!Sg} ;
 
     UseCl  t a p cl = {s = case t.t of { 
-      Cond => cl.s! p.p ! ClCondit ;
+      Cond => cl.s! p.p ! ClCondit ; --# notpresent
       _ => cl.s! p.p ! ClIndic (getTense t.t) a.a}};
 
     UseQCl t a p qcl= {s = case t.t of { 
-      Cond => qcl.s! p.p ! ClCondit ;
+      Cond => qcl.s! p.p ! ClCondit ; --# notpresent
       _ => qcl.s!p.p! ClIndic (getTense t.t) a.a }};
 
     UseRCl t a p rcl ={s = \\gn,c,anim => case t.t of { 
-      Cond => [", "] ++ rcl.s! p.p ! ClCondit ! gn !c !anim ;
+      Cond => [", "] ++ rcl.s! p.p ! ClCondit ! gn !c !anim ; --# notpresent
       _ => [", "] ++ rcl.s! p.p ! ClIndic (getTense t.t) a.a !gn !c !anim}};
 
     AdvS a s = {s = a.s ++ "," ++ s.s} ; ---- AR 19/6/2007
