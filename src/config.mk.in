@@ -10,6 +10,7 @@ libdir = @libdir@
 datadir = @datadir@
 
 host = @host@
+build = @build@
 
 GHCFLAGS = @GHCFLAGS@
 CPPFLAGS = @CPPFLAGS@
