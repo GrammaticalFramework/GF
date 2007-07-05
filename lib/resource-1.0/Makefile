@@ -114,7 +114,7 @@ multimodal:
 	$(GF) -make -nocf multimodal/Multi???.gf
 	mv multimodal/*.gfc ../multimodal
 
-compiled:
+compiled: prelude present alltenses mathematical multimodal
 	cd .. ; tar cfz compiled.tgz alltenses/ mathematical/ multimodal/ present/ prelude/*.gf?
 
 treebank:
