@@ -26,8 +26,6 @@ MSI_FILE=gf-$(subst .,_,$(PACKAGE_VERSION)).msi
 GF_DATA_DIR=$(datadir)/GF-$(PACKAGE_VERSION)
 GF_LIB_DIR=$(GF_DATA_DIR)/lib
 
-GF_LIB_PACKAGES = alltenses mathematical multimodal prelude present
-
 EMBED = GF/Embed/TemplateApp
 
 # use the temporary binary file name 'gf-bin' to not clash with directory 'GF' 
@@ -208,7 +206,7 @@ gfcc2c:
 #
 
 lib:
-	$(MAKE) -C ../lib/resource-1.0 $(GF_LIB_PACKAGES)
+	$(MAKE) -C ../lib/resource-1.0 clean compiled
 
 #
 # Distribution
@@ -247,8 +245,7 @@ binary-dist:
 	$(INSTALL) -m 0644 INSTALL.binary $(BIN_DIST_DIR)/INSTALL
 	$(INSTALL) -m 0644 Makefile.binary $(BIN_DIST_DIR)/Makefile
 	$(MAKE) lib
-	$(INSTALL) -d $(addprefix $(BIN_DIST_DIR)/lib/, $(GF_LIB_PACKAGES))
-	(cd ../lib && find $(GF_LIB_PACKAGES) -type f -name '*.gf?' -exec $(INSTALL) -m 0644 '{}' '../src/$(BIN_DIST_DIR)/lib/{}' ';')
+	$(TAR) -C $(BIN_DIST_DIR) -zxf ../lib/compiled.tgz
 	$(TAR) -zcf GF-$(PACKAGE_VERSION)-$(host).tgz $(BIN_DIST_DIR)
 	rm -rf $(BIN_DIST_DIR)
 
@@ -283,8 +280,7 @@ install-gfdoc:
 
 install-lib:
 	$(INSTALL) -d $(GF_LIB_DIR)
-	$(INSTALL) -d $(addprefix $(GF_LIB_DIR)/, $(GF_LIB_PACKAGES))
-	(cd ../lib && find $(GF_LIB_PACKAGES) -type f -name '*.gf?' -exec $(INSTALL) -m 0644 '{}' '$(GF_LIB_DIR)/{}' ';')
+	$(TAR) -C $(GF_LIB_DIR) -zxf ../lib/compiled.tgz
 
 install-editor:
 	$(INSTALL) -d $(GF_DATA_DIR)
