@@ -8,8 +8,8 @@ lincat
 lin
   SpecNoun spec noun = mkUtt (mkNP spec noun) ;
 
-  One = mkDet one_Quant ;
-  Two = mkDet (mkNum n2_Numeral) ;
+  One = mkDet n1_Numeral ;
+  Two = mkDet n2_Numeral ;
 
   Felis = cat_N ;
   Canis = dog_N ;
