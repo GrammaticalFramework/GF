@@ -27,7 +27,7 @@ lin
   can_VV = mkVV (verboV (poder_58 "poder")) ;
   during_Prep = mkPrep "durante" ; ----
   either7or_DConj = {s1,s2 = "o" ; n = Sg} ;
-  everybody_NP = mkNP ["todos"] Masc Pl ;
+  everybody_NP = makeNP ["todos"] Masc Pl ;
   every_Det = {s = \\_,_ => "cada" ; n = Sg} ;
   everything_NP = pn2np (mkPN ["todo"] Masc) ;
   everywhere_Adv = ss ["en todas partes"] ;
@@ -92,12 +92,12 @@ lin
       Pl => \\g,c => prepCase c ++ genForms "esos" "esas" ! g
       }
     } ;
-  that_NP = mkNP ["eso"] Masc Sg ;
+  that_NP = makeNP ["eso"] Masc Sg ;
   there_Adv = mkAdv "allí" ;		-- allá
   there7to_Adv = mkAdv ["para allá"] ;
   there7from_Adv = mkAdv ["de allá"] ;	
   therefore_PConj = ss ["por eso"] ;
-  these_NP = mkNP ["estos"] Masc Pl ;
+  these_NP = makeNP ["estos"] Masc Pl ;
   they_Pron = mkPronoun
     "ellos" "los" "les" "ellos"
     "su" "su" "sus" "sus"
@@ -109,7 +109,7 @@ lin
       }
     } ;
   this_NP = pn2np (mkPN ["esto"] Masc) ;
-  those_NP = mkNP ["esos"] Masc Pl ;
+  those_NP = makeNP ["esos"] Masc Pl ;
   through_Prep = mkPrep "por" ;
   too_AdA = ss "demasiado" ;
   to_Prep = complDat ;

@@ -431,7 +431,7 @@ oper
   regPN n = regGenPN n utrum ;
   regGenPN n g = {s = \\c => mkCase c n ; g = g} ** {lock_PN = <>} ;
   nounPN n = {s = n.s ! singular ! Indef ; g = n.g ; lock_PN = <>} ;
-  mkNP x y n g = 
+  makeNP x y n g = 
     {s = table {NPPoss _ => y ; _ => x} ; a = agrP3 g n ; p = P3 ;
      lock_NP = <>} ;
 
@@ -614,7 +614,7 @@ oper
 -- To form a noun phrase that can also be plural and have an irregular
 -- genitive, you can use the worst-case function.
 
-  mkNP : Str -> Str -> Number -> Gender -> NP ; 
+  makeNP : Str -> Str -> Number -> Gender -> NP ; 
 
     
 

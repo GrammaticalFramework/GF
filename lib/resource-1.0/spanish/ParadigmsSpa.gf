@@ -319,7 +319,7 @@ oper
       }
     } ;
 
-  mkNP x g n = {s = (pn2np (mk2PN x g)).s; a = agrP3 g n ; hasClit = False} ** {lock_NP = <>} ;
+  makeNP x g n = {s = (pn2np (mk2PN x g)).s; a = agrP3 g n ; hasClit = False} ** {lock_NP = <>} ;
 
   mk5A a b c d e = 
    compADeg {s = \\_ => (mkAdj a b c d e).s ; isPre = False ; lock_A = <>} ;
@@ -430,7 +430,7 @@ oper
 -- To form a noun phrase that can also be plural,
 -- you can use the worst-case function.
 
-  mkNP : Str -> Gender -> Number -> NP ; 
+  makeNP : Str -> Gender -> Number -> NP ; 
 
   mkA = overload {
     mkA : (util : Str) -> A  = regA ;

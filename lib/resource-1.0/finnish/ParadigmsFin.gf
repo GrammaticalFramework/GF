@@ -484,8 +484,8 @@ reg3N = \vesi,veden,vesiä ->
   compN = \s,n -> {s = \\c => s ++ n.s ! c ; g = n.g ; lock_N = <>} ;
 
 
-  mkNP  : N -> Number -> CatFin.NP ; 
-  mkNP noun num = {
+  makeNP  : N -> Number -> CatFin.NP ; 
+  makeNP noun num = {
     s = \\c => noun.s ! NCase num (npform2case num c) ; 
     a = agrP3 num ;
     isPron = False ;

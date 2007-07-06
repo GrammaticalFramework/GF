@@ -90,12 +90,12 @@ lin
       Pl => \\_,_ => "ces"
       }
     } ;
-  that_NP = mkNP ["cela"] Masc Sg ;
+  that_NP = makeNP ["cela"] Masc Sg ;
   there7from_Adv = ss ["de là"] ;
   there7to_Adv = ss "là" ; --- y
   there_Adv = ss "là" ;
   therefore_PConj = ss "donc" ;
-  these_NP = mkNP ["ceux-ci"] Masc Pl ;
+  these_NP = makeNP ["ceux-ci"] Masc Pl ;
   they_Pron = mkPronoun
     "ils" "les" "leur" "eux" "leur" "leur" "leurs"
     Masc Pl P3 ;
@@ -108,7 +108,7 @@ lin
       }
     } ;
   this_NP = pn2np (mkPN ["ceci"] Masc) ;
-  those_NP = mkNP ["ceux-là"] Masc Pl ;
+  those_NP = makeNP ["ceux-là"] Masc Pl ;
   through_Prep = mkPreposition "par" ;
   too_AdA = ss "trop" ;
   to_Prep = complDat ;

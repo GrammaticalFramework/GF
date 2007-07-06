@@ -6,13 +6,13 @@ concrete ExtraSpa of ExtraSpaAbs = ExtraRomanceSpa **
       "yo" "me" "me" "mí"
       "mi" "mi" "mis" "mis"
       Fem Sg P1 ;
-    these8fem_NP = mkNP ["estas"] Fem Pl ;
+    these8fem_NP = makeNP ["estas"] Fem Pl ;
     they8fem_Pron = mkPronoun
       "ellas" "las" "les" "ellas"
       "su" "su" "sus" "sus"
       Fem Pl P3 ;
     this8fem_NP = pn2np (mkPN ["esta"] Fem) ;
-    those8fem_NP = mkNP ["esas"] Fem Pl ;
+    those8fem_NP = makeNP ["esas"] Fem Pl ;
 
     we8fem_Pron = mkPronoun 
       "nosotras" "nos" "nos" "nosotras"

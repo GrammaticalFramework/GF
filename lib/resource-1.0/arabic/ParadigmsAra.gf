@@ -328,7 +328,7 @@ resource ParadigmsAra = open
   
   mkN3 = \n,p,q -> n ** {lock_N3 = <> ; c2 = p ; c3 = q} ;
   
-  mkNP : (_,_,_ : Str) -> PerGenNum -> NP = \ana,nI,I,pgn ->
+  makeNP : (_,_,_ : Str) -> PerGenNum -> NP = \ana,nI,I,pgn ->
     { s = 
         table {
           Nom => ana;

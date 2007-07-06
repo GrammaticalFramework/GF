@@ -5,12 +5,12 @@ concrete ExtraIta of ExtraItaAbs = ExtraRomanceIta **
     i8fem_Pron = mkPronoun
       "io" "mi" "mi" "me" "me" "mio" "mia" "miei" "mie"
       Fem Sg P1 ;
-    these8fem_NP = mkNP ["queste"] Fem Pl ;
+    these8fem_NP = makeNP ["queste"] Fem Pl ;
     they8fem_Pron = mkPronoun
       "loro" "loro" "li" "glie" "loro" "loro" "loro" "loro" "loro" 
       Fem Pl P3 ;
     this8fem_NP = pn2np (mkPN ["questa"] Fem) ;
-    those8fem_NP = mkNP ["quelle"] Fem Pl ;
+    those8fem_NP = makeNP ["quelle"] Fem Pl ;
     we8fem_Pron = 
       mkPronoun "noi" "ci" "ci" "ce" "noi" "nostro" "nostra" "nostri" "nostre"
       Fem Pl P1 ;
