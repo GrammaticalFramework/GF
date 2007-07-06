@@ -2090,25 +2090,591 @@ FIXME: The linearization type is ``{s : Str}`` for all these categories.
 
 
 %--!
+
 =Using the resource grammar library=
 
-%!include: ../intro-resource.txt
+In this chapter, we will take a look at the GF resource grammar library.
+We will use the library to implement a slightly extended ``Food`` grammar
+and port it to some new languages.
 
 
-%--!
-=Overview of the resource grammar library=
+==The coverage of the library==
 
-%!include: ../overview-resource.txt
+The GF Resource Grammar Library contains grammar rules for
+10 languages (in addition, 2 languages are available as incomplete
+implementations, and a few more are under construction). Its purpose
+is to make these rules available for application programmers,
+who can thereby concentrate on the semantic and stylistic
+aspects of their grammars, without having to think about 
+grammaticality. The targeted level of application grammarians
+is that of a skilled programmer with
+a practical knowledge of the target languages, but without
+theoretical knowledge about their grammars.
+Such a combination of
+skills is typical of programmers who, for instance, want to localize
+software to new languages.
+
+The current resource languages are
+- ``Ara``bic (incomplete)
+- ``Cat``alan (incomplete)
+- ``Dan``ish
+- ``Eng``lish
+- ``Fin``nish
+- ``Fre``nch
+- ``Ger``man
+- ``Ita``lian
+- ``Nor``wegian
+- ``Rus``sian
+- ``Spa``nish
+- ``Swe``dish
+
+
+The first three letters (``Eng`` etc) are used in grammar module names.
+The incomplete Arabic and Catalan implementations are 
+enough to be used in many applications; they both contain, amoung other 
+things, complete inflectional morphology.
+
+
+==The resource API==
+
+The resource library API is devided into language-specific 
+and language-independent parts. To put it roughly,
+- the syntax API is language-independent, i.e. has the same types and functions for all
+  languages.
+  Its name is ``Syntax``//L// for each language //L//
+- the morphology API is language-specific, i.e. has partly different types and functions
+  for different languages.
+  Its name is ``Paradigms``//L// for each language //L//
+
+
+A full documentation of the API is available on-line in the
+[resource synopsis  ../../lib/resource-1.0/synopsis.html]. For our
+examples, we will only need a fragment of the full API.
+
+In the first examples, 
+we will make use of the following categories, from the module ``Syntax``.
+
+|| Category  | Explanation  | Example  ||
+| ``Utt`` | sentence, question, word... | "be quiet" |
+| ``Adv`` | verb-phrase-modifying adverb, | "in the house" |
+| ``AdA`` | adjective-modifying adverb, | "very" |
+| ``S`` | declarative sentence | "she lived here" |
+| ``Cl`` | declarative clause, with all tenses | "she looks at this" |
+| ``AP`` | adjectival phrase | "very warm" |
+| ``CN`` | common noun (without determiner) | "red house" |
+| ``NP`` | noun phrase (subject or object) | "the red house" |
+| ``Det`` | determiner phrase | "those seven" |
+| ``Predet`` | predeterminer | "only" |
+| ``Quant`` | quantifier with both sg and pl | "this/these" |
+| ``Prep`` | preposition, or just case | "in" |
+| ``A`` | one-place adjective | "warm" |
+| ``N`` | common noun | "house" |
+
+
+We will need the following syntax rules from ``Syntax``.
+
+|| Function  | Type  | Example  ||
+| ``mkUtt`` | ``S -> Utt`` | //John walked// |
+| ``mkUtt`` | ``Cl -> Utt`` | //John walks// |
+| ``mkCl``  | ``NP -> AP -> Cl`` | //John is very old// |
+| ``mkNP``  | ``Det -> CN -> NP`` | //the first old man// |
+| ``mkNP``  | ``Predet -> NP -> NP`` | //only John// |
+| ``mkDet`` | ``Quant -> Det`` | //this// |
+| ``mkCN``  | ``N -> CN`` | //house// |
+| ``mkCN``  | ``AP -> CN -> CN`` | //very big blue house// |
+| ``mkAP``  | ``A -> AP`` | //old// |
+| ``mkAP``  | ``AdA -> AP -> AP`` | //very very old// |
+
+We will also need the following structural words from ``Syntax``.
+
+|| Function      | Type       | Example  ||
+| ``all_Predet`` | ``Predet`` | //all// |
+| ``defPlDet``   | ``Det``    | //the (houses)// |
+| ``this_Quant`` | ``Quant``  | //this// |
+| ``very_AdA``   | ``AdA``    | //very// |
+
+
+For French, we will use the following part of ``ParadigmsFre``.
+
+|| Function  | Type  | Example  ||
+| ``Gender`` | ``Type`` | - |
+| ``masculine`` | ``Gender`` | - |
+| ``feminine`` | ``Gender`` | - |
+| ``mkN`` | ``(cheval : Str) -> N`` | - |
+| ``mkN`` | ``(foie : Str) -> Gender -> N`` | - |
+| ``mkA`` | ``(cher : Str) -> A`` | - |
+| ``mkA`` | ``(sec,seche : Str) -> A`` | - |
+
+
+For German, we will use the following part of ``ParadigmsGer``.
+
+|| Function  | Type  | Example  ||
+| ``Gender`` | ``Type`` | - |
+| ``masculine`` | ``Gender`` | - |
+| ``feminine`` | ``Gender`` | - |
+| ``neuter`` | ``Gender`` | - |
+| ``mkN`` | ``(Stufe : Str) -> N`` | - |
+| ``mkN`` | ``(Bild,Bilder : Str) -> Gender -> N`` | - |
+| ``mkA`` | ``Str -> A`` | - |
+| ``mkA`` | ``(gut,besser,beste : Str) -> A`` | //gut,besser,beste// |
+
+
+**Exercise**. Try out the morphological paradigms in different languages. Do 
+in this way:
+```
+  > i -path=alltenses:prelude -retain alltenses/ParadigmsGer.gfr
+  > cc mkN "Farbe"
+  > cc mkA "gut" "besser" "beste"
+```
+
+
+==Example: French==
+
+We start with an abstract syntax that is like ``Food`` before, but
+has a plural determiner (//all wines//) and some new nouns that will
+need different genders in most languages.
+```
+  abstract Food = {
+  cat
+    S ; Item ; Kind ; Quality ;
+  fun
+    Is : Item -> Quality -> S ;
+    This, All : Kind -> Item ;
+    QKind : Quality -> Kind -> Kind ;
+    Wine, Cheese, Fish, Beer, Pizza : Kind ;
+    Very : Quality -> Quality ;
+    Fresh, Warm, Italian, Expensive, Delicious, Boring : Quality ;
+  }
+``` 
+The French implementation opens ``SyntaxFre`` and ``ParadigmsFre``
+to get access to the resource libraries needed. In order to find
+the libraries, a ``path`` directive is prepended; it is interpreted
+relative to the environment variable ``GF_LIB_PATH``.
+```
+  --# -path=.:present:prelude
+
+  concrete FoodFre of Food = open SyntaxFre,ParadigmsFre in {
+  lincat
+    S = Utt ; 
+    Item = NP ;
+    Kind = CN ;
+    Quality = AP ;
+  lin
+    Is item quality = mkUtt (mkCl item quality) ;
+    This kind = mkNP (mkDet this_Quant) kind ;
+    All kind = mkNP all_Predet (mkNP defPlDet kind) ;
+    QKind quality kind = mkCN quality kind ;
+    Wine = mkCN (mkN "vin") ;
+    Beer = mkCN (mkN "bière") ;
+    Pizza = mkCN (mkN "pizza" feminine) ;
+    Cheese = mkCN (mkN "fromage" masculine) ;
+    Fish = mkCN (mkN "poisson") ;
+    Very quality = mkAP very_AdA quality ;
+    Fresh = mkAP (mkA "frais" "fraîche") ;
+    Warm = mkAP (mkA "chaud") ;
+    Italian = mkAP (mkA "italien") ;
+    Expensive = mkAP (mkA "cher") ;
+    Delicious = mkAP (mkA "délicieux") ;
+    Boring = mkAP (mkA "ennuyeux") ;
+  }
+```
+The ``lincat`` definitions in ``FoodFre`` assign **resource categories**
+to **application categories**. In a sense, the application categories
+are **semantic**, as they correspond to concepts in the grammar application,
+whereas the resource categories are **syntactic**: they give the linguistic
+means to express concepts in any application.
+
+The ``lin`` definitions likewise assign resource functions to application
+functions. Under the hood, there is a lot of matching with parameters to
+take care of word order, inflection, and agreement. But the user of the
+library sees nothing of this: the only parameters you need to give are
+the genders of some nouns, which cannot be correctly inferred from the word.
+
+In French, for example, the one-argument ``mkN`` assignes the noun the feminine
+gender if and only if it ends with an //e//. Therefore the words //fromage// and
+//pizza// are given genders. One can of course always give genders manually, to
+be on the safe side.
+
+As for inflection, the one-argument adjective pattern ``mkA`` takes care of
+completely regular adjective such as //chaud-chaude//, but also of special 
+cases such as //italien-italien//, //cher-chère//, and //délicieux-délicieuse//.
+But it cannot form //frais-fraîche// properly. Once again, you can give more
+forms to be on the safe side. You can also test the paradigms in the GF
+program.
+
+**Exercise**. Compile the grammar ``FoodFre`` and generate and parse some sentences.
+
+**Exercise**. Write a concrete syntax of ``Food`` for English or some other language
+included in the resource library. You can also compare the output with the hand-written
+grammars presented earlier in this tutorial.
+
+
+
+==Functor implementation of multilingual grammars==
+
+If you did the exercise of writing  a concrete syntax of ``Food`` for some other
+language, you probably noticed that much of the code looks exactly the same
+as for French. The immediate reason for this is that the ``Syntax`` API is the
+same for all languages; the deeper reason is that all languages (at least those
+in the resource package) have the same syntactic structures and tend to use them
+in similar ways. Thus it is only the lexical parts of a concrete syntax that
+you need to write anew for a new language. In brief,
+- first copy the concrete syntax for one language
+- then change the words (the strings and perhaps some paradigms)
+
+
+But programming by copy-and-paste is not worthy of a functional programmer.
+Can we write a function that takes care of the shared parts of grammar modules?
+Yes, we can. It is not a function in the ``fun`` or ``oper`` sense, but 
+a function operating on modules, called a **functor**. This construct
+is familiar from the functional languages ML and OCaml, but it does not
+exist in Haskell. It also bears some resemblance to templates in C++.
+Functors are also known as **parametrized modules**.
+
+In GF, a functor is a module that ``open``s one or more **interfaces**.
+An ``interface`` is a module similar to a ``resource``, but it only
+contains the types of ``oper``s, not their definitions. You can think
+of an interface as a kind of a record type. Thus a functor is a kind
+of a function taking records as arguments and producins a module
+as value.
+
+Let us look at a functor implementation of the ``Food`` grammar.
+Consider its module header first:
+```
+  incomplete concrete FoodI of Food = open Syntax, LexFood in
+```
+In the functor-function analogy, ``FoodI`` would be presented as a function
+with the following type signature:
+```
+  FoodI : instance of Syntax -> instance of LexFood -> concrete of Food
+```
+It takes as arguments two interfaces: 
+- ``Syntax``, the resource grammar interface
+- ``LexFood``, the domain-specific lexicon interface
+
+
+Functors opening ``Syntax`` and a domain lexicon interface are in fact
+so typical in GF applications, that this structure could be called a **design patter**
+for GF grammars. The idea in this pattern is, again, that 
+the languages use the same syntactic structures but different words.
+
+Before going to the details of the module bodies, let us look at how functors
+are concretely used. An interface has a header such as
+```
+  interface LexFood = open Syntax in
+```
+To give an ``instance`` of it means that all ``oper``s are given definitione (of
+appropriate types). For example,
+```
+  instance LexFoodGer of LexFood = open SyntaxGer, ParadigmsGer in
+```
+Notice that when an interface opens an interface, such as ``Syntax``, then its instance
+opens an instance of it. But the instance may also open some resources - typically,
+a domain lexicon instance opens a ``Paradigms`` module.
+
+In the function-functor analogy, we now have
+```
+  SyntaxGer  : instance of Syntax
+  LexFoodGer : instance of LexFood  
+```
+Thus we can complete the German implementation by "applying" the functor:
+```
+  FoodI SyntaxGer LexFoodGer : concrete of Food
+```
+The GF syntax for doing so is
+```
+  concrete FoodGer of Food = FoodI with 
+    (Syntax = SyntaxGer),
+    (LexFood = LexFoodGer) ;
+```
+Notice that this is the //complete// module, not just a header of it.
+The module body is received from ``FoodI``, by instantiating the
+interface constants with their definitions given in the German
+instances.
+
+A module of this form, characterized by the keyword ``with``, is
+called a **functor instantiation**.
+
+Here is the complete code for the functor ``FoodI``:
+```
+  incomplete concrete FoodI of Food = open Syntax, LexFood in {
+  lincat
+    S = Utt ; 
+    Item = NP ;
+    Kind = CN ;
+    Quality = AP ;
+  lin
+    Is item quality = mkUtt (mkCl item quality) ;
+    This kind = mkNP (mkDet this_Quant) kind ;
+    All kind = mkNP all_Predet (mkNP defPlDet kind) ;
+    QKind quality kind = mkCN quality kind ;
+    Wine = mkCN wine_N ;
+    Beer = mkCN beer_N ;
+    Pizza = mkCN pizza_N ;
+    Cheese = mkCN cheese_N ;
+    Fish = mkCN fish_N ;
+    Very quality = mkAP very_AdA quality ;
+    Fresh = mkAP fresh_A ;
+    Warm = mkAP warm_A ;
+    Italian = mkAP italian_A ;
+    Expensive = mkAP expensive_A ;
+    Delicious = mkAP delicious_A ;
+    Boring = mkAP boring_A ;
+}
+```
+
+
+==Interfaces and instances==
+
+Let us now define the ``LexFood`` interface:
+```
+  interface LexFood = open Syntax in {
+  oper
+    wine_N : N ;
+    beer_N : N ;
+    pizza_N : N ;
+    cheese_N : N ;
+    fish_N : N ;
+    fresh_A : A ;
+    warm_A : A ;
+    italian_A : A ;
+    expensive_A : A ;
+    delicious_A : A ;
+    boring_A : A ;
+}
+```
+In this interface, only lexical items are declared. In general, an
+interface can declare any functions and also types. The ``Syntax``
+interface does this.
+
+Here is the German instance of the interface:
+```
+  instance LexFoodGer of LexFood = open SyntaxGer, ParadigmsGer in {
+  oper
+    wine_N = mkN "Wein" ;
+    beer_N = mkN "Bier" "Biere" neuter ;
+    pizza_N = mkN "Pizza" "Pizzen" feminine ;
+    cheese_N = mkN "Käse" "Käsen" masculine ;
+    fish_N = mkN "Fisch" ;
+    fresh_A = mkA "frisch" ;
+    warm_A = mkA "warm" "wärmer" "wärmste" ;
+    italian_A = mkA "italienisch" ;
+    expensive_A = mkA "teuer" ;
+    delicious_A = mkA "köstlich" ;
+    boring_A = mkA "langweilig" ;
+}
+```
+Just to complete the picture, we repeat the German functor instantiation
+for ``FoodI``, this time with a path directive that makes it compilable.
+```
+  --# -path=.:present:prelude
+
+  concrete FoodGer of Food = FoodI with 
+    (Syntax = SyntaxGer),
+    (LexFood = LexFoodGer) ;
+```
+
+
+**Exercise**. Compile and test ``FoodGer``.
+
+**Exercise**. Refactor ``FoodFre`` as a functor instantiation.
+
+
+
+==Adding languages to a functor implementation==
+
+Once we have an application grammar defined by using a functor,
+adding a new language is simple. Just two modules need to be written:
+- a domain lexicon instance
+- a functor instantiation
+
+
+The functor instantiation is completely mechanical to write.
+Here is one for Finnish:
+```
+--# -path=.:present:prelude
+
+concrete FoodFin of Food = FoodI with 
+  (Syntax = SyntaxFin),
+  (LexFood = LexFoodFin) ;
+```
+The domain lexicon instance requires some knowledge of the words of the
+language: what words are used for which concepts, how the words are
+inflected, plus features such as genders. Here is a lexicon instance for
+Finnish:
+```
+  instance LexFoodFin of LexFood = open SyntaxFin, ParadigmsFin in {
+  oper
+    wine_N = mkN "viini" ;
+    beer_N = mkN "olut" ;
+    pizza_N = mkN "pizza" ;
+    cheese_N = mkN "juusto" ;
+    fish_N = mkN "kala" ;
+    fresh_A = mkA "tuore" ;
+    warm_A = mkA "lämmin" ;
+    italian_A = mkA "italialainen" ;
+    expensive_A = mkA "kallis" ;
+    delicious_A = mkA "herkullinen" ;
+    boring_A = mkA "tylsä" ;
+  }
+```
+
+**Exercise**. Instantiate the functor ``FoodI`` to some language of
+your choice.
+
+
+==Division of labour revisited==
+
+One purpose with the resource grammars was stated to be a division
+of labour between linguists and application grammarians. We can now
+reflect on what this means more precisely, by asking ourselves what
+skills are required of grammarians working on different components.
+
+Building a GF application starts from the abstract syntax. Writing
+an abstract syntax requires
+- understanding the semantic structure of the application domain
+- knowledge of the GF fragment with categories and functions
+
+
+If the concrete syntax is written by means of a functor, the programmer
+has to decide what parts of the implementation are put to the interface
+and what parts are shared in the functor. This requires
+- knowing how the domain concepts are expressed in natural language
+- knowledge of the resource grammar library - the categories and combinators
+- understanding what parts are likely to be expressed in language-dependent
+  ways, so that they must belong to the interface and not the functor
+- knowledge of the GF fragment with function applications and strings
+
+
+Instantiating a ready-made functor to a new language is less demanding.
+It requires essentially
+- knowing how the domain words are expressed in the language
+- knowing, roughly, how these words are inflected
+- knowledge of the paradigms available in the library
+- knowledge of the GF fragment with function applications and strings
+
+
+Notice that none of these tasks requires the use of GF records, tables,
+or parameters. Thus only a small fragment of GF is needed; the rest of
+GF is only relevant for those who write the libraries.
+
+Of course, grammar writing is not always straightforward usage of libraries.
+For example, GF can be used for other languages than just those in the
+libraries - for both natural and formal languages. A knowledge of records
+and tables can, unfortunately, also be needed for understanding GF's error 
+messages.
+
+**Exercise**. Design a small grammar that can be used for controlling
+an MP3 player. The grammar should be able to recognize commands such
+as //play this song//, with the following variations:
+- verbs: //play//, //remove//
+- objects: //song//, //artist//
+- determiners: //this//, //the previous//
+- verbs without arguments: //stop//, //pause//
+
+
+The implementation goes in the following phases:
++ abstract syntax
++ functor and lexicon interface
++ lexicon instance for the first language
++ functor instantiation for the first language
++ lexicon instance for the second language
++ functor instantiation for the second language
++ ...
+
+
+
+==Restricted inheritance==
+
+A functor implementation using the resource ``Syntax`` interface
+works as long as all concepts are expressed by using the same structures
+in all languages. If this is not the case, the deviant linearization can
+be made into a parameter and moved to the domain lexicon interface.
+
+Let us take a slightly contrived example: assume that English has
+no word for ``Pizza``, but has to use the paraphrase //Italian pie//.
+This paraphrase is no longer a noun ``N``, but a complex phrase
+in the category ``CN``. An obvious way to solve this problem is
+to change interface ``LexEng`` so that the constant declared for
+``Pizza`` gets a new type:
+```
+  oper pizza_CN : CN ;
+```
+But this solution is unstable: we may end up changing the interface
+and the function with each new language, and we must every time also
+change the interface instances for the old languages to maintain
+type correctness.
+
+A better solution is to use **restricted inheritance**: the English 
+instantiation inherits the functor implementation except for the 
+constant ``Pizza``. This is how we write:
+```
+  --# -path=.:present:prelude
+
+  concrete FoodEng of Food = FoodI - [Pizza] with 
+    (Syntax = SyntaxEng),
+    (LexFood = LexFoodEng) ** 
+      open SyntaxEng, ParadigmsEng in {
+
+    lin Pizza = mkCN (mkA "Italian") (mkN "pie") ;
+  }
+```
+Restricted inheritance is available for all inherited modules. One can for
+instance exclude some mushrooms and pick up just some fruit in 
+the ``FoodMarket`` example:
+```
+  abstract Foodmarket = Food, Fruit [Peach], Mushroom - [Agaric]
+```
+A concrete syntax of ``Foodmarket`` must then indicate the same inheritance
+restrictions.
+ 
+
+**Exercise**. Change ``FoodGer`` in such a way that it says, instead of
+//X is Y//, the equivalent of //X must be Y// (//X muss Y sein//).
+You will have to browse the full resource API to find all 
+the functions needed.
+
+
+==Browsing the resource with GF commands=
+
+In addition to reading the 
+[resource synopsis  ../../lib/resource-1.0/synopsis.html], you
+can find resource function combinations by using the parser. This
+is so because the resource library is in the end implemented as
+a top-level ``abstract-concrete`` grammar, on which parsing
+and linearization work.
+
+Unfortunately, only English and the Scandinavian languages can be
+parsed within acceptable computer resource limits when the full
+resource is used. 
+
+To look for a syntax tree in the overload API by parsing, do like this:
+```
+  > $GF_LIB_PATH
+  > i -path=alltenses:prelude alltenses/OverLangEng.gfc
+  > p -cat=S -overload "this grammar is too big"
+```
+To view linearizations in all languages by parsing from English:
+```
+  > i alltenses/langs.gfcm
+  > p -cat=S -lang=LangEng "this grammar is too big" | tb
+```
+
+**Exercise**. Find the resource grammar translations for the following
+English phrases (parse in the category ``Phr``). You can first try to
+build the terms manually.
+
+//every man loves a woman//
+
+//this grammar speaks more than ten languages//
+
+//which languages aren't in the grammar//
+
+//which languages did you want to speak//
 
 
 
 =More concepts of abstract syntax=
-
-This section is about the use of the type theory part of GF for 
-including more semantics in grammars. Some of the subsections present
-ideas that have not yet been used in real-world applications, and whose
-tool support outside the GF program is not complete.
-
 
 ==GF as a logical framework==
 
@@ -2135,162 +2701,267 @@ abstract Arithm = {
     And  : Prop -> Prop -> Prop ; -- A and B
     } 
 ```
-A concrete syntax is given below, as an example of using the resource grammar
-library.
+
+**Exercise**. Give a concrete syntax of ``Arithm``, either from scatch or
+by using the resource library.
+
 
 
 
 ==Dependent types==
 
 **Dependent types** are a characteristic feature of GF,
-inherited from the
-**constructive type theory** of Martin-Löf and
+inherited from the **constructive type theory** of Martin-Löf and
 distinguishing GF from most other grammar formalisms and
 functional programming languages.
-The initial main motivation for developing GF was, indeed,
-to have a grammar formalism with dependent types.
-As can be inferred from the fact that we introduce them only now,
-after having written lots of grammars without them,
-dependent types are no longer the only motivation for GF.
-But they are still important and interesting.
-
 
 Dependent types can be used for stating stronger
-**conditions of well-formedness** than non-dependent types.
-A simple example is postal addresses. Ignoring the other details,
-let us take a look at addresses consisting of
-a street, a city, and a country. 
-```
-abstract Address = {
-  cat 
-    Address ; Country ; City ; Street ;
+**conditions of well-formedness** than ordinary types.
+A simple example is a "smart house" system, which
+defines voice commands for household appliances. This example
+is borrowed from the 
+[Regulus Book http://cslipublications.stanford.edu/site/1575865262.html]
+(Rayner & al. 2006).
 
-  fun
-    mkAddress : Country -> City -> Street -> Address ;
+In a smart house, the owner or tennant can use speech to dim lights, swith
+on the fan, etc. For each ``Kind`` of a device, there is a set of
+``Actions`` that can be performed on it; thus one can dim the lights but
+ not the fan, for example. These dependencies can be expressed by 
+by making the type ``Action`` dependent on ``Kind``. We express this
+as follows in ``cat`` declarations:
+```
+  cat
+    Command ;
+    Kind ; 
+    Action Kind ; 
+    Device Kind ; 
+```
+The crucial use of the dependencies is made in the rule for forming commands:
+```
+  fun CAction : (k : Kind) -> Action k -> Device k -> Command ;
+```
+In other words: an action and a device can be combined into a command only
+if they are of the same ``Kind`` ``k``. If we have the functions
+```
+  DKindOne  : (k : Kind) -> Device k ;  -- the light
 
-    UK, France : Country ;
-    Paris, London, Grenoble : City ;
-    OxfordSt, ShaftesburyAve, BdRaspail, RueBlondel, AvAlsaceLorraine : Street ;
-  }
+  light, fan : Kind ;
+  dim : Action light ;
 ```
-The linearization rules are straightforward,
+we can form the syntax tree
 ```
-  lin
-    mkAddress country city street = 
-      ss (street.s ++ "," ++ city.s ++ "," ++ country.s) ;
-    UK = ss ("U.K.") ;
-    France = ss ("France") ;
-    Paris = ss ("Paris") ;
-    London = ss ("London") ;
-    Grenoble = ss ("Grenoble") ;
-    OxfordSt = ss ("Oxford" ++ "Street") ;
-    ShaftesburyAve = ss ("Shaftesbury" ++ "Avenue") ;
-    BdRaspail = ss ("boulevard" ++ "Raspail") ;
-    RueBlondel = ss ("rue" ++ "Blondel") ;
-    AvAlsaceLorraine = ss ("avenue" ++ "Alsace-Lorraine") ;
+  CAction light dim (DKindOne light)
 ```
-Notice that, in ``mkAddress``, we have
-reversed the order of the constituents. The type of ``mkAddress``
-in the abstract syntax takes its arguments in a "logical" order,
-with increasing precision. (This order is sometimes even used in the 
-concrete syntax of addresses, e.g. in Russia).
+but we cannot form the trees
+```
+  CAction light dim (DKindOne fan)
+  CAction fan   dim (DKindOne light)
+  CAction fan   dim (DKindOne fan)
+```
+Linearization rules are written as usual: the concrete syntax does not
+know if a category is a dependent type. In English, you can write as follows:
+```
+  lincat Action = {s : Str} ;
+  lin CAction kind act dev = {s = act.s ++ dev.s} ; 
+```
+Notice that the argument ``kind`` does not show in the linearization.
+The type checker will be able to reconstruct it from the ``dev`` argument.
 
-Both existing and non-existing addresses are recognized by this
-grammar. The non-existing ones in the following randomly generated
-list have afterwards been marked by *:
+Parsing with dependent types happens in two phases. If you just parse in
+the usual way, the ``kind`` argument is not found:
 ```
-  > gr -cat=Address -number=7 | l
+  > parse "dim the light"
+  CAction ? dim (DKindOne light)
+```
+Moreover, type-incorrect commands are not rejected:
+```
+  > parse "dim the fan"
+  CAction ? dim (DKindOne fan)
+```
+The question mark ``?`` is a **metavariable**, and is returned by the parser
+for any subtree that is suppressed by a linearization rule.
 
-  * Oxford Street , Paris , France
-  * Shaftesbury Avenue , Grenoble , U.K.
-  boulevard Raspail , Paris , France
-  * rue Blondel , Grenoble , U.K.
-  * Shaftesbury Avenue , Grenoble , France
-  * Oxford Street , London , France
-  * Shaftesbury Avenue , Grenoble , France
+To get rid of metavariables, you must feed the parse result into the
+second phase of **solving** them. The ``solve`` process uses the dependent
+type checker to restore the values of the metavariables. It is invoked by
+the command ``put_tree = pt`` with the flag ``-transform=solve``:
 ```
-Dependent types provide a way to guarantee that addresses are
-well-formed. What we do is to include **contexts** in
-``cat`` judgements:
+  > parse "dim the light" | put_tree -transform=solve
+  CAction light dim (DKindOne light)
 ```
-  cat 
-    Address ; 
-    Country ; 
-    City Country ; 
-    Street (x : Country)(City x) ;
+The ``solve`` process may fail, in which case no tree is returned:
 ```
-The first two judgements are as before, but the third one makes
-``City`` dependent on ``Country``: there are no longer just cities,
-but cities of the U.K. and cities of France. The fourth judgement
-makes ``Street`` dependent on ``City``; but since 
-``City`` is itself dependent on ``Country``, we must
-include them both in the context, moreover guaranteeing that
-the city is one of the given country. Since the context itself
-is built by using a dependent type, we have to use variables
-to indicate the dependencies. The judgement we used for ``City``
-is actually shorthand for
+  > parse "dim the fan" | put_tree -transform=solve
+  no tree found
 ```
-  cat City (x : Country)
-```
-which is only possible if the subsequent context does not depend on ``x``.
 
-The ``fun`` judgements of the grammar are modified accordingly:
-```
-  fun
-    mkAddress : (x : Country) -> (y : City x) -> Street x y -> Address ;
-  
-    UK : Country ;
-    France : Country ;
-    Paris : City France ; 
-    London : City UK ; 
-    Grenoble : City France ;
-    OxfordSt : Street UK London ; 
-    ShaftesburyAve : Street UK London ;
-    BdRaspail : Street France Paris ; 
-    RueBlondel : Street France Paris ; 
-    AvAlsaceLorraine : Street France Grenoble ;
-```
-Since the type of ``mkAddress`` now has dependencies among
-its argument types, we have to use variables just like we used in
-the context of ``Street`` above. What we claimed to be the
-"logical" order of the arguments is now forced by the type system
-of GF: a variable must be declared (=bound) before it can be
-referenced (=used).
 
-The effect of dependent types is that the *-marked addresses above are
-no longer well-formed. What the GF parser actually does is that it
-initially accepts them (by using a context-free parsing algorithm)
-and then rejects them (by type checking). The random generator does not produce
-illegal addresses (this could be useful in bulk mailing!).
-The linearization algorithm does not care about type dependencies;
-actually, since the //categories// (ignoring their arguments)
-are the same in both abstract syntaxes,
-we use the same concrete syntax
-for both of them.
+**Exercise**. Write an abstract syntax module with above contents
+and an appropriate English concrete syntax. Try to parse the commands
+//dim the light// and //dim the fan//, with and without ``solve`` filtering.
 
-**Remark**. Function types //without//
+
+**Exercise**. Perform random and exhaustive generation, with and without
+``solve`` filtering.
+
+**Exercise**. Add some device kinds and actions to the grammar.
+
+
+==Polymorphism==
+
+Sometimes an action can be performed on all kinds of devices. It would be
+possible to introduce separate ``fun`` constants for each kind-action pair,
+but this would be tedious. Instead, one can use **polymorphic** actions,
+i.e. actions that take a ``Kind`` as an argument and produce an ``Action``
+for that ``Kind``:
+```
+  fun switchOn, switchOff : (k : Kind) -> Action k ;
+```
+Functions that are not polymorphic are **monomorphic**. However, the 
+dichotomy into monomorphism and full polymorphism is not always sufficien
+for good semantic modelling: very typically, some actions are defined
+for a subset of devices, but not just one. For instance, both doors and
+windows can be opened, whereas lights cannot.
+We will return to this problem by introducing the
+concept of **restricted polymorphism** later,
+after a chapter proof objects.
+
+
+
+==Dependent types and spoken language models==
+
+We have used dependent types to control semantic well-formedness
+in grammars. This is important in traditional type theory 
+applications such as proof assistants, where only mathematically
+meaningful formulas should be constructed. But semantic filtering has
+also proved important in speech recognition, because it reduces the
+ambiguity of the results.
+
+
+===Grammar-based language models===
+
+The standard way of using GF in speech recognition is by building
+**grammar-based language models**. To this end, GF comes with compilers
+into several formats that are used in speech recognition systems.
+One such format is GSL, used in the [Nuance speech recognizer www.nuance.com].
+It is produced from GF simply by printing a grammar with the flag
+``-printer=gsl``.
+```
+  > import -conversion=finite SmartEng.gf
+  > print_grammar -printer=gsl
+
+  ;GSL2.0
+  ; Nuance speech recognition grammar for SmartEng
+  ; Generated by GF
+
+  .MAIN SmartEng_2
+
+  SmartEng_0 [("switch" "off") ("switch" "on")]
+  SmartEng_1 ["dim" ("switch" "off")
+              ("switch" "on")]
+  SmartEng_2 [(SmartEng_0 SmartEng_3)
+              (SmartEng_1 SmartEng_4)]
+  SmartEng_3 ("the" SmartEng_5)
+  SmartEng_4 ("the" SmartEng_6)
+  SmartEng_5 "fan"
+  SmartEng_6 "light"
+```
+Now, GSL is a context-free format, so how does it cope with dependent types?
+In general, dependent types can give rise to infinitely many basic types
+(exercise!), whereas a context-free grammar can by definition only have
+finitely many nonterminals.
+
+This is where the flag ``-conversion=finite`` is needed in hte ``import``
+command. Its effect is to convert a GF grammar with dependent types to
+one without, so that each instance of a dependent type is replaced by
+an atomic type. This can then be used as a nonterminal in a context-free
+grammar. The ``finite`` conversion presupposes that every 
+dependent type only has finitely many instances, which is in fact
+the case in the ``Smart`` grammar.
+
+
+*Exercise**. If you have access to the Nuance speech recognizer,
+test it with GF-generated language models for ``SmartEng``. Do this
+both with and without ``-conversion=finite``.
+
+**Exercise**. Construct an abstract syntax with infinitely many instances
+of dependent types.
+
+
+===Statistical language models===
+
+An alternative to grammar-based language models are
+**statistical language models** (**SLM**s). An SLM is 
+built from a **corpus**, i.e. a set of utterances. It specifies the
+probability of each **n-gram**, i.e. sequence of //n// words. The
+typical value of //n// is 2 (bigrams) or 3 (trigrams).
+
+One advantage of SLMs over grammar-based models is that they are
+**robust**, i.e. they can be used to recognize sequences that would
+be out of the grammar or the corpus. Another advantage is that
+an SLM can be built "for free" if a corpus is available.
+
+However, collecting a corpus can require a lot of work, and writing
+a grammar can be less demanding, especially with tools such as GF or
+Regulus. This advantage of grammars can be combined with robustness
+by creating a back-up SLM from a **synthesized corpus**. This means
+simply that the grammar is used for generating such a corpus. 
+In GF, this can be done with the ``generate_trees`` command.
+As with grammar-based models, the quality of the SLM is better
+if meaningless utterances are excluded from the corpus. Thus 
+a good way to generate an SLM from a GF grammar is by using
+dependent types and filter the results with the type checker:
+```
+  > generate_trees | put_trees -transform=solve | linearize
+```
+
+
+**Exercise**. Measure the size of the corpus generated from
+``SmartEng``, with and without type checker filtering.
+
+
+
+==Digression: dependent types in concrete syntax==
+
+===Variables in function types===
+
+A dependent function type needs to introduce a variable for
+its argument type, as in
+```
+  switchOff : (k : Kind) -> Action k
+```
+Function types //without//
 variables are actually a shorthand notation: writing
 ```
-  fun PredV1 : NP -> V1 -> S
+  fun PredVP : NP -> VP -> S
 ```
 is shorthand for 
 ```
-  fun PredV1 : (x : NP) -> (y : V1) -> S
+  fun PredVP : (x : NP) -> (y : VP) -> S
 ```
 or any other naming of the variables. Actually the use of variables
 sometimes shortens the code, since we can write e.g.
 ```
-  oper triple : (x,y,z : Str) -> Str = ...
+  octuple : (x,y,z,u,v,w,s,t : Str) -> Str
 ```
 If a bound variable is not used, it can here, as elsewhere in GF, be replaced by
 a wildcard:
 ```
-  oper triple : (_,_,_ : Str) -> Str = ...
+  octuple : (_,_,_,_,_,_,_,_ : Str) -> Str
+```
+A good practice for such functions is to indicate the number of arguments
+in the type:
+```
+  octuple : (x1,_,_,_,_,_,_,x8 : Str) -> Str
+```
+One can also use the variables to document what each argument is expected
+to provide, as is done in inflection paradigms in the resource grammar.
+```
+  mkV : (drink,drank,drunk : Str) -> V 
 ```
 
 
-
-==Dependent types in concrete syntax==
+===Polymorphism in concrete syntax===
 
 The **functional fragment** of GF
 terms and types comprises function types, applications, lambda
@@ -2328,196 +2999,6 @@ When the operations are used, the type checker requires
 them to be equipped with all their arguments; this may be a nuisance
 for a Haskell or ML programmer. 
 
-
-
-==Expressing selectional restrictions==
-
-This section introduces a way of using dependent types to
-formalize a notion known as **selectional restrictions**
-in linguistics. We first present a mathematical model
-of the notion, and then integrate it in a linguistically
-motivated syntax.
-
-In linguistics, a 
-grammar is usually thought of as being about **syntactic well-formedness**
-in a rather liberal sense: an expression can be well-formed without
-being meaningful, in other words, without being
-**semantically well-formed**.
-For instance, the sentence
-```
-  the number 2 is equilateral
-```
-is syntactically well-formed but semantically ill-formed.
-It is well-formed because it combines a well-formed
-noun phrase ("the number 2") with a well-formed
-verb phrase ("is equilateral") and satisfies the agreement 
-rule saying that the verb phrase is inflected in the
-number of the noun phrase:
-```
-  fun PredVP : NP -> VP -> S ;
-  lin PredVP np v = {s = np.s ++ vp.s ! np.n} ;
-```
-It is ill-formed because the predicate "is equilateral"
-is only defined for triangles, not for numbers.
-
-In a straightforward type-theoretical formalization of
-mathematics, domains of mathematical objects
-are defined as types. In GF, we could write
-```
-  cat Nat ;
-  cat Triangle ;
-  cat Prop ;
-```
-for the types of natural numbers, triangles, and propositions,
-respectively.
-Noun phrases are typed as objects of basic types other than
-``Prop``, whereas verb phrases are functions from basic types
-to ``Prop``. For instance,
-```
-  fun two : Nat ;
-  fun Even : Nat -> Prop ;
-  fun Equilateral : Triangle -> Prop ;
-```
-With these judgements, and the linearization rules
-```
-  lin two = ss ["the number 2"] ;
-  lin Even x = ss (x.s ++ ["is even"]) ;
-  lin Equilateral x = ss (x.s ++ ["is equilateral"]) ;
-```
-we can form the proposition ``Even two``
-```
-  the number 2 is even
-```
-but no proposition linearized to
-```
-  the number 2 is equilateral
-```
-since ``Equilateral two`` is not a well-formed type-theoretical object.
-It is not even accepted by the context-free parser.
-
-When formalizing mathematics, e.g. in the purpose of
-computer-assisted theorem proving, we are certainly interested
-in semantic well-formedness: we want to be sure that a proposition makes
-sense before we make the effort of proving it. The straightforward typing
-of nouns and predicates shown above is the way in which this
-is guaranteed in various proof systems based on type theory.
-(Notice that it is still possible to form //false// propositions,
-e.g. "the number 3 is even".
-False and meaningless are different things.)
-
-As shown by the linearization rules for ``two``, ``Even``,
-etc, it //is// possible to use straightforward mathematical typings
-as the abstract syntax of a grammar. However, this syntax is not very
-expressive linguistically: for instance, there is no distinction between
-adjectives and verbs. It is hard to give rules for structures like
-adjectival modification ("even number") and conjunction of predicates
-("even or odd"). 
-
-By using dependent types, it is simple to combine a linguistically
-motivated system of categories with mathematically motivated
-type restrictions. What we need is a category of domains of
-individual objects,
-```
-  cat Dom
-```
-and dependencies of other categories on this:
-```
-  cat 
-    S ;            -- sentence
-    V1 Dom ;       -- one-place verb with specific subject type
-    V2 Dom Dom ;   -- two-place verb with specific subject and object types
-    A1 Dom ;       -- one-place adjective
-    A2 Dom Dom ;   -- two-place adjective
-    NP Dom ;       -- noun phrase for an object of specific type
-    Conj ;         -- conjunction
-    Det ;          -- determiner
-```
-Having thus parametrized categories on domains, we have to reformulate
-the rules of predication, etc, accordingly. This is straightforward:
-```
-  fun
-    PredV1  : (A   : Dom) -> NP A -> V1 A -> S ;
-    ComplV2 : (A,B : Dom) -> V2 A B -> NP B -> V1 A ;
-    DetCN   :                Det -> (A : Dom) -> NP A ;
-    ModA1   :                (A : Dom) -> A1 A -> Dom ;
-    ConjS   :                Conj -> S -> S -> S ;
-    ConjV1  : (A   : Dom) -> Conj -> V1 A -> V1 A -> V1 A ;
-```
-In linearization rules,
-we use wildcards for the domain arguments,
-because they don't affect linearization:
-```
-  lin
-    PredV1 _ np vp = ss (np.s ++ vp.s) ;
-    ComplV2 _ _ v2 np = ss (v2.s ++ np.s) ;
-    DetCN det cn = ss (det.s ++ cn.s) ;
-    ModA1 cn a1 = ss (a1.s ++ cn.s) ;
-    ConjS conj s1 s2 = ss (s1.s ++ conj.s ++ s2.s) ;
-    ConjV1 _ conj v1 v2 = ss (v1.s ++ conj.s ++ v2.s) ;
-```
-The domain arguments thus get suppressed in linearization.
-Parsing initially returns metavariables for them,
-but type checking can usually restore them
-by inference from those arguments that are not suppressed.
-
-One traditional linguistic example of domain restrictions
-(= selectional restrictions) is the contrast between the two sentences
-```
-  John plays golf
-  golf plays John
-```
-To explain the contrast, we introduce the functions
-```
-  human : Dom ; 
-  game : Dom ;
-  play : V2 human game ;
-  John : NP human ;
-  Golf : NP game ;
-```
-Both sentences still pass the context-free parser,
-returning trees with lots of metavariables of type ``Dom``:
-```
-  PredV1 ?0 John (ComplV2 ?1 ?2 play Golf)
-  PredV1 ?0 Golf (ComplV2 ?1 ?2 play John)
-```
-But only the former sentence passes the type checker, which moreover
-infers the domain arguments:
-```
-  PredV1 human John (ComplV2 human game play Golf)
-```
-To try this out in GF, use ``pt = put_term`` with the **tree transformation**
-that solves the metavariables by type checking:
-```
-  > p -tr "John plays golf" | pt -transform=solve
-  > p -tr "golf plays John" | pt -transform=solve
-```
-In the latter case, no solutions are found.
-
-A known problem with selectional restrictions is that they can be more
-or less liberal. For instance,
-```
-  John loves Mary
-  John loves golf
-```
-should both make sense, even though ``Mary`` and ``golf``
-are of different types. A natural solution in this case is to
-formalize ``love`` as a **polymorphic** verb, which takes
-a human as its first argument but an object of any type as its second
-argument:
-```
-  fun love : (A : Dom) -> V2 human A ;
-  lin love _ = ss "loves" ;
-```
-In other words, it is possible for a human to love anything.
-
-A problem related to polymorphism is **subtyping**: what
-is meaningful for a ``human`` is also meaningful for
-a ``man`` and a ``woman``, but not the other way round.
-One solution to this is **coercions**: functions that
-"lift" objects from subtypes to supertypes.
-
-
-==Case study: selectional restrictions and statistical language models TODO==
 
 
 ==Proof objects==
@@ -2590,7 +3071,22 @@ by using the ``Less`` predicate:
   cat Span ;
   fun span : (m,n : Nat) -> Less m n -> Span ;
 ```
-A possible practical application of this idea is **proof-carrying documents**:
+
+**Exercise**. Write an abstract and concrete syntax with the
+concepts of this section, and experiment with it in GF.
+
+
+**Exercise**. Define the notions of "even" and "odd" in terms
+of proof objects. **Hint**. You need one function for proving
+that 0 is even, and two other functions for propagating the
+properties.
+
+
+
+
+===Proof-carrying documents===
+
+Another possible application of proof objects is **proof-carrying documents**:
 to be semantically well-formed, the abstract syntax of a document must contain a proof
 of some property, although the proof is not shown in the concrete document.
 Think, for instance, of small documents describing flight connections:
@@ -2607,9 +3103,12 @@ The well-formedness of this text is partly expressible by dependent typing:
     LH3043 : Flight Gothenburg Frankfurt ;
     OK0537 : Flight Frankfurt Prague ;
 ```
-This rules out texts saying //take OK0537 from Gothenburg to Prague//. However, there is a
-further condition saying that it must be possible to change from LH3043 to OK0537 in Frankfurt.
-This can be modelled as a proof object of a suitable type, which is required by the constructor
+This rules out texts saying //take OK0537 from Gothenburg to Prague//. 
+However, there is a
+further condition saying that it must be possible to 
+change from LH3043 to OK0537 in Frankfurt.
+This can be modelled as a proof object of a suitable type, 
+which is required by the constructor
 that connects flights.
 ```
   cat
@@ -2620,6 +3119,49 @@ that connects flights.
         IsPossible x y z u v -> Flight x z ;
 ```
 
+
+==Restricted polymorphism==
+
+In the first version of the smart house grammar ``Smart``, 
+all Actions were either of
+- **monomorphic**: defined for one Kind
+- **polymorphic**: defined for all Kinds
+
+
+To make this scale up for new Kinds, we can refine this to 
+*restricted polymorphism**: defined for Kinds of a certain **class**
+
+
+The notion of class can be expressed in abstract syntax 
+by using the Curry-Howard isomorphism as follows:
+- a class is a **predicate** of Kinds - a type depending of Kinds
+- a Kind is in a xlass if there is of proof object of this type
+
+
+Here is an example with switching and dimming.
+```
+cat
+  Switchable Kind ;
+  Dimmable   Kind ;
+fun
+  switchable_light : Switchable light ;
+  switchable_fan   : Switchable fan ;
+  dimmable_light   : Dimmable light ;
+
+  switchOn : (k : Kind) -> Switchable k -> Action k ;
+  dim      : (k : Kind) -> Dimmable k -> Action k ;
+```
+One advantage of this formalization is that classes for new 
+actions can be added incrementally. 
+
+**Exercise**. Write a new version of the ``Smart`` grammar with
+classes, and test it in GF.
+
+**Exercise**. Add some actions, kinds, and classes to the grammar.
+Try to port the grammar for a new language. You will probably find
+out that restricted polymorphism works differently in different languages.
+For instance, in Finnish not only doors but also TVs and radios 
+can be "opened", which means switching them on.
 
 
 ==Variable bindings==
@@ -2661,8 +3203,6 @@ which corresponds to the ordinary notation
 ```
   (All x)(x = x).
 ```
-
-
 An abstract syntax where trees have functions as arguments, as in
 the two examples above, has turned out to be precisely the right
 thing for the semantics and computer implementation of
@@ -2735,13 +3275,11 @@ Thus we can compute the linearization of the formula,
 ```
   All (\x -> Eq x x)  --> {s = "[( All x ) ( x = x )]"}.
 ```
-
 How did we get the //linearization// of the variable ``x``
 into the string ``"x"``? GF grammars have no rules for
 this: it is just hard-wired in GF that variable symbols are
 linearized into the same strings that represent them in
 the print-out of the abstract syntax. 
-
 
 To be able to //parse// variable symbols, however, GF needs to know what
 to look for (instead of e.g. trying to parse //any//
@@ -2896,27 +3434,7 @@ which is equivalent to the two judgements
 ```
 
 
-==Case study: representing anaphoric reference TODO==
-
-
-=Transfer modules TODO=
-
-Transfer means noncompositional tree-transforming operations.
-The command ``apply_transfer = at`` is typically used in a pipe:
-```
-  > p "John walks and John runs" | apply_transfer aggregate | l
-  John walks and runs
-```
-See the
-[sources ../../transfer/examples/aggregation] of this example.
-
-See the
-[transfer language documentation  ../transfer.html]
-for more information.
-
-
-=Practical issues TODO=
-
+=Practical issues=
 
 ==Lexers and unlexers==
 
@@ -2951,13 +3469,6 @@ Given by ``help -lexer``, ``help -unlexer``:
 ```
 
 
-==Efficiency of grammars==
-
-Issues:
-
-- the choice of datastructures in ``lincat``s
-- the value of the ``optimize`` flag 
-- parsing efficiency: ``-fcfg`` vs. others
 
 
 ==Speech input and output==
@@ -2980,6 +3491,7 @@ Both Flite and ATK are freely available through the links
 above, but they are not distributed together with GF.
 
 
+
 ==Multilingual syntax editor==
 
 The 
@@ -2994,19 +3506,14 @@ The grammars of the snapshot are from the
 [Letter grammar package http://www.cs.chalmers.se/~aarne/GF/examples/letter].
 
 
-
-==Interactive Development Environment (IDE)==
-
-Forthcoming.
-
-
 ==Communicating with GF==
 
 Other processes can communicate with the GF command interpreter,
 and also with the GF syntax editor. Useful flags when invoking GF are
 - ``-batch`` suppresses the promps and structures the communication with XML tags.
 - ``-s`` suppresses non-output non-error messages and XML tags.
--- ``-nocpu`` suppresses CPU time indication.
+- ``-nocpu`` suppresses CPU time indication.
+
 
 Thus the most silent way to invoke GF is
 ```
@@ -3019,7 +3526,6 @@ Thus the most silent way to invoke GF is
 
 GF grammars can be used as parts of programs written in the
 following languages. The links give more documentation.
-
 - [Java http://www.cs.chalmers.se/~bringert/gf/gf-java.html]
 - [Haskell http://www.cs.chalmers.se/~aarne/GF/src/GF/Embed/EmbedAPI.hs]
 - [Prolog http://www.cs.chalmers.se/~peb/software.html]
@@ -3031,39 +3537,6 @@ A summary is given in the following chart of GF grammar compiler phases:
 [../gf-compiler.png]
 
 
-=Larger case studies TODO=
 
-==Interfacing formal and natural languages==
-
-[Formal and Informal Software Specifications http://www.cs.chalmers.se/~krijo/thesis/thesisA4.pdf],
-PhD Thesis by
-[Kristofer Johannisson http://www.cs.chalmers.se/~krijo], is an extensive example of this.
-The system is based on a multilingual grammar relating the formal language OCL with
-English and German.
-
-A simpler example will be explained here.
-
-
-==A multimodal dialogue system==
-
-See TALK project deliverables, [TALK homepage http://www.talk-project.org]
-
-
-
-
-% Appendices
-
-=Appendix A: The GF Command Help=
-
-%!include: ../gf-help.txt
-
-
-=Appendix B: GF Quick Reference=
-
-%!include: ../gf-reference.txt
-
-
-=Appendix C: Resource Grammar Synopsis=
-
-%!include: ../resource-synopsis.txt
+=Further reading=
 
