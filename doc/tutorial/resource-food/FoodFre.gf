@@ -10,9 +10,9 @@ concrete FoodFre of Food = open SyntaxFre,ParadigmsFre in {
 
   lin
     Is item quality = mkUtt (mkCl item quality) ;
-    This kind = SyntaxFre.mkNP (mkDet this_Quant) kind ;
-    That kind = SyntaxFre.mkNP (mkDet that_Quant) kind ;
-    All kind = SyntaxFre.mkNP all_Predet (SyntaxFre.mkNP defPlDet kind) ;
+    This kind = mkNP (mkDet this_Quant) kind ;
+    That kind = mkNP (mkDet that_Quant) kind ;
+    All kind = mkNP all_Predet (mkNP defPlDet kind) ;
     QKind quality kind = mkCN quality kind ;
     Wine = mkCN (mkN "vin") ;
     Beer = mkCN (mkN "bière") ;
