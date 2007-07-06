@@ -32,9 +32,9 @@ concrete StructuralFin of Structural = CatFin **
   can_VV = reg2V "voida" "voi" ;
   during_Prep = postGenPrep "aikana" ;
   either7or_DConj = sd2 "joko" "tai" ** {n = Sg} ;
-  everybody_NP = mkNP (regN "jokainen") Sg ;
+  everybody_NP = makeNP (regN "jokainen") Sg ;
   every_Det = mkDet Sg (regN "jokainen") ;
-  everything_NP = mkNP ((nhn (sKorpi "kaikki" "kaiken" "kaikkena")) **
+  everything_NP = makeNP ((nhn (sKorpi "kaikki" "kaiken" "kaikkena")) **
     {lock_N = <>}) Sg ;
   everywhere_Adv = ss "kaikkialla" ;
   few_Det  = mkDet Sg (regN "harva") ;

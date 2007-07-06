@@ -66,27 +66,24 @@ oper
 
 --2 Nouns
 
--- Worst case: give all four forms. The gender is computed from the
--- last letter of the second form (if "n", then $utrum$, otherwise $neutrum$).
-
-  mkN  : (dreng,drengen,drenger,drengene : Str) -> N ;
-
 -- The regular function takes the singular indefinite form
 -- and computes the other forms and the gender by a heuristic.
 -- The heuristic is that nouns ending "e" are feminine like "kvinne",
 -- all others are masculine like "bil". 
--- If in doubt, use the $cc$ command to test!
-
-  regN : Str -> N ;
-
 -- Giving gender manually makes the heuristic more reliable.
-
-  regGenN : Str -> Gender -> N ;
-
--- This function takes the singular indefinite and definite forms; the
+-- One can also compute the gender from the definite form.
 -- gender is computed from the definite form.
+-- If in doubt, use the $cc$ command to test!
+-- In the worst case, give all four forms. The gender is computed from the
+-- last letter of the second form (if "n", then $utrum$, otherwise $neutrum$).
 
-  mk2N : (bil,bilen : Str) -> N ;
+  mkN : overload {
+    mkN : Str -> N ;
+    mkN : Str -> Gender -> N ;
+    mkN : (bil,bilen : Str) -> N ;
+    mkN  : (dreng,drengen,drenger,drengene : Str) -> N
+  } ;
+
 
 
 --3 Compound nouns 
@@ -126,61 +123,39 @@ oper
 --3 Proper names and noun phrases
 --
 -- Proper names, with a regular genitive, are formed as follows
-
-  regPN    : Str -> PN ;            -- utrum
-  regGenPN : Str -> Gender -> PN ;  
-
 -- Sometimes you can reuse a common noun as a proper name, e.g. "Bank".
 
-  nounPN : N -> PN ;
+  mkPN : overload {
+    mkPN : Str -> PN ;       -- masculine
+    mkPN : Str -> Gender -> PN ;  
+    mkPN : N -> PN ;
+    } ;
 
--- To form a noun phrase that can also be plural and have an irregular
--- genitive, you can use the worst-case function.
-
-  mkNP : Str -> Str -> Number -> Gender -> NP ; 
 
 --2 Adjectives
 
--- Non-comparison one-place adjectives need three forms: 
+-- The regular pattern works for many adjectives, e.g. those ending
+-- with "ig". Two, five, or at worst five forms are sometimes needed.
 
-  mkA : (galen,galet,galne : Str) -> A ;
+  mkA : overload {
+    mkA : (fin : Str) -> A ;
+    mkA : (fin,fint : Str) -> A ;
+    mkA : (galen,galet,galne : Str) -> A ;
+    mkA : (stor,stort,store,storre,storst : Str) -> A ;
 
--- For regular adjectives, the other forms are derived. 
+-- If comparison is formed by "mer", "mest", as in general for
+-- long adjective, the following pattern is used:
 
-  regA : Str -> A ;
-
--- In most cases, two forms are enough.
-
-  mk2A : (stor,stort : Str) -> A ;
+    mkA : A -> A ; -- -/mer/mest norsk
+  } ;
  
+
 --3 Two-place adjectives
 --
 -- Two-place adjectives need a preposition for their second argument.
 
   mkA2 : A -> Prep -> A2 ;
 
--- Comparison adjectives may need as many as five forms. 
-
-  mkADeg : (stor,stort,store,storre,storst : Str) -> A ;
-
--- The regular pattern works for many adjectives, e.g. those ending
--- with "ig".
-
-  regADeg : Str -> A ;
-
--- Just the comparison forms can be irregular.
-
-  irregADeg : (tung,tyngre,tyngst : Str) -> A ;
-
--- Sometimes just the positive forms are irregular.
-
-  mk3ADeg : (galen,galet,galne : Str) -> A ;
-  mk2ADeg : (bred,bredt        : Str) -> A ;
-
--- If comparison is formed by "mer", "mest", as in general for
--- long adjective, the following pattern is used:
-
-  compoundA : A -> A ; -- -/mer/mest norsk
 
 
 --2 Adverbs
@@ -198,22 +173,33 @@ oper
 
 --2 Verbs
 --
--- The worst case needs six forms.
 
-  mkV : (spise,spiser,spises,spiste,spist,spis : Str) -> V ;
+  mkV : overload {
 
 -- The 'regular verb' function is the first conjugation.
 
-  regV : (snakke : Str) -> V ;
+    mkV : (snakke : Str) -> V ;
 
 -- The almost regular verb function needs the infinitive and the preteritum.
 
-  mk2V : (leve,levde : Str) -> V ;
+    mkV : (leve,levde : Str) -> V ;
 
 -- There is an extensive list of irregular verbs in the module $IrregNor$.
 -- In practice, it is enough to give three forms, as in school books.
 
-  irregV : (drikke, drakk, drukket  : Str) -> V ;
+    mkV : (drikke, drakk, drukket  : Str) -> V ;
+
+-- The worst case needs six forms.
+
+    mkV : (spise,spiser,spises,spiste,spist,spis : Str) -> V ;
+
+--3 Verbs with a particle.
+--
+-- The particle, such as in "lukke opp", is given as a string.
+
+    mkV : V -> Str -> V ;
+  } ;
+
 
 
 --3 Verbs with 'være' as auxiliary
@@ -223,11 +209,6 @@ oper
   vaereV : V -> V ;
 
 
---3 Verbs with a particle.
---
--- The particle, such as in "lukke opp", is given as a string.
-
-  partV  : V -> Str -> V ;
 
 --3 Deponent verbs.
 --
@@ -240,11 +221,14 @@ oper
 --3 Two-place verbs
 --
 -- Two-place verbs need a preposition, except the special case with direct object.
--- (transitive verbs). Notice that a particle comes from the $V$.
+-- (transitive verbs). Notice that, if a particle is needed, it comes from the $V$.
 
-  mkV2  : V -> Prep -> V2 ;
+  mkV2 : overload {
+    mkV2 : Str -> V2 ;
+    mkV2 : V -> V2 ;
+    mkV2 : V -> Prep -> V2 ;
+  } ;
 
-  dirV2 : V -> V2 ;
 
 --3 Three-place verbs
 --
@@ -301,7 +285,7 @@ oper
   nominative = Nom ;
   genitive = Gen ;
 
-  mkN x y z u = mkSubstantive x y z u ** {g = extNGen y ; lock_N = <>} ;
+  mk4N x y z u = mkSubstantive x y z u ** {g = extNGen y ; lock_N = <>} ;
 
   regN x = regGenN x g where {
     g = case <x : Str> of {
@@ -312,14 +296,14 @@ oper
 
   regGenN x g = case last x of {
     "e" => case g of {
-       Utr Masc   => mkN x (x      + "n") (x + "r") (x + "ne") ;
-       Utr Fem    => mkN x (init x + "a") (x + "r") (x + "ne") ;
-       Neutr      => mkN x (x      + "t") (x + "r") (init x + "a")
+       Utr Masc   => mk4N x (x      + "n") (x + "r") (x + "ne") ;
+       Utr Fem    => mk4N x (init x + "a") (x + "r") (x + "ne") ;
+       Neutr      => mk4N x (x      + "t") (x + "r") (init x + "a")
        } ;
     _ => case g of {
-       Utr Masc   => mkN x (x      + "en") (x + "er") (x + "ene") ;
-       Utr Fem    => mkN x (x      + "a")  (x + "er") (x + "ene") ;
-       Neutr      => mkN x (x      + "et") (x + "")   (x + "a")
+       Utr Masc   => mk4N x (x      + "en") (x + "er") (x + "ene") ;
+       Utr Fem    => mk4N x (x      + "a")  (x + "er") (x + "ene") ;
+       Neutr      => mk4N x (x      + "et") (x + "")   (x + "a")
        }
     } ;
 
@@ -337,12 +321,17 @@ oper
   regGenPN n g = {s = \\c => mkCase c n ; g = g} ** {lock_PN = <>} ;
   regPN n = regGenPN n utrum ;
   nounPN n = {s = n.s ! singular ! Indef ; g = n.g ; lock_PN = <>} ;
-  mkNP x y n g = 
+
+-- To form a noun phrase that can also be plural and have an irregular
+-- genitive, you can use the worst-case function.
+
+  makeNP : Str -> Str -> Number -> Gender -> NP ; 
+  makeNP x y n g = 
     {s = table {NPPoss _ => x ; _ => y} ; a = agrP3 g n ;
      lock_NP = <>} ;
 
-  mkA a b c = (mkAdject a b c [] []) ** {isComp = False ; lock_A = <>} ;
-  mk2A a b = mkA a b (a + "e") ;
+  mk3A a b c = (mkAdject a b c [] []) ** {isComp = False ; lock_A = <>} ;
+  mk2A a b = mk3A a b (a + "e") ;
   regA a = (regADeg a) **  {isComp = False ; lock_A = <>} ;
 
   mkA2 a p = a ** {c2 = p.s ; lock_A2 = <>} ;
@@ -369,10 +358,22 @@ oper
   mkPrep p = {s = p ; lock_Prep = <>} ;
   noPrep = mkPrep [] ;
 
-  mkV a b c d e f = mkVerb6 a b c d e f ** 
+  mk6V a b c d e f = mkVerb6 a b c d e f ** 
     {part = [] ; vtype = VAct ; isVaere = False ; lock_V = <>} ;
 
   regV a = case last a of {
+
+--3 Verbs with a particle.
+--
+-- The particle, such as in "lukke opp", is given as a string.
+
+
+
+--3 Verbs with a particle.
+--
+-- The particle, such as in "lukke opp", is given as a string.
+
+
     "e" => vHusk (init a) ;
     _ => vBo a
     } ** {part = [] ; vtype = VAct ; isVaere = False ; lock_V = <>} ;
@@ -391,7 +392,7 @@ oper
         _   => drikke + "r"
         }
     in 
-    mkV drikke drikker (drikke + "s") drakk drukket drikk ; 
+    mk6V drikke drikker (drikke + "s") drakk drukket drikk ; 
 
   vaereV v = {
     s = v.s ;
@@ -405,8 +406,8 @@ oper
   depV v = {s = v.s ; part = v.part ; vtype = VPass ; isVaere = False ; lock_V = <>} ;
   reflV v = {s = v.s ; part = v.part ; vtype = VRefl ; isVaere = False ; lock_V = <>} ;
 
-  mkV2 v p = v ** {c2 = p.s ; lock_V2 = <>} ;
-  dirV2 v = mkV2 v noPrep ;
+  mk2V2 v p = v ** {c2 = p.s ; lock_V2 = <>} ;
+  dirV2 v = mk2V2 v noPrep ;
 
   mkV3 v p q = v ** {c2 = p.s ; c3 = q.s ; lock_V3 = <>} ;
   dirV3 v p = mkV3 v noPrep p ;
@@ -414,13 +415,13 @@ oper
 
   mkV0  v = v ** {lock_V0 = <>} ;
   mkVS  v = v ** {lock_VS = <>} ;
-  mkV2S v p = mkV2 v p ** {lock_V2S = <>} ;
+  mkV2S v p = mk2V2 v p ** {lock_V2S = <>} ;
   mkVV  v = v ** {c2 = "å" ; lock_VV = <>} ;
-  mkV2V v p t = mkV2 v p ** {s3 = t ; lock_V2V = <>} ;
+  mkV2V v p t = mk2V2 v p ** {s3 = t ; lock_V2V = <>} ;
   mkVA  v = v ** {lock_VA = <>} ;
-  mkV2A v p = mkV2 v p ** {lock_V2A = <>} ;
+  mkV2A v p = mk2V2 v p ** {lock_V2A = <>} ;
   mkVQ  v = v ** {lock_VQ = <>} ;
-  mkV2Q v p = mkV2 v p ** {lock_V2Q = <>} ;
+  mkV2Q v p = mk2V2 v p ** {lock_V2Q = <>} ;
 
   mkAS  v = v ** {lock_A = <>} ;
   mkA2S v p = mkA2 v p ** {lock_A = <>} ;
@@ -432,5 +433,73 @@ oper
   AS, A2S, AV : Type = A ;
   A2V : Type = A2 ;
 
+
+---------
+
+  mk2N : (bil,bilen : Str) -> N ;
+  mk4N  : (dreng,drengen,drenger,drengene : Str) -> N ;
+  regN : Str -> N ;
+  regGenN : Str -> Gender -> N ;
+  mk2N : (bil,bilen : Str) -> N ;
+
+  mkN = overload {
+    mkN : Str -> N = regN ;
+    mkN : Str -> Gender -> N = regGenN ;
+    mkN : (bil,bilen : Str) -> N = mk2N ;
+    mkN  : (dreng,drengen,drenger,drengene : Str) -> N = mk4N
+  } ;
+
+  mkPN = overload {
+    mkPN : Str -> PN = regPN ;       -- masculine
+    mkPN : Str -> Gender -> PN = regGenPN ;  
+    mkPN : N -> PN = nounPN ;
+    } ;
+
+  regPN    : Str -> PN ;            -- utrum
+  regGenPN : Str -> Gender -> PN ;  
+  nounPN : N -> PN ;
+
+  mkA = overload {
+    mkA : (fin : Str) -> A = regADeg ;
+    mkA : (fin,fint : Str) -> A = mk2ADeg ;
+    mkA : (galen,galet,galne : Str) -> A = mk3ADeg ;
+    mkA : (stor,stort,store,storre,storst : Str) -> A = mkADeg ;
+    mkA : A -> A = compoundA ; -- -/mer/mest norsk
+  } ;
+
+  mk3A : (galen,galet,galne : Str) -> A ;
+  regA : Str -> A ;
+  mk2A : (stor,stort : Str) -> A ;
+  mkADeg : (stor,stort,store,storre,storst : Str) -> A ;
+  regADeg : Str -> A ;
+  irregADeg : (tung,tyngre,tyngst : Str) -> A ;
+  mk3ADeg : (galen,galet,galne : Str) -> A ;
+  mk2ADeg : (bred,bredt        : Str) -> A ;
+  compoundA : A -> A ; -- -/mer/mest norsk
+
+  mkV = overload {
+    mkV : (snakke : Str) -> V = regV ;
+    mkV : (leve,levde : Str) -> V = mk2V ;
+    mkV : (drikke, drakk, drukket  : Str) -> V = irregV ;
+    mkV : (spise,spiser,spises,spiste,spist,spis : Str) -> V = mk6V ;
+    mkV : V -> Str -> V = partV ;
+  } ;
+
+
+  regV : (snakke : Str) -> V ;
+  mk2V : (leve,levde : Str) -> V ;
+  irregV : (drikke, drakk, drukket  : Str) -> V ;
+  mk6V : (spise,spiser,spises,spiste,spist,spis : Str) -> V ;
+  partV  : V -> Str -> V ;
+
+
+  mkV2 = overload {
+    mkV2 : Str -> V2 = \s -> dirV2 (regV s) ;
+    mkV2 : V -> V2 = dirV2 ;
+    mkV2 : V -> Prep -> V2 = mk2V2 ;
+  } ;
+
+  mk2V2  : V -> Prep -> V2 ;
+  dirV2 : V -> V2 ;
 
 } ;

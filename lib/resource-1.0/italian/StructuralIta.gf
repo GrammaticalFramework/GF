@@ -27,7 +27,7 @@ lin
   can_VV = mkVV (verboV (potere_69 "potere")) ;
   during_Prep = mkPrep "durante" ;
   either7or_DConj = {s1,s2 = "o" ; n = Sg} ;
-  everybody_NP = mkNP ["tutti"] Masc Pl ;
+  everybody_NP = makeNP ["tutti"] Masc Pl ;
   every_Det = {s = \\_,_ => "ogni" ; n = Sg} ;
   everything_NP = pn2np (mkPN ["tutto"] Masc) ;
   everywhere_Adv = ss "dappertutto" ;
@@ -87,12 +87,12 @@ lin
       Pl => \\g,c => prepCase c ++ genForms "quelli" "quelle" ! g ---- quegli
       }
     } ;
-  that_NP = mkNP ["quello"] Masc Sg ;
+  that_NP = makeNP ["quello"] Masc Sg ;
   there7from_Adv = ss ["di là"] ;
   there7to_Adv = ss "là" ; --- ci
   there_Adv = ss "là" ;
   therefore_PConj = ss "quindi" ;
-  these_NP = mkNP ["questi"] Masc Pl ;
+  these_NP = makeNP ["questi"] Masc Pl ;
   they_Pron = mkPronoun
     "loro" "loro" "li" "glie" "loro" "loro" "loro" "loro" "loro" 
     Masc Pl P3 ;
@@ -103,7 +103,7 @@ lin
       }
     } ;
   this_NP = pn2np (mkPN ["questo"] Masc) ;
-  those_NP = mkNP ["quelli"] Masc Pl ;
+  those_NP = makeNP ["quelli"] Masc Pl ;
   through_Prep = mkPrep "per" ;
   too_AdA = ss "troppo" ;
   to_Prep = complDat ;

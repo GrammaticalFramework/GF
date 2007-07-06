@@ -339,6 +339,7 @@ Source 2: <A HREF="../abstract/Cat.gf"><CODE>http://www.cs.chalmers.se/~aarne/GF
 </TR>
 </TABLE>
 
+<P></P>
 <A NAME="toc2"></A>
 <H1>Syntax Rules</H1>
 <P>
@@ -1532,6 +1533,7 @@ Source: <A HREF="../api/Constructors.gf"><CODE>http://www.cs.chalmers.se/~aarne/
 </TR>
 </TABLE>
 
+<P></P>
 <A NAME="toc3"></A>
 <H1>Structural Words</H1>
 <P>
@@ -2025,6 +2027,7 @@ Source: <A HREF="../abstract/Structural.gf"><CODE>http://www.cs.chalmers.se/~aar
 </TR>
 </TABLE>
 
+<P></P>
 <A NAME="toc4"></A>
 <H1>Paradigms for Danish</H1>
 <P>
@@ -2093,27 +2096,27 @@ source <A HREF="../danish/ParadigmsDan.gf"><CODE>http://www.cs.chalmers.se/~aarn
 </TR>
 <TR>
 <TD><CODE>mkN</CODE></TD>
-<TD><CODE>(dreng,drengen,drenge,drengene : Str) -&gt; N</CODE></TD>
+<TD><CODE>(bil : Str) -&gt; N</CODE></TD>
 <TD>-</TD>
 </TR>
 <TR>
-<TD><CODE>regN</CODE></TD>
-<TD><CODE>Str -&gt; N</CODE></TD>
+<TD><CODE>mkN</CODE></TD>
+<TD><CODE>(hus : Str) -&gt; Gender -&gt; N</CODE></TD>
 <TD>-</TD>
 </TR>
 <TR>
-<TD><CODE>regGenN</CODE></TD>
-<TD><CODE>Str -&gt; Gender -&gt; N</CODE></TD>
-<TD>-</TD>
-</TR>
-<TR>
-<TD><CODE>mk2N</CODE></TD>
+<TD><CODE>mkN</CODE></TD>
 <TD><CODE>(bil,bilen : Str) -&gt; N</CODE></TD>
 <TD>-</TD>
 </TR>
 <TR>
-<TD><CODE>mk3N</CODE></TD>
+<TD><CODE>mkN</CODE></TD>
 <TD><CODE>(bil,bilen,biler : Str) -&gt; N</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkN</CODE></TD>
+<TD><CODE>(dreng,drengen,drenge,drengene : Str) -&gt; N</CODE></TD>
 <TD>-</TD>
 </TR>
 <TR>
@@ -2133,22 +2136,27 @@ source <A HREF="../danish/ParadigmsDan.gf"><CODE>http://www.cs.chalmers.se/~aarn
 </TR>
 <TR>
 <TD><CODE>mkPN</CODE></TD>
-<TD><CODE>Str -&gt; Gender -&gt; PN</CODE></TD>
-<TD><I>Paris neutrum</I></TD>
-</TR>
-<TR>
-<TD><CODE>regPN</CODE></TD>
 <TD><CODE>Str -&gt; PN</CODE></TD>
-<TD><I>utrum gender</I></TD>
+<TD><I>utrum</I></TD>
 </TR>
 <TR>
-<TD><CODE>nounPN</CODE></TD>
+<TD><CODE>mkPN</CODE></TD>
+<TD><CODE>Str -&gt; Gender -&gt; PN</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkPN</CODE></TD>
 <TD><CODE>N -&gt; PN</CODE></TD>
 <TD>-</TD>
 </TR>
 <TR>
-<TD><CODE>mkNP</CODE></TD>
-<TD><CODE>Str -&gt; Str -&gt; Number -&gt; Gender -&gt; NP</CODE></TD>
+<TD><CODE>mkA</CODE></TD>
+<TD><CODE>(fin : Str) -&gt; A</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkA</CODE></TD>
+<TD><CODE>(fin,fint : Str) -&gt; A</CODE></TD>
 <TD>-</TD>
 </TR>
 <TR>
@@ -2157,49 +2165,19 @@ source <A HREF="../danish/ParadigmsDan.gf"><CODE>http://www.cs.chalmers.se/~aarn
 <TD>-</TD>
 </TR>
 <TR>
-<TD><CODE>regA</CODE></TD>
-<TD><CODE>Str -&gt; A</CODE></TD>
+<TD><CODE>mkA</CODE></TD>
+<TD><CODE>(stor,stort,store,storre,storst : Str) -&gt; A</CODE></TD>
 <TD>-</TD>
 </TR>
 <TR>
-<TD><CODE>mk2A</CODE></TD>
-<TD><CODE>(stor,stort : Str) -&gt; A</CODE></TD>
-<TD>-</TD>
+<TD><CODE>mkA</CODE></TD>
+<TD><CODE>A -&gt; A</CODE></TD>
+<TD><I>-/mer/mest norsk</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkA2</CODE></TD>
 <TD><CODE>A -&gt; Prep -&gt; A2</CODE></TD>
 <TD>-</TD>
-</TR>
-<TR>
-<TD><CODE>mkADeg</CODE></TD>
-<TD><CODE>(stor,stort,store,storre,storst : Str) -&gt; A</CODE></TD>
-<TD>-</TD>
-</TR>
-<TR>
-<TD><CODE>regADeg</CODE></TD>
-<TD><CODE>Str -&gt; A</CODE></TD>
-<TD>-</TD>
-</TR>
-<TR>
-<TD><CODE>irregADeg</CODE></TD>
-<TD><CODE>(tung,tyngre,tyngst : Str) -&gt; A</CODE></TD>
-<TD>-</TD>
-</TR>
-<TR>
-<TD><CODE>mk3ADeg</CODE></TD>
-<TD><CODE>(galen,galet,galna : Str) -&gt; A</CODE></TD>
-<TD>-</TD>
-</TR>
-<TR>
-<TD><CODE>mk2ADeg</CODE></TD>
-<TD><CODE>(bred,bredt : Str) -&gt; A</CODE></TD>
-<TD>-</TD>
-</TR>
-<TR>
-<TD><CODE>compoundA</CODE></TD>
-<TD><CODE>A -&gt; A</CODE></TD>
-<TD><I>-/mer/mest norsk</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkAdv</CODE></TD>
@@ -2218,32 +2196,32 @@ source <A HREF="../danish/ParadigmsDan.gf"><CODE>http://www.cs.chalmers.se/~aarn
 </TR>
 <TR>
 <TD><CODE>mkV</CODE></TD>
-<TD><CODE>(spise,spiser,spises,spiste,spist,spis : Str) -&gt; V</CODE></TD>
-<TD>-</TD>
-</TR>
-<TR>
-<TD><CODE>regV</CODE></TD>
 <TD><CODE>(snakke : Str) -&gt; V</CODE></TD>
 <TD>-</TD>
 </TR>
 <TR>
-<TD><CODE>mk2V</CODE></TD>
+<TD><CODE>mkV</CODE></TD>
 <TD><CODE>(leve,levde : Str) -&gt; V</CODE></TD>
 <TD>-</TD>
 </TR>
 <TR>
-<TD><CODE>irregV</CODE></TD>
-<TD><CODE>(drikke, drak, drukket : Str) -&gt; V</CODE></TD>
+<TD><CODE>mkV</CODE></TD>
+<TD><CODE>(drikke, drakk, drukket : Str) -&gt; V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV</CODE></TD>
+<TD><CODE>(spise,spiser,spises,spiste,spist,spis : Str) -&gt; V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV</CODE></TD>
+<TD><CODE>V -&gt; Str -&gt; V</CODE></TD>
 <TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>vaereV</CODE></TD>
 <TD><CODE>V -&gt; V</CODE></TD>
-<TD>-</TD>
-</TR>
-<TR>
-<TD><CODE>partV</CODE></TD>
-<TD><CODE>V -&gt; Str -&gt; V</CODE></TD>
 <TD>-</TD>
 </TR>
 <TR>
@@ -2258,12 +2236,17 @@ source <A HREF="../danish/ParadigmsDan.gf"><CODE>http://www.cs.chalmers.se/~aarn
 </TR>
 <TR>
 <TD><CODE>mkV2</CODE></TD>
-<TD><CODE>V -&gt; Prep -&gt; V2</CODE></TD>
+<TD><CODE>Str -&gt; V2</CODE></TD>
 <TD>-</TD>
 </TR>
 <TR>
-<TD><CODE>dirV2</CODE></TD>
+<TD><CODE>mkV2</CODE></TD>
 <TD><CODE>V -&gt; V2</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV2</CODE></TD>
+<TD><CODE>V -&gt; Prep -&gt; V2</CODE></TD>
 <TD>-</TD>
 </TR>
 <TR>
@@ -2348,6 +2331,7 @@ source <A HREF="../danish/ParadigmsDan.gf"><CODE>http://www.cs.chalmers.se/~aarn
 </TR>
 </TABLE>
 
+<P></P>
 <A NAME="toc5"></A>
 <H1>Paradigms for English</H1>
 <P>
@@ -2631,6 +2615,7 @@ source <A HREF="../english/ParadigmsEng.gf"><CODE>http://www.cs.chalmers.se/~aar
 </TR>
 </TABLE>
 
+<P></P>
 <A NAME="toc6"></A>
 <H1>Paradigms for Finnish</H1>
 <P>
@@ -3044,6 +3029,7 @@ source <A HREF="../finnish/ParadigmsFin.gf"><CODE>http://www.cs.chalmers.se/~aar
 </TR>
 </TABLE>
 
+<P></P>
 <A NAME="toc7"></A>
 <H1>Paradigms for French</H1>
 <P>
@@ -3327,6 +3313,7 @@ source <A HREF="../french/ParadigmsFre.gf"><CODE>http://www.cs.chalmers.se/~aarn
 </TR>
 </TABLE>
 
+<P></P>
 <A NAME="toc8"></A>
 <H1>Paradigms for German</H1>
 <P>
@@ -3640,6 +3627,7 @@ source <A HREF="../german/ParadigmsGer.gf"><CODE>http://www.cs.chalmers.se/~aarn
 </TR>
 </TABLE>
 
+<P></P>
 <A NAME="toc9"></A>
 <H1>Paradigms for Italian</H1>
 <P>
@@ -3928,6 +3916,7 @@ source <A HREF="../italian/ParadigmsIta.gf"><CODE>http://www.cs.chalmers.se/~aar
 </TR>
 </TABLE>
 
+<P></P>
 <A NAME="toc10"></A>
 <H1>Paradigms for Norwegian</H1>
 <P>
@@ -4001,22 +3990,22 @@ source <A HREF="../norwegian/ParadigmsNor.gf"><CODE>http://www.cs.chalmers.se/~a
 </TR>
 <TR>
 <TD><CODE>mkN</CODE></TD>
-<TD><CODE>(dreng,drengen,drenger,drengene : Str) -&gt; N</CODE></TD>
-<TD>-</TD>
-</TR>
-<TR>
-<TD><CODE>regN</CODE></TD>
 <TD><CODE>Str -&gt; N</CODE></TD>
 <TD>-</TD>
 </TR>
 <TR>
-<TD><CODE>regGenN</CODE></TD>
+<TD><CODE>mkN</CODE></TD>
 <TD><CODE>Str -&gt; Gender -&gt; N</CODE></TD>
 <TD>-</TD>
 </TR>
 <TR>
-<TD><CODE>mk2N</CODE></TD>
+<TD><CODE>mkN</CODE></TD>
 <TD><CODE>(bil,bilen : Str) -&gt; N</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkN</CODE></TD>
+<TD><CODE>(dreng,drengen,drenger,drengene : Str) -&gt; N</CODE></TD>
 <TD>-</TD>
 </TR>
 <TR>
@@ -4035,23 +4024,28 @@ source <A HREF="../norwegian/ParadigmsNor.gf"><CODE>http://www.cs.chalmers.se/~a
 <TD>-</TD>
 </TR>
 <TR>
-<TD><CODE>regPN</CODE></TD>
+<TD><CODE>mkPN</CODE></TD>
 <TD><CODE>Str -&gt; PN</CODE></TD>
-<TD><I>utrum</I></TD>
+<TD><I>masculine</I></TD>
 </TR>
 <TR>
-<TD><CODE>regGenPN</CODE></TD>
+<TD><CODE>mkPN</CODE></TD>
 <TD><CODE>Str -&gt; Gender -&gt; PN</CODE></TD>
 <TD>-</TD>
 </TR>
 <TR>
-<TD><CODE>nounPN</CODE></TD>
+<TD><CODE>mkPN</CODE></TD>
 <TD><CODE>N -&gt; PN</CODE></TD>
 <TD>-</TD>
 </TR>
 <TR>
-<TD><CODE>mkNP</CODE></TD>
-<TD><CODE>Str -&gt; Str -&gt; Number -&gt; Gender -&gt; NP</CODE></TD>
+<TD><CODE>mkA</CODE></TD>
+<TD><CODE>(fin : Str) -&gt; A</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkA</CODE></TD>
+<TD><CODE>(fin,fint : Str) -&gt; A</CODE></TD>
 <TD>-</TD>
 </TR>
 <TR>
@@ -4060,49 +4054,19 @@ source <A HREF="../norwegian/ParadigmsNor.gf"><CODE>http://www.cs.chalmers.se/~a
 <TD>-</TD>
 </TR>
 <TR>
-<TD><CODE>regA</CODE></TD>
-<TD><CODE>Str -&gt; A</CODE></TD>
+<TD><CODE>mkA</CODE></TD>
+<TD><CODE>(stor,stort,store,storre,storst : Str) -&gt; A</CODE></TD>
 <TD>-</TD>
 </TR>
 <TR>
-<TD><CODE>mk2A</CODE></TD>
-<TD><CODE>(stor,stort : Str) -&gt; A</CODE></TD>
-<TD>-</TD>
+<TD><CODE>mkA</CODE></TD>
+<TD><CODE>A -&gt; A</CODE></TD>
+<TD><I>-/mer/mest norsk</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkA2</CODE></TD>
 <TD><CODE>A -&gt; Prep -&gt; A2</CODE></TD>
 <TD>-</TD>
-</TR>
-<TR>
-<TD><CODE>mkADeg</CODE></TD>
-<TD><CODE>(stor,stort,store,storre,storst : Str) -&gt; A</CODE></TD>
-<TD>-</TD>
-</TR>
-<TR>
-<TD><CODE>regADeg</CODE></TD>
-<TD><CODE>Str -&gt; A</CODE></TD>
-<TD>-</TD>
-</TR>
-<TR>
-<TD><CODE>irregADeg</CODE></TD>
-<TD><CODE>(tung,tyngre,tyngst : Str) -&gt; A</CODE></TD>
-<TD>-</TD>
-</TR>
-<TR>
-<TD><CODE>mk3ADeg</CODE></TD>
-<TD><CODE>(galen,galet,galne : Str) -&gt; A</CODE></TD>
-<TD>-</TD>
-</TR>
-<TR>
-<TD><CODE>mk2ADeg</CODE></TD>
-<TD><CODE>(bred,bredt : Str) -&gt; A</CODE></TD>
-<TD>-</TD>
-</TR>
-<TR>
-<TD><CODE>compoundA</CODE></TD>
-<TD><CODE>A -&gt; A</CODE></TD>
-<TD><I>-/mer/mest norsk</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkAdv</CODE></TD>
@@ -4121,32 +4085,32 @@ source <A HREF="../norwegian/ParadigmsNor.gf"><CODE>http://www.cs.chalmers.se/~a
 </TR>
 <TR>
 <TD><CODE>mkV</CODE></TD>
-<TD><CODE>(spise,spiser,spises,spiste,spist,spis : Str) -&gt; V</CODE></TD>
-<TD>-</TD>
-</TR>
-<TR>
-<TD><CODE>regV</CODE></TD>
 <TD><CODE>(snakke : Str) -&gt; V</CODE></TD>
 <TD>-</TD>
 </TR>
 <TR>
-<TD><CODE>mk2V</CODE></TD>
+<TD><CODE>mkV</CODE></TD>
 <TD><CODE>(leve,levde : Str) -&gt; V</CODE></TD>
 <TD>-</TD>
 </TR>
 <TR>
-<TD><CODE>irregV</CODE></TD>
+<TD><CODE>mkV</CODE></TD>
 <TD><CODE>(drikke, drakk, drukket : Str) -&gt; V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV</CODE></TD>
+<TD><CODE>(spise,spiser,spises,spiste,spist,spis : Str) -&gt; V</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV</CODE></TD>
+<TD><CODE>V -&gt; Str -&gt; V</CODE></TD>
 <TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>vaereV</CODE></TD>
 <TD><CODE>V -&gt; V</CODE></TD>
-<TD>-</TD>
-</TR>
-<TR>
-<TD><CODE>partV</CODE></TD>
-<TD><CODE>V -&gt; Str -&gt; V</CODE></TD>
 <TD>-</TD>
 </TR>
 <TR>
@@ -4161,12 +4125,17 @@ source <A HREF="../norwegian/ParadigmsNor.gf"><CODE>http://www.cs.chalmers.se/~a
 </TR>
 <TR>
 <TD><CODE>mkV2</CODE></TD>
-<TD><CODE>V -&gt; Prep -&gt; V2</CODE></TD>
+<TD><CODE>Str -&gt; V2</CODE></TD>
 <TD>-</TD>
 </TR>
 <TR>
-<TD><CODE>dirV2</CODE></TD>
+<TD><CODE>mkV2</CODE></TD>
 <TD><CODE>V -&gt; V2</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV2</CODE></TD>
+<TD><CODE>V -&gt; Prep -&gt; V2</CODE></TD>
 <TD>-</TD>
 </TR>
 <TR>
@@ -4251,6 +4220,7 @@ source <A HREF="../norwegian/ParadigmsNor.gf"><CODE>http://www.cs.chalmers.se/~a
 </TR>
 </TABLE>
 
+<P></P>
 <A NAME="toc11"></A>
 <H1>Paradigms for Russian</H1>
 <P>
@@ -4334,12 +4304,17 @@ source <A HREF="../russian/ParadigmsRus.gf"><CODE>http://www.cs.chalmers.se/~aar
 </TR>
 <TR>
 <TD><CODE>mkN</CODE></TD>
-<TD><CODE>(nomSg, genSg, datSg, accSg, instSg, preposSg,</CODE></TD>
+<TD><CODE>Str -&gt; N</CODE></TD>
 <TD>-</TD>
 </TR>
 <TR>
-<TD><CODE>regN</CODE></TD>
-<TD><CODE>Str -&gt; N</CODE></TD>
+<TD><CODE>mkN</CODE></TD>
+<TD><CODE>Str -&gt; Gender -&gt; Animacy -&gt; N</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkN</CODE></TD>
+<TD><CODE>(nomSg,_,_,_,_,_,_,_,_,_,_,prepPl : Str) -&gt; Gender -&gt; Animacy -&gt; N</CODE></TD>
 <TD>-</TD>
 </TR>
 <TR>
@@ -4454,33 +4429,28 @@ source <A HREF="../russian/ParadigmsRus.gf"><CODE>http://www.cs.chalmers.se/~aar
 </TR>
 <TR>
 <TD><CODE>mkPN</CODE></TD>
+<TD><CODE>Str -&gt; PN</CODE></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkPN</CODE></TD>
 <TD><CODE>Str -&gt; Gender -&gt; Animacy -&gt; PN</CODE></TD>
 <TD><I>"Иван", "Маша"</I></TD>
 </TR>
 <TR>
-<TD><CODE>nounPN</CODE></TD>
+<TD><CODE>mkPN</CODE></TD>
 <TD><CODE>N -&gt; PN</CODE></TD>
 <TD>-</TD>
 </TR>
 <TR>
-<TD><CODE>mkCN</CODE></TD>
-<TD><CODE>N -&gt; CN</CODE></TD>
-<TD>-</TD>
-</TR>
-<TR>
-<TD><CODE>mkNP</CODE></TD>
-<TD><CODE>Str -&gt; Gender -&gt; Animacy -&gt; NP</CODE></TD>
-<TD>-</TD>
-</TR>
-<TR>
-<TD><CODE>regA</CODE></TD>
-<TD><CODE>Str -&gt; Str -&gt; A</CODE></TD>
-<TD>-</TD>
-</TR>
-<TR>
-<TD><CODE>adjInvar</CODE></TD>
+<TD><CODE>mkA</CODE></TD>
 <TD><CODE>Str -&gt; A</CODE></TD>
 <TD><I>khaki, mini, hindi, netto</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkA</CODE></TD>
+<TD><CODE>Str -&gt; Str -&gt; A</CODE></TD>
+<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>AStaruyj</CODE></TD>
@@ -4519,13 +4489,18 @@ source <A HREF="../russian/ParadigmsRus.gf"><CODE>http://www.cs.chalmers.se/~aar
 </TR>
 <TR>
 <TD><CODE>mkV</CODE></TD>
-<TD><CODE>Aspect -&gt; (presentSgP1,presentSgP2,presentSgP3,</CODE></TD>
+<TD><CODE>Aspect -&gt; Conjugation -&gt; (stemPrsSgP1,endPrsSgP1,pastSgP1,imp,inf : Str) -&gt; V</CODE></TD>
 <TD>-</TD>
 </TR>
 <TR>
-<TD><CODE>pastSgP1,imperative,infinitive</CODE></TD>
-<TD><CODE>Str) -&gt; V</CODE></TD>
+<TD><CODE>mkV</CODE></TD>
+<TD><CODE>Aspect -&gt; (presSgP1,presSgP2,presSgP3,presPlP1,presPlP2,presPlP3,pastSgMasc,imp,inf: Str) -&gt; V</CODE></TD>
 <TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>mkV2</CODE></TD>
+<TD><CODE>V -&gt; V2</CODE></TD>
+<TD><I>"видеть", "любить"</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkV2</CODE></TD>
@@ -4533,22 +4508,18 @@ source <A HREF="../russian/ParadigmsRus.gf"><CODE>http://www.cs.chalmers.se/~aar
 <TD><I>"войти в дом"; "в", accusative</I></TD>
 </TR>
 <TR>
-<TD><CODE>mkV3</CODE></TD>
-<TD><CODE>V -&gt; Str -&gt; Str -&gt; Case -&gt; Case -&gt; V3</CODE></TD>
-<TD><I>"сложить письмо в конверт"</I></TD>
-</TR>
-<TR>
-<TD><CODE>dirV2</CODE></TD>
-<TD><CODE>V -&gt; V2</CODE></TD>
-<TD><I>"видеть", "любить"</I></TD>
-</TR>
-<TR>
 <TD><CODE>tvDirDir</CODE></TD>
 <TD><CODE>V -&gt; V3</CODE></TD>
 <TD>-</TD>
 </TR>
+<TR>
+<TD><CODE>mkV3</CODE></TD>
+<TD><CODE>V -&gt; Str -&gt; Str -&gt; Case -&gt; Case -&gt; V3</CODE></TD>
+<TD><I>"сложить письмо в конверт"</I></TD>
+</TR>
 </TABLE>
 
+<P></P>
 <A NAME="toc12"></A>
 <H1>Paradigms for Spanish</H1>
 <P>
@@ -4842,6 +4813,7 @@ source <A HREF="../spanish/ParadigmsSpa.gf"><CODE>http://www.cs.chalmers.se/~aar
 </TR>
 </TABLE>
 
+<P></P>
 <A NAME="toc13"></A>
 <H1>Paradigms for Swedish</H1>
 <P>
@@ -5140,6 +5112,7 @@ source <A HREF="../swedish/ParadigmsSwe.gf"><CODE>http://www.cs.chalmers.se/~aar
 </TR>
 </TABLE>
 
+<P></P>
 <A NAME="toc14"></A>
 <H1>Browsing the libraries with GF commands</H1>
 <P>
@@ -5235,6 +5208,6 @@ For each language, an instantiation of the functor:
 </PRE>
 <P></P>
 
-<!-- html code generated by txt2tags 2.4 (http://txt2tags.sf.net) -->
+<!-- html code generated by txt2tags 2.3 (http://txt2tags.sf.net) -->
 <!-- cmdline: txt2tags -thtml -\-toc synopsis.txt -->
 </BODY></HTML>
