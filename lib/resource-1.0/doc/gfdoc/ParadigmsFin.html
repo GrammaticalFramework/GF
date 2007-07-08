@@ -6,7 +6,7 @@
 </HEAD><BODY BGCOLOR="white" TEXT="black">
 <P ALIGN="center"><CENTER><H1> Finnish Lexical Paradigms</H1>
 <FONT SIZE="4">
-<I>Last update: 2006-11-21 14:49:06 CET</I><BR>
+<I>Last update: 2007-07-08 15:18:54 CEST</I><BR>
 </FONT></CENTER>
 
 <P></P>
@@ -117,8 +117,6 @@ stems, vowel alternation, and vowel harmony.
 </P>
 <PRE>
     oper
-      mkN : (talo,   talon,   talona, taloa, taloon,
-             taloina,taloissa,talojen,taloja,taloihin : Str) -&gt; N ;
 </PRE>
 <P></P>
 <P>
@@ -127,22 +125,21 @@ nominative) and analyses it to pick the correct paradigm.
 It does automatic grade alternation, and is hence not usable
 for words like <I>auto</I> (whose genitive would become <I>audon</I>).
 </P>
-<PRE>
-      regN : (talo : Str) -&gt; N ;
-</PRE>
-<P></P>
 <P>
-If <CODE>regN</CODE> does not give the correct result, one can try and give 
-two or three forms as follows. Examples of the use of these
-functions are given in <CODE>BasicFin</CODE>. Most notably, <CODE>reg2N</CODE> is used
+If the one-argument paradigm does not give the correct result, one can try and give 
+two or three forms. Most notably, the two-argument variant is used
 for nouns like <I>kivi - kiviä</I>, which would otherwise become like
-<I>rivi - rivejä</I>. <CODE>regN3</CODE> is used e.g. for 
+<I>rivi - rivejä</I>. Three arguments are used e.g. for 
 <I>sydän - sydämen - sydämiä</I>, which would otherwise become
 <I>sydän - sytämen</I>.
 </P>
 <PRE>
-      reg2N : (savi,savia : Str) -&gt; N ;
-      reg3N : (vesi,veden,vesiä : Str) -&gt; N ;
+      mkN : overload {
+        mkN : (talo : Str) -&gt; N ;
+        mkN : (savi,savia : Str) -&gt; N ;
+        mkN : (vesi,veden,vesiä : Str) -&gt; N ;
+        mkN : (olo,oln,olona,oloa,oloon,oloina,oloissa,olojen,oloja,oloihin : Str) -&gt; N 
+      } ;
 </PRE>
 <P></P>
 <P>
@@ -291,12 +288,14 @@ have only their last part inflected.
 </PRE>
 <P></P>
 <P>
-Nouns used as functions need a case, of which by far the commonest is
+Nouns used as functions need a case, of which the default is
 the genitive.
 </P>
 <PRE>
-      mkN2  : N -&gt; Prep -&gt; N2 ;
-      genN2 : N -&gt; N2 ;
+      mkN2 = overload {
+        mkN2 : N -&gt; N2 = genN2 ;
+        mkN2 : N -&gt; Prep -&gt; N2 = mmkN2
+        } ;
     
       mkN3  : N -&gt; Prep -&gt; Prep -&gt; N3 ;
 </PRE>
@@ -306,18 +305,28 @@ Proper names can be formed by using declensions for nouns.
 The plural forms are filtered away by the compiler.
 </P>
 <PRE>
-      regPN : Str -&gt; PN ;
-      mkPN  : N -&gt; PN ;
-      mkNP  : N -&gt; Number -&gt; NP ; 
+      mkPN : overload {
+        mkPN : Str -&gt; PN ;
+        mkPN : N -&gt; PN
+        } ;
 </PRE>
 <P></P>
 <A NAME="toc3"></A>
 <H2>Adjectives</H2>
 <P>
 Non-comparison one-place adjectives are just like nouns.
+The regular adjectives are based on <CODE>regN</CODE> in the positive.
+Comparison adjectives have three forms. 
+The comparative and the superlative
+are always inflected in the same way, so the nominative of them is actually
+enough (except for the superlative <I>paras</I> of <I>hyvä</I>).
 </P>
 <PRE>
-      mkA : N -&gt; A ;
+      mkA : overload {
+        mkA : Str -&gt; A ;
+        mkA : N -&gt; A ;
+        mkA : N -&gt; (kivempaa,kivinta : Str) -&gt; A
+      } ;
 </PRE>
 <P></P>
 <P>
@@ -327,22 +336,6 @@ Two-place adjectives need a case for the second argument.
       mkA2 : A -&gt; Prep -&gt; A2 ;
 </PRE>
 <P></P>
-<P>
-Comparison adjectives have three forms. The comparative and the superlative
-are always inflected in the same way, so the nominative of them is actually
-enough (except for the superlative <I>paras</I> of <I>hyvä</I>).
-</P>
-<PRE>
-      mkADeg : (kiva : N) -&gt; (kivempaa,kivinta : Str) -&gt; A ;
-</PRE>
-<P></P>
-<P>
-The regular adjectives are based on <CODE>regN</CODE> in the positive.
-</P>
-<PRE>
-      regA : (punainen : Str) -&gt; A ;
-</PRE>
-<P></P>
 <A NAME="toc4"></A>
 <H2>Verbs</H2>
 <P>
@@ -350,26 +343,22 @@ The grammar does not cover the potential mood and some nominal
 forms. One way to see the coverage is to linearize a verb to
 a table.
 The worst case needs twelve forms, as shown in the following.
-</P>
-<PRE>
-      mkV   : (tulla,tulee,tulen,tulevat,tulkaa,tullaan,
-               tuli,tulin,tulisi,tullut,tultu,tullun : Str) -&gt; V ;
-</PRE>
-<P></P>
-<P>
 The following heuristics cover more and more verbs.
 </P>
 <PRE>
-      regV  : (soutaa : Str) -&gt; V ;
-      reg2V : (soutaa,souti : Str) -&gt; V ;
-      reg3V : (soutaa,soudan,souti : Str) -&gt; V ;
+      mkV : overload {
+        mkV : (soutaa : Str) -&gt; V ;
+        mkV : (soutaa,souti : Str) -&gt; V ;
+        mkV : (soutaa,soudan,souti : Str) -&gt; V ;
+        mkV : (tulla,tulee,tulen,tulevat,tulkaa,tullaan,tuli,tulin,tulisi,tullut,tultu,tullun : Str) -&gt; V ;
 </PRE>
 <P></P>
 <P>
-The subject case of verbs is by default nominative. This dunction can change it.
+The subject case of verbs is by default nominative. This function can change it.
 </P>
 <PRE>
-      subjcaseV : V -&gt; Case -&gt; V ;
+        mkV : V -&gt; Case -&gt; V
+      } ;
 </PRE>
 <P></P>
 <P>
@@ -429,26 +418,18 @@ The verbs <I>be</I> is special.
 <A NAME="toc5"></A>
 <H3>Two-place verbs</H3>
 <P>
-Two-place verbs need a case, and can have a pre- or postposition.
+Two-place verbs need an object case, and can have a pre- or postposition.
+The default is direct (accusative) object. There is also a special case
+with case only. The string-only argument case yields a regular verb with
+accusative object.
 </P>
 <PRE>
-      mkV2 : V -&gt; Prep -&gt; V2 ;
-</PRE>
-<P></P>
-<P>
-If the complement needs just a case, the following special function can be used.
-</P>
-<PRE>
-      caseV2 : V -&gt; Case -&gt; V2 ;
-</PRE>
-<P></P>
-<P>
-Verbs with a direct (accusative) object
-are special, since their complement case is finally decided in syntax.
-But this is taken care of in <CODE>VerbFin</CODE>.
-</P>
-<PRE>
-      dirV2 : V -&gt; V2 ;
+      mkV2 : overload {
+        mkV2 : Str -&gt; V2 ;
+        mkV2 : V -&gt; V2 ;
+        mkV2 : V -&gt; Case -&gt; V2 ;
+        mkV2 : V -&gt; Prep -&gt; V2 ;
+        } ;
 </PRE>
 <P></P>
 <A NAME="toc6"></A>
@@ -498,6 +479,6 @@ as an adverb. Likewise <CODE>AS, A2S, AV, A2V</CODE> are just <CODE>A</CODE>.
 </PRE>
 <P></P>
 
-<!-- html code generated by txt2tags 2.4 (http://txt2tags.sf.net) -->
+<!-- html code generated by txt2tags 2.3 (http://txt2tags.sf.net) -->
 <!-- cmdline: txt2tags -thtml -\-toc finnish/ParadigmsFin.txt -->
 </BODY></HTML>

@@ -6,7 +6,7 @@
 </HEAD><BODY BGCOLOR="white" TEXT="black">
 <P ALIGN="center"><CENTER><H1> Spanish Lexical Paradigms</H1>
 <FONT SIZE="4">
-<I>Last update: 2007-03-19 18:25:03 CET</I><BR>
+<I>Last update: 2007-07-06 09:19:56 CEST</I><BR>
 </FONT></CENTER>
 
 <P></P>
@@ -24,14 +24,13 @@
     <LI><A HREF="#toc7">Adjectives</A>
       <UL>
       <LI><A HREF="#toc8">Two-place adjectives</A>
-      <LI><A HREF="#toc9">Comparison adjectives</A>
       </UL>
-    <LI><A HREF="#toc10">Adverbs</A>
-    <LI><A HREF="#toc11">Verbs</A>
+    <LI><A HREF="#toc9">Adverbs</A>
+    <LI><A HREF="#toc10">Verbs</A>
       <UL>
-      <LI><A HREF="#toc12">Two-place verbs</A>
-      <LI><A HREF="#toc13">Three-place verbs</A>
-      <LI><A HREF="#toc14">Other complement patterns</A>
+      <LI><A HREF="#toc11">Two-place verbs</A>
+      <LI><A HREF="#toc12">Three-place verbs</A>
+      <LI><A HREF="#toc13">Other complement patterns</A>
       </UL>
     </UL>
 
@@ -124,12 +123,8 @@ amalgamate with the following word (the 'genitive' <I>de</I> and the
 <P></P>
 <A NAME="toc2"></A>
 <H2>Nouns</H2>
-<P>
-Worst case: two forms (singular + plural),
-and the gender.
-</P>
 <PRE>
-      mkN  : (_,_ : Str) -&gt; Gender -&gt; N ;   -- bastón, bastones, masculine
+      mkN : overload {
 </PRE>
 <P></P>
 <P>
@@ -142,15 +137,22 @@ those ending with <I>z</I> have <I>ces</I> in plural; all other nouns
 have <I>es</I> as plural ending. The accent is not dealt with.
 </P>
 <PRE>
-      regN : Str -&gt; N ;
+        mkN : (luz : Str) -&gt; N ;
 </PRE>
 <P></P>
 <P>
-To force a different gender, use one of the following functions.
+A different gender can be forced.
 </P>
 <PRE>
-      mascN : N -&gt; N ;
-      femN  : N -&gt; N ;
+        mkN : Str -&gt; Gender -&gt; N ;
+</PRE>
+<P></P>
+<P>
+The worst case has two forms (singular + plural) and the gender.
+</P>
+<PRE>
+        mkN : (baston,bastones : Str) -&gt; Gender -&gt; N 
+        } ;
 </PRE>
 <P></P>
 <A NAME="toc3"></A>
@@ -202,47 +204,55 @@ and <CODE>PrepNP</CODE> constructions to build phrases like this.
 <H3>Proper names and noun phrases</H3>
 <P>
 Proper names need a string and a gender.
+The default gender is feminine for names ending with <I>a</I>, otherwise masculine.
 </P>
 <PRE>
-      mkPN  : Str -&gt; Gender -&gt; PN ; -- Juan
-      regPN : Str -&gt; PN ;           -- feminine for "-a", otherwise masculine
-</PRE>
-<P></P>
-<P>
-To form a noun phrase that can also be plural,
-you can use the worst-case function.
-</P>
-<PRE>
-      mkNP : Str -&gt; Gender -&gt; Number -&gt; NP ; 
+      mkPN : overload {
+        mkPN : (Anna : Str) -&gt; PN ;
+        mkPN : (Pilar : Str) -&gt; Gender -&gt; PN
+        } ;
 </PRE>
 <P></P>
 <A NAME="toc7"></A>
 <H2>Adjectives</H2>
+<PRE>
+      mkA : overload {
+</PRE>
+<P></P>
 <P>
-Non-comparison one-place adjectives need five forms in the worst
+For regular adjectives, all forms are derived from the
+masculine singular. The types of adjectives that are recognized are
+<I>alto</I>, <I>fuerte</I>, <I>util</I>. Comparison is formed by <I>mas</I>.
+</P>
+<PRE>
+        mkA : (util : Str) -&gt; A ;
+</PRE>
+<P></P>
+<P>
+One-place adjectives compared with <I>mas</I> need five forms in the worst
 case (masc and fem singular, masc plural, adverbial).
 </P>
 <PRE>
-      mkA : (solo,sola,solos,solas, solamiento : Str) -&gt; A ;
+        mkA : (solo,sola,solos,solas,solamiento : Str) -&gt; A ;
 </PRE>
 <P></P>
 <P>
-For regular adjectives, all other forms are derived from the
-masculine singular. The types of adjectives that are recognized are
-<I>alto</I>, <I>fuerte</I>, <I>util</I>.
+In the worst case, two separate adjectives are given: 
+the positive (<I>bueno</I>), and the comparative (<I>mejor</I>). 
 </P>
 <PRE>
-      regA : Str -&gt; A ;
+        mkA : (bueno : A) -&gt; (mejor : A) -&gt; A
+        } ;
 </PRE>
 <P></P>
 <P>
-These functions create postfix adjectives. To switch
+The functions above create postfix adjectives. To switch
 them to prefix ones (i.e. ones placed before the noun in
 modification, as in <I>bueno vino</I>), the following function is
 provided.
 </P>
 <PRE>
-      prefA : A -&gt; A ;
+      prefixA : A -&gt; A ;
 </PRE>
 <P></P>
 <A NAME="toc8"></A>
@@ -255,32 +265,6 @@ Two-place adjectives need a preposition for their second argument.
 </PRE>
 <P></P>
 <A NAME="toc9"></A>
-<H3>Comparison adjectives</H3>
-<P>
-Comparison adjectives are in the worst case put up from two
-adjectives: the positive (<I>bueno</I>), and the comparative (<I>mejor</I>). 
-</P>
-<PRE>
-      mkADeg : A -&gt; A -&gt; A ;
-</PRE>
-<P></P>
-<P>
-If comparison is formed by <I>mas</I>, as usual in Spanish,
-the following pattern is used:
-</P>
-<PRE>
-      compADeg : A -&gt; A ;
-</PRE>
-<P></P>
-<P>
-The regular pattern is the same as <CODE>regA</CODE> for plain adjectives, 
-with comparison by <I>mas</I>.
-</P>
-<PRE>
-      regADeg : Str -&gt; A ;
-</PRE>
-<P></P>
-<A NAME="toc10"></A>
 <H2>Adverbs</H2>
 <P>
 Adverbs are not inflected. Most lexical ones have position
@@ -304,8 +288,12 @@ Adverbs modifying adjectives and sentences can also be formed.
       mkAdA : Str -&gt; AdA ;
 </PRE>
 <P></P>
-<A NAME="toc11"></A>
+<A NAME="toc10"></A>
 <H2>Verbs</H2>
+<PRE>
+      mkV : overload {
+</PRE>
+<P></P>
 <P>
 Regular verbs are ones inflected like <I>cortar</I>, <I>deber</I>, or <I>vivir</I>.
 The regular verb function is the first conjugation (<I>ar</I>) recognizes
@@ -314,15 +302,25 @@ the variations corresponding to the patterns
 the complete set of <I>Bescherelle</I> conjugations.
 </P>
 <PRE>
-      regV : Str -&gt; V ;
+        mkV : (pagar : Str) -&gt; V ;
 </PRE>
 <P></P>
 <P>
-The module <CODE>BeschSpa</CODE> gives all the patterns of the <I>Bescherelle</I>
+Verbs with vowel alternatition in the stem - easiest to give with
+two forms, e.g. <I>mostrar///</I>muestro//.
+</P>
+<PRE>
+        mkV : (mostrar,muestro : Str) -&gt; V ;
+</PRE>
+<P></P>
+<P>
+Most irreguler verbs are found in <CODE>IrregSpa</CODE>. If this is not enough,
+the module <CODE>BeschSpa</CODE> gives all the patterns of the <I>Bescherelle</I>
 book. To use them in the category <CODE>V</CODE>, wrap them with the function
 </P>
 <PRE>
-      verboV : Verbum -&gt; V ;
+        mkV : Verbum -&gt; V 
+        } ;
 </PRE>
 <P></P>
 <P>
@@ -340,24 +338,18 @@ in masculine singular form as second argument.
       special_ppV : V -&gt; Str -&gt; V ; 
 </PRE>
 <P></P>
-<P>
-Verbs with vowel alternatition in the stem - easiest to give with
-two forms, e.g. <I>mostrar///</I>muestro//.
-</P>
-<PRE>
-      regAltV : (mostrar,muestro : Str) -&gt; V ;
-</PRE>
-<P></P>
-<A NAME="toc12"></A>
+<A NAME="toc11"></A>
 <H3>Two-place verbs</H3>
 <P>
 Two-place verbs need a preposition, except the special case with direct object.
-(transitive verbs). Notice that a particle comes from the <CODE>V</CODE>.
+(transitive verbs). 
 </P>
 <PRE>
-      mkV2  : V -&gt; Prep -&gt; V2 ;
-    
-      dirV2 : V -&gt; V2 ;
+      mkV2 : overload {
+        mkV2 : Str -&gt; V2 ;
+        mkV2 : V -&gt; V2 ;  
+        mkV2 : V -&gt; Prep -&gt; V2
+        } ;
 </PRE>
 <P></P>
 <P>
@@ -367,7 +359,7 @@ You can reuse a <CODE>V2</CODE> verb in <CODE>V</CODE>.
       v2V : V2 -&gt; V ;
 </PRE>
 <P></P>
-<A NAME="toc13"></A>
+<A NAME="toc12"></A>
 <H3>Three-place verbs</H3>
 <P>
 Three-place (ditransitive) verbs need two prepositions, of which
@@ -379,7 +371,7 @@ the first one or both can be absent.
       dirdirV3 : V -&gt; V3 ;                   -- dar,(dative),(accusative)
 </PRE>
 <P></P>
-<A NAME="toc14"></A>
+<A NAME="toc13"></A>
 <H3>Other complement patterns</H3>
 <P>
 Verbs and adjectives can take complements such as sentences,
@@ -416,6 +408,6 @@ as an adverb. Likewise <CODE>AS, A2S, AV, A2V</CODE> are just <CODE>A</CODE>.
 </PRE>
 <P></P>
 
-<!-- html code generated by txt2tags 2.4 (http://txt2tags.sf.net) -->
+<!-- html code generated by txt2tags 2.3 (http://txt2tags.sf.net) -->
 <!-- cmdline: txt2tags -thtml -\-toc spanish/ParadigmsSpa.txt -->
 </BODY></HTML>

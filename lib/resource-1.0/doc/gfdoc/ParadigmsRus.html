@@ -6,7 +6,7 @@
 </HEAD><BODY BGCOLOR="white" TEXT="black">
 <P ALIGN="center"><CENTER><H1> Russian Lexical Paradigms</H1>
 <FONT SIZE="4">
-<I>Last update: 2006-09-07 16:12:56 CEST</I><BR>
+<I>Last update: 2007-07-06 10:39:50 CEST</I><BR>
 </FONT></CENTER>
 
 <P></P>
@@ -18,6 +18,10 @@
     <LI><A HREF="#toc3">Adjectives</A>
     <LI><A HREF="#toc4">Adverbs</A>
     <LI><A HREF="#toc5">Verbs</A>
+      <UL>
+      <LI><A HREF="#toc6">Two-place verbs</A>
+      <LI><A HREF="#toc7">Three-place verbs</A>
+      </UL>
     </UL>
 
 <P></P>
@@ -105,6 +109,11 @@ To abstract over number names, we define the following.
     
       singular : Number ;
       plural   : Number ;
+    
+      Animacy: Type ; 
+    
+      animate: Animacy;
+      inanimate: Animacy; 
 </PRE>
 <P></P>
 <A NAME="toc2"></A>
@@ -113,12 +122,22 @@ To abstract over number names, we define the following.
 Best case: indeclinabe nouns: <I>кофе</I>, <I>пальто</I>, <I>ВУЗ</I>.
 </P>
 <PRE>
-      Animacy: Type ; 
-    
-      animate: Animacy;
-      inanimate: Animacy; 
-    
-      mkIndeclinableNoun: Str -&gt; Gender -&gt; Animacy -&gt; N ; 
+      mkN : overload {
+</PRE>
+<P></P>
+<P>
+The regular function captures the variants for some popular nouns 
+endings below:
+</P>
+<PRE>
+        mkN : Str -&gt; N ;
+</PRE>
+<P></P>
+<P>
+This function is for indeclinable nouns.
+</P>
+<PRE>
+        mkN : Str -&gt; Gender -&gt; Animacy -&gt; N ; 
 </PRE>
 <P></P>
 <P>
@@ -132,19 +151,15 @@ to the Nominative or the Genetive one) is actually of no help,
 since there are a lot of exceptions and the gain is just one form less.
 </P>
 <PRE>
-      mkN  : (nomSg, genSg, datSg, accSg, instSg, preposSg,
-              nomPl, genPl, datPl, accPl, instPl, preposPl: Str) -&gt; Gender -&gt; Animacy -&gt; N ; 
-    
-         -- мужчина, мужчины, мужчине, мужчину, мужчиной, мужчине
-         -- мужчины, мужчин, мужчинам, мужчин, мужчинами, мужчинах
+        mkN : (nomSg,_,_,_,_,_,_,_,_,_,_,prepPl : Str) -&gt; Gender -&gt; Animacy -&gt; N ; 
 </PRE>
 <P></P>
 <P>
-The regular function captures the variants for some popular nouns 
-endings below:
+мужчина, мужчины, мужчине, мужчину, мужчиной, мужчине
+мужчины, мужчин, мужчинам, мужчин, мужчинами, мужчинах
 </P>
 <PRE>
-      regN : Str -&gt; N ;
+      } ;
 </PRE>
 <P></P>
 <P>
@@ -206,17 +221,11 @@ Nouns used as functions need a preposition. The most common is with Genitive.
 Proper names.
 </P>
 <PRE>
-      mkPN  : Str -&gt; Gender -&gt; Animacy -&gt; PN ;          -- "Иван", "Маша"
-      nounPN : N -&gt; PN ;
-</PRE>
-<P></P>
-<P>
-On the top level, it is maybe <CODE>CN</CODE> that is used rather than <CODE>N</CODE>, and
-<CODE>NP</CODE> rather than <CODE>PN</CODE>.
-</P>
-<PRE>
-      mkCN  : N -&gt; CN ;
-      mkNP  : Str -&gt; Gender -&gt; Animacy -&gt; NP ;
+      mkPN : overload {
+        mkPN : Str -&gt; PN ; 
+        mkPN : Str -&gt; Gender -&gt; Animacy -&gt; PN ;          -- "Иван", "Маша"
+        mkPN : N -&gt; PN ;
+      } ;
 </PRE>
 <P></P>
 <A NAME="toc3"></A>
@@ -230,20 +239,16 @@ Instructive | Prepositional)
 Notice that 4 short forms, which exist for some adjectives are not included 
 in the current description, otherwise there would be 32 forms for 
 positive degree.
-mkA : ( : Str) -&gt; A ;
 The regular function captures the variants for some popular adjective
 endings below. The first string agrument is the masculine singular form, 
 the second is comparative:
+Invariable adjective is a special case, with only on string needed.
 </P>
 <PRE>
-       regA : Str -&gt; Str -&gt; A ;
-</PRE>
-<P></P>
-<P>
-Invariable adjective is a special case.
-</P>
-<PRE>
-       adjInvar : Str -&gt; A ;          -- khaki, mini, hindi, netto
+       mkA : overload {
+         mkA : Str -&gt; A ;          -- khaki, mini, hindi, netto
+         mkA : Str -&gt; Str -&gt; A ;
+       } ;
 </PRE>
 <P></P>
 <P>
@@ -274,10 +279,6 @@ only one superlative form (syntactic) we can produce the
 comparison adjective with only one extra argument -
 non-syntactic comparative form.
 Syntactic forms are based on the positive forms.
-mkADeg : A -&gt; Str -&gt; ADeg ;
-On top level, there are adjectival phrases. The most common case is
-just to use a one-place adjective. 
-ap : A  -&gt; IsPostfixAdj -&gt; AP ;
 </P>
 <A NAME="toc4"></A>
 <H2>Adverbs</H2>
@@ -322,20 +323,6 @@ Notice, that some forms are never used for some verbs.
 </PRE>
 <P></P>
 <P>
-The worst case need 6 forms of the present tense in indicative mood
-(<I>я бегу</I>, <I>ты бежишь</I>, <I>он бежит</I>, <I>мы бежим</I>, <I>вы бежите</I>, <I>они бегут</I>),
-a past form (singular, masculine: <I>я бежал</I>), an imperative form 
-(singular, second person: <I>беги</I>), an infinitive (<I>бежать</I>).
-Inherent aspect should also be specified.
-mkVerbum : Aspect -&gt; (presentSgP1,presentSgP2,presentSgP3,
-</P>
-<PRE>
-       mkV : Aspect -&gt; (presentSgP1,presentSgP2,presentSgP3,
-                             presentPlP1,presentPlP2,presentPlP3,
-                             pastSgMasculine,imperative,infinitive: Str) -&gt; V ;
-</PRE>
-<P></P>
-<P>
 Common conjugation patterns are two conjugations: 
 first - verbs ending with <I>-ать/-ять</I> and second - <I>-ить/-еть</I>.
 Instead of 6 present forms of the worst case, we only need
@@ -347,20 +334,45 @@ first person from with second person form:
 So the definition for verb <I>любить</I>  looks like:
 regV Imperfective Second <I>люб</I> <I>лю</I> <I>любил</I> <I>люби</I> <I>любить</I>;
 </P>
+<P>
+There is no one-argument case.
+</P>
 <PRE>
-       regV :Aspect -&gt; Conjugation -&gt; (stemPresentSgP1,endingPresentSgP1,
-                             pastSgP1,imperative,infinitive : Str) -&gt; V ; 
+      mkV : overload {
+        mkV : Aspect -&gt; Conjugation -&gt; (stemPrsSgP1,endPrsSgP1,pastSgP1,imp,inf : Str) -&gt; V ; 
 </PRE>
 <P></P>
+<P>
+The worst case need 6 forms of the present tense in indicative mood
+(<I>я бегу</I>, <I>ты бежишь</I>, <I>он бежит</I>, <I>мы бежим</I>, <I>вы бежите</I>, <I>они бегут</I>),
+a past form (singular, masculine: <I>я бежал</I>), an imperative form 
+(singular, second person: <I>беги</I>), an infinitive (<I>бежать</I>).
+Inherent aspect should also be specified.
+</P>
+<PRE>
+       mkV : Aspect -&gt; (presSgP1,presSgP2,presSgP3,presPlP1,presPlP2,presPlP3,pastSgMasc,imp,inf: Str) -&gt; V ;
+    
+      } ;
+</PRE>
+<P></P>
+<A NAME="toc6"></A>
+<H3>Two-place verbs</H3>
 <P>
 Two-place verbs, and the special case with direct object. Notice that
 a particle can be included in a <CODE>V</CODE>.
 </P>
 <PRE>
-       mkV2     : V   -&gt; Str -&gt; Case -&gt; V2 ;   -- "войти в дом"; "в", accusative
-       mkV3  : V -&gt; Str -&gt; Str -&gt; Case -&gt; Case -&gt; V3 ; -- "сложить письмо в конверт"
-       dirV2    : V -&gt; V2 ;                    -- "видеть", "любить"
+      mkV2 : overload { 
+        mkV2 : V -&gt; V2 ;                    -- "видеть", "любить"
+        mkV2 : V   -&gt; Str -&gt; Case -&gt; V2 ;   -- "войти в дом"; "в", accusative
+      } ;
+</PRE>
+<P></P>
+<A NAME="toc7"></A>
+<H3>Three-place verbs</H3>
+<PRE>
        tvDirDir : V -&gt; V3 ; 
+       mkV3     : V -&gt; Str -&gt; Str -&gt; Case -&gt; Case -&gt; V3 ; -- "сложить письмо в конверт"                            
 </PRE>
 <P></P>
 <P>
@@ -368,6 +380,6 @@ The definitions should not bother the user of the API. So they are
 hidden from the document.
 </P>
 
-<!-- html code generated by txt2tags 2.4 (http://txt2tags.sf.net) -->
+<!-- html code generated by txt2tags 2.3 (http://txt2tags.sf.net) -->
 <!-- cmdline: txt2tags -thtml -\-toc russian/ParadigmsRus.txt -->
 </BODY></HTML>

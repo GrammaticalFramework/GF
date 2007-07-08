@@ -6,7 +6,7 @@
 </HEAD><BODY BGCOLOR="white" TEXT="black">
 <P ALIGN="center"><CENTER><H1> Norwegian Lexical Paradigms</H1>
 <FONT SIZE="4">
-<I>Last update: 2006-07-02 00:15:01 CEST</I><BR>
+<I>Last update: 2007-07-06 10:10:01 CEST</I><BR>
 </FONT></CENTER>
 
 <P></P>
@@ -28,8 +28,8 @@
     <LI><A HREF="#toc9">Adverbs</A>
     <LI><A HREF="#toc10">Verbs</A>
       <UL>
-      <LI><A HREF="#toc11">Verbs with 'være' as auxiliary</A>
-      <LI><A HREF="#toc12">Verbs with a particle.</A>
+      <LI><A HREF="#toc11">Verbs with a particle.</A>
+      <LI><A HREF="#toc12">Verbs with 'være' as auxiliary</A>
       <LI><A HREF="#toc13">Deponent verbs.</A>
       <LI><A HREF="#toc14">Two-place verbs</A>
       <LI><A HREF="#toc15">Three-place verbs</A>
@@ -129,37 +129,24 @@ Prepositions used in many-argument functions are just strings.
 <A NAME="toc2"></A>
 <H2>Nouns</H2>
 <P>
-Worst case: give all four forms. The gender is computed from the
-last letter of the second form (if <I>n</I>, then <CODE>utrum</CODE>, otherwise <CODE>neutrum</CODE>).
-</P>
-<PRE>
-      mkN  : (dreng,drengen,drenger,drengene : Str) -&gt; N ;
-</PRE>
-<P></P>
-<P>
 The regular function takes the singular indefinite form
 and computes the other forms and the gender by a heuristic.
 The heuristic is that nouns ending <I>e</I> are feminine like <I>kvinne</I>,
 all others are masculine like <I>bil</I>. 
-If in doubt, use the <CODE>cc</CODE> command to test!
-</P>
-<PRE>
-      regN : Str -&gt; N ;
-</PRE>
-<P></P>
-<P>
 Giving gender manually makes the heuristic more reliable.
-</P>
-<PRE>
-      regGenN : Str -&gt; Gender -&gt; N ;
-</PRE>
-<P></P>
-<P>
-This function takes the singular indefinite and definite forms; the
+One can also compute the gender from the definite form.
 gender is computed from the definite form.
+If in doubt, use the <CODE>cc</CODE> command to test!
+In the worst case, give all four forms. The gender is computed from the
+last letter of the second form (if <I>n</I>, then <CODE>utrum</CODE>, otherwise <CODE>neutrum</CODE>).
 </P>
 <PRE>
-      mk2N : (bil,bilen : Str) -&gt; N ;
+      mkN : overload {
+        mkN : Str -&gt; N ;
+        mkN : Str -&gt; Gender -&gt; N ;
+        mkN : (bil,bilen : Str) -&gt; N ;
+        mkN  : (dreng,drengen,drenger,drengene : Str) -&gt; N
+      } ;
 </PRE>
 <P></P>
 <A NAME="toc3"></A>
@@ -209,48 +196,37 @@ and <CODE>PrepNP</CODE> constructions to build phrases like this.
 <H3>Proper names and noun phrases</H3>
 <P>
 Proper names, with a regular genitive, are formed as follows
-</P>
-<PRE>
-      regPN    : Str -&gt; PN ;            -- utrum
-      regGenPN : Str -&gt; Gender -&gt; PN ;  
-</PRE>
-<P></P>
-<P>
 Sometimes you can reuse a common noun as a proper name, e.g. <I>Bank</I>.
 </P>
 <PRE>
-      nounPN : N -&gt; PN ;
-</PRE>
-<P></P>
-<P>
-To form a noun phrase that can also be plural and have an irregular
-genitive, you can use the worst-case function.
-</P>
-<PRE>
-      mkNP : Str -&gt; Str -&gt; Number -&gt; Gender -&gt; NP ; 
+      mkPN : overload {
+        mkPN : Str -&gt; PN ;       -- masculine
+        mkPN : Str -&gt; Gender -&gt; PN ;  
+        mkPN : N -&gt; PN ;
+        } ;
 </PRE>
 <P></P>
 <A NAME="toc7"></A>
 <H2>Adjectives</H2>
 <P>
-Non-comparison one-place adjectives need three forms: 
+The regular pattern works for many adjectives, e.g. those ending
+with <I>ig</I>. Two, five, or at worst five forms are sometimes needed.
 </P>
 <PRE>
-      mkA : (galen,galet,galne : Str) -&gt; A ;
+      mkA : overload {
+        mkA : (fin : Str) -&gt; A ;
+        mkA : (fin,fint : Str) -&gt; A ;
+        mkA : (galen,galet,galne : Str) -&gt; A ;
+        mkA : (stor,stort,store,storre,storst : Str) -&gt; A ;
 </PRE>
 <P></P>
 <P>
-For regular adjectives, the other forms are derived. 
+If comparison is formed by <I>mer</I>, <I>mest</I>, as in general for
+long adjective, the following pattern is used:
 </P>
 <PRE>
-      regA : Str -&gt; A ;
-</PRE>
-<P></P>
-<P>
-In most cases, two forms are enough.
-</P>
-<PRE>
-      mk2A : (stor,stort : Str) -&gt; A ;
+        mkA : A -&gt; A ; -- -/mer/mest norsk
+      } ;
 </PRE>
 <P></P>
 <A NAME="toc8"></A>
@@ -260,44 +236,6 @@ Two-place adjectives need a preposition for their second argument.
 </P>
 <PRE>
       mkA2 : A -&gt; Prep -&gt; A2 ;
-</PRE>
-<P></P>
-<P>
-Comparison adjectives may need as many as five forms. 
-</P>
-<PRE>
-      mkADeg : (stor,stort,store,storre,storst : Str) -&gt; A ;
-</PRE>
-<P></P>
-<P>
-The regular pattern works for many adjectives, e.g. those ending
-with <I>ig</I>.
-</P>
-<PRE>
-      regADeg : Str -&gt; A ;
-</PRE>
-<P></P>
-<P>
-Just the comparison forms can be irregular.
-</P>
-<PRE>
-      irregADeg : (tung,tyngre,tyngst : Str) -&gt; A ;
-</PRE>
-<P></P>
-<P>
-Sometimes just the positive forms are irregular.
-</P>
-<PRE>
-      mk3ADeg : (galen,galet,galne : Str) -&gt; A ;
-      mk2ADeg : (bred,bredt        : Str) -&gt; A ;
-</PRE>
-<P></P>
-<P>
-If comparison is formed by <I>mer</I>, <I>mest</I>, as in general for
-long adjective, the following pattern is used:
-</P>
-<PRE>
-      compoundA : A -&gt; A ; -- -/mer/mest norsk
 </PRE>
 <P></P>
 <A NAME="toc9"></A>
@@ -320,25 +258,22 @@ Adverbs modifying adjectives and sentences can also be formed.
 <P></P>
 <A NAME="toc10"></A>
 <H2>Verbs</H2>
-<P>
-The worst case needs six forms.
-</P>
 <PRE>
-      mkV : (spise,spiser,spises,spiste,spist,spis : Str) -&gt; V ;
+      mkV : overload {
 </PRE>
 <P></P>
 <P>
 The 'regular verb' function is the first conjugation.
 </P>
 <PRE>
-      regV : (snakke : Str) -&gt; V ;
+        mkV : (snakke : Str) -&gt; V ;
 </PRE>
 <P></P>
 <P>
 The almost regular verb function needs the infinitive and the preteritum.
 </P>
 <PRE>
-      mk2V : (leve,levde : Str) -&gt; V ;
+        mkV : (leve,levde : Str) -&gt; V ;
 </PRE>
 <P></P>
 <P>
@@ -346,25 +281,33 @@ There is an extensive list of irregular verbs in the module <CODE>IrregNor</CODE
 In practice, it is enough to give three forms, as in school books.
 </P>
 <PRE>
-      irregV : (drikke, drakk, drukket  : Str) -&gt; V ;
+        mkV : (drikke, drakk, drukket  : Str) -&gt; V ;
+</PRE>
+<P></P>
+<P>
+The worst case needs six forms.
+</P>
+<PRE>
+        mkV : (spise,spiser,spises,spiste,spist,spis : Str) -&gt; V ;
 </PRE>
 <P></P>
 <A NAME="toc11"></A>
+<H3>Verbs with a particle.</H3>
+<P>
+The particle, such as in <I>lukke opp</I>, is given as a string.
+</P>
+<PRE>
+        mkV : V -&gt; Str -&gt; V ;
+      } ;
+</PRE>
+<P></P>
+<A NAME="toc12"></A>
 <H3>Verbs with 'være' as auxiliary</H3>
 <P>
 By default, the auxiliary is <I>have</I>. This function changes it to <I>være</I>.
 </P>
 <PRE>
       vaereV : V -&gt; V ;
-</PRE>
-<P></P>
-<A NAME="toc12"></A>
-<H3>Verbs with a particle.</H3>
-<P>
-The particle, such as in <I>lukke opp</I>, is given as a string.
-</P>
-<PRE>
-      partV  : V -&gt; Str -&gt; V ;
 </PRE>
 <P></P>
 <A NAME="toc13"></A>
@@ -382,12 +325,14 @@ reflexive e.g. <I>forestille seg</I>.
 <H3>Two-place verbs</H3>
 <P>
 Two-place verbs need a preposition, except the special case with direct object.
-(transitive verbs). Notice that a particle comes from the <CODE>V</CODE>.
+(transitive verbs). Notice that, if a particle is needed, it comes from the <CODE>V</CODE>.
 </P>
 <PRE>
-      mkV2  : V -&gt; Prep -&gt; V2 ;
-    
-      dirV2 : V -&gt; V2 ;
+      mkV2 : overload {
+        mkV2 : Str -&gt; V2 ;
+        mkV2 : V -&gt; V2 ;
+        mkV2 : V -&gt; Prep -&gt; V2 ;
+      } ;
 </PRE>
 <P></P>
 <A NAME="toc15"></A>
@@ -437,6 +382,6 @@ as an adverb. Likewise <CODE>AS, A2S, AV, A2V</CODE> are just <CODE>A</CODE>.
 </PRE>
 <P></P>
 
-<!-- html code generated by txt2tags 2.4 (http://txt2tags.sf.net) -->
+<!-- html code generated by txt2tags 2.3 (http://txt2tags.sf.net) -->
 <!-- cmdline: txt2tags -thtml -\-toc norwegian/ParadigmsNor.txt -->
 </BODY></HTML>
