@@ -1,8 +1,8 @@
-instance LexEng of Lex = open GrammarEng, ParadigmsEng in {
+instance LexEng of Lex = open SyntaxEng, ParadigmsEng in {
 
   oper
-    even_A = regA "even" ;
-    odd_A = regA "odd" ;
-    zero_PN = regPN "zero" ;
+    even_A = mkA "even" ;
+    odd_A = mkA "odd" ;
+    zero_PN = mkPN "zero" ;
 
 }

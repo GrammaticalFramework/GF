@@ -1,7 +1,5 @@
---# -path=.:api:present:prelude:mathematical
+--# -path=.:present:prelude
 
 concrete MathFre of Math = MathI with
-  (Grammar = GrammarFre), 
-  (Combinators = CombinatorsFre), 
-  (Predication = PredicationFre), 
+  (Syntax = SyntaxFre), 
   (Lex = LexFre) ;

@@ -8,6 +8,16 @@ Last update: %%date(%c)
 
 %!target:html
 
+%!postproc(html): #BCEN <center>
+%!postproc(html): #ECEN </center>
+
+
+#BCEN
+
+[10lang-large.png]
+
+#ECEN
+
 
 The GF Resource Grammar Library defines the basic grammar of
 ten languages: 
@@ -233,8 +243,7 @@ Swedish
 
 ==More reading==
 
-[GF Resource Grammar Library ../../../doc/resource.pdf] (pdf).
-Printable user manual with API documentation.
+[Synopsis synopsis.html]. The concise guide to API v. 1.2.
 
 [Grammars as Software Libraries gslt-sem-2006.html]. Slides
 with background and motivation for the resource grammar library.
@@ -255,4 +264,7 @@ Slides showing how linearization rules are written as strings parsable by the re
 [Multimodal Resource Grammars http://www.cs.chalmers.se/~aarne/slides/talk-edin2005.pdf].
 Slides showing how to use the multimodal resource library. N.B. the library
 examples are from ``multimodal/old``, which is a reduced-size API.
+
+[GF Resource Grammar Library ../../../doc/resource.pdf] (pdf).
+Printable user manual with API documentation, for version 1.0.
 

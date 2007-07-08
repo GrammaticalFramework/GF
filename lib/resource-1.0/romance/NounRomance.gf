@@ -47,7 +47,8 @@ incomplete concrete NounRomance of Noun =
       } ;
 
     SgQuant q = {s = q.s ! False ! Sg} ;
-    PlQuant q = {s = \\b => q.s ! b ! Pl} ;
+    PlQuant q = {s = \\b,g,c => q.s ! b ! Pl ! g ! c} ; 
+       --- part app: cf NounScand. AR 8/7/2007
 
     PossPron p = {
       s = \\_,n,g,c => possCase g n c ++ p.s ! Poss (aagr g n) ---- il mio!
