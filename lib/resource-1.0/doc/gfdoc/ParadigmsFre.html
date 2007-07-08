@@ -6,7 +6,7 @@
 </HEAD><BODY BGCOLOR="white" TEXT="black">
 <P ALIGN="center"><CENTER><H1> French Lexical Paradigms</H1>
 <FONT SIZE="4">
-<I>Last update: 2006-07-02 00:15:01 CEST</I><BR>
+<I>Last update: 2007-07-06 09:17:50 CEST</I><BR>
 </FONT></CENTER>
 
 <P></P>
@@ -24,14 +24,13 @@
     <LI><A HREF="#toc7">Adjectives</A>
       <UL>
       <LI><A HREF="#toc8">Two-place adjectives</A>
-      <LI><A HREF="#toc9">Comparison adjectives</A>
       </UL>
-    <LI><A HREF="#toc10">Adverbs</A>
-    <LI><A HREF="#toc11">Verbs</A>
+    <LI><A HREF="#toc9">Adverbs</A>
+    <LI><A HREF="#toc10">Verbs</A>
       <UL>
-      <LI><A HREF="#toc12">Two-place verbs</A>
-      <LI><A HREF="#toc13">Three-place verbs</A>
-      <LI><A HREF="#toc14">Other complement patterns</A>
+      <LI><A HREF="#toc11">Two-place verbs</A>
+      <LI><A HREF="#toc12">Three-place verbs</A>
+      <LI><A HREF="#toc13">Other complement patterns</A>
       </UL>
     </UL>
 
@@ -122,32 +121,35 @@ amalgamate with the following word (the 'genitive' <I>de</I> and the
 <P></P>
 <A NAME="toc2"></A>
 <H2>Nouns</H2>
-<P>
-Worst case: give both two forms and the gender. 
-</P>
 <PRE>
-      mkN  : (oeil,yeux : Str) -&gt; Gender -&gt; N ;
+      mkN : overload {
 </PRE>
 <P></P>
 <P>
-The regular function takes the singular form,
-and computes the plural and the gender by a heuristic. The plural 
+The regular function uses heuristics to compute the
+plural and the gender from the singular. The plural 
 heuristic currently
 covers the cases <I>pas-pas</I>, <I>prix-prix</I>, <I>nez-nez</I>, 
 <I>bijou-bijoux</I>, <I>cheveu-cheveux</I>, <I>plateau-plateaux</I>, <I>cheval-chevaux</I>.
 The gender heuristic is less reliable: it treats as feminine all
 nouns ending with <I>e</I> and <I>ion</I>, all others as masculine.
-If in doubt, use the <CODE>cc</CODE> command to test!
 </P>
 <PRE>
-      regN : Str -&gt; N ;
+        mkN : (cheval : Str) -&gt; N ;
 </PRE>
 <P></P>
 <P>
-Adding gender information widens the scope of the foregoing function.
+Adding gender information widens the scope of the regular pattern.
 </P>
 <PRE>
-      regGenN : Str -&gt; Gender -&gt; N ;
+        mkN : (foie : Str) -&gt; Gender -&gt; N ; 
+</PRE>
+<P></P>
+<P>
+In the worst case, both singular and plural forms and the gender are needed. 
+</P>
+<PRE>
+        mkN : (oeil,yeux : Str) -&gt; Gender -&gt; N ;
 </PRE>
 <P></P>
 <A NAME="toc3"></A>
@@ -159,7 +161,8 @@ They could be formed in syntax, but we give a shortcut here since
 they are frequent in lexica.
 </P>
 <PRE>
-      compN : N -&gt; Str -&gt; N ;
+        mkN : N -&gt; Str -&gt; N
+      } ; 
 </PRE>
 <P></P>
 <A NAME="toc4"></A>
@@ -198,51 +201,65 @@ and <CODE>PrepNP</CODE> constructions to build phrases like this.
 <A NAME="toc6"></A>
 <H3>Proper names and noun phrases</H3>
 <P>
-Proper names need a string and a gender.
+Proper names need a string and a gender. If no gender is given, the
+feminine is used for strings ending with <I>e</I>, the masculine for other strings.
 </P>
 <PRE>
-      mkPN  : Str -&gt; Gender -&gt; PN ; -- Jean
-    
-      regPN : Str -&gt; PN ;           -- feminine if "-e", masculine otherwise
-</PRE>
-<P></P>
-<P>
-To form a noun phrase that can also be plural,
-you can use the worst-case function.
-</P>
-<PRE>
-      mkNP : Str -&gt; Gender -&gt; Number -&gt; NP ; 
+      mkPN  : overload {
+        mkPN : Str -&gt; PN ;
+        mkPN : Str -&gt; Gender -&gt; PN
+        } ;
 </PRE>
 <P></P>
 <A NAME="toc7"></A>
 <H2>Adjectives</H2>
-<P>
-Non-comparison one-place adjectives need four forms in the worst
-case (masc and fem singular, masc plural, adverbial).
-</P>
 <PRE>
-      mkA : (banal,banale,banaux,banalement : Str) -&gt; A ;
+      mkA : overload {
 </PRE>
 <P></P>
 <P>
-For regular adjectives, all other forms are derived from the
+For regular adjectives, all forms are derived from the
 masculine singular. The heuristic takes into account certain
-deviant endings: <I>banal- -banaux</I>, <I>chinois- -chinois</I>, 
+deviant endings: <I>banal-banale-banaux</I>, <I>chinois-chinoise-chinois</I>, 
 <I>heureux-heureuse-heureux</I>, <I>italien-italienne</I>, <I>jeune-jeune</I>,
 <I>amer-amère</I>, <I>carré- - -carrément</I>, <I>joli- - -joliment</I>.
 </P>
 <PRE>
-      regA : Str -&gt; A ;
+        mkA : (cher : Str) -&gt; A ;
 </PRE>
 <P></P>
 <P>
-These functions create postfix adjectives. To switch
+Often just the feminine singular is deviant.
+</P>
+<PRE>
+        mkA : (sec,seche : Str) -&gt; A ;
+</PRE>
+<P></P>
+<P>
+This is the worst-case paradigm for the positive forms.
+</P>
+<PRE>
+        mkA : (banal,banale,banaux,banalement : Str) -&gt; A ;
+</PRE>
+<P></P>
+<P>
+If comparison forms are irregular (i.e. not formed by <I>plus</I>, e.g.
+<I>bon-meilleur</I>), the positive and comparative can be given as separate
+adjectives.
+</P>
+<PRE>
+        mkA : A -&gt; A -&gt; A
+      } ;
+</PRE>
+<P></P>
+<P>
+The functions create by default postfix adjectives. To switch
 them to prefix ones (i.e. ones placed before the noun in
 modification, as in <I>petite maison</I>), the following function is
 provided.
 </P>
 <PRE>
-      prefA : A -&gt; A ;
+      prefixA : A -&gt; A ;
 </PRE>
 <P></P>
 <A NAME="toc8"></A>
@@ -255,32 +272,6 @@ Two-place adjectives need a preposition for their second argument.
 </PRE>
 <P></P>
 <A NAME="toc9"></A>
-<H3>Comparison adjectives</H3>
-<P>
-Comparison adjectives are in the worst case put up from two
-adjectives: the positive (<I>bon</I>), and the comparative (<I>meilleure</I>). 
-</P>
-<PRE>
-      mkADeg : A -&gt; A -&gt; A ;
-</PRE>
-<P></P>
-<P>
-If comparison is formed by <I>plus</I>, as usual in French,
-the following pattern is used:
-</P>
-<PRE>
-      compADeg : A -&gt; A ;
-</PRE>
-<P></P>
-<P>
-For prefixed adjectives, the following function is
-provided.
-</P>
-<PRE>
-      prefA : A -&gt; A ;
-</PRE>
-<P></P>
-<A NAME="toc10"></A>
 <H2>Adverbs</H2>
 <P>
 Adverbs are not inflected. Most lexical ones have position
@@ -304,24 +295,20 @@ Adverbs modifying adjectives and sentences can also be formed.
       mkAdA : Str -&gt; AdA ;
 </PRE>
 <P></P>
-<A NAME="toc11"></A>
+<A NAME="toc10"></A>
 <H2>Verbs</H2>
 <P>
-Irregular verbs are given in the module <CODE>VerbsFre</CODE>. 
+Irregular verbs are given in the module <CODE>IrregFre</CODE>. 
 If a verb should be missing in that list, the module
 <CODE>BeschFre</CODE> gives all the patterns of the <I>Bescherelle</I> book.
 </P>
 <P>
 Regular verbs are ones with the infinitive <I>er</I> or <I>ir</I>, the
 latter with plural present indicative forms as <I>finissons</I>.
-The regular verb function is the first conjugation recognizes
+The regular verb function in the first conjugation recognizes
 these endings, as well as the variations among
 <I>aimer, céder, placer, peser, jeter, placer, manger, assiéger, payer</I>.
 </P>
-<PRE>
-      regV : Str -&gt; V ;
-</PRE>
-<P></P>
 <P>
 Sometimes, however, it is not predictable which variant of the <I>er</I>
 conjugation is to be selected. Then it is better to use the function
@@ -329,50 +316,63 @@ that gives the third person singular present indicative and future
 ((<I>il</I>) <I>jette</I>, <I>jettera</I>) as second argument.
 </P>
 <PRE>
-      reg3V : (jeter,jette,jettera : Str) -&gt; V ;
+      mkV : overload {
+        mkV : (finir : Str) -&gt; V ;
+        mkV : (jeter,jette,jettera : Str) -&gt; V ;
 </PRE>
 <P></P>
 <P>
-The function <CODE>regV</CODE> gives all verbs the compound auxiliary <I>avoir</I>.
-To change it to <I>être</I>, use the following function. Reflexive implies <I>être</I>.
+The <CODE>IrregFre</CODE> list gives some verbs as two-place. These verbs can be
+reused as one-place verbs.
+</P>
+<PRE>
+        mkV : V2 -&gt; V
+      } ;
+</PRE>
+<P></P>
+<P>
+The function <CODE>mkV</CODE> gives the default compound auxiliary <I>avoir</I>.
+To change it to <I>être</I>, use the following function. 
 </P>
 <PRE>
       etreV : V -&gt; V ;
+</PRE>
+<P></P>
+<P>
+This function turns a verb into reflexive, which implies the auxiliary <I>être</I>.
+</P>
+<PRE>
       reflV : V -&gt; V ;
 </PRE>
 <P></P>
-<A NAME="toc12"></A>
+<A NAME="toc11"></A>
 <H3>Two-place verbs</H3>
 <P>
 Two-place verbs need a preposition, except the special case with direct object.
 (transitive verbs). 
 </P>
 <PRE>
-      mkV2  : V -&gt; Prep -&gt; V2 ;
-    
-      dirV2 : V -&gt; V2 ;
+      mkV2 = overload {
+        mkV2 : V -&gt; V2 = dirV2 ;  
+        mkV2 : V -&gt; Prep -&gt; V2 = mmkV2
+      } ;
 </PRE>
 <P></P>
-<P>
-You can reuse a <CODE>V2</CODE> verb in <CODE>V</CODE>.
-</P>
-<PRE>
-      v2V : V2 -&gt; V ;
-</PRE>
-<P></P>
-<A NAME="toc13"></A>
+<A NAME="toc12"></A>
 <H3>Three-place verbs</H3>
 <P>
 Three-place (ditransitive) verbs need two prepositions, of which
 the first one or both can be absent.
 </P>
 <PRE>
-      mkV3     : V -&gt; Prep -&gt; Prep -&gt; V3 ;  -- parler, à, de
-      dirV3    : V -&gt; Prep -&gt; V3 ;          -- donner,_,à
-      dirdirV3 : V -&gt; V3 ;                  -- donner,_,_
+      mkV3 : overload {
+        mkV3 : V -&gt; V3 ;                -- donner,_,_
+        mkV3 : V -&gt; Prep -&gt; V3 ;        -- placer,_,dans
+        mkV3 : V -&gt; Prep -&gt; Prep -&gt; V3  -- parler, à, de
+        } ;
 </PRE>
 <P></P>
-<A NAME="toc14"></A>
+<A NAME="toc13"></A>
 <H3>Other complement patterns</H3>
 <P>
 Verbs and adjectives can take complements such as sentences,
@@ -409,6 +409,6 @@ as an adverb. Likewise <CODE>AS, A2S, AV, A2V</CODE> are just <CODE>A</CODE>.
 </PRE>
 <P></P>
 
-<!-- html code generated by txt2tags 2.4 (http://txt2tags.sf.net) -->
+<!-- html code generated by txt2tags 2.3 (http://txt2tags.sf.net) -->
 <!-- cmdline: txt2tags -thtml -\-toc french/ParadigmsFre.txt -->
 </BODY></HTML>

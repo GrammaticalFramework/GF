@@ -6,7 +6,7 @@
 </HEAD><BODY BGCOLOR="white" TEXT="black">
 <P ALIGN="center"><CENTER><H1> Italian Lexical Paradigms</H1>
 <FONT SIZE="4">
-<I>Last update: 2006-12-15 17:11:19 CET</I><BR>
+<I>Last update: 2007-07-06 09:18:06 CEST</I><BR>
 </FONT></CENTER>
 
 <P></P>
@@ -16,22 +16,20 @@
     <LI><A HREF="#toc1">Parameters</A>
     <LI><A HREF="#toc2">Nouns</A>
       <UL>
-      <LI><A HREF="#toc3">Compound nouns</A>
-      <LI><A HREF="#toc4">Relational nouns</A>
-      <LI><A HREF="#toc5">Relational common noun phrases</A>
-      <LI><A HREF="#toc6">Proper names and noun phrases</A>
+      <LI><A HREF="#toc3">Relational nouns</A>
+      <LI><A HREF="#toc4">Relational common noun phrases</A>
+      <LI><A HREF="#toc5">Proper names and noun phrases</A>
       </UL>
-    <LI><A HREF="#toc7">Adjectives</A>
+    <LI><A HREF="#toc6">Adjectives</A>
       <UL>
-      <LI><A HREF="#toc8">Two-place adjectives</A>
-      <LI><A HREF="#toc9">Comparison adjectives</A>
+      <LI><A HREF="#toc7">Two-place adjectives</A>
       </UL>
-    <LI><A HREF="#toc10">Adverbs</A>
-    <LI><A HREF="#toc11">Verbs</A>
+    <LI><A HREF="#toc8">Adverbs</A>
+    <LI><A HREF="#toc9">Verbs</A>
       <UL>
-      <LI><A HREF="#toc12">Two-place verbs</A>
-      <LI><A HREF="#toc13">Three-place verbs</A>
-      <LI><A HREF="#toc14">Other complement patterns</A>
+      <LI><A HREF="#toc10">Two-place verbs</A>
+      <LI><A HREF="#toc11">Three-place verbs</A>
+      <LI><A HREF="#toc12">Other complement patterns</A>
       </UL>
     </UL>
 
@@ -132,11 +130,8 @@ The following prepositions also have special contracted forms.
 <P></P>
 <A NAME="toc2"></A>
 <H2>Nouns</H2>
-<P>
-Worst case: give both two forms and the gender. 
-</P>
 <PRE>
-      mkN  : (uomo,uomini : Str) -&gt; Gender -&gt; N ;
+      mkN : overload {
 </PRE>
 <P></P>
 <P>
@@ -146,45 +141,45 @@ The heuristic says that the gender is feminine for nouns
 ending with <I>a</I>, and masculine for all other words.
 </P>
 <PRE>
-      regN : Str -&gt; N ;
+        mkN : (cane : Str) -&gt; N ;
 </PRE>
 <P></P>
 <P>
-To force a different gender, use one of the following functions.
+To force a different gender, give it explicitly.
 </P>
 <PRE>
-      mascN : N -&gt; N ;
-      femN  : N -&gt; N ;
+        mkN : (carne : Str) -&gt; Gender -&gt; N ; 
 </PRE>
 <P></P>
-<A NAME="toc3"></A>
-<H3>Compound nouns</H3>
 <P>
-Some nouns are ones where the first part is inflected as a noun but
+Worst case: give both two forms and the gender. 
+</P>
+<PRE>
+        mkN : (uomo,uomini : Str) -&gt; Gender -&gt; N ;
+</PRE>
+<P></P>
+<P>
+In <B>compound nouns</B>, the first part is inflected as a noun but
 the second part is not inflected. e.g. <I>numero di telefono</I>. 
 They could be formed in syntax, but we give a shortcut here since
 they are frequent in lexica.
 </P>
 <PRE>
-      compN : N -&gt; Str -&gt; N ;
+        mkN : N -&gt; Str -&gt; N
+        } ;
 </PRE>
 <P></P>
-<A NAME="toc4"></A>
+<A NAME="toc3"></A>
 <H3>Relational nouns</H3>
 <P>
 Relational nouns (<I>figlio di x</I>) need a case and a preposition. 
+The default is regular nouns with the genitive <I>di</I>.
 </P>
 <PRE>
-      mkN2 : N -&gt; Prep -&gt; N2 ;
-</PRE>
-<P></P>
-<P>
-The most common cases are the genitive <I>di</I> and the dative <I>a</I>, 
-with the empty preposition.
-</P>
-<PRE>
-      diN2 : N -&gt; N2 ;
-      aN2  : N -&gt; N2 ;
+      mkN2 : overload {
+        mkN2 : Str -&gt; N2 ;
+        mkN2 : N -&gt; Prep -&gt; N2
+      } ;
 </PRE>
 <P></P>
 <P>
@@ -194,7 +189,7 @@ Three-place relational nouns (<I>la connessione di x a y</I>) need two prepositi
       mkN3 : N -&gt; Prep -&gt; Prep -&gt; N3 ;
 </PRE>
 <P></P>
-<A NAME="toc5"></A>
+<A NAME="toc4"></A>
 <H3>Relational common noun phrases</H3>
 <P>
 In some cases, you may want to make a complex <CODE>CN</CODE> into a
@@ -202,53 +197,62 @@ relational noun (e.g. <I>la vecchia chiesa di</I>). However, <CODE>N2</CODE> and
 <CODE>N3</CODE> are purely lexical categories. But you can use the <CODE>AdvCN</CODE>
 and <CODE>PrepNP</CODE> constructions to build phrases like this.
 </P>
-<A NAME="toc6"></A>
+<A NAME="toc5"></A>
 <H3>Proper names and noun phrases</H3>
 <P>
-Proper names need a string and a gender.
+Proper names need a string and a gender. The gender is by default feminine if
+the name ends with an <I>a</I>, and masculine otherwise.
 </P>
 <PRE>
-      mkPN  : Str -&gt; Gender -&gt; PN ;
-      regPN : Str -&gt; PN ;           -- feminine if "-a", otherwise masculine
+      mkPN : overload {
+        mkPN : Str -&gt; PN ;
+        mkPN : Str -&gt; Gender -&gt; PN
+      } ;
 </PRE>
 <P></P>
-<P>
-To form a noun phrase that can also be plural,
-you can use the worst-case function.
-</P>
-<PRE>
-      mkNP : Str -&gt; Gender -&gt; Number -&gt; NP ; 
-</PRE>
-<P></P>
-<A NAME="toc7"></A>
+<A NAME="toc6"></A>
 <H2>Adjectives</H2>
-<P>
-Non-comparison one-place adjectives need five forms in the worst
-case (masc and fem singular, masc plural, adverbial).
-</P>
 <PRE>
-      mkA : (solo,sola,soli,sole, solamente : Str) -&gt; A ;
+      mkA : overload {
 </PRE>
 <P></P>
 <P>
-For regular adjectives, all other forms are derived from the
-masculine singular. 
+For regular adjectives, all forms are derived from the
+masculine singular. Comparison is formed by <I>più</I>.
 </P>
 <PRE>
-      regA : Str -&gt; A ;
+        mkA : (bianco : Str) -&gt; A ;
 </PRE>
 <P></P>
 <P>
-These functions create postfix adjectives. To switch
+Five forms are needed in the worst
+case (masc and fem singular, masc plural, adverbial), given that
+comparison is formed by <I>più</I>.
+</P>
+<PRE>
+        mkA : (solo,sola,soli,sole,solamente : Str) -&gt; A ;
+</PRE>
+<P></P>
+<P>
+With irregular comparison, there are as it were two adjectives:
+the positive (<I>buono</I>) and the comparative (<I>migliore</I>). 
+</P>
+<PRE>
+        mkA : A -&gt; A -&gt; A
+        } ;
+</PRE>
+<P></P>
+<P>
+All the functions above create postfix adjectives. To switch
 them to prefix ones (i.e. ones placed before the noun in
 modification, as in <I>vecchia chiesa</I>), the following function is
 provided.
 </P>
 <PRE>
-      prefA : A -&gt; A ;
+        prefixA : A -&gt; A = prefA ;
 </PRE>
 <P></P>
-<A NAME="toc8"></A>
+<A NAME="toc7"></A>
 <H3>Two-place adjectives</H3>
 <P>
 Two-place adjectives need a preposition for their second argument.
@@ -257,33 +261,7 @@ Two-place adjectives need a preposition for their second argument.
       mkA2 : A -&gt; Prep -&gt; A2 ;
 </PRE>
 <P></P>
-<A NAME="toc9"></A>
-<H3>Comparison adjectives</H3>
-<P>
-Comparison adjectives are in the worst case put up from two
-adjectives: the positive (<I>buono</I>), and the comparative (<I>migliore</I>). 
-</P>
-<PRE>
-      mkADeg : A -&gt; A -&gt; A ;
-</PRE>
-<P></P>
-<P>
-If comparison is formed by <I>più</I>, as usual in Italian,
-the following pattern is used:
-</P>
-<PRE>
-      compADeg : A -&gt; A ;
-</PRE>
-<P></P>
-<P>
-The regular pattern is the same as <CODE>regA</CODE> for plain adjectives, 
-with comparison by <I>più</I>.
-</P>
-<PRE>
-      regADeg : Str -&gt; A ;
-</PRE>
-<P></P>
-<A NAME="toc10"></A>
+<A NAME="toc8"></A>
 <H2>Adverbs</H2>
 <P>
 Adverbs are not inflected. Most lexical ones have position
@@ -307,8 +285,12 @@ Adverbs modifying adjectives and sentences can also be formed.
       mkAdA : Str -&gt; AdA ;
 </PRE>
 <P></P>
-<A NAME="toc11"></A>
+<A NAME="toc9"></A>
 <H2>Verbs</H2>
+<PRE>
+      mkV : overload {
+</PRE>
+<P></P>
 <P>
 Regular verbs are ones with the infinitive <I>are</I> or <I>ire</I>, the
 latter with singular present indicative forms as <I>finisco</I>.
@@ -317,7 +299,7 @@ these endings, as well as the variations among
 <I>amare, cominciare, mangiare, legare, cercare</I>.
 </P>
 <PRE>
-      regV : Str -&gt; V ;
+        mkV : Str -&gt; V ;
 </PRE>
 <P></P>
 <P>
@@ -325,7 +307,17 @@ The module <CODE>BeschIta</CODE> gives (almost) all the patterns of the <I>Besch
 book. To use them in the category <CODE>V</CODE>, wrap them with the function
 </P>
 <PRE>
-      verboV : Verbo -&gt; V ;
+        mkV : Verbo -&gt; V ;
+</PRE>
+<P></P>
+<P>
+If <CODE>BeschIta</CODE> does not give the desired result or feels difficult
+to consult, here is a worst-case function for <I>-ire</I> and <I>-ere</I> verbs,
+taking 11 arguments.
+</P>
+<PRE>
+        mkV : (udire,odo,ode,udiamo,udiro,udii,udisti,udi,udirono,odi,udito : Str) -&gt; V 
+        } ;
 </PRE>
 <P></P>
 <P>
@@ -338,26 +330,18 @@ Reflexive implies <I>essere</I>.
       reflV : V -&gt; V ;
 </PRE>
 <P></P>
-<P>
-If <CODE>BeschIta</CODE> does not give the desired result or feels difficult
-to consult, here is a worst-case function for <I>-ire</I> and <I>-ere</I> verbs,
-taking 11 arguments.
-</P>
-<PRE>
-      mkV : 
-        (udire,odo,ode,udiamo,udiro,udii,udisti,udi,udirono,odi,udito : Str) -&gt; V ; 
-</PRE>
-<P></P>
-<A NAME="toc12"></A>
+<A NAME="toc10"></A>
 <H3>Two-place verbs</H3>
 <P>
 Two-place verbs need a preposition, except the special case with direct object.
 (transitive verbs). Notice that a particle comes from the <CODE>V</CODE>.
 </P>
 <PRE>
-      mkV2  : V -&gt; Prep -&gt; V2 ;
-    
-      dirV2 : V -&gt; V2 ;
+      mkV2 : overload {
+        mkV2 : Str -&gt; V2 ;
+        mkV2 : V -&gt; V2 ;
+        mkV2 : V -&gt; Prep -&gt; V2
+        } ;
 </PRE>
 <P></P>
 <P>
@@ -367,7 +351,7 @@ You can reuse a <CODE>V2</CODE> verb in <CODE>V</CODE>.
       v2V : V2 -&gt; V ;
 </PRE>
 <P></P>
-<A NAME="toc13"></A>
+<A NAME="toc11"></A>
 <H3>Three-place verbs</H3>
 <P>
 Three-place (ditransitive) verbs need two prepositions, of which
@@ -379,7 +363,7 @@ the first one or both can be absent.
       dirdirV3 : V -&gt; V3 ;                 -- dare,_,_
 </PRE>
 <P></P>
-<A NAME="toc14"></A>
+<A NAME="toc12"></A>
 <H3>Other complement patterns</H3>
 <P>
 Verbs and adjectives can take complements such as sentences,
@@ -416,6 +400,6 @@ as an adverb. Likewise <CODE>AS, A2S, AV, A2V</CODE> are just <CODE>A</CODE>.
 </PRE>
 <P></P>
 
-<!-- html code generated by txt2tags 2.4 (http://txt2tags.sf.net) -->
+<!-- html code generated by txt2tags 2.3 (http://txt2tags.sf.net) -->
 <!-- cmdline: txt2tags -thtml -\-toc italian/ParadigmsIta.txt -->
 </BODY></HTML>

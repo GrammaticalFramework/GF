@@ -2,28 +2,83 @@
 <HTML>
 <HEAD>
 <META NAME="generator" CONTENT="http://txt2tags.sf.net">
-<TITLE> Constructors: the High-Level Syntax API</TITLE>
+<TITLE> Constructors: the Resource Syntax API</TITLE>
 </HEAD><BODY BGCOLOR="white" TEXT="black">
-<P ALIGN="center"><CENTER><H1> Constructors: the High-Level Syntax API</H1>
+<P ALIGN="center"><CENTER><H1> Constructors: the Resource Syntax API</H1>
 <FONT SIZE="4">
-<I>Last update: 2007-05-09 17:52:28 CEST</I><BR>
+<I>Last update: 2007-07-08 16:44:35 CEST</I><BR>
 </FONT></CENTER>
 
 <P></P>
 <HR NOSHADE SIZE=1>
 <P></P>
     <UL>
-    <LI><A HREF="#toc1">Texts, phrases, and utterances</A>
-    <LI><A HREF="#toc2">Sentences, and clauses</A>
-    <LI><A HREF="#toc3">Verb phrases and imperatives</A>
-    <LI><A HREF="#toc4">Noun phrases and determiners</A>
-    <LI><A HREF="#toc5">Numerals - cardinal and ordinal</A>
-    <LI><A HREF="#toc6">Common nouns</A>
-    <LI><A HREF="#toc7">Adjectival phrases</A>
-    <LI><A HREF="#toc8">Adverbs</A>
-    <LI><A HREF="#toc9">Questions and interrogative pronouns</A>
-    <LI><A HREF="#toc10">Relative clauses and relative pronouns</A>
-    <LI><A HREF="#toc11">Objectless sentences and sentence complements</A>
+    <LI><A HREF="#toc1">Principles of organization</A>
+    <LI><A HREF="#toc2">Texts, phrases, and utterances</A>
+      <UL>
+      <LI><A HREF="#toc3">Text: texts</A>
+      <LI><A HREF="#toc4">Punct: punctuation marks</A>
+      <LI><A HREF="#toc5">Phr: phrases in a text</A>
+      <LI><A HREF="#toc6">PConj, phrasal conjunctions</A>
+      <LI><A HREF="#toc7">Voc, vocatives</A>
+      <LI><A HREF="#toc8">Utt, utterances</A>
+      </UL>
+    <LI><A HREF="#toc9">Auxiliary parameters for phrases and sentences</A>
+      <UL>
+      <LI><A HREF="#toc10">Pol, polarity</A>
+      <LI><A HREF="#toc11">Ant, anteriority</A>
+      <LI><A HREF="#toc12">Tense, tense</A>
+      <LI><A HREF="#toc13">ImpForm, imperative form</A>
+      </UL>
+    <LI><A HREF="#toc14">Sentences and clauses</A>
+      <UL>
+      <LI><A HREF="#toc15">S, sentences</A>
+      <LI><A HREF="#toc16">Cl, clauses</A>
+      </UL>
+    <LI><A HREF="#toc17">Verb phrases and imperatives</A>
+      <UL>
+      <LI><A HREF="#toc18">VP, verb phrases</A>
+      <LI><A HREF="#toc19">Imp, imperatives</A>
+      </UL>
+    <LI><A HREF="#toc20">Noun phrases and determiners</A>
+      <UL>
+      <LI><A HREF="#toc21">NP, noun phrases</A>
+      <LI><A HREF="#toc22">Det, determiners</A>
+      <LI><A HREF="#toc23">Quant, quantifiers with both sincular and plural forms</A>
+      <LI><A HREF="#toc24">QuantSg, singular quantifiers</A>
+      <LI><A HREF="#toc25">QuantPl, plural quantifiers</A>
+      <LI><A HREF="#toc26">Num, cardinal numerals</A>
+      <LI><A HREF="#toc27">Ord, ordinal numerals</A>
+      <LI><A HREF="#toc28">AdN, adnumerals</A>
+      <LI><A HREF="#toc29">Numeral, number words</A>
+      </UL>
+    <LI><A HREF="#toc30">Nouns</A>
+      <UL>
+      <LI><A HREF="#toc31">CN, common noun phrases</A>
+      </UL>
+    <LI><A HREF="#toc32">Adjectives and adverbs</A>
+      <UL>
+      <LI><A HREF="#toc33">AP, adjectival phrases</A>
+      <LI><A HREF="#toc34">Adv, adverbial phrases</A>
+      </UL>
+    <LI><A HREF="#toc35">Questions and relatives</A>
+      <UL>
+      <LI><A HREF="#toc36">QS, question sentences</A>
+      <LI><A HREF="#toc37">QCl, question clauses</A>
+      <LI><A HREF="#toc38">IP, interrogative pronouns</A>
+      <LI><A HREF="#toc39">IAdv, interrogative adverbs.</A>
+      <LI><A HREF="#toc40">RS, relative sentences</A>
+      <LI><A HREF="#toc41">RCl, relative clauses</A>
+      <LI><A HREF="#toc42">RP, relative pronouns</A>
+      <LI><A HREF="#toc43">Slash, objectless sentences</A>
+      </UL>
+    <LI><A HREF="#toc44">Lists for coordination</A>
+      <UL>
+      <LI><A HREF="#toc45">ListS, sentence lists</A>
+      <LI><A HREF="#toc46">ListAdv, adverb lists</A>
+      <LI><A HREF="#toc47">ListAP, adjectival phrase lists</A>
+      <LI><A HREF="#toc48">ListNP, noun phrase lists</A>
+      </UL>
     </UL>
 
 <P></P>
@@ -34,337 +89,1108 @@ Produced by
 gfdoc - a rudimentary GF document generator.
 (c) Aarne Ranta (<A HREF="mailto:aarne@cs.chalmers.se">aarne@cs.chalmers.se</A>) 2002 under GNU GPL.
 </P>
-<P>
-This module gives access to (almost) all functions in the resource
-syntax API defined in <A HREF="Grammar.html">Grammar</A>. It uses overloaded
-function names to reduce the burden of remembering different names.
-</P>
-<P>
-The principle is simply:
-to construct an object of type <CODE>C</CODE>, use the function <CODE>mkC</CODE>.
-</P>
-<P>
-For example, to the object
-</P>
-<P>
-<CODE>PredVP (UsePron she_Pron) (ComplV2 love_V2 (UsePN paris_PN))</CODE>
-</P>
-<P>
-can now also be written
-</P>
-<P>
-<CODE>mkCl (mkNP she_Pron) (mkVP love_V2 (mkNP paris_PN))</CODE>
-</P>
-<P>
-In addition to exact variants of the <CODE>Grammar</CODE> functions, the module
-gives some common special cases using deeper terms and default arguments.
-An example of deeper terms is two-place coordination such as
-</P>
-<P>
-<CODE>mkNP : Conj -&gt; NP -&gt; NP -&gt; NP</CODE>. 
-</P>
-<P>
-An example of default arguments is present-tense sentences,
-</P>
-<P>
-<CODE>mkS : Cl -&gt; S</CODE>.
-</P>
-<P>
-The <I>old</I> API can of course be used simultaneously with this one.
-Typically, <CODE>Grammar</CODE> and <CODE>Paradigms</CODE> are needed to be <CODE>open</CODE>ed in addition
-to this. 
-</P>
 <PRE>
     incomplete resource Constructors = open Grammar in {
     
-      oper
-</PRE>
-<P></P>
-<A NAME="toc1"></A>
-<H2>Texts, phrases, and utterances</H2>
-<PRE>
-        mkText : overload {
-          mkText : Text               ;   -- [empty text]
-          mkText : Phr -&gt; Text        ;   -- John walks.
-          mkText : Utt -&gt; Text        ;   -- John walks.
-          mkText : S -&gt; Text          ;   -- John walks.
-          mkText : Cl -&gt; Text         ;   -- John walks.
-          mkText : QS -&gt; Text         ;   -- Does John walk?
-          mkText : Imp -&gt; Text        ;   -- Walk!
-          mkText : Pol -&gt; Imp -&gt; Text ;   -- Don't walk!
-          mkText : Phr -&gt; Text -&gt; Text    -- John walks. ...
-          } ;
-    
-        mkPhr : overload {
-          mkPhr : PConj -&gt; Utt -&gt; Voc -&gt; Phr;   -- But go home my friend
-          mkPhr : Utt -&gt; Phr                ;   -- Go home
-          mkPhr : S -&gt; Phr                      -- I go home
-          } ;
-    
-        mkUtt : overload {
-          mkUtt : S -&gt; Utt                  ;   -- John walked
-          mkUtt : Cl -&gt; Utt                 ;   -- John walks
-          mkUtt : QS -&gt; Utt                 ;   -- is it good
-          mkUtt : Pol -&gt; Imp -&gt; Utt         ;   -- (don't) help yourself
-          mkUtt : Imp -&gt; Utt                ;   -- help yourself
-          mkUtt : IP   -&gt; Utt               ;   -- who
-          mkUtt : IAdv -&gt; Utt               ;   -- why
-          mkUtt : NP   -&gt; Utt               ;   -- this man
-          mkUtt : Adv  -&gt; Utt               ;   -- here
-          mkUtt : VP   -&gt; Utt                   -- to sleep
-          } ;
-</PRE>
-<P></P>
-<A NAME="toc2"></A>
-<H2>Sentences, and clauses</H2>
-<PRE>
-        mkS : overload {
-          mkS : Cl -&gt; S ;                        -- John walks
-          mkS : Tense -&gt; Cl -&gt; S ;               -- John walked
-          mkS : Ant -&gt; Cl -&gt; S ;                 -- John has walked
-          mkS : Pol -&gt; Cl -&gt; S ;                 -- John doesn't walk
-          mkS : Tense -&gt; Ant -&gt; Cl -&gt; S ;        -- John had walked
-          mkS : Tense -&gt; Pol -&gt; Cl -&gt; S ;        -- John didn't walk
-          mkS : Ant -&gt; Pol -&gt; Cl -&gt; S ;          -- John hasn't walked
-          mkS : Tense -&gt; Ant -&gt; Pol -&gt; Cl -&gt; S ; -- John wouldn't have walked
-          mkS : Conj -&gt; S -&gt; S -&gt; S ;            -- John walks and Mary talks   
-          mkS : DConj -&gt; S -&gt; S -&gt; S ;           -- either I leave or you come
-          mkS : Conj -&gt; ListS -&gt; S ;             -- John walks, Mary talks, and Bob runs
-          mkS : DConj -&gt; ListS -&gt; S ;            -- either I leave, you come, or he runs
-          mkS : Adv -&gt; S -&gt; S                    -- today, I will sleep
-          } ;
-    
-        mkCl : overload {
-          mkCl : NP -&gt; VP -&gt; Cl   ;   -- John wants to walk
-          mkCl : NP -&gt; V -&gt; Cl    ;   -- John walks
-          mkCl : NP -&gt; V2 -&gt; NP -&gt; Cl ; -- John uses it
-          mkCl : VP -&gt; Cl         ;   -- it rains
-          mkCl : NP  -&gt; RS -&gt; Cl  ;   -- it is you who did it
-          mkCl : Adv -&gt; S  -&gt; Cl  ;   -- it is yesterday she arrived
-          mkCl : NP -&gt; Cl         ;   -- there is a house
-          mkCl : NP -&gt; AP -&gt; Cl   ;   -- John is nice and warm
-          mkCl : NP -&gt; A  -&gt; Cl   ;   -- John is warm
-          mkCl : NP -&gt; A -&gt; NP -&gt; Cl; -- John is warmer than Mary
-          mkCl : NP -&gt; A2 -&gt; NP -&gt; Cl; -- John is married to Mary
-          mkCl : NP -&gt; NP -&gt; Cl   ;   -- John is a man
-          mkCl : NP -&gt; Adv -&gt; Cl      -- John is here
-          } ;
-</PRE>
-<P></P>
-<A NAME="toc3"></A>
-<H2>Verb phrases and imperatives</H2>
-<PRE>
-        mkVP : overload {
-          mkVP : V   -&gt; VP            ;   -- sleep
-          mkVP : V2  -&gt; NP -&gt; VP      ;   -- use it
-          mkVP : V3  -&gt; NP -&gt; NP -&gt; VP ;  -- send a message to her
-          mkVP : VV  -&gt; VP -&gt; VP      ;   -- want to run
-          mkVP : VS  -&gt; S  -&gt; VP      ;   -- know that she runs
-          mkVP : VQ  -&gt; QS -&gt; VP      ;   -- ask if she runs
-          mkVP : VA  -&gt; AP -&gt; VP      ;   -- look red
-          mkVP : V2A -&gt; NP -&gt; AP -&gt; VP ;  -- paint the house red
-          mkVP : AP -&gt; VP             ;   -- be warm
-          mkVP : NP -&gt; VP             ;   -- be a man
-          mkVP : Adv -&gt; VP            ;   -- be here
-          mkVP : VP -&gt; Adv -&gt; VP      ;   -- sleep here
-          mkVP : AdV -&gt; VP -&gt; VP          -- always sleep
-          } ;
-    
-        mkImp : overload {
-          mkImp : VP -&gt; Imp              ;   -- go there now
-          mkImp : V  -&gt; Imp              ;   -- go
-          mkImp : V2 -&gt; NP -&gt; Imp            -- take it
-          } ;
-</PRE>
-<P></P>
-<A NAME="toc4"></A>
-<H2>Noun phrases and determiners</H2>
-<PRE>
-        mkNP : overload {
-          mkNP : Det -&gt; CN -&gt; NP  ;        -- the old man
-          mkNP : Det -&gt; N -&gt; NP   ;        -- the man
-          mkNP : Num -&gt; CN -&gt; NP  ;        -- forty-five old men
-          mkNP : Num -&gt; N -&gt; NP   ;        -- forty-five men
-          mkNP : Int -&gt; CN -&gt; NP  ;        -- 51 old men
-          mkNP : Int -&gt; N -&gt; NP   ;        -- 51 men
-          mkNP : Digit -&gt; CN -&gt; NP;        -- five old men
-          mkNP : Digit -&gt; N -&gt; NP ;        -- five men
-          mkNP : PN -&gt; NP         ;        -- John
-          mkNP : Pron -&gt; NP       ;        -- he
-          mkNP : Predet -&gt; NP -&gt; NP ;      -- all the men
-          mkNP : NP -&gt; V2  -&gt; NP  ;        -- the number squared
-          mkNP : NP -&gt; Adv -&gt; NP  ;        -- Paris at midnight
-          mkNP : Conj -&gt; NP -&gt; NP -&gt; NP ;  -- John and Mary walk
-          mkNP : DConj -&gt; NP -&gt; NP -&gt; NP ; -- both John and Mary walk
-          mkNP : Conj -&gt; ListNP -&gt; NP ;    -- John, Mary, and Bill walk
-          mkNP : DConj -&gt; ListNP -&gt; NP     -- both John, Mary, and Bill walk
-    
-          } ;
-    
-        mkDet : overload {
-          mkDet : QuantSg -&gt; Ord -&gt; Det        ;   -- this best (man)
-          mkDet : Det                          ;   -- the (man)
-          mkDet : QuantSg -&gt;  Det              ;   -- this (man)
-          mkDet : QuantPl -&gt; Num -&gt; Ord -&gt; Det ;   -- these five best (men)
-          mkDet : QuantPl -&gt; Det               ;   -- these (men)
-          mkDet : Quant -&gt;  Det                ;   -- this (man)
-          mkDet : Num -&gt; Det                   ;   -- forty-five (men)
-          mkDet : Int -&gt; Det                   ;   -- 51 (men)
-          mkDet : Digit -&gt; Det                 ;   -- five (men)
-          mkDet : Pron -&gt; Det                      -- my (house)
-          } ;
-    
-       def_Det : Det ;   -- the (man)
-       indef_Det : Det ; -- a (man)
-       mass_Det : Det ;  -- (water)
+      flags optimize=noexpand ;
 </PRE>
 <P></P>
 <P>
-More determiners are available in the Structural module
+This module gives access to the syntactic constructions of the
+GF Resource Grammar library. Its main principle is simple:
+to construct an object of type <CODE>C</CODE>, use the function <CODE>mkC</CODE>.
 </P>
-<A NAME="toc5"></A>
-<H2>Numerals - cardinal and ordinal</H2>
+<P>
+For example, an object of type <CODE>S</CODE> corresponding to the string
+</P>
+<P>
+<CODE>John loves Mary</CODE>
+</P>
+<P>
+is written
+</P>
+<P>
+<CODE>mkS (mkCl (mkNP (mkPN "John")) (mkV2 "love") (mkNP (mkPN "Mary")))</CODE>
+</P>
+<P>
+This module defines the syntactic constructors, which take trees as arguments.
+Lexical constructors, which take strings as arguments, are defined in the
+<CODE>Paradigms</CODE> modules separately for each language.
+</P>
+<P>
+The recommended usage of this module is via the wrapper module <CODE>Syntax</CODE>, 
+which also contains the <CODE>Structural</CODE> (structural words). 
+Together with <CODE>Paradigms</CODE>, <CODE>Syntax</CODE> gives everything that is needed
+to implement the concrete syntax for a langauge.
+</P>
+<A NAME="toc1"></A>
+<H2>Principles of organization</H2>
+<P>
+To make the library easier to grasp and navigate, we have followed
+a set of principles when organizing it:
+</P>
+<OL>
+<LI>Each category <CODE>C</CODE> has an overloaded constructor <CODE>mkC</CODE>, with value type <CODE>C</CODE>.
+<LI>With <CODE>mkC</CODE>, it is possible to construct any tree of type <CODE>C</CODE>, except
+atomic ones, i.e. those that take no arguments, and
+those whose argument types are exactly the same as in some other instance
+<LI>To achieve completeness, the library therefore also has
+for each atomic tree of type <CODE>C</CODE>, a constant suffixed <CODE>C</CODE>, and,
+for other missing constructions, some operation suffixed <CODE>C</CODE>.
+These constructors are listed immediately after the <CODE>mkC</CODE> group.
+<LI>Those atomic constructors that are given in <CODE>Structural</CODE> are not repeated here.
+<LI>In addition to the minimally complete set of constructions, many <CODE>mkC</CODE> groups
+include some frequently needed special cases, with two possible logics:
+default value (to decrease the number of arguments), and
+direct arguments of an intervening constructor (to flatten the terms).
+<LI>If such a special case is applied to some category in some rule, it is
+also applied to all other rules in which the category appears.
+<LI>The constructors in a group are listed, roughly, 
+<B>from the most common to the most general</B>. This does not of course specify
+a total order. 
+<LI>Optional argument types are marked in parentheses. Although parentheses make no
+difference in the way the GF compiler treats the types, their presence indicates
+to the reader that the corresponding arguments can be left out; internally, the
+library has an overload case for each such combination.
+<LI>Each constructor case is equipped with an example that is built by that
+case but could not be built with any other one.
+</OL>
+
+<A NAME="toc2"></A>
+<H2>Texts, phrases, and utterances</H2>
+<A NAME="toc3"></A>
+<H3>Text: texts</H3>
+<P>
+A text is a list of phrases separated by punctuation marks.
+The default punctuation mark is the full stop, and the default
+continuation of a text is empty.
+</P>
 <PRE>
-        mkNum : overload {
-          mkNum : Num            ;   -- [no num]
-          mkNum : Int -&gt; Num     ;   -- 51
-          mkNum : Digit -&gt; Num
+      oper
+        mkText : overload {
+          mkText : Phr -&gt;                      Text ; -- 1. But John walks.
+          mkText : Phr -&gt; (Punct) -&gt; (Text) -&gt; Text ; -- 2. John walks? Yes.
+</PRE>
+<P></P>
+<P>
+A text can also be directly built from utterances, which in turn can
+be directly built from sentences, present-tense clauses, questions, or
+positive imperatives. 
+</P>
+<PRE>
+          mkText : Utt -&gt;  Text ;  -- 3. John.
+          mkText : S   -&gt;  Text ;  -- 4. John walked.
+          mkText : Cl  -&gt;  Text ;  -- 5. John walks.
+          mkText : QS  -&gt;  Text ;  -- 6. Did John walk?
+          mkText : Imp -&gt;  Text    -- 7. Walk!
           } ;
-    
-        mkOrd : overload {
-          mkOrd : Ord            ;   -- [no ord]
-          mkOrd : Int -&gt; Ord     ;   -- 51st
-          mkOrd : Digit -&gt; Ord   ;   -- fifth
-          mkOrd : A -&gt; Ord           -- largest
+</PRE>
+<P></P>
+<P>
+A text can also be empty.
+</P>
+<PRE>
+          emptyText :      Text ;  -- 8. (empty text)
+</PRE>
+<P></P>
+<A NAME="toc4"></A>
+<H3>Punct: punctuation marks</H3>
+<P>
+There are three punctuation marks that can separate phrases in a text.
+</P>
+<PRE>
+          fullStopPunct  : Punct ;  -- .
+          questMarkPunct : Punct ;  -- ?
+          exclMarkPunct  : Punct ;  -- !
+</PRE>
+<P></P>
+<A NAME="toc5"></A>
+<H3>Phr: phrases in a text</H3>
+<P>
+Phrases are built from utterances by adding a phrasal conjunction
+and a vocative, both of which are by default empty.
+</P>
+<PRE>
+        mkPhr : overload {
+          mkPhr :            Utt -&gt;          Phr ;  -- 1. why
+          mkPhr : (PConj) -&gt; Utt -&gt; (Voc) -&gt; Phr ;  -- 2. but why John
+</PRE>
+<P></P>
+<P>
+A phrase can also be directly built by a sentence, a present-tense
+clause, a question, or a positive singular imperative. 
+</P>
+<PRE>
+          mkPhr : S   -&gt;  Phr ; -- 3. John walked
+          mkPhr : Cl  -&gt;  Phr ; -- 4. John walks
+          mkPhr : QS  -&gt;  Phr ; -- 5. did John walk
+          mkPhr : Imp -&gt;  Phr   -- 6. walk
           } ;
 </PRE>
 <P></P>
 <A NAME="toc6"></A>
-<H2>Common nouns</H2>
+<H3>PConj, phrasal conjunctions</H3>
+<P>
+Any conjunction can be used as a phrasal conjunction.
+More phrasal conjunctions are defined in <CODE>Structural</CODE>.
+</P>
 <PRE>
-        mkCN : overload {
-          mkCN : N  -&gt; CN               ;   -- house
-          mkCN : N2 -&gt; NP -&gt; CN         ;   -- son of the king
-          mkCN : N3 -&gt; NP -&gt; NP -&gt; CN   ;   -- flight from Moscow (to Paris)
-          mkCN : N2 -&gt; CN               ;   -- son
-          mkCN : N3 -&gt; CN               ;   -- flight
-          mkCN : AP -&gt; CN  -&gt; CN        ;   -- nice and big blue house
-          mkCN : AP -&gt;  N  -&gt; CN        ;   -- nice and big house
-          mkCN : CN -&gt; AP  -&gt; CN        ;   -- nice and big blue house
-          mkCN :  N -&gt; AP  -&gt; CN        ;   -- nice and big house
-          mkCN :  A -&gt; CN  -&gt; CN        ;   -- big blue house
-          mkCN :  A -&gt;  N  -&gt; CN        ;   -- big house
-          mkCN : CN -&gt; RS  -&gt; CN        ;   -- house that John owns
-          mkCN :  N -&gt; RS  -&gt; CN        ;   -- house that John owns
-          mkCN : CN -&gt; Adv -&gt; CN        ;   -- house on the hill
-          mkCN :  N -&gt; Adv -&gt; CN        ;   -- house on the hill
-          mkCN : CN -&gt; SC  -&gt; CN        ;   -- fact that John smokes, question if he does
-          mkCN :  N -&gt; SC  -&gt; CN        ;   -- fact that John smokes, question if he does
-          mkCN : CN -&gt; NP  -&gt; CN        ;   -- number x, numbers x and y
-          mkCN :  N -&gt; NP  -&gt; CN            -- number x, numbers x and y
-          } ;
+          mkPConj : Conj -&gt; PConj ;  -- 1. and
 </PRE>
 <P></P>
 <A NAME="toc7"></A>
-<H2>Adjectival phrases</H2>
+<H3>Voc, vocatives</H3>
+<P>
+Any noun phrase can be turned into a vocative.
+More vocatives are defined in <CODE>Structural</CODE>.
+</P>
 <PRE>
-        mkAP : overload {
-          mkAP : A -&gt; AP        ;         -- warm
-          mkAP : A -&gt; NP -&gt; AP  ;         -- warmer than Spain
-          mkAP : A2 -&gt; NP -&gt; AP ;         -- divisible by 2
-          mkAP : A2 -&gt; AP       ;         -- divisible by itself
-          mkAP : AP -&gt; SC -&gt; AP ;         -- great that she won; uncertain if she did
-          mkAP : AdA -&gt; AP -&gt; AP ;        -- very uncertain
-          mkAP : Conj -&gt; AP -&gt; AP -&gt; AP ; -- warm and nice
-          mkAP : DConj -&gt; AP -&gt; AP -&gt; AP ;-- both warm and nice
-          mkAP : Conj -&gt; ListAP -&gt; AP ;   -- warm, nice, and cheap
-          mkAP : DConj -&gt; ListAP -&gt; AP    -- both warm, nice, and cheap
-    
-          } ;
+          mkVoc : NP -&gt; Voc ;   -- 1. John
 </PRE>
 <P></P>
 <A NAME="toc8"></A>
-<H2>Adverbs</H2>
+<H3>Utt, utterances</H3>
+<P>
+Utterances are formed from sentences, clauses, questions, and positive singular imperatives.
+</P>
 <PRE>
-        mkAdv : overload {
-          mkAdv : A -&gt; Adv               ;    -- quickly
-          mkAdv : Prep -&gt; NP -&gt; Adv      ;    -- in the house
-          mkAdv : CAdv -&gt; A -&gt; NP -&gt; Adv ;    -- more quickly than John
-          mkAdv : CAdv -&gt; A -&gt; S -&gt; Adv  ;    -- more quickly than he runs
-          mkAdv : AdA -&gt; Adv -&gt; Adv      ;    -- very quickly
-          mkAdv : Subj -&gt; S -&gt; Adv       ;    -- when he arrives
-          mkAdv : Conj -&gt; Adv -&gt; Adv -&gt; Adv;  -- here and now
-          mkAdv : DConj -&gt; Adv -&gt; Adv -&gt; Adv; -- both here and now
-          mkAdv : Conj -&gt; ListAdv -&gt; Adv ;    -- here, now, and with you
-          mkAdv : DConj -&gt; ListAdv -&gt; Adv     -- both here, now, and with you
+        mkUtt : overload {
+          mkUtt : S   -&gt; Utt ;  -- 1. John walked
+          mkUtt : Cl  -&gt; Utt ;  -- 2. John walks
+          mkUtt : QS  -&gt; Utt ;  -- 3. did John walk
+          mkUtt : Imp -&gt; Utt ;  -- 4. love yourself
+</PRE>
+<P></P>
+<P>
+Imperatives can also vary in <CODE>ImpForm</CODE> (number/politeness) and 
+polarity.
+</P>
+<PRE>
+          mkUtt : (ImpForm) -&gt; (Pol) -&gt; Imp -&gt; Utt ;  -- 5. don't love yourselves
+</PRE>
+<P></P>
+<P>
+Utterances can also be formed from interrogative phrases and
+interrogative adverbials, noun phrases, adverbs, and verb phrases.
+</P>
+<PRE>
+          mkUtt : IP   -&gt;  Utt ;  -- 6. who
+          mkUtt : IAdv -&gt;  Utt ;  -- 7. why
+          mkUtt : NP   -&gt;  Utt ;  -- 8. John
+          mkUtt : Adv  -&gt;  Utt ;  -- 9. here
+          mkUtt : VP   -&gt;  Utt    -- 10. to walk
           } ;
+</PRE>
+<P></P>
+<P>
+The plural first-person imperative is a special construction.
+</P>
+<PRE>
+          lets_Utt : VP -&gt;  Utt ;  -- 11. let's walk
 </PRE>
 <P></P>
 <A NAME="toc9"></A>
-<H2>Questions and interrogative pronouns</H2>
-<PRE>
-        mkQS : overload {
-          mkQS : Tense -&gt; Ant -&gt; Pol -&gt; QCl -&gt; QS ; -- wouldn't John have walked
-          mkQS : QCl  -&gt; QS                       ; -- who walks
-          mkQS : Cl   -&gt; QS                         -- does John walk
-          } ;
-    
-        mkQCl : overload {
-          mkQCl : Cl -&gt; QCl                ;   -- does John walk
-          mkQCl : IP -&gt; VP -&gt; QCl          ;   -- who walks
-          mkQCl : IP -&gt; Slash -&gt; QCl       ;   -- who does John love
-          mkQCl : IP -&gt; NP -&gt; V2 -&gt; QCl    ;   -- who does John love
-          mkQCl : IAdv -&gt; Cl -&gt; QCl        ;   -- why does John walk
-          mkQCl : Prep -&gt; IP -&gt; Cl -&gt; QCl  ;   -- with whom does John walk
-          mkQCl : IAdv -&gt; NP -&gt; QCl        ;   -- where is John
-          mkQCl : IP -&gt; QCl                    -- which houses are there
-          } ;
-    
-        mkIP : overload {
-          mkIP : IDet -&gt; Num -&gt; Ord -&gt; CN -&gt; IP ; -- which five best songs
-          mkIP : IDet -&gt; N -&gt; IP              ;   -- which song
-          mkIP : IP -&gt; Adv -&gt; IP                  -- who in Europe
-          } ;
-</PRE>
-<P></P>
+<H2>Auxiliary parameters for phrases and sentences</H2>
 <A NAME="toc10"></A>
-<H2>Relative clauses and relative pronouns</H2>
+<H3>Pol, polarity</H3>
+<P>
+Polarity is a parameter that sets a clause to positive or negative
+form. Since positive is the default, it need never be given explicitly.
+</P>
 <PRE>
-        mkRS : overload {
-          mkRS : Tense -&gt; Ant -&gt; Pol -&gt; RCl -&gt; RS ; -- who wouldn't have walked
-          mkRS : RCl  -&gt; RS                         -- who walks
-          } ;
-    
-        mkRCl : overload {
-          mkRCl : Cl -&gt; RCl          ;   -- such that John loves her
-          mkRCl : RP -&gt; VP -&gt; RCl    ;   -- who loves John
-          mkRCl : RP -&gt; Slash -&gt; RCl     -- whom John loves
-          } ;
-    
-        mkRP : overload {
-          mkRP : RP                    ;   -- which
-          mkRP : Prep -&gt; NP -&gt; RP -&gt; RP    -- all the roots of which
-          } ;
+          positivePol : Pol ;  -- (John walks) [default]
+          negativePol : Pol ;  -- (John doesn't walk)
 </PRE>
 <P></P>
 <A NAME="toc11"></A>
-<H2>Objectless sentences and sentence complements</H2>
+<H3>Ant, anteriority</H3>
+<P>
+Anteriority is a parameter that presents an event as simultaneous or
+anterior to some other reference time.
+Since simultaneous is the default, it need never be given explicitly.
+</P>
 <PRE>
-        mkSlash : overload {
-          mkSlash : NP -&gt; V2 -&gt; Slash    ;    -- (whom) he sees
-          mkSlash : NP -&gt; VV -&gt; V2 -&gt; Slash ; -- (whom) he wants to see
-          mkSlash : Slash -&gt; Adv -&gt; Slash ;   -- (whom) he sees tomorrow
-          mkSlash : Cl -&gt; Prep -&gt; Slash       -- (with whom) he walks
-          } ;
-    
-        mkSC : overload {
-          mkSC : S  -&gt; SC             ;   -- that you go
-          mkSC : QS -&gt; SC             ;   -- whether you go
-          mkSC : VP -&gt; SC                 -- to go
+          simultaneousAnt : Ant ;  -- (John walks) [default]
+          anteriorAnt     : Ant ;  -- (John has walked)       --# notpresent
+</PRE>
+<P></P>
+<A NAME="toc12"></A>
+<H3>Tense, tense</H3>
+<P>
+Tense is a parameter that relates the time of an event 
+to the time of speaking about it.
+Since present is the default, it need never be given explicitly.
+</P>
+<PRE>
+          presentTense     : Tense ; -- (John walks) [default]
+          pastTense        : Tense ; -- (John walked)           --# notpresent
+          futureTense      : Tense ; -- (John will walk)        --# notpresent
+          conditionalTense : Tense ; -- (John would walk)       --# notpresent
+</PRE>
+<P></P>
+<A NAME="toc13"></A>
+<H3>ImpForm, imperative form</H3>
+<P>
+Imperative form is a parameter that sets the form of imperative
+by reference to the person or persons addressed.
+Since singular is the default, it need never be given explicitly.
+</P>
+<PRE>
+          singularImpForm : ImpForm ;  -- (help yourself) [default]
+          pluralImpForm   : ImpForm ;  -- (help yourselves)
+          politeImpForm   : ImpForm ;  -- (help yourself) (polite singular)
+</PRE>
+<P></P>
+<A NAME="toc14"></A>
+<H2>Sentences and clauses</H2>
+<A NAME="toc15"></A>
+<H3>S, sentences</H3>
+<P>
+A sentence has a fixed tense, anteriority and polarity.
+</P>
+<PRE>
+        mkS : overload {
+          mkS :                              Cl -&gt; S ;  -- 1. John walks
+          mkS : (Tense) -&gt; (Ant) -&gt; (Pol) -&gt; Cl -&gt; S ;  -- 2. John wouldn't have walked
+</PRE>
+<P></P>
+<P>
+Sentences can be combined with conjunctions. This can apply to a pair
+of sentences, but also to a list of more than two.
+</P>
+<PRE>
+          mkS : Conj  -&gt; S -&gt; S -&gt; S ;  -- 3. John walks and I run   
+          mkS : Conj  -&gt; ListS  -&gt; S ;  -- 4. John walks, I run and you sleep
+          mkS : DConj -&gt; S -&gt; S -&gt; S ;  -- 5. either John walk or I run
+          mkS : DConj -&gt; ListS  -&gt; S ;  -- 6. either John walks, I run or you sleep
+</PRE>
+<P></P>
+<P>
+A sentence can be prefixed by an adverb.
+</P>
+<PRE>
+          mkS : Adv -&gt; S -&gt; S    -- 7. today, John walks
           } ;
 </PRE>
 <P></P>
+<A NAME="toc16"></A>
+<H3>Cl, clauses</H3>
+<P>
+A clause has a variable tense, anteriority and polarity.
+A clause can be built from a subject noun phrase 
+with a verb and appropriate arguments.
+</P>
+<PRE>
+        mkCl : overload {
+          mkCl : NP  -&gt; V  -&gt;             Cl ;  -- 1. John walks
+          mkCl : NP  -&gt; V2 -&gt; NP -&gt;       Cl ;  -- 2. John loves her
+          mkCl : NP  -&gt; V3 -&gt; NP -&gt; NP -&gt; Cl ;  -- 3. John sends it to her
+          mkCl : NP  -&gt; VV -&gt; VP -&gt;       Cl ;  -- 4. John wants to walk 
+          mkCl : NP  -&gt; VS -&gt; S  -&gt;       Cl ;  -- 5. John says that it is good
+          mkCl : NP  -&gt; VQ -&gt; QS -&gt;       Cl ;  -- 6. John wonders if it is good
+          mkCl : NP  -&gt; VA -&gt; AP -&gt;       Cl ;  -- 7. John becomes old
+          mkCl : NP  -&gt; V2A -&gt;NP -&gt; AP -&gt; Cl ;  -- 8. John paints it red
+          mkCl : NP  -&gt; A  -&gt;             Cl ;  -- 9. John is old
+          mkCl : NP  -&gt; A  -&gt; NP -&gt;       Cl ;  -- 10. John is older than her
+          mkCl : NP  -&gt; A2 -&gt; NP -&gt;       Cl ;  -- 11. John is married to her
+          mkCl : NP  -&gt; AP -&gt;             Cl ;  -- 12. John is very old
+          mkCl : NP  -&gt; N  -&gt;             Cl ;  -- 13. John is a man
+          mkCl : NP  -&gt; CN -&gt;             Cl ;  -- 14. John is an old man
+          mkCl : NP  -&gt; NP -&gt;             Cl ;  -- 15. John is the man
+          mkCl : NP  -&gt; Adv -&gt;            Cl ;  -- 16. John is here
+</PRE>
+<P></P>
+<P>
+As the general rule, a clause can be built from a subject noun phrase and 
+a verb phrase.
+</P>
+<PRE>
+          mkCl : NP  -&gt; VP -&gt; Cl ;  -- 17. John walks here
+</PRE>
+<P></P>
+<P>
+Subjectless verb phrases are used for impersonal actions.
+</P>
+<PRE>
+          mkCl : V   -&gt;  Cl ;  -- 18. it rains
+          mkCl : VP  -&gt;  Cl ;  -- 19. it is raining
+</PRE>
+<P></P>
+<P>
+Existentials are a special form of clauses.
+</P>
+<PRE>
+          mkCl : N   -&gt;  Cl ;  -- 20. there is a house
+          mkCl : CN  -&gt;  Cl ;  -- 21. there is an old houses
+          mkCl : NP  -&gt;  Cl ;  -- 22. there are five houses
+</PRE>
+<P></P>
+<P>
+There are also special forms in which a noun phrase or an adverb is
+emphasized.
+</P>
+<PRE>
+          mkCl : NP  -&gt; RS -&gt; Cl ;  -- 23. it is John that walks
+          mkCl : Adv -&gt; S  -&gt; Cl    -- 24. it is here John walks
+          } ;
+</PRE>
+<P></P>
+<P>
+Generic clauses are one with an impersonal subject.
+</P>
+<PRE>
+          genericCl : VP -&gt;  Cl ;   -- 25. one walks              
+</PRE>
+<P></P>
+<A NAME="toc17"></A>
+<H2>Verb phrases and imperatives</H2>
+<A NAME="toc18"></A>
+<H3>VP, verb phrases</H3>
+<P>
+A verb phrase is formed from a verb with appropriate arguments.
+</P>
+<PRE>
+        mkVP : overload {
+          mkVP : V   -&gt;             VP ;  -- 1. walk
+          mkVP : V2  -&gt; NP -&gt;       VP ;  -- 2. love her
+          mkVP : V3  -&gt; NP -&gt; NP -&gt; VP ;  -- 3. send it to her
+          mkVP : VV  -&gt; VP -&gt;       VP ;  -- 4. want to walk
+          mkVP : VS  -&gt; S  -&gt;       VP ;  -- 5. know that she walks
+          mkVP : VQ  -&gt; QS -&gt;       VP ;  -- 6. ask if she walks
+          mkVP : VA  -&gt; AP -&gt;       VP ;  -- 7. become old
+          mkVP : V2A -&gt; NP -&gt; AP -&gt; VP ;  -- 8. paint it red
+</PRE>
+<P></P>
+<P>
+The verb can also be a copula (<I>be</I>), and the relevant argument is
+then the complement adjective or noun phrase.
+</P>
+<PRE>
+          mkVP : A   -&gt;      VP ;  --  9. be warm
+          mkVP : AP  -&gt;      VP ;  -- 12. be very warm
+          mkVP : A  -&gt; NP -&gt; VP ;  -- 10. be older than her
+          mkVP : A2 -&gt; NP -&gt; VP ;  -- 11. be married to her
+          mkVP : N   -&gt;      VP ;  -- 13. be a man
+          mkVP : CN  -&gt;      VP ;  -- 14. be an old man
+          mkVP : NP  -&gt;      VP ;  -- 15. be the man
+          mkVP : Adv -&gt;      VP ;  -- 16. be here
+</PRE>
+<P></P>
+<P>
+A verb phrase can be modified with a postverbal or a preverbal adverb.
+</P>
+<PRE>
+          mkVP : VP  -&gt; Adv -&gt; VP ;  -- 17. sleep here
+          mkVP : AdV -&gt; VP  -&gt; VP    -- 18. always sleep
+          } ;
+</PRE>
+<P></P>
+<P>
+Two-place verbs can be used reflexively.
+</P>
+<PRE>
+          reflexiveVP : V2 -&gt; VP ; -- 19. love itself
+</PRE>
+<P></P>
+<P>
+Two-place verbs can also be used in the passive, with or without an agent.
+</P>
+<PRE>
+        passiveVP : overload {
+          passiveVP : V2 -&gt;       VP ;  -- 20. be loved
+          passiveVP : V2 -&gt; NP -&gt; VP ;  -- 21. be loved by her
+          } ;
+</PRE>
+<P></P>
+<P>
+A verb phrase can be turned into the progressive form.
+</P>
+<PRE>
+          progressiveVP : VP -&gt; VP ;  -- 22. be sleeping
+</PRE>
+<P></P>
+<A NAME="toc19"></A>
+<H3>Imp, imperatives</H3>
+<P>
+Imperatives are formed from verbs and their arguments; as the general
+rule, from verb phrases.
+</P>
+<PRE>
+        mkImp : overload {
+          mkImp : V  -&gt;        Imp  ;   -- go
+          mkImp : V2 -&gt; NP -&gt;  Imp  ;   -- take it
+          mkImp : VP -&gt;        Imp      -- go there now
+          } ;
+</PRE>
+<P></P>
+<A NAME="toc20"></A>
+<H2>Noun phrases and determiners</H2>
+<A NAME="toc21"></A>
+<H3>NP, noun phrases</H3>
+<P>
+A noun phrases can be built from a determiner and a common noun (<CODE>CN</CODE>) .
+For determiners, the special cases of quantifiers, numerals, integers, 
+and possessive pronouns are provided. For common nouns, the 
+special case of a simple common noun (<CODE>N</CODE>) is always provided.
+</P>
+<PRE>
+        mkNP : overload {
+          mkNP : Det     -&gt; N  -&gt; NP ;       --  1. the first man
+          mkNP : Det     -&gt; CN -&gt; NP ;       --  2. the first old man
+          mkNP : QuantSg -&gt; N  -&gt; NP ;       --  3. this man
+          mkNP : QuantSg -&gt; CN -&gt; NP ;       --  4. this old man
+          mkNP : QuantPl -&gt; N  -&gt; NP ;       --  5. these men
+          mkNP : QuantPl -&gt; CN -&gt; NP ;       --  6. these old men
+          mkNP : Numeral -&gt; N  -&gt; NP ;       --  7. twenty men
+          mkNP : Numeral -&gt; CN -&gt; NP ;       --  8. twenty old men
+          mkNP : Int     -&gt; N  -&gt; NP ;       --  9. 45 men
+          mkNP : Int     -&gt; CN -&gt; NP ;       -- 10. 45 old men
+          mkNP : Num     -&gt; N  -&gt; NP ;       -- 11. almost twenty men
+          mkNP : Num     -&gt; CN -&gt; NP ;       -- 12. almost twenty old men
+          mkNP : Pron    -&gt; N  -&gt; NP ;       -- 13. my man
+          mkNP : Pron    -&gt; CN -&gt; NP;        -- 14. my old man
+</PRE>
+<P></P>
+<P>
+Proper names and pronouns can be used as noun phrases.
+</P>
+<PRE>
+          mkNP : PN    -&gt; NP ;  -- 15. John
+          mkNP : Pron  -&gt; NP ;  -- 16. he
+</PRE>
+<P></P>
+<P>
+A noun phrase once formed can be prefixed by a predeterminer and
+suffixed by a past participle or an adverb.
+</P>
+<PRE>
+          mkNP : Predet -&gt; NP -&gt; NP ;  -- 17. only John
+          mkNP : NP -&gt;    V2  -&gt; NP ;  -- 18. John killed
+          mkNP : NP -&gt;    Adv -&gt; NP ;  -- 19. John in Paris
+</PRE>
+<P></P>
+<P>
+A conjunction can be formed both from two noun phrases and a longer
+list of them.
+</P>
+<PRE>
+          mkNP : Conj  -&gt; NP -&gt; NP -&gt; NP ; -- 20. John and I
+          mkNP : Conj  -&gt; ListNP -&gt;   NP ; -- 21. John, I, and that
+          mkNP : DConj -&gt; NP -&gt; NP -&gt; NP ; -- 22. either John or I
+          mkNP : DConj -&gt; ListNP -&gt;   NP   -- 23. either John, I, or that
+    
+          } ;
+</PRE>
+<P></P>
+<A NAME="toc22"></A>
+<H3>Det, determiners</H3>
+<P>
+A determiner is either a singular or a plural one.
+Both have a quantifier and an optional ordinal; the plural
+determiner also has an optional numeral.
+</P>
+<PRE>
+        mkDet : overload {
+          mkDet : QuantSg -&gt;                   Det ; -- 1. this
+          mkDet : QuantSg -&gt;          (Ord) -&gt; Det ; -- 2. this first
+          mkDet : QuantPl -&gt;                   Det ; -- 3. these
+          mkDet : QuantPl -&gt; (Num) -&gt; (Ord) -&gt; Det ; -- 4. these five best
+</PRE>
+<P></P>
+<P>
+Quantifiers that have both singular and plural forms are by default used as
+singular determiners. If a numeral is added, the plural form is chosen.
+</P>
+<PRE>
+          mkDet : Quant -&gt;        Det ;  -- 5. this
+          mkDet : Quant -&gt; Num -&gt; Det ;  -- 6. these five
+</PRE>
+<P></P>
+<P>
+Numerals, their special cases integers and digits, and possessive pronouns can be
+used as determiners.
+</P>
+<PRE>
+          mkDet : Num     -&gt;  Det ;  --  7. almost twenty
+          mkDet : Numeral -&gt;  Det ;  --  8. five
+          mkDet : Int     -&gt;  Det ;  --  9. 51
+          mkDet : Pron    -&gt;  Det    -- 10. my
+          } ;
+</PRE>
+<P></P>
+<P>
+The definite and indefinite articles are commonly used determiners.
+</P>
+<PRE>
+          defSgDet   : Det ;  -- 11. the (house)
+          defPlDet   : Det ;  -- 12. the (houses)
+          indefSgDet : Det ;  -- 13. a (house)
+          indefPlDet : Det ;  -- 14. (houses)
+</PRE>
+<P></P>
+<A NAME="toc23"></A>
+<H3>Quant, quantifiers with both sincular and plural forms</H3>
+<P>
+Definite and indefinite articles have both singular and plural 
+forms (even though the
+plural indefinite is empty in most languages).
+</P>
+<PRE>
+          defQuant   : Quant ;  -- 1. the
+          indefQuant : Quant ;  -- 2. a
+</PRE>
+<P></P>
+<P>
+More quantifiers are available in the <CODE>Structural</CODE> module.
+</P>
+<A NAME="toc24"></A>
+<H3>QuantSg, singular quantifiers</H3>
+<P>
+From quantifiers that can have both forms, this constructor 
+builds the singular form.
+</P>
+<PRE>
+          mkQuantSg : Quant -&gt; QuantSg ;  -- 1. this
+</PRE>
+<P></P>
+<P>
+The mass noun phrase constructor is treated as a singular quantifier.
+</P>
+<PRE>
+          massQuant : QuantSg ;  -- 2. (mass terms)
+</PRE>
+<P></P>
+<P>
+More singular quantifiers are available in the <CODE>Structural</CODE> module.
+</P>
+<A NAME="toc25"></A>
+<H3>QuantPl, plural quantifiers</H3>
+<P>
+From quantifiers that can have both forms, this constructor 
+builds the plural form.
+</P>
+<PRE>
+          mkQuantPl : Quant -&gt; QuantPl ;  -- 1. these
+</PRE>
+<P></P>
+<P>
+More plural quantifiers are available in the <CODE>Structural</CODE> module.
+</P>
+<A NAME="toc26"></A>
+<H3>Num, cardinal numerals</H3>
+<P>
+Numerals can be formed from number words (<CODE>Numeral</CODE>), their special case digits,
+and from symbolic integers.
+</P>
+<PRE>
+        mkNum : overload {
+          mkNum : Numeral -&gt; Num ;   -- 1. twenty
+          mkNum : Int     -&gt; Num ;   -- 2. 51
+</PRE>
+<P></P>
+<P>
+A numeral can be modified by an adnumeral.
+</P>
+<PRE>
+          mkNum : AdN -&gt; Num -&gt; Num  -- 3. almost ten
+          } ;
+</PRE>
+<P></P>
+<A NAME="toc27"></A>
+<H3>Ord, ordinal numerals</H3>
+<P>
+Just like cardinals, ordinals can be formed from number words (<CODE>Numeral</CODE>)
+and from symbolic integers.
+</P>
+<PRE>
+        mkOrd : overload {
+          mkOrd : Numeral -&gt; Ord ;  -- 1. twentieth
+          mkOrd : Int     -&gt; Ord ;  -- 2. 51st
+</PRE>
+<P></P>
+<P>
+Also adjectives in the superlative form can appear on ordinal positions.
+</P>
+<PRE>
+          mkOrd : A  -&gt; Ord  -- 3. best
+          } ;
+</PRE>
+<P></P>
+<A NAME="toc28"></A>
+<H3>AdN, adnumerals</H3>
+<P>
+Comparison adverbs can be used as adnumerals.
+</P>
+<PRE>
+          mkAdN : CAdv -&gt; AdN ;  -- 1. more than
+</PRE>
+<P></P>
+<A NAME="toc29"></A>
+<H3>Numeral, number words</H3>
+<P>
+Digits and some <I>round</I> numbers are here given as shorthands.
+</P>
+<PRE>
+          n1_Numeral    : Numeral ; -- 1. one
+          n2_Numeral    : Numeral ; -- 2. two
+          n3_Numeral    : Numeral ; -- 3. three
+          n4_Numeral    : Numeral ; -- 4. four
+          n5_Numeral    : Numeral ; -- 5. five
+          n6_Numeral    : Numeral ; -- 6. six
+          n7_Numeral    : Numeral ; -- 7. seven
+          n8_Numeral    : Numeral ; -- 8. eight
+          n9_Numeral    : Numeral ; -- 9. nine
+          n10_Numeral   : Numeral ; -- 10. ten
+          n20_Numeral   : Numeral ; -- 11. twenty
+          n100_Numeral  : Numeral ; -- 12. hundred
+          n1000_Numeral : Numeral ; -- 13. thousand
+</PRE>
+<P></P>
+<P>
+See <CODE>Numeral</CODE> for the full set of constructors, or use <CODE>Int</CODE> for other numbers.
+</P>
+<A NAME="toc30"></A>
+<H2>Nouns</H2>
+<A NAME="toc31"></A>
+<H3>CN, common noun phrases</H3>
+<PRE>
+        mkCN : overload {
+</PRE>
+<P></P>
+<P>
+The most frequent way of forming common noun phrases is from atomic nouns <CODE>N</CODE>.
+</P>
+<PRE>
+          mkCN : N -&gt; CN ;   -- 1. house
+</PRE>
+<P></P>
+<P>
+Common noun phrases can be formed from relational nouns by providing arguments.
+</P>
+<PRE>
+          mkCN : N2 -&gt; NP -&gt;       CN ; -- 2. mother of John
+          mkCN : N3 -&gt; NP -&gt; NP -&gt; CN ; -- 3. distance from this city to Paris
+</PRE>
+<P></P>
+<P>
+Relational nouns can also be used without their arguments.
+</P>
+<PRE>
+          mkCN : N2 -&gt; CN ;   -- 4. son
+          mkCN : N3 -&gt; CN ;   -- 5. flight
+</PRE>
+<P></P>
+<P>
+A common noun phrase can be modified by adjectival phrase. We give special 
+cases of this, where one or both of the arguments are atomic.
+</P>
+<PRE>
+          mkCN : A  -&gt; N   -&gt; CN ;   -- 6. big house
+          mkCN : A  -&gt; CN  -&gt; CN ;   -- 7. big blue house
+          mkCN : AP -&gt; N   -&gt; CN ;   -- 8. very big house
+          mkCN : AP -&gt; CN  -&gt; CN ;   -- 9. very big blue house
+</PRE>
+<P></P>
+<P>
+A common noun phrase can be modified by a relative clause or an adverb.
+</P>
+<PRE>
+          mkCN : N  -&gt; RS  -&gt; CN ;   -- 10. house that John loves
+          mkCN : CN -&gt; RS  -&gt; CN ;   -- 11. big house that John loves
+          mkCN : N  -&gt; Adv -&gt; CN ;   -- 12. house in the city
+          mkCN : CN -&gt; Adv -&gt; CN ;   -- 13. big house in the city
+</PRE>
+<P></P>
+<P>
+For some nouns it makes sense to modify them by sentences, 
+questions, or infinitives. But syntactically this is possible for
+all nouns.
+</P>
+<PRE>
+          mkCN : CN -&gt; S   -&gt; CN ;   -- 14. rule that John walks
+          mkCN : CN -&gt; QS  -&gt; CN ;   -- 15. question if John walks
+          mkCN : CN -&gt; VP  -&gt; CN ;   -- 16. reason to walk
+</PRE>
+<P></P>
+<P>
+A noun can be used in apposition to a noun phrase, especially a proper name.
+</P>
+<PRE>
+          mkCN : N  -&gt; NP  -&gt; CN ;   -- 17. king John
+          mkCN : CN -&gt; NP  -&gt; CN     -- 18. old king John
+          } ;
+</PRE>
+<P></P>
+<A NAME="toc32"></A>
+<H2>Adjectives and adverbs</H2>
+<A NAME="toc33"></A>
+<H3>AP, adjectival phrases</H3>
+<PRE>
+        mkAP : overload {
+</PRE>
+<P></P>
+<P>
+Adjectival phrases can be formed from atomic adjectives by using the positive form or
+the comparative with a complement
+</P>
+<PRE>
+          mkAP : A  -&gt;       AP ;  -- 1. old
+          mkAP : A  -&gt; NP -&gt; AP ;  -- 2. older than John
+</PRE>
+<P></P>
+<P>
+Relational adjectives can be used with a complement or a reflexive
+</P>
+<PRE>
+          mkAP : A2 -&gt; NP -&gt; AP ;  -- 3. married to her
+          mkAP : A2 -&gt;       AP ;  -- 4. married to myself
+</PRE>
+<P></P>
+<P>
+Some adjectival phrases can take as complements sentences, 
+questions, or infinitives. Syntactically this is possible for
+all adjectives.
+</P>
+<PRE>
+          mkAP : AP -&gt; S  -&gt; AP ;  -- 5. probable that John walks
+          mkAP : AP -&gt; QS -&gt; AP ;  -- 6. uncertain if John walks
+          mkAP : AP -&gt; VP -&gt; AP ;  -- 7. ready to go
+</PRE>
+<P></P>
+<P>
+An adjectival phrase can be modified by an adadjective.
+</P>
+<PRE>
+          mkAP : AdA  -&gt; A  -&gt; AP ;  -- 8. very old
+          mkAP : AdA  -&gt; AP -&gt; AP ;  -- 9. very very old
+</PRE>
+<P></P>
+<P>
+Conjunction can be formed from two or more adjectival phrases.
+</P>
+<PRE>
+          mkAP : Conj  -&gt; AP -&gt; AP -&gt; AP ; -- 10. old and big
+          mkAP : Conj  -&gt; ListAP   -&gt; AP ; -- 11. old, big, and warm
+          mkAP : DConj -&gt; AP -&gt; AP -&gt; AP ; -- 12. either old or big
+          mkAP : DConj -&gt; ListAP -&gt;   AP   -- 13. either old, big, or warm
+    
+          } ;
+</PRE>
+<P></P>
+<A NAME="toc34"></A>
+<H3>Adv, adverbial phrases</H3>
+<PRE>
+        mkAdv : overload {
+</PRE>
+<P></P>
+<P>
+Adverbs can be formed from adjectives.
+</P>
+<PRE>
+          mkAdv : A -&gt; Adv  ;   -- 1. warmly
+</PRE>
+<P></P>
+<P>
+Prepositional phrases are treated as adverbs.
+</P>
+<PRE>
+          mkAdv : Prep -&gt; NP -&gt; Adv ;  -- 2. with John
+</PRE>
+<P></P>
+<P>
+Subordinate sentences are treated as adverbs.
+</P>
+<PRE>
+          mkAdv : Subj -&gt; S -&gt; Adv  ;  -- 3. when John walks
+</PRE>
+<P></P>
+<P>
+An adjectival adverb can be compared to a noun phrase or a sentence.
+</P>
+<PRE>
+          mkAdv : CAdv -&gt; A -&gt; NP -&gt; Adv ;  -- 4. more warmly than John
+          mkAdv : CAdv -&gt; A -&gt; S  -&gt; Adv ;  -- 5. more warmly than John walks
+</PRE>
+<P></P>
+<P>
+Adverbs can be modified by adadjectives.
+</P>
+<PRE>
+          mkAdv : AdA -&gt; Adv -&gt; Adv ;  -- 6. very warmly
+</PRE>
+<P></P>
+<P>
+Conjunction can be formed from two or more adverbial phrases.
+</P>
+<PRE>
+          mkAdv : Conj  -&gt; Adv -&gt; Adv -&gt; Adv ; -- 7. here and now
+          mkAdv : Conj  -&gt; ListAdv -&gt;    Adv ; -- 8. with John, here and now
+          mkAdv : DConj -&gt; Adv -&gt; Adv -&gt; Adv ; -- 9. either here or now
+          mkAdv : DConj -&gt; ListAdv -&gt;    Adv   -- 10. either here, now, or with John
+          } ;
+</PRE>
+<P></P>
+<A NAME="toc35"></A>
+<H2>Questions and relatives</H2>
+<A NAME="toc36"></A>
+<H3>QS, question sentences</H3>
+<PRE>
+        mkQS : overload {
+</PRE>
+<P></P>
+<P>
+Just like a sentence <CODE>S</CODE> is built from a clause <CODE>Cl</CODE>, 
+a question sentence <CODE>QS</CODE> is built from
+a question clause <CODE>QCl</CODE> by fixing tense, anteriority and polarity. 
+Any of these arguments can be omitted, which results in the 
+default (present, simultaneous, and positive, respectively).
+</P>
+<PRE>
+          mkQS :                              QCl -&gt; QS ;  -- 1. who walks
+          mkQS : (Tense) -&gt; (Ant) -&gt; (Pol) -&gt; QCl -&gt; QS ;  -- 2. who wouldn't have walked
+</PRE>
+<P></P>
+<P>
+Since 'yes-no' question clauses can be built from clauses (see below), 
+we give a shortcut
+for building a question sentence directly from a clause, using the defaults
+present, simultaneous, and positive.
+</P>
+<PRE>
+          mkQS : Cl -&gt; QS  -- 3. does John walk
+          } ;
+</PRE>
+<P></P>
+<A NAME="toc37"></A>
+<H3>QCl, question clauses</H3>
+<PRE>
+        mkQCl : overload {
+</PRE>
+<P></P>
+<P>
+'Yes-no' question clauses are built from 'declarative' clauses.
+</P>
+<PRE>
+          mkQCl : Cl -&gt; QCl ;   -- 1. does John walk
+</PRE>
+<P></P>
+<P>
+'Wh' questions are built from interrogative pronouns in subject 
+or object position. The former uses a verb phrase; we don't give
+shortcuts for verb-argument sequences as we do for clauses.
+The latter uses the 'slash' category of objectless clauses 
+(see below); we give the common special case with a two-place verb.
+</P>
+<PRE>
+          mkQCl : IP -&gt; VP -&gt;       QCl ;  -- 2. who walks
+          mkQCl : IP -&gt; NP -&gt; V2 -&gt; QCl ;  -- 3. whom does John love
+          mkQCl : IP -&gt; Slash -&gt;    QCl ;  -- 4. whom does John love today
+</PRE>
+<P></P>
+<P>
+Adverbial 'wh' questions are built with interrogative adverbials, with the
+special case of prepositional phrases with interrogative pronouns.
+</P>
+<PRE>
+          mkQCl : IAdv -&gt; Cl -&gt;       QCl ;   -- 5. why does John walk
+          mkQCl : Prep -&gt; IP -&gt; Cl -&gt; QCl ;   -- 6. with who does John walk
+</PRE>
+<P></P>
+<P>
+An interrogative adverbial can serve as the complement of a copula.
+</P>
+<PRE>
+          mkQCl : IAdv -&gt; NP -&gt; QCl ;  -- 7. where is John
+</PRE>
+<P></P>
+<P>
+Existentials are a special construction.
+</P>
+<PRE>
+          mkQCl : IP -&gt; QCl  -- 8. what is there
+          } ;
+</PRE>
+<P></P>
+<A NAME="toc38"></A>
+<H3>IP, interrogative pronouns</H3>
+<PRE>
+        mkIP : overload {
+</PRE>
+<P></P>
+<P>
+Interrogative pronouns 
+can be formed much like noun phrases, by using interrogative determiners.
+</P>
+<PRE>
+          mkIP : IDet -&gt;                   N  -&gt; IP ; -- 1. which city
+          mkIP : IDet -&gt; (Num) -&gt; (Ord) -&gt; CN -&gt; IP ; -- 2. which five best cities
+</PRE>
+<P></P>
+<P>
+An interrogative pronoun can be modified by an adverb.
+</P>
+<PRE>
+          mkIP : IP -&gt; Adv -&gt; IP  -- 3. who in Paris
+          } ;
+</PRE>
+<P></P>
+<P>
+More interrogative pronouns and determiners can be found in <CODE>Structural</CODE>.
+</P>
+<A NAME="toc39"></A>
+<H3>IAdv, interrogative adverbs.</H3>
+<P>
+In addition to the interrogative adverbs defined in the <CODE>Structural</CODE> lexicon, they
+can be formed as prepositional phrases from interrogative pronouns.
+</P>
+<PRE>
+        mkIAdv : Prep -&gt; IP -&gt; IAdv ;  -- 1. in which city
+</PRE>
+<P></P>
+<P>
+More interrogative adverbs are given in <CODE>Structural</CODE>.
+</P>
+<A NAME="toc40"></A>
+<H3>RS, relative sentences</H3>
+<P>
+Just like a sentence <CODE>S</CODE> is built from a clause <CODE>Cl</CODE>, 
+a relative sentence <CODE>RS</CODE> is built from
+a relative clause <CODE>RCl</CODE> by fixing the tense, anteriority and polarity. 
+Any of these arguments
+can be omitted, which results in the default (present, simultaneous,
+and positive, respectively).
+</P>
+<PRE>
+        mkRS : overload {
+          mkRS : RCl -&gt;                              RS ; -- 1. that walk
+          mkRS : (Tense) -&gt; (Ant) -&gt; (Pol) -&gt; RCl -&gt; RS   -- 2. that wouldn't have walked
+          } ;
+</PRE>
+<P></P>
+<A NAME="toc41"></A>
+<H3>RCl, relative clauses</H3>
+<PRE>
+        mkRCl : overload {
+</PRE>
+<P></P>
+<P>
+Relative clauses are built from relative pronouns in subject or object position.
+The former uses a verb phrase; we don't give
+shortcuts for verb-argument sequences as we do for clauses.
+The latter uses the 'slash' category of objectless clauses (see below); 
+we give the common special case with a two-place verb.
+</P>
+<PRE>
+          mkRCl : RP -&gt; VP -&gt;       RCl ;  -- 1. that walk
+          mkRCl : RP -&gt; NP -&gt; V2 -&gt; RCl ;  -- 2. which John loves
+          mkRCl : RP -&gt; Slash -&gt;    RCl ;  -- 3. which John loves today
+</PRE>
+<P></P>
+<P>
+There is a simple 'such that' construction for forming relative 
+clauses from clauses.
+</P>
+<PRE>
+          mkRCl : Cl -&gt; RCl  -- 4. such that John loves her
+          } ;
+</PRE>
+<P></P>
+<A NAME="toc42"></A>
+<H3>RP, relative pronouns</H3>
+<P>
+There is an atomic relative pronoun
+</P>
+<PRE>
+          which_RP : RP ;   -- 1. which
+</PRE>
+<P></P>
+<P>
+A relative pronoun can be made into a kind of a prepositional phrase.
+</P>
+<PRE>
+          mkRP : Prep -&gt; NP -&gt; RP -&gt; RP ;  -- 2. all the houses in which
+</PRE>
+<P></P>
+<A NAME="toc43"></A>
+<H3>Slash, objectless sentences</H3>
+<PRE>
+        mkSlash : overload {
+</PRE>
+<P></P>
+<P>
+Objectless sentences are used in questions and relative clauses.
+The most common way of constructing them is by using a two-place verb
+with a subject but without an object.
+</P>
+<PRE>
+          mkSlash : NP -&gt; V2 -&gt; Slash ;  -- 1. (whom) John loves
+</PRE>
+<P></P>
+<P>
+The two-place verb can be separated from the subject by a verb-complement verb.
+</P>
+<PRE>
+          mkSlash : NP -&gt; VV -&gt; V2 -&gt; Slash ;  -- 2. (whom) John wants to see
+</PRE>
+<P></P>
+<P>
+The missing object can also be the noun phrase in a prepositional phrase.
+</P>
+<PRE>
+          mkSlash : Cl -&gt; Prep -&gt; Slash ;  -- 3. (with whom) John walks
+</PRE>
+<P></P>
+<P>
+An objectless sentence can be modified by an adverb.
+</P>
+<PRE>
+          mkSlash : Slash -&gt; Adv -&gt; Slash  -- 4. (whom) John loves today
+          } ;
+</PRE>
+<P></P>
+<A NAME="toc44"></A>
+<H2>Lists for coordination</H2>
+<P>
+The rules in this section are very uniform: a list can be built from two or more
+expressions of the same category.
+</P>
+<A NAME="toc45"></A>
+<H3>ListS, sentence lists</H3>
+<PRE>
+        mkListS : overload {
+         mkListS : S -&gt; S -&gt;     ListS ;  -- 1. he walks, I run
+         mkListS : S -&gt; ListS -&gt; ListS    -- 2. John walks, I run, you sleep
+         } ;
+</PRE>
+<P></P>
+<A NAME="toc46"></A>
+<H3>ListAdv, adverb lists</H3>
+<PRE>
+        mkListAdv : overload {
+         mkListAdv : Adv -&gt; Adv -&gt;     ListAdv ;  -- 1. here, now
+         mkListAdv : Adv -&gt; ListAdv -&gt; ListAdv    -- 2. to me, here, now
+         } ;
+</PRE>
+<P></P>
+<A NAME="toc47"></A>
+<H3>ListAP, adjectival phrase lists</H3>
+<PRE>
+        mkListAP : overload {
+         mkListAP : AP -&gt; AP -&gt;     ListAP ;  -- 1. old, big
+         mkListAP : AP -&gt; ListAP -&gt; ListAP    -- 2. old, big, warm
+         } ;
+</PRE>
+<P></P>
+<A NAME="toc48"></A>
+<H3>ListNP, noun phrase lists</H3>
+<PRE>
+        mkListNP : overload {
+         mkListNP : NP -&gt; NP -&gt;     ListNP ;  -- 1. John, I
+         mkListNP : NP -&gt; ListNP -&gt; ListNP    -- 2. John, I, that
+         } ;
+</PRE>
+<P></P>
 
-<!-- html code generated by txt2tags 2.4 (http://txt2tags.sf.net) -->
+<!-- html code generated by txt2tags 2.3 (http://txt2tags.sf.net) -->
 <!-- cmdline: txt2tags -thtml -\-toc api/Constructors.txt -->
 </BODY></HTML>

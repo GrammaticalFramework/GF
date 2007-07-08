@@ -6,7 +6,7 @@
 </HEAD><BODY BGCOLOR="white" TEXT="black">
 <P ALIGN="center"><CENTER><H1> Swedish Lexical Paradigms</H1>
 <FONT SIZE="4">
-<I>Last update: 2007-03-06 17:30:03 CET</I><BR>
+<I>Last update: 2007-07-06 09:20:11 CEST</I><BR>
 </FONT></CENTER>
 
 <P></P>
@@ -16,23 +16,21 @@
     <LI><A HREF="#toc1">Parameters</A>
     <LI><A HREF="#toc2">Nouns</A>
       <UL>
-      <LI><A HREF="#toc3">Compound nouns</A>
-      <LI><A HREF="#toc4">Relational nouns</A>
-      <LI><A HREF="#toc5">Relational common noun phrases</A>
-      <LI><A HREF="#toc6">Proper names and noun phrases</A>
+      <LI><A HREF="#toc3">Relational nouns</A>
+      <LI><A HREF="#toc4">Relational common noun phrases</A>
+      <LI><A HREF="#toc5">Proper names and noun phrases</A>
       </UL>
-    <LI><A HREF="#toc7">Adjectives</A>
+    <LI><A HREF="#toc6">Adjectives</A>
       <UL>
-      <LI><A HREF="#toc8">Two-place adjectives</A>
+      <LI><A HREF="#toc7">Two-place adjectives</A>
       </UL>
-    <LI><A HREF="#toc9">Adverbs</A>
-    <LI><A HREF="#toc10">Verbs</A>
+    <LI><A HREF="#toc8">Adverbs</A>
+    <LI><A HREF="#toc9">Verbs</A>
       <UL>
-      <LI><A HREF="#toc11">Verbs with a particle.</A>
-      <LI><A HREF="#toc12">Deponent verbs.</A>
-      <LI><A HREF="#toc13">Two-place verbs</A>
-      <LI><A HREF="#toc14">Three-place verbs</A>
-      <LI><A HREF="#toc15">Other complement patterns</A>
+      <LI><A HREF="#toc10">Deponent verbs.</A>
+      <LI><A HREF="#toc11">Two-place verbs</A>
+      <LI><A HREF="#toc12">Three-place verbs</A>
+      <LI><A HREF="#toc13">Other complement patterns</A>
       </UL>
     </UL>
 
@@ -116,7 +114,7 @@ To abstract over case names, we define the following.
 </PRE>
 <P></P>
 <P>
-Prepositions used in many-argument functions are just strings.
+Prepositions used in many-argument functions can be constructed from strings.
 </P>
 <PRE>
       mkPrep : Str -&gt; Prep ;
@@ -126,73 +124,65 @@ Prepositions used in many-argument functions are just strings.
 <A NAME="toc2"></A>
 <H2>Nouns</H2>
 <P>
-Worst case: give all four forms. The gender is computed from the
-last letter of the second form (if <I>n</I>, then <CODE>utrum</CODE>, otherwise <CODE>neutrum</CODE>).
+The following overloaded paradigm takes care of all noun formation.
 </P>
 <PRE>
-      mkN  : (apa,apan,apor,aporna : Str) -&gt; N ;
+      mkN : overload {
 </PRE>
 <P></P>
 <P>
-The regular function takes the singular indefinite form and computes the other
-forms and the gender by a heuristic. The heuristic is currently 
-to treat all words ending with <I>a</I> like <I>flicka</I>, with <I>e</I> like <I>rike</I>,
-and otherwise like <I>bil</I>.
-If in doubt, use the <CODE>cc</CODE> command to test!
+The one-argument case takes the singular indefinite form and computes 
+the other forms and the gender by a simple heuristic. The heuristic is currently 
+to treat all words ending with <I>a</I> like <I>apa-apor</I>, with <I>e</I> like <I>rike-riken</I>,
+and otherwise like <I>bil-bilar</I>.
 </P>
 <PRE>
-      regN : Str -&gt; N ;
+        mkN : (apa : Str) -&gt; N ;
 </PRE>
 <P></P>
 <P>
-Adding the gender manually greatly improves the correction of <CODE>regN</CODE>.
+The case with a string and gender makes it possible to treat 
+<I>lik</I> (neutrum) and <I>pojke</I> (utrum).
 </P>
 <PRE>
-      regGenN : Str -&gt; Gender -&gt; N ;
+        mkN : (lik : Str) -&gt; Gender -&gt; N ; 
 </PRE>
 <P></P>
 <P>
-In practice the worst case is often just: give singular and plural indefinite.
+Giving two forms - the singular and plural indefinite - is sufficient for
+most nouns. The paradigm deals correctly with the vowel contractions in 
+<I>nyckel - nycklar</I> such as <I>pojke - pojkar</I>.
 </P>
 <PRE>
-      mk2N : (nyckel,nycklar : Str) -&gt; N ;
+        mkN : (nyckel,nycklar : Str) -&gt; N ; 
 </PRE>
 <P></P>
 <P>
-This heuristic takes just the plural definite form and infers the others.
-It does not work if there are changes in the stem.
+In the worst case, four forms are needed.
 </P>
 <PRE>
-      mk1N : (bilarna : Str) -&gt; N ;
+        mkN : (museum,museet,museer,museerna : Str) -&gt; N
+      } ;
 </PRE>
 <P></P>
-<A NAME="toc3"></A>
-<H3>Compound nouns</H3>
 <P>
-All the functions above work quite as well to form compound nouns,
+All the functions above work quite as well to form <B>compound nouns</B>,
 such as <I>fotboll</I>. 
 </P>
-<A NAME="toc4"></A>
+<A NAME="toc3"></A>
 <H3>Relational nouns</H3>
 <P>
-Relational nouns (<I>dotter till x</I>) need a preposition. 
+Relational nouns (<I>kung av x</I>) are nouns with a preposition. 
+As a special case, we provide regular nouns (formed with one-argument <CODE>mkN</CODE>)
+with the preposition <I>av</I>. 
 </P>
 <PRE>
-      mkN2 : N -&gt; Prep -&gt; N2 ;
+      mkN2 : overload {
+        mkN2 : Str -&gt; N2 ;
+        mkN2 : N -&gt; Prep -&gt; N2
+      } ;
 </PRE>
 <P></P>
-<P>
-The most common preposition is <I>av</I>, and the following is a
-shortcut for regular, <CODE>nonhuman</CODE> relational nouns with <I>av</I>.
-</P>
-<PRE>
-      regN2 : Str -&gt; Gender -&gt; N2 ;
-</PRE>
-<P></P>
-<P>
-Use the function <CODE>mkPreposition</CODE> or see the section on prepositions below to  
-form other prepositions.
-</P>
 <P>
 Three-place relational nouns (<I>förbindelse från x till y</I>) 
 need two prepositions.
@@ -201,7 +191,7 @@ need two prepositions.
       mkN3 : N -&gt; Prep -&gt; Prep -&gt; N3 ;
 </PRE>
 <P></P>
-<A NAME="toc5"></A>
+<A NAME="toc4"></A>
 <H3>Relational common noun phrases</H3>
 <P>
 In some cases, you may want to make a complex <CODE>CN</CODE> into a
@@ -209,71 +199,82 @@ relational noun (e.g. <I>den före detta maken till</I>). However, <CODE>N2</CODE
 <CODE>N3</CODE> are purely lexical categories. But you can use the <CODE>AdvCN</CODE>
 and <CODE>PrepNP</CODE> constructions to build phrases like this.
 </P>
-<A NAME="toc6"></A>
+<A NAME="toc5"></A>
 <H3>Proper names and noun phrases</H3>
 <P>
-Proper names, with a regular genitive, are formed as follows
+Proper names, with a regular genitive, are formed from strings and
+have the default gender utrum. 
 </P>
 <PRE>
-      regGenPN : Str -&gt; Gender -&gt; PN ;
-      regPN    : Str -&gt; PN ;            -- utrum
+      mkPN : overload {
+        mkPN : Str -&gt; PN ;
+        mkPN : Str -&gt; Gender -&gt; PN ;
 </PRE>
 <P></P>
 <P>
-Sometimes you can reuse a common noun as a proper name, e.g. <I>Bank</I>.
+In the worst case, the genitive form is irregular.
 </P>
 <PRE>
-      nounPN : N -&gt; PN ;
+        mkPN : (jesus,jesu : Str) -&gt; Gender -&gt; PN
+        } ;
 </PRE>
 <P></P>
-<P>
-To form a noun phrase that can also be plural and have an irregular
-genitive, you can use the worst-case function.
-</P>
-<PRE>
-      mkNP : Str -&gt; Str -&gt; Number -&gt; Gender -&gt; NP ; 
-</PRE>
-<P></P>
-<A NAME="toc7"></A>
+<A NAME="toc6"></A>
 <H2>Adjectives</H2>
 <P>
-Adjectives may need as many as seven forms. 
+Adjectives need one to seven forms. 
 </P>
 <PRE>
-      mkA : (liten, litet, lilla, sma, mindre, minst, minsta : Str) -&gt; A ;
+      mkA : overload {
 </PRE>
 <P></P>
 <P>
-The regular pattern works for many adjectives, e.g. those ending
-with <I>ig</I>.
+Most adjectives are formed simply by adding endings to a stem.
 </P>
 <PRE>
-      regA : Str -&gt; A ;
+        mkA : (billig : Str) -&gt; A ;
 </PRE>
 <P></P>
 <P>
-Just the comparison forms can be irregular.
+Some adjectives have a deviant neuter form. The following pattern
+also recognizes the neuter formation <I>galen-galet</I> and forms the
+proper plural and comparison forms <I>galna-galnare-galnast</I>.
 </P>
 <PRE>
-      irregA : (tung,tyngre,tyngst : Str) -&gt; A ;
+        mkA : (bred,brett : Str) -&gt; A ;
 </PRE>
 <P></P>
 <P>
-Sometimes just the positive forms are irregular.
+Umlaut in comparison forms is 
 </P>
 <PRE>
-      mk3A : (galen,galet,galna : Str) -&gt; A ;
-      mk2A : (bred,brett        : Str) -&gt; A ;
+        mkA : (tung,tyngre,tyngst : Str) -&gt; A ;
 </PRE>
 <P></P>
 <P>
-Comparison forms may be compound (<I>mera svensk</I> - <I>mest svensk</I>).
+A few adjectives need 5 forms.
+</P>
+<PRE>
+        mkA : (god,gott,goda,battre,bast : Str) -&gt; A ;
+</PRE>
+<P></P>
+<P>
+Hardly any other adjective than <I>liten</I> needs the full 7 forms.
+</P>
+<PRE>
+        mkA : (liten,litet,lilla,sma,mindre,minst,minsta : Str) -&gt; A
+        } ;
+</PRE>
+<P></P>
+<P>
+Comparison forms may be compound (<I>mera svensk</I> - <I>mest svensk</I>);
+this behaviour can be forced on any adjective.
 </P>
 <PRE>
       compoundA : A -&gt; A ;
 </PRE>
 <P></P>
-<A NAME="toc8"></A>
+<A NAME="toc7"></A>
 <H3>Two-place adjectives</H3>
 <P>
 Two-place adjectives need a preposition for their second argument.
@@ -282,7 +283,7 @@ Two-place adjectives need a preposition for their second argument.
       mkA2 : A -&gt; Prep -&gt; A2 ;
 </PRE>
 <P></P>
-<A NAME="toc9"></A>
+<A NAME="toc8"></A>
 <H2>Adverbs</H2>
 <P>
 Adverbs are not inflected. Most lexical ones have position
@@ -301,89 +302,97 @@ Adverbs modifying adjectives and sentences can also be formed.
       mkAdA : Str -&gt; AdA ;
 </PRE>
 <P></P>
-<A NAME="toc10"></A>
+<A NAME="toc9"></A>
 <H2>Verbs</H2>
 <P>
-The worst case needs five forms.
+All verbs can be defined by the overloaded paradigm <CODE>mkV</CODE>.
 </P>
 <PRE>
-      mkV : (supa,super,sup,söp,supit,supen : Str) -&gt; V ;
+      mkV : overload {
 </PRE>
 <P></P>
 <P>
-The 'regular verb' function is inspired by Lexin. It uses the
+The 'regular verb' (= one-place) case is inspired by Lexin. It uses the
 present tense indicative form. The value is the first conjugation if the
 argument ends with <I>ar</I> (<I>tala</I> - <I>talar</I> - <I>talade</I> - <I>talat</I>),
 the second with <I>er</I> (<I>leka</I> - <I>leker</I> - <I>lekte</I> - <I>lekt</I>, with the
-variations like <I>gräva</I>, <I>vända</I>, <I>tyda</I>, <I>hyra</I>), and 
+variations like in <I>gräva</I>, <I>vända</I>, <I>tyda</I>, <I>hyra</I>), and 
 the third in other cases (<I>bo</I> - <I>bor</I> - <I>bodde</I> - <I>bott</I>).
+It is also possible to give the infinite form to it; they are treated
+as if they were implicitly suffixed by <I>r</I>. Moreover, deponent verbs
+are recognized from the final <I>s</I> (<I>hoppas</I>).
 </P>
 <PRE>
-      regV : (talar : Str) -&gt; V ;
+        mkV : (stämmer : Str) -&gt; V ;
 </PRE>
 <P></P>
 <P>
-The almost regular verb function needs the infinitive and the preteritum.
-It is not really more powerful than the new implementation of
-<CODE>regV</CODE> based on the indicative form.
+Most irregular verbs need just the conventional three forms.
 </P>
 <PRE>
-      mk2V : (leka,lekte : Str) -&gt; V ;
+        mkV : (dricka,drack,druckit : Str) -&gt; V ;
 </PRE>
 <P></P>
 <P>
-There is an extensive list of irregular verbs in the module <CODE>IrregSwe</CODE>.
-In practice, it is enough to give three forms, as in school books.
+In the worst case, six forms are given.
 </P>
 <PRE>
-      irregV : (dricka, drack, druckit : Str) -&gt; V ;
+        mkV : (gå,går,gå,gick,gått,gången : Str) -&gt; V ;
 </PRE>
 <P></P>
-<A NAME="toc11"></A>
-<H3>Verbs with a particle.</H3>
 <P>
-The particle, such as in <I>passa på</I>, is given as a string.
+Particle verbs, such as <I>passa på</I>, are formed by adding a string to a verb.
 </P>
 <PRE>
-      partV  : V -&gt; Str -&gt; V ;
+        mkV : V -&gt; Str -&gt; V
+        } ;
 </PRE>
 <P></P>
-<A NAME="toc12"></A>
+<A NAME="toc10"></A>
 <H3>Deponent verbs.</H3>
 <P>
 Some words are used in passive forms only, e.g. <I>hoppas</I>, some as
-reflexive e.g. <I>ångra sig</I>.
+reflexive e.g. <I>ångra sig</I>. Regular deponent verbs are also
+handled by <CODE>mkV</CODE> and recognized from the ending <I>s</I>.
 </P>
 <PRE>
       depV  : V -&gt; V ;
       reflV : V -&gt; V ;
 </PRE>
 <P></P>
-<A NAME="toc13"></A>
+<A NAME="toc11"></A>
 <H3>Two-place verbs</H3>
 <P>
-Two-place verbs need a preposition, except the special case with direct object.
-(transitive verbs). Notice that a particle comes from the <CODE>V</CODE>.
+Two-place verbs need a preposition, which default to the 'empty preposition'
+i.e. direct object. (transitive verbs). The simplest case is a regular
+verb (as in <CODE>mkV</CODE>) with a direct object.
+Notice that, if a particle is needed, it comes from the <CODE>V</CODE>.
 </P>
 <PRE>
-      mkV2  : V -&gt; Prep -&gt; V2 ;
-    
-      dirV2 : V -&gt; V2 ;
+      mkV2 : overload {
+        mkV2 : Str -&gt; V2 ;
+        mkV2 : V   -&gt; V2 ;
+        mkV2 : V   -&gt; Prep -&gt; V2
+        } ;
 </PRE>
 <P></P>
-<A NAME="toc14"></A>
+<A NAME="toc12"></A>
 <H3>Three-place verbs</H3>
 <P>
 Three-place (ditransitive) verbs need two prepositions, of which
-the first one or both can be absent.
+the first one or both can be absent. The simplest case is a regular
+verb (as in <CODE>mkV</CODE>) with no prepositions.
 </P>
 <PRE>
-      mkV3     : V -&gt; Prep -&gt; Prep -&gt; V3 ; -- tala, med, om
-      dirV3    : V -&gt; Prep -&gt; V3 ;         -- ge, (acc),till
-      dirdirV3 : V -&gt; V3 ;                 -- ge, (dat), (acc)
+      mkV3 : overload {
+        mkV3 : Str -&gt; V3 ;
+        mkV3 : V   -&gt; V3 ;
+        mkV3 : V   -&gt; Prep -&gt; V3 ;
+        mkV3 : V   -&gt; Prep -&gt; Prep -&gt; V3
+        } ;
 </PRE>
 <P></P>
-<A NAME="toc15"></A>
+<A NAME="toc13"></A>
 <H3>Other complement patterns</H3>
 <P>
 Verbs and adjectives can take complements such as sentences,
@@ -418,6 +427,6 @@ as an adverb. Likewise <CODE>AS, A2S, AV, A2V</CODE> are just <CODE>A</CODE>.
 </PRE>
 <P></P>
 
-<!-- html code generated by txt2tags 2.4 (http://txt2tags.sf.net) -->
+<!-- html code generated by txt2tags 2.3 (http://txt2tags.sf.net) -->
 <!-- cmdline: txt2tags -thtml -\-toc swedish/ParadigmsSwe.txt -->
 </BODY></HTML>

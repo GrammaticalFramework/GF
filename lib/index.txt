@@ -24,10 +24,10 @@ give some introduction to this idea.
 This library covers basic linguistic structures of 
 different languages.
 
-[Version 1.1 resource-1.0/doc] released 22 December 2006
+[Version 1.2 resource-1.0/doc] released 22 December 2006
 (enhanced version of 1.0).
 Covers Danish, English, Finnish, French, German, Italian, Norwegian, 
-Russian, Spanish, and Swedish.
+Russian, Spanish, and Swedish, and to a smaller extent Arabic and Catalan.
 
 Two older versions are also available:
 [Version 0.9 resource/]
@@ -51,3 +51,8 @@ of predefined (hard-coded) functions.
 for strings, tables, records, booleans.
 
 
+==License==
+
+All libraries in this directory and its subdirectories are
+releaced under GNU Lesser General Public License (LGPL). See the file 
+[LICENSE ./LICENSE] for more details.
