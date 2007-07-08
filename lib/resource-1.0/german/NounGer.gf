@@ -72,7 +72,7 @@ concrete NounGer of Noun = CatGer ** open ResGer, Prelude in {
     NumInt n = {s = n.s; n = table (Predef.Ints 1 * Predef.Ints 9) {
 			        <0,1>  => Sg ;
 				_ => Pl
-			   } ! <n.size,n.last> 
+			   } ! <1,2> ---- parser bug (AR 2/6/2007) <n.size,n.last>
       } ;
     OrdInt n = {s = \\_   => n.s ++ "."} ;
 
