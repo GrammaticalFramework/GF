@@ -91,7 +91,7 @@ lin
   go_V = regV "mennä" ;
   green_A = mkADeg (regN "vihreä") "vihreämpi" "vihrein" ;
   harbour_N = nKukko "satama" "sataman" "satamia" ;
-  hate_V2 = dirV2 (regV "vihata") ;
+  hate_V2 = mkV2 (regV "vihata") cpartitive ;
   hat_N = nLukko "hattu" ;
   have_V2 = dirV2 (caseV adessive vOlla) ;
   hear_V2 = dirV2 (regV "kuulla") ;
@@ -142,7 +142,7 @@ lin
   pen_N = nLukko "kynä" ;
   planet_N = nLukko "planeetta" ;
   plastic_N = regN "muovi" ;
-  play_V2 = dirV2 (regV "pelata") ; --- leikkiä, soittaa
+  play_V2 = mkV2 (regV "pelata") cpartitive ; --- leikkiä, soittaa
   policeman_N = regN "poliisi" ;
   priest_N = regN "pappi" ;
   probable_AS = mkAS (mkA (nNainen "todennäköistä")) ; --- for vowel harmony
@@ -162,7 +162,7 @@ lin
   school_N = nLukko "koulu" ;
   science_N = regN "tiede" ;
   sea_N = nMeri "meri" ;
-  seek_V2 = dirV2 (regV "etsiä") ;
+  seek_V2 = mkV2 (regV "etsiä") cpartitive ;
   see_V2 = dirV2 (
     mk12V "nähdä" "näkee" "näen" "näkevät" "nähkää" "nähdään"
       "näki" "näin" "näkisi" "nähnyt" "nähty" "nähdyn") ; 
@@ -180,7 +180,7 @@ lin
   small_A = mkADeg (reg2N "pieni" "pieniä") "pienempi" "pienin" ;
   snake_N = regN "käärme" ;
   sock_N = nLukko "sukka" ;
-  speak_V2 = dirV2 (regV "puhua") ;
+  speak_V2 = mkV2 (regV "puhua") cpartitive ;
   star_N = nSylki "tähti" ;
   steel_N = regN "teräs" ;
   stone_N = nSylki "kivi" ;
@@ -213,7 +213,7 @@ lin
 	 ) 
     "lämpimämpi" "lämpimin" ;
   war_N = nLukko "sota" ;
-  watch_V2 = dirV2 (regV "katsella") ;
+  watch_V2 = mkV2 (regV "katsella") cpartitive ;
   water_N = reg3N "vesi" "veden" "vesiä" ;
   white_A = regA "valkoinen" ;
   window_N = reg2N "ikkuna" "ikkunoita" ;
@@ -325,35 +325,35 @@ lin
   cut_V2 = dirV2 (reg2V "leikata" "leikkasi") ;
   dig_V = regV "kaivaa" ;
   fall_V = reg3V "pudota" "putoan" "putosi" ;
-  fear_V2 = dirV2 (reg3V "pelätä" "pelkään" "pelkäsi") ;
-  fight_V2 = dirV2 (regV "taistella") ;
+  fear_V2 = mkV2 (reg3V "pelätä" "pelkään" "pelkäsi") cpartitive ;
+  fight_V2 = mkV2 (regV "taistella") (postPrep partitive "vastaan") ;
   float_V = regV "kellua" ;
   flow_V = reg3V "virrata" "virtaan" "virtasi" ;
   fly_V = regV "lentää" ;
   freeze_V = regV "jäätyä" ;
   give_V3 = dirdirV3 (reg3V "antaa" "annan" "antoi") ;
-  hit_V2 = dirV2 (regV "lyödä") ;
-  hold_V2 = dirV2 (regV "pitää") ;
-  hunt_V2 = dirV2 (regV "metsästää") ;
+  hit_V2 = mkV2 (regV "lyödä") cpartitive ;
+  hold_V2 = mkV2 (regV "pitää") cpartitive ;
+  hunt_V2 = mkV2 (regV "metsästää") cpartitive ;
   kill_V2 = dirV2 (regV "tappaa") ;
   laugh_V = reg3V "nauraa" "nauran" "nauroi" ;
   lie_V = reg3V "maata" "makaan" "makasi" ;
   play_V = regV "pelata" ;
   pull_V2 = dirV2 (regV "vetää") ;
   push_V2 = dirV2 (regV "työntää") ;
-  rub_V2 = dirV2 (regV "hieroa") ;
-  scratch_V2 = dirV2 (regV "raapia") ;
+  rub_V2 = mkV2 (regV "hieroa") cpartitive ;
+  scratch_V2 = mkV2 (regV "raapia") cpartitive ;
   sew_V = regV "kylvää" ;
   sing_V = regV "laulaa" ;
   sit_V = regV "istua" ;
   smell_V = reg2V "haistaa" "haistoi" ;
   spit_V = regV "sylkeä" ;
   split_V2 = dirV2 (reg2V "halkaista" "halkaisi") ;
-  squeeze_V2 = dirV2 (regV "puristaa") ;
-  stab_V2 = dirV2 (regV "pistää") ;
+  squeeze_V2 = mkV2 (regV "puristaa") cpartitive ;
+  stab_V2 = mkV2 (regV "pistää") cpartitive ;
   stand_V = mk12V "seistä" "seisoo" "seison" "seisovat" "seiskää" "seistään"
       "seisoi" "seisoin" "seisoisi" "seissyt" "seisty" "seistyn" ; --- *seisoivät
-  suck_V2 = dirV2 (regV "imeä") ;
+  suck_V2 = mkV2 (regV "imeä") cpartitive ;
   swell_V = mk12V "turvota" "turpoaa" "turpoan" "turpoavat" "turvotkaa" "turvotaan"
       "turposi" "turposin" "turpoaisi" "turvonnut" "turvottu" "turvotun" ;
   swim_V = reg3V "uida" "uin" "ui" ;
@@ -381,5 +381,6 @@ lin
  oper
     mkOrd : N -> Ord ;
     mkOrd x = {s = \\n,c => x.s ! NCase n c; lock_Ord = <> } ;
+    cpartitive = casePrep partitive ;
 
 } ;
