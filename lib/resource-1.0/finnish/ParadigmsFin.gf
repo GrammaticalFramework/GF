@@ -285,19 +285,17 @@ oper
 
 --3 Two-place verbs
 --
--- Two-place verbs need a case, and can have a pre- or postposition.
+-- Two-place verbs need an object case, and can have a pre- or postposition.
+-- The default is direct (accusative) object. There is also a special case
+-- with case only. The string-only argument case yields a regular verb with
+-- accusative object.
 
-  mkV2 : V -> Prep -> V2 ;
-
--- If the complement needs just a case, the following special function can be used.
-
-  caseV2 : V -> Case -> V2 ;
-
--- Verbs with a direct (accusative) object
--- are special, since their complement case is finally decided in syntax.
--- But this is taken care of in $VerbFin$.
-
-  dirV2 : V -> V2 ;
+  mkV2 : overload {
+    mkV2 : Str -> V2 ;
+    mkV2 : V -> V2 ;
+    mkV2 : V -> Case -> V2 ;
+    mkV2 : V -> Prep -> V2 ;
+    } ;
 
 
 --3 Three-place verbs
@@ -557,9 +555,9 @@ reg3N = \vesi,veden,vesiä ->
     v2v (MorphoFin.vHuoltaa ottaa otan otti otin)  ** {sc = NPCase Nom ; lock_V = <>} ;
 
 
-  mkV2 = \v,c -> v ** {c2 = c ; lock_V2 = <>} ;
-  caseV2 = \v,c -> mkV2 v (casePrep c) ; 
-  dirV2 v = mkV2 v accPrep ;
+  mk2V2 = \v,c -> v ** {c2 = c ; lock_V2 = <>} ;
+  caseV2 = \v,c -> mk2V2 v (casePrep c) ; 
+  dirV2 v = mk2V2 v accPrep ;
 
   mkAdv : Str -> Adv = \s -> {s = s ; lock_Adv = <>} ;
 
@@ -578,11 +576,11 @@ reg3N = \vesi,veden,vesiä ->
   A2V : Type = A2 ;
 
   mkV0  v = v ** {lock_V = <>} ;
-  mkV2S v p = mkV2 v p ** {lock_V2 = <>} ;
-  mkV2V v p = mkV2 v p ** {lock_V2 = <>} ;
+  mkV2S v p = mk2V2 v p ** {lock_V2 = <>} ;
+  mkV2V v p = mk2V2 v p ** {lock_V2 = <>} ;
   mkVA  v p = v ** {c2 = p ; lock_VA = <>} ;
   mkV2A v p q = v ** {c2 = p ; c3 = q ; lock_V2A = <>} ;
-  mkV2Q v p = mkV2 v p ** {lock_V2 = <>} ;
+  mkV2Q v p = mk2V2 v p ** {lock_V2 = <>} ;
 
   mkAS  v = v ** {lock_A = <>} ;
   mkA2S v p = mkA2 v p ** {lock_A = <>} ;
@@ -623,5 +621,17 @@ reg3N = \vesi,veden,vesiä ->
   subjcaseV : V -> Case -> V ;
 
   regPN : Str -> PN ;
+
+  mkV2 = overload {
+    mkV2 : Str -> V2 = \s -> dirV2 (regV s) ;
+    mkV2 : V -> V2 = dirV2 ;
+    mkV2 : V -> Case -> V2 = caseV2 ;
+    mkV2 : V -> Prep -> V2 = mk2V2 ;
+    } ;
+
+  dirV2 : V -> V2 ;
+  mk2V2 : V -> Prep -> V2 ;
+  caseV2 : V -> Case -> V2 ;
+  dirV2 : V -> V2 ;
 
 } ;
