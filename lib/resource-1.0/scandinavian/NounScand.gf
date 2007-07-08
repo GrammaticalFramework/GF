@@ -108,7 +108,8 @@ incomplete concrete NounScand of Noun =
     MassDet = {s = \\_,_ => [] ; n = Sg ; det = DIndef} ;
 
     UseN, UseN2, UseN3 = \noun -> {
-      s = \\n,d => noun.s ! n ! specDet d ;
+      s = \\n,d,c => noun.s ! n ! specDet d ! c ; 
+           ---- part app wo c shows editor bug. AR 8/7/2007
       g = noun.g ;
       isMod = False
       } ;
