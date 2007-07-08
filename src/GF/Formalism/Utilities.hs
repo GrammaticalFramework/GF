@@ -258,6 +258,21 @@ chart2forests :: (Ord n, Ord e) =>
 					-- In essence, the result is a map from 'n' to forest daughters
 
 -- simplest implementation
+
+chart2forests chart isMeta = concatMap (edge2forests [])
+    where edge2forests edges edge
+              | isMeta edge       = [FMeta]
+              | edge `elem` edges = []
+              | otherwise         = map (item2forest (edge:edges)) $ chart ? edge
+          item2forest edges (SMeta)               = FMeta
+          item2forest edges (SNode name children) = 
+                                    FNode name $ children >>= mapM (edge2forests edges)
+          item2forest edges (SString s)           = FString s
+          item2forest edges (SInt    n)           = FInt    n
+          item2forest edges (SFloat  f)           = FFloat  f
+
+{- -before AR inserted peb's patch 8/7/2007, this was:
+
 chart2forests chart isMeta  = concatMap edge2forests
     where edge2forests edge = if isMeta edge then [FMeta]
 			      else map item2forest $ chart ? edge
@@ -267,6 +282,7 @@ chart2forests chart isMeta  = concatMap edge2forests
 	  item2forest (SInt    n)           = FInt    n
 	  item2forest (SFloat  f)           = FFloat  f
 	  
+-}
 
 {-
 -- more intelligent(?) implementation,
