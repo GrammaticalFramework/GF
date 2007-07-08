@@ -1,7 +1,5 @@
---# -path=.:api:present:prelude:mathematical
+--# -path=.:present:prelude
 
 concrete MathEng of Math = MathI with
-  (Grammar = GrammarEng), 
-  (Combinators = CombinatorsEng), 
-  (Predication = PredicationEng), 
+  (Syntax = SyntaxEng), 
   (Lex = LexEng) ;

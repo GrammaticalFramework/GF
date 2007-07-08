@@ -4,7 +4,7 @@ Aarne Ranta
 
 
 
-In this directory, we have a minimal resource grammar
+We will show how to build a minimal resource grammar
 application whose architecture scales up to much
 larger applications. The application is run from the
 shell by the command
@@ -46,74 +46,67 @@ The system was built in 22 steps explained below.
 
 1. Write ``Math.gf``, which defines what you want to say.
 ```
-abstract Math = {
-
+  abstract Math = {
   cat Prop ; Elem ;
-
   fun 
     And  : Prop -> Prop -> Prop ;
     Even : Elem -> Prop ;
     Zero : Elem ;
-
-}
+  }
 ```
 2. Write ``Lex.gf``, which defines which language-dependent
 parts are needed in the concrete syntax. These are mostly
 words (lexicon), but can in fact be any operations. The definitions
 only use resource abstract syntax, which is opened.
 ```
-interface Lex = open Grammar in {
-
+  interface Lex = open Syntax in {
   oper
     even_A : A ;
     zero_PN : PN ;
-
-} 
+  } 
 ```
 3. Write ``LexEng.gf``, the English implementation of ``Lex.gf``
 This module uses English resource libraries.
 ```
-instance LexEng of Lex = open GrammarEng, ParadigmsEng in {
-
+  instance LexEng of Lex = open GrammarEng, ParadigmsEng in {
   oper
     even_A = regA "even" ;
     zero_PN = regPN "zero" ;
 
-}
+  }
 ```
 4. Write ``MathI.gf``, a language-independent concrete syntax of
-``Math.gf``. It opens interfaces can resource abstract syntaxes,
+``Math.gf``. It opens interfaces.
 which makes it an incomplete module, aka. parametrized module, aka.
 functor.
 ```
-incomplete concrete MathI of Math = 
-  open Grammar, Combinators, Predication, Lex in {
+  incomplete concrete MathI of Math = 
+
+  open Syntax, Lex in {
 
   flags startcat = Prop ;
 
   lincat 
     Prop = S ;
     Elem = NP ;
-
   lin 
-    And x y = coord and_Conj x y ;
-    Even x = PosCl (pred even_A x) ;
-    Zero = UsePN zero_PN ;
-}
+    And x y = mkS and_Conj x y ;
+    Even x = mkS (mkCl x even_A) ;
+    Zero = mkNP zero_PN ;
+  }
 ```
 5. Write ``MathEng.gf``, which is just an instatiation of ``MathI.gf``,
 replacing the interfaces by their English instances. This is the module
 that will be used as a top module in GF, so it contains a path to
 the libraries.
 ```
---# -path=.:api:present:prelude:mathematical
-
-concrete MathEng of Math = MathI with
-  (Grammar = GrammarEng), 
-  (Combinators = CombinatorsEng), 
-  (Predication = PredicationEng), 
-  (Lex = LexEng) ;
+  instance LexEng of Lex = open SyntaxEng, ParadigmsEng in {
+  oper
+    even_A = mkA "even" ;
+    zero_PN = mkPN "zero" ;
+  }
 ```
+
 
 ===Testing===
 
@@ -128,38 +121,38 @@ concrete MathEng of Math = MathI with
 ```
 When importing the grammar, you will fail if you haven't 
 - correctly defined your ``GF_LIB_PATH`` as ``GF/lib``
-- compiled the resourcec by ``make`` in ``GF/lib/resource-1.0``
+- installed the resource package or 
+  compiled the resource from source by ``make`` in ``GF/lib/resource-1.0``
+
 
 
 ===Adding a new language===
 
 7. Now it is time to add a new language. Write a French lexicon ``LexFre.gf``:
 ```
-instance LexFre of Lex = open GrammarFre, ParadigmsFre in {
-
+  instance LexFre of Lex = open SyntaxFre, ParadigmsFre in {
   oper
-    even_A = regA "pair" ;
-    zero_PN = regPN "zéro" ;
-}
+    even_A = mkA "pair" ;
+    zero_PN = mkPN "zéro" ;
+  }
 ```
 8. You also need a French concrete syntax, ``MathFre.gf``:
 ```
---# -path=.:api:present:prelude:mathematical
+  --# -path=.:present:prelude
 
-concrete MathFre of Math = MathI with
-  (Grammar = GrammarFre), 
-  (Combinators = CombinatorsFre), 
-  (Predication = PredicationFre), 
-  (Lex = LexFre) ;
+  concrete MathFre of Math = MathI with
+    (Syntax = SyntaxFre), 
+    (Lex = LexFre) ;
 ```
 9. This time, you can test multilingual generation:
 ```
   > i MathFre.gf
-  > gr -tr | l -multi
+  > gr | tb
   Even Zero
   zéro est pair
   zero is even
 ```
+
 
 ===Extending the language===
 
@@ -175,15 +168,15 @@ It is first added to ``Math.gf``:
 12. Then you can give a language-independent concrete syntax in
 ``MathI.gf``:
 ```
-  lin Odd x = PosCl (pred odd_A x) ;
+  lin Odd x = mkS (mkCl x odd_A) ;
 ```
 13. The new word is implemented in ``LexEng.gf``.
 ```
-  oper odd_A = regA "odd" ;
+  oper odd_A = mkA "odd" ;
 ```
 14. The new word is implemented in ``LexFre.gf``.
 ```
-  oper odd_A = regA "impair" ;
+  oper odd_A = mkA "impair" ;
 ```
 15. Now you can test with the extended lexicon. First empty
 the environment to get rid of the old abstract syntax, then
@@ -192,11 +185,12 @@ import the new versions of the grammars.
   > e
   > i MathEng.gf
   > i MathFre.gf
-  > gr -tr | l -multi
+  > gr | tb
   And (Odd Zero) (Even Zero)
   zéro est impair et zéro est pair
   zero is odd and zero is even
 ```
+
 
 ==Building a user program==
 

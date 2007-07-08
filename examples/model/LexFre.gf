@@ -1,8 +1,8 @@
-instance LexFre of Lex = open GrammarFre, ParadigmsFre in {
+instance LexFre of Lex = open SyntaxFre, ParadigmsFre in {
 
   oper
-    even_A = regA "pair" ;
-    odd_A = regA "impair" ;
-    zero_PN = regPN "zéro" ;
+    even_A = mkA "pair" ;
+    odd_A = mkA "impair" ;
+    zero_PN = mkPN "zéro" ;
 
 }

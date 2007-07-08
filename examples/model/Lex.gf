@@ -1,4 +1,4 @@
-interface Lex = open Grammar in {
+interface Lex = open Syntax in {
 
   oper
     even_A : A ;

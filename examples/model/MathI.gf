@@ -1,5 +1,5 @@
 incomplete concrete MathI of Math = 
-  open Grammar, Combinators, Predication, Lex in {
+  open Syntax, Lex in {
 
   flags startcat = Prop ;
 
@@ -8,9 +8,9 @@ incomplete concrete MathI of Math =
     Elem = NP ;
 
   lin 
-    And x y = coord and_Conj x y ;
-    Even x = PosCl (pred even_A x) ;
-    Odd x = PosCl (pred odd_A x) ;
-    Zero = UsePN zero_PN ;
+    And x y = mkS and_Conj x y ;
+    Even x = mkS (mkCl x even_A) ;
+    Odd x = mkS (mkCl x odd_A) ;
+    Zero = mkNP zero_PN ;
 
 }
