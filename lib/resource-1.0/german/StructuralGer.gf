@@ -24,8 +24,8 @@ concrete StructuralGer of Structural = CatGer **
   can8know_VV, can_VV = auxVV 
       (mkV 
         "können" "kann" "kannst" "kann" "könnt" "könn" 
-        "konnte" "konntest" "konnten" "könntet"
-        "könnte" "gekonnen" [] 
+        "konnte" "konntest" "konnten" "konntet"
+        "könnte" "gekonnt" [] 
         VHaben) ;
   during_Prep = mkPrep "während" Gen ;
   either7or_DConj = sd2 "entweder" "oder" ** {n = Sg} ;
@@ -57,7 +57,7 @@ concrete StructuralGer of Structural = CatGer **
       (mkV 
         "müssen" "muß" "mußt" "muß" "müßt" "müß" 
         "mußte" "mußtest" "mußten" "mußtet"
-        "mußte" "gemüßt" [] 
+        "müßte" "gemußt" [] 
         VHaben) ;
   one_Quant = {
       s = \\g,c => "ein" + pronEnding ! GSg g ! c ;  
@@ -104,7 +104,7 @@ concrete StructuralGer of Structural = CatGer **
       (mkV 
         "wollen" "will" "willst" "will" "wollt" "woll" 
         "wollte" "wolltest" "wollten" "wolltet"
-        "wollte" "gewollen" [] 
+        "wollte" "gewollt" [] 
         VHaben) ;
   we_Pron = mkPronPers "wir" "uns"  "uns"   "unser"  "unser" Fem Pl P1 ;
 

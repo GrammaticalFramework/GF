@@ -21,7 +21,7 @@ lin
   bad_A = regA "schlecht" ;
   bank_N = reg2N "Bank" "Banken" feminine ;
   beautiful_A = regA "schön" ;
-  become_VA = mkVA (mk6V "werde" "wird" "werd" "wurde" "würde" "geworden") ;
+  become_VA = mkVA IrregGer.werden_V ;
   beer_N = reg2N "Bier" "Biere" neuter ;
   beg_V2V = mkV2V (mk6V "bitten" "bittet" "bitte" "bat" "bäte" "gebeten") accPrep ;
   big_A = mk3A "groß" "größer" "größte" ;
