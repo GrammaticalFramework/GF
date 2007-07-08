@@ -52,8 +52,9 @@ parseString os sg cat = liftM fst . parseStringMsg os sg cat
 
 parseStringMsg :: Options -> StateGrammar -> CFCat -> String -> Err ([Tree],String)
 parseStringMsg os sg cat s = do
-  (ts,(_,ss)) <- checkStart $ parseStringC os sg cat s
-  return (ts, unlines $ reverse ss)
+  case checkStart $ parseStringC os sg cat s of
+    Ok (ts,(_,ss)) -> return (ts, unlines $ reverse ss)
+    Bad s -> return ([],s)
 
 parseStringC :: Options -> StateGrammar -> CFCat -> String -> Check [Tree]
 parseStringC opts0 sg cat s 
@@ -92,7 +93,8 @@ parseStringC opts0 sg cat s
         uncap s = s
 
   case unknowns of
-    _:_ -> fail $ "Unknown words:" +++ unwords unknowns
+    _:_ | oElem (iOpt "trynextlang") opts -> return []
+    _:_  -> fail $ "Unknown words:" +++ unwords unknowns
     _ -> do  
   
      ts <- checkErr $ New.parse algorithm strategy (pInfo sg) (absId sg) cat toks

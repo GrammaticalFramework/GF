@@ -109,7 +109,8 @@ parse :: GFGrammar -> GFCat -> String -> [Tree]
 parse sgr cat = errVal [] . parseString noOptions sgr cat
 
 parseAny :: [GFGrammar] -> GFCat -> String -> [Tree]
-parseAny grs cat s = concat [parse gr cat s | gr <- grs]
+parseAny grs cat s = 
+  concat [errVal [] (parseString (options [iOpt "trynextlang"]) gr cat s) | gr <- grs]
 
 translate :: GFGrammar -> GFGrammar -> GFCat -> String -> [String]
 translate ig og cat = map (linearize og) . parse ig cat
@@ -121,7 +122,8 @@ translateFromAny :: [GFGrammar] -> GFGrammar -> GFCat -> String -> [String]
 translateFromAny igs og cat s = concat [translate ig og cat s | ig <- igs]
 
 translateBetweenAll :: [GFGrammar] -> GFCat -> String -> [String]
-translateBetweenAll grs cat = concat . map (linearizeToAll grs) . parseAny grs cat
+translateBetweenAll grs cat = 
+  concat . map (linearizeToAll grs) . parseAny grs cat
 
 homonyms :: GFGrammar -> GFCat -> Tree -> [Tree]
 homonyms gr cat = nub . parse gr cat . linearize gr
