@@ -31,7 +31,11 @@ in {
   lin dingen_V =  irregV "dingen" "dingt" "dingte" "dang" "gedungen" ;
   lin dreschen_V =  irregV "dreschen" "drischt" "drosch" "drösche" "gedroschen" ;
   lin dringen_V =  irregV "dringen" "dringt" "drang" "dränge" "gedrungen" ;
-  lin dürfen_V =  irregV "dürfen" "darf" "durfte" "dürfte" "gedurft" ;
+  lin dürfen_V = M.mkV 
+        "dürfen" "darf" "darfst" "darf" "dürft" "dürf" 
+        "durfte" "durftest" "durften" "durftet"
+        "dürfte" "gedurft" [] 
+        M.VHaben ** {lock_V = <>} ;
   lin empfehlen_V =  irregV "empfehlen" "empfiehlt" "empfahl" 
     (variants {"empföhle" ; "empfähle"}) "empfohlen" ;
   lin erlöschen_V =  irregV "erlöschen" "erlischt" "erlosch" "erlösche" "erloschen" ;
@@ -78,7 +82,11 @@ in {
   lin klingen_V =  irregV "klingen" "klingt" "klang" "klänge" "geklungen" ;
   lin kneifen_V =  irregV "kneifen" "kneift" "kniff" "kniffe" "gekniffen" ;
   lin kommen_V =  irregV "kommen" "kommt" "kam" "käme" "gekommen" ;
-  lin können_V =  irregV "können" "kann" "konnte" "könnte" "gekonnt" ;
+  lin können_V =  M.mkV 
+        "können" "kann" "kannst" "kann" "könnt" "könn" 
+        "konnte" "konntest" "konnten" "konntet"
+        "könnte" "gekonnt" [] 
+        M.VHaben  ** {lock_V = <>} ;
   lin kriechen_V =  irregV "kriechen" "kriecht" "kroch" "kröche" "gekrochen" ;
   lin küren_V =  irregV "küren" "kürt" "kürte" "kor" "gekürt" ;
   lin laden_V =  irregV "laden" "lädt" "lud" "lüde" "geladen" ;
@@ -99,8 +107,11 @@ in {
         "mochte" "mochtest" "mochten" "mochtet"
         "möchte" "gemocht" [] 
         M.VHaben ** {lock_V = <>} ;
-
-  lin müssen_V =  irregV "müssen" "muß" "mußte" "müßte" "gemußt" ;
+  lin müssen_V = M.mkV 
+        "müssen" "muß" "mußt" "muß" "müßt" "müß" 
+        "mußte" "mußtest" "mußten" "mußtet"
+        "müßte" "gemußt" [] 
+        M.VHaben ** {lock_V = <>} ;
   lin nehmen_V = mk6V "nehmen" "nimmt" "nimm" "nahm" "nähme" "genommen" ;
   lin nennen_V =  irregV "nennen" "nennt" "nannte" "nennte" "genannt" ;
   lin pfeifen_V =  irregV "pfeifen" "pfeift" "pfiff" "pfiffe" "gepfiffen" ;
@@ -154,7 +165,12 @@ in {
   lin sinken_V =  irregV "sinken" "sinkt" "sank" "sänke" "gesunken" ;
   lin sinnen_V =  irregV "sinnen" "sinnt" "sann" "sänne" "gesonnen" ;
   lin sitzen_V =  irregV "sitzen" "sitzt" "saß" "säße" "gesessen" ;
-  lin sollen_V =  irregV "sollen" "sollt" "sollte" "sollte" "gesollt" ;
+  lin sollen_V =  M.mkV 
+        "sollen" "soll" "sollst" "soll" "sollt" "soll" 
+        "sollte" "solltest" "sollten" "solltet"
+        "sollte" "gesollt" [] 
+        M.VHaben ** {lock_V = <>} ;
+
   lin speien_V =  irregV "speien" "speit" "spie" "spie" "gespien" ;
   lin spinnen_V =  irregV "spinnen" "spinnt" "spann" (variants {"spönne" ; "spänne"}) "gesponnen" ;
   lin spleißen_V =  irregV "spleißen" "spleißt" "spliß" "spliße" "gesplissen" ;
@@ -188,7 +204,11 @@ in {
   lin weisen_V =  irregV "weisen" "weist" "wies" "wiese" "gewiesen" ;
   lin wenden_V =  irregV "wenden" "wendt" (variants {"wandte" ; "wendete"}) (variants {"wandte" ; "wendete"}) (variants {"gewandt" ; "gewendet"}) ;
   lin werben_V =  irregV "werben" "wirbt" "warb" "würbe" "geworben" ;
-  lin werden_V =  irregV "werden" "wird" (variants {"wurde" ; "ward"}) "würde" "geworden" ;
+  lin werden_V = M.mkV 
+        "werden" "werde" "wirst" "wird" "werdet" "werd" 
+        "wurde" "wurdest" "wurden" "wurdet"
+        "würde" "geworden" [] 
+        M.VHaben ** {lock_V = <>} ;
   lin werfen_V =  irregV "werfen" "wirft" "warf" "würfe" "geworfen" ;
   lin wiegen_V =  irregV "wiegen" "wiegt" "wog" "wöge" "gewogen" ;
   lin winden_V =  irregV "winden" "windt" "wand" "wände" "gewunden" ;
@@ -196,7 +216,7 @@ in {
   lin wollen_V =  M.mkV 
         "wollen" "will" "willst" "will" "wollt" "woll" 
         "wollte" "wolltest" "wollten" "wolltet"
-        "wollte" "gewollen" [] 
+        "wollte" "gewollt" [] 
         M.VHaben ** {lock_V = <>} ;
 
 
