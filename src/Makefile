@@ -253,7 +253,7 @@ grammar-dist:
 	-rm -rf $(GRAMMAR_DIST_DIR)
 	mkdir $(GRAMMAR_DIST_DIR)
 	cp -r ../_darcs/current/{lib,examples} $(GRAMMAR_DIST_DIR)
-	$(MAKE) GF_LIB_PATH=.. -C $(GRAMMAR_DIST_DIR)/lib/resource-1.0 show-path present mathematical multimodal langs
+	$(MAKE) GF_LIB_PATH=.. -C $(GRAMMAR_DIST_DIR)/lib/resource-1.0 show-path prelude present alltenses mathematical api multimodal langs
 	$(TAR) -zcf $(GRAMMAR_DIST_DIR).tgz $(GRAMMAR_DIST_DIR)
 	rm -rf $(GRAMMAR_DIST_DIR)
 
