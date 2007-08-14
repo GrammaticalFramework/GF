@@ -1,7 +1,7 @@
 concrete FoodEng of Food = {
 
   lincat
-    S, Item, Kind, Quality = {s : Str} ;
+    Phrase, Item, Kind, Quality = {s : Str} ;
 
   lin
     Is item quality = {s = item.s ++ "is" ++ quality.s} ;

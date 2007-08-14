@@ -1,7 +1,7 @@
 concrete FoodIta of Food = {
 
   lincat
-    S, Item, Kind, Quality = {s : Str} ;
+    Phrase, Item, Kind, Quality = {s : Str} ;
 
   lin
     Is item quality = {s = item.s ++ "è" ++ quality.s} ;
