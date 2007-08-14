@@ -245,6 +245,8 @@ known as BNF grammars in computer science.
 
 
 
+=Getting started=
+
 ==GF = Grammatical Framework==
 
 The term GF is used for different things:
@@ -463,60 +465,127 @@ As a common convention in this Tutorial, we will use
 - ``>`` as a prompt that marks GF commands
 
 
-Thus you should not type these prompts, but only the lines that
+Thus you should not type these prompts, but only the characters that
 follow them.
 
 
+==A "Hello World" grammar==
 
-%--!
-=The .cf grammar format=
+The tradition in programming language tutorials is to start with a
+program that prints "Hello World" on the terminal. GF should be no 
+exception. But our program has features that distinguish it from
+most "Hello World" programs:
+- **Multilinguality**: the message is printed in many languages.
+- **Reversibility**: in addition to printing, you can **parse** the
+  message and translate it to other languages.
 
-Now you are ready to try out your first grammar.
-We start with one that is not written in the GF language, but
-in the much more common BNF notation (Backus Naur Form). The GF 
-program understands a variant of this notation and translates it
-internally to GF's own representation. 
 
-To get started, type (or copy) the following lines into a file named
-``food.cf``:
+===The program: abstract syntax and concrete syntaxes===
+
+A GF program, in general, is a **multilingual grammar**. Its main parts
+are
+- an **abstract syntax**
+- one or more **concrete syntaxes**
+
+
+The abstract syntax defines, in a language-independent way, what **meanings**
+can be expressed in the grammar. In the "Hello World" grammar we want
+to express //Greetings//, where we greet a //Recipient//, which can be 
+//World// or //Mum// or //Friends//. The GF code for the abstract syntax
+has the following parts:
+- a **comment** (optional), saying what the module is doing 
+- a **module header** indicating that it is an abstract syntax
+  module named ``Hello``
+- a **module body** in braces, consisting of
+  - **category declarations** stating that ``Greeting`` and ``recipient``
+    are categories, i.e. types of meanings
+  - a **startcat flag declaration** stating that ``Greeting`` is the
+    main category, i.e. the one we are most interested in
+  - **function declarations** stating what meaning-building functions there
+    are; these are the three possible recipients, as well as the function
+    ``Hello`` constructing a greeting from a recipient
+
+
 ```
-Is.        S       ::= Item "is" Quality ;
-That.      Item    ::= "that" Kind ;
-This.      Item    ::= "this" Kind ;
-QKind.     Kind    ::= Quality Kind ;
-Cheese.    Kind    ::= "cheese" ;
-Fish.      Kind    ::= "fish" ;
-Wine.      Kind    ::= "wine" ;
-Italian.   Quality ::= "Italian" ;
-Boring.    Quality ::= "boring" ;
-Delicious. Quality ::= "delicious" ;
-Expensive. Quality ::= "expensive" ;
-Fresh.     Quality ::= "fresh" ;
-Very.      Quality ::= "very" Quality ;
-Warm.      Quality ::= "warm" ;
+  -- a "Hello World" grammar
+  abstract Hello = {
+
+  cat Greeting ; Recipient ;
+
+  flags startcat = Greeting ;
+
+  fun 
+    Hello : Recipient -> Greeting ;
+    World, Mum, Friends : Recipient ;
+  }
 ```
-For those who know ordinary BNF, the
-notation we use includes one extra element: a **label** appearing
-as the first element of each rule and terminated by a full stop.
+A concrete syntax defines a mapping from the abstract meanings to their
+expressions in a language. We first give an English concrete syntax, whose
+major parts are
+- a module header indicating that it is a concrete syntax of the abstract syntax
+  ``Hello``, itself named ``HelloEng``
+- a module body in braces, consisting of
+  - **linearization type definitions** stating that 
+    ``Greeting`` and ``recipient`` are **records** with a **string** ``s``
+  - **linearization definitions** telling what records are assigned to
+    each of the meanings defined in the abstract syntax; the recipients are
+    linearized to records containing single words, whereas the ``Hello`` greeting
+    has a function telling that the word ``hello`` is prefixed to the argument
 
-The grammar we wrote defines a set of phrases usable for speaking about food.
-It builds **sentences** (``S``) by assigning ``Quality``s to
-``Item``s. ``Item``s are build from ``Kind``s by prepending the
-word "this" or "that". ``Kind``s are either **atomic**, such as
-"cheese" and "wine", or formed by prepending a ``Quality`` to a
-``Kind``. A ``Quality`` is either atomic, such as "Italian" and "boring",
-or built by another ``Quality`` by prepending "very". Those familiar with
-the context-free grammar notation will notice that, for instance, the
-following sentence can be built using this grammar:
+
 ```
-  this delicious Italian wine is very very expensive
+  -- "Hello World" in English
+  concrete HelloEng of Hello = {
+
+  lincat Greeting, Recipient = {s : Str} ;
+
+  lin 
+    Hello rec = {s = "hello" ++ rec.s} ;
+    World = {s = "world"} ;
+    Mum = {s = "mum"} ;
+    Friends = {s = "friends"} ;
+  }
 ```
+To make the grammar truly multilingual, we add a Finnish and an Italian concrete
+syntax:
+```
+  -- "Hello World" in Finnish
+  concrete HelloFin of Hello = {
+
+  lincat Greeting, Recipient = {s : Str} ;
+
+  lin 
+    Hello rec = {s = "terve" ++ rec.s} ;
+    World = {s = "maailma"} ;
+    Mum = {s = "äiti"} ;
+    Friends = {s = "ystävät"} ;
+  }
+
+
+  -- "Hello World" in Italian
+  concrete HelloIta of Hello = {
+
+  lincat Greeting, Recipient = {s : Str} ;
+
+  lin 
+    Hello rec = {s = "ciao" ++ rec.s} ;
+    World = {s = "mondo"} ;
+    Mum = {s = "mamma"} ;
+    Friends = {s = "amici"} ;
+  }
+```
+Now we have a trilingual grammar usable for translation and for
+many other tasks, which we will now look into.
 
 
 
-%--!
-==Importing grammars and parsing strings==
+===Using the grammar in the GF program===
 
+In order to compile the grammar in GF, each of the four modules
+has to be put in a file named //modulename//``.gf``:
+```
+  Hello.gf  HelloEng.gf  HelloFin.gf  HelloIta.gf
+```
 The first GF command needed when using a grammar is to **import** it.
 The command has a long name, ``import``, and a short name, ``i``.
 You can type either
@@ -527,279 +596,141 @@ or
 ```
   > i food.cf
 ```
-to get the same effect.
-The effect is that the GF program **compiles** your grammar into an internal
-representation, and shows a new prompt when it is ready. It will also show how much
-CPU time is consumed:
+to get the same effect. In general, all GF commands have a long and a short name;
+short names are convenient when typing commands by hand, whereas long commands
+are more readable in scripts, i.e. files with lists of commands.
+
+The effect of ``import`` is that the GF program **compiles** your grammar 
+into an internal representation, and shows a new prompt when it is ready. 
+It will also show how much CPU time was consumed:
 ```
-  > i food.cf
-  - parsing cf food.cf 12 msec
-  16 msec
-  >        
+  > i HelloEng.gf
+  - compiling Hello.gf...   wrote file Hello.gfc 8 msec
+  - compiling HelloEng.gf...   wrote file HelloEng.gfc 12 msec
+
+  12 msec
 ```
 You can now use GF for **parsing**:
 ```
-  > parse "this cheese is delicious"
-  Is (This Cheese) Delicious
-
-  > p "that wine is very very Italian"
-  Is (That Wine) (Very (Very Italian))
+  > parse "hello world"
+  Hello World
 ```
 The ``parse`` (= ``p``) command takes a **string**
-(in double quotes) and returns an **abstract syntax tree** - the thing
-beginning with ``Is``. Trees are built from the rule labels given in the
-grammar, and record the ways in which the rules are used to produce the
-strings. A tree is, in general, something easier than a string 
-for a machine to understand and to process further.
+(in double quotes) and returns an **abstract syntax tree** - the meaning
+of the string defined in the abstract syntax.
+A tree is, in general, something easier than a string 
+for a machine to understand and to process further, although this
+is not so obvious in this simple grammar.
 
 Strings that return a tree when parsed do so in virtue of the grammar
-you imported. Try parsing something else, and you fail
+you imported. Try parsing something that is not in grammar, and you fail
 ```
-  > p "hello world"
-  Unknown words: hello world
+  > parse "hello dad"
+  Unknown words: dad
+
+  > parse "world hello"
+  no tree found
 ```
+In the first example, the failure is caused by an unknown word. 
+In the second example, the combination of words is ungrammatical.
 
-**Exercise**. Extend the grammar ``food.cf`` by ten new food kinds and
-qualities, and run the parser with new kinds of examples.
-
-
-**Exercise**. Add a rule that enables questions of the form 
-//is this cheese Italian//.
-
-
-
-**Exercise**. Add the rule
-```
-  IsVery. S ::= Item "is" "very" Quality ;
-```
-and see what happens when parsing ``this wine is very very Italian``.
-You have just made the grammar **ambiguous**: it now assigns several
-trees to some strings.
-
-
-**Exercise**. Modify the grammar so that at most one ``Quality`` may
-attach to a given ``Kind``. Thus //boring Italian fish// will no longer
-be recognized.
-
-
-
-
-%--!
-==Generating trees and strings==
-
-You can also use GF for **linearizing**
+In addition to parsing, you can also use GF for **linearizing**
 (``linearize = l``). This is the inverse of
 parsing, taking trees into strings:
 ```
-  > linearize Is (That Wine) Warm
-  that wine is warm
+  > linearize Hello World
+  hello world
 ```
 What is the use of this? Typically not that you type in a tree at
 the GF prompt. The utility of linearization comes from the fact that
-you can obtain a tree from somewhere else. One way to do so is
-**random generation** (``generate_random = gr``):
+you can obtain a tree from somewhere else - for instance, from
+a parser. A prime example of this is **translation**: you parse
+with one concrete syntax and linearize with another. Let us
+now do this by first importing the Italian grammar:
 ```
-  > generate_random
-  Is (This (QKind Italian Fish)) Fresh
+  > import HelloIta.gf
 ```
-Now you can copy the tree and paste it to the ``linearize command``.
-Or, more conveniently, feed random generation into linearization by using
-a **pipe**.
+We can now parse with ``HelloEng`` and **pipe** the result
+into linearizing with ``HelloIta``:
 ```
-  > gr | l
-  this Italian fish is fresh
+  > parse -lang=HelloEng "hello mum" | linearize -lang=HelloIta
+  ciao mamma
 ```
-Pipes in GF work much the same way as Unix pipes: they feed the output
-of one command into another command as its input.
+Notice that the commands must use a **language flag** to indicate
+which concrete syntax is used in each of the operations.
 
-
-%--!
-==Visualizing trees==
-
-The gibberish code with parentheses returned by the parser does not
-look like trees. Why is it called so? From the abstract mathematical
-point of view, trees are a data structure that
-represents **nesting**: trees are branching entities, and the branches
-are themselves trees. Parentheses give a linear representation of trees,
-useful for the computer. But the human eye may prefer to see a visualization;
-for this purpose, GF provides the command ``visualizre_tree = vt``, to which
-parsing (and any other tree-producing command) can be piped:
-
-``` 
-  > parse "this delicious cheese is very Italian" | vt
+To conclude the translation exercise, we import the Finnish grammar
+and pipe English parsing into **multilingual generation**:
+```
+  > parse -lang=HelloEng "hello friends" | linearize -multi
+  terve ystävät
+  ciao amici
+  hello friends
 ```
 
-[Tree2.png]
+**Exercise**. Test the examples shown above, as well as
+some new examples.
 
-This command uses the programs Graphviz and Ghostview, which you
-might not have, but which are freely available on the web.
+**Exercise**. Extend the grammar ``Hello.gf`` and some of the
+concrete syntaxes by five new recipients and one new greeting
+form.
 
-
-
-%--!
-==Some random-generated sentences==
-
-Random generation is a good way to test a grammar; it can also
-be fun. So you may want to
-generate ten strings with one and the same command:
-```
-  > gr -number=10 | l
-  that wine is boring
-  that fresh cheese is fresh
-  that cheese is very boring
-  this cheese is Italian
-  that expensive cheese is expensive
-  that fish is fresh
-  that wine is very Italian
-  this wine is Italian
-  this cheese is boring
-  this fish is boring
-```
-
-
-%--!
-==Systematic generation==
-
-To generate //all// sentence that a grammar
-can generate, use the command ``generate_trees = gt``.
-```
-  > generate_trees | l
-  that cheese is very Italian
-  that cheese is very boring
-  that cheese is very delicious
-  that cheese is very expensive
-  that cheese is very fresh
-  ...
-  this wine is expensive
-  this wine is fresh
-  this wine is warm
-
-```
-You get quite a few trees but not all of them: only up to a given
-**depth** of trees. To see how you can get more, use the
-``help = h`` command,
-```
-  > help gt
-```
-
-**Exercise**. If the command ``gt`` generated all
-trees in your grammar, it would never terminate. Why?
-
-**Exercise**. Measure how many trees the grammar gives with depths 4 and 5,
-respectively. You use the Unix **word count** command ``wc`` to count lines.
-**Hint**. You can pipe the output of a GF command into a Unix command by
-using the escape ``?``, as follows:
-```
-  > generate_trees | ? wc
-```
+**Exercise**. Add a concrete syntax for some other
+languages you might know.
 
 
 
+==What else can be done with the grammar==
+
+Now we have built our first multilingual grammar and seen the basic
+functionalities of GF: parsing and linearization. We have tested
+these functionalities inside the GF program. In the forthcoming
+chapters, we will build larger grammars and have more fun with
+these functionalities. But we will also introduce many more:
+- random generation
+- exhaustive generation
+- treebank generation
+- syntax editing
+- morphological analysis
+- translation and morphological quizzes
+- semantic filtering
 
 
-%--!
-==More on pipes; tracing==
-
-A pipe of GF commands can have any length, but the "output type"
-(either string or tree) of one command must always match the "input type"
-of the next command. 
-
-The intermediate results in a pipe can be observed by putting the
-**tracing** flag ``-tr`` to each command whose output you
-want to see:
-```
-  > gr -tr | l -tr | p
-
-  Is (This Cheese) Boring
-  this cheese is boring
-  Is (This Cheese) Boring  
-```
-This facility is good for test purposes: for instance, you
-may want to see if a grammar is **ambiguous**, i.e.
-contains strings that can be parsed in more than one way.
-
-**Exercise**. Extend the grammar ``food.cf`` so that it produces ambiguous strings,
-and try out the ambiguity test.
+The usefulness of GF would be quite limited if grammars were
+usable only inside the GF program. In the forthcoming chapters,
+we will see many other ways of using grammars:
+- compile them to new formats, such as speech recognition grammars
+- embed them in Java and Haskell programs
+- build applications using compilation and embedding:
+  - voice commands
+  - spoken language translators
+  - dialogue systems
+  - user interfaces
+  - localization: parametrize the messages printed by a program
+    to support different languages
 
 
-
-
-%--!
-==Writing and reading files==
-
-To save the outputs of GF commands into a file, you can
-pipe it to the ``write_file = wf`` command,
-```
-  > gr -number=10 | l | write_file exx.tmp
-```
-You can read the file back to GF with the
-``read_file = rf`` command,
-```
-  > read_file exx.tmp | p -lines
-```
-Notice the flag ``-lines`` given to the parsing
-command. This flag tells GF to parse each line of
-the file separately. Without the flag, the grammar could
-not recognize the string in the file, because it is not
-a sentence but a sequence of ten sentences.
+All GF functionalities, both those inside the GF program and those 
+ported to other environments, 
+are of course applicable to the simplest of grammars,
+such as the ``Hello`` grammars presented above. But the main focus
+of this book will be to show how larger and more expressive grammars
+can be built by using the constructs of the GF programming language.
 
 
 
+==Summary of GF language features==
 
-%--!
-=The .gf grammar format=
-
-To see GF's internal representation of a grammar
-that you have imported, you can give the command
-``print_grammar = pg``,
-```
-  > print_grammar
-```
-The output is quite unreadable at this stage, and you may feel happy that
-you did not need to write the grammar in that notation, but that the
-GF grammar compiler produced it.
-
-However, we will now start the demonstration 
-how GF's own notation gives you
-much more expressive power than the ``.cf``
-format. We will introduce the ``.gf`` format by presenting
-another way of defining the same grammar as in
-``food.cf``.
-Then we will show how the full GF grammar format enables you
-to do things that are not possible in the context-free format.
+A GF grammar consists of **modules**, 
+into which judgements are grouped. The most important
+module forms are
+- ``abstract`` A ``=`` M, abstract syntax A with judgements in
+  the module body M.
+- ``concrete`` C ``of`` A ``=`` M, concrete syntax C of the
+       abstract syntax A, with judgements in the module body M.
 
 
-%--!
-==Abstract and concrete syntax==
-
-A GF grammar consists of two main parts:
-
-- **abstract syntax**, defining what syntax trees there are
-- **concrete syntax**, defining how trees are linearized into strings 
-
-
-The context-free format fuses these two things together, but it is always
-possible to take them apart. For instance, the sentence formation rule
-```
-  Is. S ::= Item "is" Quality ;
-```
-is interpreted as the following pair of GF rules:
-```
-  fun Is : Item -> Quality -> S ;
-  lin Is item quality = {s = item.s ++ "is" ++ quality.s} ;
-```
-The former rule, with the keyword ``fun``, belongs to the abstract syntax.
-It defines the **function**
-``Is`` which constructs syntax trees of form
-(``Is`` //item// //quality//). 
-
-The latter rule, with the keyword ``lin``, belongs to the concrete syntax.
-It defines the **linearization function** for
-syntax trees of form (``Is`` //item// //quality//). 
-
-
-%--!
-==Judgement forms==
+Each module is written in a file named //Modulename//.``.gf``.
 
 Rules in a GF grammar are called **judgements**, and the keywords
 ``fun`` and ``lin`` are used for distinguishing between two
@@ -819,118 +750,20 @@ judgement forms:
      | ``lin`` f ``=`` t    | function f has linearization t
   
 
-
-We return to the precise meanings of these judgement forms later.
-First we will look at how judgements are grouped into modules, and
-show how the food grammar is
-expressed by using modules and judgements.
+Both abstract and concrete modules may moreover contain definitions of
+**flags**, of the form 
+- ``flags`` //flag//``=``//value//
 
 
-%--!
-==Module types==
-
-A GF grammar consists of **modules**, 
-into which judgements are grouped. The most important
-module forms are
-
-  - ``abstract`` A ``=`` M, abstract syntax A with judgements in
-  the module body M.
-  - ``concrete`` C ``of`` A ``=`` M, concrete syntax C of the
-       abstract syntax A, with judgements in the module body M.
+and **comments** of the forms
+- ``--`` //anything till a newline//
+- ``{-`` //anything except hyphen followed by closing brace// ``-}``
 
 
-%--!
-==Basic types and function types==
-
-The nonterminals of a context-free grammar, i.e. categories,
-are called **basic types** in the type system of GF. In addition
-to them, there are **function types** such as
-```
-  Item -> Quality -> S
-```
-This type is read "a function from iterms and qualities to sentences".
-The last type in the arrow-separated sequence is the **value type**
-of the function type, the earlier types are its **argument types**.
-
-
-
-
-%--!
-==Records and strings==
-
-The linearization type of a category is a **record type**, with
-zero of more **fields** of different types. The simplest record
-type used for linearization in GF is
-```
-  {s : Str}
-```
-which has one field, with **label** ``s`` and type ``Str``.
-
-Examples of records of this type are
-```
-  {s = "foo"}
-  {s = "hello" ++ "world"}
-```
-
-Whenever a record ``r`` of type ``{s : Str}`` is given,
-``r.s`` is an object of type ``Str``. This is
-a special case of the **projection** rule, allowing the extraction
-of fields from a record:
-
-- if //r// : ``{`` ... //p// : //T// ... ``}`` then //r.p// : //T//
-
-
-The type ``Str`` is really the type of **token lists**, but
-most of the time one can conveniently think of it as the type of strings,
-denoted by string literals in double quotes. 
-
-Notice that
-```  "hello world"
-is not recommended as an expression of type ``Str``. It denotes
-a token with a space in it, and will usually 
-not work with the lexical analysis that precedes parsing. A shorthand
-exemplified by
-```
-  ["hello world and people"]  === "hello" ++ "world" ++ "and" ++ "people"
-```
-can be used for lists of tokens. The expression
-```
-  []
-```
-denotes the empty token list.
-
-
-
-%--!
-==An abstract syntax example==
-
-To express the abstract syntax of ``food.cf`` in
-a file ``Food.gf``, we write two kinds of judgements:
-
-- Each category is introduced by a ``cat`` judgement.
-- Each rule label is introduced by a ``fun`` judgement,
-  with the type formed from the nonterminals of the rule.
-
-
-```
-  abstract Food = {
-
-  cat
-    S ; Item ; Kind ; Quality ;
-
-  fun
-    Is : Item -> Quality -> S ;
-    This, That : Kind -> Item ;
-    QKind : Quality -> Kind -> Kind ;
-    Wine, Cheese, Fish : Kind ;
-    Very : Quality -> Quality ;
-    Fresh, Warm, Italian, Expensive, Delicious, Boring : Quality ;
-  }
-```
-Notice the use of shorthands permitting the sharing of
+Shorthands permit the sharing of
 the keyword in subsequent judgements, 
 ```
-  cat S ; Item ;   ===   cat S ; cat Item ; 
+  cat Phrase ; Item ;   ===   cat Phrase ; cat Item ; 
 ```
 and of the type in subsequent ``fun`` judgements,
 ```
@@ -940,24 +773,90 @@ and of the type in subsequent ``fun`` judgements,
 ```
 The order of judgements in a module is free.
 
-**Exercise**. Extend the abstract syntax ``Food`` with ten new
-kinds and qualities, and with questions of the form
-//is this wine Italian//.
- 
 
 
-%--!
-==A concrete syntax example==
+**Types** in an abstract syntax are either **basic types**,
+i.e. ones introduced in ``cat`` judgements, or
+**function types** of the form
+```
+  A1 -> ... -> An -> A
+```
+where each of ``A1, ..., An, A`` is a basic type (this restriction
+will be relieved later). The last type in the arrow-separated sequence 
+is the **value type** of the function type, the earlier types are 
+its **argument types**.
 
-Each category introduced in ``Food.gf`` is
-given a ``lincat`` rule, and each
-function is given a ``lin`` rule. Similar shorthands
-apply as in ``abstract`` modules.
+In a concrete syntax, the available types include
+- the type of strings, ``Str``
+- record types of form ``{`` r1 : T1 ; ... ; rn : Tn ``}``
+
+
+**Terms** used in linearizations have the forms
+- quoted string: ``"foo"``, of type ``Str``
+- record: ``{`` r1 = t1 ; ... ; rn = Tn ``}``, 
+  of type ``{`` r1 : R1 ; ... ; rn : Rn ``}``
+- projection ``t.r`` with a record label, of the corresponding record
+  field type
+- argument variable ``x`` bound by the left-hand-side of a ``lin`` rule,
+  of the corresponding linearization type
+
+
+
+
+
+
+=Designing a grammar for complex phrases=
+
+We will now start with a grammar that has much more structure than
+the ``Hello`` grammar. We will look at how the abstract
+is divided into suitable categories, and how infinitely many
+phrases can be built by using recursive rules. We will also
+introduce **modularity** by showing how a large grammar can be 
+divided into modules.
+
+
+==The abstract syntax Food==
+
+The grammar we wrote defines a set of phrases usable for speaking about food.
+It builds ``Phrase``s by assigning ``Quality``s to
+``Item``s. ``Item``s are build from ``Kind``s by prepending the
+word "this" or "that". ``Kind``s are either **atomic**, such as
+"cheese" and "wine", or formed by prepending a ``Quality`` to a
+``Kind``. A ``Quality`` is either atomic, such as "Italian" and "boring",
+or built by another ``Quality`` by prepending "very". Those familiar with
+the context-free grammar notation will notice that, for instance, the
+following sentence can be built using this grammar:
+```
+  this delicious Italian wine is very very expensive
+```
+Here is the abstract syntax:
+```
+  abstract Food = {
+
+  cat
+    Phrase ; Item ; Kind ; Quality ;
+
+  flags startcat = Phrase ;
+
+  fun
+    Is : Item -> Quality -> Phrase ;
+    This, That : Kind -> Item ;
+    QKind : Quality -> Kind -> Kind ;
+    Wine, Cheese, Fish : Kind ;
+    Very : Quality -> Quality ;
+    Fresh, Warm, Italian, Expensive, Delicious, Boring : Quality ;
+  }
+```
+
+
+==The concrete syntax FoodEng==
+
+The English concrete syntax gives no surprises:
 ```
   concrete FoodEng of Food = {
 
   lincat
-    S, Item, Kind, Quality = {s : Str} ;
+    Phrase, Item, Kind, Quality = {s : Str} ;
 
   lin
     Is item quality = {s = item.s ++ "is" ++ quality.s} ;
@@ -974,15 +873,155 @@ apply as in ``abstract`` modules.
     Expensive = {s = "expensive"} ;
     Delicious = {s = "delicious"} ;
     Boring = {s = "boring"} ;
-  }
+  }  
+```
+Let us test how the grammar works in parsing:
+```
+  > p -lang=FoodEng "this delicious wine is very very Italian"
+  Is (This (QKind Delicious Wine)) (Very (Very Italian))
 ```
 
-**Exercise**. Extend the concrete syntax ``FoodEng`` so that it
-matches the abstract syntax defined in the exercise of the previous
-section. What happens if the concrete syntax lacks some of the
-new functions?
+**Exercise**. Extend the ``Food`` grammar by ten new food kinds and
+qualities, and run the parser with new kinds of examples.
 
- 
+
+**Exercise**. Add a rule that enables question phrases of the form 
+//is this cheese Italian//.
+
+
+**Exercise**. Enable the optional prefixing of 
+phrases with the words "excuse me but". Do this in such a way that
+the prefix can occur at most once.
+
+
+
+==Commands for testing grammars==
+
+===Generating trees and strings===
+
+When we have a grammar above the trivial size, especially a recursive
+one, we need more efficient ways of testing it than just by parsing
+sentences that happen to come to our minds. One way to do this is 
+based on **automatic generation**, which can be either
+**random** or **exhausive**.
+
+Random generation (``generate_random = gr``) is an operation that 
+builds a random tree in accordance with an abstract syntax:
+```
+  > generate_random
+  Is (This (QKind Italian Fish)) Fresh
+```
+By using a pipe, random generation can be fed into linearization:
+```
+  > gr | l
+  this Italian fish is fresh
+```
+Random generation is a good way to test a grammar; it can also
+be fun. By using the ``number`` flag, several strings can be generated
+in one command:
+```
+  > gr -number=10 | l
+  that wine is boring
+  that fresh cheese is fresh
+  that cheese is very boring
+  this cheese is Italian
+  that expensive cheese is expensive
+  that fish is fresh
+  that wine is very Italian
+  this wine is Italian
+  this cheese is boring
+  this fish is boring
+```
+To generate //all// phrases that a grammar can produce,
+GF provides the command ``generate_trees = gt``.
+```
+  > generate_trees | l
+  that cheese is very Italian
+  that cheese is very boring
+  that cheese is very delicious
+  that cheese is very expensive
+  that cheese is very fresh
+  ...
+  this wine is expensive
+  this wine is fresh
+  this wine is warm
+
+```
+You get quite a few trees but not all of them: only up to a given
+**depth** of trees. The default depth is 3; the depth can be
+set by using the ``depth`` flag:
+```
+  > generate_trees -depth=5 | l
+```
+Other options to the generation commands (like all commands) can be seen
+by GF's ``help = h`` command:
+```
+  > help gr
+  > help gt
+```
+
+**Exercise**. If the command ``gt`` generated all
+trees in your grammar, it would never terminate. Why?
+
+**Exercise**. Measure how many trees the grammar gives with depths 4 and 5,
+respectively. You use the Unix **word count** command ``wc`` to count lines.
+**Hint**. You can pipe the output of a GF command into a Unix command by
+using the escape ``?``, as follows:
+```
+  > generate_trees -depth=4 | ? wc
+```
+
+
+
+
+
+===More on pipes; tracing===
+
+A pipe of GF commands can have any length, but the "output type"
+(either string or tree) of one command must always match the "input type"
+of the next command. 
+
+The intermediate results in a pipe can be observed by putting the
+**tracing** flag ``-tr`` to each command whose output you
+want to see:
+```
+  > gr -tr | l -tr | p
+
+  Is (This Cheese) Boring
+  this cheese is boring
+  Is (This Cheese) Boring  
+```
+This facility is good for test purposes: for instance, you
+may want to see if a grammar is **ambiguous**, i.e.
+contains strings that can be parsed in more than one way.
+
+**Exercise**. Extend the ``Food`` grammar so that it produces ambiguous 
+strings, and try out the ambiguity test.
+
+
+
+===Writing and reading files===
+
+To save the outputs of GF commands into a file, you can
+pipe it to the ``write_file = wf`` command,
+```
+  > gr -number=10 | l | write_file exx.tmp
+```
+You can read the file back to GF with the
+``read_file = rf`` command,
+```
+  > read_file exx.tmp | p -lines
+```
+Notice the flag ``-lines`` given to the parsing
+command. This flag tells GF to parse each line of
+the file separately. Without the flag, the grammar could
+not recognize the string in the file, because it is not
+a sentence but a sequence of ten sentences.
+
+Files with examples can be used for **regression testing**
+of grammars. 
+
+
 
 
 %--!
@@ -994,13 +1033,14 @@ important ones are:
 - Target files: each module is compiled into a ``.gfc`` file.
 
 
-Import ``FoodEng.gf`` and see what happens:
+When you import ``FoodEng.gf``, you see the target files being
+generated:
 ```
   > i FoodEng.gf
   - compiling Food.gf...   wrote file Food.gfc 16 msec
   - compiling FoodEng.gf...   wrote file FoodEng.gfc 20 msec
 ```
-The GF program does not only read the file 
+You also see that the GF program does not only read the file 
 ``FoodEng.gf``, but also all other files that it
 depends on - in this case, ``Food.gf``.
 
@@ -1022,29 +1062,15 @@ a second time? Try this in different situations:
 
 
 
-%--!
-=Multilingual grammars and translation=
-
-The main advantage of separating abstract from concrete syntax is that
-one abstract syntax can be equipped with many concrete syntaxes.
-A system with this property is called a **multilingual grammar**.
-
-Multilingual grammars can be used for applications such as
-translation. Let us build an Italian concrete syntax for
-``Food`` and then test the resulting 
-multilingual grammar.
-
-
-
-
-%--!
 ==An Italian concrete syntax==
 
+We write the Italian grammar in a straightforward way, by replacing
+English words with their usual dictionary equivalents:
 ```
-concrete FoodIta of Food = {
+  concrete FoodIta of Food = {
 
   lincat
-    S, Item, Kind, Quality = {s : Str} ;
+    Phrase, Item, Kind, Quality = {s : Str} ;
 
   lin
     Is item quality = {s = item.s ++ "è" ++ quality.s} ;
@@ -1061,9 +1087,15 @@ concrete FoodIta of Food = {
     Expensive = {s = "caro"} ;
     Delicious = {s = "delizioso"} ;
     Boring = {s = "noioso"} ;
-
-}
+  }
 ```
+An alert reader, or one who already knows Italian,  may notice one point in
+which a change more radical than replacement of words is made: the order of
+a quality and the kind it modifies in
+```
+    QKind quality kind = {s = kind.s ++ quality.s} ;
+```
+Thus Italian says ``vino italiano`` for ``Italian wine``.
 
 **Exercise**. Write a concrete syntax of ``Food`` for some other language.
 You will probably end up with grammatically incorrect output - but don't
@@ -1075,28 +1107,12 @@ come out incorrect, and prepare a list of those ones that cannot be helped
 with the currently available fragment of GF.
 
 
-%--!
-==Using a multilingual grammar==
 
-Import the two grammars in the same GF session.
-```
-  > i FoodEng.gf
-  > i FoodIta.gf
-```
-Try generation now:
-```
-  > gr | l
-  quello formaggio molto noioso è italiano
+==More application of multilingual grammars==
 
-  > gr | l -lang=FoodEng
-  this fish is warm
-```
-Translate by using a pipe:
-```
-  > p -lang=FoodEng "this cheese is very delicious" | l -lang=FoodIta
-  questo formaggio è molto delizioso
-```
-Generate a **multilingual treebank**, i.e. a set of trees with their
+===Multilingual treebanks===
+
+A **multilingual treebank**, is a set of trees with their
 translations in different languages:
 ```
   > gr -number=2 | tree_bank
@@ -1109,27 +1125,9 @@ translations in different languages:
   quello formaggio è fresco
   that cheese is fresh
 ```
-The ``lang`` flag tells GF which concrete syntax to use in parsing and
-linearization. By default, the flag is set to the last-imported grammar.
-To see what grammars are in scope and which is the main one, use the command
-``print_options = po``:
-```
-  > print_options
-  main abstract :     Food
-  main concrete :     FoodIta
-  actual concretes :  FoodIta FoodEng
-```
-You can change the main grammar by the command ``change_main = cm``:
-```
-  > change_main FoodEng
-  main abstract :     Food
-  main concrete :     FoodEng
-  actual concretes :  FoodIta FoodEng
-```
 
 
-%--!
-==Translation session==
+===Translation session===
 
 If translation is what you want to do with a set of grammars, a convenient
 way to do it is to open a ``translation_session = ts``. In this session,
@@ -1151,9 +1149,7 @@ A dot ``.`` terminates the translation session.
 ```
 
 
-
-%--!
-==Translation quiz==
+===Translation quiz===
 
 This is a simple language exercise that can be automatically
 generated from a multilingual grammar. The system generates a set of
@@ -1189,12 +1185,9 @@ file for later use, by the command ``translation_list = tl``
 The ``number`` flag gives the number of sentences generated.
 
 
+==Grammar architecture==
 
-
-%--!
-=Grammar architecture=
-
-==Extending a grammar==
+===Extending a grammar===
 
 The module system of GF makes it possible to **extend** a
 grammar in different ways. The syntax of extension is
@@ -1227,8 +1220,7 @@ module **inherits** the contents of the old module.
 
 
 
-%--!
-==Multiple inheritance==
+===Multiple inheritance===
 
 Specialized vocabularies can be represented as small grammars that
 only do "one thing" each. For instance, the following are grammars
@@ -1259,8 +1251,8 @@ At this point, you would perhaps like to go back to
 ``Drink`` module.
 
 
-%--!
-==Visualizing module structure==
+
+===Visualizing module structure===
 
 When you have created all the abstract syntaxes and
 one set of concrete syntaxes needed for ``Foodmarket``,
@@ -1287,8 +1279,7 @@ Just as the ``visualize_tree = vt`` command, the open source tools
 Ghostview and Graphviz are needed.
 
 
-%--!
-==System commands==
+===System commands===
 
 To document your grammar, you may want to print the
 graph into a file, e.g. a ``.png`` file that
@@ -1318,21 +1309,39 @@ is then ``?``.
 ```
 
 
+==The context-free grammar format==
+
+Readers not familar with context-free grammars, also known as BNF grammars, can
+skip this section. Those that are familar with them will find here the exact
+relation between GF and context-free grammars. We will moreover show how
+the BNF format can be used as input to the GF program; it is often more
+concise than GF proper, but also more restricted in expressive power.
+
+
+
+==Summary of GF language features==
+
+Module extensions, multiple inheritance.
+
+The ``.cf`` grammar format.
+
+
 
 %--!
-=Resource modules=
-
+=Using resource modules=
 
 ==The golden rule of functional programming==
 
-In comparison to the ``.cf`` format, the ``.gf`` format looks rather
-verbose, and demands lots more characters to be written. You have probably
+When writing a grammar, you have to type lots of 
+characters. You have probably
 done this by the copy-paste-modify method, which is a common way to
 avoid repeating work.
 
-However, there is a more elegant way to avoid repeating work than the copy-and-paste
+However, there is a more elegant way to avoid repeating work than 
+the copy-and-paste
 method. The **golden rule of functional programming** says that
-- whenever you find yourself programming by copy-and-paste, write a function instead.
+- whenever you find yourself programming by copy-and-paste, 
+  write a function instead.
 
 
 A function separates the shared parts of different computations from the
@@ -1512,7 +1521,7 @@ linguistic concepts of inflection, agreement, and parts of speech.
 
 
 %--!
-=Morphology=
+=Implementing morphology=
 
 Suppose we want to say, with the vocabulary included in
 ``Food.gf``, things like

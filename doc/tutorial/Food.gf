@@ -1,10 +1,12 @@
 abstract Food = {
 
   cat
-    S ; Item ; Kind ; Quality ;
+    Phrase ; Item ; Kind ; Quality ;
+
+  flags startcat = Phrase ;
 
   fun
-    Is : Item -> Quality -> S ;
+    Is : Item -> Quality -> Phrase ;
     This, That : Kind -> Item ;
     QKind : Quality -> Kind -> Kind ;
     Wine, Cheese, Fish : Kind ;
