@@ -1,4 +1,4 @@
-Grammatical Framework Tutorial
+Grammatical Framework: A Framework for Multilingual Natural Language Applications
 Author: Aarne Ranta aarne (at) cs.chalmers.se
 Last update: %%date(%c)
 
@@ -9,7 +9,10 @@ Last update: %%date(%c)
 %!target:html
 %!encoding: iso-8859-1
 
-%!postproc(tex): "section\*" "section"
+%%!postproc(tex): "section\*" "section"
+
+%!postproc(tex): "subsection\*" "section"
+%!postproc(tex): "section\*" "chapter"
 
 %!postproc(html): #BCEN <center>
 %!postproc(html): #ECEN </center>
@@ -22,6 +25,11 @@ Last update: %%date(%c)
 
 %!preproc(html): #LOGOPNG [../gf-logo.png]
 %!preproc(tex):  #LOGOPNG ""
+
+
+%!postproc(tex): #PARTone "part{Tutorial}"
+%!postproc(tex): #PARTtwo "part{Advanced Applications}"
+%!postproc(tex): #PARTthree "part{Reference Manual}"
 
 
 #LOGOPNG
@@ -244,6 +252,7 @@ known as BNF grammars in computer science.
 
 
 
+#PARTone
 
 =Getting started=
 
@@ -2998,7 +3007,7 @@ build the terms manually.
 
 
 
-=More concepts of abstract syntax=
+=Refining semantics in abstract syntax=
 
 ==GF as a logical framework==
 
@@ -3788,94 +3797,8 @@ You can use the [precedence library ../../lib/prelude/Precedence.gf]
 of GF to facilitate this.
 
 
-=Practical issues=
 
-==Lexers and unlexers==
-
-Lexers and unlexers can be chosen from
-a list of predefined ones, using the flags``-lexer`` and `` -unlexer`` either
-in the grammar file or on the GF command line. Here are some often-used lexers
-and unlexers:
-```
-  The default is words.
-  -lexer=words         tokens are separated by spaces or newlines
-  -lexer=literals      like words, but GF integer and string literals recognized
-  -lexer=vars          like words, but "x","x_...","$...$" as vars, "?..." as meta
-  -lexer=chars         each character is a token
-  -lexer=code          use Haskell's lex
-  -lexer=codevars      like code, but treat unknown words as variables, ?? as meta
-  -lexer=text          with conventions on punctuation and capital letters
-  -lexer=codelit       like code, but treat unknown words as string literals
-  -lexer=textlit       like text, but treat unknown words as string literals
-
-  The default is unwords.
-  -unlexer=unwords     space-separated token list (like unwords)
-  -unlexer=text        format as text: punctuation, capitals, paragraph <p>
-  -unlexer=code        format as code (spacing, indentation)
-  -unlexer=textlit     like text, but remove string literal quotes
-  -unlexer=codelit     like code, but remove string literal quotes
-  -unlexer=concat      remove all spaces
-```
-More options can be found by ``help -lexer`` and ``help -unlexer``:
-
-
-
-
-==Speech input and output==
-
-The ``speak_aloud = sa`` command sends a string to the speech
-synthesizer 
-[Flite http://www.speech.cs.cmu.edu/flite/doc/].
-It is typically used via a pipe:
-```  generate_random | linearize | speak_aloud
-The result is only satisfactory for English.
-
-The ``speech_input = si`` command receives a string from a
-speech recognizer that requires the installation of
-[ATK http://mi.eng.cam.ac.uk/~sjy/software.htm].
-It is typically used to pipe input to a parser:
-```  speech_input -tr | parse
-The method words only for grammars of English.
-
-Both Flite and ATK are freely available through the links
-above, but they are not distributed together with GF.
-
-
-
-==Multilingual syntax editor==
-
-The 
-[Editor User Manual http://www.cs.chalmers.se/~aarne/GF2.0/doc/javaGUImanual/javaGUImanual.htm]
-describes the use of the editor, which works for any multilingual GF grammar.
-
-Here is a snapshot of the editor:
-
-#BCEN
-
-#EDITORPNG
-
-#ECEN
-
- 
-The grammars of the snapshot are from the
-[Letter grammar package http://www.cs.chalmers.se/~aarne/GF/examples/letter].
-
-
-==Communicating with GF==
-
-Other processes can communicate with the GF command interpreter,
-and also with the GF syntax editor. Useful flags when invoking GF are
-- ``-batch`` suppresses the promps and structures the communication with XML tags.
-- ``-s`` suppresses non-output non-error messages and XML tags.
-- ``-nocpu`` suppresses CPU time indication.
-
-
-Thus the most silent way to invoke GF is
-```
-  gf -batch -s -nocpu
-```
-
-
+#PARTtwo
 
 =Embedded grammars in Haskell and Java=
 
@@ -4187,6 +4110,134 @@ Forthcoming; at the moment, the document
  [``http://www.cs.chalmers.se/~bringert/gf/gf-java.html`` http://www.cs.chalmers.se/~bringert/gf/gf-java.html]
 
 by Björn Bringert gives more information on Java.
+
+
+=Spoken language translators=
+
+
+=Multimodal dialogue systems=
+
+
+=Grammar of formal languages=
+
+==Precedence and ficity==
+
+==Higher-order abstract syntax==
+
+==Extensible natural-language interfaces==
+
+
+
+=Inside the resource grammar library=
+
+==Writing your own resource implementation==
+
+==Parametrized modules for language families==
+
+
+
+=Using Transfer for semantics actions=
+
+
+
+#PARTthree
+
+
+=Syntax and semantics of the GF grammar formalism=
+
+=The resource grammar API=
+
+=The GFC format=
+
+=The command language of the GF shell=
+
+==Lexers and unlexers==
+
+Lexers and unlexers can be chosen from
+a list of predefined ones, using the flags``-lexer`` and `` -unlexer`` either
+in the grammar file or on the GF command line. Here are some often-used lexers
+and unlexers:
+```
+  The default is words.
+  -lexer=words         tokens are separated by spaces or newlines
+  -lexer=literals      like words, but GF integer and string literals recognized
+  -lexer=vars          like words, but "x","x_...","$...$" as vars, "?..." as meta
+  -lexer=chars         each character is a token
+  -lexer=code          use Haskell's lex
+  -lexer=codevars      like code, but treat unknown words as variables, ?? as meta
+  -lexer=text          with conventions on punctuation and capital letters
+  -lexer=codelit       like code, but treat unknown words as string literals
+  -lexer=textlit       like text, but treat unknown words as string literals
+
+  The default is unwords.
+  -unlexer=unwords     space-separated token list (like unwords)
+  -unlexer=text        format as text: punctuation, capitals, paragraph <p>
+  -unlexer=code        format as code (spacing, indentation)
+  -unlexer=textlit     like text, but remove string literal quotes
+  -unlexer=codelit     like code, but remove string literal quotes
+  -unlexer=concat      remove all spaces
+```
+More options can be found by ``help -lexer`` and ``help -unlexer``:
+
+
+
+
+==Speech input and output==
+
+The ``speak_aloud = sa`` command sends a string to the speech
+synthesizer 
+[Flite http://www.speech.cs.cmu.edu/flite/doc/].
+It is typically used via a pipe:
+```  generate_random | linearize | speak_aloud
+The result is only satisfactory for English.
+
+The ``speech_input = si`` command receives a string from a
+speech recognizer that requires the installation of
+[ATK http://mi.eng.cam.ac.uk/~sjy/software.htm].
+It is typically used to pipe input to a parser:
+```  speech_input -tr | parse
+The method words only for grammars of English.
+
+Both Flite and ATK are freely available through the links
+above, but they are not distributed together with GF.
+
+
+
+==Multilingual syntax editor==
+
+The 
+[Editor User Manual http://www.cs.chalmers.se/~aarne/GF2.0/doc/javaGUImanual/javaGUImanual.htm]
+describes the use of the editor, which works for any multilingual GF grammar.
+
+Here is a snapshot of the editor:
+
+#BCEN
+
+#EDITORPNG
+
+#ECEN
+
+ 
+The grammars of the snapshot are from the
+[Letter grammar package http://www.cs.chalmers.se/~aarne/GF/examples/letter].
+
+
+==Communicating with GF==
+
+Other processes can communicate with the GF command interpreter,
+and also with the GF syntax editor. Useful flags when invoking GF are
+- ``-batch`` suppresses the promps and structures the communication with XML tags.
+- ``-s`` suppresses non-output non-error messages and XML tags.
+- ``-nocpu`` suppresses CPU time indication.
+
+
+Thus the most silent way to invoke GF is
+```
+  gf -batch -s -nocpu
+```
+
+
+
 
 
 
