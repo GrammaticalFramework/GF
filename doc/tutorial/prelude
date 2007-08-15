@@ -1,0 +1,6 @@
+\documentclass[11pt]{book}
+\usepackage[latin1]{inputenc}
+
+\newcommand{\bequ}{\begin{quote}}
+\newcommand{\enqu}{\end{quote}}
+%%%
