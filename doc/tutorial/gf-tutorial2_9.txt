@@ -247,25 +247,30 @@ known as BNF grammars in computer science.
 
 =Getting started=
 
-==GF = Grammatical Framework==
+In this chapter, we will introduce the GF program and write a first GF grammar.
+We show how the grammar is used for the tasks of translation and multilingual
+generation.
 
-The term GF is used for different things:
-- a **program** used for working with grammars
+
+==What GF is==
+
+We use the term GF for three different things:
+- a **system** (computer program) used for working with grammars
 - a **programming language** in which grammars can be written
 - a **theory** about grammars and languages
 
 
-This tutorial is primarily about the GF program and 
-the GF programming language.
-It will guide you
-- to use the GF program
-- to write GF grammars
-- to write programs in which GF grammars are used as components
+The relation between these things is obvious: the GF system is an implementation
+of the GF programming language, which in turn is built on the ideas of the
+GF theory. The main focus of this book is on the GF programming language.
+We learn how grammars are written in the language. At the same time, we learn
+the way of thinking in the GF theory. To make this all useful and fun, we
+make the grammars run on a computer by using the GF system. 
 
 
 
 %--!
-==What are GF grammars used for==
+==What GF grammars are used for==
 
 A grammar is a definition of a language.
 From this definition, different language processing components 
@@ -328,60 +333,50 @@ is given by the libraries.
 
 
 %--!
-==Who is this tutorial for==
+==Who is the tutorial for==
 
-This tutorial is mainly for programmers who want to learn to write
-application grammars. It will go through GF's programming concepts
-without entering too deep into linguistics. Thus it should
-be accessible to anyone who has some previous programming experience.
+The tutorial part of this book is mainly for programmers 
+who want to learn to write application grammars. 
+It will go through GF's programming concepts, and does not
+presuppose knowledge of any of the main ingredients of GF:
+linguistics, functional programming, and type theory.
+Thus it should be accessible to anyone who has some 
+previous programming experience from any language; the basics
+of using computers are also presupposed, e.g. the use of 
+text editors and the management of files.
 
-A separate document has been written on how to write resource grammars: the
-[Resource HOWTO  ../../lib/resource-1.0/doc/Resource-HOWTO.html].
-In this tutorial, we will just cover the programming concepts that are used for 
-solving linguistic problems in the resource grammars.
+Those who already know GF well can skip the tutorial part, 
+or skim thorough it, and go directly to the part on advanced applications. 
+These will involve large scale GF programming, such as needed in resource
+grammars, and also the embedding of GF in systems such as
+natural-language user interfaces and dialogue systems.
 
-The easiest way to use GF is probably via the interactive syntax editor.
-Its use does not require any knowledge of the GF formalism. There is
-a separate 
-[Editor User Manual http://www.cs.chalmers.se/~aarne/GF2.0/doc/javaGUImanual/javaGUImanual.htm]
-by Janna Khegai, covering the use of the editor. The editor is also a platform for many
-kinds of GF applications, implementing the slogan
-
-//write a document in a language you don't know, while seeing it in a language you know//.
 
 
 %--!
 ==The coverage of the tutorial==
 
 The tutorial gives a hands-on introduction to grammar writing.
-We start by building a small grammar for the domain of food:
+We start by building a "Hello World" grammar, which covers greetings
+in three languages (//hello world//, //terve maailma//, //ciao mondo//).
+This **multilingual grammar** is based on the distinction, central in
+GF, between the **abstract syntax**
+(the logical structure) and the **concrete syntax** (the
+sequence of words) of expressions. 
+
+From the "Hello World" example, we proceed 
+to a larger grammar for the domain of food:
 in this grammar, you can say things like
 ``` 
   this Italian cheese is delicious
 ```
-in English and Italian.
-
-The first English grammar 
-[``food.cf`` food.cf]
-is written in a context-free
-notation (also known as BNF). The BNF format is often a good
-starting point for GF grammar development, because it is
-simple and widely used. However, the BNF format is not
-good for multilingual grammars. While it is possible to
-"translate" by just changing the words contained in a 
-BNF grammar to words of some other
-language, proper translation usually involves more.
-For instance, the order of words may have to be changed:
+in English and Italian. This grammar illustrates how translation is
+more than just replacement of words. For instance, the order of 
+words may have to be changed:
 ``` 
   Italian cheese ===> formaggio italiano
 ```
-The full GF grammar format is designed to support such
-changes, by separating between the **abstract syntax**
-(the logical structure) and the **concrete syntax** (the
-sequence of words) of expressions. 
-
-There is more than words and word order that makes languages
-different. Words can have different forms, and which forms
+Moreover, words can have different forms, and which forms
 they have vary from language to language. For instance,
 Italian adjectives usually have four forms where English
 has just one:
@@ -390,18 +385,35 @@ has just one:
   vino delizioso, vini deliziosi, pizza deliziosa, pizze deliziose
 ```
 The **morphology** of a language describes the
-forms of its words. While the complete description of morphology
-belongs to resource grammars, this tutorial will explain the
-programming concepts involved in morphology. This will moreover
-make it possible to grow the fragment covered by the food example.
+forms of its words. 
+
+While the complete description of morphology
+belongs to resource grammars, and the use of them will be covered
+by the tutorial. However, we will explain all the
+programming concepts involved in resource grammars. 
 The tutorial will in fact build a miniature resource grammar in order
 to give an introduction to linguistically oriented grammar writing.
 
-Thus it is by elaborating the initial ``food.cf`` example that
-the tutorial makes a guided tour through all concepts of GF.
+Of course, we will not presuppose that the reader knows Italian.
+We have chosen Italian as the example language because it has a rich
+morphological structure that illustrates very well the capacities of
+GF. Moreover, even those who don't know Italian, will find many of
+its words familiar. The exercises will encourage the reader to
+port the examples to other languages; in fact, many GF
+applications work for 5-10 languages.
+
+Thus it is by elaborating the Food grammar example that
+the tutorial makes a guided tour through most of GF.
 While the constructs of the GF language are the main focus,
 also the commands of the GF system are introduced as they
 are needed. 
+
+In addition to multilinguality, **semantics** is an important aspect of GF
+grammars. The concepts needed for "purely linguistic" grammars belong to 
+the concrete syntax part of GF, whereas semantics is expressed in the abstract
+syntax. After the presentation of concrete syntax constructs, we proceed
+to the enrichment of abstract syntax with **dependent types**,
+**variable bindings**, and **semantic definitions**.
 
 To learn how to write GF grammars is not the only goal of
 this tutorial. We will also explain the most important 
@@ -412,13 +424,8 @@ system.
 
 More complicated applications, such as natural-language
 interfaces and dialogue systems, moreover require programming in
-some general-purpose language. Thus we will briefly explain how
-GF grammars are used as components of Haskell programs.
-Chapters on using them in Java and Javascript programs are
-forthcoming; a comprehensive manual on GF embedded in Java, by Björn Bringert, is
-available in
-[``http://www.cs.chalmers.se/~bringert/gf/gf-java.html`` http://www.cs.chalmers.se/~bringert/gf/gf-java.html].
-
+some general-purpose language. The part on advanced topics will
+explain how GF grammars are used as components of Haskell and Java programs.
 
 
 %--!
@@ -491,37 +498,50 @@ are
 The abstract syntax defines, in a language-independent way, what **meanings**
 can be expressed in the grammar. In the "Hello World" grammar we want
 to express //Greetings//, where we greet a //Recipient//, which can be 
-//World// or //Mum// or //Friends//. The GF code for the abstract syntax
-has the following parts:
+//World// or //Mum// or //Friends//. Here is the entire 
+GF code for the abstract syntax:
+```
+  -- a "Hello World" grammar
+  abstract Hello = {
+
+    flags startcat = Greeting ;
+
+    cat Greeting ; Recipient ;
+
+    fun 
+      Hello : Recipient -> Greeting ;
+      World, Mum, Friends : Recipient ;
+  }
+```
+The code has the following parts:
 - a **comment** (optional), saying what the module is doing 
 - a **module header** indicating that it is an abstract syntax
   module named ``Hello``
 - a **module body** in braces, consisting of
-  - **category declarations** stating that ``Greeting`` and ``recipient``
-    are categories, i.e. types of meanings
   - a **startcat flag declaration** stating that ``Greeting`` is the
     main category, i.e. the one we are most interested in
+  - **category declarations** stating that ``Greeting`` and ``recipient``
+    are categories, i.e. types of meanings
   - **function declarations** stating what meaning-building functions there
     are; these are the three possible recipients, as well as the function
     ``Hello`` constructing a greeting from a recipient
 
 
+A concrete syntax defines a mapping from the abstract meanings to their
+expressions in a language. We first give an English concrete syntax: 
 ```
-  -- a "Hello World" grammar
-  abstract Hello = {
+  concrete HelloEng of Hello = {
 
-  cat Greeting ; Recipient ;
+    lincat Greeting, Recipient = {s : Str} ;
 
-  flags startcat = Greeting ;
-
-  fun 
-    Hello : Recipient -> Greeting ;
-    World, Mum, Friends : Recipient ;
+    lin 
+      Hello rec = {s = "hello" ++ rec.s} ;
+      World = {s = "world"} ;
+      Mum = {s = "mum"} ;
+      Friends = {s = "friends"} ;
   }
 ```
-A concrete syntax defines a mapping from the abstract meanings to their
-expressions in a language. We first give an English concrete syntax, whose
-major parts are
+The major parts of this code are:
 - a module header indicating that it is a concrete syntax of the abstract syntax
   ``Hello``, itself named ``HelloEng``
 - a module body in braces, consisting of
@@ -533,48 +553,30 @@ major parts are
     has a function telling that the word ``hello`` is prefixed to the argument
 
 
-```
-  -- "Hello World" in English
-  concrete HelloEng of Hello = {
 
-  lincat Greeting, Recipient = {s : Str} ;
 
-  lin 
-    Hello rec = {s = "hello" ++ rec.s} ;
-    World = {s = "world"} ;
-    Mum = {s = "mum"} ;
-    Friends = {s = "friends"} ;
-  }
-```
 To make the grammar truly multilingual, we add a Finnish and an Italian concrete
 syntax:
 ```
-  -- "Hello World" in Finnish
   concrete HelloFin of Hello = {
-
-  lincat Greeting, Recipient = {s : Str} ;
-
-  lin 
-    Hello rec = {s = "terve" ++ rec.s} ;
-    World = {s = "maailma"} ;
-    Mum = {s = "äiti"} ;
-    Friends = {s = "ystävät"} ;
+    lincat Greeting, Recipient = {s : Str} ;
+    lin 
+      Hello rec = {s = "terve" ++ rec.s} ;
+      World = {s = "maailma"} ;
+      Mum = {s = "äiti"} ;
+      Friends = {s = "ystävät"} ;
   }
 
-
-  -- "Hello World" in Italian
   concrete HelloIta of Hello = {
-
-  lincat Greeting, Recipient = {s : Str} ;
-
-  lin 
-    Hello rec = {s = "ciao" ++ rec.s} ;
-    World = {s = "mondo"} ;
-    Mum = {s = "mamma"} ;
-    Friends = {s = "amici"} ;
+    lincat Greeting, Recipient = {s : Str} ;
+    lin 
+      Hello rec = {s = "ciao" ++ rec.s} ;
+      World = {s = "mondo"} ;
+      Mum = {s = "mamma"} ;
+      Friends = {s = "amici"} ;
   }
 ```
-Now we have a trilingual grammar usable for translation and for
+Now we have a trilingual grammar usable for translation and
 many other tasks, which we will now look into.
 
 
@@ -668,8 +670,8 @@ and pipe English parsing into **multilingual generation**:
   hello friends
 ```
 
-**Exercise**. Test the examples shown above, as well as
-some new examples.
+**Exercise**. Test the parsing and translation examples shown above, as well as
+five other examples.
 
 **Exercise**. Extend the grammar ``Hello.gf`` and some of the
 concrete syntaxes by five new recipients and one new greeting
@@ -714,8 +716,10 @@ All GF functionalities, both those inside the GF program and those
 ported to other environments, 
 are of course applicable to the simplest of grammars,
 such as the ``Hello`` grammars presented above. But the main focus
-of this book will be to show how larger and more expressive grammars
-can be built by using the constructs of the GF programming language.
+of this tutorial will be on grammar writing. Thus we will show
+how larger and more expressive grammars can be built by using 
+the constructs of the GF programming language, before entering the
+applications in the next part of the book.
 
 
 
@@ -765,15 +769,17 @@ the keyword in subsequent judgements,
 ```
   cat Phrase ; Item ;   ===   cat Phrase ; cat Item ; 
 ```
-and of the type in subsequent ``fun`` judgements,
+and of the right-hand-side in subsequent judgements of the same form
 ```
-  fun Wine, Fish : Kind ;            ===
-  fun Wine : Kind ; Fish : Kind ;    ===
-  fun Wine : Kind ; fun Fish : Kind ;
+  fun World, Mum, Friends : Recipient ; ===
+  fun World : Recipient ; Mum : Recipient ; Friends : Recipient ;
 ```
-The order of judgements in a module is free.
+The order of judgements in a module is free. In particular, an identifier
+need not be declared before it is used. 
 
-
+An **identifier** is a letter followed by a sequence of letters, digits, and
+characters ``'`` or ``_``. Each identifier can only be
+introduced once in the same module.
 
 **Types** in an abstract syntax are either **basic types**,
 i.e. ones introduced in ``cat`` judgements, or
@@ -812,40 +818,43 @@ the ``Hello`` grammar. We will look at how the abstract
 is divided into suitable categories, and how infinitely many
 phrases can be built by using recursive rules. We will also
 introduce **modularity** by showing how a large grammar can be 
-divided into modules.
+divided into modules, and how functions defined **resource modules** 
+can be used for avoiding repeated code.
 
 
 ==The abstract syntax Food==
 
-The grammar we wrote defines a set of phrases usable for speaking about food.
-It builds ``Phrase``s by assigning ``Quality``s to
-``Item``s. ``Item``s are build from ``Kind``s by prepending the
-word "this" or "that". ``Kind``s are either **atomic**, such as
-"cheese" and "wine", or formed by prepending a ``Quality`` to a
-``Kind``. A ``Quality`` is either atomic, such as "Italian" and "boring",
-or built by another ``Quality`` by prepending "very". Those familiar with
-the context-free grammar notation will notice that, for instance, the
-following sentence can be built using this grammar:
-```
-  this delicious Italian wine is very very expensive
-```
-Here is the abstract syntax:
+The grammar we wrote defines a set of phrases usable for speaking about food:
+- the main category is ``Phrase``
+- a ``Phrase`` can be built by assigning a ``Quality`` to an ``Item``s
+- an``Item`` are build from a ``Kind`` by prefixing "this" or "that" 
+- a ``Kind`` is either **atomic**, such as "cheese" and "wine", or formed 
+  modifying a given ``Kind`` with a ``Quality``
+- a ``Quality`` is either atomic, such as "Italian" and "boring",
+  or built by modifying a given ``Quality`` "very"
+
+
+These verbal descriptions can be expressed as the following abstract syntax:
 ```
   abstract Food = {
 
-  cat
-    Phrase ; Item ; Kind ; Quality ;
+    flags startcat = Phrase ;
 
-  flags startcat = Phrase ;
+    cat
+      Phrase ; Item ; Kind ; Quality ;
 
-  fun
-    Is : Item -> Quality -> Phrase ;
-    This, That : Kind -> Item ;
-    QKind : Quality -> Kind -> Kind ;
-    Wine, Cheese, Fish : Kind ;
-    Very : Quality -> Quality ;
-    Fresh, Warm, Italian, Expensive, Delicious, Boring : Quality ;
+    fun
+      Is : Item -> Quality -> Phrase ;
+      This, That : Kind -> Item ;
+      QKind : Quality -> Kind -> Kind ;
+      Wine, Cheese, Fish : Kind ;
+      Very : Quality -> Quality ;
+      Fresh, Warm, Italian, Expensive, Delicious, Boring : Quality ;
   }
+```
+In the concrete syntax, we will be able to build phrases such as
+```
+  this delicious Italian wine is very very expensive
 ```
 
 
@@ -855,24 +864,24 @@ The English concrete syntax gives no surprises:
 ```
   concrete FoodEng of Food = {
 
-  lincat
-    Phrase, Item, Kind, Quality = {s : Str} ;
+    lincat
+      Phrase, Item, Kind, Quality = {s : Str} ;
 
-  lin
-    Is item quality = {s = item.s ++ "is" ++ quality.s} ;
-    This kind = {s = "this" ++ kind.s} ;
-    That kind = {s = "that" ++ kind.s} ;
-    QKind quality kind = {s = quality.s ++ kind.s} ;
-    Wine = {s = "wine"} ;
-    Cheese = {s = "cheese"} ;
-    Fish = {s = "fish"} ;
-    Very quality = {s = "very" ++ quality.s} ;
-    Fresh = {s = "fresh"} ;
-    Warm = {s = "warm"} ;
-    Italian = {s = "Italian"} ;
-    Expensive = {s = "expensive"} ;
-    Delicious = {s = "delicious"} ;
-    Boring = {s = "boring"} ;
+    lin
+      Is item quality = {s = item.s ++ "is" ++ quality.s} ;
+      This kind = {s = "this" ++ kind.s} ;
+      That kind = {s = "that" ++ kind.s} ;
+      QKind quality kind = {s = quality.s ++ kind.s} ;
+      Wine = {s = "wine"} ;
+      Cheese = {s = "cheese"} ;
+      Fish = {s = "fish"} ;
+      Very quality = {s = "very" ++ quality.s} ;
+      Fresh = {s = "fresh"} ;
+      Warm = {s = "warm"} ;
+      Italian = {s = "Italian"} ;
+      Expensive = {s = "expensive"} ;
+      Delicious = {s = "delicious"} ;
+      Boring = {s = "boring"} ;
   }  
 ```
 Let us test how the grammar works in parsing:
@@ -1029,8 +1038,8 @@ of grammars.
 
 GF uses suffixes to recognize different file formats. The most
 important ones are:
-- Source files: Module name + ``.gf`` = file name
-- Target files: each module is compiled into a ``.gfc`` file.
+- Source files: //Modulname//``.gf``
+- Target files: //Modulname//``.gfc``
 
 
 When you import ``FoodEng.gf``, you see the target files being
@@ -1069,24 +1078,24 @@ English words with their usual dictionary equivalents:
 ```
   concrete FoodIta of Food = {
 
-  lincat
-    Phrase, Item, Kind, Quality = {s : Str} ;
+    lincat
+      Phrase, Item, Kind, Quality = {s : Str} ;
 
-  lin
-    Is item quality = {s = item.s ++ "è" ++ quality.s} ;
-    This kind = {s = "questo" ++ kind.s} ;
-    That kind = {s = "quello" ++ kind.s} ;
-    QKind quality kind = {s = kind.s ++ quality.s} ;
-    Wine = {s = "vino"} ;
-    Cheese = {s = "formaggio"} ;
-    Fish = {s = "pesce"} ;
-    Very quality = {s = "molto" ++ quality.s} ;
-    Fresh = {s = "fresco"} ;
-    Warm = {s = "caldo"} ;
-    Italian = {s = "italiano"} ;
-    Expensive = {s = "caro"} ;
-    Delicious = {s = "delizioso"} ;
-    Boring = {s = "noioso"} ;
+    lin
+      Is item quality = {s = item.s ++ "è" ++ quality.s} ;
+      This kind = {s = "questo" ++ kind.s} ;
+      That kind = {s = "quello" ++ kind.s} ;
+      QKind quality kind = {s = kind.s ++ quality.s} ;
+      Wine = {s = "vino"} ;
+      Cheese = {s = "formaggio"} ;
+      Fish = {s = "pesce"} ;
+      Very quality = {s = "molto" ++ quality.s} ;
+      Fresh = {s = "fresco"} ;
+      Warm = {s = "caldo"} ;
+      Italian = {s = "italiano"} ;
+      Expensive = {s = "caro"} ;
+      Delicious = {s = "delizioso"} ;
+      Boring = {s = "noioso"} ;
   }
 ```
 An alert reader, or one who already knows Italian,  may notice one point in
@@ -1185,6 +1194,189 @@ file for later use, by the command ``translation_list = tl``
 The ``number`` flag gives the number of sentences generated.
 
 
+
+
+==The context-free grammar format==
+
+Readers not familar with context-free grammars, also known as BNF grammars, can
+skip this section. Those that are familar with them will find here the exact
+relation between GF and context-free grammars. We will moreover show how
+the BNF format can be used as input to the GF program; it is often more
+concise than GF proper, but also more restricted in expressive power.
+
+
+
+==Using resource modules==
+
+===The golden rule of functional programming===
+
+When writing a grammar, you have to type lots of 
+characters. You have probably
+done this by the copy-paste-modify method, which is a common way to
+avoid repeating work.
+
+However, there is a more elegant way to avoid repeating work than 
+the copy-and-paste
+method. The **golden rule of functional programming** says that
+- whenever you find yourself programming by copy-and-paste, 
+  write a function instead.
+
+
+A function separates the shared parts of different computations from the
+changing parts, its **arguments**, or **parameters**. 
+In functional programming languages, such as
+[Haskell http://www.haskell.org], it is possible to share much more 
+code with functions than in languages such as C and Java.
+
+
+===Operation definitions===
+
+GF is a functional programming language, not only in the sense that
+the abstract syntax is a system of functions (``fun``), but also because
+functional programming can be used to define concrete syntax. This is
+done by using a new form of judgement, with the keyword ``oper`` (for
+**operation**), distinct from ``fun`` for the sake of clarity.
+Here is a simple example of an operation:
+```
+  oper ss : Str -> {s : Str} = \x -> {s = x} ;
+```
+The operation can be **applied** to an argument, and GF will
+**compute** the application into a value. For instance,
+```
+  ss "boy"  ===>  {s = "boy"}
+```
+(We use the symbol ``===>`` to indicate how an expression is 
+computed into a value; this symbol is not a part of GF)
+
+Thus an ``oper`` judgement includes the name of the defined operation,
+its type, and an expression defining it. As for the syntax of the defining
+expression, notice the **lambda abstraction** form ``\x -> t`` of
+the function.
+
+
+
+%--!
+===The ``resource`` module type===
+
+Operator definitions can be included in a concrete syntax. 
+But they are not really tied to a particular set of linearization rules.
+They should rather be seen as **resources**
+usable in many concrete syntaxes.
+
+The ``resource`` module type is used to package
+``oper`` definitions into reusable resources. Here is
+an example, with a handful of operations to manipulate
+strings and records.
+```
+  resource StringOper = {
+    oper
+      SS : Type = {s : Str} ;
+      ss : Str -> SS = \x -> {s = x} ;
+      cc : SS -> SS -> SS = \x,y -> ss (x.s ++ y.s) ;
+      prefix : Str -> SS -> SS = \p,x -> ss (p ++ x.s) ;
+  }
+```
+Resource modules can extend other resource modules, in the
+same way as modules of other types can extend modules of the
+same type. Thus it is possible to build resource hierarchies.
+
+
+
+%--!
+===Opening a resource===
+
+Any number of ``resource`` modules can be
+**opened** in a ``concrete`` syntax, which
+makes definitions contained
+in the resource usable in the concrete syntax. Here is
+an example, where the resource ``StringOper`` is
+opened in a new version of ``FoodEng``.
+```
+  concrete FoodEng of Food = open StringOper in {
+
+    lincat
+      S, Item, Kind, Quality = SS ;
+
+    lin
+      Is item quality = cc item (prefix "is" quality) ;
+      This k = prefix "this" k ;
+      That k = prefix "that" k ;
+      QKind k q = cc k q ;
+      Wine = ss "wine" ;
+      Cheese = ss "cheese" ;
+      Fish = ss "fish" ;
+      Very = prefix "very" ;
+      Fresh = ss "fresh" ;
+      Warm = ss "warm" ;
+      Italian = ss "Italian" ;
+      Expensive = ss "expensive" ;
+      Delicious = ss "delicious" ;
+      Boring = ss "boring" ;
+  }
+```
+
+**Exercise**. Use the same string operations to write ``FoodIta``
+more concisely.
+
+
+
+%--!
+===Partial application===
+
+GF, like Haskell, permits **partial application** of
+functions. An example of this is the rule
+```
+  lin This k = prefix "this" k ;
+```
+which can be written more concisely
+```
+  lin This = prefix "this" ;
+```
+The first form is perhaps more intuitive to write
+but, once you get used to partial application, you will appreciate its
+conciseness and elegance. The logic of partial application 
+is known as **currying**, with a reference to Haskell B. Curry. 
+The idea is that any //n//-place function can be defined as a 1-place
+function whose value is an //n-//1 -place function. Thus
+```
+  oper prefix : Str -> SS -> SS ;
+```
+can be used as a 1-place function that takes a ``Str`` into a
+function ``SS -> SS``. The expected linearization of ``This`` is exactly
+a function of such a type, operating on an argument of type ``Kind``
+whose linearization is of type ``SS``. Thus we can define the
+linearization directly as ``prefix "this"``.
+
+**Exercise**. Define an operation ``infix`` analogous to ``prefix``,
+such that it allows you to write
+```
+  lin Is = infix "is" ;
+```
+
+
+
+===Testing resource modules===
+
+To test a ``resource`` module independently, you must import it
+with the flag ``-retain``, which tells GF to retain ``oper`` definitions
+in the memory; the usual behaviour is that ``oper`` definitions
+are just applied to compile linearization rules 
+(this is called **inlining**) and then thrown away.
+```
+  > i -retain StringOper.gf
+```
+The command ``compute_concrete = cc`` computes any expression
+formed by operations and other GF constructs. For example,
+```
+  > compute_concrete prefix "in" (ss "addition")
+  {
+    s : Str = "in" ++ "addition"
+  }
+```
+
+
+
+
 ==Grammar architecture==
 
 ===Extending a grammar===
@@ -1218,6 +1410,19 @@ The effect of extension is that all of the contents of the extended
 and extending module are put together. We also say that the new 
 module **inherits** the contents of the old module.
 
+At the same time as extending a module of the same type, a concrete
+syntax module may open resources. The syntax is shown by the
+following Italian grammar module:
+```
+  concrete MorefoodIta of Morefood = FoodIta ** open StringOper in {
+    lincat
+      Question = SS ;
+    lin
+      QIs item quality = ss (item.s ++ "è" ++ quality.s) ;
+      Pizza = ss "pizza" ;
+  }
+```
+
 
 
 ===Multiple inheritance===
@@ -1246,8 +1451,8 @@ same time:
       MushroomKind : Mushroom -> Kind ;
     }
 ```
-At this point, you would perhaps like to go back to
-``Food`` and take apart ``Wine`` to build a special
+
+**Exercise**. Refactor ``Food`` by taking apart ``Wine`` into a special
 ``Drink`` module.
 
 
@@ -1277,6 +1482,7 @@ The graph uses
 
 Just as the ``visualize_tree = vt`` command, the open source tools
 Ghostview and Graphviz are needed.
+
 
 
 ===System commands===
@@ -1309,197 +1515,7 @@ is then ``?``.
 ```
 
 
-==The context-free grammar format==
-
-Readers not familar with context-free grammars, also known as BNF grammars, can
-skip this section. Those that are familar with them will find here the exact
-relation between GF and context-free grammars. We will moreover show how
-the BNF format can be used as input to the GF program; it is often more
-concise than GF proper, but also more restricted in expressive power.
-
-
-
-==Summary of GF language features==
-
-Module extensions, multiple inheritance.
-
-The ``.cf`` grammar format.
-
-
-
-%--!
-=Using resource modules=
-
-==The golden rule of functional programming==
-
-When writing a grammar, you have to type lots of 
-characters. You have probably
-done this by the copy-paste-modify method, which is a common way to
-avoid repeating work.
-
-However, there is a more elegant way to avoid repeating work than 
-the copy-and-paste
-method. The **golden rule of functional programming** says that
-- whenever you find yourself programming by copy-and-paste, 
-  write a function instead.
-
-
-A function separates the shared parts of different computations from the
-changing parts, its **arguments**, or **parameters**. 
-In functional programming languages, such as
-[Haskell http://www.haskell.org], it is possible to share much more 
-code with functions than in imperative languages such as C and Java.
-
-
-==Operation definitions==
-
-GF is a functional programming language, not only in the sense that
-the abstract syntax is a system of functions (``fun``), but also because
-functional programming can be used to define concrete syntax. This is
-done by using a new form of judgement, with the keyword ``oper`` (for
-**operation**), distinct from ``fun`` for the sake of clarity.
-Here is a simple example of an operation:
-```
-  oper ss : Str -> {s : Str} = \x -> {s = x} ;
-```
-The operation can be **applied** to an argument, and GF will
-**compute** the application into a value. For instance,
-```
-  ss "boy"  ===>  {s = "boy"}
-```
-(We use the symbol ``===>`` to indicate how an expression is 
-computed into a value; this symbol is not a part of GF)
-
-Thus an ``oper`` judgement includes the name of the defined operation,
-its type, and an expression defining it. As for the syntax of the defining
-expression, notice the **lambda abstraction** form ``\x -> t`` of
-the function.
-
-
-
-%--!
-==The ``resource`` module type==
-
-Operator definitions can be included in a concrete syntax. 
-But they are not really tied to a particular set of linearization rules.
-They should rather be seen as **resources**
-usable in many concrete syntaxes.
-
-The ``resource`` module type can be used to package
-``oper`` definitions into reusable resources. Here is
-an example, with a handful of operations to manipulate
-strings and records.
-```
-  resource StringOper = {
-    oper
-      SS : Type = {s : Str} ;
-      ss : Str -> SS = \x -> {s = x} ;
-      cc : SS -> SS -> SS = \x,y -> ss (x.s ++ y.s) ;
-      prefix : Str -> SS -> SS = \p,x -> ss (p ++ x.s) ;
-  }
-```
-Resource modules can extend other resource modules, in the
-same way as modules of other types can extend modules of the
-same type. Thus it is possible to build resource hierarchies.
-
-
-
-%--!
-==Opening a resource==
-
-Any number of ``resource`` modules can be
-**opened** in a ``concrete`` syntax, which
-makes definitions contained
-in the resource usable in the concrete syntax. Here is
-an example, where the resource ``StringOper`` is
-opened in a new version of ``FoodEng``.
-```
-  concrete Food2Eng of Food = open StringOper in {
-
-  lincat
-    S, Item, Kind, Quality = SS ;
-
-  lin
-    Is item quality = cc item (prefix "is" quality) ;
-    This k = prefix "this" k ;
-    That k = prefix "that" k ;
-    QKind k q = cc k q ;
-    Wine = ss "wine" ;
-    Cheese = ss "cheese" ;
-    Fish = ss "fish" ;
-    Very = prefix "very" ;
-    Fresh = ss "fresh" ;
-    Warm = ss "warm" ;
-    Italian = ss "Italian" ;
-    Expensive = ss "expensive" ;
-    Delicious = ss "delicious" ;
-    Boring = ss "boring" ;
-
-  }
-```
-**Exercise**. Use the same string operations to write ``FoodIta``
-more concisely.
-
-
-
-%--!
-==Partial application==
-
-GF, like Haskell, permits **partial application** of
-functions. An example of this is the rule
-```
-  lin This k = prefix "this" k ;
-```
-which can be written more concisely
-```
-  lin This = prefix "this" ;
-```
-The first form is perhaps more intuitive to write
-but, once you get used to partial application, you will appreciate its
-conciseness and elegance. The logic of partial application 
-is known as **currying**, with a reference to Haskell B. Curry. 
-The idea is that any //n//-place function can be defined as a 1-place
-function whose value is an //n-//1 -place function. Thus
-```
-  oper prefix : Str -> SS -> SS ;
-```
-can be used as a 1-place function that takes a ``Str`` into a
-function ``SS -> SS``. The expected linearization of ``This`` is exactly
-a function of such a type, operating on an argument of type ``Kind``
-whose linearization is of type ``SS``. Thus we can define the
-linearization directly as ``prefix "this"``.
-
-**Exercise**. Define an operation ``infix`` analogous to ``prefix``,
-such that it allows you to write
-```
-  lin Is = infix "is" ;
-```
-
-
-%--!
-==Testing resource modules==
-
-To test a ``resource`` module independently, you must import it
-with the flag ``-retain``, which tells GF to retain ``oper`` definitions
-in the memory; the usual behaviour is that ``oper`` definitions
-are just applied to compile linearization rules 
-(this is called **inlining**) and then thrown away.
-```
-  > i -retain StringOper.gf
-```
-The command ``compute_concrete = cc`` computes any expression
-formed by operations and other GF constructs. For example,
-```
-  > compute_concrete prefix "in" (ss "addition")
-  {
-    s : Str = "in" ++ "addition"
-  }
-```
-
-
-
-%--!
-==Division of labour==
+===Division of labour===
 
 Using operations defined in resource modules is a
 way to avoid repetitive code.
@@ -1518,10 +1534,22 @@ from libraries. It is also useful to know something about the
 linguistic concepts of inflection, agreement, and parts of speech.
 
 
+==Summary of GF language features==
+
+Module extensions, multiple inheritance.
+
+Resource modules.
+
+Oper judgements.
+
+The ``.cf`` grammar format.
 
 
-%--!
-=Implementing morphology=
+
+
+=Grammars with parameters=
+
+==The problem: words have to be inflected==
 
 Suppose we want to say, with the vocabulary included in
 ``Food.gf``, things like
@@ -1642,7 +1670,193 @@ apply in English, and implement some alternative paradigms.
 considered in earlier exercises.
 
 
+
+==Using parameters in concrete syntax==
+
+We can now enrich the concrete syntax definitions to
+comprise morphology. This will involve a more radical
+variation between languages (e.g. English and Italian)
+then just the use of different words. In general,
+parameters and linearization types are different in
+different languages - but this does not prevent the 
+use of a common abstract syntax.
+
+
 %--!
+===Parametric vs. inherent features, agreement===
+
+The rule of subject-verb agreement in English says that the verb
+phrase must be inflected in the number of the subject. This
+means that a noun phrase (functioning as a subject), inherently
+//has// a number, which it passes to the verb. The verb does not
+//have// a number, but must be able to //receive// whatever number the
+subject has. This distinction is nicely represented by the
+different linearization types of **noun phrases** and **verb phrases**:
+```
+  lincat NP = {s : Str ; n : Number} ;
+  lincat VP = {s : Number => Str} ;
+```
+We say that the number of ``NP`` is an **inherent feature**,
+whereas the number of  ``NP`` is a **variable feature** (or a
+**parametric feature**).
+
+The agreement rule itself is expressed in the linearization rule of
+the predication function:
+```
+  lin PredVP np vp = {s = np.s ++ vp.s ! np.n} ;
+```
+The following section will present
+``FoodsEng``, assuming the abstract syntax ``Foods`` 
+that is similar to ``Food`` but also has the
+plural determiners ``These`` and ``Those``.
+The reader is invited to inspect the way in which agreement works in
+the formation of sentences.
+
+
+%--!
+===English concrete syntax with parameters===
+
+The grammar uses both 
+[``Prelude`` ../../lib/prelude/Prelude.gf] and
+[``MorphoEng`` resource/MorphoEng].
+We will later see how to make the grammar even
+more high-level by using a resource grammar library
+and parametrized modules.
+```
+--# -path=.:resource:prelude
+
+concrete FoodsEng of Foods = open Prelude, MorphoEng in {
+
+  lincat
+    S, Quality = SS ; 
+    Kind = {s : Number => Str} ; 
+    Item = {s : Str ; n : Number} ; 
+
+  lin
+    Is item quality = ss (item.s ++ (mkVerb "are" "is").s ! item.n ++ quality.s) ;
+    This  = det Sg "this" ;
+    That  = det Sg "that" ;
+    These = det Pl "these" ;
+    Those = det Pl "those" ;
+    QKind quality kind = {s = \\n => quality.s ++ kind.s ! n} ;
+    Wine = regNoun "wine" ;
+    Cheese = regNoun "cheese" ;
+    Fish = mkNoun "fish" "fish" ;
+    Very = prefixSS "very" ;
+    Fresh = ss "fresh" ;
+    Warm = ss "warm" ;
+    Italian = ss "Italian" ;
+    Expensive = ss "expensive" ;
+    Delicious = ss "delicious" ;
+    Boring = ss "boring" ;
+
+  oper
+    det : Number -> Str -> Noun -> {s : Str ; n : Number} = \n,d,cn -> {
+      s = d ++ cn.s ! n ;
+      n = n
+      } ;
+}
+```
+
+
+
+%--!
+==Hierarchic parameter types==
+
+The reader familiar with a functional programming language such as
+[Haskell http://www.haskell.org] must have noticed the similarity
+between parameter types in GF and **algebraic datatypes** (``data`` definitions
+in Haskell). The GF parameter types are actually a special case of algebraic
+datatypes: the main restriction is that in GF, these types must be finite.
+(It is this restriction that makes it possible to invert linearization rules into
+parsing methods.)
+
+However, finite is not the same thing as enumerated. Even in GF, parameter
+constructors can take arguments, provided these arguments are from other
+parameter types - only recursion is forbidden. Such parameter types impose a
+hierarchic order among parameters. They are often needed to define
+the linguistically most accurate parameter systems.
+
+To give an example, Swedish adjectives
+are inflected in number (singular or plural) and
+gender (uter or neuter). These parameters would suggest 2*2=4 different
+forms. However, the gender distinction is done only in the singular. Therefore,
+it would be inaccurate to define adjective paradigms using the type
+``Gender => Number => Str``. The following hierarchic definition
+yields an accurate system of three adjectival forms.
+```
+  param AdjForm = ASg Gender | APl ;
+  param Gender  = Utr | Neutr ;
+```
+Here is an example of pattern matching, the paradigm of regular adjectives.
+```
+  oper regAdj : Str -> AdjForm => Str = \fin -> table {
+    ASg Utr   => fin ;
+    ASg Neutr => fin + "t" ;
+    APl       => fin + "a" ;
+    }
+```
+A constructor can be used as a pattern that has patterns as arguments. For instance,
+the adjectival paradigm in which the two singular forms are the same, 
+can be defined
+```
+  oper plattAdj : Str -> AdjForm => Str = \platt -> table {
+    ASg _ => platt ;
+    APl   => platt + "a" ;
+    }
+```
+
+
+
+
+%--!
+==Discontinuous constituents==
+
+A linearization type may contain more strings than one. 
+An example of where this is useful are English particle
+verbs, such as //switch off//. The linearization of
+a sentence may place the object between the verb and the particle:
+//he switched it off//.
+
+The following judgement defines transitive verbs as
+**discontinuous constituents**, i.e. as having a linearization
+type with two strings and not just one. 
+```
+  lincat TV = {s : Number => Str ; part : Str} ;
+```
+This linearization rule
+shows how the constituents are separated by the object in complementization.
+```
+  lin PredTV tv obj = {s = \\n => tv.s ! n ++ obj.s ++ tv.part} ;
+```
+There is no restriction in the number of discontinuous constituents
+(or other fields) a  ``lincat`` may contain. The only condition is that
+the fields must be of finite types, i.e. built from records, tables,
+parameters, and ``Str``, and not functions. 
+
+A mathematical result
+about parsing in GF says that the worst-case complexity of parsing
+increases with the number of discontinuous constituents. This is
+potentially a reason to avoid discontinuous constituents.
+Moreover, the parsing and linearization commands only give accurate
+results for categories whose linearization type has a unique ``Str`` 
+valued field labelled ``s``. Therefore, discontinuous constituents
+are not a good idea in top-level categories accessed by the users
+of a grammar application.
+
+
+
+
+
+
+
+
+
+
+
+
+=Implementing morphology=
+
 ==Worst-case functions and data abstraction==
 
 Some English nouns, such as ``mouse``, are so irregular that
@@ -1799,6 +2013,73 @@ is factored out as a separate ``oper``, which is shared with
 
 
 
+%--!
+==Regular expression patterns==
+
+To define string operations computed at compile time, such
+as in morphology, it is handy to use regular expression patterns:
+ - //p// ``+`` //q// : token consisting of //p// followed by //q//
+ - //p// ``*``       : token //p// repeated 0 or more times
+                                     (max the length of the string to be matched)
+ - ``-`` //p//       : matches anything that //p// does not match
+ - //x// ``@`` //p// : bind to //x// what //p// matches
+ - //p// ``|`` //q// : matches what either //p// or //q// matches
+
+
+The last three apply to all types of patterns, the first two only to token strings.
+As an example, we give a rule for the formation of English word forms
+ending with an //s// and used in the formation of both plural nouns and
+third-person present-tense verbs.
+```
+  add_s : Str -> Str = \w -> case w of {
+    _ + "oo"                           => w + "s" ;   -- bamboo
+    _ + ("s" | "z" | "x" | "sh" | "o") => w + "es" ;  -- bus, hero
+    _ + ("a" | "o" | "u" | "e") + "y"  => w + "s" ;   -- boy
+    x + "y"                            => x + "ies" ; -- fly
+    _                                  => w + "s"     -- car
+    } ;
+```
+Here is another example, the plural formation in Swedish 2nd declension.
+The second branch uses a variable binding with ``@`` to cover the cases where an
+unstressed pre-final vowel //e// disappears in the plural
+(//nyckel-nycklar, seger-segrar, bil-bilar//):
+```
+  plural2 : Str -> Str = \w -> case w of {
+    pojk + "e"                       => pojk + "ar" ;
+    nyck + "e" + l@("l" | "r" | "n") => nyck + l + "ar" ;
+    bil                              => bil + "ar"
+    } ;
+```
+
+
+Semantics: variables are always bound to the **first match**, which is the first
+in the sequence of binding lists ``Match p v`` defined as follows. In the definition,
+``p`` is a pattern and ``v`` is a value. The semantics is given in Haskell notation.
+```
+  Match (p1|p2) v = Match p1 ++ U Match p2 v
+  Match (p1+p2) s = [Match p1 s1 ++ Match p2 s2 | 
+                       i <- [0..length s], (s1,s2) = splitAt i s]
+  Match p*      s = [[]] if Match "" s ++ Match p s ++ Match (p+p) s ++... /= []
+  Match -p      v = [[]] if Match p v = []
+  Match c       v = [[]] if c == v  -- for constant and literal patterns c
+  Match x       v = [[(x,v)]]       -- for variable patterns x
+  Match x@p     v = [[(x,v)]] + M   if M = Match p v /= []
+  Match p       v = [] otherwise    -- failure
+```
+Examples:
+- ``x + "e" + y`` matches ``"peter"`` with ``x = "p", y = "ter"``
+- ``x + "er"*`` matches ``"burgerer"`` with ``x = "burg"
+
+
+
+**Exercise**. Implement the German **Umlaut** operation on word stems.
+The operation changes the vowel of the stressed stem syllable as follows:
+//a// to //ä//, //au// to //äu//, //o// to //ö//, and //u// to //ü//. You
+can assume that the operation only takes syllables as arguments. Test the
+operation to see whether it correctly changes //Arzt// to //Ärzt//,
+//Baum// to //Bäum//, //Topf// to //Töpf//, and //Kuh// to //Küh//.
+
+
 
 %--!
 ==Morphological resource modules==
@@ -1851,142 +2132,6 @@ directory.
 
 
 
-=Using parameters in concrete syntax=
-
-We can now enrich the concrete syntax definitions to
-comprise morphology. This will involve a more radical
-variation between languages (e.g. English and Italian)
-then just the use of different words. In general,
-parameters and linearization types are different in
-different languages - but this does not prevent the 
-use of a common abstract syntax.
-
-
-%--!
-==Parametric vs. inherent features, agreement==
-
-The rule of subject-verb agreement in English says that the verb
-phrase must be inflected in the number of the subject. This
-means that a noun phrase (functioning as a subject), inherently
-//has// a number, which it passes to the verb. The verb does not
-//have// a number, but must be able to //receive// whatever number the
-subject has. This distinction is nicely represented by the
-different linearization types of **noun phrases** and **verb phrases**:
-```
-  lincat NP = {s : Str ; n : Number} ;
-  lincat VP = {s : Number => Str} ;
-```
-We say that the number of ``NP`` is an **inherent feature**,
-whereas the number of  ``NP`` is a **variable feature** (or a
-**parametric feature**).
-
-The agreement rule itself is expressed in the linearization rule of
-the predication function:
-```
-  lin PredVP np vp = {s = np.s ++ vp.s ! np.n} ;
-```
-The following section will present
-``FoodsEng``, assuming the abstract syntax ``Foods`` 
-that is similar to ``Food`` but also has the
-plural determiners ``These`` and ``Those``.
-The reader is invited to inspect the way in which agreement works in
-the formation of sentences.
-
-
-%--!
-==English concrete syntax with parameters==
-
-The grammar uses both 
-[``Prelude`` ../../lib/prelude/Prelude.gf] and
-[``MorphoEng`` resource/MorphoEng].
-We will later see how to make the grammar even
-more high-level by using a resource grammar library
-and parametrized modules.
-```
---# -path=.:resource:prelude
-
-concrete FoodsEng of Foods = open Prelude, MorphoEng in {
-
-  lincat
-    S, Quality = SS ; 
-    Kind = {s : Number => Str} ; 
-    Item = {s : Str ; n : Number} ; 
-
-  lin
-    Is item quality = ss (item.s ++ (mkVerb "are" "is").s ! item.n ++ quality.s) ;
-    This  = det Sg "this" ;
-    That  = det Sg "that" ;
-    These = det Pl "these" ;
-    Those = det Pl "those" ;
-    QKind quality kind = {s = \\n => quality.s ++ kind.s ! n} ;
-    Wine = regNoun "wine" ;
-    Cheese = regNoun "cheese" ;
-    Fish = mkNoun "fish" "fish" ;
-    Very = prefixSS "very" ;
-    Fresh = ss "fresh" ;
-    Warm = ss "warm" ;
-    Italian = ss "Italian" ;
-    Expensive = ss "expensive" ;
-    Delicious = ss "delicious" ;
-    Boring = ss "boring" ;
-
-  oper
-    det : Number -> Str -> Noun -> {s : Str ; n : Number} = \n,d,cn -> {
-      s = d ++ cn.s ! n ;
-      n = n
-      } ;
-}
-```
-
-
-
-%--!
-==Hierarchic parameter types==
-
-The reader familiar with a functional programming language such as
-[Haskell http://www.haskell.org] must have noticed the similarity
-between parameter types in GF and **algebraic datatypes** (``data`` definitions
-in Haskell). The GF parameter types are actually a special case of algebraic
-datatypes: the main restriction is that in GF, these types must be finite.
-(It is this restriction that makes it possible to invert linearization rules into
-parsing methods.)
-
-However, finite is not the same thing as enumerated. Even in GF, parameter
-constructors can take arguments, provided these arguments are from other
-parameter types - only recursion is forbidden. Such parameter types impose a
-hierarchic order among parameters. They are often needed to define
-the linguistically most accurate parameter systems.
-
-To give an example, Swedish adjectives
-are inflected in number (singular or plural) and
-gender (uter or neuter). These parameters would suggest 2*2=4 different
-forms. However, the gender distinction is done only in the singular. Therefore,
-it would be inaccurate to define adjective paradigms using the type
-``Gender => Number => Str``. The following hierarchic definition
-yields an accurate system of three adjectival forms.
-```
-  param AdjForm = ASg Gender | APl ;
-  param Gender  = Utr | Neutr ;
-```
-Here is an example of pattern matching, the paradigm of regular adjectives.
-```
-  oper regAdj : Str -> AdjForm => Str = \fin -> table {
-    ASg Utr   => fin ;
-    ASg Neutr => fin + "t" ;
-    APl       => fin + "a" ;
-    }
-```
-A constructor can be used as a pattern that has patterns as arguments. For instance,
-the adjectival paradigm in which the two singular forms are the same, 
-can be defined
-```
-  oper plattAdj : Str -> AdjForm => Str = \platt -> table {
-    ASg _ => platt ;
-    APl   => platt + "a" ;
-    }
-```
-
-
 %--!
 ==Morphological analysis and morphology quiz==
 
@@ -2025,95 +2170,6 @@ The ``number`` flag gives the number of exercises generated.
 
 
 
-%--!
-==Discontinuous constituents==
-
-A linearization type may contain more strings than one. 
-An example of where this is useful are English particle
-verbs, such as //switch off//. The linearization of
-a sentence may place the object between the verb and the particle:
-//he switched it off//.
-
-The following judgement defines transitive verbs as
-**discontinuous constituents**, i.e. as having a linearization
-type with two strings and not just one. 
-```
-  lincat TV = {s : Number => Str ; part : Str} ;
-```
-This linearization rule
-shows how the constituents are separated by the object in complementization.
-```
-  lin PredTV tv obj = {s = \\n => tv.s ! n ++ obj.s ++ tv.part} ;
-```
-There is no restriction in the number of discontinuous constituents
-(or other fields) a  ``lincat`` may contain. The only condition is that
-the fields must be of finite types, i.e. built from records, tables,
-parameters, and ``Str``, and not functions. 
-
-A mathematical result
-about parsing in GF says that the worst-case complexity of parsing
-increases with the number of discontinuous constituents. This is
-potentially a reason to avoid discontinuous constituents.
-Moreover, the parsing and linearization commands only give accurate
-results for categories whose linearization type has a unique ``Str`` 
-valued field labelled ``s``. Therefore, discontinuous constituents
-are not a good idea in top-level categories accessed by the users
-of a grammar application.
-
-
-%--!
-==Free variation==
-
-Sometimes there are many alternative ways to define a concrete syntax.
-For instance, the verb negation in English can be expressed both by
-//does not// and //doesn't//. In linguistic terms, these expressions
-are in **free variation**. The ``variants`` construct of GF can
-be used to give a list of strings in free variation. For example,
-```
-  NegVerb verb = {s = variants {["does not"] ; "doesn't} ++ verb.s ! Pl} ;
-```
-An empty variant list
-```
-  variants {}
-```
-can be used e.g. if a word lacks a certain form.
-
-In general, ``variants`` should be used cautiously. It is not
-recommended for modules aimed to be libraries, because the
-user of the library has no way to choose among the variants.
-
-
-
-==Overloading of operations==
-
-Large libraries, such as the GF Resource Grammar Library, may define 
-hundreds of names, which can be unpractical
-for both the library writer and the user. The writer has to invent longer 
-and longer names which are not always intuitive,
-and the user has to learn or at least be able to find all these names. 
-A solution to this problem, adopted by languages such as C++, is **overloading**:
-the same name can be used for several functions. When such a name is used, the
-compiler performs **overload resolution** to find out which of the possible functions
-is meant. The resolution is based on the types of the functions: all functions that
-have the same name must have different types.
-
-In C++, functions with the same name can be scattered everywhere in the program.
-In GF, they must be grouped together in ``overload`` groups. Here is an example
-of an overload group, defining four ways to define nouns in Italian:
-```
-  oper mkN = overload {
-    mkN : Str -> N                  = -- regular nouns
-    mkN : Str -> Gender -> N        = -- regular nouns with unexpected gender
-    mkN : Str -> Str -> N           = -- irregular nouns
-    mkN : Str -> Str -> Gender -> N = -- irregular nouns with unexpected gender
-  }
-```
-All of the following uses of ``mkN`` are easy to resolve:
-```
-  lin Pizza = mkN "pizza" ;         -- Str -> N
-  lin Hand  = mkN "mano" Fem ;      -- Str -> Gender -> N
-  lin Man   = mkN "uomo" "uomini" ; -- Str -> Str -> N
-```
 
 
 
@@ -2218,73 +2274,25 @@ possible to write, slightly surprisingly,
 ```
 
 
-%--!
-==Regular expression patterns==
+==Free variation==
 
-To define string operations computed at compile time, such
-as in morphology, it is handy to use regular expression patterns:
- - //p// ``+`` //q// : token consisting of //p// followed by //q//
- - //p// ``*``       : token //p// repeated 0 or more times
-                                     (max the length of the string to be matched)
- - ``-`` //p//       : matches anything that //p// does not match
- - //x// ``@`` //p// : bind to //x// what //p// matches
- - //p// ``|`` //q// : matches what either //p// or //q// matches
-
-
-The last three apply to all types of patterns, the first two only to token strings.
-As an example, we give a rule for the formation of English word forms
-ending with an //s// and used in the formation of both plural nouns and
-third-person present-tense verbs.
+Sometimes there are many alternative ways to define a concrete syntax.
+For instance, the verb negation in English can be expressed both by
+//does not// and //doesn't//. In linguistic terms, these expressions
+are in **free variation**. The ``variants`` construct of GF can
+be used to give a list of strings in free variation. For example,
 ```
-  add_s : Str -> Str = \w -> case w of {
-    _ + "oo"                           => w + "s" ;   -- bamboo
-    _ + ("s" | "z" | "x" | "sh" | "o") => w + "es" ;  -- bus, hero
-    _ + ("a" | "o" | "u" | "e") + "y"  => w + "s" ;   -- boy
-    x + "y"                            => x + "ies" ; -- fly
-    _                                  => w + "s"     -- car
-    } ;
+  NegVerb verb = {s = variants {["does not"] ; "doesn't} ++ verb.s ! Pl} ;
 ```
-Here is another example, the plural formation in Swedish 2nd declension.
-The second branch uses a variable binding with ``@`` to cover the cases where an
-unstressed pre-final vowel //e// disappears in the plural
-(//nyckel-nycklar, seger-segrar, bil-bilar//):
+An empty variant list
 ```
-  plural2 : Str -> Str = \w -> case w of {
-    pojk + "e"                       => pojk + "ar" ;
-    nyck + "e" + l@("l" | "r" | "n") => nyck + l + "ar" ;
-    bil                              => bil + "ar"
-    } ;
+  variants {}
 ```
+can be used e.g. if a word lacks a certain form.
 
-
-Semantics: variables are always bound to the **first match**, which is the first
-in the sequence of binding lists ``Match p v`` defined as follows. In the definition,
-``p`` is a pattern and ``v`` is a value. The semantics is given in Haskell notation.
-```
-  Match (p1|p2) v = Match p1 ++ U Match p2 v
-  Match (p1+p2) s = [Match p1 s1 ++ Match p2 s2 | 
-                       i <- [0..length s], (s1,s2) = splitAt i s]
-  Match p*      s = [[]] if Match "" s ++ Match p s ++ Match (p+p) s ++... /= []
-  Match -p      v = [[]] if Match p v = []
-  Match c       v = [[]] if c == v  -- for constant and literal patterns c
-  Match x       v = [[(x,v)]]       -- for variable patterns x
-  Match x@p     v = [[(x,v)]] + M   if M = Match p v /= []
-  Match p       v = [] otherwise    -- failure
-```
-Examples:
-- ``x + "e" + y`` matches ``"peter"`` with ``x = "p", y = "ter"``
-- ``x + "er"*`` matches ``"burgerer"`` with ``x = "burg"
-
-
-
-**Exercise**. Implement the German **Umlaut** operation on word stems.
-The operation changes the vowel of the stressed stem syllable as follows:
-//a// to //ä//, //au// to //äu//, //o// to //ö//, and //u// to //ü//. You
-can assume that the operation only takes syllables as arguments. Test the
-operation to see whether it correctly changes //Arzt// to //Ärzt//,
-//Baum// to //Bäum//, //Topf// to //Töpf//, and //Kuh// to //Küh//.
-
-
+In general, ``variants`` should be used cautiously. It is not
+recommended for modules aimed to be libraries, because the
+user of the library has no way to choose among the variants.
 
 
 %--!
@@ -2336,6 +2344,39 @@ they can be used as arguments. For example:
   -- e.g. (StreetAddress 10 "Downing Street") : Address
 ```
 FIXME: The linearization type is ``{s : Str}`` for all these categories.
+
+
+==Overloading of operations==
+
+Large libraries, such as the GF Resource Grammar Library, may define 
+hundreds of names, which can be unpractical
+for both the library writer and the user. The writer has to invent longer 
+and longer names which are not always intuitive,
+and the user has to learn or at least be able to find all these names. 
+A solution to this problem, adopted by languages such as C++, is **overloading**:
+the same name can be used for several functions. When such a name is used, the
+compiler performs **overload resolution** to find out which of the possible functions
+is meant. The resolution is based on the types of the functions: all functions that
+have the same name must have different types.
+
+In C++, functions with the same name can be scattered everywhere in the program.
+In GF, they must be grouped together in ``overload`` groups. Here is an example
+of an overload group, defining four ways to define nouns in Italian:
+```
+  oper mkN = overload {
+    mkN : Str -> N                  = -- regular nouns
+    mkN : Str -> Gender -> N        = -- regular nouns with unexpected gender
+    mkN : Str -> Str -> N           = -- irregular nouns
+    mkN : Str -> Str -> Gender -> N = -- irregular nouns with unexpected gender
+  }
+```
+All of the following uses of ``mkN`` are easy to resolve:
+```
+  lin Pizza = mkN "pizza" ;         -- Str -> N
+  lin Hand  = mkN "mano" Fem ;      -- Str -> Gender -> N
+  lin Man   = mkN "uomo" "uomini" ; -- Str -> Str -> N
+```
+
 
 
 
