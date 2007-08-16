@@ -1,4 +1,4 @@
-Grammatical Framework: A Framework for Multilingual Natural Language Applications
+Grammatical Framework: Tutorial, Advanced Applications, and Reference Manual
 Author: Aarne Ranta aarne (at) cs.chalmers.se
 Last update: %%date(%c)
 
@@ -1768,6 +1768,43 @@ concrete FoodsEng of Foods = open Prelude, MorphoEng in {
 ```
 
 
+==Pattern matching==
+
+We have so far built all expressions of the ``table`` form 
+from branches whose patterns are constants introduced in
+``param`` definitions, as well as constant strings. 
+But there are more expressive patterns. Here is a summary of the possible forms:
+- a constructor pattern (identifier introduced in a ``param`` definition) matches
+  the identical constructor
+- a variable pattern (identifier other than constant parameter) matches anything
+- the wild card ``_`` matches anything
+- a string literal pattern, e.g. ``"s"``, matches the same string 
+- a disjunctive pattern ``P | ... | Q`` matches anything that
+     one of the disjuncts matches
+
+
+Pattern matching is performed in the order in which the branches
+appear in the table: the branch of the first matching pattern is followed.
+As a first example, let us take an English noun that has the same form in 
+singular and plura:
+```
+  lin Fish = {s = table {_ => "fish"}} ;
+```
+As syntactic sugar, one-branch tables can be written concisely,
+```
+  \\P,...,Q => t  ===  table {P => ... table {Q => t} ...}
+```
+Thus we could rewrite the above rule
+```
+  lin Fish = {s = \\_ => "fish"} ;
+```
+Finally, the ``case`` expressions common in functional
+programming languages are syntactic sugar for table selections:
+```
+  case e of {...} ===  table {...} ! e
+```
+
+
 
 %--!
 ==Hierarchic parameter types==
@@ -1854,17 +1891,211 @@ are not a good idea in top-level categories accessed by the users
 of a grammar application.
 
 
+==More constructs for concrete syntax==
+
+In this section, we go through constructs that are not necessary 
+in simple grammars or when the concrete syntax relies on libraries. 
+But they are useful when writing advanced concrete syntax implementations, 
+such as resource grammar libraries. Moreover, they conclude
+the presentation of concrete syntax constructs.
+
+
+%--!
+===Local definitions===
+
+Local definitions ("``let`` expressions") are used in functional
+programming for two reasons: to structure the code into smaller
+expressions, and to avoid repeated computation of one and
+the same expression. Here is an example, from 
+[``MorphoIta`` resource/MorphoIta.gf]:
+```
+  oper regNoun : Str -> Noun = \vino -> 
+        let 
+          vin = init vino ;
+          o   = last vino
+        in
+        case o of {
+          "a"       => mkNoun Fem  vino (vin + "e") ;
+          "o" | "e" => mkNoun Masc vino (vin + "i") ;
+          _         => mkNoun Masc vino vino         
+          } ;
+```
+
+
+
+===Record extension and subtyping===
+
+Record types and records can be **extended** with new fields. For instance,
+in German it is natural to see transitive verbs as verbs with a case.
+The symbol ``**`` is used for both constructs.
+```
+  lincat TV = Verb ** {c : Case} ;
+
+  lin Follow = regVerb "folgen" ** {c = Dative} ; 
+```
+To extend a record type or a record with a field whose label it
+already has is a type error.
+
+A record type //T// is a **subtype** of another one //R//, if //T// has
+all the fields of //R// and possibly other fields. For instance,
+an extension of a record type is always a subtype of it.
+
+If //T// is a subtype of //R//, an object of //T// can be used whenever
+an object of //R// is required. For instance, a transitive verb can
+be used whenever a verb is required.
+
+**Contravariance** means that a function taking an //R// as argument
+can also be applied to any object of a subtype //T//.
+
+
+
+===Tuples and product types===
+
+Product types and tuples are syntactic sugar for record types and records:
+```
+  T1 * ... * Tn   ===   {p1 : T1 ; ... ; pn : Tn}
+  <t1, ...,  tn>  ===   {p1 = T1 ; ... ; pn = Tn}
+```
+Thus the labels ``p1, p2,...`` are hard-coded.
+
+
+===Record and tuple patterns===
+
+Record types of parameter types also count as parameter types.
+A typical example is a record of agreement features, e.g. French
+```
+  oper Agr : PType = {g : Gender ; n : Number ; p : Person} ;
+```
+Notice the term ``PType`` rather than just ``Type`` referring to
+parameter types. Every ``PType`` is also a ``Type``, but not vice-versa.
+
+Pattern matching is done in the expected way, but it can moreover
+utilize partial records: the branch
+```
+  {g = Fem} => t
+```
+in a table of type ``Agr => T`` means the same as
+```
+  {g = Fem ; n = _ ; p = _} => t
+```
+Tuple patterns are translated to record patterns in the
+same way as tuples to records; partial patterns make it
+possible to write, slightly surprisingly,
+```
+  case <g,n,p> of {
+    <Fem> => t
+    ...
+    }
+```
+
+
+===Free variation===
+
+Sometimes there are many alternative ways to define a concrete syntax.
+For instance, the verb negation in English can be expressed both by
+//does not// and //doesn't//. In linguistic terms, these expressions
+are in **free variation**. The ``variants`` construct of GF can
+be used to give a list of strings in free variation. For example,
+```
+  NegVerb verb = {s = variants {["does not"] ; "doesn't} ++ verb.s ! Pl} ;
+```
+An empty variant list
+```
+  variants {}
+```
+can be used e.g. if a word lacks a certain form.
+
+In general, ``variants`` should be used cautiously. It is not
+recommended for modules aimed to be libraries, because the
+user of the library has no way to choose among the variants.
+
+
+%--!
+===Prefix-dependent choices===
+
+Sometimes a token has different forms depending on the token
+that follows. An example is the English indefinite article,
+which is //an// if a vowel follows, //a// otherwise.
+Which form is chosen can only be decided at run time, i.e.
+when a string is actually build. GF has a special construct for
+such tokens, the ``pre`` construct exemplified in
+```
+  oper artIndef : Str = 
+    pre {"a" ; "an" / strs {"a" ; "e" ; "i" ; "o"}} ;
+```
+Thus
+```
+  artIndef ++ "cheese"  --->  "a" ++ "cheese"
+  artIndef ++ "apple"   --->  "an" ++ "apple"
+```
+This very example does not work in all situations: the prefix
+//u// has no general rules, and some problematic words are
+//euphemism, one-eyed, n-gram//. It is possible to write
+```
+  oper artIndef : Str = 
+    pre {"a" ; 
+         "a"  / strs {"eu" ; "one"} ;
+         "an" / strs {"a" ; "e" ; "i" ; "o" ; "n-"}
+        } ;
+```
+
+
+===Predefined types===
+
+GF has the following predefined categories in abstract syntax:
+```
+  cat Int ;     -- integers, e.g. 0, 5, 743145151019
+  cat Float ;   -- floats,   e.g. 0.0, 3.1415926
+  cat String ;  -- strings,  e.g. "", "foo", "123"
+```
+The objects of each of these categories are **literals**
+as indicated in the comments above. No ``fun`` definition
+can have a predefined category as its value type, but
+they can be used as arguments. For example:
+```
+  fun StreetAddress : Int -> String -> Address ;
+  lin StreetAddress number street = {s = number.s ++ street.s} ;
+
+  -- e.g. (StreetAddress 10 "Downing Street") : Address
+```
+FIXME: The linearization type is ``{s : Str}`` for all these categories.
+
+
+===Overloading of operations===
+
+Large libraries, such as the GF Resource Grammar Library, may define 
+hundreds of names, which can be unpractical
+for both the library writer and the user. The writer has to invent longer 
+and longer names which are not always intuitive,
+and the user has to learn or at least be able to find all these names. 
+A solution to this problem, adopted by languages such as C++, is **overloading**:
+the same name can be used for several functions. When such a name is used, the
+compiler performs **overload resolution** to find out which of the possible functions
+is meant. The resolution is based on the types of the functions: all functions that
+have the same name must have different types.
+
+In C++, functions with the same name can be scattered everywhere in the program.
+In GF, they must be grouped together in ``overload`` groups. Here is an example
+of an overload group, defining four ways to define nouns in Italian:
+```
+  oper mkN = overload {
+    mkN : Str -> N                  = -- regular nouns
+    mkN : Str -> Gender -> N        = -- regular nouns with unexpected gender
+    mkN : Str -> Str -> N           = -- irregular nouns
+    mkN : Str -> Str -> Gender -> N = -- irregular nouns with unexpected gender
+  }
+```
+All of the following uses of ``mkN`` are easy to resolve:
+```
+  lin Pizza = mkN "pizza" ;         -- Str -> N
+  lin Hand  = mkN "mano" Fem ;      -- Str -> Gender -> N
+  lin Man   = mkN "uomo" "uomini" ; -- Str -> Str -> N
+```
 
 
 
 
-
-
-
-
-
-
-=Implementing morphology=
+=Implementing morphology and syntax=
 
 ==Worst-case functions and data abstraction==
 
@@ -1952,33 +2183,6 @@ without explicit ``open`` of the module ``Predef``.
 
 
 
-%--!
-==Pattern matching==
-
-We have so far built all expressions of the ``table`` form 
-from branches whose patterns are constants introduced in
-``param`` definitions, as well as constant strings. 
-But there are more expressive patterns. Here is a summary of the possible forms:
-- a variable pattern (identifier other than constant parameter) matches anything
-- the wild card ``_`` matches anything
-- a string literal pattern, e.g. ``"s"``, matches the same string 
-- a disjunctive pattern ``P | ... | Q`` matches anything that
-     one of the disjuncts matches
-
-
-Pattern matching is performed in the order in which the branches
-appear in the table: the branch of the first matching pattern is followed.
-
-As syntactic sugar, one-branch tables can be written concisely,
-```
-  \\P,...,Q => t  ===  table {P => ... table {Q => t} ...}
-```
-Finally, the ``case`` expressions common in functional
-programming languages are syntactic sugar for table selections:
-```
-  case e of {...} ===  table {...} ! e
-```
-
 
 %--!
 ==An intelligent noun paradigm using pattern matching==
@@ -2059,23 +2263,9 @@ unstressed pre-final vowel //e// disappears in the plural
     bil                              => bil + "ar"
     } ;
 ```
-
-
-Semantics: variables are always bound to the **first match**, which is the first
-in the sequence of binding lists ``Match p v`` defined as follows. In the definition,
-``p`` is a pattern and ``v`` is a value. The semantics is given in Haskell notation.
-```
-  Match (p1|p2) v = Match p1 ++ U Match p2 v
-  Match (p1+p2) s = [Match p1 s1 ++ Match p2 s2 | 
-                       i <- [0..length s], (s1,s2) = splitAt i s]
-  Match p*      s = [[]] if Match "" s ++ Match p s ++ Match (p+p) s ++... /= []
-  Match -p      v = [[]] if Match p v = []
-  Match c       v = [[]] if c == v  -- for constant and literal patterns c
-  Match x       v = [[(x,v)]]       -- for variable patterns x
-  Match x@p     v = [[(x,v)]] + M   if M = Match p v /= []
-  Match p       v = [] otherwise    -- failure
-```
-Examples:
+Variables in regular expression patterns
+are always bound to the **first match**, which is the first
+in the sequence of binding lists. For example:
 - ``x + "e" + y`` matches ``"peter"`` with ``x = "p", y = "ter"``
 - ``x + "er"*`` matches ``"burgerer"`` with ``x = "burg"
 
@@ -2180,222 +2370,14 @@ The ``number`` flag gives the number of exercises generated.
 
 
 
-
-
-
-
-
-%--!
-=More constructs for concrete syntax=
-
-In this chapter, we go through constructs that are not necessary in simple grammars
-or when the concrete syntax relies on libraries. But they are useful when 
-writing advanced concrete syntax implementations, such as resource grammar libraries.
-This chapter can safely be skipped if the reader prefers to continue to the
-chapter on using libraries.
-
-
-%--!
-==Local definitions==
-
-Local definitions ("``let`` expressions") are used in functional
-programming for two reasons: to structure the code into smaller
-expressions, and to avoid repeated computation of one and
-the same expression. Here is an example, from 
-[``MorphoIta`` resource/MorphoIta.gf]:
-```
-  oper regNoun : Str -> Noun = \vino -> 
-        let 
-          vin = init vino ;
-          o   = last vino
-        in
-        case o of {
-          "a"       => mkNoun Fem  vino (vin + "e") ;
-          "o" | "e" => mkNoun Masc vino (vin + "i") ;
-          _         => mkNoun Masc vino vino         
-          } ;
-```
-
-
-==Record extension and subtyping==
-
-Record types and records can be **extended** with new fields. For instance,
-in German it is natural to see transitive verbs as verbs with a case.
-The symbol ``**`` is used for both constructs.
-```
-  lincat TV = Verb ** {c : Case} ;
-
-  lin Follow = regVerb "folgen" ** {c = Dative} ; 
-```
-To extend a record type or a record with a field whose label it
-already has is a type error.
-
-A record type //T// is a **subtype** of another one //R//, if //T// has
-all the fields of //R// and possibly other fields. For instance,
-an extension of a record type is always a subtype of it.
-
-If //T// is a subtype of //R//, an object of //T// can be used whenever
-an object of //R// is required. For instance, a transitive verb can
-be used whenever a verb is required.
-
-**Contravariance** means that a function taking an //R// as argument
-can also be applied to any object of a subtype //T//.
-
-
-
-==Tuples and product types==
-
-Product types and tuples are syntactic sugar for record types and records:
-```
-  T1 * ... * Tn   ===   {p1 : T1 ; ... ; pn : Tn}
-  <t1, ...,  tn>  ===   {p1 = T1 ; ... ; pn = Tn}
-```
-Thus the labels ``p1, p2,...`` are hard-coded.
-
-
-==Record and tuple patterns==
-
-Record types of parameter types are also parameter types.
-A typical example is a record of agreement features, e.g. French
-```
-  oper Agr : PType = {g : Gender ; n : Number ; p : Person} ;
-```
-Notice the term ``PType`` rather than just ``Type`` referring to
-parameter types. Every ``PType`` is also a ``Type``, but not vice-versa.
-
-Pattern matching is done in the expected way, but it can moreover
-utilize partial records: the branch
-```
-  {g = Fem} => t
-```
-in a table of type ``Agr => T`` means the same as
-```
-  {g = Fem ; n = _ ; p = _} => t
-```
-Tuple patterns are translated to record patterns in the
-same way as tuples to records; partial patterns make it
-possible to write, slightly surprisingly,
-```
-  case <g,n,p> of {
-    <Fem> => t
-    ...
-    }
-```
-
-
-==Free variation==
-
-Sometimes there are many alternative ways to define a concrete syntax.
-For instance, the verb negation in English can be expressed both by
-//does not// and //doesn't//. In linguistic terms, these expressions
-are in **free variation**. The ``variants`` construct of GF can
-be used to give a list of strings in free variation. For example,
-```
-  NegVerb verb = {s = variants {["does not"] ; "doesn't} ++ verb.s ! Pl} ;
-```
-An empty variant list
-```
-  variants {}
-```
-can be used e.g. if a word lacks a certain form.
-
-In general, ``variants`` should be used cautiously. It is not
-recommended for modules aimed to be libraries, because the
-user of the library has no way to choose among the variants.
-
-
-%--!
-==Prefix-dependent choices==
-
-Sometimes a token has different forms depending on the token
-that follows. An example is the English indefinite article,
-which is //an// if a vowel follows, //a// otherwise.
-Which form is chosen can only be decided at run time, i.e.
-when a string is actually build. GF has a special construct for
-such tokens, the ``pre`` construct exemplified in
-```
-  oper artIndef : Str = 
-    pre {"a" ; "an" / strs {"a" ; "e" ; "i" ; "o"}} ;
-```
-Thus
-```
-  artIndef ++ "cheese"  --->  "a" ++ "cheese"
-  artIndef ++ "apple"   --->  "an" ++ "apple"
-```
-This very example does not work in all situations: the prefix
-//u// has no general rules, and some problematic words are
-//euphemism, one-eyed, n-gram//. It is possible to write
-```
-  oper artIndef : Str = 
-    pre {"a" ; 
-         "a"  / strs {"eu" ; "one"} ;
-         "an" / strs {"a" ; "e" ; "i" ; "o" ; "n-"}
-        } ;
-```
-
-
-==Predefined types==
-
-GF has the following predefined categories in abstract syntax:
-```
-  cat Int ;     -- integers, e.g. 0, 5, 743145151019
-  cat Float ;   -- floats,   e.g. 0.0, 3.1415926
-  cat String ;  -- strings,  e.g. "", "foo", "123"
-```
-The objects of each of these categories are **literals**
-as indicated in the comments above. No ``fun`` definition
-can have a predefined category as its value type, but
-they can be used as arguments. For example:
-```
-  fun StreetAddress : Int -> String -> Address ;
-  lin StreetAddress number street = {s = number.s ++ street.s} ;
-
-  -- e.g. (StreetAddress 10 "Downing Street") : Address
-```
-FIXME: The linearization type is ``{s : Str}`` for all these categories.
-
-
-==Overloading of operations==
-
-Large libraries, such as the GF Resource Grammar Library, may define 
-hundreds of names, which can be unpractical
-for both the library writer and the user. The writer has to invent longer 
-and longer names which are not always intuitive,
-and the user has to learn or at least be able to find all these names. 
-A solution to this problem, adopted by languages such as C++, is **overloading**:
-the same name can be used for several functions. When such a name is used, the
-compiler performs **overload resolution** to find out which of the possible functions
-is meant. The resolution is based on the types of the functions: all functions that
-have the same name must have different types.
-
-In C++, functions with the same name can be scattered everywhere in the program.
-In GF, they must be grouped together in ``overload`` groups. Here is an example
-of an overload group, defining four ways to define nouns in Italian:
-```
-  oper mkN = overload {
-    mkN : Str -> N                  = -- regular nouns
-    mkN : Str -> Gender -> N        = -- regular nouns with unexpected gender
-    mkN : Str -> Str -> N           = -- irregular nouns
-    mkN : Str -> Str -> Gender -> N = -- irregular nouns with unexpected gender
-  }
-```
-All of the following uses of ``mkN`` are easy to resolve:
-```
-  lin Pizza = mkN "pizza" ;         -- Str -> N
-  lin Hand  = mkN "mano" Fem ;      -- Str -> Gender -> N
-  lin Man   = mkN "uomo" "uomini" ; -- Str -> Str -> N
-```
-
-
-
-
-%--!
-
 =Using the resource grammar library=
 
 In this chapter, we will take a look at the GF resource grammar library.
 We will use the library to implement a slightly extended ``Food`` grammar
 and port it to some new languages.
+
+**Exercise**. Define the mini resource of the previous chapter by
+using a functor over the full resource.
 
 
 ==The coverage of the library==
