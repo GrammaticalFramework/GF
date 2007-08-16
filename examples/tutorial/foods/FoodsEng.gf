@@ -1,23 +1,23 @@
---# -path=.:resource:prelude
+--# -path=.:prelude
 
 concrete FoodsEng of Foods = open Prelude in {
 
   lincat
-    S, Quality = SS ; 
+    Phr, Quality = SS ; 
     Kind = {s : Number => Str} ; 
     Item = {s : Str ; n : Number} ; 
 
   lin
-    Is item quality = ss (item.s ++ copula item.n ++ quality.s) ;
+    Is item quality = ss (item.s ++ copula ! item.n ++ quality.s) ;
     This  = det Sg "this" ;
     That  = det Sg "that" ;
     These = det Pl "these" ;
     Those = det Pl "those" ;
     QKind quality kind = {s = \\n => quality.s ++ kind.s ! n} ;
-    Wine = noun "wine" "wines" ;
-    Cheese = noun "cheese" "cheeses" ;
+    Wine = regNoun "wine" ;
+    Cheese = regNoun "cheese" ;
     Fish = noun "fish" "fish" ;
-    Pizza = noun "pizza" "pizzas" ;
+    Pizza = regNoun "pizza" ;
     Very = prefixSS "very" ;
     Fresh = ss "fresh" ;
     Warm = ss "warm" ;
@@ -41,8 +41,10 @@ concrete FoodsEng of Foods = open Prelude in {
         Pl => men 
         }
       } ;
-    copula : Number -> Str = 
-      \n -> case n of {
+    regNoun : Str -> {s : Number => Str} = 
+      \car -> noun car (car + "s") ;
+    copula : Number => Str = 
+      table {
         Sg => "is" ;
         Pl => "are"
         } ;
