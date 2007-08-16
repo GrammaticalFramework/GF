@@ -8,6 +8,9 @@ resource MorphoEng = open Prelude in {
     oper
       Noun, Verb : Type = {s : Number => Str} ;
 
+      NP = {s : Str ; n : Number} ;
+      VP = {s : Bool => Bool => Number => Str * Str} ; -- decl, pol
+
       mkNoun : Str -> Str -> Noun = \x,y -> {
         s = table {
           Sg => x ;

@@ -3,29 +3,51 @@
 concrete SyntaxIta of Syntax = open Prelude, MorphoIta in {
 
   lincat
+    Phr  = {s : Str} ;
     S    = {s : Str} ;
+    QS   = {s : Str} ;
     NP   = {s : Str ; g : Gender ; n : Number} ;
+    IP   = {s : Str ; g : Gender ; n : Number} ;
     CN   = {s : Number => Str ; g : Gender} ;
     Det  = {s : Gender => Str ; n : Number} ;
     AP   = {s : Gender => Number => Str} ;
     AdA  = {s : Str} ;
     VP   = {s : Bool => Gender => Number => Str} ;
+
+    N    = {s : Number => Str ; g : Gender} ;
+    A    = {s : Gender => Number => Str} ;
     V    = {s : Number => Str} ;
     V2   = {s : Number => Str ; c : Str} ;
 
   lin
-    PosVP  np vp = {s = np.s ++ vp.s ! True  ! np.g ! np.n} ;
-    NegVP  np vp = {s = np.s ++ vp.s ! False ! np.g ! np.n} ;
+    PhrS = postfixSS "." ;
+    PhrQS = postfixSS "?" ;
+
+    PosVP   np vp = {s = np.s ++ vp.s ! True  ! np.g ! np.n} ;
+    NegVP   np vp = {s = np.s ++ vp.s ! False ! np.g ! np.n} ;
+    QPosVP  np vp = {s = np.s ++ vp.s ! True  ! np.g ! np.n} ;
+    QNegVP  np vp = {s = np.s ++ vp.s ! False ! np.g ! np.n} ;
+    IPPosVP np vp = {s = np.s ++ vp.s ! True  ! np.g ! np.n} ;
+    IPNegVP np vp = {s = np.s ++ vp.s ! False ! np.g ! np.n} ;
+
+    IPPosV2 ip np v2 = {s = v2.c ++ ip.s ++ v2.s ! np.n ++ np.s} ;
+    IPNegV2 ip np v2 = {s = v2.c ++ ip.s ++ "non" ++ v2.s ! np.n ++ np.s} ;
  
-    PredAP ap    = {s = \\b,g,n => posneg b ++ copula n ++ ap.s ! g ! n} ;
-    PredV  v     = {s = \\b,_,n => posneg b ++ v.s ! n} ;
-    PredV2 v2 np = {s = \\b,_,n => posneg b ++ v2.s ! n ++ v2.c ++ np.s} ;
+    ComplV2 v2 np = {s = \\b,_,n => posneg b ++ v2.s ! n ++ v2.c ++ np.s} ;
+    ComplAP ap    = {s = \\b,g,n => posneg b ++ copula n ++ ap.s ! g ! n} ;
 
     DetCN det cn = {s = det.s ! cn.g ++ cn.s ! det.n ; g = cn.g ; n = det.n} ;
 
     ModCN ap cn  = {s = \\n => cn.s ! n ++ ap.s ! cn.g ! n ; g = cn.g} ;
 
     AdAP ada ap  = {s = \\n,g => ada.s ++ ap.s ! n ! g} ;
+
+    WhichCN cn = {s = "quale" ++ cn.s ! Sg ; g = cn.g ; n = Sg} ;
+
+    UseN n = n ;
+    UseA a = a ;
+    UseV v = {s = \\b,_,n => posneg b ++ v.s ! n} ;
+
 
     this_Det = mkDet Sg (regAdjective "questo") ;
     that_Det = mkDet Sg (regAdjective "quello") ;
@@ -34,17 +56,16 @@ concrete SyntaxIta of Syntax = open Prelude, MorphoIta in {
     every_Det = {s = \\_ => "ogni" ; n = Sg} ;
     theSg_Det = {s = artDef Sg ; n = Sg} ;
     thePl_Det = {s = artDef Pl ; n = Pl} ;
-    a_Det = {s = artIndef ; n = Pl} ;
+    indef_Det = {s = artIndef ; n = Sg} ;
     plur_Det = {s = \\_ => [] ; n = Pl} ;
     two_Det = {s = \\_ => "due" ; n = Pl} ;
 
     very_AdA = {s = "molto"} ;
-    too_AdA = {s = "troppo"} ;
 
 
   oper
     copula : Number -> Str = \n -> case n of {
-      Sg => "Ã¨" ;
+      Sg => "è" ;
       Pl => "sono"
       } ;
 
