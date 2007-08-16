@@ -1,9 +1,9 @@
---# -path=.:resource:prelude
+--# -path=.:prelude
 
 concrete FoodsIta of Foods = open Prelude in {
 
   lincat
-    S = SS ; 
+    Phr = SS ; 
     Quality = {s : Gender => Number => Str} ; 
     Kind = {s : Number => Str ; g : Gender} ; 
     Item = {s : Str ; g : Gender ; n : Number} ; 
@@ -74,4 +74,3 @@ concrete FoodsIta of Foods = open Prelude in {
         Pl => "sono"
         } ;
 }
-    

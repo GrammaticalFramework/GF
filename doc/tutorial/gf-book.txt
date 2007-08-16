@@ -1268,7 +1268,7 @@ concise than GF proper, but also more restricted in expressive power.
 
 
 
-==Using resource modules==
+==Using operations and resource modules==
 
 ===The golden rule of functional programming===
 
@@ -1731,54 +1731,160 @@ comprise morphology. This will permit a more radical
 variation between languages (e.g. English and Italian)
 then just the use of different words. In general,
 parameters and linearization types are different in
-different languages - but this does not prevent the 
-use of a common abstract syntax.
+different languages - but this has no effect on 
+the common abstract syntax.
+
+We consider a grammar ``Foods``, which is similar to
+``Food``, with the addition of two plural determiners,
+```
+  fun These, Those : Kind -> Item ;
+```
+and a noun which in Italian has the feminine case; all noun in
+``Food`` were carefully chosen to be masculine!
+```
+  fun Pizza : Kind ;
+```
+
 
 
 %--!
-===Parametric vs. inherent features, agreement===
+===Agreement===
 
-The rule of subject-verb agreement in English says that the verb
-phrase must be inflected in the number of the subject. This
-means that a noun phrase (functioning as a subject), inherently
-has a number, which it passes to the verb. The verb does not
-//have// a number, but must be able to //receive// whatever number the
-subject has. This distinction is nicely represented by the
-different linearization types of **noun phrases** and **verb phrases**:
+In the English ``Foods`` grammar, we need just one type of parameters:
+``Number`` as defined above. The phrase-forming rule
 ```
-  lincat NP = {s : Str ; n : Number} ;
-  lincat VP = {s : Number => Str} ;
+  Is : Item -> Quality -> Phr ;
 ```
-We say that the number of ``NP`` is an **inherent feature**,
-whereas the number of  ``NP`` is a **variable feature** (or a
-**parametric feature**).
-
-The agreement rule itself is expressed in the linearization rule of
-the predication function:
+is affected by the number because of **subject-verb agreement**.
+In English, agreement says that the verb of a sentence
+must be inflected in the number of the subject. Thus we will linearize
 ```
-  lin PredVP np vp = {s = np.s ++ vp.s ! np.n} ;
+  Is (This Pizza) Warm   >>  "this pizza is warm"
+  Is (These Pizza) Warm  >>  "these pizzas are warm"
 ```
-The following section will present
-``FoodsEng``, assuming the abstract syntax ``Foods`` 
-that is similar to ``Food`` but also has the
-plural determiners ``These`` and ``Those``.
-The reader is invited to inspect the way in which agreement works in
-the formation of sentences.
-
-
-%--!
-===English concrete syntax with parameters===
-
-The grammar uses both 
-[``Prelude`` ../../lib/prelude/Prelude.gf] and
-[``MorphoEng`` resource/MorphoEng].
-We will later see how to make the grammar even
-more high-level by using a resource grammar library
-and parametrized modules.
+It is the **copula**, i.e. the verb //be// that is affected. We can define
+the copula as the operation
 ```
---# -path=.:resource:prelude
+  oper copula : Number => Str = 
+    table {
+      Sg => "is" ;
+      Pl => "are"
+      } ;
+```
+The form of the copula depends on the subject of the sentence, i.e. the item
+that is qualified. This means that an item must have such a number to provide.
+In other words, the linearization of an ``Item`` must provide a number. The 
+simplest way to guarantee this is by putting a number as a field in
+the linearization type:
+```
+  lincat Item = {s : Str ; n : Number} ;
+```
+Now we can write precisely the ``Is`` rule that expresses agreement:
+```
+  lin Is item qual = {s = item.s ++ copula ! item.n ++ qual.s} ;
+```
 
-concrete FoodsEng of Foods = open Prelude, MorphoEng in {
+===Government===
+
+Let us turn to ``Item`` subjects and see how they receive their
+numbers. The two rules
+```
+  fun This, These : Kind -> Item ;
+```
+require different numbers of their ``Kind`` arguments: ``This`` 
+requires the singular (//this pizza//) and ``These`` the plural
+(//these pizzas//). The ``Kind`` is the same in both cases: ``Pizza``.
+Thus we must require that a ``Kind`` has both singular and plural forms.
+The simplest way to express this is by using a table:
+```
+  lincat Kind = {s : Number => Str} ;
+```
+The linearization rules for ``This`` and ``These`` can now be written
+```
+  lin This kind = {
+    s = "this" ++ kind.s ! Sg ; 
+    n = Sg
+  } ; 
+
+  lin These kind = {
+    s = "these" ++ kind.s ! Pl ; 
+    n = Pl
+  } ; 
+```
+The grammatical relation between the determiner and the noun is similar to
+agreement, but yet different; it is usually called **government**.
+Since the same pattern is used four times in the ``FoodsEng`` grammar,
+we codify it as an operation,
+```
+  oper det : Str -> Number -> {s : Number => Str} -> {s : Str ; n : Number} = 
+    \det,n,kind -> {
+    s = det ++ kind.s ! n ; 
+    n = n
+  } ; 
+```
+In a more linguistically motivated grammar, determiners will be made to a 
+category of their own and have a number.
+
+
+===Parametric vs. inherent features===
+
+``Kind``s, as in general common nouns in English, have both singular
+and plural forms; what form is chosen is determined by the construction
+in which the noun is used. We say that the number is a
+**parametric feature** of nouns. In GF, parametric features
+appear as argument types to tables in linearization types.
+
+``Item``s, as in general noun phrases functioning as subjects, don't
+have variation in number. The number is rather an **inherent feature**,
+which the noun phrase passes to the verb. In GF, inherent features
+appear as record fields in linearization types.
+
+A category can have both parametric and inherent features. As we will see
+in the Italian ``Foods`` grammar, nouns have parametric number and
+inherent gender:
+```
+  lincat Kind = {s : Number => Str ; g : Gender} ;
+```
+Formally, nothing prevents the same parameter type from appearing both
+as parametric and inherent feature, or the appearance of several inherent
+features of the same type, etc. Determining the linearization types
+of categories is one of the most crucial steps in the design of a GF
+grammar. Two conditions must be in balance:
+- existence: what forms are possible to build by morphological and
+  other means?
+- need: what features are expected via agreement or government?
+
+
+Grammar books and dictionaries give good advice on existence; for instance,
+an Italian dictionary has entries such as
+
+**uomo**, pl. //uomini//, n.m. "man"
+
+which tells that //uomo// is a masculine noun with the plural form //uomini//.
+From this alone, or with a couple more examples, we can generalize to the type 
+for all nouns in Italian: they have both singular and plural forms and thus
+a parametric number, and they have an inherent gender.
+
+Sometimes the puzzle of making agreement and government work in a grammar has
+several solutions. For instance, //precedence// in programming languages can
+be equivalently described by a parametric or an inherent feature (see below).
+However, in natural language applications using the resource grammar library,
+all parameters are hidden from the user, who thereby does not need to bother
+about them.
+
+
+==An English concrete syntax for Foods with parameters==
+
+We repeat some of the rules above by showing the entire
+module ``FoodsEng``, equipped with parameters. The parameters and
+operations are, for the sake of brevity, included in the same module
+and not in a separate ``resource``. However, some string operations
+from the library [``Prelude`` ../../lib/prelude/Prelude.gf]
+are used.
+```
+  --# -path=.:prelude
+
+  concrete FoodsEng of Foods = open Prelude in {
 
   lincat
     S, Quality = SS ; 
@@ -1786,8 +1892,7 @@ concrete FoodsEng of Foods = open Prelude, MorphoEng in {
     Item = {s : Str ; n : Number} ; 
 
   lin
-    Is item quality = 
-      ss (item.s ++ (mkVerb "are" "is").s ! item.n ++ quality.s) ;
+    Is item quality = ss (item.s ++ copula item.n ++ quality.s) ;
     This  = det Sg "this" ;
     That  = det Sg "that" ;
     These = det Pl "these" ;
@@ -1795,7 +1900,8 @@ concrete FoodsEng of Foods = open Prelude, MorphoEng in {
     QKind quality kind = {s = \\n => quality.s ++ kind.s ! n} ;
     Wine = regNoun "wine" ;
     Cheese = regNoun "cheese" ;
-    Fish = mkNoun "fish" "fish" ;
+    Fish = noun "fish" "fish" ;
+    Pizza = regNoun "pizza" ;
     Very = prefixSS "very" ;
     Fresh = ss "fresh" ;
     Warm = ss "warm" ;
@@ -1804,13 +1910,29 @@ concrete FoodsEng of Foods = open Prelude, MorphoEng in {
     Delicious = ss "delicious" ;
     Boring = ss "boring" ;
 
+  param
+    Number = Sg | Pl ;
+
   oper
-    det : Number -> Str -> Noun -> {s : Str ; n : Number} = 
+    det : Number -> Str -> {s : Number => Str} -> {s : Str ; n : Number} = 
       \n,d,cn -> {
         s = d ++ cn.s ! n ;
         n = n
+      } ;
+    noun : Str -> Str -> {s : Number => Str} = 
+      \man,men -> {s = table {
+        Sg => man ;
+        Pl => men 
+        }
+      } ;
+    regNoun : Str -> {s : Number => Str} = 
+      \car -> noun car (car + "s") ;
+    copula : Number -> Str = 
+      \n -> case n of {
+        Sg => "is" ;
+        Pl => "are"
         } ;
-}
+  }    
 ```
 
 
@@ -1843,6 +1965,10 @@ As syntactic sugar, one-branch tables can be written concisely,
 Thus we could rewrite the above rule
 ```
   lin Fish = {s = \\_ => "fish"} ;
+```
+An example binding a variable was shown in ``FoodEng``:
+```
+  lin QKind quality kind = {s = \\n => quality.s ++ kind.s ! n} ;
 ```
 Finally, the ``case`` expressions common in functional
 programming languages are syntactic sugar for table selections:
