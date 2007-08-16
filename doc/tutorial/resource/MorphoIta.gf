@@ -4,6 +4,13 @@
 
   resource MorphoIta = open Prelude in {
 
+  -- the lexicographer's API
+
+    oper
+      masculine, feminine : Gender ;
+
+  
+
     param
       Number = Sg | Pl ;
       Gender = Masc | Fem ;
@@ -15,6 +22,10 @@
   -- we will only use present indicative third person verb forms
 
       Verb      : Type = {s : Number => Str} ;
+
+  -- two-place verbs have a preposition
+
+      Verb2     : Type = Verb ** {c : Str} ;
 
   -- this function takes the gender and both singular and plural forms
 
@@ -28,16 +39,18 @@
 
   -- this function takes the singular form
 
-      regNoun : Str -> Noun = \vino -> 
-        let 
-          vin = init vino ;
-          o   = last vino
-        in
-        case o of {
-          "a"       => mkNoun Fem  vino (vin + "e") ; -- pizza
-          "o" | "e" => mkNoun Masc vino (vin + "i") ; -- vino, pane
-          _         => mkNoun Masc vino vino          -- tram
-          } ;
+     regNoun : Str -> Noun = \vino -> 
+       case vino of {
+         vin + c@("c" | "g") + "a" 
+           => mkNoun Fem  vino (vin + c + "he") ; -- banche
+         vin + "a"               
+           => mkNoun Fem  vino (vin + "e") ;      -- pizza
+         vin + c@("c" | "g") + "o"
+           => mkNoun Masc vino (vin + c + "hi") ; -- boschi 
+         vin + ("o" | "e") 
+           => mkNoun Masc vino (vin + "i") ;      -- vino, pane
+         _ => mkNoun Masc vino vino               -- tram
+         } ;
 
   -- to make nouns such as "carne", "università" feminine
 
