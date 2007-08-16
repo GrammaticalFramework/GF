@@ -6,17 +6,17 @@ concrete SyntaxEng of Syntax = open Prelude, MorphoEng in {
     Phr  = {s : Str} ;
     S    = {s : Str} ;
     QS   = {s : Str} ;
-    NP   = MorphoEng.NP ;
-    IP   = MorphoEng.NP ;
+    NP   = NounPhrase ;
+    IP   = NounPhrase ;
     CN   = Noun ;
     Det  = {s : Str ; n : Number} ;
     AP   = {s : Str} ;
     AdA  = {s : Str} ;
-    VP   = MorphoEng.VP ;
+    VP   = VerbPhrase ;
     N    = Noun ;
     A    = {s : Str} ;
     V    = Verb ;
-    V2   = Verb ** {c : Str} ;
+    V2   = Verb2 ;
 
   lin
     PhrS = postfixSS "." ;
@@ -31,13 +31,13 @@ concrete SyntaxEng of Syntax = open Prelude, MorphoEng in {
 
     IPPosV2 ip np v2 = {
       s = let 
-            vp : MorphoEng.VP = {s = \\q,b,n => predVerb v2 q b n} ;
+            vp : VerbPhrase = {s = \\q,b,n => predVerb v2 q b n} ;
           in 
           bothWays (ip.s ++ (predVP False True np vp).s) v2.c
     } ;
     IPNegV2 ip np v2 = {
       s = let 
-            vp : MorphoEng.VP = {s = \\q,b,n => predVerb v2 q b n} ;
+            vp : VerbPhrase = {s = \\q,b,n => predVerb v2 q b n} ;
           in 
           bothWays (ip.s ++ (predVP False False np vp).s) v2.c
     } ;
@@ -77,7 +77,10 @@ concrete SyntaxEng of Syntax = open Prelude, MorphoEng in {
     very_AdA = {s = "very"} ;
 
   oper
-    predVP : Bool -> Bool -> MorphoEng.NP -> MorphoEng.VP -> SS = 
+    NounPhrase = {s : Str ; n : Number} ;
+    VerbPhrase = {s : Bool => Bool => Number => Str * Str} ; -- decl, pol
+
+    predVP : Bool -> Bool -> NounPhrase -> VerbPhrase -> SS = 
       \q,b,np,vp -> {
       s = let vps = vp.s ! q ! b ! np.n 
           in case q of {
@@ -92,7 +95,7 @@ concrete SyntaxEng of Syntax = open Prelude, MorphoEng in {
       } ;
 
     do : Bool -> Number -> Str = \b,n -> 
-      posneg b ((regVerb "do").s ! n) ;
+      posneg b ((mkV "do").s ! n) ;
 
     predVerb : Verb -> Bool -> Bool -> Number -> Str * Str = \verb,q,b,n -> 
       let 

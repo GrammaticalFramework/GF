@@ -8,16 +8,16 @@ concrete SyntaxIta of Syntax = open Prelude, MorphoIta in {
     QS   = {s : Str} ;
     NP   = {s : Str ; g : Gender ; n : Number} ;
     IP   = {s : Str ; g : Gender ; n : Number} ;
-    CN   = {s : Number => Str ; g : Gender} ;
+    CN   = Noun ;
     Det  = {s : Gender => Str ; n : Number} ;
     AP   = {s : Gender => Number => Str} ;
     AdA  = {s : Str} ;
     VP   = {s : Bool => Gender => Number => Str} ;
 
-    N    = {s : Number => Str ; g : Gender} ;
-    A    = {s : Gender => Number => Str} ;
-    V    = {s : Number => Str} ;
-    V2   = {s : Number => Str ; c : Str} ;
+    N    = Noun ;
+    A    = Adjective ;
+    V    = Verb ;
+    V2   = Verb2 ;
 
   lin
     PhrS = postfixSS "." ;

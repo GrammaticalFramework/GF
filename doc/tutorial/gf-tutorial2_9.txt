@@ -304,7 +304,7 @@ other tasks are readily available for GF grammars:
 
 A typical GF application is based on a **multilingual grammar** involving
 translation on a special domain. Existing applications of this idea include
-- [Alfa: http://www.cs.chalmers.se/~hallgren/Alfa/Tutorial/GFplugin.html]:
+- [Alfa http://www.cs.chalmers.se/~hallgren/Alfa/Tutorial/GFplugin.html]:
   a natural-language interface to a proof editor
   (languages: English, French, Swedish)
 - [KeY http://www.key-project.org/]: 
@@ -464,11 +464,11 @@ Windows users are recommended to install Cywgin, the free Unix shell for Windows
 %--!
 ==Running the GF program==
 
-To start the GF program, assuming you have installed it, just type
+To start the GF program, assuming you have installed it, just type 
+``gf`` in the Unix (or Cygwin) shell:
 ```
   % gf
 ```
-in the shell. 
 You will see GF's welcome message and the prompt ``>``.
 The command
 ```
@@ -895,8 +895,15 @@ The English concrete syntax gives no surprises:
 ```
 Let us test how the grammar works in parsing:
 ```
-  > p -lang=FoodEng "this delicious wine is very very Italian"
+  > import FoodEng.gf
+  > parse "this delicious wine is very very Italian"
   Is (This (QKind Delicious Wine)) (Very (Very Italian))
+```
+You can also try parsing in other categories than the ``startcat``,
+by setting the command-line ``cat`` flag:
+```
+  p -cat=Kind "very Italian wine"
+  QKind (Very Italian) Wine
 ```
 
 **Exercise**. Extend the ``Food`` grammar by ten new food kinds and
@@ -997,7 +1004,7 @@ using the escape ``?``, as follows:
 
 A pipe of GF commands can have any length, but the "output type"
 (either string or tree) of one command must always match the "input type"
-of the next command. 
+of the next command, in order for the result to make sense.
 
 The intermediate results in a pipe can be observed by putting the
 **tracing** flag ``-tr`` to each command whose output you
@@ -1204,6 +1211,52 @@ The ``number`` flag gives the number of sentences generated.
 
 
 
+===Multilingual syntax editing===
+
+Any multilingual grammar can be used in the graphical syntax editor, which is
+opened by the shell 
+command ``gfeditor`` followed by the names of the grammar files.
+Thus
+```
+  % gfeditor FoodEng.gf FoodIta.gf 
+```
+opens the editor for the two ``Food`` grammars. 
+
+The editor supports commands for manipulating an abstract syntax tree.
+The process is started by choosing a category from the "New" menu.
+Choosing ``Phrase`` creates a new tree of type ``Phrase``. A new tree
+is in general completely unknown: it consists of a **metavariable**
+``?1``. However, since the category ``Phrase`` in ``Food`` has
+only one possible constructor, ``Is``, the tree is readily
+given the form ``Is ?1 ?2``. Here is what the editor looks like at
+this stage:
+
+  [food1.png]
+
+Editing goes on by **refinements**, i.e. choices of constructors from
+the menu, until no metavariables remain. Here is a tree resulting from the
+current editing session:
+
+  [food2.png]
+
+Editing can be continued even when the tree is finished. The user can shift
+the **focus** to some of the subtrees by clicking at it of the corresponding
+part of a linearization. In the picture, the focus is on "fish".
+The menu shows no refinements, since there are no metavariables, but other
+possible actions:
+- to **change** "fish" to "cheese" or "wine"
+- to **delete** "fish", i.e. change it to a metavariable
+- to **wrap** "fish" in a qualification, i.e. change it to
+  ``QKind ? Fish``, where the quality can be given in a later refinement
+
+
+In adition to menu-based editing, the tool supports refinement by parsing,
+which gets accessible by middle-clicking at the linearization field.
+
+**Exercise**. Construct the sentence 
+//this very expensive cheese is very very delicious//
+and its Italian translation by using ``gfeditor``.
+
 
 ==The context-free grammar format==
 
@@ -1235,14 +1288,15 @@ A function separates the shared parts of different computations from the
 changing parts, its **arguments**, or **parameters**. 
 In functional programming languages, such as
 [Haskell http://www.haskell.org], it is possible to share much more 
-code with functions than in languages such as C and Java.
+code with functions than in languages such as C and Java, because
+of higher-order functions (functions that takes functions as arguments).
 
 
 ===Operation definitions===
 
 GF is a functional programming language, not only in the sense that
 the abstract syntax is a system of functions (``fun``), but also because
-functional programming can be used to define concrete syntax. This is
+functional programming can be used when defining concrete syntax. This is
 done by using a new form of judgement, with the keyword ``oper`` (for
 **operation**), distinct from ``fun`` for the sake of clarity.
 Here is a simple example of an operation:
@@ -1254,13 +1308,29 @@ The operation can be **applied** to an argument, and GF will
 ```
   ss "boy"  ===>  {s = "boy"}
 ```
-(We use the symbol ``===>`` to indicate how an expression is 
-computed into a value; this symbol is not a part of GF)
+We use the symbol ``===>`` to indicate how an expression is 
+computed into a value; this symbol is not a part of GF.
 
 Thus an ``oper`` judgement includes the name of the defined operation,
 its type, and an expression defining it. As for the syntax of the defining
-expression, notice the **lambda abstraction** form ``\x -> t`` of
-the function.
+expression, notice the **lambda abstraction** form ``\``//x// ``->`` //t// of
+the function. It reads: function with variable //x// and **function body**
+//t//. 
+
+For lambda abstraction with multiple arguments, we have the shorthand
+```
+  \x,y,z -> t   ===  \x -> \y -> \z -> t
+```
+The notation we have used for linearization rules,
+```
+  lin f x y = t
+```
+is shorthand for
+```
+  lin f = \x,y -> t
+```
+
+
 
 
 
@@ -1466,34 +1536,6 @@ same time:
 
 
 
-===Visualizing module structure===
-
-When you have created all the abstract syntaxes and
-one set of concrete syntaxes needed for ``Foodmarket``,
-your grammar consists of eight GF modules. To see how their
-dependences look like, you can use the command 
-``visualize_graph = vg``,
-```
-  > visualize_graph
-```
-and the graph will pop up in a separate window. 
-
-The graph uses
-
-- oval boxes for abstract modules
-- square boxes  for concrete modules
-- black-headed arrows for inheritance
-- white-headed arrows for the concrete-of-abstract relation
-
-
-[Foodmarket.png]
-
-
-Just as the ``visualize_tree = vt`` command, the open source tools
-Ghostview and Graphviz are needed.
-
-
-
 ===System commands===
 
 To document your grammar, you may want to print the
@@ -1537,9 +1579,9 @@ details.
 
 In the following sections, we will go through some
 such linguistic details. The programming constructs needed when
-doing this are useful for all GF programmers, even if they don't
-hand-code the linguistics of their applications  but get them
-from libraries. It is also useful to know something about the
+doing this are useful for all GF programmers, even for those who don't
+hand-code the linguistics of their applications but get them
+from libraries. And it is quite interesting to know something about the
 linguistic concepts of inflection, agreement, and parts of speech.
 
 
@@ -1550,6 +1592,8 @@ Module extensions, multiple inheritance.
 Resource modules.
 
 Oper judgements.
+
+Lambda abstraction.
 
 The ``.cf`` grammar format.
 
@@ -1592,7 +1636,7 @@ adjectives, and verbs can have in some languages that you know.
 %--!
 ==Parameters and tables==
 
-We define the **parameter type** of number in Englisn by
+We define the **parameter type** of number in English by
 using a new form of judgement:
 ```
   param Number = Sg | Pl ;
@@ -1632,7 +1676,7 @@ selection argument. Thus
    ===> "cheeses"
 ```
 
-**Exercise**. In a previous exercise, we make a list of the possible 
+**Exercise**. In a previous exercise, we made a list of the possible 
 forms that nouns, adjectives, and verbs can have in some languages that 
 you know. Now take some of the results and implement them by
 using parameter type definitions and tables. Write them into a ``resource``
@@ -1667,7 +1711,7 @@ The **gluing** operator ``+`` tells that
 the string held in the variable ``x`` and the ending ``"s"`` 
 are written together to form one **token**. Thus, for instance,
 ```
-  (regNoun "cheese").s ! Pl  ---> "cheese" + "s"  --->  "cheeses"
+  (regNoun "cheese").s ! Pl  ===> "cheese" + "s"  ===>  "cheeses"
 ```
 
 **Exercise**. Identify cases in which the ``regNoun`` paradigm does not
@@ -1683,7 +1727,7 @@ considered in earlier exercises.
 ==Using parameters in concrete syntax==
 
 We can now enrich the concrete syntax definitions to
-comprise morphology. This will involve a more radical
+comprise morphology. This will permit a more radical
 variation between languages (e.g. English and Italian)
 then just the use of different words. In general,
 parameters and linearization types are different in
@@ -1697,7 +1741,7 @@ use of a common abstract syntax.
 The rule of subject-verb agreement in English says that the verb
 phrase must be inflected in the number of the subject. This
 means that a noun phrase (functioning as a subject), inherently
-//has// a number, which it passes to the verb. The verb does not
+has a number, which it passes to the verb. The verb does not
 //have// a number, but must be able to //receive// whatever number the
 subject has. This distinction is nicely represented by the
 different linearization types of **noun phrases** and **verb phrases**:
@@ -1742,7 +1786,8 @@ concrete FoodsEng of Foods = open Prelude, MorphoEng in {
     Item = {s : Str ; n : Number} ; 
 
   lin
-    Is item quality = ss (item.s ++ (mkVerb "are" "is").s ! item.n ++ quality.s) ;
+    Is item quality = 
+      ss (item.s ++ (mkVerb "are" "is").s ! item.n ++ quality.s) ;
     This  = det Sg "this" ;
     That  = det Sg "that" ;
     These = det Pl "these" ;
@@ -1760,10 +1805,11 @@ concrete FoodsEng of Foods = open Prelude, MorphoEng in {
     Boring = ss "boring" ;
 
   oper
-    det : Number -> Str -> Noun -> {s : Str ; n : Number} = \n,d,cn -> {
-      s = d ++ cn.s ! n ;
-      n = n
-      } ;
+    det : Number -> Str -> Noun -> {s : Str ; n : Number} = 
+      \n,d,cn -> {
+        s = d ++ cn.s ! n ;
+        n = n
+        } ;
 }
 ```
 
@@ -1891,6 +1937,9 @@ are not a good idea in top-level categories accessed by the users
 of a grammar application.
 
 
+**Exercise**. Define the language ``a^n b^n c^n`` in GF.
+
+
 ==More constructs for concrete syntax==
 
 In this section, we go through constructs that are not necessary 
@@ -1934,7 +1983,8 @@ The symbol ``**`` is used for both constructs.
   lin Follow = regVerb "folgen" ** {c = Dative} ; 
 ```
 To extend a record type or a record with a field whose label it
-already has is a type error.
+already has is a type error. It is also an error to extend a type or
+object that is not a record.
 
 A record type //T// is a **subtype** of another one //R//, if //T// has
 all the fields of //R// and possibly other fields. For instance,
@@ -1987,6 +2037,60 @@ possible to write, slightly surprisingly,
     ...
     }
 ```
+
+===Regular expression patterns===
+
+To define string operations computed at compile time, such
+as in morphology, it is handy to use regular expression patterns:
+ - //p// ``+`` //q// : token consisting of //p// followed by //q//
+ - //p// ``*``       : token //p// repeated 0 or more times
+                                     (max the length of the string to be matched)
+ - ``-`` //p//       : matches anything that //p// does not match
+ - //x// ``@`` //p// : bind to //x// what //p// matches
+ - //p// ``|`` //q// : matches what either //p// or //q// matches
+
+
+The last three apply to all types of patterns, the first two only to token strings.
+As an example, we give a rule for the formation of English word forms
+ending with an //s// and used in the formation of both plural nouns and
+third-person present-tense verbs.
+```
+  add_s : Str -> Str = \w -> case w of {
+    _ + "oo"                           => w + "s" ;   -- bamboo
+    _ + ("s" | "z" | "x" | "sh" | "o") => w + "es" ;  -- bus, hero
+    _ + ("a" | "o" | "u" | "e") + "y"  => w + "s" ;   -- boy
+    x + "y"                            => x + "ies" ; -- fly
+    _                                  => w + "s"     -- car
+    } ;
+```
+Here is another example, the plural formation in Swedish 2nd declension.
+The second branch uses a variable binding with ``@`` to cover the cases where an
+unstressed pre-final vowel //e// disappears in the plural
+(//nyckel-nycklar, seger-segrar, bil-bilar//):
+```
+  plural2 : Str -> Str = \w -> case w of {
+    pojk + "e"                       => pojk + "ar" ;
+    nyck + "e" + l@("l" | "r" | "n") => nyck + l + "ar" ;
+    bil                              => bil + "ar"
+    } ;
+```
+Variables in regular expression patterns
+are always bound to the **first match**, which is the first
+in the sequence of binding lists. For example:
+- ``x + "e" + y`` matches ``"peter"`` with ``x = "p", y = "ter"``
+- ``x + "er"*`` matches ``"burgerer"`` with ``x = "burg"
+
+
+
+**Exercise**. Implement the German **Umlaut** operation on word stems.
+The operation changes the vowel of the stressed stem syllable as follows:
+//a// to //ä//, //au// to //äu//, //o// to //ö//, and //u// to //ü//. You
+can assume that the operation only takes syllables as arguments. Test the
+operation to see whether it correctly changes //Arzt// to //Ärzt//,
+//Baum// to //Bäum//, //Topf// to //Töpf//, and //Kuh// to //Küh//.
+
+**Exercise**. Define an operation that deletes all vowels from the
+end of a string, so that e.g. "aigeia" becomes "aig".
 
 
 ===Free variation===
@@ -2064,38 +2168,54 @@ FIXME: The linearization type is ``{s : Str}`` for all these categories.
 ===Overloading of operations===
 
 Large libraries, such as the GF Resource Grammar Library, may define 
-hundreds of names, which can be unpractical
-for both the library writer and the user. The writer has to invent longer 
+hundreds of names. This can be unpractical
+for both the library author and the user: the author has to invent longer 
 and longer names which are not always intuitive,
-and the user has to learn or at least be able to find all these names. 
-A solution to this problem, adopted by languages such as C++, is **overloading**:
-the same name can be used for several functions. When such a name is used, the
-compiler performs **overload resolution** to find out which of the possible functions
-is meant. The resolution is based on the types of the functions: all functions that
+and the author has to learn or at least be able to find all these names. 
+A solution to this problem, adopted by languages such as C++, 
+is **overloading**: one and the same name can be used for several functions. 
+When such a name is used, the
+compiler performs **overload resolution** to find out which of 
+the possible functions is meant. Overload resolution is based on 
+the types of the functions: all functions that
 have the same name must have different types.
 
 In C++, functions with the same name can be scattered everywhere in the program.
 In GF, they must be grouped together in ``overload`` groups. Here is an example
-of an overload group, defining four ways to define nouns in Italian:
+of an overload group, giving three different ways to define verbs in English:
 ```
-  oper mkN = overload {
-    mkN : Str -> N                  = -- regular nouns
-    mkN : Str -> Gender -> N        = -- regular nouns with unexpected gender
-    mkN : Str -> Str -> N           = -- irregular nouns
-    mkN : Str -> Str -> Gender -> N = -- irregular nouns with unexpected gender
+  oper mkV = overload {
+    mkV : (walk : Str) -> V           = -- regular verbs
+    mkV : (omit,omitted : Str) -> V   = -- regular verbs with duplication
+    mkN : (sing,sang,sung : Str) -> V = -- irregular verbs
+    mkN : (run,ran,run,running : Str) -> V = -- irregular verbs with duplication
   }
 ```
-All of the following uses of ``mkN`` are easy to resolve:
-```
-  lin Pizza = mkN "pizza" ;         -- Str -> N
-  lin Hand  = mkN "mano" Fem ;      -- Str -> Gender -> N
-  lin Man   = mkN "uomo" "uomini" ; -- Str -> Str -> N
-```
+Intuitively, the forms correspond to the way regular and irregular words
+are given in a dictionary: by listing relevant forms, instead of
+referring to a paradigm.
 
 
 
 
 =Implementing morphology and syntax=
+
+In this chapter, we will dig deeper into linguistic concepts than
+so far. We will build an implementation of a linguistic motivated
+fragment of English and Italian, covering basic morphology of syntax.
+The result is a miniature of the GF resource library, which will
+be covered in the next chapter. There are two main purposes
+for this chapter:
+- first, to understand the linguistic concepts underlying the resource
+  grammar library
+- second, to get practice in the more advanced constructs of concrete syntax
+
+
+However, the reader who is not willing to work on an advanced level
+of concrete syntax may just skim through the introductory parts of
+each section, thus using the chapter in its first purpose only.
+
+
 
 ==Worst-case functions and data abstraction==
 
@@ -2133,7 +2253,7 @@ terms, ``Noun`` is then treated as an **abstract datatype**.
 
 
 %--!
-==A system of paradigms using Prelude operations==
+==A system of paradigms using predefined string operations==
 
 In addition to the completely regular noun paradigm ``regNoun``, 
 some other frequent noun paradigms deserve to be
@@ -2156,11 +2276,13 @@ all characters but the last) of a string:
 ```
 The operation ``init`` belongs to a set of operations in the
 resource module ``Prelude``, which therefore has to be
-``open``ed so that ``init`` can be used. Its dual is ``last``:
+``open``ed so that ``init`` can be used. 
 ```
   > cc init "curry"
   "curr"
-
+```
+Its dual is ``last``:
+```
   > cc last "curry"
   "y"
 ```
@@ -2192,7 +2314,7 @@ inflection paradigm. A way to help this is to define a more intelligent
 paradigm, which chooses the ending by first analysing the lemma.
 The following variant for English regular nouns puts together all the
 previously shown paradigms, and chooses one of them on the basis of
-the final letter of the lemma (found by the prelude operator ``last``).
+the final letter of the lemma (found by the prelude operation ``last``).
 ```
   regNoun : Str -> Noun = \s -> case last s of {
     "s" | "z" => mkNoun s (s + "es") ;
@@ -2200,9 +2322,6 @@ the final letter of the lemma (found by the prelude operator ``last``).
     _         => mkNoun s (s + "s")
     } ;
 ```
-This definition displays many GF expression forms not shown befores;
-these forms are explained in the next section.
-
 The paradigms ``regNoun`` does not give the correct forms for
 all nouns. For instance, //mouse - mice// and
 //fish - fish// must be given by using ``mkNoun``.
@@ -2225,58 +2344,6 @@ is factored out as a separate ``oper``, which is shared with
 ``regVerb``.
 
 
-
-%--!
-==Regular expression patterns==
-
-To define string operations computed at compile time, such
-as in morphology, it is handy to use regular expression patterns:
- - //p// ``+`` //q// : token consisting of //p// followed by //q//
- - //p// ``*``       : token //p// repeated 0 or more times
-                                     (max the length of the string to be matched)
- - ``-`` //p//       : matches anything that //p// does not match
- - //x// ``@`` //p// : bind to //x// what //p// matches
- - //p// ``|`` //q// : matches what either //p// or //q// matches
-
-
-The last three apply to all types of patterns, the first two only to token strings.
-As an example, we give a rule for the formation of English word forms
-ending with an //s// and used in the formation of both plural nouns and
-third-person present-tense verbs.
-```
-  add_s : Str -> Str = \w -> case w of {
-    _ + "oo"                           => w + "s" ;   -- bamboo
-    _ + ("s" | "z" | "x" | "sh" | "o") => w + "es" ;  -- bus, hero
-    _ + ("a" | "o" | "u" | "e") + "y"  => w + "s" ;   -- boy
-    x + "y"                            => x + "ies" ; -- fly
-    _                                  => w + "s"     -- car
-    } ;
-```
-Here is another example, the plural formation in Swedish 2nd declension.
-The second branch uses a variable binding with ``@`` to cover the cases where an
-unstressed pre-final vowel //e// disappears in the plural
-(//nyckel-nycklar, seger-segrar, bil-bilar//):
-```
-  plural2 : Str -> Str = \w -> case w of {
-    pojk + "e"                       => pojk + "ar" ;
-    nyck + "e" + l@("l" | "r" | "n") => nyck + l + "ar" ;
-    bil                              => bil + "ar"
-    } ;
-```
-Variables in regular expression patterns
-are always bound to the **first match**, which is the first
-in the sequence of binding lists. For example:
-- ``x + "e" + y`` matches ``"peter"`` with ``x = "p", y = "ter"``
-- ``x + "er"*`` matches ``"burgerer"`` with ``x = "burg"
-
-
-
-**Exercise**. Implement the German **Umlaut** operation on word stems.
-The operation changes the vowel of the stressed stem syllable as follows:
-//a// to //ä//, //au// to //äu//, //o// to //ö//, and //u// to //ü//. You
-can assume that the operation only takes syllables as arguments. Test the
-operation to see whether it correctly changes //Arzt// to //Ärzt//,
-//Baum// to //Bäum//, //Topf// to //Töpf//, and //Kuh// to //Küh//.
 
 
 
@@ -2366,6 +2433,7 @@ file for later use, by the command ``morpho_list = ml``
   > morpho_list -number=25 -cat=V | wf exx.txt
 ```
 The ``number`` flag gives the number of exercises generated.
+
 
 
 
@@ -2478,27 +2546,27 @@ We will also need the following structural words from ``Syntax``.
 
 For French, we will use the following part of ``ParadigmsFre``.
 
-|| Function  | Type  | Example  ||
-| ``Gender`` | ``Type`` | - |
-| ``masculine`` | ``Gender`` | - |
-| ``feminine`` | ``Gender`` | - |
-| ``mkN`` | ``(cheval : Str) -> N`` | - |
-| ``mkN`` | ``(foie : Str) -> Gender -> N`` | - |
-| ``mkA`` | ``(cher : Str) -> A`` | - |
-| ``mkA`` | ``(sec,seche : Str) -> A`` | - |
+|| Function  | Type  ||
+| ``Gender`` | ``Type`` |
+| ``masculine`` | ``Gender`` |
+| ``feminine`` | ``Gender`` |
+| ``mkN`` | ``(cheval : Str) -> N`` | 
+| ``mkN`` | ``(foie : Str) -> Gender -> N`` | 
+| ``mkA`` | ``(cher : Str) -> A`` | 
+| ``mkA`` | ``(sec,seche : Str) -> A`` |
 
 
 For German, we will use the following part of ``ParadigmsGer``.
 
-|| Function  | Type  | Example  ||
-| ``Gender`` | ``Type`` | - |
-| ``masculine`` | ``Gender`` | - |
-| ``feminine`` | ``Gender`` | - |
-| ``neuter`` | ``Gender`` | - |
-| ``mkN`` | ``(Stufe : Str) -> N`` | - |
-| ``mkN`` | ``(Bild,Bilder : Str) -> Gender -> N`` | - |
-| ``mkA`` | ``Str -> A`` | - |
-| ``mkA`` | ``(gut,besser,beste : Str) -> A`` | //gut,besser,beste// |
+|| Function  | Type  ||
+| ``Gender`` | ``Type`` | 
+| ``masculine`` | ``Gender`` |
+| ``feminine`` | ``Gender`` |
+| ``neuter`` | ``Gender`` | 
+| ``mkN`` | ``(Stufe : Str) -> N`` | 
+| ``mkN`` | ``(Bild,Bilder : Str) -> Gender -> N`` |
+| ``mkA`` | ``(klein : Str) -> A`` |
+| ``mkA`` | ``(gut,besser,beste : Str) -> A`` |
 
 
 **Exercise**. Try out the morphological paradigms in different languages. Do 
@@ -2574,15 +2642,15 @@ the genders of some nouns, which cannot be correctly inferred from the word.
 
 In French, for example, the one-argument ``mkN`` assigns the noun the feminine
 gender if and only if it ends with an //e//. Therefore the words //fromage// and
-//pizza// are given genders. One can of course always give genders manually, to
-be on the safe side.
+//pizza// are given genders manually. 
+One can of course always give genders manually, to be on the safe side.
 
 As for inflection, the one-argument adjective pattern ``mkA`` takes care of
 completely regular adjective such as //chaud-chaude//, but also of special 
 cases such as //italien-italienne//, //cher-chère//, and //délicieux-délicieuse//.
 But it cannot form //frais-fraîche// properly. Once again, you can give more
 forms to be on the safe side. You can also test the paradigms in the GF
-program.
+system.
 
 **Exercise**. Compile the grammar ``FoodFre`` and generate and parse some sentences.
 
@@ -2641,7 +2709,8 @@ It takes as arguments two interfaces:
 
 
 Functors opening ``Syntax`` and a domain lexicon interface are in fact
-so typical in GF applications, that this structure could be called a **design patter**
+so typical in GF applications, that this structure could be called 
+a **design patter**
 for GF grammars. The idea in this pattern is, again, that 
 the languages use the same syntactic structures but different words.
 
@@ -2655,8 +2724,10 @@ appropriate types). For example,
 ```
   instance LexFoodGer of LexFood = open SyntaxGer, ParadigmsGer in
 ```
-Notice that when an interface opens an interface, such as ``Syntax``, then its instance
-opens an instance of it. But the instance may also open some resources - typically,
+Notice that when an interface opens an interface, such as ``Syntax``, 
+then its instance
+opens an instance of it. But the instance may also open some other 
+resources - typically,
 a domain lexicon instance opens a ``Paradigms`` module.
 
 In the function-functor analogy, we now have
@@ -3782,7 +3853,7 @@ of GF to facilitate this.
 
 #PARTtwo
 
-=Embedded grammars in Haskell and Java=
+=Embedded grammars in Haskell=
 
 GF grammars can be used as parts of programs written in the
 following languages. We will go through a skeleton application in
@@ -4083,6 +4154,8 @@ from source by typing ``make``. Here is a minimal such ``Makefile``:
 ```
 
 
+==The Embedded GF Haskell API==
+
 
 
 =Embedded grammars in Java=
@@ -4193,11 +4266,11 @@ describes the use of the editor, which works for any multilingual GF grammar.
 
 Here is a snapshot of the editor:
 
-#BCEN
+%#BCEN
 
-#EDITORPNG
+%#EDITORPNG
 
-#ECEN
+%#ECEN
 
  
 The grammars of the snapshot are from the
