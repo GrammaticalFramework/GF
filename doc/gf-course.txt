@@ -17,7 +17,7 @@ Chalmers University of Technology and Gothenburg University.
 Autumn Term 2007.
 
 
-**New**. [Schedule http://www.cs.chalmers.se/~aarne/GF/doc/gf-course.html].
+**New**. [Schedule http://www.gslt.hum.gu.se/courses/schedule.html].
 The course will start on Thursday 13 September in Room C430 at the Humanities
 Building of Gothenburg University ("Humanisten").
 
