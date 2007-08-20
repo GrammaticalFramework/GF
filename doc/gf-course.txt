@@ -17,6 +17,11 @@ Chalmers University of Technology and Gothenburg University.
 Autumn Term 2007.
 
 
+**New**. [Schedule http://www.cs.chalmers.se/~aarne/GF/doc/gf-course.html].
+The course will start on Thursday 13 September in Room C430 at the Humanities
+Building of Gothenburg University ("Humanisten").
+
+
 =Purpose=
 
 [GF http://www.cs.chalmers.se/~aarne/GF/]
@@ -54,6 +59,7 @@ The first module goes through the basics of GF, including
 
 The lectures follow the
 [GF Tutorial http://www.cs.chalmers.se/~aarne/GF/doc/tutorial/gf-tutorial2.html].
+**There will be a new version of the Tutorial available around 10 September**.
 Those who just want to do the first module will write a simple application
 as their course work during the intensive week.
 
