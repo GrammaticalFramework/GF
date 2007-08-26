@@ -83,8 +83,8 @@ generate gr opts cat i mn mt = case mt of
       (f,(cs,_)) <- funs c,
       let alts = map (gener (i-1)) cs,
       ts <- combinations alts,
-      let tr = SApp (f, ts),
-      depth tr >= i
+      let tr = SApp (f, ts)
+--      depth tr >= i -- NO!
     ]
 
   allTrees = genAll i
