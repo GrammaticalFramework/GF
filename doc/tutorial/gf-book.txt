@@ -1687,7 +1687,7 @@ module, which you can test by using the command ``compute_concrete``.
 %--!
 ==Inflection tables and paradigms==
 
-All English common nouns are inflected in number, most of them in the
+All English common nouns are inflected for number, most of them in the
 same way: the plural form is obtained from the singular by adding the
 ending //s//. This rule is an example of 
 a **paradigm** - a formula telling how the inflection
@@ -1739,11 +1739,13 @@ We consider a grammar ``Foods``, which is similar to
 ```
   fun These, Those : Kind -> Item ;
 ```
-and a noun which in Italian has the feminine case; all noun in
+We also add a noun which in Italian has the feminine case; all noun in
 ``Food`` were carefully chosen to be masculine!
 ```
   fun Pizza : Kind ;
 ```
+This will force us to deal with gender in the Italian grammar, which is what
+we need for the grammar to scale up for larger lexica.
 
 
 
@@ -1762,7 +1764,7 @@ must be inflected in the number of the subject. Thus we will linearize
   Is (This Pizza) Warm   >>  "this pizza is warm"
   Is (These Pizza) Warm  >>  "these pizzas are warm"
 ```
-It is the **copula**, i.e. the verb //be// that is affected. We can define
+It is the **copula**, i.e. the verb //be// that is affected. We define
 the copula as the operation
 ```
   oper copula : Number => Str = 
@@ -1771,7 +1773,9 @@ the copula as the operation
       Pl => "are"
       } ;
 ```
-The form of the copula depends on the subject of the sentence, i.e. the item
+We don't need to inflect the copula for person and tense yet.
+
+The form of the copula in a sentence depends on the subject of the sentence, i.e. the item
 that is qualified. This means that an item must have such a number to provide.
 In other words, the linearization of an ``Item`` must provide a number. The 
 simplest way to guarantee this is by putting a number as a field in
@@ -1816,14 +1820,15 @@ agreement, but yet different; it is usually called **government**.
 Since the same pattern is used four times in the ``FoodsEng`` grammar,
 we codify it as an operation,
 ```
-  oper det : Str -> Number -> {s : Number => Str} -> {s : Str ; n : Number} = 
-    \det,n,kind -> {
-    s = det ++ kind.s ! n ; 
-    n = n
-  } ; 
+  oper det : 
+    Str -> Number -> {s : Number => Str} -> {s : Str ; n : Number} = 
+      \det,n,kind -> {
+      s = det ++ kind.s ! n ; 
+      n = n
+    } ; 
 ```
 In a more linguistically motivated grammar, determiners will be made to a 
-category of their own and have a number.
+category of their own and given an inherent number.
 
 
 ===Parametric vs. inherent features===
@@ -1857,8 +1862,8 @@ grammar. Two conditions must be in balance:
 
 Grammar books and dictionaries give good advice on existence; for instance,
 an Italian dictionary has entries such as
+- **uomo**, pl. //uomini//, n.m. "man"
 
-**uomo**, pl. //uomini//, n.m. "man"
 
 which tells that //uomo// is a masculine noun with the plural form //uomini//.
 From this alone, or with a couple more examples, we can generalize to the type 
@@ -1868,7 +1873,7 @@ a parametric number, and they have an inherent gender.
 Sometimes the puzzle of making agreement and government work in a grammar has
 several solutions. For instance, //precedence// in programming languages can
 be equivalently described by a parametric or an inherent feature (see below).
-However, in natural language applications using the resource grammar library,
+However, in natural language applications that use the resource grammar library,
 all parameters are hidden from the user, who thereby does not need to bother
 about them.
 
@@ -1953,21 +1958,34 @@ But there are more expressive patterns. Here is a summary of the possible forms:
 
 Pattern matching is performed in the order in which the branches
 appear in the table: the branch of the first matching pattern is followed.
-As a first example, let us take an English noun that has the same form in 
-singular and plura:
+Thus we could write the regular noun paradigm equally well as
+```
+  regNoun : Str -> {s : Number => Str} = 
+    \car -> {s = table {
+      Sg => car ;
+      _ => car + "s" 
+      }
+    } ;
+```
+where the wildcard matches anything but the singular.
+
+Tables with only one branch are a common special case.
+Either the value is the same for all parameters, as in
 ```
   lin Fish = {s = table {_ => "fish"}} ;
 ```
-As syntactic sugar, one-branch tables can be written concisely,
+or a parameter variable is just passed on to the right-hand-side,
+as in
+```
+  lin QKind quality kind = {s = table {n => quality.s ++ kind.s ! n}} ;
+```
+GF has syntactic sugar for writing one-branch tables concisely:
 ```
   \\P,...,Q => t  ===  table {P => ... table {Q => t} ...}
 ```
-Thus we could rewrite the above rule
+Thus we could rewrite the above rules
 ```
   lin Fish = {s = \\_ => "fish"} ;
-```
-An example binding a variable was shown in ``FoodEng``:
-```
   lin QKind quality kind = {s = \\n => quality.s ++ kind.s ! n} ;
 ```
 Finally, the ``case`` expressions common in functional
@@ -1975,7 +1993,7 @@ programming languages are syntactic sugar for table selections:
 ```
   case e of {...} ===  table {...} ! e
 ```
-
+This is exemplified by the ``copula`` rule in ``FoodEng``.
 
 
 %--!
@@ -1996,7 +2014,7 @@ hierarchic order among parameters. They are often needed to define
 the linguistically most accurate parameter systems.
 
 To give an example, Swedish adjectives
-are inflected in number (singular or plural) and
+are inflected for number (singular or plural) and
 gender (uter or neuter). These parameters would suggest 2*2=4 different
 forms. However, the gender distinction is done only in the singular. Therefore,
 it would be inaccurate to define adjective paradigms using the type
@@ -2042,15 +2060,19 @@ type with two strings and not just one.
 ```
   lincat TV = {s : Number => Str ; part : Str} ;
 ```
-This linearization rule
-shows how the constituents are separated by the object in complementization.
+In the abstract syntax, we can now have a rule that combines a transitive verb with
+a noun phrase object (``NP``) into a verb phrase (``VP``):
+```
+  fun ComplTV : TV -> NP -> VP ;
+```
+The linearization rule places the object between the two parts of the verb:
 ```
   lin PredTV tv obj = {s = \\n => tv.s ! n ++ obj.s ++ tv.part} ;
 ```
 There is no restriction in the number of discontinuous constituents
 (or other fields) a  ``lincat`` may contain. The only condition is that
-the fields must be of finite types, i.e. built from records, tables,
-parameters, and ``Str``, and not functions. 
+the fields must be built from records, tables,
+parameters, and ``Str``, but not functions. 
 
 A mathematical result
 about parsing in GF says that the worst-case complexity of parsing
@@ -2063,7 +2085,10 @@ are not a good idea in top-level categories accessed by the users
 of a grammar application.
 
 
-**Exercise**. Define the language ``a^n b^n c^n`` in GF.
+**Exercise**. Define the language ``a^n b^n c^n`` in GF, i.e.
+any number of //a//'s followed by the same number of //b//'s and
+the same number of //c//'s. This language is not context-free,
+but can be defined in GF by using discontinuous constituents.
 
 
 ==More constructs for concrete syntax==
@@ -2071,8 +2096,8 @@ of a grammar application.
 In this section, we go through constructs that are not necessary 
 in simple grammars or when the concrete syntax relies on libraries. 
 But they are useful when writing advanced concrete syntax implementations, 
-such as resource grammar libraries. Moreover, they conclude
-the presentation of concrete syntax constructs.
+such as resource grammar libraries. Moreover, they complete
+our presentation of concrete syntax constructs.
 
 
 %--!
@@ -2081,19 +2106,23 @@ the presentation of concrete syntax constructs.
 Local definitions ("``let`` expressions") are used in functional
 programming for two reasons: to structure the code into smaller
 expressions, and to avoid repeated computation of one and
-the same expression. Here is an example, from 
-[``MorphoIta`` resource/MorphoIta.gf]:
+the same expression. Here is an example from 
+Italian morphology. The operation needs to analyse the
+last letter of the lemma, to select a plural ending.
+It also needs the stem consisting of all letters than the last,
+to add the ending to. The lemma and the ending are computed
+in a local definition.
 ```
   oper regNoun : Str -> Noun = \vino -> 
-        let 
-          vin = init vino ;
-          o   = last vino
-        in
-        case o of {
-          "a"       => mkNoun Fem  vino (vin + "e") ;
-          "o" | "e" => mkNoun Masc vino (vin + "i") ;
-          _         => mkNoun Masc vino vino         
-          } ;
+    let 
+      vin = init vino ;
+      o   = last vino
+    in
+    case o of {
+      "a"       => mkNoun Fem  vino (vin + "e") ;
+      "o" | "e" => mkNoun Masc vino (vin + "i") ;
+      _         => mkNoun Masc vino vino         
+      } ;
 ```
 
 
@@ -2101,8 +2130,9 @@ the same expression. Here is an example, from
 ===Record extension and subtyping===
 
 Record types and records can be **extended** with new fields. For instance,
-in German it is natural to see transitive verbs as verbs with a case.
-The symbol ``**`` is used for both constructs.
+in German it is natural to see transitive verbs as verbs with a case, which
+is usually accusative or dative, and is passed to the object of the verb. 
+The symbol ``**`` is used for both record types and record objects.
 ```
   lincat TV = Verb ** {c : Case} ;
 
@@ -2137,8 +2167,8 @@ Thus the labels ``p1, p2,...`` are hard-coded.
 
 ===Record and tuple patterns===
 
-Record types of parameter types also count as parameter types.
-A typical example is a record of agreement features, e.g. French
+Record types of parameter types count themselves as parameter types.
+A typical example is a record of agreement features, e.g. Italian
 ```
   oper Agr : PType = {g : Gender ; n : Number ; p : Person} ;
 ```
@@ -2240,7 +2270,6 @@ recommended for modules aimed to be libraries, because the
 user of the library has no way to choose among the variants.
 
 
-%--!
 ===Prefix-dependent choices===
 
 Sometimes a token has different forms depending on the token
@@ -2269,6 +2298,16 @@ This very example does not work in all situations: the prefix
         } ;
 ```
 
+**Example**. The masculine singular definite article has three forms:
+- //l'// before a vowel (any of //aeiouh//): //l'amico// ("the friend")
+- //lo// before "impure s" 
+  (any of "sb", "sc", "sd", "sf", "sg", "sm", "sp", "st", "sv", "z"): //lo stato// ("the state")
+- //il// otherwise: //il vino// ("the wine")
+
+
+Define this by using prefix-dependent choice.
+
+
 
 ===Predefined types===
 
@@ -2291,6 +2330,71 @@ they can be used as arguments. For example:
 FIXME: The linearization type is ``{s : Str}`` for all these categories.
 
 
+===Function types with variables===
+
+Below in Chapter ??, we will introduce **dependent function types**, where
+the value type depends on the argument. For this end, we need a notation
+that binds a variable to the argument type, as in
+```
+  switchOff : (k : Kind) -> Action k
+```
+Function types //without//
+variables are actually a shorthand notation: writing
+```
+  PredVP : NP -> VP -> S
+```
+is shorthand for 
+```
+  PredVP : (x : NP) -> (y : VP) -> S
+```
+or any other naming of the variables. Actually the use of variables
+sometimes shortens the code, since they can share a type:
+```
+  octuple : (x,y,z,u,v,w,s,t : Str) -> Str
+```
+If a bound variable is not used, it can here, as elsewhere in GF, be replaced by
+a wildcard:
+```
+  octuple : (_,_,_,_,_,_,_,_ : Str) -> Str
+```
+A good practice for functions with many arguments of the same type
+is to indicate the number of arguments:
+```
+  octuple : (x1,_,_,_,_,_,_,x8 : Str) -> Str
+```
+One can also use heuristic variable names to document what 
+information each argument is expected to provide.
+This is very handy in the types of inflection paradigms:
+```
+  mkV : (drink,drank,drunk : Str) -> V 
+```
+
+
+===Separating operation types and definitions===
+
+In grammars intended as libraries, it is useful to separate oparation
+definitions from their type signatures. The user is only interested
+in the type, whereas the definition is kept for the implementor and
+the maintainer. This is possible by using separate ``oper`` fragments 
+for the two parts:
+```
+  oper regNoun : Str -> Noun ;
+  oper regNoun s = mkNoun s (s + "s") ;
+```
+The type checker combines the two into one ``oper`` judgement to see
+if the definition matches the type. Notice that, in this way, it
+is possible to bind the argument variables on the left hand side
+instead of using a lambda.
+
+In the library module, the type signatures are typically placed in
+the beginning and the definitions in the end. A more radical separation
+can be achieved by using the ``interface`` and ``instance`` module types
+(see below Section ??): the type signatures are placed in the interface 
+and the definitions in the instance.
+
+
+
+
 ===Overloading of operations===
 
 Large libraries, such as the GF Resource Grammar Library, may define 
@@ -2310,16 +2414,159 @@ In C++, functions with the same name can be scattered everywhere in the program.
 In GF, they must be grouped together in ``overload`` groups. Here is an example
 of an overload group, giving three different ways to define verbs in English:
 ```
-  oper mkV = overload {
-    mkV : (walk : Str) -> V           = -- regular verbs
-    mkV : (omit,omitted : Str) -> V   = -- regular verbs with duplication
-    mkN : (sing,sang,sung : Str) -> V = -- irregular verbs
-    mkN : (run,ran,run,running : Str) -> V = -- irregular verbs with duplication
+  oper mkV : overload {
+    mkV : (walk : Str) -> V ;              = -- regular verbs
+    mkV : (omit,omitting : Str) -> V ;     = -- reg. verbs with duplication
+    mkV : (sing,sang,sung : Str) -> V ;    = -- irregular verbs
+    mkV : (run,ran,run,running : Str) -> V = -- irreg. verbs with duplication
   }
 ```
 Intuitively, the forms correspond to the way regular and irregular words
-are given in a dictionary: by listing relevant forms, instead of
-referring to a paradigm.
+are given in most dictionaries: by listing relevant forms, instead of
+referring to a paradigm number identifier.
+
+The ``mkV`` example above gives only the possible types of the overloaded
+operation. Their definitions can be given separately, maybe in another module
+(cf. the section above). An overload group with definitions looks as follows:
+```
+  oper mkV = overload {
+    mkV : (walk : Str) -> V = regV ;
+    mkV : (omit,omitting : Str) -> V = ... ;
+    mkV : (sing,sang,sung : Str) -> V = ... ;
+    mkV : (run,ran,run,running : Str) -> V = ... ;
+  }
+```
+Notice that the types of the branches must be repeated so that they can be
+associated with proper definitions; the order of the branches has no
+significance.
+
+
+
+==The Italian Food grammar==
+
+We conclude the parametrization of the Food grammar by presenting an
+Italian variant, now complete with parameters, inflection, and 
+agreement.
+
+The header part is similar to English:
+```
+--# -path=.:prelude
+
+concrete FoodsIta of Foods = open Prelude in {
+```
+Parameters include not only number byt also gender.
+```
+  param
+    Number = Sg | Pl ;
+    Gender = Masc | Fem ;
+```
+Qualities are inflected for gender and number, whereas kinds
+have a parametric number (as in English) and an inherent gender.
+Items have an inherent number (as in English) but also gender.
+```
+  lincat
+    Phr = SS ; 
+    Quality = {s : Gender => Number => Str} ; 
+    Kind = {s : Number => Str ; g : Gender} ; 
+    Item = {s : Str ; g : Gender ; n : Number} ; 
+```
+A Quality is expressed by an adjective, which in Italian has one form for each
+gender-number combination.
+```
+  oper
+    adjective : (_,_,_,_ : Str) -> {s : Gender => Number => Str} = 
+      \nero,nera,neri,nere -> {
+        s = table {
+          Masc => table {
+            Sg => nero ;
+            Pl => neri
+            } ; 
+          Fem => table {
+            Sg => nera ;
+            Pl => nere
+            }
+          }
+      } ;
+```
+The very common case of regular adjectives works by adding
+endings to the stem.
+```
+    regAdj : Str -> {s : Gender => Number => Str} = \nero ->
+      let ner = init nero 
+      in adjective nero (ner + "a") (ner + "i") (ner + "e") ;
+```
+For noun inflection, there are several paradigms; since only two forms
+are ever needed, we will just give them explicitly (the resource grammar
+library also has a paradigm that takes the singular form and infers the
+plural and the gender from it).
+```
+    noun : Str -> Str -> Gender -> {s : Number => Str ; g : Gender} = 
+      \man,men,g -> {
+        s = table {
+          Sg => man ;
+          Pl => men 
+          } ;
+        g = g
+      } ;
+```
+As in ``FoodEng``, we need only number variation for the copula.
+```
+    copula : Number -> Str = 
+      \n -> case n of {
+        Sg => "è" ;
+        Pl => "sono"
+        } ;
+```
+Determination is more complex than in English, because of gender:
+it uses separate determiner forms for the two genders, and selects
+one of them as function of the noun determined.
+```
+
+    det : Number -> Str -> Str -> {s : Number => Str ; g : Gender} -> 
+        {s : Str ; g : Gender ; n : Number} = 
+      \n,m,f,cn -> {
+        s = case cn.g of {Masc => m ; Fem => f} ++ cn.s ! n ;
+        g = cn.g ;
+        n = n
+      } ;
+```
+Here is, finally, the complete set of linearization rules.
+```
+  lin
+    Is item quality = 
+      ss (item.s ++ copula item.n ++ quality.s ! item.g ! item.n) ;
+    This  = det Sg "questo" "questa" ;
+    That  = det Sg "quello" "quella" ;
+    These = det Pl "questi" "queste" ;
+    Those = det Pl "quelli" "quelle" ;
+    QKind quality kind = {
+      s = \\n => kind.s ! n ++ quality.s ! kind.g ! n ;
+      g = kind.g
+      } ;
+    Wine = noun "vino" "vini" Masc ;
+    Cheese = noun "formaggio" "formaggi" Masc ;
+    Fish = noun "pesce" "pesci" Masc ;
+    Pizza = noun "pizza" "pizze" Fem ;
+    Very qual = {s = \\g,n => "molto" ++ qual.s ! g ! n} ;
+    Fresh = adjective "fresco" "fresca" "freschi" "fresche" ;
+    Warm = regAdj "caldo" ;
+    Italian = regAdj "italiano" ;
+    Expensive = regAdj "caro" ;
+    Delicious = regAdj "delizioso" ;
+    Boring = regAdj "noioso" ;
+  }
+```
+The grammars ``FoodsEng`` and ``FoodsIta`` can be found on line, and
+in the GF distribution, in the directory
+[``examples/tutorial/foods/`` ../../examples/tutorial/foods/].
+
+
+**Exercise**. Experiment with multilingual generation and translation in the
+``Foods`` grammars.
+
+**Exercise**. Write a concrete syntax of ``Food`` for a language of your choice,
+now aiming for complete grammatical correctness by the use of parameters.
+
 
 
 
@@ -3440,46 +3687,6 @@ dependent types and filter the results through the type checker:
 
 ==Digression: dependent types in concrete syntax==
 
-===Variables in function types===
-
-A dependent function type needs to introduce a variable for
-its argument type, as in
-```
-  switchOff : (k : Kind) -> Action k
-```
-Function types //without//
-variables are actually a shorthand notation: writing
-```
-  fun PredVP : NP -> VP -> S
-```
-is shorthand for 
-```
-  fun PredVP : (x : NP) -> (y : VP) -> S
-```
-or any other naming of the variables. Actually the use of variables
-sometimes shortens the code, since they can share a type:
-```
-  octuple : (x,y,z,u,v,w,s,t : Str) -> Str
-```
-If a bound variable is not used, it can here, as elsewhere in GF, be replaced by
-a wildcard:
-```
-  octuple : (_,_,_,_,_,_,_,_ : Str) -> Str
-```
-A good practice for functions with many arguments of the same type
-is to indicate the number of arguments:
-```
-  octuple : (x1,_,_,_,_,_,_,x8 : Str) -> Str
-```
-One can also use the variables to document what each argument is expected
-to provide, as is done in inflection paradigms in the resource grammar.
-```
-  mkV : (drink,drank,drunk : Str) -> V 
-```
-
-
-===Polymorphism in concrete syntax===
-
 The **functional fragment** of GF
 terms and types comprises function types, applications, lambda
 abstracts, constants, and variables. This fragment is similar in
@@ -4418,6 +4625,8 @@ Thus the most silent way to invoke GF is
 ```
 
 
+
+==GFDoc==
 
 
 
