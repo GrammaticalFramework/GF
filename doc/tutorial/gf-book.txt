@@ -42,30 +42,30 @@ Last update: %%date(%c)
 ==Natural language application programming==
 
 Making computers understand human language is one of the oldest dreams of 
-programmers. Projects with machine translations started almost as soon as
-the first computers appeared in the 1940's. This was partly encouraged by the
+programmers. Projects with machine translation started almost as soon as
+the first computers appeared in the 1940's. They was partly encouraged by the
 success of decryption during the Second World War. Thus some American scientists
 had the vision that Russian can be seen as encrypted English, which can be
 deciphered by similar algorithms as those used for cracking the Germans' Enigma.
 
-Despite substantial efforts on machine translation, the early visions were not
+Despite substantial efforts in machine translation, the early visions were not
 realized, and the general conclusion reached by the mid-1960's was that
 high-quality broad-coverage machine translation is impossible. Machine 
-translation was translated to the less ambitious and more specialized tasks of
-computational linguistics. Parallel to this, fantacies of "speaking robots" and
+translation was tuned down to the less ambitious and more specialized group of
+tasks that started to be called computational linguistics. 
+Parallel to this, fantacies of "speaking robots" and
 other language-understanding machines prevailed, exemplified by such science
-fiction figures as the HAL computer in the film "2001: A Space Odyssey" from
-1970.
+fiction figures as the HAL computer in "2001: A Space Odyssey".
 
-What we see in today's market of language understanding machines is a variety of
+The language understanding machines we see today are a variety of
 products, which focus on different aspects of the task and none of which comes 
 even close to HAL or a machine translator with human-like capacities. Here is a
 list of some such applications:
 - browse-quality machine translation: Systran
 - machine translation specialized on weather reports: Meteo
-- electronic dictionaries
+- electronic dictionaries: desktop, web-based, portable
 - spelling and grammar checkers
-- dialogue systems for enabling simple speech interaction with a computer
+- dialogue systems enabling simple speech interaction with a computer
 
 
 A common feature of these applications is that their construction requires 
@@ -77,14 +77,21 @@ make a computer understand at least something of a natural language.
 
 This is where GF comes into picture. GF, Grammatical Framework, is a programming
 language designed for expressing linguistic rules. A set of such rules is called
-a **grammar**. GF is designed in such a way that it is much easier to write
-grammar rules in it than in a general-purpose programming language, such as 
-Java or C or Haskell. At the same time, GF is equipped with tools for 
-**embedded grammars**. This means that a GF grammar can be used as a component
-of a program written in another language, such as Java or C or Haskell. To build
-a language application usually involves much more than just a grammar, and it is
-important that the grammar can be integrated seemlessly with the rest of the
-application.
+a **grammar**. GF is designed to make it easy to write grammar rules; this is 
+much easier than in a general-purpose programming language such as 
+Java or C or Haskell. But it is also in many ways easier and more productive
+than in other languages specialized in grammars; the most well-known of these
+is the BNF notation (Backus Naur Form), which is also known as 
+context-free grammars and implemented in tools such as YACC.
+  
+GF does not only enable the writing of grammars. It is also equipped with tools 
+for integrating grammars in language-processing systems. 
+To build a language application usually involves much more than just a grammar,
+and these other parts are often written in general-purpose languages.
+Since it is important that the grammar can be integrated seemlessly with 
+the rest of the application, GF grammars can be converted into
+**embedded grammars**, which can be directly used as components of
+programs written in other languages such as C, Java, JavaScript, and Haskell.
 
 Since natural language application programming requires linguistic knowledge, it
 is usually considered to need linguistic training. The mission of GF is to relieve
@@ -96,85 +103,89 @@ some of this need. This is achieved in two ways:
 
 
 This said, GF makes no claim to "fire linguists" from natural language programming
-projects. The claim is rather one of the **division of labour**: GF enables the
-division of grammar writing into different **modules**, where some modules
+projects. The claim is just that there should be a **division of labour**: 
+in GF, grammar can be divided into different **modules**, where some modules
 require linguistic knowledge and others don't. Linguists working on the linguistic
 modules will appreciate the way GF supports abstractions and generalizations, and
 also the grammar development tools that enable testing of linguistic rules. 
-Non-linguists working on the application-oriented modules will appreciate the
-possibility to take grammar rules for granted and focus on other aspects of
-the program.
+Non-linguists working on application-oriented modules will appreciate the
+possibility to rely grammar rules defined in the linguistic library modules,
+and to focus on other aspects of the task.
 
 
 
-==The history of GF and its applications==
+==A brief history of GF and its applications==
 
 GF belongs to the tradition of **functional programming languages**, exemplified
-by Lisp and, as later and closer relatives, ML and Haskell. An important branch
+by ML and Haskell and, somewhat more remotely, Lisp. One branch
 of functional programming is **type theory**, which in turn has its roots in
 logic and the foundations of mathematics. GF was, at the first place, created to
 implement the idea that type theory can provide **semantics**, i.e. formalize
 the meaning of natural languages. Several aspects of type-theoretical semantics
 were covered in the monograph //Type-Theoretical Grammar// (A. Ranta, OUP 1994).
 But a stronger aspect grew out of subsequent experiments dealing with different
-languages: it is possible to have a common semantics for many language, and 
-thereby build systems that translate between languages via the semantics. During
-this period, discussions with Per Martin-Löf (Ranta's PhD supervisor at the
-University of Stockholm) had a major impact on the work, and cooperation 
-with Petri Mäenpää at the University of Helsinki led to the first computer
-implementations.
+languages: it is possible to have a common semantics for many languages, and 
+thereby build systems that translate between languages via the semantics. 
+The first implementation of this idea was written as a plug-in to the
+proof editor Alfa (Magnusson & Nordström 1994) in 1995.
 
 As a stand-alone programming language, GF was first implemented in 1998. This
 took place at Xerox Research Centre Europe in Grenoble, within a project entitled
-//Multilingual Document Authoring//. The leading idea in the project was to 
-enable writing documents in multiple languages simultaneously, so that the user
+//Multilingual Document Authoring//. The goal of the project was to build a tool 
+for writing documents in multiple languages simultaneously, so that the user
 need only know one of the languages; the rest will be produced automatically
-via translations from the type-theoretical semantics. The Xerox staff involved
-in the project included Marc Dymetman, Lauri Karttunen, Veronika Lux,
-Sylvain Pogodalla, and Annie Zaenen.
+via translations from the type-theoretical semantics. 
+In addition to GF itself, the project produced some prototype applications, 
+e.g. a restaurant phrase book and an editor of medical drug descriptions. 
+An important aspect was the adaptability of the system to new domains and
+languages; hence the need of a language where such adaptations can be made
+by just wrting new grammars.
 
-The Xerox project produced some prototype applications, e.g. a restaurant phrase
-book and an editor of medical drug descriptions. The grammars that were build
-remained the property of Xerox, but the GF formalism and its implementation
-were released as open-source software under GNU General Public License. The
-principal author of GF got an academic position in 1999, at the Department of
-Computing Science of Chalmers University of Technology and Gothenburg University.
-At Chalmers, both functional programming and type theory flourish, and in this
-environment, GF developed into a more stable and more full-fledged programming
-language. In this process, collaboration with Koen Claessen, Thierry Coquand,
-Thomas Hallgren, Patrik Jansson, and Bengt Nordström made important contributions.
+The grammars that were build in the Xerox project 
+remained property of Xerox Corporation, but the GF formalism and its 
+implementation were released as open-source software under GNU General 
+Public License. From 1999, the development of GF continued mostly at
+the Department of Computing Science of Chalmers University of Technology 
+and Gothenburg University. In this environment, both functional programming 
+and type theory are strong research areas. This helped GF to develop into 
+a more stable and more full-fledged programming language. 
 
-The idea of making GF into "the working programmer's grammar formalism", as 
-opposed to a tool requiring linguistic expertise, was confirmed at Chalmers
-in courses given to computer science students and later in joint research
-projects. A nice experience of the courses was that computer scientists are
+At Chalmers, GF has also been used in courses given to computer science 
+students and in joint projects with non-linguist research groups.
+This activity soon crystallized the idea of making GF into 
+"the working programmer's grammar formalism", as 
+opposed to a tool requiring linguistic expertise. A nice experience from 
+the courses (both graduate and undergraduate) was that computer scientists are
 often very interested in languages and have firm intuitions on grammar; given
-a suitable programming tool, they can achieve impressive results. GF seemed to
-be close to such a tool, and, in subsequent collaborations at the Department,
-it evolved even more to a programming language with a virtues of familiarity
-and "the least surprise". Issues of stability are also important, including
-backward compatibility, and documentation is something there can hardly be
-too much of. As a mark of stability, version 1.0 of GF was released in 
-2002. In 2004, a theoretical reference paper appeared in the Journal
-of Functional Programming, as well as a long tutorial text in the ESSLLI
-lecture notes post-publication.
+a suitable programming tool, they can achieve impressive results in short time. 
+GF was to be made into such a tool, which meant above all that
+it was developed in the way programming languages are, 
+following the virtues of familiarity and "the least surprise". 
+Issues of stability are also important, including
+backward compatibility and portability to different platforms. 
+Documentation is something there can hardly be too much of. 
+As a mark of stability, version 1.0 of GF was released in 
+2002. In 2004, a reference article appeared in the 
+//Journal of Functional Programming//, 
+and a long tutorial text was published in the post-publication of
+ESSLLI lecture notes.
 
-The first full-scale applications of GF emerged as natural-language interfaces.
-The first one was for the proof editor Alfa, written with Thomas Hallgren.
+The first full-scale applications of GF were natural-language interfaces.
+The first one was for the proof editor Alfa (Hallgren & Ranta 2000).
 The second one was a syntax editor and a natural-language interface to the 
 software specification language OCL (Object Constraint Language) built 
-within the KeY project. This work was done first with Reiner Hähnle, then
-with the students Kristoffer Johannisson (PhD 2005), Hans-Joachim Daniels, 
-and David Burke. On the GF implementation side, Janna Khegai (PhD 2006) built
-a Java-based syntax editor. Peter Ljunglöf (PhD 2004) succeeded to identify
-the complexity of parsing in GF and found an algorithm that greatly improved
-the use of GF in parsing. He implemented the algorithm with Håkan Burden, and
-it was later still improved by Krasimir Angelov.
+within the KeY project (Ahrendt & al. 2006). 
+These projects boosted the implementation side 
+of GF itself, in particular, the graphical syntax editor (Khegai & al. 2003).
+At the same time, some major mathematical properties of GF were established
+in the PhD thesis of Peter Ljunglöf (2004), which led to improved
+parser implementations.
 
-At the same time, collaboration with the Linguistics Department of
-Gothenburg University served as a "linguistic sanity check" of GF. 
-Robin Cooper, an eminent linguist working at the Department, initiated
-two efforts that have formed the development of GF:
+At the same time as GF was used in joint projects with computer science groups, 
+collaboration with the Linguistics Department of
+Gothenburg University served as a "linguistic sanity check" of GF. To efforts
+that have been formative to the development of GF were started within this 
+collaboration:
 - resource grammar libraries
 - dialogue system applications
 
@@ -188,43 +199,37 @@ the library started in 2002; a version stable enough to be released with number
 Dialogue systems, on the other hand, turned
 out to be a major source of interesting problems and also of successful solutions.
 Much of this work was carried out in the European project TALK (Tools for Ambient
-Linguistic Knowledge, 2004-2006), by Björn Bringert, Rebecca Jonson, and 
-Peter Ljunglöf in Gothenburg, and Oliver Lemon (Edinburgh), Nadine Perera (BMW), 
-and Karl Weilhammer (Cambridge) at the other sites. In addition to 
-complete systems, this project produced supporting tools for embedded grammars
-and speech recognition, and additions to the resource grammar library.
+Linguistic Knowledge, 2004-2006), also involving sites from Cambridge, 
+Edinburgh, and BMW in Munich. In addition to complete systems, the TALK 
+project produced supporting tools for embedded grammars
+and speech recognition, as well as additions of spoken language structures
+to the resource grammar library.
 
-Besides dialogue systems, multilingual authoring and translation continues
+Besides dialogue systems, multilingual authoring and translation continued
 to be the main application of GF. The European WebALT project (Web Advanced 
 Learning Technologies, 2005-2006), used GF to build a tool for translating
 mathematical exercises from formal specifications (written in MathML) to
 six language. Also tool integrating GF with a computer algebra system was
-developed. The project gave rise to a company, WebALT Inc. Many members
-of the WebALT staff also contributed to GF and the resource grammar library:
-Lauri Carlson, Glòria Casanellas, Anni Laine, Wanjiku N'gan'ga, and
-Jordi Saludes.
+developed. The project gave rise to a company, WebALT Inc. 
 
-As of the time of writing (August 2007), the release of GF has version
+At the time of writing this (August 2007), the release of GF has version
 number 2.8. It is a stable system that has been built with contributions
 of dozens of persons and been used by at least hundreds; download figures
 are in thousands. New ideas of how to apply GF are posted by users almost
-every week. These users are often programmers with good knowledge of
-functional languages, highly developed instinct for programming language
-design, and firm intuitions on natural language. Another group of users
-are those that have been trained in GF on courses.
+every week. 
 
 
 
 ==The purpose and scope of this book==
 
-The purpose of this book is to serve the growing user base of GF with
-a manual that gathers all relevant information in one place. However, it
-is also intended to serve those who want to get started with GF, and
+One purpose of this book is to serve the growing user base of GF with
+a definitive manual that gathers all relevant information in one place. 
+However, it is also intended to serve those who want to get started with GF, and
 who don't necessarily have the technical background of the typical
 users. We believe that learning to program in GF is not more difficult 
 than learning some other programming language; as for the linguistic
-aspects, we believe that writing grammars is an excellent introduction
-to the problems of linguistics, where theory can be learnt at the
+aspects, our experience is that writing grammars is an excellent introduction
+to the problems of linguistics. In this way, theory can be learnt at the
 same time as it is motivated by concrete problems.
 
 The book thus starts with a tutorial, which gradually explains all
@@ -233,22 +238,21 @@ aspects of grammar engineering are covered, to help the user to scale
 up from small to large and possibly collaborative applications.
 After the tutorial, the book continues with a "cook book" containing 
 hints and case studies for advanced users. Moreover, the resource
-grammar library is covered in some detail, which will help the
+grammar library is covered in some detail, which will help those
 programmers who want to port the library to new languages, but also
 motivate linguistically the choices made in the libraries.
 A complete reference manual concludes the book, with a quick reference 
 card as an appendix.
 
-What is not covered by the book is theoretical discussions of
+What is not given much space in the book is theoretical discussions of
 GF, especially in comparison to other grammar formalism. Even though important
 in the development of GF as a scientifically justified framework, such
-discussions are not relevant for programmers who want to use GF - any more
+discussions are not relevant for programmers who just want to use GF - any more
 than, say, a book on Haskell has to include comparisons with Java. In fact,
-introducing Haskell by references to Java may have some point, since many
-of the readers can already be assumed to know Java. But, even though some
-readers will know DCG or HPSG or LFG, we will not assume this; we will just
-note in passing the relation between GF and context-free grammars, also
-known as BNF grammars in computer science.
+introducing Haskell by references to Java may make more sense
+than comparing GF with DCG or HPSG or LFG: many Haskell learners can
+already be expected to know Java, but most GF learners are not expected
+to know any grammar formalism, except perhaps BNF. 
 
 
 
@@ -256,9 +260,11 @@ known as BNF grammars in computer science.
 
 =Getting started=
 
-In this chapter, we will introduce the GF program and write a first GF grammar.
-We show how the grammar is used for the tasks of translation and multilingual
+In this chapter, we will introduce the GF program and write the first GF grammar,
+a "Hello World" grammar. While extremely small, this grammar already illustrates
+how GF can be used for the tasks of translation and multilingual
 generation.
+
 
 
 ==What GF is==
@@ -273,8 +279,9 @@ The relation between these things is obvious: the GF system is an implementation
 of the GF programming language, which in turn is built on the ideas of the
 GF theory. The main focus of this book is on the GF programming language.
 We learn how grammars are written in the language. At the same time, we learn
-the way of thinking in the GF theory. To make this all useful and fun, we
-make the grammars run on a computer by using the GF system. 
+the way of thinking in the GF theory. To make this all useful and fun, and
+to encourage experimenting, we make the grammars run on a computer by 
+using the GF system. 
 
 
 
@@ -330,18 +337,16 @@ because they are multilingual and domain-specific.
 
 However, there is another kind of grammars, which we call **resource grammars**.
 These are large, comprehensive grammars that can be used on any domain.
-The GF Resource Grammar Library has resource grammars for 10 languages.
+The GF Resource Grammar Library has resource grammars for 12 languages.
 These grammars can be used as **libraries** to define application grammars.
 In this way, it is possible to write a high-quality grammar without
 knowing about linguistics: in general, to write an application grammar
 by using the resource library just requires practical knowledge of
 the target language. and all theoretical knowledge about its grammar
-is given by the libraries.
+is given in the libraries.
 
 
 
-
-%--!
 ==Who is the tutorial for==
 
 The tutorial part of this book is mainly for programmers 
@@ -349,33 +354,37 @@ who want to learn to write application grammars.
 It will go through GF's programming concepts, and does not
 presuppose knowledge of any of the main ingredients of GF:
 linguistics, functional programming, and type theory.
-Thus it should be accessible to anyone who has some 
-previous programming experience from any language; the basics
+This knowledge will be introduced as a part of grammar writing
+practice.
+
+Thus the book should be accessible to anyone who has some 
+previous programming experience from any programming language; the basics
 of using computers are also presupposed, e.g. the use of 
 text editors and the management of files.
 
 Those who already know GF well can skip the tutorial part, 
 or skim thorough it, and go directly to the part on advanced applications. 
-These will involve large scale GF programming, such as needed in resource
-grammars, and also the embedding of GF in systems such as
-natural-language user interfaces and dialogue systems.
+Many of these applications will involve large scale GF programming, 
+and/or programming in other languages in which GF grammars are embedded.
 
 
 
-%--!
 ==The coverage of the tutorial==
 
 The tutorial gives a hands-on introduction to grammar writing.
-We start by building a "Hello World" grammar, which covers greetings
-in three languages (//hello world//, //terve maailma//, //ciao mondo//).
+We start in this chapter 
+by building a "Hello World" grammar, which covers greetings
+in three languages: English (//hello world//), 
+Finnish (//terve maailma//), and Italian (//ciao mondo//).
 This **multilingual grammar** is based on the distinction, central in
-GF, between the **abstract syntax**
-(the logical structure) and the **concrete syntax** (the
-sequence of words) of expressions. 
+GF, between **abstract syntax**
+(the logical structure) and **concrete syntax** (the
+sequence of words).
 
 From the "Hello World" example, we proceed 
-to a larger grammar for the domain of food:
-in this grammar, you can say things like
+in the next chapter
+to a larger grammar for the domain of food.
+In this grammar, you can say things like
 ``` 
   this Italian cheese is delicious
 ```
@@ -394,53 +403,48 @@ has just one:
   vino delizioso, vini deliziosi, pizza deliziosa, pizze deliziose
 ```
 The **morphology** of a language describes the
-forms of its words. 
+forms of its words, and the basics of it are explained in Chapter 4.
 
-While the complete description of morphology
-belongs to resource grammars, and the use of them will be covered
-by the tutorial. However, we will explain all the
-programming concepts involved in resource grammars. 
-The tutorial will in fact build a miniature resource grammar in order
-to give an introduction to linguistically oriented grammar writing.
+The complete description of morphology
+belongs to resource grammars, whose use is covered in Chapter 6.
+However, we will explain all the
+programming concepts involved in resource grammars, and also 
+build a miniature resource grammar in order
+to give an introduction to linguistically oriented grammar writing (Chapter 5).
 
-Of course, we will not presuppose that the reader knows Italian.
-We have chosen Italian as the example language because it has a rich
-morphological structure that illustrates very well the capacities of
-GF. Moreover, even those who don't know Italian, will find many of
+Italian is used as the example language of many grammars.
+Of course, we will not presuppose that the reader knows any Italian.
+We have chosen Italian because it has a rich structure 
+that illustrates very well the capacities of GF. 
+Moreover, even those readers who don't know Italian, will find many of
 its words familiar. The exercises will encourage the reader to
 port the examples to other languages; in fact, many GF
 applications work for 5-10 languages.
-
-Thus it is by elaborating the Food grammar example that
-the tutorial makes a guided tour through most of GF.
-While the constructs of the GF language are the main focus,
-also the commands of the GF system are introduced as they
-are needed. 
 
 In addition to multilinguality, **semantics** is an important aspect of GF
 grammars. The concepts needed for "purely linguistic" grammars belong to 
 the concrete syntax part of GF, whereas semantics is expressed in the abstract
 syntax. After the presentation of concrete syntax constructs, we proceed
-to the enrichment of abstract syntax with **dependent types**,
+in Chapter 7 to the enrichment of abstract syntax with **dependent types**,
 **variable bindings**, and **semantic definitions**.
 
 To learn how to write GF grammars is not the only goal of
 this tutorial. We will also explain the most important 
 commands of the GF system. With these commands,
-simple applications of grammars, such as translation and
+simple application programs such as translation and
 quiz systems, can be built simply by writing scripts for the
-system. 
+GF system. 
 
 More complicated applications, such as natural-language
 interfaces and dialogue systems, moreover require programming in
-some general-purpose language. The part on advanced topics will
+some general-purpose language. Part II on advanced applications will
 explain how GF grammars are used as components of Haskell and Java programs.
 
 
 %--!
 ==Getting the GF program==
 
-The GF program is open-source free software, which you can download via the
+The GF program is open-source free software, which can be downloaded via the
 GF Homepage:
 
 [``http://www.cs.chalmers.se/~aarne/GF`` http://www.cs.chalmers.se/~aarne/GF]
@@ -483,6 +487,7 @@ As a common convention in this Tutorial, we will use
 
 Thus you should not type these prompts, but only the characters that
 follow them.
+
 
 
 ==A "Hello World" grammar==
@@ -620,6 +625,7 @@ It will also show how much CPU time was consumed:
   - compiling HelloEng.gf...   wrote file HelloEng.gfc 12 msec
 
   12 msec
+  >
 ```
 You can now use GF for **parsing**:
 ```
@@ -634,7 +640,7 @@ for a machine to understand and to process further, although this
 is not so obvious in this simple grammar.
 
 Strings that return a tree when parsed do so in virtue of the grammar
-you imported. Try parsing something that is not in grammar, and you fail
+you imported. Try to parse something that is not in grammar, and you will fail
 ```
   > parse "hello dad"
   Unknown words: dad
@@ -708,7 +714,7 @@ these functionalities. But we will also introduce many more:
 
 
 The usefulness of GF would be quite limited if grammars were
-usable only inside the GF program. In the forthcoming chapters,
+usable only inside the GF program. Later in this book,
 we will see many other ways of using grammars:
 - compile them to new formats, such as speech recognition grammars
 - embed them in Java and Haskell programs
@@ -823,7 +829,7 @@ In a concrete syntax, the available types include
 =Designing a grammar for complex phrases=
 
 We will now start with a grammar that has much more structure than
-the ``Hello`` grammar. We will look at how the abstract
+the ``Hello`` grammar. We will look at how the abstract syntax
 is divided into suitable categories, and how infinitely many
 phrases can be built by using recursive rules. We will also
 introduce **modularity** by showing how a large grammar can be 
@@ -833,7 +839,8 @@ can be used for avoiding repeated code.
 
 ==The abstract syntax Food==
 
-The grammar we wrote defines a set of phrases usable for speaking about food:
+We will write a grammar that
+defines a set of phrases usable for speaking about food:
 - the main category is ``Phrase``
 - a ``Phrase`` can be built by assigning a ``Quality`` to an ``Item``s
 - an``Item`` are build from a ``Kind`` by prefixing "this" or "that" 
@@ -861,7 +868,11 @@ These verbal descriptions can be expressed as the following abstract syntax:
       Fresh, Warm, Italian, Expensive, Delicious, Boring : Quality ;
   }
 ```
-In the concrete syntax, we will be able to build phrases such as
+In this abstract syntax, we can build ``Phrase``s such as
+```
+  Is (This (QKind Delicious (QKind Italian Wine))) (Very (Very Expensive))
+```
+In the English concrete syntax, we will want to linearize this into
 ```
   this delicious Italian wine is very very expensive
 ```
@@ -924,7 +935,7 @@ the prefix can occur at most once.
 
 ===Generating trees and strings===
 
-When we have a grammar above the trivial size, especially a recursive
+When we have a grammar above a trivial size, especially a recursive
 one, we need more efficient ways of testing it than just by parsing
 sentences that happen to come to our minds. One way to do this is 
 based on **automatic generation**, which can be either
@@ -1054,8 +1065,8 @@ of grammars.
 
 GF uses suffixes to recognize different file formats. The most
 important ones are:
-- Source files: //Modulname//``.gf``
-- Target files: //Modulname//``.gfc``
+- Source files: //Modulename//``.gf``
+- Target files: //Modulename//``.gfc``
 
 
 When you import ``FoodEng.gf``, you see the target files being
@@ -1258,7 +1269,7 @@ which gets accessible by middle-clicking at the linearization field.
 and its Italian translation by using ``gfeditor``.
 
 
-==The context-free grammar format==
+==Context-free grammars and GF==
 
 Readers not familar with context-free grammars, also known as BNF grammars, can
 skip this section. Those that are familar with them will find here the exact
@@ -1266,6 +1277,65 @@ relation between GF and context-free grammars. We will moreover show how
 the BNF format can be used as input to the GF program; it is often more
 concise than GF proper, but also more restricted in expressive power.
 
+
+===The "cf" grammar format===
+
+The grammar ``FoodEng`` could be written in a BNF format as follows:
+```
+  Is.        Phrase  ::= Item "is" Quality ;
+  That.      Item    ::= "that" Kind ;
+  This.      Item    ::= "this" Kind ;
+  QKind.     Kind    ::= Quality Kind ;
+  Cheese.    Kind    ::= "cheese" ;
+  Fish.      Kind    ::= "fish" ;
+  Wine.      Kind    ::= "wine" ;
+  Italian.   Quality ::= "Italian" ;
+  Boring.    Quality ::= "boring" ;
+  Delicious. Quality ::= "delicious" ;
+  Expensive. Quality ::= "expensive" ;
+  Fresh.     Quality ::= "fresh" ;
+  Very.      Quality ::= "very" Quality ;
+  Warm.      Quality ::= "warm" ;
+```
+In this format, each rule is prefixed by a **label** that gives
+the constructor function GF gives in its ``fun`` rules. In fact,
+each context-free rule is a fusion of ``fun`` and a ``lin`` rule:
+it states simultaneously that
+- the label is a function from the nonterminal categories
+  on the right-hand side to the category on the left-hand side;
+  the first rule gives
+```
+  fun Is : Item -> Quality -> Phrase 
+```
+- trees built by the label are linearized in the way indicated
+  by the right-hand side;
+  the first rule gives
+```
+  lin Is item quality = {s = item.s ++ "is" ++ quality.s}
+```
+
+
+The translations from BNF to GF described above are in fact used in
+the GF system to convert BNF grammars into GF. BNF files are recognized
+by the file name suffix ``.cf``; thus the grammar above can be
+put into a file named ``food.cf`` and read into GF by
+```
+  > import food.cf
+```
+
+
+===Restrictions of context-free grammars===
+
+Even though we managed to write ``FoodEng`` in the context-free format,
+we cannot do this for GF grammars in general. If we just try to do this
+for ``FoodIta`` as well, we lose an important aspect of multilinguality:
+that the order of constituents is defined separately in concrete syntax.
+Thus we could not use ``FoodEng`` and ``FoodIta`` in a multilingual
+grammar that supports translation via common abstract syntax.
+
+
+**Exercise**. Define the copy language ``{x x | x <- (a|b)*}`` in GF.
+This language is known not to be context-free.
 
 
 ==Using operations and resource modules==
