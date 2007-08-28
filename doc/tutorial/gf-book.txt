@@ -1356,6 +1356,15 @@ grammar engineering point of view. They give no support to
 modules, functions, and parameters, which are so central
 for the productivity of GF.
 
+**Exercise**. GF can also interpret unlabelled BNF grammars, by
+creating labels automatically. The right-hand sides of BNF rules
+can moreover be disjunctions, e.g.
+```
+  Quality ::= "fresh" | "Italian" | "very" Quality ;
+```
+Experiment with this format in GF, possibly with a grammar that
+you import from some other source, such as a programming language
+document.
 
 **Exercise**. Define the copy language ``{x x | x <- (a|b)*}`` in GF.
 
@@ -1718,7 +1727,7 @@ We want to express such special features of languages in the
 concrete syntax while ignoring them in the abstract syntax.
 
 To be able to do all this, we need one new judgement form
-and many new expression forms.
+and some new expression forms.
 We also need to generalize linearization types
 from strings to more complex types.
 
@@ -1787,7 +1796,7 @@ a **paradigm** - a formula telling how the inflection
 forms of a word are formed.
 
 From the GF point of view, a paradigm is a function that takes a **lemma** -
-also known as a **dictionary form** - and returns an inflection
+also known as a **dictionary form** or a **citation form** - and returns an inflection
 table of desired type. Paradigms are not functions in the sense of the
 ``fun`` judgements of abstract syntax (which operate on trees and not
 on strings), but operations defined in ``oper`` judgements.
@@ -1822,7 +1831,7 @@ considered in earlier exercises.
 We can now enrich the concrete syntax definitions to
 comprise morphology. This will permit a more radical
 variation between languages (e.g. English and Italian)
-then just the use of different words. In general,
+than just the use of different words. In general,
 parameters and linearization types are different in
 different languages - but this has no effect on 
 the common abstract syntax.
@@ -1838,7 +1847,7 @@ We also add a noun which in Italian has the feminine case; all noun in
   fun Pizza : Kind ;
 ```
 This will force us to deal with gender in the Italian grammar, which is what
-we need for the grammar to scale up for larger lexica.
+we need for the grammar to scale up for larger applications.
 
 
 
@@ -1848,7 +1857,7 @@ we need for the grammar to scale up for larger lexica.
 In the English ``Foods`` grammar, we need just one type of parameters:
 ``Number`` as defined above. The phrase-forming rule
 ```
-  Is : Item -> Quality -> Phr ;
+  fun Is : Item -> Quality -> Phrase ;
 ```
 is affected by the number because of **subject-verb agreement**.
 In English, agreement says that the verb of a sentence
@@ -1868,10 +1877,11 @@ the copula as the operation
 ```
 We don't need to inflect the copula for person and tense yet.
 
-The form of the copula in a sentence depends on the subject of the sentence, i.e. the item
+The form of the copula in a sentence depends on the 
+**subject** of the sentence, i.e. the item
 that is qualified. This means that an item must have such a number to provide.
 In other words, the linearization of an ``Item`` must provide a number. The 
-simplest way to guarantee this is by putting a number as a field in
+obvious to guarantee this is by putting a number as a field in
 the linearization type:
 ```
   lincat Item = {s : Str ; n : Number} ;
@@ -1880,18 +1890,22 @@ Now we can write precisely the ``Is`` rule that expresses agreement:
 ```
   lin Is item qual = {s = item.s ++ copula ! item.n ++ qual.s} ;
 ```
+The copula needs a number, which it receives from the subject item.
 
-===Government===
+
+===Determiners===
 
 Let us turn to ``Item`` subjects and see how they receive their
 numbers. The two rules
 ```
   fun This, These : Kind -> Item ;
 ```
+form ``Item``s from ``Kind``s by adding **determiners**, either
+//this// or //these//. The determiners
 require different numbers of their ``Kind`` arguments: ``This`` 
 requires the singular (//this pizza//) and ``These`` the plural
 (//these pizzas//). The ``Kind`` is the same in both cases: ``Pizza``.
-Thus we must require that a ``Kind`` has both singular and plural forms.
+Thus a ``Kind`` must have both singular and plural forms.
 The simplest way to express this is by using a table:
 ```
   lincat Kind = {s : Number => Str} ;
@@ -1909,8 +1923,10 @@ The linearization rules for ``This`` and ``These`` can now be written
   } ; 
 ```
 The grammatical relation between the determiner and the noun is similar to
-agreement, but yet different; it is usually called **government**.
-Since the same pattern is used four times in the ``FoodsEng`` grammar,
+agreement, but due to some subtle differencies into which we don't go here
+it is often called **government**.
+
+Since the same pattern for determination is used four times in the ``FoodsEng`` grammar,
 we codify it as an operation,
 ```
   oper det : 
@@ -1920,8 +1936,18 @@ we codify it as an operation,
       n = n
     } ; 
 ```
-In a more linguistically motivated grammar, determiners will be made to a 
-category of their own and given an inherent number.
+In a more **lexicalized** grammar, determiners would be made into a 
+category of their own and given an inherent number:
+```
+  lincat Det = {s : Str ; n : Number} ;
+  fun Det : Det -> Kind -> Item ;
+  lin Det det kind = {
+      s = det.s ++ kind.s ! det.n ; 
+      n = det.n
+    } ; 
+```
+This is essentially what is done in the linguistically motivated resource grammars.
+
 
 
 ===Parametric vs. inherent features===
@@ -1930,10 +1956,10 @@ category of their own and given an inherent number.
 and plural forms; what form is chosen is determined by the construction
 in which the noun is used. We say that the number is a
 **parametric feature** of nouns. In GF, parametric features
-appear as argument types to tables in linearization types.
+appear as argument types in tables in linearization types.
 
 ``Item``s, as in general noun phrases functioning as subjects, don't
-have variation in number. The number is rather an **inherent feature**,
+have variation in number. The number is instead an **inherent feature**,
 which the noun phrase passes to the verb. In GF, inherent features
 appear as record fields in linearization types.
 
@@ -1943,11 +1969,11 @@ inherent gender:
 ```
   lincat Kind = {s : Number => Str ; g : Gender} ;
 ```
-Formally, nothing prevents the same parameter type from appearing both
+Nothing prevents the same parameter type from appearing both
 as parametric and inherent feature, or the appearance of several inherent
 features of the same type, etc. Determining the linearization types
 of categories is one of the most crucial steps in the design of a GF
-grammar. Two conditions must be in balance:
+grammar. These two conditions must be in balance:
 - existence: what forms are possible to build by morphological and
   other means?
 - need: what features are expected via agreement or government?
@@ -1963,12 +1989,22 @@ From this alone, or with a couple more examples, we can generalize to the type
 for all nouns in Italian: they have both singular and plural forms and thus
 a parametric number, and they have an inherent gender.
 
+The distinction between parametric and inherent features can be stated in
+object-oriented programming terms: a linearization type is like a **class**,
+which has a **method** for linearization and also some **attributes**.
+In this class, the parametric features appear as supplementary arguments to the
+linearization method, whereas the inherent features appear as arguments.
+
 Sometimes the puzzle of making agreement and government work in a grammar has
-several solutions. For instance, //precedence// in programming languages can
-be equivalently described by a parametric or an inherent feature (see below).
-However, in natural language applications that use the resource grammar library,
+several solutions. For instance, **precedence** in programming languages can
+be equivalently described by a parametric or an inherent feature 
+(see Section ?? below).
+
+In natural language applications that use the resource grammar library,
 all parameters are hidden from the user, who thereby does not need to bother
-about them.
+about them. The only thing that one has to think about is what linguistic
+categories are given as linearization types to each semantic category.
+
 
 
 ==An English concrete syntax for Foods with parameters==
@@ -2032,6 +2068,12 @@ are used.
         } ;
   }    
 ```
+Notice the ``case`` expression in the ``copula`` rule. Such expressions
+are common in functional programming languages. In GF they are just syntactic 
+sugar for table selections:
+```
+  case e of {...} ===  table {...} ! e
+```
 
 
 ==Pattern matching==
@@ -2081,12 +2123,6 @@ Thus we could rewrite the above rules
   lin Fish = {s = \\_ => "fish"} ;
   lin QKind quality kind = {s = \\n => quality.s ++ kind.s ! n} ;
 ```
-Finally, the ``case`` expressions common in functional
-programming languages are syntactic sugar for table selections:
-```
-  case e of {...} ===  table {...} ! e
-```
-This is exemplified by the ``copula`` rule in ``FoodEng``.
 
 
 %--!
@@ -2095,10 +2131,10 @@ This is exemplified by the ``copula`` rule in ``FoodEng``.
 The reader familiar with a functional programming language such as
 [Haskell http://www.haskell.org] must have noticed the similarity
 between parameter types in GF and **algebraic datatypes** (``data`` definitions
-in Haskell). The GF parameter types are actually a special case of algebraic
+in Haskell). The parameter types of GF are actually a special case of algebraic
 datatypes: the main restriction is that in GF, these types must be finite.
-(It is this restriction that makes it possible to invert linearization rules into
-parsing methods.)
+It is this restriction that makes it possible to invert linearization rules into
+parsing methods.
 
 However, finite is not the same thing as enumerated. Even in GF, parameter
 constructors can take arguments, provided these arguments are from other
@@ -2153,14 +2189,14 @@ type with two strings and not just one.
 ```
   lincat TV = {s : Number => Str ; part : Str} ;
 ```
-In the abstract syntax, we can now have a rule that combines a transitive verb with
-a noun phrase object (``NP``) into a verb phrase (``VP``):
+In the abstract syntax, we can now have a rule that combines a subject and and object
+item with a transitive verb to form a sentence:
 ```
-  fun ComplTV : TV -> NP -> VP ;
+  fun AppTV : Item -> TV -> Item -> Phrase ;
 ```
 The linearization rule places the object between the two parts of the verb:
 ```
-  lin PredTV tv obj = {s = \\n => tv.s ! n ++ obj.s ++ tv.part} ;
+  lin AppTV subj tv obj = {s = subj.s ++ tv.s ! subj.n ++ obj.s ++ tv.part} ;
 ```
 There is no restriction in the number of discontinuous constituents
 (or other fields) a  ``lincat`` may contain. The only condition is that
@@ -2171,12 +2207,12 @@ A mathematical result
 about parsing in GF says that the worst-case complexity of parsing
 increases with the number of discontinuous constituents. This is
 potentially a reason to avoid discontinuous constituents.
+
 Moreover, the parsing and linearization commands only give accurate
 results for categories whose linearization type has a unique ``Str`` 
 valued field labelled ``s``. Therefore, discontinuous constituents
 are not a good idea in top-level categories accessed by the users
 of a grammar application.
-
 
 **Exercise**. Define the language ``a^n b^n c^n`` in GF, i.e.
 any number of //a//'s followed by the same number of //b//'s and
@@ -2189,7 +2225,7 @@ but can be defined in GF by using discontinuous constituents.
 In this section, we go through constructs that are not necessary 
 in simple grammars or when the concrete syntax relies on libraries. 
 But they are useful when writing advanced concrete syntax implementations, 
-such as resource grammar libraries. Moreover, they complete
+such as resource grammar libraries. They complete
 our presentation of concrete syntax constructs.
 
 
@@ -2394,7 +2430,8 @@ This very example does not work in all situations: the prefix
 **Example**. The masculine singular definite article has three forms:
 - //l'// before a vowel (any of //aeiouh//): //l'amico// ("the friend")
 - //lo// before "impure s" 
-  (any of "sb", "sc", "sd", "sf", "sg", "sm", "sp", "st", "sv", "z"): //lo stato// ("the state")
+  (any of "sb", "sc", "sd", "sf", "sg", "sm", "sp", "st", "sv", "z"): 
+  //lo stato// ("the state")
 - //il// otherwise: //il vino// ("the wine")
 
 
@@ -2425,7 +2462,7 @@ FIXME: The linearization type is ``{s : Str}`` for all these categories.
 
 ===Function types with variables===
 
-Below in Chapter ??, we will introduce **dependent function types**, where
+In Chapter 8, we will introduce **dependent function types**, where
 the value type depends on the argument. For this end, we need a notation
 that binds a variable to the argument type, as in
 ```
@@ -2657,6 +2694,10 @@ in the GF distribution, in the directory
 **Exercise**. Experiment with multilingual generation and translation in the
 ``Foods`` grammars.
 
+
+**Exercise**. Add items, qualities, and determiners to the grammar, and try to get
+their inflection and inherent features right.
+
 **Exercise**. Write a concrete syntax of ``Food`` for a language of your choice,
 now aiming for complete grammatical correctness by the use of parameters.
 
@@ -2668,13 +2709,13 @@ now aiming for complete grammatical correctness by the use of parameters.
 
 In this chapter, we will dig deeper into linguistic concepts than
 so far. We will build an implementation of a linguistic motivated
-fragment of English and Italian, covering basic morphology of syntax.
+fragment of English and Italian, covering basic morphology and syntax.
 The result is a miniature of the GF resource library, which will
 be covered in the next chapter. There are two main purposes
 for this chapter:
-- first, to understand the linguistic concepts underlying the resource
+- to understand the linguistic concepts underlying the resource
   grammar library
-- second, to get practice in the more advanced constructs of concrete syntax
+- to get practice in the more advanced constructs of concrete syntax
 
 
 However, the reader who is not willing to work on an advanced level
@@ -2682,8 +2723,235 @@ of concrete syntax may just skim through the introductory parts of
 each section, thus using the chapter in its first purpose only.
 
 
+==Lexical vs. syntactic rules==
 
-==Worst-case functions and data abstraction==
+So far we have seen a grammar from a semantic point of view:
+a grammar specifies a system of meanings (specified in the abstract syntax) and
+tells how they are expressed in some language (as specified in a concrete syntax).
+In resource grammars, as in linguistic tradition, the goal is to 
+specify the **grammatically correct combinations of words**, whatever their
+meanings are.
+
+Thus the grammar has two kinds of categories and two kinds of rules:
+- lexical:
+  - lexical categories, to classify words
+  - lexical rules, to define words their properties
+
+
+- phrasal (combinatorial, syntactic):
+  - phrasal categories, to classify phrases of arbitrary size
+  - phrasal rules, to combine phrases into larger phrases
+
+
+Many grammar formalisms force a radical distinction between the lexical and syntactic
+components; sometimes it is not even possible to express the two kinds of rules in
+the same formalism. GF has no such restrictions. Nevertheless, it has turned out
+to be a good discipline to maintain a distinction between the lexical and syntactic 
+components.
+
+
+
+==The abstract syntax==
+
+Let us go through the abstract syntax contained in the module ``Syntax``.
+It can be found in the file 
+[``examples/tutorial/syntax/Syntax.gf`` examples/tutorial/syntax/Syntax.gf].
+
+
+===Lexical categories===
+
+Words are classified into two kinds of categories: **closed** and
+**open**. The definining property of closed categories is that the
+words of them can easily be enumerated; it is very seldom that any
+new words are introduced in them. In general, closed categories
+contain **structural words**, also known as **function words**.
+In ``Syntax``, we have just two closed lexical categories:
+```
+  cat
+    Det ;  -- determiner            e.g. "this"
+    AdA ;  -- adadjective           e.g. "very"
+```
+We have already used words of both categories in the ``Food``
+examples; they have just not been assigned a category, but
+treated as **syncategorematic**. In GF, a syncategoramatic
+word is one that is introduced in a linearization rule of
+some construction alongside with some other expressions that
+are combined; there is no abstract syntax tree for that word
+alone. Thus in the rules
+```
+  fun That : Kind -> Item ;
+  lin That k = {"that" ++ k.s} ;
+```
+the word //that// is syncategoramatic. In linguistically motivated
+grammars, syncategorematic words are usually avoided, whereas in
+semantically motivated grammars, structural words are often treated
+as syncategoramatic. This is partly so because the concept expressed
+by a structural word in one language is often expressed by some other
+means than an individual word in another. For instance, the definite 
+article //the// is a determiner word in English, whereas Swedish expresses
+determination by inflecting the determined noun: //the wine// is //vinet//
+in Swedish.
+
+As for open classes, we will use four:
+```
+  cat
+    N ;    -- noun                  e.g. "pizza"
+    A ;    -- adjective             e.g. "good"
+    V ;    -- intransitive verb     e.g. "boil"
+    V2 ;   -- two-place verb        e.g. "eat"
+```
+Two-place verbs differ from intransitive verbs syntactically by
+taking an object. In the lexicon, they must be equipped with information
+on the //case// of the object in some languages (such as German and Latin),
+and on the //preposition// in some languages (such as English).
+
+
+
+===Lexical rules===
+
+The words of closed categories can be listed once and for all in a 
+library. The ``Syntax`` module has the following:
+```
+  fun 
+    this_Det, that_Det, these_Det, those_Det, 
+    every_Det, theSg_Det, thePl_Det, indef_Det, plur_Det, two_Det : Det ;
+    very_AdA  : AdA ;
+```
+The naming convention for lexical rules is that we use a word followed by
+the category. In this way we can for instance distinguish the determiner
+//that// from the conjunction //that//. But there are also rules where this
+does not quite suffice. English has no distinction between singular and
+plural //the//; yet they behave differently as determiners, analogously to
+//this// vs. //these//. The function //indef_Det// is the indefinite article
+//a//, whereas //plur_Det// is semantically the plural indefinite article,
+which has no separate word in English, as in some other languages, e.g.
+//des// in French.
+
+Open lexical categories have no objects in ``Syntax``. However, we can
+build lexical modules as extensions of ``Syntax``. An example is
+[``examples/tutorial/syntax/Test.gf`` examples/tutorial/syntax/Test.gf],
+which we use to test the syntax. Its vocabulary is from the food domain:
+```
+  abstract Test = Syntax ** {
+    fun
+      wine_N, cheese_N, fish_N, pizza_N, waiter_N, customer_N : N ;
+      fresh_A, warm_A, italian_A, expensive_A, delicious_A, boring_A : A ;
+      stink_V : V ;
+      eat_V2, love_V2, talk_V2 : V2 ;
+  }
+```
+
+===Phrasal categories===
+
+The topmost category in ``Syntax`` is ``Phr``, **phrase**, covering
+all complete sentences, which have a punctuation mark and could be
+used alone to make an utterance. In addition to **declarative sentences**
+``S``, there are also **question sentences** ``QS``:
+```
+  cat
+    Phr ;  -- any complete sentence e.g. "Is this pizza good?"
+    S ;    -- declarative sentence  e.g. "this pizza is good"
+    QS ;   -- question sentence     e.g. "is this pizza good"
+```
+The main parts of a sentence are usually taken to be the **noun phrase** ``NP`` and
+the **verb phrase** ``VP``. In analogy to noun phrases, we consider 
+**interrogative phrases**, which are used for forming question sentences.
+```
+    NP ;   -- noun phrase           e.g. "this pizza"
+    IP ;   -- interrogative phrase  e.g  "which pizza"
+    VP ;   -- verb phrase           e.g. "is good"
+```
+The "smallest" phrasal categories are **common nouns** ``CN`` and
+**adjectival phrases** ``AP``:
+```
+    CN ;   -- common noun phrase    e.g. "very good pizza"
+    AP ;   -- adjectival phrase     e.g. "very good"
+```
+Common nouns are typically combined with determiners to build noun
+phrases, whereas adjectival phrases are combined with the copula to
+form verb phrases.
+
+
+===Phrasal rules===
+
+Phrasal rules specify how complex phrases are built from simpler ones.
+At the bottom, there are **lexical insertion rules** telling how
+words from each lexical category are "promoted" to phrases; i.e. how
+the most elementary phrases are built.
+```
+  fun
+    UseN : N -> CN ;  -- pizza
+    UseA : A -> AP ;  -- be good
+    UseV : V -> VP ;  -- stink
+```
+Structural words usually don't form phrases themselves; thus they
+are at the first place used for promoting "lower" phrase categories
+to "higher" ones,
+```
+    DetCN : Det -> CN -> NP ;  -- this pizza
+```
+or for recursively building more complex phrases:
+```
+    AdAP : AdA -> AP -> AP ;  -- very good
+```
+In analogy to ``DetCN``, we could have a rule forming interrogative
+noun phrases with interogative determiners such as //which//. In
+``Syntax``, we however make a shortcut and just treat //which//
+syncategorematically:
+```
+    WhichCN : CN -> IP ;
+```
+Starting from the top of the grammar, we need two rules promoting
+sentences and questions into complete phrases:
+```
+    PhrS  : S  -> Phr ;   -- This pizza is good.
+    PhrQS : QS -> Phr ;   -- Is this pizza good?
+```
+The most central rule in most grammars is the **predication rule**, 
+which combines a noun
+phrase and a verb phrase into a sentence. In the present grammar,
+though not in the full resource grammar library, we split this
+rule into two: one for positive and one for negated sentences:
+```
+    PosVP, NegVP : NP -> VP -> S ;  -- this pizza is/isn't good
+```
+In the same way, question sentences can be formed with these two
+**polarities**:
+```
+    QPosVP, QNegVP : NP -> VP -> QS ; -- is/isn't this pizza good
+```
+Another form of questions are ones with interrogative noun phrases:
+```
+    IPPosVP, IPNegVP : IP -> VP -> QS ;  -- which pizza is/isn't good
+```
+Verb phrases can be built by **complementation**, where a two-place
+verb needs a noun phrase complement, and the (syncategoriematic) copula
+can take an adjectival phrase as complement:
+```
+    ComplV2 : V2 -> NP -> VP ;   -- eat this pizza
+    ComplAP : AP -> VP ;         -- be good
+```
+**Adjectival modification** is a recursive rule for forming common nouns:
+```
+    ModCN  : AP -> CN -> CN ;    -- warm pizza
+```
+Finally, we have two special rules that are instances of so-called
+**wh-movement**. The idea with this term is that a question such
+as //which pizza do you eat// is a result of moving //which pizza//
+from its "proper" place which is after the verb: //you eat which pizza//:
+```
+    IPPosV2, IPNegV2 : IP -> NP -> V2 -> QS ; -- which pizza do/don't you eat
+```
+The full resource grammar has a more general treatment of this phenomenon.
+But these special cases are already quite useful; moreover, they illustrate
+variation that is possible in English between 
+**pied piping** (//about which pizzza do you talk//) and 
+**preposition stranding** (//which pizzza do you talk about//).
+
+
+==Concrete syntax: English morphology==
+
+===Worst-case functions and data abstraction===
 
 Some English nouns, such as ``mouse``, are so irregular that
 it makes no sense to see them as instances of a paradigm. Even
@@ -2717,9 +2985,7 @@ correct to use these functions in concrete modules. In programming
 terms, ``Noun`` is then treated as an **abstract datatype**.
 
 
-
-%--!
-==A system of paradigms using predefined string operations==
+===A system of paradigms using predefined string operations===
 
 In addition to the completely regular noun paradigm ``regNoun``, 
 some other frequent noun paradigms deserve to be
@@ -2769,11 +3035,7 @@ without explicit ``open`` of the module ``Predef``.
 
 
 
-
-
-
-%--!
-==An intelligent noun paradigm using pattern matching==
+===An intelligent noun paradigm using pattern matching===
 
 It may be hard for the user of a resource morphology to pick the right
 inflection paradigm. A way to help this is to define a more intelligent
@@ -2810,11 +3072,7 @@ is factored out as a separate ``oper``, which is shared with
 ``regVerb``.
 
 
-
-
-
-%--!
-==Morphological resource modules==
+===Morphological resource modules===
 
 A common idiom is to
 gather the ``oper`` and ``param`` definitions
@@ -2863,9 +3121,7 @@ set the environment variable ``GF_LIB_PATH`` to point to this
 directory.
 
 
-
-%--!
-==Morphological analysis and morphology quiz==
+===Morphological analysis and morphology quiz===
 
 Even though morphology is in GF
 mostly used as an auxiliary for syntax, it
@@ -2902,6 +3158,25 @@ The ``number`` flag gives the number of exercises generated.
 
 
 
+==Concrete syntax: English phrase building==
+
+
+===Predication===
+
+
+===Complementization===
+
+
+===Determination===
+
+
+===Modification===
+
+
+===Putting the syntax together===
+
+
+==Concrete syntax for Italian==
 
 
 =Using the resource grammar library=
