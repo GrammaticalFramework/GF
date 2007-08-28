@@ -1330,12 +1330,35 @@ Even though we managed to write ``FoodEng`` in the context-free format,
 we cannot do this for GF grammars in general. If we just try to do this
 for ``FoodIta`` as well, we lose an important aspect of multilinguality:
 that the order of constituents is defined separately in concrete syntax.
-Thus we could not use ``FoodEng`` and ``FoodIta`` in a multilingual
-grammar that supports translation via common abstract syntax.
+Thus we could not use context-free ``FoodEng`` and ``FoodIta`` in a multilingual
+grammar that supports translation via common abstract syntax: the
+qualification function ``QKind`` has different types in the two
+grammars.
+
+To summarize, the separation of concrete and abstract syntax allows
+three deviations from context-free grammar:
+- **permutation**: vary the linear order of constituents
+- **suppression**: omit some constituent in linearization
+- **reduplication**: repeat some constituent in linearization
+
+
+The third property is the one that definitely shows that GF is 
+stronger than context-free: GF can define the **copy language**
+``{x x | x <- (a|b)*}``, which is known not to be context-free.
+The other properties have more to do with the kind of trees that
+the grammar can associated with strings: permutation is important
+in multilingual grammars, and suppression is needed in grammars
+were trees carry some hidden semantic information (see Chapter 8
+below).
+
+Of course, context-free grammars are also restricted from the
+grammar engineering point of view. They give no support to
+modules, functions, and parameters, which are so central
+for the productivity of GF.
 
 
 **Exercise**. Define the copy language ``{x x | x <- (a|b)*}`` in GF.
-This language is known not to be context-free.
+
 
 
 ==Using operations and resource modules==
