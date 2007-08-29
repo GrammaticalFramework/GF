@@ -1,4 +1,4 @@
-Grammatical Framework: Tutorial, Advanced Applications, and Reference Manual
+Grammatical Framework: Tutorial, Applications, and Reference Manual
 Author: Aarne Ranta aarne (at) cs.chalmers.se
 Last update: %%date(%c)
 
@@ -28,8 +28,15 @@ Last update: %%date(%c)
 
 
 %!postproc(tex): #PARTone "part{Tutorial}"
-%!postproc(tex): #PARTtwo "part{Advanced Applications}"
+%!postproc(tex): #PARTtwo "part{Advanced Grammars and Applications}"
 %!postproc(tex): #PARTthree "part{Reference Manual}"
+
+%!postproc(tex): #PARTbnf "include{DocGF}"
+%!postproc(tex): #PARTquickref "chapter{Quick Reference}"
+%!postproc(tex): #twocolumn "twocolumn"
+%!postproc(tex): #smallsize "tiny"
+%!postproc(tex): #startappendix "appendix"
+
 
 
 #LOGOPNG
@@ -347,7 +354,7 @@ is given in the libraries.
 
 
 
-==Who is the tutorial for==
+==Who should read this tutorial==
 
 The tutorial part of this book is mainly for programmers 
 who want to learn to write application grammars. 
@@ -357,7 +364,7 @@ linguistics, functional programming, and type theory.
 This knowledge will be introduced as a part of grammar writing
 practice.
 
-Thus the book should be accessible to anyone who has some 
+Thus the tutorial should be accessible to anyone who has some 
 previous programming experience from any programming language; the basics
 of using computers are also presupposed, e.g. the use of 
 text editors and the management of files.
@@ -1638,35 +1645,6 @@ same time:
 
 
 
-===System commands===
-
-To document your grammar, you may want to print the
-graph into a file, e.g. a ``.png`` file that
-can be included in an HTML document. You can do this
-by first printing the graph into a file ``.dot`` and then
-processing this file with the ``dot`` program (from the Graphviz package).
-```
-  > pm -printer=graph | wf Foodmarket.dot
-  > ! dot -Tpng Foodmarket.dot > Foodmarket.png
-```
-The latter command is a Unix command, issued from GF by using the
-shell escape symbol ``!``. The resulting graph was shown in the previous section.
-
-The command ``print_multi = pm`` is used for printing the current multilingual
-grammar in various formats, of which the format ``-printer=graph`` just
-shows the module dependencies. Use ``help`` to see what other formats
-are available:
-```
-  > help pm
-  > help -printer
-  > help help
-```
-Another form of system commands are those usable in GF pipes. The escape symbol
-is then ``?``.
-```
-  > generate_trees | ? wc
-```
-
 
 ===Division of labour===
 
@@ -1679,12 +1657,14 @@ available through resource grammar modules, whose users only need
 to pick the right operations and not to know their implementation
 details. 
 
-In the following sections, we will go through some
+In the following Chapter, we will go through some
 such linguistic details. The programming constructs needed when
 doing this are useful for all GF programmers, even for those who don't
 hand-code the linguistics of their applications but get them
-from libraries. And it is quite interesting to know something about the
-linguistic concepts of inflection, agreement, and parts of speech.
+from libraries. And it can be generally interesting to learn something about the
+linguistic concepts of inflection, agreement, and parts of speech, in the
+form of precise computer-executable code.
+
 
 
 ==Summary of GF language features==
@@ -2703,480 +2683,6 @@ now aiming for complete grammatical correctness by the use of parameters.
 
 
 
-
-
-=Implementing morphology and syntax=
-
-In this chapter, we will dig deeper into linguistic concepts than
-so far. We will build an implementation of a linguistic motivated
-fragment of English and Italian, covering basic morphology and syntax.
-The result is a miniature of the GF resource library, which will
-be covered in the next chapter. There are two main purposes
-for this chapter:
-- to understand the linguistic concepts underlying the resource
-  grammar library
-- to get practice in the more advanced constructs of concrete syntax
-
-
-However, the reader who is not willing to work on an advanced level
-of concrete syntax may just skim through the introductory parts of
-each section, thus using the chapter in its first purpose only.
-
-
-==Lexical vs. syntactic rules==
-
-So far we have seen a grammar from a semantic point of view:
-a grammar specifies a system of meanings (specified in the abstract syntax) and
-tells how they are expressed in some language (as specified in a concrete syntax).
-In resource grammars, as in linguistic tradition, the goal is to 
-specify the **grammatically correct combinations of words**, whatever their
-meanings are.
-
-Thus the grammar has two kinds of categories and two kinds of rules:
-- lexical:
-  - lexical categories, to classify words
-  - lexical rules, to define words their properties
-
-
-- phrasal (combinatorial, syntactic):
-  - phrasal categories, to classify phrases of arbitrary size
-  - phrasal rules, to combine phrases into larger phrases
-
-
-Many grammar formalisms force a radical distinction between the lexical and syntactic
-components; sometimes it is not even possible to express the two kinds of rules in
-the same formalism. GF has no such restrictions. Nevertheless, it has turned out
-to be a good discipline to maintain a distinction between the lexical and syntactic 
-components.
-
-
-
-==The abstract syntax==
-
-Let us go through the abstract syntax contained in the module ``Syntax``.
-It can be found in the file 
-[``examples/tutorial/syntax/Syntax.gf`` examples/tutorial/syntax/Syntax.gf].
-
-
-===Lexical categories===
-
-Words are classified into two kinds of categories: **closed** and
-**open**. The definining property of closed categories is that the
-words of them can easily be enumerated; it is very seldom that any
-new words are introduced in them. In general, closed categories
-contain **structural words**, also known as **function words**.
-In ``Syntax``, we have just two closed lexical categories:
-```
-  cat
-    Det ;  -- determiner            e.g. "this"
-    AdA ;  -- adadjective           e.g. "very"
-```
-We have already used words of both categories in the ``Food``
-examples; they have just not been assigned a category, but
-treated as **syncategorematic**. In GF, a syncategoramatic
-word is one that is introduced in a linearization rule of
-some construction alongside with some other expressions that
-are combined; there is no abstract syntax tree for that word
-alone. Thus in the rules
-```
-  fun That : Kind -> Item ;
-  lin That k = {"that" ++ k.s} ;
-```
-the word //that// is syncategoramatic. In linguistically motivated
-grammars, syncategorematic words are usually avoided, whereas in
-semantically motivated grammars, structural words are often treated
-as syncategoramatic. This is partly so because the concept expressed
-by a structural word in one language is often expressed by some other
-means than an individual word in another. For instance, the definite 
-article //the// is a determiner word in English, whereas Swedish expresses
-determination by inflecting the determined noun: //the wine// is //vinet//
-in Swedish.
-
-As for open classes, we will use four:
-```
-  cat
-    N ;    -- noun                  e.g. "pizza"
-    A ;    -- adjective             e.g. "good"
-    V ;    -- intransitive verb     e.g. "boil"
-    V2 ;   -- two-place verb        e.g. "eat"
-```
-Two-place verbs differ from intransitive verbs syntactically by
-taking an object. In the lexicon, they must be equipped with information
-on the //case// of the object in some languages (such as German and Latin),
-and on the //preposition// in some languages (such as English).
-
-
-
-===Lexical rules===
-
-The words of closed categories can be listed once and for all in a 
-library. The ``Syntax`` module has the following:
-```
-  fun 
-    this_Det, that_Det, these_Det, those_Det, 
-    every_Det, theSg_Det, thePl_Det, indef_Det, plur_Det, two_Det : Det ;
-    very_AdA  : AdA ;
-```
-The naming convention for lexical rules is that we use a word followed by
-the category. In this way we can for instance distinguish the determiner
-//that// from the conjunction //that//. But there are also rules where this
-does not quite suffice. English has no distinction between singular and
-plural //the//; yet they behave differently as determiners, analogously to
-//this// vs. //these//. The function //indef_Det// is the indefinite article
-//a//, whereas //plur_Det// is semantically the plural indefinite article,
-which has no separate word in English, as in some other languages, e.g.
-//des// in French.
-
-Open lexical categories have no objects in ``Syntax``. However, we can
-build lexical modules as extensions of ``Syntax``. An example is
-[``examples/tutorial/syntax/Test.gf`` examples/tutorial/syntax/Test.gf],
-which we use to test the syntax. Its vocabulary is from the food domain:
-```
-  abstract Test = Syntax ** {
-    fun
-      wine_N, cheese_N, fish_N, pizza_N, waiter_N, customer_N : N ;
-      fresh_A, warm_A, italian_A, expensive_A, delicious_A, boring_A : A ;
-      stink_V : V ;
-      eat_V2, love_V2, talk_V2 : V2 ;
-  }
-```
-
-===Phrasal categories===
-
-The topmost category in ``Syntax`` is ``Phr``, **phrase**, covering
-all complete sentences, which have a punctuation mark and could be
-used alone to make an utterance. In addition to **declarative sentences**
-``S``, there are also **question sentences** ``QS``:
-```
-  cat
-    Phr ;  -- any complete sentence e.g. "Is this pizza good?"
-    S ;    -- declarative sentence  e.g. "this pizza is good"
-    QS ;   -- question sentence     e.g. "is this pizza good"
-```
-The main parts of a sentence are usually taken to be the **noun phrase** ``NP`` and
-the **verb phrase** ``VP``. In analogy to noun phrases, we consider 
-**interrogative phrases**, which are used for forming question sentences.
-```
-    NP ;   -- noun phrase           e.g. "this pizza"
-    IP ;   -- interrogative phrase  e.g  "which pizza"
-    VP ;   -- verb phrase           e.g. "is good"
-```
-The "smallest" phrasal categories are **common nouns** ``CN`` and
-**adjectival phrases** ``AP``:
-```
-    CN ;   -- common noun phrase    e.g. "very good pizza"
-    AP ;   -- adjectival phrase     e.g. "very good"
-```
-Common nouns are typically combined with determiners to build noun
-phrases, whereas adjectival phrases are combined with the copula to
-form verb phrases.
-
-
-===Phrasal rules===
-
-Phrasal rules specify how complex phrases are built from simpler ones.
-At the bottom, there are **lexical insertion rules** telling how
-words from each lexical category are "promoted" to phrases; i.e. how
-the most elementary phrases are built.
-```
-  fun
-    UseN : N -> CN ;  -- pizza
-    UseA : A -> AP ;  -- be good
-    UseV : V -> VP ;  -- stink
-```
-Structural words usually don't form phrases themselves; thus they
-are at the first place used for promoting "lower" phrase categories
-to "higher" ones,
-```
-    DetCN : Det -> CN -> NP ;  -- this pizza
-```
-or for recursively building more complex phrases:
-```
-    AdAP : AdA -> AP -> AP ;  -- very good
-```
-In analogy to ``DetCN``, we could have a rule forming interrogative
-noun phrases with interogative determiners such as //which//. In
-``Syntax``, we however make a shortcut and just treat //which//
-syncategorematically:
-```
-    WhichCN : CN -> IP ;
-```
-Starting from the top of the grammar, we need two rules promoting
-sentences and questions into complete phrases:
-```
-    PhrS  : S  -> Phr ;   -- This pizza is good.
-    PhrQS : QS -> Phr ;   -- Is this pizza good?
-```
-The most central rule in most grammars is the **predication rule**, 
-which combines a noun
-phrase and a verb phrase into a sentence. In the present grammar,
-though not in the full resource grammar library, we split this
-rule into two: one for positive and one for negated sentences:
-```
-    PosVP, NegVP : NP -> VP -> S ;  -- this pizza is/isn't good
-```
-In the same way, question sentences can be formed with these two
-**polarities**:
-```
-    QPosVP, QNegVP : NP -> VP -> QS ; -- is/isn't this pizza good
-```
-Another form of questions are ones with interrogative noun phrases:
-```
-    IPPosVP, IPNegVP : IP -> VP -> QS ;  -- which pizza is/isn't good
-```
-Verb phrases can be built by **complementation**, where a two-place
-verb needs a noun phrase complement, and the (syncategoriematic) copula
-can take an adjectival phrase as complement:
-```
-    ComplV2 : V2 -> NP -> VP ;   -- eat this pizza
-    ComplAP : AP -> VP ;         -- be good
-```
-**Adjectival modification** is a recursive rule for forming common nouns:
-```
-    ModCN  : AP -> CN -> CN ;    -- warm pizza
-```
-Finally, we have two special rules that are instances of so-called
-**wh-movement**. The idea with this term is that a question such
-as //which pizza do you eat// is a result of moving //which pizza//
-from its "proper" place which is after the verb: //you eat which pizza//:
-```
-    IPPosV2, IPNegV2 : IP -> NP -> V2 -> QS ; -- which pizza do/don't you eat
-```
-The full resource grammar has a more general treatment of this phenomenon.
-But these special cases are already quite useful; moreover, they illustrate
-variation that is possible in English between 
-**pied piping** (//about which pizzza do you talk//) and 
-**preposition stranding** (//which pizzza do you talk about//).
-
-
-==Concrete syntax: English morphology==
-
-===Worst-case functions and data abstraction===
-
-Some English nouns, such as ``mouse``, are so irregular that
-it makes no sense to see them as instances of a paradigm. Even
-then, it is useful to perform **data abstraction** from the
-definition of the type ``Noun``, and introduce a constructor
-operation, a **worst-case function** for nouns:
-```
-  oper mkNoun : Str -> Str -> Noun = \x,y -> {
-    s = table {
-      Sg => x ;
-      Pl => y
-      }
-    } ;
-```
-Thus we can define
-```
-  lin Mouse = mkNoun "mouse" "mice" ;
-```
-and
-```
-  oper regNoun : Str -> Noun = \x -> 
-    mkNoun x (x + "s") ;
-```
-instead of writing the inflection tables explicitly.
-
-The grammar engineering advantage of worst-case functions is that
-the author of the resource module may change the definitions of
-``Noun`` and ``mkNoun``, and still retain the
-interface (i.e. the system of type signatures) that makes it
-correct to use these functions in concrete modules. In programming
-terms, ``Noun`` is then treated as an **abstract datatype**.
-
-
-===A system of paradigms using predefined string operations===
-
-In addition to the completely regular noun paradigm ``regNoun``, 
-some other frequent noun paradigms deserve to be
-defined, for instance,
-```
-  sNoun : Str -> Noun = \kiss  -> mkNoun kiss (kiss + "es") ;
-```
-What about nouns like //fly//, with the plural //flies//? The already
-available solution is to use the longest common prefix
-//fl// (also known as the **technical stem**) as argument, and define
-```
-  yNoun : Str -> Noun = \fl -> mkNoun (fl + "y") (fl + "ies") ;
-```
-But this paradigm would be very unintuitive to use, because the technical stem
-is not an existing form of the word. A better solution is to use
-the lemma and a string operator ``init``, which returns the initial segment (i.e.
-all characters but the last) of a string:
-```
-  yNoun : Str -> Noun = \fly -> mkNoun fly (init fly + "ies") ;  
-```
-The operation ``init`` belongs to a set of operations in the
-resource module ``Prelude``, which therefore has to be
-``open``ed so that ``init`` can be used. 
-```
-  > cc init "curry"
-  "curr"
-```
-Its dual is ``last``:
-```
-  > cc last "curry"
-  "y"
-```
-As generalizations of the library functions ``init`` and ``last``, GF has
-two predefined funtions:
-``Predef.dp``, which "drops" suffixes of any length, 
-and ``Predef.tk``, which "takes" a prefix
-just omitting a number of characters from the end. For instance,
-```
-  > cc Predef.tk 3 "worried"
-  "worr"
-  > cc Predef.dp 3 "worried"
-  "ied"
-```
-The prefix ``Predef`` is given to a handful of functions that could
-not be defined internally in GF. They are available in all modules
-without explicit ``open`` of the module ``Predef``.
-
-
-
-===An intelligent noun paradigm using pattern matching===
-
-It may be hard for the user of a resource morphology to pick the right
-inflection paradigm. A way to help this is to define a more intelligent
-paradigm, which chooses the ending by first analysing the lemma.
-The following variant for English regular nouns puts together all the
-previously shown paradigms, and chooses one of them on the basis of
-the final letter of the lemma (found by the prelude operation ``last``).
-```
-  regNoun : Str -> Noun = \s -> case last s of {
-    "s" | "z" => mkNoun s (s + "es") ;
-    "y"       => mkNoun s (init s + "ies") ;
-    _         => mkNoun s (s + "s")
-    } ;
-```
-The paradigms ``regNoun`` does not give the correct forms for
-all nouns. For instance, //mouse - mice// and
-//fish - fish// must be given by using ``mkNoun``.
-Also the word //boy// would be inflected incorrectly; to prevent
-this, either use ``mkNoun`` or modify 
-``regNoun`` so that the ``"y"`` case does not
-apply if the second-last character is a vowel.
-
-**Exercise**. Extend the ``regNoun`` paradigm so that it takes care
-of all variations there are in English. Test it with the nouns
-//ax//, //bamboo//, //boy//, //bush//, //hero//, //match//. 
-**Hint**. The library functions ``Predef.dp`` and ``Predef.tk``
-are useful in this task.
-
-**Exercise**. The same rules that form plural nouns in English also
-apply in the formation of third-person singular verbs. 
-Write a regular verb paradigm that uses this idea, but first
-rewrite ``regNoun`` so that the analysis needed to build //s//-forms
-is factored out as a separate ``oper``, which is shared with
-``regVerb``.
-
-
-===Morphological resource modules===
-
-A common idiom is to
-gather the ``oper`` and ``param`` definitions
-needed for inflecting words in
-a language into a morphology module. Here is a simple
-example, [``MorphoEng`` resource/MorphoEng.gf].
-```
-  --# -path=.:prelude
-
-  resource MorphoEng = open Prelude in {
-
-    param
-      Number = Sg | Pl ;
-
-    oper
-      Noun, Verb : Type = {s : Number => Str} ;
-
-      mkNoun : Str -> Str -> Noun = \x,y -> {
-        s = table {
-          Sg => x ;
-          Pl => y
-          }
-        } ;
-
-      regNoun : Str -> Noun = \s -> case last s of {
-        "s" | "z" => mkNoun s (s + "es") ;
-        "y"       => mkNoun s (init s + "ies") ;
-        _         => mkNoun s (s + "s")
-        } ;
-
-      mkVerb : Str -> Str -> Verb = \x,y -> mkNoun y x ;
-
-      regVerb : Str -> Verb = \s -> case last s of {
-        "s" | "z" => mkVerb s (s + "es") ;
-        "y"       => mkVerb s (init s + "ies") ;
-        "o"       => mkVerb s (s + "es") ;
-        _         => mkVerb s (s + "s")
-        } ;
-  }
-```
-The first line gives as a hint to the compiler the
-**search path** needed to find all the other modules that the
-module depends on. The directory ``prelude`` is a subdirectory of
-``GF/lib``; to be able to refer to it in this simple way, you can
-set the environment variable ``GF_LIB_PATH`` to point to this
-directory.
-
-
-===Morphological analysis and morphology quiz===
-
-Even though morphology is in GF
-mostly used as an auxiliary for syntax, it
-can also be useful on its own right. The command ``morpho_analyse = ma``
-can be used to read a text and return for each word the analyses that
-it has in the current concrete syntax.
-```
-  > rf bible.txt | morpho_analyse
-```
-In the same way as translation exercises, morphological exercises can
-be generated, by the command ``morpho_quiz = mq``. Usually,
-the category is set to be something else than ``S``. For instance,
-```
-  > cd GF/lib/resource-1.0/
-  > i french/IrregFre.gf
-  > morpho_quiz -cat=V
-
-  Welcome to GF Morphology Quiz.
-  ...
-
-  réapparaître : VFin VCondit  Pl  P2
-  réapparaitriez
-  > No, not réapparaitriez, but
-  réapparaîtriez
-  Score 0/1
-```
-Finally, a list of morphological exercises can be generated
-off-line and saved in a
-file for later use, by the command ``morpho_list = ml``
-```
-  > morpho_list -number=25 -cat=V | wf exx.txt
-```
-The ``number`` flag gives the number of exercises generated.
-
-
-
-==Concrete syntax: English phrase building==
-
-
-===Predication===
-
-
-===Complementization===
-
-
-===Determination===
-
-
-===Modification===
-
-
-===Putting the syntax together===
-
-
-==Concrete syntax for Italian==
 
 
 =Using the resource grammar library=
@@ -4874,13 +4380,486 @@ by Björn Bringert gives more information on Java.
 =Multimodal dialogue systems=
 
 
-=Grammar of formal languages=
+=Grammars of formal languages=
 
-==Precedence and ficity==
+==Precedence and fixity==
 
 ==Higher-order abstract syntax==
 
 ==Extensible natural-language interfaces==
+
+
+
+=Implementing morphology and syntax=
+
+In this chapter, we will dig deeper into linguistic concepts than
+so far. We will build an implementation of a linguistic motivated
+fragment of English and Italian, covering basic morphology and syntax.
+The result is a miniature of the GF resource library, whose internals will
+be covered in the next chapter. There are two main purposes
+for this chapter:
+- to understand the linguistic concepts underlying the resource
+  grammar library
+- to get practice in the more advanced constructs of concrete syntax
+
+
+
+
+==Lexical vs. syntactic rules==
+
+So far we have seen a grammar from a semantic point of view:
+a grammar specifies a system of meanings (specified in the abstract syntax) and
+tells how they are expressed in some language (as specified in a concrete syntax).
+In resource grammars, as in linguistic tradition, the goal is to 
+specify the **grammatically correct combinations of words**, whatever their
+meanings are.
+
+Thus the grammar has two kinds of categories and two kinds of rules:
+- lexical:
+  - lexical categories, to classify words
+  - lexical rules, to define words their properties
+
+
+- phrasal (combinatorial, syntactic):
+  - phrasal categories, to classify phrases of arbitrary size
+  - phrasal rules, to combine phrases into larger phrases
+
+
+Many grammar formalisms force a radical distinction between the lexical and syntactic
+components; sometimes it is not even possible to express the two kinds of rules in
+the same formalism. GF has no such restrictions. Nevertheless, it has turned out
+to be a good discipline to maintain a distinction between the lexical and syntactic 
+components.
+
+
+
+==The abstract syntax==
+
+Let us go through the abstract syntax contained in the module ``Syntax``.
+It can be found in the file 
+[``examples/tutorial/syntax/Syntax.gf`` examples/tutorial/syntax/Syntax.gf].
+
+
+===Lexical categories===
+
+Words are classified into two kinds of categories: **closed** and
+**open**. The definining property of closed categories is that the
+words of them can easily be enumerated; it is very seldom that any
+new words are introduced in them. In general, closed categories
+contain **structural words**, also known as **function words**.
+In ``Syntax``, we have just two closed lexical categories:
+```
+  cat
+    Det ;  -- determiner            e.g. "this"
+    AdA ;  -- adadjective           e.g. "very"
+```
+We have already used words of both categories in the ``Food``
+examples; they have just not been assigned a category, but
+treated as **syncategorematic**. In GF, a syncategoramatic
+word is one that is introduced in a linearization rule of
+some construction alongside with some other expressions that
+are combined; there is no abstract syntax tree for that word
+alone. Thus in the rules
+```
+  fun That : Kind -> Item ;
+  lin That k = {"that" ++ k.s} ;
+```
+the word //that// is syncategoramatic. In linguistically motivated
+grammars, syncategorematic words are usually avoided, whereas in
+semantically motivated grammars, structural words are often treated
+as syncategoramatic. This is partly so because the concept expressed
+by a structural word in one language is often expressed by some other
+means than an individual word in another. For instance, the definite 
+article //the// is a determiner word in English, whereas Swedish expresses
+determination by inflecting the determined noun: //the wine// is //vinet//
+in Swedish.
+
+As for open classes, we will use four:
+```
+  cat
+    N ;    -- noun                  e.g. "pizza"
+    A ;    -- adjective             e.g. "good"
+    V ;    -- intransitive verb     e.g. "boil"
+    V2 ;   -- two-place verb        e.g. "eat"
+```
+Two-place verbs differ from intransitive verbs syntactically by
+taking an object. In the lexicon, they must be equipped with information
+on the //case// of the object in some languages (such as German and Latin),
+and on the //preposition// in some languages (such as English).
+
+
+
+===Lexical rules===
+
+The words of closed categories can be listed once and for all in a 
+library. The ``Syntax`` module has the following:
+```
+  fun 
+    this_Det, that_Det, these_Det, those_Det, 
+    every_Det, theSg_Det, thePl_Det, indef_Det, plur_Det, two_Det : Det ;
+    very_AdA  : AdA ;
+```
+The naming convention for lexical rules is that we use a word followed by
+the category. In this way we can for instance distinguish the determiner
+//that// from the conjunction //that//. But there are also rules where this
+does not quite suffice. English has no distinction between singular and
+plural //the//; yet they behave differently as determiners, analogously to
+//this// vs. //these//. The function //indef_Det// is the indefinite article
+//a//, whereas //plur_Det// is semantically the plural indefinite article,
+which has no separate word in English, as in some other languages, e.g.
+//des// in French.
+
+Open lexical categories have no objects in ``Syntax``. However, we can
+build lexical modules as extensions of ``Syntax``. An example is
+[``examples/tutorial/syntax/Test.gf`` examples/tutorial/syntax/Test.gf],
+which we use to test the syntax. Its vocabulary is from the food domain:
+```
+  abstract Test = Syntax ** {
+    fun
+      wine_N, cheese_N, fish_N, pizza_N, waiter_N, customer_N : N ;
+      fresh_A, warm_A, italian_A, expensive_A, delicious_A, boring_A : A ;
+      stink_V : V ;
+      eat_V2, love_V2, talk_V2 : V2 ;
+  }
+```
+
+===Phrasal categories===
+
+The topmost category in ``Syntax`` is ``Phr``, **phrase**, covering
+all complete sentences, which have a punctuation mark and could be
+used alone to make an utterance. In addition to **declarative sentences**
+``S``, there are also **question sentences** ``QS``:
+```
+  cat
+    Phr ;  -- any complete sentence e.g. "Is this pizza good?"
+    S ;    -- declarative sentence  e.g. "this pizza is good"
+    QS ;   -- question sentence     e.g. "is this pizza good"
+```
+The main parts of a sentence are usually taken to be the **noun phrase** ``NP`` and
+the **verb phrase** ``VP``. In analogy to noun phrases, we consider 
+**interrogative phrases**, which are used for forming question sentences.
+```
+    NP ;   -- noun phrase           e.g. "this pizza"
+    IP ;   -- interrogative phrase  e.g  "which pizza"
+    VP ;   -- verb phrase           e.g. "is good"
+```
+The "smallest" phrasal categories are **common nouns** ``CN`` and
+**adjectival phrases** ``AP``:
+```
+    CN ;   -- common noun phrase    e.g. "very good pizza"
+    AP ;   -- adjectival phrase     e.g. "very good"
+```
+Common nouns are typically combined with determiners to build noun
+phrases, whereas adjectival phrases are combined with the copula to
+form verb phrases.
+
+
+===Phrasal rules===
+
+Phrasal rules specify how complex phrases are built from simpler ones.
+At the bottom, there are **lexical insertion rules** telling how
+words from each lexical category are "promoted" to phrases; i.e. how
+the most elementary phrases are built.
+```
+  fun
+    UseN : N -> CN ;  -- pizza
+    UseA : A -> AP ;  -- be good
+    UseV : V -> VP ;  -- stink
+```
+Structural words usually don't form phrases themselves; thus they
+are at the first place used for promoting "lower" phrase categories
+to "higher" ones,
+```
+    DetCN : Det -> CN -> NP ;  -- this pizza
+```
+or for recursively building more complex phrases:
+```
+    AdAP : AdA -> AP -> AP ;  -- very good
+```
+In analogy to ``DetCN``, we could have a rule forming interrogative
+noun phrases with interogative determiners such as //which//. In
+``Syntax``, we however make a shortcut and just treat //which//
+syncategorematically:
+```
+    WhichCN : CN -> IP ;
+```
+Starting from the top of the grammar, we need two rules promoting
+sentences and questions into complete phrases:
+```
+    PhrS  : S  -> Phr ;   -- This pizza is good.
+    PhrQS : QS -> Phr ;   -- Is this pizza good?
+```
+The most central rule in most grammars is the **predication rule**, 
+which combines a noun
+phrase and a verb phrase into a sentence. In the present grammar,
+though not in the full resource grammar library, we split this
+rule into two: one for positive and one for negated sentences:
+```
+    PosVP, NegVP : NP -> VP -> S ;  -- this pizza is/isn't good
+```
+In the same way, question sentences can be formed with these two
+**polarities**:
+```
+    QPosVP, QNegVP : NP -> VP -> QS ; -- is/isn't this pizza good
+```
+Another form of questions are ones with interrogative noun phrases:
+```
+    IPPosVP, IPNegVP : IP -> VP -> QS ;  -- which pizza is/isn't good
+```
+Verb phrases can be built by **complementation**, where a two-place
+verb needs a noun phrase complement, and the (syncategoriematic) copula
+can take an adjectival phrase as complement:
+```
+    ComplV2 : V2 -> NP -> VP ;   -- eat this pizza
+    ComplAP : AP -> VP ;         -- be good
+```
+**Adjectival modification** is a recursive rule for forming common nouns:
+```
+    ModCN  : AP -> CN -> CN ;    -- warm pizza
+```
+Finally, we have two special rules that are instances of so-called
+**wh-movement**. The idea with this term is that a question such
+as //which pizza do you eat// is a result of moving //which pizza//
+from its "proper" place which is after the verb: //you eat which pizza//:
+```
+    IPPosV2, IPNegV2 : IP -> NP -> V2 -> QS ; -- which pizza do/don't you eat
+```
+The full resource grammar has a more general treatment of this phenomenon.
+But these special cases are already quite useful; moreover, they illustrate
+variation that is possible in English between 
+**pied piping** (//about which pizzza do you talk//) and 
+**preposition stranding** (//which pizzza do you talk about//).
+
+
+==Concrete syntax: English morphology==
+
+===Worst-case functions and data abstraction===
+
+Some English nouns, such as ``mouse``, are so irregular that
+it makes no sense to see them as instances of a paradigm. Even
+then, it is useful to perform **data abstraction** from the
+definition of the type ``Noun``, and introduce a constructor
+operation, a **worst-case function** for nouns:
+```
+  oper mkNoun : Str -> Str -> Noun = \x,y -> {
+    s = table {
+      Sg => x ;
+      Pl => y
+      }
+    } ;
+```
+Thus we can define
+```
+  lin Mouse = mkNoun "mouse" "mice" ;
+```
+and
+```
+  oper regNoun : Str -> Noun = \x -> 
+    mkNoun x (x + "s") ;
+```
+instead of writing the inflection tables explicitly.
+
+The grammar engineering advantage of worst-case functions is that
+the author of the resource module may change the definitions of
+``Noun`` and ``mkNoun``, and still retain the
+interface (i.e. the system of type signatures) that makes it
+correct to use these functions in concrete modules. In programming
+terms, ``Noun`` is then treated as an **abstract datatype**.
+
+
+===A system of paradigms using predefined string operations===
+
+In addition to the completely regular noun paradigm ``regNoun``, 
+some other frequent noun paradigms deserve to be
+defined, for instance,
+```
+  sNoun : Str -> Noun = \kiss  -> mkNoun kiss (kiss + "es") ;
+```
+What about nouns like //fly//, with the plural //flies//? The already
+available solution is to use the longest common prefix
+//fl// (also known as the **technical stem**) as argument, and define
+```
+  yNoun : Str -> Noun = \fl -> mkNoun (fl + "y") (fl + "ies") ;
+```
+But this paradigm would be very unintuitive to use, because the technical stem
+is not an existing form of the word. A better solution is to use
+the lemma and a string operator ``init``, which returns the initial segment (i.e.
+all characters but the last) of a string:
+```
+  yNoun : Str -> Noun = \fly -> mkNoun fly (init fly + "ies") ;  
+```
+The operation ``init`` belongs to a set of operations in the
+resource module ``Prelude``, which therefore has to be
+``open``ed so that ``init`` can be used. 
+```
+  > cc init "curry"
+  "curr"
+```
+Its dual is ``last``:
+```
+  > cc last "curry"
+  "y"
+```
+As generalizations of the library functions ``init`` and ``last``, GF has
+two predefined funtions:
+``Predef.dp``, which "drops" suffixes of any length, 
+and ``Predef.tk``, which "takes" a prefix
+just omitting a number of characters from the end. For instance,
+```
+  > cc Predef.tk 3 "worried"
+  "worr"
+  > cc Predef.dp 3 "worried"
+  "ied"
+```
+The prefix ``Predef`` is given to a handful of functions that could
+not be defined internally in GF. They are available in all modules
+without explicit ``open`` of the module ``Predef``.
+
+
+
+===An intelligent noun paradigm using pattern matching===
+
+It may be hard for the user of a resource morphology to pick the right
+inflection paradigm. A way to help this is to define a more intelligent
+paradigm, which chooses the ending by first analysing the lemma.
+The following variant for English regular nouns puts together all the
+previously shown paradigms, and chooses one of them on the basis of
+the final letter of the lemma (found by the prelude operation ``last``).
+```
+  regNoun : Str -> Noun = \s -> case last s of {
+    "s" | "z" => mkNoun s (s + "es") ;
+    "y"       => mkNoun s (init s + "ies") ;
+    _         => mkNoun s (s + "s")
+    } ;
+```
+The paradigms ``regNoun`` does not give the correct forms for
+all nouns. For instance, //mouse - mice// and
+//fish - fish// must be given by using ``mkNoun``.
+Also the word //boy// would be inflected incorrectly; to prevent
+this, either use ``mkNoun`` or modify 
+``regNoun`` so that the ``"y"`` case does not
+apply if the second-last character is a vowel.
+
+**Exercise**. Extend the ``regNoun`` paradigm so that it takes care
+of all variations there are in English. Test it with the nouns
+//ax//, //bamboo//, //boy//, //bush//, //hero//, //match//. 
+**Hint**. The library functions ``Predef.dp`` and ``Predef.tk``
+are useful in this task.
+
+**Exercise**. The same rules that form plural nouns in English also
+apply in the formation of third-person singular verbs. 
+Write a regular verb paradigm that uses this idea, but first
+rewrite ``regNoun`` so that the analysis needed to build //s//-forms
+is factored out as a separate ``oper``, which is shared with
+``regVerb``.
+
+
+===Morphological resource modules===
+
+A common idiom is to
+gather the ``oper`` and ``param`` definitions
+needed for inflecting words in
+a language into a morphology module. Here is a simple
+example, [``MorphoEng`` resource/MorphoEng.gf].
+```
+  --# -path=.:prelude
+
+  resource MorphoEng = open Prelude in {
+
+    param
+      Number = Sg | Pl ;
+
+    oper
+      Noun, Verb : Type = {s : Number => Str} ;
+
+      mkNoun : Str -> Str -> Noun = \x,y -> {
+        s = table {
+          Sg => x ;
+          Pl => y
+          }
+        } ;
+
+      regNoun : Str -> Noun = \s -> case last s of {
+        "s" | "z" => mkNoun s (s + "es") ;
+        "y"       => mkNoun s (init s + "ies") ;
+        _         => mkNoun s (s + "s")
+        } ;
+
+      mkVerb : Str -> Str -> Verb = \x,y -> mkNoun y x ;
+
+      regVerb : Str -> Verb = \s -> case last s of {
+        "s" | "z" => mkVerb s (s + "es") ;
+        "y"       => mkVerb s (init s + "ies") ;
+        "o"       => mkVerb s (s + "es") ;
+        _         => mkVerb s (s + "s")
+        } ;
+  }
+```
+The first line gives as a hint to the compiler the
+**search path** needed to find all the other modules that the
+module depends on. The directory ``prelude`` is a subdirectory of
+``GF/lib``; to be able to refer to it in this simple way, you can
+set the environment variable ``GF_LIB_PATH`` to point to this
+directory.
+
+
+===Morphological analysis and morphology quiz===
+
+Even though morphology is in GF
+mostly used as an auxiliary for syntax, it
+can also be useful on its own right. The command ``morpho_analyse = ma``
+can be used to read a text and return for each word the analyses that
+it has in the current concrete syntax.
+```
+  > rf bible.txt | morpho_analyse
+```
+In the same way as translation exercises, morphological exercises can
+be generated, by the command ``morpho_quiz = mq``. Usually,
+the category is set to be something else than ``S``. For instance,
+```
+  > cd GF/lib/resource-1.0/
+  > i french/IrregFre.gf
+  > morpho_quiz -cat=V
+
+  Welcome to GF Morphology Quiz.
+  ...
+
+  réapparaître : VFin VCondit  Pl  P2
+  réapparaitriez
+  > No, not réapparaitriez, but
+  réapparaîtriez
+  Score 0/1
+```
+Finally, a list of morphological exercises can be generated
+off-line and saved in a
+file for later use, by the command ``morpho_list = ml``
+```
+  > morpho_list -number=25 -cat=V | wf exx.txt
+```
+The ``number`` flag gives the number of exercises generated.
+
+
+
+==Concrete syntax: English phrase building==
+
+
+===Predication===
+
+
+===Complementization===
+
+
+===Determination===
+
+
+===Modification===
+
+
+===Putting the syntax together===
+
+
+==Concrete syntax for Italian==
+
 
 
 
@@ -4899,11 +4878,11 @@ by Björn Bringert gives more information on Java.
 #PARTthree
 
 
-=Syntax and semantics of the GF grammar formalism=
+=Syntax and semantics of the GF language=
 
 =The resource grammar API=
 
-=The GFC format=
+=The low-level GFC format=
 
 =The command language of the GF shell=
 
@@ -4994,7 +4973,7 @@ Thus the most silent way to invoke GF is
 
 
 
-==GFDoc==
+=Documenting grammars with GFDoc=
 
 
 
@@ -5016,4 +4995,475 @@ Resource Grammar HOWTO  (on writing resource grammars):
 GF Homepage:
 
 [``http://www.cs.chalmers.se/~aarne/GF/doc`` ../..]
+
+
+#startappendix
+
+#PARTbnf
+
+#twocolumn
+
+#PARTquickref
+
+#smallsize
+
+
+This is a quick reference on GF grammars. It aims to
+cover all forms of expression available when writing
+grammars. It assumes basic knowledge of GF, which
+can be acquired from the Tutorial part of this book.
+For the commands of the GF system, help is obtained on line by the
+help command (``help``). Help on invoking
+GF from the shell is obtained with (``gf -help``).
+
+
+==A complete example==
+
+This is a complete example of a GF grammar divided
+into three modules in files. The grammar recognizes the
+phrases //one pizza// and //two pizzas//.
+
+File ``Order.gf``:
+```
+abstract Order = {
+cat 
+  Order ; 
+  Item ;
+fun 
+  One, Two : Item -> Order ;
+  Pizza : Item ;
+}
+```
+File ``OrderEng.gf`` (the top file):
+```
+--# -path=.:prelude
+concrete OrderEng of Order = 
+ open Res, Prelude in {
+flags startcat=Order ;
+lincat 
+  Order = SS ; 
+  Item  = {s : Num => Str} ;
+lin 
+  One it = ss ("one" ++ it.s ! Sg) ;
+  Two it = ss ("two" ++ it.s ! Pl) ;
+  Pizza  = regNoun "pizza" ;
+}
+```
+File ``Res.gf``:
+```
+resource Res = open Prelude in {
+param Num = Sg | Pl ;
+oper regNoun : Str -> {s : Num => Str} =
+  \dog -> {s = table {
+    Sg => dog ;
+    _  => dog + "s"
+    }
+  } ;
+}
+```
+To use this example, do
+```
+  % gf             -- in shell: start GF
+  > i OrderEng.gf  -- in GF: import grammar
+  > p "one pizza"  --        parse string
+  > l Two Pizza    --        linearize tree
+```
+
+
+
+==Modules and files==
+
+One module per file.
+File named ``Foo.gf`` contains module named
+``Foo``.
+
+Each module has the structure
+```
+moduletypename =   
+  Inherits **        -- optional
+  open Opens in      -- optional
+  { Judgements }   
+```
+Inherits are names of modules of the same type.
+Inheritance can be restricted:
+```
+  Mo[f,g],  -- inherit only f,g from Mo
+  Lo-[f,g]  -- inheris all but f,g from Lo
+```
+Opens are possible in ``concrete`` and ``resource``.
+They are names of modules of these two types, possibly
+qualified:
+```
+  (M = Mo), -- refer to f as M.f or Mo.f
+  (Lo = Lo) -- refer to f as Lo.f
+```
+Module types and judgements in them:
+```
+abstract A          -- cat, fun, def, data
+concrete C of A     -- lincat, lin, lindef, printname
+resource R          -- param, oper
+
+interface I         -- like resource, but can have
+                       oper f : T without definition
+instance J of I     -- like resource, defines opers
+                       that I leaves undefined
+incomplete          -- functor: concrete that opens 
+ concrete CI of A =    one or more interfaces
+  open I in ...
+concrete CJ of A =  -- completion: concrete that
+  CI with              instantiates a functor by
+    (I = J)            instances of open interfaces
+``` 
+The forms 
+``param``, ``oper`` 
+may appear in ``concrete`` as well, but are then
+not inherited to extensions.
+
+All modules can moreover have ``flags`` and comments.
+Comments have the forms
+```
+-- till the end of line
+{- any number of lines between -}
+--# used for compiler pragmas
+```
+A ``concrete`` can be opened like a ``resource``.
+It is translated as follows:
+```
+cat C          --->  oper C : Type = 
+lincat C = T           T ** {lock_C : {}}
+
+fun f : G -> C --->  oper f : A* -> C* = \g -> 
+lin f = t              t g ** {lock_C = <>}          
+```
+An ``abstract`` can be opened like an ``interface``.
+Any ``concrete`` of it then works as an ``instance``.
+
+
+
+==Judgements==
+
+```
+cat C               -- declare category C
+cat C (x:A)(y:B x)  -- dependent category C
+cat C A B           -- same as C (x : A)(y : B)
+fun f : T           -- declare function f of type T
+def f = t           -- define f as t
+def f p q = t       -- define f by pattern matching
+data C = f | g      -- set f,g as constructors of C
+data f : A -> C     -- same as 
+                       fun f : A -> C; data C=f
+
+lincat C = T        -- define lin.type of cat C
+lin f = t           -- define lin. of fun f
+lin f x y = t       -- same as lin f = \x y -> t
+lindef C = \s -> t  -- default lin. of cat C
+printname fun f = s -- printname shown in menus
+printname cat C = s -- printname shown in menus
+printname f = s     -- same as printname fun f = s
+
+param P = C | D Q R -- define parameter type P 
+                       with constructors
+                       C : P, D : Q -> R -> P
+oper h : T = t      -- define oper h of type T
+oper h = t          -- omit type, if inferrable
+
+flags p=v           -- set value of flag p
+```
+Judgements are terminated by semicolons (``;``).
+Subsequent judgments of the same form may share the
+keyword:
+```
+cat C ; D ;         -- same as cat C ; cat D ;
+```
+Judgements can also share RHS:
+```
+fun f,g : A         -- same as fun f : A ; g : A
+```
+
+
+==Types==
+
+Abstract syntax (in ``fun``):
+```
+C                -- basic type, if cat C
+C a b            -- basic type for dep. category
+(x : A) -> B     -- dep. functions from A to B
+(_ : A) -> B     -- nondep. functions from A to B
+(p,q : A) -> B   -- same as (p : A)-> (q : A) -> B
+A -> B           -- same as (_ : A) -> B
+Int              -- predefined integer type
+Float            -- predefined float type
+String           -- predefined string type
+```
+Concrete syntax (in ``lincat``):
+```
+Str              -- token lists
+P                -- parameter type, if param P
+P => B           -- table type, if P param. type
+{s : Str ; p : P}-- record type
+{s,t : Str}      -- same as {s : Str ; t : Str}
+{a : A} **{b : B}-- record type extension, same as  
+                    {a : A ; b : B}
+A * B * C        -- tuple type, same as
+                    {p1 : A ; p2 : B ; p3 : C}
+Ints n           -- type of n first integers
+```
+Resource (in ``oper``): all those of concrete, plus
+``` 
+Tok              -- tokens (subtype of Str)
+A -> B           -- functions from A to B
+Int              -- integers
+Strs             -- list of prefixes (for pre)
+PType            -- parameter type
+Type             -- any type
+```
+As parameter types, one can use any finite type:
+``P`` defined in ``param P``,
+``Ints n``, and record types of parameter types.
+
+
+
+==Expressions==
+
+Syntax trees = full function applications
+```
+f a b              -- : C if fun f : A -> B -> C
+1977               -- : Int
+3.14               -- : Float
+"foo"              -- : String
+```
+Higher-Order Abstract syntax (HOAS): functions as arguments:
+```
+F a (\x -> c)      -- : C if a : A, c : C (x : B), 
+                      fun F : A -> (B -> C) -> C
+```
+Tokens and token lists
+```
+"hello"            -- : Tok, singleton Str
+"hello" ++ "world" -- : Str
+["hello world"]    -- : Str, same as "hello" ++ "world"
+"hello" + "world"  -- : Tok, computes to "helloworld"
+[]                 -- : Str, empty list
+```
+Parameters
+```
+Sg                   -- atomic constructor
+VPres Sg P2          -- applied constructor
+{n = Sg ; p = P3}    -- record of parameters
+```
+Tables
+```
+table {              -- by full branches
+  Sg => "mouse" ;
+  Pl => "mice"
+  }
+table {              -- by pattern matching
+  Pl => "mice" ;
+  _  => "mouse"      -- wildcard pattern
+  }
+table {               
+  n => regn n "cat"  -- variable pattern 
+  }
+table Num {...}      -- table given with arg. type
+table ["ox"; "oxen"] -- table as course of values
+\\_ => "fish"        -- same as table {_ => "fish"} 
+\\p,q => t           -- same as \\p => \\q => t
+
+t ! p                -- select p from table t
+case e of {...}      -- same as table {...} ! e 
+```
+Records
+```
+{s = "Liz"; g = Fem} -- record in full form
+{s,t = "et"}         -- same as {s = "et";t= "et"}
+{s = "Liz"} **       -- record extension: same as
+  {g = Fem}             {s = "Liz" ; g = Fem}
+
+<a,b,c>        -- tuple, same as {p1=a;p2=b;p3=c}
+```
+Functions
+```
+\x -> t            -- lambda abstract
+\x,y -> t          -- same as \x -> \y -> t
+\x,_ -> t          -- binding not in t
+```
+Local definitions
+```
+let x : A = d in t -- let definition
+let x = d in t     -- let defin, type inferred
+let x=d ; y=e in t -- same as 
+                      let x=d in let y=e in t
+let {...} in t     -- same as let ... in t
+
+t where {...}      -- same as let ... in t
+```
+Free variation
+```
+variants {x ; y}     -- both x and y possible
+variants {}          -- nothing possible
+```
+Prefix-dependent choices
+```
+pre {"a" ; "an" / v} -- "an" before v, "a" otherw.
+strs {"a" ; "i" ;"o"}-- list of condition prefixes
+```
+Typed expression
+```
+<t:T>                -- same as t, to help type inference
+```
+Accessing bound variables in ``lin``: use fields ``$1, $2, $3,...``. 
+Example:
+```
+fun F : (A : Set) -> (El A -> Prop) -> Prop ; 
+lin F A B = {s = ["for all"] ++ A.s ++ B.$1 ++ B.s}
+```
+
+
+==Pattern matching==
+
+These patterns can be used in branches of ``table`` and
+``case`` expressions. Patterns are matched in the order in
+which they appear in the grammar.
+```
+C                 -- atomic param constructor
+C p q             -- param constr. applied to patterns
+x                 -- variable, matches anything
+_                 -- wildcard, matches anything
+"foo"             -- string
+56                -- integer
+{s = p ; y = q}   -- record, matches extensions too
+<p,q>             -- tuple, same as {p1=p ; p2=q}
+p | q             -- disjunction, binds to first match
+x@p               -- binds x to what p matches
+- p               -- negation
+p + "s"           -- sequence of two string patterns
+p*                -- repetition of a string pattern
+```
+
+==Sample library functions==
+
+```
+-- lib/prelude/Predef.gf
+drop   : Int -> Tok -> Tok   -- drop prefix of length
+take   : Int -> Tok -> Tok   -- take prefix of length
+tk     : Int -> Tok -> Tok   -- drop suffix of length
+dp     : Int -> Tok -> Tok   -- take suffix of length
+occur  : Tok -> Tok -> PBool -- test if substring
+occurs : Tok -> Tok -> PBool -- test if any char occurs
+show   : (P:Type) -> P ->Tok -- param to string
+read   : (P:Type) -> Tok-> P -- string to param
+toStr  : (L:Type) -> L ->Str -- find "first" string
+
+-- lib/prelude/Prelude.gf
+param Bool = True | False
+oper
+  SS  : Type                   -- the type {s : Str}
+  ss  : Str -> SS              -- construct SS
+  cc2 : (_,_ : SS) -> SS       -- concat SS's
+  optStr : Str -> Str          -- string or empty
+  strOpt : Str -> Str          -- empty or string
+  bothWays : Str -> Str -> Str -- X++Y or Y++X 
+  init : Tok -> Tok            -- all but last char
+  last : Tok -> Tok            -- last char
+  prefixSS : Str -> SS -> SS
+  postfixSS : Str -> SS -> SS
+  infixSS : Str -> SS -> SS -> SS
+  if_then_else : (A : Type) -> Bool -> A -> A -> A
+  if_then_Str : Bool -> Str -> Str -> Str
+```
+
+
+==Flags==
+
+Flags can appear, with growing priority,
+- in files, judgement ``flags`` and without dash (``-``)
+- as flags to ``gf`` when invoked, with dash
+- as flags to various GF commands, with dash
+
+
+Some common flags used in grammars:
+```
+startcat=cat    use this category as default 
+
+lexer=literals  int and string literals recognized
+lexer=code      like program code
+lexer=text      like text: spacing, capitals
+lexer=textlit   text, unknowns as string lits
+
+unlexer=code    like program code
+unlexer=codelit code, remove string lit quotes
+unlexer=text    like text: punctuation, capitals
+unlexer=textlit text, remove string lit quotes
+unlexer=concat  remove all spaces
+unlexer=bind    remove spaces around "&+"
+
+optimize=all_subs  best for almost any concrete
+optimize=values    good for lexicon concrete
+optimize=all       usually good for resource
+optimize=noexpand  for resource, if =all too big
+```
+For the full set of values for ``FLAG``, 
+use on-line ``h -FLAG``.
+
+
+
+==File paths==
+
+Colon-separated lists of directories searched in the
+given order: 
+```
+--# -path=.:../abstract:../common:prelude
+```
+This can be (in order of growing preference), as
+first line in the top file, as flag to ``gf``
+when invoked, or as flag to the ``i`` command.
+The prefix ``--#`` is used only in files.
+
+If the environment variabls ``GF_LIB_PATH`` is defined, its
+value is automatically prefixed to each directory to
+extend the original search path.
+
+
+==Alternative grammar formats==
+
+**Old GF** (before GF 2.0): 
+all judgements in any kinds of modules,
+division into files uses ``include``s.
+A file ``Foo.gf`` is recognized as the old format
+if it lacks a module header. 
+
+**Context-free** (file ``foo.cf``). The form of rules is e.g.
+```
+Fun. S ::= NP "is" AP ;
+```
+If ``Fun`` is omitted, it is generated automatically. 
+Rules must be one per line. The RHS can be empty.
+
+**Extended BNF** (file ``foo.ebnf``). The form of rules is e.g.
+```
+S ::= (NP+ ("is" | "was") AP | V NP*) ;
+```
+where the RHS is a regular expression of categories
+and quoted tokens: ``"foo", CAT, T U, T|U, T*, T+, T?``, or empty.
+Rule labels are generated automatically.
+
+
+**Probabilistic grammars** (not a separate format).
+You can set the probability of a function ``f`` (in its value category) by
+```
+--# prob f 0.009
+```
+These are put into a file given to GF using the ``probs=File`` flag
+on command line. This file can be the grammar file itself.
+
+**Example-based grammars**  (file ``foo.gfe``). Expressions of the form
+```
+in Cat "example string"
+```
+are preprocessed by using a parser given by the flag 
+```
+--# -resource=File
+```
+and the result is written to ``foo.gf``.
+
 
