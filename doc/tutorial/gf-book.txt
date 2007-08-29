@@ -1,6 +1,6 @@
 Grammatical Framework: Tutorial, Applications, and Reference Manual
-Author: Aarne Ranta aarne (at) cs.chalmers.se
-Last update: %%date(%c)
+Aarne Ranta
+Draft %%date(%c)
 
 % NOTE: this is a txt2tags file.
 % Create an html file from this file using:
@@ -28,7 +28,8 @@ Last update: %%date(%c)
 
 
 %!postproc(tex): #PARTone "part{Tutorial}"
-%!postproc(tex): #PARTtwo "part{Advanced Grammars and Applications}"
+%!postproc(tex): #PARTtwo "part{Applications of Grammars}"
+%!postproc(tex): #PARTfour "part{Advanced Grammar Writing}"
 %!postproc(tex): #PARTthree "part{Reference Manual}"
 
 %!postproc(tex): #PARTbnf "include{DocGF}"
@@ -4365,30 +4366,67 @@ from source by typing ``make``. Here is a minimal such ``Makefile``:
 
 
 
-=Embedded grammars in Java=
+=Embedded grammars in Java FORTHCOMING=
 
-Forthcoming; at the moment, the document
+In this chapter, we will build a similar application in Java as was
+built in Haskell in the previous chapter. This application gives
+a template with the overall program structure that can be
+extended with larger grammars and more Java functionalities.
+
+Before the chapter is written, the document
 
  [``http://www.cs.chalmers.se/~bringert/gf/gf-java.html`` http://www.cs.chalmers.se/~bringert/gf/gf-java.html]
 
-by Björn Bringert gives more information on Java.
+by Björn Bringert gives more information on embedded grammars in Java.
 
 
-=Spoken language translators=
+
+=Spoken language translators FORTHCOMING=
+
+In this chapter, it will be shown how a multilingual grammar is
+equipped with speech recognition and speech synthesis to obtain
+a spoken language translator.
+
+Before the chapter is written, the document
+
+ [``http://www.cs.chalmers.se/~bringert/gf/translatespeech.html`` http://www.cs.chalmers.se/~bringert/gf/translatespeech.html]
+
+by Björn Bringert gives more information on spoken language translation with GF.
 
 
-=Multimodal dialogue systems=
+
+=Multimodal dialogue systems FORTHCOMING=
+
+In this chapter, we will show how to build a dialogue system in GF:
+a system in which the user can talk with the computer to accomplish
+a task such as finding a route on a map of transfer systems.
+The grammars are **multimodal**, which means that spoken input
+can be completed with mouse clicks.
+
+Before the chapter is written, the article
+"Multimodal Dialogue System Grammars" by
+Björn Bringert, Robin Cooper, Peter Ljunglöf, and Aarne Ranta
+(//Proceedings of DIALOR'05, Ninth Workshop on the Semantics and Pragmatics of Dialogue//, 
+Nancy, France, June 9-11, 2005)
+provides information on multilingual grammars. The paper is available in
+
+[``http://www.cs.chalmers.se/~bringert/publ/mm-grammars-dialor/mm-grammars-dialor.pdf`` http://www.cs.chalmers.se/~bringert/publ/mm-grammars-dialor/mm-grammars-dialor.pdf]
 
 
-=Grammars of formal languages=
+
+=Grammars of formal languages FORTHCOMING=
+
+In this chapter, we will build a grammar for a formal language and interface
+it with natural language.
 
 ==Precedence and fixity==
-
-==Higher-order abstract syntax==
 
 ==Extensible natural-language interfaces==
 
 
+
+
+#PARTfour
 
 =Implementing morphology and syntax=
 
@@ -4840,7 +4878,7 @@ The ``number`` flag gives the number of exercises generated.
 
 
 
-==Concrete syntax: English phrase building==
+==Concrete syntax: English phrase building FORTHCOMING==
 
 
 ===Predication===
@@ -4858,87 +4896,99 @@ The ``number`` flag gives the number of exercises generated.
 ===Putting the syntax together===
 
 
-==Concrete syntax for Italian==
+==Concrete syntax for Italian FORTHCOMING==
 
 
 
 
-=Inside the resource grammar library=
+=Inside the resource grammar library FORTHCOMING=
 
-==Writing your own resource implementation==
+This chapter is meant for those who want to understand the GF resource
+grammar library more thoroughly - in particular, for those who 
+want to write their own implementations.
 
-==Parametrized modules for language families==
+Before the chapter is finished, more information can be found in
+
+[``http://www.cs.chalmers.se/~aarne/GF/lib/resource-1.0/doc/Resource-HOWTO.html`` http://www.cs.chalmers.se/~aarne/GF/lib/resource-1.0/doc/Resource-HOWTO.html]
 
 
 
-=Using Transfer for semantics actions=
 
+=Building a compiler in GF FORTHCOMING=
+
+The purpose of this chapter is to show how the expressive power
+of GF can be used in a complete definition of a language, which
+includes both its syntax and semantics. We will write a grammar
+for a subset of the C programming language, taking care of
+parsing and type checking. As an alternative concrete syntax,
+we will use JVM (Java Virtual Machine), so that we can use
+the grammar to compile C code into runnable JVM code.
+
+Before the chapter is finished, more information can be found in
+
+[``http://www.cs.chalmers.se/~aarne/GF/doc/gfcc.pdf`` http://www.cs.chalmers.se/~aarne/GF/doc/gfcc.pdf]
+
+
+
+=Using Transfer for semantics actions FORTHCOMING=
+
+Semantic actions on syntax trees can be defined in a general purpose language,
+as is done in embedded Java and Haskell applications. But this method has
+two drawbacks:
+- the definitions are not portable from one language to another
+- the host languages do not support the dependent type system of GF
+
+
+In this chapter, a powerful technique provided by a separate ``transfer`` language
+is introduced, and applied to build logical representations from syntax trees,
+perform anaphora resolution and generation, and optimize text generation by
+aggregagation.
+
+Before the chapter is ready, more information on ``transfer`` can be found in
+[``http://www.cs.chalmers.se/~aarne/GF/doc/transfer.html`` http://www.cs.chalmers.se/~aarne/GF/doc/transfer.html]
+
+Many aspects of logical semantics and how they are implemented by using ``def``
+definitions are covered in the article
+"Computational semantics in type theory" by Aarne Ranta
+(// Mathematics and Social Sciences//, 165, pp. 31-57, 2004),
+available in
+
+[``http://msh.revues.org/document2925.html`` http://msh.revues.org/document2925.html]
 
 
 #PARTthree
 
 
-=Syntax and semantics of the GF language=
+=Syntax and semantics of the GF language FORTHCOMING=
 
-=The resource grammar API=
-
-=The low-level GFC format=
-
-=The command language of the GF shell=
-
-==Lexers and unlexers==
-
-Lexers and unlexers can be chosen from
-a list of predefined ones, using the flags``-lexer`` and `` -unlexer`` either
-in the grammar file or on the GF command line. Here are some often-used lexers
-and unlexers:
-```
-  The default is words.
-  -lexer=words         tokens are separated by spaces or newlines
-  -lexer=literals      like words, but GF integer and string literals recognized
-  -lexer=vars          like words, but "x","x_...","$...$" as vars, "?..." as meta
-  -lexer=chars         each character is a token
-  -lexer=code          use Haskell's lex
-  -lexer=codevars      like code, but treat unknown words as variables, ?? as meta
-  -lexer=text          with conventions on punctuation and capital letters
-  -lexer=codelit       like code, but treat unknown words as string literals
-  -lexer=textlit       like text, but treat unknown words as string literals
-
-  The default is unwords.
-  -unlexer=unwords     space-separated token list (like unwords)
-  -unlexer=text        format as text: punctuation, capitals, paragraph <p>
-  -unlexer=code        format as code (spacing, indentation)
-  -unlexer=textlit     like text, but remove string literal quotes
-  -unlexer=codelit     like code, but remove string literal quotes
-  -unlexer=concat      remove all spaces
-```
-More options can be found by ``help -lexer`` and ``help -unlexer``:
+Before this chapter is written, we refer to Appendix A with a BNF grammar of GF,
+and Appendix B with a quick reference.
 
 
 
+=The resource grammar API FORTHCOMING=
 
-==Speech input and output==
+Before this chapter is written, we refer to the
+Resource Grammar Synopsis:
 
-The ``speak_aloud = sa`` command sends a string to the speech
-synthesizer 
-[Flite http://www.speech.cs.cmu.edu/flite/doc/].
-It is typically used via a pipe:
-```  generate_random | linearize | speak_aloud
-The result is only satisfactory for English.
-
-The ``speech_input = si`` command receives a string from a
-speech recognizer that requires the installation of
-[ATK http://mi.eng.cam.ac.uk/~sjy/software.htm].
-It is typically used to pipe input to a parser:
-```  speech_input -tr | parse
-The method words only for grammars of English.
-
-Both Flite and ATK are freely available through the links
-above, but they are not distributed together with GF.
+[``http://www.cs.chalmers.se/~aarne/GF/lib/resource-1.0/synopsis.html`` ../../lib/resource-1.0/synopsis.html]
 
 
+=The low-level GFC format FORTHCOMING=
 
-==Multilingual syntax editor==
+This is the format generated by the GF grammar compiler. The format is
+undergoing a revision, so a reference manual will appear later.
+
+
+=The GF system FORTHCOMING=
+
+==The command language of the GF shell==
+
+Before this chapter is written, we refer to online help obtained
+in the GF shell with the command ``help``.
+
+
+==The multilingual syntax editor==
 
 The 
 [Editor User Manual http://www.cs.chalmers.se/~aarne/GF2.0/doc/javaGUImanual/javaGUImanual.htm]
@@ -4973,28 +5023,18 @@ Thus the most silent way to invoke GF is
 
 
 
-=Documenting grammars with GFDoc=
+=Documenting grammars with GFDoc FORTHCOMING=
 
+GFDoc is a very simple system generating HTML and LaTeX from GF grammars.
+Some mark-up has been defined to enable annotations of the source code.
 
+Before this chapter is written, a summary of the tool is obtained by
+the command
+```
+  % gfdoc
+```
+provided `gfdoc`` has been installed as a part of one's GF installation.
 
-
-=Further reading=
-
-Syntax Editor User Manual:
-
-[``http://www.cs.chalmers.se/~aarne/GF2.0/doc/javaGUImanual/javaGUImanual.htm`` http://www.cs.chalmers.se/~aarne/GF2.0/doc/javaGUImanual/javaGUImanual.htm]
-
-Resource Grammar Synopsis (on using resource grammars):
-
-[``http://www.cs.chalmers.se/~aarne/GF/lib/resource-1.0/synopsis.html`` ../../lib/resource-1.0/synopsis.html]
-
-Resource Grammar HOWTO  (on writing resource grammars):
-
-[``http://www.cs.chalmers.se/~aarne/GF/lib/resource-1.0/synopsis.html`` ../../lib/resource-1.0/doc/Resource-HOWTO.html]
-
-GF Homepage:
-
-[``http://www.cs.chalmers.se/~aarne/GF/doc`` ../..]
 
 
 #startappendix
