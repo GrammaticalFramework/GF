@@ -47,6 +47,15 @@ Draft %%date(%c)
 %--!
 =Introduction=
 
+In this Introduction, we will discuss the field of natural language processing
+and locate the place of GF in the field. We will continue with a brief history
+of GF and its applications, followed by an overview of this book.
+This Introduction contains no technical material that is presupposed in
+later chapters. Therefore, the practically oriented reader can jump
+directly to the Tutorial starting from Chapter 2.
+
+
+
 ==Natural language application programming==
 
 Making computers understand human language is one of the oldest dreams of 
@@ -240,31 +249,122 @@ aspects, our experience is that writing grammars is an excellent introduction
 to the problems of linguistics. In this way, theory can be learnt at the
 same time as it is motivated by concrete problems.
 
-The book thus starts with a tutorial, which gradually explains all
+The book thus starts with a Tutorial (Part I), which gradually explains all
 the constructs of the GF programming language. Also the design and style
 aspects of grammar engineering are covered, to help the user to scale
 up from small to large and possibly collaborative applications.
-After the tutorial, the book continues with a "cook book" containing 
-hints and case studies for advanced users. Moreover, the resource
-grammar library is covered in some detail, which will help those
-programmers who want to port the library to new languages, but also
-motivate linguistically the choices made in the libraries.
-A complete reference manual concludes the book, with a quick reference 
-card as an appendix.
+
+After the Tutorial, the book continues with a manual on building applications
+that have embedded grammars as components (Part II). Part III goes through some
+examples of more advanced grammar writing, in particular, the internals of the
+resource grammar library.
+Part IV is a complete reference manual, and the two Appendices
+show a grammar of the GF language and a quick reference card of GF.
 
 What is not given much space in the book is theoretical discussions of
 GF, especially in comparison to other grammar formalism. Even though important
 in the development of GF as a scientifically justified framework, such
 discussions are not relevant for programmers who just want to use GF - any more
 than, say, a book on Haskell has to include comparisons with Java. In fact,
-introducing Haskell by references to Java may make more sense
-than comparing GF with DCG or HPSG or LFG: many Haskell learners can
-already be expected to know Java, but most GF learners are not expected
-to know any grammar formalism, except perhaps BNF. 
+comparisons with Java in a Haskell introduction would make more sense
+than comparisons with DCG or HPSG or LFG in a GF introduction: 
+many Haskell learners can already be expected to know Java, whereas
+most GF learners are not expected
+to know any grammar formalisms, except perhaps BNF. 
 
 
 
 #PARTone
+
+=An overview of the tutorial=
+
+The tutorial gives a hands-on introduction to grammar writing in GF.
+We start in Chapter 3 
+by building a "Hello World" grammar, which covers greetings
+in three languages: English (//hello world//), 
+Finnish (//terve maailma//), and Italian (//ciao mondo//).
+This **multilingual grammar** is based on the distinction, central in
+GF, between **abstract syntax**
+(the logical structure) and **concrete syntax** (the
+sequence of words).
+
+From the "Hello World" example, we proceed 
+in Chapter 4
+to a larger grammar for the domain of food.
+In this grammar, you can say things like
+``` 
+  this Italian cheese is delicious
+```
+in English and Italian. This grammar illustrates how translation is
+more than just replacement of words. For instance, the order of 
+words may have to be changed:
+``` 
+  Italian cheese ===> formaggio italiano
+```
+Moreover, words can have different forms, and which forms
+they have vary from language to language. For instance,
+Italian adjectives usually have four forms where English
+has just one:
+```
+  delicious (wine, wines, pizza, pizzas)
+  vino delizioso, vini deliziosi, pizza deliziosa, pizze deliziose
+```
+The **morphology** of a language describes the
+forms of its words, and the basics of it are explained in Chapter 5.
+
+The complete description of morphology
+belongs to resource grammars, whose use is covered in Chapter 6.
+However, we will explain all the
+programming concepts involved in resource grammars.
+
+In addition to multilinguality, **semantics** is an important aspect of GF
+grammars. The concepts needed for "purely linguistic" grammars belong to 
+the concrete syntax part of GF, whereas semantics is expressed in the abstract
+syntax. After the presentation of concrete syntax constructs, we proceed
+in Chapter 7 to the enrichment of abstract syntax with **dependent types**,
+**variable bindings**, and **semantic definitions**.
+
+Italian is used as the example language of many grammars.
+Of course, we will not presuppose that the reader knows any Italian.
+We have chosen Italian because it has a rich structure 
+that illustrates very well the capacities of GF. 
+Moreover, even those readers who don't know Italian, will find many of
+its words familiar. The exercises will encourage the reader to
+port the examples to other languages; in fact, many GF
+applications work for 5-10 languages.
+
+To learn how to write GF grammars is not the only goal of
+this tutorial. We will also explain the most important 
+commands of the GF system, mostly in passing. With these commands,
+simple application programs such as translation and
+quiz systems, can be built simply by writing scripts for the
+GF system. More complicated applications, such as natural-language
+interfaces and dialogue systems, moreover require programming in
+some general-purpose language; such applications are covered in Part II.
+
+
+==Who should read this tutorial==
+
+This tutorial has been written for all programmers 
+who want to learn to write grammars in GF. 
+It will go through GF's programming concepts, and does not
+presuppose knowledge of any of the main ingredients of GF:
+linguistics, functional programming, and type theory.
+This knowledge will be introduced as a part of grammar writing
+practice.
+
+Thus the tutorial should be accessible to anyone who has some 
+previous programming experience from any programming language; the basics
+of using computers are also presupposed, e.g. the use of 
+text editors and the management of files.
+
+Those who already know GF well can skip the tutorial part, 
+or skim thorough it, and go directly to the parts on applications
+and advanced grammar writing. 
+Many of these topics will involve large scale GF programming, 
+and/or programming in other languages in which GF grammars are embedded.
+
+
 
 =Getting started=
 
@@ -272,7 +372,6 @@ In this chapter, we will introduce the GF program and write the first GF grammar
 a "Hello World" grammar. While extremely small, this grammar already illustrates
 how GF can be used for the tasks of translation and multilingual
 generation.
-
 
 
 ==What GF is==
@@ -354,99 +453,6 @@ the target language. and all theoretical knowledge about its grammar
 is given in the libraries.
 
 
-
-==Who should read this tutorial==
-
-The tutorial part of this book is mainly for programmers 
-who want to learn to write application grammars. 
-It will go through GF's programming concepts, and does not
-presuppose knowledge of any of the main ingredients of GF:
-linguistics, functional programming, and type theory.
-This knowledge will be introduced as a part of grammar writing
-practice.
-
-Thus the tutorial should be accessible to anyone who has some 
-previous programming experience from any programming language; the basics
-of using computers are also presupposed, e.g. the use of 
-text editors and the management of files.
-
-Those who already know GF well can skip the tutorial part, 
-or skim thorough it, and go directly to the part on advanced applications. 
-Many of these applications will involve large scale GF programming, 
-and/or programming in other languages in which GF grammars are embedded.
-
-
-
-==The coverage of the tutorial==
-
-The tutorial gives a hands-on introduction to grammar writing.
-We start in this chapter 
-by building a "Hello World" grammar, which covers greetings
-in three languages: English (//hello world//), 
-Finnish (//terve maailma//), and Italian (//ciao mondo//).
-This **multilingual grammar** is based on the distinction, central in
-GF, between **abstract syntax**
-(the logical structure) and **concrete syntax** (the
-sequence of words).
-
-From the "Hello World" example, we proceed 
-in the next chapter
-to a larger grammar for the domain of food.
-In this grammar, you can say things like
-``` 
-  this Italian cheese is delicious
-```
-in English and Italian. This grammar illustrates how translation is
-more than just replacement of words. For instance, the order of 
-words may have to be changed:
-``` 
-  Italian cheese ===> formaggio italiano
-```
-Moreover, words can have different forms, and which forms
-they have vary from language to language. For instance,
-Italian adjectives usually have four forms where English
-has just one:
-```
-  delicious (wine, wines, pizza, pizzas)
-  vino delizioso, vini deliziosi, pizza deliziosa, pizze deliziose
-```
-The **morphology** of a language describes the
-forms of its words, and the basics of it are explained in Chapter 4.
-
-The complete description of morphology
-belongs to resource grammars, whose use is covered in Chapter 6.
-However, we will explain all the
-programming concepts involved in resource grammars, and also 
-build a miniature resource grammar in order
-to give an introduction to linguistically oriented grammar writing (Chapter 5).
-
-Italian is used as the example language of many grammars.
-Of course, we will not presuppose that the reader knows any Italian.
-We have chosen Italian because it has a rich structure 
-that illustrates very well the capacities of GF. 
-Moreover, even those readers who don't know Italian, will find many of
-its words familiar. The exercises will encourage the reader to
-port the examples to other languages; in fact, many GF
-applications work for 5-10 languages.
-
-In addition to multilinguality, **semantics** is an important aspect of GF
-grammars. The concepts needed for "purely linguistic" grammars belong to 
-the concrete syntax part of GF, whereas semantics is expressed in the abstract
-syntax. After the presentation of concrete syntax constructs, we proceed
-in Chapter 7 to the enrichment of abstract syntax with **dependent types**,
-**variable bindings**, and **semantic definitions**.
-
-To learn how to write GF grammars is not the only goal of
-this tutorial. We will also explain the most important 
-commands of the GF system. With these commands,
-simple application programs such as translation and
-quiz systems, can be built simply by writing scripts for the
-GF system. 
-
-More complicated applications, such as natural-language
-interfaces and dialogue systems, moreover require programming in
-some general-purpose language. Part II on advanced applications will
-explain how GF grammars are used as components of Haskell and Java programs.
 
 
 %--!
@@ -1685,6 +1691,17 @@ The ``.cf`` grammar format.
 
 =Grammars with parameters=
 
+In this Chapter, we will introduce the techniques needed for
+describing the inflection of words, as well as the rules by
+which propor word forms are selected in syntactic combinations.
+These techniques are already needed in a very slight extension
+of the Food grammar of the previous Chapter. While explaining
+how the linguistic problems are solved for English and Italian,
+we also explain all the language constructs GF has for
+defining concrete syntax.
+
+
+
 ==The problem: words have to be inflected==
 
 Suppose we want to say, with the vocabulary included in
@@ -2690,10 +2707,9 @@ now aiming for complete grammatical correctness by the use of parameters.
 
 In this chapter, we will take a look at the GF resource grammar library.
 We will use the library to implement a slightly extended ``Food`` grammar
-and port it to some new languages.
-
-**Exercise**. Define the mini resource of the previous chapter by
-using a functor over the full resource.
+and port it to some new languages. Some new concepts of GF's module system
+are also introduced, most notably the technique of **parametrized modules**,
+which has become an important "design pattern" for multilingual grammars.
 
 
 ==The coverage of the library==
@@ -3309,6 +3325,14 @@ build the terms manually.
 
 
 =Refining semantics in abstract syntax=
+
+While the concrete syntax constructs of GF have been already
+introduced, there is much more that can be done in the abstract 
+syntax. The techniques of **dependent types** and 
+**higher order abstract syntax** are introduced in this Chapter,
+which thereby concludes the presentation of the GF language.
+
+
 
 ==GF as a logical framework==
 
@@ -5033,7 +5057,7 @@ the command
 ```
   % gfdoc
 ```
-provided `gfdoc`` has been installed as a part of one's GF installation.
+The `gfdoc`` program is normally installed as a part of GF installation.
 
 
 
