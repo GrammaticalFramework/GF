@@ -39,6 +39,7 @@ Draft %%date(%c)
 %!postproc(tex): #startappendix "appendix"
 
 
+%!postproc(tex): #FORMULAone "input{FORMULAone}"
 
 #LOGOPNG
 
@@ -97,10 +98,21 @@ language designed for expressing linguistic rules. A set of such rules is called
 a **grammar**. GF is designed to make it easy to write grammar rules; this is 
 much easier than in a general-purpose programming language such as 
 Java or C or Haskell. But it is also in many ways easier and more productive
-than in other languages specialized in grammars; the most well-known of these
-is the BNF notation (Backus Naur Form), which is also known as 
-context-free grammars and implemented in tools such as YACC.
-  
+than in other languages specialized in grammars. The most well-known of these
+is the **BNF notation** (Backus Naur Form), which is also known as 
+**context-free grammars**. It is used in compiler tools such as YACC.
+While BNF is an excellent way to specify the grammar of a programming language,
+it does not scale up the the complexities of of natural languages.
+
+Linguists have of course developed many formalisms that are designed for
+describing natural languages. In comparison with them, one advantage of GF is
+its support for **multilingual grammars**. In a multilingual grammar, a
+semantic representation can be shared between several languages, in such a
+way that a grammar written for one language can be easily ported to another
+one. The grammar also supports translation between the languages it includes.
+The most comprehensive multilingual grammars written in GF cover almost 100
+languages. 
+
 GF does not only enable the writing of grammars. It is also equipped with tools 
 for integrating grammars in language-processing systems. 
 To build a language application usually involves much more than just a grammar,
@@ -139,26 +151,43 @@ of functional programming is **type theory**, which in turn has its roots in
 logic and the foundations of mathematics. GF was, at the first place, created to
 implement the idea that type theory can provide **semantics**, i.e. formalize
 the meaning of natural languages. Several aspects of type-theoretical semantics
-were covered in the monograph //Type-Theoretical Grammar// (A. Ranta, OUP 1994).
+were covered in the monograph //Type-Theoretical Grammar// (Ranta 1994).
 But a stronger aspect grew out of subsequent experiments dealing with different
 languages: it is possible to have a common semantics for many languages, and 
 thereby build systems that translate between languages via the semantics. 
 The first implementation of this idea was written as a plug-in to the
-proof editor Alfa (Magnusson & Nordström 1994) in 1995.
+proof editor Alfa (Magnusson & Nordström 1994) in 1995. It supported the
+generation of sentences in six languages from mathematical formula that were
+manipulated in the proof editor. One example area was geometry:
+- Formula:
+#FORMULAone
+- English:
+//If a point p lies outside a line l, then there is a line m such that p lies on m and m is parallel to l.//
+- Finnish:
+//Jos piste p on suoran l ulkopuolella, niin on olemassa suora m sellainen että p on suoralla m ja m on yhdensuuntainen l:n kanssa.//
+- French:
+//Si un point p est extérieur à une ligne l, alors il existe une ligne m telle que p soit sur la ligne m et que m soit parallèle à l.//
+- German:
+//Wenn ein Punkt p außerhalb einer Geraden l liegt, dann gibt es so eine Gerade m daß p auf der Geraden m liegt und m parallel zu l ist.//
+- Italian:
+//Si un punto p è esteriore a una linea l, allora esiste una line m tale che p sia sulla linea m e che m sia parallela a l.//
+- Swedish:
+//Om en punkt p ligger utanför linje l, så finns det en linje m sådan att p ligger på m och m är parallel med l.//
+
 
 As a stand-alone programming language, GF was first implemented in 1998. This
 took place at Xerox Research Centre Europe in Grenoble, within a project entitled
 //Multilingual Document Authoring//. The goal of the project was to build a tool 
 for writing documents in multiple languages simultaneously, so that the user
 need only know one of the languages; the rest will be produced automatically
-via translations from the type-theoretical semantics. 
+via translations from the type-theoretical semantics (Dymetman & al. 2000). 
 In addition to GF itself, the project produced some prototype applications, 
-e.g. a restaurant phrase book and an editor of medical drug descriptions. 
+e.g. a restaurant phrase book and an editor for medical drug descriptions. 
 An important aspect was the adaptability of the system to new domains and
 languages; hence the need of a language where such adaptations can be made
-by just wrting new grammars.
+by just writing new grammars.
 
-The grammars that were build in the Xerox project 
+Most grammars that were build in the Xerox project 
 remained property of Xerox Corporation, but the GF formalism and its 
 implementation were released as open-source software under GNU General 
 Public License. From 1999, the development of GF continued mostly at
@@ -167,9 +196,9 @@ and Gothenburg University. In this environment, both functional programming
 and type theory are strong research areas. This helped GF to develop into 
 a more stable and more full-fledged programming language. 
 
-At Chalmers, GF has also been used in courses given to computer science 
+At Chalmers GF was soon used in courses given to computer science 
 students and in joint projects with non-linguist research groups.
-This activity soon crystallized the idea of making GF into 
+This activity was soon summarized in the idea of making GF into 
 "the working programmer's grammar formalism", as 
 opposed to a tool requiring linguistic expertise. A nice experience from 
 the courses (both graduate and undergraduate) was that computer scientists are
@@ -180,10 +209,11 @@ it was developed in the way programming languages are,
 following the virtues of familiarity and "the least surprise". 
 Issues of stability are also important, including
 backward compatibility and portability to different platforms. 
-Documentation is something there can hardly be too much of. 
 As a mark of stability, version 1.0 of GF was released in 
-2002. In 2004, a reference article appeared in the 
-//Journal of Functional Programming//, 
+2002. Also 
+documentation was found important. In addition to on-line documents,
+a reference article appeared in the 
+//Journal of Functional Programming// in 2004, 
 and a long tutorial text was published in the post-publication of
 ESSLLI lecture notes.
 
@@ -200,7 +230,7 @@ parser implementations.
 
 At the same time as GF was used in joint projects with computer science groups, 
 collaboration with the Linguistics Department of
-Gothenburg University served as a "linguistic sanity check" of GF. To efforts
+Gothenburg University served as a "linguistic sanity check" of GF. Two efforts
 that have been formative to the development of GF were started within this 
 collaboration:
 - resource grammar libraries
@@ -226,13 +256,13 @@ Besides dialogue systems, multilingual authoring and translation continued
 to be the main application of GF. The European WebALT project (Web Advanced 
 Learning Technologies, 2005-2006), used GF to build a tool for translating
 mathematical exercises from formal specifications (written in MathML) to
-six language. Also tool integrating GF with a computer algebra system was
+six languages. Also a tool integrating GF with a computer algebra system was
 developed. The project gave rise to a company, WebALT Inc. 
 
 At the time of writing this (August 2007), the release of GF has version
 number 2.8. It is a stable system that has been built with contributions
 of dozens of persons and been used by at least hundreds; download figures
-are in thousands. New ideas of how to apply GF are posted by users almost
+are in thousands. New ideas on how to use GF are posted by users almost
 every week. 
 
 
@@ -244,15 +274,16 @@ a definitive manual that gathers all relevant information in one place.
 However, it is also intended to serve those who want to get started with GF, and
 who don't necessarily have the technical background of the typical
 users. We believe that learning to program in GF is not more difficult 
-than learning some other programming language; as for the linguistic
+than learning some other programming language.  As for learning the linguistic
 aspects, our experience is that writing grammars is an excellent introduction
-to the problems of linguistics. In this way, theory can be learnt at the
-same time as it is motivated by concrete problems.
+to the problems of linguistics. In this way, linguistic 
+theory can be learnt at the same time as it is motivated by concrete problems.
 
 The book thus starts with a Tutorial (Part I), which gradually explains all
 the constructs of the GF programming language. Also the design and style
 aspects of grammar engineering are covered, to help the user to scale
-up from small to large and possibly collaborative applications.
+up from small to large and possibly collaborative applications. Linguistic
+concepts are explained at the same time as they are introduced in grammars.
 
 After the Tutorial, the book continues with a manual on building applications
 that have embedded grammars as components (Part II). Part III goes through some
@@ -262,7 +293,7 @@ Part IV is a complete reference manual, and the two Appendices
 show a grammar of the GF language and a quick reference card of GF.
 
 What is not given much space in the book is theoretical discussions of
-GF, especially in comparison to other grammar formalism. Even though important
+GF, especially in comparison to other grammar formalisms. Even though important
 in the development of GF as a scientifically justified framework, such
 discussions are not relevant for programmers who just want to use GF - any more
 than, say, a book on Haskell has to include comparisons with Java. In fact,
@@ -283,8 +314,8 @@ We start in Chapter 3
 by building a "Hello World" grammar, which covers greetings
 in three languages: English (//hello world//), 
 Finnish (//terve maailma//), and Italian (//ciao mondo//).
-This **multilingual grammar** is based on the distinction, central in
-GF, between **abstract syntax**
+This **multilingual grammar** is based on the most central idea of GF: 
+the distinction between **abstract syntax**
 (the logical structure) and **concrete syntax** (the
 sequence of words).
 
@@ -310,11 +341,13 @@ has just one:
   vino delizioso, vini deliziosi, pizza deliziosa, pizze deliziose
 ```
 The **morphology** of a language describes the
-forms of its words, and the basics of it are explained in Chapter 5.
+forms of its words, and the basics 
+of it are explained in Chapter 5.
 
 The complete description of morphology
 belongs to resource grammars, whose use is covered in Chapter 6.
-However, we will explain all the
+Writing resource grammars will only be covered in Part III;
+however, we the Tutorial does explain all the
 programming concepts involved in resource grammars.
 
 In addition to multilinguality, **semantics** is an important aspect of GF
@@ -324,14 +357,17 @@ syntax. After the presentation of concrete syntax constructs, we proceed
 in Chapter 7 to the enrichment of abstract syntax with **dependent types**,
 **variable bindings**, and **semantic definitions**.
 
-Italian is used as the example language of many grammars.
+English and Italian are used as example languages in many grammars.
 Of course, we will not presuppose that the reader knows any Italian.
 We have chosen Italian because it has a rich structure 
 that illustrates very well the capacities of GF. 
 Moreover, even those readers who don't know Italian, will find many of
-its words familiar. The exercises will encourage the reader to
-port the examples to other languages; in fact, many GF
-applications work for 5-10 languages.
+its words familiar, due to the Latin heritage. 
+The exercises will encourage the reader to
+port the examples to other languages as well; in particular,
+it should be instructive for the reader to look at her 
+own native language from the point of view of writing a grammar
+implementation.
 
 To learn how to write GF grammars is not the only goal of
 this tutorial. We will also explain the most important 
@@ -354,7 +390,7 @@ This knowledge will be introduced as a part of grammar writing
 practice.
 
 Thus the tutorial should be accessible to anyone who has some 
-previous programming experience from any programming language; the basics
+previous experience from any programming language; the basics
 of using computers are also presupposed, e.g. the use of 
 text editors and the management of files.
 
@@ -368,7 +404,7 @@ and/or programming in other languages in which GF grammars are embedded.
 
 =Getting started=
 
-In this chapter, we will introduce the GF program and write the first GF grammar,
+In this chapter, we will introduce the GF system and write the first GF grammar,
 a "Hello World" grammar. While extremely small, this grammar already illustrates
 how GF can be used for the tasks of translation and multilingual
 generation.
@@ -385,7 +421,7 @@ We use the term GF for three different things:
 The relation between these things is obvious: the GF system is an implementation
 of the GF programming language, which in turn is built on the ideas of the
 GF theory. The main focus of this book is on the GF programming language.
-We learn how grammars are written in the language. At the same time, we learn
+We learn how grammars are written in this language. At the same time, we learn
 the way of thinking in the GF theory. To make this all useful and fun, and
 to encourage experimenting, we make the grammars run on a computer by 
 using the GF system. 
@@ -410,7 +446,7 @@ other tasks are readily available for GF grammars:
 - **morphological synthesis**: generate all inflection forms of words
 - **random generation**: generate random expressions
 - **corpus generation**: generate all expressions
-- **treebank generation**: generate a list of trees with multiple linearizations
+- **treebank generation**: generate a list of trees with their linearizations
 - **teaching quizzes**: train morphology and translation
 - **multilingual authoring**: create a document in many languages simultaneously
 - **speech input**: optimize a speech recognition system for your grammar
@@ -456,12 +492,12 @@ is given in the libraries.
 
 
 %--!
-==Getting the GF program==
+==Getting the GF system==
 
-The GF program is open-source free software, which can be downloaded via the
+The GF system is open-source free software, which can be downloaded via the
 GF Homepage:
 
-[``http://www.cs.chalmers.se/~aarne/GF`` http://www.cs.chalmers.se/~aarne/GF]
+[``http://www.digitalgrammars.com/gf`` http://www.digitalgrammars.com/gf]
 
 There you can download
 - binaries for Linux, Mac OS X, and Windows
@@ -471,7 +507,7 @@ There you can download
 
 If you want to compile GF from source, you need a Haskell compiler.
 To compile the interactive editor, you also need a Java compilers. 
-But normally you don't have to compile, and you definitely
+But normally you don't have to compile anything yourself, and you definitely
 don't need to know Haskell or Java to use GF.
 
 We are assuming the availability of a Unix shell. Linux and Mac OS X users
@@ -480,9 +516,9 @@ Windows users are recommended to install Cywgin, the free Unix shell for Windows
 
 
 %--!
-==Running the GF program==
+==Running the GF system==
 
-To start the GF program, assuming you have installed it, just type 
+To start the GF system, assuming you have installed it, just type 
 ``gf`` in the Unix (or Cygwin) shell:
 ```
   % gf
@@ -494,7 +530,7 @@ The command
 ```
 will give you a list of available commands.
 
-As a common convention in this Tutorial, we will use
+As a common convention in this book, we will use
 - ``%`` as a prompt that marks system commands
 - ``>`` as a prompt that marks GF commands
 
@@ -547,8 +583,9 @@ The code has the following parts:
   module named ``Hello``
 - a **module body** in braces, consisting of
   - a **startcat flag declaration** stating that ``Greeting`` is the
-    main category, i.e. the one we are most interested in
-  - **category declarations** stating that ``Greeting`` and ``recipient``
+    main category, i.e. the one in which parsing and generation is
+    performed by default
+  - **category declarations** stating that ``Greeting`` and ``Recipient``
     are categories, i.e. types of meanings
   - **function declarations** stating what meaning-building functions there
     are; these are the three possible recipients, as well as the function
@@ -578,7 +615,8 @@ The major parts of this code are:
   - **linearization definitions** telling what records are assigned to
     each of the meanings defined in the abstract syntax; the recipients are
     linearized to records containing single words, whereas the ``Hello`` greeting
-    has a function telling that the word ``hello`` is prefixed to the argument
+    has a function telling that the word ``hello`` is prefixed to the string
+    containing in the argument record
 
 
 
@@ -609,16 +647,16 @@ many other tasks, which we will now look into.
 
 
 
-===Using the grammar in the GF program===
+===Using the grammar in the GF system===
 
 In order to compile the grammar in GF, each of the four modules
-has to be put in a file named //modulename//``.gf``:
+has to be put in a file named //Modulename//``.gf``:
 ```
   Hello.gf  HelloEng.gf  HelloFin.gf  HelloIta.gf
 ```
 The first GF command needed when using a grammar is to **import** it.
 The command has a long name, ``import``, and a short name, ``i``.
-You can type either
+You can thus type either
 ```
   > import food.cf
 ```
@@ -627,8 +665,8 @@ or
   > i food.cf
 ```
 to get the same effect. In general, all GF commands have a long and a short name;
-short names are convenient when typing commands by hand, whereas long commands
-are more readable in scripts, i.e. files with lists of commands.
+short names are convenient when typing commands by hand, whereas long command
+names are more readable in scripts, i.e. files that include sequences of commands.
 
 The effect of ``import`` is that the GF program **compiles** your grammar 
 into an internal representation, and shows a new prompt when it is ready. 
@@ -688,7 +726,7 @@ into linearizing with ``HelloIta``:
   ciao mamma
 ```
 Notice that the commands must use a **language flag** to indicate
-which concrete syntax is used in each of the operations.
+which concrete syntax is used in each operation.
 
 To conclude the translation exercise, we import the Finnish grammar
 and pipe English parsing into **multilingual generation**:
@@ -711,20 +749,65 @@ languages you might know.
 
 
 
+==Using grammars from outside GF==
+
+A "hello world" program written e.g. in C should be executable from the
+Unix shell and print its output on the terminal. This is possible in GF
+as well, by using the ``gf`` program in a Unix pipe. Invoking ``gf``
+can be made with grammar names as arguments,
+```
+  % gf HelloEng.gf HelloFin.gf HelloIta.gf
+```
+which has the same effect as opening ``gf`` and then importing the
+grammars. A command can be send to this ``gf`` state by piping it from
+Unix's ``echo`` command:
+```
+  % echo "l -multi Hello Wordl" | gf HelloEng.gf HelloFin.gf HelloIta.gf
+```
+which will execute the command and then quit. Alternatively, one can write
+a **script**,
+```
+  import HelloEng.gf
+  import HelloFin.gf
+  import HelloIta.gf
+  linearize -multi Hello World
+```
+If we name this script ``hello.gfs``, we can do
+```
+  $ gf -batch -s <hello.gfs s
+
+  ciao mondo
+  terve maailma
+  hello world
+```
+The options ``-batch`` and ``-s``("silent") prohibit GF's prompts, CPU time,
+and other messages.
+
+Writing GF scripts and Unix shell scripts that call GF is the simplest
+way to build application programs that use GF grammars.
+
+**Exercise**. (For Unix hackers.) Write a GF application that reads
+an English string from the standard input and writes an Italian
+translation to the output.
+
+
+
 ==What else can be done with the grammar==
 
 Now we have built our first multilingual grammar and seen the basic
 functionalities of GF: parsing and linearization. We have tested
 these functionalities inside the GF program. In the forthcoming
 chapters, we will build larger grammars and have more fun with
-these functionalities. But we will also introduce many more:
-- random generation
-- exhaustive generation
-- treebank generation
-- syntax editing
-- morphological analysis
-- translation and morphological quizzes
-- semantic filtering
+these functionalities. But we will also introduce many more,
+as listed above in Section 3.2:
+random generation,
+exhaustive generation,
+treebank generation,
+syntax editing,
+morphological analysis,
+and
+translation and morphological quizzes.
+
 
 
 The usefulness of GF would be quite limited if grammars were
@@ -803,6 +886,9 @@ and of the right-hand-side in subsequent judgements of the same form
   fun World, Mum, Friends : Recipient ; ===
   fun World : Recipient ; Mum : Recipient ; Friends : Recipient ;
 ```
+We use the symbol ``===`` to indicate **syntactic sugar** when
+speaking about GF. Thus it is not a symbol of the GF language.
+
 The order of judgements in a module is free. In particular, an identifier
 need not be declared before it is used. 
 
@@ -828,6 +914,7 @@ In a concrete syntax, the available types include
 
 **Terms** used in linearizations have the forms
 - quoted string: ``"foo"``, of type ``Str``
+- concatenation of strings: ``"foo" ++ "bar"``,
 - record: ``{`` r1 = t1 ; ... ; rn = Tn ``}``, 
   of type ``{`` r1 : R1 ; ... ; rn : Rn ``}``
 - projection ``t.r`` with a record label, of the corresponding record
@@ -835,6 +922,15 @@ In a concrete syntax, the available types include
 - argument variable ``x`` bound by the left-hand-side of a ``lin`` rule,
   of the corresponding linearization type
 
+
+Each semi-colon separated part in record types and records is called a
+**field**. The identifier introduced by the left-hand-side of a field
+is called a **label**.
+
+Each quoted string is treated as one **token**, and strings concatenated by
+``++`` are treated as separate tokens. Tokens are, by default, written with
+a space in between. This behaviour can be changed by ``lexer`` and ``unlexer``
+flags, as will be explained later in Section ??.
 
 
 
@@ -847,8 +943,8 @@ the ``Hello`` grammar. We will look at how the abstract syntax
 is divided into suitable categories, and how infinitely many
 phrases can be built by using recursive rules. We will also
 introduce **modularity** by showing how a large grammar can be 
-divided into modules, and how functions defined **resource modules** 
-can be used for avoiding repeated code.
+divided into modules, and how functions defined in **resource modules** 
+can be used to ahare code in and among modules.
 
 
 ==The abstract syntax Food==
@@ -856,12 +952,14 @@ can be used for avoiding repeated code.
 We will write a grammar that
 defines a set of phrases usable for speaking about food:
 - the main category is ``Phrase``
-- a ``Phrase`` can be built by assigning a ``Quality`` to an ``Item``s
+- a ``Phrase`` can be built by assigning a ``Quality`` to an ``Item``s 
+  (e.g. //this cheese is Italian//)
 - an``Item`` are build from a ``Kind`` by prefixing "this" or "that" 
-- a ``Kind`` is either **atomic**, such as "cheese" and "wine", or formed 
-  modifying a given ``Kind`` with a ``Quality``
-- a ``Quality`` is either atomic, such as "Italian" and "boring",
-  or built by modifying a given ``Quality`` "very"
+  (e.g. //this wine//)
+- a ``Kind`` is either **atomic** (e.g. //cheese//), or formed 
+  modifying a given ``Kind`` with a ``Quality`` (e.g. //Italian cheese//)
+- a ``Quality`` is either atomic (e.g. //Italian//,
+  or built by modifying a given ``Quality`` (e.g. //very warm//)
 
 
 These verbal descriptions can be expressed as the following abstract syntax:
@@ -963,7 +1061,7 @@ builds a random tree in accordance with an abstract syntax:
 ```
 By using a pipe, random generation can be fed into linearization:
 ```
-  > gr | l
+  > generate_random | linearize
   this Italian fish is fresh
 ```
 Random generation is a good way to test a grammar; it can also
@@ -1041,7 +1139,7 @@ want to see:
   this cheese is boring
   Is (This Cheese) Boring  
 ```
-This facility is good for test purposes: for instance, you
+This facility is useful for test purposes: for instance, you
 may want to see if a grammar is **ambiguous**, i.e.
 contains strings that can be parsed in more than one way.
 
@@ -1074,43 +1172,6 @@ of grammars.
 
 
 
-%--!
-==Modules and files==
-
-GF uses suffixes to recognize different file formats. The most
-important ones are:
-- Source files: //Modulename//``.gf``
-- Target files: //Modulename//``.gfc``
-
-
-When you import ``FoodEng.gf``, you see the target files being
-generated:
-```
-  > i FoodEng.gf
-  - compiling Food.gf...   wrote file Food.gfc 16 msec
-  - compiling FoodEng.gf...   wrote file FoodEng.gfc 20 msec
-```
-You also see that the GF program does not only read the file 
-``FoodEng.gf``, but also all other files that it
-depends on - in this case, ``Food.gf``.
-
-For each file that is compiled, a ``.gfc`` file
-is generated. The GFC format (="GF Canonical") is the
-"machine code" of GF, which is faster to process than
-GF source files. When reading a module, GF decides whether
-to use an existing ``.gfc`` file or to generate
-a new one, by looking at modification times.
-
-**Exercise**.  What happens when you import ``FoodEng.gf`` for 
-a second time? Try this in different situations:
-- Right after importing it the first time (the modules are kept in
-  the memory of GF and need no reloading).
-- After issuing the command ``empty`` (``e``), which clears the memory
-  of GF.
-- After making a small change in ``FoodEng.gf``, be it only an added space.
-- After making a change in ``Food.gf``.
-
-
 
 ==An Italian concrete syntax==
 
@@ -1140,7 +1201,7 @@ English words with their usual dictionary equivalents:
   }
 ```
 An alert reader, or one who already knows Italian,  may notice one point in
-which a change more radical than replacement of words is made: the order of
+which the change is more radical than just replacement of words: the order of
 a quality and the kind it modifies in
 ```
     QKind quality kind = {s = kind.s ++ quality.s} ;
@@ -1148,13 +1209,14 @@ a quality and the kind it modifies in
 Thus Italian says ``vino italiano`` for ``Italian wine``.
 
 **Exercise**. Write a concrete syntax of ``Food`` for some other language.
-You will probably end up with grammatically incorrect output - but don't
+You will probably end up with grammatically incorrect linearizations - but don't
 worry about this yet.
 
 **Exercise**. If you have written ``Food`` for German, Swedish, or some
 other language, test with random or exhaustive generation what constructs
 come out incorrect, and prepare a list of those ones that cannot be helped
-with the currently available fragment of GF.
+with the currently available fragment of GF. You can return to your list
+after having worked out Chapter 5.
 
 
 
@@ -1267,16 +1329,16 @@ current editing session:
 Editing can be continued even when the tree is finished. The user can shift
 the **focus** to some of the subtrees by clicking at it of the corresponding
 part of a linearization. In the picture, the focus is on "fish".
-The menu shows no refinements, since there are no metavariables, but other
-possible actions:
+Since there are no metavariables, 
+the menu shows no refinements, but some other possible actions:
 - to **change** "fish" to "cheese" or "wine"
 - to **delete** "fish", i.e. change it to a metavariable
 - to **wrap** "fish" in a qualification, i.e. change it to
   ``QKind ? Fish``, where the quality can be given in a later refinement
 
 
-In adition to menu-based editing, the tool supports refinement by parsing,
-which gets accessible by middle-clicking at the linearization field.
+In addition to menu-based editing, the tool supports refinement by parsing,
+which is accessible by middle-clicking in the tree or in the linearization field.
 
 **Exercise**. Construct the sentence 
 //this very expensive cheese is very very delicious//
@@ -1313,7 +1375,7 @@ The grammar ``FoodEng`` could be written in a BNF format as follows:
 ```
 In this format, each rule is prefixed by a **label** that gives
 the constructor function GF gives in its ``fun`` rules. In fact,
-each context-free rule is a fusion of ``fun`` and a ``lin`` rule:
+each context-free rule is a fusion of a ``fun`` and a ``lin`` rule:
 it states simultaneously that
 - the label is a function from the nonterminal categories
   on the right-hand side to the category on the left-hand side;
@@ -1329,7 +1391,7 @@ it states simultaneously that
 ```
 
 
-The translations from BNF to GF described above are in fact used in
+The translation from BNF to GF described above is in fact used in
 the GF system to convert BNF grammars into GF. BNF files are recognized
 by the file name suffix ``.cf``; thus the grammar above can be
 put into a file named ``food.cf`` and read into GF by
@@ -1349,11 +1411,11 @@ grammar that supports translation via common abstract syntax: the
 qualification function ``QKind`` has different types in the two
 grammars.
 
-To summarize, the separation of concrete and abstract syntax allows
+In general terms, the separation of concrete and abstract syntax allows
 three deviations from context-free grammar:
-- **permutation**: vary the linear order of constituents
-- **suppression**: omit some constituent in linearization
-- **reduplication**: repeat some constituent in linearization
+- **permutation**: changing the order of constituents
+- **suppression**: omitting constituents
+- **reduplication**: repeating constituent
 
 
 The third property is the one that definitely shows that GF is 
@@ -1361,8 +1423,8 @@ stronger than context-free: GF can define the **copy language**
 ``{x x | x <- (a|b)*}``, which is known not to be context-free.
 The other properties have more to do with the kind of trees that
 the grammar can associated with strings: permutation is important
-in multilingual grammars, and suppression is needed in grammars
-were trees carry some hidden semantic information (see Chapter 8
+in multilingual grammars, and suppression is exploited in grammars
+where trees carry some hidden semantic information (see Chapter 7
 below).
 
 Of course, context-free grammars are also restricted from the
@@ -1384,13 +1446,53 @@ document.
 
 
 
+%--!
+==Modules and files==
+
+GF uses suffixes to recognize different file formats. The most
+important ones are:
+- Source files: //Modulename//``.gf``
+- Target files: //Modulename//``.gfc``
+
+
+When you import ``FoodEng.gf``, you see the target files being
+generated:
+```
+  > i FoodEng.gf
+  - compiling Food.gf...   wrote file Food.gfc 16 msec
+  - compiling FoodEng.gf...   wrote file FoodEng.gfc 20 msec
+```
+You also see that the GF program does not only read the file 
+``FoodEng.gf``, but also all other files that it
+depends on - in this case, ``Food.gf``.
+
+For each file that is compiled, a ``.gfc`` file
+is generated. The GFC format (="GF Canonical") is the
+"machine code" of GF, which is faster to process than
+GF source files. When reading a module, GF decides whether
+to use an existing ``.gfc`` file or to generate
+a new one, by looking at modification times.
+
+**Exercise**.  What happens when you import ``FoodEng.gf`` for 
+a second time? Try this in different situations:
+- Right after importing it the first time (the modules are kept in
+  the memory of GF and need no reloading).
+- After issuing the command ``empty`` (``e``), which clears the memory
+  of GF.
+- After making a small change in ``FoodEng.gf``, be it only an added space.
+- After making a change in ``Food.gf``.
+
+
+
+
+
 ==Using operations and resource modules==
 
 ===The golden rule of functional programming===
 
 When writing a grammar, you have to type lots of 
 characters. You have probably
-done this by the copy-paste-modify method, which is a common way to
+done this by the copy-and-paste method, which is a common way to
 avoid repeating work.
 
 However, there is a more elegant way to avoid repeating work than 
@@ -1437,13 +1539,11 @@ For lambda abstraction with multiple arguments, we have the shorthand
 ```
   \x,y,z -> t   ===  \x -> \y -> \z -> t
 ```
-The notation we have used for linearization rules,
+The notation we have used for linearization rules, where
+variables are bound on the left-hand side, is actually syntactic
+sugar for abstraction:
 ```
-  lin f x y = t
-```
-is shorthand for
-```
-  lin f = \x,y -> t
+  lin f x = t   ===  lin f = \x -> t
 ```
 
 
@@ -1454,7 +1554,8 @@ is shorthand for
 ===The ``resource`` module type===
 
 Operator definitions can be included in a concrete syntax. 
-But they are not really tied to a particular set of linearization rules.
+But they are usually not really tied to a particular 
+set of linearization rules.
 They should rather be seen as **resources**
 usable in many concrete syntaxes.
 
@@ -1471,9 +1572,6 @@ strings and records.
       prefix : Str -> SS -> SS = \p,x -> ss (p ++ x.s) ;
   }
 ```
-Resource modules can extend other resource modules, in the
-same way as modules of other types can extend modules of the
-same type. Thus it is possible to build resource hierarchies.
 
 
 
@@ -1570,8 +1668,6 @@ formed by operations and other GF constructs. For example,
 ```
 
 
-
-
 ==Grammar architecture==
 
 ===Extending a grammar===
@@ -1617,7 +1713,9 @@ following Italian grammar module:
       Pizza = ss "pizza" ;
   }
 ```
-
+Resource modules can extend other resource modules, in the
+same way as modules of other types can extend modules of the
+same type. Thus it is possible to build resource hierarchies.
 
 
 ===Multiple inheritance===
@@ -1646,6 +1744,16 @@ same time:
       MushroomKind : Mushroom -> Kind ;
     }
 ```
+The main advantages with splitting a grammar to modules are
+**reusability**, **separate compilation**, and **division of labour**. 
+Reusability means
+that one and the same module can be put into different uses; for instance,
+a module with mushroom names might be used in a mycological information system
+as well as in a restaurant phrasebook. Separate compilation means that a module
+once compiled into ``.gfc`` need not be compiled again unless changes have
+taken place.
+Division of labour means simply that programmers that are experts in
+special areas can work on modules belonging tp those areas.
 
 **Exercise**. Refactor ``Food`` by taking apart ``Wine`` into a special
 ``Drink`` module.
@@ -1653,24 +1761,6 @@ same time:
 
 
 
-===Division of labour===
-
-Using operations defined in resource modules is a
-way to avoid repetitive code.
-In addition, it enables a new kind of modularity
-and division of labour in grammar writing: grammarians familiar with
-the linguistic details of a language can make their knowledge
-available through resource grammar modules, whose users only need
-to pick the right operations and not to know their implementation
-details. 
-
-In the following Chapter, we will go through some
-such linguistic details. The programming constructs needed when
-doing this are useful for all GF programmers, even for those who don't
-hand-code the linguistics of their applications but get them
-from libraries. And it can be generally interesting to learn something about the
-linguistic concepts of inflection, agreement, and parts of speech, in the
-form of precise computer-executable code.
 
 
 
