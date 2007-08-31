@@ -19,6 +19,8 @@ Autumn Term 2007.
 
 =News=
 
+31/8 Revised the description of the one- and five-point variants.
+
 21/8 Course mailing list started. 
 To subscribe, send a mail to ``gf-subscribe at gslt hum gu se`` 
 (replacing spaces by dots except around the word at, where the spaces 
@@ -48,12 +50,14 @@ practical skills in using it.
 
 The course consists of two modules. The first module is a one-week
 intensive course (during the first intensive week of GSLT), which
-is as such usable as a one-week intensive course for doctoral studies.
+is as such usable as a one-week intensive course for doctoral studies,
+if completed with a small course project.
 
-The second module is an independent programming project, written
+The second module is a larger programming project, written
 by each student (possibly working in groups) during the Autumn term.
-This module ends with a three days' meeting where the projects are
-presented and discussed.
+The projects are discussed during the second intensive week of GSLT
+(see [schedule http://www.gslt.hum.gu.se/courses/schedule.html]),
+and presented at a date that will be set later.
 
 The first module goes through the basics of GF, including
 - using the GF programming language
@@ -68,7 +72,7 @@ The lectures follow the
 [GF Tutorial http://www.cs.chalmers.se/~aarne/GF/doc/tutorial/gf-tutorial2.html].
 **There will be a new version of the Tutorial available around 10 September**.
 Those who just want to do the first module will write a simple application
-as their course work during the intensive week.
+as their course work during and after the first intensive week.
 
 Those who continue with the second module will choose a more substantial
 project. Possible topics are
@@ -82,7 +86,7 @@ project. Possible topics are
 =Prerequisites=
 
 Experience in programming. No earlier natural language processing
-experience is necessary.
+or functional programming experience is necessary.
 
 The course is thus suitable both for GSLT and NGSLT students,
 and for graduate students in computer science.
