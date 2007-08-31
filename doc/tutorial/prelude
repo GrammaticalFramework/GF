@@ -1,5 +1,11 @@
-\documentclass[11pt]{book}
+\documentclass[nwbk_0pt]{book}
 \usepackage[latin1]{inputenc}
+
+%\setlength{\oddsidemargin}{0mm}
+%\setlength{\evensidemargin}{-2mm}
+%\setlength{\topmargin}{-12mm}
+%\setlength{\textheight}{220mm}
+%\setlength{\textwidth}{158mm}
 
 \newcommand{\bequ}{\begin{quote}}
 \newcommand{\enqu}{\end{quote}}
