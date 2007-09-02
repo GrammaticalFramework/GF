@@ -3,7 +3,7 @@
 concrete FoodsEng of Foods = open Prelude in {
 
   lincat
-    Phr, Quality = SS ; 
+    Phrase, Quality = SS ; 
     Kind = {s : Number => Str} ; 
     Item = {s : Str ; n : Number} ; 
 

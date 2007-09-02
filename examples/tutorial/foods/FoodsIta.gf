@@ -3,7 +3,7 @@
 concrete FoodsIta of Foods = open Prelude in {
 
   lincat
-    Phr = SS ; 
+    Phrase = SS ; 
     Quality = {s : Gender => Number => Str} ; 
     Kind = {s : Number => Str ; g : Gender} ; 
     Item = {s : Str ; g : Gender ; n : Number} ; 
