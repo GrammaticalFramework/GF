@@ -63,13 +63,17 @@ To make and install GF (Updated for version 2.4).
 9. For a quick test: 
    Start gf, load a grammar and parse a string:
 
-     cd GF/grammars/basic
-     gf English.gf
+     cd $GFHOME/examples/tutorial/food
+     gf FoodIta.gf FoodEng.gf
 
      -- when gf has started and shows the prompt >:
-     > p "every number is even or odd"
+
+     > parse "this cheese is very very Italian" | tree_bank
+
      -- this is the response from GF:
-     PredA1 (Every Number) (DisjA1 Even Odd)
+     Is (This Cheese) (Very (Very Italian))
+     this cheese is very very Italian
+     questo formaggio è molto molto italiano
 
 10. If you want to run the Java GUI, go back to $GFHOME/src directory
     and also do
@@ -84,5 +88,6 @@ To make and install GF (Updated for version 2.4).
 
    When the window opens, push the Random button. 
 
-Author: Aarne Ranta, Björn Bringert 8/11/2004 -- 26/01/2006
+Author: Aarne Ranta, Björn Bringert 8/11/2004 -- 26/01/2006 -- 3/9/2007
+
 

@@ -9,7 +9,7 @@
 <p>
 Aarne Ranta
 <p>
-20 May, 2005
+3 September, 2007
 
 <p>
 
@@ -19,7 +19,8 @@ Aarne Ranta
 
 This Quick Start shows two examples of how GF can be used.
 We assume that you have downloaded and installed GF, so that
-the command <tt>gf</tt> works for you.
+the command <tt>gf</tt> works for you. See download and install
+instructions <a href="../tmp-download.html">here</a>.
 
 
 
@@ -29,34 +30,36 @@ When you have downloaded and installed GF:
 
 <ol>
 <li> Copy the files
-<a href="tutorial/old/Paleolithic.gf"><tt>Paleolithic.gf</tt></a>,
-<a href="tutorial/old/PaleolithicEng.gf"><tt>PaleolithicEng.gf</tt></a>, and
-<a href="tutorial/old/PaleolithicIta.gf"><tt>PaleolithicIta.gf</tt></a>.
+<a href="../examples/tutorial/food/Food.gf"><tt>Food.gf</tt></a>,
+<a href="../examples/tutorial/food/Food.gf"><tt>FoodEng.gf</tt></a>, and
+<a href="../examples/tutorial/food/Food.gf"><tt>FoodIta.gf</tt></a>.
+Or go to <tt>GF/examples/tutorial/food/</tt>, if you have downloaded the
+GF sources.
 
  <li> Start GF with the command
 <pre>
-  gf PaleolithicIta.gf PaleolithicEng.gf
+  gf FoodIta.gf FoodEng.gf
 </pre>
 
 <li> <b>Translation</b>. Try your first translation by giving the GF command
 <pre>
-  t PaleolithicEng PaleolithicIta "the boy eats the snake"
+  parse "this cheese is very very Italian" | tree_bank
 </pre>
 
 <li> <b>Generation</b>. Random-generate sentences in two languages:
 <pre>
-  gr | l -multi
+  generate_random | l -multi
 </pre>
 
-<li> <b>Grammar development</b>. Add words to the <tt>Paleolithic</tt>
+<li> <b>Grammar development</b>. Add words to the <tt>Food</tt>
 grammars and try the above commands again. For instance, add the following lines:
 <pre>
-  Black : A ;             -- in Paleolithic.gf
-  Black = {s = "black"} ; -- in PaleolithicEng.gf
-  Black = {s = "nero"} ;  -- in PaleolithicIta.gf
+  Bread : Kind ;          -- in Food.gf
+  Black = {s = "bread"} ; -- in FoodEng.gf
+  Black = {s = "pane"} ;  -- in FoodIta.gf
 </pre>
 and start GF again with the same command. Now you can even translate
-<i>the boy eats the black snake</i>.
+<i>this bread is very Italian</i>.
 </ol>
 To lear more on GF commands and
 grammar development, go to the
