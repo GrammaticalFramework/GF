@@ -441,6 +441,12 @@ incomplete resource Constructors = open Grammar in {
       massQuant : QuantSg ;  -- 2. (mass terms)
 
 -- More singular quantifiers are available in the $Structural$ module.
+-- The following singular cases of quantifiers are often used.
+
+      the_QuantSg  : QuantSg ; -- 3. the
+      a_QuantSg    : QuantSg ; -- 4. a
+      this_QuantSg : QuantSg ; -- 5. this
+      that_QuantSg : QuantSg ; -- 6. that
 
 
 --3 QuantPl, plural quantifiers
@@ -450,8 +456,14 @@ incomplete resource Constructors = open Grammar in {
 
       mkQuantPl : Quant -> QuantPl ;  -- 1. these
 
--- More plural quantifiers are available in the $Structural$ module.
-   
+-- More plural quantifiers are available in the $Structural$ module.   
+-- The following plural cases of quantifiers are often used.
+
+      the_QuantPl  : QuantPl ; -- 2. the
+      a_QuantPl    : QuantPl ; -- 3. (indefinite plural)
+      these_QuantPl : QuantPl ; -- 4. these
+      those_QuantPl : QuantPl ; -- 5. those
+
 
 --3 Num, cardinal numerals 
 
@@ -1027,6 +1039,16 @@ incomplete resource Constructors = open Grammar in {
     indefQuant = IndefArt ;   
 
     massQuant : QuantSg = MassDet  ;
+
+      the_QuantSg  : QuantSg = SgQuant DefArt ;
+      a_QuantSg    : QuantSg = mkQuantSg indefQuant ;
+      this_QuantSg : QuantSg = mkQuantSg this_Quant ;
+      that_QuantSg : QuantSg = mkQuantSg that_Quant ; 
+
+      the_QuantPl  : QuantPl = mkQuantPl defQuant ; 
+      a_QuantPl    : QuantPl = mkQuantPl indefQuant ; 
+      these_QuantPl : QuantPl = mkQuantPl this_Quant ; 
+      those_QuantPl : QuantPl = mkQuantPl that_Quant ; 
 
 
 
