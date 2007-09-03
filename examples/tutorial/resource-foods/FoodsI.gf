@@ -8,10 +8,10 @@ incomplete concrete FoodsI of Foods = open Syntax, LexFoods in {
     Quality = AP ;
   lin
     Is item quality = mkUtt (mkCl item quality) ;
-    This kind = mkNP (mkDet this_Quant) kind ;
-    That kind = mkNP (mkDet that_Quant) kind ;
-    These kind = mkNP (mkDet (mkQuantPl this_Quant)) kind ;
-    Those kind = mkNP (mkDet (mkQuantPl that_Quant)) kind ;
+    This kind = mkNP this_QuantSg kind ;
+    That kind = mkNP that_QuantSg kind ;
+    These kind = mkNP these_QuantPl kind ;
+    Those kind = mkNP those_QuantPl kind ;
     QKind quality kind = mkCN quality kind ;
     Very quality = mkAP very_AdA quality ;
 
