@@ -5,20 +5,32 @@ GF Version 2.8, released 8 July 2007.
 <ul>
 <li> <a href="download/GF-2.8.tgz"><tt>GF-2.8.tgz</tt></a>, 
 Haskell and Java sources, grammar library sources, examples, documentation.
+To compile and install: read <a href="src/INSTALL"><tt>src/INSTALL</tt></a>.
 
 <li> <a href="download/GF-2.8-lib.tgz"><tt>GF-2.8-lib.tgz</tt></a>,
-Compiled grammar libraries</a>; open this in your <tt>$GF_LIB_PATH</tt>.
+Compiled grammar libraries</a>. To install: 
+unpack this in the directory pointed by <tt>GF_LIB_PATH</tt>.
 
 <li> <a href="download/GF-2.8-i386-pc-linux-gnu.tgz"><tt>GF-2.8-i386-pc-linux-gnu.tgz</tt></a>,
-Linux binary, with precompiled grammar libraries.
+Linux binary, with precompiled grammar libraries. To install:
+<pre>
+  tar xvfz GF-2.8-i386-pc-linux-gnu.tgz
+  cd GF-2.8-i386-pc-linux-gnu
+  ./configure
+  make install
+</pre>
+You may need <tt>sudo make install</tt>; if you cannot write in 
+<tt>/usr/local/</tt>, you can change the target directory
+by <tt>./configure --prefix=MYDIR</tt>.
+
 
 <li> <a href="download/GF-2.8-i386-apple-darwin8.9.1.tgz"><tt>GF-2.8-i386-apple-darwin8.9.1.tgz</tt></a>, Mac OS X binary (Intel), with precompiled grammar libraries. Requires Readline from
-<a href="http://www.macports.org/">MacPorts</a>.
+<a href="http://www.macports.org/">MacPorts</a>. To install, see above item.
 
 </ul>
 The <a href=
 "http://sourceforge.net/project/showfiles.php?group_id=132285">Sourceforge GF site</a> 
-will be soon updated, but has currently only v 2.7 and older versions.
+has currently only v 2.7 and older versions.
 
 <p>
 
@@ -31,7 +43,8 @@ and subsequent times
 <pre>
   darcs pull -a
 </pre>
-
+Then compile and install as described in 
+<a href="src/INSTALL"><tt>GF/src/INSTALL</tt></a>.
 
 
 </body>
