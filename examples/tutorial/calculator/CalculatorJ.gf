@@ -15,6 +15,7 @@ concrete CalculatorJ of Calculator = open Prelude in {
     EPlus  = postfix "iadd" ;
     EMinus = postfix "isub" ;
     ETimes = postfix "imul" ;
+    EDiv   = postfix "imul" ;
 
     EInt = prefixSS "iconst" ;
     EVar = prefixSS "iload" ;
