@@ -10,7 +10,7 @@ concrete CalculatorC of Calculator = open Prelude, Formal in {
 
   lin
     PEmpty = ss [] ;
-    PDecl exp prog = ss ("int" ++ prog.$0 ++ "=" ++ top exp ++ ";" ++ prog.s) ;
+    PInit exp prog = ss ("int" ++ prog.$0 ++ "=" ++ top exp ++ ";" ++ prog.s) ;
     PAss vr exp prog = ss (vr.s ++ "=" ++ top exp ++ ";" ++ prog.s) ;
 
     EPlus  = infixl 0 "+" ;

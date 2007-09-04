@@ -9,13 +9,13 @@ concrete CalculatorJ of Calculator = open Prelude in {
 
   lin
     PEmpty = ss [] ;
-    PDecl exp prog = ss (exp.s ++ ";" ++ prog.s) ;
+    PInit exp prog = ss (exp.s ++ ";" ++ "istore" ++ prog.$0 ++ ";" ++ prog.s) ;
     PAss vr exp prog = ss (exp.s ++ ";" ++ "istore" ++ vr.s ++ ";" ++ prog.s) ;
 
     EPlus  = postfix "iadd" ;
     EMinus = postfix "isub" ;
     ETimes = postfix "imul" ;
-    EDiv   = postfix "imul" ;
+    EDiv   = postfix "idiv" ;
 
     EInt = prefixSS "iconst" ;
     EVar = prefixSS "iload" ;
