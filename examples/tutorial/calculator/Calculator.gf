@@ -9,7 +9,7 @@ abstract Calculator = {
     PDecl  : Exp -> (Var -> Prog) -> Prog ;
     PAss   : Var -> Exp  -> Prog  -> Prog ;
 
-    EPlus, EMinus, ETimes : Exp -> Exp -> Exp ;
+    EPlus, EMinus, ETimes, EDiv : Exp -> Exp -> Exp ;
 
     EInt : Int -> Exp ;
     EVar : Var -> Exp ;
