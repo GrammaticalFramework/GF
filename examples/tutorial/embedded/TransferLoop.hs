@@ -1,12 +1,12 @@
 module Main where
 
 import GF.Embed.EmbedAPI
-import GSyntax
+import TransferDef (transfer)
 
 main :: IO () 
 main = do
   gr <- file2grammar "math.gfcm"
-  loop (translate answerTree gr)
+  loop (translate transfer gr)
 
 loop :: (String -> String) -> IO ()
 loop trans = do 
@@ -21,21 +21,3 @@ translate tr gr = unlines . map transLine . lines where
     (lg,t:_):_ -> linearize gr lg (tr t)
     _ -> "NO PARSE"
 
-answerTree :: Tree -> Tree
-answerTree = gf . answer . fg
-
-answer :: GQuestion -> GAnswer
-answer p = case p of
-  GOdd x   -> test odd x
-  GEven x  -> test even x
-  GPrime x -> test prime x
-
-value :: GObject -> Int
-value e = case e of
-  GNumber (GInt i) -> fromInteger i
-
-test :: (Int -> Bool) -> GObject -> GAnswer
-test f x = if f (value x) then GYes else GNo
-
-prime :: Int -> Bool
-prime = (< 8) ----
