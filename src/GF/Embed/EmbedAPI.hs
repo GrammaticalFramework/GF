@@ -15,7 +15,7 @@
 
 module GF.Embed.EmbedAPI where
 
-import GF.Compile.ShellState (ShellState,grammar2shellState,canModules,stateGrammarOfLang,abstract,grammar,firstStateGrammar,allLanguages,allCategories,stateOptions)
+import GF.Compile.ShellState (ShellState,grammar2shellState,canModules,stateGrammarOfLang,abstract,grammar,firstStateGrammar,allLanguages,allCategories,stateOptions,firstAbsCat)
 import GF.UseGrammar.Linear (linTree2string)
 import GF.UseGrammar.GetTree (string2tree)
 import GF.Embed.EmbedParsing (parseString)
@@ -53,14 +53,19 @@ file2grammar :: FilePath -> IO MultiGrammar
 linearize    :: MultiGrammar -> Language -> Tree -> String
 parse        :: MultiGrammar -> Language -> Category -> String -> [Tree]
 
-linearizeAll :: MultiGrammar             -> Tree -> [String]
-parseAll     :: MultiGrammar             -> Category -> String -> [[Tree]]
+linearizeAll     :: MultiGrammar -> Tree -> [String]
+linearizeAllLang :: MultiGrammar -> Tree -> [(Language,String)]
+
+parseAll     :: MultiGrammar -> Category -> String -> [[Tree]]
+parseAllLang :: MultiGrammar -> Category -> String -> [(Language,[Tree])]
 
 readTree     :: MultiGrammar -> String -> Tree
 showTree     ::                 Tree -> String
 
 languages    :: MultiGrammar -> [Language]
 categories   :: MultiGrammar -> [Category]
+
+startCat :: MultiGrammar -> Category
 
 ---------------------------------------------------
 -- Implementation
@@ -84,15 +89,19 @@ linearize mgr lang =
 parse mgr lang cat = 
   map tree2exp . 
   errVal [] . 
-  parseString noOptions sgr cfcat
+  parseString (stateOptions sgr) sgr cfcat
  where
    sgr   = stateGrammarOfLang mgr (zIdent lang)
    cfcat = string2CFCat abs cat
    abs   = maybe (error "no abstract syntax") prIdent $ abstract mgr
 
-linearizeAll mgr t = [linearize mgr lang t | lang <- languages mgr]
+linearizeAll mgr = map snd . linearizeAllLang mgr
+linearizeAllLang mgr t = [(lang,linearize mgr lang t) | lang <- languages mgr]
 
-parseAll mgr cat s = [parse mgr lang cat s | lang <- languages mgr]
+parseAll mgr cat = map snd . parseAllLang mgr cat
+
+parseAllLang mgr cat s = 
+  [(lang,ts) | lang <- languages mgr, let ts = parse mgr lang cat s, not (null ts)]
 
 readTree mgr s = tree2exp $ string2tree (firstStateGrammar mgr) s
 
@@ -101,3 +110,5 @@ showTree t  = prt_ t
 languages mgr = [prt_ l | l <- allLanguages mgr]
 
 categories mgr = [prt_ c | (_,c) <- allCategories mgr]
+
+startCat = prt_ . snd . firstAbsCat noOptions . firstStateGrammar
