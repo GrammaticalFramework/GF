@@ -10,4 +10,11 @@ instance LexFoodsFin of LexFoods = open SyntaxFin, ParadigmsFin in {
     expensive_A = mkA "kallis" ;
     delicious_A = mkA "herkullinen" ;
     boring_A = mkA "tylsä" ;
+
+    eat_V2 = mkV2 (mkV "syödä") partitive ;
+    drink_V2 = mkV2 (mkV "juoda") partitive ;
+    pay_V2 = mkV2 (mkV "maksaa") ;
+    lady_N = mkN "rouva" ;
+    gentleman_N = mkN "herra" ;
+
 }

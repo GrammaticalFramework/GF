@@ -1249,6 +1249,8 @@ incomplete resource Constructors = open Grammar in {
                                          = \i ->   IDetCN i NoNum  ;
       mkIP : IDet -> Num -> CN -> IP   -- which five best songs
                                          = \i,n ->   IDetCN i n NoOrd  ;
+      mkIP : IDet -> CN -> IP   -- which best songs
+                                         = \i ->   IDetCN i NoNum NoOrd  ;
       mkIP : IDet -> N -> IP      -- which song
                                          =    \i,n -> IDetCN i NoNum NoOrd (UseN n)  ;
       mkIP : IP -> Adv -> IP                  -- who in Europe
