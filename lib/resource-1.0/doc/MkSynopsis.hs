@@ -26,14 +26,14 @@ main = do
   space
   link "Source:" syntaxAPI
   space
-  rs <- getRules isLatex syntaxAPI
+  rs <- getRules True isLatex syntaxAPI
   delimit rs
   space
   title "Structural Words"
   space
   link "Source:" structuralAPI
   space
-  rs <- getRules isLatex structuralAPI
+  rs <- getRules False isLatex structuralAPI
   delimit rs
   space
   mapM_ (putParadigms isLatex) paradigmFiles
@@ -62,9 +62,9 @@ getCats isLatex isBeg file = do
          (expl,ex) = span (/="e.g.") exp
        _ -> getrs rs ss2
 
-getRules isLatex file = do
+getRules hasEx isLatex file = do
   ss <- readFile file >>= return . lines
-  return $ inChunks chsize mkTable $ getrs [] ss
+  return $ inChunks chsize (mkTable hasEx) $ getrs [] ss
  where
    chsize = if isLatex then 40 else 1000
    getrs rs ss = case ss of
@@ -77,12 +77,14 @@ getRules isLatex file = do
        _ -> getrs rs ss2
    layout s = "  " ++ dropWhile isSpace s
 
+getParads = getRules False
+
 putParadigms isLatex (lang,file) = do
   title ("Paradigms for " ++ lang)
   space
   link "source" file
   space
-  rs <- getRules isLatex file
+  rs <- getParads isLatex file
   space
   delimit rs
   space
@@ -92,9 +94,23 @@ inChunks i f = concat . intersperse ["\n\n"] . map f . chunks i where
   chunks _ [] = []
   chunks i xs = x : chunks i y where (x,y) = splitAt i xs
 
-mkTable rs = header : map (unwords . row . words) rs where
-  header = "|| Function  | Type  | Example  ||"
-  row ws = ["|", name, "|", typ, "|", ex, "|"] where
+mkTable hasEx rs = header : map (unwords . row . words) rs where
+  header = if hasEx then "|| Function  | Type  | Example  ||" 
+                    else "|| Function  | Type  ||"
+  row ws = if hasEx then ["|", name, "|", typ, "|", ex, "|"]
+                    else ["|", name, "|", typ, "|"] where
+    name = ttf (head ws)
+    (t,e) = span (/="--") (tail ws)
+    typ = ttf (unwords $ filtype (drop 1 t)) 
+    ex = if null e then "-" else itf (unwords $ unnumber $ drop 1 e)
+    unnumber e = case e of
+      n:ws | last n == '.' && not (null (init n)) && all isDigit (init n) -> ws
+      _ -> e
+    filtype = filter (/=";")
+
+mkParTable rs = header : map (unwords . row . words) rs where
+  header = "|| Paradigm  | Type  ||"
+  row ws = ["|", name, "|", typ, "|"] where
     name = ttf (head ws)
     (t,e) = span (/="--") (tail ws)
     typ = ttf (unwords $ filtype (drop 1 t)) 
