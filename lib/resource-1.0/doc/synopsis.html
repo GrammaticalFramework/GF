@@ -349,7 +349,6 @@ Source 2: <A HREF="../abstract/Cat.gf"><CODE>http://www.cs.chalmers.se/~aarne/GF
 </TR>
 </TABLE>
 
-<P></P>
 <A NAME="toc2"></A>
 <H1>Syntax Rules</H1>
 <P>
@@ -1057,9 +1056,49 @@ Source: <A HREF="../api/Constructors.gf"><CODE>http://www.cs.chalmers.se/~aarne/
 <TD><I>(mass terms)</I></TD>
 </TR>
 <TR>
+<TD><CODE>the_QuantSg</CODE></TD>
+<TD><CODE>QuantSg</CODE></TD>
+<TD><I>the</I></TD>
+</TR>
+<TR>
+<TD><CODE>a_QuantSg</CODE></TD>
+<TD><CODE>QuantSg</CODE></TD>
+<TD><I>a</I></TD>
+</TR>
+<TR>
+<TD><CODE>this_QuantSg</CODE></TD>
+<TD><CODE>QuantSg</CODE></TD>
+<TD><I>this</I></TD>
+</TR>
+<TR>
+<TD><CODE>that_QuantSg</CODE></TD>
+<TD><CODE>QuantSg</CODE></TD>
+<TD><I>that</I></TD>
+</TR>
+<TR>
 <TD><CODE>mkQuantPl</CODE></TD>
 <TD><CODE>Quant -&gt; QuantPl</CODE></TD>
 <TD><I>these</I></TD>
+</TR>
+<TR>
+<TD><CODE>the_QuantPl</CODE></TD>
+<TD><CODE>QuantPl</CODE></TD>
+<TD><I>the</I></TD>
+</TR>
+<TR>
+<TD><CODE>a_QuantPl</CODE></TD>
+<TD><CODE>QuantPl</CODE></TD>
+<TD><I>(indefinite plural)</I></TD>
+</TR>
+<TR>
+<TD><CODE>these_QuantPl</CODE></TD>
+<TD><CODE>QuantPl</CODE></TD>
+<TD><I>these</I></TD>
+</TR>
+<TR>
+<TD><CODE>those_QuantPl</CODE></TD>
+<TD><CODE>QuantPl</CODE></TD>
+<TD><I>those</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkNum</CODE></TD>
@@ -1543,7 +1582,6 @@ Source: <A HREF="../api/Constructors.gf"><CODE>http://www.cs.chalmers.se/~aarne/
 </TR>
 </TABLE>
 
-<P></P>
 <A NAME="toc3"></A>
 <H1>Structural Words</H1>
 <P>
@@ -1552,492 +1590,394 @@ Source: <A HREF="../abstract/Structural.gf"><CODE>http://www.cs.chalmers.se/~aar
 <TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
-<TH>Type</TH>
-<TH COLSPAN="2">Example</TH>
+<TH COLSPAN="2">Type</TH>
 </TR>
 <TR>
 <TD><CODE>above_Prep</CODE></TD>
 <TD><CODE>Prep</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>after_Prep</CODE></TD>
 <TD><CODE>Prep</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>all_Predet</CODE></TD>
 <TD><CODE>Predet</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>almost_AdA</CODE></TD>
 <TD><CODE>AdA</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>almost_AdN</CODE></TD>
 <TD><CODE>AdN</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>although_Subj</CODE></TD>
 <TD><CODE>Subj</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>always_AdV</CODE></TD>
 <TD><CODE>AdV</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>and_Conj</CODE></TD>
 <TD><CODE>Conj</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>because_Subj</CODE></TD>
 <TD><CODE>Subj</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>before_Prep</CODE></TD>
 <TD><CODE>Prep</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>behind_Prep</CODE></TD>
 <TD><CODE>Prep</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>between_Prep</CODE></TD>
 <TD><CODE>Prep</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>both7and_DConj</CODE></TD>
 <TD><CODE>DConj</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>but_PConj</CODE></TD>
 <TD><CODE>PConj</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>by8agent_Prep</CODE></TD>
 <TD><CODE>Prep</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>by8means_Prep</CODE></TD>
 <TD><CODE>Prep</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>can8know_VV</CODE></TD>
 <TD><CODE>VV</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>can_VV</CODE></TD>
 <TD><CODE>VV</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>during_Prep</CODE></TD>
 <TD><CODE>Prep</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>either7or_DConj</CODE></TD>
 <TD><CODE>DConj</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>every_Det</CODE></TD>
 <TD><CODE>Det</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>everybody_NP</CODE></TD>
 <TD><CODE>NP</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>everything_NP</CODE></TD>
 <TD><CODE>NP</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>everywhere_Adv</CODE></TD>
 <TD><CODE>Adv</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>first_Ord</CODE></TD>
 <TD><CODE>Ord</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>few_Det</CODE></TD>
 <TD><CODE>Det</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>for_Prep</CODE></TD>
 <TD><CODE>Prep</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>from_Prep</CODE></TD>
 <TD><CODE>Prep</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>he_Pron</CODE></TD>
 <TD><CODE>Pron</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>here_Adv</CODE></TD>
 <TD><CODE>Adv</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>here7to_Adv</CODE></TD>
 <TD><CODE>Adv</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>here7from_Adv</CODE></TD>
 <TD><CODE>Adv</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>how_IAdv</CODE></TD>
 <TD><CODE>IAdv</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>how8many_IDet</CODE></TD>
 <TD><CODE>IDet</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>i_Pron</CODE></TD>
 <TD><CODE>Pron</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>if_Subj</CODE></TD>
 <TD><CODE>Subj</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>in8front_Prep</CODE></TD>
 <TD><CODE>Prep</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>in_Prep</CODE></TD>
 <TD><CODE>Prep</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>it_Pron</CODE></TD>
 <TD><CODE>Pron</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>less_CAdv</CODE></TD>
 <TD><CODE>CAdv</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>many_Det</CODE></TD>
 <TD><CODE>Det</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>more_CAdv</CODE></TD>
 <TD><CODE>CAdv</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>most_Predet</CODE></TD>
 <TD><CODE>Predet</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>much_Det</CODE></TD>
 <TD><CODE>Det</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>must_VV</CODE></TD>
 <TD><CODE>VV</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>no_Phr</CODE></TD>
 <TD><CODE>Phr</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>on_Prep</CODE></TD>
 <TD><CODE>Prep</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>one_Quant</CODE></TD>
 <TD><CODE>QuantSg</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>only_Predet</CODE></TD>
 <TD><CODE>Predet</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>or_Conj</CODE></TD>
 <TD><CODE>Conj</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>otherwise_PConj</CODE></TD>
 <TD><CODE>PConj</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>part_Prep</CODE></TD>
 <TD><CODE>Prep</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>please_Voc</CODE></TD>
 <TD><CODE>Voc</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>possess_Prep</CODE></TD>
 <TD><CODE>Prep</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>quite_Adv</CODE></TD>
 <TD><CODE>AdA</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>she_Pron</CODE></TD>
 <TD><CODE>Pron</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>so_AdA</CODE></TD>
 <TD><CODE>AdA</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>someSg_Det</CODE></TD>
 <TD><CODE>Det</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>somePl_Det</CODE></TD>
 <TD><CODE>Det</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>somebody_NP</CODE></TD>
 <TD><CODE>NP</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>something_NP</CODE></TD>
 <TD><CODE>NP</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>somewhere_Adv</CODE></TD>
 <TD><CODE>Adv</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>that_Quant</CODE></TD>
 <TD><CODE>Quant</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>that_NP</CODE></TD>
 <TD><CODE>NP</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>there_Adv</CODE></TD>
 <TD><CODE>Adv</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>there7to_Adv</CODE></TD>
 <TD><CODE>Adv</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>there7from_Adv</CODE></TD>
 <TD><CODE>Adv</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>therefore_PConj</CODE></TD>
 <TD><CODE>PConj</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>these_NP</CODE></TD>
 <TD><CODE>NP</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>they_Pron</CODE></TD>
 <TD><CODE>Pron</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>this_Quant</CODE></TD>
 <TD><CODE>Quant</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>this_NP</CODE></TD>
 <TD><CODE>NP</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>those_NP</CODE></TD>
 <TD><CODE>NP</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>through_Prep</CODE></TD>
 <TD><CODE>Prep</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>to_Prep</CODE></TD>
 <TD><CODE>Prep</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>too_AdA</CODE></TD>
 <TD><CODE>AdA</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>under_Prep</CODE></TD>
 <TD><CODE>Prep</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>very_AdA</CODE></TD>
 <TD><CODE>AdA</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>want_VV</CODE></TD>
 <TD><CODE>VV</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>we_Pron</CODE></TD>
 <TD><CODE>Pron</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>whatPl_IP</CODE></TD>
 <TD><CODE>IP</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>whatSg_IP</CODE></TD>
 <TD><CODE>IP</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>when_IAdv</CODE></TD>
 <TD><CODE>IAdv</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>when_Subj</CODE></TD>
 <TD><CODE>Subj</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>where_IAdv</CODE></TD>
 <TD><CODE>IAdv</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>whichPl_IDet</CODE></TD>
 <TD><CODE>IDet</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>whichSg_IDet</CODE></TD>
 <TD><CODE>IDet</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>whoPl_IP</CODE></TD>
 <TD><CODE>IP</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>whoSg_IP</CODE></TD>
 <TD><CODE>IP</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>why_IAdv</CODE></TD>
 <TD><CODE>IAdv</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>with_Prep</CODE></TD>
 <TD><CODE>Prep</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>without_Prep</CODE></TD>
 <TD><CODE>Prep</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>yes_Phr</CODE></TD>
 <TD><CODE>Phr</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>youSg_Pron</CODE></TD>
 <TD><CODE>Pron</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>youPl_Pron</CODE></TD>
 <TD><CODE>Pron</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>youPol_Pron</CODE></TD>
 <TD><CODE>Pron</CODE></TD>
-<TD>-</TD>
 </TR>
 </TABLE>
 
-<P></P>
 <A NAME="toc4"></A>
 <H1>Paradigms for Danish</H1>
 <P>
@@ -2046,302 +1986,242 @@ source <A HREF="../danish/ParadigmsDan.gf"><CODE>http://www.cs.chalmers.se/~aarn
 <TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
-<TH>Type</TH>
-<TH COLSPAN="2">Example</TH>
+<TH COLSPAN="2">Type</TH>
 </TR>
 <TR>
 <TD><CODE>Gender</CODE></TD>
 <TD><CODE>Type</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>utrum</CODE></TD>
 <TD><CODE>Gender</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>neutrum</CODE></TD>
 <TD><CODE>Gender</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>Number</CODE></TD>
 <TD><CODE>Type</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>singular</CODE></TD>
 <TD><CODE>Number</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>plural</CODE></TD>
 <TD><CODE>Number</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>Case</CODE></TD>
 <TD><CODE>Type</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>nominative</CODE></TD>
 <TD><CODE>Case</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>genitive</CODE></TD>
 <TD><CODE>Case</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkPrep</CODE></TD>
 <TD><CODE>Str -&gt; Prep</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>noPrep</CODE></TD>
 <TD><CODE>Prep</CODE></TD>
-<TD><I>empty string</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkN</CODE></TD>
 <TD><CODE>(bil : Str) -&gt; N</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkN</CODE></TD>
 <TD><CODE>(hus : Str) -&gt; Gender -&gt; N</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkN</CODE></TD>
 <TD><CODE>(bil,bilen : Str) -&gt; N</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkN</CODE></TD>
 <TD><CODE>(bil,bilen,biler : Str) -&gt; N</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkN</CODE></TD>
 <TD><CODE>(dreng,drengen,drenge,drengene : Str) -&gt; N</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkN2</CODE></TD>
 <TD><CODE>N -&gt; Prep -&gt; N2</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>regN2</CODE></TD>
 <TD><CODE>Str -&gt; Gender -&gt; N2</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkN3</CODE></TD>
 <TD><CODE>N -&gt; Prep -&gt; Prep -&gt; N3</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkPN</CODE></TD>
 <TD><CODE>Str -&gt; PN</CODE></TD>
-<TD><I>utrum</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkPN</CODE></TD>
 <TD><CODE>Str -&gt; Gender -&gt; PN</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkPN</CODE></TD>
 <TD><CODE>N -&gt; PN</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkA</CODE></TD>
 <TD><CODE>(fin : Str) -&gt; A</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkA</CODE></TD>
 <TD><CODE>(fin,fint : Str) -&gt; A</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkA</CODE></TD>
 <TD><CODE>(galen,galet,galne : Str) -&gt; A</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkA</CODE></TD>
 <TD><CODE>(stor,stort,store,storre,storst : Str) -&gt; A</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkA</CODE></TD>
 <TD><CODE>A -&gt; A</CODE></TD>
-<TD><I>-/mer/mest norsk</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkA2</CODE></TD>
 <TD><CODE>A -&gt; Prep -&gt; A2</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkAdv</CODE></TD>
 <TD><CODE>Str -&gt; Adv</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkAdV</CODE></TD>
 <TD><CODE>Str -&gt; AdV</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkAdA</CODE></TD>
 <TD><CODE>Str -&gt; AdA</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV</CODE></TD>
 <TD><CODE>(snakke : Str) -&gt; V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV</CODE></TD>
 <TD><CODE>(leve,levde : Str) -&gt; V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV</CODE></TD>
 <TD><CODE>(drikke, drakk, drukket : Str) -&gt; V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV</CODE></TD>
 <TD><CODE>(spise,spiser,spises,spiste,spist,spis : Str) -&gt; V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV</CODE></TD>
 <TD><CODE>V -&gt; Str -&gt; V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>vaereV</CODE></TD>
 <TD><CODE>V -&gt; V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>depV</CODE></TD>
 <TD><CODE>V -&gt; V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>reflV</CODE></TD>
 <TD><CODE>V -&gt; V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV2</CODE></TD>
 <TD><CODE>Str -&gt; V2</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV2</CODE></TD>
 <TD><CODE>V -&gt; V2</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV2</CODE></TD>
 <TD><CODE>V -&gt; Prep -&gt; V2</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV3</CODE></TD>
 <TD><CODE>V -&gt; Prep -&gt; Prep -&gt; V3</CODE></TD>
-<TD><I>snakke, med, om</I></TD>
 </TR>
 <TR>
 <TD><CODE>dirV3</CODE></TD>
 <TD><CODE>V -&gt; Prep -&gt; V3</CODE></TD>
-<TD><I>give,_,til</I></TD>
 </TR>
 <TR>
 <TD><CODE>dirdirV3</CODE></TD>
 <TD><CODE>V -&gt; V3</CODE></TD>
-<TD><I>give,_,_</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkV0</CODE></TD>
 <TD><CODE>V -&gt; V0</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkVS</CODE></TD>
 <TD><CODE>V -&gt; VS</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV2S</CODE></TD>
 <TD><CODE>V -&gt; Prep -&gt; V2S</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkVV</CODE></TD>
 <TD><CODE>V -&gt; VV</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV2V</CODE></TD>
 <TD><CODE>V -&gt; Prep -&gt; Prep -&gt; V2V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkVA</CODE></TD>
 <TD><CODE>V -&gt; VA</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV2A</CODE></TD>
 <TD><CODE>V -&gt; Prep -&gt; V2A</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkVQ</CODE></TD>
 <TD><CODE>V -&gt; VQ</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV2Q</CODE></TD>
 <TD><CODE>V -&gt; Prep -&gt; V2Q</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkAS</CODE></TD>
 <TD><CODE>A -&gt; AS</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkA2S</CODE></TD>
 <TD><CODE>A -&gt; Prep -&gt; A2S</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkAV</CODE></TD>
 <TD><CODE>A -&gt; AV</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkA2V</CODE></TD>
 <TD><CODE>A -&gt; Prep -&gt; A2V</CODE></TD>
-<TD>-</TD>
 </TR>
 </TABLE>
 
-<P></P>
 <A NAME="toc5"></A>
 <H1>Paradigms for English</H1>
 <P>
@@ -2350,282 +2230,226 @@ source <A HREF="../english/ParadigmsEng.gf"><CODE>http://www.cs.chalmers.se/~aar
 <TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
-<TH>Type</TH>
-<TH COLSPAN="2">Example</TH>
+<TH COLSPAN="2">Type</TH>
 </TR>
 <TR>
 <TD><CODE>Gender</CODE></TD>
 <TD><CODE>Type</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>human</CODE></TD>
 <TD><CODE>Gender</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>nonhuman</CODE></TD>
 <TD><CODE>Gender</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>masculine</CODE></TD>
 <TD><CODE>Gender</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>Number</CODE></TD>
 <TD><CODE>Type</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>singular</CODE></TD>
 <TD><CODE>Number</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>plural</CODE></TD>
 <TD><CODE>Number</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>Case</CODE></TD>
 <TD><CODE>Type</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>nominative</CODE></TD>
 <TD><CODE>Case</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>genitive</CODE></TD>
 <TD><CODE>Case</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkN</CODE></TD>
 <TD><CODE>(flash : Str) -&gt; N</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkN</CODE></TD>
 <TD><CODE>(man,men : Str) -&gt; N</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkN</CODE></TD>
 <TD><CODE>(man,men,man's,men's : Str) -&gt; N</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkN</CODE></TD>
 <TD><CODE>Str -&gt; N -&gt; N</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkN2</CODE></TD>
 <TD><CODE>N -&gt; Prep -&gt; N2</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>regN2</CODE></TD>
 <TD><CODE>Str -&gt; N2</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkN3</CODE></TD>
 <TD><CODE>N -&gt; Prep -&gt; Prep -&gt; N3</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkPN</CODE></TD>
 <TD><CODE>Str -&gt; PN</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkPN</CODE></TD>
 <TD><CODE>N -&gt; PN</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkA</CODE></TD>
 <TD><CODE>(happy : Str) -&gt; A</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkA</CODE></TD>
 <TD><CODE>(fat,fatter : Str) -&gt; A</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkA</CODE></TD>
 <TD><CODE>(good,better,best,well : Str) -&gt; A</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>compoundA</CODE></TD>
 <TD><CODE>A -&gt; A</CODE></TD>
-<TD><I>-/more/most ridiculous</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkA2</CODE></TD>
 <TD><CODE>A -&gt; Prep -&gt; A2</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkAdv</CODE></TD>
 <TD><CODE>Str -&gt; Adv</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkAdV</CODE></TD>
 <TD><CODE>Str -&gt; AdV</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkAdA</CODE></TD>
 <TD><CODE>Str -&gt; AdA</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkPrep</CODE></TD>
 <TD><CODE>Str -&gt; Prep</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>noPrep</CODE></TD>
 <TD><CODE>Prep</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV</CODE></TD>
 <TD><CODE>(cry : Str) -&gt; V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV</CODE></TD>
 <TD><CODE>(stop, stopped : Str) -&gt; V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV</CODE></TD>
 <TD><CODE>(drink, drank, drunk : Str) -&gt; V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV</CODE></TD>
 <TD><CODE>(run, ran, run, running : Str) -&gt; V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV</CODE></TD>
 <TD><CODE>(go, goes, went, gone, going : Str) -&gt; V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>partV</CODE></TD>
 <TD><CODE>V -&gt; Str -&gt; V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>reflV</CODE></TD>
 <TD><CODE>V -&gt; V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV2</CODE></TD>
 <TD><CODE>V -&gt; Prep -&gt; V2</CODE></TD>
-<TD><I>believe in</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkV2</CODE></TD>
 <TD><CODE>V -&gt; V2</CODE></TD>
-<TD><I>kill</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkV3</CODE></TD>
 <TD><CODE>V -&gt; Prep -&gt; Prep -&gt; V3</CODE></TD>
-<TD><I>speak, with, about</I></TD>
 </TR>
 <TR>
 <TD><CODE>dirV3</CODE></TD>
 <TD><CODE>V -&gt; Prep -&gt; V3</CODE></TD>
-<TD><I>give,_,to</I></TD>
 </TR>
 <TR>
 <TD><CODE>dirdirV3</CODE></TD>
 <TD><CODE>V -&gt; V3</CODE></TD>
-<TD><I>give,_,_</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkV0</CODE></TD>
 <TD><CODE>V -&gt; V0</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkVS</CODE></TD>
 <TD><CODE>V -&gt; VS</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV2S</CODE></TD>
 <TD><CODE>V -&gt; Prep -&gt; V2S</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkVV</CODE></TD>
 <TD><CODE>V -&gt; VV</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV2V</CODE></TD>
 <TD><CODE>V -&gt; Prep -&gt; Prep -&gt; V2V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkVA</CODE></TD>
 <TD><CODE>V -&gt; VA</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV2A</CODE></TD>
 <TD><CODE>V -&gt; Prep -&gt; V2A</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkVQ</CODE></TD>
 <TD><CODE>V -&gt; VQ</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV2Q</CODE></TD>
 <TD><CODE>V -&gt; Prep -&gt; V2Q</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkAS</CODE></TD>
 <TD><CODE>A -&gt; AS</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkA2S</CODE></TD>
 <TD><CODE>A -&gt; Prep -&gt; A2S</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkAV</CODE></TD>
 <TD><CODE>A -&gt; AV</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkA2V</CODE></TD>
 <TD><CODE>A -&gt; Prep -&gt; A2V</CODE></TD>
-<TD>-</TD>
 </TR>
 </TABLE>
 
-<P></P>
 <A NAME="toc6"></A>
 <H1>Paradigms for Finnish</H1>
 <P>
@@ -2634,417 +2458,334 @@ source <A HREF="../finnish/ParadigmsFin.gf"><CODE>http://www.cs.chalmers.se/~aar
 <TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
-<TH>Type</TH>
-<TH COLSPAN="2">Example</TH>
+<TH COLSPAN="2">Type</TH>
 </TR>
 <TR>
 <TD><CODE>Number</CODE></TD>
 <TD><CODE>Type</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>singular</CODE></TD>
 <TD><CODE>Number</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>plural</CODE></TD>
 <TD><CODE>Number</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>Case</CODE></TD>
 <TD><CODE>Type</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>nominative</CODE></TD>
 <TD><CODE>Case</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>genitive</CODE></TD>
 <TD><CODE>Case</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>partitive</CODE></TD>
 <TD><CODE>Case</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>translative</CODE></TD>
 <TD><CODE>Case</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>inessive</CODE></TD>
 <TD><CODE>Case</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>elative</CODE></TD>
 <TD><CODE>Case</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>illative</CODE></TD>
 <TD><CODE>Case</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>adessive</CODE></TD>
 <TD><CODE>Case</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>ablative</CODE></TD>
 <TD><CODE>Case</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>allative</CODE></TD>
 <TD><CODE>Case</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>prePrep</CODE></TD>
 <TD><CODE>Case -&gt; Str -&gt; Prep</CODE></TD>
-<TD><I>ilman, partitive</I></TD>
 </TR>
 <TR>
 <TD><CODE>postPrep</CODE></TD>
 <TD><CODE>Case -&gt; Str -&gt; Prep</CODE></TD>
-<TD><I>takana, genitive</I></TD>
 </TR>
 <TR>
 <TD><CODE>postGenPrep</CODE></TD>
 <TD><CODE>Str -&gt; Prep</CODE></TD>
-<TD><I>takana</I></TD>
 </TR>
 <TR>
 <TD><CODE>casePrep</CODE></TD>
 <TD><CODE>Case -&gt; Prep</CODE></TD>
-<TD><I>adessive</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkN</CODE></TD>
 <TD><CODE>(talo : Str) -&gt; N</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkN</CODE></TD>
 <TD><CODE>(savi,savia : Str) -&gt; N</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkN</CODE></TD>
 <TD><CODE>(vesi,veden,vesi� : Str) -&gt; N</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkN</CODE></TD>
 <TD><CODE>(olo,oln,olona,oloa,oloon,oloina,oloissa,olojen,oloja,oloihin : Str) -&gt; N</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>sgpartN</CODE></TD>
 <TD><CODE>(meri : N) -&gt; (merta : Str) -&gt; N</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>nMeri</CODE></TD>
 <TD><CODE>(meri : Str) -&gt; N</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>nKukko</CODE></TD>
 <TD><CODE>(kukko,kukon,kukkoja : Str) -&gt; N</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>nTalo</CODE></TD>
 <TD><CODE>(talo : Str) -&gt; N</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>nLukko</CODE></TD>
 <TD><CODE>(lukko : Str) -&gt; N</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>nArpi</CODE></TD>
 <TD><CODE>(arpi : Str) -&gt; N</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>nSylki</CODE></TD>
 <TD><CODE>(sylki : Str) -&gt; N</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>nLinux</CODE></TD>
 <TD><CODE>(linuxia : Str) -&gt; N</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>nPeruna</CODE></TD>
 <TD><CODE>(peruna : Str) -&gt; N</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>nRae</CODE></TD>
 <TD><CODE>(rae, rakeena : Str) -&gt; N</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>nSusi</CODE></TD>
 <TD><CODE>(susi,suden,sutta : Str) -&gt; N</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>nPuu</CODE></TD>
 <TD><CODE>(puu : Str) -&gt; N</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>nSuo</CODE></TD>
 <TD><CODE>(suo : Str) -&gt; N</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>nNainen</CODE></TD>
 <TD><CODE>(naista : Str) -&gt; N</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>nTilaus</CODE></TD>
 <TD><CODE>(tilaus,tilauksena : Str) -&gt; N</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>nKulaus</CODE></TD>
 <TD><CODE>(kulaus : Str) -&gt; N</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>nNauris</CODE></TD>
 <TD><CODE>(naurista : Str) -&gt; N</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>compN</CODE></TD>
 <TD><CODE>Str -&gt; N -&gt; N</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkN2</CODE></TD>
 <TD><CODE>N -&gt; N2 = genN2</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkN2</CODE></TD>
 <TD><CODE>N -&gt; Prep -&gt; N2 = mmkN2</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkN3</CODE></TD>
 <TD><CODE>N -&gt; Prep -&gt; Prep -&gt; N3</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkPN</CODE></TD>
 <TD><CODE>Str -&gt; PN</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkPN</CODE></TD>
 <TD><CODE>N -&gt; PN</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkA</CODE></TD>
 <TD><CODE>Str -&gt; A</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkA</CODE></TD>
 <TD><CODE>N -&gt; A</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkA</CODE></TD>
 <TD><CODE>N -&gt; (kivempaa,kivinta : Str) -&gt; A</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkA2</CODE></TD>
 <TD><CODE>A -&gt; Prep -&gt; A2</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV</CODE></TD>
 <TD><CODE>(soutaa : Str) -&gt; V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV</CODE></TD>
 <TD><CODE>(soutaa,souti : Str) -&gt; V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV</CODE></TD>
 <TD><CODE>(soutaa,soudan,souti : Str) -&gt; V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV</CODE></TD>
 <TD><CODE>(tulla,tulee,tulen,tulevat,tulkaa,tullaan,tuli,tulin,tulisi,tullut,tultu,tullun : Str) -&gt; V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV</CODE></TD>
 <TD><CODE>V -&gt; Case -&gt; V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>vValua</CODE></TD>
 <TD><CODE>(valua : Str) -&gt; V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>vKattaa</CODE></TD>
 <TD><CODE>(kattaa, katan : Str) -&gt; V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>vOstaa</CODE></TD>
 <TD><CODE>(ostaa : Str) -&gt; V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>vNousta</CODE></TD>
 <TD><CODE>(nousta, nousen : Str) -&gt; V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>vTuoda</CODE></TD>
 <TD><CODE>(tuoda : Str) -&gt; V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>caseV</CODE></TD>
 <TD><CODE>Case -&gt; V -&gt; V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>vOlla</CODE></TD>
 <TD><CODE>V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV2</CODE></TD>
 <TD><CODE>Str -&gt; V2</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV2</CODE></TD>
 <TD><CODE>V -&gt; V2</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV2</CODE></TD>
 <TD><CODE>V -&gt; Case -&gt; V2</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV2</CODE></TD>
 <TD><CODE>V -&gt; Prep -&gt; V2</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV3</CODE></TD>
 <TD><CODE>V -&gt; Prep -&gt; Prep -&gt; V3</CODE></TD>
-<TD><I>puhua, allative, elative</I></TD>
 </TR>
 <TR>
 <TD><CODE>dirV3</CODE></TD>
 <TD><CODE>V -&gt; Case -&gt; V3</CODE></TD>
-<TD><I>siirt��, (accusative), illative</I></TD>
 </TR>
 <TR>
 <TD><CODE>dirdirV3</CODE></TD>
 <TD><CODE>V -&gt; V3</CODE></TD>
-<TD><I>antaa, (accusative), (allative)</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkV0</CODE></TD>
 <TD><CODE>V -&gt; V0</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkVS</CODE></TD>
 <TD><CODE>V -&gt; VS</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV2S</CODE></TD>
 <TD><CODE>V -&gt; Prep -&gt; V2S</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkVV</CODE></TD>
 <TD><CODE>V -&gt; VV</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV2V</CODE></TD>
 <TD><CODE>V -&gt; Prep -&gt; V2V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkVA</CODE></TD>
 <TD><CODE>V -&gt; Prep -&gt; VA</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV2A</CODE></TD>
 <TD><CODE>V -&gt; Prep -&gt; Prep -&gt; V2A</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkVQ</CODE></TD>
 <TD><CODE>V -&gt; VQ</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV2Q</CODE></TD>
 <TD><CODE>V -&gt; Prep -&gt; V2Q</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkAS</CODE></TD>
 <TD><CODE>A -&gt; AS</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkA2S</CODE></TD>
 <TD><CODE>A -&gt; Prep -&gt; A2S</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkAV</CODE></TD>
 <TD><CODE>A -&gt; AV</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkA2V</CODE></TD>
 <TD><CODE>A -&gt; Prep -&gt; A2V</CODE></TD>
-<TD>-</TD>
 </TR>
 </TABLE>
 
-<P></P>
 <A NAME="toc7"></A>
 <H1>Paradigms for French</H1>
 <P>
@@ -3053,282 +2794,226 @@ source <A HREF="../french/ParadigmsFre.gf"><CODE>http://www.cs.chalmers.se/~aarn
 <TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
-<TH>Type</TH>
-<TH COLSPAN="2">Example</TH>
+<TH COLSPAN="2">Type</TH>
 </TR>
 <TR>
 <TD><CODE>Gender</CODE></TD>
 <TD><CODE>Type</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>masculine</CODE></TD>
 <TD><CODE>Gender</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>feminine</CODE></TD>
 <TD><CODE>Gender</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>Number</CODE></TD>
 <TD><CODE>Type</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>singular</CODE></TD>
 <TD><CODE>Number</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>plural</CODE></TD>
 <TD><CODE>Number</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>accusative</CODE></TD>
 <TD><CODE>Prep</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>genitive</CODE></TD>
 <TD><CODE>Prep</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>dative</CODE></TD>
 <TD><CODE>Prep</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkPrep</CODE></TD>
 <TD><CODE>Str -&gt; Prep</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkN</CODE></TD>
 <TD><CODE>(cheval : Str) -&gt; N</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkN</CODE></TD>
 <TD><CODE>(foie : Str) -&gt; Gender -&gt; N</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkN</CODE></TD>
 <TD><CODE>(oeil,yeux : Str) -&gt; Gender -&gt; N</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkN</CODE></TD>
 <TD><CODE>N -&gt; Str -&gt; N</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkN2</CODE></TD>
 <TD><CODE>N -&gt; Prep -&gt; N2</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>deN2</CODE></TD>
 <TD><CODE>N -&gt; N2</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>aN2</CODE></TD>
 <TD><CODE>N -&gt; N2</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkN3</CODE></TD>
 <TD><CODE>N -&gt; Prep -&gt; Prep -&gt; N3</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkPN</CODE></TD>
 <TD><CODE>Str -&gt; PN</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkPN</CODE></TD>
 <TD><CODE>Str -&gt; Gender -&gt; PN</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkA</CODE></TD>
 <TD><CODE>(cher : Str) -&gt; A</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkA</CODE></TD>
 <TD><CODE>(sec,seche : Str) -&gt; A</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkA</CODE></TD>
 <TD><CODE>(banal,banale,banaux,banalement : Str) -&gt; A</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkA</CODE></TD>
 <TD><CODE>A -&gt; A -&gt; A</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>prefixA</CODE></TD>
 <TD><CODE>A -&gt; A</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkA2</CODE></TD>
 <TD><CODE>A -&gt; Prep -&gt; A2</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkAdv</CODE></TD>
 <TD><CODE>Str -&gt; Adv</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkAdV</CODE></TD>
 <TD><CODE>Str -&gt; AdV</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkAdA</CODE></TD>
 <TD><CODE>Str -&gt; AdA</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV</CODE></TD>
 <TD><CODE>(finir : Str) -&gt; V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV</CODE></TD>
 <TD><CODE>(jeter,jette,jettera : Str) -&gt; V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV</CODE></TD>
 <TD><CODE>V2 -&gt; V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>etreV</CODE></TD>
 <TD><CODE>V -&gt; V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>reflV</CODE></TD>
 <TD><CODE>V -&gt; V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV2</CODE></TD>
 <TD><CODE>V -&gt; V2 = dirV2</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV2</CODE></TD>
 <TD><CODE>V -&gt; Prep -&gt; V2 = mmkV2</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV3</CODE></TD>
 <TD><CODE>V -&gt; V3</CODE></TD>
-<TD><I>donner,_,_</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkV3</CODE></TD>
 <TD><CODE>V -&gt; Prep -&gt; V3</CODE></TD>
-<TD><I>placer,_,dans</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkV3</CODE></TD>
 <TD><CODE>V -&gt; Prep -&gt; Prep -&gt; V3</CODE></TD>
-<TD><I>parler, �, de</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkV0</CODE></TD>
 <TD><CODE>V -&gt; V0</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkVS</CODE></TD>
 <TD><CODE>V -&gt; VS</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV2S</CODE></TD>
 <TD><CODE>V -&gt; Prep -&gt; V2S</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkVV</CODE></TD>
 <TD><CODE>V -&gt; VV</CODE></TD>
-<TD><I>plain infinitive: "je veux parler"</I></TD>
 </TR>
 <TR>
 <TD><CODE>deVV</CODE></TD>
 <TD><CODE>V -&gt; VV</CODE></TD>
-<TD><I>"j'essaie de parler"</I></TD>
 </TR>
 <TR>
 <TD><CODE>aVV</CODE></TD>
 <TD><CODE>V -&gt; VV</CODE></TD>
-<TD><I>"j'arrive � parler"</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkV2V</CODE></TD>
 <TD><CODE>V -&gt; Prep -&gt; Prep -&gt; V2V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkVA</CODE></TD>
 <TD><CODE>V -&gt; VA</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV2A</CODE></TD>
 <TD><CODE>V -&gt; Prep -&gt; Prep -&gt; V2A</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkVQ</CODE></TD>
 <TD><CODE>V -&gt; VQ</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV2Q</CODE></TD>
 <TD><CODE>V -&gt; Prep -&gt; V2Q</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkAS</CODE></TD>
 <TD><CODE>A -&gt; AS</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkA2S</CODE></TD>
 <TD><CODE>A -&gt; Prep -&gt; A2S</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkAV</CODE></TD>
 <TD><CODE>A -&gt; Prep -&gt; AV</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkA2V</CODE></TD>
 <TD><CODE>A -&gt; Prep -&gt; Prep -&gt; A2V</CODE></TD>
-<TD>-</TD>
 </TR>
 </TABLE>
 
-<P></P>
 <A NAME="toc8"></A>
 <H1>Paradigms for German</H1>
 <P>
@@ -3337,312 +3022,250 @@ source <A HREF="../german/ParadigmsGer.gf"><CODE>http://www.cs.chalmers.se/~aarn
 <TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
-<TH>Type</TH>
-<TH COLSPAN="2">Example</TH>
+<TH COLSPAN="2">Type</TH>
 </TR>
 <TR>
 <TD><CODE>Gender</CODE></TD>
 <TD><CODE>Type</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>masculine</CODE></TD>
 <TD><CODE>Gender</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>feminine</CODE></TD>
 <TD><CODE>Gender</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>neuter</CODE></TD>
 <TD><CODE>Gender</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>Case</CODE></TD>
 <TD><CODE>Type</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>nominative</CODE></TD>
 <TD><CODE>Case</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>accusative</CODE></TD>
 <TD><CODE>Case</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>dative</CODE></TD>
 <TD><CODE>Case</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>genitive</CODE></TD>
 <TD><CODE>Case</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>Number</CODE></TD>
 <TD><CODE>Type</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>singular</CODE></TD>
 <TD><CODE>Number</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>plural</CODE></TD>
 <TD><CODE>Number</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkN</CODE></TD>
 <TD><CODE>(Stufe : Str) -&gt; N</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkN</CODE></TD>
 <TD><CODE>(Bild,Bilder : Str) -&gt; Gender -&gt; N</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkN</CODE></TD>
 <TD><CODE>(x1,_,_,_,_,x6 : Str) -&gt; Gender -&gt; N</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkN2</CODE></TD>
 <TD><CODE>Str -&gt; N2</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkN2</CODE></TD>
 <TD><CODE>N -&gt; N2</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkN2</CODE></TD>
 <TD><CODE>N -&gt; Prep -&gt; N2</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkN3</CODE></TD>
 <TD><CODE>N -&gt; Prep -&gt; Prep -&gt; N3</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkPN</CODE></TD>
 <TD><CODE>Str -&gt; PN</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkPN</CODE></TD>
 <TD><CODE>(nom,gen : Str) -&gt; PN</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkPN</CODE></TD>
 <TD><CODE>(nom,acc,dat,gen : Str) -&gt; PN</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkA</CODE></TD>
 <TD><CODE>Str -&gt; A</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkA</CODE></TD>
 <TD><CODE>(gut,besser,beste : Str) -&gt; A</CODE></TD>
-<TD><I>gut,besser,beste</I></TD>
 </TR>
 <TR>
 <TD><CODE>invarA</CODE></TD>
 <TD><CODE>Str -&gt; A</CODE></TD>
-<TD><I>prima</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkA2</CODE></TD>
 <TD><CODE>A -&gt; Prep -&gt; A2</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkAdv</CODE></TD>
 <TD><CODE>Str -&gt; Adv</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkPrep</CODE></TD>
 <TD><CODE>Str -&gt; Case -&gt; Prep</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>accPrep</CODE></TD>
 <TD><CODE>Prep</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>datPrep</CODE></TD>
 <TD><CODE>Prep</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>genPrep</CODE></TD>
 <TD><CODE>Prep</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>von_Prep</CODE></TD>
 <TD><CODE>Prep</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>zu_Prep</CODE></TD>
 <TD><CODE>Prep</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV</CODE></TD>
 <TD><CODE>(f�hren : Str) -&gt; V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV</CODE></TD>
 <TD><CODE>(sehen,sieht,sah,s�he,gesehen : Str) -&gt; V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV</CODE></TD>
 <TD><CODE>(geben, gibt, gib, gab, g�be, gegeben : Str) -&gt; V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV</CODE></TD>
 <TD><CODE>Str -&gt; V -&gt; V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>no_geV</CODE></TD>
 <TD><CODE>V -&gt; V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>seinV</CODE></TD>
 <TD><CODE>V -&gt; V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>habenV</CODE></TD>
 <TD><CODE>V -&gt; V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>reflV</CODE></TD>
 <TD><CODE>V -&gt; Case -&gt; V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV2</CODE></TD>
 <TD><CODE>V -&gt; Prep -&gt; V2</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV2</CODE></TD>
 <TD><CODE>V -&gt; V2</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV2</CODE></TD>
 <TD><CODE>V -&gt; Case -&gt; V2</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV3</CODE></TD>
 <TD><CODE>V -&gt; Prep -&gt; Prep -&gt; V3</CODE></TD>
-<TD><I>sprechen, mit, �ber</I></TD>
 </TR>
 <TR>
 <TD><CODE>dirV3</CODE></TD>
 <TD><CODE>V -&gt; Prep -&gt; V3</CODE></TD>
-<TD><I>senden,(accusative),nach</I></TD>
 </TR>
 <TR>
 <TD><CODE>accdatV3</CODE></TD>
 <TD><CODE>V -&gt; V3</CODE></TD>
-<TD><I>give,accusative,dative</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkV0</CODE></TD>
 <TD><CODE>V -&gt; V0</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkVS</CODE></TD>
 <TD><CODE>V -&gt; VS</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV2S</CODE></TD>
 <TD><CODE>V -&gt; Prep -&gt; V2S</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkVV</CODE></TD>
 <TD><CODE>V -&gt; VV</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV2V</CODE></TD>
 <TD><CODE>V -&gt; Prep -&gt; V2V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkVA</CODE></TD>
 <TD><CODE>V -&gt; VA</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV2A</CODE></TD>
 <TD><CODE>V -&gt; Prep -&gt; V2A</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkVQ</CODE></TD>
 <TD><CODE>V -&gt; VQ</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV2Q</CODE></TD>
 <TD><CODE>V -&gt; Prep -&gt; V2Q</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkAS</CODE></TD>
 <TD><CODE>A -&gt; AS</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkA2S</CODE></TD>
 <TD><CODE>A -&gt; Prep -&gt; A2S</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkAV</CODE></TD>
 <TD><CODE>A -&gt; AV</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkA2V</CODE></TD>
 <TD><CODE>A -&gt; Prep -&gt; A2V</CODE></TD>
-<TD>-</TD>
 </TR>
 </TABLE>
 
-<P></P>
 <A NAME="toc9"></A>
 <H1>Paradigms for Italian</H1>
 <P>
@@ -3651,287 +3274,230 @@ source <A HREF="../italian/ParadigmsIta.gf"><CODE>http://www.cs.chalmers.se/~aar
 <TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
-<TH>Type</TH>
-<TH COLSPAN="2">Example</TH>
+<TH COLSPAN="2">Type</TH>
 </TR>
 <TR>
 <TD><CODE>Gender</CODE></TD>
 <TD><CODE>Type</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>masculine</CODE></TD>
 <TD><CODE>Gender</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>feminine</CODE></TD>
 <TD><CODE>Gender</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>Number</CODE></TD>
 <TD><CODE>Type</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>singular</CODE></TD>
 <TD><CODE>Number</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>plural</CODE></TD>
 <TD><CODE>Number</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>Prep</CODE></TD>
 <TD><CODE>Type</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>accusative</CODE></TD>
 <TD><CODE>Prep</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>genitive</CODE></TD>
 <TD><CODE>Prep</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>dative</CODE></TD>
 <TD><CODE>Prep</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkPrep</CODE></TD>
 <TD><CODE>Str -&gt; Prep</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkN</CODE></TD>
 <TD><CODE>(cane : Str) -&gt; N</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkN</CODE></TD>
 <TD><CODE>(carne : Str) -&gt; Gender -&gt; N</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkN</CODE></TD>
 <TD><CODE>(uomo,uomini : Str) -&gt; Gender -&gt; N</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkN</CODE></TD>
 <TD><CODE>N -&gt; Str -&gt; N</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkN2</CODE></TD>
 <TD><CODE>Str -&gt; N2</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkN2</CODE></TD>
 <TD><CODE>N -&gt; Prep -&gt; N2</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkN3</CODE></TD>
 <TD><CODE>N -&gt; Prep -&gt; Prep -&gt; N3</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkPN</CODE></TD>
 <TD><CODE>Str -&gt; PN</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkPN</CODE></TD>
 <TD><CODE>Str -&gt; Gender -&gt; PN</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkA</CODE></TD>
 <TD><CODE>(bianco : Str) -&gt; A</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkA</CODE></TD>
 <TD><CODE>(solo,sola,soli,sole,solamente : Str) -&gt; A</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkA</CODE></TD>
 <TD><CODE>A -&gt; A -&gt; A</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>prefixA</CODE></TD>
 <TD><CODE>A -&gt; A = prefA</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkA2</CODE></TD>
 <TD><CODE>A -&gt; Prep -&gt; A2</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkAdv</CODE></TD>
 <TD><CODE>Str -&gt; Adv</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkAdV</CODE></TD>
 <TD><CODE>Str -&gt; AdV</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkAdA</CODE></TD>
 <TD><CODE>Str -&gt; AdA</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV</CODE></TD>
 <TD><CODE>Str -&gt; V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV</CODE></TD>
 <TD><CODE>Verbo -&gt; V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV</CODE></TD>
 <TD><CODE>(udire,odo,ode,udiamo,udiro,udii,udisti,udi,udirono,odi,udito : Str) -&gt; V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>essereV</CODE></TD>
 <TD><CODE>V -&gt; V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>reflV</CODE></TD>
 <TD><CODE>V -&gt; V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV2</CODE></TD>
 <TD><CODE>Str -&gt; V2</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV2</CODE></TD>
 <TD><CODE>V -&gt; V2</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV2</CODE></TD>
 <TD><CODE>V -&gt; Prep -&gt; V2</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>v2V</CODE></TD>
 <TD><CODE>V2 -&gt; V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV3</CODE></TD>
 <TD><CODE>V -&gt; Prep -&gt; Prep -&gt; V3</CODE></TD>
-<TD><I>parlare, a, di</I></TD>
 </TR>
 <TR>
 <TD><CODE>dirV3</CODE></TD>
 <TD><CODE>V -&gt; Prep -&gt; V3</CODE></TD>
-<TD><I>dare,_,a</I></TD>
 </TR>
 <TR>
 <TD><CODE>dirdirV3</CODE></TD>
 <TD><CODE>V -&gt; V3</CODE></TD>
-<TD><I>dare,_,_</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkV0</CODE></TD>
 <TD><CODE>V -&gt; V0</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkVS</CODE></TD>
 <TD><CODE>V -&gt; VS</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV2S</CODE></TD>
 <TD><CODE>V -&gt; Prep -&gt; V2S</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkVV</CODE></TD>
 <TD><CODE>V -&gt; VV</CODE></TD>
-<TD><I>plain infinitive: "voglio parlare"</I></TD>
 </TR>
 <TR>
 <TD><CODE>deVV</CODE></TD>
 <TD><CODE>V -&gt; VV</CODE></TD>
-<TD><I>"cerco di parlare"</I></TD>
 </TR>
 <TR>
 <TD><CODE>aVV</CODE></TD>
 <TD><CODE>V -&gt; VV</CODE></TD>
-<TD><I>"arrivo a parlare"</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkV2V</CODE></TD>
 <TD><CODE>V -&gt; Prep -&gt; Prep -&gt; V2V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkVA</CODE></TD>
 <TD><CODE>V -&gt; VA</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV2A</CODE></TD>
 <TD><CODE>V -&gt; Prep -&gt; Prep -&gt; V2A</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkVQ</CODE></TD>
 <TD><CODE>V -&gt; VQ</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV2Q</CODE></TD>
 <TD><CODE>V -&gt; Prep -&gt; V2Q</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkAS</CODE></TD>
 <TD><CODE>A -&gt; AS</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkA2S</CODE></TD>
 <TD><CODE>A -&gt; Prep -&gt; A2S</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkAV</CODE></TD>
 <TD><CODE>A -&gt; Prep -&gt; AV</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkA2V</CODE></TD>
 <TD><CODE>A -&gt; Prep -&gt; Prep -&gt; A2V</CODE></TD>
-<TD>-</TD>
 </TR>
 </TABLE>
 
-<P></P>
 <A NAME="toc10"></A>
 <H1>Paradigms for Norwegian</H1>
 <P>
@@ -3940,302 +3506,242 @@ source <A HREF="../norwegian/ParadigmsNor.gf"><CODE>http://www.cs.chalmers.se/~a
 <TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
-<TH>Type</TH>
-<TH COLSPAN="2">Example</TH>
+<TH COLSPAN="2">Type</TH>
 </TR>
 <TR>
 <TD><CODE>Gender</CODE></TD>
 <TD><CODE>Type</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>masculine</CODE></TD>
 <TD><CODE>Gender</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>feminine</CODE></TD>
 <TD><CODE>Gender</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>neutrum</CODE></TD>
 <TD><CODE>Gender</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>Number</CODE></TD>
 <TD><CODE>Type</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>singular</CODE></TD>
 <TD><CODE>Number</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>plural</CODE></TD>
 <TD><CODE>Number</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>Case</CODE></TD>
 <TD><CODE>Type</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>nominative</CODE></TD>
 <TD><CODE>Case</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>genitive</CODE></TD>
 <TD><CODE>Case</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkPrep</CODE></TD>
 <TD><CODE>Str -&gt; Prep</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>noPrep</CODE></TD>
 <TD><CODE>Prep</CODE></TD>
-<TD><I>empty string</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkN</CODE></TD>
 <TD><CODE>Str -&gt; N</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkN</CODE></TD>
 <TD><CODE>Str -&gt; Gender -&gt; N</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkN</CODE></TD>
 <TD><CODE>(bil,bilen : Str) -&gt; N</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkN</CODE></TD>
 <TD><CODE>(dreng,drengen,drenger,drengene : Str) -&gt; N</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkN2</CODE></TD>
 <TD><CODE>N -&gt; Prep -&gt; N2</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>regN2</CODE></TD>
 <TD><CODE>Str -&gt; Gender -&gt; N2</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkN3</CODE></TD>
 <TD><CODE>N -&gt; Prep -&gt; Prep -&gt; N3</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkPN</CODE></TD>
 <TD><CODE>Str -&gt; PN</CODE></TD>
-<TD><I>masculine</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkPN</CODE></TD>
 <TD><CODE>Str -&gt; Gender -&gt; PN</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkPN</CODE></TD>
 <TD><CODE>N -&gt; PN</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkA</CODE></TD>
 <TD><CODE>(fin : Str) -&gt; A</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkA</CODE></TD>
 <TD><CODE>(fin,fint : Str) -&gt; A</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkA</CODE></TD>
 <TD><CODE>(galen,galet,galne : Str) -&gt; A</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkA</CODE></TD>
 <TD><CODE>(stor,stort,store,storre,storst : Str) -&gt; A</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkA</CODE></TD>
 <TD><CODE>A -&gt; A</CODE></TD>
-<TD><I>-/mer/mest norsk</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkA2</CODE></TD>
 <TD><CODE>A -&gt; Prep -&gt; A2</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkAdv</CODE></TD>
 <TD><CODE>Str -&gt; Adv</CODE></TD>
-<TD><I>e.g. her</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkAdV</CODE></TD>
 <TD><CODE>Str -&gt; AdV</CODE></TD>
-<TD><I>e.g. altid</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkAdA</CODE></TD>
 <TD><CODE>Str -&gt; AdA</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV</CODE></TD>
 <TD><CODE>(snakke : Str) -&gt; V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV</CODE></TD>
 <TD><CODE>(leve,levde : Str) -&gt; V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV</CODE></TD>
 <TD><CODE>(drikke, drakk, drukket : Str) -&gt; V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV</CODE></TD>
 <TD><CODE>(spise,spiser,spises,spiste,spist,spis : Str) -&gt; V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV</CODE></TD>
 <TD><CODE>V -&gt; Str -&gt; V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>vaereV</CODE></TD>
 <TD><CODE>V -&gt; V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>depV</CODE></TD>
 <TD><CODE>V -&gt; V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>reflV</CODE></TD>
 <TD><CODE>V -&gt; V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV2</CODE></TD>
 <TD><CODE>Str -&gt; V2</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV2</CODE></TD>
 <TD><CODE>V -&gt; V2</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV2</CODE></TD>
 <TD><CODE>V -&gt; Prep -&gt; V2</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV3</CODE></TD>
 <TD><CODE>V -&gt; Prep -&gt; Prep -&gt; V3</CODE></TD>
-<TD><I>snakke, med, om</I></TD>
 </TR>
 <TR>
 <TD><CODE>dirV3</CODE></TD>
 <TD><CODE>V -&gt; Prep -&gt; V3</CODE></TD>
-<TD><I>gi,_,til</I></TD>
 </TR>
 <TR>
 <TD><CODE>dirdirV3</CODE></TD>
 <TD><CODE>V -&gt; V3</CODE></TD>
-<TD><I>gi,_,_</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkV0</CODE></TD>
 <TD><CODE>V -&gt; V0</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkVS</CODE></TD>
 <TD><CODE>V -&gt; VS</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV2S</CODE></TD>
 <TD><CODE>V -&gt; Prep -&gt; V2S</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkVV</CODE></TD>
 <TD><CODE>V -&gt; VV</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV2V</CODE></TD>
 <TD><CODE>V -&gt; Prep -&gt; Prep -&gt; V2V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkVA</CODE></TD>
 <TD><CODE>V -&gt; VA</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV2A</CODE></TD>
 <TD><CODE>V -&gt; Prep -&gt; V2A</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkVQ</CODE></TD>
 <TD><CODE>V -&gt; VQ</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV2Q</CODE></TD>
 <TD><CODE>V -&gt; Prep -&gt; V2Q</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkAS</CODE></TD>
 <TD><CODE>A -&gt; AS</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkA2S</CODE></TD>
 <TD><CODE>A -&gt; Prep -&gt; A2S</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkAV</CODE></TD>
 <TD><CODE>A -&gt; AV</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkA2V</CODE></TD>
 <TD><CODE>A -&gt; Prep -&gt; A2V</CODE></TD>
-<TD>-</TD>
 </TR>
 </TABLE>
 
-<P></P>
 <A NAME="toc11"></A>
 <H1>Paradigms for Russian</H1>
 <P>
@@ -4244,297 +3750,238 @@ source <A HREF="../russian/ParadigmsRus.gf"><CODE>http://www.cs.chalmers.se/~aar
 <TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
-<TH>Type</TH>
-<TH COLSPAN="2">Example</TH>
+<TH COLSPAN="2">Type</TH>
 </TR>
 <TR>
 <TD><CODE>Gender</CODE></TD>
 <TD><CODE>Type</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>masculine</CODE></TD>
 <TD><CODE>Gender</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>feminine</CODE></TD>
 <TD><CODE>Gender</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>neuter</CODE></TD>
 <TD><CODE>Gender</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>Case</CODE></TD>
 <TD><CODE>Type</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>nominative</CODE></TD>
 <TD><CODE>Case</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>genitive</CODE></TD>
 <TD><CODE>Case</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>dative</CODE></TD>
 <TD><CODE>Case</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>accusative</CODE></TD>
 <TD><CODE>Case</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>instructive</CODE></TD>
 <TD><CODE>Case</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>prepositional</CODE></TD>
 <TD><CODE>Case</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>Number</CODE></TD>
 <TD><CODE>Type</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>singular</CODE></TD>
 <TD><CODE>Number</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>plural</CODE></TD>
 <TD><CODE>Number</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkN</CODE></TD>
 <TD><CODE>Str -&gt; N</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkN</CODE></TD>
 <TD><CODE>Str -&gt; Gender -&gt; Animacy -&gt; N</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkN</CODE></TD>
 <TD><CODE>(nomSg,_,_,_,_,_,_,_,_,_,_,prepPl : Str) -&gt; Gender -&gt; Animacy -&gt; N</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>nMashina</CODE></TD>
 <TD><CODE>Str -&gt; N</CODE></TD>
-<TD><I>feminine, inanimate, ending with "-а", Inst -"машин-ой"</I></TD>
 </TR>
 <TR>
 <TD><CODE>nEdinica</CODE></TD>
 <TD><CODE>Str -&gt; N</CODE></TD>
-<TD><I>feminine, inanimate, ending with "-а", Inst -"единиц-ей"</I></TD>
 </TR>
 <TR>
 <TD><CODE>nZhenchina</CODE></TD>
 <TD><CODE>Str -&gt; N</CODE></TD>
-<TD><I>feminine, animate, ending with "-a"</I></TD>
 </TR>
 <TR>
 <TD><CODE>nNoga</CODE></TD>
 <TD><CODE>Str -&gt; N</CODE></TD>
-<TD><I>feminine, inanimate, ending with "г_к_х-a"</I></TD>
 </TR>
 <TR>
 <TD><CODE>nMalyariya</CODE></TD>
 <TD><CODE>Str -&gt; N</CODE></TD>
-<TD><I>feminine, inanimate, ending with "-ия"</I></TD>
 </TR>
 <TR>
 <TD><CODE>nTetya</CODE></TD>
 <TD><CODE>Str -&gt; N</CODE></TD>
-<TD><I>feminine, animate, ending with "-я"</I></TD>
 </TR>
 <TR>
 <TD><CODE>nBol</CODE></TD>
 <TD><CODE>Str -&gt; N</CODE></TD>
-<TD><I>feminine, inanimate, ending with "-ь"(soft sign)</I></TD>
 </TR>
 <TR>
 <TD><CODE>nObezbolivauchee</CODE></TD>
 <TD><CODE>Str -&gt; N</CODE></TD>
-<TD><I>neutral, inanimate, ending with "-ee"</I></TD>
 </TR>
 <TR>
 <TD><CODE>nProizvedenie</CODE></TD>
 <TD><CODE>Str -&gt; N</CODE></TD>
-<TD><I>neutral, inanimate, ending with "-e"</I></TD>
 </TR>
 <TR>
 <TD><CODE>nChislo</CODE></TD>
 <TD><CODE>Str -&gt; N</CODE></TD>
-<TD><I>neutral, inanimate, ending with "-o"</I></TD>
 </TR>
 <TR>
 <TD><CODE>nZhivotnoe</CODE></TD>
 <TD><CODE>Str -&gt; N</CODE></TD>
-<TD><I>masculine, inanimate, ending with "-ень"</I></TD>
 </TR>
 <TR>
 <TD><CODE>nPepel</CODE></TD>
 <TD><CODE>Str -&gt; N</CODE></TD>
-<TD><I>masculine, inanimate, ending with "-ел"- "пеп-ла"</I></TD>
 </TR>
 <TR>
 <TD><CODE>nMalush</CODE></TD>
 <TD><CODE>Str -&gt; N</CODE></TD>
-<TD><I>малышей</I></TD>
 </TR>
 <TR>
 <TD><CODE>nPotolok</CODE></TD>
 <TD><CODE>Str -&gt; N</CODE></TD>
-<TD><I>потол-ок - потол-ка</I></TD>
 </TR>
 <TR>
 <TD><CODE>nStomatolog</CODE></TD>
 <TD><CODE>Str -&gt; N</CODE></TD>
-<TD><I>same as above, but animate</I></TD>
 </TR>
 <TR>
 <TD><CODE>nAdres</CODE></TD>
 <TD><CODE>Str -&gt; N</CODE></TD>
-<TD><I>адрес-а (Nom=Acc)</I></TD>
 </TR>
 <TR>
 <TD><CODE>nTelefon</CODE></TD>
 <TD><CODE>Str -&gt; N</CODE></TD>
-<TD><I>телефон-ы (Nom=Acc)</I></TD>
 </TR>
 <TR>
 <TD><CODE>nNol</CODE></TD>
 <TD><CODE>Str -&gt; N</CODE></TD>
-<TD><I>masculine, inanimate, ending with "-ь" (soft sign)</I></TD>
 </TR>
 <TR>
 <TD><CODE>nUroven</CODE></TD>
 <TD><CODE>Str -&gt; N</CODE></TD>
-<TD><I>masculine, inanimate, ending with "-ень"</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkFun</CODE></TD>
 <TD><CODE>N -&gt; Prep -&gt; N2</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkN2</CODE></TD>
 <TD><CODE>N -&gt; N2</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkN3</CODE></TD>
 <TD><CODE>N -&gt; Prep -&gt; Prep -&gt; N3</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkPN</CODE></TD>
 <TD><CODE>Str -&gt; PN</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkPN</CODE></TD>
 <TD><CODE>Str -&gt; Gender -&gt; Animacy -&gt; PN</CODE></TD>
-<TD><I>"Иван", "Маша"</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkPN</CODE></TD>
 <TD><CODE>N -&gt; PN</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkA</CODE></TD>
 <TD><CODE>Str -&gt; A</CODE></TD>
-<TD><I>khaki, mini, hindi, netto</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkA</CODE></TD>
 <TD><CODE>Str -&gt; Str -&gt; A</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>AStaruyj</CODE></TD>
 <TD><CODE>Str -&gt; Str -&gt; A</CODE></TD>
-<TD><I>ending with "-ый"</I></TD>
 </TR>
 <TR>
 <TD><CODE>AMalenkij</CODE></TD>
 <TD><CODE>Str -&gt; Str -&gt; A</CODE></TD>
-<TD><I>ending with "-ий", Gen - "маленьк-ого"</I></TD>
 </TR>
 <TR>
 <TD><CODE>AKhoroshij</CODE></TD>
 <TD><CODE>Str -&gt; Str -&gt; A</CODE></TD>
-<TD><I>ending with "-ий", Gen - "хорош-его"</I></TD>
 </TR>
 <TR>
 <TD><CODE>AMolodoj</CODE></TD>
 <TD><CODE>Str -&gt; Str -&gt; A</CODE></TD>
-<TD><I>ending with "-ой",</I></TD>
 </TR>
 <TR>
 <TD><CODE>AKakoj_Nibud</CODE></TD>
 <TD><CODE>Str -&gt; Str -&gt; Str -&gt; A</CODE></TD>
-<TD><I>ending with "-ой",</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkA2</CODE></TD>
 <TD><CODE>A -&gt; Str -&gt; Case -&gt; A2</CODE></TD>
-<TD><I>"делим на"</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkAdv</CODE></TD>
 <TD><CODE>Str -&gt; Adv</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV</CODE></TD>
 <TD><CODE>Aspect -&gt; Conjugation -&gt; (stemPrsSgP1,endPrsSgP1,pastSgP1,imp,inf : Str) -&gt; V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV</CODE></TD>
 <TD><CODE>Aspect -&gt; (presSgP1,presSgP2,presSgP3,presPlP1,presPlP2,presPlP3,pastSgMasc,imp,inf: Str) -&gt; V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV2</CODE></TD>
 <TD><CODE>V -&gt; V2</CODE></TD>
-<TD><I>"видеть", "любить"</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkV2</CODE></TD>
 <TD><CODE>V -&gt; Str -&gt; Case -&gt; V2</CODE></TD>
-<TD><I>"войти в дом"; "в", accusative</I></TD>
 </TR>
 <TR>
 <TD><CODE>tvDirDir</CODE></TD>
 <TD><CODE>V -&gt; V3</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV3</CODE></TD>
 <TD><CODE>V -&gt; Str -&gt; Str -&gt; Case -&gt; Case -&gt; V3</CODE></TD>
-<TD><I>"сложить письмо в конверт"</I></TD>
 </TR>
 </TABLE>
 
-<P></P>
 <A NAME="toc12"></A>
 <H1>Paradigms for Spanish</H1>
 <P>
@@ -4543,292 +3990,234 @@ source <A HREF="../spanish/ParadigmsSpa.gf"><CODE>http://www.cs.chalmers.se/~aar
 <TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
-<TH>Type</TH>
-<TH COLSPAN="2">Example</TH>
+<TH COLSPAN="2">Type</TH>
 </TR>
 <TR>
 <TD><CODE>Gender</CODE></TD>
 <TD><CODE>Type</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>masculine</CODE></TD>
 <TD><CODE>Gender</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>feminine</CODE></TD>
 <TD><CODE>Gender</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>Number</CODE></TD>
 <TD><CODE>Type</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>singular</CODE></TD>
 <TD><CODE>Number</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>plural</CODE></TD>
 <TD><CODE>Number</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>Prep</CODE></TD>
 <TD><CODE>Type</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>accusative</CODE></TD>
 <TD><CODE>Prep</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>genitive</CODE></TD>
 <TD><CODE>Prep</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>dative</CODE></TD>
 <TD><CODE>Prep</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkPrep</CODE></TD>
 <TD><CODE>Str -&gt; Prep</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkN</CODE></TD>
 <TD><CODE>(luz : Str) -&gt; N</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkN</CODE></TD>
 <TD><CODE>Str -&gt; Gender -&gt; N</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkN</CODE></TD>
 <TD><CODE>(baston,bastones : Str) -&gt; Gender -&gt; N</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>compN</CODE></TD>
 <TD><CODE>N -&gt; Str -&gt; N</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkN2</CODE></TD>
 <TD><CODE>N -&gt; Prep -&gt; N2</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>deN2</CODE></TD>
 <TD><CODE>N -&gt; N2</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>aN2</CODE></TD>
 <TD><CODE>N -&gt; N2</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkN3</CODE></TD>
 <TD><CODE>N -&gt; Prep -&gt; Prep -&gt; N3</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkPN</CODE></TD>
 <TD><CODE>(Anna : Str) -&gt; PN</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkPN</CODE></TD>
 <TD><CODE>(Pilar : Str) -&gt; Gender -&gt; PN</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkA</CODE></TD>
 <TD><CODE>(util : Str) -&gt; A</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkA</CODE></TD>
 <TD><CODE>(solo,sola,solos,solas,solamiento : Str) -&gt; A</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkA</CODE></TD>
 <TD><CODE>(bueno : A) -&gt; (mejor : A) -&gt; A</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>prefixA</CODE></TD>
 <TD><CODE>A -&gt; A</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkA2</CODE></TD>
 <TD><CODE>A -&gt; Prep -&gt; A2</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkAdv</CODE></TD>
 <TD><CODE>Str -&gt; Adv</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkAdV</CODE></TD>
 <TD><CODE>Str -&gt; AdV</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkAdA</CODE></TD>
 <TD><CODE>Str -&gt; AdA</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV</CODE></TD>
 <TD><CODE>(pagar : Str) -&gt; V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV</CODE></TD>
 <TD><CODE>(mostrar,muestro : Str) -&gt; V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV</CODE></TD>
 <TD><CODE>Verbum -&gt; V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>reflV</CODE></TD>
 <TD><CODE>V -&gt; V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>special_ppV</CODE></TD>
 <TD><CODE>V -&gt; Str -&gt; V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV2</CODE></TD>
 <TD><CODE>Str -&gt; V2</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV2</CODE></TD>
 <TD><CODE>V -&gt; V2</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV2</CODE></TD>
 <TD><CODE>V -&gt; Prep -&gt; V2</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>v2V</CODE></TD>
 <TD><CODE>V2 -&gt; V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV3</CODE></TD>
 <TD><CODE>V -&gt; Prep -&gt; Prep -&gt; V3</CODE></TD>
-<TD><I>hablar, a, di</I></TD>
 </TR>
 <TR>
 <TD><CODE>dirV3</CODE></TD>
 <TD><CODE>V -&gt; Prep -&gt; V3</CODE></TD>
-<TD><I>dar,(accusative),a</I></TD>
 </TR>
 <TR>
 <TD><CODE>dirdirV3</CODE></TD>
 <TD><CODE>V -&gt; V3</CODE></TD>
-<TD><I>dar,(dative),(accusative)</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkV0</CODE></TD>
 <TD><CODE>V -&gt; V0</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkVS</CODE></TD>
 <TD><CODE>V -&gt; VS</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV2S</CODE></TD>
 <TD><CODE>V -&gt; Prep -&gt; V2S</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkVV</CODE></TD>
 <TD><CODE>V -&gt; VV</CODE></TD>
-<TD><I>plain infinitive: "quiero hablar"</I></TD>
 </TR>
 <TR>
 <TD><CODE>deVV</CODE></TD>
 <TD><CODE>V -&gt; VV</CODE></TD>
-<TD><I>"terminar de hablar"</I></TD>
 </TR>
 <TR>
 <TD><CODE>aVV</CODE></TD>
 <TD><CODE>V -&gt; VV</CODE></TD>
-<TD><I>"aprender a hablar"</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkV2V</CODE></TD>
 <TD><CODE>V -&gt; Prep -&gt; Prep -&gt; V2V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkVA</CODE></TD>
 <TD><CODE>V -&gt; VA</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV2A</CODE></TD>
 <TD><CODE>V -&gt; Prep -&gt; Prep -&gt; V2A</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkVQ</CODE></TD>
 <TD><CODE>V -&gt; VQ</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV2Q</CODE></TD>
 <TD><CODE>V -&gt; Prep -&gt; V2Q</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkAS</CODE></TD>
 <TD><CODE>A -&gt; AS</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkA2S</CODE></TD>
 <TD><CODE>A -&gt; Prep -&gt; A2S</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkAV</CODE></TD>
 <TD><CODE>A -&gt; Prep -&gt; AV</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkA2V</CODE></TD>
 <TD><CODE>A -&gt; Prep -&gt; Prep -&gt; A2V</CODE></TD>
-<TD>-</TD>
 </TR>
 </TABLE>
 
-<P></P>
 <A NAME="toc13"></A>
 <H1>Paradigms for Swedish</H1>
 <P>
@@ -4837,297 +4226,238 @@ source <A HREF="../swedish/ParadigmsSwe.gf"><CODE>http://www.cs.chalmers.se/~aar
 <TABLE CELLPADDING="4" BORDER="1">
 <TR>
 <TH>Function</TH>
-<TH>Type</TH>
-<TH COLSPAN="2">Example</TH>
+<TH COLSPAN="2">Type</TH>
 </TR>
 <TR>
 <TD><CODE>Gender</CODE></TD>
 <TD><CODE>Type</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>utrum</CODE></TD>
 <TD><CODE>Gender</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>neutrum</CODE></TD>
 <TD><CODE>Gender</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>Number</CODE></TD>
 <TD><CODE>Type</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>singular</CODE></TD>
 <TD><CODE>Number</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>plural</CODE></TD>
 <TD><CODE>Number</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>Case</CODE></TD>
 <TD><CODE>Type</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>nominative</CODE></TD>
 <TD><CODE>Case</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>genitive</CODE></TD>
 <TD><CODE>Case</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkPrep</CODE></TD>
 <TD><CODE>Str -&gt; Prep</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>noPrep</CODE></TD>
 <TD><CODE>Prep</CODE></TD>
-<TD><I>empty string</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkN</CODE></TD>
 <TD><CODE>(apa : Str) -&gt; N</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkN</CODE></TD>
 <TD><CODE>(lik : Str) -&gt; Gender -&gt; N</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkN</CODE></TD>
 <TD><CODE>(nyckel,nycklar : Str) -&gt; N</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkN</CODE></TD>
 <TD><CODE>(museum,museet,museer,museerna : Str) -&gt; N</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkN2</CODE></TD>
 <TD><CODE>Str -&gt; N2</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkN2</CODE></TD>
 <TD><CODE>N -&gt; Prep -&gt; N2</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkN3</CODE></TD>
 <TD><CODE>N -&gt; Prep -&gt; Prep -&gt; N3</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkPN</CODE></TD>
 <TD><CODE>Str -&gt; PN</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkPN</CODE></TD>
 <TD><CODE>Str -&gt; Gender -&gt; PN</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkPN</CODE></TD>
 <TD><CODE>(jesus,jesu : Str) -&gt; Gender -&gt; PN</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkA</CODE></TD>
 <TD><CODE>(billig : Str) -&gt; A</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkA</CODE></TD>
 <TD><CODE>(bred,brett : Str) -&gt; A</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkA</CODE></TD>
 <TD><CODE>(tung,tyngre,tyngst : Str) -&gt; A</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkA</CODE></TD>
 <TD><CODE>(god,gott,goda,battre,bast : Str) -&gt; A</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkA</CODE></TD>
 <TD><CODE>(liten,litet,lilla,sma,mindre,minst,minsta : Str) -&gt; A</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>compoundA</CODE></TD>
 <TD><CODE>A -&gt; A</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkA2</CODE></TD>
 <TD><CODE>A -&gt; Prep -&gt; A2</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkAdv</CODE></TD>
 <TD><CODE>Str -&gt; Adv</CODE></TD>
-<TD><I>h�r</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkAdV</CODE></TD>
 <TD><CODE>Str -&gt; AdV</CODE></TD>
-<TD><I>alltid</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkAdA</CODE></TD>
 <TD><CODE>Str -&gt; AdA</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV</CODE></TD>
 <TD><CODE>(st�mmer : Str) -&gt; V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV</CODE></TD>
 <TD><CODE>(dricka,drack,druckit : Str) -&gt; V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV</CODE></TD>
 <TD><CODE>(g�,g�r,g�,gick,g�tt,g�ngen : Str) -&gt; V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV</CODE></TD>
 <TD><CODE>V -&gt; Str -&gt; V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>depV</CODE></TD>
 <TD><CODE>V -&gt; V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>reflV</CODE></TD>
 <TD><CODE>V -&gt; V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV2</CODE></TD>
 <TD><CODE>Str -&gt; V2</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV2</CODE></TD>
 <TD><CODE>V -&gt; V2</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV2</CODE></TD>
 <TD><CODE>V -&gt; Prep -&gt; V2</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV3</CODE></TD>
 <TD><CODE>Str -&gt; V3</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV3</CODE></TD>
 <TD><CODE>V -&gt; V3</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV3</CODE></TD>
 <TD><CODE>V -&gt; Prep -&gt; V3</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV3</CODE></TD>
 <TD><CODE>V -&gt; Prep -&gt; Prep -&gt; V3</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV0</CODE></TD>
 <TD><CODE>V -&gt; V0</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkVS</CODE></TD>
 <TD><CODE>V -&gt; VS</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV2S</CODE></TD>
 <TD><CODE>V -&gt; Prep -&gt; V2S</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkVV</CODE></TD>
 <TD><CODE>V -&gt; VV</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV2V</CODE></TD>
 <TD><CODE>V -&gt; Prep -&gt; Prep -&gt; V2V</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkVA</CODE></TD>
 <TD><CODE>V -&gt; VA</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV2A</CODE></TD>
 <TD><CODE>V -&gt; Prep -&gt; V2A</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkVQ</CODE></TD>
 <TD><CODE>V -&gt; VQ</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkV2Q</CODE></TD>
 <TD><CODE>V -&gt; Prep -&gt; V2Q</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkAS</CODE></TD>
 <TD><CODE>A -&gt; AS</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkA2S</CODE></TD>
 <TD><CODE>A -&gt; Prep -&gt; A2S</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkAV</CODE></TD>
 <TD><CODE>A -&gt; AV</CODE></TD>
-<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkA2V</CODE></TD>
 <TD><CODE>A -&gt; Prep -&gt; A2V</CODE></TD>
-<TD>-</TD>
 </TR>
 </TABLE>
 
-<P></P>
 <A NAME="toc14"></A>
 <H1>Browsing the libraries with GF commands</H1>
 <P>
@@ -5223,6 +4553,6 @@ For each language, an instantiation of the functor:
 </PRE>
 <P></P>
 
-<!-- html code generated by txt2tags 2.3 (http://txt2tags.sf.net) -->
+<!-- html code generated by txt2tags 2.4 (http://txt2tags.sf.net) -->
 <!-- cmdline: txt2tags -thtml -\-toc synopsis.txt -->
 </BODY></HTML>
