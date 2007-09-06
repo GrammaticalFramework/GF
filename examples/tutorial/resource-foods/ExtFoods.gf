@@ -3,25 +3,26 @@ abstract ExtFoods = Foods ** {
   flags startcat=Move ;
 
   cat
-    Move ;
-    Verb ;
-    Guest ;
-    GuestKind ;
+    Move ;      -- declarative, question, or imperative
+    Verb ;      -- transitive verb
+    Guest ;     -- guest in restaurant
+    GuestKind ; -- type of guest
 
   fun
-    MAssert : Phrase -> Move ;    
-    MDeny : Phrase -> Move ;    
-    MAsk : Phrase -> Move ;
+    MAssert : Phrase -> Move ;  -- This pizza is warm.
+    MDeny : Phrase -> Move ;    -- This pizza isn't warm.
+    MAsk : Phrase -> Move ;     -- Is this pizza warm?
 
-    PVerb : Guest -> Verb -> Item -> Phrase ;
-    PVerbWant : Guest -> Verb -> Item -> Phrase ;
+    PVerb : Guest -> Verb -> Item -> Phrase ;     -- we eat this pizza
+    PVerbWant : Guest -> Verb -> Item -> Phrase ; -- we want to eat this pizza
 
-    WhichVerb : Kind -> Guest -> Verb -> Move ;
+    WhichVerb : Kind -> Guest -> Verb -> Move ; -- Which pizza do you eat?
     WhichVerbWant : Kind -> Guest -> Verb -> Move ;
-    WhichIs : Kind -> Quality -> Move ;
+                                        -- Which pizza do you want to eat?
+    WhichIs : Kind -> Quality -> Move ; -- Which wine is Italian? 
 
-    Do : Verb -> Item -> Move ;
-    DoPlease : Verb -> Item -> Move ;
+    Do : Verb -> Item -> Move ;       -- Pay this wine!
+    DoPlease : Verb -> Item -> Move ; -- Pay this wine please!
 
     I, You, We : Guest ;
 

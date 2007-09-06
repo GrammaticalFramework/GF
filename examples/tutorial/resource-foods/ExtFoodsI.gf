@@ -6,7 +6,7 @@ incomplete concrete ExtFoodsI of ExtFoods = FoodsI ** open Syntax, LexFoods in {
     Move = Text ;
     Verb = V2 ;
     Guest = NP ;
-    GuestKind = N ;
+    GuestKind = CN ;
   lin
     MAssert p = mkText (mkS p) ;
     MDeny p = mkText (mkS negativePol p) ;
@@ -43,7 +43,7 @@ incomplete concrete ExtFoodsI of ExtFoods = FoodsI ** open Syntax, LexFoods in {
     Eat = eat_V2 ;
     Drink = drink_V2 ;
     Pay = pay_V2 ;
-    Lady = lady_N ;
-    Gentleman = gentleman_N ;
+    Lady = mkCN lady_N ;
+    Gentleman = mkCN gentleman_N ;
 
 }
