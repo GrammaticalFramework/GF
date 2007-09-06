@@ -2,12 +2,12 @@
 
 incomplete concrete FoodsI of Foods = open Syntax, LexFoods in {
   lincat
-    Phrase = Utt ; 
+    Phrase = Cl ; 
     Item = NP ;
     Kind = CN ;
     Quality = AP ;
   lin
-    Is item quality = mkUtt (mkCl item quality) ;
+    Is item quality = mkCl item quality ;
     This kind = mkNP this_QuantSg kind ;
     That kind = mkNP that_QuantSg kind ;
     These kind = mkNP these_QuantPl kind ;

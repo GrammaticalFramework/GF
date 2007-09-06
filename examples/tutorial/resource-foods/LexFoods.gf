@@ -10,4 +10,10 @@ interface LexFoods = open Syntax in {
     expensive_A : A ;
     delicious_A : A ;
     boring_A : A ;
+
+    eat_V2 : V2 ;
+    drink_V2 : V2 ;
+    pay_V2 : V2 ;
+    lady_N : N ;
+    gentleman_N : N ;
 }
