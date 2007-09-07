@@ -1,6 +1,6 @@
 digraph {
 
-size = "12,8" ;
+size = "11,11" ;
 
 Text [style = "solid", shape = "ellipse"];
 Text -> Punct  [style = "solid"];

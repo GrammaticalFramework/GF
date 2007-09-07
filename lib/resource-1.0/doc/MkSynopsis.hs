@@ -127,7 +127,8 @@ mkCatTable isBeg rs =
   (if isBeg then ("|| Category  | Explanation  | Example  ||" :) else id) 
     (map mk1 rs) 
  where
-  mk1 (name,typ,ex) = unwords ["|", ttf name, "|", typ, "|", ex, "|"]
+  mk1 (name,typ,ex) = unwords ["|", ttf name, "|", typ, "|", typo ex, "|"]
+  typo ex = if take 1 ex == "\"" then itf (init (tail ex)) else ex
 
 synopsis = "synopsis.txt"
 commonAPI = "../abstract/Common.gf"
