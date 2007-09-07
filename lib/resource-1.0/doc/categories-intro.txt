@@ -1,0 +1,17 @@
+
+
+
+The chart below shows the categories in a hierarchical top-down order.
+The edges do not define the complete dependency structure; if they did,
+the graph would have many many more edges, and also many cycles. The precise
+meaning of a directed edge from //C// to //D// is: there is a constructor
+of //C// that takes //D// as an argument. What the constructors exactly are,
+and what other arguments they take, is described by separate tables for
+each category.
+
+ |  [categories.png] |
+
+The rectangular boxes mark open lexical categories, which have constructors
+also in the ``Paradigms`` modules.
+
+

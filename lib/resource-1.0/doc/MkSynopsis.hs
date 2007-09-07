@@ -20,14 +20,17 @@ main = do
   cs1 <- getCats isLatex True  commonAPI
   cs2 <- getCats isLatex False catAPI
   let cs = cs1 ++ cs2
-  delimit cs
+  append "==A hierarchic view==\n"
+  include "categories-intro.txt"
+  append "==Explanations==\n"
+  delimit $ reCat cs
   space
   title "Syntax Rules"
   space
   link "Source:" syntaxAPI
   space
   rs <- getRules True isLatex syntaxAPI
-  delimit rs
+  delimit $ reTable rs
   space
   title "Structural Words"
   space
@@ -154,3 +157,44 @@ link s f = append $ s ++ " [``" ++ fa ++ "`` " ++ f ++ "]" where
 
 ttf s = "``" ++ s ++ "``"
 itf s = "//" ++ s ++ "//"
+
+-----------------
+
+-- sort category synopsis by category, retain one table
+
+reCat t = let (hd,tb) = splitHeader t in hd : sortCat tb
+
+sortCat = sortBy (\r s -> compare (cat r) (cat s)) where
+  cat r = unquote $ words r !! 1
+
+unquote = takeWhile (/='`') . dropWhile (=='`')
+
+-- sort function synopsis by category, into separate tables
+
+-- table:
+-- || Function  | Type  | Example  ||
+-- | ``mkText`` | ``Phr -> Text`` | //But John walks.// |
+
+reTable t = let (hd,tb) = splitHeader t in sortTable hd tb
+
+splitHeader (hd:tb) = (hd,tb)
+
+sortTable hd = map (printBack hd) . sortVal . groupVal
+
+groupVal = groupBy sameVal where
+  sameVal r1 r2 = valRow r1 == valRow r2
+
+-- row: | ``mkText`` | ``Phr -> Text`` | //But John walks.// |
+valRow r = case words r of
+  "|":_:"|":rest -> val where
+    typ = takeWhile (/="|") rest
+    val = unquote $ last typ
+  _ -> error "no row value for: " ++ r
+
+sortVal = sortBy (\t u -> compare (hd t) (hd u)) where
+  hd = (valRow . head)
+
+printBack hd tb = unlines $ subtitle (valRow (head tb)) : "\n" : [hd] ++ tb
+
+subtitle cat = "==" ++ cat ++ "=="
+
