@@ -357,7 +357,7 @@ incomplete resource Constructors = open Grammar in {
       mkNP : Num     -> N  -> NP ;       -- 11. almost twenty men
       mkNP : Num     -> CN -> NP ;       -- 12. almost twenty old men
       mkNP : Pron    -> N  -> NP ;       -- 13. my man
-      mkNP : Pron    -> CN -> NP;        -- 14. my old man
+      mkNP : Pron    -> CN -> NP ;       -- 14. my old man
 
 -- Proper names and pronouns can be used as noun phrases.
 
