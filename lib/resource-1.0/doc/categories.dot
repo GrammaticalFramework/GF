@@ -43,7 +43,8 @@ Cl -> VP [style = "solid"];
 Cl -> Adv [style = "solid"];
 
 Adv [style = "solid", shape = "rectangle"];
-Adv -> ListAdv [style = "solid"];
+Adv -> Subj [style = "solid"];
+Adv -> ListAdj [style = "solid"];
 
 
 NP [style = "solid", shape = "ellipse"];
