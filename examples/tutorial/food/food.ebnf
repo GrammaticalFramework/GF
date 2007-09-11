@@ -1,0 +1,4 @@
+Phrase  ::= 
+  ("this" | "that") Quality* ("wine" | "cheese" | "fish") "is" Quality ;
+Quality ::= 
+  ("very"* ("fresh" | "warm" | "boring" | "Italian" | "expensive")) ;
