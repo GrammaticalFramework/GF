@@ -49,7 +49,7 @@ Building of Gothenburg University ("Humanisten").
 
 
 The structure of each lecture will be the following:
-- ca. 70h lecture, going through the book
+- ca. 70min lecture, going through the book
 - ca. 20min work on computer, individually or in pairs
 
 
