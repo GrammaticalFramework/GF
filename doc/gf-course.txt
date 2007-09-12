@@ -42,15 +42,15 @@ Building of Gothenburg University ("Humanisten").
 
 || Time            | Subject      | Assignment                       ||
 | Thu 8.00-9.30    | Chapters 1-3 | Hello and Food in a new language  |
-| Thu 10.00-11.30  | Chapter 4    | Foods in a new language           |
-| Thu 13.00-14.30  | Chapter 5    | ExtFoods in a new language        |
-| Thu 15.00-16.30  | Chapters 6-7 | straight code compiler            |
+| Thu 10.00-11.30  | Chapters 3-4 | Foods in a new language           |
+| Thu 13.15-14.45  | Chapter 5    | ExtFoods in a new language        |
+| Thu 15.15-16.45  | Chapters 6-7 | straight code compiler            |
 | Fri  8.00-9.30   | Chapters 8   | application in Haskell or Java    |
 
 
 The structure of each lecture will be the following:
-- ca. 70min lecture, going through the book
-- ca. 20min work on computer, individually or in pairs
+- ca. 75min lecture, going through the book
+- ca. 15min work on computer, individually or in pairs
 
 
 In order for this to work out, it is important that enough many
