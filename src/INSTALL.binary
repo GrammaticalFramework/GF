@@ -2,9 +2,13 @@ Installing a binary GF distribution:
 
 1. Untar the distribution file:
 
-   $ gtar -zxf GF-2.0-[host].tar.gz
+   $ gtar -zxf GF-2.8-[host].tar.gz
 
-2. Run configure:
+2. Go to the created directory:
+
+   $ cd GF-2.8-[host]
+
+3. Run configure:
 
    $ ./configure
 
@@ -13,6 +17,22 @@ Installing a binary GF distribution:
 
    $ ./configure --prefix=/usr
 
-3. Install:
+4. Install:
 
    $ make install
+
+If the above procedure should fail (e.g. you don't have "make" available), you
+can do a manual install:
+
+  1. Untar the package and go to the GF directory, as 1-2 above.
+
+  2. The executable is the file "gf". You may want to move it somewhere
+     else, e.g. /usr/local/bin
+
+  3. The libraries are in the subdirectory "lib/". It is recommended to
+     create an environment variable GF_LIB_PATH pointing to that directory.
+     In the bash shell, you do
+
+     $ export GF_LIB_PATH=[your gf directory]/lib
+
+

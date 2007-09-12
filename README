@@ -19,13 +19,16 @@ generic grammar processor performs various tasks with the grammars:
     * random generation
     * syntax editing 
 
-GF particularly addresses two aspects of grammars:
+GF particularly addresses four aspects of grammars:
 
     * multilinguality (parallel grammars for different languages)
     * semantics (semantic conditions of well-formedness, semantic 
       properties of expressions) 
+    * grammar engineering (modularity, abstractions, libraries)
+    * embeddability in programs written in other languages (C,C++,
+      Haskell, Java, JavaScript)
 
+INSTALLATION of binary distribution: see INSTALL
 
-INSTALLATION
-
+INSTALLATION of source distribution:
 See src/INSTALL for installation instructions.
