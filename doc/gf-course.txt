@@ -19,6 +19,13 @@ Autumn Term 2007.
 
 =News=
 
+12/8 The course starts tomorrow at 8.00. A detailed plan for the day is
+right below. Don't forget to
+- join the mailing list (send a mail to ``gf-subscribe at gslt hum gu se``)
+- install GF on your laptops from [here ../download.html]
+- take with you a copy of the book (as sent to the mailing list yesterday)
+
+
 31/8 Revised the description of the one- and five-point variants.
 
 21/8 Course mailing list started. 
@@ -29,6 +36,29 @@ are just removed, and the word itself is replaced by the at symbol).
 20/8/2007 [Schedule http://www.gslt.hum.gu.se/courses/schedule.html].
 The course will start on Thursday 13 September in Room C430 at the Humanities
 Building of Gothenburg University ("Humanisten").
+
+
+=Plan=
+
+|| Time            | Subject      | Assignment                       ||
+| Thu 8.00-9.30    | Chapters 1-3 | Hello and Food in a new language  |
+| Thu 10.00-11.30  | Chapter 4    | Foods in a new language           |
+| Thu 13.00-14.30  | Chapter 5    | ExtFoods in a new language        |
+| Thu 15.00-16.30  | Chapters 6-7 | straight code compiler            |
+| Fri  8.00-9.30   | Chapters 8   | application in Haskell or Java    |
+
+
+The structure of each lecture will be the following:
+- ca. 70h lecture, going through the book
+- ca. 20min work on computer, individually or in pairs
+
+
+In order for this to work out, it is important that enough many
+have a working GF installation, including the directory
+[``examples/tutorial`` ../examples/tutorial]. This directory is
+included in the Darcs version, as well as in the updated binary
+packages from 12 September.
+
 
 
 =Purpose=
@@ -68,9 +98,12 @@ The first module goes through the basics of GF, including
 - using embedded grammars as components of software systems
 
 
-The lectures follow the
-[GF Tutorial http://www.cs.chalmers.se/~aarne/GF/doc/tutorial/gf-tutorial2.html].
-**There will be a new version of the Tutorial available around 10 September**.
+The lectures follow a draft of GF book. It contains a heavily updated
+version os the
+[GF Tutorial http://www.cs.chalmers.se/~aarne/GF/doc/tutorial/gf-tutorial2.html];
+thus the on-line tutorial is not adequate for this course. To get the course
+book, join the course mailing list.
+
 Those who just want to do the first module will write a simple application
 as their course work during and after the first intensive week.
 
