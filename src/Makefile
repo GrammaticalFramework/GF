@@ -62,7 +62,7 @@ endif
 
 .PHONY: all unix jar tags gfdoc windows install install-gf \
         lib temp install-gfdoc install-editor \
-        today help clean windows-msi
+        today help clean windows-msi dist
 
 all: unix gfdoc $(BUILD_JAR)
 

@@ -220,8 +220,12 @@ getImports ps = get [] where
   tryRead name = do
     file <- do
       let file_gf = gfFile name
-      b <- doesFileExistPath ps file_gf                   -- try gf file first
-      if b then return file_gf else return (gfcFile name) -- gfc next
+      b <- doesFileExistPath ps file_gf                 -- try gf file first
+      if b then return file_gf else do
+        let file_gfr = gfrFile name
+        bb <- doesFileExistPath ps file_gfr             -- gfr file next
+        if bb then return file_gfr else do
+          return (gfcFile name)                         -- gfc next
 
     readFileIfPath ps $ file
 
