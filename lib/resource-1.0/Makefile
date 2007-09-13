@@ -20,7 +20,10 @@ GFCCP=$(GFCC) -preproc=./mkPresent
 
 .PHONY: show-path all prelude test alltenses pretest langs present mathematical multimodal compiled treebank stat gfdoc clean api
 
-all: show-path prelude present alltenses mathematical api multimodal langs compiled
+all: chmod show-path prelude present alltenses mathematical api multimodal langs compiled
+
+chmod:
+	chmod a+x mkPresent
 
 show-path:
 	@echo GF_LIB_PATH=$(GF_LIB_PATH)
