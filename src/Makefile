@@ -64,7 +64,7 @@ endif
         lib temp install-gfdoc install-editor \
         today help clean windows-msi dist
 
-all: unix gfdoc $(BUILD_JAR)
+all: unix gfdoc $(BUILD_JAR) lib
 
 unix: today opt
 
