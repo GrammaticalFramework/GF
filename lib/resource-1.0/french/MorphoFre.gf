@@ -116,7 +116,7 @@ oper
 
   adjHeureux : Str -> Adj = \heureux ->
     let {heureu = Predef.tk 1 heureux} in 
-    mkAdj heureux (heureu+"s") (heureu+"se") (heureu+"sement") ;
+    mkAdj heureux heureux (heureu+"se") (heureu+"sement") ;
 
   adjBanal : Str -> Adj = \banal ->
     let {bana = Predef.tk 1 banal} in 
