@@ -72,8 +72,16 @@ putPoint' f opts msg act = do
   ve $ putCPU
   return a
 
-readFileIf :: String -> IO String
-readFileIf f = catch (readFile f) (\_ -> reportOn f) where
+readFileStrict :: String -> IO String
+readFileStrict f = do
+  s <- readFile f
+  return $ seq (length s) ()
+  return s
+
+readFileIf = readFileIfs readFile
+readFileIfStrict  = readFileIfs readFileStrict
+
+readFileIfs rf f = catch (rf f) (\_ -> reportOn f) where
  reportOn f = do
    putStrLnFlush ("File " ++ f ++ " does not exist. Returned empty string")
    return ""
@@ -94,15 +102,18 @@ getFilePath ps file = getFilePathMsg ("file" +++ file +++ "not found\n") ps file
 getFilePathMsg :: String -> [FilePath] -> String -> IO (Maybe FilePath)
 getFilePathMsg msg paths file = get paths where
   get []     = putStrFlush msg >> return Nothing
-  get (p:ps) = let pfile = prefixPathName p file in
-               catch (readFile pfile >> return (Just pfile)) (\_ -> get ps)
+  get (p:ps) = do
+    let pfile = prefixPathName p file
+    exist <- doesFileExist pfile
+    if exist then return (Just pfile) else get ps
+---               catch (readFileStrict pfile >> return (Just pfile)) (\_ -> get ps)
 
 readFileIfPath :: [FilePath] -> String -> IOE (FilePath,String)
 readFileIfPath paths file = do
   mpfile <- ioeIO $ getFilePath paths file
   case mpfile of
     Just pfile -> do
-      s <- ioeIO $ readFile pfile
+      s <- ioeIO $ readFileStrict pfile
       return (justInitPath pfile,s)
     _ -> ioeErr $ Bad ("File " ++ file ++ " does not exist.")
 
@@ -298,7 +309,7 @@ gfLibraryPath = "GF_LIB_PATH"
 
 -- ((do {s <- readFile f; return (return s)}) ) 
 readFileIOE :: FilePath -> IOE (String)
-readFileIOE f = ioe $ catch (readFile f >>= return . return)
+readFileIOE f = ioe $ catch (readFileStrict f >>= return . return)
                       (\_ -> return (Bad (reportOn f))) where
   reportOn f = "File " ++ f ++ " not found."
 
@@ -311,13 +322,13 @@ readFileIOE f = ioe $ catch (readFile f >>= return . return)
 -- FIXME: unix-specific, \/ is \\ on Windows
 readFileLibraryIOE :: String -> FilePath -> IOE (FilePath, String)
 readFileLibraryIOE ini f = 
-	ioe $ catch ((do {s <- readFile initPath; return (return (initPath,s))}))
+	ioe $ catch ((do {s <- readFileStrict initPath; return (return (initPath,s))}))
 	 (\_ -> tryLibrary ini f) where
 		tryLibrary :: String -> FilePath -> IO (Err (FilePath, String))
 		tryLibrary ini f = 
 			catch (do {
 				lp <- getLibPath; 
-				s <- readFile (lp ++ f);
+				s <- readFileStrict (lp ++ f);
 				return (return (lp ++ f, s))
 			}) (\_ -> return (Bad (reportOn f)))
 		initPath = addInitFilePath ini f
