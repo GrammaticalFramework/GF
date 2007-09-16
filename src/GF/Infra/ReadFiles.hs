@@ -304,6 +304,7 @@ getModuleHeader ws = case ws of
     ----  ((MTyOther,name),(m,MUInstance):(n,MUOther):[(n,MUComplete) | n <- ms])
     m:"with":ms -> ((MTyOther,name),(m,MUOther):[(n,MUComplete) | n <- ms])
     ms -> ((MTyOther,name),[(n,MUOther) | n <- ms])
+  _ -> error "the file is empty"
 
 unComm s = case s of
       '-':'-':cs -> unComm $ dropWhile (/='\n') cs
@@ -323,14 +324,14 @@ lexs s = x:xs where
 -- | options can be passed to the compiler by comments in @--#@, in the main file
 getOptionsFromFile ::  FilePath -> IO Options
 getOptionsFromFile file = do
-  s <- readFileIf file
+  s <- readFileIfStrict file
   let ls = filter (isPrefixOf "--#") $ lines s
   return $ fst $ getOptions "-" $ map (unwords . words . drop 3) ls
 
 -- | check if old GF file
 isOldFile :: FilePath -> IO Bool
 isOldFile f = do
-  s <- readFileIf f
+  s <- readFileIfStrict f
   let s' = unComm s
   return $ not (null s') && old (head (words s'))
  where

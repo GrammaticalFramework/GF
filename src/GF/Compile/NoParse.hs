@@ -38,9 +38,11 @@ getNoparseFromFile :: Options -> FilePath -> IO NoParse
 getNoparseFromFile opts file = do 
   let f = maybe file id $ getOptVal opts noparseFile
   s <- readFile f
-  return $ igns s
+  let tree = buildTree $ flip zip (repeat ()) $ concat $ map getIgnores $ lines s
+  tree `seq` return $ igns tree
  where
-   igns s i = isInBinTree i $ buildTree $ flip zip (repeat ()) $ concat $ map getIgnores $ lines s
+  igns tree i = isInBinTree i tree
+
 -- where
 getIgnores s = case dropWhile (/="--#") (words s) of
      _:"noparse":fs -> map identC fs
