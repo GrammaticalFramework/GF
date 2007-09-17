@@ -215,9 +215,13 @@ compileOne opts env@((_,srcgr,cancgr0,eenv),_) file = do
 
       --- hack fix to a bug in ReadFiles with reused concrete
 
-      b <- ioeIO $ doesFileExist file
-      if not b 
-        then compileOne opts env $ gfcFile $ unsuffixFile file
+      let modu = unsuffixFile file
+      b1 <- ioeIO $ doesFileExist file
+      b2 <- ioeIO $ doesFileExist $ gfrFile modu
+      if not b1
+        then if b2 
+          then compileOne opts env $ gfrFile $ modu 
+          else compileOne opts env $ gfcFile $ modu 
         else do
 
        sm0 <- putpOpt ("- parsing" +++ file) ("- compiling" +++ file ++ "... ") $ 
