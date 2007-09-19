@@ -133,14 +133,23 @@ convertTerm cnc_defs selector (FV vars)                      lins  = do term <- 
                                                                         convertTerm cnc_defs selector term lins
 convertTerm cnc_defs selector (S ts)       ((lbl_path,lin) : lins) = do projectHead lbl_path
                                                                         foldM (\lins t -> convertTerm cnc_defs selector t lins) ((lbl_path,lin) : lins) (reverse ts)
-convertTerm cnc_defs selector (KS str)     ((lbl_path,lin) : lins) = do projectHead lbl_path
-                                                                        return ((lbl_path,Tok str : lin) : lins)
-convertTerm cnc_defs selector (KP (str:_)_)((lbl_path,lin) : lins) = do projectHead lbl_path
-                                                                        return ((lbl_path,Tok str : lin) : lins)
+convertTerm cnc_defs selector (K (KS str))     ((lbl_path,lin) : lins) = 
+  do projectHead lbl_path
+     return ((lbl_path,Tok str : lin) : lins)
+convertTerm cnc_defs selector (K (KP (str:_)_))((lbl_path,lin) : lins) = 
+  do projectHead lbl_path
+     return ((lbl_path,Tok str : lin) : lins)
 convertTerm cnc_defs selector (RP _ term)                    lins  = convertTerm cnc_defs selector term lins
 convertTerm cnc_defs selector (F id)                         lins  = do term <- Map.lookup id cnc_defs
                                                                         convertTerm cnc_defs selector term lins
-convertTerm cnc_defs selector (W s ss)     ((lbl_path,lin) : lins) = convertRec cnc_defs selector 0 [KS (s ++ s1) | s1 <- ss] lbl_path lin lins
+convertTerm cnc_defs selector (W s t)     ((lbl_path,lin) : lins) = do
+  ss <- case t of
+    R ss -> return ss
+    F f -> do
+      t <- Map.lookup f cnc_defs 
+      case t of
+        R ss -> return ss
+  convertRec cnc_defs selector 0 [K (KS (s ++ s1)) | K (KS s1) <- ss] lbl_path lin lins
 convertTerm cnc_defs selector x lins  = error ("convertTerm ("++show x++")")
 
 

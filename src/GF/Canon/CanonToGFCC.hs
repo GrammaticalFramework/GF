@@ -12,7 +12,8 @@
 -- GFC to GFCC compiler. AR Aug-Oct 2006
 -----------------------------------------------------------------------------
 
-module GF.Canon.CanonToGFCC (prCanon2gfcc, mkCanon2gfcc) where
+module GF.Canon.CanonToGFCC (
+  prCanon2gfcc, mkCanon2gfcc, mkCanon2gfccNoUTF8) where
 
 import GF.Canon.AbsGFC
 import qualified GF.Canon.GFC as GFC
@@ -43,8 +44,13 @@ import Debug.Trace ----
 prCanon2gfcc :: CanonGrammar -> String
 prCanon2gfcc = Pr.printTree . mkCanon2gfcc
 
+-- this variant makes utf8 conversion; used in back ends
 mkCanon2gfcc :: CanonGrammar -> C.Grammar
 mkCanon2gfcc = canon2gfcc . reorder . utf8Conv . canon2canon . normalize
+
+-- this variant makes no utf8 conversion; used in ShellState
+mkCanon2gfccNoUTF8 :: CanonGrammar -> C.Grammar
+mkCanon2gfccNoUTF8 = canon2gfcc . reorder . canon2canon . normalize
 
 -- This is needed to reorganize the grammar. GFCC has its own back-end optimization.
 -- But we need to have the canonical order in tables, created by valOpt
@@ -82,7 +88,7 @@ mkType t = case GM.catSkeleton t of
 
 mkCType :: CType -> C.Term
 mkCType t = case t of
-  TInts i      -> C.C (fromInteger i)
+  TInts i      -> C.C $ fromInteger i
   -- record parameter alias - created in gfc preprocessing
   RecType [Lbg (L (IC "_")) i, Lbg (L (IC "__")) t] -> C.RP (mkCType i) (mkCType t)
   RecType rs     -> C.R [mkCType t | Lbg _ t <- rs]
@@ -90,13 +96,13 @@ mkCType t = case t of
   TStr     -> C.S []
  where
   getI pt = case pt of
-    C.C  i   -> i
+    C.C i -> i
     C.RP i _ -> getI i
 
 mkTerm :: Term -> C.Term
 mkTerm tr = case tr of
-  Arg (A _ i) -> C.V (fromInteger i)
-  EInt i      -> C.C (fromInteger i)
+  Arg (A _ i) -> C.V $ fromInteger i
+  EInt i      -> C.C $ fromInteger i
   -- record parameter alias - created in gfc preprocessing
   R [Ass (L (IC "_")) i, Ass (L (IC "__")) t] -> C.RP (mkTerm i) (mkTerm t)
   -- ordinary record
@@ -111,11 +117,11 @@ mkTerm tr = case tr of
   S t p    -> C.P (mkTerm t) (mkTerm p)
   C s t    -> C.S [mkTerm x | x <- [s,t]]
   FV ts    -> C.FV [mkTerm t | t <- ts]
-  K (KS s) -> C.KS s
-  K (KP ss _) -> C.KP ss [] ---- TODO: prefix variants
+  K (KS s) -> C.K (C.KS s)
+  K (KP ss _) -> C.K (C.KP ss []) ---- TODO: prefix variants
   E        -> C.S []
   Par _ _  -> prtTrace tr $ C.C 66661          ---- for debugging
-  _ -> C.S [C.KS (A.prt tr +++ "66662")]       ---- for debugging
+  _ -> C.S [C.K (C.KS (A.prt tr +++ "66662"))] ---- for debugging
  where
    mkLab (L (IC l)) = case l of
      '_':ds -> (read ds) :: Int
@@ -175,7 +181,7 @@ canon2canon :: CanonGrammar -> CanonGrammar
 canon2canon = recollect . map cl2cl . repartition where
   recollect = 
     M.MGrammar . nubBy (\ (i,_) (j,_) -> i==j) . concatMap M.modules
-  cl2cl cg = tr $ M.MGrammar $ map c2c $ M.modules cg where
+  cl2cl cg = {-tr $-} M.MGrammar $ map c2c $ M.modules cg where
     c2c (c,m) = case m of
       M.ModMod mo@(M.Module _ _ _ _ _ js) ->
         (c, M.ModMod $ M.replaceJudgements mo $ mapTree j2j js)
@@ -406,30 +412,24 @@ optConcrete defs = subex
 -- suffix sets can later be shared by subex elim
 
 optTerm :: C.Term -> C.Term  
-optTerm tr = 
-  case tr of
-    C.R ts  -> mkSuff ts
-    C.P t v -> C.P   (optTerm t) v
+optTerm tr = case tr of
+    C.R ts@(_:_:_) | all isK ts -> mkSuff $ optToks [s | C.K (C.KS s) <- ts]
+    C.R ts  -> C.R $ map optTerm ts
+    C.P t v -> C.P (optTerm t) v
     C.L x t -> C.L x (optTerm t)
-    tr      -> tr
-  where
-    mkSuff ts@(C.KS s : ts1@(_:_)) =
-      case pref s ts1 of
-        Nothing  -> C.R (map optTerm ts)
-        Just ""  -> C.R ts
-        Just prf -> let len = length prf
-                    in C.W prf [drop len s | C.KS s <- ts]
-      where
-        pref cand []     = Just cand
-        pref cand (t:ts) =
-          case t of
-            C.KS s -> pref (getPrefix cand s) ts
-            _      -> Nothing
-          where
-            getPrefix cand s
-              | isPrefixOf cand s = cand
-              | otherwise         = getPrefix (init cand) s
-    mkSuff ts = C.R (map optTerm ts)
+    _ -> tr
+ where
+  optToks ss = prf : suffs where
+    prf = pref (head ss) (tail ss)
+    suffs = map (drop (length prf)) ss
+    pref cand ss = case ss of
+      s1:ss2 -> if isPrefixOf cand s1 then pref cand ss2 else pref (init cand) ss
+      _ -> cand
+  isK t = case t of
+    C.K (C.KS _) -> True
+    _ -> False
+  mkSuff ("":ws) = C.R (map (C.K . C.KS) ws)
+  mkSuff (p:ws) = C.W p (C.R (map (C.K . C.KS) ws))
 
 
 -- common subexpression elimination; see ./Subexpression.hs for the idea
@@ -454,7 +454,7 @@ addSubexpConsts tree lins =
      _ -> case t of
        C.R ts   -> C.R $ map (recomp f) ts
        C.S ts   -> C.S $ map (recomp f) ts
-       C.W s ss -> C.W s ss
+       C.W s t  -> C.W s (recomp f t)
        C.P t p  -> C.P (recomp f t) (recomp f p)
        C.RP t p -> C.RP (recomp f t) (recomp f p)
        C.L x t  -> C.L x (recomp f t)
@@ -483,7 +483,8 @@ collectSubterms t = case t of
   C.S ts -> do
     mapM collectSubterms ts
     add t
-  C.W s ts -> do
+  C.W s u -> do
+    collectSubterms u
     add t
   C.P p u -> do
     collectSubterms p

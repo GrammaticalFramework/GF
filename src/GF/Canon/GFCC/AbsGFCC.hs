@@ -47,19 +47,24 @@ data Term =
    R [Term]
  | P Term Term
  | S [Term]
- | KS String
- | KP [String] [Variant]
+ | K Tokn
  | V Int
  | C Int
  | F CId
  | FV [Term]
- | W String [String]
+ | W String Term
  | RP Term Term
  | TM
  | L CId Term
  | BV CId
   deriving (Eq,Ord,Show)
 
+data Tokn =
+   KS String
+ | KP [String] [Variant]
+  deriving (Eq,Ord,Show)
+
 data Variant =
    Var [String] [String]
   deriving (Eq,Ord,Show)
+

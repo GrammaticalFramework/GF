@@ -69,11 +69,10 @@ prPrec :: Int -> Int -> Doc -> Doc
 prPrec i j = if j<i then parenth else id
 
 
-instance Print Int where
+instance Print Integer where
   prt _ x = doc (shows x)
 
-
-instance Print Integer where
+instance Print Int where
   prt _ x = doc (shows x)
 
 
@@ -157,8 +156,7 @@ instance Print Term where
    R terms -> prPrec i 0 (concatD [doc (showString "[") , prt 0 terms , doc (showString "]")])
    P term0 term -> prPrec i 0 (concatD [doc (showString "(") , prt 0 term0 , doc (showString "!") , prt 0 term , doc (showString ")")])
    S terms -> prPrec i 0 (concatD [doc (showString "(") , prt 0 terms , doc (showString ")")])
-   KS str -> prPrec i 0 (concatD [prt 0 str])
-   KP strs variants -> prPrec i 0 (concatD [doc (showString "[") , doc (showString "pre") , prt 0 strs , doc (showString "[") , prt 0 variants , doc (showString "]") , doc (showString "]")])
+   K tokn -> prPrec i 0 (concatD [prt 0 tokn])
    V n -> prPrec i 0 (concatD [doc (showString "$") , prt 0 n])
    C n -> prPrec i 0 (concatD [prt 0 n])
    F cid -> prPrec i 0 (concatD [prt 0 cid])
@@ -173,6 +171,11 @@ instance Print Term where
    [] -> (concatD [])
    [x] -> (concatD [prt 0 x])
    x:xs -> (concatD [prt 0 x , doc (showString ",") , prt 0 xs])
+
+instance Print Tokn where
+  prt i e = case e of
+   KS str -> prPrec i 0 (concatD [prt 0 str])
+   KP strs variants -> prPrec i 0 (concatD [doc (showString "[") , doc (showString "pre") , prt 0 strs , doc (showString "[") , prt 0 variants , doc (showString "]") , doc (showString "]")])
 
 
 instance Print Variant where
