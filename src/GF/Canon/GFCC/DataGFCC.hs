@@ -46,9 +46,10 @@ realize :: Term -> String
 realize trm = case trm of
   R ts     -> realize (ts !! 0)
   S ss     -> unwords $ Prelude.map realize ss
-  KS s     -> s
-  KP s _   -> unwords s ---- prefix choice TODO
-  W s ss   -> s ++ (ss !! 0)
+  K t -> case t of
+    KS s -> s
+    KP s _ -> unwords s ---- prefix choice TODO
+  W s t    -> s ++ realize t
   FV ts    -> realize (ts !! 0)  ---- other variants TODO
   RP _ r   -> realize r
   TM       -> "?"
@@ -58,9 +59,9 @@ linExp :: GFCC -> CId -> Exp -> Term
 linExp mcfg lang tree@(Tr at trees) = 
   case at of
     AC fun -> comp (Prelude.map lin trees) $ look fun
-    AS s   -> R [KS (show s)] -- quoted
-    AI i   -> R [KS (show i)]
-    AF d   -> R [KS (show d)]
+    AS s   -> R [kks (show s)] -- quoted
+    AI i   -> R [kks (show i)]
+    AF d   -> R [kks (show d)]
     AM     -> TM
  where
    lin  = linExp mcfg lang
@@ -71,17 +72,20 @@ exp0 :: Exp
 exp0 = Tr (AS "NO_PARSE") []
 
 term0 :: CId -> Term
-term0 (CId s) = R [KS ("#" ++ s ++ "#")]
+term0 (CId s) = R [kks ("#" ++ s ++ "#")]
+
+kks :: String -> Term
+kks = K . KS
 
 compute :: GFCC -> CId -> [Term] -> Term -> Term
 compute mcfg lang args = comp where
   comp trm = case trm of
     P r p  -> proj (comp r) (comp p) 
     RP i t -> RP (comp i) (comp t)
-    W s ss -> W s ss
+    W s t  -> W s (comp t)
     R ts   -> R $ Prelude.map comp ts
-    V i    -> idx args i                  -- already computed
-    F c    -> comp $ look c               -- not computed (if contains argvar)
+    V i    -> idx args i          -- already computed
+    F c    -> comp $ look c       -- not computed (if contains argvar)
     FV ts  -> FV $ Prelude.map comp ts
     S ts   -> S $ Prelude.filter (/= S []) $ Prelude.map comp ts
     _ -> trm
@@ -90,9 +94,14 @@ compute mcfg lang args = comp where
 
   idx xs i = if i > length xs - 1 then trace "overrun !!\n" (last xs) else xs !! i 
 
-  proj r p = case p of
-    FV ts -> FV $ Prelude.map (proj r) ts
-    _     -> comp $ getField r (getIndex p)
+  proj r p = case (r,p) of
+    (_,     FV ts) -> FV $ Prelude.map (proj r) ts
+    (W s t, _)     -> kks (s ++ getString (proj t p))      
+    _              -> comp $ getField r (getIndex p)
+
+  getString t = case t of
+    K (KS s) -> s
+    _ -> trace ("ERROR in grammar compiler: string from "++ show t) "ERR"
 
   getIndex t =  case t of
     C i    -> i
@@ -102,7 +111,6 @@ compute mcfg lang args = comp where
 
   getField t i = case t of
     R rs   -> idx rs i
-    W s ss -> KS (s ++ idx ss i)
     RP _ r -> getField r i
     TM     -> TM
     _ -> trace ("ERROR in grammar compiler: field from " ++ show t) t

@@ -74,7 +74,7 @@ mkType t = case GM.catSkeleton t of
 
 mkCType :: Type -> C.Term
 mkCType t = case t of
-  EInt i      -> C.C i
+  EInt i      -> C.C $ fromInteger i
   -- record parameter alias - created in gfc preprocessing
   RecType [(LIdent "_", i), (LIdent "__", t)] -> C.RP (mkCType i) (mkCType t)
   RecType rs     -> C.R [mkCType t | (_, t) <- rs]
@@ -82,14 +82,14 @@ mkCType t = case t of
   _    -> C.S [] ----- TStr
  where
   getI pt = case pt of
-    C.C i -> fromInteger i
+    C.C i -> i
     C.RP i _ -> getI i
     _ -> 1 -----
 
 mkTerm :: Term -> C.Term
 mkTerm tr = case tr of
-  Vr (IA (_,i)) -> C.V $ toInteger i
-  EInt i      -> C.C i
+  Vr (IA (_,i)) -> C.V i
+  EInt i      -> C.C $ fromInteger i
   -- record parameter alias - created in gfc preprocessing
   R [(LIdent "_", (_,i)), (LIdent "__", (_,t))] -> C.RP (mkTerm i) (mkTerm t)
   -- ordinary record
@@ -112,7 +112,7 @@ mkTerm tr = case tr of
   _ -> C.S [C.K (C.KS (A.prt tr +++ "66662"))] ---- for debugging
  where
    mkLab (LIdent l) = case l of
-     '_':ds -> (read ds) :: Integer
+     '_':ds -> (read ds) :: Int
      _ -> prtTrace tr $ 66663
 
 -- return just one module per language

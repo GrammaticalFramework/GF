@@ -53,13 +53,14 @@ term2js l t = f t
       C.R xs           -> new "Arr" (map f xs)
       C.P x y          -> JS.ECall (JS.EMember (f x) (JS.Ident "sel")) [f y]
       C.S xs           -> new "Seq" (map f xs)
-      C.KS s           -> new "Str" [JS.EStr s]
-      C.KP ss vs       -> new "Seq" (map JS.EStr ss) -- FIXME
+      C.K (C.KS s)           -> new "Str" [JS.EStr s]
+      C.K (C.KP ss vs)       -> new "Seq" (map JS.EStr ss) -- FIXME
       C.V i            -> JS.EIndex (JS.EVar children) (JS.EInt i)
       C.C i            -> new "Int" [JS.EInt i]
       C.F (C.CId f)    -> JS.ECall (JS.EMember (JS.EVar l) (JS.Ident "rule")) [JS.EStr f, JS.EVar children]
       C.FV xs          -> new "Variants" (map f xs)
-      C.W str ss       -> new "Suffix" (JS.EStr str : map JS.EStr ss)
+      C.W str (C.R r)  -> 
+        new "Suffix" (JS.EStr str : [JS.EStr s | C.K (C.KS s) <- r])
       C.RP x y         -> new "Rp" [f x, f y]
       C.TM             -> new "Meta" []
 
