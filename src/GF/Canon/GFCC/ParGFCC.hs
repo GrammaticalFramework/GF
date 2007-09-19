@@ -448,14 +448,14 @@ happyReduction_42 happy_x_2
 	happy_x_1
 	 =  case happyOut24 happy_x_2 of { happy_var_2 -> 
 	happyIn36
-		 (V happy_var_2
+		 (V (fromInteger happy_var_2) --H
 	)}
 
 happyReduce_43 = happySpecReduce_1 13# happyReduction_43
 happyReduction_43 happy_x_1
 	 =  case happyOut24 happy_x_1 of { happy_var_1 -> 
 	happyIn36
-		 (C happy_var_1
+		 (C (fromInteger happy_var_1) --H
 	)}
 
 happyReduce_44 = happySpecReduce_1 13# happyReduction_44

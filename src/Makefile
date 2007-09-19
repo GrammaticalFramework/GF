@@ -192,7 +192,7 @@ tools/$(GF_DOC_EXE): tools/GFDoc.hs
 	$(GHMAKE) $(GHCOPTFLAGS) -o $@ $^
 
 gfcc:
-	$(GHMAKE) $(GHCOPTFLAGS) -o gfcc GF/Canon/GFCC/RunGFCC.hs
+	$(GHMAKE) $(GHCOPTFLAGS) -o gfcc GF/Canon/GFCC/Shell.hs
 	strip gfcc
 	mv gfcc ../bin/
 
