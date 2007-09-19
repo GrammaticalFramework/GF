@@ -2,20 +2,31 @@ module GF.Canon.CanonToJS (prCanon2js) where
 
 import GF.Canon.GFC
 import GF.Canon.CanonToGFCC
+import GF.Canon.Look
+import GF.Data.ErrM
+import GF.Infra.Option
 import qualified GF.Canon.GFCC.AbsGFCC as C
 import qualified GF.JavaScript.AbsJS as JS
 import qualified GF.JavaScript.PrintJS as JS
 
 
-prCanon2js :: CanonGrammar -> String
-prCanon2js gr = gfcc2js $ mkCanon2gfcc gr
+import Control.Monad (mplus)
+import Data.Maybe (fromMaybe)
 
-gfcc2js :: C.Grammar -> String
-gfcc2js (C.Grm (C.Hdr n _) as cs) = JS.printTree $ JS.Program $ abstract2js n as ++ concatMap (concrete2js n) cs
+prCanon2js :: Options -> CanonGrammar -> String
+prCanon2js opts gr = gfcc2js start $ mkCanon2gfcc gr
+  where 
+    start = fromMaybe "S" (getOptVal opts gStartCat 
+                           `mplus` getOptVal grOpts gStartCat)
+    grOpts = errVal noOptions $ lookupOptionsCan gr
 
-abstract2js :: C.CId -> C.Abstract -> [JS.Element]
-abstract2js (C.CId n) (C.Abs ds) = 
-    [JS.ElStmt $ JS.SDeclOrExpr $ JS.Decl [JS.DInit a (new "Abstract" [])]] 
+gfcc2js :: String -> C.Grammar -> String
+gfcc2js start (C.Grm (C.Hdr n _) as cs) = 
+  JS.printTree $ JS.Program $ abstract2js start n as ++ concatMap (concrete2js n) cs
+
+abstract2js :: String -> C.CId -> C.Abstract -> [JS.Element]
+abstract2js start (C.CId n) (C.Abs ds) = 
+    [JS.ElStmt $ JS.SDeclOrExpr $ JS.Decl [JS.DInit a (new "Abstract" [JS.EStr start])]] 
     ++ concatMap (absdef2js a) ds
   where a = JS.Ident n
 

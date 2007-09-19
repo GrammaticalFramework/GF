@@ -328,7 +328,7 @@ customMultiGrammarPrinter =
   [
    (strCI "gfcm", const MC.prCanon)
   ,(strCI "gfcc", const GFCC.prCanon2gfcc)
-  ,(strCI "js", const JS.prCanon2js)
+  ,(strCI "js", JS.prCanon2js)
   ,(strCI "header", const (MC.prCanonMGr . unoptimizeCanon))
   ,(strCI "cfgm", prCanonAsCFGM)
   ,(strCI "graph", visualizeCanonGrammar)
