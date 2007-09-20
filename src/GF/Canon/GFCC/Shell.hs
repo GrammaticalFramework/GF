@@ -25,7 +25,7 @@ loop grammar = do
     loop grammar
 
 treat :: MultiGrammar -> String -> IO ()
-treat grammar s = case words s of
+treat mgr s = case words s of
   "gt":cat:n:_ -> do
     mapM_ prlinonly $ take (read n) $ G.generate grammar (CId cat)
   "gtt":cat:n:_ -> do
@@ -37,21 +37,22 @@ treat grammar s = case words s of
     gen <- newStdGen
     mapM_ prlin $ take (read n) $ G.generateRandom gen grammar (CId cat)
   "p":lang:cat:ws -> do
-    let ts = parse grammar lang cat $ unwords ws
+    let ts = parse mgr lang cat $ unwords ws
     mapM_ (putStrLn . showTree) ts 
   "search":cat:n:ws -> do
     case G.parse (read n) grammar (CId cat) ws of
       t:_ -> prlin t
       _ -> putStrLn "no parse found" 
-  _ -> lins $ readTree grammar s
+  _ -> lins $ readTree mgr s
  where
-  langs = languages grammar
+  grammar = gfcc mgr
+  langs = languages mgr
   lins t = mapM_ (lint t) $ langs 
   lint t lang = do
 ----    putStrLn $ showTree $ linExp grammar lang t 
     lin t lang
   lin t lang = do
-    putStrLn $ linearize grammar lang t
+    putStrLn $ linearize mgr lang t
   prlins t = do
     putStrLn $ showTree t
     lins t

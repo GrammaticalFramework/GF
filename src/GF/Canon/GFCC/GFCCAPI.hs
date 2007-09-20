@@ -22,6 +22,8 @@ import GF.Canon.GFCC.ParGFCC
 import GF.Canon.GFCC.PrintGFCC
 import GF.Canon.GFCC.ErrM
 import GF.Canon.GFCC.FCFGParsing
+import GF.Conversion.SimpleToFCFG (convertGrammarCId,FCat(..))
+
 --import GF.Data.Operations
 --import GF.Infra.UseIO
 import qualified Data.Map as Map
@@ -37,7 +39,7 @@ import System
 -- Interface
 ---------------------------------------------------
 
-type MultiGrammar = GFCC
+data MultiGrammar = MultiGrammar {gfcc :: GFCC, parsers :: [(Language,FCFPInfo)]}
 type Language     = String
 type Category     = String
 type Tree         = Exp
@@ -65,14 +67,18 @@ startCat   :: MultiGrammar -> Category
 -- Implementation
 ---------------------------------------------------
 
-file2grammar f =
+file2grammar f = do
+  gfcc <- file2gfcc f
+  let fcfgs = convertGrammarCId gfcc
+  return (MultiGrammar gfcc [(lang, buildPInfo fcfg) | (CId lang,fcfg) <- fcfgs])
+
+file2gfcc f =
   readFileIf f >>= err (error "no parse") (return . mkGFCC) . pGrammar . myLexer
 
-linearize mgr lang = GF.Canon.GFCC.DataGFCC.linearize mgr (CId lang)
-
+linearize mgr lang = GF.Canon.GFCC.DataGFCC.linearize (gfcc mgr) (CId lang)
 
 parse mgr lang cat s = 
-  err error id $ parserLang mgr (CId lang) (CId cat) (words s)
+  err error id $ parserLang (gfcc mgr) (CId lang) (CId cat) (words s)
 
 {-
   map tree2exp . 
@@ -85,7 +91,8 @@ parse mgr lang cat s =
 -}
 
 linearizeAll mgr = map snd . linearizeAllLang mgr
-linearizeAllLang mgr t = [(lang,linearThis mgr lang t) | lang <- languages mgr]
+linearizeAllLang mgr t = 
+  [(lang,linearThis mgr lang t) | lang <- languages mgr]
 
 {-
 parseAll mgr cat = map snd . parseAllLang mgr cat
@@ -98,9 +105,9 @@ readTree _ = err (const exp0) id . (pExp . myLexer)
 
 showTree t = printTree t
 
-languages mgr = [l | CId l <- cncnames mgr]
+languages mgr = [l | CId l <- cncnames (gfcc mgr)]
 
-categories mgr = [c | CId c <- Map.keys (cats (abstract mgr))]
+categories mgr = [c | CId c <- Map.keys (cats (abstract (gfcc mgr)))]
 
 startCat mgr = "S" ----
 

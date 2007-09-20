@@ -1,4 +1,4 @@
-module GF.Canon.GFCC.FCFGParsing (parserLang) where
+module GF.Canon.GFCC.FCFGParsing (parserLang,buildPInfo,FCFPInfo) where
 
 import GF.Canon.GFCC.DataGFCC
 import GF.Canon.GFCC.AbsGFCC
@@ -52,7 +52,7 @@ wordsCFTok :: CFTok -> [String]
 wordsCFTok = return ----
 
 
-type FCFPInfo = PF.FCFPInfo FCat FName Token
+type FCFPInfo = PF.FCFPInfo FCat FName String
 
 buildPInfo :: FGrammar -> FCFPInfo
 buildPInfo fcfg = PF.buildFCFPInfo grammarLexer fcfg where
@@ -130,7 +130,7 @@ tree2term (TMeta)      = Macros.mkMeta 0
 -- conversion and unification of forests
 
 -- simplest implementation
-applyProfileToForest :: SyntaxForest Name -> [SyntaxForest Fun]
+applyProfileToForest :: SyntaxForest FName -> [SyntaxForest Fun]
 applyProfileToForest (FNode name@(Name fun profile) children) 
     | isCoercionF name = concat chForests
     | otherwise       = [ FNode fun chForests | not (null chForests) ]
