@@ -35,6 +35,8 @@ import qualified GF.Grammar.Grammar as G
 import qualified GF.Canon.AbsGFC as A
 import qualified GF.Canon.GFC as C
 import qualified GF.Canon.CanonToGFCC as GFCC
+import qualified GF.Canon.GFCC.GFCCToHaskell as CCH
+import qualified GF.Canon.GFCC.DataGFCC as DataGFCC
 import qualified GF.Canon.CanonToJS as JS (prCanon2js)
 import qualified GF.Source.AbsGF as GF
 import qualified GF.Grammar.MMacros as MM
@@ -273,6 +275,8 @@ customGrammarPrinter =
   ,(strCI "bnf",     \_ -> prBNF False)
   ,(strCI "absbnf",  \_ -> abstract2bnf . stateGrammarST)
   ,(strCI "haskell", \_ -> grammar2haskell . stateGrammarST)
+  ,(strCI "gfcc_haskell", \_ -> CCH.grammar2haskell . DataGFCC.mkGFCC .
+                                GFCC.mkCanon2gfcc . stateGrammarST)
   ,(strCI "haskell_gadt", \_ -> grammar2haskellGADT . stateGrammarST)
   ,(strCI "transfer", \_ -> grammar2transfer . stateGrammarST)
   ,(strCI "morpho",  \_ -> prMorpho . stateMorpho)

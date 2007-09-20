@@ -22,7 +22,8 @@ import GF.Canon.GFCC.ParGFCC
 import GF.Canon.GFCC.PrintGFCC
 import GF.Canon.GFCC.ErrM
 import GF.Canon.GFCC.FCFGParsing
-import GF.Conversion.SimpleToFCFG (convertGrammarCId,FCat(..))
+import qualified GF.Canon.GFCC.GenGFCC as G
+import GF.Conversion.SimpleToFCFG (convertGrammarCId,FCat(..)) ----
 
 --import GF.Data.Operations
 --import GF.Infra.UseIO
@@ -52,8 +53,11 @@ parse        :: MultiGrammar -> Language -> Category -> String -> [Tree]
 linearizeAll     :: MultiGrammar -> Tree -> [String]
 linearizeAllLang :: MultiGrammar -> Tree -> [(Language,String)]
 
---parseAll     :: MultiGrammar -> Category -> String -> [[Tree]]
---parseAllLang :: MultiGrammar -> Category -> String -> [(Language,[Tree])]
+parseAll     :: MultiGrammar -> Category -> String -> [[Tree]]
+parseAllLang :: MultiGrammar -> Category -> String -> [(Language,[Tree])]
+
+generateAll    :: MultiGrammar -> Category -> [Tree]
+generateRandom :: MultiGrammar -> Category -> IO [Tree]
 
 readTree   :: MultiGrammar -> String -> Tree
 showTree   ::                 Tree -> String
@@ -80,26 +84,20 @@ linearize mgr lang = GF.Canon.GFCC.DataGFCC.linearize (gfcc mgr) (CId lang)
 parse mgr lang cat s = 
   err error id $ parserLang (gfcc mgr) (CId lang) (CId cat) (words s)
 
-{-
-  map tree2exp . 
-  errVal [] . 
-  parseString (stateOptions sgr) sgr cfcat
- where
-   sgr   = stateGrammarOfLang mgr (zIdent lang)
-   cfcat = string2CFCat abs cat
-   abs   = maybe (error "no abstract syntax") prIdent $ abstract mgr
--}
-
 linearizeAll mgr = map snd . linearizeAllLang mgr
 linearizeAllLang mgr t = 
   [(lang,linearThis mgr lang t) | lang <- languages mgr]
 
-{-
 parseAll mgr cat = map snd . parseAllLang mgr cat
 
 parseAllLang mgr cat s = 
   [(lang,ts) | lang <- languages mgr, let ts = parse mgr lang cat s, not (null ts)]
--}
+
+generateRandom mgr cat = do
+  gen <- newStdGen
+  return $ G.generateRandom gen (gfcc mgr) (CId cat)
+
+generateAll mgr cat = G.generate (gfcc mgr) (CId cat)
 
 readTree _ = err (const exp0) id . (pExp . myLexer)
 
