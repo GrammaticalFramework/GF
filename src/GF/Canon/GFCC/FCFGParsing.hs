@@ -118,13 +118,11 @@ cnv_forests2 (FFloat  x)   = FFloat  x
 
 tree2term :: SyntaxTree Fun -> Exp
 tree2term (TNode f ts) = Tr (AC f) (map tree2term ts)
-{- ----
-tree2term (TString  s) = Macros.string2term s
-tree2term (TInt     n) = Macros.int2term    n
-tree2term (TFloat   f) = Macros.float2term  f
-tree2term (TMeta)      = Macros.mkMeta 0
--}
 
+tree2term (TString  s) = Tr (AS s) []
+tree2term (TInt     n) = Tr (AI n) []
+tree2term (TFloat   f) = Tr (AF f) []
+tree2term (TMeta)      = Tr AM []
 
 ----------------------------------------------------------------------
 -- conversion and unification of forests

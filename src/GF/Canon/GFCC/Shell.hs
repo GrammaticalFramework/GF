@@ -5,7 +5,7 @@ import qualified GF.Canon.GFCC.GenGFCC as G ---
 import GF.Canon.GFCC.AbsGFCC (CId(CId)) ---
 import System.Random (newStdGen)
 import System (getArgs)
-
+import Data.Char (isDigit)
 
 -- Simple translation application built on GFCC. AR 7/9/2006 -- 19/9/2007
 
@@ -13,29 +13,37 @@ main :: IO ()
 main = do
   file:_  <- getArgs
   grammar <- file2grammar file
-  putStrLn $ "languages:  " ++ unwords (languages grammar)
-  putStrLn $ "categories: " ++ unwords (categories grammar)
+  printHelp grammar
   loop grammar
 
 loop :: MultiGrammar -> IO ()
 loop grammar = do
   s <- getLine
-  if s == "quit" then return () else do
+  if s == "q" then return () else do
     treat grammar s
     loop grammar
 
+printHelp grammar = do
+  putStrLn $ "languages:  " ++ unwords (languages grammar)
+  putStrLn $ "categories: " ++ unwords (categories grammar)
+  putStrLn commands
+
+
+commands = unlines [
+  "Commands:",
+  "  (gt | gtt | gr | grt) Cat Num - generate all or random",
+  "  p Lang Cat String             - parse (unquoted) string",
+  "  l Tree                        - linearize in all languages",
+  "  h                             - help",
+  "  q                             - quit"
+  ]
+
 treat :: MultiGrammar -> String -> IO ()
 treat mgr s = case words s of
-  "gt":cat:n:_ -> do
-    mapM_ prlinonly $ take (read n) $ G.generate grammar (CId cat)
-  "gtt":cat:n:_ -> do
-    mapM_ prlin $ take (read n) $ G.generate grammar (CId cat)
-  "gr":cat:n:_ -> do
-    gen <- newStdGen
-    mapM_ prlinonly $ take (read n) $ G.generateRandom gen grammar (CId cat)
-  "grt":cat:n:_ -> do
-    gen <- newStdGen
-    mapM_ prlin $ take (read n) $ G.generateRandom gen grammar (CId cat)
+  "gt" :cat:n:_ -> mapM_ prlinonly $ take (read1 n) $ generateAll mgr cat
+  "gtt":cat:n:_ -> mapM_ prlin $ generateAll mgr cat
+  "gr" :cat:n:_ -> generateRandom mgr cat >>= mapM_ prlinonly . take (read1 n) 
+  "grt":cat:n:_ -> generateRandom mgr cat >>= mapM_ prlin . take (read1 n) 
   "p":lang:cat:ws -> do
     let ts = parse mgr lang cat $ unwords ws
     mapM_ (putStrLn . showTree) ts 
@@ -43,6 +51,7 @@ treat mgr s = case words s of
     case G.parse (read n) grammar (CId cat) ws of
       t:_ -> prlin t
       _ -> putStrLn "no parse found" 
+  "h":_ -> printHelp mgr
   _ -> lins $ readTree mgr s
  where
   grammar = gfcc mgr
@@ -60,4 +69,6 @@ treat mgr s = case words s of
     putStrLn $ showTree t
     prlinonly t
   prlinonly t = mapM_ (lin t) $ langs
+  read1 s = if all isDigit s then read s else 1
+
 
