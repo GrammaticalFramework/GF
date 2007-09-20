@@ -19,7 +19,7 @@ import Data.List (groupBy)
 import GF.Formalism.Utilities
 import GF.Formalism.GCFG
 
-import GF.Infra.Print
+import GF.Infra.PrintClass
 
 
 ------------------------------------------------------------

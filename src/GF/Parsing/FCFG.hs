@@ -18,7 +18,7 @@ import GF.Formalism.MCFG
 import GF.Parsing.FCFG.PInfo
 
 import qualified GF.Parsing.FCFG.Active as Active
-import GF.Infra.Print
+import GF.Infra.PrintClass
 
 ----------------------------------------------------------------------
 -- parsing

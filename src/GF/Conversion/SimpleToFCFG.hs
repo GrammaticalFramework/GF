@@ -13,17 +13,17 @@
 
 
 module GF.Conversion.SimpleToFCFG
-    (convertGrammar) where
+    (convertGrammar,convertGrammarCId,FCat(..)) where
 
 import GF.System.Tracing
-import GF.Infra.Print
+import GF.Infra.PrintClass
 import GF.Infra.Ident
 
 import Control.Monad
 
 import GF.Formalism.Utilities
 import GF.Formalism.FCFG
-import GF.Conversion.Types
+import GF.Conversion.FTypes
 import GF.Canon.GFCC.AbsGFCC
 import GF.Canon.GFCC.DataGFCC
 
@@ -40,17 +40,27 @@ import Data.Maybe
 ----------------------------------------------------------------------
 -- main conversion function
 
-convertGrammar :: Grammar -> [(Ident,FGrammar)]
-convertGrammar g@(Grm hdr (Abs abs_defs) cncs) = [(i2i cncname,convert abs_defs conc) | cncname <- cncnames gfcc, conc <- Map.lookup cncname (concretes gfcc)]
+type FToken = String
+
+convertGrammar :: Grammar -> [(Ident,FCFGrammar FCat FName FToken)]
+convertGrammar g = [(IC c, f) | (CId c,f) <- convertGrammarCId (mkGFCC g)]
+
+-- this is more native for GFCC
+
+convertGrammarCId :: GFCC -> [(CId,FCFGrammar FCat FName FToken)]
+convertGrammarCId gfcc = [(cncname,convert abs_defs conc) | 
+    cncname <- cncnames gfcc, conc <- Map.lookup cncname (concretes gfcc)]
   where
-    gfcc = mkGFCC g
 
-    i2i (CId i) = IC i
+    abs_defs = Map.assocs (funs (abstract gfcc))
 
-    convert :: [AbsDef] -> TermMap -> FGrammar
+    convert :: [(CId,Type)] -> TermMap -> FGrammar
     convert abs_defs cnc_defs = getFRules (loop frulesEnv)
       where
-        srules = [(XRule id args res (map findLinType args) (findLinType res) term) | Fun id (Typ args res) exp <- abs_defs, term <- Map.lookup id cnc_defs]
+        srules = [
+          (XRule id args res (map findLinType args) (findLinType res) term) | 
+            (id, Typ args res) <- abs_defs, 
+            term <- Map.lookup id cnc_defs]
         
         findLinType (CId id) = fromJust (Map.lookup (CId ("__"++id)) cnc_defs)
 
@@ -119,7 +129,7 @@ translateLin idxArgs lbl' ((lbl,syms) : lins)
 type CnvMonad a = BacktrackM Env a
 
 type Env     = (FCat, [(FCat,[FPath])], Term, [Term])
-type LinRec  = [(FPath, [Symbol (FPath, FIndex, Int) Token])]
+type LinRec  = [(FPath, [Symbol (FPath, FIndex, Int) FToken])]
 
 type TermMap = Map.Map CId Term
 

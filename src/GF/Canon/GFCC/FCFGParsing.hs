@@ -1,8 +1,8 @@
-module GF.Canon.GFCC.FCFGParsing where
+module GF.Canon.GFCC.FCFGParsing (parserLang) where
 
 import GF.Canon.GFCC.DataGFCC
 import GF.Canon.GFCC.AbsGFCC
-import GF.Conversion.SimpleToFCFG (convertGrammar)
+import GF.Conversion.SimpleToFCFG (convertGrammarCId,FCat(..))
 
 --import GF.System.Tracing 
 --import GF.Infra.Print
@@ -20,8 +20,9 @@ import GF.Conversion.SimpleToFCFG (convertGrammar)
 import GF.Data.SortedList 
 import GF.Data.Assoc
 import GF.Formalism.Utilities --(forest2trees)
+import qualified GF.Data.Operations as Op
 
---import GF.Conversion.Types
+import GF.Conversion.FTypes
 
 import GF.Formalism.FCFG
 --import qualified GF.Formalism.GCFG as G
@@ -32,16 +33,15 @@ import GF.Formalism.FCFG
 import qualified GF.Parsing.FCFG as PF
 --import qualified GF.Parsing.CFG as PC
 import GF.Canon.GFCC.ErrM
+import GF.Infra.PrintClass
 
+--convertGrammarCId :: Grammar -> [(CId,FGrammar)]
 
---convertGrammar :: Grammar -> [(Ident,FGrammar)]
+parserLang :: GFCC -> CId -> CFCat -> [CFTok] -> Err [Exp]
+parserLang mgr lang = parse info where
+  fcfgs = convertGrammarCId mgr
+  info  = buildPInfo $ maybe (error "no parser") id $ lookup lang fcfgs
 
---import qualified GF.Parsing.GFC as New
---checkErr $ New.parse algorithm strategy (pInfo sg) (absId sg) cat toks
--- algorithm "f"
--- strategy "bottomup"
-
-type Token = String ----
 type CFTok = String ----
 type CFCat = CId ----
 type Fun = CId ----
@@ -54,6 +54,16 @@ wordsCFTok = return ----
 
 type FCFPInfo = PF.FCFPInfo FCat FName Token
 
+buildPInfo :: FGrammar -> FCFPInfo
+buildPInfo fcfg = PF.buildFCFPInfo grammarLexer fcfg where
+  grammarLexer s =
+      case reads s of
+        [(n,"")] -> (fcatInt, SInt (n::Integer))
+        _        -> case reads s of
+                      [(f,"")] -> (fcatFloat, SFloat  (f::Double))
+                      _        -> (fcatString,SString s)
+
+
 -- main parsing function
 
 parse :: 
@@ -65,7 +75,7 @@ parse ::
       [CFTok] ->        -- ^ input tokens
       Err [Exp]         -- ^ resulting GF terms
 
-parse pinfo startCat inString = 
+parse pinfo startCat inString = e2e $
 
     do let inTokens = inputMany (map wordsCFTok inString)
        forests <- selectParser pinfo startCat inTokens
@@ -107,7 +117,7 @@ cnv_forests2 (FFloat  x)   = FFloat  x
 -- parse trees to GFCC terms
 
 tree2term :: SyntaxTree Fun -> Exp
-tree2term (TNode f ts) = Tr (AC (CId f)) (map tree2term ts)
+tree2term (TNode f ts) = Tr (AC f) (map tree2term ts)
 {- ----
 tree2term (TString  s) = Macros.string2term s
 tree2term (TInt     n) = Macros.int2term    n
@@ -122,7 +132,7 @@ tree2term (TMeta)      = Macros.mkMeta 0
 -- simplest implementation
 applyProfileToForest :: SyntaxForest Name -> [SyntaxForest Fun]
 applyProfileToForest (FNode name@(Name fun profile) children) 
-    | isCoercion name = concat chForests
+    | isCoercionF name = concat chForests
     | otherwise       = [ FNode fun chForests | not (null chForests) ]
     where chForests   = concat [ applyProfileM unifyManyForests profile forests |
 				 forests0 <- children,
@@ -132,40 +142,10 @@ applyProfileToForest (FInt    n) = [FInt    n]
 applyProfileToForest (FFloat  f) = [FFloat  f]
 applyProfileToForest (FMeta)     = [FMeta]
 
-
---------------------- From parsing types ------------------------------
-
--- * fast nonerasing MCFG
-
-type FIndex   = Int
-type FPath    = [FIndex]
-type FName    = NameProfile CId
-type FGrammar = FCFGrammar FCat FName Token
-type FRule    = FCFRule    FCat FName Token
-data FCat     = FCat  {-# UNPACK #-} !Int CId [FPath] [(FPath,FIndex)]
-
-initialFCat :: CId -> FCat
-initialFCat cat = FCat 0 cat [] []
-
-fcatString = FCat (-1) (CId "String") [[0]] []
-fcatInt    = FCat (-2) (CId "Int")    [[0]] []
-fcatFloat  = FCat (-3) (CId "Float")  [[0]] []
-
-fcat2cid :: FCat -> CId
-fcat2cid (FCat _ c _ _) = c
-
-instance Eq FCat where
-  (FCat id1 _ _ _) == (FCat id2 _ _ _) = id1 == id2
-
-instance Ord FCat where
-  compare (FCat id1 _ _ _) (FCat id2 _ _ _) = compare id1 id2
-
-
-
 ---
 
-isCoercion :: Name -> Bool
-isCoercion (Name fun [Unify [0]]) = False -- isWildIdent fun
-isCoercion _ = False
+e2e :: Op.Err a -> Err a
+e2e e = case e of
+  Op.Ok v -> Ok v
+  Op.Bad s -> Bad s
 
-type Name = NameProfile Fun
