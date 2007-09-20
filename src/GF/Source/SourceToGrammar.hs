@@ -305,6 +305,14 @@ transResDef x = case x of
                                      | (p,pars) <- pardefs']
            ++ [(f, G.ResValue (yes (M.mkProdSimple co (G.Cn p),Nothing))) |
                      (p,pars) <- pardefs', (f,co) <- pars]
+
+{-
+  ---- encoding of AnyInd without changing syntax. AR 20/9/2007
+  DefOper [DDef [c] (EApp (EInt status) (EIdent mo))] -> do
+    c' <- transName c
+    mo' <- transIdent mo
+    return $ Left [(c',G.AnyInd (status==1) mo')]
+-}
   DefOper defs -> do
     defs' <- liftM concat $ mapM getDefs defs
     returnl $ concatMap mkOverload [(f, G.ResOper pt pe) | (f,(pt,pe)) <- defs']

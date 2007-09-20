@@ -107,7 +107,14 @@ trAnyDef (i,info) = let i' = tri i in case info of
   CncFun _ ptr ppr -> 
     [P.DefLin [trDef i' nope ptr]] 
     ---- P.DefPrintFun [P.PrintDef i' (trt pr)]]
+{-
+  ---- encoding of AnyInd without changing syntax. AR 20/9/2007
+  AnyInd s b -> 
+    [P.DefOper [P.DDef [mkName i] 
+      (P.EApp (P.EInt (if s then 1 else 0)) (P.EIdent (tri b)))]]
+-}
   _ -> [] 
+
 
 trDef :: Ident -> Perh Type -> Perh Term -> P.Def
 trDef i pty ptr = case (pty,ptr) of

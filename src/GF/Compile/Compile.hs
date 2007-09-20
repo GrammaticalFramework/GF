@@ -19,6 +19,7 @@ module GF.Compile.Compile (compileModule, compileEnvShSt, compileOne,
 import GF.Grammar.Grammar
 import GF.Infra.Ident
 import GF.Infra.Option
+import GF.Infra.CompactPrint
 import GF.Grammar.PrGrammar
 import GF.Compile.Update
 import GF.Grammar.Lookup
@@ -331,7 +332,7 @@ generateModuleCode opts path minfo@(name,info) = do
       let rminfo = if isCompilable info then minfo 
                    else (name, ModMod emptyModule) 
       let (file,out) = (gfrFile pname, prGrammar (MGrammar [rminfo]))
-      putp ("  wrote file" +++ file) $ ioeIO $ writeFile file out
+      putp ("  wrote file" +++ file) $ ioeIO $ writeFile file $ compactPrint out
     _ -> return ()
   (file,out) <- do
       code <- return $ MkGFC.prCanonModInfo minfo'
