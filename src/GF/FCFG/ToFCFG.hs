@@ -11,7 +11,7 @@ module GF.FCFG.ToFCFG (printFGrammar) where
 
 import GF.Formalism.FCFG
 import GF.Formalism.SimpleGFC
-import GF.Conversion.Types
+import GF.Conversion.FTypes
 import GF.Infra.Ident
 import qualified GF.FCFG.AbsFCFG as F
 
@@ -28,22 +28,23 @@ import GF.Formalism.GCFG
 
 import GF.Infra.Print
 
+type FToken = String
 
 -- this is the main function used
-printFGrammar :: FCFGrammar FCat FName Token -> String
+printFGrammar :: FCFGrammar FCat FName FToken -> String
 printFGrammar = undefined {- printTree . fgrammar
 
-fgrammar :: FCFGrammar FCat Name Token -> F.FGrammar
+fgrammar :: FCFGrammar FCat Name FToken -> F.FGrammar
 fgrammar = F.FGr . map frule
 
-frule :: FCFRule FCat Name Token -> F.FRule
+frule :: FCFRule FCat Name FToken -> F.FRule
 frule (FRule ab rhs) = 
   F.FR (abstract ab) [[fsymbol sym | (_,sym) <- assocs syms] | (_,syms) <- assocs rhs]
 
 abstract :: Abstract FCat Name -> F.Abstract
 abstract (Abs cat cats n) = F.Abs (fcat cat) (map fcat cats) (name n)
 
-fsymbol :: FSymbol FCat Token -> F.FSymbol
+fsymbol :: FSymbol FCat FToken -> F.FSymbol
 fsymbol fs = case fs of
   FSymCat fc i j -> F.FSymCat (fcat fc) (toInteger i) (toInteger j)
   FSymTok s -> F.FSymTok s
@@ -56,7 +57,7 @@ fcat (FCat i id ps pts) =
 name :: Name -> F.Name
 name (Name id profs) = F.Nm (ident id) (map profile profs)
 
-pathel :: Either C.Label (Term SCat Token) -> F.PathEl
+pathel :: Either C.Label (Term SCat FToken) -> F.PathEl
 pathel lt = case lt of
   Left lab -> F.PLabel $ label lab
   Right trm -> F.PTerm $ term trm
@@ -76,7 +77,7 @@ forest f = case f of
   FInt i -> F.FInt i
   FFloat d -> F.FFloat d
 
-term :: Term SCat Token -> F.Term
+term :: Term SCat FToken -> F.Term
 term tr = case tr of
   Arg i id p -> F.Arg (toInteger i) (ident id) (path p)
   Rec rs -> F.Rec [F.Ass (label l) (term t) | (l,t) <- rs]

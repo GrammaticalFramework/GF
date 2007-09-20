@@ -16,7 +16,7 @@ module GF.Formalism.GCFG where
 import GF.Formalism.Utilities (SyntaxChart)
 import GF.Data.Assoc (assocMap, accumAssoc)
 import GF.Data.SortedList (nubsort, groupPairs)
-import GF.Infra.Print
+import GF.Infra.PrintClass
 
 ----------------------------------------------------------------------
 

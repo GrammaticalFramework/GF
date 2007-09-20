@@ -10,7 +10,7 @@
 module GF.Parsing.FCFG.PInfo where
 
 import GF.System.Tracing
-import GF.Infra.Print
+import GF.Infra.PrintClass
 
 import GF.Formalism.Utilities
 import GF.Formalism.GCFG

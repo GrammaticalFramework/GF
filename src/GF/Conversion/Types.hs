@@ -14,6 +14,8 @@
 
 module GF.Conversion.Types where
 
+---import GF.Conversion.FTypes
+
 import qualified GF.Infra.Ident as Ident (Ident(..), wildIdent, isWildIdent)
 import qualified GF.Canon.AbsGFC as AbsGFC (CIdent(..), Label(..))
 import qualified GF.Canon.GFCC.AbsGFCC as AbsGFCC (CId(..))
@@ -110,31 +112,8 @@ mcat2scat = ecat2scat . mcat2ecat
 ----------------------------------------------------------------------
 -- * fast nonerasing MCFG
 
-type FIndex   = Int
-type FPath    = [FIndex]
-type FName    = NameProfile AbsGFCC.CId
-type FGrammar = FCFGrammar FCat FName Token
-type FRule    = FCFRule    FCat FName Token
-data FCat     = FCat  {-# UNPACK #-} !Int AbsGFCC.CId [FPath] [(FPath,FIndex)]
+---- moved to FTypes by AR 20/9/2007
 
-initialFCat :: AbsGFCC.CId -> FCat
-initialFCat cat = FCat 0 cat [] []
-
-fcatString = FCat (-1) (AbsGFCC.CId "String") [[0]] []
-fcatInt    = FCat (-2) (AbsGFCC.CId "Int")    [[0]] []
-fcatFloat  = FCat (-3) (AbsGFCC.CId "Float")  [[0]] []
-
-fcat2cid :: FCat -> AbsGFCC.CId
-fcat2cid (FCat _ c _ _) = c
-
-instance Eq FCat where
-  (FCat id1 _ _ _) == (FCat id2 _ _ _) = id1 == id2
-
-instance Ord FCat where
-  compare (FCat id1 _ _ _) (FCat id2 _ _ _) = compare id1 id2
-
-instance Print AbsGFCC.CId where
-  prt (AbsGFCC.CId s) = s
 
 ----------------------------------------------------------------------
 -- * CFG
@@ -163,9 +142,5 @@ instance Print MCat where
 instance Print CCat where
     prt (CCat cat label) = prt cat ++ prt label
 
-instance Print FCat where
-    prt (FCat _ (AbsGFCC.CId cat) rcs tcs) = cat ++ "{" ++ 
-			             prtSep ";" ([prt path                    |  path       <- rcs] ++
-			                         [prt path ++ "=" ++ prt term | (path,term) <- tcs])
-			                 ++ "}"
+---- instance Print FCat where ---- FCat
 

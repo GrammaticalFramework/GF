@@ -20,7 +20,7 @@ import GF.Formalism.MCFG(Lin(..))
 import GF.Formalism.Utilities
 
 import GF.Infra.Ident
-import GF.Infra.Print
+import GF.Infra.PrintClass
 
 import GF.Parsing.FCFG.Range
 import GF.Parsing.FCFG.PInfo

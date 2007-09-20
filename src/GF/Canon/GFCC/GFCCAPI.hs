@@ -21,6 +21,7 @@ import GF.Canon.GFCC.AbsGFCC
 import GF.Canon.GFCC.ParGFCC
 import GF.Canon.GFCC.PrintGFCC
 import GF.Canon.GFCC.ErrM
+import GF.Canon.GFCC.FCFGParsing
 --import GF.Data.Operations
 --import GF.Infra.UseIO
 import qualified Data.Map as Map
@@ -70,7 +71,9 @@ file2grammar f =
 linearize mgr lang = GF.Canon.GFCC.DataGFCC.linearize mgr (CId lang)
 
 
-parse mgr lang cat s = [] 
+parse mgr lang cat s = 
+  err error id $ parserLang mgr (CId lang) (CId cat) (words s)
+
 {-
   map tree2exp . 
   errVal [] . 

@@ -14,9 +14,9 @@ import Data.List (groupBy)
 import Data.Array
 
 import GF.Formalism.Utilities
-import GF.Formalism.GCFG
+--import GF.Formalism.GCFG
 
-import GF.Infra.Print
+import GF.Infra.PrintClass
 
 
 ------------------------------------------------------------

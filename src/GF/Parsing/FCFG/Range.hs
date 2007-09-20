@@ -14,7 +14,7 @@ module GF.Parsing.FCFG.Range
 
 -- GF modules
 import GF.Formalism.Utilities
-import GF.Infra.Print
+import GF.Infra.PrintClass
 
 ------------------------------------------------------------
 -- ranges as single pairs

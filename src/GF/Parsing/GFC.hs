@@ -32,6 +32,7 @@ import GF.Data.SortedList
 import GF.Data.Assoc
 import GF.Formalism.Utilities
 import GF.Conversion.Types
+import GF.Conversion.FTypes
 
 import qualified GF.Formalism.GCFG as G
 import qualified GF.Formalism.SimpleGFC as S

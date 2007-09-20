@@ -22,7 +22,7 @@ import GF.Data.SortedList
 import GF.Data.Assoc
 import GF.Data.Utilities (sameLength, foldMerge, splitBy)
 
-import GF.Infra.Print
+import GF.Infra.PrintClass
 
 ------------------------------------------------------------
 -- * symbols

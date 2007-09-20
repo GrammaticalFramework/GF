@@ -25,6 +25,7 @@ import GF.Formalism.SimpleGFC (decl2cat)
 import GF.Formalism.CFG (CFRule(..))
 import GF.Formalism.Utilities (symbol, name2fun)
 import GF.Conversion.Types
+import GF.Conversion.FTypes
 
 import qualified GF.Conversion.GFCtoSimple as G2S
 import qualified GF.Conversion.SimpleToFinite as S2Fin
