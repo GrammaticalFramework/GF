@@ -38,7 +38,7 @@ canon2gfcc cgr@(M.MGrammar ((a,M.ModMod abm):cms)) =
   cs  = map (i2i . fst) cms
   adefs = [C.Fun f' (mkType ty) (C.Tr (C.AC f') []) | 
             (f,AbsFun (Yes ty) _) <- tree2list (M.jments abm), let f' = i2i f]
-  cncs  = [C.Cnc (i2i a) (concr abm)]
+  cncs  = [C.Cnc (i2i lang) (concr m) | (lang,M.ModMod m) <- cms]
   concr mo = cats mo ++ lindefs mo ++ 
                optConcrete 
                  [C.Lin (i2i f) (mkTerm tr) | 
