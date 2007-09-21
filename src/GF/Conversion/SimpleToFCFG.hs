@@ -181,6 +181,7 @@ convertCon (ConSel indices) index lbl_path lin lins = do
   guard (index `elem` indices)
   restrictHead lbl_path index
   return lins
+convertCon x _ _ _ _ = error $ "SimpleToFCFG,convertCon: " ++ show x
 
 convertRec cnc_defs selector                   index []           lbl_path lin lins = return lins
 convertRec cnc_defs selector@(TupleSel fields) index (val:record) lbl_path lin lins = select fields
