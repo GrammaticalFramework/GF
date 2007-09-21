@@ -9,8 +9,6 @@ import GF.Compile.Update
 import GF.Grammar.Lookup
 import GF.Infra.Modules
 import GF.Devel.ReadFiles
---import GF.Compile.ShellState
---import GF.Compile.MkResource
 
 -- the main compiler passes
 import GF.Devel.GetGrammar
@@ -21,17 +19,8 @@ import GF.Grammar.Refresh
 import GF.Compile.CheckGrammar
 import GF.Compile.Optimize
 import GF.Compile.Evaluate ----
---import GF.Compile.GrammarToCanon
---import GF.Compile.GrammarToGFCC -----
 --import GF.Canon.Share
 --import GF.Canon.Subexpressions (elimSubtermsMod,unSubelimModule)
---import GF.UseGrammar.Linear (unoptimizeCanonMod) ----
-
---import qualified GF.Canon.CanonToGrammar as CG
-
---import qualified GF.Canon.GFC as GFC
---import qualified GF.Canon.MkGFC as MkGFC
---import GF.Canon.GetGFC
 
 import GF.Data.Operations
 import GF.Devel.UseIO
@@ -84,8 +73,8 @@ compileModule opts1 env file = do
   return e
 
 compileEnvShSt :: CompileEnv -> [ModName] -> CompileEnv
-compileEnvShSt env@(_,sgr) fs = (0,sgr) where
-  sgr = MGrammar [m | m@(i,_) <- modules sgr, notElem (prt i) $ map fileBody fs]
+compileEnvShSt env@(_,sgr) fs = (0,sgr2) where
+  sgr2 = MGrammar [m | m@(i,_) <- modules sgr, notElem (prt i) $ map fileBody fs]
 
 compileOne :: Options -> CompileEnv -> FullPath -> IOE CompileEnv
 compileOne opts env@(_,srcgr) file = do
