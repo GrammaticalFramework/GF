@@ -17,7 +17,7 @@ main = do
     _ | oElem (iOpt "-make") opts -> do
       gr <- batchCompile opts fs
       let name = justModuleName (last fs)
-      let (abs,gc) = prGrammar2gfcc name gr
+      let (abs,gc) = prGrammar2gfcc opts name gr
       let target = abs ++ ".gfcc"
       writeFile target gc
       putStrLn $ "wrote file " ++ target

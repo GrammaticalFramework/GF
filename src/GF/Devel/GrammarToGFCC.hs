@@ -12,6 +12,7 @@ import qualified GF.Infra.Option as O
 
 import GF.Devel.ModDeps
 import GF.Infra.Ident
+import GF.Infra.Option
 import GF.Data.Operations
 import GF.Text.UTF8
 
@@ -22,31 +23,28 @@ import Debug.Trace ----
 
 -- the main function: generate GFCC from GF.
 
-prGrammar2gfcc :: String -> SourceGrammar -> (String,String)
-prGrammar2gfcc cnc gr = (abs, Pr.printTree gc) where
-  (abs,gc) = mkCanon2gfcc cnc gr 
+prGrammar2gfcc :: Options -> String -> SourceGrammar -> (String,String)
+prGrammar2gfcc opts cnc gr = (abs, Pr.printTree gc) where
+  (abs,gc) = mkCanon2gfcc opts cnc gr 
 
-mkCanon2gfcc :: String -> SourceGrammar -> (String,C.Grammar)
-mkCanon2gfcc cnc gr = 
-  (prIdent abs, (canon2gfcc . reorder abs . utf8Conv . canon2canon abs) gr)
+mkCanon2gfcc :: Options -> String -> SourceGrammar -> (String,C.Grammar)
+mkCanon2gfcc opts cnc gr = 
+  (prIdent abs, (canon2gfcc opts . reorder abs . utf8Conv . canon2canon abs) gr)
   where
     abs = err error id $ M.abstractOfConcrete gr (identC cnc)
-
--- This is needed to reorganize the grammar. GFCC has its own back-end optimization.
--- But we need to have the canonical order in tables, created by valOpt
 
 -- Generate GFCC from GFCM.
 -- this assumes a grammar translated by canon2canon
 
-canon2gfcc :: SourceGrammar -> C.Grammar
-canon2gfcc cgr@(M.MGrammar ((a,M.ModMod abm):cms)) = 
+canon2gfcc :: Options -> SourceGrammar -> C.Grammar
+canon2gfcc opts cgr@(M.MGrammar ((a,M.ModMod abm):cms)) = 
      C.Grm (C.Hdr (i2i a) cs) (C.Abs adefs) cncs where
   cs  = map (i2i . fst) cms
   adefs = [C.Fun f' (mkType ty) (C.Tr (C.AC f') []) | 
             (f,AbsFun (Yes ty) _) <- tree2list (M.jments abm), let f' = i2i f]
   cncs  = [C.Cnc (i2i lang) (concr m) | (lang,M.ModMod m) <- cms]
   concr mo = cats mo ++ lindefs mo ++ 
-               optConcrete 
+               (if oElem (iOpt "noopt") opts then id else optConcrete) 
                  [C.Lin (i2i f) (mkTerm tr) | 
                    (f,CncFun _ (Yes tr) _) <- tree2list (M.jments mo)]
   cats mo = [C.Lin (i2ic c) (mkCType ty) | 
@@ -163,7 +161,7 @@ canon2canon :: Ident -> SourceGrammar -> SourceGrammar
 canon2canon abs = recollect . map cl2cl . repartition abs . purgeGrammar abs where
   recollect = 
     M.MGrammar . nubBy (\ (i,_) (j,_) -> i==j) . concatMap M.modules
-  cl2cl cg = M.MGrammar $ map c2c $ M.modules cg where
+  cl2cl cg = tr $ M.MGrammar $ map c2c $ M.modules cg where
     c2c (c,m) = case m of
       M.ModMod mo@(M.Module _ _ _ _ _ js) ->
         (c, M.ModMod $ M.replaceJudgements mo $ mapTree j2j js)
@@ -176,11 +174,12 @@ canon2canon abs = recollect . map cl2cl . repartition abs . purgeGrammar abs whe
     ty2ty = type2type cg pv
     pv@(labels,untyps,typs) = paramValues cg
     tr = trace $
-     (unlines [A.prt c ++ "." ++ unwords (map A.prt l) +++ "=" +++ show i  | 
+     ("labels:" ++++
+       unlines [A.prt c ++ "." ++ unwords (map A.prt l) +++ "=" +++ show i  | 
        ((c,l),i) <- Map.toList labels]) ++
-     (unlines [A.prt t +++ "=" +++ show i  | 
+     ("untyps:" ++++ unlines [A.prt t +++ "=" +++ show i  | 
        (t,i) <- Map.toList untyps]) ++
-     (unlines [A.prt t | 
+     ("typs:" ++++ unlines [A.prt t | 
        (t,_) <- Map.toList typs])
 
 
@@ -270,12 +269,14 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
   QC  _ _ -> mkValCase tr 
   R rs ->
     let
+      tr' = R [(l, (Nothing,t)) | 
+               (l,(_,t)) <- unlock rs]
       rs' = [(mkLab i, (Nothing, t2t t)) | 
                (i,(l,(_,t))) <- zip [0..] (unlock rs)]
     in if (any (isStr . trmAss) rs)
       then R rs'
   --- else mkValCase tr
-      else R [(LIdent "_", (Nothing, mkValCase tr))]
+      else R [(LIdent "_", (Nothing, mkValCase tr'))]
   --- else R [(LIdent "_", (Nothing, mkValCase tr)), (LIdent "__",(Nothing,R rs'))]
   P t l    -> r2r tr
   PI t l i  -> EInt $ toInteger i
@@ -289,6 +290,29 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
   _ -> GM.composSafeOp t2t tr
  where
    t2t = term2term cgr env
+
+   mkValCase tr = case appSTM (doVar tr) [] of
+     Ok (tr', st@(_:_)) -> t2t $ comp $ foldr mkCase tr' st
+     _ -> valNum tr
+
+   doVar :: Term -> STM [((Type,[Term]),(Term,Term))] Term
+   doVar tr = case getLab tr of
+     Ok (cat, lab) -> do
+       k <- readSTM >>= return . length
+       let tr' = Vr $ identC $ show k -----
+
+       let tyvs = case Map.lookup (cat,lab) labels of
+             Just (ty,_) -> case Map.lookup ty typs of
+               Just vs -> (ty,[t | 
+                            (t,_) <- sortBy (\x y -> compare (snd x) (snd y)) 
+                                            (Map.assocs vs)])
+               _ -> error $ A.prt ty
+             _ -> error $ A.prt tr
+       updateSTM ((tyvs, (tr', tr)):) 
+       return tr'
+     _ -> GM.composOp doVar tr
+
+
 
    r2r tr@(P (S (V ty ts) v) l) = t2t $ S (V ty [comp (P t l) | t <- ts]) v
 
@@ -308,26 +332,6 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
      S p _ -> getLab p
      _ -> Bad "getLab"
 
-   doVar :: Term -> STM [((Type,[Term]),(Term,Term))] Term
-   doVar tr = case getLab tr of
-     Ok (cat, lab) -> do
-       k <- readSTM >>= return . length
-       let tr' = Vr $ identC $ show k -----
-
-       let tyvs = case Map.lookup (cat,lab) labels of
-             Just (ty,_) -> case Map.lookup ty typs of
-               Just vs -> (ty,[t | 
-                            (t,_) <- sortBy (\x y -> compare (snd x) (snd y)) 
-                                            (Map.assocs vs)])
-               _ -> error $ A.prt ty
-             _ -> error $ A.prt tr
-       updateSTM ((tyvs, (tr', tr)):) 
-       return tr'
-     _ -> GM.composOp doVar tr
-
-   mkValCase tr = case appSTM (doVar tr) [] of
-     Ok (tr', st@(_:_)) -> t2t $ comp $ foldr mkCase tr' st
-     _ -> valNum tr
 
    mkCase ((ty,vs),(x,p)) tr = 
      S (V ty [mkBranch x v tr | v <- vs]) p
@@ -351,11 +355,12 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
         _ -> FV $ map valNum ts
    isStr tr = case tr of
      App _ _ -> False
+     QC _ _  -> False
      EInt _  -> False
      R rs    -> any (isStr . trmAss) rs
      FV ts   -> any isStr ts
      S t _   -> isStr t
-     Empty       -> True
+     Empty   -> True
      T _ cs  -> any isStr [v | (_, v) <- cs]
      V _ ts  -> any isStr ts
      P t r   -> case getLab tr of
