@@ -10,6 +10,7 @@ import qualified GF.Grammar.Macros as GM
 import qualified GF.Infra.Modules as M
 import qualified GF.Infra.Option as O
 
+import GF.Devel.ModDeps
 import GF.Infra.Ident
 import GF.Data.Operations
 import GF.Text.UTF8
@@ -20,11 +21,15 @@ import Debug.Trace ----
 
 -- the main function: generate GFCC from GF.
 
-prGrammar2gfcc :: SourceGrammar-> String
-prGrammar2gfcc = Pr.printTree . mkCanon2gfcc
+prGrammar2gfcc :: String -> SourceGrammar -> (String,String)
+prGrammar2gfcc cnc gr = (abs, Pr.printTree gc) where
+  (abs,gc) = mkCanon2gfcc cnc gr 
 
-mkCanon2gfcc :: SourceGrammar -> C.Grammar
-mkCanon2gfcc = canon2gfcc . reorder . utf8Conv . canon2canon
+mkCanon2gfcc :: String -> SourceGrammar -> (String,C.Grammar)
+mkCanon2gfcc cnc gr = 
+  (prIdent abs, (canon2gfcc . reorder abs . utf8Conv . canon2canon abs) gr)
+  where
+    abs = err error id $ M.abstractOfConcrete gr (identC cnc)
 
 -- This is needed to reorganize the grammar. GFCC has its own back-end optimization.
 -- But we need to have the canonical order in tables, created by valOpt
@@ -102,15 +107,14 @@ mkTerm tr = case tr of
 
 -- return just one module per language
 
-reorder :: SourceGrammar -> SourceGrammar
-reorder cg = M.MGrammar $ 
+reorder :: Ident -> SourceGrammar -> SourceGrammar
+reorder abs cg = M.MGrammar $ 
     (abs, M.ModMod $ 
           M.Module M.MTAbstract M.MSComplete [] [] [] adefs):
       [(c, M.ModMod $ 
           M.Module (M.MTConcrete abs) M.MSComplete [] [] [] (sorted2tree js)) 
             | (c,js) <- cncs] 
      where
-       abs = maybe (error "no abstract") id $ M.greatestAbstract cg
        mos = M.allModMod cg
        adefs = 
          sorted2tree $ sortBy (\ (f,_) (g,_) -> compare f g) 
@@ -125,9 +129,8 @@ reorder cg = M.MGrammar $
               finfo <- tree2list (M.jments mo)]
 
 -- one grammar per language - needed for symtab generation
-repartition :: SourceGrammar -> [SourceGrammar]
-repartition cg = [M.partOfGrammar cg (lang,mo) | 
-  let abs = maybe (error "no abstract") id $ M.greatestAbstract cg,
+repartition :: Ident -> SourceGrammar -> [SourceGrammar]
+repartition abs cg = [M.partOfGrammar cg (lang,mo) | 
   let mos = M.allModMod cg,
   lang <- M.allConcretes cg abs,
   let mo = errVal 
@@ -151,11 +154,11 @@ utf8Conv = M.MGrammar . map toUTF8 . M.modules where
 
 -- translate tables and records to arrays, parameters and labels to indices
 
-canon2canon :: SourceGrammar -> SourceGrammar
-canon2canon = recollect . map cl2cl . repartition where
+canon2canon :: Ident -> SourceGrammar -> SourceGrammar
+canon2canon abs = recollect . map cl2cl . repartition abs . purgeGrammar abs where
   recollect = 
     M.MGrammar . nubBy (\ (i,_) (j,_) -> i==j) . concatMap M.modules
-  cl2cl cg = tr $ M.MGrammar $ map c2c $ M.modules cg where
+  cl2cl cg = M.MGrammar $ map c2c $ M.modules cg where
     c2c (c,m) = case m of
       M.ModMod mo@(M.Module _ _ _ _ _ js) ->
         (c, M.ModMod $ M.replaceJudgements mo $ mapTree j2j js)
@@ -174,6 +177,15 @@ canon2canon = recollect . map cl2cl . repartition where
        (t,i) <- Map.toList untyps]) ++
      (unlines [A.prt t | 
        (t,_) <- Map.toList typs])
+
+
+purgeGrammar :: Ident -> SourceGrammar -> SourceGrammar
+purgeGrammar abstr gr = (M.MGrammar . filter complete . purge . M.modules) gr where
+  purge = nubBy (\x y -> fst x == fst y) . filter (flip elem needed . fst)
+  needed = nub $ concatMap (requiredCanModules isSingle gr) acncs
+  acncs = abstr : M.allConcretes gr abstr
+  isSingle = True
+  complete (i,M.ModMod m) = M.isCompleteModule m --- not . isIncompleteCanon
 
 type ParamEnv =
   (Map.Map (Ident,[Label]) (Type,Integer), -- numbered labels
