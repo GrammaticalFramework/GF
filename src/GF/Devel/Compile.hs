@@ -29,9 +29,9 @@ import GF.Devel.Arch
 import Control.Monad
 import System.Directory
 
-batchCompile :: [FilePath] -> IO SourceGrammar
-batchCompile files = do
-  let defOpts = options [emitCode] 
+batchCompile :: Options -> [FilePath] -> IO SourceGrammar
+batchCompile opts files = do
+  let defOpts = addOptions opts (options [emitCode]) 
   Ok (_,gr) <- appIOE $ foldM (compileModule defOpts) emptyCompileEnv files
   return gr
 
@@ -79,12 +79,12 @@ compileEnvShSt env@(_,sgr) fs = (0,sgr2) where
 compileOne :: Options -> CompileEnv -> FullPath -> IOE CompileEnv
 compileOne opts env@(_,srcgr) file = do
 
-  let putp s = putPointE opts (s ++ "\n") 
+  let putp s = putPointE opts ("\n" ++ s) 
   let putpp = putPointEsil opts
   let putpOpt v m act
        | oElem beVerbose opts =  putp v act
        | oElem beSilent opts  =  putpp v act
-       | otherwise = ioeIO (putStrFlush m) >> act
+       | otherwise = ioeIO (putStrFlush ("\n" ++ m)) >> act
 
   let gf   = fileSuffix file
   let path = justInitPath file
