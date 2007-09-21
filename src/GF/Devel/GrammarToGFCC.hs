@@ -16,6 +16,7 @@ import GF.Data.Operations
 import GF.Text.UTF8
 
 import Data.List
+import Data.Char (isDigit)
 import qualified Data.Map as Map
 import Debug.Trace ----
 
@@ -79,6 +80,8 @@ mkCType t = case t of
 mkTerm :: Term -> C.Term
 mkTerm tr = case tr of
   Vr (IA (_,i)) -> C.V i
+  Vr (IC s) | isDigit (last s) -> 
+    C.V (read (reverse (takeWhile (/='_') (reverse s)))) ---- from gf parser of gfc
   EInt i      -> C.C $ fromInteger i
   -- record parameter alias - created in gfc preprocessing
   R [(LIdent "_", (_,i)), (LIdent "__", (_,t))] -> C.RP (mkTerm i) (mkTerm t)
@@ -292,6 +295,8 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
    -- this goes recursively into tables (ignored) and records (accumulated)
    getLab tr = case tr of
      Vr (IA (cat, _)) -> return (identC cat,[])
+     Vr (IC s) -> return (identC cat,[]) where
+       cat = init (reverse (dropWhile (/='_') (reverse s))) ---- from gf parser
      P p lab2 -> do
        (cat,labs) <- getLab p
        return (cat,labs++[lab2]) 
