@@ -67,7 +67,8 @@ mkCType :: Type -> C.Term
 mkCType t = case t of
   EInt i      -> C.C $ fromInteger i
   -- record parameter alias - created in gfc preprocessing
-  RecType [(LIdent "_", i), (LIdent "__", t)] -> C.RP (mkCType i) (mkCType t)
+  RecType [(LIdent "_", i)] -> mkCType i
+  --- RecType [(LIdent "_", i), (LIdent "__", t)] -> C.RP (mkCType i) (mkCType t)
   RecType rs     -> C.R [mkCType t | (_, t) <- rs]
   Table pt vt -> C.R $ replicate (getI (mkCType pt)) $ mkCType vt
   _    -> C.S [] ----- TStr
@@ -84,7 +85,8 @@ mkTerm tr = case tr of
     C.V (read (reverse (takeWhile (/='_') (reverse s)))) ---- from gf parser of gfc
   EInt i      -> C.C $ fromInteger i
   -- record parameter alias - created in gfc preprocessing
-  R [(LIdent "_", (_,i)), (LIdent "__", (_,t))] -> C.RP (mkTerm i) (mkTerm t)
+  R [(LIdent "_", (_,i))] -> mkTerm i
+  --- R [(LIdent "_", (_,i)), (LIdent "__", (_,t))] -> C.RP (mkTerm i) (mkTerm t)
   -- ordinary record
   R rs     -> C.R [mkTerm t | (_, (_,t)) <- rs]
   P t l    -> C.P (mkTerm t) (C.C (mkLab l))
@@ -250,7 +252,8 @@ type2type cgr env@(labels,untyps,typs) ty = case ty of
                (i,(l, t)) <- zip [0..] (unlockTyp rs)]
     in if (any isStrType [t | (_, t) <- rs])
       then RecType rs'
-      else RecType [(LIdent "_", look ty), (LIdent "__", RecType rs')]
+      else look ty
+  --- else RecType [(LIdent "_", look ty), (LIdent "__", RecType rs')]
 
   Table pt vt -> Table (t2t pt) (t2t vt)
   Cn _ -> look ty
@@ -271,7 +274,9 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
                (i,(l,(_,t))) <- zip [0..] (unlock rs)]
     in if (any (isStr . trmAss) rs)
       then R rs'
-      else R [(LIdent "_", (Nothing, mkValCase tr)), (LIdent "__",(Nothing,R rs'))]
+  --- else mkValCase tr
+      else R [(LIdent "_", (Nothing, mkValCase tr))]
+  --- else R [(LIdent "_", (Nothing, mkValCase tr)), (LIdent "__",(Nothing,R rs'))]
   P t l    -> r2r tr
   PI t l i  -> EInt $ toInteger i
 
