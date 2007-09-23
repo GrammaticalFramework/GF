@@ -4,7 +4,7 @@ module GF.Canon.GFCC.ParGFCC where
 import GF.Canon.GFCC.AbsGFCC
 import GF.Canon.GFCC.LexGFCC
 import GF.Canon.GFCC.ErrM
-import Array
+import Data.Array
 #if __GLASGOW_HASKELL__ >= 503
 import GHC.Exts
 #else

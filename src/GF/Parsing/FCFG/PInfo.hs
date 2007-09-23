@@ -9,11 +9,8 @@
 
 module GF.Parsing.FCFG.PInfo where
 
-import GF.System.Tracing
 import GF.Infra.PrintClass
-
 import GF.Formalism.Utilities
-import GF.Formalism.GCFG
 import GF.Formalism.FCFG
 import GF.Data.SortedList
 import GF.Data.Assoc
@@ -73,8 +70,6 @@ getLeftCornerCat lins
 
 buildFCFPInfo :: (Ord c, Ord n, Ord t) => (t -> (c,SyntaxNode RuleId RangeRec)) -> FCFGrammar c n t -> FCFPInfo c n t
 buildFCFPInfo lexer grammar = 
-    traceCalcFirst grammar $
-    tracePrt "MCFG.PInfo - parser info" (prt) $
     FCFPInfo { allRules = allrules
              , topdownRules = topdownrules
 	     -- , emptyRules = emptyrules

@@ -43,7 +43,6 @@ filterCats syms = [ cat | Cat cat <- syms ]
 filterToks :: [Symbol c t] -> [t]
 filterToks syms = [ tok | Tok tok <- syms ]
 
-
 ------------------------------------------------------------
 -- * edges
 

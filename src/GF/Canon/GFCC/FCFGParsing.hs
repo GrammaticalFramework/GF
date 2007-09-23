@@ -2,7 +2,7 @@ module GF.Canon.GFCC.FCFGParsing (parserLang,buildPInfo,FCFPInfo) where
 
 import GF.Canon.GFCC.DataGFCC
 import GF.Canon.GFCC.AbsGFCC
-import GF.Conversion.SimpleToFCFG (convertGrammarCId,FCat(..))
+import GF.Conversion.SimpleToFCFG (convertGrammar,FCat(..))
 
 --import GF.System.Tracing 
 --import GF.Infra.Print
@@ -35,11 +35,9 @@ import qualified GF.Parsing.FCFG as PF
 import GF.Canon.GFCC.ErrM
 import GF.Infra.PrintClass
 
---convertGrammarCId :: Grammar -> [(CId,FGrammar)]
-
 parserLang :: GFCC -> CId -> CFCat -> [CFTok] -> Err [Exp]
 parserLang mgr lang = parse info where
-  fcfgs = convertGrammarCId mgr
+  fcfgs = convertGrammar mgr
   info  = buildPInfo $ maybe (error "no parser") id $ lookup lang fcfgs
 
 type CFTok = String ----
