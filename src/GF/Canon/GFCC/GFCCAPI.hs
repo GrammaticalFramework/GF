@@ -23,14 +23,14 @@ import GF.Canon.GFCC.PrintGFCC
 import GF.Canon.GFCC.ErrM
 import GF.Canon.GFCC.FCFGParsing
 import qualified GF.Canon.GFCC.GenGFCC as G
-import GF.Conversion.SimpleToFCFG (convertGrammarCId,FCat(..)) ----
+import GF.Conversion.SimpleToFCFG (convertGrammar,FCat(..))
 
 --import GF.Data.Operations
 --import GF.Infra.UseIO
 import qualified Data.Map as Map
 import System.Random (newStdGen)
 import System.Directory (doesFileExist)
-import System
+
 
 -- This API is meant to be used when embedding GF grammars in Haskell 
 -- programs. The embedded system is supposed to use the
@@ -73,7 +73,7 @@ startCat   :: MultiGrammar -> Category
 
 file2grammar f = do
   gfcc <- file2gfcc f
-  let fcfgs = convertGrammarCId gfcc
+  let fcfgs = convertGrammar gfcc
   return (MultiGrammar gfcc [(lang, buildPInfo fcfg) | (CId lang,fcfg) <- fcfgs])
 
 file2gfcc f =

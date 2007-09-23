@@ -1,6 +1,5 @@
 module GF.Conversion.FTypes where
 
-import qualified GF.Infra.Ident as Ident (Ident(..), wildIdent, isWildIdent)
 import qualified GF.Canon.GFCC.AbsGFCC as AbsGFCC (CId(..))
 
 import GF.Formalism.FCFG

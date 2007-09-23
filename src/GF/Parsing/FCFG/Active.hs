@@ -14,12 +14,9 @@ import GF.Data.Assoc
 import GF.Data.SortedList
 import GF.Data.Utilities
 
-import GF.Formalism.GCFG
 import GF.Formalism.FCFG
-import GF.Formalism.MCFG(Lin(..))
 import GF.Formalism.Utilities
 
-import GF.Infra.Ident
 import GF.Infra.PrintClass
 
 import GF.Parsing.FCFG.Range

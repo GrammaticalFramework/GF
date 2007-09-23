@@ -13,9 +13,6 @@ import Control.Monad (liftM)
 import Data.List (groupBy)
 import Data.Array
 
-import GF.Formalism.Utilities
---import GF.Formalism.GCFG
-
 import GF.Infra.PrintClass
 
 

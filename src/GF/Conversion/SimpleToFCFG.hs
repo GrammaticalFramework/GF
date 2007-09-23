@@ -13,11 +13,9 @@
 
 
 module GF.Conversion.SimpleToFCFG
-    (convertGrammar,convertGrammarCId,FCat(..)) where
+    (convertGrammar,FCat(..)) where
 
-import GF.System.Tracing
 import GF.Infra.PrintClass
-import GF.Infra.Ident
 
 import Control.Monad
 
@@ -42,13 +40,8 @@ import Data.Maybe
 
 type FToken = String
 
-convertGrammar :: Grammar -> [(Ident,FCFGrammar FCat FName FToken)]
-convertGrammar g = [(IC c, f) | (CId c,f) <- convertGrammarCId (mkGFCC g)]
-
--- this is more native for GFCC
-
-convertGrammarCId :: GFCC -> [(CId,FCFGrammar FCat FName FToken)]
-convertGrammarCId gfcc = [(cncname,convert abs_defs conc) | 
+convertGrammar :: GFCC -> [(CId,FCFGrammar FCat FName FToken)]
+convertGrammar gfcc = [(cncname,convert abs_defs conc) | 
     cncname <- cncnames gfcc, conc <- Map.lookup cncname (concretes gfcc)]
   where
 

@@ -13,8 +13,6 @@ module GF.Parsing.FCFG
 import GF.Data.Operations (Err(..))
 
 import GF.Formalism.Utilities
-import GF.Formalism.GCFG
-import GF.Formalism.MCFG
 import GF.Parsing.FCFG.PInfo
 
 import qualified GF.Parsing.FCFG.Active as Active

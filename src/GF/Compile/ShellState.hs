@@ -17,6 +17,8 @@ module GF.Compile.ShellState where
 import GF.Data.Operations
 import GF.Canon.GFC
 import GF.Canon.AbsGFC
+import GF.Canon.GFCC.AbsGFCC(CId(CId))
+import GF.Canon.GFCC.DataGFCC(mkGFCC)
 import GF.Canon.CanonToGFCC as C2GFCC
 import GF.Grammar.Macros
 import GF.Grammar.MMacros
@@ -260,7 +262,7 @@ updateShellState opts ign mcnc sh ((_,sgr,gr,eenv),rts) = do
 
   let fromGFC       = snd . snd . Cnv.convertGFC opts
       (mcfgs, cfgs) = unzip $ map (curry fromGFC cgr) concrs
-      fcfgs         = FCnv.convertGrammar (C2GFCC.mkCanon2gfccNoUTF8 cgr)
+      fcfgs         = [(IC id,g) | (CId id,g) <- FCnv.convertGrammar (mkGFCC (C2GFCC.mkCanon2gfccNoUTF8 cgr))]
       pInfos        = zipWith3 Prs.buildPInfo mcfgs (map snd fcfgs) cfgs
       
       
