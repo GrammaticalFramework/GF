@@ -40,7 +40,6 @@ import qualified GF.Canon.GFCC.DataGFCC as DataGFCC
 import qualified GF.Canon.CanonToJS as JS (prCanon2js)
 import qualified GF.Source.AbsGF as GF
 import qualified GF.Grammar.MMacros as MM
-import GF.FCFG.ToFCFG
 import GF.Grammar.AbsCompute
 import GF.Grammar.TypeCheck
 import GF.UseGrammar.Generate
@@ -301,7 +300,6 @@ customGrammarPrinter =
 -- grammar conversions:
   ,(strCI "mcfg",     \_ -> Prt.prt . stateMCFG)
   ,(strCI "fcfg",     \_ -> Prt.prt . stateFCFG)
-  ,(strCI "bfcfg",    \_ -> printFGrammar . stateFCFG)
   ,(strCI "cfg",      \_ -> Prt.prt . stateCFG)
   ,(strCI "pinfo",    \_ -> Prt.prt . statePInfo)
   ,(strCI "abstract", \_ -> Prt.prtAfter "\n" . Cnv.gfc2abstract . stateGrammarLang)
