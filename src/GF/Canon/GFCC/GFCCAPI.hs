@@ -21,7 +21,7 @@ import GF.Canon.GFCC.AbsGFCC
 import GF.Canon.GFCC.ParGFCC
 import GF.Canon.GFCC.PrintGFCC
 import GF.Canon.GFCC.ErrM
-import GF.Canon.GFCC.FCFGParsing
+import GF.Parsing.FCFG
 import qualified GF.Canon.GFCC.GenGFCC as G
 import GF.Conversion.SimpleToFCFG (convertGrammar,FCat(..))
 
@@ -82,7 +82,11 @@ file2gfcc f =
 linearize mgr lang = GF.Canon.GFCC.DataGFCC.linearize (gfcc mgr) (CId lang)
 
 parse mgr lang cat s = 
-  err error id $ parserLang (gfcc mgr) (CId lang) (CId cat) (words s)
+  case lookup lang (parsers mgr) of
+    Nothing    -> error "no parser"
+    Just pinfo -> case parseFCF "bottomup" pinfo (CId cat) (words s) of
+                    Ok x -> x
+                    Bad s -> error s
 
 linearizeAll mgr = map snd . linearizeAllLang mgr
 linearizeAllLang mgr t = 

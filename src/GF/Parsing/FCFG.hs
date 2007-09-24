@@ -8,25 +8,91 @@
 -----------------------------------------------------------------------------
 
 module GF.Parsing.FCFG
-    (parseFCF, module GF.Parsing.FCFG.PInfo) where
+    (parseFCF,buildFCFPInfo,FCFPInfo(..),makeFinalEdge) where
 
-import GF.Data.Operations (Err(..))
+import GF.Data.SortedList 
+import GF.Data.Assoc
 
+import GF.Infra.PrintClass
+
+import GF.Formalism.FCFG
 import GF.Formalism.Utilities
-import GF.Parsing.FCFG.PInfo
 
 import qualified GF.Parsing.FCFG.Active as Active
-import GF.Infra.PrintClass
+import GF.Parsing.FCFG.PInfo
+
+import GF.Canon.GFCC.AbsGFCC
+import GF.Canon.GFCC.ErrM
+
 
 ----------------------------------------------------------------------
 -- parsing
 
-parseFCF :: String -> Err (FCFParser)
-parseFCF prs | prs `elem` strategies = Ok $ parseFCF' prs
-	     | otherwise = Bad $ "FCFG parsing strategy not defined: " ++ prs 
+-- main parsing function
 
-strategies = words "bottomup topdown"
+parseFCF :: 
+      String ->         -- ^ parsing strategy
+      FCFPInfo ->       -- ^ compiled grammar (fcfg) 
+      CId ->            -- ^ starting category
+      [String] ->       -- ^ input tokens
+      Err [Exp]         -- ^ resulting GF terms
+parseFCF strategy pinfo startCat inString =
+    do let inTokens = input inString
+           startCats = filter isStart $ grammarCats pinfo
+	   isStart cat = fcat2cid cat == startCat
+       fcfParser <- parseFCF strategy
+       let chart = fcfParser pinfo startCats inTokens
+	   (i,j) = inputBounds inTokens
+	   finalEdges = [makeFinalEdge cat i j | cat <- startCats]
+	   forests = map cnv_forests $ chart2forests chart (const False) finalEdges
+           filteredForests = forests >>= applyProfileToForest
+	   trees = nubsort $ filteredForests >>= forest2trees
+       return $ map tree2term trees
+    where
+      parseFCF :: String -> Err (FCFParser)
+      parseFCF "bottomup" = Ok  $ Active.parse "b"
+      parseFCF "topdown"  = Ok  $ Active.parse "t"
+      parseFCF strat      = Bad $ "FCFG parsing strategy not defined: " ++ strat
 
-parseFCF' :: String -> FCFParser
-parseFCF' "bottomup" pinfo starts toks = Active.parse "b" pinfo starts toks 
-parseFCF' "topdown"  pinfo starts toks = Active.parse "t" pinfo starts toks 
+
+cnv_forests FMeta         = FMeta
+cnv_forests (FNode (Name (CId n) p) fss) = FNode (Name (CId n) (map cnv_profile p)) (map (map cnv_forests) fss)
+cnv_forests (FString x)   = FString x
+cnv_forests (FInt    x)   = FInt    x
+cnv_forests (FFloat  x)   = FFloat  x
+
+cnv_profile (Unify    x) = Unify x
+cnv_profile (Constant x) = Constant (cnv_forests2 x)
+
+cnv_forests2 FMeta         = FMeta
+cnv_forests2 (FNode (CId n) fss) = FNode (CId n) (map (map cnv_forests2) fss)
+cnv_forests2 (FString x)   = FString x
+cnv_forests2 (FInt    x)   = FInt    x
+cnv_forests2 (FFloat  x)   = FFloat  x
+
+----------------------------------------------------------------------
+-- parse trees to GFCC terms
+
+tree2term :: SyntaxTree CId -> Exp
+tree2term (TNode f ts) = Tr (AC f) (map tree2term ts)
+
+tree2term (TString  s) = Tr (AS s) []
+tree2term (TInt     n) = Tr (AI n) []
+tree2term (TFloat   f) = Tr (AF f) []
+tree2term (TMeta)      = Tr AM []
+
+----------------------------------------------------------------------
+-- conversion and unification of forests
+
+-- simplest implementation
+applyProfileToForest :: SyntaxForest FName -> [SyntaxForest CId]
+applyProfileToForest (FNode name@(Name fun profile) children) 
+    | isCoercionF name = concat chForests
+    | otherwise       = [ FNode fun chForests | not (null chForests) ]
+    where chForests   = concat [ applyProfileM unifyManyForests profile forests |
+				 forests0 <- children,
+				 forests <- mapM applyProfileToForest forests0 ]
+applyProfileToForest (FString s) = [FString s]
+applyProfileToForest (FInt    n) = [FInt    n]
+applyProfileToForest (FFloat  f) = [FFloat  f]
+applyProfileToForest (FMeta)     = [FMeta]
