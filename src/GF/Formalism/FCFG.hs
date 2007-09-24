@@ -7,32 +7,106 @@
 -- Definitions of fast multiple context-free grammars
 -----------------------------------------------------------------------------
 
-module GF.Formalism.FCFG where
+module GF.Formalism.FCFG
+         ( 
+         -- * Token
+           FToken
+
+         -- * Category
+         , FPath
+         , FCat(..)
+
+         , initialFCat
+         , fcatString, fcatInt, fcatFloat
+         , fcat2cid
+
+         -- * Symbol
+         , FIndex
+         , FSymbol(..)
+
+         -- * Name
+         , FName
+         , isCoercionF
+
+         -- * Grammar
+         , FPointPos
+         , FGrammar
+         , FRule(..)
+         ) where
 
 import Control.Monad (liftM)
 import Data.List (groupBy)
 import Data.Array
 
+import GF.Formalism.Utilities
+import qualified GF.Canon.GFCC.AbsGFCC as AbsGFCC
 import GF.Infra.PrintClass
 
 
 ------------------------------------------------------------
--- grammar types
+-- Token
+type FToken    = String
 
-type FLabel    = Int
+
+------------------------------------------------------------
+-- Category
+type FPath     = [FIndex]
+data FCat      = FCat  {-# UNPACK #-} !Int AbsGFCC.CId [FPath] [(FPath,FIndex)]
+
+initialFCat :: AbsGFCC.CId -> FCat
+initialFCat cat = FCat 0 cat [] []
+
+fcatString = FCat (-1) (AbsGFCC.CId "String") [[0]] []
+fcatInt    = FCat (-2) (AbsGFCC.CId "Int")    [[0]] []
+fcatFloat  = FCat (-3) (AbsGFCC.CId "Float")  [[0]] []
+
+fcat2cid :: FCat -> AbsGFCC.CId
+fcat2cid (FCat _ c _ _) = c
+
+instance Eq FCat where
+  (FCat id1 _ _ _) == (FCat id2 _ _ _) = id1 == id2
+
+instance Ord FCat where
+  compare (FCat id1 _ _ _) (FCat id2 _ _ _) = compare id1 id2
+
+
+------------------------------------------------------------
+-- Symbol
+type FIndex    = Int
+data FSymbol
+  = FSymCat FCat {-# UNPACK #-} !FIndex {-# UNPACK #-} !Int 
+  | FSymTok FToken
+
+
+------------------------------------------------------------
+-- Name
+type FName     = NameProfile AbsGFCC.CId
+
+isCoercionF :: FName -> Bool
+isCoercionF (Name fun [Unify [0]]) = fun == AbsGFCC.CId "_"
+isCoercionF _ = False
+
+
+------------------------------------------------------------
+-- Grammar
+type FGrammar  = [FRule]
 type FPointPos = Int
+data FRule     = FRule FName [FCat] FCat (Array FIndex (Array FPointPos FSymbol))
 
-data FSymbol cat tok 
-  = FSymCat cat {-# UNPACK #-} !FLabel {-# UNPACK #-} !Int 
-  | FSymTok tok
-
-type FCFGrammar cat name tok = [FCFRule cat name tok]
-data FCFRule    cat name tok = FRule name [cat] cat (Array FLabel (Array FPointPos (FSymbol cat tok)))
 
 ------------------------------------------------------------
 -- pretty-printing
 
-instance (Print c, Print t) => Print (FSymbol c t) where
+instance Print AbsGFCC.CId where
+  prt (AbsGFCC.CId s) = s
+
+instance Print FCat where
+    prt (FCat _ (AbsGFCC.CId cat) rcs tcs) = cat ++ "{" ++ 
+			             prtSep ";" ([prt path                    |  path       <- rcs] ++
+			                         [prt path ++ "=" ++ prt term | (path,term) <- tcs])
+			                 ++ "}"
+
+instance Print FSymbol where
     prt (FSymCat c l n) = "($" ++ prt n ++ "!" ++ prt l ++ ")"
     prt (FSymTok t)     = simpleShow (prt t)
       where simpleShow str = "\"" ++ concatMap mkEsc str ++ "\""
@@ -43,7 +117,7 @@ instance (Print c, Print t) => Print (FSymbol c t) where
             mkEsc chr  = [chr]
     prtList = prtSep " "
 
-instance (Print c, Print n, Print t) => Print (FCFRule n c t) where
+instance Print FRule where
     prt (FRule name args res lins) = prt name ++ " : " ++ (if null args then "" else prtSep " " args ++ " -> ") ++ prt res ++
                                      " =\n   [" ++ prtSep "\n    " ["("++prtSep " " [prt sym | (_,sym) <- assocs syms]++")" | (_,syms) <- assocs lins]++"]"
     prtList = prtSep "\n"

@@ -21,7 +21,6 @@ import Control.Monad
 
 import GF.Formalism.Utilities
 import GF.Formalism.FCFG
-import GF.Conversion.FTypes
 import GF.Canon.GFCC.AbsGFCC
 import GF.Canon.GFCC.DataGFCC
 
@@ -38,9 +37,7 @@ import Data.Maybe
 ----------------------------------------------------------------------
 -- main conversion function
 
-type FToken = String
-
-convertGrammar :: GFCC -> [(CId,FCFGrammar FCat FName FToken)]
+convertGrammar :: GFCC -> [(CId,FGrammar)]
 convertGrammar gfcc = [(cncname,convert abs_defs conc) | 
     cncname <- cncnames gfcc, conc <- Map.lookup cncname (concretes gfcc)]
   where

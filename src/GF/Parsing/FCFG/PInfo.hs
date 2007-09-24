@@ -23,10 +23,10 @@ import Data.Maybe
 -- type declarations
 
 -- | the list of categories = possible starting categories
-type FCFParser c n t = FCFPInfo c n t 
-		     -> [c]
-		     -> Input t
-		     -> SyntaxChart n (c,RangeRec)
+type FCFParser =  FCFPInfo
+               -> [FCat]
+               -> Input FToken
+               -> SyntaxChart FName (FCat,RangeRec)
 
 makeFinalEdge cat 0 0 = (cat, [EmptyRange])
 makeFinalEdge cat i j = (cat, [makeRange i j])
@@ -36,19 +36,19 @@ makeFinalEdge cat i j = (cat, [makeRange i j])
 
 type RuleId = Int
 
-data FCFPInfo c n t
-    = FCFPInfo { allRules           :: Array RuleId (FCFRule c n t)
-               , topdownRules       :: Assoc c (SList RuleId)
+data FCFPInfo
+    = FCFPInfo { allRules           :: Array RuleId FRule
+               , topdownRules       :: Assoc FCat (SList RuleId)
 		 -- ^ used in 'GF.Parsing.MCFG.Active' (Earley):
-	         -- , emptyRules         :: [RuleId]
+	         -- , emptyRules    :: [RuleId]
 	       , epsilonRules       :: [RuleId]
 		 -- ^ used in 'GF.Parsing.MCFG.Active' (Kilbury):
-	       , leftcornerCats     :: Assoc c (SList RuleId)
-	       , leftcornerTokens   :: Assoc t (SList RuleId)
+	       , leftcornerCats     :: Assoc FCat (SList RuleId)
+	       , leftcornerTokens   :: Assoc FToken (SList RuleId)
 		 -- ^ used in 'GF.Parsing.MCFG.Active' (Kilbury):
-	       , grammarCats        :: SList c
-	       , grammarToks        :: SList t
-	       , grammarLexer       :: t -> (c,SyntaxNode RuleId RangeRec)
+	       , grammarCats        :: SList FCat
+	       , grammarToks        :: SList FToken
+	       , grammarLexer       :: FToken -> (FCat,SyntaxNode RuleId RangeRec)
 	       }
 
 
@@ -68,7 +68,7 @@ getLeftCornerCat lins
   where
     syms = lins ! 0
 
-buildFCFPInfo :: (Ord c, Ord n, Ord t) => (t -> (c,SyntaxNode RuleId RangeRec)) -> FCFGrammar c n t -> FCFPInfo c n t
+buildFCFPInfo :: (FToken -> (FCat,SyntaxNode RuleId RangeRec)) -> FGrammar -> FCFPInfo
 buildFCFPInfo lexer grammar = 
     FCFPInfo { allRules = allrules
              , topdownRules = topdownrules
@@ -98,7 +98,7 @@ buildFCFPInfo lexer grammar =
 ----------------------------------------------------------------------
 -- pretty-printing of statistics
 
-instance (Ord c, Ord n, Ord t) => Print (FCFPInfo c n t) where
+instance Print FCFPInfo where
     prt pI = "[ allRules=" ++ sl (elems . allRules) ++
 	     "; tdRules=" ++ sla topdownRules ++
 	     -- "; emptyRules=" ++ sl emptyRules ++ 

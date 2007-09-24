@@ -21,12 +21,12 @@ import GF.Infra.PrintClass
 ----------------------------------------------------------------------
 -- parsing
 
-parseFCF :: (Print c, Ord c, Ord n, Print t, Ord t) => String -> Err (FCFParser c n t)
+parseFCF :: String -> Err (FCFParser)
 parseFCF prs | prs `elem` strategies = Ok $ parseFCF' prs
 	     | otherwise = Bad $ "FCFG parsing strategy not defined: " ++ prs 
 
 strategies = words "bottomup topdown"
 
-parseFCF' :: (Print c, Ord c, Ord n, Print t, Ord t) => String -> FCFParser c n t
+parseFCF' :: String -> FCFParser
 parseFCF' "bottomup" pinfo starts toks = Active.parse "b" pinfo starts toks 
 parseFCF' "topdown"  pinfo starts toks = Active.parse "t" pinfo starts toks 

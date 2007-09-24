@@ -32,7 +32,7 @@ import Data.Array
 ----------------------------------------------------------------------
 -- * parsing
 
-parse :: (Print c, Ord c, Ord n, Print t, Ord t) => String -> FCFParser c n t
+parse :: String -> FCFParser
 parse strategy pinfo starts toks = xchart2syntaxchart chart pinfo
     where chart = process strategy pinfo toks axioms emptyXChart
           axioms | isBU  strategy = literals pinfo toks ++ initialBU pinfo toks
@@ -42,7 +42,7 @@ isBU  s = s=="b"
 isTD  s = s=="t"
 
 -- used in prediction
-emptyChildren :: RuleId -> FCFPInfo c n t -> SyntaxNode RuleId RangeRec
+emptyChildren :: RuleId -> FCFPInfo -> SyntaxNode RuleId RangeRec
 emptyChildren ruleid pinfo = SNode ruleid (replicate (length rhs) [])
   where
     FRule _ rhs _ _ = allRules pinfo ! ruleid
@@ -57,7 +57,7 @@ updateChildren (SNode ruleid recs) i rec = do
 makeMaxRange (Range _ j) = Range j j
 makeMaxRange EmptyRange  = EmptyRange
 
-process :: (Print c, Ord c, Ord n, Print t, Ord t) => String -> FCFPInfo c n t -> Input t -> [(c,Item)] -> XChart c -> XChart c
+process :: String -> FCFPInfo -> Input FToken -> [(FCat,Item)] -> XChart FCat -> XChart FCat
 process strategy pinfo toks []               chart = chart
 process strategy pinfo toks ((c,item):items) chart = process strategy pinfo toks items $! univRule c item chart
   where
@@ -110,7 +110,7 @@ process strategy pinfo toks ((c,item):items) chart = process strategy pinfo toks
 data Item
   = Active RangeRec
            Range
-           {-# UNPACK #-} !FLabel
+           {-# UNPACK #-} !FIndex
            {-# UNPACK #-} !FPointPos
            (SyntaxNode RuleId RangeRec)
   | Final RangeRec (SyntaxNode RuleId RangeRec)
@@ -134,7 +134,7 @@ insertXChart (XChart actives finals) item@(Final _ _) c =
 lookupXChartAct   (XChart actives finals) c = chartLookup actives c
 lookupXChartFinal (XChart actives finals) c = chartLookup finals  c
 
-xchart2syntaxchart :: (Ord c, Ord n, Ord t) => XChart c -> FCFPInfo c n t -> SyntaxChart n (c,RangeRec)
+xchart2syntaxchart :: XChart FCat -> FCFPInfo -> SyntaxChart FName (FCat,RangeRec)
 xchart2syntaxchart (XChart actives finals) pinfo =
   accumAssoc groupSyntaxNodes $
     [ case node of
@@ -146,7 +146,7 @@ xchart2syntaxchart (XChart actives finals) pinfo =
     | (cat, Final found node) <- chartAssocs finals
     ]
 
-literals :: (Ord c, Ord n, Ord t) => FCFPInfo c n t -> Input t -> [(c,Item)]
+literals :: FCFPInfo -> Input FToken -> [(FCat,Item)]
 literals pinfo toks =
   [let (c,node) = grammarLexer pinfo t in (c,Final [makeRange i j] node) | Edge i j t <- inputEdges toks, not (t `elem` grammarToks pinfo)]
 
@@ -154,7 +154,7 @@ literals pinfo toks =
 -- Earley --
 
 -- called with all starting categories
-initialTD :: (Ord c, Ord n, Ord t) => FCFPInfo c n t -> [c] -> Input t -> [(c,Item)]
+initialTD :: FCFPInfo -> [FCat] -> Input FToken -> [(FCat,Item)]
 initialTD pinfo starts toks = 
     do cat <- starts
        ruleid <- topdownRules pinfo ? cat
@@ -164,7 +164,7 @@ initialTD pinfo starts toks =
 ----------------------------------------------------------------------
 -- Kilbury --
 
-initialBU :: (Ord c, Ord n, Ord t) => FCFPInfo c n t -> Input t -> [(c,Item)]
+initialBU :: FCFPInfo -> Input FToken -> [(FCat,Item)]
 initialBU pinfo toks =
     do tok <- aElems (inputToken toks)
        ruleid <- leftcornerTokens pinfo ? tok ++
