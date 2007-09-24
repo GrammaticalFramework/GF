@@ -74,7 +74,7 @@ startCat   :: MultiGrammar -> Category
 file2grammar f = do
   gfcc <- file2gfcc f
   let fcfgs = convertGrammar gfcc
-  return (MultiGrammar gfcc [(lang, buildPInfo fcfg) | (CId lang,fcfg) <- fcfgs])
+  return (MultiGrammar gfcc [(lang, buildFCFPInfo fcfg) | (CId lang,fcfg) <- fcfgs])
 
 file2gfcc f =
   readFileIf f >>= err (error "no parse") (return . mkGFCC) . pGrammar . myLexer

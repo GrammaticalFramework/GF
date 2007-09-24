@@ -1,44 +1,23 @@
-module GF.Canon.GFCC.FCFGParsing (parserLang,buildPInfo,FCFPInfo) where
+module GF.Canon.GFCC.FCFGParsing (parserLang,PF.buildFCFPInfo,PF.FCFPInfo) where
 
 import GF.Canon.GFCC.DataGFCC
 import GF.Canon.GFCC.AbsGFCC
 import GF.Conversion.SimpleToFCFG (convertGrammar,FCat(..))
-
---import GF.System.Tracing 
---import GF.Infra.Print
---import qualified GF.Grammar.PrGrammar as PrGrammar
-
---import GF.Data.Operations (Err(..))
-
---import qualified GF.Grammar.Grammar as Grammar
---import qualified GF.Grammar.Macros as Macros
---import qualified GF.Canon.AbsGFC as AbsGFC
---import qualified GF.Canon.GFCC.AbsGFCC as AbsGFCC
---import qualified GF.Infra.Ident as Ident
---import GF.CF.CFIdent (CFCat, cfCat2Ident, CFTok, wordsCFTok)
 
 import GF.Data.SortedList 
 import GF.Data.Assoc
 import GF.Formalism.Utilities --(forest2trees)
 import qualified GF.Data.Operations as Op
 
-import GF.Conversion.FTypes
-
 import GF.Formalism.FCFG
---import qualified GF.Formalism.GCFG as G
---import qualified GF.Formalism.SimpleGFC as S
---import qualified GF.Formalism.MCFG as M
---import qualified GF.Formalism.CFG as C
---import qualified GF.Parsing.MCFG as PM
 import qualified GF.Parsing.FCFG as PF
---import qualified GF.Parsing.CFG as PC
 import GF.Canon.GFCC.ErrM
 import GF.Infra.PrintClass
 
 parserLang :: GFCC -> CId -> CFCat -> [CFTok] -> Err [Exp]
 parserLang mgr lang = parse info where
   fcfgs = convertGrammar mgr
-  info  = buildPInfo $ maybe (error "no parser") id $ lookup lang fcfgs
+  info  = PF.buildFCFPInfo $ maybe (error "no parser") id $ lookup lang fcfgs
 
 type CFTok = String ----
 type CFCat = CId ----
@@ -50,24 +29,12 @@ wordsCFTok :: CFTok -> [String]
 wordsCFTok = return ----
 
 
-type FCFPInfo = PF.FCFPInfo FCat FName String
-
-buildPInfo :: FGrammar -> FCFPInfo
-buildPInfo fcfg = PF.buildFCFPInfo grammarLexer fcfg where
-  grammarLexer s =
-      case reads s of
-        [(n,"")] -> (fcatInt, SInt (n::Integer))
-        _        -> case reads s of
-                      [(f,"")] -> (fcatFloat, SFloat  (f::Double))
-                      _        -> (fcatString,SString s)
-
-
 -- main parsing function
 
 parse :: 
 --         String ->      -- ^ parsing algorithm (mcfg or cfg)
 --         String ->      -- ^ parsing strategy
-      FCFPInfo ->       -- ^ compiled grammar (fcfg) 
+      PF.FCFPInfo ->       -- ^ compiled grammar (fcfg) 
 --      Ident.Ident ->    -- ^ abstract module name
       CFCat ->          -- ^ starting category
       [CFTok] ->        -- ^ input tokens
