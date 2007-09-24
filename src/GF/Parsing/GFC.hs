@@ -25,8 +25,9 @@ import qualified GF.Grammar.Grammar as Grammar
 import qualified GF.Grammar.Macros as Macros
 import qualified GF.Canon.AbsGFC as AbsGFC
 import qualified GF.Canon.GFCC.AbsGFCC as AbsGFCC
+import qualified GF.Canon.GFCC.ErrM as ErrM
 import qualified GF.Infra.Ident as Ident
-import GF.CF.CFIdent (CFCat, cfCat2Ident, CFTok, wordsCFTok)
+import GF.CF.CFIdent (CFCat, cfCat2Ident, CFTok, wordsCFTok, prCFTok)
 
 import GF.Data.SortedList 
 import GF.Data.Assoc
@@ -73,26 +74,12 @@ parse :: String         -- ^ parsing algorithm (mcfg or cfg)
       -> [CFTok]        -- ^ input tokens
       -> Err [Grammar.Term] -- ^ resulting GF terms
 
-parse prs strategy pinfo abs startCat inString = 
-    do let inTokens = tracePrt "Parsing.GFC - input tokens" prt $
-		      inputMany (map wordsCFTok inString)
-       forests <- selectParser prs strategy pinfo startCat inTokens
-       traceM "Parsing.GFC - nr. unfiltered forests" (prt (length forests))
-       traceM "Parsing.GFC - nr. unfiltered trees" (prt (length (forests >>= forest2trees)))
-       let filteredForests = tracePrt "Parsing.GFC - nr. forests" (prt . length) $
-			     forests >>= applyProfileToForest
-	   -- compactFs = tracePrt "#compactForests" (prt . length) $
-	   -- 	          tracePrt "compactForests" (prtBefore "\n") $
-	   -- 	          compactForests forests
-	   trees = tracePrt "Parsing.GFC - nr. trees" (prt . length) $
-		   nubsort $ filteredForests >>= forest2trees
-		   -- compactFs >>= forest2trees
-       return $ map (tree2term abs) trees
-
 
 -- parsing via CFG
-selectParser "c" strategy pinfo startCat inTokens
-    = do let startCats = tracePrt "Parsing.GFC - starting CF categories" prt $
+parse "c" strategy pinfo abs startCat inString
+    = do let inTokens = tracePrt "Parsing.GFC - input tokens" prt $
+		      inputMany (map wordsCFTok inString)
+	 let startCats = tracePrt "Parsing.GFC - starting CF categories" prt $
 			 filter isStart $ map fst $ aAssocs $ PC.topdownRules cfpi
 	     isStart cat = ccat2scat cat == cfCat2Ident startCat
 	     cfpi = cfPInfo pinfo
@@ -103,11 +90,25 @@ selectParser "c" strategy pinfo startCat inTokens
 		     C.grammar2chart cfChart
 	     finalEdges = tracePrt "Parsing.GFC - final chart edges" prt $
 			  map (uncurry Edge (inputBounds inTokens)) startCats
-	 return $ chart2forests chart (const False) finalEdges
+	     forests = chart2forests chart (const False) finalEdges
+         traceM "Parsing.GFC - nr. unfiltered forests" (prt (length forests))
+         traceM "Parsing.GFC - nr. unfiltered trees" (prt (length (forests >>= forest2trees)))
+         let filteredForests = tracePrt "Parsing.GFC - nr. forests" (prt . length) $
+	  		       forests >>= applyProfileToForest
+	     -- compactFs = tracePrt "#compactForests" (prt . length) $
+	     -- 	          tracePrt "compactForests" (prtBefore "\n") $
+	     -- 	          compactForests forests
+	     trees = tracePrt "Parsing.GFC - nr. trees" (prt . length) $
+	  	     nubsort $ filteredForests >>= forest2trees
+		     -- compactFs >>= forest2trees
+         return $ map (tree2term abs) trees
+
 
 -- parsing via MCFG
-selectParser "m" strategy pinfo startCat inTokens
-    = do let startCats = tracePrt "Parsing.GFC - starting MCF categories" prt $
+parse "m" strategy pinfo abs startCat inString
+    = do let inTokens = tracePrt "Parsing.GFC - input tokens" prt $
+		      inputMany (map wordsCFTok inString)
+         let startCats = tracePrt "Parsing.GFC - starting MCF categories" prt $
 			 filter isStart $ PM.grammarCats mcfpi
 	     isStart cat = mcat2scat cat == cfCat2Ident startCat
 	     mcfpi = mcfPInfo pinfo
@@ -116,20 +117,28 @@ selectParser "m" strategy pinfo startCat inTokens
 	     finalEdges = tracePrt "Parsing.GFC - final chart edges" prt $
 			  [ PM.makeFinalEdge cat lbl (inputBounds inTokens) | 
 			    cat@(MCat _ [lbl]) <- startCats ]
-	 return $ chart2forests chart (const False) finalEdges
+	     forests = chart2forests chart (const False) finalEdges
+         traceM "Parsing.GFC - nr. unfiltered forests" (prt (length forests))
+         traceM "Parsing.GFC - nr. unfiltered trees" (prt (length (forests >>= forest2trees)))
+         let filteredForests = tracePrt "Parsing.GFC - nr. forests" (prt . length) $
+	  		       forests >>= applyProfileToForest
+	     -- compactFs = tracePrt "#compactForests" (prt . length) $
+	     -- 	          tracePrt "compactForests" (prtBefore "\n") $
+	     -- 	          compactForests forests
+	     trees = tracePrt "Parsing.GFC - nr. trees" (prt . length) $
+	  	     nubsort $ filteredForests >>= forest2trees
+		     -- compactFs >>= forest2trees
+         return $ map (tree2term abs) trees
+
 
 -- parsing via FCFG
-selectParser "f" strategy pinfo startCat inTokens
-    = do let startCats = filter isStart $ PF.grammarCats fcfpi
-	     isStart cat = cat' == cfCat2Ident startCat
-	       where AbsGFCC.CId x = fcat2cid cat
-	             cat'          = Ident.IC x
-	     fcfpi = fcfPInfo pinfo
-	 fcfParser <- PF.parseFCF strategy
-	 let chart = fcfParser fcfpi startCats inTokens
-	     (i,j) = inputBounds inTokens
-	     finalEdges = [PF.makeFinalEdge cat i j | cat <- startCats]
-	 return $ map cnv_forests $ chart2forests chart (const False) finalEdges
+parse "f" strategy pinfo abs startCat inString =
+  let Ident.IC x = cfCat2Ident startCat
+      cat' = AbsGFCC.CId x
+  in case PF.parseFCF strategy (fcfPInfo pinfo) cat' (map prCFTok inString) of
+       ErrM.Ok  es  -> Ok  (map (exp2term abs) es)
+       ErrM.Bad msg -> Bad msg
+
 
 -- error parser: 
 selectParser prs strategy _ _ _ = Bad $ "Parser '" ++ prs ++ "' not defined with strategy: " ++ strategy 
@@ -159,6 +168,15 @@ tree2term abs (TInt     n) = Macros.int2term    n
 tree2term abs (TFloat   f) = Macros.float2term  f
 tree2term abs (TMeta)      = Macros.mkMeta 0
 
+exp2term :: Ident.Ident -> AbsGFCC.Exp -> Grammar.Term
+exp2term abs (AbsGFCC.Tr a es) = Macros.mkApp (atom2term abs a) (map (exp2term abs) es)
+
+atom2term :: Ident.Ident -> AbsGFCC.Atom -> Grammar.Term
+atom2term abs (AbsGFCC.AC (AbsGFCC.CId f)) = Macros.qq (abs,Ident.IC f)
+atom2term abs (AbsGFCC.AS s) = Macros.string2term s
+atom2term abs (AbsGFCC.AI n) = Macros.int2term    n
+atom2term abs (AbsGFCC.AF f) = Macros.float2term  f
+atom2term abs AbsGFCC.AM     = Macros.mkMeta 0
 
 ----------------------------------------------------------------------
 -- conversion and unification of forests
