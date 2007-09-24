@@ -48,7 +48,6 @@ data FCFPInfo
 		 -- ^ used in 'GF.Parsing.MCFG.Active' (Kilbury):
 	       , grammarCats        :: SList FCat
 	       , grammarToks        :: SList FToken
-	       , grammarLexer       :: FToken -> (FCat,SyntaxNode RuleId RangeRec)
 	       }
 
 
@@ -68,8 +67,8 @@ getLeftCornerCat lins
   where
     syms = lins ! 0
 
-buildFCFPInfo :: (FToken -> (FCat,SyntaxNode RuleId RangeRec)) -> FGrammar -> FCFPInfo
-buildFCFPInfo lexer grammar = 
+buildFCFPInfo :: FGrammar -> FCFPInfo
+buildFCFPInfo grammar =
     FCFPInfo { allRules = allrules
              , topdownRules = topdownrules
 	     -- , emptyRules = emptyrules
@@ -78,7 +77,6 @@ buildFCFPInfo lexer grammar =
 	     , leftcornerTokens = leftcorntoks
 	     , grammarCats = grammarcats
 	     , grammarToks = grammartoks
-	     , grammarLexer = lexer
 	     }
 
     where allrules = listArray (0,length grammar-1) grammar

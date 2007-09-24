@@ -148,7 +148,15 @@ xchart2syntaxchart (XChart actives finals) pinfo =
 
 literals :: FCFPInfo -> Input FToken -> [(FCat,Item)]
 literals pinfo toks =
-  [let (c,node) = grammarLexer pinfo t in (c,Final [makeRange i j] node) | Edge i j t <- inputEdges toks, not (t `elem` grammarToks pinfo)]
+  [let (c,node) = lexer t in (c,Final [makeRange i j] node) | Edge i j t <- inputEdges toks, not (t `elem` grammarToks pinfo)]
+  where
+    lexer t =
+      case reads t of
+        [(n,"")] -> (fcatInt, SInt (n::Integer))
+        _        -> case reads t of
+                      [(f,"")] -> (fcatFloat, SFloat  (f::Double))
+                      _        -> (fcatString,SString t)
+
 
 ----------------------------------------------------------------------
 -- Earley --
