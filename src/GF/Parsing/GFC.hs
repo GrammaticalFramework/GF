@@ -55,17 +55,9 @@ type CFPInfo  = PC.CFPInfo CCat Name Token
 
 buildPInfo :: MGrammar -> FGrammar -> CGrammar -> PInfo
 buildPInfo mcfg fcfg cfg = PInfo { mcfPInfo = PM.buildMCFPInfo mcfg
-                                 , fcfPInfo = PF.buildFCFPInfo grammarLexer fcfg
+                                 , fcfPInfo = PF.buildFCFPInfo fcfg
 			         , cfPInfo  = PC.buildCFPInfo  cfg
 			         }
-  where
-    grammarLexer s =
-      case reads s of
-        [(n,"")] -> (fcatInt, SInt (n::Integer))
-        _        -> case reads s of
-                      [(f,"")] -> (fcatFloat, SFloat  (f::Double))
-                      _        -> (fcatString,SString s)
-
 
 instance Print PInfo where
     prt (PInfo m f c) = prt m ++ "\n" ++ prt c
