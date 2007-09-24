@@ -32,11 +32,11 @@ import GF.Data.SortedList
 import GF.Data.Assoc
 import GF.Formalism.Utilities
 import GF.Conversion.Types
-import GF.Conversion.FTypes
 
 import qualified GF.Formalism.GCFG as G
 import qualified GF.Formalism.SimpleGFC as S
 import qualified GF.Formalism.MCFG as M
+import GF.Formalism.FCFG
 import qualified GF.Formalism.CFG as C
 import qualified GF.Parsing.MCFG as PM
 import qualified GF.Parsing.FCFG as PF
@@ -46,12 +46,11 @@ import qualified GF.Parsing.CFG as PC
 -- parsing information
 
 data PInfo = PInfo { mcfPInfo :: MCFPInfo
-		   , fcfPInfo :: FCFPInfo
+		   , fcfPInfo :: PF.FCFPInfo
 		   , cfPInfo  :: CFPInfo
 		   }
 
 type MCFPInfo = PM.MCFPInfo MCat Name MLabel Token
-type FCFPInfo = PF.FCFPInfo FCat FName Token
 type CFPInfo  = PC.CFPInfo CCat Name Token
 
 buildPInfo :: MGrammar -> FGrammar -> CGrammar -> PInfo

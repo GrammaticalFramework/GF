@@ -13,7 +13,7 @@
 
 module GF.Conversion.GFC
     (module GF.Conversion.GFC,
-     SGrammar, EGrammar, MGrammar, FGrammar, CGrammar) where
+     SGrammar, EGrammar, MGrammar, CGrammar) where
 
 import GF.Infra.Option
 import GF.Canon.GFC (CanonGrammar)
@@ -25,7 +25,6 @@ import GF.Formalism.SimpleGFC (decl2cat)
 import GF.Formalism.CFG (CFRule(..))
 import GF.Formalism.Utilities (symbol, name2fun)
 import GF.Conversion.Types
-import GF.Conversion.FTypes
 
 import qualified GF.Conversion.GFCtoSimple as G2S
 import qualified GF.Conversion.SimpleToFinite as S2Fin

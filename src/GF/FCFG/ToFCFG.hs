@@ -11,7 +11,6 @@ module GF.FCFG.ToFCFG (printFGrammar) where
 
 import GF.Formalism.FCFG
 import GF.Formalism.SimpleGFC
-import GF.Conversion.FTypes
 import GF.Infra.Ident
 import qualified GF.FCFG.AbsFCFG as F
 
@@ -31,7 +30,7 @@ import GF.Infra.Print
 type FToken = String
 
 -- this is the main function used
-printFGrammar :: FCFGrammar FCat FName FToken -> String
+printFGrammar :: FGrammar -> String
 printFGrammar = undefined {- printTree . fgrammar
 
 fgrammar :: FCFGrammar FCat Name FToken -> F.FGrammar

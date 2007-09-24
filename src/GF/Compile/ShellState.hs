@@ -44,6 +44,7 @@ import GF.System.Arch (ModTime)
 
 import qualified Transfer.InterpreterAPI as T
 
+import GF.Formalism.FCFG
 import qualified GF.OldParsing.ConvertGrammar as CnvOld -- OBSOLETE
 import qualified GF.Conversion.GFC as Cnv
 import qualified GF.Conversion.SimpleToFCFG as FCnv
@@ -67,7 +68,7 @@ data ShellState = ShSt {
   cfs        :: [(Ident,CF)] ,       -- ^ context-free grammars (small, no parameters, very over-generating)
   abstracts  :: [(Ident,[Ident])],   -- ^ abstracts and their associated concretes
   mcfgs      :: [(Ident, Cnv.MGrammar)], -- ^ MCFG, converted according to Ljunglöf (2004, ch 3)
-  fcfgs      :: [(Ident, Cnv.FGrammar)], -- ^ FCFG, optimized MCFG by Krasimir Angelov
+  fcfgs      :: [(Ident, FGrammar)], -- ^ FCFG, optimized MCFG by Krasimir Angelov
   cfgs       :: [(Ident, Cnv.CGrammar)], -- ^ CFG, converted from mcfg 
                                          -- (large, with parameters, no-so overgenerating)
   pInfos     :: [(Ident, Prs.PInfo)], -- ^ parsing information (compiled mcfg&cfg grammars)
@@ -146,7 +147,7 @@ data StateGrammar = StGr {
   grammar  :: CanonGrammar,
   cf       :: CF,
   mcfg     :: Cnv.MGrammar,
-  fcfg     :: Cnv.FGrammar,
+  fcfg     :: FGrammar,
   cfg      :: Cnv.CGrammar,
   pInfo    :: Prs.PInfo,
   morpho   :: Morpho,
@@ -174,7 +175,7 @@ emptyStateGrammar = StGr {
 stateGrammarST    :: StateGrammar -> CanonGrammar
 stateCF           :: StateGrammar -> CF
 stateMCFG         :: StateGrammar -> Cnv.MGrammar
-stateFCFG         :: StateGrammar -> Cnv.FGrammar
+stateFCFG         :: StateGrammar -> FGrammar
 stateCFG          :: StateGrammar -> Cnv.CGrammar
 statePInfo        :: StateGrammar -> Prs.PInfo
 stateMorpho       :: StateGrammar -> Morpho
