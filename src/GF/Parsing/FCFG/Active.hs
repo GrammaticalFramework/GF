@@ -47,34 +47,27 @@ emptyChildren ruleid pinfo = SNode ruleid (replicate (length rhs) [])
   where
     FRule _ rhs _ _ = allRules pinfo ! ruleid
 
-updateChildren :: SyntaxNode RuleId RangeRec -> Int -> RangeRec -> [SyntaxNode RuleId RangeRec]
-updateChildren (SNode ruleid recs) i rec = do
-  recs <- updateNthM update i recs
-  return (SNode ruleid recs)
-  where
-    update rec' = guard (null rec' || rec' == rec) >> return rec
-
-makeMaxRange (Range _ j) = Range j j
-makeMaxRange EmptyRange  = EmptyRange
-
 process :: String -> FCFPInfo -> Input FToken -> [(FCat,Item)] -> XChart FCat -> XChart FCat
 process strategy pinfo toks []               chart = chart
 process strategy pinfo toks ((c,item):items) chart = process strategy pinfo toks items $! univRule c item chart
   where
-    univRule cat item@(Active found rng lbl ppos node@(SNode ruleid _)) chart
+    univRule cat item@(Active found rng lbl ppos node@(SNode ruleid recs)) chart
       | inRange (bounds lin) ppos =
            case lin ! ppos of
-             FSymCat c r d -> case insertXChart chart item c of
-	                        Nothing    -> chart
-	                        Just chart -> let items = do item@(Final found' _) <- lookupXChartFinal chart c
-	         			                     rng  <- concatRange rng (found' !! r)
-	         			                     node <- updateChildren node d found'
-	     			                             return (c, Active found rng lbl (ppos+1) node)
-	     			                          ++
-	     			                          do guard (isTD strategy)
-	     			                             ruleid <- topdownRules pinfo ? c
-	     			                             return (c, Active [] EmptyRange 0 0 (emptyChildren ruleid pinfo))
-	     			              in process strategy pinfo toks items chart
+             FSymCat c r d -> case recs !! d of
+                                [] -> case insertXChart chart item c of
+	                                Nothing    -> chart
+	                                Just chart -> let items = do item@(Final found' _) <- lookupXChartFinal chart c
+	                			                     rng  <- concatRange rng (found' !! r)
+	     			                                     return (c, Active found rng lbl (ppos+1) (SNode ruleid (updateNth (const found') d recs)))
+	     			                                  ++
+	     			                                  do guard (isTD strategy)
+	     			                                     ruleid <- topdownRules pinfo ? c
+	     			                                     return (c, Active [] EmptyRange 0 0 (emptyChildren ruleid pinfo))
+	     			                      in process strategy pinfo toks items chart
+	     			found' -> let items = do rng  <- concatRange rng (found' !! r)
+	     			                         return (c, Active found rng lbl (ppos+1) node)
+	     			          in process strategy pinfo toks items chart
 	     FSymTok tok   -> let items = do (i,j) <- inputToken toks ? tok
 	                                     rng' <- concatRange rng (makeRange i j)
 	                                     return (cat, Active found rng' lbl (ppos+1) node)
@@ -93,15 +86,16 @@ process strategy pinfo toks ((c,item):items) chart = process strategy pinfo toks
                                      let FRule _ _ _ lins = allRules pinfo ! ruleid
                                          FSymCat cat r d  = lins ! l ! ppos
                                      rng  <- concatRange rng (found' !! r)
-                                     node <- updateChildren node d found'
-                                     return (cat, Active found rng l (ppos+1) node)
+                                     return (cat, Active found rng l (ppos+1) (updateChildren node d found'))
                                   ++
     			          do guard (isBU strategy)
 			             ruleid <- leftcornerCats pinfo ? cat
 			             let FRule _ _ _ lins = allRules pinfo ! ruleid
 			                 FSymCat cat r d  = lins ! 0 ! 0
-			             node <- updateChildren (emptyChildren ruleid pinfo) d found'
-                                     return (cat, Active [] (found' !! r) 0 1 node)
+                                     return (cat, Active [] (found' !! r) 0 1 (updateChildren (emptyChildren ruleid pinfo) d found'))
+
+                          updateChildren :: SyntaxNode RuleId RangeRec -> Int -> RangeRec -> SyntaxNode RuleId RangeRec
+                          updateChildren (SNode ruleid recs) i rec = SNode ruleid $! updateNth (const rec) i recs
                       in process strategy pinfo toks items chart
 
 ----------------------------------------------------------------------
