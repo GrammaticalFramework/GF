@@ -174,8 +174,12 @@ initialTD pinfo starts toks =
 
 initialBU :: FCFPInfo -> Input FToken -> [(FCat,Item)]
 initialBU pinfo toks =
-    do tok <- aElems (inputToken toks)
-       ruleid <- leftcornerTokens pinfo ? tok ++
-                 epsilonRules pinfo
+    do (tok,rngs) <- aAssocs (inputToken toks)
+       ruleid <- leftcornerTokens pinfo ? tok
+       let FRule _ _ cat _ = allRules pinfo ! ruleid
+       (i,j) <- rngs
+       return (cat,Active [] (makeRange i j) 0 1 (emptyChildren ruleid pinfo))
+    ++
+    do ruleid <- epsilonRules pinfo
        let FRule _ _ cat _ = allRules pinfo ! ruleid
        return (cat,Active [] EmptyRange 0 0 (emptyChildren ruleid pinfo))
