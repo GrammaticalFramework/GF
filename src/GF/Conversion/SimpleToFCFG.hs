@@ -133,7 +133,7 @@ convertTerm cnc_defs selector (FV vars)                      lins  = do term <- 
                                                                         convertTerm cnc_defs selector term lins
 convertTerm cnc_defs selector (S ts)       ((lbl_path,lin) : lins) = do projectHead lbl_path
                                                                         foldM (\lins t -> convertTerm cnc_defs selector t lins) ((lbl_path,lin) : lins) (reverse ts)
-convertTerm cnc_defs selector (K (KS str))     ((lbl_path,lin) : lins) = 
+convertTerm cnc_defs selector (K (KS str)) ((lbl_path,lin) : lins) = 
   do projectHead lbl_path
      return ((lbl_path,Tok str : lin) : lins)
 convertTerm cnc_defs selector (K (KP (str:_)_))((lbl_path,lin) : lins) = 
