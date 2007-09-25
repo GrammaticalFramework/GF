@@ -1,7 +1,6 @@
 module GF.Infra.PrintClass where
 
 import Data.List (intersperse)
-import GF.Data.Operations (Err(..))
 
 class Print a where
     prt :: a -> String
@@ -50,7 +49,3 @@ instance Print Integer where
 instance Print a => Print (Maybe a) where
     prt (Just a) = prt a
     prt Nothing  = "Nothing"
-
-instance Print a => Print (Err a) where
-    prt (Ok a) = prt a
-    prt (Bad str) = str

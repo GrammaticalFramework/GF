@@ -121,4 +121,7 @@ instance Print CFFun where
 instance Print Exp where
     prt = P.printTree
 
+instance Print a => Print (Err a) where
+    prt (Ok a) = prt a
+    prt (Bad str) = str
 
