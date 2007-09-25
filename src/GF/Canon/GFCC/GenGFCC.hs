@@ -2,7 +2,7 @@ module GF.Canon.GFCC.GenGFCC where
 
 import GF.Canon.GFCC.DataGFCC
 import GF.Canon.GFCC.AbsGFCC
-import GF.Data.Operations
+
 import qualified Data.Map as M
 import System.Random
 
@@ -25,6 +25,11 @@ generate gfcc cat = concatMap (\i -> gener i cat) [0..]
   depth tr = case tr of
     Tr _ [] -> 1
     Tr _ ts -> maximum (map depth ts) + 1
+
+combinations :: [[a]] -> [[a]]
+combinations t = case t of 
+  []    -> [[]]
+  aa:uu -> [a:u | a <- aa, u <- combinations uu]
 
 -- generate an infinite list of trees randomly
 generateRandom :: StdGen -> GFCC -> CId -> [Exp]
