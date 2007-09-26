@@ -72,7 +72,7 @@ parse :: String         -- ^ parsing algorithm (mcfg or cfg)
       -> Ident.Ident    -- ^ abstract module name
       -> CFCat          -- ^ starting category
       -> [CFTok]        -- ^ input tokens
-      -> Err [Grammar.Term] -- ^ resulting GF terms
+      -> GF.Data.Operations.Err [Grammar.Term] -- ^ resulting GF terms
 
 
 -- parsing via CFG
