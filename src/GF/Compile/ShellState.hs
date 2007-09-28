@@ -263,7 +263,9 @@ updateShellState opts ign mcnc sh ((_,sgr,gr,eenv),rts) = do
 
   let fromGFC       = snd . snd . Cnv.convertGFC opts
       (mcfgs, cfgs) = unzip $ map (curry fromGFC cgr) concrs
-      fcfgs         = [(IC id,g) | (CId id,g) <- FCnv.convertGrammar (mkGFCC (C2GFCC.mkCanon2gfccNoUTF8 cgr))]
+      fcfgs0        = [(IC id,g) | (CId id,g) <- 
+        FCnv.convertGrammar (mkGFCC (C2GFCC.mkCanon2gfccNoUTF8 cgr))]
+      fcfgs         = [(c,g) | c <- concrs, Just g <- [lookup c fcfgs0]]
       pInfos        = zipWith3 Prs.buildPInfo mcfgs (map snd fcfgs) cfgs
       
       
