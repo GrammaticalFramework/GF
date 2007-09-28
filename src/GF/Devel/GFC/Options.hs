@@ -1,4 +1,11 @@
-module GF.Devel.Options where
+module GF.Devel.GFC.Options 
+    (
+     Err(..), -- FIXME: take from somewhere else
+
+     Options(..),
+     Mode(..), Phase(..), OutputFormat(..), Optimization(..),
+     parseOptions, helpMessage
+    ) where
 
 import Control.Monad
 import Data.Maybe
