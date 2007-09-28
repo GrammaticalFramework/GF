@@ -2,6 +2,9 @@ module Main where
 
 import GF.Devel.Compile
 import GF.Devel.GrammarToGFCC
+import GF.Canon.GFCC.CheckGFCC
+import GF.Canon.GFCC.PrintGFCC
+import GF.Canon.GFCC.DataGFCC
 import GF.Devel.UseIO
 import GF.Infra.Option
 ---import GF.Devel.PrGrammar ---
@@ -17,10 +20,19 @@ main = do
     _ | oElem (iOpt "-make") opts -> do
       gr <- batchCompile opts fs
       let name = justModuleName (last fs)
-      let (abs,gc) = prGrammar2gfcc opts name gr
+      let (abs,gc) = mkCanon2gfcc opts name gr
+
+      if oElem (iOpt "check") opts then (check gc) else return ()
+
       let target = abs ++ ".gfcc"
-      writeFile target gc
+      writeFile target (printTree gc)
       putStrLn $ "wrote file " ++ target
     _ -> do
       mapM_ (batchCompile opts) (map return fs)
       putStrLn "Done."
+
+check gc = do
+  let gfcc = mkGFCC gc
+  b <- checkGFCC gfcc
+  putStrLn $ if b then "OK" else "Corrupted GFCC"
+

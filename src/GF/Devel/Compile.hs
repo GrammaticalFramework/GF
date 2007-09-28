@@ -35,6 +35,16 @@ batchCompile opts files = do
   Ok (_,gr) <- appIOE $ foldM (compileModule defOpts) emptyCompileEnv files
   return gr
 
+-- to output an intermediate stage
+intermOut :: Options -> Option -> String -> IOE ()
+intermOut opts opt s = if oElem opt opts then 
+  ioeIO (putStrLn ("\n\n--#" +++ prOpt opt) >> putStrLn s) 
+  else return ()
+
+prMod :: SourceModule -> String
+prMod = compactPrint . prModule
+
+
 -- | environment variable for grammar search path
 gfGrammarPathVar = "GF_GRAMMAR_PATH"
 
@@ -45,6 +55,7 @@ type CompileEnv = (Int,SourceGrammar)
 -- command-line options override options (marked by --#) in the file
 -- As for path: if it is read from file, the file path is prepended to each name.
 -- If from command line, it is used as it is.
+
 compileModule :: Options -> CompileEnv -> FilePath -> IOE CompileEnv
 compileModule opts1 env file = do
   opts0 <- ioeIO $ getOptionsFromFile file
@@ -60,21 +71,20 @@ compileModule opts1 env file = do
   ps <- ioeIO $ extendPathEnv gfLibraryPath gfGrammarPathVar ps1
   let ioeIOIf = if oElem beVerbose opts then ioeIO else (const (return ()))
   ioeIOIf $ putStrLn $ "module search path:" +++ show ps ----
-  let st = env
+  let sgr = snd env
   let rfs = [] ---- files already in memory and their read times
   let file' = if useFileOpt then justFileName file else file -- to find file itself
   files <- getAllFiles opts ps rfs file'
   ioeIOIf $ putStrLn $ "files to read:" +++ show files ----
   let names = map justModuleName files
   ioeIOIf $ putStrLn $ "modules to include:" +++ show names ----
-  let env0 = compileEnvShSt st names
+  let sgr2 = MGrammar [m | m@(i,_) <- modules sgr, 
+                           notElem (prt i) $ map fileBody names]
+  let env0 = (0,sgr2)
   (e,mm) <- foldIOE (compileOne opts) env0 files
   maybe (return ()) putStrLnE mm
   return e
 
-compileEnvShSt :: CompileEnv -> [ModName] -> CompileEnv
-compileEnvShSt env@(_,sgr) fs = (0,sgr2) where
-  sgr2 = MGrammar [m | m@(i,_) <- modules sgr, notElem (prt i) $ map fileBody fs]
 
 compileOne :: Options -> CompileEnv -> FullPath -> IOE CompileEnv
 compileOne opts env@(_,srcgr) file = do
@@ -125,19 +135,25 @@ compileSourceModule opts env@(k,gr) mo@(i,mi) = do
       mos   = modules gr
 
   mo1   <- ioeErr $ rebuildModule mos mo
+  intermOut opts (iOpt "show_rebuild") (prMod mo1)
 
   mo1b  <- ioeErr $ extendModule mos mo1
+  intermOut opts (iOpt "show_extend") (prMod mo1b)
 
   case mo1b of
     (_,ModMod n) | not (isCompleteModule n) -> do
       return (k,mo1b)   -- refresh would fail, since not renamed
     _ -> do
       mo2:_ <- putpp "  renaming " $ ioeErr $ renameModule mos mo1b
+      intermOut opts (iOpt "show_rename") (prMod mo2)
 
       (mo3:_,warnings) <- putpp "  type checking" $ ioeErr $ showCheckModule mos mo2
       if null warnings then return () else putp warnings $ return ()
+      intermOut opts (iOpt "show_typecheck") (prMod mo3)
+
 
       (k',mo3r:_) <- putpp "  refreshing " $ ioeErr $ refreshModule (k,mos) mo3
+      intermOut opts (iOpt "show_refresh") (prMod mo3r)
 
       let eenv = emptyEEnv
       (mo4,eenv') <- 

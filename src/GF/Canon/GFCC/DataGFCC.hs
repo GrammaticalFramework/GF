@@ -131,4 +131,3 @@ mkGFCC (Grm (Hdr a cs) ab@(Abs funs) ccs) = GFCC {
  where
    mkCnc lins = fromList [(fun,lin) | Lin fun lin <- lins] ---- Asc
 
-

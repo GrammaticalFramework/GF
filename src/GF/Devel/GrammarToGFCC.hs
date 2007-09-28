@@ -1,4 +1,4 @@
-module GF.Devel.GrammarToGFCC (prGrammar2gfcc) where
+module GF.Devel.GrammarToGFCC (prGrammar2gfcc,mkCanon2gfcc) where
 
 import GF.Grammar.Grammar
 import qualified GF.Grammar.Lookup as Look

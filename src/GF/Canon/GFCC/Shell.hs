@@ -41,7 +41,7 @@ commands = unlines [
 treat :: MultiGrammar -> String -> IO ()
 treat mgr s = case words s of
   "gt" :cat:n:_ -> mapM_ prlinonly $ take (read1 n) $ generateAll mgr cat
-  "gtt":cat:n:_ -> mapM_ prlin $ generateAll mgr cat
+  "gtt":cat:n:_ -> mapM_ prlin $ take (read1 n) $ generateAll mgr cat
   "gr" :cat:n:_ -> generateRandom mgr cat >>= mapM_ prlinonly . take (read1 n) 
   "grt":cat:n:_ -> generateRandom mgr cat >>= mapM_ prlin . take (read1 n) 
   "p":lang:cat:ws -> do
