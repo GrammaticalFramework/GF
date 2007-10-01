@@ -3,6 +3,7 @@ module GF.Canon.GFCC.CheckGFCC where
 import GF.Canon.GFCC.DataGFCC
 import GF.Canon.GFCC.AbsGFCC
 import GF.Canon.GFCC.PrintGFCC
+import GF.Canon.GFCC.ErrM
 
 import qualified Data.Map as Map
 import Control.Monad
@@ -20,31 +21,76 @@ checkGFCC gfcc = andMapM (checkConcrete gfcc) $ Map.assocs $ concretes gfcc
 
 checkConcrete :: GFCC -> (CId,Map.Map CId Term) -> IO Bool
 checkConcrete gfcc (lang,cnc) = 
-  labelBoolIO (printTree lang) $ andMapM (checkLin gfcc lang) $ linRules cnc
+  labelBoolIO ("happened in language " ++ printTree lang) $ 
+    andMapM (checkLin gfcc lang) $ linRules cnc
 
 checkLin :: GFCC -> CId -> (CId,Term) -> IO Bool
 checkLin gfcc lang (f,t) = 
-  labelBoolIO (printTree f) $ checkTerm (lintype gfcc lang f) $ inline gfcc lang t
+  labelBoolIO ("happened in function " ++ printTree f) $ 
+    checkTerm (lintype gfcc lang f) $ inline gfcc lang t
+
+inferTerm :: [Tpe] -> Term -> Maybe Tpe
+inferTerm args trm = case trm of
+  K _ -> return str
+  C i -> return $ ints i
+  V i -> if i < length args 
+           then (return $ args !! i) 
+           else error ("index " ++ show i)
+  S ts -> do
+    tys <- mapM infer ts
+    if all (==str) tys 
+      then return str 
+      else error ("only strings expected in: " ++ printTree trm
+                  ++ " instead of " ++ unwords (map printTree tys)
+                 )
+  R ts -> do
+    tys <- mapM infer ts
+    return $ tuple tys
+  P t u -> do
+    R tys <- infer t
+    case u of
+      C i -> if (i < length tys) 
+             then (return $ tys !! i) -- record: index must be known
+             else error ("too few fields in " ++ printTree (R tys))
+      _ -> if all (==head tys) tys    -- table: must be same
+             then return (head tys) 
+             else error ("projection " ++ printTree trm)
+  FV ts -> return $ head ts ---- empty variants; check equality 
+  W s r -> infer r
+  _ -> error ("no type inference for " ++ printTree trm)
+ where
+   infer = inferTerm args
 
 checkTerm :: LinType -> Term -> IO Bool
-checkTerm (args,val) trm = case (val,trm) of
-  (R tys, R trs) -> do
-    let (ntys,ntrs) = (length tys,length trs)
-    b <- checkCond 
-      ("number of fields in " ++ prtrm ++ " does not match " ++ prval) (ntys == ntrs)
-    bs <- andMapM (uncurry check) (zip tys trs)
-    return $ b && bs
-  (R _, W _ r) -> check val r
-  _ -> return True
- where
-   checkCond msg cond = if cond then return True else (putStrLn msg >> return False)
-   check ty tr = checkTerm (args,ty) tr
-   prtrm = printTree trm
-   prval = printTree val
+checkTerm (args,val) trm = case inferTerm args trm of
+  Just ty -> if eqType ty val then return True else do
+    putStrLn $ "term: " ++ printTree trm ++ 
+               "\nexpected type: " ++ printTree val ++
+               "\ninferred type: " ++ printTree ty
+    return False
+  _ -> do
+    putStrLn $ "cannot infer type of " ++ printTree trm
+    return False
+
+eqType :: Tpe -> Tpe -> Bool
+eqType inf exp = case (inf,exp) of
+  (C k, C n)  -> k <= n -- only run-time corr.
+  (R rs,R ts) -> length rs == length ts && and [eqType r t | (r,t) <- zip rs ts]
+  _ -> inf == exp
 
 -- should be in a generic module, but not in the run-time DataGFCC
 
-type LinType = ([Term],Term)
+type Tpe = Term
+type LinType = ([Tpe],Tpe)
+
+tuple :: [Tpe] -> Tpe
+tuple = R
+
+ints :: Int -> Tpe
+ints = C
+
+str :: Tpe
+str = S []
 
 lintype :: GFCC -> CId -> CId -> LinType
 lintype gfcc lang fun = case lookType gfcc fun of
