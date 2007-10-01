@@ -49,6 +49,9 @@ inferTerm args trm = case trm of
   P t u -> do
     R tys <- infer t
     case u of
+      R [v] -> infer $ P t v
+      R (v:vs) -> infer $ P (head tys) (R vs) -----
+        
       C i -> if (i < length tys) 
              then (return $ tys !! i) -- record: index must be known
              else error ("too few fields in " ++ printTree (R tys))
