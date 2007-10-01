@@ -64,34 +64,22 @@ mkType t = case GM.catSkeleton t of
 mkCType :: Type -> C.Term
 mkCType t = case t of
   EInt i      -> C.C $ fromInteger i
-  -- record parameter alias - created in gfc preprocessing
-  ----RecType [(LIdent "_", i)] -> mkCType i
-  --- RecType [(LIdent "_", i), (LIdent "__", t)] -> C.RP (mkCType i) (mkCType t)
-  RecType rs     -> C.R [mkCType t | (_, t) <- rs]
-  Table pt vt -> C.R $ replicate (getI (mkCType pt)) $ mkCType vt
-  _    -> C.S [] ----- TStr
- where
-  getI pt = case pt of
-    C.C i -> i
-    C.RP i _ -> getI i
-    _ -> 1 -----
+  RecType rs  -> C.R [mkCType t | (_, t) <- rs]
+  Table pt vt -> case pt of
+    EInt i -> C.R $ replicate (fromInteger i) $ mkCType vt
+    RecType rs -> mkCType $ foldr Table vt (map snd rs) 
+  Sort "Str"        -> C.S [] --- Str only
+  _ -> error  $ "mkCType " ++ show t
 
 mkTerm :: Term -> C.Term
 mkTerm tr = case tr of
   Vr (IA (_,i)) -> C.V i
   Vr (IC s) | isDigit (last s) -> 
-    C.V (read (reverse (takeWhile (/='_') (reverse s)))) ---- from gf parser of gfc
+    C.V (read (reverse (takeWhile (/='_') (reverse s)))) 
+    ---- from gf parser of gfc
   EInt i      -> C.C $ fromInteger i
-  -- record parameter alias - created in gfc preprocessing
-  ----R [(LIdent "_", (_,i))] -> mkTerm i
-  --- R [(LIdent "_", (_,i)), (LIdent "__", (_,t))] -> C.RP (mkTerm i) (mkTerm t)
-  -- ordinary record
   R rs     -> C.R [mkTerm t | (_, (_,t)) <- rs]
   P t l    -> C.P (mkTerm t) (C.C (mkLab l))
-
------  LI x     -> C.BV $ i2i x
------  T _ [(PV x, t)] -> C.L (i2i x) (mkTerm t)
-
   T _ cs   -> C.R [mkTerm t | (_,t) <- cs] ------
   V _ cs   -> C.R [mkTerm t | t <- cs]
   S t p    -> C.P (mkTerm t) (mkTerm p)
@@ -158,7 +146,8 @@ utf8Conv = M.MGrammar . map toUTF8 . M.modules where
 -- translate tables and records to arrays, parameters and labels to indices
 
 canon2canon :: Ident -> SourceGrammar -> SourceGrammar
-canon2canon abs = recollect . map cl2cl . repartition abs . purgeGrammar abs where
+canon2canon abs = recollect . map cl2cl . repartition abs . purgeGrammar abs 
+ where
   recollect = 
     M.MGrammar . nubBy (\ (i,_) (j,_) -> i==j) . concatMap M.modules
   cl2cl cg = tr $ M.MGrammar $ map c2c $ M.modules cg where
@@ -168,7 +157,7 @@ canon2canon abs = recollect . map cl2cl . repartition abs . purgeGrammar abs whe
       _ -> (c,m)
     j2j (f,j) = case j of
       CncFun x (Yes tr) z -> (f,CncFun x (Yes (t2t tr)) z)
-      CncCat (Yes ty) (Yes x) y   -> (f,CncCat (Yes (ty2ty ty)) (Yes (t2t x)) y)
+      CncCat (Yes ty) (Yes x) y -> (f,CncCat (Yes (ty2ty ty)) (Yes (t2t x)) y)
       _ -> (f,j)
     t2t = term2term cg pv
     ty2ty = type2type cg pv
@@ -196,7 +185,7 @@ type ParamEnv =
    Map.Map Term Integer,                   -- untyped terms to values
    Map.Map Type (Map.Map Term Integer))    -- types to their terms to values
 
---- gathers those param types that are actually used in lincats and in lin terms
+--- gathers those param types that are actually used in lincats and lin terms
 paramValues :: SourceGrammar -> ParamEnv
 paramValues cgr = (labels,untyps,typs) where
   params = [(ty, errVal [] $ Look.allParamValues cgr ty) | ty <- partyps]
@@ -219,13 +208,16 @@ paramValues cgr = (labels,untyps,typs) where
   typsFromTrm :: Term -> STM [Type] Term
   typsFromTrm tr = case tr of
     V ty ts -> updateSTM (ty:) >> mapM_ typsFromTrm ts >> return tr
-    T (TTyped ty) cs -> updateSTM (ty:) >> mapM_ typsFromTrm [t | (_, t) <- cs] >> return tr
+    T (TTyped ty) cs -> 
+      updateSTM (ty:) >> mapM_ typsFromTrm [t | (_, t) <- cs] >> return tr
     _ -> GM.composOp typsFromTrm tr
 
-
-  jments = [(m,j) | (m,mo) <- M.allModMod cgr, j <- tree2list $ M.jments mo]
-  typs = Map.fromList [(ci,Map.fromList (zip vs [0..])) | (ci,vs) <- params]
-  untyps = Map.fromList $ concatMap Map.toList [typ | (_,typ) <- Map.toList typs]
+  jments = 
+    [(m,j) | (m,mo) <- M.allModMod cgr, j <- tree2list $ M.jments mo]
+  typs = 
+    Map.fromList [(ci,Map.fromList (zip vs [0..])) | (ci,vs) <- params]
+  untyps = 
+    Map.fromList $ concatMap Map.toList [typ | (_,typ) <- Map.toList typs]
   lincats = 
     [(IC cat,[(LIdent "s",GM.typeStr)]) | cat <- ["Int", "Float", "String"]] ++
     [(cat,(unlockTyp ls)) | (_,(cat,CncCat (Yes (RecType ls)) _ _)) <- jments]
@@ -246,48 +238,26 @@ paramValues cgr = (labels,untyps,typs) where
 type2type :: SourceGrammar -> ParamEnv -> Type -> Type
 type2type cgr env@(labels,untyps,typs) ty = case ty of
   RecType rs ->
-    let
-      rs' = [(mkLab i, t2t t) | 
-               (i,(l, t)) <- zip [0..] (unlockTyp rs)]
-    in if (any isStrType [t | (_, t) <- rs])
-      then RecType rs'
-      else look ty
-  --- else RecType [(LIdent "_", look ty), (LIdent "__", RecType rs')]
-
+    RecType [(mkLab i, t2t t) | (i,(l, t)) <- zip [0..] (unlockTyp rs)]
   Table pt vt -> Table (t2t pt) (t2t vt)
-  Cn _ -> look ty
+  QC _ _ -> look ty
   _ -> ty
  where
    t2t = type2type cgr env
    look ty = EInt $ toInteger $ case Map.lookup ty typs of
      Just vs -> length $ Map.assocs vs
-     _ -> trace ("unknown partype " ++ show ty) 1 ---- 66669
+     _ -> trace ("unknown partype " ++ show ty) 66669
 
 term2term :: SourceGrammar -> ParamEnv -> Term -> Term
 term2term cgr env@(labels,untyps,typs) tr = case tr of
   App _ _ -> mkValCase tr 
   QC  _ _ -> mkValCase tr 
-  R rs ->
-    let
-      tr' = R [(l, (Nothing,t)) | 
-               (l,(_,t)) <- unlock rs]
-      rs' = [(mkLab i, (Nothing, t2t t)) | 
-               (i,(l,(_,t))) <- zip [0..] (unlock rs)]
-    in 
-      ----if (any (isStr . trmAss) rs)
-      ----then 
-      R rs'
-  --- else mkValCase tr
-  ----else R [(LIdent "_", (Nothing, mkValCase tr'))]
-  --- else R [(LIdent "_", (Nothing, mkValCase tr)), (LIdent "__",(Nothing,R rs'))]
-  P t l    -> r2r tr
-  PI t l i  -> EInt $ toInteger i
-
------  T ti [Cas ps@[PV _] t] -> T ti [Cas ps (t2t t)]
-
-  T (TTyped ty) cs  -> V ty [t2t t | (_, t) <- cs]
-  ----    _ -> K (KS (A.prt tr +++ prtTrace tr "66668"))
-  V ty ts  -> V ty [t2t t | t <- ts]
+  R rs    -> R [(mkLab i, (Nothing, t2t t)) | 
+                 (i,(l,(_,t))) <- zip [0..] (unlock rs)]
+  P  t l   -> r2r tr
+  PI t l i -> EInt $ toInteger i
+  T (TTyped ty) cs  -> mkCurry $ V ty [t2t t | (_, t) <- cs]
+  V ty ts  -> mkCurry $ V ty [t2t t | t <- ts]
   S t p    -> S (t2t t) (t2t p)
   _ -> GM.composSafeOp t2t tr
  where
@@ -296,6 +266,9 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
    mkValCase tr = case appSTM (doVar tr) [] of
      Ok (tr', st@(_:_)) -> t2t $ comp $ foldr mkCase tr' st
      _ -> valNum tr
+
+   --- this is mainly needed for parameter record projections
+   comp t = t ----- $ Look.ccompute cgr [] t
 
    doVar :: Term -> STM [((Type,[Term]),(Term,Term))] Term
    doVar tr = case getLab tr of
@@ -355,35 +328,22 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
       valNumFV ts = case ts of
         [tr] -> EInt 66667 ----K (KS (A.prt tr +++ prtTrace tr "66667"))
         _ -> FV $ map valNum ts
-   isStr tr = case tr of
-     App _ _ -> False
-     QC _ _  -> False
-     EInt _  -> False
-     R rs    -> any (isStr . trmAss) rs
-     FV ts   -> any isStr ts
-     S t _   -> isStr t
-     Empty   -> True
-     T _ cs  -> any isStr [v | (_, v) <- cs]
-     V _ ts  -> any isStr ts
-     P t r   -> case getLab tr of
-       Ok (cat,labs) -> case 
-          Map.lookup (cat,labs) labels of
-            Just (ty,_) -> isStrType ty 
-            _ -> True ---- TODO?
-       _ -> True
-     _ -> True ----
-   trmAss (_,(_, t)) = t
 
-   --- this is mainly needed for parameter record projections
-   comp t = t ----- $ Look.ccompute cgr [] t
+   mkCurry trm = case trm of
+     V (RecType [(_,ty)]) ts -> V ty ts 
+     V (RecType ((_,ty):ltys)) ts -> 
+       V ty [mkCurry (V (RecType ltys) cs) | cs <- chop (lengthtyp ty) ts] 
+     _ -> trm
+   lengthtyp ty = case Map.lookup ty typs of
+     Just m -> length (Map.assocs m)
+     _ -> error $ "length of type " ++ show ty
+   chop i xs = case splitAt i xs of 
+     (xs1,[])  -> [xs1]
+     (xs1,xs2) -> xs1:chop i xs2
 
-isStrType ty = case ty of
-     Sort "Str" -> True
-     RecType ts -> any isStrType [t | (_, t) <- ts]
-     Table _ t -> isStrType t
-     _ -> False
 
 mkLab k = LIdent (("_" ++ show k))
+
 
 -- remove lock fields; in fact, any empty records and record types
 unlock = filter notlock where
@@ -394,7 +354,6 @@ unlockTyp = filter notlock where
   notlock (l, t) = case t of --- need not look at l
      RecType [] -> False
      _ -> True
-
 
 prtTrace tr n = n ----trace ("-- ERROR" +++ A.prt tr +++ show n +++ show tr) n
 prTrace  tr n = trace ("-- OBSERVE" +++ A.prt tr +++ show n +++ show tr) n
@@ -498,3 +457,31 @@ collectSubterms t = case t of
          _ ->            ((1,   i ), i+1)
      writeSTM (Map.insert t (count,id) ts, next)
 
+{-
+-- needed in the past
+isStr tr = case tr of
+     App _ _ -> False
+     QC _ _  -> False
+     EInt _  -> False
+     R rs    -> any (isStr . trmAss) rs
+     FV ts   -> any isStr ts
+     S t _   -> isStr t
+     Empty   -> True
+     T _ cs  -> any isStr [v | (_, v) <- cs]
+     V _ ts  -> any isStr ts
+     P t r   -> case getLab tr of
+       Ok (cat,labs) -> case 
+          Map.lookup (cat,labs) labels of
+            Just (ty,_) -> isStrType ty 
+            _ -> True ---- TODO?
+       _ -> True
+     _ -> True ----
+   trmAss (_,(_, t)) = t
+
+
+isStrType ty = case ty of
+     Sort "Str" -> True
+     RecType ts -> any isStrType [t | (_, t) <- ts]
+     Table _ t -> isStrType t
+     _ -> False
+-}
