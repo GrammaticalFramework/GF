@@ -1,6 +1,7 @@
 module GF.Canon.GFCC.DataGFCC where
 
 import GF.Canon.GFCC.AbsGFCC
+import GF.Canon.GFCC.PrintGFCC
 import Data.Map
 import Data.List
 import Debug.Trace ----
@@ -92,10 +93,14 @@ compute mcfg lang args = comp where
 
   look = lookLin mcfg lang
 
-  idx xs i = if i > length xs - 1 then trace "overrun !!\n" (last xs) else xs !! i 
+  idx xs i = if i > length xs - 1 
+    then trace 
+         ("too large " ++ show i ++ " for\n" ++ unlines (Prelude.map prt xs) ++ "\n") TM 
+    else xs !! i 
 
   proj r p = case (r,p) of
     (_,     FV ts) -> FV $ Prelude.map (proj r) ts
+    (FV ts, _    ) -> FV $ Prelude.map (\t -> proj t r) ts
     (W s t, _)     -> kks (s ++ getString (proj t p))
     (_,R is)       -> comp $ foldl P r is
     _              -> comp $ getField r (getIndex p)
@@ -115,6 +120,8 @@ compute mcfg lang args = comp where
     RP _ r -> getField r i
     TM     -> TM
     _ -> trace ("ERROR in grammar compiler: field from " ++ show t) t
+
+  prt = printTree
 
 mkGFCC :: Grammar -> GFCC
 mkGFCC (Grm (Hdr a cs) ab@(Abs funs) ccs) = GFCC {

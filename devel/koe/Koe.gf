@@ -5,7 +5,7 @@ cat S ; NP ; VP ;
 fun
   Pred : NP -> VP -> S ;
 
-  He, She : NP ;
+  Je, Tu, Il, Elle, Nous, Vous, Ils, Elles : NP ;
 
   Strong : VP ;
 

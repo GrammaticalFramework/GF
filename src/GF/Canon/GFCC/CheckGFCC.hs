@@ -29,50 +29,62 @@ checkLin gfcc lang (f,t) =
   labelBoolIO ("happened in function " ++ printTree f) $ 
     checkTerm (lintype gfcc lang f) $ inline gfcc lang t
 
-inferTerm :: [Tpe] -> Term -> Maybe Tpe
+inferTerm :: [Tpe] -> Term -> Err Tpe
 inferTerm args trm = case trm of
   K _ -> return str
   C i -> return $ ints i
-  V i -> if i < length args 
-           then (return $ args !! i) 
-           else error ("index " ++ show i)
+  V i -> do
+    testErr (i < length args) ("too large index " ++ show i) 
+    return $ args !! i
   S ts -> do
     tys <- mapM infer ts
-    if all (==str) tys 
-      then return str 
-      else error ("only strings expected in: " ++ printTree trm
-                  ++ " instead of " ++ unwords (map printTree tys)
-                 )
+    let tys' = filter (/=str) tys
+    testErr (null tys')
+      ("expected Str in " ++ prt trm ++ " not " ++ unwords (map prt tys')) 
+    return str 
   R ts -> do
     tys <- mapM infer ts
     return $ tuple tys
   P t u -> do
-    R tys <- infer t
-    case u of
+    tt <- infer t
+    tu <- infer u
+    case tt of
+     R tys -> case tu of
       R [v] -> infer $ P t v
       R (v:vs) -> infer $ P (head tys) (R vs) -----
         
-      C i -> if (i < length tys) 
-             then (return $ tys !! i) -- record: index must be known
-             else error ("too few fields in " ++ printTree (R tys))
-      _ -> if all (==head tys) tys    -- table: must be same
-             then return (head tys) 
-             else error ("projection " ++ printTree trm)
-  FV ts -> return $ head ts ---- empty variants; check equality 
+      C i -> do
+        testErr (i < length tys) 
+          ("required more than " ++ show i ++ " fields in " ++ prt (R tys)) 
+        (return $ tys !! i)   -- record: index must be known
+      _ -> do
+        let typ = head tys
+        testErr (all (==typ) tys) ("different types in table " ++ prt trm) 
+        return typ            -- table: must be same
+     _ -> Bad $ "projection from " ++ prt t ++ " : " ++ prt tt
+  FV [] -> return str ----
+  FV (t:ts) -> do
+    ty <- infer t
+    tys <- mapM infer ts
+    testErr (all (==ty) tys) ("different types in variants " ++ prt trm)
+    return ty
   W s r -> infer r
-  _ -> error ("no type inference for " ++ printTree trm)
+  _ -> Bad ("no type inference for " ++ prt trm)
  where
    infer = inferTerm args
+   prt = printTree
 
 checkTerm :: LinType -> Term -> IO Bool
 checkTerm (args,val) trm = case inferTerm args trm of
-  Just ty -> if eqType ty val then return True else do
+  Ok ty -> if eqType ty val 
+             then return True 
+             else do
     putStrLn $ "term: " ++ printTree trm ++ 
                "\nexpected type: " ++ printTree val ++
                "\ninferred type: " ++ printTree ty
     return False
-  _ -> do
-    putStrLn $ "cannot infer type of " ++ printTree trm
+  Bad s -> do
+    putStrLn s
     return False
 
 eqType :: Tpe -> Tpe -> Bool
@@ -117,14 +129,31 @@ inline gfcc lang t = case t of
 
 composOp :: Monad m => (Term -> m Term) -> Term -> m Term
 composOp f trm = case trm of
-  R  ts -> liftM R $ mapM comp ts
-  S  ts -> liftM S $ mapM comp ts
-  FV ts -> liftM FV $ mapM comp ts
-  P t u -> liftM2 P (comp t) (comp u)
-  W s t -> liftM (W s) $ comp t
+  R  ts -> liftM R $ mapM f ts
+  S  ts -> liftM S $ mapM f ts
+  FV ts -> liftM FV $ mapM f ts
+  P t u -> liftM2 P (f t) (f u)
+  W s t -> liftM (W s) $ f t
   _ -> return trm
- where
-   comp = composOp f
 
 composSafeOp :: (Term -> Term) -> Term -> Term
 composSafeOp f = maybe undefined id . composOp (return . f)
+
+-- from GF.Data.Oper
+
+maybeErr :: String -> Maybe a -> Err a
+maybeErr s = maybe (Bad s) Ok
+
+testErr :: Bool -> String -> Err ()
+testErr cond msg = if cond then return () else Bad msg
+
+errVal :: a -> Err a -> a
+errVal a = err (const a) id
+
+errIn :: String -> Err a -> Err a
+errIn msg = err (\s -> Bad (s ++ "\nOCCURRED IN\n" ++ msg)) return
+
+err :: (String -> b) -> (a -> b) -> Err a -> b 
+err d f e = case e of
+  Ok a -> f a
+  Bad s -> d s
