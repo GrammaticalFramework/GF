@@ -10,6 +10,7 @@ import qualified GF.Grammar.Macros as GM
 import qualified GF.Infra.Modules as M
 import qualified GF.Infra.Option as O
 
+import GF.Devel.PrGrammar
 import GF.Devel.ModDeps
 import GF.Infra.Ident
 import GF.Infra.Option
@@ -38,7 +39,9 @@ mkCanon2gfcc opts cnc gr =
 
 canon2gfcc :: Options -> SourceGrammar -> C.Grammar
 canon2gfcc opts cgr@(M.MGrammar ((a,M.ModMod abm):cms)) = 
-     C.Grm (C.Hdr (i2i a) cs) (C.Abs adefs) cncs where
+  (if (oElem (iOpt "show_canon") opts) then trace (prGrammar cgr) else id) $
+     C.Grm (C.Hdr (i2i a) cs) (C.Abs adefs) cncs 
+ where
   cs  = map (i2i . fst) cms
   adefs = [C.Fun f' (mkType ty) (C.Tr (C.AC f') []) | 
             (f,AbsFun (Yes ty) _) <- tree2list (M.jments abm), let f' = i2i f]
@@ -66,7 +69,7 @@ mkCType t = case t of
   EInt i      -> C.C $ fromInteger i
   RecType rs  -> C.R [mkCType t | (_, t) <- rs]
   Table pt vt -> case pt of
-    EInt i -> C.R $ replicate (fromInteger i) $ mkCType vt
+    EInt i -> C.R $ replicate (1 + fromInteger i) $ mkCType vt
     RecType rs -> mkCType $ foldr Table vt (map snd rs) 
   Sort "Str"        -> C.S [] --- Str only
   _ -> error  $ "mkCType " ++ show t
@@ -150,7 +153,7 @@ canon2canon abs = recollect . map cl2cl . repartition abs . purgeGrammar abs
  where
   recollect = 
     M.MGrammar . nubBy (\ (i,_) (j,_) -> i==j) . concatMap M.modules
-  cl2cl cg = tr $ M.MGrammar $ map c2c $ M.modules cg where
+  cl2cl cg = {- tr $ -} M.MGrammar $ map c2c $ M.modules cg where
     c2c (c,m) = case m of
       M.ModMod mo@(M.Module _ _ _ _ _ js) ->
         (c, M.ModMod $ M.replaceJudgements mo $ mapTree j2j js)
@@ -202,13 +205,15 @@ paramValues cgr = (labels,untyps,typs) where
             ]
   typsFrom ty = case ty of
     Table p t  -> typsFrom p ++ typsFrom t
-    RecType ls -> RecType (unlockTyp ls) : concat [typsFrom t | (_, t) <- ls]
+    RecType ls -> RecType (sort (unlockTyp ls)) : concat [typsFrom t | (_, t) <- ls]
     _ -> [ty]
  
   typsFromTrm :: Term -> STM [Type] Term
   typsFromTrm tr = case tr of
     V ty ts -> updateSTM (ty:) >> mapM_ typsFromTrm ts >> return tr
     T (TTyped ty) cs -> 
+      updateSTM (ty:) >> mapM_ typsFromTrm [t | (_, t) <- cs] >> return tr
+    T (TComp ty) cs -> 
       updateSTM (ty:) >> mapM_ typsFromTrm [t | (_, t) <- cs] >> return tr
     _ -> GM.composOp typsFromTrm tr
 
@@ -244,7 +249,7 @@ type2type cgr env@(labels,untyps,typs) ty = case ty of
   _ -> ty
  where
    t2t = type2type cgr env
-   look ty = EInt $ toInteger $ case Map.lookup ty typs of
+   look ty = EInt $ (+ (-1)) $ toInteger $ case Map.lookup ty typs of
      Just vs -> length $ Map.assocs vs
      _ -> trace ("unknown partype " ++ show ty) 66669
 
@@ -253,12 +258,13 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
   App _ _ -> mkValCase tr 
   QC  _ _ -> mkValCase tr 
   R rs    -> R [(mkLab i, (Nothing, t2t t)) | 
-                 (i,(l,(_,t))) <- zip [0..] (unlock rs)]
+                 (i,(l,(_,t))) <- zip [0..] (sort (unlock rs))]
   P  t l   -> r2r tr
   PI t l i -> EInt $ toInteger i
-  T (TTyped ty) cs  -> mkCurry $ V ty [t2t t | (_, t) <- cs]
+  T (TComp  ty) cs  -> t2t $ V ty $ map snd cs ---- should be elim'ed in tc
+  T (TTyped ty) cs  -> t2t $ V ty $ map snd cs ---- should be elim'ed in tc
   V ty ts  -> mkCurry $ V ty [t2t t | t <- ts]
-  S t p    -> S (t2t t) (t2t p)
+  S t p    -> mkCurrySel (t2t t) (t2t p)
   _ -> GM.composSafeOp t2t tr
  where
    t2t = term2term cgr env
@@ -321,9 +327,9 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
 	  Just v -> EInt v
           _ -> valNumFV $ tryVar tr
         _ -> valNumFV $ tryVar tr
-      tryVar tr = case tr of
------        Par c ts -> [Par c ts' | ts' <- combinations (map tryVar ts)]
-        FV ts -> ts
+      tryVar tr = case GM.appForm tr of
+        ---(c, ts) -> [ts' | ts' <- combinations (map tryVar ts)]
+        (FV ts,_) -> ts
         _ -> [tr]
       valNumFV ts = case ts of
         [tr] -> EInt 66667 ----K (KS (A.prt tr +++ prtTrace tr "66667"))
@@ -332,7 +338,8 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
    mkCurry trm = case trm of
      V (RecType [(_,ty)]) ts -> V ty ts 
      V (RecType ((_,ty):ltys)) ts -> 
-       V ty [mkCurry (V (RecType ltys) cs) | cs <- chop (lengthtyp ty) ts] 
+       V ty [mkCurry (V (RecType ltys) cs) | 
+         cs <- chop (product (map (lengthtyp . snd) ltys)) ts] 
      _ -> trm
    lengthtyp ty = case Map.lookup ty typs of
      Just m -> length (Map.assocs m)
@@ -340,6 +347,9 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
    chop i xs = case splitAt i xs of 
      (xs1,[])  -> [xs1]
      (xs1,xs2) -> xs1:chop i xs2
+
+
+   mkCurrySel t p = S t p ----
 
 
 mkLab k = LIdent (("_" ++ show k))
