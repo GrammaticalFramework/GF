@@ -7,6 +7,7 @@ import qualified GF.Canon.GFCC.AbsGFCC as C
 import qualified GF.Canon.GFCC.PrintGFCC as Pr
 import qualified GF.Grammar.Abstract as A
 import qualified GF.Grammar.Macros as GM
+import qualified GF.Grammar.Compute as Compute
 import qualified GF.Infra.Modules as M
 import qualified GF.Infra.Option as O
 
@@ -271,10 +272,10 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
 
    mkValCase tr = case appSTM (doVar tr) [] of
      Ok (tr', st@(_:_)) -> t2t $ comp $ foldr mkCase tr' st
-     _ -> valNum tr
+     _ -> valNum $ comp tr
 
    --- this is mainly needed for parameter record projections
-   comp t = t ----- $ Look.ccompute cgr [] t
+   comp t = errVal t $ Compute.computeTerm cgr [] t
 
    doVar :: Term -> STM [((Type,[Term]),(Term,Term))] Term
    doVar tr = case getLab tr of
@@ -328,11 +329,11 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
           _ -> valNumFV $ tryVar tr
         _ -> valNumFV $ tryVar tr
       tryVar tr = case GM.appForm tr of
-        ---(c, ts) -> [ts' | ts' <- combinations (map tryVar ts)]
+        (c@(QC _ _), ts) -> [GM.mkApp c ts' | ts' <- combinations (map tryVar ts)]
         (FV ts,_) -> ts
         _ -> [tr]
       valNumFV ts = case ts of
-        [tr] -> EInt 66667 ----K (KS (A.prt tr +++ prtTrace tr "66667"))
+        [tr] -> K (A.prt tr ++ "66667")
         _ -> FV $ map valNum ts
 
    mkCurry trm = case trm of
@@ -353,6 +354,15 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
 
 
 mkLab k = LIdent (("_" ++ show k))
+
+
+{-
+{CommonScand.VI} ({CommonScand.VSupin} (table ({CommonScand.VType} ) {
+  CommonScand.VAct => {CommonScand.Act} ;
+  CommonScand.VPass => {CommonScand.Pass} ;
+  CommonScand.VRefl => {CommonScand.Act} 
+} ! {CommonScand.VAct}
+-}
 
 
 -- remove lock fields; in fact, any empty records and record types

@@ -278,10 +278,10 @@ computeTermOpt rec gr = comp where
 
      -- case-expand tables
      -- if already expanded, don't expand again
-     T i@(TComp _) cs -> do
+     T i@(TComp ty) cs -> do
        -- if there are no variables, don't even go inside
        cs' <- if (null g) then return cs else mapPairsM (comp g) cs
-       return $ T i cs'
+       return $ {- V ty (map snd cs') --- -} T i cs'
      --- this means some extra work; should implement TSh directly
      TSh i cs -> comp g $ T i [(p,v) | (ps,v) <- cs, p <- ps]
 
@@ -296,7 +296,7 @@ computeTermOpt rec gr = comp where
            ts   <- mapM (\ (c,g') -> comp (g' ++ g) c) sts
            ps   <- mapM term2patt vs
            let ps' = ps --- PT ptyp (head ps) : tail ps
-           return $ --- V ptyp ts -- to save space, just course of values
+           return $ ---- V ptyp ts -- to save space, just course of values
                     T (TComp ptyp) (zip ps' ts)
          _ -> do
            cs' <- mapM (compBranch g) cs

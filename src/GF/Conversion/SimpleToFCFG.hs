@@ -127,6 +127,10 @@ convertTerm :: TermMap -> TermSelector -> Term -> LinRec -> CnvMonad LinRec
 convertTerm cnc_defs selector (V nr)       ((lbl_path,lin) : lins) = convertArg selector nr []    lbl_path lin lins
 convertTerm cnc_defs selector (C nr)       ((lbl_path,lin) : lins) = convertCon selector nr       lbl_path lin lins
 convertTerm cnc_defs selector (R record)   ((lbl_path,lin) : lins) = convertRec cnc_defs selector 0 record lbl_path lin lins
+
+----convertTerm cnc_defs selector (P term (R ts)) lins = 
+----  convertTerm cnc_defs selector (foldl P term ts) lins  ---- ?? AR 2/10/2007
+
 convertTerm cnc_defs selector (P term sel)                   lins  = do nr <- evalTerm cnc_defs [] sel
                                                                         convertTerm cnc_defs (TuplePrj nr selector) term lins
 convertTerm cnc_defs selector (FV vars)                      lins  = do term <- member vars
@@ -213,10 +217,13 @@ unifyPType nr path (C max_index) =
 		          return index
 unifyPType nr path (RP alias _) = unifyPType nr path alias
 
+unifyPType nr path t = error $ "unifyPType " ++ show t ---- AR 2/10/2007
+
 selectTerm :: FPath -> Term -> Term
 selectTerm []           term        = term
 selectTerm (index:path) (R  record) = selectTerm path (record !! index)
 selectTerm path         (RP _ term) = selectTerm path term
+
 
 ----------------------------------------------------------------------
 -- FRulesEnv
