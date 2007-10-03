@@ -141,6 +141,8 @@ push or pull, try upgrading to recent versions of darcs and OpenSSH
 (OpenSSH version 4 or newer).
 Recent OpenSSH versions include a connection multiplexing feature, which
 recent darcs versions support.
+Note that darcs 1.0.9 has some problems with this, try downgrading 
+to darcs 1.0.8.
 
 **Note: we seem to have some problems getting read-write access working smoothly on Windows.**
 If you figure out how to do this, let us know. If not, you can still use read-only access,
@@ -246,7 +248,11 @@ Try upgrading to a more recent version of darcs.
 
 === Using ssh ControlMaster ===
 
-Get a recent darcs and OpenSSH, see above.
+Get a recent darcs and OpenSSH, see above. 
+
+Note that the ControlMaster feature does not seem to
+work properly in darcs 1.0.9 under Mac OS X. 
+Use darcs 1.0.8 instead.
 
 
 === Using ssh-agent ===
