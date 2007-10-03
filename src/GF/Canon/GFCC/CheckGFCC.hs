@@ -11,81 +11,88 @@ import Control.Monad
 andMapM :: Monad m => (a -> m Bool) -> [a] -> m Bool
 andMapM f xs = mapM f xs >>= return . and
 
-labelBoolIO :: String -> IO Bool -> IO Bool
+labelBoolIO :: String -> IO (x,Bool) -> IO (x,Bool)
 labelBoolIO msg iob = do
-  b <- iob
-  if b then return b else (putStrLn msg >> return b)
+  (x,b) <- iob
+  if b then return (x,b) else (putStrLn msg >> return (x,b))
 
-checkGFCC :: GFCC -> IO Bool
-checkGFCC gfcc = andMapM (checkConcrete gfcc) $ Map.assocs $ concretes gfcc
+checkGFCC :: GFCC -> IO (GFCC,Bool)
+checkGFCC gfcc = do
+  (cs,bs) <- mapM (checkConcrete gfcc) 
+               (Map.assocs (concretes gfcc)) >>= return . unzip
+  return (gfcc {concretes = Map.fromAscList cs}, and bs)
 
-checkConcrete :: GFCC -> (CId,Map.Map CId Term) -> IO Bool
+checkConcrete :: GFCC -> (CId,Concr) -> IO ((CId,Concr),Bool)
 checkConcrete gfcc (lang,cnc) = 
-  labelBoolIO ("happened in language " ++ printTree lang) $ 
-    andMapM (checkLin gfcc lang) $ linRules cnc
+  labelBoolIO ("happened in language " ++ printTree lang) $ do
+    (rs,bs) <- mapM (checkLin gfcc lang) (linRules cnc) >>= return . unzip
+    return ((lang,Map.fromAscList rs),and bs)
 
-checkLin :: GFCC -> CId -> (CId,Term) -> IO Bool
+checkLin :: GFCC -> CId -> (CId,Term) -> IO ((CId,Term),Bool)
 checkLin gfcc lang (f,t) = 
-  labelBoolIO ("happened in function " ++ printTree f) $ 
-    checkTerm (lintype gfcc lang f) $ inline gfcc lang t
+  labelBoolIO ("happened in function " ++ printTree f) $ do
+    (t',b) <- checkTerm (lintype gfcc lang f) t --- $ inline gfcc lang t
+    return ((f,t'),b)
 
-inferTerm :: [Tpe] -> Term -> Err Tpe
+inferTerm :: [Tpe] -> Term -> Err (Term,Tpe)
 inferTerm args trm = case trm of
-  K _ -> return str
-  C i -> return $ ints i
+  K _ -> returnt str
+  C i -> returnt $ ints i
   V i -> do
     testErr (i < length args) ("too large index " ++ show i) 
-    return $ args !! i
+    returnt $ args !! i
   S ts -> do
-    tys <- mapM infer ts
+    (ts',tys) <- mapM infer ts >>= return . unzip
     let tys' = filter (/=str) tys
     testErr (null tys')
       ("expected Str in " ++ prt trm ++ " not " ++ unwords (map prt tys')) 
-    return str 
+    return (S ts',str)
   R ts -> do
-    tys <- mapM infer ts
-    return $ tuple tys
+    (ts',tys) <- mapM infer ts >>= return . unzip
+    return $ (R ts',tuple tys)
   P t u -> do
-    tt <- infer t
-    tu <- infer u
+    (t',tt) <- infer t
+    (u',tu) <- infer u
     case tt of
      R tys -> case tu of
-      R [v] -> infer $ P t v
-      R (v:vs) -> infer $ P (head tys) (R vs) -----
+      R vs -> infer $ foldl P t' [P u' (C i) | i <- [0 .. length vs - 1]]
+      --- R [v] -> infer $ P t v
+      --- R (v:vs) -> infer $ P (head tys) (R vs)
         
       C i -> do
         testErr (i < length tys) 
           ("required more than " ++ show i ++ " fields in " ++ prt (R tys)) 
-        (return $ tys !! i)   -- record: index must be known
+        (returnt $ tys !! i)   -- record: index must be known
       _ -> do
         let typ = head tys
         testErr (all (==typ) tys) ("different types in table " ++ prt trm) 
-        return typ            -- table: must be same
+        returnt typ            -- table: must be same
      _ -> Bad $ "projection from " ++ prt t ++ " : " ++ prt tt
-  FV [] -> return str ----
+  FV [] -> returnt str ----
   FV (t:ts) -> do
-    ty <- infer t
-    tys <- mapM infer ts
+    (t',ty) <- infer t
+    (ts',tys) <- mapM infer ts >>= return . unzip
     testErr (all (==ty) tys) ("different types in variants " ++ prt trm)
-    return ty
+    return (FV (t':ts'),ty)
   W s r -> infer r
   _ -> Bad ("no type inference for " ++ prt trm)
  where
+   returnt ty = return (trm,ty)
    infer = inferTerm args
    prt = printTree
 
-checkTerm :: LinType -> Term -> IO Bool
+checkTerm :: LinType -> Term -> IO (Term,Bool)
 checkTerm (args,val) trm = case inferTerm args trm of
-  Ok ty -> if eqType ty val 
-             then return True 
+  Ok (t,ty) -> if eqType ty val 
+             then return (t,True) 
              else do
     putStrLn $ "term: " ++ printTree trm ++ 
                "\nexpected type: " ++ printTree val ++
                "\ninferred type: " ++ printTree ty
-    return False
+    return (trm,False)
   Bad s -> do
     putStrLn s
-    return False
+    return (trm,False)
 
 eqType :: Tpe -> Tpe -> Bool
 eqType inf exp = case (inf,exp) of

@@ -139,3 +139,10 @@ mkGFCC (Grm (Hdr a cs) ab@(Abs funs) ccs) = GFCC {
  where
    mkCnc lins = fromList [(fun,lin) | Lin fun lin <- lins] ---- Asc
 
+printGFCC :: GFCC -> String
+printGFCC gfcc = printTree $ Grm
+  (Hdr (absname gfcc) (cncnames gfcc))
+  (Abs [Fun f ty (Tr (AC f) []) | (f,ty) <- assocs (funs (abstract gfcc))])
+  [Cnc lang [Lin f t | (f,t) <- assocs lins] | 
+            (lang,lins) <- assocs (concretes gfcc)]
+
