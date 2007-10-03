@@ -25,8 +25,12 @@ checkGFCC gfcc = do
 checkConcrete :: GFCC -> (CId,Concr) -> IO ((CId,Concr),Bool)
 checkConcrete gfcc (lang,cnc) = 
   labelBoolIO ("happened in language " ++ printTree lang) $ do
-    (rs,bs) <- mapM (checkLin gfcc lang) (linRules cnc) >>= return . unzip
+    (rs,bs) <- mapM checkl (Map.assocs cnc) >>= return . unzip
     return ((lang,Map.fromAscList rs),and bs)
+ where
+   checkl r@(CId f,_) = case head f of 
+     '_' -> return (r,True)
+     _   -> checkLin gfcc lang r
 
 checkLin :: GFCC -> CId -> (CId,Term) -> IO ((CId,Term),Bool)
 checkLin gfcc lang (f,t) = 
@@ -89,7 +93,7 @@ checkTerm (args,val) trm = case inferTerm args trm of
     putStrLn $ "term: " ++ printTree trm ++ 
                "\nexpected type: " ++ printTree val ++
                "\ninferred type: " ++ printTree ty
-    return (trm,False)
+    return (t,False)
   Bad s -> do
     putStrLn s
     return (trm,False)

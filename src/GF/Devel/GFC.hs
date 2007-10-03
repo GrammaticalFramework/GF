@@ -2,6 +2,7 @@ module Main where
 
 import GF.Devel.Compile
 import GF.Devel.GrammarToGFCC
+import GF.Devel.OptimizeGFCC
 import GF.Canon.GFCC.CheckGFCC
 import GF.Canon.GFCC.PrintGFCC
 import GF.Canon.GFCC.DataGFCC
@@ -21,7 +22,8 @@ main = do
       gr <- batchCompile opts fs
       let name = justModuleName (last fs)
       let (abs,gc0) = mkCanon2gfcc opts name gr
-      gc <- check gc0
+      gc1 <- check gc0
+      let gc = if oElem (iOpt "noopt") opts then gc1 else optGFCC gc1
       let target = abs ++ ".gfcc"
       writeFile target (printGFCC gc)
       putStrLn $ "wrote file " ++ target
