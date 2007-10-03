@@ -20,19 +20,18 @@ main = do
     _ | oElem (iOpt "-make") opts -> do
       gr <- batchCompile opts fs
       let name = justModuleName (last fs)
-      let (abs,gc) = mkCanon2gfcc opts name gr
-
-      if oElem (iOpt "check") opts then (check gc) else return ()
-
+      let (abs,gc0) = mkCanon2gfcc opts name gr
+      gc <- check gc0
       let target = abs ++ ".gfcc"
-      writeFile target (printTree gc)
+      writeFile target (printGFCC gc)
       putStrLn $ "wrote file " ++ target
     _ -> do
       mapM_ (batchCompile opts) (map return fs)
       putStrLn "Done."
 
-check gc = do
-  let gfcc = mkGFCC gc
-  b <- checkGFCC gfcc
+check gc0 = do
+  let gfcc = mkGFCC gc0
+  (gc,b) <- checkGFCC gfcc
   putStrLn $ if b then "OK" else "Corrupted GFCC"
+  return gc
 
