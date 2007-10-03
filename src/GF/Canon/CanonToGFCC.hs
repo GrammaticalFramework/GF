@@ -96,7 +96,7 @@ mkCType t = case t of
   TStr     -> C.S []
  where
   getI pt = case pt of
-    C.C i -> i
+    C.C i -> i + 1
     C.RP i _ -> getI i
 
 mkTerm :: Term -> C.Term
@@ -268,7 +268,7 @@ type2type cgr env@(labels,untyps,typs) ty = case ty of
   _ -> ty
  where
    t2t = type2type cgr env
-   look ty = TInts $ toInteger $ case Map.lookup ty typs of
+   look ty = TInts $ (+ (-1)) $ toInteger $ case Map.lookup ty typs of
      Just vs -> length $ Map.assocs vs
      _ -> trace ("unknown partype " ++ show ty) 1 ---- 66669
 

@@ -212,7 +212,7 @@ unifyPType nr path (C max_index) =
        let (FCat _ _ _ tcs,_) = args !! nr
        case lookup path tcs of
          Just index -> return index
-         Nothing    -> do index <- member [0..max_index-1]
+         Nothing    -> do index <- member [0..max_index]
 		          restrictArg nr path index
 		          return index
 unifyPType nr path (RP alias _) = unifyPType nr path alias
@@ -306,7 +306,7 @@ genFCatArg ctype env@(FRulesEnv last_id fcatSet rules) m1@(FCat _ cat rcs tcs) =
       case List.lookup path tcs of
         Just index -> return $! addConstraint path index acc
         Nothing    -> do writeState True
-                         index <- member [0..max_index-1]
+                         index <- member [0..max_index]
                          return $! addConstraint path index acc
       where
         addConstraint path0 index0 (c@(path,index) : cs)
