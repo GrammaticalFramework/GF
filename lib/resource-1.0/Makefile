@@ -20,6 +20,9 @@ GFCCP=$(GFCC) -preproc=./mkPresent
 
 .PHONY: show-path all prelude test alltenses pretest langs present mathematical multimodal compiled treebank stat gfdoc clean api
 
+new:
+	export GF='../../bin/gf -s' ; make -e all
+
 all: chmod show-path prelude present alltenses mathematical api multimodal langs compiled
 
 chmod:
@@ -146,6 +149,6 @@ gfdoc:
 	mv ../prelude/*.html doc/gfdoc
 
 clean:
-	-rm */*.gfc */*.gfr */*.gf~ ../*/*.gfc ../*/*.gfr ../*/*.gf~ ../*/langs.gfcm ../compiled.tgz
+	-rm -f */*.gfc */*.gfr */*.gf~ ../*/*.gfc ../*/*.gfr ../*/*.gf~ ../*/langs.gfcm ../compiled.tgz
 
 
