@@ -23,4 +23,21 @@ oper
        = \np,ap -> PredVP PPos np (ComplAP ap) ;
     } ;
 
+  mkNP : Det -> CN -> NP 
+    = DetCN ;
+
+  mkCN = overload {
+    mkCN : AP -> CN -> CN 
+      = ModCN ;
+    mkCN : N -> CN 
+      = UseN ;
+  } ;
+
+  mkAP = overload {
+    mkAP : AdA -> AP -> AP 
+      = AdAP ;
+    mkAP : A -> AP 
+      = UseA ;
+  } ;
+
 }
