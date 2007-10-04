@@ -102,7 +102,7 @@ compute mcfg lang args = comp where
     (_,     FV ts) -> FV $ Prelude.map (proj r) ts
     (FV ts, _    ) -> FV $ Prelude.map (\t -> proj t r) ts
     (W s t, _)     -> kks (s ++ getString (proj t p))
-    (_,R is)       -> comp $ foldl P r is
+    (_,R is)       -> trace ("projection " ++ show p ++ "\n") $ comp $ foldl P r is
     _              -> comp $ getField r (getIndex p)
 
   getString t = case t of

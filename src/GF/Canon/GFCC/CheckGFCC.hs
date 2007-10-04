@@ -58,20 +58,20 @@ inferTerm args trm = case trm of
     (t',tt) <- infer t
     (u',tu) <- infer u
     case tt of
-     R tys -> case tu of
-      R vs -> infer $ foldl P t' [P u' (C i) | i <- [0 .. length vs - 1]]
-      --- R [v] -> infer $ P t v
-      --- R (v:vs) -> infer $ P (head tys) (R vs)
+      R tys -> case tu of
+        R vs -> infer $ foldl P t' [P u' (C i) | i <- [0 .. length vs - 1]]
+        --- R [v] -> infer $ P t v
+        --- R (v:vs) -> infer $ P (head tys) (R vs)
         
-      C i -> do
-        testErr (i < length tys) 
-          ("required more than " ++ show i ++ " fields in " ++ prt (R tys)) 
-        (returnt $ tys !! i)   -- record: index must be known
-      _ -> do
-        let typ = head tys
-        testErr (all (==typ) tys) ("different types in table " ++ prt trm) 
-        returnt typ            -- table: must be same
-     _ -> Bad $ "projection from " ++ prt t ++ " : " ++ prt tt
+        C i -> do
+          testErr (i < length tys) 
+            ("required more than " ++ show i ++ " fields in " ++ prt (R tys)) 
+          return (P t' u', tys !! i) -- record: index must be known
+        _ -> do
+          let typ = head tys
+          testErr (all (==typ) tys) ("different types in table " ++ prt trm) 
+          return (P t' u', typ)      -- table: types must be same
+      _ -> Bad $ "projection from " ++ prt t ++ " : " ++ prt tt
   FV [] -> returnt str ----
   FV (t:ts) -> do
     (t',ty) <- infer t
