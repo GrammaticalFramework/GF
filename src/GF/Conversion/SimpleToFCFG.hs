@@ -60,7 +60,7 @@ convertGrammar gfcc = [(cncname,convert abs_defs conc) |
 	       let srulesMap' = Map.insertWith (++) abs_res [rule] srulesMap
 	           frulesEnv' = List.foldl' (\env selector -> convertRule cnc_defs selector rule env)
 	                                    frulesEnv
-	                                    (mkSingletonSelectors cnc_res)
+	                                    (mkSingletonSelectors cnc_defs cnc_res)
                in srulesMap' `seq` frulesEnv' `seq` (srulesMap',frulesEnv')
 
         loop frulesEnv =
@@ -81,7 +81,7 @@ convertRule cnc_defs selector (XRule fun args cat ctypes ctype term) frulesEnv =
       let (env1, newCat)          = genFCatHead env0 newCat'
           (env2, newArgs,idxArgs) = foldr (\((fcat@(FCat _ cat rcs tcs),xpaths),ctype,idx) (env,args,all_args) ->
                                        let xargs          = fcat:[FCat 0 cat [path] tcs | path <- reverse xpaths]
-                                           (env1, xargs1) = List.mapAccumL (genFCatArg ctype) env xargs
+                                           (env1, xargs1) = List.mapAccumL (genFCatArg cnc_defs ctype) env xargs
                                        in case fcat of
                                             FCat _ _ [] _ -> (env ,        args,             all_args)
                                             _             -> (env1,xargs1++args,(idx,xargs1):all_args)) (env1,[],[]) (zip3 newArgs' ctypes [0..])
@@ -264,8 +264,8 @@ genFCatHead env@(FRulesEnv last_id fcatSet rules) m1@(FCat _ cat rcs tcs) =
         tmap_s = Map.singleton tcs x_fcat
         rmap_s = Map.singleton rcs tmap_s
 
-genFCatArg :: Term -> FRulesEnv -> FCat -> (FRulesEnv, FCat)
-genFCatArg ctype env@(FRulesEnv last_id fcatSet rules) m1@(FCat _ cat rcs tcs) =
+genFCatArg :: TermMap -> Term -> FRulesEnv -> FCat -> (FRulesEnv, FCat)
+genFCatArg cnc_defs ctype env@(FRulesEnv last_id fcatSet rules) m1@(FCat _ cat rcs tcs) =
   case Map.lookup cat fcatSet >>= Map.lookup rcs of
     Just tmap -> case Map.lookup tcs tmap of
                    Just (Left  fcat) -> (env,   fcat)
@@ -312,6 +312,10 @@ genFCatArg ctype env@(FRulesEnv last_id fcatSet rules) m1@(FCat _ cat rcs tcs) =
         addConstraint path0 index0 (c@(path,index) : cs)
 	  | path0 > path = c:addConstraint path0 index0 cs
         addConstraint path0 index0 cs  = (path0,index0) : cs
+    gen_tcs (F id)        path acc = case Map.lookup id cnc_defs of
+                                        Just term -> gen_tcs term path acc
+                                        Nothing   -> error ("unknown identifier: "++prt id)
+
 
 takeToDoRules :: XRulesMap -> FRulesEnv -> ([([XRule], TermSelector)], FRulesEnv)
 takeToDoRules srulesMap (FRulesEnv last_id fcatSet rules) = (todo,FRulesEnv last_id fcatSet' rules)
@@ -350,9 +354,10 @@ data TermSelector
   | StrSel
   deriving Show
 
-mkSingletonSelectors :: Term               -- ^ Type representation term
+mkSingletonSelectors :: TermMap 
+                     -> Term               -- ^ Type representation term
                      -> [TermSelector]     -- ^ list of selectors containing just one string field
-mkSingletonSelectors term = sels0
+mkSingletonSelectors cnc_defs term = sels0
   where
     (sels0,tcss0) = loop [] ([],[]) term
 
@@ -360,6 +365,9 @@ mkSingletonSelectors term = sels0
     loop path st          (RP _ t)   = loop path st t
     loop path (sels,tcss) (C i)      = (                          sels,map ((,) path) [0..i-1] : tcss)
     loop path (sels,tcss) (S _)      = (mkSelector [path] tcss0 : sels,                          tcss)
+    loop path (sels,tcss) (F id)     = case Map.lookup id cnc_defs of
+                                         Just term -> loop path (sels,tcss) term
+                                         Nothing   -> error ("unknown identifier: "++prt id)
 
 mkSelector :: [FPath] -> [[(FPath,FIndex)]] -> TermSelector
 mkSelector rcs tcss =
