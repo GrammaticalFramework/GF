@@ -66,6 +66,8 @@ endif
 
 all: unix gfdoc $(BUILD_JAR) lib
 
+gf: unix
+
 unix: today opt
 
 windows: unix
