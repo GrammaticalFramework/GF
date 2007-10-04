@@ -1,6 +1,6 @@
 --# -path=.:resource:prelude
 
-concrete TestEng of Test = SyntaxEng ** open Prelude, MorphoEng in {
+concrete TestEng of Test = GrammarEng ** open Prelude, MorphoEng in {
 
   lin
     wine_N = mkN "wine" ;

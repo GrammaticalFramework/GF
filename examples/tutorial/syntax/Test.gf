@@ -1,4 +1,4 @@
-abstract Test = Syntax ** {
+abstract Test = Grammar ** {
 
   fun
     wine_N, cheese_N, fish_N, pizza_N, waiter_N, customer_N : N ;
