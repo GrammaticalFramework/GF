@@ -3,8 +3,8 @@ module GF.Devel.GrammarToGFCC (prGrammar2gfcc,mkCanon2gfcc) where
 import GF.Grammar.Grammar
 import qualified GF.Grammar.Lookup as Look
 
-import qualified GF.Canon.GFCC.AbsGFCC as C
-import qualified GF.Canon.GFCC.PrintGFCC as Pr
+import qualified GF.GFCC.AbsGFCC as C
+import qualified GF.GFCC.DataGFCC as D
 import qualified GF.Grammar.Abstract as A
 import qualified GF.Grammar.Macros as GM
 import qualified GF.Grammar.Compute as Compute
@@ -26,10 +26,10 @@ import Debug.Trace ----
 -- the main function: generate GFCC from GF.
 
 prGrammar2gfcc :: Options -> String -> SourceGrammar -> (String,String)
-prGrammar2gfcc opts cnc gr = (abs, Pr.printTree gc) where
+prGrammar2gfcc opts cnc gr = (abs, D.printGFCC gc) where
   (abs,gc) = mkCanon2gfcc opts cnc gr 
 
-mkCanon2gfcc :: Options -> String -> SourceGrammar -> (String,C.Grammar)
+mkCanon2gfcc :: Options -> String -> SourceGrammar -> (String,D.GFCC)
 mkCanon2gfcc opts cnc gr = 
   (prIdent abs, (canon2gfcc opts . reorder abs . utf8Conv . canon2canon abs) gr)
   where
@@ -38,27 +38,39 @@ mkCanon2gfcc opts cnc gr =
 -- Generate GFCC from GFCM.
 -- this assumes a grammar translated by canon2canon
 
-canon2gfcc :: Options -> SourceGrammar -> C.Grammar
+canon2gfcc :: Options -> SourceGrammar -> D.GFCC
 canon2gfcc opts cgr@(M.MGrammar ((a,M.ModMod abm):cms)) = 
   (if (oElem (iOpt "show_canon") opts) then trace (prGrammar cgr) else id) $
-     C.Grm (C.Hdr (i2i a) cs) (C.Abs adefs) cncs 
+     D.GFCC an cns abs cncs 
  where
-  cs  = map (i2i . fst) cms
-  adefs = [C.Fun f' (mkType ty) (C.Tr (C.AC f') []) | 
-            (f,AbsFun (Yes ty) _) <- tree2list (M.jments abm), let f' = i2i f]
-  cncs  = [C.Cnc (i2i lang) (concr m) | (lang,M.ModMod m) <- cms]
-  concr mo = cats mo ++ lindefs mo ++ 
-                 [C.Lin (i2i f) (mkTerm tr) | 
-                   (f,CncFun _ (Yes tr) _) <- tree2list (M.jments mo)]
-  cats mo = [C.Lin (i2ic c) (mkCType ty) | 
-                   (c,CncCat (Yes ty) _ _) <- tree2list (M.jments mo)]
-  lindefs mo = [C.Lin (i2id c) (mkTerm tr) | 
-                   (c,CncCat _ (Yes tr) _) <- tree2list (M.jments mo)]
+  an  = (i2i a)
+  cns = map (i2i . fst) cms
+  abs = D.Abstr aflags funs cats catfuns
+  aflags = Map.fromAscList [] ---- flags
+  lfuns = [(f', (mkType ty,C.Tr (C.AC f') [])) | ---- defs 
+             (f,AbsFun (Yes ty) _) <- tree2list (M.jments abm), let f' = i2i f]
+  funs = Map.fromAscList lfuns
+  lcats = [(i2i c,[]) | ---- context
+            (c,AbsCat _ _) <- tree2list (M.jments abm)]
+  cats = Map.fromAscList lcats
+  catfuns = Map.fromAscList 
+    [(cat,[f | (f, (C.Typ _ c,_)) <- lfuns, c==cat]) | (cat,_) <- lcats]
+
+  cncs  = Map.fromList [mkConcr (i2i lang) mo | (lang,M.ModMod mo) <- cms]
+  mkConcr lang mo = (lang,D.Concr flags lins opers lincats lindefs printnames)
+    where
+      flags   = Map.fromAscList [] ---- flags
+      opers   = Map.fromAscList [] -- opers will be created as optimization
+      lins    = Map.fromAscList 
+        [(i2i f, mkTerm tr) | (f,CncFun _ (Yes tr) _) <- tree2list (M.jments mo)]
+      lincats = Map.fromAscList 
+        [(i2i c, mkCType ty) | (c,CncCat (Yes ty) _ _) <- tree2list (M.jments mo)]
+      lindefs = Map.fromAscList 
+        [(i2i c, mkTerm tr) | (c,CncCat _ (Yes tr) _) <- tree2list (M.jments mo)]
+      printnames = Map.fromAscList [] ---- printnames
 
 i2i :: Ident -> C.CId
 i2i (IC c) = C.CId c
-i2ic (IC c) = C.CId ("__" ++ c) -- for lincat of category symbols
-i2id (IC c) = C.CId ("_d" ++ c) -- for lindef of category symbols
 
 mkType :: A.Type -> C.Type
 mkType t = case GM.catSkeleton t of

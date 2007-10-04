@@ -1,50 +1,43 @@
-Grm. Grammar  ::= Header ";" Abstract ";" [Concrete] ;
-Hdr. Header   ::= "grammar" CId "(" [CId] ")" ;
+Grm. Grammar  ::= 
+  "grammar" CId "(" [CId] ")" ";" 
+  Abstract ";" 
+  [Concrete] ;
 
 Abs. Abstract ::= 
   "abstract" "{" 
      "flags" [Flag] 
-     "cat"   [CatDef] 
      "fun"   [FunDef] 
+     "cat"   [CatDef] 
   "}" ;
 
 Cnc. Concrete ::= 
   "concrete" CId "{" 
      "flags"  [Flag] 
+     "lin"    [LinDef] 
      "oper"   [LinDef] 
      "lincat" [LinDef] 
      "lindef" [LinDef] 
-     "lin"    [LinDef] 
+     "printname" [LinDef]
   "}" ;
 
 Flg. Flag     ::= CId "=" String ;
-
-Cat. CatDef   ::= CId [Hypo] ;
+Cat. CatDef   ::= CId "[" [Hypo] "]" ;
 
 Fun. FunDef   ::= CId ":" Type "=" Exp ;
-
 Lin. LinDef   ::= CId "=" Term ;
 
-Hyp. Hypo     ::= "(" CId ":" Type ")" ;
-
-FTyp. Type    ::= [CId] "->" CId ;            -- simple type
-DTyp. Type    ::= "[" [Hypo] "->" Type "]" ;  -- dep. product type
-BTyp. Type    ::= "(" CId [Exp] ")" ;         -- dep. basic type
-
-Tr.   Exp     ::= "(" Atom [Exp] ")" ;               -- ordinary term
-DTr.  Exp     ::= "[" "(" [CId] ")" Atom [Exp] "]" ; -- term with bindings
+Typ. Type     ::= [CId] "->" CId ;          -- context-free type
+Tr.  Exp      ::= "(" Atom [Exp] ")" ;      -- context-free term
 
 AC.  Atom     ::= CId ;
 AS.  Atom     ::= String ;
 AI.  Atom     ::= Integer ;
 AF.  Atom     ::= Double ;
-AM.  Atom     ::= "?" ;
-trA. Exp      ::= Atom ;
-define trA a = Tr a [] ;
+AM.  Atom     ::= "?" Integer ;
 
 R.   Term     ::= "[" [Term] "]" ;          -- record/table
 P.   Term     ::= "(" Term "!" Term ")" ;   -- projection/selection
-S.   Term     ::= "(" [Term] ")" ;          -- sequence with ++
+S.   Term     ::= "(" [Term] ")" ;          -- concatenated sequence
 K.   Term     ::= Tokn ;                    -- token
 V.   Term     ::= "$" Integer ;             -- argument
 C.   Term     ::= Integer ;                 -- parameter value/label
@@ -63,7 +56,6 @@ terminator Flag ";" ;
 terminator CatDef ";" ;
 terminator FunDef ";" ;
 terminator LinDef ";" ;
-terminator Hypo "" ;
 separator  CId "," ;
 separator  Term "," ;
 terminator Exp "" ;
@@ -71,3 +63,17 @@ terminator String "" ;
 separator  Variant "," ;
 
 token CId (('_' | letter) (letter | digit | '\'' | '_')*) ;
+
+-- the following are needed if dependent types or HOAS or defs are present
+
+Hyp.  Hypo    ::= CId ":" Type ;
+DTyp. Type    ::= "[" [Hypo] "]" CId [Exp] ;         -- dependent type
+DTr.  Exp     ::= "[" "(" [CId] ")" Atom [Exp] "]" ; -- term with bindings
+AV.   Atom    ::= "$" CId ;
+
+EEq.  Exp      ::= "{" [Equation] "}" ;  -- list of pattern eqs; primitive notion: []
+Equ.  Equation ::= [Exp] "->" Exp ;      -- patterns are encoded as exps
+
+terminator Hypo ";" ;
+terminator Equation ";" ;
+

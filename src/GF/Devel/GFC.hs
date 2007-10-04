@@ -3,15 +3,12 @@ module Main where
 import GF.Devel.Compile
 import GF.Devel.GrammarToGFCC
 import GF.Devel.OptimizeGFCC
-import GF.Canon.GFCC.CheckGFCC
-import GF.Canon.GFCC.PrintGFCC
-import GF.Canon.GFCC.DataGFCC
+import GF.GFCC.CheckGFCC
+import GF.GFCC.DataGFCC
 import GF.Devel.UseIO
 import GF.Infra.Option
----import GF.Devel.PrGrammar ---
 
 import System
-
 
 main = do
   xx <- getArgs
@@ -31,8 +28,7 @@ main = do
       mapM_ (batchCompile opts) (map return fs)
       putStrLn "Done."
 
-check gc0 = do
-  let gfcc = mkGFCC gc0
+check gfcc = do
   (gc,b) <- checkGFCC gfcc
   putStrLn $ if b then "OK" else "Corrupted GFCC"
   return gc
