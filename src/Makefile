@@ -199,7 +199,11 @@ gfc:
 	mv gfc ../bin/
 
 gfcc:
-#	$(GHMAKE) $(GHCOPTFLAGS) -o gfcc GF/Canon/GFCC/Shell.hs
+	$(GHMAKE) $(GHCOPTFLAGS) -o gfcc GF/Canon/GFCC/Shell.hs
+	strip gfcc
+	mv gfcc ../bin/
+
+newgfcc:
 	$(GHMAKE) $(GHCOPTFLAGS) -o gfcc GF/Devel/Shell.hs
 	strip gfcc
 	mv gfcc ../bin/
