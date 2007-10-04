@@ -1,6 +1,6 @@
 --# -path=.:resource:prelude
 
-concrete TestIta of Test = SyntaxIta ** open Prelude, MorphoIta in {
+concrete TestIta of Test = GrammarIta ** open Prelude, MorphoIta in {
 
   lin
     wine_N = regNoun "vino" ;

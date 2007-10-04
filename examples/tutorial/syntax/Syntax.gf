@@ -1,60 +1,26 @@
-abstract Syntax = {
+interface Syntax = open Prelude, Grammar in {
 
-  flags startcat=Phr ;
+oper
+  mkPhr = overload {
+    mkPhr : S -> Phr 
+      = PhrS ;
+    mkPhr : QS -> Phr 
+      = PhrQS ;
+  } ;
 
-  cat
-    Phr ;  -- any complete sentence e.g. "Is this pizza good?"
-    S ;    -- declarative sentence  e.g. "this pizza is good"
-    QS ;   -- question sentence     e.g. "is this pizza good"
-    NP ;   -- noun phrase           e.g. "this pizza"
-    IP ;   -- interrogative phrase  e.g  "which pizza"
-    CN ;   -- common noun phrase    e.g. "very good pizza"
-    Det ;  -- determiner            e.g. "this"
-    AP ;   -- adjectival phrase     e.g. "very good"
-    AdA ;  -- adadjective           e.g. "very"
-    VP ;   -- verb phrase           e.g. "is good"
-    N ;    -- noun                  e.g. "pizza"
-    A ;    -- adjective             e.g. "good"
-    V ;    -- intransitive verb     e.g. "boil"
-    V2 ;   -- two-place verb        e.g. "eat"
+  mkS = overload {
+    mkS : Pol -> NP -> VP -> S
+       = PredVP ;
+    mkS : NP -> VP -> S
+       = PredVP PPos ;
+    mkS : Pol -> NP -> V2 -> NP -> S
+       = \p,np,v,o -> PredVP p np (ComplV2 v o) ;
+    mkS : NP -> V2 -> NP -> S
+       = \np,v,o -> PredVP PPos np (ComplV2 v o) ;
+    mkS : Pol -> NP -> AP -> S
+       = \p,np,ap -> PredVP p np (ComplAP ap) ;
+    mkS : NP -> AP -> S
+       = \np,ap -> PredVP PPos np (ComplAP ap) ;
+    } ;
 
-  fun
-    PhrS  : S -> Phr ;
-    PhrQS : QS -> Phr ;
-
-    PosVP, NegVP : NP -> VP -> S ;
-    QPosVP, QNegVP : NP -> VP -> QS ;
-
-    IPPosVP, IPNegVP : IP -> VP -> QS ;
-    IPPosV2, IPNegV2 : IP -> NP -> V2 -> QS ;
- 
-    ComplV2 : V2 -> NP -> VP ;
-    ComplAP : AP -> VP ;
-
-    DetCN  : Det -> CN -> NP ;
-
-    ModCN  : AP -> CN -> CN ;
-
-    AdAP   : AdA -> AP -> AP ;
-
-    WhichCN : CN -> IP ;
-
-    UseN : N -> CN ;
-    UseA : A -> AP ;
-    UseV : V -> VP ;
-
-  -- entries of the closed lexicon
-
-    this_Det  : Det ;
-    that_Det  : Det ;
-    these_Det : Det ;
-    those_Det : Det ;
-    every_Det : Det ;
-    theSg_Det : Det ;
-    thePl_Det : Det ;
-    indef_Det : Det ;
-    plur_Det  : Det ;
-    two_Det   : Det ;
-
-    very_AdA  : AdA ;
 }
