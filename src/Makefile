@@ -213,7 +213,7 @@ gfcc2c:
 #
 
 lib:
-	$(MAKE) -C ../lib/resource-1.0 clean compiled
+	$(MAKE) -C ../lib/resource-1.0 clean new
 
 #
 # Distribution
