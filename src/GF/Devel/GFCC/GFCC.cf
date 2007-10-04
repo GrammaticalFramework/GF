@@ -1,0 +1,73 @@
+Grm. Grammar  ::= Header ";" Abstract ";" [Concrete] ;
+Hdr. Header   ::= "grammar" CId "(" [CId] ")" ;
+
+Abs. Abstract ::= 
+  "abstract" "{" 
+     "flags" [Flag] 
+     "cat"   [CatDef] 
+     "fun"   [FunDef] 
+  "}" ;
+
+Cnc. Concrete ::= 
+  "concrete" CId "{" 
+     "flags"  [Flag] 
+     "oper"   [LinDef] 
+     "lincat" [LinDef] 
+     "lindef" [LinDef] 
+     "lin"    [LinDef] 
+  "}" ;
+
+Flg. Flag     ::= CId "=" String ;
+
+Cat. CatDef   ::= CId [Hypo] ;
+
+Fun. FunDef   ::= CId ":" Type "=" Exp ;
+
+Lin. LinDef   ::= CId "=" Term ;
+
+Hyp. Hypo     ::= "(" CId ":" Type ")" ;
+
+FTyp. Type    ::= [CId] "->" CId ;            -- simple type
+DTyp. Type    ::= "[" [Hypo] "->" Type "]" ;  -- dep. product type
+BTyp. Type    ::= "(" CId [Exp] ")" ;         -- dep. basic type
+
+Tr.   Exp     ::= "(" Atom [Exp] ")" ;               -- ordinary term
+DTr.  Exp     ::= "[" "(" [CId] ")" Atom [Exp] "]" ; -- term with bindings
+
+AC.  Atom     ::= CId ;
+AS.  Atom     ::= String ;
+AI.  Atom     ::= Integer ;
+AF.  Atom     ::= Double ;
+AM.  Atom     ::= "?" ;
+trA. Exp      ::= Atom ;
+define trA a = Tr a [] ;
+
+R.   Term     ::= "[" [Term] "]" ;          -- record/table
+P.   Term     ::= "(" Term "!" Term ")" ;   -- projection/selection
+S.   Term     ::= "(" [Term] ")" ;          -- sequence with ++
+K.   Term     ::= Tokn ;                    -- token
+V.   Term     ::= "$" Integer ;             -- argument
+C.   Term     ::= Integer ;                 -- parameter value/label
+F.   Term     ::= CId ;                     -- global constant
+FV.  Term     ::= "[|" [Term] "|]" ;        -- free variation
+W.   Term     ::= "(" String "+" Term ")" ; -- prefix + suffix table
+TM.  Term     ::= "?" ;                     -- lin of metavariable
+
+KS.  Tokn     ::= String ;
+KP.  Tokn     ::= "[" "pre" [String] "[" [Variant] "]" "]" ;
+Var. Variant  ::= [String] "/" [String] ;
+
+
+terminator Concrete ";" ;
+terminator Flag ";" ;
+terminator CatDef ";" ;
+terminator FunDef ";" ;
+terminator LinDef ";" ;
+terminator Hypo "" ;
+separator  CId "," ;
+separator  Term "," ;
+terminator Exp "" ;
+terminator String "" ;
+separator  Variant "," ;
+
+token CId (('_' | letter) (letter | digit | '\'' | '_')*) ;
