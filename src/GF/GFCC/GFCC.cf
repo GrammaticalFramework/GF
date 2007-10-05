@@ -29,11 +29,11 @@ Lin. LinDef   ::= CId "=" Term ;
 DTyp. Type    ::= "[" [Hypo] "]" CId [Exp] ;         -- dependent type
 DTr.  Exp     ::= "[" "(" [CId] ")" Atom [Exp] "]" ; -- term with bindings
 
-AC.  Atom     ::= CId ;
-AS.  Atom     ::= String ;
-AI.  Atom     ::= Integer ;
-AF.  Atom     ::= Double ;
-AM.  Atom     ::= "?" Integer ;
+AC.   Atom     ::= CId ;
+AS.   Atom     ::= String ;
+AI.   Atom     ::= Integer ;
+AF.   Atom     ::= Double ;
+AM.   Atom     ::= "?" Integer ;
 
 R.   Term     ::= "[" [Term] "]" ;          -- record/table
 P.   Term     ::= "(" Term "!" Term ")" ;   -- projection/selection
