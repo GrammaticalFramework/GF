@@ -38,102 +38,6 @@ statGFCC gfcc = unlines [
   ]
  where pr (CId s) = s
 
-lookLin :: GFCC -> CId -> CId -> Term
-lookLin gfcc lang fun = 
-  lookMap TM fun $ lins $ lookMap (error "no lang") lang $ concretes gfcc
-
-lookOper :: GFCC -> CId -> CId -> Term
-lookOper gfcc lang fun = 
-  lookMap TM fun $ opers $ lookMap (error "no lang") lang $ concretes gfcc
-
-lookLincat :: GFCC -> CId -> CId -> Term
-lookLincat gfcc lang fun = 
-  lookMap TM fun $ lincats $ lookMap (error "no lang") lang $ concretes gfcc
-
--- | Look up the type of a function.
-lookType :: GFCC -> CId -> Type
-lookType gfcc f = 
-  fst $ lookMap (error $ "lookType " ++ show f) f (funs (abstract gfcc))
-
-linearize :: GFCC -> CId -> Exp -> String
-linearize mcfg lang = realize . linExp mcfg lang
-
-realize :: Term -> String
-realize trm = case trm of
-  R ts     -> realize (ts !! 0)
-  S ss     -> unwords $ lmap realize ss
-  K t -> case t of
-    KS s -> s
-    KP s _ -> unwords s ---- prefix choice TODO
-  W s t    -> s ++ realize t
-  FV ts    -> realize (ts !! 0)  ---- other variants TODO
-  TM       -> "?"
-  _ -> "ERROR " ++ show trm ---- debug
-
-linExp :: GFCC -> CId -> Exp -> Term
-linExp mcfg lang tree@(Tr at trees) = 
-  case at of
-    AC fun -> comp (lmap lin trees) $ look fun
-    AS s   -> R [kks (show s)] -- quoted
-    AI i   -> R [kks (show i)]
-    AF d   -> R [kks (show d)]
-    AM _   -> TM
- where
-   lin  = linExp mcfg lang
-   comp = compute mcfg lang
-   look = lookLin mcfg lang
-
-exp0 :: Exp
-exp0 = Tr (AM 0) []
-
-term0 :: CId -> Term
-term0 _ = TM
-
-kks :: String -> Term
-kks = K . KS
-
-compute :: GFCC -> CId -> [Term] -> Term -> Term
-compute mcfg lang args = comp where
-  comp trm = case trm of
-    P r p  -> proj (comp r) (comp p) 
-    W s t  -> W s (comp t)
-    R ts   -> R $ lmap comp ts
-    V i    -> idx args i          -- already computed
-    F c    -> comp $ look c       -- not computed (if contains argvar)
-    FV ts  -> FV $ lmap comp ts
-    S ts   -> S $ lfilter (/= S []) $ lmap comp ts
-    _ -> trm
-
-  look = lookOper mcfg lang
-
-  idx xs i = if i > length xs - 1 
-    then error 
-         ("too large " ++ show i ++ " for\n" ++ unlines (lmap prt xs) ++ "\n") TM 
-    else xs !! i 
-
-  proj r p = case (r,p) of
-    (_,     FV ts) -> FV $ lmap (proj r) ts
-    (FV ts, _    ) -> FV $ lmap (\t -> proj t r) ts
-    (W s t, _)     -> kks (s ++ getString (proj t p))
-    _              -> comp $ getField r (getIndex p)
-
-  getString t = case t of
-    K (KS s) -> s
-    _ -> error ("ERROR in grammar compiler: string from "++ show t) "ERR"
-
-  getIndex t =  case t of
-    C i    -> i
-    TM     -> 0  -- default value for parameter
-    _ -> error ("ERROR in grammar compiler: index from " ++ show t) 0
-
-  getField t i = case t of
-    R rs   -> idx rs i
-    TM     -> TM
-    _ -> error ("ERROR in grammar compiler: field from " ++ show t) t
-
-  prt = printTree
-
-
 -- convert parsed grammar to internal GFCC
 
 mkGFCC :: Grammar -> GFCC
@@ -183,10 +87,6 @@ printGFCC gfcc = printTree $ Grm
      [Lin f v | (f,v) <- assocs (lincats cnc)]
      [Lin f v | (f,v) <- assocs (lindefs cnc)]
      [Lin f v | (f,v) <- assocs (printnames cnc)]
-
--- lookup with default value
-lookMap :: (Show i, Ord i) => a -> i -> Map i a -> a 
-lookMap d c m = maybe d id $ Data.Map.lookup c m
 
 -- default map and filter are for Map here
 lmap = Prelude.map

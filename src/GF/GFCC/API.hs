@@ -15,12 +15,15 @@
 
 module  GF.GFCC.API where
 
+import GF.GFCC.Linearize
+import GF.GFCC.Generate
+import GF.GFCC.Macros
 import GF.GFCC.DataGFCC
 import GF.GFCC.AbsGFCC
 import GF.GFCC.ParGFCC
-import GF.GFCC.PrintGFCC
+
 import GF.GFCC.ErrM
-import GF.GFCC.Generate
+
 ----import GF.Parsing.FCFG
 ----import GF.Conversion.SimpleToFCFG (convertGrammar,FCat(..))
 
@@ -80,7 +83,7 @@ file2grammar f = do
 file2gfcc f =
   readFileIf f >>= err (error) (return . mkGFCC) . pGrammar . myLexer
 
-linearize mgr lang = GF.GFCC.DataGFCC.linearize (gfcc mgr) (CId lang)
+linearize mgr lang = GF.GFCC.Linearize.linearize (gfcc mgr) (CId lang)
 
 parse mgr lang cat s = error "no parser"
 ----parse mgr lang cat s = 
@@ -107,7 +110,7 @@ generateAll mgr cat = generate (gfcc mgr) (CId cat)
 
 readTree _ = err (const exp0) id . (pExp . myLexer)
 
-showTree t = printTree t
+showTree = prt
 
 languages mgr = [l | CId l <- cncnames (gfcc mgr)]
 
