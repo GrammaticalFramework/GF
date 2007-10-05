@@ -24,8 +24,8 @@ import GF.GFCC.ParGFCC
 
 import GF.GFCC.ErrM
 
-----import GF.Parsing.FCFG
-----import GF.Conversion.SimpleToFCFG (convertGrammar,FCat(..))
+import GF.Parsing.FCFG
+import GF.Conversion.SimpleToFCFG (convertGrammar,FCat(..))
 
 --import GF.Data.Operations
 --import GF.Infra.UseIO
@@ -42,8 +42,7 @@ import System.Directory (doesFileExist)
 -- Interface
 ---------------------------------------------------
 
-----data MultiGrammar = MultiGrammar {gfcc :: GFCC, parsers :: [(Language,FCFPInfo)]}
-data MultiGrammar = MultiGrammar {gfcc :: GFCC, parsers :: [(Language,())]}
+data MultiGrammar = MultiGrammar {gfcc :: GFCC, parsers :: [(Language,FCFPInfo)]}
 type Language     = String
 type Category     = String
 type Tree         = Exp
@@ -76,22 +75,20 @@ startCat   :: MultiGrammar -> Category
 
 file2grammar f = do
   gfcc <- file2gfcc f
-----  let fcfgs = convertGrammar gfcc
-----  return (MultiGrammar gfcc [(lang, buildFCFPInfo fcfg) | (CId lang,fcfg) <- fcfgs])
-  return (MultiGrammar gfcc [])
+  let fcfgs = convertGrammar gfcc
+  return (MultiGrammar gfcc [(lang, buildFCFPInfo fcfg) | (CId lang,fcfg) <- fcfgs])
 
 file2gfcc f =
   readFileIf f >>= err (error) (return . mkGFCC) . pGrammar . myLexer
 
 linearize mgr lang = GF.GFCC.Linearize.linearize (gfcc mgr) (CId lang)
 
-parse mgr lang cat s = error "no parser"
-----parse mgr lang cat s = 
-----  case lookup lang (parsers mgr) of
-----    Nothing    -> error "no parser"
-----    Just pinfo -> case parseFCF "bottomup" pinfo (CId cat) (words s) of
-----                    Ok x -> x
-----                    Bad s -> error s
+parse mgr lang cat s = 
+  case lookup lang (parsers mgr) of
+    Nothing    -> error "no parser"
+    Just pinfo -> case parseFCF "bottomup" pinfo (CId cat) (words s) of
+                    Ok x -> x
+                    Bad s -> error s
 
 linearizeAll mgr = map snd . linearizeAllLang mgr
 linearizeAllLang mgr t = 
