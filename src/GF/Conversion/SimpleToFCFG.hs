@@ -21,8 +21,10 @@ import Control.Monad
 
 import GF.Formalism.Utilities
 import GF.Formalism.FCFG
-import GF.Canon.GFCC.AbsGFCC
-import GF.Canon.GFCC.DataGFCC
+
+import GF.GFCC.Macros hiding (prt)
+import GF.GFCC.DataGFCC
+import GF.GFCC.AbsGFCC
 
 import GF.Data.BacktrackM
 import GF.Data.SortedList
@@ -38,21 +40,24 @@ import Data.Maybe
 -- main conversion function
 
 convertGrammar :: GFCC -> [(CId,FGrammar)]
-convertGrammar gfcc = [(cncname,convert abs_defs conc) | 
-    cncname <- cncnames gfcc, conc <- Map.lookup cncname (concretes gfcc)]
+convertGrammar gfcc = [(cncname,convert abs_defs conc cats) | 
+    cncname <- cncnames gfcc, 
+    cnc <- Map.lookup cncname (concretes gfcc),
+    let conc = Map.union (opers cnc) (lins cnc), -- "union big+small most efficient"
+    let cats = lincats cnc]
   where
 
     abs_defs = Map.assocs (funs (abstract gfcc))
 
-    convert :: [(CId,Type)] -> TermMap -> FGrammar
-    convert abs_defs cnc_defs = getFRules (loop frulesEnv)
+    convert :: [(CId,(Type,Exp))] -> TermMap -> TermMap -> FGrammar
+    convert abs_defs cnc_defs cat_defs = getFRules (loop frulesEnv)
       where
         srules = [
           (XRule id args res (map findLinType args) (findLinType res) term) | 
-            (id, Typ args res) <- abs_defs, 
+            (id, (ty,_)) <- abs_defs, let (args,res) = catSkeleton ty, 
             term <- Map.lookup id cnc_defs]
         
-        findLinType (CId id) = fromJust (Map.lookup (CId ("__"++id)) cnc_defs)
+        findLinType id = fromJust (Map.lookup id cat_defs)
 
         (srulesMap,frulesEnv) = List.foldl' helper (Map.empty,emptyFRulesEnv) srules
            where
@@ -128,9 +133,6 @@ convertTerm cnc_defs selector (V nr)       ((lbl_path,lin) : lins) = convertArg 
 convertTerm cnc_defs selector (C nr)       ((lbl_path,lin) : lins) = convertCon selector nr       lbl_path lin lins
 convertTerm cnc_defs selector (R record)   ((lbl_path,lin) : lins) = convertRec cnc_defs selector 0 record lbl_path lin lins
 
-----convertTerm cnc_defs selector (P term (R ts)) lins = 
-----  convertTerm cnc_defs selector (foldl P term ts) lins  ---- ?? AR 2/10/2007
-
 convertTerm cnc_defs selector (P term sel)                   lins  = do nr <- evalTerm cnc_defs [] sel
                                                                         convertTerm cnc_defs (TuplePrj nr selector) term lins
 convertTerm cnc_defs selector (FV vars)                      lins  = do term <- member vars
@@ -169,7 +171,7 @@ convertArg (ConSel indices) nr path lbl_path lin lins = do
 convertArg StrSel nr path lbl_path lin lins = do
   projectHead lbl_path
   xnr <- projectArg nr path
-  return ((lbl_path, Cat (path, nr, xnr) : lin) : lins)
+  return ((lbl_path, GF.Formalism.Utilities.Cat (path, nr, xnr) : lin) : lins)
 
 convertCon (ConSel indices) index lbl_path lin lins = do
   guard (index `elem` indices)

@@ -39,7 +39,7 @@ import Data.List (groupBy)
 import Data.Array
 
 import GF.Formalism.Utilities
-import qualified GF.Canon.GFCC.AbsGFCC as AbsGFCC
+import qualified GF.GFCC.AbsGFCC as AbsGFCC
 import GF.Infra.PrintClass
 
 

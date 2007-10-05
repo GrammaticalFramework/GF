@@ -21,8 +21,9 @@ import GF.Formalism.Utilities
 import qualified GF.Parsing.FCFG.Active as Active
 import GF.Parsing.FCFG.PInfo
 
-import GF.Canon.GFCC.AbsGFCC
-import GF.Canon.GFCC.ErrM
+import GF.GFCC.AbsGFCC
+import GF.GFCC.Macros
+import GF.GFCC.ErrM
 
 
 ----------------------------------------------------------------------
@@ -74,12 +75,12 @@ cnv_forests2 (FFloat  x)   = FFloat  x
 -- parse trees to GFCC terms
 
 tree2term :: SyntaxTree CId -> Exp
-tree2term (TNode f ts) = Tr (AC f) (map tree2term ts)
+tree2term (TNode f ts) = tree (AC f) (map tree2term ts)
 
-tree2term (TString  s) = Tr (AS s) []
-tree2term (TInt     n) = Tr (AI n) []
-tree2term (TFloat   f) = Tr (AF f) []
-tree2term (TMeta)      = Tr AM []
+tree2term (TString  s) = tree (AS s) []
+tree2term (TInt     n) = tree (AI n) []
+tree2term (TFloat   f) = tree (AF f) []
+tree2term (TMeta)      = exp0
 
 ----------------------------------------------------------------------
 -- conversion and unification of forests

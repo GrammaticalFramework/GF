@@ -1,4 +1,4 @@
-module GF.Devel.OptimizeGFCC where
+module GF.GFCC.OptimizeGFCC where
 
 import GF.GFCC.AbsGFCC
 import GF.GFCC.DataGFCC

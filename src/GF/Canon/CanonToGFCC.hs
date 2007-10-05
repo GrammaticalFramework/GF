@@ -19,8 +19,12 @@ import GF.Canon.AbsGFC
 import qualified GF.Canon.GFC as GFC
 import qualified GF.Canon.Look as Look
 import qualified GF.Canon.Subexpressions as Sub
-import qualified GF.Canon.GFCC.AbsGFCC as C
-import qualified GF.Canon.GFCC.PrintGFCC as Pr
+
+import qualified GF.GFCC.Macros as CM
+import qualified GF.GFCC.AbsGFCC as C
+import qualified GF.GFCC.DataGFCC as D
+import GF.GFCC.OptimizeGFCC
+
 import GF.Canon.GFC
 import GF.Canon.Share
 import qualified GF.Grammar.Abstract as A
@@ -42,56 +46,71 @@ import Debug.Trace ----
 -- the main function: generate GFCC from GFCM.
 
 prCanon2gfcc :: CanonGrammar -> String
-prCanon2gfcc = Pr.printTree . mkCanon2gfcc
+prCanon2gfcc = D.printGFCC . mkCanon2gfcc
 
 -- this variant makes utf8 conversion; used in back ends
-mkCanon2gfcc :: CanonGrammar -> C.Grammar
-mkCanon2gfcc = canon2gfcc . reorder . utf8Conv . canon2canon . normalize
+mkCanon2gfcc :: CanonGrammar -> D.GFCC
+mkCanon2gfcc = 
+-- canon2gfcc . reorder abs . utf8Conv . canon2canon abs
+  optGFCC . canon2gfcc . reorder . utf8Conv . canon2canon . normalize
 
 -- this variant makes no utf8 conversion; used in ShellState
-mkCanon2gfccNoUTF8 :: CanonGrammar -> C.Grammar
-mkCanon2gfccNoUTF8 = canon2gfcc . reorder . canon2canon . normalize
+mkCanon2gfccNoUTF8 :: CanonGrammar -> D.GFCC
+mkCanon2gfccNoUTF8 = optGFCC . canon2gfcc . reorder . canon2canon . normalize
 
--- This is needed to reorganize the grammar. GFCC has its own back-end optimization.
+-- This is needed to reorganize the grammar. 
+-- GFCC has its own back-end optimization.
 -- But we need to have the canonical order in tables, created by valOpt
 normalize :: CanonGrammar -> CanonGrammar
 normalize = share . unoptimizeCanon . Sub.unSubelimCanon where
   share = M.MGrammar . map (shareModule valOpt) . M.modules --- allOpt
 
 -- Generate GFCC from GFCM.
--- this assumes a grammar translated by canon2canon
+-- this assumes a grammar normalized and transformed by canon2canon
 
-canon2gfcc :: CanonGrammar -> C.Grammar
+canon2gfcc :: CanonGrammar -> D.GFCC
 canon2gfcc cgr@(M.MGrammar ((a,M.ModMod abm):cms)) = 
-     C.Grm (C.Hdr (i2i a) cs) (C.Abs adefs) cncs where
-  cs  = map (i2i . fst) cms
-  adefs = [C.Fun f' (mkType ty) (C.Tr (C.AC f') []) | 
-            (f,GFC.AbsFun ty _) <- tree2list (M.jments abm), let f' = i2i f]
-  cncs  = [C.Cnc (i2i lang) (concr m) | (lang,M.ModMod m) <- cms]
-  concr mo = cats mo ++ lindefs mo ++ 
-               optConcrete 
-                 [C.Lin (i2i f) (mkTerm tr) | 
-                   (f,GFC.CncFun _ _ tr _) <- tree2list (M.jments mo)]
-  cats mo = [C.Lin (i2ic c) (mkCType ty) | 
-                   (c,GFC.CncCat ty _ _) <- tree2list (M.jments mo)]
-  lindefs mo = [C.Lin (i2id c) (mkTerm tr) | 
-                   (c,GFC.CncCat _ tr _) <- tree2list (M.jments mo)]
+     D.GFCC an cns abs cncs 
+ where
+  an  = (i2i a)
+  cns = map (i2i . fst) cms
+  abs = D.Abstr aflags funs cats catfuns
+  aflags = Map.fromAscList [] ---- flags
+  lfuns = [(f', (mkType ty,CM.primNotion)) | ---- defs 
+             (f,GFC.AbsFun ty _) <- tree2list (M.jments abm), let f' = i2i f]
+  funs = Map.fromAscList lfuns
+  lcats = [(i2i c,[]) | ---- context
+            (c,GFC.AbsCat _ _) <- tree2list (M.jments abm)]
+  cats = Map.fromAscList lcats
+  catfuns = Map.fromAscList 
+    [(cat,[f | (f, (C.DTyp _ c _,_)) <- lfuns, c==cat]) | (cat,_) <- lcats]
+
+  cncs  = Map.fromList [mkConcr (i2i lang) mo | (lang,M.ModMod mo) <- cms]
+  mkConcr lang mo = (lang,D.Concr flags lins opers lincats lindefs printnames)
+    where
+      flags   = Map.fromAscList [] ---- flags
+      opers   = Map.fromAscList [] -- opers will be created as optimization
+      lins    = Map.fromAscList 
+        [(i2i f, mkTerm tr) | (f,GFC.CncFun _ _ tr _) <- tree2list (M.jments mo)]
+      lincats = Map.fromAscList 
+        [(i2i c, mkCType ty) | (c,GFC.CncCat ty _ _) <- tree2list (M.jments mo)]
+      lindefs = Map.fromAscList 
+        [(i2i c, mkTerm tr) | (c,GFC.CncCat _ tr _) <- tree2list (M.jments mo)]
+      printnames = Map.fromAscList [] ---- printnames
 
 i2i :: Ident -> C.CId
 i2i (IC c) = C.CId c
-i2ic (IC c) = C.CId ("__" ++ c) -- for lincat of category symbols
-i2id (IC c) = C.CId ("_d" ++ c) -- for lindef of category symbols
 
 mkType :: A.Type -> C.Type
 mkType t = case GM.catSkeleton t of
-  Ok (cs,c) -> C.Typ (map (i2i . snd) cs) (i2i $ snd c)
+  Ok (cs,c) -> CM.cftype (map (i2i . snd) cs) (i2i $ snd c)
 
 mkCType :: CType -> C.Term
 mkCType t = case t of
   TInts i      -> C.C $ fromInteger i
   -- record parameter alias - created in gfc preprocessing
   RecType [Lbg (L (IC "_")) i, Lbg (L (IC "__")) t] -> C.RP (mkCType i) (mkCType t)
-  RecType rs     -> C.R [mkCType t | Lbg _ t <- rs]
+  RecType rs  -> C.R [mkCType t | Lbg _ t <- rs]
   Table pt vt -> C.R $ replicate (getI (mkCType pt)) $ mkCType vt
   TStr     -> C.S []
  where
@@ -108,9 +127,6 @@ mkTerm tr = case tr of
   -- ordinary record
   R rs     -> C.R [mkTerm t | Ass _ t <- rs]
   P t l    -> C.P (mkTerm t) (C.C (mkLab l))
-
-  LI x     -> C.BV $ i2i x
-  T _ [Cas [PV x] t] -> C.L (i2i x) (mkTerm t)
 
   T _ cs   -> error $ "improper optimization for gfcc in" +++ A.prt tr
   V _ cs   -> C.R [mkTerm t | t <- cs]
@@ -400,103 +416,4 @@ unlockTyp = filter notlock where
 
 prtTrace tr n = n ----trace ("-- ERROR" +++ A.prt tr +++ show n +++ show tr) n
 prTrace  tr n = trace ("-- OBSERVE" +++ A.prt tr +++ show n +++ show tr) n
-
--- back-end optimization: 
--- suffix analysis followed by common subexpression elimination
-
-optConcrete :: [C.CncDef] -> [C.CncDef]
-optConcrete defs = subex 
-  [C.Lin f (optTerm t) | C.Lin f t <- defs]
-
--- analyse word form lists into prefix + suffixes
--- suffix sets can later be shared by subex elim
-
-optTerm :: C.Term -> C.Term  
-optTerm tr = case tr of
-    C.R ts@(_:_:_) | all isK ts -> mkSuff $ optToks [s | C.K (C.KS s) <- ts]
-    C.R ts  -> C.R $ map optTerm ts
-    C.P t v -> C.P (optTerm t) v
-    C.L x t -> C.L x (optTerm t)
-    _ -> tr
- where
-  optToks ss = prf : suffs where
-    prf = pref (head ss) (tail ss)
-    suffs = map (drop (length prf)) ss
-    pref cand ss = case ss of
-      s1:ss2 -> if isPrefixOf cand s1 then pref cand ss2 else pref (init cand) ss
-      _ -> cand
-  isK t = case t of
-    C.K (C.KS _) -> True
-    _ -> False
-  mkSuff ("":ws) = C.R (map (C.K . C.KS) ws)
-  mkSuff (p:ws) = C.W p (C.R (map (C.K . C.KS) ws))
-
-
--- common subexpression elimination; see ./Subexpression.hs for the idea
-
-subex :: [C.CncDef] -> [C.CncDef]
-subex js = errVal js $ do
-  (tree,_) <- appSTM (getSubtermsMod js) (Map.empty,0)
-  return $ addSubexpConsts tree js
-
-type TermList = Map.Map C.Term (Int,Int) -- number of occs, id
-type TermM a = STM (TermList,Int) a
-
-addSubexpConsts :: TermList -> [C.CncDef] -> [C.CncDef]
-addSubexpConsts tree lins =
-  let opers = sortBy (\ (C.Lin f _) (C.Lin g _) -> compare f g)
-                [C.Lin (fid id) trm | (trm,(_,id)) <- list]
-  in map mkOne $ opers ++ lins
- where
-   mkOne (C.Lin f trm) = (C.Lin f (recomp f trm))
-   recomp f t = case Map.lookup t tree of
-     Just (_,id) | fid id /= f -> C.F $ fid id -- not to replace oper itself
-     _ -> case t of
-       C.R ts   -> C.R $ map (recomp f) ts
-       C.S ts   -> C.S $ map (recomp f) ts
-       C.W s t  -> C.W s (recomp f t)
-       C.P t p  -> C.P (recomp f t) (recomp f p)
-       C.RP t p -> C.RP (recomp f t) (recomp f p)
-       C.L x t  -> C.L x (recomp f t)
-       _ -> t
-   fid n = C.CId $ "_" ++ show n
-   list = Map.toList tree
-
-getSubtermsMod :: [C.CncDef] -> TermM TermList
-getSubtermsMod js = do
-  mapM (getInfo collectSubterms) js
-  (tree0,_) <- readSTM
-  return $ Map.filter (\ (nu,_) -> nu > 1) tree0
- where
-   getInfo get (C.Lin f trm) = do
-     get trm
-     return ()
-
-collectSubterms :: C.Term -> TermM ()
-collectSubterms t = case t of
-  C.R ts -> do
-    mapM collectSubterms ts
-    add t
-  C.RP u v -> do
-    collectSubterms v
-    add t
-  C.S ts -> do
-    mapM collectSubterms ts
-    add t
-  C.W s u -> do
-    collectSubterms u
-    add t
-  C.P p u -> do
-    collectSubterms p
-    collectSubterms u
-    add t
-  _ -> return ()
- where
-   add t = do
-     (ts,i) <- readSTM
-     let 
-       ((count,id),next) = case Map.lookup t ts of
-         Just (nu,id) -> ((nu+1,id), i)
-         _ ->            ((1,   i ), i+1)
-     writeSTM (Map.insert t (count,id) ts, next)
 

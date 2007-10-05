@@ -5,13 +5,16 @@ import GF.Canon.CanonToGFCC
 import GF.Canon.Look
 import GF.Data.ErrM
 import GF.Infra.Option
-import qualified GF.Canon.GFCC.AbsGFCC as C
+import qualified GF.GFCC.Macros as M
+import qualified GF.GFCC.DataGFCC as D
+import qualified GF.GFCC.AbsGFCC as C
 import qualified GF.JavaScript.AbsJS as JS
 import qualified GF.JavaScript.PrintJS as JS
 
 
 import Control.Monad (mplus)
 import Data.Maybe (fromMaybe)
+import qualified Data.Map as Map
 
 prCanon2js :: Options -> CanonGrammar -> String
 prCanon2js opts gr = gfcc2js start $ mkCanon2gfcc gr
@@ -20,29 +23,37 @@ prCanon2js opts gr = gfcc2js start $ mkCanon2gfcc gr
                            `mplus` getOptVal grOpts gStartCat)
     grOpts = errVal noOptions $ lookupOptionsCan gr
 
-gfcc2js :: String -> C.Grammar -> String
-gfcc2js start (C.Grm (C.Hdr n _) as cs) = 
-  JS.printTree $ JS.Program $ abstract2js start n as ++ concatMap (concrete2js n) cs
+gfcc2js :: String -> D.GFCC -> String
+gfcc2js start gfcc =
+  JS.printTree $ JS.Program $ abstract2js start n as ++ 
+  concatMap (concrete2js n) cs
+ where
+   n  = D.absname gfcc
+   as = D.abstract gfcc
+   cs = Map.assocs (D.concretes gfcc)
 
-abstract2js :: String -> C.CId -> C.Abstract -> [JS.Element]
-abstract2js start (C.CId n) (C.Abs ds) = 
+abstract2js :: String -> C.CId -> D.Abstr -> [JS.Element]
+abstract2js start (C.CId n) ds = 
     [JS.ElStmt $ JS.SDeclOrExpr $ JS.Decl [JS.DInit a (new "Abstract" [JS.EStr start])]] 
-    ++ concatMap (absdef2js a) ds
+    ++ concatMap (absdef2js a) (Map.assocs (D.funs ds))
   where a = JS.Ident n
 
-absdef2js :: JS.Ident -> C.AbsDef -> [JS.Element]
-absdef2js a (C.Fun (C.CId f) (C.Typ args (C.CId cat)) _) = 
+absdef2js :: JS.Ident -> (C.CId,(C.Type,C.Exp)) -> [JS.Element]
+absdef2js a (C.CId f,(typ,_)) =
+  let (args,C.CId cat) = M.catSkeleton typ in 
     [JS.ElStmt $ JS.SDeclOrExpr $ JS.DExpr $ JS.ECall (JS.EMember (JS.EVar a) (JS.Ident "addType")) 
            [JS.EStr f, JS.EArray [JS.EStr x | C.CId x <- args], JS.EStr cat]]
 
-concrete2js :: C.CId -> C.Concrete -> [JS.Element]
-concrete2js (C.CId a) (C.Cnc (C.CId c) ds) = 
+concrete2js :: C.CId -> (C.CId,D.Concr) -> [JS.Element]
+concrete2js (C.CId a) (C.CId c, cnc) =
     [JS.ElStmt $ JS.SDeclOrExpr $ JS.Decl [JS.DInit l (new "Concrete" [JS.EVar (JS.Ident a)])]] 
     ++ concatMap (cncdef2js l) ds
-  where l = JS.Ident c
+  where 
+   l  = JS.Ident c
+   ds = Map.assocs $ D.lins cnc
 
-cncdef2js :: JS.Ident -> C.CncDef -> [JS.Element]
-cncdef2js l (C.Lin (C.CId f) t) = 
+cncdef2js :: JS.Ident -> (C.CId,C.Term) -> [JS.Element]
+cncdef2js l (C.CId f, t) = 
     [JS.ElStmt $ JS.SDeclOrExpr $ JS.DExpr $ JS.ECall (JS.EMember (JS.EVar l) (JS.Ident "addRule")) [JS.EStr f, JS.EFun [children] [JS.SReturn (term2js l t)]]]
 
 term2js :: JS.Ident -> C.Term -> JS.Expr
