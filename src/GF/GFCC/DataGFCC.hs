@@ -52,7 +52,7 @@ mkGFCC (Grm a cs ab@(Abs afls fs cts) ccs) = GFCC {
       lcats   = [(c,hyps) | Cat c hyps <- cts]
       cats    = fromAscList lcats
       catfuns = fromAscList 
-                  [(cat,[f | (f, (Typ _ c,_)) <- lfuns, c==cat]) | (cat,_) <- lcats]
+        [(cat,[f | (f, (DTyp _ c _,_)) <- lfuns, c==cat]) | (cat,_) <- lcats]
     in Abstr aflags funs cats catfuns,
   concretes = fromAscList (lmap mkCnc ccs)
   }

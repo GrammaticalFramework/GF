@@ -11,16 +11,16 @@ import System.Random
 generate :: GFCC -> CId -> [Exp]
 generate gfcc cat = concatMap (\i -> gener i cat) [0..]
  where
-  gener 0 c = [tree (AC f) [] | (f, Typ [] _) <- fns c]
+  gener 0 c = [tree (AC f) [] | (f, ([],_)) <- fns c]
   gener i c = [
     tr | 
-      (f, Typ cs _) <- fns c,
+      (f, (cs,_)) <- fns c,
       let alts = map (gener (i-1)) cs,
       ts <- combinations alts,
       let tr = tree (AC f) ts,
       depth tr >= i
     ]
-  fns = functionsToCat gfcc
+  fns c = [(f,catSkeleton ty) | (f,ty) <- functionsToCat gfcc c]
 
 
 -- generate an infinite list of trees randomly
@@ -55,7 +55,7 @@ genRandom gen gfcc cat = genTrees (randomRs (0.0, 1.0) gen) cat where
         in (t:ts, k + ks)
       _ -> ([],0)
 
-    fns cat = [(f,cs) | (f, Typ cs _) <- functionsToCat gfcc cat]
+    fns cat = [(f,(fst (catSkeleton ty))) | (f,ty) <- functionsToCat gfcc cat]
 
 
 {-
