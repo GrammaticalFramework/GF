@@ -1,6 +1,6 @@
 module TransferDefGFCC where
 
-import GF.Canon.GFCC.GFCCAPI (Tree)
+import GF.GFCC.API (Tree)
 import GSyntax
 
 transfer :: Tree -> Tree

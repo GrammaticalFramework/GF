@@ -1,6 +1,6 @@
 module Main where
 
-import GF.Canon.GFCC.GFCCAPI
+import GF.GFCC.API
 import TransferDefGFCC (transfer)
 
 main :: IO () 
