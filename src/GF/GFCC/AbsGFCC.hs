@@ -32,13 +32,11 @@ data LinDef =
   deriving (Eq,Ord,Show)
 
 data Type =
-   Typ [CId] CId
- | DTyp [Hypo] CId [Exp]
+   DTyp [Hypo] CId [Exp]
   deriving (Eq,Ord,Show)
 
 data Exp =
-   Tr Atom [Exp]
- | DTr [CId] Atom [Exp]
+   DTr [CId] Atom [Exp]
  | EEq [Equation]
   deriving (Eq,Ord,Show)
 
@@ -62,6 +60,7 @@ data Term =
  | FV [Term]
  | W String Term
  | TM
+ | RP Term Term
   deriving (Eq,Ord,Show)
 
 data Tokn =

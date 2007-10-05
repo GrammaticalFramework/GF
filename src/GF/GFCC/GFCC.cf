@@ -26,8 +26,8 @@ Cat. CatDef   ::= CId "[" [Hypo] "]" ;
 Fun. FunDef   ::= CId ":" Type "=" Exp ;
 Lin. LinDef   ::= CId "=" Term ;
 
-Typ. Type     ::= [CId] "->" CId ;          -- context-free type
-Tr.  Exp      ::= "(" Atom [Exp] ")" ;      -- context-free term
+DTyp. Type    ::= "[" [Hypo] "]" CId [Exp] ;         -- dependent type
+DTr.  Exp     ::= "[" "(" [CId] ")" Atom [Exp] "]" ; -- term with bindings
 
 AC.  Atom     ::= CId ;
 AS.  Atom     ::= String ;
@@ -51,6 +51,8 @@ KP.  Tokn     ::= "[" "pre" [String] "[" [Variant] "]" "]" ;
 Var. Variant  ::= [String] "/" [String] ;
 
 
+RP.  Term     ::= "(" Term "@" Term ")";    -- DEPRECATED: record parameter alias
+
 terminator Concrete ";" ;
 terminator Flag ";" ;
 terminator CatDef ";" ;
@@ -64,16 +66,15 @@ separator  Variant "," ;
 
 token CId (('_' | letter) (letter | digit | '\'' | '_')*) ;
 
+
 -- the following are needed if dependent types or HOAS or defs are present
 
-Hyp.  Hypo    ::= CId ":" Type ;
-DTyp. Type    ::= "[" [Hypo] "]" CId [Exp] ;         -- dependent type
-DTr.  Exp     ::= "[" "(" [CId] ")" Atom [Exp] "]" ; -- term with bindings
-AV.   Atom    ::= "$" CId ;
+Hyp. Hypo     ::= CId ":" Type ;
+AV.  Atom     ::= "$" CId ;
 
-EEq.  Exp      ::= "{" [Equation] "}" ;  -- list of pattern eqs; primitive notion: []
-Equ.  Equation ::= [Exp] "->" Exp ;      -- patterns are encoded as exps
+EEq. Exp      ::= "{" [Equation] "}" ;  -- list of pattern eqs; primitive: []
+Equ. Equation ::= [Exp] "->" Exp ;      -- patterns are encoded as exps
 
-terminator Hypo ";" ;
+separator  Hypo "," ;
 terminator Equation ";" ;
 

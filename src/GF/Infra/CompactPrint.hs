@@ -1,11 +1,19 @@
 module GF.Infra.CompactPrint where
 import Data.Char
 
-compactPrint = tail . concat . map spaceIf . words 
+compactPrint = compactPrintCustom keywordGF (const False)
 
-spaceIf w = case w of
-  _ | keyword w -> "\n" ++ w
+compactPrintGFCC = compactPrintCustom (const False) keywordGFCC
+
+compactPrintCustom pre post = tail . concat . map (spaceIf pre post) . words 
+
+spaceIf pre post w = case w of
+  _ | pre w -> "\n" ++ w
+  _ | post w -> w ++ "\n"
   c:cs | isAlpha c || isDigit c -> " " ++ w
   _ -> w
 
-keyword w = elem w ["cat","fun","lin","lincat","lindef","oper","param"]
+keywordGF w = elem w ["cat","fun","lin","lincat","lindef","oper","param"]
+keywordGFCC w = 
+  last w == ';' || 
+  elem w ["flags","fun","cat","lin","oper","lincat","lindef","printname"]

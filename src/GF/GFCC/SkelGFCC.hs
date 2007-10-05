@@ -51,13 +51,11 @@ transLinDef x = case x of
 
 transType :: Type -> Result
 transType x = case x of
-  Typ cids cid  -> failure x
   DTyp hypos cid exps  -> failure x
 
 
 transExp :: Exp -> Result
 transExp x = case x of
-  Tr atom exps  -> failure x
   DTr cids atom exps  -> failure x
   EEq equations  -> failure x
 
@@ -84,6 +82,7 @@ transTerm x = case x of
   FV terms  -> failure x
   W str term  -> failure x
   TM  -> failure x
+  RP term0 term  -> failure x
 
 
 transTokn :: Tokn -> Result

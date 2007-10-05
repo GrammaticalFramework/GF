@@ -75,6 +75,7 @@ instance Print Integer where
 instance Print Int where  --H
   prt _ x = doc (shows x) --H
 
+
 instance Print Double where
   prt _ x = doc (shows x)
 
@@ -141,13 +142,11 @@ instance Print LinDef where
 
 instance Print Type where
   prt i e = case e of
-   Typ cids cid -> prPrec i 0 (concatD [prt 0 cids , doc (showString "->") , prt 0 cid])
    DTyp hypos cid exps -> prPrec i 0 (concatD [doc (showString "[") , prt 0 hypos , doc (showString "]") , prt 0 cid , prt 0 exps])
 
 
 instance Print Exp where
   prt i e = case e of
-   Tr atom exps -> prPrec i 0 (concatD [doc (showString "(") , prt 0 atom , prt 0 exps , doc (showString ")")])
    DTr cids atom exps -> prPrec i 0 (concatD [doc (showString "[") , doc (showString "(") , prt 0 cids , doc (showString ")") , prt 0 atom , prt 0 exps , doc (showString "]")])
    EEq equations -> prPrec i 0 (concatD [doc (showString "{") , prt 0 equations , doc (showString "}")])
 
@@ -177,6 +176,7 @@ instance Print Term where
    FV terms -> prPrec i 0 (concatD [doc (showString "[|") , prt 0 terms , doc (showString "|]")])
    W str term -> prPrec i 0 (concatD [doc (showString "(") , prt 0 str , doc (showString "+") , prt 0 term , doc (showString ")")])
    TM  -> prPrec i 0 (concatD [doc (showString "?")])
+   RP term0 term -> prPrec i 0 (concatD [doc (showString "(") , prt 0 term0 , doc (showString "@") , prt 0 term , doc (showString ")")])
 
   prtList es = case es of
    [] -> (concatD [])
@@ -204,7 +204,8 @@ instance Print Hypo where
 
   prtList es = case es of
    [] -> (concatD [])
-   x:xs -> (concatD [prt 0 x , doc (showString ";") , prt 0 xs])
+   [x] -> (concatD [prt 0 x])
+   x:xs -> (concatD [prt 0 x , doc (showString ",") , prt 0 xs])
 
 instance Print Equation where
   prt i e = case e of
