@@ -2,7 +2,7 @@ module Main where
 
 import GF.Devel.Compile
 import GF.Devel.GrammarToGFCC
-import GF.Devel.OptimizeGFCC
+import GF.GFCC.OptimizeGFCC
 import GF.GFCC.CheckGFCC
 import GF.GFCC.DataGFCC
 import GF.Devel.UseIO

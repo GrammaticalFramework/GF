@@ -17,8 +17,9 @@
 module GF.Speech.TransformCFG where
 
 import GF.Canon.CanonToGFCC (mkCanon2gfcc)
-import qualified GF.Canon.GFCC.AbsGFCC as C
-import GF.Canon.GFCC.DataGFCC (GFCC, mkGFCC, lookType)
+import qualified GF.GFCC.AbsGFCC as C
+import GF.GFCC.Macros (lookType,catSkeleton)
+import GF.GFCC.DataGFCC (GFCC)
 import GF.Conversion.Types
 import GF.CF.PPrCF (prCFCat)
 import GF.Data.Utilities
@@ -70,7 +71,7 @@ cfgToCFRules s =
           nameToTerm (Name IW [Unify [n]]) = CFRes n
           nameToTerm (Name f@(IC c) prs) = 
               CFObj f (zipWith profileToTerm args prs)
-            where C.Typ args _ = lookType gfcc (C.CId c)
+            where (args,_) = catSkeleton $ lookType gfcc (C.CId c)
           nameToTerm n = error $ "cfgToCFRules.nameToTerm" ++ show n
           profileToTerm (C.CId t) (Unify []) = CFMeta t
           profileToTerm _ (Unify xs) = CFRes (last xs) -- FIXME: unify
@@ -84,7 +85,7 @@ getStartCatCF :: Options -> StateGrammar -> String
 getStartCatCF opts sgr = getStartCat opts sgr ++ "{}.s"
 
 stateGFCC :: StateGrammar -> GFCC
-stateGFCC = mkGFCC . mkCanon2gfcc . stateGrammarST
+stateGFCC = mkCanon2gfcc . stateGrammarST
 
 -- * Grammar filtering
 

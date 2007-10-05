@@ -24,8 +24,8 @@ import GF.Data.Operations (Err(..))
 import qualified GF.Grammar.Grammar as Grammar
 import qualified GF.Grammar.Macros as Macros
 import qualified GF.Canon.AbsGFC as AbsGFC
-import qualified GF.Canon.GFCC.AbsGFCC as AbsGFCC
-import qualified GF.Canon.GFCC.ErrM as ErrM
+import qualified GF.GFCC.AbsGFCC as AbsGFCC
+import qualified GF.GFCC.ErrM as ErrM
 import qualified GF.Infra.Ident as Ident
 import GF.CF.CFIdent (CFCat, cfCat2Ident, CFTok, wordsCFTok, prCFTok)
 
@@ -169,14 +169,15 @@ tree2term abs (TFloat   f) = Macros.float2term  f
 tree2term abs (TMeta)      = Macros.mkMeta 0
 
 exp2term :: Ident.Ident -> AbsGFCC.Exp -> Grammar.Term
-exp2term abs (AbsGFCC.Tr a es) = Macros.mkApp (atom2term abs a) (map (exp2term abs) es)
+exp2term abs (AbsGFCC.DTr _ a es) =  ---- TODO: bindings
+  Macros.mkApp (atom2term abs a) (map (exp2term abs) es)
 
 atom2term :: Ident.Ident -> AbsGFCC.Atom -> Grammar.Term
 atom2term abs (AbsGFCC.AC (AbsGFCC.CId f)) = Macros.qq (abs,Ident.IC f)
 atom2term abs (AbsGFCC.AS s) = Macros.string2term s
 atom2term abs (AbsGFCC.AI n) = Macros.int2term    n
 atom2term abs (AbsGFCC.AF f) = Macros.float2term  f
-atom2term abs AbsGFCC.AM     = Macros.mkMeta 0
+atom2term abs (AbsGFCC.AM i) = Macros.mkMeta (fromInteger i)
 
 ----------------------------------------------------------------------
 -- conversion and unification of forests
