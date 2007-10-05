@@ -3,6 +3,7 @@ module GF.Devel.GrammarToGFCC (prGrammar2gfcc,mkCanon2gfcc) where
 import GF.Grammar.Grammar
 import qualified GF.Grammar.Lookup as Look
 
+import qualified GF.GFCC.Macros as CM
 import qualified GF.GFCC.AbsGFCC as C
 import qualified GF.GFCC.DataGFCC as D
 import qualified GF.Grammar.Abstract as A
@@ -47,14 +48,14 @@ canon2gfcc opts cgr@(M.MGrammar ((a,M.ModMod abm):cms)) =
   cns = map (i2i . fst) cms
   abs = D.Abstr aflags funs cats catfuns
   aflags = Map.fromAscList [] ---- flags
-  lfuns = [(f', (mkType ty,C.Tr (C.AC f') [])) | ---- defs 
+  lfuns = [(f', (mkType ty,CM.tree (C.AC f') [])) | ---- defs 
              (f,AbsFun (Yes ty) _) <- tree2list (M.jments abm), let f' = i2i f]
   funs = Map.fromAscList lfuns
   lcats = [(i2i c,[]) | ---- context
             (c,AbsCat _ _) <- tree2list (M.jments abm)]
   cats = Map.fromAscList lcats
   catfuns = Map.fromAscList 
-    [(cat,[f | (f, (C.Typ _ c,_)) <- lfuns, c==cat]) | (cat,_) <- lcats]
+    [(cat,[f | (f, (C.DTyp _ c _,_)) <- lfuns, c==cat]) | (cat,_) <- lcats]
 
   cncs  = Map.fromList [mkConcr (i2i lang) mo | (lang,M.ModMod mo) <- cms]
   mkConcr lang mo = (lang,D.Concr flags lins opers lincats lindefs printnames)
@@ -74,7 +75,7 @@ i2i (IC c) = C.CId c
 
 mkType :: A.Type -> C.Type
 mkType t = case GM.catSkeleton t of
-  Ok (cs,c) -> C.Typ (map (i2i . snd) cs) (i2i $ snd c)
+  Ok (cs,c) -> CM.cftype (map (i2i . snd) cs) (i2i $ snd c)
 
 mkCType :: Type -> C.Term
 mkCType t = case t of

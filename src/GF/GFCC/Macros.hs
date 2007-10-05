@@ -38,6 +38,20 @@ depth tr = case tr of
 tree :: Atom -> [Exp] -> Exp
 tree = DTr []
 
+cftype :: [CId] -> CId -> Type
+cftype args val = DTyp [Hyp wildCId (cftype [] arg) | arg <- args] val []
+
+catSkeleton :: Type -> ([CId],CId)
+catSkeleton ty = case ty of
+  DTyp hyps val _ -> ([valCat ty | Hyp _ ty <- hyps],val)
+
+valCat :: Type -> CId
+valCat ty = case ty of
+  DTyp _ val _ -> val
+
+wildCId :: CId
+wildCId = CId "_"
+
 exp0 :: Exp
 exp0 = Tr (AM 0) []
 

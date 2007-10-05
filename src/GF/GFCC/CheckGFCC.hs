@@ -1,8 +1,8 @@
 module GF.GFCC.CheckGFCC where
 
+import GF.GFCC.Macros
 import GF.GFCC.DataGFCC
 import GF.GFCC.AbsGFCC
-import GF.GFCC.PrintGFCC
 import GF.GFCC.ErrM
 
 import qualified Data.Map as Map
@@ -24,7 +24,7 @@ checkGFCC gfcc = do
 
 checkConcrete :: GFCC -> (CId,Concr) -> IO ((CId,Concr),Bool)
 checkConcrete gfcc (lang,cnc) = 
-  labelBoolIO ("happened in language " ++ printTree lang) $ do
+  labelBoolIO ("happened in language " ++ prt lang) $ do
     (rs,bs) <- mapM checkl (Map.assocs (lins cnc)) >>= return . unzip
     return ((lang,cnc{lins = Map.fromAscList rs}),and bs)
  where
@@ -32,11 +32,11 @@ checkConcrete gfcc (lang,cnc) =
 
 checkLin :: GFCC -> CId -> (CId,Term) -> IO ((CId,Term),Bool)
 checkLin gfcc lang (f,t) = 
-  labelBoolIO ("happened in function " ++ printTree f) $ do
+  labelBoolIO ("happened in function " ++ prt f) $ do
     (t',b) <- checkTerm (lintype gfcc lang f) t --- $ inline gfcc lang t
     return ((f,t'),b)
 
-inferTerm :: [Tpe] -> Term -> Err (Term,Tpe)
+inferTerm :: [CType] -> Term -> Err (Term,CType)
 inferTerm args trm = case trm of
   K _ -> returnt str
   C i -> returnt $ ints i
@@ -81,22 +81,21 @@ inferTerm args trm = case trm of
  where
    returnt ty = return (trm,ty)
    infer = inferTerm args
-   prt = printTree
 
 checkTerm :: LinType -> Term -> IO (Term,Bool)
 checkTerm (args,val) trm = case inferTerm args trm of
   Ok (t,ty) -> if eqType ty val 
              then return (t,True) 
              else do
-    putStrLn $ "term: " ++ printTree trm ++ 
-               "\nexpected type: " ++ printTree val ++
-               "\ninferred type: " ++ printTree ty
+    putStrLn $ "term: " ++ prt trm ++ 
+               "\nexpected type: " ++ prt val ++
+               "\ninferred type: " ++ prt ty
     return (t,False)
   Bad s -> do
     putStrLn s
     return (trm,False)
 
-eqType :: Tpe -> Tpe -> Bool
+eqType :: CType -> CType -> Bool
 eqType inf exp = case (inf,exp) of
   (C k, C n)  -> k <= n -- only run-time corr.
   (R rs,R ts) -> length rs == length ts && and [eqType r t | (r,t) <- zip rs ts]
@@ -104,21 +103,21 @@ eqType inf exp = case (inf,exp) of
 
 -- should be in a generic module, but not in the run-time DataGFCC
 
-type Tpe = Term
-type LinType = ([Tpe],Tpe)
+type CType = Term
+type LinType = ([CType],CType)
 
-tuple :: [Tpe] -> Tpe
+tuple :: [CType] -> CType
 tuple = R
 
-ints :: Int -> Tpe
+ints :: Int -> CType
 ints = C
 
-str :: Tpe
+str :: CType
 str = S []
 
 lintype :: GFCC -> CId -> CId -> LinType
-lintype gfcc lang fun = case lookType gfcc fun of
-  Typ cs c -> (map linc cs, linc c)
+lintype gfcc lang fun = case catSkeleton (lookType gfcc fun) of
+  (cs,c) -> (map linc cs, linc c) ---- HOAS
  where 
    linc = lookLincat gfcc lang
 
