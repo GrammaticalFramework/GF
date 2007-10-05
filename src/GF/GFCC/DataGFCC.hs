@@ -2,6 +2,7 @@ module GF.GFCC.DataGFCC where
 
 import GF.GFCC.AbsGFCC
 import GF.GFCC.PrintGFCC
+import GF.Infra.CompactPrint
 import Data.Map
 import Data.List
 
@@ -70,7 +71,7 @@ mkGFCC (Grm a cs ab@(Abs afls fs cts) ccs) = GFCC {
 -- convert internal GFCC and pretty-print it
 
 printGFCC :: GFCC -> String
-printGFCC gfcc = printTree $ Grm
+printGFCC gfcc = compactPrintGFCC $ printTree $ Grm
   (absname gfcc) 
   (cncnames gfcc)
   (Abs

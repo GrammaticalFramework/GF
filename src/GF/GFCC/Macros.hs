@@ -53,7 +53,10 @@ wildCId :: CId
 wildCId = CId "_"
 
 exp0 :: Exp
-exp0 = Tr (AM 0) []
+exp0 = tree (AM 0) []
+
+primNotion :: Exp
+primNotion = EEq []
 
 term0 :: CId -> Term
 term0 _ = TM
