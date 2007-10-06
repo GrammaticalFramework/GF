@@ -39,7 +39,7 @@ import GF.Compile.CheckGrammar
 import GF.Compile.Optimize
 import GF.Compile.Evaluate
 import GF.Compile.GrammarToCanon
-import GF.Compile.GrammarToGFCC -----
+--import GF.Devel.GrammarToGFCC -----
 import GF.Canon.Share
 import GF.Canon.Subexpressions (elimSubtermsMod,unSubelimModule)
 import GF.UseGrammar.Linear (unoptimizeCanonMod) ----
@@ -300,9 +300,10 @@ compileSourceModule opts env@(k,gr,can,eenv) mo@(i,mi) = do
 generateModuleCode :: Options -> InitPath -> SourceModule -> IOE GFC.CanonModule
 generateModuleCode opts path minfo@(name,info) = do
 
-  if oElem (iOpt "gfcc") opts
-    then ioeIO $ putStrLn $ prGrammar2gfcc minfo
-    else return ()
+--- DEPREC
+---  if oElem (iOpt "gfcc") opts
+---    then ioeIO $ putStrLn $ prGrammar2gfcc minfo
+---    else return ()
 
   let pname = prefixPathName path (prt name)
   minfo0     <- ioeErr $ redModInfo minfo
