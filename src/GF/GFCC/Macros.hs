@@ -24,6 +24,14 @@ lookType :: GFCC -> CId -> Type
 lookType gfcc f = 
   fst $ lookMap (error $ "lookType " ++ show f) f (funs (abstract gfcc))
 
+lookAbsFlag :: GFCC -> CId -> String
+lookAbsFlag gfcc f = 
+  lookMap (error $ "lookAbsFlag " ++ show f) f (aflags (abstract gfcc))
+
+lookFlag :: GFCC -> CId -> CId -> String
+lookFlag gfcc lang fun = 
+  lookMap "?" fun $ flags $ lookMap (error "no lang") lang $ concretes gfcc
+
 functionsToCat :: GFCC -> CId -> [(CId,Type)]
 functionsToCat gfcc cat =
   [(f,ty) | f <- fs, Just (ty,_) <- [Data.Map.lookup f $ funs $ abstract gfcc]]

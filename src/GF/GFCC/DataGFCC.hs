@@ -3,6 +3,8 @@ module GF.GFCC.DataGFCC where
 import GF.GFCC.AbsGFCC
 import GF.GFCC.PrintGFCC
 import GF.Infra.CompactPrint
+import GF.Text.UTF8
+
 import Data.Map
 import Data.List
 
@@ -71,7 +73,7 @@ mkGFCC (Grm a cs ab@(Abs afls fs cts) ccs) = GFCC {
 -- convert internal GFCC and pretty-print it
 
 printGFCC :: GFCC -> String
-printGFCC gfcc = compactPrintGFCC $ printTree $ Grm
+printGFCC gfcc0 = compactPrintGFCC $ printTree $ Grm
   (absname gfcc) 
   (cncnames gfcc)
   (Abs
@@ -88,9 +90,36 @@ printGFCC gfcc = compactPrintGFCC $ printTree $ Grm
      [Lin f v | (f,v) <- assocs (lincats cnc)]
      [Lin f v | (f,v) <- assocs (lindefs cnc)]
      [Lin f v | (f,v) <- assocs (printnames cnc)]
+   gfcc = utf8GFCC gfcc0
 
 -- default map and filter are for Map here
 lmap = Prelude.map
 lfilter = Prelude.filter
+mmap = Data.Map.map
 
+-- encode idenfifiers and strings in UTF8
+
+utf8GFCC :: GFCC -> GFCC
+utf8GFCC gfcc = gfcc {
+  concretes = mmap u8concr (concretes gfcc)
+  }
+ where 
+   u8concr cnc = cnc {
+     lins = mmap u8term (lins cnc),
+     opers = mmap u8term (opers cnc)
+     }
+   u8term = convertStringsInTerm encodeUTF8
+
+---- TODO: convert identifiers and flags
+
+convertStringsInTerm conv t = case t of
+  K (KS s) -> K (KS (conv s))
+  W s r    -> W (conv s) (convs r)
+  R ts     -> R $ lmap convs ts
+  S ts     -> S $ lmap convs ts
+  FV ts    -> FV $ lmap convs ts
+  P u v    -> P (convs u) (convs v)
+  _        -> t
+ where
+  convs = convertStringsInTerm conv
 

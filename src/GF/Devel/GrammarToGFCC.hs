@@ -32,7 +32,7 @@ prGrammar2gfcc opts cnc gr = (abs, D.printGFCC gc) where
 
 mkCanon2gfcc :: Options -> String -> SourceGrammar -> (String,D.GFCC)
 mkCanon2gfcc opts cnc gr = 
-  (prIdent abs, (canon2gfcc opts . reorder abs . utf8Conv . canon2canon abs) gr)
+  (prIdent abs, (canon2gfcc opts . reorder abs . canon2canon abs) gr)
   where
     abs = err error id $ M.abstractOfConcrete gr (identC cnc)
 
@@ -69,12 +69,14 @@ canon2gfcc opts cgr@(M.MGrammar ((a,M.ModMod abm):cms)) =
       js = tree2list (M.jments mo)
       flags   = Map.fromList [(C.CId f,x) | Opt (f,[x]) <- M.flags mo]
       opers   = Map.fromAscList [] -- opers will be created as optimization
+      utf     = if elem (Opt ("coding",["utf8"])) (M.flags mo) 
+                  then D.convertStringsInTerm decodeUTF8 else id
       lins    = Map.fromAscList 
-        [(i2i f, mkTerm tr) | (f,CncFun _ (Yes tr) _) <- js]
+        [(i2i f, utf (mkTerm tr))  | (f,CncFun _ (Yes tr) _) <- js]
       lincats = Map.fromAscList 
         [(i2i c, mkCType ty) | (c,CncCat (Yes ty) _ _) <- js]
       lindefs = Map.fromAscList 
-        [(i2i c, mkTerm tr) | (c,CncCat _ (Yes tr) _) <- js]
+        [(i2i c, mkTerm tr)  | (c,CncCat _ (Yes tr) _) <- js]
       printnames = Map.union 
         (Map.fromAscList [(i2i f, mkTerm tr) | (f,CncFun _ _ (Yes tr)) <- js])
         (Map.fromAscList [(i2i f, mkTerm tr) | (f,CncCat _ _ (Yes tr)) <- js])
@@ -95,7 +97,11 @@ mkExp t = case t of
   mkAt c = case c of 
     Q _ c  -> C.AC $ i2i c
     QC _ c -> C.AC $ i2i c
+    Vr x   -> C.AV $ i2i x
     EInt i -> C.AI i
+    EFloat f -> C.AF f
+    K s    -> C.AS s
+    Meta (MetaSymb i) -> C.AM $ toInteger i
     _ -> C.AM 0
   mkPatt p = uncurry CM.tree $ case p of
     A.PP _ c ps -> (C.AC (i2i c), map mkPatt ps)
@@ -182,20 +188,6 @@ repartition abs cg = [M.partOfGrammar cg (lang,mo) |
   let mo = errVal 
        (error ("no module found for " ++ A.prt lang)) $ M.lookupModule cg lang
   ]
-
--- convert to UTF8 if not yet converted
-utf8Conv :: SourceGrammar -> SourceGrammar
-utf8Conv = M.MGrammar . map toUTF8 . M.modules where
-  toUTF8 mo = case mo of
-    (i, M.ModMod m) 
-      ----- | hasFlagCanon (flagCanon "coding" "utf8") mo -> mo
-      | otherwise -> (i, M.ModMod $
-          m{ M.jments = M.jments m -----
------            mapTree (onSnd (mapInfoTerms (onTokens encodeUTF8))) (M.jments m),
-	   -----  M.flags = setFlag "coding" "utf8" (M.flags m) 
-           }
-          )
-    _ -> mo
  
 
 -- translate tables and records to arrays, parameters and labels to indices
