@@ -102,11 +102,11 @@ trAnyDef (i,info) = let i' = tri i in case info of
   CncCat (Yes ty) Nope _ -> 
     [P.DefLincat [P.PrintDef [mkName i'] (trt ty)]] 
   CncCat pty ptr ppr -> 
-    [P.DefLindef [trDef i' pty ptr]] 
-    ---- P.DefPrintCat [P.PrintDef i' (trt pr)]]
+    [P.DefLindef [trDef i' pty ptr]] ++
+    [P.DefPrintCat [P.PrintDef [mkName i] (trt pr)] | Yes pr <- [ppr]]
   CncFun _ ptr ppr -> 
-    [P.DefLin [trDef i' nope ptr]] 
-    ---- P.DefPrintFun [P.PrintDef i' (trt pr)]]
+    [P.DefLin [trDef i' nope ptr]] ++ 
+    [P.DefPrintFun [P.PrintDef [mkName i] (trt pr)] | Yes pr <- [ppr]]
 {-
   ---- encoding of AnyInd without changing syntax. AR 20/9/2007
   AnyInd s b -> 
