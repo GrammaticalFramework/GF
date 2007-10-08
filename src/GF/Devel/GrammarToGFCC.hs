@@ -44,38 +44,67 @@ canon2gfcc opts cgr@(M.MGrammar ((a,M.ModMod abm):cms)) =
   (if (oElem (iOpt "show_canon") opts) then trace (prGrammar cgr) else id) $
      D.GFCC an cns abs cncs 
  where
+  -- abstract
   an  = (i2i a)
   cns = map (i2i . fst) cms
   abs = D.Abstr aflags funs cats catfuns
-  aflags = Map.fromAscList [] ---- flags
-  lfuns = [(f', (mkType ty,CM.primNotion)) | ---- defs 
-             (f,AbsFun (Yes ty) _) <- tree2list (M.jments abm), let f' = i2i f]
+  aflags = Map.fromList [(C.CId f,x) | Opt (f,[x]) <- M.flags abm]
+  mkDef pty = case pty of
+    Yes t -> mkExp t
+    _ -> CM.primNotion
+
+  -- concretes
+  lfuns = [(f', (mkType ty, mkDef pty)) | 
+             (f,AbsFun (Yes ty) pty) <- tree2list (M.jments abm), let f' = i2i f]
   funs = Map.fromAscList lfuns
-  lcats = [(i2i c,[]) | ---- context
-            (c,AbsCat _ _) <- tree2list (M.jments abm)]
+  lcats = [(i2i c, mkContext cont) |
+                (c,AbsCat (Yes cont) _) <- tree2list (M.jments abm)]
   cats = Map.fromAscList lcats
-  catfuns = Map.fromAscList 
+  catfuns = Map.fromList 
     [(cat,[f | (f, (C.DTyp _ c _,_)) <- lfuns, c==cat]) | (cat,_) <- lcats]
 
   cncs  = Map.fromList [mkConcr (i2i lang) mo | (lang,M.ModMod mo) <- cms]
   mkConcr lang mo = (lang,D.Concr flags lins opers lincats lindefs printnames)
     where
-      flags   = Map.fromAscList [] ---- flags
+      js = tree2list (M.jments mo)
+      flags   = Map.fromList [(C.CId f,x) | Opt (f,[x]) <- M.flags mo]
       opers   = Map.fromAscList [] -- opers will be created as optimization
       lins    = Map.fromAscList 
-        [(i2i f, mkTerm tr) | (f,CncFun _ (Yes tr) _) <- tree2list (M.jments mo)]
+        [(i2i f, mkTerm tr) | (f,CncFun _ (Yes tr) _) <- js]
       lincats = Map.fromAscList 
-        [(i2i c, mkCType ty) | (c,CncCat (Yes ty) _ _) <- tree2list (M.jments mo)]
+        [(i2i c, mkCType ty) | (c,CncCat (Yes ty) _ _) <- js]
       lindefs = Map.fromAscList 
-        [(i2i c, mkTerm tr) | (c,CncCat _ (Yes tr) _) <- tree2list (M.jments mo)]
-      printnames = Map.fromAscList [] ---- printnames
+        [(i2i c, mkTerm tr) | (c,CncCat _ (Yes tr) _) <- js]
+      printnames = Map.union 
+        (Map.fromAscList [(i2i f, mkTerm tr) | (f,CncFun _ _ (Yes tr)) <- js])
+        (Map.fromAscList [(i2i f, mkTerm tr) | (f,CncCat _ _ (Yes tr)) <- js])
 
 i2i :: Ident -> C.CId
-i2i (IC c) = C.CId c
+i2i = C.CId . prIdent
 
 mkType :: A.Type -> C.Type
-mkType t = case GM.catSkeleton t of
-  Ok (cs,c) -> CM.cftype (map (i2i . snd) cs) (i2i $ snd c)
+mkType t = case GM.typeForm t of
+  Ok (hyps,(_,cat),args) -> C.DTyp (mkContext hyps) (i2i cat) (map mkExp args)
+
+mkExp :: A.Term -> C.Exp
+mkExp t = case t of
+  A.Eqs eqs -> C.EEq [C.Equ (map mkPatt ps) (mkExp e) | (ps,e) <- eqs]
+  _ -> case GM.termForm t of
+    Ok (xx,c,args) -> C.DTr [i2i x | x <- xx] (mkAt c) (map mkExp args) 
+ where
+  mkAt c = case c of 
+    Q _ c  -> C.AC $ i2i c
+    QC _ c -> C.AC $ i2i c
+    EInt i -> C.AI i
+    _ -> C.AM 0
+  mkPatt p = uncurry CM.tree $ case p of
+    A.PP _ c ps -> (C.AC (i2i c), map mkPatt ps)
+    A.PV x      -> (C.AV (i2i x), [])
+    A.PW        -> (C.AV CM.wildCId, [])
+    A.PInt i    -> (C.AI i, [])
+
+mkContext :: A.Context -> [C.Hypo]
+mkContext hyps = [C.Hyp (i2i x) (mkType ty) | (x,ty) <- hyps]
 
 mkCType :: Type -> C.Term
 mkCType t = case t of
@@ -117,23 +146,33 @@ mkTerm tr = case tr of
 reorder :: Ident -> SourceGrammar -> SourceGrammar
 reorder abs cg = M.MGrammar $ 
     (abs, M.ModMod $ 
-          M.Module M.MTAbstract M.MSComplete [] [] [] adefs):
+          M.Module M.MTAbstract M.MSComplete aflags [] [] adefs):
       [(c, M.ModMod $ 
-          M.Module (M.MTConcrete abs) M.MSComplete [] [] [] (sorted2tree js)) 
-            | (c,js) <- cncs] 
+          M.Module (M.MTConcrete abs) M.MSComplete fs [] [] (sorted2tree js)) 
+            | (c,(fs,js)) <- cncs] 
      where
        mos = M.allModMod cg
-       adefs = 
-         sorted2tree $ sortBy (\ (f,_) (g,_) -> compare f g) 
+       adefs = sorted2tree $ sortIds $
+            predefADefs ++
             [finfo | 
               (i,mo) <- M.allModMod cg, M.isModAbs mo, 
               finfo <- tree2list (M.jments mo)]
-       cncs = sortBy (\ (x,_) (y,_) -> compare x y)
-            [(lang, concr lang) | lang <- M.allConcretes cg abs]
-       concr la = sortBy (\ (f,_) (g,_) -> compare f g) 
-            [finfo | 
-              (i,mo) <- mos, M.isModCnc mo, elem i (M.allExtends cg la),
-              finfo <- tree2list (M.jments mo)]
+       predefADefs = 
+         [(IC c, AbsCat (Yes []) Nope) | c <- ["Float","Int","String"]]
+       aflags = nubFlags $ concat [M.flags mo | (_,mo) <- M.allModMod cg, M.isModAbs mo]
+
+       cncs = sortIds [(lang, concr lang) | lang <- M.allConcretes cg abs]
+       concr la = (nubFlags (concat flags), sortIds (predefCDefs ++ concat jments)) where 
+         (flags,jments) = unzip $ cdata la
+       cdata la = [(M.flags mo, tree2list (M.jments mo)) | 
+                    (i,mo) <- mos, M.isModCnc mo, elem i (M.allExtends cg la)]
+       predefCDefs = 
+         [(IC c, CncCat (Yes GM.defLinType) Nope Nope) | ---- lindef,printname 
+                                            c <- ["Float","Int","String"]]
+
+       sortIds = sortBy (\ (f,_) (g,_) -> compare f g) 
+       nubFlags = nubBy (\ (Opt (f,_)) (Opt (g,_)) -> f == g)
+
 
 -- one grammar per language - needed for symtab generation
 repartition :: Ident -> SourceGrammar -> [SourceGrammar]
@@ -362,7 +401,7 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
      (xs1,xs2) -> xs1:chop i xs2
 
 
-   mkCurrySel t p = S t p ----
+   mkCurrySel t p = S t p -- done properly in CheckGFCC
 
 
 mkLab k = LIdent (("_" ++ show k))
