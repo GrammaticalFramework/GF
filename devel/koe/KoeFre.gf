@@ -1,5 +1,7 @@
 concrete KoeFre of Koe = {
 
+flags coding=utf8 ;
+
 param 
   Gen = Masc | Fem ;
   Num = Sg | Pl ;
