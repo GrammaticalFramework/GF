@@ -35,10 +35,24 @@ This document concerns the API v. 1.0. You can find the current code in
 
 
 
-==The resource grammar API==
+==The resource grammar structure==
 
-The API is divided into a bunch of ``interface`` and ``resource`` modules.
-The following figure gives the dependencies of these modules.
+The library is divided into a bunch of modules, whose dependencies
+are given in the following figure.
+
+[Syntax.png] 
+
+- solid contours: module used by end users
+- dashed contours: internal module
+- ellipse: abstract/concrete pair of modules
+- rectangle: resource or instance
+- diamond: interface
+
+
+The solid ellipses show the API as visible to the user of the library. The
+dashed ellipses form the main of the implementation, on which the resource
+grammar programmer has to work with. With the exception of the ``Paradigms``
+module, the visible API modules can be produced mechanically.
 
 [Grammar.png] 
 
