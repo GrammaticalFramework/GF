@@ -57,8 +57,6 @@ oper
 -- amalgamate with the following word (the 'genitive' "de" and the
 -- 'dative' "a").
 
-  Prep : Type ;
-
   accusative : Prep ;
   genitive   : Prep ;
   dative     : Prep ;
@@ -293,11 +291,10 @@ oper
   singular = Sg ;
   plural = Pl ;
 
-  Prep = Compl ;
-  accusative = complAcc ;
-  genitive = complGen ;
-  dative = complDat ;
-  mkPrep p = {s = p ; c = Acc ; isDir = False} ;
+  accusative = complAcc ** {lock_Prep = <>} ;
+  genitive = complGen ** {lock_Prep = <>} ;
+  dative = complDat ** {lock_Prep = <>} ;
+  mkPrep p = {s = p ; c = Acc ; isDir = False ; lock_Prep = <>} ;
 
 
   mk2N x y g = mkNounIrreg x y g ** {lock_N = <>} ;

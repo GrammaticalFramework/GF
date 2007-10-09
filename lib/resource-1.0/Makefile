@@ -59,8 +59,9 @@ alltenses:
 	$(GFCC) api/Syntax???.gf
 	cp -p api/Constructors*.gfc api/Constructors*.gfr ../alltenses
 	cp -p api/Syntax*.gfc api/Syntax*.gfr ../alltenses
+	$(GFCC) api/Try???.gf
 	$(GFCC) -path=alltenses:prelude:api:api/toplevel api/toplevel/OverLangEng.gf
-	mv api/toplevel/Over*.gfc ../alltenses
+	mv api/toplevel/Over*.gfc api/Try*.gf? ../alltenses
 
 langs:
 	echo "s ;; pm | wf langs.gfcm" | $(GFCA) -path=present:prelude ../present/Lang???.gfc $(RTSS)
@@ -101,8 +102,9 @@ present: chmod
 	$(GFCCP) -path=api:present:prelude api/Syntax???.gf
 	mv api/Constructors*.gfc api/Constructors*.gfr ../present
 	mv api/Syntax*.gfc api/Syntax*.gfr ../present
+	$(GFCCP) -path=api:present:prelude api/Try???.gf
 	$(GFCCP) -path=present:prelude:api:api/toplevel api/toplevel/OverLangEng.gf
-	mv api/toplevel/Over*.gfc ../present
+	mv api/toplevel/Over*.gfc api/Try???.gf? ../present
 
 
 mathematical:
