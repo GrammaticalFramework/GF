@@ -1,6 +1,6 @@
 abstract Koe = {
 
-flags starcat = S ;
+flags startcat = S ;
 
 cat S ; NP ; VP ;
 

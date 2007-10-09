@@ -8,6 +8,12 @@ Last update: %%date(%c)
 
 %!target:html
 
+**History**
+
+October 2007: updated for API 1.2.
+
+January 2006: first version.
+
 
 The purpose of this document is to tell how to implement the GF
 resource grammar API for a new language. We will //not// cover how
@@ -16,7 +22,7 @@ will give some hints how to extend the API.
 
 A manual for using the resource grammar is found in
 
-[``http://www.cs.chalmers.se/~aarne/GF/doc/resource.pdf`` http://www.cs.chalmers.se/~aarne/GF/doc/resource.pdf].
+[``http://www.cs.chalmers.se/~aarne/GF/lib/resource-1.0/doc/synopsis.html`` http://www.cs.chalmers.se/~aarne/GF/lib/resource-1.0/doc/synopsis.html].
 
 A tutorial on GF, also introducing the idea of resource grammars, is found in
 
@@ -26,14 +32,12 @@ This document concerns the API v. 1.0. You can find the current code in
 
 [``http://www.cs.chalmers.se/~aarne/GF/lib/resource-1.0/`` ..]
 
-See the [``README`` ../README] for
-details on how this differs from previous versions.
 
 
 
 ==The resource grammar API==
 
-The API is divided into a bunch of ``abstract`` modules.
+The API is divided into a bunch of ``interface`` and ``resource`` modules.
 The following figure gives the dependencies of these modules.
 
 [Grammar.png] 

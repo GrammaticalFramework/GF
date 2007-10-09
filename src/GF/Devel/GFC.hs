@@ -2,6 +2,7 @@ module Main where
 
 import GF.Devel.Compile
 import GF.Devel.GrammarToGFCC
+import GF.Devel.GFCCtoJS
 import GF.GFCC.OptimizeGFCC
 import GF.GFCC.CheckGFCC
 import GF.GFCC.DataGFCC
@@ -24,6 +25,12 @@ main = do
       let target = abs ++ ".gfcc"
       writeFile target (printGFCC gc)
       putStrLn $ "wrote file " ++ target
+      if oElem (iOpt "js") opts 
+        then do
+          let js = abs ++ ".js"
+          writeFile js (gfcc2js gc)
+          putStrLn $ "wrote file " ++ js
+        else return ()
     _ -> do
       mapM_ (batchCompile opts) (map return fs)
       putStrLn "Done."

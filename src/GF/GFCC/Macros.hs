@@ -57,8 +57,11 @@ valCat :: Type -> CId
 valCat ty = case ty of
   DTyp _ val _ -> val
 
+cid :: String -> CId
+cid = CId
+
 wildCId :: CId
-wildCId = CId "_"
+wildCId = cid "_"
 
 exp0 :: Exp
 exp0 = tree (AM 0) []
