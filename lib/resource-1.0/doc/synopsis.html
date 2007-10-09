@@ -3786,7 +3786,7 @@ source <A HREF="../italian/ParadigmsIta.gf"><CODE>http://www.cs.chalmers.se/~aar
 <TD><CODE>Number</CODE></TD>
 </TR>
 <TR>
-<TD><CODE>Prep</CODE></TD>
+<TD><CODE>--Prep</CODE></TD>
 <TD><CODE>Type</CODE></TD>
 </TR>
 <TR>
@@ -4505,10 +4505,6 @@ source <A HREF="../spanish/ParadigmsSpa.gf"><CODE>http://www.cs.chalmers.se/~aar
 <TD><CODE>Number</CODE></TD>
 </TR>
 <TR>
-<TD><CODE>Prep</CODE></TD>
-<TD><CODE>Type</CODE></TD>
-</TR>
-<TR>
 <TD><CODE>accusative</CODE></TD>
 <TD><CODE>Prep</CODE></TD>
 </TR>
@@ -4962,6 +4958,13 @@ To try out inflection paradigms:
 <PRE>
     &gt; i -path=alltenses:prelude -retain alltenses/ParadigmsGer.gfr
     &gt; cc mkN "Farbe"
+</PRE>
+<P>
+To try out overloaded syntax, test lexicon, and inflection paradigms:
+</P>
+<PRE>
+    &gt; i -path=alltenses:prelude -retain alltenses/TryGer.gfr
+    &gt; cc mkCl (mkNP this_QuantSg (mkN "Farbe")) (mkA "dunkel")
 </PRE>
 <P>
 To look for a syntax tree in the overload API by parsing:

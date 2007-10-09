@@ -10,6 +10,11 @@ To try out inflection paradigms:
   > i -path=alltenses:prelude -retain alltenses/ParadigmsGer.gfr
   > cc mkN "Farbe"
 ```
+To try out overloaded syntax, test lexicon, and inflection paradigms:
+```
+  > i -path=alltenses:prelude -retain alltenses/TryGer.gfr
+  > cc mkCl (mkNP this_QuantSg (mkN "Farbe")) (mkA "dunkel")
+```
 To look for a syntax tree in the overload API by parsing:
 ```
   > i -path=alltenses:prelude alltenses/OverLangEng.gfc
