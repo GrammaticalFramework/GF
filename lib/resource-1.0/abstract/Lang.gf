@@ -8,4 +8,6 @@
 abstract Lang = 
   Grammar,
   Lexicon
-  ** {} ;
+  ** {
+  flags startcat=Phr ;
+  } ;
