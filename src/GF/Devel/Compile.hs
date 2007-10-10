@@ -104,13 +104,15 @@ compileOne opts env@(_,srcgr) file = do
 
   case gf of
 
-    -- for compiled gf, read the file and update environment, also source env
+    -- for compiled gf, read the file and update environment
+    -- also undo common subexp optimization, to enable normal computations
     "gfc" -> do
        sm0 <- putp ("+ reading" +++ file) $ getSourceModule opts file
-       sm <- {- putp "creating indirections" $ -} ioeErr $ extendModule mos sm0
+       let sm1 = unsubexpModule sm0
+       sm <- {- putp "creating indirections" $ -} ioeErr $ extendModule mos sm1
        extendCompileEnv env sm
 
-    -- for gf source, do full compilation
+    -- for gf source, do full compilation and generate code
     _ -> do
 
       let modu = unsuffixFile file
@@ -123,7 +125,7 @@ compileOne opts env@(_,srcgr) file = do
                                            getSourceModule opts file
        (k',sm)  <- compileSourceModule opts env sm0
        cm  <- putpp "  generating code... " $ generateModuleCode opts path sm
-
+          -- sm is optimized before generation, but not in the env
        extendCompileEnvInt env (k',sm)
 
 
@@ -170,7 +172,7 @@ generateModuleCode opts path minfo@(name,info) = do
 
   let pname  = prefixPathName path (prt name)
   let minfo0 = minfo 
-  let minfo1 = shareModule minfo
+  let minfo1 = (if isConcr info then optModule else id) minfo
   let minfo2 = minfo1
 
   let (file,out) = (gfcFile pname, prGrammar (MGrammar [minfo2]))
@@ -180,9 +182,9 @@ generateModuleCode opts path minfo@(name,info) = do
  where 
    putp  = putPointE opts
    putpp = putPointEsil opts
-   isCompilable mi = case mi of
-     ModMod m -> not $ isModCnc m && mstatus m == MSIncomplete 
-     _ -> True
+   isConcr mi = case mi of
+     ModMod m -> isModCnc m && mstatus m /= MSIncomplete 
+     _ -> False
 
 
 -- auxiliaries

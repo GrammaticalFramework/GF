@@ -15,7 +15,8 @@
 -- following advice of Josef Svenningsson
 -----------------------------------------------------------------------------
 
-module GF.Devel.OptimizeGF (shareModule,unshareModule) where 
+module GF.Devel.OptimizeGF (
+  optModule,unshareModule,unsubexpModule,unoptModule) where 
 
 import GF.Grammar.Grammar
 import GF.Grammar.Lookup
@@ -30,11 +31,14 @@ import Data.Map (Map)
 import qualified Data.Map as Map
 import Data.List
 
-shareModule :: (Ident, SourceModInfo) -> (Ident, SourceModInfo)
-shareModule = subexpModule . processModule optim
+optModule :: (Ident, SourceModInfo) -> (Ident, SourceModInfo)
+optModule = subexpModule . processModule optim
+
+unoptModule :: SourceGrammar -> (Ident, SourceModInfo) -> (Ident, SourceModInfo)
+unoptModule gr = unshareModule gr . unsubexpModule
 
 unshareModule :: SourceGrammar -> (Ident, SourceModInfo) -> (Ident, SourceModInfo)
-unshareModule gr = processModule (const (unoptim gr)) . unsubexpModule
+unshareModule gr = processModule (const (unoptim gr))
 
 processModule :: 
   (Ident -> Term -> Term) -> (Ident, SourceModInfo) -> (Ident, SourceModInfo)
@@ -107,8 +111,9 @@ replace old new trm = case trm of
 
 values :: Term -> Term
 values t = case t of
-  T ty [(ps,t)]   -> T ty [(ps,values t)] -- don't destroy parametrization
-  T (TComp ty) cs -> V ty [values t | (_, t) <- cs]
+  T ty [(ps,t)]    -> T ty [(ps,values t)] -- don't destroy parametrization
+  T (TComp ty)  cs -> V ty [values t | (_, t) <- cs]
+  T (TTyped ty) cs -> V ty [values t | (_, t) <- cs] ---- why are these left?
   _ -> C.composSafeOp values t
 
 
@@ -166,7 +171,7 @@ subexpModule (mo,m) = errVal (mo,m) $ case m of
 
 unsubexpModule :: SourceModule -> SourceModule
 unsubexpModule mo@(i,m) = case m of
-    M.ModMod (M.Module mt@(M.MTConcrete _) st fs me ops js) | hasSub ljs ->
+    M.ModMod (M.Module mt st fs me ops js) | hasSub ljs ->
       (i, M.ModMod (M.Module mt st fs me ops 
                      (rebuild (map unparInfo ljs)))) 
                         where ljs = tree2list js
@@ -176,10 +181,12 @@ unsubexpModule mo@(i,m) = case m of
     hasSub ljs = not $ null [c | (c,ResOper _ _) <- ljs]
     unparInfo (c,info) = case info of
       CncFun xs (Yes t) m -> [(c, CncFun xs (Yes (unparTerm t)) m)]
-      ResOper _ _ -> [] ----
+      ResOper (Yes (EInt 8)) _ -> [] -- subexp-generated opers
+      ResOper pty (Yes t) -> [(c, ResOper pty (Yes (unparTerm t)))]
       _ -> [(c,info)]
     unparTerm t = case t of
-      Q m c -> errVal t $ liftM unparTerm $ lookupResDef gr m c 
+      Q m c@(IC ('A':'\'':'\'':_)) -> --- name convention of subexp opers
+        errVal t $ liftM unparTerm $ lookupResDef gr m c 
       _ -> C.composSafeOp unparTerm t
     gr = M.MGrammar [mo] 
     rebuild = buildTree . concat
@@ -210,7 +217,8 @@ addSubexpConsts mo tree lins = do
 
    list = Map.toList tree
 
-   oper id trm = (ident id, ResOper Nope (Yes trm))
+   oper id trm = (ident id, ResOper (Yes (EInt 8)) (Yes trm)) 
+   --- impossible type encoding generated opers
 
 getSubtermsMod :: Ident -> [(Ident,Info)] -> TermM (Map Term (Int,Int))
 getSubtermsMod mo js = do
