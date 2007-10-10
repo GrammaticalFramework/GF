@@ -230,7 +230,7 @@ purgeGrammar abstr gr =
   acncs = abstr : M.allConcretes gr abstr
   isSingle = True
   complete (i,M.ModMod m) = M.isCompleteModule m --- not . isIncompleteCanon
-  unopt = unshareModule gr
+  unopt = unshareModule gr -- subexp elim undone when compiled
 
 type ParamEnv =
   (Map.Map (Ident,[Label]) (Type,Integer), -- numbered labels
