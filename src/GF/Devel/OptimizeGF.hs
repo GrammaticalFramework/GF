@@ -25,13 +25,16 @@ import GF.Grammar.PrGrammar (prt)
 import qualified GF.Infra.Modules as M
 import GF.Data.Operations
 
+import Control.Monad
+import Data.Map (Map)
+import qualified Data.Map as Map
 import Data.List
 
 shareModule :: (Ident, SourceModInfo) -> (Ident, SourceModInfo)
-shareModule = processModule optim
+shareModule = subexpModule . processModule optim
 
 unshareModule :: SourceGrammar -> (Ident, SourceModInfo) -> (Ident, SourceModInfo)
-unshareModule gr = processModule (const (unoptim gr))
+unshareModule gr = processModule (const (unoptim gr)) . unsubexpModule
 
 processModule :: 
   (Ident -> Term -> Term) -> (Ident, SourceModInfo) -> (Ident, SourceModInfo)
@@ -125,4 +128,131 @@ unfactor gr t = case t of
      Vr y | y == x -> u
      _ -> C.composSafeOp (restore x u) t
 
+
+----------------------------------------------------------------------
+
+{-
+This module implements a simple common subexpression elimination
+ for gfc grammars, to factor out shared subterms in lin rules.
+It works in three phases: 
+
+  (1) collectSubterms collects recursively all subterms of forms table and (P x..y)
+      from lin definitions (experience shows that only these forms
+      tend to get shared) and counts how many times they occur
+  (2) addSubexpConsts takes those subterms t that occur more than once
+      and creates definitions of form "oper A''n = t" where n is a
+      fresh number; notice that we assume no ids of this form are in
+      scope otherwise
+  (3) elimSubtermsMod goes through lins and the created opers by replacing largest
+      possible subterms by the newly created identifiers
+
+The optimization is invoked in gf by the flag i -subs.
+
+If an application does not support GFC opers, the effect of this
+optimization can be undone by the function unSubelimCanon.
+
+The function unSubelimCanon can be used to diagnostisize how much
+cse is possible in the grammar. It is used by the flag pg -printer=subs.
+
+-}
+
+subexpModule :: SourceModule -> SourceModule
+subexpModule (mo,m) = errVal (mo,m) $ case m of
+  M.ModMod (M.Module mt st fs me ops js) -> do
+    (tree,_) <- appSTM (getSubtermsMod mo (tree2list js)) (Map.empty,0)
+    js2 <- liftM buildTree $ addSubexpConsts mo tree $ tree2list js
+    return (mo,M.ModMod (M.Module mt st fs me ops js2))
+  _ -> return (mo,m)
+
+unsubexpModule :: SourceModule -> SourceModule
+unsubexpModule mo@(i,m) = case m of
+    M.ModMod (M.Module mt@(M.MTConcrete _) st fs me ops js) | hasSub ljs ->
+      (i, M.ModMod (M.Module mt st fs me ops 
+                     (rebuild (map unparInfo ljs)))) 
+                        where ljs = tree2list js
+    _ -> (i,m)
+  where
+    -- perform this iff the module has opers
+    hasSub ljs = not $ null [c | (c,ResOper _ _) <- ljs]
+    unparInfo (c,info) = case info of
+      CncFun xs (Yes t) m -> [(c, CncFun xs (Yes (unparTerm t)) m)]
+      ResOper _ _ -> [] ----
+      _ -> [(c,info)]
+    unparTerm t = case t of
+      Q m c -> errVal t $ liftM unparTerm $ lookupResDef gr m c 
+      _ -> C.composSafeOp unparTerm t
+    gr = M.MGrammar [mo] 
+    rebuild = buildTree . concat
+
+-- implementation
+
+type TermList = Map Term (Int,Int) -- number of occs, id
+type TermM a = STM (TermList,Int) a
+
+addSubexpConsts :: 
+  Ident -> Map Term (Int,Int) -> [(Ident,Info)] -> Err [(Ident,Info)]
+addSubexpConsts mo tree lins = do
+  let opers = [oper id trm | (trm,(_,id)) <- list]
+  mapM mkOne $ opers ++ lins
+ where
+
+   mkOne (f,def) = case def of
+     CncFun xs (Yes trm) pn -> do
+       trm' <- recomp f trm
+       return (f,CncFun xs (Yes trm') pn)
+     ResOper ty (Yes trm) -> do
+       trm' <- recomp f trm
+       return (f,ResOper ty (Yes trm'))
+     _ -> return (f,def)
+   recomp f t = case Map.lookup t tree of
+     Just (_,id) | ident id /= f -> return $ Q mo (ident id)
+     _ -> C.composOp (recomp f) t
+
+   list = Map.toList tree
+
+   oper id trm = (ident id, ResOper Nope (Yes trm))
+
+getSubtermsMod :: Ident -> [(Ident,Info)] -> TermM (Map Term (Int,Int))
+getSubtermsMod mo js = do
+  mapM (getInfo (collectSubterms mo)) js
+  (tree0,_) <- readSTM
+  return $ Map.filter (\ (nu,_) -> nu > 1) tree0
+ where
+   getInfo get fi@(f,i) = case i of
+     CncFun xs (Yes trm) pn -> do
+       get trm
+       return $ fi
+     ResOper ty (Yes trm) -> do
+       get trm
+       return $ fi
+     _ -> return fi
+
+collectSubterms :: Ident -> Term -> TermM Term
+collectSubterms mo t = case t of
+  App f a -> do
+    collect f
+    collect a
+    add t 
+  T ty cs -> do
+    let (_,ts) = unzip cs
+    mapM collect ts
+    add t
+  V ty ts -> do
+    mapM collect ts
+    add t
+----  K (KP _ _)  -> add t
+  _ -> C.composOp (collectSubterms mo) t
+ where
+   collect = collectSubterms mo
+   add t = do
+     (ts,i) <- readSTM
+     let 
+       ((count,id),next) = case Map.lookup t ts of
+         Just (nu,id) -> ((nu+1,id), i)
+         _ ->            ((1,   i ), i+1)
+     writeSTM (Map.insert t (count,id) ts, next)
+     return t --- only because of composOp
+
+ident :: Int -> Ident
+ident i = identC ("A''" ++ show i) ---
 
