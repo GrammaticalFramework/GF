@@ -20,7 +20,7 @@ concrete StructuralDan of Structural = CatDan **
   but_PConj = ss "men" ;
   by8means_Prep = ss "med" ;
   can8know_VV, can_VV = 
-    mkV "kunne" "kan" nonExist "kunne" "kunnet" nonExist **
+    mkV "kunne" "kan" "kan" "kunne" "kunnet" "kan" **
     {c2 = [] ; lock_VV = <>} ;
   during_Prep = ss "under" ;
   either7or_DConj = sd2 "enten" "eller" ** {n = Sg} ;
@@ -97,7 +97,7 @@ concrete StructuralDan of Structural = CatDan **
   under_Prep = ss "under" ;
   very_AdA = ss "meget" ;
   want_VV = 
-    mkV "ville" "vil" nonExist "ville" "villet" "villed" ** 
+    mkV "ville" "vil" "vil" "ville" "villet" "villed" ** 
     {c2 = [] ; lock_VV = <>} ;
   we_Pron = MorphoDan.mkNP "vi"  "os"  "vores" "vores" "vores"  Plg P1 ;
   whatSg_IP = {s = \\_ => "hvad" ; gn = SgUtr} ; ---- infl
