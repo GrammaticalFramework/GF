@@ -1,5 +1,7 @@
 module GF.Devel.GrammarToGFCC (prGrammar2gfcc,mkCanon2gfcc) where
 
+import GF.Devel.OptimizeGF (unshareModule)
+
 import GF.Grammar.Grammar
 import qualified GF.Grammar.Lookup as Look
 
@@ -220,12 +222,15 @@ canon2canon abs = recollect . map cl2cl . repartition abs . purgeGrammar abs
 
 
 purgeGrammar :: Ident -> SourceGrammar -> SourceGrammar
-purgeGrammar abstr gr = (M.MGrammar . filter complete . purge . M.modules) gr where
+purgeGrammar abstr gr = 
+  (M.MGrammar . map unopt . filter complete . purge . M.modules) gr 
+ where
   purge = nubBy (\x y -> fst x == fst y) . filter (flip elem needed . fst)
   needed = nub $ concatMap (requiredCanModules isSingle gr) acncs
   acncs = abstr : M.allConcretes gr abstr
   isSingle = True
   complete (i,M.ModMod m) = M.isCompleteModule m --- not . isIncompleteCanon
+  unopt = unshareModule gr
 
 type ParamEnv =
   (Map.Map (Ident,[Label]) (Type,Integer), -- numbered labels
