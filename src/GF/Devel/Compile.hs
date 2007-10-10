@@ -1,15 +1,5 @@
 module GF.Devel.Compile (batchCompile) where
 
-import GF.Grammar.Grammar
-import GF.Infra.Ident
-import GF.Infra.Option
-import GF.Infra.CompactPrint
-import GF.Devel.PrGrammar
-import GF.Compile.Update
-import GF.Grammar.Lookup
-import GF.Infra.Modules
-import GF.Devel.ReadFiles
-
 -- the main compiler passes
 import GF.Devel.GetGrammar
 import GF.Compile.Extend
@@ -19,8 +9,19 @@ import GF.Grammar.Refresh
 import GF.Compile.CheckGrammar
 import GF.Compile.Optimize
 import GF.Compile.Evaluate ----
+import GF.Devel.OptimizeGF
 --import GF.Canon.Share
 --import GF.Canon.Subexpressions (elimSubtermsMod,unSubelimModule)
+
+import GF.Grammar.Grammar
+import GF.Infra.Ident
+import GF.Infra.Option
+import GF.Infra.CompactPrint
+import GF.Devel.PrGrammar
+import GF.Compile.Update
+import GF.Grammar.Lookup
+import GF.Infra.Modules
+import GF.Devel.ReadFiles
 
 import GF.Data.Operations
 import GF.Devel.UseIO
@@ -167,31 +168,10 @@ compileSourceModule opts env@(k,gr) mo@(i,mi) = do
 generateModuleCode :: Options -> InitPath -> SourceModule -> IOE SourceModule
 generateModuleCode opts path minfo@(name,info) = do
 
-  let pname = prefixPathName path (prt name)
+  let pname  = prefixPathName path (prt name)
   let minfo0 = minfo 
-  let minfo1 = minfo
-  let minfo2 = minfo
-
-{- ---- restore optimizations!
-  let oopts  = addOptions opts (iOpts (flagsModule minfo))
-      optims = maybe "all_subs" id $ getOptVal oopts useOptimizer
-      optim  = takeWhile (/='_') optims
-      subs   = drop 1 (dropWhile (/='_') optims) == "subs"
-  minfo1     <- return $
-    case optim of
-      "parametrize" -> shareModule paramOpt minfo0  -- parametrization and sharing
-      "values"      -> shareModule valOpt minfo0    -- tables as courses-of-values
-      "share"       -> shareModule shareOpt minfo0  -- sharing of branches
-      "all"         -> shareModule allOpt minfo0    -- first parametrize then values
-      "none"        -> minfo0                       -- no optimization
-      _             -> shareModule shareOpt minfo0  -- sharing; default
-
-  -- do common subexpression elimination if required by flag "subs"
-  minfo2 <- 
-    if subs
-      then ioeErr $ elimSubtermsMod minfo1
-      else return minfo1
--}
+  let minfo1 = shareModule minfo
+  let minfo2 = minfo1
 
   let (file,out) = (gfcFile pname, prGrammar (MGrammar [minfo2]))
   putp ("  wrote file" +++ file) $ ioeIO $ writeFile file $ compactPrint out
