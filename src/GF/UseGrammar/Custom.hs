@@ -299,7 +299,7 @@ customGrammarPrinter =
 
 -- grammar conversions:
   ,(strCI "mcfg",     \_ -> Prt.prt . stateMCFG)
-  ,(strCI "fcfg",     \_ -> Prt.prt . stateFCFG)
+  ,(strCI "fcfg",     \_ -> Prt.prt . fst . stateFCFG)
   ,(strCI "cfg",      \_ -> Prt.prt . stateCFG)
   ,(strCI "pinfo",    \_ -> Prt.prt . statePInfo)
   ,(strCI "abstract", \_ -> Prt.prtAfter "\n" . Cnv.gfc2abstract . stateGrammarLang)

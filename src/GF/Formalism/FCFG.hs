@@ -14,11 +14,9 @@ module GF.Formalism.FCFG
 
          -- * Category
          , FPath
-         , FCat(..)
+         , FCat
 
-         , initialFCat
          , fcatString, fcatInt, fcatFloat
-         , fcat2cid
 
          -- * Symbol
          , FIndex
@@ -37,6 +35,7 @@ module GF.Formalism.FCFG
 import Control.Monad (liftM)
 import Data.List (groupBy)
 import Data.Array
+import qualified Data.Map as Map
 
 import GF.Formalism.Utilities
 import qualified GF.GFCC.AbsGFCC as AbsGFCC
@@ -51,30 +50,18 @@ type FToken    = String
 ------------------------------------------------------------
 -- Category
 type FPath     = [FIndex]
-data FCat      = FCat  {-# UNPACK #-} !Int AbsGFCC.CId [FPath] [(FPath,FIndex)]
+type FCat      = Int
 
-initialFCat :: AbsGFCC.CId -> FCat
-initialFCat cat = FCat 0 cat [] []
-
-fcatString = FCat (-1) (AbsGFCC.CId "String") [[0]] []
-fcatInt    = FCat (-2) (AbsGFCC.CId "Int")    [[0]] []
-fcatFloat  = FCat (-3) (AbsGFCC.CId "Float")  [[0]] []
-
-fcat2cid :: FCat -> AbsGFCC.CId
-fcat2cid (FCat _ c _ _) = c
-
-instance Eq FCat where
-  (FCat id1 _ _ _) == (FCat id2 _ _ _) = id1 == id2
-
-instance Ord FCat where
-  compare (FCat id1 _ _ _) (FCat id2 _ _ _) = compare id1 id2
-
+fcatString, fcatInt, fcatFloat :: Int
+fcatString = (-1)
+fcatInt    = (-2)
+fcatFloat  = (-3)
 
 ------------------------------------------------------------
 -- Symbol
 type FIndex    = Int
 data FSymbol
-  = FSymCat FCat {-# UNPACK #-} !FIndex {-# UNPACK #-} !Int 
+  = FSymCat {-# UNPACK #-} !FCat {-# UNPACK #-} !FIndex {-# UNPACK #-} !Int 
   | FSymTok FToken
 
 
@@ -89,22 +76,16 @@ isCoercionF _ = False
 
 ------------------------------------------------------------
 -- Grammar
-type FGrammar  = [FRule]
-type FPointPos = Int
-data FRule     = FRule FName [FCat] FCat (Array FIndex (Array FPointPos FSymbol))
 
+type FPointPos = Int
+type FGrammar  = ([FRule], Map.Map AbsGFCC.CId [FCat])
+data FRule     = FRule FName [FCat] FCat (Array FIndex (Array FPointPos FSymbol))
 
 ------------------------------------------------------------
 -- pretty-printing
 
 instance Print AbsGFCC.CId where
   prt (AbsGFCC.CId s) = s
-
-instance Print FCat where
-    prt (FCat _ (AbsGFCC.CId cat) rcs tcs) = cat ++ "{" ++ 
-			             prtSep ";" ([prt path                    |  path       <- rcs] ++
-			                         [prt path ++ "=" ++ prt term | (path,term) <- tcs])
-			                 ++ "}"
 
 instance Print FSymbol where
     prt (FSymCat c l n) = "($" ++ prt n ++ "!" ++ prt l ++ ")"

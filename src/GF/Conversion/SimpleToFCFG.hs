@@ -13,7 +13,7 @@
 
 
 module GF.Conversion.SimpleToFCFG
-    (convertGrammar,FCat(..)) where
+    (convertGrammar) where
 
 import GF.Infra.PrintClass
 
@@ -40,17 +40,18 @@ import Data.Maybe
 -- main conversion function
 
 convertGrammar :: GFCC -> [(CId,FGrammar)]
-convertGrammar gfcc = [(cncname,convert abs_defs conc cats) | 
-    cncname <- cncnames gfcc, 
-    cnc <- Map.lookup cncname (concretes gfcc),
-    let conc = Map.union (opers cnc) (lins cnc), -- "union big+small most efficient"
-    let cats = lincats cnc]
+convertGrammar gfcc = 
+  [(cncname,convert abs_defs conc cats)
+       | cncname <- cncnames gfcc, 
+         cnc <- Map.lookup cncname (concretes gfcc),
+         let conc = Map.union (opers cnc) (lins cnc) -- "union big+small most efficient"
+             cats = lincats cnc
+  ]
   where
-
     abs_defs = Map.assocs (funs (abstract gfcc))
 
     convert :: [(CId,(Type,Exp))] -> TermMap -> TermMap -> FGrammar
-    convert abs_defs cnc_defs cat_defs = getFRules (loop frulesEnv)
+    convert abs_defs cnc_defs cat_defs = getFGrammar (loop frulesEnv)
       where
         srules = [
           (XRule id args res (map findLinType args) (findLinType res) term) | 
@@ -59,17 +60,17 @@ convertGrammar gfcc = [(cncname,convert abs_defs conc cats) |
         
         findLinType id = fromJust (Map.lookup id cat_defs)
 
-        (srulesMap,frulesEnv) = List.foldl' helper (Map.empty,emptyFRulesEnv) srules
+        (xrulesMap,frulesEnv) = List.foldl' helper (Map.empty,emptyFRulesEnv) srules
            where
-	     helper (srulesMap,frulesEnv) rule@(XRule id abs_args abs_res cnc_args cnc_res term) = 
-	       let srulesMap' = Map.insertWith (++) abs_res [rule] srulesMap
+	     helper (xrulesMap,frulesEnv) rule@(XRule id abs_args abs_res cnc_args cnc_res term) = 
+	       let xrulesMap' = Map.insertWith (++) abs_res [rule] xrulesMap
 	           frulesEnv' = List.foldl' (\env selector -> convertRule cnc_defs selector rule env)
 	                                    frulesEnv
 	                                    (mkSingletonSelectors cnc_defs cnc_res)
-               in srulesMap' `seq` frulesEnv' `seq` (srulesMap',frulesEnv')
+               in xrulesMap' `seq` frulesEnv' `seq` (xrulesMap',frulesEnv')
 
         loop frulesEnv =
-          let (todo, frulesEnv') = takeToDoRules srulesMap frulesEnv
+          let (todo, frulesEnv') = takeToDoRules xrulesMap frulesEnv
           in case todo of
                [] -> frulesEnv'
                _  -> loop $! List.foldl' (\env (srules,selector) -> 
@@ -80,27 +81,27 @@ convertRule cnc_defs selector (XRule fun args cat ctypes ctype term) frulesEnv =
   foldBM addRule
          frulesEnv
          (convertTerm cnc_defs selector term [([],[])])
-         (initialFCat cat, map (\scat -> (initialFCat scat,[])) args, ctype, ctypes)
+         (protoFCat cat, map (\scat -> (protoFCat scat,[])) args, ctype, ctypes)
   where
     addRule linRec (newCat', newArgs', _, _) env0 =
       let (env1, newCat)          = genFCatHead env0 newCat'
-          (env2, newArgs,idxArgs) = foldr (\((fcat@(FCat _ cat rcs tcs),xpaths),ctype,idx) (env,args,all_args) ->
-                                       let xargs          = fcat:[FCat 0 cat [path] tcs | path <- reverse xpaths]
+          (env2, newArgs,idxArgs) = foldr (\((xcat@(PFCat cat rcs tcs),xpaths),ctype,idx) (env,args,all_args) ->
+                                       let xargs          = xcat:[PFCat cat [path] tcs | path <- reverse xpaths]
                                            (env1, xargs1) = List.mapAccumL (genFCatArg cnc_defs ctype) env xargs
-                                       in case fcat of
-                                            FCat _ _ [] _ -> (env ,        args,             all_args)
-                                            _             -> (env1,xargs1++args,(idx,xargs1):all_args)) (env1,[],[]) (zip3 newArgs' ctypes [0..])
+                                       in case xcat of
+                                            PFCat _ [] _ -> (env ,        args,                       all_args)
+                                            _            -> (env1,xargs1++args,(idx,zip xargs1 xargs):all_args)) (env1,[],[]) (zip3 newArgs' ctypes [0..])
 
-          newLinRec = listArray (0,length linRec-1) [translateLin idxArgs path linRec | path <- case newCat of {FCat _ _ rcs _ -> rcs}]
+          newLinRec = listArray (0,length linRec-1) [translateLin idxArgs path linRec | path <- case newCat' of {PFCat _ rcs _ -> rcs}]
 
           (_,newProfile) = List.mapAccumL accumProf 0 newArgs'
             where
-              accumProf nr (FCat _ _ [] _,_     ) = (nr,       Unify []          )
-              accumProf nr (_            ,xpaths) = (nr+cnt+1, Unify [nr..nr+cnt])
+              accumProf nr (PFCat _ [] _,_     ) = (nr,       Unify []          )
+              accumProf nr (_           ,xpaths) = (nr+cnt+1, Unify [nr..nr+cnt])
                 where cnt = length xpaths
 
           rule = FRule (Name fun newProfile) newArgs newCat newLinRec
-      in addFCatRule env2 rule
+      in addFRule env2 rule
 
 translateLin idxArgs lbl' []                    = array (0,-1) []
 translateLin idxArgs lbl' ((lbl,syms) : lins)
@@ -109,8 +110,8 @@ translateLin idxArgs lbl' ((lbl,syms) : lins)
   where
     instSym = symbol (\(lbl, nr, xnr) -> instCat lbl nr xnr 0 idxArgs) FSymTok
     instCat lbl nr xnr nr' ((idx,xargs):idxArgs)
-      | nr == idx = let arg@(FCat _ _ rcs _) = xargs !! xnr
-                    in FSymCat arg (index lbl rcs 0) (nr'+xnr)
+      | nr == idx = let (fcat, PFCat _ rcs _) = xargs !! xnr
+                    in FSymCat fcat (index lbl rcs 0) (nr'+xnr)
       | otherwise = instCat lbl nr xnr (nr'+length xargs) idxArgs
 
     index lbl' (lbl:lbls) idx
@@ -123,7 +124,7 @@ translateLin idxArgs lbl' ((lbl,syms) : lins)
 
 type CnvMonad a = BacktrackM Env a
 
-type Env     = (FCat, [(FCat,[FPath])], Term, [Term])
+type Env     = (ProtoFCat, [(ProtoFCat,[FPath])], Term, [Term])
 type LinRec  = [(FPath, [Symbol (FPath, FIndex, Int) FToken])]
 
 type TermMap = Map.Map CId Term
@@ -211,7 +212,7 @@ evalTerm cnc_defs path x = error ("evalTerm ("++show x++")")
 unifyPType :: FIndex -> FPath -> Term -> CnvMonad FIndex
 unifyPType nr path (C max_index) =
     do (_, args, _, _) <- readState
-       let (FCat _ _ _ tcs,_) = args !! nr
+       let (PFCat _ _ tcs,_) = args !! nr
        case lookup path tcs of
          Just index -> return index
          Nothing    -> do index <- member [0..max_index]
@@ -231,43 +232,50 @@ selectTerm path         (RP _ term) = selectTerm path term
 -- FRulesEnv
 
 data FRulesEnv = FRulesEnv {-# UNPACK #-} !Int FCatSet [FRule]
-
-type XRulesMap = Map.Map CId [XRule]
-data XRule     = XRule CId     {- function -}
-                       [CId]   {- argument types -}
-                       CId     {- result   type  -}
-                       [Term]  {- argument lin-types representation -}
-                       Term    {- result   lin-type  representation -}
-                       Term    {- body -}
 type FCatSet   = Map.Map CId (Map.Map [FPath] (Map.Map [(FPath,FIndex)] (Either FCat FCat)))
 
+data ProtoFCat = PFCat CId [FPath] [(FPath,FIndex)]
 
-emptyFRulesEnv = FRulesEnv 0 (ins fcatString (ins fcatInt (ins fcatFloat Map.empty))) []
+protoFCat :: CId -> ProtoFCat
+protoFCat cat = PFCat cat [] []
+
+
+emptyFRulesEnv = FRulesEnv 0 (ins fcatString (CId "String") [[0]] [] $
+                              ins fcatInt    (CId "Int")    [[0]] [] $
+                              ins fcatFloat  (CId "Float")  [[0]] [] $
+                              Map.empty) []
   where
-    ins fcat@(FCat _ cat rcs tcs) fcatSet =
-      Map.insertWith (\_ -> Map.insertWith (\_ -> Map.insert tcs x_fcat) rcs tmap_s) cat rmap_s fcatSet
+    ins fcat cat rcs tcs fcatSet =
+      Map.insertWith (\_ -> Map.insertWith (\_ -> Map.insert tcs right_fcat) rcs tmap_s) cat rmap_s fcatSet
       where
-        x_fcat = Right fcat
-        tmap_s = Map.singleton tcs x_fcat
+        right_fcat = Right fcat
+        tmap_s = Map.singleton tcs right_fcat
         rmap_s = Map.singleton rcs tmap_s
 
-genFCatHead :: FRulesEnv -> FCat -> (FRulesEnv, FCat)
-genFCatHead env@(FRulesEnv last_id fcatSet rules) m1@(FCat _ cat rcs tcs) =
+addFRule :: FRulesEnv -> FRule -> FRulesEnv
+addFRule (FRulesEnv last_id fcatSet rules) rule = FRulesEnv last_id fcatSet (rule:rules)
+
+getFGrammar :: FRulesEnv -> FGrammar
+getFGrammar (FRulesEnv last_id fcatSet rules) = (rules, Map.map getFCatList fcatSet)
+  where
+    getFCatList rcs = Map.fold (\tcs lst -> Map.fold (\x lst -> either id id x : lst) lst tcs) [] rcs
+
+genFCatHead :: FRulesEnv -> ProtoFCat -> (FRulesEnv, FCat)
+genFCatHead env@(FRulesEnv last_id fcatSet rules) (PFCat cat rcs tcs) =
   case Map.lookup cat fcatSet >>= Map.lookup rcs >>= Map.lookup tcs of
     Just (Left  fcat) -> (FRulesEnv last_id (ins fcat) rules, fcat)
     Just (Right fcat) -> (env, fcat)
-    Nothing           -> let next_id = last_id+1
-                             fcat    = FCat next_id cat rcs tcs
-                         in (FRulesEnv next_id (ins fcat) rules, fcat)
+    Nothing           -> let fcat = last_id+1
+                         in (FRulesEnv fcat (ins fcat) rules, fcat)
   where
-    ins fcat = Map.insertWith (\_ -> Map.insertWith (\_ -> Map.insert tcs x_fcat) rcs tmap_s) cat rmap_s fcatSet
+    ins fcat = Map.insertWith (\_ -> Map.insertWith (\_ -> Map.insert tcs right_fcat) rcs tmap_s) cat rmap_s fcatSet
       where
-        x_fcat = Right fcat
-        tmap_s = Map.singleton tcs x_fcat
+        right_fcat = Right fcat
+        tmap_s = Map.singleton tcs right_fcat
         rmap_s = Map.singleton rcs tmap_s
 
-genFCatArg :: TermMap -> Term -> FRulesEnv -> FCat -> (FRulesEnv, FCat)
-genFCatArg cnc_defs ctype env@(FRulesEnv last_id fcatSet rules) m1@(FCat _ cat rcs tcs) =
+genFCatArg :: TermMap -> Term -> FRulesEnv -> ProtoFCat -> (FRulesEnv, FCat)
+genFCatArg cnc_defs ctype env@(FRulesEnv last_id fcatSet rules) (PFCat cat rcs tcs) =
   case Map.lookup cat fcatSet >>= Map.lookup rcs of
     Just tmap -> case Map.lookup tcs tmap of
                    Just (Left  fcat) -> (env,   fcat)
@@ -276,17 +284,16 @@ genFCatArg cnc_defs ctype env@(FRulesEnv last_id fcatSet rules) m1@(FCat _ cat r
     Nothing   -> ins Map.empty
   where
     ins tmap =
-      let next_id = last_id+1
-          fcat    = FCat next_id cat rcs tcs
-          (x_fcat,last_id1,tmap1,rules1)
-                  = foldBM (\tcs st (x_fcat,last_id,tmap,rules) ->
+      let fcat = last_id+1
+          (either_fcat,last_id1,tmap1,rules1)
+                  = foldBM (\tcs st (either_fcat,last_id,tmap,rules) ->
                                    let (last_id1,tmap1,fcat_arg) = addArg tcs last_id tmap
                                        rule = FRule (Name (CId "_") [Unify [0]]) [fcat_arg] fcat
                                                     (listArray (0,length rcs-1) [listArray (0,0) [FSymCat fcat_arg lbl 0] | lbl <- [0..length rcs-1]])
                                    in if st
-                                        then (Right fcat,last_id1,tmap1,rule:rules)
-                                        else (x_fcat,    last_id,  tmap,     rules))
-                           (Left fcat,next_id,Map.insert tcs x_fcat tmap,rules)
+                                        then (Right fcat, last_id1,tmap1,rule:rules)
+                                        else (either_fcat,last_id, tmap,      rules))
+                           (Left fcat,fcat,Map.insert tcs either_fcat tmap,rules)
                            (gen_tcs ctype [] [])
                            False
           rmap1 = Map.singleton rcs tmap1
@@ -296,9 +303,8 @@ genFCatArg cnc_defs ctype env@(FRulesEnv last_id fcatSet rules) m1@(FCat _ cat r
 	  case Map.lookup tcs tmap of
 	    Just (Left  fcat) -> (last_id, tmap, fcat)
 	    Just (Right fcat) -> (last_id, tmap, fcat)
-	    Nothing           -> let next_id = last_id+1
-	                             fcat    = FCat next_id cat rcs tcs
-                                 in (next_id, Map.insert tcs (Left fcat) tmap, fcat)
+	    Nothing           -> let fcat = last_id+1
+                                 in (fcat, Map.insert tcs (Left fcat) tmap, fcat)
 
     gen_tcs :: Term -> FPath -> [(FPath,FIndex)] -> BacktrackM Bool [(FPath,FIndex)]
     gen_tcs (R record)    path acc = foldM (\acc (label,ctype) -> gen_tcs ctype (label:path) acc) acc (zip [0..] record)
@@ -319,31 +325,37 @@ genFCatArg cnc_defs ctype env@(FRulesEnv last_id fcatSet rules) m1@(FCat _ cat r
                                         Nothing   -> error ("unknown identifier: "++prt id)
 
 
+
+------------------------------------------------------------
+-- TODO queue organization
+
+type XRulesMap = Map.Map CId [XRule]
+data XRule     = XRule CId     {- function -}
+                       [CId]   {- argument types -}
+                       CId     {- result   type  -}
+                       [Term]  {- argument lin-types representation -}
+                       Term    {- result   lin-type  representation -}
+                       Term    {- body -}
+
 takeToDoRules :: XRulesMap -> FRulesEnv -> ([([XRule], TermSelector)], FRulesEnv)
-takeToDoRules srulesMap (FRulesEnv last_id fcatSet rules) = (todo,FRulesEnv last_id fcatSet' rules)
+takeToDoRules xrulesMap (FRulesEnv last_id fcatSet rules) = (todo,FRulesEnv last_id fcatSet' rules)
   where
     (todo,fcatSet') =
           Map.mapAccumWithKey (\todo cat rmap ->
                 let (todo1,rmap1) = Map.mapAccumWithKey (\todo rcs tmap -> 
-                                          let (tcss,tmap') = Map.mapAccumWithKey (\tcss tcs x_fcat ->
-                                                                   case x_fcat of
-                                                                     Left  fcat -> (tcs:tcss,Right fcat)
-                                                                     Right fcat -> (    tcss,    x_fcat)) [] tmap
+                                          let (tcss,tmap') = Map.mapAccumWithKey (\tcss tcs either_xcat ->
+                                                                   case either_xcat of
+                                                                     Left  xcat -> (tcs:tcss,Right xcat)
+                                                                     Right xcat -> (    tcss,either_xcat)) [] tmap
                                           in case tcss of
                                                [] -> (                               todo,tmap )
                                                _  -> ((srules,mkSelector rcs tcss) : todo,tmap')) todo rmap
-                    mb_srules   = Map.lookup cat srulesMap
+                    mb_srules   = Map.lookup cat xrulesMap
                     Just srules = mb_srules
 
                 in case mb_srules of
                      Just srules -> (todo1,rmap1)
                      Nothing     -> (todo ,rmap1)) [] fcatSet
-
-addFCatRule :: FRulesEnv -> FRule -> FRulesEnv
-addFCatRule (FRulesEnv last_id fcatSet rules) rule = FRulesEnv last_id fcatSet (rule:rules)
-
-getFRules :: FRulesEnv -> [FRule]
-getFRules (FRulesEnv last_id fcatSet rules) = rules
 
 
 ------------------------------------------------------------
@@ -415,8 +427,8 @@ readArgCType nr = do (_, _, _, ctypes) <- readState
 restrictArg :: FIndex -> FPath -> FIndex -> CnvMonad ()
 restrictArg nr path index = do
   (head, args, ctype, ctypes) <- readState 
-  args' <- updateNthM (\(fcat,xs) -> do fcat <- restrictFCat path index fcat
-                                        return (fcat,xs)                    ) nr args
+  args' <- updateNthM (\(xcat,xs) -> do xcat <- restrictProtoFCat path index xcat
+                                        return (xcat,xs)                         ) nr args
   writeState (head, args', ctype, ctypes)
 
 projectArg :: FIndex -> FPath -> CnvMonad Int
@@ -426,10 +438,10 @@ projectArg nr path = do
   writeState (head, args', ctype, ctypes)
   return xnr
   where
-    updateArgs :: FIndex -> [(FCat,[FPath])] -> CnvMonad (Int,[(FCat,[FPath])])
-    updateArgs 0 ((a@(FCat _ _ rcs _),xpaths) : as)
+    updateArgs :: FIndex -> [(ProtoFCat,[FPath])] -> CnvMonad (Int,[(ProtoFCat,[FPath])])
+    updateArgs 0 ((a@(PFCat _ rcs _),xpaths) : as)
       | path `elem` rcs = return (length xpaths+1,(a,path:xpaths):as)
-      | otherwise       = do a <- projectFCat path a
+      | otherwise       = do a <- projectProtoFCat path a
                              return (0,(a,xpaths):as)
     updateArgs n (a : as) = do
       (xnr,as) <- updateArgs (n-1) as
@@ -442,19 +454,19 @@ readHeadCType = do (_, _, ctype, _) <- readState
 restrictHead :: FPath -> FIndex -> CnvMonad ()
 restrictHead path term
     = do (head, args, ctype, ctypes) <- readState
-	 head' <- restrictFCat path term head
+	 head' <- restrictProtoFCat path term head
 	 writeState (head', args, ctype, ctypes)
 
 projectHead :: FPath -> CnvMonad ()
 projectHead path
     = do (head, args, ctype, ctypes) <- readState
-	 head' <- projectFCat path head
+	 head' <- projectProtoFCat path head
 	 writeState (head', args, ctype, ctypes)
 
-restrictFCat :: FPath -> FIndex -> FCat -> CnvMonad FCat
-restrictFCat path0 index0 (FCat id cat rcs tcs) = do
+restrictProtoFCat :: FPath -> FIndex -> ProtoFCat -> CnvMonad ProtoFCat
+restrictProtoFCat path0 index0 (PFCat cat rcs tcs) = do
   tcs <- addConstraint tcs
-  return (FCat id cat rcs tcs)
+  return (PFCat cat rcs tcs)
   where
     addConstraint (c@(path,index) : cs)
         | path0 >  path = liftM (c:) (addConstraint cs)
@@ -462,9 +474,9 @@ restrictFCat path0 index0 (FCat id cat rcs tcs) = do
                           return (c : cs)
     addConstraint cs    = return ((path0,index0) : cs)
 
-projectFCat :: FPath -> FCat -> CnvMonad FCat
-projectFCat path0 (FCat id cat rcs tcs) = do
-  return (FCat id cat (addConstraint rcs) tcs)
+projectProtoFCat :: FPath -> ProtoFCat -> CnvMonad ProtoFCat
+projectProtoFCat path0 (PFCat cat rcs tcs) = do
+  return (PFCat cat (addConstraint rcs) tcs)
   where
     addConstraint (path : rcs)
         | path0 >  path = path  : addConstraint rcs
