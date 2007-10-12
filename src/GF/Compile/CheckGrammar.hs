@@ -1025,17 +1025,19 @@ allOperDependencies m b =
   where
     opersIn t = case t of
       Q n c | n == m -> [c]
+      QC n c | n == m -> [c]
       _ -> collectOp opersIn t
     opty (Yes ty) = opersIn ty
     opty _ = []
     pts i = case i of
       ResOper pty pt -> [pty,pt]
+      ResParam (Yes (ps,_)) -> [Yes t | (_,cont) <- ps, (_,t) <- cont]
       CncFun  _   pt _ -> [pt]  ---- (Maybe (Ident,(Context,Type))
       _              -> []    ---- ResParam
 
 topoSortOpers :: [(Ident,[Ident])] -> Err [Ident]
 topoSortOpers st = do
-  let eops = topoTest st
+  let eops = topoTest (trace (show st) st)
   either 
     return 
     (\ops -> Bad ("circular definitions:" +++ unwords (map prt (head ops))))
