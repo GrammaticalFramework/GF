@@ -25,6 +25,7 @@ import GF.GFCC.AbsGFCC
 import GF.GFCC.Macros
 import GF.GFCC.ErrM
 
+import qualified Data.Map as Map
 
 ----------------------------------------------------------------------
 -- parsing
@@ -39,9 +40,8 @@ parseFCF ::
       Err [Exp]         -- ^ resulting GF terms
 parseFCF strategy pinfo startCat inString =
     do let inTokens = input inString
-           startCats = filter isStart $ grammarCats pinfo
-	   isStart cat = fcat2cid cat == startCat
-       fcfParser <- parseFCF strategy
+       startCats <- Map.lookup startCat (startupCats pinfo)
+       fcfParser <- {- trace lctree $ -} parseFCF strategy
        let chart = fcfParser pinfo startCats inTokens
 	   (i,j) = inputBounds inTokens
 	   finalEdges = [makeFinalEdge cat i j | cat <- startCats]

@@ -15,9 +15,13 @@ import GF.Formalism.FCFG
 import GF.Data.SortedList
 import GF.Data.Assoc
 import GF.Parsing.FCFG.Range
+import qualified GF.GFCC.AbsGFCC as AbsGFCC
 
 import Data.Array
 import Data.Maybe
+import qualified Data.Map as Map
+import qualified Data.Set as Set
+import Debug.Trace
 
 ----------------------------------------------------------------------
 -- type declarations
@@ -48,6 +52,7 @@ data FCFPInfo
 		 -- ^ used in 'GF.Parsing.MCFG.Active' (Kilbury):
 	       , grammarCats        :: SList FCat
 	       , grammarToks        :: SList FToken
+	       , startupCats        :: Map.Map AbsGFCC.CId [FCat]
 	       }
 
 
@@ -68,7 +73,7 @@ getLeftCornerCat lins
     syms = lins ! 0
 
 buildFCFPInfo :: FGrammar -> FCFPInfo
-buildFCFPInfo grammar =
+buildFCFPInfo (grammar,startup) = -- trace (unlines [prt (x,Set.toList set) | (x,set) <- Map.toList leftcornFilter]) $
     FCFPInfo { allRules = allrules
              , topdownRules = topdownrules
 	     -- , emptyRules = emptyrules
@@ -77,6 +82,7 @@ buildFCFPInfo grammar =
 	     , leftcornerTokens = leftcorntoks
 	     , grammarCats = grammarcats
 	     , grammarToks = grammartoks
+	     , startupCats = startup
 	     }
 
     where allrules = listArray (0,length grammar-1) grammar
