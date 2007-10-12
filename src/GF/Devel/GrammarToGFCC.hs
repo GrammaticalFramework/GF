@@ -136,18 +136,28 @@ mkTerm tr = case tr of
   T _ cs   -> C.R [mkTerm t | (_,t) <- cs] ------
   V _ cs   -> C.R [mkTerm t | t <- cs]
   S t p    -> C.P (mkTerm t) (mkTerm p)
-  C s t    -> C.S [mkTerm x | x <- [s,t]]
+  C s t    -> C.S $ concatMap flats [mkTerm x | x <- [s,t]]
   FV ts    -> C.FV [mkTerm t | t <- ts]
   K s      -> C.K (C.KS s)
 -----  K (KP ss _) -> C.K (C.KP ss []) ---- TODO: prefix variants
-  Empty        -> C.S []
+  Empty    -> C.S []
   App _ _  -> prtTrace tr $ C.C 66661          ---- for debugging
-  Abs _ t -> mkTerm t ---- only on toplevel
-  _ -> C.S [C.K (C.KS (A.prt tr +++ "66662"))] ---- for debugging
+  Abs _ t  -> mkTerm t ---- only on toplevel
+  Alts (td,tvs) -> 
+    C.K (C.KP (strings td) [C.Var (strings u) (strings v) | (u,v) <- tvs])
+  _ -> prtTrace tr $ C.S [C.K (C.KS (A.prt tr +++ "66662"))] ---- for debugging
  where
    mkLab (LIdent l) = case l of
      '_':ds -> (read ds) :: Int
      _ -> prtTrace tr $ 66663
+   strings t = case t of
+     K s -> [s]
+     C u v -> strings u ++ strings v
+     Strs ss -> concatMap strings ss
+     _ -> prtTrace tr $ ["66660"]
+   flats t = case t of
+     C.S ts -> concatMap flats ts
+     _ -> [t]
 
 -- return just one module per language
 
@@ -195,23 +205,38 @@ repartition abs cg = [M.partOfGrammar cg (lang,mo) |
 -- translate tables and records to arrays, parameters and labels to indices
 
 canon2canon :: Ident -> SourceGrammar -> SourceGrammar
-canon2canon abs = recollect . map cl2cl . repartition abs . purgeGrammar abs 
+canon2canon abs = 
+   recollect . map cl2cl . repartition abs . purgeGrammar abs 
  where
-  recollect = 
-    M.MGrammar . nubBy (\ (i,_) (j,_) -> i==j) . concatMap M.modules
-  cl2cl cg = {- tr $ -} M.MGrammar $ map c2c $ M.modules cg where
-    c2c (c,m) = case m of
+  recollect = M.MGrammar . nubBy (\ (i,_) (j,_) -> i==j) . concatMap M.modules
+  cl2cl = M.MGrammar . js2js . map (c2c p2p) . M.modules
+    
+  js2js ms = map (c2c (j2j (M.MGrammar ms))) ms
+
+  c2c f2 (c,m) = case m of
       M.ModMod mo@(M.Module _ _ _ _ _ js) ->
-        (c, M.ModMod $ M.replaceJudgements mo $ mapTree j2j js)
-      _ -> (c,m)
-    j2j (f,j) = case j of
+        (c, M.ModMod $ M.replaceJudgements mo $ mapTree f2 js)
+      _ -> (c,m)    
+  j2j cg (f,j) = case j of
       CncFun x (Yes tr) z -> (f,CncFun x (Yes (t2t tr)) z)
       CncCat (Yes ty) (Yes x) y -> (f,CncCat (Yes (ty2ty ty)) (Yes (t2t x)) y)
       _ -> (f,j)
-    t2t = term2term cg pv
-    ty2ty = type2type cg pv
-    pv@(labels,untyps,typs) = paramValues cg
-    tr = trace $
+   where
+      t2t = term2term cg pv
+      ty2ty = type2type cg pv
+      pv@(labels,untyps,typs) = paramValues cg
+
+    -- flatten record arguments of param constructors
+  p2p (f,j) = case j of
+      ResParam (Yes (ps,v)) -> 
+        (f,ResParam (Yes ([(c,concatMap unRec cont) | (c,cont) <- ps],v)))
+      _ -> (f,j)
+  unRec (x,ty) = case ty of
+      RecType fs -> [ity | (_,typ) <- fs, ity <- unRec (identW,typ)] 
+      _ -> [(x,ty)]
+
+{-
+  tr = trace $
      ("labels:" ++++
        unlines [A.prt c ++ "." ++ unwords (map A.prt l) +++ "=" +++ show i  | 
        ((c,l),i) <- Map.toList labels]) ++
@@ -219,7 +244,7 @@ canon2canon abs = recollect . map cl2cl . repartition abs . purgeGrammar abs
        (t,i) <- Map.toList untyps]) ++
      ("typs:" ++++ unlines [A.prt t | 
        (t,_) <- Map.toList typs])
-
+-}
 
 purgeGrammar :: Ident -> SourceGrammar -> SourceGrammar
 purgeGrammar abstr gr = 
@@ -304,7 +329,7 @@ type2type cgr env@(labels,untyps,typs) ty = case ty of
 
 term2term :: SourceGrammar -> ParamEnv -> Term -> Term
 term2term cgr env@(labels,untyps,typs) tr = case tr of
-  App _ _ -> mkValCase tr 
+  App _ _ -> mkValCase (unrec tr)
   QC  _ _ -> mkValCase tr 
   R rs    -> R [(mkLab i, (Nothing, t2t t)) | 
                  (i,(l,(_,t))) <- zip [0..] (sort (unlock rs))]
@@ -317,6 +342,10 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
   _ -> GM.composSafeOp t2t tr
  where
    t2t = term2term cgr env
+
+   unrec t = case t of
+     App f (R fs) -> GM.mkApp (unrec f) [unrec u | (_,(_,u)) <- fs]
+     _ -> GM.composSafeOp unrec t
 
    mkValCase tr = case appSTM (doVar tr) [] of
      Ok (tr', st@(_:_)) -> t2t $ comp $ foldr mkCase tr' st
@@ -413,6 +442,6 @@ unlockTyp = filter notlock where
      RecType [] -> False
      _ -> True
 
-prtTrace tr n = n ----trace ("-- ERROR" +++ A.prt tr +++ show n +++ show tr) n
+prtTrace tr n = trace ("-- ERROR" +++ A.prt tr +++ show n +++ show tr) n
 prTrace  tr n = trace ("-- OBSERVE" +++ A.prt tr +++ show n +++ show tr) n
 
