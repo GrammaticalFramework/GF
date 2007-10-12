@@ -1037,7 +1037,7 @@ allOperDependencies m b =
 
 topoSortOpers :: [(Ident,[Ident])] -> Err [Ident]
 topoSortOpers st = do
-  let eops = topoTest (trace (show st) st)
+  let eops = topoTest st
   either 
     return 
     (\ops -> Bad ("circular definitions:" +++ unwords (map prt (head ops))))
