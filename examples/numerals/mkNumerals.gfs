@@ -18,6 +18,7 @@ i -old -abs=Numerals -cnc=english english.gf
 i -old -abs=Numerals -cnc=finnish finnish.gf
 i -old -abs=Numerals -cnc=french french.gf
 i -old -abs=Numerals -cnc=french_swiss french_swiss.gf
+i -old -abs=Numerals -cnc=french_belgian french_belgian.gf
 i -old -abs=Numerals -cnc=fulfulde fulfulde.gf
 i -old -abs=Numerals -cnc=geez geez.gf
 i -old -abs=Numerals -cnc=german german.gf
