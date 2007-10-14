@@ -74,12 +74,12 @@ instance DiffFre of DiffRomance = open CommonRomance, PhonoFre, Prelude in {
             P3 => elision "s" ;  --- use of reflPron incred. expensive
             _  => argPron Fem n p Acc
             },True> ;
-          CPron a => <argPron a.g a.n a.p Acc,True> ;
+          CPron ag an ap => <argPron ag an ap Acc,True> ;
           _ => <[],False>
           } ;
        in
        case dat of {
-          CPron a => let pdat = argPron a.g a.n a.p dative in case a.p of {
+          CPron ag an ap => let pdat = argPron ag an ap dative in case ap of {
             P3 => <pacc.p1 ++ pdat,[],True> ;
             _  => <pdat ++ pacc.p1,[],True>
             } ;
@@ -90,7 +90,8 @@ instance DiffFre of DiffRomance = open CommonRomance, PhonoFre, Prelude in {
 -- Positive polarity is used in the imperative: stressed for 1st and
 -- 2nd persons.
 
-    pronArgGen : Polarity -> Number -> Person -> CAgr -> CAgr -> Str * Str = \b,n,p,acc,dat ->
+    pronArgGen : Polarity -> Number -> Person -> CAgr -> CAgr -> Str * Str = 
+      \b,n,p,acc,dat ->
       let 
         cas : Person -> Case -> Case = \pr,c -> case <pr,b> of {
           <P1 | P2, Pos> => CPrep P_de ; --- encoding in argPron
@@ -101,16 +102,16 @@ instance DiffFre of DiffRomance = open CommonRomance, PhonoFre, Prelude in {
             P3 => elision "s" ;  --- use of reflPron incred. expensive
             _  => argPron Fem n p (cas p Acc)
             } ;
-          CPron a => argPron a.g a.n a.p (cas a.p Acc) ;
+          CPron ag an ap => argPron ag an ap (cas ap Acc) ;
           _ => []
           } ;
         pdat = case dat of {
-          CPron a => argPron a.g a.n a.p (cas a.p dative) ;
+          CPron ag an ap => argPron ag an ap (cas ap dative) ;
           _ => []
           } ;
        in
        case dat of {
-          CPron {p = P3} => <pacc ++ pdat,[]> ;
+          CPron _ _ P3 => <pacc ++ pdat,[]> ;
           _ => <pdat ++ pacc, []>
           } ;
 

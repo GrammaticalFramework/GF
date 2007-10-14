@@ -129,7 +129,8 @@ param
 
 -- Clitic slots.
 
-  CAgr = CPron {g : Gender ; n : Number ; p : Person} | CRefl | CNone ; --- Agr
+  CAgr = CPron Gender Number Person | CRefl | CNone ; --- Agr
+---  CAgr = CPron {g : Gender ; n : Number ; p : Person} | CRefl | CNone ; --- Agr
 
 oper
   aagr : Gender -> Number -> AAgr = \g,n ->

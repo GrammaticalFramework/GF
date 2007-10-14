@@ -63,11 +63,11 @@ instance DiffSpa of DiffRomance = open CommonRomance, PhonoSpa, BeschSpa, Prelud
       let 
         paccp = case acc of {
           CRefl   => <reflPron n p Acc, p,True> ;
-          CPron a => <argPron a.g a.n a.p Acc, a.p,True> ;
+          CPron ag an ap => <argPron ag an ap Acc, ap,True> ;
           _ => <[],P2,False>
           } ;
         pdatp = case dat of {
-          CPron a => <argPron a.g a.n a.p dative, a.p,True> ;
+          CPron ag an ap => <argPron ag an ap dative, ap,True> ;
           _ => <[],P2,False>
           }
        in case <paccp.p2, pdatp.p2> of {

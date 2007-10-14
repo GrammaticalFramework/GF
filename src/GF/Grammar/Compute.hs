@@ -235,6 +235,7 @@ computeTermOpt rec gr = comp where
 ----              foldr1 C (map K (str2strings (glueStr v (str a)))) | v <- x']
            ,return $ Glue x y
            ]
+         (C u v,_) -> comp g $ C u (Glue v y)
 
          _ -> do
            mapM_ checkNoArgVars [x,y]
