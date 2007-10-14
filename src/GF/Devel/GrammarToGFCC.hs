@@ -224,19 +224,21 @@ canon2canon abs =
    where
       t2t = term2term cg pv
       ty2ty = type2type cg pv
-      pv@(labels,untyps,typs) = paramValues cg
+      pv@(labels,untyps,typs) = paramValues cg ---trs $ paramValues cg
 
     -- flatten record arguments of param constructors
   p2p (f,j) = case j of
       ResParam (Yes (ps,v)) -> 
-        (f,ResParam (Yes ([(c,concatMap unRec cont) | (c,cont) <- ps],v)))
+        (f,ResParam (Yes ([(c,concatMap unRec cont) | (c,cont) <- ps],Nothing)))
       _ -> (f,j)
   unRec (x,ty) = case ty of
       RecType fs -> [ity | (_,typ) <- fs, ity <- unRec (identW,typ)] 
       _ -> [(x,ty)]
 
-{-
-  tr = trace $
+----
+  trs v = trace (tr v) v
+
+  tr (labels,untyps,typs) =
      ("labels:" ++++
        unlines [A.prt c ++ "." ++ unwords (map A.prt l) +++ "=" +++ show i  | 
        ((c,l),i) <- Map.toList labels]) ++
@@ -244,7 +246,7 @@ canon2canon abs =
        (t,i) <- Map.toList untyps]) ++
      ("typs:" ++++ unlines [A.prt t | 
        (t,_) <- Map.toList typs])
--}
+----
 
 purgeGrammar :: Ident -> SourceGrammar -> SourceGrammar
 purgeGrammar abstr gr = 
@@ -371,8 +373,6 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
        return tr'
      _ -> GM.composOp doVar tr
 
-
-
    r2r tr@(P (S (V ty ts) v) l) = t2t $ S (V ty [comp (P t l) | t <- ts]) v
 
    r2r tr@(P p _) = case getLab tr of
@@ -401,16 +401,18 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
    valNum tr = maybe (tryPerm tr) EInt $ Map.lookup tr untyps
     where
       tryPerm tr = case tr of
+{- obsolete ----
         R rs -> case Map.lookup (R rs) untyps of
 	  Just v -> EInt v
           _ -> valNumFV $ tryVar tr
+-}
         _ -> valNumFV $ tryVar tr
       tryVar tr = case GM.appForm tr of
         (c@(QC _ _), ts) -> [GM.mkApp c ts' | ts' <- combinations (map tryVar ts)]
         (FV ts,_) -> ts
         _ -> [tr]
       valNumFV ts = case ts of
-        [tr] -> K (A.prt tr ++ "66667")
+        [tr] -> prtTrace tr $ K "66667"
         _ -> FV $ map valNum ts
 
    mkCurry trm = case trm of
@@ -442,6 +444,7 @@ unlockTyp = filter notlock where
      RecType [] -> False
      _ -> True
 
-prtTrace tr n = trace ("-- ERROR" +++ A.prt tr +++ show n +++ show tr) n
+prtTrace tr n = 
+  trace ("-- INTERNAL COMPILER ERROR" +++ A.prt tr ++++ show tr ++++ show n) n
 prTrace  tr n = trace ("-- OBSERVE" +++ A.prt tr +++ show n +++ show tr) n
 
