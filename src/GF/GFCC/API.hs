@@ -25,7 +25,7 @@ import GF.GFCC.ParGFCC
 import GF.GFCC.ErrM
 
 import GF.Parsing.FCFG
-import GF.Conversion.SimpleToFCFG (convertGrammar,FCat(..))
+import GF.Conversion.SimpleToFCFG (convertGrammar)
 
 --import GF.Data.Operations
 --import GF.Infra.UseIO
