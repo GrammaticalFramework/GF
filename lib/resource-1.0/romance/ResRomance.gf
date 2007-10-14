@@ -104,12 +104,13 @@ oper
       vpdat = vp.clDat ;
       vpagr = vp.agr ;
       npa   = np.a ;
+      cpron = CPron npa.g npa.n npa.p ; 
       noNewClit = <vpacc, vpdat, appCompl c np.s, vpagr> ;
 
       cc : CAgr * CAgr * Str * VPAgr = case <np.hasClit,c.isDir> of {
         <True,True> => case c.c of {
-          Acc => <CPron npa,  vpdat,   [], vpAgrClit npa> ;
-          _   => <vpacc,    CPron npa, [], vpagr> -- must be dat
+          Acc => <cpron, vpdat, [], vpAgrClit npa> ;
+          _   => <vpacc, cpron, [], vpagr> -- must be dat
           } ;
         _   => noNewClit
         } ;

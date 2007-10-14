@@ -87,7 +87,7 @@ instance DiffIta of DiffRomance = open CommonRomance, PhonoIta, BeschIta, Prelud
             P3 => "si" ;
             _  => argPron Fem n p Acc False --- no clitic after acc
             } ;
-          CPron a => argPron a.g a.n a.p Acc False ;
+          CPron ag an ap => argPron ag an ap Acc False ;
           _ => []
           } ;
         hasAcc = case acc of {
@@ -99,7 +99,7 @@ instance DiffIta of DiffRomance = open CommonRomance, PhonoIta, BeschIta, Prelud
           _ => True
           } ;
         pdat = case dat of {
-          CPron a => argPron a.g a.n a.p dative hasAcc ;
+          CPron ag an ap => argPron ag an ap dative hasAcc ;
           _ => []
           } ;
        in
