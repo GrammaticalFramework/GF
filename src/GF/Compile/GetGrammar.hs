@@ -80,7 +80,7 @@ getOldGrammar opts file = do
 
 parseOldGrammarFiles :: FilePath -> IOE [A.TopDef]
 parseOldGrammarFiles file = do
-   putStrE $ "reading grammar of old format" +++ file
+   putStrLnE $ "reading grammar of old format" +++ file
    (_, g) <- getImports "" ([],[]) file
    return g  -- now we can throw away includes
   where 
@@ -95,7 +95,7 @@ parseOldGrammarFiles file = do
 
 parseOldGrammar :: FilePath -> IOE ([FilePath],[A.TopDef])
 parseOldGrammar file = do
-  putStrE $ "reading old file" +++ file
+  putStrLnE $ "reading old file" +++ file
   s <- ioeIO $ readFileIf file
   A.OldGr incl topdefs <- ioeErr $ pOldGrammar $ oldLexer $ fixNewlines s
   includes <- ioeErr $ transInclude incl
