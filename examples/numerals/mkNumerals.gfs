@@ -30,6 +30,7 @@ i -old -abs=Numerals -cnc=hebrew_biblical hebrew_biblical.gf
 i -old -abs=Numerals -cnc=hindi hindi.gf
 i -old -abs=Numerals -cnc=hungarian hungarian.gf
 i -old -abs=Numerals -cnc=icelandic icelandic.gf
+i -old -abs=Numerals -cnc=interlingua interlingua.gf
 i -old -abs=Numerals -cnc=irish irish.gf
 i -old -abs=Numerals -cnc=irula irula.gf
 i -old -abs=Numerals -cnc=italian italian.gf
