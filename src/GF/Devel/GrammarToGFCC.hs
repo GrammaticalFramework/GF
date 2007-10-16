@@ -177,16 +177,20 @@ reorder abs cg = M.MGrammar $
               finfo <- tree2list (M.jments mo)]
        predefADefs = 
          [(IC c, AbsCat (Yes []) Nope) | c <- ["Float","Int","String"]]
-       aflags = nubFlags $ concat [M.flags mo | (_,mo) <- M.allModMod cg, M.isModAbs mo]
+       aflags = nubFlags $ 
+         concat [M.flags mo | (_,mo) <- M.allModMod cg, M.isModAbs mo]
 
        cncs = sortIds [(lang, concr lang) | lang <- M.allConcretes cg abs]
-       concr la = (nubFlags (concat flags), sortIds (predefCDefs ++ concat jments)) where 
-         (flags,jments) = unzip $ cdata la
-       cdata la = [(M.flags mo, tree2list (M.jments mo)) | 
-                    (i,mo) <- mos, M.isModCnc mo, elem i (M.allExtends cg la)]
-       predefCDefs = 
-         [(IC c, CncCat (Yes GM.defLinType) Nope Nope) | ---- lindef,printname 
-                                            c <- ["Float","Int","String"]]
+       concr la = (nubFlags flags, 
+                   sortIds (predefCDefs ++ jments)) where 
+         jments = Look.allOrigInfos cg la
+         flags  = concat [M.flags mo | 
+                     (i,mo) <- mos, M.isModCnc mo, 
+                     Just r <- [lookup i (M.allExtendSpecs cg la)]]
+
+         predefCDefs = [(IC c, CncCat (Yes GM.defLinType) Nope Nope) | 
+                       ---- lindef,printname 
+                         c <- ["Float","Int","String"]]
 
        sortIds = sortBy (\ (f,_) (g,_) -> compare f g) 
        nubFlags = nubBy (\ (Opt (f,_)) (Opt (g,_)) -> f == g)
@@ -301,7 +305,9 @@ paramValues cgr = (labels,untyps,typs) where
     Map.fromList $ concatMap Map.toList [typ | (_,typ) <- Map.toList typs]
   lincats = 
     [(IC cat,[(LIdent "s",GM.typeStr)]) | cat <- ["Int", "Float", "String"]] ++
-    [(cat,(unlockTyp ls)) | (_,(cat,CncCat (Yes (RecType ls)) _ _)) <- jments]
+    reverse ---- TODO: really those lincats that are reached
+            ---- reverse is enough to expel overshadowed ones... 
+      [(cat,(unlockTyp ls)) | (_,(cat,CncCat (Yes (RecType ls)) _ _)) <- jments]
   labels = Map.fromList $ concat 
     [((cat,[lab]),(typ,i)): 
       [((cat,[lab,lab2]),(ty,j)) | 
@@ -400,13 +406,7 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
 
    valNum tr = maybe (tryPerm tr) EInt $ Map.lookup tr untyps
     where
-      tryPerm tr = case tr of
-{- obsolete ----
-        R rs -> case Map.lookup (R rs) untyps of
-	  Just v -> EInt v
-          _ -> valNumFV $ tryVar tr
--}
-        _ -> valNumFV $ tryVar tr
+      tryPerm tr = valNumFV $ tryVar tr
       tryVar tr = case GM.appForm tr of
         (c@(QC _ _), ts) -> [GM.mkApp c ts' | ts' <- combinations (map tryVar ts)]
         (FV ts,_) -> ts

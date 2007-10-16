@@ -24,6 +24,7 @@ module GF.Grammar.Lookup (
 	       lookupFirstTag, 
                lookupValueIndex,
                lookupIndexValue,
+               allOrigInfos,
 	       allParamValues, 
 	       lookupAbsDef, 
 	       lookupLincat, 
@@ -121,6 +122,17 @@ lookupOverload gr m c = do
           _   -> Bad $ prt c +++ "is not an overloaded operation"
       _ -> Bad $ prt m +++ "is not a resource"
 
+lookupOrigInfo :: SourceGrammar -> Ident -> Ident -> Err Info
+lookupOrigInfo gr m c = do
+    mi   <- lookupModule gr m
+    case mi of
+      ModMod mo -> do
+        info <- lookupIdentInfo mo c
+        case info of
+          AnyInd _ n  -> lookupOrigInfo gr n c
+          i   -> return i
+      _ -> Bad $ prt m +++ "is not run-time module"
+
 lookupParams :: SourceGrammar -> Ident -> Ident -> Err ([Param],Maybe PValues)
 lookupParams gr = look True where 
   look isTop m c = do
@@ -168,6 +180,14 @@ lookupIndexValue gr ty i = do
   if i < length ts
     then return $ ts !! i
     else Bad $ "no value for index" +++ show i +++ "in" +++ prt ty
+
+allOrigInfos :: SourceGrammar -> Ident -> [(Ident,Info)]
+allOrigInfos gr m = errVal [] $ do
+  mi <- lookupModule gr m
+  case mi of
+    ModMod mo -> return [(c,i) | (c,_) <- tree2list (jments mo), Ok i <- [look c]]
+ where
+   look = lookupOrigInfo gr m
 
 allParamValues :: SourceGrammar -> Type -> Err [Term]
 allParamValues cnc ptyp = case ptyp of

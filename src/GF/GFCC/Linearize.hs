@@ -6,6 +6,8 @@ import GF.GFCC.AbsGFCC
 import Data.Map
 import Data.List
 
+import Debug.Trace
+
 -- linearization and computation of concrete GFCC Terms
 
 linearize :: GFCC -> CId -> Exp -> String
@@ -53,7 +55,7 @@ compute mcfg lang args = comp where
   look = lookOper mcfg lang
 
   idx xs i = if i > length xs - 1 
-    then error 
+    then trace 
          ("too large " ++ show i ++ " for\n" ++ unlines (lmap prt xs) ++ "\n") TM 
     else xs !! i 
 
@@ -71,7 +73,7 @@ compute mcfg lang args = comp where
     C i    -> i
     RP p _ -> getIndex p ---- DEPREC
     TM     -> 0  -- default value for parameter
-    _ -> error ("ERROR in grammar compiler: index from " ++ show t) 0
+    _ -> trace ("ERROR in grammar compiler: index from " ++ show t) 666
 
   getField t i = case t of
     R rs   -> idx rs i
