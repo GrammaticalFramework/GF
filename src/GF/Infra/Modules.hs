@@ -28,7 +28,8 @@ module GF.Infra.Modules (
 		oSimple, oQualif,
 		ModuleStatus(..),
 		openedModule, allOpens, depPathModule, allDepsModule, partOfGrammar,
-		allExtends, allExtendsPlus, allExtensions, searchPathModule, addModule,
+		allExtends, allExtendSpecs, allExtendsPlus, allExtensions, 
+                searchPathModule, addModule,
 		emptyMGrammar, emptyModInfo, emptyModule,
 		IdentM(..),
 		typeOfModule, abstractOfConcrete, abstractModOfConcrete,
@@ -216,13 +217,20 @@ partOfGrammar gr (i,m) = MGrammar [mo | mo@(j,_) <- mods, elem j modsFor]
       ---- ModWith n i os -> i : map openedModule os ++ partOfGrammar (ModMod n) ----
       _ -> [i]
 
-
--- | all modules that a module extends, directly or indirectly
+-- | all modules that a module extends, directly or indirectly, without restricts
 allExtends :: (Show i,Ord i) => MGrammar i f a -> i -> [i]
 allExtends gr i = case lookupModule gr i of
   Ok (ModMod m) -> case extends m of 
     [] -> [i]
     is -> i : concatMap (allExtends gr) is
+  _ -> []
+
+-- | all modules that a module extends, directly or indirectly, with restricts
+allExtendSpecs :: (Show i,Ord i) => MGrammar i f a -> i -> [(i,MInclude i)]
+allExtendSpecs gr i = case lookupModule gr i of
+  Ok (ModMod m) -> case extend m of 
+    [] -> [(i,MIAll)]
+    is -> (i,MIAll) : concatMap (allExtendSpecs gr . fst) is
   _ -> []
 
 -- | this plus that an instance extends its interface
