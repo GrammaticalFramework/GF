@@ -157,7 +157,7 @@ oper
 
 -- The functions above create postfix adjectives. To switch
 -- them to prefix ones (i.e. ones placed before the noun in
--- modification, as in "bueno vino"), the following function is
+-- modification, as in "buen vino"), the following function is
 -- provided.
 
   prefixA : A -> A ;
