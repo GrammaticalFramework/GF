@@ -147,7 +147,7 @@ oper
 -- One-place adjectives compared with "mas" need five forms in the worst
 -- case (masc and fem singular, masc plural, adverbial).
 
-    mkA : (solo,sola,solos,solas,solamiento : Str) -> A ;
+    mkA : (solo,sola,solos,solas,solamente : Str) -> A ;
 
 -- In the worst case, two separate adjectives are given: 
 -- the positive ("bueno"), and the comparative ("mejor"). 
@@ -431,11 +431,11 @@ oper
 
   mkA = overload {
     mkA : (util : Str) -> A  = regA ;
-    mkA : (solo,sola,solos,solas,solamiento : Str) -> A = mk5A ;
+    mkA : (solo,sola,solos,solas,solamente : Str) -> A = mk5A ;
     mkA : (bueno : A) -> (mejor : A) -> A = mkADeg ;
     } ;
 
-  mk5A : (solo,sola,solos,solas, solamiento : Str) -> A ;
+  mk5A : (solo,sola,solos,solas, solamente : Str) -> A ;
   regA : Str -> A ;
   mkADeg : A -> A -> A ;
   compADeg : A -> A ;
