@@ -19,6 +19,7 @@ abstract Grammar = {
     V ;    -- intransitive verb     e.g. "boil"
     V2 ;   -- two-place verb        e.g. "eat"
     Pol ;  -- polarity (pos or neg)           
+    Conj ; -- conjunction           e.g. "and"
 
   fun
     PhrS    : S  -> Phr ;
@@ -40,6 +41,9 @@ abstract Grammar = {
     AdAP    : AdA -> AP -> AP ;
 
     IDetCN  : IDet -> CN -> IP ;
+
+    ConjS   : Conj -> S -> S -> S ;
+    ConjNP  : Conj -> NP -> NP -> NP ;
 
   -- lexical insertion
 
@@ -64,6 +68,7 @@ abstract Grammar = {
 
     very_AdA  : AdA ;
 
+    and_Conj  : Conj ;
   -- polarities
 
     PPos, PNeg : Pol ;
