@@ -18,6 +18,7 @@ concrete GrammarEng of Grammar = open Prelude, MorphoEng in {
     A    = {s : Str} ;
     V    = Verb ;
     V2   = Verb2 ;
+    Conj = {s : Str} ;
     Pol  = {s : Str ; p : Bool} ;
 
   lin
@@ -52,6 +53,9 @@ concrete GrammarEng of Grammar = open Prelude, MorphoEng in {
 
     IDetCN det cn = {s = det.s ++ cn.s ! det.n ; n = det.n} ;
 
+    ConjS c a b = {s = a.s ++ c.s ++ b.s} ;
+    ConjNP c a b = {s = a.s ++ c.s ++ b.s ; n = Pl} ;
+
     UseN n = n ;
     UseA a = a ;
     UseV v = {s = \\q,b,n => predVerb v q b n} ;
@@ -70,6 +74,8 @@ concrete GrammarEng of Grammar = open Prelude, MorphoEng in {
     very_AdA = {s = "very"} ;
 
     which_IDet = {s = "which" ; n = Sg} ;
+
+    and_Conj = {s = "and"} ;
 
     PPos = {s = [] ; p = True} ;
     PNeg = {s = [] ; p = False} ;
@@ -113,4 +119,5 @@ concrete GrammarEng of Grammar = open Prelude, MorphoEng in {
 
     artIndef : Str = 
       pre {"a" ; "an" / strs {"a" ; "e" ; "i" ; "o"}} ;
+        
 }

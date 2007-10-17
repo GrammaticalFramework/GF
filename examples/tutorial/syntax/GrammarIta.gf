@@ -18,6 +18,7 @@ concrete GrammarIta of Grammar = open Prelude, MorphoIta in {
     A    = Adjective ;
     V    = Verb ;
     V2   = Verb2 ;
+    Conj = {s : Str} ;
     Pol  = {s : Str ; p : Bool} ;
 
 
@@ -36,11 +37,15 @@ concrete GrammarIta of Grammar = open Prelude, MorphoIta in {
     ComplAP ap    = {s = \\b,g,n => posneg b ++ copula n ++ ap.s ! g ! n} ;
 
     DetCN  det cn = {s = det.s ! cn.g ++ cn.s ! det.n ; g = cn.g ; n = det.n} ;
-    IDetCN det cn = {s = det.s ! cn.g ++ cn.s ! det.n ; g = cn.g ; n = det.n} ;
 
     ModCN ap cn  = {s = \\n => cn.s ! n ++ ap.s ! cn.g ! n ; g = cn.g} ;
 
     AdAP ada ap  = {s = \\n,g => ada.s ++ ap.s ! n ! g} ;
+
+    IDetCN det cn = {s = det.s ! cn.g ++ cn.s ! det.n ; g = cn.g ; n = det.n} ;
+
+    ConjS c a b = {s = a.s ++ c.s ++ b.s} ;
+    ConjNP c a b = {s = a.s ++ c.s ++ b.s ; n = Pl ; g = conjGender a.g b.g} ;
 
     UseN n = n ;
     UseA a = a ;
@@ -58,6 +63,7 @@ concrete GrammarIta of Grammar = open Prelude, MorphoIta in {
     two_Det = {s = \\_ => "due" ; n = Pl} ;
     very_AdA = {s = "molto"} ;
     which_IDet   = {s = \\_ => "quale" ; n = Sg} ;
+    and_Conj = {s = "e"} ;
 
     PPos = {s = [] ; p = True} ;
     PNeg = {s = [] ; p = False} ;
@@ -95,7 +101,13 @@ concrete GrammarIta of Grammar = open Prelude, MorphoIta in {
       Fem  => pre {"una" ; "un'" / vowel}
       } ;
 
+    conjGender : Gender -> Gender -> Gender = \g,h -> case g of {
+      Masc => Masc ;
+      _ => h
+    } ;
+
     sImpuro : Strs = strs {"sb" ; "sp" ; "sy" ; "z"} ;
     vowel   : Strs = strs {"a" ; "e" ; "i" ; "o" ; "u"} ;
+
 
 }
