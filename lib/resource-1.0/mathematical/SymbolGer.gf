@@ -4,6 +4,7 @@ lin
   SymbPN i = {s = \\c => i.s ; g = Neutr} ; --- c
   IntPN i  = {s = \\c => i.s ; g = Neutr} ; --- c
   FloatPN i  = {s = \\c => i.s ; g = Neutr} ; --- c
+  NumPN i  = {s = \\c => i.s ; g = Neutr} ; --- c
 
   CNIntNP cn i = {
     s = \\c => cn.s ! Weak ! Sg ! Nom ++ i.s ;

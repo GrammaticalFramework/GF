@@ -12,6 +12,7 @@ fun
   SymbPN   : Symb -> PN ;                -- x
   IntPN    : Int -> PN ;                 -- 27
   FloatPN  : Float -> PN ;               -- 3.14159
+  NumPN    : Num -> PN ;
   CNNumNP  : CN -> Num -> NP ;           -- level five ; level 5
   CNSymbNP : Det -> CN -> [Symb] -> NP ; -- (the) (2) numbers x and y
 

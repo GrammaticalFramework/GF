@@ -5,6 +5,7 @@ lin
   SymbPN i = {s = i.s ; g = Masc} ;
   IntPN i  = {s = i.s ; g = Masc} ;
   FloatPN i  = {s = i.s ; g = Masc} ;
+  NumPN i  = {s = i.s!Masc ; g = Masc} ;
 
   CNIntNP cn i = {
     s = \\c => cn.s ! Sg ++ i.s ;
