@@ -4,6 +4,7 @@ lin
   SymbPN i = {s = \\c => i.s} ; --- c
   IntPN i  = {s = \\c => i.s} ; --- c
   FloatPN i  = {s = \\c => i.s} ; --- c
+  NumPN i  = {s = \\c => i.s!Sg!Nom } ; --- c
 
   CNIntNP cn i = {
     s = \\c => cn.s ! NCase Sg (npform2case Sg c) ++ i.s ;
