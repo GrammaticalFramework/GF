@@ -12,7 +12,7 @@ iS s = case s of
 
 iNP :: GNP -> (Exp -> Prop) -> Prop
 iNP np p = case np of
-  GEvery cn -> All   (If  (iCN cn var) (p var)) ----
+  GEvery cn -> All   (If  (iCN cn var) (liftProp 0 (p var))) ----
   GSome  cn -> Exist (And (iCN cn var) (p var)) ----
   GConjNP c np1 np2 -> iConj c (iNP np1 p) (iNP np2 p)
   GUseInt (GInt i) -> p (int i)

@@ -12,9 +12,10 @@ main = do
 loop :: MultiGrammar -> IO ()
 loop gr = do
   s <- getLine
-  let t:_ = parse gr "BaseEng" "S" s
-  putStrLn $ showTree t
-  let p = iS $ fg t
-  putStrLn $ show p
+  case parse gr "BaseEng" "Question" s of
+    [] -> putStrLn "no parse"
+    ts -> mapM_ answer ts
   loop gr
+ where
+   answer t = putStrLn $ linearize gr "BaseEng" $ gf $ question2answer $ fg t
 

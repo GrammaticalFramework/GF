@@ -17,8 +17,10 @@ lin
   ConjAP c = infixSS c.s ;
   ConjNP c = infixSS c.s ;
 
+  UsePN a = a ;
   Every = prefixSS "every" ;
   Some  = prefixSS "some" ;
+  None  = prefixSS "no" ;
 
   And = ss "and" ;
   Or  = ss "or" ;
@@ -35,4 +37,21 @@ lin
   Smaller = ss ("smaller" ++ "than") ;
   Divisible = ss ("divisible" ++ "by") ;
  
+  Sum     = prefixSS ["the sum of"] ;
+  Product = prefixSS ["the product of"] ;
+  GCD     = prefixSS ["the greatest common divisor of"] ;
+
+  WhatIs = prefixSS ["what is"] ;
+  WhichAre cn ap = ss ("which" ++ cn.s ++ "is" ++ ap.s) ; ---- are
+  QuestS s = s ; ---- inversion
+
+  Yes = ss "yes" ;
+  No = ss "no" ;
+
+  Value np = np ;
+  Many list = list ;
+
+  BasePN = infixSS "and" ;
+  ConsPN = infixSS "," ;
+  
 }
