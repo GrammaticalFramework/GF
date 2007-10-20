@@ -23,6 +23,7 @@ import GF.Infra.Modules
 import GF.Data.Operations
 
 import Data.List (isPrefixOf, find, intersperse)
+import Data.Maybe (fromMaybe)
 
 -- | the main function
 grammar2haskell :: GFC.CanonGrammar -> String
@@ -33,7 +34,7 @@ grammar2haskell gr = foldr (++++) [] $
 grammar2haskellGADT :: GFC.CanonGrammar -> String
 grammar2haskellGADT gr = foldr (++++) [] $  
   ["{-# OPTIONS_GHC -fglasgow-exts #-}"] ++ 
-  haskPreamble ++ [datatypesGADT gr', gfinstances gr', fginstances gr']
+  haskPreamble ++ [datatypesGADT gr', composInstance gr', gfinstances gr', fginstances gr']
     where gr' = hSkeleton gr
 
 -- | by this you can prefix all identifiers with stg; the default is 'G'
@@ -48,7 +49,11 @@ haskPreamble =
   "import GF.Grammar.Grammar",
   "import GF.Grammar.PrGrammar",
   "import GF.Grammar.Macros",
+  "import GF.Data.Compos",
   "import GF.Data.Operations",
+  "",
+  "import Control.Applicative (pure,(<*>))",
+  "import Data.Traversable (traverse)",
   "----------------------------------------------------",
   "-- automatic translation from GF to Haskell",
   "----------------------------------------------------",
@@ -174,6 +179,32 @@ fInstance m (cat,rules) =
 		     gId f +++  
 		     prTList " " [prParenth ("fg" +++ x) | x <- vars]
 
+composInstance :: (String,HSkeleton) -> String
+composInstance (_,skel) = unlines $
+    ["instance Compos Tree where",
+     "  compos f t = case t of"]
+    ++ map ("      "++) (concatMap prComposCat skel
+                         ++ if not allRecursive then ["_ -> pure t"] else [])
+    where
+    prComposCat c@(cat, fs) 
+        | isListCat c = [gId cat +++ "xs" +++ "->" 
+                         +++ "pure" +++ gId cat +++ "<*> traverse f" +++ "xs"]
+        | otherwise = concatMap (prComposFun cat) fs
+    prComposFun :: OIdent -> (OIdent,[OIdent]) -> [String]
+    prComposFun cat c@(fun,args) 
+	| any isTreeType args = [gId fun +++ unwords vars +++ "->" +++ rhs]
+        | otherwise = []
+      where vars = ["x" ++ show n | n <- [1..length args]]
+            rhs = "pure" +++ gId fun +++ unwords (zipWith prRec vars args)
+	        where prRec var typ
+                          | not (isTreeType typ) = "<*>" +++ "pure" +++ var
+			  | otherwise = "<*>" +++ "f" +++ var
+    allRecursive = and [any isTreeType args | (_,fs) <- skel, (_,args) <- fs] 
+    isTreeType cat = cat `elem` (map fst skel ++ builtin)
+    isList cat = case filter ((==cat) . fst) skel of
+                   [] -> error $ "Unknown cat " ++ show cat
+                   x:_ -> isListCat x
+    builtin = ["GString", "GInt", "GFloat"]
 
 hSkeleton :: GFC.CanonGrammar -> (String,HSkeleton)
 hSkeleton gr = (name,collectR rules [(c,[]) | c <- cats]) where
