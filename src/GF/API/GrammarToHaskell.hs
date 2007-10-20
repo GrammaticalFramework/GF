@@ -34,7 +34,8 @@ grammar2haskell gr = foldr (++++) [] $
 grammar2haskellGADT :: GFC.CanonGrammar -> String
 grammar2haskellGADT gr = foldr (++++) [] $  
   ["{-# OPTIONS_GHC -fglasgow-exts #-}"] ++ 
-  haskPreamble ++ [datatypesGADT gr', composInstance gr', gfinstances gr', fginstances gr']
+  haskPreamble ++ [datatypesGADT gr', composInstance gr', showInstanceGADT gr', 
+                   gfinstances gr', fginstances gr']
     where gr' = hSkeleton gr
 
 -- | by this you can prefix all identifiers with stg; the default is 'G'
@@ -205,6 +206,26 @@ composInstance (_,skel) = unlines $
                    [] -> error $ "Unknown cat " ++ show cat
                    x:_ -> isListCat x
     builtin = ["GString", "GInt", "GFloat"]
+
+showInstanceGADT :: (String,HSkeleton) -> String
+showInstanceGADT (_,skel) = unlines $
+            ["instance Show (Tree c) where",
+	     "  showsPrec n t = case t of"]
+	     ++ map ("    "++) (concatMap prShowCat skel)
+	     ++ ["   where opar n = if n > 0 then showChar '(' else id",
+	         "         cpar n = if n > 0 then showChar ')' else id"]
+  where 
+  prShowCat c@(cat, fs)
+      | isListCat c = [gId cat +++ "xs" +++ "->" +++ "showList" +++ "xs"]
+      | otherwise = map (prShowFun cat) fs
+  prShowFun :: OIdent -> (OIdent,[OIdent]) -> String
+  prShowFun cat (fun,args) 
+      | null vars = gId fun +++ "->" +++ "showString" +++ show fun
+      | otherwise = gId fun +++ unwords vars +++ "->" 
+			     +++ "opar n . showString" +++ show fun
+			     +++ unwords [". showChar ' ' . showsPrec 1 " ++ x | x <- vars]
+			     +++ ". cpar n"
+      where vars = ["x" ++ show n | n <- [1..length args]]
 
 hSkeleton :: GFC.CanonGrammar -> (String,HSkeleton)
 hSkeleton gr = (name,collectR rules [(c,[]) | c <- cats]) where
