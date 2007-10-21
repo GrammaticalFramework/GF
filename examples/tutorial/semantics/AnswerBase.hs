@@ -11,13 +11,12 @@ domain = [0 .. 100]
 iS :: GS -> Prop
 iS s = case s of
   GPredAP np ap -> iNP np (iAP ap)
-  GConjS c s t  -> iConj c (iS s) (iS t)
 
 iNP :: GNP -> (Ent -> Prop) -> Prop
 iNP np p = case np of
   GEvery cn -> all (\x -> not (iCN cn x) || p x) domain
   GSome  cn -> any (\x ->      iCN cn x  && p x) domain
-  GNone  cn -> not (any (\x -> iCN cn x  && p x) domain)
+  GNone     -> not (any (\x -> p x) domain)
   GMany pns -> and (map p (iListPN pns))
   GConjNP c np1 np2 -> iConj c (iNP np1 p) (iNP np2 p)
   GUsePN a -> p (iPN a)
@@ -74,7 +73,7 @@ question2answer :: GQuestion -> GAnswer
 question2answer q = case iQuestion q of
   Left True  -> GYes
   Left False -> GNo
-  Right []   -> GValue (GNone GNumber)
+  Right []   -> GValue GNone
   Right [v]  -> GValue (GUsePN (ent2pn v))
   Right vs   -> GValue (GMany (GListPN (map ent2pn vs)))
 

@@ -83,7 +83,7 @@ data GNP =
    GConjNP GConj GNP GNP 
  | GEvery GCN 
  | GMany GListPN 
- | GNone GCN 
+ | GNone 
  | GSome GCN 
  | GUsePN GPN 
   deriving Show
@@ -101,9 +101,7 @@ data GQuestion =
  | GWhichAre GCN GAP 
   deriving Show
 
-data GS =
-   GConjS GConj GS GS 
- | GPredAP GNP GAP 
+data GS = GPredAP GNP GAP 
   deriving Show
 
 
@@ -141,7 +139,7 @@ instance Gf GNP where
  gf (GConjNP x1 x2 x3) = DTr [] (AC (CId "ConjNP")) [gf x1, gf x2, gf x3]
  gf (GEvery x1) = DTr [] (AC (CId "Every")) [gf x1]
  gf (GMany x1) = DTr [] (AC (CId "Many")) [gf x1]
- gf (GNone x1) = DTr [] (AC (CId "None")) [gf x1]
+ gf GNone = DTr [] (AC (CId "None")) []
  gf (GSome x1) = DTr [] (AC (CId "Some")) [gf x1]
  gf (GUsePN x1) = DTr [] (AC (CId "UsePN")) [gf x1]
 
@@ -156,9 +154,7 @@ instance Gf GQuestion where
  gf (GWhatIs x1) = DTr [] (AC (CId "WhatIs")) [gf x1]
  gf (GWhichAre x1 x2) = DTr [] (AC (CId "WhichAre")) [gf x1, gf x2]
 
-instance Gf GS where
- gf (GConjS x1 x2 x3) = DTr [] (AC (CId "ConjS")) [gf x1, gf x2, gf x3]
- gf (GPredAP x1 x2) = DTr [] (AC (CId "PredAP")) [gf x1, gf x2]
+instance Gf GS where gf (GPredAP x1 x2) = DTr [] (AC (CId "PredAP")) [gf x1, gf x2]
 
 
 instance Fg GA2 where
@@ -215,7 +211,7 @@ instance Fg GNP where
     DTr [] (AC (CId "ConjNP")) [x1,x2,x3] -> GConjNP (fg x1) (fg x2) (fg x3)
     DTr [] (AC (CId "Every")) [x1] -> GEvery (fg x1)
     DTr [] (AC (CId "Many")) [x1] -> GMany (fg x1)
-    DTr [] (AC (CId "None")) [x1] -> GNone (fg x1)
+    DTr [] (AC (CId "None")) [] -> GNone 
     DTr [] (AC (CId "Some")) [x1] -> GSome (fg x1)
     DTr [] (AC (CId "UsePN")) [x1] -> GUsePN (fg x1)
     _ -> error ("no NP " ++ show t)
@@ -240,7 +236,6 @@ instance Fg GQuestion where
 instance Fg GS where
  fg t =
   case t of
-    DTr [] (AC (CId "ConjS")) [x1,x2,x3] -> GConjS (fg x1) (fg x2) (fg x3)
     DTr [] (AC (CId "PredAP")) [x1,x2] -> GPredAP (fg x1) (fg x2)
     _ -> error ("no S " ++ show t)
 

@@ -6,7 +6,7 @@ flags lexer=literals ; unlexer=text ;
 lincat
   Question = G.Phr ;
   Answer = G.Phr ;
-  S  = Cl ;
+  S  = G.Cl ;
   NP = G.NP ;
   PN = G.NP ;
   CN = G.CN ;
@@ -22,14 +22,12 @@ lin
 
   ModCN   = mkCN ;
 
----  ConjS  = mkS ;
   ConjAP = mkAP ;
   ConjNP = mkNP ;
 
   UsePN p = p ;
   Every = mkNP every_Det ;
   Some  = mkNP someSg_Det ;
----  None  = mkNP noSg_Det ; ---
 
   And = and_Conj ;
   Or  = or_Conj ;
@@ -48,7 +46,8 @@ lin
  
   Sum     = prefix sum_N2 ;
   Product = prefix product_N2 ;
----  GCD     = prefixSS ["the greatest common divisor of"] ;
+  GCD nps = mkNP (mkDet (mkQuantSg defQuant) (mkOrd great_A)) 
+              (mkCN common_A (mkCN divisor_N2 (mkNP and_Conj nps))) ;
 
   WhatIs np = mkPhr (mkQS (mkQCl whatSg_IP (mkVP np))) ;
   WhichAre cn ap = mkPhr (mkQS (mkQCl (mkIP whichPl_IDet cn) (mkVP ap))) ;
@@ -59,6 +58,7 @@ lin
 
   Value np = mkPhr (mkUtt np) ;
   Many list = mkNP and_Conj list ;
+  None  = none_NP ;
 
   BasePN = G.BaseNP ;
   ConsPN = G.ConsNP ;

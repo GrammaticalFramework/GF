@@ -19,14 +19,12 @@ fun
 
   ModCN   : AP -> CN -> CN ;
 
-  ConjS   : Conj -> S -> S -> S ;
   ConjAP  : Conj -> AP -> AP -> AP ;
   ConjNP  : Conj -> NP -> NP -> NP ;
 
   UsePN   : PN -> NP ;
   Every   : CN -> NP ;
   Some    : CN -> NP ;
-  None    : CN -> NP ;
 
   And, Or : Conj ;  
 
@@ -55,6 +53,7 @@ fun
   No    : Answer ;
   Value : NP -> Answer ;
 
+  None  : NP ;
   Many  : ListPN -> NP ;
   BasePN : PN -> PN -> ListPN ;
   ConsPN : PN -> ListPN -> ListPN ; 
