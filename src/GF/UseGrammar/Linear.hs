@@ -80,9 +80,11 @@ linearizeToRecord gr mk m = lin [] where
 
   recS t = R [Ass (L (identC "s")) t] ----
 
-  recInt i = R [Ass (L (identC "s"))  (tK $ show i),
-              Ass (L (identC "last")) (EInt (rem i 10)),
-              Ass (L (identC "size")) (EInt (if i > 9 then 1 else 0))]
+  recInt i = R [
+              ----Ass (L (identC "last")) (EInt (rem i 10)),
+              Ass (L (identC "s"))  (tK $ show i) ----,
+              ----Ass (L (identC "size")) (EInt (if i > 9 then 1 else 0))
+              ]
 
   lookCat = return . errVal defLindef . look 
          ---- should always be given in the module
