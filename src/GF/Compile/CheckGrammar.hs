@@ -311,10 +311,10 @@ computeLType gr t = do
 
     Q m c | elem c [cPredef,cPredefAbs] -> return ty
     Q m c | elem c [zIdent "Int"] -> 
-      let ints k = App (Q (IC "Predef") (IC "Ints")) (EInt k) in
-      return $
-      RecType [
-        (LIdent "s", typeStr), (LIdent "last",ints 9),(LIdent "size",ints 1)]
+      return $ defLinType
+----      let ints k = App (Q (IC "Predef") (IC "Ints")) (EInt k) in
+----      RecType [
+----        (LIdent "last",ints 9),(LIdent "s", typeStr), (LIdent "size",ints 1)]
     Q m c | elem c [zIdent "Float",zIdent "String"] -> return defLinType ----
 
     Q m ident -> checkIn ("module" +++ prt m) $ do
