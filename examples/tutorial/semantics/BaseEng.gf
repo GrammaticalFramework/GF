@@ -13,14 +13,12 @@ lin
 
   ModCN   = cc2 ;
 
-  ConjS  c = infixSS c.s ;
   ConjAP c = infixSS c.s ;
   ConjNP c = infixSS c.s ;
 
   UsePN a = a ;
   Every = prefixSS "every" ;
   Some  = prefixSS "some" ;
-  None  = prefixSS "no" ;
 
   And = ss "and" ;
   Or  = ss "or" ;
@@ -49,6 +47,7 @@ lin
   No = ss "no" ;
 
   Value np = np ;
+  None = ss "none" ;
   Many list = list ;
 
   BasePN = infixSS "and" ;

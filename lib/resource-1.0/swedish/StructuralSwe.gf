@@ -25,7 +25,7 @@ concrete StructuralSwe of Structural = CatSwe **
   during_Prep = ss "under" ;
   either7or_DConj = sd2 "antingen" "eller" ** {n = Sg} ;
   everybody_NP = regNP "alla" "allas" Plg ;
-  every_Det = {s = \\_,_ => "varje" ; n = Sg ; det = DDef Indef} ;
+  every_Det = {s = \\_,_ => "varje" ; n = Sg ; det = DIndef} ;
   everything_NP = regNP "allting" "alltings" SgNeutr ;
   everywhere_Adv = ss "överallt" ;
   few_Det  = {s = \\_,_ => "få" ; n = Pl ; det = DDef Indef} ;
