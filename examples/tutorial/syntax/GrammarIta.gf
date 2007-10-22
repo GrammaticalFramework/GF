@@ -6,32 +6,45 @@ concrete GrammarIta of Grammar = open Prelude, MorphoIta in {
     Phr  = {s : Str} ;
     S    = {s : Str} ;
     QS   = {s : Str} ;
-    NP   = {s : Str ; g : Gender ; n : Number} ;
-    IP   = {s : Str ; g : Gender ; n : Number} ;
+    Cl   = Clause ;
+    QCl  = Clause ;
+    NP   = NounPhrase ;
+    IP   = NounPhrase ;
     CN   = Noun ;
     Det  = {s : Gender => Str ; n : Number} ;
     IDet = {s : Gender => Str ; n : Number} ;
     AP   = {s : Gender => Number => Str} ;
     AdA  = {s : Str} ;
-    VP   = {s : Bool => Gender => Number => Str} ;
+    VP   = VerbPhrase ;
     N    = Noun ;
     A    = Adjective ;
     V    = Verb ;
     V2   = Verb2 ;
     Conj = {s : Str} ;
+    Subj = {s : Str} ;
     Pol  = {s : Str ; p : Bool} ;
 
-
+  oper
+    Clause     : Type = {s : Bool => Str} ;
+    NounPhrase : Type = {s : Str ; g : Gender ; n : Number} ;
+    VerbPhrase : Type = {s : Bool => Gender => Number => Str} ; 
   lin
     PhrS = postfixSS "." ;
     PhrQS = postfixSS "?" ;
 
-    PredVP   p np vp = {s = np.s ++ p.s ++ vp.s ! p.p ! np.g ! np.n} ;
-    QuestVP  p np vp = {s = np.s ++ p.s ++ vp.s ! p.p ! np.g ! np.n} ;
-    IPPredVP p np vp = {s = np.s ++ p.s ++ vp.s ! p.p ! np.g ! np.n} ;
+    UseCl  pol cl  = {s = pol.s ++ cl.s  ! pol.p} ;
+    UseQCl pol qcl = {s = pol.s ++ qcl.s ! pol.p} ;
 
-    IPPredV2 p ip np v2 = 
-      {s = v2.c ++ ip.s ++ p.s ++ posneg p.p ++ v2.s ! np.n ++ np.s} ;
+    QuestCl cl = cl ;
+
+    SubjS subj s = {s = subj.s ++ s.s} ;
+
+    PredVP  = predVP ;
+
+    QuestVP = predVP ;
+
+    QuestV2 ip np v2 = 
+      {s = \\b => v2.c ++ ip.s ++ posneg b ++ v2.s ! np.n ++ np.s} ;
  
     ComplV2 v2 np = {s = \\b,_,n => posneg b ++ v2.s ! n ++ v2.c ++ np.s} ;
     ComplAP ap    = {s = \\b,g,n => posneg b ++ copula n ++ ap.s ! g ! n} ;
@@ -40,6 +53,7 @@ concrete GrammarIta of Grammar = open Prelude, MorphoIta in {
 
     ModCN ap cn  = {s = \\n => cn.s ! n ++ ap.s ! cn.g ! n ; g = cn.g} ;
 
+    AdVP adv vp  = {s = \\p,n,g => vp.s ! p ! n ! g ++ adv.s} ;
     AdAP ada ap  = {s = \\n,g => ada.s ++ ap.s ! n ! g} ;
 
     IDetCN det cn = {s = det.s ! cn.g ++ cn.s ! det.n ; g = cn.g ; n = det.n} ;
@@ -61,14 +75,19 @@ concrete GrammarIta of Grammar = open Prelude, MorphoIta in {
     indef_Det = {s = artIndef ; n = Sg} ;
     plur_Det = {s = \\_ => [] ; n = Pl} ;
     two_Det = {s = \\_ => "due" ; n = Pl} ;
+    today_Adv = {s = "oggi"} ;
     very_AdA = {s = "molto"} ;
     which_IDet   = {s = \\_ => "quale" ; n = Sg} ;
     and_Conj = {s = "e"} ;
+    because_Subj = {s = "perché"} ;
 
     PPos = {s = [] ; p = True} ;
     PNeg = {s = [] ; p = False} ;
 
   oper
+    predVP : NounPhrase -> VerbPhrase -> Clause = \np,vp -> 
+      {s = \\b => np.s ++ vp.s ! b ! np.g ! np.n} ;
+
     copula : Number -> Str = \n -> case n of {
       Sg => "è" ;
       Pl => "sono"
