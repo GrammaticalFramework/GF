@@ -73,6 +73,7 @@ data Options = Options {
                         optEmitGFC :: Bool,
                         optGFCDir :: FilePath,
                         optOutputFormats :: [OutputFormat],
+                        optOutputName :: Maybe String,
                         optOutputFile :: Maybe FilePath,
                         optOutputDir :: FilePath,
                         optLibraryPath :: [FilePath],
@@ -94,6 +95,7 @@ defaultOptions = Options {
                           optEmitGFC = True,
                           optGFCDir = ".",
                           optOutputFormats = [FmtGFCC],
+                          optOutputName = Nothing,
                           optOutputFile = Nothing,
                           optOutputDir = ".",
                           optLibraryPath = [],
@@ -134,6 +136,10 @@ optDescr =
                   "Multiple concrete: gfcc (default), gar, js, ...",
                   "Single concrete only: cf, bnf, lbnf, gsl, srgs_xml, srgs_abnf, ...",
                   "Abstract only: haskell, ..."]),
+     Option ['n'] ["output-name"] (ReqArg outName "NAME") 
+           ("Use NAME as the name of the output. This is used in the output file names, "
+            ++ "with suffixes depending on the formats, and, when relevant, "
+            ++ "internally in the output."),
      Option ['o'] ["output-file"] (ReqArg outFile "FILE") 
            "Save output in FILE (default is out.X, where X depends on output format.",
      Option ['D'] ["output-dir"] (ReqArg outDir "DIR") 
@@ -162,6 +168,7 @@ optDescr =
        emitGFC     x o = return $ o { optEmitGFC = x }
        gfcDir      x o = return $ o { optGFCDir = x }
        outFmt      x o = readOutputFormat x >>= \f -> return $ o { optOutputFormats = optOutputFormats o ++ [f] }
+       outName     x o = return $ o { optOutputName = Just x }
        outFile     x o = return $ o { optOutputFile = Just x }
        outDir      x o = return $ o { optOutputDir = x }
        addLibDir   x o = return $ o { optLibraryPath = x:optLibraryPath o }
