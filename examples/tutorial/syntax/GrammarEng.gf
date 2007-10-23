@@ -43,18 +43,12 @@ concrete GrammarEng of Grammar = open Prelude, MorphoEng in {
     QuestV2 ip np v2 = {
       s = \\ord,pol => 
           let 
-            vp : VerbPhrase = {s = \\q,b,n => predVerb v2 q b n} ;
+            vp : VerbPhrase = predVerb v2
           in 
           bothWays (ip.s ++ (predVP np vp).s ! ord ! pol) v2.c
     } ;
 
-    ComplV2 v2 np = {
-      s = \\q,b,n => 
-        let vp = predVerb v2 q b n in {
-          fin = vp.fin ; 
-          inf = vp.inf ++ v2.c ++ np.s
-        }
-    } ;
+    ComplV2 v np = insertObject (v.c ++ np.s) (predVerb v) ;
 
     ComplAP ap = {
       s = \\_,b,n => {
@@ -84,7 +78,7 @@ concrete GrammarEng of Grammar = open Prelude, MorphoEng in {
 
     UseN n = n ;
     UseA a = a ;
-    UseV v = {s = \\q,b,n => predVerb v q b n} ;
+    UseV = predVerb ;
 
     this_Det = {s = "this" ; n = Sg} ;
     that_Det = {s = "that" ; n = Sg} ;
@@ -131,8 +125,8 @@ concrete GrammarEng of Grammar = open Prelude, MorphoEng in {
     do : Bool -> Number -> Str = \b,n -> 
       posneg b ((mkV "do").s ! n) ;
 
-    predVerb : Verb -> Order -> Bool -> Number -> {fin,inf : Str} = 
-      \verb,q,b,n -> 
+    predVerb : Verb -> VerbPhrase = \verb -> {
+      s = \\q,b,n => 
       let 
         inf = verb.s ! Pl ;
         fin = verb.s ! n ;
@@ -141,7 +135,16 @@ concrete GrammarEng of Grammar = open Prelude, MorphoEng in {
       case <q,b> of {
         <Dir,True> => {fin = []  ; inf = fin} ;
         _          => {fin = aux ; inf = inf}
-        } ;
+        }
+      } ;
+
+    insertObject : Str -> VerbPhrase -> VerbPhrase = 
+      \obj,vp -> {
+      s = \\q,b,n => let vps = vp.s ! q ! b! n in {
+        fin = vps.fin ;
+        inf = vps.inf ++ obj
+      }
+    } ;
 
     posneg : Bool -> Str -> Str = \b,do -> case b of {
       True => do ;
