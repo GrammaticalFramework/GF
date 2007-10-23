@@ -72,7 +72,7 @@ data Options = Options {
                         optShowCPUTime :: Bool,
                         optEmitGFC :: Bool,
                         optGFCDir :: FilePath,
-                        optOutputFormat :: OutputFormat,
+                        optOutputFormats :: [OutputFormat],
                         optOutputFile :: Maybe FilePath,
                         optLibraryPath :: [FilePath],
                         optForceRecomp :: Bool,
@@ -92,7 +92,7 @@ defaultOptions = Options {
                           optShowCPUTime = False,
                           optEmitGFC = True,
                           optGFCDir = ".",
-                          optOutputFormat = FmtGFCC,
+                          optOutputFormats = [FmtGFCC],
                           optOutputFile = Nothing,
                           optLibraryPath = [],
                           optForceRecomp = False,
@@ -157,7 +157,7 @@ optDescr =
        cpu         x o = return $ o { optShowCPUTime = x }
        emitGFC     x o = return $ o { optEmitGFC = x }
        gfcDir      x o = return $ o { optGFCDir = x }
-       outFmt      x o = readOutputFormat x >>= \f -> return $ o { optOutputFormat = f }
+       outFmt      x o = readOutputFormat x >>= \f -> return $ o { optOutputFormats = optOutputFormats o ++ [f] }
        outFile     x o = return $ o { optOutputFile = Just x }
        addLibDir   x o = return $ o { optLibraryPath = x:optLibraryPath o }
        setLibPath  x o = return $ o { optLibraryPath = splitSearchPath x }
