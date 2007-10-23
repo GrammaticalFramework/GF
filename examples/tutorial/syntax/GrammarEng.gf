@@ -61,15 +61,9 @@ concrete GrammarEng of Grammar = open Prelude, MorphoEng in {
 
     ModCN ap cn  = {s = \\n => ap.s ++ cn.s ! n} ;
 
-    AdVP adv vp  = {
-      s = \\o,b,n => 
-        let vps = vp.s ! o ! b ! n in {
-          fin = vps.fin ;
-          inf =  vps.inf ++ adv.s
-        }
-    } ;
+    AdVP adv = insertObject adv.s ;
 
-    AdAP ada ap  = {s = ada.s ++ ap.s} ;
+    AdAP ada ap = {s = ada.s ++ ap.s} ;
 
     IDetCN det cn = {s = det.s ++ cn.s ! det.n ; n = det.n} ;
 
