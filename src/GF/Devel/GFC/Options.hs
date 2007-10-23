@@ -74,6 +74,7 @@ data Options = Options {
                         optGFCDir :: FilePath,
                         optOutputFormats :: [OutputFormat],
                         optOutputFile :: Maybe FilePath,
+                        optOutputDir :: FilePath,
                         optLibraryPath :: [FilePath],
                         optForceRecomp :: Bool,
                         optPreprocessors :: [String],
@@ -94,6 +95,7 @@ defaultOptions = Options {
                           optGFCDir = ".",
                           optOutputFormats = [FmtGFCC],
                           optOutputFile = Nothing,
+                          optOutputDir = ".",
                           optLibraryPath = [],
                           optForceRecomp = False,
                           optPreprocessors = [],
@@ -134,6 +136,8 @@ optDescr =
                   "Abstract only: haskell, ..."]),
      Option ['o'] ["output-file"] (ReqArg outFile "FILE") 
            "Save output in FILE (default is out.X, where X depends on output format.",
+     Option ['D'] ["output-dir"] (ReqArg outDir "DIR") 
+           "Save output files (other than .gfc files) in DIR.",
      Option ['i'] [] (ReqArg addLibDir "DIR") "Add DIR to the library search path.",
      Option [] ["path"] (ReqArg setLibPath "DIR:DIR:...") "Set the library search path.",
      Option [] ["src","force-recomp"] (NoArg (forceRecomp True)) 
@@ -159,6 +163,7 @@ optDescr =
        gfcDir      x o = return $ o { optGFCDir = x }
        outFmt      x o = readOutputFormat x >>= \f -> return $ o { optOutputFormats = optOutputFormats o ++ [f] }
        outFile     x o = return $ o { optOutputFile = Just x }
+       outDir      x o = return $ o { optOutputDir = x }
        addLibDir   x o = return $ o { optLibraryPath = x:optLibraryPath o }
        setLibPath  x o = return $ o { optLibraryPath = splitSearchPath x }
        forceRecomp x o = return $ o { optForceRecomp = x }
