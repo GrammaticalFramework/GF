@@ -24,7 +24,7 @@ the table below. Material (new chapters) will appear later today.
 It will explain some of the files in
 - [``syntax/`` http://digitalgrammars.com/gf/examples/tutorial/syntax/]:
   linguistic grammar programming
-- [``semantics/`` http://digitalgrammars.com/gf/examples/tutorial/sementics/]:
+- [``semantics/`` http://digitalgrammars.com/gf/examples/tutorial/semantics/]:
   a question-answer system based on logical semantics
 
 
