@@ -19,7 +19,17 @@ Autumn Term 2007.
 
 =News=
 
-12/8 The course starts tomorrow at 8.00. A detailed plan for the day is
+24/10 Tomorrow's session starts at 8.15. A detailed plan has been added to
+the table below. Material (new chapters) will appear later today. 
+It will explain some of the files in
+- [``syntax/`` http://digitalgrammars.com/gf/examples/tutorial/syntax/]:
+  linguistic grammar programming
+- [``semantics/`` http://digitalgrammars.com/gf/examples/tutorial/sementics/]:
+  a question-answer system based on logical semantics
+
+
+
+12/9 The course starts tomorrow at 8.00. A detailed plan for the day is
 right below. Don't forget to
 - join the mailing list (send a mail to ``gf-subscribe at gslt hum gu se``)
 - install GF on your laptops from [here ../download.html]
@@ -40,12 +50,22 @@ Building of Gothenburg University ("Humanisten").
 
 =Plan=
 
+First week (13-14/9)
+
 || Time            | Subject      | Assignment                       ||
 | Thu 8.00-9.30    | Chapters 1-3 | Hello and Food in a new language  |
 | Thu 10.00-11.30  | Chapters 3-4 | Foods in a new language           |
 | Thu 13.15-14.45  | Chapter 5    | ExtFoods in a new language        |
 | Thu 15.15-16.45  | Chapters 6-7 | straight code compiler            |
 | Fri  8.00-9.30   | Chapters 8   | application in Haskell or Java    |
+
+Second week (25/10)
+
+|| Time            | Subject        | Assignment                       ||
+| Thu 8.15-9.45    | Chapters 13-15 | mini resource in a new language   |
+| Thu 10.15-11.45  | Chapters 12,16 | query system for a new domain     |
+| Thu 13.15-14.45  | presentations  | explain your own project          |
+
 
 
 The structure of each lecture will be the following:
