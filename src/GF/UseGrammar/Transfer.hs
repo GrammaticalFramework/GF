@@ -57,6 +57,7 @@ core2exp e = case e of
   T.EInteger i -> EInt $ fromInteger i
   T.EMeta _  -> uExp  -- meta symbol 0, refreshed by GF
  where
+   var :: T.CIdent -> Ident
    var (T.CIdent x) = zIdent x
 
 
