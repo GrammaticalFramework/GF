@@ -21,6 +21,8 @@ fun
   LString : String -> Label ;
   VString : String -> Var ;
 
+  V_x, V_y, V_z : Var ; --- for js
+
   PLink : Proof ;
 
 -- lexicon

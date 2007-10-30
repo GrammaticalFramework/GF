@@ -27,6 +27,10 @@ lin
   LString s = s ;
   VString s = s ;
 
+  V_x = ss "x" ;
+  V_y = ss "y" ;
+  V_z = ss "z" ;
+
 -- lexicon
 
   Set  = ss "mängd" ;
