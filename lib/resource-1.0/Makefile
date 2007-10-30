@@ -54,11 +54,11 @@ alltenses:
 	$(GFC) spanish/Spanish.gf
 	$(GFC) swedish/Swedish.gf
 	$(GFC) common/ConstructX.gf
-	cp -p */*.gfc */*.gfr ../alltenses
+	cp -p */*.gf? ../alltenses
 	touch api/Constructors.gf
 	$(GFCC) api/Syntax???.gf
-	cp -p api/Constructors*.gfc api/Constructors*.gfr ../alltenses
-	cp -p api/Syntax*.gfc api/Syntax*.gfr ../alltenses
+	cp -p api/Constructors*.gf? ../alltenses
+	cp -p api/Syntax*.gf? ../alltenses
 	$(GFCC) api/Try???.gf
 	$(GFCC) -path=alltenses:prelude:api:api/toplevel api/toplevel/OverLangEng.gf
 	mv api/toplevel/Over*.gfc api/Try*.gf? ../alltenses
@@ -73,7 +73,7 @@ api:
 #	$(GFCC) api/Constructors???.gf
 	$(GFCC) api/Combinators???.gf
 	$(GFCC) api/Symbolic???.gf
-	cp -p api/*.gfc api/*.gfr ../api
+	cp -p api/*.gf? ../api
 
 arabic: chmod
 	$(GFCP) arabic/GrammarAra.gf
@@ -97,11 +97,11 @@ present: chmod
 	$(GFCP) spanish/Spanish.gf
 	$(GFCP) swedish/Swedish.gf
 	$(GFCP) common/ConstructX.gf
-	mv */*.gfc */*.gfr ../present
+	mv */*.gf? ../present
 	touch api/Constructors.gf
 	$(GFCCP) -path=api:present:prelude api/Syntax???.gf
-	mv api/Constructors*.gfc api/Constructors*.gfr ../present
-	mv api/Syntax*.gfc api/Syntax*.gfr ../present
+	mv api/Constructors*.gf? ../present
+	mv api/Syntax*.gf? ../present
 	$(GFCCP) -path=api:present:prelude api/Try???.gf
 	$(GFCCP) -path=present:prelude:api:api/toplevel api/toplevel/OverLangEng.gf
 	mv api/toplevel/Over*.gfc api/Try???.gf? ../present
