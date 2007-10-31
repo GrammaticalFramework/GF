@@ -4,28 +4,25 @@ concrete MathSwz of Mathw = open Prelude in {
 
 flags lexer = textlit ; unlexer = textlit ;
 
--- lincat Section ; Label ; Context ; Typ ; Obj ; Prop ; Proof ; Var ;
+-- lincat Section ; Context ; Typ ; Obj ; Prop ; Proof ; Var ;
 
 lin
-  SDefObj lab cont obj typ df = 
-    ss ("Definition" ++ lab.s ++ "." ++ cont.s ++ 
+  SDefObj cont obj typ df = 
+    ss ("Definition" ++ "." ++ cont.s ++ 
         obj.s ++ "är" ++ "ett" ++ typ.s ++ "," ++ "definierat" ++ "som" ++ df.s ++ ".") ;  
-  SDefProp lab cont prop df = 
-    ss ("Definition" ++ lab.s ++ "." ++ cont.s ++ "vi" ++ "säger" ++ 
-        "att" ++ prop.s ++ "vilket" ++ "menar" ++ "att" ++ df.s ++ ".") ;  
-  SAxiom lab cont prop = 
-    ss ("Axiom" ++ lab.s ++ "." ++ cont.s ++ prop.s ++ ".") ;
-  STheorem lab cont prop proof = 
-    ss ("Theorem" ++ lab.s ++ "." ++ cont.s ++ prop.s ++ "." ++ proof.s ++ ".") ;
+  SDefProp cont prop df = 
+    ss ("Definition" ++ "." ++ cont.s ++ "vi" ++ "säger" ++ 
+        "att" ++ prop.s ++ "om" ++ df.s ++ ".") ;  
+  SAxiom cont prop = 
+    ss ("Axiom" ++ "." ++ cont.s ++ prop.s ++ ".") ;
+  STheorem cont prop proof = 
+    ss ("Theorem" ++ "." ++ cont.s ++ prop.s ++ "." ++ proof.s ++ ".") ;
 
   CEmpty = ss [] ;
   CObj vr typ co = ss ("låt" ++ vr.s ++ "vara" ++ "ett" ++ typ.s ++ "." ++ co.s) ;
   CProp prop co = ss ("anta" ++ "att" ++ prop.s ++ "." ++ co.s) ;
 
   OVar v = v ;
-  LNone = ss [] ;
-  LString s = s ;
-  VString s = s ;
 
   V_x = ss "x" ;
   V_y = ss "y" ;
