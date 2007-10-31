@@ -50,7 +50,7 @@ concrete2js (C.CId a) (C.CId c, cnc) =
     ++ concatMap (cncdef2js l) ds
   where 
    l  = JS.Ident c
-   ds = Map.assocs $ D.lins cnc
+   ds = concatMap Map.assocs [D.lins cnc, D.opers cnc, D.lindefs cnc]
 
 cncdef2js :: JS.Ident -> (C.CId,C.Term) -> [JS.Element]
 cncdef2js l (C.CId f, t) = 
