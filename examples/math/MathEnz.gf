@@ -1,6 +1,6 @@
 --# -path=.:prelude
 
-concrete MathEnz of Math = open Prelude in {
+concrete MathEnz of Mathw = open Prelude in {
 
 flags lexer = textlit ; unlexer = textlit ;
 
