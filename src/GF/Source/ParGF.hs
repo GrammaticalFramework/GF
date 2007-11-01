@@ -1,6 +1,6 @@
 {-# OPTIONS -fglasgow-exts -cpp #-}
 {-# OPTIONS -fno-warn-incomplete-patterns -fno-warn-overlapping-patterns #-}
-module GF.Source.ParGF where --H
+ module GF.Source.ParGF (pGrammar, pModDef, pOldGrammar, pExp, myLexer) where --H
 import GF.Source.AbsGF       --H
 import GF.Source.LexGF       --H
 import GF.Infra.Ident        --H
