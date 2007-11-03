@@ -21,6 +21,7 @@ import GF.GFCC.Macros
 import GF.GFCC.DataGFCC
 import GF.GFCC.AbsGFCC
 import GF.GFCC.ParGFCC
+import GF.Command.PPrTree
 
 import GF.GFCC.ErrM
 
@@ -105,9 +106,9 @@ generateRandom mgr cat = do
 
 generateAll mgr cat = generate (gfcc mgr) (CId cat)
 
-readTree _ = err (const exp0) id . (pExp . myLexer)
+readTree _ = pTree
 
-showTree = prt
+showTree = prExp
 
 languages mgr = [l | CId l <- cncnames (gfcc mgr)]
 

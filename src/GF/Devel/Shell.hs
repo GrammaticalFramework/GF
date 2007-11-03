@@ -46,7 +46,7 @@ treat mgr s = case words s of
     let ts = parse mgr lang cat $ unwords ws
     mapM_ (putStrLn . showTree) ts 
   "h":_ -> printHelp mgr
-  _ -> lins $ readTree mgr s
+  "l" : ws -> lins $ readTree mgr $ unwords ws
  where
   grammar = gfcc mgr
   langs = languages mgr
