@@ -42,7 +42,7 @@ concrete VerbRus of Verb = CatRus ** open ResRus, Prelude in {
    } ;
 
   CompAP zloj ={
- s= \\clf,gn,p => case clf of { 
+ s= \\clf,gn,p => case clf of { 
 -- person is ignored !
        ClInfinit => "быть" ++ zloj.s ! AF Inst Animate (ASg Masc) ; 
         ClImper => case gn of 
@@ -53,7 +53,7 @@ concrete VerbRus of Verb = CatRus ** open ResRus, Prelude in {
 -- but indicative does for the sake of adjectival predication !
         ClIndic Present _ =>  zloj.s ! AF Nom Animate gn ;
         ClIndic PastRus _ => case gn of
-       { (ASg Fem)   => "была" ++ zloj.s! AF Nom Animate (ASg Fem);
+       { (ASg Fem)   => "была" ++ zloj.s! AF Nom Animate (ASg Fem);
           (ASg Masc)  => "был" ++ zloj.s! AF Nom Animate (ASg Masc);
           (ASg Neut)   => "был" ++ zloj.s! AF Nom Animate (ASg Neut);
            APl => "были" ++ zloj.s! AF Nom Animate APl
@@ -71,7 +71,7 @@ concrete VerbRus of Verb = CatRus ** open ResRus, Prelude in {
         }
       };
        ClCondit => ""
-      } ;        
+      } ;        
 
       asp = Imperfective ;      
       w = Act;
@@ -84,7 +84,7 @@ concrete VerbRus of Verb = CatRus ** open ResRus, Prelude in {
 -- Verb phrases can also be formed from adjectives (" молод"),
 -- common nouns (" человек"), and noun phrases (" самый молодой").
 -- The third rule is overgenerating: " каждый человек" has to be ruled out
--- on semantic grounds.
+-- on semantic grounds.
 -- Note: we omit a dash "-" because it will cause problems with negation word order:
 -- "Я не - волшебник". Alternatively, we can consider verb-based VP and
 -- all the rest.

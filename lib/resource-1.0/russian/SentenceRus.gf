@@ -14,7 +14,7 @@ concrete SentenceRus of Sentence = CatRus ** open Prelude, ResRus in {
               ClInfinit => (mkPronForm Acc No NonPoss); 
                _ => (mkPronForm Nom No NonPoss)
                });
-         ne = case b of {Pos=>""; Neg=>"не"};
+         ne = case b of {Pos=>""; Neg=>"не"};
          vizhu = tebyaNeVizhu.s ! clf ! (pgNum Ya.g Ya.n)! Ya.p;
          khorosho = tebyaNeVizhu.s2 ;
          tebya = tebyaNeVizhu.s3 ! (pgen2gen Ya.g) ! Ya.n 
@@ -28,7 +28,7 @@ concrete SentenceRus of Sentence = CatRus ** open Prelude, ResRus in {
 
     PredSCVP sc vp = { s = \\b,clf => 
        let  { 
-         ne = case b of {Pos=>""; Neg=>"не"};
+         ne = case b of {Pos=>""; Neg=>"не"};
          vizhu = vp.s ! clf ! (ASg Neut)! P3;
          tebya = vp.s3 ! Neut ! Sg 
        }
@@ -54,6 +54,17 @@ concrete SentenceRus of Sentence = CatRus ** open Prelude, ResRus in {
     } ;
 
     SlashPrep cl p =  {s=cl.s; s2=p.s; c=p.c} ;     
+
+    --- AR 3/11/2007
+    SlashVS ivan vidit tuUlubaeshsya = { 
+      s=\\b,clf => ivan.s ! PF Nom No NonPoss ++ 
+         vidit.s! (getActVerbForm clf (pgen2gen ivan.g) ivan.n ivan.p) ++
+         [", что"] ++ tuUlubaeshsya.s ;
+      s2=tuUlubaeshsya.s2; 
+      c=tuUlubaeshsya.c 
+    } ;
+
+
 
     ImpVP inf = {s = \\pol, g,n =>          
         let 
@@ -82,6 +93,16 @@ concrete SentenceRus of Sentence = CatRus ** open Prelude, ResRus in {
     UseRCl t a p rcl ={s = \\gn,c,anim => case t.t of { 
       Cond => [", "] ++ rcl.s! p.p ! ClCondit ! gn !c !anim ; --# notpresent
       _ => [", "] ++ rcl.s! p.p ! ClIndic (getTense t.t) a.a !gn !c !anim}};
+
+    UseSlash  t a p cl = {
+      s = case t.t of { 
+        Cond => cl.s! p.p ! ClCondit ; --# notpresent
+        _ => cl.s! p.p ! ClIndic (getTense t.t) a.a
+        } ;
+      s2 = cl.s2 ;
+      c = cl.c
+    };
+
 
     AdvS a s = {s = a.s ++ "," ++ s.s} ; ---- AR 19/6/2007
 

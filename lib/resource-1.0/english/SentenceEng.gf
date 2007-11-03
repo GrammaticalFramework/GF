@@ -37,16 +37,29 @@ concrete SentenceEng of Sentence = CatEng ** open Prelude, ResEng in {
 
     SlashPrep cl prep = cl ** {c2 = prep.s} ;
 
+    SlashVS np vs slash = 
+      mkClause (np.s ! Nom) np.a 
+        (insertObj (\\_ => conjThat ++ slash.s) (predV vs))  **
+        {c2 = slash.c2} ;
+
     EmbedS  s  = {s = conjThat ++ s.s} ;
     EmbedQS qs = {s = qs.s ! QIndir} ;
     EmbedVP vp = {s = infVP False vp (agrP3 Sg)} ; --- agr
 
-    UseCl  t a p cl = {s = t.s ++ a.s ++ p.s ++ cl.s ! t.t ! a.a ! ctr p.p ! ODir} ;
-    UseQCl t a p cl = {s = \\q => t.s ++ a.s ++ p.s ++ cl.s ! t.t ! a.a ! ctr p.p ! q} ;
+    UseCl  t a p cl = {
+      s = t.s ++ a.s ++ p.s ++ cl.s ! t.t ! a.a ! ctr p.p ! ODir
+    } ;
+    UseQCl t a p cl = {
+      s = \\q => t.s ++ a.s ++ p.s ++ cl.s ! t.t ! a.a ! ctr p.p ! q
+    } ;
     UseRCl t a p cl = {
       s = \\r => t.s ++ a.s ++ p.s ++ cl.s ! t.t ! a.a ! ctr p.p ! r ;
       c = cl.c
-      } ;
+    } ;
+    UseSlash t a p cl = {
+      s = t.s ++ a.s ++ p.s ++ cl.s ! t.t ! a.a ! ctr p.p  ! ODir ;
+      c2 = cl.c2
+    } ;
 
     AdvS a s = {s = a.s ++ "," ++ s.s} ;
 

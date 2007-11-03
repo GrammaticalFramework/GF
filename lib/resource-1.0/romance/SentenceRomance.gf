@@ -43,16 +43,35 @@ incomplete concrete SentenceRomance of Sentence =
       c2 = {s = prep.s ; c = prep.c ; isDir = False}
       } ;
 
+    SlashVS np vs slash = 
+      {s = \\d,ag =>
+        (mkClause
+          (np.s ! Aton Nom) np.hasClit np.a
+          (insertExtrapos (\\b => conjThat ++ slash.s ! ag ! (vs.m ! b)) --- ag?
+            (predV vs))
+        ).s ! d ;
+       c2 = slash.c2
+      } ;
+
     EmbedS  s  = {s = conjThat ++ s.s ! Indic} ; --- mood
     EmbedQS qs = {s = qs.s ! QIndir} ;
     EmbedVP vp = {s = infVP vp (agrP3 Masc Sg)} ; --- agr ---- compl
 
-    UseCl  t a p cl = {s = \\o => t.s ++ a.s ++ p.s ++ cl.s ! DDir ! t.t ! a.a ! p.p ! o} ;
-    UseQCl t a p cl = {s = \\q => t.s ++ a.s ++ p.s ++ cl.s ! t.t ! a.a ! p.p ! q} ;
+    UseCl  t a p cl = {
+      s = \\o => t.s ++ a.s ++ p.s ++ cl.s ! DDir ! t.t ! a.a ! p.p ! o
+    } ;
+    UseQCl t a p cl = {
+      s = \\q => t.s ++ a.s ++ p.s ++ cl.s ! t.t ! a.a ! p.p ! q
+    } ;
     UseRCl t a p cl = {
       s = \\r,ag => t.s ++ a.s ++ p.s ++ cl.s ! ag ! t.t ! a.a ! p.p ! r ; 
       c = cl.c
       } ;
+    UseSlash t a p cl = {
+      s = \\agr,mo => 
+          t.s ++ a.s ++ p.s ++ cl.s ! DDir ! agr ! t.t ! a.a ! p.p ! mo ;
+      c2 = cl.c2
+    } ;
 
     AdvS a s = {s = \\o => a.s ++ "," ++ s.s ! o} ;
 

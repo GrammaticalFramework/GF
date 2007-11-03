@@ -10,6 +10,7 @@ incomplete concrete CatScand of Cat =
     S  = {s : Order => Str} ;
     QS = {s : QForm => Str} ;
     RS = {s : Agr => Str ; c : NPForm} ;
+    SlashS = {s : Order => Str} ** {c2 : Str} ;
 
 -- Sentence
 
