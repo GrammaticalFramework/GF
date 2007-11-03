@@ -9,6 +9,7 @@ concrete CatEng of Cat = CommonX ** open ResEng, Prelude in {
     S  = {s : Str} ;
     QS = {s : QForm => Str} ;
     RS = {s : Agr => Str ; c : Case} ; -- c for it clefts
+    SlashS = {s : Str ; c2 : Str} ;
 
 -- Sentence
 

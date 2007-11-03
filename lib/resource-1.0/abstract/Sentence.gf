@@ -33,6 +33,8 @@ abstract Sentence = Cat ** {
     AdvSlash  : Slash -> Adv -> Slash ;     -- (whom) he sees tomorrow
     SlashPrep : Cl -> Prep -> Slash ;       -- (with whom) he walks 
 
+    SlashVS   : NP -> VS -> SlashS -> Slash ; -- (whom) he says that she loves
+
 --2 Imperatives
 
 -- An imperative is straightforwardly formed from a verb phrase.
@@ -60,6 +62,7 @@ abstract Sentence = Cat ** {
     UseCl  : Tense -> Ant -> Pol -> Cl  -> S ;
     UseQCl : Tense -> Ant -> Pol -> QCl -> QS ;
     UseRCl : Tense -> Ant -> Pol -> RCl -> RS ;
+    UseSlash : Tense -> Ant -> Pol -> Slash -> SlashS ;
 
 -- An adverb can be added to the beginning of a sentence.
 

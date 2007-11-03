@@ -11,6 +11,7 @@ concrete CatGer of Cat =
     S  = {s : Order => Str} ;
     QS = {s : QForm => Str} ;
     RS = {s : GenNum => Str ; c : Case} ;
+    SlashS = {s : Order => Str} ** {c2 : Preposition} ;
 
 -- Sentence
 

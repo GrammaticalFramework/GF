@@ -53,6 +53,16 @@ concrete SentenceFin of Sentence = CatFin ** open Prelude, ResFin in {
       c2 = prep
       } ;
 
+    SlashVS np vs slash = { 
+      s = \\t,a,p => 
+        (mkClause (subjForm np vs.sc) np.a 
+          (insertExtrapos ("että" ++ slash.s) 
+             (predV vs))
+        ).s ! t ! a ! p ! SDecl ;
+      c2 = slash.c2
+      } ;
+
+
     EmbedS  s  = {s = "että" ++ s.s} ;
     EmbedQS qs = {s = qs.s} ;
     EmbedVP vp = {s = infVP (NPCase Nom) Pos (agrP3 Sg) vp} ; --- case,pol,agr
@@ -63,7 +73,11 @@ concrete SentenceFin of Sentence = CatFin ** open Prelude, ResFin in {
       s = \\r => t.s ++ a.s ++ p.s ++ cl.s ! t.t ! a.a ! p.p ! r ;
       c = cl.c
       } ;
+    UseSlash t a p cl = {
+      s = t.s ++ a.s ++ p.s ++ cl.s ! t.t ! a.a ! p.p ;
+      c2 = cl.c2
+    } ;
 
-    AdvS a s = {s = a.s ++ "," ++ s.s} ;
+    AdvS a s = {s = a.s ++ s.s} ;
 
 }

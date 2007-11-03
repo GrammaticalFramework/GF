@@ -39,11 +39,16 @@ concrete SentenceGer of Sentence = CatGer ** open ResGer, Prelude in {
 
     SlashPrep cl prep = cl ** {c2 = prep} ;
 
+    SlashVS np vs slash = 
+        mkClause (np.s ! Nom) np.a 
+          (insertExtrapos (conjThat ++ slash.s ! Sub) (predV vs)) **
+        {c2 = slash.c2} ;
+
     EmbedS  s  = {s = conjThat ++ s.s ! Sub} ;
     EmbedQS qs = {s = qs.s ! QIndir} ;
     EmbedVP vp = {s = useInfVP False vp} ;
 
-    UseCl  t a p cl = {
+    UseCl t a p cl = {
       s = \\o => t.s ++ a.s ++ p.s ++ cl.s ! t.m ! t.t ! a.a ! p.p ! o
       } ;
     UseQCl t a p cl = {
@@ -53,7 +58,11 @@ concrete SentenceGer of Sentence = CatGer ** open ResGer, Prelude in {
       s = \\r => t.s ++ a.s ++ p.s ++ cl.s ! t.m ! t.t ! a.a ! p.p ! r ;
       c = cl.c
       } ;
+    UseSlash t a p cl = {
+      s = \\o => t.s ++ a.s ++ p.s ++ cl.s ! t.m ! t.t ! a.a ! p.p ! o ;
+      c2 = cl.c2
+      } ;
 
-    AdvS a s = {s = \\o => a.s ++ "," ++ s.s ! o} ;
+    AdvS a s = {s = \\o => a.s ++ s.s ! Inv} ;
 
 }

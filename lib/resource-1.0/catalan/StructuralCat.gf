@@ -27,7 +27,7 @@ lin
 --  can_VV = mkVV (verbV (poder_58 "poder")) ;
   during_Prep = mkPreposition "durant" ; ----
   either7or_DConj = {s1,s2 = "o" ; n = Sg} ;
-  everybody_NP = mkNP ["tothom"] Masc Sg ;
+  everybody_NP = makeNP ["tothom"] Masc Sg ;
   every_Det = {s = \\_,_ => "cada" ; n = Sg} ;
   everything_NP = pn2np (mkPN ["tot"] Masc) ;
   everywhere_Adv = ss ["a tot arreu"] ;
@@ -91,12 +91,12 @@ lin
       Pl => \\g,c => prepCase c ++ genForms "aquells" "aquelles" ! g
       }
     } ;
-  that_NP = mkNP ["alló"] Masc Sg ;
+  that_NP = makeNP ["alló"] Masc Sg ;
   there_Adv = mkAdv "allà" ;		-- allá
   there7to_Adv = mkAdv ["cap a allà"] ;
   there7from_Adv = mkAdv ["d'allà"] ;	
   therefore_PConj = ss ["per tant"] ;
-  these_NP = mkNP ["aquestes"] Fem Pl ;
+  these_NP = makeNP ["aquestes"] Fem Pl ;
   they_Pron = mkPronoun
     "elles" "les" "les" "elles"
     ["el seu"] ["la seva"] ["llurs"] ["llurs"]
@@ -108,7 +108,7 @@ lin
       }
     } ;
   this_NP = pn2np (mkPN ["això"] Masc) ;
-  those_NP = mkNP ["aquelles"] Fem Pl ;
+  those_NP = makeNP ["aquelles"] Fem Pl ;
   through_Prep = mkPreposition "mitjançant" ;
   too_AdA = ss "massa" ;
   to_Prep = complDat ;

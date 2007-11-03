@@ -9,6 +9,7 @@ concrete CatFin of Cat = CommonX ** open ResFin, Prelude in {
     S  = {s : Str} ;
     QS = {s : Str} ;
     RS = {s : Agr => Str ; c : NPForm} ;
+    SlashS = {s : Str ; c2 : Compl} ;
 
 -- Sentence
 

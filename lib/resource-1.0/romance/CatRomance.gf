@@ -11,6 +11,11 @@ incomplete concrete CatRomance of Cat =
     S  = {s : Mood => Str} ;
     QS = {s : QForm => Str} ;
     RS = {s : Mood => Agr => Str ; c : Case} ;
+    SlashS = {
+      s  : AAgr => Mood => Str ; 
+      c2 : Compl
+      } ;
+
 
 -- Sentence
 

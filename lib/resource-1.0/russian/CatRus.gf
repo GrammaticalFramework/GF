@@ -11,6 +11,7 @@ concrete CatRus of Cat = CommonX ** open ResRus, Prelude in {
    S  = {s : Str} ;
    QS = {s :                 QForm => Str} ;
    RS = {s :                   GenNum => Case => Animacy => Str} ;
+   SlashS = {s : Str; s2: Str ; c: Case} ;
 
 -- Sentence
    -- clause (variable tense) e.g. "John walks"/"John walked"

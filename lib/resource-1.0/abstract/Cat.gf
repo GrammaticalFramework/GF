@@ -32,6 +32,7 @@ abstract Cat = Common ** {
     RS ;    -- relative                            e.g. "in which she lived"
     Cl ;    -- declarative clause, with all tenses e.g. "she looks at this"
     Slash ; -- clause missing NP (S/NP in GPSG)    e.g. "she looks at"
+    SlashS ;-- sentence missing NP                 e.g. "she has looked at"
     Imp ;   -- imperative                          e.g. "look at this"
 
 --2 Questions and interrogatives
