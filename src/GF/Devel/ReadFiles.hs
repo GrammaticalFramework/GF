@@ -15,13 +15,13 @@
 --
 -- to find all files that have to be read, put them in dependency order, and
 -- decide which files need recompilation. Name @file.gf@ is returned for them,
--- and @file.gfc@ or @file.gfr@ otherwise.
+-- and @file.gfo@ otherwise.
 -----------------------------------------------------------------------------
 
 module GF.Devel.ReadFiles (-- * Heading 1
 		  getAllFiles,fixNewlines,ModName,getOptionsFromFile,
 		  -- * Heading 2
-		  gfcFile,gfFile,gfrFile,isGFC,resModName,isOldFile
+		  gfoFile,gfFile,isGFO,resModName,isOldFile
 		 ) where
 
 import GF.Devel.Arch (selectLater, modifiedFiles, ModTime, getModTime,laterModTime)
@@ -67,18 +67,18 @@ getAllFiles opts ps env file = do
     let ds4 = needCompile opts (map fst ds0) ds2
     return ds4
 
--- to decide whether to read gf or gfc, or if in env; returns full file path
+-- to decide whether to read gf or gfo, or if in env; returns full file path
 
 data CompStatus =
    CSComp -- compile: read gf
- | CSRead -- read gfc
- | CSEnv  -- gfc is in env
+ | CSRead -- read gfo
+ | CSEnv  -- gfo is in env
  | CSEnvR -- also gfr is in env
  | CSDont -- don't read at all
  | CSRes  -- read gfr
   deriving (Eq,Show)
 
--- for gfc, we also return ModTime to cope with earlier compilation of libs
+-- for gfo, we also return ModTime to cope with earlier compilation of libs
 
 selectFormat :: Options -> ModEnv -> (InitPath,ModName) -> 
                 IO (ModName,(InitPath,(CompStatus,Maybe ModTime)))
@@ -87,8 +87,8 @@ selectFormat opts env (p,f) = do
   let pf = prefixPathName p f
   let mtenv = lookup f env   -- Nothing if f is not in env
   let rtenv = lookup (resModName f) env
-  let fromComp = oElem isCompiled opts -- i -gfc
-  mtgfc <- getModTime $ gfcFile pf
+  let fromComp = oElem isCompiled opts -- i -gfo
+  mtgfc <- getModTime $ gfoFile pf
   mtgf  <- getModTime $ gfFile pf
   let stat = case (rtenv,mtenv,mtgfc,mtgf) of
         (_,Just tenv,_,_)        | fromComp -> (CSEnv, Just tenv)
@@ -131,7 +131,7 @@ needCompile opts headers sfiles0 = paths $ res $ mark $ iter changed where
   isAux = flip elem [MUReuse,MUInstance,MUComplete] . snd
   noComp = flip elem [CSRead,CSEnv,CSEnvR] . stat0 . fst
 
-  -- mark as to be compiled those whose gfc is earlier than a deeper gfc
+  -- mark as to be compiled those whose gfo is earlier than a deeper gfo
   sfiles1 = map compTimes sfiles
   compTimes fp@(f,(p,(_, Just t))) =
     if any (> t) [t' | Just fs <- [lookup f deps], 
@@ -156,8 +156,6 @@ needCompile opts headers sfiles0 = paths $ res $ mark $ iter changed where
                 let st = if (elem f cs) then CSComp else st0]
 
 
-  -- if a compilable file depends on a resource, read gfr instead of gfc/env
-  -- but don't read gfr if already in env (by CSEnvR)
   -- Also read res if the option "retain" is present
   -- Also, if a "with" file has to be compiled, read its mother file from source
 
@@ -182,17 +180,14 @@ needCompile opts headers sfiles0 = paths $ res $ mark $ iter changed where
   mkName f p st = mk $ prefixPathName p f where
     mk = case st of
       CSComp -> gfFile
-      CSRead -> gfcFile
-      CSRes  -> gfrFile
+      CSRead -> gfoFile
+      CSRes  -> gfoFile ---- gfr
 
-isGFC :: FilePath -> Bool
-isGFC = (== "gfc") . fileSuffix
+isGFO :: FilePath -> Bool
+isGFO = (== "gfo") . fileSuffix
 
-gfcFile :: FilePath -> FilePath
-gfcFile = suffixFile "gfc"
-
-gfrFile :: FilePath -> FilePath
-gfrFile = suffixFile "gfr"
+gfoFile :: FilePath -> FilePath
+gfoFile = suffixFile "gfo"
 
 gfFile :: FilePath -> FilePath
 gfFile  = suffixFile "gf"
@@ -222,10 +217,7 @@ getImports ps = get [] where
       let file_gf = gfFile name
       b <- doesFileExistPath ps file_gf                 -- try gf file first
       if b then return file_gf else do
-        let file_gfr = gfrFile name
-        bb <- doesFileExistPath ps file_gfr             -- gfr file next
-        if bb then return file_gfr else do
-          return (gfcFile name)                         -- gfc next
+          return (gfoFile name)                         -- gfo next
 
     readFileIfPath ps $ file
 

@@ -106,7 +106,7 @@ compileOne opts env@(_,srcgr) file = do
 
     -- for compiled gf, read the file and update environment
     -- also undo common subexp optimization, to enable normal computations
-    "gfc" -> do
+    "gfo" -> do
        sm0 <- putp ("+ reading" +++ file) $ getSourceModule opts file
        let sm1 = unsubexpModule sm0
        sm <- {- putp "creating indirections" $ -} ioeErr $ extendModule mos sm1
@@ -118,7 +118,7 @@ compileOne opts env@(_,srcgr) file = do
       let modu = unsuffixFile file
       b1 <- ioeIO $ doesFileExist file
       if not b1
-        then compileOne opts env $ gfcFile $ modu 
+        then compileOne opts env $ gfoFile $ modu 
         else do
 
        sm0 <- putpOpt ("- parsing" +++ file) ("- compiling" +++ file ++ "... ") $ 
@@ -175,7 +175,7 @@ generateModuleCode opts path minfo@(name,info) = do
   let minfo1 = (if isConcr info then optModule else id) minfo
   let minfo2 = minfo1
 
-  let (file,out) = (gfcFile pname, prGrammar (MGrammar [minfo2]))
+  let (file,out) = (gfoFile pname, prGrammar (MGrammar [minfo2]))
   putp ("  wrote file" +++ file) $ ioeIO $ writeFile file $ compactPrint out
 
   return minfo2
