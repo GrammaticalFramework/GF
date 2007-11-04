@@ -1,4 +1,4 @@
-module GF.Command.PPrTree (pTree, prExp) where
+module GF.Command.PPrTree (pTree, prExp, tree2exp) where
 
 import GF.GFCC.AbsGFCC
 import GF.GFCC.Macros
@@ -17,7 +17,7 @@ tree2exp t = case t of
   TAbs xs t -> DTr (map i2i xs ++ ys) f ts where DTr ys f ts = tree2exp t 
   TId c     -> tree (AC (i2i c)) [] 
   TInt i    -> tree (AI i) []
---  TStr s
+  TStr s    -> tree (AS s) []
 --  TFloat d -> 
  where
    i2i (Ident s) = CId s

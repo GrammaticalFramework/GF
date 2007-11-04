@@ -1,7 +1,7 @@
 module Main where
 
+import GF.Command.Interpreter
 import GF.GFCC.API
-import System.Random (newStdGen)
 import System (getArgs)
 import Data.Char (isDigit)
 
@@ -18,14 +18,15 @@ loop :: MultiGrammar -> IO ()
 loop grammar = do
   s <- getLine
   if s == "q" then return () else do
-    treat grammar s
+    interpretCommandLine grammar s
     loop grammar
 
 printHelp grammar = do
   putStrLn $ "languages:  " ++ unwords (languages grammar)
   putStrLn $ "categories: " ++ unwords (categories grammar)
-  putStrLn commands
+---  putStrLn commands
 
+{- obsolete
 
 commands = unlines [
   "Commands:",
@@ -64,4 +65,5 @@ treat mgr s = case words s of
     prlinonly t
   prlinonly t = mapM_ (lin t) $ langs
   read1 s = if all isDigit s then read s else 1
+-}
 
