@@ -1,6 +1,7 @@
-digraph {
+digraph categories {
 
 size = "11,11" ;
+node [href="#\N"];
 
 Text [style = "solid", shape = "ellipse"];
 Text -> Punct  [style = "solid"];

@@ -13,6 +13,7 @@ main = do
   writeFile synopsis "GF Resource Grammar Library: Synopsis"
   append "Aarne Ranta"
   space
+  append "%!postproc(html): '(SRC=\"categories.png\")'  '\\1 USEMAP=\"#categories\"'"
   include "synopsis-intro.txt"
   title "Categories"
   space
