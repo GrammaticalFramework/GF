@@ -234,7 +234,7 @@ incomplete resource Constructors = open Grammar in {
       mkCl : NP  -> VS -> S  ->       Cl ;  -- 5. John says that it is good
       mkCl : NP  -> VQ -> QS ->       Cl ;  -- 6. John wonders if it is good
       mkCl : NP  -> VA -> AP ->       Cl ;  -- 7. John becomes old
-      mkCl : NP  -> V2A ->NP -> AP -> Cl ;  -- 8. John paints it red
+      mkCl : NP  -> V2A -> NP -> AP -> Cl ; -- 8. John paints it red
       mkCl : NP  -> A  ->             Cl ;  -- 9. John is old
       mkCl : NP  -> A  -> NP ->       Cl ;  -- 10. John is older than her
       mkCl : NP  -> A2 -> NP ->       Cl ;  -- 11. John is married to her
