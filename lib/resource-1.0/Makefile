@@ -6,6 +6,12 @@ RTSS=+RTS -M1300M -K100M
 RTS=+RTS -M2000M -K200M
 RTSS=+RTS -M2000M -K200M
 
+GFNewC=gfc -s
+GFNew=$(GFNewC) -src
+GFNewMake=$(GFNew) --make
+GFNewPres=$(GFNew) -preproc=./mkPresent
+GFNewPresC=$(GFNewC) -preproc=./mkPresent
+
 GFCA=$(GF) -nocf
 GFCC=$(GF) -nocf -make
 GFC=$(GFCC) -src
@@ -149,6 +155,53 @@ gfdoc:
 	mv */Paradigms*.html doc/gfdoc
 	cp */Irreg???.gf doc/gfdoc
 	mv ../prelude/*.html doc/gfdoc
+
+gf3:
+#	$(GFNew) arabic/GrammarAra.gf
+#	$(GFNew) catalan/Catalan.gf
+	$(GFNew) danish/Danish.gf
+	$(GFNew) english/English.gf
+	$(GFNew) finnish/Finnish.gf
+	$(GFNew) french/French.gf
+	$(GFNew) german/German.gf
+	$(GFNew) italian/Italian.gf
+	$(GFNew) norwegian/Norwegian.gf
+	$(GFNew) russian/Russian.gf
+	$(GFNew) spanish/Spanish.gf
+	$(GFNew) swedish/Swedish.gf
+	$(GFNew) common/ConstructX.gf
+	cp -p */*.gfo ../alltenses
+	touch api/Constructors.gf
+	$(GFNewC) api/Syntax???.gf
+	cp -p api/Constructors*.gfo ../alltenses
+	cp -p api/Syntax*.gfo ../alltenses
+#	$(GFNewC) api/Try???.gf
+#	$(GFNewC) -path=alltenses:prelude:api:api/toplevel api/toplevel/OverLangEng.gf
+#	mv api/toplevel/Over*.gfc api/Try*.gf? ../alltenses
+
+gf3present:
+#	$(GFNewPres) arabic/GrammarAra.gf
+#	$(GFNewPres) catalan/Catalan.gf
+	$(GFNewPres) danish/Danish.gf
+	$(GFNewPres) english/English.gf
+	$(GFNewPres) finnish/Finnish.gf
+	$(GFNewPres) french/French.gf
+	$(GFNewPres) german/German.gf
+	$(GFNewPres) italian/Italian.gf
+	$(GFNewPres) norwegian/Norwegian.gf
+	$(GFNewPres) russian/Russian.gf
+	$(GFNewPres) spanish/Spanish.gf
+	$(GFNewPres) swedish/Swedish.gf
+	$(GFNewPres) common/ConstructX.gf
+	cp -p */*.gfo ../present
+	touch api/Constructors.gf
+	$(GFNewPresC) api/Syntax???.gf
+	cp -p api/Constructors*.gfo ../present
+	cp -p api/Syntax*.gfo ../present
+#	$(GFNewPresC) api/Try???.gf
+#	$(GFNewPresC) -path=present:prelude:api:api/toplevel api/toplevel/OverLangEng.gf
+#	mv api/toplevel/Over*.gfc api/Try*.gf? ../present
+
 
 clean:
 	-rm -f */*.gfc */*.gfr */*.gf~ ../*/*.gfc ../*/*.gfr ../*/*.gf~ ../*/langs.gfcm ../compiled.tgz
