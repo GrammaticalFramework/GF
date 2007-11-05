@@ -10,10 +10,14 @@ main = do
   let isLatex = case xx of
         "-tex":_ -> True
         _ -> False 
+  cs1 <- getCats commonAPI
+  cs2 <- getCats catAPI
+  let cs = sortCats (cs1 ++ cs2)
   writeFile synopsis "GF Resource Grammar Library: Synopsis"
   append "Aarne Ranta"
   space
   append "%!postproc(html): '(SRC=\"categories.png\")'  '\\1 USEMAP=\"#categories\"'"
+  delimit $ addToolTips cs
   include "synopsis-intro.txt"
   title "Categories"
   space
@@ -24,9 +28,6 @@ main = do
   append "==A hierarchic view==\n"
   include "categories-intro.txt"
   append "==Explanations==\n"
-  cs1 <- getCats commonAPI
-  cs2 <- getCats catAPI
-  let cs = sortCats (cs1 ++ cs2)
   delimit $ mkCatTable isLatex cs
   space
   title "Syntax Rules"
@@ -55,6 +56,10 @@ main = do
   system $ "txt2tags -t" ++ format ++ " --toc " ++ synopsis
   if isLatex then (system $ "pdflatex synopsis.tex") >> return () else return ()
 
+addToolTips :: Cats -> [String]
+addToolTips = map f
+  where f (n,e,_) = "%!postproc(html): '(?i)(HREF=\"#" ++ n ++ "\")( TITLE=\"[^\"]*\")?'  '\\1 TITLE=\"" ++ e' ++ "\"'"
+           where e' = n ++ if null e then "" else " - " ++ e
 
 getCats :: FilePath -> IO Cats
 getCats file = do
