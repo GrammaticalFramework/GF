@@ -95,7 +95,7 @@ abstract Cat = Common ** {
 -- Constructed in [Structural Structural.html].
 
     Conj ;  -- conjunction,                        e.g. "and"
-    DConj ; -- distributed conj.                   e.g. "both - and"
+    DConj ; -- distributed conjunction             e.g. "both - and"
     Subj ;  -- subjunction,                        e.g. "if"
     Prep ;  -- preposition, or just case           e.g. "in"
 
