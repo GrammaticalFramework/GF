@@ -61,7 +61,7 @@ compute mcfg lang args = comp where
 
   proj r p = case (r,p) of
     (_,     FV ts) -> FV $ lmap (proj r) ts
-    (FV ts, _    ) -> FV $ lmap (\t -> proj t r) ts
+    (FV ts, _    ) -> FV $ lmap (\t -> proj t p) ts
     (W s t, _)     -> kks (s ++ getString (proj t p))
     _              -> comp $ getField r (getIndex p)
 

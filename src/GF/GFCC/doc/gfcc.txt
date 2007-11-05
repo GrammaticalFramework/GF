@@ -363,6 +363,7 @@ compute gfcc lang args = comp where
 
   proj r p = case (r,p) of
     (_,     FV ts) -> FV $ Prelude.map (proj r) ts
+    (FV ts, _    ) -> FV $ Prelude.map (\t -> proj t p) ts
     (W s t, _)     -> kks (s ++ getString (proj t p))
     _              -> comp $ getField r (getIndex p)
 
