@@ -81,7 +81,7 @@ oper
     s = table {
       VPFinite t Simul => vf (vfin t)   (\_ -> []) ;
       VPFinite t Anter => vf (habet t)  vpart ;   --# notpresent
-      VPInfinit Anter _=> vf (\_ -> []) (\a -> habere ++ vpart a) ;  --# notpresent
+      VPInfinit Anter b=> vf (\_ -> []) (\a -> habere ++ vpart a) ;  --# notpresent
       VPImperat        => vf vimp       (\_ -> []) ;
       VPGerund         => vf (\_ -> []) (\_ -> vger) ;
       VPInfinit Simul b=> vf (\_ -> []) (\_ -> vinf b)
