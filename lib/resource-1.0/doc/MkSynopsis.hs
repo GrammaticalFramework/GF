@@ -119,10 +119,9 @@ inChunks i f = concat . intersperse ["\n\n"] . map f . chunks i where
 -- Makes one table per result category.
 -- Adds a subsection header for each table.
 mkSplitTables :: Bool -> Bool -> Cats -> Rules -> [String]
-mkSplitTables hasEx isLatex cs rs = concatMap t (sortRules rs)
-  where t xs = [subtitle c expl] ++ mkTable hasEx isLatex cs xs
-         where c = resultCat (head xs)
-               expl = case [e | (n,e,_) <- cs, n == c] of
+mkSplitTables hasEx isLatex cs = concatMap t . addLexicalCats cs . sortRules
+  where t (c, xs) = [subtitle c expl] ++ mkTable hasEx isLatex cs xs
+         where expl = case [e | (n,e,_) <- cs, n == c] of
                         []  -> ""
                         e:_ -> e
 
@@ -190,6 +189,11 @@ sortRules = groupBy sameCat . sortBy compareRules
   where sameCat r1 r2 = resultCat r1 == resultCat r2
         compareRules r1@(n1,_,_) r2@(n2,_,_) 
             = compare (resultCat r1,n1) (resultCat r2,n2)
+
+addLexicalCats :: Cats -> [Rules] -> [(String,Rules)]
+addLexicalCats cs rss = 
+    sortBy (\x y -> compare (fst x) (fst y)) $
+           [ (resultCat r, rs) | rs@(r:_) <- rss] ++ [(n,[]) | (n,_,_) <- cs]
 
 resultCat :: (String,String,String) -> String
 resultCat (_,t,_) = last (words t)
