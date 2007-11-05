@@ -30,7 +30,7 @@ main = do
   link "Source:" syntaxAPI
   space
   rs <- getRules syntaxAPI
-  delimit $ mkSplitTables True isLatex rs
+  delimit $ mkSplitTables True isLatex cs rs
   space
   title "Structural Words"
   space
@@ -114,9 +114,13 @@ inChunks i f = concat . intersperse ["\n\n"] . map f . chunks i where
 
 -- Makes one table per result category.
 -- Adds a subsection header for each table.
-mkSplitTables :: Bool -> Bool -> [(String,String,String)] -> [String]
-mkSplitTables hasEx isLatex rs = concatMap t (sortRules rs)
-  where t xs = subtitle (resultCat (head xs)) : mkTable hasEx isLatex xs
+mkSplitTables :: Bool -> Bool -> [(String,String,String)] -> [(String,String,String)] -> [String]
+mkSplitTables hasEx isLatex cs rs = concatMap t (sortRules rs)
+  where t xs = [subtitle c] ++ expl ++ mkTable hasEx isLatex xs
+         where c = resultCat (head xs)
+               expl = case [e | (n,e,_) <- cs, n == c] of
+                        []  -> []
+                        e:_ -> ["", e, ""]
 
 mkTable :: Bool -> Bool -> [(String,String,String)] -> [String]
 mkTable hasEx isLatex = inChunks chsize (\rs -> header : map (unwords . row) rs)
