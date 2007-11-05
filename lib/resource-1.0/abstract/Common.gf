@@ -26,7 +26,7 @@ abstract Common = {
     Phr ;   -- phrase in a text                    e.g. "but be quiet please"
     Utt ;   -- sentence, question, word...         e.g. "be quiet"
     Voc ;   -- vocative or "please"                e.g. "my darling"
-    PConj ; -- phrase-beginning conj.              e.g. "therefore"
+    PConj ; -- phrase-beginning conjunction        e.g. "therefore"
 
 -- Constructed in [``Sentence`` Sentence.html]:
 
@@ -37,10 +37,10 @@ abstract Common = {
 -- Constructed in [``Adverb`` Adverb.html].  
 -- Many adverbs are constructed in [``Structural`` Structural.html].
 
-    Adv ;   -- verb-phrase-modifying adverb,       e.g. "in the house"
+    Adv ;   -- verb-phrase-modifying adverb        e.g. "in the house"
     AdV ;   -- adverb directly attached to verb    e.g. "always"
-    AdA ;   -- adjective-modifying adverb,         e.g. "very"
-    AdN ;   -- numeral-modifying adverb,           e.g. "more than"
+    AdA ;   -- adjective-modifying adverb          e.g. "very"
+    AdN ;   -- numeral-modifying adverb            e.g. "more than"
     IAdv ;  -- interrogative adverb                e.g. "why"
     CAdv ;  -- comparative adverb                  e.g. "more"
 
