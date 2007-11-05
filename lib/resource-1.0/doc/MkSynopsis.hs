@@ -2,6 +2,9 @@ import System
 import Char
 import List
 
+type Cats = [(String,String,String)]
+type Rules = [(String,String,String)]
+
 main = do
   xx <- getArgs
   let isLatex = case xx of
@@ -36,10 +39,10 @@ main = do
   space
   link "Source:" structuralAPI
   space
-  rs <- rulesTable False isLatex structuralAPI
+  rs <- rulesTable False isLatex cs structuralAPI
   delimit rs
   space
-  mapM_ (putParadigms isLatex) paradigmFiles
+  mapM_ (putParadigms isLatex cs) paradigmFiles
   space
   include "synopsis-browse.txt"
   space
@@ -52,7 +55,7 @@ main = do
   if isLatex then (system $ "pdflatex synopsis.tex") >> return () else return ()
 
 
-getCats :: FilePath -> IO [(String, String, String)]
+getCats :: FilePath -> IO Cats
 getCats file = do
   ss <- readFile file >>= return . lines
   return $ getrs [] ss
@@ -66,13 +69,13 @@ getCats file = do
          (expl,ex) = span (/="e.g.") exp
        _ -> getrs rs ss2
 
-rulesTable :: Bool -> Bool -> FilePath -> IO [String]
-rulesTable hasEx isLatex file = do
+rulesTable :: Bool -> Bool -> Cats -> FilePath -> IO [String]
+rulesTable hasEx isLatex cs file = do
   rs <- getRules file
-  return $ mkTable hasEx isLatex rs
+  return $ mkTable hasEx isLatex cs rs
 
 
-getRules :: FilePath -> IO [(String,String,String)]
+getRules :: FilePath -> IO Rules
 getRules file = do
   ss <- readFile file >>= return . lines
   return $ getrs [] ss
@@ -97,12 +100,13 @@ getRules file = do
            n:ws | last n == '.' && not (null (init n)) && all isDigit (init n) -> ws
            _ -> e
 
-putParadigms isLatex (lang,file) = do
+putParadigms :: Bool -> Cats -> (String, FilePath) -> IO ()
+putParadigms isLatex cs (lang,file) = do
   title ("Paradigms for " ++ lang)
   space
   link "source" file
   space
-  rs <- rulesTable False isLatex file
+  rs <- rulesTable False isLatex cs file
   space
   delimit rs
   space
@@ -114,16 +118,16 @@ inChunks i f = concat . intersperse ["\n\n"] . map f . chunks i where
 
 -- Makes one table per result category.
 -- Adds a subsection header for each table.
-mkSplitTables :: Bool -> Bool -> [(String,String,String)] -> [(String,String,String)] -> [String]
+mkSplitTables :: Bool -> Bool -> Cats -> Rules -> [String]
 mkSplitTables hasEx isLatex cs rs = concatMap t (sortRules rs)
-  where t xs = [subtitle c] ++ expl ++ mkTable hasEx isLatex xs
+  where t xs = [subtitle c expl] ++ mkTable hasEx isLatex cs xs
          where c = resultCat (head xs)
                expl = case [e | (n,e,_) <- cs, n == c] of
-                        []  -> []
-                        e:_ -> ["", e, ""]
+                        []  -> ""
+                        e:_ -> e
 
-mkTable :: Bool -> Bool -> [(String,String,String)] -> [String]
-mkTable hasEx isLatex = inChunks chsize (\rs -> header : map (unwords . row) rs)
+mkTable :: Bool -> Bool -> Cats -> Rules -> [String]
+mkTable hasEx isLatex cs = inChunks chsize (\rs -> header : map (unwords . row) rs)
  where
   chsize = if isLatex then 40 else 1000
   header = if hasEx then "|| Function  | Type  | Example  ||" 
@@ -133,15 +137,15 @@ mkTable hasEx isLatex = inChunks chsize (\rs -> header : map (unwords . row) rs)
                     else ["|", name', "|", typ', "|"]
    where 
      name' = ttf name
-     typ' = showTyp typ
+     typ' = showTyp cs typ
      ex' = if null ex then "-" else itf ex
 
-mkCatTable :: Bool -> [(String, String, String)] -> [String]
-mkCatTable isLatex = inChunks chsize (\rs -> header ++ map mk1 rs)
+mkCatTable :: Bool -> Cats -> [String]
+mkCatTable isLatex cs = inChunks chsize (\rs -> header ++ map mk1 rs) cs
  where
   header = ["|| Category  | Explanation  | Example  ||"]
   chsize = if isLatex then 40 else 1000
-  mk1 (name,expl,ex) = unwords ["|", showCat name, "|", expl, "|", typo ex, "|"]
+  mk1 (name,expl,ex) = unwords ["|", showCat cs name, "|", expl, "|", typo ex, "|"]
   typo ex = if take 1 ex == "\"" then itf (init (tail ex)) else ex
 
 synopsis = "synopsis.txt"
@@ -176,12 +180,12 @@ itf s = "//" ++ s ++ "//"
 -----------------
 
 -- sort category synopsis by category, retain one table
-sortCats :: [(String,String,String)] -> [(String,String,String)]
+sortCats :: Cats -> Cats
 sortCats = sortBy compareCat
   where compareCat (n1,_,_) (n2,_,_) = compare n1 n2
 
 -- sort function synopsis by category, into separate tables
-sortRules :: [(String,String,String)] -> [[(String,String,String)]]
+sortRules :: Rules -> [Rules]
 sortRules = groupBy sameCat . sortBy compareRules
   where sameCat r1 r2 = resultCat r1 == resultCat r2
         compareRules r1@(n1,_,_) r2@(n2,_,_) 
@@ -191,14 +195,17 @@ resultCat :: (String,String,String) -> String
 resultCat (_,t,_) = last (words t)
 
 
-subtitle cat = "==" ++ cat ++ "==" ++ "[" ++ cat ++ "]"
+subtitle cat expl = "==" ++ cat ++ e ++ "==" ++ "[" ++ cat ++ "]"
+  where e = if null expl then "" else " - " ++ expl
 
-showCat cat = "[" ++ cat ++ " #" ++ cat ++ "]"
+showCat :: Cats -> String -> String
+showCat cs cat = "[" ++ cat ++ " #" ++ cat ++ "]"
 
-showTyp = unwords . map f . words
+showTyp :: Cats -> String -> String
+showTyp cs = unwords . map f . words
   where f s | head s == '(' && last s == ')' && isCat c
-                = "(" ++ showCat c ++ ")"
-            | isCat s = showCat s
+                = "(" ++ showCat cs c ++ ")"
+            | isCat s = showCat cs s
             | otherwise = ttf s
          where c = init (tail s)
         isCat cat = cat `notElem` ["Str","Int"]
