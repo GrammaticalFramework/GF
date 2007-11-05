@@ -17,26 +17,26 @@ main = do
   space
   link "Source 2:" catAPI
   space
-  cs1 <- getCats isLatex True  commonAPI
-  cs2 <- getCats isLatex False catAPI
-  let cs = cs1 ++ cs2
   append "==A hierarchic view==\n"
   include "categories-intro.txt"
   append "==Explanations==\n"
-  delimit $ reCat cs
+  cs1 <- getCats commonAPI
+  cs2 <- getCats catAPI
+  let cs = sortCats (cs1 ++ cs2)
+  delimit $ mkCatTable isLatex cs
   space
   title "Syntax Rules"
   space
   link "Source:" syntaxAPI
   space
-  rs <- getRules True isLatex syntaxAPI
-  delimit $ reTable rs
+  rs <- getRules syntaxAPI
+  delimit $ mkSplitTables True isLatex rs
   space
   title "Structural Words"
   space
   link "Source:" structuralAPI
   space
-  rs <- getRules False isLatex structuralAPI
+  rs <- rulesTable False isLatex structuralAPI
   delimit rs
   space
   mapM_ (putParadigms isLatex) paradigmFiles
@@ -51,11 +51,12 @@ main = do
   system $ "txt2tags -t" ++ format ++ " --toc " ++ synopsis
   if isLatex then (system $ "pdflatex synopsis.tex") >> return () else return ()
 
-getCats isLatex isBeg file = do
+
+getCats :: FilePath -> IO [(String, String, String)]
+getCats file = do
   ss <- readFile file >>= return . lines
-  return $ inChunks chsize (mkCatTable (isLatex || isBeg)) $ getrs [] ss
+  return $ getrs [] ss
  where
-   chsize = if isLatex then 40 else 1000
    getrs rs ss = case ss of
      ('-':'-':'.':_):_ -> reverse rs
      [] -> reverse rs
@@ -65,29 +66,43 @@ getCats isLatex isBeg file = do
          (expl,ex) = span (/="e.g.") exp
        _ -> getrs rs ss2
 
-getRules hasEx isLatex file = do
+rulesTable :: Bool -> Bool -> FilePath -> IO [String]
+rulesTable hasEx isLatex file = do
+  rs <- getRules file
+  return $ mkTable hasEx isLatex rs
+
+
+getRules :: FilePath -> IO [(String,String,String)]
+getRules file = do
   ss <- readFile file >>= return . lines
-  return $ inChunks chsize (mkTable hasEx) $ getrs [] ss
+  return $ getrs [] ss
  where
-   chsize = if isLatex then 40 else 1000
    getrs rs ss = case ss of
      ('-':'-':'.':_):_ -> reverse rs
      [] -> reverse rs
      ('-':'-':_):ss2 -> getrs rs ss2
      s:ss2 -> case words s of
        _:_:"overload":_ -> getrs rs ss2
-       _:":":_ -> getrs (layout s:rs) ss2
+       _:":":_ -> getrs (rule s:rs) ss2
        _ -> getrs rs ss2
-   layout s = "  " ++ dropWhile isSpace s
-
-getParads = getRules False
+   rule s = (name, typ, ex)
+       where 
+         ws = words s
+         name = head ws
+         (t,e) = span (/="--") (tail ws)
+         typ = unwords $ filtype (drop 1 t)
+         filtype = filter (/=";")
+         ex = if null e then "" else unwords $ unnumber $ drop 1 e
+         unnumber e = case e of
+           n:ws | last n == '.' && not (null (init n)) && all isDigit (init n) -> ws
+           _ -> e
 
 putParadigms isLatex (lang,file) = do
   title ("Paradigms for " ++ lang)
   space
   link "source" file
   space
-  rs <- getParads isLatex file
+  rs <- rulesTable False isLatex file
   space
   delimit rs
   space
@@ -97,37 +112,32 @@ inChunks i f = concat . intersperse ["\n\n"] . map f . chunks i where
   chunks _ [] = []
   chunks i xs = x : chunks i y where (x,y) = splitAt i xs
 
-mkTable hasEx rs = header : map (unwords . row . words) rs where
+-- Makes one table per result category.
+-- Adds a subsection header for each table.
+mkSplitTables :: Bool -> Bool -> [(String,String,String)] -> [String]
+mkSplitTables hasEx isLatex rs = concatMap t (sortRules rs)
+  where t xs = subtitle (resultCat (head xs)) : mkTable hasEx isLatex xs
+
+mkTable :: Bool -> Bool -> [(String,String,String)] -> [String]
+mkTable hasEx isLatex = inChunks chsize (\rs -> header : map (unwords . row) rs)
+ where
+  chsize = if isLatex then 40 else 1000
   header = if hasEx then "|| Function  | Type  | Example  ||" 
                     else "|| Function  | Type  ||"
-  row ws = if hasEx then ["|", name, "|", typ, "|", ex, "|"]
-                    else ["|", name, "|", typ, "|"] where
-    name = ttf (head ws)
-    (t,e) = span (/="--") (tail ws)
-    typ = ttf (unwords $ filtype (drop 1 t)) 
-    ex = if null e then "-" else itf (unwords $ unnumber $ drop 1 e)
-    unnumber e = case e of
-      n:ws | last n == '.' && not (null (init n)) && all isDigit (init n) -> ws
-      _ -> e
-    filtype = filter (/=";")
+  row (name,typ,ex) 
+         = if hasEx then ["|", name', "|", typ', "|", ex', "|"]
+                    else ["|", name', "|", typ', "|"]
+   where 
+     name' = ttf name
+     typ' = showTyp typ
+     ex' = if null ex then "-" else itf ex
 
-mkParTable rs = header : map (unwords . row . words) rs where
-  header = "|| Paradigm  | Type  ||"
-  row ws = ["|", name, "|", typ, "|"] where
-    name = ttf (head ws)
-    (t,e) = span (/="--") (tail ws)
-    typ = ttf (unwords $ filtype (drop 1 t)) 
-    ex = if null e then "-" else itf (unwords $ unnumber $ drop 1 e)
-    unnumber e = case e of
-      n:ws | last n == '.' && not (null (init n)) && all isDigit (init n) -> ws
-      _ -> e
-    filtype = filter (/=";")
-
-mkCatTable isBeg rs = 
-  (if isBeg then ("|| Category  | Explanation  | Example  ||" :) else id) 
-    (map mk1 rs) 
+mkCatTable :: Bool -> [(String, String, String)] -> [String]
+mkCatTable isLatex = inChunks chsize (\rs -> header ++ map mk1 rs)
  where
-  mk1 (name,typ,ex) = unwords ["|", showCat name, "|", typ, "|", typo ex, "|"]
+  header = ["|| Category  | Explanation  | Example  ||"]
+  chsize = if isLatex then 40 else 1000
+  mk1 (name,expl,ex) = unwords ["|", showCat name, "|", expl, "|", typo ex, "|"]
   typo ex = if take 1 ex == "\"" then itf (init (tail ex)) else ex
 
 synopsis = "synopsis.txt"
@@ -162,41 +172,31 @@ itf s = "//" ++ s ++ "//"
 -----------------
 
 -- sort category synopsis by category, retain one table
-
-reCat t = let (hd,tb) = splitHeader t in hd : sortCat tb
-
-sortCat = sortBy (\r s -> compare (cat r) (cat s)) where
-  cat r = unquote $ words r !! 1
-
-unquote = takeWhile (/='`') . dropWhile (=='`')
+sortCats :: [(String,String,String)] -> [(String,String,String)]
+sortCats = sortBy compareCat
+  where compareCat (n1,_,_) (n2,_,_) = compare n1 n2
 
 -- sort function synopsis by category, into separate tables
+sortRules :: [(String,String,String)] -> [[(String,String,String)]]
+sortRules = groupBy sameCat . sortBy compareRules
+  where sameCat r1 r2 = resultCat r1 == resultCat r2
+        compareRules r1@(n1,_,_) r2@(n2,_,_) 
+            = compare (resultCat r1,n1) (resultCat r2,n2)
 
--- table:
--- || Function  | Type  | Example  ||
--- | ``mkText`` | ``Phr -> Text`` | //But John walks.// |
+resultCat :: (String,String,String) -> String
+resultCat (_,t,_) = last (words t)
 
-reTable t = let (hd,tb) = splitHeader t in sortTable hd tb
-
-splitHeader (hd:tb) = (hd,tb)
-
-sortTable hd = map (printBack hd) . sortVal . groupVal
-
-groupVal = groupBy sameVal where
-  sameVal r1 r2 = valRow r1 == valRow r2
-
--- row: | ``mkText`` | ``Phr -> Text`` | //But John walks.// |
-valRow r = case words r of
-  "|":_:"|":rest -> val where
-    typ = takeWhile (/="|") rest
-    val = unquote $ last typ
-  _ -> error "no row value for: " ++ r
-
-sortVal = sortBy (\t u -> compare (hd t) (hd u)) where
-  hd = (valRow . head)
-
-printBack hd tb = unlines $ subtitle (valRow (head tb)) : "\n" : [hd] ++ tb
 
 subtitle cat = "==" ++ cat ++ "==" ++ "[" ++ cat ++ "]"
 
 showCat cat = "[" ++ cat ++ " #" ++ cat ++ "]"
+
+showTyp = unwords . map f . words
+  where f s | head s == '(' && last s == ')' && isCat c
+                = "(" ++ showCat c ++ ")"
+            | isCat s = showCat s
+            | otherwise = ttf s
+         where c = init (tail s)
+        isCat cat = cat `notElem` ["Str","Int"]
+                    && all (\c -> isAlphaNum c || c == '\'') cat
+                    && isUpper (head cat)
