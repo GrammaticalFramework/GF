@@ -21,7 +21,7 @@ data Abstr = Abstr {
   aflags  :: Map CId String,     -- value of a flag
   funs    :: Map CId (Type,Exp), -- type and def of a fun
   cats    :: Map CId [Hypo],     -- context of a cat
-  catfuns :: Map CId [CId]       -- funs yielding a cat (redundant, for fast lookup)
+  catfuns :: Map CId [CId]       -- funs to a cat (redundant, for fast lookup)
   }
 
 data Concr = Concr {
@@ -91,6 +91,17 @@ printGFCC gfcc0 = compactPrintGFCC $ printTree $ Grm
      [Lin f v | (f,v) <- assocs (lindefs cnc)]
      [Lin f v | (f,v) <- assocs (printnames cnc)]
    gfcc = utf8GFCC gfcc0
+
+
+-- merge two GFCCs; fails is differens absnames; priority to second arg
+
+unionGFCC :: GFCC -> GFCC -> GFCC
+unionGFCC one two = 
+  if absname one == absname two
+    then one {
+      concretes = Data.Map.union (concretes two) (concretes one),
+      cncnames  = Data.List.union (cncnames two) (cncnames one)}
+    else one
 
 -- default map and filter are for Map here
 lmap = Prelude.map

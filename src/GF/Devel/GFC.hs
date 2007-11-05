@@ -6,6 +6,7 @@ import GF.Devel.GFCCtoJS
 import GF.GFCC.OptimizeGFCC
 import GF.GFCC.CheckGFCC
 import GF.GFCC.DataGFCC
+import GF.GFCC.ParGFCC
 import GF.Devel.UseIO
 import GF.Infra.Option
 
@@ -31,6 +32,14 @@ main = do
           writeFile js (gfcc2js gc)
           putStrLn $ "wrote file " ++ js
         else return ()
+
+    -- gfc -o target.gfcc source_1.gfcc ... source_n.gfcc
+    _ | all ((=="gfcc") . fileSuffix) fs && oElem (iOpt "o") opts -> do
+      let target:sources = fs
+      gfccs <- mapM file2gfcc sources
+      let gfcc = foldl1 unionGFCC gfccs
+      writeFile target (printGFCC gfcc)
+      
     _ -> do
       mapM_ (batchCompile opts) (map return fs)
       putStrLn "Done."
@@ -40,3 +49,5 @@ check gfcc = do
   putStrLn $ if b then "OK" else "Corrupted GFCC"
   return gc
 
+file2gfcc f =
+  readFileIf f >>= err (error) (return . mkGFCC) . pGrammar . myLexer
