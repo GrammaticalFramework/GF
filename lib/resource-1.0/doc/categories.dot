@@ -32,7 +32,7 @@ S -> Cl [style = "solid"];
 S -> ListS [style = "solid"];
 S -> Conjs [style = "solid"];
 
-Conjs [label = "Conj,DConj", style = "solid", shape = "ellipse"];
+Conjs [label = "Conj,DConj", href="#Conj", style = "solid", shape = "ellipse"];
 
 Tense [style = "solid", shape = "ellipse"];
 Ant [style = "solid", shape = "ellipse"];
@@ -67,7 +67,7 @@ Det -> Num [style = "solid"];
 Det -> Ord [style = "solid"];
 
 
-Quants [label = "QuantSg,QuantPl", style = "solid", shape = "ellipse"];
+Quants [label = "QuantSg,QuantPl", href="#QuantSg", style = "solid", shape = "ellipse"];
 Quants -> Quant [style = "solid"];
 
 Quant [style = "solid", shape = "ellipse"];
@@ -81,7 +81,7 @@ AdN [style = "solid", shape = "ellipse"];
 AdN -> CAdv [style = "solid"];
 
 
-Numerals [label = "Numeral,Int", style = "solid", shape = "ellipse"];
+Numerals [label = "Numeral,Int", href="#Numeral", style = "solid", shape = "ellipse"];
 
 
 Ord [style = "solid", shape = "ellipse"];
@@ -90,7 +90,7 @@ CN [style = "solid", shape = "ellipse"];
 CN -> Ns [style = "solid"];
 CN -> RS [style = "solid"];
 
-Ns [label = "N,N2,N3", style = "solid", shape = "rectangle"];
+Ns [label = "N,N2,N3", href="#N", style = "solid", shape = "rectangle"];
 
 
 VP [style = "solid", shape = "ellipse"];
@@ -100,14 +100,14 @@ VP -> AP [style = "solid"];
 
 AdV [style = "solid", shape = "ellipse"];
 
-Vs [label = "V,V2,V3,VV,VS,VQ,VA,V2A", style = "solid", shape = "rectangle"];
+Vs [label = "V,V2,V3,VV,VS,VQ,VA,V2A", href="#V", style = "solid", shape = "rectangle"];
 
 AP [style = "solid", shape = "ellipse"];
 AP -> AdA [style = "solid"];
 AP -> As [style = "solid"];
 AP -> ListAP [style = "solid"];
 
-As [label = "A, A2", style = "solid", shape = "rectangle"];
+As [label = "A, A2", href="#A", style = "solid", shape = "rectangle"];
 
 
 
