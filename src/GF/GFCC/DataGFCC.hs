@@ -96,12 +96,22 @@ printGFCC gfcc0 = compactPrintGFCC $ printTree $ Grm
 -- merge two GFCCs; fails is differens absnames; priority to second arg
 
 unionGFCC :: GFCC -> GFCC -> GFCC
-unionGFCC one two = 
-  if absname one == absname two
-    then one {
+unionGFCC one two = case absname one of
+  CId "" -> two                  -- extending empty grammar
+  n | n == absname two -> one {  -- extending grammar with same abstract
       concretes = Data.Map.union (concretes two) (concretes one),
-      cncnames  = Data.List.union (cncnames two) (cncnames one)}
-    else one
+      cncnames  = Data.List.union (cncnames two) (cncnames one)
+    }
+  _ -> one   -- abstracts don't match ---- print error msg
+
+emptyGFCC :: GFCC
+emptyGFCC = GFCC {
+  absname   = CId "",
+  cncnames  = [] ,
+  abstract  = error "empty grammar, no abstract",
+  concretes = empty
+  }
+
 
 -- default map and filter are for Map here
 lmap = Prelude.map
