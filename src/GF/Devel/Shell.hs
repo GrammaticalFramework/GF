@@ -1,6 +1,7 @@
 module Main where
 
 import GF.Command.Interpreter
+import GF.Command.Commands
 import GF.GFCC.API
 import System (getArgs)
 import Data.Char (isDigit)
@@ -11,15 +12,16 @@ main :: IO ()
 main = do
   file:_  <- getArgs
   grammar <- file2grammar file
+  let env = CommandEnv grammar (allCommands grammar)
   printHelp grammar
-  loop grammar
+  loop env
 
-loop :: MultiGrammar -> IO ()
-loop grammar = do
+loop :: CommandEnv -> IO ()
+loop env = do
   s <- getLine
   if s == "q" then return () else do
-    interpretCommandLine grammar s
-    loop grammar
+    interpretCommandLine env s
+    loop env
 
 printHelp grammar = do
   putStrLn $ "languages:  " ++ unwords (languages grammar)
