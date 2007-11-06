@@ -94,9 +94,9 @@ abstract Cat = Common ** {
 
 -- Constructed in [Structural Structural.html].
 
-    Conj ;  -- conjunction,                        e.g. "and"
+    Conj ;  -- conjunction                         e.g. "and"
     DConj ; -- distributed conjunction             e.g. "both - and"
-    Subj ;  -- subjunction,                        e.g. "if"
+    Subj ;  -- subjunction                         e.g. "if"
     Prep ;  -- preposition, or just case           e.g. "in"
 
 --2 Words of open classes
