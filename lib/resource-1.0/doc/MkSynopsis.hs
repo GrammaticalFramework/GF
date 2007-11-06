@@ -198,8 +198,9 @@ sortRules = groupBy sameCat . sortBy compareRules
 
 addLexicalCats :: Cats -> [Rules] -> [(String,Rules)]
 addLexicalCats cs rss = 
-    sortBy (\x y -> compare (fst x) (fst y)) $
+    map head $ groupBy fstEq $ sortBy (\x y -> compare (fst x) (fst y)) $
            [ (resultCat r, rs) | rs@(r:_) <- rss] ++ [(n,[]) | (n,_,_) <- cs]
+  where fstEq p1 p2 = fst p1 == fst p2
 
 resultCat :: (String,String,String) -> String
 resultCat (_,t,_) = last (words t)
