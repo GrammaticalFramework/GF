@@ -203,6 +203,11 @@ gfcc:
 	strip gfcc
 	mv gfcc ../bin/
 
+gf3:
+	$(GHMAKE) $(GHCOPTFLAGS) -o gf3 GF/Devel/GF3.hs
+	strip gf3
+	mv gf3 ../bin/
+
 gfcc2c:
 	$(MAKE) -C tools/c
 	$(MAKE) -C ../lib/c

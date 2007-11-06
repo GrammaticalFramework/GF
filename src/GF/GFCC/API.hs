@@ -76,9 +76,10 @@ startCat   :: MultiGrammar -> Category
 
 file2grammar f = do
   gfcc <- file2gfcc f
-  let fcfgs = convertGrammar gfcc
-  return (MultiGrammar gfcc 
-            [(lang, buildFCFPInfo fcfg) | (CId lang,fcfg) <- fcfgs])
+  return (MultiGrammar gfcc (gfcc2parsers gfcc))
+
+gfcc2parsers gfcc =
+  [(lang, buildFCFPInfo fcfg) | (CId lang,fcfg) <- convertGrammar gfcc]
 
 file2gfcc f =
   readFileIf f >>= err (error) (return . mkGFCC) . pGrammar . myLexer
@@ -116,6 +117,8 @@ languages mgr = [l | CId l <- cncnames (gfcc mgr)]
 categories mgr = [c | CId c <- Map.keys (cats (abstract (gfcc mgr)))]
 
 startCat mgr = "S" ----
+
+emptyMultiGrammar = MultiGrammar emptyGFCC []
 
 ------------ for internal use only
 
