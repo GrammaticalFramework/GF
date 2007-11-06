@@ -112,6 +112,11 @@ readTree _ = pTree
 
 showTree = prExp
 
+prIdent :: CId -> String
+prIdent (CId s) = s
+
+abstractName mgr = prIdent (absname (gfcc mgr))
+
 languages mgr = [l | CId l <- cncnames (gfcc mgr)]
 
 categories mgr = [c | CId c <- Map.keys (cats (abstract (gfcc mgr)))]

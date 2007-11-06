@@ -23,6 +23,7 @@ import System.Directory
 import System.IO
 import System.IO.Error
 import System.Environment
+import System.CPUTime
 import Control.Monad
 
 putShow' :: Show a => (c -> a) -> c -> IO ()
