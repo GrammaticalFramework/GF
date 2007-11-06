@@ -26,10 +26,16 @@ loop gfenv0 = do
   s <- getLine
   let gfenv = gfenv0 {history = s : history gfenv0}
   case words s of
-    "q":_ -> return gfenv
+
+  -- special commands, working on GFEnv
     "i":args -> do
       env1 <- importInEnv (multigrammar env) args
       loopNewCPU $ gfenv {commandenv = env1}
+    "e":_ -> loopNewCPU $ gfenv {commandenv=env{multigrammar=emptyMultiGrammar}}
+    "ph":_ -> mapM_ putStrLn (reverse (history gfenv0)) >> loopNewCPU gfenv
+    "q":_  -> putStrLn "See you." >> return gfenv
+
+  -- ordinary commands, working on CommandEnv
     _ -> do
       interpretCommandLine env s
       loopNewCPU gfenv
@@ -48,8 +54,20 @@ importInEnv mgr0 xx = do
   return env
 
 welcome = unlines [
-  "This is GF version 3.0 alpha.",
-  "Some things may work."
+  "                              ",
+  "         *  *  *              ",
+  "      *           *           ",
+  "    *               *         ",
+  "   *                          ",
+  "   *                          ",
+  "   *        * * * * * *       ",
+  "   *        *         *       ",
+  "    *       * * * *  *        ",
+  "      *     *      *          ",
+  "         *  *  *              ",
+  "                              ",
+  "This is GF version 3.0 alpha. ",
+  "Some things may work.         "
   ]
 
 prompt env = abstractName (multigrammar env) ++ "> "
