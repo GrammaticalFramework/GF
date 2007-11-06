@@ -1,4 +1,5 @@
 module GF.Command.Interpreter (
+  CommandEnv (..),
   interpretCommandLine
   ) where
 
@@ -14,8 +15,13 @@ import GF.Command.ErrM ----
 
 import qualified Data.Map as Map
 
-interpretCommandLine :: MultiGrammar -> String -> IO ()
-interpretCommandLine gr line = case (pCommandLine (myLexer line)) of
+data CommandEnv = CommandEnv {
+  multigrammar :: MultiGrammar,
+  commands     :: Map.Map String CommandInfo
+  }
+
+interpretCommandLine :: CommandEnv -> String -> IO ()
+interpretCommandLine env line = case (pCommandLine (myLexer line)) of
   Ok CEmpty -> return ()
   Ok (CLine pipes) -> mapM_ interPipe pipes
   _ -> putStrLn "command not parsed"
@@ -27,14 +33,14 @@ interpretCommandLine gr line = case (pCommandLine (myLexer line)) of
    intercs (trees,_) (c:cs) = do
      treess2 <- interc trees c
      intercs treess2 cs
-   interc = interpret gr
+   interc = interpret env
 
 -- return the trees to be sent in pipe, and the output possibly printed
-interpret :: MultiGrammar -> [Tree] -> Command -> IO CommandOutput
-interpret mgr trees0 comm = case lookCommand co commands of
+interpret :: CommandEnv -> [Tree] -> Command -> IO CommandOutput
+interpret env trees0 comm = case lookCommand co comms of
   Just info -> do
     checkOpts info
-    tss@(_,s) <- exec info trees
+    tss@(_,s) <- exec info opts trees
     optTrace s
     return tss
   _ -> do
@@ -43,7 +49,7 @@ interpret mgr trees0 comm = case lookCommand co commands of
  where
    optTrace = if isOpt "tr" opts then putStrLn else const (return ()) 
    (co,opts,trees) = getCommand comm trees0
-   commands = allCommands mgr opts
+   comms = commands env
    checkOpts info = 
      case
        [o | OOpt  (Ident o)   <- opts, notElem o (options info)] ++

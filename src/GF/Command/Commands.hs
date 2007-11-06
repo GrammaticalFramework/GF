@@ -5,6 +5,7 @@ module GF.Command.Commands (
   isOpt,
   options,
   flags,
+  CommandInfo,
   CommandOutput
   ) where
 
@@ -22,7 +23,7 @@ import qualified Data.Map as Map
 type CommandOutput = ([Tree],String) ---- errors, etc
 
 data CommandInfo = CommandInfo {
-  exec     :: [Tree] -> IO CommandOutput,
+  exec     :: [Option] -> [Tree] -> IO CommandOutput,
   synopsis :: String,
   explanation :: String,
   longname :: String,
@@ -32,7 +33,7 @@ data CommandInfo = CommandInfo {
 
 emptyCommandInfo :: CommandInfo
 emptyCommandInfo = CommandInfo {
-  exec = \ts -> return (ts,[]), ----
+  exec = \_ ts -> return (ts,[]), ----
   synopsis = "synopsis",
   explanation = "explanation",
   longname = "longname",
@@ -46,7 +47,7 @@ lookCommand = Map.lookup
 commandHelpAll :: MultiGrammar -> [Option] -> String
 commandHelpAll mgr opts = unlines
   [commandHelp (isOpt "full" opts) (co,info)
-    | (co,info) <- Map.assocs (allCommands mgr opts)]
+    | (co,info) <- Map.assocs (allCommands mgr)]
 
 commandHelp :: Bool -> (String,CommandInfo) -> String
 commandHelp full (co,info) = unlines $ [
@@ -78,45 +79,45 @@ isOpt :: String -> [Option] -> Bool
 isOpt o opts = elem o [x | OOpt (Ident x) <- opts]
 
 
-allCommands :: MultiGrammar -> [Option] -> Map.Map String CommandInfo
-allCommands mgr opts = Map.fromAscList [
+allCommands :: MultiGrammar -> Map.Map String CommandInfo
+allCommands mgr = Map.fromAscList [
   ("gr", emptyCommandInfo {
      longname = "generate_random",
      synopsis = "generates a list of random trees, by default one tree",
-     flags = ["number"],
-     exec = \_ -> do
-       ts <- generateRandom mgr optCat
-       return $ fromTrees $ take optNum ts
+     flags = ["cat","number"],
+     exec = \opts _ -> do
+       ts <- generateRandom mgr (optCat opts)
+       return $ fromTrees $ take (optNum opts) ts
      }),
   ("h", emptyCommandInfo {
      longname = "help",
      synopsis = "get description of a command, or a the full list of commands",
      options = ["full"],
-     exec = \ts -> return ([], case ts of
+     exec = \opts ts -> return ([], case ts of
        [t] -> let co = (showTree t) in 
-              case lookCommand co (allCommands mgr opts) of
+              case lookCommand co (allCommands mgr) of   ---- new map ??!!
                 Just info -> commandHelp True (co,info)
                 _ -> "command not found"
        _ -> commandHelpAll mgr opts)
      }),
   ("l", emptyCommandInfo {
-     exec = return . fromStrings . map lin,
+     exec = \opts -> return . fromStrings . map (lin opts),
      flags = ["lang"]
      }),
   ("p", emptyCommandInfo {
-     exec = return . fromTrees . concatMap par . toStrings,
+     exec = \opts -> return . fromTrees . concatMap (par opts). toStrings,
      flags = ["cat","lang"]
      })
   ]
  where
-   lin t = unlines [linearize mgr lang t    | lang <- optLangs]
-   par s = concat  [parse mgr lang optCat s | lang <- optLangs]
+   lin opts t = unlines [linearize mgr lang t    | lang <- optLangs opts]
+   par opts s = concat  [parse mgr lang (optCat opts) s | lang <- optLangs opts]
  
-   optLangs = case valIdOpts "lang" "" opts of
+   optLangs opts = case valIdOpts "lang" "" opts of
      "" -> languages mgr
      lang -> [lang] 
-   optCat   = valIdOpts "cat" (lookAbsFlag gr (cid "startcat")) opts
-   optNum   = valIntOpts "number" 1 opts
+   optCat opts = valIdOpts "cat" (lookAbsFlag gr (cid "startcat")) opts
+   optNum opts = valIntOpts "number" 1 opts
 
    gr       = gfcc mgr
 
