@@ -86,7 +86,7 @@ eitherResIdent tv s = treeFind resWords
                               | s > a  = treeFind right
                               | s == a = t
 
-resWords = b "lin" (b "flags" (b "cat" (b "abstract" N N) (b "concrete" N N)) (b "grammar" (b "fun" N N) N)) (b "oper" (b "lindef" (b "lincat" N N) N) (b "printname" (b "pre" N N) N))
+resWords = b "lin" (b "flags" (b "cat" (b "abstract" N N) (b "concrete" N N)) (b "grammar" (b "fun" N N) N)) (b "param" (b "lindef" (b "lincat" N N) (b "oper" N N)) (b "printname" (b "pre" N N) N))
    where b s = B s (TS s)
 
 unescapeInitTail :: String -> String

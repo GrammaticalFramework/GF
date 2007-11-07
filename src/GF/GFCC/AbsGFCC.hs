@@ -4,7 +4,7 @@ module GF.GFCC.AbsGFCC where
 
 newtype CId = CId String deriving (Eq,Ord,Show)
 data Grammar =
-   Grm CId [CId] Abstract [Concrete]
+   Grm CId [CId] [Flag] Abstract [Concrete]
   deriving (Eq,Ord,Show)
 
 data Abstract =
@@ -12,7 +12,7 @@ data Abstract =
   deriving (Eq,Ord,Show)
 
 data Concrete =
-   Cnc CId [Flag] [LinDef] [LinDef] [LinDef] [LinDef] [LinDef]
+   Cnc CId [Flag] [LinDef] [LinDef] [LinDef] [LinDef] [LinDef] [LinDef]
   deriving (Eq,Ord,Show)
 
 data Flag =
