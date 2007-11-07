@@ -22,7 +22,7 @@ import GF.Data.Operations
 import GF.Text.UTF8
 
 import Data.List
-import Data.Char (isDigit)
+import Data.Char (isDigit,isSpace)
 import qualified Data.Map as Map
 import Debug.Trace ----
 
@@ -34,15 +34,16 @@ prGrammar2gfcc opts cnc gr = (abs, D.printGFCC gc) where
 
 mkCanon2gfcc :: Options -> String -> SourceGrammar -> (String,D.GFCC)
 mkCanon2gfcc opts cnc gr = 
-  (prIdent abs, (canon2gfcc opts . reorder abs . canon2canon abs) gr)
+  (prIdent abs, (canon2gfcc opts pars . reorder abs . canon2canon abs) gr)
   where
     abs = err error id $ M.abstractOfConcrete gr (identC cnc)
+    pars = mkParamLincat gr
 
 -- Generate GFCC from GFCM.
 -- this assumes a grammar translated by canon2canon
 
-canon2gfcc :: Options -> SourceGrammar -> D.GFCC
-canon2gfcc opts cgr@(M.MGrammar ((a,M.ModMod abm):cms)) = 
+canon2gfcc :: Options -> (Ident -> Ident -> C.Term) -> SourceGrammar -> D.GFCC
+canon2gfcc opts pars cgr@(M.MGrammar ((a,M.ModMod abm):cms)) = 
   (if (oElem (iOpt "show_canon") opts) then trace (prGrammar cgr) else id) $
      D.GFCC an cns gflags abs cncs 
  where
@@ -67,8 +68,8 @@ canon2gfcc opts cgr@(M.MGrammar ((a,M.ModMod abm):cms)) =
   catfuns = Map.fromList 
     [(cat,[f | (f, (C.DTyp _ c _,_)) <- lfuns, c==cat]) | (cat,_) <- lcats]
 
-  cncs  = Map.fromList [mkConcr (i2i lang) mo | (lang,M.ModMod mo) <- cms]
-  mkConcr lang mo = 
+  cncs  = Map.fromList [mkConcr lang (i2i lang) mo | (lang,M.ModMod mo) <- cms]
+  mkConcr lang0 lang mo = 
       (lang,D.Concr flags lins opers lincats lindefs printnames params)
     where
       js = tree2list (M.jments mo)
@@ -85,7 +86,8 @@ canon2gfcc opts cgr@(M.MGrammar ((a,M.ModMod abm):cms)) =
       printnames = Map.union 
         (Map.fromAscList [(i2i f, mkTerm tr) | (f,CncFun _ _ (Yes tr)) <- js])
         (Map.fromAscList [(i2i f, mkTerm tr) | (f,CncCat _ _ (Yes tr)) <- js])
-      params = lincats -----
+      params = Map.fromAscList 
+        [(i2i c, pars lang0 c) | (c,CncCat (Yes ty) _ _) <- js]
 
 i2i :: Ident -> C.CId
 i2i = C.CId . prIdent
@@ -117,16 +119,6 @@ mkExp t = case t of
 
 mkContext :: A.Context -> [C.Hypo]
 mkContext hyps = [C.Hyp (i2i x) (mkType ty) | (x,ty) <- hyps]
-
-mkCType :: Type -> C.Term
-mkCType t = case t of
-  EInt i      -> C.C $ fromInteger i
-  RecType rs  -> C.R [mkCType t | (_, t) <- rs]
-  Table pt vt -> case pt of
-    EInt i -> C.R $ replicate (1 + fromInteger i) $ mkCType vt
-    RecType rs -> mkCType $ foldr Table vt (map snd rs) 
-  Sort "Str"        -> C.S [] --- Str only
-  _ -> error  $ "mkCType " ++ show t
 
 mkTerm :: Term -> C.Term
 mkTerm tr = case tr of
@@ -162,6 +154,37 @@ mkTerm tr = case tr of
    flats t = case t of
      C.S ts -> concatMap flats ts
      _ -> [t]
+
+-- encoding GFCC-internal lincats as terms
+mkCType :: Type -> C.Term
+mkCType t = case t of
+  EInt i      -> C.C $ fromInteger i
+  RecType rs  -> C.R [mkCType t | (_, t) <- rs]
+  Table pt vt -> case pt of
+    EInt i -> C.R $ replicate (1 + fromInteger i) $ mkCType vt
+    RecType rs -> mkCType $ foldr Table vt (map snd rs) 
+  Sort "Str"        -> C.S [] --- Str only
+  _ -> error  $ "mkCType " ++ show t
+
+-- encoding showable lincats (as in source gf) as terms
+mkParamLincat :: SourceGrammar -> Ident -> Ident -> C.Term
+mkParamLincat sgr lang cat = errVal (C.R [C.S []]) $ do 
+  typ <- Look.lookupLincat sgr lang cat
+  mkPType typ
+ where
+  mkPType typ = case typ of
+    RecType lts -> do
+      ts <- mapM (mkPType . snd) lts
+      return $ C.R ts
+    Table p v -> do
+      p' <- mkPType p
+      v' <- mkPType v
+      return $ C.S [p',v']
+    Sort "Str" -> return $ C.S []
+    _ -> return $ 
+      C.FV $ map (C.K . C.KS . filter showable . prt_) $ 
+             errVal [] $ Look.allParamValues sgr typ
+  showable c = not (isSpace c) ---- || (c == ' ')  -- to eliminate \n in records
 
 -- return just one module per language
 

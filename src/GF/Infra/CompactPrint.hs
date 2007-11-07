@@ -16,4 +16,4 @@ spaceIf pre post w = case w of
 keywordGF w = elem w ["cat","fun","lin","lincat","lindef","oper","param"]
 keywordGFCC w = 
   last w == ';' || 
-  elem w ["flags","fun","cat","lin","oper","lincat","lindef","printname"]
+  elem w ["flags","fun","cat","lin","oper","lincat","lindef","printname","param"]
