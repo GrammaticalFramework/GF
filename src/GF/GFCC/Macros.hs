@@ -24,13 +24,17 @@ lookType :: GFCC -> CId -> Type
 lookType gfcc f = 
   fst $ lookMap (error $ "lookType " ++ show f) f (funs (abstract gfcc))
 
+lookGlobalFlag :: GFCC -> CId -> String
+lookGlobalFlag gfcc f = 
+  lookMap "?" f (gflags gfcc)
+
 lookAbsFlag :: GFCC -> CId -> String
 lookAbsFlag gfcc f = 
-  lookMap (error $ "lookAbsFlag " ++ show f) f (aflags (abstract gfcc))
+  lookMap "?" f (aflags (abstract gfcc))
 
-lookFlag :: GFCC -> CId -> CId -> String
-lookFlag gfcc lang fun = 
-  lookMap "?" fun $ flags $ lookMap (error "no lang") lang $ concretes gfcc
+lookCncFlag :: GFCC -> CId -> CId -> String
+lookCncFlag gfcc lang f = 
+  lookMap "?" f $ cflags $ lookMap (error "no lang") lang $ concretes gfcc
 
 functionsToCat :: GFCC -> CId -> [(CId,Type)]
 functionsToCat gfcc cat =

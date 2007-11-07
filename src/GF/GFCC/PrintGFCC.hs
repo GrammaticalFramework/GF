@@ -75,7 +75,6 @@ instance Print Integer where
 instance Print Int where  --H
   prt _ x = doc (shows x) --H
 
-
 instance Print Double where
   prt _ x = doc (shows x)
 
@@ -92,7 +91,7 @@ instance Print CId where
 
 instance Print Grammar where
   prt i e = case e of
-   Grm cid cids abstract concretes -> prPrec i 0 (concatD [doc (showString "grammar") , prt 0 cid , doc (showString "(") , prt 0 cids , doc (showString ")") , doc (showString ";") , prt 0 abstract , doc (showString ";") , prt 0 concretes])
+   Grm cid cids flags abstract concretes -> prPrec i 0 (concatD [doc (showString "grammar") , prt 0 cid , doc (showString "(") , prt 0 cids , doc (showString ")") , doc (showString "(") , prt 0 flags , doc (showString ")") , doc (showString ";") , prt 0 abstract , doc (showString ";") , prt 0 concretes])
 
 
 instance Print Abstract where
@@ -102,7 +101,7 @@ instance Print Abstract where
 
 instance Print Concrete where
   prt i e = case e of
-   Cnc cid flags lindefs0 lindefs1 lindefs2 lindefs3 lindefs -> prPrec i 0 (concatD [doc (showString "concrete") , prt 0 cid , doc (showString "{") , doc (showString "flags") , prt 0 flags , doc (showString "lin") , prt 0 lindefs0 , doc (showString "oper") , prt 0 lindefs1 , doc (showString "lincat") , prt 0 lindefs2 , doc (showString "lindef") , prt 0 lindefs3 , doc (showString "printname") , prt 0 lindefs , doc (showString "}")])
+   Cnc cid flags lindefs0 lindefs1 lindefs2 lindefs3 lindefs4 lindefs -> prPrec i 0 (concatD [doc (showString "concrete") , prt 0 cid , doc (showString "{") , doc (showString "flags") , prt 0 flags , doc (showString "lin") , prt 0 lindefs0 , doc (showString "oper") , prt 0 lindefs1 , doc (showString "lincat") , prt 0 lindefs2 , doc (showString "lindef") , prt 0 lindefs3 , doc (showString "printname") , prt 0 lindefs4 , doc (showString "param") , prt 0 lindefs , doc (showString "}")])
 
   prtList es = case es of
    [] -> (concatD [])

@@ -44,12 +44,14 @@ mkCanon2gfcc opts cnc gr =
 canon2gfcc :: Options -> SourceGrammar -> D.GFCC
 canon2gfcc opts cgr@(M.MGrammar ((a,M.ModMod abm):cms)) = 
   (if (oElem (iOpt "show_canon") opts) then trace (prGrammar cgr) else id) $
-     D.GFCC an cns abs cncs 
+     D.GFCC an cns gflags abs cncs 
  where
   -- abstract
   an  = (i2i a)
   cns = map (i2i . fst) cms
   abs = D.Abstr aflags funs cats catfuns
+  gflags = Map.fromList [(C.CId fg,x) | Just x <- [getOptVal opts (aOpt fg)]] 
+                                          where fg = "firstlang"
   aflags = Map.fromList [(C.CId f,x) | Opt (f,[x]) <- M.flags abm]
   mkDef pty = case pty of
     Yes t -> mkExp t
@@ -66,7 +68,8 @@ canon2gfcc opts cgr@(M.MGrammar ((a,M.ModMod abm):cms)) =
     [(cat,[f | (f, (C.DTyp _ c _,_)) <- lfuns, c==cat]) | (cat,_) <- lcats]
 
   cncs  = Map.fromList [mkConcr (i2i lang) mo | (lang,M.ModMod mo) <- cms]
-  mkConcr lang mo = (lang,D.Concr flags lins opers lincats lindefs printnames)
+  mkConcr lang mo = 
+      (lang,D.Concr flags lins opers lincats lindefs printnames params)
     where
       js = tree2list (M.jments mo)
       flags   = Map.fromList [(C.CId f,x) | Opt (f,[x]) <- M.flags mo]
@@ -82,6 +85,7 @@ canon2gfcc opts cgr@(M.MGrammar ((a,M.ModMod abm):cms)) =
       printnames = Map.union 
         (Map.fromAscList [(i2i f, mkTerm tr) | (f,CncFun _ _ (Yes tr)) <- js])
         (Map.fromAscList [(i2i f, mkTerm tr) | (f,CncCat _ _ (Yes tr)) <- js])
+      params = lincats -----
 
 i2i :: Ident -> C.CId
 i2i = C.CId . prIdent
