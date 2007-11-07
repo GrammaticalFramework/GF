@@ -198,10 +198,10 @@ gfc:
 	strip gfc
 	mv gfc ../bin/
 
-gfcc:
-	$(GHMAKE) $(GHCOPTFLAGS) -o gfcc GF/Devel/Shell.hs
-	strip gfcc
-	mv gfcc ../bin/
+gfi:
+	$(GHMAKE) $(GHCOPTFLAGS) -o gfi GF/Devel/GFI.hs
+	strip gfi
+	mv gfi ../bin/
 
 gf3:
 	$(GHMAKE) $(GHCOPTFLAGS) -o gf3 GF/Devel/GF3.hs

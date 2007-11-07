@@ -1,0 +1,76 @@
+GF Version 3.0
+Aarne Ranta
+7 November 2007
+
+
+==Overview==
+
+GF 3 results from the following needs:
+- refactor GF to make it more maintainable
+- provide a simple command-line batch compiler
+- replace the gfcc by the much simpler gfcc format for embedded grammars
+
+
+The current implementation of GF 3 has three binaries:
+- gfc, batch compiler, for building grammar applications
+- gfi, interpreter for gfcc grammars, for using grammars
+- gf, interactive compiler with interpreter, for developing grammars
+
+
+Thus, roughly, gf = gfc + gfi.
+
+Question: should we have, like current GF, just one binary, gf, and
+implement the others by shell scripts calling gf with suitable options?
+- +: one binary is less code altogether
+- +: one binary is easier to distribute and update
+- -: each of the components is less code by itself
+- -: many users might only need either the compiler or the interpreter
+- -: those users could avoid installation problems such as readline
+
+
+There are some analogies in other languages:
+
+  || GF    | Haskell | Java   ||
+  |  gfc   | ghc     | javac   |
+  |  gfi   | ghci*   | java    |
+  |  gf    | ghci*   | -       |
+
+In Haskell, ghci makes more than gfi since it reads source files, but
+less than gf since it does not compile them to externally usable target
+code.
+
+
+
+
+==Status of code and functionalities==
+
+GF executable v. 2.8
+- gf: 263 modules, executable 7 MB
+
+
+Current status of GF 3.0 alpha:
+- gf3: 94 modules, executable 4 MB
+- gfc: 71 modules, executable 3 MB
+- gfi: 35 modules, executable 1 MB
+
+
+Missing functionalities
+- in gfc:
+  - input formats: cf, ebnf, gfe, old gf
+  - output formats: speech grammars, bnfc
+
+
+- in gfi:
+  - command cc (computing with resource)
+  - morphological analysis, linearization with tables
+  - quizzes, treebanks
+  - syntax editor
+  - readline
+
+
+==Additional feature options==
+
+Native Haskell readline
+
+Binary formats for gfo and gfcc
+
