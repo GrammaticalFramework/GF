@@ -3,12 +3,15 @@ Aarne Ranta
 7 November 2007
 
 
+This document summarizes the goals and status of the forthcoming
+GF version 3.0.
+
 ==Overview==
 
 GF 3 results from the following needs:
 - refactor GF to make it more maintainable
 - provide a simple command-line batch compiler
-- replace the gfcc by the much simpler gfcc format for embedded grammars
+- replace gfc by the much simpler gfcc format for embedded grammars
 
 
 The current implementation of GF 3 has three binaries:
@@ -45,19 +48,21 @@ code.
 ==Status of code and functionalities==
 
 GF executable v. 2.8
-- gf: 263 modules, executable 7 MB
+- gf: 263 modules, executable 7+ MB (on MacOS i386)
 
 
 Current status of GF 3.0 alpha:
-- gf3: 94 modules, executable 4 MB
-- gfc: 71 modules, executable 3 MB
-- gfi: 35 modules, executable 1 MB
+- gf3: 94 modules, executable 4+ MB
+- gfc: 71 modules, executable 3+ MB
+- gfi: 35 modules, executable 1+ MB
 
 
 Missing functionalities
 - in gfc:
   - input formats: cf, ebnf, gfe, old gf
   - output formats: speech grammars, bnfc
+  - integrating options for input, output, and debugging information
+    (as described in Devel/GFC/Options.hs)
 
 
 - in gfi:
@@ -73,4 +78,7 @@ Missing functionalities
 Native Haskell readline
 
 Binary formats for gfo and gfcc
+
+Parallel compilation on multicore machines
+
 
