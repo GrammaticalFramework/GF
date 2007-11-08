@@ -195,7 +195,7 @@ gf3present:
 	$(GFNewPres) common/ConstructX.gf
 	cp -p */*.gfo ../present
 	touch api/Constructors.gf
-	$(GFNewPresC) api/Syntax???.gf
+	$(GFNewPresC) -path=present:prelude:api api/Syntax???.gf
 	cp -p api/Constructors*.gfo ../present
 	cp -p api/Syntax*.gfo ../present
 #	$(GFNewPresC) api/Try???.gf

@@ -44,20 +44,23 @@ import GF.Data.Operations
 import GF.Infra.CheckM
 
 import Data.List
+import qualified Data.Set as Set
+import qualified Data.Map as Map
 import Control.Monad
 import Debug.Trace ---
 
 
 showCheckModule :: [SourceModule] -> SourceModule -> Err ([SourceModule],String)
 showCheckModule mos m = do
-    (st,(_,msg)) <- checkStart $ checkModule mos m
-    return (st, unlines $ reverse msg)
+  (st,(_,msg)) <- checkStart $ checkModule mos m
+  return (st, unlines $ reverse msg)
 
--- | checking is performed in dependency order of modules
+-- | checking is performed in the dependency order of modules
 checkModule :: [SourceModule] -> SourceModule -> Check [SourceModule]
 checkModule ms (name,mod) = checkIn ("checking module" +++ prt name) $ case mod of
 
   ModMod mo@(Module mt st fs me ops js) -> do
+    checkRestrictedInheritance ms (name, mo)
     js' <- case mt of
       MTAbstract -> mapMTree (checkAbsInfo gr name) js
 
@@ -83,6 +86,32 @@ checkModule ms (name,mod) = checkIn ("checking module" +++ prt name) $ case mod 
   _ -> return $ (name,mod) : ms
  where
    gr  = MGrammar $ (name,mod):ms
+
+-- check if restricted inheritance modules are still coherent
+-- i.e. that the defs of remaining names don't depend on omitted names
+---checkRestrictedInheritance :: [SourceModule] -> SourceModule -> Check ()
+checkRestrictedInheritance mos (name,mo) = do
+  let irs = [ii | ii@(_,mi) <- extend mo, mi /= MIAll]  -- names with restr. inh.
+  let mrs = [((i,m),mi) | (i,ModMod m) <- mos, Just mi <- [lookup i irs]] 
+                             -- the restr. modules themself, with restr. infos
+  mapM_ checkRem mrs
+ where
+   checkRem ((i,m),mi) = do
+     let (incl,excl) = partition (isInherited mi) (map fst (tree2list (jments m)))
+     let incld c   = Set.member c (Set.fromList incl)
+     let illegal c = Set.member c (Set.fromList excl)
+     let illegals = [(f,is) | 
+           (f,cs) <- allDeps, incld f, let is = filter illegal cs, not (null is)]
+     case illegals of 
+       [] -> return ()
+       cs -> fail $ "In inherited module" +++ prt i ++
+               ", dependence of excluded constants:" ++++
+               unlines ["  " ++ prt f +++ "on" +++ unwords (map prt is) | 
+                              (f,is) <- cs]
+   allDeps = ---- transClosure $ Map.fromList $ 
+             concatMap (allDependencies (const True)) 
+                              [jments m | (_,ModMod m) <- mos]
+   transClosure ds = ds ---- TODO: check in deeper modules
 
 -- | check if a term is typable
 justCheckLTerm :: SourceGrammar -> Term -> Err Term
@@ -1020,20 +1049,26 @@ linTypeOfType cnc m typ = do
 -- | dependency check, detecting circularities and returning topo-sorted list
 
 allOperDependencies :: Ident -> BinTree Ident Info -> [(Ident,[Ident])]
-allOperDependencies m b = 
+allOperDependencies m = allDependencies (==m)
+
+allDependencies :: (Ident -> Bool) -> BinTree Ident Info -> [(Ident,[Ident])]
+allDependencies ism b = 
   [(f, nub (concatMap opty (pts i))) | (f,i) <- tree2list b]
   where
     opersIn t = case t of
-      Q n c | n == m -> [c]
-      QC n c | n == m -> [c]
+      Q n c | ism n -> [c]
+      QC n c | ism n -> [c]
       _ -> collectOp opersIn t
     opty (Yes ty) = opersIn ty
     opty _ = []
     pts i = case i of
       ResOper pty pt -> [pty,pt]
       ResParam (Yes (ps,_)) -> [Yes t | (_,cont) <- ps, (_,t) <- cont]
-      CncFun  _   pt _ -> [pt]  ---- (Maybe (Ident,(Context,Type))
-      _              -> []    ---- ResParam
+      CncCat pty _ _ -> [pty]
+      CncFun _   pt _ -> [pt]  ---- (Maybe (Ident,(Context,Type))
+      AbsFun pty ptr -> [pty] --- ptr is def, which can be mutual
+      AbsCat (Yes co) _ -> [Yes ty | (_,ty) <- co]
+      _              -> []
 
 topoSortOpers :: [(Ident,[Ident])] -> Err [Ident]
 topoSortOpers st = do
