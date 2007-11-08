@@ -20,6 +20,10 @@ lookLincat :: GFCC -> CId -> CId -> Term
 lookLincat gfcc lang fun = 
   lookMap TM fun $ lincats $ lookMap (error "no lang") lang $ concretes gfcc
 
+lookParamLincat :: GFCC -> CId -> CId -> Term
+lookParamLincat gfcc lang fun = 
+  lookMap TM fun $ paramlincats $ lookMap (error "no lang") lang $ concretes gfcc
+
 lookType :: GFCC -> CId -> Type
 lookType gfcc f = 
   fst $ lookMap (error $ "lookType " ++ show f) f (funs (abstract gfcc))
