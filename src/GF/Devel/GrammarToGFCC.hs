@@ -199,10 +199,7 @@ reorder abs cg = M.MGrammar $
      where
        mos = M.allModMod cg
        adefs = sorted2tree $ sortIds $
-            predefADefs ++
-            [finfo | 
-              (i,mo) <- M.allModMod cg, M.isModAbs mo, 
-              finfo <- tree2list (M.jments mo)]
+                 predefADefs ++ Look.allOrigInfos cg abs
        predefADefs = 
          [(IC c, AbsCat (Yes []) Nope) | c <- ["Float","Int","String"]]
        aflags = nubFlags $ 
