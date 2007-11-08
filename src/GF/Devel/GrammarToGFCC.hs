@@ -175,16 +175,17 @@ mkParamLincat sgr lang cat = errVal (C.R [C.S []]) $ do
   mkPType typ = case typ of
     RecType lts -> do
       ts <- mapM (mkPType . snd) lts
-      return $ C.R ts
+      return $ C.R [ C.P (kks $ prt_ l) t | ((l,_),t) <- zip lts ts]
     Table p v -> do
       p' <- mkPType p
       v' <- mkPType v
       return $ C.S [p',v']
     Sort "Str" -> return $ C.S []
     _ -> return $ 
-      C.FV $ map (C.K . C.KS . filter showable . prt_) $ 
+      C.FV $ map (kks . filter showable . prt_) $ 
              errVal [] $ Look.allParamValues sgr typ
   showable c = not (isSpace c) ---- || (c == ' ')  -- to eliminate \n in records
+  kks = C.K . C.KS
 
 -- return just one module per language
 
