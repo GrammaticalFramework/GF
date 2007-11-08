@@ -103,7 +103,7 @@ allCommands mgr = Map.fromAscList [
      }),
   ("l", emptyCommandInfo {
      exec = \opts -> return . fromStrings . map (optLin opts),
-     options = ["record","table","term"],
+     options = ["all","record","table","term"],
      flags = ["lang"]
      }),
   ("p", emptyCommandInfo {
@@ -117,6 +117,7 @@ allCommands mgr = Map.fromAscList [
  
    optLin opts t = unlines [linea lang t | lang <- optLangs opts] where
      linea lang = case opts of
+       _ | isOpt "all"    opts -> allLinearize gr (cid lang)
        _ | isOpt "table"  opts -> tableLinearize gr (cid lang)
        _ | isOpt "term"   opts -> termLinearize gr (cid lang)
        _ | isOpt "record" opts -> recordLinearize gr (cid lang)
