@@ -29,7 +29,7 @@ GFCCP=$(GFCC) -preproc=./mkPresent
 new:
 	export GF='../../bin/gf -s' ; make -e all
 
-all: chmod show-path prelude present alltenses mathematical api multimodal langs compiled
+all: chmod show-path prelude present alltenses mathematical api langs compiled
 
 chmod:
 	chmod a+x mkPresent
