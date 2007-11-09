@@ -10,7 +10,7 @@ instance DiffDan of DiffScand = open CommonScand, Prelude in {
     neutrum = Neutr ;
 
     gennum : Gender -> Number -> GenNum = \g,n ->
-      case <g,n> of {
+      case <<g,n> : Gender * Number> of {
         <Utr,  Sg> => SgUtr ;
         <Neutr,Sg> => SgNeutr ;
         _  => Plg
