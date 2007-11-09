@@ -1,5 +1,6 @@
 abstract ExtraFinAbs = Extra [
-  GenNP,VPI,ListVPI,BaseVPI,ConsVPI,MkVPI,ComplVPIVV,ConjVPI] ** {
+  GenNP,VPI,ListVPI,BaseVPI,ConsVPI,MkVPI,ComplVPIVV,ConjVPI,
+  VV,VP,Conj,NP,Quant] ** {
 
   fun
     AdvExistNP : Adv -> NP -> Cl ;        -- kuvassa olemme me
