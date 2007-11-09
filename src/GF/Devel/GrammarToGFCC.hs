@@ -389,7 +389,14 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
      _ -> valNum $ comp tr
 
    --- this is mainly needed for parameter record projections
-   comp t = errVal t $ Compute.computeTerm cgr [] t
+   ---- was: errVal t $ Compute.computeConcreteRec cgr t
+   comp t = case t of
+     S (V typ ts) v0 -> errVal t $ do
+       let v = comp v0 
+       vs <- Look.allParamValues cgr typ
+       return $ maybe t (comp . (ts !!)) $ lookup v (zip vs [0 .. length vs - 1])
+     P (R r) l -> maybe t (comp . snd) $ lookup l r
+     _ -> GM.composSafeOp comp t
 
    doVar :: Term -> STM [((Type,[Term]),(Term,Term))] Term
    doVar tr = case getLab tr of
