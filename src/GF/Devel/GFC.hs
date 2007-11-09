@@ -1,8 +1,8 @@
 module Main where
 
 import GF.Devel.Compile
+import GF.Devel.PrintGFCC
 import GF.Devel.GrammarToGFCC
-import GF.Devel.GFCCtoJS
 import GF.GFCC.OptimizeGFCC
 import GF.GFCC.CheckGFCC
 import GF.GFCC.DataGFCC
@@ -26,12 +26,7 @@ main = do
       let target = abs ++ ".gfcc"
       writeFile target (printGFCC gc)
       putStrLn $ "wrote file " ++ target
-      if oElem (iOpt "js") opts 
-        then do
-          let js = abs ++ ".js"
-          writeFile js (gfcc2js gc)
-          putStrLn $ "wrote file " ++ js
-        else return ()
+      mapM_ (alsoPrint opts abs gc) printOptions
 
     -- gfc -o target.gfcc source_1.gfcc ... source_n.gfcc
     _ | all ((=="gfcc") . fileSuffix) fs && oElem (iOpt "o") opts -> do
@@ -51,3 +46,18 @@ check gfcc = do
 
 file2gfcc f =
   readFileIf f >>= err (error) (return . mkGFCC) . pGrammar . myLexer
+
+
+---- TODO: nicer and richer print options
+
+alsoPrint opts abs gr (opt,suff) =
+      if oElem (iOpt opt) opts 
+        then do
+          let outfile = abs ++ "." ++ suff
+          let output = prGFCC opt gr
+          writeFile outfile output
+          putStrLn $ "wrote file " ++ outfile
+        else return ()
+
+printOptions = [("haskell","hs"),("haskell_gadt","hs"),("js","js")]
+

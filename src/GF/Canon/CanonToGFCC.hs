@@ -70,7 +70,7 @@ normalize = share . unoptimizeCanon . Sub.unSubelimCanon where
 
 canon2gfcc :: CanonGrammar -> D.GFCC
 canon2gfcc cgr@(M.MGrammar ((a,M.ModMod abm):cms)) = 
-     D.GFCC an cns abs cncs 
+     D.GFCC an cns Map.empty abs cncs 
  where
   an  = (i2i a)
   cns = map (i2i . fst) cms
@@ -86,7 +86,7 @@ canon2gfcc cgr@(M.MGrammar ((a,M.ModMod abm):cms)) =
     [(cat,[f | (f, (C.DTyp _ c _,_)) <- lfuns, c==cat]) | (cat,_) <- lcats]
 
   cncs  = Map.fromList [mkConcr (i2i lang) mo | (lang,M.ModMod mo) <- cms]
-  mkConcr lang mo = (lang,D.Concr flags lins opers lincats lindefs printnames)
+  mkConcr lang mo = (lang,D.Concr flags lins opers lincats lindefs printnames params)
     where
       flags   = Map.fromAscList [] ---- flags
       opers   = Map.fromAscList [] -- opers will be created as optimization
@@ -97,6 +97,7 @@ canon2gfcc cgr@(M.MGrammar ((a,M.ModMod abm):cms)) =
       lindefs = Map.fromAscList 
         [(i2i c, mkTerm tr) | (c,GFC.CncCat _ tr _) <- tree2list (M.jments mo)]
       printnames = Map.fromAscList [] ---- printnames
+      params = Map.fromAscList [] ---- params
 
 i2i :: Ident -> C.CId
 i2i (IC c) = C.CId c

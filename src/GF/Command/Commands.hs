@@ -15,6 +15,7 @@ import GF.Command.ParGFShell
 import GF.GFCC.ShowLinearize
 import GF.GFCC.API
 import GF.GFCC.Macros
+import GF.Devel.PrintGFCC
 import GF.GFCC.AbsGFCC ----
 
 import GF.Command.ErrM ----
@@ -79,7 +80,7 @@ valOpts flag def opts = case lookup flag flags of
 isOpt :: String -> [Option] -> Bool
 isOpt o opts = elem o [x | OOpt (Ident x) <- opts]
 
-
+-- this list must be kept sorted by the command name!
 allCommands :: MultiGrammar -> Map.Map String CommandInfo
 allCommands mgr = Map.fromAscList [
   ("gr", emptyCommandInfo {
@@ -109,6 +110,10 @@ allCommands mgr = Map.fromAscList [
   ("p", emptyCommandInfo {
      exec = \opts -> return . fromTrees . concatMap (par opts). toStrings,
      flags = ["cat","lang"]
+     }),
+  ("pg", emptyCommandInfo {
+     exec  = \opts _ -> return $ fromString $ prGrammar opts,
+     flags = ["cat","lang","printer"]
      })
   ]
  where
@@ -134,6 +139,11 @@ allCommands mgr = Map.fromAscList [
 
    fromTrees ts = (ts,unlines (map showTree ts))
    fromStrings ss = (map tStr ss, unlines ss)
+   fromString  s  = ([tStr s], s)
    toStrings ts = [s | DTr [] (AS s) [] <- ts] 
    tStr s = DTr [] (AS s) []
+
+   prGrammar opts = case valIdOpts "printer" "" opts of
+     "cats" -> unwords $ categories mgr
+     v -> prGFCC v gr 
 
