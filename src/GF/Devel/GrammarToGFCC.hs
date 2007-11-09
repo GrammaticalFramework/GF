@@ -176,6 +176,10 @@ mkParamLincat sgr lang cat = errVal (C.R [C.S []]) $ do
     RecType lts -> do
       ts <- mapM (mkPType . snd) lts
       return $ C.R [ C.P (kks $ prt_ l) t | ((l,_),t) <- zip lts ts]
+    Table (RecType lts) v -> do
+      ps <- mapM (mkPType . snd) lts
+      v' <- mkPType v
+      return $ foldr (\p v -> C.S [p,v]) v' ps
     Table p v -> do
       p' <- mkPType p
       v' <- mkPType v
