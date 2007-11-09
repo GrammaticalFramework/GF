@@ -63,7 +63,7 @@ term2js l t = f t
     case t of
       C.R xs           -> new "Arr" (map f xs)
       C.P x y          -> JS.ECall (JS.EMember (f x) (JS.Ident "sel")) [f y]
-      C.S xs           -> new "Seq" (map f xs)
+      C.S xs           -> mkSeq (map f xs)
       C.K t            -> tokn2js t
       C.V i            -> JS.EIndex (JS.EVar children) (JS.EInt i)
       C.C i            -> new "Int" [JS.EInt i]
@@ -74,8 +74,15 @@ term2js l t = f t
       C.TM             -> new "Meta" []
 
 tokn2js :: C.Tokn -> JS.Expr
-tokn2js (C.KS s) = new "Str" [JS.EStr s]
-tokn2js (C.KP ss vs) = new "Seq" (map JS.EStr ss) -- FIXME
+tokn2js (C.KS s) = mkStr s
+tokn2js (C.KP ss vs) = mkSeq (map mkStr ss) -- FIXME
+
+mkStr :: String -> JS.Expr
+mkStr s = new "Str" [JS.EStr s]
+
+mkSeq :: [JS.Expr] -> JS.Expr
+mkSeq [x] = x
+mkSeq xs = new "Seq" xs
 
 argIdent :: Integer -> JS.Ident
 argIdent n = JS.Ident ("x" ++ show n)
