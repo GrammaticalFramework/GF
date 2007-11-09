@@ -165,10 +165,10 @@ gf3:
 	$(GFNew) finnish/Finnish.gf
 	$(GFNew) french/French.gf
 	$(GFNew) german/German.gf
-	$(GFNew) italian/Italian.gf
+	$(GFNew) italian/Italian.gf $(RTSS)
 	$(GFNew) norwegian/Norwegian.gf
 	$(GFNew) russian/Russian.gf
-	$(GFNew) spanish/Spanish.gf
+	$(GFNew) spanish/Spanish.gf $(RTSS)
 	$(GFNew) swedish/Swedish.gf
 	$(GFNew) common/ConstructX.gf
 	cp -p */*.gfo ../alltenses

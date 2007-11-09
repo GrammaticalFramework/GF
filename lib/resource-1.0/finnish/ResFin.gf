@@ -56,10 +56,13 @@ param
   NPForm = NPCase Case | NPAcc ;
 
 oper
-  npform2case : Number -> NPForm -> Case = \n,f -> case <f,n> of {
-    <NPCase c,_> => c ;
-    <NPAcc,Sg>   => Gen ;-- appCompl does the job
-    <NPAcc,Pl>   => Nom
+  npform2case : Number -> NPForm -> Case = \n,f ->
+
+--  type signature: workaround for gfc bug 9/11/2007
+    case <<f,n> : NPForm * Number> of {
+      <NPCase c,_> => c ;
+      <NPAcc,Sg>   => Gen ;-- appCompl does the job
+      <NPAcc,Pl>   => Nom
     } ;
 
   n2nform : NForm -> NForm = \nf -> case nf of {

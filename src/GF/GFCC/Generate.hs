@@ -25,7 +25,7 @@ generate gfcc cat = concatMap (\i -> gener i cat) [0..]
 
 -- generate an infinite list of trees randomly
 genRandom :: StdGen -> GFCC -> CId -> [Exp]
-genRandom gen gfcc cat = genTrees (randomRs (0.0, 1.0) gen) cat where
+genRandom gen gfcc cat = genTrees (randomRs (0.0, 1.0 :: Double) gen) cat where
 
   timeout = 47 -- give up
 
