@@ -9,8 +9,19 @@ instance DiffSwe of DiffScand = open CommonScand, Prelude in {
     utrum = Utr ; 
     neutrum = Neutr ;
 
+    gennumN : Gender -> Number -> GenNum = \g,n -> Plg ; -----
     gennum : Gender -> Number -> GenNum = \g,n ->
-      case <g,n> of {
+{-
+--- debugging Compute 9/11/2007
+      case n of {
+        Sg => case g of {
+          Utr => SgUtr ;
+          Neutr => SgNeutr
+          } ;
+        _  => Plg
+        } ;
+-}
+      case <<g,n> : Gender * Number> of {
         <Utr,Sg> => SgUtr ;
         <Neutr,Sg> => SgNeutr ;
         _  => Plg

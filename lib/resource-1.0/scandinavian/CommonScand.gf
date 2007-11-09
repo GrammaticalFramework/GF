@@ -81,10 +81,12 @@ oper
 
 -- Used in $Noun.AdjCN$.
 
-  agrAdj : GenNum -> DetSpecies -> AFormPos = \gn,d -> case <gn,d> of {
-    <_,  DIndef> => Strong gn ;
-    <Plg,DDef _> => Weak Pl ;
-    _            => Weak Sg
+-----  agrAdj : GenNum -> DetSpecies -> AFormPos = \gn,d -> Strong gn ; --- debug
+  agrAdj : GenNum -> DetSpecies -> AFormPos = \gn,d -> 
+    case <<gn,d> : GenNum * DetSpecies> of {
+      <_,  DIndef> => Strong gn ;
+      <Plg,DDef _> => Weak Pl ;
+      _            => Weak Sg
     } ;
 
 -- Used in $DiffScand.predV$.

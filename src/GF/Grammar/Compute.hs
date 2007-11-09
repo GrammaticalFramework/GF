@@ -179,6 +179,7 @@ computeTermOpt rec gr = comp where
            vs <- allParamValues gr ptyp
            case lookup v' (zip vs [0 .. length vs - 1]) of
              Just i -> comp g $ ts !! i
+-----             _ -> prtBad "selection" $ S t' v' -- debug
              _ -> return $ S t' v' -- if v' is not canonical
 
          T (TComp _) cs -> do
@@ -196,8 +197,7 @@ computeTermOpt rec gr = comp where
          Alias _ _ d -> comp g (S d v')
 
          S (T i cs) e -> prawitz g i (flip S v') cs e
-
-	 _    -> returnC $ S t' v'
+         _    -> returnC $ S t' v'
 
      -- normalize away empty tokens
      K "" -> return Empty
