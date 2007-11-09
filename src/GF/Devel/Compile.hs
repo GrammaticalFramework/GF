@@ -32,9 +32,11 @@ import System.Directory
 
 batchCompile :: Options -> [FilePath] -> IO SourceGrammar
 batchCompile opts files = do
-  let defOpts = addOptions opts (options [emitCode]) 
-  Ok (_,gr) <- appIOE $ foldM (compileModule defOpts) emptyCompileEnv files
-  return gr
+  let defOpts = addOptions opts (options [emitCode])
+  egr <- appIOE $ foldM (compileModule defOpts) emptyCompileEnv files 
+  case egr of
+    Ok (_,gr) -> return gr
+    Bad s -> error s
 
 -- to output an intermediate stage
 intermOut :: Options -> Option -> String -> IOE ()
