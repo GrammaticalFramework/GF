@@ -16,7 +16,7 @@ main = do
   xx <- getArgs
   let (opts,fs) = getOptions "-" xx
   case opts of
-    _ | oElem (iOpt "help") opts -> putStrLn "usage: gfc (--make) FILES"
+    _ | oElem (iOpt "help") opts -> putStrLn usageMsg
     _ | oElem (iOpt "-make") opts -> do
       gr <- batchCompile opts fs
       let name = justModuleName (last fs)
@@ -50,14 +50,20 @@ file2gfcc f =
 
 ---- TODO: nicer and richer print options
 
-alsoPrint opts abs gr (opt,suff) =
+alsoPrint opts abs gr (opt,name) =
       if oElem (iOpt opt) opts 
         then do
-          let outfile = abs ++ "." ++ suff
+          let outfile = name
           let output = prGFCC opt gr
           writeFile outfile output
           putStrLn $ "wrote file " ++ outfile
         else return ()
 
-printOptions = [("haskell","hs"),("haskell_gadt","hs"),("js","js")]
+printOptions = [
+  ("haskell","GSyntax.hs"),
+  ("haskell_gadt","GSyntax.hs"),
+  ("js","grammar.js")
+  ]
 
+usageMsg = 
+  "usage: gfc (-h | --make (-noopt) (-js | -haskell | -haskell_gadt)) (-src) FILES"
