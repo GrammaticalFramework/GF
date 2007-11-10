@@ -1,4 +1,4 @@
-module GF.Devel.GFCCtoJS (gfcc2js) where
+module GF.Devel.GFCCtoJS (gfcc2js,gfcc2grammarRef) where
 
 import qualified GF.GFCC.Macros as M
 import qualified GF.GFCC.DataGFCC as D
@@ -84,3 +84,23 @@ children = JS.Ident "cs"
 
 new :: String -> [JS.Expr] -> JS.Expr
 new f xs = JS.ENew (JS.Ident f) xs
+
+-- grammar reference file for js applications. AR 10/11/2007
+
+gfcc2grammarRef :: D.GFCC -> String
+gfcc2grammarRef gfcc =
+  encodeUTF8 $ refs
+ where
+   C.CId abstr = D.absname gfcc
+   refs = unlines $ [
+     "// Grammar Reference",
+     "function concreteReference(concreteSyntax, concreteSyntaxName) {",
+     "this.concreteSyntax = concreteSyntax;",
+     "this.concreteSyntaxName = concreteSyntaxName;",
+     "}",
+     "var myAbstract = " ++ abstr ++ " ;",
+     "var myConcrete = new Array();"
+     ] ++ [
+     "myConcrete.push(new concreteReference(" ++ c ++ ",\"" ++ c ++ "\"));" 
+        | C.CId c <- D.cncnames gfcc]
+
