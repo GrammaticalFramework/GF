@@ -50,20 +50,21 @@ file2gfcc f =
 
 ---- TODO: nicer and richer print options
 
-alsoPrint opts abs gr (opt,name) =
-      if oElem (iOpt opt) opts 
-        then do
-          let outfile = name
-          let output = prGFCC opt gr
-          writeFile outfile output
-          putStrLn $ "wrote file " ++ outfile
-        else return ()
+alsoPrint opts abs gr (opt,name) = do
+  if oElem (iOpt opt) opts 
+    then do
+      let outfile = name
+      let output = prGFCC opt gr
+      writeFile outfile output
+      putStrLn $ "wrote file " ++ outfile
+    else return ()
 
 printOptions = [
   ("haskell","GSyntax.hs"),
   ("haskell_gadt","GSyntax.hs"),
-  ("js","grammar.js")
+  ("js","grammar.js"),
+  ("jsref","grammarReference.js")
   ]
 
 usageMsg = 
-  "usage: gfc (-h | --make (-noopt) (-js | -haskell | -haskell_gadt)) (-src) FILES"
+  "usage: gfc (-h | --make (-noopt) (-js | -jsref | -haskell | -haskell_gadt)) (-src) FILES"
