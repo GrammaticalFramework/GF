@@ -116,7 +116,9 @@ values :: Term -> Term
 values t = case t of
   T ty [(ps,t)]    -> T ty [(ps,values t)] -- don't destroy parametrization
   T (TComp ty)  cs -> V ty [values t | (_, t) <- cs]
-  T (TTyped ty) cs -> V ty [values t | (_, t) <- cs] ---- why are these left?
+  T (TTyped ty) cs -> V ty [values t | (_, t) <- cs] 
+        ---- why are these left?
+        ---- printing with GrammarToSource does not preserve the distinction
   _ -> C.composSafeOp values t
 
 

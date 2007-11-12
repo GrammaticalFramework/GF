@@ -12,7 +12,7 @@ resource ResFin = ParamX ** open Prelude in {
   flags optimize=all ;
 
 
---2 Parameterd for $Noun$
+--2 Parameters for $Noun$
 
 -- This is the $Case$ as needed for both nouns and $NP$s.
 

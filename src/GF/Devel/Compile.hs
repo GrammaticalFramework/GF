@@ -6,9 +6,9 @@ import GF.Compile.Extend
 import GF.Compile.Rebuild
 import GF.Compile.Rename
 import GF.Grammar.Refresh
-import GF.Compile.CheckGrammar
-import GF.Compile.Optimize
-import GF.Compile.Evaluate ----
+import GF.Devel.CheckGrammar
+import GF.Devel.Optimize
+--import GF.Compile.Evaluate ----
 import GF.Devel.OptimizeGF
 --import GF.Canon.Share
 --import GF.Canon.Subexpressions (elimSubtermsMod,unSubelimModule)
@@ -166,7 +166,7 @@ compileSourceModule opts env@(k,gr) mo@(i,mi) = do
       (k',mo3r:_) <- putpp "  refreshing " $ ioeErr $ refreshModule (k,mos) mo3
       intermOut opts (iOpt "show_refresh") (prMod mo3r)
 
-      let eenv = emptyEEnv
+      let eenv = () --- emptyEEnv
       (mo4,eenv') <- 
         ---- if oElem "check_only" opts 
           putpp "  optimizing " $ ioeErr $ optimizeModule opts (mos,eenv) mo3r

@@ -10,7 +10,7 @@ import qualified GF.GFCC.AbsGFCC as C
 import qualified GF.GFCC.DataGFCC as D
 import qualified GF.Grammar.Abstract as A
 import qualified GF.Grammar.Macros as GM
-import qualified GF.Grammar.Compute as Compute
+--import qualified GF.Grammar.Compute as Compute
 import qualified GF.Infra.Modules as M
 import qualified GF.Infra.Option as O
 
