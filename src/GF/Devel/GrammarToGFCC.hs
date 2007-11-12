@@ -300,7 +300,6 @@ type ParamEnv =
 --- gathers those param types that are actually used in lincats and lin terms
 paramValues :: SourceGrammar -> ParamEnv
 paramValues cgr = (labels,untyps,typs) where
-  params = [(ty, errVal [] $ Look.allParamValues cgr ty) | ty <- partyps]
   partyps = nub $ [ty | 
               (_,(_,CncCat (Yes (RecType ls)) _ _)) <- jments,
               ty0 <- [ty | (_, ty) <- unlockTyp ls],
@@ -312,6 +311,7 @@ paramValues cgr = (labels,untyps,typs) where
               (_,(_,CncFun _ (Yes tr) _)) <- jments,
               ty  <- err (const []) snd $ appSTM (typsFromTrm tr) []
             ]
+  params = [(ty, errVal [] $ Look.allParamValues cgr ty) | ty <- partyps]
   typsFrom ty = case ty of
     Table p t  -> typsFrom p ++ typsFrom t
     RecType ls -> RecType (sort (unlockTyp ls)) : concat [typsFrom t | (_, t) <- ls]
@@ -320,6 +320,11 @@ paramValues cgr = (labels,untyps,typs) where
   typsFromTrm :: Term -> STM [Type] Term
   typsFromTrm tr = case tr of
     V ty ts -> updateSTM (ty:) >> mapM_ typsFromTrm ts >> return tr
+    R fs -> mapM_ (typsFromField . snd) fs >> return tr 
+      where
+        typsFromField (mty, t) = case mty of
+          Just x -> updateSTM (x:) >> typsFromTrm t
+          _ -> typsFromTrm t
     T (TTyped ty) cs -> 
       updateSTM (ty:) >> mapM_ typsFromTrm [t | (_, t) <- cs] >> return tr
     T (TComp ty) cs -> 
