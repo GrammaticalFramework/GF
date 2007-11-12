@@ -156,7 +156,9 @@ gfdoc:
 	cp */Irreg???.gf doc/gfdoc
 	mv ../prelude/*.html doc/gfdoc
 
-gf3:
+gf3: gf3present gf3alltenses
+
+gf3alltenses:
 #	$(GFNew) arabic/GrammarAra.gf
 #	$(GFNew) catalan/Catalan.gf
 	$(GFNew) danish/Danish.gf

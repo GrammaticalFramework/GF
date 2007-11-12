@@ -90,6 +90,7 @@ computeTermOpt rec gr = comp where
          (Alias _ _ d, _) -> comp g (App d a')
 
          (S (T i cs) e,_) -> prawitz g i (flip App a') cs e
+         (S (V i cs) e,_) -> prawitzV g i (flip App a') cs e
 
 	 _ -> do
            (t',b) <- appPredefined (App f' a')
@@ -122,6 +123,7 @@ computeTermOpt rec gr = comp where
          Alias _ _ r -> comp g (P r l)
 
          S (T i cs) e -> prawitz g i (flip P l) cs e
+         S (V i cs) e -> prawitzV g i (flip P l) cs e
 
          _   -> returnC $ P t' l
 
@@ -197,6 +199,7 @@ computeTermOpt rec gr = comp where
          Alias _ _ d -> comp g (S d v')
 
          S (T i cs) e -> prawitz g i (flip S v') cs e
+         S (V i cs) e -> prawitzV g i (flip S v') cs e
          _    -> returnC $ S t' v'
 
      -- normalize away empty tokens
@@ -219,6 +222,8 @@ computeTermOpt rec gr = comp where
 
          (S (T i cs) e, s) -> prawitz g i (flip Glue s) cs e
          (s, S (T i cs) e) -> prawitz g i (Glue s) cs e
+         (S (V i cs) e, s) -> prawitzV g i (flip Glue s) cs e
+         (s, S (V i cs) e) -> prawitzV g i (Glue s) cs e
          (_,Empty)         -> return x
          (Empty,_)         -> return y
          (K a, K b)        -> return $ K (a ++ b)
@@ -373,6 +378,9 @@ computeTermOpt rec gr = comp where
      prawitz g i f cs e = do
        cs' <- mapM (compBranch g) [(p, f v) | (p,v) <- cs]
        return $ S (T i cs') e
+     prawitzV g i f cs e = do
+       cs' <- mapM (comp g) [(f v) | v <- cs]
+       return $ S (V i cs') e
 
 -- | argument variables cannot be glued
 checkNoArgVars :: Term -> Err Term
