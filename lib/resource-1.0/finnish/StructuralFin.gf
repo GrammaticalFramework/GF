@@ -126,7 +126,7 @@ concrete StructuralFin of Structural = CatFin **
             c => (mkPronoun "tämä" "tämän" "tätä" "tänä" "tähän" Sg P3).s ! NPCase c
             } ;
           table (MorphoFin.Case) {
-            c => (mkPronoun "nuo" "noiden" "noita" "noina" "noihin" Sg P3).s ! NPCase c
+            c => (mkPronoun "nämä" "näiden" "näitä" "näinä" "näihin" Sg P3).s ! NPCase c
             }
           ] ;
     s2 = [] ; isNum,isPoss = False ; isDef = True ; 
