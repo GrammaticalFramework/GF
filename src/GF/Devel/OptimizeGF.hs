@@ -16,7 +16,8 @@
 -----------------------------------------------------------------------------
 
 module GF.Devel.OptimizeGF (
-  optModule,unshareModule,unsubexpModule,unoptModule) where 
+  optModule,unshareModule,unsubexpModule,unoptModule,subexpModule,shareModule
+  ) where 
 
 import GF.Grammar.Grammar
 import GF.Grammar.Lookup
@@ -32,7 +33,9 @@ import qualified Data.Map as Map
 import Data.List
 
 optModule :: (Ident, SourceModInfo) -> (Ident, SourceModInfo)
-optModule = subexpModule . processModule optim
+optModule = subexpModule . shareModule
+
+shareModule = processModule optim
 
 unoptModule :: SourceGrammar -> (Ident, SourceModInfo) -> (Ident, SourceModInfo)
 unoptModule gr = unshareModule gr . unsubexpModule
