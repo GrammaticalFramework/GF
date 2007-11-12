@@ -33,6 +33,8 @@ EMBED = GF/Embed/TemplateApp
 GF_EXE=gf$(EXEEXT)
 GF_EXE_TMP=gf-bin$(EXEEXT)
 GF_DOC_EXE=gfdoc$(EXEEXT)
+GF3_EXE=gf3$(EXEEXT)
+
 
 ifeq ("$(READLINE)","readline")
   GHCFLAGS += -package readline -DUSE_READLINE
@@ -201,8 +203,8 @@ gfi: gf3
 
 gf3:
 	$(GHMAKE) $(GHCOPTFLAGS) -o gf3 GF/Devel/GF.hs
-	strip gf3
-	mv gf3 ../bin/
+	strip $(GF3_EXE)
+	mv $(GF3_EXE) ../bin/
 
 gfcc2c:
 	$(MAKE) -C tools/c
@@ -283,6 +285,11 @@ install: install-gf install-gfdoc install-lib install-editor
 install-gf:
 	$(INSTALL) -d $(bindir)
 	$(INSTALL) ../bin/$(GF_EXE) $(bindir)
+
+install-gf3:
+	$(INSTALL) -d $(bindir)
+	$(INSTALL) ../bin/$(GF3_EXE) $(bindir)
+	$(INSTALL) ../bin/gfc $(bindir)
 
 install-gfdoc: 
 	$(INSTALL) -d $(bindir)
