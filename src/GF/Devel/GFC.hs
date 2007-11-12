@@ -1,4 +1,5 @@
-module Main where
+module GF.Devel.GFC (mainGFC) where
+-- module Main where
 
 import GF.Devel.Compile
 import GF.Devel.PrintGFCC
@@ -10,10 +11,8 @@ import GF.GFCC.ParGFCC
 import GF.Devel.UseIO
 import GF.Infra.Option
 
-import System
-
-main = do
-  xx <- getArgs
+mainGFC :: [String] -> IO ()
+mainGFC xx = do
   let (opts,fs) = getOptions "-" xx
   case opts of
     _ | oElem (iOpt "help") opts -> putStrLn usageMsg

@@ -193,18 +193,12 @@ gfdoc: tools/$(GF_DOC_EXE)
 tools/$(GF_DOC_EXE): tools/GFDoc.hs
 	$(GHMAKE) $(GHCOPTFLAGS) -o $@ $^
 
-gfc:
-	$(GHMAKE) $(GHCOPTFLAGS) -o gfc GF/Devel/GFC.hs
-	strip gfc
-	mv gfc ../bin/
+gfc: gf3
 
-gfi:
-	$(GHMAKE) $(GHCOPTFLAGS) -o gfi GF/Devel/GFI.hs
-	strip gfi
-	mv gfi ../bin/
+gfi: gf3
 
 gf3:
-	$(GHMAKE) $(GHCOPTFLAGS) -o gf3 GF/Devel/GF3.hs
+	$(GHMAKE) $(GHCOPTFLAGS) -o gf3 GF/Devel/GF.hs
 	strip gf3
 	mv gf3 ../bin/
 
