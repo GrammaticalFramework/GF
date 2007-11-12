@@ -391,10 +391,15 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
    --- this is mainly needed for parameter record projections
    ---- was: errVal t $ Compute.computeConcreteRec cgr t
    comp t = case t of
-     S (V typ ts) v0 -> errVal t $ do
+     T (TComp typ) ts  -> comp $ V typ (map (comp . snd) ts)  ---- should
+     T (TTyped typ) ts -> comp $ V typ (map (comp . snd) ts) ---- should
+     V typ ts -> V typ (map comp ts)
+     S (V typ ts) v0 -> err error id $ do
        let v = comp v0 
        vs <- Look.allParamValues cgr typ
-       return $ maybe t (comp . (ts !!)) $ lookup v (zip vs [0 .. length vs - 1])
+       return $ maybe t ---- (error (prt t)) -- should be safe after doVar though
+                      (comp . (ts !!)) $ lookup v (zip vs [0 .. length vs - 1])
+     R r -> R [(l,(ty,comp t)) | (l,(ty,t)) <- r]
      P (R r) l -> maybe t (comp . snd) $ lookup l r
      _ -> GM.composSafeOp comp t
 
@@ -481,6 +486,6 @@ unlockTyp = filter notlock where
      _ -> True
 
 prtTrace tr n = 
-  trace ("-- INTERNAL COMPILER ERROR" +++ A.prt tr ++++ show tr ++++ show n) n
+  trace ("-- INTERNAL COMPILER ERROR" +++ A.prt tr ++++ show n) n
 prTrace  tr n = trace ("-- OBSERVE" +++ A.prt tr +++ show n +++ show tr) n
 

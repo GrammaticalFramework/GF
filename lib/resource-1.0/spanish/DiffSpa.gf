@@ -70,8 +70,8 @@ instance DiffSpa of DiffRomance = open CommonRomance, PhonoSpa, BeschSpa, Prelud
           CPron ag an ap => <argPron ag an ap dative, ap,True> ;
           _ => <[],P2,False>
           }
-       in case <paccp.p2, pdatp.p2> of {
-         <P3,P3> => <"se" ++ paccp.p1, [],True> ;
+       in case <<paccp.p2, pdatp.p2> : Person * Person> of {
+          <P3,P3> => <"se" ++ paccp.p1, [],True> ;
          _       => <pdatp.p1 ++ paccp.p1, [],orB paccp.p3 pdatp.p3>
          } ;
 
@@ -139,7 +139,7 @@ instance DiffSpa of DiffRomance = open CommonRomance, PhonoSpa, BeschSpa, Prelud
           _ => eux
           } ;
       in 
-      \g,n,p -> case <g,n,p> of { 
+      \g,n,p -> case <<g,n,p> : Gender * Number * Person> of { 
         <_,Sg,P1> => cases "me" "mí" ;
         <_,Sg,P2> => cases "te" "tí" ;
         <_,Pl,P1> => cases "nos" "nosotras" ; --- nosotros

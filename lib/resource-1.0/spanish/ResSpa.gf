@@ -8,6 +8,6 @@
 
 instance ResSpa of ResRomance = DiffSpa ** open CommonRomance, Prelude in {
 
-  flags optimize=noexpand ;
+---  flags optimize=noexpand ;
 
 } ;
