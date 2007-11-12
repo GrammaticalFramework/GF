@@ -6,7 +6,7 @@ AC_PREREQ(2.53)
 
 AC_REVISION($Revision: 1.26 $)
 
-AC_CONFIG_FILES([config.mk jgf gfeditor])
+AC_CONFIG_FILES([config.mk gfc jgf gfeditor])
 
 AC_CANONICAL_HOST
 
