@@ -194,6 +194,8 @@ tools/$(GF_DOC_EXE): tools/GFDoc.hs
 	$(GHMAKE) $(GHCOPTFLAGS) -o $@ $^
 
 gfc: gf3
+	cp -f gfc ../bin/
+	chmod a+x ../bin/gfc
 
 gfi: gf3
 
