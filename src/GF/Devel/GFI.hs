@@ -1,71 +1,77 @@
-module Main where
+module GF.Devel.GFI (mainGFI) where
 
 import GF.Command.Interpreter
+import GF.Command.Importing
 import GF.Command.Commands
 import GF.GFCC.API
-import System (getArgs)
-import Data.Char (isDigit)
 
--- Simple translation application built on GFCC. AR 7/9/2006 -- 19/9/2007
+import GF.Devel.UseIO
+import GF.Devel.Arch
+import GF.Infra.Option ---- Haskell's option lib
 
-main :: IO ()
-main = do
-  file:_  <- getArgs
-  grammar <- file2grammar file
-  let env = CommandEnv grammar (allCommands grammar)
-  printHelp grammar
-  loop env
 
-loop :: CommandEnv -> IO ()
-loop env = do
+mainGFI :: [String] -> IO ()
+mainGFI xx = do
+  putStrLn welcome
+  env <- importInEnv emptyMultiGrammar xx
+  loop (GFEnv env [] 0)
+  return ()
+
+loop :: GFEnv -> IO GFEnv
+loop gfenv0 = do
+  let env = commandenv gfenv0
+  putStrFlush (prompt env)
   s <- getLine
-  if s == "q" then return () else do
-    interpretCommandLine env s
-    loop env
+  let gfenv = gfenv0 {history = s : history gfenv0}
+  case words s of
 
-printHelp grammar = do
-  putStrLn $ "languages:  " ++ unwords (languages grammar)
-  putStrLn $ "categories: " ++ unwords (categories grammar)
----  putStrLn commands
+  -- special commands, working on GFEnv
+    "i":args -> do
+      env1 <- importInEnv (multigrammar env) args
+      loopNewCPU $ gfenv {commandenv = env1}
+    "e":_ -> loopNewCPU $ gfenv {commandenv=env{multigrammar=emptyMultiGrammar}}
+    "ph":_ -> mapM_ putStrLn (reverse (history gfenv0)) >> loopNewCPU gfenv
+    "q":_  -> putStrLn "See you." >> return gfenv
 
-{- obsolete
+  -- ordinary commands, working on CommandEnv
+    _ -> do
+      interpretCommandLine env s
+      loopNewCPU gfenv
 
-commands = unlines [
-  "Commands:",
-  "  (gt | gtt | gr | grt) Cat Num - generate all or random",
-  "  p Lang Cat String             - parse (unquoted) string",
-  "  l Tree                        - linearize in all languages",
-  "  h                             - help",
-  "  q                             - quit"
+loopNewCPU gfenv = do
+  cpu <- prCPU $ cputime gfenv
+  loop $ gfenv {cputime = cpu}
+
+importInEnv mgr0 xx = do
+  let (opts,files) = getOptions "-" xx
+  mgr1 <- case files of
+    [] -> return mgr0
+    _  -> importGrammar mgr0 opts files
+  let env = CommandEnv mgr1 (allCommands mgr1)
+  putStrLn $ unwords $ "\nLanguages:" : languages mgr1
+  return env
+
+welcome = unlines [
+  "                              ",
+  "         *  *  *              ",
+  "      *           *           ",
+  "    *               *         ",
+  "   *                          ",
+  "   *                          ",
+  "   *        * * * * * *       ",
+  "   *        *         *       ",
+  "    *       * * * *  *        ",
+  "      *     *      *          ",
+  "         *  *  *              ",
+  "                              ",
+  "This is GF version 3.0 alpha. ",
+  "Some things may work.         "
   ]
 
-treat :: MultiGrammar -> String -> IO ()
-treat mgr s = case words s of
-  "gt" :cat:n:_ -> mapM_ prlinonly $ take (read1 n) $ generateAll mgr cat
-  "gtt":cat:n:_ -> mapM_ prlin $ take (read1 n) $ generateAll mgr cat
-  "gr" :cat:n:_ -> generateRandom mgr cat >>= mapM_ prlinonly . take (read1 n) 
-  "grt":cat:n:_ -> generateRandom mgr cat >>= mapM_ prlin . take (read1 n) 
-  "p":lang:cat:ws -> do
-    let ts = parse mgr lang cat $ unwords ws
-    mapM_ (putStrLn . showTree) ts 
-  "h":_ -> printHelp mgr
-  "l" : ws -> lins $ readTree mgr $ unwords ws
- where
-  grammar = gfcc mgr
-  langs = languages mgr
-  lins t = mapM_ (lint t) $ langs 
-  lint t lang = do
-----    putStrLn $ showTree $ linExp grammar lang t 
-    lin t lang
-  lin t lang = do
-    putStrLn $ linearize mgr lang t
-  prlins t = do
-    putStrLn $ showTree t
-    lins t
-  prlin t = do
-    putStrLn $ showTree t
-    prlinonly t
-  prlinonly t = mapM_ (lin t) $ langs
-  read1 s = if all isDigit s then read s else 1
--}
+prompt env = abstractName (multigrammar env) ++ "> "
 
+data GFEnv = GFEnv {
+  commandenv :: CommandEnv,
+  history    :: [String],
+  cputime    :: Integer
+  }

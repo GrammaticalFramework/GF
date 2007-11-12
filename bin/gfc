@@ -1,0 +1,3 @@
+#!/bin/sh
+GFBIN=/usr/local/bin/gf3
+exec $GFBIN --batch ${1+"$@"}
