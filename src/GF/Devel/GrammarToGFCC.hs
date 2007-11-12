@@ -319,12 +319,12 @@ paramValues cgr = (labels,untyps,typs) where
  
   typsFromTrm :: Term -> STM [Type] Term
   typsFromTrm tr = case tr of
-    V ty ts -> updateSTM (ty:) >> mapM_ typsFromTrm ts >> return tr
     R fs -> mapM_ (typsFromField . snd) fs >> return tr 
       where
         typsFromField (mty, t) = case mty of
           Just x -> updateSTM (x:) >> typsFromTrm t
           _ -> typsFromTrm t
+    V ty ts -> updateSTM (ty:) >> mapM_ typsFromTrm ts >> return tr
     T (TTyped ty) cs -> 
       updateSTM (ty:) >> mapM_ typsFromTrm [t | (_, t) <- cs] >> return tr
     T (TComp ty) cs -> 
@@ -396,14 +396,12 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
    --- this is mainly needed for parameter record projections
    ---- was: errVal t $ Compute.computeConcreteRec cgr t
    comp t = case t of
-     T (TComp typ) ts  -> comp $ V typ (map (comp . snd) ts)  ---- should
-     T (TTyped typ) ts -> comp $ V typ (map (comp . snd) ts) ---- should
+     T (TComp typ) ts  -> comp $ V typ (map (comp . snd) ts)  ---- should...
+     T (TTyped typ) ts -> comp $ V typ (map (comp . snd) ts)  ---- should
      V typ ts -> V typ (map comp ts)
      S (V typ ts) v0 -> err error id $ do
        let v = comp v0 
-       vs <- Look.allParamValues cgr typ
-       return $ maybe t ---- (error (prt t)) -- should be safe after doVar though
-                      (comp . (ts !!)) $ lookup v (zip vs [0 .. length vs - 1])
+       return $ maybe t (comp . (ts !!) . fromInteger) $ Map.lookup v untyps
      R r -> R [(l,(ty,comp t)) | (l,(ty,t)) <- r]
      P (R r) l -> maybe t (comp . snd) $ lookup l r
      _ -> GM.composSafeOp comp t
@@ -437,6 +435,7 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
      Vr (IA (cat, _)) -> return (identC cat,[])
      Vr (IC s) -> return (identC cat,[]) where
        cat = init (reverse (dropWhile (/='_') (reverse s))) ---- from gf parser
+----     Vr _ -> error $ "getLab " ++ show tr
      P p lab2 -> do
        (cat,labs) <- getLab p
        return (cat,labs++[lab2]) 
@@ -450,15 +449,15 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
      _ | tr == x -> t
      _ -> GM.composSafeOp (mkBranch x t) tr     
 
-   valNum tr = maybe (tryPerm tr) EInt $ Map.lookup tr untyps
+   valNum tr = maybe (valNumFV $ tryFV tr) EInt $ Map.lookup tr untyps
     where
-      tryPerm tr = valNumFV $ tryVar tr
-      tryVar tr = case GM.appForm tr of
-        (c@(QC _ _), ts) -> [GM.mkApp c ts' | ts' <- combinations (map tryVar ts)]
+      tryFV tr = case GM.appForm tr of
+        (c@(QC _ _), ts) -> [GM.mkApp c ts' | ts' <- combinations (map tryFV ts)]
         (FV ts,_) -> ts
         _ -> [tr]
       valNumFV ts = case ts of
-        [tr] -> prtTrace tr $ K "66667"
+        [tr] -> trace (unwords (map prt (Map.keys typs))) $ 
+                  prtTrace tr $ K "66667"
         _ -> FV $ map valNum ts
 
    mkCurry trm = case trm of

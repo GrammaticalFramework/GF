@@ -126,9 +126,15 @@ compileOne opts env@(_,srcgr) file = do
        sm0 <- putpOpt ("- parsing" +++ file) ("- compiling" +++ file ++ "... ") $ 
                                            getSourceModule opts file
        (k',sm)  <- compileSourceModule opts env sm0
-       cm  <- putpp "  generating code... " $ generateModuleCode opts path sm
+       let sm1 = if isConcr sm then shareModule sm else sm -- cannot expand Str
+       cm  <- putpp "  generating code... " $ generateModuleCode opts path sm1
           -- sm is optimized before generation, but not in the env
-       extendCompileEnvInt env (k',sm)
+       let cm2 = unsubexpModule cm
+       extendCompileEnvInt env (k',sm1)
+  where
+   isConcr (_,mi) = case mi of
+     ModMod m -> isModCnc m && mstatus m /= MSIncomplete 
+     _ -> False
 
 
 compileSourceModule :: Options -> CompileEnv -> 
@@ -174,7 +180,7 @@ generateModuleCode opts path minfo@(name,info) = do
 
   let pname  = prefixPathName path (prt name)
   let minfo0 = minfo 
-  let minfo1 = (if isConcr info then optModule else id) minfo
+  let minfo1 = subexpModule minfo0
   let minfo2 = minfo1
 
   let (file,out) = (gfoFile pname, prGrammar (MGrammar [minfo2]))
@@ -184,9 +190,6 @@ generateModuleCode opts path minfo@(name,info) = do
  where 
    putp  = putPointE opts
    putpp = putPointEsil opts
-   isConcr mi = case mi of
-     ModMod m -> isModCnc m && mstatus m /= MSIncomplete 
-     _ -> False
 
 
 -- auxiliaries

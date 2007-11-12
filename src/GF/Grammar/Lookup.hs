@@ -194,6 +194,7 @@ allParamValues cnc ptyp = case ptyp of
      App (Q (IC "Predef") (IC "Ints")) (EInt n) -> 
        return [EInt i | i <- [0..n]]
      QC p c -> lookupParamValues cnc p c
+     Q  p c -> lookupParamValues cnc p c ----
      RecType r -> do
        let (ls,tys) = unzip $ sortByFst r
        tss <- mapM allPV tys
