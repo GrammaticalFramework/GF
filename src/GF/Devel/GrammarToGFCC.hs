@@ -164,6 +164,7 @@ mkCType t = case t of
     EInt i -> C.R $ replicate (1 + fromInteger i) $ mkCType vt
     RecType rs -> mkCType $ foldr Table vt (map snd rs) 
   Sort "Str"        -> C.S [] --- Str only
+  App (Q (IC "Predef") (IC "Ints")) (EInt i) -> C.C $ fromInteger i
   _ -> error  $ "mkCType " ++ show t
 
 -- encoding showable lincats (as in source gf) as terms
