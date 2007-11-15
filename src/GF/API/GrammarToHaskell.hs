@@ -248,6 +248,7 @@ updateSkeleton cat skel rule =
  case skel of
    (cat0,rules):rr | cat0 == cat -> (cat0, rule:rules) : rr
    (cat0,rules):rr               -> (cat0, rules) : updateSkeleton cat rr rule
+   _ -> error $ cat ++ ": updating empty skeleton with" +++ show rule
 
 isListCat :: (OIdent, [(OIdent, [OIdent])]) -> Bool
 isListCat (cat,rules) = "List" `isPrefixOf` cat && length rules == 2
