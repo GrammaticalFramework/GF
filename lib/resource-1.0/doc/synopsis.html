@@ -18,7 +18,7 @@
     <LI><A HREF="#toc2">A hierarchic view</A>
     <LI><A HREF="#toc3">Explanations</A>
     </UL>
-  <LI><A HREF="#toc4">Syntax Rules</A>
+  <LI><A HREF="#toc4">Syntax Rules and Structural Words</A>
     <UL>
     <LI><A HREF="#A" TITLE="A - one-place adjective">A - one-place adjective</A>
     <LI><A HREF="#A2" TITLE="A2 - two-place adjective">A2 - two-place adjective</A>
@@ -86,17 +86,19 @@
     <LI><A HREF="#VV" TITLE="VV - verb-phrase-complement verb">VV - verb-phrase-complement verb</A>
     <LI><A HREF="#Voc" TITLE="Voc - vocative or "please"">Voc - vocative or "please"</A>
     </UL>
-  <LI><A HREF="#toc70">Structural Words</A>
-  <LI><A HREF="#toc71">Paradigms for Danish</A>
-  <LI><A HREF="#toc72">Paradigms for English</A>
-  <LI><A HREF="#toc73">Paradigms for Finnish</A>
-  <LI><A HREF="#toc74">Paradigms for French</A>
-  <LI><A HREF="#toc75">Paradigms for German</A>
-  <LI><A HREF="#toc76">Paradigms for Italian</A>
-  <LI><A HREF="#toc77">Paradigms for Norwegian</A>
-  <LI><A HREF="#toc78">Paradigms for Russian</A>
-  <LI><A HREF="#toc79">Paradigms for Spanish</A>
-  <LI><A HREF="#toc80">Paradigms for Swedish</A>
+  <LI><A HREF="#toc70">Lexical Paradigms</A>
+    <UL>
+    <LI><A HREF="#toc71">Paradigms for Danish</A>
+    <LI><A HREF="#toc72">Paradigms for English</A>
+    <LI><A HREF="#toc73">Paradigms for Finnish</A>
+    <LI><A HREF="#toc74">Paradigms for French</A>
+    <LI><A HREF="#toc75">Paradigms for German</A>
+    <LI><A HREF="#toc76">Paradigms for Italian</A>
+    <LI><A HREF="#toc77">Paradigms for Norwegian</A>
+    <LI><A HREF="#toc78">Paradigms for Russian</A>
+    <LI><A HREF="#toc79">Paradigms for Spanish</A>
+    <LI><A HREF="#toc80">Paradigms for Swedish</A>
+    </UL>
   <LI><A HREF="#toc81">Browsing the libraries with GF commands</A>
   <LI><A HREF="#toc82">An Example of Usage</A>
   </UL>
@@ -494,14 +496,25 @@ also in the <CODE>Paradigms</CODE> modules.
 </TABLE>
 
 <A NAME="toc4"></A>
-<H1>Syntax Rules</H1>
+<H1>Syntax Rules and Structural Words</H1>
 <P>
-Source: <A HREF="../api/Constructors.gf"><CODE>http://www.cs.chalmers.se/~aarne/GF/lib/resource/api/Constructors.gf</CODE></A>
+Source 1: <A HREF="../api/Constructors.gf"><CODE>http://www.cs.chalmers.se/~aarne/GF/lib/resource/api/Constructors.gf</CODE></A>
+</P>
+<P>
+Source 2: <A HREF="../abstract/Structural.gf"><CODE>http://www.cs.chalmers.se/~aarne/GF/lib/resource/abstract/Structural.gf</CODE></A>
 </P>
 <A NAME="A"></A>
 <H2>A - one-place adjective</H2>
+<P>
+Lexical category, constructors given in
+<A HREF="#RParadigms">lexical paradigms</A>.
+</P>
 <A NAME="A2"></A>
 <H2>A2 - two-place adjective</H2>
+<P>
+Lexical category, constructors given in
+<A HREF="#RParadigms">lexical paradigms</A>.
+</P>
 <A NAME="AP"></A>
 <H2>AP - adjectival phrase</H2>
 <TABLE CELLPADDING="4" BORDER="1">
@@ -579,6 +592,39 @@ Source: <A HREF="../api/Constructors.gf"><CODE>http://www.cs.chalmers.se/~aarne/
 
 <A NAME="AdA"></A>
 <H2>AdA - adjective-modifying adverb</H2>
+<TABLE CELLPADDING="4" BORDER="1">
+<TR>
+<TH>Function</TH>
+<TH>Type</TH>
+<TH COLSPAN="2">Example</TH>
+</TR>
+<TR>
+<TD><CODE>almost_AdA</CODE></TD>
+<TD><A HREF="#AdA" TITLE="AdA - adjective-modifying adverb">AdA</A></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>quite_Adv</CODE></TD>
+<TD><A HREF="#AdA" TITLE="AdA - adjective-modifying adverb">AdA</A></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>so_AdA</CODE></TD>
+<TD><A HREF="#AdA" TITLE="AdA - adjective-modifying adverb">AdA</A></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>too_AdA</CODE></TD>
+<TD><A HREF="#AdA" TITLE="AdA - adjective-modifying adverb">AdA</A></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>very_AdA</CODE></TD>
+<TD><A HREF="#AdA" TITLE="AdA - adjective-modifying adverb">AdA</A></TD>
+<TD>-</TD>
+</TR>
+</TABLE>
+
 <A NAME="AdN"></A>
 <H2>AdN - numeral-modifying adverb</H2>
 <TABLE CELLPADDING="4" BORDER="1">
@@ -586,6 +632,11 @@ Source: <A HREF="../api/Constructors.gf"><CODE>http://www.cs.chalmers.se/~aarne/
 <TH>Function</TH>
 <TH>Type</TH>
 <TH COLSPAN="2">Example</TH>
+</TR>
+<TR>
+<TD><CODE>almost_AdN</CODE></TD>
+<TD><A HREF="#AdN" TITLE="AdN - numeral-modifying adverb">AdN</A></TD>
+<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkAdN</CODE></TD>
@@ -596,6 +647,19 @@ Source: <A HREF="../api/Constructors.gf"><CODE>http://www.cs.chalmers.se/~aarne/
 
 <A NAME="AdV"></A>
 <H2>AdV - adverb directly attached to verb</H2>
+<TABLE CELLPADDING="4" BORDER="1">
+<TR>
+<TH>Function</TH>
+<TH>Type</TH>
+<TH COLSPAN="2">Example</TH>
+</TR>
+<TR>
+<TD><CODE>always_AdV</CODE></TD>
+<TD><A HREF="#AdV" TITLE="Adv - verb-phrase-modifying adverb">AdV</A></TD>
+<TD>-</TD>
+</TR>
+</TABLE>
+
 <A NAME="Adv"></A>
 <H2>Adv - verb-phrase-modifying adverb</H2>
 <TABLE CELLPADDING="4" BORDER="1">
@@ -603,6 +667,26 @@ Source: <A HREF="../api/Constructors.gf"><CODE>http://www.cs.chalmers.se/~aarne/
 <TH>Function</TH>
 <TH>Type</TH>
 <TH COLSPAN="2">Example</TH>
+</TR>
+<TR>
+<TD><CODE>everywhere_Adv</CODE></TD>
+<TD><A HREF="#Adv" TITLE="Adv - verb-phrase-modifying adverb">Adv</A></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>here7from_Adv</CODE></TD>
+<TD><A HREF="#Adv" TITLE="Adv - verb-phrase-modifying adverb">Adv</A></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>here7to_Adv</CODE></TD>
+<TD><A HREF="#Adv" TITLE="Adv - verb-phrase-modifying adverb">Adv</A></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>here_Adv</CODE></TD>
+<TD><A HREF="#Adv" TITLE="Adv - verb-phrase-modifying adverb">Adv</A></TD>
+<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkAdv</CODE></TD>
@@ -654,6 +738,26 @@ Source: <A HREF="../api/Constructors.gf"><CODE>http://www.cs.chalmers.se/~aarne/
 <TD><A HREF="#DConj" TITLE="DConj - distributed conjunction">DConj</A> <CODE>-&gt;</CODE> <A HREF="#ListAdv">ListAdv</A> <CODE>-&gt;</CODE> <A HREF="#Adv" TITLE="Adv - verb-phrase-modifying adverb">Adv</A></TD>
 <TD><I>either here, now, or with John</I></TD>
 </TR>
+<TR>
+<TD><CODE>somewhere_Adv</CODE></TD>
+<TD><A HREF="#Adv" TITLE="Adv - verb-phrase-modifying adverb">Adv</A></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>there7from_Adv</CODE></TD>
+<TD><A HREF="#Adv" TITLE="Adv - verb-phrase-modifying adverb">Adv</A></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>there7to_Adv</CODE></TD>
+<TD><A HREF="#Adv" TITLE="Adv - verb-phrase-modifying adverb">Adv</A></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>there_Adv</CODE></TD>
+<TD><A HREF="#Adv" TITLE="Adv - verb-phrase-modifying adverb">Adv</A></TD>
+<TD>-</TD>
+</TR>
 </TABLE>
 
 <A NAME="Ant"></A>
@@ -678,6 +782,24 @@ Source: <A HREF="../api/Constructors.gf"><CODE>http://www.cs.chalmers.se/~aarne/
 
 <A NAME="CAdv"></A>
 <H2>CAdv - comparative adverb</H2>
+<TABLE CELLPADDING="4" BORDER="1">
+<TR>
+<TH>Function</TH>
+<TH>Type</TH>
+<TH COLSPAN="2">Example</TH>
+</TR>
+<TR>
+<TD><CODE>less_CAdv</CODE></TD>
+<TD><A HREF="#CAdv" TITLE="CAdv - comparative adverb">CAdv</A></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>more_CAdv</CODE></TD>
+<TD><A HREF="#CAdv" TITLE="CAdv - comparative adverb">CAdv</A></TD>
+<TD>-</TD>
+</TR>
+</TABLE>
+
 <A NAME="CN"></A>
 <H2>CN - common noun (without determiner)</H2>
 <TABLE CELLPADDING="4" BORDER="1">
@@ -915,10 +1037,50 @@ Source: <A HREF="../api/Constructors.gf"><CODE>http://www.cs.chalmers.se/~aarne/
 
 <A NAME="Comp"></A>
 <H2>Comp - complement of copula, such as AP</H2>
+<P>
+Lexical category, constructors given in
+<A HREF="#RParadigms">lexical paradigms</A>.
+</P>
 <A NAME="Conj"></A>
 <H2>Conj - conjunction</H2>
+<TABLE CELLPADDING="4" BORDER="1">
+<TR>
+<TH>Function</TH>
+<TH>Type</TH>
+<TH COLSPAN="2">Example</TH>
+</TR>
+<TR>
+<TD><CODE>and_Conj</CODE></TD>
+<TD><A HREF="#Conj" TITLE="Conj - conjunction">Conj</A></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>or_Conj</CODE></TD>
+<TD><A HREF="#Conj" TITLE="Conj - conjunction">Conj</A></TD>
+<TD>-</TD>
+</TR>
+</TABLE>
+
 <A NAME="DConj"></A>
 <H2>DConj - distributed conjunction</H2>
+<TABLE CELLPADDING="4" BORDER="1">
+<TR>
+<TH>Function</TH>
+<TH>Type</TH>
+<TH COLSPAN="2">Example</TH>
+</TR>
+<TR>
+<TD><CODE>both7and_DConj</CODE></TD>
+<TD><A HREF="#DConj" TITLE="DConj - distributed conjunction">DConj</A></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>either7or_DConj</CODE></TD>
+<TD><A HREF="#DConj" TITLE="DConj - distributed conjunction">DConj</A></TD>
+<TD>-</TD>
+</TR>
+</TABLE>
+
 <A NAME="Det"></A>
 <H2>Det - determiner phrase</H2>
 <TABLE CELLPADDING="4" BORDER="1">
@@ -938,6 +1100,16 @@ Source: <A HREF="../api/Constructors.gf"><CODE>http://www.cs.chalmers.se/~aarne/
 <TD><I>the (house)</I></TD>
 </TR>
 <TR>
+<TD><CODE>every_Det</CODE></TD>
+<TD><A HREF="#Det" TITLE="Det - determiner phrase">Det</A></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>few_Det</CODE></TD>
+<TD><A HREF="#Det" TITLE="Det - determiner phrase">Det</A></TD>
+<TD>-</TD>
+</TR>
+<TR>
 <TD><CODE>indefPlDet</CODE></TD>
 <TD><A HREF="#Det" TITLE="Det - determiner phrase">Det</A></TD>
 <TD><I>(houses)</I></TD>
@@ -946,6 +1118,11 @@ Source: <A HREF="../api/Constructors.gf"><CODE>http://www.cs.chalmers.se/~aarne/
 <TD><CODE>indefSgDet</CODE></TD>
 <TD><A HREF="#Det" TITLE="Det - determiner phrase">Det</A></TD>
 <TD><I>a (house)</I></TD>
+</TR>
+<TR>
+<TD><CODE>many_Det</CODE></TD>
+<TD><A HREF="#Det" TITLE="Det - determiner phrase">Det</A></TD>
+<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkDet</CODE></TD>
@@ -997,6 +1174,21 @@ Source: <A HREF="../api/Constructors.gf"><CODE>http://www.cs.chalmers.se/~aarne/
 <TD><A HREF="#Pron" TITLE="Pron - personal pronoun">Pron</A> <CODE>-&gt;</CODE> <A HREF="#Det" TITLE="Det - determiner phrase">Det</A></TD>
 <TD><I>my</I></TD>
 </TR>
+<TR>
+<TD><CODE>much_Det</CODE></TD>
+<TD><A HREF="#Det" TITLE="Det - determiner phrase">Det</A></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>somePl_Det</CODE></TD>
+<TD><A HREF="#Det" TITLE="Det - determiner phrase">Det</A></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>someSg_Det</CODE></TD>
+<TD><A HREF="#Det" TITLE="Det - determiner phrase">Det</A></TD>
+<TD>-</TD>
+</TR>
 </TABLE>
 
 <A NAME="IAdv"></A>
@@ -1008,16 +1200,63 @@ Source: <A HREF="../api/Constructors.gf"><CODE>http://www.cs.chalmers.se/~aarne/
 <TH COLSPAN="2">Example</TH>
 </TR>
 <TR>
+<TD><CODE>how_IAdv</CODE></TD>
+<TD><A HREF="#IAdv" TITLE="IAdv - interrogative adverb">IAdv</A></TD>
+<TD>-</TD>
+</TR>
+<TR>
 <TD><CODE>mkIAdv</CODE></TD>
 <TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A> <CODE>-&gt;</CODE> <A HREF="#IP" TITLE="IP - interrogative pronoun">IP</A> <CODE>-&gt;</CODE> <A HREF="#IAdv" TITLE="IAdv - interrogative adverb">IAdv</A></TD>
 <TD><I>in which city</I></TD>
+</TR>
+<TR>
+<TD><CODE>when_IAdv</CODE></TD>
+<TD><A HREF="#IAdv" TITLE="IAdv - interrogative adverb">IAdv</A></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>where_IAdv</CODE></TD>
+<TD><A HREF="#IAdv" TITLE="IAdv - interrogative adverb">IAdv</A></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>why_IAdv</CODE></TD>
+<TD><A HREF="#IAdv" TITLE="IAdv - interrogative adverb">IAdv</A></TD>
+<TD>-</TD>
 </TR>
 </TABLE>
 
 <A NAME="IComp"></A>
 <H2>IComp - interrogative complement of copula</H2>
+<P>
+Lexical category, constructors given in
+<A HREF="#RParadigms">lexical paradigms</A>.
+</P>
 <A NAME="IDet"></A>
 <H2>IDet - interrogative determiner</H2>
+<TABLE CELLPADDING="4" BORDER="1">
+<TR>
+<TH>Function</TH>
+<TH>Type</TH>
+<TH COLSPAN="2">Example</TH>
+</TR>
+<TR>
+<TD><CODE>how8many_IDet</CODE></TD>
+<TD><A HREF="#IDet" TITLE="IDet - interrogative determiner">IDet</A></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>whichPl_IDet</CODE></TD>
+<TD><A HREF="#IDet" TITLE="IDet - interrogative determiner">IDet</A></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>whichSg_IDet</CODE></TD>
+<TD><A HREF="#IDet" TITLE="IDet - interrogative determiner">IDet</A></TD>
+<TD>-</TD>
+</TR>
+</TABLE>
+
 <A NAME="IP"></A>
 <H2>IP - interrogative pronoun</H2>
 <TABLE CELLPADDING="4" BORDER="1">
@@ -1040,6 +1279,26 @@ Source: <A HREF="../api/Constructors.gf"><CODE>http://www.cs.chalmers.se/~aarne/
 <TD><CODE>mkIP</CODE></TD>
 <TD><A HREF="#IP" TITLE="IP - interrogative pronoun">IP</A> <CODE>-&gt;</CODE> <A HREF="#Adv" TITLE="Adv - verb-phrase-modifying adverb">Adv</A> <CODE>-&gt;</CODE> <A HREF="#IP" TITLE="IP - interrogative pronoun">IP</A></TD>
 <TD><I>who in Paris</I></TD>
+</TR>
+<TR>
+<TD><CODE>whatPl_IP</CODE></TD>
+<TD><A HREF="#IP" TITLE="IP - interrogative pronoun">IP</A></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>whatSg_IP</CODE></TD>
+<TD><A HREF="#IP" TITLE="IP - interrogative pronoun">IP</A></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>whoPl_IP</CODE></TD>
+<TD><A HREF="#IP" TITLE="IP - interrogative pronoun">IP</A></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>whoSg_IP</CODE></TD>
+<TD><A HREF="#IP" TITLE="IP - interrogative pronoun">IP</A></TD>
+<TD>-</TD>
 </TR>
 </TABLE>
 
@@ -1175,10 +1434,22 @@ Source: <A HREF="../api/Constructors.gf"><CODE>http://www.cs.chalmers.se/~aarne/
 
 <A NAME="N"></A>
 <H2>N - common noun</H2>
+<P>
+Lexical category, constructors given in
+<A HREF="#RParadigms">lexical paradigms</A>.
+</P>
 <A NAME="N2"></A>
 <H2>N2 - relational noun</H2>
+<P>
+Lexical category, constructors given in
+<A HREF="#RParadigms">lexical paradigms</A>.
+</P>
 <A NAME="N3"></A>
 <H2>N3 - three-place relational noun</H2>
+<P>
+Lexical category, constructors given in
+<A HREF="#RParadigms">lexical paradigms</A>.
+</P>
 <A NAME="NP"></A>
 <H2>NP - noun phrase (subject or object)</H2>
 <TABLE CELLPADDING="4" BORDER="1">
@@ -1186,6 +1457,16 @@ Source: <A HREF="../api/Constructors.gf"><CODE>http://www.cs.chalmers.se/~aarne/
 <TH>Function</TH>
 <TH>Type</TH>
 <TH COLSPAN="2">Example</TH>
+</TR>
+<TR>
+<TD><CODE>everybody_NP</CODE></TD>
+<TD><A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>everything_NP</CODE></TD>
+<TD><A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A></TD>
+<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>mkNP</CODE></TD>
@@ -1302,6 +1583,36 @@ Source: <A HREF="../api/Constructors.gf"><CODE>http://www.cs.chalmers.se/~aarne/
 <TD><A HREF="#DConj" TITLE="DConj - distributed conjunction">DConj</A> <CODE>-&gt;</CODE> <A HREF="#ListNP">ListNP</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A></TD>
 <TD><I>either John, I, or that</I></TD>
 </TR>
+<TR>
+<TD><CODE>somebody_NP</CODE></TD>
+<TD><A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>something_NP</CODE></TD>
+<TD><A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>that_NP</CODE></TD>
+<TD><A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>these_NP</CODE></TD>
+<TD><A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>this_NP</CODE></TD>
+<TD><A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>those_NP</CODE></TD>
+<TD><A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A></TD>
+<TD>-</TD>
+</TR>
 </TABLE>
 
 <A NAME="Num"></A>
@@ -1413,6 +1724,11 @@ Source: <A HREF="../api/Constructors.gf"><CODE>http://www.cs.chalmers.se/~aarne/
 <TH COLSPAN="2">Example</TH>
 </TR>
 <TR>
+<TD><CODE>first_Ord</CODE></TD>
+<TD><A HREF="#Ord" TITLE="Ord - ordinal number (used in Det)">Ord</A></TD>
+<TD>-</TD>
+</TR>
+<TR>
 <TD><CODE>mkOrd</CODE></TD>
 <TD><A HREF="#Numeral">Numeral</A> <CODE>-&gt;</CODE> <A HREF="#Ord" TITLE="Ord - ordinal number (used in Det)">Ord</A></TD>
 <TD><I>twentieth</I></TD>
@@ -1438,14 +1754,33 @@ Source: <A HREF="../api/Constructors.gf"><CODE>http://www.cs.chalmers.se/~aarne/
 <TH COLSPAN="2">Example</TH>
 </TR>
 <TR>
+<TD><CODE>but_PConj</CODE></TD>
+<TD><A HREF="#PConj" TITLE="PConj - phrase-beginning conjunction">PConj</A></TD>
+<TD>-</TD>
+</TR>
+<TR>
 <TD><CODE>mkPConj</CODE></TD>
 <TD><A HREF="#Conj" TITLE="Conj - conjunction">Conj</A> <CODE>-&gt;</CODE> <A HREF="#PConj" TITLE="PConj - phrase-beginning conjunction">PConj</A></TD>
 <TD><I>and</I></TD>
+</TR>
+<TR>
+<TD><CODE>otherwise_PConj</CODE></TD>
+<TD><A HREF="#PConj" TITLE="PConj - phrase-beginning conjunction">PConj</A></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>therefore_PConj</CODE></TD>
+<TD><A HREF="#PConj" TITLE="PConj - phrase-beginning conjunction">PConj</A></TD>
+<TD>-</TD>
 </TR>
 </TABLE>
 
 <A NAME="PN"></A>
 <H2>PN - proper name</H2>
+<P>
+Lexical category, constructors given in
+<A HREF="#RParadigms">lexical paradigms</A>.
+</P>
 <A NAME="Phr"></A>
 <H2>Phr - phrase in a text</H2>
 <TABLE CELLPADDING="4" BORDER="1">
@@ -1484,6 +1819,16 @@ Source: <A HREF="../api/Constructors.gf"><CODE>http://www.cs.chalmers.se/~aarne/
 <TD><A HREF="#Imp" TITLE="Imp - imperative">Imp</A> <CODE>-&gt;</CODE> <A HREF="#Phr" TITLE="Phr - phrase in a text">Phr</A></TD>
 <TD><I>walk</I></TD>
 </TR>
+<TR>
+<TD><CODE>no_Phr</CODE></TD>
+<TD><A HREF="#Phr" TITLE="Phr - phrase in a text">Phr</A></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>yes_Phr</CODE></TD>
+<TD><A HREF="#Phr" TITLE="Phr - phrase in a text">Phr</A></TD>
+<TD>-</TD>
+</TR>
 </TABLE>
 
 <A NAME="Pol"></A>
@@ -1508,10 +1853,194 @@ Source: <A HREF="../api/Constructors.gf"><CODE>http://www.cs.chalmers.se/~aarne/
 
 <A NAME="Predet"></A>
 <H2>Predet - predeterminer (prefixed Quant)</H2>
+<TABLE CELLPADDING="4" BORDER="1">
+<TR>
+<TH>Function</TH>
+<TH>Type</TH>
+<TH COLSPAN="2">Example</TH>
+</TR>
+<TR>
+<TD><CODE>all_Predet</CODE></TD>
+<TD><A HREF="#Predet" TITLE="Predet - predeterminer (prefixed Quant)">Predet</A></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>most_Predet</CODE></TD>
+<TD><A HREF="#Predet" TITLE="Predet - predeterminer (prefixed Quant)">Predet</A></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>only_Predet</CODE></TD>
+<TD><A HREF="#Predet" TITLE="Predet - predeterminer (prefixed Quant)">Predet</A></TD>
+<TD>-</TD>
+</TR>
+</TABLE>
+
 <A NAME="Prep"></A>
 <H2>Prep - preposition, or just case</H2>
+<TABLE CELLPADDING="4" BORDER="1">
+<TR>
+<TH>Function</TH>
+<TH>Type</TH>
+<TH COLSPAN="2">Example</TH>
+</TR>
+<TR>
+<TD><CODE>above_Prep</CODE></TD>
+<TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>after_Prep</CODE></TD>
+<TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>before_Prep</CODE></TD>
+<TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>behind_Prep</CODE></TD>
+<TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>between_Prep</CODE></TD>
+<TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>by8agent_Prep</CODE></TD>
+<TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>by8means_Prep</CODE></TD>
+<TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>during_Prep</CODE></TD>
+<TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>for_Prep</CODE></TD>
+<TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>from_Prep</CODE></TD>
+<TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>in8front_Prep</CODE></TD>
+<TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>in_Prep</CODE></TD>
+<TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>on_Prep</CODE></TD>
+<TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>part_Prep</CODE></TD>
+<TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>possess_Prep</CODE></TD>
+<TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>through_Prep</CODE></TD>
+<TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>to_Prep</CODE></TD>
+<TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>under_Prep</CODE></TD>
+<TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>with_Prep</CODE></TD>
+<TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>without_Prep</CODE></TD>
+<TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A></TD>
+<TD>-</TD>
+</TR>
+</TABLE>
+
 <A NAME="Pron"></A>
 <H2>Pron - personal pronoun</H2>
+<TABLE CELLPADDING="4" BORDER="1">
+<TR>
+<TH>Function</TH>
+<TH>Type</TH>
+<TH COLSPAN="2">Example</TH>
+</TR>
+<TR>
+<TD><CODE>he_Pron</CODE></TD>
+<TD><A HREF="#Pron" TITLE="Pron - personal pronoun">Pron</A></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>i_Pron</CODE></TD>
+<TD><A HREF="#Pron" TITLE="Pron - personal pronoun">Pron</A></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>it_Pron</CODE></TD>
+<TD><A HREF="#Pron" TITLE="Pron - personal pronoun">Pron</A></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>she_Pron</CODE></TD>
+<TD><A HREF="#Pron" TITLE="Pron - personal pronoun">Pron</A></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>they_Pron</CODE></TD>
+<TD><A HREF="#Pron" TITLE="Pron - personal pronoun">Pron</A></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>we_Pron</CODE></TD>
+<TD><A HREF="#Pron" TITLE="Pron - personal pronoun">Pron</A></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>youPl_Pron</CODE></TD>
+<TD><A HREF="#Pron" TITLE="Pron - personal pronoun">Pron</A></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>youPol_Pron</CODE></TD>
+<TD><A HREF="#Pron" TITLE="Pron - personal pronoun">Pron</A></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>youSg_Pron</CODE></TD>
+<TD><A HREF="#Pron" TITLE="Pron - personal pronoun">Pron</A></TD>
+<TD>-</TD>
+</TR>
+</TABLE>
+
 <A NAME="Punct"></A>
 <H2>Punct</H2>
 <TABLE CELLPADDING="4" BORDER="1">
@@ -1630,6 +2159,16 @@ Source: <A HREF="../api/Constructors.gf"><CODE>http://www.cs.chalmers.se/~aarne/
 <TD><A HREF="#Quant" TITLE="Quant - quantifier with both sg and pl">Quant</A></TD>
 <TD><I>a</I></TD>
 </TR>
+<TR>
+<TD><CODE>that_Quant</CODE></TD>
+<TD><A HREF="#Quant" TITLE="Quant - quantifier with both sg and pl">Quant</A></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>this_Quant</CODE></TD>
+<TD><A HREF="#Quant" TITLE="Quant - quantifier with both sg and pl">Quant</A></TD>
+<TD>-</TD>
+</TR>
 </TABLE>
 
 <A NAME="QuantPl"></A>
@@ -1689,6 +2228,11 @@ Source: <A HREF="../api/Constructors.gf"><CODE>http://www.cs.chalmers.se/~aarne/
 <TD><CODE>mkQuantSg</CODE></TD>
 <TD><A HREF="#Quant" TITLE="Quant - quantifier with both sg and pl">Quant</A> <CODE>-&gt;</CODE> <A HREF="#QuantSg">QuantSg</A></TD>
 <TD><I>this</I></TD>
+</TR>
+<TR>
+<TD><CODE>one_Quant</CODE></TD>
+<TD><A HREF="#QuantSg">QuantSg</A></TD>
+<TD>-</TD>
 </TR>
 <TR>
 <TD><CODE>that_QuantSg</CODE></TD>
@@ -1824,6 +2368,10 @@ Source: <A HREF="../api/Constructors.gf"><CODE>http://www.cs.chalmers.se/~aarne/
 
 <A NAME="SC"></A>
 <H2>SC - embedded sentence or question</H2>
+<P>
+Lexical category, constructors given in
+<A HREF="#RParadigms">lexical paradigms</A>.
+</P>
 <A NAME="Slash"></A>
 <H2>Slash - clause missing NP (S/NP in GPSG)</H2>
 <TABLE CELLPADDING="4" BORDER="1">
@@ -1856,6 +2404,34 @@ Source: <A HREF="../api/Constructors.gf"><CODE>http://www.cs.chalmers.se/~aarne/
 
 <A NAME="Subj"></A>
 <H2>Subj - subjunction</H2>
+<TABLE CELLPADDING="4" BORDER="1">
+<TR>
+<TH>Function</TH>
+<TH>Type</TH>
+<TH COLSPAN="2">Example</TH>
+</TR>
+<TR>
+<TD><CODE>although_Subj</CODE></TD>
+<TD><A HREF="#Subj" TITLE="Subj - subjunction">Subj</A></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>because_Subj</CODE></TD>
+<TD><A HREF="#Subj" TITLE="Subj - subjunction">Subj</A></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>if_Subj</CODE></TD>
+<TD><A HREF="#Subj" TITLE="Subj - subjunction">Subj</A></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>when_Subj</CODE></TD>
+<TD><A HREF="#Subj" TITLE="Subj - subjunction">Subj</A></TD>
+<TD>-</TD>
+</TR>
+</TABLE>
+
 <A NAME="Tense"></A>
 <H2>Tense - tense</H2>
 <TABLE CELLPADDING="4" BORDER="1">
@@ -2003,14 +2579,34 @@ Source: <A HREF="../api/Constructors.gf"><CODE>http://www.cs.chalmers.se/~aarne/
 
 <A NAME="V"></A>
 <H2>V - one-place verb</H2>
+<P>
+Lexical category, constructors given in
+<A HREF="#RParadigms">lexical paradigms</A>.
+</P>
 <A NAME="V2"></A>
 <H2>V2 - two-place verb</H2>
+<P>
+Lexical category, constructors given in
+<A HREF="#RParadigms">lexical paradigms</A>.
+</P>
 <A NAME="V2A"></A>
 <H2>V2A - verb with NP and AP complement</H2>
+<P>
+Lexical category, constructors given in
+<A HREF="#RParadigms">lexical paradigms</A>.
+</P>
 <A NAME="V3"></A>
 <H2>V3 - three-place verb</H2>
+<P>
+Lexical category, constructors given in
+<A HREF="#RParadigms">lexical paradigms</A>.
+</P>
 <A NAME="VA"></A>
 <H2>VA - adjective-complement verb</H2>
+<P>
+Lexical category, constructors given in
+<A HREF="#RParadigms">lexical paradigms</A>.
+</P>
 <A NAME="VP"></A>
 <H2>VP - verb phrase</H2>
 <TABLE CELLPADDING="4" BORDER="1">
@@ -2133,10 +2729,46 @@ Source: <A HREF="../api/Constructors.gf"><CODE>http://www.cs.chalmers.se/~aarne/
 
 <A NAME="VQ"></A>
 <H2>VQ - question-complement verb</H2>
+<P>
+Lexical category, constructors given in
+<A HREF="#RParadigms">lexical paradigms</A>.
+</P>
 <A NAME="VS"></A>
 <H2>VS - sentence-complement verb</H2>
+<P>
+Lexical category, constructors given in
+<A HREF="#RParadigms">lexical paradigms</A>.
+</P>
 <A NAME="VV"></A>
 <H2>VV - verb-phrase-complement verb</H2>
+<TABLE CELLPADDING="4" BORDER="1">
+<TR>
+<TH>Function</TH>
+<TH>Type</TH>
+<TH COLSPAN="2">Example</TH>
+</TR>
+<TR>
+<TD><CODE>can8know_VV</CODE></TD>
+<TD><A HREF="#VV" TITLE="VV - verb-phrase-complement verb">VV</A></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>can_VV</CODE></TD>
+<TD><A HREF="#VV" TITLE="VV - verb-phrase-complement verb">VV</A></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>must_VV</CODE></TD>
+<TD><A HREF="#VV" TITLE="VV - verb-phrase-complement verb">VV</A></TD>
+<TD>-</TD>
+</TR>
+<TR>
+<TD><CODE>want_VV</CODE></TD>
+<TD><A HREF="#VV" TITLE="VV - verb-phrase-complement verb">VV</A></TD>
+<TD>-</TD>
+</TR>
+</TABLE>
+
 <A NAME="Voc"></A>
 <H2>Voc - vocative or "please"</H2>
 <TABLE CELLPADDING="4" BORDER="1">
@@ -2150,406 +2782,20 @@ Source: <A HREF="../api/Constructors.gf"><CODE>http://www.cs.chalmers.se/~aarne/
 <TD><A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A> <CODE>-&gt;</CODE> <A HREF="#Voc" TITLE="Voc - vocative or "please"">Voc</A></TD>
 <TD><I>John</I></TD>
 </TR>
-</TABLE>
-
-<A NAME="toc70"></A>
-<H1>Structural Words</H1>
-<P>
-Source: <A HREF="../abstract/Structural.gf"><CODE>http://www.cs.chalmers.se/~aarne/GF/lib/resource/abstract/Structural.gf</CODE></A>
-</P>
-<TABLE CELLPADDING="4" BORDER="1">
-<TR>
-<TH>Function</TH>
-<TH COLSPAN="2">Type</TH>
-</TR>
-<TR>
-<TD><CODE>above_Prep</CODE></TD>
-<TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A></TD>
-</TR>
-<TR>
-<TD><CODE>after_Prep</CODE></TD>
-<TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A></TD>
-</TR>
-<TR>
-<TD><CODE>all_Predet</CODE></TD>
-<TD><A HREF="#Predet" TITLE="Predet - predeterminer (prefixed Quant)">Predet</A></TD>
-</TR>
-<TR>
-<TD><CODE>almost_AdA</CODE></TD>
-<TD><A HREF="#AdA" TITLE="AdA - adjective-modifying adverb">AdA</A></TD>
-</TR>
-<TR>
-<TD><CODE>almost_AdN</CODE></TD>
-<TD><A HREF="#AdN" TITLE="AdN - numeral-modifying adverb">AdN</A></TD>
-</TR>
-<TR>
-<TD><CODE>although_Subj</CODE></TD>
-<TD><A HREF="#Subj" TITLE="Subj - subjunction">Subj</A></TD>
-</TR>
-<TR>
-<TD><CODE>always_AdV</CODE></TD>
-<TD><A HREF="#AdV" TITLE="Adv - verb-phrase-modifying adverb">AdV</A></TD>
-</TR>
-<TR>
-<TD><CODE>and_Conj</CODE></TD>
-<TD><A HREF="#Conj" TITLE="Conj - conjunction">Conj</A></TD>
-</TR>
-<TR>
-<TD><CODE>because_Subj</CODE></TD>
-<TD><A HREF="#Subj" TITLE="Subj - subjunction">Subj</A></TD>
-</TR>
-<TR>
-<TD><CODE>before_Prep</CODE></TD>
-<TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A></TD>
-</TR>
-<TR>
-<TD><CODE>behind_Prep</CODE></TD>
-<TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A></TD>
-</TR>
-<TR>
-<TD><CODE>between_Prep</CODE></TD>
-<TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A></TD>
-</TR>
-<TR>
-<TD><CODE>both7and_DConj</CODE></TD>
-<TD><A HREF="#DConj" TITLE="DConj - distributed conjunction">DConj</A></TD>
-</TR>
-<TR>
-<TD><CODE>but_PConj</CODE></TD>
-<TD><A HREF="#PConj" TITLE="PConj - phrase-beginning conjunction">PConj</A></TD>
-</TR>
-<TR>
-<TD><CODE>by8agent_Prep</CODE></TD>
-<TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A></TD>
-</TR>
-<TR>
-<TD><CODE>by8means_Prep</CODE></TD>
-<TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A></TD>
-</TR>
-<TR>
-<TD><CODE>can8know_VV</CODE></TD>
-<TD><A HREF="#VV" TITLE="VV - verb-phrase-complement verb">VV</A></TD>
-</TR>
-<TR>
-<TD><CODE>can_VV</CODE></TD>
-<TD><A HREF="#VV" TITLE="VV - verb-phrase-complement verb">VV</A></TD>
-</TR>
-<TR>
-<TD><CODE>during_Prep</CODE></TD>
-<TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A></TD>
-</TR>
-<TR>
-<TD><CODE>either7or_DConj</CODE></TD>
-<TD><A HREF="#DConj" TITLE="DConj - distributed conjunction">DConj</A></TD>
-</TR>
-<TR>
-<TD><CODE>every_Det</CODE></TD>
-<TD><A HREF="#Det" TITLE="Det - determiner phrase">Det</A></TD>
-</TR>
-<TR>
-<TD><CODE>everybody_NP</CODE></TD>
-<TD><A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A></TD>
-</TR>
-<TR>
-<TD><CODE>everything_NP</CODE></TD>
-<TD><A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A></TD>
-</TR>
-<TR>
-<TD><CODE>everywhere_Adv</CODE></TD>
-<TD><A HREF="#Adv" TITLE="Adv - verb-phrase-modifying adverb">Adv</A></TD>
-</TR>
-<TR>
-<TD><CODE>first_Ord</CODE></TD>
-<TD><A HREF="#Ord" TITLE="Ord - ordinal number (used in Det)">Ord</A></TD>
-</TR>
-<TR>
-<TD><CODE>few_Det</CODE></TD>
-<TD><A HREF="#Det" TITLE="Det - determiner phrase">Det</A></TD>
-</TR>
-<TR>
-<TD><CODE>for_Prep</CODE></TD>
-<TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A></TD>
-</TR>
-<TR>
-<TD><CODE>from_Prep</CODE></TD>
-<TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A></TD>
-</TR>
-<TR>
-<TD><CODE>he_Pron</CODE></TD>
-<TD><A HREF="#Pron" TITLE="Pron - personal pronoun">Pron</A></TD>
-</TR>
-<TR>
-<TD><CODE>here_Adv</CODE></TD>
-<TD><A HREF="#Adv" TITLE="Adv - verb-phrase-modifying adverb">Adv</A></TD>
-</TR>
-<TR>
-<TD><CODE>here7to_Adv</CODE></TD>
-<TD><A HREF="#Adv" TITLE="Adv - verb-phrase-modifying adverb">Adv</A></TD>
-</TR>
-<TR>
-<TD><CODE>here7from_Adv</CODE></TD>
-<TD><A HREF="#Adv" TITLE="Adv - verb-phrase-modifying adverb">Adv</A></TD>
-</TR>
-<TR>
-<TD><CODE>how_IAdv</CODE></TD>
-<TD><A HREF="#IAdv" TITLE="IAdv - interrogative adverb">IAdv</A></TD>
-</TR>
-<TR>
-<TD><CODE>how8many_IDet</CODE></TD>
-<TD><A HREF="#IDet" TITLE="IDet - interrogative determiner">IDet</A></TD>
-</TR>
-<TR>
-<TD><CODE>i_Pron</CODE></TD>
-<TD><A HREF="#Pron" TITLE="Pron - personal pronoun">Pron</A></TD>
-</TR>
-<TR>
-<TD><CODE>if_Subj</CODE></TD>
-<TD><A HREF="#Subj" TITLE="Subj - subjunction">Subj</A></TD>
-</TR>
-<TR>
-<TD><CODE>in8front_Prep</CODE></TD>
-<TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A></TD>
-</TR>
-<TR>
-<TD><CODE>in_Prep</CODE></TD>
-<TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A></TD>
-</TR>
-<TR>
-<TD><CODE>it_Pron</CODE></TD>
-<TD><A HREF="#Pron" TITLE="Pron - personal pronoun">Pron</A></TD>
-</TR>
-<TR>
-<TD><CODE>less_CAdv</CODE></TD>
-<TD><A HREF="#CAdv" TITLE="CAdv - comparative adverb">CAdv</A></TD>
-</TR>
-<TR>
-<TD><CODE>many_Det</CODE></TD>
-<TD><A HREF="#Det" TITLE="Det - determiner phrase">Det</A></TD>
-</TR>
-<TR>
-<TD><CODE>more_CAdv</CODE></TD>
-<TD><A HREF="#CAdv" TITLE="CAdv - comparative adverb">CAdv</A></TD>
-</TR>
-<TR>
-<TD><CODE>most_Predet</CODE></TD>
-<TD><A HREF="#Predet" TITLE="Predet - predeterminer (prefixed Quant)">Predet</A></TD>
-</TR>
-<TR>
-<TD><CODE>much_Det</CODE></TD>
-<TD><A HREF="#Det" TITLE="Det - determiner phrase">Det</A></TD>
-</TR>
-<TR>
-<TD><CODE>must_VV</CODE></TD>
-<TD><A HREF="#VV" TITLE="VV - verb-phrase-complement verb">VV</A></TD>
-</TR>
-<TR>
-<TD><CODE>no_Phr</CODE></TD>
-<TD><A HREF="#Phr" TITLE="Phr - phrase in a text">Phr</A></TD>
-</TR>
-<TR>
-<TD><CODE>on_Prep</CODE></TD>
-<TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A></TD>
-</TR>
-<TR>
-<TD><CODE>one_Quant</CODE></TD>
-<TD><A HREF="#QuantSg">QuantSg</A></TD>
-</TR>
-<TR>
-<TD><CODE>only_Predet</CODE></TD>
-<TD><A HREF="#Predet" TITLE="Predet - predeterminer (prefixed Quant)">Predet</A></TD>
-</TR>
-<TR>
-<TD><CODE>or_Conj</CODE></TD>
-<TD><A HREF="#Conj" TITLE="Conj - conjunction">Conj</A></TD>
-</TR>
-<TR>
-<TD><CODE>otherwise_PConj</CODE></TD>
-<TD><A HREF="#PConj" TITLE="PConj - phrase-beginning conjunction">PConj</A></TD>
-</TR>
-<TR>
-<TD><CODE>part_Prep</CODE></TD>
-<TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A></TD>
-</TR>
 <TR>
 <TD><CODE>please_Voc</CODE></TD>
 <TD><A HREF="#Voc" TITLE="Voc - vocative or "please"">Voc</A></TD>
-</TR>
-<TR>
-<TD><CODE>possess_Prep</CODE></TD>
-<TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A></TD>
-</TR>
-<TR>
-<TD><CODE>quite_Adv</CODE></TD>
-<TD><A HREF="#AdA" TITLE="AdA - adjective-modifying adverb">AdA</A></TD>
-</TR>
-<TR>
-<TD><CODE>she_Pron</CODE></TD>
-<TD><A HREF="#Pron" TITLE="Pron - personal pronoun">Pron</A></TD>
-</TR>
-<TR>
-<TD><CODE>so_AdA</CODE></TD>
-<TD><A HREF="#AdA" TITLE="AdA - adjective-modifying adverb">AdA</A></TD>
-</TR>
-<TR>
-<TD><CODE>someSg_Det</CODE></TD>
-<TD><A HREF="#Det" TITLE="Det - determiner phrase">Det</A></TD>
-</TR>
-<TR>
-<TD><CODE>somePl_Det</CODE></TD>
-<TD><A HREF="#Det" TITLE="Det - determiner phrase">Det</A></TD>
-</TR>
-<TR>
-<TD><CODE>somebody_NP</CODE></TD>
-<TD><A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A></TD>
-</TR>
-<TR>
-<TD><CODE>something_NP</CODE></TD>
-<TD><A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A></TD>
-</TR>
-<TR>
-<TD><CODE>somewhere_Adv</CODE></TD>
-<TD><A HREF="#Adv" TITLE="Adv - verb-phrase-modifying adverb">Adv</A></TD>
-</TR>
-<TR>
-<TD><CODE>that_Quant</CODE></TD>
-<TD><A HREF="#Quant" TITLE="Quant - quantifier with both sg and pl">Quant</A></TD>
-</TR>
-<TR>
-<TD><CODE>that_NP</CODE></TD>
-<TD><A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A></TD>
-</TR>
-<TR>
-<TD><CODE>there_Adv</CODE></TD>
-<TD><A HREF="#Adv" TITLE="Adv - verb-phrase-modifying adverb">Adv</A></TD>
-</TR>
-<TR>
-<TD><CODE>there7to_Adv</CODE></TD>
-<TD><A HREF="#Adv" TITLE="Adv - verb-phrase-modifying adverb">Adv</A></TD>
-</TR>
-<TR>
-<TD><CODE>there7from_Adv</CODE></TD>
-<TD><A HREF="#Adv" TITLE="Adv - verb-phrase-modifying adverb">Adv</A></TD>
-</TR>
-<TR>
-<TD><CODE>therefore_PConj</CODE></TD>
-<TD><A HREF="#PConj" TITLE="PConj - phrase-beginning conjunction">PConj</A></TD>
-</TR>
-<TR>
-<TD><CODE>these_NP</CODE></TD>
-<TD><A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A></TD>
-</TR>
-<TR>
-<TD><CODE>they_Pron</CODE></TD>
-<TD><A HREF="#Pron" TITLE="Pron - personal pronoun">Pron</A></TD>
-</TR>
-<TR>
-<TD><CODE>this_Quant</CODE></TD>
-<TD><A HREF="#Quant" TITLE="Quant - quantifier with both sg and pl">Quant</A></TD>
-</TR>
-<TR>
-<TD><CODE>this_NP</CODE></TD>
-<TD><A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A></TD>
-</TR>
-<TR>
-<TD><CODE>those_NP</CODE></TD>
-<TD><A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A></TD>
-</TR>
-<TR>
-<TD><CODE>through_Prep</CODE></TD>
-<TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A></TD>
-</TR>
-<TR>
-<TD><CODE>to_Prep</CODE></TD>
-<TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A></TD>
-</TR>
-<TR>
-<TD><CODE>too_AdA</CODE></TD>
-<TD><A HREF="#AdA" TITLE="AdA - adjective-modifying adverb">AdA</A></TD>
-</TR>
-<TR>
-<TD><CODE>under_Prep</CODE></TD>
-<TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A></TD>
-</TR>
-<TR>
-<TD><CODE>very_AdA</CODE></TD>
-<TD><A HREF="#AdA" TITLE="AdA - adjective-modifying adverb">AdA</A></TD>
-</TR>
-<TR>
-<TD><CODE>want_VV</CODE></TD>
-<TD><A HREF="#VV" TITLE="VV - verb-phrase-complement verb">VV</A></TD>
-</TR>
-<TR>
-<TD><CODE>we_Pron</CODE></TD>
-<TD><A HREF="#Pron" TITLE="Pron - personal pronoun">Pron</A></TD>
-</TR>
-<TR>
-<TD><CODE>whatPl_IP</CODE></TD>
-<TD><A HREF="#IP" TITLE="IP - interrogative pronoun">IP</A></TD>
-</TR>
-<TR>
-<TD><CODE>whatSg_IP</CODE></TD>
-<TD><A HREF="#IP" TITLE="IP - interrogative pronoun">IP</A></TD>
-</TR>
-<TR>
-<TD><CODE>when_IAdv</CODE></TD>
-<TD><A HREF="#IAdv" TITLE="IAdv - interrogative adverb">IAdv</A></TD>
-</TR>
-<TR>
-<TD><CODE>when_Subj</CODE></TD>
-<TD><A HREF="#Subj" TITLE="Subj - subjunction">Subj</A></TD>
-</TR>
-<TR>
-<TD><CODE>where_IAdv</CODE></TD>
-<TD><A HREF="#IAdv" TITLE="IAdv - interrogative adverb">IAdv</A></TD>
-</TR>
-<TR>
-<TD><CODE>whichPl_IDet</CODE></TD>
-<TD><A HREF="#IDet" TITLE="IDet - interrogative determiner">IDet</A></TD>
-</TR>
-<TR>
-<TD><CODE>whichSg_IDet</CODE></TD>
-<TD><A HREF="#IDet" TITLE="IDet - interrogative determiner">IDet</A></TD>
-</TR>
-<TR>
-<TD><CODE>whoPl_IP</CODE></TD>
-<TD><A HREF="#IP" TITLE="IP - interrogative pronoun">IP</A></TD>
-</TR>
-<TR>
-<TD><CODE>whoSg_IP</CODE></TD>
-<TD><A HREF="#IP" TITLE="IP - interrogative pronoun">IP</A></TD>
-</TR>
-<TR>
-<TD><CODE>why_IAdv</CODE></TD>
-<TD><A HREF="#IAdv" TITLE="IAdv - interrogative adverb">IAdv</A></TD>
-</TR>
-<TR>
-<TD><CODE>with_Prep</CODE></TD>
-<TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A></TD>
-</TR>
-<TR>
-<TD><CODE>without_Prep</CODE></TD>
-<TD><A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A></TD>
-</TR>
-<TR>
-<TD><CODE>yes_Phr</CODE></TD>
-<TD><A HREF="#Phr" TITLE="Phr - phrase in a text">Phr</A></TD>
-</TR>
-<TR>
-<TD><CODE>youSg_Pron</CODE></TD>
-<TD><A HREF="#Pron" TITLE="Pron - personal pronoun">Pron</A></TD>
-</TR>
-<TR>
-<TD><CODE>youPl_Pron</CODE></TD>
-<TD><A HREF="#Pron" TITLE="Pron - personal pronoun">Pron</A></TD>
-</TR>
-<TR>
-<TD><CODE>youPol_Pron</CODE></TD>
-<TD><A HREF="#Pron" TITLE="Pron - personal pronoun">Pron</A></TD>
+<TD>-</TD>
 </TR>
 </TABLE>
 
+<A NAME="toc70"></A>
+<H1>Lexical Paradigms</H1>
 <A NAME="toc71"></A>
-<H1>Paradigms for Danish</H1>
+<H2>Paradigms for Danish</H2>
+<P>
+<a name="RParadigms"></a>
+</P>
 <P>
 source <A HREF="../danish/ParadigmsDan.gf"><CODE>http://www.cs.chalmers.se/~aarne/GF/lib/resource/danish/ParadigmsDan.gf</CODE></A>
 </P>
@@ -2793,7 +3039,10 @@ source <A HREF="../danish/ParadigmsDan.gf"><CODE>http://www.cs.chalmers.se/~aarn
 </TABLE>
 
 <A NAME="toc72"></A>
-<H1>Paradigms for English</H1>
+<H2>Paradigms for English</H2>
+<P>
+<a name="RParadigms"></a>
+</P>
 <P>
 source <A HREF="../english/ParadigmsEng.gf"><CODE>http://www.cs.chalmers.se/~aarne/GF/lib/resource/english/ParadigmsEng.gf</CODE></A>
 </P>
@@ -3021,7 +3270,10 @@ source <A HREF="../english/ParadigmsEng.gf"><CODE>http://www.cs.chalmers.se/~aar
 </TABLE>
 
 <A NAME="toc73"></A>
-<H1>Paradigms for Finnish</H1>
+<H2>Paradigms for Finnish</H2>
+<P>
+<a name="RParadigms"></a>
+</P>
 <P>
 source <A HREF="../finnish/ParadigmsFin.gf"><CODE>http://www.cs.chalmers.se/~aarne/GF/lib/resource/finnish/ParadigmsFin.gf</CODE></A>
 </P>
@@ -3357,7 +3609,10 @@ source <A HREF="../finnish/ParadigmsFin.gf"><CODE>http://www.cs.chalmers.se/~aar
 </TABLE>
 
 <A NAME="toc74"></A>
-<H1>Paradigms for French</H1>
+<H2>Paradigms for French</H2>
+<P>
+<a name="RParadigms"></a>
+</P>
 <P>
 source <A HREF="../french/ParadigmsFre.gf"><CODE>http://www.cs.chalmers.se/~aarne/GF/lib/resource/french/ParadigmsFre.gf</CODE></A>
 </P>
@@ -3585,7 +3840,10 @@ source <A HREF="../french/ParadigmsFre.gf"><CODE>http://www.cs.chalmers.se/~aarn
 </TABLE>
 
 <A NAME="toc75"></A>
-<H1>Paradigms for German</H1>
+<H2>Paradigms for German</H2>
+<P>
+<a name="RParadigms"></a>
+</P>
 <P>
 source <A HREF="../german/ParadigmsGer.gf"><CODE>http://www.cs.chalmers.se/~aarne/GF/lib/resource/german/ParadigmsGer.gf</CODE></A>
 </P>
@@ -3837,7 +4095,10 @@ source <A HREF="../german/ParadigmsGer.gf"><CODE>http://www.cs.chalmers.se/~aarn
 </TABLE>
 
 <A NAME="toc76"></A>
-<H1>Paradigms for Italian</H1>
+<H2>Paradigms for Italian</H2>
+<P>
+<a name="RParadigms"></a>
+</P>
 <P>
 source <A HREF="../italian/ParadigmsIta.gf"><CODE>http://www.cs.chalmers.se/~aarne/GF/lib/resource/italian/ParadigmsIta.gf</CODE></A>
 </P>
@@ -4069,7 +4330,10 @@ source <A HREF="../italian/ParadigmsIta.gf"><CODE>http://www.cs.chalmers.se/~aar
 </TABLE>
 
 <A NAME="toc77"></A>
-<H1>Paradigms for Norwegian</H1>
+<H2>Paradigms for Norwegian</H2>
+<P>
+<a name="RParadigms"></a>
+</P>
 <P>
 source <A HREF="../norwegian/ParadigmsNor.gf"><CODE>http://www.cs.chalmers.se/~aarne/GF/lib/resource/norwegian/ParadigmsNor.gf</CODE></A>
 </P>
@@ -4313,7 +4577,10 @@ source <A HREF="../norwegian/ParadigmsNor.gf"><CODE>http://www.cs.chalmers.se/~a
 </TABLE>
 
 <A NAME="toc78"></A>
-<H1>Paradigms for Russian</H1>
+<H2>Paradigms for Russian</H2>
+<P>
+<a name="RParadigms"></a>
+</P>
 <P>
 source <A HREF="../russian/ParadigmsRus.gf"><CODE>http://www.cs.chalmers.se/~aarne/GF/lib/resource/russian/ParadigmsRus.gf</CODE></A>
 </P>
@@ -4553,7 +4820,10 @@ source <A HREF="../russian/ParadigmsRus.gf"><CODE>http://www.cs.chalmers.se/~aar
 </TABLE>
 
 <A NAME="toc79"></A>
-<H1>Paradigms for Spanish</H1>
+<H2>Paradigms for Spanish</H2>
+<P>
+<a name="RParadigms"></a>
+</P>
 <P>
 source <A HREF="../spanish/ParadigmsSpa.gf"><CODE>http://www.cs.chalmers.se/~aarne/GF/lib/resource/spanish/ParadigmsSpa.gf</CODE></A>
 </P>
@@ -4785,7 +5055,10 @@ source <A HREF="../spanish/ParadigmsSpa.gf"><CODE>http://www.cs.chalmers.se/~aar
 </TABLE>
 
 <A NAME="toc80"></A>
-<H1>Paradigms for Swedish</H1>
+<H2>Paradigms for Swedish</H2>
+<P>
+<a name="RParadigms"></a>
+</P>
 <P>
 source <A HREF="../swedish/ParadigmsSwe.gf"><CODE>http://www.cs.chalmers.se/~aarne/GF/lib/resource/swedish/ParadigmsSwe.gf</CODE></A>
 </P>
