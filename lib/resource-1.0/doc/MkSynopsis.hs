@@ -16,7 +16,9 @@ main = do
   writeFile synopsis "GF Resource Grammar Library: Synopsis"
   append "Aarne Ranta"
   space
-  append "%!postproc(html): '(SRC=\"categories.png\")'  '\\1 USEMAP=\"#categories\"'"
+  append "%!postproc(html): '(SRC=\"categories.png\")'  '\\1 USEMAP=\"#categories\"'"  
+  append "%!postproc(html): '#LParadigms'  '<a name=\"RParadigms\"></a>'"
+  append "%!postproc(tex): '#LParadigms' ''"
   delimit $ addToolTips cs
   include "synopsis-intro.txt"
   title "Categories"
@@ -30,20 +32,24 @@ main = do
   append "==Explanations==\n"
   delimit $ mkCatTable isLatex cs
   space
-  title "Syntax Rules"
+  title "Syntax Rules and Structural Words"
   space
-  link "Source:" syntaxAPI
+  link "Source 1:" syntaxAPI
+  space
+  link "Source 2:" structuralAPI
   space
   rs <- getRules syntaxAPI
-  delimit $ mkSplitTables True isLatex cs rs
+  rs2 <- getRules structuralAPI
+  delimit $ mkSplitTables True isLatex cs $ rs ++ rs2
   space
-  title "Structural Words"
+--  title "Structural Words"
+--  space
+--  link "Source:" structuralAPI
+--  space
+--  rs <- rulesTable False isLatex cs structuralAPI
+--  delimit rs
   space
-  link "Source:" structuralAPI
-  space
-  rs <- rulesTable False isLatex cs structuralAPI
-  delimit rs
-  space
+  title "Lexical Paradigms"
   mapM_ (putParadigms isLatex cs) paradigmFiles
   space
   include "synopsis-browse.txt"
@@ -108,7 +114,8 @@ getRules file = do
 
 putParadigms :: Bool -> Cats -> (String, FilePath) -> IO ()
 putParadigms isLatex cs (lang,file) = do
-  title ("Paradigms for " ++ lang)
+  stitle ("Paradigms for " ++ lang)
+  append "#LParadigms"
   space
   link "source" file
   space
@@ -126,10 +133,16 @@ inChunks i f = concat . intersperse ["\n\n"] . map f . chunks i where
 -- Adds a subsection header for each table.
 mkSplitTables :: Bool -> Bool -> Cats -> Rules -> [String]
 mkSplitTables hasEx isLatex cs = concatMap t . addLexicalCats cs . sortRules
-  where t (c, xs) = [subtitle c expl] ++ mkTable hasEx isLatex cs xs
-         where expl = case [e | (n,e,_) <- cs, n == c] of
+  where t (c, xs) = [subtitle c expl] ++ tableOrLink
+         where 
+           expl = case [e | (n,e,_) <- cs, n == c] of
                         []  -> ""
                         e:_ -> e
+           tableOrLink = if null xs then parad else mkTable hasEx isLatex cs xs
+           parad = [
+             "Lexical category, constructors given in",
+             "[lexical paradigms #RParadigms]."
+             ]
 
 mkTable :: Bool -> Bool -> Cats -> Rules -> [String]
 mkTable hasEx isLatex cs = inChunks chsize (\rs -> header : map (unwords . row) rs)
@@ -173,6 +186,7 @@ paradigmFiles = [
 
 append s = appendFile synopsis ('\n':s)
 title s = append $ "=" ++ s ++ "="
+stitle s = append $ "==" ++ s ++ "=="
 include s = append $ "%!include: " ++ s
 space = append "\n"
 delimit ss = mapM_ append ss
