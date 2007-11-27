@@ -189,7 +189,7 @@ ECase.     Exp4 ::= "case" Exp "of" "{" [Case] "}" ;
 EVariants. Exp4 ::= "variants" "{" [Exp] "}" ;
 EPre.      Exp4 ::= "pre" "{" Exp ";" [Altern] "}" ;
 EStrs.     Exp4 ::= "strs" "{" [Exp] "}" ;
-EConAt.    Exp4 ::= Ident "@" Exp6 ;
+EConAt.    Exp4 ::= Ident "@" Exp6 ; --%
 
 ESelect.   Exp3 ::= Exp3 "!" Exp4 ;
 ETupTyp.   Exp3 ::= Exp3 "*" Exp4 ;
