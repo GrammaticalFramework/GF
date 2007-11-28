@@ -1,8 +1,6 @@
 module GF.Devel.Terms where
 
-import GF.Data.Str
 import GF.Infra.Ident
-import GF.Infra.Option ---
 import GF.Infra.Modules
 
 import GF.Data.Operations
