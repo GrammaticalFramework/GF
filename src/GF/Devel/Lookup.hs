@@ -2,6 +2,7 @@ module GF.Devel.Lookup where
 
 import GF.Devel.Modules
 import GF.Devel.Judgements
+import GF.Devel.Macros
 import GF.Devel.Terms
 import GF.Infra.Ident
 
@@ -24,7 +25,7 @@ lookupJForm = lookupJField jform
 lookupCatContext :: GF -> Ident -> Ident -> Err Context
 lookupCatContext gf m c = do
   ty <- lookupJField jtype gf m c
-  return [] ---- context of ty
+  return $ contextOfType ty
 
 lookupFunType :: GF -> Ident -> Ident -> Err Term
 lookupFunType = lookupJField jtype 
@@ -35,10 +36,24 @@ lookupLin = lookupJField jlin
 lookupLincat :: GF -> Ident -> Ident -> Err Term
 lookupLincat = lookupJField jlin
 
+lookupOperType :: GF -> Ident -> Ident -> Err Term
+lookupOperType = lookupJField jtype 
+
+lookupOperDef :: GF -> Ident -> Ident -> Err Term
+lookupOperDef = lookupJField jlin
+
+lookupParams :: GF -> Ident -> Ident -> Err [(Ident,Context)]
+lookupParams gf m c = do
+  ty <- lookupJField jtype gf m c
+  return [(k,contextOfType t) | (k,t) <- contextOfType ty]
+
+lookupParamConstructor :: GF -> Ident -> Ident -> Err Type
+lookupParamConstructor = lookupJField jlin
+
 lookupParamValues :: GF -> Ident -> Ident -> Err [Term]
 lookupParamValues gf m c = do
-  j <- lookupJudgement gf m c
-  case jdef j of
+  d <- lookupJField jdef gf m c
+  case d of
     V _ ts -> return ts
     _ -> raise "no parameter values"
 
