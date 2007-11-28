@@ -21,18 +21,19 @@ import GF.GFCC.DataGFCC
 import GF.GFCC.AbsGFCC
 
 import GF.Data.Operations
+import GF.Text.UTF8
 
 import Data.List --(isPrefixOf, find, intersperse)
 import qualified Data.Map as Map
 
 -- | the main function
 grammar2haskell :: GFCC -> String
-grammar2haskell gr = foldr (++++) [] $  
+grammar2haskell gr = encodeUTF8 $ foldr (++++) [] $  
   haskPreamble ++ [datatypes gr', gfinstances gr', fginstances gr']
     where gr' = hSkeleton gr
 
 grammar2haskellGADT :: GFCC -> String
-grammar2haskellGADT gr = foldr (++++) [] $  
+grammar2haskellGADT gr = encodeUTF8 $ foldr (++++) [] $  
   ["{-# OPTIONS_GHC -fglasgow-exts #-}"] ++ 
   haskPreamble ++ [datatypesGADT gr', gfinstances gr', fginstances gr']
     where gr' = hSkeleton gr
