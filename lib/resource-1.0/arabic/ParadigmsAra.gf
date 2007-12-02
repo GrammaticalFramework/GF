@@ -56,6 +56,8 @@ resource ParadigmsAra = open
 --takes a root string, a singular pattern string, a gender, 
 --and species. Gives a noun whose plural is sound masculine
   sdmN : Str -> Str -> Gender -> Species -> N ; 
+
+  mkPN : Str -> Gender -> Species -> PN ;
   
 --3 Relational nouns 
 
@@ -178,6 +180,7 @@ resource ParadigmsAra = open
   V0, V2S, V2V, V2A, V2Q : Type ;
   AS, A2S, AV, A2V : Type ;
 
+
 --.
 --2 Definitions of paradigms
 
@@ -291,7 +294,7 @@ resource ParadigmsAra = open
   Preposition = Str ;
   
   mkN nsc gen spec =
-    { s = nsc; 
+    { s = nsc; --NTable
       g = gen; 
       h = spec;
       lock_N = <>
@@ -323,12 +326,20 @@ resource ParadigmsAra = open
     \root,sg,gen,spec ->
     let { mucallim = mkWord sg root;
     } in mkN (sndm mucallim) gen spec;
+
+  mkPN = \str,gen,species -> 
+    { s = \\c => str + indecl!c ;
+      g = gen;
+      h = species;
+      lock_PN = <>
+    };
+    
   
   mkN2 = \n,p -> n ** {lock_N2 = <> ; c2 = p} ;
   
   mkN3 = \n,p,q -> n ** {lock_N3 = <> ; c2 = p ; c3 = q} ;
   
-  makeNP : (_,_,_ : Str) -> PerGenNum -> NP = \ana,nI,I,pgn ->
+  mkNP : (_,_,_ : Str) -> PerGenNum -> NP = \ana,nI,I,pgn ->
     { s = 
         table {
           Nom => ana;
@@ -429,5 +440,6 @@ resource ParadigmsAra = open
   mkA2S v p = mkA2 v p ** {lock_A = <>} ;
   mkAV  v = v ** {lock_A = <>} ;
   mkA2V v p = mkA2 v p ** {lock_A2 = <>} ;
+
 
 } ;

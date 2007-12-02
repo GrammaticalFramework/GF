@@ -6,7 +6,7 @@ concrete StructuralAra of Structural = CatAra **
   lin
   above_Prep = ss "فَوْقَ" ;
   after_Prep = ss "بَعْدَ" ;
---  all_Predet = ss "َلّ" ;
+  all_Predet = mkPredet "كُلّ" True ;
 --  almost_AdA, almost_AdN = ss "َلمْست" ;
 --  although_Subj = ss "َلتهُْغه" ;
 --  always_AdV = ss "َلوَيس" ;
@@ -47,8 +47,8 @@ concrete StructuralAra of Structural = CatAra **
 --  less_CAdv = ss "لسّ" ;
   many_Det = mkDet "جَمِيع" Pl Const ;
 --  more_CAdv = ss "مْري" ;
---  most_Predet = ss "مْست" ;
-  much_Det = mkDet "الكَثِير" Pl Const ;
+  most_Predet = mkPredet  "أَكثَر" True ;
+  much_Det = mkDet "الكَثِير مِنَ" Pl Const ;
 --  must_VV = {
 --    s = table VVForm [["بي هَثي تْ"] ; "مُست" ; ["هَد تْ"] ; 
 --         ["هَد تْ"] ; ["هَثِنغ تْ"] ; "مُستنءت" ; ["هَدنءت تْ"]] ; ---- 
@@ -57,7 +57,7 @@ concrete StructuralAra of Structural = CatAra **
   no_Phr = ss "لا" ;
   on_Prep = ss "عَلى" ;
   one_Quant = mkQuantNum "واحِد" Sg Indef ;
---  only_Predet = ss "ْنلي" ;
+  only_Predet = mkPredet "فَقَط" False;
 --  or_Conj = ss "ْر" ** {n = Sg} ;
 --  otherwise_PConj = ss "ْتهروِسي" ;
   part_Prep = ss "مِنَ" ;

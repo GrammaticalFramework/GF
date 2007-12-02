@@ -22,13 +22,20 @@ concrete NounAra of Noun = CatAra ** open ResAra, Prelude in {
               isPron = False }
       };
     
---    UsePN pn = pn ** {a = agrP3 Sg} ;
+    UsePN pn = { 
+      s =  pn.s; 
+      a = {pgn = (Per3 pn.g Sg); isPron = False } 
+      };
+
     UsePron p = p ;
---
---    PredetNP pred np = {
---      s = \\c => pred.s ++ np.s ! c ;
---      a = np.a
---      } ;
+
+    PredetNP pred np = {
+      s = \\c => case pred.isDecl of {
+        True => pred.s!c ++ np.s ! Gen ; -- akvaru l-awlAdi
+        False => pred.s!c ++ np.s ! c
+        };
+      a = np.a
+      } ;
 
     DetSg quant ord = {
       s = quant.s ; --++ ord.s 

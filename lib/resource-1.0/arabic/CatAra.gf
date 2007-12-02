@@ -48,7 +48,8 @@ concrete CatAra of Cat = CommonX - [Utt]  ** open ResAra, Prelude, ParamX in {
     NP, Pron = ResAra.NP; --{s : Case => Str ; a : Agr } ;
     Num, Ord = {s : Gender => State => Case => Str ;
                 n : Size };
-    Predet, QuantSg, QuantPl = 
+    Predet = ResAra.Predet ;
+    QuantSg, QuantPl = 
       {s : Species => Gender => Case => Str; 
        n : ResAra.Number; d : State; isNum : Bool} ;
     Det = ResAra.Det ;
@@ -87,6 +88,6 @@ concrete CatAra of Cat = CommonX - [Utt]  ** open ResAra, Prelude, ParamX in {
     N, N2 = ResAra.Noun ; --{s : ResAra.Number => State => Case => Str; g : Gender ; h = Species} ;
 --    N2 = {s : ResAra.Number => Case => Str} ** {c2 : Str} ;
     N3 = ResAra.Noun ** {c2,c3 : Str} ;
-    PN = {s : Case => Str} ;
+    PN = {s : Case => Str; g : Gender; h : Species} ;
 
 }
