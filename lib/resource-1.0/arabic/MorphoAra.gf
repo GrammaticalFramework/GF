@@ -3,6 +3,7 @@ resource MorphoAra = ResAra ** open Prelude in  {
 flags optimize = all ;--noexpand;
 
   oper
+
     mkDet : Str -> Number -> State -> Det 
       = \word,num,state -> 
       { s = \\_,_,c => word + vowel ! c ;
@@ -11,6 +12,16 @@ flags optimize = all ;--noexpand;
         isNum = False
       };
     
+    mkPredet : Str -> Bool -> Predet 
+      = \word,decl ->
+      { s = \\c => 
+          case decl of {
+            True => word + vowel!c;
+            False => word
+          };
+        isDecl = decl
+      };
+
    mkQuantNum : Str -> Number -> State -> { 
       s: Species => Gender => Case => Str; n: Number; d : State; isNum : Bool} = 
       \waHid,num,state -> 

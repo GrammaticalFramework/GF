@@ -10,7 +10,7 @@
 resource ResAra = PatternsAra ** open  Prelude, Predef   in {
 
   flags optimize=all ;
-        
+
 
   param     
     
@@ -658,19 +658,26 @@ patHollowImp : (_,_ :Str) -> Gender => Number => Str =\xaf,xAf ->
     };
   
   clr : Str -> Str -> Str -> Gender => NTable =
-    \eaHmar,HamrA',Humr ->
+    \aHmar,HamrA',Humr ->
     table {
-      Masc => reg eaHmar Humr;
-      Fem  => reg HamrA' Humr
+      Masc => table {
+        Sg => indeclN aHmar;
+        Dl => dual aHmar;
+        Pl => sing Humr
+        };
+      Fem  => table {
+        Sg => indeclN HamrA';
+        Dl => dual ((tk 2 HamrA') + "و");
+        Pl => sing Humr
+        }
     };
-  {-in 
-      table {
-        APosit _ => posit;
-        AComp c => posit ! Masc ! Sg ! Const ! c
-      };-}
-  
-    --takes 2 words, singular and broken plural, and gives the 
-    --complete noun inflection table
+
+  -- indeclinable nominal word (mamnuu3 mina S-Sarf)
+  indeclN : Str -> State => Case => Str =
+    \aHmar -> \\s,c => Al!s + aHmar + indecl!c;
+
+    -- takes 2 words, singular and broken plural, and gives the 
+    -- complete noun inflection table
     reg : Str -> Str -> NTable =
       \kitAb,kutub ->
       table {
@@ -678,7 +685,6 @@ patHollowImp : (_,_ :Str) -> Gender => Number => Str =\xaf,xAf ->
         Dl => dual kitAb ;
         Pl => sing kutub 
       };
-    
     
     --takes the sound noun in singular and gives the 
     --complete noun inflection table of sound feminine plural
@@ -755,6 +761,14 @@ patHollowImp : (_,_ :Str) -> Gender => Number => Str =\xaf,xAf ->
             Gen => "ِ"
           }
       };
+
+    --indeclinables (mamnuu3 mina S-Sarf) 
+    indecl :  Case => Str =
+      table {
+        Nom => "ُ";
+        _ => "َ"
+      };
+        
 
     --declection 2 (ends in yaa') of the singular or broken plural words
     dec2sg : State => Case => Str = 
@@ -946,6 +960,11 @@ patHollowImp : (_,_ :Str) -> Gender => Number => Str =\xaf,xAf ->
       n : Size; 
       isNum : Bool 
       } ;
+
+    Predet : Type = { 
+      s : Case => Str;
+      isDecl : Bool 
+      };
 
     Agr = { pgn : PerGenNum; isPron : Bool} ;
     AAgr = { g : Gender ; n : Number} ;

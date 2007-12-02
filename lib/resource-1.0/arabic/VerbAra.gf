@@ -30,7 +30,7 @@ concrete VerbAra of Verb = CatAra ** open Prelude, ResAra in {
 --
 --    PassV2 v = insertObj (\\_ => v.s ! VPPart) (predAux auxBe) ;
 --
---    UseVS, UseVQ = \vv -> {s = vv.s ; c2 = [] ; isRefl = vv.isRefl} ; -- no "تْ"
+    --    UseVS, UseVQ = \vv -> {s = vv.s ; c2 = [] ; isRefl = vv.isRefl} ; -- no "تْ"
 --
     CompAP ap = {s = \\agr,c => ap.s ! Hum ! agr.g ! agr.n ! Indef ! c} ; --FIXME
     CompNP np = {s = \\_,c => np.s ! c};

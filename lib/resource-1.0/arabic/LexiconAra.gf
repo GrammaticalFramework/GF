@@ -12,7 +12,7 @@ flags
   lin
 
   airplane_N   = sdfN "ط؟ر" "فاعِلة" Fem NoHum ;
-  answer_V2S   = dirV2 (v3 "جوب") ;
+{-  answer_V2S   = dirV2 (v3 "جوب") ;
   apartment_N  = brkN "شقّ" "فِعّة" "فِعَل" Fem NoHum ;
   apple_N      = sdfN "تفح" "فِعّالة" Fem NoHum ;
   art_N        = brkN "فنّ" "فَعّ" "فُعُول" Masc NoHum ;
@@ -147,8 +147,8 @@ flags
   paint_V2A    = mkV2A (regV "يَدهَن" ) [] ;
 --  paint_V2A    = mkV2A (v1 "دهن" a a ) [] ;
   paper_N      = brkN "ورق" "فَعَلة" "أَفعال" Fem NoHum ;
---  paris_PN     = regPN "بارِيس" nonhuman ;
-  peace_N      = brkN "سلم" "فَعال" "فَعال" Masc NoHum; --no plur
+-}  paris_PN     = mkPN "بارِيس" Fem NoHum  ;
+{-  peace_N      = brkN "سلم" "فَعال" "فَعال" Masc NoHum; --no plur
   pen_N        = brkN "قلم" "فَعَل" "أَفعال" Masc NoHum;
   planet_N     = mkN (reg "كَوكَب" "كَواكِب") Masc NoHum ; -- quadriconsonantal
   plastic_N    = mkN (sndf "بلاستِيك") Masc NoHum ;
@@ -163,8 +163,8 @@ flags
 --  rain_V0      = mkV0 (v1 "مطر" a u) ;
   read_V2      = dirV2 (regV "يَقرَ؟") ;
 --  read_V2      = dirV2 (v1 "قر؟" a a ) ;
-  red_A        = clrA "حمر" ;
-  religion_N   = brkN "دين" "فِعل" "أَفعال" Masc NoHum ;
+-}  red_A        = clrA "حمر" ;
+{-  religion_N   = brkN "دين" "فِعل" "أَفعال" Masc NoHum ;
   restaurant_N = brkN "طعم" "مَفعَل" "مَفاعِل" Masc NoHum ;
   river_N      = brkN "نهر" "فَعل" "أَفعال" Masc NoHum ;
   rock_N       = brkN "صخر" "فَعلة" "فُعُول" Fem NoHum ;
@@ -173,7 +173,7 @@ flags
   run_V        = regV "يَركُض" ;
 --  run_V        = v1 "ركض" a u ;
   say_VS       = mkVS (v1 "قول" a u) ; --check
-  school_N     = brkN "درس" "مَسفعَلة" "مَفاعِل" Masc NoHum ;
+  school_N     = brkN "درس" "مَفعَلة" "مَفاعِل" Fem NoHum ;
   science_N    = brkN "علم" "فِعل" "فُعُول" Masc NoHum ;
   sea_N        = brkN "بحر" "فَعل" "فُعُول" Masc NoHum ;
   seek_V2      = dirV2 (regV "يَطلُب") ; 
@@ -378,7 +378,7 @@ flags
   tie_V2       = dirV2 (regV "يَربُط" ) ;
   wash_V2      = dirV2 ( regV "يَغسِل" ) ;
   wipe_V2      = dirV2 ( regV "يَمسَح" ) ;
-
+-}
 --  other_A = sndA "ْتهر" ;
 
 } ;
