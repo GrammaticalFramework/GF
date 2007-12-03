@@ -31,16 +31,16 @@ lookupFunType :: GF -> Ident -> Ident -> Err Term
 lookupFunType = lookupJField jtype 
 
 lookupLin :: GF -> Ident -> Ident -> Err Term
-lookupLin = lookupJField jlin
+lookupLin = lookupJField jdef
 
 lookupLincat :: GF -> Ident -> Ident -> Err Term
-lookupLincat = lookupJField jlin
+lookupLincat = lookupJField jtype
 
 lookupOperType :: GF -> Ident -> Ident -> Err Term
 lookupOperType = lookupJField jtype 
 
 lookupOperDef :: GF -> Ident -> Ident -> Err Term
-lookupOperDef = lookupJField jlin
+lookupOperDef = lookupJField jdef
 
 lookupParams :: GF -> Ident -> Ident -> Err [(Ident,Context)]
 lookupParams gf m c = do
@@ -48,7 +48,7 @@ lookupParams gf m c = do
   return [(k,contextOfType t) | (k,t) <- contextOfType ty]
 
 lookupParamConstructor :: GF -> Ident -> Ident -> Err Type
-lookupParamConstructor = lookupJField jlin
+lookupParamConstructor = lookupJField jtype
 
 lookupParamValues :: GF -> Ident -> Ident -> Err [Term]
 lookupParamValues gf m c = do

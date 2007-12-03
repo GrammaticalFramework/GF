@@ -22,25 +22,24 @@ emptyGF = GF Nothing [] empty empty
 
 data Module = Module {
   mtype       :: ModuleType,
-  mof         :: Ident,               -- other for concrete, same for rest
-  minterfaces :: [(Ident,Ident)],     -- non-empty for functors 
+  minterfaces :: [(Ident,Ident)],           -- non-empty for functors 
+  minstances  :: [((Ident,MInclude),[(Ident,Ident)])], -- non-empty for instant'ions
   mextends    :: [(Ident,MInclude)],
-  minstances  :: [(Ident,Ident)],     -- non-empty for instantiations
-  mopens      :: [(Ident,Ident)],     -- used name, original name
+  mopens      :: [(Ident,Ident)],           -- used name, original name
   mflags      :: Map Ident String,
   mjments     :: Map Ident (Either Judgement Ident)  -- def or indirection
   }
 
 emptyModule :: Ident -> Module
-emptyModule m = Module MGrammar m [] [] [] [] empty empty
+emptyModule m = Module MTGrammar [] [] [] [] empty empty
 
 listJudgements :: Module -> [(Ident,Either Judgement Ident)]
 listJudgements = assocs . mjments
 
 data ModuleType =
-    MAbstract
-  | MConcrete
-  | MGrammar 
+    MTAbstract
+  | MTConcrete Ident
+  | MTGrammar 
 
 data MInclude =
     MIAll
