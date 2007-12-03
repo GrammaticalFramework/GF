@@ -33,8 +33,23 @@ appForm tr = (f,reverse xs) where
 mkProd :: Context -> Type -> Type
 mkProd = flip (foldr (uncurry Prod))
 
+mkApp :: Term -> [Term] -> Term
+mkApp = foldl App
+
+mkAbs :: [Ident] -> Term -> Term
+mkAbs xs t = foldr Abs t xs
+
+mkDecl :: Term -> Decl
+mkDecl typ = (wildIdent, typ)
+
 typeType :: Type
 typeType = Sort "Type"
+
+ident2label :: Ident -> Label
+ident2label c = LIdent (prIdent c)
+
+----label2ident :: Label -> Ident
+----label2ident = identC . prLabel
 
 -- to apply a term operation to every term in a judgement, module, grammar
 
@@ -56,12 +71,10 @@ termOpJudgement :: Monad m => (Term -> m Term) -> Judgement -> m Judgement
 termOpJudgement f j = do 
   jtyp <- f (jtype j)
   jde <- f (jdef j)
-  jli <- f (jlin j)
   jpri <- f (jprintname j)
   return $ j {
     jtype = jtyp,
     jdef = jde,
-    jlin = jli,
     jprintname = jpri
     }
 
