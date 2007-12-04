@@ -248,13 +248,7 @@ transResDef :: TopDef -> Err (Either [(Ident,Judgement)] [(Ident,String)])
 transResDef x = case x of
   DefPar pardefs -> do
     pardefs' <- mapM transParDef pardefs
-    returnl $ [] 
-        ---- [(p, resParam (if null pars 
-        ----                          then nope -- abstract param type 
-        ----                          else (yes (pars,Nothing)))) 
-        ----                             | (p,pars) <- pardefs']
-        ----   ++ [(f, G.ResValue (yes (M.mkProd co (G.Con p),Nothing))) |
-        ----             (p,pars) <- pardefs', (f,co) <- pars]
+    returnl $ concatMap mkParamDefs pardefs'   
 
   DefOper defs -> do
     defs' <- liftM concat $ mapM getDefs defs
@@ -267,19 +261,21 @@ transResDef x = case x of
   DefFlag defs -> liftM (Right . concat) $ mapM transFlagDef defs
   _ -> Bad $ "illegal definition form in resource" +++ printTree x
  where
-   mkOverload (c,j) = case j of
-{- ----
-     G.ResOper _ (Yes (G.App keyw (G.R fs@(_:_:_)))) | 
-                                          isOverloading keyw c fs -> 
-       [(c,G.ResOverload [(ty,fu) | (_,(Just ty,fu)) <- fs])]
+
+   mkParamDefs (p,pars) =
+     if null pars 
+       then [(p,addJType M.meta0 (emptyJudgement JParam))]  -- in an interface
+       else (p,resParam pars) : paramConstructors p pars
+
+   mkOverload (c,j) = case (jtype j, jdef j) of
+     (_,G.App keyw (G.R fs@(_:_:_))) | isOverloading keyw c fs -> 
+         [(c,resOverload [(ty,fu) | (_,(Just ty,fu)) <- fs])]
 
      -- to enable separare type signature --- not type-checked
-     G.ResOper (Yes (G.App keyw (G.RecType fs@(_:_:_)))) _ | 
-                                          isOverloading keyw c fs -> []
--}
+     (G.App keyw (G.RecType fs@(_:_:_)),_) | isOverloading keyw c fs -> []
      _ -> [(c,j)]
-   isOverloading keyw c fs = 
-     printTree keyw == "overload" &&       -- overload is a "soft keyword"
+   isOverloading (G.Vr keyw) c fs = 
+     prIdent keyw == "overload" &&       -- overload is a "soft keyword"
      False ---- all (== GP.prt c) (map (GP.prt . fst) fs)
 
 transParDef :: ParDef -> Err (Ident, [(Ident,G.Context)])

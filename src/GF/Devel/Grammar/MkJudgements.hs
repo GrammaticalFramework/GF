@@ -47,17 +47,20 @@ resOperDef tr = addJDef tr (emptyJudgement JOper)
 resOper :: Type -> Term -> Judgement
 resOper ty tr = addJDef tr (resOperType ty)
 
--- param m.p = c g  is encoded as p : (ci : gi -> EData) -> Type
--- we use EData instead of m.p to make circularity check easier  
-resParam :: Ident -> Ident -> [(Ident,Context)] -> Judgement
-resParam m p cos = addJType constrs (emptyJudgement JParam) where
+resOverload :: [(Type,Term)] -> Judgement
+resOverload tts = resOperDef (Overload tts)
+
+-- param p = ci gi  is encoded as p : ((ci : gi) -> EData) -> Type
+-- we use EData instead of p to make circularity check easier  
+resParam :: [(Ident,Context)] -> Judgement
+resParam cos = addJType constrs (emptyJudgement JParam) where
   constrs = mkProd [(c,mkProd co EData) | (c,co) <- cos] typeType
 
 -- to enable constructor type lookup:
--- create an oper for each constructor m.p = c g, as c : g -> m.p = EData
-paramConstructors :: Ident -> Ident -> [(Ident,Context)] -> [(Ident,Judgement)]
-paramConstructors m p cs = 
-  [(c,resOper (mkProd co (QC m p)) EData) | (c,co) <- cs]
+-- create an oper for each constructor p = c g, as c : g -> p = EData
+paramConstructors :: Ident -> [(Ident,Context)] -> [(Ident,Judgement)]
+paramConstructors p cs = 
+  [(c,resOper (mkProd co (Con p)) EData) | (c,co) <- cs]
 
 -- unifying contents of judgements
 

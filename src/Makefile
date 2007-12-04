@@ -34,6 +34,7 @@ GF_EXE=gf$(EXEEXT)
 GF_EXE_TMP=gf-bin$(EXEEXT)
 GF_DOC_EXE=gfdoc$(EXEEXT)
 GF3_EXE=gf3$(EXEEXT)
+TESTGF3_EXE=testgf3$(EXEEXT)
 
 
 ifeq ("$(READLINE)","readline")
@@ -205,6 +206,11 @@ gf3:
 	$(GHMAKE) $(GHCOPTFLAGS) -o gf3 GF/Devel/GF.hs
 	strip $(GF3_EXE)
 	mv $(GF3_EXE) ../bin/
+
+testgf3:
+	$(GHMAKE) $(GHCOPTFLAGS) -o testgf3 GF/Devel/TestGF3.hs
+	strip $(TESTGF3_EXE)
+	mv $(TESTGF3_EXE) ../bin/
 
 gfcc2c:
 	$(MAKE) -C tools/c

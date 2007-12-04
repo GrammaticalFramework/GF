@@ -54,6 +54,8 @@ data Term =
 
  | Alts (Term, [(Term, Term)]) -- ^ prefix-dependent: @pre {t ; s\/c ; ...}@
 
+ | Overload [(Type,Term)]
+
   deriving (Read, Show, Eq, Ord)
 
 data Patt =
