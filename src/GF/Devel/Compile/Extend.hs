@@ -10,6 +10,7 @@
 -- > CVS $Revision: 1.18 $
 --
 -- AR 14\/5\/2003 -- 11\/11
+-- 4/12/2007 this module is still very very messy... ----
 --
 -- The top-level function 'extendModule'
 -- extends a module symbol table by indirections to the module it extends
@@ -28,25 +29,26 @@ import GF.Devel.Grammar.Macros
 
 import GF.Infra.Ident
 
---import GF.Compile.Update
-
 import GF.Data.Operations
 
+import Data.List (nub)
 import Data.Map
 import Control.Monad
 
 extendModule :: GF -> SourceModule -> Err SourceModule
-extendModule gf (name,mo) = case mtype mo of
+extendModule gf nmo0 = do
+  (name,mo) <- rebuildModule gf nmo0
+  case mtype mo of
 
   ---- Just to allow inheritance in incomplete concrete (which are not
   ---- compiled anyway), extensions are not built for them.
   ---- Should be replaced by real control. AR 4/2/2005
-  MTConcrete _ | not (isCompleteModule mo) -> return (name,mo)
-  _  -> do
-    mo' <- foldM extOne mo (mextends mo) 
-    return (name, mo') 
+    MTConcrete _ | not (isCompleteModule mo) -> return (name,mo)
+    _  -> do
+      mo' <- foldM (extOne name) mo (mextends mo) 
+      return (name, mo') 
  where
-   extOne mo (n,cond) = do
+   extOne name mo (n,cond) = do
      (m0,isCompl) <- do
         m <- lookupModule gf n
 
@@ -96,3 +98,52 @@ tryInsert unif indir tree z@(x, info) = case Data.Map.lookup x tree of
     info1 <- unif info info0
     return $ insert x info1 tree 
   _ -> return $ insert x (indir info) tree
+
+-- | rebuilding instance + interface, and "with" modules, prior to renaming. 
+-- AR 24/10/2003
+rebuildModule :: GF -> SourceModule -> Err SourceModule
+rebuildModule gr mo@(i,mi) = case mtype mi of
+  MTConcrete i0 -> do
+          m1 <- lookupModule gr i0
+          testErr (mtype m1 == MTAbstract) 
+                  ("abstract expected as type of" +++ prt i0)
+          js' <- extendMod False i0 (const True) i (mjments m1) (mjments mi)
+          --- to avoid double inclusions, in instance I of I0 = J0 ** ...
+          case mextends mi of
+            [] -> return $ (i,mi {mjments = js'})
+            j0s -> do 
+              m0s <- mapM (lookupModule gr . fst) j0s ---- restricted?? 12/2007
+              let notInM0 c _  = all (notMember c . mjments) m0s
+              let js2 = filterWithKey notInM0 js'
+              return $ (i,mi {mjments = js2})
+
+    -- add the instance opens to an incomplete module "with" instances
+    --      ModWith mt stat ext me ops -> do
+    --    ModWith (Module mt stat fs_ me ops_ js_) (ext,incl) ops -> do
+
+  _ -> case minstances mi of
+    [((ext,incl),ops)] -> do
+        let infs  = Prelude.map fst ops
+        let stat' = Prelude.null [i | (_,i) <- minterfaces mi, notElem i infs]
+        testErr stat' ("module" +++ prt i +++ "remains incomplete")
+           --        Module mt0 _ fs me' ops0 js <- lookupModMod gr ext
+        mo0 <- lookupModule gr ext
+        let ops1 = nub $
+                     mopens mi ++   -- N.B. mo0 has been name-resolved already
+                     ops ++ 
+                     [(n,o) | (n,o) <- mopens mo0, notElem o infs] ++
+                     [(i,i) | i <- Prelude.map snd ops] ----
+                     ----    ++ [oSimple i   | i <- map snd ops] ----
+
+        --- check if me is incomplete
+        let fs1 = union (mflags mi) (mflags mo0)  -- new flags have priority
+        let js0 = [ci | ci@(c,_) <- assocs (mjments mo0), isInherited incl c]
+        let js1 = fromList (assocs (mjments mi) ++ js0)
+        return $ (i,mo0 {
+          mflags = fs1, 
+          mextends = mextends mi,
+          mopens = ops1,
+          mjments = js1
+          })
+    _ -> return (i,mi)
+
