@@ -3,13 +3,14 @@ module Main where
 import GF.Devel.Grammar.LexGF
 import GF.Devel.Grammar.ParGF
 ---- import GF.Devel.Grammar.PrintGF
-import GF.Devel.Grammar.AbsGF
+import GF.Devel.Grammar.Modules
 
 import GF.Devel.Grammar.SourceToGF
 
 import qualified GF.Devel.Grammar.ErrM as GErr ----
 import GF.Data.Operations
 
+import Data.Map
 import System (getArgs)
 
 main = do
@@ -23,7 +24,7 @@ main = do
 compile g = do
   let eg = transGrammar g
   case eg of
-    Ok _ -> putStrLn "OK"
+    Ok gr -> print (length (assocs (gfmodules gr))) >> putStrLn "OK"
     Bad s -> putStrLn s
   return ()
 

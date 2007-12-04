@@ -404,7 +404,7 @@ transExp x = case x of
           G.Typed _ t -> G.TTyped t
           _ -> G.TRaw 
     return $ G.S (G.T annot cases') exp'
-----  ECTable binds exp  -> liftM2 M.mkCTable (mapM transBind binds) (transExp exp)
+  ECTable binds exp  -> liftM2 M.mkCTable (mapM transBind binds) (transExp exp)
 
   EVariants exps    -> liftM  G.FV $ mapM transExp exps
   EPre exp alts     -> liftM2 (curry G.Alts) (transExp exp) (mapM transAltern alts)
@@ -507,8 +507,8 @@ transPatt x = case x of
     let (lss,ps) = unzip [(ls,p) | PA ls p <- pattasss]
         ls = map LPIdent $ concat lss
     liftM G.PR $ liftM2 zip (mapM trLabel ls) (mapM transPatt ps)
-----  PTup pcs -> 
-----    liftM (G.PR . M.tuple2recordPatt) (mapM transPatt [e | PTComp e <- pcs])
+  PTup pcs -> 
+    liftM (G.PR . M.tuple2recordPatt) (mapM transPatt [e | PTComp e <- pcs])
   PQ id0 id  -> liftM3 G.PP (transIdent id0) (transIdent id) (return [])
   PQC id0 id patts  -> 
     liftM3 G.PP (transIdent id0) (transIdent id) (mapM transPatt patts)
