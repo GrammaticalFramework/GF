@@ -1,7 +1,6 @@
-module GF.Devel.Terms where
+module GF.Devel.Grammar.Terms where
 
 import GF.Infra.Ident
-import GF.Infra.Modules
 
 import GF.Data.Operations
 
