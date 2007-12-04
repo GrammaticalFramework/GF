@@ -14,10 +14,10 @@
 
 module GF.Devel.Grammar.SourceToGF ( 
   transGrammar,
-  transInclude,
   transModDef,
-  transOldGrammar,
   transExp,
+----  transOldGrammar,
+----  transInclude,
   newReservedWords
   ) where
 
@@ -73,7 +73,7 @@ transModDef :: ModDef -> Err (Ident,Module)
 transModDef x = case x of
   MModule compl mtyp body -> do
 
-    ---- let mstat' = transComplMod compl
+    --- let mstat' = transComplMod compl
 
     (trDef, mtyp', id') <- case mtyp of
       MAbstract id -> do
@@ -98,8 +98,8 @@ transModDef x = case x of
         extends' <- transExtend extends
         opens'   <- transOpens opens
         defs0    <- mapM trDef $ getTopDefs defs
-        defs'    <- return $ Map.fromList [d | Left ds <- defs0, d <- ds]
-        flags'   <- return Map.empty ---- [f | Right fs <- defs0, f <- fs]
+        let defs'  = Map.fromList [(i,Left d) | Left ds <- defs0, (i,d) <- ds]
+        let flags' = Map.fromList [f | Right fs <- defs0, f <- fs]
         return (id', Module mtyp' [] [] extends' opens' flags' defs')
 
        MWith m insts -> mkBody xx $ MWithEBody [] m insts NoOpens []
@@ -111,8 +111,8 @@ transModDef x = case x of
         insts'   <- mapM transOpen insts 
         opens'   <- transOpens opens
         defs0    <- mapM trDef $ getTopDefs defs
-        defs'    <- return $ Map.fromList [d | Left  ds <- defs0, d <- ds]
-        flags'   <- return Map.empty ---- [f | Right fs <- defs0, f <- fs]
+        let defs'  = Map.fromList [(i,Left d) | Left ds <- defs0, (i,d) <- ds]
+        let flags' = Map.fromList [f | Right fs <- defs0, f <- fs]
         return (id', Module mtyp' [] [(m',insts')] extends' opens' flags' defs')
        _ -> fail "deprecated module form"
 
@@ -169,9 +169,10 @@ transAbsDef x = case x of
     returnl $ 
       [(c, G.AbsCat nope (yes ps)) | (c,ps) <- ds'] ++
       [(f, G.AbsFun nope (yes G.EData))  | (_,fs) <- ds', tf <- fs, f <- funs tf]
-  DefFlag defs -> liftM Right $ mapM transFlagDef defs
 -}
-  _ -> Bad $ "illegal definition in abstract module:" ++++ printTree x
+  DefFlag defs -> liftM (Right . concat) $ mapM transFlagDef defs
+  _ -> return $ Left [] ----  
+----  _ -> Bad $ "illegal definition in abstract module:" ++++ printTree x
  where
    -- to get data constructors as terms
    funs t = case t of
@@ -183,12 +184,17 @@ transAbsDef x = case x of
 returnl :: a -> Err (Either a b)
 returnl = return . Left
 
-transFlagDef :: FlagDef -> Err [(Ident,String)]
+transFlagDef :: Def -> Err [(Ident,String)]
 transFlagDef x = case x of
-  FlagDef f x -> do
-    f' <- transIdent f
-    x' <- transIdent f
-    return $ [(f',prIdent x')]
+  DDef f x -> do
+    fs <- mapM transName f
+    x' <- transExp x
+    v <- case x' of
+      G.K s -> return s
+      G.Vr (IC s) -> return s
+      G.EInt i -> return $ show i
+      _ -> fail $ "illegal flag value" +++ printTree x
+    return $ [(f',v) | f' <- fs]
 
 
 -- | Cat definitions can also return some fun defs
@@ -226,7 +232,7 @@ transCatDef x = case x of
 
 transFunDef :: FunDef -> Err ([Ident], G.Type)
 transFunDef x = case x of
-  FunDef ids typ  -> liftM2 (,) (mapM transIdent ids) (transExp typ)
+  FDecl ids typ  -> liftM2 (,) (mapM transName ids) (transExp typ)
 
 {- ----
 transDataDef :: DataDef -> Err (Ident,[G.Term])
@@ -258,7 +264,7 @@ transResDef x = case x of
     defs' <- liftM concat $ mapM getDefs defs
     returnl [(f, resOper pt pe) | (f,(pt,pe)) <- defs']
 
-  DefFlag defs -> liftM Right $ mapM transFlagDef defs
+  DefFlag defs -> liftM (Right . concat) $ mapM transFlagDef defs
   _ -> Bad $ "illegal definition form in resource" +++ printTree x
  where
    mkOverload (c,j) = case j of
@@ -280,7 +286,6 @@ transParDef :: ParDef -> Err (Ident, [(Ident,G.Context)])
 transParDef x = case x of
   ParDefDir id params  -> liftM2 (,) (transIdent id) (mapM transParConstr params)
   ParDefAbs id -> liftM2 (,) (transIdent id) (return [])
-  _ -> Bad $ "illegal definition in resource:" ++++ printTree x
 
 transCncDef :: TopDef -> Err (Either [(Ident,Judgement)] [(Ident,String)])
 transCncDef x = case x of
@@ -311,9 +316,9 @@ transCncDef x = case x of
 -}
   _ -> errIn ("illegal definition in concrete syntax:") $ transResDef x
 
-transPrintDef :: PrintDef -> Err [(Ident,G.Term)]
+transPrintDef :: Def -> Err [(Ident,G.Term)]
 transPrintDef x = case x of
-  PrintDef ids exp  -> do
+  DDef ids exp  -> do
     (ids,e) <- liftM2 (,) (mapM transName ids) (transExp exp)
     return $ [(i,e) | i <- ids]
 
