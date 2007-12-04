@@ -39,6 +39,28 @@ mkApp = foldl App
 mkAbs :: [Ident] -> Term -> Term
 mkAbs xs t = foldr Abs t xs
 
+mkCTable :: [Ident] -> Term -> Term
+mkCTable ids v = foldr ccase v ids where 
+  ccase x t = T TRaw [(PV x,t)]
+
+tuple2record :: [Term] -> [Assign]
+tuple2record ts = [assign (tupleLabel i) t | (i,t) <- zip [1..] ts]
+
+tuple2recordType :: [Term] -> [Labelling]
+tuple2recordType ts = [(tupleLabel i, t) | (i,t) <- zip [1..] ts]
+
+tuple2recordPatt :: [Patt] -> [(Label,Patt)]
+tuple2recordPatt ts = [(tupleLabel i, t) | (i,t) <- zip [1..] ts]
+
+tupleLabel :: Int -> Label
+tupleLabel i = LIdent $ "p" ++ show i
+
+assign :: Label -> Term -> Assign
+assign l t = (l,(Nothing,t))
+
+assignT :: Label -> Type -> Term -> Assign
+assignT l a t = (l,(Just a,t))
+
 mkDecl :: Term -> Decl
 mkDecl typ = (wildIdent, typ)
 
