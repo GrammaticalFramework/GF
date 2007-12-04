@@ -64,6 +64,11 @@ paramConstructors p cs =
 
 -- unifying contents of judgements
 
+---- used in SourceToGF; make error-free and informative
+unifyJudgements (Left j) (Left k) = Left $ case unifyJudgement j k of
+  Ok l -> l
+  Bad s -> error s
+
 unifyJudgement :: Judgement -> Judgement -> Err Judgement
 unifyJudgement old new = do
   testErr (jform old == jform new) "different judment forms"
