@@ -35,22 +35,27 @@ data Module = Module {
   mextends    :: [(Ident,MInclude)],
   mopens      :: [(Ident,Ident)],           -- used name, original name
   mflags      :: Map Ident String,
-  mjments     :: Map Ident (Either Judgement Indirection) -- def or indirection
+  mjments     :: MapJudgement 
   }
 
 emptyModule :: Ident -> Module
 emptyModule m = Module MTGrammar [] [] [] [] empty empty
 
+type MapJudgement = Map Ident JEntry -- def or indirection
+
 isCompleteModule :: Module -> Bool
 isCompleteModule = Prelude.null . minterfaces 
 
-listJudgements :: Module -> [(Ident,Either Judgement Indirection)]
+listJudgements :: Module -> [(Ident,JEntry)]
 listJudgements = assocs . mjments
+
+type JEntry = Either Judgement Indirection
 
 data ModuleType =
     MTAbstract
   | MTConcrete Ident
   | MTGrammar 
+  deriving Eq
 
 data MInclude =
     MIAll
@@ -58,4 +63,19 @@ data MInclude =
   | MIOnly [Ident]
 
 type Indirection = (Ident,Bool) -- module of origin, whether canonical
+
+isConstructorEntry :: Either Judgement Indirection -> Bool
+isConstructorEntry ji = case ji of
+  Left j -> isConstructor j
+  Right i -> snd i
+
+isConstructor :: Judgement -> Bool
+isConstructor j = jdef j == EData
+
+isInherited :: MInclude -> Ident -> Bool
+isInherited mi i = case mi of
+  MIExcept is -> notElem i is
+  MIOnly is -> elem i is
+  _ -> True
+
 
