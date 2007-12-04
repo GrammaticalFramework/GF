@@ -53,7 +53,7 @@ extendModule gf nmo0 = do
         m <- lookupModule gf n
 
         -- test that the module types match, and find out if the old is complete
-        testErr (mtype mo == mtype m) 
+        testErr True ---- (mtype mo == mtype m) 
                     ("illegal extension type to module" +++ prt name)
         return (m, isCompleteModule m)
 
@@ -103,10 +103,10 @@ tryInsert unif indir tree z@(x, info) = case Data.Map.lookup x tree of
 -- AR 24/10/2003
 rebuildModule :: GF -> SourceModule -> Err SourceModule
 rebuildModule gr mo@(i,mi) = case mtype mi of
-  MTConcrete i0 -> do
+  MTInstance i0 -> do
           m1 <- lookupModule gr i0
-          testErr (mtype m1 == MTAbstract) 
-                  ("abstract expected as type of" +++ prt i0)
+          testErr (mtype m1 == MTInterface) 
+                  ("interface expected as type of" +++ prt i0)
           js' <- extendMod False i0 (const True) i (mjments m1) (mjments mi)
           --- to avoid double inclusions, in instance I of I0 = J0 ** ...
           case mextends mi of

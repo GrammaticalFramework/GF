@@ -38,6 +38,8 @@ trModule (i,mo) = P.MModule compl typ body where
       MTGrammar -> P.MGrammar i'
       MTAbstract -> P.MAbstract i'
       MTConcrete a -> P.MConcrete i' (tri a)
+      MTInterface -> P.MInterface i'
+      MTInstance a -> P.MInstance i' (tri a)
     body = P.MBody 
              (trExtends (mextends mo)) 
              (mkOpens (map trOpen (mopens mo)))

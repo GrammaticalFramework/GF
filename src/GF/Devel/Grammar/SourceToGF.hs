@@ -85,10 +85,10 @@ transModDef x = case x of
         id'   <- transIdent id
         open' <- transIdent open
         return (transCncDef, MTConcrete open', id')
-      MInterface id -> mkModRes id MTAbstract body
+      MInterface id -> mkModRes id MTInterface body
       MInstance id open -> do
         open' <- transIdent open
-        mkModRes id (MTConcrete open') body
+        mkModRes id (MTInstance open') body
 
     mkBody (trDef, mtyp', id') body
   where
