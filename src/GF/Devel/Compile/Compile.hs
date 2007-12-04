@@ -2,8 +2,7 @@ module GF.Devel.Compile.Compile (batchCompile) where
 
 -- the main compiler passes
 import GF.Devel.Compile.GetGrammar
-----import GF.Compile.Update
-----import GF.Compile.Extend
+import GF.Devel.Compile.Extend
 ----import GF.Compile.Rebuild
 ----import GF.Compile.Rename
 ----import GF.Grammar.Refresh
@@ -144,18 +143,19 @@ compileSourceModule :: Options -> CompileEnv ->
 compileSourceModule opts env@(k,gr) mo@(i,mi) = do
 
   intermOut opts (iOpt "show_gf") (prMod mo)
-  return (k,mo) ----
 
-{- ----
   let putp  = putPointE opts
       putpp = putPointEsil opts
-      mos   = modules gr
 
+  mo1  <- ioeErr $ extendModule gr mo
+  intermOut opts (iOpt "show_extend") (prMod mo1)
+
+  return (k,mo1) ----
+
+{- ----
   mo1   <- ioeErr $ rebuildModule mos mo
   intermOut opts (iOpt "show_rebuild") (prMod mo1)
 
-  mo1b  <- ioeErr $ extendModule mos mo1
-  intermOut opts (iOpt "show_extend") (prMod mo1b)
 
   case mo1b of
     (_,ModMod n) | not (isCompleteModule n) -> do

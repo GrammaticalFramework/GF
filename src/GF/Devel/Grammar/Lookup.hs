@@ -59,15 +59,19 @@ lookupParamValues gf m c = do
 
 -- infrastructure for lookup
     
-lookupIdent :: GF -> Ident -> Ident -> Err (Either Judgement Ident)
+lookupModule :: GF -> Ident -> Err Module
+lookupModule gf m = do
+  maybe (raise "module not found") return $ mlookup m (gfmodules gf)
+
+lookupIdent :: GF -> Ident -> Ident -> Err JEntry
 lookupIdent gf m c = do
-  mo <- maybe (raise "module not found") return $ mlookup m (gfmodules gf)
+  mo <- lookupModule gf m
   maybe (Bad "constant not found") return $ mlookup c (mjments mo)
 
 lookupJudgement :: GF -> Ident -> Ident -> Err Judgement
 lookupJudgement gf m c = do
   eji <- lookupIdent gf m c
-  either return (\n -> lookupJudgement gf n c) eji 
+  either return (\n -> lookupJudgement gf (fst n) c) eji 
 
 mlookup = Data.Map.lookup
 
