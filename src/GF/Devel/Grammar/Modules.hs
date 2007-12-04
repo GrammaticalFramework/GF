@@ -20,6 +20,14 @@ data GF = GF {
 emptyGF :: GF
 emptyGF = GF Nothing [] empty empty
 
+type SourceModule = (Ident,Module)
+
+listModules :: GF -> [SourceModule]
+listModules = assocs.gfmodules
+
+addModule :: Ident -> Module -> GF -> GF
+addModule c m gf = gf {gfmodules = insert c m (gfmodules gf)}
+
 data Module = Module {
   mtype       :: ModuleType,
   minterfaces :: [(Ident,Ident)],           -- non-empty for functors 
@@ -32,6 +40,9 @@ data Module = Module {
 
 emptyModule :: Ident -> Module
 emptyModule m = Module MTGrammar [] [] [] [] empty empty
+
+isCompleteModule :: Module -> Bool
+isCompleteModule = Prelude.null . minterfaces 
 
 listJudgements :: Module -> [(Ident,Either Judgement Indirection)]
 listJudgements = assocs . mjments
