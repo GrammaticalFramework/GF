@@ -27,13 +27,13 @@ data Module = Module {
   mextends    :: [(Ident,MInclude)],
   mopens      :: [(Ident,Ident)],           -- used name, original name
   mflags      :: Map Ident String,
-  mjments     :: Map Ident (Either Judgement Ident)  -- def or indirection
+  mjments     :: Map Ident (Either Judgement Indirection) -- def or indirection
   }
 
 emptyModule :: Ident -> Module
 emptyModule m = Module MTGrammar [] [] [] [] empty empty
 
-listJudgements :: Module -> [(Ident,Either Judgement Ident)]
+listJudgements :: Module -> [(Ident,Either Judgement Indirection)]
 listJudgements = assocs . mjments
 
 data ModuleType =
@@ -46,4 +46,5 @@ data MInclude =
   | MIExcept [Ident]
   | MIOnly [Ident]
 
+type Indirection = (Ident,Bool) -- module of origin, whether canonical
 

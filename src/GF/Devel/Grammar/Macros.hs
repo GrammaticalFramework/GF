@@ -45,6 +45,9 @@ mkDecl typ = (wildIdent, typ)
 typeType :: Type
 typeType = Sort "Type"
 
+meta0 :: Term
+meta0 = Meta 0
+
 ident2label :: Ident -> Label
 ident2label c = LIdent (prIdent c)
 
@@ -155,6 +158,10 @@ composOp co trm = case trm of
         aa' <- mapM (pairM co) aa
         return (Alts (t',aa'))
    FV ts -> mapM co ts >>= return . FV
+   Overload tts -> do
+     tts' <- mapM (pairM co) tts
+     return $ Overload tts'
+
    _ -> return trm -- covers K, Vr, Cn, Sort
 
 --- just aux to composOp?
