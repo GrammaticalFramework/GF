@@ -54,6 +54,8 @@ type JEntry = Either Judgement Indirection
 data ModuleType =
     MTAbstract
   | MTConcrete Ident
+  | MTInterface
+  | MTInstance Ident
   | MTGrammar 
   deriving Eq
 
