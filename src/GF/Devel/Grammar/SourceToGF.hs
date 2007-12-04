@@ -79,6 +79,7 @@ transModDef x = case x of
       MAbstract id -> do
         id' <- transIdent id
         return (transAbsDef, MTAbstract, id')
+      MGrammar id -> mkModRes id MTGrammar body 
       MResource id -> mkModRes id MTGrammar body 
       MConcrete id open -> do
         id'   <- transIdent id
@@ -98,7 +99,8 @@ transModDef x = case x of
         extends' <- transExtend extends
         opens'   <- transOpens opens
         defs0    <- mapM trDef $ getTopDefs defs
-        let defs'  = Map.fromList [(i,Left d) | Left ds <- defs0, (i,d) <- ds]
+        let defs' = Map.fromListWith unifyJudgements 
+                       [(i,Left d) | Left ds <- defs0, (i,d) <- ds]
         let flags' = Map.fromList [f | Right fs <- defs0, f <- fs]
         return (id', Module mtyp' [] [] extends' opens' flags' defs')
 
@@ -111,7 +113,8 @@ transModDef x = case x of
         insts'   <- mapM transOpen insts 
         opens'   <- transOpens opens
         defs0    <- mapM trDef $ getTopDefs defs
-        let defs'  = Map.fromList [(i,Left d) | Left ds <- defs0, (i,d) <- ds]
+        let defs'  = Map.fromListWith unifyJudgements 
+                       [(i,Left d) | Left ds <- defs0, (i,d) <- ds]
         let flags' = Map.fromList [f | Right fs <- defs0, f <- fs]
         return (id', Module mtyp' [] [(m',insts')] extends' opens' flags' defs')
        _ -> fail "deprecated module form"
