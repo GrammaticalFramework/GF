@@ -34,8 +34,6 @@ MGrammar.   ModType ::= "grammar"   PIdent ;
 MInterface. ModType ::= "interface" PIdent ;
 MConcrete.  ModType ::= "concrete"  PIdent "of" PIdent ;
 MInstance.  ModType ::= "instance"  PIdent "of" PIdent ;
-MTransfer.  ModType ::= "transfer"  PIdent ":" Open "->" Open ;
-
 
 MBody.      ModBody ::= Extend Opens "{" [TopDef] "}" ;
 MNoBody.    ModBody ::= [Included] ;
@@ -69,13 +67,6 @@ IAll.   Included ::= PIdent ;
 ISome.  Included ::= PIdent "[" [PIdent] "]" ;
 IMinus. Included ::= PIdent "-" "[" [PIdent] "]" ;
 
--- definitions after the $oper$ keywords
-
-DDecl.  Def ::= [Name] ":" Exp ;
-DDef.   Def ::= [Name] "=" Exp ;
-DPatt.  Def ::= Name [Patt] "=" Exp ;  -- non-empty pattern list
-DFull.  Def ::= [Name] ":" Exp "=" Exp ;
-
 -- top-level definitions
 
 DefCat.    TopDef ::= "cat" [CatDef] ;
@@ -84,49 +75,45 @@ DefFunData.TopDef ::= "data" [FunDef] ;
 DefDef.    TopDef ::= "def" [Def] ;
 DefData.   TopDef ::= "data" [DataDef] ;
 
-DefTrans.  TopDef ::= "transfer" [Def] ;--%
-
 DefPar.    TopDef ::= "param" [ParDef] ;
 DefOper.   TopDef ::= "oper"  [Def] ;
 
-DefLincat. TopDef ::= "lincat" [PrintDef] ;
+DefLincat. TopDef ::= "lincat" [Def] ;
 DefLindef. TopDef ::= "lindef" [Def] ;
 DefLin.    TopDef ::= "lin"    [Def] ;
 
-DefPrintCat. TopDef ::= "printname" "cat" [PrintDef] ;
-DefPrintFun. TopDef ::= "printname" "fun" [PrintDef] ;
-DefFlag.     TopDef ::= "flags" [FlagDef] ;
+DefPrintCat. TopDef ::= "printname" "cat" [Def] ;
+DefPrintFun. TopDef ::= "printname" "fun" [Def] ;
+DefFlag.     TopDef ::= "flags" [Def] ;
+
+-- definitions after most keywords
+
+DDecl.  Def ::= [Name] ":" Exp ;
+DDef.   Def ::= [Name] "=" Exp ;
+DPatt.  Def ::= Name [Patt] "=" Exp ;  -- non-empty pattern list
+DFull.  Def ::= [Name] ":" Exp "=" Exp ;
+
+FDecl.  FunDef ::= [Name] ":" Exp ;
 
 SimpleCatDef.   CatDef ::= PIdent [DDecl] ;
 ListCatDef.     CatDef ::= "[" PIdent [DDecl] "]" ;
 ListSizeCatDef. CatDef ::= "[" PIdent [DDecl] "]" "{" Integer "}" ;
 
-FunDef.    FunDef ::= [PIdent] ":" Exp ;
-
-DataDef.   DataDef    ::= PIdent "=" [DataConstr] ;
+DataDef.   DataDef    ::= Name "=" [DataConstr] ;
 DataId.    DataConstr ::= PIdent ;
 DataQId.   DataConstr ::= PIdent "." PIdent ;
 separator DataConstr "|" ;
 
-
 ParDefDir.   ParDef ::= PIdent "=" [ParConstr] ;
-ParDefIndir. ParDef ::= PIdent "=" "(" "in" PIdent ")" ;
 ParDefAbs.   ParDef ::= PIdent ;
 
 ParConstr. ParConstr ::= PIdent [DDecl] ;
 
-PrintDef. PrintDef ::= [Name] "=" Exp ;
-
-FlagDef. FlagDef ::= PIdent "=" PIdent ;
-
 terminator nonempty Def ";" ;
-terminator nonempty CatDef ";" ;
 terminator nonempty FunDef ";" ;
+terminator nonempty CatDef ";" ;
 terminator nonempty DataDef ";" ;
 terminator nonempty ParDef ";" ;
-
-terminator nonempty PrintDef ";" ;
-terminator nonempty FlagDef ";" ;
 
 separator ParConstr "|" ;
 
@@ -149,7 +136,7 @@ separator LocDef ";" ;
 
 -- terms and types
 
-EPIdent.    Exp6 ::= PIdent ;
+EPIdent.   Exp6 ::= PIdent ;
 EConstr.   Exp6 ::= "{" PIdent "}" ;--%
 ECons.     Exp6 ::= "%" PIdent "%" ;--%
 ESort.     Exp6 ::= Sort ;
@@ -310,7 +297,7 @@ FString. FileName ::= String ; --%
 
 terminator nonempty FileName ";" ; --%
 
-FPIdent.  FileName ::= PIdent ; --%
+FPIdent. FileName ::= PIdent ; --%
 FSlash.  FileName ::= "/" FileName ; --%
 FDot.    FileName ::= "." FileName ; --%
 FMinus.  FileName ::= "-" FileName ; --%
@@ -320,7 +307,7 @@ token LString '\'' (char - '\'')* '\'' ; --%
 ELString.  Exp6 ::= LString ; --%
 ELin.      Exp4 ::= "Lin" PIdent ; --%
 
-DefPrintOld.  TopDef ::= "printname" [PrintDef] ; --%
+DefPrintOld.  TopDef ::= "printname" [Def] ; --%
 DefLintype.   TopDef ::= "lintype"   [Def] ; --%
 DefPattern.   TopDef ::= "pattern"   [Def] ; --%
 
