@@ -1,6 +1,6 @@
-module GF.Devel.Judgements where
+module GF.Devel.Grammar.Judgements where
 
-import GF.Devel.Terms
+import GF.Devel.Grammar.Terms
 import GF.Infra.Ident
 
 data Judgement = Judgement {

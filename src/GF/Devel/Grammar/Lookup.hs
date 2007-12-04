@@ -1,9 +1,9 @@
-module GF.Devel.Lookup where
+module GF.Devel.Grammar.Lookup where
 
-import GF.Devel.Modules
-import GF.Devel.Judgements
-import GF.Devel.Macros
-import GF.Devel.Terms
+import GF.Devel.Grammar.Modules
+import GF.Devel.Grammar.Judgements
+import GF.Devel.Grammar.Macros
+import GF.Devel.Grammar.Terms
 import GF.Infra.Ident
 
 import GF.Data.Operations

@@ -21,12 +21,12 @@ module GF.Devel.Grammar.SourceToGF (
   newReservedWords
   ) where
 
-import qualified GF.Devel.Terms as G
+import qualified GF.Devel.Grammar.Terms as G
 ----import qualified GF.Grammar.PrGrammar as GP
-import GF.Devel.Judgements
-import GF.Devel.MkJudgements
-import GF.Devel.Modules
-import qualified GF.Devel.Macros as M
+import GF.Devel.Grammar.Judgements
+import GF.Devel.Grammar.MkJudgements
+import GF.Devel.Grammar.Modules
+import qualified GF.Devel.Grammar.Macros as M
 ----import qualified GF.Compile.Update as U
 --import qualified GF.Infra.Option as GO
 --import qualified GF.Compile.ModDeps as GD

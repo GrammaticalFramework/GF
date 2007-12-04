@@ -1,8 +1,8 @@
-module GF.Devel.Macros where
+module GF.Devel.Grammar.Macros where
 
-import GF.Devel.Terms
-import GF.Devel.Judgements
-import GF.Devel.Modules
+import GF.Devel.Grammar.Terms
+import GF.Devel.Grammar.Judgements
+import GF.Devel.Grammar.Modules
 import GF.Infra.Ident
 
 import GF.Data.Operations
