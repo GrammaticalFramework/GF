@@ -63,27 +63,15 @@ oper
   singular : Number ;
   plural   : Number ;
 
+--2 Nouns
+
+-- Best case: indeclinabe nouns: "кофе", "пальто", "ВУЗ".
   Animacy: Type ; 
   
   animate: Animacy;
   inanimate: Animacy; 
-
-
-
---2 Nouns
-
--- Best case: indeclinabe nouns: "кофе", "пальто", "ВУЗ".
-
-  mkN : overload {
-
--- The regular function captures the variants for some popular nouns 
--- endings below:
-
-    mkN : Str -> N ;
-
--- This function is for indeclinable nouns.
  
-    mkN : Str -> Gender -> Animacy -> N ; 
+  mkIndeclinableNoun: Str -> Gender -> Animacy -> N ; 
 
 -- Worst case - give six singular forms:
 -- Nominative, Genetive, Dative, Accusative, Instructive and Prepositional;
@@ -94,13 +82,17 @@ oper
 -- to the Nominative or the Genetive one) is actually of no help, 
 -- since there are a lot of exceptions and the gain is just one form less.
 
-    mkN : (nomSg,_,_,_,_,_,_,_,_,_,_,prepPl : Str) -> Gender -> Animacy -> N ; 
+  -- +++ MG_UR: new case Prepos2 introduced! +++
+  mkN  : (nomSg, genSg, datSg, accSg, instSg, preposSg, prepos2Sg,
+          nomPl, genPl, datPl, accPl, instPl, preposPl, prepos2Pl: Str) -> Gender -> Animacy -> N ; 
 
-     
--- мужчина, мужчины, мужчине, мужчину, мужчиной, мужчине
--- мужчины, мужчин, мужчинам, мужчин, мужчинами, мужчинах
+     -- мужчина, мужчины, мужчине, мужчину, мужчиной, мужчине
+     -- мужчины, мужчин, мужчинам, мужчин, мужчинами, мужчинах
 
-  } ;
+-- The regular function captures the variants for some popular nouns 
+-- endings below:
+
+  regN : Str -> N ;
 
 
 -- Here are some common patterns. The list is far from complete.
@@ -115,31 +107,70 @@ oper
   nTetya     : Str -> N ;    -- feminine, animate, ending with "-я"   
   nBol       : Str -> N ;    -- feminine, inanimate, ending with "-ь"(soft sign)     
 
+-- further classes added by Magda Gerritsen and Ulrich Real
+  nSvecha: Str -> N ; -- like nEdinica, but instrumental case with -oj
+  nMat: Str -> N ; -- irregular, changing stem, other example 'daughter'
+  nDoch: Str -> N ; -- like nMat but different instrumental case
+  nLoshad: Str -> N ; -- i-declination but instrumental plural -mi
+  nNoch: Str -> N ; -- like nBol but after ZH no "soft behaviour"
+
+
 -- Neuter patterns. 
 
   nObezbolivauchee : Str -> N ;   -- neutral, inanimate, ending with "-ee" 
   nProizvedenie : Str -> N ;   -- neutral, inanimate, ending with "-e" 
-  nChislo : Str -> N ;   -- neutral, inanimate, ending with "-o" 
+  nChislo : Str -> Str -> N ;   -- neutral, inanimate, ending with "-o" +++ MG_UR: nChislo now expects two arguments +++
   nZhivotnoe : Str -> N ;    -- masculine, inanimate, ending with "-ень"
+
+-- further classes added by Magda Gerritsen and Ulrich Real
+  nSlovo: Str -> N ; -- hard consonants and zh, ending with -o
+  nMorje: Str -> N ; -- weak consonants, ending with -e
+  nUchilishe: Str -> N ; -- like nSlovo but because not stressed (betont) of with -e
+-- nOkno: Str -> N ; -- like nSlovo but without -o- and genetive plural with -o- in between; no longer needed because of nChislo with two arguments +++
+-- nKreslo: Str -> N ; -- like nSlovo but without -o- and genetive plural with -o- in between; no longer needed because of nChislo with two arguments +++
+  nNebo: Str -> N ;   -- irregular, other example 'chudo' (wonder)
+  nDerevo: Str -> N ; -- irregular, change of stem, other example 'krylo' (wing)
+  nVremja: Str -> N ; -- irregular total, the most important ones: 'imja' (name), 'plamja' (flame), 'znamja' (flag), 'semja' (seed)
+
 
 -- Masculine patterns. 
 
 -- Ending with consonant: 
   nPepel : Str -> N ;    -- masculine, inanimate, ending with "-ел"- "пеп-ла"
-
   nBrat: Str -> N ;   -- animate, брат-ья
   nStul: Str -> N ;    -- same as above, but inanimate
   nMalush : Str -> N ; -- малышей
   nPotolok : Str -> N ; -- потол-ок - потол-ка
 
- -- the next four differ in plural nominative and/or accusative form(s) :
+-- the next four differ in plural nominative and/or accusative form(s) :
   nBank: Str -> N ;    -- банк-и (Nom=Acc)
   nStomatolog : Str -> N ;  -- same as above, but animate
-  nAdres     : Str -> N ;     -- адрес-а (Nom=Acc)
+  nAdres     : Str -> N ;     -- адрес-а (Nom=Acc), +++ MG_UR: other examples: 'bereg, vecher, gorod, dom, lec, glaz, poezd' +++
   nTelefon   : Str -> N ;     -- телефон-ы (Nom=Acc)
-
   nNol       : Str -> N ;    -- masculine, inanimate, ending with "-ь" (soft sign)
+  nUchitel   : Str -> N ;    -- masculine, animate, ending with "-ь" (soft sign) -- +++ MG_UR: added +++
   nUroven    : Str -> N ;    -- masculine, inanimate, ending with "-ень"
+
+-- further classes added by Magda Gerritsen and Ulrich Real
+  nStol: Str -> N ; -- masculine "standard" declination (most simple case), hard consonants
+  nSlovar : Str -> N ; -- masculine, inanimate, ending soft ending, instrumental case with -jo-
+  nMusej : Str -> N ; -- masculine, inanimate, without ending
+  nDvorec : Str -> N ; -- masculine, inanimate, ending like nEtazh but genetive with -o- and with missing vowel
+  nTovarish : Str -> N ; -- masculine, animate, ending like nEtazh but instrumental case with -e-
+  nMesjac : Str -> N ; -- masculine, inanimate, ending like nDvorec but genitive wiht -e-
+  nGrazhdanin : Str -> N ; -- masculine, animate, ending with "-anin" and change of stem
+  nRebenok : Str -> N ; -- masculine, little beings, change of stem
+  nPut : Str -> N ; -- unique irregular Form, frequent use of the word
+  nGospodin : Str -> N ; -- like nGrazhdanin, but nominative plural ending with -a
+  nDen : Str -> N ; -- masculine, animate, ending with "-ь" (soft sign) but without vowel
+  nDrug : Str -> N ; -- like nBrat, but change of stemm 
+  nSyn : Str -> N ; -- like nDrug, but another stem
+
+-- further classes added by Magda Gerritsen and Ulrich Real
+-- attention: these are not declension classes but classes in which
+-- one case differs depending on the preposition used with it!
+  nLes : Str -> N ; -- preposition 'v' requires the case Prepos2
+  nMost : Str -> N ; -- preposition 'na' requires the case Prepos2
 
 -- Nouns used as functions need a preposition. The most common is with Genitive.
 
@@ -149,12 +180,14 @@ oper
 
 -- Proper names.
 
-  mkPN : overload {
-    mkPN : Str -> PN ; 
-    mkPN : Str -> Gender -> Animacy -> PN ;          -- "Иван", "Маша"
-    mkPN : N -> PN ;
-  } ;
+  mkPN  : Str -> Gender -> Animacy -> PN ;          -- "Иван", "Маша"
+  nounPN : N -> PN ;
+  
+-- On the top level, it is maybe $CN$ that is used rather than $N$, and
+-- $NP$ rather than $PN$.
 
+  mkCN  : N -> CN ;
+  mkNP  : Str -> Gender -> Animacy -> NP ;
 
 
 --2 Adjectives
@@ -173,15 +206,18 @@ oper
 -- in the current description, otherwise there would be 32 forms for 
 -- positive degree.
 
+-- mkA : ( : Str) -> A ;
+
 -- The regular function captures the variants for some popular adjective
 -- endings below. The first string agrument is the masculine singular form, 
 -- the second is comparative:
--- Invariable adjective is a special case, with only on string needed.
   
-   mkA : overload {
-     mkA : Str -> A ;          -- khaki, mini, hindi, netto
-     mkA : Str -> Str -> A ;
-   } ;
+   regA : Str -> Str -> A ;
+
+
+-- Invariable adjective is a special case.
+
+   adjInvar : Str -> A ;          -- khaki, mini, hindi, netto
 
 -- Some regular patterns depending on the ending.
 
@@ -205,6 +241,12 @@ oper
 -- non-syntactic comparative form.
 -- Syntactic forms are based on the positive forms.
 
+
+--   mkADeg : A -> Str -> ADeg ;
+
+-- On top level, there are adjectival phrases. The most common case is
+-- just to use a one-place adjective. 
+--   ap : A  -> IsPostfixAdj -> AP ;
 
 --2 Adverbs
 
@@ -233,6 +275,8 @@ firstE:  Conjugation; -- Verbs with vowel "ё": "даёшь" (give), "пьёшь
 second:  Conjugation; -- "вид-Ишь, вид-Им"
 mixed:   Conjugation; -- "хоч-Ешь - хот-Им"
 dolzhen: Conjugation; -- irregular
+foreign: Conjugation; -- foreign words which are used in Russian, +++ MG_UR: added +++
+
 
 true:  Bool;
 false: Bool;
@@ -242,6 +286,17 @@ passive: Voice ;
 imperfective: Aspect;
 perfective: Aspect ;  
 
+
+-- The worst case need 6 forms of the present tense in indicative mood
+-- ("я бегу", "ты бежишь", "он бежит", "мы бежим", "вы бежите", "они бегут"),
+-- a past form (singular, masculine: "я бежал"), an imperative form 
+-- (singular, second person: "беги"), an infinitive ("бежать").
+-- Inherent aspect should also be specified.
+
+--   mkVerbum : Aspect -> (presentSgP1,presentSgP2,presentSgP3,
+   mkV : Aspect -> (presentSgP1,presentSgP2,presentSgP3,
+                         presentPlP1,presentPlP2,presentPlP3,
+                         pastSgMasculine,imperative,infinitive: Str) -> V ;
 
 -- Common conjugation patterns are two conjugations: 
 --  first - verbs ending with "-ать/-ять" and second - "-ить/-еть".
@@ -253,38 +308,19 @@ perfective: Aspect ;
 -- "я люб-лю", "ты люб-ишь". Stems shoud be the same.
 -- So the definition for verb "любить"  looks like:
 -- regV Imperfective Second "люб" "лю" "любил" "люби" "любить";
---
--- There is no one-argument case.
 
-  mkV : overload {
-    mkV : Aspect -> Conjugation -> (stemPrsSgP1,endPrsSgP1,pastSgP1,imp,inf : Str) -> V ; 
--- The worst case need 6 forms of the present tense in indicative mood
--- ("я бегу", "ты бежишь", "он бежит", "мы бежим", "вы бежите", "они бегут"),
--- a past form (singular, masculine: "я бежал"), an imperative form 
--- (singular, second person: "беги"), an infinitive ("бежать").
--- Inherent aspect should also be specified.
+   regV :Aspect -> Conjugation -> (stemPresentSgP1,endingPresentSgP1,
+                         pastSgP1,imperative,infinitive : Str) -> V ; 
 
-   mkV : Aspect -> (presSgP1,presSgP2,presSgP3,presPlP1,presPlP2,presPlP3,pastSgMasc,imp,inf: Str) -> V ;
-
-  } ;
-
-
-
---3 Two-place verbs
 
 -- Two-place verbs, and the special case with direct object. Notice that
 -- a particle can be included in a $V$.
 
-  mkV2 : overload { 
-    mkV2 : V -> V2 ;                    -- "видеть", "любить"
-    mkV2 : V   -> Str -> Case -> V2 ;   -- "войти в дом"; "в", accusative
-  } ;
-
-
---3 Three-place verbs
-
+   mkV2     : V   -> Str -> Case -> V2 ;   -- "войти в дом"; "в", accusative
+   mkV3  : V -> Str -> Str -> Case -> Case -> V3 ; -- "сложить письмо в конверт"
+   dirV2    : V -> V2 ;                    -- "видеть", "любить"
    tvDirDir : V -> V3 ; 
-   mkV3     : V -> Str -> Str -> Case -> Case -> V3 ; -- "сложить письмо в конверт"                            
+                            
 -- The definitions should not bother the user of the API. So they are
 -- hidden from the document.
 --.
@@ -302,6 +338,7 @@ firstE = FirstE ;
 second = Second ;
 mixed = Mixed ;
 dolzhen = Dolzhen; 
+foreign = Foreign; -- +++ MG_UR: added +++
 
   true = True;
   false = False ;
@@ -338,9 +375,9 @@ dolzhen = Dolzhen;
      anim = anim 
    } ** {lock_N = <>};
 
-
-  mk12N =  \nomSg, genSg, datSg, accSg, instSg, preposSg,
-          nomPl, genPl, datPl, accPl, instPl, preposPl, g, anim ->
+  -- +++ MG_UR: new case Prepos2 introduced! +++
+  mkN =  \nomSg, genSg, datSg, accSg, instSg, preposSg, prepos2Sg,
+          nomPl, genPl, datPl, accPl, instPl, preposPl, prepos2Pl, g, anim ->
    {
      s = table { 
            SF Sg Nom => nomSg ;
@@ -349,19 +386,21 @@ dolzhen = Dolzhen;
            SF Sg Acc => accSg ;
            SF Sg Inst => instSg ;
            SF Sg Prepos => preposSg ;
+           SF Sg Prepos2 => prepos2Sg ;
            SF Pl Nom => nomPl ;
            SF Pl Gen => genPl ;
            SF Pl Dat => datPl ;
            SF Pl Acc => accPl ;
            SF Pl Inst => instPl ;
-           SF Pl Prepos => preposPl      
+           SF Pl Prepos => preposPl ;
+           SF Pl Prepos2 => prepos2Pl
      } ;                           
      g = g ;
      anim = anim
-   } ** {lock_N = <>}  ;
+   } ** {lock_N = <>} ;
 
 
-regN = \ray -> 
+regN = \ray ->
     let
       ra  = Predef.tk 1 ray ; 
       y   = Predef.dp 1 ray ; 
@@ -378,28 +417,42 @@ regN = \ray ->
             "ее" => nObezbolivauchee ray ;
             "ое" => nZhivotnoe ray  ;
             _ => nProizvedenie ray  };
-          "о" => nChislo ray;
+          -- "о" => nChislo ray ; +++ MG_UR: commented out +++
            _=>  nStomatolog ray
          }
      in
        rays ;
 
   
-
   nMashina   = \s -> aEndInAnimateDecl s ** {lock_N = <>};
   nEdinica   = \s -> ej_aEndInAnimateDecl s ** {lock_N = <>};
   nZhenchina = \s -> (aEndAnimateDecl s) ** { g = Fem ; anim = Animate } ** {lock_N = <>}; 
   nNoga      = \s -> aEndG_K_KH_Decl s ** {lock_N = <>};    
-  nMalyariya  = \s -> i_yaEndDecl s ** {lock_N = <>};
+  nMalyariya = \s -> i_yaEndDecl s ** {lock_N = <>};
   nTetya     = \s -> (yaEndAnimateDecl s) ** {g = Fem; anim = Animate; lock_N = <>} ;
   nBol       = \s -> softSignEndDeclFem  s ** {lock_N = <>};
 
--- Neuter patterns. 
+-- further classes added by Magda Gerritsen and Ulrich Real
+  nSvecha  = \s -> oj_aEndInAnimateDecl s ** {lock_N = <>};
+  nMat = \s -> irregStemAnimateDecl s ** {g = Fem; anim = Animate; lock_N = <>};
+  nDoch = \s -> irregStemAnimateDeclInstr_MI s ** {g = Fem; anim = Animate; lock_N = <>};
+  nLoshad = \s -> softSignEndDeclFemInstr_MI  s ** {g = Fem; anim = Animate; lock_N = <>};
+  nNoch = \s -> softSignEndDeclFemInanimate_ZH  s ** {g = Fem; anim = Inanimate; lock_N = <>};
 
+
+-- Neuter patterns. 
   nObezbolivauchee = \s -> eeEndInAnimateDecl s ** {lock_N = <>};
   nZhivotnoe = \s -> oeEndAnimateDecl s ** {lock_N = <>};
   nProizvedenie = \s -> eEndInAnimateDecl s ** {lock_N = <>};
-  nChislo = \s -> oEndInAnimateDecl s ** {lock_N = <>};
+  nChislo = \s, o -> oEndInAnimateDecl3 s o ** {lock_N = <>}; -- +++ MG_UR: nChislo now expects two arguments +++
+
+-- further classes added by Magda Gerritsen and Ulrich Real
+  nSlovo = \s -> hardCons_ZHInAnimateDecl s ** {lock_N = <>};
+  nMorje = \s -> weakConsInAnimateDecl s ** {lock_N = <>};
+  nUchilishe = \s -> hardCons_ZHInAnimateDeclE s ** {lock_N = <>};
+  nNebo = \s -> irregPlInAnimateDecl s ** {lock_N = <>};
+  nDerevo = \s -> irregPl_StemInAnimateDecl s ** {lock_N = <>};
+  nVremja = \s -> irregTotalInAnimateDecl s ** {lock_N = <>};
 
 
 -- Masculine patterns. 
@@ -416,7 +469,27 @@ regN = \ray ->
   nPepel   = \s -> nullEndInAnimateDeclPepel s ** {lock_N = <>}; 
 
   nNol       = \s -> softSignEndDeclMasc s ** {lock_N = <>};
+  nUchitel   = \s -> softSignEndDeclMascAnimate s ** {lock_N = <>}; -- +++ MG_UR: added +++
   nUroven    = \s -> EN_softSignEndDeclMasc s ** {lock_N = <>};
+
+-- further classes added by Magda Gerritsen and Ulrich Real
+  nStol = \s -> nullEndDecl s ** {lock_N = <>};
+  nSlovar   = \s -> softSignEndDeclMascInAnimateInstrJO s ** {lock_N = <>};
+  nMusej = \s -> nullEndInAnimateDeclSoft s ** {lock_N = <>};
+  nDvorec = \s -> ZH_EndInAnimateDeclSoftGenOWithout s ** {lock_N = <>};
+  nTovarish = \s -> ZH_EndAnimateDeclSoftInstrE s ** {lock_N = <>};
+  nMesjac = \s -> ZH_EndInAnimateDeclSoftGenE s ** {lock_N = <>};
+  nGrazhdanin = \s -> PlStemChangeAnimateDecl s ** {lock_N = <>};
+  nRebenok = \s -> LittleAnimalDecl s ** {lock_N = <>};
+  nPut = \s -> UniqueIrregularDecl s ** {lock_N = <>};
+  nGospodin = \s -> A_PlStemChangeAnimateDecl s ** {lock_N = <>};
+  nDen = \s -> softSignEndDeclMascInAnimateGenEWithout s ** {lock_N = <>};
+  nDrug = \s -> nullEndAnimateDeclDrug s** {lock_N = <>};
+  nSyn = \s -> nullEndAnimateDeclSyn s** {lock_N = <>};
+
+-- preposition types added by Magda Gerritsen and Ulrich Real
+  nLes = \s -> preposition_V s ** {lock_N = <>};
+  nMost = \s -> preposition_Na s ** {lock_N = <>};
 
 
 -- An individual-valued function is a common noun together with the
@@ -437,22 +510,16 @@ regN = \ray ->
   mkN3 f p r = (UseN f) ** {s2 = p.s ; c=p.c; s3=r.s ; c2=r.c; lock_N3 = <>} ; 
 
 
-  mk3PN = \ivan, g, anim -> 
+  mkPN = \ivan, g, anim -> 
     case g of { 
        Masc => mkProperNameMasc ivan anim ; 
        _ => mkProperNameFem ivan anim
     } ** {lock_PN =<>};
   nounPN n = {s=\\c => n.s! SF Sg c; anim=n.anim; g=n.g; lock_PN=<>};
     
--- On the top level, it is maybe $CN$ that is used rather than $N$, and
--- $NP$ rather than $PN$.
+  mkCN = UseN;
 
-  makeCN  : N -> CN ;
-  makeNP  : Str -> Gender -> Animacy -> NP ;
-
-  makeCN = UseN;
-
-  makeNP = \x,y,z -> UsePN (mk3PN x y z) ;
+  mkNP = \x,y,z -> UsePN (mkPN x y z) ;
 
 -- Adjective definitions
   regA = \ray, comp -> 
@@ -486,7 +553,7 @@ regN = \ray ->
 -- Verb definitions 
 
 --   mkVerbum = \asp, sgP1, sgP2, sgP3, plP1, plP2, plP3, 
-   mk9V = \asp, sgP1, sgP2, sgP3, plP1, plP2, plP3, 
+   mkV = \asp, sgP1, sgP2, sgP3, plP1, plP2, plP3, 
      sgMascPast, imperSgP2, inf -> case asp of { 
        Perfective  =>  
          mkVerb (perfectiveActivePattern inf imperSgP2 
@@ -522,8 +589,8 @@ regN = \ray ->
        VSubj gn => aller.s ! VFORM vox (VSUB gn)
        }; t = Present ; a = aller.asp ; w = vox ; lock_V = <>} ;
 -}
-   mk2V2 v p cas = v ** {s2 = p ; c = cas; lock_V2 = <>}; 
-   dirV2 v = mk2V2 v [] Acc;
+   mkV2 v p cas = v ** {s2 = p ; c = cas; lock_V2 = <>}; 
+   dirV2 v = mkV2 v [] Acc;
 
 
    tvDirDir v = mkV3 v "" "" Acc Dat; 
@@ -535,69 +602,438 @@ regN = \ray ->
    mkV3 v s1 s2 c1 c2 = v ** {s2 = s1; c = c1; s4 = s2; c2=c2; lock_V3 = <>};  
  
 
----------------------------
--- overloaded API started by AR 6/7/2007
-
-  mkN = overload {
-    mkN : Str -> N = regN ;
-    mkN : Str -> Gender -> Animacy -> N = mkIndeclinableNoun ; 
-    mkN : (nomSg,_,_,_,_,_,_,_,_,_,_,prepPl : Str) -> Gender -> Animacy -> N = mk12N ; 
-  } ;
-
-  regN : Str -> N ;
-  mkIndeclinableNoun: Str -> Gender -> Animacy -> N ; 
-  mk12N  : (nomSg, genSg, datSg, accSg, instSg, preposSg,
-          nomPl, genPl, datPl, accPl, instPl, preposPl: Str) -> Gender -> Animacy -> N ; 
-
-
-  mkPN = overload {
-    mkPN : Str -> PN = regPN ; 
-    mkPN : Str -> Gender -> Animacy -> PN = mk3PN ;          -- "Иван", "Маша"
-    mkPN : N -> PN = nounPN ;
-  } ;
-  
-  regPN : Str -> PN = \s -> nounPN (regN s) ;
-  mk3PN  : Str -> Gender -> Animacy -> PN ;          -- "Иван", "Маша"
-  nounPN : N -> PN ;
-  
---   mkADeg : A -> Str -> ADeg ;
-
--- On top level, there are adjectival phrases. The most common case is
--- just to use a one-place adjective. 
---   ap : A  -> IsPostfixAdj -> AP ;
-
-   mkA = overload {
-     mkA : Str -> A = adjInvar ;          -- khaki, mini, hindi, netto
-     mkA : Str -> Str -> A = regA ;
-   } ;
-
-   regA : Str -> Str -> A ;
-   adjInvar : Str -> A ;          -- khaki, mini, hindi, netto
-
---   mkVerbum : Aspect -> (presentSgP1,presentSgP2,presentSgP3,
-
-  mkV =  overload {
-    mkV : Aspect -> Conjugation -> (stemPrsSgP1,endPrsSgP1,pastSgP1,imp,inf : Str) -> V = regV ; 
-   mkV : Aspect -> (presSgP1,presSgP2,presSgP3,presPlP1,presPlP2,presPlP3,pastSgMasc,imp,inf: Str) -> V = mk9V ;
-
-  } ;
-
-   regV :Aspect -> Conjugation -> (stemPresentSgP1,endingPresentSgP1,
-                         pastSgP1,imperative,infinitive : Str) -> V ; 
-   mk9V : Aspect -> (presentSgP1,presentSgP2,presentSgP3,
-                         presentPlP1,presentPlP2,presentPlP3,
-                         pastSgMasculine,imperative,infinitive: Str) -> V ;
-
-
-  mkV2 = overload { 
-    mkV2 : V -> V2 = dirV2 ;                    -- "видеть", "любить"
-    mkV2 : V   -> Str -> Case -> V2 = mk2V2 ;   -- "войти в дом"; "в", accusative
-  } ;
-
-   mk2V2     : V   -> Str -> Case -> V2 ;   -- "войти в дом"; "в", accusative
-   dirV2    : V -> V2 ;                    -- "видеть", "любить"
-
-
-
+----2 Parameters 
+----
+---- To abstract over gender names, we define the following identifiers.
+--
+--oper
+--  Gender : Type ; 
+--
+--  human     : Gender ;
+--  nonhuman  : Gender ;
+--  masculine : Gender ;
+--
+---- To abstract over number names, we define the following.
+--
+--  Number : Type ; 
+--
+--  singular : Number ;
+--  plural   : Number ;
+--
+---- To abstract over case names, we define the following.
+--
+--  Case : Type ;
+--
+--  nominative : Case ;
+--  genitive   : Case ;
+--
+---- Prepositions are used in many-argument functions for rection.
+--
+--  Preposition : Type ;
+--
+--
+----2 Nouns
+--
+---- Worst case: give all four forms and the semantic gender.
+--
+--  mkN  : (man,men,man's,men's : Str) -> N ;
+--
+---- The regular function captures the variants for nouns ending with
+---- "s","sh","x","z" or "y": "kiss - kisses", "flash - flashes"; 
+---- "fly - flies" (but "toy - toys"),
+--
+--  regN : Str -> N ;
+--
+---- In practice the worst case is just: give singular and plural nominative.
+--
+--  mk2N : (man,men : Str) -> N ;
+--
+---- All nouns created by the previous functions are marked as
+---- $nonhuman$. If you want a $human$ noun, wrap it with the following
+---- function:
+--
+--  genderN : Gender -> N -> N ;
+--
+----3 Compound nouns 
+----
+---- A compound noun ia an uninflected string attached to an inflected noun,
+---- such as "baby boom", "chief executive officer".
+--
+--  compoundN : Str -> N -> N ;
+--
+--
+----3 Relational nouns 
+---- 
+---- Relational nouns ("daughter of x") need a preposition. 
+--
+--  mkN2 : N -> Preposition -> N2 ;
+--
+---- The most common preposition is "of", and the following is a
+---- shortcut for regular relational nouns with "of".
+--
+--  regN2 : Str -> N2 ;
+--
+---- Use the function $mkPreposition$ or see the section on prepositions below to  
+---- form other prepositions.
+----
+---- Three-place relational nouns ("the connection from x to y") need two prepositions.
+--
+--  mkN3 : N -> Preposition -> Preposition -> N3 ;
+--
+--
+----3 Relational common noun phrases
+----
+---- In some cases, you may want to make a complex $CN$ into a
+---- relational noun (e.g. "the old town hall of").
+--
+--  cnN2 : CN -> Preposition -> N2 ;
+--  cnN3 : CN -> Preposition -> Preposition -> N3 ;
+--
+---- 
+----3 Proper names and noun phrases
+----
+---- Proper names, with a regular genitive, are formed as follows
+--
+--  regPN : Str -> Gender -> PN ;          -- John, John's
+--
+---- Sometimes you can reuse a common noun as a proper name, e.g. "Bank".
+--
+--  nounPN : N -> PN ;
+--
+---- To form a noun phrase that can also be plural and have an irregular
+---- genitive, you can use the worst-case function.
+--
+--  mkNP : Str -> Str -> Number -> Gender -> NP ; 
+--
+----2 Adjectives
+--
+---- Non-comparison one-place adjectives need two forms: one for
+---- the adjectival and one for the adverbial form ("free - freely")
+--
+--  mkA : (free,freely : Str) -> A ;
+--
+---- For regular adjectives, the adverbial form is derived. This holds
+---- even for cases with the variation "happy - happily".
+--
+--  regA : Str -> A ;
+-- 
+----3 Two-place adjectives
+----
+---- Two-place adjectives need a preposition for their second argument.
+--
+--  mkA2 : A -> Preposition -> A2 ;
+--
+---- Comparison adjectives may two more forms. 
+--
+--  ADeg : Type ;
+--
+--  mkADeg : (good,better,best,well : Str) -> ADeg ;
+--
+---- The regular pattern recognizes two common variations: 
+---- "-e" ("rude" - "ruder" - "rudest") and
+---- "-y" ("happy - happier - happiest - happily")
+--
+--  regADeg : Str -> ADeg ;      -- long, longer, longest
+--
+---- However, the duplication of the final consonant is nor predicted,
+---- but a separate pattern is used:
+--
+--  duplADeg : Str -> ADeg ;      -- fat, fatter, fattest
+--
+---- If comparison is formed by "more, "most", as in general for
+---- long adjective, the following pattern is used:
+--
+--  compoundADeg : A -> ADeg ; -- -/more/most ridiculous
+--
+---- From a given $ADeg$, it is possible to get back to $A$.
+--
+--  adegA : ADeg -> A ;
+--
+--
+----2 Adverbs
+--
+---- Adverbs are not inflected. Most lexical ones have position
+---- after the verb. Some can be preverbal (e.g. "always").
+--
+--  mkAdv : Str -> Adv ;
+--  mkAdV : Str -> AdV ;
+--
+---- Adverbs modifying adjectives and sentences can also be formed.
+--
+--  mkAdA : Str -> AdA ;
+--
+----2 Prepositions
+----
+---- A preposition as used for rection in the lexicon, as well as to
+---- build $PP$s in the resource API, just requires a string.
+--
+--  mkPreposition : Str -> Preposition ;
+--  mkPrep        : Str -> Prep ;
+--
+---- (These two functions are synonyms.)
+--
+----2 Verbs
+----
+---- Except for "be", the worst case needs five forms: the infinitive and
+---- the third person singular present, the past indicative, and the
+---- past and present participles.
+--
+--  mkV : (go, goes, went, gone, going : Str) -> V ;
+--
+---- The regular verb function recognizes the special cases where the last
+---- character is "y" ("cry - cries" but "buy - buys") or "s", "sh", "x", "z"
+---- ("fix - fixes", etc).
+--
+--  regV : Str -> V ;
+--
+---- The following variant duplicates the last letter in the forms like
+---- "rip - ripped - ripping".
+--
+--  regDuplV : Str -> V ;
+--
+---- There is an extensive list of irregular verbs in the module $IrregularEng$.
+---- In practice, it is enough to give three forms, 
+---- e.g. "drink - drank - drunk", with a variant indicating consonant
+---- duplication in the present participle.
+--
+--  irregV     : (drink, drank, drunk  : Str) -> V ;
+--  irregDuplV : (get,   got,   gotten : Str) -> V ;
+--
+--
+----3 Verbs with a particle.
+----
+---- The particle, such as in "switch on", is given as a string.
+--
+--  partV  : V -> Str -> V ;
+--
+----3 Reflexive verbs
+----
+---- By default, verbs are not reflexive; this function makes them that.
+--
+--  reflV  : V -> V ;
+--
+----3 Two-place verbs
+----
+---- Two-place verbs need a preposition, except the special case with direct object.
+---- (transitive verbs). Notice that a particle comes from the $V$.
+--
+--  mkV2  : V -> Preposition -> V2 ;
+--
+--  dirV2 : V -> V2 ;
+--
+----3 Three-place verbs
+----
+---- Three-place (ditransitive) verbs need two prepositions, of which
+---- the first one or both can be absent.
+--
+--  mkV3     : V -> Preposition -> Preposition -> V3 ; -- speak, with, about
+--  dirV3    : V -> Preposition -> V3 ;                -- give,_,to
+--  dirdirV3 : V -> V3 ;                               -- give,_,_
+--
+----3 Other complement patterns
+----
+---- Verbs and adjectives can take complements such as sentences,
+---- questions, verb phrases, and adjectives.
+--
+--  mkV0  : V -> V0 ;
+--  mkVS  : V -> VS ;
+--  mkV2S : V -> Str -> V2S ;
+--  mkVV  : V -> VV ;
+--  mkV2V : V -> Str -> Str -> V2V ;
+--  mkVA  : V -> VA ;
+--  mkV2A : V -> Str -> V2A ;
+--  mkVQ  : V -> VQ ;
+--  mkV2Q : V -> Str -> V2Q ;
+--
+--  mkAS  : A -> AS ;
+--  mkA2S : A -> Str -> A2S ;
+--  mkAV  : A -> AV ;
+--  mkA2V : A -> Str -> A2V ;
+--
+---- Notice: categories $V2S, V2V, V2A, V2Q$ are in v 1.0 treated
+---- just as synonyms of $V2$, and the second argument is given
+---- as an adverb. Likewise $AS, A2S, AV, A2V$ are just $A$.
+---- $V0$ is just $V$.
+--
+--  V0, V2S, V2V, V2A, V2Q : Type ;
+--  AS, A2S, AV, A2V : Type ;
+--
+--
+----2 Definitions of paradigms
+----
+---- The definitions should not bother the user of the API. So they are
+---- hidden from the document.
+----.
+--
+--  Gender = MorphoEng.Gender ; 
+--  Number = MorphoEng.Number ;
+--  Case = MorphoEng.Case ;
+--  human = Masc ; 
+--  nonhuman = Neutr ;
+--  masculine = Masc ;
+--  feminine = Fem ;
+--  singular = Sg ;
+--  plural = Pl ;
+--  nominative = Nom ;
+--  genitive = Gen ;
+--
+--  Preposition = Str ;
+--
+--  regN = \ray -> 
+--    let
+--      ra  = Predef.tk 1 ray ; 
+--      y   = Predef.dp 1 ray ; 
+--      r   = Predef.tk 2 ray ; 
+--      ay  = Predef.dp 2 ray ;
+--      rays =
+--        case y of {
+--          "y" => y2ie ray "s" ; 
+--          "s" => ray + "es" ;
+--          "z" => ray + "es" ;
+--          "x" => ray + "es" ;
+--          _ => case ay of {
+--            "sh" => ray + "es" ;
+--            "ch" => ray + "es" ;
+--            _    => ray + "s"
+--            }
+--         }
+--     in
+--       mk2N ray rays ;
+--
+--  mk2N = \man,men -> 
+--    let mens = case last men of {
+--      "s" => men + "'" ;
+--      _   => men + "'s"
+--      }
+--    in
+--    mkN man men (man + "'s") mens ;
+--
+--  mkN = \man,men,man's,men's -> 
+--    mkNoun man man's men men's ** {g = Neutr ; lock_N = <>} ;
+--
+--  genderN g man = {s = man.s ; g = g ; lock_N = <>} ;
+--
+--  compoundN s n = {s = \\x,y => s ++ n.s ! x ! y ; g=n.g ; lock_N = <>} ;
+--
+--  mkN2 = \n,p -> n ** {lock_N2 = <> ; c2 = p} ;
+--  regN2 n = mkN2 (regN n) (mkPreposition "of") ;
+--  mkN3 = \n,p,q -> n ** {lock_N3 = <> ; c2 = p ; c3 = q} ;
+--  cnN2 = \n,p -> n ** {lock_N2 = <> ; c2 = p} ;
+--  cnN3 = \n,p,q -> n ** {lock_N3 = <> ; c2 = p ; c3 = q} ;
+--
+--  regPN n g = nameReg n g ** {lock_PN = <>} ;
+--  nounPN n = {s = n.s ! singular ; g = n.g ; lock_PN = <>} ;
+--  mkNP x y n g = {s = table {Gen => x ; _ => y} ; a = agrP3 n ;
+--  lock_NP = <>} ;
+--
+--  mkA a b = mkAdjective a a a b ** {lock_A = <>} ;
+--  regA a = regAdjective a ** {lock_A = <>} ;
+--
+--  mkA2 a p = a ** {c2 = p ; lock_A2 = <>} ;
+--
+--  ADeg = A ; ----
+--
+--  mkADeg a b c d = mkAdjective a b c d ** {lock_A = <>} ;
+--
+--  regADeg happy = 
+--    let
+--      happ = init happy ;
+--      y    = last happy ;
+--      happie = case y of {
+--        "y" => happ + "ie" ;
+--        "e" => happy ;
+--        _   => happy + "e"
+--        } ;
+--      happily = case y of {
+--        "y" => happ + "ily" ;
+--        _   => happy + "ly"
+--        } ;
+--    in mkADeg happy (happie + "r") (happie + "st") happily ;
+--
+--  duplADeg fat = 
+--    mkADeg fat 
+--    (fat + last fat + "er") (fat + last fat + "est") (fat + "ly") ;
+--
+--  compoundADeg a =
+--    let ad = (a.s ! AAdj Posit) 
+--    in mkADeg ad ("more" ++ ad) ("most" ++ ad) (a.s ! AAdv) ;
+--
+--  adegA a = a ;
+--
+--  mkAdv x = ss x ** {lock_Adv = <>} ;
+--  mkAdV x = ss x ** {lock_AdV = <>} ;
+--  mkAdA x = ss x ** {lock_AdA = <>} ;
+--
+--  mkPreposition p = p ;
+--  mkPrep p = ss p ** {lock_Prep = <>} ;
+--
+--  mkV a b c d e = mkVerb a b c d e ** {s1 = [] ; lock_V = <>} ;
+--
+--  regV cry = 
+--    let
+--      cr = init cry ;
+--      y  = last cry ;
+--      cries = (regN cry).s ! Pl ! Nom ; -- !
+--      crie  = init cries ;
+--      cried = case last crie of {
+--        "e" => crie + "d" ;
+--        _   => crie + "ed"
+--        } ;
+--      crying = case y of {
+--        "e" => case last cr of {
+--           "e" => cry + "ing" ; 
+--           _ => cr + "ing" 
+--           } ;
+--        _   => cry + "ing"
+--        }
+--    in mkV cry cries cried cried crying ;
+--
+--  regDuplV fit = 
+--    let fitt = fit + last fit in
+--    mkV fit (fit + "s") (fitt + "ed") (fitt + "ed") (fitt + "ing") ;
+--
+--  irregV x y z = let reg = (regV x).s in
+--    mkV x (reg ! VPres) y z (reg ! VPresPart) ** {s1 = [] ; lock_V = <>} ;
+--
+--  irregDuplV fit y z = 
+--    let 
+--      fitting = (regDuplV fit).s ! VPresPart
+--    in
+--    mkV fit (fit + "s") y z fitting ;
+--
+--  partV v p = verbPart v p ** {lock_V = <>} ;
+--  reflV v = {s = v.s ; part = v.part ; lock_V = v.lock_V ; isRefl = True} ;
+--
+--  mkV2 v p = v ** {s = v.s ; s1 = v.s1 ; c2 = p ; lock_V2 = <>} ;
+--  dirV2 v = mkV2 v [] ;
+--
+--  mkV3 v p q = v ** {s = v.s ; s1 = v.s1 ; c2 = p ; c3 = q ; lock_V3 = <>} ;
+--  dirV3 v p = mkV3 v [] p ;
+--  dirdirV3 v = dirV3 v [] ;
+--
+--  mkVS  v = v ** {lock_VS = <>} ;
+--  mkVV  v = {
+--    s = table {VVF vf => v.s ! vf ; _ => variants {}} ; 
+--    isAux = False ; lock_VV = <>
+--    } ;
+--  mkVQ  v = v ** {lock_VQ = <>} ;
+--
+--  V0 : Type = V ;
+--  V2S, V2V, V2Q, V2A : Type = V2 ;
+--  AS, A2S, AV : Type = A ;
+--  A2V : Type = A2 ;
+--
+--  mkV0  v = v ** {lock_V = <>} ;
+--  mkV2S v p = mkV2 v p ** {lock_V2 = <>} ;
+--  mkV2V v p t = mkV2 v p ** {s4 = t ; lock_V2 = <>} ;
+--  mkVA  v = v ** {lock_VA = <>} ;
+--  mkV2A v p = mkV2 v p ** {lock_V2A = <>} ;
+--  mkV2Q v p = mkV2 v p ** {lock_V2 = <>} ;
+--
+--  mkAS  v = v ** {lock_A = <>} ;
+--  mkA2S v p = mkA2 v p ** {lock_A = <>} ;
+--  mkAV  v = v ** {lock_A = <>} ;
+--  mkA2V v p = mkA2 v p ** {lock_A2 = <>} ;
+--
 } ;
 
