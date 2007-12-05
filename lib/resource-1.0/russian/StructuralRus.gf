@@ -49,7 +49,8 @@ lin
   i_Pron   = pronYa ;
   if_Subj    = ss "если" ;
   in8front_Prep  = { s = "перед" ; c = Inst};
-  in_Prep  = { s = "в" ; c = Prepos };
+  --in_Prep  = { s = "в" ; c = Prepos };
+  in_Prep = { s = "в" ; c = Prepos2 } ; -- +++ MG_UR: new case Prepos2 introduced! +++
   it_Pron    = pronOno ;
   less_CAdv = ss "менее" ;
   many_Det  = mnogoSgDet ** {n = Sg; g = (PGen Neut); c= Gen} ; 
@@ -61,7 +62,8 @@ lin
  much_Det   = mnogoSgDet ** {n = Sg; g = (PGen Neut); c= Gen} ; -- same as previous
  must_VV  = verbDolzhen ;
  no_Phr  = ss ["Нет ."] ;
- on_Prep = { s = "на" ; c = Prepos };
+--on_Prep = { s = "на" ; c = Prepos }; 
+ on_Prep = { s = "на" ; c = Prepos2 }; -- +++ MG_UR: new case Prepos2 introduced! +++
  one_Quant = odinDet  ** {lock_QuantSg = <>; n= Sg; g = PNoGen; c = Nom };
 --AStaruyj :
  only_Predet = (uy_j_EndDecl  "единственн" ) ** {lock_Predet = <>; n= Sg; g = PNoGen; c = Nom };
@@ -131,4 +133,3 @@ lin
 ---  NowhereNP = ss "нигде" ;
 ---  AgentPrep = { s = "" ; c = Nom}; -- missing in Russian
 }
-
