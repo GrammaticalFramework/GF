@@ -82,13 +82,13 @@ instance Print Term where
 instance Print Ident where
   prt = cprintTree . tri
 
-{- ----
 instance Print Patt where
   prt = P.printTree . trp
 
 instance Print Label where
   prt = P.printTree . trLabel
 
+{-
 instance Print MetaSymb where
   prt (MetaSymb i) = "?" ++ show i
 

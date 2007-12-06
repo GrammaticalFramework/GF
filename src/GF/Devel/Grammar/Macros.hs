@@ -21,10 +21,21 @@ typeForm t = (co,f,a) where
   (co,t2) = prodForm t
   (f,a) = appForm t2
 
+termForm :: Term -> ([Ident],Term,[Term])
+termForm t = (co,f,a) where
+  (co,t2) = absForm t
+  (f,a) = appForm t2
+
 prodForm :: Type -> (Context,Term)
 prodForm t = case t of
   Prod x ty val -> ((x,ty):co,t2) where (co,t2) = prodForm val
   _ -> ([],t)
+
+absForm :: Term -> ([Ident],Term)
+absForm t = case t of
+  Abs x val -> (x:co,t2) where (co,t2) = absForm val
+  _ -> ([],t)
+
 
 appForm :: Term -> (Term,[Term])
 appForm tr = (f,reverse xs) where 
@@ -171,6 +182,8 @@ isTypeInts ty = case ty of
   App c _ -> c == constPredefRes "Ints"
   _ -> False
 
+cnPredef = constPredefRes
+
 constPredefRes :: String -> Term
 constPredefRes s = Q (IC "Predef") (identC s)
 
@@ -214,6 +227,15 @@ judgementOpModule f m = do
   return m {mjments = mjs}
  where
   fj = either (liftM Left . f) (return . Right)
+
+entryOpModule :: Monad m => 
+                 (Ident -> Judgement -> m Judgement) -> Module -> m Module
+entryOpModule f m = do 
+  mjs <- liftM Map.fromAscList $ mapm $ Map.assocs $ mjments m
+  return $ m {mjments = mjs}
+ where
+  mapm = mapM (\ (i,j) -> liftM ((,) i) (fe i j)) 
+  fe i j = either (liftM Left . f i) (return . Right) j
    
 termOpJudgement :: Monad m => (Term -> m Term) -> Judgement -> m Judgement
 termOpJudgement f j = do 
