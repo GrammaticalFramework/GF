@@ -3,8 +3,7 @@ module GF.Devel.Compile.Compile (batchCompile) where
 -- the main compiler passes
 import GF.Devel.Compile.GetGrammar
 import GF.Devel.Compile.Extend
-----import GF.Compile.Rebuild
-----import GF.Compile.Rename
+import GF.Devel.Compile.Rename
 ----import GF.Grammar.Refresh
 ----import GF.Devel.CheckGrammar
 ----import GF.Devel.Optimize
@@ -147,10 +146,15 @@ compileSourceModule opts env@(k,gr) mo@(i,mi) = do
   let putp  = putPointE opts
       putpp = putPointEsil opts
 
-  mo1  <- ioeErr $ extendModule gr mo
-  intermOut opts (iOpt "show_extend") (prMod mo1)
 
-  return (k,mo1) ----
+  mor <- ioeErr $ renameModule gr mo
+  intermOut opts (iOpt "show_rename") (prMod mor)
+
+  moe <- ioeErr $ extendModule gr mor
+  intermOut opts (iOpt "show_extend") (prMod moe)
+
+
+  return (k,moe) ----
 
 {- ----
   mo1   <- ioeErr $ rebuildModule mos mo
@@ -161,8 +165,6 @@ compileSourceModule opts env@(k,gr) mo@(i,mi) = do
     (_,ModMod n) | not (isCompleteModule n) -> do
       return (k,mo1b)   -- refresh would fail, since not renamed
     _ -> do
-      mo2:_ <- putpp "  renaming " $ ioeErr $ renameModule mos mo1b
-      intermOut opts (iOpt "show_rename") (prMod mo2)
 
       (mo3:_,warnings) <- putpp "  type checking" $ ioeErr $ showCheckModule mos mo2
       if null warnings then return () else putp warnings $ return ()

@@ -30,6 +30,7 @@ addModule c m gf = gf {gfmodules = insert c m (gfmodules gf)}
 
 data Module = Module {
   mtype       :: ModuleType,
+  miscomplete :: Bool,
   minterfaces :: [(Ident,Ident)],           -- non-empty for functors 
   minstances  :: [((Ident,MInclude),[(Ident,Ident)])], -- non-empty for instant'ions
   mextends    :: [(Ident,MInclude)],
@@ -39,12 +40,24 @@ data Module = Module {
   }
 
 emptyModule :: Ident -> Module
-emptyModule m = Module MTGrammar [] [] [] [] empty empty
+emptyModule m = Module MTGrammar True [] [] [] [] empty empty
 
 type MapJudgement = Map Ident JEntry -- def or indirection
 
 isCompleteModule :: Module -> Bool
-isCompleteModule = Prelude.null . minterfaces 
+isCompleteModule = miscomplete ---- Prelude.null . minterfaces 
+
+isInterface :: Module -> Bool
+isInterface m = case mtype m of
+  MTInterface -> True
+  MTAbstract -> True
+  _ -> False
+
+interfaceName :: Module -> Maybe Ident
+interfaceName mo = case mtype mo of
+  MTInstance i -> return i
+  MTConcrete i -> return i
+  _ -> Nothing
 
 listJudgements :: Module -> [(Ident,JEntry)]
 listJudgements = assocs . mjments

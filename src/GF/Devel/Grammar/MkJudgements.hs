@@ -3,12 +3,15 @@ module GF.Devel.Grammar.MkJudgements where
 import GF.Devel.Grammar.Macros
 import GF.Devel.Grammar.Judgements
 import GF.Devel.Grammar.Terms
+import GF.Devel.Grammar.PrGF
 import GF.Infra.Ident
 
 import GF.Data.Operations
 
 import Control.Monad
 import Data.Map
+
+import Debug.Trace (trace) ----
 
 -- constructing judgements from parse tree
 
@@ -79,5 +82,12 @@ unifyJudgement old new = do
    unifyTerm oterm nterm = case (oterm,nterm) of
      (Meta _,t) -> return t
      (t,Meta _) -> return t
-     _ -> testErr (nterm == oterm) "incompatible fields" >> return nterm
+     _ -> do
+       if (nterm /= oterm) 
+          then (trace (unwords ["illegal update of",prt oterm,"to",prt nterm]) 
+                (return ()))
+          else return () ---- to recover from spurious qualification conflicts
+----       testErr (nterm == oterm) 
+----               (unwords ["illegal update of",prt oterm,"to",prt nterm])
+       return nterm
 
