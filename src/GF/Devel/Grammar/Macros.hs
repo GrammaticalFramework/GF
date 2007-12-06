@@ -7,8 +7,11 @@ import GF.Infra.Ident
 
 import GF.Data.Operations
 
-import Data.Map
+import qualified Data.Map as Map
 import Control.Monad (liftM,liftM2)
+
+
+-- analyse types and terms
 
 contextOfType :: Type -> Context
 contextOfType ty = co where (co,_,_) = typeForm ty
@@ -30,8 +33,47 @@ appForm tr = (f,reverse xs) where
     App f a -> (f2,a:a2) where (f2,a2) = appForm f
     _ -> (t,[])
 
+valCat :: Type -> Err (Ident,Ident)
+valCat typ = case typeForm typ of
+  (_,Q m c,_) -> return (m,c)
+
+typeRawSkeleton :: Type -> Err ([(Int,Type)],Type)
+typeRawSkeleton typ = do
+  let (cont,typ) = prodForm typ
+  args <- mapM (typeRawSkeleton . snd) cont
+  return ([(length c, v) | (c,v) <- args], typ)
+
+type MCat = (Ident,Ident)
+
+sortMCat :: String -> MCat
+sortMCat s = (identC "_", identC s)
+
+--- hack for Editing.actCat in empty state
+errorCat :: MCat
+errorCat = (identC "?", identC "?")
+
+getMCat :: Term -> Err MCat
+getMCat t = case t of
+  Q  m c -> return (m,c)
+  QC m c -> return (m,c)
+  Sort s -> return $ sortMCat s
+  App f _ -> getMCat f
+  _ -> error $ "no qualified constant" +++ show t
+
+typeSkeleton :: Type -> Err ([(Int,MCat)],MCat)
+typeSkeleton typ = do
+  (cont,val) <- typeRawSkeleton typ
+  cont' <- mapPairsM getMCat cont
+  val'  <- getMCat val
+  return (cont',val')
+
+-- construct types and terms
+
 mkProd :: Context -> Type -> Type
 mkProd = flip (foldr (uncurry Prod))
+
+mkFunType :: [Type] -> Type -> Type
+mkFunType tt t = mkProd ([(wildIdent, ty) | ty <- tt]) t -- nondep prod
 
 mkApp :: Term -> [Term] -> Term
 mkApp = foldl App
@@ -42,6 +84,12 @@ mkAbs xs t = foldr Abs t xs
 mkCTable :: [Ident] -> Term -> Term
 mkCTable ids v = foldr ccase v ids where 
   ccase x t = T TRaw [(PV x,t)]
+
+appCons :: Ident -> [Term] -> Term
+appCons = mkApp . Con
+
+appc :: String -> [Term] -> Term
+appc = appCons . identC
 
 tuple2record :: [Term] -> [Assign]
 tuple2record ts = [assign (tupleLabel i) t | (i,t) <- zip [1..] ts]
@@ -67,8 +115,73 @@ mkDecl typ = (wildIdent, typ)
 mkLet :: [LocalDef] -> Term -> Term
 mkLet defs t = foldr Let t defs
 
+mkRecTypeN :: Int -> (Int -> Label) -> [Type] -> Type
+mkRecTypeN int lab typs = RecType [ (lab i, t) | (i,t) <- zip [int..] typs]
+
+mkRecType :: (Int -> Label) -> [Type] -> Type
+mkRecType = mkRecTypeN 0
+
+plusRecType :: Type -> Type -> Err Type
+plusRecType t1 t2 = case (t1, t2) of
+  (RecType r1, RecType r2) -> case
+    filter (`elem` (map fst r1)) (map fst r2) of
+      [] -> return (RecType (r1 ++ r2))
+      ls -> Bad $ "clashing labels" +++ unwords (map show ls)
+  _ -> Bad ("cannot add record types" +++ show t1 +++ "and" +++ show t2) 
+
+plusRecord :: Term -> Term -> Err Term
+plusRecord t1 t2 =
+ case (t1,t2) of
+   (R r1, R r2 ) -> return (R ([(l,v) | -- overshadowing of old fields
+                              (l,v) <- r1, not (elem l (map fst r2)) ] ++ r2))
+   (_,    FV rs) -> mapM (plusRecord t1) rs >>= return . FV
+   (FV rs,_    ) -> mapM (`plusRecord` t2) rs >>= return . FV
+   _ -> Bad ("cannot add records" +++ show t1 +++ "and" +++ show t2)
+
+zipAssign :: [Label] -> [Term] -> [Assign]
+zipAssign ls ts = [assign l t | (l,t) <- zip ls ts]
+
+-- type constants
+
 typeType :: Type
 typeType = Sort "Type"
+
+typePType :: Type
+typePType = Sort "PType"
+
+typeStr :: Type
+typeStr = Sort "Str"
+
+cPredef :: Ident
+cPredef = identC "Predef"
+
+cPredefAbs :: Ident
+cPredefAbs = identC "PredefAbs"
+
+typeString, typeFloat, typeInt :: Term
+typeInts :: Integer -> Term
+
+typeString = constPredefRes "String"
+typeInt = constPredefRes "Int"
+typeFloat = constPredefRes "Float"
+typeInts i = App (constPredefRes "Ints") (EInt i)
+
+isTypeInts :: Term -> Bool
+isTypeInts ty = case ty of
+  App c _ -> c == constPredefRes "Ints"
+  _ -> False
+
+constPredefRes :: String -> Term
+constPredefRes s = Q (IC "Predef") (identC s)
+
+isPredefConstant :: Term -> Bool
+isPredefConstant t = case t of
+  Q (IC "Predef") _ -> True
+  Q (IC "PredefAbs") _ -> True
+  _ -> False
+
+defLinType :: Type
+defLinType = RecType [(LIdent "s",  typeStr)]
 
 meta0 :: Term
 meta0 = Meta 0
@@ -93,12 +206,14 @@ termOpGF f g = do
 
 termOpModule :: Monad m => (Term -> m Term) -> Module -> m Module
 termOpModule f = judgementOpModule fj where
-  fj = either (liftM Left  . termOpJudgement f) (return . Right)
+  fj = termOpJudgement f
    
 judgementOpModule :: Monad m => (Judgement -> m Judgement) -> Module -> m Module
 judgementOpModule f m = do 
-  mjs <- mapMapM f (mjments m)
+  mjs <- mapMapM fj (mjments m)
   return m {mjments = mjs}
+ where
+  fj = either (liftM Left . f) (return . Right)
    
 termOpJudgement :: Monad m => (Term -> m Term) -> Judgement -> m Judgement
 termOpJudgement f j = do 
@@ -194,6 +309,28 @@ composOp co trm = case trm of
 
    _ -> return trm -- covers K, Vr, Cn, Sort
 
+
+---- should redefine using composOp
+collectOp :: (Term -> [a]) -> Term -> [a]
+collectOp co trm = case trm of
+  App c a    -> co c ++ co a 
+  Abs _ b    -> co b
+  Prod _ a b -> co a ++ co b 
+  S c a      -> co c ++ co a
+  Table a c  -> co a ++ co c
+  ExtR a c   -> co a ++ co c
+  R r        -> concatMap (\ (_,(mt,a)) -> maybe [] co mt ++ co a) r 
+  RecType r  -> concatMap (co . snd) r 
+  P t i      -> co t
+  T _ cc     -> concatMap (co . snd) cc -- not from patterns --- nor from type annot
+  V _ cc     -> concatMap co         cc --- nor from type annot
+  Let (x,(mt,a)) b -> maybe [] co mt ++ co a ++ co b
+  C s1 s2    -> co s1 ++ co s2 
+  Glue s1 s2 -> co s1 ++ co s2 
+  Alts (t,aa) -> let (x,y) = unzip aa in co t ++ concatMap co (x ++ y)
+  FV ts      -> concatMap co ts
+  _ -> [] -- covers K, Vr, Cn, Sort, Ready
+
 --- just aux to composOp?
 
 mapAssignM :: Monad m => (Term -> m c) -> [Assign] -> m [(Label,(Maybe c,c))]
@@ -207,9 +344,29 @@ changeTableType co i = case i of
     TWild ty  -> co ty >>= return . TWild
     _ -> return i
 
+
+patt2term :: Patt -> Term
+patt2term pt = case pt of
+  PV x      -> Vr x
+  PW        -> Vr wildIdent             --- not parsable, should not occur
+  PC c pp   -> mkApp (Con c) (map patt2term pp)
+  PP p c pp -> mkApp (QC p c) (map patt2term pp)
+  PR r      -> R [assign l (patt2term p) | (l,p) <- r] 
+  PT _ p    -> patt2term p
+  PInt i    -> EInt i
+  PFloat i  -> EFloat i
+  PString s -> K s 
+
+  PAs x p   -> appc "@" [Vr x, patt2term p]            --- an encoding
+  PSeq a b  -> appc "+" [(patt2term a), (patt2term b)] --- an encoding
+  PAlt a b  -> appc "|" [(patt2term a), (patt2term b)] --- an encoding
+  PRep a    -> appc "*" [(patt2term a)]                --- an encoding
+  PNeg a    -> appc "-" [(patt2term a)]                --- an encoding
+
+
 ---- given in lib?
 
-mapMapM :: (Monad m, Ord k) => (v -> m v) -> Map k v -> m (Map k v)
+mapMapM :: (Monad m, Ord k) => (v -> m v) -> Map.Map k v -> m (Map.Map k v)
 mapMapM f = 
-  liftM fromAscList . mapM (\ (x,y) -> liftM ((,) x) $ f y) . assocs 
+  liftM Map.fromAscList . mapM (\ (x,y) -> liftM ((,) x) $ f y) . Map.assocs 
 

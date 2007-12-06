@@ -4,11 +4,13 @@ import GF.Devel.Grammar.Modules
 import GF.Devel.Grammar.Judgements
 import GF.Devel.Grammar.Macros
 import GF.Devel.Grammar.Terms
+import GF.Devel.Grammar.PrGF
 import GF.Infra.Ident
 
 import GF.Data.Operations
 
 import Data.Map
+import Data.List (sortBy) ----
 
 -- look up fields for a constant in a grammar
 
@@ -56,6 +58,22 @@ lookupParamValues gf m c = do
   case d of
     V _ ts -> return ts
     _ -> raise "no parameter values"
+
+allParamValues :: GF -> Type -> Err [Term]
+allParamValues cnc ptyp = case ptyp of
+     App (Q (IC "Predef") (IC "Ints")) (EInt n) -> 
+       return [EInt i | i <- [0..n]]
+     QC p c -> lookupParamValues cnc p c
+     Q  p c -> lookupParamValues cnc p c ----
+     RecType r -> do
+       let (ls,tys) = unzip $ sortByFst r
+       tss <- mapM allPV tys
+       return [R (zipAssign ls ts) | ts <- combinations tss]
+     _ -> prtBad "cannot find parameter values for" ptyp
+  where
+    allPV = allParamValues cnc
+    -- to normalize records and record types
+    sortByFst = sortBy (\ x y -> compare (fst x) (fst y))
 
 -- infrastructure for lookup
     
