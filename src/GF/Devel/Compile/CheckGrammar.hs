@@ -23,23 +23,32 @@
 -----------------------------------------------------------------------------
 
 module GF.Devel.Compile.CheckGrammar (
-  showCheckModule, justCheckLTerm, allOperDependencies, topoSortOpers) where
+  showCheckModule, 
+  justCheckLTerm, 
+  allOperDependencies, 
+  topoSortOpers
+  ) where
 
-import GF.Grammar.Grammar
+import GF.Devel.Grammar.Modules
+import GF.Devel.Grammar.Judgements
+import GF.Devel.Grammar.Terms
+import GF.Devel.Grammar.MkJudgements
+import GF.Devel.Grammar.Macros
+import GF.Devel.Grammar.PrGrammar
+import GF.Devel.Grammar.Lookup
+
 import GF.Infra.Ident
-import GF.Infra.Modules
-import GF.Grammar.Refresh ----
 
-import GF.Grammar.TypeCheck
-import GF.Grammar.Values (cPredefAbs) ---
+--import GF.Grammar.Refresh ----
 
-import GF.Grammar.PrGrammar
-import GF.Grammar.Lookup
+--import GF.Grammar.TypeCheck
+--import GF.Grammar.Values (cPredefAbs) ---
+
+
 --import GF.Grammar.LookAbs
-import GF.Grammar.Macros
-import GF.Grammar.ReservedWords ----
-import GF.Grammar.PatternMatch
-import GF.Grammar.AppPredefined
+--import GF.Grammar.ReservedWords ----
+--import GF.Grammar.PatternMatch
+--import GF.Grammar.AppPredefined
 --import GF.Grammar.Lockfield (isLockLabel)
 
 import GF.Data.Operations
@@ -52,43 +61,35 @@ import Control.Monad
 import Debug.Trace ---
 
 
-showCheckModule :: [SourceModule] -> SourceModule -> Err ([SourceModule],String)
+showCheckModule :: GF -> SourceModule -> Err (SourceModule,String)
 showCheckModule mos m = do
   (st,(_,msg)) <- checkStart $ checkModule mos m
   return (st, unlines $ reverse msg)
 
--- | checking is performed in the dependency order of modules
-checkModule :: [SourceModule] -> SourceModule -> Check [SourceModule]
-checkModule ms (name,mod) = checkIn ("checking module" +++ prt name) $ case mod of
+checkModule :: GF -> SourceModule -> Check SourceModule
+checkModule gf0 (name,mo) = checkIn ("checking module" +++ prt name) $ do
+  let gf = gf0 {gfmodules = Map.insert name mo (gfmodules gf0)}
+  checkRestrictedInheritance gf (name, mo)
+  mo1 <- case mtype mo of
+    MTAbstract -> judgementOpModule (checkAbsInfo gr name) mo
+    MTResource -> judgementOpModule (checkResInfo gr name) mo
 
-  ModMod mo@(Module mt st fs me ops js) -> do
-    checkRestrictedInheritance ms (name, mo)
-    js' <- case mt of
-      MTAbstract -> mapMTree (checkAbsInfo gr name) js
+    MTConcrete aname -> do
+      checkErr $ topoSortOpers $ allOperDependencies name js
+      abs <- checkErr $ lookupModule gr aname
+      js1 <- checkCompleteGrammar abs mo
+      judgementOpModule (checkCncInfo gr name (aname,abs)) js1
 
-      MTTransfer a b -> mapMTree (checkAbsInfo gr name) js
+    MTInterface -> judgementOpModule (checkResInfo gr name) mo
 
-      MTResource -> mapMTree (checkResInfo gr name) js
+    MTInstance iname -> do
+      intf <- checkErr $ lookupModule gr iname
+      -- checkCompleteInstance abs mo -- this is done in Rebuild
+      judgementOpModule  (checkResInfo gr name) mo
 
-      MTConcrete a -> do
-        checkErr $ topoSortOpers $ allOperDependencies name js
-        ModMod abs <- checkErr $ lookupModule gr a
-        js1 <- checkCompleteGrammar abs mo
-        mapMTree (checkCncInfo gr name (a,abs)) js1
+  return $ (name, mo1)
 
-      MTInterface -> mapMTree (checkResInfo gr name) js
-
-      MTInstance a -> do
-        ModMod abs <- checkErr $ lookupModule gr a
-        -- checkCompleteInstance abs mo -- this is done in Rebuild
-        mapMTree (checkResInfo gr name) js
-
-    return $ (name, ModMod (Module mt st fs me ops js')) : ms
-
-  _ -> return $ (name,mod) : ms
- where
-   gr  = MGrammar $ (name,mod):ms
-
+{- ----
 -- check if restricted inheritance modules are still coherent
 -- i.e. that the defs of remaining names don't depend on omitted names
 ---checkRestrictedInheritance :: [SourceModule] -> SourceModule -> Check ()
@@ -114,6 +115,8 @@ checkRestrictedInheritance mos (name,mo) = do
              concatMap (allDependencies (const True)) 
                               [jments m | (_,ModMod m) <- mos]
    transClosure ds = ds ---- TODO: check in deeper modules
+-}
+
 
 -- | check if a term is typable
 justCheckLTerm :: SourceGrammar -> Term -> Err Term
@@ -121,7 +124,10 @@ justCheckLTerm src t = do
   ((t',_),_) <- checkStart (inferLType src t)
   return t'
 
-checkAbsInfo :: SourceGrammar -> Ident -> (Ident,Info) -> Check (Ident,Info)
+checkAbsInfo :: GF -> Ident -> (Ident,JEntry) -> Check (Ident,JEntry)
+checkAbsInfo st m (c,info) = return (c,info) ----
+
+{-
 checkAbsInfo st m (c,info) = do
 ---- checkReservedId c
  case info of
@@ -170,6 +176,7 @@ checkAbsInfo st m (c,info) = do
    elimSel t a = case a of
      R fs -> mkApp t (map (snd . snd) fs)
      _ -> mkApp t [a]
+-}
 
 checkCompleteGrammar :: SourceAbs -> SourceCnc -> Check (BinTree Ident Info)
 checkCompleteGrammar abs cnc = do
