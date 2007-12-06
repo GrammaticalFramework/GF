@@ -64,6 +64,9 @@ assignT l a t = (l,(Just a,t))
 mkDecl :: Term -> Decl
 mkDecl typ = (wildIdent, typ)
 
+mkLet :: [LocalDef] -> Term -> Term
+mkLet defs t = foldr Let t defs
+
 typeType :: Type
 typeType = Sort "Type"
 
@@ -72,6 +75,9 @@ meta0 = Meta 0
 
 ident2label :: Ident -> Label
 ident2label c = LIdent (prIdent c)
+
+label2ident :: Label -> Ident
+label2ident (LIdent c) = identC c
 
 ----label2ident :: Label -> Ident
 ----label2ident = identC . prLabel

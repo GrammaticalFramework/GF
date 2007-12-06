@@ -49,19 +49,22 @@ extendModule gf nmo0 = do
       return (name, mo') 
  where
    extOne name mo (n,cond) = do
-     (m0,isCompl) <- do
-        m <- lookupModule gf n
+     mo0 <- lookupModule gf n
 
-        -- test that the module types match, and find out if the old is complete
-        testErr True ---- (mtype mo == mtype m) 
+     -- test that the module types match
+     testErr True ---- (legalExtension mo mo0) 
                     ("illegal extension type to module" +++ prt name)
-        return (m, isCompleteModule m)
 
-     -- build extension in a way depending on whether the old module is complete
-     js0 <- extendMod isCompl n (isInherited cond) name (mjments m0) (mjments mo)
+     -- find out if the old is complete
+     let isCompl = isCompleteModule mo0
 
-     -- if incomplete, throw away extension information
-     let me' = mextends mo ----if isCompl then es else (filter ((/=n) . fst) es) 
+     -- if incomplete, remove it from extension list --- because??
+     let me' = (if isCompl then id else (Prelude.filter ((/=n) . fst))) 
+                 (mextends mo) 
+
+     -- build extension depending on whether the old module is complete
+     js0 <- extendMod isCompl n (isInherited cond) name (mjments mo0) (mjments mo)
+
      return $ mo {mextends = me', mjments = js0}
 
 -- | When extending a complete module: new information is inserted,
@@ -89,7 +92,7 @@ extendAnyInfo isc n o i j =
       testErr (m1 == m2) $ 
         "different sources of inheritance:" +++ show m1 +++ show m2
       return i
-    _ -> Bad $ "cannot unify information in"---- ++++ prt i ++++ "and" ++++ prt j
+    _ -> Bad $ "cannot unify information in" ++++ prJEntry i ++++ prJEntry j
 
 tryInsert :: Ord a => (b -> b -> Err b) -> (b -> b) ->
              Map a b -> (a,b) -> Err (Map a b)
@@ -103,45 +106,51 @@ tryInsert unif indir tree z@(x, info) = case Data.Map.lookup x tree of
 -- AR 24/10/2003
 rebuildModule :: GF -> SourceModule -> Err SourceModule
 rebuildModule gr mo@(i,mi) = case mtype mi of
+
+  -- copy interface contents to instance
   MTInstance i0 -> do
-          m1 <- lookupModule gr i0
-          testErr (mtype m1 == MTInterface) 
-                  ("interface expected as type of" +++ prt i0)
-          js' <- extendMod False i0 (const True) i (mjments m1) (mjments mi)
-          --- to avoid double inclusions, in instance I of I0 = J0 ** ...
-          case mextends mi of
-            [] -> return $ (i,mi {mjments = js'})
-            j0s -> do 
-              m0s <- mapM (lookupModule gr . fst) j0s ---- restricted?? 12/2007
-              let notInM0 c _  = all (notMember c . mjments) m0s
-              let js2 = filterWithKey notInM0 js'
-              return $ (i,mi {mjments = js2})
+    m1 <- lookupModule gr i0
+    testErr (isInterface m1) ("not an interface:" +++ prt i0)
+    js1 <- extendMod False i0 (const True) i (mjments m1) (mjments mi)
 
-    -- add the instance opens to an incomplete module "with" instances
-    --      ModWith mt stat ext me ops -> do
-    --    ModWith (Module mt stat fs_ me ops_ js_) (ext,incl) ops -> do
+    --- to avoid double inclusions, in instance J of I0 = J0 ** ...
+    case mextends mi of
+      [] -> return $ (i,mi {mjments = js1})
+      es -> do 
+        mes <- mapM (lookupModule gr . fst) es ---- restricted?? 12/2007
+        let notInExts c _  = all (notMember c . mjments) mes
+        let js2 = filterWithKey notInExts js1
+        return $ (i,mi {mjments = js2})
 
+  -- copy functor contents to instantiation, and also add opens
   _ -> case minstances mi of
     [((ext,incl),ops)] -> do
-        let infs  = Prelude.map fst ops
-        let stat' = Prelude.null [i | (_,i) <- minterfaces mi, notElem i infs]
-        testErr stat' ("module" +++ prt i +++ "remains incomplete")
-           --        Module mt0 _ fs me' ops0 js <- lookupModMod gr ext
-        mo0 <- lookupModule gr ext
-        let ops1 = nub $
-                     mopens mi ++   -- N.B. mo0 has been name-resolved already
-                     ops ++ 
-                     [(n,o) | (n,o) <- mopens mo0, notElem o infs] ++
-                     [(i,i) | i <- Prelude.map snd ops] ----
-                     ----    ++ [oSimple i   | i <- map snd ops] ----
+      let interfs  = Prelude.map fst ops
 
-        --- check if me is incomplete
-        let fs1 = union (mflags mi) (mflags mo0)  -- new flags have priority
-        let js0 = [ci | ci@(c,_) <- assocs (mjments mo0), isInherited incl c]
-        let js1 = fromList (assocs (mjments mi) ++ js0)
-        return $ (i,mo0 {
+      -- test that all interfaces are instantiated
+      let isCompl = Prelude.null [i | (_,i) <- minterfaces mi, notElem i interfs]
+      testErr isCompl ("module" +++ prt i +++ "remains incomplete")
+
+      -- look up the functor and build new opens set
+      mi0 <- lookupModule gr ext
+      let 
+        ops1 = nub $
+             mopens mi   -- own opens; N.B. mi0 has been name-resolved already
+          ++ ops         -- instantiating opens
+          ++ [(n,o) | 
+               (n,o) <- mopens mi0, notElem o interfs] -- ftor's non-if opens
+          ++ [(i,i) | i <- Prelude.map snd ops] ----   -- insts w. real names
+
+      -- combine flags; new flags have priority
+      let fs1 = union (mflags mi) (mflags mi0)  
+      
+      -- copy inherited functor judgements
+      let js0 = [ci | ci@(c,_) <- assocs (mjments mi0), isInherited incl c]
+      let js1 = fromList (assocs (mjments mi) ++ js0)
+
+      return $ (i,mi {
           mflags = fs1, 
-          mextends = mextends mi,
+          mextends = mextends mi,  -- extends of instantiation
           mopens = ops1,
           mjments = js1
           })

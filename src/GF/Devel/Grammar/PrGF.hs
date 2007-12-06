@@ -24,11 +24,13 @@ module GF.Devel.Grammar.PrGF where
 import qualified GF.Devel.Grammar.PrintGF as P
 import GF.Devel.Grammar.GFtoSource
 import GF.Devel.Grammar.Modules
+import GF.Devel.Grammar.Judgements
 import GF.Devel.Grammar.Terms
 ----import GF.Grammar.Values
 
 ----import GF.Infra.Option
 import GF.Infra.Ident
+import GF.Infra.CompactPrint
 ----import GF.Data.Str
 
 import GF.Data.Operations
@@ -53,22 +55,32 @@ class Print a where
 --- in writing grammars to a file. For some constructs, e.g. prMarkedTree,
 --- only the former is ever needed.
 
+cprintTree :: P.Print a => a -> String
+cprintTree = compactPrint . P.printTree
+
 -- | to show terms etc in error messages
 prtBad :: Print a => String -> a -> Err b
 prtBad s a = Bad (s +++ prt a)
 
 prGF :: GF -> String
-prGF = P.printTree . trGrammar
+prGF = cprintTree . trGrammar
 
 prModule :: SourceModule -> String
-prModule = P.printTree . trModule
+prModule = cprintTree . trModule
+
+prJEntry :: JEntry -> String
+prJEntry = either prt show 
+
+instance Print Judgement where
+  prt j = cprintTree $ trAnyDef (wildIdent, j)
+----  prt_ = prExp
 
 instance Print Term where
-  prt = P.printTree . trt
+  prt = cprintTree . trt
 ----  prt_ = prExp
 
 instance Print Ident where
-  prt = P.printTree . tri
+  prt = cprintTree . tri
 
 {- ----
 instance Print Patt where
