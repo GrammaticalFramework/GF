@@ -109,9 +109,9 @@ rebuildModule gr mo@(i,mi) = case mtype mi of
 
   -- copy interface contents to instance
   MTInstance i0 -> do
-    m1 <- lookupModule gr i0
-    testErr (isInterface m1) ("not an interface:" +++ prt i0)
-    js1 <- extendMod False i0 (const True) i (mjments m1) (mjments mi)
+    m0 <- lookupModule gr i0
+    testErr (isInterface m0) ("not an interface:" +++ prt i0)
+    js1 <- extendMod False i0 (const True) i (mjments m0) (mjments mi)
 
     --- to avoid double inclusions, in instance J of I0 = J0 ** ...
     case mextends mi of
@@ -120,7 +120,9 @@ rebuildModule gr mo@(i,mi) = case mtype mi of
         mes <- mapM (lookupModule gr . fst) es ---- restricted?? 12/2007
         let notInExts c _  = all (notMember c . mjments) mes
         let js2 = filterWithKey notInExts js1
-        return $ (i,mi {mjments = js2})
+        return $ (i,mi {
+          mjments = js2
+          })
 
   -- copy functor contents to instantiation, and also add opens
   _ -> case minstances mi of

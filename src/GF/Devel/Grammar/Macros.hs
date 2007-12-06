@@ -92,11 +92,13 @@ termOpGF f g = do
    fm = termOpModule f
 
 termOpModule :: Monad m => (Term -> m Term) -> Module -> m Module
-termOpModule f m = do 
-  mjs <- mapMapM fj (mjments m)
+termOpModule f = judgementOpModule fj where
+  fj = either (liftM Left  . termOpJudgement f) (return . Right)
+   
+judgementOpModule :: Monad m => (Judgement -> m Judgement) -> Module -> m Module
+judgementOpModule f m = do 
+  mjs <- mapMapM f (mjments m)
   return m {mjments = mjs}
- where
-   fj = either (liftM Left  . termOpJudgement f) (return . Right)
    
 termOpJudgement :: Monad m => (Term -> m Term) -> Judgement -> m Judgement
 termOpJudgement f j = do 

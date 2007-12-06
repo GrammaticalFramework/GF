@@ -147,14 +147,18 @@ compileSourceModule opts env@(k,gr) mo@(i,mi) = do
       putpp = putPointEsil opts
 
 
-  mor <- ioeErr $ renameModule gr mo
-  intermOut opts (iOpt "show_rename") (prMod mor)
-
-  moe <- ioeErr $ extendModule gr mor
+  moe <- ioeErr $ extendModule gr mo
   intermOut opts (iOpt "show_extend") (prMod moe)
 
+  mor <- ioeErr $ renameModule gr moe
+  intermOut opts (iOpt "show_rename") (prMod mor)
 
-  return (k,moe) ----
+  (moc,warnings) <- putpp "  type checking" $ ioeErr $ showCheckModule gr mor
+  if null warnings then return () else putp warnings $ return ()
+  intermOut opts (iOpt "show_typecheck") (prMod moc)
+
+  return (k,moc) ----
+
 
 {- ----
   mo1   <- ioeErr $ rebuildModule mos mo
