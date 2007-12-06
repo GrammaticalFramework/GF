@@ -18,9 +18,9 @@ module GF.Devel.Grammar.PatternMatch (matchPattern,
 		    ) where
 
 
-import GF.Grammar.Terms
-import GF.Grammar.Macros
-import GF.Grammar.PrGF
+import GF.Devel.Grammar.Terms
+import GF.Devel.Grammar.Macros
+import GF.Devel.Grammar.PrGF
 import GF.Infra.Ident
 
 import GF.Data.Operations
@@ -56,15 +56,12 @@ findMatch cases terms = case cases of
 
 tryMatch :: (Patt, Term) -> Err [(Ident, Term)]
 tryMatch (p,t) = do 
-  t' <- termForm t
+  let t' = termForm t
   trym p t'
  where
   isInConstantFormt = True -- tested already
   trym p t' =
     case (p,t') of
-      (PVal _ i, (_,Val _ j,_)) 
-          | i == j -> return []
-          | otherwise -> Bad $ "no match of values"
       (_,(x,Empty,y)) -> trym p (x,K [],y)   -- because "" = [""] = []
       (PV IW, _) | isInConstantFormt -> return [] -- optimization with wildcard
       (PV x,  _) | isInConstantFormt -> return [(x,t)]
@@ -94,7 +91,6 @@ tryMatch (p,t) = do
                             [(p,snd a) | (l,p) <- r, let Just a = lookup l r']
             return (concat matches)
       (PT _ p',_) -> trym p' t'
-      (_, ([],Alias _ _ d,[])) -> tryMatch (p,d)
 
 --      (PP (IC "Predef") (IC "CC") [p1,p2], ([],K s, [])) -> do
 
@@ -119,10 +115,11 @@ tryMatch (p,t) = do
         ] >>
         return []
       _ -> prtBad "no match in case expr for" t
-  
+
+eqStrIdent = (==) ----  
+
 isInConstantForm :: Term -> Bool
 isInConstantForm trm = case trm of
-    Cn _     -> True
     Con _    -> True
     Q _ _    -> True
     QC _ _   -> True
@@ -131,7 +128,6 @@ isInConstantForm trm = case trm of
     R r      -> all (isInConstantForm . snd . snd) r
     K _      -> True
     Empty    -> True
-    Alias _ _ t -> isInConstantForm t
     EInt _   -> True
     _       -> False ---- isInArgVarForm trm
 
@@ -143,11 +139,4 @@ varsOfPatt p = case p of
   PR r    -> concat $ map (varsOfPatt . snd) r
   PT _ q -> varsOfPatt q
   _ -> []
-
--- | to search matching parameter combinations in tables
-isMatchingForms :: [Patt] -> [Term] -> Bool
-isMatchingForms ps ts = all match (zip ps ts') where
-  match (PC c cs, (Cn d, ds)) = c == d && isMatchingForms cs ds
-  match _ = True
-  ts' = map appForm ts
 

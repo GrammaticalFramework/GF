@@ -4,10 +4,9 @@ module GF.Devel.Compile.Compile (batchCompile) where
 import GF.Devel.Compile.GetGrammar
 import GF.Devel.Compile.Extend
 import GF.Devel.Compile.Rename
+import GF.Devel.Compile.CheckGrammar
 ----import GF.Grammar.Refresh
-----import GF.Devel.CheckGrammar
 ----import GF.Devel.Optimize
---import GF.Compile.Evaluate ----
 ----import GF.Devel.OptimizeGF
 
 import GF.Devel.Grammar.Terms
@@ -157,7 +156,7 @@ compileSourceModule opts env@(k,gr) mo@(i,mi) = do
   if null warnings then return () else putp warnings $ return ()
   intermOut opts (iOpt "show_typecheck") (prMod moc)
 
-  return (k,moc) ----
+  return (k,mor) ----
 
 
 {- ----

@@ -20,7 +20,7 @@ module GF.Devel.Grammar.AppPredefined (
 
 import GF.Devel.Grammar.Terms
 import GF.Devel.Grammar.Macros
-import GF.Grammar.PrGF (prt,prt_,prtBad)
+import GF.Devel.Grammar.PrGF (prt,prt_,prtBad)
 import GF.Infra.Ident
 
 import GF.Data.Operations
@@ -41,28 +41,31 @@ typPredefined c@(IC f) = case f of
   "error"  -> return $ mkFunType [typeStr] (cnPredef "Error")  -- non-can. of empty set
   "PFalse" -> return $ cnPredef "PBool"
   "PTrue"  -> return $ cnPredef "PBool"
-  "dp"     -> return $ mkFunType [cnPredef "Int",typeTok] typeTok
-  "drop"   -> return $ mkFunType [cnPredef "Int",typeTok] typeTok
+  "dp"     -> return $ mkFunType [cnPredef "Int",typeStr] typeStr
+  "drop"   -> return $ mkFunType [cnPredef "Int",typeStr] typeStr
   "eqInt"  -> return $ mkFunType [cnPredef "Int",cnPredef "Int"] (cnPredef "PBool")
   "lessInt"-> return $ mkFunType [cnPredef "Int",cnPredef "Int"] (cnPredef "PBool")
-  "eqStr"  -> return $ mkFunType [typeTok,typeTok] (cnPredef "PBool")
-  "length" -> return $ mkFunType [typeTok] (cnPredef "Int")
-  "occur"  -> return $ mkFunType [typeTok,typeTok] (cnPredef "PBool")
-  "occurs" -> return $ mkFunType [typeTok,typeTok] (cnPredef "PBool")
+  "eqStr"  -> return $ mkFunType [typeStr,typeStr] (cnPredef "PBool")
+  "length" -> return $ mkFunType [typeStr] (cnPredef "Int")
+  "occur"  -> return $ mkFunType [typeStr,typeStr] (cnPredef "PBool")
+  "occurs" -> return $ mkFunType [typeStr,typeStr] (cnPredef "PBool")
   "plus"   -> return $ mkFunType [cnPredef "Int",cnPredef "Int"] (cnPredef "Int")
 ----  "read"   -> (P : Type) -> Tok -> P
-  "show"   -> return $ mkProd -- (P : PType) -> P -> Tok
-    ([(zIdent "P",typePType),(wildIdent,Vr (zIdent "P"))],typeStr,[]) 
-  "toStr"  -> return $ mkProd -- (L : Type)  -> L -> Str
-    ([(zIdent "L",typeType),(wildIdent,Vr (zIdent "L"))],typeStr,[]) 
+  "show"   -> return $ mkProds -- (P : PType) -> P -> Tok
+    ([(identC "P",typePType),(wildIdent,Vr (identC "P"))],typeStr,[]) 
+  "toStr"  -> return $ mkProds -- (L : Type)  -> L -> Str
+    ([(identC "L",typeType),(wildIdent,Vr (identC "L"))],typeStr,[]) 
   "mapStr" -> 
-    let ty = zIdent "L" in
-    return $ mkProd -- (L : Type)  -> (Str -> Str) -> L -> L
+    let ty = identC "L" in
+    return $ mkProds -- (L : Type)  -> (Str -> Str) -> L -> L
     ([(ty,typeType),(wildIdent,mkFunType [typeStr] typeStr),(wildIdent,Vr ty)],Vr ty,[]) 
-  "take"   -> return $ mkFunType [cnPredef "Int",typeTok] typeTok
-  "tk"     -> return $ mkFunType [cnPredef "Int",typeTok] typeTok
+  "take"   -> return $ mkFunType [cnPredef "Int",typeStr] typeStr
+  "tk"     -> return $ mkFunType [cnPredef "Int",typeStr] typeStr
   _        -> prtBad "unknown in Predef:" c
+
 typPredefined c = prtBad "unknown in Predef:" c
+
+mkProds (cont,t,xx) = foldr (uncurry Prod) (mkApp t xx) cont
 
 appPredefined :: Term -> Err (Term,Bool)
 appPredefined t = case t of
@@ -119,10 +122,10 @@ appPredefined t = case t of
 str2tag :: String -> Term
 str2tag s = case s of
 ----  '\'' : cs -> mkCn $ pTrm $ init cs
-  _ -> Cn $ IC s ---
+  _ -> Con $ IC s ---
  where
    mkCn t = case t of
-     Vr i -> Cn i
+     Vr i -> Con i
      App c a -> App (mkCn c) (mkCn a)
      _ -> t
 
@@ -140,7 +143,6 @@ trm2str :: Term -> Err Term
 trm2str t = case t of
   R ((_,(_,s)):_) -> trm2str s
   T _ ((_,s):_)   -> trm2str s
-  TSh _ ((_,s):_) -> trm2str s
   V _ (s:_)       -> trm2str s
   C _ _         -> return $ t
   K _           -> return $ t
@@ -153,7 +155,7 @@ trm2str t = case t of
 -- (this has been done in type checking)
 mapStr :: Type -> Term -> Term -> Term
 mapStr ty f t = case (ty,t) of
-  _ | elem ty [typeStr,typeTok] -> App f t
+  _ | elem ty [typeStr,typeStr] -> App f t
   (_,        R ts)    -> R [(l,mapField v)   | (l,v) <- ts]
   (Table a b,T ti cs) -> T ti [(p,mapStr b f v) | (p,v) <- cs]
   _    -> t 

@@ -47,12 +47,13 @@ import GF.Infra.Ident
 
 --import GF.Grammar.LookAbs
 --import GF.Grammar.ReservedWords ----
-import GF.Grammar.PatternMatch (testOvershadow)
-import GF.Grammar.AppPredefined
+import GF.Devel.Grammar.PatternMatch (testOvershadow)
+import GF.Devel.Grammar.AppPredefined
 --import GF.Grammar.Lockfield (isLockLabel)
 
+import GF.Devel.CheckM
+
 import GF.Data.Operations
-import GF.Infra.CheckM
 
 import Data.List
 import qualified Data.Set as Set
@@ -77,8 +78,8 @@ checkModule gf0 (name,mo) = checkIn ("checking module" +++ prt name) $ do
     MTConcrete aname -> do
       checkErr $ topoSortOpers $ allOperDependencies name $ mjments mo
       abs <- checkErr $ lookupModule gr aname
-      js1 <- checkCompleteGrammar abs mo
-      judgementOpModule (checkCncInfo gr name (aname,abs)) js1
+      mo1 <- checkCompleteGrammar abs mo
+      entryOpModule (checkCncInfo gr name (aname,abs)) mo1
 
     MTInterface -> judgementOpModule (checkResInfo gr name) mo
 
@@ -124,8 +125,8 @@ justCheckLTerm src t = do
   ((t',_),_) <- checkStart (inferLType src t)
   return t'
 
-checkAbsInfo :: GF -> Ident -> Ident -> Judgement -> Check Judgement
-checkAbsInfo st m c info = return info ----
+checkAbsInfo :: GF -> Ident -> Judgement -> Check Judgement
+checkAbsInfo st m info = return info ----
 
 {-
 checkAbsInfo st m (c,info) = do
@@ -198,18 +199,18 @@ checkCompleteGrammar abs cnc = do
          checkWarn $ 
            "Warning: no linearization type for" +++ prt c ++ 
            ", inserting default {s : Str}" 
-         return $ Map.insert c (cncCat defLinType) js
+         return $ Map.insert c (Left (cncCat defLinType)) js
      _ -> return js
 
-checkResInfo :: GF -> Ident -> Ident -> Judgement -> Check Judgement
-checkResInfo gr mo c info = do
+checkResInfo :: GF -> Ident -> Judgement -> Check Judgement
+checkResInfo gr mo info = do
   ----  checkReservedId c
   case jform info of
     JOper -> chIn "operation" $ case (jtype info, jdef info) of
       (_,Meta _) -> do
         checkWarn "No definition given to oper"
         return info
-      (Meta,de) -> do
+      (Meta _,de) -> do
         (de',ty') <- infer de
         return (resOper ty' de')
       (ty, de) -> do
@@ -237,7 +238,7 @@ checkResInfo gr mo c info = do
  where
    infer = inferLType gr
    check = checkLType gr
-   chIn cat = checkIn ("Happened in" +++ cat +++ prt c +++ ":")
+   chIn cat = checkIn ("Happened in" +++ cat) ---- +++ prt c +++ ":")
    comp = computeLType gr
 
    checkUniq xss = case xss of
@@ -265,7 +266,7 @@ checkCncInfo gr cnc (a,abs) c info = do
       ---- return (c, CncFun (Just (cat,(cont,val))) (Yes trm') mpr)
                                                    -- cat for cf, typ for pe
 
-    JCat (Yes typ) mdef mpr -> chIn "linearization type of" $ do
+    JCat -> chIn "linearization type of" $ do
       checkErr $ lookupCatContext gr a c
       typ'  <- checkIfLinType gr (jtype info)
     {- ----
@@ -278,7 +279,7 @@ checkCncInfo gr cnc (a,abs) c info = do
       checkPrintname gr (jprintname info)
       return (info {jtype = typ'})
 
-    _ -> checkResInfo gr cnc c info
+    _ -> checkResInfo gr cnc info
 
  where
    env = gr
@@ -620,7 +621,7 @@ inferLType gr trm = case trm of
      _ -> False
 
    inferPatt p = case p of
-     PP q c ps | q /= cPredef -> checkErr $ lookupOperType gr q c >>= snd . prodForm
+     PP q c ps | q /= cPredef -> checkErr $ lookupOperType gr q c >>= return . snd . prodForm
      PAs _ p  -> inferPatt p
      PNeg p   -> inferPatt p
      PAlt p q -> checks [inferPatt p, inferPatt q]
@@ -1053,14 +1054,12 @@ allOperDependencies m = allDependencies (==m)
 
 allDependencies :: (Ident -> Bool) -> Map.Map Ident JEntry -> [(Ident,[Ident])]
 allDependencies ism b = 
-  [(f, nub (concatMap opty (pts i))) | (f,i) <- tree2list b]
+  [(f, nub (concatMap opersIn (pts i))) | (f,Left i) <- Map.assocs b]
   where
     opersIn t = case t of
       Q n c | ism n -> [c]
       QC n c | ism n -> [c]
       _ -> collectOp opersIn t
-    opty (Yes ty) = opersIn ty
-    opty _ = []
     pts i = [jtype i, jdef i]
     ----  AbsFun pty ptr -> [pty] --- ptr is def, which can be mutual
  
