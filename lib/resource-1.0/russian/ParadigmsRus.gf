@@ -183,12 +183,6 @@ oper
   mkPN  : Str -> Gender -> Animacy -> PN ;          -- "Иван", "Маша"
   nounPN : N -> PN ;
   
--- On the top level, it is maybe $CN$ that is used rather than $N$, and
--- $NP$ rather than $PN$.
-
-  mkCN  : N -> CN ;
-  mkNP  : Str -> Gender -> Animacy -> NP ;
-
 
 --2 Adjectives
 
@@ -517,9 +511,16 @@ regN = \ray ->
     } ** {lock_PN =<>};
   nounPN n = {s=\\c => n.s! SF Sg c; anim=n.anim; g=n.g; lock_PN=<>};
     
-  mkCN = UseN;
+-- On the top level, it is maybe $CN$ that is used rather than $N$, and
+-- $NP$ rather than $PN$.
 
-  mkNP = \x,y,z -> UsePN (mkPN x y z) ;
+  makeCN  : N -> CN ;
+  makeNP  : Str -> Gender -> Animacy -> NP ;
+
+
+  makeCN = UseN;
+
+  makeNP = \x,y,z -> UsePN (mkPN x y z) ;
 
 -- Adjective definitions
   regA = \ray, comp -> 
