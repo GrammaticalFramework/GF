@@ -5,7 +5,9 @@ compactPrint = compactPrintCustom keywordGF (const False)
 
 compactPrintGFCC = compactPrintCustom (const False) keywordGFCC
 
-compactPrintCustom pre post = tail . concat . map (spaceIf pre post) . words 
+compactPrintCustom pre post = dps . concat . map (spaceIf pre post) . words 
+
+dps = dropWhile isSpace
 
 spaceIf pre post w = case w of
   _ | pre w -> "\n" ++ w

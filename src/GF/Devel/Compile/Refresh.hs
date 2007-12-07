@@ -9,19 +9,32 @@
 -- > CVS $Author: bringert $
 -- > CVS $Revision: 1.6 $
 --
--- (Description of the module)
+-- make variable names unique by adding an integer index to each
 -----------------------------------------------------------------------------
 
-module GF.Devel.Compile.Refresh (refreshTerm, refreshTermN,
-		refreshModule
-	       ) where
+module GF.Devel.Compile.Refresh (
+  refreshModule,
+  refreshTerm, 
+  refreshTermN
+  ) where
+
+import GF.Devel.Grammar.Modules
+import GF.Devel.Grammar.Terms
+import GF.Devel.Grammar.Macros
+import GF.Infra.Ident
 
 import GF.Data.Operations
-import GF.Grammar.Grammar
-import GF.Infra.Ident
-import GF.Infra.Modules
-import GF.Grammar.Macros
+
 import Control.Monad
+
+
+-- for concrete and resource in grammar, before optimizing
+
+refreshModule :: Int -> SourceModule -> Err (Int,SourceModule)
+refreshModule k (m,mo) = do
+  (mo',(_,k')) <- appSTM (termOpModule refresh mo) (initIdStateN k)
+  return (k',(m,mo'))
+
 
 refreshTerm :: Term -> Err Term
 refreshTerm = refreshTermN 0
@@ -102,32 +115,4 @@ refreshTInfo i = case i of
 refreshEquation :: Equation -> Err ([Patt],Term)
 refreshEquation pst = err Bad (return . fst) (appSTM (refr pst) initIdState) where
   refr (ps,t) = liftM2 (,) (mapM refreshPatt ps) (refresh t)
-
--- for concrete and resource in grammar, before optimizing
-
-refreshGrammar :: SourceGrammar -> Err SourceGrammar
-refreshGrammar = liftM (MGrammar . snd) . foldM refreshModule (0,[]) . modules
-
-refreshModule :: (Int,[SourceModule]) -> SourceModule -> Err (Int,[SourceModule])
-refreshModule (k,ms) mi@(i,m) = case m of
-    ModMod mo@(Module mt fs st me ops js) | (isModCnc mo || isModRes mo) -> do
-      (k',js') <- foldM refreshRes (k,[]) $ tree2list js
-      return (k', (i, ModMod(Module mt fs st me ops (buildTree js'))) : ms)
-    _ -> return (k, mi:ms)
- where
-  refreshRes (k,cs) ci@(c,info) = case info of
-    ResOper ptyp (Yes trm) -> do   ---- refresh ptyp
-      (k',trm') <- refreshTermKN k trm
-      return $ (k', (c, ResOper ptyp (Yes trm')):cs)
-    ResOverload tyts -> do
-      (k',tyts') <- liftM (\ (t,(_,i)) -> (i,t)) $ 
-                    appSTM (mapPairsM refresh tyts) (initIdStateN k)
-      return $ (k', (c, ResOverload tyts'):cs)
-    CncCat mt (Yes trm) pn -> do   ---- refresh mt, pn
-      (k',trm') <- refreshTermKN k trm
-      return $ (k', (c, CncCat mt (Yes trm') pn):cs)
-    CncFun mt (Yes trm) pn -> do   ---- refresh pn
-      (k',trm') <- refreshTermKN k trm
-      return $ (k', (c, CncFun mt (Yes trm') pn):cs)
-    _ -> return (k, ci:cs)
 

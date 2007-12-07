@@ -5,7 +5,7 @@ import GF.Devel.Compile.GetGrammar
 import GF.Devel.Compile.Extend
 import GF.Devel.Compile.Rename
 import GF.Devel.Compile.CheckGrammar
-----import GF.Grammar.Refresh
+import GF.Devel.Compile.Refresh
 ----import GF.Devel.Optimize
 ----import GF.Devel.OptimizeGF
 
@@ -156,7 +156,12 @@ compileSourceModule opts env@(k,gr) mo@(i,mi) = do
   if null warnings then return () else putp warnings $ return ()
   intermOut opts (iOpt "show_typecheck") (prMod moc)
 
-  return (k,mor) ----
+  (k',mox) <- putpp "  refreshing " $ ioeErr $ refreshModule k moc
+  intermOut opts (iOpt "show_refresh") (prMod mox)
+
+
+
+  return (k,mox) ----
 
 
 {- ----
@@ -172,10 +177,6 @@ compileSourceModule opts env@(k,gr) mo@(i,mi) = do
       (mo3:_,warnings) <- putpp "  type checking" $ ioeErr $ showCheckModule mos mo2
       if null warnings then return () else putp warnings $ return ()
       intermOut opts (iOpt "show_typecheck") (prMod mo3)
-
-
-      (k',mo3r:_) <- putpp "  refreshing " $ ioeErr $ refreshModule (k,mos) mo3
-      intermOut opts (iOpt "show_refresh") (prMod mo3r)
 
       let eenv = () --- emptyEEnv
       (mo4,eenv') <- 
