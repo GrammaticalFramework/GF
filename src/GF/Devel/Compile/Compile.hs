@@ -6,14 +6,13 @@ import GF.Devel.Compile.Extend
 import GF.Devel.Compile.Rename
 import GF.Devel.Compile.CheckGrammar
 import GF.Devel.Compile.Refresh
-----import GF.Devel.Optimize
+import GF.Devel.Compile.Optimize
 ----import GF.Devel.OptimizeGF
 
 import GF.Devel.Grammar.Terms
 import GF.Devel.Grammar.Modules
 import GF.Devel.Grammar.Judgements
 import GF.Infra.Ident
-import GF.Infra.CompactPrint
 import GF.Devel.Grammar.PrGF
 ----import GF.Grammar.Lookup
 import GF.Devel.ReadFiles
@@ -41,7 +40,7 @@ intermOut opts opt s = if oElem opt opts then
   else return ()
 
 prMod :: SourceModule -> String
-prMod = compactPrint . prModule
+prMod = prModule
 
 -- | environment variable for grammar search path
 gfGrammarPathVar = "GF_GRAMMAR_PATH"
@@ -146,10 +145,10 @@ compileSourceModule opts env@(k,gr) mo@(i,mi) = do
       putpp = putPointEsil opts
 
 
-  moe <- ioeErr $ extendModule gr mo
+  moe <- putpp "  extending" $ ioeErr $ extendModule gr mo
   intermOut opts (iOpt "show_extend") (prMod moe)
 
-  mor <- ioeErr $ renameModule gr moe
+  mor <- putpp "  renaming" $ ioeErr $ renameModule gr moe
   intermOut opts (iOpt "show_rename") (prMod mor)
 
   (moc,warnings) <- putpp "  type checking" $ ioeErr $ showCheckModule gr mor
@@ -159,9 +158,11 @@ compileSourceModule opts env@(k,gr) mo@(i,mi) = do
   (k',mox) <- putpp "  refreshing " $ ioeErr $ refreshModule k moc
   intermOut opts (iOpt "show_refresh") (prMod mox)
 
+  moo <- putpp "  optimizing " $ ioeErr $ optimizeModule opts gr mox
+  intermOut opts (iOpt "show_optimize") (prMod moo)
 
 
-  return (k,mox) ----
+  return (k,moo) ----
 
 
 {- ----
@@ -196,7 +197,7 @@ generateModuleCode opts path minfo@(name,info) = do
   let minfo2 = minfo1
 
   let (file,out) = (gfoFile pname, prGrammar (MGrammar [minfo2]))
-  putp ("  wrote file" +++ file) $ ioeIO $ writeFile file $ compactPrint out
+  putp ("  wrote file" +++ file) $ ioeIO $ writeFile file $ out
 
   return minfo2
  where 
