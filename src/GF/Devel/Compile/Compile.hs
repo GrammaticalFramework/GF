@@ -7,14 +7,14 @@ import GF.Devel.Compile.Rename
 import GF.Devel.Compile.CheckGrammar
 import GF.Devel.Compile.Refresh
 import GF.Devel.Compile.Optimize
-----import GF.Devel.OptimizeGF
+import GF.Devel.Compile.Factorize
 
 import GF.Devel.Grammar.Terms
 import GF.Devel.Grammar.Modules
 import GF.Devel.Grammar.Judgements
 import GF.Infra.Ident
 import GF.Devel.Grammar.PrGF
-----import GF.Grammar.Lookup
+----import GF.Devel.Grammar.Lookup
 import GF.Devel.ReadFiles
 
 import GF.Infra.Option ----
@@ -161,8 +161,10 @@ compileSourceModule opts env@(k,gr) mo@(i,mi) = do
   moo <- putpp "  optimizing " $ ioeErr $ optimizeModule opts gr mox
   intermOut opts (iOpt "show_optimize") (prMod moo)
 
+  mof <- putpp "  factorizing " $ ioeErr $ optimizeModule opts gr moo
+  intermOut opts (iOpt "show_factorize") (prMod mof)
 
-  return (k,moo) ----
+  return (k,mof) ----
 
 
 {- ----
