@@ -29,10 +29,8 @@ module GF.Devel.Compile.CheckGrammar (
   topoSortOpers
   ) where
 
-import GF.Devel.Grammar.Modules
-import GF.Devel.Grammar.Judgements
-import GF.Devel.Grammar.Terms
-import GF.Devel.Grammar.MkJudgements
+import GF.Devel.Grammar.Grammar
+import GF.Devel.Grammar.Construct
 import GF.Devel.Grammar.Macros
 import GF.Devel.Grammar.PrGF
 import GF.Devel.Grammar.Lookup
@@ -187,19 +185,19 @@ checkCompleteGrammar abs cnc = do
   js' <- foldM checkOne js fs
   return $ cnc {mjments = js'}
  where
-   checkOne js i@(c, Left ju) = case jform ju of
+   checkOne js i@(c, ju) = case jform ju of
      JFun -> case Map.lookup c js of
-       Just (Left j) | jform j == JLin -> return js
+       Just j | jform j == JLin -> return js
        _ -> do
          checkWarn $ "WARNING: no linearization of" +++ prt c
          return js
      JCat -> case Map.lookup c js of
-       Just (Left j) | jform ju == JLincat -> return js  
+       Just j | jform ju == JLincat -> return js  
        _ -> do        ---- TODO: other things to check here
          checkWarn $ 
            "Warning: no linearization type for" +++ prt c ++ 
            ", inserting default {s : Str}" 
-         return $ Map.insert c (Left (cncCat defLinType)) js
+         return $ Map.insert c (cncCat defLinType) js
      _ -> return js
 
 checkResInfo :: GF -> Ident -> Ident -> Judgement -> Check Judgement
@@ -1055,12 +1053,12 @@ linTypeOfType cnc m typ = do
 
 -- | dependency check, detecting circularities and returning topo-sorted list
 
-allOperDependencies :: Ident -> Map.Map Ident JEntry -> [(Ident,[Ident])]
+allOperDependencies :: Ident -> Map.Map Ident Judgement -> [(Ident,[Ident])]
 allOperDependencies m = allDependencies (==m)
 
-allDependencies :: (Ident -> Bool) -> Map.Map Ident JEntry -> [(Ident,[Ident])]
+allDependencies :: (Ident -> Bool) -> Map.Map Ident Judgement -> [(Ident,[Ident])]
 allDependencies ism b = 
-  [(f, nub (concatMap opersIn (pts i))) | (f,Left i) <- Map.assocs b]
+  [(f, nub (concatMap opersIn (pts i))) | (f,i) <- Map.assocs b]
   where
     opersIn t = case t of
       Q n c | ism n -> [c]

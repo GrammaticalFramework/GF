@@ -18,7 +18,7 @@ module GF.Devel.Grammar.PatternMatch (matchPattern,
 		    ) where
 
 
-import GF.Devel.Grammar.Terms
+import GF.Devel.Grammar.Grammar
 import GF.Devel.Grammar.Macros
 import GF.Devel.Grammar.PrGF
 import GF.Infra.Ident

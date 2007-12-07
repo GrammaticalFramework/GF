@@ -9,9 +9,8 @@ import GF.Devel.Compile.Refresh
 import GF.Devel.Compile.Optimize
 import GF.Devel.Compile.Factorize
 
-import GF.Devel.Grammar.Terms
-import GF.Devel.Grammar.Modules
-import GF.Devel.Grammar.Judgements
+import GF.Devel.Grammar.Grammar
+import GF.Devel.Grammar.Construct
 import GF.Infra.Ident
 import GF.Devel.Grammar.PrGF
 ----import GF.Devel.Grammar.Lookup

@@ -14,9 +14,8 @@
 
 module GF.Devel.Compile.Optimize (optimizeModule) where
 
-import GF.Devel.Grammar.Modules
---import GF.Devel.Grammar.Judgements
---import GF.Devel.Grammar.Terms
+import GF.Devel.Grammar.Grammar
+import GF.Devel.Grammar.Construct
 import GF.Devel.Grammar.Macros
 --import GF.Devel.Grammar.PrGF
 import GF.Devel.Grammar.Compute

@@ -18,7 +18,8 @@ module GF.Devel.Grammar.AppPredefined (
   appPredefined
   ) where
 
-import GF.Devel.Grammar.Terms
+import GF.Devel.Grammar.Grammar
+import GF.Devel.Grammar.Construct
 import GF.Devel.Grammar.Macros
 import GF.Devel.Grammar.PrGF (prt,prt_,prtBad)
 import GF.Infra.Ident
