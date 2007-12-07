@@ -1,8 +1,7 @@
 module GF.Devel.Grammar.Macros where
 
-import GF.Devel.Grammar.Terms
-import GF.Devel.Grammar.Judgements
-import GF.Devel.Grammar.Modules
+import GF.Devel.Grammar.Grammar
+import GF.Devel.Grammar.Construct
 import GF.Infra.Ident
 
 import GF.Data.Str
@@ -81,9 +80,6 @@ typeSkeleton typ = do
 
 -- construct types and terms
 
-mkProd :: Context -> Type -> Type
-mkProd = flip (foldr (uncurry Prod))
-
 mkFunType :: [Type] -> Type -> Type
 mkFunType tt t = mkProd ([(wildIdent, ty) | ty <- tt]) t -- nondep prod
 
@@ -156,49 +152,6 @@ plusRecord t1 t2 =
 zipAssign :: [Label] -> [Term] -> [Assign]
 zipAssign ls ts = [assign l t | (l,t) <- zip ls ts]
 
--- type constants
-
-typeType :: Type
-typeType = Sort "Type"
-
-typePType :: Type
-typePType = Sort "PType"
-
-typeStr :: Type
-typeStr = Sort "Str"
-
-typeTok :: Type      ---- deprecated
-typeTok = Sort "Tok"  
-
-cPredef :: Ident
-cPredef = identC "Predef"
-
-cPredefAbs :: Ident
-cPredefAbs = identC "PredefAbs"
-
-typeString, typeFloat, typeInt :: Term
-typeInts :: Integer -> Term
-
-typeString = constPredefRes "String"
-typeInt = constPredefRes "Int"
-typeFloat = constPredefRes "Float"
-typeInts i = App (constPredefRes "Ints") (EInt i)
-
-isTypeInts :: Term -> Bool
-isTypeInts ty = case ty of
-  App c _ -> c == constPredefRes "Ints"
-  _ -> False
-
-cnPredef = constPredefRes
-
-constPredefRes :: String -> Term
-constPredefRes s = Q (IC "Predef") (identC s)
-
-isPredefConstant :: Term -> Bool
-isPredefConstant t = case t of
-  Q (IC "Predef") _ -> True
-  Q (IC "PredefAbs") _ -> True
-  _ -> False
 
 defLinType :: Type
 defLinType = RecType [(LIdent "s",  typeStr)]
@@ -230,10 +183,8 @@ termOpModule f = judgementOpModule fj where
    
 judgementOpModule :: Monad m => (Judgement -> m Judgement) -> Module -> m Module
 judgementOpModule f m = do 
-  mjs <- mapMapM fj (mjments m)
+  mjs <- mapMapM f (mjments m)
   return m {mjments = mjs}
- where
-  fj = either (liftM Left . f) (return . Right)
 
 entryOpModule :: Monad m => 
                  (Ident -> Judgement -> m Judgement) -> Module -> m Module
@@ -241,8 +192,7 @@ entryOpModule f m = do
   mjs <- liftM Map.fromAscList $ mapm $ Map.assocs $ mjments m
   return $ m {mjments = mjs}
  where
-  mapm = mapM (\ (i,j) -> liftM ((,) i) (fe i j)) 
-  fe i j = either (liftM Left . f i) (return . Right) j
+  mapm = mapM (\ (i,j) -> liftM ((,) i) (f i j)) 
    
 termOpJudgement :: Monad m => (Term -> m Term) -> Judgement -> m Judgement
 termOpJudgement f j = do 

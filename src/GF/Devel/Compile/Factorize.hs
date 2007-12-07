@@ -24,10 +24,8 @@ module GF.Devel.Compile.Factorize (
   shareModule
   ) where 
 
-import GF.Devel.Grammar.Modules
-import GF.Devel.Grammar.Judgements
-import GF.Devel.Grammar.Terms
-import GF.Devel.Grammar.MkJudgements
+import GF.Devel.Grammar.Grammar
+import GF.Devel.Grammar.Construct
 import GF.Devel.Grammar.PrGF (prt)
 import qualified GF.Devel.Grammar.Macros as C
 
@@ -53,10 +51,11 @@ unshareModule :: GF -> SourceModule -> SourceModule
 unshareModule gr = processModule (const (unoptim gr))
 
 processModule :: (Ident -> Term -> Term) -> SourceModule -> SourceModule
-processModule opt (i,m) = (i, C.judgementOpModule (shareInfo (opt i)) m)
+processModule opt (i,mo) = 
+  (i, mo {mjments = Map.map (shareInfo (opt i)) (mjments mo)})
 
-shareInfo :: (Term -> Term) -> Judgement -> Err Judgement
-shareInfo opt ju = return $ ju {jdef = opt (jdef ju)}
+shareInfo :: (Term -> Term) -> Judgement -> Judgement
+shareInfo opt ju = ju {jdef = opt (jdef ju)}
 
 -- the function putting together optimizations
 optim :: Ident -> Term -> Term
@@ -169,34 +168,25 @@ cse is possible in the grammar. It is used by the flag pg -printer=subs.
 -}
 
 subexpModule :: SourceModule -> SourceModule
-subexpModule (mo,m) = errVal (mo,m) $ case m of
-  M.ModMod (M.Module mt st fs me ops js) -> do
-    (tree,_) <- appSTM (getSubtermsMod mo (tree2list js)) (Map.empty,0)
-    js2 <- liftM buildTree $ addSubexpConsts mo tree $ tree2list js
-    return (mo,M.ModMod (M.Module mt st fs me ops js2))
-  _ -> return (mo,m)
+subexpModule (m,mo) = errVal (m,mo) $ case mtype mo of
+  MTAbstract -> return (m,mo)
+  _ -> do
+    let js = listJudgements mo
+    (tree,_) <- appSTM (getSubtermsMod m js) (Map.empty,0)
+    js2 <- addSubexpConsts m tree js
+    return (m, mo{mjments = Map.fromList js2})
 
 unsubexpModule :: SourceModule -> SourceModule
-unsubexpModule mo@(i,m) = case m of
-    M.ModMod (M.Module mt st fs me ops js) | hasSub ljs ->
-      (i, M.ModMod (M.Module mt st fs me ops 
-                     (rebuild (map unparInfo ljs)))) 
-                        where ljs = tree2list js
-    _ -> (i,m)
+unsubexpModule (m,mo) = (m, mo{mjments = rebuild (mjments mo)})
   where
-    -- perform this iff the module has opers
-    hasSub ljs = not $ null [c | (c,ResOper _ _) <- ljs]
-    unparInfo (c,info) = case info of
-      CncFun xs (Yes t) m -> [(c, CncFun xs (Yes (unparTerm t)) m)]
-      ResOper (Yes (EInt 8)) _ -> [] -- subexp-generated opers
-      ResOper pty (Yes t) -> [(c, ResOper pty (Yes (unparTerm t)))]
-      _ -> [(c,info)]
+    unparInfo (c, ju) = case jtype ju of
+      EInt 8 -> [] -- subexp-generated opers
+      _ -> [(c, ju {jdef = unparTerm (jdef ju)})]
     unparTerm t = case t of
-      Q m c@(IC ('A':'\'':'\'':_)) -> --- name convention of subexp opers
-        errVal t $ liftM unparTerm $ lookupResDef gr m c 
+      Q _ c@(IC ('_':'A':_)) -> --- name convention of subexp opers
+        maybe t (unparTerm . jdef) $ Map.lookup c (mjments mo)
       _ -> C.composSafeOp unparTerm t
-    gr = M.MGrammar [mo] 
-    rebuild = buildTree . concat
+    rebuild = Map.fromList . concat . map unparInfo . Map.assocs
 
 -- implementation
 
@@ -204,20 +194,20 @@ type TermList = Map Term (Int,Int) -- number of occs, id
 type TermM a = STM (TermList,Int) a
 
 addSubexpConsts :: 
-  Ident -> Map Term (Int,Int) -> [(Ident,Info)] -> Err [(Ident,Info)]
+  Ident -> Map Term (Int,Int) -> [(Ident,Judgement)] -> Err [(Ident,Judgement)]
 addSubexpConsts mo tree lins = do
   let opers = [oper id trm | (trm,(_,id)) <- list]
   mapM mkOne $ opers ++ lins
  where
 
-   mkOne (f,def) = (f,def {jdef = recomp f (jdef def)})
+   mkOne (f, def) = return (f, def {jdef = recomp f (jdef def)})
    recomp f t = case Map.lookup t tree of
-     Just (_,id) | ident id /= f -> return $ Q mo (ident id)
-     _ -> C.composOp (recomp f) t
+     Just (_,id) | ident id /= f -> Q mo (ident id)
+     _ -> C.composSafeOp (recomp f) t
 
    list = Map.toList tree
 
-   oper id trm = (ident id, resOper (EInt 8) (Yes trm))
+   oper id trm = (ident id, resOper (EInt 8) trm)
    --- impossible type encoding generated opers
 
 getSubtermsMod :: Ident -> [(Ident,Judgement)] -> TermM (Map Term (Int,Int))
@@ -226,7 +216,7 @@ getSubtermsMod mo js = do
   (tree0,_) <- readSTM
   return $ Map.filter (\ (nu,_) -> nu > 1) tree0
  where
-   getInfo get fi@(f,i) = do
+   getInfo get fi@(_,i) = do
      get (jdef i)    
      return $ fi
 

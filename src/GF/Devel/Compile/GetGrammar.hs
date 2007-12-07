@@ -15,17 +15,18 @@
 module GF.Devel.Compile.GetGrammar where
 
 import GF.Devel.UseIO
-import GF.Devel.Grammar.Modules
+import GF.Devel.Grammar.Grammar
+import GF.Devel.Grammar.Construct
 ----import GF.Devel.PrGrammar
-import GF.Devel.Grammar.SourceToGF
+import GF.Devel.Compile.SourceToGF
 ---- import Macros
 ---- import Rename
 --- import Custom
-import GF.Devel.Grammar.ParGF
-import qualified GF.Devel.Grammar.LexGF as L
+import GF.Devel.Compile.ParGF
+import qualified GF.Devel.Compile.LexGF as L
 
 import GF.Data.Operations
-import qualified GF.Devel.Grammar.ErrM as E ----
+import qualified GF.Devel.Compile.ErrM as E ----
 import GF.Infra.Option ----
 import GF.Devel.ReadFiles ----
 

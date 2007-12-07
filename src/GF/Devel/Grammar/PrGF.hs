@@ -21,11 +21,10 @@
 
 module GF.Devel.Grammar.PrGF where
 
-import qualified GF.Devel.Grammar.PrintGF as P
+import qualified GF.Devel.Compile.PrintGF as P
 import GF.Devel.Grammar.GFtoSource
-import GF.Devel.Grammar.Modules
-import GF.Devel.Grammar.Judgements
-import GF.Devel.Grammar.Terms
+import GF.Devel.Grammar.Grammar
+import GF.Devel.Grammar.Construct
 ----import GF.Grammar.Values
 
 ----import GF.Infra.Option
@@ -67,9 +66,6 @@ prGF = cprintTree . trGrammar
 
 prModule :: SourceModule -> String
 prModule = cprintTree . trModule
-
-prJEntry :: JEntry -> String
-prJEntry = either prt show 
 
 instance Print Judgement where
   prt j = cprintTree $ trAnyDef (wildIdent, j)

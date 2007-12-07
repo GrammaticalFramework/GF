@@ -1,14 +1,69 @@
-module GF.Devel.Grammar.Terms where
+module GF.Devel.Grammar.Grammar where
 
 import GF.Infra.Ident
 
 import GF.Data.Operations
 
-type Type = Term
-type Cat  = QIdent
-type Fun  = QIdent
+import Data.Map
 
-type QIdent = (Ident,Ident)
+
+------------------
+-- definitions  --
+------------------
+
+data GF = GF {
+  gfabsname   :: Maybe Ident ,
+  gfcncnames  :: [Ident] ,
+  gflags      :: Map Ident String ,   -- value of a global flag
+  gfmodules   :: Map Ident Module
+  }
+
+data Module = Module {
+  mtype       :: ModuleType,
+  miscomplete :: Bool,
+  minterfaces :: [(Ident,Ident)],           -- non-empty for functors 
+  minstances  :: [((Ident,MInclude),[(Ident,Ident)])], -- non-empty for instant'ions
+  mextends    :: [(Ident,MInclude)],
+  mopens      :: [(Ident,Ident)],           -- used name, original name
+  mflags      :: Map Ident String,
+  mjments     :: Map Ident Judgement
+  }
+
+data ModuleType =
+    MTAbstract
+  | MTConcrete Ident
+  | MTInterface
+  | MTInstance Ident
+  | MTGrammar 
+  deriving Eq
+
+data MInclude =
+    MIAll
+  | MIExcept [Ident]
+  | MIOnly [Ident]
+
+type Indirection = (Ident,Bool) -- module of origin, whether canonical
+
+data Judgement = Judgement {
+  jform :: JudgementForm,  -- cat      fun   lincat  lin     oper    param
+  jtype :: Type,           -- context  type  lincat  -       type    constrs
+  jdef  :: Term,           -- lindef   def   lindef  lin     def     values
+  jprintname :: Term,      -- -        -     prname  prname  -       -
+  jlink :: Ident,
+  jposition :: Int
+  }
+
+data JudgementForm =
+    JCat
+  | JFun
+  | JLincat
+  | JLin
+  | JOper
+  | JParam
+  | JLink
+  deriving Eq
+
+type Type = Term
 
 data Term =
    Vr Ident             -- ^ variable
@@ -104,15 +159,3 @@ type Assign    = (Label, (Maybe Type, Term))
 type Case      = (Patt, Term) 
 type LocalDef  = (Ident, (Maybe Type, Term))
 
-
--- | branches à la Alfa
-newtype Branch = Branch (Con,([Ident],Term)) deriving (Eq, Ord,Show,Read)
-type Con = Ident ---
-
-varLabel :: Int -> Label
-varLabel = LVar
-
-wildPatt :: Patt
-wildPatt = PW
-
-type Trm = Term

@@ -24,9 +24,8 @@ module GF.Devel.Compile.Rename (
   renameModule
   ) where
 
-import GF.Devel.Grammar.Modules
-import GF.Devel.Grammar.Judgements
-import GF.Devel.Grammar.Terms
+import GF.Devel.Grammar.Grammar
+import GF.Devel.Grammar.Construct
 import GF.Devel.Grammar.Macros
 import GF.Devel.Grammar.PrGF
 import GF.Infra.Ident
@@ -61,7 +60,8 @@ renameIdentTerm :: RenameEnv -> Term -> Err Term
 renameIdentTerm (gf, (name,mo)) trm = case trm of
   Vr i -> looks i
   Con i -> looks i
-  Q m i -> getQualified m >>= look i
+  Q  m i -> getQualified m >>= look i
+  QC m i -> getQualified m >>= look i
   _ -> return trm
  where
    looks i = do
@@ -76,10 +76,10 @@ renameIdentTerm (gf, (name,mo)) trm = case trm of
                (return t)
 ----       _ -> fail $ unwords $ "identifier" : prt i : "ambiguous:" : map prt ts
    look i m = do
-     entry <- lookupIdent gf m i
-     return $ case entry of
-       Left j -> if isConstructor j then QC m i else Q m i
-       Right (n,b) -> if b then QC n i else Q n i
+     ju <- lookupIdent gf m i
+     return $ case jform ju of
+       JLink -> if isConstructor ju then QC (jlink ju) i else Q (jlink ju) i
+       _     -> if isConstructor ju then QC m i else Q m i
    pool = nub $ name :
                 maybe name id (interfaceName mo) : 
                 IC "Predef" : 

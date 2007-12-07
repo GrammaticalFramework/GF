@@ -20,8 +20,7 @@ module GF.Devel.CheckM (Check,
 	      ) where
 
 import GF.Data.Operations
-import GF.Devel.Grammar.Modules
-import GF.Devel.Grammar.Terms
+import GF.Devel.Grammar.Grammar
 import GF.Infra.Ident
 import GF.Devel.Grammar.PrGF
 

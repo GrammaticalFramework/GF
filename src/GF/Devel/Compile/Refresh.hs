@@ -18,8 +18,8 @@ module GF.Devel.Compile.Refresh (
   refreshTermN
   ) where
 
-import GF.Devel.Grammar.Modules
-import GF.Devel.Grammar.Terms
+import GF.Devel.Grammar.Grammar
+import GF.Devel.Grammar.Construct
 import GF.Devel.Grammar.Macros
 import GF.Infra.Ident
 

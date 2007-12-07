@@ -9,11 +9,10 @@ module GF.Devel.Grammar.GFtoSource (
   ) where
 
 
-import GF.Devel.Grammar.Modules
-import GF.Devel.Grammar.Judgements
-import GF.Devel.Grammar.Terms
+import GF.Devel.Grammar.Grammar
+import GF.Devel.Grammar.Construct
 import GF.Devel.Grammar.Macros (contextOfType)
-import qualified GF.Devel.Grammar.AbsGF as P
+import qualified GF.Devel.Compile.AbsGF as P
 import GF.Infra.Ident
 
 import GF.Data.Operations
@@ -43,7 +42,7 @@ trModule (i,mo) = P.MModule compl typ body where
     body = P.MBody 
              (trExtends (mextends mo)) 
              (mkOpens (map trOpen (mopens mo)))
-             (concatMap trAnyDef [(c,j) | (c,Left j) <- listJudgements mo] ++ 
+             (concatMap trAnyDef [(c,j) | (c,j) <- listJudgements mo] ++ 
                         map trFlag (Map.assocs (mflags mo)))
 
 trExtends :: [(Ident,MInclude)] -> P.Extend
@@ -89,6 +88,7 @@ trAnyDef (i,ju) = let
   JLin -> 
     [P.DefLin [trDef i (Meta 0) (jdef ju)]] 
     ---- ++ [P.DefPrintFun [P.DDef [mkName i] (trt pr)] | Yes pr <- [ppr]]
+  JLink -> []
 {-
   ---- encoding of AnyInd without changing syntax. AR 20/9/2007
   AnyInd s b -> 

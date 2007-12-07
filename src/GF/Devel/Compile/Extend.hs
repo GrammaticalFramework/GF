@@ -20,9 +20,8 @@ module GF.Devel.Compile.Extend (
   extendModule
   ) where
 
-import GF.Devel.Grammar.Modules
-import GF.Devel.Grammar.Judgements
-import GF.Devel.Grammar.MkJudgements
+import GF.Devel.Grammar.Grammar
+import GF.Devel.Grammar.Construct
 import GF.Devel.Grammar.PrGF
 import GF.Devel.Grammar.Lookup
 import GF.Devel.Grammar.Macros
@@ -71,28 +70,23 @@ extendModule gf nmo0 = do
 -- and the process is interrupted if unification fails.
 -- If the extended module is incomplete, its judgements are just copied.
 extendMod :: Bool -> Ident -> (Ident -> Bool) -> Ident -> 
-             MapJudgement -> MapJudgement -> Err MapJudgement
+             Map Ident Judgement -> Map Ident Judgement -> 
+             Err (Map Ident Judgement)
 extendMod isCompl name cond base old new = foldM try new $ assocs old where
   try t i@(c,_) | not (cond c) = return t
   try t i@(c,_) = errIn ("constant" +++ prt c) $
                   tryInsert (extendAnyInfo isCompl name base) indirIf t i
   indirIf = if isCompl then indirInfo name else id
 
-indirInfo :: Ident -> JEntry -> JEntry
-indirInfo n info = Right $ case info of
-  Right (k,b) -> (k,b) -- original link is passed
-  Left j      -> (n,isConstructor j)
+indirInfo :: Ident -> Judgement -> Judgement
+indirInfo n ju = case jform ju of
+  JLink -> ju -- original link is passed
+  _     -> linkInherited (isConstructor ju) n
 
-extendAnyInfo :: Bool -> Ident -> Ident -> JEntry -> JEntry -> Err JEntry
+extendAnyInfo :: Bool -> Ident -> Ident -> Judgement -> Judgement -> Err Judgement
 extendAnyInfo isc n o i j = 
-  errIn ("building extension for" +++ prt n +++ "in" +++ prt o) $ case (i,j) of
-    (Left j1,Left j2) -> liftM Left $ unifyJudgement j1 j2
-    (Right (m1,b1), Right (m2,b2)) -> do
-      testErr (b1 == b2) "inconsistent indirection status"
-      testErr (m1 == m2) $ 
-        "different sources of inheritance:" +++ show m1 +++ show m2
-      return i
-    _ -> Bad $ "cannot unify information in" ++++ prJEntry i ++++ prJEntry j
+  errIn ("building extension for" +++ prt n +++ "in" +++ prt o) $ 
+  unifyJudgement i j
 
 tryInsert :: Ord a => (b -> b -> Err b) -> (b -> b) ->
              Map a b -> (a,b) -> Err (Map a b)

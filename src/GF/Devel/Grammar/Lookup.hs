@@ -1,9 +1,8 @@
 module GF.Devel.Grammar.Lookup where
 
-import GF.Devel.Grammar.Modules
-import GF.Devel.Grammar.Judgements
+import GF.Devel.Grammar.Grammar
+import GF.Devel.Grammar.Construct
 import GF.Devel.Grammar.Macros
-import GF.Devel.Grammar.Terms
 import GF.Devel.Grammar.PrGF
 import GF.Infra.Ident
 
@@ -103,15 +102,19 @@ lookupModule :: GF -> Ident -> Err Module
 lookupModule gf m = do
   maybe (raiseIdent "module not found:" m) return $ mlookup m (gfmodules gf)
 
-lookupIdent :: GF -> Ident -> Ident -> Err JEntry
+-- this finds the immediate definition, which can be a link
+lookupIdent :: GF -> Ident -> Ident -> Err Judgement
 lookupIdent gf m c = do
   mo <- lookupModule gf m
-  maybe (raiseIdent "constant not found" c) return $ mlookup c (mjments mo)
+  maybe (raiseIdent "constant not found:" c) return $ mlookup c (mjments mo)
 
+-- this follows the link
 lookupJudgement :: GF -> Ident -> Ident -> Err Judgement
 lookupJudgement gf m c = do
-  eji <- lookupIdent gf m c
-  either return (\n -> lookupJudgement gf (fst n) c) eji 
+  ju <- lookupIdent gf m c
+  case jform ju of
+    JLink -> lookupJudgement gf (jlink ju) c
+    _ -> return ju
 
 mlookup = Data.Map.lookup
 
