@@ -160,10 +160,10 @@ compileSourceModule opts env@(k,gr) mo@(i,mi) = do
   moo <- putpp "  optimizing " $ ioeErr $ optimizeModule opts gr mox
   intermOut opts (iOpt "show_optimize") (prMod moo)
 
-  mof <- putpp "  factorizing " $ ioeErr $ optimizeModule opts gr moo
-  intermOut opts (iOpt "show_factorize") (prMod mof)
+----  mof <- putpp "  factorizing " $ ioeErr $ optimizeModule opts gr moo
+----  intermOut opts (iOpt "show_factorize") (prMod mof)
 
-  return (k,mof) ----
+  return (k,moo) ----
 
 
 {- ----

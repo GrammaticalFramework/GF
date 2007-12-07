@@ -37,17 +37,19 @@ import GF.Data.Operations
 
 import Control.Monad
 import Data.List
+import qualified Data.Map as Map
 
 import Debug.Trace
 
 
 optimizeModule :: Options -> GF -> SourceModule -> Err SourceModule
-optimizeModule opts gf sm@(m,mo) = case mtype mo of
+optimizeModule opts gf0 sm@(m,mo) = case mtype mo of
   MTConcrete _ -> opt sm 
   MTInstance _ -> opt sm
   MTGrammar   -> opt sm
   _ -> return sm
  where
+   gf = gf0 {gfmodules = Map.insert m mo (gfmodules gf0)}
    opt (m,mo) = do
      mo' <- termOpModule (computeTerm gf) mo
      return (m,mo')
