@@ -73,7 +73,7 @@ checkModule gf0 (name,mo) = checkIn ("checking module" +++ prt name) $ do
 ----  checkRestrictedInheritance gr (name, mo)
   mo1 <- case mtype mo of
     MTAbstract -> judgementOpModule (checkAbsInfo gr name) mo
-    MTGrammar -> judgementOpModule (checkResInfo gr name) mo
+    MTGrammar -> entryOpModule (checkResInfo gr name) mo
 
     MTConcrete aname -> do
       checkErr $ topoSortOpers $ allOperDependencies name $ mjments mo
@@ -81,12 +81,12 @@ checkModule gf0 (name,mo) = checkIn ("checking module" +++ prt name) $ do
       mo1 <- checkCompleteGrammar abs mo
       entryOpModule (checkCncInfo gr name (aname,abs)) mo1
 
-    MTInterface -> judgementOpModule (checkResInfo gr name) mo
+    MTInterface -> entryOpModule (checkResInfo gr name) mo
 
     MTInstance iname -> do
       intf <- checkErr $ lookupModule gr iname
       -- checkCompleteInstance abs mo -- this is done in Rebuild
-      judgementOpModule  (checkResInfo gr name) mo
+      entryOpModule  (checkResInfo gr name) mo
 
   return $ (name, mo1)
 
@@ -202,8 +202,8 @@ checkCompleteGrammar abs cnc = do
          return $ Map.insert c (Left (cncCat defLinType)) js
      _ -> return js
 
-checkResInfo :: GF -> Ident -> Judgement -> Check Judgement
-checkResInfo gr mo info = do
+checkResInfo :: GF -> Ident -> Ident -> Judgement -> Check Judgement
+checkResInfo gr mo c info = do
   ----  checkReservedId c
   case jform info of
     JOper -> chIn "operation" $ case (jtype info, jdef info) of
@@ -212,6 +212,7 @@ checkResInfo gr mo info = do
         return info
       (Meta _,de) -> do
         (de',ty') <- infer de
+        ---- trace ("inferred" +++ prt de' +++ ":" +++ prt ty') $ 
         return (resOper ty' de')
       (ty, de) -> do
         ty'     <- check ty typeType >>= comp . fst
@@ -238,7 +239,7 @@ checkResInfo gr mo info = do
  where
    infer = inferLType gr
    check = checkLType gr
-   chIn cat = checkIn ("Happened in" +++ cat) ---- +++ prt c +++ ":")
+   chIn cat = checkIn ("Happened in" +++ cat +++ prt c +++ ":")
    comp = computeLType gr
 
    checkUniq xss = case xss of
@@ -279,7 +280,7 @@ checkCncInfo gr cnc (a,abs) c info = do
       checkPrintname gr (jprintname info)
       return (info {jtype = typ'})
 
-    _ -> checkResInfo gr cnc info
+    _ -> checkResInfo gr cnc c info
 
  where
    env = gr
@@ -377,8 +378,8 @@ computeLType gr t = do
       let fs' = sortBy (\x y -> compare (fst x) (fst y)) fs
       liftM RecType $ mapPairsM comp fs'
 
-----    _ | ty == typeStr -> return typeStr
-----    _ | isPredefConstant ty -> return ty
+    _ | ty == typeTok -> return typeStr  ---- deprecated
+    _ | isPredefConstant ty -> return ty
 
     _ -> composOp comp ty
 
@@ -634,7 +635,7 @@ inferLType gr trm = case trm of
 -- the latter permits matching with value type
 getOverload :: GF -> Maybe Type -> Term -> Check (Maybe (Term,Type))
 getOverload env@gr mt t = case appForm t of
-     (f@(Q m c), ts) -> case (return []) of ---- lookupOverload gr m c of
+     (f@(Q m c), ts) -> case lookupOverload gr m c of
        Ok typs -> do
          ttys <- mapM infer ts
          v <- matchOverload f typs ttys
@@ -722,6 +723,8 @@ checkLType env trm typ0 = do
           (trm',ty') <- infer trm
           termWith trm' $ checkEq typ ty' trm'
 
+    EData -> return (trm,typ)
+
     T _ [] ->
       prtFail "found empty table in type" typ
     T _ cs -> case typ of 
@@ -729,11 +732,11 @@ checkLType env trm typ0 = do
         case allParamValues env arg of
           Ok vs -> do
             let ps0 = map fst cs
-            ps <- checkErr $ testOvershadow ps0 vs
+            ps <- return [] ---- checkErr $ testOvershadow ps0 vs
             if null ps 
               then return () 
-              else checkWarn $ "WARNING: patterns never reached:" +++ 
-                               concat (intersperse ", " (map prt ps))
+              else checkWarn $ "WARNING: patterns never reached:"
+                               ---- +++ concat (intersperse ", " (map prt ps))
 
           _ -> return () -- happens with variable types
         cs' <- mapM (checkCase arg val) cs
@@ -953,6 +956,9 @@ checkIfEqLType env t u trm = do
      -- error (the empty type!) is subtype of any other type
      (_,Q (IC "Predef") (IC "Error")) -> True
 
+     -- unknown type unifies with any type ----
+     (_,Meta _) -> True
+
      -- contravariance
      (Prod x a b, Prod y c d) -> alpha g c a && alpha ((x,y):g) b d 
                               
@@ -1010,7 +1016,7 @@ checkIfEqLType env t u trm = do
    ---- to revise
    allExtendsPlus _ n = [n]
 
-   sTypes = [typeStr, typeString]
+   sTypes = [typeStr, typeString, typeTok] ---- Tok deprecated
    comp = computeLType env
 
 -- printing a type with a lock field lock_C as C

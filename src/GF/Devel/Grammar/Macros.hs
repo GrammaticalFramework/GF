@@ -163,6 +163,9 @@ typePType = Sort "PType"
 typeStr :: Type
 typeStr = Sort "Str"
 
+typeTok :: Type      ---- deprecated
+typeTok = Sort "Tok"  
+
 cPredef :: Ident
 cPredef = identC "Predef"
 

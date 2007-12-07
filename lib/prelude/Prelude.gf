@@ -27,7 +27,7 @@ oper
 
 -- Discontinuous constituents.
 
-  SD2 = {s1,s2 : Str} ;
+  SD2 : Type = {s1,s2 : Str} ;
   sd2 : (_,_ : Str) -> SD2 = \x,y -> {s1 = x ; s2 = y} ;
 
 

@@ -9,6 +9,7 @@ import GF.Infra.Ident
 
 import GF.Data.Operations
 
+import Control.Monad (liftM)
 import Data.Map
 import Data.List (sortBy) ----
 
@@ -39,10 +40,25 @@ lookupLincat :: GF -> Ident -> Ident -> Err Term
 lookupLincat = lookupJField jtype
 
 lookupOperType :: GF -> Ident -> Ident -> Err Term
-lookupOperType = lookupJField jtype 
+lookupOperType gr m c = do
+  ju <- lookupJudgement gr m c
+  case jform ju of
+    JParam -> return typePType
+    _ -> case jtype ju of
+      Meta _ -> fail "no type given"
+      ty -> return ty
+---- can't be just lookupJField jtype 
 
 lookupOperDef :: GF -> Ident -> Ident -> Err Term
 lookupOperDef = lookupJField jdef
+
+lookupOverload :: GF -> Ident -> Ident -> Err [([Type],(Type,Term))]
+lookupOverload gr m c = do
+  tr <- lookupJField jdef gr m c
+  case tr of
+    Overload tysts -> return 
+      [(lmap snd args,(val,tr)) | (ty,tr) <- tysts, let (args,val) = prodForm ty]
+    _   -> Bad $ prt c +++ "is not an overloaded operation"
 
 lookupParams :: GF -> Ident -> Ident -> Err [(Ident,Context)]
 lookupParams gf m c = do
@@ -56,8 +72,14 @@ lookupParamValues :: GF -> Ident -> Ident -> Err [Term]
 lookupParamValues gf m c = do
   d <- lookupJField jdef gf m c
   case d of
-    V _ ts -> return ts
-    _ -> raise "no parameter values"
+    ---- V _ ts -> return ts
+    _ -> do
+      ps <- lookupParams gf m c
+      liftM concat $ mapM mkPar ps
+ where
+   mkPar (f,co) = do
+     vs <- liftM combinations $ mapM (\ (_,ty) -> allParamValues gf ty) co
+     return $ lmap (mkApp (QC m f)) vs
 
 allParamValues :: GF -> Type -> Err [Term]
 allParamValues cnc ptyp = case ptyp of
@@ -95,4 +117,5 @@ mlookup = Data.Map.lookup
 
 raiseIdent msg i = raise (msg +++ prIdent i)
 
+lmap = Prelude.map
 
