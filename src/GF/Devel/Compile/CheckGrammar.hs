@@ -189,7 +189,7 @@ checkCompleteGrammar abs cnc = do
  where
    checkOne js i@(c, Left ju) = case jform ju of
      JFun -> case Map.lookup c js of
-       Just (Left j) | jform ju == JLin -> return js
+       Just (Left j) | jform j == JLin -> return js
        _ -> do
          checkWarn $ "WARNING: no linearization of" +++ prt c
          return js
