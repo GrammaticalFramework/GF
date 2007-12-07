@@ -5,6 +5,7 @@ import GF.Devel.Grammar.Judgements
 import GF.Devel.Grammar.Modules
 import GF.Infra.Ident
 
+import GF.Data.Str
 import GF.Data.Operations
 
 import qualified Data.Map as Map
@@ -119,6 +120,9 @@ assign l t = (l,(Nothing,t))
 
 assignT :: Label -> Type -> Term -> Assign
 assignT l a t = (l,(Just a,t))
+
+unzipR :: [Assign] -> ([Label],[Term])
+unzipR r = (ls, map snd ts) where (ls,ts) = unzip r
 
 mkDecl :: Term -> Decl
 mkDecl typ = (wildIdent, typ)
@@ -387,6 +391,80 @@ patt2term pt = case pt of
   PAlt a b  -> appc "|" [(patt2term a), (patt2term b)] --- an encoding
   PRep a    -> appc "*" [(patt2term a)]                --- an encoding
   PNeg a    -> appc "-" [(patt2term a)]                --- an encoding
+
+
+term2patt :: Term -> Err Patt
+term2patt trm = case Ok (termForm trm) of
+  Ok ([], Vr x, []) -> return (PV x)
+  Ok ([], QC p c, aa) -> do
+    aa' <- mapM term2patt aa
+    return (PP p c aa')
+  Ok ([], R r, []) -> do
+    let (ll,aa) = unzipR r
+    aa' <- mapM term2patt aa
+    return (PR (zip ll aa'))
+  Ok ([],EInt i,[]) -> return $ PInt i
+  Ok ([],EFloat i,[]) -> return $ PFloat i
+  Ok ([],K s,   []) -> return $ PString s
+
+--- encodings due to excessive use of term-patt convs. AR 7/1/2005
+  Ok ([], Con (IC "@"), [Vr a,b]) -> do
+    b' <- term2patt b
+    return (PAs a b')
+  Ok ([], Con (IC "-"), [a]) -> do
+    a' <- term2patt a
+    return (PNeg a')
+  Ok ([], Con (IC "*"), [a]) -> do
+    a' <- term2patt a
+    return (PRep a')
+  Ok ([], Con (IC "+"), [a,b]) -> do
+    a' <- term2patt a
+    b' <- term2patt b
+    return (PSeq a' b')
+  Ok ([], Con (IC "|"), [a,b]) -> do
+    a' <- term2patt a
+    b' <- term2patt b
+    return (PAlt a' b')
+
+  Ok ([], Con c, aa) -> do
+    aa' <- mapM term2patt aa
+    return (PC c aa')
+
+  _ -> Bad $ "no pattern corresponds to term" +++ show trm
+
+getTableType :: TInfo -> Err Type
+getTableType i = case i of
+  TTyped ty -> return ty
+  TComp ty  -> return ty
+  TWild ty  -> return ty
+  _ -> Bad "the table is untyped"
+
+-- | to get a string from a term that represents a sequence of terminals
+strsFromTerm :: Term -> Err [Str]
+strsFromTerm t = case t of
+  K s   -> return [str s]
+  Empty -> return [str []]
+  C s t -> do
+    s' <- strsFromTerm s
+    t' <- strsFromTerm t
+    return [plusStr x y | x <- s', y <- t']
+  Glue s t -> do
+    s' <- strsFromTerm s
+    t' <- strsFromTerm t
+    return [glueStr x y | x <- s', y <- t']
+  Alts (d,vs) -> do
+    d0 <- strsFromTerm d
+    v0 <- mapM (strsFromTerm . fst) vs
+    c0 <- mapM (strsFromTerm . snd) vs
+    let vs' = zip v0 c0
+    return [strTok (str2strings def) vars | 
+              def  <- d0,
+              vars <- [[(str2strings v, map sstr c) | (v,c) <- zip vv c0] | 
+                                                          vv <- combinations v0]
+           ]
+  FV ts -> mapM strsFromTerm ts >>= return . concat
+  _ -> Bad $ "cannot get Str from term" +++ show t
+
 
 
 ---- given in lib?
