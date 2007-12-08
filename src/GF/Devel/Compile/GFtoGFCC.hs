@@ -50,8 +50,8 @@ canon2gfcc opts pars cgr =
      D.GFCC an cns gflags abs cncs 
  where
   -- recognize abstract and concretes
-  [[(a,abm)],cms] = 
-    partition ((== MTAbstract) . mtype . snd) (Map.toList gfmodules cgr)
+  ([(a,abm)],cms) = 
+    partition ((== MTAbstract) . mtype . snd) (Map.toList (gfmodules cgr))
 
   -- abstract
   an  = (i2i a)
@@ -59,7 +59,7 @@ canon2gfcc opts pars cgr =
   abs = D.Abstr aflags funs cats catfuns
   gflags = Map.fromList [(C.CId fg,x) | Just x <- [getOptVal opts (aOpt fg)]] 
                                           where fg = "firstlang"
-  aflags = Map.fromList [(C.CId f,x) | Opt (f,[x]) <- M.mflags abm]
+  aflags = Map.fromList [(C.CId f,x) | (IC f,x) <- Map.toList (M.mflags abm)]
   mkDef pty = case pty of
     Meta _ -> CM.primNotion
     t -> mkExp t
@@ -80,9 +80,9 @@ canon2gfcc opts pars cgr =
       (lang,D.Concr flags lins opers lincats lindefs printnames params)
     where
       js = listJudgements mo
-      flags   = Map.fromList [(C.CId f,x) | Opt (f,[x]) <- M.mflags mo]
-      opers   = Map.fromAscList [] -- opers will be created as optimization
-      utf     = if elem (Opt ("coding",["utf8"])) (M.mflags mo) 
+      flags = Map.fromList [(C.CId f,x) | (IC f,x) <- Map.toList (M.mflags mo)]
+      opers = Map.fromAscList [] -- opers will be created as optimization
+      utf   = if elem (IC "coding","utf8") (Map.assocs (M.mflags mo)) ---- 
                   then D.convertStringsInTerm decodeUTF8 else id
       lins    = Map.fromAscList 
         [(i2i f, utf (mkTerm (jdef ju))) | (f,ju) <- js, jform ju == JLin]
@@ -94,7 +94,7 @@ canon2gfcc opts pars cgr =
         [(i2i c, utf (mkTerm (jprintname ju))) | 
                      (c,ju) <- js, elem (jform ju) [JLincat,JLin]]
       params = Map.fromAscList 
-        [(i2i c, pars lang0 (jtype ju)) | (c,ju) <- js, jform ju == JLincat]
+        [(i2i c, pars lang0 c) | (c,ju) <- js, jform ju == JLincat] ---- c ??
 
 i2i :: Ident -> C.CId
 i2i = C.CId . prIdent
@@ -107,7 +107,7 @@ mkExp :: A.Term -> C.Exp
 mkExp t = case t of
   A.Eqs eqs -> C.EEq [C.Equ (map mkPatt ps) (mkExp e) | (ps,e) <- eqs]
   _ -> case GM.termForm t of
-    Ok (xx,c,args) -> C.DTr [i2i x | x <- xx] (mkAt c) (map mkExp args) 
+    (xx,c,args) -> C.DTr [i2i x | x <- xx] (mkAt c) (map mkExp args) 
  where
   mkAt c = case c of 
     Q _ c  -> C.AC $ i2i c
@@ -203,8 +203,8 @@ mkParamLincat sgr lang cat = errVal (C.R [C.S []]) $ do
 
 reorder :: Ident -> GF -> GF
 reorder abs cg = emptyGF {
-  gfabsname = abs,
-  gfcncnames = Map.fromList (map fst cncs),
+  gfabsname = Just abs,
+  gfcncnames = (map fst cncs),
   gfmodules = Map.fromList ((abs,absm) : map mkCnc cncs)
   } 
  where
@@ -219,19 +219,22 @@ reorder abs cg = emptyGF {
       mjments = snd cnc
       })
        
-    mos = gfmodules cg
+    mos = Map.toList $ gfmodules cg
        
     adefs = Map.fromAscList $ sortIds $
                  predefADefs ++ Look.allOrigJudgements cg abs
     predefADefs = 
-         [(IC c, absCat []) | c <- ["Float","Int","String"]]
-    aflags = nubByFst $ 
-         concat [M.mflags mo | (_,mo) <- mos, mtype mo == MTAbstract] ----too many
+      [(IC c, absCat []) | c <- ["Float","Int","String"]]
+    aflags = Map.fromList $ nubByFst $ concat 
+      [Map.toList (M.mflags mo) | (_,mo) <- mos, mtype mo == MTAbstract] ----toom
 
     cncs = sortIds [(lang, concr lang) | lang <- Look.allConcretes cg abs]
-    concr la = (nubByFst flags, sortIds (predefCDefs ++ jments)) where 
-      jments = Look.allOrigJudgements cg la
-      flags  = Look.lookupFlags cg la
+    concr la = (
+      Map.fromList (nubByFst flags), 
+      Map.fromList (sortIds (predefCDefs ++ jments))
+      ) where 
+        jments = Look.allOrigJudgements cg la
+        flags  = Look.lookupFlags cg la
                   ----concat [M.mflags mo | 
                   ----  (i,mo) <- mos, M.isModCnc mo, 
                   ----  Just r <- [lookup i (M.allExtendSpecs cg la)]]
@@ -258,17 +261,21 @@ repartition abs cg = [Look.partOfGrammar cg (lang,mo) |
 -- translate tables and records to arrays, parameters and labels to indices
 
 canon2canon :: Ident -> GF -> GF
-canon2canon abs = 
-   recollect . map cl2cl . repartition abs . purgeGrammar abs 
- where
-  recollect gfs = gfModules (nubModules gfs)
-  nubModules = Map.toList . nubByFst . concatMap (Map.fromList. gfmodules)
+canon2canon abs gf = errVal gf $ GM.termOpGF t2t gf where
+  t2t = return . term2term gf pv
+  ty2ty = type2type gf pv
+  pv@(labels,untyps,typs) = paramValues gf
+  ---- should be done lang for lang
+  ---- ty2ty should be used for types, t2t only in concrete
 
-  cl2cl gf = errVal gf $ GM.moduleOpGF (js2js . map (c2c p2p)) gf
+{- ----
+  gfModules . nubModules . map cl2cl . repartition abs . purgeGrammar abs  
+ where    
+  nubModules = Map.fromList . nubByFst . concatMap (Map.toList . gfmodules)
+
+  cl2cl gf = errVal gf $ GM.moduleOpGF (js2js . map (GM.judgementOpModule p2p)) gf
     
-  js2js ms = map (c2c (j2j (gfModules ms))) ms
-
-  c2c f2 (c,mo) = (c, errVal mo $ GM.judgementOpModule f2 mo)
+  js2js ms = map (GM.judgementOpModule (j2j (gfModules ms))) ms
 
   j2j cg (f,j) = case jform j of
     JLin -> (f, j{jdef = t2t (jdef j)})
@@ -301,6 +308,7 @@ canon2canon abs =
      ("typs:" ++++ unlines [prt t | 
        (t,_) <- Map.toList typs])
 ----
+-}
 
 purgeGrammar :: Ident -> GF -> GF
 purgeGrammar abstr gr = gr {
@@ -313,7 +321,8 @@ purgeGrammar abstr gr = gr {
   needed = 
      nub $ concatMap (Look.allDepsModule gr) $ 
            ---- (requiredCanModules True gr) $
-     abstr : Look.allConcretes gr abstr
+           [mo | m <- abstr : Look.allConcretes gr abstr, 
+                 Ok mo <- [Look.lookupModule gr m]]
 
   complete (i,mo) = isCompleteModule mo
   unopt = unshareModule gr -- subexp elim undone when compiled
@@ -334,7 +343,7 @@ paramValues cgr = (labels,untyps,typs) where
   partyps = nub $ [ty | 
     (_,(_,ju)) <- jments,
     jform ju == JLincat,
-    RecType ls <- jtype ju,               
+    RecType ls <- [jtype ju],
     ty0 <- [ty | (_, ty) <- unlockTyp ls],
     ty  <- typsFrom ty0
    ] ++ [Q m ty | 
