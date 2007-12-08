@@ -1,4 +1,4 @@
-module GF.Devel.GFtoGFCC (prGrammar2gfcc,mkCanon2gfcc) where
+module GF.Devel.Compile.GFtoGFCC (prGrammar2gfcc,mkCanon2gfcc) where
 
 import GF.Devel.Compile.Factorize (unshareModule)
 
