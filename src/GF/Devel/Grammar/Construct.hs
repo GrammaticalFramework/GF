@@ -26,6 +26,9 @@ listModules = assocs.gfmodules
 addModule :: Ident -> Module -> GF -> GF
 addModule c m gf = gf {gfmodules = insert c m (gfmodules gf)}
 
+gfModules :: [(Ident,Module)] -> GF
+gfModules ms = emptyGF {gfmodules = fromList ms}
+
 -- abstractions on Module
 
 emptyModule :: Ident -> Module

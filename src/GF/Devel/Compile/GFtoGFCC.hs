@@ -261,31 +261,30 @@ canon2canon :: Ident -> GF -> GF
 canon2canon abs = 
    recollect . map cl2cl . repartition abs . purgeGrammar abs 
  where
-  recollect gfs = emptyGF {gfmodules = nubModules gfs}
+  recollect gfs = gfModules (nubModules gfs)
   nubModules = Map.toList . nubByFst . concatMap (Map.fromList. gfmodules)
 
-  cl2cl = M.MGrammar . js2js . map (c2c p2p) . M.modules
+  cl2cl gf = errVal gf $ GM.moduleOpGF (js2js . map (c2c p2p)) gf
     
-  js2js ms = map (c2c (j2j (M.MGrammar ms))) ms
+  js2js ms = map (c2c (j2j (gfModules ms))) ms
 
-  c2c f2 (c,m) = case m of
-      M.ModMod mo@(M.Module _ _ _ _ _ js) ->
-        (c, M.ModMod $ M.replaceJudgements mo $ mapTree f2 js)
-      _ -> (c,m)    
-  j2j cg (f,j) = case j of
-      CncFun x (Yes tr) z -> (f,CncFun x (Yes (t2t tr)) z)
-      CncCat (Yes ty) (Yes x) y -> (f,CncCat (Yes (ty2ty ty)) (Yes (t2t x)) y)
-      _ -> (f,j)
+  c2c f2 (c,mo) = (c, errVal mo $ GM.judgementOpModule f2 mo)
+
+  j2j cg (f,j) = case jform j of
+    JLin -> (f, j{jdef = t2t (jdef j)})
+    JLincat -> (f, j{jdef = t2t (jdef j), jtype = ty2ty (jtype j)})
+    _ -> (f,j)
    where
       t2t = term2term cg pv
       ty2ty = type2type cg pv
       pv@(labels,untyps,typs) = paramValues cg ---trs $ paramValues cg
 
     -- flatten record arguments of param constructors
-  p2p (f,j) = case j of
-      ResParam (Yes (ps,v)) -> 
-        (f,ResParam (Yes ([(c,concatMap unRec cont) | (c,cont) <- ps],Nothing)))
-      _ -> (f,j)
+  p2p (f,j) = case jform j of
+    ---- JParam ->
+      ----ResParam (Yes (ps,v)) -> 
+      ----(f,ResParam (Yes ([(c,concatMap unRec cont) | (c,cont) <- ps],Nothing)))
+    _ -> (f,j)
   unRec (x,ty) = case ty of
       RecType fs -> [ity | (_,typ) <- fs, ity <- unRec (identW,typ)] 
       _ -> [(x,ty)]
@@ -295,23 +294,28 @@ canon2canon abs =
 
   tr (labels,untyps,typs) =
      ("labels:" ++++
-       unlines [A.prt c ++ "." ++ unwords (map A.prt l) +++ "=" +++ show i  | 
+       unlines [prt c ++ "." ++ unwords (map prt l) +++ "=" +++ show i  | 
        ((c,l),i) <- Map.toList labels]) ++
-     ("untyps:" ++++ unlines [A.prt t +++ "=" +++ show i  | 
+     ("untyps:" ++++ unlines [prt t +++ "=" +++ show i  | 
        (t,i) <- Map.toList untyps]) ++
-     ("typs:" ++++ unlines [A.prt t | 
+     ("typs:" ++++ unlines [prt t | 
        (t,_) <- Map.toList typs])
 ----
 
 purgeGrammar :: Ident -> GF -> GF
-purgeGrammar abstr gr = 
-  (M.MGrammar . map unopt . filter complete . purge . M.modules) gr 
+purgeGrammar abstr gr = gr {
+  gfmodules = treat gr
+  }
  where
+  treat = 
+    Map.fromList . map unopt . filter complete . purge . Map.toList . gfmodules
   purge = nubBy (\x y -> fst x == fst y) . filter (flip elem needed . fst)
-  needed = nub $ concatMap (requiredCanModules isSingle gr) acncs
-  acncs = abstr : M.allConcretes gr abstr
-  isSingle = True
-  complete (i,M.ModMod m) = M.isCompleteModule m --- not . isIncompleteCanon
+  needed = 
+     nub $ concatMap (Look.allDepsModule gr) $ 
+           ---- (requiredCanModules True gr) $
+     abstr : Look.allConcretes gr abstr
+
+  complete (i,mo) = isCompleteModule mo
   unopt = unshareModule gr -- subexp elim undone when compiled
 
 type ParamEnv =
@@ -322,17 +326,25 @@ type ParamEnv =
 --- gathers those param types that are actually used in lincats and lin terms
 paramValues :: GF -> ParamEnv
 paramValues cgr = (labels,untyps,typs) where
+
+  jments = [(m,j) | 
+    (m,mo) <- Map.toList (gfmodules cgr), 
+    j <- Map.toList (mjments mo)]
+
   partyps = nub $ [ty | 
-              (_,(_,CncCat (Yes (RecType ls)) _ _)) <- jments,
-              ty0 <- [ty | (_, ty) <- unlockTyp ls],
-              ty  <- typsFrom ty0
-            ] ++ [
-             Q m ty | 
-              (m,(ty,ResParam _)) <- jments
-            ] ++ [ty | 
-              (_,(_,CncFun _ (Yes tr) _)) <- jments,
-              ty  <- err (const []) snd $ appSTM (typsFromTrm tr) []
-            ]
+    (_,(_,ju)) <- jments,
+    jform ju == JLincat,
+    RecType ls <- jtype ju,               
+    ty0 <- [ty | (_, ty) <- unlockTyp ls],
+    ty  <- typsFrom ty0
+   ] ++ [Q m ty | 
+    (m,(ty,ju)) <- jments,
+    jform ju == JParam
+   ] ++ [ty | 
+    (_,(_,ju)) <- jments,
+    jform ju == JLin,
+    ty  <- err (const []) snd $ appSTM (typsFromTrm (jdef ju)) []
+   ]
   params = [(ty, errVal [] $ Look.allParamValues cgr ty) | ty <- partyps]
   typsFrom ty = case ty of
     Table p t  -> typsFrom p ++ typsFrom t
@@ -353,17 +365,19 @@ paramValues cgr = (labels,untyps,typs) where
       updateSTM (ty:) >> mapM_ typsFromTrm [t | (_, t) <- cs] >> return tr
     _ -> GM.composOp typsFromTrm tr
 
-  jments = 
-    [(m,j) | (m,mo) <- M.allModMod cgr, j <- tree2list $ M.jments mo]
   typs = 
     Map.fromList [(ci,Map.fromList (zip vs [0..])) | (ci,vs) <- params]
   untyps = 
     Map.fromList $ concatMap Map.toList [typ | (_,typ) <- Map.toList typs]
   lincats = 
-    [(IC cat,[(LIdent "s",GM.typeStr)]) | cat <- ["Int", "Float", "String"]] ++
+    [(IC cat,[(LIdent "s",typeStr)]) | cat <- ["Int", "Float", "String"]] ++
     reverse ---- TODO: really those lincats that are reached
             ---- reverse is enough to expel overshadowed ones... 
-      [(cat,(unlockTyp ls)) | (_,(cat,CncCat (Yes (RecType ls)) _ _)) <- jments]
+      [(cat,(unlockTyp ls)) |
+        (_,(cat,ju)) <- jments,
+        jform ju == JLincat,
+        RecType ls <- [jtype ju]
+       ] 
   labels = Map.fromList $ concat 
     [((cat,[lab]),(typ,i)): 
       [((cat,[lab,lab2]),(ty,j)) | 
@@ -439,8 +453,8 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
                Just vs -> (ty,[t | 
                             (t,_) <- sortBy (\x y -> compare (snd x) (snd y)) 
                                             (Map.assocs vs)])
-               _ -> error $ A.prt ty
-             _ -> error $ A.prt tr
+               _ -> error $ prt ty
+             _ -> error $ prt tr
        updateSTM ((tyvs, (tr', tr)):) 
        return tr'
      _ -> GM.composOp doVar tr
@@ -450,7 +464,7 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
    r2r tr@(P p _) = case getLab tr of
      Ok (cat,labs) -> P (t2t p) . mkLab $ maybe (prtTrace tr $ 66664) snd $ 
           Map.lookup (cat,labs) labels
-     _ -> K ((A.prt tr +++ prtTrace tr "66665"))
+     _ -> K ((prt tr +++ prtTrace tr "66665"))
 
    -- this goes recursively into tables (ignored) and records (accumulated)
    getLab tr = case tr of
@@ -512,6 +526,6 @@ unlockTyp = filter notlock where
      _ -> True
 
 prtTrace tr n = 
-  trace ("-- INTERNAL COMPILER ERROR" +++ A.prt tr ++++ show n) n
-prTrace  tr n = trace ("-- OBSERVE" +++ A.prt tr +++ show n +++ show tr) n
+  trace ("-- INTERNAL COMPILER ERROR" +++ prt tr ++++ show n) n
+prTrace  tr n = trace ("-- OBSERVE" +++ prt tr +++ show n +++ show tr) n
 
