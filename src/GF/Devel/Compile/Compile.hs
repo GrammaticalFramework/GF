@@ -133,6 +133,7 @@ compileOne opts env@(_,srcgr) file = do
      _ -> False
 
 
+
 compileSourceModule :: Options -> CompileEnv -> 
                        SourceModule -> IOE (Int,SourceModule)
 compileSourceModule opts env@(k,gr) mo@(i,mi) = do
@@ -141,28 +142,32 @@ compileSourceModule opts env@(k,gr) mo@(i,mi) = do
 
   let putp  = putPointE opts
       putpp = putPointEsil opts
+      stopIf n comp m = 
+        if any (\k -> oElem (iOpt (show k)) opts) [1..n] then return m else comp m
+      stopIfV v n comp m = 
+        if any (\k -> oElem (iOpt (show k)) opts) [1..n] then return (m,v) else comp m
 
-
-  moe <- putpp "  extending" $ ioeErr $ extendModule gr mo
+  moe <- stopIf 1 (putpp "  extending" . ioeErr . extendModule gr) mo
   intermOut opts (iOpt "show_extend") (prMod moe)
 
-  mor <- putpp "  renaming" $ ioeErr $ renameModule gr moe
+  mor <- stopIf 2 (putpp "  renaming" . ioeErr . renameModule gr) moe
   intermOut opts (iOpt "show_rename") (prMod mor)
 
-  (moc,warnings) <- putpp "  type checking" $ ioeErr $ showCheckModule gr mor
+  (moc,warnings) <- 
+    stopIfV [] 3 (putpp "  type checking" . ioeErr . showCheckModule gr) mor
   if null warnings then return () else putp warnings $ return ()
   intermOut opts (iOpt "show_typecheck") (prMod moc)
 
-  (k',mox) <- putpp "  refreshing " $ ioeErr $ refreshModule k moc
+  (mox,k') <- stopIfV k 4 (putpp "  refreshing " . ioeErr . refreshModule k) moc
   intermOut opts (iOpt "show_refresh") (prMod mox)
 
-  moo <- putpp "  optimizing " $ ioeErr $ optimizeModule opts gr mox
+  moo <- stopIf 5 (putpp "  optimizing " . ioeErr . optimizeModule opts gr) mox
   intermOut opts (iOpt "show_optimize") (prMod moo)
 
-----  mof <- putpp "  factorizing " $ ioeErr $ optimizeModule opts gr moo
-----  intermOut opts (iOpt "show_factorize") (prMod mof)
+  mof <- stopIf 6 (putpp "  factorizing " . ioeErr . optimizeModule opts gr) moo
+  intermOut opts (iOpt "show_factorize") (prMod mof)
 
-  return (k,moo) ----
+  return (k',moo) ----
 
 
 generateModuleCode :: Options -> InitPath -> SourceModule -> IOE SourceModule
