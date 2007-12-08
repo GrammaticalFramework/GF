@@ -123,9 +123,11 @@ compileOne opts env@(_,srcgr) file = do
        (k',sm) <- compileSourceModule opts env sm0
        let sm1 = sm ---- 
 ----             if isConcr sm then shareModule sm else sm -- cannot expand Str
-       cm  <- putpp "  generating code... " $ generateModuleCode opts path sm1
+       if oElem (iOpt "doemit") opts 
+         then putpp "  generating code... " $ generateModuleCode opts path sm1
+         else return ()
 ----          -- sm is optimized before generation, but not in the env
-       let cm2 = unsubexpModule cm
+----       let cm2 = unsubexpModule cm
        extendCompileEnvInt env (k',sm) ---- sm1
   where
    isConcr (_,mi) = case mi of
@@ -170,7 +172,7 @@ compileSourceModule opts env@(k,gr) mo@(i,mi) = do
   return (k',moo) ----
 
 
-generateModuleCode :: Options -> InitPath -> SourceModule -> IOE SourceModule
+generateModuleCode :: Options -> InitPath -> SourceModule -> IOE ()
 generateModuleCode opts path minfo@(name,info) = do
 
   let pname  = prefixPathName path (prt name)
@@ -181,7 +183,7 @@ generateModuleCode opts path minfo@(name,info) = do
   let (file,out) = (gfoFile pname, prGF (gfModules [minfo2]))
   putp ("  wrote file" +++ file) $ ioeIO $ writeFile file $ out
 
-  return minfo2
+  return () ----- minfo2
  where 
    putp  = putPointE opts
    putpp = putPointEsil opts
