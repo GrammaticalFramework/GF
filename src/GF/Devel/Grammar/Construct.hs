@@ -31,8 +31,8 @@ gfModules ms = emptyGF {gfmodules = fromList ms}
 
 -- abstractions on Module
 
-emptyModule :: Ident -> Module
-emptyModule m = Module MTGrammar True [] [] [] [] empty empty
+emptyModule :: Module
+emptyModule = Module MTGrammar True [] [] [] [] empty empty
 
 isCompleteModule :: Module -> Bool
 isCompleteModule = miscomplete

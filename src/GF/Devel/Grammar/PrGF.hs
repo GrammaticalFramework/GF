@@ -64,6 +64,9 @@ prtBad s a = Bad (s +++ prt a)
 prGF :: GF -> String
 prGF = cprintTree . trGrammar
 
+instance Print GF where
+  prt = cprintTree . trGrammar
+
 prModule :: SourceModule -> String
 prModule = cprintTree . trModule
 
