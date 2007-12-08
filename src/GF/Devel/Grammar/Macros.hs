@@ -171,11 +171,12 @@ label2ident (LIdent c) = identC c
 -- to apply a term operation to every term in a judgement, module, grammar
 
 termOpGF :: Monad m => (Term -> m Term) -> GF -> m GF
-termOpGF f g = do 
-  ms <- mapMapM fm (gfmodules g)
+termOpGF f = moduleOpGF (termOpModule f) 
+
+moduleOpGF :: Monad m => (Module -> m Module) -> GF -> m GF
+moduleOpGF f g = do 
+  ms <- mapMapM f (gfmodules g)
   return g {gfmodules = ms}
- where
-   fm = termOpModule f
 
 termOpModule :: Monad m => (Term -> m Term) -> Module -> m Module
 termOpModule f = judgementOpModule fj where
