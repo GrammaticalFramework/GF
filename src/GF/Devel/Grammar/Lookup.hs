@@ -80,6 +80,11 @@ lookupParamValues gf m c = do
      vs <- liftM combinations $ mapM (\ (_,ty) -> allParamValues gf ty) co
      return $ lmap (mkApp (QC m f)) vs
 
+lookupFlags :: GF -> Ident -> [(Ident,String)]
+lookupFlags gf m = errVal [] $ do
+  mo <- lookupModule gf m
+  return $ toList $ mflags mo
+
 allParamValues :: GF -> Type -> Err [Term]
 allParamValues cnc ptyp = case ptyp of
      App (Q (IC "Predef") (IC "Ints")) (EInt n) -> 
@@ -95,6 +100,47 @@ allParamValues cnc ptyp = case ptyp of
     allPV = allParamValues cnc
     -- to normalize records and record types
     sortByFst = sortBy (\ x y -> compare (fst x) (fst y))
+
+abstractOfConcrete :: GF -> Ident -> Err Ident
+abstractOfConcrete gf m = do
+  mo <- lookupModule gf m
+  case mtype mo of
+    MTConcrete a -> return a
+    MTInstance a -> return a
+    MTGrammar -> return m
+    _ -> prtBad "not concrete module" m
+
+allOrigJudgements :: GF -> Ident -> [(Ident,Judgement)]
+allOrigJudgements gf m = errVal [] $ do
+  mo <- lookupModule gf m
+  return [ju | ju@(_,j) <- listJudgements mo, jform j /= JLink]
+
+allConcretes :: GF -> Ident -> [Ident]
+allConcretes gf m = 
+  [c | (c,mo) <- toList (gfmodules gf), mtype mo == MTConcrete m]
+
+-- | select just those modules that a given one depends on, including itself
+partOfGrammar :: GF -> (Ident,Module) -> GF
+partOfGrammar gr (i,mo) = gr {
+  gfmodules = fromList [m | m@(j,_) <- mos, elem j modsFor]
+  } 
+  where
+    mos = toList $ gfmodules gr
+    modsFor = i : allDepsModule gr mo
+
+allDepsModule :: GF -> Module -> [Ident]
+allDepsModule gr m = iterFix add os0 where
+  os0 = depPathModule m
+  add os = [m | o <- os, Just n <- [llookup o mods], m <- depPathModule n]
+  mods = toList $ gfmodules gr
+
+-- | initial dependency list
+depPathModule :: Module -> [Ident]
+depPathModule mo = fors ++ lmap fst (mextends mo) ++ lmap snd (mopens mo) where
+  fors = case mtype mo of
+    MTConcrete i   -> [i]
+    MTInstance i   -> [i]
+    _              -> []
 
 -- infrastructure for lookup
     
@@ -121,4 +167,5 @@ mlookup = Data.Map.lookup
 raiseIdent msg i = raise (msg +++ prIdent i)
 
 lmap = Prelude.map
+llookup = Prelude.lookup
 
