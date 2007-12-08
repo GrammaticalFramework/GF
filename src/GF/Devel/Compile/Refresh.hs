@@ -30,10 +30,10 @@ import Control.Monad
 
 -- for concrete and resource in grammar, before optimizing
 
-refreshModule :: Int -> SourceModule -> Err (Int,SourceModule)
+refreshModule :: Int -> SourceModule -> Err (SourceModule,Int)
 refreshModule k (m,mo) = do
   (mo',(_,k')) <- appSTM (termOpModule refresh mo) (initIdStateN k)
-  return (k',(m,mo'))
+  return ((m,mo'),k')
 
 
 refreshTerm :: Term -> Err Term
