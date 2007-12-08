@@ -102,13 +102,12 @@ compileOne opts env@(_,srcgr) file = do
     -- for compiled gf, read the file and update environment
     -- also undo common subexp optimization, to enable normal computations
 
-{- ----
     "gfo" -> do
        sm0 <- putp ("+ reading" +++ file) $ getSourceModule opts file
        let sm1 = unsubexpModule sm0
-       sm <- {- putp "creating indirections" $ -} ioeErr $ extendModule mos sm1
+       sm <- {- putp "creating indirections" $ -} ioeErr $ extendModule srcgr sm1
        extendCompileEnv env sm
--}
+
     -- for gf source, do full compilation and generate code
     _ -> do
 
@@ -124,9 +123,9 @@ compileOne opts env@(_,srcgr) file = do
        (k',sm) <- compileSourceModule opts env sm0
        let sm1 = sm ---- 
 ----             if isConcr sm then shareModule sm else sm -- cannot expand Str
-----       cm  <- putpp "  generating code... " $ generateModuleCode opts path sm1
+       cm  <- putpp "  generating code... " $ generateModuleCode opts path sm1
 ----          -- sm is optimized before generation, but not in the env
-----       let cm2 = unsubexpModule cm
+       let cm2 = unsubexpModule cm
        extendCompileEnvInt env (k',sm) ---- sm1
   where
    isConcr (_,mi) = case mi of
@@ -166,29 +165,6 @@ compileSourceModule opts env@(k,gr) mo@(i,mi) = do
   return (k,moo) ----
 
 
-{- ----
-  mo1   <- ioeErr $ rebuildModule mos mo
-  intermOut opts (iOpt "show_rebuild") (prMod mo1)
-
-
-  case mo1b of
-    (_,ModMod n) | not (isCompleteModule n) -> do
-      return (k,mo1b)   -- refresh would fail, since not renamed
-    _ -> do
-
-      (mo3:_,warnings) <- putpp "  type checking" $ ioeErr $ showCheckModule mos mo2
-      if null warnings then return () else putp warnings $ return ()
-      intermOut opts (iOpt "show_typecheck") (prMod mo3)
-
-      let eenv = () --- emptyEEnv
-      (mo4,eenv') <- 
-        ---- if oElem "check_only" opts 
-          putpp "  optimizing " $ ioeErr $ optimizeModule opts (mos,eenv) mo3r
-      return (k',mo4)
- where
-   ----   prDebug mo = ioeIO $ putStrLn $ prGrammar $ MGrammar [mo] ---- debug
-   prDebug mo = ioeIO $ print $ length $ lines $ prGrammar $ MGrammar [mo]
-
 generateModuleCode :: Options -> InitPath -> SourceModule -> IOE SourceModule
 generateModuleCode opts path minfo@(name,info) = do
 
@@ -197,14 +173,13 @@ generateModuleCode opts path minfo@(name,info) = do
   let minfo1 = subexpModule minfo0
   let minfo2 = minfo1
 
-  let (file,out) = (gfoFile pname, prGrammar (MGrammar [minfo2]))
+  let (file,out) = (gfoFile pname, prGF (gfModules [minfo2]))
   putp ("  wrote file" +++ file) $ ioeIO $ writeFile file $ out
 
   return minfo2
  where 
    putp  = putPointE opts
    putpp = putPointEsil opts
--}
 
 -- auxiliaries
 
