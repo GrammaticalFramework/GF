@@ -146,6 +146,7 @@ trt trm = case trm of
     T _ cc -> P.ETable (map trCase cc)
     V ty cc -> P.EVTable (trt ty) (map trt cc)
 
+    Typed tr ty -> P.ETyped (trt tr) (trt ty)
     Table x v -> P.ETType (trt x) (trt v)
     S f x -> P.ESelect  (trt f) (trt x)
     Let (x,(ma,b)) t -> 
