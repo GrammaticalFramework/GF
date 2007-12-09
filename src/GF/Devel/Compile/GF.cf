@@ -13,7 +13,7 @@ comment "{-" "-}" ;
 
 -- identifiers
 
-position token PIdent (letter | '_') (letter | digit | '_' | '\'')* ;
+position token PIdent ('_')? letter (letter | digit | '_' | '\'')* ;
 
 -- the top-level grammar
 

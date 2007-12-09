@@ -22,11 +22,11 @@ import GF.Devel.Grammar.Compute
 
 --import GF.Infra.Ident
 
---import GF.Grammar.Lookup
+import GF.Devel.Grammar.Lookup
 --import GF.Grammar.Refresh
 
 --import GF.Compile.BackOpt
---import GF.Devel.CheckGrammar
+import GF.Devel.Compile.CheckGrammar
 --import GF.Compile.Update
 
 
@@ -45,14 +45,27 @@ import Debug.Trace
 optimizeModule :: Options -> GF -> SourceModule -> Err SourceModule
 optimizeModule opts gf0 sm@(m,mo) = case mtype mo of
   MTConcrete _ -> opt sm 
-  MTInstance _ -> opt sm
-  MTGrammar   -> opt sm
+  MTInstance _ -> optr sm
+  MTGrammar   -> optr sm
   _ -> return sm
  where
    gf = gf0 {gfmodules = Map.insert m mo (gfmodules gf0)}
    opt (m,mo) = do
      mo' <- termOpModule (computeTerm gf) mo
      return (m,mo')
+
+   optr (m,mo)= do
+     let deps = allOperDependencies m $ mjments mo
+     ids <- topoSortOpers deps
+     gf' <- foldM evalOp gf ids
+     mo' <- lookupModule gf' m
+     return $ (m,mo')
+    where
+     evalOp gf i = do
+       ju   <- lookupJudgement gf m i
+       def' <- computeTerm gf (jdef ju)
+       updateJudgement m i (ju {jdef = def'}) gf
+
 
 
 

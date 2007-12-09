@@ -63,7 +63,7 @@ computeTermOpt rec gr = comp where
      ---- Computed t' -> return $ unComputed t'
 
      Vr x -> do
-       t' <- maybe (prtBad ("no value given to variable") x) return $ lookup x g
+       t' <- maybe (prtBad ("no value for variable") x) return $ lookup x g
        case t' of 
          _ | t == t' -> return t
          _ -> comp g t'
