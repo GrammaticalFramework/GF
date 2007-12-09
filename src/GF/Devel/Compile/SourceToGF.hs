@@ -504,6 +504,7 @@ transSort x = case x of
 transPatt :: Patt -> Err G.Patt
 transPatt x = case x of
   PW  -> return wildPatt
+  PV (PIdent (_,"_"))  -> return wildPatt
   PV id  -> liftM G.PV $ transIdent id
   PC id patts  -> liftM2 G.PC (transIdent id) (mapM transPatt patts)
   PCon id  -> liftM2 G.PC (transIdent id) (return [])
@@ -529,6 +530,7 @@ transPatt x = case x of
 
 transBind :: Bind -> Err Ident
 transBind x = case x of
+  BPIdent (PIdent (_,"_")) -> return identW
   BPIdent id  -> transIdent id
   BWild  -> return identW
 

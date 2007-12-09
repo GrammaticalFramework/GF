@@ -54,7 +54,7 @@ refresh e = case e of
 
   Prod x a b -> do
     a'  <- refresh a
-    x'  <- refVar  x
+    x'  <- refVarPlus x
     b'  <- refresh b
     return $ Prod x' a' b'
 
@@ -79,7 +79,7 @@ refreshCase :: (Patt,Term) -> STM IdState (Patt,Term)
 refreshCase (p,t) = liftM2 (,) (refreshPatt p) (refresh t)
 
 refreshPatt p = case p of
-  PV x    -> liftM PV     (refVar x)
+  PV x    -> liftM PV     (refVarPlus x)
   PC c ps -> liftM (PC c) (mapM refreshPatt ps)
   PP q c ps -> liftM (PP q c) (mapM refreshPatt ps)
   PR r    -> liftM PR     (mapPairsM refreshPatt r)

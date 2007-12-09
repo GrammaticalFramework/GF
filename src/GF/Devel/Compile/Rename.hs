@@ -47,12 +47,15 @@ renameSourceTerm g m t = do
 -}
 
 renameModule :: GF -> SourceModule -> Err SourceModule
-renameModule gf sm@(name,mo) = errIn ("renaming module" +++ prt name) $ do
-  let gf1 = gf {gfmodules = Map.insert name mo (gfmodules gf)}
-  let rename = renameTerm (gf1,sm) []
-  mo1 <- termOpModule rename mo
-  let mo2 = mo1 {mopens = [(i,i) | (_,i) <- mopens mo1]}
-  return (name,mo2)
+renameModule gf sm@(name,mo) = case mtype mo of
+  MTInterface -> return sm
+  _ | not (isCompleteModule mo) -> return sm 
+  _ -> errIn ("renaming module" +++ prt name) $ do
+    let gf1 = gf {gfmodules = Map.insert name mo (gfmodules gf)}
+    let rename = renameTerm (gf1,sm) []
+    mo1 <- termOpModule rename mo
+    let mo2 = mo1 {mopens = nub [(i,i) | (_,i) <- mopens mo1]}
+    return (name,mo2)
 
 type RenameEnv = (GF,SourceModule)
 

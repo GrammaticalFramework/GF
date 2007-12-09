@@ -89,7 +89,7 @@ factor c i t = case t of
 
 --- we hope this will be fresh and don't check... 
 
-qqIdent c i = identC ("_q" ++ prt c ++ "__" ++ show i)
+qqIdent c i = identC ("_q_" ++ prt c ++ "__" ++ show i)
 
 
 --  we need to replace subterms
