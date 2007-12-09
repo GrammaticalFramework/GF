@@ -149,7 +149,11 @@ unifyJudgement old new = do
 ----               (unwords ["illegal update of",prt oterm,"to",prt nterm])
        return nterm
 
-
+updateJudgement :: Ident -> Ident -> Judgement -> GF -> Err GF
+updateJudgement m c ju gf = do
+  mo  <- maybe (Bad (show m)) return $ Data.Map.lookup m $ gfmodules gf
+  let mo' = mo {mjments = insert c ju (mjments mo)}
+  return $ gf {gfmodules = insert m mo' (gfmodules gf)}
 
 -- abstractions on Term
 
