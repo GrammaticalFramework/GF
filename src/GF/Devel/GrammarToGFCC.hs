@@ -129,6 +129,7 @@ mkTerm tr = case tr of
   EInt i      -> C.C $ fromInteger i
   R rs     -> C.R [mkTerm t | (_, (_,t)) <- rs]
   P t l    -> C.P (mkTerm t) (C.C (mkLab l))
+  TSh _ _    -> error $ show tr
   T _ cs   -> C.R [mkTerm t | (_,t) <- cs] ------
   V _ cs   -> C.R [mkTerm t | t <- cs]
   S t p    -> C.P (mkTerm t) (mkTerm p)
@@ -378,6 +379,9 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
                  (i,(l,(_,t))) <- zip [0..] (sort (unlock rs))]
   P  t l   -> r2r tr
   PI t l i -> EInt $ toInteger i
+
+  T _ [_] -> error $ "single" +++ prt tr
+  T (TWild _) _ -> error $ "wild" +++ prt tr
   T (TComp  ty) cs  -> t2t $ V ty $ map snd cs ---- should be elim'ed in tc
   T (TTyped ty) cs  -> t2t $ V ty $ map snd cs ---- should be elim'ed in tc
   V ty ts  -> mkCurry $ V ty [t2t t | t <- ts]
@@ -457,7 +461,7 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
         (FV ts,_) -> ts
         _ -> [tr]
       valNumFV ts = case ts of
-        [tr] -> trace (unwords (map prt (Map.keys typs))) $ 
+        [tr] -> trace (unwords (map prt (Map.keys untyps))) $ 
                   prtTrace tr $ K "66667"
         _ -> FV $ map valNum ts
 
