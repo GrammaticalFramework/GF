@@ -73,6 +73,11 @@ redInfo (c,info) = errIn ("decompiling abstract" +++ show c) $ do
       par' <- mapM redParam par
       return $ G.ResParam (Yes (par',Nothing)) ---- list of values
 
+    ResOper pty ptr -> do
+      ty'  <- redCType pty
+      trm' <- redCTerm ptr
+      return $ G.ResOper (Yes ty') (Yes trm')
+
     CncCat pty ptr ppr -> do
       ty'  <- redCType pty
       trm' <- redCTerm ptr
@@ -145,13 +150,13 @@ redCTerm x = case x of
   P term label  -> liftM2 G.P (redCTerm term) (return $ redLabel label)
   T ctype cases  -> do
     ctype' <- redCType ctype
-    let (ps,ts) = unzip [(ps,t) | Cas ps t <- cases]
-    ps' <- mapM (mapM redPatt) ps
+    let (ps,ts) = unzip [(p,t) | Cas [p] t <- cases]
+    ps' <- mapM redPatt ps
     ts' <- mapM redCTerm ts
     let tinfo = case ps' of
-                  [[G.PV _]] -> G.TTyped ctype'
+                  [G.PV _] -> G.TTyped ctype'
                   _ -> G.TComp ctype'
-    return $ G.TSh tinfo $ zip ps' ts'
+    return $ G.T tinfo $ zip ps' ts'
   V ctype ts  -> do
     ctype' <- redCType ctype
     ts' <- mapM redCTerm ts
