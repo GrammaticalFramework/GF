@@ -404,6 +404,7 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
      T (TComp typ) ts  -> comp $ V typ (map (comp . snd) ts)  ---- should...
      T (TTyped typ) ts -> comp $ V typ (map (comp . snd) ts)  ---- should
      V typ ts -> V typ (map comp ts)
+     S tb (FV ts) -> FV $ map (comp . S tb) ts
      S (V typ ts) v0 -> err error id $ do
        let v = comp v0 
        return $ maybe t (comp . (ts !!) . fromInteger) $ Map.lookup v untyps
