@@ -23,7 +23,7 @@ GFCCP=$(GFCC) -preproc=./mkPresent
 .PHONY: show-path all prelude test alltenses pretest langs present mathematical multimodal compiled treebank stat gfdoc clean api
 
 new:
-	export GF='../../bin/gf -s' ; export GF_LIB_PATH='..'; make -e all
+	export GF='../../bin/gf -s' ; export GF_LIB_PATH='..'; $(MAKE) -e all
 
 all: chmod show-path prelude present alltenses mathematical api langs compiled
 
