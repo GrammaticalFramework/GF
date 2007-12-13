@@ -207,6 +207,13 @@ gf3present:
 #	mv api/toplevel/Over*.gfc api/Try*.gf? ../present
 
 
+gf3langs:
+	mv ../present/LangSpa.gfo tmpLangSpa.gfo
+	$(GFNew) -path=present:prelude -target=langs --make ../present/Lang???.gfo $(RTSS)
+	mv langs.gfcc ../present
+	mv tmpLangSpa.gfo ../present/LangSpa.gfo 
+
+
 clean:
 	-rm -f */*.gfc */*.gfr */*.gf~ ../*/*.gfc ../*/*.gfr ../*/*.gf~ ../*/langs.gfcm ../compiled.tgz
 
