@@ -380,7 +380,6 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
   P  t l   -> r2r tr
   PI t l i -> EInt $ toInteger i
 
-  T _ [_] -> error $ "single" +++ prt tr
   T (TWild _) _ -> error $ "wild" +++ prt tr
   T (TComp  ty) cs  -> t2t $ V ty $ map snd cs ---- should be elim'ed in tc
   T (TTyped ty) cs  -> t2t $ V ty $ map snd cs ---- should be elim'ed in tc

@@ -40,7 +40,8 @@ pretest:
 	echo "gr -cat=Cl -number=11 -prob | tb" | $(GF) -probs=lang.gfprob -path=present:prelude -nocf ../present/Lang???.gfc
 
 prelude: 
-	$(GFC) ../prelude/*.gf
+	$(GFC) ../src/*.gf
+	cp -p ../src/*.gf? ../prelude
 
 alltenses:
 #	$(GFC) arabic/GrammarAra.gf
@@ -153,7 +154,11 @@ gfdoc:
 	mv ../prelude/*.html doc/gfdoc
 
 gf3: 
-	export GF_LIB_PATH=..; $(MAKE) -e gf3present gf3alltenses
+	export GF_LIB_PATH=..; $(MAKE) -e gf3prelude gf3present gf3alltenses
+
+gf3prelude: 
+	$(GFNew) ../src/*.gf
+	cp -p ../src/*.gfo ../prelude
 
 gf3alltenses:
 #	$(GFNew) arabic/GrammarAra.gf
