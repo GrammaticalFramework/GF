@@ -10,6 +10,7 @@ import GF.GFCC.DataGFCC
 import GF.GFCC.ParGFCC
 import GF.Devel.UseIO
 import GF.Infra.Option
+import GF.GFCC.ErrM
 
 mainGFC :: [String] -> IO ()
 mainGFC xx = do
@@ -20,32 +21,38 @@ mainGFC xx = do
       gr <- batchCompile opts fs
       let name = justModuleName (last fs)
       let (abs,gc0) = mkCanon2gfcc opts name gr
-      gc1 <- check gc0
+      gc1 <- checkGFCCio gc0
       let gc = if oElem (iOpt "noopt") opts then gc1 else optGFCC gc1
-      let target = abs ++ ".gfcc"
-      writeFile target (printGFCC gc)
-      putStrLn $ "wrote file " ++ target
-      mapM_ (alsoPrint opts abs gc) printOptions
+      let target = targetName opts abs
+      let gfccFile =  target ++ ".gfcc"
+      writeFile gfccFile (printGFCC gc)
+      putStrLn $ "wrote file " ++ gfccFile
+      mapM_ (alsoPrint opts target gc) printOptions
 
     -- gfc -o target.gfcc source_1.gfcc ... source_n.gfcc
-    _ | all ((=="gfcc") . fileSuffix) fs && oElem (iOpt "o") opts -> do
-      let target:sources = fs
-      gfccs <- mapM file2gfcc sources
+    _ | all ((=="gfcc") . fileSuffix) fs -> do
+      gfccs <- mapM file2gfcc fs
       let gfcc = foldl1 unionGFCC gfccs
-      writeFile target (printGFCC gfcc)
+      let abs = printCId $ absname gfcc
+      let target = targetName opts abs
+      let gfccFile =  target ++ ".gfcc"
+      writeFile gfccFile (printGFCC gfcc)
+      putStrLn $ "wrote file " ++ gfccFile
+      mapM_ (alsoPrint opts target gfcc) printOptions
       
     _ -> do
       mapM_ (batchCompile opts) (map return fs)
       putStrLn "Done."
 
-check gfcc = do
-  (gc,b) <- checkGFCC gfcc
-  putStrLn $ if b then "OK" else "Corrupted GFCC"
-  return gc
+file2gfcc f = do
+  f <- readFileIf f 
+  case pGrammar (myLexer f) of
+    Ok g -> return (mkGFCC g) 
+    Bad s -> error s
 
-file2gfcc f =
-  readFileIf f >>= err (error) (return . mkGFCC) . pGrammar . myLexer
-
+targetName opts abs = case getOptVal opts (aOpt "target") of
+  Just n -> n
+  _ -> abs
 
 ---- TODO: nicer and richer print options
 
@@ -66,4 +73,4 @@ printOptions = [
   ]
 
 usageMsg = 
-  "usage: gfc (-h | --make (-noopt) (-js | -jsref | -haskell | -haskell_gadt)) (-src) FILES"
+  "usage: gfc (-h | --make (-noopt) (-target=PREFIX) (-js | -jsref | -haskell | -haskell_gadt)) (-src) FILES"

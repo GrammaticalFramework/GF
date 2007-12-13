@@ -22,9 +22,7 @@ importGrammar mgr0 opts files = do
       gr <- batchCompile opts files
       let name = justModuleName (last files)
       let (abs,gfcc0) = mkCanon2gfcc opts name gr
-      (gfcc1,b) <- checkGFCC gfcc0
-      if b then return () else do
-        putStrLn "Corrupted GFCC"
+      gfcc1 <- checkGFCCio gfcc0
       return $ if oElem (iOpt "noopt") opts then gfcc1 else optGFCC gfcc1
     "gfcc" -> 
       mapM file2gfcc files >>= return . foldl1 unionGFCC

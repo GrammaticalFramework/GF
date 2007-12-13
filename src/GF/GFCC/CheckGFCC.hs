@@ -1,4 +1,4 @@
-module GF.GFCC.CheckGFCC where
+module GF.GFCC.CheckGFCC (checkGFCC, checkGFCCio) where
 
 import GF.GFCC.Macros
 import GF.GFCC.DataGFCC
@@ -7,32 +7,47 @@ import GF.GFCC.ErrM
 
 import qualified Data.Map as Map
 import Control.Monad
+import Debug.Trace
 
-andMapM :: Monad m => (a -> m Bool) -> [a] -> m Bool
-andMapM f xs = mapM f xs >>= return . and
+checkGFCCio :: GFCC -> IO GFCC
+checkGFCCio gfcc = case checkGFCC gfcc of
+  Ok (gc,b) -> do 
+    putStrLn $ if b then "OK" else "Corrupted GFCC"
+    return gc
+  Bad s -> do
+    putStrLn s
+    error "building GFCC failed"
 
-labelBoolIO :: String -> IO (x,Bool) -> IO (x,Bool)
-labelBoolIO msg iob = do
-  (x,b) <- iob
-  if b then return (x,b) else (putStrLn msg >> return (x,b))
-
-checkGFCC :: GFCC -> IO (GFCC,Bool)
+checkGFCC :: GFCC -> Err (GFCC,Bool)
 checkGFCC gfcc = do
   (cs,bs) <- mapM (checkConcrete gfcc) 
                (Map.assocs (concretes gfcc)) >>= return . unzip
   return (gfcc {concretes = Map.fromAscList cs}, and bs)
 
-checkConcrete :: GFCC -> (CId,Concr) -> IO ((CId,Concr),Bool)
+
+-- errors are non-fatal; replace with 'fail' to change this
+msg s = trace s (return ())
+
+andMapM :: Monad m => (a -> m Bool) -> [a] -> m Bool
+andMapM f xs = mapM f xs >>= return . and
+
+labelBoolErr :: String -> Err (x,Bool) -> Err (x,Bool)
+labelBoolErr ms iob = do
+  (x,b) <- iob
+  if b then return (x,b) else (msg ms >> return (x,b))
+
+
+checkConcrete :: GFCC -> (CId,Concr) -> Err ((CId,Concr),Bool)
 checkConcrete gfcc (lang,cnc) = 
-  labelBoolIO ("happened in language " ++ prt lang) $ do
+  labelBoolErr ("happened in language " ++ prt lang) $ do
     (rs,bs) <- mapM checkl (Map.assocs (lins cnc)) >>= return . unzip
     return ((lang,cnc{lins = Map.fromAscList rs}),and bs)
  where
    checkl = checkLin gfcc lang
 
-checkLin :: GFCC -> CId -> (CId,Term) -> IO ((CId,Term),Bool)
+checkLin :: GFCC -> CId -> (CId,Term) -> Err ((CId,Term),Bool)
 checkLin gfcc lang (f,t) = 
-  labelBoolIO ("happened in function " ++ prt f) $ do
+  labelBoolErr ("happened in function " ++ prt f) $ do
     (t',b) <- checkTerm (lintype gfcc lang f) t --- $ inline gfcc lang t
     return ((f,t'),b)
 
@@ -82,17 +97,17 @@ inferTerm args trm = case trm of
    returnt ty = return (trm,ty)
    infer = inferTerm args
 
-checkTerm :: LinType -> Term -> IO (Term,Bool)
+checkTerm :: LinType -> Term -> Err (Term,Bool)
 checkTerm (args,val) trm = case inferTerm args trm of
   Ok (t,ty) -> if eqType ty val 
              then return (t,True) 
              else do
-    putStrLn $ "term: " ++ prt trm ++ 
+    msg ("term: " ++ prt trm ++ 
                "\nexpected type: " ++ prt val ++
-               "\ninferred type: " ++ prt ty
+               "\ninferred type: " ++ prt ty)
     return (t,False)
   Bad s -> do
-    putStrLn s
+    msg s
     return (trm,False)
 
 eqType :: CType -> CType -> Bool

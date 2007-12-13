@@ -99,6 +99,8 @@ printGFCC gfcc0 = compactPrintGFCC $ printTree $ Grm
      [Lin f v | (f,v) <- assocs (paramlincats cnc)]
    gfcc = utf8GFCC gfcc0
 
+printCId :: CId -> String
+printCId = printTree
 
 -- merge two GFCCs; fails is differens absnames; priority to second arg
 
