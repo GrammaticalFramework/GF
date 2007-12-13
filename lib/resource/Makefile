@@ -1,19 +1,15 @@
 GF=gf -s
-RTS=+RTS -M800M -K100M
-RTSS=+RTS -M1300M -K100M
 
-#may need this on amd64
-RTS=+RTS -M2000M -K200M
-RTSS=+RTS -M2000M -K200M
+RTS=+RTS -M2000M -K200M -RTS
 
-GFNewC=gfc -s
+GFNewC=gfc -s $(RTS)
 GFNew=$(GFNewC) -src
 GFNewMake=$(GFNew) --make
 GFNewPres=$(GFNew) -preproc=./mkPresent
 GFNewPresC=$(GFNewC) -preproc=./mkPresent
 
 GFCA=$(GF) -nocf
-GFCC=$(GF) -nocf -make
+GFCC=$(GF) -nocf -make $(RTS)
 GFC=$(GFCC) -src
 
 # comment the first and uncomment the second in Windows
@@ -70,9 +66,9 @@ alltenses:
 	mv api/toplevel/Over*.gfc api/Try*.gf? ../alltenses
 
 langs:
-	echo "s ;; pm | wf langs.gfcm" | $(GFCA) -path=present:prelude ../present/Lang???.gfc $(RTSS)
+	echo "s ;; pm | wf langs.gfcm" | $(GFCA) -path=present:prelude ../present/Lang???.gfc
 	mv langs.gfcm ../present
-	echo "s ;; pm | wf langs.gfcm" | $(GFCA) -path=alltenses:prelude ../alltenses/Lang???.gfc $(RTSS)
+	echo "s ;; pm | wf langs.gfcm" | $(GFCA) -path=alltenses:prelude ../alltenses/Lang???.gfc
 	mv langs.gfcm ../alltenses
 
 api:
@@ -167,10 +163,10 @@ gf3alltenses:
 	$(GFNew) finnish/Finnish.gf
 	$(GFNew) french/French.gf
 	$(GFNew) german/German.gf
-	$(GFNew) italian/Italian.gf $(RTSS)
+	$(GFNew) italian/Italian.gf
 	$(GFNew) norwegian/Norwegian.gf
 	$(GFNew) russian/Russian.gf
-	$(GFNew) spanish/Spanish.gf $(RTSS)
+	$(GFNew) spanish/Spanish.gf
 	$(GFNew) swedish/Swedish.gf
 	$(GFNew) common/ConstructX.gf
 	cp -p */*.gfo ../alltenses
