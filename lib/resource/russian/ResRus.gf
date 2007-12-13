@@ -196,7 +196,10 @@ oper
    case t of { Present => VPresent p ; PastRus => VPast; Future => VFuture p } ;
 
    getTense : Tense -> RusTense= \t ->
-   case t of { Pres => Present  ; Fut => Future; _ => PastRus} ;
+   case t of { Pres => Present  
+    ; Fut => Future   --# notpresent
+    ; _ => PastRus    --# notpresent
+    } ;
 
   
    getVoice: VerbForm -> Voice = \vf ->
