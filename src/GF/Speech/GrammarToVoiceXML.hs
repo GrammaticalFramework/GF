@@ -11,8 +11,8 @@
 module GF.Speech.GrammarToVoiceXML (grammar2vxml) where
 
 import GF.Canon.CanonToGFCC (mkCanon2gfcc)
-import qualified GF.GFCC.AbsGFCC as C
-import GF.GFCC.DataGFCC (GFCC(..), Abstr(..), mkGFCC)
+import qualified GF.GFCC.Raw.AbsGFCCRaw as C
+import GF.GFCC.DataGFCC (GFCC(..), Abstr(..))
 import GF.GFCC.Macros
 import qualified GF.Canon.GFC as GFC
 import GF.Canon.AbsGFC (Term)

@@ -1,6 +1,6 @@
 module GF.GFCC.OptimizeGFCC where
 
-import GF.GFCC.AbsGFCC
+import GF.GFCC.Raw.AbsGFCCRaw (CId (..))
 import GF.GFCC.DataGFCC
 
 import GF.Data.Operations

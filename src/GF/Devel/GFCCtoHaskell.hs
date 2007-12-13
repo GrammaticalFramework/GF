@@ -18,7 +18,7 @@ module GF.Devel.GFCCtoHaskell (grammar2haskell, grammar2haskellGADT) where
 
 import GF.GFCC.Macros
 import GF.GFCC.DataGFCC
-import GF.GFCC.AbsGFCC
+import GF.GFCC.Raw.AbsGFCCRaw (CId (..))
 
 import GF.Data.Operations
 import GF.Text.UTF8

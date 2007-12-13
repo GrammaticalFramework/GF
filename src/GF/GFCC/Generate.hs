@@ -2,7 +2,7 @@ module GF.GFCC.Generate where
 
 import GF.GFCC.Macros
 import GF.GFCC.DataGFCC
-import GF.GFCC.AbsGFCC
+import GF.GFCC.Raw.AbsGFCCRaw (CId (..))
 
 import qualified Data.Map as M
 import System.Random

@@ -1,4 +1,4 @@
-module GF.GFCC.Raw.ConvertGFCC where
+module GF.GFCC.Raw.ConvertGFCC (toGFCC,fromGFCC) where
 
 import GF.GFCC.DataGFCC
 import GF.GFCC.Raw.AbsGFCCRaw
@@ -7,9 +7,9 @@ import Data.Map
 
 -- convert parsed grammar to internal GFCC
 
-mkGFCC :: Grammar -> GFCC
-mkGFCC (Grm [
-  App (CId "abstract")  [AId a], 
+toGFCC :: Grammar -> GFCC
+toGFCC (Grm [
+  AId a, 
   App (CId "concrete") cs, 
   App (CId "flags")     gfs, 
   ab@(
@@ -37,8 +37,7 @@ mkGFCC (Grm [
     }
  where
    mkCnc (
-    App (CId "concrete") [
-      AId lang,
+    App lang [
       App (CId "flags") fls, 
       App (CId "lin") ls, 
       App (CId "oper") ops, 
@@ -72,7 +71,9 @@ toHypo e = case e of
 toExp :: RExp -> Exp
 toExp e = case e of
   App fun [App (CId "abs") xs, App (CId "arg") exps] ->
-    DTr [x | AId x <- xs] (AC fun) (lmap toExp exps) 
+    DTr [x | AId x <- xs] (AC fun) (lmap toExp exps)
+  App (CId "Eq") _ -> EEq [] ----
+  AMet -> DTr [] (AM 0) []
   _ -> error $ "exp " ++ show e
 
 toTerm :: RExp -> Term
@@ -90,29 +91,69 @@ toTerm e = case e of
   AStr s -> K (KS s) ----
   _ -> error $ "term " ++ show e
 
+------------------------------
+--- from internal to parser --
+------------------------------
 
-{-
--- convert internal GFCC and pretty-print it
-
-printGFCC :: GFCC -> String
-printGFCC gfcc0 = compactPrintGFCC $ printTree $ Grm
-  (absname gfcc) 
-  (cncnames gfcc)
-  [Flg f v | (f,v) <- assocs (gflags gfcc)]
-  (Abs
-    [Flg f v     | (f,v) <- assocs (aflags (abstract gfcc))]
-    [Fun f ty df | (f,(ty,df)) <- assocs (funs (abstract gfcc))]
-    [Cat f v     | (f,v) <- assocs (cats (abstract gfcc))]
-    )
-  [fromCnc lang cnc | (lang,cnc) <- assocs (concretes gfcc)]
+fromGFCC :: GFCC -> Grammar
+fromGFCC gfcc0 = Grm [
+  AId (absname gfcc),
+  app "concrete" (lmap AId (cncnames gfcc)), 
+  app "flags" [App f [AStr v] | (f,v) <- toList (gflags gfcc)],
+  app "abstract" [
+    app "flags" [App f [AStr v] | (f,v) <- toList (aflags agfcc)],
+    app "fun"   [App f [fromType t,fromExp d] | (f,(t,d)) <- toList (funs agfcc)],
+    app "cat"   [App f (lmap fromHypo hs) | (f,hs) <- toList (cats agfcc)]
+    ],
+  app "concrete" [App lang (fromConcrete c) | (lang,c) <- toList (concretes gfcc)]
+  ]
  where
-   fromCnc lang cnc = Cnc lang 
-     [Flg f v | (f,v) <- assocs (cflags cnc)]
-     [Lin f v | (f,v) <- assocs (lins cnc)]
-     [Lin f v | (f,v) <- assocs (opers cnc)]
-     [Lin f v | (f,v) <- assocs (lincats cnc)]
-     [Lin f v | (f,v) <- assocs (lindefs cnc)]
-     [Lin f v | (f,v) <- assocs (printnames cnc)]
-     [Lin f v | (f,v) <- assocs (paramlincats cnc)]
-   gfcc = utf8GFCC gfcc0
--}
+  gfcc = utf8GFCC gfcc0
+  app s = App (CId s)
+  agfcc = abstract gfcc
+  fromConcrete cnc = [
+      app "flags"     [App f [AStr v]     | (f,v) <- toList (cflags cnc)],
+      app "lin"       [App f [fromTerm v] | (f,v) <- toList (lins cnc)],
+      app "oper"      [App f [fromTerm v] | (f,v) <- toList (opers cnc)],
+      app "lincat"    [App f [fromTerm v] | (f,v) <- toList (lincats cnc)],
+      app "lindef"    [App f [fromTerm v] | (f,v) <- toList (lindefs cnc)],
+      app "printname" [App f [fromTerm v] | (f,v) <- toList (printnames cnc)],
+      app "param"     [App f [fromTerm v] | (f,v) <- toList (paramlincats cnc)]
+      ] 
+
+fromType :: Type -> RExp
+fromType e = case e of
+  DTyp hypos cat exps -> 
+    App cat [
+      App (CId "hypo") (lmap fromHypo hypos), 
+      App (CId "arg") (lmap fromExp exps)] 
+
+fromHypo :: Hypo -> RExp
+fromHypo e = case e of
+  Hyp x typ -> App x [fromType typ]
+
+fromExp :: Exp -> RExp
+fromExp e = case e of
+  DTr xs (AC fun) exps ->
+    App fun [App (CId "abs") (lmap AId xs), App (CId "arg") (lmap fromExp exps)]  
+  DTr xs (AM _) exps -> AMet ----
+  EEq _ -> App (CId "Eq") [] ----
+  _ -> error $ "exp " ++ show e
+
+fromTerm :: Term -> RExp
+fromTerm e = case e of
+  R es    -> app "R" (lmap fromTerm es)
+  S es    -> app "S" (lmap fromTerm es)
+  FV es   -> app "FV" (lmap fromTerm es)
+  P e v   -> app "P"  [fromTerm e, fromTerm v]
+  RP e v  -> app "RP" [fromTerm e, fromTerm v] ----
+  W s v   -> app "W" [AStr s, fromTerm v]
+  C i     -> AInt (toInteger i)
+  TM      -> AMet
+  F f     -> AId f
+  V i     -> App (CId "A") [AInt (toInteger i)]
+  K (KS s) -> AStr s ----
+  K (KP d vs) -> app "FV" (str d : [str v | Var v _ <- vs]) ----
+ where
+   app = App . CId
+   str v = app "S" (lmap AStr v)

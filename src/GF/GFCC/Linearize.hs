@@ -2,7 +2,7 @@ module GF.GFCC.Linearize where
 
 import GF.GFCC.Macros
 import GF.GFCC.DataGFCC
-import GF.GFCC.AbsGFCC
+import GF.GFCC.Raw.AbsGFCCRaw (CId (..))
 import Data.Map
 import Data.List
 
@@ -56,7 +56,7 @@ compute mcfg lang args = comp where
 
   idx xs i = if i > length xs - 1 
     then trace 
-         ("too large " ++ show i ++ " for\n" ++ unlines (lmap prt xs) ++ "\n") TM 
+         ("too large " ++ show i ++ " for\n" ++ unlines (lmap show xs) ++ "\n") TM 
     else xs !! i 
 
   proj r p = case (r,p) of

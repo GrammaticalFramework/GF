@@ -1,8 +1,8 @@
 module GF.GFCC.CheckGFCC (checkGFCC, checkGFCCio) where
 
+import GF.GFCC.Raw.AbsGFCCRaw (CId (..))
 import GF.GFCC.Macros
 import GF.GFCC.DataGFCC
-import GF.GFCC.AbsGFCC
 import GF.GFCC.ErrM
 
 import qualified Data.Map as Map
@@ -39,7 +39,7 @@ labelBoolErr ms iob = do
 
 checkConcrete :: GFCC -> (CId,Concr) -> Err ((CId,Concr),Bool)
 checkConcrete gfcc (lang,cnc) = 
-  labelBoolErr ("happened in language " ++ prt lang) $ do
+  labelBoolErr ("happened in language " ++ printCId lang) $ do
     (rs,bs) <- mapM checkl (Map.assocs (lins cnc)) >>= return . unzip
     return ((lang,cnc{lins = Map.fromAscList rs}),and bs)
  where
@@ -47,7 +47,7 @@ checkConcrete gfcc (lang,cnc) =
 
 checkLin :: GFCC -> CId -> (CId,Term) -> Err ((CId,Term),Bool)
 checkLin gfcc lang (f,t) = 
-  labelBoolErr ("happened in function " ++ prt f) $ do
+  labelBoolErr ("happened in function " ++ printCId f) $ do
     (t',b) <- checkTerm (lintype gfcc lang f) t --- $ inline gfcc lang t
     return ((f,t'),b)
 
@@ -62,7 +62,7 @@ inferTerm args trm = case trm of
     (ts',tys) <- mapM infer ts >>= return . unzip
     let tys' = filter (/=str) tys
     testErr (null tys')
-      ("expected Str in " ++ prt trm ++ " not " ++ unwords (map prt tys')) 
+      ("expected Str in " ++ show trm ++ " not " ++ unwords (map show tys')) 
     return (S ts',str)
   R ts -> do
     (ts',tys) <- mapM infer ts >>= return . unzip
@@ -78,21 +78,21 @@ inferTerm args trm = case trm of
         
         C i -> do
           testErr (i < length tys) 
-            ("required more than " ++ show i ++ " fields in " ++ prt (R tys)) 
+            ("required more than " ++ show i ++ " fields in " ++ show (R tys)) 
           return (P t' u', tys !! i) -- record: index must be known
         _ -> do
           let typ = head tys
-          testErr (all (==typ) tys) ("different types in table " ++ prt trm) 
+          testErr (all (==typ) tys) ("different types in table " ++ show trm) 
           return (P t' u', typ)      -- table: types must be same
-      _ -> Bad $ "projection from " ++ prt t ++ " : " ++ prt tt
+      _ -> Bad $ "projection from " ++ show t ++ " : " ++ show tt
   FV [] -> returnt TM ----
   FV (t:ts) -> do
     (t',ty) <- infer t
     (ts',tys) <- mapM infer ts >>= return . unzip
-    testErr (all (eqType ty) tys) ("different types in variants " ++ prt trm)
+    testErr (all (eqType ty) tys) ("different types in variants " ++ show trm)
     return (FV (t':ts'),ty)
   W s r -> infer r
-  _ -> Bad ("no type inference for " ++ prt trm)
+  _ -> Bad ("no type inference for " ++ show trm)
  where
    returnt ty = return (trm,ty)
    infer = inferTerm args
@@ -102,9 +102,9 @@ checkTerm (args,val) trm = case inferTerm args trm of
   Ok (t,ty) -> if eqType ty val 
              then return (t,True) 
              else do
-    msg ("term: " ++ prt trm ++ 
-               "\nexpected type: " ++ prt val ++
-               "\ninferred type: " ++ prt ty)
+    msg ("term: " ++ show trm ++ 
+               "\nexpected type: " ++ show val ++
+               "\ninferred type: " ++ show ty)
     return (t,False)
   Bad s -> do
     msg s

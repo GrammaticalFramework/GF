@@ -7,9 +7,11 @@ import GF.Devel.GrammarToGFCC
 import GF.GFCC.OptimizeGFCC
 import GF.GFCC.CheckGFCC
 import GF.GFCC.DataGFCC
-import GF.GFCC.ParGFCC
+import GF.GFCC.Raw.ParGFCCRaw
+import GF.GFCC.Raw.ConvertGFCC
 import GF.Devel.UseIO
 import GF.Infra.Option
+import GF.GFCC.API
 import GF.GFCC.ErrM
 
 mainGFC :: [String] -> IO ()
@@ -43,12 +45,6 @@ mainGFC xx = do
     _ -> do
       mapM_ (batchCompile opts) (map return fs)
       putStrLn "Done."
-
-file2gfcc f = do
-  f <- readFileIf f 
-  case pGrammar (myLexer f) of
-    Ok g -> return (mkGFCC g) 
-    Bad s -> error s
 
 targetName opts abs = case getOptVal opts (aOpt "target") of
   Just n -> n

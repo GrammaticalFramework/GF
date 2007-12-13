@@ -9,7 +9,7 @@ import GF.Command.PPrTree
 import GF.Command.ParGFShell
 import GF.GFCC.API
 import GF.GFCC.Macros
-import GF.GFCC.AbsGFCC ----
+import GF.GFCC.DataGFCC
 
 import GF.Command.ErrM ----
 

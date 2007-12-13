@@ -1,6 +1,8 @@
 module GF.Devel.PrintGFCC where
 
-import GF.GFCC.DataGFCC (GFCC,printGFCC)
+import GF.GFCC.DataGFCC (GFCC)
+import GF.GFCC.Raw.ConvertGFCC (fromGFCC)
+import GF.GFCC.Raw.PrintGFCCRaw (printTree)
 import GF.Devel.GFCCtoHaskell
 import GF.Devel.GFCCtoJS
 
@@ -13,4 +15,7 @@ prGFCC printer gr = case printer of
   "js" -> gfcc2js gr
   "jsref" -> gfcc2grammarRef gr
   _ -> printGFCC gr
+
+printGFCC :: GFCC -> String
+printGFCC = printTree . fromGFCC
 
