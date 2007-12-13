@@ -21,8 +21,10 @@ import qualified GF.Canon.Look as Look
 import qualified GF.Canon.Subexpressions as Sub
 
 import qualified GF.GFCC.Macros as CM
-import qualified GF.GFCC.AbsGFCC as C
+import GF.GFCC.Raw.AbsGFCCRaw (CId (..))
+import qualified GF.GFCC.DataGFCC as C
 import qualified GF.GFCC.DataGFCC as D
+import GF.Devel.PrintGFCC
 import GF.GFCC.OptimizeGFCC
 
 import GF.Canon.GFC
@@ -46,7 +48,7 @@ import Debug.Trace ----
 -- the main function: generate GFCC from GFCM.
 
 prCanon2gfcc :: CanonGrammar -> String
-prCanon2gfcc = D.printGFCC . mkCanon2gfcc
+prCanon2gfcc = printGFCC . mkCanon2gfcc
 
 -- this variant makes utf8 conversion; used in back ends
 mkCanon2gfcc :: CanonGrammar -> D.GFCC
@@ -99,8 +101,8 @@ canon2gfcc cgr@(M.MGrammar ((a,M.ModMod abm):cms)) =
       printnames = Map.fromAscList [] ---- printnames
       params = Map.fromAscList [] ---- params
 
-i2i :: Ident -> C.CId
-i2i (IC c) = C.CId c
+i2i :: Ident -> CId
+i2i (IC c) = CId c
 
 mkType :: A.Type -> C.Type
 mkType t = case GM.catSkeleton t of

@@ -8,8 +8,8 @@ module GF.GFCC.ShowLinearize (
 import GF.GFCC.Linearize
 import GF.GFCC.Macros
 import GF.GFCC.DataGFCC
-import GF.GFCC.AbsGFCC
-import GF.GFCC.PrintGFCC ----
+import GF.GFCC.Raw.AbsGFCCRaw (CId (..))
+--import GF.GFCC.PrintGFCC ----
 
 import GF.Data.Operations
 import Data.List
@@ -46,7 +46,7 @@ mkRecord typ trm = case (typ,trm) of
   (_,W s (R ts))      -> mkRecord typ (R [K (KS (s ++ u)) | K (KS u) <- ts])
   (FV ps,       C i)  -> RCon $ str $ ps !! i
   (S [],        _)    -> RS $ realize trm
-  _                   -> RS $ printTree trm
+  _                   -> RS $ show trm ---- printTree trm
  where
    str = realize
 
@@ -82,6 +82,6 @@ recLinearize gfcc lang exp = mkRecord typ $ linExp gfcc lang exp where
 
 -- show GFCC term
 termLinearize :: GFCC -> CId -> Exp -> String
-termLinearize gfcc lang = printTree . linExp gfcc lang
+termLinearize gfcc lang = show . linExp gfcc lang
 
 

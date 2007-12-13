@@ -24,7 +24,8 @@ import GF.Data.Operations (Err(..))
 import qualified GF.Grammar.Grammar as Grammar
 import qualified GF.Grammar.Macros as Macros
 import qualified GF.Canon.AbsGFC as AbsGFC
-import qualified GF.GFCC.AbsGFCC as AbsGFCC
+import qualified GF.GFCC.DataGFCC as AbsGFCC
+import GF.GFCC.Raw.AbsGFCCRaw (CId (..))
 import qualified GF.GFCC.ErrM as ErrM
 import qualified GF.Infra.Ident as Ident
 import GF.CF.CFIdent (CFCat, cfCat2Ident, CFTok, wordsCFTok, prCFTok)
@@ -134,7 +135,7 @@ parse "m" strategy pinfo abs startCat inString
 -- parsing via FCFG
 parse "f" strategy pinfo abs startCat inString =
   let Ident.IC x = cfCat2Ident startCat
-      cat' = AbsGFCC.CId x
+      cat' = CId x
   in case PF.parseFCF strategy (fcfPInfo pinfo) cat' (map prCFTok inString) of
        ErrM.Ok  es  -> Ok  (map (exp2term abs) es)
        ErrM.Bad msg -> Bad msg
@@ -144,7 +145,7 @@ parse "f" strategy pinfo abs startCat inString =
 selectParser prs strategy _ _ _ = Bad $ "Parser '" ++ prs ++ "' not defined with strategy: " ++ strategy 
 
 cnv_forests FMeta         = FMeta
-cnv_forests (FNode (Name (AbsGFCC.CId n) p) fss) = FNode (Name (Ident.IC n) (map cnv_profile p)) (map (map cnv_forests) fss)
+cnv_forests (FNode (Name (CId n) p) fss) = FNode (Name (Ident.IC n) (map cnv_profile p)) (map (map cnv_forests) fss)
 cnv_forests (FString x)   = FString x
 cnv_forests (FInt    x)   = FInt    x
 cnv_forests (FFloat  x)   = FFloat  x
@@ -153,7 +154,7 @@ cnv_profile (Unify    x) = Unify x
 cnv_profile (Constant x) = Constant (cnv_forests2 x)
 
 cnv_forests2 FMeta         = FMeta
-cnv_forests2 (FNode (AbsGFCC.CId n) fss) = FNode (Ident.IC n) (map (map cnv_forests2) fss)
+cnv_forests2 (FNode (CId n) fss) = FNode (Ident.IC n) (map (map cnv_forests2) fss)
 cnv_forests2 (FString x)   = FString x
 cnv_forests2 (FInt    x)   = FInt    x
 cnv_forests2 (FFloat  x)   = FFloat  x
@@ -173,7 +174,7 @@ exp2term abs (AbsGFCC.DTr _ a es) =  ---- TODO: bindings
   Macros.mkApp (atom2term abs a) (map (exp2term abs) es)
 
 atom2term :: Ident.Ident -> AbsGFCC.Atom -> Grammar.Term
-atom2term abs (AbsGFCC.AC (AbsGFCC.CId f)) = Macros.qq (abs,Ident.IC f)
+atom2term abs (AbsGFCC.AC (CId f)) = Macros.qq (abs,Ident.IC f)
 atom2term abs (AbsGFCC.AS s) = Macros.string2term s
 atom2term abs (AbsGFCC.AI n) = Macros.int2term    n
 atom2term abs (AbsGFCC.AF f) = Macros.float2term  f

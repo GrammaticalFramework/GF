@@ -5,7 +5,6 @@ import GF.Devel.GrammarToGFCC
 import GF.GFCC.OptimizeGFCC
 import GF.GFCC.CheckGFCC
 import GF.GFCC.DataGFCC
-import GF.GFCC.ParGFCC
 import GF.GFCC.API
 import qualified GF.Command.AbsGFShell as C
 

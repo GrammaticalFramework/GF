@@ -6,8 +6,9 @@ import GF.Grammar.Grammar
 import qualified GF.Grammar.Lookup as Look
 
 import qualified GF.GFCC.Macros as CM
-import qualified GF.GFCC.AbsGFCC as C
+import qualified GF.GFCC.DataGFCC as C
 import qualified GF.GFCC.DataGFCC as D
+import GF.GFCC.Raw.AbsGFCCRaw (CId (..))
 import qualified GF.Grammar.Abstract as A
 import qualified GF.Grammar.Macros as GM
 --import qualified GF.Grammar.Compute as Compute
@@ -15,6 +16,7 @@ import qualified GF.Infra.Modules as M
 import qualified GF.Infra.Option as O
 
 import GF.Devel.PrGrammar
+import GF.Devel.PrintGFCC
 import GF.Devel.ModDeps
 import GF.Infra.Ident
 import GF.Infra.Option
@@ -29,7 +31,7 @@ import Debug.Trace ----
 -- the main function: generate GFCC from GF.
 
 prGrammar2gfcc :: Options -> String -> SourceGrammar -> (String,String)
-prGrammar2gfcc opts cnc gr = (abs, D.printGFCC gc) where
+prGrammar2gfcc opts cnc gr = (abs,printGFCC gc) where
   (abs,gc) = mkCanon2gfcc opts cnc gr 
 
 mkCanon2gfcc :: Options -> String -> SourceGrammar -> (String,D.GFCC)
@@ -51,9 +53,9 @@ canon2gfcc opts pars cgr@(M.MGrammar ((a,M.ModMod abm):cms)) =
   an  = (i2i a)
   cns = map (i2i . fst) cms
   abs = D.Abstr aflags funs cats catfuns
-  gflags = Map.fromList [(C.CId fg,x) | Just x <- [getOptVal opts (aOpt fg)]] 
+  gflags = Map.fromList [(CId fg,x) | Just x <- [getOptVal opts (aOpt fg)]] 
                                           where fg = "firstlang"
-  aflags = Map.fromList [(C.CId f,x) | Opt (f,[x]) <- M.flags abm]
+  aflags = Map.fromList [(CId f,x) | Opt (f,[x]) <- M.flags abm]
   mkDef pty = case pty of
     Yes t -> mkExp t
     _ -> CM.primNotion
@@ -73,7 +75,7 @@ canon2gfcc opts pars cgr@(M.MGrammar ((a,M.ModMod abm):cms)) =
       (lang,D.Concr flags lins opers lincats lindefs printnames params)
     where
       js = tree2list (M.jments mo)
-      flags   = Map.fromList [(C.CId f,x) | Opt (f,[x]) <- M.flags mo]
+      flags   = Map.fromList [(CId f,x) | Opt (f,[x]) <- M.flags mo]
       opers   = Map.fromAscList [] -- opers will be created as optimization
       utf     = if elem (Opt ("coding",["utf8"])) (M.flags mo) 
                   then D.convertStringsInTerm decodeUTF8 else id
@@ -89,8 +91,8 @@ canon2gfcc opts pars cgr@(M.MGrammar ((a,M.ModMod abm):cms)) =
       params = Map.fromAscList 
         [(i2i c, pars lang0 c) | (c,CncCat (Yes ty) _ _) <- js]
 
-i2i :: Ident -> C.CId
-i2i = C.CId . prIdent
+i2i :: Ident -> CId
+i2i = CId . prIdent
 
 mkType :: A.Type -> C.Type
 mkType t = case GM.typeForm t of

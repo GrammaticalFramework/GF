@@ -19,8 +19,9 @@ import GF.GFCC.Linearize
 import GF.GFCC.Generate
 import GF.GFCC.Macros
 import GF.GFCC.DataGFCC
-import GF.GFCC.AbsGFCC
-import GF.GFCC.ParGFCC
+import GF.GFCC.Raw.AbsGFCCRaw (CId (..))
+import GF.GFCC.Raw.ConvertGFCC
+import GF.GFCC.Raw.ParGFCCRaw
 import GF.Command.PPrTree
 
 import GF.GFCC.ErrM
@@ -81,8 +82,10 @@ file2grammar f = do
 gfcc2parsers gfcc =
   [(lang, buildFCFPInfo fcfg) | (CId lang,fcfg) <- convertGrammar gfcc]
 
-file2gfcc f =
-  readFileIf f >>= err (error) (return . mkGFCC) . pGrammar . myLexer
+file2gfcc f = do
+  s <- readFileIf f
+  g <- parseGrammar s
+  return $ toGFCC g
 
 linearize mgr lang = GF.GFCC.Linearize.linearize (gfcc mgr) (CId lang)
 

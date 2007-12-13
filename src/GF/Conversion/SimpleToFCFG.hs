@@ -22,9 +22,9 @@ import Control.Monad
 import GF.Formalism.Utilities
 import GF.Formalism.FCFG
 
-import GF.GFCC.Macros hiding (prt)
+import GF.GFCC.Macros --hiding (prt)
 import GF.GFCC.DataGFCC
-import GF.GFCC.AbsGFCC
+import GF.GFCC.Raw.AbsGFCCRaw (CId (..))
 
 import GF.Data.BacktrackM
 import GF.Data.SortedList

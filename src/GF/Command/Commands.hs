@@ -16,7 +16,7 @@ import GF.GFCC.ShowLinearize
 import GF.GFCC.API
 import GF.GFCC.Macros
 import GF.Devel.PrintGFCC
-import GF.GFCC.AbsGFCC ----
+import GF.GFCC.DataGFCC ----
 
 import GF.Command.ErrM ----
 

@@ -21,7 +21,8 @@ import GF.Formalism.Utilities
 import qualified GF.Parsing.FCFG.Active as Active
 import GF.Parsing.FCFG.PInfo
 
-import GF.GFCC.AbsGFCC
+import GF.GFCC.DataGFCC
+import GF.GFCC.Raw.AbsGFCCRaw (CId (..))
 import GF.GFCC.Macros
 import GF.GFCC.ErrM
 

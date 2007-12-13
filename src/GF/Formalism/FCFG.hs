@@ -38,7 +38,7 @@ import Data.Array
 import qualified Data.Map as Map
 
 import GF.Formalism.Utilities
-import qualified GF.GFCC.AbsGFCC as AbsGFCC
+import qualified GF.GFCC.Raw.AbsGFCCRaw as AbsGFCC
 import GF.Infra.PrintClass
 
 

@@ -1,8 +1,8 @@
 module GF.GFCC.Macros where
 
-import GF.GFCC.AbsGFCC
+import GF.GFCC.Raw.AbsGFCCRaw (CId (..))
 import GF.GFCC.DataGFCC
-import GF.GFCC.PrintGFCC
+----import GF.GFCC.PrintGFCC
 import Data.Map
 import Data.List
 
@@ -82,9 +82,6 @@ term0 _ = TM
 
 kks :: String -> Term
 kks = K . KS
-
-prt :: Print a => a -> String
-prt = printTree
 
 -- lookup with default value
 lookMap :: (Show i, Ord i) => a -> i -> Map i a -> a 

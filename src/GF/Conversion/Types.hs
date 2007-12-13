@@ -18,7 +18,7 @@ module GF.Conversion.Types where
 
 import qualified GF.Infra.Ident as Ident (Ident(..), wildIdent, isWildIdent)
 import qualified GF.Canon.AbsGFC as AbsGFC (CIdent(..), Label(..))
-import qualified GF.GFCC.AbsGFCC as AbsGFCC (CId(..))
+import qualified GF.GFCC.Raw.AbsGFCCRaw as AbsGFCC (CId(..))
 import qualified GF.Grammar.Grammar as Grammar (Term)
 
 import GF.Formalism.GCFG
