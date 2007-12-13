@@ -1,6 +1,6 @@
 module GF.GFCC.DataGFCC where
 
-import GF.GFCC.AbsGFCC
+import GF.GFCC.Raw.AbsGFCCRaw (CId (..))
 import GF.GFCC.PrintGFCC
 import GF.Infra.CompactPrint
 import GF.Text.UTF8
@@ -35,6 +35,57 @@ data Concr = Concr {
   paramlincats :: Map CId Term  -- lin type of cat, with printable param names
   }
 
+data Type =
+   DTyp [Hypo] CId [Exp]
+  deriving (Eq,Ord,Show)
+
+data Exp =
+   DTr [CId] Atom [Exp]
+ | EEq [Equation]
+  deriving (Eq,Ord,Show)
+
+data Atom =
+   AC CId
+ | AS String
+ | AI Integer
+ | AF Double
+ | AM Integer
+ | AV CId
+  deriving (Eq,Ord,Show)
+
+data Term =
+   R [Term]
+ | P Term Term
+ | S [Term]
+ | K Tokn
+ | V Int
+ | C Int
+ | F CId
+ | FV [Term]
+ | W String Term
+ | TM
+ | RP Term Term
+  deriving (Eq,Ord,Show)
+
+data Tokn =
+   KS String
+ | KP [String] [Variant]
+  deriving (Eq,Ord,Show)
+
+data Variant =
+   Var [String] [String]
+  deriving (Eq,Ord,Show)
+
+data Hypo =
+   Hyp CId Type
+  deriving (Eq,Ord,Show)
+
+data Equation =
+   Equ [Exp] Exp
+  deriving (Eq,Ord,Show)
+
+-- print statistics
+
 statGFCC :: GFCC -> String
 statGFCC gfcc = unlines [
   "Abstract\t" ++ pr (absname gfcc), 
@@ -43,64 +94,8 @@ statGFCC gfcc = unlines [
   ]
  where pr (CId s) = s
 
--- convert parsed grammar to internal GFCC
-
-mkGFCC :: Grammar -> GFCC
-mkGFCC (Grm a cs gfs ab@(Abs afls fs cts) ccs) = GFCC {
-  absname = a,
-  cncnames = cs,
-  gflags = fromAscList [(f,v) | Flg f v <- gfs],
-  abstract = 
-    let
-      aflags  = fromAscList [(f,v) | Flg f v <- afls]
-      lfuns   = [(fun,(typ,def)) | Fun fun typ def <- fs]
-      funs    = fromAscList lfuns
-      lcats   = [(c,hyps) | Cat c hyps <- cts]
-      cats    = fromAscList lcats
-      catfuns = fromAscList 
-        [(cat,[f | (f, (DTyp _ c _,_)) <- lfuns, c==cat]) | (cat,_) <- lcats]
-    in Abstr aflags funs cats catfuns,
-  concretes = fromAscList (lmap mkCnc ccs)
-  }
- where
-   mkCnc (Cnc lang fls ls ops lincs linds prns params) = (lang, 
-    Concr {
-     cflags     = fromAscList [(f,v) | Flg f v <- fls],
-     lins       = fromAscList [(f,v) | Lin f v <- ls],  
-     opers      = fromAscList [(f,v) | Lin f v <- ops],  
-     lincats    = fromAscList [(f,v) | Lin f v <- lincs],  
-     lindefs    = fromAscList [(f,v) | Lin f v <- linds],  
-     printnames = fromAscList [(f,v) | Lin f v <- prns],  
-     paramlincats = fromAscList [(f,v) | Lin f v <- params]  
-     }
-    )
-
--- convert internal GFCC and pretty-print it
-
-printGFCC :: GFCC -> String
-printGFCC gfcc0 = compactPrintGFCC $ printTree $ Grm
-  (absname gfcc) 
-  (cncnames gfcc)
-  [Flg f v | (f,v) <- assocs (gflags gfcc)]
-  (Abs
-    [Flg f v     | (f,v) <- assocs (aflags (abstract gfcc))]
-    [Fun f ty df | (f,(ty,df)) <- assocs (funs (abstract gfcc))]
-    [Cat f v     | (f,v) <- assocs (cats (abstract gfcc))]
-    )
-  [fromCnc lang cnc | (lang,cnc) <- assocs (concretes gfcc)]
- where
-   fromCnc lang cnc = Cnc lang 
-     [Flg f v | (f,v) <- assocs (cflags cnc)]
-     [Lin f v | (f,v) <- assocs (lins cnc)]
-     [Lin f v | (f,v) <- assocs (opers cnc)]
-     [Lin f v | (f,v) <- assocs (lincats cnc)]
-     [Lin f v | (f,v) <- assocs (lindefs cnc)]
-     [Lin f v | (f,v) <- assocs (printnames cnc)]
-     [Lin f v | (f,v) <- assocs (paramlincats cnc)]
-   gfcc = utf8GFCC gfcc0
-
 printCId :: CId -> String
-printCId = printTree
+printCId (CId s) = s
 
 -- merge two GFCCs; fails is differens absnames; priority to second arg
 

@@ -104,7 +104,7 @@ param  PronGen = PGen Gender | PNoGen ;
 oper
   pgen2gen : PronGen -> Gender = \p -> case p of {
     PGen g => g ;
-    PNoGen => variants {Masc ; Fem} --- the best we can do for ya, tu
+    PNoGen => Masc ---- variants {Masc ; Fem} --- the best we can do for ya, tu
     } ;
 
 
