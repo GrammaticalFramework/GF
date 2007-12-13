@@ -34,10 +34,19 @@ import GF.Grammar.Values
 import qualified GF.Grammar.Grammar as G
 import qualified GF.Canon.AbsGFC as A
 import qualified GF.Canon.GFC as C
-import qualified GF.Canon.CanonToGFCC as GFCC
+
+import qualified GF.Devel.GrammarToGFCC as GFCC
 import qualified GF.Devel.GFCCtoHaskell as CCH
-import qualified GF.GFCC.DataGFCC as DataGFCC
-import qualified GF.Canon.CanonToJS as JS (prCanon2js)
+import GF.Devel.PrintGFCC
+import qualified GF.Devel.GFCCtoJS as JS
+import GF.GFCC.CheckGFCC (checkGFCCmaybe)
+import GF.GFCC.OptimizeGFCC
+
+--import qualified GF.Canon.CanonToGFCC as GFCC
+--import qualified GF.Devel.GFCCtoHaskell as CCH
+--import qualified GF.GFCC.DataGFCC as DataGFCC
+--import qualified GF.Canon.CanonToJS as JS (prCanon2js)
+
 import qualified GF.Source.AbsGF as GF
 import qualified GF.Grammar.MMacros as MM
 import GF.Grammar.AbsCompute
@@ -106,6 +115,7 @@ import GF.Visualization.VisualizeGrammar (visualizeCanonGrammar, visualizeSource
 
 import GF.API.MyParser
 
+import qualified GF.Infra.Modules as M
 import GF.Infra.UseIO
 
 import Control.Monad
@@ -274,8 +284,8 @@ customGrammarPrinter =
   ,(strCI "bnf",     \_ -> prBNF False)
   ,(strCI "absbnf",  \_ -> abstract2bnf . stateGrammarST)
   ,(strCI "haskell", \_ -> grammar2haskell . stateGrammarST)
-  ,(strCI "gfcc_haskell", \_ -> CCH.grammar2haskell . 
-                                GFCC.mkCanon2gfcc . stateGrammarST)
+  ,(strCI "gfcc_haskell", \opts -> CCH.grammar2haskell . 
+                                canon2gfcc opts . stateGrammarST)
   ,(strCI "haskell_gadt", \_ -> grammar2haskellGADT . stateGrammarST)
   ,(strCI "transfer", \_ -> grammar2transfer . stateGrammarST)
   ,(strCI "morpho",  \_ -> prMorpho . stateMorpho)
@@ -328,8 +338,8 @@ customMultiGrammarPrinter =
   customData "Printers for multiple grammars, selected by option -printer=x" $
   [
    (strCI "gfcm", const MC.prCanon)
-  ,(strCI "gfcc", const GFCC.prCanon2gfcc)
-  ,(strCI "js", JS.prCanon2js)
+  ,(strCI "gfcc", canon2gfccPr)
+  ,(strCI "js", \opts -> JS.gfcc2js . canon2gfcc opts)
   ,(strCI "header", const (MC.prCanonMGr . unoptimizeCanon))
   ,(strCI "cfgm", prCanonAsCFGM)
   ,(strCI "graph", visualizeCanonGrammar)
@@ -340,6 +350,21 @@ customMultiGrammarPrinter =
   ,(strCI "mcfg-prolog", CnvProlog.prtMMulti)
   ,(strCI "cfg-prolog", CnvProlog.prtCMulti)
   ]
+
+---Options -> CanonGrammar -> String
+canon2gfccPr opts = printGFCC . canon2gfcc opts
+canon2gfcc opts = source2gfcc opts . canon2source ----
+canon2source = err error id . canon2sourceGrammar . unSubelimCanon
+
+source2gfcc opts gf = 
+  let 
+    (abs,gfcc) = GFCC.mkCanon2gfcc opts (gfcabs gf) gf
+    gfcc1 = maybe undefined id $ checkGFCCmaybe gfcc
+  in if oElem (iOpt "noopt") opts then gfcc1 else optGFCC gfcc1
+
+gfcabs gfc = 
+  prt $ head $ M.allConcretes gfc $ maybe (error "no abstract") id $ 
+   M.greatestAbstract gfc
 
 
 customSyntaxPrinter = 

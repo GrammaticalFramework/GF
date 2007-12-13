@@ -15,10 +15,11 @@ import GF.Devel.Grammar.PrGF
 --import GF.Devel.ModDeps
 import GF.Infra.Ident
 
+import GF.Devel.PrintGFCC
 import qualified GF.GFCC.Macros as CM
-import qualified GF.GFCC.AbsGFCC as C
+import qualified GF.GFCC.DataGFCC as C
 import qualified GF.GFCC.DataGFCC as D
-
+import GF.GFCC.Raw.AbsGFCCRaw (CId (..))
 import GF.Infra.Option ----
 import GF.Data.Operations
 import GF.Text.UTF8
@@ -31,7 +32,7 @@ import Debug.Trace ----
 -- the main function: generate GFCC from GF.
 
 prGrammar2gfcc :: Options -> String -> GF -> (String,String)
-prGrammar2gfcc opts cnc gr = (abs, D.printGFCC gc) where
+prGrammar2gfcc opts cnc gr = (abs, printGFCC gc) where
   (abs,gc) = mkCanon2gfcc opts cnc gr 
 
 mkCanon2gfcc :: Options -> String -> GF -> (String,D.GFCC)
@@ -57,9 +58,9 @@ canon2gfcc opts pars cgr =
   an  = (i2i a)
   cns = map (i2i . fst) cms
   abs = D.Abstr aflags funs cats catfuns
-  gflags = Map.fromList [(C.CId fg,x) | Just x <- [getOptVal opts (aOpt fg)]] 
+  gflags = Map.fromList [(CId fg,x) | Just x <- [getOptVal opts (aOpt fg)]] 
                                           where fg = "firstlang"
-  aflags = Map.fromList [(C.CId f,x) | (IC f,x) <- Map.toList (M.mflags abm)]
+  aflags = Map.fromList [(CId f,x) | (IC f,x) <- Map.toList (M.mflags abm)]
   mkDef pty = case pty of
     Meta _ -> CM.primNotion
     t -> mkExp t
@@ -80,7 +81,7 @@ canon2gfcc opts pars cgr =
       (lang,D.Concr flags lins opers lincats lindefs printnames params)
     where
       js = listJudgements mo
-      flags = Map.fromList [(C.CId f,x) | (IC f,x) <- Map.toList (M.mflags mo)]
+      flags = Map.fromList [(CId f,x) | (IC f,x) <- Map.toList (M.mflags mo)]
       opers = Map.fromAscList [] -- opers will be created as optimization
       utf   = if elem (IC "coding","utf8") (Map.assocs (M.mflags mo)) ---- 
                   then D.convertStringsInTerm decodeUTF8 else id
@@ -96,8 +97,8 @@ canon2gfcc opts pars cgr =
       params = Map.fromAscList 
         [(i2i c, pars lang0 c) | (c,ju) <- js, jform ju == JLincat] ---- c ??
 
-i2i :: Ident -> C.CId
-i2i = C.CId . prIdent
+i2i :: Ident -> CId
+i2i = CId . prIdent
 
 mkType :: A.Type -> C.Type
 mkType t = case GM.typeForm t of

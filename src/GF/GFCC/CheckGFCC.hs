@@ -1,4 +1,4 @@
-module GF.GFCC.CheckGFCC (checkGFCC, checkGFCCio) where
+module GF.GFCC.CheckGFCC (checkGFCC, checkGFCCio, checkGFCCmaybe) where
 
 import GF.GFCC.Raw.AbsGFCCRaw (CId (..))
 import GF.GFCC.Macros
@@ -17,6 +17,12 @@ checkGFCCio gfcc = case checkGFCC gfcc of
   Bad s -> do
     putStrLn s
     error "building GFCC failed"
+
+---- needed in old Custom
+checkGFCCmaybe :: GFCC -> Maybe GFCC
+checkGFCCmaybe gfcc = case checkGFCC gfcc of
+  Ok (gc,b) -> return gc 
+  Bad s -> Nothing
 
 checkGFCC :: GFCC -> Err (GFCC,Bool)
 checkGFCC gfcc = do
