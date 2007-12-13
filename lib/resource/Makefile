@@ -208,14 +208,14 @@ gf3present:
 
 
 gf3langs:
-#	mv ../present/LangSpa.gfo tmpLangSpa.gfo
-#	$(GFNew) -path=present:prelude -target=langs --make ../present/Lang???.gfo $(RTSS)
-#	mv langs.gfcc ../present
-#	mv tmpLangSpa.gfo ../present/LangSpa.gfo 
-	mv ../alltenses/LangSpa.gfo tmpLangSpa.gfo
-	$(GFNew) -path=alltenses:prelude -target=langs --make ../alltenses/Lang???.gfo $(RTSS)
-	mv langs.gfcc ../alltenses
-	mv tmpLangSpa.gfo ../alltenses/LangSpa.gfo 
+	mv ../present/LangSpa.gfo tmpLangSpa.gfo
+	$(GFNew) -path=present:prelude -target=langs --make ../present/Lang???.gfo $(RTSS)
+	mv langs.gfcc ../present
+	mv tmpLangSpa.gfo ../present/LangSpa.gfo 
+#	mv ../alltenses/LangSpa.gfo tmpLangSpa.gfo
+#	$(GFNew) -path=alltenses:prelude -target=langs --make ../alltenses/Lang???.gfo $(RTSS)
+#	mv langs.gfcc ../alltenses
+#	mv tmpLangSpa.gfo ../alltenses/LangSpa.gfo 
 
 
 clean:
