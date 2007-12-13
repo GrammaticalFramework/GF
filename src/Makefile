@@ -222,7 +222,7 @@ gfcc2c:
 #
 
 lib:
-	$(MAKE) -C ../lib/resource-1.0 clean new
+	$(MAKE) -C ../lib/resource clean new
 
 #
 # Distribution
