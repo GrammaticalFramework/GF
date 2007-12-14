@@ -8,7 +8,7 @@ module GF.GFCC.ShowLinearize (
 import GF.GFCC.Linearize
 import GF.GFCC.Macros
 import GF.GFCC.DataGFCC
-import GF.GFCC.Raw.AbsGFCCRaw (CId (..))
+import GF.GFCC.CId
 --import GF.GFCC.PrintGFCC ----
 
 import GF.Data.Operations

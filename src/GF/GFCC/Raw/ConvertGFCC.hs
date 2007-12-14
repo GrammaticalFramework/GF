@@ -59,7 +59,7 @@ toGFCC (Grm [
 
 toType :: RExp -> Type
 toType e = case e of
-  App cat [App (CId "hypo") hypos, App (CId "arg") exps] -> 
+  App cat [App (CId "H") hypos, App (CId "X") exps] -> 
     DTyp (lmap toHypo hypos) cat (lmap toExp exps) 
   _ -> error $ "type " ++ show e
 
@@ -70,7 +70,7 @@ toHypo e = case e of
 
 toExp :: RExp -> Exp
 toExp e = case e of
-  App fun [App (CId "abs") xs, App (CId "arg") exps] ->
+  App fun [App (CId "B") xs, App (CId "X") exps] ->
     DTr [x | AId x <- xs] (AC fun) (lmap toExp exps)
   App (CId "Eq") _ -> EEq [] ----
   AMet -> DTr [] (AM 0) []
@@ -125,8 +125,8 @@ fromType :: Type -> RExp
 fromType e = case e of
   DTyp hypos cat exps -> 
     App cat [
-      App (CId "hypo") (lmap fromHypo hypos), 
-      App (CId "arg") (lmap fromExp exps)] 
+      App (CId "H") (lmap fromHypo hypos), 
+      App (CId "X") (lmap fromExp exps)] 
 
 fromHypo :: Hypo -> RExp
 fromHypo e = case e of
@@ -135,7 +135,7 @@ fromHypo e = case e of
 fromExp :: Exp -> RExp
 fromExp e = case e of
   DTr xs (AC fun) exps ->
-    App fun [App (CId "abs") (lmap AId xs), App (CId "arg") (lmap fromExp exps)]  
+    App fun [App (CId "B") (lmap AId xs), App (CId "X") (lmap fromExp exps)]  
   DTr xs (AM _) exps -> AMet ----
   EEq _ -> App (CId "Eq") [] ----
   _ -> error $ "exp " ++ show e

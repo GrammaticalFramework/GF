@@ -1,6 +1,6 @@
 module GF.GFCC.CheckGFCC (checkGFCC, checkGFCCio, checkGFCCmaybe) where
 
-import GF.GFCC.Raw.AbsGFCCRaw (CId (..))
+import GF.GFCC.CId
 import GF.GFCC.Macros
 import GF.GFCC.DataGFCC
 import GF.GFCC.ErrM

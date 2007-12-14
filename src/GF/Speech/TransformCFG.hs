@@ -17,7 +17,7 @@
 module GF.Speech.TransformCFG where
 
 import GF.Canon.CanonToGFCC (canon2gfcc)
-import qualified GF.GFCC.Raw.AbsGFCCRaw as C
+import qualified GF.GFCC.CId as C
 import GF.GFCC.Macros (lookType,catSkeleton)
 import GF.GFCC.DataGFCC (GFCC)
 import GF.Conversion.Types

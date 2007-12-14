@@ -1,6 +1,6 @@
 module GF.GFCC.Macros where
 
-import GF.GFCC.Raw.AbsGFCCRaw (CId (..))
+import GF.GFCC.CId
 import GF.GFCC.DataGFCC
 ----import GF.GFCC.PrintGFCC
 import Data.Map

@@ -15,7 +15,7 @@ import GF.Formalism.FCFG
 import GF.Data.SortedList
 import GF.Data.Assoc
 import GF.Parsing.FCFG.Range
-import qualified GF.GFCC.Raw.AbsGFCCRaw as AbsGFCC
+import qualified GF.GFCC.CId as AbsGFCC
 
 import Data.Array
 import Data.Maybe

@@ -24,7 +24,7 @@ import GF.Formalism.FCFG
 
 import GF.GFCC.Macros --hiding (prt)
 import GF.GFCC.DataGFCC
-import GF.GFCC.Raw.AbsGFCCRaw (CId (..))
+import GF.GFCC.CId
 
 import GF.Data.BacktrackM
 import GF.Data.SortedList

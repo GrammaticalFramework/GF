@@ -2,7 +2,7 @@ module GF.GFCC.Linearize where
 
 import GF.GFCC.Macros
 import GF.GFCC.DataGFCC
-import GF.GFCC.Raw.AbsGFCCRaw (CId (..))
+import GF.GFCC.CId
 import Data.Map
 import Data.List
 
