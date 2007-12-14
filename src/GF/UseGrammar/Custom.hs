@@ -35,17 +35,9 @@ import qualified GF.Grammar.Grammar as G
 import qualified GF.Canon.AbsGFC as A
 import qualified GF.Canon.GFC as C
 
-import qualified GF.Devel.GrammarToGFCC as GFCC
-import qualified GF.Devel.GFCCtoHaskell as CCH
-import GF.Devel.PrintGFCC
 import qualified GF.Devel.GFCCtoJS as JS
-import GF.GFCC.CheckGFCC (checkGFCCmaybe)
-import GF.GFCC.OptimizeGFCC
-
---import qualified GF.Canon.CanonToGFCC as GFCC
---import qualified GF.Devel.GFCCtoHaskell as CCH
---import qualified GF.GFCC.DataGFCC as DataGFCC
---import qualified GF.Canon.CanonToJS as JS (prCanon2js)
+import GF.Canon.CanonToGFCC
+import qualified GF.Devel.GFCCtoHaskell as CCH
 
 import qualified GF.Source.AbsGF as GF
 import qualified GF.Grammar.MMacros as MM
@@ -350,21 +342,6 @@ customMultiGrammarPrinter =
   ,(strCI "mcfg-prolog", CnvProlog.prtMMulti)
   ,(strCI "cfg-prolog", CnvProlog.prtCMulti)
   ]
-
----Options -> CanonGrammar -> String
-canon2gfccPr opts = printGFCC . canon2gfcc opts
-canon2gfcc opts = source2gfcc opts . canon2source ----
-canon2source = err error id . canon2sourceGrammar . unSubelimCanon
-
-source2gfcc opts gf = 
-  let 
-    (abs,gfcc) = GFCC.mkCanon2gfcc opts (gfcabs gf) gf
-    gfcc1 = maybe undefined id $ checkGFCCmaybe gfcc
-  in if oElem (iOpt "noopt") opts then gfcc1 else optGFCC gfcc1
-
-gfcabs gfc = 
-  prt $ head $ M.allConcretes gfc $ maybe (error "no abstract") id $ 
-   M.greatestAbstract gfc
 
 
 customSyntaxPrinter = 

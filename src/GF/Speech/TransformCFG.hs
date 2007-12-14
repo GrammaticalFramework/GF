@@ -16,7 +16,7 @@
 
 module GF.Speech.TransformCFG where
 
-import GF.Canon.CanonToGFCC (mkCanon2gfcc)
+import GF.Canon.CanonToGFCC (canon2gfcc)
 import qualified GF.GFCC.Raw.AbsGFCCRaw as C
 import GF.GFCC.Macros (lookType,catSkeleton)
 import GF.GFCC.DataGFCC (GFCC)
@@ -85,7 +85,7 @@ getStartCatCF :: Options -> StateGrammar -> String
 getStartCatCF opts sgr = getStartCat opts sgr ++ "{}.s"
 
 stateGFCC :: StateGrammar -> GFCC
-stateGFCC = mkCanon2gfcc . stateGrammarST
+stateGFCC = canon2gfcc noOptions . stateGrammarST
 
 -- * Grammar filtering
 
