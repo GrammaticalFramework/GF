@@ -17,7 +17,7 @@ module GF.Compile.ShellState where
 import GF.Data.Operations
 import GF.Canon.GFC
 import GF.Canon.AbsGFC
-import GF.GFCC.Raw.AbsGFCCRaw(CId(CId))
+import GF.GFCC.CId
 --import GF.GFCC.DataGFCC(mkGFCC)
 import GF.Canon.CanonToGFCC
 import GF.Grammar.Macros

@@ -1,6 +1,6 @@
 module GF.GFCC.DataGFCC where
 
-import GF.GFCC.Raw.AbsGFCCRaw (CId (..))
+import GF.GFCC.CId
 import GF.Infra.CompactPrint
 import GF.Text.UTF8
 

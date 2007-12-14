@@ -8,7 +8,7 @@ import qualified GF.Grammar.Lookup as Look
 import qualified GF.GFCC.Macros as CM
 import qualified GF.GFCC.DataGFCC as C
 import qualified GF.GFCC.DataGFCC as D
-import GF.GFCC.Raw.AbsGFCCRaw (CId (..))
+import GF.GFCC.CId
 import qualified GF.Grammar.Abstract as A
 import qualified GF.Grammar.Macros as GM
 --import qualified GF.Grammar.Compute as Compute

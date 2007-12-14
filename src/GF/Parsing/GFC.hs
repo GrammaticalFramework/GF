@@ -25,7 +25,7 @@ import qualified GF.Grammar.Grammar as Grammar
 import qualified GF.Grammar.Macros as Macros
 import qualified GF.Canon.AbsGFC as AbsGFC
 import qualified GF.GFCC.DataGFCC as AbsGFCC
-import GF.GFCC.Raw.AbsGFCCRaw (CId (..))
+import GF.GFCC.CId
 import qualified GF.GFCC.ErrM as ErrM
 import qualified GF.Infra.Ident as Ident
 import GF.CF.CFIdent (CFCat, cfCat2Ident, CFTok, wordsCFTok, prCFTok)

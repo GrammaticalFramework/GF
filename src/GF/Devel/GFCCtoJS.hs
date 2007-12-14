@@ -2,7 +2,7 @@ module GF.Devel.GFCCtoJS (gfcc2js,gfcc2grammarRef) where
 
 import qualified GF.GFCC.Macros as M
 import qualified GF.GFCC.DataGFCC as D
-import GF.GFCC.Raw.AbsGFCCRaw (CId (..))
+import GF.GFCC.CId
 import qualified GF.JavaScript.AbsJS as JS
 import qualified GF.JavaScript.PrintJS as JS
 

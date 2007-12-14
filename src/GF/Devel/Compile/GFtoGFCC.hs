@@ -19,7 +19,7 @@ import GF.Devel.PrintGFCC
 import qualified GF.GFCC.Macros as CM
 import qualified GF.GFCC.DataGFCC as C
 import qualified GF.GFCC.DataGFCC as D
-import GF.GFCC.Raw.AbsGFCCRaw (CId (..))
+import GF.GFCC.CId
 import GF.Infra.Option ----
 import GF.Data.Operations
 import GF.Text.UTF8

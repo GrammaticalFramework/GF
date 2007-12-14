@@ -19,7 +19,7 @@ import GF.GFCC.Linearize
 import GF.GFCC.Generate
 import GF.GFCC.Macros
 import GF.GFCC.DataGFCC
-import GF.GFCC.Raw.AbsGFCCRaw (CId (..))
+import GF.GFCC.CId
 import GF.GFCC.Raw.ConvertGFCC
 import GF.GFCC.Raw.ParGFCCRaw
 import GF.Command.PPrTree
