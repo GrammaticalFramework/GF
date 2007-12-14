@@ -19,7 +19,7 @@ import GF.Canon.GFC
 import GF.Canon.AbsGFC
 import GF.GFCC.Raw.AbsGFCCRaw(CId(CId))
 --import GF.GFCC.DataGFCC(mkGFCC)
-import GF.Canon.CanonToGFCC as C2GFCC
+import GF.Canon.CanonToGFCC
 import GF.Grammar.Macros
 import GF.Grammar.MMacros
 
@@ -264,12 +264,10 @@ updateShellState opts ign mcnc sh ((_,sgr,gr,eenv),rts) = do
   let fromGFC       = snd . snd . Cnv.convertGFC opts
       (mcfgs, cfgs) = unzip $ map (curry fromGFC cgr) concrs
       fcfgs0        = [(IC id,g) | (CId id,g) <- 
-        FCnv.convertGrammar (C2GFCC.mkCanon2gfccNoUTF8 cgr)]
+                         FCnv.convertGrammar (canon2gfcc opts cgr)] ---- UTF8
       fcfgs         = [(c,g) | c <- concrs, Just g <- [lookup c fcfgs0]]
       pInfos        = zipWith3 Prs.buildPInfo mcfgs (map snd fcfgs) cfgs
       
-      
-
   let funs = funRulesOf cgr
   let cats = allCatsOf cgr
   let csi  = [(c,(co,

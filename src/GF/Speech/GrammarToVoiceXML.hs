@@ -10,7 +10,7 @@
 
 module GF.Speech.GrammarToVoiceXML (grammar2vxml) where
 
-import GF.Canon.CanonToGFCC (mkCanon2gfcc)
+import GF.Canon.CanonToGFCC (canon2gfcc)
 import qualified GF.GFCC.Raw.AbsGFCCRaw as C
 import GF.GFCC.DataGFCC (GFCC(..), Abstr(..))
 import GF.GFCC.Macros
@@ -32,6 +32,7 @@ import GF.UseGrammar.GetTree (string2treeErr)
 import GF.UseGrammar.Linear (linTree2strings)
 
 import GF.Infra.Ident
+import GF.Infra.Option (noOptions)
 import GF.Infra.Modules
 import GF.Data.Operations
 
@@ -65,7 +66,7 @@ prid :: VIdent -> String
 prid (C.CId x) = x
 
 vSkeleton :: GFC.CanonGrammar -> (VIdent,VSkeleton)
-vSkeleton = gfccSkeleton . mkCanon2gfcc
+vSkeleton = gfccSkeleton . canon2gfcc noOptions
 
 gfccSkeleton :: GFCC -> (VIdent,VSkeleton)
 gfccSkeleton gfcc = (absname gfcc, ts)
