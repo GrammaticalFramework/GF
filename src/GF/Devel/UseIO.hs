@@ -131,7 +131,7 @@ extendPathEnv lib var ps = do
   s <- catch (getEnv var) (const (return ""))     -- e.g. GF_GRAMMAR_PATH
   let fs = pFilePaths s
   let ss = ps ++ fs
-  liftM concat $ mapM allSubdirs $ ss ++ [b ++ "/" ++ s | s <- ss]
+  liftM concat $ mapM allSubdirs $ ss ++ [b ++ "/" ++ s | s <- ss ++ ["prelude"]]
 
 pFilePaths :: String -> [FilePath]
 pFilePaths s = case break isPathSep s of

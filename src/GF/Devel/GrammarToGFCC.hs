@@ -221,9 +221,11 @@ reorder abs cg = M.MGrammar $
                      (i,mo) <- mos, M.isModCnc mo, 
                      Just r <- [lookup i (M.allExtendSpecs cg la)]]
 
-         predefCDefs = [(IC c, CncCat (Yes GM.defLinType) Nope Nope) | 
-                       ---- lindef,printname 
-                         c <- ["Float","Int","String"]]
+         predefCDefs = 
+           (IC "Int", CncCat (Yes Look.linTypeInt) Nope Nope) : 
+           [(IC c, CncCat (Yes GM.defLinType) Nope Nope) | 
+                                    ---- lindef,printname 
+                         c <- ["Float","String"]]
 
        sortIds = sortBy (\ (f,_) (g,_) -> compare f g) 
        nubFlags = nubBy (\ (Opt (f,_)) (Opt (g,_)) -> f == g)
@@ -304,7 +306,9 @@ type ParamEnv =
 --- gathers those param types that are actually used in lincats and lin terms
 paramValues :: SourceGrammar -> ParamEnv
 paramValues cgr = (labels,untyps,typs) where
-  partyps = nub $ [ty | 
+  partyps = nub $ 
+            [App (Q (IC "Predef") (IC "Ints")) (EInt i) | i <- [1,9]] ---linTypeInt 
+              ++ [ty | 
               (_,(_,CncCat (Yes (RecType ls)) _ _)) <- jments,
               ty0 <- [ty | (_, ty) <- unlockTyp ls],
               ty  <- typsFrom ty0
@@ -342,7 +346,8 @@ paramValues cgr = (labels,untyps,typs) where
   untyps = 
     Map.fromList $ concatMap Map.toList [typ | (_,typ) <- Map.toList typs]
   lincats = 
-    [(IC cat,[(LIdent "s",GM.typeStr)]) | cat <- ["Int", "Float", "String"]] ++
+    [(IC "Int",[f | let RecType fs = Look.linTypeInt, f <- fs])] ++
+    [(IC cat,[(LIdent "s",GM.typeStr)]) | cat <- ["Float", "String"]] ++
     reverse ---- TODO: really those lincats that are reached
             ---- reverse is enough to expel overshadowed ones... 
       [(cat,(unlockTyp ls)) | (_,(cat,CncCat (Yes (RecType ls)) _ _)) <- jments]
