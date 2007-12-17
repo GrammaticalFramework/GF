@@ -34,6 +34,9 @@ prCFTree (CFTree (fun, (_,trees))) = prCFFun fun ++ prs trees where
  prs ts = " " ++ unwords (map ps ts)
  ps t@(CFTree (_,(_,[]))) = prCFTree t
  ps t = prParenth (prCFTree t)
+{-# NOINLINE prCFTree #-}
+-- Workaround ghc 6.8.2 bug
+
 
 prCFRule :: CFRule -> String
 prCFRule (fun,(cat,its)) = 
