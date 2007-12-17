@@ -46,4 +46,15 @@ fun
   pot3 : Sub1000 -> Sub1000000 ;                -- m * 1000
   pot3plus : Sub1000 -> Sub1000 -> Sub1000000 ; -- m * 1000 + n
 
+-- Numerals as sequences of digits have a separate, simpler grammar
+
+  cat 
+    Dig ;
+
+  fun
+    IDig  : Dig -> Digits ;
+    IIDig : Dig -> Digits -> Digits ;
+
+    D_0, D_1, D_2, D_3, D_4, D_5, D_6, D_7, D_8, D_9 : Dig ;
+
 }

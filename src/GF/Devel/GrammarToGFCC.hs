@@ -307,8 +307,8 @@ type ParamEnv =
 paramValues :: SourceGrammar -> ParamEnv
 paramValues cgr = (labels,untyps,typs) where
   partyps = nub $ 
-            [App (Q (IC "Predef") (IC "Ints")) (EInt i) | i <- [1,9]] ---linTypeInt 
-              ++ [ty | 
+            --- [App (Q (IC "Predef") (IC "Ints")) (EInt i) | i <- [1,9]] ---linTypeInt 
+            [ty | 
               (_,(_,CncCat (Yes (RecType ls)) _ _)) <- jments,
               ty0 <- [ty | (_, ty) <- unlockTyp ls],
               ty  <- typsFrom ty0

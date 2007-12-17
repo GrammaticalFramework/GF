@@ -38,7 +38,7 @@ concrete StructuralEng of Structural = CatEng **
   everything_NP = regNP "everything" Sg ;
   everywhere_Adv = ss "everywhere" ;
   few_Det = mkDeterminer Pl "few" ;
-  first_Ord = ss "first" ;
+---  first_Ord = ss "first" ; DEPRECATED
   for_Prep = ss "for" ;
   from_Prep = ss "from" ;
   he_Pron = mkNP "he" "him" "his" Sg P3 ;
@@ -71,7 +71,7 @@ concrete StructuralEng of Structural = CatEng **
     } ;
   no_Phr = ss "no" ;
   on_Prep = ss "on" ;
-  one_Quant = mkDeterminer Sg "one" ;
+----  one_Quant = mkDeterminer Sg "one" ; -- DEPRECATED
   only_Predet = ss "only" ;
   or_Conj = ss "or" ** {n = Sg} ;
   otherwise_PConj = ss "otherwise" ;

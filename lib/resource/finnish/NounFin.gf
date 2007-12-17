@@ -61,7 +61,7 @@ concrete NounFin of Noun = CatFin ** open ResFin, Prelude in {
       } ;
 
     DetSg quant ord = {
-      s1 = \\c => quant.s1 ! c ++ ord.s ! Sg ! c ;
+      s1 = \\c => quant.s1 ! Sg ! c ++ ord.s ! Sg ! c ;
       s2 = quant.s2 ; 
       n  = Sg ; 
       isNum = False ; 
@@ -70,14 +70,15 @@ concrete NounFin of Noun = CatFin ** open ResFin, Prelude in {
       } ;
 
     DetPl quant num ord = {
-      s1 = \\c => quant.s1 ! c ++ num.s ! Sg ! c ++ ord.s ! Pl ! c ; 
+      s1 = \\c => quant.s1 ! num.n ! c ++ num.s ! Sg ! c ++ ord.s ! Pl ! c ; 
       s2 = quant.s2 ;
-      n = Pl ;
+      n = num.n ;
       isNum = num.isNum ;
       isPoss = quant.isPoss ;
       isDef = quant.isDef
       } ;
 
+{- --- DEPREC
     SgQuant quant = {
       s1 = quant.s1 ! Sg ; 
       s2 = quant.s2 ; 
@@ -92,7 +93,7 @@ concrete NounFin of Noun = CatFin ** open ResFin, Prelude in {
       isPoss = quant.isPoss ;
       isDef = quant.isDef
       } ;
-
+-}
     PossPron p = {
       s1 = \\_,_ => p.s ! NPCase Gen ;
       s2 = BIND ++ possSuffix p.a ;
@@ -101,16 +102,27 @@ concrete NounFin of Noun = CatFin ** open ResFin, Prelude in {
       isDef = True  --- "minun kolme autoani ovat" ; thus "...on" is missing
       } ;
 
-    NoNum = {s = \\_,_ => [] ; isNum = False} ;
+    NoNum = {s = \\_,_ => [] ; isNum = False ; n = Pl} ;
     NoOrd = {s = \\_,_ => []} ;
 
-    NumInt n = {s = \\_,_ => n.s ; isNum = True} ;
+    NumInt n = {s = \\_,_ => n.s ; isNum = True ; n = Pl} ; --DEPREC
     OrdInt n = {s = \\_,_ => n.s ++ "."} ;
 
-    NumNumeral numeral = {s = \\n,c => numeral.s ! NCard (NCase n c) ; isNum = True} ;
+    NumDigits numeral = {
+      s = \\n,c => numeral.s ! NCard (NCase n c) ; 
+      n = numeral.n ;
+      isNum = True
+      } ;
+    OrdDigits numeral = {s = \\n,c => numeral.s ! NOrd  (NCase n c)} ;
+
+    NumNumeral numeral = {
+      s = \\n,c => numeral.s ! NCard (NCase n c) ; 
+      n = numeral.n ;
+      isNum = True
+      } ;
     OrdNumeral numeral = {s = \\n,c => numeral.s ! NOrd  (NCase n c)} ;
 
-    AdNum adn num = {s = \\n,c => adn.s ++ num.s ! n ! c ; isNum = num.isNum} ;
+    AdNum adn num = {s = \\n,c => adn.s ++ num.s ! n ! c ; isNum = num.isNum ; n = num.n} ;
 
     OrdSuperl a = {s = \\n,c => a.s ! Superl ! AN (NCase n c)} ;
 
@@ -128,7 +140,7 @@ concrete NounFin of Noun = CatFin ** open ResFin, Prelude in {
       } ;
 
     MassDet = {
-      s1 = \\_ => [] ; --- Nom is Part ?
+      s1 = \\_,_ => [] ; --- Nom is Part ?
       s2 = [] ; 
       isNum,isPoss,isDef = False
       } ;

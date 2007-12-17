@@ -1,0 +1,182 @@
+GFCC Syntax 
+
+
+==Syntax of GFCC files==
+
+The parser syntax is very simple, as defined in BNF:
+```
+  Grm. Grammar ::= [RExp] ;
+
+  App.  RExp ::= "(" CId [RExp] ")" ;
+  AId.  RExp ::= CId ;
+  AInt. RExp ::= Integer ;
+  AStr. RExp ::= String ;
+  AFlt. RExp ::= Double ;
+  AMet. RExp ::= "?" ;
+
+  terminator RExp "" ;
+
+  token CId (('_' | letter) (letter | digit | '\'' | '_')*) ;
+```
+While a parser and a printer can be generated for many languages
+from this grammar by using the BNF Converter, a parser is also
+easy to write by hand using recursive descent.
+
+
+==Syntax of well-formed GFCC code==
+
+Here is a summary of well-formed syntax, 
+with a comment on the semantics of each construction.
+```
+  Grammar ::= 
+    CId                          -- abstract syntax names
+    "(" "concrete" CId* ")"      -- concrete syntax names
+    "(" "flags"    Flag* ")"     -- global flags
+    "(" "abstract" Abstract ")"  -- abstract syntax
+    "(" "concrete" Concrete* ")" -- concrete syntaxes
+
+  Abstract ::= 
+    "(" "flags" Flag*   ")"      -- abstract flags
+    "(" "fun"   FunDef* ")"      -- function definitions
+    "(" "cat"   CatDef* ")"      -- category definitions
+
+  Concrete ::= 
+    "(" CId                      -- language name
+      "flags"     Flag*          -- concrete flags
+      "lin"       LinDef*        -- linearization rules
+      "oper"      LinDef*        -- operations (macros)
+      "lincat"    LinDef*        -- linearization type definitions
+      "lindef"    LinDef*        -- linearization default definitions
+      "printname" LinDef*        -- printname definitions
+      "param"     LinDef*        -- lincats with labels and parameter value names
+    ")" 
+
+  Flag   ::= "(" CId String ")"   -- flag and value
+  FunDef ::= "(" CId Type Exp ")" -- function, type, and definition
+  CatDef ::= "(" CId Hypo* ")"    -- category and context
+  LinDef ::= "(" CId Term ")"     -- function and definition
+
+  Type ::= 
+    "(" CId                 -- value category
+      "(" "H" Hypo* ")"     --   argument context
+      "(" "X" Exp* ")" ")"  --   arguments (of dependent value type)
+
+  Exp ::=
+     "(" CId                -- function
+       "(" "B" CId* ")"     --   bindings
+       "(" "X" Exp* ")" ")" --   arguments
+   | CId                    -- variable
+   | "?"                    -- metavariable
+   | "(" "Eq" Equation* ")" -- group of pattern equations
+   | Integer                -- integer literal (non-negative)
+   | Float                  -- floating-point literal (non-negative)
+   | String                 -- string literal (in double quotes)
+
+  Hypo ::= "(" CId Type ")" -- variable and type
+
+  Equation ::= "(" "E" Exp Exp* ")" -- value and pattern list
+
+  Term ::= 
+     "(" "R"  Term* ")"       -- array (record or table)
+   | "(" "S"  Term* ")"       -- concatenated sequence
+   | "(" "FV" Term* ")"       -- free variant list
+   | "(" "P"  Term Term ")"   -- access to index (projection or selection)
+   | "(" "W"  String Term ")" -- token prefix with suffix list
+   | "(" "A"  Integer ")"     -- pointer to subtree
+   | String                   -- token (in double quotes)
+   | Integer                  -- index in array
+   | CId                      -- macro constant
+   | "?"                      -- metavariable
+```
+
+
+==GFCC interpreter==
+
+The first phase in interpreting GFCC is to parse a GFCC file and
+build an internal abstract syntax representation, as specified
+in the previous section.
+
+With this representation, linearization can be performed by
+a straightforward function from expressions (``Exp``) to terms
+(``Term``). All expressions except groups of pattern equations
+can be linearized.
+
+Here is a reference Haskell implementation of linearization:
+```
+  linExp :: GFCC -> CId -> Exp -> Term
+  linExp gfcc lang tree@(DTr _ at trees) = case at of
+    AC fun -> comp (map lin trees) $ look fun
+    AS s   -> R [K (show s)] -- quoted
+    AI i   -> R [K (show i)]
+    AF d   -> R [K (show d)]
+    AM     -> TM
+   where
+     lin  = linExp gfcc lang
+     comp = compute gfcc lang
+     look = lookLin gfcc lang
+```
+TODO: bindings must be supported.
+
+Terms resulting from linearization are evaluated in
+call-by-value order, with two environments needed:
+- the grammar (a concrete syntax) to give the global constants
+- an array of terms to give the subtree linearizations
+
+
+The Haskell implementation works as follows:
+```
+compute :: GFCC -> CId -> [Term] -> Term -> Term
+compute gfcc lang args = comp where
+  comp trm = case trm of
+    P r p  -> proj (comp r) (comp p)
+    W s t  -> W s (comp t)
+    R ts   -> R $ map comp ts
+    V i    -> idx args (fromInteger i)  -- already computed
+    F c    -> comp $ look c             -- not computed (if contains V)
+    FV ts  -> FV $ Prelude.map comp ts
+    S ts   -> S $ Prelude.filter (/= S []) $ Prelude.map comp ts
+    _ -> trm
+
+  look = lookOper gfcc lang
+
+  idx xs i = xs !! i
+
+  proj r p = case (r,p) of
+    (_,     FV ts) -> FV $ Prelude.map (proj r) ts
+    (FV ts, _    ) -> FV $ Prelude.map (\t -> proj t p) ts
+    (W s t, _)     -> kks (s ++ getString (proj t p))
+    _              -> comp $ getField r (getIndex p)
+
+  getString t = case t of
+    K (KS s) -> s
+    _ -> trace ("ERROR in grammar compiler: string from "++ show t) "ERR"
+
+  getIndex t =  case t of
+    C i    -> fromInteger i
+    RP p _ -> getIndex p
+    TM     -> 0  -- default value for parameter
+    _ -> trace ("ERROR in grammar compiler: index from " ++ show t) 0
+
+  getField t i = case t of
+    R rs   -> idx rs i
+    RP _ r -> getField r i
+    TM     -> TM
+    _ -> trace ("ERROR in grammar compiler: field from " ++ show t) t
+```
+The result of linearization is usually a record, which is realized as
+a string using the following algorithm.
+```
+  realize :: Term -> String
+  realize trm = case trm of
+    R (t:_)  -> realize t
+    S ss     -> unwords $ map realize ss
+    K s      -> s
+    W s t    -> s ++ realize t
+    FV (t:_) -> realize t  -- TODO: all variants
+    TM       -> "?"
+```
+Notice that realization always picks the first field of a record.
+If a linearization type has more than one field, the first field
+does not necessarily contain the desired string.
+Also notice that the order of record fields in GFCC is not necessarily
+the same as in GF source.

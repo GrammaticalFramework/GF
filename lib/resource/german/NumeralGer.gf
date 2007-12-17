@@ -45,4 +45,42 @@ lin
   pot3plus n m = 
     {s = \\g => n.s ! invNum ++ "tausend" ++ m.s ! g ; n = Pl} ;
 
+
+  lincat 
+    Dig = TDigit ;
+
+  lin
+    IDig d = d ; 
+
+    IIDig d i = {
+      s = \\o => d.s ! o ++ i.s ! o ;
+      n = Pl
+    } ;
+
+    ---- TODO: case endings of ordinals
+    D_0 = mkDig "0" ;
+    D_1 = mk3Dig "1" "1e" Sg ;
+    D_2 = mk2Dig "2" "2e" ;
+    D_3 = mkDig "3" ;
+    D_4 = mkDig "4" ;
+    D_5 = mkDig "5" ;
+    D_6 = mkDig "6" ;
+    D_7 = mkDig "7" ;
+    D_8 = mkDig "8" ;
+    D_9 = mkDig "9" ;
+
+  oper
+    mk2Dig : Str -> Str -> TDigit = \c,o -> mk3Dig c o Pl ;
+    mkDig : Str -> TDigit = \c -> mk2Dig c (c + "e") ;
+
+    mk3Dig : Str -> Str -> Number -> TDigit = \c,o,n -> {
+      s = table {NCard => c ; NOrd _ => o} ;
+      n = n
+      } ;
+
+    TDigit = {
+      n : Number ;
+      s : CardOrd => Str
+    } ;
+
 }

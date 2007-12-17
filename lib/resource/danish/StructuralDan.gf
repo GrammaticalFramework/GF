@@ -29,7 +29,7 @@ concrete StructuralDan of Structural = CatDan **
   everything_NP = regNP "alt" "alts" SgNeutr ;
   everywhere_Adv = ss "overalt" ;
   few_Det  = {s = \\_,_ => "få" ; n = Pl ; det = DDef Indef} ;
-  first_Ord = {s = "første" ; isDet = True} ;
+---  first_Ord = {s = "første" ; isDet = True} ;
   for_Prep = ss "for" ;
   from_Prep = ss "fra" ;
   he_Pron = MorphoDan.mkNP "han"  "ham"  "hans" "hans" "hans"  SgUtr P3 ;
@@ -53,7 +53,7 @@ concrete StructuralDan of Structural = CatDan **
     mkV "måtte" "må" "må" "måtte" "måttet" "mått" ** {c2 = [] ; lock_VV = <>} ;
   no_Phr = ss ["Nej"] ;
   on_Prep = ss "på" ;
-  one_Quant = {s = \\_ => genderForms ["en"] ["et"] ; n = Sg ; det = DIndef} ; --- ei
+---  one_Quant = {s = \\_ => genderForms ["en"] ["et"] ; n = Sg ; det = DIndef} ; --- ei
   only_Predet = {s = \\_ => "kun"} ;
   or_Conj = ss "eller" ** {n = Sg} ;
   otherwise_PConj = ss "anderledes" ;

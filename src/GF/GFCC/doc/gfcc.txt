@@ -1,6 +1,6 @@
 The GFCC Grammar Format
 Aarne Ranta
-October 5, 2007
+December 14, 2007
 
 Author's address:
 [``http://www.cs.chalmers.se/~aarne`` http://www.cs.chalmers.se/~aarne]
@@ -8,6 +8,7 @@ Author's address:
 % to compile: txt2tags -thtml --toc gfcc.txt
 
 History:
+- 14 Dec 2007: simpler, Lisp-like concrete syntax of GFCC
 - 5 Oct 2007: new, better structured GFCC with full expressive power
 - 19 Oct: translation of lincats, new figures on C++
 - 3 Oct 2006: first version
@@ -53,7 +54,8 @@ will be used instead. GFC provides only marginal advantages as a target format
 compared with GF, and it is therefore just extra weight to carry around this
 format.
 
-The main differences of GFCC compared with GFC (and GF) can be summarized as follows:
+The main differences of GFCC compared with GFC (and GF) can be 
+summarized as follows:
 - there are no modules, and therefore no qualified names
 - a GFCC grammar is multilingual, and consists of a common abstract syntax 
   together with one concrete syntax per language
@@ -66,7 +68,8 @@ The main differences of GFCC compared with GFC (and GF) can be summarized as fol
 
 
 Here is an example of a GF grammar, consisting of three modules, 
-as translated to GFCC. The representations are aligned; thus they do not completely
+as translated to GFCC. The representations are aligned; 
+thus they do not completely
 reflect the order of judgements in GFCC files, which have different orders of
 blocks of judgements, and alphabetical sorting.
 ```  

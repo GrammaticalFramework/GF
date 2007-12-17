@@ -73,7 +73,7 @@ toExp e = case e of
   App fun [App (CId "B") xs, App (CId "X") exps] ->
     DTr [x | AId x <- xs] (AC fun) (lmap toExp exps)
   App (CId "Eq") eqs -> 
-    EEq [Equ (lmap toExp ps) (toExp v) | App (CId "Case") (v:ps) <- eqs]
+    EEq [Equ (lmap toExp ps) (toExp v) | App (CId "E") (v:ps) <- eqs]
   AMet -> DTr [] (AM 0) []
   AInt i -> DTr [] (AI i) []
   AFlt i -> DTr [] (AF i) []
@@ -147,7 +147,7 @@ fromExp e = case e of
   DTr [] (AI i) [] -> AInt (toInteger i)
   DTr [] (AM _) [] -> AMet ----
   EEq eqs -> 
-    App (CId "Eq") [App (CId "Case") (lmap fromExp (v:ps)) | Equ ps v <- eqs]
+    App (CId "Eq") [App (CId "E") (lmap fromExp (v:ps)) | Equ ps v <- eqs]
   _ -> error $ "exp " ++ show e
 
 fromTerm :: Term -> RExp

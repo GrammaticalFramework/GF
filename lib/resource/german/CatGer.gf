@@ -47,7 +47,7 @@ concrete CatGer of Cat =
     NP = {s : Case => Str ; a : Agr} ;
     Pron = {s : NPForm => Str ; a : Agr} ;
     Det = {s : Gender => Case => Str ; n : Number ; a : Adjf} ;
-    QuantSg, QuantPl = {s : Gender => Case => Str ; a : Adjf} ;
+---    QuantSg, QuantPl = {s : Gender => Case => Str ; a : Adjf} ; DEPREC
     Quant = {s : Number => Gender => Case => Str ; a : Adjf} ;
     Predet = {s : Number => Gender => Case => Str} ;
     Num = {s : Str; n : Number } ;
@@ -55,7 +55,8 @@ concrete CatGer of Cat =
 
 -- Numeral
 
-    Numeral = {s : CardOrd => Str; n : Number } ;
+    Numeral = {s : CardOrd => Str ; n : Number } ;
+    Digits = {s : CardOrd => Str ; n : Number } ;
 
 -- Structural
 

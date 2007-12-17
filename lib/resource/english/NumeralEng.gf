@@ -41,4 +41,55 @@ lin pot3 n = {
   s = \\c => n.s ! NCard ++ mkCard c "thousand" ; n = Pl} ;
 lin pot3plus n m = {
   s = \\c => n.s ! NCard ++ "thousand" ++ m.s ! c ; n = Pl} ;
+
+-- numerals as sequences of digits
+
+  lincat 
+    Dig = TDigit ;
+
+  lin
+    IDig d = d ** {tail = T1} ;
+
+    IIDig d i = {
+      s = \\o => d.s ! o ++ commaIf i.tail ++ i.s ! o ;
+      n = Pl ;
+      tail = inc i.tail
+    } ;
+
+    D_0 = mkDig "0" ;
+    D_1 = mk3Dig "1" "1st" Sg ;
+    D_2 = mk2Dig "2" "2nd" ;
+    D_3 = mk2Dig "3" "3rd" ;
+    D_4 = mkDig "4" ;
+    D_5 = mkDig "5" ;
+    D_6 = mkDig "6" ;
+    D_7 = mkDig "7" ;
+    D_8 = mkDig "8" ;
+    D_9 = mkDig "9" ;
+
+  oper
+    commaIf : DTail -> Str = \t -> case t of {
+      T3 => "," ;
+      _ => []
+      } ;
+
+    inc : DTail -> DTail = \t -> case t of {
+      T1 => T2 ;
+      T2 => T3 ;
+      T3 => T1
+      } ;
+
+    mk2Dig : Str -> Str -> TDigit = \c,o -> mk3Dig c o Pl ;
+    mkDig : Str -> TDigit = \c -> mk2Dig c (c + "th") ;
+
+    mk3Dig : Str -> Str -> Number -> TDigit = \c,o,n -> {
+      s = table {NCard => c ; NOrd => o} ;
+      n = n
+      } ;
+
+    TDigit = {
+      n : Number ;
+      s : CardOrd => Str
+    } ;
+
 }

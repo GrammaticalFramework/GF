@@ -231,10 +231,10 @@ lookupAbsDef gr m c = errIn ("looking up absdef of" +++ prt c) $ do
     _ -> Bad $ prt m +++ "is not an abstract module"
 
 linTypeInt :: Type
-linTypeInt = 
-      let ints k = App (Q (IC "Predef") (IC "Ints")) (EInt k) in
-      RecType [
-        (LIdent "last",ints 9),(LIdent "s", typeStr), (LIdent "size",ints 1)]
+linTypeInt = defLinType
+---      let ints k = App (Q (IC "Predef") (IC "Ints")) (EInt k) in
+---      RecType [
+---        (LIdent "last",ints 9),(LIdent "s", typeStr), (LIdent "size",ints 1)]
 
 lookupLincat :: SourceGrammar -> Ident -> Ident -> Err Type
 lookupLincat gr m c | elem c [zIdent "Int"] = return linTypeInt

@@ -78,9 +78,7 @@ abstract Cat = Common ** {
     Pron ;   -- personal pronoun                    e.g. "she"
     Det ;    -- determiner phrase                   e.g. "those seven"
     Predet ; -- predeterminer (prefixed Quant)      e.g. "all"
-    QuantSg ;-- quantifier ('nucleus' of sing. Det) e.g. "every"
-    QuantPl ;-- quantifier ('nucleus' of plur. Det) e.g. "many"
-    Quant ;  -- quantifier with both sg and pl      e.g. "this/these"
+    Quant ;  -- quantifier ('nucleus' of Det)       e.g. "this/these"
     Num ;    -- cardinal number (used with QuantPl) e.g. "seven"
     Ord ;    -- ordinal number (used in Det)        e.g. "seventh"
 
@@ -88,7 +86,8 @@ abstract Cat = Common ** {
 
 -- Constructed in [Numeral Numeral.html].
 
-    Numeral;-- cardinal or ordinal,                e.g. "five/fifth"
+    Numeral ; -- cardinal or ordinal,               e.g. "five/fifth"
+    Digits ;  -- cardinal or ordinal,               e.g. "1,000/1,000th"
 
 --2 Structural words
 
@@ -120,5 +119,9 @@ abstract Cat = Common ** {
     N2 ;    -- relational noun                     e.g. "son"
     N3 ;    -- three-place relational noun         e.g. "connection"
     PN ;    -- proper name                         e.g. "Paris"
+
+-- DEPRECATED: QuantSg, QuantPl
+---    QuantSg ;-- quantifier ('nucleus' of sing. Det) e.g. "every"
+---    QuantPl ;-- quantifier ('nucleus' of plur. Det) e.g. "many"
 
 }

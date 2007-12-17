@@ -26,33 +26,37 @@ concrete NounEng of Noun = CatEng ** open ResEng, Prelude in {
       } ;
 
     DetSg quant ord = {
-      s = quant.s ++ ord.s ; 
+      s = quant.s ! Sg ++ ord.s ; 
       n = Sg
       } ;
 
     DetPl quant num ord = {
-      s = quant.s ++ num.s ++ ord.s ; 
+      s = quant.s ! num.n ++ num.s ++ ord.s ; 
       n = num.n
       } ;
 
-    SgQuant quant = {s = quant.s ! Sg} ;
-    PlQuant quant = {s = quant.s ! Pl} ;
+---    SgQuant quant = {s = quant.s ! Sg} ; DEPRECATED
+---    PlQuant quant = {s = quant.s ! Pl} ;
 
     PossPron p = {s = \\_ => p.s ! Gen} ;
 
     NoNum = {s = []; n = Pl } ;
     NoOrd = {s = []} ;
 
-    NumInt n = {s = n.s; n = table (Predef.Ints 1 * Predef.Ints 9) {
-			        <0,1>  => Sg ;
-				_ => Pl
-			   } ! ---- <1,2> ---- parser bug (AR 2/6/2007) 
-                               <n.size,n.last>
-    } ;
+    NumDigits n = {s = n.s ! NCard ; n = n.n} ;
 
-    OrdInt n = {s = n.s ++ "th"} ; ---
+    NumInt n = {s = n.s ; n = Pl} ; 
+        --table (Predef.Ints 1 * Predef.Ints 9) {
+	--		        <0,1>  => Sg ;
+	--			_ => Pl  -- DEPRECATED
+	--		   } ! <1,2> ---- parser bug (AR 2/6/2007) 
+        --                       ---- <n.size,n.last>
+        -- } ;
 
-    NumNumeral numeral = {s = numeral.s ! NCard; n = numeral.n } ;
+    OrdInt n = {s = n.s ++ "th"} ; --- DEPRECATED
+    OrdDigits n = {s = n.s ! NOrd} ;
+
+    NumNumeral numeral = {s = numeral.s ! NCard; n = numeral.n} ;
     OrdNumeral numeral = {s = numeral.s ! NOrd} ;
 
     AdNum adn num = {s = adn.s ++ num.s; n = num.n } ;
@@ -68,7 +72,7 @@ concrete NounEng of Noun = CatEng ** open ResEng, Prelude in {
         }
       } ;
 
-    MassDet = {s = [] ; n = Sg} ;
+    MassDet = {s = \\_ => []} ;
 
     UseN n = n ;
     UseN2 n = n ;

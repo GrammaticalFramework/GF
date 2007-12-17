@@ -29,7 +29,7 @@ concrete StructuralNor of Structural = CatNor **
   everything_NP = regNP "alt" "alts" SgNeutr ;
   everywhere_Adv = ss "overalt" ;
   few_Det  = {s = \\_,_ => "få" ; n = Pl ; det = DDef Indef} ;
-  first_Ord = {s = "første" ; isDet = True} ;
+---  first_Ord = {s = "første" ; isDet = True} ; DEPREC
   for_Prep = ss "for" ;
   from_Prep = ss "fra" ;
   he_Pron = MorphoNor.mkNP "han"  "ham"  "hans" "hans" "hans"  SgUtr P3 ;
@@ -53,7 +53,7 @@ concrete StructuralNor of Structural = CatNor **
     mkV "måtte" "må" "må" "måtte" "måttet" "mått" ** {c2 = [] ; lock_VV = <>} ;
   no_Phr = ss ["Nei"] ;
   on_Prep = ss "på" ;
-  one_Quant = {s = \\_ => genderForms ["en"] ["et"] ; n = Sg ; det = DIndef} ; --- ei
+---  one_Quant = {s = \\_ => genderForms ["en"] ["et"] ; n = Sg ; det = DIndef} ; DEPREC
   only_Predet = {s = \\_ => "kun"} ;
   or_Conj = ss "eller" ** {n = Sg} ;
   otherwise_PConj = ss "annarledes" ;

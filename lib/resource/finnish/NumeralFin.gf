@@ -138,5 +138,42 @@ oper
     }
   } ;
 
+
+  lincat 
+    Dig = TDigit ;
+
+  lin
+    IDig d = d ; 
+
+    IIDig d i = {
+      s = \\o => d.s ! o ++ i.s ! o ;
+      n = Pl
+    } ;
+
+    D_0 = mkDig "0" ;
+    D_1 = mk3Dig "1" "1." MorphoFin.Sg ;
+    D_2 = mkDig "2" ;
+    D_3 = mkDig "3" ;
+    D_4 = mkDig "4" ;
+    D_5 = mkDig "5" ;
+    D_6 = mkDig "6" ;
+    D_7 = mkDig "7" ;
+    D_8 = mkDig "8" ;
+    D_9 = mkDig "9" ;
+
+  oper
+    mk2Dig : Str -> Str -> TDigit = \c,o -> mk3Dig c o MorphoFin.Pl ;
+    mkDig : Str -> TDigit = \c -> mk2Dig c (c + ".") ;
+
+    mk3Dig : Str -> Str -> MorphoFin.Number -> TDigit = \c,o,n -> {
+      s = table {NCard _ => c ; NOrd _ => o} ;
+      n = n
+      } ;
+
+    TDigit = {
+      n : MorphoFin.Number ;
+      s : CardOrd => Str
+    } ;
+
 }
 
