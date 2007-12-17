@@ -38,7 +38,7 @@ concrete StructuralFin of Structural = CatFin **
     {lock_N = <>}) Sg ;
   everywhere_Adv = ss "kaikkialla" ;
   few_Det  = mkDet Sg (regN "harva") ;
-  first_Ord = {s = \\n,c => (regN "ensimmäinen").s ! NCase n c} ;
+---  first_Ord = {s = \\n,c => (regN "ensimmäinen").s ! NCase n c} ;
   for_Prep = casePrep allative ;
   from_Prep = casePrep elative ;
   he_Pron = mkPronoun "hän" "hänen" "häntä"  "hänenä" "häneen" Sg P3 ;
@@ -65,9 +65,7 @@ concrete StructuralFin of Structural = CatFin **
   must_VV = subjcaseV (regV "täytyä") genitive ;
   no_Phr = ss "ei" ;
   on_Prep = casePrep adessive ;
-  one_Quant = mkDet Sg 
-     (nhn (mkSubst "ä" "yksi" "yhde" "yhte" "yhtä" "yhteen" "yksi" "yksi" 
-      "yksien" "yksiä" "yksiin")) ;
+---  one_Quant = mkDet Sg  DEPREC
   only_Predet = {s = \\_,_ => "vain"} ;
   or_Conj = ss "tai" ** {n = Sg} ;
   otherwise_PConj = ss "muuten" ;

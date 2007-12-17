@@ -34,7 +34,7 @@ concrete StructuralGer of Structural = CatGer **
   everything_NP = nameNounPhrase {s = caselist "alles" "alles" "allem" "alles"} ;
   everywhere_Adv = ss "überall" ;
   few_Det = detLikeAdj Pl "wenig" ;
-  first_Ord = {s = (regA "erst").s ! Posit} ;
+----  first_Ord = {s = (regA "erst").s ! Posit} ;
   for_Prep = mkPrep "für" Acc ;
   from_Prep = mkPrep "aus" Dat ;
   he_Pron = mkPronPers "er" "ihn" "ihm" "seiner" "sein"  Masc Sg P3 ;
@@ -59,11 +59,7 @@ concrete StructuralGer of Structural = CatGer **
         "mußte" "mußtest" "mußten" "mußtet"
         "müßte" "gemußt" [] 
         VHaben) ;
-  one_Quant = {
-      s = \\g,c => "ein" + pronEnding ! GSg g ! c ;  
-      n = Sg ;
-      a = Strong
-      } ;
+---  one_Quant = DEPREC
   only_Predet = {s = \\_,_,_ => "nur"} ;
   no_Phr = ss "nein" ;
   on_Prep = mkPrep "auf" Dat ;

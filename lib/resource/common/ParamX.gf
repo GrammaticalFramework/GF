@@ -53,4 +53,11 @@ resource ParamX = open Prelude in {
         }
       } ;
 
+-- To count the length of a tail in a sequence of digits, e.g. to put commas
+-- as in 1,000,000.
+
+  param
+    DTail = T1 | T2 | T3 ;
+
+
 }

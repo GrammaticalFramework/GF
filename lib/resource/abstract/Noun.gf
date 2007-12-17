@@ -35,13 +35,17 @@ abstract Noun = Cat ** {
 -- (This is modified from CLE by further dividing their $Num$ into 
 -- cardinal and ordinal.)
 
-    DetSg : QuantSg ->        Ord -> Det ;  -- this best man
-    DetPl : QuantPl -> Num -> Ord -> Det ;  -- these five best men
+    DetSg : Quant ->        Ord -> Det ;  -- this best man
+    DetPl : Quant -> Num -> Ord -> Det ;  -- these five best men
+
+-- Notice that $DetPl$ can still result in a singular determiner, because
+-- "one" is a numeral: "this one man".
 
 -- Quantifiers that have both forms can be used in both ways.
 
-    SgQuant : Quant -> QuantSg ;            -- this
-    PlQuant : Quant -> QuantPl ;            -- these
+--- DEPRECATED: no longer needed
+---    SgQuant : Quant -> QuantSg ;            -- this
+---    PlQuant : Quant -> QuantPl ;            -- these
 
 -- Pronouns have possessive forms. Genitives of other kinds
 -- of noun phrases are not given here, since they are not possible
@@ -58,7 +62,8 @@ abstract Noun = Cat ** {
 
 -- $Num$ consists of either digits or numeral words.
 
-    NumInt     : Int -> Num ;     -- 51
+    NumInt     : Int -> Num ;     -- 51 (DEPRECATED)
+    NumDigits  : Digits -> Num ;  -- 51
     NumNumeral : Numeral -> Num ; -- fifty-one
 
 -- The construction of numerals is defined in [Numeral Numeral.html].
@@ -69,7 +74,8 @@ abstract Noun = Cat ** {
 
 -- $Ord$ consists of either digits or numeral words.
 
-    OrdInt     : Int -> Ord ;     -- 51st
+    OrdInt     : Int -> Ord ;     -- 51st (DEPRECATED)
+    OrdDigits  : Digits -> Ord ;  -- 51st
     OrdNumeral : Numeral -> Ord ; -- fifty-first
     
 -- Superlative forms of adjectives behave syntactically in the same way as
@@ -88,7 +94,7 @@ abstract Noun = Cat ** {
 -- not distinguish mass nouns from other common nouns, which can result
 -- in semantically odd expressions.
 
-    MassDet  : QuantSg ;          -- (beer)
+    MassDet  : Quant ;            -- (beer)
 
 -- Other determiners are defined in [Structural Structural.html].
 

@@ -56,15 +56,16 @@ concrete CatFin of Cat = CommonX ** open ResFin, Prelude in {
       isPoss : Bool ;          -- True (a possessive suffix is present)
       isDef : Bool             -- True (verb agrees in Pl, Nom is not Part)
       } ;
-    QuantSg, QuantPl = {s1 : Case => Str ; s2 : Str ; isPoss, isDef : Bool} ;
+----    QuantSg, QuantPl = {s1 : Case => Str ; s2 : Str ; isPoss, isDef : Bool} ;
     Ord = {s : Number => Case => Str} ;
     Predet = {s : Number => NPForm => Str} ;
     Quant = {s1 : Number => Case => Str ; s2 : Str ; isPoss, isDef : Bool} ;
-    Num = {s : Number => Case => Str ; isNum : Bool} ;
+    Num = {s : Number => Case => Str ; isNum : Bool ; n : Number} ;
 
 -- Numeral
 
     Numeral = {s : CardOrd => Str ; n : Number} ;
+    Digits  = {s : CardOrd => Str ; n : Number} ;
 
 -- Structural
 

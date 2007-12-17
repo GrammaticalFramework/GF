@@ -36,7 +36,7 @@ concrete NounGer of Noun = CatGer ** open ResGer, Prelude in {
         n = Sg ;
         a = quant.a
       in {
-        s = \\g,c => quant.s ! g ! c ++ 
+        s = \\g,c => quant.s ! n ! g ! c ++ 
                      ord.s ! agrAdj g (adjfCase a c) n c ;
         n = n ;
         a = a
@@ -46,12 +46,13 @@ concrete NounGer of Noun = CatGer ** open ResGer, Prelude in {
         n = num.n ;
         a = quant.a
       in {
-        s = \\g,c => quant.s ! g ! c ++ 
+        s = \\g,c => quant.s ! n ! g ! c ++ 
                      num.s ++ ord.s ! agrAdj g (adjfCase a c) n c ;
         n = n ;
         a = a
         } ;
 
+{- --- DEPREC
     SgQuant q = {
       s = q.s ! Sg ;
       a = q.a
@@ -60,6 +61,7 @@ concrete NounGer of Noun = CatGer ** open ResGer, Prelude in {
       s = q.s ! Pl ;
       a = q.a
       } ;
+-}
 
     PossPron p = {
       s = \\n,g,c => p.s ! NPPoss (gennum g n) c ;
@@ -75,6 +77,9 @@ concrete NounGer of Noun = CatGer ** open ResGer, Prelude in {
 			   } ! <1,2> ---- parser bug (AR 2/6/2007) <n.size,n.last>
       } ;
     OrdInt n = {s = \\_   => n.s ++ "."} ;
+
+    NumDigits numeral = {s = numeral.s ! NCard; n = numeral.n } ;
+    OrdDigits numeral = {s = \\af => numeral.s ! NOrd af} ;
 
     NumNumeral numeral = {s = numeral.s ! NCard; n = numeral.n } ;
     OrdNumeral numeral = {s = \\af => numeral.s ! NOrd af} ;
@@ -97,8 +102,7 @@ concrete NounGer of Noun = CatGer ** open ResGer, Prelude in {
       } ;
 
     MassDet = {
-      s = \\g,c => [] ;
-      n = Sg ;
+      s = \\_,g,c => [] ;
       a = Strong
       } ;
 

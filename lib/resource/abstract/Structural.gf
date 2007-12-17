@@ -36,7 +36,7 @@ abstract Structural = Cat ** {
   everybody_NP : NP ;
   everything_NP : NP ;
   everywhere_Adv : Adv ;
-  first_Ord : Ord ;
+---  first_Ord : Ord ; DEPRECATED
   few_Det : Det ;
   for_Prep : Prep ;
   from_Prep : Prep ;
@@ -59,7 +59,7 @@ abstract Structural = Cat ** {
   must_VV : VV ;
   no_Phr : Phr ;
   on_Prep : Prep ;
-  one_Quant : QuantSg ;
+---  one_Quant : QuantSg ; DEPRECATED
   only_Predet : Predet ;
   or_Conj : Conj ;
   otherwise_PConj : PConj ;

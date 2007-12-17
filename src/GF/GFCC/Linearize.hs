@@ -31,8 +31,9 @@ linExp mcfg lang tree@(DTr _ at trees) =  ---- bindings TODO
   case at of
     AC fun -> comp (lmap lin trees) $ look fun
     AS s   -> R [kks (show s)] -- quoted
-    AI i   -> R [C lst, kks (show i), C size] where 
-                lst = mod (fromInteger i) 10 ; size = if i < 10 then 0 else 1
+    AI i   -> R [kks (show i)] 
+                --- [C lst, kks (show i), C size] where 
+                --- lst = mod (fromInteger i) 10 ; size = if i < 10 then 0 else 1
     AF d   -> R [kks (show d)]
     AM _   -> TM
  where

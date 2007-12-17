@@ -46,17 +46,18 @@ incomplete concrete NounScand of Noun =
       } ;
 
     DetSg quant ord = {
-      s = \\b,g => quant.s ! (orB b ord.isDet) ! g ++ ord.s ;
+      s = \\b,g => quant.s ! Sg ! (orB b ord.isDet) ! g ++ ord.s ;
       n = Sg ;
       det = quant.det
       } ;
     DetPl quant num ord = {
-      s = \\b,g => quant.s ! (orB b (orB num.isDet ord.isDet)) ! g ++ 
+      s = \\b,g => quant.s ! num.n ! (orB b (orB num.isDet ord.isDet)) ! g ++ 
                    num.s ! g ++ ord.s ;
-      n = Pl ;
+      n = num.n ;
       det = quant.det
       } ;
 
+{- --- DEPREC
     SgQuant quant = {
       s = quant.s ! Sg ;
       n = Sg ;
@@ -67,22 +68,26 @@ incomplete concrete NounScand of Noun =
       n = Pl ;
       det = quant.det
       } ;
+-}
 
     PossPron p = {
       s = \\n,_,g => p.s ! NPPoss (gennum g n) ; 
       det = DDef Indef
       } ;
 
-    NoNum = {s = \\_ => [] ; isDet = False} ;
+    NoNum = {s = \\_ => [] ; isDet = False ; n = Pl} ;
     NoOrd = {s = [] ; isDet = False} ;
 
-    NumInt n = {s = \\_ => n.s ; isDet = True} ;
-    OrdInt n = {s = n.s ++ ":e" ; isDet = True} ; ---
+    NumInt n = {s = \\_ => n.s ; isDet = True ; n = Pl} ; --- DEPRECATED
+    OrdInt n = {s = n.s ++ ":e" ; isDet = True} ; --- DEPRECATED
 
-    NumNumeral numeral = {s = \\g => numeral.s ! NCard g ; isDet = True} ;
-    OrdNumeral numeral = {s = numeral.s ! NOrd SupWeak ; isDet = True} ;
+    NumDigits nu = {s = \\g => nu.s ! NCard g ; isDet = True ; n = nu.n} ;
+    OrdDigits nu = {s = nu.s ! NOrd SupWeak ; isDet = True} ;
 
-    AdNum adn num = {s = \\g => adn.s ++ num.s ! g ; isDet = True} ;
+    NumNumeral nu = {s = \\g => nu.s ! NCard g ; isDet = True ; n = nu.n} ;
+    OrdNumeral nu = {s = nu.s ! NOrd SupWeak ; isDet = True} ;
+
+    AdNum adn num = {s = \\g => adn.s ++ num.s ! g ; isDet = True ; n = num.n} ;
 
     OrdSuperl a = {
       s = case a.isComp of {
@@ -105,7 +110,7 @@ incomplete concrete NounScand of Noun =
       det = DIndef
       } ;
 
-    MassDet = {s = \\_,_ => [] ; n = Sg ; det = DIndef} ;
+    MassDet = {s = \\_,_,_ => [] ; n = Sg ; det = DIndef} ;
 
     UseN, UseN2, UseN3 = \noun -> {
       s = \\n,d,c => noun.s ! n ! specDet d ! c ; 
