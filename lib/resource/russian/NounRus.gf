@@ -89,6 +89,7 @@ concrete NounRus of Noun = CatRus ** open ResRus, Prelude, MorphoRus in {
  --      _ => uy_j_EndDecl n.s }  ;
 
    OrdNumeral numeral = variants {} ; ---- TODO; needed to compile Constructors
+   OrdDigits numeral = variants {} ; ---- TODO; needed to compile Constructors
 ----   OrdDigits TODO
  --  {s = \\ af => (uy_j_EndDecl (numeral.s ! caseAF af ! genAF af)).s!af} ;
 
