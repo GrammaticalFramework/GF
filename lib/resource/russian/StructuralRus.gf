@@ -38,7 +38,7 @@ lin
   everything_NP  = UsePron (pronVseInanimate ** {lock_Pron=<>}) ;
   everywhere_Adv = ss "везде" ;
   few_Det = (ij_EndK_G_KH_Decl "немног") **{lock_Det= <>; n= Sg; g = PNoGen; c = Nom}; -- AMalenkij  
-  first_Ord = (uy_j_EndDecl  "перв" ) ** {lock_A = <>};  --AStaruyj 
+--- DEPREC  first_Ord = (uy_j_EndDecl  "перв" ) ** {lock_A = <>};  --AStaruyj 
   from_Prep  = { s = "от" ; c = Gen };
   he_Pron  = pronOn ;
   here_Adv = ss "здесь" ;
@@ -64,7 +64,7 @@ lin
  no_Phr  = ss ["Нет ."] ;
 --on_Prep = { s = "на" ; c = Prepos }; 
  on_Prep = { s = "на" ; c = Prepos2 }; -- +++ MG_UR: new case Prepos2 introduced! +++
- one_Quant = odinDet  ** {lock_QuantSg = <>; n= Sg; g = PNoGen; c = Nom };
+--- DEPREC one_Quant = odinDet  ** {lock_QuantSg = <>; n= Sg; g = PNoGen; c = Nom };
 --AStaruyj :
  only_Predet = (uy_j_EndDecl  "единственн" ) ** {lock_Predet = <>; n= Sg; g = PNoGen; c = Nom };
  or_Conj  = ss "или"  ** {n = Sg} ;

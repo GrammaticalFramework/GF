@@ -51,7 +51,7 @@ lin pot3plus n m = {
     IDig d = d ** {tail = T1} ;
 
     IIDig d i = {
-      s = \\o => d.s ! o ++ commaIf i.tail ++ i.s ! o ;
+      s = \\o => d.s ! NCard ++ commaIf i.tail ++ i.s ! o ;
       n = Pl ;
       tail = inc i.tail
     } ;

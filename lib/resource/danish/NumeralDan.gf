@@ -51,13 +51,13 @@ lin n9 = mkTal "ni"   "nitten"  "halvfems"   "niende" "halvfemsindstyvende" ;
     IDig d = d ; 
 
     IIDig d i = {
-      s = \\o => d.s ! o ++ i.s ! o ;
+      s = \\o => d.s ! NCard neutrum ++ i.s ! o ;
       n = Pl
     } ;
 
     D_0 = mkDig "0" ;
-    D_1 = mk3Dig "1" "1e" Sg ;
-    D_2 = mk2Dig "2" "2e" ;
+    D_1 = mk3Dig "1" "1:e" Sg ;
+    D_2 = mk2Dig "2" "2:e" ;
     D_3 = mkDig "3" ;
     D_4 = mkDig "4" ;
     D_5 = mkDig "5" ;
@@ -68,7 +68,7 @@ lin n9 = mkTal "ni"   "nitten"  "halvfems"   "niende" "halvfemsindstyvende" ;
 
   oper
     mk2Dig : Str -> Str -> TDigit = \c,o -> mk3Dig c o Pl ;
-    mkDig : Str -> TDigit = \c -> mk2Dig c (c + "e") ;
+    mkDig : Str -> TDigit = \c -> mk2Dig c (c + ":e") ;
 
     mk3Dig : Str -> Str -> Number -> TDigit = \c,o,n -> {
       s = table {NCard _ => c ; NOrd _ => o} ;

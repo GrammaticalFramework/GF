@@ -39,32 +39,36 @@ incomplete concrete NounRomance of Noun =
       } ;
 
     DetSg quant ord = {
-      s = \\g,c => quant.s ! g ! c ++ ord.s ! aagr g Sg ;
+      s = \\g,c => quant.s ! False ! Sg ! g ! c ++ ord.s ! aagr g Sg ;
       n = Sg
       } ;
     DetPl quant num ord = {
-      s = \\g,c => quant.s ! num.isNum ! g ! c ++ num.s ! g ++ ord.s ! aagr g Pl ;
-      n = Pl
+      s = \\g,c => quant.s ! num.isNum ! num.n ! g ! c ++ num.s ! g ++ 
+                   ord.s ! aagr g Pl ;
+      n = num.n
       } ;
 
-    SgQuant q = {s = q.s ! False ! Sg} ;
-    PlQuant q = {s = \\b,g,c => q.s ! b ! Pl ! g ! c} ; 
+--- DEPREC   SgQuant q = {s = q.s ! False ! Sg} ;
+--- DEPREC   PlQuant q = {s = \\b,g,c => q.s ! b ! Pl ! g ! c} ; 
        --- part app: cf NounScand. AR 8/7/2007
 
     PossPron p = {
       s = \\_,n,g,c => possCase g n c ++ p.s ! Poss (aagr g n) ---- il mio!
       } ;
 
-    NoNum = {s = \\_ => [] ; isNum = False} ;
+    NoNum = {s = \\_ => [] ; isNum = False ; n = Pl} ;
     NoOrd = {s = \\_ => []} ;
 
-    NumInt n = {s = \\_ => n.s ; isNum = True} ;
+    NumInt n = {s = \\_ => n.s ; isNum = True ; n = Pl} ;
     OrdInt n = {s = \\_ => n.s ++ "."} ; ---
 
-    NumNumeral numeral = {s = \\g => numeral.s ! NCard g ; isNum = True} ;
-    OrdNumeral numeral = {s = \\a => numeral.s ! NOrd a.g a.n} ;
+    NumDigits nu = {s = \\g => nu.s ! NCard g ; isNum = True ; n = nu.n} ;
+    OrdDigits nu = {s = \\a => nu.s ! NOrd a.g a.n} ;
 
-    AdNum adn num = {s = \\a => adn.s ++ num.s ! a ; isNum = num.isNum} ;
+    NumNumeral nu = {s = \\g => nu.s ! NCard g ; isNum = True ; n = nu.n} ;
+    OrdNumeral nu = {s = \\a => nu.s ! NOrd a.g a.n} ;
+
+    AdNum adn num = {s = \\a => adn.s ++ num.s ! a ; isNum = num.isNum ; n = num.n} ;
 
     OrdSuperl adj = {s = \\a => adj.s ! Superl ! AF a.g a.n} ;
 
@@ -77,8 +81,10 @@ incomplete concrete NounRomance of Noun =
       } ;
 
     MassDet = {
-      s = \\g,c => partitive g c ; 
-      n = Sg
+      s = \\b,n,g,c => case <b,n> of {
+        <False,Sg> => partitive g c ;
+        _ => prepCase genitive ----
+        }
       } ;
 
 -- This is based on record subtyping.

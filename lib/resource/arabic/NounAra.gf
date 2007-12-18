@@ -38,16 +38,19 @@ concrete NounAra of Noun = CatAra ** open ResAra, Prelude in {
       } ;
 
     DetSg quant ord = {
-      s = quant.s ; --++ ord.s 
+      s = \\h,g,c => 
+        quant.s ! Sg ! h ! g ! c ;  
+      ----      s = quant.s ; --++ ord.s -- AR 18/12/2007
       n = One;
       d = quant.d;
-      isNum = quant.isNum
+      isNum = False ---- quant.isNum
       } ;
 
 
     DetPl quant num ord = {
       s = \\h,g,c => 
-        quant.s ! h ! g ! c ++ num.s ! g ! (toDef quant.d num.n) ! c ;  
+        quant.s ! Pl ! h ! g ! c ++   -- AR 18/12/2007 ??
+        num.s ! g ! (toDef quant.d num.n) ! c ;  
       n = num.n;
       d = quant.d;
       isNum = 
@@ -57,8 +60,9 @@ concrete NounAra of Noun = CatAra ** open ResAra, Prelude in {
         };
       } ;
 
-    SgQuant quant = {s = quant.s ! Sg ; n = Sg; d = quant.d; isNum = False} ;
-    PlQuant quant = {s = quant.s ! Pl ; n = Pl; d = quant.d; isNum = False} ;
+--- DEPREC
+---    SgQuant quant = {s = quant.s ! Sg ; n = Sg; d = quant.d; isNum = False} ;
+---    PlQuant quant = {s = quant.s ! Pl ; n = Pl; d = quant.d; isNum = False} ;
 
 
 --    PossPron p = {s = \\_ => p.s ! Gen} ;
@@ -80,7 +84,7 @@ concrete NounAra of Noun = CatAra ** open ResAra, Prelude in {
 
     IndefArt = {s = \\_,_,_,_ => []; d = Indef} ;
 
-    MassDet = {s = \\_,_,_ => [] ; n = Sg; d = Indef; isNum = False} ;
+    MassDet = {s = \\_,_,_,_ => [] ; n = Sg; d = Indef; isNum = False} ;
 
     UseN n = n ;
 --    UseN2 n = n ;

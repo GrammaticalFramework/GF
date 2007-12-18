@@ -34,7 +34,7 @@ lin
   everything_NP = pn2np (mkPN ["tout"] Masc) ;
   everywhere_Adv = ss "partout" ;
   few_Det  = {s = \\g,c => prepCase c ++ "peu" ++ elisDe ; n = Pl} ;
-  first_Ord = {s = \\ag => (regA "premier").s ! Posit ! AF ag.g ag.n} ;
+--- DEPREC first_Ord = {s = \\ag => (regA "premier").s ! Posit ! AF ag.g ag.n} ;
   for_Prep = mkPreposition "pour" ;
   from_Prep = complGen ; ---
   he_Pron = 
@@ -65,7 +65,7 @@ lin
   must_VV = mkVV (devoir_V2 ** {lock_V = <>}) ;
   no_Phr = ss "non" ;
   on_Prep = mkPreposition "sur" ;
-  one_Quant = {s = \\g,c => prepCase c ++ genForms "un" "une" ! g} ;
+--- DEPREC   one_Quant = {s = \\g,c => prepCase c ++ genForms "un" "une" ! g} ;
   only_Predet = {s = \\_,c => prepCase c ++ "seulement" ; c = Nom} ; --- seul(e)(s)
   or_Conj = {s = "ou" ; n = Sg} ;
   otherwise_PConj = ss "autrement" ;

@@ -58,12 +58,14 @@ concrete CatRus of Cat = CommonX ** open ResRus, Prelude in {
 -- Gender parameter is due to multiple determiners (Numerals in Russian)
 -- like "mnogo"
 -- The determined noun has the case parameter specific for the determiner
-    QuantSg, QuantPl , Det = {s : AdjForm => Str; n: Number; g: PronGen; c: Case} ; 
+--- DEPREC    QuantSg, QuantPl , 
+    Det = {s : AdjForm => Str; n: Number; g: PronGen; c: Case} ; 
     Predet, Quant= {s : AdjForm => Str; g: PronGen; c: Case} ; 
 
 -- Numeral
 
-    Num, Numeral = {s : Case => Gender => Str} ;
+    Num, Numeral = {s : Case => Gender => Str ; n : Number} ;
+    Digits = {s : Str ; n : Number} ; ---- 
     
 -- Structural
 -- The conjunction has an inherent number, which is used when conjoining

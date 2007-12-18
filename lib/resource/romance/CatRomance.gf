@@ -55,16 +55,17 @@ incomplete concrete CatRomance of Cat =
     CN      = {s : Number => Str ; g : Gender} ;
     NP,Pron = Pronoun ;
     Det     = {s : Gender => Case => Str ; n : Number} ;
-    QuantSg = {s : Gender => Case => Str} ;
-    QuantPl = {s : Bool => Gender => Case => Str} ;
+---    QuantSg = {s : Gender => Case => Str} ;
+---    QuantPl = {s : Bool => Gender => Case => Str} ;
     Quant   = {s : Bool => Number => Gender => Case => Str} ;
     Predet  = {s : AAgr   => Case => Str ; c : Case} ; -- c : la plupart de
-    Num     = {s : Gender => Str ; isNum : Bool} ;
+    Num     = {s : Gender => Str ; isNum : Bool ; n : Number} ;
     Ord     = {s : AAgr   => Str} ;
 
 -- Numeral
 
-    Numeral = {s : CardOrd => Str} ;
+    Numeral = {s : CardOrd => Str ; n : Number} ;
+    Digits  = {s : CardOrd => Str ; n : Number} ;
 
 -- Structural
 

@@ -7,8 +7,8 @@ concrete NumeralFre of Numeral = CatFre **
 -- Auxiliaries
 
 oper
-  digitPl : {s : DForm => Str; inh : DForm ; inh1 : Number} ->
-            {s : CardOrd => DForm => Str ; inh : DForm ; inh1 : Number} = \d -> {
+  digitPl : {s : DForm => Str; inh : DForm ; n : Number} ->
+            {s : CardOrd => DForm => Str ; inh : DForm ; n : Number} = \d -> {
    s = \\co,df => let ds = d.s ! df in 
      case co of {
        NCard _ => ds ;
@@ -18,7 +18,7 @@ oper
          _ => ds + "ième"
          }
        } ;
-       inh = d.inh ; inh1 = d.inh1
+       inh = d.inh ; n = d.n
   } ;
 
   cardOrd : CardOrd -> Str -> Str -> Str = \co, x,y -> case co of {
@@ -27,30 +27,30 @@ oper
     } ;
 
 lincat 
-  Digit = {s : CardOrd => DForm => Str ; inh : DForm ; inh1 : Number} ; 
+  Digit = {s : CardOrd => DForm => Str ; inh : DForm ; n : Number} ; 
   Sub10 = {s : CardOrd => {p1 : DForm ; p2 : Place} => Str ; inh : Number} ;
-  Sub100 = {s : CardOrd => Place => Str} ;
-  Sub1000 = {s : CardOrd => Place => Str} ;
-  Sub1000000 = {s : CardOrd => Str} ;
+  Sub100 = {s : CardOrd => Place => Str ; n : Number} ;
+  Sub1000 = {s : CardOrd => Place => Str ; n : Number} ;
+  Sub1000000 = {s : CardOrd => Str ; n : Number} ;
 
 lin num x0 = x0 ;
 
 lin n2  =
-  digitPl {inh = unit ; inh1 = Sg ; s = table {unit => "deux" ; teen => "douze" ; jten => "vingt" ; ten => "vingt" ; tenplus => "vingt"}} ;
+  digitPl {inh = unit ; n = Sg ; s = table {unit => "deux" ; teen => "douze" ; jten => "vingt" ; ten => "vingt" ; tenplus => "vingt"}} ;
 lin n3  =
-  digitPl {inh = unit ; inh1 = Sg ; s = table {unit => "trois" ; teen => "treize" ; jten => "trente" ; ten => "trente" ; tenplus => "trente"}} ;
+  digitPl {inh = unit ; n = Sg ; s = table {unit => "trois" ; teen => "treize" ; jten => "trente" ; ten => "trente" ; tenplus => "trente"}} ;
 lin n4  =
-   digitPl {inh = unit ; inh1 = Sg ; s = table {unit => "quatre" ; teen => "quatorze" ; jten => "quarante" ; ten => "quarante" ; tenplus => "quarante"}} ;
+   digitPl {inh = unit ; n = Sg ; s = table {unit => "quatre" ; teen => "quatorze" ; jten => "quarante" ; ten => "quarante" ; tenplus => "quarante"}} ;
 lin n5  =
-   digitPl {inh = unit ; inh1 = Sg ; s = table {unit => "cinq" ; teen => "quinze" ; jten => "cinquante" ; ten => "cinquante" ; tenplus => "cinquante"}} ;
+   digitPl {inh = unit ; n = Sg ; s = table {unit => "cinq" ; teen => "quinze" ; jten => "cinquante" ; ten => "cinquante" ; tenplus => "cinquante"}} ;
 lin n6  =
-   digitPl {inh = unit ; inh1 = Sg ; s = table {unit => "six" ; teen => "seize" ; jten => "soixante" ; ten => "soixante" ; tenplus => "soixante"}} ;
+   digitPl {inh = unit ; n = Sg ; s = table {unit => "six" ; teen => "seize" ; jten => "soixante" ; ten => "soixante" ; tenplus => "soixante"}} ;
 lin n7  =
-   digitPl {inh = teen ; inh1 = Sg ; s = table {unit => "sept" ; teen => "dix-sept" ; jten => "soixante-dix" ; ten => "soixante-dix" ; tenplus => "soixante"}} ;
+   digitPl {inh = teen ; n = Sg ; s = table {unit => "sept" ; teen => "dix-sept" ; jten => "soixante-dix" ; ten => "soixante-dix" ; tenplus => "soixante"}} ;
 lin n8  =
-   digitPl {inh = unit ; inh1 = Pl ; s = table {unit => "huit" ; teen => "dix-huit" ; jten => "quatre-vingts" ; ten => "quatre-vingt" ; tenplus => "quatre-vingt"}} ;
+   digitPl {inh = unit ; n = Pl ; s = table {unit => "huit" ; teen => "dix-huit" ; jten => "quatre-vingts" ; ten => "quatre-vingt" ; tenplus => "quatre-vingt"}} ;
 lin n9  =
-   digitPl {inh = teen ; inh1 = Pl ; s = table {unit => "neuf" ; teen => "dix-neuf" ; jten => "quatre-vingt-dix" ; ten => "quatre-vingt-dix" ; tenplus => "quatre-vingt"}} ;
+   digitPl {inh = teen ; n = Pl ; s = table {unit => "neuf" ; teen => "dix-neuf" ; jten => "quatre-vingt-dix" ; ten => "quatre-vingt-dix" ; tenplus => "quatre-vingt"}} ;
 
 lin pot01  =
   {inh = Sg ; s = \\g => let dix = cardOrd g "dix" "dixième" in table {
@@ -76,18 +76,18 @@ lin pot1to19 d =
   {s = \\g => table {indep => d.s ! g ! teen ; attr => d.s ! g ! teen} ; n = Pl} ;
 lin pot0as1 n =
   {s = \\g => table {indep => n.s ! g ! {p1 = unit ; p2 = indep} ;
-  attr => n.s ! g ! {p1 = unit ; p2 = attr}} ; n = n.n} ;
+  attr => n.s ! g ! {p1 = unit ; p2 = attr}} ; n = n.inh} ;
 lin pot1 d =
   {s = \\g => table {indep => d.s ! g ! jten ; attr => d.s ! g ! ten}
   ; n = Pl} ;
 lin pot1plus d e =
   {s = \\g => table {indep => (d.s ! (NCard Masc) ! tenplus) ++ (table {{p1 = Sg
   ; p2 = Sg} => "et" ; {p1 = Sg ; p2 = pl} => "-" ; {p1 = Pl ; p2 =
-  Sg} => "-" ; {p1 = Pl ; p2 = pl} => "-"} ! {p1 = d.inh1 ; p2 =
+  Sg} => "-" ; {p1 = Pl ; p2 = pl} => "-"} ! {p1 = d.n ; p2 =
   e.inh}) ++ e.s ! g ! {p1 = d.inh ; p2 = indep} ; attr => (d.s ! (NCard Masc) !
   tenplus) ++ (table {{p1 = Sg ; p2 = Sg} => "et" ; {p1 = Sg ; p2 =
   pl} => "-" ; {p1 = Pl ; p2 = Sg} => "-" ; {p1 = Pl ; p2 = pl} =>
-  "-"} ! {p1 = d.inh1 ; p2 = e.inh}) ++ e.s ! g ! {p1 = d.inh ; p2 =
+  "-"} ! {p1 = d.n ; p2 = e.inh}) ++ e.s ! g ! {p1 = d.inh ; p2 =
   indep}} ; n = Pl} ;
 lin pot1as2 n = n ;
 lin pot2 d =
@@ -105,5 +105,44 @@ lin pot3 n =
 lin pot3plus n m =
   {s = \\g => (n.s ! NCard Masc !  attr) ++  "mille" ++ m.s ! g ! indep ; n =
   Pl} ;
+
+
+-- numerals as sequences of digits
+
+  lincat 
+    Dig = TDigit ;
+
+  lin
+    IDig d = d ;
+
+    IIDig d i = {
+      s = \\o => d.s ! NCard Masc ++ i.s ! o ;
+      n = Pl
+    } ;
+
+    D_0 = mkDig "0" ;
+    D_1 = mk3Dig "1" "1er" Sg ; ---- gender
+    D_2 = mk2Dig "2" "2ème" ;
+    D_3 = mk2Dig "3" "3ème" ;
+    D_4 = mkDig "4" ;
+    D_5 = mkDig "5" ;
+    D_6 = mkDig "6" ;
+    D_7 = mkDig "7" ;
+    D_8 = mkDig "8" ;
+    D_9 = mkDig "9" ;
+
+  oper
+    mk2Dig : Str -> Str -> TDigit = \c,o -> mk3Dig c o Pl ;
+    mkDig : Str -> TDigit = \c -> mk2Dig c (c + "ème") ;
+
+    mk3Dig : Str -> Str -> Number -> TDigit = \c,o,n -> {
+      s = table {NCard _ => c ; NOrd _ _ => o} ; ---- gender
+      n = n
+      } ;
+
+    TDigit = {
+      n : Number ;
+      s : CardOrd => Str
+    } ;
 
 }
