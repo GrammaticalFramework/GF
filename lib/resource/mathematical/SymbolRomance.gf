@@ -24,7 +24,7 @@ lin
     } ;
   SymbS sy = {s = \\_ => sy.s} ;
 
-  SymbNum n = {s = \\_ => n.s ; isNum = True} ;
+  SymbNum n = {s = \\_ => n.s ; isNum = True ; n = Pl} ;
   SymbOrd n = {s = \\_ => n.s ++ "."} ; ---
 
 lincat 

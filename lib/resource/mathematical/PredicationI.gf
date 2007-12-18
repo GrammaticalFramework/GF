@@ -22,7 +22,7 @@ lin
   predN2 n x y = 
     PredVP x (UseComp (CompNP (DetCN (DetSg (SgQuant IndefArt) NoOrd) (ComplN2 n y)))) ;
   predNColl n x y = PredVP (ConjNP and_Conj (BaseNP x y)) 
-    (UseComp (CompNP (DetCN (DetPl (PlQuant IndefArt) NoNum NoOrd) (UseN n)))) ;
+    (UseComp (CompNP (DetCN (DetPl (IndefArt) NoNum NoOrd) (UseN n)))) ;
   predAdv a x = PredVP x (UseComp (CompAdv a)) ;
   predPrep p x y = PredVP x (UseComp (CompAdv (PrepNP p y))) ;
 
@@ -50,6 +50,8 @@ lin
 
 -- This is similar to a family except that the argument is a type.
 
-  typN2 f n = ComplN2 f (DetCN (DetPl (PlQuant IndefArt) NoNum NoOrd) n) ;
+  typN2 f n = ComplN2 f (DetCN (DetPl (IndefArt) NoNum NoOrd) n) ;
 
+--.
+  oper SgQuant : Quant -> Quant = \q -> q ; ---- for BWC with DEPREC
 }

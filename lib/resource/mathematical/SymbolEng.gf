@@ -20,7 +20,7 @@ lin
 
   SymbS sy = sy ; 
 
-  SymbNum sy = {s = sy.s ; n = Sg} ;
+  SymbNum sy = {s = sy.s ; n = Pl} ;
   SymbOrd sy = {s = sy.s ++ "th"} ;
 
 lincat 
