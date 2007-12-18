@@ -352,8 +352,8 @@ incomplete resource Constructors = open Grammar in {
       mkNP : QuantPl -> CN -> NP ;       --  6. these old men
       mkNP : Numeral -> N  -> NP ;       --  7. twenty men
       mkNP : Numeral -> CN -> NP ;       --  8. twenty old men
-      mkNP : Int     -> N  -> NP ;       --  9. 45 men
-      mkNP : Int     -> CN -> NP ;       -- 10. 45 old men
+      mkNP : Digits  -> N  -> NP ;       --  9. 45 men
+      mkNP : Digits  -> CN -> NP ;       -- 10. 45 old men
       mkNP : Num     -> N  -> NP ;       -- 11. almost twenty men
       mkNP : Num     -> CN -> NP ;       -- 12. almost twenty old men
       mkNP : Pron    -> N  -> NP ;       -- 13. my man
@@ -405,7 +405,7 @@ incomplete resource Constructors = open Grammar in {
 
       mkDet : Num     ->  Det ;  --  7. almost twenty
       mkDet : Numeral ->  Det ;  --  8. five
-      mkDet : Int     ->  Det ;  --  9. 51
+      mkDet : Digits  ->  Det ;  --  9. 51
       mkDet : Pron    ->  Det    -- 10. my
       } ;
 
@@ -472,7 +472,7 @@ incomplete resource Constructors = open Grammar in {
 
     mkNum : overload {
       mkNum : Numeral -> Num ;   -- 1. twenty
-      mkNum : Int     -> Num ;   -- 2. 51
+      mkNum : Digits  -> Num ;   -- 2. 51
 
 -- A numeral can be modified by an adnumeral.
 
@@ -487,7 +487,7 @@ incomplete resource Constructors = open Grammar in {
 
     mkOrd : overload {
       mkOrd : Numeral -> Ord ;  -- 1. twentieth
-      mkOrd : Int     -> Ord ;  -- 2. 51st
+      mkOrd : Digits  -> Ord ;  -- 2. 51st
 
 -- Also adjectives in the superlative form can appear on ordinal positions.
 
@@ -518,7 +518,23 @@ incomplete resource Constructors = open Grammar in {
       n100_Numeral  : Numeral ; -- 12. hundred
       n1000_Numeral : Numeral ; -- 13. thousand
 
--- See $Numeral$ for the full set of constructors, or use $Int$ for other numbers.
+-- See $Numeral$ for the full set of constructors, and use the category 
+-- $Digits$ for other numbers from one million.
+
+      n1_Digits    : Digits ; -- 1. one
+      n2_Digits    : Digits ; -- 2. two
+      n3_Digits    : Digits ; -- 3. three
+      n4_Digits    : Digits ; -- 4. four
+      n5_Digits    : Digits ; -- 5. five
+      n6_Digits    : Digits ; -- 6. six
+      n7_Digits    : Digits ; -- 7. seven
+      n8_Digits    : Digits ; -- 8. eight
+      n9_Digits    : Digits ; -- 9. nine
+      n10_Digits   : Digits ; -- 10. ten
+      n20_Digits   : Digits ; -- 11. twenty
+      n100_Digits  : Digits ; -- 12. hundred
+      n1000_Digits : Digits ; -- 13. thousand
+
 
 
 --2 Nouns
@@ -969,6 +985,10 @@ incomplete resource Constructors = open Grammar in {
 	                                 =    \d,n -> DetCN (DetPl (PlQuant IndefArt) (NumNumeral d) NoOrd) n ;
       mkNP : Numeral -> N -> NP       -- 51 men
 	                                 =    \d,n -> DetCN (DetPl (PlQuant IndefArt) (NumNumeral d) NoOrd) (UseN n) ;
+      mkNP : Digits -> CN -> NP      -- 51 old men
+	                                 =    \d,n -> DetCN (DetPl (PlQuant IndefArt) (NumDigits d) NoOrd) n ;
+      mkNP : Digits -> N -> NP       -- 51 men
+	                                 =    \d,n -> DetCN (DetPl (PlQuant IndefArt) (NumDigits d) NoOrd) (UseN n) ;
       mkNP : Int -> CN -> NP      -- 51 old men
 	                                 =    \d,n -> DetCN (DetPl (PlQuant IndefArt) (NumInt d) NoOrd) n ;
       mkNP : Int -> N -> NP       -- 51 men
@@ -1015,6 +1035,8 @@ incomplete resource Constructors = open Grammar in {
                                          =    \q,nu -> DetPl (PlQuant q) nu NoOrd  ;
       mkDet : Num ->  Det       -- forty-five men
                                          =    \n -> DetPl (PlQuant IndefArt) n NoOrd  ;
+      mkDet : Digits -> Det          -- 51 (men)
+                                         =    \n -> DetPl (PlQuant IndefArt) (NumDigits n) NoOrd  ;
       mkDet : Int -> Det          -- 51 (men)
                                          =    \n -> DetPl (PlQuant IndefArt) (NumInt n) NoOrd  ;
       mkDet : Digit -> Det  ---- obsol
@@ -1059,6 +1081,8 @@ incomplete resource Constructors = open Grammar in {
 
     mkNum = overload {
       mkNum : Numeral -> Num = NumNumeral ;
+      mkNum : Digits -> Num         -- 51
+                                         =    NumDigits      ;
       mkNum : Int -> Num         -- 51
                                          =    NumInt      ;
       mkNum : Digit -> Num
@@ -1085,11 +1109,27 @@ incomplete resource Constructors = open Grammar in {
     n100_Numeral = num (pot2as3 (pot2 pot01)) ;
     n1000_Numeral = num (pot3 (pot1as2 (pot0as1 pot01))) ;
 
+    n1_Digits = IDig D_1 ;
+    n2_Digits = IDig D_2 ;
+    n3_Digits = IDig D_3 ;
+    n4_Digits = IDig D_4 ;
+    n5_Digits = IDig D_5 ;
+    n6_Digits = IDig D_6 ;
+    n7_Digits = IDig D_7 ;
+    n8_Digits = IDig D_8 ;
+    n9_Digits = IDig D_9 ;
+    n10_Digits = IIDig D_1 (IDig D_0) ;
+    n20_Digits = IIDig D_2 (IDig D_0) ;
+    n100_Digits = IIDig D_1 (IIDig D_0 (IDig D_0)) ;
+    n1000_Digits = IIDig D_1 (IIDig D_0 (IIDig D_0 (IDig D_0))) ;
+
 
     mkAdN : CAdv -> AdN = AdnCAdv ;                  -- more (than five)
 
     mkOrd = overload {
       mkOrd : Numeral -> Ord = OrdNumeral ;
+      mkOrd : Digits -> Ord         -- 51st
+                                         =    OrdDigits      ;
       mkOrd : Int -> Ord         -- 51st
                                          =    OrdInt      ;
       mkOrd : Digit -> Ord       -- fifth
@@ -1486,6 +1526,7 @@ incomplete resource Constructors = open Grammar in {
    } ;
 
 
+---- what is this? AR 18/12/2007
     mkInt : Str -> {s : Str ; size : Predef.Ints 1 ; last : Predef.Ints 9 ; lock_Int : {}} = \s -> {
       s = s ;
       last = case s of {
