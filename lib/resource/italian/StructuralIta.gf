@@ -32,7 +32,7 @@ lin
   everything_NP = pn2np (mkPN ["tutto"] Masc) ;
   everywhere_Adv = ss "dappertutto" ;
   few_Det  = {s = \\g,c => prepCase c ++ genForms "pochi" "poche" ! g ; n = Pl} ;
-  first_Ord = {s = \\ag => (regA "primo").s ! Posit ! AF ag.g ag.n} ;
+----  first_Ord = {s = \\ag => (regA "primo").s ! Posit ! AF ag.g ag.n} ;
   for_Prep = mkPrep "per" ;
   from_Prep = complGen ; ---
   he_Pron = 
@@ -63,7 +63,7 @@ lin
   must_VV = mkVV (verboV (dovere_47 "dovere")) ;
   no_Phr = ss "no" ;
   on_Prep = {s = [] ; c = CPrep P_su ; isDir = False} ;
-  one_Quant = {s = \\g,c => prepCase c ++ genForms "uno" "una" ! g} ;
+----  one_Quant = {s = \\g,c => prepCase c ++ genForms "uno" "una" ! g} ;
   only_Predet = {s = \\_,c => prepCase c ++ "soltanto" ; c = Nom} ; --- solo|a|i|e
   or_Conj = {s = "o" ; n = Sg} ;
   otherwise_PConj = ss "altramente" ;

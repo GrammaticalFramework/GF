@@ -12,7 +12,7 @@ lincat Sub100 = {s : Place => Gender => Str ; size : Size} ;
 lincat Sub1000 = {s : Place => Gender => Str ; size : Size} ;
 lincat Sub1000000 = {s : Gender => Str} ;
 
-lin num x = {s = table{ _ => x.s }};
+lin num x = {s = table{ _ => x.s } ; n = Pl}; ---- n TODO ; Size? AR 18/12/2007
 
 lin n2  =
   {s = table {{unit} => table {{Fem} => "две" ; _ => "два"} ; 
@@ -99,5 +99,44 @@ lin pot3plus n m =
 
 --- TODO
 --- raz/odin
+
+-- numerals as sequences of digits
+
+  lincat 
+    Dig = TDigit ;
+
+  lin
+    IDig d = {s = d.s ; n = d.n} ;
+
+    IIDig d i = {
+      s = d.s ++ i.s ;
+      n = Pl
+    } ;
+
+    D_0 = mkDig "0" ;
+    D_1 = mk3Dig "1" "1" Sg ; ----
+    D_2 = mkDig "2" ;
+    D_3 = mkDig "3" ;
+    D_4 = mkDig "4" ;
+    D_5 = mkDig "5" ;
+    D_6 = mkDig "6" ;
+    D_7 = mkDig "7" ;
+    D_8 = mkDig "8" ;
+    D_9 = mkDig "9" ;
+
+  oper
+    mk2Dig : Str -> Str -> TDigit = \c,o -> mk3Dig c o Pl ;
+    mkDig : Str -> TDigit = \c -> mk2Dig c (c + "o") ;
+
+    mk3Dig : Str -> Str -> Number -> TDigit = \c,o,n -> {
+      s = c ; ---- gender
+      n = n
+      } ;
+
+    TDigit = {
+      n : Number ;
+      s : Str
+    } ;
+
 }
 

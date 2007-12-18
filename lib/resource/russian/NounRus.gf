@@ -58,29 +58,29 @@ concrete NounRus of Noun = CatRus ** open ResRus, Prelude, MorphoRus in {
 
     DetSg quant ord = {
       s = \\af => quant.s!af ++ ord.s!af ; 
-      n = quant.n;
+      n = Sg ;
       g = quant.g;
       c = quant.c
       } ;
 
     DetPl quant num ord = {
       s =  \\af => quant.s !af ++ num.s! (caseAF af) ! (genAF af)  ++ ord.s!af ; 
-      n = Pl;
+      n = num.n; ---- ?? AR 18/12/2007
       g = quant.g;
       c = quant.c
       } ;
 
-    SgQuant quant = {s = quant.s; c=quant.c; g=quant.g; n= Sg} ;
-    PlQuant quant = {s = quant.s ; c=quant.c; g=quant.g; n= Pl} ;
+--- DEPREC    SgQuant quant = {s = quant.s; c=quant.c; g=quant.g; n= Sg} ;
+--- DEPREC    PlQuant quant = {s = quant.s ; c=quant.c; g=quant.g; n= Pl} ;
 
     PossPron p = {s = \\af => p.s ! mkPronForm (caseAF af) No (Poss (gNum (genAF af) (numAF af) )); c=Nom; g = PNoGen} ;
 
-      NoNum = {s = \\_,_ => []} ; -- cardinal numeral
+      NoNum = {s = \\_,_ => [] ; n = Pl} ; -- cardinal numeral
       NoOrd = {s = \\_ => []} ;   -- adjective
 
 -- unclear how to tell apart the numbers from their string representation,
 -- so just leave a decimal representation, without case-suffixes:
-    NumInt i =  {s = table { _ => table {_ => i.s } } } ;
+    NumInt i =  {s = table { _ => table {_ => i.s } }  ; n = Pl} ;
 
    OrdInt n = variants {} ; ---- TODO
  -- case n of {
@@ -88,12 +88,14 @@ concrete NounRus of Noun = CatRus ** open ResRus, Prelude, MorphoRus in {
  --      3 => (ti_j_EndDecl n.s) ; 
  --      _ => uy_j_EndDecl n.s }  ;
 
-   OrdNumeral numeral = variants {} ; ---- TODO
+----   OrdNumeral numeral = variants {} ; ---- TODO
+----   OrdDigits TODO
  --  {s = \\ af => (uy_j_EndDecl (numeral.s ! caseAF af ! genAF af)).s!af} ;
 
     NumNumeral n = n ;
+    NumDigits n = {s = \\_,_ => n.s ; n = n.n} ;
 
-    AdNum adn num = {s = \\c,n => adn.s ++ num.s!c!n} ;
+    AdNum adn num = {s = \\c,n => adn.s ++ num.s!c!n ; n = num.n} ;
 
     OrdSuperl a = {s = a.s!Posit};
 

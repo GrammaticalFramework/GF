@@ -56,7 +56,7 @@ concrete StructuralAra of Structural = CatAra **
 --    } ;
   no_Phr = ss "لا" ;
   on_Prep = ss "عَلى" ;
-  one_Quant = mkQuantNum "واحِد" Sg Indef ;
+--- DEPREC  one_Quant = mkQuantNum "واحِد" Sg Indef ;
   only_Predet = mkPredet "فَقَط" False;
 --  or_Conj = ss "ْر" ** {n = Sg} ;
 --  otherwise_PConj = ss "ْتهروِسي" ;
