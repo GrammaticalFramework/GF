@@ -121,6 +121,7 @@ mathematical:
 	$(GFCC) mathematical/MathematicalFin.gf
 	mv mathematical/*.gfc ../mathematical
 
+#doesn't compile 18/12/2007:
 multimodal:
 	$(GF) -make -nocf multimodal/Multi???.gf
 	mv multimodal/*.gfc ../multimodal

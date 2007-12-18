@@ -836,6 +836,11 @@ incomplete resource Constructors = open Grammar in {
 --. 
 -- Definitions
 
+    QuantSg : Type = Quant ** {isSg : {}} ;
+    QuantPl : Type = Quant ** {isPl : {}} ;
+    SgQuant : Quant -> QuantSg = \q -> q ** {isSg = <>} ;
+    PlQuant : Quant -> QuantPl = \q -> q ** {isPl = <>} ;
+
     mkAP = overload {
       mkAP : A -> AP           -- warm
                                          =    PositA   ;
@@ -1030,7 +1035,7 @@ incomplete resource Constructors = open Grammar in {
     ---- obsol
     def_Det : Det = DetSg (SgQuant DefArt) NoOrd ;   -- the (man)
     indef_Det : Det = DetSg (SgQuant IndefArt) NoOrd ; -- a (man)
-    mass_Det : Det = DetSg MassDet NoOrd;  -- (water)
+    mass_Det : Det = DetSg (SgQuant MassDet) NoOrd;  -- (water)
 
     mkQuantSg : Quant -> QuantSg = SgQuant ;
     mkQuantPl : Quant -> QuantPl = PlQuant ;
@@ -1038,7 +1043,7 @@ incomplete resource Constructors = open Grammar in {
     defQuant = DefArt ;
     indefQuant = IndefArt ;   
 
-    massQuant : QuantSg = MassDet  ;
+    massQuant : QuantSg = SgQuant MassDet  ;
 
       the_QuantSg  : QuantSg = SgQuant DefArt ;
       a_QuantSg    : QuantSg = mkQuantSg indefQuant ;

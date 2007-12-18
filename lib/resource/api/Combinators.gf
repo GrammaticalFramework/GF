@@ -109,14 +109,14 @@ incomplete resource Combinators = open Grammar in {
       pred : A  -> NP -> NP -> Cl      
                                        = \a,x,y -> PredVP (ConjNP and_Conj (BaseNP x y)) (UseComp (CompAP (PositA a))) ;
       pred : N -> NP -> Cl
-                                       = \n,x -> PredVP x (UseComp (CompNP (DetCN (DetSg (SgQuant IndefArt) NoOrd) (UseN n)))) ;
+                                       = \n,x -> PredVP x (UseComp (CompNP (DetCN (DetSg (IndefArt) NoOrd) (UseN n)))) ;
       pred : CN -> NP -> Cl
-                                       = \n,x -> PredVP x (UseComp (CompNP (DetCN (DetSg (SgQuant IndefArt) NoOrd) n))) ;
+                                       = \n,x -> PredVP x (UseComp (CompNP (DetCN (DetSg (IndefArt) NoOrd) n))) ;
       pred : NP -> NP -> Cl
                                        = \n,x -> PredVP x (UseComp (CompNP n)) ;      pred : N2 -> NP -> NP -> Cl 
-                                       = \n,x,y -> PredVP x (UseComp (CompNP (DetCN (DetSg (SgQuant IndefArt) NoOrd) (ComplN2 n y)))) ;
+                                       = \n,x,y -> PredVP x (UseComp (CompNP (DetCN (DetSg (IndefArt) NoOrd) (ComplN2 n y)))) ;
       pred : N -> NP -> NP -> Cl 
-                                       = \n,x,y -> PredVP (ConjNP and_Conj (BaseNP x y)) (UseComp (CompNP (DetCN (DetPl (PlQuant IndefArt) NoNum NoOrd) (UseN n)))) ;
+                                       = \n,x,y -> PredVP (ConjNP and_Conj (BaseNP x y)) (UseComp (CompNP (DetCN (DetPl (IndefArt) NoNum NoOrd) (UseN n)))) ;
       pred : Adv -> NP -> Cl 
                                        = \a,x -> PredVP x (UseComp (CompAdv a)) ;
       pred : Prep -> NP -> NP -> Cl        
@@ -126,15 +126,15 @@ incomplete resource Combinators = open Grammar in {
 
     app = overload {
       app : N  -> NP
-                                       = \n -> DetCN (DetSg (SgQuant DefArt) NoOrd) (UseN n) ;
+                                       = \n -> DetCN (DetSg (DefArt) NoOrd) (UseN n) ;
       app : N2 -> NP -> NP 
-                                       = \n,x -> DetCN (DetSg (SgQuant DefArt) NoOrd) (ComplN2 n x) ;
+                                       = \n,x -> DetCN (DetSg (DefArt) NoOrd) (ComplN2 n x) ;
       app : N3 -> NP -> NP -> NP
-                                       = \n,x,y -> DetCN (DetSg (SgQuant DefArt) NoOrd) (ComplN2 (ComplN3 n x) y) ;
+                                       = \n,x,y -> DetCN (DetSg (DefArt) NoOrd) (ComplN2 (ComplN3 n x) y) ;
       app : N2 -> NP -> NP -> NP
-                                       = \n,x,y -> DetCN (DetSg (SgQuant DefArt) NoOrd) (ComplN2 n (ConjNP and_Conj (BaseNP x y))) ;
+                                       = \n,x,y -> DetCN (DetSg (DefArt) NoOrd) (ComplN2 n (ConjNP and_Conj (BaseNP x y))) ;
       app : N2 -> N -> CN
-                                       = \f,n -> ComplN2 f (DetCN (DetPl (PlQuant IndefArt) NoNum NoOrd) (UseN n))
+                                       = \f,n -> ComplN2 f (DetCN (DetPl (IndefArt) NoNum NoOrd) (UseN n))
       } ;
 
     coord = overload {
@@ -185,13 +185,13 @@ incomplete resource Combinators = open Grammar in {
       mod : Det -> CN -> NP 
 	                          = \d,n -> DetCN d n ;
       mod : Quant -> N -> NP
-                                  = \q,n -> DetCN (DetSg (SgQuant q) NoOrd) (UseN n) ;
+                                  = \q,n -> DetCN (DetSg (q) NoOrd) (UseN n) ;
       mod : Quant -> CN -> NP
-                                  = \q,n -> DetCN (DetSg (SgQuant q) NoOrd) n ;
+                                  = \q,n -> DetCN (DetSg (q) NoOrd) n ;
       mod : Predet -> N -> NP 
-                                  = \q,n -> PredetNP q (DetCN (DetPl (PlQuant IndefArt)  NoNum NoOrd) (UseN n)) ;
+                                  = \q,n -> PredetNP q (DetCN (DetPl (IndefArt)  NoNum NoOrd) (UseN n)) ;
       mod : Numeral -> N -> NP
-                                  = \nu,n -> DetCN (DetPl (PlQuant IndefArt) (NumNumeral nu) NoOrd) (UseN n)
+                                  = \nu,n -> DetCN (DetPl (IndefArt) (NumNumeral nu) NoOrd) (UseN n)
 
       } ;
 

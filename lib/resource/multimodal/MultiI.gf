@@ -28,8 +28,8 @@ incomplete concrete MultiI of Multi =
     Imp = Lang.Imp ** {point : Str} ;
     Utt = Lang.Utt ** {point : Str} ;
     Quant = Lang.Quant ** {point : Str} ;
-    QuantSg = Lang.QuantSg ** {point : Str} ;
-    QuantPl = Lang.QuantPl ** {point : Str} ;
+---    QuantSg = Lang.QuantSg ** {point : Str} ;
+---    QuantPl = Lang.QuantPl ** {point : Str} ;
 
     Point  = {point : Str} ;
     Speech = {s : Str} ;
@@ -43,8 +43,8 @@ incomplete concrete MultiI of Multi =
     AdvNP np adv = Lang.AdvNP np adv ** {point = np.point ++ adv.point} ;
     DetSg qu o = Lang.DetSg qu o ** {point = qu.point} ;
     DetPl qu n o = Lang.DetPl qu n o ** {point = qu.point} ;
-    SgQuant qu = Lang.SgQuant qu ** {point = qu.point} ;
-    PlQuant qu = Lang.PlQuant qu ** {point = qu.point} ;
+---    SgQuant qu = Lang.SgQuant qu ** {point = qu.point} ;
+---    PlQuant qu = Lang.PlQuant qu ** {point = qu.point} ;
     PossPron p = Lang.PossPron p ** noPoint ;
     DefArt = Lang.DefArt ** noPoint ;
     IndefArt = Lang.IndefArt ** noPoint ;
@@ -123,7 +123,7 @@ incomplete concrete MultiI of Multi =
   these_NP = Lang.these_NP ** noPoint ;
   this_NP = Lang.this_NP ** noPoint ;
   those_NP = Lang.those_NP ** noPoint ;
-  one_Quant = Lang.one_Quant ** noPoint ;
+---  one_Quant = Lang.one_Quant ** noPoint ;
   that_Quant = Lang.that_Quant ** noPoint ;
   this_Quant = Lang.this_Quant ** noPoint ;
     
