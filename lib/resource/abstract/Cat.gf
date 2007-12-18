@@ -86,8 +86,8 @@ abstract Cat = Common ** {
 
 -- Constructed in [Numeral Numeral.html].
 
-    Numeral ; -- cardinal or ordinal,               e.g. "five/fifth"
-    Digits ;  -- cardinal or ordinal,               e.g. "1,000/1,000th"
+    Numeral ; -- cardinal or ordinal in words       e.g. "five/fifth"
+    Digits ;  -- cardinal or ordinal in digits      e.g. "1,000/1,000th"
 
 --2 Structural words
 

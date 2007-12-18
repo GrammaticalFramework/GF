@@ -77,7 +77,12 @@ incomplete resource Constructors = open Grammar in {
       mkText : S   ->  Text ;  -- 4. John walked.
       mkText : Cl  ->  Text ;  -- 5. John walks.
       mkText : QS  ->  Text ;  -- 6. Did John walk?
-      mkText : Imp ->  Text    -- 7. Walk!
+      mkText : Imp ->  Text ;  -- 7. Walk!
+
+-- Finally, two texts can be combined into a text.
+
+      mkText : Text -> Text -> Text ;  -- 8. Where? When? Here. Now!
+
       } ;
 
 -- A text can also be empty.
@@ -1452,7 +1457,8 @@ incomplete resource Constructors = open Grammar in {
       mkText : Pol -> Imp -> Text 
 	                                 =    \p,i -> TExclMark (PhrUtt NoPConj (UttImpSg p i) NoVoc) TEmpty;
       mkText : Phr -> Text -> Text    -- John walks. ...
-                                         =    TFullStop
+                                         =    TFullStop ;
+      mkText : Text -> Text -> Text = \t,u -> {s = t.s ++ u.s ; lock_Text = <>} ;
       } ;
 
     mkVP = overload {
