@@ -502,6 +502,8 @@ reg3N = \vesi,veden,vesiä ->
   } ;
 
   mk1A = \x -> {s = \\_ => (noun2adj x).s ; lock_A = <>} ;
+    ---- mkADeg (noun2adj x).s ...
+
   mkA2 = \x,c -> x ** {c2 = c ; lock_A2 = <>} ;
   mkADeg x kivempi kivin = 
     let

@@ -11,16 +11,16 @@ lin
           (PositA young_A) (PositA beautiful_A))))))) (UseCl TPast ASimul PPos
           (PredVP everything_NP (ComplVA become_VA (PositA probable_AS)))))))) ;
 
-  ex03 = mkText (UseCl TPres ASimul PPos (CleftNP (PredetNP only_Predet 
-          (DetCN (DetPl ( IndefArt) (NumDigits n2_Digits) NoOrd) (UseN woman_N)))
-          (UseRCl TCond ASimul PPos (RelSlash IdRP
-          (AdvSlash (SlashPrep (PredVP (UsePron i_Pron) (ComplVV want_VV
-          (PassV2 see_V2))) with_Prep) (PrepNP in_Prep (DetCN (DetSg 
-          (DefArt) NoOrd) (UseN rain_N)))))))) ;
+  ex03 = mkText (UseCl TPres ASimul PPos (ExistNP (PredetNP only_Predet 
+         (DetCN (DetPl IndefArt (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 
+         (pot0 n2)))))) NoOrd) (AdvCN (RelCN (UseN woman_N) (UseRCl TCond ASimul 
+         PPos (RelSlash IdRP (SlashPrep (PredVP (UsePron i_Pron) (ComplVV want_VV 
+         (PassV2 see_V2))) with_Prep)))) (PrepNP in_Prep (DetCN (DetSg DefArt NoOrd) 
+         (UseN rain_N)))))))) ;
 
   ex04 = mkText (UttNP (DetCN someSg_Det (RelCN (UseN day_N) (UseRCl TFut ASimul PPos
-          (RelCl (ExistNP (AdvNP (DetCN (DetSg ( IndefArt) NoOrd)
-          (UseN peace_N)) (PrepNP on_Prep (DetCN (DetSg ( IndefArt)
+          (RelCl (ExistNP (AdvNP (DetCN (DetSg MassDet NoOrd)
+          (UseN peace_N)) (PrepNP on_Prep (DetCN (DetSg DefArt
            NoOrd) (UseN earth_N)))))))))) ;
 
   ex05 = mkText (UseCl TPres ASimul PPos (PredVP (UsePron they_Pron) (AdvVP
@@ -48,7 +48,7 @@ lin
            youSg_Pron)love_V2)))))) ;
 
   ex10 = mkText (UseCl TPres ASimul PPos (PredSCVP (EmbedS (UseCl TPres ASimul PNeg
-           (PredVP (UsePron i_Pron) (UseComp (CompAP (ReflA2 married_A2))))))
+           (PredVP (UsePron she_Pron) (UseComp (CompAP (ReflA2 married_A2))))))
            (ComplV2 kill_V2 (UsePron i_Pron)))) ;
 
   ex11 = (TQuestMark (PhrUtt (PConjConj and_Conj) (UttQS (UseQCl TPres ASimul
@@ -109,7 +109,7 @@ lin
 
   ex23 = mkText (UttVP (PassV2 know_V2)) ;
 
-  ex24 = mkText (UseCl TPres ASimul PPos (PredVP (DetCN (DetSg MassDet NoOrd) (SentCN
+  ex24 = mkText (UseCl TPres ASimul PPos (PredVP (DetCN (DetSg IndefArt NoOrd) (SentCN
            (UseN song_N) (EmbedVP (UseV sing_V)))) (UseComp (CompAP 
            (PositA (UseA2 easy_A2V)))))) ;
 
@@ -119,13 +119,13 @@ lin
 
  ex26 = mkText (UseCl TPres ASimul PPos (PredVP (UsePron she_Pron) (UseComp (CompAP
           (AdAP almost_AdA (SentAP (ComplA2 married_A2 (DetCN (DetSg (
-          (PossPron she_Pron)) NoOrd) (UseN cousin_N))) (EmbedQS (UseQCl 
-           TPast ASimul PPos (QuestCl (PredVP (UsePron youPol_Pron)
+          (PossPron she_Pron)) NoOrd) (UseN cousin_N))) (SubjS if_Subj (UseCl 
+           TPast ASimul PPos ((PredVP (UsePron youPol_Pron)
           (ComplV2 watch_V2 (DetCN (DetSg ( DefArt) NoOrd) 
           (UseN television_N))))))))))))) ;
 
   ex27 = mkText (UseCl TPres ASimul PPos (ImpersCl (ComplVV can8know_VV (UseComp 
-           (CompAdv (PositAdvAdj important_A)))))) ;
+           (CompAP (PositA important_A)))))) ;
 }
 
 

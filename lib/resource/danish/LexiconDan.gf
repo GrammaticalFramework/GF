@@ -317,7 +317,7 @@ lin
   flow_V = regV "strømme" ;
   fly_V = vaereV flyve_V ;
   freeze_V = fryse_V ;
-  give_V3 = dirdirV3 give_V ;
+  give_V3 = dirV3 give_V (mkPrep "til");
   hit_V2 = dirV2 (slå_V) ;
   hold_V2 = dirV2 (holde_V) ;
   hunt_V2 = dirV2 (regV "jage") ;

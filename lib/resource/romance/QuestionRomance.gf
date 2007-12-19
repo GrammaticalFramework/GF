@@ -53,7 +53,7 @@ incomplete concrete QuestionRomance of Question =
       } ;
 
     PrepIP p ip = {
-      s = p.s ++ ip.s ! accusative
+      s = p.s ++ ip.s ! p.c
       } ;
 
     AdvIP ip adv = {
