@@ -91,12 +91,12 @@ selectFormat opts env (p,f) = do
   mtgfc <- getModTime $ gfcFile pf
   mtgf  <- getModTime $ gfFile pf
   let stat = case (rtenv,mtenv,mtgfc,mtgf) of
-        (_,Just tenv,_,_)        | fromComp -> (CSEnv, Just tenv)
+--        (_,Just tenv,_,_)        | fromComp -> (CSEnv, Just tenv)
         (_,_,Just tgfc,_)        | fromComp -> (CSRead,Just tgfc)
-        (Just tenv,_,_,Just tgf) | laterModTime tenv tgf -> (CSEnvR,Just tenv)
-        (_,Just tenv,_,Just tgf) | laterModTime tenv tgf -> (CSEnv, Just tenv)
+--        (Just tenv,_,_,Just tgf) | laterModTime tenv tgf -> (CSEnvR,Just tenv)
+--        (_,Just tenv,_,Just tgf) | laterModTime tenv tgf -> (CSEnv, Just tenv)
         (_,_,Just tgfc,Just tgf) | laterModTime tgfc tgf -> (CSRead,Just tgfc)
-        (_,Just tenv,_,Nothing) -> (CSEnv,Just tenv) -- source does not exist
+--        (_,Just tenv,_,Nothing) -> (CSEnv,Just tenv) -- source does not exist
         (_,_,_,        Nothing) -> (CSRead,Nothing)  -- source does not exist
         _ -> (CSComp,Nothing)
   return $ (f, (p,stat))

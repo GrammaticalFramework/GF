@@ -526,19 +526,19 @@ incomplete resource Constructors = open Grammar in {
 -- See $Numeral$ for the full set of constructors, and use the category 
 -- $Digits$ for other numbers from one million.
 
-      n1_Digits    : Digits ; -- 1. one
-      n2_Digits    : Digits ; -- 2. two
-      n3_Digits    : Digits ; -- 3. three
-      n4_Digits    : Digits ; -- 4. four
-      n5_Digits    : Digits ; -- 5. five
-      n6_Digits    : Digits ; -- 6. six
-      n7_Digits    : Digits ; -- 7. seven
-      n8_Digits    : Digits ; -- 8. eight
-      n9_Digits    : Digits ; -- 9. nine
-      n10_Digits   : Digits ; -- 10. ten
-      n20_Digits   : Digits ; -- 11. twenty
-      n100_Digits  : Digits ; -- 12. hundred
-      n1000_Digits : Digits ; -- 13. thousand
+      n1_Digits    : Digits ; -- 1. 1
+      n2_Digits    : Digits ; -- 2. 2
+      n3_Digits    : Digits ; -- 3. 3
+      n4_Digits    : Digits ; -- 4. 4
+      n5_Digits    : Digits ; -- 5. 5
+      n6_Digits    : Digits ; -- 6. 6
+      n7_Digits    : Digits ; -- 7. 7
+      n8_Digits    : Digits ; -- 8. 8
+      n9_Digits    : Digits ; -- 9. 9
+      n10_Digits   : Digits ; -- 10. 10
+      n20_Digits   : Digits ; -- 11. 20
+      n100_Digits  : Digits ; -- 12. 100
+      n1000_Digits : Digits ; -- 13. 1,000
 
 
 

@@ -3,47 +3,47 @@ incomplete concrete ExamplesI of Examples = open Syntax,Lang in {
 lincat Ex = Text ;
 
 lin
-  ex1 = mkText (UttS (UseCl TPres ASimul PPos (PredVP (UsePron he_Pron) 
+  ex01 = mkText (UttS (UseCl TPres ASimul PPos (PredVP (UsePron he_Pron) 
           (AdvVP (UseV sing_V) (AdAdv almost_AdA (PositAdvAdj correct_A))))));
 
-  ex2 = mkText (UttAdv (SubjS when_Subj (ConjS and_Conj (BaseS (UseCl TPast ASimul PPos
+  ex02 = mkText (UttAdv (SubjS when_Subj (ConjS and_Conj (BaseS (UseCl TPast ASimul PPos
           (PredVP everybody_NP (UseComp (CompAP (ConjAP and_Conj (BaseAP
           (PositA young_A) (PositA beautiful_A))))))) (UseCl TPast ASimul PPos
           (PredVP everything_NP (ComplVA become_VA (PositA probable_AS)))))))) ;
 
-  ex3 = mkText (UseCl TPres ASimul PPos (CleftNP (PredetNP only_Predet 
+  ex03 = mkText (UseCl TPres ASimul PPos (CleftNP (PredetNP only_Predet 
           (DetCN (DetPl ( IndefArt) (NumDigits n2_Digits) NoOrd) (UseN woman_N)))
           (UseRCl TCond ASimul PPos (RelSlash IdRP
           (AdvSlash (SlashPrep (PredVP (UsePron i_Pron) (ComplVV want_VV
           (PassV2 see_V2))) with_Prep) (PrepNP in_Prep (DetCN (DetSg 
           (DefArt) NoOrd) (UseN rain_N)))))))) ;
 
-  ex4 = mkText (UttNP (DetCN someSg_Det (RelCN (UseN day_N) (UseRCl TFut ASimul PPos
+  ex04 = mkText (UttNP (DetCN someSg_Det (RelCN (UseN day_N) (UseRCl TFut ASimul PPos
           (RelCl (ExistNP (AdvNP (DetCN (DetSg ( IndefArt) NoOrd)
           (UseN peace_N)) (PrepNP on_Prep (DetCN (DetSg ( IndefArt)
            NoOrd) (UseN earth_N)))))))))) ;
 
-  ex5 = mkText (UseCl TPres ASimul PPos (PredVP (UsePron they_Pron) (AdvVP
+  ex05 = mkText (UseCl TPres ASimul PPos (PredVP (UsePron they_Pron) (AdvVP
           (ProgrVP (UseV play_V)) (ComparAdvAdjS less_CAdv clever_A
           (UseCl TPres ASimul PPos (GenericCl (UseV think_V))))))) ;
        
-  ex6 = mkText (UseCl TPres ASimul PPos (CleftAdv (AdvSC (EmbedVP (AdVVP always_AdV
+  ex06 = mkText (UseCl TPres ASimul PPos (CleftAdv (AdvSC (EmbedVP (AdVVP always_AdV
           (UseV stop_V)))) (UseCl TPres ASimul PPos (PredVP (UsePron we_Pron)
           (ComplV2 beg_V2V (UsePron youPl_Pron)))))) ;
 
-  ex7 = mkText (UseCl TCond ASimul PNeg (PredVP (UsePron i_Pron) (ComplV3 give_V3 
+  ex07 = mkText (UseCl TCond ASimul PNeg (PredVP (UsePron i_Pron) (ComplV3 give_V3 
           (DetCN (DetPl ( IndefArt) (AdNum (AdnCAdv more_CAdv) 
           (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n3))))))) NoOrd)
           (UseN star_N)) (DetCN (DetSg ( this_Quant) NoOrd)
           (UseN restaurant_N))))) ;
 
-  ex8 = mkText (UttImpSg PPos (ImpVP (ComplV2A paint_V2A (DetCN (DetSg ( DefArt)
+  ex08 = mkText (UttImpSg PPos (ImpVP (ComplV2A paint_V2A (DetCN (DetSg ( DefArt)
           NoOrd) (UseN earth_N)) (DConjAP both7and_DConj (BaseAP (ComparA
           small_A (DetCN (DetSg ( DefArt) NoOrd) (UseN sun_N)))
           (ComparA big_A (DetCN (DetSg ( DefArt) NoOrd) (UseN moon_N
            ))))))) ) ;
 
-  ex9 = mkText (UseCl TPres ASimul PPos (PredVP everybody_NP (ComplVQ wonder_VQ
+  ex09 = mkText (UseCl TPres ASimul PPos (PredVP everybody_NP (ComplVQ wonder_VQ
           (UseQCl TPres ASimul PPos (QuestSlash whatSg_IP (SlashV2 (UsePron
            youSg_Pron)love_V2)))))) ;
 
