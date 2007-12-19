@@ -119,10 +119,10 @@ lin
     mkPronoun "nous" "nous" "nous" "nous" "notre" "notre" "nos"
     Masc Pl P1 ;
   whatSg_IP = 
-    {s = \\c => prepCase c ++ quelPron ! a ; a = a}
+    {s = \\c => prepCase c ++ "quoi" ; a = a}
     where {a = aagr Masc Sg} ;
   whatPl_IP = 
-    {s = \\c => prepCase c ++ quelPron ! a ; a = a}
+    {s = \\c => prepCase c ++ "quoi" ; a = a}
     where {a = aagr Masc Pl} ;
   when_IAdv = ss "quand" ;
   when_Subj = ss "quand" ** {m = Indic} ;

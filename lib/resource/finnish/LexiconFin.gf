@@ -68,7 +68,8 @@ lin
   dog_N = nLukko "koira" ;
   door_N = nArpi "ovi" ;
   drink_V2 = dirV2 (regV "juoda") ;
-  easy_A2V = mkA2V (mkA (nLukko "helppo")) (casePrep allative) ;
+  easy_A2V = mkA2V (mkADeg (nLukko "helppo") "helpompi" "helpoin") 
+    (casePrep allative) ;
   eat_V2 = dirV2 (regV "syödä") ;
   empty_A = mkADeg (nLukko "tyhjä") "tyhjempi" "tyhjin" ;
   enemy_N = regN "vihollinen" ;
@@ -82,7 +83,7 @@ lin
   fridge_N = regN "jääkaappi" ;
   friend_N = nLukko "ystävä" ;
   fruit_N = nLukko "hedelmä" ;
-  fun_AV = mkAV (mkA (nLukko "hauska")) ;
+  fun_AV = mkAV (mkADeg (nLukko "hauska") "hauskempi" "hauskin") ;
   garden_N = nKukko "puutarha" "puutarhan" "puutarhoja" ;
   girl_N = nLukko "tyttö" ;
   glove_N = regN "käsine" ;
@@ -145,7 +146,8 @@ lin
   play_V2 = mkV2 (regV "pelata") cpartitive ; --- leikkiä, soittaa
   policeman_N = regN "poliisi" ;
   priest_N = regN "pappi" ;
-  probable_AS = mkAS (mkA (nNainen "todennäköistä")) ; --- for vowel harmony
+  probable_AS = mkAS --- for vowel harmony
+    (mkADeg (nNainen "todennäköistä") "tonennäköisempi" "todennälöisin") ; 
   queen_N = regN "kuningatar" ;
   radio_N = reg2N "radio" "radioita" ;
   rain_V0 = mkV0 (reg2V "sataa" "satoi") ;

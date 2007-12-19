@@ -581,7 +581,7 @@ resource ResGer = ParamX ** open Prelude in {
   infVP : Bool -> VP -> ((Agr => Str) * Str * Str) = \isAux, vp ->
     <
      \\agr => vp.n2 ! agr ++  vp.a2,
-     (vp.s ! (notB isAux) ! agrP3 Sg ! VPInfinit Simul).inf,
+     vp.a1 ! Pos ++ (vp.s ! (notB isAux) ! agrP3 Sg ! VPInfinit Simul).inf,
      vp.inf ++ vp.ext
     > ;
 

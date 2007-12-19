@@ -16,7 +16,7 @@ lin
   baby_N = mk2N "baby" "babyen" ;
   bad_A = regADeg "dårlig" ; ----
   bank_N = mk2N "bank" "banken" ;
-  beautiful_A = mk3ADeg "vakker" "vakkert" "vakra" ;
+  beautiful_A = mk3ADeg "vakker" "vakkert" "vakre" ;
   become_VA = mkVA (vaereV bli_V) ;
   beer_N = regGenN "øl" neutrum ;
   beg_V2V = mkV2V be_V noPrep (mkPrep "at") ;
@@ -315,7 +315,7 @@ lin
   flow_V = renne_V ;
   fly_V = vaereV IrregNor.fly_V ;
   freeze_V = fryse_V ;
-  give_V3 = dirdirV3 gi_V ;
+  give_V3 = dirV3 gi_V (mkPrep "til");
   hit_V2 = dirV2 (slå_V) ;
   hold_V2 = dirV2 (holde_V) ;
   hunt_V2 = dirV2 (regV "jakte") ;
