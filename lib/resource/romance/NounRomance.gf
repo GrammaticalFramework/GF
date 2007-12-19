@@ -10,7 +10,7 @@ incomplete concrete NounRomance of Noun =
         n = det.n
       in {
         s = \\c => let cs = npform2case c in 
-              prepCase cs ++ det.s ! g ! cs ++ cn.s ! n ;
+              det.s ! g ! cs ++ cn.s ! n ;
         a = agrP3 g n ;
         hasClit = False
         } ;
