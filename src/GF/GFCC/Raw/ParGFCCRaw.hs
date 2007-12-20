@@ -15,14 +15,14 @@ import GHC.Exts
 import GlaExts
 #endif
 
-parseGrammar :: String -> IO Grammar
-parseGrammar f = case pGrammar (myLexer f) of
-  Ok g -> return g
-  Bad s -> error s
+-- parser produced by Happy Version 1.17
 
--- parser produced by Happy Version 1.16
-
-newtype HappyAbsSyn  = HappyAbsSyn (() -> ())
+newtype HappyAbsSyn  = HappyAbsSyn HappyAny
+#if __GLASGOW_HASKELL__ >= 607
+type HappyAny = GHC.Exts.Any
+#else
+type HappyAny = forall a . a
+#endif
 happyIn6 :: (Integer) -> (HappyAbsSyn )
 happyIn6 x = unsafeCoerce# x
 {-# INLINE happyIn6 #-}
@@ -71,6 +71,7 @@ happyInTok x = unsafeCoerce# x
 happyOutTok :: (HappyAbsSyn ) -> Token
 happyOutTok x = unsafeCoerce# x
 {-# INLINE happyOutTok #-}
+
 
 happyActOffsets :: HappyAddr
 happyActOffsets = HappyA# "\x00\x00\x11\x00\x00\x00\x23\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x1d\x00\x1e\x00\x00\x00\x00\x00\x00\x00\x00\x00\x1a\x00\x11\x00\x00\x00\x00\x00\x0a\x00\x00\x00\x00\x00"#
@@ -242,6 +243,11 @@ pListRExp tks = happySomeParser where
 happySeq = happyDontSeq
 
 
+parseGrammar :: String -> IO Grammar
+parseGrammar f = case pGrammar (myLexer f) of
+  Ok g -> return g
+  Bad s -> error s
+
 returnM :: a -> Err a
 returnM = return
 
@@ -257,13 +263,14 @@ happyError ts =
     _ -> " before " ++ unwords (map prToken (take 4 ts))
 
 myLexer = tokens
-{-# LINE 1 "GenericTemplate.hs" #-}
+{-# LINE 1 "templates/GenericTemplate.hs" #-}
+{-# LINE 1 "templates/GenericTemplate.hs" #-}
 {-# LINE 1 "<built-in>" #-}
 {-# LINE 1 "<command line>" #-}
-{-# LINE 1 "GenericTemplate.hs" #-}
+{-# LINE 1 "templates/GenericTemplate.hs" #-}
 -- Id: GenericTemplate.hs,v 1.26 2005/01/14 14:47:22 simonmar Exp 
 
-{-# LINE 28 "GenericTemplate.hs" #-}
+{-# LINE 28 "templates/GenericTemplate.hs" #-}
 
 
 data Happy_IntList = HappyCons Int# Happy_IntList
@@ -272,11 +279,11 @@ data Happy_IntList = HappyCons Int# Happy_IntList
 
 
 
-{-# LINE 49 "GenericTemplate.hs" #-}
+{-# LINE 49 "templates/GenericTemplate.hs" #-}
 
-{-# LINE 59 "GenericTemplate.hs" #-}
+{-# LINE 59 "templates/GenericTemplate.hs" #-}
 
-{-# LINE 68 "GenericTemplate.hs" #-}
+{-# LINE 68 "templates/GenericTemplate.hs" #-}
 
 infixr 9 `HappyStk`
 data HappyStk a = HappyStk a (HappyStk a)
@@ -328,7 +335,7 @@ happyDoAction i tk st
  	 action | check     = indexShortOffAddr happyTable off_i
 		| otherwise = indexShortOffAddr happyDefActions st
 
-{-# LINE 127 "GenericTemplate.hs" #-}
+{-# LINE 127 "templates/GenericTemplate.hs" #-}
 
 
 indexShortOffAddr (HappyA# arr) off =
@@ -361,7 +368,7 @@ data HappyAddr = HappyA# Addr#
 -----------------------------------------------------------------------------
 -- HappyState data type (not arrays)
 
-{-# LINE 170 "GenericTemplate.hs" #-}
+{-# LINE 170 "templates/GenericTemplate.hs" #-}
 
 -----------------------------------------------------------------------------
 -- Shifting a token
