@@ -47,7 +47,7 @@ haskPreamble =
   "module GSyntax where",
   "",
   "import GF.GFCC.DataGFCC",
-  "import GF.GFCC.AbsGFCC",
+  "import GF.GFCC.Raw.AbsGFCCRaw",
   "----------------------------------------------------",
   "-- automatic translation from GF to Haskell",
   "----------------------------------------------------",
