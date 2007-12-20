@@ -1,6 +1,6 @@
 module TransferDef where
 
-import GF.Embed.EmbedAPI (Tree)
+import GF.GFCC.API (Tree)
 import GSyntax
 
 transfer :: Tree -> Tree

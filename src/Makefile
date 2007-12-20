@@ -69,6 +69,10 @@ endif
 
 all: unix gfdoc $(BUILD_JAR) lib
 
+static: GHCFLAGS += -optl-static
+static: unix
+
+
 gf: unix
 
 unix: today opt

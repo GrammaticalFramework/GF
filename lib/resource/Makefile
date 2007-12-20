@@ -207,6 +207,16 @@ gf3present:
 #	$(GFNewPresC) -path=present:prelude:api:api/toplevel api/toplevel/OverLangEng.gf
 #	mv api/toplevel/Over*.gfc api/Try*.gf? ../present
 
+gf3mathematical:
+	$(GFNew) mathematical/MathematicalEng.gf
+	$(GFNew) mathematical/MathematicalNor.gf
+	$(GFNew) mathematical/MathematicalGer.gf
+	$(GFNew) mathematical/MathematicalSpa.gf
+	$(GFNew) mathematical/MathematicalIta.gf
+	$(GFNew) mathematical/MathematicalFre.gf
+	$(GFNew) mathematical/MathematicalSwe.gf
+	$(GFNew) mathematical/MathematicalFin.gf
+	mv mathematical/*.gfc ../mathematical
 
 gf3langs:
 	mv ../present/LangSpa.gfo tmpLangSpa.gfo
