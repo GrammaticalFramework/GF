@@ -24,7 +24,7 @@ import GF.GFCC.Raw.ConvertGFCC
 import GF.GFCC.Raw.ParGFCCRaw
 import GF.Command.PPrTree
 
-import GF.GFCC.ErrM
+import GF.Data.ErrM
 
 import GF.Parsing.FCFG
 import GF.Conversion.SimpleToFCFG (convertGrammar)

@@ -24,7 +24,7 @@ import GF.Parsing.FCFG.PInfo
 import GF.GFCC.DataGFCC
 import GF.GFCC.CId
 import GF.GFCC.Macros
-import GF.GFCC.ErrM
+import GF.Data.ErrM
 
 import qualified Data.Map as Map
 

@@ -3,7 +3,7 @@ module GF.GFCC.CheckGFCC (checkGFCC, checkGFCCio, checkGFCCmaybe) where
 import GF.GFCC.CId
 import GF.GFCC.Macros
 import GF.GFCC.DataGFCC
-import GF.GFCC.ErrM
+import GF.Data.ErrM
 
 import qualified Data.Map as Map
 import Control.Monad

@@ -18,7 +18,7 @@ import GF.GFCC.Macros
 import GF.Devel.PrintGFCC
 import GF.GFCC.DataGFCC ----
 
-import GF.Command.ErrM ----
+import GF.Data.ErrM ----
 
 import qualified Data.Map as Map
 

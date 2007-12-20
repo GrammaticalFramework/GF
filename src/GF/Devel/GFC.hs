@@ -12,7 +12,7 @@ import GF.GFCC.Raw.ConvertGFCC
 import GF.Devel.UseIO
 import GF.Infra.Option
 import GF.GFCC.API
-import GF.GFCC.ErrM
+import GF.Data.ErrM
 
 mainGFC :: [String] -> IO ()
 mainGFC xx = do
