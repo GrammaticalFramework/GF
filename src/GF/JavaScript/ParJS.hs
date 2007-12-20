@@ -3,7 +3,7 @@
 module GF.JavaScript.ParJS where
 import GF.JavaScript.AbsJS
 import GF.JavaScript.LexJS
-import GF.JavaScript.ErrM
+import GF.Data.ErrM
 #if __GLASGOW_HASKELL__ >= 503
 import Data.Array
 #else

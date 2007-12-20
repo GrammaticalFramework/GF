@@ -19,14 +19,13 @@ import GF.System.Tracing
 import GF.Infra.Print
 import qualified GF.Grammar.PrGrammar as PrGrammar
 
-import GF.Data.Operations (Err(..))
+import GF.Data.ErrM
 
 import qualified GF.Grammar.Grammar as Grammar
 import qualified GF.Grammar.Macros as Macros
 import qualified GF.Canon.AbsGFC as AbsGFC
 import qualified GF.GFCC.DataGFCC as AbsGFCC
 import GF.GFCC.CId
-import qualified GF.GFCC.ErrM as ErrM
 import qualified GF.Infra.Ident as Ident
 import GF.CF.CFIdent (CFCat, cfCat2Ident, CFTok, wordsCFTok, prCFTok)
 
@@ -73,7 +72,7 @@ parse :: String         -- ^ parsing algorithm (mcfg or cfg)
       -> Ident.Ident    -- ^ abstract module name
       -> CFCat          -- ^ starting category
       -> [CFTok]        -- ^ input tokens
-      -> GF.Data.Operations.Err [Grammar.Term] -- ^ resulting GF terms
+      -> Err [Grammar.Term] -- ^ resulting GF terms
 
 
 -- parsing via CFG
@@ -137,8 +136,8 @@ parse "f" strategy pinfo abs startCat inString =
   let Ident.IC x = cfCat2Ident startCat
       cat' = CId x
   in case PF.parseFCF strategy (fcfPInfo pinfo) cat' (map prCFTok inString) of
-       ErrM.Ok  es  -> Ok  (map (exp2term abs) es)
-       ErrM.Bad msg -> Bad msg
+       Ok  es  -> Ok  (map (exp2term abs) es)
+       Bad msg -> Bad msg
 
 
 -- error parser: 

@@ -14,7 +14,7 @@ import GF.GFCC.AbsGFCC
 
 
 
-import GF.GFCC.ErrM
+import GF.Data.ErrM
 
 type ParseFun a = [Token] -> Err a
 

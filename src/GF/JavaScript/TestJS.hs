@@ -14,7 +14,7 @@ import GF.JavaScript.AbsJS
 
 
 
-import GF.JavaScript.ErrM
+import GF.Data.ErrM
 
 type ParseFun a = [Token] -> Err a
 

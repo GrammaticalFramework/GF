@@ -3,7 +3,7 @@
 module GF.GFCC.Raw.ParGFCCRaw (parseGrammar) where
 import GF.GFCC.Raw.AbsGFCCRaw
 import GF.GFCC.Raw.LexGFCCRaw
-import GF.GFCC.Raw.ErrM
+import GF.Data.ErrM
 #if __GLASGOW_HASKELL__ >= 503
 import Data.Array
 #else

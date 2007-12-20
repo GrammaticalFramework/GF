@@ -16,5 +16,5 @@ module GF.Data.ErrM (
 		     module GF.Data.Operations
 	    ) where
 
-import GF.Data.Operations
+import GF.Data.Operations (Err(..))
 

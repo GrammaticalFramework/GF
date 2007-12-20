@@ -6,7 +6,7 @@ import GF.GFCC.Macros
 import qualified GF.Command.ParGFShell as P
 import GF.Command.PrintGFShell
 import GF.Command.AbsGFShell
-import GF.Command.ErrM
+import GF.Data.ErrM
 
 pTree :: String -> Exp
 pTree s = case P.pTree (P.myLexer s) of

@@ -3,7 +3,7 @@
 module GF.Command.ParGFShell where
 import GF.Command.AbsGFShell
 import GF.Command.LexGFShell
-import GF.Command.ErrM
+import GF.Data.ErrM
 #if __GLASGOW_HASKELL__ >= 503
 import Data.Array
 #else
