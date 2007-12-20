@@ -29,13 +29,13 @@ import qualified Data.Map as Map
 -- | the main function
 grammar2haskell :: GFCC -> String
 grammar2haskell gr = encodeUTF8 $ foldr (++++) [] $  
-  haskPreamble ++ [datatypes gr', gfinstances gr', fginstances gr']
+  haskPreamble ++ [datatypes gr', gfinstances gr']
     where gr' = hSkeleton gr
 
 grammar2haskellGADT :: GFCC -> String
 grammar2haskellGADT gr = encodeUTF8 $ foldr (++++) [] $  
   ["{-# OPTIONS_GHC -fglasgow-exts #-}"] ++ 
-  haskPreamble ++ [datatypesGADT gr', gfinstances gr', fginstances gr']
+  haskPreamble ++ [datatypesGADT gr', gfinstances gr']
     where gr' = hSkeleton gr
 
 -- | by this you can prefix all identifiers with stg; the default is 'G'
@@ -47,13 +47,14 @@ haskPreamble =
   "module GSyntax where",
   "",
   "import GF.GFCC.DataGFCC",
-  "import GF.GFCC.Raw.AbsGFCCRaw",
+  "import GF.GFCC.AbsGFCC",
   "----------------------------------------------------",
   "-- automatic translation from GF to Haskell",
   "----------------------------------------------------",
   "", 
-  "class Gf a where gf :: a -> Exp",
-  "class Fg a where fg :: Exp -> a",
+  "class Gf a where",
+  "  gf :: a -> Exp",
+  "  fg :: Exp -> a",
   "",
   predefInst "GString" "String" "DTr [] (AS s) []",
   "",
@@ -70,8 +71,7 @@ haskPreamble =
 predefInst gtyp typ patt = 
   "newtype" +++ gtyp +++ "=" +++ gtyp +++ typ +++ " deriving Show" +++++
   "instance Gf" +++ gtyp +++ "where" ++++
-  "  gf (" ++ gtyp +++ "s) =" +++ patt +++++
-  "instance Fg" +++ gtyp +++ "where" ++++
+  "  gf (" ++ gtyp +++ "s) =" +++ patt ++++
   "  fg t =" ++++
   "    case t of" ++++
   "     " +++ patt +++ " ->" +++ gtyp +++ "s" ++++
@@ -81,13 +81,12 @@ type OIdent = String
 
 type HSkeleton = [(OIdent, [(OIdent, [OIdent])])]
 
-datatypes, gfinstances, fginstances :: (String,HSkeleton) -> String
+datatypes, gfinstances :: (String,HSkeleton) -> String
 datatypes   = (foldr (+++++) "") . (filter (/="")) . (map hDatatype) . snd
-gfinstances (m,g) = (foldr (+++++) "") $ (filter (/="")) $ (map (hInstance m)) g
-fginstances (m,g) = (foldr (+++++) "") $ (filter (/="")) $ (map (fInstance m)) g
+gfinstances (m,g) = (foldr (+++++) "") $ (filter (/="")) $ (map (gfInstance m)) g
 
-hDatatype :: (OIdent, [(OIdent, [OIdent])]) -> String
-hInstance, fInstance :: String -> (OIdent, [(OIdent, [OIdent])]) -> String
+hDatatype  :: (OIdent, [(OIdent, [OIdent])]) -> String
+gfInstance :: String -> (OIdent, [(OIdent, [OIdent])]) -> String
 
 hDatatype ("Cn",_) = "" ---
 hDatatype (cat,[]) = ""
@@ -120,6 +119,7 @@ hDatatypeGADT (cat, rules)
         [ gId f +++ "::" +++ concatMap (\a -> gId a +++ "-> ") args ++ t | (f,args) <- rules ]
   where t = "Tree" +++ gId cat ++ "_"
 
+gfInstance m crs = hInstance m crs ++++ fInstance m crs
 
 ----hInstance m ("Cn",_) = "" --- seems to belong to an old applic. AR 18/5/2004
 hInstance m (cat,[]) = "" 
@@ -133,13 +133,12 @@ hInstance m (cat,rules)
 -- no show for GADTs
 --     ++++ " gf (" ++ gId cat +++ "xs) = error (\"Bad " ++ cat ++ " value: \" ++ show xs)" 
  | otherwise =
-  "instance Gf" +++ gId cat +++ "where" ++
-  (if length rules == 1 then "" else "\n") +++
-  foldr1 (\x y -> x ++ "\n" +++ y) [mkInst f xx | (f,xx) <- rules]
+  "instance Gf" +++ gId cat +++ "where\n" ++
+  unlines [mkInst f xx | (f,xx) <- rules]
  where
    ec = elemCat cat
    baseVars = mkVars (baseSize (cat,rules))
-   mkInst f xx = let xx' = mkVars (length xx) in "gf " ++
+   mkInst f xx = let xx' = mkVars (length xx) in "  gf " ++
      (if length xx == 0 then gId f else prParenth (gId f +++ foldr1 (+++) xx')) +++
      "=" +++ mkRHS f xx'
    mkVars n = ["x" ++ show i | i <- [1..n]]
@@ -150,14 +149,13 @@ hInstance m (cat,rules)
 ----fInstance m ("Cn",_) = "" ---
 fInstance m (cat,[]) = ""
 fInstance m (cat,rules) =
-  "instance Fg" +++ gId cat +++ "where" ++++
-  " fg t =" ++++
-  "  case t of" ++++
-  foldr1 (\x y -> x ++ "\n" ++ y) [mkInst f xx | (f,xx) <- rules] ++++
-  "    _ -> error (\"no" +++ cat ++ " \" ++ show t)"
+  "  fg t =" ++++
+  "    case t of" ++++
+  unlines [mkInst f xx | (f,xx) <- rules] ++++
+  "      _ -> error (\"no" +++ cat ++ " \" ++ show t)"
    where
     mkInst f xx =
-     "    DTr [] (AC (CId \"" ++ f ++ "\")) " ++
+     "      DTr [] (AC (CId \"" ++ f ++ "\")) " ++
      "[" ++ prTList "," xx' ++ "]" +++
      "->" +++ mkRHS f xx'
        where xx' = ["x" ++ show i | (_,i) <- zip xx [1..]]
