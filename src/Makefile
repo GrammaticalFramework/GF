@@ -42,11 +42,11 @@ ifeq ("$(READLINE)","readline")
 endif
 
 ifneq ("$(CPPFLAGS)","")
-  GHCFLAGS += -optP'$(CPPFLAGS)'
+  GHCFLAGS += $(addprefix -optP, $(CPPFLAGS))
 endif
 
 ifneq ("$(LDFLAGS)","")
-  GHCFLAGS += -optl'$(LDFLAGS)'
+  GHCFLAGS += $(addprefix -optl, $(LDFLAGS))
 endif
 
 ifeq ("$(INTERRUPT)","yes")
