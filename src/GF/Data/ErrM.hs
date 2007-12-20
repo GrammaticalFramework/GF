@@ -12,9 +12,27 @@
 -- hack for BNFC generated files. AR 21/9/2003
 -----------------------------------------------------------------------------
 
-module GF.Data.ErrM (
-		     module GF.Data.Operations
-	    ) where
+module GF.Data.ErrM (Err(..)) where
 
-import GF.Data.Operations (Err(..))
+import Control.Monad (MonadPlus(..))
 
+-- | like @Maybe@ type with error msgs
+data Err a = Ok a | Bad String
+  deriving (Read, Show, Eq)
+
+instance Monad Err where
+  return      = Ok
+  fail        = Bad
+  Ok a  >>= f = f a
+  Bad s >>= f = Bad s
+
+-- | added 2\/10\/2003 by PEB
+instance Functor Err where
+  fmap f (Ok a) = Ok (f a)
+  fmap f (Bad s) = Bad s
+
+-- | added by KJ
+instance MonadPlus Err where
+    mzero = Bad "error (no reason given)"
+    mplus (Ok a)  _ = Ok a
+    mplus (Bad s) b = b
