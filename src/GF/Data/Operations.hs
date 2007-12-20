@@ -80,6 +80,8 @@ import Data.List (nub, sortBy, sort, deleteBy, nubBy)
 --import Data.FiniteMap
 import Control.Monad (liftM,liftM2, MonadPlus, mzero, mplus)
 
+import GF.Data.ErrM
+
 infixr 5 +++
 infixr 5 ++-
 infixr 5 ++++
@@ -93,27 +95,6 @@ onSnd :: (a -> b) -> (c,a) -> (c,b)
 onSnd f (x, y) = (x, f y)
 
 -- the Error monad
-
--- | like @Maybe@ type with error msgs
-data Err a = Ok a | Bad String
-  deriving (Read, Show, Eq)
-
-instance Monad Err where
-  return      = Ok
-  fail        = Bad
-  Ok a  >>= f = f a
-  Bad s >>= f = Bad s
-
--- | added 2\/10\/2003 by PEB
-instance Functor Err where
-  fmap f (Ok a) = Ok (f a)
-  fmap f (Bad s) = Bad s
-
--- | added by KJ
-instance MonadPlus Err where
-    mzero = Bad "error (no reason given)"
-    mplus (Ok a)  _ = Ok a
-    mplus (Bad s) b = b
 
 -- | analogue of @maybe@
 err :: (String -> b) -> (a -> b) -> Err a -> b 
