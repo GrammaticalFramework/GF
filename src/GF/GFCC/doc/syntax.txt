@@ -29,14 +29,12 @@ Here is a summary of well-formed syntax,
 with a comment on the semantics of each construction.
 ```
   Grammar ::= 
-    CId                          -- abstract syntax names
-    "(" "concrete" CId* ")"      -- concrete syntax names
-    "(" "flags"    Flag* ")"     -- global flags
+    ("grammar" CId CId*)      -- abstract syntax name and concrete syntax names
+    "(" "flags"    Flag* ")"     -- global and abstract flags
     "(" "abstract" Abstract ")"  -- abstract syntax
     "(" "concrete" Concrete* ")" -- concrete syntaxes
 
   Abstract ::= 
-    "(" "flags" Flag*   ")"      -- abstract flags
     "(" "fun"   FunDef* ")"      -- function definitions
     "(" "cat"   CatDef* ")"      -- category definitions
 
