@@ -126,9 +126,9 @@ hInstance m (cat,[]) = ""
 hInstance m (cat,rules) 
  | isListCat (cat,rules) =
   "instance Gf" +++ gId cat +++ "where" ++++
-     " gf (" ++ gId cat +++ "[" ++ concat (intersperse "," baseVars) ++ "])" 
+     "  gf (" ++ gId cat +++ "[" ++ concat (intersperse "," baseVars) ++ "])" 
            +++ "=" +++ mkRHS ("Base"++ec) baseVars ++++
-     " gf (" ++ gId cat +++ "(x:xs)) = " 
+     "  gf (" ++ gId cat +++ "(x:xs)) = " 
            ++ mkRHS ("Cons"++ec) ["x",prParenth (gId cat+++"xs")] 
 -- no show for GADTs
 --     ++++ " gf (" ++ gId cat +++ "xs) = error (\"Bad " ++ cat ++ " value: \" ++ show xs)" 
