@@ -9,8 +9,7 @@ import Data.Map
 
 toGFCC :: Grammar -> GFCC
 toGFCC (Grm [
-  AId a, 
-  App (CId "concrete") cs, 
+  App (CId "grammar") (AId a:cs),
   App (CId "flags")     gfs, 
   ab@(
     App (CId "abstract") [
@@ -102,8 +101,7 @@ toTerm e = case e of
 
 fromGFCC :: GFCC -> Grammar
 fromGFCC gfcc0 = Grm [
-  AId (absname gfcc),
-  app "concrete" (lmap AId (cncnames gfcc)), 
+  app "grammar" (AId (absname gfcc) : lmap AId (cncnames gfcc)), 
   app "flags" [App f [AStr v] | (f,v) <- toList (gflags gfcc)],
   app "abstract" [
     app "flags" [App f [AStr v] | (f,v) <- toList (aflags agfcc)],
