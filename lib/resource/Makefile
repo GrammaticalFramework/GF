@@ -155,7 +155,7 @@ gfdoc:
 	mv ../prelude/*.html doc/gfdoc
 
 gf3: 
-	export GF_LIB_PATH=..; $(MAKE) -e gf3prelude gf3present gf3alltenses
+	export GF_LIB_PATH=..; $(MAKE) -e gf3prelude gf3present gf3alltenses gf3mathematical
 
 gf3prelude: 
 	$(GFNew) ../src/*.gf
@@ -216,7 +216,7 @@ gf3mathematical:
 	$(GFNew) mathematical/MathematicalFre.gf
 	$(GFNew) mathematical/MathematicalSwe.gf
 	$(GFNew) mathematical/MathematicalFin.gf
-	mv mathematical/*.gfc ../mathematical
+	mv mathematical/*.gfo ../mathematical
 
 gf3langs:
 	mv ../present/LangSpa.gfo tmpLangSpa.gfo
@@ -228,6 +228,10 @@ gf3langs:
 #	mv langs.gfcc ../alltenses
 #	mv tmpLangSpa.gfo ../alltenses/LangSpa.gfo 
 
+
+overljs:
+	gfc --make -js -jsref api/toplevel/OverLangEng.gf api/toplevel/OverLangSwe.gf api/toplevel/OverLangRus.gf +RTS -K100M
+	mv grammar.js grammarReference.js ../../js/overl
 
 clean:
 	-rm -f */*.gfc */*.gfr */*.gf~ ../*/*.gfc ../*/*.gfr ../*/*.gf~ ../*/langs.gfcm ../compiled.tgz

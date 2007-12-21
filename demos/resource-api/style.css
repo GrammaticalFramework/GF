@@ -1,0 +1,198 @@
+body {
+	font-family:arial,helvetica,sans-serif;
+	font-size:12px;
+	background-color: white;
+}
+
+#wrapper {
+	width:600px;
+	height:520px;
+	margin:auto 50px;
+	border:1px solid gray;
+	padding:10px;
+
+}
+
+#absFrame {
+ 	width:180px;
+ 	height:250px;
+	padding:10px;
+	border:1px solid gray;
+   	float:left;
+   	white-space: nowrap;
+}
+
+#conFrame {
+	width:366px;
+	height:250px;
+	margin-left:10px;
+	padding:10px;
+	border:1px solid gray;
+   	float:left;
+   	white-space: normal;
+   	overflow:auto;
+}
+
+#actFrame {
+	width:180px;
+	height:170px;
+	margin-top:10px;
+	padding:10px;
+	border:1px solid gray;
+   	float:left;
+   	overflow:auto;
+}
+
+#refFrame {
+	width:366px;
+	height:170px;
+	margin-left:10px;
+	margin-top:10px;
+	padding:10px;
+	border:1px solid gray;
+   	float:left;
+   	overflow:auto;
+}
+
+#messageFrame {
+	width:366px;
+	height:15px;
+	margin-top:10px;
+	margin-right:10px;
+	padding:10px;
+	border:1px solid gray;
+   	float:left;
+   	overflow:auto;
+}
+
+#clipboardFrame {
+	width:180px;
+	height:15px;
+	margin-top:10px;
+	padding:10px;
+	border:1px solid gray;
+   	float:left;
+   	overflow:auto;
+}
+
+#tree {
+	left: -10px;
+	top: -10px;	
+	width: 180px;
+	height: 250px;
+	margin: 0px;
+	padding: 10px;
+	overflow: auto;
+}
+
+ul {
+	position: relative;
+	list-style: none;
+	margin-left: 20px;
+	padding: 0px;
+}
+
+li {
+	position: relative;
+}
+
+img.tree-menu {
+	margin-right: 5px;
+}
+
+a.tree:link, a.tree:visited, a.tree:active {
+	color: black;
+	background-color: white;
+	text-decoration: none;
+	margin-right:10px;
+}
+
+a.tree:hover {
+	color: blue;
+	background-color: white;
+	text-decoration: underline;
+	margin-right:10px;
+}
+
+a.treeSelected:link, a.treeSelected:visited, a.treeSelected:active {
+	color: white;
+	background-color: #3366CC;
+	text-decoration: none;
+	margin-right:10px;
+}
+
+a.treeSelected:hover {
+	color: white;
+	background-color: #3366CC;
+	text-decoration: underline;
+	margin-right:10px;
+}
+
+table.action, table.refinement, table.wrapper {
+	margin: 0px;
+	padding: 0px;
+	border-style: none;
+	border-collapse: collapse;
+	border-spacing: 0px;
+}
+
+tr.selected {
+	color: white;
+	background-color: #3366CC;
+}
+
+tr.unavailable, tr.closed {
+	color: silver;
+	background-color: white;
+}
+
+tr.unavailable:hover {
+	color: silver;
+	background-color: #3366CC;
+}
+
+tr.action, tr.refinement, tr.wrapper {
+	color: black;
+	background-color: white;
+}
+
+tr.action:hover, tr.refinement:hover, tr.wrapper:hover {
+	color: white;
+	background-color: #3366CC;
+}
+
+td.action {
+	width: 220px;
+	margin: 0px;
+	padding: 0px;
+}
+
+td.refinement, td.wrapper {
+	width: 515px;
+	margin: 0px;
+	padding: 0px;
+}
+
+td.hotKey {
+	width: 30px;
+	margin: 0px;
+	padding: 0px;
+	text-align: right;
+}
+
+p {
+	margin-bottom: 40px;
+	text-align: justify;
+}
+
+span.normal {
+	color: black;
+	background-color: white;
+	text-decoration: none;
+}
+
+span.selected {
+	color: white;
+	background-color: #3366CC;
+	text-decoration: none;
+}
