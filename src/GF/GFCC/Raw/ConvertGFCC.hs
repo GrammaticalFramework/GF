@@ -13,7 +13,6 @@ toGFCC (Grm [
   App (CId "flags")     gfs, 
   ab@(
     App (CId "abstract") [
-      App (CId "flags") afls,
       App (CId "fun")   fs,
       App (CId "cat")   cts
       ]), 
@@ -24,7 +23,7 @@ toGFCC (Grm [
     gflags = fromAscList [(f,v) | App f [AStr v] <- gfs],
     abstract = 
      let
-      aflags  = fromAscList [(f,v) | App f [AStr v] <- afls]
+      aflags  = fromAscList [(f,v) | App f [AStr v] <- gfs]
       lfuns   = [(f,(toType typ,toExp def)) | App f [typ, def] <- fs]
       funs    = fromAscList lfuns
       lcats   = [(c, Prelude.map toHypo hyps) | App c hyps <- cts]
@@ -102,9 +101,8 @@ toTerm e = case e of
 fromGFCC :: GFCC -> Grammar
 fromGFCC gfcc0 = Grm [
   app "grammar" (AId (absname gfcc) : lmap AId (cncnames gfcc)), 
-  app "flags" [App f [AStr v] | (f,v) <- toList (gflags gfcc)],
+  app "flags" [App f [AStr v] | (f,v) <- toList (gflags gfcc `union` aflags agfcc)],
   app "abstract" [
-    app "flags" [App f [AStr v] | (f,v) <- toList (aflags agfcc)],
     app "fun"   [App f [fromType t,fromExp d] | (f,(t,d)) <- toList (funs agfcc)],
     app "cat"   [App f (lmap fromHypo hs) | (f,hs) <- toList (cats agfcc)]
     ],
