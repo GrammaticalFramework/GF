@@ -6,19 +6,20 @@
 </HEAD><BODY BGCOLOR="white" TEXT="black">
 <P ALIGN="center"><CENTER><H1>GF Resource Grammar Library: Synopsis</H1>
 <FONT SIZE="4">
-<I>Aarne Ranta</I><BR>
+<I>B. Bringert and A. Ranta</I><BR>
 </FONT></CENTER>
 
 <P></P>
 <HR NOSHADE SIZE=1>
 <P></P>
   <UL>
-  <LI><A HREF="#toc1">Categories</A>
+  <LI><A HREF="#toc1">Introduction</A>
+  <LI><A HREF="#toc2">Categories</A>
     <UL>
-    <LI><A HREF="#toc2">A hierarchic view</A>
-    <LI><A HREF="#toc3">Explanations</A>
+    <LI><A HREF="#toc3">A hierarchic view</A>
+    <LI><A HREF="#toc4">Explanations</A>
     </UL>
-  <LI><A HREF="#toc4">Syntax Rules and Structural Words</A>
+  <LI><A HREF="#toc5">Syntax Rules and Structural Words</A>
     <UL>
     <LI><A HREF="#A" TITLE="A - one-place adjective">A - one-place adjective</A>
     <LI><A HREF="#A2" TITLE="A2 - two-place adjective">A2 - two-place adjective</A>
@@ -87,34 +88,38 @@
     <LI><A HREF="#VV" TITLE="VV - verb-phrase-complement verb">VV - verb-phrase-complement verb</A>
     <LI><A HREF="#Voc" TITLE="Voc - vocative or "please"">Voc - vocative or "please"</A>
     </UL>
-  <LI><A HREF="#toc71">Lexical Paradigms</A>
+  <LI><A HREF="#toc72">Lexical Paradigms</A>
     <UL>
-    <LI><A HREF="#toc72">Paradigms for Danish</A>
-    <LI><A HREF="#toc73">Paradigms for English</A>
-    <LI><A HREF="#toc74">Paradigms for Finnish</A>
-    <LI><A HREF="#toc75">Paradigms for French</A>
-    <LI><A HREF="#toc76">Paradigms for German</A>
-    <LI><A HREF="#toc77">Paradigms for Italian</A>
-    <LI><A HREF="#toc78">Paradigms for Norwegian</A>
-    <LI><A HREF="#toc79">Paradigms for Russian</A>
-    <LI><A HREF="#toc80">Paradigms for Spanish</A>
-    <LI><A HREF="#toc81">Paradigms for Swedish</A>
+    <LI><A HREF="#toc73">Paradigms for Danish</A>
+    <LI><A HREF="#toc74">Paradigms for English</A>
+    <LI><A HREF="#toc75">Paradigms for Finnish</A>
+    <LI><A HREF="#toc76">Paradigms for French</A>
+    <LI><A HREF="#toc77">Paradigms for German</A>
+    <LI><A HREF="#toc78">Paradigms for Italian</A>
+    <LI><A HREF="#toc79">Paradigms for Norwegian</A>
+    <LI><A HREF="#toc80">Paradigms for Russian</A>
+    <LI><A HREF="#toc81">Paradigms for Spanish</A>
+    <LI><A HREF="#toc82">Paradigms for Swedish</A>
     </UL>
-  <LI><A HREF="#toc82">Browsing the libraries with GF commands</A>
-  <LI><A HREF="#toc83">An Example of Usage</A>
+  <LI><A HREF="#toc83">Browsing the libraries with GF commands</A>
+  <LI><A HREF="#toc84">An Example of Usage</A>
   </UL>
 
 <P></P>
 <HR NOSHADE SIZE=1>
 <P></P>
+<A NAME="toc1"></A>
+<H1>Introduction</H1>
 <P>
 This document contains the most important parts of the GF Resource Grammar API.
 It has been machine-generated from the source files; each chapter gives a link
 to the relevant source files, which give more information. Some of the files have
-not yet been prepared so that the machine generated documentation has the right format.
+not yet been prepared so that the machine generated documentation has the right 
+format.
 </P>
 <P>
-Since the character encoding is UTF-8 for Russian and Latin-1 for other languages, you
+Since the character encoding is UTF-8 for Russian and Latin-1 for other 
+languages, you
 may have to change the encoding preference of your browser when reading different
 parts of the document.
 </P>
@@ -123,11 +128,15 @@ The second-last chapter gives instructions on how to "browse" the library by
 loading the grammars into the <CODE>gf</CODE> command editor.
 </P>
 <P>
+<B>New</B>: Browsing by syntax editor 
+<A HREF="../../../demos/resource-api/editor.html">directly on the web</A>.
+</P>
+<P>
 The last chapter contains a brief example of how application grammars can
 import resource modules. At the same time, it illustrates a "design pattern" for 
 using the resource API to build functor-based applications
 </P>
-<A NAME="toc1"></A>
+<A NAME="toc2"></A>
 <H1>Categories</H1>
 <P>
 Source 1: <A HREF="../abstract/Common.gf"><CODE>http://www.cs.chalmers.se/~aarne/GF/lib/resource/abstract/Common.gf</CODE></A>
@@ -135,7 +144,7 @@ Source 1: <A HREF="../abstract/Common.gf"><CODE>http://www.cs.chalmers.se/~aarne
 <P>
 Source 2: <A HREF="../abstract/Cat.gf"><CODE>http://www.cs.chalmers.se/~aarne/GF/lib/resource/abstract/Cat.gf</CODE></A>
 </P>
-<A NAME="toc2"></A>
+<A NAME="toc3"></A>
 <H2>A hierarchic view</H2>
 <P>
 The chart below shows the categories in a hierarchical top-down order.
@@ -207,7 +216,7 @@ each category.
 The rectangular boxes mark open lexical categories, which have constructors
 also in the <CODE>Paradigms</CODE> modules.
 </P>
-<A NAME="toc3"></A>
+<A NAME="toc4"></A>
 <H2>Explanations</H2>
 <TABLE CELLPADDING="4" BORDER="1">
 <TR>
@@ -508,7 +517,7 @@ also in the <CODE>Paradigms</CODE> modules.
 </TABLE>
 
 <P></P>
-<A NAME="toc4"></A>
+<A NAME="toc5"></A>
 <H1>Syntax Rules and Structural Words</H1>
 <P>
 Source 1: <A HREF="../api/Constructors.gf"><CODE>http://www.cs.chalmers.se/~aarne/GF/lib/resource/api/Constructors.gf</CODE></A>
@@ -2873,9 +2882,9 @@ Lexical category, constructors given in
 </TABLE>
 
 <P></P>
-<A NAME="toc71"></A>
-<H1>Lexical Paradigms</H1>
 <A NAME="toc72"></A>
+<H1>Lexical Paradigms</H1>
+<A NAME="toc73"></A>
 <H2>Paradigms for Danish</H2>
 <P>
 <a name="RParadigms"></a>
@@ -3123,7 +3132,7 @@ source <A HREF="../danish/ParadigmsDan.gf"><CODE>http://www.cs.chalmers.se/~aarn
 </TABLE>
 
 <P></P>
-<A NAME="toc73"></A>
+<A NAME="toc74"></A>
 <H2>Paradigms for English</H2>
 <P>
 <a name="RParadigms"></a>
@@ -3355,7 +3364,7 @@ source <A HREF="../english/ParadigmsEng.gf"><CODE>http://www.cs.chalmers.se/~aar
 </TABLE>
 
 <P></P>
-<A NAME="toc74"></A>
+<A NAME="toc75"></A>
 <H2>Paradigms for Finnish</H2>
 <P>
 <a name="RParadigms"></a>
@@ -3695,7 +3704,7 @@ source <A HREF="../finnish/ParadigmsFin.gf"><CODE>http://www.cs.chalmers.se/~aar
 </TABLE>
 
 <P></P>
-<A NAME="toc75"></A>
+<A NAME="toc76"></A>
 <H2>Paradigms for French</H2>
 <P>
 <a name="RParadigms"></a>
@@ -3927,7 +3936,7 @@ source <A HREF="../french/ParadigmsFre.gf"><CODE>http://www.cs.chalmers.se/~aarn
 </TABLE>
 
 <P></P>
-<A NAME="toc76"></A>
+<A NAME="toc77"></A>
 <H2>Paradigms for German</H2>
 <P>
 <a name="RParadigms"></a>
@@ -4183,7 +4192,7 @@ source <A HREF="../german/ParadigmsGer.gf"><CODE>http://www.cs.chalmers.se/~aarn
 </TABLE>
 
 <P></P>
-<A NAME="toc77"></A>
+<A NAME="toc78"></A>
 <H2>Paradigms for Italian</H2>
 <P>
 <a name="RParadigms"></a>
@@ -4419,7 +4428,7 @@ source <A HREF="../italian/ParadigmsIta.gf"><CODE>http://www.cs.chalmers.se/~aar
 </TABLE>
 
 <P></P>
-<A NAME="toc78"></A>
+<A NAME="toc79"></A>
 <H2>Paradigms for Norwegian</H2>
 <P>
 <a name="RParadigms"></a>
@@ -4667,7 +4676,7 @@ source <A HREF="../norwegian/ParadigmsNor.gf"><CODE>http://www.cs.chalmers.se/~a
 </TABLE>
 
 <P></P>
-<A NAME="toc79"></A>
+<A NAME="toc80"></A>
 <H2>Paradigms for Russian</H2>
 <P>
 <a name="RParadigms"></a>
@@ -4963,7 +4972,7 @@ source <A HREF="../russian/ParadigmsRus.gf"><CODE>http://www.cs.chalmers.se/~aar
 </TABLE>
 
 <P></P>
-<A NAME="toc80"></A>
+<A NAME="toc81"></A>
 <H2>Paradigms for Spanish</H2>
 <P>
 <a name="RParadigms"></a>
@@ -5199,7 +5208,7 @@ source <A HREF="../spanish/ParadigmsSpa.gf"><CODE>http://www.cs.chalmers.se/~aar
 </TABLE>
 
 <P></P>
-<A NAME="toc81"></A>
+<A NAME="toc82"></A>
 <H2>Paradigms for Swedish</H2>
 <P>
 <a name="RParadigms"></a>
@@ -5443,8 +5452,12 @@ source <A HREF="../swedish/ParadigmsSwe.gf"><CODE>http://www.cs.chalmers.se/~aar
 </TABLE>
 
 <P></P>
-<A NAME="toc82"></A>
+<A NAME="toc83"></A>
 <H1>Browsing the libraries with GF commands</H1>
+<P>
+<B>New</B>: Browsing by syntax editor 
+<A HREF="../../../demos/resource-api/editor.html">directly on the web</A>.
+</P>
 <P>
 All of the following assume
 </P>
@@ -5480,7 +5493,7 @@ To view linearizations in all languages by parsing from English:
     &gt; p -cat=S -lang=LangEng "this grammar is too big" | tb
 </PRE>
 <P></P>
-<A NAME="toc83"></A>
+<A NAME="toc84"></A>
 <H1>An Example of Usage</H1>
 <P>
 The standard way of building an application has the following modules.

@@ -1,5 +1,11 @@
 
+
+
+
 =Browsing the libraries with GF commands=
+
+**New**: Browsing by syntax editor 
+[directly on the web ../../../demos/resource-api/editor.html].
 
 All of the following assume
 ```

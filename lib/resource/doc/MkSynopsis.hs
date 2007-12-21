@@ -14,7 +14,7 @@ main = do
   cs2 <- getCats catAPI
   let cs = sortCats (cs1 ++ cs2)
   writeFile synopsis "GF Resource Grammar Library: Synopsis"
-  append "Aarne Ranta"
+  append "B. Bringert and A. Ranta"
   space
   append "%!postproc(html): '(SRC=\"categories.png\")'  '\\1 USEMAP=\"#categories\"'"  
   append "%!postproc(html): '#LParadigms'  '<a name=\"RParadigms\"></a>'"
