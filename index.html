@@ -1,5 +1,5 @@
 <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
-<html><head><title>GF Version 2.8</title></head>
+<html><head><title>GF Version 2.9</title></head>
  
 
 <body bgcolor="#ffffff" text="#000000">
@@ -9,9 +9,9 @@
 
 <h1>Grammatical Framework</h1>
 
-<h2>Version 2.8</h2>
+<h2>Version 2.9</h2>
 
-July 8, 2007.
+December 21, 2007.
 
 <p>
 
@@ -23,25 +23,21 @@ July 8, 2007.
 "doc">Documentation</a>
 |
 <a href=
-"download.html">Download</a>
+"download/">Download</a>
 |
 <a href=
-"http://www.cs.chalmers.se/Cs/Research/Language-technology/darcs/GF/doc/darcs.html">Developers</a>
-|
-<a href=
-"doc/gf-history.html">Changes</a>
+"http://www.cs.chalmers.se/Cs/Research/Language-technology/darcs/GF/doc/darcs.html">LatestCode</a>
 |
 <a href=
 "doc/gf-quickstart.html">QuickStart</a>
 |
 <a href=
-"doc/tutorial/gf-tutorial2.html">Tutorial</a>
+"doc/gf-tutorial.html">Tutorial</a>
 |
 <a href=
-"lib">Libraries</a>
+"doc/gf-refman.html">ReferenceManual</a>
 |
-<a href=
-"examples">Examples</a>
+<a href="lib/resource/doc/synopsis.html">Libraries</a>
 |
 <a href=
 "http://www.cs.chalmers.se/~bringert/gf/translate/">NumeralDemo</a>
@@ -56,30 +52,24 @@ July 8, 2007.
 
 </p><h2>News</h2>
 
-
 <p>
 
-<i>August 31, 2007</i>. <a href="doc/gf-course.html">GF Graduate Course</a>
-organized by <a href="http://www.gslt.hum.gu.se">GSLT</a>: first module
-September 13-14 in Gothenburg.
-
-<p>
-
-<i>July 8, 2007</i>. GF 2.8 released. Some highlights:
+<i>December 21, 2007</i>. 
 <ul>
-<li> Resource Grammar Library v 1.2: <a href="lib/resource-1.0/doc/synopsis.html">synopsis</a>.
-<li> New version of <a href="doc/tutorial/gf-tutorial2.html">tutorial</a>,
-     now with exercises and also as a 
-     <a href="doc/tutorial/gf-tutorial2.pdf">pdf file</a>,
-<li> new speech formats
-<li> better semantics of <tt>variants</tt>
-<li> lots of bug fixes
+<li> GF 2.9 is mainly a bug fix version;
+<li> preview version of GF3: get the 
+  <a href=
+   "http://www.cs.chalmers.se/Cs/Research/Language-technology/darcs/GF/doc/darcs.html">
+   latest sources</a> and compile with <tt>make gfc</tt>
+<li> new version of the <a href="doc/gf-tutorial.html">tutorial</a>
+<li> new <a href="doc/gf-refman.html">reference manual</a>
+<li> <a href="demos/resource-api/editor.html">resource api browser</a>
+     using interactive editing
 </ul>
 
-
 <p>
 
-<a href="doc/old-news.html">News before 2.7</a>.
+<a href="doc/old-news.html">News before 2.9</a>.
 
 
 </p><h2>What is GF?</h2>
@@ -136,8 +126,8 @@ GF is open-source software licensed under
 
 <p>
 
-The <a href="lib>"GF Grammar Libraries</a> are licensed under
-<a href="lib/resource-1.0/LICENSE">GNU Lesser General Public License (LGPL)</a>.
+The <a href="lib">GF Grammar Libraries</a> are licensed under
+<a href="lib/resource/LICENSE">GNU Lesser General Public License (LGPL)</a>.
 
 
 
@@ -166,7 +156,12 @@ of a multimodal dialogue system built with embedded grammars.
 
 <p>
 
-<a href="lib/resource-1.0/doc/index.html">Resource grammar library</a>: 
+<a href="examples/tutorial/">Example grammars</a> used in the 
+<a href="doc/gf-tutorial.html">GF tutorial</a>.
+
+<p>
+
+<a href="lib/resource/doc/index.html">Resource grammar library</a>: 
 basic structures of ten languages
 (Danish, English, Finnish, French, German,
 Italian, Norwegian, Russian, Spanish, Swedish).
@@ -181,8 +176,7 @@ but they can also be useful for language training.
 GF is available for
 several platforms: Linux, Mac OS X, Microsoft Windows, and Sun OS.
 To get GF, go to the
-<a href="http://sourceforge.net/project/showfiles.php?group_id=132285">Download Page</a>
-(at SourceForge).
+<a href="download">Download Page</a>.
 
 
 <h2>Quick start</h2>
@@ -205,8 +199,8 @@ The platform-independent graphical user interface is written in
 
 </p><p>
 
-The <a href="http://sourceforge.net/project/showfiles.php?group_id=132285">
-Download Page</a> (at SourceForge) gives links to source and binary packages, as well as
+The <a href="download/">Download Page</a> 
+gives links to source and binary packages, as well as
 information on compiler requirements.
 
 <p>
@@ -234,38 +228,28 @@ See the <a href="doc/index.html">Documentation page</a>.
 
 <h2>Projects and events</h2>
 
+<li> <a href="http://webalt.math.helsinki.fi/content/index_eng.html">WebALT</a>,
+Web Advanced Learning Technologies. GF is used as for generating multilingual
+teaching material in mathematics.
+
 <li> <a href="http://www.talk-project.org">TALK</a> = Tools for Ambient Linguistic
-Knowledge</a>. GF is used in implementing multimodal and multilingual dialogue systems.
+Knowledge</a>. GF was used in implementing multimodal and multilingual dialogue systems.
 
 <li> <a href="http://www.key-project.org/">KeY</a> project on Integrated Deductive
-Software Design. GF is used for
+Software Design. GF was used for
 authoring informal and formal specifications. More details on the GF
 application
 <a href="http://www.cs.chalmers.se/%7Ekrijo/gfspec">
 here</a>.
-
-<li> <a href="http://webalt.math.helsinki.fi/content/index_eng.html">WebALT</a>,
-Web Advanced Learning Technologies. GF is used as for generating multilingual
-teaching material in mathematics.
 
 <li> 
 Project <a href="http://efficient.citi.tudor.lu/index_noframe.html">Efficient</a>
 at Tudor Institute, Luxembourg, "atelier de prototypage de transactions d'e-commerce".
 GF is used as an authoring tool for business models.
 
-<li> 
-An introductory course on GF was given at the
-<a href="http://www.logic.at/esslli03/">ESSLLI summer school</a>
-in Vienna 2003. 
-
 
 
 <h2>Miscellaneous</h2>
-
-
-</li><li>
-<a href="http://www.cs.chalmers.se/%7Ekrijo/gramlets/index.html">Gramlets</a>:
-GF grammars compiled to Java applets.
 
 
 </li><li> 
@@ -275,11 +259,6 @@ report on a compiler from a fragment of C to JVM, written in GF.
 The compiler source code can be found in the directory
 <tt>examples/gfcc</tt> in the GF grammar library
 (see  <a href="http://sourceforge.net/project/showfiles.php?group_id=132285">GF download page</a>).
-
-</li><li>
-<a href="http://www.cs.chalmers.se/~aarne/GF1">
-An early version of the GF Home Page</a>
-last updated for GF, Version 1.2, 2003.
 
 </li><li>
 The original <a href="http://www.xrce.xerox.com/">
@@ -296,14 +275,14 @@ Earlier application:
 </li><li>
 <a href="http://www.cs.chalmers.se/%7Emarkus/BNFC">The BNF Converter</a>.
 A GF spin-off customized for the description of programming
-languages.
-    
+languages.    
 
 </li><li>
 
 <a href="http://www.cs.chalmers.se/%7Emarkus/FM">The Functional
 Morphology project</a>. Creating infrastructure for GF and other
 linguistic applications.
+
 
 </li></ul>
 
@@ -332,6 +311,6 @@ And register to the
 Last modified by
 <a href="http://www.cs.chalmers.se/%7Eaarne">
 Aarne Ranta</a>,
-December 22, 2005.
+December 21, 2007.
 
 </body></html>

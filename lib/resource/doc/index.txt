@@ -26,12 +26,8 @@ Italian, Norwegian, Russian, Spanish, Swedish.
 Still incomplete implementations for Arabic and Catalan are also
 included.
 
-**New in Version 1.2**
-- Simpler APIs using overloading: see [Synopsis synopsis.html].
-  The API of version 1.0 remains valid and can be used in combination with this.
-- Bug fixes and new paradigms.
-- Licensed under LGPL.
-
+**New** in December 2007: Browsing the library by syntax editor 
+[directly on the web ../../../demos/resource-api/editor.html].
 
 
 
@@ -41,6 +37,7 @@ included.
 Inger Andersson and Therese Soderberg (Spanish morphology),
 Nicolas Barth and Sylvain Pogodalla (French verb list),
 Ali El Dada (Arabic modules),
+Magda Gerritsen and Ulrich Real (Russian paradigms and lexicon),
 Janna Khegai (Russian modules),
 Bjorn Bringert (many Swadesh lexica),
 Carlos Gonzalía (Spanish cardinals), 
