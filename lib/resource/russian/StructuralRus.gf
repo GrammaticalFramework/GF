@@ -116,7 +116,7 @@ lin
   without_Prep  = { s = "без" ; c = Gen};
   youPl_Pron  = pronVu;
   yes_Phr  = ss ["Да ."] ;
-  youSg_Pron   = pronVu;
+  youSg_Pron   = pronTu;
   youPol_Pron =  pronVu;
 
 ---  NoDet    = nikakojDet ** {n = Sg; g = PNoGen; c= Nom} ;
