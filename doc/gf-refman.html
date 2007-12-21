@@ -1,0 +1,4545 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<META NAME="generator" CONTENT="http://txt2tags.sf.net">
+<TITLE>GF Language Reference Manual</TITLE>
+</HEAD><BODY BGCOLOR="white" TEXT="black">
+<P ALIGN="center"><CENTER><H1>GF Language Reference Manual</H1>
+<FONT SIZE="4">
+<I>Aarne Ranta</I><BR>
+</FONT></CENTER>
+
+<P></P>
+<HR NOSHADE SIZE=1>
+<P></P>
+    <UL>
+    <LI><A HREF="#toc1">Overview of GF</A>
+    <LI><A HREF="#toc2">The module system</A>
+      <UL>
+      <LI><A HREF="#toc3">Top-level and supplementary module structure</A>
+      <LI><A HREF="#toc4">Compilation units</A>
+      <LI><A HREF="#toc5">Names</A>
+      <LI><A HREF="#toc6">The structure of a module</A>
+      <LI><A HREF="#toc7">Module types, headers, and bodies</A>
+      <LI><A HREF="#toc8">Digression: the logic of module types</A>
+      <LI><A HREF="#toc9">Inheritance</A>
+      <LI><A HREF="#toc10">Opening</A>
+      <LI><A HREF="#toc11">Name resolution</A>
+      <LI><A HREF="#toc12">Functor instantiations</A>
+      <LI><A HREF="#toc13">Completeness</A>
+      </UL>
+    <LI><A HREF="#toc14">Judgements</A>
+      <UL>
+      <LI><A HREF="#toc15">Overview of the forms of judgement</A>
+      <LI><A HREF="#toc16">Category declarations, cat</A>
+      <LI><A HREF="#toc17">Hypotheses and contexts</A>
+      <LI><A HREF="#toc18">Function declarations, fun</A>
+      <LI><A HREF="#toc19">Function definitions, def</A>
+      <LI><A HREF="#toc20">Data constructor definitions, data</A>
+      <LI><A HREF="#toc21">The semantic status of an abstract syntax function</A>
+      <LI><A HREF="#toc22">Linearization type definitions, lincat</A>
+      <LI><A HREF="#toc23">Linearization definitions, lin</A>
+      <LI><A HREF="#toc24">Linearization default definitions, lindef</A>
+      <LI><A HREF="#toc25">Printname definitions, printname cat and printname fun</A>
+      <LI><A HREF="#toc26">Parameter type definitions, param</A>
+      <LI><A HREF="#toc27">Parameter values</A>
+      <LI><A HREF="#toc28">Operation definitions, oper</A>
+      <LI><A HREF="#toc29">Operation overloading</A>
+      <LI><A HREF="#toc30">Flag definitions, flags</A>
+      </UL>
+    <LI><A HREF="#toc31">Types and expressions</A>
+      <UL>
+      <LI><A HREF="#toc32">Overview of expression forms</A>
+      <LI><A HREF="#toc33">The functional fragment: expressions in abstract syntax</A>
+      <LI><A HREF="#toc34">Conversions</A>
+      <LI><A HREF="#toc35">Syntax trees</A>
+      <LI><A HREF="#toc36">Predefined types in abstract syntax</A>
+      <LI><A HREF="#toc37">Overview of expressions in concrete syntax</A>
+      <LI><A HREF="#toc38">Values, canonical forms, and run-time variables</A>
+      <LI><A HREF="#toc39">Token lists, tokens, and strings</A>
+      <LI><A HREF="#toc40">Records and record types</A>
+      <LI><A HREF="#toc41">Subtyping</A>
+      <LI><A HREF="#toc42">Tables and table types</A>
+      <LI><A HREF="#toc43">Pattern matching</A>
+      <LI><A HREF="#toc44">Free variation</A>
+      <LI><A HREF="#toc45">Local definitions</A>
+      <LI><A HREF="#toc46">Function applications in concrete syntax</A>
+      <LI><A HREF="#toc47">Reusing top-level grammars as resources</A>
+      <LI><A HREF="#toc48">Predefined concrete syntax types</A>
+      <LI><A HREF="#toc49">Predefined concrete syntax operations</A>
+      </UL>
+    <LI><A HREF="#toc50">Flags and pragmas</A>
+      <UL>
+      <LI><A HREF="#toc51">Some flags and their values</A>
+      <LI><A HREF="#toc52">Compiler pragmas</A>
+      </UL>
+    <LI><A HREF="#toc53">Alternative grammar input formats</A>
+      <UL>
+      <LI><A HREF="#toc54">Old GF without modules</A>
+      <LI><A HREF="#toc55">Context-free grammars</A>
+      <LI><A HREF="#toc56">Extended BNF grammars</A>
+      <LI><A HREF="#toc57">Example-based grammars</A>
+      </UL>
+    <LI><A HREF="#toc58">The grammar of GF</A>
+    <LI><A HREF="#toc59">The lexical structure of GF</A>
+      <UL>
+      <LI><A HREF="#toc60">Identifiers</A>
+      <LI><A HREF="#toc61">Literals</A>
+      <LI><A HREF="#toc62">Reserved words and symbols</A>
+      <LI><A HREF="#toc63">Comments</A>
+      </UL>
+    <LI><A HREF="#toc64">The syntactic structure of GF</A>
+    </UL>
+
+<P></P>
+<HR NOSHADE SIZE=1>
+<P></P>
+<P>
+
+</P>
+<P>
+This document is a reference manual to the GF programming language.
+GF, Grammatical Framework, is a special-purpose programming language,
+designed to support definitions of grammars. 
+</P>
+<P>
+This document is not an introduction to GF; such introduction can be 
+found in the GF tutorial available on line on the GF web page,
+</P>
+<P>
+<A HREF="http://digitalgrammars.com/gf"><CODE>digitalgrammars.com/gf</CODE></A>
+</P>
+<P>
+This manual covers only the language, not the GF compiler or
+interactive system. We will however make some references to different
+compiler versions, if they involve changes of behaviour having to
+do with the language specification.
+</P>
+<P>
+This manual is meant to be fully compatible with GF version 3.0
+(forthcoming). Main discrepancies with version 2.8 are indicated,
+as well as with the reference article on GF, 
+</P>
+<P>
+A. Ranta, "Grammatical Framework. A Type Theoretical Grammar Formalism",
+<I>The Journal of Functional Programming</I> 14(2), 2004, pp. 145-189.
+</P>
+<P>
+This article will referred to as "the JFP article".
+</P>
+<P>
+As metalinguistic notation, we will use the symbols
+</P>
+<UL>
+<LI><I>a</I> === <I>b</I> to say that <I>a</I> is syntactic sugar for <I>b</I>
+<LI><I>a</I> ==> <I>b</I> to say that <I>a</I> is computed (or compiled) to <I>b</I>
+</UL>
+
+<A NAME="toc1"></A>
+<H2>Overview of GF</H2>
+<P>
+GF is a typed functional language,
+borrowing many of its constructs from ML and Haskell: algebraic datatypes, 
+higher-order functions, pattern matching. The module system bears resemblance
+to ML (functors) but also to object-oriented languages (inheritance).
+The type theory used in the abstract syntax part of GF is inherited from
+logical frameworks, in particular ALF ("Another Logical Framework"; in a
+sense, GF is Yet Another ALF). From ALF comes also the use of dependent
+types, including the use of explicit type variables instead of 
+Hindley-Milner polymorphism.
+</P>
+<P>
+The look and feel of GF is close to Java and 
+C, due to the use of curly brackets and semicolons in structuring the code;
+the expression syntax, however, follows Haskell in using juxtaposition for
+function application and parentheses only for grouping.
+</P>
+<P>
+To understand the constructs of GF, and especially their limitations in comparison
+to general-purpose programming languages, it is essential to keep in mind that
+GF is a special-purpose and non-turing-complete language. Every GF program is
+ultimately compiled to a <B>multilingual grammar</B>, which consists of an
+<B>abstract syntax</B> and a set of <B>concrete syntaxes</B>. The abstract syntax
+defines a system of <B>syntax trees</B>, and each concrete syntax defines a
+mapping from those syntax trees to <B>nested tuples</B> of strings and integers.
+This mapping is <B>compositional</B>, i.e. <B>homomorphic</B>, and moreover
+<B>reversible</B>: given a nested tuple, there exists an effective way of finding
+the set of syntax trees that map to this tuple. The procedure of applying the
+mapping to a tree to produce a tuple is called <B>linearization</B>, and the
+reverse search procedure is called <B>parsing</B>. It is ultimately the requirement
+of reversibility that restricts GF to be less than turing-complete. This is
+reflected in restrictions to recursion in concrete syntax. Tree formation in
+abstract syntax, however, is fully recursive.
+</P>
+<P>
+Even though run-time GF grammars manipulate just nested tuples, at compile
+time these are represented by by the more fine-grained labelled records 
+and finite functions over algebraic datatypes. This enables the programmer
+to write on a higher abstraction level, and also adds type distinctions
+and hence raises the level of checking of programs.
+</P>
+<A NAME="toc2"></A>
+<H2>The module system</H2>
+<A NAME="toc3"></A>
+<H3>Top-level and supplementary module structure</H3>
+<P>
+The big picture of GF as a programming language for multilingual grammars
+explains its principal module structure. Any GF grammar must have an
+abstract syntax module; it can in addition have any number of concrete
+syntax modules matching that abstract syntax. Before going to details,
+we give a simple example: a module defining the <B>category</B> <CODE>A</CODE> 
+of adjectives and one adjective-forming <B>function</B>, the zero-place function
+<CODE>Even</CODE>. We give the module the name <CODE>Adj</CODE>. The GF code for the
+module looks as follows:
+</P>
+<PRE>
+    abstract Adj = {
+      cat A ;
+      fun Even : A ;
+    }
+</PRE>
+<P>
+Here are two concrete syntax modules, one intended for mapping the trees
+to English, the other to Swedish. The mappling is defined by
+<CODE>lincat</CODE> definitions assigning a <B>linearization type</B> to each category,
+and <CODE>lin</CODE> definitions assigning a <B>linearization</B> to each function. 
+</P>
+<PRE>
+    concrete AdjEng of Adj = {
+      lincat A = {s : Str} ;
+      lin Even = {s = "even"} ;
+    }
+  
+    concrete AdjSwe of Adj = {
+      lincat A = {s : AForm =&gt; Str} ;
+      lin Even = {s = table {
+        ASg Utr   =&gt; "jämn" ;
+        ASg Neutr =&gt; "jämnt" ;
+        APl       =&gt; "jämna"
+        }
+      } ;
+      param AForm = ASg Gender | APl ;
+      param Gender = Utr | Neutr ;
+    }
+</PRE>
+<P>
+These examples illustrate the main ideas of multilingual grammars:
+</P>
+<UL>
+<LI>the concrete syntax must match the abstract syntax:
+  <UL>
+  <LI>every <CODE>cat</CODE> is given a <CODE>lincat</CODE>
+  <LI>every <CODE>fun</CODE> is given a <CODE>lin</CODE>
+  </UL>
+</UL>
+
+<UL>
+<LI>the concrete syntax is internally coherent:
+  <UL>
+  <LI>the <CODE>lin</CODE> rules respect the types defined by <CODE>lincat</CODE> rules
+  </UL>
+</UL>
+
+<UL>
+<LI>concrete syntaxes are independent of each other
+  <UL>
+  <LI>they can use different <CODE>lincat</CODE> and <CODE>lin</CODE> definitions
+  <LI>they can define their own <B>parameter types</B> (<CODE>param</CODE>)
+  </UL>
+</UL>
+
+<P>
+The first two ideas form the core of the <B>static checking</B> of GF
+grammars, eliminating the possibility of run-time errors in
+linearization and parsing. The third idea gives GF the expressive
+power needed to map abstract syntax to vastly different languages.
+</P>
+<P>
+Abstract and concrete modules are called <B>top-level grammar modules</B>,
+since they are the ones that remain in grammar systems at run time.
+However, in order to support <B>modular grammar engineering</B>, GF provides
+much more module structure than strictly required in top-level grammars.
+</P>
+<P>
+<B>Inheritance</B>, also known as <B>extension</B>, means that a module can inherit the
+contents of one or more other modules to which new judgements are added, 
+e.g.
+</P>
+<PRE>
+    abstract MoreAdj = Adj ** {
+      fun Odd : A ;
+    }
+</PRE>
+<P>
+<B>Resource modules</B> define parameter types and <B>operations</B> usable
+in several concrete syntaxes,
+</P>
+<PRE>
+    resource MorphoFre = {
+      param Number = Sg | Pl ;
+      param Gender = Masc | Fem ;
+      oper regA : Str -&gt; {s : Gender =&gt; Number =&gt; Str} = 
+        \fin -&gt; {
+          s = table {
+            Masc =&gt; table {Sg =&gt; fin ; Pl =&gt; fin + "s"} ;
+            Fem  =&gt; table {Sg =&gt; fin + "e" ; Pl =&gt; fin + "es"}
+          }
+        } ;
+    }
+</PRE>
+<P>
+By <B>opening</B>, a module can use the contents of a resource module 
+without inheriting them, e.g.
+</P>
+<PRE>
+    concrete AdjFre of Adj = open MorphoFre in {
+      lincat A = {s : Gender =&gt; Number =&gt; Str} ;
+      lin Even = regA "pair" ;
+    }
+</PRE>
+<P>
+<B>Interfaces</B> and <B>instances</B> separate the contents of a resource module
+to type signatures and definitions, in a way analogous to abstract vs. concrete
+modules, e.g.
+</P>
+<PRE>
+    interface Lexicon = {
+      oper Adjective : Type ;
+      oper even_A : Adjective ;
+    }
+  
+    instance LexiconEng of Lexicon = {
+      oper Adjective = {s : Str} ;
+      oper even_A = {s = "even"} ;
+    }
+</PRE>
+<P>
+<B>Functors</B> i.e. <B>parametrized modules</B> i.e. <B>incomplete modules</B>, defining
+a concrete syntax in terms of an interface. 
+</P>
+<PRE>
+    incomplete concrete AdjI of Adj = open Lexicon in {
+      lincat A = Adjective ;
+      lin Even = even_A ;
+    }
+</PRE>
+<P>
+A functor can be <B>instantiated</B> by providing instances of its open interfaces.
+</P>
+<PRE>
+    concrete AdjEng of Adj = AdjI with (Lexicon = LexiconEng) ;
+</PRE>
+<P></P>
+<A NAME="toc4"></A>
+<H3>Compilation units</H3>
+<P>
+The compilation unit of GF source code is a file that contains a module.
+Judgements outside modules are supported only for backward compatibility,
+as explained <a href="#oldgf">here</a>. 
+Every source file, suffixed <CODE>.gf</CODE>, is compiled to a "GF object file",
+suffixed <CODE>.gfo</CODE> (as of GF Version 3.0 and later). For runtime grammar objects
+used for parsing and linearization, a set of <CODE>.gfo</CODE> files is linked to
+a single file suffixed <CODE>.gfcc</CODE>. While <CODE>.gf</CODE> and <CODE>.gfo</CODE> files may contain
+modules of any kinds, a <CODE>.gfcc</CODE> file always contains a multilingual grammar
+with one abstract and a set of concrete syntaxes.
+</P>
+<P>
+The following diagram summarizes the files involved in the compilation process.
+<center>
+<CODE>module1.gf module2.gf ... modulen.gf</CODE>
+</P>
+<P>
+==>
+</P>
+<P>
+<CODE>module1.gfo module2.gfo ... modulen.gfo</CODE>
+</P>
+<P>
+==>
+</P>
+<P>
+grammar.gfcc
+</center>
+Both <CODE>.gf</CODE> and <CODE>.gfo</CODE> files are written in the GF source language;
+<CODE>.gfcc</CODE> files are written in a lower-level format. The process of translating
+<CODE>.gf</CODE> to <CODE>.gfo</CODE> consists of <B>name resolution</B>, <B>type annotation</B>,
+<B>partial evaluation</B>, and <B>optimization</B>. 
+There is a great advantage in the possibility to do this
+separately for GF modules and saving the result in <CODE>.gfo</CODE> files. The partial 
+evaluation phase, in particular, is time and memory consuming, and GF libraries
+are therefore distributed in <CODE>.gfo</CODE> to make their use less arduous.
+</P>
+<P>
+<I>In GF before version 3.0, the object files are in a format called <CODE>.gfc</CODE>,</I> 
+<I>and the multilingual runtime grammar is in a format called <CODE>.gfcm</CODE>.</I>
+</P>
+<P>
+The standard compiler has a built-in <B>make facility</B>, which finds out what
+other modules are needed when compiling an explicitly given module. 
+This facility builds a dependency graph and decides which of the involved 
+modules need recompilation (from <CODE>.gf</CODE> to <CODE>.gfo</CODE>), and for which the
+GF object can be used directly. 
+</P>
+<A NAME="toc5"></A>
+<H3>Names</H3>
+<P>
+Each module <I>M</I> defines a set of <B>names</B>, which are visible in <I>M</I>
+itself, in all modules extending <I>M</I> (unless excluded, as explained 
+<a href="#restrictedinheritance">here</a>), and
+all modules opening <I>M</I>. These names can stand for abstract syntax
+categories and functions, parameter types and parameter constructors,
+and operations. All these names live in the same <B>name space</B>, which
+means that a name entering a module more than once due to inheritance or
+opening can lead to a <B>conflict</B>. It is specified 
+<a href="#renaming">here</a> how these
+conflicts are resolved.
+</P>
+<P>
+The names of modules live in a name space separate from the other names.
+Even here, all names must be distinct in a set of files compiled to a 
+multilingual grammar. In particular, even files residing in different directories
+must have different names, since GF has no notion of hierarchic 
+module names.
+</P>
+<P>
+Lexically, names belong to the class of <B>identifiers</B>. An idenfifier is
+a letter followed by any number of letters, digits, undercores (<CODE>_</CODE>) and
+primes (<CODE>'</CODE>). Upper- and lower-case letters are treated as distinct.
+Nothing dictates the choice of upper or lower-case initials, but
+the standard libraries follow conventions similar to Haskell:
+</P>
+<UL>
+<LI>upper case is used for modules, abstract syntax categories and functions,
+  parameter types and constructors, and type synonyms
+<LI>lower case is used for non-type-valued operations and for variables
+</UL>
+
+<P>
+<a name="identifiers"></a>
+</P>
+<P>
+"Letters" as mentioned in the identifier syntax include all 7-bit ASCII
+letters. Iso-latin-1 and Unicode letters are supported in varying degrees
+by different tools and platforms, and are hence not recommended in identifiers.
+</P>
+<A NAME="toc6"></A>
+<H3>The structure of a module</H3>
+<P>
+Modules of all types have the following structure:
+<center>
+<I>moduletype</I> <I>name</I> <CODE>=</CODE> <I>extends</I> <I>opens</I> <I>body</I>
+</center>
+The part of the module preceding the body is its <B>header</B>. The header
+defines the type of the module and tells what other modules it inherits
+and opens. The body consists of the judgements that introduce all the new
+names defined by the module.
+</P>
+<P>
+Any of the parts <I>extends</I>, <I>opens</I>, and <I>body</I> may be empty.
+If they are all filled, delimiters and keywords separate the parts in the
+following way:
+<center>
+<I>moduletype</I> <I>name</I> <CODE>=</CODE> 
+  <I>extends</I> <CODE>**</CODE> <CODE>open</CODE> <I>opens</I> <CODE>in</CODE> <CODE>{</CODE> <I>body</I> <CODE>}</CODE>
+</center>
+The part <I>moduletype</I> <I>name</I> looks slightly different if the
+type is <CODE>concrete</CODE> or <CODE>instance</CODE>: the <I>name</I> intrudes between
+the type keyword and the name of the module being implemented and which
+really belongs to the type of the module:
+<center>
+  <CODE>concrete</CODE> <I>name</I> <CODE>of</CODE> <I>abstractname</I> 
+</center>
+The only exception to the schema of functor syntax
+is functor instantiations: the instantiation
+list is given in a special way between <I>extends</I> and <I>opens</I>:
+<center>
+<CODE>incomplete concrete</CODE> <I>name</I> <CODE>of</CODE> <I>abstractname</I> <CODE>=</CODE> 
+  <I>extends</I> <CODE>**</CODE> <I>functorname</I> <CODE>with</CODE> <I>instantiations</I> <CODE>**</CODE> 
+  <CODE>open</CODE> <I>opens</I> <CODE>in</CODE> <CODE>{</CODE> <I>body</I> <CODE>}</CODE>
+</center>
+Logically, the part "<I>functorname</I> <CODE>with</CODE> <I>instantiations</I>" should
+really be one of the <I>extends</I>. This is also shown by the fact that 
+it can have restricted inheritance (concept defined <a href="#restrictedinheritance">here</a>).
+</P>
+<A NAME="toc7"></A>
+<H3>Module types, headers, and bodies</H3>
+<P>
+The <I>extends</I> and <I>opens</I> parts of a module header are lists of
+module names (with possible qualifications, as defined below <a href="#qualifiednames">here</a>).
+The first step of type checking a module consists of verifying that
+these names stand for modules of approptiate module types. As a rule
+of thumb,
+</P>
+<UL>
+<LI>the <I>extends</I> of a module must have the same <I>moduletype</I>
+<LI>the <I>opens</I> of a module must be of type <CODE>resource</CODE>
+</UL>
+
+<P>
+However, the precise rules are a little more fine-grained, because
+of the presence of interfaces and their instances, and the possibility
+to reuse abstract and concrete modules as resources. The following table
+gives, for all module types, the possible module types of their <I>extends</I>
+and <I>opens</I>, as well as the forms of judgement legal in that module type.
+</P>
+<TABLE ALIGN="center" CELLPADDING="4" BORDER="1">
+<TR>
+<TH>module type</TH>
+<TH>extends</TH>
+<TH>opens</TH>
+<TH COLSPAN="2">body</TH>
+</TR>
+<TR>
+<TD><CODE>abstract</CODE></TD>
+<TD>abstract</TD>
+<TD>-</TD>
+<TD><CODE>cat, fun, def, data</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>concrete of</CODE> <I>abstract</I></TD>
+<TD>concrete</TD>
+<TD>resource*</TD>
+<TD><CODE>lincat, cat, oper, param</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>resource</CODE></TD>
+<TD>resource*</TD>
+<TD>resource*</TD>
+<TD><CODE>oper, param</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>interface</CODE></TD>
+<TD>resource+</TD>
+<TD>resource*</TD>
+<TD><CODE>oper, param</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>instance of</CODE> <I>interface</I></TD>
+<TD>resource*</TD>
+<TD>resource*</TD>
+<TD><CODE>oper, param</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>incomplete</CODE> concrete</TD>
+<TD>concrete+</TD>
+<TD>resource+</TD>
+<TD><CODE>lincat, cat, oper, param</CODE></TD>
+</TR>
+</TABLE>
+
+<P></P>
+<P>
+The table uses the following shorthands for lists of module types:
+</P>
+<UL>
+<LI>resource*: resource, instance, concrete
+<LI>resource+: resource*, interface, abstract
+<LI>concrete+: concrete, incomplete concrete
+</UL>
+
+<P>
+The legality of judgements in the body is checked before the judgements 
+themselves are checked.
+</P>
+<P>
+The forms of judgement are explained <a href="#judgementforms">here</a>.
+</P>
+<A NAME="toc8"></A>
+<H3>Digression: the logic of module types</H3>
+<P>
+Why are the legality conditions of opens and extends so complicated? The best way
+to grasp them is probably to consider a simplified logical model of the module
+system, replacing modules by types and functions. This model could actually
+be developed towards treating modules in GF as first-class objects; so far, 
+however, this step has not been motivated by any practical needs.
+</P>
+<TABLE ALIGN="center" CELLPADDING="4" BORDER="1">
+<TR>
+<TH>module</TH>
+<TH COLSPAN="2">object and type</TH>
+</TR>
+<TR>
+<TD>abstract A = B</TD>
+<TD>A = B : type</TD>
+</TR>
+<TR>
+<TD>concrete C of A = B</TD>
+<TD>C = B : A -&gt; S</TD>
+</TR>
+<TR>
+<TD>interface I = B</TD>
+<TD>I = B : type</TD>
+</TR>
+<TR>
+<TD>instance J of I = B</TD>
+<TD>J = B : I</TD>
+</TR>
+<TR>
+<TD>incomplete concrete C of A = open I in B</TD>
+<TD>C = B : I -&gt; A -&gt; S</TD>
+</TR>
+<TR>
+<TD>concrete K of A = C with (I=J)</TD>
+<TD>K = B(J) : A -&gt; S</TD>
+</TR>
+<TR>
+<TD>resource R = B</TD>
+<TD>R = B : I</TD>
+</TR>
+<TR>
+<TD>concrete C of A = open R in B</TD>
+<TD>C = B(R) : A -&gt; S</TD>
+</TR>
+</TABLE>
+
+<P></P>
+<P>
+A further step of defining modules as first-class objects would use
+GADTs and record types:
+</P>
+<UL>
+<LI>an abstract syntax is a Generalized Algebraic Datatype (GADT)
+<LI>the target type <CODE>S</CODE> of concrete syntax is the type of nested
+  tuples over strings and integers
+<LI>an interface is a labelled record type
+<LI>an instance is a record of the type defined by the interface
+<LI>a functor, with a module body opening an interface, is a function 
+  on its instances
+<LI>the instantiation of a functor is an application of the function to
+  some instance
+<LI>a resource is a typed labelled record, putting together an interface and
+  an instance of it
+<LI>the body of a module opening a resource is as a function on the interface
+  implicit in the resource;  this function is immediately applied to the instance
+  defined in the resource
+</UL>
+
+<P>
+Slightly unexpectedly, interfaces and instances are easier to understand
+in this way than resources - a resource is, indeed, more complex, since
+it fuses together an interface and an instance.
+</P>
+<P>
+<a name="openabstract"></a>
+</P>
+<P>
+When an abstract is used as an interface and a concrete as its instance, they
+are actually reinterpreted so that they match the model. Then the abstract is
+no longer a GADT, but a system of <I>abstract</I> datatypes, with a record field
+of type <CODE>Type</CODE> for each category, and a function among these types for each
+abstract syntax function. A concrete syntax instantiates this record with 
+linearization types and linearizations.
+</P>
+<A NAME="toc9"></A>
+<H3>Inheritance</H3>
+<P>
+After checking that the <I>extends</I> of a module are of appropriate
+module types, the compiler adds the inherited judgements to the
+judgements included in the body. The inherited judgements are
+not copied entirely, but their names with links to the inherited module.
+Conflicts may arise in this process: a name can have two definitions in the combined
+pool of inherited and added judgements. Such a conflict is always an
+error: GF provides no way to redefine an inherited constant.
+</P>
+<P>
+Simple as the definition of a conflict may sound, it has to take care of the
+inheritance hierarchy. A very common pattern of inheritance is the 
+<B>diamond</B>: inheritance from two modules which themselves inherit a common
+base module. Assume that the base module defines a name <CODE>f</CODE>:
+</P>
+<PRE>
+            N
+          /   \
+        M1     M2
+          \   /
+          Base {f}
+</PRE>
+<P>
+Now, <CODE>N</CODE> inherits <CODE>f</CODE> from both <CODE>M1</CODE> and <CODE>M2</CODE>, so is there a
+conflict? The answer in GF is <I>no</I>, because the "two" <CODE>f</CODE>'s are in the
+end the same: the one defined in <CODE>Base</CODE>. The situation is thus simpler
+than in <B>multiple inheritance</B> in languages like C++, because definitions in
+GF are <B>immutable</B>: neither <CODE>M1</CODE> nor <CODE>M2</CODE> can possibly have changed
+the definition of <CODE>f</CODE> given in <CODE>Base</CODE>. In practice, the compiler manages
+inheritance through hierarchy in a very simple way, by just always creating
+a link not to the immediate parent, but the original ancestor; this ancestor
+can be read from the link provided by the immediate parent. Here is how
+links are created from source modules by the compiler:
+</P>
+<PRE>
+    Base {f}
+    M1 {m1}   ===&gt;  M1 {Base.f, m1}
+    M2 {m2}   ===&gt;  M2 {Base.f, m2}
+    N  {n}    ===&gt;  N  {Base.f, M1.m1, M2.m2, n}
+</PRE>
+<P></P>
+<P>
+<a name="restrictedinheritance"></a>
+</P>
+<P>
+Inheritance can be <B>restricted</B>. This means that a module can be specified
+as inheriting <I>only</I> explicitly listed constants, or all constants
+<I>except</I> ones explicitly listed. The syntax uses constant names in brackets,
+prefixed by a minus sign in the case of an exclusion list. In the following
+configuration, N inherits <CODE>a,b,c</CODE> from <CODE>M1</CODE>, and all names but <CODE>d</CODE> 
+from <CODE>M2</CODE>
+</P>
+<PRE>
+    N = M1 {a,b,c}, M2-{d}
+</PRE>
+<P>
+Restrictions are performed as a part of inheritance linking, module by module: 
+the link is created for a constant if and only if it is both
+included in the module and compatible with the restriction. Thus, 
+for instance, an inadvertent usage can exclude a constant from one module
+but inherit it from another one. In the following
+configuration, <CODE>f</CODE> is inherited via <CODE>M1</CODE>, if <CODE>M1</CODE> inherits it.
+</P>
+<PRE>
+    N = M1 [a,b,c], M2-[f]
+</PRE>
+<P>
+Unintended inheritance may cause problems later in compilation, in the
+judgement-level dependency analysis phase. For instance, suppose a function
+<CODE>f</CODE> has category <CODE>C</CODE> as its type in <CODE>M</CODE>, and we only include <CODE>f</CODE>. The
+exclusion has the effect of creating an ill-formed module:
+</P>
+<PRE>
+    abstract M = {cat C ; fun f : C ;}
+    M [f]   ===&gt; {fun f : C ;}
+</PRE>
+<P>
+One might expect inheritance restriction to be transitive: if an included 
+constant <I>b</I> depends on some other constant <I>a</I>, then <I>a</I> should be
+included automatically. However, this rule would leave to hard-to-detect
+inheritances. And it could only be applied later in the compilation phase,
+when the compiler has not only collected the names defined, but also 
+resolved the names used in definitions.
+</P>
+<P>
+Yet another pitfall with restricted inheritance is that it must be stated
+for each module separately. For instance, a concrete syntax of an abstract
+must exclude all those names that the abstract does, and a functor instantiation
+must replicate all restrictions of the functor.
+</P>
+<A NAME="toc10"></A>
+<H3>Opening</H3>
+<P>
+Opening makes constants from other modules usable in judgements, without 
+inheriting them. This means that, unlike inheritance, opening is not
+transitive. 
+</P>
+<P>
+<a name="qualifiednames"></a>
+</P>
+<P>
+Opening cannot be restricted as inheritance can, but it can be <B>qualified</B>.
+This means that the names from the opened modules cannot be used as such, but
+only as prefixed by a qualifier and a dot (<CODE>.</CODE>). The qualifier can be any
+identifier, including the name of the module. Here is an example of 
+an <I>opens</I> list:
+</P>
+<PRE>
+    open A, (X = XSLTS), (Y = XSLTS), B
+</PRE>
+<P>
+If <CODE>A</CODE> defines the constant <CODE>a</CODE>, it can be accessed by the names
+</P>
+<PRE>
+    a  A.a
+</PRE>
+<P>
+If <CODE>XSLTS</CODE> defines the constant <CODE>x</CODE>, it can be accessed by the names
+</P>
+<PRE>
+    X.x  Y.x  XSLTS.x
+</PRE>
+<P>
+Thus qualification by real module name is always possible, and one and the same
+module can be qualified in different ways at the same time (the latter can
+be useful if you want to be able to change the implementations of some
+constants to a different resource later). Since the qualification with real
+module name is always possible, it is not possible to "swap" the names of 
+modules locally:
+</P>
+<PRE>
+    open (A=B), (B=A) -- NOT POSSIBLE!
+</PRE>
+<P>
+The list of qualifiers names and module names in a module header may
+thus not contain any duplicates.
+</P>
+<A NAME="toc11"></A>
+<H3>Name resolution</H3>
+<P>
+<a name="renaming"></a>
+</P>
+<P>
+<B>Name resolution</B> is the compiler phase taking place after inheritance
+linking. It qualifies all names occurring in the definition parts of judgements
+(that is, just excluding the defined names themselves) with the names of
+the modules they come from. If a name can come from different modules (that is,
+not from their common ancestor), a conflict is reported; this decision is
+hence not dependent on e.g. types, which are known only at a later phase.
+</P>
+<P>
+Qualification of names is the main device for avoiding conflicts in
+name resolution. No other information is used, such as priorities between
+modules. However, if a name is defined in different opened modules 
+but never used in the module body, 
+a conflict does not arise: conflicts arise only
+when names are used. Also in this respect, opening is thus different from
+inheritance, where conflicts are checked independently of use.
+</P>
+<P>
+As usual, inner scope has priority in name resolution. This means that
+if an identifier is in scope as a bound variable, it will not be
+interpreted as a constant, unless qualified by a module name
+(variable bindings are explained <a href="#variablebinding">here</a>).
+</P>
+<A NAME="toc12"></A>
+<H3>Functor instantiations</H3>
+<P>
+We have dealt with the principles of module headers, inheritance, and
+names in a general way that applies to all module types. The exception
+is functor instantiations, that have an extra part of the instantiating
+equations, assigning an instance to every interface. Here is a typical
+example, displaying the full generality:
+</P>
+<PRE>
+    concrete FoodsEng of Foods = PhrasesEng ** 
+      FoodsI-[Pizza] with 
+        (Syntax = SyntaxEng),
+        (LexFoods = LexFoodsEng) ** 
+      open SyntaxEng, ParadigmsEng in {
+        lin Pizza = mkCN (mkA "Italian") (mkN "pie") ;
+    }
+</PRE>
+<P>
+(The example is modified from Section 5.9 in the GF Tutorial.)
+</P>
+<P>
+The instantiation syntax is similar to qualified <I>opens</I>. The left-hand-side
+names must be interfaces, the right-hand-side names their instances. (Recall
+that <CODE>abstract</CODE> can be use as <CODE>interface</CODE> and <CODE>concrete</CODE> as its
+<CODE>instance</CODE>.) Inheritance from the functor can be restricted, typically
+in the purpose of defining some excluded functions in language-specific
+ways in the module body.
+</P>
+<A NAME="toc13"></A>
+<H3>Completeness</H3>
+<P>
+<a name="completeness"></a>
+</P>
+<P>
+(This section refers to the forms of judgement introduced <a href="#judgementforms">here</a>.)
+</P>
+<P>
+A <CODE>concrete</CODE> is complete with respect to an <CODE>abstract</CODE>, if it
+contains a <CODE>lincat</CODE> definition for every <CODE>cat</CODE> declaration, and
+a <CODE>lin</CODE> definition for every <CODE>fun</CODE> declaration.
+</P>
+<P>
+The same completeness criterion applies to functor instantiations.
+It is not possible to use a partial functor instantiation, leading
+to another functor.
+</P>
+<P>
+Functors do not need to be complete in the sense concrete modules need.
+The missing definitions can then be provided in the body of each
+functor instantiation.
+</P>
+<P>
+A <CODE>resource</CODE> is complete, if all its <CODE>oper</CODE> and <CODE>param</CODE> judgements
+have a definition part. While a <CODE>resource</CODE> must be complete, an
+<CODE>interface</CODE> need not. For an <CODE>interface</CODE>, it is the definition
+parts of judgements are optional.
+</P>
+<P>
+An <CODE>instance</CODE> is complete with respect to an <CODE>interface</CODE>, if it 
+gives the definition parts of all <CODE>oper</CODE> and <CODE>param</CODE> judgements
+that are omitted in the <CODE>interface</CODE>. Giving definitions to judgements
+that have already been defined in the <CODE>interface</CODE> is illegal.
+Type signatures, on the other hand, can be repeated if the same types
+are used. 
+</P>
+<P>
+In addition to completing the definitions in an <CODE>interface</CODE>,
+its instance may contain other judgements, but these must all
+be complete with definitions.
+</P>
+<P>
+Here is an example of an instance and its interface showing the
+above variations:
+</P>
+<PRE>
+    interface Pos = {
+      param Case ;                 -- no definition
+      param Number = Sg | Pl ;     -- definition given
+      oper Noun : Type = {         -- relative definition given
+        s : Number =&gt; Case =&gt; Str
+      } ;
+      oper regNoun : Str -&gt; Noun ; -- no definition
+    }
+  
+    instance PosEng of Pos = {
+      param Case = Nom | Gen ;     -- definition of Case
+                                   -- Number and Noun inherited
+      oper regNoun = \dog -&gt; {     -- type of regNoun inherited
+        s = table {                -- definition of regNoun
+          Sg =&gt; table {
+            Nom =&gt; dog
+            -- etc
+          }
+        } ;
+      oper house_N : Noun =        -- new definition
+        regNoun "house" ;
+    }
+</PRE>
+<P></P>
+<A NAME="toc14"></A>
+<H2>Judgements</H2>
+<A NAME="toc15"></A>
+<H3>Overview of the forms of judgement</H3>
+<P>
+<a name="judgementforms"></a>
+</P>
+<P>
+A module body in GF is a set of <B>judgements</B>. Judgements are
+definitions or declarations, sometimes combinations of the two; the
+common feature is that every judgement introduces a name, which is
+available in the module and whenever the module is extended or opened.
+</P>
+<P>
+There are several different <B>forms of judgement</B>, identified by different
+<B>judgement keywords</B>. Here is a list of all these forms, together
+with syntax descriptions and the types of modules in which each form can occur.
+The table moreover indicates whether the judgement has a default value, and
+whether it contributes to the <B>name base</B>, i.e. introduces a new 
+name to the scope.
+</P>
+<TABLE ALIGN="center" CELLPADDING="4" BORDER="1">
+<TR>
+<TH>judgement</TH>
+<TH>where</TH>
+<TH>module</TH>
+<TH>default</TH>
+<TH COLSPAN="2">base</TH>
+</TR>
+<TR>
+<TD><CODE>cat</CODE> C G</TD>
+<TD>G context</TD>
+<TD>abstract</TD>
+<TD>N/A</TD>
+<TD>yes</TD>
+</TR>
+<TR>
+<TD><CODE>fun</CODE> f : A</TD>
+<TD>A type</TD>
+<TD>abstract</TD>
+<TD>N/A</TD>
+<TD>yes</TD>
+</TR>
+<TR>
+<TD><CODE>def</CODE> f ps = t</TD>
+<TD>f fun, ps patterns, t term</TD>
+<TD>abstract</TD>
+<TD>yes</TD>
+<TD>no</TD>
+</TR>
+<TR>
+<TD><CODE>data</CODE> C = f <CODE>|</CODE> ... <CODE>|</CODE> g</TD>
+<TD>C cat, f...g fun</TD>
+<TD>abstract</TD>
+<TD>yes</TD>
+<TD>no</TD>
+</TR>
+<TR>
+<TD><CODE>lincat</CODE> C = T</TD>
+<TD>C cat, T type</TD>
+<TD>concrete*</TD>
+<TD>yes</TD>
+<TD>yes</TD>
+</TR>
+<TR>
+<TD><CODE>lin</CODE> f = t</TD>
+<TD>f fun, t term</TD>
+<TD>concrete*</TD>
+<TD>no</TD>
+<TD>yes</TD>
+</TR>
+<TR>
+<TD><CODE>lindef</CODE> f = t</TD>
+<TD>f fun, t term</TD>
+<TD>concrete*</TD>
+<TD>yes</TD>
+<TD>no</TD>
+</TR>
+<TR>
+<TD><CODE>printname cat</CODE> C = t</TD>
+<TD>C cat, t term</TD>
+<TD>concrete*</TD>
+<TD>yes</TD>
+<TD>no</TD>
+</TR>
+<TR>
+<TD><CODE>printname fun</CODE> f = t</TD>
+<TD>f fun, t term</TD>
+<TD>concrete*</TD>
+<TD>yes</TD>
+<TD>no</TD>
+</TR>
+<TR>
+<TD><CODE>param</CODE> P = C<CODE>|</CODE> ... <CODE>|</CODE> D</TD>
+<TD>C...D constructors</TD>
+<TD>resource*</TD>
+<TD>N/A</TD>
+<TD>yes</TD>
+</TR>
+<TR>
+<TD><CODE>oper</CODE> f : T = t</TD>
+<TD>T type, t term</TD>
+<TD>resource*</TD>
+<TD>N/A</TD>
+<TD>yes</TD>
+</TR>
+<TR>
+<TD><CODE>flags</CODE> o = v</TD>
+<TD>o flag, v value</TD>
+<TD>all</TD>
+<TD>yes</TD>
+<TD>N/A</TD>
+</TR>
+</TABLE>
+
+<P></P>
+<P>
+Judgements that have default values are rarely used, except <CODE>lincat</CODE> and
+<CODE>flags</CODE>, which often need values different from the defaults.
+</P>
+<P>
+Introducing a name twice in the same module is an error. In other words,
+all judgements that have a "yes" in the name base column, must 
+have distinct identifiers on their left-hand sides.
+</P>
+<P>
+All judgement end with semicolons (<CODE>;</CODE>).
+</P>
+<P>
+In addition to the syntax given in the table, many of the forms have
+syntactic sugar. This sugar will be explained below in connection to
+each form. There are moreover two kinds of syntactic sugar common to all forms:
+</P>
+<UL>
+<LI>the judgement keyword is shared between consecutive judgements
+  until a new keyword appears:
+<center>
+<CODE>keyw J ; K ;</CODE>  ===  <CODE>keyw J ; keyw K ;</CODE>
+</center>
+<LI>the right-hand sides of colon (<CODE>:</CODE>) and equality (<CODE>=</CODE>) 
+  can be shared, by using comma (<CODE>,</CODE>) as separator of left-hand sides, which
+  must consist of identifiers
+<center>
+<CODE>c,d : T</CODE>  ===  <CODE>c : T ; d : T ;</CODE>
+<P></P>
+<CODE>c,d = t</CODE>  ===  <CODE>c = t ; d = t ;</CODE>
+</center>
+</UL>
+
+<P>
+These conventions, like all syntactic sugar, are performed at an
+early compilation phase, directly after parsing. This means that e.g.
+</P>
+<PRE>
+    lin f,g = \x -&gt; x ;
+</PRE>
+<P>
+can be correct even though <CODE>f</CODE> and <CODE>g</CODE> required different
+function types.
+</P>
+<P>
+Within a module, judgements can occur in any order. In particular, 
+a name can be used before it is introduced. 
+</P>
+<P>
+The explanations of judgement forms refer to the notions 
+of <B>type</B> and <B>term</B> (the latter also called <B>expression</B>).
+These notions will be explained in detail <a href="#expressions">here</a>. 
+</P>
+<A NAME="toc16"></A>
+<H3>Category declarations, cat</H3>
+<P>
+<a name="catjudgements"></a>
+</P>
+<P>
+Category declarations 
+<center>
+<CODE>cat</CODE> <I>C</I> <I>G</I>
+</center>
+define the <B>basic types</B> of abstract syntax.
+A basic type is formed from a category by giving values to all variables
+in the <B>context</B> <I>G</I>. If the context is empty, the
+basic type looks the same as the category itself. Otherwise, application
+syntax is used:
+<center>
+<I>C</I> <i>a</i><sub>1</sub>...<i>a</i><sub>n</sub>
+</center>
+</P>
+<A NAME="toc17"></A>
+<H3>Hypotheses and contexts</H3>
+<P>
+<a name="contexts"></a>
+</P>
+<P>
+A context is a sequence of <B>hypotheses</B>, i.e. variable-type pairs.
+A hypothesis is written
+<center>
+<CODE>(</CODE> <I>x</I> <CODE>:</CODE> <I>T</I> <CODE>)</CODE>
+</center>
+and a sequence does not have any separator symbols. As syntactic sugar,
+</P>
+<UL>
+<LI>variables can share a type,
+<center>
+<CODE>(</CODE> <I>x,y</I> <CODE>:</CODE> <I>T</I> <CODE>)</CODE>  ===  <CODE>(</CODE> <I>x</I> <CODE>:</CODE> <I>T</I> <CODE>)</CODE> <CODE>(</CODE> <I>y</I> <CODE>:</CODE> <I>T</I> <CODE>)</CODE>
+</center>
+<LI>a <B>wildcard</B> can be used for a variable not occurring in types 
+  later in the context,
+<center>
+<CODE>(</CODE> <CODE>_</CODE> <CODE>:</CODE> <I>T</I> <CODE>)</CODE> === <CODE>(</CODE> <I>x</I> <CODE>:</CODE> <I>T</I> <CODE>)</CODE>
+</center>
+<LI>if the variable does not occur later, it can be omitted altogether, and
+  parentheses are not used,
+<center>
+  <I>T</I> ===  <CODE>(</CODE> <I>x</I> <CODE>:</CODE> <I>T</I> <CODE>)</CODE>
+</center>
+  But if <I>T</I> is more complex than an identifier, it needs parentheses to
+  be separated from the rest of the context.
+</UL>
+
+<P>
+An abstract syntax has <B>dependent types</B>, if any of its categories has
+a non-empty context.
+</P>
+<A NAME="toc18"></A>
+<H3>Function declarations, fun</H3>
+<P>
+Function declarations,
+<center>
+  <CODE>fun</CODE> <I>f</I> <CODE>:</CODE> <I>T</I>
+</center>
+define the <B>syntactic constructors</B> of abstract
+syntax. The type <I>T</I> of <I>f</I>
+is built built from basic types (formed from categories) by using
+the function type constructor <CODE>-&gt;</CODE>. Thus its form is
+<center>
+  (<i>x</i><sub>1</sub> <CODE>:</CODE> <i>A</i><sub>1</sub>) <CODE>-&gt;</CODE> ... <CODE>-&gt;</CODE> (<i>x</i><sub>n</sub> <CODE>:</CODE> <i>A</i><sub>n</sub>) <CODE>-&gt;</CODE> <I>B</I>
+</center>
+where <I>Ai</I> are types, called the <B>argument types</B>, and <I>B</I> is a 
+basic type, called the <B>value type</B> of <I>f</I>. The <B>value category</B> of
+<I>f</I> is the category that forms the type <I>B</I>.
+</P>
+<P>
+A <B>syntax tree</B> is formed from <I>f</I> by applying it to a full list of
+arguments, so that the result is of a basic type. 
+</P>
+<P>
+A <B>higher-order function</B> is one that has a function type as an 
+argument. The concrete syntax of GF does not support displaying the
+bound variables of functions of higher than second order, but they are
+legal in abstract syntax.
+</P>
+<P>
+An abstract syntax is <B>context-free</B>, if it has neither dependent
+types nor higher-order functions. Grammars with context-free abstract
+syntax are an important subclass of GF, with more limited complexity
+than full GF. Whether the <I>concrete</I> syntax is context-free in the sense
+of the Chomsky hierarchy is independent of the context-freeness of
+the abstract syntax.
+</P>
+<A NAME="toc19"></A>
+<H3>Function definitions, def</H3>
+<P>
+Function definitions,
+<center>
+  <CODE>def</CODE> <I>f</I> <i>p</i><sub>1</sub> ... <i>p</i><sub>n</sub> <CODE>=</CODE> <I>t</I>
+</center>
+where <I>f</I> is a <CODE>fun</CODE> function and <i>p</i><sub>i</sub># are patterns,
+impose a relation of <B>definitional equality</B> on abstract syntax
+trees. They form the basis of <B>computation</B>, which is used
+when comparing whether two types are equal; this notion is relevant
+only if the types are dependent. Computation can also be used for
+the <B>normalization</B> of syntax trees, which applies even in
+context-free abstract syntax.
+</P>
+<P>
+The set of <CODE>def</CODE> definitions for <I>f</I> can be scattered around
+the module in which <I>f</I> is introduced as a function. The compiler
+builds the set of pattern equations in the order in which the
+equations appear; this order is significant in the case of
+overlapping patterns. All equations must appear in the same module in 
+which <I>f</I> itself declared.
+</P>
+<P>
+The syntax of patterns will be specified <a href="#patternmatching">here</a>, commonly for
+abstract and concrete syntax. In abstract
+syntax, <B>constructor patterns</B> are those of the form
+<center>
+  <I>C</I> <i>p</i><sub>1</sub> ... <i>p</i><sub>n</sub>
+</center>
+where <I>C</I> is declared as <CODE>data</CODE> for some abstract syntax category
+(see next section). A <B>variable pattern</B> is either an identifier or 
+a wildcard. 
+</P>
+<P>
+A common pitfall is to forget to declare a constructor as data, which
+causes it to be interpreted as a variable pattern in definitions.
+</P>
+<P>
+Computation is performed by applying definitions and beta conversions,
+and in general by using <B>pattern matching</B>. Computation and pattern matching
+are explained commonly for abstract and concrete syntax <a href="#patternmatching">here</a>.
+</P>
+<P>
+In contrast to concrete syntax, abstract syntax computation is 
+completely <B>symbolic</B>: it does not produce a value, but just another
+term. Hence it is not an error to have incomplete systems of
+pattern equations for a function. In addition, the definitions
+can be <B>recursive</B>, which means that computation can fail to terminate;
+this can never happen in concrete syntax.
+</P>
+<A NAME="toc20"></A>
+<H3>Data constructor definitions, data</H3>
+<P>
+A data constructor definition,
+<center>
+  <CODE>data</CODE> <I>C</I> <CODE>=</CODE> <i>f</i><sub>1</sub> <CODE>|</CODE> ... <CODE>|</CODE> <i>f</i><sub>n</sub>
+</center>
+defines the functions <I>f1</I>...<I>fn</I> to be <B>constructors</B>
+of the category <I>C</I>. This means that they are recognized as constructor
+patterns when used in function definitions. 
+</P>
+<P>
+In order for the data constructor definition to be correct,
+<i>f</i><sub>1</sub>...<i>f</i><sub>n</sub> must be functions with <I>C</I> as their value category.
+</P>
+<P>
+The complete set of constructors for a category <I>C</I> is the union of
+all its data constructor definitions. Thus a category can be "extended"
+by new constructors afterwards. However, all these constructor definitions
+must appear in the same module in which the category is itself defined.
+</P>
+<P>
+There is syntactic sugar for declaring a function as a constructor at
+the same time as introducing it:
+<center>
+<CODE>data</CODE> <I>f</I> : <i>A</i><sub>1</sub> <CODE>-&gt;</CODE> ... <CODE>-&gt;</CODE> <i>A</i><sub>n</sub> <CODE>-&gt;</CODE> <I>C</I> <i>t</i><sub>1</sub> ... <i>t</i><sub>m</sub> 
+</P>
+<P>
+  ===
+</P>
+<P>
+<CODE>fun</CODE> <I>f</I> : <i>A</i><sub>1</sub> <CODE>-&gt;</CODE> ... <CODE>-&gt;</CODE> <i>A</i><sub>n</sub> <CODE>-&gt;</CODE> <I>C</I> <i>t</i><sub>1</sub> ... <i>t</i><sub>m</sub> ;
+  <CODE>data</CODE> <I>C</I> = <I>f</I>
+</center>
+</P>
+<A NAME="toc21"></A>
+<H3>The semantic status of an abstract syntax function</H3>
+<P>
+There are three possible statuses for a function declared in a <CODE>fun</CODE> judgement:
+</P>
+<UL>
+<LI>primitive notion: the default status
+<LI>constructor: the function appears on the right-hand side in <CODE>data</CODE> judgement
+<LI>defined: the function has a <CODE>def</CODE> definition
+</UL>
+
+<P>
+The "constructor" and "defined" statuses are in contradiction with each other,
+whereas the primitive notion status is overridden by any of the two others.
+</P>
+<P>
+This distinction is relevant for the semantics of abstract syntax, not
+for concrete syntax. It shows in the way patterns are treated in 
+equations in <CODE>def</CODE> definitions: a constructor 
+in a pattern matches only itself, whereas
+any other name is treated as a variable pattern, which matches
+anything.
+</P>
+<A NAME="toc22"></A>
+<H3>Linearization type definitions, lincat</H3>
+<P>
+A linearization type definition,
+<center>
+  <CODE>lincat</CODE> <I>C</I> <CODE>=</CODE> <I>T</I>
+</center>
+defines the type of linearizations of trees whose type has category <I>C</I>.
+Type dependences have no effect on the linearization type.
+</P>
+<P>
+The type <I>T</I> must be a <B>legal linearization type</B>, which means that it
+is a <I>record type</I> whose fields have either parameter types, the type Str
+of strings, or table or record types of these. In particular, function types
+may not appear in <I>T</I>. A detailed explanation of types in concrete syntax
+will be given <a href="#cnctypes">here</a>.
+</P>
+<P>
+If <I>K</I> is the concrete syntax of an abstract syntax <I>A</I>, then <I>K</I> must
+define the linearization type of all categories declared in <I>A</I>. However,
+the definition can be omitted from the source code, in which case the default
+type <CODE>{s : Str}</CODE> is used.
+</P>
+<A NAME="toc23"></A>
+<H3>Linearization definitions, lin</H3>
+<P>
+A linearization definition,
+<center>
+  <CODE>lin</CODE> <I>f</I> <CODE>=</CODE> <I>t</I>
+</center>
+defines the linearizations function of function <I>f</I>, i.e. the function
+used for linearizing trees formed by <I>f</I>.
+</P>
+<P>
+The type of <I>t</I> must be the homomorphic image of the type of <I>f</I>.
+In other words, if
+<center>
+  <CODE>fun</CODE> <I>f</I> <CODE>:</CODE> <i>A</i><sub>1</sub> <CODE>-&gt;</CODE> ... <CODE>-&gt;</CODE> <i>A</i><sub>n</sub> <CODE>-&gt;</CODE> <I>A</I>
+</center>
+then
+<center>
+  <CODE>lin</CODE> <I>f</I> <CODE>:</CODE> <i>A</i><sub>1</sub>* <CODE>-&gt;</CODE> ... <CODE>-&gt;</CODE> <i>A</i><sub>n</sub>* <CODE>-&gt;</CODE> <I>A</I>*
+</center>
+where the type <I>T</I>* is defined as follows depending on <I>T</I>:
+</P>
+<UL>
+<LI>(<I>C</I> <i>t</i><sub>1</sub> ... <i>t</i><sub>n</sub>)* = <I>T</I>, if <CODE>lincat</CODE> <I>C</I> <CODE>=</CODE> <I>T</I>
+<LI>(<i>B</i><sub>1</sub> <CODE>-&gt;</CODE> ... <CODE>-&gt;</CODE> <i>B</i><sub>m</sub> <CODE>-&gt;</CODE> <I>B</I>)* = <I>B</I>* <CODE>** {$0,...,$m : Str}</CODE>
+</UL>
+
+<P>
+The second case is relevant for higher-order functions only. It says that 
+the linearization type of the value type is extended by adding a string field
+for each argument types; these fields store the variable symbol used for
+the binding of each variable.
+</P>
+<P>
+<a name="HOAS"></a>
+</P>
+<P>
+Since the arguments of a function argument are treated as bare strings,
+orders higher than the second are irrelevant for concrete syntax.
+</P>
+<P>
+There is syntactic sugar for binding the variables of the linearization
+of a function on the left-hand side:
+<center>
+  <CODE>lin</CODE> <I>f</I> <I>p</I> <CODE>=</CODE> <I>t</I> === <CODE>lin</CODE> <I>f</I> <CODE>= \</CODE><I>p</I> <CODE>-&gt;</CODE> <I>t</I>
+</center>
+The pattern <I>p</I> must be either a variable or a wildcard (<CODE>_</CODE>); this is
+what the syntax of lambda abstracts (<CODE>\p -&gt; t</CODE>) requires.
+</P>
+<A NAME="toc24"></A>
+<H3>Linearization default definitions, lindef</H3>
+<P>
+<a name="lindefjudgements"></a>
+</P>
+<P>
+A linearization default definition,
+<center>
+  <CODE>lindef</CODE> <I>C</I> <CODE>=</CODE> <I>t</I>
+</center>
+defines the default linearization of category <I>C</I>, i.e. the function
+applicable to a string to make it into an object of the linearization 
+type of <I>C</I>.
+</P>
+<P>
+Linearization defaults are invoked when linearizing variable bindings
+in higher-order abstract syntax. A variable symbol is then presented
+as a string, which must be converted to correct type in order for
+linearization not to fail with an error. 
+</P>
+<P>
+The defaults can also be used for linearizing metavariables
+in an interactive syntax editor.
+</P>
+<P>
+Usually, linearization defaults are generated by using the default
+rule that "uses the symbol itself for every string, and the
+first value of the parameter type for every parameter". The precise
+definition is by structural recursion on the type:
+</P>
+<UL>
+<LI>default(Str,s) = s
+<LI>default(P,s) = #1(P)
+<LI>default(P =&gt; T,s) = <CODE>\\_ =&gt;</CODE> default(T,s)
+<LI>default(<CODE>{</CODE>... ; r : R ; ...<CODE>}</CODE>,s) = <CODE>{</CODE>... ; r : default(R,s) ; ...<CODE>}</CODE>
+</UL>
+
+<P>
+The notion of the first value of a parameter type (#1(P)) is defined
+<a href="#paramvalues">here</a> below.
+</P>
+<A NAME="toc25"></A>
+<H3>Printname definitions, printname cat and printname fun</H3>
+<P>
+A category printname definition,
+<center>
+  <CODE>printname cat</CODE> <I>C</I> <CODE>=</CODE> <I>s</I>
+</center>
+defines the printname of category <I>C</I>, i.e. the name used
+in some abstract syntax information shown to the user.
+</P>
+<P>
+Likewise, a function printname definition,
+<center>
+  <CODE>printname fun</CODE> <I>f</I> <CODE>=</CODE> <I>s</I>
+</center>
+defines the printname of function <I>f</I>, i.e. the name used
+in some abstract syntax information shown to the user.
+</P>
+<P>
+The most common use of printnames is in the interactive syntax
+editor, where printnames are displayed in menus. It is possible
+e.g. to adapt them to each language, or to embed HTML tooltips
+in them (as is used in some HTML-based editor GUIs).
+</P>
+<P>
+Usually, printnames are generated automatically from the symbol
+and/or concrete syntax information.
+</P>
+<A NAME="toc26"></A>
+<H3>Parameter type definitions, param</H3>
+<P>
+<a name="paramjudgements"></a>
+</P>
+<P>
+A parameter type definition,
+<center>
+  <CODE>param</CODE> <I>P</I> <CODE>=</CODE> <i>C</i><sub>1</sub> <i>G</i><sub>1</sub> <CODE>|</CODE> ...  <CODE>|</CODE> <i>C</i><sub>n</sub> <i>G</i><sub>n</sub>
+</center>
+defines a parameter type <I>P</I> with the <B>parameter constructors</B>
+<i>C</i><sub>1</sub>...<i>C</i><sub>n</sub>, with their respective contexts <i>G</i><sub>1</sub>...<i>G</i><sub>n</sub>.
+</P>
+<P>
+<a name="paramtypes"></a>
+</P>
+<P>
+Contexts have the same syntax as in <CODE>cat</CODE> judgements, explained
+<a href="#catjudgements">here</a>. Since dependent types are not available in
+parameter type definitions, the use of variables is never
+necessary. The types in the context must themselves be <B>parameter types</B>,
+which are defined as follows:
+</P>
+<UL>
+<LI>Given the judgement <CODE>param</CODE> <I>P</I> ..., <I>P</I> is a parameter type.
+<LI>A record type of parameter types is a parameter type.
+<LI><CODE>Ints</CODE> <I>n</I> (an initial segment of integers) is a parameter type.
+</UL>
+
+<P>
+The names defined by a parameter type definition include both the
+type name <I>P</I> and the constructor names <i>C</i><sub>i</sub>. Therefore all these
+names must be distinct in a module.
+</P>
+<P>
+A parameter type may not be recursive, i.e. <I>P</I> itself may not occur in
+the contexts of its constructors. This restriction extends to mutual 
+recursion: we say that <I>P</I> <B>depends</B> on the types that occur
+in the contexts of its constructors and on all types that those types
+depend on, and state that <I>P</I> may not depend on itself.
+</P>
+<P>
+In an <CODE>interface module</CODE>, it is possible to declare a parameter type
+without defining it,
+<center>
+  <CODE>param</CODE> <I>P</I> <CODE>;</CODE>
+</center>
+</P>
+<A NAME="toc27"></A>
+<H3>Parameter values</H3>
+<P>
+<a name="paramvalues"></a>
+</P>
+<P>
+All parameter types are finite, and the GF compiler will internally
+compute them to <B>lists of parameter values</B>. These lists are formed by
+traversing the <CODE>param</CODE> definitions, usually respecting the
+order of constructors in the source code. For records, bibliographical 
+sorting is applied. However, both the order of traversal of <CODE>param</CODE>
+definitions and the order of fields in a record are specified
+in a compiler-internal way, which means that the programmer should not
+rely on any particular order.
+</P>
+<P>
+The order of the list of parameter values can affect the program in two
+cases:
+</P>
+<UL>
+<LI>in the default <CODE>lindef</CODE> definition (<a href="#lindefjudgements">here</a>), 
+  the first value is chosen
+<LI>in course-of-value tables (<a href="#tables">here</a>), the compiler-internal order is
+  followed
+</UL>
+
+<P>
+The first usage implies that, if <CODE>lindef</CODE> definitions are essential for
+the application, they should be given manually. The second usage implies that
+course-of-value tables should be avoided in hand-written GF code.
+</P>
+<P>
+In run-time grammar generation, all parameter values are translated to
+integers denotions positions in these parameter lists.
+</P>
+<A NAME="toc28"></A>
+<H3>Operation definitions, oper</H3>
+<P>
+An operation definition,
+<center>
+  <CODE>oper</CODE> <I>h</I> <CODE>:</CODE> <I>T</I> <CODE>=</CODE> <I>t</I>
+</center>
+defines an <B>operation</B> <I>h</I>  of type <I>T</I>, with the computation rule
+<center>
+  <I>h</I> ==> <I>t</I>
+</center>
+The type <I>T</I> can be any concrete syntax type, including function
+types of any order. The term <I>t</I> must have the type <I>T</I>, as
+defined <a href="#expressions">here</a>.
+</P>
+<P>
+As syntactic sugar, the type can be omitted,
+<center>
+  <CODE>oper</CODE> <I>h</I> <CODE>=</CODE> <I>t</I>
+</center>
+which works in two cases
+</P>
+<UL>
+<LI>the type can be inferred from <I>t</I> (compiler-dependent)
+<LI>the definition occurs in an <CODE>instance</CODE> and the type is given in 
+  the <CODE>interface</CODE>
+</UL>
+
+<P>
+It is also possible to give the type and the definition separately:
+<center>
+<CODE>oper</CODE> <I>h</I> <CODE>:</CODE> <I>T</I> ; <CODE>oper</CODE> <I>h</I> <CODE>=</CODE> <I>t</I> ===
+  <CODE>oper</CODE> <I>h</I> <CODE>:</CODE> <I>T</I> <CODE>=</CODE> <I>t</I>
+</center>
+The order of the type part and the definition part is free, and there
+can be other judgements in between. However, they must occur in the
+same <CODE>resource</CODE> module for it to be complete (as defined <a href="#completeness">here</a>).
+In an <CODE>interface</CODE> module, it is enough to give the type.
+</P>
+<P>
+When only the definition is given, it is possible to use a shorthand
+similar to <CODE>lin</CODE> judgements:
+<center>
+<CODE>oper</CODE> <I>h</I> <I>p</I> <CODE>=</CODE> <I>t</I> ===  <CODE>oper</CODE> <I>h</I> <CODE>=</CODE> <CODE>\</CODE><I>p</I> <CODE>-&gt;</CODE> <I>t</I>
+</center>
+The pattern <I>p</I> is either a variable or a wildcard (<CODE>_</CODE>).
+</P>
+<P>
+Operation definitions may not be recursive, not even mutually recursive.
+This condition ensures that functions can in the end be eliminated from
+concrete syntax code (as explained <a href="#functionelimination">here</a>).
+</P>
+<A NAME="toc29"></A>
+<H3>Operation overloading</H3>
+<P>
+<a name="overloading"></a>
+</P>
+<P>
+One and the same operation name <I>h</I> can be used for different operations,
+which have to have different types. For each call of <I>h</I>, the type checker 
+selects one of these operations depending on what type is expected in the
+context of the call. The syntax of overloaded operation definitions is
+<center>
+<CODE>oper</CODE> <I>h</I> 
+ <CODE>= overload {</CODE><I>h</I> : <i>T</i><sub>1</sub> = <i>t</i><sub>1</sub> ; ... ; <I>h</I> : <i>T</i><sub>n</sub> = <i>t</i><sub>n</sub><CODE>}</CODE>
+</center>
+Notice that <I>h</I> must be the same in all cases.
+This format can be used to give the complete implementation; to give just
+the types, e.g. in an interface, one can use the form
+<center>
+<CODE>oper</CODE> <I>h</I> 
+ <CODE>: overload {</CODE><I>h</I> : <i>T</i><sub>1</sub> ; ... ; <I>h</I> : <i>T</i><sub>n</sub><CODE>}</CODE>
+</center>
+The implementation of this operation typing is given by a judgement of
+the first form. The order of branches need not be the same.
+</P>
+<A NAME="toc30"></A>
+<H3>Flag definitions, flags</H3>
+<P>
+A flag definition,
+<center>
+  <CODE>flags</CODE> <I>o</I> <CODE>=</CODE> <I>v</I>
+</center>
+sets the value of the flag <I>o</I>, to be used when compiling or using
+the module. 
+</P>
+<P>
+The flag <I>o</I> is an identifier, and the value <I>v</I> is either an identifier
+or a quoted string.
+</P>
+<P>
+Flags are a kind of metadata, which do not strictly belong to the GF
+language. For instance, compilers do not necessarily check the 
+consistency of flags, or the meaningfulness of their values.
+The inheritance of flags is not well-defined; the only certain rule
+is that flags set in the module body override the settings from
+inherited modules. 
+</P>
+<P>
+Here are some flags commonly included in grammars.
+</P>
+<TABLE ALIGN="center" CELLPADDING="4" BORDER="1">
+<TR>
+<TH>flag</TH>
+<TH>value</TH>
+<TH>description</TH>
+<TH COLSPAN="2">module</TH>
+</TR>
+<TR>
+<TD><CODE>coding</CODE></TD>
+<TD>character encoding</TD>
+<TD>encoding used in string literals</TD>
+<TD>concrete</TD>
+</TR>
+<TR>
+<TD><CODE>lexer</CODE></TD>
+<TD>predefined lexer</TD>
+<TD>lexer before parsing</TD>
+<TD>concrete</TD>
+</TR>
+<TR>
+<TD><CODE>startcat</CODE></TD>
+<TD>category</TD>
+<TD>default target of parsing</TD>
+<TD>abstract</TD>
+</TR>
+<TR>
+<TD><CODE>unlexer</CODE></TD>
+<TD>predefined unlexer</TD>
+<TD>unlexer after linearization</TD>
+<TD>concrete</TD>
+</TR>
+</TABLE>
+
+<P></P>
+<P>
+The possible values of these flags are specified <a href="#flagvalues">here</a>.
+</P>
+<A NAME="toc31"></A>
+<H2>Types and expressions</H2>
+<A NAME="toc32"></A>
+<H3>Overview of expression forms</H3>
+<P>
+<a name="expressions"></a>
+</P>
+<P>
+Like many dependently typed languages, GF makes no syntactic distinction 
+between expressions and types. An illegal use of a type as an expression or
+vice versa comes out as a type error. Whether a variable, for instance,
+stands for a type or an expression value, can only be resolved from its
+context of use. 
+</P>
+<P>
+One practical consequence of the common syntax is that global and local definitions 
+(<CODE>oper</CODE> judgements and <CODE>let</CODE> expressions, respectively) work in the same way
+for types and expressions. Thus it is possible to abbreviate a type
+occurring in a type expression:
+</P>
+<PRE>
+    let A = {s : Str ; b : Bool} in A -&gt; A -&gt; A
+</PRE>
+<P>
+Type and other expressions have a system of <B>precedences</B>. The following table
+summarizes all expression forms, from the highest to the lowest precedence.
+Some expressions are moreover left- or right-associative.
+</P>
+<TABLE ALIGN="center" CELLPADDING="4" BORDER="1">
+<TR>
+<TH>prec</TH>
+<TH>expression example</TH>
+<TH COLSPAN="2">explanation</TH>
+</TR>
+<TR>
+<TD>7</TD>
+<TD><CODE>c</CODE></TD>
+<TD>constant or variable</TD>
+</TR>
+<TR>
+<TD>7</TD>
+<TD><CODE>Type</CODE></TD>
+<TD>the type of types</TD>
+</TR>
+<TR>
+<TD>7</TD>
+<TD><CODE>PType</CODE></TD>
+<TD>the type of parameter types</TD>
+</TR>
+<TR>
+<TD>7</TD>
+<TD><CODE>Str</CODE></TD>
+<TD>the type of strings/token lists</TD>
+</TR>
+<TR>
+<TD>7</TD>
+<TD><CODE>"foo"</CODE></TD>
+<TD>string literal</TD>
+</TR>
+<TR>
+<TD>7</TD>
+<TD><CODE>123</CODE></TD>
+<TD>integer literal</TD>
+</TR>
+<TR>
+<TD>7</TD>
+<TD><CODE>0.123</CODE></TD>
+<TD>floating point literal</TD>
+</TR>
+<TR>
+<TD>7</TD>
+<TD><CODE>?</CODE></TD>
+<TD>metavariable</TD>
+</TR>
+<TR>
+<TD>7</TD>
+<TD><CODE>[]</CODE></TD>
+<TD>empty token list</TD>
+</TR>
+<TR>
+<TD>7</TD>
+<TD><CODE>[C a b]</CODE></TD>
+<TD>list category</TD>
+</TR>
+<TR>
+<TD>7</TD>
+<TD><CODE>["foo bar"]</CODE></TD>
+<TD>token list</TD>
+</TR>
+<TR>
+<TD>7</TD>
+<TD><CODE>{"s : Str ; n : Num}</CODE></TD>
+<TD>record type</TD>
+</TR>
+<TR>
+<TD>7</TD>
+<TD><CODE>{"s = "foo" ; n = Sg}</CODE></TD>
+<TD>record</TD>
+</TR>
+<TR>
+<TD>7</TD>
+<TD><CODE>&lt;Sg,Fem,Gen&gt;</CODE></TD>
+<TD>tuple</TD>
+</TR>
+<TR>
+<TD>7</TD>
+<TD><CODE>&lt;n : Num&gt;</CODE></TD>
+<TD>type-annotated expression</TD>
+</TR>
+<TR>
+<TD>6 left</TD>
+<TD><CODE>t.r</CODE></TD>
+<TD>projection or qualification</TD>
+</TR>
+<TR>
+<TD>5 left</TD>
+<TD><CODE>f a</CODE></TD>
+<TD>function application</TD>
+</TR>
+<TR>
+<TD>5</TD>
+<TD><CODE>table {Sg =&gt; [] ; _ =&gt; "xs"}</CODE></TD>
+<TD>table</TD>
+</TR>
+<TR>
+<TD>5</TD>
+<TD><CODE>table P [a ; b ; c]</CODE></TD>
+<TD>course-of-values table</TD>
+</TR>
+<TR>
+<TD>5</TD>
+<TD><CODE>case n of {Sg =&gt; [] ; _ =&gt; "xs"}</CODE></TD>
+<TD>case expression</TD>
+</TR>
+<TR>
+<TD>5</TD>
+<TD><CODE>variants {"color" ; "colour"}</CODE></TD>
+<TD>free variation</TD>
+</TR>
+<TR>
+<TD>5</TD>
+<TD><CODE>pre {"a" ; "an"/vowel}</CODE></TD>
+<TD>prefix-dependent choice</TD>
+</TR>
+<TR>
+<TD>4 left</TD>
+<TD><CODE>t ! v</CODE></TD>
+<TD>table selection</TD>
+</TR>
+<TR>
+<TD>4 left</TD>
+<TD><CODE>A * B</CODE></TD>
+<TD>tuple type</TD>
+</TR>
+<TR>
+<TD>4 left</TD>
+<TD><CODE>R ** {b : Bool}</CODE></TD>
+<TD>record (type) extension</TD>
+</TR>
+<TR>
+<TD>3 left</TD>
+<TD><CODE>t + s</CODE></TD>
+<TD>token gluing</TD>
+</TR>
+<TR>
+<TD>2 left</TD>
+<TD><CODE>t ++ s</CODE></TD>
+<TD>token list concatenation</TD>
+</TR>
+<TR>
+<TD>1 right</TD>
+<TD><CODE>\x,y -&gt; t</CODE></TD>
+<TD>function abstraction ("lambda")</TD>
+</TR>
+<TR>
+<TD>1 right</TD>
+<TD><CODE>\\x,y =&gt; t</CODE></TD>
+<TD>table abstraction</TD>
+</TR>
+<TR>
+<TD>1 right</TD>
+<TD><CODE>(x : A) -&gt; B</CODE></TD>
+<TD>dependent function type</TD>
+</TR>
+<TR>
+<TD>1 right</TD>
+<TD><CODE>A -&gt; B</CODE></TD>
+<TD>function type</TD>
+</TR>
+<TR>
+<TD>1 right</TD>
+<TD><CODE>P =&gt; T</CODE></TD>
+<TD>table type</TD>
+</TR>
+<TR>
+<TD>1 right</TD>
+<TD><CODE>let x = v in t</CODE></TD>
+<TD>local definition</TD>
+</TR>
+<TR>
+<TD>1</TD>
+<TD><CODE>t where {x = v}</CODE></TD>
+<TD>local definition</TD>
+</TR>
+<TR>
+<TD>1</TD>
+<TD><CODE>in M.C "foo"</CODE></TD>
+<TD>rule by example</TD>
+</TR>
+</TABLE>
+
+<P></P>
+<P>
+Any expression in parentheses (<CODE>(</CODE><I>exp</I><CODE>)</CODE>) is in the highest
+precedence class.
+</P>
+<A NAME="toc33"></A>
+<H3>The functional fragment: expressions in abstract syntax</H3>
+<P>
+<a name="functiontype"></a>
+</P>
+<P>
+The expression syntax is the same in abstract and concrete syntax, although
+only a part of the syntax is actually usable in well-typed expressions in
+abstract syntax. An abstract syntax is essentially used for defining a set
+of types and a set of functions between those types. Therefore it needs
+essentially the <B>functional fragment</B>
+of the syntax. This fragment comprises two kinds of types:
+</P>
+<UL>
+<LI><B>basic types</B>, of form <I>C a1...an</I> where 
+  <UL>
+  <LI><CODE>cat</CODE> <I>C</I> (<i>x</i><sub>1</sub> : <i>A</i><sub>1</sub>)...(<i>x</i><sub>n</sub> : <i>A</i><sub>n</sub>), including the predefined
+    categories <CODE>Int</CODE>, <CODE>Float</CODE>, and <CODE>String</CODE> explained <a href="#predefabs">here</a>
+  <LI><i>a</i><sub>1</sub> : <i>A</i><sub>1</sub>,...,<i>a</i><sub>n</sub> : <i>A</i><sub>n</sub>{<i>x</i><sub>1</sub> = <i>a</i><sub>1</sub>,...,<i>x</i><sub>n-1</sub>=<i>a</i><sub>n-1</sub>}
+  </UL>
+</UL>
+
+<UL>
+<LI><B>function types</B>, of form (<I>x</I> : <I>A</I>) <CODE>-&gt;</CODE> <I>B</I>, where
+  <UL>
+  <LI><I>A</I> is a type
+  <LI><I>B</I> is a type possibly depending on <I>x</I> : <I>A</I>
+  </UL>
+</UL>
+
+<P>
+When defining basic types, we used the notation 
+<I>t</I>{<i>x</i><sub>1</sub> = <i>t</i><sub>1</sub>,...,<i>x</i><sub>n</sub>=<i>t</i><sub>n</sub>}
+for the <B>substitution</B> of values to variables. This is a metalevel notation,
+which denotes a term that is formed by replacing the free occurrences of
+each variable <i>x</i><sub>i</sub> by <i>t</i><sub>i</sub>. 
+</P>
+<P>
+These types have six kinds of expressions:
+</P>
+<UL>
+<LI><B>constants</B>, <I>f</I> : <I>A</I> where 
+  <UL>
+  <LI><CODE>fun</CODE> <I>f</I> : <I>A</I>
+  </UL>
+</UL>
+
+<UL>
+<LI><B>literals</B> for integers, floats, and strings (defined in <a href="#predefabs">here</a>)
+</UL>
+
+<UL>
+<LI><B>variables</B>, <I>x</I> : <I>A</I> where 
+  <UL>
+  <LI><I>x</I> has been introduced by a binding
+  </UL>
+</UL>
+
+<UL>
+<LI><B>applications</B>, <I>f a</I> : <I>B</I>{<I>x</I>=<I>a</I>}, where
+  <UL>
+  <LI><I>f</I> : (<I>x</I> : <I>A</I>) <CODE>-&gt;</CODE> <I>B</I>
+  <LI><I>a</I> : <I>A</I>
+  </UL>
+</UL>
+
+<UL>
+<LI><B>abstractions</B>, <CODE>\</CODE><I>x</I> <CODE>-&gt;</CODE> <I>b</I> : (<I>x</I> : <I>A</I>) <CODE>-&gt;</CODE> <I>B</I>, where
+  <UL>
+  <LI><I>b</I> : <I>B</I> possibly depending on <I>x</I> : <I>A</I>
+  </UL>
+</UL>
+
+<UL>
+<LI><B>metavariables</B>, <CODE>?</CODE>, as introduced in intermediate phases of
+  incremental type checking; metavariables are not permitted
+  in GF source code
+</UL>
+
+<P>
+<a name="variablebinding"></a>
+</P>
+<P>
+The notion of <B>binding</B> is defined for occurrences of variables in
+subexpressions as follows:
+</P>
+<UL>
+<LI>in (<I>x</I> : <I>A</I>) <CODE>-&gt;</CODE> <I>B</I>, <I>x</I> is bound in <I>B</I>
+<LI>in <CODE>\</CODE><I>x</I> <CODE>-&gt;</CODE> <I>b</I>, <I>x</I> is bound in <I>b</I>
+<LI>in <CODE>def</CODE> <I>f</I> <i>p</i><sub>1</sub> ... <i>p</i><sub>n</sub> = <I>t</I>, any pattern variable introduced in
+  any <I>pi</I> is bound in <I>t</I> (as defined <a href="#patternmatching">here</a>)
+</UL>
+
+<P>
+As syntactic sugar, function types have sharing of types and
+suppression of variables, in the same way as contexts 
+(defined <a href="#contexts">here</a>):
+</P>
+<UL>
+<LI>variables can share a type,
+<center>
+<CODE>(</CODE> <I>x,y</I> <CODE>:</CODE> <I>A</I> <CODE>)</CODE> <CODE>-&gt;</CODE> <I>B</I> ===  
+  <CODE>(</CODE> <I>x</I> <CODE>:</CODE> <I>A</I> <CODE>) -&gt; (</CODE> <I>y</I> <CODE>:</CODE> <I>A</I> <CODE>) -&gt;</CODE> <I>B</I>
+</center>
+<LI>a <B>wildcard</B> can be used for a variable not occurring later in the type,
+<center>
+<CODE>(</CODE> <CODE>_</CODE> <CODE>:</CODE> <I>A</I> <CODE>) -&gt;</CODE> <I>B</I> ===
+  <CODE>(</CODE> <I>x</I> <CODE>:</CODE> <I>T</I> <CODE>) -&gt;</CODE> <I>B</I>
+</center>
+<LI>if the variable does not occur later, it can be omitted altogether, and
+  parentheses are not used,
+<center>
+  <I>A</I> <CODE>-&gt;</CODE> <I>B</I> ===  <CODE>(</CODE> <I>_</I> <CODE>:</CODE> <I>A</I> <CODE>) -&gt;</CODE> <I>B</I>
+</center>
+</UL>
+
+<P>
+There is analogous syntactic sugar for constant functions,
+<center>
+<CODE>\</CODE><I>_</I> <CODE>-&gt;</CODE> <I>t</I> ===  <CODE>\</CODE><I>x</I> <CODE>-&gt;</CODE> <I>t</I>
+</center>
+where <I>x</I> does not occur in <I>t</I>, and for multiple lambda abstractions:
+<center>
+<CODE>\</CODE><I>p,q</I> <CODE>-&gt;</CODE> <I>t</I> ===  <CODE>\</CODE><I>p</I> <CODE>-&gt;</CODE> <CODE>\</CODE><I>q</I> <CODE>-&gt;</CODE> <I>t</I>
+</center>
+where <I>p</I> and <I>q</I> are variables or wild cards (<CODE>_</CODE>).
+</P>
+<A NAME="toc34"></A>
+<H3>Conversions</H3>
+<P>
+<a name="conversions"></a>
+</P>
+<P>
+Among expressions, there is a relation of <B>definitional equality</B> defined
+by four <B>conversion rules</B>:
+</P>
+<UL>
+<LI><B>alpha conversion</B>: 
+  <CODE>\</CODE><I>x</I> <CODE>-&gt;</CODE> <I>b</I> = <CODE>\</CODE><I>y</I> <CODE>-&gt;</CODE> <I>b</I>{<I>x</I>=<I>y</I>}
+</UL>
+
+<UL>
+<LI><B>beta conversion</B>: (<CODE>\</CODE><I>x</I> <CODE>-&gt;</CODE> <I>b</I>) <I>a</I> = <I>b</I>{<I>x</I>=<I>a</I>}
+</UL>
+
+<UL>
+<LI><B>delta conversion</B>: <I>f</I> <i>a</i><sub>1</sub> ... <i>a</i><sub>n</sub> = <I>tg</I>, if
+  <UL>
+  <LI>there is a definition <CODE>def</CODE> <I>f</I> <i>p</i><sub>1</sub> ... <i>p</i><sub>n</sub> = <I>t</I>
+  <LI>this definition is the first for <I>f</I> that matches the sequence
+    <i>a</i><sub>1</sub> .... <i>a</i><sub>n</sub>, with the substitution <I>g</I> 
+  </UL>
+</UL>
+
+<UL>
+<LI><B>eta conversion</B>: <I>c</I> = <CODE>\</CODE><I>x</I> <CODE>-&gt;</CODE> <I>c x</I>, 
+  if <I>c</I> : (<I>x</I> : <I>A</I>) <CODE>-&gt;</CODE> <I>B</I>
+</UL>
+
+<P>
+Pattern matching substitution used in delta conversion
+is defined <a href="#patternmatching">here</a>.
+</P>
+<P>
+An expression is in <B>beta-eta-normal form</B> if 
+</P>
+<UL>
+<LI>it has no subexpressions to which beta conversion applies (beta normality)
+<LI>each constant or variable whose type is a function type must be
+  <B>eta-expanded</B>, i.e. made into an abstract equal to it by eta conversion
+  (eta normality)
+</UL>
+
+<P>
+Notice that the iteration of eta expansion would lead to an expression not
+in beta-normal form.
+</P>
+<A NAME="toc35"></A>
+<H3>Syntax trees</H3>
+<P>
+<a name="syntaxtrees"></a>
+</P>
+<P>
+The <B>syntax trees</B> defined by an abstract syntax are well-typed
+expressions of basic types in beta-eta normal form. 
+Linearization defined in concrete
+syntax applies to all and only these expressions. 
+</P>
+<P>
+There is also a direct definition of syntax trees, which does not
+refer to beta and eta conversions: keeping in mind that a type always has
+the form
+<center>
+(<i>x</i><sub>1</sub> : <i>A</i><sub>1</sub>)  <CODE>-&gt;</CODE> ...  <CODE>-&gt;</CODE> (<i>x</i><sub>n</sub> : <i>A</i><sub>n</sub>)  <CODE>-&gt;</CODE> <I>B</I>
+</center>
+where <I>Ai</I> are types and <I>B</I> is a basic type, a syntax tree is an expression
+<center>
+<I>b</I> <i>t</i><sub>1</sub> ... <i>t</i><sub>n</sub> : <I>B'</I>
+</center>
+where 
+</P>
+<UL>
+<LI><I>B'</I> is the basic type <I>B</I>{<i>x</i><sub>1</sub> = <i>t</i><sub>1</sub>,...,<i>x</i><sub>n</sub> = <i>t</i><sub>n</sub>}
+<LI><CODE>fun</CODE> <I>b</I> : (<i>x</i><sub>1</sub> : <i>A</i><sub>1</sub>)  <CODE>-&gt;</CODE> ...  <CODE>-&gt;</CODE> (<i>x</i><sub>n</sub> : <i>A</i><sub>n</sub>)  <CODE>-&gt;</CODE> <I>B</I>
+<LI>each <i>t</i><sub>i</sub> has the form <CODE>\</CODE><i>z</i><sub>1</sub>,...,<i>z</i><sub>m</sub> <CODE>-&gt;</CODE> <I>c</I> where <i>A</i><sub>i</sub> is
+<center>
+(<i>y</i><sub>1</sub> : <i>B</i><sub>1</sub>)  <CODE>-&gt;</CODE> ...  <CODE>-&gt;</CODE> (<i>y</i><sub>m</sub> : <i>B</i><sub>m</sub>)  <CODE>-&gt;</CODE> <I>B</I>
+</center>
+</UL>
+
+<A NAME="toc36"></A>
+<H3>Predefined types in abstract syntax</H3>
+<P>
+<a name="predefabs"></a>
+</P>
+<P>
+GF provides three predefined categories for abstract syntax, with predefined
+expressions:
+</P>
+<TABLE ALIGN="center" CELLPADDING="4" BORDER="1">
+<TR>
+<TH>category</TH>
+<TH COLSPAN="2">expressions</TH>
+</TR>
+<TR>
+<TD ALIGN="center"><CODE>Int</CODE></TD>
+<TD>integer literals, e.g. <CODE>123</CODE></TD>
+</TR>
+<TR>
+<TD ALIGN="center"><CODE>Float</CODE></TD>
+<TD>floating point literals, e.g. <CODE>12.34</CODE></TD>
+</TR>
+<TR>
+<TD ALIGN="center"><CODE>String</CODE></TD>
+<TD>string literals, e.g. <CODE>"foo"</CODE></TD>
+</TR>
+</TABLE>
+
+<P></P>
+<P>
+These categories take no arguments, and they can be used as basic
+types in the same way as if they were introduced in <CODE>cat</CODE> judgements.
+However, it is not legal to define <CODE>fun</CODE> functions that have any
+of these types as value type: their only well-typed expressions are
+literals as defined in the above table.
+</P>
+<A NAME="toc37"></A>
+<H3>Overview of expressions in concrete syntax</H3>
+<P>
+<a name="cnctypes"></a>
+</P>
+<P>
+Concrete syntax is about defining mappings from abstract syntax trees
+to <B>concrete syntax objects</B>. These objects comprise
+</P>
+<UL>
+<LI>records
+<LI>tables
+<LI>strings
+<LI>parameter values
+</UL>
+
+<P>
+Thus functions are not concrete syntax objects; however, the 
+mappings themselves are expressed as functions, and the source code
+of a concrete syntax can use functions under the condition that
+they can be eliminated from the final compiled grammar (which they
+can; this is one of the fundamental properties of compilation, as 
+explained in more detail in the <I>JFP</I> article).
+</P>
+<P>
+Concrete syntax thus has the same function types and expression forms as
+abstract syntax, specified <a href="#functiontype">here</a>. The basic types defined
+by categories (<CODE>cat</CODE> judgements) are available via grammar reuse
+explained <a href="#reuse">here</a>; this also comprises the
+predefined categories <CODE>Float</CODE> and <CODE>String</CODE>. 
+</P>
+<A NAME="toc38"></A>
+<H3>Values, canonical forms, and run-time variables</H3>
+<P>
+In abstract syntax, the conversion rules fiven <a href="#conversions">here</a>
+define a computational relation
+among expressions, but there is no separate notion of a <B>value</B> of 
+computation: the value (the end point) of a computation chain is
+simply an expression to which no more conversions apply. In general,
+we are interested in expressions that satisfy the conditions of being
+syntax trees (as defined <a href="#syntaxtrees">here</a>), but there can be many computationally
+equivalent syntax trees which nonetheless are distinct syntax trees
+and hence have different linearizations. The main use of computation 
+in abstract syntax is to compare types in dependent type checking.
+</P>
+<P>
+In concrete syntax, the notion of values is central. At run time,
+we want to compute the values of linearizations; at compile time, we want
+to perform <B>partial evaluation</B>, which computes expressions as far as
+possible.
+To specify what happens
+in computation we therefore have to distinguish between <B>canonical forms</B>
+and other forms of expressions. The canonical forms are defined separately
+for each form of type, whereas the other forms may usually produce expressions
+of any type.
+</P>
+<P>
+<a name="linexpansion"></a>
+<a name="runtimevariables"></a>
+</P>
+<P>
+What is done at compile time is the elimination of any noncanonical forms,
+except for those depending on <B>run-time variables</B>. Run-time variables are
+the same as the <B>argument variables</B> of linearization rules, i.e. the
+variables <i>x</i><sub>1</sub>,...,<i>x</i><sub>n</sub> in
+<center>
+<CODE>lin</CODE> <I>f</I> <CODE>= \</CODE> <i>x</i><sub>1</sub>,...,<i>x</i><sub>n</sub> <CODE>-&gt;</CODE> <I>t</I>
+</center>
+where
+<center>
+<CODE>fun</CODE> <I>f</I> <CODE>:</CODE> 
+(<i>x</i><sub>1</sub> : <i>A</i><sub>1</sub>)  <CODE>-&gt;</CODE> ...  <CODE>-&gt;</CODE> (<i>x</i><sub>n</sub> : <i>A</i><sub>n</sub>) <CODE>-&gt;</CODE> <I>B</I>
+</center>
+Notice that this definition refers to the <B>eta-expanded</B> linearization term,
+which has one abstracted variable for each argument type of <I>f</I>. These variables
+are not necessarily explicit in GF source code, but introduced by the compiler.
+</P>
+<P>
+Since certain expression forms should be eliminated in compilation but
+cannot be eliminated if run-time variables appear in them, errors can
+appear late in compilation. This is an issue with the following
+expression forms:
+</P>
+<UL>
+<LI>gluing (<CODE>s + t</CODE>), defined <a href="#gluing">here</a>
+<LI>pattern matching on strings, defined <a href="#patternmatching">here</a> 
+<LI>predefined string operations, defined <a href="#predefcnc">here</a> (those taking
+  <CODE>Str</CODE> arguments)
+</UL>
+
+<A NAME="toc39"></A>
+<H3>Token lists, tokens, and strings</H3>
+<P>
+<a name="strtype"></a>
+</P>
+<P>
+The most prominent basic type is <CODE>Str</CODE>, the type of <B>token lists</B>.
+This type is often sloppily referred to as the type of <B>strings</B>;
+but it should be kept in mind that the objects of <CODE>Str</CODE> are
+<I>lists</I> of strings rather than single strings.
+</P>
+<P>
+Expressions of type <CODE>Str</CODE> have the following canonical forms:
+</P>
+<UL>
+<LI><B>tokens</B>, i.e. <B>string literals</B>, in double quotes, e.g. <CODE>"foo"</CODE>
+<LI><B>the empty token list</B>, <CODE>[]</CODE>
+<LI><B>concatenation</B>, <I>s</I> <CODE>++</CODE> <I>t</I>, where <I>s,t</I> : <CODE>Str</CODE>
+<LI><B>prefix-dependent choice</B>, 
+  <CODE>pre {</CODE> <I>s</I> ; <i>s</i><sub>1</sub> <CODE>/</CODE> <i>p</i><sub>1</sub> ; ... ; <i>s</i><sub>n</sub> <CODE>/</CODE> <i>p</i><sub>n</sub>}, where
+  <UL>
+  <LI><I>s</I>, <i>s</i><sub>1</sub>,...,<i>s</i><sub>n</sub>, <i>p</i><sub>1</sub>,...,<i>p</i><sub>n</sub> : <CODE>Str</CODE>
+  </UL>
+</UL>
+
+<P>
+For convenience, the notation is overloaded so that tokens are identified
+with singleton token lists, and there is no separate type of tokens
+(this is a change from the <I>JFP</I> article). 
+The notion of a token
+is still important for compilation: all tokens introduced by
+the grammar must be known at compile time. This, in turn, is
+required by the parsing algorithms used for parsing with GF grammars.
+</P>
+<P>
+In addition to string literals, tokens can be formed by a specific 
+non-canonical operator:
+</P>
+<UL>
+<LI><B>gluing</B>, <I>s</I> <CODE>+</CODE> <I>t</I>, where <I>s,t</I> : <CODE>Str</CODE>
+</UL>
+
+<P>
+<a name="gluing"></a>
+</P>
+<P>
+Being noncanonical, gluing is equipped with a computation rule:
+string literals are glued by forming a new string literal, and
+empty token lists can be ignored:
+</P>
+<UL>
+<LI><CODE>"foo" + "bar"</CODE>  ==> <CODE>"foobar"</CODE>
+<LI><I>t</I> <CODE>+ []</CODE>  ==> <I>t</I>
+<LI><CODE>[] +</CODE> <I>t</I> ==> <I>t</I>
+</UL>
+
+<P>
+Since tokens must be known at compile time, 
+the operands of gluing may not depend on run-time variables,
+as defined <a href="#runtimevariables">here</a>.
+</P>
+<P>
+As syntactic sugar, token lists can be given as bracketed string literals, where
+spaces separate tokens:
+</P>
+<UL>
+<LI><B>token lists</B>, <CODE>["one two three"]</CODE> === <CODE>"one" ++ "two" ++ "three"</CODE>
+</UL>
+
+<P>
+Notice that there are no empty tokens, but the expression <CODE>[]</CODE> 
+can be used in a context requiring a token, in particular in gluing expression
+below. Since <CODE>[]</CODE> denotes an empty token list, the following computation laws
+are valid:
+</P>
+<UL>
+<LI><I>t</I> <CODE>++ []</CODE>  ==> <I>t</I>
+<LI><CODE>[] ++</CODE> <I>t</I>  ==> <I>t</I>
+</UL>
+
+<P>
+Moreover, concatenation and gluing are associative:
+</P>
+<UL>
+<LI>s <CODE>+</CODE> (t <CODE>+</CODE> u) ==> s <CODE>+</CODE> t <CODE>+</CODE> u
+<LI>s <CODE>++</CODE> (t <CODE>++</CODE> u) ==> s <CODE>++</CODE> t <CODE>++</CODE> u
+</UL>
+
+<P>
+For the programmer, associativity and the empty token laws mean 
+that the compiler can use them to simplify string expressions.
+It also means that these laws are respected in pattern matching
+on strings.
+</P>
+<P>
+A prime example of prefix-dependent choice operation is the following
+approximative expression for the English indefinite article:
+</P>
+<PRE>
+    pre {"a" ; "an" / variants {"a" ; "e" ; "i" ; "o"}}
+</PRE>
+<P>
+This expression can be computed in the context of a subsequent token:
+</P>
+<UL>
+<LI><CODE>pre {</CODE> <I>s</I> ; <i>s</i><sub>1</sub> <CODE>/</CODE> <i>p</i><sub>1</sub> ; ... ; <i>s</i><sub>n</sub> <CODE>/</CODE> <i>p</i><sub>n</sub><CODE>} ++</CODE> <I>t</I>
+  ==>
+  <UL>
+  <LI><i>s</i><sub>i</sub> for the first <I>i</I> such that the prefix <i>p</i><sub>i</sub> 
+    matches <I>t</I>, if it exists
+  <LI><I>s</I> otherwise
+  </UL>
+</UL>
+
+<P>
+The <B>matching prefix</B> is defined by comparing the string with the prefix of 
+the token. If the prefix is a variant list of strings, then it matches
+the token if any of the strings in the list matches it.
+</P>
+<P>
+The computation rule can sometimes be applied at compile time, but it general,
+prefix-dependent choices need to be passed to the run-time grammar, because
+they are not given a subsequent token to compare with, or because the
+subsequent token depends on a run-time variable.
+</P>
+<P>
+The prefix-dependent choice expression itself may not depend on run-time 
+variables.
+</P>
+<P>
+<I>In GF prior to 3.0, a specific type</I> <CODE>Strs</CODE> 
+<I>is used for defining prefixes,</I>
+<I>instead of just</I> <CODE>variants</CODE> <I>of</I> <CODE>Str</CODE>.
+</P>
+<A NAME="toc40"></A>
+<H3>Records and record types</H3>
+<P>
+A <B>record</B> is a collection of objects of possibly different types,
+accessible by <B>projections</B> from the record with <B>labels</B> pointing
+to these objects. A record is also itself an object, whose type is
+a <B>record type</B>. Record types have the form
+<center>
+ <CODE>{</CODE> <i>r</i><sub>1</sub> : <i>A</i><sub>1</sub> <CODE>;</CODE> ... <CODE>;</CODE> <i>r</i><sub>n</sub> : <i>A</i><sub>n</sub> <CODE>}</CODE>
+</center>
+where <I>n</I> &gt;= 0, each <i>A</i><sub>i</sub> is a type, and the labels <i>r</i><sub>i</sub> are
+distinct. A record of this type has the form
+<center>
+ <CODE>{</CODE> <i>r</i><sub>1</sub> = <i>a</i><sub>1</sub> <CODE>;</CODE> ... <CODE>;</CODE> <i>r</i><sub>n</sub> = <i>a</i><sub>n</sub> <CODE>}</CODE>
+</center>
+where each #aii : "Aii. A limiting case is the <B>empty record type</B>
+<CODE>{}</CODE>, which has the object <CODE>{}</CODE>, the <B>empty record</B>.
+</P>
+<P>
+The <B>fields</B> of a record type are its parts of the form <I>r</I> : <I>A</I>,
+also called <B>typings</B>. The <B>fields</B> of a record are of the form
+<I>r</I> = <I>a</I>, also called <B>value assignments</B>. Value assignments
+may optionally indicate the type, as in <I>r</I> : <I>A</I> = <I>a</I>.
+</P>
+<P>
+The order of fields in record types and records is insignificant: two record
+types (or records) are equal if they have the same fields, in any order, and a 
+record is an object of a record type, if it has type-correct value assignments
+for all fields of the record type. 
+The latter definition implies the even stronger 
+principle of <B>record subtyping</B>: a record can have any type that has some
+subset of its fields. This principle is explained further 
+<a href="#subtyping">here</a>.
+</P>
+<P>
+All fields in a record must have distinct labels. Thus it is not possible
+e.g. to "redefine" a field "later" in a record.
+</P>
+<P>
+Lexically, labels are identifiers (defined <a href="#identifiers">here</a>). 
+This is with the exception
+of the labels selecting bound variables in the linearization of higher-order
+abstract syntax, which have the form <CODE>$</CODE><I>i</I> for an integer <I>i</I>,
+as specified <a href="#HOAS">here</a>. 
+In source code, these labels should not appear in records fields, 
+but only in selections.
+</P>
+<P>
+Labels occur only in syntactic positions where they cannot be confused with
+constants or variables. Therefore it is safe to write, as in <CODE>Prelude</CODE>,
+</P>
+<PRE>
+    ss : Str -&gt; {s : Str} = \s -&gt; {s = s} ;
+</PRE>
+<P>
+A <B>projection</B> is an expression of the form
+<center>
+ <I>t</I>.<I>r</I>
+</center>
+where <I>t</I> must be a record and <I>r</I> must be a label defined in it.
+The type of the projection is the type of that field.
+The computation rule for projection returns the value assigned to that field:
+<center>
+<CODE>{</CODE> ... <CODE>;</CODE> <I>r</I> = <I>a</I> <CODE>;</CODE> ... <CODE>}.</CODE><I>r</I> ==> <I>a</I>
+</center>
+Notice that the dot notation <I>t</I>.<I>r</I> is also used for qualified names
+as specified <a href="#qualifiednames">here</a>. 
+This ambiguity follows tradition and convenience. It is
+resolved by the following rules (before type checking):
+</P>
+<OL>
+<LI>if <I>t</I> is a bound variable or a constant in scope, 
+  <I>t</I>.<I>r</I> is type-checked as a projection
+<LI>otherwise, <I>t</I>.<I>r</I> is type-checked as a qualified name
+</OL>
+
+<P>
+As syntactic sugar, types and values can be shared:
+</P>
+<UL>
+<LI><CODE>{</CODE> ... <CODE>;</CODE> <I>r,s</I> : <I>A</I> <CODE>;</CODE> ... <CODE>}</CODE> ===
+  <CODE>{</CODE> ... <CODE>;</CODE> <I>r</I> : <I>A</I> <CODE>;</CODE> <I>s</I> : <I>A</I> <CODE>;</CODE> ... <CODE>}</CODE>
+<LI><CODE>{</CODE> ... <CODE>;</CODE> <I>r,s</I> = <I>a</I> <CODE>;</CODE> ... <CODE>}</CODE> ===
+  <CODE>{</CODE> ... <CODE>;</CODE> <I>r</I> = <I>a</I> <CODE>;</CODE> <I>s</I> = <I>a</I> <CODE>;</CODE> ... <CODE>}</CODE>
+</UL>
+
+<P>
+Another syntactic sugar are <B>tuple types</B> and <B>tuples</B>, which are translated
+by endowing their unlabelled fields by the labels <CODE>p1</CODE>, <CODE>p2</CODE>,... in the
+order of appearance of the fields:
+</P>
+<UL>
+<LI><i>A</i><sub>1</sub> <CODE>*</CODE> ...  <CODE>*</CODE> <i>A</i><sub>n</sub> ===
+ <CODE>{</CODE> <CODE>p1</CODE> : <i>A</i><sub>1</sub> <CODE>;</CODE> ... <CODE>;</CODE> <CODE>pn</CODE> : <i>A</i><sub>n</sub> <CODE>}</CODE>
+<LI><CODE>&lt;</CODE><i>a</i><sub>1</sub> <CODE>,</CODE> ...  <CODE>,</CODE> <i>a</i><sub>n</sub> <CODE>&gt;</CODE> ===
+ <CODE>{</CODE> <CODE>p1</CODE> = <i>a</i><sub>1</sub><CODE>;</CODE> ... <CODE>;</CODE> <CODE>pn</CODE> = <i>a</i><sub>n</sub> <CODE>}</CODE>
+</UL>
+
+<P>
+A <B>record extension</B> is formed by adding fields to a record or a record type.
+The general syntax involves two expressions,
+<center>
+ <I>R</I> <CODE>**</CODE> <I>S</I>
+</center>
+The result is a record type or a record with a union of the fields of <I>R</I> and
+<I>S</I>. It is therefore well-formed if
+</P>
+<UL>
+<LI>both <I>R</I> and <I>S</I> are either records or record types
+<LI>the labels in <I>R</I> and <I>S</I> are distinct
+</UL>
+
+<A NAME="toc41"></A>
+<H3>Subtyping</H3>
+<P>
+<a name="subtyping"></a>
+</P>
+<P>
+The possibility of having superfluous fields in a record forms the basis of
+the <B>subtyping</B> relation.
+That <I>A</I> is a subtype of <I>B</I> means that <I>a : A</I> implies <I>a : B</I>.
+This is clearly satisfied for records with superfluous fields:
+</P>
+<UL>
+<LI>if <I>R</I> is a record type without the label <I>r</I>, 
+  then <I>R</I> <CODE>** {</CODE> <I>r</I> : <I>A</I> <CODE>}</CODE> is a subtype of <I>R</I>
+</UL>
+
+<P>
+The GF grammar compiler extends subtyping to function types by <B>covariance</B>
+and <B>contravariance</B>:
+</P>
+<UL>
+<LI>covariance: if <I>A</I> is a subtype of <I>B</I>, 
+  then <I>C</I> <CODE>-&gt;</CODE> <I>A</I> is a subtype of <I>C</I> <CODE>-&gt;</CODE> <I>B</I>
+<LI>contravariance: if <I>A</I> is a subtype of <I>B</I>, 
+  then <I>B</I> <CODE>-&gt;</CODE> <I>C</I> is a subtype of <I>A</I> <CODE>-&gt;</CODE> <I>C</I>
+</UL>
+
+<P>
+The logic of these rules is natural: if a function is returns a value 
+in a subtype, then this value is <I>a fortiori</I> in the supertype. 
+If a function is defined for some type, then it is <I>a fortiori</I> defined
+for any subtype.
+</P>
+<P>
+In addition to the well-known principles of record subtyping and co- and
+contravariance, GF implements subtyping for initial segments of integers:
+</P>
+<UL>
+<LI>if <I>m</I> &lt; <I>n</I>, then <CODE>Ints</CODE> <I>m</I> is a subtype of <CODE>Ints</CODE> <I>n</I>
+<LI><CODE>Ints</CODE> <I>n</I> is a subtype of <CODE>Integer</CODE>
+</UL>
+
+<P>
+As the last rule, subtyping is transitive:
+</P>
+<UL>
+<LI>if <I>A</I> is a subtype of <I>B</I> and <I>B</I> is a subtype of <I>C</I>, then 
+  <I>A</I> is a subtype of <I>C</I>.
+</UL>
+
+<A NAME="toc42"></A>
+<H3>Tables and table types</H3>
+<P>
+<a name="tables"></a>
+</P>
+<P>
+One of the most characteristic constructs of GF is <B>tables</B>, also called
+<B>finite functions</B>. That these functions are finite means that it
+is possible to finitely enumerate all argument-value pairs; this, in
+turn, is possible because the argument types are finite. 
+</P>
+<P>
+A <B>table type</B> has the form
+<center>
+<I>P</I> <CODE>=&gt;</CODE> <I>T</I>
+</center>
+where <I>P</I> must be a parameter type in the sense defined <a href="#paramtypes">here</a>, whereas
+<I>T</I> can be any type.
+</P>
+<P>
+Canonical expressions of table types are <B>tables</B>, of the form
+<center>
+<CODE>table</CODE> <CODE>{</CODE> <i>V</i><sub>1</sub> <CODE>=&gt;</CODE> <i>t</i><sub>1</sub> ; ... ; <i>V</i><sub>n</sub> <CODE>=&gt;</CODE> <i>t</i><sub>n</sub> <CODE>}</CODE>
+</center>
+where <i>V</i><sub>1</sub>,...,<i>V</i><sub>n</sub> is the complete list of the parameter values of
+the argument type <I>P</I> (defined <a href="#paramvalues">here</a>), and each <i>t</i><sub>i</sub> is 
+an expression of the value type <I>T</I>.
+</P>
+<P>
+In addition to explicit enumerations, 
+tables can be given by <B>pattern matching</B>,
+<center>
+<CODE>table</CODE> <CODE>{</CODE><i>p</i><sub>1</sub> <CODE>=&gt;</CODE> <i>t</i><sub>1</sub> ; ... ; <i>p</i><sub>m</sub> <CODE>=&gt;</CODE> <i>t</i><sub>m</sub><CODE>}</CODE>
+</center>
+where <i>p</i><sub>1</sub>,....,<i>p</i><sub>m</sub> is a list of patterns that covers all values of type <I>P</I>.
+Each pattern <i>p</i><sub>i</sub> may bind some variables, on which the expression <i>t</i><sub>i</sub>
+may depend. A complete account of patterns and pattern matching is given
+<a href="#patternmatching">here</a>.
+</P>
+<P>
+A <B>course-of-values table</B> omits the patterns and just lists all
+values. It uses the enumeration of all values of the argument type <I>P</I>
+to pair the values with arguments:
+<center>
+<CODE>table</CODE> <I>P</I> <CODE>[</CODE><i>t</i><sub>1</sub> ; ... ; <i>t</i><sub>n</sub><CODE>]</CODE>
+</center>
+This format is not recommended for GF source code, since the
+ordering of parameter values is not specified and therefore a
+compiler-internal decision.
+</P>
+<P>
+The argument type can be indicated in ordinary tables as well, which is
+sometimes helpful for type inference:
+<center>
+<CODE>table</CODE> <I>P</I> <CODE>{</CODE> ... <CODE>}</CODE>
+</center>
+</P>
+<P>
+The <B>selection</B> operator <CODE>!</CODE>, applied to a table <I>t</I> and to an expression
+<I>v</I> of its argument type
+<center>
+<I>t</I> <CODE>!</CODE> <I>v</I>
+</center>
+returns the first pattern matching result from <I>t</I> with <I>v</I>, as defined
+<a href="#patternmatching">here</a>. The order of patterns is thus significant as long as the
+patterns contain variables or wildcards. When the compiler reorders the
+patterns following the enumeration of all values of the argument type,
+this order no longer matters, because no overlap remains between patterns.
+</P>
+<P>
+The GF compiler performs <B>table expansion</B>, i.e. an analogue of 
+eta expansion defined <a href="#conversions">here</a>, where a table is applied to all
+values to its argument type:
+<center>
+<I>t</I> : <I>P</I> <CODE>=&gt;</CODE> <I>T</I> ==> 
+<CODE>table</CODE> <I>P</I> <CODE>[</CODE><I>t</I> <CODE>!</CODE> <i>V</i><sub>1</sub> ; ... ; <I>t</I> <CODE>!</CODE> <i>V</i><sub>n</sub><CODE>]</CODE>
+</center>
+As syntactic sugar, one-branch tables can be written in a way similar to
+lambda abstractions:
+<center>
+<CODE>\\</CODE><I>p</I> <CODE>=&gt;</CODE> <I>t</I>  ===  <CODE>table {</CODE><I>p</I> <CODE>=&gt;</CODE> <I>t</I> <CODE>}</CODE>
+</center>
+where <I>p</I> is either a variable or a wildcard (<CODE>_</CODE>). Multiple bindings
+can be abbreviated:
+<center>
+<CODE>\\</CODE><I>p,q</I> <CODE>=&gt;</CODE> <I>t</I>  ===  <CODE>\\</CODE><I>p</I> <CODE>=&gt;</CODE> <CODE>\\</CODE><I>q</I> <CODE>=&gt;</CODE> <I>t</I>
+</center>
+<B>Case expressions</B> are syntactic sugar for selections:
+<center>
+<CODE>case</CODE> <I>e</I> <CODE>of {</CODE>...<CODE>}</CODE>  ===  <CODE>table {</CODE>...<CODE>} !</CODE> <I>e</I>
+</center>
+</P>
+<A NAME="toc43"></A>
+<H3>Pattern matching</H3>
+<P>
+<a name="patternmatching"></a>
+</P>
+<P>
+We will list all forms of patterns that can be used in table branches.
+We define their <B>variable bindings</B> and <B>matching substitutions</B>.
+</P>
+<P>
+We start with the patterns available for all parameter types, as well
+as for the types <CODE>Integer</CODE> and <CODE>Str</CODE>.
+</P>
+<UL>
+<LI>A constructor pattern <I>C</I> <i>p</i><sub>1</sub>...<i>p</i><sub>n</sub> 
+  binds the union of all variables bound in the subpatterns
+  <i>p</i><sub>1</sub>,...,<i>p</i><sub>n</sub>. 
+  It matches any value 
+  <I>C</I> <i>V</i><sub>1</sub>...<i>V</i><sub>n</sub> where each <i>p</i><sub>i</sub># matches <i>V</i><sub>i</sub>, 
+  and the matching substitution is the union of these substitutions.
+<LI>A record pattern 
+  <CODE>{</CODE> <i>r</i><sub>1</sub> <CODE>=</CODE> <i>p</i><sub>1</sub> <CODE>;</CODE> ... <CODE>;</CODE> <i>r</i><sub>n</sub> <CODE>=</CODE> <i>p</i><sub>n</sub> <CODE>}</CODE>
+  binds the union of all variables bound in the subpatterns
+  <i>p</i><sub>1</sub>,...,<i>p</i><sub>n</sub>. 
+  It matches any value 
+  <CODE>{</CODE> <i>r</i><sub>1</sub> <CODE>=</CODE> <i>V</i><sub>1</sub> <CODE>;</CODE> ... <CODE>;</CODE> <i>r</i><sub>n</sub> <CODE>=</CODE> <i>V</i><sub>n</sub> <CODE>;</CODE> ...<CODE>}</CODE>
+  where each <i>p</i><sub>i</sub># matches <i>V</i><sub>i</sub>, 
+  and the matching substitution is the union of these substitutions.
+<LI>A variable pattern <I>x</I> 
+  (identifier other than parameter constructor) 
+  binds the variable <I>x</I>. 
+  It matches any value <I>V</I>, with the substitution {<I>x</I> = <I>V</I>}.
+<LI>The wild card <CODE>_</CODE> binds no variables.
+  It matches any value, with the empty substitution.
+<LI>A disjunctive pattern <I>p</I> <CODE>|</CODE> <I>q</I> binds the intersection of
+  the variables bound by <I>p</I> and <I>q</I>.
+  It matches anything that 
+  either <I>p</I> or <I>q</I> matches, with the first substitution starting
+  with <I>p</I> matches, from which those
+  variables that are not bound by both patterns are removed.
+<LI>A negative pattern <CODE>-</CODE> <I>p</I> binds no variables.
+  It matches anything that <I>p</I> does <I>not</I> match, with the empty
+  substitution.
+<LI>An alias pattern <I>x</I> <CODE>@</CODE> <I>p</I> binds <I>x</I> and all the variables
+  bound by <I>p</I>. It matches any value <I>V</I> that <I>p</I> matches, with
+  the same substition extended by {<I>x</I> = <I>V</I>}.
+</UL>
+
+<P>
+The following patterns are only available for the type <CODE>Str</CODE>:
+</P>
+<UL>
+<LI>A string literal pattern, e.g. <CODE>"s"</CODE>, binds no variables.
+  It matches the same string, with the empty substitution.
+<LI>A concatenation pattern, <I>p</I> <CODE>+</CODE> <I>q</I>,
+  binds the union of variables bound by <I>p</I> and <I>q</I>.
+  It matches any string that consists
+  of a prefix matching <I>p</I> and a suffix matching <I>q</I>,
+  with the union of substitutions corresponding to the first match (see below).
+<LI>A repetition pattern <I>p</I><CODE>*</CODE> binds no variables.
+  It matches any string that can be decomposed
+  into strings that match <I>p</I>, with the empty substitution.
+</UL>
+
+<P>
+The following pattern is only available for the types <CODE>Integer</CODE> 
+and <CODE>Ints</CODE> <I>n</I>:
+</P>
+<UL>
+<LI>An integer literal pattern, e.g. <CODE>214</CODE>, binds no variables.
+  It matches the same integer, with
+  the empty substitution.
+</UL>
+
+<P>
+All patterns must be <B>linear</B>: the same pattern variable may occur
+only once in them. This is what makes it straightforward to speak
+about unions of binding sets and substitutions.
+</P>
+<P>
+Pattern matching is performed in the order in which the branches
+appear in the source code: the branch of the first matching pattern is followed.
+In concrete syntax, the type checker reject sets of patterns that are 
+not exhaustive, and warns for completely overshadowed patterns.
+It also checks the type correctness of patterns with respect to the
+argument type. In abstract syntax, only type correctness is checked,
+no exhaustiveness or overshadowing.
+</P>
+<P>
+It follows from the definition of record pattern matching 
+that it can utilize partial records: the branch
+</P>
+<PRE>
+    {g = Fem} =&gt; t
+</PRE>
+<P>
+in a table of type <CODE>{g : Gender ; n : Number} =&gt; T</CODE> means the same as
+</P>
+<PRE>
+    {g = Fem ; n = _} =&gt; t
+</PRE>
+<P>
+Variables in regular expression patterns
+are always bound to the <B>first match</B>, which is the first
+in the sequence of binding lists. For example:
+</P>
+<UL>
+<LI><CODE>x + "e" + y</CODE> matches <CODE>"peter"</CODE> with <CODE>x = "p", y = "ter"</CODE>
+<LI><CODE>x + "er"*</CODE> matches <CODE>"burgerer"</CODE> with <CODE>x = "burg"</CODE>
+</UL>
+
+<A NAME="toc44"></A>
+<H3>Free variation</H3>
+<P>
+An expressions of the form
+<center>
+<CODE>variants</CODE> <CODE>{</CODE><i>t</i><sub>1</sub> ; ... ; <i>t</i><sub>n</sub><CODE>}</CODE>
+</center>
+where all <i>t</i><sub>i</sub> are of the same type <I>T</I>, has itseld type <I>T</I>.
+This expression presents <i>t</i><sub>i</sub>,...,<i>t</i><sub>n</sub> as being in <B>free variation</B>:
+the choice between them is not determined by semantics or parameters. 
+A limiting case is
+<center>
+<CODE>variants {}</CODE>
+</center>
+which encodes a rule saying that there is no way to express a certain
+thing, e.g. that a certain inflectional form does not exist.
+</P>
+<P>
+A common wisdom in linguistics is that "there is no free variation", which
+refers to the situation where <I>all</I> aspects are taken into account. For 
+instance, the English negation contraction could be expressed as free variation,
+</P>
+<PRE>
+    variants {"don't" ; "do" ++ "not"}
+</PRE>
+<P>
+if only semantics is taken into account, but if stylistic aspects are included,
+then the proper formulation might be with a parameter distinguishing between
+informal and formal style:
+</P>
+<PRE>
+    case style of {Informal =&gt; "don't" ; Formal =&gt; "do" ++ "not"}
+</PRE>
+<P>
+Since there is not way to choose a particular element from a ``variants` list,
+free variants is normally not adequate in libraries, nor in grammars meant for
+natural language generation. In application grammars 
+meant to parse user input, free variation is a way to avoid cluttering the
+abstract syntax with semantically insignificant distinctions and even to
+tolerate some grammatical errors.
+</P>
+<P>
+Permitting <CODE>variants</CODE> in all types involves a major modification of the
+semantics of GF expressions. All computation rules have to be lifted to
+deal with lists of expressions and values. For instance,
+<center>
+<I>t</I> <CODE>!</CODE> <CODE>variants</CODE> <CODE>{</CODE><i>t</i><sub>1</sub> ; ... ; <i>t</i><sub>n</sub><CODE>}</CODE> ==> 
+<CODE>variants</CODE> <CODE>{</CODE><I>t</I> <CODE>!</CODE> <i>t</i><sub>1</sub> ; ... ; <I>t</I> <CODE>!</CODE> <i>t</i><sub>n</sub><CODE>}</CODE>
+</center>
+This is done in such a way that
+variation does not distribute to records (or other product-like structures).
+For instance, variants of records,
+</P>
+<PRE>
+    variants {{s = "Auto" ; g = Neutr} ; {s = "Wagen" ; g = Masc}}
+</PRE>
+<P>
+is <I>not</I> the same as a record of variants,
+</P>
+<PRE>
+    {s = variants {"Auto" ; "Wagen"} ; g = variants {Neutr ; Masc}}
+</PRE>
+<P>
+Variants of variants are flattened,
+<center>
+<CODE>variants</CODE> <CODE>{</CODE>...; <CODE>variants</CODE> <CODE>{</CODE><i>t</i><sub>1</sub> ;...; <i>t</i><sub>n</sub><CODE>}</CODE> ;...<CODE>}</CODE>
+==>
+<CODE>variants</CODE> <CODE>{</CODE>...; <i>t</i><sub>1</sub> ;...; <i>t</i><sub>n</sub> ;...<CODE>}</CODE>
+</center>
+and singleton variants are eliminated,
+<center>
+<CODE>variants</CODE> <CODE>{</CODE><I>t</I><CODE>}</CODE> ==> <I>t</I>
+</center>
+</P>
+<A NAME="toc45"></A>
+<H3>Local definitions</H3>
+<P>
+A <B>local definition</B>, i.e. a <B>let expression</B> has the form
+<center>
+<CODE>let</CODE> <I>x</I> : <I>T</I> = <I>t</I> <CODE>in</CODE> <I>e</I>
+</center>
+The type of <I>x</I> must be <I>T</I>, which also has to be the type of <I>t</I>.
+Computation is performed by substituting <I>t</I> for <I>x</I> in <I>e</I>:
+<center>
+<CODE>let</CODE> <I>x</I> : <I>T</I> = <I>t</I> <CODE>in</CODE> <I>e</I> ==> <I>e</I> {<I>x</I> = <I>t</I>}
+</center>
+As syntactic sugar, the type can be omitted if the type checker is 
+able to infer it:
+<center>
+<CODE>let</CODE> <I>x</I> = <I>t</I> <CODE>in</CODE> <I>e</I>
+</center>
+It is possible to compress several local definitions into one block:
+<center>
+<CODE>let</CODE> <I>x</I> : <I>T</I> = <I>t</I> <CODE>;</CODE> <I>y</I> : <I>U</I> = <I>u</I> <CODE>in</CODE> <I>e</I>
+===
+<CODE>let</CODE> <I>x</I> : <I>T</I> = <I>t</I> <CODE>in</CODE> <CODE>let</CODE> <I>y</I> : <I>U</I> = <I>u</I> <CODE>in</CODE> <I>e</I>
+</center>
+Another notational variant is a definition block appearing after the main
+expression:
+<center>
+<I>e</I> <CODE>where</CODE> <CODE>{</CODE>...<CODE>}</CODE> === <CODE>let</CODE> <CODE>{</CODE>...<CODE>}</CODE> <CODE>in</CODE> <I>e</I>
+</center>
+Curly brackets are obligatory in the <CODE>where</CODE> form, and can
+also be optionally used in the <CODE>let</CODE> form.
+</P>
+<P>
+Since a block of definitions is treated as syntactic sugar
+for a nested <CODE>let</CODE> expression, a constant must be defined before it
+is used: the scope is not mutual, as in a module body.
+Furthermore, unlike in <CODE>lin</CODE> and <CODE>oper</CODE> definitions, it is <I>not</I> possible
+to bind variables on the left of the equality sign.
+</P>
+<A NAME="toc46"></A>
+<H3>Function applications in concrete syntax</H3>
+<P>
+<a name="functionelimination"></a>
+</P>
+<P>
+Fully compiled concrete syntax may not include expressions of function types
+except on the outermost level of <CODE>lin</CODE> rules, as defined <a href="#linexpansion">here</a>. 
+However, 
+in the source code, and especially in <CODE>oper</CODE> definitions, functions
+are the main vehicle of code reuse and abstraction. Thus function types and
+functions follow the same rules as in abstract syntax, as specified
+<a href="#functiontype">here</a>. In 
+particular, the application of a lambda abstract is computed by beta conversion.
+</P>
+<P>
+To ensure the elimination of functions, GF uses a special computation rule
+for pushing function applications inside tables, since otherwise run-time 
+variables could block their applications:
+<center>
+(<CODE>table</CODE> <CODE>{</CODE><i>p</i><sub>1</sub> <CODE>=&gt;</CODE> <i>f</i><sub>1</sub> ; ... ; 
+  <i>p</i><sub>n</sub> <CODE>=&gt;</CODE> <i>f</i><sub>n</sub> <CODE>}</CODE> <CODE>!</CODE> <I>e</I>) <I>a</I>  
+ ==>
+  <CODE>table</CODE> <CODE>{</CODE><i>p</i><sub>1</sub> <CODE>=&gt;</CODE> <i>f</i><sub>1</sub> <I>a</I> ; ... ; 
+  <i>p</i><sub>n</sub> <CODE>=&gt;</CODE> <i>f</i><sub>n</sub> <I>a</I><CODE>}</CODE> <CODE>!</CODE> <I>e</I> 
+</center>
+Also parameter constructors with non-empty contexts, as defined 
+<a href="#paramjudgements">here</a>, 
+result in expressions in application form. These expressions are never
+a problem if their arguments are just constructors, because they can then
+be translated to integers corresponding to the position of the expression
+in the enumaration of the values of its type.
+However, a constructor
+applied to a run-time variable may need to be converted as follows:
+<center>
+<I>C</I>...<I>x</I>... ==> <CODE>case</CODE> <I>x</I> of <CODE>{_ =&gt;</CODE> <I>C</I>...<I>x</I><CODE>}</CODE> 
+</center>
+The resulting expression, when processed by table expansion as explained 
+<a href="#tables">here</a>, 
+results in <I>C</I> being applied to just values of the type of <I>x</I>, and the
+application thereby disappears.
+</P>
+<A NAME="toc47"></A>
+<H3>Reusing top-level grammars as resources</H3>
+<P>
+<a name="reuse"></a>
+</P>
+<P>
+<I>This section is valid for GF 3.0, which abandons the "lock field"</I>
+<I>discipline of GF 2.8.</I>
+</P>
+<P>
+As explained <a href="#openabstract">here</a>, 
+abstract syntax modules can be opened as interfaces
+and concrete syntaxes as their instances. This means that judgements are,
+as it were, translated in the following way:
+</P>
+<UL>
+<LI><CODE>cat</CODE> <I>C</I> <I>G</I> ===&gt; <CODE>oper</CODE> <I>C</I> : <CODE>Type</CODE>
+<LI><CODE>fun</CODE> <I>f</I> : <I>T</I> ===&gt; <CODE>oper</CODE> <I>f</I> : <I>T</I>
+<LI><CODE>lincat</CODE> <I>C</I> = <I>T</I> ===&gt; <CODE>oper</CODE> <I>C</I> : <CODE>Type</CODE> = <I>C</I>
+<LI><CODE>lin</CODE> <I>f</I> = <I>t</I> ===&gt; <CODE>oper</CODE> <I>f</I> = <I>t</I>
+</UL>
+
+<P>
+Notice that the value <I>T</I> of <CODE>lincat</CODE> definitions is not disclosed
+in the translation. This means that the type <I>C</I> remains abstract: the
+only ways of building an object of type <I>C</I> are the operations <I>f</I>
+obtained from <I>fun</I> and <I>lin</I> rules.
+</P>
+<P>
+The purpose of keeping linearization types abstract is to enforce
+<B>grammar checking via type checking</B>. This means that any well-typed
+operation application is also well-typed in the sense of the original
+grammar. If the types were disclosed, then we could for instance easily
+confuse all categories that have the linearization
+type <CODE>{s : Str}</CODE>. Yet another reason is that revealing the types
+makes it impossible for the library programmers to change their type
+definitions afterwards.
+</P>
+<P>
+Library writers may occasionally want to have access to the values of
+linearization types. The way to make it possible is to add an extra
+construction operation to a module in which the linearization type
+is available:
+</P>
+<PRE>
+    oper MkC : T -&gt; C = \x -&gt; x
+</PRE>
+<P>
+In object-oriented terms, the type <I>C</I> itself is <B>protected</B>, whereas
+<I>MkC</I> is a <B>public constructor</B> of <I>C</I>. Of course, it is possible to
+make these constructors overloaded (concept explained <a href="#overloading">here</a>), 
+to enable easy access to special cases.
+</P>
+<A NAME="toc48"></A>
+<H3>Predefined concrete syntax types</H3>
+<P>
+<a name="predefcnc"></a>
+</P>
+<P>
+The following concrete syntax types are predefined:
+</P>
+<UL>
+<LI><CODE>Str</CODE>, the type of tokens and token lists (defined <a href="#strtype">here</a>)
+<LI><CODE>Integer</CODE>, the type of nonnegative integers
+<LI><CODE>Ints</CODE> <I>n</I>, the type of integers from <I>0</I> to <I>n</I>
+<LI><CODE>Type</CODE>, the type of (concrete syntax) types
+<LI><CODE>PType</CODE>, the type of parameter types
+</UL>
+
+<P>
+The last two types are, in a way, extended by user-written grammars,
+since new parameter types can be defined in the way shown <a href="#paramjudgements">here</a>, 
+and every paramater type is also a type. From the point of view of the values
+of expressions, however, a <CODE>param</CODE> declaration does not extend
+<CODE>PType</CODE>, since all parameter types get compiled to initial
+segments of integers.
+</P>
+<P>
+Notice the difference between the concrete syntax types
+<CODE>Str</CODE> and <CODE>Integer</CODE> on the one hand, and the abstract
+syntax categories <CODE>String</CODE> and <CODE>Int</CODE>, on the other.
+As <I>concrete syntax</I> types, the latter are treated in
+the same way as any reused categories: their objects
+can be formed by using syntax trees (string and integer
+literals).
+</P>
+<P>
+<I>The type name</I> <CODE>Integer</CODE> <I>replaces in GF 3.0 the name</I> <CODE>Int</CODE>,
+<I>to avoid confusion with the abstract syntax type and to be analogous</I>
+<I>with the</I> <CODE>Str</CODE> <I>vs.</I> <CODE>String</CODE> <I>distinction.</I>
+</P>
+<A NAME="toc49"></A>
+<H3>Predefined concrete syntax operations</H3>
+<P>
+The following predefined operations are defined in the resource module
+<CODE>prelude/Predefined.gf</CODE>. Their implementations are defined as
+a part of the GF grammar compiler. 
+</P>
+<TABLE ALIGN="center" CELLPADDING="4" BORDER="1">
+<TR>
+<TH>operation</TH>
+<TH>type</TH>
+<TH COLSPAN="2">explanation</TH>
+</TR>
+<TR>
+<TD><CODE>PBool</CODE></TD>
+<TD><CODE>PType</CODE></TD>
+<TD><CODE>PTrue | PFalse</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>Error</CODE></TD>
+<TD><CODE>Type</CODE></TD>
+<TD>the empty type</TD>
+</TR>
+<TR>
+<TD><CODE>Int</CODE></TD>
+<TD><CODE>Type</CODE></TD>
+<TD>the type of integers</TD>
+</TR>
+<TR>
+<TD><CODE>Ints</CODE></TD>
+<TD><CODE>Integer -&gt; Type</CODE></TD>
+<TD>the type of integers from 0 to n</TD>
+</TR>
+<TR>
+<TD><CODE>error</CODE></TD>
+<TD><CODE>Str -&gt; Error</CODE></TD>
+<TD>forms error message</TD>
+</TR>
+<TR>
+<TD><CODE>length</CODE></TD>
+<TD><CODE>Str -&gt; Int</CODE></TD>
+<TD>length of string</TD>
+</TR>
+<TR>
+<TD><CODE>drop</CODE></TD>
+<TD><CODE>Integer -&gt; Str -&gt; Str</CODE></TD>
+<TD>drop prefix of length</TD>
+</TR>
+<TR>
+<TD><CODE>take</CODE></TD>
+<TD><CODE>Integer -&gt; Str -&gt; Str</CODE></TD>
+<TD>take prefix of length</TD>
+</TR>
+<TR>
+<TD><CODE>tk</CODE></TD>
+<TD><CODE>Integer -&gt; Str -&gt; Str</CODE></TD>
+<TD>drop suffix of length</TD>
+</TR>
+<TR>
+<TD><CODE>dp</CODE></TD>
+<TD><CODE>Integer -&gt; Str -&gt; Str</CODE></TD>
+<TD>take suffix of length</TD>
+</TR>
+<TR>
+<TD><CODE>eqInt</CODE></TD>
+<TD><CODE>Integer -&gt; Integer -&gt; PBool</CODE></TD>
+<TD>test if equal integers</TD>
+</TR>
+<TR>
+<TD><CODE>lessInt</CODE></TD>
+<TD><CODE>Integer -&gt; Integer -&gt; PBool</CODE></TD>
+<TD>test order of integers</TD>
+</TR>
+<TR>
+<TD><CODE>plus</CODE></TD>
+<TD><CODE>Integer -&gt; Integer -&gt; Integer</CODE></TD>
+<TD>add integers</TD>
+</TR>
+<TR>
+<TD><CODE>eqStr</CODE></TD>
+<TD><CODE>Str -&gt; Str -&gt; PBool</CODE></TD>
+<TD>test if equal strings</TD>
+</TR>
+<TR>
+<TD><CODE>occur</CODE></TD>
+<TD><CODE>Str -&gt; Str -&gt; PBool</CODE></TD>
+<TD>test if occurs as substring</TD>
+</TR>
+<TR>
+<TD><CODE>occurs</CODE></TD>
+<TD><CODE>Str -&gt; Str -&gt; PBool</CODE></TD>
+<TD>test if any char occurs</TD>
+</TR>
+<TR>
+<TD><CODE>show</CODE></TD>
+<TD><CODE>(P : Type) -&gt; P -&gt; Str</CODE></TD>
+<TD>convert param to string</TD>
+</TR>
+<TR>
+<TD><CODE>read</CODE></TD>
+<TD><CODE>(P : Type) -&gt; Str -&gt; P</CODE></TD>
+<TD>convert string to param</TD>
+</TR>
+<TR>
+<TD><CODE>toStr</CODE></TD>
+<TD><CODE>(L : Type) -&gt; L -&gt; Str</CODE></TD>
+<TD>find the "first" string</TD>
+</TR>
+</TABLE>
+
+<P></P>
+<P>
+Compilation eliminates these operations, and they may therefore not
+take arguments that depend on run-time variables.
+</P>
+<P>
+The module <CODE>Predef</CODE> is included in the <I>opens</I> list of all
+modules, and therefore does not need to be opened explicitly.
+</P>
+<A NAME="toc50"></A>
+<H2>Flags and pragmas</H2>
+<A NAME="toc51"></A>
+<H3>Some flags and their values</H3>
+<P>
+<a name="flagvalues"></a>
+</P>
+<P>
+The flag <CODE>coding</CODE> in concrete syntax sets the <B>character encoding</B>
+used in the grammar. Internally, GF uses unicode, and <CODE>.gfcc</CODE> files
+are always written in UTF8 encoding. The presence of the flag
+<CODE>coding=utf8</CODE> prevents GF from encoding an already encoded
+file.
+</P>
+<P>
+The flag <CODE>lexer</CODE> in concrete syntax sets the lexer, 
+i.e. the processor that turns
+strings into token lists sent to the parser. Some GF implementations
+support the following lexers.
+</P>
+<TABLE ALIGN="center" CELLPADDING="4" BORDER="1">
+<TR>
+<TH>lexer</TH>
+<TH COLSPAN="2">description</TH>
+</TR>
+<TR>
+<TD><CODE>words</CODE></TD>
+<TD>(default) tokens are separated by spaces or newlines</TD>
+</TR>
+<TR>
+<TD><CODE>literals</CODE></TD>
+<TD>like words, but integer and string literals recognized</TD>
+</TR>
+<TR>
+<TD><CODE>chars</CODE></TD>
+<TD>each character is a token</TD>
+</TR>
+<TR>
+<TD><CODE>code</CODE></TD>
+<TD>program code conventions (uses Haskell's lex)</TD>
+</TR>
+<TR>
+<TD><CODE>text</CODE></TD>
+<TD>with conventions on punctuation and capital letters</TD>
+</TR>
+<TR>
+<TD><CODE>codelit</CODE></TD>
+<TD>like code, but recognize literals (unknown words as strings)</TD>
+</TR>
+<TR>
+<TD><CODE>textlit</CODE></TD>
+<TD>like text, but recognize literals (unknown words as strings)</TD>
+</TR>
+</TABLE>
+
+<P></P>
+<P>
+The flag <CODE>startcat</CODE> in abstract syntax sets the default start category for
+parsing, random generation, and any other grammar operation that depends
+on category. Its legal values are the categories defined or inherited in
+the abstract syntax.
+</P>
+<P>
+The flag <CODE>unlexer</CODE> in concrete syntax sets the lexer, 
+i.e. the processor that turns
+token lists obrained from the linearizer to strings. Some GF implementations
+support the following unlexers.
+</P>
+<TABLE ALIGN="center" CELLPADDING="4" BORDER="1">
+<TR>
+<TH>unlexer</TH>
+<TH COLSPAN="2">description</TH>
+</TR>
+<TR>
+<TD><CODE>unwords</CODE></TD>
+<TD>(default) space-separated token list</TD>
+</TR>
+<TR>
+<TD><CODE>text</CODE></TD>
+<TD>format as text: punctuation, capitals, paragraph &lt;p&gt;</TD>
+</TR>
+<TR>
+<TD><CODE>code</CODE></TD>
+<TD>format as code (spacing, indentation)</TD>
+</TR>
+<TR>
+<TD><CODE>textlit</CODE></TD>
+<TD>like text, but remove string literal quotes</TD>
+</TR>
+<TR>
+<TD><CODE>codelit</CODE></TD>
+<TD>like code, but remove string literal quotes</TD>
+</TR>
+<TR>
+<TD><CODE>concat</CODE></TD>
+<TD>remove all spaces</TD>
+</TR>
+</TABLE>
+
+<P></P>
+<A NAME="toc52"></A>
+<H3>Compiler pragmas</H3>
+<P>
+<B>Compiler pragmas</B> are a special form of comments prefixed with <CODE>--#</CODE>.
+Currently GF interprets the following pragmas.
+</P>
+<TABLE CELLPADDING="4" BORDER="1">
+<TR>
+<TH>pragma</TH>
+<TH COLSPAN="2">explanation</TH>
+</TR>
+<TR>
+<TD><CODE>-path=</CODE>PATH</TD>
+<TD>path list for searching modules</TD>
+</TR>
+</TABLE>
+
+<P></P>
+<P>
+For instance, the line
+</P>
+<PRE>
+    --# -path=.:present:prelude:/home/aarne/GF/tmp
+</PRE>
+<P>
+in the top of <CODE>FILE.gf</CODE> causes the GF compiler, when invoked on <CODE>FILE.gf</CODE>,
+to search through the current directory (<CODE>.</CODE>) and the directories
+<CODE>present</CODE>, <CODE>prelude</CODE>, and <CODE>/home/aarne/GF/tmp</CODE>, in this order. 
+If a directory <CODE>DIR</CODE> is not found relative to the working directory,
+also <CODE>$(GF_LIB_PATH)/DIR</CODE> is searched.
+</P>
+<A NAME="toc53"></A>
+<H2>Alternative grammar input formats</H2>
+<P>
+While the GF language as specified in this document is the most versatile
+and powerful way of writing GF grammars, there are several other formats 
+that a GF compiler may make available for users, either to get started
+with small grammars or to semiautomatically convert grammars from other
+formats to GF. Here are the ones supported by GF 2.8 and 3.0.
+</P>
+<A NAME="toc54"></A>
+<H3>Old GF without modules</H3>
+<P>
+<a name="oldgf"></a>
+</P>
+<P>
+Before GF compiler version 2.0, there was no module system, and
+all kinds of judgement could be written in all files, without
+any headers. This format is still available, and the compiler
+(version 2.8) detects automatically if a file is in the current
+or the old format. However, the old format is not recommended
+because of pure modularity and missing separate compilation, 
+and also because libraries are not available, since the old
+and the new format cannot be mixed. With version 2.8, grammars
+in the old format can be converted to modular grammar with the
+command
+</P>
+<PRE>
+    &gt; import -o FILE.gf
+</PRE>
+<P>
+which rewrites the grammar divided into three files: 
+an abstract, a concrete, and a resource module.
+</P>
+<A NAME="toc55"></A>
+<H3>Context-free grammars</H3>
+<P>
+A quick way to write a GF grammar is to use the context-free format,
+also known as BNF. Files of this form are recognized by the suffix
+<CODE>.cf</CODE>. Rules in these files have the form
+<center>
+<I>Label</I> <CODE>.</CODE> <I>Cat</I> <CODE>::=</CODE> (<I>String</I> | <I>Cat</I>)* <CODE>;</CODE>
+</center>
+where <I>Label</I> and <I>Cat</I> are identifiers and <I>String</I> quoted strings.
+</P>
+<P>
+There is a shortcut form generating labels automatically,
+<center>
+<I>Cat</I> <CODE>::=</CODE> (<I>String</I> | <I>Cat</I>)* <CODE>;</CODE>
+</center>
+In the shortcut form, vertical bars (<CODE>|</CODE>) can be used to give
+several right-hand-sides at a time. An empty right-hand side
+means the singleton of an empty sequence, and not an empty union.
+</P>
+<P>
+Just like old-style GF files (previous section), contex-free grammar
+files can be converted to modular GF by using the <CODE>-o</CODE> option to
+the compiler in GF 2.8.
+</P>
+<A NAME="toc56"></A>
+<H3>Extended BNF grammars</H3>
+<P>
+Extended BNF (<CODE>FILE.ebnf</CODE>) 
+goes one step further from the shortcut notation of previous section.
+The rules have the form
+<center>
+<I>Cat</I> <CODE>::=</CODE> <I>RHS</I> <CODE>;</CODE>
+</center>
+where an <I>RHS</I> can be any regular expression 
+built from quoted strings and category symbols, in the following ways:
+</P>
+<TABLE ALIGN="center" CELLPADDING="4" BORDER="1">
+<TR>
+<TH>RHS item</TH>
+<TH COLSPAN="2">explanation</TH>
+</TR>
+<TR>
+<TD><I>Cat</I></TD>
+<TD>nonterminal</TD>
+</TR>
+<TR>
+<TD><I>String</I></TD>
+<TD>terminal</TD>
+</TR>
+<TR>
+<TD><I>RHS</I> <I>RHS</I></TD>
+<TD>sequence</TD>
+</TR>
+<TR>
+<TD><I>RHS</I> <CODE>|</CODE> <I>RHS</I></TD>
+<TD>alternatives</TD>
+</TR>
+<TR>
+<TD><I>RHS</I> <CODE>?</CODE></TD>
+<TD>optional</TD>
+</TR>
+<TR>
+<TD><I>RHS</I> <CODE>*</CODE></TD>
+<TD>repetition</TD>
+</TR>
+<TR>
+<TD><I>RHS</I> <CODE>+</CODE></TD>
+<TD>non-empty repetition|</TD>
+</TR>
+</TABLE>
+
+<P></P>
+<P>
+Parentheses are used to override standard precedences, where 
+<CODE>|</CODE> binds weaker than sequencing, which binds weaker than the unary operations.
+</P>
+<P>
+The compiler generates not only labels, but also new categories corresponding
+to the regular expression combinations actually in use.
+</P>
+<P>
+Just like <CODE>.cf</CODE> files (previous section), <CODE>.ebnf</CODE>
+files can be converted to modular GF by using the <CODE>-o</CODE> option to
+the compiler in GF 2.8.
+</P>
+<A NAME="toc57"></A>
+<H3>Example-based grammars</H3>
+<P>
+<B>Example-based grammars</B> (<CODE>.gfe</CODE>) provide a way to use
+resource grammar libraries without having to know the names
+of functions in them. The compiler works as a preprocessor,
+saving the result in a (<CODE>.gf</CODE>) file, which can be compiled
+as usual.
+</P>
+<P>
+If a library is implemented as an abstract and concrete syntax,
+it can be used for parsing. Calls of library functions can therefore
+be formed by parsing strings in the library. GF has an expression
+format for this,
+<center>
+<CODE>in</CODE> <I>C</I> <I>String</I>
+</center>
+where <I>C</I> is the category in which to parse (it can be qualified by
+the module name) and the string is the input to parser. Expressions
+of this form are replaced by the syntax trees that result. These
+trees are always type-correct. If several parses are found, all but
+the first one are given in comments.
+</P>
+<P>
+Here is an example, from <CODE>GF/examples/animal/</CODE>:
+</P>
+<PRE>
+    --# -resource=../../lib/present/LangEng.gfc
+    --# -path=.:present:prelude
+  
+    incomplete concrete QuestionsI of Questions = open Lang in {
+      lincat
+        Phrase = Phr ;
+        Entity = N ;
+        Action = V2 ;
+      lin
+        Who  love_V2 man_N           = in Phr "who loves men" ;
+        Whom man_N love_V2           = in Phr "whom does the man love" ;
+        Answer woman_N love_V2 man_N = in Phr "the woman loves men" ;
+    }
+</PRE>
+<P>
+The <CODE>resource</CODE> pragma shows the grammar that is used for parsing
+the examples.
+</P>
+<P>
+Notice that the variables <CODE>love_V2</CODE>, <CODE>man_N</CODE>, etc, are
+actually constants in the library. In the resulting rules, such as
+</P>
+<PRE>
+    lin Whom = \man_N -&gt; \love_V2 -&gt; 
+      PhrUtt NoPConj (UttQS (UseQCl TPres ASimul PPos 
+        (QuestSlash whoPl_IP (SlashV2 (DetCN (DetSg (SgQuant 
+          DefArt)NoOrd)(UseN man_N)) love_V2)))) NoVoc ;
+</PRE>
+<P>
+those constants are nonetheless treated as variables, following
+the normal binding conventions, as stated <a href="#renaming">here</a>.
+</P>
+<A NAME="toc58"></A>
+<H2>The grammar of GF</H2>
+<P>
+The following grammar is actually used in the parser of GF, although we have
+omitted
+some obsolete rules still included in the parser for backward compatibility
+reasons.
+</P>
+<P>
+This document was automatically generated by the <I>BNF-Converter</I>. It was generated together with the lexer, the parser, and the abstract syntax module, which guarantees that the document matches with the implementation of the language (provided no hand-hacking has taken place).
+</P>
+<A NAME="toc59"></A>
+<H2>The lexical structure of GF</H2>
+<A NAME="toc60"></A>
+<H3>Identifiers</H3>
+<P>
+Identifiers <I>Ident</I> are unquoted strings beginning with a letter,
+followed by any combination of letters, digits, and the characters <CODE>_ '</CODE>
+reserved words excluded.
+</P>
+<A NAME="toc61"></A>
+<H3>Literals</H3>
+<P>
+Integer literals <I>Integer</I> are nonempty sequences of digits.
+</P>
+<P>
+String literals <I>String</I> have the form
+<CODE>"</CODE><I>x</I><CODE>"</CODE>}, where <I>x</I> is any sequence of any characters
+except <CODE>"</CODE> unless preceded by <CODE>\</CODE>.
+</P>
+<P>
+Double-precision float literals <I>Double</I> have the structure
+indicated by the regular expression <CODE>digit+ '.' digit+ ('e' ('-')? digit+)?</CODE> i.e.\
+two sequences of digits separated by a decimal point, optionally
+followed by an unsigned or negative exponent.
+</P>
+<A NAME="toc62"></A>
+<H3>Reserved words and symbols</H3>
+<P>
+The set of reserved words is the set of terminals appearing in the grammar. Those reserved words that consist of non-letter characters are called symbols, and they are treated in a different way from those that are similar to identifiers. The lexer follows rules familiar from languages like Haskell, C, and Java, including longest match and spacing conventions.
+</P>
+<P>
+The reserved words used in GF are the following:
+</P>
+<TABLE ALIGN="center" CELLPADDING="4">
+<TR>
+<TD><CODE>PType</CODE></TD>
+<TD><CODE>Str</CODE></TD>
+<TD><CODE>Strs</CODE></TD>
+<TD><CODE>Type</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>abstract</CODE></TD>
+<TD><CODE>case</CODE></TD>
+<TD><CODE>cat</CODE></TD>
+<TD><CODE>concrete</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>data</CODE></TD>
+<TD><CODE>def</CODE></TD>
+<TD><CODE>flags</CODE></TD>
+<TD><CODE>fun</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>in</CODE></TD>
+<TD><CODE>incomplete</CODE></TD>
+<TD><CODE>instance</CODE></TD>
+<TD><CODE>interface</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>let</CODE></TD>
+<TD><CODE>lin</CODE></TD>
+<TD><CODE>lincat</CODE></TD>
+<TD><CODE>lindef</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>of</CODE></TD>
+<TD><CODE>open</CODE></TD>
+<TD><CODE>oper</CODE></TD>
+<TD><CODE>param</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>pre</CODE></TD>
+<TD><CODE>printname</CODE></TD>
+<TD><CODE>resource</CODE></TD>
+<TD><CODE>strs</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>table</CODE></TD>
+<TD><CODE>transfer</CODE></TD>
+<TD><CODE>variants</CODE></TD>
+<TD><CODE>where</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>with</CODE></TD>
+<TD></TD>
+<TD></TD>
+</TR>
+</TABLE>
+
+<P></P>
+<P>
+The symbols used in GF are the following:
+</P>
+<TABLE ALIGN="center" CELLPADDING="4">
+<TR>
+<TD>;</TD>
+<TD>=</TD>
+<TD>:</TD>
+<TD>-&gt;</TD>
+</TR>
+<TR>
+<TD>{</TD>
+<TD>}</TD>
+<TD>**</TD>
+<TD>,</TD>
+</TR>
+<TR>
+<TD>(</TD>
+<TD>)</TD>
+<TD>[</TD>
+<TD>]</TD>
+</TR>
+<TR>
+<TD>-</TD>
+<TD>.</TD>
+<TD>|</TD>
+<TD>?</TD>
+</TR>
+<TR>
+<TD>&lt;</TD>
+<TD>&gt;</TD>
+<TD>@</TD>
+<TD>!</TD>
+</TR>
+<TR>
+<TD>*</TD>
+<TD>+</TD>
+<TD>++</TD>
+<TD>\</TD>
+</TR>
+<TR>
+<TD>=&gt;</TD>
+<TD>_</TD>
+<TD>$</TD>
+<TD>/</TD>
+</TR>
+</TABLE>
+
+<P></P>
+<A NAME="toc63"></A>
+<H3>Comments</H3>
+<P>
+Single-line comments begin with --.Multiple-line comments are  enclosed with {- and -}.
+</P>
+<A NAME="toc64"></A>
+<H2>The syntactic structure of GF</H2>
+<P>
+Non-terminals are enclosed between &lt; and &gt;. 
+The symbols -&gt; (production),  <B>|</B>  (union) 
+and <B>eps</B> (empty rule) belong to the BNF notation. 
+All other symbols are terminals.
+</P>
+<TABLE ALIGN="center" CELLPADDING="4">
+<TR>
+<TD><I>Grammar</I></TD>
+<TD>-&gt;</TD>
+<TD><I>[ModDef]</I></TD>
+</TR>
+<TR>
+<TD><I>[ModDef]</I></TD>
+<TD>-&gt;</TD>
+<TD><B>eps</B></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>ModDef</I> <I>[ModDef]</I></TD>
+</TR>
+<TR>
+<TD><I>ModDef</I></TD>
+<TD>-&gt;</TD>
+<TD><I>ModDef</I> <CODE>;</CODE></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>ComplMod</I> <I>ModType</I> <CODE>=</CODE> <I>ModBody</I></TD>
+</TR>
+<TR>
+<TD><I>ModType</I></TD>
+<TD>-&gt;</TD>
+<TD><CODE>abstract</CODE> <I>Ident</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><CODE>resource</CODE> <I>Ident</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><CODE>interface</CODE> <I>Ident</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><CODE>concrete</CODE> <I>Ident</I> <CODE>of</CODE> <I>Ident</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><CODE>instance</CODE> <I>Ident</I> <CODE>of</CODE> <I>Ident</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><CODE>transfer</CODE> <I>Ident</I> <CODE>:</CODE> <I>Open</I> <CODE>-&gt;</CODE> <I>Open</I></TD>
+</TR>
+<TR>
+<TD><I>ModBody</I></TD>
+<TD>-&gt;</TD>
+<TD><I>Extend</I> <I>Opens</I> <CODE>{</CODE> <I>[TopDef]</I> <CODE>}</CODE></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>[Included]</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>Included</I> <CODE>with</CODE> <I>[Open]</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>Included</I> <CODE>with</CODE> <I>[Open]</I> <CODE>**</CODE> <I>Opens</I> <CODE>{</CODE> <I>[TopDef]</I> <CODE>}</CODE></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>[Included]</I> <CODE>**</CODE> <I>Included</I> <CODE>with</CODE> <I>[Open]</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>[Included]</I> <CODE>**</CODE> <I>Included</I> <CODE>with</CODE> <I>[Open]</I> <CODE>**</CODE> <I>Opens</I> <CODE>{</CODE> <I>[TopDef]</I> <CODE>}</CODE></TD>
+</TR>
+<TR>
+<TD><I>[TopDef]</I></TD>
+<TD>-&gt;</TD>
+<TD><B>eps</B></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>TopDef</I> <I>[TopDef]</I></TD>
+</TR>
+<TR>
+<TD><I>Extend</I></TD>
+<TD>-&gt;</TD>
+<TD><I>[Included]</I> <CODE>**</CODE></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><B>eps</B></TD>
+</TR>
+<TR>
+<TD><I>[Open]</I></TD>
+<TD>-&gt;</TD>
+<TD><B>eps</B></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>Open</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>Open</I> <CODE>,</CODE> <I>[Open]</I></TD>
+</TR>
+<TR>
+<TD><I>Opens</I></TD>
+<TD>-&gt;</TD>
+<TD><B>eps</B></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><CODE>open</CODE> <I>[Open]</I> <CODE>in</CODE></TD>
+</TR>
+<TR>
+<TD><I>Open</I></TD>
+<TD>-&gt;</TD>
+<TD><I>Ident</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><CODE>(</CODE> <I>QualOpen</I> <I>Ident</I> <CODE>)</CODE></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><CODE>(</CODE> <I>QualOpen</I> <I>Ident</I> <CODE>=</CODE> <I>Ident</I> <CODE>)</CODE></TD>
+</TR>
+<TR>
+<TD><I>ComplMod</I></TD>
+<TD>-&gt;</TD>
+<TD><B>eps</B></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><CODE>incomplete</CODE></TD>
+</TR>
+<TR>
+<TD><I>QualOpen</I></TD>
+<TD>-&gt;</TD>
+<TD><B>eps</B></TD>
+</TR>
+<TR>
+<TD><I>[Included]</I></TD>
+<TD>-&gt;</TD>
+<TD><B>eps</B></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>Included</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>Included</I> <CODE>,</CODE> <I>[Included]</I></TD>
+</TR>
+<TR>
+<TD><I>Included</I></TD>
+<TD>-&gt;</TD>
+<TD><I>Ident</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>Ident</I> <CODE>[</CODE> <I>[Ident]</I> <CODE>]</CODE></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>Ident</I> <CODE>-</CODE> <CODE>[</CODE> <I>[Ident]</I> <CODE>]</CODE></TD>
+</TR>
+<TR>
+<TD><I>Def</I></TD>
+<TD>-&gt;</TD>
+<TD><I>[Name]</I> <CODE>:</CODE> <I>Exp</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>[Name]</I> <CODE>=</CODE> <I>Exp</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>Name</I> <I>[Patt]</I> <CODE>=</CODE> <I>Exp</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>[Name]</I> <CODE>:</CODE> <I>Exp</I> <CODE>=</CODE> <I>Exp</I></TD>
+</TR>
+<TR>
+<TD><I>TopDef</I></TD>
+<TD>-&gt;</TD>
+<TD><CODE>cat</CODE> <I>[CatDef]</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><CODE>fun</CODE> <I>[FunDef]</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><CODE>data</CODE> <I>[FunDef]</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><CODE>def</CODE> <I>[Def]</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><CODE>data</CODE> <I>[DataDef]</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><CODE>param</CODE> <I>[ParDef]</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><CODE>oper</CODE> <I>[Def]</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><CODE>lincat</CODE> <I>[PrintDef]</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><CODE>lindef</CODE> <I>[Def]</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><CODE>lin</CODE> <I>[Def]</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><CODE>printname</CODE> <CODE>cat</CODE> <I>[PrintDef]</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><CODE>printname</CODE> <CODE>fun</CODE> <I>[PrintDef]</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><CODE>flags</CODE> <I>[FlagDef]</I></TD>
+</TR>
+<TR>
+<TD><I>CatDef</I></TD>
+<TD>-&gt;</TD>
+<TD><I>Ident</I> <I>[DDecl]</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><CODE>[</CODE> <I>Ident</I> <I>[DDecl]</I> <CODE>]</CODE></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><CODE>[</CODE> <I>Ident</I> <I>[DDecl]</I> <CODE>]</CODE> <CODE>{</CODE> <I>Integer</I> <CODE>}</CODE></TD>
+</TR>
+<TR>
+<TD><I>FunDef</I></TD>
+<TD>-&gt;</TD>
+<TD><I>[Ident]</I> <CODE>:</CODE> <I>Exp</I></TD>
+</TR>
+<TR>
+<TD><I>DataDef</I></TD>
+<TD>-&gt;</TD>
+<TD><I>Ident</I> <CODE>=</CODE> <I>[DataConstr]</I></TD>
+</TR>
+<TR>
+<TD><I>DataConstr</I></TD>
+<TD>-&gt;</TD>
+<TD><I>Ident</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>Ident</I> <CODE>.</CODE> <I>Ident</I></TD>
+</TR>
+<TR>
+<TD><I>[DataConstr]</I></TD>
+<TD>-&gt;</TD>
+<TD><B>eps</B></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>DataConstr</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>DataConstr</I> <CODE>|</CODE> <I>[DataConstr]</I></TD>
+</TR>
+<TR>
+<TD><I>ParDef</I></TD>
+<TD>-&gt;</TD>
+<TD><I>Ident</I> <CODE>=</CODE> <I>[ParConstr]</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>Ident</I> <CODE>=</CODE> <CODE>(</CODE> <CODE>in</CODE> <I>Ident</I> <CODE>)</CODE></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>Ident</I></TD>
+</TR>
+<TR>
+<TD><I>ParConstr</I></TD>
+<TD>-&gt;</TD>
+<TD><I>Ident</I> <I>[DDecl]</I></TD>
+</TR>
+<TR>
+<TD><I>PrintDef</I></TD>
+<TD>-&gt;</TD>
+<TD><I>[Name]</I> <CODE>=</CODE> <I>Exp</I></TD>
+</TR>
+<TR>
+<TD><I>FlagDef</I></TD>
+<TD>-&gt;</TD>
+<TD><I>Ident</I> <CODE>=</CODE> <I>Ident</I></TD>
+</TR>
+<TR>
+<TD><I>[Def]</I></TD>
+<TD>-&gt;</TD>
+<TD><I>Def</I> <CODE>;</CODE></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>Def</I> <CODE>;</CODE> <I>[Def]</I></TD>
+</TR>
+<TR>
+<TD><I>[CatDef]</I></TD>
+<TD>-&gt;</TD>
+<TD><I>CatDef</I> <CODE>;</CODE></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>CatDef</I> <CODE>;</CODE> <I>[CatDef]</I></TD>
+</TR>
+<TR>
+<TD><I>[FunDef]</I></TD>
+<TD>-&gt;</TD>
+<TD><I>FunDef</I> <CODE>;</CODE></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>FunDef</I> <CODE>;</CODE> <I>[FunDef]</I></TD>
+</TR>
+<TR>
+<TD><I>[DataDef]</I></TD>
+<TD>-&gt;</TD>
+<TD><I>DataDef</I> <CODE>;</CODE></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>DataDef</I> <CODE>;</CODE> <I>[DataDef]</I></TD>
+</TR>
+<TR>
+<TD><I>[ParDef]</I></TD>
+<TD>-&gt;</TD>
+<TD><I>ParDef</I> <CODE>;</CODE></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>ParDef</I> <CODE>;</CODE> <I>[ParDef]</I></TD>
+</TR>
+<TR>
+<TD><I>[PrintDef]</I></TD>
+<TD>-&gt;</TD>
+<TD><I>PrintDef</I> <CODE>;</CODE></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>PrintDef</I> <CODE>;</CODE> <I>[PrintDef]</I></TD>
+</TR>
+<TR>
+<TD><I>[FlagDef]</I></TD>
+<TD>-&gt;</TD>
+<TD><I>FlagDef</I> <CODE>;</CODE></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>FlagDef</I> <CODE>;</CODE> <I>[FlagDef]</I></TD>
+</TR>
+<TR>
+<TD><I>[ParConstr]</I></TD>
+<TD>-&gt;</TD>
+<TD><B>eps</B></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>ParConstr</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>ParConstr</I> <CODE>|</CODE> <I>[ParConstr]</I></TD>
+</TR>
+<TR>
+<TD><I>[Ident]</I></TD>
+<TD>-&gt;</TD>
+<TD><I>Ident</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>Ident</I> <CODE>,</CODE> <I>[Ident]</I></TD>
+</TR>
+<TR>
+<TD><I>Name</I></TD>
+<TD>-&gt;</TD>
+<TD><I>Ident</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><CODE>[</CODE> <I>Ident</I> <CODE>]</CODE></TD>
+</TR>
+<TR>
+<TD><I>[Name]</I></TD>
+<TD>-&gt;</TD>
+<TD><I>Name</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>Name</I> <CODE>,</CODE> <I>[Name]</I></TD>
+</TR>
+<TR>
+<TD><I>LocDef</I></TD>
+<TD>-&gt;</TD>
+<TD><I>[Ident]</I> <CODE>:</CODE> <I>Exp</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>[Ident]</I> <CODE>=</CODE> <I>Exp</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>[Ident]</I> <CODE>:</CODE> <I>Exp</I> <CODE>=</CODE> <I>Exp</I></TD>
+</TR>
+<TR>
+<TD><I>[LocDef]</I></TD>
+<TD>-&gt;</TD>
+<TD><B>eps</B></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>LocDef</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>LocDef</I> <CODE>;</CODE> <I>[LocDef]</I></TD>
+</TR>
+<TR>
+<TD><I>Exp6</I></TD>
+<TD>-&gt;</TD>
+<TD><I>Ident</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>Sort</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>String</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>Integer</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>Double</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><CODE>?</CODE></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><CODE>[</CODE> <CODE>]</CODE></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><CODE>data</CODE></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><CODE>[</CODE> <I>Ident</I> <I>Exps</I> <CODE>]</CODE></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><CODE>[</CODE> <I>String</I> <CODE>]</CODE></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><CODE>{</CODE> <I>[LocDef]</I> <CODE>}</CODE></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><CODE>&lt;</CODE> <I>[TupleComp]</I> <CODE>&gt;</CODE></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><CODE>&lt;</CODE> <I>Exp</I> <CODE>:</CODE> <I>Exp</I> <CODE>&gt;</CODE></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><CODE>(</CODE> <I>Exp</I> <CODE>)</CODE></TD>
+</TR>
+<TR>
+<TD><I>Exp5</I></TD>
+<TD>-&gt;</TD>
+<TD><I>Exp5</I> <CODE>.</CODE> <I>Label</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>Exp6</I></TD>
+</TR>
+<TR>
+<TD><I>Exp4</I></TD>
+<TD>-&gt;</TD>
+<TD><I>Exp4</I> <I>Exp5</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><CODE>table</CODE> <CODE>{</CODE> <I>[Case]</I> <CODE>}</CODE></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><CODE>table</CODE> <I>Exp6</I> <CODE>{</CODE> <I>[Case]</I> <CODE>}</CODE></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><CODE>table</CODE> <I>Exp6</I> <CODE>[</CODE> <I>[Exp]</I> <CODE>]</CODE></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><CODE>case</CODE> <I>Exp</I> <CODE>of</CODE> <CODE>{</CODE> <I>[Case]</I> <CODE>}</CODE></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><CODE>variants</CODE> <CODE>{</CODE> <I>[Exp]</I> <CODE>}</CODE></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><CODE>pre</CODE> <CODE>{</CODE> <I>Exp</I> <CODE>;</CODE> <I>[Altern]</I> <CODE>}</CODE></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><CODE>strs</CODE> <CODE>{</CODE> <I>[Exp]</I> <CODE>}</CODE></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>Ident</I> <CODE>@</CODE> <I>Exp6</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>Exp5</I></TD>
+</TR>
+<TR>
+<TD><I>Exp3</I></TD>
+<TD>-&gt;</TD>
+<TD><I>Exp3</I> <CODE>!</CODE> <I>Exp4</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>Exp3</I> <CODE>*</CODE> <I>Exp4</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>Exp3</I> <CODE>**</CODE> <I>Exp4</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>Exp4</I></TD>
+</TR>
+<TR>
+<TD><I>Exp1</I></TD>
+<TD>-&gt;</TD>
+<TD><I>Exp2</I> <CODE>+</CODE> <I>Exp1</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>Exp2</I></TD>
+</TR>
+<TR>
+<TD><I>Exp</I></TD>
+<TD>-&gt;</TD>
+<TD><I>Exp1</I> <CODE>++</CODE> <I>Exp</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><CODE>\</CODE> <I>[Bind]</I> <CODE>-&gt;</CODE> <I>Exp</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><CODE>\</CODE> <CODE>\</CODE> <I>[Bind]</I> <CODE>=&gt;</CODE> <I>Exp</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>Decl</I> <CODE>-&gt;</CODE> <I>Exp</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>Exp3</I> <CODE>=&gt;</CODE> <I>Exp</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><CODE>let</CODE> <CODE>{</CODE> <I>[LocDef]</I> <CODE>}</CODE> <CODE>in</CODE> <I>Exp</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><CODE>let</CODE> <I>[LocDef]</I> <CODE>in</CODE> <I>Exp</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>Exp3</I> <CODE>where</CODE> <CODE>{</CODE> <I>[LocDef]</I> <CODE>}</CODE></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><CODE>in</CODE> <I>Exp5</I> <I>String</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>Exp1</I></TD>
+</TR>
+<TR>
+<TD><I>Exp2</I></TD>
+<TD>-&gt;</TD>
+<TD><I>Exp3</I></TD>
+</TR>
+<TR>
+<TD><I>[Exp]</I></TD>
+<TD>-&gt;</TD>
+<TD><B>eps</B></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>Exp</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>Exp</I> <CODE>;</CODE> <I>[Exp]</I></TD>
+</TR>
+<TR>
+<TD><I>Exps</I></TD>
+<TD>-&gt;</TD>
+<TD><B>eps</B></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>Exp6</I> <I>Exps</I></TD>
+</TR>
+<TR>
+<TD><I>Patt2</I></TD>
+<TD>-&gt;</TD>
+<TD><CODE>_</CODE></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>Ident</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>Ident</I> <CODE>.</CODE> <I>Ident</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>Integer</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>Double</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>String</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><CODE>{</CODE> <I>[PattAss]</I> <CODE>}</CODE></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><CODE>&lt;</CODE> <I>[PattTupleComp]</I> <CODE>&gt;</CODE></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><CODE>(</CODE> <I>Patt</I> <CODE>)</CODE></TD>
+</TR>
+<TR>
+<TD><I>Patt1</I></TD>
+<TD>-&gt;</TD>
+<TD><I>Ident</I> <I>[Patt]</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>Ident</I> <CODE>.</CODE> <I>Ident</I> <I>[Patt]</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>Patt2</I> <CODE>*</CODE></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>Ident</I> <CODE>@</CODE> <I>Patt2</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><CODE>-</CODE> <I>Patt2</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>Patt2</I></TD>
+</TR>
+<TR>
+<TD><I>Patt</I></TD>
+<TD>-&gt;</TD>
+<TD><I>Patt</I> <CODE>|</CODE> <I>Patt1</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>Patt</I> <CODE>+</CODE> <I>Patt1</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>Patt1</I></TD>
+</TR>
+<TR>
+<TD><I>PattAss</I></TD>
+<TD>-&gt;</TD>
+<TD><I>[Ident]</I> <CODE>=</CODE> <I>Patt</I></TD>
+</TR>
+<TR>
+<TD><I>Label</I></TD>
+<TD>-&gt;</TD>
+<TD><I>Ident</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><CODE>$</CODE> <I>Integer</I></TD>
+</TR>
+<TR>
+<TD><I>Sort</I></TD>
+<TD>-&gt;</TD>
+<TD><CODE>Type</CODE></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><CODE>PType</CODE></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><CODE>Str</CODE></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><CODE>Strs</CODE></TD>
+</TR>
+<TR>
+<TD><I>[PattAss]</I></TD>
+<TD>-&gt;</TD>
+<TD><B>eps</B></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>PattAss</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>PattAss</I> <CODE>;</CODE> <I>[PattAss]</I></TD>
+</TR>
+<TR>
+<TD><I>[Patt]</I></TD>
+<TD>-&gt;</TD>
+<TD><I>Patt2</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>Patt2</I> <I>[Patt]</I></TD>
+</TR>
+<TR>
+<TD><I>Bind</I></TD>
+<TD>-&gt;</TD>
+<TD><I>Ident</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><CODE>_</CODE></TD>
+</TR>
+<TR>
+<TD><I>[Bind]</I></TD>
+<TD>-&gt;</TD>
+<TD><B>eps</B></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>Bind</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>Bind</I> <CODE>,</CODE> <I>[Bind]</I></TD>
+</TR>
+<TR>
+<TD><I>Decl</I></TD>
+<TD>-&gt;</TD>
+<TD><CODE>(</CODE> <I>[Bind]</I> <CODE>:</CODE> <I>Exp</I> <CODE>)</CODE></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>Exp4</I></TD>
+</TR>
+<TR>
+<TD><I>TupleComp</I></TD>
+<TD>-&gt;</TD>
+<TD><I>Exp</I></TD>
+</TR>
+<TR>
+<TD><I>PattTupleComp</I></TD>
+<TD>-&gt;</TD>
+<TD><I>Patt</I></TD>
+</TR>
+<TR>
+<TD><I>[TupleComp]</I></TD>
+<TD>-&gt;</TD>
+<TD><B>eps</B></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>TupleComp</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>TupleComp</I> <CODE>,</CODE> <I>[TupleComp]</I></TD>
+</TR>
+<TR>
+<TD><I>[PattTupleComp]</I></TD>
+<TD>-&gt;</TD>
+<TD><B>eps</B></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>PattTupleComp</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>PattTupleComp</I> <CODE>,</CODE> <I>[PattTupleComp]</I></TD>
+</TR>
+<TR>
+<TD><I>Case</I></TD>
+<TD>-&gt;</TD>
+<TD><I>Patt</I> <CODE>=&gt;</CODE> <I>Exp</I></TD>
+</TR>
+<TR>
+<TD><I>[Case]</I></TD>
+<TD>-&gt;</TD>
+<TD><I>Case</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>Case</I> <CODE>;</CODE> <I>[Case]</I></TD>
+</TR>
+<TR>
+<TD><I>Altern</I></TD>
+<TD>-&gt;</TD>
+<TD><I>Exp</I> <CODE>/</CODE> <I>Exp</I></TD>
+</TR>
+<TR>
+<TD><I>[Altern]</I></TD>
+<TD>-&gt;</TD>
+<TD><B>eps</B></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>Altern</I></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>Altern</I> <CODE>;</CODE> <I>[Altern]</I></TD>
+</TR>
+<TR>
+<TD><I>DDecl</I></TD>
+<TD>-&gt;</TD>
+<TD><CODE>(</CODE> <I>[Bind]</I> <CODE>:</CODE> <I>Exp</I> <CODE>)</CODE></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>Exp6</I></TD>
+</TR>
+<TR>
+<TD><I>[DDecl]</I></TD>
+<TD>-&gt;</TD>
+<TD><B>eps</B></TD>
+</TR>
+<TR>
+<TD></TD>
+<TD ALIGN="center"><B>|</B></TD>
+<TD><I>DDecl</I> <I>[DDecl]</I></TD>
+</TR>
+</TABLE>
+
+<P></P>
+
+<!-- html code generated by txt2tags 2.3 (http://txt2tags.sf.net) -->
+<!-- cmdline: txt2tags -thtml -\-toc gf-refman.txt -->
+</BODY></HTML>
