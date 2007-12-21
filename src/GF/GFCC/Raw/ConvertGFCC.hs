@@ -46,7 +46,7 @@ toGFCC (Grm [
       App (CId "param") params
       ]) = (lang, 
     Concr {
-     cflags       = fromAscList [(f,v) | App f [AStr v] <- afls],
+     cflags       = fromAscList [(f,v) | App f [AStr v] <- fls],
      lins         = fromAscList [(f,toTerm v) | App f [v] <- ls],  
      opers        = fromAscList [(f,toTerm v) | App f [v] <- ops],  
      lincats      = fromAscList [(f,toTerm v) | App f [v] <- lincs],  
