@@ -2,15 +2,14 @@ concrete AdjectiveAra of Adjective = CatAra ** open ResAra, Prelude in {
 
   lin
 
+
     PositA a = {
-      s = 
-        table {
-          Hum => a.s ;
-          NoHum => \\g,n =>
-            case n of {
-              Pl => a.s ! Fem ! Sg  ;
-              _  => a.s ! g ! n 
-            }
+      s = \\h,g,n,d,c => case h of {
+        Hum => a.s ! APosit g n d c;
+        NoHum => case n of {
+          Pl => a.s ! APosit Fem Sg d c ;
+          _  => a.s ! APosit g n d c
+          }
         } 
       };
 --  ComparA a np = {

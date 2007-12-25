@@ -44,49 +44,55 @@ concrete CatAra of Cat = CommonX - [Utt]  ** open ResAra, Prelude, ParamX in {
 
 -- Noun
 
-    CN = ResAra.Noun;
+    CN = ResAra.Noun ** {adj : NTable};
     NP, Pron = ResAra.NP; --{s : Case => Str ; a : Agr } ;
     Num, Ord = {s : Gender => State => Case => Str ;
                 n : Size };
     Predet = ResAra.Predet ;
---- DEPREC    QuantSg, QuantPl = 
----      {s : Species => Gender => Case => Str; 
----       n : ResAra.Number; d : State; isNum : Bool} ;
+
+-- DEPRECATED
+--    QuantSg, QuantPl = 
+--      {s : Species => Gender => Case => Str; 
+--       n : ResAra.Number; 
+--       d : State; 
+--       isNum : Bool;
+--       isPron : Bool} ;
+
     Det = ResAra.Det ;
---      {s : Species => Gender => Case => Str ; d : State; n : Size; isNum : Bool } ;
-    Quant = {s : ResAra.Number => Species => Gender => Case => Str; d : State} ;
-
--- Adverb
-
---    Adv, AdV, AdA, AdS, AdN = {s : Str} ;
+--  {s : Species => Gender => Case => Str ; 
+--   d : State; n : Size; isNum : Bool } ;
+    Quant = {s : ResAra.Number => Species => Gender => Case => Str; 
+             d : State;
+             isNum : Bool;
+             isPron: Bool} ;
 
 -- Numeral
 
-    Numeral,Digits = {s : Gender => State => Case => Str ; 
+    Numeral = {s : CardOrd => Gender => State => Case => Str ; 
                n : Size } ;
+    Digits = {s : Str;
+              n : Size};
 
+-- Structural
 
----- Structural
---
     Conj = {s : Str ; n : ResAra.Number} ;
 --    DConj = {s1,s2 : Str ; n : ResAra.Number} ;
---    PConj = {s : Str} ;    
---    CAdv = {s : Str} ;    
 --    Subj = {s : Str} ;
     Prep = {s : Str} ;
---
+
 -- Open lexical classes, e.g. Lexicon
     
     V, VS, VQ, VA = ResAra.Verb ; -- = {s : VForm => Str} ;
     V2, V2A = ResAra.Verb ** {c2 : Str} ;
     V3 = ResAra.Verb ** {c2, c3 : Str} ;
 --    VV = {s : VVForm => Str ; isAux : Bool} ;
---
+
     A = ResAra.Adj ;
     A2 = ResAra.Adj ** {c2 : Str} ;
---
-    N, N2 = ResAra.Noun ; --{s : ResAra.Number => State => Case => Str; g : Gender ; h = Species} ;
---    N2 = {s : ResAra.Number => Case => Str} ** {c2 : Str} ;
+
+    N, N2 = ResAra.Noun ; 
+--{s : ResAra.Number => State => Case => Str; g : Gender ; h = Species} ;
+--    N2 = {s : ResAra.Number => Case => Str} ** {c2 : Str} ;??
     N3 = ResAra.Noun ** {c2,c3 : Str} ;
     PN = {s : Case => Str; g : Gender; h : Species} ;
 

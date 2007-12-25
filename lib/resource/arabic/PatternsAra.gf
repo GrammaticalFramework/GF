@@ -89,6 +89,8 @@ resource PatternsAra =  {
 	fuculo   = { h = ""  ; m1 = "ُ"   ; m2 = "ُ"   ; t = "ْ"  } ;
 	fucUl    = { h = ""  ; m1 = "ُ"   ; m2 = "ُو"  ; t = ""   } ;
 	fUcil    = { h = ""  ; m1 = "ُو"  ; m2 = "ِ"   ; t = ""   } ;
+    mafcUl   = { h = "مَ"; m1 = "ْ"   ; m2 = "ُو"  ; t = ""   } ;
+    mafcil   = { h = "مَ"; m1 = "ْ"   ; m2 = "ِ"  ; t = ""   } ;
 	tafAcal  = { h = "تَ"; m1 = "َا"  ; m2 = "َ"   ; t = ""   } ;
 	tafaccal = { h = "تَ"; m1 = "َ"   ; m2 = "َّ"  ; t = ""   } ;
 	tufuccil = { h = "تُ"; m1 = "ُ"   ; m2 = "ِّ"  ; t = ""   } ;
