@@ -99,42 +99,45 @@ resource ResAra = PatternsAra ** open  Prelude, Predef   in {
     NTable = Number => State => Case => Str;
 
     Noun : Type = {s : NTable ; g : Gender; h : Species} ;
-    Adj  : Type = {s : Gender => NTable} ;
---    Adj  : Type = {s : AForm => Str} ;
+--    Adj  : Type = {s : Gender => NTable} ;
+    Adj  : Type = {s : AForm => Str} ;
     Verb : Type = {s : VForm => Str} ;
     
   param
     VForm =
-        VPerf Voice PerGenNum
+      VPerf Voice PerGenNum
       | VImpf Mood Voice PerGenNum
-      | VImp Gender Number ;
+      | VImp Gender Number 
+      | VPPart ;
     
     PerGenNum = 
-        Per3 Gender Number 
+      Per3 Gender Number 
       | Per2 Gender Number
       | Per1 SgPl;
     
     SgPl = Sing | Plur;
-
+    
     AForm = 
-        APosit Gender Number State Case
-      | AComp Case ;
-
---verbal morphology
-
+      APosit Gender Number State Case
+      | AComp State Case ;
+    
+    --verbal morphology
+    
 oper 
-
+  
   --macro for sound verb
-  verb : (_,_,_,_,_ : Str) -> Verb  = --PerfAct, PerfPas, ImpfAct, ImpfPas, Imp
-    \katab,kutib,aktub,uktab,euktub ->
-    { s = table {
+  --PerfAct, PerfPas, ImpfAct, ImpfPas, Imp, PPart
+  verb : (_,_,_,_,_,_ : Str) -> Verb = 
+    \katab,kutib,aktub,uktab,euktub,maktUb -> { 
+      s = table {
         VPerf Act pgn     => katab + suffixPerf ! pgn ;
         VPerf Pas pgn     => kutib + suffixPerf ! pgn ;
-        VImpf Ind Act pgn => prefixImpf ! pgn + aktub + suffixImpfInd ! pgn ;
-        VImpf Ind Pas pgn => prefixImpf ! pgn + uktab + suffixImpfInd ! pgn ;
-        VImpf m Act pgn   => prefixImpf ! pgn + aktub + suffixImpfCJ m ! pgn ;
-        VImpf m Pas pgn   => prefixImpf ! pgn + uktab + suffixImpfCJ m ! pgn ;
-        VImp  g n         => euktub + suffixImpfCJ Jus ! (Per2 g n)
+        VImpf Ind Act pgn => prefixImpf!pgn + aktub + suffixImpfInd !pgn;
+        VImpf Ind Pas pgn => prefixImpf!pgn + uktab + suffixImpfInd !pgn;
+        VImpf m Act pgn => prefixImpf!pgn + aktub + suffixImpfCJ m ! pgn;
+        VImpf m Pas pgn => prefixImpf !pgn + uktab + suffixImpfCJ m !pgn;
+        VImp  g n  => euktub + suffixImpfCJ Jus ! (Per2 g n);
+        VPPart     => maktUb
         } 
     } ;
   
@@ -156,7 +159,7 @@ oper
       Per1 Sing    => "ْتُ" ;    
       Per1 Plur    => "ْنَا"
     } ;
-  
+
   prefixImpf : PerGenNum => Str = 
     table {
       Per1 Sing    => "أ" ;    
@@ -191,8 +194,8 @@ oper
     } ;
   
   --macro for geminate verbs: FIXME, change the misleading variable names 
-  verbGeminate : (_,_,_,_,_,_,_,_,_,_ : Str) -> Verb = 
-	\xAf,xif,xyf,xuf,axAf,axaf,uxAf,uxaf,xaf,xAf' ->
+  verbGeminate : (_,_,_,_,_,_,_,_,_,_,_ : Str) -> Verb = 
+	\xAf,xif,xyf,xuf,axAf,axaf,uxAf,uxaf,xaf,xAf',ppart ->
     let { perfPattern = patHollowPerf xAf xif xyf xuf ;
 		  impfPattern = patHollowImpf axAf axaf uxAf uxaf ;
 		  impPattern  = patHollowImp xaf xAf'
@@ -201,13 +204,14 @@ oper
         VPerf     v pgn => perfPattern ! v ! pgn  + suffixPerf ! pgn ;
 	    VImpf Ind v pgn => prefixImpf ! pgn + impfPattern ! v ! pgn +  suffixImpfInd ! pgn ;
 	    VImpf m   v pgn => prefixImpf ! pgn + impfPattern ! v ! pgn +  suffixImpfCJ m ! pgn ;
-	    VImp	g	n	  =>			        impPattern ! g ! n +  suffixImpfCJ Jus ! (Per2 g n)
+	    VImp	g	n	  =>			        impPattern ! g ! n +  suffixImpfCJ Jus ! (Per2 g n);
+        VPPart => ppart
         }
     } ;
   
   --macro for hollow verbs:
-  verbHollow : (_,_,_,_,_,_,_,_,_,_ : Str) -> Verb = 
-	\xAf,xif,xyf,xuf,axAf,axaf,uxAf,uxaf,xaf,xAf' ->
+  verbHollow : (_,_,_,_,_,_,_,_,_,_,_ : Str) -> Verb = 
+	\xAf,xif,xyf,xuf,axAf,axaf,uxAf,uxaf,xaf,xAf',ppart ->
     let { perfPattern = patHollowPerf xAf xif xyf xuf ;
 		  impfPattern = patHollowImpf axAf axaf uxAf uxaf ;
 		  impPattern  = patHollowImp axaf xAf' ;
@@ -218,13 +222,14 @@ oper
 	    VImpf Ind v pgn => prefixImpf ! pgn + impfPattern ! v ! pgn +  suffixImpfInd ! pgn ;
 	    VImpf Cnj v pgn => prefixImpf ! pgn + impfPattern ! v ! pgn +  suffixImpfCJ Cnj ! pgn ;
 	    VImpf Jus v pgn => prefixImpf ! pgn + jusPattern ! v ! pgn +  suffixImpfCJ Jus ! pgn ;
-	    VImp	g	n	  =>			        impPattern ! g ! n +  suffixImpfCJ Jus ! (Per2 g n)
+	    VImp	g	n	  =>			        impPattern ! g ! n +  suffixImpfCJ Jus ! (Per2 g n);
+        VPPart => ppart
         }
     } ;
   
   --macro for defective verbs:
-  verbDef: (_,_,_,_,_,_,_,_,_,_ : Str) -> Vowel -> Verb =
-    \rama,ramay,rumi,rumu,rumiy,armi,armu,urma,Irmi,Irmu,vowel ->
+  verbDef: (_,_,_,_,_,_,_,_,_,_,_ : Str) -> Vowel -> Verb =
+    \rama,ramay,rumi,rumu,rumiy,armi,armu,urma,Irmi,Irmu,ppart,vowel ->
     let {
 	  patPerf = patDefPerf rama ramay rumi rumu rumiy ;
 	  patImpfAct = patDefImpfAct armi armu ;
@@ -234,7 +239,8 @@ oper
         VPerf v pgn => patPerf ! v ! pgn + (suffixPerfDef v) ! pgn ;
 	    VImpf m Act pgn => prefixImpf ! pgn + patImpfAct ! pgn + (suffixImpfDef Act vowel) ! m  ! pgn ;
 	    VImpf m Pas pgn => prefixImpf ! pgn + urma + (suffixImpfDef Pas vowel) ! m  ! pgn ;
-	    VImp g n =>  patImp ! g ! n + (suffixImpfDef Act vowel) ! Jus ! (Per2 g n)
+	    VImp g n =>  patImp ! g ! n + (suffixImpfDef Act vowel) ! Jus ! (Per2 g n) ;
+        VPPart => ppart
         }
     } ;
   
@@ -355,9 +361,10 @@ v1sound : Root3 -> Vowel -> Vowel -> Verb =
 	euktub = case fcl.f of {
       "؟"|"و"|"ي" => qif ;
       _   => prefixImp ! vImpf + ktub
-      }
+      };
+    maktUb = mkStrong mafcUl fcl 
   } in
-  verb katab kutib aktub uktab euktub ;
+  verb katab kutib aktub uktab euktub maktUb ;
 
 v1hollow : Root3 -> Vowel -> Verb =
   \xwf,vowel -> 
@@ -371,8 +378,10 @@ v1hollow : Root3 -> Vowel -> Verb =
 	uxAf= mkHollow ufAc xwf ;
 	uxaf= "ُ" + xaf ;
 	xAf'= mkHollow (patHol3 ! vowel) xwf ;
-	axAf= "َ" + xAf'
-  }  in verbHollow xAf xif xyf xuf axAf axaf uxAf uxaf xaf xAf' ;
+	axAf= "َ" + xAf';
+    ppart = "مَ" + xAf' -- FIXME actually wierd anomalies happen with the a vowel.. 
+
+  }  in verbHollow xAf xif xyf xuf axAf axaf uxAf uxaf xaf xAf' ppart ;
 
 patHol1 : Vowel => Pattern =
   table { u => fuc ; _ => fic} ;
@@ -411,8 +420,9 @@ v1geminate : Str -> Vowel -> Vowel -> Verb =
 	amdud = "َ" + mdud ;
 	umadd = "ُ" + madd ;
 	umdad = "ُ" + mkStrong fcal mdd ;
-	Umdud = (prefixImp ! vImpf) + mdud
-  }  in verbGeminate madd madad mudd mudid amudd amdud umadd umdad Umdud mudd' ;
+	Umdud = (prefixImp ! vImpf) + mdud;
+    mamdUd = mkStrong mafcUl mdd
+  }  in verbGeminate madd madad mudd mudid amudd amdud umadd umdad Umdud mudd' mamdUd;
 
 patGem1 : Vowel => Pattern =
   table {
@@ -449,8 +459,9 @@ v1defective : Root3 -> Vowel -> Verb =
 	armu = "َ" + rmu ;
 	urma = mkDefective ufca rmy ;
     eirmi = prefixImp ! vowel + rmi;
-    eirmu = prefixImp ! vowel + rmu
-  } in verbDef rama ramay rumi rumu rumiy armi armu urma eirmi eirmu vowel;
+    eirmu = prefixImp ! vowel + rmu;
+    marmiy = mkStrong mafcil rmy
+  } in verbDef rama ramay rumi rumu rumiy armi armu urma eirmi eirmu marmiy vowel ;
 
 patDef1 : Vowel => Pattern =
   table {
@@ -471,9 +482,10 @@ v2sound : Root3 -> Verb = \qsm ->
     qussim = mkStrong fuccil qsm ;
 	qassim  = mkStrong faccil qsm ;
     uqassim = "ُ" + qassim ;
-	uqassam = "ُ" + qassam
+	uqassam = "ُ" + qassam ;
+    muqassam = "مُ" + qassam
   } in
-  verb qassam qussim uqassim uqassam qassim ;
+  verb qassam qussim uqassim uqassam qassim muqassam;
 
 v2defective : Root3 -> Verb = \gny ->
   let {
@@ -487,7 +499,8 @@ v2defective : Root3 -> Verb = \gny ->
     gannu = mkDefective faccu gny;
     ugannu = "ُ" + gannu;
     uganna = "ُ" + ganna;
-  } in verbDef ganna gannay gunni gunnu gunniy uganni ugannu uganna ganni gannu i;
+    mugannaY = "مُ" + ganna + "ى"
+  } in verbDef ganna gannay gunni gunnu gunniy uganni ugannu uganna ganni gannu mugannaY i;
 
 v3sound : Root3 -> Verb = 
   \tbc ->
@@ -497,7 +510,8 @@ v3sound : Root3 -> Verb =
     tAbic = mkStrong fAcil tbc ;
     utAbic  = "ُ" + tAbic ;
     utAbac = mkStrong ufAcal tbc ;
-  } in verb tAbac twbic utAbic utAbac tAbic;
+    mutAbac = "م" + utAbac  
+  } in verb tAbac twbic utAbic utAbac tAbic mutAbac;
 
 v4sound : Root3 -> Verb =
   \qnc ->
@@ -506,9 +520,10 @@ v4sound : Root3 -> Verb =
     euqnic = mkStrong eufcil qnc;
     uqnic = mkStrong ufcil qnc;
     uqnac = mkStrong ufcal qnc;
-    eaqnic = mkStrong eafcil qnc
+    eaqnic = mkStrong eafcil qnc;
+    muqnac = "م" + uqnac
   } in 
-  verb eaqnac euqnic uqnic uqnac eaqnic ;
+  verb eaqnac euqnic uqnic uqnac eaqnic muqnac;
 
 v4defective : Root3 -> Verb = \cTy ->
   let {
@@ -525,7 +540,8 @@ v4defective : Root3 -> Verb = \cTy ->
     ucTa = "ُ" + cTa;
     eacTi = "أَ" + cTi;
     eacTu = "أَ" + cTu;
-  } in verbDef eacTa eacTay eucTi eucTu eucTiy ucTi ucTu ucTa eacTi eacTu i;
+    mucTaY = "م" + ucTa +"ى"
+  } in verbDef eacTa eacTay eucTi eucTu eucTiy ucTi ucTu ucTa eacTi eacTu mucTaY i;
 
 v5sound : Root3 -> Verb = 
   \nfs ->
@@ -534,7 +550,8 @@ v5sound : Root3 -> Verb =
     tunuffis = mkStrong tufuccil nfs ;
     atanaffas  = "َ" + tanaffas ;
     utanaffas = "ُ" + tanaffas ;
-  } in verb tanaffas tunuffis atanaffas utanaffas tanaffas ;
+    mutanaffas = "م" + tanaffas
+  } in verb tanaffas tunuffis atanaffas utanaffas tanaffas mutanaffas;
 
 v6sound : Root3 -> Verb = 
   \fqm ->
@@ -543,7 +560,8 @@ v6sound : Root3 -> Verb =
     tufUqim = mkStrong tufUcil fqm ;
     atafAqam = "َ" + tafAqam ;
     utafAqam = "ُ" + tafAqam ;
-  } in verb tafAqam tufUqim atafAqam utafAqam tafAqam ;
+    mutafAqam = "م" + utafAqam
+  } in verb tafAqam tufUqim atafAqam utafAqam tafAqam mutafAqam;
 
 v8sound : Root3 -> Verb = 
   \rbT ->
@@ -555,7 +573,8 @@ v8sound : Root3 -> Verb =
     artabiT = "َ" + rtabiT ;
     urtabaT  = "ُ" + rtabaT ;
     eirtabiT = "إِ" + rtabiT ;
-  } in verb eirtabaT eurtubiT artabiT urtabaT eirtabiT;
+    murtabaT =  "م" + urtabaT
+  } in verb eirtabaT eurtubiT artabiT urtabaT eirtabiT murtabaT;
 
 patV1Perf : Vowel => Pattern =
   table {
@@ -649,7 +668,8 @@ patHollowImp : (_,_ :Str) -> Gender => Number => Str =\xaf,xAf ->
 
 --Nominal Morphology
 
-  adj : Str -> Gender => NTable  =
+--takes the adjective lemma and gives the Posit table
+  positAdj : Str -> Gender => NTable  =
     \kabIr ->
     let kabIra = kabIr + "َة" in 
     table {
@@ -657,21 +677,22 @@ patHollowImp : (_,_ :Str) -> Gender => Number => Str =\xaf,xAf ->
       Fem  => sndf kabIra
     };
   
-  clr : Str -> Str -> Str -> Gender => NTable =
+  clr : Str -> Str -> Str -> AForm => Str =
     \aHmar,HamrA',Humr ->
     table {
-      Masc => table {
-        Sg => indeclN aHmar;
-        Dl => dual aHmar;
-        Pl => sing Humr
+      APosit Masc n d c => case n of {
+        Sg => indeclN aHmar ! d ! c ;
+        Dl => dual aHmar ! d ! c ;
+        Pl => sing Humr ! d ! c
         };
-      Fem  => table {
-        Sg => indeclN HamrA';
-        Dl => dual ((tk 2 HamrA') + "و");
-        Pl => sing Humr
-        }
+      APosit Fem n d c => case n of {
+        Sg => indeclN HamrA'  ! d ! c;
+        Dl => dual ((tk 2 HamrA') + "و") ! d ! c;
+        Pl => sing Humr ! d ! c
+        };
+      AComp d c => indeclN aHmar ! d ! c 
     };
-
+  
   -- indeclinable nominal word (mamnuu3 mina S-Sarf)
   indeclN : Str -> State => Case => Str =
     \aHmar -> \\s,c => Al!s + aHmar + indecl!c;
@@ -770,7 +791,7 @@ patHollowImp : (_,_ :Str) -> Gender => Number => Str =\xaf,xAf ->
       };
         
 
-    --declection 2 (ends in yaa') of the singular or broken plural words
+    --declection 2 (ends in yaa') 
     dec2sg : State => Case => Str = 
       table {
         Indef => 
@@ -785,7 +806,7 @@ patHollowImp : (_,_ :Str) -> Gender => Number => Str =\xaf,xAf ->
           }
       };
 
-    --declection 3 (ending in alif) of the singular or broken plural words
+    --declention 3 (ending in alif)
     dec3sg : State => Case => Str = 
       table {
         Indef => 
@@ -886,7 +907,8 @@ patHollowImp : (_,_ :Str) -> Gender => Number => Str =\xaf,xAf ->
         _ => Def             --Lkitaabu
       };
 
-    --FIXME needs testing, should be wrong!
+
+    --FIXME needs testing
     nounCase : Case -> Size -> State -> Case = 
       \c,size,s -> 
       case <size,s> of {
@@ -914,13 +936,17 @@ patHollowImp : (_,_ :Str) -> Gender => Number => Str =\xaf,xAf ->
         _ => s 
       };
 
-    --some determiners act as adjectives modifying the noun they count
-    detAsAdj : Bool -> Size -> State -> Bool = \isNum,s,d ->
-      case <isNum,s,d> of {
-        <False,_,_> => False; --this doesn't hold for non-numerals
-        <True,_,Def> => True; --definite numbers act as adjectives
-        <True,Two,_> => True; --numerals one and two always adjectives
-        <True,One,_> => True; --numerals one and two always adjectives
+    -- in a NP, sometimes the common noun preceedes the determiner
+    -- e.g. some determiners act as adjectives modifying the noun they count
+    -- "the three children, two children"
+    -- e.g. possesive pronouns: his book (kitaabuhu"
+    cnB4det : Bool -> Bool -> Size -> State -> Bool = \isPron,isNum,s,d ->
+      case <isPron,isNum,s,d> of {
+        <True,_,_,_> => True;
+        <_,False,_,_> => False; --non-numerals
+        <_,True,_,Def> => True; --definite numbers act as adjectives
+        <_,True,Two,_> => True; --numerals one and two always adjectives
+        <_,True,One,_> => True; --numerals one and two always adjectives
         _ => False          
       };
     
@@ -958,7 +984,10 @@ patHollowImp : (_,_ :Str) -> Gender => Number => Str =\xaf,xAf ->
       s : Species => Gender => Case => Str ; 
       d : State; 
       n : Size; 
-      isNum : Bool 
+      isNum : Bool;
+      -- for genitive pronouns (suffixes). if true, then "cn ++ det" 
+      --should be used instead of "det ++ cn" when constructing the NP
+      isPron : Bool 
       } ;
 
     Predet : Type = { 
@@ -1055,36 +1084,60 @@ patHollowImp : (_,_ :Str) -> Gender => Number => Str =\xaf,xAf ->
 
     Size = One | Two | ThreeTen | Teen | NonTeen | Hundreds | None ;
     DForm = unit | ten ;
+    CardOrd = NCard | NOrd ;
 
   oper
-    --digits 3 to 10: take the digit in masculine form and 
-    --calculates the whole table 
+    --digits 1, 3 - 10: take the lemmas of the card ords & in masculine 
+    --form and calculates the whole table 
 
-    num1_10 : Str -> { s : DForm => Gender => State => Case => Str } =
-      \xams ->
-      let xamsa = xams + "َة" in { 
-        s= table {
+    regNum : Str -> Str -> 
+      {s : DForm => CardOrd => Gender => State => Case => Str} = 
+      \xams,xAmis ->
+      let { xamsa = xams + "َة";
+            xAmisa = xAmis +  "َة"} in 
+      mkNum xamsa xAmis xAmisa;
+
+    mkNum : Str -> Str -> Str ->
+      {s : DForm => CardOrd => Gender => State => Case => Str} = 
+      \wAhid,awwal,Ula ->
+      let { wAhida = wAhid + "َة"} in
+      { s= table {
           unit => table {
-            Masc => \\s,c => (sing xams) ! s ! c ;
-            Fem => \\s,c => Al ! s + xamsa + dec1sg ! s ! c --we know it's dec1
-          };
-          ten => \\_,s,c => Al ! s + xams + m_pl ! Indef ! c
+            NCard => table {
+              Masc => \\s,c => (sing wAhid) ! s ! c ;
+              --all fem are first declension:
+              Fem => \\s,c => Al ! s + wAhida + dec1sg ! s ! c 
+              };
+            NOrd => table {
+              Masc => \\s,c => Al ! s + awwal + dec1sg ! s ! c;
+              Fem => \\s,c => (sing Ula) ! s ! c 
+              }
+            };
+          ten => table {
+            NCard => \\_,s,c => Al ! s + wAhid + m_pl ! Indef ! c;
+            NOrd => \\_,s,c => Al ! s + awwal + m_pl ! Indef ! c
+            }
           }
       };
 
-    num3_10 : Str ->{ s : DForm => Gender => State => Case => Str ; 
-                      n : Size } =
-      \xams ->
-      num1_10 xams ** { n = ThreeTen };
+    num3_10 : Str -> Str -> { s : DForm => CardOrd => Gender 
+                                => State => Case => Str ; n : Size } =
+      \xams,xAmis ->
+      regNum xams xAmis ** { n = ThreeTen };
 
-    num2 : { s : DForm => Gender => State => Case => Str} =
+    num2 : { s : DForm => CardOrd => Gender => State => Case => Str} =
       { s = table {
-          unit => 
-            table {
-              Masc => \\s,c => Al ! s + "ٱِثن" + dl ! s ! c ;
-              Fem => \\s,c => Al ! s + "ٱِثنَت" + dl ! s ! c 
+          unit => table {
+              NCard => table {
+                Masc => \\s,c => Al ! s + "ٱِثن" + dl ! s ! c ;
+                Fem => \\s,c => Al ! s + "ٱِثنَت" + dl ! s ! c 
+                };
+              NOrd => table {
+                Masc => \\s,c => Al ! s + "ثان" + dec2sg ! s ! c ;
+                Fem => \\s,c => Al ! s + "ثانِيَة" + dec1sg ! s ! c 
+                }
             };
-          ten => \\_,s,c => Al ! s + "عِشر" + m_pl ! Indef ! c
+          ten => \\_,_,s,c => Al ! s + "عِشر" + m_pl ! Indef ! c
           }
       };
 

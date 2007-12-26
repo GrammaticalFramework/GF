@@ -339,7 +339,7 @@ resource ParadigmsAra = open
   
   mkN3 = \n,p,q -> n ** {lock_N3 = <> ; c2 = p ; c3 = q} ;
   
-  mkNP : (_,_,_ : Str) -> PerGenNum -> NP = \ana,nI,I,pgn ->
+  mkPron : (_,_,_ : Str) -> PerGenNum -> NP = \ana,nI,I,pgn ->
     { s = 
         table {
           Nom => ana;
@@ -347,6 +347,20 @@ resource ParadigmsAra = open
           Gen => I
         };
       a = {pgn = pgn; isPron = True };
+      lock_NP = <>
+    };
+
+  -- e.g. al-jamii3, 2a7ad
+  regNP : Str -> Number -> NP = \word,n ->
+    { s = \\c => word + vowel ! c ;
+      a = {pgn = Per3 Masc n; isPron = False };
+      lock_NP = <>
+    };
+
+  -- e.g. hadha, dhaalika
+  indeclNP : Str -> Number -> NP = \word,n ->
+    { s = \\c => word ;
+      a = {pgn = Per3 Masc n; isPron = False };
       lock_NP = <>
     };
   
@@ -364,6 +378,8 @@ resource ParadigmsAra = open
           _              => havihi
         };
       d = Def;
+      isPron = False;
+      isNum = False;
       lock_Quant = <>
     };
   
@@ -377,24 +393,30 @@ resource ParadigmsAra = open
           _              => tilka
         };
       d = Def;
+      isPron = False;
+      isNum = False;
       lock_Quant = <>
     };
   
   sndA root pat =
-    let { raw = sndA' root pat } in
-    { s = \\g,n,d,c =>
+    let  raw = sndA' root pat in { 
+      s = \\af =>
         case root of {
-          _ + "؟" + _ => rectifyHmz(raw.s ! g ! n ! d ! c);
-          _ => raw.s ! g ! n ! d ! c
+          _ + "؟" + _ => rectifyHmz(raw.s ! af);
+        _ => raw.s ! af
         };
       lock_A = <>
     };
   
   sndA' : Str -> Str -> A =
     \root,pat ->
-    let { kabIr = mkWord pat root
+    let { kabIr = mkWord pat root;
+          akbar = mkWord "أَفعَل" root
     } in {
-      s = adj kabIr ;
+      s = table {
+        APosit g n d c => (positAdj kabIr) ! g ! n ! d ! c ;
+        AComp d c => (indeclN akbar) ! d ! c
+        };
       lock_A = <>
     };
   

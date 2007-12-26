@@ -8,8 +8,9 @@ flags optimize = all ;--noexpand;
       = \word,num,state -> 
       { s = \\_,_,c => word + vowel ! c ;
         n = numberToSize num;
-        d = state;
-        isNum = False
+        d = state;  --only Const is used now. check StructuralAra
+        isNum = False;
+        isPron = False
       };
     
     mkPredet : Str -> Bool -> Predet 
@@ -23,7 +24,7 @@ flags optimize = all ;--noexpand;
       };
 
    mkQuantNum : Str -> Number -> State -> { 
-      s: Species => Gender => Case => Str; n: Number; d : State; isNum : Bool} = 
+      s: Species => Gender => Case => Str; n: Number; d : State; isPron: Bool; isNum : Bool} = 
       \waHid,num,state -> 
      let waHida = waHid + "َة" in 
       { s = \\_,g,c => 
@@ -34,6 +35,7 @@ flags optimize = all ;--noexpand;
           } in Al ! state + word + dec1sg ! state ! c;
         n = num;
         d = state;
+        isPron = False;
         isNum = True
       };
     

@@ -1,7 +1,7 @@
 concrete AdverbAra of Adverb = CatAra ** open ResAra, Prelude in {
 
   lin
-    PositAdvAdj a = {s = a.s ! Masc ! Sg ! Indef ! Acc} ;
+    PositAdvAdj a = {s = a.s ! APosit Masc Sg Indef Acc} ;
 --    ComparAdvAdj cadv a np = {
 --      s = cadv.s ++ a.s ! AAdv ++ "مِنْ" ++ np.s ! Gen
 --      } ;
