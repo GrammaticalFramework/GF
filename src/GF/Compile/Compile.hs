@@ -40,6 +40,7 @@ import GF.Compile.Optimize
 import GF.Compile.Evaluate
 import GF.Compile.GrammarToCanon
 --import GF.Devel.GrammarToGFCC -----
+import GF.Devel.OptimizeGF (subexpModule,unsubexpModule)
 import GF.Canon.Share
 import GF.Canon.Subexpressions (elimSubtermsMod,unSubelimModule)
 import GF.UseGrammar.Linear (unoptimizeCanonMod) ----
@@ -202,7 +203,8 @@ compileOne opts env@((_,srcgr,cancgr0,eenv),_) file = do
     -- for compiled resource, parse and organize, then update environment
     "gfr" -> do
        sm0 <- putp ("| reading" +++ file) $ getSourceModule opts file
-       sm <- {- putp "creating indirections" $ -} ioeErr $ extendModule mos sm0
+       let sm1 = unsubexpModule sm0
+       sm <- {- putp "creating indirections" $ -} ioeErr $ extendModule mos sm1
 ---- experiment with not optimizing gfr 
 ----      sm:_  <- putp "  optimizing " $ ioeErr $ evalModule mos sm1
        let gfc = gfcFile name 
@@ -330,7 +332,8 @@ generateModuleCode opts path minfo@(name,info) = do
   --- Also for incomplete, to create timestamped gfc/gfr files
   case info of
     ModMod m | emitsGFR m && emit && nomulti -> do
-      let rminfo = if isCompilable info then minfo 
+      let rminfo = if isCompilable info 
+                   then subexpModule minfo 
                    else (name, ModMod emptyModule) 
       let (file,out) = (gfrFile pname, prGrammar (MGrammar [rminfo]))
       putp ("  wrote file" +++ file) $ ioeIO $ writeFile file $ compactPrint out
