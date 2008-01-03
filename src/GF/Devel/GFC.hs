@@ -24,7 +24,7 @@ mainGFC xx = do
       let name = justModuleName (last fs)
       let (abs,gc0) = mkCanon2gfcc opts name gr
       gc1 <- checkGFCCio gc0
-      let gc = if oElem (iOpt "noopt") opts then gc1 else optGFCC gc1
+      let gc = addParsers $ if oElem (iOpt "noopt") opts then gc1 else optGFCC gc1
       let target = targetName opts abs
       let gfccFile =  target ++ ".gfcc"
       writeFile gfccFile (printGFCC gc)

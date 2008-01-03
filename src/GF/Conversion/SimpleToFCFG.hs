@@ -13,7 +13,7 @@
 
 
 module GF.Conversion.SimpleToFCFG
-    (convertGrammar) where
+    (convertConcrete) where
 
 import GF.Infra.PrintClass
 
@@ -39,19 +39,14 @@ import Data.Maybe
 ----------------------------------------------------------------------
 -- main conversion function
 
-convertGrammar :: GFCC -> [(CId,FGrammar)]
-convertGrammar gfcc = 
-  [(cncname,convert abs_defs conc cats)
-       | cncname <- cncnames gfcc, 
-         cnc <- Map.lookup cncname (concretes gfcc),
-         let conc = Map.union (opers cnc) (lins cnc) -- "union big+small most efficient"
+convertConcrete :: Abstr -> Concr -> FGrammar
+convertConcrete abs cnc = convert abs_defs conc cats
+       where abs_defs = Map.assocs (funs abs)
+             conc = Map.union (opers cnc) (lins cnc) -- "union big+small most efficient"
              cats = lincats cnc
-  ]
-  where
-    abs_defs = Map.assocs (funs (abstract gfcc))
 
-    convert :: [(CId,(Type,Exp))] -> TermMap -> TermMap -> FGrammar
-    convert abs_defs cnc_defs cat_defs = getFGrammar (loop frulesEnv)
+convert :: [(CId,(Type,Exp))] -> TermMap -> TermMap -> FGrammar
+convert abs_defs cnc_defs cat_defs = getFGrammar (loop frulesEnv)
       where
         srules = [
           (XRule id args res (map findLinType args) (findLinType res) term) | 

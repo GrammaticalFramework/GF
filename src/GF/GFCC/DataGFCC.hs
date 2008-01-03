@@ -3,6 +3,8 @@ module GF.GFCC.DataGFCC where
 import GF.GFCC.CId
 import GF.Infra.CompactPrint
 import GF.Text.UTF8
+import GF.Formalism.FCFG
+import GF.Parsing.FCFG.PInfo
 
 import Data.Map
 import Data.List
@@ -31,7 +33,8 @@ data Concr = Concr {
   lincats :: Map CId Term,      -- lin type of a cat
   lindefs :: Map CId Term,      -- lin default of a cat
   printnames :: Map CId Term,   -- printname of a cat or a fun
-  paramlincats :: Map CId Term  -- lin type of cat, with printable param names
+  paramlincats :: Map CId Term, -- lin type of cat, with printable param names
+  parser  :: Maybe FCFPInfo     -- parser
   }
 
 data Type =
@@ -115,7 +118,6 @@ emptyGFCC = GFCC {
   abstract  = error "empty grammar, no abstract",
   concretes = empty
   }
-
 
 -- default map and filter are for Map here
 lmap = Prelude.map

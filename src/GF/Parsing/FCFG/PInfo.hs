@@ -99,6 +99,9 @@ buildFCFPInfo (grammar,startup) = -- trace (unlines [prt (x,Set.toList set) | (x
 	  grammarcats   = aElems topdownrules
 	  grammartoks   = nubsort [t | (FRule _ _ _ lins) <- grammar, lin <- elems lins, FSymTok t <- elems lin]
 
+fcfPInfoToFGrammar :: FCFPInfo -> FGrammar
+fcfPInfoToFGrammar pinfo = (elems (allRules pinfo), startupCats pinfo)
+
 ----------------------------------------------------------------------
 -- pretty-printing of statistics
 

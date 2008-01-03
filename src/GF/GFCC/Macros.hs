@@ -2,6 +2,8 @@ module GF.GFCC.Macros where
 
 import GF.GFCC.CId
 import GF.GFCC.DataGFCC
+import GF.Formalism.FCFG (FGrammar)
+import GF.Parsing.FCFG.PInfo (FCFPInfo, fcfPInfoToFGrammar)
 ----import GF.GFCC.PrintGFCC
 import Data.Map
 import Data.List
@@ -27,6 +29,12 @@ lookParamLincat gfcc lang fun =
 lookType :: GFCC -> CId -> Type
 lookType gfcc f = 
   fst $ lookMap (error $ "lookType " ++ show f) f (funs (abstract gfcc))
+
+lookParser :: GFCC -> CId -> Maybe FCFPInfo
+lookParser gfcc lang = parser $ lookMap (error "no lang") lang $ concretes gfcc
+
+lookFCFG :: GFCC -> CId -> Maybe FGrammar
+lookFCFG gfcc lang = fmap fcfPInfoToFGrammar $ lookParser gfcc lang
 
 lookGlobalFlag :: GFCC -> CId -> String
 lookGlobalFlag gfcc f = 
