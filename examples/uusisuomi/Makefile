@@ -1,7 +1,8 @@
 #LEX=Duodecim
 #LEX=Aino
 #LEX=Omat
-LEX=NSSK
+#LEX=NSSK
+LEX=Swadesh
 
 all: tests
 

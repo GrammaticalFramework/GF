@@ -1,0 +1,195 @@
+eläin eläimen eläintä eläimenä eläimeen eläimien eläimiä eläiminä eläimissä eläimiin
+
+selkä selän selkää selkänä selkään selkien selkiä selkinä selissä selkiin
+
+vatsa vatsan vatsaa vatsana vatsaan vatsojen vatsoja vatsoina vatsoissa vatsoihin
+
+lintu linnun lintua lintuna lintuun lintujen lintuja lintuina linnuissa lintuihin
+
+luu luun luuta luuna luuhun luiden luita luina luissa luihin
+
+rinta rinnan rintaa rintana rintaan rintojen rintoja rintoina rinnoissa rintoihin
+
+lapsi lapsen lasta lapsena lapseen lasten/lapsien lapsia lapsina lapsissa lapsiin
+
+pilvi pilven pilveä pilvenä pilveen pilvien pilviä pilvinä pilvissä pilviin
+
+päivä päivän päivää päivänä päivään päivien päiviä päivinä päivissä päiviin
+
+koira koiran koiraa koirana koiraan koirien koiria koirina koirissa koiriin
+
+korva korvan korvaa korvana korvaan korvien korvia korvina korvissa korviin
+
+muna munan munaa munana munaan munien munia munina munissa muniin
+
+silmä silmän silmää silmänä silmään silmien silmiä silminä silmissä silmiin
+
+höyhen höyhenen höyhentä höyhenenä höyheneen höyhenten höyheniä höyheninä höyhenissä höyheniin
+
+kynsi kynnen kynttä kyntenä kynteen kynsien kynsiä kynsinä kynsissä kynsiin
+
+tuli tulen tulta tulena tuleen tulien/tulten tulia tulina tulissa tuliin
+
+kala kalan kalaa kalana kalaan kalojen kaloja kaloina kaloissa kaloihin
+
+kukka kukan kukkaa kukkana kukkaan kukkien kukkia kukkina kukissa kukkiin
+
+jalka jalan jalkaa jalkana jalkaan jalkojen jalkoja jalkoina jaloissa jalkoihin
+
+metsä metsän metsää metsänä metsään metsien metsiä metsinä metsissä metsiin
+
+hedelmä hedelmän hedelmää hedelmänä hedelmään hedelmien hedelmiä hedelminä hedelmissä hedelmiin
+
+ruoho ruohon ruohoa ruohona ruohoon ruohojen ruohoja ruohoina ruohoissa ruohoihin
+
+sisälmys sisälmyksen sisälmystä sisälmyksenä sisälmykseen sisälmysten sisälmyksiä sisälmyksinä sisälmyksissä sisälmyksiin
+
+hius hiuksen hiusta hiuksena hiukseen hiusten hiuksia hiuksina hiuksissa hiuksiin
+
+käsi käden kättä kätenä käteen käsien käsiä käsinä käsissä käsiin
+
+pää pään päätä päänä päähän päiden päitä päinä päissä päihin
+
+sydän sydämen sydäntä sydämenä sydämeen sydämien sydämiä sydäminä sydämissä sydämiin
+
+sarvi sarven sarvea sarvena sarveen sarvien sarvia sarvina sarvissa sarviin
+
+mies miehen miestä miehenä mieheen miesten miehiä miehinä miehissä miehiin
+
+polvi polven polvea polvena polveen polvien polvia polvina polvissa polviin
+
+järvi järven järveä järvenä järveen järvien järviä järvinä järvissä järviin
+
+lehti lehden lehteä lehtenä lehteen lehtien lehtiä lehtinä lehdissä lehtiin
+
+maksa maksan maksaa maksana maksaan maksojen maksoja maksoina maksoissa maksoihin
+
+lude luteen ludetta luteena luteeseen luteiden luteita luteina luteissa luteisiin
+
+kuu kuun kuuta kuuna kuuhun kuiden kuita kuina kuissa kuihin
+
+vuori vuoren vuorta vuorena vuoreen vuorien/vuorten vuoria vuorina vuorissa vuoriin
+
+suu suun suuta suuna suuhun suiden suita suina suissa suihin
+
+nimi nimen nimeä nimenä nimeen nimien nimiä niminä nimissä nimiin
+
+niska niskan niskaa niskana niskaan niskojen niskoja niskoina niskoissa niskoihin
+
+yö yön yötä yönä yöhön öiden öitä öinä öissä öihin
+
+nenä nenän nenää nenänä nenään nenien neniä neninä nenissä neniin
+
+henkilö henkilön henkilöä henkilönä henkilöön henkilöiden/henkilöjen henkilöitä henkilöinä henkilöissä henkilöihin
+
+joki joen jokea jokena jokeen jokien jokia jokina joissa jokiin
+
+tie tien tietä tienä tiehen teiden teitä teinä teissä teihin
+
+juuri juuren juurta juurena juureen juurien/juurten juuria juurina juurissa juuriin
+
+köysi köyden köyttä köytenä köyteen köysien köysiä köysinä köysissä köysiin
+
+meri meren merta merenä mereen merien/merten meriä merinä merissä meriin
+
+siemen siemenen siementä siemenenä siemeneen siementen siemeniä siemeninä siemenissä siemeniin
+
+nahka nahkan nahkaa nahkana nahkaan nahkojen nahkoja nahkoina nahkoissa nahkoihin
+
+taivas taivaan taivasta taivaana taivaaseen taivaiden taivaita taivaina taivaissa taivaisiin
+
+käärme käärmeen käärmettä käärmeenä käärmeeseen käärmeiden käärmeitä käärmeinä käärmeissä käärmeisiin
+
+tähti tähden tähteä tähtenä tähteen tähtien tähtiä tähtinä tähdissä tähtiin
+
+keppi kepin keppiä keppinä keppiin keppien keppejä keppeinä kepeissä keppeihin
+
+kivi kiven kiveä kivenä kiveen kivien kiviä kivinä kivissä kiviin
+
+aurinko auringon aurinkoa aurinkona aurinkoon aurinkojen aurinkoja aurinkoina auringoissa aurinkoihin
+
+häntä hännän häntää häntänä häntään häntien häntiä häntinä hännissä häntiin
+
+kieli kielen kieltä kielenä kieleen kielten/kielien kieliä kielinä kielissä kieliin
+
+hammas hampaan hammasta hampaana hampaaseen hampaiden hampaita hampaina hampaissa hampaisiin
+
+puu puun puuta puuna puuhun puiden puita puina puissa puihin
+
+vaimo vaimon vaimoa vaimona vaimoon vaimojen vaimoja vaimoina vaimoissa vaimoihin
+
+tuuli tuulen tuulta tuulena tuuleen tuulten/tuulien tuulia tuulina tuulissa tuuliin
+
+siipi siiven siipeä siipenä siipeen siipien siipiä siipinä siivissä siipiin
+
+nainen naisen naista naisena naiseen naisten naisia naisina naisissa naisiin
+
+mato madon matoa matona matoon matojen matoja matoina madoissa matoihin
+
+vuosi vuoden vuotta vuotena vuoteen vuosien vuosia vuosina vuosissa vuosiin
+
+tuhka tuhkan tuhkaa tuhkana tuhkaan tuhkien tuhkia tuhkina tuhkissa tuhkiin
+
+kaarna kaarnan kaarnaa kaarnana kaarnaan kaarnojen kaarnoja kaarnoina kaarnoissa kaarnoihin
+
+veri veren verta verenä vereen verien/verten veriä verinä verissä veriin
+
+pöly pölyn pölyä pölynä pölyyn pölyjen pölyjä pölyinä pölyissä pölyihin
+
+maa maan maata maana maahan maiden maita maina maissa maihin
+
+rasva rasvan rasvaa rasvana rasvaan rasvojen rasvoja rasvoina rasvoissa rasvoihin
+
+sumu sumun sumua sumuna sumuun sumujen sumuja sumuina sumuissa sumuihin
+
+jää jään jäätä jäänä jäähän jäiden jäitä jäinä jäissä jäihin
+
+liha lihan lihaa lihana lihaan lihojen lihoja lihoina lihoissa lihoihin
+
+sade sateen sadetta sateena sateeseen sateiden sateita sateina sateissa sateisiin
+
+suola suolan suolaa suolana suolaan suolien suolia suolina suolissa suoliin
+
+hiekka hiekan hiekkaa hiekkana hiekkaan hiekkojen hiekkoja hiekkoina hiekoissa hiekkoihin
+
+savu savun savua savuna savuun savujen savuja savuina savuissa savuihin
+
+lumi lumen lunta lumena lumeen lumien lumia lumina lumissa lumiin
+
+vesi veden vettä vetenä veteen vesien vesiä vesinä vesissä vesiin
+
+paha pahan pahaa pahana pahaan pahojen pahoja pahoina pahoissa pahoihin
+
+suuri suuren suurta suurena suureen suurten/suurien suuria suurina suurissa suuriin
+
+musta mustan mustaa mustana mustaan mustien mustia mustina mustissa mustiin
+
+kylmä kylmän kylmää kylmänä kylmään kylmien kylmiä kylminä kylmissä kylmiin
+
+oikea oikean oikeaa oikeana oikeaan oikeiden oikeita oikeina oikeissa oikeisiin
+
+likainen likaisen likaista likaisena likaiseen likaisten likaisia likaisina likaisissa likaisiin
+
+kuiva kuivan kuivaa kuivana kuivaan kuivien kuivia kuivina kuivissa kuiviin
+
+tylsä tylsän tylsää tylsänä tylsään tylsien tylsiä tylsinä tylsissä tylsiin
+
+täysi täyden täyttä täytenä täyteen täysien täysiä täysinä täysissä täysiin
+
+hyvä hyvän hyvää hyvänä hyvään hyvien hyviä hyvinä hyvissä hyviin
+
+vihreä vihreän vihreää vihreänä vihreään vihreiden vihreitä vihreinä vihreissä vihreisiin
+
+raskas raskaan raskasta raskaana raskaaseen raskaiden raskaita raskaina raskaissa raskaisiin
+
+pitkä pitkän pitkää pitkänä pitkään pitkien pitkiä pitkinä pitkissä pitkiin
+
+kapea kapean kapeaa kapeana kapeaan kapeiden kapeita kapeina kapeissa kapeisiin
+
+läheinen läheisen läheistä läheisenä läheiseen läheisten läheisiä läheisinä läheisissä läheisiin
+
+uusi uuden uutta uutena uuteen uusien uusia uusina uusissa uusiin
+
+vanha vanhan vanhaa vanhana vanhaan vanhojen vanhoja vanhoina vanhoissa vanhoihin
+punainen punaisen punaista punaisena punaiseen punaisten punaisia punaisina punaisissa punaisiin
+
