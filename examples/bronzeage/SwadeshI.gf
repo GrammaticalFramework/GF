@@ -20,8 +20,8 @@ incomplete concrete SwadeshI of Swadesh = open Lang in {
 
     -- Determiners
 
-    this_Det = DetSg (SgQuant this_Quant) NoOrd ;
-    that_Det = DetSg (SgQuant that_Quant) NoOrd ;
+    this_Det = DetSg (this_Quant) NoOrd ;
+    that_Det = DetSg (that_Quant) NoOrd ;
     many_Det = Lang.many_Det ;
     some_Det = someSg_Det ;
 ----    few_Det =  few_Det ;
@@ -42,7 +42,8 @@ incomplete concrete SwadeshI of Swadesh = open Lang in {
     in_Prep = Lang.in_Prep ;
     with_Prep = Lang.with_Prep ;
     -- Numerals
-    one_Det = Lang.DetSg one_Quant NoOrd ;
+    one_Det = Lang.DetPl IndefArt 
+      (Lang.NumNumeral (num (pot2as3 (pot1as2 (pot0as1 pot01))))) NoOrd ;
     two_Num = Lang.NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n2))))) ;
     three_Num = Lang.NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n3))))) ;
     four_Num = Lang.NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n4))))) ;

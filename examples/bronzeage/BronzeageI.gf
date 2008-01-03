@@ -30,7 +30,7 @@ incomplete concrete BronzeageI of Bronzeage = open Lang in {
 
     UsePron p = Lang.UsePron p ;
     DetCN d n = Lang.DetCN d n ;
-    NumCN k cn = Lang.DetCN (DetPl (PlQuant IndefArt) k NoOrd) cn ;
+    NumCN k cn = Lang.DetCN (DetPl (IndefArt) k NoOrd) cn ;
 
     UseN n = Lang.UseN n ;
     ModCN a cn = AdjCN (PositA a) cn ;
