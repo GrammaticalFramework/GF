@@ -1,13 +1,15 @@
+#LEX=Duodecim
+#LEX=Aino
 LEX=Omat
 
 all: tests
 
 gf-files:
-	runghc MkLex.hs 0 > $(LEX)Abs.gf
-	runghc MkLex.hs 1 > $(LEX)1.gf
-	runghc MkLex.hs 2 > $(LEX)2.gf
-	runghc MkLex.hs 3 > $(LEX)3.gf
-	runghc MkLex.hs 4 > $(LEX)4.gf
+	runghc MkLex.hs 0 $(LEX) > $(LEX)Abs.gf
+	runghc MkLex.hs 1 $(LEX) > $(LEX)1.gf
+	runghc MkLex.hs 2 $(LEX) > $(LEX)2.gf
+	runghc MkLex.hs 3 $(LEX) > $(LEX)3.gf
+	runghc MkLex.hs 4 $(LEX) > $(LEX)4.gf
 
 experiments: gf-files
 	echo "gt -cat=Utt | l | wf exper1-$(LEX).txt" | gf $(LEX)1.gf

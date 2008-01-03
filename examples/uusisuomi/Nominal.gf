@@ -18,11 +18,11 @@ resource Nominal = ResFin ** open MorphoFin,Declensions,CatFin,Prelude in {
     let
       ukk = init ukko ;
       uko = weakGrade ukko ;
+      ukon = uko + "n" ;
       renka = Declensions.strongGrade (init ukko) ;
       rake = Declensions.strongGrade ukko ;
     in
     case ukko of {
-      _ + ("us" | "ys") => dLujuus ukko ;
       _ + "nen" => dNainen ukko ;
       _ + ("aa" | "ee" | "ii" | "oo" | "uu" | "yy" |"ää"|"öö") => dPuu ukko ;
       _ + ("ai" | "ei" | "oi" | "ui" | "yi" | "äi" | "öi") => dPuu ukko ;
@@ -34,8 +34,12 @@ resource Nominal = ResFin ** open MorphoFin,Declensions,CatFin,Prelude in {
       _ + ("ut" | "yt") => dRae ukko (ukk + "en") ;
       _ + ("as" | "äs") => dRae ukko (renka + last renka + "n") ;
       _ + "e" => dRae ukko (rake + "en") ;
-      _ + ("a" | "o" | "u" | "y" | "ä" | "ö") => dUkko ukko (uko + "n") ;
-      _ + "i" => dPaatti ukko (uko + "n") ;
+      _ + "s" => dJalas ukko ; 
+      _ + "i" +o@("o"|"ö") => dSilakka ukko (ukko+"n") (ukko+"it"+getHarmony o);
+      _ + "i" + "a" => dSilakka ukko (ukko + "n") (ukk + "oita") ;
+      _ + "i" + "ä" => dSilakka ukko (ukko + "n") (ukk + "öitä") ;
+      _ + ("a" | "o" | "u" | "y" | "ä" | "ö") => dUkko ukko ukon ;
+      _ + "i" => dPaatti ukko ukon ;
       _ + ("ar" | "är") => dPiennar ukko (renka + "ren") ;
       _ + "e" + ("l" | "n") => dPiennar ukko (ukko + "en") ;
       _ => dUnix ukko
@@ -47,7 +51,8 @@ resource Nominal = ResFin ** open MorphoFin,Declensions,CatFin,Prelude in {
       in
       case <ukko,ukon> of {
         <_ + ("aa" | "ee" | "ii" | "oo" | "uu" | "yy" | "ää" | "öö" | 
-              "ie" | "uo" | "yö" | "ea" | "eä"), _ + "n"> => 
+              "ie" | "uo" | "yö" | "ea" | "eä" | 
+              "ia" | "iä" | "io" | "iö"), _ + "n"> => 
            nForms1 ukko ; --- to protect
         <_ + ("a" | "o" | "u" | "y" | "ä" | "ö"), _ + "n"> => 
           dUkko ukko ukon ;  -- auto,auton
@@ -57,7 +62,8 @@ resource Nominal = ResFin ** open MorphoFin,Declensions,CatFin,Prelude in {
         <terv + "e", terv + "een"> => 
           dRae ukko (terv + "een") ;
         <nukk + "e", nuk + "en"> => dNukke ukko ukon ;
-        <_ + "s", _ + "ksen"> => dJalas ukko ; 
+        <_ + ("us" | "ys"), _ + "den"> => dLujuus ukko ;
+        <_, _ + ":n"> => dSDP ukko ;
         <_, _ + "n"> => nForms1 ukko ;
         _ => 
           Predef.error (["second argument should end in n, not"] ++ ukon)
@@ -68,12 +74,16 @@ resource Nominal = ResFin ** open MorphoFin,Declensions,CatFin,Prelude in {
         ukot = nForms2 ukko ukon ; 
       in
       case <ukko,ukon,ukkoja> of {
-
+        <_ + "ea", _ + "ean", _ + "oita"> => 
+          dSilakka ukko ukon ukkoja ;  -- idea, but not korkea
         <_ + ("aa" | "ee" | "ii" | "oo" | "uu" | "yy" | "ää" | "öö" | 
-              "ie" | "uo" | "yö" | "ea" | "eä"), _ + "n", _> => 
-          nForms1 ukko ; --- to protect
-        <_ + "a" | "ä", _ + "n", _ + ("a" | "ä")> => 
+              "ie" | "uo" | "yö" | "ea" | "eä" | 
+              "ia" | "iä" | "io" | "iö"), _ + "n"> => 
+          nForms1 ukko ; --- to protect --- how to get "dioja"?
+        <_ + "a" | "ä" | "o" | "ö", _ + "n", _ + ("a" | "ä")> => 
           dSilakka ukko ukon ukkoja ;
+        <_ + "i", _ + "n", _ + ("eita" | "eitä")> => 
+          dTohtori ukko ;
         <_, _ + "n", _ + ("a" | "ä")> => ukot ;
         _ => 
           Predef.error 

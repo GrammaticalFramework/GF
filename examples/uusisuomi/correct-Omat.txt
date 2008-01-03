@@ -10,15 +10,11 @@ maa maan maata maana maahan maiden maita maina maissa maihin
 
 paluu paluun paluuta paluuna paluuhun paluiden paluita paluina paluissa paluihin
 
-syy syyn syytä syynä syyhyn syiden syitä syinä syissä syihin
-
 pii piin piitä piinä piihin piiden piitä piinä piissä piihin
 
 hai hain haita haina haihin haiden haita haina haissa haihin
 
 tienoo tienoon tienoota tienoona tienoohon tienoiden tienoita tienoina tienoissa tienoihin
-
-suo suon suota suona suohon soiden soita soina soissa soihin
 
 yö yön yötä yönä yöhön öiden öitä öinä öissä öihin
 
@@ -185,4 +181,18 @@ mies miehen miestä miehenä mieheen miesten miehiä miehinä miehissä miehiin
 kevät kevään kevättä keväänä kevääseen keväiden keväitä keväinä keväissä keväihin/keväisiin
 
 sydän sydämen sydäntä sydämenä sydämeen sydanten/sydämien sydämiä sydäminä sydämissä sydämiin
+
+radio radion radiota radiona radioon radioiden radioita radioina radioissa radioihin
+
+neliö neliön neliötä neliönä neliöön neliöiden neliöitä neliöinä neliöissä neliöihin
+
+sammakko sammakon sammakkoa sammakkona sammakoiden sammakoita sammakkoina sammakoissa sammakkoihin
+
+asia asian asiaa asiana asiaan asioiden asioita asioina asioissa asioihin
+
+päkiä päkiän päkiää päkiänä päkiään päkiöiden päkiöitä päkiöinä päkiöissä päkiöihin
+
+idea idean ideaa ideana ideaan ideoiden ideoita ideoina ideoissa ideoihin
+
+SDP SDP:n SDP:tä SDP:nä SDP:hen SDP:iden SDP:itä SDP:inä SDP:issä SDP:ihin
 

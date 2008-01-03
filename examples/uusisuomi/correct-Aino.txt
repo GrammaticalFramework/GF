@@ -4,7 +4,7 @@ tunti tunnin tuntia tuntina tuntiin tuntien tunteja tunteina tunneissa tunteihin
 
 ‰iti ‰idin ‰iti‰ ‰itin‰ ‰itiin ‰itien ‰itej‰ ‰itein‰ ‰ideiss‰ ‰iteihin
 
-t‰hti t‰hdin t‰hti‰ t‰htin‰ t‰htiin t‰htien t‰htej‰ t‰htein‰ t‰hdeiss‰ t‰hteihin
+t‰hti t‰hden t‰hte‰ t‰hten‰ t‰hteen t‰htien t‰hti‰ t‰htin‰ t‰hdiss‰ t‰htiin
 
 puhelin puhelimen puhelinta puhelimena puhelimeen puhelimien puhelimia puhelimina puhelimissa puhelimiin
 
@@ -16,11 +16,11 @@ kulta kullan kultaa kultana kultaan kultien kultia kultina kullissa kultiin
 
 hame hameen hametta hameena hameeseen hameiden hameita hameina hameissa hameisiin
 
+pelle pellen pelle‰ pellen‰ pelleen pellien pellej‰ pellein‰ pelleiss‰ pelleihin
+
 sein‰ sein‰n sein‰‰ sein‰n‰ sein‰‰n seinien seini‰ seinin‰ seiniss‰ seiniin
 
 helma helman helmaa helmana helmaan helmojen helmoja helmoina helmoissa helmoihin
-
-hetki hetkin hetki‰ hetkin‰ hetkiin hetkien hetkej‰ hetkein‰ hetkeiss‰ hetkeihin
 
 paikka paikan paikkaa paikkana paikkaan paikkojen paikkoja paikkoina paikoissa paikkoihin
 
@@ -32,11 +32,11 @@ lauta laudan lautaa lautana lautaan lautojen lautoja lautoina laudoissa lautoihi
 
 rosvo rosvon rosvoa rosvona rosvoon rosvojen rosvoja rosvoina rosvoissa rosvoihin
 
-kivi kivin kivi‰ kivin‰ kiviin kivien kivej‰ kivein‰ kiveiss‰ kiveihin
+kivi kiven kive‰ kiven‰ kiveen kivien kivi‰ kivin‰ kiviss‰ kiviin
 
-el‰in el‰imen el‰int‰ el‰imen‰ el‰imeen el‰imien el‰imi‰ el‰imin‰ el‰imiss‰ el‰imiin
+el‰in el‰imen el‰int‰ el‰imen‰ el‰imeen el‰imien/el‰inten el‰imi‰ el‰imin‰ el‰imiss‰ el‰imiin
 
-langas lankaan langasta lankaana lankaaseen lankaiden lankaita lankaina lankaissa lankaisiin
+kangas kankaan kangasta kankaana kankaaseen kankaiden kankaita kankaina kankaissa kankaisiin
 
 tukka tukan tukkaa tukkana tukkaan tukkien tukkia tukkina tukissa tukkiin
 
@@ -56,9 +56,9 @@ yst‰v‰ yst‰v‰n yst‰v‰‰ yst‰v‰n‰ yst‰v‰‰n yst‰vien yst‰vi‰ yst‰vin‰ yst‰viss‰ yst
 
 teatteri teatterin teatteria teatterina teatteriin teatterien teattereja teattereina teattereissa teattereihin
 
-ravintola ravintolan ravintolaa ravintolana ravintolaan ravintolien ravintolia ravintolina ravintolissa ravintoliin
+ravintola ravintolan ravintolaa ravintolana ravintolaan ravintoloiden ravintoloita ravintoloina ravintoloissa ravintoloihin
 
-suuttumus suuttumuden suuttumutta suuttumutena suuttumuteen suuttumuksien suuttumuksia suuttumuksina suuttumuksissa suuttumuksiin
+suuttumus suuttumuksen suuttumusta suuttumuksena suuttumukseen suuttumusten suuttumuksia suuttumuksina suuttumuksissa suuttumuksiin
 
 laukku laukun laukkua laukkuna laukkuun laukkujen laukkuja laukkuina laukuissa laukkuihin
 
@@ -66,13 +66,13 @@ pussi pussin pussia pussina pussiin pussien pusseja pusseina pusseissa pusseihin
 
 puikko puikon puikkoa puikkona puikkoon puikkojen puikkoja puikkoina puikoissa puikkoihin
 
-rasia rasian rasiaa rasiana rasiaan rasiojen rasioja rasioina rasioissa rasioihin
+rasia rasian rasiaa rasiana rasiaan rasioiden rasioita rasioina rasioissa rasioihin
 
 takki takin takkia takkina takkiin takkien takkeja takkeina takeissa takkeihin
 
 kielto kiellon kieltoa kieltona kieltoon kieltojen kieltoja kieltoina kielloissa kieltoihin
 
-k‰si k‰sin k‰si‰ k‰sin‰ k‰siin k‰sien k‰sej‰ k‰sein‰ k‰seiss‰ k‰seihin
+k‰si k‰den k‰tt‰ k‰ten‰ k‰teen k‰sien k‰si‰ k‰sin‰ k‰siss‰ k‰siin
 
 is‰ is‰n is‰‰ is‰n‰ is‰‰n isien isi‰ isin‰ isiss‰ isiin
 
@@ -80,7 +80,7 @@ Veikka Veikan Veikkaa Veikkana Veikkaan Veikkojen Veikkoja Veikkoina Veikoissa V
 
 itku itkun itkua itkuna itkuun itkujen itkuja itkuina itkuissa itkuihin
 
-hetki hetkin hetki‰ hetkin‰ hetkiin hetkien hetkej‰ hetkein‰ hetkeiss‰ hetkeihin
+hetki hetken hetke‰ hetken‰ hetkeen hetkien hetki‰ hetkin‰ hetkiss‰ hetkiin
 
 ihminen ihmisen ihmist‰ ihmisen‰ ihmiseen ihmisten ihmisi‰ ihmisin‰ ihmisiss‰ ihmisiin
 
@@ -122,7 +122,7 @@ kello kellon kelloa kellona kelloon kellojen kelloja kelloina kelloissa kelloihi
 
 viisari viisarin viisaria viisarina viisariin viisarien viisareja viisareina viisareissa viisareihin
 
-toivotus toivotuden toivotutta toivotutena toivotuteen toivotuksien toivotuksia toivotuksina toivotuksissa toivotuksiin
+toivotus toivotuksen toivotusta toivotuksena toivotukseen toivotusten toivotuksia toivotuksina toivotuksissa toivotuksiin
 
 kemu kemun kemua kemuna kemuun kemujen kemuja kemuina kemuissa kemuihin
 
@@ -134,9 +134,9 @@ kastike kastikkeen kastiketta kastikkeena kastikkeeseen kastikkeiden kastikkeita
 
 ruoka ruoan ruokaa ruokana ruokaan ruokien ruokia ruokina ruoissa ruokiin
 
-ateria aterian ateriaa ateriana ateriaan ateriojen aterioja aterioina aterioissa aterioihin
+ateria aterian ateriaa ateriana ateriaan aterioiden aterioita aterioina aterioissa aterioihin
 
-kierros kierrosin kierrosia kierrosina kierrosiin kierrosien kierroseja kierroseina kierroseissa kierroseihin
+kierros kierroksen kierrosta kierroksena kierrokseen kierrosten kierroksia kierroksina kierroksissa kierroksiin
 
 lupa luvan lupaa lupana lupaan lupien lupia lupina luvissa lupiin
 
@@ -170,7 +170,7 @@ kerta kerran kertaa kertana kertaan kertojen kertoja kertoina kerroissa kertoihi
 
 harjoittelu harjoittelun harjoittelua harjoitteluna harjoitteluun harjoittelujen harjoitteluja harjoitteluina harjoitteluissa harjoitteluihin
 
-asia asian asiaa asiana asiaan asiojen asioja asioina asioissa asioihin
+asia asian asiaa asiana asiaan asioiden asioita asioina asioissa asioihin
 
 mieli mielin mieli‰ mielin‰ mieliin mielien mielej‰ mielein‰ mieleiss‰ mieleihin
 
@@ -184,17 +184,15 @@ koulu koulun koulua kouluna kouluun koulujen kouluja kouluina kouluissa kouluihi
 
 teht‰v‰ teht‰v‰n teht‰v‰‰ teht‰v‰n‰ teht‰v‰‰n teht‰vien teht‰vi‰ teht‰vin‰ teht‰viss‰ teht‰viin
 
-rehtori rehtorin rehtoria rehtorina rehtoriin rehtorien rehtoreja rehtoreina rehtoreissa rehtoreihin
+rehtori rehtorin rehtoria rehtorina rehtoriin rehtoreiden rehtoreita rehtoreina rehtoreissa rehtoreihin
 
 viitta viitan viittaa viittana viittaan viittojen viittoja viittoina viitoissa viittoihin
 
 hyppy hypyn hyppy‰ hyppyn‰ hyppyyn hyppyjen hyppyj‰ hyppyin‰ hypyiss‰ hyppyihin
 
-taivutus taivutuden taivututta taivututena taivututeen taivutuksien taivutuksia taivutuksina taivutuksissa taivutuksiin
+taivutus taivutuksen taivutusta taivutuksena taivutukseen taivutusten taivutuksia taivutuksina taivutuksissa taivutuksiin
 
 opettaja opettajan opettajaa opettajana opettajaan opettajien opettajia opettajina opettajissa opettajiin
 
-saavutus saavutuden saavututta saavututena saavututeen saavutuksien saavutuksia saavutuksina saavutuksissa saavutuksiin
-
-pelle pelteen pellett‰ pelteen‰ pelteeseen pelteiden pelteit‰ peltein‰ pelteiss‰ pelteisiin
+saavutus saavutuksen saavutusta saavutuksena saavutukseen saavutusten saavutuksia saavutuksina saavutuksissa saavutuksiin
 
