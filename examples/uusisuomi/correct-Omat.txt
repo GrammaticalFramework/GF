@@ -14,6 +14,8 @@ syy syyn syytä syynä syyhyn syiden syitä syinä syissä syihin
 
 pii piin piitä piinä piihin piiden piitä piinä piissä piihin
 
+hai hain haita haina haihin haiden haita haina haissa haihin
+
 tienoo tienoon tienoota tienoona tienoohon tienoiden tienoita tienoina tienoissa tienoihin
 
 suo suon suota suona suohon soiden soita soina soissa soihin
@@ -52,9 +54,9 @@ rengas renkaan rengasta renkaana renkaaseen renkaiden renkaita renkaina renkaiss
 
 taivas taivaan taivasta taivaana taivaaseen taivaiden taivaita taivaina taivaissa taivaisiin
 
-piennar pientaren piennarta pientarena pientaren piennarten pientaria pientarina pientarissa pientariin
+piennar pientaren piennarta pientarena pientareen pientarien/piennarten pientaria pientarina pientarissa pientariin
 
-sisar sisaren sisarta sisarena sisareen sisarien sisaria sisarina sisarissa sisariin
+sisar sisaren sisarta sisarena sisareen sisarien/sisarten sisaria sisarina sisarissa sisariin
 
 rae rakeen raetta rakeena rakeeseen rakeiden rakeita rakeina rakeissa rakeisiin
 
@@ -104,7 +106,7 @@ jälsi jällen jälttä jältenä jälteen jälsien jälsiä jälsinä jälsissä jälsiin
 
 korsi korren kortta kortena korteen korsien korsia korsina korsissa korsiin
 
-kuusi kuusen kuusta kuusena kuuseen kuusten kuusia kuusina kuusissa kuusiin
+kuusi kuusen kuusta kuusena kuuseen kuusten/kuusien kuusia kuusina kuusissa kuusiin
 
 saari saaren saarta saarena saareen saarten saaria saarina saarissa saariin
 
@@ -114,17 +116,17 @@ arpi arven arpea arpena arpeen arpien arpia arpina arvissa arpiin
 
 jälki jäljen jälkeä jälkenä jälkeen jälkien jälkiä jälkinä jäljissä jälkiin
 
-veitsi veitsen veistä veitsenä veitseen veisten veitsiä veitsinä veitsissä veitsiin
+veitsi veitsen veistä veitsenä veitseen veisten/veitsien veitsiä veitsinä veitsissä veitsiin
 
 meri meren merta merenä mereen merten meriä merinä merissä meriin
 
 veri veren verta verenä vereen verten veriä verinä verissä veriin
 
-pakkaus pakkauksen pakkausta pakkauksena pakkaukseen pakkauksien pakkauksia pakkauksina pakkauksissa pakkauksiin
+pakkaus pakkauksen pakkausta pakkauksena pakkaukseen pakkauksien/pakkausten pakkauksia pakkauksina pakkauksissa pakkauksiin
 
-julius juliuksen juliusta juliuksena juliukseen juliuksien juliuksia juliuksina juliuksissa juliuksiin
+julius juliuksen juliusta juliuksena juliukseen juliuksien/juliusten juliuksia juliuksina juliuksissa juliuksiin
 
-hius hiuksen hiusta hiuksena hiukseen hiuksien hiuksia hiuksina hiuksissa hiuksiin
+hius hiuksen hiusta hiuksena hiukseen hiuksien/hiusten hiuksia hiuksina hiuksissa hiuksiin
 
 paperi paperin paperia paperina paperiin papereiden papereita papereina papereissa papereihin
 
@@ -173,8 +175,6 @@ uksi uksen uksea uksena ukseen uksien uksia uksina uksissa uksiin
 sankari sankarin sankaria sankarina sankariin sankareiden sankareita sankareina sankareissa sankareihin
 
 jumala jumalan jumalaa jumalana jumalaan jumalien jumalia jumalina jumalissa jumaliin
-
-sisar sisaren sisarta sisarena sisareen sisarien sisaria sisarina sisarissa sisariin
 
 kirves kirveen kirvestä kirveenä kirveeseen kirvesten/kirveiden kirveitä kirveinä kirveissä kirveisiin/kirveihin
 
