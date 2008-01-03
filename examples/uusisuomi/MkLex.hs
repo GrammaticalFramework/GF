@@ -18,6 +18,10 @@ main = do
 --tgt = "NSK"
 src = "correct-Omat.txt"
 tgt = "Omat"
+--src = "aino.txt"
+--tgt = "Aino"
+--src = "duodecim.txt"
+--tgt = "Duodecim"
 
 initiate i = mapM_ putStrLn [
   "--# -path=.:alltenses",
@@ -83,3 +87,18 @@ mkLex 4 line = case words line of
                  "\" \"" ++ sanaa ++ "\" \"" ++ sanoja ++ "\" ;"
   _ -> return ()
 
+
+-- to initiate from a noun list
+
+mkLex 11 line = case words line of
+  _:"--":_ -> return ()
+  num:sana0:_ -> do
+    let sana = uncompound sana0
+    let nimi = "n" ++ init num ++ "_" ++ sana 
+    putStrLn $ "fun " ++ nimi ++ "_N : N ;"
+    putStrLn $ "lin " ++ nimi ++ "_N = mk1N \"" ++ sana ++ "\" ;"
+  _ -> return ()
+
+-- from sora+tie to tie
+
+uncompound = reverse . takeWhile (/= '+') . reverse

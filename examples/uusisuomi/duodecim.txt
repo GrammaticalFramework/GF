@@ -17,7 +17,7 @@ tauti
 hypertyreoosi
 karbimatsoliesi+hoito
 silmä+oire
-HYKS:
+HYKS
 endokrinologia
 poliklinikka
 häköhermo+kompressio
@@ -30,12 +30,12 @@ viitealue
 kevät
 Kauko+itä
 kuu+kausi
-1970-luku
+1970-+luku
 kalsium+arvo
 ylä+osa
 sarkoidoosi
 keuhko+kuvaus
-ACE:
+ACE
 vaihe
 aktiivisuus
 lisäkilpirauhas+hormoni
@@ -58,7 +58,7 @@ veri
 kalsium
 vuorokausi+virtsa
 kalsium+määrä
-PTH:
+PTH
 luun+tiheys
 poskiontelo+tulehdus
 ehkäisy+pilleri
@@ -79,9 +79,9 @@ reabsorptio
 luusto
 imeytyminen
 suolisto
-D-vitamiini
+D-+vitamiini
 muodostus
-CaR:
+CaR
 synteesi
 vaikutus
 syy
@@ -94,7 +94,7 @@ puhdistuma
 suhde
 kreatiniini
 poistuma
-FHH:
+FHH
 suku+historia
 mahdollisuus
 autosomi
