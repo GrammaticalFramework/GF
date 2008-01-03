@@ -14,7 +14,7 @@ poisto poiston poistoa poistona poistoon poistojen poistoja poistoina poistoissa
 
 endometrioosi endometrioosin endometrioosia endometrioosina endometrioosiin endometrioosien endometriooseja endometriooseina endometriooseissa endometriooseihin
 
-suoli suolin suolia suolina suoliin suolien suoleja suoleina suoleissa suoleihin
+suoli suolen suolta suolena suoleen suolten/suolien suolia suolina suolissa suoliin
 
 autosomi autosomin autosomia autosomina autosomiin autosomien autosomeja autosomeina autosomeissa autosomeihin
 
@@ -22,11 +22,9 @@ inkontinenssi inkontinenssin inkontinenssia inkontinenssina inkontinenssiin inko
 
 alku alun alkua alkuna alkuun alkujen alkuja alkuina aluissa alkuihin
 
-vuoto vuodon vuotoa vuotona vuotoon vuotojen vuotoja vuotoina vuodoissa vuotoihin
+tutkimus tutkimuksen tutkimusta tutkimuksena tutkimukseen tutkimusten tutkimuksia tutkimuksina tutkimuksissa tutkimuksiin
 
-tutkimus tutkimuden tutkimutta tutkimutena tutkimuteen tutkimuksien tutkimuksia tutkimuksina tutkimuksissa tutkimuksiin
-
-tulos tulosin tulosia tulosina tulosiin tulosien tuloseja tuloseina tuloseissa tuloseihin
+tulos tuloksen tulosta tuloksena tulokseen tulosten tuloksia tuloksina tuloksissa tuloksiin
 
 Basedow Basedowin Basedowia Basedowina Basedowiin Basedowien Basedoweja Basedoweina Basedoweissa Basedoweihin
 
@@ -38,31 +36,31 @@ hoito hoidon hoitoa hoitona hoitoon hoitojen hoitoja hoitoina hoidoissa hoitoihi
 
 oire oireen oiretta oireena oireeseen oireiden oireita oireina oireissa oireisiin
 
-HYKS HYKSin HYKSiä HYKSinä HYKSiin HYKSien HYKSejä HYKSeinä HYKSeissä HYKSeihin
+HYKS HYKS:n HYKS:ä HYKS:nä HYKS:ään HYKS:ien HYKS:iä HYKS:inä HYKS:issä HYKS:iin
 
-endokrinologia endokrinologian endokrinologiaa endokrinologiana endokrinologiaan endokrinologiien endokrinologiia endokrinologiina endokrinologiissa endokrinologiiin
+endokrinologia endokrinologian endokrinologiaa endokrinologiana endokrinologiaan endokrinologioiden endokrinologioita endokrinologioina endokrinologioissa endokrinologioihin
 
-poliklinikka poliklinikan poliklinikkaa poliklinikkana poliklinikkaan poliklinikkien poliklinikkia poliklinikkina poliklinikissa poliklinikkiin
+poliklinikka poliklinikan poliklinikkaa poliklinikkana poliklinikkaan poliklinikoiden poliklinikoita poliklinikkoina poliklinikoissa poliklinikkoihin
 
-kompressio kompression kompressioa kompressiona kompressioon kompressiojen kompressioja kompressioina kompressioissa kompressioihin
+kompressio kompression kompressiota kompressiona kompressioon kompressioiden kompressioita kompressioina kompressioissa kompressioihin
 
-leikkaus leikkauden leikkautta leikkautena leikkauteen leikkauksien leikkauksia leikkauksina leikkauksissa leikkauksiin
+leikkaus leikkauksen leikkausta leikkauksena leikkaukseen leikkausten leikkauksia leikkauksina leikkauksissa leikkauksiin
 
 kortisoni kortisonin kortisonia kortisonina kortisoniin kortisonien kortisoneja kortisoneina kortisoneissa kortisoneihin
 
-hyperkalsemia hyperkalsemian hyperkalsemiaa hyperkalsemiana hyperkalsemiaan hyperkalsemiojen hyperkalsemioja hyperkalsemioina hyperkalsemioissa hyperkalsemioihin
+hyperkalsemia hyperkalsemian hyperkalsemiaa hyperkalsemiana hyperkalsemiaan hyperkalsemioiden hyperkalsemioita hyperkalsemioina hyperkalsemioissa hyperkalsemioihin
 
 seerumi seerumin seerumia seerumina seerumiin seerumien seerumeja seerumeina seerumeissa seerumeihin
 
-pitoisuus pitoisuuden pitoisuutta pitoisuutena pitoisuuteen pitoisuuksien pitoisuuksia pitoisuuksina pitoisuuksissa pitoisuuksiin
+pitoisuus pitoisuuksen pitoisuusta pitoisuuksena pitoisuukseen pitoisuusten pitoisuuksia pitoisuuksina pitoisuuksissa pitoisuuksiin
 
 viitealue viitealueen viitealuetta viitealueena viitealueeseen viitealueiden viitealueita viitealueina viitealueissa viitealueisiin
 
-kevät kevätin kevätiä kevätinä kevätiin kevätien kevätejä keväteinä keväteissä keväteihin
+kevät kevään kevättä keväänä kevääseen keväiden keväitä keväinä keväissä keväihin/keväisiin
 
 itä idän itää itänä itään itien itiä itinä idissä itiin
 
-kausi kausin kausia kausina kausiin kausien kauseja kauseina kauseissa kauseihin
+kausi kauden kautta kautena kauteen kausien kausia kausina kausissa kausiin
 
 luku luvun lukua lukuna lukuun lukujen lukuja lukuina luvuissa lukuihin
 
@@ -72,9 +70,9 @@ osa osan osaa osana osaan osien osia osina osissa osiin
 
 sarkoidoosi sarkoidoosin sarkoidoosia sarkoidoosina sarkoidoosiin sarkoidoosien sarkoidooseja sarkoidooseina sarkoidooseissa sarkoidooseihin
 
-kuvaus kuvauden kuvautta kuvautena kuvauteen kuvauksien kuvauksia kuvauksina kuvauksissa kuvauksiin
+kuvaus kuvauksen kuvausta kuvauksena kuvaukseen kuvausten kuvauksia kuvauksina kuvauksissa kuvauksiin
 
-ACE ACEin ACEiä ACEinä ACEiin ACEien ACEejä ACEeinä ACEeissä ACEeihin
+ACE ACE:n ACE:tä ACE:nä ACE:hen ACE:iden ACE:itä ACE:inä ACE:issä ACE:ihin
 
 vaihe vaiheen vaihetta vaiheena vaiheeseen vaiheiden vaiheita vaiheina vaiheissa vaiheisiin
 
@@ -88,7 +86,7 @@ kontrolli kontrollin kontrollia kontrollina kontrolliin kontrollien kontrolleja 
 
 tuntuma tuntuman tuntumaa tuntumana tuntumaan tuntumien tuntumia tuntumina tuntumissa tuntumiin
 
-laboratorio laboratorion laboratorioa laboratoriona laboratorioon laboratoriojen laboratorioja laboratorioina laboratorioissa laboratorioihin
+laboratorio laboratorion laboratoriota laboratoriona laboratorioon laboratorioiden laboratorioita laboratorioina laboratorioissa laboratorioihin
 
 virhe virheen virhettä virheenä virheeseen virheiden virheitä virheinä virheissä virheisiin
 
@@ -96,23 +94,23 @@ epäily epäilyn epäilyä epäilynä epäilyyn epäilyjen epäilyjä epäilyinä epäilyissä
 
 rauhanen rauhasen rauhasta rauhasena rauhaseen rauhasten rauhasia rauhasina rauhasissa rauhasiin
 
-paratyreoidea paratyreoidean paratyreoideaa paratyreoideana paratyreoideaan paratyreoideiden paratyreoideita paratyreoideina paratyreoideissa paratyreoideisiin
+paratyreoidea paratyreoidean paratyreoideaa paratyreoideana paratyreoideaan paratyreoideoiden paratyreoideoita paratyreoideoina paratyreoideoissa paratyreoideoihin
 
 näyte näytteen näytettä näytteenä näytteeseen näytteiden näytteitä näytteinä näytteissä näytteisiin
 
-löydös löydösin löydösiä löydösinä löydösiin löydösien löydösejä löydöseinä löydöseissä löydöseihin
+löydös löydöksen löydöstä löydöksenä löydökseen löydösten löydöksiä löydöksinä löydöksissä löydöksiin
 
-hyperplasia hyperplasian hyperplasiaa hyperplasiana hyperplasiaan hyperplasiojen hyperplasioja hyperplasioina hyperplasioissa hyperplasioihin
+hyperplasia hyperplasian hyperplasiaa hyperplasiana hyperplasiaan hyperplasioiden hyperplasioita hyperplasioina hyperplasioissa hyperplasioihin
 
-lääkitys lääkityden lääkityttä lääkitytenä lääkityteen lääkityksien lääkityksiä lääkityksinä lääkityksissä lääkityksiin
+lääkitys lääkityksen lääkitystä lääkityksenä lääkitykseen lääkitysten lääkityksiä lääkityksinä lääkityksissä lääkityksiin
 
 tyroksiini tyroksiinin tyroksiinia tyroksiinina tyroksiiniin tyroksiinien tyroksiineja tyroksiineina tyroksiineissa tyroksiineihin
 
 valeraatti valeraatin valeraattia valeraattina valeraattiin valeraattien valeraatteja valeraatteina valeraateissa valeraatteihin
 
-koe koeen koetta koeena koeeseen koeiden koeita koeina koeissa koeisiin
+koe kokeen koetta kokeena kokeeseen kokeiden kokeita kokeina kokeissa kokeisiin
 
-veri verin veriä verinä veriin verien verejä vereinä vereissä vereihin
+veri veren verta verenä vereen verten/verien veriä verinä verissä veriin
 
 kalsium kalsiumin kalsiumia kalsiumina kalsiumiin kalsiumien kalsiumeja kalsiumeina kalsiumeissa kalsiumeihin
 
@@ -120,13 +118,13 @@ virtsa virtsan virtsaa virtsana virtsaan virtsojen virtsoja virtsoina virtsoissa
 
 määrä määrän määrää määränä määrään määrien määriä määrinä määrissä määriin
 
-PTH PTHin PTHiä PTHinä PTHiin PTHien PTHejä PTHeinä PTHeissä PTHeihin
+PTH PTH:n PTH:ta PTH:na PTH:hon PTH:iden PTH:ita PTH:ina PTH:issa PTH:ihin
 
 tiheys tiheyden tiheyttä tiheytenä tiheyteen tiheyksien tiheyksiä tiheyksinä tiheyksissä tiheyksiin
 
-tulehdus tulehduden tulehdutta tulehdutena tulehduteen tulehduksien tulehduksia tulehduksina tulehduksissa tulehduksiin
+tulehdus tulehduksen tulehdusta tulehduksena tulehdukseen tulehdusten tulehduksia tulehduksina tulehduksissa tulehduksiin
 
-pilleri pillerin pilleriä pillerinä pilleriin pillerien pillerejä pillereinä pillereissä pillereihin
+pilleri pillerin pilleriä pillerinä pilleriin pillereiden pillereitä pillereinä pillereissä pillereihin
 
 tuote tuotteen tuotetta tuotteena tuotteeseen tuotteiden tuotteita tuotteina tuotteissa tuotteisiin
 
@@ -134,27 +132,27 @@ valmiste valmisteen valmistetta valmisteena valmisteeseen valmisteiden valmistei
 
 diagnoosi diagnoosin diagnoosia diagnoosina diagnoosiin diagnoosien diagnooseja diagnooseina diagnooseissa diagnooseihin
 
-väsymys väsymyden väsymyttä väsymytenä väsymyteen väsymyksien väsymyksiä väsymyksinä väsymyksissä väsymyksiin
+väsymys väsymyksen väsymystä väsymyksenä väsymykseen väsymysten väsymyksiä väsymyksinä väsymyksissä väsymyksiin
 
 poikkeavuus poikkeavuuden poikkeavuutta poikkeavuutena poikkeavuuteen poikkeavuuksien poikkeavuuksia poikkeavuuksina poikkeavuuksissa poikkeavuuksiin
 
-vaihdunta vaihdunnan vaihduntaa vaihduntana vaihduntaan vaihduntien vaihduntia vaihduntina vaihdunnissa vaihduntiin
+vaihdunta vaihdunnan vaihduntaa vaihduntana vaihduntaan vaihduntojen vaihduntoja vaihduntoina vaihdunnoissa vaihduntoihin
 
-häiriö häiriön häiriöä häiriönä häiriöön häiriöjen häiriöjä häiriöinä häiriöissä häiriöihin
+häiriö häiriön häiriötä häiriönä häiriöön häiriöiden häiriöitä häiriöinä häiriöissä häiriöihin
 
 piirre piirteen piirrettä piirteenä piirteeseen piirteiden piirteitä piirteinä piirteissä piirteisiin
 
-eritys erityden erityttä eritytenä erityteen erityksien erityksiä erityksinä erityksissä erityksiin
+eritys erityksen eritystä erityksenä eritykseen eritysten erityksiä erityksinä erityksissä erityksiin
 
 raja rajan rajaa rajana rajaan rajojen rajoja rajoina rajoissa rajoihin
 
 tieto tiedon tietoa tietona tietoon tietojen tietoja tietoina tiedoissa tietoihin
 
-reseptio reseption reseptioa reseptiona reseptioon reseptiojen reseptioja reseptioina reseptioissa reseptioihin
+reseptio reseption reseptiota reseptiona reseptioon reseptioiden reseptioita reseptioina reseptioissa reseptioihin
 
 munuainen munuaisen munuaista munuaisena munuaiseen munuaisten munuaisia munuaisina munuaisissa munuaisiin
 
-reabsorptio reabsorption reabsorptioa reabsorptiona reabsorptioon reabsorptiojen reabsorptioja reabsorptioina reabsorptioissa reabsorptioihin
+reabsorptio reabsorption reabsorptiota reabsorptiona reabsorptioon reabsorptioiden reabsorptioita reabsorptioina reabsorptioissa reabsorptioihin
 
 luusto luuston luustoa luustona luustoon luustojen luustoja luustoina luustoissa luustoihin
 
@@ -164,13 +162,13 @@ suolisto suoliston suolistoa suolistona suolistoon suolistojen suolistoja suolis
 
 vitamiini vitamiinin vitamiinia vitamiinina vitamiiniin vitamiinien vitamiineja vitamiineina vitamiineissa vitamiineihin
 
-muodostus muodostuden muodostutta muodostutena muodostuteen muodostuksien muodostuksia muodostuksina muodostuksissa muodostuksiin
+muodostus muodostuksen muodostusta muodostuksena muodostukseen muodostusten muodostuksia muodostuksina muodostuksissa muodostuksiin
 
-CaR CaRin CaRia CaRina CaRiin CaRien CaReja CaReina CaReissa CaReihin
+CaR CaR:n CaR:ää CaR:nä CaR:ään CaR:ien CaR:iä CaR:inä CaR:issä CaR:iin
 
 synteesi synteesin synteesiä synteesinä synteesiin synteesien synteesejä synteeseinä synteeseissä synteeseihin
 
-vaikutus vaikutuden vaikututta vaikututena vaikututeen vaikutuksien vaikutuksia vaikutuksina vaikutuksissa vaikutuksiin
+vaikutus vaikutuksen vaikutusta vaikutuksena vaikutukseen vaikutusten vaikutuksia vaikutuksina vaikutuksissa vaikutuksiin
 
 syy syyn syytä syynä syyhyn syiden syitä syinä syissä syihin
 
@@ -180,7 +178,7 @@ sairaus sairauden sairautta sairautena sairauteen sairauksien sairauksia sairauk
 
 tausta taustan taustaa taustana taustaan taustojen taustoja taustoina taustoissa taustoihin
 
-toiminta toiminnan toimintaa toimintana toimintaan toimintien toimintia toimintina toiminnissa toimintiin
+toiminta toiminnan toimintaa toimintana toimintaan toimintojen toimintoja toimintoina toiminnoissa toimintoihin
 
 kriteeri kriteerin kriteeriä kriteerinä kriteeriin kriteerien kriteerejä kriteereinä kriteereissä kriteereihin
 
@@ -192,9 +190,9 @@ kreatiniini kreatiniinin kreatiniinia kreatiniinina kreatiniiniin kreatiniinien 
 
 poistuma poistuman poistumaa poistumana poistumaan poistumien poistumia poistumina poistumissa poistumiin
 
-FHH FHHin FHHiä FHHinä FHHiin FHHien FHHejä FHHeinä FHHeissä FHHeihin
+FHH FHH:n FHH:ta FHH:na FHH:hon FHH:iden FHH:ita FHH:ina FHH:issa FHH:ihin
 
-historia historian historiaa historiana historiaan historiien historiia historiina historiissa historiiin
+historia historian historiaa historiana historiaan historioiden historioita historioina historioissa historioihin
 
 mahdollisuus mahdollisuuden mahdollisuutta mahdollisuutena mahdollisuuteen mahdollisuuksien mahdollisuuksia mahdollisuuksina mahdollisuuksissa mahdollisuuksiin
 

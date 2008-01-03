@@ -90,7 +90,7 @@ resource Declensions = ResFin ** open MorphoFin,CatFin,Prelude in {
       (onnettom + "in" + a) (onnettom + "iss" + a) 
       (onnettom + "iin") ;
 
-
+  -- 2-syllable a/ä, o/ö, u/y
   dUkko : (_,_ : Str) -> NForms = \ukko,ukon ->
       let
         o   = last ukko ;
@@ -117,27 +117,33 @@ resource Declensions = ResFin ** open MorphoFin,CatFin,Prelude in {
         ukkoja.p2 ukkoja.p1
         ukkoina ukoissa ukkoja.p5 ; 
 
+  -- 3-syllable a/ä/o/ö
   dSilakka : (_,_,_ : Str) -> NForms = \silakka,silakan,silakoita ->
     let
-      a   = last silakka ;
+      o = last silakka ;
+      a = getHarmony o ;
       silakk = init silakka ;
       silaka = init silakan ;
       silak  = init silaka ;
+      silakkaa = silakka + case o of {
+        "o" | "ö" => "t" + a ;  -- radiota
+        _ => a                  -- sammakkoa
+        } ;
       silakoiden = case <silakoita : Str> of {
         _ + "i" + ("a" | "ä") =>                    -- asemia
-          <silakk + "ien", silakk, silak, silakk + "iin"> ;
-        _ + o@("o" | "ö") + ("ja" | "jä") =>        -- pasuunoja
-          <silakk + o + "jen",silakk + o, silak + o, silakk + o + "ihin"> ;
-        _ + o@("o" | "ö") + ("ita" | "itä") =>      -- silakoita
-          <silak + o + "iden",silakk + o, silak + o, silakk + o + "ihin"> ;
-       _   => Predef.error silakoita                    
-       } ;
-      silakkoina = silakoiden.p2 + "in" + a ; 
-      silakoissa = silakoiden.p3 + "iss" + a ;
+          <silakka+a, silakk + "ien", silakk, silak, silakk + "iin"> ;
+        _ + O@("o" | "ö") + ("ja" | "jä") =>        -- pasuunoja
+          <silakka+a,silakk+O+"jen",silakk+O, silak+O, silakk +O+ "ihin"> ;
+        _ + O@("o" | "ö") + ("ita" | "itä") =>      -- silakoita
+          <silakkaa, silak+O+"iden",silakk+O, silak+O, silakk +O+ "ihin"> ;
+        _   => Predef.error silakoita                    
+        } ;
+      silakkoina = silakoiden.p3 + "in" + a ; 
+      silakoissa = silakoiden.p4 + "iss" + a ;
     in nForms10
-      silakka silakan (silakka + a) (silakka + "n" + a) (silakka + a + "n")
-      silakoiden.p1 silakoita
-      silakkoina silakoissa silakoiden.p4 ; 
+      silakka silakan silakoiden.p1 (silakka + "n" + a) (silakka + o + "n")
+      silakoiden.p2 silakoita
+      silakkoina silakoissa silakoiden.p5 ; 
 
    dArpi : (_,_ : Str) -> NForms = \arpi,arven ->
       let
@@ -186,15 +192,24 @@ resource Declensions = ResFin ** open MorphoFin,CatFin,Prelude in {
           (rakei + "n" + a) (rakei + "ss" + a) (rakei + "siin") ; ---- sisariin
 
   dPaatti : (_,_ : Str) -> NForms = \paatti,paatin ->
-        let
-          a = vowelHarmony paatti ;
-          paatte = init paatti + "e" ;
-          paati = init paatin ;
-          paate = init paati + "e" ;
-        in nForms10
-          paatti paatin (paatti + a) (paatti + "n" + a) (paatti + "in")
-          (paatti + "en") (paatte + "j" + a) 
-          (paatte + "in" + a) (paate + "iss" + a) (paatte + "ihin") ; 
+    let
+      a = vowelHarmony paatti ;
+      paatte = init paatti + "e" ;
+      paati = init paatin ;
+      paate = init paati + "e" ;
+    in nForms10
+      paatti paatin (paatti + a) (paatti + "n" + a) (paatti + "in")
+      (paatti + "en") (paatte + "j" + a) 
+      (paatte + "in" + a) (paate + "iss" + a) (paatte + "ihin") ; 
+
+  dTohtori : (_ : Str) -> NForms = \tohtori ->
+    let
+      a = vowelHarmony tohtori ;
+      tohtor = init tohtori ;
+    in nForms10
+      tohtori (tohtori+"n") (tohtori + a) (tohtori + "n" + a) (tohtori + "in")
+      (tohtor + "eiden") (tohtor + "eit" + a) 
+      (tohtor + "ein" + a) (tohtor + "eiss" + a) (tohtor + "eihin") ; 
 
   dPiennar : (_,_ : Str) -> NForms = \piennar,pientaren ->
     let 
@@ -207,14 +222,14 @@ resource Declensions = ResFin ** open MorphoFin,CatFin,Prelude in {
       (pientar + "iss" + a) (pientar + "iin") ;
 
   dUnix : (_ : Str) -> NForms = \unix ->
-        let 
-          a = vowelHarmony unix ;
-          unixi = unix + "i" ; 
-          unixe = unix + "e" ; 
-        in nForms10
-          unix (unixi + "n") (unixi + a) (unixi + "n" + a) (unixi + "in")
-          (unixi + "en") (unixe + "j" + a) (unixe + "in" + a)
-          (unixe + "iss" + a) (unixe + "ihin") ;
+    let 
+      a = vowelHarmony unix ;
+      unixi = unix + "i" ; 
+      unixe = unix + "e" ; 
+    in nForms10
+      unix (unixi + "n") (unixi + a) (unixi + "n" + a) (unixi + "in")
+      (unixi + "en") (unixe + "j" + a) (unixe + "in" + a)
+      (unixe + "iss" + a) (unixe + "ihin") ;
 
   dNukke : (_,_ : Str) -> NForms = \nukke,nuken ->
     let
@@ -238,6 +253,41 @@ resource Declensions = ResFin ** open MorphoFin,CatFin,Prelude in {
       (jalas + "ten") (jalaksi + a) 
       (jalaksi + "n" + a) (jalaksi + "ss" + a) (jalaksi + "in") ; 
 
+  dSDP : Str -> NForms = \SDP ->
+    let 
+      c = case last SDP of {
+        "A" => 
+           <"n","ta","na","han","iden","ita","ina","issa","ihin"> ;
+        "B" | "C" | "D" | "E" | "G" | "P" | "T" | "V" | "W" => 
+           <"n","tä","nä","hen","iden","itä","inä","issä","ihin"> ;
+        "F" | "L" | "M" | "N" | "R" | "S" | "X" => 
+           <"n","ää","nä","ään","ien","iä","inä","issä","iin"> ;
+        "H" | "K" | "O" | "Å" => 
+           <"n","ta","na","hon","iden","ita","ina","issa","ihin"> ;
+        "I" | "J" => 
+           <"n","tä","nä","hin","iden","itä","inä","issä","ihin"> ;
+        "Q" | "U" => 
+           <"n","ta","na","hun","iden","ita","ina","issa","ihin"> ;
+        "Z" => 
+           <"n","aa","na","aan","ojen","oja","oina","oissa","oihin"> ;
+        "Ä" => 
+           <"n","tä","nä","hän","iden","itä","inä","issä","ihin"> ;
+        "Ö" => 
+           <"n","tä","nä","hön","iden","itä","inä","issä","ihin"> ;
+        _ => Predef.error (["illegal abbreviation"] ++ SDP)
+        } ;
+    in nForms10
+      SDP (SDP + ":" + c.p1) (SDP + ":" + c.p2) (SDP + ":" + c.p3) 
+      (SDP + ":" + c.p4) (SDP + ":" + c.p5) (SDP + ":" + c.p6) 
+      (SDP + ":" + c.p7) (SDP + ":" + c.p8) (SDP + ":" + c.p9) ;
+
+
+
+-------------------
+-- auxiliaries ----
+-------------------
+
+-- the maximal set of technical stems
 
     NForms : Type = Predef.Ints 9 => Str ;
 

@@ -5,25 +5,17 @@ import Char
 
 -- generate Finnish lexicon implementations with 1 or more 
 -- characteristic arguments
--- usage: runghc MkLex.hs 3
+-- usage: runghc MkLex.hs 3 name
 
 main = do
-  i:_ <- getArgs
+  i:tgt:_ <- getArgs
+  let src = "correct-" ++ tgt ++ ".txt"
   ss <- readFile src >>= return . filter (not . (all isSpace)) . lines
-  initiate i
+  initiate tgt i
   mapM_ (mkLex (read i) . uncurry (++)) (zip nums ss)
   putStrLn "}"
 
---src = "correct-NSK.txt"
---tgt = "NSK"
-src = "correct-Omat.txt"
-tgt = "Omat"
---src = "aino.txt"
---tgt = "Aino"
---src = "duodecim.txt"
---tgt = "Duodecim"
-
-initiate i = mapM_ putStrLn [
+initiate tgt i = mapM_ putStrLn [
   "--# -path=.:alltenses",
   "",
   header i,
