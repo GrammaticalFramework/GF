@@ -27,7 +27,6 @@ import GF.Command.PPrTree
 import GF.Data.ErrM
 
 import GF.Parsing.FCFG
-import GF.Conversion.SimpleToFCFG (convertGrammar)
 
 --import GF.Data.Operations
 --import GF.Infra.UseIO
@@ -44,7 +43,7 @@ import System.Directory (doesFileExist)
 -- Interface
 ---------------------------------------------------
 
-data MultiGrammar = MultiGrammar {gfcc :: GFCC, parsers :: [(Language,FCFPInfo)]}
+data MultiGrammar = MultiGrammar {gfcc :: GFCC}
 type Language     = String
 type Category     = String
 type Tree         = Exp
@@ -77,10 +76,7 @@ startCat   :: MultiGrammar -> Category
 
 file2grammar f = do
   gfcc <- file2gfcc f
-  return (MultiGrammar gfcc (gfcc2parsers gfcc))
-
-gfcc2parsers gfcc =
-  [(lang, buildFCFPInfo fcfg) | (CId lang,fcfg) <- convertGrammar gfcc]
+  return (MultiGrammar gfcc)
 
 file2gfcc f = do
   s <- readFileIf f
@@ -90,7 +86,7 @@ file2gfcc f = do
 linearize mgr lang = GF.GFCC.Linearize.linearize (gfcc mgr) (CId lang)
 
 parse mgr lang cat s = 
-  case lookup lang (parsers mgr) of
+  case lookParser (gfcc mgr) (CId lang) of
     Nothing    -> error "no parser"
     Just pinfo -> case parseFCF "bottomup" pinfo (CId cat) (words s) of
                     Ok x -> x
@@ -126,7 +122,7 @@ categories mgr = [c | CId c <- Map.keys (cats (abstract (gfcc mgr)))]
 
 startCat mgr = "S" ----
 
-emptyMultiGrammar = MultiGrammar emptyGFCC []
+emptyMultiGrammar = MultiGrammar emptyGFCC
 
 ------------ for internal use only
 

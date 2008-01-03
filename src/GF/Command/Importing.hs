@@ -22,10 +22,8 @@ importGrammar mgr0 opts files = do
       let name = justModuleName (last files)
       let (abs,gfcc0) = mkCanon2gfcc opts name gr
       gfcc1 <- checkGFCCio gfcc0
-      return $ if oElem (iOpt "noopt") opts then gfcc1 else optGFCC gfcc1
+      return $ addParsers $ if oElem (iOpt "noopt") opts then gfcc1 else optGFCC gfcc1
     "gfcc" -> 
       mapM file2gfcc files >>= return . foldl1 unionGFCC
   let gfcc3 = unionGFCC (gfcc mgr0) gfcc2
-  return $ MultiGrammar gfcc3 
-     (nubBy (\ (x,_) (y,_) -> x == y) (gfcc2parsers gfcc3 ++ parsers mgr0)) 
-     -- later coming parsers override
+  return $ MultiGrammar gfcc3

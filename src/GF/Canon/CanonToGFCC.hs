@@ -25,7 +25,7 @@ source2gfcc opts gf =
   let 
     (abs,gfcc) = mkCanon2gfcc opts (gfcabs gf) gf
     gfcc1 = maybe undefined id $ checkGFCCmaybe gfcc
-  in if oElem (iOpt "noopt") opts then gfcc1 else optGFCC gfcc1
+  in addParsers $ if oElem (iOpt "noopt") opts then gfcc1 else optGFCC gfcc1
 
 gfcabs gfc = 
   prt $ head $ M.allConcretes gfc $ maybe (error "no abstract") id $ 

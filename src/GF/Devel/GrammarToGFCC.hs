@@ -1,4 +1,4 @@
-module GF.Devel.GrammarToGFCC (prGrammar2gfcc,mkCanon2gfcc) where
+module GF.Devel.GrammarToGFCC (prGrammar2gfcc,mkCanon2gfcc,addParsers) where
 
 import GF.Devel.OptimizeGF (unshareModule)
 
@@ -15,6 +15,8 @@ import qualified GF.Grammar.Macros as GM
 import qualified GF.Infra.Modules as M
 import qualified GF.Infra.Option as O
 
+import GF.Conversion.SimpleToFCFG (convertConcrete)
+import GF.Parsing.FCFG.PInfo (buildFCFPInfo)
 import GF.Devel.PrGrammar
 import GF.Devel.PrintGFCC
 import GF.Devel.ModDeps
@@ -40,6 +42,12 @@ mkCanon2gfcc opts cnc gr =
   where
     abs = err error id $ M.abstractOfConcrete gr (identC cnc)
     pars = mkParamLincat gr
+
+-- Adds parsers for all concretes
+addParsers :: D.GFCC -> D.GFCC
+addParsers gfcc = gfcc { D.concretes = Map.map conv (D.concretes gfcc) }
+  where
+    conv cnc = cnc { D.parser = Just (buildFCFPInfo (convertConcrete (D.abstract gfcc) cnc)) }
 
 -- Generate GFCC from GFCM.
 -- this assumes a grammar translated by canon2canon
@@ -72,7 +80,7 @@ canon2gfcc opts pars cgr@(M.MGrammar ((a,M.ModMod abm):cms)) =
 
   cncs  = Map.fromList [mkConcr lang (i2i lang) mo | (lang,M.ModMod mo) <- cms]
   mkConcr lang0 lang mo = 
-      (lang,D.Concr flags lins opers lincats lindefs printnames params)
+      (lang,D.Concr flags lins opers lincats lindefs printnames params fcfg)
     where
       js = tree2list (M.jments mo)
       flags   = Map.fromList [(CId f,x) | Opt (f,[x]) <- M.flags mo]
@@ -90,6 +98,7 @@ canon2gfcc opts pars cgr@(M.MGrammar ((a,M.ModMod abm):cms)) =
         (Map.fromAscList [(i2i f, mkTerm tr) | (f,CncCat _ _ (Yes tr)) <- js])
       params = Map.fromAscList 
         [(i2i c, pars lang0 c) | (c,CncCat (Yes ty) _ _) <- js]
+      fcfg = Nothing
 
 i2i :: Ident -> CId
 i2i = CId . prIdent
