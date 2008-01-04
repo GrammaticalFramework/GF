@@ -1,34 +1,46 @@
-Fri Jan  4 10:50:06 CET 2008
-aarne-rantas-computer:~/GF/examples/uusisuomi aarne$ export LEX=NSSK ; make -e
+aarne-rantas-computer:~/GF/examples/uusisuomi aarne$ make
 
 NSSK
-      52 diff1.txt
-      36 diff2.txt
-      28 diff3.txt
-      21 diff4.txt
-
 Omat
-      45 diff1.txt
-      23 diff2.txt
-      14 diff3.txt
-       7 diff4.txt ruis, ainoa, vapaa, kirves, mies, kevät, sydän
+Dictionary:
+  (Aino Wuolle, Suomalais-englantilainen sanakirja, 11. painos WSOY 1973, 
+  ca. 24k Words)
+Duodecim
+Aino
 
-Dictionary 
-(Aino Wuolle, Suomalais-englantilainen sanakirja, 11. painos WSOY 1973, 
-ca. 24k Words)
-      29 diff1.txt
-      14 diff2.txt
-       1 diff3.txt päitsi-päistä
-       0 diff4.txt
+Fri Jan  4 18:24:29 CET 2008
+Aino
+   7 diff1-Aino.txt
+   2 diff2-Aino.txt
+   0 diff3-Aino.txt
+   0 diff4-Aino.txt
+
+Dictionary
+  15 diff1-Dictionary.txt
+  10 diff2-Dictionary.txt
+   1 diff3-Dictionary.txt
+   0 diff4-Dictionary.txt
 
 Duodecim
-      20 diff1.txt
-       8 diff2.txt
-       3 diff3.txt
-       1 diff4.txt kevät
+  17 diff1-Duodecim.txt
+   8 diff2-Duodecim.txt
+   3 diff3-Duodecim.txt
+   1 diff4-Duodecim.txt
 
-Aino
-       7 diff1.txt
-       2 diff2.txt
-       0 diff3.txt
-       0 diff4.txt
+NSSK
+  50 diff1-NSSK.txt
+  32 diff2-NSSK.txt
+  26 diff3-NSSK.txt
+  19 diff4-NSSK.txt
+
+Omat
+  42 diff1-Omat.txt
+  21 diff2-Omat.txt
+  14 diff3-Omat.txt
+   7 diff4-Omat.txt
+
+Swadesh
+  31 diff1-Swadesh.txt
+   7 diff2-Swadesh.txt
+   7 diff3-Swadesh.txt
+   2 diff4-Swadesh.txt
