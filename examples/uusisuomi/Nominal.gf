@@ -57,10 +57,12 @@ resource Nominal = ResFin ** open MorphoFin,Declensions,CatFin,Prelude in {
         <_ + ("a" | "o" | "u" | "y" | "ä" | "ö"), _ + "n"> => 
           dUkko ukko ukon ;  -- auto,auton
         <arp + "i", arv + "en"> => dArpi ukko ukon ;
-        <arp + "i", _ + "i" + ("a" | "ä")> =>         -- for b-w compat.
-          dArpi ukko (init (weakGrade ukko) + "en") ;
+---        <arp + "i", _ + "i" + ("a" | "ä")> =>         -- for b-w compat.
+---          dArpi ukko (init (weakGrade ukko) + "en") ;
         <terv + "e", terv + "een"> => 
-          dRae ukko (terv + "een") ;
+          dRae ukko ukon ;
+        <taiv + ("as" | "äs"), taiv + ("aan" | "ään")> => 
+          dRae ukko ukon ;
         <nukk + "e", nuk + "en"> => dNukke ukko ukon ;
         <_ + ("us" | "ys"), _ + "den"> => dLujuus ukko ;
         <_, _ + ":n"> => dSDP ukko ;
@@ -80,7 +82,7 @@ resource Nominal = ResFin ** open MorphoFin,Declensions,CatFin,Prelude in {
               "ie" | "uo" | "yö" | "ea" | "eä" | 
               "ia" | "iä" | "io" | "iö"), _ + "n"> => 
           nForms1 ukko ; --- to protect --- how to get "dioja"?
-        <_ + "a" | "ä" | "o" | "ö", _ + "n", _ + ("a" | "ä")> => 
+        <_ + ("a" | "ä" | "o" | "ö"), _ + "n", _ + ("a" | "ä")> => 
           dSilakka ukko ukon ukkoja ;
         <_ + "i", _ + "n", _ + ("eita" | "eitä")> => 
           dTohtori ukko ;

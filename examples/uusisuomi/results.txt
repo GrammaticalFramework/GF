@@ -1,0 +1,34 @@
+Fri Jan  4 10:50:06 CET 2008
+aarne-rantas-computer:~/GF/examples/uusisuomi aarne$ export LEX=NSSK ; make -e
+
+NSSK
+      52 diff1.txt
+      36 diff2.txt
+      28 diff3.txt
+      21 diff4.txt
+
+Omat
+      45 diff1.txt
+      23 diff2.txt
+      14 diff3.txt
+       7 diff4.txt ruis, ainoa, vapaa, kirves, mies, kevät, sydän
+
+Dictionary 
+(Aino Wuolle, Suomalais-englantilainen sanakirja, 11. painos WSOY 1973, 
+ca. 24k Words)
+      29 diff1.txt
+      14 diff2.txt
+       1 diff3.txt päitsi-päistä
+       0 diff4.txt
+
+Duodecim
+      20 diff1.txt
+       8 diff2.txt
+       3 diff3.txt
+       1 diff4.txt kevät
+
+Aino
+       7 diff1.txt
+       2 diff2.txt
+       0 diff3.txt
+       0 diff4.txt
