@@ -47,6 +47,5 @@ Library
     GF.GFCC.Generate
     GF.GFCC.Linearize
     GF.GFCC.Raw.AbsGFCCRaw
-    GF.GFCC.Raw.LexGFCCRaw
     GF.GFCC.Raw.ParGFCCRaw
     GF.GFCC.Raw.ConvertGFCC
