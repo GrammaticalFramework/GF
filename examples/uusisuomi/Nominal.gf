@@ -6,13 +6,49 @@ resource Nominal = ResFin ** open MorphoFin,Declensions,CatFin,Prelude in {
 
   oper
 
---  mkN = overload {
-    mk1N : (talo : Str) -> N = \s -> nForms2N (nForms1 s) ;
-    mk2N : (talo,talon : Str) -> N = \s,t -> nForms2N (nForms2 s t) ;
-    mk3N : (talo,talon,taloja : Str) -> N = \s,t,u -> nForms2N (nForms3 s t u) ;
-    mk4N : (talo,talon,taloa,taloja : Str) -> N = \s,t,u,v -> 
+  mkN : overload {
+    mkN : (talo : Str) -> N ;
+    mkN : (talo,talon : Str) -> N ;
+    mkN : (talo,talon,taloja : Str) -> N ;
+    mkN : (talo,talon,taloja,taloa : Str) -> N ;
+    mkN : (sora : Str) -> (tie : N) -> N ;
+    mkN : (oma : N) -> (tunto : N) -> N ;
+  } ;
+
+  mkA : overload {
+    mkA : Str -> A ;
+    mkA : N -> A ;
+    mkA : (hyva,parempi,paras : N) -> (hyvin,paremmin,parhaiten : Str) -> A ;
+  } ;
+
+
+  mkN = overload {
+    mkN : (talo : Str) -> N = mk1N ;
+    --  \s -> nForms2N (nForms1 s) ;
+    mkN : (talo,talon : Str) -> N = mk2N ;
+    --  \s,t -> nForms2N (nForms2 s t) ;
+    mkN : (talo,talon,taloja : Str) -> N = mk3N ;
+    --  \s,t,u -> nForms2N (nForms3 s t u) ;
+    mkN : (talo,talon,taloja,taloa : Str) -> N = mk4N ;
+    --  \s,t,u,v -> nForms2N (nForms4 s t u v) ;
+    mkN : (sora : Str) -> (tie : N) -> N = mkStrN ;
+    mkN : (oma,tunto : N) -> N = mkNN ;
+  } ;
+
+  mk1A : Str -> A = \jalo -> aForms2A (nforms2aforms (nForms1 jalo)) ;
+  mkNA : N -> A = \suuri -> aForms2A (nforms2aforms (n2nforms suuri)) ;
+
+  mk1N : (talo : Str) -> N = \s -> nForms2N (nForms1 s) ;
+  mk2N : (talo,talon : Str) -> N = \s,t -> nForms2N (nForms2 s t) ;
+  mk3N : (talo,talon,taloja : Str) -> N = \s,t,u -> nForms2N (nForms3 s t u) ;
+  mk4N : (talo,talon,taloa,taloja : Str) -> N = \s,t,u,v -> 
       nForms2N (nForms4 s t u v) ;
---  } ;
+  mkStrN : Str -> N -> N = \sora,tie -> {
+    s = \\c => sora + tie.s ! c ; lock_N = <>
+    } ;
+  mkNN : N -> N -> N = \oma,tunto -> {
+    s = \\c => oma.s ! c + tunto.s ! c ; lock_N = <>
+    } ; ---- TODO: oma in possessive suffix forms
 
   nForms1 : Str -> NForms = \ukko ->
     let
@@ -63,6 +99,8 @@ resource Nominal = ResFin ** open MorphoFin,Declensions,CatFin,Prelude in {
            nForms1 ukko ; --- to protect
         <_ + ("a" | "o" | "u" | "y" | "ä" | "ö"), _ + "n"> => 
           dUkko ukko ukon ;  -- auto,auton
+        <_ + "mpi", _ + ("emman" | "emmän")> => dSuurempi ukko ;
+        <_ + "in", _ + ("imman" | "immän")> => dSuurin ukko ;
         <arp + "i", arv + "en"> => dArpi ukko ukon ;
 ---        <arp + "i", _ + "i" + ("a" | "ä")> =>         -- for b-w compat.
 ---          dArpi ukko (init (weakGrade ukko) + "en") ;
@@ -99,11 +137,11 @@ resource Nominal = ResFin ** open MorphoFin,Declensions,CatFin,Prelude in {
            (["last arguments should end in n and a/ä, not"] ++ ukon ++ ukkoja)
       } ;
 
-    nForms4 : (_,_,_,_ : Str) -> NForms = \ukko,ukon,ukkoa,ukkoja -> 
+    nForms4 : (_,_,_,_ : Str) -> NForms = \ukko,ukon,ukkoja,ukkoa -> 
       let
         ukot = nForms3 ukko ukon ukkoja ;
       in
-      case <ukko,ukon,ukkoa,ukkoja> of {
+      case <ukko,ukon,ukkoja,ukkoa> of {
         <_,_ + "n", _ + ("a" | "ä"), _ + ("a" | "ä")> => 
           table {
             2 => ukkoa ;
@@ -112,7 +150,7 @@ resource Nominal = ResFin ** open MorphoFin,Declensions,CatFin,Prelude in {
         _ => 
           Predef.error 
             (["last arguments should end in n, a/ä, and a/ä, not"] ++ 
-            ukon ++ ukkoa ++ ukkoja)
+            ukon ++ ukkoja ++ ukkoa)
       } ;
 
 }

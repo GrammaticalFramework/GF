@@ -10,7 +10,7 @@ resource Declensions = ResFin ** open MorphoFin,CatFin,Prelude in {
     let
       lujuu = init lujuus ;
       lujuuksi = lujuu + "ksi" ;
-      a = vowelHarmony (last lujuu) ;
+      a = vowHarmony (last lujuu) ;
     in nForms10
       lujuus (lujuu + "den") (lujuu + "tt" + a) 
       (lujuu + "ten" + a) (lujuu + "teen")
@@ -19,7 +19,7 @@ resource Declensions = ResFin ** open MorphoFin,CatFin,Prelude in {
 
   dNainen : Str -> NForms = \nainen ->
     let 
-      a = vowelHarmony nainen ;
+      a = vowHarmony nainen ;
       nais = Predef.tk 3 nainen + "s"
     in nForms10
       nainen (nais + "en") (nais + "t" + a) (nais + "en" + a) (nais + "een")
@@ -28,7 +28,7 @@ resource Declensions = ResFin ** open MorphoFin,CatFin,Prelude in {
 
   dPuu : Str -> NForms = \puu ->
     let
-      a = vowelHarmony puu ;
+      a = vowHarmony puu ;
       pui = init puu + "i" ;
       u = last puu ;
     in nForms10
@@ -39,7 +39,7 @@ resource Declensions = ResFin ** open MorphoFin,CatFin,Prelude in {
   dSuo : Str -> NForms = \suo ->
     let
       o = last suo ;
-      a = vowelHarmony o ;
+      a = vowHarmony o ;
       soi = Predef.tk 2 suo + o + "i" ;
     in nForms10
       suo (suo + "n") (suo + "t" + a) (suo + "n" + a)  (suo + "h" + o + "n")
@@ -59,7 +59,7 @@ resource Declensions = ResFin ** open MorphoFin,CatFin,Prelude in {
 
   dKaunis : Str -> NForms = \kaunis ->
     let
-      a = vowelHarmony kaunis ;
+      a = vowHarmony kaunis ;
       kaunii = init kaunis + "i" ;
     in nForms10
       kaunis (kaunii + "n") (kaunis + "t" + a) 
@@ -70,7 +70,7 @@ resource Declensions = ResFin ** open MorphoFin,CatFin,Prelude in {
 
   dLiitin : (_,_ : Str) -> NForms = \liitin,liittimen ->
     let
-      a = vowelHarmony liitin ;
+      a = vowHarmony liitin ;
       liittim = Predef.tk 2 liittimen ;
     in nForms10
       liitin (liittim + "en") (liitin + "t" + a) 
@@ -81,7 +81,7 @@ resource Declensions = ResFin ** open MorphoFin,CatFin,Prelude in {
 
   dOnneton : Str -> NForms = \onneton ->
     let
-      a = vowelHarmony onneton ;
+      a = vowHarmony onneton ;
       onnettom = Predef.tk 2 onneton + "t" + last (init onneton) + "m" ;
     in nForms10
       onneton (onnettom + a + "n") (onneton + "t" + a) 
@@ -94,7 +94,7 @@ resource Declensions = ResFin ** open MorphoFin,CatFin,Prelude in {
   dUkko : (_,_ : Str) -> NForms = \ukko,ukon ->
       let
         o   = last ukko ;
-        a   = vowelHarmony o ;
+        a   = vowHarmony o ;
         ukk = init ukko ;
         uko = init ukon ;
         uk  = init uko ;
@@ -147,7 +147,7 @@ resource Declensions = ResFin ** open MorphoFin,CatFin,Prelude in {
 
    dArpi : (_,_ : Str) -> NForms = \arpi,arven ->
       let
-        a = vowelHarmony arpi ;
+        a = vowHarmony arpi ;
         arp = init arpi ;
         arv = Predef.tk 2 arven ;
         ar  = init arp ;
@@ -172,7 +172,7 @@ resource Declensions = ResFin ** open MorphoFin,CatFin,Prelude in {
 
   dRae : (_,_ : Str) -> NForms = \rae,rakeen ->
       let
-        a = vowelHarmony rae ;
+        a = vowHarmony rae ;
         rakee  = init rakeen ;
         rakei  = init rakee + "i" ;
         raetta = case <rae : Str> of {
@@ -193,7 +193,7 @@ resource Declensions = ResFin ** open MorphoFin,CatFin,Prelude in {
 
   dPaatti : (_,_ : Str) -> NForms = \paatti,paatin ->
     let
-      a = vowelHarmony paatti ;
+      a = vowHarmony paatti ;
       paatte = init paatti + "e" ;
       paati = init paatin ;
       paate = init paati + "e" ;
@@ -204,7 +204,7 @@ resource Declensions = ResFin ** open MorphoFin,CatFin,Prelude in {
 
   dTohtori : (_ : Str) -> NForms = \tohtori ->
     let
-      a = vowelHarmony tohtori ;
+      a = vowHarmony tohtori ;
       tohtor = init tohtori ;
     in nForms10
       tohtori (tohtori+"n") (tohtori + a) (tohtori + "n" + a) (tohtori + "in")
@@ -213,7 +213,7 @@ resource Declensions = ResFin ** open MorphoFin,CatFin,Prelude in {
 
   dPiennar : (_,_ : Str) -> NForms = \piennar,pientaren ->
     let 
-      a = vowelHarmony piennar ;
+      a = vowHarmony piennar ;
       pientar = Predef.tk 2 pientaren ;
     in nForms10
       piennar pientaren (piennar +"t" + a) 
@@ -223,7 +223,7 @@ resource Declensions = ResFin ** open MorphoFin,CatFin,Prelude in {
 
   dUnix : (_ : Str) -> NForms = \unix ->
     let 
-      a = vowelHarmony unix ;
+      a = vowHarmony unix ;
       unixi = unix + "i" ; 
       unixe = unix + "e" ; 
     in nForms10
@@ -233,7 +233,7 @@ resource Declensions = ResFin ** open MorphoFin,CatFin,Prelude in {
 
   dNukke : (_,_ : Str) -> NForms = \nukke,nuken ->
     let
-      a = vowelHarmony nukke ;
+      a = vowHarmony nukke ;
       nukk = init nukke ;
       nuke = init nuken ;
     in
@@ -244,7 +244,7 @@ resource Declensions = ResFin ** open MorphoFin,CatFin,Prelude in {
 
   dJalas : Str -> NForms = \jalas -> 
     let
-      a = vowelHarmony jalas ;
+      a = vowHarmony jalas ;
       jalaks = init jalas + "ks" ;
       jalaksi = jalaks + "i" ;
     in nForms10
@@ -281,6 +281,29 @@ resource Declensions = ResFin ** open MorphoFin,CatFin,Prelude in {
       (SDP + ":" + c.p4) (SDP + ":" + c.p5) (SDP + ":" + c.p6) 
       (SDP + ":" + c.p7) (SDP + ":" + c.p8) (SDP + ":" + c.p9) ;
 
+-- for adjective comparison
+
+  dSuurempi : Str -> NForms = \suurempi ->
+    let
+      a = vowHarmony suurempi ;
+      suuremp = init suurempi ;
+      suuremm = Predef.tk 2 suurempi + "m" ;
+    in nForms10
+      suurempi (suuremm + a + "n") (suuremp + a + a) 
+      (suuremp + a + "n" + a) (suuremp + a + a + "n")
+      (suuremp + "ien") (suurempi + a) 
+      (suurempi + "n" + a) (suuremm + "iss" + a) (suurempi + "in") ; 
+
+  dSuurin : Str -> NForms = \suurin ->
+    let
+      a = vowHarmony suurin ;
+      suurimm = init suurin + "mm" ;
+      suurimp = init suurimm + "p" ;
+    in nForms10
+      suurin (suurimm + a + "n") (suurin + "t" + a) 
+      (suurimp + a + "n" + a) (suurimp + a + a + "n")
+      (suurimp + "ien") (suurimp + "i" + a) 
+      (suurimp + "in" + a) (suurimm + "iss" + a) (suurimp + "iin") ; 
 
 
 -------------------
@@ -365,8 +388,60 @@ resource Declensions = ResFin ** open MorphoFin,CatFin,Prelude in {
     lock_N = <>
     } ;
 
+  n2nforms : N -> NForms = \ukko -> table {
+    0 => ukko.s ! NCase Sg Nom ;
+    1 => ukko.s ! NCase Sg Gen ;
+    2 => ukko.s ! NCase Sg Part ;
+    3 => ukko.s ! NCase Sg Ess ;
+    4 => ukko.s ! NCase Sg Illat ;
+    5 => ukko.s ! NCase Pl Gen ;
+    6 => ukko.s ! NCase Pl Part ;
+    7 => ukko.s ! NCase Pl Ess ;
+    8 => ukko.s ! NCase Pl Iness ;
+    9 => ukko.s ! NCase Pl Illat
+  } ;
 
---- This is used to analyse nouns "rae", "hake", "rengas", "laidun", etc.
+-- Adjective forms
+
+    AForms : Type = {
+      posit  : NForms ;
+      compar : NForms ;
+      superl : NForms ;
+      adv_posit, adv_compar, adv_superl : Str ;
+      } ;
+
+    aForms2A : AForms -> A = \afs -> {
+      s = table {
+        Posit => table {
+          AN n => (nForms2N afs.posit).s ! n ; 
+          AAdv => afs.adv_posit
+          } ;
+        Compar => table {
+          AN n => (nForms2N afs.compar).s ! n ; 
+          AAdv => afs.adv_compar
+          } ;
+        Superl => table {
+          AN n => (nForms2N afs.superl).s ! n ; 
+          AAdv => afs.adv_superl
+          }
+        } ;
+      lock_A = <>
+      } ;
+
+    nforms2aforms : NForms -> AForms = \nforms -> 
+      let
+        suure = init (nforms ! 1) ;
+        suur = Predef.tk 4 (nforms ! 8) ;
+      in {
+        posit = nforms ;
+        compar = dSuurempi (suure ++ "mpi") ;
+        superl = dSuurin   (suur ++ "in") ;
+        adv_posit = suure + "sti" ;
+        adv_compar = suure + "mmin" ;
+        adv_superl = suur + "immin" ;
+      } ;
+
+-- This is used to analyse nouns "rae", "hake", "rengas", "laidun", etc.
 
   strongGrade : Str -> Str = \hanke ->
     let
@@ -388,16 +463,9 @@ resource Declensions = ResFin ** open MorphoFin,CatFin,Prelude in {
       ase => ase
       } ;
 
-  part2casePl : Str -> Str * Str * Str * Str = \savia -> case savia of {
-    sav  + "i"  + a@("a" | "ä") => 
-      <sav + "ien", sav + "in" + a, sav + "iss" + a, sav + "iin"> ;
-    elio + "it" + a@("a" | "ä") => 
-      <elio + "iden", elio + "in" + a, elio + "iss" + a, elio + "ihin"> ;
-    maal + "ej" + a@("a" | "ä") => 
-      <maal + "ien", maal + "ein" + a, maal + "eiss" + a, maal + "eihin"> ;
-    talo + "j"  + a@("a" | "ä") => 
-      <talo + "jen", talo + "in" + a, talo + "iss" + a, talo + "ihin">  ;
-    _ => Predef.error (["impossible plural partitive"] ++ savia)
+  vowHarmony : Str -> Str = \s -> case s of {
+    _ + ("a" | "o" | "u") + _ => "a" ;
+    _ => "ä"
     } ;
 
 }

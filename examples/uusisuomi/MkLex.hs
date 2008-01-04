@@ -54,33 +54,33 @@ mkLex 0 line = case words line of
 mkLex 1 line = case words line of
   num:sana:_ -> do
     let nimi = "n" ++ init num ++ "_" ++ sana 
-    putStrLn $ "lin " ++ nimi ++ "_N = mk1N \"" ++ sana ++ "\" ;"
+    putStrLn $ "lin " ++ nimi ++ "_N = mkN \"" ++ sana ++ "\" ;"
   _ -> return ()
 
 mkLex 2 line = case words line of
   num:sana:sanan:_ -> do
     let nimi = "n" ++ init num ++ "_" ++ sana 
     putStrLn $ "lin " ++ nimi ++ 
-      "_N = mk2N \"" ++ sana ++ "\" \"" ++ sanan ++ "\" ;"
+      "_N = mkN \"" ++ sana ++ "\" \"" ++ sanan ++ "\" ;"
   _ -> return ()
 
 mkLex 3 line = case words line of
   num:sana:sanan:_:_:_:_:sanoja:_ -> do
     let nimi = "n" ++ init num ++ "_" ++ sana 
     putStrLn $ "lin " ++ nimi ++ 
-      "_N = mk3N \"" ++ sana ++ "\" \"" ++ sanan ++ "\" \"" ++ sanoja ++ "\" ;"
+      "_N = mkN \"" ++ sana ++ "\" \"" ++ sanan ++ "\" \"" ++ sanoja ++ "\" ;"
   _ -> return ()
 
 mkLex 4 line = case words line of
   num:sana:sanan:sanaa:_:_:_:sanoja:_ -> do
     let nimi = "n" ++ init num ++ "_" ++ sana 
     putStrLn $ "lin " ++ nimi ++ 
-      "_N = mk4N \"" ++ sana ++ "\" \"" ++ sanan ++ 
-                 "\" \"" ++ sanaa ++ "\" \"" ++ sanoja ++ "\" ;"
+      "_N = mkN \"" ++ sana ++ "\" \"" ++ sanan ++ 
+                 "\" \"" ++ sanoja ++ "\" \"" ++ sanaa ++ "\" ;"
   _ -> return ()
 
 
--- to initiate from a noun list
+-- to initiate from a noun list that has compounds
 
 mkLex 11 line = case words line of
   _:"--":_ -> return ()
@@ -88,7 +88,7 @@ mkLex 11 line = case words line of
     let sana = uncompound sana0
     let nimi = "n" ++ init num ++ "_" ++ sana 
     putStrLn $ "fun " ++ nimi ++ "_N : N ;"
-    putStrLn $ "lin " ++ nimi ++ "_N = mk1N \"" ++ sana ++ "\" ;"
+    putStrLn $ "lin " ++ nimi ++ "_N = mkN \"" ++ sana ++ "\" ;"
   _ -> return ()
 
 -- from sora+tie to tie
