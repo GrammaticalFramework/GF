@@ -21,7 +21,7 @@ import GF.GFCC.Macros
 import GF.GFCC.DataGFCC
 import GF.GFCC.CId
 import GF.GFCC.Raw.ConvertGFCC
-import GF.GFCC.Raw.ParGFCCRaw
+import GF.GFCC.Raw.CombParGFCCRaw
 import GF.Command.PPrTree
 
 import GF.Data.ErrM
