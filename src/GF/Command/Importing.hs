@@ -1,12 +1,8 @@
 module GF.Command.Importing (importGrammar) where
 
-import GF.Devel.Compile
-import GF.Devel.GrammarToGFCC
-import GF.GFCC.OptimizeGFCC
-import GF.GFCC.CheckGFCC
+import GF.Compile.API
 import GF.GFCC.DataGFCC
 import GF.GFCC.API
-import qualified GF.Command.AbsGFShell as C
 
 import GF.Devel.UseIO
 import GF.Infra.Option
@@ -17,12 +13,7 @@ import Data.List (nubBy)
 importGrammar :: MultiGrammar -> Options -> [FilePath] -> IO MultiGrammar
 importGrammar mgr0 opts files = do
   gfcc2 <- case fileSuffix (last files) of
-    s | elem s ["gf","gfo"] -> do
-      gr <- batchCompile opts files
-      let name = justModuleName (last files)
-      let (abs,gfcc0) = mkCanon2gfcc opts name gr
-      gfcc1 <- checkGFCCio gfcc0
-      return $ addParsers $ if oElem (iOpt "noopt") opts then gfcc1 else optGFCC gfcc1
+    s | elem s ["gf","gfo"] -> compileToGFCC opts files
     "gfcc" -> 
       mapM file2gfcc files >>= return . foldl1 unionGFCC
   let gfcc3 = unionGFCC (gfcc mgr0) gfcc2
