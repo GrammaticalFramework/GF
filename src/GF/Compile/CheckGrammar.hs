@@ -613,6 +613,7 @@ inferLType gr trm = case trm of
      PString _ -> True
      PInt _ -> True
      PFloat _ -> True
+     PChar -> True
      PSeq p q -> isConstPatt p && isConstPatt q
      PAlt p q -> isConstPatt p && isConstPatt q
      PRep p -> isConstPatt p
@@ -626,6 +627,7 @@ inferLType gr trm = case trm of
      PNeg p   -> inferPatt p
      PAlt p q -> checks [inferPatt p, inferPatt q]
      PSeq _ _ -> return $ typeStr
+     PChar    -> return $ typeStr
      PRep _   -> return $ typeStr
      _ -> infer (patt2term p) >>= return . snd
 

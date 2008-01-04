@@ -1,10 +1,14 @@
-#LEX=Duodecim
-#LEX=Aino
-#LEX=Omat
-#LEX=NSSK
-LEX=Swadesh
+LEX=Omat
 
-all: tests
+all: 
+	export LEX=NSSK ; make -e tests
+	export LEX=Omat ; make -e tests
+	export LEX=Swadesh ; make -e tests
+	export LEX=Dictionary ; make -e tests
+	export LEX=Duodecim ; make -e tests
+	export LEX=Aino ; make -e tests
+	cat all-diff-* >all-differences
+	cat all-differences
 
 gf-files:
 	runghc MkLex.hs 0 $(LEX) > $(LEX)Abs.gf

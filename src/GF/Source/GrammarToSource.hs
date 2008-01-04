@@ -219,6 +219,7 @@ trp p = case p of
     PSeq p q -> P.PSeq (trp p) (trp q)
     PRep p   -> P.PRep (trp p)
     PNeg p   -> P.PNeg (trp p)
+    PChar    -> P.PV (IC "C_") ---- temporary encoding
 
 
 trAssign (lab, (mty, t)) = maybe (P.LDDef x t') (\ty -> P.LDFull x (trt ty) t') mty
