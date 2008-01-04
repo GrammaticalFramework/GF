@@ -31,10 +31,17 @@ resource Nominal = ResFin ** open MorphoFin,Declensions,CatFin,Prelude in {
       _ + "is" => dKaunis ukko ;
       _ + ("i" | "u") + "n" => dLiitin ukko (renka + "men") ;
       _ + ("ton" | "tön") => dOnneton ukko ;
+      _ + "e" => dRae ukko (rake + "en") ;
       _ + ("ut" | "yt") => dRae ukko (ukk + "en") ;
       _ + ("as" | "äs") => dRae ukko (renka + last renka + "n") ;
-      _ + "e" => dRae ukko (rake + "en") ;
+      _ + ("uus" | "yys") => dLujuus ukko ;
       _ + "s" => dJalas ukko ; 
+      _ + ("a" | "e" | "i") + C_ + _ + "aja" =>  -- opettaja correct autom. 
+          dSilakka ukko (ukko + "n") (ukk + "ia") ;
+      _ + ("a" | "e" | "i" | "o" | "u") + C_ + _ + "ija" =>  
+          dSilakka ukko (ukko + "n") (ukk + "oita") ;
+      _ + ("e" | "i" | "y" | "ä" | "ö") + C_ + _ + "ijä" =>  
+          dSilakka ukko (ukko + "n") (ukk + "öitä") ;
       _ + "i" +o@("o"|"ö") => dSilakka ukko (ukko+"n") (ukko+"it"+getHarmony o);
       _ + "i" + "a" => dSilakka ukko (ukko + "n") (ukk + "oita") ;
       _ + "i" + "ä" => dSilakka ukko (ukko + "n") (ukk + "öitä") ;
@@ -52,7 +59,7 @@ resource Nominal = ResFin ** open MorphoFin,Declensions,CatFin,Prelude in {
       case <ukko,ukon> of {
         <_ + ("aa" | "ee" | "ii" | "oo" | "uu" | "yy" | "ää" | "öö" | 
               "ie" | "uo" | "yö" | "ea" | "eä" | 
-              "ia" | "iä" | "io" | "iö"), _ + "n"> => 
+              "ia" | "iä" | "io" | "iö" | "ja" | "jä"), _ + "n"> => 
            nForms1 ukko ; --- to protect
         <_ + ("a" | "o" | "u" | "y" | "ä" | "ö"), _ + "n"> => 
           dUkko ukko ukon ;  -- auto,auton

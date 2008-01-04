@@ -539,7 +539,7 @@ trLabel :: Label -> Err G.Label
 trLabel x = case x of
 
   -- this case is for bward compatibiity and should be removed
-  LIdent (IC ('v':ds)) | all isDigit ds -> return $ G.LVar $ readIntArg ds 
+  LIdent (IC ('v':ds@(_:_))) | all isDigit ds -> return $ G.LVar $ readIntArg ds 
   
   LIdent (IC s) -> return $ G.LIdent s
   LVar x   -> return $ G.LVar $ fromInteger x
@@ -572,6 +572,7 @@ transPatts p = case p of
 transPatt :: Patt -> Err G.Patt
 transPatt x = case x of
   PW  -> return G.wildPatt
+  PV (IC "C_") -> return G.PChar ---- temporary encoding
   PV id  -> liftM G.PV $ transIdent id
   PC id patts  -> liftM2 G.PC (transIdent id) (mapM transPatt patts)
   PCon id  -> liftM2 G.PC (transIdent id) (return [])
