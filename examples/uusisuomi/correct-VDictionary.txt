@@ -1,0 +1,100 @@
+aikoa aion aikoo aikovat aikokaa aiotaan aioin aikoi aikoisi aikonut aiottu
+
+alentaa alennan alentaa alentavat alentakaa alennetaan alensin alensi alentaisi alentanut alennettu
+
+ansioitua ansioidun ansioituu ansioituvat ansioitukaa ansioidutaan ansioiduin ansioitui ansioituisi ansioitunut ansioiduttu
+
+arvostaa arvostan arvostaa arvostavat arvostakaa arvostetaan arvostin arvosti arvostaisi arvostanut arvostettu
+
+avustaa avustan avustaa avustavat avustakaa avustetaan avustin avusti avustaisi avustanut avustettu
+
+dominoida dominoin dominoi dominoivat dominoikaa dominoidaan dominoin dominoi dominoisi dominoinut dominoitu
+
+elämöidä elämöin elämöi elämöivät elämöikää elämöidään elämöin elämöi elämöisi elämöinyt elämöity
+
+epäilyttää epäilytän epäilyttää epäilyttävät epäilyttäkää epäilytetään epäilytin epäilytti epäilyttäisi epäilyttänyt epäilytetty
+
+esitellä esittelen esittelee esittelevät esitelkää esitellään esittelin esitteli esittelisi esitellyt esitelty
+
+fakturoida fakturoin fakturoi fakturoivat fakturoikaa fakturoidaan fakturoin fakturoi fakturoisi fakturoinut fakturoitu
+
+halata halaan halaa halaavat halatkaa halataan halasin halasi halaisi halannut halattu
+
+harjata harjaan harjaa harjaavat harjatkaa harjataan harjasin harjasi harjaisi harjannut harjattu
+
+hengittää hengitän hengittää hengittävät hengittäkää hengitetään hengitin hengitti hengittäisi hengittänyt hengitetty
+
+hihittää hihitän hihittää hihittävät hihittäkää hihitetään hihitin hihitti hihittäisi hihittänyt hihitetty
+
+hullutella hulluttelen hulluttelee hulluttelevat hullutelkaa hullutellaan hulluttelin hullutteli hulluttelisi hullutellut hulluteltu
+
+huuhtoutua huuhtoudun huuhtoutuu huuhtoutuvat huuhtoutukaa huuhtoudutaan huuhtouduin huuhtoutui huuhtoutuisi huuhtoutunut huuhtouduttu
+
+häpäistä häpäisen häpäisee häpäisevät häpäiskää häpäistään häpäisin häpäisi häpäisisi häpäissyt häpäisty
+
+ikävystyttää ikävystytän ikävystyttää ikävystyttävät ikävystyttäkää ikävystytetään ikävystytin ikävystytti ikävystyttäisi ikävystyttänyt ikävystytetty
+
+isännöidä isännöin isännöi isännöivät isännöikää isännöidään isännöin isännöi isännöisi isännöinyt isännöity
+
+jatkua jatkun jatkuu jatkuvat jatkukaa jatkutaan jatkuin jatkui jatkuisi jatkunut jatkuttu
+
+jupista jupisen jupisee jupisevat jupiskaa jupistaan jupisin jupisi jupisisi jupissut jupistu
+
+jätättää jätätän jätättää jätättävät jätättäkää jätätetään jätätin jätätti jätättäisi jätättänyt jätätetty
+
+kalastaa kalastan kalastaa kalastavat kalastakaa kalastetaan kalastin kalasti kalastaisi kalastanut kalastettu
+
+kansoittaa kansoitan kansoittaa kansoittavat kansoittakaa kansoitetaan kansoitin kansoitti kansoittaisi kansoittanut kansoitettu
+
+kaulia kaulin kaulii kaulivat kaulikaa kaulitaan kaulin kauli kaulisi kaulinut kaulittu
+
+kellua kellun kelluu kelluvat kellukaa kellutaan kelluin kellui kelluisi kellunut kelluttu
+
+kierittää kieritän kierittää kierittävät kierittäkää kieritetään kieritin kieritti kierittäisi kierittänyt kieritetty
+
+kipinöidä kipinöin kipinöi kipinöivät kipinöikää kipinöidään kipinöin kipinöi kipinöisi kipinöinyt kipinöity
+
+kokkaroitua kokkaroidun kokkaroituu kokkaroituvat kokkaroitukaa kokkaroidutaan kokkaroiduin kokkaroitui kokkaroituisi kokkaroitunut kokkaroiduttu
+
+korjauttaa korjautan korjauttaa korjauttavat korjauttakaa korjautetaan korjautin korjautti korjauttaisi korjauttanut korjautettu
+
+kukistaa kukistan kukistaa kukistavat kukistakaa kukistetaan kukistin kukisti kukistaisi kukistanut kukistettu
+
+kuntouttaa kuntoutan kuntouttaa kuntouttavat kuntouttakaa kuntoutetaan kuntoutin kuntoutti kuntouttaisi kuntouttanut kuntoutettu
+
+kyllästyttää kyllästytän kyllästyttää kyllästyttävät kyllästyttäkää kyllästytetään kyllästytin kyllästytti kyllästyttäisi kyllästyttänyt kyllästytetty
+
+käskeä käsken käskee käskevät käskekää käsketään käskin käski käskisi käskenyt käsketty
+
+lainata lainaan lainaa lainaavat lainatkaa lainataan lainasin lainasi lainaisi lainannut lainattu
+
+laskostaa laskostan laskostaa laskostavat laskostakaa laskostetaan laskostin laskosti laskostaisi laskostanut laskostettu
+
+lihoa lihon lihoo lihovat lihokaa lihotaan lihoin lihoi lihoisi lihonut lihottu
+
+liuottaa liuotan liuottaa liuottavat liuottakaa liuotetaan liuotin liuotti liuottaisi liuottanut liuotettu
+
+luotsata luotsaan luotsaa luotsaavat luotsatkaa luotsataan luotsasin luotsasi luotsaisi luotsannut luotsattu
+
+läpäistä läpäisen läpäisee läpäisevät läpäiskää läpäistään läpäisin läpäisi läpäisisi läpäissyt läpäisty
+
+maksoittaa maksoitan maksoittaa maksoittavat maksoittakaa maksoitetaan maksoitin maksoitti maksoittaisi maksoittanut maksoitettu
+
+menestyä menestyn menestyy menestyvät menestykää menestytään menestyin menestyi menestyisi menestynyt menestytty
+
+mitätöidä mitätöin mitätöi mitätöivät mitätöikää mitätöidään mitätöin mitätöi mitätöisi mitätöinyt mitätöity
+
+muokata muokkaan muokkaa muokkaavat muokatkaa muokataan muokkasin muokkasi muokkaisi muokannut muokattu
+
+naamioida naamioin naamioi naamioivat naamioikaa naamioidaan naamioin naamioi naamioisi naamioinut naamioitu
+
+niiskuttaa niiskutan niiskuttaa niiskuttavat niiskuttakaa niiskutetaan niiskutin niiskutti niiskuttaisi niiskuttanut niiskutettu
+
+nähdä näen näkee näkevät nähkää nähdään näin näki näkisi nähnyt nähty
+
+ohjata ohjaan ohjaa ohjaavat ohjatkaa ohjataan ohjasin ohjasi ohjaisi ohjannut ohjattu
+
+opiskella opiskelen opiskelee opiskelevat opiskelkaa opiskellaan opiskelin opiskeli opiskelisi opiskellut opiskeltu
+
+paaduttaa paadutan paaduttaa paaduttavat paaduttakaa paadutetaan paadutin paadutti paaduttaisi paaduttanut paadutettu
+

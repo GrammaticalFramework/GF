@@ -57,7 +57,7 @@ mkLex "V" _ line = case words line of
   num:sana:_:_:_:_:_:_:sanan:_ -> do
     let nimi = "n" ++ init num ++ "_" ++ sana 
     putStrLn $ "lin " ++ nimi ++ 
-      "_V = mk2V <\"" ++ sana ++ "\", \"" ++ sanan ++ "\"> ;"
+      "_V = mkV \"" ++ sana ++ "\" \"" ++ sanan ++ "\" ;"
   _ -> return ()
 
 mkLex "N" 2 line = case words line of
