@@ -81,7 +81,7 @@ computeTermOpt rec gr = comp where
         h' <- comp g h
         as' <- mapM (comp g) as
         case h' of
-
+          _ | not (null [() | FV _ <- as']) -> compApp g (mkApp h' as')
           c@(QC _ _) -> do
             return $ mkApp c as'
           Q (IC "Predef") f -> do     
@@ -92,7 +92,8 @@ computeTermOpt rec gr = comp where
             let (xs,b) = termFormCnc h'
             let g' = (zip xs as') ++ g
             let as2 = drop (length xs) as'
-            b' <- comp g' b
+            let xs2 = drop (length as') xs
+            b' <- comp g' (mkAbs xs2 b)
             if null as2 then return b' else comp g (mkApp b' as2)
 
           _ -> compApp g (mkApp h' as')
