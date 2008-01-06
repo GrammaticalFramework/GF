@@ -85,6 +85,7 @@ computeTermOpt rec gr = comp where
          (_, FV as)  -> mapM (\c -> comp g (App f' c)) as >>= return . variants
          (FV fs, _)  -> mapM (\c -> comp g (App c a')) fs >>= return . variants
          (Abs x b,_) -> comp (ext x a' g) b
+
          (QC _ _,_)  -> returnC $ App f' a'
 
          (Alias _ _ d, _) -> comp g (App d a')

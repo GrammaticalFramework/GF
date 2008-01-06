@@ -5,17 +5,17 @@ import Char
 
 -- generate Finnish lexicon implementations with 1 or more 
 -- characteristic arguments
--- usage: runghc MkLex.hs 3 name
+-- usage: runghc MkLex.hs 3 cat name
 
 main = do
-  i:tgt:_ <- getArgs
+  i:cat:tgt:_ <- getArgs
   let src = "correct-" ++ tgt ++ ".txt"
   ss <- readFile src >>= return . filter (not . (all isSpace)) . lines
-  initiate tgt i
-  mapM_ (mkLex (read i) . uncurry (++)) (zip nums ss)
+  initiate tgt cat i
+  mapM_ (mkLex cat (read i) . uncurry (++)) (zip nums ss)
   putStrLn "}"
 
-initiate tgt i = mapM_ putStrLn [
+initiate tgt cat i = mapM_ putStrLn [
   "--# -path=.:alltenses",
   "",
   header i,
@@ -23,55 +23,58 @@ initiate tgt i = mapM_ putStrLn [
   ]
  where
   header i = case i of
-    "0" -> "abstract " ++ tgt ++ "Abs = Cat ** {\n\nfun testN : N -> Utt ;\n"
+    "0" -> unlines [
+      "abstract " ++ tgt ++ "Abs = Cat ** {",
+      "fun testN : N -> Utt ;",
+      "fun testV : V -> Utt ;"
+      ]
     _ -> unlines [
       "concrete " ++ tgt ++ i ++ 
-      " of " ++ tgt ++ "Abs = CatFin ** open Nominal, ResFin, Prelude in {",
+      " of " ++ tgt ++ 
+      "Abs = CatFin ** open Nominal, Verbal, ResFin, Prelude in {",
       "",
-      "lin testN talo = let t = talo.s in ss (",
-      "  t ! NCase Sg Nom ++",
-      "  t ! NCase Sg Gen ++",
-      "  t ! NCase Sg Part ++", 
-      "  t ! NCase Sg Ess ++",
-      "  t ! NCase Sg Illat ++",
-      "  t ! NCase Pl Gen ++",
-      "  t ! NCase Pl Part ++",
-      "  t ! NCase Pl Ess ++",
-      "  t ! NCase Pl Iness ++",
-      "  t ! NCase Pl Illat",
-      "  ) ;"
+      "lin testN = showN ;",
+      "lin testV = showV ;"
      ]
 
 nums = map prt [1 ..] where
   prt i = (if i < 10 then "0" else "") ++ show i ++ ". "
 
-mkLex 0 line = case words line of
+mkLex cat 0 line = case words line of
   num:sana:_ -> do
     let nimi = "n" ++ init num ++ "_" ++ sana 
-    putStrLn $ "fun " ++ nimi ++ "_N : N ;"
+    putStrLn $ "fun " ++ nimi ++ "_" ++ cat ++ " : " ++ cat ++ " ;"
   _ -> return ()
 
-mkLex 1 line = case words line of
+mkLex cat 1 line = case words line of
   num:sana:_ -> do
     let nimi = "n" ++ init num ++ "_" ++ sana 
-    putStrLn $ "lin " ++ nimi ++ "_N = mkN \"" ++ sana ++ "\" ;"
+    putStrLn $ "lin " ++ nimi ++ 
+               "_" ++ cat ++ " = mk" ++ cat ++ " \"" ++ sana ++ "\" ;"
   _ -> return ()
 
-mkLex 2 line = case words line of
+mkLex "V" _ line = case words line of
+  num:sana:_:_:_:_:_:_:sanan:_ -> do
+    let nimi = "n" ++ init num ++ "_" ++ sana 
+    putStrLn $ "lin " ++ nimi ++ 
+      "_V = mk2V <\"" ++ sana ++ "\", \"" ++ sanan ++ "\"> ;"
+  _ -> return ()
+
+mkLex "N" 2 line = case words line of
   num:sana:sanan:_ -> do
     let nimi = "n" ++ init num ++ "_" ++ sana 
     putStrLn $ "lin " ++ nimi ++ 
       "_N = mkN \"" ++ sana ++ "\" \"" ++ sanan ++ "\" ;"
   _ -> return ()
 
-mkLex 3 line = case words line of
+mkLex "N" 3 line = case words line of
   num:sana:sanan:_:_:_:_:sanoja:_ -> do
     let nimi = "n" ++ init num ++ "_" ++ sana 
     putStrLn $ "lin " ++ nimi ++ 
       "_N = mkN \"" ++ sana ++ "\" \"" ++ sanan ++ "\" \"" ++ sanoja ++ "\" ;"
   _ -> return ()
 
-mkLex 4 line = case words line of
+mkLex "N" 4 line = case words line of
   num:sana:sanan:sanaa:_:_:_:sanoja:_ -> do
     let nimi = "n" ++ init num ++ "_" ++ sana 
     putStrLn $ "lin " ++ nimi ++ 
@@ -82,7 +85,7 @@ mkLex 4 line = case words line of
 
 -- to initiate from a noun list that has compounds
 
-mkLex 11 line = case words line of
+mkLex "N" 11 line = case words line of
   _:"--":_ -> return ()
   num:sana0:_ -> do
     let sana = uncompound sana0
