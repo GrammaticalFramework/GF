@@ -21,6 +21,19 @@ resource Nominal = ResFin ** open MorphoFin,Declensions,CatFin,Prelude in {
     mkA : (hyva,parempi,paras : N) -> (hyvin,paremmin,parhaiten : Str) -> A ;
   } ;
 
+  showN : N -> Utt = \talo -> 
+    let t = talo.s in ss (
+      t ! NCase Sg Nom ++
+      t ! NCase Sg Gen ++
+      t ! NCase Sg Part ++
+      t ! NCase Sg Ess ++
+      t ! NCase Sg Illat ++
+      t ! NCase Pl Gen ++
+      t ! NCase Pl Part ++
+      t ! NCase Pl Ess ++
+      t ! NCase Pl Iness ++
+      t ! NCase Pl Illat
+      ) ** {lock_Utt = <>} ;
 
   mkN = overload {
     mkN : (talo : Str) -> N = mk1N ;

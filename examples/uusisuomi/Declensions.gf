@@ -305,6 +305,18 @@ resource Declensions = ResFin ** open MorphoFin,CatFin,Prelude in {
       (suurimp + "ien") (suurimp + "i" + a) 
       (suurimp + "in" + a) (suurimm + "iss" + a) (suurimp + "iin") ; 
 
+-- for verb participle forms
+
+  dOttanut : Str -> NForms = \ottanut ->
+    let
+      a = vowHarmony ottanut ;
+      ottane = init ottanut + "e" ;
+      ottanee = ottane + "e" ;
+    in nForms10
+      ottanut (ottanee + "n") (ottanut + "t" + a) 
+      (ottanee + "n" + a) (ottanee + "seen")
+      (ottane + "iden") (ottane + "it" + a) 
+      (ottane + "in" + a) (ottane + "iss" + a) (ottane + "isiin") ; 
 
 -------------------
 -- auxiliaries ----
@@ -455,9 +467,9 @@ resource Declensions = ResFin ** open MorphoFin,CatFin,Prelude in {
       "rr" + e => "rt" + e ;
       "ll" + a => "lt" + a ;
       h@("h" | "l") + "j" + e => h + "k" + e ; -- pohje/lahje impossible
-      ("hk" | "sk" | "sp" | "st") + _ => nke ;       -- viuhke,kuiske 
-      a + k@("k" | "p" | "t") + e@("e"|"a"|"ä"|"u"|"i")  => a + k + k + e ;
-      a + "d" + e@("e"|"a"|"ä"|"u"|"i")  => a + "t" + e ; 
+      ("tk" | "hk" | "sk" | "sp" | "st") + _ => nke ;       -- viuhke,kuiske 
+      a + k@("k"|"p"|"t") + e@("e"|"a"|"ä"|"u"|"i"|"o"|"ö")  => a + k + k + e ;
+      a + "d" + e@("e"|"a"|"ä"|"u"|"i"|"o"|"ö")  => a + "t" + e ; 
       s + a@("a" | "ä") + "e" => s + a + "ke" ;       -- säe, tae
       a + "v" + e@("e"|"a"|"ä"|"u"|"i") => a + "p" + e ;  -- taive/toive imposs
       ase => ase

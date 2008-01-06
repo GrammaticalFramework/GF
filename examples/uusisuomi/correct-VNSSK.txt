@@ -1,0 +1,90 @@
+punoa punon punoo punovat punokaa punotaan punoin punoi punoisi punonut punottu
+
+muistaa muistan muistaa muistavat muistakaa muistetaan muistin muisti muistaisi muistanut muistettu
+
+huutaa huudan huutaa huutavat huutakaa huudetaan huusin huusi huutaisi huutanut huudettu
+
+soutaa soudan soutaa soutavat soutakaa soudetaan soudin souti soutaisi soutanut soudettu
+
+puoltaa puollan puoltaa puoltavat puoltakaa puolletaan puolsin puolsi puoltaisi puoltanut puollettu
+
+murtaa murran murtaa murtavat murtakaa murretaan mursin mursi murtaisi murtanut murrettu
+
+sortaa sorran sortaa sortavat sortakaa sorretaan sorsin sorsi sortaisi sortanut sorrettu
+
+pahentaa pahennan pahentaa pahentavat pahentakaa pahennetaan pahensin pahensi pahentaisi pahentanut pahennettu
+
+kaivaa kaivan kaivaa kaivavat kaivakaa kaivetaan kaivoin kaivoi kaivaisi kaivanut kaivettu
+
+haastaa haastan haastaa haastavat haastakaa haastetaan haastoin haastoi haastaisi haastanut haastettu
+
+paistaa paistan paistaa paistavat paistakaa paistetaan paistoin paistoi paistaisi paistanut paistettu
+
+saartaa saarran saartaa saartavat saartakaa saarretaan saarsin saarsi saartaisi saartanut saarrettu
+
+laskea lasken laskee laskevat laskekaa lasketaan laskin laski laskisi laskenut laskettu
+
+tuntea tunnen tuntee tuntevat tuntekaa tunnetaan tunsin tunsi tuntisi tuntenut tunnettu
+
+potea poden potee potevat potekaa podetaan podin poti potisi potenut podettu
+
+lähteä lähden lähtee lähtevät lähtekää lähdetään lähdin lähti lähtisi lähtenyt lähdetty
+
+sallia sallin sallii sallivat sallikaa sallitaan sallin salli sallisi sallinut sallittu
+
+naida nain nai naivat naikaa naidaan nain nai naisi nainut naitu
+
+saada saan saa saavat saakaa saadaan sain sai saisi saanut saatu
+
+myydä myyn myy myyvät myykää myydään myin myi myisi myynyt myyty
+
+juoda juon juo juovat juokaa juodaan join joi joisi juonut juotu
+
+viedä vien vie vievät viekää viedään vein vei veisi vienyt viety
+
+käydä käyn käy käyvät käykää käykö kävin kävi kävisi käynyt käyty
+
+nuolaista nuolaisen nuolaisee nuolaisevat nuolaiskaa nuolaistaan nuolaisin nuolaisi nuolaisisi nuolaissut nuolaistu
+
+tulla tulen tulee tulevat tulkaa tullaan tulin tuli tulisi tullut tultu
+
+purra puren puree purevat purkaa purraan purin puri purisi purrut purtu
+
+mennä menen menee menevät menkää mennään menin meni menisi mennyt menty
+
+katsella katselen katselee katselevat katselkaa katsellaan katselin katseli katselisi katsellut katseltu
+
+arvailla arvailen arvailee arvailevat arvailkaa arvaillaan arvailin arvaili arvailisi arvaillut arvailtu
+
+haravoida haravoin haravoi haravoivat haravoikaa haravoidaan haravoin haravoi haravoisi haravoinut haravoitu
+
+valita valitsen valitse valitsevat valitkaa valitaan valitsin valitsi valitsisi valinnut valittu
+
+juosta juoksen juoksee juoksevat juoskaa juostaan juoksin juoksi juoksisi juossut juostu
+
+nähdä näen näkee näkevät nähkää nähkö näin näki näkisi nähnyt nähty
+
+aleta alenen alenee alenevat aletkaa aletaan alenin aleni alenisi alennut alettu
+
+salata salaan salaa salaavat salatkaa salataan salasin salasi salaisi salannut salattu
+
+katketa katkean katkeaa katkeavat katketkaa katketaan katkesin katkesi katkeaisi katkennut katkettu
+
+selvitä selviän selviää selviävät selvitkää selvitään selvisin selvisi selviäisi selvinnyt selvitty
+
+kohota kohoan kohoaa kohoavat kohotkaa kohotaan kohosin kohosi kohoaisi kohonnut kohottu
+
+haluta haluan haluaa haluavat halutkaa halutaan halusin halusi haluaisi halunnut haluttu
+
+palata palaan palaa palaavat palatkaa palataan palasin palasi palaisi palannut palattu
+
+kihistä kihisen kihisee kihisevät kihiskää kihistään kihisin kihisi kihisisi kihissyt kihisty
+
+rakentaa rakennan rakentaa rakentavat rakentakaa rakennetaan rakensin rakensi rakentaisi rakentanut rakennettu
+
+taitaa taidan taitaa taitavat taitakaa taidetaan taisin taisi taitaisi tainnut/taitanut taidettu
+
+antautua antaudun antautuu antautuvat antautukaa antaudutaan antauduin antautui antautuisi antautunut antauduttu
+
+kaata kaadan kaataa kaatavat kaatkaa kaatko kaasin kaasi kaataisi kaannut kaattu
+
