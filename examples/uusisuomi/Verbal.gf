@@ -9,7 +9,7 @@ resource Verbal = ResFin **
 
   mkV = overload {
     mkV : (huutaa : Str) -> V = mk1V ;
-    mkV : (huutaa,huusi : Str) -> V = \s,t -> mk2V <s,t> ;
+    mkV : (huutaa,huusi : Str) -> V = mk2V ;
   } ;
 
   showV : V -> Utt = \v -> ss (
@@ -27,8 +27,7 @@ resource Verbal = ResFin **
    ) ** {lock_Utt = <>} ;
 
   mk1V : Str -> V = \s -> vforms2V (vForms1 s) ;
-  mk2V : (_ : Str * Str) -> V = \st -> 
-    vforms2V (vForms2 st.p1 st.p2) ;
+  mk2V : (_,_ : Str) -> V = \s,t -> vforms2V (vForms2 s t) ;
 
   vForms1 : Str -> VForms = \ottaa ->
     let
@@ -45,6 +44,9 @@ resource Verbal = ResFin **
         cHukkua ottaa (ota + "n") ;
       _ + ("l" | "n" | "r") + ("taa" | "tää") => 
         cOttaa ottaa (ota + "n") (ots + "in") (ots + "i") ;
+      ("" | C_) + ("a" | "e" | "i" | "o" | "u") + C_ + _ + 
+        ("a" | "e" | "i" | "o" | "u") + _ + "aa" => 
+        cOttaa ottaa (ota + "n") (ot + "in") (ott + "i") ;
       ("" | C_) + ("a" | "e" | "i") + _ + "aa" => 
         cOttaa ottaa (ota + "n") (ot + "oin") (ott + "oi") ;
       _ + ("aa" | "ää") => 
