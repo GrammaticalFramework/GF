@@ -4,8 +4,9 @@ CAT=N
 all: nouns
 
 verbs: 
-#	export CAT=V ; export LEX=VNSSK ; make -e tests
-#	export CAT=V ; export LEX=VOmat ; make -e tests
+	export CAT=V ; export LEX=VNSSK ; make -e tests
+	export CAT=V ; export LEX=VOmat ; make -e tests
+	export CAT=V ; export LEX=VSwadesh ; make -e tests
 	export CAT=V ; export LEX=VDictionary ; make -e tests
 	cat all-diff-V* >all-differences-V
 	cat all-differences-V
