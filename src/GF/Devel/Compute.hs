@@ -76,25 +76,29 @@ computeTermOpt rec gr = comp where
        return $ Prod x a' b'
 
      -- beta-convert
-     App f a -> do
-       f' <- comp g f
-       a' <- comp g a
-       case (f',a') of
-         (Abs x b, FV as) -> 
-           mapM (\c -> comp (ext x c g) b) as >>= return . variants
-         (_, FV as)  -> mapM (\c -> comp g (App f' c)) as >>= return . variants
-         (FV fs, _)  -> mapM (\c -> comp g (App c a')) fs >>= return . variants
-         (Abs x b,_) -> comp (ext x a' g) b
-         (QC _ _,_)  -> returnC $ App f' a'
 
-         (Alias _ _ d, _) -> comp g (App d a')
+     App f a -> case appForm t of
+      (h,as) | length as > 1 -> do
+        h' <- comp g h
+        as' <- mapM (comp g) as
+        case h' of
+          _ | not (null [() | FV _ <- as']) -> compApp g (mkApp h' as')
+          c@(QC _ _) -> do
+            return $ mkApp c as'
+          Q (IC "Predef") f -> do     
+            (t',b) <- appPredefined (mkApp h' as')
+            if b then return t' else comp g t'
 
-         (S (T i cs) e,_) -> prawitz g i (flip App a') cs e
-         (S (V i cs) e,_) -> prawitzV g i (flip App a') cs e
+          Abs _ _ -> do
+            let (xs,b) = termFormCnc h'
+            let g' = (zip xs as') ++ g
+            let as2 = drop (length xs) as'
+            let xs2 = drop (length as') xs
+            b' <- comp g' (mkAbs xs2 b)
+            if null as2 then return b' else comp g (mkApp b' as2)
 
-	 _ -> do
-           (t',b) <- appPredefined (App f' a')
-           if b then return t' else comp g t'
+          _ -> compApp g (mkApp h' as')
+      _ -> compApp g t
 
      P t l | isLockLabel l -> return $ R [] 
      ---- a workaround 18/2/2005: take this away and find the reason
@@ -318,6 +322,26 @@ computeTermOpt rec gr = comp where
      _ -> composOp (comp g) t >>= returnC
 
     where
+
+     compApp g (App f a) = do
+       f' <- comp g f
+       a' <- comp g a
+       case (f',a') of
+         (Abs x b, FV as) -> 
+           mapM (\c -> comp (ext x c g) b) as >>= return . variants
+         (_, FV as)  -> mapM (\c -> comp g (App f' c)) as >>= return . variants
+         (FV fs, _)  -> mapM (\c -> comp g (App c a')) fs >>= return . variants
+         (Abs x b,_) -> comp (ext x a' g) b
+         (QC _ _,_)  -> returnC $ App f' a'
+
+         (Alias _ _ d, _) -> comp g (App d a')
+
+         (S (T i cs) e,_) -> prawitz g i (flip App a') cs e
+         (S (V i cs) e,_) -> prawitzV g i (flip App a') cs e
+
+	 _ -> do
+           (t',b) <- appPredefined (App f' a')
+           if b then return t' else comp g t'
 
      look p c
        | rec       = lookupResDef gr p c >>= comp []

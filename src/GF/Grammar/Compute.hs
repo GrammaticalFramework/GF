@@ -45,9 +45,9 @@ computeTerm = computeTermOpt False
 -- have already been computed (mainly with -optimize=noexpand in .gfr)
 
 computeTermOpt :: Bool -> SourceGrammar -> Substitution -> Term -> Err Term
-computeTermOpt rec gr = comp where
+computeTermOpt rec gr = comput True where
 
-   comp g t = ---- errIn ("subterm" +++ prt t) $ --- for debugging 
+   comput full g t = ---- errIn ("subterm" +++ prt t) $ --- for debugging 
               case t of
 
      Q (IC "Predef") _ -> return t
@@ -62,9 +62,14 @@ computeTermOpt rec gr = comp where
          _ | t == t' -> return t
          _ -> comp g t'
 
-     Abs x b -> do 
-       b' <- comp (ext x (Vr x) g) b
-       return $ Abs x b'
+     -- Abs x@(IA _) b -> do 
+     Abs x b | full -> do 
+       let (xs,b1) = termFormCnc t   
+       b' <- comp ([(x,Vr x) | x <- xs] ++ g) b1
+       return $ mkAbs xs b'
+     --  b' <- comp (ext x (Vr x) g) b
+     --  return $ Abs x b'
+     Abs _ _ -> return t -- hnf
 
      Let (x,(_,a)) b -> do
        a' <- comp g a
@@ -78,7 +83,7 @@ computeTermOpt rec gr = comp where
      -- beta-convert
      App f a -> case appForm t of
       (h,as) | length as > 1 -> do
-        h' <- comp g h
+        h' <- hnf g h
         as' <- mapM (comp g) as
         case h' of
           _ | not (null [() | FV _ <- as']) -> compApp g (mkApp h' as')
@@ -322,7 +327,7 @@ computeTermOpt rec gr = comp where
     where
 
      compApp g (App f a) = do
-       f' <- comp g f
+       f' <- hnf g f
        a' <- comp g a
        case (f',a') of
          (Abs x b, FV as) -> 
@@ -341,6 +346,9 @@ computeTermOpt rec gr = comp where
 	 _ -> do
            (t',b) <- appPredefined (App f' a')
            if b then return t' else comp g t'
+
+     hnf  = comput False
+     comp = comput True
 
      look p c
        | rec       = lookupResDef gr p c >>= comp []
