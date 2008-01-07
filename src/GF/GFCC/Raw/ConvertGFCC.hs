@@ -115,7 +115,7 @@ toFName (App f ts) = Name f (lmap toProfile ts)
       toSyntaxForest (AFlt f) = FFloat f
 
 toSymbol :: RExp -> FSymbol
-toSymbol (App (CId "proj") [c,n,l]) = FSymCat (expToInt c) (expToInt l) (expToInt n)
+toSymbol (App (CId "P") [c,n,l]) = FSymCat (expToInt c) (expToInt l) (expToInt n)
 toSymbol (AStr t) = FSymTok t
 
 toAssoc :: Ord a => (RExp -> a) -> ([RExp] -> b) -> [RExp] -> Assoc a b
@@ -276,7 +276,7 @@ fromFName n = case n of
     fromSyntaxForest (FFloat f) = AFlt f
 
 fromSymbol :: FSymbol -> RExp
-fromSymbol (FSymCat c l n) = app "proj" [intToExp c, intToExp n, intToExp l]
+fromSymbol (FSymCat c l n) = app "P" [intToExp c, intToExp n, intToExp l]
 fromSymbol (FSymTok t) = AStr t
 
 -- ** Utilities
