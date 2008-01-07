@@ -9,7 +9,7 @@
 --
 resource ResAra = PatternsAra ** open  Prelude, Predef   in {
 
-  flags optimize=all ;
+  flags optimize=noexpand ;
 
 
   param     

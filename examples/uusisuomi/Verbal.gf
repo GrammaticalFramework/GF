@@ -75,12 +75,16 @@ resource Verbal = ResFin **
     case <huutaa,huusi> of {
       <_ + ("taa" | "tää"), _ + ("oi" | "öi")> =>
         cOttaa huutaa (huuda + "n") autoin huusi ;
-      <_ + ("taa" | "tää"), _ + "i"> =>
+      <_ + ("aa" | "ää"), _ + "i"> =>
         cOttaa huutaa (huuda + "n") huusin huusi ;
       <_ + ("eta" | "etä"), _ + "eni"> =>
         cValjeta huutaa huusi ;
-      <_ + ("ita" | "itä"), _ + "isi"> =>
+      <_ + ("sta" | "stä"), _ + "si"> =>
+        vForms1 huutaa ; -- pestä, halkaista
+      <_ + ("ta" | "tä"), _ + "si"> =>
         cPudota huutaa huusi ;
+      <_ + ("lla" | "llä"), _ + "li"> =>
+        cKuunnella huutaa huusin ;
       _ => vForms1 huutaa
       } ;
 
