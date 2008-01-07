@@ -12,7 +12,7 @@ flags
   lin
 
   airplane_N   = sdfN "ط؟ر" "فاعِلة" Fem NoHum ;
-{-  answer_V2S   = dirV2 (v3 "جوب") ;
+  answer_V2S   = dirV2 (v3 "جوب") ;
   apartment_N  = brkN "شقّ" "فِعّة" "فِعَل" Fem NoHum ;
   apple_N      = sdfN "تفح" "فِعّالة" Fem NoHum ;
   art_N        = brkN "فنّ" "فَعّ" "فُعُول" Masc NoHum ;
@@ -25,10 +25,10 @@ flags
   become_VA    = mkVA (v4 "صبح") ;
   beer_N       = sdfN "بير" "فِعلة" Fem NoHum ;
   beg_V2V      = dirV2 (v5 "وسل") ;
--}  big_A        = sndA "كبر" "فَعِيل" ;
+  big_A        = sndA "كبر" "فَعِيل" ;
   bike_N       = sdfN "درج" "فَعّالة" Fem NoHum ;
   bird_N       = brkN "طير" "فَعل" "فُعُول" Masc NoHum; 
-{-  black_A      = clrA "سود" ;
+  black_A      = clrA "سود" ;
   blue_A       = clrA "زرق" ;
   boat_N       = brkN "قرب" "فاعِل" "فَواعِل" Masc NoHum ;
   book_N       = brkN "كتب" "فِعال" "فُعُل" Masc NoHum ;
@@ -97,8 +97,8 @@ flags
 --  go_V         = v1 "ذهب" a a ;
   green_A      = clrA "خضر" ;
   harbour_N    = brkN "رف؟" "مَفعَل" "مَفاعِل" Masc NoHum ; --mInA', marsaY
--}  hate_V2      = dirV2 (regV "كَرِه") ;
-{-  hat_N        = sdfN "قبع" "فُعَّلة" Fem NoHum ;
+  hate_V2      = dirV2 (regV "كَرِه") ;
+  hat_N        = sdfN "قبع" "فُعَّلة" Fem NoHum ;
   have_V2      = dirV2 (regV "يَملِك") ; 
 --  have_V2      = dirV2 (v1 "ملك" a i) ; 
   hear_V2      = dirV2 (regV "سَمِع") ;
@@ -107,8 +107,8 @@ flags
   hope_VS      = mkVS (v1 "رجو" a u) ; --check
   horse_N      = brkN "حصن" "فِعال" "أَفعِلة" Masc NoHum ;
   hot_A        = sndA "سخن" "فاعِل" ; --HAr
--}  house_N      = brkN "بيت" "فَعل" "فُعُول" Masc NoHum ; --manzil
-{-  important_A  = sndA "هيم" "فاعّ" ;
+  house_N      = brkN "بيت" "فَعل" "فُعُول" Masc NoHum ; --manzil
+  important_A  = sndA "هيم" "فاعّ" ;
   industry_N   = sdfN "صنع" "فِعالة" Fem NoHum ;
   iron_N       = brkN "حدّ" "فَعِيل" "فَعائِل" Masc NoHum ;
   king_N       = brkN "ملك" "فَعِل" "فُعُول" Masc Hum ;
@@ -163,8 +163,8 @@ flags
 --  rain_V0      = mkV0 (v1 "مطر" a u) ;
   read_V2      = dirV2 (regV "يَقرَ؟") ;
 --  read_V2      = dirV2 (v1 "قر؟" a a ) ;
--}  red_A        = clrA "حمر" ;
-{-  religion_N   = brkN "دين" "فِعل" "أَفعال" Masc NoHum ;
+  red_A        = clrA "حمر" ;
+  religion_N   = brkN "دين" "فِعل" "أَفعال" Masc NoHum ;
   restaurant_N = brkN "طعم" "مَفعَل" "مَفاعِل" Masc NoHum ;
   river_N      = brkN "نهر" "فَعل" "أَفعال" Masc NoHum ;
   rock_N       = brkN "صخر" "فَعلة" "فُعُول" Fem NoHum ;
@@ -239,8 +239,8 @@ flags
 
   do_V2        = dirV2 (regV "يَفعَل") ;
 --  do_V2        = dirV2 (v1 "فعل" a a ) ;
--}  now_Adv      = mkAdv "الآن" ;
-{-  already_Adv  = mkAdv "سابِقاً" ; 
+  now_Adv      = mkAdv "الآن" ;
+  already_Adv  = mkAdv "سابِقاً" ; 
   song_N       = brkN "غني" "أَفعِلة" "أَفاعِي" Fem NoHum ;
   add_V3       = dirV3 (regV "يَجمَع") "وَ" ;
 --  add_V3       = dirV3 (v1 "جمع" a a) "وَ" ;
@@ -305,9 +305,9 @@ flags
   leg_N        = brkN "رجل" "فِعل" "أَفعُل"     Fem NoHum;            
   liver_N      = brkN "كبد" "فَعِل" "أَفعال"    Masc NoHum ;          
   louse_N      = sdfN "قمل" "فَعلة"             Fem NoHum;            
--}  mouth_N      = brkN "فوه" "فُعل" "أَفعال"     Masc NoHum ;          
+  mouth_N      = brkN "فوه" "فُعل" "أَفعال"     Masc NoHum ;          
   name_N       = brkN "؟سم" "فِعل" "فَعالِي"     Masc NoHum;       
-{-  neck_N       = brkN "رقب" "فَعَلة" "فِعال"    Fem NoHum;        
+  neck_N       = brkN "رقب" "فَعَلة" "فِعال"    Fem NoHum;        
   night_N      = brkN "ليل" "فَعلة" "فَعالِي"    Fem NoHum;  --plural?
   nose_N       = brkN "؟نف" "فَعل" "فُعُول"      Masc NoHum;           
   person_N     = brkN "شخص" "فَعل" "أَفعال"     Masc Hum;             
@@ -378,7 +378,7 @@ flags
   tie_V2       = dirV2 (regV "يَربُط" ) ;
   wash_V2      = dirV2 ( regV "يَغسِل" ) ;
   wipe_V2      = dirV2 ( regV "يَمسَح" ) ;
--}
+
 --  other_A = sndA "ْتهر" ;
 
 } ;
