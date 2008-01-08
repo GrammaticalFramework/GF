@@ -59,8 +59,9 @@ linearizeAllLang :: MultiGrammar -> Tree -> [(Language,String)]
 parseAll     :: MultiGrammar -> Category -> String -> [[Tree]]
 parseAllLang :: MultiGrammar -> Category -> String -> [(Language,[Tree])]
 
-generateAll    :: MultiGrammar -> Category -> [Tree]
-generateRandom :: MultiGrammar -> Category -> IO [Tree]
+generateAll      :: MultiGrammar -> Category -> [Tree]
+generateRandom   :: MultiGrammar -> Category -> IO [Tree]
+generateAllDepth :: MultiGrammar -> Category -> Maybe Int -> [Tree]
 
 readTree   :: MultiGrammar -> String -> Tree
 showTree   ::                 Tree -> String
@@ -105,7 +106,8 @@ generateRandom mgr cat = do
   gen <- newStdGen
   return $ genRandom gen (gfcc mgr) (CId cat)
 
-generateAll mgr cat = generate (gfcc mgr) (CId cat)
+generateAll mgr cat = generate (gfcc mgr) (CId cat) Nothing
+generateAllDepth mgr cat = generate (gfcc mgr) (CId cat)
 
 readTree _ = pTree
 

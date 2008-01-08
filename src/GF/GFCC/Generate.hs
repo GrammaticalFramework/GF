@@ -8,8 +8,8 @@ import qualified Data.Map as M
 import System.Random
 
 -- generate an infinite list of trees exhaustively
-generate :: GFCC -> CId -> [Exp]
-generate gfcc cat = concatMap (\i -> gener i cat) [0..]
+generate :: GFCC -> CId -> Maybe Int -> [Exp]
+generate gfcc cat dp = concatMap (\i -> gener i cat) depths
  where
   gener 0 c = [tree (AC f) [] | (f, ([],_)) <- fns c]
   gener i c = [
@@ -21,7 +21,7 @@ generate gfcc cat = concatMap (\i -> gener i cat) [0..]
       depth tr >= i
     ]
   fns c = [(f,catSkeleton ty) | (f,ty) <- functionsToCat gfcc c]
-
+  depths = maybe [0 ..] (\d -> [0..d]) dp
 
 -- generate an infinite list of trees randomly
 genRandom :: StdGen -> GFCC -> CId -> [Exp]
