@@ -91,6 +91,15 @@ allCommands mgr = Map.fromAscList [
        ts <- generateRandom mgr (optCat opts)
        return $ fromTrees $ take (optNum opts) ts
      }),
+  ("gt", emptyCommandInfo {
+     longname = "generate_trees",
+     synopsis = "generates a list of trees, by default exhaustive",
+     flags = ["cat","depth","number"],
+     exec = \opts _ -> do
+       let dp = return $ valIntOpts "depth" 4 opts
+       let ts = generateAllDepth mgr (optCat opts) dp
+       return $ fromTrees $ take (optNumInf opts) ts
+     }),
   ("h", emptyCommandInfo {
      longname = "help",
      synopsis = "get description of a command, or a the full list of commands",
@@ -134,6 +143,7 @@ allCommands mgr = Map.fromAscList [
      lang -> [lang] 
    optCat opts = valIdOpts "cat" (lookAbsFlag gr (cid "startcat")) opts
    optNum opts = valIntOpts "number" 1 opts
+   optNumInf opts = valIntOpts "number" 1000000000 opts ---- 10^9
 
    gr       = gfcc mgr
 
