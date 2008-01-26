@@ -11,6 +11,7 @@ prGrammar :: Grammar -> ShowS
 prGrammar (Grm xs) = prRExpList xs
 
 prRExp :: RExp -> ShowS
+prRExp (App x []) = showChar '(' . prCId x . showChar ')' 
 prRExp (App x xs) = showChar '(' . prCId x . showChar ' ' 
                     . prRExpList xs . showChar ')'
 prRExp (AId x) = prCId x
