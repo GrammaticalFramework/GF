@@ -38,7 +38,23 @@ initiate tgt cat i = mapM_ putStrLn [
      ]
 
 nums = map prt [1 ..] where
-  prt i = (if i < 10 then "0" else "") ++ show i ++ ". "
+----  prt i = (if i < 10 then "0" else "") ++ show i ++ ". "
+  prt i = let n = show i in replicate (4-length n) '0' ++ n ++ ". "
+
+-- W is the flag for mixed-class word lists
+mkLex "W" 0 line = case words line of
+  num:cat:sana:_ -> do
+    let nimi = "n" ++ init num ++ "_" ++ sana 
+    putStrLn $ "fun " ++ nimi ++ "_" ++ cat ++ " : " ++ cat ++ " ;"
+  _ -> return ()
+
+mkLex "W" 1 line = case words line of
+  num:cat:sanat@(sana:_) -> do
+    let nimi = "n" ++ init num ++ "_" ++ sana 
+    putStrLn $ "lin " ++ nimi ++ 
+               "_" ++ cat ++ " = mk" ++ cat ++ " " ++ 
+               unwords (map prQuoted sanat) ++" ;"
+  _ -> return ()
 
 mkLex cat 0 line = case words line of
   num:sana:_ -> do
@@ -68,6 +84,7 @@ mkLex "N" 2 line = case words line of
   _ -> return ()
 
 mkLex "N" 3 line = case words line of
+----  num:sana:sanan:sanoja:_ -> do
   num:sana:sanan:_:_:_:_:sanoja:_ -> do
     let nimi = "n" ++ init num ++ "_" ++ sana 
     putStrLn $ "lin " ++ nimi ++ 
@@ -82,7 +99,6 @@ mkLex "N" 4 line = case words line of
                  "\" \"" ++ sanoja ++ "\" \"" ++ sanaa ++ "\" ;"
   _ -> return ()
 
-
 -- to initiate from a noun list that has compounds
 
 mkLex "N" 11 line = case words line of
@@ -93,6 +109,8 @@ mkLex "N" 11 line = case words line of
     putStrLn $ "fun " ++ nimi ++ "_N : N ;"
     putStrLn $ "lin " ++ nimi ++ "_N = mkN \"" ++ sana ++ "\" ;"
   _ -> return ()
+
+prQuoted s = concat ["\"",s,"\""]
 
 -- from sora+tie to tie
 

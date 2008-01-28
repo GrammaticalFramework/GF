@@ -10,6 +10,9 @@ resource Verbal = ResFin **
   mkV = overload {
     mkV : (huutaa : Str) -> V = mk1V ;
     mkV : (huutaa,huusi : Str) -> V = mk2V ;
+    mkV : (
+      huutaa,huudan,huutaa,huutavat,huutakaa,huudetaan,
+      huusin,huusi,huusisi,huutanut,huudettu,huutanee : Str) -> V = mk12V ;
   } ;
 
   showV : V -> Utt = \v -> ss (
@@ -28,6 +31,12 @@ resource Verbal = ResFin **
 
   mk1V : Str -> V = \s -> vforms2V (vForms1 s) ;
   mk2V : (_,_ : Str) -> V = \s,t -> vforms2V (vForms2 s t) ;
+
+  mk12V : (
+      huutaa,huudan,huutaa,huutavat,huutakaa,huudetaan,
+      huusin,huusi,huusisi,huutanut,huudettu,huutanee : Str) -> V = 
+     \a,b,c,d,e,f,g,h,i,j,k,l -> 
+        vforms2V (vForms12 a b c d e f g h i j k l) ;
 
   vForms1 : Str -> VForms = \ottaa ->
     let

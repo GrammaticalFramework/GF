@@ -44,6 +44,9 @@ resource Nominal = ResFin ** open MorphoFin,Declensions,CatFin,Prelude in {
     --  \s,t,u -> nForms2N (nForms3 s t u) ;
     mkN : (talo,talon,taloja,taloa : Str) -> N = mk4N ;
     --  \s,t,u,v -> nForms2N (nForms4 s t u v) ;
+    mkN : 
+      (talo,talon,taloa,talona,taloon,talojen,taloja,taloina,taloissa,taloihin
+        : Str) -> N = mk10N ;
     mkN : (sora : Str) -> (tie : N) -> N = mkStrN ;
     mkN : (oma,tunto : N) -> N = mkNN ;
   } ;
@@ -56,6 +59,11 @@ resource Nominal = ResFin ** open MorphoFin,Declensions,CatFin,Prelude in {
   mk3N : (talo,talon,taloja : Str) -> N = \s,t,u -> nForms2N (nForms3 s t u) ;
   mk4N : (talo,talon,taloa,taloja : Str) -> N = \s,t,u,v -> 
       nForms2N (nForms4 s t u v) ;
+  mk10N : 
+      (talo,talon,taloa,talona,taloon,talojen,taloja,taloina,taloissa,taloihin
+        : Str) -> N = \a,b,c,d,e,f,g,h,i,j -> 
+        nForms2N (nForms10 a b c d e f g h i j) ;
+
   mkStrN : Str -> N -> N = \sora,tie -> {
     s = \\c => sora + tie.s ! c ; lock_N = <>
     } ;
@@ -68,6 +76,7 @@ resource Nominal = ResFin ** open MorphoFin,Declensions,CatFin,Prelude in {
       ukk = init ukko ;
       uko = weakGrade ukko ;
       ukon = uko + "n" ;
+      o = case last ukko of {"ä" => "ö" ; "a" => "o"} ; -- only used then 
       renka = Declensions.strongGrade (init ukko) ;
       rake = Declensions.strongGrade ukko ;
     in
@@ -83,14 +92,29 @@ resource Nominal = ResFin ** open MorphoFin,Declensions,CatFin,Prelude in {
       _ + "e" => dRae ukko (rake + "en") ;
       _ + ("ut" | "yt") => dRae ukko (ukk + "en") ;
       _ + ("as" | "äs") => dRae ukko (renka + last renka + "n") ;
-      _ + ("uus" | "yys") => dLujuus ukko ;
+      _ + ("uus" | "yys" | "eus" | "eys") => dLujuus ukko ;
       _ + "s" => dJalas ukko ; 
-      _ + ("a" | "e" | "i") + C_ + _ + "aja" =>  -- opettaja correct autom. 
+
+{- heuristics for 3-syllable nouns ending a/ä
+      _ + ("a" | "e" | "i" | "o" | "u" | "y" | "ä" | "ö") + C_ + 
+          _ + "i" + C_ + a@("a" | "ä") =>  
+          dSilakka ukko (ukko + "n") (ukk + o + "it" + a) ;
+      _ + ("a" | "e" | "i" | "o" | "u" | "y" | "ä" | "ö") + C_ + _ + 
+          ("a" | "e" | "o" | "u" | "y" | "ä" | "ö") + 
+          ("l" | "r" | "n") + a@("a" | "ä") =>  
+          dSilakka ukko (ukko + "n") (ukk + o + "it" + a) ;
+      _ + ("a" | "e" | "i" | "o" | "u" | "y" | "ä" | "ö") + C_ + _ + 
+          ("a" | "e" | "i" | "o" | "u" | "y" | "ä" | "ö") + 
+          ("n" | "k" | "s") + "k" + a@("a" | "ä") =>  
+          dSilakka ukko (uko + "n") (init uko + o + "it" + a) ;
+      _ + ("a" | "e" | "i" | "o" | "u" | "y" | "ä" | "ö") + C_ + _ + 
+          ("a" | "e" | "i" | "o" | "u" | "y" | "ä" | "ö") + 
+          ("n" | "t" | "s") + "t" + a@("a" | "ä") =>  
+          dSilakka ukko (uko + "n") (ukk + o + "j" + a) ;
+      _ + ("a" | "e" | "i" | "o" | "u") + C_ + _ + 
+          ("a" | "e" | "o" | "u") + C_ + "a" =>  
           dSilakka ukko (ukko + "n") (ukk + "ia") ;
-      _ + ("a" | "e" | "i" | "o" | "u") + C_ + _ + "ija" =>  
-          dSilakka ukko (ukko + "n") (ukk + "oita") ;
-      _ + ("e" | "i" | "y" | "ä" | "ö") + C_ + _ + "ijä" =>  
-          dSilakka ukko (ukko + "n") (ukk + "öitä") ;
+-}
       _ + "i" +o@("o"|"ö") => dSilakka ukko (ukko+"n") (ukko+"it"+getHarmony o);
       _ + "i" + "a" => dSilakka ukko (ukko + "n") (ukk + "oita") ;
       _ + "i" + "ä" => dSilakka ukko (ukko + "n") (ukk + "öitä") ;
