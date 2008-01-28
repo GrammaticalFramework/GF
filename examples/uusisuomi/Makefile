@@ -21,6 +21,10 @@ nouns:
 	cat all-diff-* >all-differences
 	cat all-differences
 
+CSC: 
+	export LEX=NCSC ; make -e tests
+	cat all-diff-NCSC
+
 gf-files:
 	runghc MkLex.hs 0 $(CAT) $(LEX) > $(LEX)Abs.gf
 	runghc MkLex.hs 1 $(CAT) $(LEX) > $(LEX)1.gf

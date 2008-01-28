@@ -5,7 +5,7 @@ concrete LangAra of Lang =
   LexiconAra
   ** {
 
-  flags startcat = Phr ; unlexer = text ; lexer = text ;
+  flags startcat = Phr ; unlexer = text ; lexer = text ; coding = utf8 ;
 
 }
 
