@@ -2,5 +2,5 @@
 
 concrete ExamplesRus of Examples = ExamplesI with
   (Syntax=SyntaxRus),
-  (Lang=LangRus) ** {flags coding=utf8} ;
+  (Lang=LangRus) ** {flags coding=utf8; }
 
