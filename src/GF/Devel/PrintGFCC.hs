@@ -5,6 +5,7 @@ import GF.GFCC.Raw.ConvertGFCC (fromGFCC)
 import GF.GFCC.Raw.PrintGFCCRaw (printTree)
 import GF.Devel.GFCCtoHaskell
 import GF.Devel.GFCCtoJS
+import GF.Text.UTF8
 
 -- top-level access to code generation
 
@@ -17,5 +18,5 @@ prGFCC printer gr = case printer of
   _ -> printGFCC gr
 
 printGFCC :: GFCC -> String
-printGFCC = printTree . fromGFCC
+printGFCC = encodeUTF8 . printTree . fromGFCC
 
