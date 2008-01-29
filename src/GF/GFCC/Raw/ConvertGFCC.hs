@@ -16,7 +16,7 @@ import Data.Map
 
 toGFCC :: Grammar -> GFCC
 toGFCC (Grm [
-  App (CId "grammar") (AId a:cs),
+  App (CId "grammar") (App a []:cs),
   App (CId "flags")     gfs, 
   ab@(
     App (CId "abstract") [
@@ -26,7 +26,7 @@ toGFCC (Grm [
   App (CId "concrete") ccs
   ]) = GFCC {
     absname = a,
-    cncnames = [c | AId c <- cs],
+    cncnames = [c | App c [] <- cs],
     gflags = fromAscList [(f,v) | App f [AStr v] <- gfs],
     abstract = 
      let
@@ -134,15 +134,15 @@ toHypo e = case e of
 
 toExp :: RExp -> Exp
 toExp e = case e of
-  App fun [App (CId "B") xs, App (CId "X") exps] ->
-    DTr [x | AId x <- xs] (AC fun) (lmap toExp exps)
+  App (CId "App") [App fun [], App (CId "B") xs, App (CId "X") exps] ->
+    DTr [x | App x [] <- xs] (AC fun) (lmap toExp exps)
   App (CId "Eq") eqs -> 
     EEq [Equ (lmap toExp ps) (toExp v) | App (CId "E") (v:ps) <- eqs]
+  App (CId "Var") [App i []] -> DTr [] (AV i) []
   AMet -> DTr [] (AM 0) []
   AInt i -> DTr [] (AI i) []
   AFlt i -> DTr [] (AF i) []
   AStr i -> DTr [] (AS i) []
-  AId i  -> DTr [] (AV i) []
   _ -> error $ "exp " ++ show e
 
 toTerm :: RExp -> Term
@@ -153,10 +153,10 @@ toTerm e = case e of
   App (CId "P") [e,v] -> P  (toTerm e) (toTerm v)
   App (CId "RP") [e,v] -> RP  (toTerm e) (toTerm v) ----
   App (CId "W") [AStr s,v] -> W s (toTerm v)
+  App (CId "A") [AInt i] -> V (fromInteger i)
+  App f []  -> F f
   AInt i -> C (fromInteger i)
   AMet   -> TM
-  AId f  -> F f
-  App (CId "A") [AInt i] -> V (fromInteger i)
   AStr s -> K (KS s) ----
   _ -> error $ "term " ++ show e
 
@@ -166,7 +166,7 @@ toTerm e = case e of
 
 fromGFCC :: GFCC -> Grammar
 fromGFCC gfcc0 = Grm [
-  app "grammar" (AId (absname gfcc) : lmap AId (cncnames gfcc)), 
+  app "grammar" (App (absname gfcc) [] : lmap (flip App []) (cncnames gfcc)), 
   app "flags" [App f [AStr v] | (f,v) <- toList (gflags gfcc `union` aflags agfcc)],
   app "abstract" [
     app "fun"   [App f [fromType t,fromExp d] | (f,(t,d)) <- toList (funs agfcc)],
@@ -202,10 +202,10 @@ fromHypo e = case e of
 fromExp :: Exp -> RExp
 fromExp e = case e of
   DTr xs (AC fun) exps ->
-    App fun [App (CId "B") (lmap AId xs), App (CId "X") (lmap fromExp exps)]  
+    App (CId "App") [App fun [], App (CId "B") (lmap (flip App []) xs), App (CId "X") (lmap fromExp exps)]
+  DTr [] (AV x) [] -> App (CId "Var") [App x []]
   DTr [] (AS s) [] -> AStr s
   DTr [] (AF d) [] -> AFlt d
-  DTr [] (AV x) [] -> AId x
   DTr [] (AI i) [] -> AInt (toInteger i)
   DTr [] (AM _) [] -> AMet ----
   EEq eqs -> 
@@ -222,7 +222,7 @@ fromTerm e = case e of
   W s v   -> app "W" [AStr s, fromTerm v]
   C i     -> AInt (toInteger i)
   TM      -> AMet
-  F f     -> AId f
+  F f     -> App f []
   V i     -> App (CId "A") [AInt (toInteger i)]
   K (KS s) -> AStr s ----
   K (KP d vs) -> app "FV" (str d : [str v | Var v _ <- vs]) ----

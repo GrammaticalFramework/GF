@@ -14,13 +14,12 @@ pGrammar :: P Grammar
 pGrammar = liftM Grm pTerms
 
 pTerms :: P [RExp]
-pTerms = liftM2 (:) pTerm pTerms <++ (skipSpaces >> return [])
+pTerms = liftM2 (:) (pTerm 1) pTerms <++ (skipSpaces >> return [])
 
-pTerm :: P RExp
-pTerm = skipSpaces >> (pApp <++ pId <++ pNum <++ pStr <++ pMeta)
-  where pApp = between (char '(') (char ')') 
-               (liftM2 App pIdent pTerms)
-        pId = liftM AId pIdent
+pTerm :: Int -> P RExp
+pTerm n = skipSpaces >> (pParen <++ pApp <++ pNum <++ pStr <++ pMeta)
+  where pParen = between (char '(') (char ')') (pTerm 0)
+        pApp = liftM2 App pIdent (if n == 0 then pTerms else return [])
         pStr = char '"' >> liftM AStr (manyTill (pEsc <++ get) (char '"'))
         -- FIXME: what escapes are used?
         pEsc = char '\\' >> get
