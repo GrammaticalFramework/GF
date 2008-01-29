@@ -10,15 +10,14 @@ printTree g = prGrammar g ""
 prGrammar :: Grammar -> ShowS
 prGrammar (Grm xs) = prRExpList xs
 
-prRExp :: RExp -> ShowS
-prRExp (App x []) = showChar '(' . prCId x . showChar ')' 
-prRExp (App x xs) = showChar '(' . prCId x . showChar ' ' 
-                    . prRExpList xs . showChar ')'
-prRExp (AId x) = prCId x
-prRExp (AInt x) = shows x
-prRExp (AStr x) = showChar '"' . concatS (map mkEsc x) . showChar '"'
-prRExp (AFlt x) = shows x -- FIXME: simpler format
-prRExp AMet = showChar '?'
+prRExp :: Int -> RExp -> ShowS
+prRExp _ (App x []) = prCId x
+prRExp n (App x xs) = p (prCId x . showChar ' ' . prRExpList xs)
+    where p s = if n == 0 then s else showChar '(' . s . showChar ')'
+prRExp _ (AInt x) = shows x
+prRExp _ (AStr x) = showChar '"' . concatS (map mkEsc x) . showChar '"'
+prRExp _ (AFlt x) = shows x -- FIXME: simpler format
+prRExp _ AMet = showChar '?'
 
 mkEsc :: Char -> ShowS
 mkEsc s = case s of
@@ -29,7 +28,7 @@ mkEsc s = case s of
   _    -> showChar s
 
 prRExpList :: [RExp] -> ShowS
-prRExpList = concatS . intersperse (showChar ' ') . map prRExp
+prRExpList = concatS . intersperse (showChar ' ') . map (prRExp 1)
 
 prCId :: CId -> ShowS
 prCId (CId x) = showString x

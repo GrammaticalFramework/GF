@@ -9,7 +9,6 @@ data Grammar =
 
 data RExp =
    App CId [RExp]
- | AId CId
  | AInt Integer
  | AStr String
  | AFlt Double
