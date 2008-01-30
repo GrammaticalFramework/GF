@@ -21,9 +21,7 @@ pTerm n = skipSpaces >> (pParen <++ pApp <++ pNum <++ pStr <++ pMeta)
   where pParen = between (char '(') (char ')') (pTerm 0)
         pApp = liftM2 App pIdent (if n == 0 then pTerms else return [])
         pStr = char '"' >> liftM AStr (manyTill (pEsc <++ get) (char '"'))
-        -- FIXME: what escapes are used?
         pEsc = char '\\' >> get
-        -- FIXME: what formats?
         pNum = do x <- munch1 isDigit
                   ((char '.' >> munch1 isDigit >>= \y -> return (AFlt (read (x++"."++y))))
                    <++
