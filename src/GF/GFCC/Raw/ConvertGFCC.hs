@@ -6,7 +6,7 @@ import GF.GFCC.Raw.AbsGFCCRaw
 import GF.Data.Assoc
 import GF.Formalism.FCFG
 import GF.Formalism.Utilities (NameProfile(..), Profile(..), SyntaxForest(..))
-import GF.Parsing.FCFG.PInfo (FCFPInfo(..))
+import GF.Parsing.FCFG.PInfo (FCFPInfo(..), buildFCFPInfo)
 
 import qualified Data.Array as Array
 import Data.Map
@@ -65,27 +65,11 @@ toConcr = foldl add (Concr {
     add cnc (App (CId "parser") ts)    = cnc { parser = Just (toPInfo ts) }
 
 toPInfo :: [RExp] -> FCFPInfo
-toPInfo = foldl add (FCFPInfo { 
-                       allRules         = error "FCFPInfo.allRules",
-                       topdownRules     = error "FCFPInfo.topdownRules",
-	               epsilonRules     = error "FCFPInfo.epsilonRules",
-	               leftcornerCats   = error "FCFPInfo.leftcornerCats",
-	               leftcornerTokens = error "FCFPInfo.leftcornerTokens",
-	               grammarCats      = error "FCFPInfo.grammarCats",
-	               grammarToks      = error "FCFPInfo.grammarToks",
-	               startupCats      = error "FCFPInfo.startupCats"})
+toPInfo [App (CId "rules") rs, App (CId "gfcats") cs] = buildFCFPInfo (rules, cats)
   where 
-    add :: FCFPInfo -> RExp -> FCFPInfo
-    add p (App (CId f) ts) =
-        case f of
-          "rules"         -> p { allRules = mkArray (lmap toFRule ts) }
-          "catrules"      -> p { topdownRules = toAssoc expToInt (lmap expToInt) ts }
-          "epsilonrules"  -> p { epsilonRules = lmap expToInt ts }
-          "firstcatrules" -> p { leftcornerCats = toAssoc expToInt (lmap expToInt) ts }
-          "firsttokrules" -> p { leftcornerTokens = toAssoc expToStr (lmap expToInt) ts }
-          "cats"          -> p { grammarCats = lmap expToInt ts }
-          "toks"          -> p { grammarToks = lmap expToStr ts }
-          "gfcats"        -> p { startupCats = fromList [(c, lmap expToInt cs) | App c cs <- ts] }
+    rules = lmap toFRule rs
+    cats = fromList [(c, lmap expToInt fs) | App c fs <- cs]
+
     toFRule :: RExp -> FRule
     toFRule (App (CId "rule") 
               [n,                      
@@ -117,9 +101,6 @@ toFName (App f ts) = Name f (lmap toProfile ts)
 toSymbol :: RExp -> FSymbol
 toSymbol (App (CId "P") [c,n,l]) = FSymCat (expToInt c) (expToInt l) (expToInt n)
 toSymbol (AStr t) = FSymTok t
-
-toAssoc :: Ord a => (RExp -> a) -> ([RExp] -> b) -> [RExp] -> Assoc a b
-toAssoc f g xs = listAssoc [(f k, g v) | App (CId "map") (k:v) <- xs]
 
 toType :: RExp -> Type
 toType e = case e of
@@ -235,17 +216,8 @@ fromTerm e = case e of
 fromPInfo :: FCFPInfo -> RExp
 fromPInfo p = app "parser" [
           app "rules"         [fromFRule rule | rule <- Array.elems (allRules p)],
-          app "catrules"      (fromAssoc intToExp (lmap intToExp) (topdownRules p)),
-          app "epsilonrules"  (lmap intToExp (epsilonRules p)),
-          app "firstcatrules" (fromAssoc intToExp (lmap intToExp) (leftcornerCats p)),
-          app "firsttokrules" (fromAssoc AStr (lmap intToExp) (leftcornerTokens p)),
-          app "cats"          (lmap intToExp (grammarCats p)),
-          app "toks"          (lmap AStr (grammarToks p)),
           app "gfcats"        [App f (lmap intToExp cs) | (f,cs) <- toList (startupCats p)]
         ]
-
-fromAssoc :: Ord a => (a -> RExp) -> (b -> [RExp]) -> Assoc a b -> [RExp]
-fromAssoc f g xs = [app "map" (f x:g y) | (x,y) <- aAssocs xs]
 
 fromFRule :: FRule -> RExp
 fromFRule (FRule n args res lins) = 
