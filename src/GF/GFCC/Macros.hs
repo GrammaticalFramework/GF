@@ -69,9 +69,17 @@ catSkeleton :: Type -> ([CId],CId)
 catSkeleton ty = case ty of
   DTyp hyps val _ -> ([valCat ty | Hyp _ ty <- hyps],val)
 
+typeSkeleton :: Type -> ([(Int,CId)],CId)
+typeSkeleton ty = case ty of
+  DTyp hyps val _ -> ([(contextLength ty, valCat ty) | Hyp _ ty <- hyps],val)
+
 valCat :: Type -> CId
 valCat ty = case ty of
   DTyp _ val _ -> val
+
+contextLength :: Type -> Int
+contextLength ty = case ty of
+  DTyp hyps _ _ -> length hyps
 
 cid :: String -> CId
 cid = CId

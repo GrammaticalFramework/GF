@@ -138,10 +138,13 @@ str :: CType
 str = S []
 
 lintype :: GFCC -> CId -> CId -> LinType
-lintype gfcc lang fun = case catSkeleton (lookType gfcc fun) of
-  (cs,c) -> (map linc cs, linc c) ---- HOAS
+lintype gfcc lang fun = case typeSkeleton (lookType gfcc fun) of
+  (cs,c) -> (map vlinc cs, linc c) ---- HOAS
  where 
    linc = lookLincat gfcc lang
+   vlinc (0,c) = linc c
+   vlinc (i,c) = case linc c of
+     R ts -> R (ts ++ replicate i str)
 
 inline :: GFCC -> CId -> Term -> Term
 inline gfcc lang t = case t of

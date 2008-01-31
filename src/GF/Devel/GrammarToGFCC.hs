@@ -134,6 +134,7 @@ mkContext hyps = [C.Hyp (i2i x) (mkType ty) | (x,ty) <- hyps]
 mkTerm :: Term -> C.Term
 mkTerm tr = case tr of
   Vr (IA (_,i)) -> C.V i
+  Vr (IAV (_,_,i)) -> C.V i
   Vr (IC s) | isDigit (last s) -> 
     C.V (read (reverse (takeWhile (/='_') (reverse s)))) 
     ---- from gf parser of gfc
@@ -362,10 +363,11 @@ paramValues cgr = (labels,untyps,typs) where
       [(cat,(unlockTyp ls)) | (_,(cat,CncCat (Yes (RecType ls)) _ _)) <- jments]
   labels = Map.fromList $ concat 
     [((cat,[lab]),(typ,i)): 
+      [((cat,[LVar v]),(typ,toInteger (mx + v))) | v <- [0,1]] ++ ---- 1 or 2 vars 
       [((cat,[lab,lab2]),(ty,j)) | 
         rs <- getRec typ, ((lab2, ty),j) <- zip rs [0..]] 
       | 
-        (cat,ls) <- lincats, ((lab, typ),i) <- zip ls [0..]]
+        (cat,ls) <- lincats, ((lab, typ),i) <- zip ls [0..], let mx = length ls]
     -- go to tables recursively
     ---- TODO: even go to deeper records
    where
@@ -447,13 +449,15 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
    r2r tr@(P (S (V ty ts) v) l) = t2t $ S (V ty [comp (P t l) | t <- ts]) v
 
    r2r tr@(P p _) = case getLab tr of
-     Ok (cat,labs) -> P (t2t p) . mkLab $ maybe (prtTrace tr $ 66664) snd $ 
-          Map.lookup (cat,labs) labels
+     Ok (cat,labs) -> P (t2t p) . mkLab $ 
+          maybe (prtTrace tr $ 66664) snd $ 
+            Map.lookup (cat,labs) labels
      _ -> K ((A.prt tr +++ prtTrace tr "66665"))
 
    -- this goes recursively into tables (ignored) and records (accumulated)
    getLab tr = case tr of
      Vr (IA (cat, _)) -> return (identC cat,[])
+     Vr (IAV (cat,_,_)) -> return (identC cat,[])
      Vr (IC s) -> return (identC cat,[]) where
        cat = init (reverse (dropWhile (/='_') (reverse s))) ---- from gf parser
 ----     Vr _ -> error $ "getLab " ++ show tr
