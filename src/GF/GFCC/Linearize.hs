@@ -23,11 +23,11 @@ realize trm = case trm of
   W s t    -> s ++ realize t
   FV ts    -> realize (ts !! 0)  ---- other variants TODO
   RP _ r   -> realize r ---- DEPREC
-  TM       -> "?"
+  TM s     -> s
   _ -> "ERROR " ++ show trm ---- debug
 
 linExp :: GFCC -> CId -> Exp -> Term
-linExp mcfg lang tree@(DTr xs at trees) =  ---- bindings TODO
+linExp mcfg lang tree@(DTr xs at trees) =
   case at of
     AC fun -> addB $ comp (lmap lin trees) $ look fun
     AS s   -> R [kks (show s)] -- quoted
@@ -35,8 +35,8 @@ linExp mcfg lang tree@(DTr xs at trees) =  ---- bindings TODO
                 --- [C lst, kks (show i), C size] where 
                 --- lst = mod (fromInteger i) 10 ; size = if i < 10 then 0 else 1
     AF d   -> R [kks (show d)]
-    AV x   -> addB $ R [kks (prCId x)]  ---- lindef of cat 
-    AM _   -> TM
+    AV x   -> addB $ TM (prCId x)
+    AM i   -> TM (show i)
  where
    lin  = linExp mcfg lang
    comp = compute mcfg lang
@@ -63,7 +63,7 @@ compute mcfg lang args = comp where
 
   idx xs i = if i > length xs - 1 
     then trace 
-         ("too large " ++ show i ++ " for\n" ++ unlines (lmap show xs) ++ "\n") TM 
+         ("too large " ++ show i ++ " for\n" ++ unlines (lmap show xs) ++ "\n") tm0 
     else xs !! i 
 
   proj r p = case (r,p) of
@@ -79,12 +79,12 @@ compute mcfg lang args = comp where
   getIndex t =  case t of
     C i    -> i
     RP p _ -> getIndex p ---- DEPREC
-    TM     -> 0  -- default value for parameter
+    TM _   -> 0  -- default value for parameter
     _ -> trace ("ERROR in grammar compiler: index from " ++ show t) 666
 
   getField t i = case t of
     R rs   -> idx rs i
     RP _ r -> getField r i ---- DEPREC
-    TM     -> TM
+    TM s   -> TM s
     _ -> error ("ERROR in grammar compiler: field from " ++ show t) t
 

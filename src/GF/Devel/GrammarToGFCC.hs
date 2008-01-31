@@ -459,7 +459,8 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
      Vr (IA (cat, _)) -> return (identC cat,[])
      Vr (IAV (cat,_,_)) -> return (identC cat,[])
      Vr (IC s) -> return (identC cat,[]) where
-       cat = init (reverse (dropWhile (/='_') (reverse s))) ---- from gf parser
+       cat = takeWhile (/='_') s ---- also to match IAVs; no _ in a cat tolerated
+             ---- init (reverse (dropWhile (/='_') (reverse s))) ---- from gf parser
 ----     Vr _ -> error $ "getLab " ++ show tr
      P p lab2 -> do
        (cat,labs) <- getLab p

@@ -63,7 +63,7 @@ term2js l t = f t
       D.FV xs          -> new "Variants" (map f xs)
       D.W str x        -> new "Suffix" [JS.EStr str, f x]
       D.RP x y         -> new "Rp" [f x, f y]
-      D.TM             -> new "Meta" []
+      D.TM _           -> new "Meta" []
 
 tokn2js :: D.Tokn -> JS.Expr
 tokn2js (D.KS s) = mkStr s

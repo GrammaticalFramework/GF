@@ -12,19 +12,19 @@ import Data.List
 
 lookLin :: GFCC -> CId -> CId -> Term
 lookLin gfcc lang fun = 
-  lookMap TM fun $ lins $ lookMap (error "no lang") lang $ concretes gfcc
+  lookMap tm0 fun $ lins $ lookMap (error "no lang") lang $ concretes gfcc
 
 lookOper :: GFCC -> CId -> CId -> Term
 lookOper gfcc lang fun = 
-  lookMap TM fun $ opers $ lookMap (error "no lang") lang $ concretes gfcc
+  lookMap tm0 fun $ opers $ lookMap (error "no lang") lang $ concretes gfcc
 
 lookLincat :: GFCC -> CId -> CId -> Term
 lookLincat gfcc lang fun = 
-  lookMap TM fun $ lincats $ lookMap (error "no lang") lang $ concretes gfcc
+  lookMap tm0 fun $ lincats $ lookMap (error "no lang") lang $ concretes gfcc
 
 lookParamLincat :: GFCC -> CId -> CId -> Term
 lookParamLincat gfcc lang fun = 
-  lookMap TM fun $ paramlincats $ lookMap (error "no lang") lang $ concretes gfcc
+  lookMap tm0 fun $ paramlincats $ lookMap (error "no lang") lang $ concretes gfcc
 
 lookType :: GFCC -> CId -> Type
 lookType gfcc f = 
@@ -94,7 +94,10 @@ primNotion :: Exp
 primNotion = EEq []
 
 term0 :: CId -> Term
-term0 _ = TM
+term0 = TM . prCId
+
+tm0 :: Term
+tm0 = TM "?"
 
 kks :: String -> Term
 kks = K . KS
