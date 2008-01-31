@@ -91,7 +91,7 @@ inferTerm args trm = case trm of
           testErr (all (==typ) tys) ("different types in table " ++ show trm) 
           return (P t' u', typ)      -- table: types must be same
       _ -> Bad $ "projection from " ++ show t ++ " : " ++ show tt
-  FV [] -> returnt TM ----
+  FV [] -> returnt tm0 ----
   FV (t:ts) -> do
     (t',ty) <- infer t
     (ts',tys) <- mapM infer ts >>= return . unzip
@@ -120,7 +120,7 @@ eqType :: CType -> CType -> Bool
 eqType inf exp = case (inf,exp) of
   (C k, C n)  -> k <= n -- only run-time corr.
   (R rs,R ts) -> length rs == length ts && and [eqType r t | (r,t) <- zip rs ts]
-  (TM,  _)    -> True ---- for variants [] ; not safe
+  (TM _,  _)  -> True ---- for variants [] ; not safe
   _ -> inf == exp
 
 -- should be in a generic module, but not in the run-time DataGFCC

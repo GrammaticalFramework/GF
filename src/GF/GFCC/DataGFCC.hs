@@ -65,7 +65,7 @@ data Term =
  | F CId
  | FV [Term]
  | W String Term
- | TM
+ | TM String
  | RP Term Term
   deriving (Eq,Ord,Show)
 

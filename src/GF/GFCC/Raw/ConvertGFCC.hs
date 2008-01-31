@@ -137,7 +137,7 @@ toTerm e = case e of
   App (CId "A") [AInt i] -> V (fromInteger i)
   App f []  -> F f
   AInt i -> C (fromInteger i)
-  AMet   -> TM
+  AMet   -> TM "?"
   AStr s -> K (KS s) ----
   _ -> error $ "term " ++ show e
 
@@ -202,7 +202,7 @@ fromTerm e = case e of
   RP e v  -> app "RP" [fromTerm e, fromTerm v] ----
   W s v   -> app "W" [AStr s, fromTerm v]
   C i     -> AInt (toInteger i)
-  TM      -> AMet
+  TM _    -> AMet
   F f     -> App f []
   V i     -> App (CId "A") [AInt (toInteger i)]
   K (KS s) -> AStr s ----
