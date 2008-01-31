@@ -27,19 +27,24 @@ realize trm = case trm of
   _ -> "ERROR " ++ show trm ---- debug
 
 linExp :: GFCC -> CId -> Exp -> Term
-linExp mcfg lang tree@(DTr _ at trees) =  ---- bindings TODO
+linExp mcfg lang tree@(DTr xs at trees) =  ---- bindings TODO
   case at of
-    AC fun -> comp (lmap lin trees) $ look fun
+    AC fun -> addB $ comp (lmap lin trees) $ look fun
     AS s   -> R [kks (show s)] -- quoted
     AI i   -> R [kks (show i)] 
                 --- [C lst, kks (show i), C size] where 
                 --- lst = mod (fromInteger i) 10 ; size = if i < 10 then 0 else 1
     AF d   -> R [kks (show d)]
+    AV x   -> addB $ R [kks (prCId x)]  ---- lindef of cat 
     AM _   -> TM
  where
    lin  = linExp mcfg lang
    comp = compute mcfg lang
    look = lookLin mcfg lang
+   addB t 
+     | Data.List.null xs = t
+     | otherwise = case t of
+         R ts -> R $ ts ++ (Data.List.map (kks . prCId) xs)
 
 compute :: GFCC -> CId -> [Term] -> Term -> Term
 compute mcfg lang args = comp where
