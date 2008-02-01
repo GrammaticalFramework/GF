@@ -78,7 +78,7 @@ canon2gfcc opts pars cgr =
   -- concretes
   cncs  = Map.fromList [mkConcr lang (i2i lang) mo | (lang,mo) <- cms]
   mkConcr lang0 lang mo = 
-      (lang,D.Concr flags lins opers lincats lindefs printnames params)
+      (lang,D.Concr flags lins opers lincats lindefs printnames params fcfg)
     where
       js = listJudgements mo
       flags = Map.fromList [(CId f,x) | (IC f,x) <- Map.toList (M.mflags mo)]
@@ -96,6 +96,7 @@ canon2gfcc opts pars cgr =
                      (c,ju) <- js, elem (jform ju) [JLincat,JLin]]
       params = Map.fromAscList 
         [(i2i c, pars lang0 c) | (c,ju) <- js, jform ju == JLincat] ---- c ??
+      fcfg = Nothing
 
 i2i :: Ident -> CId
 i2i = CId . prIdent

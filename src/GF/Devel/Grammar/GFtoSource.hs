@@ -162,6 +162,9 @@ trt trm = case trm of
     EInt i -> P.EInt i
     EFloat i -> P.EFloat i
 
+    EPatt p -> P.EPatt (trp p)
+    EPattType t -> P.EPattType (trt t)
+
     Glue a b -> P.EGlue (trt a) (trt b)
     Alts (t, tt) -> P.EPre (trt t) [P.Alt (trt v) (trt c) | (v,c) <- tt]
     FV ts -> P.EVariants $ map trt ts
@@ -170,6 +173,9 @@ trt trm = case trm of
 
 trp :: Patt -> P.Patt
 trp p = case p of
+    PChar -> P.PChar
+    PChars s -> P.PChars s
+    PM m c -> P.PM (tri m) (tri c)
     PW -> P.PW
     PV s | isWildIdent s -> P.PW
     PV s -> P.PV $ tri s

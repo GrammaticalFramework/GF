@@ -393,10 +393,10 @@ transExp x = case x of
           ETupTyp x y -> tups x ++ [y] -- right-associative parsing
           _ -> [t]
     es <- mapM transExp $ tups x
-    return $ G.RecType $ [] ---- M.tuple2recordType es
+    return $ G.RecType $ M.tuple2recordType es
   ETuple tuplecomps  -> do
     es <- mapM transExp [e | TComp e <- tuplecomps]
-    return $ G.R $  [] ---- M.tuple2record es
+    return $ G.R $ M.tuple2record es
   EProj exp id  -> liftM2 G.P (transExp exp) (trLabel id)
   EApp exp0 exp  -> liftM2 G.App (transExp exp0) (transExp exp)
   ETable cases  -> liftM (G.T G.TRaw) (transCases cases)
@@ -436,6 +436,9 @@ transExp x = case x of
      tryLoc (c,_) = Bad $ "local definition of" +++ prIdent c +++ "without value"
   ELetb defs exp -> transExp $ ELet defs exp
   EWhere exp defs -> transExp $ ELet defs exp
+
+  EPattType typ -> liftM G.EPattType (transExp typ)
+  EPatt patt -> liftM G.EPatt (transPatt patt)
 
   ELString (LString str) -> return $ G.K str 
 ----  ELin id -> liftM G.LiT $ transIdent id
@@ -503,6 +506,10 @@ transSort x = case x of
 
 transPatt :: Patt -> Err G.Patt
 transPatt x = case x of
+  PChar -> return G.PChar
+  PChars s -> return $ G.PChars s
+  PMacro c -> liftM G.PMacro $ transIdent c
+  PM m c   -> liftM2 G.PM (transIdent m) (transIdent c)
   PW  -> return wildPatt
   PV (PIdent (_,"_"))  -> return wildPatt
   PV id  -> liftM G.PV $ transIdent id

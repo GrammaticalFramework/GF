@@ -287,6 +287,10 @@ composOp co trm = case trm of
      tts' <- mapM (pairM co) tts
      return $ Overload tts'
 
+   EPattType ty -> 
+     do ty' <- co ty
+        return (EPattType ty')
+
    _ -> return trm -- covers K, Vr, Cn, Sort
 
 
