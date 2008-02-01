@@ -164,7 +164,10 @@ EVTable.   Exp4 ::= "table" Exp6 "[" [Exp] "]" ;
 ECase.     Exp4 ::= "case" Exp "of" "{" [Case] "}" ;
 EVariants. Exp4 ::= "variants" "{" [Exp] "}" ;
 EPre.      Exp4 ::= "pre" "{" Exp ";" [Altern] "}" ;
-EStrs.     Exp4 ::= "strs" "{" [Exp] "}" ;
+EStrs.     Exp4 ::= "strs" "{" [Exp] "}" ; --%
+
+EPatt.     Exp4 ::= "pattern" Patt2 ;
+EPattType. Exp4 ::= "pattern" "type" Exp5 ;
 
 ESelect.   Exp3 ::= Exp3 "!" Exp4 ;
 ETupTyp.   Exp3 ::= Exp3 "*" Exp4 ;
@@ -195,6 +198,10 @@ ConsExp. Exps ::= Exp6 Exps ; -- Exp6 to force parantheses
 
 -- patterns
 
+PChar.  Patt2  ::= "?" ;
+PChars. Patt2  ::= "[" String "]" ;
+PMacro. Patt2  ::= "#" PIdent ;
+PM.     Patt2  ::= "#" PIdent "." PIdent ;
 PW.     Patt2  ::= "_" ;
 PV.     Patt2  ::= PIdent ;
 PCon.   Patt2  ::= "{" PIdent "}" ; --%

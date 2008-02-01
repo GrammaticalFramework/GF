@@ -114,6 +114,10 @@ tryMatch (p,t) = do
            [1..n]) t' | n <- [0 .. length s]
         ] >>
         return []
+
+      (PChar,  ([],K [_], [])) -> return []
+      (PChars cs, ([],K [c], [])) | elem c cs -> return []
+
       _ -> prtBad "no match in case expr for" t
 
 eqStrIdent = (==) ----  

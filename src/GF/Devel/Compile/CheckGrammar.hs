@@ -577,6 +577,12 @@ inferLType gr trm = case trm of
 ---     checkIfComplexVariantType trm ty
      check trm ty
 
+   EPattType ty -> do
+     ty' <- justCheck ty typeType
+     return (ty',typeType)
+   EPatt p -> do
+     ty <- inferPatt p
+     return (trm, EPattType ty)
    _ -> prtFail "cannot infer lintype of" trm
 
  where
@@ -612,20 +618,25 @@ inferLType gr trm = case trm of
      PString _ -> True
      PInt _ -> True
      PFloat _ -> True
-     PSeq p q -> isConstPatt p && isConstPatt q
-     PAlt p q -> isConstPatt p && isConstPatt q
+     PSeq p q -> isConstPatt p || isConstPatt q
+     PAlt p q -> isConstPatt p || isConstPatt q
      PRep p -> isConstPatt p
      PNeg p -> isConstPatt p
      PAs _ p -> isConstPatt p
+     PChar -> True
+     PChars _ -> True
      _ -> False
 
    inferPatt p = case p of
-     PP q c ps | q /= cPredef -> checkErr $ lookupOperType gr q c >>= return . snd . prodForm
+     PP q c ps | q /= cPredef -> 
+       checkErr $ lookupOperType gr q c >>= return . snd . prodForm
      PAs _ p  -> inferPatt p
      PNeg p   -> inferPatt p
      PAlt p q -> checks [inferPatt p, inferPatt q]
      PSeq _ _ -> return $ typeStr
      PRep _   -> return $ typeStr
+     PChar    -> return $ typeStr
+     PChars _ -> return $ typeStr
      _ -> infer (patt2term p) >>= return . snd
 
 

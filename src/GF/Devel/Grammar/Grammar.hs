@@ -105,6 +105,9 @@ data Term =
  | C Term Term          -- ^ concatenation: @s ++ t@
  | Glue Term Term       -- ^ agglutination: @s + t@
 
+ | EPatt Patt
+ | EPattType Term
+
  | FV [Term]            -- ^ free variation: @variants { s ; ... }@
 
  | Alts (Term, [(Term, Term)]) -- ^ prefix-dependent: @pre {t ; s\/c ; ...}@
@@ -130,6 +133,11 @@ data Patt =
  | PAlt Patt Patt         -- ^ disjunctive pattern: p1 | p2
  | PSeq Patt Patt         -- ^ sequence of token parts: p + q
  | PRep Patt              -- ^ repetition of token part: p*
+ | PChar                  -- ^ string of length one
+ | PChars String          -- ^ list of characters
+
+ | PMacro Ident           -- 
+ | PM Ident Ident
 
   deriving (Read, Show, Eq, Ord)
 

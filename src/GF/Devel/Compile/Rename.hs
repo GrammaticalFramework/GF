@@ -132,6 +132,10 @@ renameTerm env vars = ren vars where
             Ok t -> return t                              -- const proj last
             _ -> prtBad "unknown qualified constant" trm
 
+    EPatt p -> do
+      (p',_) <- renpatt p
+      return $ EPatt p'
+
     _ -> composOp (ren vs) trm
 
   renid = renameIdentTerm env
@@ -144,6 +148,12 @@ renameTerm env vars = ren vars where
 -- | vars not needed in env, since patterns always overshadow old vars
 renamePattern :: RenameEnv -> Patt -> Err (Patt,[Ident])
 renamePattern env patt = case patt of
+
+  PMacro c -> do
+    c' <- renid $ Vr c
+    case c' of
+      Q p d -> renp $ PM p d
+      _ -> prtBad "unresolved pattern" patt
 
   PC c ps -> do
     c' <- renid $ Vr c
