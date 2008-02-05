@@ -28,7 +28,7 @@ import GF.GFCC.CId
 
 import GF.Data.BacktrackM
 import GF.Data.SortedList
-import GF.Data.Utilities (updateNthM)
+import GF.Data.Utilities (updateNthM, sortNub)
 
 import qualified Data.Map as Map
 import qualified Data.Set as Set
@@ -40,10 +40,66 @@ import Data.Maybe
 -- main conversion function
 
 convertConcrete :: Abstr -> Concr -> FGrammar
-convertConcrete abs cnc = convert abs_defs conc cats
+convertConcrete abs cnc = fixHoasFuns $ convert abs_defs' conc' cats'
        where abs_defs = Map.assocs (funs abs)
              conc = Map.union (opers cnc) (lins cnc) -- "union big+small most efficient"
              cats = lincats cnc
+             (abs_defs',conc',cats') = expandHOAS abs_defs conc cats
+
+expandHOAS :: [(CId,(Type,Exp))] -> TermMap -> TermMap -> ([(CId,(Type,Exp))],TermMap,TermMap)
+expandHOAS funs lins lincats = (funs' ++ hoFuns ++ varFuns, 
+                                Map.unions [lins, hoLins, varLins], 
+                                Map.unions [lincats, hoLincats, varLincat])
+    where
+      -- replace higher-order fun argument types with new categories
+      funs' = [(f,(fixType ty,e)) | (f,(ty,e)) <- funs]
+          where
+            fixType :: Type -> Type
+            fixType ty = let (ats,rt) = typeSkeleton ty in cftype (map catName ats) rt
+
+      hoTypes :: [(Int,CId)]
+      hoTypes = sortNub [(n,c) | (_,(ty,_)) <- funs, (n,c) <- fst (typeSkeleton ty), n > 0]
+      hoCats = sortNub (map snd hoTypes)
+      -- for each Cat with N bindings, we add a new category _NCat
+      -- each new category contains a single function __NCat : Cat -> _Var -> ... -> _Var -> _NCat
+      hoFuns = [(funName ty,(cftype (c : replicate n varCat) (catName ty),EEq [])) | ty@(n,c) <- hoTypes]
+      -- lincats for the new categories
+      hoLincats = Map.fromList [(catName ty, modifyRec (++ replicate n (S [])) (lincatOf c)) | ty@(n,c) <- hoTypes]
+      -- linearizations of the new functions, lin __NCat v_0 ... v_n-1 x = { s1 = x.s1; ...; sk = x.sk; $0 = v_0.s ...
+      hoLins = Map.fromList [ (funName ty, mkLin c n) | ty@(n,c) <- hoTypes]
+          where mkLin c n = modifyRec (\fs -> [P (V 0) (C j) | j <- [0..length fs-1]] ++ [P (V i) (C 0) | i <- [1..n]]) (lincatOf c)
+      -- for each Cat, we a add a fun _Var_Cat : _Var -> Cat
+      varFuns = [(varFunName cat, (cftype [varCat] cat,EEq [])) | cat <- hoCats]
+      -- linearizations of the _Var_Cat functions
+      varLins = Map.fromList [(varFunName cat, R [P (V 0) (C 0)]) | cat <- hoCats]
+      -- lincat for the _Var category
+      varLincat = Map.singleton varCat (R [S []])
+
+      lincatOf c = fromMaybe (error $ "No lincat for " ++ prt c) $ Map.lookup c lincats
+
+      modifyRec :: ([Term] -> [Term]) -> Term -> Term
+      modifyRec f (R xs) = R (f xs)
+      modifyRec _ t = error $ "Not a record: " ++ show t
+
+      varCat = CId "_Var"
+
+      catName :: (Int,CId) -> CId
+      catName (0,c) = c
+      catName (n,CId c) = CId ("_" ++ show n ++ c)
+
+      funName :: (Int,CId) -> CId
+      funName (n,CId c) = CId ("__" ++ show n ++ c)
+
+      varFunName :: CId -> CId
+      varFunName (CId c) = CId ("_Var_" ++ c)
+
+-- replaces __NCat with _B and _Var_Cat with _.
+-- the temporary names are just there to avoid name collisions.
+fixHoasFuns :: FGrammar -> FGrammar
+fixHoasFuns (rs, cs) = ([FRule (fixName n) args cat lins | FRule n args cat lins <- rs], cs)
+  where fixName (Name (CId ('_':'_':_)) p) = Name (CId "_B") p
+        fixName (Name (CId n) p) | "_Var_" `List.isPrefixOf` n = Name wildCId p
+        fixName n = n
 
 convert :: [(CId,(Type,Exp))] -> TermMap -> TermMap -> FGrammar
 convert abs_defs cnc_defs cat_defs = getFGrammar (loop frulesEnv)
@@ -234,10 +290,10 @@ data ProtoFCat = PFCat CId [FPath] [(FPath,FIndex)]
 protoFCat :: CId -> ProtoFCat
 protoFCat cat = PFCat cat [] []
 
-
 emptyFRulesEnv = FRulesEnv 0 (ins fcatString (CId "String") [[0]] [] $
                               ins fcatInt    (CId "Int")    [[0]] [] $
                               ins fcatFloat  (CId "Float")  [[0]] [] $
+                              ins fcatVar    (CId "_Var")   [[0]] [] $
                               Map.empty) []
   where
     ins fcat cat rcs tcs fcatSet =
