@@ -16,7 +16,7 @@ module GF.Formalism.FCFG
          , FPath
          , FCat
 
-         , fcatString, fcatInt, fcatFloat
+         , fcatString, fcatInt, fcatFloat, fcatVar
 
          -- * Symbol
          , FIndex
@@ -52,10 +52,12 @@ type FToken    = String
 type FPath     = [FIndex]
 type FCat      = Int
 
-fcatString, fcatInt, fcatFloat :: Int
+fcatString, fcatInt, fcatFloat, fcatVar :: Int
 fcatString = (-1)
 fcatInt    = (-2)
 fcatFloat  = (-3)
+fcatVar    = (-4)
+
 
 ------------------------------------------------------------
 -- Symbol
