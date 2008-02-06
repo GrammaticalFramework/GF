@@ -6,11 +6,17 @@ import GF.GFCC.CId
 import qualified GF.JavaScript.AbsJS as JS
 import qualified GF.JavaScript.PrintJS as JS
 
+import GF.Formalism.FCFG
+import GF.Parsing.FCFG.PInfo
+import GF.Formalism.Utilities (NameProfile(..), Profile(..), SyntaxForest(..))
+
 import GF.Text.UTF8
 import GF.Data.ErrM
 import GF.Infra.Option
 
 import Control.Monad (mplus)
+import Data.Array (Array)
+import qualified Data.Array as Array
 import Data.Maybe (fromMaybe)
 import qualified Data.Map as Map
 
@@ -40,6 +46,7 @@ concrete2js :: CId -> (CId,D.Concr) -> [JS.Element]
 concrete2js (CId a) (CId c, cnc) =
     [JS.ElStmt $ JS.SDeclOrExpr $ JS.Decl [JS.DInit l (new "Concrete" [JS.EVar (JS.Ident a)])]] 
     ++ concatMap (cncdef2js l) ds
+    ++ fromMaybe [] (fmap (parser2js l) (D.parser cnc))
   where 
    l  = JS.Ident c
    ds = concatMap Map.assocs [D.lins cnc, D.opers cnc, D.lindefs cnc]
@@ -81,6 +88,33 @@ argIdent n = JS.Ident ("x" ++ show n)
 
 children :: JS.Ident
 children = JS.Ident "cs"
+
+
+-- Parser
+
+parser2js :: JS.Ident -> FCFPInfo -> [JS.Element]
+parser2js l p = [JS.ElStmt $ JS.SDeclOrExpr $ JS.DExpr $ JS.EAssign parser (new "Parser" [])]
+              ++ map (addRule . frule2js) (Array.elems (allRules p))
+              ++ map addCat (Map.assocs (startupCats p))
+    where 
+      parser = JS.EMember (JS.EVar l) (JS.Ident "parser")
+      addRule r = JS.ElStmt $ JS.SDeclOrExpr $ JS.DExpr $ JS.ECall (JS.EMember parser (JS.Ident "addRule")) [r]
+      addCat (CId c,is) = JS.ElStmt $ JS.SDeclOrExpr $ JS.DExpr $ JS.ECall (JS.EMember parser (JS.Ident "addCat")) [JS.EStr c, JS.EArray (map JS.EInt is)]
+
+frule2js :: FRule -> JS.Expr
+frule2js (FRule n args res lins) = 
+    new "Rule" [JS.EInt res, name2js n, JS.EArray (map JS.EInt args), lins2js lins]
+
+-- FIXME: inclue full profile
+name2js :: FName -> JS.Expr
+name2js (Name (CId f) _) = JS.EStr f
+
+lins2js :: Array FIndex (Array FPointPos FSymbol) -> JS.Expr
+lins2js ls = JS.EArray [ JS.EArray [ sym2js s | s <- Array.elems l] | l <- Array.elems ls]
+
+sym2js :: FSymbol -> JS.Expr
+sym2js (FSymCat _ l n) = new "ArgProj" [JS.EInt n, JS.EInt l]
+sym2js (FSymTok t) = JS.EStr t
 
 new :: String -> [JS.Expr] -> JS.Expr
 new f xs = JS.ENew (JS.Ident f) xs
