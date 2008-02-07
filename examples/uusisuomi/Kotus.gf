@@ -9,12 +9,12 @@ oper
   d01A : Str -> NForms -- 166 yökkö
     = \s -> dUkko s (weakGrade s + "n") ;
   d02 : Str -> NForms -- 1189 ääntely
-    = \s -> dSilakka s (s + "n") (s + "j" + getHarmony (last s)) ;
+    = \s -> dSilakka s (s + "n") (s + "j" + vowelHarmony (last s)) ;
   d03 : Str -> NForms -- 481 ääntiö
-    = \s -> dSilakka s (s + "n") (s + "it" + getHarmony (last s)) ;
+    = \s -> dSilakka s (s + "n") (s + "it" + vowelHarmony (last s)) ;
   d04A : Str -> NForms -- 273 äpärikkö
     = \s -> let ws = weakGrade s in 
-      dSilakka s (ws + "n") (ws + "it" + getHarmony (last s)) ;
+      dSilakka s (ws + "n") (ws + "it" + vowelHarmony (last s)) ;
   d05 : Str -> NForms -- 3212 öljymaali
     = \s -> dPaatti s (s + "n") ;
   d05A : Str -> NForms -- 1959 öylätti
@@ -34,27 +34,28 @@ oper
   d09A : Str -> NForms -- 1040 ääniraita
     = \s -> dUkko s (s + weakGrade "n") ;
   d10 : Str -> NForms -- 2119 äänittäjä
-    = \s -> dSilakka s (s + "n") (init s + "i" + getHarmony (last s)) ;
+    = \s -> dSilakka s (s + "n") (init s + "i" + vowelHarmony (last s)) ;
   d10A : Str -> NForms -- 284 änkkä
     = \s -> dUkko s (weakGrade s + "n") ;
   d11 : Str -> NForms -- 46 ödeema
     = \s -> dUkko s (s + "n") ;
   d12 : Str -> NForms -- 1125 örinä
-    = \s -> let a = getHarmony (last s) in 
+    = \s -> let a = vowelHarmony (last s) in 
       dSilakka s (s + "n") 
         (init s + case a of {"a" => "o" ; _ => "ö"} + "it" + a) ;
   d13 : Str -> NForms -- 157 virtaska
-    = \s -> let a = getHarmony (last s) in 
+    = \s -> let a = vowelHarmony (last s) in 
       dSilakka s (s + "n") 
         (init s + case a of {"a" => "o" ; _ => "ö"} + "j" + a) ;
   d14A : Str -> NForms -- 244 ötökkä
-    = \s -> let a = getHarmony (last s) ; ws = weakGrade s in 
+    = \s -> let a = vowelHarmony (last s) ; ws = weakGrade s in 
       dSilakka s (ws + "n") 
         (init ws + case a of {"a" => "o" ; _ => "ö"} + "it" + a) ;
   d15 : Str -> NForms -- 170 äreä
     = dKorkea ;
-----  d16 : Str -> NForms -- 2 kumpikin
-----    = \s ->  ;
+  d16 : Str -> NForms -- 2 kumpikin
+    = \s -> let kumpi = Predef.take 5 s ; kin = Predef.drop 5 s in 
+         \\i => (dSuurempi kumpi ! i + kin) ;
   d16A : Str -> NForms -- 20 ylempi
     = dSuurempi ;
   d17 : Str -> NForms -- 38 virkkuu
@@ -67,8 +68,10 @@ oper
     = dPaluu ;
   d21 : Str -> NForms -- 22 tax-free
     = dPuu ;
-----  d22 : Str -> NForms -- 13 tournedos
-----    = \s ->  ;
+  d22 : Str -> NForms -- 13 tournedos
+    = \s -> nForms10
+      s (s + "'n") (s + "'ta") (s + "'na") (s + "'hon")
+      (s + "'iden") (s + "'ita") (s + "'ina") (s + "'issa") (s + "'ihin") ;
   d23 : Str -> NForms -- 9 vuohi
     = \s -> dArpi s (init s + "en") ;
   d24 : Str -> NForms -- 20 uni
@@ -83,12 +86,19 @@ oper
     = \s -> dArpi s (Predef.tk 2 s + "ren") ;
   d28A : Str -> NForms -- 1 jälsi
     = \s -> dArpi s (Predef.tk 2 s + "len") ;
-----  d29 : Str -> NForms -- 1 lapsi
-----    = \s ->  ;
-----  d30 : Str -> NForms -- 2 veitsi
-----    = \s ->  ;
-----  d31 : Str -> NForms -- 3 yksi
-----    = \s ->  ;
+  d29 : Str -> NForms -- 1 lapsi
+    = \s -> let lapsi = dArpi s (init s + "en") in 
+       table {2 => Predef.tk 3 s + "ta" ; i => lapsi ! i} ;
+  d30 : Str -> NForms -- 2 veitsi
+    = \s -> let lapsi = dArpi s (init s + "en") in 
+       table {2 => Predef.tk 3 s + "stä" ; i => lapsi ! i} ;
+  d31 : Str -> NForms -- 3 yksi
+    = \s -> let 
+        y = Predef.tk 3 s ;
+        a = vowelHarmony y
+      in nForms10
+        s (y + "hden") (y + "ht" + a) (y + "hten" + a) (y + "hteen")
+        (s + "en") (s + a) (s + "n" + a) (s + "ss" + a) (s + "in") ;
   d32 : Str -> NForms -- 20 uumen
     = \s -> dPiennar s (s + "en") ;
   d32A : Str -> NForms -- 54 ystävätär
@@ -97,16 +107,28 @@ oper
     = \s -> dLiitin s (init s + "men") ;
   d33A : Str -> NForms -- 181 yllytin
     = \s -> dLiitin s (strongGrade (init s) + "men") ;
-----  d34 : Str -> NForms -- 1 alaston
-----    = dOnneton ;
+  d34 : Str -> NForms -- 1 alaston
+    = \s -> let alastom = init s in 
+      nForms10
+        s (s + "ta") (alastom + "an") (alastom + "ana") (alastom + "aan")
+        (alastom + "ien") (alastom + "ia") (alastom + "ina") (alastom + "issa")
+        (alastom + "iin") ;
   d34A : Str -> NForms -- 569 ääretön
     = dOnneton ;
-----  d35A : Str -> NForms -- 1 lämmin
-----    = \s ->  ;
+  d35A : Str -> NForms -- 1 lämmin
+    = \s -> let lämpim = strongGrade (init s) + "m" in
+      nForms10
+        s (s + "tä") (lämpim + "än") (lämpim + "änä") (lämpim + "ään")
+        (lämpim + "ien") (lämpim + "iä") (lämpim + "inä") (lämpim + "issä")
+        (lämpim + "iin") ;
   d36 : Str -> NForms -- 11 ylin
     = dSuurin ;
-----  d37 : Str -> NForms -- 1 vasen
-----    = \s ->  ;
+  d37 : Str -> NForms -- 1 vasen
+    = \s -> let vasem = init s + "m" in 
+      nForms10
+        s (s + "ta") (vasem + "man") (vasem + "pana") (vasem + "paan")
+        (vasem + "pien") (vasem + "pia") (vasem + "pina") (vasem + "missa")
+        (vasem + "piin") ;
   d38 : Str -> NForms -- 4195 öykkärimäinen
     = dNainen ;
   d39 : Str -> NForms -- 2730 örähdys
@@ -117,18 +139,34 @@ oper
     = \s -> let is = init s in dRae s (is + last is ++ "n") ;
   d41A : Str -> NForms -- 401 öljykangas
     = \s -> let is = init s in dRae s (strongGrade is + last is ++ "n") ;
-----  d42 : Str -> NForms -- 1 mies
-----    = \s ->  ;
+  d42 : Str -> NForms -- 1 mies
+    = \s -> let mieh = init s + "s" in 
+      nForms10
+        s (s + "tä") (mieh + "en") (mieh + "enä") (mieh + "een")
+        (s + "ten") (mieh + "iä") (mieh + "pinä") (mieh + "issä")
+        (mieh + "iin") ;
   d43 : Str -> NForms -- 11 tiehyt
     = \s -> dRae s (init s + "en") ;
   d43A : Str -> NForms -- 1 immyt
     = \s -> dRae s (strongGrade (init s) + "en") ;
-----  d44 : Str -> NForms -- 1 kevät
-----    = \s ->  ;
-----  d45 : Str -> NForms -- 23 yhdes
-----    = \s ->  ;
-----  d46 : Str -> NForms -- 1 tuhat
-----    = \s ->  ;
+  d44 : Str -> NForms -- 1 kevät
+    = \s -> let kevä = init s in 
+      nForms10
+        s (s + "tä") (kevä + "än") (kevä + "änä") (kevä + "äseen")
+        (s + "iden") (kevä + "itä") (kevä + "inä") (kevä + "issä")
+        (kevä + "isiin") ;
+  d45 : Str -> NForms -- 23 yhdes
+    = \s -> let yhde = init s ; a = vowelHarmony s in 
+      nForms10
+        s (yhde + "tt" + a) (yhde + "nnen") (yhde + "nten" + a) (yhde + "nteen")
+        (yhde + "nsien") (yhde + "nsi" + a) (yhde + "nsin" + a) (yhde + "nsiss" + a)
+        (yhde + "nsiin") ;
+  d46 : Str -> NForms -- 1 tuhat
+    = \s -> let tuha = init s ; a = vowelHarmony s in 
+      nForms10
+        s (tuha + "tt" + a) (tuha + "nnen") (tuha + "nten" + a) (tuha + "nteen")
+        (tuha + "nsien") (tuha + "nsi" + a) (tuha + "nsin" + a) (tuha + "nsiss" + a)
+        (tuha + "nsiin") ;
   d47 : Str -> NForms -- 46 ylirasittunut
     = dOttanut ;
   d48 : Str -> NForms -- 346 äpäre
@@ -137,8 +175,8 @@ oper
     = \s -> dRae s (strongGrade s + "en") ;
   d49 : Str -> NForms -- 31 vempele
     = \s -> dRae s (s + "en") ;
-----  d49A : Str -> NForms -- 11 vemmel
-----    = \s ->  ;
+  d49A : Str -> NForms -- 11 vemmel
+    = \s -> dPiennar s (strongGrade (init s) + "len") ;
 {-
   d50 : Str -> NForms -- 520 vääräsääri
     = \s ->  ;
