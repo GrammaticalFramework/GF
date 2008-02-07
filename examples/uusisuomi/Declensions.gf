@@ -26,6 +26,16 @@ resource Declensions = ResFin ** open MorphoFin,CatFin,Prelude in {
       (nais + "ten") (nais + "i" + a) 
       (nais + "in" + a) (nais + "iss" + a) (nais + "iin") ; 
 
+  dPaluu : Str -> NForms = \paluu ->
+    let
+      a = vowHarmony paluu ;
+      palui = init paluu + "i" ;
+      u = last paluu ;
+    in nForms10
+      paluu (paluu + "n") (paluu + "t" + a) (paluu + "n" + a)  (paluu + "seen")
+      (palui + "den") (palui + "t" + a) 
+      (palui + "n" + a) (palui + "ss" + a) (palui + "siin") ;
+
   dPuu : Str -> NForms = \puu ->
     let
       a = vowHarmony puu ;
