@@ -11,12 +11,14 @@ import GF.Parsing.FCFG.PInfo (FCFPInfo(..), buildFCFPInfo)
 import qualified Data.Array as Array
 import Data.Map
 
+pgfMajorVersion, pgfMinorVersion :: Integer
+(pgfMajorVersion, pgfMinorVersion) = (1,0)
 
 -- convert parsed grammar to internal GFCC
 
 toGFCC :: Grammar -> GFCC
 toGFCC (Grm [
-  App (CId "grammar") (App a []:cs),
+  App (CId "pgf") (AInt v1 : AInt v2 : App a []:cs),
   App (CId "flags")     gfs, 
   ab@(
     App (CId "abstract") [
@@ -147,7 +149,8 @@ toTerm e = case e of
 
 fromGFCC :: GFCC -> Grammar
 fromGFCC gfcc0 = Grm [
-  app "grammar" (App (absname gfcc) [] : lmap (flip App []) (cncnames gfcc)), 
+  app "pgf" (AInt pgfMajorVersion:AInt pgfMinorVersion
+             : App (absname gfcc) [] : lmap (flip App []) (cncnames gfcc)), 
   app "flags" [App f [AStr v] | (f,v) <- toList (gflags gfcc `union` aflags agfcc)],
   app "abstract" [
     app "fun"   [App f [fromType t,fromExp d] | (f,(t,d)) <- toList (funs agfcc)],
