@@ -28,7 +28,7 @@ pTerm n = skipSpaces >> (pParen <++ pApp <++ pNum <++ pStr <++ pMeta)
                    return (AInt (read x)))
         pMeta = char '?' >> return AMet
         pIdent = liftM CId $ liftM2 (:) (satisfy isIdentFirst) (munch isIdentRest)
-        isIdentFirst c = c == '_' || isLetter c
+        isIdentFirst c = c == '_' || isAlpha c
         isIdentRest c = c == '_' || c == '\'' || isAlphaNum c
 
 -- Parser combinators with only left-biased choice
