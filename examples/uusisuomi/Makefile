@@ -1,6 +1,8 @@
 LEX=Omat
 CAT=N
 
+.PHONY: kotus
+
 all: nouns
 
 verbs: 
@@ -21,6 +23,10 @@ nouns:
 	cat all-diff-* >all-differences
 	cat all-differences
 
+kotus: 
+	export LEX=KOTUS ; make -e tests
+	cat all-diff-KOTUS
+
 CSC: 
 	export LEX=NCSC ; make -e tests
 	cat all-diff-NCSC
@@ -33,7 +39,7 @@ gf-files:
 	runghc MkLex.hs 4 $(CAT) $(LEX) > $(LEX)4.gf
 
 experiments: gf-files
-	echo "gt -cat=Utt | l | wf exper1-$(LEX).txt" | gf -s $(LEX)1.gf
+#	echo "gt -cat=Utt | l | wf exper1-$(LEX).txt" | gf -s $(LEX)1.gf
 	echo "gt -cat=Utt | l | wf exper2-$(LEX).txt" | gf -s $(LEX)2.gf
 	echo "gt -cat=Utt | l | wf exper3-$(LEX).txt" | gf -s $(LEX)3.gf
 	echo "gt -cat=Utt | l | wf exper4-$(LEX).txt" | gf -s $(LEX)4.gf

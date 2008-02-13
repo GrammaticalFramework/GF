@@ -9,12 +9,12 @@ oper
   d01A : Str -> NForms -- 166 yökkö
     = \s -> dUkko s (weakGrade s + "n") ;
   d02 : Str -> NForms -- 1189 ääntely
-    = \s -> dSilakka s (s + "n") (s + "j" + vowelHarmony (last s)) ;
+    = \s -> dSilakka s (s + "n") (s + "j" + getHarmony (last s)) ;
   d03 : Str -> NForms -- 481 ääntiö
-    = \s -> dSilakka s (s + "n") (s + "it" + vowelHarmony (last s)) ;
+    = \s -> dSilakka s (s + "n") (s + "it" + vowelHarmony s) ;
   d04A : Str -> NForms -- 273 äpärikkö
     = \s -> let ws = weakGrade s in 
-      dSilakka s (ws + "n") (ws + "it" + vowelHarmony (last s)) ;
+      dSilakka s (ws + "n") (ws + "it" + getHarmony (last s)) ;
   d05 : Str -> NForms -- 3212 öljymaali
     = \s -> dPaatti s (s + "n") ;
   d05A : Str -> NForms -- 1959 öylätti
@@ -136,9 +136,9 @@ oper
   d40 : Str -> NForms -- 2482 öykkärimäisyys
     = dLujuus  ;
   d41 : Str -> NForms -- 127 äyräs
-    = \s -> let is = init s in dRae s (is + last is ++ "n") ;
+    = \s -> let is = init s in dRae s (is + last is + "n") ;
   d41A : Str -> NForms -- 401 öljykangas
-    = \s -> let is = init s in dRae s (strongGrade is + last is ++ "n") ;
+    = \s -> let is = init s in dRae s (strongGrade is + last is + "n") ;
   d42 : Str -> NForms -- 1 mies
     = \s -> let mieh = init s + "s" in 
       nForms10

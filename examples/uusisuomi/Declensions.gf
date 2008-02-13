@@ -142,9 +142,9 @@ resource Declensions = ResFin ** open MorphoFin,CatFin,Prelude in {
       silakoiden = case <silakoita : Str> of {
         _ + "i" + ("a" | "ä") =>                    -- asemia
           <silakka+a, silakk + "ien", silakk, silak, silakk + "iin"> ;
-        _ + O@("o" | "ö") + ("ja" | "jä") =>        -- pasuunoja
+        _ + O@("o" | "ö" | "u" | "y" | "e") + ("ja" | "jä") =>        -- pasuunoja
           <silakka+a,silakk+O+"jen",silakk+O, silak+O, silakk +O+ "ihin"> ;
-        _ + O@("o" | "ö") + ("ita" | "itä") =>      -- silakoita
+        _ + O@("o" | "ö" | "u" | "y" | "e") + ("ita" | "itä") =>      -- silakoita
           <silakkaa, silak+O+"iden",silakk+O, silak+O, silakk +O+ "ihin"> ;
         _   => Predef.error silakoita                    
         } ;

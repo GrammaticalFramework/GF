@@ -72,7 +72,8 @@ lin pot01  =
 lin pot0 d =
   {s = table {_ => d.s} ; size = d.size} ;
 lin pot110  =
-  {s = table {_ => gg "десять"} ; size = plg} ;
+  {s = table {_ => gg "десяти"} ; size = plg} ;
+--   {s = table {_ => gg "десять"} ; size = plg} ;
 lin pot111  =
   {s = table {_ => gg "одиннадцать"} ; size = plg} ; --- 11
 lin pot1to19 d =
