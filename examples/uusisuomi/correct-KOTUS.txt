@@ -26172,8 +26172,6 @@ miero mieron mieroa mierona mieroon mierojen mieroja mieroina mieroissa mieroihi
 
 mierolainen mierolaisen mierolaista mierolaisena mierolaiseen mierolaisten mierolaisia mierolaisina mierolaisissa mierolaisiin
 
-mies miestä miesen miesenä mieseen miesten miesiä miespinä miesissä miesiin
-
 miesmäinen miesmäisen miesmäistä miesmäisenä miesmäiseen miesmäisten miesmäisiä miesmäisinä miesmäisissä miesmäisiin
 
 miesmäisyys miesmäisyyden miesmäisyyttä miesmäisyytenä miesmäisyyteen miesmäisyyksien miesmäisyyksiä miesmäisyyksinä miesmäisyyksissä miesmäisyyksiin
@@ -51894,7 +51892,7 @@ vasemmistolainen vasemmistolaisen vasemmistolaista vasemmistolaisena vasemmistol
 
 vasemmistolaisuus vasemmistolaisuuden vasemmistolaisuutta vasemmistolaisuutena vasemmistolaisuuteen vasemmistolaisuuksien vasemmistolaisuuksia vasemmistolaisuuksina vasemmistolaisuuksissa vasemmistolaisuuksiin
 
-vasen vasenta vasemman vasempana vasempaan vasempien vasempia vasempina vasemmissa vasempiin
+vasen vasemman vasenta vasempana vasempaan vasempien vasempia vasempina vasemmissa vasempiin
 
 vasikka vasikan vasikkaa vasikkana vasikkaan vasikoiden vasikoita vasikkoina vasikoissa vasikkoihin
 

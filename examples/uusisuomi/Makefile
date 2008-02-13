@@ -33,7 +33,7 @@ CSC:
 
 gf-files:
 	runghc MkLex.hs 0 $(CAT) $(LEX) > $(LEX)Abs.gf
-	runghc MkLex.hs 1 $(CAT) $(LEX) > $(LEX)1.gf
+#	runghc MkLex.hs 1 $(CAT) $(LEX) > $(LEX)1.gf
 	runghc MkLex.hs 2 $(CAT) $(LEX) > $(LEX)2.gf
 	runghc MkLex.hs 3 $(CAT) $(LEX) > $(LEX)3.gf
 	runghc MkLex.hs 4 $(CAT) $(LEX) > $(LEX)4.gf
