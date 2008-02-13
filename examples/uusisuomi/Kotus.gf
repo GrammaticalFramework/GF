@@ -110,7 +110,7 @@ oper
   d34 : Str -> NForms -- 1 alaston
     = \s -> let alastom = init s in 
       nForms10
-        s (s + "ta") (alastom + "an") (alastom + "ana") (alastom + "aan")
+        s (alastom + "an") (s + "ta") (alastom + "ana") (alastom + "aan")
         (alastom + "ien") (alastom + "ia") (alastom + "ina") (alastom + "issa")
         (alastom + "iin") ;
   d34A : Str -> NForms -- 569 ääretön
@@ -118,7 +118,7 @@ oper
   d35A : Str -> NForms -- 1 lämmin
     = \s -> let lämpim = strongGrade (init s) + "m" in
       nForms10
-        s (s + "tä") (lämpim + "än") (lämpim + "änä") (lämpim + "ään")
+        s (lämpim + "än") (s + "tä") (lämpim + "änä") (lämpim + "ään")
         (lämpim + "ien") (lämpim + "iä") (lämpim + "inä") (lämpim + "issä")
         (lämpim + "iin") ;
   d36 : Str -> NForms -- 11 ylin
@@ -126,7 +126,7 @@ oper
   d37 : Str -> NForms -- 1 vasen
     = \s -> let vasem = init s + "m" in 
       nForms10
-        s (s + "ta") (vasem + "man") (vasem + "pana") (vasem + "paan")
+        s (vasem + "man") (s + "ta") (vasem + "pana") (vasem + "paan")
         (vasem + "pien") (vasem + "pia") (vasem + "pina") (vasem + "missa")
         (vasem + "piin") ;
   d38 : Str -> NForms -- 4195 öykkärimäinen
@@ -142,8 +142,8 @@ oper
   d42 : Str -> NForms -- 1 mies
     = \s -> let mieh = init s + "s" in 
       nForms10
-        s (s + "tä") (mieh + "en") (mieh + "enä") (mieh + "een")
-        (s + "ten") (mieh + "iä") (mieh + "pinä") (mieh + "issä")
+        s (mieh + "en") (s + "tä") (mieh + "enä") (mieh + "een")
+        (s + "ten") (mieh + "iä") (mieh + "inä") (mieh + "issä")
         (mieh + "iin") ;
   d43 : Str -> NForms -- 11 tiehyt
     = \s -> dRae s (init s + "en") ;
@@ -152,19 +152,19 @@ oper
   d44 : Str -> NForms -- 1 kevät
     = \s -> let kevä = init s in 
       nForms10
-        s (s + "tä") (kevä + "än") (kevä + "änä") (kevä + "äseen")
+        s (kevä + "än") (s + "tä") (kevä + "änä") (kevä + "äseen")
         (s + "iden") (kevä + "itä") (kevä + "inä") (kevä + "issä")
         (kevä + "isiin") ;
   d45 : Str -> NForms -- 23 yhdes
     = \s -> let yhde = init s ; a = vowelHarmony s in 
       nForms10
-        s (yhde + "tt" + a) (yhde + "nnen") (yhde + "nten" + a) (yhde + "nteen")
+        s (yhde + "nnen") (yhde + "tt" + a) (yhde + "nten" + a) (yhde + "nteen")
         (yhde + "nsien") (yhde + "nsi" + a) (yhde + "nsin" + a) (yhde + "nsiss" + a)
         (yhde + "nsiin") ;
   d46 : Str -> NForms -- 1 tuhat
     = \s -> let tuha = init s ; a = vowelHarmony s in 
       nForms10
-        s (tuha + "tt" + a) (tuha + "nnen") (tuha + "nten" + a) (tuha + "nteen")
+        s (tuha + "nnen") (tuha + "tt" + a) (tuha + "nten" + a) (tuha + "nteen")
         (tuha + "nsien") (tuha + "nsi" + a) (tuha + "nsin" + a) (tuha + "nsiss" + a)
         (tuha + "nsiin") ;
   d47 : Str -> NForms -- 46 ylirasittunut
