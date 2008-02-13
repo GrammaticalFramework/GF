@@ -37,9 +37,9 @@ initiate tgt cat i = mapM_ putStrLn [
       "lin testV = showV ;"
      ]
 
-nums = map prt [1 ..] where
+nums = map prt [10001 ..] where
 ----  prt i = (if i < 10 then "0" else "") ++ show i ++ ". "
-  prt i = let n = show i in replicate (4-length n) '0' ++ n ++ ". "
+  prt i = show i ++ ". "
 
 -- W is the flag for mixed-class word lists
 mkLex "W" 0 line = case words line of

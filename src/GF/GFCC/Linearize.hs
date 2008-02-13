@@ -28,14 +28,14 @@ realize trm = case trm of
 
 linExp :: GFCC -> CId -> Exp -> Term
 linExp mcfg lang tree@(DTr xs at trees) =
-  case at of
-    AC fun -> addB $ comp (lmap lin trees) $ look fun
+  addB $ case at of
+    AC fun -> comp (lmap lin trees) $ look fun
     AS s   -> R [kks (show s)] -- quoted
     AI i   -> R [kks (show i)] 
                 --- [C lst, kks (show i), C size] where 
                 --- lst = mod (fromInteger i) 10 ; size = if i < 10 then 0 else 1
     AF d   -> R [kks (show d)]
-    AV x   -> addB $ TM (prCId x)
+    AV x   -> TM (prCId x)
     AM i   -> TM (show i)
  where
    lin  = linExp mcfg lang
@@ -45,6 +45,7 @@ linExp mcfg lang tree@(DTr xs at trees) =
      | Data.List.null xs = t
      | otherwise = case t of
          R ts -> R $ ts ++ (Data.List.map (kks . prCId) xs)
+         TM s -> R $ t : (Data.List.map (kks . prCId) xs)
 
 compute :: GFCC -> CId -> [Term] -> Term -> Term
 compute mcfg lang args = comp where

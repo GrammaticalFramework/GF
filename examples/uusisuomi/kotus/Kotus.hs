@@ -5,19 +5,19 @@ kotus = "sanat.xxmmll"
 
 main = do
   ss <- readFile kotus >>= return . lines
-  let ws = map analyse ss
+  let ws = [w | Just w <- map analyse ss]
   writeFile "kotus.gf" $ unlines $ treat ws
 --  mapM putStrLn $ treat ws
 
 treat = map mkLin . entries
 
-entries = zip [10000..] . filter isNoun
+entries = zip [10001..] . filter isNoun
 
 isNoun x = ((<5) . read . take 1 . fst) x && (all isAlpha . snd) x
 
 mkLin (n,(pa,ex)) = 
   "fun n" ++ show n ++ "_" ++ ex ++ " : N ;\n" ++
-  "lin n" ++ show n ++ "_" ++ ex ++ " = d" ++ pa ++ " \"" ++ ex ++ "\" ;"
+  "lin n" ++ show n ++ "_" ++ ex ++ " = ud d" ++ pa ++ " \"" ++ ex ++ "\" ;"
 
 -- treat = map mkRule . paradigms
 
@@ -45,8 +45,11 @@ analyse s =
     lst = drop 6 $ dropWhile (/='t') end
     (num,gr) = span isDigit lst
     para = (replicate (2 - length num) '0' ++ num) ++ ['A' | isPrefixOf "av" (drop 6 gr)]
-  in  
-  (para,word)
+  in case num of
+    "" -> Nothing
+    "0" -> Nothing
+    _ | length num > 2 -> Nothing
+    _ -> if last word == 't' then Nothing else Just (para,word)
 
 sub cs s = isPrefixOf cs s || isPrefixOf cs (drop 1 s)
 

@@ -330,6 +330,7 @@ perfective: Aspect ;
 first = First ;
 firstE = FirstE ;
 second = Second ;
+secondA = SecondA ;
 mixed = Mixed ;
 dolzhen = Dolzhen; 
 foreign = Foreign; -- +++ MG_UR: added +++

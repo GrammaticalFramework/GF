@@ -2266,7 +2266,7 @@ oper uy_oj_EndDecl : Str -> Adjective = \s ->{s = table {
 ---- patterns in the present tense in the indicative mood.
 
 -- +++ MG_UR: new conjugation class 'Foreign' introduced +++
-param Conjugation = First | FirstE | Second | Mixed | Dolzhen | Foreign ;
+param Conjugation = First | FirstE | Second | SecondA | Mixed | Dolzhen | Foreign ;
 
 
 --3 First conjugation (in Present) verbs :
@@ -2367,6 +2367,16 @@ table {
     PRF APl P3 => del+ "дят"
   };
 
+oper presentConj2a: Str -> Str -> PresentVerb = \del, sgP1End ->
+table {
+    PRF (ASg _) P1 => del+ sgP1End ; -- sgP1End "жу"
+    PRF (ASg _) P2 => del+ "ишь" ;
+    PRF (ASg _) P3  => del+ "ит" ;
+    PRF APl P1 => del+ "им" ;
+    PRF APl P2 => del+ "ите" ;
+    PRF APl P3 => del+ "ят"
+  };
+
 oper presentConj1E: Str -> Str -> PresentVerb = \del, sgP1End ->
   table {
     PRF (ASg _) P1 => del+ sgP1End ;
@@ -2438,6 +2448,7 @@ oper verbDecl: Aspect -> Conjugation -> Str -> Str -> Str -> Str ->Str -> Verbum
      First =>    mkVerb (perfectiveActivePattern inf imperSgP2 (presentConj1 del sgP1End) (pastConj sgMascPast))  (pastConj sgMascPast);
      FirstE =>    mkVerb (perfectiveActivePattern inf imperSgP2 (presentConj1E del sgP1End) (pastConj sgMascPast))  (pastConj sgMascPast);
      Second =>    mkVerb (perfectiveActivePattern inf imperSgP2 (presentConj2 del sgP1End) (pastConj sgMascPast)) (pastConj sgMascPast);
+     SecondA =>    mkVerb (perfectiveActivePattern inf imperSgP2 (presentConj2a del sgP1End) (pastConj sgMascPast)) (pastConj sgMascPast);
     Mixed => mkVerb (perfectiveActivePattern inf imperSgP2 (presentConjMixed del sgP1End) (pastConj sgMascPast)) (pastConj sgMascPast);
     Dolzhen => mkVerb (perfectiveActivePattern inf imperSgP2 (presentConjDolzhen del sgP1End) (pastConjDolzhen sgMascPast)) (pastConjDolzhen sgMascPast);
     Foreign => mkVerb (perfectiveActivePattern inf imperSgP2 (presentConjForeign del sgP1End) (pastConj sgMascPast)) (pastConj sgMascPast)
@@ -2446,6 +2457,7 @@ oper verbDecl: Aspect -> Conjugation -> Str -> Str -> Str -> Str ->Str -> Verbum
      First => mkVerb (imperfectiveActivePattern inf imperSgP2 (presentConj1 del sgP1End) (pastConj sgMascPast))  (pastConj sgMascPast);
      FirstE => mkVerb (imperfectiveActivePattern inf imperSgP2 (presentConj1E del sgP1End) (pastConj sgMascPast))  (pastConj sgMascPast);
     Second => mkVerb (imperfectiveActivePattern inf imperSgP2 (presentConj2 del sgP1End) (pastConj sgMascPast)) (pastConj sgMascPast);
+    SecondA => mkVerb (imperfectiveActivePattern inf imperSgP2 (presentConj2a del sgP1End) (pastConj sgMascPast)) (pastConj sgMascPast);
     Mixed => mkVerb (imperfectiveActivePattern inf imperSgP2 (presentConjMixed del sgP1End) (pastConj sgMascPast)) (pastConj sgMascPast) ;
     Dolzhen => mkVerb (imperfectiveActivePattern inf imperSgP2 (presentConjDolzhen del sgP1End) (pastConjDolzhen sgMascPast)) (pastConjDolzhen sgMascPast);
     Foreign => mkVerb (imperfectiveActivePattern inf imperSgP2 (presentConjForeign del sgP1End) (pastConj sgMascPast)) (pastConj sgMascPast)

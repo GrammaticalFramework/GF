@@ -317,7 +317,8 @@ lin
   sock_N = nPotolok "нос" ;
 ---  son_N = nSyn "сын" ; -- +++ MG_UR: added +++
   song_N = nTetya "песн" ;
-  speak_V2 = dirV2 (regV imperfective second "говор" "ю" "говорил" "говори" "говорить" );
+  speak_V2 = mkV2 (regV imperfective secondA "говор" "ю" "говорил" "говори" "говорить")
+               "на" prepositional ;
   spit_V = regV imperfective firstE "плю" "ю" "плевал" "плюй" "плевать" ;
   split_V2 = dirV2 (regV imperfective first "разбива" "ю" "разбивал" "разбей" "разбивать" ) ;
   squeeze_V2 = dirV2 (regV imperfective first "сжима" "ю" "сжимал" "сжимай" "сжимать" ) ;
