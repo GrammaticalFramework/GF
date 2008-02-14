@@ -428,8 +428,8 @@ mkSingletonSelectors cnc_defs term = sels0
 
     loop path st          (R record) = List.foldl' (\st (index,term) -> loop (index:path) st term) st (zip [0..] record)
     loop path st          (RP _ t)   = loop path st t
-    loop path (sels,tcss) (C i)      = (                          sels,map ((,) path) [0..i-1] : tcss)
-    loop path (sels,tcss) (S _)      = (mkSelector [path] tcss0 : sels,                          tcss)
+    loop path (sels,tcss) (C i)      = (                          sels,map ((,) path) [0..i] : tcss)
+    loop path (sels,tcss) (S _)      = (mkSelector [path] tcss0 : sels,                        tcss)
     loop path (sels,tcss) (F id)     = case Map.lookup id cnc_defs of
                                          Just term -> loop path (sels,tcss) term
                                          Nothing   -> error ("unknown identifier: "++prt id)
