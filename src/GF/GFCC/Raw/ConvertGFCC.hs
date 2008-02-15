@@ -67,7 +67,7 @@ toConcr = foldl add (Concr {
     add cnc (App (CId "parser") ts)    = cnc { parser = Just (toPInfo ts) }
 
 toPInfo :: [RExp] -> FCFPInfo
-toPInfo [App (CId "rules") rs, App (CId "gfcats") cs] = buildFCFPInfo (rules, cats)
+toPInfo [App (CId "rules") rs, App (CId "startupcats") cs] = buildFCFPInfo (rules, cats)
   where 
     rules = lmap toFRule rs
     cats = fromList [(c, lmap expToInt fs) | App c fs <- cs]
@@ -219,7 +219,7 @@ fromTerm e = case e of
 fromPInfo :: FCFPInfo -> RExp
 fromPInfo p = app "parser" [
           app "rules"         [fromFRule rule | rule <- Array.elems (allRules p)],
-          app "gfcats"        [App f (lmap intToExp cs) | (f,cs) <- toList (startupCats p)]
+          app "startupcats"   [App f (lmap intToExp cs) | (f,cs) <- toList (startupCats p)]
         ]
 
 fromFRule :: FRule -> RExp
