@@ -144,6 +144,10 @@ resource Nominal = ResFin ** open MorphoFin,Declensions,CatFin,Prelude in {
           dArpi ukko (init (weakGrade ukko) + "en") ;
         <_ + "i", _ + ("eita" | "eitä")> => 
           dTohtori ukko ;
+        <_ + "e", nuk + ("eja" | "ejä")> => 
+          dNukke ukko ukon ;
+        <_, _ + ":" + _ + ("a" | "ä")> => dSDP ukko ;
+        <_ + ("l" | "n" | "r" | "s"), _ + ("eja" | "ejä")> => dUnix ukko ;
         <_, _ + ("a" | "ä")> => ukot ;
         _ => 
           Predef.error 
@@ -168,7 +172,7 @@ resource Nominal = ResFin ** open MorphoFin,Declensions,CatFin,Prelude in {
           dRae ukko ukon ;
         <taiv + ("as" | "äs"), taiv + ("aan" | "ään")> => 
           dRae ukko ukon ;
-        <nukk + "e", nuk + "en"> => dNukke ukko ukon ;
+        <nukk + "e", nuk + "een"> => dRae ukko ukon ;
         <arp + "i", arv + "en"> => dArpi ukko ukon ;
         <_ + ("us" | "ys"), _ + "den"> => dLujuus ukko ;
         <_, _ + ":n"> => dSDP ukko ;

@@ -14,8 +14,8 @@ verbs:
 	cat all-differences-V
 
 nouns: 
-	export LEX=NSSK ; make -e tests
-	export LEX=Omat ; make -e tests
+#	export LEX=NSSK ; make -e tests
+#	export LEX=Omat ; make -e tests
 	export LEX=Swadesh ; make -e tests
 	export LEX=Dictionary ; make -e tests
 	export LEX=Duodecim ; make -e tests
@@ -33,13 +33,13 @@ CSC:
 
 gf-files:
 	runghc MkLex.hs 0 $(CAT) $(LEX) > $(LEX)Abs.gf
-	runghc MkLex.hs 1 $(CAT) $(LEX) > $(LEX)1.gf
+#	runghc MkLex.hs 1 $(CAT) $(LEX) > $(LEX)1.gf
 	runghc MkLex.hs 2 $(CAT) $(LEX) > $(LEX)2.gf
 	runghc MkLex.hs 3 $(CAT) $(LEX) > $(LEX)3.gf
 	runghc MkLex.hs 4 $(CAT) $(LEX) > $(LEX)4.gf
 
 experiments: gf-files
-	echo "gt -cat=Utt | l | wf exper1-$(LEX).txt" | gf -s $(LEX)1.gf
+#	echo "gt -cat=Utt | l | wf exper1-$(LEX).txt" | gf -s $(LEX)1.gf
 	echo "gt -cat=Utt | l | wf exper2-$(LEX).txt" | gf -s $(LEX)2.gf
 	echo "gt -cat=Utt | l | wf exper3-$(LEX).txt" | gf -s $(LEX)3.gf
 	echo "gt -cat=Utt | l | wf exper4-$(LEX).txt" | gf -s $(LEX)4.gf
