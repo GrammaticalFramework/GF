@@ -30,15 +30,19 @@ oper
   d08A : Str -> NForms -- 5 vinaigrette
     = \s -> dNukke s (weakGrade s + "n") ;
   d09 : Str -> NForms -- 696 ääriraja
-    = \s -> dUkko s (s + "n") ;
+    = \s -> let a = last s in dSilakka s         
+              (s + "n")
+              (init s + case a of {"a" => "o" ; _ => "ö"} + "j" + a) ;
   d09A : Str -> NForms -- 1040 ääniraita
-    = \s -> dUkko s (s + weakGrade "n") ;
+    = \s -> let a = last s in dSilakka s         
+              (weakGrade s + "n")
+              (init s + case a of {"a" => "o" ; _ => "ö"} + "j" + a) ;
   d10 : Str -> NForms -- 2119 äänittäjä
     = \s -> dSilakka s (s + "n") (init s + "i" + vowelHarmony (last s)) ;
   d10A : Str -> NForms -- 284 änkkä
-    = \s -> dUkko s (weakGrade s + "n") ;
+    = \s -> dSilakka s (weakGrade s + "n") (init s + "i" + vowelHarmony (last s)) ;
   d11 : Str -> NForms -- 46 ödeema
-    = \s -> dUkko s (s + "n") ;
+    = \s -> dSilakka s (weakGrade s + "n") (init s + "i" + vowelHarmony (last s)) ;
   d12 : Str -> NForms -- 1125 örinä
     = \s -> let a = vowelHarmony (last s) in 
       dSilakka s (s + "n") 
@@ -174,7 +178,10 @@ oper
   d48A : Str -> NForms -- 481 äänne
     = \s -> dRae s (strongGrade s + "en") ;
   d49 : Str -> NForms -- 31 vempele
-    = \s -> dRae s (s + "en") ;
+    = \s -> case last s of {
+         "e" => dRae s (s + "en") ;
+         _ => dPiennar s (s + "en")
+        } ;
   d49A : Str -> NForms -- 11 vemmel
     = \s -> dPiennar s (strongGrade (init s) + "len") ;
 {-
