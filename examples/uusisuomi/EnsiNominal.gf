@@ -125,59 +125,54 @@ resource Nominal = ResFin ** open MorphoFin,Declensions,CatFin,Prelude in {
       _ => dUnix ukko
     } ;   
 
-
-    nForms2 : (_,_ : Str) -> NForms = \ukko,ukkoja -> 
-      let
-        ukot = nForms1 ukko ; 
-        ukon = weakGrade ukko + "n" ;
-      in
-      case <ukko,ukkoja> of {
-        <_ + "ea", _ + "oita"> => 
-          dSilakka ukko ukon ukkoja ;  -- idea, but not korkea
-        <_ + ("aa" | "ee" | "ii" | "oo" | "uu" | "yy" | "ää" | "öö" | 
-              "ie" | "uo" | "yö" | "ea" | "eä" | 
-              "ia" | "iä" | "io" | "iö"), _ + ("a" | "ä")> => 
-          nForms1 ukko ; --- to protect --- how to get "dioja"?
-        <_ + ("a" | "ä" | "o" | "ö"), _ + ("a" | "ä")> => 
-          dSilakka ukko ukon ukkoja ;
-        <arp + "i", _ + "i" + ("a" | "ä")> =>
-          dArpi ukko (init (weakGrade ukko) + "en") ;
-        <_ + "i", _ + ("eita" | "eitä")> => 
-          dTohtori ukko ;
-        <_, _ + ("a" | "ä")> => ukot ;
-        _ => 
-          Predef.error 
-           (["last argument should end in a/ä, not"] ++ ukkoja)
-      } ;
-
-    nForms3 : (_,_,_ : Str) -> NForms = \ukko,ukon,ukkoja -> 
+    nForms2 : (_,_ : Str) -> NForms = \ukko,ukon -> 
       let
         ukk = init ukko ;
-        ukot = nForms2 ukko ukkoja ;
       in
       case <ukko,ukon> of {
         <_ + ("aa" | "ee" | "ii" | "oo" | "uu" | "yy" | "ää" | "öö" | 
               "ie" | "uo" | "yö" | "ea" | "eä" | 
               "ia" | "iä" | "io" | "iö" | "ja" | "jä"), _ + "n"> => 
-           ukot ; --- to protect
-        <_ + ("a" | "o" | "u" | "y" | "ä" | "ö"), _ + "n", _ + ("a" | "ä")> => 
-          dSilakka ukko ukon ukkoja ;  -- auto,auton
+           nForms1 ukko ; --- to protect
+        <_ + ("a" | "o" | "u" | "y" | "ä" | "ö"), _ + "n"> => 
+          dUkko ukko ukon ;  -- auto,auton
         <_ + "mpi", _ + ("emman" | "emmän")> => dSuurempi ukko ;
         <_ + "in", _ + ("imman" | "immän")> => dSuurin ukko ;
+        <arp + "i", arv + "en"> => dArpi ukko ukon ;
+---        <arp + "i", _ + "i" + ("a" | "ä")> =>         -- for b-w compat.
+---          dArpi ukko (init (weakGrade ukko) + "en") ;
         <terv + "e", terv + "een"> => 
           dRae ukko ukon ;
         <taiv + ("as" | "äs"), taiv + ("aan" | "ään")> => 
           dRae ukko ukon ;
         <nukk + "e", nuk + "en"> => dNukke ukko ukon ;
-        <arp + "i", arv + "en"> => dArpi ukko ukon ;
         <_ + ("us" | "ys"), _ + "den"> => dLujuus ukko ;
         <_, _ + ":n"> => dSDP ukko ;
-        <_, _ + "n"> => ukot ;
+        <_, _ + "n"> => nForms1 ukko ;
         _ => 
           Predef.error (["second argument should end in n, not"] ++ ukon)
        } ;
 
-
+    nForms3 : (_,_,_ : Str) -> NForms = \ukko,ukon,ukkoja -> 
+      let
+        ukot = nForms2 ukko ukon ; 
+      in
+      case <ukko,ukon,ukkoja> of {
+        <_ + "ea", _ + "ean", _ + "oita"> => 
+          dSilakka ukko ukon ukkoja ;  -- idea, but not korkea
+        <_ + ("aa" | "ee" | "ii" | "oo" | "uu" | "yy" | "ää" | "öö" | 
+              "ie" | "uo" | "yö" | "ea" | "eä" | 
+              "ia" | "iä" | "io" | "iö"), _ + "n"> => 
+          nForms1 ukko ; --- to protect --- how to get "dioja"?
+        <_ + ("a" | "ä" | "o" | "ö"), _ + "n", _ + ("a" | "ä")> => 
+          dSilakka ukko ukon ukkoja ;
+        <_ + "i", _ + "n", _ + ("eita" | "eitä")> => 
+          dTohtori ukko ;
+        <_, _ + "n", _ + ("a" | "ä")> => ukot ;
+        _ => 
+          Predef.error 
+           (["last arguments should end in n and a/ä, not"] ++ ukon ++ ukkoja)
+      } ;
 
     nForms4 : (_,_,_,_ : Str) -> NForms = \ukko,ukon,ukkoja,ukkoa -> 
       let
