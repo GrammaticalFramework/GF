@@ -2,9 +2,9 @@ concrete NumeralBul of Numeral = CatBul ** open Prelude, ResBul in {
 
 lincat 
   Digit      = {s : DForm => CardOrd => Str} ;
-  Sub10      = {s : DForm => CardOrd => Str; n : Number } ;
-  Sub100     = {s : CardOrd => Str; n : Number; i : Bool } ;
-  Sub1000    = {s : CardOrd => Str; n : Number; i : Bool } ;
+  Sub10      = {s : DForm => CardOrd => Str; n : Number} ;
+  Sub100     = {s : CardOrd => Str; n : Number; i : Bool} ;
+  Sub1000    = {s : CardOrd => Str; n : Number; i : Bool} ;
   Sub1000000 = {s : CardOrd => Str; n : Number} ;
 
 lin num x = x ;
