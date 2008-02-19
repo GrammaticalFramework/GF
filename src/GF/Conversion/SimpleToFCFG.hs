@@ -194,9 +194,10 @@ convertTerm cnc_defs selector (S ts)       ((lbl_path,lin) : lins) = do projectH
 convertTerm cnc_defs selector (K (KS str)) ((lbl_path,lin) : lins) = 
   do projectHead lbl_path
      return ((lbl_path,Tok str : lin) : lins)
-convertTerm cnc_defs selector (K (KP (str:_)_))((lbl_path,lin) : lins) = 
+convertTerm cnc_defs selector (K (KP strs vars))((lbl_path,lin) : lins) = 
   do projectHead lbl_path
-     return ((lbl_path,Tok str : lin) : lins)
+     toks <- member (strs:[strs' | Var strs' _ <- vars])
+     return ((lbl_path, map Tok toks ++ lin) : lins)
 convertTerm cnc_defs selector (RP _ term)                    lins  = convertTerm cnc_defs selector term lins
 convertTerm cnc_defs selector (F id)                         lins  = do term <- Map.lookup id cnc_defs
                                                                         convertTerm cnc_defs selector term lins
