@@ -30,8 +30,8 @@ resource ResBul = ParamX ** open Prelude in {
   param
     Gender = Masc | Fem | Neut ;
     
-    Dt = NDet | Det ;
-
+    Species = Indef | Def ;
+ 
 -- The plural never makes a gender distinction.
 
 --2 For $Verb$
@@ -55,9 +55,9 @@ resource ResBul = ParamX ** open Prelude in {
 --2 For $Adjective$
 
     AForm = 
-       ASg Gender Dt
-     | APl Dt
-     | AFullDet
+       ASg Gender Species
+     | APl Species
+     | AFullDef
      ;
 
 --2 Transformations between parameter types
@@ -80,8 +80,8 @@ resource ResBul = ParamX ** open Prelude in {
 
     aformGenNum : GenNum -> AForm = \gn -> 
       case gn of {
-        GSg g  => ASg g NDet ;
-        GPl    => APl NDet
+        GSg g  => ASg g Indef ;
+        GPl    => APl Indef
       } ;
 
   oper
@@ -190,15 +190,15 @@ resource ResBul = ParamX ** open Prelude in {
     mkAdjective : (_,_,_,_,_,_,_,_,_ : Str) -> {s : AForm => Str} = 
       \dobyr,dobria,dobriat,dobra,dobrata,dobro,dobroto,dobri,dobrite -> {
       s = table {
-        ASg Masc NDet  => dobyr ;
-        ASg Masc Det   => dobria ;
-        AFullDet       => dobriat ;
-        ASg Fem  NDet  => dobra ;
-        ASg Fem  Det   => dobrata ;
-        ASg Neut NDet  => dobro ;
-        ASg Neut Det   => dobroto ;
+        ASg Masc Indef => dobyr ;
+        ASg Masc Def   => dobria ;
+        AFullDef       => dobriat ;
+        ASg Fem  Indef => dobra ;
+        ASg Fem  Def   => dobrata ;
+        ASg Neut Indef => dobro ;
+        ASg Neut Def   => dobroto ;
         APl NDet       => dobri ;
-        APl Det        => dobrite
+        APl Def        => dobrite
         }
       } ;
 
