@@ -18,7 +18,7 @@ resource ResBul = ParamX ** open Prelude in {
 -- This is the worst-case $Case$ needed for pronouns.
 
   param
-    Case = Nom | Acc | Gen AForm;
+    Case = Nom | Acc | Gen AForm ;
     
     GenNum = GSg Gender | GPl ;
 
