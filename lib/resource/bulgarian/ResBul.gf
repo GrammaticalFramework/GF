@@ -62,8 +62,20 @@ resource ResBul = ParamX ** open Prelude in {
 
 --2 For $Numeral$
 
-    DGender = DMasc | DMascPersonal | DFem | DNeut ;
-    CardOrd = NCard DGender Species | NOrd AForm ;
+    DGenderSpecies = 
+       DMascIndef
+     | DMascDef
+     | DMascNomDef
+     | DMascPersonalIndef
+     | DMascPersonalDef
+     | DMascPersonalNomDef
+     | DFemIndef
+     | DFemDef
+     | DNeutIndef
+     | DNeutDef
+     ;
+
+    CardOrd = NCard DGenderSpecies | NOrd AForm ;
     DForm = unit | teen | ten | hundred ;
 
 --2 Transformations between parameter types
@@ -320,12 +332,7 @@ resource ResBul = ParamX ** open Prelude in {
     mkCardOrd : Str -> Str -> Str -> Str -> CardOrd => Str =
       \dva, dvama, dve, vtori ->
                table {
-                 NCard dg Indef => digitGender dva dvama dve ! dg ;
-                 NCard dg Def   => case digitGender dva dvama dve ! dg of {
-                                     dves+"та" => dves+"тате" ;
-                                     dv+"а"    => dv+"ата" ;
-                                     x         => x+"те"
-                                   } ;
+                 NCard dg   => digitGender dva dvama dve ! dg ;
                  NOrd aform => let vtora = init vtori + "а" ;
                                    vtoro = init vtori + "о"
                                in (mkAdjective vtori
@@ -339,13 +346,26 @@ resource ResBul = ParamX ** open Prelude in {
                                                (vtori+"те")).s ! aform
                } ;
 
-    digitGender : Str -> Str -> Str -> DGender => Str =
+    digitGender : Str -> Str -> Str -> DGenderSpecies => Str =
       \dva, dvama, dve
-            -> table {
-                 DMasc         => dva ;
-                 DMascPersonal => dvama ;
-                 _             => dve
-               } ;
+            -> let addDef : Str -> Str =
+                     \s -> case s of {
+		             dves+"та" => dves+"тате" ;
+		             dv+"а"    => dv+"ата" ;
+		             x         => x+"те"
+                           }
+               in table {
+                    DMascIndef          => dva ;
+                    DMascDef            => addDef dva ;
+                    DMascNomDef         => addDef dva ;
+                    DMascPersonalIndef  => dvama ;
+                    DMascPersonalDef    => addDef dvama ;
+                    DMascPersonalNomDef => addDef dvama ;
+                    DFemIndef           => dve ;
+                    DFemDef             => addDef dve ;
+                    DNeutIndef          => dve ;
+                    DNeutDef            => addDef dve
+                  } ;
 
     mkIP : Str -> GenNum -> {s : Str ; gn : GenNum} =
       \s,gn -> {
