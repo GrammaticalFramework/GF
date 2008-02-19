@@ -215,7 +215,7 @@ resource ResBul = ParamX ** open Prelude in {
         ASg Fem  Def   => dobrata ;
         ASg Neut Indef => dobro ;
         ASg Neut Def   => dobroto ;
-        APl NDet       => dobri ;
+        APl Indef      => dobri ;
         APl Def        => dobrite
         }
       } ;
