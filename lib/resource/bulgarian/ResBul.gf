@@ -60,6 +60,12 @@ resource ResBul = ParamX ** open Prelude in {
      | AFullDef
      ;
 
+--2 For $Numeral$
+
+    DGender = DMasc | DMascPersonal | DFem | DNeut ;
+    CardOrd = NCard DGender Species | NOrd AForm ;
+    DForm = unit | teen | ten | hundred ;
+
 --2 Transformations between parameter types
 
   oper
@@ -293,6 +299,53 @@ resource ResBul = ParamX ** open Prelude in {
               OQuest => subj ++ verb ++ "ли" ++ compl
              }
       } ;
+      
+-- For $Numeral$.
+
+    mkDigit : Str -> Str -> Str -> Str -> Str -> {s : DForm => CardOrd => Str} =
+      \dva, dvama, dve, vtori, dvesta ->
+      {s = table {
+             unit                  => mkCardOrd dva dvama dve vtori ;
+             teen                  => mkCardOrd (dva+"надесет") (dva+"надесетима") (dva+"надесет") (dva+"надесети") ;
+             ten                   => mkCardOrd (dva+"десет")   (dva+"десетима")   (dva+"десет")   (dva+"десети") ;
+             hundred               => let dvesten : Str
+                                                  = case dvesta of {
+                                                      dvest+"а"        => dvest+"ен" ;
+                                                      chetiristot+"ин" => chetiristot+"ен"
+                                                    }
+                                      in mkCardOrd dvesta dvesta dvesta dvesten
+           }
+      } ;
+
+    mkCardOrd : Str -> Str -> Str -> Str -> CardOrd => Str =
+      \dva, dvama, dve, vtori ->
+               table {
+                 NCard dg Indef => digitGender dva dvama dve ! dg ;
+                 NCard dg Def   => case digitGender dva dvama dve ! dg of {
+                                     dves+"та" => dves+"тате" ;
+                                     dv+"а"    => dv+"ата" ;
+                                     x         => x+"те"
+                                   } ;
+                 NOrd aform => let vtora = init vtori + "а" ;
+                                   vtoro = init vtori + "о"
+                               in (mkAdjective vtori
+                                               (vtori+"я")
+                                               (vtori+"ят")
+                                               vtora
+                                               (vtora+"та")
+                                               vtoro
+                                               (vtoro+"то")
+                                               vtori
+                                               (vtori+"те")).s ! aform
+               } ;
+
+    digitGender : Str -> Str -> Str -> DGender => Str =
+      \dva, dvama, dve
+            -> table {
+                 DMasc         => dva ;
+                 DMascPersonal => dvama ;
+                 _             => dve
+               } ;
 
     mkIP : Str -> GenNum -> {s : Str ; gn : GenNum} =
       \s,gn -> {

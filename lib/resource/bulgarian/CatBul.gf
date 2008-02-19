@@ -39,6 +39,11 @@ concrete CatBul of Cat = CommonX ** open ResBul, Prelude in {
     Num = {s : Str; n : Number } ;
     Quant = {s : AForm => Str; spec : Species} ;
 
+-- Numeral
+
+    Numeral = {s : CardOrd => Str; n : Number} ;
+    Digits  = {s : CardOrd => Str; n : Number; tail : DTail} ;
+
 -- Structural
 
     Subj = {s : Str} ;
