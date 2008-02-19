@@ -20,14 +20,16 @@ lin n9 = mkDigit "девет"  "деветима" "девет"  "девети"   "деветстотин" ;
 lin pot01 =
       {s = table {
              unit    => table {
-                          NCard DMasc         Indef => "един" ;
-                          NCard DMascPersonal Indef => "един" ;
-                          NCard DFem          Indef => "една" ;
-                          NCard DNeut         Indef => "едно" ;
-                          NCard DMasc         Def   => "единия" ;
-                          NCard DMascPersonal Def   => "единия" ;
-                          NCard DFem          Def   => "едната" ;
-                          NCard DNeut         Def   => "едното" ;
+                          NCard DMascIndef          => "един" ;
+                          NCard DMascDef            => "единия" ;
+                          NCard DMascNomDef         => "единият" ;
+                          NCard DMascPersonalIndef  => "един" ;
+                          NCard DMascPersonalDef    => "единия" ;
+                          NCard DMascPersonalNomDef => "единият" ;
+                          NCard DFemIndef           => "една" ;
+                          NCard DFemDef             => "едната" ;
+                          NCard DNeutIndef          => "едно" ;
+                          NCard DNeutDef            => "едното" ;
                           NOrd  aform               => (mkAdjective "първи"
                                                                     "първия"
                                                                     "първият"
@@ -52,12 +54,12 @@ lin pot1to19 d = {s = d.s ! teen; n = Pl; i = True} ;
 lin pot0as1 n = {s = n.s ! unit; n = n.n; i = True} ;
 lin pot1 d = {s = d.s ! ten; n = Pl; i = True} ;
 lin pot1plus d e = {
-   s = \\c => d.s ! ten ! NCard DMasc Indef ++ "и" ++ e.s ! unit ! c ; n = Pl; i = False} ;
+   s = \\c => d.s ! ten ! NCard DMascIndef ++ "и" ++ e.s ! unit ! c ; n = Pl; i = False} ;
 
 lin pot1as2 n = n ;
 lin pot2 n = {s = \\c => n.s ! hundred ! c; n = Pl; i = True} ;
 lin pot2plus d e = {
-  s = \\c => d.s ! hundred ! NCard DMasc Indef ++ case e.i of {False => []; True  => "и"} ++ e.s ! c ;
+  s = \\c => d.s ! hundred ! NCard DMascIndef ++ case e.i of {False => []; True  => "и"} ++ e.s ! c ;
   n = Pl ;
   i = False
   } ;
@@ -66,12 +68,12 @@ lin pot2as3 n = n ;
 lin pot3 n = {
   s = \\c => case n.n of {
                Sg => mkCardOrd "хиляда" "хиляда" "хиляда" "хиляден" ! c ;
-               Pl => n.s ! NCard DFem Indef ++ mkCardOrd "хиляди" "хиляди" "хиляди" "хиляден" ! c
+               Pl => n.s ! NCard DFemIndef ++ mkCardOrd "хиляди" "хиляди" "хиляди" "хиляден" ! c
              } ;
   n = Pl
   } ;
 lin pot3plus n m = {
-  s = \\c => (pot3 n).s ! NCard DMasc Indef ++ case m.i of {False => []; True  => "и"} ++ m.s ! c ;
+  s = \\c => (pot3 n).s ! NCard DMascIndef ++ case m.i of {False => []; True  => "и"} ++ m.s ! c ;
   n = Pl
   } ;
 
@@ -85,7 +87,7 @@ lin pot3plus n m = {
     IDig d = d ** {tail = T1} ;
 
     IIDig d i = {
-      s = \\o => d.s ! NCard DMasc Indef ++ commaIf i.tail ++ i.s ! o ;
+      s = \\o => d.s ! NCard DMascIndef ++ commaIf i.tail ++ i.s ! o ;
       n = Pl ;
       tail = inc i.tail
     } ;
@@ -117,7 +119,7 @@ lin pot3plus n m = {
     mkDig : Str -> TDigit = \c -> mk2Dig c (c + "ти") ;
 
     mk3Dig : Str -> Str -> Number -> TDigit = \c,o,n -> {
-      s = table {NCard _ _ => c ; NOrd aform => (regAdjective o).s ! aform} ;
+      s = table {NCard _ => c ; NOrd aform => (regAdjective o).s ! aform} ;
       n = n
       } ;
 
