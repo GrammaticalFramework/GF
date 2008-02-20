@@ -31,6 +31,10 @@ concrete CatBul of Cat = CommonX ** open ResBul, Prelude in {
 
     Comp = {s : Agr => Str} ; 
 
+-- Adjective
+
+    AP = {s : AForm => Str; isPre : Bool} ; 
+
 -- Noun
 
     CN = {s : NForm => Str; g : DGender} ;
@@ -57,6 +61,7 @@ concrete CatBul of Cat = CommonX ** open ResBul, Prelude in {
     V3 = Verb ** {c2, c3 : Str} ;
 
     A = {s : AForm => Str} ;
+    A2 = {s : AForm => Str ; c2 : Str} ;
     
     N = {s : NForm => Str; g : DGender} ;
 }

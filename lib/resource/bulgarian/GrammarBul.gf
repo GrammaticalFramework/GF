@@ -3,6 +3,7 @@
 concrete GrammarBul of Grammar = 
   NounBul,
   VerbBul,
+  AdjectiveBul,
   NumeralBul,
   SentenceBul,
   QuestionBul,

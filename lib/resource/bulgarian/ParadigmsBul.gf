@@ -29,6 +29,12 @@ resource ParadigmsBul = VerbParadigmsBul, AdjParadigmsBul ** open
   in {
 
 oper
+--3 Two-place adjectives
+--
+-- Two-place adjectives need a preposition for their second argument.
+
+  mkA2 : A -> Prep -> A2 ;
+
 --2 Adverbs
 
 -- Adverbs are not inflected. Most lexical ones have position
@@ -48,6 +54,8 @@ oper
 
   mkPrep : Str -> Prep ;
   noPrep : Prep ;
+
+  mkA2 a p = a ** {c2 = p.s ; lock_A2 = <>} ;
 
 --2 Verbs
 --

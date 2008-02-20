@@ -139,6 +139,22 @@ resource ResBul = ParamX ** open Prelude in {
                      <DNeut,Def>   => DNeutDef
                    } ;
 
+    nform2aform : NForm -> DGender -> AForm
+      = \nf,g -> case nf of {
+                   NF n spec  => aform (gennum g n) spec Acc ;
+                   NFSgDefNom => aform (gennum g Sg) Def Nom ;
+                   NFPlCount  => APl Indef ;
+                   NFVocative => aform (gennum g Sg) Indef Acc
+                 } ;
+
+    indefNForm : NForm -> NForm
+      = \nf -> case nf of {
+                 NF n spec  => NF n  Indef ;
+                 NFSgDefNom => NF Sg Indef ;
+                 NFPlCount  => NFPlCount ;
+                 NFVocative => NFVocative
+               } ;
+
   oper
 -- For $Verb$.
 
