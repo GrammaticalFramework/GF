@@ -19,7 +19,14 @@ resource ResBul = ParamX ** open Prelude in {
 
   param
     Case = Nom | Acc | Gen AForm ;
-    
+
+    NForm = 
+        NF Number Species
+      | NFSgDefNom
+      | NFPlCount
+      | NFVocative
+      ;
+
     GenNum = GSg Gender | GPl ;
 
 -- Agreement of $NP$ is a record. We'll add $Gender$ later.
@@ -56,19 +63,26 @@ resource ResBul = ParamX ** open Prelude in {
 
     AForm = 
        ASg Gender Species
+     | ASgMascDefNom
      | APl Species
-     | AFullDef
      ;
 
 --2 For $Numeral$
 
+    DGender =
+       DMasc
+     | DMascPersonal
+     | DFem
+     | DNeut
+     ;
+    
     DGenderSpecies = 
        DMascIndef
      | DMascDef
-     | DMascNomDef
+     | DMascDefNom
      | DMascPersonalIndef
      | DMascPersonalDef
-     | DMascPersonalNomDef
+     | DMascPersonalDefNom
      | DFemIndef
      | DFemDef
      | DNeutIndef
@@ -81,12 +95,14 @@ resource ResBul = ParamX ** open Prelude in {
 --2 Transformations between parameter types
 
   oper
-    agrP3 : GenNum -> Agr = \gn -> 
-      {gn = gn ; p = P3} ;
-
-    gennum : Gender -> Number -> GenNum = \g,n ->
+    gennum : DGender -> Number -> GenNum = \g,n ->
       case n of {
-        Sg => GSg g ;
+        Sg => GSg (case g of {
+                     DMasc         => Masc ;
+                     DMascPersonal => Masc ;
+                     DFem          => Fem ;
+                     DNeut         => Neut
+                   }) ;
         Pl => GPl
         } ;
 
@@ -96,11 +112,32 @@ resource ResBul = ParamX ** open Prelude in {
         GPl    => Pl
       } ;
 
-    aformGenNum : GenNum -> AForm = \gn -> 
+    aform : GenNum -> Species -> Case -> AForm = \gn,spec,c -> 
       case gn of {
-        GSg g  => ASg g Indef ;
-        GPl    => APl Indef
+        GSg g  => case <g,spec,c> of {
+                    <Masc,Def,Nom> => ASgMascDefNom ;
+                    _              => ASg g spec
+                  } ;
+        GPl    => APl spec
       } ;
+
+    dgenderSpecies : DGender -> Species -> Case -> DGenderSpecies =
+      \g,spec,c -> case <g,spec> of {
+                     <DMasc,Indef> => DMascIndef ;
+                     <DMasc,Def>   => case c of {
+                                        Nom => DMascDefNom ;
+                                        _   => DMascDef
+                                      } ;
+                     <DMascPersonal,Indef> => DMascPersonalIndef ;
+                     <DMascPersonal,Def>   => case c of {
+                                                Nom => DMascPersonalDefNom ;
+                                                _   => DMascPersonalDef
+                                              } ;
+                     <DFem ,Indef> => DFemIndef ;
+                     <DFem ,Def>   => DFemDef ;
+                     <DNeut,Indef> => DNeutIndef ;
+                     <DNeut,Def>   => DNeutDef
+                   } ;
 
   oper
 -- For $Verb$.
@@ -120,7 +157,7 @@ resource ResBul = ParamX ** open Prelude in {
         let pol : Polarity -> Str -> Str = \p,vf -> case p of { Pos => vf ; Neg => "не" ++ vf }
         in { s = \\t,a,p,agr => let present = verb.s ! (VPres   (numGenNum agr.gn) agr.p) ;
                                     aorist  = verb.s ! (VAorist (numGenNum agr.gn) agr.p) ;
-                                    perfect = verb.s ! (VPerfect (aformGenNum agr.gn)) ;
+                                    perfect = verb.s ! (VPerfect (aform agr.gn Indef Acc)) ;
                                     vf = case <t,a> of {
                                            <Pres,Simul> => present ;
                                            <Pres,Anter> => auxBe.s ! (VPres (numGenNum agr.gn) agr.p) ++ perfect ;
@@ -129,7 +166,7 @@ resource ResBul = ParamX ** open Prelude in {
                                            <Fut, Simul> => "ще" ++ present ;
                                            <Fut, Anter> => "ще" ++ auxBe.s ! (VPres (numGenNum agr.gn) agr.p) ++ perfect ;
                                            <Cond,Simul> => auxWould.s ! (VAorist (numGenNum agr.gn) agr.p) ++ perfect ;
-                                           <Cond,Anter> => auxWould.s ! (VAorist (numGenNum agr.gn) agr.p) ++ auxBe.s ! (VPerfect (aformGenNum agr.gn)) ++ perfect
+                                           <Cond,Anter> => auxWould.s ! (VAorist (numGenNum agr.gn) agr.p) ++ auxBe.s ! (VPerfect (aform agr.gn Indef Acc)) ++ perfect
                                          } ;
                                 in pol p vf ;
              imp = \\p,n => pol p (verb.s ! VImperative n) ;
@@ -210,7 +247,7 @@ resource ResBul = ParamX ** open Prelude in {
       s = table {
         ASg Masc Indef => dobyr ;
         ASg Masc Def   => dobria ;
-        AFullDef       => dobriat ;
+        ASgMascDefNom  => dobriat ;
         ASg Fem  Indef => dobra ;
         ASg Fem  Def   => dobrata ;
         ASg Neut Indef => dobro ;
@@ -332,7 +369,7 @@ resource ResBul = ParamX ** open Prelude in {
     mkCardOrd : Str -> Str -> Str -> Str -> CardOrd => Str =
       \dva, dvama, dve, vtori ->
                table {
-                 NCard dg   => digitGender dva dvama dve ! dg ;
+                 NCard dg   => digitGenderSpecies dva dvama dve ! dg ;
                  NOrd aform => let vtora = init vtori + "а" ;
                                    vtoro = init vtori + "о"
                                in (mkAdjective vtori
@@ -346,7 +383,7 @@ resource ResBul = ParamX ** open Prelude in {
                                                (vtori+"те")).s ! aform
                } ;
 
-    digitGender : Str -> Str -> Str -> DGenderSpecies => Str =
+    digitGenderSpecies : Str -> Str -> Str -> DGenderSpecies => Str =
       \dva, dvama, dve
             -> let addDef : Str -> Str =
                      \s -> case s of {
@@ -357,10 +394,10 @@ resource ResBul = ParamX ** open Prelude in {
                in table {
                     DMascIndef          => dva ;
                     DMascDef            => addDef dva ;
-                    DMascNomDef         => addDef dva ;
+                    DMascDefNom         => addDef dva ;
                     DMascPersonalIndef  => dvama ;
                     DMascPersonalDef    => addDef dvama ;
-                    DMascPersonalNomDef => addDef dvama ;
+                    DMascPersonalDefNom => addDef dvama ;
                     DFemIndef           => dve ;
                     DFemDef             => addDef dve ;
                     DNeutIndef          => dve ;

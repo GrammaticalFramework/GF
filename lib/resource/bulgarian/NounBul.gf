@@ -4,27 +4,49 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
 
   lin
     DetCN det cn = 
-      { s = \\c => det.s ! cn.g ++ cn.s ! det.n ! c ! det.spec ; 
-        a = agrP3 (gennum cn.g det.n)
+      { s = \\c => let nf = case <det.n,det.spec> of {
+                              <Sg,Def>   => case c of {
+                                              Nom => NFSgDefNom ;
+                                              _   => NF Sg Def
+                                            } ;
+                              <Pl,Indef> => case det.countable of {
+                                              True  => NFPlCount ;
+                                              False => NF Pl Indef
+                                            } ;
+                              _              => NF det.n det.spec
+                            } ;
+                   in det.s ! cn.g ! c ++ cn.s ! nf ; 
+        a = {gn = gennum cn.g det.n; p = P3} ;
       } ;
     UsePron p = p ;
 
     DetSg quant ord = {
-      s = \\g => quant.s ! ASg g Indef ++ ord.s ; 
+      s = \\g,c => quant.s ! gennum g Sg ++
+                   ord.s   ! aform (gennum g Sg) quant.spec c ;
       n = Sg ;
-      spec=quant.spec
+      countable = False ;
+      spec=case ord.empty of {True => quant.spec; _ => Indef}
       } ;
 
     DetPl quant num ord = {
-      s = \\g => quant.s ! aformGenNum (gennum g num.n) ++ num.s ++ ord.s ; 
+      s = \\g,c => quant.s ! gennum g num.n ++
+                   num.s ! dgenderSpecies g quant.spec c ++
+                   ord.s ! aform (gennum g num.n) (case num.empty of {True => quant.spec; _ => Indef}) c ; 
       n = num.n ;
-      spec=quant.spec
+      countable = True ;
+      spec=case <num.empty,ord.empty> of {<True,True> => quant.spec; _ => Indef}
       } ;
 
-    PossPron p = {s = \\aform => p.s ! Gen aform; spec = Indef} ;
+    PossPron p = {
+      s = \\gn => p.s ! Gen (aform gn Def Nom) ;
+      spec = Indef
+      } ;
 
-    NoNum = {s = []; n = Pl } ;
-    NoOrd = {s = []} ;
+    NoNum = {s = \\_ => []; n = Pl; empty = True} ;
+    NoOrd = {s = \\_ => []; empty = True} ;
+
+    NumNumeral numeral = {s = \\gspec => numeral.s ! NCard gspec; n = numeral.n; empty = False} ;
+    OrdNumeral numeral = {s = \\aform => numeral.s ! NOrd aform; empty = False} ;
 
     DefArt = {
       s = \\_ => [] ; 
@@ -32,21 +54,14 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
       } ;
 
     IndefArt = {
-      s = \\_ => [] ; 
+      s = \\_ => [] ;
       spec = ResBul.Indef
       } ;
 
-    MassDet = {s = \\_ => [] ; n = Sg ; spec = Indef} ;
-
-    UseN noun = {
-      s = \\n,c,dt => let aform = case n of {
-                                    Sg => case <noun.g,c,dt> of {
-                                            <Masc,Nom,Def> => AFullDef ;
-                                            _              => ASg noun.g dt
-                                          } ;
-                                    Pl => APl dt
-                                    }
-                      in noun.s ! aform ;
-      g = noun.g
+    MassDet = {
+      s = \\_ => [] ;
+      spec = Indef
       } ;
+
+    UseN noun = noun ;
 }
