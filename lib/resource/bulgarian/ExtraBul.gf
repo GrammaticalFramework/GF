@@ -20,4 +20,15 @@ concrete ExtraBul of ExtraBulAbs = CatBul **
     
     youPol8fem_Pron  = mkNP "вие" "вас" "ваш" "вашия" "вашият" "ваша" "вашата" "ваше" "вашето" "ваши" "вашите" (GSg Fem) P2 ;
     youPol8neut_Pron = mkNP "вие" "вас" "ваш" "вашия" "вашият" "ваша" "вашата" "ваше" "вашето" "ваши" "вашите" (GSg Neut) P2 ;
+
+    onePl_Num = {s = table {
+                       DMascIndef | DMascPersonalIndef | DFemIndef | DNeutIndef                             => "едни" ;
+                       DMascDef | DMascDefNom | DMascPersonalDef | DMascPersonalDefNom | DFemDef | DNeutDef => "едните"
+                     } ;
+                 n = Pl;
+                 empty = False
+                } ;
+
+    UttImpSg8fem  pol imp = {s = pol.s ++ imp.s ! pol.p ! GSg Fem} ;
+    UttImpSg8neut pol imp = {s = pol.s ++ imp.s ! pol.p ! GSg Fem} ;
 } 

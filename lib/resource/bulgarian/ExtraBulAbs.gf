@@ -20,4 +20,9 @@ fun
 
   youPol8fem_Pron : Pron ;
   youPol8neut_Pron : Pron ;
+  
+  onePl_Num : Num ;
+  
+  UttImpSg8fem  : Pol -> Imp -> Utt;
+  UttImpSg8neut : Pol -> Imp -> Utt;
 }
