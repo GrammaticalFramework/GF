@@ -15,18 +15,17 @@ resource MorphoBul = ResBul ** open Prelude, (Predef=Predef) in {
 oper
 --2 Determiners
 
-  mkDeterminerSg : Str -> Str -> Str -> {s : Gender => Str; n : Number; spec : Species} = \vseki,vsiaka,vsiako ->
-    {s = table Gender [vseki;vsiaka;vsiako]; n = Sg; spec = Indef} ;
-  mkDeterminerPl : Str -> {s : Gender => Str ; n : Number; spec : Species} = \vsicki ->
-    {s = \\_ => vsicki; n = Sg; spec = Indef} ;
+  mkDeterminerSg : Str -> Str -> Str -> {s : DGender => Case => Str; n : Number; countable : Bool ; spec : Species} = \vseki,vsiaka,vsiako ->
+    {s = \\g,_ => table DGender [vseki;vseki;vsiaka;vsiako] ! g; n = Sg; countable = False; spec = Indef} ;
+  mkDeterminerPl : Str -> {s : DGender => Case => Str ; n : Number; countable : Bool ; spec : Species} = \vsicki ->
+    {s = \\_,_ => vsicki; n = Pl; countable = False; spec = Indef} ;
 
-  mkQuant : Str -> Str -> Str -> Str -> {s : AForm => Str; spec : Species} = \tozi,tazi,towa,tezi -> {
+  mkQuant : Str -> Str -> Str -> Str -> {s : GenNum => Str; spec : Species} = \tozi,tazi,towa,tezi -> {
     s = \\gn => case gn of {
-                  ASg Masc _ => tozi ;
-                  ASg Fem  _ => tazi ;
-                  ASg Neut _ => towa ;
-                  APl      _ => tezi ;
-                  AFullDef   => tozi
+                  GSg Masc => tozi ;
+                  GSg Fem  => tazi ;
+                  GSg Neut => towa ;
+                  GPl      => tezi
                 };
     spec = Indef
     } ;

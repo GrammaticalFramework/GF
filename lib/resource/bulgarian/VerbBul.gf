@@ -14,7 +14,7 @@ concrete VerbBul of Verb = CatBul ** open ResBul in {
 
     ReflV2 v = insertObj (\\_ => v.c2 ++ ["себе си"]) (predV v) ;
 
-    PassV2 v = insertObj (\\a => v.s ! VPassive (aformGenNum a.gn)) (predV auxBe) ;
+    PassV2 v = insertObj (\\a => v.s ! VPassive (aform a.gn Indef Acc)) (predV auxBe) ;
 
     CompNP np = {s = \\_ => np.s ! Acc} ;
     CompAdv a = {s = \\_ => a.s} ;

@@ -46,7 +46,7 @@ concrete StructuralBul of Structural = CatBul **
   everything_NP = regNP "everything" Sg ;
 -}
   everywhere_Adv = ss "навсякъде" ;
-  few_Det = mkDeterminerPl "няколко" ;
+  few_Det = {s = \\_,_ => "няколко"; n = Pl; countable = True; spec = Indef} ;
 ---  first_Ord = ss "first" ; DEPRECATED
   for_Prep = ss "за" ;
   from_Prep = ss "от" ;

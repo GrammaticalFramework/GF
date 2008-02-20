@@ -19,7 +19,7 @@ concrete CatBul of Cat = CommonX ** open ResBul, Prelude in {
     QCl = {s : ResBul.Tense => Anteriority => Polarity => QForm => Str} ;
     IP = {s : Str ; gn : GenNum} ;
     IComp = {s : Str} ;    
-    IDet = {s : Gender => Str ; n : Number; spec : Species} ;
+    IDet = {s : DGender => Case => Str; n : Number; countable : Bool; spec : Species} ;
 
 -- Verb
 
@@ -33,11 +33,12 @@ concrete CatBul of Cat = CommonX ** open ResBul, Prelude in {
 
 -- Noun
 
-    CN = {s : Number => Case => Species => Str; g : Gender} ;
+    CN = {s : NForm => Str; g : DGender} ;
     NP, Pron = {s : Case => Str ; a : Agr} ;
-    Det = {s : Gender => Str ; n : Number; spec : Species} ;
-    Num = {s : Str; n : Number } ;
-    Quant = {s : AForm => Str; spec : Species} ;
+    Det = {s : DGender => Case => Str ; n : Number; countable : Bool; spec : Species} ;
+    Predet, Ord = {s : AForm => Str; empty : Bool} ;
+    Num = {s : DGenderSpecies => Str; n : Number; empty : Bool} ;
+    Quant = {s : GenNum => Str; spec : Species} ;
 
 -- Numeral
 
@@ -57,5 +58,5 @@ concrete CatBul of Cat = CommonX ** open ResBul, Prelude in {
 
     A = {s : AForm => Str} ;
     
-    N = {s : AForm => Str; g : Gender} ;
+    N = {s : NForm => Str; g : DGender} ;
 }
