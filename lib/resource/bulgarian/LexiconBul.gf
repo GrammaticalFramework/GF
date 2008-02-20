@@ -44,7 +44,7 @@ lin
   long_A = mkA80 "дълъг" ;
   lose_V2 = dirV2 (mkV173 "губя") ;
   love_V2 = dirV2 (mkV186 "обичам") ;
---  married_A2 = mkA2 (mkA76 "женен") toP ;
+  married_A2 = mkA2 (mkA76 "женен") zaP ;
   narrow_A = mkA84 "тесен" ;
   new_A = mkA76 "нов" ;
   old_A = mkA76 "стар" ;
