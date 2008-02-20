@@ -25,16 +25,16 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
                    ord.s   ! aform (gennum g Sg) quant.spec c ;
       n = Sg ;
       countable = False ;
-      spec=case ord.empty of {True => quant.spec; _ => Indef}
+      spec=case ord.nonEmpty of {False => quant.spec; _ => Indef}
       } ;
 
     DetPl quant num ord = {
       s = \\g,c => quant.s ! gennum g num.n ++
                    num.s ! dgenderSpecies g quant.spec c ++
-                   ord.s ! aform (gennum g num.n) (case num.empty of {True => quant.spec; _ => Indef}) c ; 
+                   ord.s ! aform (gennum g num.n) (case num.nonEmpty of {False => quant.spec; _ => Indef}) c ; 
       n = num.n ;
-      countable = True ;
-      spec=case <num.empty,ord.empty> of {<True,True> => quant.spec; _ => Indef}
+      countable = num.nonEmpty ;
+      spec=case <num.nonEmpty,ord.nonEmpty> of {<False,False> => quant.spec; _ => Indef}
       } ;
 
     PossPron p = {
@@ -42,11 +42,11 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
       spec = Indef
       } ;
 
-    NoNum = {s = \\_ => []; n = Pl; empty = True} ;
-    NoOrd = {s = \\_ => []; empty = True} ;
+    NoNum = {s = \\_ => []; n = Pl; nonEmpty = False} ;
+    NoOrd = {s = \\_ => []; nonEmpty = False} ;
 
-    NumNumeral numeral = {s = \\gspec => numeral.s ! NCard gspec; n = numeral.n; empty = False} ;
-    OrdNumeral numeral = {s = \\aform => numeral.s ! NOrd aform; empty = False} ;
+    NumNumeral numeral = {s = \\gspec => numeral.s ! NCard gspec; n = numeral.n; nonEmpty = False} ;
+    OrdNumeral numeral = {s = \\aform => numeral.s ! NOrd aform; nonEmpty = False} ;
 
     DefArt = {
       s = \\_ => [] ; 
