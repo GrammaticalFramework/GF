@@ -2,7 +2,9 @@ concrete ExtraBul of ExtraBulAbs = CatBul **
   open ResBul, Coordination, Prelude in {
 
   lin
-    GenNP np = {s = \\aform => np.s ! Gen aform} ;
+    GenNP np = {s = \\gn => np.s ! Gen (aform gn Def Nom); spec=Indef} ;
+    
+    GenNPIndef np = {s = \\gn => np.s ! Gen (aform gn Indef Nom); spec=Indef} ;
     
     i8fem_Pron  = mkNP "аз" "мен" "мой" "моя" "моят" "моя" "моята" "мое" "моето" "мои" "моите" (GSg Fem)  P1 ;
     i8neut_Pron = mkNP "аз" "мен" "мой" "моя" "моят" "моя" "моята" "мое" "моето" "мои" "моите" (GSg Neut) P1 ;
