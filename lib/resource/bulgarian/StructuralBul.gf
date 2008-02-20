@@ -58,7 +58,7 @@ concrete StructuralBul of Structural = CatBul **
   how8many_IDet = mkDeterminerPl ["колко много"] ;
   if_Subj = ss "ако" ;
   in8front_Prep = ss "пред" ;
-  i_Pron  = mkNP "аз" "мен" "мой" "моя" "моят" "моя" "моята" "мое" "моето" "мои" "моите" (GSg (variants {Masc;Fem})) P1 ;
+  i_Pron  = mkNP "аз" "мен" "мой" "моя" "моят" "моя" "моята" "мое" "моето" "мои" "моите" (GSg Masc) P1 ;
   in_Prep = ss (pre { "в" ; 
                       "във" / strs {"в" ; "ф" ; "В" ; "Ф"}
                     }) ;
@@ -136,7 +136,7 @@ concrete StructuralBul of Structural = CatBul **
 -}
   we_Pron = mkNP "ние" "нас" "наш" "нашия" "нашият" "наша" "нашата" "наше" "нашето" "наши" "нашите" GPl P1 ;
   whatPl_IP = mkIP "какви" GPl ;
-  whatSg_IP = variants { mkIP "какъв" (GSg Masc); mkIP "каква" (GSg Fem); mkIP "какво" (GSg Neut) } ;
+  whatSg_IP = mkIP "какъв" (GSg Masc) ;
   when_IAdv = ss "кога" ;
 {-
   when_Subj = ss "when" ;
@@ -146,7 +146,7 @@ concrete StructuralBul of Structural = CatBul **
   whichPl_IDet = mkDeterminer Pl ["which"] ;
   whichSg_IDet = mkDeterminer Sg ["which"] ;
 -}
-  whoSg_IP = variants { mkIP "кой" (GSg Masc); mkIP "коя" (GSg Fem); mkIP "кое" (GSg Neut) } ;
+  whoSg_IP = mkIP "кой" (GSg Masc) ;
   whoPl_IP = mkIP "кои" GPl ;
   why_IAdv = ss "защо" ;
   without_Prep = ss "без" ;
@@ -154,8 +154,8 @@ concrete StructuralBul of Structural = CatBul **
                         "със" / strs {"с" ; "з" ; "С" ; "З"}
                       }) ;
   yes_Phr = ss "да" ;
-  youSg_Pron = mkNP "ти" "теб" "твой" "твоя" "твоят" "твоя" "твоята" "твое" "твоето" "твои" "твоите" (GSg (variants {Masc;Fem})) P2 ;
+  youSg_Pron = mkNP "ти" "теб" "твой" "твоя" "твоят" "твоя" "твоята" "твое" "твоето" "твои" "твоите" (GSg Masc) P2 ;
   youPl_Pron = mkNP "вие" "вас" "ваш" "вашия" "вашият" "ваша" "вашата" "ваше" "вашето" "ваши" "вашите" GPl P2 ;
-  youPol_Pron = mkNP "вие" "вас" "ваш" "вашия" "вашият" "ваша" "вашата" "ваше" "вашето" "ваши" "вашите" (GSg (variants {Masc;Fem})) P2 ;
+  youPol_Pron = mkNP "вие" "вас" "ваш" "вашия" "вашият" "ваша" "вашата" "ваше" "вашето" "ваши" "вашите" (GSg Masc) P2 ;
 }
 
