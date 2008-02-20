@@ -6,15 +6,9 @@ concrete SentenceBul of Sentence = CatBul ** open Prelude, ResBul in {
     PredVP np vp = mkClause (np.s ! Nom) np.a vp ;
 
     ImpVP vp = {
-      s = \\p,i => 
-        let gn : GenNum =
-              case i of {
-                ImpF _  True => GPl ;
-                ImpF Sg _    => GSg (variants {Masc; Fem; Neut}) ;
-	        ImpF Pl _    => GPl
-	      } ;
-            agr = {gn = gn ; p = P2} ;
-            verb = vp.imp ! p ! numImp i ;
+      s = \\p,gn => 
+        let agr = {gn = gn ; p = P2} ;
+            verb = vp.imp ! p ! numGenNum gn ;
             compl = vp.s2 ! agr
         in
         verb ++ compl
