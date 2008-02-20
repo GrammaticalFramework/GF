@@ -12,7 +12,7 @@ concrete CatBul of Cat = CommonX ** open ResBul, Prelude in {
 -- Sentence
 
     Cl = {s : ResBul.Tense => Anteriority => Polarity => Order => Str} ;
-    Imp = {s : Polarity => ImpForm => Str} ;
+    Imp = {s : Polarity => GenNum => Str} ;
 
 -- Question
 
