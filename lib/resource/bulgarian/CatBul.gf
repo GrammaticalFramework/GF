@@ -36,8 +36,8 @@ concrete CatBul of Cat = CommonX ** open ResBul, Prelude in {
     CN = {s : NForm => Str; g : DGender} ;
     NP, Pron = {s : Case => Str ; a : Agr} ;
     Det = {s : DGender => Case => Str ; n : Number; countable : Bool; spec : Species} ;
-    Predet, Ord = {s : AForm => Str; empty : Bool} ;
-    Num = {s : DGenderSpecies => Str; n : Number; empty : Bool} ;
+    Predet, Ord = {s : AForm => Str; nonEmpty : Bool} ;
+    Num = {s : DGenderSpecies => Str; n : Number; nonEmpty : Bool} ;
     Quant = {s : GenNum => Str; spec : Species} ;
 
 -- Numeral
