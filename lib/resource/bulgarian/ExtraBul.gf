@@ -3,4 +3,19 @@ concrete ExtraBul of ExtraBulAbs = CatBul **
 
   lin
     GenNP np = {s = \\aform => np.s ! Gen aform} ;
+    
+    i8fem_Pron  = mkNP "аз" "мен" "мой" "моя" "моят" "моя" "моята" "мое" "моето" "мои" "моите" (GSg Fem)  P1 ;
+    i8neut_Pron = mkNP "аз" "мен" "мой" "моя" "моят" "моя" "моята" "мое" "моето" "мои" "моите" (GSg Neut) P1 ;
+    
+    whatSg8fem_IP  = mkIP "каква" (GSg Fem) ;
+    whatSg8neut_IP = mkIP "какво" (GSg Neut) ;
+
+    whoSg8fem_IP  = mkIP "коя" (GSg Fem) ;
+    whoSg8neut_IP = mkIP "кое" (GSg Neut) ;
+    
+    youSg8fem_Pron  = mkNP "ти" "теб" "твой" "твоя" "твоят" "твоя" "твоята" "твое" "твоето" "твои" "твоите" (GSg Fem) P2 ;
+    youSg8neut_Pron = mkNP "ти" "теб" "твой" "твоя" "твоят" "твоя" "твоята" "твое" "твоето" "твои" "твоите" (GSg Neut) P2 ;
+    
+    youPol8fem_Pron  = mkNP "вие" "вас" "ваш" "вашия" "вашият" "ваша" "вашата" "ваше" "вашето" "ваши" "вашите" (GSg Fem) P2 ;
+    youPol8neut_Pron = mkNP "вие" "вас" "ваш" "вашия" "вашият" "ваша" "вашата" "ваше" "вашето" "ваши" "вашите" (GSg Neut) P2 ;
 } 
