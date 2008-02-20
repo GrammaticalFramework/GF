@@ -1,6 +1,8 @@
 abstract ExtraBulAbs = Extra ** {
 
 fun
+  GenNPIndef : NP -> Quant ;
+
 -- Feminine variants of pronouns (those in $Structural$ are
 -- masculine, which is the default when gender is unknown).
 
