@@ -49,6 +49,7 @@ lin
   new_A = mkA76 "нов" ;
   old_A = mkA76 "стар" ;
   open_V2 = dirV2 (mkV187 "отварям") ;
+  paris_PN = mkPN "Париж" Masc ;
   play_V2 = dirV2 (mkV161 "играя") ;
   read_V2 = dirV2 (mkV145 "чета") ;
   red_A = mkA76 "червен" ;
@@ -146,6 +147,7 @@ lin
   wash_V2 = dirV2 (mkV163 "мия") ;
 --  wipe_V2 = dirV2 (regV "wipe") ;
 
+  john_PN = mkPN "Джон" Masc ;
   ready_A = mkA76 "готов" ;
   today_Adv = mkAdv "днес" ;
   uncertain_A = mkA79 "неясен" ;

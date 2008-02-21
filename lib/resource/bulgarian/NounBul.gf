@@ -18,6 +18,7 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
                    in det.s ! cn.g ! c ++ cn.s ! nf ; 
         a = {gn = gennum cn.g det.n; p = P3} ;
       } ;
+    UsePN pn = {s = \\_ => pn.s; a = {gn = GSg pn.g; p = P3}} ;
     UsePron p = {s = p.s; a=p.a} ;
 
     DetSg quant ord = {
@@ -64,6 +65,11 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
       } ;
 
     UseN noun = noun ;
+    UseN2 noun = noun ;
+    UseN3 noun = noun ;
+
+    ComplN2 f x = {s = \\nf => f.s ! nf ++ f.c2 ++ x.s ! Acc; g=f.g} ;
+    ComplN3 f x = {s = \\nf => f.s ! nf ++ f.c2 ++ x.s ! Acc; c2 = f.c3; g=f.g} ;
 
     AdjCN ap cn = {
       s = \\nf => preOrPost ap.isPre (ap.s ! nform2aform nf cn.g) (cn.s ! (indefNForm nf)) ;
