@@ -14,7 +14,7 @@ import GF.Devel.Grammar.Construct
 import GF.Infra.Ident
 import GF.Devel.Grammar.PrGF
 ----import GF.Devel.Grammar.Lookup
-import GF.Devel.ReadFiles
+import GF.Devel.Infra.ReadFiles
 
 import GF.Infra.Option ----
 import GF.Data.Operations
@@ -102,7 +102,7 @@ compileOne opts env@(_,srcgr) file = do
     -- for compiled gf, read the file and update environment
     -- also undo common subexp optimization, to enable normal computations
 
-    "gfo" -> do
+    "gfn" -> do
        sm0 <- putp ("+ reading" +++ file) $ getSourceModule opts file
        let sm1 = unsubexpModule sm0
        sm <- {- putp "creating indirections" $ -} ioeErr $ extendModule srcgr sm1

@@ -1,0 +1,34 @@
+GF3, the next version of GF
+Aarne Ranta 
+
+
+Version 1: 20/2/2008
+
+To compile:
+
+  make testgf3
+
+To run:
+
+  testgf3 <options>
+
+Options:
+
+  -src      -- read from source
+  -doemit   -- emit gfn files
+
+More options (debugging flags):
+
+  -show_gf         -- show compiled source module after parsing
+  -show_extend     -- ... after extension
+  -show_rename     -- ... after renaming
+  -show_typecheck  -- ... after type checking
+  -show_refreshing -- ... after refreshing variables
+  -show_optimize   -- ... after partial evaluation
+  -show_factorize  -- ... after factoring optimization
+
+  -1  -- stop before extending
+  -2  -- ... renaming
+  -3  -- ... type checking
+  -4  -- ... refreshing
+  -5  -- ... partial evaluation
