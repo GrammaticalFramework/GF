@@ -20,7 +20,7 @@ GFCCP=$(GFCC) -preproc=./mkPresent
 #GFCP=$(GFC) -preproc=mkPresent
 
 
-.PHONY: show-path all prelude test alltenses pretest langs present mathematical multimodal compiled treebank stat gfdoc clean api
+.PHONY: show-path all prelude test alltenses pretest langs present mathematical multimodal time compiled treebank stat gfdoc clean api
 
 new:
 	export GF='../../bin/gf -s' ; export GF_LIB_PATH='..'; $(MAKE) -e all
@@ -126,6 +126,10 @@ multimodal:
 	$(GF) -make -nocf multimodal/Multi???.gf
 	mv multimodal/*.gfc ../multimodal
 
+time: 
+	$(GFCC) time/TimeEng.gf
+	mv time/*.gfc ../time
+
 compiled: prelude present alltenses mathematical
 	cd .. ; tar cfz compiled.tgz alltenses/ mathematical/ present/ prelude/*.gf?
 
@@ -217,6 +221,10 @@ gf3mathematical:
 	$(GFNew) mathematical/MathematicalSwe.gf
 	$(GFNew) mathematical/MathematicalFin.gf
 	mv mathematical/*.gfo ../mathematical
+
+gf3time: 
+	$(GFNew) time/TimeEng.gf
+	mv time/*.gfo ../time
 
 gf3langs:
 	mv ../present/LangSpa.gfo tmpLangSpa.gfo
