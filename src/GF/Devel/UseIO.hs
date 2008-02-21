@@ -1,3 +1,4 @@
+{-# OPTIONS -cpp #-}
 ----------------------------------------------------------------------
 -- |
 -- Module      : UseIO
@@ -25,6 +26,12 @@ import System.IO.Error
 import System.Environment
 import System.CPUTime
 import Control.Monad
+
+#ifdef mingw32_HOST_OS
+import System.Win32.DLL
+import System.FilePath.Windows
+import Foreign.Ptr
+#endif
 
 putShow' :: Show a => (c -> a) -> c -> IO ()
 putShow' f = putStrLn . show . length . show . f
@@ -123,11 +130,23 @@ doesFileExistPath paths file = do
   mpfile <- ioeIO $ getFilePathMsg "" paths file
   return $ maybe False (const True) mpfile
 
+getLibraryPath :: IO FilePath
+getLibraryPath =
+  catch
+    (getEnv "GF_LIB_PATH")
+#ifdef mingw32_HOST_OS
+    (\_ -> do exepath <- getModuleFileName nullPtr
+              let (path,_) = splitFileName exepath
+              canonicalizePath (combine path "../lib"))
+#else
+    (const (return libdir))
+#endif
+
 -- | first var is lib prefix, second is like class path
 -- | path in environment variable has lower priority
 extendPathEnv :: String -> String -> [FilePath] -> IO [FilePath]
 extendPathEnv lib var ps = do
-  b <- catch (getEnv lib) (const (return libdir)) -- e.g. GF_LIB_PATH
+  b <- getLibraryPath                             -- e.g. GF_LIB_PATH
   s <- catch (getEnv var) (const (return ""))     -- e.g. GF_GRAMMAR_PATH
   let fs = pFilePaths s
   let ss = ps ++ fs
