@@ -22,7 +22,7 @@ concrete IdiomEng of Idiom = CatEng ** open Prelude, ResEng in {
       mkQuestion (ss (ip.s ! Nom)) 
         (mkClause "there" (agrP3 ip.n) (predAux auxBe)) ;
 
-    ProgrVP vp = insertObj (\\a => vp.ad ++ vp.prp ++ vp.s2 ! a) (predAux auxBe) ;
+    ProgrVP vp = insertObj (\\a => vp.prp ++ vp.s2 ! a) (predAux auxBe) ;
 
     ImpPl1 vp = {s = "let's" ++ infVP True vp {n = Pl ; p = P1}} ;
 
