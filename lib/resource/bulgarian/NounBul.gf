@@ -40,8 +40,8 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
       } ;
 
     DetPl quant num ord = {
-      s = \\g,c => quant.s ! gennum g num.n ++
-                   num.s ! dgenderSpecies g quant.spec c ++
+      s = \\g,c => num.s ! dgenderSpecies g quant.spec c ++
+                   quant.s ! gennum g num.n ++                   
                    ord.s ! aform (gennum g num.n) (case num.nonEmpty of {False => quant.spec; _ => Indef}) c ; 
       n = num.n ;
       countable = num.nonEmpty ;
