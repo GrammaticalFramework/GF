@@ -63,7 +63,7 @@ concrete StructuralBul of Structural = CatBul **
                       "във" / strs {"в" ; "ф" ; "В" ; "Ф"}
                     }) ;
   it_Pron  = mkNP "то" "него" "негов" "неговия" "неговият" "негова" "неговата" "негово" "неговото" "негови" "неговите" (GSg Neut) P3 ;
-  less_CAdv = ss "помалко" ;
+  less_CAdv = ss ["по-малко"] ;
   many_Det = mkDeterminerPl "много" ;
   more_CAdv = ss "още" ;
   most_Predet = {s = \\_ => "повечето"} ;
