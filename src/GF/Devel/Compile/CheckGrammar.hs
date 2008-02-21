@@ -429,10 +429,8 @@ inferLType gr trm = case trm of
 
    QC m ident -> checks [
        termWith trm $ checkErr (lookupOperType gr m ident) >>= comp
-       ,
-       checkErr (lookupOperDef gr m ident) >>= infer
-       ,
-       prtFail "cannot infer type of canonical constant" trm
+--       ,checkErr (lookupOperDef gr m ident) >>= infer
+--       ,prtFail "cannot infer type of canonical constant" trm
        ]
 
    Val ty i -> termWith trm $ return ty

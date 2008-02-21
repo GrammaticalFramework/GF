@@ -283,7 +283,7 @@ computeTermOpt rec gr = comp where
        return $ T i cs'
 
      T i cs -> do
-       pty0 <- getTableType i
+       pty0 <- errIn (prt t) $ getTableType i
        ptyp <- comp g pty0
        case allParamValues gr ptyp of
          Ok vs -> do

@@ -444,6 +444,7 @@ transExp x = case x of
 ----  ELin id -> liftM G.LiT $ transIdent id
 
   EEqs eqs -> liftM G.Eqs $ mapM transEquation eqs
+  EData -> return G.EData
 
   _ -> Bad $ "translation not yet defined for" +++ printTree x ----
 
