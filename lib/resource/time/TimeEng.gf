@@ -1,9 +1,13 @@
 --# -path=.:present
-concrete TimeEng of Time = NumeralEng ** 
+concrete TimeEng of Time = CatEng, NumeralEng ** 
   open Prelude, CatEng, ParadigmsEng, ResEng in {
 
+param DateType = YearMonthType | DayType ;
+
 lincat
-Date = SS ;
+DateTime = SS ;
+
+Date = { s : Str; t : DateType } ;
 Year = SS;
 Month = SS ;
 MonthName = SS ;
@@ -14,14 +18,19 @@ Minute = SS ;
 Time = SS ;
 
 lin
-WeekdayDate day = ss (day.s ! singular ! nominative) ;
-WeekdayTimeDate day time = ss (day.s ! singular ! nominative ++ "at" ++ time.s) ;
-MonthDayDate month day = variants { ss ("the" ++ day.s ++ "of" ++ month.s);
-                                    ss (month.s ++ day.s) } ;
-YearDate year = ss (year.s) ;
-YearMonthDate year month = ss (month.s ++ year.s) ;
-YearMonthDayDate year month day = variants { ss ("the" ++ day.s ++ "of" ++ month.s ++ "," ++ year.s); 
-					     ss (month.s ++ day.s ++ "," ++ year.s) } ;
+
+DateTimeDateTime date time = { s = date.s ++ "at" ++ time.s };
+
+WeekdayDate day = { s = day.s ! singular ! nominative; t = DayType } ;
+MonthDayDate month day = { s = variants { "the" ++ day.s ++ "of" ++ month.s;
+					  month.s ++ day.s } ;
+			   t = DayType } ;
+MonthDate month = { s = month.s ; t = YearMonthType } ;
+YearDate year = { s = year.s ; t = YearMonthType } ;
+YearMonthDate year month = { s = month.s ++ year.s; t = YearMonthType } ;
+YearMonthDayDate year month day = { s = variants { "the" ++ day.s ++ "of" ++ month.s ++ "," ++ year.s; 
+						   month.s ++ day.s ++ "," ++ year.s }; 
+				    t = DayType } ;
 
 
 NumYear n = {s = n.s ! NCard} ;
@@ -65,5 +74,14 @@ thursday = mkN "Thursday" ;
 friday = mkN "Friday" ;
 saturday = mkN "Saturday" ;
 sunday = mkN "Sunday" ;
+
+
+OnDate date = let prep = case date.t of {
+                           YearMonthType => "in";
+			   DayType       => "on"
+		    }
+	       in { s = prep ++ date.s } ;
+
+AtTime time = { s = "at" ++ time.s } ;
 
 } ;

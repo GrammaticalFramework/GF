@@ -1,14 +1,19 @@
-abstract Time = Numeral ** {
+abstract Time = Cat, Numeral ** {
 
--- Time grammar Abstract syntax. Modified by AR from Karin Cavallin.
+-- Time grammar Abstract syntax. Modified by BB and AR from Karin Cavallin.
+
+-- Dates and times
 
 cat 
+
+DateTime ;
 
 Date ;
 Year ;
 Month ;
 MonthName ;
 Day ;
+
 Time ; 
 Hour ; 
 Minute ; 
@@ -16,9 +21,11 @@ Weekday ;
 
 fun
 
+DateTimeDateTime : Date -> Time -> DateTime ;
+
 WeekdayDate      : Weekday -> Date ; -- Monday
-WeekdayTimeDate  : Weekday -> Time -> Date ; -- Monday at twenty past two
 MonthDayDate     : MonthName -> Day -> Date ; -- the third of March
+MonthDate        : MonthName -> Date ; -- March
 YearDate         : Year -> Date ; -- two thousand eight
 YearMonthDate    : Year -> MonthName -> Date ; -- March 1995
 YearMonthDayDate : Year -> MonthName -> Day -> Date ; -- January 1st, 2006
@@ -67,6 +74,12 @@ friday : Weekday ;
 saturday : Weekday ;
 sunday : Weekday ;
 
+-- Date and time adverbs
+
+fun 
+  OnDate     : Date -> Adv ;
+  AtTime     : Time -> Adv ;
+
 {-
 Add:
 
@@ -82,26 +95,6 @@ relative days: today, tomorrow, yesterday, the day before yesterday,
 the day after tomorrow, in x days, x days ago
 
 relative time: in x minutes, in x hours
-
-temporal adverbs:
-
-point:
-
-- in 1992
-- in July
-- in July 1992
-- on Monday
-- on the first of July
-- on the first of July, 1992
-- on Monday at two twenty
-
-starting:
-
-- from (all of the above)
-
-ending:
-
-- to (all of the above)
 
 -}
 
