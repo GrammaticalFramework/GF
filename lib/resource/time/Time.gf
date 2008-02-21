@@ -4,27 +4,59 @@ abstract Time = Numeral ** {
 
 cat 
 
-Date ; 
+Date ;
+Year ;
+Month ;
+MonthName ;
+Day ;
+Time ; 
 Hour ; 
 Minute ; 
 Weekday ;
 
 fun
 
--- The variants: "two twenty", "twenty past two", "twenty to two"
+WeekdayDate      : Weekday -> Date ; -- Monday
+WeekdayTimeDate  : Weekday -> Time -> Date ; -- Monday at twenty past two
+MonthDayDate     : MonthName -> Day -> Date ; -- the third of March
+YearDate         : Year -> Date ; -- two thousand eight
+YearMonthDate    : Year -> MonthName -> Date ; -- March 1995
+YearMonthDayDate : Year -> MonthName -> Day -> Date ; -- January 1st, 2006
 
-DayDate     : Weekday -> Date ;
-DayTimeDate : Weekday -> Time -> Date ;
+NumYear    : Numeral -> Year ;
+DigYear    : Digits -> Year ;
 
-FormalTime : Hour -> Minute -> Time ;
-PastTime   : Hour -> Minute -> Time ;
-ToTime     : Hour -> Minute -> Time ;
-ExactTime  : Hour -> Time ;
+NumMonth   : Sub100 -> Month ;
+DigMonth   : Digits -> Month ;
+NameMonth  : MonthName -> Month ;
 
--- These range from 1 to 99 and are thus overgenerating.
+NumDay     : Sub100 -> Day ;
+DigDay     : Digits -> Day ;
 
-NumHour    : Sub100 -> Hour ;
-NumMinute  : Sub100 -> Minute ;
+FormalTime : Hour -> Minute -> Time ; -- "two twenty"
+PastTime   : Hour -> Minute -> Time ; -- "twenty past two"
+ToTime     : Hour -> Minute -> Time ; -- "twenty to two"
+HourTime   : Hour -> Time ;           -- "two o'clock"
+ExactTime  : Hour -> Time ;           -- "sharp"
+
+NumHour     : Numeral -> Hour ;
+DigHour     : Digits -> Hour ;
+NumMinute   : Numeral -> Minute ;
+DigMinute   : Digits -> Minute ;
+
+fun
+january   : MonthName ;
+february  : MonthName ;
+march     : MonthName ;
+april     : MonthName ;
+may       : MonthName ;
+june      : MonthName ;
+july      : MonthName ;
+august    : MonthName ;
+september : MonthName ;
+october   : MonthName ;
+november  : MonthName ;
+december  : MonthName ;
 
 fun
 monday : Weekday ;
@@ -38,9 +70,11 @@ sunday : Weekday ;
 {-
 Add:
 
-years
+era (AD, BC)
 
-dates: the x:th of y
+twelve hour time (am, pm)
+
+teen-hundred years: "x-teen hundred"
 
 relative weeks: next week, last week, in x weeks, x weeks ago
 
@@ -48,6 +82,26 @@ relative days: today, tomorrow, yesterday, the day before yesterday,
 the day after tomorrow, in x days, x days ago
 
 relative time: in x minutes, in x hours
+
+temporal adverbs:
+
+point:
+
+- in 1992
+- in July
+- in July 1992
+- on Monday
+- on the first of July
+- on the first of July, 1992
+- on Monday at two twenty
+
+starting:
+
+- from (all of the above)
+
+ending:
+
+- to (all of the above)
 
 -}
 
