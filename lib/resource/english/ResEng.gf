@@ -181,13 +181,13 @@ resource ResEng = ParamX ** open Prelude in {
     } ;
 
   VerbForms : Type =
-    Tense => Anteriority => CPolarity => Order => Agr => {fin, inf : Str} ; 
+    Tense => Anteriority => CPolarity => Order => Agr => 
+      {aux, adv, fin, inf : Str} ; -- would, hardly, sleeps, slept
 
   VP : Type = {
     s   : VerbForms ;
     prp : Str ;   -- present participle 
     inf : Str ;   -- the infinitive form ; VerbForms would be the logical place
-    ad  : Str ;   -- sentential adverb
     s2  : Agr => Str -- complement
     } ;
 
@@ -200,11 +200,11 @@ resource ResEng = ParamX ** open Prelude in {
         part = verb.s ! VPPart ;
       in
       case <t,ant,b,ord> of {
-        <Pres,Simul,CPos,ODir>   => vf            fin [] ;
+        <Pres,Simul,CPos,ODir>   => vff            fin [] ;
         <Pres,Simul,CPos,OQuest> => vf (does agr)   inf ;
         <Pres,Anter,CPos,_>      => vf (have agr)   part ; --# notpresent
         <Pres,Anter,CNeg c,_>    => vfn c (have agr) (havent agr) part ; --# notpresent
-        <Past,Simul,CPos,ODir>   => vf (verb.s ! VPast) [] ; --# notpresent
+        <Past,Simul,CPos,ODir>   => vff (verb.s ! VPast) [] ; --# notpresent
         <Past,Simul,CPos,OQuest> => vf "did"        inf ; --# notpresent
         <Past,Simul,CNeg c,_>    => vfn c "did" "didn't"     inf ; --# notpresent
         <Past,Anter,CPos,_>      => vf "had"        part ; --# notpresent
@@ -221,7 +221,6 @@ resource ResEng = ParamX ** open Prelude in {
         } ;
     prp  = verb.s ! VPresPart ;
     inf  = verb.s ! VInf ;
-    ad = [] ;
     s2 = \\a => if_then_Str verb.isRefl (reflPron ! a) []
     } ;
 
@@ -257,16 +256,19 @@ resource ResEng = ParamX ** open Prelude in {
         } ;
     prp = verb.prpart ;
     inf = verb.inf ;
-    ad = [] ;
     s2 = \\_ => []
     } ;
         
-  vf : Str -> Str -> {fin, inf : Str} = \x,y -> vfn True x x y ;
+  vff : Str -> Str -> {aux, adv, fin, inf : Str} = \x,y -> 
+    {aux = [] ; adv = [] ; fin = x ; inf = y} ;
 
-  vfn : Bool -> Str -> Str -> Str -> {fin, inf : Str} = \contr,x,y,z -> 
+  vf : Str -> Str -> {aux, adv, fin, inf : Str} = \x,y -> vfn True x x y ;
+
+  vfn : Bool -> Str -> Str -> Str -> {aux, fin, adv, inf : Str} = 
+    \contr,x,y,z -> 
     case contr of {
-      True  => {fin = y ; inf = z} ;
-      False => {fin = x ; inf = "not" ++ z}
+      True  => {aux = y ; adv = [] ; fin = [] ; inf = z} ;
+      False => {aux = x ; adv = "not" ; fin = [] ; inf = z}
       } ;
 
   insertObj : (Agr => Str) -> VP -> VP = \obj,vp -> {
@@ -279,11 +281,12 @@ resource ResEng = ParamX ** open Prelude in {
 
 --- The adverb should be before the finite verb.
 
-  insertAdV : Str -> VP -> VP = \adv,vp -> {
-    s = vp.s ;
+  insertAdV : Str -> VP -> VP = \ad,vp -> {
+    s = \\t,ant,cb,ord,agr => 
+      let vps = vp.s ! t ! ant ! cb ! ord ! agr in
+      {aux = vps.aux ; adv = vps.adv ++ ad ; fin = vps.fin ; inf = vps.inf} ;
     prp = vp.prp ;
     inf = vp.inf ;
-    ad = vp.ad ++ adv ;
     s2 = \\a => vp.s2 ! a
     } ;
 
@@ -313,7 +316,7 @@ resource ResEng = ParamX ** open Prelude in {
     agrVerb (verb.s ! VPres) (verb.s ! VInf) ;
 
   infVP : Bool -> VP -> Agr -> Str = \isAux,vp,a ->
-    vp.ad ++ if_then_Str isAux [] "to" ++ 
+    if_then_Str isAux [] "to" ++ 
     vp.inf ++ vp.s2 ! a ;
 
   agrVerb : Str -> Str -> Agr -> Str = \has,have,agr -> 
@@ -378,8 +381,8 @@ resource ResEng = ParamX ** open Prelude in {
           compl = vp.s2 ! agr
         in
         case o of {
-          ODir   => subj ++ verb.fin ++ vp.ad ++ verb.inf ++ compl ;
-          OQuest => verb.fin ++ subj ++ vp.ad ++ verb.inf ++ compl
+          ODir => subj ++ verb.aux ++ verb.adv ++ verb.fin ++ verb.inf ++ compl ;
+          OQuest => verb.aux ++ subj ++ verb.adv ++ verb.fin ++ verb.inf ++ compl
           }
     } ;
 
