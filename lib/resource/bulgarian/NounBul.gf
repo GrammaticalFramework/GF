@@ -18,7 +18,7 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
                    in det.s ! cn.g ! c ++ cn.s ! nf ; 
         a = {gn = gennum cn.g det.n; p = P3} ;
       } ;
-    UsePron p = p ;
+    UsePron p = {s = p.s; a=p.a} ;
 
     DetSg quant ord = {
       s = \\g,c => quant.s ! gennum g Sg ++
@@ -38,7 +38,7 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
       } ;
 
     PossPron p = {
-      s = \\gn => p.s ! Gen (aform gn Def Nom) ;
+      s = \\gn => p.gen ! aform gn Indef Nom ;
       spec = Indef
       } ;
 
