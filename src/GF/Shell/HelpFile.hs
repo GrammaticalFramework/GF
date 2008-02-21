@@ -717,7 +717,7 @@ txtHelpFile =
   "\n-coding, Some grammars are in UTF-8, some in isolatin-1." ++
   "\n    If the letters \228 (a-umlaut) and \246 (o-umlaut) look strange, either" ++
   "\n    change your terminal to isolatin-1, or rewrite the grammar with" ++
-  "\n    'pg -utf8'." ++
+  "\n    'pg -utf8'. For Windows you also may have to change your font to TrueType." ++
   "\n" ++
   "\n-- *: Commands and options marked with * are not currently implemented." ++
   []
