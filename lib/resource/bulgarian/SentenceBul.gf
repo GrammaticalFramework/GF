@@ -14,6 +14,9 @@ concrete SentenceBul of Sentence = CatBul ** open Prelude, ResBul in {
         verb ++ compl
     } ;
 
+    EmbedS  s  = {s = "," ++ "че" ++ s.s} ;
+    EmbedQS qs = {s = qs.s ! QIndir} ;
+
     UseCl t a p cl = {
       s = t.s ++ a.s ++ p.s ++ cl.s ! t.t ! a.a ! p.p ! ODir
     } ;
