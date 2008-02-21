@@ -56,8 +56,18 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
     NoNum = {s = \\_ => []; n = Pl; nonEmpty = False} ;
     NoOrd = {s = \\_ => []; nonEmpty = False} ;
 
+    NumDigits n = {s = \\gspec => n.s ! NCard gspec; n = n.n; nonEmpty = True} ;
+    OrdDigits n = {s = \\aform => n.s ! NOrd aform; nonEmpty = True} ;
+
+    NumInt n = {s = \\gspec => n.s ; n = Pl; nonEmpty = True} ;   -- DEPRECATED
+    OrdInt n = {s = \\aform => n.s ++ "th"; nonEmpty = True} ;    -- DEPRECATED
+
     NumNumeral numeral = {s = \\gspec => numeral.s ! NCard gspec; n = numeral.n; nonEmpty = True} ;
     OrdNumeral numeral = {s = \\aform => numeral.s ! NOrd aform; nonEmpty = True} ;
+    
+    AdNum adn num = {s = \\gspec => adn.s ++ num.s ! gspec; n = num.n; nonEmpty = num.nonEmpty} ;
+
+    OrdSuperl a = {s = \\aform => "най" ++ "-" ++ a.s ! aform; nonEmpty = True} ;
 
     DefArt = {
       s = \\_ => [] ; 
