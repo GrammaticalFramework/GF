@@ -21,6 +21,16 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
     UsePN pn = {s = \\_ => pn.s; a = {gn = GSg pn.g; p = P3}} ;
     UsePron p = {s = p.s; a=p.a} ;
 
+    PredetNP pred np = {
+      s = \\c => pred.s ! np.a.gn ++ np.s ! c ;
+      a = np.a
+      } ;
+
+    PPartNP np v2 = {
+      s = \\c => np.s ! c ++ v2.s ! VPassive (aform np.a.gn Indef c) ;
+      a = np.a
+      } ;
+
     DetSg quant ord = {
       s = \\g,c => quant.s ! gennum g Sg ++
                    ord.s   ! aform (gennum g Sg) quant.spec c ;

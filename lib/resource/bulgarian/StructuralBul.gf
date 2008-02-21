@@ -6,9 +6,9 @@ concrete StructuralBul of Structural = CatBul **
   lin
   above_Prep = ss "над" ;
   after_Prep = ss "след" ;
-{-  all_Predet = ss "all" ;
-  almost_AdA, almost_AdN = ss "almost" ;
-  although_Subj = ss "although" ;
+  all_Predet = {s = table GenNum ["всичкия";"всичката";"всичкото";"всичките"]} ;
+  almost_AdA, almost_AdN = ss "почти" ;
+{-  although_Subj = ss "although" ;
   always_AdV = ss "always" ;
   and_Conj = ss "and" ** {n = Pl} ;
 -}
@@ -65,10 +65,8 @@ concrete StructuralBul of Structural = CatBul **
   it_Pron  = mkNP "то" "него" "негов" "неговия" "неговият" "негова" "неговата" "негово" "неговото" "негови" "неговите" (GSg Neut) P3 ;
   less_CAdv = ss "помалко" ;
   many_Det = mkDeterminerPl "много" ;
-  more_CAdv = ss "повече" ;
-{-
-  most_Predet = ss "most" ;
--}
+  more_CAdv = ss "още" ;
+  most_Predet = {s = \\_ => "повечето"} ;
   much_Det = mkDeterminerSg "много" "много" "много";
 {-
   must_VV = {
@@ -86,9 +84,9 @@ concrete StructuralBul of Structural = CatBul **
 -}
   no_Phr = ss "не" ;
   on_Prep = ss "на" ;
-{-
 ----  one_Quant = mkDeterminer Sg "one" ; -- DEPRECATED
-  only_Predet = ss "only" ;
+  only_Predet = {s = \\_ => "само"} ;
+{-
   or_Conj = ss "or" ** {n = Sg} ;
   otherwise_PConj = ss "otherwise" ;
 -}
