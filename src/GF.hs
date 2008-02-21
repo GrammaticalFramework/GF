@@ -1,3 +1,4 @@
+{-# OPTIONS -cpp #-}
 ----------------------------------------------------------------------
 -- |
 -- Module      : Main
@@ -37,10 +38,21 @@ import System (getArgs,system,getEnv)
 import Control.Monad (foldM,liftM)
 import Data.List (nub)
 
+#ifdef mingw32_HOST_OS
+import System.Win32.Console
+import System.Win32.NLS
+#endif
+
 -- AR 19/4/2000 -- 21/3/2006
 
 main :: IO ()
 main = do
+#ifdef mingw32_HOST_OS
+  codepage <- getACP
+  setConsoleCP codepage
+  setConsoleOutputCP codepage
+#endif
+  
   xs <- getArgs
   let 
    (os,fs) = getOptions "-" xs
