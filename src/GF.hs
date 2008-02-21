@@ -119,15 +119,13 @@ helpMsg = unlines [
   ]
 
 welcomeMsgLib = do
-  lib <- catch 
-    (getEnv "GF_LIB_PATH" >>= return . ("GF_LIB_PATH is set to" +++)) 
-    (const (return $ "GF_LIB_PATH is set to the default, " ++ libdir))
+  lib <- getLibraryPath
   return $ welcomeMsg lib
 
 welcomeMsg lib = 
   "Welcome to " ++ authorMsg ++++ 
   "If \228 and \246 (umlaut letters) look strange, see 'h -coding'." ++
-  "\n" ++ lib ++
+  "\nGF_LIB_PATH is set to " ++ lib ++
   "\n\nType 'h' for help, and 'h [Command] for more detailed help.\n"
 
 authorMsg = unlines [
