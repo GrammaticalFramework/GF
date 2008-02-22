@@ -10,7 +10,7 @@ import Data.Map
 import Debug.Trace (trace)
 
 ------------------
--- abstractions on Grammar
+-- abstractions on Grammar, constructing objects
 ------------------
 
 -- abstractions on GF
@@ -111,17 +111,15 @@ resOper ty tr = addJDef tr (resOperType ty)
 resOverload :: [(Type,Term)] -> Judgement
 resOverload tts = resOperDef (Overload tts)
 
--- param p = ci gi  is encoded as p : ((ci : gi) -> EData) -> Type
+-- param p = ci gi  is encoded as p : ((ci : gi) -> p) -> Type
 -- we use EData instead of p to make circularity check easier  
-resParam :: [(Ident,Context)] -> Judgement
-resParam cos = addJType constrs (emptyJudgement JParam) where
-  constrs = mkProd [(c,mkProd co EData) | (c,co) <- cos] typeType
+resParam :: Ident -> [(Ident,Context)] -> Judgement
+resParam p cos = addJDef (EParam cos) (emptyJudgement JParam)
 
 -- to enable constructor type lookup:
 -- create an oper for each constructor p = c g, as c : g -> p = EData
 paramConstructors :: Ident -> [(Ident,Context)] -> [(Ident,Judgement)]
-paramConstructors p cs = 
-  [(c,resOper (mkProd co (Con p)) EData) | (c,co) <- cs]
+paramConstructors p cs = [(c,resOper (mkProd co (Con p)) EData) | (c,co) <- cs]
 
 -- unifying contents of judgements
 

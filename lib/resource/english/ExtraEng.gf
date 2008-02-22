@@ -28,7 +28,7 @@ concrete ExtraEng of ExtraEngAbs = CatEng **
     ConsVPI = consrTable2 VPIForm Agr comma ;
 
     MkVPI vp = {
-      s = \\v,a => vp.ad ++ vp.inf ++ vp.s2 ! a
+      s = \\v,a => vp.inf ++ vp.s2 ! a
       } ;
     ConjVPI = conjunctTable2 VPIForm Agr ;
     ComplVPIVV vv vpi = 

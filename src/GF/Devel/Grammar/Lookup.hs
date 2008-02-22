@@ -44,7 +44,7 @@ lookupOperType gr m c = do
   case jform ju of
     JParam -> return typePType
     _ -> case jtype ju of
-      Meta _ -> fail ("no type given to " ++ prIdent m ++ "." ++ prIdent c)
+      Meta _ -> fail ("no type given to " ++ prIdent m ++ "." ++ prIdent c ++ " in " ++ show ju)
       ty -> return ty
 ---- can't be just lookupJField jtype 
 

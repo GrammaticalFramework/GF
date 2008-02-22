@@ -272,7 +272,7 @@ transResDef x = case x of
    mkParamDefs (p,pars) =
      if null pars 
        then [(p,addJType M.meta0 (emptyJudgement G.JParam))]  -- in an interface
-       else (p,resParam pars) : paramConstructors p pars
+       else (p,resParam p pars) : paramConstructors p pars
 
    mkOverload (c,j) = case (G.jtype j, G.jdef j) of
      (_,G.App keyw (G.R fs@(_:_:_))) | isOverloading keyw c fs -> 
