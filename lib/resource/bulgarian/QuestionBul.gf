@@ -29,10 +29,13 @@ concrete QuestionBul of Question = CatBul ** open ResBul, Prelude in {
       gn = ip.gn
       } ;
 
-   -- IDetCN idet num ord cn = {
-   --   s = \\c => idet.s ++ num.s ++ ord.s ++ cn.s ! idet.n ! c ; 
-   --   gn = idet.gn
-   --   } ;
+    IDetCN idet num ord cn = {
+      s = idet.s ! gennum cn.g idet.n ++                   
+          num.s ! dgenderSpecies cn.g Indef Nom ++
+          ord.s ! aform (gennum cn.g num.n) Indef Nom ++
+          cn.s ! NF idet.n Indef ; 
+      gn = gennum cn.g idet.n
+      } ;
 
     CompIAdv a = a ;
 
