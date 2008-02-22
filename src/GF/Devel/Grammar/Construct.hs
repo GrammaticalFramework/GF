@@ -114,7 +114,7 @@ resOverload tts = resOperDef (Overload tts)
 -- param p = ci gi  is encoded as p : ((ci : gi) -> p) -> Type
 -- we use EData instead of p to make circularity check easier  
 resParam :: Ident -> [(Ident,Context)] -> Judgement
-resParam p cos = addJDef (EParam cos) (emptyJudgement JParam)
+resParam p cos = addJDef (EParam (Con p) cos) (addJType typePType (emptyJudgement JParam))
 
 -- to enable constructor type lookup:
 -- create an oper for each constructor p = c g, as c : g -> p = EData
