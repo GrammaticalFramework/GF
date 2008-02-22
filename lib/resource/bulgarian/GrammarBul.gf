@@ -9,7 +9,7 @@ concrete GrammarBul of Grammar =
   SentenceBul,
   QuestionBul,
   PhraseBul,
-  TextX,
+  TextBul,
   StructuralBul
   ** {
 

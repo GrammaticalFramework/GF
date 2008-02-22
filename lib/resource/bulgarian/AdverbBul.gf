@@ -15,5 +15,5 @@ concrete AdverbBul of Adverb = CatBul ** open ResBul, Prelude in {
     SubjS = cc2 ;
     AdvSC s = s ; --- this rule give stack overflow in ordinary parsing
 
-    AdnCAdv cadv = {s = cadv.s ++ "от"} ;
+    AdnCAdv cadv = {s = cadv.sn ++ "от"} ;
 }
