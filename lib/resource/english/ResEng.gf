@@ -317,7 +317,7 @@ resource ResEng = ParamX ** open Prelude in {
 
   infVP : Bool -> VP -> Agr -> Str = \isAux,vp,a ->
     case isAux of {True => [] ; False => "to"} ++ 
-    vp.inf ++ vp.s2 ! a ;
+    (vp.s!Pres!Simul!CPos!ODir!a).adv ++ vp.inf ++ vp.s2 ! a ;
 ---    if_then_Str isAux [] "to" ++ 
 ---    vp.inf ++ vp.s2 ! a ;
 
