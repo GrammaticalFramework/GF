@@ -35,7 +35,7 @@ concrete CatBul of Cat = open ResBul, Prelude, (R = ParamX) in {
     QCl = {s : ResBul.Tense => Anteriority => Polarity => QForm => Str} ;
     IP = {s : Str ; gn : GenNum} ;
     IComp = {s : Str} ;    
-    IDet = {s : DGender => Case => Str; n : Number; countable : Bool; spec : Species} ;
+    IDet = {s : GenNum => Str; n : Number} ;
 
 -- Verb
 
