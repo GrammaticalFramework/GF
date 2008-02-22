@@ -9,11 +9,11 @@ concrete ExtraBul of ExtraBulAbs = CatBul **
     i8fem_Pron  = mkNP "аз" "мен" "мой" "моя" "моят" "моя" "моята" "мое" "моето" "мои" "моите" (GSg Fem)  P1 ;
     i8neut_Pron = mkNP "аз" "мен" "мой" "моя" "моят" "моя" "моята" "мое" "моето" "мои" "моите" (GSg Neut) P1 ;
     
-    whatSg8fem_IP  = mkIP "каква" (GSg Fem) ;
-    whatSg8neut_IP = mkIP "какво" (GSg Neut) ;
+    whatSg8fem_IP  = mkIP "каква" "каква" (GSg Fem) ;
+    whatSg8neut_IP = mkIP "какво" "какво" (GSg Neut) ;
 
-    whoSg8fem_IP  = mkIP "коя" (GSg Fem) ;
-    whoSg8neut_IP = mkIP "кое" (GSg Neut) ;
+    whoSg8fem_IP  = mkIP "коя" "кого" (GSg Fem) ;
+    whoSg8neut_IP = mkIP "кое" "кого" (GSg Neut) ;
     
     youSg8fem_Pron  = mkNP "ти" "теб" "твой" "твоя" "твоят" "твоя" "твоята" "твое" "твоето" "твои" "твоите" (GSg Fem) P2 ;
     youSg8neut_Pron = mkNP "ти" "теб" "твой" "твоя" "твоят" "твоя" "твоята" "твое" "твоето" "твои" "твоите" (GSg Neut) P2 ;

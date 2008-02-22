@@ -131,8 +131,8 @@ concrete StructuralBul of Structural = CatBul **
   want_VV = P.mkVV (P.regV "want") ;
 -}
   we_Pron = mkNP "ние" "нас" "наш" "нашия" "нашият" "наша" "нашата" "наше" "нашето" "наши" "нашите" GPl P1 ;
-  whatPl_IP = mkIP "какви" GPl ;
-  whatSg_IP = mkIP "какъв" (GSg Masc) ;
+  whatPl_IP = mkIP "какви" "какви" GPl ;
+  whatSg_IP = mkIP "какъв" "какъв" (GSg Masc) ;
   when_IAdv = ss "кога" ;
 {-
   when_Subj = ss "when" ;
@@ -140,8 +140,8 @@ concrete StructuralBul of Structural = CatBul **
   where_IAdv = ss "къде" ;
   whichPl_IDet = {s = table GenNum ["кой";"коя";"кое";"кои"]; n = Pl} ;
   whichSg_IDet = {s = table GenNum ["кой";"коя";"кое";"кои"]; n = Sg} ;
-  whoSg_IP = mkIP "кой" (GSg Masc) ;
-  whoPl_IP = mkIP "кои" GPl ;
+  whoSg_IP = mkIP "кой" "кого" (GSg Masc) ;
+  whoPl_IP = mkIP "кои" "кого" GPl ;
   why_IAdv = ss "защо" ;
   without_Prep = ss "без" ;
   with_Prep = ss (pre { "с" ; 

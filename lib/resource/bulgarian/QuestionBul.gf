@@ -22,10 +22,10 @@ concrete QuestionBul of Question = CatBul ** open ResBul, Prelude in {
     QuestIComp icomp np = 
       mkQuestion icomp (mkClause (np.s ! Nom) np.a (predV auxBe)) ;
 
-    PrepIP p ip = {s = p.s ++ ip.s} ;
+    PrepIP p ip = {s = p.s ++ ip.s ! Nom} ;
 
     AdvIP ip adv = {
-      s = ip.s ++ adv.s ;
+      s = \\c => ip.s ! c ++ adv.s ;
       gn = ip.gn
       } ;
 

@@ -420,9 +420,12 @@ resource ResBul = ParamX ** open Prelude in {
                     DNeutDef            => addDef dve
                   } ;
 
-    mkIP : Str -> GenNum -> {s : Str ; gn : GenNum} =
-      \s,gn -> {
-      s = s ;
+    mkIP : Str -> Str -> GenNum -> {s : Case => Str ; gn : GenNum} =
+      \koi,kogo,gn -> {
+      s = table {
+            Nom => koi ;
+            Acc => kogo
+          } ;
       gn = gn
       } ;
 
