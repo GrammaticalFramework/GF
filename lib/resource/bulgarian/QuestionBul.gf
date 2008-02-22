@@ -8,14 +8,17 @@ concrete QuestionBul of Question = CatBul ** open ResBul, Prelude in {
       s = \\t,a,p => 
             let cls = cl.s ! t ! a ! p 
             in table {
-              QDir   => cls ! OQuest ;
-              QIndir => "ако" ++ cls ! ODir
+              QDir   => cls ! Quest ;
+              QIndir => "ако" ++ cls ! Main
               } ---- "whether" in ExtEng
       } ;
       
     QuestVP ip vp = 
-      let cl = mkClause ip.s {gn = ip.gn ; p = P3} vp
-      in {s = \\t,a,b,_ => cl.s ! t ! a ! b ! ODir} ;
+      let cl = mkClause (ip.s ! Nom) {gn = ip.gn ; p = P3} vp
+      in {s = \\t,a,b,_ => cl.s ! t ! a ! b ! Main} ;
+
+    QuestSlash ip slash = 
+      mkQuestion (ss (slash.c2 ++ ip.s ! Acc)) slash ;
 
     QuestIAdv iadv cl = mkQuestion iadv cl ;
 
@@ -30,10 +33,14 @@ concrete QuestionBul of Question = CatBul ** open ResBul, Prelude in {
       } ;
 
     IDetCN idet num ord cn = {
-      s = idet.s ! gennum cn.g idet.n ++                   
-          num.s ! dgenderSpecies cn.g Indef Nom ++
-          ord.s ! aform (gennum cn.g num.n) Indef Nom ++
-          cn.s ! NF idet.n Indef ; 
+      s = \\c => let nf = case <idet.n, num.nonEmpty> of {
+                            <Pl,True> => NFPlCount ;
+                            _         => NF idet.n Indef
+                          }
+                 in idet.s ! gennum cn.g idet.n ++                   
+                    num.s ! dgenderSpecies cn.g Indef Nom ++
+                    ord.s ! aform (gennum cn.g num.n) Indef Nom ++
+                    cn.s ! nf ;
       gn = gennum cn.g idet.n
       } ;
 
