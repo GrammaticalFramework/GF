@@ -81,7 +81,8 @@ oper
   dirV3    : V -> Prep -> V3 ;           -- give,_,to
   dirdirV3 : V -> V3 ;                   -- give,_,_
 
-
+  mkVS  : V -> VS ;
+  
   mkPN : Str -> Gender -> PN ;
   
   
@@ -96,6 +97,8 @@ oper
   mkV3 v p q = v ** {s = v.s ; s1 = v.s1 ; c2 = p.s ; c3 = q.s ; lock_V3 = <>} ;
   dirV3 v p = mkV3 v noPrep p ;
   dirdirV3 v = dirV3 v noPrep ;
+  
+  mkVS  v = v ** {lock_VS = <>} ;
   
   mkPN s g = {s = s; g = g ; lock_PN = <>} ;
 

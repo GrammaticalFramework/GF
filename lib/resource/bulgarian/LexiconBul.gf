@@ -25,6 +25,7 @@ lin
   drink_V2 = dirV2 (mkV163 "пия") ;
   eat_V2 = dirV2 (mkV169 "ям") ;
   empty_A = mkA79 "празен" ;
+  fear_VS = mkVS (mkV186 "страхувам") ;
   find_V2 = dirV2 (mkV173 "намеря") ;
   forget_V2 = dirV2 (mkV173 "забравя") ;
   good_A = mkA80 "добър" ;
@@ -33,6 +34,7 @@ lin
   hate_V2 = dirV2 (mkV173 "мразя") ;
   have_V2 = dirV2 (mkV186 "имам") ;
   hear_V2 = dirV2 (mkV186 "чувам") ;
+  hope_VS = mkVS (mkV186 "надявам") ;
   hot_A = mkA76 "горещ" ;
   important_A = mkA79 "важен" ;
   know_V2 = dirV2 (mkV162 "зная") ;
@@ -54,6 +56,7 @@ lin
   read_V2 = dirV2 (mkV145 "чета") ;
   red_A = mkA76 "червен" ;
   run_V = (mkV186 "бягам") ;
+  say_VS = mkVS (mkV186 "казвам") ;
   seek_V2 = dirV2 (mkV173 "търся") ;
   see_V2 = dirV2 (mkV186 "виждам") ;
   sell_V3 = dirV3 (mkV186 "продавам") naP ;
