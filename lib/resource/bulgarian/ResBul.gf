@@ -57,7 +57,7 @@ resource ResBul = ParamX ** open Prelude in {
 
 -- The order of sentence is needed already in $VP$.
 
-    Order = ODir | OQuest ;
+    Order = Main | Inv | Quest ;
 
 --2 For $Adjective$
 
@@ -360,8 +360,9 @@ resource ResBul = ParamX ** open Prelude in {
             verb  = vp.s ! t ! a ! b ! agr ;
             compl = vp.s2 ! agr
           in case o of {
-              ODir   => subj ++ verb ++ compl ;
-              OQuest => subj ++ verb ++ "ли" ++ compl
+              Main  => subj ++ verb ++ compl ;
+              Inv   => verb ++ subj ++ compl ;
+              Quest => subj ++ verb ++ "ли" ++ compl
              }
       } ;
       
@@ -450,8 +451,8 @@ resource ResBul = ParamX ** open Prelude in {
             let cls = cl.s ! t ! a ! p ;
                 why = wh.s
             in table {
-                 QDir   => why ++ cls ! OQuest ;
-                 QIndir => why ++ cls ! ODir
+                 QDir   => why ++ cls ! Inv ;
+                 QIndir => why ++ cls ! Main
                }
       } ;
 }

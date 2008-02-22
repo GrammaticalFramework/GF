@@ -21,7 +21,7 @@ concrete SentenceBul of Sentence = CatBul ** open Prelude, ResBul in {
     EmbedQS qs = {s = qs.s ! QIndir} ;
 
     UseCl t a p cl = {
-      s = t.s ++ a.s ++ p.s ++ cl.s ! t.t ! a.a ! p.p ! ODir
+      s = t.s ++ a.s ++ p.s ++ cl.s ! t.t ! a.a ! p.p ! Main
     } ;
     UseQCl t a p cl = {
       s = \\q => t.s ++ a.s ++ p.s ++ cl.s ! t.t ! a.a ! p.p ! q
