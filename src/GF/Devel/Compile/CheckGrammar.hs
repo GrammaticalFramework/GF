@@ -516,6 +516,8 @@ inferLType gr trm = case trm of
 
    Empty -> return (trm, typeStr)
 
+   EParam _ cos -> return (trm, typePType) ---- check cos
+
    C s1 s2 -> 
      check2 (flip justCheck typeStr) C s1 s2 typeStr
 

@@ -71,7 +71,7 @@ trAnyDef (i,ju) = let
   ----  JFun ty EData -> [P.DefFunData [P.FunDef [i'] (trt ty)]]
   JParam -> [P.DefPar [
     P.ParDefDir i0 [
-      P.ParConstr (tri c) (map trDecl co) | let EParam cos = jdef ju, (c,co) <- cos]
+      P.ParConstr (tri c) (map trDecl co) | let EParam _ cos = jdef ju, (c,co) <- cos]
     ]] 
   JOper -> case jdef ju of 
     Overload tysts -> 
@@ -160,6 +160,8 @@ trt trm = case trm of
     Alts (t, tt) -> P.EPre (trt t) [P.Alt (trt v) (trt c) | (v,c) <- tt]
     FV ts -> P.EVariants $ map trt ts
     EData -> P.EData
+    EParam t _ -> trt t
+
     _ -> error $ "not yet" +++ show trm ----
 
 trp :: Patt -> P.Patt

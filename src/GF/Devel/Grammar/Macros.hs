@@ -259,9 +259,10 @@ composOp co trm = case trm of
    Eqs cc -> 
      do cc' <- mapPairListM (co . snd) cc
         return (Eqs cc')
-   EParam cos -> 
-     do cos' <- mapPairListM (mapPairListM (co . snd) . snd) cos
-        return (EParam cos')
+   EParam ty cos -> 
+     do ty' <- co ty
+        cos' <- mapPairListM (mapPairListM (co . snd) . snd) cos
+        return (EParam ty' cos')
    V ty vs ->
      do ty' <- co ty
         vs' <- mapM co vs

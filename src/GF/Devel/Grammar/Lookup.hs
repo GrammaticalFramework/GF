@@ -61,20 +61,16 @@ lookupOverload gr m c = do
 
 lookupParams :: GF -> Ident -> Ident -> Err [(Ident,Context)]
 lookupParams gf m c = do
-  ty <- lookupJField jtype gf m c
-  return [(k,contextOfType t) | (k,t) <- contextOfType ty]
+  EParam _ ty <- lookupJField jdef gf m c
+  return ty
 
 lookupParamConstructor :: GF -> Ident -> Ident -> Err Type
 lookupParamConstructor = lookupJField jtype
 
 lookupParamValues :: GF -> Ident -> Ident -> Err [Term]
 lookupParamValues gf m c = do
-  d <- lookupJField jdef gf m c
-  case d of
-    ---- V _ ts -> return ts
-    _ -> do
-      ps <- lookupParams gf m c
-      liftM concat $ mapM mkPar ps
+  ps <- lookupParams gf m c
+  liftM concat $ mapM mkPar ps
  where
    mkPar (f,co) = do
      vs <- liftM combinations $ mapM (\ (_,ty) -> allParamValues gf ty) co

@@ -109,7 +109,7 @@ data Term =
  | EPatt Patt
  | EPattType Term
 
- | EParam [(Ident,Context)] -- to encode parameter constructor sets
+ | EParam Term [(Ident,Context)] -- to encode parameter constructor sets
 
  | FV [Term]            -- ^ free variation: @variants { s ; ... }@
 
