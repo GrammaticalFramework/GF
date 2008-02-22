@@ -71,10 +71,8 @@ trAnyDef (i,ju) = let
   ----  JFun ty EData -> [P.DefFunData [P.FunDef [i'] (trt ty)]]
   JParam -> [P.DefPar [
     P.ParDefDir i0 [
-      P.ParConstr (tri c) (map trDecl co) | 
-        (c,co) <- [(k,contextOfType t) | (k,t) <- contextOfType (jtype ju)]
-      ]
-    ]]
+      P.ParConstr (tri c) (map trDecl co) | let EParam cos = jdef ju, (c,co) <- cos]
+    ]] 
   JOper -> case jdef ju of 
     Overload tysts -> 
       [P.DefOper [P.DDef [i'] (
@@ -89,13 +87,6 @@ trAnyDef (i,ju) = let
     [P.DefLin [trDef i (Meta 0) (jdef ju)]] 
     ---- ++ [P.DefPrintFun [P.DDef [mkName i] (trt pr)] | Yes pr <- [ppr]]
   JLink -> []
-{-
-  ---- encoding of AnyInd without changing syntax. AR 20/9/2007
-  AnyInd s b -> 
-    [P.DefOper [P.DDef [mkName i] 
-      (P.EApp (P.EInt (if s then 1 else 0)) (P.EIdent (tri b)))]]
--}
-
 
 trDef :: Ident -> Type -> Term -> P.Def
 trDef i pty ptr = case (pty,ptr) of

@@ -51,7 +51,8 @@ data Judgement = Judgement {
   jprintname :: Term,      -- -        -     prname  prname  -       -
   jlink :: Ident,
   jposition :: Int
-  }
+  } 
+  deriving Show
 
 data JudgementForm =
     JCat
@@ -61,7 +62,7 @@ data JudgementForm =
   | JOper
   | JParam
   | JLink
-  deriving Eq
+  deriving (Eq,Show)
 
 type Type = Term
 
@@ -107,6 +108,8 @@ data Term =
 
  | EPatt Patt
  | EPattType Term
+
+ | EParam [(Ident,Context)] -- to encode parameter constructor sets
 
  | FV [Term]            -- ^ free variation: @variants { s ; ... }@
 
