@@ -97,8 +97,8 @@ concrete StructuralBul of Structural = CatBul **
   possess_Prep = ss "на" ;
   quite_Adv = ss "доста" ;
   she_Pron = mkNP "тя" "нея" "неин" "нейния" "нейният" "нейна" "нейната" "нейно" "нейното" "нейни" "нейните" (GSg Fem) P3 ;
+  so_AdA = ss "толкова" ;
 {-
-  so_AdA = ss "so" ;
   somebody_NP = regNP "somebody" Sg ;
   someSg_Det = mkDeterminerSg "някой" "някое" "някоя" ;
   somePl_Det = mkDeterminerPl "някои" ;
@@ -123,13 +123,11 @@ concrete StructuralBul of Structural = CatBul **
   those_NP = regNP "those" Pl ;
 -}
   through_Prep = ss "през" ;
-{-
-  too_AdA = ss "too" ;
--}
+  too_AdA = ss "прекалено" ;
   to_Prep = ss "до" ;
   under_Prep = ss "под" ;
+  very_AdA = ss "много" ;
 {-
-  very_AdA = ss "very" ;
   want_VV = P.mkVV (P.regV "want") ;
 -}
   we_Pron = mkNP "ние" "нас" "наш" "нашия" "нашият" "наша" "нашата" "наше" "нашето" "наши" "нашите" GPl P1 ;
