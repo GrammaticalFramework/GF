@@ -28,6 +28,10 @@ concrete CatBul of Cat = open ResBul, Prelude, (R = ParamX) in {
 -- Sentence
 
     Cl = {s : ResBul.Tense => Anteriority => Polarity => Order => Str} ;
+    Slash = {
+      s : ResBul.Tense => Anteriority => Polarity => Order => Str ;
+      c2 : Str
+      } ;
     Imp = {s : Polarity => GenNum => Str} ;
 
 -- Question
