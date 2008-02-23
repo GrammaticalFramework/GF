@@ -30,7 +30,7 @@ concrete CatBul of Cat = open ResBul, Prelude, (R = ParamX) in {
     Cl = {s : ResBul.Tense => Anteriority => Polarity => Order => Str} ;
     Slash = {
       s : ResBul.Tense => Anteriority => Polarity => Order => Str ;
-      c2 : Str
+      c2 : Prep
       } ;
     Imp = {s : Polarity => GenNum => Str} ;
 
@@ -83,13 +83,13 @@ concrete CatBul of Cat = open ResBul, Prelude, (R = ParamX) in {
 -- Structural
 
     Subj = {s : Str} ;
-    Prep = {s : Str} ;
+    Prep = {s : Str; c : Case} ;
 
 -- Open lexical classes, e.g. Lexicon
 
     V, VS, VQ, VA = Verb ;
-    V2, V2A = Verb ** {c2 : Str} ;
-    V3 = Verb ** {c2, c3 : Str} ;
+    V2, V2A = Verb ** {c2 : Prep} ;
+    V3 = Verb ** {c2, c3 : Prep} ;
 
     A = {s : AForm => Str} ;
     A2 = {s : AForm => Str ; c2 : Str} ;

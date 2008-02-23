@@ -18,7 +18,7 @@ concrete QuestionBul of Question = CatBul ** open ResBul, Prelude in {
       in {s = \\t,a,b,_ => cl.s ! t ! a ! b ! Main} ;
 
     QuestSlash ip slash = 
-      mkQuestion (ss (slash.c2 ++ ip.s ! Acc)) slash ;
+      mkQuestion (ss (slash.c2.s ++ ip.s ! slash.c2.c)) slash ;
 
     QuestIAdv iadv cl = mkQuestion iadv cl ;
 

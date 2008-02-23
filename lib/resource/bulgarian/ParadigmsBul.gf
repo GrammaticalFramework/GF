@@ -52,7 +52,7 @@ oper
 -- A preposition as used for rection in the lexicon, as well as to
 -- build $PP$s in the resource API, just requires a string.
 
-  mkPrep : Str -> Prep ;
+  mkPrep : Str -> Case -> Prep ;
   noPrep : Prep ;
 
   mkA2 a p = a ** {c2 = p.s ; lock_A2 = <>} ;
@@ -88,13 +88,13 @@ oper
   
   mkAdv x = ss x ** {lock_Adv = <>} ;
   
-  mkPrep p = ss p ** {lock_Prep = <>} ;
-  noPrep = mkPrep [] ;
+  mkPrep p c = {s = p; c = c; lock_Prep = <>} ;
+  noPrep = mkPrep [] Acc ;
 
-  prepV2 v p = v ** {s = v.s ; c2 = p.s ; lock_V2 = <>} ;
-  dirV2 v = prepV2 v noPrep;
+  prepV2 v p = {s = v.s ; c2 = p ; lock_V2 = <>} ;
+  dirV2 v = prepV2 v noPrep ;
 
-  mkV3 v p q = v ** {s = v.s ; s1 = v.s1 ; c2 = p.s ; c3 = q.s ; lock_V3 = <>} ;
+  mkV3 v p q = v ** {s = v.s ; s1 = v.s1 ; c2 = p ; c3 = q ; lock_V3 = <>} ;
   dirV3 v p = mkV3 v noPrep p ;
   dirdirV3 v = dirV3 v noPrep ;
   
