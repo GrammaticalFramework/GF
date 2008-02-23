@@ -8,7 +8,7 @@ concrete AdverbBul of Adverb = CatBul ** open ResBul, Prelude in {
       s = cadv.s ++ "по" ++ "-" ++ a.s ! ASg Neut Indef ++ "от" ++ s.s
       } ;
 
-    PrepNP prep np = {s = prep.s ++ np.s ! Acc} ;
+    PrepNP prep np = {s = prep.s ++ np.s ! prep.c} ;
 
     AdAdv = cc2 ;
 

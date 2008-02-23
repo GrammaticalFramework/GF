@@ -18,7 +18,7 @@ resource ResBul = ParamX ** open Prelude in {
 -- This is the worst-case $Case$ needed for pronouns.
 
   param
-    Case = Nom | Acc ;
+    Case = Nom | Acc | Dat;
 
     NForm = 
         NF Number Species
@@ -425,16 +425,18 @@ resource ResBul = ParamX ** open Prelude in {
       \koi,kogo,gn -> {
       s = table {
             Nom => koi ;
-            Acc => kogo
+            Acc => kogo ;
+            Dat => "на" ++ kogo
           } ;
       gn = gn
       } ;
 
-    mkNP : (az,men,moj,moia,moiat,moia_,moiata,moe,moeto,moi,moite : Str) -> GenNum -> Person -> {s : Case => Str; gen : AForm => Str; a : Agr} =
-      \az,men,moj,moia,moiat,moia_,moiata,moe,moeto,moi,moite,gn,p -> {
+    mkPron : (az,men,mi,moj,moia,moiat,moia_,moiata,moe,moeto,moi,moite : Str) -> GenNum -> Person -> {s : Case => Str; gen : AForm => Str; a : Agr} =
+      \az,men,mi,moj,moia,moiat,moia_,moiata,moe,moeto,moi,moite,gn,p -> {
       s = table {
             Nom => az ;
-            Acc => men           
+            Acc => men ;
+            Dat => mi
           } ;
       gen = (mkAdjective moj moia moiat moia_ moiata moe moeto moi moite).s ;
       a = {

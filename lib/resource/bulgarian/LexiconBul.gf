@@ -156,7 +156,7 @@ lin
   uncertain_A = mkA79 "неясен" ;
   
 oper
-  zaP = mkPrep "за" ;
-  naP = mkPrep "на" ;
-  doP = mkPrep "до" ;
+  zaP = mkPrep "за" Acc ;
+  naP = mkPrep "на" Dat ;
+  doP = mkPrep "до" Acc ;
 } ;

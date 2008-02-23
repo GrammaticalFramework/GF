@@ -1,11 +1,11 @@
 concrete StructuralBul of Structural = CatBul ** 
-  open MorphoBul, (P = ParadigmsBul), Prelude in {
+  open MorphoBul, ParadigmsBul, Prelude in {
 
   flags optimize=all ;
 
   lin
-  above_Prep = ss "над" ;
-  after_Prep = ss "след" ;
+  above_Prep = mkPrep "над" Acc ;
+  after_Prep = mkPrep "след" Acc ;
   all_Predet = {s = table GenNum ["всички€";"всичката";"всичкото";"всичките"]} ;
   almost_AdA, almost_AdN = ss "почти" ;
 {-  although_Subj = ss "although" ;
@@ -13,15 +13,15 @@ concrete StructuralBul of Structural = CatBul **
   and_Conj = ss "and" ** {n = Pl} ;
 -}
   because_Subj = ss "защото" ;
-  before_Prep = ss "преди" ;
-  behind_Prep = ss "зад" ;
-  between_Prep = ss "между" ;
+  before_Prep = mkPrep "преди" Acc ;
+  behind_Prep = mkPrep "зад" Acc ;
+  between_Prep = mkPrep "между" Acc ;
 {-
   both7and_DConj = sd2 "both" "and" ** {n = Pl} ;
   but_PConj = ss "but" ;
 -}
-  by8agent_Prep = ss "чрез" ;
-  by8means_Prep = ss "чрез" ;
+  by8agent_Prep = mkPrep "чрез" Acc ;
+  by8means_Prep = mkPrep "чрез" Acc ;
 {-
   can8know_VV, can_VV = {
     s = table { 
@@ -36,7 +36,7 @@ concrete StructuralBul of Structural = CatBul **
     isAux = True
     } ;
 -}
-  during_Prep = ss ["по време на"] ;
+  during_Prep = mkPrep ["по време на"] Acc ;
 {-
   either7or_DConj = sd2 "either" "or" ** {n = Sg} ;
   everybody_NP = regNP "everybody" Sg ;
@@ -48,21 +48,21 @@ concrete StructuralBul of Structural = CatBul **
   everywhere_Adv = ss "навс€къде" ;
   few_Det = {s = \\_,_ => "н€колко"; n = Pl; countable = True; spec = Indef} ;
 ---  first_Ord = ss "first" ; DEPRECATED
-  for_Prep = ss "за" ;
-  from_Prep = ss "от" ;
-  he_Pron = mkNP "той" "него" "свой" "сво€" "сво€т" "сво€" "сво€та" "свое" "своето" "свои" "своите" (GSg Masc) P3 ;
+  for_Prep = mkPrep "за" Acc ;
+  from_Prep = mkPrep "от" Acc ;
+  he_Pron = mkPron "той" "него" "му" "свой" "сво€" "сво€т" "сво€" "сво€та" "свое" "своето" "свои" "своите" (GSg Masc) P3 ;
   here_Adv = ss "тук" ;
   here7to_Adv = ss ["до тук"] ;
   here7from_Adv = ss ["от тук"] ;
   how_IAdv = ss "как" ;
   how8many_IDet = {s = \\_ => "колко"; n = Pl} ;
   if_Subj = ss "ако" ;
-  in8front_Prep = ss "пред" ;
-  i_Pron  = mkNP "аз" "мен" "мой" "мо€" "мо€т" "мо€" "мо€та" "мое" "моето" "мои" "моите" (GSg Masc) P1 ;
-  in_Prep = ss (pre { "в" ; 
-                      "във" / strs {"в" ; "ф" ; "¬" ; "‘"}
-                    }) ;
-  it_Pron  = mkNP "то" "него" "негов" "негови€" "негови€т" "негова" "неговата" "негово" "неговото" "негови" "неговите" (GSg Neut) P3 ;
+  in8front_Prep = mkPrep "пред" Acc ;
+  i_Pron  = mkPron "аз" "мен" "ми" "мой" "мо€" "мо€т" "мо€" "мо€та" "мое" "моето" "мои" "моите" (GSg Masc) P1 ;
+  in_Prep = mkPrep (pre { "в" ; 
+                          "във" / strs {"в" ; "ф" ; "¬" ; "‘"}
+                        }) Acc ;
+  it_Pron  = mkPron "то" "него" "му" "негов" "негови€" "негови€т" "негова" "неговата" "негово" "неговото" "негови" "неговите" (GSg Neut) P3 ;
   less_CAdv = {s="не"; sn="по-малко"} ;
   many_Det = mkDeterminerPl "много" ;
   more_CAdv = {s=[]; sn="повече"} ;
@@ -83,20 +83,20 @@ concrete StructuralBul of Structural = CatBul **
     } ;
 -}
   no_Phr = ss "не" ;
-  on_Prep = ss "на" ;
+  on_Prep = mkPrep "на" Acc ;
 ----  one_Quant = mkDeterminer Sg "one" ; -- DEPRECATED
   only_Predet = {s = \\_ => "само"} ;
 {-
   or_Conj = ss "or" ** {n = Sg} ;
   otherwise_PConj = ss "otherwise" ;
 -}
-  part_Prep = ss "от" ;
+  part_Prep = mkPrep "от" Acc ;
 {-
   please_Voc = ss "please" ;
 -}
-  possess_Prep = ss "на" ;
+  possess_Prep = mkPrep [] Dat ;
   quite_Adv = ss "доста" ;
-  she_Pron = mkNP "т€" "не€" "неин" "нейни€" "нейни€т" "нейна" "нейната" "нейно" "нейното" "нейни" "нейните" (GSg Fem) P3 ;
+  she_Pron = mkPron "т€" "не€" "и" "неин" "нейни€" "нейни€т" "нейна" "нейната" "нейно" "нейното" "нейни" "нейните" (GSg Fem) P3 ;
   so_AdA = ss "толкова" ;
 {-
   somebody_NP = regNP "somebody" Sg ;
@@ -116,21 +116,21 @@ concrete StructuralBul of Structural = CatBul **
   therefore_PConj = ss "therefore" ;
   these_NP = regNP "these" Pl ;
 -}
-  they_Pron = mkNP "те" "т€х" "техен" "техни€" "техни€т" "т€хна" "т€хната" "т€хно" "т€хното" "техни" "техните" GPl P3 ; 
+  they_Pron = mkPron "те" "т€х" "им" "техен" "техни€" "техни€т" "т€хна" "т€хната" "т€хно" "т€хното" "техни" "техните" GPl P3 ; 
   this_Quant = mkQuant "този" "тaзи" "това" "тези" ;
 {-
   this_NP = regNP "this" Sg ;
   those_NP = regNP "those" Pl ;
 -}
-  through_Prep = ss "през" ;
+  through_Prep = mkPrep "през" Acc ;
   too_AdA = ss "прекалено" ;
-  to_Prep = ss "до" ;
-  under_Prep = ss "под" ;
+  to_Prep = mkPrep "до" Acc ;
+  under_Prep = mkPrep "под" Acc ;
   very_AdA = ss "много" ;
 {-
   want_VV = P.mkVV (P.regV "want") ;
 -}
-  we_Pron = mkNP "ние" "нас" "наш" "наши€" "наши€т" "наша" "нашата" "наше" "нашето" "наши" "нашите" GPl P1 ;
+  we_Pron = mkPron "ние" "нас" "ни" "наш" "наши€" "наши€т" "наша" "нашата" "наше" "нашето" "наши" "нашите" GPl P1 ;
   whatPl_IP = mkIP "какви" "какви" GPl ;
   whatSg_IP = mkIP "какъв" "какъв" (GSg Masc) ;
   when_IAdv = ss "кога" ;
@@ -143,13 +143,13 @@ concrete StructuralBul of Structural = CatBul **
   whoSg_IP = mkIP "кой" "кого" (GSg Masc) ;
   whoPl_IP = mkIP "кои" "кого" GPl ;
   why_IAdv = ss "защо" ;
-  without_Prep = ss "без" ;
-  with_Prep = ss (pre { "с" ; 
-                        "със" / strs {"с" ; "з" ; "—" ; "«"}
-                      }) ;
+  without_Prep = mkPrep "без" Acc ;
+  with_Prep = mkPrep (pre { "с" ; 
+                            "със" / strs {"с" ; "з" ; "—" ; "«"}
+                          }) Acc ;
   yes_Phr = ss "да" ;
-  youSg_Pron = mkNP "ти" "теб" "твой" "тво€" "тво€т" "тво€" "тво€та" "твое" "твоето" "твои" "твоите" (GSg Masc) P2 ;
-  youPl_Pron = mkNP "вие" "вас" "ваш" "ваши€" "ваши€т" "ваша" "вашата" "ваше" "вашето" "ваши" "вашите" GPl P2 ;
-  youPol_Pron = mkNP "вие" "вас" "ваш" "ваши€" "ваши€т" "ваша" "вашата" "ваше" "вашето" "ваши" "вашите" (GSg Masc) P2 ;
+  youSg_Pron = mkPron "ти" "теб" "ти" "твой" "тво€" "тво€т" "тво€" "тво€та" "твое" "твоето" "твои" "твоите" (GSg Masc) P2 ;
+  youPl_Pron = mkPron "вие" "вас" "ви" "ваш" "ваши€" "ваши€т" "ваша" "вашата" "ваше" "вашето" "ваши" "вашите" GPl P2 ;
+  youPol_Pron = mkPron "вие" "вас" "ви" "ваш" "ваши€" "ваши€т" "ваша" "вашата" "ваше" "вашето" "ваши" "вашите" (GSg Masc) P2 ;
 }
 

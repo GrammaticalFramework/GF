@@ -15,10 +15,19 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
                                             } ;
                               _              => NF det.n det.spec
                             } ;
-                   in det.s ! cn.g ! c ++ cn.s ! nf ; 
+                       s = det.s ! cn.g ! c ++ cn.s ! nf
+                   in case c of {
+                        Dat => "на" ++ s; 
+                        _   => s
+                      } ;
         a = {gn = gennum cn.g det.n; p = P3} ;
       } ;
-    UsePN pn = {s = \\_ => pn.s; a = {gn = GSg pn.g; p = P3}} ;
+    UsePN pn = { s = \\c => case c of {
+                              Dat => "на" ++ pn.s; 
+                              _   => pn.s
+                            } ;
+                 a = {gn = GSg pn.g; p = P3}
+               } ;
     UsePron p = {s = p.s; a=p.a} ;
 
     PredetNP pred np = {

@@ -22,7 +22,7 @@ concrete SentenceBul of Sentence = CatBul ** open Prelude, ResBul in {
       c2 = slash.c2
     } ;
 
-    SlashPrep cl prep = cl ** {c2 = prep.s} ;
+    SlashPrep cl prep = cl ** {c2 = prep} ;
 
     EmbedS  s  = {s = "," ++ "че" ++ s.s} ;
     EmbedQS qs = {s = qs.s ! QIndir} ;
