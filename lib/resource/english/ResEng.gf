@@ -182,12 +182,13 @@ resource ResEng = ParamX ** open Prelude in {
 
   VerbForms : Type =
     Tense => Anteriority => CPolarity => Order => Agr => 
-      {aux, adv, fin, inf : Str} ; -- would, hardly, sleeps, slept
+      {aux, adv, fin, inf : Str} ; -- would, not, sleeps, slept
 
   VP : Type = {
     s   : VerbForms ;
     prp : Str ;   -- present participle 
     inf : Str ;   -- the infinitive form ; VerbForms would be the logical place
+    ad  : Str ;   -- sentence adverb
     s2  : Agr => Str -- complement
     } ;
 
@@ -221,6 +222,7 @@ resource ResEng = ParamX ** open Prelude in {
         } ;
     prp  = verb.s ! VPresPart ;
     inf  = verb.s ! VInf ;
+    ad   = [] ;
     s2 = \\a => if_then_Str verb.isRefl (reflPron ! a) []
     } ;
 
@@ -256,6 +258,7 @@ resource ResEng = ParamX ** open Prelude in {
         } ;
     prp = verb.prpart ;
     inf = verb.inf ;
+    ad = [] ;
     s2 = \\_ => []
     } ;
         
@@ -282,11 +285,10 @@ resource ResEng = ParamX ** open Prelude in {
 --- The adverb should be before the finite verb.
 
   insertAdV : Str -> VP -> VP = \ad,vp -> {
-    s = \\t,ant,cb,ord,agr => 
-      let vps = vp.s ! t ! ant ! cb ! ord ! agr in
-      {aux = vps.aux ; adv = vps.adv ++ ad ; fin = vps.fin ; inf = vps.inf} ;
+    s = vp.s ;
     prp = vp.prp ;
     inf = vp.inf ;
+    ad  = vp.ad ++ ad ;
     s2 = \\a => vp.s2 ! a
     } ;
 
@@ -316,10 +318,9 @@ resource ResEng = ParamX ** open Prelude in {
     agrVerb (verb.s ! VPres) (verb.s ! VInf) ;
 
   infVP : Bool -> VP -> Agr -> Str = \isAux,vp,a ->
+    vp.ad ++ 
     case isAux of {True => [] ; False => "to"} ++ 
-    (vp.s!Pres!Simul!CPos!ODir!a).adv ++ vp.inf ++ vp.s2 ! a ;
----    if_then_Str isAux [] "to" ++ 
----    vp.inf ++ vp.s2 ! a ;
+    vp.inf ++ vp.s2 ! a ;
 
   agrVerb : Str -> Str -> Agr -> Str = \has,have,agr -> 
     case agr of {
@@ -383,8 +384,8 @@ resource ResEng = ParamX ** open Prelude in {
           compl = vp.s2 ! agr
         in
         case o of {
-          ODir => subj ++ verb.aux ++ verb.adv ++ verb.fin ++ verb.inf ++ compl ;
-          OQuest => verb.aux ++ subj ++ verb.adv ++ verb.fin ++ verb.inf ++ compl
+          ODir => subj ++ verb.aux ++ verb.adv ++ vp.ad ++ verb.fin ++ verb.inf ++ compl ;
+          OQuest => verb.aux ++ subj ++ verb.adv ++ vp.ad ++ verb.fin ++ verb.inf ++ compl
           }
     } ;
 
