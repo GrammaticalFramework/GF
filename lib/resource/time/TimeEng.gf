@@ -17,6 +17,8 @@ Hour = SS ;
 Minute = SS ;
 Time = SS ;
 
+[Dig] = { s : CardOrd => Str } ;
+
 lin
 
 DateTimeDateTime date time = { s = date.s ++ "at" ++ time.s };
@@ -83,5 +85,9 @@ OnDate date = let prep = case date.t of {
 	       in { s = prep ++ date.s } ;
 
 AtTime time = { s = "at" ++ time.s } ;
+
+
+BaseDig d = { s = \\o => d.s!o } ;
+ConsDig d ds = { s = \\o => d.s!NCard ++ ds.s!o } ;
 
 } ;
