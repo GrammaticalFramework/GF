@@ -19,6 +19,8 @@ Hour ;
 Minute ; 
 Weekday ;
 
+[Dig]{1};
+
 fun
 
 DateTimeDateTime : Date -> Time -> DateTime ;
@@ -31,14 +33,14 @@ YearMonthDate    : Year -> MonthName -> Date ; -- March 1995
 YearMonthDayDate : Year -> MonthName -> Day -> Date ; -- January 1st, 2006
 
 NumYear    : Numeral -> Year ;
-DigYear    : Digits -> Year ;
+DigYear    : [Dig] -> Year ;
 
 NumMonth   : Sub100 -> Month ;
-DigMonth   : Digits -> Month ;
+DigMonth   : [Dig] -> Month ;
 NameMonth  : MonthName -> Month ;
 
 NumDay     : Sub100 -> Day ;
-DigDay     : Digits -> Day ;
+DigDay     : [Dig] -> Day ;
 
 FormalTime : Hour -> Minute -> Time ; -- "two twenty"
 PastTime   : Hour -> Minute -> Time ; -- "twenty past two"
@@ -47,9 +49,9 @@ HourTime   : Hour -> Time ;           -- "two o'clock"
 ExactTime  : Hour -> Time ;           -- "sharp"
 
 NumHour     : Numeral -> Hour ;
-DigHour     : Digits -> Hour ;
+DigHour     : [Dig] -> Hour ;
 NumMinute   : Numeral -> Minute ;
-DigMinute   : Digits -> Minute ;
+DigMinute   : [Dig] -> Minute ;
 
 fun
 january   : MonthName ;
@@ -79,6 +81,7 @@ sunday : Weekday ;
 fun 
   OnDate     : Date -> Adv ;
   AtTime     : Time -> Adv ;
+
 
 {-
 Add:
