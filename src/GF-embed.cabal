@@ -14,6 +14,7 @@ Library
     Build-depends: base >= 3.0, array, containers, directory, random
   else
     Build-depends: base < 3.0
+  Ghc-options: -O2
   Extensions: 
   Exposed-Modules: 
     GF.GFCC.API
