@@ -18,7 +18,8 @@ resource ResBul = ParamX ** open Prelude in {
 -- This is the worst-case $Case$ needed for pronouns.
 
   param
-    Case = Nom | Acc | Dat;
+    Role = RSubj | RObj Case ;
+    Case = Acc | Dat;
 
     NForm = 
         NF Number Species
@@ -53,6 +54,12 @@ resource ResBul = ParamX ** open Prelude in {
      | VPresPart   AForm
      | VImperative Number
      | VGerund
+     ;
+     
+    VType =
+       VNormal
+     | VMedial  Case
+     | VPhrasal Case
      ;
 
 -- The order of sentence is needed already in $VP$.
@@ -112,39 +119,39 @@ resource ResBul = ParamX ** open Prelude in {
         GPl    => Pl
       } ;
 
-    aform : GenNum -> Species -> Case -> AForm = \gn,spec,c -> 
+    aform : GenNum -> Species -> Role -> AForm = \gn,spec,role -> 
       case gn of {
-        GSg g  => case <g,spec,c> of {
-                    <Masc,Def,Nom> => ASgMascDefNom ;
-                    _              => ASg g spec
+        GSg g  => case <g,spec,role> of {
+                    <Masc,Def,RSubj> => ASgMascDefNom ;
+                    _                => ASg g spec
                   } ;
         GPl    => APl spec
       } ;
 
-    dgenderSpecies : DGender -> Species -> Case -> DGenderSpecies =
-      \g,spec,c -> case <g,spec> of {
-                     <DMasc,Indef> => DMascIndef ;
-                     <DMasc,Def>   => case c of {
-                                        Nom => DMascDefNom ;
-                                        _   => DMascDef
-                                      } ;
-                     <DMascPersonal,Indef> => DMascPersonalIndef ;
-                     <DMascPersonal,Def>   => case c of {
-                                                Nom => DMascPersonalDefNom ;
-                                                _   => DMascPersonalDef
-                                              } ;
-                     <DFem ,Indef> => DFemIndef ;
-                     <DFem ,Def>   => DFemDef ;
-                     <DNeut,Indef> => DNeutIndef ;
-                     <DNeut,Def>   => DNeutDef
-                   } ;
+    dgenderSpecies : DGender -> Species -> Role -> DGenderSpecies =
+      \g,spec,role -> case <g,spec> of {
+                        <DMasc,Indef> => DMascIndef ;
+                        <DMasc,Def>   => case role of {
+                                           RSubj => DMascDefNom ;
+                                           _     => DMascDef
+                                         } ;
+                        <DMascPersonal,Indef> => DMascPersonalIndef ;
+                        <DMascPersonal,Def>   => case role of {
+                                                   RSubj => DMascPersonalDefNom ;
+                                                   _     => DMascPersonalDef
+                                                 } ;
+                        <DFem ,Indef> => DFemIndef ;
+                        <DFem ,Def>   => DFemDef ;
+                        <DNeut,Indef> => DNeutIndef ;
+                        <DNeut,Def>   => DNeutDef
+                      } ;
 
     nform2aform : NForm -> DGender -> AForm
       = \nf,g -> case nf of {
-                   NF n spec  => aform (gennum g n) spec Acc ;
-                   NFSgDefNom => aform (gennum g Sg) Def Nom ;
+                   NF n spec  => aform (gennum g n) spec (RObj Acc) ;
+                   NFSgDefNom => aform (gennum g Sg) Def RSubj ;
                    NFPlCount  => APl Indef ;
-                   NFVocative => aform (gennum g Sg) Indef Acc
+                   NFVocative => aform (gennum g Sg) Indef (RObj Acc)
                  } ;
 
     indefNForm : NForm -> NForm
@@ -159,96 +166,174 @@ resource ResBul = ParamX ** open Prelude in {
 -- For $Verb$.
 
     Verb : Type = {
-      s : VForm => Str ;
+      s  : VForm => Str ;
+      vtype : VType
     } ;
 
     VP : Type = {
-      s   : Tense => Anteriority => Polarity => Agr => Str ;
+      s   : Tense => Anteriority => Polarity => Agr => Bool => Str ;
       imp : Polarity => Number => Str ;
-      s2  : Agr => Str
+      s2  : Agr => Str ;
+      subjRole : Role
     } ;
 
     predV : Verb -> VP =
       \verb -> 
-        let pol : Polarity -> Str -> Str = \p,vf -> case p of { Pos => vf ; Neg => "не" ++ vf }
-        in { s = \\t,a,p,agr => let present = verb.s ! (VPres   (numGenNum agr.gn) agr.p) ;
-                                    aorist  = verb.s ! (VAorist (numGenNum agr.gn) agr.p) ;
-                                    perfect = verb.s ! (VPerfect (aform agr.gn Indef Acc)) ;
-                                    vf = case <t,a> of {
-                                           <Pres,Simul> => present ;
-                                           <Pres,Anter> => auxBe.s ! (VPres (numGenNum agr.gn) agr.p) ++ perfect ;
-                                           <Past,Simul> => aorist ;
-                                           <Past,Anter> => auxBe.s ! (VAorist (numGenNum agr.gn) agr.p) ++ perfect ;
-                                           <Fut, Simul> => "ще" ++ present ;
-                                           <Fut, Anter> => "ще" ++ auxBe.s ! (VPres (numGenNum agr.gn) agr.p) ++ perfect ;
-                                           <Cond,Simul> => auxWould.s ! (VAorist (numGenNum agr.gn) agr.p) ++ perfect ;
-                                           <Cond,Anter> => auxWould.s ! (VAorist (numGenNum agr.gn) agr.p) ++ auxBe.s ! (VPerfect (aform agr.gn Indef Acc)) ++ perfect
+        { s = \\t,a,p,agr,q => let 
+                                 clitic = case verb.vtype of {
+                                               VNormal    => {s=[]; agr=agr} ;
+                                               VMedial c  => {s=reflClitics ! c; agr=agr} ;
+                                               VPhrasal c => {s=personalClitics ! c ! agr.gn ! agr.p; agr={gn=GSg Neut; p=P3}}
+                                             } ;
+
+                                 present = verb.s ! (VPres   (numGenNum clitic.agr.gn) clitic.agr.p) ;
+                                 aorist  = verb.s ! (VAorist (numGenNum clitic.agr.gn) clitic.agr.p) ;
+                                 perfect = verb.s ! (VPerfect (aform clitic.agr.gn Indef (RObj Acc))) ;
+                                 
+                                 auxPres    = auxBe clitic.s ! VPres (numGenNum clitic.agr.gn) clitic.agr.p ;
+                                 auxAorist  = auxBe clitic.s ! VAorist (numGenNum clitic.agr.gn) clitic.agr.p ;
+                                 auxPerfect = auxBe clitic.s ! VPerfect (aform clitic.agr.gn Indef (RObj Acc)) ;
+                                 auxCondS   = auxWould clitic.s ! VAorist (numGenNum clitic.agr.gn) clitic.agr.p ;
+                                 auxCondA   = auxCondS ++
+                                              auxBe [] ! VPerfect (aform clitic.agr.gn Indef (RObj Acc)) ;
+
+                                 verbs : {aux:Str; main:Str}
+                                       = case <t,a> of {
+                                           <Pres,Simul> => {aux=clitic.s; main=present} ;
+                                           <Pres,Anter> => {aux=auxPres; main=perfect} ;
+                                           <Past,Simul> => {aux=clitic.s; main=aorist} ;
+                                           <Past,Anter> => {aux=auxAorist; main=perfect} ;
+                                           <Fut, Simul> => {aux=clitic.s; main=present} ;
+                                           <Fut, Anter> => {aux=auxPres; main=perfect} ;
+                                           <Cond,Simul> => {aux=auxCondS; main=perfect} ;
+                                           <Cond,Anter> => {aux=auxCondA; main=perfect}
                                          } ;
-                                in pol p vf ;
-             imp = \\p,n => pol p (verb.s ! VImperative n) ;
-             s2 = \\_ => []
+
+                                 li = case q of {True => "ли"; False => []} ;
+                                 aux = case p of {
+                                         Pos => case t of {
+                                                  Fut => {s1="ще"++verbs.aux; s2=li} ;
+                                                  _   => case q of {True  => {s1=[]; s2="ли"++verbs.aux};
+                                                                    False => {s1=verbs.aux; s2=[]}}
+                                                } ;
+                                         Neg => case t of {
+                                                  Fut => {s1="не"++"ще"++verbs.aux; s2=li} ;
+                                                  _   => case q of {True  => {s1="не"++verbs.aux; s2="ли"};
+                                                                    False => {s1="не"++verbs.aux; s2=[]}}
+                                                }
+                                       }
+
+                             in aux.s1 ++ verbs.main ++ aux.s2;
+             imp = \\p,n => let ne = case p of {Pos => []; Neg => "не"} ;
+                            in ne ++ verb.s ! VImperative n ;
+             s2 = \\_ => [] ;
+             subjRole = case verb.vtype of {
+                          VNormal    => RSubj ;
+                          VMedial  _ => RSubj ;
+                          VPhrasal c => RObj c
+                        }
            } ;
 
     insertObj : (Agr => Str) -> VP -> VP = \obj,vp -> {
-      s = vp.s ;
+      s   = vp.s ;
       imp = vp.imp ;
-      s2 = \\a => vp.s2 ! a ++ obj ! a
+      s2 = \\a => vp.s2 ! a ++ obj ! a ;
+      subjRole = vp.subjRole
       } ;
 
-    auxBe : Verb = {
-      s = table {
-            VPres      Sg P1 => "съм" ; 
-            VPres      Sg P2 => "си" ;
-            VPres      Sg P3 => "е" ; 
-            VPres      Pl P1 => "сме" ; 
-            VPres      Pl P2 => "сте" ;
-            VPres      Pl P3 => "са" ;
-            VAorist    Sg P1 => "бях" ; 
-            VAorist    Sg _  => "беше" ;
-            VAorist    Pl P1 => "бяхме" ; 
-            VAorist    Pl P2 => "бяхте" ;
-            VAorist    Pl P3 => "бяха" ;
-            VImperfect Sg P1 => "бях" ; 
-            VImperfect Sg _  => "беше" ;
-            VImperfect Pl P1 => "бяхме" ; 
-            VImperfect Pl P2 => "бяхте" ;
-            VImperfect Pl P3 => "бяха" ;
-            VPerfect    aform => (regAdjective "бил").s ! aform ;
-            VPluPerfect aform => (regAdjective "бил").s ! aform ;
-            VPassive    aform => (regAdjective "бъден").s ! aform ;
-            VPresPart   aform => (regAdjective "бъдещ").s ! aform ;
-            VImperative Sg => "бъди" ;
-            VImperative Pl => "бъдете" ;
-            VGerund        => "бидейки"
-          }
+    auxBe : Str -> VForm => Str = \se ->
+      table {
+        VPres      Sg P1  => "съм" ++ se ; 
+        VPres      Sg P2  => "си" ++ se ;
+        VPres      Sg P3  => se ++ "е" ;
+        VPres      Pl P1  => "сме" ++ se ; 
+        VPres      Pl P2  => "сте" ++ se ;
+        VPres      Pl P3  => "са" ++ se ;
+        VAorist    Sg P1  => "бях" ++ se ; 
+        VAorist    Sg P2  => "беше" ++ se ;
+        VAorist    Sg P3  => se ++ "беше" ;
+        VAorist    Pl P1  => "бяхме" ++ se ; 
+        VAorist    Pl P2  => "бяхте" ++ se ;
+        VAorist    Pl P3  => "бяха" ++ se ;
+        VImperfect Sg P1  => "бях" ++ se ; 
+        VImperfect Sg _   => "беше" ++ se ;
+        VImperfect Pl P1  => "бяхме" ++ se ; 
+        VImperfect Pl P2  => "бяхте" ++ se ;
+        VImperfect Pl P3  => "бяха" ++ se ;
+        VPerfect    aform => (regAdjective "бил").s ! aform ++ se ;
+        VPluPerfect aform => (regAdjective "бил").s ! aform ++ se ;
+        VPassive    aform => (regAdjective "бъден").s ! aform ++ se ;
+        VPresPart   aform => (regAdjective "бъдещ").s ! aform ++ se ;
+        VImperative Sg    => "бъди" ++ se ;
+        VImperative Pl    => "бъдете" ++ se ;
+        VGerund           => "бидейки" ++ se
       } ;
 
-    auxWould : Verb = {
-      s = table {
-            VPres      Sg P1 => "бъда" ; 
-            VPres      Sg P2 => "бъдеш" ;
-            VPres      Sg P3 => "бъде" ; 
-            VPres      Pl P1 => "бъдем" ; 
-            VPres      Pl P2 => "бъдете" ;
-            VPres      Pl P3 => "бъдат" ;
-            VAorist    Sg P1 => "бих" ; 
-            VAorist    Sg _  => "би" ;
-            VAorist    Pl P1 => "бихме" ; 
-            VAorist    Pl P2 => "бихте" ;
-            VAorist    Pl P3 => "биха" ;
-            VImperfect Sg P1 => "бъдех" ; 
-            VImperfect Sg _  => "бъдеше" ;
-            VImperfect Pl P1 => "бъдехме" ; 
-            VImperfect Pl P2 => "бъдехте" ;
-            VImperfect Pl P3 => "бъдеха" ;
-            VPerfect    aform => (regAdjective "бил").s ! aform ;
-            VPluPerfect aform => (regAdjective "бъдел").s ! aform ;
-            VPassive    aform => (regAdjective "бъден").s ! aform ;
-            VPresPart   aform => (regAdjective "бъдещ").s ! aform ;
-            VImperative Sg => "бъди" ;
-            VImperative Pl => "бъдете" ;
-            VGerund        => "бъдейки"
-          }
+    auxWould : Str -> VForm => Str = \se ->
+      table {
+        VPres      Sg P1  => "бъда" ++ se ; 
+        VPres      Sg P2  => "бъдеш" ++ se ;
+        VPres      Sg P3  => se ++ "бъде" ; 
+        VPres      Pl P1  => "бъдем" ++ se ; 
+        VPres      Pl P2  => "бъдете" ++ se ;
+        VPres      Pl P3  => "бъдат" ++ se ;
+        VAorist    Sg P1  => "бих" ++ se ; 
+        VAorist    Sg _   => "би" ++ se ;
+        VAorist    Pl P1  => "бихме" ++ se ; 
+        VAorist    Pl P2  => "бихте" ++ se ;
+        VAorist    Pl P3  => "биха" ++ se ;
+        VImperfect Sg P1  => "бъдех" ++ se ; 
+        VImperfect Sg _   => "бъдеше" ++ se ;
+        VImperfect Pl P1  => "бъдехме" ++ se ; 
+        VImperfect Pl P2  => "бъдехте" ++ se ;
+        VImperfect Pl P3  => "бъдеха" ++ se ;
+        VPerfect    aform => (regAdjective "бил").s ! aform ++ se ;
+        VPluPerfect aform => (regAdjective "бъдел").s ! aform ++ se ;
+        VPassive    aform => (regAdjective "бъден").s ! aform ++ se ;
+        VPresPart   aform => (regAdjective "бъдещ").s ! aform ++ se ;
+        VImperative Sg    => "бъди" ++ se ;
+        VImperative Pl    => "бъдете" ++ se ;
+        VGerund           => "бъдейки" ++ se
+      } ;
+
+    verbBe : Verb = {s=auxBe []; vtype=VNormal} ;
+
+    reflClitics : Case => Str = table {Acc => "се"; Dat => "си"} ;
+
+    personalClitics : Case => GenNum => Person => Str =
+      table {
+        Acc => table {
+                 GSg g => table {
+                            P1 => "ме" ;
+                            P2 => "те" ;
+                            P3 => case g of {
+                                    Masc => "го" ;
+                                    Fem  => "я" ;
+                                    Neut => "го"
+                                  }
+                          } ;
+                 GPl   => table {
+                            P1 => "ни" ;
+                            P2 => "ви" ;
+                            P3 => "ги"
+                          }
+               } ;
+        Dat => table {
+                 GSg g => table {
+                            P1 => "ми" ;
+                            P2 => "ти" ;
+                            P3 => case g of {
+                                    Masc => "му" ;
+                                    Fem  => "й" ;
+                                    Neut => "му"
+                                  }
+                          } ;
+                 GPl   => table {
+                            P1     => "ни" ;
+                            P2     => "ви" ;
+                            P3     => "им"
+                          }
+               }
       } ;
 
     ia2e : Str -> Str =           -- to be used when the next syllable has vowel different from "а","ъ","о" or "у"
@@ -345,7 +430,8 @@ resource ResBul = ParamX ** open Prelude in {
                          _           => chete + "йки"
                        }
           } ;
-    } ;  
+      vtype = VNormal
+    } ;
     
 -- For $Sentence$.
 
@@ -357,12 +443,13 @@ resource ResBul = ParamX ** open Prelude in {
       \subj,agr,vp -> {
         s = \\t,a,b,o => 
           let 
-            verb  = vp.s ! t ! a ! b ! agr ;
+            verb  = vp.s ! t ! a ! b ! agr ! False ;
+            verbq = vp.s ! t ! a ! b ! agr ! True ;
             compl = vp.s2 ! agr
           in case o of {
               Main  => subj ++ verb ++ compl ;
-              Inv   => verb ++ subj ++ compl ;
-              Quest => subj ++ verb ++ "ли" ++ compl
+              Inv   => verb ++ compl ++ subj ;
+              Quest => subj ++ verbq ++ compl
              }
       } ;
       
@@ -421,22 +508,22 @@ resource ResBul = ParamX ** open Prelude in {
                     DNeutDef            => addDef dve
                   } ;
 
-    mkIP : Str -> Str -> GenNum -> {s : Case => Str ; gn : GenNum} =
+    mkIP : Str -> Str -> GenNum -> {s : Role => Str ; gn : GenNum} =
       \koi,kogo,gn -> {
       s = table {
-            Nom => koi ;
-            Acc => kogo ;
-            Dat => "на" ++ kogo
+            RSubj    => koi ;
+            RObj Acc => kogo ;
+            RObj Dat => "на" ++ kogo
           } ;
       gn = gn
       } ;
 
-    mkPron : (az,men,mi,moj,moia,moiat,moia_,moiata,moe,moeto,moi,moite : Str) -> GenNum -> Person -> {s : Case => Str; gen : AForm => Str; a : Agr} =
+    mkPron : (az,men,mi,moj,moia,moiat,moia_,moiata,moe,moeto,moi,moite : Str) -> GenNum -> Person -> {s : Role => Str; gen : AForm => Str; a : Agr} =
       \az,men,mi,moj,moia,moiat,moia_,moiata,moe,moeto,moi,moite,gn,p -> {
       s = table {
-            Nom => az ;
-            Acc => men ;
-            Dat => mi
+            RSubj    => az ;
+            RObj Acc => men ;
+            RObj Dat => mi
           } ;
       gen = (mkAdjective moj moia moiat moia_ moiata moe moeto moi moite).s ;
       a = {
@@ -444,17 +531,18 @@ resource ResBul = ParamX ** open Prelude in {
            p = p
           }
       } ;
+      
+    Preposition : Type = {s : Str; c : Case};
 
     mkQuestion : 
-      {s : Str} -> Clause -> 
+      {s1,s2 : Str} -> Clause -> 
       {s : Tense => Anteriority => Polarity => QForm => Str} = \wh,cl ->
       {
       s = \\t,a,p => 
             let cls = cl.s ! t ! a ! p ;
-                why = wh.s
             in table {
-                 QDir   => why ++ cls ! Inv ;
-                 QIndir => why ++ cls ! Main
+                 QDir   => wh.s1 ++ cls ! Inv ;
+                 QIndir => wh.s2 ++ cls ! Main
                }
       } ;
 }

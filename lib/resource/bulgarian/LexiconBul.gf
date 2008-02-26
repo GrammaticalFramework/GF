@@ -113,7 +113,7 @@ lin
   flow_V = mkV148 "тека" ;
   fly_V = mkV177 "летя" ;
   freeze_V = mkV186 "замръзвам" ;
-  laugh_V = mkV160 "смея" ;
+  laugh_V = reflV (mkV160 "смея") Acc ;
   lie_V = mkV178 "лежа" ;
   play_V = mkV161 "играя" ;
 --  sew_V = IrregEng.sew_V ;
@@ -131,9 +131,9 @@ lin
 --  bite_V2 = dirV2 IrregEng.bite_V ;
   count_V2 = dirV2 (mkV175 "броя") ;
   cut_V2 = dirV2 (mkV157 "режа")  ;
-  fear_V2 = dirV2 (mkV186 "страхувам") ;
-  fight_V2 = dirV2 (mkV173 "боря") ;
---  hit_V2 = dirV2 hit_V ;
+  fear_V2 = dirV2 (reflV (mkV186 "страхувам") Acc) ;
+  fight_V2 = dirV2 (reflV (mkV173 "боря") Acc) ;
+  hit_V2 = dirV2 (mkV173 "ударя") ;
 --  hold_V2 = dirV2 hold_V ;
   hunt_V2 = dirV2 (mkV174 "ловя") ;
   kill_V2 = dirV2 (mkV163 "убия") ;

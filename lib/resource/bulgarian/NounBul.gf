@@ -4,27 +4,27 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
 
   lin
     DetCN det cn = 
-      { s = \\c => let nf = case <det.n,det.spec> of {
-                              <Sg,Def>   => case c of {
-                                              Nom => NFSgDefNom ;
-                                              _   => NF Sg Def
-                                            } ;
-                              <Pl,Indef> => case det.countable of {
-                                              True  => NFPlCount ;
-                                              False => NF Pl Indef
-                                            } ;
-                              _              => NF det.n det.spec
-                            } ;
-                       s = det.s ! cn.g ! c ++ cn.s ! nf
-                   in case c of {
-                        Dat => "íà" ++ s; 
-                        _   => s
-                      } ;
+      { s = \\role => let nf = case <det.n,det.spec> of {
+                                 <Sg,Def>   => case role of {
+                                                 RSubj => NFSgDefNom ;
+                                                 _     => NF Sg Def
+                                               } ;
+                                 <Pl,Indef> => case det.countable of {
+                                                 True  => NFPlCount ;
+                                                 False => NF Pl Indef
+                                               } ;
+                                 _              => NF det.n det.spec
+                               } ;
+                          s = det.s ! cn.g ! role ++ cn.s ! nf
+                      in case role of {
+                           RObj Dat => "íà" ++ s; 
+                           _        => s
+                         } ;
         a = {gn = gennum cn.g det.n; p = P3} ;
       } ;
-    UsePN pn = { s = \\c => case c of {
-                              Dat => "íà" ++ pn.s; 
-                              _   => pn.s
+    UsePN pn = { s = \\role => case role of {
+                              RObj Dat => "íà" ++ pn.s; 
+                              _        => pn.s
                             } ;
                  a = {gn = GSg pn.g; p = P3}
                } ;
@@ -58,7 +58,7 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
       } ;
 
     PossPron p = {
-      s = \\gn => p.gen ! aform gn Indef Nom ;
+      s = \\gn => p.gen ! aform gn Indef RSubj ;
       spec = Indef
       } ;
 
@@ -97,8 +97,8 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
     UseN2 noun = noun ;
     UseN3 noun = noun ;
 
-    ComplN2 f x = {s = \\nf => f.s ! nf ++ f.c2 ++ x.s ! Acc; g=f.g} ;
-    ComplN3 f x = {s = \\nf => f.s ! nf ++ f.c2 ++ x.s ! Acc; c2 = f.c3; g=f.g} ;
+    ComplN2 f x = {s = \\nf => f.s ! nf ++ f.c2 ++ x.s ! RObj Acc; g=f.g} ;
+    ComplN3 f x = {s = \\nf => f.s ! nf ++ f.c2 ++ x.s ! RObj Acc; c2 = f.c3; g=f.g} ;
 
     AdjCN ap cn = {
       s = \\nf => preOrPost ap.isPre (ap.s ! nform2aform nf cn.g) (cn.s ! (indefNForm nf)) ;

@@ -30,23 +30,24 @@ concrete CatBul of Cat = open ResBul, Prelude, (R = ParamX) in {
     Cl = {s : ResBul.Tense => Anteriority => Polarity => Order => Str} ;
     Slash = {
       s : ResBul.Tense => Anteriority => Polarity => Order => Str ;
-      c2 : Prep
+      c2 : Preposition
       } ;
     Imp = {s : Polarity => GenNum => Str} ;
 
 -- Question
 
     QCl = {s : ResBul.Tense => Anteriority => Polarity => QForm => Str} ;
-    IP = {s : Case => Str; gn : GenNum} ;
-    IComp = {s : Str} ;    
+    IP = {s : Role => Str; gn : GenNum} ;
+    IComp = {s1,s2 : Str} ;    
     IDet = {s : GenNum => Str; n : Number} ;
 
 -- Verb
 
     VP = {
-      s : ResBul.Tense => Anteriority => Polarity => Agr => Str ;
+      s : ResBul.Tense => Anteriority => Polarity => Agr => Bool => Str ;
       imp : Polarity => Number => Str ;
-      s2 : Agr => Str
+      s2 : Agr => Str ;
+      subjRole : Role
     } ;
 
     Comp = {s : Agr => Str} ; 
@@ -60,15 +61,15 @@ concrete CatBul of Cat = open ResBul, Prelude, (R = ParamX) in {
 
     Adv = {s : Str} ;
     CAdv = {s : Str; sn : Str} ;
-    IAdv = {s : Str} ;
+    IAdv = {s1,s2 : Str} ;
     AdA = {s : Str} ;
 
 -- Noun
 
     CN = {s : NForm => Str; g : DGender} ;
-    NP = {s : Case => Str; a : Agr} ;
-    Pron = {s : Case => Str; gen : AForm => Str; a : Agr} ;
-    Det = {s : DGender => Case => Str ; n : Number; countable : Bool; spec : Species} ;
+    NP = {s : Role => Str; a : Agr} ;
+    Pron = {s : Role => Str; gen : AForm => Str; a : Agr} ;
+    Det = {s : DGender => Role => Str ; n : Number; countable : Bool; spec : Species} ;
     Predet = {s : GenNum => Str} ;
     Ord = {s : AForm => Str; nonEmpty : Bool} ;
     Num = {s : DGenderSpecies => Str; n : Number; nonEmpty : Bool} ;
@@ -88,8 +89,8 @@ concrete CatBul of Cat = open ResBul, Prelude, (R = ParamX) in {
 -- Open lexical classes, e.g. Lexicon
 
     V, VS, VQ, VA = Verb ;
-    V2, V2A = Verb ** {c2 : Prep} ;
-    V3 = Verb ** {c2, c3 : Prep} ;
+    V2, V2A = Verb ** {c2 : Preposition} ;
+    V3 = Verb ** {c2, c3 : Preposition} ;
 
     A = {s : AForm => Str} ;
     A2 = {s : AForm => Str ; c2 : Str} ;

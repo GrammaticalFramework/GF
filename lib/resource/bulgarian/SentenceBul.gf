@@ -3,7 +3,7 @@ concrete SentenceBul of Sentence = CatBul ** open Prelude, ResBul in {
   flags optimize=all_subs ;
 
   lin
-    PredVP np vp = mkClause (np.s ! Nom) np.a vp ;
+    PredVP np vp = mkClause (np.s ! vp.subjRole) np.a vp ;
 
     ImpVP vp = {
       s = \\p,gn => 
@@ -15,7 +15,7 @@ concrete SentenceBul of Sentence = CatBul ** open Prelude, ResBul in {
     } ;
 
     SlashV2 np v2 = 
-      mkClause (np.s ! Nom) np.a (predV v2) ** {c2 = v2.c2} ;
+      mkClause (np.s ! RSubj) np.a (predV v2) ** {c2 = v2.c2} ;
 
     AdvSlash slash adv = {
       s  = \\t,a,b,o => slash.s ! t ! a ! b ! o ++ adv.s ;

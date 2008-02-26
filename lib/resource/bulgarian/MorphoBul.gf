@@ -15,9 +15,9 @@ resource MorphoBul = ResBul ** open Prelude, (Predef=Predef) in {
 oper
 --2 Determiners
 
-  mkDeterminerSg : Str -> Str -> Str -> {s : DGender => Case => Str; n : Number; countable : Bool ; spec : Species} = \vseki,vsiaka,vsiako ->
+  mkDeterminerSg : Str -> Str -> Str -> {s : DGender => Role => Str; n : Number; countable : Bool ; spec : Species} = \vseki,vsiaka,vsiako ->
     {s = \\g,_ => table DGender [vseki;vseki;vsiaka;vsiako] ! g; n = Sg; countable = False; spec = Indef} ;
-  mkDeterminerPl : Str -> {s : DGender => Case => Str ; n : Number; countable : Bool ; spec : Species} = \vsicki ->
+  mkDeterminerPl : Str -> {s : DGender => Role => Str ; n : Number; countable : Bool ; spec : Species} = \vsicki ->
     {s = \\_,_ => vsicki; n = Pl; countable = False; spec = Indef} ;
 
   mkQuant : Str -> Str -> Str -> Str -> {s : GenNum => Str; spec : Species} = \tozi,tazi,towa,tezi -> {

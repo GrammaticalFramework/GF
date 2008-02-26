@@ -6,14 +6,14 @@ concrete AdjectiveBul of Adjective = CatBul ** open ResBul, Prelude in {
       } ;
 
     ComparA a np = {
-      s = \\aform => "по" ++ "-" ++ a.s ! aform ++ "от" ++ np.s ! Nom ; 
+      s = \\aform => "по" ++ "-" ++ a.s ! aform ++ "от" ++ np.s ! RSubj ; 
       isPre = True
       } ;
 
 -- $SuperlA$ belongs to determiner syntax in $Noun$.
 
     ComplA2 a np = {
-      s = \\aform => a.s ! aform ++ a.c2 ++ np.s ! Acc ; 
+      s = \\aform => a.s ! aform ++ a.c2 ++ np.s ! RObj Acc ; 
       isPre = True
       } ;
 
