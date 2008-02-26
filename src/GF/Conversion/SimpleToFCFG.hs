@@ -109,7 +109,7 @@ convert abs_defs cnc_defs cat_defs = getFGrammar (loop frulesEnv)
             (id, (ty,_)) <- abs_defs, let (args,res) = catSkeleton ty, 
             term <- Map.lookup id cnc_defs]
         
-        findLinType id = fromJust (Map.lookup id cat_defs)
+        findLinType id = fromMaybe (error $ "No lincat for " ++ show id) (Map.lookup id cat_defs)
 
         (xrulesMap,frulesEnv) = List.foldl' helper (Map.empty,emptyFRulesEnv) srules
            where
