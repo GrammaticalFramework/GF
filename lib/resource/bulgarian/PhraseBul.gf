@@ -7,5 +7,5 @@ concrete PhraseBul of Phrase = CatBul ** open Prelude, ResBul in {
     UttImpPl  pol imp = {s = pol.s ++ imp.s ! pol.p ! GPl} ;
     UttImpPol pol imp = {s = pol.s ++ imp.s ! pol.p ! GPl} ;
 
-    UttIAdv iadv = iadv ;
+    UttIAdv iadv = {s = iadv.s1} ;
 }

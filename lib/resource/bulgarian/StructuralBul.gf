@@ -54,7 +54,7 @@ concrete StructuralBul of Structural = CatBul **
   here_Adv = ss "тук" ;
   here7to_Adv = ss ["до тук"] ;
   here7from_Adv = ss ["от тук"] ;
-  how_IAdv = ss "как" ;
+  how_IAdv = mkIAdv "как" ;
   how8many_IDet = {s = \\_ => "колко"; n = Pl} ;
   if_Subj = ss "ако" ;
   in8front_Prep = mkPrep "пред" Acc ;
@@ -133,16 +133,16 @@ concrete StructuralBul of Structural = CatBul **
   we_Pron = mkPron "ние" "нас" "ни" "наш" "нашия" "нашият" "наша" "нашата" "наше" "нашето" "наши" "нашите" GPl P1 ;
   whatPl_IP = mkIP "какви" "какви" GPl ;
   whatSg_IP = mkIP "какъв" "какъв" (GSg Masc) ;
-  when_IAdv = ss "кога" ;
+  when_IAdv = mkIAdv "кога" ;
 {-
   when_Subj = ss "when" ;
 -}
-  where_IAdv = ss "къде" ;
+  where_IAdv = mkIAdv "къде" ;
   whichPl_IDet = {s = table GenNum ["кой";"коя";"кое";"кои"]; n = Pl} ;
   whichSg_IDet = {s = table GenNum ["кой";"коя";"кое";"кои"]; n = Sg} ;
   whoSg_IP = mkIP "кой" "кого" (GSg Masc) ;
   whoPl_IP = mkIP "кои" "кого" GPl ;
-  why_IAdv = ss "защо" ;
+  why_IAdv = mkIAdv "защо" ;
   without_Prep = mkPrep "без" Acc ;
   with_Prep = mkPrep (pre { "с" ; 
                             "със" / strs {"с" ; "з" ; "С" ; "З"}

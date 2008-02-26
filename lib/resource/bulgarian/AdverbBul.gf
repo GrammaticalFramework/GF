@@ -2,13 +2,13 @@ concrete AdverbBul of Adverb = CatBul ** open ResBul, Prelude in {
   lin
     PositAdvAdj a = {s = a.s ! ASg Neut Indef} ;
     ComparAdvAdj cadv a np = {
-      s = cadv.s ++ "по" ++ "-" ++ a.s ! ASg Neut Indef ++ "от" ++ np.s ! Acc
+      s = cadv.s ++ "по" ++ "-" ++ a.s ! ASg Neut Indef ++ "от" ++ np.s ! RObj Acc
       } ;
     ComparAdvAdjS cadv a s = {
       s = cadv.s ++ "по" ++ "-" ++ a.s ! ASg Neut Indef ++ "от" ++ s.s
       } ;
 
-    PrepNP prep np = {s = prep.s ++ np.s ! prep.c} ;
+    PrepNP prep np = {s = prep.s ++ np.s ! RObj prep.c} ;
 
     AdAdv = cc2 ;
 

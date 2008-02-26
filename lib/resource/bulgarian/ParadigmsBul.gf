@@ -59,11 +59,17 @@ oper
 
 --2 Verbs
 --
-  
+
+  reflV  : V -> Case -> V ;
+  phrasalV : V -> Case -> V ;
+
 --3 Two-place verbs
 --
 -- Two-place verbs need a preposition, except the special case with direct object.
 -- (transitive verbs). Notice that a particle comes from the $V$.
+
+  reflV    v c = {s = v.s; vtype = VMedial  c; lock_V=<>} ;
+  phrasalV v c = {s = v.s; vtype = VPhrasal c; lock_V=<>} ;
 
   mkAdv x = ss x ** {lock_Adv = <>} ;
   mkAdV x = ss x ** {lock_AdV = <>} ;
@@ -84,17 +90,17 @@ oper
   mkVS  : V -> VS ;
   
   mkPN : Str -> Gender -> PN ;
+
+  mkIAdv : Str -> IAdv ;
   
-  
-  mkAdv x = ss x ** {lock_Adv = <>} ;
   
   mkPrep p c = {s = p; c = c; lock_Prep = <>} ;
   noPrep = mkPrep [] Acc ;
 
-  prepV2 v p = {s = v.s ; c2 = p ; lock_V2 = <>} ;
+  prepV2 v p = {s = v.s; c2 = p; vtype = v.vtype; lock_V2 = <>} ;
   dirV2 v = prepV2 v noPrep ;
 
-  mkV3 v p q = v ** {s = v.s ; s1 = v.s1 ; c2 = p ; c3 = q ; lock_V3 = <>} ;
+  mkV3 v p q = {s = v.s; s1 = v.s1; c2 = p; c3 = q; vtype = v.vtype; lock_V3 = <>} ;
   dirV3 v p = mkV3 v noPrep p ;
   dirdirV3 v = dirV3 v noPrep ;
   
@@ -102,4 +108,5 @@ oper
   
   mkPN s g = {s = s; g = g ; lock_PN = <>} ;
 
+  mkIAdv s = {s1 = s; s2 = s + "то"; lock_IAdv = <>} ;
 }
