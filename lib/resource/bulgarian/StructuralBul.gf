@@ -129,7 +129,7 @@ concrete StructuralBul of Structural = CatBul **
   whichPl_IDet = {s = table GenNum ["кой";"коя";"кое";"кои"]; n = Pl} ;
   whichSg_IDet = {s = table GenNum ["кой";"коя";"кое";"кои"]; n = Sg} ;
   whoSg_IP = mkIP "кой" "кого" (GSg Masc) ;
-  whoPl_IP = mkIP "кои" "кого" GPl ;
+  whoPl_IP = mkIP "кои" "кои" GPl ;
   why_IAdv = mkIAdv "защо" ;
   without_Prep = mkPrep "без" Acc ;
   with_Prep = mkPrep (pre { "с" ; 
