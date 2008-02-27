@@ -102,6 +102,17 @@ resource ResBul = ParamX ** open Prelude in {
 --2 Transformations between parameter types
 
   oper
+    conjGenNum : GenNum -> GenNum -> GenNum = \a,b ->
+      case <a,b> of {
+        <GSg _,GSg g> => GSg g ;
+        _             => GPl
+    } ;
+
+    conjAgr : Agr -> Agr -> Agr = \a,b -> {
+      gn = conjGenNum a.gn b.gn ;
+      p  = conjPerson a.p b.p
+      } ;
+
     gennum : DGender -> Number -> GenNum = \g,n ->
       case n of {
         Sg => GSg (case g of {
