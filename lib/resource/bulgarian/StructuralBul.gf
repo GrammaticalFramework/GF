@@ -8,8 +8,8 @@ concrete StructuralBul of Structural = CatBul **
   after_Prep = mkPrep "след" Acc ;
   all_Predet = {s = table GenNum ["всичкия";"всичката";"всичкото";"всичките"]} ;
   almost_AdA, almost_AdN = ss "почти" ;
-{-  although_Subj = ss "although" ;
-  always_AdV = ss "always" ;
+  although_Subj = ss ["въпреки че"] ;
+{-  always_AdV = ss "always" ;
   and_Conj = ss "and" ** {n = Pl} ;
 -}
   because_Subj = ss "защото" ;
@@ -134,9 +134,7 @@ concrete StructuralBul of Structural = CatBul **
   whatPl_IP = mkIP "какви" "какви" GPl ;
   whatSg_IP = mkIP "какъв" "какъв" (GSg Masc) ;
   when_IAdv = mkIAdv "кога" ;
-{-
-  when_Subj = ss "when" ;
--}
+  when_Subj = ss "когато" ;
   where_IAdv = mkIAdv "къде" ;
   whichPl_IDet = {s = table GenNum ["кой";"коя";"кое";"кои"]; n = Pl} ;
   whichSg_IDet = {s = table GenNum ["кой";"коя";"кое";"кои"]; n = Sg} ;
