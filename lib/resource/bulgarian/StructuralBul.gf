@@ -18,8 +18,8 @@ concrete StructuralBul of Structural = CatBul **
   between_Prep = mkPrep "между" Acc ;
 {-
   both7and_DConj = sd2 "both" "and" ** {n = Pl} ;
-  but_PConj = ss "but" ;
 -}
+  but_PConj = ss "но" ;
   by8agent_Prep = mkPrep "чрез" Acc ;
   by8means_Prep = mkPrep "чрез" Acc ;
 {-
@@ -86,12 +86,10 @@ concrete StructuralBul of Structural = CatBul **
   only_Predet = {s = \\_ => "само"} ;
 {-
   or_Conj = ss "or" ** {n = Sg} ;
-  otherwise_PConj = ss "otherwise" ;
 -}
+  otherwise_PConj = ss "иначе" ;
   part_Prep = mkPrep "от" Acc ;
-{-
-  please_Voc = ss "please" ;
--}
+  please_Voc = ss "моля" ;
   possess_Prep = mkPrep [] Dat ;
   quite_Adv = ss "доста" ;
   she_Pron = mkPron "тя" "нея" "и" "неин" "нейния" "нейният" "нейна" "нейната" "нейно" "нейното" "нейни" "нейните" (GSg Fem) P3 ;
