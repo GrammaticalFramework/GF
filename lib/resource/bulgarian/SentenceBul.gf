@@ -5,6 +5,8 @@ concrete SentenceBul of Sentence = CatBul ** open Prelude, ResBul in {
   lin
     PredVP np vp = mkClause (np.s ! vp.subjRole) np.a vp ;
 
+    PredSCVP sc vp = mkClause sc.s {gn=GSg Masc; p=P3} vp ;
+
     ImpVP vp = {
       s = \\p,gn => 
         let agr = {gn = gn ; p = P2} ;
@@ -46,4 +48,6 @@ concrete SentenceBul of Sentence = CatBul ** open Prelude, ResBul in {
       s = t.s ++ a.s ++ p.s ++ cl.s ! t.t ! a.a ! p.p ! Main ;
       c2 = cl.c2
     } ;
+
+    AdvS a s = {s = a.s ++ "," ++ s.s} ;
 }
