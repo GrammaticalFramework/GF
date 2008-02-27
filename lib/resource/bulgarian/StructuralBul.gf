@@ -9,8 +9,7 @@ concrete StructuralBul of Structural = CatBul **
   all_Predet = {s = table GenNum ["всичкия";"всичката";"всичкото";"всичките"]} ;
   almost_AdA, almost_AdN = ss "почти" ;
   although_Subj = ss ["въпреки че"] ;
-{-  always_AdV = ss "always" ;
--}
+  always_AdV = ss "винаги" ;
   and_Conj = ss "и" ** {n = Pl} ;
   because_Subj = ss "защото" ;
   before_Prep = mkPrep "преди" Acc ;
@@ -98,9 +97,7 @@ concrete StructuralBul of Structural = CatBul **
   there_Adv = ss "там" ;
   there7to_Adv = ss ["до там"] ;
   there7from_Adv = ss ["от там"] ;
-{-
-  therefore_PConj = ss "therefore" ;
--}
+  therefore_PConj = ss ["така че"] ;
   these_NP = mkNP "тези" GPl P3 ;
   they_Pron = mkPron "те" "тях" "им" "техен" "техния" "техният" "тяхна" "тяхната" "тяхно" "тяхното" "техни" "техните" GPl P3 ; 
   this_Quant = mkQuant "този" "тaзи" "това" "тези" ;
