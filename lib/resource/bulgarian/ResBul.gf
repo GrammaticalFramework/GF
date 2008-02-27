@@ -162,9 +162,16 @@ resource ResBul = ParamX ** open Prelude in {
                  NFVocative => NFVocative
                } ;
 
+    numNForm : NForm -> Number
+      = \nf -> case nf of {
+                 NF n spec  => n ;
+                 NFSgDefNom => Sg ;
+                 NFPlCount  => Pl ;
+                 NFVocative => Sg
+               } ;
+      
   oper
 -- For $Verb$.
-
     Verb : Type = {
       s  : VForm => Str ;
       vtype : VType
@@ -545,4 +552,12 @@ resource ResBul = ParamX ** open Prelude in {
                  QIndir => wh.s2 ++ cls ! Main
                }
       } ;
+
+    whichRP : GenNum => Str
+            = table {
+                GSg Masc => "който" ;
+                GSg Fem  => "която" ;
+                GSg Neut => "което" ;
+                GPl      => "които"
+              } ;
 }

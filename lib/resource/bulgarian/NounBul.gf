@@ -109,6 +109,10 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
       s = \\nf => preOrPost ap.isPre (ap.s ! nform2aform nf cn.g) (cn.s ! (indefNForm nf)) ;
       g = cn.g
       } ;
+    RelCN cn rs = {
+      s = \\nf => cn.s ! nf ++ rs.s ! gennum cn.g (numNForm nf) ;
+      g = cn.g
+      } ;
     AdvCN cn ad = {
       s = \\nf => cn.s ! nf ++ ad.s ;
       g = cn.g
