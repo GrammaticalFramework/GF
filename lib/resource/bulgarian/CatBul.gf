@@ -73,7 +73,7 @@ concrete CatBul of Cat = open ResBul, Prelude, (R = ParamX) in {
     Predet = {s : GenNum => Str} ;
     Ord = {s : AForm => Str; nonEmpty : Bool} ;
     Num = {s : DGenderSpecies => Str; n : Number; nonEmpty : Bool} ;
-    Quant = {s : GenNum => Str; spec : Species} ;
+    Quant = {s : AForm => Str; spec : Species} ;
 
 -- Numeral
 
