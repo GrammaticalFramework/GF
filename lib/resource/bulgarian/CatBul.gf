@@ -25,6 +25,7 @@ concrete CatBul of Cat = open ResBul, Prelude, (R = ParamX) in {
     QS = {s : QForm => Str} ;
     RS = {s : GenNum => Str} ;
     SC  = {s : Str} ;
+    SlashS = {s : Str ; c2 : Preposition} ;
 
 -- Sentence
 

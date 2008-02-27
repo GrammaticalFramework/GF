@@ -23,6 +23,11 @@ concrete SentenceBul of Sentence = CatBul ** open Prelude, ResBul in {
     } ;
 
     SlashPrep cl prep = cl ** {c2 = prep} ;
+    
+    SlashVS np vs slash = 
+      mkClause (np.s ! RSubj) np.a 
+        (insertObj (\\_ => "че" ++ slash.s) (predV vs))  **
+      {c2 = slash.c2} ;
 
     EmbedS  s  = {s = "," ++ "че" ++ s.s} ;
     EmbedQS qs = {s = qs.s ! QIndir} ;
