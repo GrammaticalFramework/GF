@@ -23,6 +23,7 @@ concrete CatBul of Cat = open ResBul, Prelude, (R = ParamX) in {
 
     S  = {s : Str} ;
     QS = {s : QForm => Str} ;
+    RS = {s : GenNum => Str} ;
     SC  = {s : Str} ;
 
 -- Sentence
@@ -40,6 +41,11 @@ concrete CatBul of Cat = open ResBul, Prelude, (R = ParamX) in {
     IP = {s : Role => Str; gn : GenNum} ;
     IComp = {s1,s2 : Str} ;    
     IDet = {s : GenNum => Str; n : Number} ;
+
+-- Relative
+
+    RCl = {s : ResBul.Tense => Anteriority => Polarity => GenNum => Str} ;
+    RP = {s : GenNum => Str} ;
 
 -- Verb
 

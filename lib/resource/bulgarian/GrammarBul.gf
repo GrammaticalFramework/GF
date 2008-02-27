@@ -8,6 +8,7 @@ concrete GrammarBul of Grammar =
   NumeralBul,
   SentenceBul,
   QuestionBul,
+  RelativeBul,
   PhraseBul,
   TextBul,
   StructuralBul
