@@ -538,6 +538,19 @@ resource ResBul = ParamX ** open Prelude in {
            p = p
           }
       } ;
+
+    mkNP : Str -> GenNum -> Person -> {s : Role => Str; a : Agr} =
+      \s,gn,p -> {
+      s = table {
+            RSubj    => s ;
+            RObj Acc => s ;
+            RObj Dat => "на" ++ s
+          } ;
+      a = {
+           gn = gn ;
+           p = p
+          }
+      } ;
       
     Preposition : Type = {s : Str; c : Case};
 
