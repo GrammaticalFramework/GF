@@ -7,13 +7,18 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
       { s = \\role => let nf = case <det.n,det.spec> of {
                                  <Sg,Def>   => case role of {
                                                  RSubj => NFSgDefNom ;
+                                                 RVoc  => NFVocative ;
                                                  _     => NF Sg Def
                                                } ;
+                                 <Sg,Indef> => case role of {
+				                 RVoc  => NFVocative ;
+				                 _     => NF Sg Indef
+                                               } ;
+                                 <Pl,Def>   => NF det.n det.spec ;
                                  <Pl,Indef> => case det.countable of {
                                                  True  => NFPlCount ;
                                                  False => NF Pl Indef
-                                               } ;
-                                 _              => NF det.n det.spec
+                                               }
                                } ;
                           s = det.s ! cn.g ! role ++ cn.s ! nf
                       in case role of {
@@ -46,7 +51,7 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
       } ;
 
     DetSg quant ord = {
-      s = \\g,c => quant.s ! aform (gennum g Sg) Def c ++
+      s = \\g,c => quant.s ! aform (gennum g Sg) (case c of {RVoc=>Indef;_=>Def}) c ++
                    ord.s   ! aform (gennum g Sg) quant.spec c ;
       n = Sg ;
       countable = False ;

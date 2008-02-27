@@ -18,7 +18,7 @@ resource ResBul = ParamX ** open Prelude in {
 -- This is the worst-case $Case$ needed for pronouns.
 
   param
-    Role = RSubj | RObj Case ;
+    Role = RSubj | RObj Case | RVoc ;
     Case = Acc | Dat;
 
     NForm = 
@@ -520,7 +520,8 @@ resource ResBul = ParamX ** open Prelude in {
       s = table {
             RSubj    => koi ;
             RObj Acc => kogo ;
-            RObj Dat => "íà" ++ kogo
+            RObj Dat => "íà" ++ kogo ;
+            RVoc     => koi
           } ;
       gn = gn
       } ;
@@ -530,7 +531,8 @@ resource ResBul = ParamX ** open Prelude in {
       s = table {
             RSubj    => az ;
             RObj Acc => men ;
-            RObj Dat => mi
+            RObj Dat => mi ;
+            RVoc     => az
           } ;
       gen = (mkAdjective moj moia moiat moia_ moiata moe moeto moi moite).s ;
       a = {
@@ -544,7 +546,8 @@ resource ResBul = ParamX ** open Prelude in {
       s = table {
             RSubj    => s ;
             RObj Acc => s ;
-            RObj Dat => "íà" ++ s
+            RObj Dat => "íà" ++ s ;
+            RVoc     => s
           } ;
       a = {
            gn = gn ;
