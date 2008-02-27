@@ -40,6 +40,11 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
       a = np.a
       } ;
 
+    AdvNP np adv = {
+      s = \\c => np.s ! c ++ adv.s ;
+      a = np.a
+      } ;
+
     DetSg quant ord = {
       s = \\g,c => quant.s ! aform (gennum g Sg) Def c ++
                    ord.s   ! aform (gennum g Sg) quant.spec c ;
@@ -110,4 +115,6 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
     } ;
 
     SentCN cn sc = {s = \\nf => cn.s ! nf ++ sc.s; g=cn.g} ;
+
+    ApposCN cn np = {s = \\nf => cn.s ! nf ++ np.s ! RSubj; g=cn.g} ;
 }
