@@ -89,6 +89,8 @@ concrete CatBul of Cat = open ResBul, Prelude, (R = ParamX) in {
 
 -- Structural
 
+    Conj = {s : Str ; n : Number} ;
+    DConj = {s1,s2 : Str ; n : Number} ;
     Subj = {s : Str} ;
     Prep = {s : Str; c : Case} ;
 
