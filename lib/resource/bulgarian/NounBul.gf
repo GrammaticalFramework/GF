@@ -41,7 +41,7 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
       } ;
 
     DetSg quant ord = {
-      s = \\g,c => quant.s ! gennum g Sg ++
+      s = \\g,c => quant.s ! aform (gennum g Sg) Def c ++
                    ord.s   ! aform (gennum g Sg) quant.spec c ;
       n = Sg ;
       countable = False ;
@@ -50,7 +50,7 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
 
     DetPl quant num ord = {
       s = \\g,c => num.s ! dgenderSpecies g quant.spec c ++
-                   quant.s ! gennum g num.n ++                   
+                   quant.s ! aform (gennum g num.n) Def c ++                   
                    ord.s ! aform (gennum g num.n) (case num.nonEmpty of {False => quant.spec; _ => Indef}) c ; 
       n = num.n ;
       countable = num.nonEmpty ;
@@ -58,7 +58,7 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
       } ;
 
     PossPron p = {
-      s = \\gn => p.gen ! aform gn Indef RSubj ;
+      s = p.gen ;
       spec = Indef
       } ;
 

@@ -2,10 +2,21 @@ concrete ExtraBul of ExtraBulAbs = CatBul **
   open ResBul, Coordination, Prelude in {
 
   lin
-    GenNP np = {s = \\gn => np.s ! Gen (aform gn Def Nom); spec=Indef} ;
-    
-    GenNPIndef np = {s = \\gn => np.s ! Gen (aform gn Indef Nom); spec=Indef} ;
-    
+    PossIndefPron p = {
+      s = \\aform => p.gen ! (indefAForm ! aform) ;
+      spec = Indef
+      } ;
+      
+    ReflQuant = {
+      s = \\aform => reflPron ! aform ;
+      spec = Indef
+    } ;
+
+    ReflIndefQuant = {
+      s = \\aform => reflPron ! (indefAForm ! aform) ;
+      spec = Indef
+    } ;
+
     i8fem_Pron  = mkPron "аз" "мен" "ми" "мой" "моя" "моят" "моя" "моята" "мое" "моето" "мои" "моите" (GSg Fem)  P1 ;
     i8neut_Pron = mkPron "аз" "мен" "ми" "мой" "моя" "моят" "моя" "моята" "мое" "моето" "мои" "моите" (GSg Neut) P1 ;
     
@@ -26,9 +37,30 @@ concrete ExtraBul of ExtraBulAbs = CatBul **
                        DMascDef | DMascDefNom | DMascPersonalDef | DMascPersonalDefNom | DFemDef | DNeutDef => "едните"
                      } ;
                  n = Pl;
-                 empty = False
+                 nonEmpty = True
                 } ;
 
     UttImpSg8fem  pol imp = {s = pol.s ++ imp.s ! pol.p ! GSg Fem} ;
     UttImpSg8neut pol imp = {s = pol.s ++ imp.s ! pol.p ! GSg Fem} ;
+    
+  oper
+    reflPron : AForm => Str =
+      table {
+        ASg Masc Indef => "свой" ;
+        ASg Masc Def   => "своя" ;
+        ASgMascDefNom  => "своят" ;
+        ASg Fem  Indef => "своя" ;
+        ASg Fem  Def   => "своята" ;
+        ASg Neut Indef => "свое" ;
+        ASg Neut Def   => "своето" ;
+        APl Indef      => "свои" ;
+        APl Def        => "своите"
+      } ;
+      
+    indefAForm : AForm => AForm =
+      table {
+        ASg g _       => ASg g Indef ;
+        ASgMascDefNom => ASg Masc Indef ;
+        APl _         => APl Indef
+      } ;
 } 

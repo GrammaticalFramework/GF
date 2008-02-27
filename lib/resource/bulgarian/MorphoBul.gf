@@ -20,13 +20,14 @@ oper
   mkDeterminerPl : Str -> {s : DGender => Role => Str ; n : Number; countable : Bool ; spec : Species} = \vsicki ->
     {s = \\_,_ => vsicki; n = Pl; countable = False; spec = Indef} ;
 
-  mkQuant : Str -> Str -> Str -> Str -> {s : GenNum => Str; spec : Species} = \tozi,tazi,towa,tezi -> {
-    s = \\gn => case gn of {
-                  GSg Masc => tozi ;
-                  GSg Fem  => tazi ;
-                  GSg Neut => towa ;
-                  GPl      => tezi
-                };
+  mkQuant : Str -> Str -> Str -> Str -> {s : AForm => Str; spec : Species} = \tozi,tazi,towa,tezi -> {
+    s = \\aform => case aform of {
+                     ASg Masc _    => tozi ;
+                     ASgMascDefNom => tozi ;
+                     ASg Fem  _    => tazi ;
+                     ASg Neut _    => towa ;
+                     APl      _    => tezi
+                   };
     spec = Indef
     } ;
 
