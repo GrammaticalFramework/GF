@@ -39,12 +39,10 @@ concrete StructuralBul of Structural = CatBul **
   during_Prep = mkPrep ["по време на"] Acc ;
 {-
   either7or_DConj = sd2 "either" "or" ** {n = Sg} ;
-  everybody_NP = regNP "everybody" Sg ;
 -}
+  everybody_NP = mkNP "всеки" (GSg Masc) P3 ;
   every_Det = mkDeterminerSg "всеки" "всяка" "всяко";
-{-
-  everything_NP = regNP "everything" Sg ;
--}
+  everything_NP = mkNP "всяко" (GSg Neut) P3 ;
   everywhere_Adv = ss "навсякъде" ;
   few_Det = {s = \\_,_ => "няколко"; n = Pl; countable = True; spec = Indef} ;
 ---  first_Ord = ss "first" ; DEPRECATED
@@ -98,30 +96,24 @@ concrete StructuralBul of Structural = CatBul **
   quite_Adv = ss "доста" ;
   she_Pron = mkPron "тя" "нея" "и" "неин" "нейния" "нейният" "нейна" "нейната" "нейно" "нейното" "нейни" "нейните" (GSg Fem) P3 ;
   so_AdA = ss "толкова" ;
-{-
-  somebody_NP = regNP "somebody" Sg ;
+  somebody_NP = mkNP "някой" (GSg Masc) P3 ;
   someSg_Det = mkDeterminerSg "някой" "някое" "някоя" ;
   somePl_Det = mkDeterminerPl "някои" ;
-  something_NP = regNP "something" Sg ;
--}
+  something_NP = mkNP "нещо" (GSg Neut) P3 ;
   somewhere_Adv = ss "някъде" ;
   that_Quant = mkQuant "онзи" "онази" "онова" "онези" ;
-{-
-  that_NP = regNP "that" Sg ;
--}
+  that_NP = mkNP "това" (GSg Neut) P3 ;
   there_Adv = ss "там" ;
   there7to_Adv = ss ["до там"] ;
   there7from_Adv = ss ["от там"] ;
 {-
   therefore_PConj = ss "therefore" ;
-  these_NP = regNP "these" Pl ;
 -}
+  these_NP = mkNP "тези" GPl P3 ;
   they_Pron = mkPron "те" "тях" "им" "техен" "техния" "техният" "тяхна" "тяхната" "тяхно" "тяхното" "техни" "техните" GPl P3 ; 
   this_Quant = mkQuant "този" "тaзи" "това" "тези" ;
-{-
-  this_NP = regNP "this" Sg ;
-  those_NP = regNP "those" Pl ;
--}
+  this_NP = mkNP "този" (GSg Masc) P3 ;
+  those_NP = mkNP "тези" GPl P3 ;
   through_Prep = mkPrep "през" Acc ;
   too_AdA = ss "прекалено" ;
   to_Prep = mkPrep "до" Acc ;
