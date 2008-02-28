@@ -19,20 +19,7 @@ concrete StructuralBul of Structural = CatBul **
   but_PConj = ss "но" ;
   by8agent_Prep = mkPrep "чрез" Acc ;
   by8means_Prep = mkPrep "чрез" Acc ;
-{-
-  can8know_VV, can_VV = {
-    s = table { 
-      VVF VInf => ["be able to"] ;
-      VVF VPres => "can" ;
-      VVF VPPart => ["been able to"] ;
-      VVF VPresPart => ["being able to"] ;
-      VVF VPast => "could" ;      --# notpresent
-      VVPastNeg => "couldn't" ;   --# notpresent
-      VVPresNeg => "can't"
-      } ;
-    isAux = True
-    } ;
--}
+  can8know_VV, can_VV = mkVV (mkV166 "мога") ;
   during_Prep = mkPrep ["по време на"] Acc ;
   either7or_DConj = sd2 "или" "или" ** {n = Sg} ;
   everybody_NP = mkNP "всеки" (GSg Masc) P3 ;
@@ -61,20 +48,22 @@ concrete StructuralBul of Structural = CatBul **
   more_CAdv = {s=[]; sn="повече"} ;
   most_Predet = {s = \\_ => "повечето"} ;
   much_Det = mkDeterminerSg "много" "много" "много";
-{-
-  must_VV = {
+  must_VV = mkVV {
     s = table {
-      VVF VInf => ["have to"] ;
-      VVF VPres => "must" ;
-      VVF VPPart => ["had to"] ;
-      VVF VPresPart => ["having to"] ;
-      VVF VPast => ["had to"] ;      --# notpresent
-      VVPastNeg => ["hadn't to"] ;      --# notpresent
-      VVPresNeg => "mustn't"
-      } ;
-    isAux = True
+          VPres      _ _ => "трябва" ;
+          VAorist    _ _ => "трябваше" ;
+          VImperfect _ _ => "трябвало" ;
+          VPerfect     _ => "трябвало" ;
+          VPluPerfect  _ => "трябвало" ;
+          VPassive     _ => "трябвало" ;
+          VPresPart    _ => "трябвало" ;
+          VImperative Sg => "трябвай" ;
+          VImperative Pl => "трябвайте" ;
+          VGerund        => "трябвайки"
+        } ;
+    vtype=VNormal ;
+    lock_V=<>
     } ;
--}
   no_Phr = ss "не" ;
   on_Prep = mkPrep "на" Acc ;
 ----  one_Quant = mkDeterminer Sg "one" ; -- DEPRECATED
@@ -108,9 +97,7 @@ concrete StructuralBul of Structural = CatBul **
   to_Prep = mkPrep "до" Acc ;
   under_Prep = mkPrep "под" Acc ;
   very_AdA = ss "много" ;
-{-
-  want_VV = P.mkVV (P.regV "want") ;
--}
+  want_VV = mkVV (mkV186 "искам") ;
   we_Pron = mkPron "ние" "нас" "ни" "наш" "нашия" "нашият" "наша" "нашата" "наше" "нашето" "наши" "нашите" GPl P1 ;
   whatPl_IP = mkIP "какви" "какви" GPl ;
   whatSg_IP = mkIP "какъв" "какъв" (GSg Masc) ;

@@ -89,6 +89,8 @@ oper
 
   mkVS  : V -> VS ;
   
+  mkVV : V -> VV ;
+  
   mkPN : Str -> Gender -> PN ;
 
   mkIAdv : Str -> IAdv ;
@@ -105,7 +107,9 @@ oper
   dirdirV3 v = dirV3 v noPrep ;
   
   mkVS  v = v ** {lock_VS = <>} ;
-  
+
+  mkVV  v = v ** {lock_VV = <>} ;
+
   mkPN s g = {s = s; g = g ; lock_PN = <>} ;
 
   mkIAdv s = {s1 = s; s2 = s + "то"; lock_IAdv = <>} ;
