@@ -1,4 +1,4 @@
-concrete VerbBul of Verb = CatBul ** open ResBul, ParadigmsBul in {
+concrete VerbBul of Verb = CatBul ** open Prelude, ResBul, ParadigmsBul in {
 
   flags optimize=all_subs ;
 
@@ -7,6 +7,13 @@ concrete VerbBul of Verb = CatBul ** open ResBul, ParadigmsBul in {
     ComplV2 v np = insertObj (\\_ => v.c2.s ++ np.s ! RObj v.c2.c) (predV v) ;
     ComplV3 v np np2 = 
       insertObj (\\_ => v.c2.s ++ np.s ! RObj v.c2.c ++ v.c3.s ++ np2.s ! RObj v.c3.c) (predV v) ;
+
+    ComplVV vv vp = {
+      s   = \\t,a,p,agr,q => (predV vv).s ! t ! a ! p ! agr ! q ++ "да" ++ vp.s ! Pres ! Simul ! Pos ! agr ! False ;
+      imp = vp.imp ;
+      s2 = vp.s2 ;
+      subjRole = vp.subjRole
+      } ;
 
     ComplVS v s  = insertObj (\\_ => "," ++ "че" ++ s.s) (predV v) ;
 

@@ -19,6 +19,16 @@ concrete SentenceBul of Sentence = CatBul ** open Prelude, ResBul in {
     SlashV2 np v2 = 
       mkClause (np.s ! RSubj) np.a (predV v2) ** {c2 = v2.c2} ;
 
+    SlashVVV2 np vv v2 = 
+      mkClause (np.s ! RSubj) np.a
+        (let vp = predV vv
+         in { s   = \\t,a,p,agr,q => vp.s ! t ! a ! p ! agr ! q ++ "да" ++ v2.s ! (VPres (numGenNum agr.gn) agr.p) ;
+              imp = vp.imp ;
+              s2 = vp.s2 ;
+              subjRole = vp.subjRole
+            }) **
+        {c2 = v2.c2} ;
+
     AdvSlash slash adv = {
       s  = \\t,a,b,o => slash.s ! t ! a ! b ! o ++ adv.s ;
       c2 = slash.c2
