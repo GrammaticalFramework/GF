@@ -9,8 +9,9 @@ concrete VerbBul of Verb = CatBul ** open Prelude, ResBul, ParadigmsBul in {
       insertObj (\\_ => v.c2.s ++ np.s ! RObj v.c2.c ++ v.c3.s ++ np2.s ! RObj v.c3.c) (predV v) ;
 
     ComplVV vv vp = {
-      s   = \\t,a,p,agr,q => (predV vv).s ! t ! a ! p ! agr ! q ++ "да" ++ vp.s ! Pres ! Simul ! Pos ! agr ! False ;
+      s   = \\t,a,p,agr,q => (predV vv).s ! t ! a ! p ! agr ! q ++ vp.ad ! False ++ "да" ++ vp.s ! Pres ! Simul ! Pos ! agr ! False ;
       imp = vp.imp ;
+      ad = \\_ => [] ;
       s2 = vp.s2 ;
       subjRole = vp.subjRole
       } ;
@@ -21,7 +22,15 @@ concrete VerbBul of Verb = CatBul ** open Prelude, ResBul, ParadigmsBul in {
 
     AdvVP vp adv = insertObj (\\_ => adv.s) vp ;
 
-    ReflV2 v = predV (reflV v v.c2.c) ;
+    AdVVP adv vp = {
+      s   = \\t,a,p,agr,q => vp.s ! t ! a ! p ! agr ! False ;
+      imp = vp.imp ;
+      ad  = \\q => vp.ad ! q ++ adv.s ++ case q of {True => "ли"; False => []} ;
+      s2 = vp.s2 ;
+      subjRole = vp.subjRole
+      } ;
+
+    ReflV2 v = predV (reflV (v ** {lock_V=<>}) v.c2.c) ;
 
     PassV2 v = insertObj (\\a => v.s ! VPassive (aform a.gn Indef (RObj Acc))) (predV verbBe) ;
 
