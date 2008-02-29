@@ -24,6 +24,7 @@ concrete SentenceBul of Sentence = CatBul ** open Prelude, ResBul in {
         (let vp = predV vv
          in { s   = \\t,a,p,agr,q => vp.s ! t ! a ! p ! agr ! q ++ "да" ++ v2.s ! (VPres (numGenNum agr.gn) agr.p) ;
               imp = vp.imp ;
+              ad = vp.ad ;
               s2 = vp.s2 ;
               subjRole = vp.subjRole
             }) **
@@ -43,6 +44,7 @@ concrete SentenceBul of Sentence = CatBul ** open Prelude, ResBul in {
 
     EmbedS  s  = {s = "," ++ "че" ++ s.s} ;
     EmbedQS qs = {s = qs.s ! QIndir} ;
+    EmbedVP vp = {s = vp.ad ! False ++ "да" ++ vp.s ! Pres ! Simul ! Pos ! {gn=GSg Masc; p=P1} ! False} ;
 
     UseCl t a p cl = {
       s = t.s ++ a.s ++ p.s ++ cl.s ! t.t ! a.a ! p.p ! Main
