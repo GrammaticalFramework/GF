@@ -17,6 +17,11 @@ concrete VerbBul of Verb = CatBul ** open Prelude, ResBul, ParadigmsBul in {
       } ;
 
     ComplVS v s  = insertObj (\\_ => "," ++ "че" ++ s.s) (predV v) ;
+    ComplVQ v q  = insertObj (\\_ => q.s ! QIndir) (predV v) ;
+
+    ComplVA  v    ap = insertObj (\\agr => ap.s ! aform agr.gn Indef (RObj Acc)) (predV v) ;
+    ComplV2A v np ap = 
+      insertObj (\\_ => v.c2.s ++ np.s ! RObj v.c2.c ++ ap.s ! aform np.a.gn Indef (RObj Acc)) (predV v) ;
 
     UseComp comp = insertObj comp.s (predV verbBe) ;
 
