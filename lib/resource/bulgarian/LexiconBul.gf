@@ -9,6 +9,7 @@ flags
 lin
   bad_A = mkA76 "лош" ;
   beautiful_A = mkA76 "красив" ;
+  become_VA = mkVA (mkV186 "ставам") ;
   big_A = mkA81 "голям" ;
   black_A = mkA79 "черен" ;
   blue_A = mkA86 "син" ;

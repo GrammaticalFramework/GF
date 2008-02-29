@@ -91,6 +91,8 @@ oper
   
   mkVV : V -> VV ;
   
+  mkVA : V -> VA ;
+  
   mkPN : Str -> Gender -> PN ;
 
   mkIAdv : Str -> IAdv ;
@@ -109,6 +111,8 @@ oper
   mkVS  v = v ** {lock_VS = <>} ;
 
   mkVV  v = v ** {lock_VV = <>} ;
+  
+  mkVA  v = v ** {lock_VA = <>} ;
 
   mkPN s g = {s = s; g = g ; lock_PN = <>} ;
 
