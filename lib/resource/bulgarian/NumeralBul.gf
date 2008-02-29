@@ -73,7 +73,7 @@ lin pot3 n = {
   n = Pl
   } ;
 lin pot3plus n m = {
-  s = \\c => (pot3 n).s ! NCard DMascIndef ++ case m.i of {False => []; True  => "è"} ++ m.s ! c ;
+  s = \\c => (pot3 (n ** {lock_Sub1000=<>})).s ! NCard DMascIndef ++ case m.i of {False => []; True  => "è"} ++ m.s ! c ;
   n = Pl
   } ;
 
