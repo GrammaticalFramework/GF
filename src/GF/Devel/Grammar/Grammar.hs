@@ -46,8 +46,8 @@ type Indirection = (Ident,Bool) -- module of origin, whether canonical
 
 data Judgement = Judgement {
   jform :: JudgementForm,  -- cat      fun   lincat  lin     oper    param
-  jtype :: Type,           -- context  type  lincat  -       type    constrs
-  jdef  :: Term,           -- lindef   def   lindef  lin     def     values
+  jtype :: Type,           -- context  type  lincat  -       type    PType
+  jdef  :: Term,           -- lindef   def   lindef  lin     def     constrs
   jprintname :: Term,      -- -        -     prname  prname  -       -
   jlink :: Ident,
   jposition :: Int
