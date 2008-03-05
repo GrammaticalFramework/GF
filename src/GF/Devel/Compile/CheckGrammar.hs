@@ -203,8 +203,10 @@ checkCompleteGrammar abs cnc = do
 checkResInfo :: GF -> Ident -> Ident -> Judgement -> Check Judgement
 checkResInfo gr mo c info = do
   ----  checkReservedId c
+  trace (show info) (return ())
   case jform info of
     JOper -> chIn "operation" $ case (jtype info, jdef info) of
+      _ | isConstructor info -> return info
       (_,Meta _) -> do
         checkWarn "No definition given to oper"
         return info
@@ -698,6 +700,7 @@ getOverload env@gr mt t = case appForm t of
 
 checkLType :: GF -> Term -> Type -> Check (Term, Type)
 checkLType env trm typ0 = do
+  trace (show trm) (return ())
 
   typ <- comp typ0
 

@@ -34,9 +34,12 @@ batchCompile opts files = do
 
 -- to output an intermediate stage
 intermOut :: Options -> Option -> String -> IOE ()
-intermOut opts opt s = if oElem opt opts then 
-  ioeIO (putStrLn ("\n\n--#" +++ prOpt opt) >> putStrLn s) 
-  else return ()
+intermOut opts opt s = 
+  if oElem opt opts || oElem (iOpt "show_all") opts
+  then 
+    ioeIO (putStrLn ("\n\n--#" +++ prOpt opt) >> putStrLn s) 
+  else 
+    return ()
 
 prMod :: SourceModule -> String
 prMod = prModule

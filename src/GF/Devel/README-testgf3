@@ -26,9 +26,11 @@ More options (debugging flags):
   -show_refreshing -- ... after refreshing variables
   -show_optimize   -- ... after partial evaluation
   -show_factorize  -- ... after factoring optimization
+  -show_all        -- show all phases
 
-  -1  -- stop before extending
-  -2  -- ... renaming
-  -3  -- ... type checking
-  -4  -- ... refreshing
-  -5  -- ... partial evaluation
+  -1  -- stop after parsing
+  -2  -- ... extending
+  -3  -- ... renaming
+  -4  -- ... type checking
+  -5  -- ... refreshing
+
