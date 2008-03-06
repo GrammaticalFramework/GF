@@ -365,9 +365,10 @@ execC co@(comm, opts0) sa@(sh@(st,(h,_,_,_)),a) = checkOptions st co >> case com
   CShowTreeGraph | oElem emitCode opts -> do -- -o
     returnArg (AString $ visualizeTrees opts $ strees $ s2t a) sa
   CShowTreeGraph  -> do
+    let gv = if oElem (iOpt "mac") opts then "open" else "gv" ---- config!
     let g0 = writeFile "grphtmp.dot" $ visualizeTrees opts $ strees $ s2t a
         g1 = system "dot -Tps grphtmp.dot >grphtmp.ps" 
-        g2 = system "gv grphtmp.ps &" 
+        g2 = system (gv +++ "grphtmp.ps &") 
         g3 = return () ---- system "rm -f grphtmp.*"
     justOutput opts (g0 >> g1 >> g2 >> g3 >> return ()) sa
 
@@ -453,9 +454,10 @@ execC co@(comm, opts0) sa@(sh@(st,(h,_,_,_)),a) = checkOptions st co >> case com
     returnArg (AString (optPrintMultiGrammar opts cgr')) sa
   CShowGrammarGraph  -> do
     ---- sa' <- changeState purgeShellState sa
+    let gv = if oElem (iOpt "mac") opts then "open" else "gv" ---- config!
     let g0 = writeFile "grphtmp.dot" $ visualizeCanonGrammar opts cgr
         g1 = system "dot -Tps grphtmp.dot >grphtmp.ps" 
-        g2 = system "gv grphtmp.ps &" 
+        g2 = system (gv +++ "grphtmp.ps &") 
         g3 = return () ---- system "rm -f grphtmp.*"
     justOutput opts (g0 >> g1 >> g2 >> g3 >> return ()) sa
   CPrintSourceGrammar -> 

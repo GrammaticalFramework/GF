@@ -34,3 +34,16 @@ More options (debugging flags):
   -4  -- ... type checking
   -5  -- ... refreshing
 
+==Compiler Phases==
+
+LexGF
+ParGF
+SourceToGF
+Extend
+Rename
+CheckGrammar
+Refresh
+Optimize
+Factorize
+GFtoGFCC
+

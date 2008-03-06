@@ -22,7 +22,7 @@ data Module = Module {
   mtype       :: ModuleType,
   miscomplete :: Bool,
   minterfaces :: [(Ident,Ident)],           -- non-empty for functors 
-  minstances  :: [((Ident,MInclude),[(Ident,Ident)])], -- non-empty for instant'ions
+  minstances  :: [((Ident,MInclude),[(Ident,Ident)])], -- non-empty for inst'ions
   mextends    :: [(Ident,MInclude)],
   mopens      :: [(Ident,Ident)],           -- used name, original name
   mflags      :: Map Ident String,
@@ -49,8 +49,8 @@ data Judgement = Judgement {
   jtype :: Type,           -- context  type  lincat  -       type    PType
   jdef  :: Term,           -- lindef   def   lindef  lin     def     constrs
   jprintname :: Term,      -- -        -     prname  prname  -       -
-  jlink :: Ident,
-  jposition :: Int
+  jlink :: Ident,   -- if inherited, the supermodule name, else #
+  jposition :: Int  -- line number where def begins
   } 
   deriving Show
 
@@ -136,11 +136,11 @@ data Patt =
  | PAlt Patt Patt         -- ^ disjunctive pattern: p1 | p2
  | PSeq Patt Patt         -- ^ sequence of token parts: p + q
  | PRep Patt              -- ^ repetition of token part: p*
- | PChar                  -- ^ string of length one
- | PChars String          -- ^ list of characters
+ | PChar                  -- ^ string of length one: ? 
+ | PChars String          -- ^ list of characters: ["aeiou"]
 
- | PMacro Ident           -- 
- | PM Ident Ident
+ | PMacro Ident           -- #p
+ | PM Ident Ident         -- #m.p
 
   deriving (Read, Show, Eq, Ord)
 

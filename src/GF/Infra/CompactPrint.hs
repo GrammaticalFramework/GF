@@ -12,7 +12,8 @@ dps = dropWhile isSpace
 spaceIf pre post w = case w of
   _ | pre w -> "\n" ++ w
   _ | post w -> w ++ "\n"
-  c:cs | isAlpha c || isDigit c -> " " ++ w
+  c:_ | isAlpha c || isDigit c -> " " ++ w
+  '_':_  -> " " ++ w
   _ -> w
 
 keywordGF w = elem w ["cat","fun","lin","lincat","lindef","oper","param"]

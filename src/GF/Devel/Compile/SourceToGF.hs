@@ -266,7 +266,8 @@ transResDef x = case x of
     returnl [(f, resOper pt pe) | (f,(pt,pe)) <- defs']
 
   DefFlag defs -> liftM (Right . concat) $ mapM transFlagDef defs
-  _ -> Bad $ "illegal definition form in resource" +++ printTree x
+  _ -> return $ Left [] ----
+----  _ -> Bad $ "illegal definition form in resource" +++ printTree x
  where
 
    mkParamDefs (p,pars) =
@@ -317,7 +318,8 @@ transCncDef x = case x of
     let defs2 = [(f, termInPattern t) | (f,(_,Yes t)) <- defs']
     returnl [(f, G.CncFun Nothing (yes t) nope) | (f,t) <- defs2]
 -}
-  _ -> errIn ("illegal definition in concrete syntax:") $ transResDef x
+  _ -> return $ Left [] ----
+----  _ -> errIn ("illegal definition in concrete syntax:") $ transResDef x
 
 transPrintDef :: Def -> Err [(Ident,G.Term)]
 transPrintDef x = case x of
