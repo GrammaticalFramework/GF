@@ -69,7 +69,7 @@ isLink j = jform j == JLink
 -- constructing judgements from parse tree
 
 emptyJudgement :: JudgementForm -> Judgement
-emptyJudgement form = Judgement form meta meta meta (identC "#NOLINK") 0 where
+emptyJudgement form = Judgement form meta meta meta (identC "#") 0 where
   meta = Meta 0
 
 addJType :: Type -> Judgement -> Judgement

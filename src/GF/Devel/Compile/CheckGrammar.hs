@@ -68,7 +68,7 @@ showCheckModule mos m = do
 checkModule :: GF -> SourceModule -> Check SourceModule
 checkModule gf0 (name,mo) = checkIn ("checking module" +++ prt name) $ do
   let gr = gf0 {gfmodules = Map.insert name mo (gfmodules gf0)}
-----  checkRestrictedInheritance gr (name, mo)
+  ----  checkRestrictedInheritance gr (name, mo)
   mo1 <- case mtype mo of
     MTAbstract -> judgementOpModule (checkAbsInfo gr name) mo
     MTGrammar -> entryOpModule (checkResInfo gr name) mo
@@ -83,7 +83,6 @@ checkModule gf0 (name,mo) = checkIn ("checking module" +++ prt name) $ do
 
     MTInstance iname -> do
       intf <- checkErr $ lookupModule gr iname
-      -- checkCompleteInstance abs mo -- this is done in Rebuild
       entryOpModule  (checkResInfo gr name) mo
 
   return $ (name, mo1)
