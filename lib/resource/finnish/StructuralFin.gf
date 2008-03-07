@@ -9,7 +9,7 @@ concrete StructuralFin of Structural = CatFin **
 
   all_Predet = {s = \\n,c => 
     let
-      kaiket = caseTable n (nhn (sKorpi "kaikki" "kaiken" "kaikkena"))
+      kaiket = caseTable n ((mkN "kaikki" "kaiken" "kaikkena"))
     in
     case npform2case n c of {
       Nom => "kaikki" ;
@@ -28,17 +28,17 @@ concrete StructuralFin of Structural = CatFin **
   but_PConj = ss "mutta" ;
   by8agent_Prep = postGenPrep "toimesta" ;
   by8means_Prep = casePrep adessive ;
-  can8know_VV = reg2V "osata" "osasi" ;
-  can_VV = reg2V "voida" "voi" ;
+  can8know_VV = mkV "osata" "osasi" ;
+  can_VV = mkV "voida" "voi" ;
   during_Prep = postGenPrep "aikana" ;
   either7or_DConj = sd2 "joko" "tai" ** {n = Sg} ;
-  everybody_NP = makeNP (regN "jokainen") Sg ;
-  every_Det = mkDet Sg (regN "jokainen") ;
-  everything_NP = makeNP ((nhn (sKorpi "kaikki" "kaiken" "kaikkena")) **
+  everybody_NP = makeNP (mkN "jokainen") Sg ;
+  every_Det = mkDet Sg (mkN "jokainen") ;
+  everything_NP = makeNP (((mkN "kaikki" "kaiken" "kaikkena")) **
     {lock_N = <>}) Sg ;
   everywhere_Adv = ss "kaikkialla" ;
-  few_Det  = mkDet Sg (regN "harva") ;
----  first_Ord = {s = \\n,c => (regN "ensimmäinen").s ! NCase n c} ;
+  few_Det  = mkDet Sg (mkN "harva") ;
+---  first_Ord = {s = \\n,c => (mkN "ensimmäinen").s ! NCase n c} ;
   for_Prep = casePrep allative ;
   from_Prep = casePrep elative ;
   he_Pron = mkPronoun "hän" "hänen" "häntä"  "hänenä" "häneen" Sg P3 ;
@@ -47,7 +47,7 @@ concrete StructuralFin of Structural = CatFin **
   here7from_Adv = ss "täältä" ;
   how_IAdv = ss "miten" ;
   how8many_IDet = 
-    {s = \\c => "kuinka" ++ (reg2N "moni" "monia").s ! NCase Sg c ; n = Sg} ;
+    {s = \\c => "kuinka" ++ (mkN "moni" "monia").s ! NCase Sg c ; n = Sg} ;
   if_Subj = ss "jos" ;
   in8front_Prep = postGenPrep "edessä" ;
   i_Pron  = mkPronoun "minä" "minun" "minua" "minuna" "minuun" Sg P1 ;
@@ -58,11 +58,11 @@ concrete StructuralFin of Structural = CatFin **
     isPron = False
     } ;
   less_CAdv = ss "vähemmän" ;
-  many_Det = mkDet Sg (reg2N "moni" "monia") ;
+  many_Det = mkDet Sg (mkN "moni" "monia") ;
   more_CAdv = ss "enemmän" ;
-  most_Predet = {s = \\n,c => (nhn (sSuurin "useinta")).s ! NCase n (npform2case n c)} ;
+  most_Predet = {s = \\n,c => (nForms2N (dSuurin "useinta")).s ! NCase n (npform2case n c)} ;
   much_Det = mkDet Sg {s = \\_ => "paljon"} ;
-  must_VV = subjcaseV (regV "täytyä") genitive ;
+  must_VV = caseV genitive (mkV "täytyä") ;
   no_Phr = ss "ei" ;
   on_Prep = casePrep adessive ;
 ---  one_Quant = mkDet Sg  DEPREC
@@ -140,7 +140,7 @@ concrete StructuralFin of Structural = CatFin **
   to_Prep = casePrep illative ; --- allative
   under_Prep = postGenPrep "alla" ;
   very_AdA = ss "erittäin" ;
-  want_VV = regV "tahtoa" ;
+  want_VV = mkV "tahtoa" ;
   we_Pron = mkPronoun "me" "meidän" "meitä" "meinä" "meihin" Pl P1 ;
   whatPl_IP = {
     s = table {NPAcc => "mitkä" ; c => mikaInt ! Pl ! npform2case Pl c} ;
@@ -181,8 +181,8 @@ concrete StructuralFin of Structural = CatFin **
 oper
   jokuPron : MorphoFin.Number => (MorphoFin.Case) => Str =
     let 
-      ku = nhn (sPuu "ku") ;
-      kui = nhn (sPuu "kuu") 
+      ku = mkN "ku" ;
+      kui = mkN "kuu" 
     in
     table {
       Sg => table {
@@ -211,7 +211,7 @@ oper
 
   mikaInt : MorphoFin.Number => (MorphoFin.Case) => Str = 
     let {
-      mi  = nhn (sSuo "mi")
+      mi  = mkN "mi"
     } in
     table {
       Sg => table {
@@ -228,8 +228,8 @@ oper
 
   kukaInt : MorphoFin.Number => (MorphoFin.Case) => Str = 
     let {
-      ku = nhn (sRae "kuka" "kenenä") ;
-      ket = nhn (sRae "kuka" "keinä")} in
+      ku = mkN "kuka" "keitä" ;    -----
+      ket = mkN "kuka" "keitä"} in
     table {
       Sg => table {
         Nom => "kuka" ;
@@ -299,6 +299,17 @@ oper
       Abess  => "sittä"
       } ;
     } ;
+
+
+oper
+  makeNP  : N -> Number -> CatFin.NP ; 
+  makeNP noun num = {
+    s = \\c => noun.s ! NCase num (npform2case num c) ; 
+    a = agrP3 num ;
+    isPron = False ;
+    lock_NP = <>
+    } ;
+
 
 
 }

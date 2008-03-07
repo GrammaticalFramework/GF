@@ -1,4 +1,4 @@
---# -path=.:../../prelude
+--# -path=.:../common:prelude
 
 --1 A Simple Finnish Resource Morphology
 --
@@ -12,421 +12,748 @@ resource MorphoFin = ResFin ** open Prelude in {
 
   flags optimize=all ;
 
---- flags optimize=noexpand ;
+  oper
 
---2 Nouns
---
-
-oper
-
-
--- A user-friendly variant takes existing forms and infers the vowel harmony.
-
-  mkNoun : (_,_,_,_,_,_,_,_,_,_ : Str) -> CommonNoun =
-    \talo,talon,talona,taloa,taloon,taloina,taloissa,talojen,taloja,taloihin ->
-    nhn (mkSubst (ifTok Str (Predef.dp 1 talona) "a" "a" "ä")
-      talo (Predef.tk 1 talon) (Predef.tk 2 talona) taloa taloon
-      (Predef.tk 2 taloina) (Predef.tk 3 taloissa) talojen taloja taloihin) ;
-
-
--- Here some useful special cases; more are given in $ParadigmsFin.gf$.
---         
-
-  sLukko : Str -> NounH = \lukko -> 
-   let
-     o = last lukko ;
-     lukk = init lukko ; 
-     a = getHarmony o ;
-     lukkoja = case o of {
-       "a" => lukk + if_then_Str (pbool2bool (Predef.occurs "ou" lukk)) "ia" "oja" ;
-       "ä" => lukk + "iä" ;
-       _   => lukko + "j" + a 
-       }
-   in
-   sKukko lukko (weakGrade lukko + "n") lukkoja ;
-
--- The special case with no alternations.
-
-  sTalo : Str -> NounH = sLukko ;
-
-  sBaari : Str -> NounH = \baaria ->
+  dLujuus : Str -> NForms = \lujuus -> 
     let
-      baari = Predef.tk 1 baaria ; 
-      baar = Predef.tk 1 baari ; 
-      a = getHarmony (Predef.dp 1 baaria) 
-    in
-      sKukko baari (weakGrade baari + "n") (baar + ("ej" + a)) ;
+      lujuu = init lujuus ;
+      lujuuksi = lujuu + "ksi" ;
+      a = vowHarmony (last lujuu) ;
+    in nForms10
+      lujuus (lujuu + "den") (lujuu + "tt" + a) 
+      (lujuu + "ten" + a) (lujuu + "teen")
+      (lujuuksi + "en") (lujuuksi + a) 
+      (lujuuksi + "n" + a) (lujuuksi + "ss" + a) (lujuuksi + "in") ; 
 
-  sKorpi : (_,_,_ : Str) -> NounH = \korpi,korven,korpena ->
+  dNainen : Str -> NForms = \nainen ->
+    let 
+      a = vowHarmony nainen ;
+      nais = Predef.tk 3 nainen + "s"
+    in nForms10
+      nainen (nais + "en") (nais + "t" + a) (nais + "en" + a) (nais + "een")
+      (nais + "ten") (nais + "i" + a) 
+      (nais + "in" + a) (nais + "iss" + a) (nais + "iin") ; 
+
+  dPaluu : Str -> NForms = \paluu ->
     let
-      a      = Predef.dp 1 korpena ;
-      korpe  = Predef.tk 2 korpena ;
-      korp   = init korpi ;
-      korpea = case last korp of {
-        "r" | "l" | "n" => korp + "t" + a ;
-        _ => korpe + a
-        } ;        
-      korve  = Predef.tk 1 korven ;
-      korvi  = Predef.tk 1 korve + "i" ;
-      korpien = case last korp of {
-        "r" | "l" | "n" => korp + "ten" ;
-        _ => korpi + "en"
-        } ;        
-    in
-    mkSubst a 
-            korpi
-            korve
-            korpe
-            korpea 
-            (korpe + "en")
-            korpi
-            korvi
-            korpien 
-            (korpi + a)
-            (korpi + "in") ;
+      a = vowHarmony paluu ;
+      palui = init paluu + "i" ;
+      u = last paluu ;
+    in nForms10
+      paluu (paluu + "n") (paluu + "t" + a) (paluu + "n" + a)  (paluu + "seen")
+      (palui + "den") (palui + "t" + a) 
+      (palui + "n" + a) (palui + "ss" + a) (palui + "siin") ;
 
-  sArpi : Str -> NounH = \arpi -> 
-    sKorpi arpi (init (weakGrade arpi) + "en") (init arpi + "ena") ;
-  sSylki : Str -> NounH = \sylki -> 
-    sKorpi sylki (init (weakGrade sylki) + "en") (init sylki + "enä") ;
-
-  sKoira : Str -> NounH = \koira ->
-    let a = getHarmony (last koira) in
-    sKukko koira (koira + "n") (init koira + "i" + a) ;
-
--- Loan words ending in consonants are actually similar to words like
--- "malli"/"mallin"/"malleja", with the exception that the "i" is not attached
--- to the singular nominative.
-
-  sLinux : Str -> NounH = \linuxia ->
-    let {
-       linux = Predef.tk 2 linuxia ; 
-       a = getHarmony (Predef.dp 1 linuxia) ;
-       linuxi = linux + "i"
-    } in 
-    mkSubst a 
-            linux
-            linuxi 
-            linuxi
-            (linuxi + a) 
-            (linuxi + "in")
-            (linux + "ei")
-            (linux + "ei")
-            (linux + "ien")
-            (linux + "ej" + a)
-            (linux + "eihin") ;
-
--- Nouns of at least 3 syllables ending with "a" or "ä", like "peruna", "rytinä".
-
-  sPeruna : Str -> NounH = \peruna ->
-    let {
-      a  = Predef.dp 1 peruna ;
-      perun = Predef.tk 1 peruna ;
-      perunoi = perun + (ifTok Str a "a" "o" "ö" + "i")
-    } 
-    in
-    mkSubst a 
-            peruna
-            peruna
-            peruna
-            (peruna + a) 
-            (peruna + a + "n")
-            perunoi
-            perunoi
-            (perunoi + "den")
-            (perunoi + ("t" + a))
-            (perunoi + "hin") ;
-
-  sTohtori : Str -> NounH = \tohtoria ->
+  dPuu : Str -> NForms = \puu ->
     let
-      a  = last tohtoria ;
-      tohtori = init tohtoria ;
-      tohtorei = init tohtori + "ei" ;
-    in
-    mkSubst a 
-            tohtori
-            tohtori
-            tohtori
-            tohtoria
-            (tohtori + "in")
-            tohtorei
-            tohtorei
-            (tohtorei + "den")
-            (tohtorei + "t" + a)
-            (tohtorei + "hin") ;
+      a = vowHarmony puu ;
+      pui = init puu + "i" ;
+      u = last puu ;
+    in nForms10
+      puu (puu + "n") (puu + "t" + a) (puu + "n" + a)  (puu + "h" + u + "n")
+      (pui + "den") (pui + "t" + a) 
+      (pui + "n" + a) (pui + "ss" + a) (pui + "hin") ;
 
-  sRadio : Str -> NounH = \radio ->
+  dSuo : Str -> NForms = \suo ->
     let
-      o  = last radio ;
-      a  = getHarmony o ;
-      radioi = radio + "i" ;
-    in
-    mkSubst a 
-            radio
-            radio
-            radio
-            (radio + "t" + a)
-            (radio + o + "n")
-            radioi
-            radioi
-            (radioi + "den")
-            (radioi + "t" + a)
-            (radioi + "hin") ;
+      o = last suo ;
+      a = vowHarmony o ;
+      soi = Predef.tk 2 suo + o + "i" ;
+    in nForms10
+      suo (suo + "n") (suo + "t" + a) (suo + "n" + a)  (suo + "h" + o + "n")
+      (soi + "den") (soi + "t" + a) 
+      (soi + "n" + a) (soi + "ss" + a) (soi + "hin") ;
 
-
-  sSusi : (_,_,_ : Str) -> NounH = \susi,suden,sutena ->
+  dKorkea : Str -> NForms = \korkea ->
     let
-      a      = Predef.dp 1 sutena ;
-      sude   = Predef.tk 1 suden ;
-      sute   = Predef.tk 2 sutena ;
-      sutt   = Predef.tk 1 sute + "t" 
-    in
-    mkSubst a 
-            susi
-            sude 
-            sute
-            (sutt + a) 
-            (sute + "en")
-            susi
-            susi
-            (sutt + "en") --- var susi + "en" bad with suuri 
-            (susi + a)
-            (susi + "in") ;
+      a = last korkea ;
+      korke = init korkea ;
+    in nForms10
+      korkea (korkea + "n") (korkea + a) 
+      (korkea + "n" + a)  (korkea + a + "n")
+      (korke + "iden") (korke + "it" + a) 
+      (korke + "in" + a) (korke + "iss" + a) 
+      (korke + "isiin") ; --- NSSK: korkeihin
 
-  sPuu : Str -> NounH = \puu ->
-    let {
-      u  = Predef.dp 1 puu ;
-      a  = getHarmony u ;
-      pu = Predef.tk 1 puu ;
-      pui = pu + "i"
-    } 
-    in
-    mkSubst a 
-            puu
-            puu
-            puu
-            (puu + ("t" + a)) 
-            (puu + ("h" + u + "n"))
-            pui
-            pui
-            (pui + "den")
-            (pui + ("t" + a))
-            (pui + "hin") ;
-
-  sSuo : Str -> NounH = \suo ->
-    let {
-      o  = Predef.dp 1 suo ;
-      a  = getHarmony o ;
-      soi = Predef.tk 2 suo + (o + "i")
-    } 
-    in
-    mkSubst a 
-            suo
-            suo
-            suo
-            (suo + ("t" + a)) 
-            (suo + ("h" + o + "n"))
-            soi
-            soi
-            (soi + "den")
-            (soi + ("t" + a))
-            (soi + "hin") ;
-
--- Here in fact it is handy to use the partitive form as the only stem.
-
-  sNainen : Str -> NounH = \naista ->
-    let {
-      nainen = Predef.tk 3 naista + "nen" ;
-      nais   = Predef.tk 2 naista ;
-      naise  = nais + "e" ;
-      naisi  = nais + "i" ;
-      a      = Predef.dp 1 naista
-    } 
-    in
-    mkSubst a 
-            nainen
-            naise
-            naise
-            (nais + ("t" + a)) 
-            (nais + "een")
-            naisi
-            naisi
-            (nais + "ten")
-            (nais + ("i" + a))
-            (nais + "iin") ;
-
--- The following covers: "tilaus", "kaulin", "paimen", "laidun", "sammal",
--- "kyynel" (excep $Sg Iness$ for the last two?).
-
-  sTilaus : (_,_ : Str) -> NounH = \tilaus, tilauksena ->
-    let {
-      tilauks  = Predef.tk 3 tilauksena ;
-      tilaukse = tilauks + "e" ;
-      tilauksi = tilauks + "i" ;
-      a        = Predef.dp 1 tilauksena
-    } 
-    in
-    mkSubst a 
-            tilaus
-            tilaukse
-            tilaukse
-            (tilaus + ("t" + a)) 
-            (tilauks + "een")
-            tilauksi
-            tilauksi
-            (tilaus + "ten")
-            (tilauks + ("i" + a))
-            (tilauks + "iin") ;
-
--- Some words have the three grades ("rakkaus","rakkauden","rakkautena"), which
--- are however derivable from the stem.
-
-  sRakkaus : Str -> NounH = \rakkaus ->
-    let {
-      rakkau    = Predef.tk 1 rakkaus ;
-      rakkaut   = rakkau + "t" ;
-      rakkaute  = rakkau + "te" ;
-      rakkaude  = rakkau + "de" ;
-      rakkauksi = rakkau + "ksi" ;
-      u         = Predef.dp 1 rakkau ;
-      a         = ifTok Str u "u" "a" "ä"
-    } 
-    in
-    mkSubst a 
-            rakkaus
-            rakkaude
-            rakkaute
-            (rakkaut + ("t" + a)) 
-            (rakkaut + "een")
-            rakkauksi
-            rakkauksi
-            (rakkauksi + "en")
-            (rakkauksi + a)
-            (rakkauksi + "in") ;
-
--- The following covers nouns like "nauris" and adjectives like "kallis", "tyyris".
-
-  sNauris : (_ : Str) -> NounH = \naurista ->
-    let {
-      a        = Predef.dp 1 naurista ;
-      nauris   = Predef.tk 2 naurista ;
-      nauri    = Predef.tk 3 naurista ;
-      i        = Predef.dp 1 nauri ;
-      naurii   = nauri + i ;
-      naurei   = nauri + "i"
-    } 
-    in
-    mkSubst a 
-            nauris
-            naurii
-            naurii
-            (nauris + ("t" + a)) 
-            (naurii + "seen")
-            naurei
-            naurei
-            (naurei + "den")
-            (naurei + ("t" + a))
-            (naurei + "siin") ;
-
--- Words of the form "siitin", "avain", "höyhen" (w or wo grade alternation).
-
-  sLiitin : Str -> Str -> NounH = \liitin,liittimen ->
+  dKaunis : Str -> NForms = \kaunis ->
     let
-      liittime = init liittimen ;
-      liitti = Predef.tk 2 liittime ;
-      m = last (init liittime) ;
-      liittimi = liitti + m + "i" ;
-      a = vowelHarmony liitin ;
-    in 
-    mkSubst a 
-            liitin
-            liittime
-            liittime
-            (liitin + "t" + a) 
-            (liittime + "en")
-            (liittimi)
-            (liittimi)
-            (liittimi + "en")
-            (liittimi + a)
-            (liittimi + "in") ;
+      a = vowHarmony kaunis ;
+      kaunii = init kaunis + "i" ;
+    in nForms10
+      kaunis (kaunii + "n") (kaunis + "t" + a) 
+      (kaunii + "n" + a)  (kaunii + "seen")
+      (kaunii + "den") (kaunii + "t" + a) 
+      (kaunii + "n" + a) (kaunii + "ss" + a) 
+      (kaunii + "siin") ;
 
--- The following covers adjectives like "kapea", "leveä".
-
-  sKapea : (_ : Str) -> NounH = \kapea ->
+  dLiitin : (_,_ : Str) -> NForms = \liitin,liittimen ->
     let
-      a        = last kapea ;
-      kape     = init kapea ;
-      kapei    = kape + "i"
+      a = vowHarmony liitin ;
+      liittim = Predef.tk 2 liittimen ;
+    in nForms10
+      liitin (liittim + "en") (liitin + "t" + a) 
+      (liittim + "en" + a)  (liittim + "een")
+      (liittim + "ien") (liittim + "i" + a) 
+      (liittim + "in" + a) (liittim + "iss" + a) 
+      (liittim + "iin") ;
+
+  dOnneton : Str -> NForms = \onneton ->
+    let
+      a = vowHarmony onneton ;
+      onnettom = Predef.tk 2 onneton + "t" + last (init onneton) + "m" ;
+    in nForms10
+      onneton (onnettom + a + "n") (onneton + "t" + a) 
+      (onnettom + a + "n" + a)  (onnettom + a + a + "n")
+      (onnettom + "ien") (onnettom + "i" + a) 
+      (onnettom + "in" + a) (onnettom + "iss" + a) 
+      (onnettom + "iin") ;
+
+  -- 2-syllable a/ä, o/ö, u/y
+  dUkko : (_,_ : Str) -> NForms = \ukko,ukon ->
+      let
+        o   = last ukko ;
+        a   = vowHarmony o ;
+        ukk = init ukko ;
+        uko = init ukon ;
+        uk  = init uko ;
+        ukkoja = case <ukko : Str> of {
+          _ + "ä" =>                        -- kylä,kyliä,kylien,kylissä,kyliin 
+             <ukk + "iä", ukk + "ien", ukk, uk, ukk + "iin"> ;
+          _ + ("au" | "eu") + _ + "a" =>    -- kauhojen,seurojen
+             <ukk + "oja",ukk + "ojen",ukk + "o", uk + "o", ukk + "oihin"> ;
+          _ + ("o" | "u") + _ + "a" =>      -- pula,pulia,pulien,pulissa,puliin
+             <ukk + "ia", ukk + "ien", ukk, uk, ukk + "iin"> ;
+          _ + "a" =>                        -- kala,kaloja,kalojen,-oissa,-oihin
+             <ukk + "oja",ukk + "ojen",ukk + "o", uk + "o", ukk + "oihin"> ;
+          _   =>                            -- suku,sukuja,sukujen,-uissa,-uihin
+             <ukko + "j" + a,ukko + "jen",ukko, uko, ukko + "ihin">
+        } ;
+        ukkoina = ukkoja.p3 + "in" + a ; 
+        ukoissa = ukkoja.p4 + "iss" + a ;
+      in nForms10
+        ukko ukon (ukko + a) (ukko + "n" + a) (ukko + o + "n")
+        ukkoja.p2 ukkoja.p1
+        ukkoina ukoissa ukkoja.p5 ; 
+
+  -- 3-syllable a/ä/o/ö
+  dSilakka : (_,_,_ : Str) -> NForms = \silakka,silakan,silakoita ->
+    let
+      o = last silakka ;
+      a = getHarmony o ;
+      silakk = init silakka ;
+      silaka = init silakan ;
+      silak  = init silaka ;
+      silakkaa = silakka + case o of {
+        "o" | "ö" => "t" + a ;  -- radiota
+        _ => a                  -- sammakkoa
+        } ;
+      silakoiden = case <silakoita : Str> of {
+        _ + "i" + ("a" | "ä") =>                    -- asemia
+          <silakka+a, silakk + "ien", silakk, silak, silakk + "iin"> ;
+        _ + O@("o" | "ö" | "u" | "y" | "e") + ("ja" | "jä") =>        -- pasuunoja
+          <silakka+a,silakk+O+"jen",silakk+O, silak+O, silakk +O+ "ihin"> ;
+        _ + O@("o" | "ö" | "u" | "y" | "e") + ("ita" | "itä") =>      -- silakoita
+          <silakkaa, silak+O+"iden",silakk+O, silak+O, silakk +O+ "ihin"> ;
+        _   => Predef.error silakoita                    
+        } ;
+      silakkoina = silakoiden.p3 + "in" + a ; 
+      silakoissa = silakoiden.p4 + "iss" + a ;
+    in nForms10
+      silakka silakan silakoiden.p1 (silakka + "n" + a) (silakka + o + "n")
+      silakoiden.p2 silakoita
+      silakkoina silakoissa silakoiden.p5 ; 
+
+   dArpi : (_,_ : Str) -> NForms = \arpi,arven ->
+      let
+        a = vowHarmony arpi ;
+        arp = init arpi ;
+        arv = Predef.tk 2 arven ;
+        ar  = init arp ;
+        arpe = case last arp of {
+         "s" => case last arv of {
+            "d" | "l" | "n" | "r" =>   -- suden,sutta ; jälsi ; kansi ; hirsi
+               <ar + "tt" + a, arpi + "en",arpi,ar + "t"> ;
+            _ =>                                     -- kuusta,kuusien
+               <arp + "t" + a,arp + "ien",arpi, arp>
+            } ;
+         "r" | "n" =>                                -- suurta,suurten
+               <arp + "t" + a,arp + "ten",arpi, arp>; 
+         "l" | "h" =>                           -- tuulta,tuulien
+               <arp + "t" + a,arp + "ien",arpi, arp>; 
+          _   =>                                -- arpea,arpien,arvissa
+               <arp + "e" + a,arp + "ien",arv+"i",arp>   
+          } ;                                   ---- pieni,pientä; uni,unta
+        in nForms10
+            arpi arven arpe.p1 (arpe.p4 + "en" + a) (arpe.p4 + "een")
+            arpe.p2 (arpi + a)
+            (arp + "in" + a) (arpe.p3 + "ss" + a) (arp + "iin") ; 
+
+  dRae : (_,_ : Str) -> NForms = \rae,rakeen ->
+      let
+        a = vowHarmony rae ;
+        rakee  = init rakeen ;
+        rakei  = init rakee + "i" ;
+        raetta = case <rae : Str> of {
+          _ + "e" => 
+            <rae + "tt" + a, rakee + "seen"> ;  -- raetta,rakeeseen
+          _ + "s" => 
+            <rae + "t" + a,  rakee + "seen"> ;  -- rengasta,renkaaseen
+          _ + "t" => 
+            <rae + "t" + a,  rakee + "en"> ;    -- olutta,olueen
+          _ + "r" => 
+            <rae + "t" + a,  rakee + "en"> ;    -- sisarta,sisareen
+          _ => Predef.error (["expected ending e/t/s/r, found"] ++ rae)
+          } ;
+        in nForms10
+          rae rakeen raetta.p1 (rakee + "n"+ a) raetta.p2
+          (rakei + "den") (rakei + "t" + a)
+          (rakei + "n" + a) (rakei + "ss" + a) (rakei + "siin") ; ---- sisariin
+
+  dPaatti : (_,_ : Str) -> NForms = \paatti,paatin ->
+    let
+      a = vowHarmony paatti ;
+      paatte = init paatti + "e" ;
+      paati = init paatin ;
+      paate = init paati + "e" ;
+    in nForms10
+      paatti paatin (paatti + a) (paatti + "n" + a) (paatti + "in")
+      (paatti + "en") (paatte + "j" + a) 
+      (paatte + "in" + a) (paate + "iss" + a) (paatte + "ihin") ; 
+
+  dTohtori : (_ : Str) -> NForms = \tohtori ->
+    let
+      a = vowHarmony tohtori ;
+      tohtor = init tohtori ;
+    in nForms10
+      tohtori (tohtori+"n") (tohtori + a) (tohtori + "n" + a) (tohtori + "in")
+      (tohtor + "eiden") (tohtor + "eit" + a) 
+      (tohtor + "ein" + a) (tohtor + "eiss" + a) (tohtor + "eihin") ; 
+
+  dPiennar : (_,_ : Str) -> NForms = \piennar,pientaren ->
+    let 
+      a = vowHarmony piennar ;
+      pientar = Predef.tk 2 pientaren ;
+    in nForms10
+      piennar pientaren (piennar +"t" + a) 
+      (pientar + "en" + a) (pientar + "een")
+      (piennar + "ten") (pientar + "i" + a) (pientar + "in" + a)
+      (pientar + "iss" + a) (pientar + "iin") ;
+
+  dUnix : (_ : Str) -> NForms = \unix ->
+    let 
+      a = vowHarmony unix ;
+      unixi = unix + "i" ; 
+      unixe = unix + "e" ; 
+    in nForms10
+      unix (unixi + "n") (unixi + a) (unixi + "n" + a) (unixi + "in")
+      (unixi + "en") (unixe + "j" + a) (unixe + "in" + a)
+      (unixe + "iss" + a) (unixe + "ihin") ;
+
+  dNukke : (_,_ : Str) -> NForms = \nukke,nuken ->
+    let
+      a = vowHarmony nukke ;
+      nukk = init nukke ;
+      nuke = init nuken ;
     in
-    mkSubst a 
-            kapea
-            kapea
-            kapea
-            (kapea + a) 
-            (kapea + a+"n")
-            kapei
-            kapei
-            (kapei + "den")
-            (kapei + ("t" + a))
-            (kapei + "siin") ;
+    nForms10
+      nukke nuken (nukke + a) (nukk +"en" + a) (nukk + "een")
+      (nukk + "ien") (nukk + "ej" + a) (nukk + "ein" + a)
+      (nuke + "iss" + a) (nukk + "eihin") ;
 
--- The following two are used for adjective comparison.
+  dJalas : Str -> NForms = \jalas -> 
+    let
+      a = vowHarmony jalas ;
+      jalaks = init jalas + "ks" ;
+      jalaksi = jalaks + "i" ;
+    in nForms10
+      jalas (jalaks + "en") (jalas + "t" + a) 
+      (jalaks + "en" + a) (jalaks + "een")
+      (jalas + "ten") (jalaksi + a) 
+      (jalaksi + "n" + a) (jalaksi + "ss" + a) (jalaksi + "in") ; 
 
-  sSuurempi : Str -> NounH = \suurempaa ->
-    let {
-      a        = Predef.dp 1 suurempaa ;
-      suure    = Predef.tk 4 suurempaa ;
-      suurempi = suure + "mpi" ;
-      suurempa = suure + ("mp" + a) ;
-      suuremm  = suure + "mm"
-    } 
-    in
-    mkSubst a 
-            suurempi
-            (suuremm + a)
-            suurempa
-            (suurempa + a)
-            (suurempa + (a + "n"))
-            suurempi
-            (suuremm + "i")
-            (suurempi + "en")
-            (suurempi + a)
-            (suurempi + "in") ;
+  dSDP : Str -> NForms = \SDP ->
+    let 
+      c = case last SDP of {
+        "A" => 
+           <"n","ta","na","han","iden","ita","ina","issa","ihin"> ;
+        "B" | "C" | "D" | "E" | "G" | "P" | "T" | "V" | "W" => 
+           <"n","tä","nä","hen","iden","itä","inä","issä","ihin"> ;
+        "F" | "L" | "M" | "N" | "R" | "S" | "X" => 
+           <"n","ää","nä","ään","ien","iä","inä","issä","iin"> ;
+        "H" | "K" | "O" | "Å" => 
+           <"n","ta","na","hon","iden","ita","ina","issa","ihin"> ;
+        "I" | "J" => 
+           <"n","tä","nä","hin","iden","itä","inä","issä","ihin"> ;
+        "Q" | "U" => 
+           <"n","ta","na","hun","iden","ita","ina","issa","ihin"> ;
+        "Z" => 
+           <"n","aa","na","aan","ojen","oja","oina","oissa","oihin"> ;
+        "Ä" => 
+           <"n","tä","nä","hän","iden","itä","inä","issä","ihin"> ;
+        "Ö" => 
+           <"n","tä","nä","hön","iden","itä","inä","issä","ihin"> ;
+        _ => Predef.error (["illegal abbreviation"] ++ SDP)
+        } ;
+    in nForms10
+      SDP (SDP + ":" + c.p1) (SDP + ":" + c.p2) (SDP + ":" + c.p3) 
+      (SDP + ":" + c.p4) (SDP + ":" + c.p5) (SDP + ":" + c.p6) 
+      (SDP + ":" + c.p7) (SDP + ":" + c.p8) (SDP + ":" + c.p9) ;
 
-  sSuurin : Str -> NounH = \suurinta ->
-    let {
-      a        = Predef.dp 1 suurinta ;
-      suuri    = Predef.tk 3 suurinta ;
-      suurin   = suuri + "n" ;
-      suurimma = suuri + ("mm" + a) ;
-      suurimpa = suuri + ("mp" + a) ;
-      suurimpi = suuri + "mpi" ;
-      suurimmi = suuri + "mmi"
-    } 
-    in
-    mkSubst a 
-            suurin
-            suurimma
-            suurimpa
-            (suurin + ("t" + a)) 
-            (suurimpa + (a + "n"))
-            suurimpi
-            suurimmi
-            (suurimpi + "en")
-            (suurimpi + a)
-            (suurimpi + "in") ;
+-- for adjective comparison
 
--- This auxiliary resolves vowel harmony from a given letter.
+  dSuurempi : Str -> NForms = \suurempi ->
+    let
+      a = vowHarmony suurempi ;
+      suuremp = init suurempi ;
+      suuremm = Predef.tk 2 suurempi + "m" ;
+    in nForms10
+      suurempi (suuremm + a + "n") (suuremp + a + a) 
+      (suuremp + a + "n" + a) (suuremp + a + a + "n")
+      (suuremp + "ien") (suurempi + a) 
+      (suurempi + "n" + a) (suuremm + "iss" + a) (suurempi + "in") ; 
 
-getHarmony : Str -> Str = \u -> case u of {
-  "a"|"o"|"u" => "a" ;
-  _   => "ä"
+  dSuurin : Str -> NForms = \suurin ->
+    let
+      a = vowHarmony suurin ;
+      suurimm = init suurin + "mm" ;
+      suurimp = init suurimm + "p" ;
+    in nForms10
+      suurin (suurimm + a + "n") (suurin + "t" + a) 
+      (suurimp + a + "n" + a) (suurimp + a + a + "n")
+      (suurimp + "ien") (suurimp + "i" + a) 
+      (suurimp + "in" + a) (suurimm + "iss" + a) (suurimp + "iin") ; 
+
+-- for verb participle forms
+
+  dOttanut : Str -> NForms = \ottanut ->
+    let
+      a = vowHarmony ottanut ;
+      ottane = Predef.tk 2 ottanut + "e" ;
+      ottanee = ottane + "e" ;
+    in nForms10
+      ottanut (ottanee + "n") (ottanut + "t" + a) 
+      (ottanee + "n" + a) (ottanee + "seen")
+      (ottane + "iden") (ottane + "it" + a) 
+      (ottane + "in" + a) (ottane + "iss" + a) (ottane + "isiin") ; 
+
+-------------------
+-- auxiliaries ----
+-------------------
+
+-- the maximal set of technical stems
+
+    NForms : Type = Predef.Ints 9 => Str ;
+
+    nForms10 : (x1,_,_,_,_,_,_,_,_,x10 : Str) -> NForms = 
+      \Ukko,ukon,ukkoa,ukkona,ukkoon,
+       ukkojen,ukkoja,ukkoina,ukoissa,ukkoihin -> table {
+      0 => Ukko ;
+      1 => ukon ;
+      2 => ukkoa ;
+      3 => ukkona ;
+      4 => ukkoon ;
+      5 => ukkojen ;
+      6 => ukkoja ;
+      7 => ukkoina ;
+      8 => ukoissa ;
+      9 => ukkoihin
+      } ;
+
+    Noun = {s : NForm => Str} ;
+
+    nForms2N : NForms -> Noun = \f -> 
+      let
+        Ukko = f ! 0 ;
+        ukon = f ! 1 ;
+        ukkoa = f ! 2 ;
+        ukkona = f ! 3 ;
+        ukkoon = f ! 4 ;
+        ukkojen = f ! 5 ;
+        ukkoja = f ! 6 ;
+        ukkoina = f ! 7 ;
+        ukoissa = f ! 8 ;
+        ukkoihin = f ! 9 ;
+        a     = last ukkoja ;
+        uko   = init ukon ;
+        ukko  = Predef.tk 2 ukkona ;
+        ukkoi = Predef.tk 2 ukkoina ;
+        ukoi  = Predef.tk 3 ukoissa ;
+      in 
+    {s = table {
+      NCase Sg Nom    => Ukko ;
+      NCase Sg Gen    => uko + "n" ;
+      NCase Sg Part   => ukkoa ;
+      NCase Sg Transl => uko + "ksi" ;
+      NCase Sg Ess    => ukkona ;
+      NCase Sg Iness  => uko + ("ss" + a) ;
+      NCase Sg Elat   => uko + ("st" + a) ;
+      NCase Sg Illat  => ukkoon ;
+      NCase Sg Adess  => uko + ("ll" + a) ;
+      NCase Sg Ablat  => uko + ("lt" + a) ;
+      NCase Sg Allat  => uko + "lle" ;
+      NCase Sg Abess  => uko + ("tt" + a) ;
+
+      NCase Pl Nom    => uko + "t" ;
+      NCase Pl Gen    => ukkojen ;
+      NCase Pl Part   => ukkoja ;
+      NCase Pl Transl => ukoi + "ksi" ;
+      NCase Pl Ess    => ukkoina ;
+      NCase Pl Iness  => ukoissa ;
+      NCase Pl Elat   => ukoi + ("st" + a) ;
+      NCase Pl Illat  => ukkoihin ;
+      NCase Pl Adess  => ukoi + ("ll" + a) ;
+      NCase Pl Ablat  => ukoi + ("lt" + a) ;
+      NCase Pl Allat  => ukoi + "lle" ;
+      NCase Pl Abess  => ukoi + ("tt" + a) ;
+
+      NComit    => ukkoi + "ne" ;
+      NInstruct => ukoi + "n" ;
+
+      NPossNom _     => ukko ;
+      NPossGen Sg    => ukko ;
+      NPossGen Pl    => init ukkojen ;
+      NPossTransl Sg => uko + "kse" ;
+      NPossTransl Pl => ukoi + "kse" ;
+      NPossIllat Sg  => init ukkoon ;
+      NPossIllat Pl  => init ukkoihin
+      } ;
+    lock_N = <>
+    } ;
+
+  n2nforms : Noun -> NForms = \ukko -> table {
+    0 => ukko.s ! NCase Sg Nom ;
+    1 => ukko.s ! NCase Sg Gen ;
+    2 => ukko.s ! NCase Sg Part ;
+    3 => ukko.s ! NCase Sg Ess ;
+    4 => ukko.s ! NCase Sg Illat ;
+    5 => ukko.s ! NCase Pl Gen ;
+    6 => ukko.s ! NCase Pl Part ;
+    7 => ukko.s ! NCase Pl Ess ;
+    8 => ukko.s ! NCase Pl Iness ;
+    9 => ukko.s ! NCase Pl Illat
   } ;
 
--- This function inspects the whole word.
+-- Adjective forms
 
-vowelHarmony : Str -> Str = \liitin ->
-  if_then_Str (pbool2bool (Predef.occurs "aou" liitin)) "a" "ä" ;
+    AForms : Type = {
+      posit  : NForms ;
+      compar : NForms ;
+      superl : NForms ;
+      adv_posit, adv_compar, adv_superl : Str ;
+      } ;
+
+    aForms2A : AForms -> Adjective = \afs -> {
+      s = table {
+        Posit => table {
+          AN n => (nForms2N afs.posit).s ! n ; 
+          AAdv => afs.adv_posit
+          } ;
+        Compar => table {
+          AN n => (nForms2N afs.compar).s ! n ; 
+          AAdv => afs.adv_compar
+          } ;
+        Superl => table {
+          AN n => (nForms2N afs.superl).s ! n ; 
+          AAdv => afs.adv_superl
+          }
+        } ;
+      lock_A = <>
+      } ;
+
+    nforms2aforms : NForms -> AForms = \nforms -> 
+      let
+        suure = init (nforms ! 1) ;
+        suur = Predef.tk 4 (nforms ! 8) ;
+      in {
+        posit = nforms ;
+        compar = dSuurempi (suure ++ "mpi") ;
+        superl = dSuurin   (suur ++ "in") ;
+        adv_posit = suure + "sti" ;
+        adv_compar = suure + "mmin" ;
+        adv_superl = suur + "immin" ;
+      } ;
+
+
+  oper
+
+  cHukkua : (_,_ : Str) -> VForms = \hukkua,hukun -> 
+    let
+      a     = last hukkua ;
+      hukku = init hukkua ;
+      huku  = init hukun ;
+      u     = last huku ;
+      i = case u of {
+        "e" | "i" => [] ;
+        _ => u
+        } ;
+      y = uyHarmony a ;
+      hukkui = init hukku + i + "i" ; 
+      hukui  = init huku + i + "i" ; 
+    in vForms12
+      hukkua
+      hukun
+      (hukku + u)
+      (hukku + "v" + a + "t")
+      (hukku + "k" + a + a)
+      (huku + "t" + a + a + "n")
+      (hukui + "n")
+      hukkui
+      (hukkui + "si")
+      (hukku + "n" + y + "t")
+      (huku + "tt" + y)
+      (hukku + "nee") ;
+
+  cOttaa : (_,_,_,_ : Str) -> VForms = \ottaa,otan,otin,otti -> 
+    let
+      a    = last ottaa ;
+      aa   = a + a ;
+      u    = uyHarmony a ;
+      ota  = init otan ;
+      otta = init ottaa ;
+      ote  = init ota + "e" ;
+    in vForms12
+      ottaa
+      otan
+      ottaa
+      (otta + "v" + a + "t") 
+      (otta + "k" + aa) 
+      (ote  + "t" + aa + "n")
+      otin
+      otti
+      (otta + "isi")
+      (otta + "n" + u + "t")
+      (ote + "tt" + u)
+      (otta + "nee") ;
+
+  cJuosta : (_,_ : Str) -> VForms = \juosta,juoksen -> 
+    let
+      a      = last juosta ;
+      juos   = Predef.tk 2 juosta ;
+      juoss  = juos + last juos ;
+      juokse = init juoksen ;
+      juoks  = init juokse ;
+      u      = uyHarmony a ;
+      juoksi = juoks + "i" ;
+    in vForms12
+      juosta
+      (juoksen)
+      (juokse + "e")
+      (juokse + "v" + a + "t")
+      (juos + "k" + a + a)
+      (juosta + a + "n")
+      (juoks + "in")
+      (juoks + "i")
+      (juoks + "isi")
+      (juoss + u + "t")
+      (juos + "t" + u)
+      (juoss + "ee") ;
+
+  cJuoda : (_ : Str) -> VForms = \juoda -> 
+    let
+      a      = last juoda ;
+      juo    = Predef.tk 2 juoda ;
+      joi    = case last juo of {
+        "i" => juo ;                     -- naida
+        o   => Predef.tk 2 juo + o + "i"
+        } ;
+      u      = uyHarmony a ;
+    in vForms12
+      juoda
+      (juo + "n")
+      (juo)
+      (juo + "v" + a + "t")
+      (juo + "k" + a + a)
+      (juoda + a + "n")
+      (joi + "n")
+      (joi)
+      (joi + "si")
+      (juo + "n" + u + "t")
+      (juo + "t" + u)
+      (juo + "nee") ;
+
+  cPudota : (_,_ : Str) -> VForms = \pudota,putosi -> 
+    let
+      a      = last pudota ;
+      pudot  = init pudota ;
+      pudo   = init pudot ;
+      ai = case last pudo of {
+        "a" | "ä" => <[], "i"> ;
+        _         => <a, a + "i">
+        } ;
+      puto   = Predef.tk 2 putosi ;
+      u      = uyHarmony a ;
+    in vForms12
+      pudota
+      (puto  + a + "n")
+      (puto  + ai.p1 + a)
+      (puto  + a + "v" + a + "t")
+      (pudot + "k" + a + a)
+      (pudot + a + a + "n")
+      (puto  + "sin")
+      (puto  + "si")
+      (puto  + ai.p2 + "si")
+      (pudo  + "nn" + u + "t")
+      (pudot + "t" + u)
+      (pudo  + "nnee") ;
+
+  cHarkita : (_ : Str) -> VForms = \harkita -> 
+    let
+      a      = last harkita ;
+      harkit = init harkita ;
+      harki  = init harkit ;
+      u      = uyHarmony a ;
+    in vForms12
+      harkita
+      (harkit + "sen")
+      (harkit + "se")
+      (harkit + "sev" + a + "t")
+      (harkit + "k" + a + a)
+      (harkit + a + a + "n")
+      (harkit + "sin")
+      (harkit + "si")
+      (harkit + "sisi")
+      (harki  + "nn" + u + "t")
+      (harkit + "t" + u)
+      (harki  + "nnee") ;
+
+  cValjeta : (_,_ : Str) -> VForms = \valjeta,valkeni -> 
+    let
+      a      = last valjeta ;
+      valjet = init valjeta ;
+      valken = init valkeni ;
+      valje  = init valjet ;
+      u      = uyHarmony a ;
+    in vForms12
+      valjeta
+      (valken + "en")
+      (valken + "ee")
+      (valken + "ev" + a + "t")
+      (valjet + "k" + a + a)
+      (valjet + a + a + "n")
+      (valken + "in")
+      (valken + "i")
+      (valken + "isi")
+      (valje  + "nn" + u + "t")
+      (valjet + "t" + u)
+      (valje  + "nnee") ;
+
+  cKuunnella : (_,_ : Str) -> VForms = \kuunnella,kuuntelin -> 
+    let
+      a       = last kuunnella ;
+      kuunnel = Predef.tk 2 kuunnella ;
+      kuuntel = Predef.tk 2 kuuntelin ;
+      u       = uyHarmony a ;
+    in vForms12
+      kuunnella
+      (kuuntel + "en")
+      (kuuntel + "ee")
+      (kuuntel + "ev" + a + "t")
+      (kuunnel + "k" + a + a)
+      (kuunnella + a + "n")
+      (kuuntel + "in")
+      (kuuntel + "i")
+      (kuuntel + "isi")
+      (kuunnel + "l" + u + "t")
+      (kuunnel + "t" + u)
+      (kuunnel + "lee") ;
+
+-- auxiliaries
+
+    uyHarmony : Str -> Str = \a -> case a of {
+      "a" => "u" ;
+      _ => "y"
+      } ;
+
+    VForms : Type = Predef.Ints 11 => Str ;
+
+    vForms12 : (x1,_,_,_,_,_,_,_,_,_,_,x12 : Str) -> VForms = 
+      \olla,olen,on,ovat,olkaa,ollaan,olin,oli,olisi,ollut,oltu,lienee ->
+      table {
+        0 => olla ;
+        1 => olen ;
+        2 => on ;
+        3 => ovat ;
+        4 => olkaa ;
+        5 => ollaan ;
+        6 => olin ;
+        7 => oli ;
+        8 => olisi ;
+        9 => ollut ;
+       10 => oltu ;
+       11 => lienee
+      } ;
+
+    vforms2V : VForms -> Verb = \vh -> 
+    let
+      tulla = vh ! 0 ; 
+      tulen = vh ! 1 ; 
+      tulee = vh ! 2 ; 
+      tulevat = vh ! 3 ;
+      tulkaa = vh ! 4 ; 
+      tullaan = vh ! 5 ; 
+      tulin = vh ! 6 ; 
+      tuli = vh ! 7 ;
+      tulisi = vh ! 8 ;
+      tullut = vh ! 9 ;
+      tultu = vh ! 10 ;
+      tullun = vh ! 11 ;
+      tule_ = init tulen ;
+      tuli_ = init tulin ;
+      a = last tulkaa ;
+      tulko = Predef.tk 2 tulkaa + (ifTok Str a "a" "o" "ö") ;
+      tulkoo = tulko + last tulko ;
+      tullee = Predef.tk 2 tullut + "ee" ;
+      tulleen = (nForms2N (dOttanut tullut)).s ;
+      tullu : Str = weakGrade tultu ;
+      tullun  = (nForms2N (dUkko tultu (tullu + "n"))).s ; 
+      tulema = Predef.tk 3 tulevat + "m" + a ;
+      vat = "v" + a + "t"
+    in
+    {s = table {
+      Inf Inf1 => tulla ;
+      Presn Sg P1 => tule_ + "n" ;
+      Presn Sg P2 => tule_ + "t" ;
+      Presn Sg P3 => tulee ;
+      Presn Pl P1 => tule_ + "mme" ;
+      Presn Pl P2 => tule_ + "tte" ;
+      Presn Pl P3 => tulevat ;
+      Impf Sg P1  => tuli_ + "n" ;   --# notpresent
+      Impf Sg P2  => tuli_ + "t" ;  --# notpresent
+      Impf Sg P3  => tuli ;  --# notpresent
+      Impf Pl P1  => tuli_ + "mme" ;  --# notpresent
+      Impf Pl P2  => tuli_ + "tte" ;  --# notpresent
+      Impf Pl P3  => tuli + vat ;  --# notpresent
+      Condit Sg P1 => tulisi + "n" ;  --# notpresent
+      Condit Sg P2 => tulisi + "t" ;  --# notpresent
+      Condit Sg P3 => tulisi ;  --# notpresent
+      Condit Pl P1 => tulisi + "mme" ;  --# notpresent
+      Condit Pl P2 => tulisi + "tte" ;  --# notpresent
+      Condit Pl P3 => tulisi + vat ;  --# notpresent
+      Imper Sg   => tule_ ;
+      Imper Pl   => tulkaa ;
+      ImperP3 Sg => tulkoo + "n" ;
+      ImperP3 Pl => tulkoo + "t" ;
+      ImperP1Pl  => tulkaa + "mme" ;
+      ImpNegPl   => tulko ;
+      Pass True  => tullaan ;
+      Pass False => Predef.tk 2 tullaan ;
+      PastPartAct (AN n)  => tulleen ! n ;
+      PastPartAct AAdv    => tullee + "sti" ;
+      PastPartPass (AN n) => tullun ! n ;
+      PastPartPass AAdv   => tullu + "sti" ;
+      Inf Inf3Iness => tulema + "ss" + a ;
+      Inf Inf3Elat  => tulema + "st" + a ;
+      Inf Inf3Illat => tulema +  a   + "n" ;
+      Inf Inf3Adess => tulema + "ll" + a ;
+      Inf Inf3Abess => tulema + "tt" + a 
+      } ;
+    sc = NPCase Nom ;
+    lock_V = <>
+    } ;
+
+-----------------------------------------
+-- Auxiliaries
+-----------------------------------------
 
 -- The following function defines how grade alternation works if it is active.
 -- In general, *whether there is* grade alternation must be given in the lexicon
@@ -460,69 +787,60 @@ vowelHarmony : Str -> Str = \liitin ->
         _ => kukko
         } ;
 
---- This is only used to analyse nouns "rae", "hake", etc.
+-- This is used to analyse nouns "rae", "hake", "rengas", "laidun", etc.
 
-  strongGrade : Str -> Str = \hake ->
+  strongGrade : Str -> Str = \hanke ->
     let
-      ha = Predef.tk 2 hake ;
-      e  = last hake ;
-      hak = init hake ;
-      hd = Predef.dp 2 hak
-    in
-      case hd of {
-        "ng" => ha + "k" ;
-        "nn" => ha + "t" ;
-        "mm" => ha + "p" ;
-        "rr" | "ll" => ha + "t" ;
-        "hj" | "lj" => ha + "k" ;  -- pohje/lahje impossible
-        "hk" | "sk" | "sp" | "st" => hak ; 
-        _ + "k"  => ha + "kk" ;
-        _ + "p"  => ha + "pp" ;
-        _ + "t"  => ha + "tt" ;
-        _ + "d"  => ha + "t" ;
-        _ + ("a" | "ä") => hak + "k" ;  -- säe, tae
-        _ + "v"  => ha + "p" ;  -- rove/hyve impossible
-        _    => hak
-        } + e ;
+      ha = Predef.tk 3 hanke ;
+      nke = Predef.dp 3 hanke ; 
+    in 
+    ha + case nke of {
+      "ng" + a => "nk" + a ;
+      "nn" + e => "nt" + e ;
+      "mm" + e => "mp" + e ;
+      "rr" + e => "rt" + e ;
+      "ll" + a => "lt" + a ;
+      h@("h" | "l") + "je" + e => h + "ke" ; -- pohje/lahje impossible
+      ("tk" | "hk" | "sk" | "sp" | "st") + _ => nke ;       -- viuhke,kuiske 
+      a + k@("k"|"p"|"t") + e@("e"|"a"|"ä"|"u"|"i"|"o"|"ö")  => a + k + k + e ;
+      a + "d" + e@("e"|"a"|"ä"|"u"|"i"|"o"|"ö")  => a + "t" + e ; 
+      s + a@("a" | "ä") + "e" => s + a + "ke" ;       -- säe, tae
+      a + "v" + e@("e"|"a"|"ä"|"u"|"i") => a + "p" + e ;  -- taive/toive imposs
+      ase => ase
+      } ;
 
---3 Proper names
---
--- Proper names are similar to common nouns in the singular.
-
-  ProperName = {s : Case => Str} ;
-
-  mkProperName : CommonNoun -> ProperName = \jussi -> 
-    {s = \\c => jussi.s ! NCase Sg c} ;
-
--- An ending given to a symbol cannot really be decided
--- independently. The string $a$ gives the vowel harmony.
--- Only some South-West dialects have the generally valid
--- Illative form.
-
-  caseEnding : Str -> Case -> Str = \a,c -> case c of {
-    Nom => [] ;
-    Gen => "n" ;
-    Part => a ; --- 
-    Transl => "ksi" ; 
-    Ess => "n" + a ;
-    Iness => "ss" + a ;
-    Elat => "st" + a ;
-    Illat => "sse" ; ---
-    Adess => "ll" + a ;
-    Ablat => "lt" + a ;
-    Allat => "lle" ;
-    Abess => "tt" + a
+  vowHarmony : Str -> Str = \s -> case s of {
+    _ + ("a" | "o" | "u") + _ => "a" ;
+    _ => "ä"
     } ;
 
-  symbProperName : Str -> ProperName = \x -> 
-    {s = table {
-       Nom => x ;
-       c => glue x (":" + caseEnding "a" c)
-       }
+  getHarmony : Str -> Str = \u -> case u of {
+    "a"|"o"|"u" => "a" ;
+    _   => "ä"
     } ;
 
---2 Pronouns
---
+-----------------------
+-- for Structural
+-----------------------
+
+caseTable : Number -> CommonNoun -> Case => Str = \n,cn -> 
+  \\c => cn.s ! NCase n c ;
+
+  mkDet : Number -> CommonNoun -> {
+      s1 : Case => Str ;       -- minun kolme
+      s2 : Str ;               -- -ni
+      n : Number ;             -- Pl   (agreement feature for verb)
+      isNum : Bool ;           -- True (a numeral is present)
+      isPoss : Bool ;          -- True (a possessive suffix is present)
+      isDef : Bool             -- True (verb agrees in Pl, Nom is not Part)
+      } = \n, noun -> {
+    s1 = \\c => noun.s ! NCase n c ;
+    s2 = [] ;
+    n = n ;
+    isNum, isPoss = False ;
+    isDef = True  --- does this hold for all new dets?
+    } ;
+
 -- Here we define personal and relative pronouns.
 
   mkPronoun : (_,_,_,_,_ : Str) ->  Number -> Person -> 
@@ -562,41 +880,13 @@ vowelHarmony : Str -> Str = \liitin ->
       a = pro.a
       } ;
 
--- Determiners
-
-  mkDet : Number -> CommonNoun -> {
-      s1 : Case => Str ;       -- minun kolme
-      s2 : Str ;               -- -ni
-      n : Number ;             -- Pl   (agreement feature for verb)
-      isNum : Bool ;           -- True (a numeral is present)
-      isPoss : Bool ;          -- True (a possessive suffix is present)
-      isDef : Bool             -- True (verb agrees in Pl, Nom is not Part)
-      } = \n, noun -> {
-    s1 = \\c => noun.s ! NCase n c ;
-    s2 = [] ;
-    n = n ;
-    isNum, isPoss = False ;
-    isDef = True  --- does this hold for all new dets?
-    } ;
-
-  mkQuant : CommonNoun -> {
-    s1 : Number => Case => Str ; 
-    s2 : Str ; 
-    isPoss, isDef : Bool
-    } = \noun -> {
-      s1 = \\n,c => noun.s ! NCase n c ;
-      s2 = [] ;
-      isPoss = False ;
-      isDef = True  --- does this hold for all new dets?
-    } ;
-
 -- The relative pronoun, "joka", is inflected in case and number, 
 -- like common nouns, but it does not take possessive suffixes.
 -- The inflextion shows a surprising similarity with "suo".
 
 oper
   relPron : Number => Case => Str =
-    let {jo = nhn (sSuo "jo")} in
+    let {jo = nForms2N (dSuo "jo")} in
     table {
       Sg => table {
         Nom => "joka" ;
@@ -608,293 +898,7 @@ oper
         c   => "j" + (jo.s ! NCase Pl c)
         }
       } ;
-  
-caseTable : Number -> CommonNoun -> Case => Str = \n,cn -> 
-  \\c => cn.s ! NCase n c ;
 
+  ProperName = {s : Case => Str} ;
 
---2 Adjectives
---
-
-
--- For the comparison of adjectives, three noun declensions 
--- are needed in the worst case.
-
-  mkAdjective : (_,_,_ : Adj) -> Adjective = \hyva,parempi,paras -> 
-    {s = table {
-      Posit  => hyva.s ;
-      Compar => parempi.s ;
-      Superl  => paras.s
-      }
-    } ;
-
--- However, it is usually enough to give the positive declension and
--- the characteristic forms of comparative and superlative. 
-
-  regAdjective : CommonNoun -> Str -> Str -> Adjective = \kiva, kivempaa, kivinta ->
-    mkAdjective 
-      (noun2adj kiva) 
-      (noun2adjComp False (nhn (sSuurempi kivempaa))) 
-      (noun2adjComp False (nhn (sSuurin kivinta))) ;
-
-
-
-  regVerbH : Str -> VerbH = \soutaa -> 
-  let
-    taa = Predef.dp 3 soutaa ;
-    juo = Predef.tk 2 soutaa ;
-    souda = weakGrade (init soutaa) ;
-    soudan = juo + "en" ;
-    o  = Predef.dp 1 juo ;
-    a = last soutaa ;
-    u = ifTok Str a "a" "u" "y" ;
-    joi = Predef.tk 2 juo + (o + "i")
-  in 
-  case taa of {
-    "it" + _ => vHarkita soutaa ;
-    ("st" | "nn" | "rr" | "ll") + _ => 
-      vJuosta soutaa soudan (juo +   o+u+"t") (juo + "t"+u) ;
-    _ + ("aa" | "ää")     => vOttaa soutaa (souda + "n") ;
-    ("o" | "u" | "y" | "ö") + ("da" | "dä") => vJuoda soutaa joi ;
-    ("ata" | "ätä") => vOsata soutaa ;
-    _ => vHukkua soutaa souda
-    } ;
-
-  reg2VerbH : (soutaa,souti : Str) -> VerbH = \soutaa,souti ->
-  let
-    soudan = weakGrade (init soutaa) + "n" ;
-    soudin = weakGrade souti + "n" ;
-    souden = init souti + "en" ;
-    juo = Predef.tk 2 soutaa ;
-    o  = Predef.dp 1 juo ;
-    u = ifTok Str (last soutaa) "a" "u" "y" ;
-    taa = Predef.dp 3 soutaa ;
-  in 
-  case taa of {
-    "taa" | "tää" => vHuoltaa soutaa soudan souti soudin ;
-    "ata" | "ätä" => vPalkata soutaa souti ;
-    "ota" | "ötä" => vPudota soutaa souti ;
-    "sta" | "stä" => vJuosta soutaa souden (juo +   o+u+"t") (juo + "t"+u) ;
-    _ + ("da" | "dä") => vJuoda soutaa souti ;
-    _ => regVerbH soutaa
-    } ;
-
-  reg3VerbH : (_,_,_ : Str) -> VerbH = \soutaa,soudan,souti -> 
-  let
-    taa   = Predef.dp 3 soutaa ;
-    souda = init soudan ;
-    juo = Predef.tk 2 soutaa ;
-    o  = last juo ;
-    a = last taa ;
-    u = ifTok Str a "a" "u" "y" ;
-    soudin = weakGrade (init souti) + "in" ;
-  in case taa of {
-    "lla" | "llä" => vJuosta soutaa soudan (juo +   o+u+"t") (juo + "t"+u) ;
-    "taa" | "tää" => vHuoltaa soutaa soudan souti soudin ;
-    _ => reg2VerbH soutaa souti
-    } ;
-
--- For "harppoa", "hukkua", "löytyä", with grade alternation.
-
-  vHukkua : (_,_ : Str) -> VerbH = \hukkua,huku -> 
-    let {
-      a     = Predef.dp 1 hukkua ;
-      hukku = Predef.tk 1 hukkua ;
-      u     = Predef.dp 1 huku ;
-      i = case u of {
-        "e" | "i" => [] ;
-        _ => u
-        } ;
-      y = case a of {
-        "a" => "u" ;
-        _ => "y"
-        } ;
-      hukkui = init hukku + i + "i" ; 
-      hukui  = init huku + i + "i" ; 
-    } in
-    mkVerbH
-      hukkua
-      (hukku + u)
-      (huku + "n")
-      (hukku + "v" + a + "t")
-      (hukku + (("k" + a) + a))
-      (huku + ((("t" + a) + a) + "n"))
-      (hukkui)
-      (hukui + "n")
-      (hukkui + "si")
-      (hukku + "n" + y + "t")
-      (huku + "tt" + y)
-      (huku + "t" + y + "t") ;
-
--- For cases with or without alternation: "sanoa", "valua", "kysyä".
-
-  vSanoa : Str -> VerbH = \sanoa ->
-    vHukkua sanoa (Predef.tk 1 sanoa) ;
-----    vHukkua sanoa (weakGrade (Predef.tk 1 sanoa)) ;
----- The gfr file becomes 6* bigger if this change is done
-
--- For "ottaa", "käyttää", "löytää", "huoltaa", "hiihtää", "siirtää".
-
-  vHuoltaa : (_,_,_,_ : Str) -> VerbH = \ottaa,otan,otti,otin -> 
-    let {
-      a    = Predef.dp 1 ottaa ;
-      aa   = a + a ;
-      u    = case a of {"a" => "u" ; _ => "y"} ;
-      ota  = Predef.tk 1 otan ;
-      otta = Predef.tk 1 ottaa ;
-      ote  = Predef.tk 1 ota + "e"
-    } in
-    mkVerbH
-      ottaa
-      ottaa
-      otan
-      (otta + "v" + a + "t") 
-      (otta + "k" + aa) 
-      (ote  + "t" + aa + "n")
-      otti
-      otin
-      (otta + "isi")
-      (otta + "n" + u + "t")
-      (ote + "tt" + u)
-      (ote + "t" + u + "n") ;
-
--- For cases where grade alternation is not affected by the imperfect "i".
-
-  vOttaa : (_,_ : Str) -> VerbH = \ottaa,otan -> 
-    let 
-      i = "i" ; --- wrong rule if_then_Str (pbool2bool (Predef.occurs "ou" ottaa)) "i" "oi"
-    in
-    vHuoltaa ottaa otan (Predef.tk 2 ottaa + i) (Predef.tk 2 otan + i + "n") ;
-
--- For "poistaa", "ryystää".
-
-  vPoistaa : Str -> VerbH = \poistaa -> 
-    vOttaa poistaa ((Predef.tk 1 poistaa + "n")) ;
-
-
--- For "osata", "lisätä"; grade alternation is unpredictable, as seen
--- from "pelätä-pelkäsi" vs. "palata-palasi"
-
-
-  vOsata : Str -> VerbH = \osata -> 
-    vPalkata osata (Predef.tk 2 osata + "si") ;
-
-  vPalkata : Str -> Str -> VerbH = \palkata,palkkasi -> 
-    let
-      a   = Predef.dp 1 palkata ;
-      palka = Predef.tk 2 palkata ;
-      palkka = Predef.tk 2 palkkasi ;
-      u   = case a of {"a" => "u" ; _ => "y"}
-    in
-    mkVerbH
-      palkata
-      (palkka + a)
-      (palkka + (a + "n"))
-      (palkka + (((a + "v") + a) + "t"))
-      (palka + ((("t" + "k") + a) + a)) 
-      (palkata + (a + "n"))
-      (palkka + "si")
-      (palkka + "sin")
-      (palkka + "isi")
-      (palka + "nn" + u + "t")
-      (palka + "tt" + u)
-      (palka + "t" + u + "n") ;
-
-  vPudota : Str -> Str -> VerbH = \pudota, putosi -> 
-    let
-      a    = Predef.dp 1 pudota ;
-      pudo = Predef.tk 2 pudota ;
-      puto = Predef.tk 2 putosi ;
-      putoa = puto + a ;
-      u   = case a of {"a" => "u" ; _ => "y"}
-    in
-    mkVerbH
-      pudota
-      (putoa  + a)
-      (putoa  + "n")
-      (putoa  + "v"  + a + "t")
-      (pudo   + "tk" + a + a) 
-      (pudota + a + "n")
-      (puto   + "si")
-      (puto   + "sin")
-      (puto   + a + "isi")
-      (pudo   + "nn" + u + "t")
-      (pudo   + "tt" + u)
-      (pudo   + "t" + u + "n") ;
-
-  vHarkita : Str -> VerbH = \harkita -> 
-    let
-      a      = Predef.dp 1 harkita ;
-      harki  = Predef.tk 2 harkita ;
-      harkitse = harki + "tse" ;
-      harkitsi = harki + "tsi" ;
-      u   = case a of {"a" => "u" ; _ => "y"}
-    in
-    mkVerbH
-      harkita
-      (harkitse + "e")
-      (harkitse + "n")
-      (harkitse + "v" + a + "t")
-      (harki    + "tk"+ a + a) 
-      (harkita  +  a + "n")
-      (harkitsi)
-      (harkitsi + "n")
-      (harkitsi + "si")
-      (harki + "nn" + u + "t")
-      (harki + "tt" + u)
-      (harki + "t" + u + "n") ;
-
-
------ tulla,tulee,tulen,tulevat,tulkaa,tullaan,tuli,tulin,tulisi,tullut,tultu,tullun
-
--- For "juosta", "piestä", "nousta", "rangaista", "kävellä", "surra", "panna".
-
-  vJuosta : (_,_,_,_ : Str) -> VerbH = \juosta,juoksen,juossut,juostu -> 
-    let
-      a      = Predef.dp 1 juosta ;
-      t      = last (init juosta) ;
-      juokse = Predef.tk 1 juoksen ;
-      juoksi = Predef.tk 2 juoksen + "i" ;
-      juos   = Predef.tk 2 juosta ;
-      juostun = ifTok Str t "t" (juostu + "n") (init juossut + "n") ;
-    in
-    mkVerbH
-      juosta
-      (juokse + "e")
-      juoksen
-      (juokse + (("v" + a) + "t"))
-      (juos + (("k" + a) + a)) 
-      (juosta + (a + "n")) 
-      juoksi
-      (juoksi + "n")
-      (juoksi + "si")
-      juossut
-      juostu
-      juostun ;
-
--- For "juoda", "syödä", "viedä", "naida", "saada".
-
-  vJuoda : (_,_ : Str) -> VerbH = \juoda, joi -> 
-    let
-      a   = Predef.dp 1 juoda ;
-      juo = Predef.tk 2 juoda ;
-      u   = case a of {"a" => "u" ; _ => "y"}
-    in
-    mkVerbH
-      juoda
-      juo
-      (juo + "n")
-      (juo + (("v" + a) + "t"))
-      (juo + (("k" + a) + a)) 
-      (juoda + (a + "n")) 
-      joi
-      (joi + "n")
-      (joi + "si")
-      (juo + "n" + u + "t")
-      (juo + "t" + u)
-      (juo + "d" + u + "n") ;
-
-} ;
-
-
-
+}
