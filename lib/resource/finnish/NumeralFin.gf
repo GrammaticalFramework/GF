@@ -20,9 +20,9 @@ lin
     (nhn (mkSubst "a" "kolme" "kolme" "kolme" "kolmea" "kolmeen" "kolmi" "kolmi"
     "kolmien" "kolmia" "kolmiin"))
     (ordN "a" "kolmas") ;
-  n4 = co (regN "neljä") (ordN "ä" "neljäs") ;
-  n5 = co (reg3N "viisi" "viiden" "viisiä") (ordN "ä" "viides") ;
-  n6 = co (reg3N "kuusi" "kuuden" "kuusia") (ordN "a" "kuudes") ; 
+  n4 = co (mkN "neljä") (ordN "ä" "neljäs") ;
+  n5 = co (mkN "viisi" "viiden" "viisiä") (ordN "ä" "viides") ;
+  n6 = co (mkN "kuusi" "kuuden" "kuusia") (ordN "a" "kuudes") ; 
   n7 = co 
     (nhn (mkSubst "ä" "seitsemän" "seitsemä" "seitsemä" "seitsemää" 
     "seitsemään" "seitsemi" "seitsemi" "seitsemien" "seitsemiä"
@@ -105,12 +105,12 @@ oper
     "kymmeneen" "kymmeni" "kymmeni" "kymmenien" "kymmeniä" "kymmeniin")) 
     (ordN "ä" "kymmenes") ;
   sataN = co 
-    (nhn (sLukko "sata")) 
+    (mkN "sata") 
     (ordN "a" "sadas") ;
 
   tuhatN = co
-    (nhn (mkSubst "a" "tuhat" "tuhanne" "tuhante" "tuhatta" "tuhanteen"
-    "tuhansi" "tuhansi" "tuhansien" "tuhansia" "tuhansiin"))
+    (mkN "tuhat" "tuhannen" "tuhatta" "ruhantena" "tuhanteen"
+    "tuhansien" "tuhansia" "tuhansina" "tuhansissa" "tuhansiin")
     (ordN "a" "tuhannes")  ;
 
   kymmentaN =

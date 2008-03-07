@@ -71,4 +71,9 @@ concrete ExtraFin of ExtraFinAbs = CatFin **
 
     vai_Conj = {s = "vai" ; n = Sg} ;
 
+
+    CompPartAP ap = {
+      s = \\agr => ap.s ! False ! AN (NCase agr.n Part)
+      } ;
+
 } 

@@ -103,7 +103,8 @@ renameIdentTerm env@(act,imps) t =
         []  -> alt c ("constant not found:" +++ prt c) 
         fs -> case nub [f c | f <- fs]  of
           [tr] -> return tr
-          ts -> return $ Strs $ (cnIC "#conflict") : reverse ts
+          ts@(t:_) -> trace ("WARNING: conflict" +++ unwords (map prt ts)) (return t)
+----          ts -> return $ Strs $ (cnIC "#conflict") : reverse ts
             -- a warning will be generated in CheckGrammar, and the head returned
             -- in next V: 
             -- Bad $ "conflicting imports:" +++ unwords (map prt ts) 
