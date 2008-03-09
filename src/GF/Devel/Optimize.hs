@@ -247,7 +247,8 @@ mkLinDefault :: SourceGrammar -> Type -> Err Term
 mkLinDefault gr typ = do
   case unComputed typ of
     RecType lts -> mapPairsM mkDefField lts >>= (return . Abs strVar . R . mkAssign)
-    _ -> prtBad "linearization type must be a record type, not" typ
+    _ -> liftM (Abs strVar) $ mkDefField typ
+----    _ -> prtBad "linearization type must be a record type, not" typ
  where
    mkDefField typ = case unComputed typ of
      Table p t  -> do
