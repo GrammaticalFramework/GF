@@ -440,8 +440,8 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
                Just vs -> (ty,[t | 
                             (t,_) <- sortBy (\x y -> compare (snd x) (snd y)) 
                                             (Map.assocs vs)])
-               _ -> error $ A.prt ty
-             _ -> error $ A.prt tr
+               _ -> error $ "doVar1" +++ A.prt ty
+             _ -> error $ "doVar2" +++ A.prt tr +++ show (cat,lab) ---- debug
        updateSTM ((tyvs, (tr', tr)):) 
        return tr'
      _ -> GM.composOp doVar tr

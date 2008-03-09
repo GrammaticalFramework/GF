@@ -311,13 +311,15 @@ checkIfStrType st typ = case typ of
 checkIfLinType :: SourceGrammar -> Type -> Check Type
 checkIfLinType st typ0 = do
   typ <- computeLType st typ0
+{- ---- should check that not fun type
   case typ of
     RecType r -> do
       let (lins,ihs) = partition (isLinLabel .fst) r
       --- checkErr $ checkUnique $ map fst r
       mapM_ checkInh ihs
       mapM_ checkLin lins
-    _ -> prtFail "a linearization type must be a record type instead of" typ
+    _ -> prtFail "a linearization type cannot be" typ
+-}
   return typ
 
  where
@@ -1037,7 +1039,8 @@ linTypeOfType cnc m typ = do
      val  <- lookLin mc
      let vars = mkRecType varLabel $ replicate n typeStr
 	 symb = argIdent n cat i
-     rec <- checkErr $ errIn ("extending" +++ prt vars +++ "with" +++ prt val) $
+     rec <- if n==0 then return val else
+            checkErr $ errIn ("extending" +++ prt vars +++ "with" +++ prt val) $
             plusRecType vars val
      return (symb,rec)
    lookLin (_,c) = checks [ --- rather: update with defLinType ?
