@@ -373,7 +373,7 @@ oper
               "ie" | "uo" | "yö" | "ea" | "eä" | 
               "ia" | "iä" | "io" | "iö" | "ja" | "jä"), _ + "n"> => 
            ukot ; --- to protect
-        <_ + ("a" | "o" | "u" | "y" | "ä" | "ö"), _ + "n", _ + ("a" | "ä")> => 
+        <_ + ("a" | "o" | "u" | "y" | "ä" | "ö"), _ + "n"> => 
           dSilakka ukko ukon ukkoja ;  -- auto,auton
         <_ + "mpi", _ + ("emman" | "emmän")> => dSuurempi ukko ;
         <_ + "in", _ + ("imman" | "immän")> => dSuurin ukko ;

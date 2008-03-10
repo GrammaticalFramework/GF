@@ -41,14 +41,14 @@ lin
   buy_V2 = mkV2 (mkV "ostaa") ;
   camera_N = mkN "kamera" ;
   cap_N = mkN "lakki" ;
-  car_N = mk3N "auto" "auton" "autoja" ; -- mkN: audon
+  car_N = mkN "auto" "auton" "autoja" ; -- mkN: audon
   carpet_N = mkN "matto" ;
   cat_N = mkN "kissa" ;
   ceiling_N = mkN "katto" ;
   chair_N = mkN "tuoli" ;
   cheese_N = mkN "juusto" ;
-  child_N = mkN "lapsi" "lapsen" "lapsena" "lasta" "lapseen" 
-            "lapsina" "lapsissa" "lasten" "lapsia" "lapsiin" ;
+  child_N = mkN "lapsi" "lapsen" "lasta" "lapsena" "lapseen" 
+              "lasten" "lapsia" "lapsina" "lapsissa" "lapsiin" ;
   church_N = mkN "kirkko" ;
   city_N = mkN "kaupunki" ;
   clean_A = mkA "puhdas" ;
@@ -109,19 +109,19 @@ lin
   lake_N = mkN "j‰rvi" "j‰rvi‰" ;
   lamp_N = mkN "lamppu" ;
   learn_V2 = 
-    mkV2 (mk12V "oppia" "oppii" "opin" "oppivat" "oppikaa" "opitaan"
-      "oppi" "opin" "oppisi" "oppinut" "opittu" "opitun") ;
+    mkV2 (mk12V "oppia" "opin" "oppii" "oppivat" "oppikaa" "opitaan"
+      "opin" "oppi" "oppisi" "oppinut" "opittu" "opitun") ;
   leather_N = mkN "nahka" ; --- nahan
   leave_V2 = mkV2 (mkV "j‰tt‰‰") ;
   like_V2 = mkV2 (mkV "pit‰‰") elative ;
   listen_V2 = mkV2 (mkV "kuunnella" "kuuntelen" "kuunteli") partitive ;
   live_V = mkV "el‰‰" ;
   long_A = mkA (mkN "pitk‰") "pitempi" "pisin" ;
-  lose_V2 = mkV2 (mkV "h‰vit‰") ; --- hukata
+  lose_V2 = mkV2 (mkV "h‰vit‰" "h‰visi") ; --- hukata
   love_N = mk3N "rakkaus" "rakkauden" "rakkauksia" ;
   love_V2 = mkV2 (mkV "rakastaa") partitive ;
-  man_N = mkN "mies" "miehen" "miehen‰" "miest‰" "mieheen" 
-            "miehin‰" "miehiss‰" "miesten" "miehi‰" "miehiin" ;
+  man_N = mkN "mies" "miehen" "miest‰" "miehen‰" "mieheen" 
+              "miesten" "miehi‰" "miehin‰" "miehiss‰" "miehiin" ; 
   married_A2 = mkA2 (mkA "avioitunut") (postPrep genitive "kanssa") ; ---- infl
   meat_N = mkN "liha" ;
   milk_N = mkN "maito" ;
@@ -134,7 +134,7 @@ lin
   newspaper_N = mkN "sanoma" (mkN "lehti" "lehti‰") ; --- for correct vowel harmony
   oil_N = mkN "ˆljy" ;
   old_A = mkA (mkN "vanha") "vanhempi" "vanhin" ;
-  open_V2 = mkV2 (mkV "avata") ;
+  open_V2 = mkV2 (mkV "avata" "avasi") ;
   paint_V2A = mkV2A (mkV "maalata") accPrep (casePrep translative) ;
   paper_N = mk2N "paperi" "papereita" ;
   paris_PN = mkPN (mkN "Pariisi") ;
@@ -165,8 +165,8 @@ lin
   sea_N = mkN "meri" "meren" "meri‰" "merta" ;
   seek_V2 = mkV2 (mkV "etsi‰") cpartitive ;
   see_V2 = mkV2 (
-    mk12V "n‰hd‰" "n‰kee" "n‰en" "n‰kev‰t" "n‰hk‰‰" "n‰hd‰‰n"
-      "n‰ki" "n‰in" "n‰kisi" "n‰hnyt" "n‰hty" "n‰hdyn") ; 
+    mk12V "n‰hd‰" "n‰en" "n‰kee" "n‰kev‰t" "n‰hk‰‰" "n‰hd‰‰n"
+      "n‰in" "n‰ki" "n‰kisi" "n‰hnyt" "n‰hty" "n‰hdyn") ; 
   sell_V3 = mkV3 (mkV "myyd‰") accPrep (casePrep allative) ;
   send_V3 = mkV3 (mkV "l‰hett‰‰") accPrep (casePrep allative) ;
   sheep_N = mkN "lammas" ;
@@ -207,7 +207,7 @@ lin
   university_N = mkN "yliopisto" ;
   village_N = mkN "kyl‰" ;
   wait_V2 = mkV2 (mkV "odottaa") partitive ;
-  walk_V = mkV "k‰vell‰" ;
+  walk_V = mkV "k‰vell‰" "k‰veli" ;
   warm_A = mkA 
     (mkN "l‰mmin" "l‰mpim‰n" "l‰mpim‰n‰" "l‰mmint‰" "l‰mpim‰‰n" 
          "l‰mpimin‰" "l‰mpimiss‰" "l‰mpimien" "l‰mpimi‰" "l‰mpimiin"
@@ -228,8 +228,8 @@ lin
   young_A = mkA (mkN "nuori" "nuoria") "nuorempi" "nuorin" ;
 
   do_V2 = mkV2 (
-    mk12V "tehd‰" "tekee" "teen" "tekev‰t" "tehk‰‰" "tehd‰‰n"
-      "teki" "tein" "tekisi" "tehnyt" "tehty" "tehdyn") ; 
+    mkV "tehd‰" "teen" "tekee" "tekev‰t" "tehk‰‰" "tehd‰‰n"
+      "tein" "teki" "tekisi" "tehnyt" "tehty" "tehdyn") ; 
 
   now_Adv = mkAdv "nyt" ;
   already_Adv = mkAdv "jo" ;
@@ -283,10 +283,11 @@ lin
   hair_N = mkN "hius" ;
   hand_N = mk3N "k‰si" "k‰den" "k‰si‰" ;
   head_N = mkN "p‰‰" ;
-  heart_N = mk3N "syd‰n" "syd‰men" "syd‰mi‰" ;
+  heart_N = mkN "syd‰n" "syd‰men" "syd‰nt‰" "syd‰men‰" "syd‰meen"
+                "syd‰nten" "syd‰mi‰" "syd‰min‰" "syd‰miss‰" "syd‰miin" ;
   horn_N = mk2N "sarvi" "sarvia" ;
-  husband_N = mkN "mies" "miehen" "miehen‰" "miest‰" "mieheen" 
-            "miehin‰" "miehiss‰" "miesten" "miehi‰" "miehiin" ; 
+  husband_N = mkN "mies" "miehen" "miest‰" "miehen‰" "mieheen" 
+                  "miesten" "miehi‰" "miehin‰" "miehiss‰" "miehiin" ; 
   ice_N = mkN "j‰‰" ;
   knee_N = mk2N "polvi" "polvia" ;
   leaf_N = mk2N "lehti" "lehti‰" ;
@@ -352,11 +353,12 @@ lin
   split_V2 = mkV2 (mk2V "halkaista" "halkaisi") ;
   squeeze_V2 = mkV2 (mkV "puristaa") cpartitive ;
   stab_V2 = mkV2 (mkV "pist‰‰") cpartitive ;
-  stand_V = mk12V "seist‰" "seisoo" "seison" "seisovat" "seisk‰‰" "seist‰‰n"
-      "seisoi" "seisoin" "seisoisi" "seissyt" "seisty" "seistyn" ; --- *seisoiv‰t
+  stand_V = mk12V "seist‰" "seison" "seisoo" "seisovat" "seisk‰‰" "seist‰‰n"
+      "seisoin" "seisoi" "seisoisi" "seissyt" "seisty" "seistyn" ; --- *seisoiv‰t
   suck_V2 = mkV2 (mkV "ime‰") cpartitive ;
-  swell_V = mk12V "turvota" "turpoaa" "turpoan" "turpoavat" "turvotkaa" "turvotaan"
-      "turposi" "turposin" "turpoaisi" "turvonnut" "turvottu" "turvotun" ;
+  swell_V = mkV "turvota" "turposi" ;
+--  swell_V = mk12V "turvota" "turpoaa" "turpoan" "turpoavat" "turvotkaa" "turvotaan"
+--      "turposi" "turposin" "turpoaisi" "turvonnut" "turvottu" "turvotun" ;
   swim_V = mkV "uida" "uin" "ui" ;
   think_V = mkV "ajatella" "ajattelen" "ajatteli" ;
   throw_V2 = mkV2 (mkV "heitt‰‰") ;
