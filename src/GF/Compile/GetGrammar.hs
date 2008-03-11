@@ -29,6 +29,7 @@ import qualified GF.Source.AbsGF as A
 import GF.Source.SourceToGrammar
 ---- import Macros
 ---- import Rename
+import GF.Text.UTF8 ----
 import GF.Infra.Option
 --- import Custom
 import GF.Source.ParGF
@@ -56,7 +57,10 @@ getSourceModule opts file0 = do
       -- ioeIO $ putStrLn $ "preproc" +++ cmd
       return tmp
     _ -> return file0
-  string    <- readFileIOE file
+  string0    <- readFileIOE file
+  let string = case getOptVal opts uniCoding of
+        Just "utf8" -> decodeUTF8 string0
+        _ -> string0
   let tokens = myLexer string
   mo1  <- ioeErr $ {- err2err $ -} pModDef tokens
   ioeErr $ transModDef mo1
