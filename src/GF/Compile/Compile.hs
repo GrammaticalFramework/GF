@@ -53,6 +53,7 @@ import GF.Canon.GetGFC
 
 import GF.Data.Operations
 import GF.Infra.UseIO
+import GF.Text.UTF8 ----
 import GF.System.Arch
 
 import Control.Monad
@@ -338,9 +339,12 @@ generateModuleCode opts path minfo@(name,info) = do
       let (file,out) = (gfrFile pname, prGrammar (MGrammar [rminfo]))
       putp ("  wrote file" +++ file) $ ioeIO $ writeFile file $ compactPrint out
     _ -> return ()
+  let encode = case getOptVal opts uniCoding of
+        Just "utf8" -> encodeUTF8
+        _ -> id
   (file,out) <- do
       code <- return $ MkGFC.prCanonModInfo minfo'
-      return (gfcFile pname, code)
+      return (gfcFile pname, encode code)
   if emit && nomulti ---- && isCompilable info 
      then putp  ("  wrote file" +++ file) $ ioeIO $ writeFile file out
      else putpp ("no need to save module" +++ prt name) $ return ()
