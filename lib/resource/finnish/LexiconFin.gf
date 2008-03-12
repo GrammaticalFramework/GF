@@ -18,7 +18,7 @@ lin
   bank_N = mkN "pankki" ;
   beautiful_A = mkA (mkN "kaunis") "kauniimpi" "kaunein" ;
   become_VA = mkVA (mkV "tulla") (casePrep translative) ;
-  beer_N = mkN "olut" ;
+  beer_N = mkN "olut" "oluita" ;
   beg_V2V = mkV2 (mk2V "pyytää" "pyysi") (casePrep partitive) ;
   big_A = mkA (mkN "suuri" "suuria") "suurempi" "suurin" ;
   bike_N = mkN "polkupyörä" ; --- for correct vowel harmony
@@ -174,7 +174,7 @@ lin
   shirt_N = mkN "paita" ;
   shoe_N = mkN "kenkä" ;
   shop_N = mkN "kauppa" ;
-  short_A = mkA "lyhyt" ;
+  short_A = mkA (mkN "lyhyt" "lyhyitä") ;
   silver_N = mkN "hopea" ;
   sister_N = mkN "sisko" ;
   sleep_V = mkV "nukkua" ;
@@ -197,7 +197,7 @@ lin
   teach_V2 = mkV2 (mkV "opettaa") ;
   television_N = mk2N "televisio" "televisioita" ;
   thick_A = mkA "paksu" ;
-  thin_A = mkA "ohut" ;
+  thin_A = mkA (mkN "ohut" "ohuita") ;
   train_N = mkN "juna" ;
   travel_V = mkV "matkustaa" ;
   tree_N = mkN "puu" ;

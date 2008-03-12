@@ -299,7 +299,7 @@ oper
       _ + ("i" | "u") + "n" => dLiitin ukko (renka + "men") ;
       _ + ("ton" | "tön") => dOnneton ukko ;
       _ + "e" => dRae ukko (rake + "en") ;
-      _ + ("ut" | "yt") => dRae ukko (ukk + "en") ;
+      _ + ("ut" | "yt") => dOttanut ukko ;
       _ + ("as" | "äs") => dRae ukko (renka + last renka + "n") ;
       _ + ("uus" | "yys" | "eus" | "eys") => dLujuus ukko ;
       _ + "s" => dJalas ukko ; 
@@ -353,6 +353,7 @@ oper
           dArpi ukko (init (weakGrade ukko) + "en") ;
         <_ + "i", _ + ("eita" | "eitä")> => 
           dTohtori ukko ;
+        <_ + ("ut" | "yt"),_ + ("uita" | "yitä")>  => dRae ukko (init ukko + "en") ;
         <_ + "e", nuk + ("eja" | "ejä")> => 
           dNukke ukko ukon ;
         <_, _ + ":" + _ + ("a" | "ä")> => dSDP ukko ;
@@ -446,7 +447,7 @@ oper
     regAdjective 
       suuri 
       (init (suuri.s ! NCase Sg Gen) + "mpi")  ---- to check
-      (init (suuri.s ! NCase Pl Part) + "n") ; ----
+      (suuri.s ! NInstruct) ; ----
     
 
 
