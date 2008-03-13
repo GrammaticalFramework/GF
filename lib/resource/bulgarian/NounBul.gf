@@ -123,7 +123,7 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
       g = cn.g
     } ;
 
-    SentCN cn sc = {s = \\nf => cn.s ! nf ++ sc.s; g=cn.g} ;
+    SentCN cn sc = {s = \\nf => cn.s ! nf ++ sc.s; g=DNeut} ;
 
     ApposCN cn np = {s = \\nf => cn.s ! nf ++ np.s ! RSubj; g=cn.g} ;
 }
