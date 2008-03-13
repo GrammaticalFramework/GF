@@ -107,8 +107,8 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
     UseN2 noun = noun ;
     UseN3 noun = noun ;
 
-    ComplN2 f x = {s = \\nf => f.s ! nf ++ f.c2 ++ x.s ! RObj Acc; g=f.g} ;
-    ComplN3 f x = {s = \\nf => f.s ! nf ++ f.c2 ++ x.s ! RObj Acc; c2 = f.c3; g=f.g} ;
+    ComplN2 f x = {s = \\nf => f.s ! nf ++ f.c2.s ++ x.s ! RObj f.c2.c; g=f.g} ;
+    ComplN3 f x = {s = \\nf => f.s ! nf ++ f.c2.s ++ x.s ! RObj f.c2.c; c2 = f.c3; g=f.g} ;
 
     AdjCN ap cn = {
       s = \\nf => preOrPost ap.isPre (ap.s ! nform2aform nf cn.g) (cn.s ! (indefNForm nf)) ;

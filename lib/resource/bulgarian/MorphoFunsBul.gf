@@ -76,6 +76,35 @@ oper
   mkVA  v = v ** {lock_VA = <>} ;
 
   
+  mkV2Q : V -> Prep -> V2Q ;  
+  mkV2Q v p = prepV2 v p ** {lock_V2 = <>} ;
+
+
+--2 Nouns
+
+--3 Two-place Nouns
+--
+
+  prepN2 : N -> Prep -> N2 ;
+  prepN2 n p = {s = n.s; g = n.g; c2 = p; lock_N2 = <>} ;
+  
+  dirN2 : N -> N2 ;
+  dirN2 n = prepN2 n noPrep ;
+
+
+--3 Three-place Nouns
+--
+
+  prepN3 : N -> Prep -> Prep -> N3 ;
+  prepN3 n p q = {s = n.s; g = n.g; c2 = p; c3 = q; lock_N3 = <>} ;
+  
+  dirN3 : N -> Prep -> N3 ;
+  dirN3 n p = prepN3 n noPrep p ;
+  
+  dirdirN3 : N -> N3 ;
+  dirdirN3 n = dirN3 n noPrep ;
+
+
 --2 Prepositions
 --
 -- A preposition as used for rection in the lexicon, as well as to
