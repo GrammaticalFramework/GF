@@ -6,7 +6,7 @@ concrete AdjectiveBul of Adjective = CatBul ** open ResBul, Prelude in {
       } ;
 
     ComparA a np = {
-      s = \\aform => "по" ++ "-" ++ a.s ! aform ++ "от" ++ np.s ! RSubj ; 
+      s = \\aform => "по" ++ "-" ++ a.s ! aform ++ "от" ++ np.s ! RObj Acc ; 
       isPre = True
       } ;
 
