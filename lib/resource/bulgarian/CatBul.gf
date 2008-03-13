@@ -107,8 +107,8 @@ concrete CatBul of Cat = open ResBul, Prelude, (R = ParamX) in {
     A2 = {s : AForm => Str ; c2 : Str} ;
     
     N = {s : NForm => Str; g : DGender} ;
-    N2 = {s : NForm => Str; g : DGender} ** {c2 : Str} ;
-    N3 = {s : NForm => Str; g : DGender} ** {c2,c3 : Str} ;
+    N2 = {s : NForm => Str; g : DGender} ** {c2 : Preposition} ;
+    N3 = {s : NForm => Str; g : DGender} ** {c2,c3 : Preposition} ;
     PN = {s : Str; g : Gender} ;
 
 
