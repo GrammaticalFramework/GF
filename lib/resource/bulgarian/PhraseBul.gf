@@ -12,7 +12,10 @@ concrete PhraseBul of Phrase = CatBul ** open Prelude, ResBul in {
     UttIP ip = {s = ip.s ! RSubj} ;
     UttIAdv iadv = {s = iadv.s1} ;
     UttNP np = {s = np.s ! RSubj} ;
-    UttVP vp = {s = vp.ad ! False ++ "да" ++ vp.s ! Pres ! Simul ! Pos ! {gn=GSg Masc; p=P1} ! False} ;
+    UttVP vp = {s = vp.ad ! False ++
+                    "да" ++ 
+                    vp.s ! Pres ! Simul ! Pos ! {gn=GSg Masc; p=P1} ! False ++ 
+                    vp.s2 ! {gn=GSg Masc; p=P1}} ;
     UttAdv adv = adv ;
 
     NoPConj = {s = []} ;
