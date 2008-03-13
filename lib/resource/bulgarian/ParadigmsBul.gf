@@ -319,7 +319,7 @@ oper
                            (v0+"и")
                            (v0+"-")
                            (v0+"ю")
-                           DMasc ;
+                           DMascPersonal ;
   mkN033 : Str -> N ;
   mkN033 base = let v0 = tk 2 base
                 in mkNoun (v0+"ен")
