@@ -24,7 +24,7 @@ concrete StructuralBul of Structural = CatBul **
   either7or_DConj = sd2 "или" "или" ** {n = Sg} ;
   everybody_NP = mkNP "всеки" (GSg Masc) P3 ;
   every_Det = mkDeterminerSg "всеки" "всяка" "всяко";
-  everything_NP = mkNP "всяко" (GSg Neut) P3 ;
+  everything_NP = mkNP "всичко" (GSg Neut) P3 ;
   everywhere_Adv = ss "навсякъде" ;
   few_Det = {s = \\_,_ => "няколко"; n = Pl; countable = True; spec = Indef} ;
 ---  first_Ord = ss "first" ; DEPRECATED
