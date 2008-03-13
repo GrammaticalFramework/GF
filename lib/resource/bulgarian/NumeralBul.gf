@@ -30,15 +30,17 @@ lin pot01 =
                           NCard DFemDef             => "едната" ;
                           NCard DNeutIndef          => "едно" ;
                           NCard DNeutDef            => "едното" ;
-                          NOrd  aform               => (mkAdjective "първи"
-                                                                    "първия"
-                                                                    "първият"
-                                                                    "първа"
-                                                                    "първата"
-                                                                    "първо"
-                                                                    "първото"
-                                                                    "първи"
-                                                                    "първите").s ! aform
+                          NOrd  aform               => case aform of {
+                                                         ASg Masc Indef => "първи" ;
+                                                         ASg Masc Def   => "първия" ;
+                                                         ASgMascDefNom  => "първият" ;
+                                                         ASg Fem  Indef => "първа" ;
+                                                         ASg Fem  Def   => "първата" ;
+                                                         ASg Neut Indef => "първо" ;
+                                                         ASg Neut Def   => "първото" ;
+                                                         APl Indef      => "първи" ;
+                                                         APl Def        => "първите"
+                                                       }
                         } ;
              teen    => mkCardOrd "единадесет" "единадесетима" "единадесет" "единадесети" ;
              ten     => mkCardOrd "десет"      "десетима"      "десет"      "десети" ;
@@ -119,7 +121,7 @@ lin pot3plus n m = {
     mkDig : Str -> TDigit = \c -> mk2Dig c (c + "ти") ;
 
     mk3Dig : Str -> Str -> Number -> TDigit = \c,o,n -> {
-      s = table {NCard _ => c ; NOrd aform => (regAdjective o).s ! aform} ;
+      s = table {NCard _ => c ; NOrd aform => regAdjective o ! aform} ;
       n = n
       } ;
 
