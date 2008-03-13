@@ -281,10 +281,10 @@ resource ResBul = ParamX ** open Prelude in {
         VImperfect Pl P1  => "бяхме" ++ se ; 
         VImperfect Pl P2  => "бяхте" ++ se ;
         VImperfect Pl P3  => "бяха" ++ se ;
-        VPerfect    aform => (regAdjective "бил").s ! aform ++ se ;
-        VPluPerfect aform => (regAdjective "бил").s ! aform ++ se ;
-        VPassive    aform => (regAdjective "бъден").s ! aform ++ se ;
-        VPresPart   aform => (regAdjective "бъдещ").s ! aform ++ se ;
+        VPerfect    aform => regAdjective "бил" ! aform ++ se ;
+        VPluPerfect aform => regAdjective "бил" ! aform ++ se ;
+        VPassive    aform => regAdjective "бъден" ! aform ++ se ;
+        VPresPart   aform => regAdjective "бъдещ" ! aform ++ se ;
         VImperative Sg    => "бъди" ++ se ;
         VImperative Pl    => "бъдете" ++ se ;
         VGerund           => "бидейки" ++ se
@@ -308,10 +308,10 @@ resource ResBul = ParamX ** open Prelude in {
         VImperfect Pl P1  => "бъдехме" ++ se ; 
         VImperfect Pl P2  => "бъдехте" ++ se ;
         VImperfect Pl P3  => "бъдеха" ++ se ;
-        VPerfect    aform => (regAdjective "бил").s ! aform ++ se ;
-        VPluPerfect aform => (regAdjective "бъдел").s ! aform ++ se ;
-        VPassive    aform => (regAdjective "бъден").s ! aform ++ se ;
-        VPresPart   aform => (regAdjective "бъдещ").s ! aform ++ se ;
+        VPerfect    aform => regAdjective "бил" ! aform ++ se ;
+        VPluPerfect aform => regAdjective "бъдел" ! aform ++ se ;
+        VPassive    aform => regAdjective "бъден" ! aform ++ se ;
+        VPresPart   aform => regAdjective "бъдещ" ! aform ++ se ;
         VImperative Sg    => "бъди" ++ se ;
         VImperative Pl    => "бъдете" ++ se ;
         VGerund           => "бъдейки" ++ se
@@ -364,95 +364,18 @@ resource ResBul = ParamX ** open Prelude in {
               _ => s
             };
 
-    mkAdjective : (_,_,_,_,_,_,_,_,_ : Str) -> {s : AForm => Str} = 
-      \dobyr,dobria,dobriat,dobra,dobrata,dobro,dobroto,dobri,dobrite -> {
-      s = table {
-        ASg Masc Indef => dobyr ;
-        ASg Masc Def   => dobria ;
-        ASgMascDefNom  => dobriat ;
-        ASg Fem  Indef => dobra ;
-        ASg Fem  Def   => dobrata ;
-        ASg Neut Indef => dobro ;
-        ASg Neut Def   => dobroto ;
-        APl Indef      => dobri ;
-        APl Def        => dobrite
-        }
-      } ;
-
-    regAdjective : Str -> {s : AForm => Str} = 
-      \base -> mkAdjective base 
-                           (base+"ия")
-                           (base+"ият")
-                           (base+"a")
-                           (base+"ата")
-                           (base+"о")
-                           (base+"ото")
-                           (ia2e base+"и")
-                           (ia2e base+"ите") ;
-
-    mkVerb : (_,_,_,_,_,_,_,_,_:Str) -> Verb = 
-      \cheta,chete,chetoh,chetqh,chel,chetql,cheten,chetqst,cheti -> {
-      s = table {
-            VPres      Sg P1 => cheta;
-            VPres      Sg P2 => chete + "ш";
-            VPres      Sg P3 => chete;
-            VPres      Pl P1 => case chete of {
-                                  _ + ("а"|"я") => chete + "ме";
-                                  _             => chete + "м"
-                                };
-            VPres      Pl P2 => chete + "те";
-            VPres      Pl P3 => case cheta of {
-                                  vika + "м" => case chete of {
-                                                  dad + "е" => dad + "ат";
-                                                  vika      => vika + "т"
-                                                };
-                                  _          => cheta + "т"
-                                };
-            VAorist    Sg P1 => chetoh;
-            VAorist    Sg _  => case chetoh of {
-                                  chet+"ох" => chete;
-                                  zova+ "х" => zova
-                                };
-            VAorist    Pl P1 => chetoh + "ме";
-            VAorist    Pl P2 => chetoh + "те";
-            VAorist    Pl P3 => chetoh + "а";
-            VImperfect Sg P1 => chetqh;
-            VImperfect Sg _  => case chete of {
-	                          rabot + "и" => rabot + "eше";
-	                          _           => chete + "ше"
-                                };
-            VImperfect Pl P1 => chetqh + "ме";
-            VImperfect Pl P2 => chetqh + "те";
-            VImperfect Pl P3 => chetqh + "а";
-            VPerfect aform   =>let chel1 : Str =
-                                     case chel of {
-                                       pas+"ъл" => pas+"л";
-                                       _        => chel
-                                     }
-                               in (mkAdjective chel
-                                               (chel+"ия")
-                                               (chel+"ият")
-                                               (chel1+"a")
-                                               (chel1+"ата")
-                                               (chel1+"о")
-                                               (chel1+"ото")
-                                               (ia2e chel1+"и")
-                                               (ia2e chel1+"ите")).s ! aform ;
-            VPluPerfect aform => (regAdjective chetql ).s ! aform ;
-            VPassive    aform => (regAdjective cheten ).s ! aform ;
-            VPresPart   aform => (regAdjective chetqst).s ! aform ;
-            VImperative Sg => cheti;
-            VImperative Pl => case cheti of {
-	                        chet + "и" => chet + "ете";
-	                        ela        => ela  + "те"
-                              };
-            VGerund => case chete of {
-                         rabot + "и" => rabot + "ейки";
-                         _           => chete + "йки"
-                       }
-          } ;
-      vtype = VNormal
-    } ;
+  regAdjective : Str -> AForm => Str = 
+    \base -> table {
+          ASg Masc Indef => base  ;
+          ASg Masc Def   => (base+"ия") ;
+          ASgMascDefNom  => (base+"ият") ;
+          ASg Fem  Indef => (base+"a") ;
+          ASg Fem  Def   => (base+"ата") ;
+          ASg Neut Indef => (base+"о") ;
+          ASg Neut Def   => (base+"ото") ;
+          APl Indef      => (ia2e base+"и") ;
+          APl Def        => (ia2e base+"ите")
+        };
     
 -- For $Sentence$.
 
@@ -497,15 +420,17 @@ resource ResBul = ParamX ** open Prelude in {
                  NCard dg   => digitGenderSpecies dva dvama dve ! dg ;
                  NOrd aform => let vtora = init vtori + "а" ;
                                    vtoro = init vtori + "о"
-                               in (mkAdjective vtori
-                                               (vtori+"я")
-                                               (vtori+"ят")
-                                               vtora
-                                               (vtora+"та")
-                                               vtoro
-                                               (vtoro+"то")
-                                               vtori
-                                               (vtori+"те")).s ! aform
+                               in case aform of {
+                                    ASg Masc Indef => vtori ;
+                                    ASg Masc Def   => vtori+"я" ;
+                                    ASgMascDefNom  => vtori+"ят" ;
+                                    ASg Fem  Indef => vtora ;
+                                    ASg Fem  Def   => vtora+"та" ;
+                                    ASg Neut Indef => vtoro ;
+                                    ASg Neut Def   => vtoro+"то" ;
+                                    APl Indef      => vtori ;
+                                    APl Def        => vtori+"те"
+                                  }
                } ;
 
     digitGenderSpecies : Str -> Str -> Str -> DGenderSpecies => Str =
@@ -548,7 +473,17 @@ resource ResBul = ParamX ** open Prelude in {
             RObj Dat => mi ;
             RVoc     => az
           } ;
-      gen = (mkAdjective moj moia moiat moia_ moiata moe moeto moi moite).s ;
+      gen = table {
+              ASg Masc Indef => moj ;
+              ASg Masc Def   => moia ;
+              ASgMascDefNom  => moiat ;
+              ASg Fem  Indef => moia_ ;
+              ASg Fem  Def   => moiata ;
+              ASg Neut Indef => moe ;
+              ASg Neut Def   => moeto ;
+              APl Indef      => moi ;
+              APl Def        => moite
+            } ;
       a = {
            gn = gn ;
            p = p
