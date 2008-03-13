@@ -20,12 +20,26 @@ oper
   mkAdA : Str -> AdA = \x -> ss x ** {lock_AdA = <>} ;
 
 
---2 Two-place adjectives
+--2 Adjectives
 --
--- Two-place adjectives need a preposition for their second argument.
+
+  AS, A2S, AV : Type = A ;
+  A2V : Type = A2 ;
 
   mkA2 : A -> Prep -> A2 ;
   mkA2 a p = a ** {c2 = p.s ; lock_A2 = <>} ;
+  
+  mkAS  : A -> AS ;
+  mkAS  v = v ** {lock_A = <>} ;
+  
+  mkA2S : A -> Prep -> A2S ;
+  mkA2S v p = mkA2 v p ** {lock_A = <>} ;
+  
+  mkAV  : A -> AV ;
+  mkAV  v = v ** {lock_A = <>} ;
+  
+  mkA2V : A -> Prep -> A2V ;
+  mkA2V v p = mkA2 v p ** {lock_A2 = <>} ;
 
 
 --2 Verbs
@@ -36,6 +50,14 @@ oper
 
   phrasalV : V -> Case -> V ;
   phrasalV v c = {s = v.s; vtype = VPhrasal c; lock_V=<>} ;
+
+
+--3 Zero-place verbs
+--
+
+  V0 : Type = V ;
+  mkV0  : V -> V0 ;
+  mkV0  v = v ** {lock_V = <>} ;
 
 
 --3 Two-place verbs
@@ -66,6 +88,20 @@ oper
 --3 Other verbs
 --
 
+  V2S, V2V, V2Q : Type = V2 ;
+
+  mkV2S : V -> Prep -> V2S ;
+  mkV2S v p = prepV2 v p ** {lock_V2 = <>} ;
+  
+  mkV2V : V -> Prep -> Prep -> V2V ;
+  mkV2V v p t = prepV2 v p ** {s4 = t ; lock_V2 = <>} ;
+  
+  mkV2A : V -> Prep -> V2A ;
+  mkV2A v p = prepV2 v p ** {lock_V2A = <>} ;
+  
+  mkV2Q : V -> Prep -> V2Q ;
+  mkV2Q v p = prepV2 v p ** {lock_V2 = <>} ;
+  
   mkVS  : V -> VS ;
   mkVS  v = v ** {lock_VS = <>} ;
   
@@ -75,6 +111,11 @@ oper
   mkVA : V -> VA ;
   mkVA  v = v ** {lock_VA = <>} ;
 
+  mkV2A : V -> Prep -> V2A ;
+  mkV2A v p = prepV2 v p ** {lock_V2A = <>} ;
+  
+  mkVQ  : V -> VQ ;
+  mkVQ  v = v ** {lock_VQ = <>} ;
   
   mkV2Q : V -> Prep -> V2Q ;  
   mkV2Q v p = prepV2 v p ** {lock_V2 = <>} ;
