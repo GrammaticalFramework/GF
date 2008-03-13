@@ -17,7 +17,7 @@ lin
   bad_A = mkA076 "лош" ;
   bank_N = mkN041 "банка" ;
   beautiful_A = mkA076 "красив" ;
-  become_VA = mkVA (mkV186 "ставам") ;
+  become_VA = mkVA (mkV152 "стана") ;
   beer_N = mkN041 "бира" ;
   beg_V2V = mkV2V (mkV173 "моля") noPrep zaP ;
   big_A = mkA081 "голям" ;
