@@ -58,7 +58,7 @@ lin
   country_N = mkN041 "държава" ;
   cousin_N = mkN007a "братовчед" ;
   cow_N = mkN041 "крава" ;
-  die_V = mkV150a "умра" ;
+  die_V = mkV186 "умирам" ;
   dirty_A = mkA079 "мръсен" ;
   distance_N3 = prepN3 (mkN072 "разстояние") otP doP ;
   doctor_N = mkN007a "доктор" ;
