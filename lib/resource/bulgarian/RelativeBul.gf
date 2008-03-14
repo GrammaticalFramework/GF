@@ -4,7 +4,7 @@ concrete RelativeBul of Relative = CatBul ** open ResBul in {
 
   lin
     RelCl cl = {
-      s = \\t,a,p,gn => whichRP ! gn ++ cl.s ! t ! a ! p ! Main ; 
+      s = \\t,a,p,gn => suchRP ! gn ++ "че" ++ cl.s ! t ! a ! p ! Main ; 
       role = RSubj
       } ;
 

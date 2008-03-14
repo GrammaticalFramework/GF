@@ -528,4 +528,12 @@ resource ResBul = ParamX ** open Prelude in {
                 GSg Neut => "което" ;
                 GPl      => "които"
               } ;
+
+    suchRP : GenNum => Str
+           = table {
+               GSg Masc => "такъв" ;
+               GSg Fem  => "такава" ;
+               GSg Neut => "такова" ;
+               GPl      => "такива"
+             } ;
 }
