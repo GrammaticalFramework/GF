@@ -12,7 +12,8 @@ concrete GrammarBul of Grammar =
   ConjunctionBul,
   PhraseBul,
   TextBul,
-  StructuralBul
+  StructuralBul,
+  IdiomBul
   ** {
 
 flags startcat = Phr ; unlexer = text ; lexer = text ;
