@@ -5,7 +5,7 @@ concrete AdverbBul of Adverb = CatBul ** open ResBul, Prelude in {
       s = cadv.s ++ "по" ++ "-" ++ a.s ! ASg Neut Indef ++ "от" ++ np.s ! RObj Acc
       } ;
     ComparAdvAdjS cadv a s = {
-      s = cadv.s ++ "по" ++ "-" ++ a.s ! ASg Neut Indef ++ "от" ++ s.s
+      s = cadv.s ++ "по" ++ "-" ++ a.s ! ASg Neut Indef ++ "от" ++ "колкото" ++ s.s
       } ;
 
     PrepNP prep np = {s = prep.s ++ np.s ! RObj prep.c} ;
