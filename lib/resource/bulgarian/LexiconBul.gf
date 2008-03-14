@@ -359,7 +359,7 @@ lin
   
 oper
   zaP = mkPrep "за" Acc ;
-  naP = mkPrep "на" Dat ;
+  naP = mkPrep [] Dat ;
   otP = mkPrep "от" Acc ;
   doP = mkPrep "до" Acc ;
   sP  = mkPrep (pre { "с" ; 
