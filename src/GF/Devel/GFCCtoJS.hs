@@ -46,6 +46,9 @@ concrete2js :: String -> CId -> (CId,D.Concr) -> [JS.Element]
 concrete2js start (CId a) (CId c, cnc) =
     [JS.ElStmt $ JS.SDeclOrExpr $ JS.Decl [JS.DInit l (new "Concrete" [JS.EVar (JS.Ident a)])]] 
     ++ concatMap (cncdef2js l) ds
+    ++ [JS.ElStmt $ JS.SDeclOrExpr $ JS.DExpr $ JS.ECall (JS.EMember (JS.EVar l) (JS.Ident "addRule")) [JS.EStr "Int", JS.EFun [children] [JS.SReturn $ new "Arr" [JS.EIndex (JS.EVar children) (JS.EInt 0)]]]]
+    ++ [JS.ElStmt $ JS.SDeclOrExpr $ JS.DExpr $ JS.ECall (JS.EMember (JS.EVar l) (JS.Ident "addRule")) [JS.EStr "Float", JS.EFun [children] [JS.SReturn $ new "Arr" [JS.EIndex (JS.EVar children) (JS.EInt 0)]]]]
+    ++ [JS.ElStmt $ JS.SDeclOrExpr $ JS.DExpr $ JS.ECall (JS.EMember (JS.EVar l) (JS.Ident "addRule")) [JS.EStr "String", JS.EFun [children] [JS.SReturn $ new "Arr" [JS.EIndex (JS.EVar children) (JS.EInt 0)]]]]
     ++ fromMaybe [] (fmap (parser2js start l) (D.parser cnc))
   where 
    l  = JS.Ident c
@@ -67,7 +70,7 @@ term2js l t = f t
       D.K t            -> tokn2js t
       D.V i            -> JS.EIndex (JS.EVar children) (JS.EInt i)
       D.C i            -> new "Int" [JS.EInt i]
-      D.F (CId f)    -> JS.ECall (JS.EMember (JS.EVar l) (JS.Ident "rule")) [JS.EStr f, JS.EVar children]
+      D.F (CId f)      -> JS.ECall (JS.EMember (JS.EVar l) (JS.Ident "rule")) [JS.EStr f, JS.EVar children]
       D.FV xs          -> new "Variants" (map f xs)
       D.W str x        -> new "Suffix" [JS.EStr str, f x]
       D.RP x y         -> new "Rp" [f x, f y]
@@ -105,9 +108,26 @@ frule2js :: FRule -> JS.Expr
 frule2js (FRule n args res lins) = 
     new "Rule" [JS.EInt res, name2js n, JS.EArray (map JS.EInt args), lins2js lins]
 
--- FIXME: inclue full profile
 name2js :: FName -> JS.Expr
-name2js (Name (CId f) _) = JS.EStr f
+name2js n = case n of
+              Name (CId "_") [p] -> fromProfile p
+              Name f ps          -> new "FunApp" $ [JS.EStr $ prCId f, JS.EArray (map fromProfile ps)]
+  where
+    fromProfile :: Profile (SyntaxForest CId) -> JS.Expr
+    fromProfile (Unify []) = new "MetaVar" []
+    fromProfile (Unify [x]) = daughter x
+    fromProfile (Unify args) = new "Unify" [JS.EArray (map daughter args)]
+    fromProfile (Constant forest) = fromSyntaxForest forest
+
+    daughter i = new "Arg" [JS.EInt i]
+
+    fromSyntaxForest :: SyntaxForest CId -> JS.Expr
+    fromSyntaxForest FMeta = new "MetaVar" []
+    -- FIXME: is there always just one element here?
+    fromSyntaxForest (FNode n [args]) = new "FunApp" $ [JS.EStr $ prCId n, JS.EArray (map fromSyntaxForest args)]
+    fromSyntaxForest (FString s) = new "Lit" $ [JS.EStr s]
+    fromSyntaxForest (FInt i) = new "Lit" $ [JS.EInt $ fromIntegral i]
+    fromSyntaxForest (FFloat f) = new "Lit" $ [JS.EDbl f]
 
 lins2js :: Array FIndex (Array FPointPos FSymbol) -> JS.Expr
 lins2js ls = JS.EArray [ JS.EArray [ sym2js s | s <- Array.elems l] | l <- Array.elems ls]
