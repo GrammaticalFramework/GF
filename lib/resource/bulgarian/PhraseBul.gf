@@ -14,8 +14,8 @@ concrete PhraseBul of Phrase = CatBul ** open Prelude, ResBul in {
     UttNP np = {s = np.s ! RSubj} ;
     UttVP vp = {s = vp.ad ! False ++
                     "да" ++ 
-                    vp.s ! Pres ! Simul ! Pos ! {gn=GSg Masc; p=P1} ! False ++ 
-                    vp.s2 ! {gn=GSg Masc; p=P1}} ;
+                    vp.s ! Pres ! Simul ! Pos ! agrP3 (GSg Neut) ! False ++ 
+                    vp.s2 ! agrP3 (GSg Neut)} ;
     UttAdv adv = adv ;
 
     NoPConj = {s = []} ;
