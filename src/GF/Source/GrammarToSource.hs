@@ -96,17 +96,17 @@ trAnyDef (i,info) = let i' = tri i in case info of
 
   ResOverload tysts -> 
     [P.DefOper [P.DDef [mkName i'] (
-      P.EApp (P.EIdent $ identC "overload") 
+      P.EApp (P.EIdent $ tri $ identC "overload") 
         (P.ERecord [P.LDFull [i'] (trt ty) (trt fu) | (ty,fu) <- tysts]))]]
 
   CncCat (Yes ty) Nope _ -> 
     [P.DefLincat [P.PrintDef [mkName i'] (trt ty)]] 
   CncCat pty ptr ppr -> 
     [P.DefLindef [trDef i' pty ptr]] ++
-    [P.DefPrintCat [P.PrintDef [mkName i] (trt pr)] | Yes pr <- [ppr]]
+    [P.DefPrintCat [P.PrintDef [mkName i'] (trt pr)] | Yes pr <- [ppr]]
   CncFun _ ptr ppr -> 
     [P.DefLin [trDef i' nope ptr]] ++ 
-    [P.DefPrintFun [P.PrintDef [mkName i] (trt pr)] | Yes pr <- [ppr]]
+    [P.DefPrintFun [P.PrintDef [mkName i'] (trt pr)] | Yes pr <- [ppr]]
 {-
   ---- encoding of AnyInd without changing syntax. AR 20/9/2007
   AnyInd s b -> 
@@ -116,7 +116,7 @@ trAnyDef (i,info) = let i' = tri i in case info of
   _ -> [] 
 
 
-trDef :: Ident -> Perh Type -> Perh Term -> P.Def
+trDef :: P.PIdent -> Perh Type -> Perh Term -> P.Def
 trDef i pty ptr = case (pty,ptr) of
   (Nope,     Nope) -> P.DDef  [mkName i] (P.EMeta) ---
   (_,        Nope) -> P.DDecl [mkName i] (trPerh pty)
@@ -131,7 +131,7 @@ trPerh p = case p of
 
 trFlag :: Option -> P.TopDef
 trFlag o = case o of
-  Opt (f,[x]) -> P.DefFlag [P.FlagDef (identC f) (identC x)]
+  Opt (f,[x]) -> P.DefFlag [P.FlagDef (tri $ identC f) (tri $ identC x)]
   _ -> P.DefFlag [] --- warning?
 
 trt :: Term -> P.Exp 
@@ -207,7 +207,7 @@ trp p = case p of
     PC c a -> P.PC (tri c) (map trp a)
     PP p c [] -> P.PQ (tri p) (tri c)
     PP p c a -> P.PQC (tri p) (tri c) (map trp a)
-    PR r -> P.PR [P.PA [trLabelIdent l] (trp p) | (l,p) <- r]
+    PR r -> P.PR [P.PA [tri $ trLabelIdent l] (trp p) | (l,p) <- r]
     PString s -> P.PStr s
     PInt i -> P.PInt i
     PFloat i -> P.PFloat i
@@ -219,36 +219,37 @@ trp p = case p of
     PSeq p q -> P.PSeq (trp p) (trp q)
     PRep p   -> P.PRep (trp p)
     PNeg p   -> P.PNeg (trp p)
-    PChar    -> P.PV (IC "C_") ---- temporary encoding
+    PChar    -> P.PChar
+    PChars s -> P.PChars s
 
 
 trAssign (lab, (mty, t)) = maybe (P.LDDef x t') (\ty -> P.LDFull x (trt ty) t') mty
   where 
     t' = trt t
-    x  = [trLabelIdent lab]
+    x  = [tri $ trLabelIdent lab]
 
-trLabelling (lab,ty) = P.LDDecl [trLabelIdent lab] (trt ty)
+trLabelling (lab,ty) = P.LDDecl [tri $ trLabelIdent lab] (trt ty)
 
 trCase  (patt, trm) = P.Case (trp patt) (trt trm)
 trCases (patts,trm) = P.Case (foldl1 P.PDisj (map trp patts)) (trt trm)
 
 trDecl (x,ty) = P.DDDec [trb x] (trt ty)
 
-tri :: Ident -> Ident
-tri i = case prIdent i of
-  s@('_':_:_) -> identC $ 'h':s ---- unsafe; needed since _3 etc are generated 
-  s -> identC $ s
-  
+tri :: Ident -> P.PIdent
+tri = ppIdent . prIdent 
+
+ppIdent i = P.PIdent ((0,0),i)
+
 trb i = if isWildIdent i then P.BWild else P.BIdent (tri i)
 
 trLabel :: Label -> P.Label
 trLabel i = case i of
-  LIdent s -> P.LIdent $ identC s
+  LIdent s -> P.LIdent $ ppIdent s
   LVar i -> P.LVar $ toInteger i
 
 trLabelIdent i = identC $ case i of
   LIdent s -> s
   LVar i -> "v" ++ show i --- should not happen
 
-mkName :: Ident -> P.Name
+mkName :: P.PIdent -> P.Name
 mkName = P.IdentName

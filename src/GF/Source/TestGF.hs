@@ -2,7 +2,7 @@
 module Main where
 
 
-import System.IO ( stdin, hGetContents )
+import IO ( stdin, hGetContents )
 import System ( getArgs, getProgName )
 
 import GF.Source.LexGF
@@ -14,7 +14,7 @@ import GF.Source.AbsGF
 
 
 
-import GF.Data.ErrM
+import GF.Source.ErrM
 
 type ParseFun a = [Token] -> Err a
 

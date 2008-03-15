@@ -305,23 +305,23 @@ oper
       _ + "s" => dJalas ukko ; 
 
 {- heuristics for 3-syllable nouns ending a/ä
-      _ + ("a" | "e" | "i" | "o" | "u" | "y" | "ä" | "ö") + C_ + 
-          _ + "i" + C_ + a@("a" | "ä") =>  
+      _ + ("a" | "e" | "i" | "o" | "u" | "y" | "ä" | "ö") + ? + 
+          _ + "i" + ? + a@("a" | "ä") =>  
           dSilakka ukko (ukko + "n") (ukk + o + "it" + a) ;
-      _ + ("a" | "e" | "i" | "o" | "u" | "y" | "ä" | "ö") + C_ + _ + 
+      _ + ("a" | "e" | "i" | "o" | "u" | "y" | "ä" | "ö") + ? + _ + 
           ("a" | "e" | "o" | "u" | "y" | "ä" | "ö") + 
           ("l" | "r" | "n") + a@("a" | "ä") =>  
           dSilakka ukko (ukko + "n") (ukk + o + "it" + a) ;
-      _ + ("a" | "e" | "i" | "o" | "u" | "y" | "ä" | "ö") + C_ + _ + 
+      _ + ("a" | "e" | "i" | "o" | "u" | "y" | "ä" | "ö") + ? + _ + 
           ("a" | "e" | "i" | "o" | "u" | "y" | "ä" | "ö") + 
           ("n" | "k" | "s") + "k" + a@("a" | "ä") =>  
           dSilakka ukko (uko + "n") (init uko + o + "it" + a) ;
-      _ + ("a" | "e" | "i" | "o" | "u" | "y" | "ä" | "ö") + C_ + _ + 
+      _ + ("a" | "e" | "i" | "o" | "u" | "y" | "ä" | "ö") + ? + _ + 
           ("a" | "e" | "i" | "o" | "u" | "y" | "ä" | "ö") + 
           ("n" | "t" | "s") + "t" + a@("a" | "ä") =>  
           dSilakka ukko (uko + "n") (ukk + o + "j" + a) ;
-      _ + ("a" | "e" | "i" | "o" | "u") + C_ + _ + 
-          ("a" | "e" | "o" | "u") + C_ + "a" =>  
+      _ + ("a" | "e" | "i" | "o" | "u") + ? + _ + 
+          ("a" | "e" | "o" | "u") + ? + "a" =>  
           dSilakka ukko (ukko + "n") (ukk + "ia") ;
 -}
       _ + "i" +o@("o"|"ö") => dSilakka ukko (ukko+"n") (ukko+"it"+getHarmony o);
@@ -478,10 +478,10 @@ oper
         cHukkua ottaa (ota + "n") ;
       _ + ("l" | "n" | "r") + ("taa" | "tää") => 
         cOttaa ottaa (ota + "n") (ots + "in") (ots + "i") ;
-      ("" | C_) + ("a" | "e" | "i" | "o" | "u") + C_ + _ + 
+      ("" | ?) + ("a" | "e" | "i" | "o" | "u") + ? + _ + 
         ("a" | "e" | "i" | "o" | "u") + _ + "aa" => 
         cOttaa ottaa (ota + "n") (ot + "in") (ott + "i") ;
-      ("" | C_) + ("a" | "e" | "i") + _ + "aa" => 
+      ("" | ?) + ("a" | "e" | "i") + _ + "aa" => 
         cOttaa ottaa (ota + "n") (ot + "oin") (ott + "oi") ;
       _ + ("aa" | "ää") => 
         cOttaa ottaa (ota + "n") (ot + "in") (ott + "i") ;

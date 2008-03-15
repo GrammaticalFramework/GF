@@ -19,7 +19,7 @@ module GF.Compile.GetGrammar (
 		  ) where
 
 import GF.Data.Operations
-import qualified GF.Data.ErrM as E ----
+import qualified GF.Source.ErrM as E
 
 import GF.Infra.UseIO
 import GF.Grammar.Grammar
@@ -62,14 +62,14 @@ getSourceModule opts file0 = do
         Just "utf8" -> decodeUTF8 string0
         _ -> string0
   let tokens = myLexer string
-  mo1  <- ioeErr $ {- err2err $ -} pModDef tokens
+  mo1  <- ioeErr $ err2err $ pModDef tokens
   ioeErr $ transModDef mo1
 
 getSourceGrammar :: Options -> FilePath -> IOE SourceGrammar
 getSourceGrammar opts file = do
   string    <- readFileIOE file
   let tokens = myLexer string
-  gr1  <- ioeErr $ {- err2err $ -} pGrammar tokens
+  gr1  <- ioeErr $ err2err $ pGrammar tokens
   ioeErr $ transGrammar gr1
 
 
@@ -101,7 +101,7 @@ parseOldGrammar :: FilePath -> IOE ([FilePath],[A.TopDef])
 parseOldGrammar file = do
   putStrLnE $ "reading old file" +++ file
   s <- ioeIO $ readFileIf file
-  A.OldGr incl topdefs <- ioeErr $ pOldGrammar $ oldLexer $ fixNewlines s
+  A.OldGr incl topdefs <- ioeErr $ err2err $ pOldGrammar $ oldLexer $ fixNewlines s
   includes <- ioeErr $ transInclude incl
   return (includes, topdefs)
 

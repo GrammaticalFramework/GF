@@ -48,6 +48,8 @@ import GF.Infra.Option
 import GF.Infra.Ident
 import GF.Data.Str
 
+import GF.Infra.CompactPrint
+
 import Data.List (intersperse)
 
 class Print a where
@@ -71,24 +73,27 @@ class Print a where
 prtBad :: Print a => String -> a -> Err b
 prtBad s a = Bad (s +++ prt a)
 
+pprintTree :: P.Print a => a -> String
+pprintTree = compactPrint . P.printTree
+
 prGrammar :: SourceGrammar -> String
-prGrammar = P.printTree . trGrammar
+prGrammar = pprintTree . trGrammar
 
 prModule :: (Ident, SourceModInfo) -> String
-prModule  = P.printTree . trModule
+prModule  = pprintTree . trModule
 
 instance Print Term where
-  prt = P.printTree . trt
+  prt = pprintTree . trt
   prt_ = prExp
 
 instance Print Ident where
-  prt = P.printTree . tri
+  prt = pprintTree . tri
 
 instance Print Patt where
-  prt = P.printTree . trp
+  prt = pprintTree . trp
 
 instance Print Label where
-  prt = P.printTree . trLabel
+  prt = pprintTree . trLabel
 
 instance Print MetaSymb where
   prt (MetaSymb i) = "?" ++ show i

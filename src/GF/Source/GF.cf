@@ -21,12 +21,12 @@ _. ModDef ::= ModDef ";" ;
 
 -- The $main$ multilingual grammar structure --%
 
-MMain. ModDef ::= "grammar" Ident "=" "{" "abstract" "=" Ident ";" [ConcSpec] "}" ;--%
+MMain. ModDef ::= "grammar" PIdent "=" "{" "abstract" "=" PIdent ";" [ConcSpec] "}" ;--%
 
-ConcSpec. ConcSpec ::= Ident "=" ConcExp ;--%
+ConcSpec. ConcSpec ::= PIdent "=" ConcExp ;--%
 separator ConcSpec ";" ;--%
 
-ConcExp. ConcExp ::= Ident [Transfer] ;--%
+ConcExp. ConcExp ::= PIdent [Transfer] ;--%
 
 separator Transfer "" ;--%
 TransferIn.  Transfer ::= "(" "transfer" "in" Open ")" ;  --%
@@ -36,12 +36,12 @@ TransferOut. Transfer ::= "(" "transfer" "out" Open ")" ;  --%
 
 MModule. ModDef ::= ComplMod ModType "=" ModBody ;
 
-MTAbstract.  ModType ::= "abstract" Ident ;
-MTResource.  ModType ::= "resource" Ident ;
-MTInterface. ModType ::= "interface" Ident ;
-MTConcrete.  ModType ::= "concrete" Ident "of" Ident ;
-MTInstance.  ModType ::= "instance" Ident "of" Ident ;
-MTTransfer.  ModType ::= "transfer" Ident ":" Open "->" Open ;
+MTAbstract.  ModType ::= "abstract" PIdent ;
+MTResource.  ModType ::= "resource" PIdent ;
+MTInterface. ModType ::= "interface" PIdent ;
+MTConcrete.  ModType ::= "concrete" PIdent "of" PIdent ;
+MTInstance.  ModType ::= "instance" PIdent "of" PIdent ;
+MTTransfer.  ModType ::= "transfer" PIdent ":" Open "->" Open ;
 
 
 MBody.      ModBody ::= Extend Opens "{" [TopDef] "}" ;
@@ -51,7 +51,7 @@ MWithBody.  ModBody ::=                 Included "with" [Open] "**" Opens "{" [T
 MWithE.     ModBody ::= [Included] "**" Included "with" [Open] ;
 MWithEBody. ModBody ::= [Included] "**" Included "with" [Open] "**" Opens "{" [TopDef] "}" ; 
 
-MReuse. ModBody ::= "reuse" Ident ; --%
+MReuse. ModBody ::= "reuse" PIdent ; --%
 MUnion. ModBody ::= "union" [Included] ;--%
 
 separator TopDef "" ;
@@ -63,9 +63,9 @@ separator Open "," ;
 NoOpens. Opens ::= ;
 OpenIn.  Opens ::= "open" [Open] "in" ;
 
-OName.   Open ::= Ident ;
-OQualQO. Open ::= "(" QualOpen Ident ")" ;
-OQual.   Open ::= "(" QualOpen Ident "=" Ident ")" ;
+OName.   Open ::= PIdent ;
+OQualQO. Open ::= "(" QualOpen PIdent ")" ;
+OQual.   Open ::= "(" QualOpen PIdent "=" PIdent ")" ;
 
 CMCompl.   ComplMod ::= ;
 CMIncompl. ComplMod ::= "incomplete" ;
@@ -76,9 +76,9 @@ QOInterface. QualOpen ::= "interface" ;--%
 
 separator Included "," ;
 
-IAll.   Included ::= Ident ;
-ISome.  Included ::= Ident "[" [Ident] "]" ;
-IMinus. Included ::= Ident "-" "[" [Ident] "]" ;
+IAll.   Included ::= PIdent ;
+ISome.  Included ::= PIdent "[" [PIdent] "]" ;
+IMinus. Included ::= PIdent "-" "[" [PIdent] "]" ;
 
 -- definitions after the $oper$ keywords
 
@@ -108,27 +108,27 @@ DefPrintCat. TopDef ::= "printname" "cat" [PrintDef] ;
 DefPrintFun. TopDef ::= "printname" "fun" [PrintDef] ;
 DefFlag.     TopDef ::= "flags" [FlagDef] ;
 
-SimpleCatDef.   CatDef ::= Ident [DDecl] ;
-ListCatDef.     CatDef ::= "[" Ident [DDecl] "]" ;
-ListSizeCatDef. CatDef ::= "[" Ident [DDecl] "]" "{" Integer "}" ;
+SimpleCatDef.   CatDef ::= PIdent [DDecl] ;
+ListCatDef.     CatDef ::= "[" PIdent [DDecl] "]" ;
+ListSizeCatDef. CatDef ::= "[" PIdent [DDecl] "]" "{" Integer "}" ;
 
-FunDef.    FunDef ::= [Ident] ":" Exp ;
+FunDef.    FunDef ::= [PIdent] ":" Exp ;
 
-DataDef.   DataDef    ::= Ident "=" [DataConstr] ;
-DataId.    DataConstr ::= Ident ;
-DataQId.   DataConstr ::= Ident "." Ident ;
+DataDef.   DataDef    ::= PIdent "=" [DataConstr] ;
+DataId.    DataConstr ::= PIdent ;
+DataQId.   DataConstr ::= PIdent "." PIdent ;
 separator DataConstr "|" ;
 
 
-ParDefDir.   ParDef ::= Ident "=" [ParConstr] ;
-ParDefIndir. ParDef ::= Ident "=" "(" "in" Ident ")" ;
-ParDefAbs.   ParDef ::= Ident ;
+ParDefDir.   ParDef ::= PIdent "=" [ParConstr] ;
+ParDefIndir. ParDef ::= PIdent "=" "(" "in" PIdent ")" ;
+ParDefAbs.   ParDef ::= PIdent ;
 
-ParConstr. ParConstr ::= Ident [DDecl] ;
+ParConstr. ParConstr ::= PIdent [DDecl] ;
 
 PrintDef. PrintDef ::= [Name] "=" Exp ;
 
-FlagDef. FlagDef ::= Ident "=" Ident ;
+FlagDef. FlagDef ::= PIdent "=" PIdent ;
 
 terminator nonempty Def ";" ;
 terminator nonempty CatDef ";" ;
@@ -141,28 +141,28 @@ terminator nonempty FlagDef ";" ;
 
 separator ParConstr "|" ;
 
-separator nonempty Ident "," ;
+separator nonempty PIdent "," ;
 
 -- names of categories and functions in definition LHS
 
-IdentName. Name ::= Ident ;
-ListName.  Name ::= "[" Ident "]" ;
+IdentName. Name ::= PIdent ;
+ListName.  Name ::= "[" PIdent "]" ;
 
 separator nonempty Name "," ;
 
 -- definitions in records and $let$ expressions
 
-LDDecl.  LocDef ::= [Ident] ":" Exp ;
-LDDef.   LocDef ::= [Ident] "=" Exp ;
-LDFull.  LocDef ::= [Ident] ":" Exp "=" Exp ;
+LDDecl.  LocDef ::= [PIdent] ":" Exp ;
+LDDef.   LocDef ::= [PIdent] "=" Exp ;
+LDFull.  LocDef ::= [PIdent] ":" Exp "=" Exp ;
 
 separator LocDef ";" ;
 
 -- terms and types
 
-EIdent.    Exp6 ::= Ident ;
-EConstr.   Exp6 ::= "{" Ident "}" ;--%
-ECons.     Exp6 ::= "%" Ident "%" ;--%
+EIdent.    Exp6 ::= PIdent ;
+EConstr.   Exp6 ::= "{" PIdent "}" ;--%
+ECons.     Exp6 ::= "%" PIdent "%" ;--%
 ESort.     Exp6 ::= Sort ;
 EString.   Exp6 ::= String ;
 EInt.      Exp6 ::= Integer ;
@@ -170,16 +170,16 @@ EFloat.    Exp6 ::= Double ;
 EMeta.     Exp6 ::= "?" ;
 EEmpty.    Exp6 ::= "[" "]" ;
 EData.     Exp6 ::= "data" ;
-EList.     Exp6 ::= "[" Ident Exps "]" ;
+EList.     Exp6 ::= "[" PIdent Exps "]" ;
 EStrings.  Exp6 ::= "[" String "]" ;
 ERecord.   Exp6 ::= "{" [LocDef] "}" ; -- !
 ETuple.    Exp6 ::= "<" [TupleComp] ">" ;  --- needed for separator ","
-EIndir.    Exp6 ::= "(" "in" Ident ")" ;   -- indirection, used in judgements --%
+EIndir.    Exp6 ::= "(" "in" PIdent ")" ;   -- indirection, used in judgements --%
 ETyped.    Exp6 ::= "<" Exp ":" Exp ">" ;  -- typing, used for annotations
 
 EProj.     Exp5 ::= Exp5 "." Label ;
-EQConstr.  Exp5 ::= "{" Ident "." Ident "}" ;  -- qualified constructor --%
-EQCons.    Exp5 ::= "%" Ident "." Ident  ;     -- qualified constant --%
+EQConstr.  Exp5 ::= "{" PIdent "." PIdent "}" ;  -- qualified constructor --%
+EQCons.    Exp5 ::= "%" PIdent "." PIdent  ;     -- qualified constant --%
 
 EApp.      Exp4 ::= Exp4 Exp5 ;
 ETable.    Exp4 ::= "table" "{" [Case] "}" ;
@@ -187,9 +187,13 @@ ETTable.   Exp4 ::= "table" Exp6 "{" [Case] "}" ;
 EVTable.   Exp4 ::= "table" Exp6 "[" [Exp] "]" ;
 ECase.     Exp4 ::= "case" Exp "of" "{" [Case] "}" ;
 EVariants. Exp4 ::= "variants" "{" [Exp] "}" ;
+--- EPreCase.  Exp4 ::= "pre" "{" [Case] "}" ;
 EPre.      Exp4 ::= "pre" "{" Exp ";" [Altern] "}" ;
 EStrs.     Exp4 ::= "strs" "{" [Exp] "}" ;
-EConAt.    Exp4 ::= Ident "@" Exp6 ; --%
+EConAt.    Exp4 ::= PIdent "@" Exp6 ; --%
+
+EPatt.     Exp4 ::= "pattern" Patt2 ;
+EPattType. Exp4 ::= "pattern" "type" Exp5 ;
 
 ESelect.   Exp3 ::= Exp3 "!" Exp4 ;
 ETupTyp.   Exp3 ::= Exp3 "*" Exp4 ;
@@ -220,30 +224,34 @@ ConsExp. Exps ::= Exp6 Exps ; -- Exp6 to force parantheses
 
 -- patterns
 
+PChar.  Patt2  ::= "?" ;
+PChars. Patt2  ::= "[" String "]" ;
+PMacro. Patt2  ::= "#" PIdent ;
+PM.     Patt2  ::= "#" PIdent "." PIdent ;
 PW.     Patt2  ::= "_" ;
-PV.     Patt2  ::= Ident ;
-PCon.   Patt2  ::= "{" Ident "}" ; --%
-PQ.     Patt2  ::= Ident "." Ident ;
+PV.     Patt2  ::= PIdent ;
+PCon.   Patt2  ::= "{" PIdent "}" ; --%
+PQ.     Patt2  ::= PIdent "." PIdent ;
 PInt.   Patt2  ::= Integer ;
 PFloat. Patt2  ::= Double ;
 PStr.   Patt2  ::= String ;
 PR.     Patt2  ::= "{" [PattAss] "}" ;
 PTup.   Patt2  ::= "<" [PattTupleComp] ">" ;
-PC.     Patt1  ::= Ident [Patt] ;
-PQC.    Patt1  ::= Ident "." Ident [Patt] ;
+PC.     Patt1  ::= PIdent [Patt] ;
+PQC.    Patt1  ::= PIdent "." PIdent [Patt] ;
 PDisj.  Patt   ::= Patt "|" Patt1 ;
 PSeq.   Patt   ::= Patt "+" Patt1 ;
 PRep.   Patt1  ::= Patt2 "*" ;
-PAs.    Patt1  ::= Ident "@" Patt2 ;
+PAs.    Patt1  ::= PIdent "@" Patt2 ;
 PNeg.   Patt1  ::= "-" Patt2 ;
 
 coercions Patt 2 ;
 
-PA.  PattAss ::= [Ident] "=" Patt ;
+PA.  PattAss ::= [PIdent] "=" Patt ;
 
 -- labels
 
-LIdent. Label ::= Ident ;
+LIdent. Label ::= PIdent ;
 LVar.   Label ::= "$" Integer ;
 
 -- basic types
@@ -264,7 +272,7 @@ separator PattAss ";" ;
 
 -- binds in lambdas and lin rules
 
-BIdent. Bind ::= Ident ;
+BIdent. Bind ::= PIdent ;
 BWild.  Bind ::= "_" ;
 
 separator Bind "," ;
@@ -322,23 +330,27 @@ FString. FileName ::= String ; --%
 
 terminator nonempty FileName ";" ; --%
 
-FIdent.  FileName ::= Ident ; --%
+FIdent.  FileName ::= PIdent ; --%
 FSlash.  FileName ::= "/" FileName ; --%
 FDot.    FileName ::= "." FileName ; --%
 FMinus.  FileName ::= "-" FileName ; --%
-FAddId.  FileName ::= Ident FileName ; --%
+FAddId.  FileName ::= PIdent FileName ; --%
 
 token LString '\'' (char - '\'')* '\'' ; --%
 ELString.  Exp6 ::= LString ; --%
-ELin.      Exp4 ::= "Lin" Ident ; --%
+ELin.      Exp4 ::= "Lin" PIdent ; --%
 
 DefPrintOld.  TopDef ::= "printname" [PrintDef] ; --%
 DefLintype.   TopDef ::= "lintype"   [Def] ; --%
 DefPattern.   TopDef ::= "pattern"   [Def] ; --%
 
 -- deprecated packages are attempted to be interpreted --%
-DefPackage.   TopDef ::= "package" Ident "=" "{" [TopDef] "}" ";" ; --%
+DefPackage.   TopDef ::= "package" PIdent "=" "{" [TopDef] "}" ";" ; --%
 
 -- these two are just ignored after parsing --%
 DefVars.      TopDef ::= "var" [Def] ; --%
-DefTokenizer. TopDef ::= "tokenizer" Ident ";" ; --%
+DefTokenizer. TopDef ::= "tokenizer" PIdent ";" ; --%
+
+-- identifiers
+
+position token PIdent ('_' | letter) (letter | digit | '_' | '\'')* ;
