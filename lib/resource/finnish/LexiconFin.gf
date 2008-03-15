@@ -114,7 +114,7 @@ lin
   leather_N = mkN "nahka" ; --- nahan
   leave_V2 = mkV2 (mkV "j‰tt‰‰") ;
   like_V2 = mkV2 (mkV "pit‰‰") elative ;
-  listen_V2 = mkV2 (mkV "kuunnella" "kuuntelen" "kuunteli") partitive ;
+  listen_V2 = mkV2 (mkV "kuunnella" "kuunteli") partitive ;
   live_V = mkV "el‰‰" ;
   long_A = mkA (mkN "pitk‰") "pitempi" "pisin" ;
   lose_V2 = mkV2 (mkV "h‰vit‰" "h‰visi") ; --- hukata
@@ -247,7 +247,7 @@ lin
   dull_A = mkA (mkN "tyls‰") "tylsempi" "tylsin" ;
   full_A = mkA (mk3N "t‰ysi" "t‰yden" "t‰ysi‰") "t‰ydempi" "t‰ysin" ;
   heavy_A = mkA "raskas" ;
-  near_A = mkA "l‰heinen" ;
+  near_A = mkA (mkN "l‰heinen") ;
   rotten_A = mkA "m‰t‰" ;
   round_A = mkA "pyˆre‰" ;
   sharp_A = mkA "ter‰v‰" ;
@@ -338,8 +338,8 @@ lin
   hold_V2 = mkV2 (mkV "pit‰‰") cpartitive ;
   hunt_V2 = mkV2 (mkV "mets‰st‰‰") cpartitive ;
   kill_V2 = mkV2 (mkV "tappaa") ;
-  laugh_V = mkV "nauraa" "nauran" "nauroi" ;
-  lie_V = mkV "maata" "makaan" "makasi" ;
+  laugh_V = mkV "nauraa" "nauroi" ;
+  lie_V = mkV "maata" "makasi" ;
   play_V = mkV "pelata" ;
   pull_V2 = mkV2 (mkV "vet‰‰") ;
   push_V2 = mkV2 (mkV "tyˆnt‰‰") ;
@@ -376,7 +376,7 @@ lin
 
     john_PN = mkPN "Jussi" ;
     question_N = mkN "kysymys" ;
-    ready_A = mkA "valmis" ;
+    ready_A = mkA (mkN "valmis") ;
     reason_N = mkN "syy" ;
     today_Adv = mkAdv "t‰n‰‰n" ;
     uncertain_A = mkA "ep‰varma" ;

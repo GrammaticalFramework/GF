@@ -15,7 +15,7 @@
 module GF.Devel.GetGrammar where
 
 import GF.Data.Operations
-import qualified GF.Data.ErrM as E ----
+import qualified GF.Source.ErrM as E
 
 import GF.Devel.UseIO
 import GF.Grammar.Grammar
@@ -49,6 +49,10 @@ getSourceModule opts file0 = do
     _ -> return file0
   string    <- readFileIOE file
   let tokens = myLexer string
-  mo1  <- ioeErr $ {- err2err $ -} pModDef tokens
+  mo1  <- ioeErr $ err2err $ pModDef tokens
   ioeErr $ transModDef mo1
+
+err2err :: E.Err a -> Err a
+err2err (E.Ok v) = Ok v
+err2err (E.Bad s) = Bad s
 

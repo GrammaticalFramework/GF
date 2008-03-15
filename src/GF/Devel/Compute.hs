@@ -45,9 +45,9 @@ computeTerm = computeTermOpt False
 -- have already been computed (mainly with -optimize=noexpand in .gfr)
 
 computeTermOpt :: Bool -> SourceGrammar -> Substitution -> Term -> Err Term
-computeTermOpt rec gr = comp where
+computeTermOpt rec gr = comput True where
 
-   comp g t = ---- errIn ("subterm" +++ prt t) $ --- for debugging 
+   comput full g t = ---- errIn ("subterm" +++ prt t) $ --- for debugging 
               case t of
 
      Q (IC "Predef") _ -> return t
@@ -62,9 +62,14 @@ computeTermOpt rec gr = comp where
          _ | t == t' -> return t
          _ -> comp g t'
 
-     Abs x b -> do 
-       b' <- comp (ext x (Vr x) g) b
-       return $ Abs x b'
+     -- Abs x@(IA _) b -> do 
+     Abs x b | full -> do 
+       let (xs,b1) = termFormCnc t   
+       b' <- comp ([(x,Vr x) | x <- xs] ++ g) b1
+       return $ mkAbs xs b'
+     --  b' <- comp (ext x (Vr x) g) b
+     --  return $ Abs x b'
+     Abs _ _ -> return t -- hnf
 
      Let (x,(_,a)) b -> do
        a' <- comp g a
@@ -76,10 +81,9 @@ computeTermOpt rec gr = comp where
        return $ Prod x a' b'
 
      -- beta-convert
-
      App f a -> case appForm t of
       (h,as) | length as > 1 -> do
-        h' <- comp g h
+        h' <- hnf g h
         as' <- mapM (comp g) as
         case h' of
           _ | not (null [() | FV _ <- as']) -> compApp g (mkApp h' as')
@@ -163,9 +167,8 @@ computeTermOpt rec gr = comp where
      S t v -> do
 
       t'     <- case t of
----- why not? ResFin.Agr "has no values"
-----        T (TComp _) _ -> return t
-----        V _ _ -> return t
+--        T _ _ -> return t
+--        V _ _ -> return t
         _ -> comp g t
 
       v'     <- comp g v
@@ -295,7 +298,7 @@ computeTermOpt rec gr = comp where
 ----       return $ V ty (map snd cs')
        return $ T i cs'
      --- this means some extra work; should implement TSh directly
-     TSh i cs -> comp g $ T i [(p,v) | (ps,v) <- cs, p <- ps] --- OBSOLETE
+     TSh i cs -> comp g $ T i [(p,v) | (ps,v) <- cs, p <- ps]
 
      T i cs -> do
        pty0 <- getTableType i
@@ -303,18 +306,18 @@ computeTermOpt rec gr = comp where
        case allParamValues gr ptyp of
          Ok vs -> do
 
-           cs'  <- mapM (compBranchOpt g) cs  ---- why is this needed??
+           cs'  <- mapM (compBranchOpt g) cs
            sts  <- mapM (matchPattern cs') vs 
            ts   <- mapM (\ (c,g') -> comp (g' ++ g) c) sts
            ps   <- mapM term2patt vs
            let ps' = ps --- PT ptyp (head ps) : tail ps
-----           return $ V ptyp ts -- to save space ---- why doesn't this work??
+----           return $ V ptyp ts -- to save space, just course of values
            return $ T (TComp ptyp) (zip ps' ts)
          _ -> do
            cs' <- mapM (compBranch g) cs
            return $ T i cs'  -- happens with variable types
 
-     Alias c a d -> do --- OBSOLETE
+     Alias c a d -> do
        d' <- comp g d
        return $ Alias c a d'  -- alias only disappears in certain redexes
 
@@ -324,7 +327,7 @@ computeTermOpt rec gr = comp where
     where
 
      compApp g (App f a) = do
-       f' <- comp g f
+       f' <- hnf g f
        a' <- comp g a
        case (f',a') of
          (Abs x b, FV as) -> 
@@ -332,6 +335,7 @@ computeTermOpt rec gr = comp where
          (_, FV as)  -> mapM (\c -> comp g (App f' c)) as >>= return . variants
          (FV fs, _)  -> mapM (\c -> comp g (App c a')) fs >>= return . variants
          (Abs x b,_) -> comp (ext x a' g) b
+
          (QC _ _,_)  -> returnC $ App f' a'
 
          (Alias _ _ d, _) -> comp g (App d a')
@@ -342,6 +346,9 @@ computeTermOpt rec gr = comp where
 	 _ -> do
            (t',b) <- appPredefined (App f' a')
            if b then return t' else comp g t'
+
+     hnf  = comput False
+     comp = comput True
 
      look p c
        | rec       = lookupResDef gr p c >>= comp []
@@ -406,6 +413,7 @@ computeTermOpt rec gr = comp where
      prawitzV g i f cs e = do
        cs' <- mapM (comp g) [(f v) | v <- cs]
        return $ S (V i cs') e
+
 
 -- | argument variables cannot be glued
 checkNoArgVars :: Term -> Err Term

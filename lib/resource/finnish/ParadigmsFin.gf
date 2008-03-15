@@ -141,13 +141,13 @@ oper
 -- a table.
 -- The worst case needs twelve forms, as shown in the following.
 
-  mkV = overload {
-    mkV : (huutaa : Str) -> V = mk1V ;
-    mkV : (huutaa,huusi : Str) -> V = mk2V ;
-    mkV : (huutaa,huudan,huusi : Str) -> V = \x,_,y -> mk2V x y ; ----
+  mkV : overload {
+    mkV : (huutaa : Str) -> V ;
+    mkV : (huutaa,huusi : Str) -> V ;
+    mkV : (huutaa,huudan,huusi : Str) -> V ;
     mkV : (
       huutaa,huudan,huutaa,huutavat,huutakaa,huudetaan,
-      huusin,huusi,huusisi,huutanut,huudettu,huutanee : Str) -> V = mk12V ;
+      huusin,huusi,huusisi,huutanut,huudettu,huutanee : Str) -> V ;
   } ;
 
 -- All the patterns above have $nominative$ as subject case.
@@ -416,18 +416,23 @@ oper
   mkN3 = \n,c,e -> n ** {c2 = c ; c3 = e ; lock_N3 = <>} ;
   
   mkPN = overload {
-    mkPN : Str -> PN = \s -> {s = \\c => (mk1N s).s ! NCase Sg c ; lock_PN = <>} ;
+    mkPN : Str -> PN = mkPN_1 ;
     mkPN : N -> PN = \s -> {s = \\c => s.s ! NCase Sg c ; lock_PN = <>} ;
     } ;
+
+  mkPN_1 : Str -> PN = \s -> {s = \\c => (mk1N s).s ! NCase Sg c ; lock_PN = <>} ;
 
 -- adjectives
 
   mkA = overload {
-    mkA : Str -> A  = \s -> noun2adjDeg (mk1N s) ** {lock_A = <>} ;
+--    mkA : Str -> A  = \x -> noun2adjDeg (mk1N x) ** {lock_A = <>} ;
+    mkA : Str -> A  = mkA_1 ;
     mkA : N -> A = \n -> noun2adjDeg n ** {lock_A = <>} ;
     mkA : N -> (kivempaa,kivinta : Str) -> A = regAdjective ;
 --    mkA : (hyva,parempi,paras : N) -> (hyvin,paremmin,parhaiten : Str) -> A ;
   } ;
+
+  mkA_1 : Str -> A = \x -> noun2adjDeg (mk1N x) ** {lock_A = <>} ;
 
 -- auxiliaries
   mkAdjective : (_,_,_ : Adj) -> A = \hyva,parempi,paras -> 
@@ -454,9 +459,18 @@ oper
 
 -- verbs
 
-  mk1V : Str -> V = \s -> vforms2V (vForms1 s) ** {sc = NPCase Nom ; lock_V = <>} ;
-  mk2V : (_,_ : Str) -> V = \s,t -> vforms2V (vForms2 s t) ** {sc = NPCase Nom ; lock_V = <>} ;
+  mkV = overload {
+    mkV : (huutaa : Str) -> V = mk1V ;
+    mkV : (huutaa,huusi : Str) -> V = mk2V ;
+    mkV : (huutaa,huudan,huusi : Str) -> V = mk3V ;
+    mkV : (
+      huutaa,huudan,huutaa,huutavat,huutakaa,huudetaan,
+      huusin,huusi,huusisi,huutanut,huudettu,huutanee : Str) -> V = mk12V ;
+  } ;
 
+  mk1V : Str -> V = \s -> vforms2V (vForms1 s) ** {sc = NPCase Nom ; lock_V = <>} ;
+  mk2V : (_,_ : Str) -> V = \x,y -> vforms2V (vForms2 x y) ** {sc = NPCase Nom ; lock_V = <>} ;
+  mk3V : (huutaa,huudan,huusi : Str) -> V = \x,_,y -> mk2V x y ; ----
   mk12V : (
       huutaa,huudan,huutaa,huutavat,huutakaa,huudetaan,
       huusin,huusi,huusisi,huutanut,huudettu,huutanee : Str) -> V = 
