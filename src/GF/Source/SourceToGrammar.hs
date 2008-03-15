@@ -45,14 +45,20 @@ type Result = Err String
 failure :: Show a => a -> Err b
 failure x = Bad $ "Undefined case: " ++ show x
 
-transIdent :: Ident -> Err Ident
-transIdent x = case x of
-  x  -> return x
+prPIdent :: PIdent -> String
+prPIdent (PIdent (_,c)) = c
+
+getIdentPos :: PIdent -> Err (Ident,Int)
+getIdentPos x = case x of
+  PIdent ((line,_),c) -> return (IC c,line)
+
+transIdent :: PIdent -> Err Ident
+transIdent = liftM fst . getIdentPos
 
 transName :: Name -> Err Ident
 transName n = case n of
   IdentName i -> transIdent i
-  ListName  i -> transIdent (mkListId i)
+  ListName  i -> liftM mkListId (transIdent i)
 
 transGrammar :: Grammar -> Err G.SourceGrammar
 transGrammar x = case x of
@@ -250,31 +256,34 @@ returnl = return . Left
 
 transFlagDef :: FlagDef -> Err GO.Option
 transFlagDef x = case x of
-  FlagDef f x  -> return $ GO.Opt (prIdent f,[prIdent x])
+  FlagDef f x  -> return $ GO.Opt (prPIdent f,[prPIdent x])
 
 -- | Cat definitions can also return some fun defs
 --   if it is a list category definition
 transCatDef :: CatDef -> Err [(Ident, G.Info)]
 transCatDef x = case x of
-  SimpleCatDef id ddecls        -> liftM (:[]) $ cat id ddecls
+  SimpleCatDef id ddecls        -> do
+    id' <- transIdent id
+    liftM (:[]) $ cat id' ddecls
   ListCatDef id ddecls          -> listCat id ddecls 0
   ListSizeCatDef id ddecls size -> listCat id ddecls size
  where 
-   cat id ddecls = do
-		       i <- transIdent id
+   cat i ddecls = do
+		       -- i <- transIdent id
 		       cont <- liftM concat $ mapM transDDecl ddecls
 		       return (i, G.AbsCat (yes cont) nope)
    listCat id ddecls size = do
+         id' <- transIdent id
 	 let 
-           li = mkListId id
-           baseId = mkBaseId id
-           consId = mkConsId id
+           li = mkListId id'
+           baseId = mkBaseId id'
+           consId = mkConsId id'
 	 catd0@(c,G.AbsCat (Yes cont0) _) <- cat li ddecls
 	 let
   	   catd = (c,G.AbsCat (Yes cont0) (Yes [M.cn baseId,M.cn consId]))
            cont = [(mkId x i,ty) | (i,(x,ty)) <- zip [0..] cont0]
            xs = map (G.Vr . fst) cont 
-           cd = M.mkDecl (M.mkApp (G.Vr id) xs)
+           cd = M.mkDecl (M.mkApp (G.Vr id') xs)
 	   lc = M.mkApp (G.Vr li) xs
 	   niltyp = M.mkProdSimple (cont ++ genericReplicate size cd) lc
 	   nilfund = (baseId, G.AbsFun (yes niltyp) (yes G.EData))
@@ -431,7 +440,10 @@ transExp x = case x of
   EMeta         -> return $ M.meta $ M.int2meta 0
   EEmpty        -> return G.Empty
   -- [ C x_1 ... x_n ] becomes (ListC x_1 ... x_n)
-  EList i es    -> transExp $ foldl EApp (EIdent (mkListId i)) (exps2list es)
+  EList i es    -> do
+    i' <- transIdent i
+    es' <- mapM transExp (exps2list es)
+    return $ foldl G.App (G.Vr (mkListId i')) es'
   EStrings []   -> return G.Empty
   EStrings str  -> return $ foldr1 G.C $ map G.K $ words str
   ERecord defs  -> erecord2term defs
@@ -538,16 +550,17 @@ locdef2fields d = case d of
 trLabel :: Label -> Err G.Label
 trLabel x = case x of
 
-  -- this case is for bward compatibiity and should be removed
-  LIdent (IC ('v':ds@(_:_))) | all isDigit ds -> return $ G.LVar $ readIntArg ds 
+  -- this case is for bward compatibility and should be removed
+  LIdent (PIdent (_,'v':ds@(_:_))) | all isDigit ds -> return $ G.LVar $ readIntArg ds 
   
-  LIdent (IC s) -> return $ G.LIdent s
+  LIdent (PIdent (_, s)) -> return $ G.LIdent s
   LVar x   -> return $ G.LVar $ fromInteger x
 
 transSort :: Sort -> Err String
 transSort x = case x of
   _ -> return $ printTree x
 
+{-
 --- no more used 7/1/2006 AR
 transPatts :: Patt -> Err [G.Patt]
 transPatts p = case p of
@@ -568,11 +581,11 @@ transPatts p = case p of
     let ps' = combinations ps0
     return $ map (G.PR . M.tuple2recordPatt) ps'
   _ -> liftM singleton $ transPatt p
+-}
 
 transPatt :: Patt -> Err G.Patt
 transPatt x = case x of
   PW  -> return G.wildPatt
-  PV (IC "C_") -> return G.PChar ---- temporary encoding
   PV id  -> liftM G.PV $ transIdent id
   PC id patts  -> liftM2 G.PC (transIdent id) (mapM transPatt patts)
   PCon id  -> liftM2 G.PC (transIdent id) (return [])
@@ -593,8 +606,8 @@ transPatt x = case x of
   PRep p      -> liftM  G.PRep (transPatt p)
   PNeg p      -> liftM  G.PNeg (transPatt p)
   PAs x p     -> liftM2 G.PAs  (transIdent x) (transPatt p)
-
-
+  PChar -> return G.PChar
+  PChars s -> return $ G.PChars s
 
 transBind :: Bind -> Err Ident
 transBind x = case x of
@@ -681,9 +694,11 @@ transOldGrammar opts name0 x = case x of
    q = CMCompl
 
    name = maybe name0 (++ ".gf") $ getOptVal opts useName
-   absName = identC $ maybe topic id $ getOptVal opts useAbsName
-   resName = identC $ maybe ("Res" ++ lang) id $ getOptVal opts useResName
-   cncName = identC $ maybe lang id $ getOptVal opts useCncName
+   absName = identPI $ maybe topic id $ getOptVal opts useAbsName
+   resName = identPI $ maybe ("Res" ++ lang) id $ getOptVal opts useResName
+   cncName = identPI $ maybe lang id $ getOptVal opts useCncName
+
+   identPI s = PIdent ((0,0),s)
 
    (beg,rest) = span (/='.') name
    (topic,lang) = case rest of -- to avoid overwriting old files
@@ -700,11 +715,11 @@ transInclude x = case x of
  where
    trans f = case f of
      FString s  -> s
-     FIdent (IC s) -> modif s
+     FIdent (PIdent (_, s)) -> modif s
      FSlash filename  -> '/' : trans filename
      FDot filename  -> '.' : trans filename
      FMinus filename  -> '-' : trans filename
-     FAddId (IC s) filename  -> modif s ++ trans filename
+     FAddId (PIdent (_, s)) filename  -> modif s ++ trans filename
    modif s = let s' = init s ++ [toLower (last s)] in 
              if elem s' newReservedWords then s' else s 
                       --- unsafe hack ; cf. GetGrammar.oldLexer

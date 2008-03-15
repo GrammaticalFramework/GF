@@ -191,6 +191,7 @@ data Patt =
  | PSeq Patt Patt         -- ^ sequence of token parts: p + q
  | PRep Patt              -- ^ repetition of token part: p*
  | PChar                  -- ^ string of length one
+ | PChars [Char]          -- ^ character list
 
   deriving (Read, Show, Eq, Ord)
 
