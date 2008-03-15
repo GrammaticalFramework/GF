@@ -226,6 +226,10 @@ renameTerm env vars = ren vars where
             Ok t -> return t                              -- const proj last
             _ -> prtBad "unknown qualified constant" trm
 
+    EPatt p -> do
+      (p',_) <- renpatt p
+      return $ EPatt p'
+
     _ -> composOp (ren vs) trm
 
   renid = renameIdentTerm env
@@ -239,11 +243,17 @@ renameTerm env vars = ren vars where
 renamePattern :: Status -> Patt -> Err (Patt,[Ident])
 renamePattern env patt = case patt of
 
+  PMacro c -> do
+    c' <- renid $ Vr c
+    case c' of
+      Q p d -> renp $ PM p d
+      _ -> prtBad "unresolved pattern" patt
+
   PC c ps -> do
     c' <- renameIdentTerm env $ Cn c
     case c' of
       QC p d -> renp $ PP p d ps
-      Q  p d -> renp $ PP p d ps
+--      Q  p d -> renp $ PP p d ps --- why this? AR 15/3/2008
       _ -> prtBad "unresolved pattern" c' ---- (PC c ps', concat vs)
 
   PP p c ps -> do
@@ -255,8 +265,14 @@ renamePattern env patt = case patt of
     let (ps',vs) = unzip psvss
     return (PP p' c' ps', concat vs)
 
-  PV x -> case renid patt of
-    Ok p -> return (p,[])
+  PM p c -> do
+    (p', c') <- case renameIdentTerm env (Q p c) of
+      Ok (Q p' c') -> return (p',c')
+      _ -> prtBad "not a pattern macro" patt
+    return (PM p' c', [])
+
+  PV x -> case renid (Vr x) of
+    Ok (QC m c) -> return (PP m c [],[])
     _    -> return (patt, [x])
 
   PR r -> do
@@ -291,7 +307,7 @@ renamePattern env patt = case patt of
 
  where 
    renp  = renamePattern env
-   renid = renameIdentPatt env
+   renid = renameIdentTerm env
 
 renameParam :: Status -> (Ident, Context) -> Err (Ident, Context)
 renameParam env (c,co) = do

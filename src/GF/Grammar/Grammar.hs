@@ -158,6 +158,9 @@ data Term =
  | C Term Term    -- ^ concatenation: @s ++ t@
  | Glue Term Term -- ^ agglutination: @s + t@
 
+ | EPatt Patt     -- ^ pattern (in macro definition): # p
+ | EPattType Term -- ^ pattern type: pattern T
+
  | FV [Term]      -- ^ alternatives in free variation: @variants { s ; ... }@
 
  | Alts (Term, [(Term, Term)]) -- ^ alternatives by prefix: @pre {t ; s\/c ; ...}@
@@ -190,8 +193,10 @@ data Patt =
  | PAlt Patt Patt         -- ^ disjunctive pattern: p1 | p2
  | PSeq Patt Patt         -- ^ sequence of token parts: p + q
  | PRep Patt              -- ^ repetition of token part: p*
- | PChar                  -- ^ string of length one
- | PChars [Char]          -- ^ character list
+ | PChar                  -- ^ string of length one: ?
+ | PChars [Char]          -- ^ character list: ["aeiou"]
+ | PMacro Ident           -- #p
+ | PM Ident Ident         -- #m.p
 
   deriving (Read, Show, Eq, Ord)
 

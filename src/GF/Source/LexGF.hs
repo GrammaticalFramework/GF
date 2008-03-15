@@ -88,7 +88,7 @@ eitherResIdent tv s = treeFind resWords
                               | s > a  = treeFind right
                               | s == a = t
 
-resWords = b "lincat" (b "def" (b "Type" (b "Str" (b "PType" (b "Lin" N N) N) (b "Tok" (b "Strs" N N) N)) (b "cat" (b "case" (b "abstract" N N) N) (b "data" (b "concrete" N N) N))) (b "include" (b "fun" (b "fn" (b "flags" N N) N) (b "in" (b "grammar" N N) N)) (b "interface" (b "instance" (b "incomplete" N N) N) (b "lin" (b "let" N N) N)))) (b "resource" (b "out" (b "of" (b "lintype" (b "lindef" N N) N) (b "oper" (b "open" N N) N)) (b "pattern" (b "param" (b "package" N N) N) (b "printname" (b "pre" N N) N))) (b "type" (b "table" (b "strs" (b "reuse" N N) N) (b "transfer" (b "tokenizer" N N) N)) (b "variants" (b "var" (b "union" N N) N) (b "with" (b "where" N N) N))))
+resWords = b "lincat" (b "def" (b "Type" (b "Str" (b "PType" (b "Lin" N N) N) (b "Tok" (b "Strs" N N) N)) (b "cat" (b "case" (b "abstract" N N) N) (b "data" (b "concrete" N N) N))) (b "include" (b "fun" (b "fn" (b "flags" N N) N) (b "in" (b "grammar" N N) N)) (b "interface" (b "instance" (b "incomplete" N N) N) (b "lin" (b "let" N N) N)))) (b "resource" (b "out" (b "of" (b "lintype" (b "lindef" N N) N) (b "oper" (b "open" N N) N)) (b "pattern" (b "param" (b "package" N N) N) (b "printname" (b "pre" N N) N))) (b "union" (b "table" (b "strs" (b "reuse" N N) N) (b "transfer" (b "tokenizer" N N) N)) (b "where" (b "variants" (b "var" N N) N) (b "with" N N))))
    where b s = B s (TS s)
 
 unescapeInitTail :: String -> String

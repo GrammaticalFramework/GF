@@ -503,6 +503,10 @@ term2patt trm = case termForm trm of
   Ok ([], QC p c, aa) -> do
     aa' <- mapM term2patt aa
     return (PP p c aa')
+
+  Ok ([], Q p c, []) -> do
+    return (PM p c)
+
   Ok ([], R r, []) -> do
     let (ll,aa) = unzipR r
     aa' <- mapM term2patt aa
@@ -523,6 +527,8 @@ term2patt trm = case termForm trm of
     return (PRep a')
   Ok ([], Cn (IC "?"), []) -> do
     return PChar
+  Ok ([], Cn (IC "[]"),[K s]) -> do
+    return $ PChars s
   Ok ([], Cn (IC "+"), [a,b]) -> do
     a' <- term2patt a
     b' <- term2patt b
@@ -532,6 +538,8 @@ term2patt trm = case termForm trm of
     b' <- term2patt b
     return (PAlt a' b')
 
+  Ok ([], Cn c, []) -> do
+    return (PMacro c)
 
   _ -> prtBad "no pattern corresponds to term" trm
 
@@ -540,8 +548,12 @@ patt2term pt = case pt of
   PV x      -> Vr x
   PW        -> Vr wildIdent             --- not parsable, should not occur
   PVal t i  -> Val t i
+  PMacro c  -> Cn c
+  PM p c    -> Q p c
+
   PC c pp   -> mkApp (Con c) (map patt2term pp)
   PP p c pp -> mkApp (QC p c) (map patt2term pp)
+
   PR r      -> R [assign l (patt2term p) | (l,p) <- r] 
   PT _ p    -> patt2term p
   PInt i    -> EInt i
@@ -550,6 +562,7 @@ patt2term pt = case pt of
 
   PAs x p   -> appc "@" [Vr x, patt2term p]            --- an encoding
   PChar     -> appc "?" []                             --- an encoding
+  PChars s  -> appc "[]" [K s]                         --- an encoding
   PSeq a b  -> appc "+" [(patt2term a), (patt2term b)] --- an encoding
   PAlt a b  -> appc "|" [(patt2term a), (patt2term b)] --- an encoding
   PRep a    -> appc "*" [(patt2term a)]                --- an encoding
@@ -731,7 +744,12 @@ composOp co trm =
         return (Alts (t',aa'))
    FV ts -> mapM co ts >>= return . FV
    Strs tt -> mapM co tt >>= return . Strs
-   _ -> return trm -- covers K, Vr, Cn, Sort
+
+   EPattType ty -> 
+     do ty' <- co ty
+        return (EPattType ty')
+
+   _ -> return trm -- covers K, Vr, Cn, Sort, EPatt
 
 getTableType :: TInfo -> Err Type
 getTableType i = case i of

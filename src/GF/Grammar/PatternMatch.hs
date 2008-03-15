@@ -111,13 +111,15 @@ tryMatch (p,t) = do
          matches <- checks [mapM tryMatch [(p1,K s1),(p2,K s2)] | (s1,s2) <- cuts]
          return (concat matches)
 
-      (PChar, ([],K [_],[])) -> return []
-
       (PRep p1, ([],K s, [])) -> checks [
          trym (foldr (const (PSeq p1)) (PString "") 
            [1..n]) t' | n <- [0 .. length s]
         ] >>
         return []
+
+      (PChar,  ([],K [_], [])) -> return []
+      (PChars cs, ([],K [c], [])) | elem c cs -> return []
+
       _ -> prtBad "no match in case expr for" t
   
 isInConstantForm :: Term -> Bool
