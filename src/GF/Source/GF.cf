@@ -192,8 +192,8 @@ EPre.      Exp4 ::= "pre" "{" Exp ";" [Altern] "}" ;
 EStrs.     Exp4 ::= "strs" "{" [Exp] "}" ;
 EConAt.    Exp4 ::= PIdent "@" Exp6 ; --%
 
-EPatt.     Exp4 ::= "pattern" Patt2 ;
-EPattType. Exp4 ::= "pattern" "type" Exp5 ;
+EPatt.     Exp4 ::= "#" Patt2 ;
+EPattType. Exp4 ::= "pattern" Exp5 ;
 
 ESelect.   Exp3 ::= Exp3 "!" Exp4 ;
 ETupTyp.   Exp3 ::= Exp3 "*" Exp4 ;

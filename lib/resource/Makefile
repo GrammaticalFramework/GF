@@ -25,7 +25,7 @@ GFCCP=$(GFCC) -preproc=./mkPresent
 new:
 	export GF='../../bin/gf -s' ; export GF_LIB_PATH='..'; $(MAKE) -e all
 
-all: chmod show-path prelude present alltenses mathematical api langs compiled
+all: chmod show-path prelude present alltenses
 
 chmod:
 	chmod a+x mkPresent
@@ -159,7 +159,7 @@ gfdoc:
 	mv ../prelude/*.html doc/gfdoc
 
 gf3: 
-	export GF_LIB_PATH=..; $(MAKE) -e gf3prelude gf3present gf3alltenses gf3mathematical
+	export GF_LIB_PATH=..; $(MAKE) -e gf3prelude gf3present gf3alltenses
 
 gf3prelude: 
 	$(GFNew) ../src/*.gf

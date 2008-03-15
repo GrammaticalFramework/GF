@@ -306,7 +306,8 @@ computeTermOpt rec gr = comput True where
        case allParamValues gr ptyp of
          Ok vs -> do
 
-           cs'  <- mapM (compBranchOpt g) cs
+           ps0  <- mapM (compPatternMacro . fst) cs
+           cs'  <- mapM (compBranchOpt g) (zip ps0 (map snd cs))
            sts  <- mapM (matchPattern cs') vs 
            ts   <- mapM (\ (c,g') -> comp (g' ++ g) c) sts
            ps   <- mapM term2patt vs
@@ -381,6 +382,33 @@ computeTermOpt rec gr = comput True where
        App f a  -> isCan f && isCan a
        R rs     -> all (isCan . snd . snd) rs
        _        -> False
+
+     compPatternMacro p = case p of
+       PM m c -> case look m c of
+         Ok (EPatt p') -> compPatternMacro p'
+         _ -> prtBad "pattern expected as value of" p ---- should be in CheckGr
+       PAs x p -> do
+         p' <- compPatternMacro p
+         return $ PAs x p'
+       PAlt p q -> do
+         p' <- compPatternMacro p
+         q' <- compPatternMacro q
+         return $ PAlt p' q'
+       PSeq p q -> do
+         p' <- compPatternMacro p
+         q' <- compPatternMacro q
+         return $ PSeq p' q'
+       PRep p -> do
+         p' <- compPatternMacro p
+         return $ PRep p'
+       PNeg p -> do
+         p' <- compPatternMacro p
+         return $ PNeg p'
+       PR rs -> do
+         rs' <- mapPairsM compPatternMacro rs
+         return $ PR rs'
+
+       _ -> return p
 
      compBranch g (p,v) = do
        let g' = contP p ++ g

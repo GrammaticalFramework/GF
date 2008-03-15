@@ -496,6 +496,9 @@ transExp x = case x of
   ELetb defs exp -> transExp $ ELet defs exp
   EWhere exp defs -> transExp $ ELet defs exp
 
+  EPattType typ -> liftM G.EPattType (transExp typ)
+  EPatt patt -> liftM G.EPatt (transPatt patt)
+
   ELString (LString str) -> return $ G.K str 
   ELin id -> liftM G.LiT $ transIdent id
 
@@ -608,6 +611,8 @@ transPatt x = case x of
   PAs x p     -> liftM2 G.PAs  (transIdent x) (transPatt p)
   PChar -> return G.PChar
   PChars s -> return $ G.PChars s
+  PMacro c -> liftM G.PMacro $ transIdent c
+  PM m c   -> liftM2 G.PM (transIdent m) (transIdent c)
 
 transBind :: Bind -> Err Ident
 transBind x = case x of
