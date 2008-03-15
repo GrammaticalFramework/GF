@@ -15,9 +15,12 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
 				                 _     => NF Sg Indef
                                                } ;
                                  <Pl,Def>   => NF det.n det.spec ;
-                                 <Pl,Indef> => case det.countable of {
-                                                 True  => NFPlCount ;
-                                                 False => NF Pl Indef
+                                 <Pl,Indef> => case cn.g of {
+                                                 DMascPersonal => NF Pl Indef;
+                                                 _             => case det.countable of {
+                                                                    True  => NFPlCount ;
+                                                                    False => NF Pl Indef
+                                                                  }
                                                }
                                } ;
                           s = det.s ! cn.g ! role ++ cn.s ! nf
