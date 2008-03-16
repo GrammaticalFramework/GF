@@ -30,6 +30,12 @@ import Data.Char (isDigit,isSpace)
 import qualified Data.Map as Map
 import Debug.Trace ----
 
+-- when developing, swap commenting
+
+--traceD s t = trace s t 
+traceD s t = t 
+
+
 -- the main function: generate GFCC from GF.
 
 prGrammar2gfcc :: Options -> String -> SourceGrammar -> (String,String)
@@ -273,7 +279,7 @@ canon2canon abs =
    where
       t2t = term2term cg pv
       ty2ty = type2type cg pv
-      pv@(labels,untyps,typs) = paramValues cg ---trs $ paramValues cg
+      pv@(labels,untyps,typs) = trs $ paramValues cg
 
     -- flatten record arguments of param constructors
   p2p (f,j) = case j of
@@ -285,22 +291,23 @@ canon2canon abs =
       _ -> [(x,ty)]
 
 ----
-  trs v = trace (tr v) v
+  trs v = traceD (tr v) v
 
   tr (labels,untyps,typs) =
-     ("labels:" ++++
+     ("LABELS:" ++++
        unlines [A.prt c ++ "." ++ unwords (map A.prt l) +++ "=" +++ show i  | 
-       ((c,l),i) <- Map.toList labels]) ++
-     ("untyps:" ++++ unlines [A.prt t +++ "=" +++ show i  | 
-       (t,i) <- Map.toList untyps]) ++
-     ("typs:" ++++ unlines [A.prt t | 
-       (t,_) <- Map.toList typs])
+       ((c,l),i) <- Map.toList labels]) ++++
+     ("UNTYPS:" ++++ unlines [A.prt t +++ "=" +++ show i | 
+       (t,i) <- Map.toList untyps]) ++++
+     ("TYPS:" ++++ unlines [A.prt t +++ "=" +++ show (Map.assocs i) | 
+       (t,i) <- Map.toList typs])
 ----
 
 purgeGrammar :: Ident -> SourceGrammar -> SourceGrammar
 purgeGrammar abstr gr = 
-  (M.MGrammar . map unopt . filter complete . purge . M.modules) gr 
+  (M.MGrammar . list . map unopt . filter complete . purge . M.modules) gr 
  where
+  list ms = traceD ("MODULES" +++ unwords (map (prt . fst) ms)) ms
   purge = nubBy (\x y -> fst x == fst y) . filter (flip elem needed . fst)
   needed = nub $ concatMap (requiredCanModules isSingle gr) acncs
   acncs = abstr : M.allConcretes gr abstr
@@ -318,9 +325,14 @@ paramValues :: SourceGrammar -> ParamEnv
 paramValues cgr = (labels,untyps,typs) where
   partyps = nub $ 
             --- [App (Q (IC "Predef") (IC "Ints")) (EInt i) | i <- [1,9]] ---linTypeInt 
+{-
             [ty | 
               (_,(_,CncCat (Yes (RecType ls)) _ _)) <- jments,
               ty0 <- [ty | (_, ty) <- unlockTyp ls],
+              ty  <- typsFrom ty0
+-}
+            [ty | 
+              (_,(_,CncCat (Yes ty0) _ _)) <- jments,
               ty  <- typsFrom ty0
             ] ++ [
              Q m ty | 
@@ -329,11 +341,12 @@ paramValues cgr = (labels,untyps,typs) where
               (_,(_,CncFun _ (Yes tr) _)) <- jments,
               ty  <- err (const []) snd $ appSTM (typsFromTrm tr) []
             ]
-  params = [(ty, errVal [] $ Look.allParamValues cgr ty) | ty <- partyps]
-  typsFrom ty = case ty of
+  params = [(ty, errVal (traceD ("UNKNOWN PARAM TYPE" +++ show ty) []) $ 
+                                         Look.allParamValues cgr ty) | ty <- partyps]
+  typsFrom ty = unlockTy ty : case ty of
     Table p t  -> typsFrom p ++ typsFrom t
-    RecType ls -> RecType (sort (unlockTyp ls)) : concat [typsFrom t | (_, t) <- ls]
-    _ -> [ty]
+    RecType ls -> concat [typsFrom t | (_, t) <- ls]
+    _ -> []
  
   typsFromTrm :: Term -> STM [Type] Term
   typsFromTrm tr = case tr of
@@ -360,7 +373,9 @@ paramValues cgr = (labels,untyps,typs) where
     [(IC cat,[(LIdent "s",GM.typeStr)]) | cat <- ["Float", "String"]] ++
     reverse ---- TODO: really those lincats that are reached
             ---- reverse is enough to expel overshadowed ones... 
-      [(cat,(unlockTyp ls)) | (_,(cat,CncCat (Yes (RecType ls)) _ _)) <- jments]
+      [(cat,ls) | (_,(cat,CncCat (Yes ty) _ _)) <- jments, 
+                  RecType ls <- [unlockTy ty]]
+----      [(cat,(unlockTyp ls)) | (_,(cat,CncCat (Yes (RecType ls)) _ _)) <- jments]
   labels = Map.fromList $ concat 
     [((cat,[lab]),(typ,i)): 
       [((cat,[LVar v]),(typ,toInteger (mx + v))) | v <- [0,1]] ++ ---- 1 or 2 vars 
@@ -372,7 +387,7 @@ paramValues cgr = (labels,untyps,typs) where
     ---- TODO: even go to deeper records
    where
      getRec typ = case typ of
-       RecType rs -> [rs]
+       RecType rs -> [rs] ---- [unlockTyp rs]  -- (sort (unlockTyp ls))
        Table _ t  -> getRec t
        _ -> []
 
@@ -482,8 +497,7 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
         (FV ts,_) -> ts
         _ -> [tr]
       valNumFV ts = case ts of
-        [tr] -> trace (unwords (map prt (Map.keys untyps))) $ 
-                  prtTrace tr $ K "66667"
+        [tr] -> prtTrace tr $ K "66667"
         _ -> FV $ map valNum ts
 
    mkCurry trm = case trm of
@@ -510,12 +524,20 @@ unlock = filter notlock where
   notlock (l,(_, t)) = case t of --- need not look at l
      R [] -> False
      _ -> True
-unlockTyp = filter notlock where
-  notlock (l, t) = case t of --- need not look at l
+
+unlockTyp = filter notlock
+  
+notlock (l, t) = case t of --- need not look at l
      RecType [] -> False
      _ -> True
+
+unlockTy ty = case ty of
+  RecType ls -> RecType $ sort [(l, unlockTy t) | (l,t) <- ls, notlock (l,t)]
+  _ -> GM.composSafeOp unlockTy ty
+
 
 prtTrace tr n = 
   trace ("-- INTERNAL COMPILER ERROR" +++ A.prt tr ++++ show n) n
 prTrace  tr n = trace ("-- OBSERVE" +++ A.prt tr +++ show n +++ show tr) n
+
 
