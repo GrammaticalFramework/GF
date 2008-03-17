@@ -51,8 +51,8 @@ lin
               "lasten" "lapsia" "lapsina" "lapsissa" "lapsiin" ;
   church_N = mkN "kirkko" ;
   city_N = mkN "kaupunki" ;
-  clean_A = mkA "puhdas" ;
-  clever_A = mkA "viisas" ;
+  clean_A = mkA (mkN "puhdas") ;
+  clever_A = mkA (mkN "viisas") ;
   close_V2 = mkV2 (mkV "sulkea") ;
   coat_N = mkN "takki" ;
   cold_A = mkA (mkN "kylm‰") "kylmempi" "kylmin" ;
@@ -357,8 +357,6 @@ lin
       "seisoin" "seisoi" "seisoisi" "seissyt" "seisty" "seistyn" ; --- *seisoiv‰t
   suck_V2 = mkV2 (mkV "ime‰") cpartitive ;
   swell_V = mkV "turvota" "turposi" ;
---  swell_V = mk12V "turvota" "turpoaa" "turpoan" "turpoavat" "turvotkaa" "turvotaan"
---      "turposi" "turposin" "turpoaisi" "turvonnut" "turvottu" "turvotun" ;
   swim_V = mkV "uida" "uin" "ui" ;
   think_V = mkV "ajatella" "ajattelen" "ajatteli" ;
   throw_V2 = mkV2 (mkV "heitt‰‰") ;

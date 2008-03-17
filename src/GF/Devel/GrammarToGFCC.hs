@@ -418,6 +418,7 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
   T (TTyped ty) cs  -> t2t $ V ty $ map snd cs ---- should be elim'ed in tc
   V ty ts  -> mkCurry $ V ty [t2t t | t <- ts]
   S t p    -> mkCurrySel (t2t t) (t2t p)
+
   _ -> GM.composSafeOp t2t tr
  where
    t2t = term2term cgr env
@@ -523,6 +524,7 @@ mkLab k = LIdent (("_" ++ show k))
 unlock = filter notlock where
   notlock (l,(_, t)) = case t of --- need not look at l
      R [] -> False
+     RecType [] -> False
      _ -> True
 
 unlockTyp = filter notlock

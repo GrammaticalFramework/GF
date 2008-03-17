@@ -425,7 +425,6 @@ oper
 -- adjectives
 
   mkA = overload {
---    mkA : Str -> A  = \x -> noun2adjDeg (mk1N x) ** {lock_A = <>} ;
     mkA : Str -> A  = mkA_1 ;
     mkA : N -> A = \n -> noun2adjDeg n ** {lock_A = <>} ;
     mkA : N -> (kivempaa,kivinta : Str) -> A = regAdjective ;
