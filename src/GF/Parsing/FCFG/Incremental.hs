@@ -15,7 +15,7 @@ import GF.Parsing.FCFG.Range
 import GF.GFCC.CId
 import Debug.Trace
 
-initState :: FCFPInfo -> CId -> Chart
+initState :: FCFPInfo -> CId -> State
 initState pinfo start = 
   let items = do
         starts <- Map.lookup start (startupCats pinfo)
@@ -23,93 +23,85 @@ initState pinfo start =
         ruleid <- topdownRules pinfo ? c
         let (FRule fn args cat lins) = allRules pinfo ! ruleid
         lbl <- indices lins
-        return (Active 0 0 lbl 0 0 (App ruleid [0 | arg <- args]))
-  in process pinfo items (Chart emptyChart emptyChart emptyChart Map.empty IntMap.empty 1)
-
-nextState :: FCFPInfo -> FToken -> Chart -> Chart
-nextState pinfo t chart =
-  let items = chartLookup (actTok chart) t
-  in process pinfo [Active j (k+1) lbl (ppos+1) fid expr | Active j k lbl ppos fid expr <- items] chart{actTok=emptyChart}
-
-getCompletions :: Chart -> FToken -> [FToken]
-getCompletions chart w =
-  [t | t <- chartKeys (actTok chart), take (length w) t == w]
-
-process pinfo []            chart = chart
-process pinfo (item:xitems) chart = univRule item chart
-  where
-    univRule item@(Active j k lbl ppos fid0 expr@(App ruleid args)) chart
-      | inRange (bounds lin) ppos =
-           case lin ! ppos of
-             FSymCat c r d -> case args !! d of
-                                0  -> case chartInsert (actCat chart) item (c,r,k) of
-                                        Nothing     -> process pinfo xitems chart
-                                        Just actCat -> let items = do ruleid <- topdownRules pinfo ? c
-                                                                      let (FRule fn args cat lins) = allRules pinfo ! ruleid
-                                                                      return (Active k k r 0 0 (App ruleid [0 | arg <- args]))
-                                                                   `mplus`
-                                                                   do endings <- Map.lookup (c,r,k) (passive chart)
-                                                                      (k',id) <- Map.toList endings
-						 	              return (Active j k' lbl (ppos+1) fid0 (App ruleid (updateAt d id args)))
-                                                       in process pinfo (xitems++items) chart{actCat=actCat}
-                                id -> case chartInsert (actTre chart) item (id,r,k) of
-                                        Nothing     -> process pinfo xitems chart
-                                        Just actTre -> let items = do exprs <- IntMap.lookup id (forest chart)
-                                                                      App ruleid args <- Set.toList exprs
-                                                                      return (Active k k r 0 id (App ruleid args))
-                                                       in process pinfo (xitems++items) chart{actTre=actTre}
-      	     FSymTok tok   -> case chartInsert (actTok chart) item tok of
-                                Nothing     -> process pinfo xitems chart
-                                Just actTok -> process pinfo xitems chart{actTok=actTok}
-      | otherwise = let ffg fid chart = if fid0 == 0
-                                          then let items = do Active j' k' lbl ppos fidc (App ruleid args) <- chartLookup (actCat chart) (cat,lbl,j)
-	                                                      let (FRule fn _ cat lins) = allRules pinfo ! ruleid
-	                                                          FSymCat c r d = lins ! lbl ! ppos
-	                                                      return (Active j' k lbl (ppos+1) fidc (App ruleid (updateAt d fid args)))
-	                                       in process pinfo (xitems++items) chart
-	                                  else let items = do Active j' k' lbl ppos fidc (App ruleid args) <- chartLookup (actTre chart) (fid0,lbl,j)
-	                                                      let (FRule fn _ cat lins) = allRules pinfo ! ruleid
-	                                                          FSymCat c r d = lins ! lbl ! ppos
-	                                                      return (Active j' k lbl (ppos+1) fidc (App ruleid (updateAt d fid args)))
-	                                       in process pinfo (xitems++items) chart
-
-                    in case Map.lookup (cat, lbl, j) (passive chart) of
-                         Nothing      ->              ffg (nextId chart) $
-                                                      chart{passive=Map.insert (cat, lbl, j) (Map.singleton k (nextId chart)) (passive chart)
-                                                           ,forest =IntMap.insert (nextId chart) (Set.singleton expr) (forest chart)
-                                                           ,nextId =nextId chart+1
-                                                           }
-                         Just endings -> case Map.lookup k endings of
-                                           Nothing -> ffg (nextId chart) $
-                                                      chart{passive=Map.insert (cat, lbl, j) (Map.insert k (nextId chart) endings) (passive chart)
-                                                           ,forest =IntMap.insert (nextId chart) (Set.singleton expr) (forest chart)
-                                                           ,nextId =nextId chart+1
-                                                           }
-                                           Just id -> process pinfo xitems chart{forest = IntMap.insertWith Set.union id (Set.singleton expr) (forest chart)}
-      where
-        (FRule fn _ cat lins) = allRules pinfo ! ruleid
-        lin                   = lins ! lbl
-
+        return (Active 0 lbl 0 ruleid args cat)
         
+      forest = IntMap.fromListWith Set.union [(cat, Set.singleton (Passive ruleid args)) | (ruleid, FRule _ args cat _) <- assocs (allRules pinfo)]
 
-updateAt nr x xs = [if i == nr then x else y | (i,y) <- zip [0..] xs]
+      max_fid = case IntMap.maxViewWithKey forest of
+                  Just ((fid,_), _) -> fid+1
+                  Nothing           -> 0
+
+  in process pinfo items (State emptyChart [] emptyChart Map.empty forest max_fid 0)
+
+nextState :: FCFPInfo -> FToken -> State -> State
+nextState pinfo t state =
+  process pinfo (chartLookup (tokens state) t) state{ chart=emptyChart
+                                                    , charts=chart state : charts state
+                                                    , tokens=emptyChart
+                                                    , passive=Map.empty
+                                                    , currOffset=currOffset state+1
+                                                    }
+
+getCompletions :: State -> FToken -> [FToken]
+getCompletions state w =
+  [t | t <- chartKeys (tokens state), take (length w) t == w]
+
+process pinfo []                                                 state = state
+process pinfo (item@(Active j lbl ppos ruleid args fid0):xitems) state
+  | inRange (bounds lin) ppos =
+      case lin ! ppos of
+        FSymCat _ r d -> let fid = args !! d
+                         in case chartInsert (chart state) item (fid,r) of
+                              Nothing     -> process pinfo xitems state
+                              Just actCat -> let items = do exprs <- IntMap.lookup fid (forest state)
+                                                            (Passive ruleid args) <- Set.toList exprs
+                                                            return (Active k r 0 ruleid args fid)
+                                                         `mplus`
+                                                         do id <- Map.lookup (fid,r,k) (passive state)
+		   		 	                    return (Active j lbl (ppos+1) ruleid (updateAt d id args) fid0)
+                                             in process pinfo (xitems++items) state{chart=actCat}
+      	FSymTok tok   -> case chartInsert (tokens state) (Active j lbl (ppos+1) ruleid args fid0) tok of
+                           Nothing     -> process pinfo xitems state
+                           Just actTok -> process pinfo xitems state{tokens=actTok}
+  | otherwise = case Map.lookup (fid0, lbl, j) (passive state) of
+                  Nothing -> let fid = nextId state
+                                 items = do Active j' lbl ppos ruleid args fidc <- chartLookup ((chart state:charts state) !! (k-j)) (fid0,lbl)
+	                                    let FSymCat _ _ d = rhs ruleid lbl ! ppos
+	                                    return (Active j' lbl (ppos+1) ruleid (updateAt d fid args) fidc)
+	                     in process pinfo (xitems++items) state{passive=Map.insert (fid0, lbl, j) fid (passive state)
+                                                                   ,forest =IntMap.insert fid (Set.singleton (Passive ruleid args)) (forest state)
+                                                                   ,nextId =nextId state+1
+                                                                   }
+                  Just id -> process pinfo xitems state{forest = IntMap.insertWith Set.union id (Set.singleton (Passive ruleid args)) (forest state)}
+  where
+   lin = rhs ruleid lbl
+   k   = currOffset state
+
+   rhs ruleid lbl = lins ! lbl
+     where
+       (FRule _ _ cat lins) = allRules pinfo ! ruleid
+
+   updateAt nr x xs = [if i == nr then x else y | (i,y) <- zip [0..] xs]
+
 
 data Active
-  = Active Int Int FIndex FPointPos ForestId Expr
+  = Active Int FIndex FPointPos RuleId [FCat] FCat
   deriving (Eq,Show,Ord)
+data Passive
+  = Passive RuleId [FCat]
+  deriving (Eq,Ord,Show)
 
-data Chart
-  = Chart
-      { actCat  :: ParseChart Active  (FCat, FIndex, Int)
-      , actTre  :: ParseChart Active  (ForestId, FIndex, Int)
-      , actTok  :: ParseChart Active  FToken
-      , passive :: Map.Map (FCat, FIndex, Int) (Map.Map Int ForestId)
-      , forest  :: IntMap.IntMap (Set.Set Expr)
-      , nextId  :: ForestId
+
+data State
+  = State
+      { chart   :: Chart
+      , charts  :: [Chart]
+      , tokens  :: ParseChart Active  FToken
+      , passive :: Map.Map (FCat, FIndex, Int) FCat
+      , forest  :: IntMap.IntMap (Set.Set Passive)
+      , nextId  :: FCat
+      , currOffset :: Int
       }
       deriving Show
 
-type ForestId = Int
-data Expr
-  = App RuleId [ForestId]
-  deriving (Eq,Ord,Show)
+type Chart = ParseChart Active (FCat, FIndex)
