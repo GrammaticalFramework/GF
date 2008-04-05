@@ -44,6 +44,8 @@ resource ResBul = ParamX ** open Prelude in {
 
 --2 For $Verb$
 
+    Aspect = Imperf | Perf ;
+
     VForm = 
        VPres      Number Person
      | VAorist    Number Person
@@ -186,14 +188,16 @@ resource ResBul = ParamX ** open Prelude in {
       
   oper
 -- For $Verb$.
+    VTable = VForm => Str ;
+
     Verb : Type = {
-      s  : VForm => Str ;
-      vtype : VType
+      s      : Aspect => VTable ;
+      vtype  : VType
     } ;
 
     VP : Type = {
-      s   : Tense => Anteriority => Polarity => Agr => Bool => Str ;
-      imp : Polarity => Number => Str ;
+      s   : Tense => Anteriority => Polarity => Agr => Bool => Aspect => Str ;
+      imp : Polarity => Number => Aspect => Str ;
       ad  : Bool => Str ;          -- sentential adverb
       s2  : Agr => Str ;
       subjRole : Role
@@ -201,53 +205,75 @@ resource ResBul = ParamX ** open Prelude in {
 
     predV : Verb -> VP =
       \verb -> 
-        { s = \\t,a,p,agr,q => let 
-                                 clitic = case verb.vtype of {
-                                               VNormal    => {s=[]; agr=agr} ;
-                                               VMedial c  => {s=reflClitics ! c; agr=agr} ;
-                                               VPhrasal c => {s=personalClitics ! c ! agr.gn ! agr.p; agr={gn=GSg Neut; p=P3}}
-                                             } ;
+        { s = \\t,a,p,agr,q,asp =>
+                             let clitic = case verb.vtype of {
+                                            VNormal    => {s=[]; agr=agr} ;
+                                            VMedial c  => {s=reflClitics ! c; agr=agr} ;
+                                            VPhrasal c => {s=personalClitics ! c ! agr.gn ! agr.p; agr={gn=GSg Neut; p=P3}}
+                                          } ;
 
-                                 present = verb.s ! (VPres   (numGenNum clitic.agr.gn) clitic.agr.p) ;
-                                 aorist  = verb.s ! (VAorist (numGenNum clitic.agr.gn) clitic.agr.p) ;
-                                 perfect = verb.s ! (VPerfect (aform clitic.agr.gn Indef (RObj Acc))) ;
+                                 present = verb.s ! asp ! (VPres   (numGenNum clitic.agr.gn) clitic.agr.p) ;
+                                 presentImperf = verb.s ! Imperf ! (VPres   (numGenNum clitic.agr.gn) clitic.agr.p) ;
+                                 aorist = verb.s ! asp ! (VAorist (numGenNum clitic.agr.gn) clitic.agr.p) ;
+                                 perfect = verb.s ! asp ! (VPerfect (aform clitic.agr.gn Indef (RObj Acc))) ;
+
+                                 auxPres   = auxBe ! VPres (numGenNum clitic.agr.gn) clitic.agr.p ;
+                                 auxAorist = auxBe ! VAorist (numGenNum clitic.agr.gn) clitic.agr.p ;
+                                 auxCond   = auxWould ! VAorist (numGenNum clitic.agr.gn) clitic.agr.p ;
+
+                                 apc : Str -> Str = \s ->
+                                   case <numGenNum clitic.agr.gn, clitic.agr.p> of {
+                                     <Sg, P3> => clitic.s++s++auxPres ;
+                                     _        => auxPres++s++clitic.s
+                                   } ;
                                  
-                                 auxPres    = auxBe clitic.s ! VPres (numGenNum clitic.agr.gn) clitic.agr.p ;
-                                 auxAorist  = auxBe clitic.s ! VAorist (numGenNum clitic.agr.gn) clitic.agr.p ;
-                                 auxPerfect = auxBe clitic.s ! VPerfect (aform clitic.agr.gn Indef (RObj Acc)) ;
-                                 auxCondS   = auxWould clitic.s ! VAorist (numGenNum clitic.agr.gn) clitic.agr.p ;
-                                 auxCondA   = auxCondS ++
-                                              auxBe [] ! VPerfect (aform clitic.agr.gn Indef (RObj Acc)) ;
-
-                                 verbs : {aux:Str; main:Str}
-                                       = case <t,a> of {
-                                           <Pres,Simul> => {aux=clitic.s; main=present} ;
-                                           <Pres,Anter> => {aux=auxPres; main=perfect} ;
-                                           <Past,Simul> => {aux=clitic.s; main=aorist} ;
-                                           <Past,Anter> => {aux=auxAorist; main=perfect} ;
-                                           <Fut, Simul> => {aux=clitic.s; main=present} ;
-                                           <Fut, Anter> => {aux=auxPres; main=perfect} ;
-                                           <Cond,Simul> => {aux=auxCondS; main=perfect} ;
-                                           <Cond,Anter> => {aux=auxCondA; main=perfect}
-                                         } ;
-
                                  li = case q of {True => "ли"; False => []} ;
-                                 aux = case p of {
-                                         Pos => case t of {
-                                                  Fut => {s1="ще"++verbs.aux; s2=li} ;
-                                                  _   => case q of {True  => {s1=[]; s2="ли"++verbs.aux};
-                                                                    False => {s1=verbs.aux; s2=[]}}
-                                                } ;
-                                         Neg => case t of {
-                                                  Fut => {s1="не"++"ще"++verbs.aux; s2=li} ;
-                                                  _   => case q of {True  => {s1="не"++verbs.aux; s2="ли"};
-                                                                    False => {s1="не"++verbs.aux; s2=[]}}
-                                                }
-                                       }
 
-                             in aux.s1 ++ verbs.main ++ aux.s2;
-             imp = \\p,n => let ne = case p of {Pos => []; Neg => "не"} ;
-                            in ne ++ verb.s ! VImperative n ;
+                                 vf1 : Str -> {s1 : Str; s2 : Str} = \s ->
+                                       case p of {
+                                         Pos => case q of {True  => {s1=[]; s2="ли"++apc []};
+                                                           False => {s1=apc []; s2=[]}} ;
+                                         Neg => {s1="не"++apc li; s2=[]}
+                                       } ;
+
+                                 vf2 : Str -> {s1 : Str; s2 : Str} = \s ->
+                                       case p of {
+                                         Pos => case q of {True  => {s1=[]; s2="ли"++s};
+                                                           False => {s1=s;  s2=[]}} ;
+                                         Neg => case verb.vtype of
+                                                          {VNormal => {s1="не"; s2=li} ;
+				                           _       => {s1="не"++s++li; s2=[]}}
+                                       } ;
+
+                                 vf3 : Str -> {s1 : Str; s2 : Str} = \s ->
+                                       case p of {
+                                         Pos => {s1="ще"++s; s2=li} ;
+                                         Neg => {s1="няма"++li++"да"++s; s2=[]}
+                                       } ;
+
+                                 vf4 : Str -> {s1 : Str; s2 : Str} = \s ->
+                                       case p of {
+                                         Pos => {s1=      s++li++clitic.s; s2=[]} ;
+                                         Neg => {s1="не"++s++li++clitic.s; s2=[]}
+                                       } ;
+
+                                 verbs : {aux:{s1:Str; s2:Str}; main:Str}
+                                       = case <t,a> of {
+                                           <Pres,Simul> => {aux=vf2 clitic.s;  main=presentImperf} ;
+                                           <Pres,Anter> => {aux=vf1 clitic.s;  main=perfect} ;
+                                           <Past,Simul> => {aux=vf2 clitic.s;  main=aorist} ;
+                                           <Past,Anter> => {aux=vf4 auxAorist; main=perfect} ;
+                                           <Fut, Simul> => {aux=vf3 clitic.s;  main=present} ;
+                                           <Fut, Anter> => {aux=vf3 (apc []);  main=perfect} ;
+                                           <Cond,_    > => {aux=vf4 auxCond ;  main=perfect}
+                                         }
+
+                            in verbs.aux.s1 ++ verbs.main ++ verbs.aux.s2 ;
+             imp = \\p,n,asp =>
+                            case p of {
+                              Pos => verb.s ! asp ! VImperative n ;
+                              Neg => "не" ++ verb.s ! Imperf ! VImperative n
+                            } ;
              ad = \\_ => [] ;
              s2 = \\_ => [] ;
              subjRole = case verb.vtype of {
@@ -265,62 +291,62 @@ resource ResBul = ParamX ** open Prelude in {
       subjRole = vp.subjRole
       } ;
 
-    auxBe : Str -> VForm => Str = \se ->
+    auxBe : VTable =
       table {
-        VPres      Sg P1  => "съм" ++ se ; 
-        VPres      Sg P2  => "си" ++ se ;
-        VPres      Sg P3  => se ++ "е" ;
-        VPres      Pl P1  => "сме" ++ se ; 
-        VPres      Pl P2  => "сте" ++ se ;
-        VPres      Pl P3  => "са" ++ se ;
-        VAorist    Sg P1  => "бях" ++ se ; 
-        VAorist    Sg P2  => "беше" ++ se ;
-        VAorist    Sg P3  => se ++ "беше" ;
-        VAorist    Pl P1  => "бяхме" ++ se ; 
-        VAorist    Pl P2  => "бяхте" ++ se ;
-        VAorist    Pl P3  => "бяха" ++ se ;
-        VImperfect Sg P1  => "бях" ++ se ; 
-        VImperfect Sg _   => "беше" ++ se ;
-        VImperfect Pl P1  => "бяхме" ++ se ; 
-        VImperfect Pl P2  => "бяхте" ++ se ;
-        VImperfect Pl P3  => "бяха" ++ se ;
-        VPerfect    aform => regAdjective "бил" ! aform ++ se ;
-        VPluPerfect aform => regAdjective "бил" ! aform ++ se ;
-        VPassive    aform => regAdjective "бъден" ! aform ++ se ;
-        VPresPart   aform => regAdjective "бъдещ" ! aform ++ se ;
-        VImperative Sg    => "бъди" ++ se ;
-        VImperative Pl    => "бъдете" ++ se ;
-        VGerund           => "бидейки" ++ se
+        VPres      Sg P1  => "съм" ; 
+        VPres      Sg P2  => "си" ;
+        VPres      Sg P3  => "е" ;
+        VPres      Pl P1  => "сме" ; 
+        VPres      Pl P2  => "сте" ;
+        VPres      Pl P3  => "са" ;
+        VAorist    Sg P1  => "бях" ; 
+        VAorist    Sg _   => "беше" ;
+        VAorist    Pl P1  => "бяхме" ; 
+        VAorist    Pl P2  => "бяхте" ;
+        VAorist    Pl P3  => "бяха" ;
+        VImperfect Sg P1  => "бях" ; 
+        VImperfect Sg _   => "беше" ;
+        VImperfect Pl P1  => "бяхме" ; 
+        VImperfect Pl P2  => "бяхте" ;
+        VImperfect Pl P3  => "бяха" ;
+        VPerfect    aform => regAdjective "бил" ! aform ;
+        VPluPerfect aform => regAdjective "бил" ! aform ;
+        VPassive    aform => regAdjective "бъден" ! aform ;
+        VPresPart   aform => regAdjective "бъдещ" ! aform ;
+        VImperative Sg    => "бъди" ;
+        VImperative Pl    => "бъдете" ;
+        VGerund           => "бидейки"
       } ;
 
-    auxWould : Str -> VForm => Str = \se ->
+    auxWould : VTable =
       table {
-        VPres      Sg P1  => "бъда" ++ se ; 
-        VPres      Sg P2  => "бъдеш" ++ se ;
-        VPres      Sg P3  => se ++ "бъде" ; 
-        VPres      Pl P1  => "бъдем" ++ se ; 
-        VPres      Pl P2  => "бъдете" ++ se ;
-        VPres      Pl P3  => "бъдат" ++ se ;
-        VAorist    Sg P1  => "бих" ++ se ; 
-        VAorist    Sg _   => "би" ++ se ;
-        VAorist    Pl P1  => "бихме" ++ se ; 
-        VAorist    Pl P2  => "бихте" ++ se ;
-        VAorist    Pl P3  => "биха" ++ se ;
-        VImperfect Sg P1  => "бъдех" ++ se ; 
-        VImperfect Sg _   => "бъдеше" ++ se ;
-        VImperfect Pl P1  => "бъдехме" ++ se ; 
-        VImperfect Pl P2  => "бъдехте" ++ se ;
-        VImperfect Pl P3  => "бъдеха" ++ se ;
-        VPerfect    aform => regAdjective "бил" ! aform ++ se ;
-        VPluPerfect aform => regAdjective "бъдел" ! aform ++ se ;
-        VPassive    aform => regAdjective "бъден" ! aform ++ se ;
-        VPresPart   aform => regAdjective "бъдещ" ! aform ++ se ;
-        VImperative Sg    => "бъди" ++ se ;
-        VImperative Pl    => "бъдете" ++ se ;
-        VGerund           => "бъдейки" ++ se
+        VPres      Sg P1  => "бъда" ; 
+        VPres      Sg P2  => "бъдеш" ;
+        VPres      Sg P3  => "бъде" ; 
+        VPres      Pl P1  => "бъдем" ; 
+        VPres      Pl P2  => "бъдете" ;
+        VPres      Pl P3  => "бъдат" ;
+        VAorist    Sg P1  => "бих" ; 
+        VAorist    Sg _   => "би" ;
+        VAorist    Pl P1  => "бихме" ; 
+        VAorist    Pl P2  => "бихте" ;
+        VAorist    Pl P3  => "биха" ;
+        VImperfect Sg P1  => "бъдех" ; 
+        VImperfect Sg _   => "бъдеше" ;
+        VImperfect Pl P1  => "бъдехме" ; 
+        VImperfect Pl P2  => "бъдехте" ;
+        VImperfect Pl P3  => "бъдеха" ;
+        VPerfect    aform => regAdjective "бил" ! aform ;
+        VPluPerfect aform => regAdjective "бъдел" ! aform ;
+        VPassive    aform => regAdjective "бъден" ! aform ;
+        VPresPart   aform => regAdjective "бъдещ" ! aform ;
+        VImperative Sg    => "бъди" ;
+        VImperative Pl    => "бъдете" ;
+        VGerund           => "бъдейки"
       } ;
 
-    verbBe : Verb = {s=auxBe []; vtype=VNormal} ;
+    verbBe    : Verb = {s=\\_=>auxBe ;    vtype=VNormal} ;
+    verbWould : Verb = {s=\\_=>auxWould ; vtype=VNormal} ;
 
     reflClitics : Case => Str = table {Acc => "се"; Dat => "си"} ;
 
@@ -382,23 +408,23 @@ resource ResBul = ParamX ** open Prelude in {
     
 -- For $Sentence$.
 
-    Clause : Type = {
-      s : Tense => Anteriority => Polarity => Order => Str
-      } ;
+  Clause : Type = {
+    s : Tense => Anteriority => Polarity => Order => Str
+  } ;
 
-    mkClause : Str -> Agr -> VP -> Clause =
-      \subj,agr,vp -> {
-        s = \\t,a,b,o => 
-          let 
-            verb  : Bool => Str
-                  = \\q => vp.ad ! q ++ vp.s ! t ! a ! b ! agr ! q ;
-            compl = vp.s2 ! agr
-          in case o of {
-              Main  => subj ++ verb ! False ++ compl ;
-              Inv   => verb ! False ++ compl ++ subj ;
-              Quest => subj ++ verb ! True ++ compl
-             }
-      } ;
+  mkClause : Str -> Agr -> VP -> Clause =
+    \subj,agr,vp -> {
+      s = \\t,a,p,o => 
+        let 
+          verb  : Bool => Str
+                = \\q => vp.ad ! q ++ vp.s ! t ! a ! p ! agr ! q ! Perf ;
+          compl = vp.s2 ! agr
+        in case o of {
+             Main  => subj ++ verb ! False ++ compl ;
+             Inv   => verb ! False ++ compl ++ subj ;
+             Quest => subj ++ verb ! True ++ compl
+           }
+    } ;
       
 -- For $Numeral$.
 

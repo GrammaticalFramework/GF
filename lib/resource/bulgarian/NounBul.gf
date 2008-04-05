@@ -44,7 +44,7 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
       } ;
 
     PPartNP np v2 = {
-      s = \\c => np.s ! c ++ v2.s ! VPassive (aform np.a.gn Indef c) ;
+      s = \\c => np.s ! c ++ v2.s ! Perf ! VPassive (aform np.a.gn Indef c) ;
       a = np.a
       } ;
 

@@ -38,9 +38,9 @@ oper
 
 --2 Verbs
 
-  mkVerb : (_,_,_,_,_,_,_,_,_:Str) -> V = 
-    \cheta,chete,chetoh,chetqh,chel,chetql,cheten,chetqst,cheti -> {
-    s = table {
+  mkVerb : (_,_,_,_,_,_,_,_,_:Str) -> VTable = 
+    \cheta,chete,chetoh,chetqh,chel,chetql,cheten,chetqst,cheti ->
+        table {
           VPres      Sg P1 => cheta;
           VPres      Sg P2 => chete + "ш";
           VPres      Sg P3 => chete;
@@ -99,9 +99,6 @@ oper
                        _           => chete + "йки"
                      }
         } ;
-    vtype = VNormal ;
-    lock_V = <>
-  } ;
 
 
 --2 Nouns
