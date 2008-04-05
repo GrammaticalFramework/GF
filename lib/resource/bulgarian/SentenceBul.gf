@@ -10,7 +10,7 @@ concrete SentenceBul of Sentence = CatBul ** open Prelude, ResBul in {
     ImpVP vp = {
       s = \\p,gn => 
         let agr = {gn = gn ; p = P2} ;
-            verb = vp.imp ! p ! numGenNum gn ;
+            verb = vp.imp ! p ! numGenNum gn ! Perf ;
             compl = vp.s2 ! agr
         in
         verb ++ compl
@@ -22,10 +22,10 @@ concrete SentenceBul of Sentence = CatBul ** open Prelude, ResBul in {
     SlashVVV2 np vv v2 = 
       mkClause (np.s ! RSubj) np.a
         (let vp = predV vv
-         in { s   = \\t,a,p,agr,q => vp.s ! t ! a ! p ! agr ! q ++ "да" ++ v2.s ! (VPres (numGenNum agr.gn) agr.p) ;
+         in { s   = \\t,a,p,agr,q,asp => vp.s ! t ! a ! p ! agr ! q ! asp ++ "да" ++ v2.s ! Perf ! (VPres (numGenNum agr.gn) agr.p) ;
               imp = vp.imp ;
-              ad = vp.ad ;
-              s2 = vp.s2 ;
+              ad  = vp.ad ;
+              s2  = vp.s2 ;
               subjRole = vp.subjRole
             }) **
         {c2 = v2.c2} ;
@@ -44,7 +44,7 @@ concrete SentenceBul of Sentence = CatBul ** open Prelude, ResBul in {
 
     EmbedS  s  = {s = "," ++ "че" ++ s.s} ;
     EmbedQS qs = {s = qs.s ! QIndir} ;
-    EmbedVP vp = {s = vp.ad ! False ++ "да" ++ vp.s ! Pres ! Simul ! Pos ! {gn=GSg Masc; p=P1} ! False} ;
+    EmbedVP vp = {s = vp.ad ! False ++ "да" ++ vp.s ! Pres ! Simul ! Pos ! {gn=GSg Masc; p=P1} ! False ! Perf} ;
 
     UseCl t a p cl = {
       s = t.s ++ a.s ++ p.s ++ cl.s ! t.t ! a.a ! p.p ! Main

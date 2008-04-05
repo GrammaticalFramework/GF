@@ -867,7 +867,7 @@ oper
                                 (v0)
                                 (v0)
                                 (v0) ;
-  mkV142 : Str -> V ;
+  mkV142 : Str -> VTable ;
   mkV142 base = let v0 = tk 3 base
                 in mkVerb (v0+"съм")
                           (v0+"е")
@@ -878,7 +878,7 @@ oper
                           (v0+"-")
                           (v0+"-")
                           (v0+"бъди") ;
-  mkV143 : Str -> V ;
+  mkV143 : Str -> VTable ;
   mkV143 base = let v0 = tk 3 base
                 in mkVerb (v0+"ъда")
                           (v0+"ъде")
@@ -889,7 +889,7 @@ oper
                           (v0+"-")
                           (v0+"ъдещ")
                           (v0+"ъди") ;
-  mkV144 : Str -> V ;
+  mkV144 : Str -> VTable ;
   mkV144 base = let v0 = tk 1 base
                 in mkVerb (v0+"а")
                           (v0+"е")
@@ -900,7 +900,7 @@ oper
                           (v0+"-")
                           (v0+"-")
                           (v0+"-") ;
-  mkV145 : Str -> V ;
+  mkV145 : Str -> VTable ;
   mkV145 base = let v0 = tk 2 base;
                     v1 = last (tk 1 base)
                 in mkVerb (v0+v1+"а")
@@ -912,7 +912,7 @@ oper
                           (v0+v1+"ен")
                           (v0+v1+"ящ")
                           (v0+v1+"и") ;
-  mkV145a : Str -> V ;
+  mkV145a : Str -> VTable ;
   mkV145a base = let v0 = tk 3 base;
                      v1 = last (tk 2 base)
                  in mkVerb (v0+v1+"са")
@@ -924,7 +924,7 @@ oper
                            (v0+v1+"сен")
                            (v0+v1+"сящ")
                            (v0+v1+"си") ;
-  mkV145b : Str -> V ;
+  mkV145b : Str -> VTable ;
   mkV145b base = let v0 = tk 2 base
                  in mkVerb (v0+"та")
                            (v0+"те")
@@ -935,7 +935,7 @@ oper
                            (v0+"-")
                            (v0+"тящ")
                            (v0+"ти") ;
-  mkV146 : Str -> V ;
+  mkV146 : Str -> VTable ;
   mkV146 base = let v0 = tk 2 base
                 in mkVerb (v0+"да")
                           (v0+"де")
@@ -946,7 +946,7 @@ oper
                           (v0+"-")
                           (v0+"-")
                           (v0+"ди") ;
-  mkV146a : Str -> V ;
+  mkV146a : Str -> VTable ;
   mkV146a base = let v0 = tk 3 base
                  in mkVerb (v0+"йда")
                            (v0+"йде")
@@ -957,7 +957,7 @@ oper
                            (v0+"-")
                            (v0+"-")
                            (v0+"йди") ;
-  mkV147 : Str -> V ;
+  mkV147 : Str -> VTable ;
   mkV147 base = let v0 = tk 3 base
                 in mkVerb (v0+"яза")
                           (v0+"езе")
@@ -968,7 +968,7 @@ oper
                           (v0+"-")
                           (v0+"-")
                           (v0+"ез") ;
-  mkV148 : Str -> V ;
+  mkV148 : Str -> VTable ;
   mkV148 base = let v0 = tk 2 base
                 in mkVerb (v0+"ка")
                           (v0+"че")
@@ -979,7 +979,7 @@ oper
                           (v0+"чен")
                           (v0+"чащ")
                           (v0+"чи") ;
-  mkV149 : Str -> V ;
+  mkV149 : Str -> VTable ;
   mkV149 base = let v0 = tk 3 base
                 in mkVerb (v0+"ека")
                           (v0+"ече")
@@ -990,7 +990,7 @@ oper
                           (v0+"ечен")
                           (v0+"-")
                           (v0+"ечи") ;
-  mkV150 : Str -> V ;
+  mkV150 : Str -> VTable ;
   mkV150 base = let v0 = tk 1 base
                 in mkVerb (v0+"а")
                           (v0+"е")
@@ -1001,7 +1001,7 @@ oper
                           (v0+"ян")
                           (v0+"-")
                           (v0+"и") ;
-  mkV150a : Str -> V ;
+  mkV150a : Str -> VTable ;
   mkV150a base = let v0 = tk 1 base
                  in mkVerb (v0+"а")
                            (v0+"е")
@@ -1012,7 +1012,7 @@ oper
                            (v0+"-")
                            (v0+"-")
                            (v0+"и") ;
-  mkV151 : Str -> V ;
+  mkV151 : Str -> VTable ;
   mkV151 base = let v0 = tk 1 base
                 in mkVerb (v0+"а")
                           (v0+"е")
@@ -1023,7 +1023,7 @@ oper
                           (v0+"ящ")
                           (v0+"ан")
                           (v0+"и") ;
-  mkV152 : Str -> V ;
+  mkV152 : Str -> VTable ;
   mkV152 base = let v0 = tk 1 base
                 in mkVerb (v0+"а")
                           (v0+"е")
@@ -1034,7 +1034,7 @@ oper
                           (v0+"ат")
                           (v0+"-")
                           (v0+"и") ;
-  mkV152a : Str -> V ;
+  mkV152a : Str -> VTable ;
   mkV152a base = let v0 = tk 4 base
                  in mkVerb (v0+"ягна")
                            (v0+"егне")
@@ -1045,7 +1045,7 @@ oper
                            (v0+"ягнат")
                            (v0+"-")
                            (v0+"егни") ;
-  mkV153 : Str -> V ;
+  mkV153 : Str -> VTable ;
   mkV153 base = let v0 = tk 3 base
                 in mkVerb (v0+"яна")
                           (v0+"ене")
@@ -1056,7 +1056,7 @@ oper
                           (v0+"янат")
                           (v0+"-")
                           (v0+"ени") ;
-  mkV154 : Str -> V ;
+  mkV154 : Str -> VTable ;
   mkV154 base = let v0 = tk 1 base
                 in mkVerb (v0+"я")
                           (v0+"е")
@@ -1067,7 +1067,7 @@ oper
                           (v0+"ан")
                           (v0+"ещ")
                           (v0+"и") ;
-  mkV155 : Str -> V ;
+  mkV155 : Str -> VTable ;
   mkV155 base = let v0 = tk 2 base
                 in mkVerb (v0+"ча")
                           (v0+"че")
@@ -1078,7 +1078,7 @@ oper
                           (v0+"-")
                           (v0+"чещ")
                           (v0+"чи") ;
-  mkV156 : Str -> V ;
+  mkV156 : Str -> VTable ;
   mkV156 base = let v0 = tk 2 base
                 in mkVerb (v0+"жа")
                           (v0+"же")
@@ -1089,7 +1089,7 @@ oper
                           (v0+"зан")
                           (v0+"-")
                           (v0+"жи") ;
-  mkV157 : Str -> V ;
+  mkV157 : Str -> VTable ;
   mkV157 base = let v0 = tk 3 base
                 in mkVerb (v0+"ежа")
                           (v0+"еже")
@@ -1100,7 +1100,7 @@ oper
                           (v0+"язан")
                           (v0+"ежещ")
                           (v0+"ежи") ;
-  mkV158 : Str -> V ;
+  mkV158 : Str -> VTable ;
   mkV158 base = let v0 = tk 2 base
                 in mkVerb (v0+"жа")
                           (v0+"же")
@@ -1111,7 +1111,7 @@ oper
                           (v0+"ган")
                           (v0+"жещ")
                           (v0+"жи") ;
-  mkV159 : Str -> V ;
+  mkV159 : Str -> VTable ;
   mkV159 base = let v0 = tk 2 base
                 in mkVerb (v0+"ша")
                           (v0+"ше")
@@ -1122,7 +1122,7 @@ oper
                           (v0+"сан")
                           (v0+"шещ")
                           (v0+"ши") ;
-  mkV160 : Str -> V ;
+  mkV160 : Str -> VTable ;
   mkV160 base = let v0 = tk 2 base
                 in mkVerb (v0+"ея")
                           (v0+"ее")
@@ -1133,7 +1133,7 @@ oper
                           (v0+"ян")
                           (v0+"еещ")
                           (v0+"ей") ;
-  mkV160a : Str -> V ;
+  mkV160a : Str -> VTable ;
   mkV160a base = let v0 = tk 2 base
                  in mkVerb (v0+"ея")
                            (v0+"ее")
@@ -1144,7 +1144,7 @@ oper
                            (v0+"ан")
                            (v0+"еещ")
                            (v0+"ей") ;
-  mkV161 : Str -> V ;
+  mkV161 : Str -> VTable ;
   mkV161 base = let v0 = tk 1 base
                 in mkVerb (v0+"я")
                           (v0+"е")
@@ -1155,7 +1155,7 @@ oper
                           (v0+"н")
                           (v0+"ещ")
                           (v0+"й") ;
-  mkV161a : Str -> V ;
+  mkV161a : Str -> VTable ;
   mkV161a base = let v0 = tk 1 base
                  in mkVerb (v0+"я")
                            (v0+"е")
@@ -1166,7 +1166,7 @@ oper
                            (v0+"т")
                            (v0+"ещ")
                            (v0+"й") ;
-  mkV162 : Str -> V ;
+  mkV162 : Str -> VTable ;
   mkV162 base = let v0 = tk 1 base
                 in mkVerb (v0+"я")
                           (v0+"е")
@@ -1177,7 +1177,7 @@ oper
                           (v0+"-")
                           (v0+"ещ")
                           (v0+"й") ;
-  mkV163 : Str -> V ;
+  mkV163 : Str -> VTable ;
   mkV163 base = let v0 = tk 1 base
                 in mkVerb (v0+"я")
                           (v0+"е")
@@ -1188,7 +1188,7 @@ oper
                           (v0+"т")
                           (v0+"ещ")
                           (v0+"й") ;
-  mkV164 : Str -> V ;
+  mkV164 : Str -> VTable ;
   mkV164 base = let v0 = tk 2 base
                 in mkVerb (v0+"ея")
                           (v0+"ее")
@@ -1199,18 +1199,18 @@ oper
                           (v0+"ят")
                           (v0+"еещ")
                           (v0+"ей") ;
-  mkV165 : Str -> V ;
+  mkV165 : Str -> VTable ;
   mkV165 base = let v0 = tk 1 base
                 in mkVerb (v0+"а")
                           (v0+"е")
-                          (v0+"-")
+                          (v0+"ох")
                           (v0+"ех")
                           (v0+"-")
                           (v0+"ел")
                           (v0+"-")
                           (v0+"ещ")
                           (v0+"и") ;
-  mkV166 : Str -> V ;
+  mkV166 : Str -> VTable ;
   mkV166 base = let v0 = tk 2 base
                 in mkVerb (v0+"га")
                           (v0+"же")
@@ -1221,7 +1221,7 @@ oper
                           (v0+"-")
                           (v0+"жещ")
                           (v0+"-") ;
-  mkV167 : Str -> V ;
+  mkV167 : Str -> VTable ;
   mkV167 base = let v0 = tk 2 base
                 in mkVerb (v0+"ка")
                           (v0+"че")
@@ -1232,7 +1232,7 @@ oper
                           (v0+"кан")
                           (v0+"чещ")
                           (v0+"чи") ;
-  mkV168 : Str -> V ;
+  mkV168 : Str -> VTable ;
   mkV168 base = let v0 = tk 1 base
                 in mkVerb (v0+"м")
                           (v0+"де")
@@ -1243,7 +1243,7 @@ oper
                           (v0+"ден")
                           (v0+"-")
                           (v0+"й") ;
-  mkV169 : Str -> V ;
+  mkV169 : Str -> VTable ;
   mkV169 base = let v0 = tk 1 base
                 in mkVerb (v0+"м")
                           (v0+"де")
@@ -1254,7 +1254,7 @@ oper
                           (v0+"ден")
                           (v0+"дещ")
                           (v0+"ж") ;
-  mkV170 : Str -> V ;
+  mkV170 : Str -> VTable ;
   mkV170 base = let v0 = tk 3 base
                 in mkVerb (v0+"ера")
                           (v0+"ере")
@@ -1265,7 +1265,7 @@ oper
                           (v0+"ран")
                           (v0+"ерящ")
                           (v0+"ери") ;
-  mkV171 : Str -> V ;
+  mkV171 : Str -> VTable ;
   mkV171 base = let v0 = tk 2 base
                 in mkVerb (v0+"ма")
                           (v0+"ме")
@@ -1276,7 +1276,7 @@ oper
                           (v0+"т")
                           (v0+"-")
                           (v0+"ми") ;
-  mkV172 : Str -> V ;
+  mkV172 : Str -> VTable ;
   mkV172 base = let v0 = tk 4 base
                 in mkVerb (v0+"ълна")
                           (v0+"ълне")
@@ -1287,7 +1287,7 @@ oper
                           (v0+"ълнат")
                           (v0+"ълнещ")
                           (v0+"ълни") ;
-  mkV173 : Str -> V ;
+  mkV173 : Str -> VTable ;
   mkV173 base = let v0 = tk 1 base
                 in mkVerb (v0+"я")
                           (v0+"и")
@@ -1298,7 +1298,7 @@ oper
                           (v0+"ен")
                           (v0+"ещ")
                           (v0+"и") ;
-  mkV174 : Str -> V ;
+  mkV174 : Str -> VTable ;
   mkV174 base = let v0 = tk 1 base
                 in mkVerb (v0+"я")
                           (v0+"и")
@@ -1309,7 +1309,7 @@ oper
                           (v0+"ен")
                           (v0+"ящ")
                           (v0+"и") ;
-  mkV175 : Str -> V ;
+  mkV175 : Str -> VTable ;
   mkV175 base = let v0 = tk 1 base
                 in mkVerb (v0+"я")
                           (v0+"и")
@@ -1320,7 +1320,7 @@ oper
                           (v0+"ен")
                           (v0+"ящ")
                           (v0+"й") ;
-  mkV176 : Str -> V ;
+  mkV176 : Str -> VTable ;
   mkV176 base = let v0 = tk 1 base
                 in mkVerb (v0+"а")
                           (v0+"и")
@@ -1331,7 +1331,7 @@ oper
                           (v0+"ен")
                           (v0+"ещ")
                           (v0+"и") ;
-  mkV177 : Str -> V ;
+  mkV177 : Str -> VTable ;
   mkV177 base = let v0 = tk 1 base
                 in mkVerb (v0+"я")
                           (v0+"и")
@@ -1342,7 +1342,7 @@ oper
                           (v0+"ян")
                           (v0+"ящ")
                           (v0+"и") ;
-  mkV178 : Str -> V ;
+  mkV178 : Str -> VTable ;
   mkV178 base = let v0 = tk 1 base
                 in mkVerb (v0+"а")
                           (v0+"и")
@@ -1353,7 +1353,7 @@ oper
                           (v0+"-")
                           (v0+"ащ")
                           (v0+"и") ;
-  mkV179 : Str -> V ;
+  mkV179 : Str -> VTable ;
   mkV179 base = let v0 = tk 4 base
                 in mkVerb (v0+"ържа")
                           (v0+"ържи")
@@ -1364,7 +1364,7 @@ oper
                           (v0+"ържан")
                           (v0+"ържащ")
                           (v0+"ръж") ;
-  mkV180 : Str -> V ;
+  mkV180 : Str -> VTable ;
   mkV180 base = let v0 = tk 1 base
                 in mkVerb (v0+"я")
                           (v0+"и")
@@ -1375,7 +1375,7 @@ oper
                           (v0+"-")
                           (v0+"ящ")
                           (v0+"й") ;
-  mkV181 : Str -> V ;
+  mkV181 : Str -> VTable ;
   mkV181 base = let v0 = tk 2 base
                 in mkVerb (v0+"дя")
                           (v0+"ди")
@@ -1386,7 +1386,7 @@ oper
                           (v0+"дян")
                           (v0+"-")
                           (v0+"ж") ;
-  mkV182 : Str -> V ;
+  mkV182 : Str -> VTable ;
   mkV182 base = let v0 = tk 1 base
                 in mkVerb (v0+"я")
                           (v0+"и")
@@ -1397,7 +1397,7 @@ oper
                           (v0+"-")
                           (v0+"ящ")
                           (v0+"и") ;
-  mkV183 : Str -> V ;
+  mkV183 : Str -> VTable ;
   mkV183 base = let v0 = tk 3 base
                 in mkVerb (v0+"ежа")
                           (v0+"ежи")
@@ -1408,7 +1408,7 @@ oper
                           (v0+"язан")
                           (v0+"ежещ")
                           (v0+"ежи") ;
-  mkV184 : Str -> V ;
+  mkV184 : Str -> VTable ;
   mkV184 base = let v0 = tk 3 base
                 in mkVerb (v0+"еля")
                           (v0+"ели")
@@ -1419,7 +1419,7 @@ oper
                           (v0+"лян")
                           (v0+"елещ")
                           (v0+"ели") ;
-  mkV185 : Str -> V ;
+  mkV185 : Str -> VTable ;
   mkV185 base = let v0 = tk 3 base
                 in mkVerb (v0+"оля")
                           (v0+"оли")
@@ -1430,7 +1430,7 @@ oper
                           (v0+"лан")
                           (v0+"олещ")
                           (v0+"оли") ;
-  mkV186 : Str -> V ;
+  mkV186 : Str -> VTable ;
   mkV186 base = let v0 = tk 2 base
                 in mkVerb (v0+"ам")
                           (v0+"а")
@@ -1441,7 +1441,7 @@ oper
                           (v0+"ан")
                           (v0+"ащ")
                           (v0+"ай") ;
-  mkV187 : Str -> V ;
+  mkV187 : Str -> VTable ;
   mkV187 base = let v0 = tk 2 base
                 in mkVerb (v0+"ям")
                           (v0+"я")

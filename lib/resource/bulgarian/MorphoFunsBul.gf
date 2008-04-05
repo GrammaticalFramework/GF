@@ -50,7 +50,20 @@ oper
 
   phrasalV : V -> Case -> V ;
   phrasalV v c = {s = v.s; vtype = VPhrasal c; lock_V=<>} ;
+  
+  actionV : VTable -> VTable -> V ;
+  actionV imperf perf = { 
+    s = table {Imperf=>imperf; Perf=>perf};
+    vtype = VNormal;
+    lock_V=<>
+    } ;
 
+  stateV : VTable -> V ;
+  stateV vtable = { 
+    s = \\_=>vtable;
+    vtype = VNormal;
+    lock_V=<>
+    } ;
 
 --3 Zero-place verbs
 --

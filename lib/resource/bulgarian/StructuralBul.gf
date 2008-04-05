@@ -19,7 +19,7 @@ concrete StructuralBul of Structural = CatBul **
   but_PConj = ss "но" ;
   by8agent_Prep = mkPrep "чрез" Acc ;
   by8means_Prep = mkPrep "чрез" Acc ;
-  can8know_VV, can_VV = mkVV (mkV166 "мога") ;
+  can8know_VV, can_VV = mkVV (stateV (mkV166 "мога")) ;
   during_Prep = mkPrep ["по време на"] Acc ;
   either7or_DConj = sd2 "или" "или" ** {n = Sg} ;
   everybody_NP = mkNP "всеки" (GSg Masc) P3 ;
@@ -48,22 +48,23 @@ concrete StructuralBul of Structural = CatBul **
   more_CAdv = {s=[]; sn="повече"} ;
   most_Predet = {s = \\_ => "повечето"} ;
   much_Det = mkDeterminerSg "много" "много" "много";
-  must_VV = mkVV {
-    s = table {
-          VPres      _ _ => "трябва" ;
-          VAorist    _ _ => "трябваше" ;
-          VImperfect _ _ => "трябвало" ;
-          VPerfect     _ => "трябвало" ;
-          VPluPerfect  _ => "трябвало" ;
-          VPassive     _ => "трябвало" ;
-          VPresPart    _ => "трябвало" ;
-          VImperative Sg => "трябвай" ;
-          VImperative Pl => "трябвайте" ;
-          VGerund        => "трябвайки"
-        } ;
-    vtype=VNormal ;
-    lock_V=<>
-    } ;
+  must_VV = 
+    mkVV {
+         s = \\_=>table {
+                    VPres      _ _ => "трябва" ;
+                    VAorist    _ _ => "трябваше" ;
+                    VImperfect _ _ => "трябвало" ;
+                    VPerfect    aform => regAdjective "трябвал" ! aform ;
+                    VPluPerfect aform => regAdjective "трябвал" ! aform ;
+                    VPassive    aform => regAdjective "трябвал" ! aform ;
+                    VPresPart   aform => regAdjective "трябвал" ! aform ;
+                    VImperative Sg => "трябвай" ;
+                    VImperative Pl => "трябвайте" ;
+                    VGerund        => "трябвайки"
+                  } ;
+         vtype=VNormal ;
+         lock_V=<>
+       } ;
   no_Phr = ss "не" ;
   on_Prep = mkPrep "на" Acc ;
 ----  one_Quant = mkDeterminer Sg "one" ; -- DEPRECATED
@@ -77,7 +78,7 @@ concrete StructuralBul of Structural = CatBul **
   she_Pron = mkPron "тя" "нея" "и" "неин" "нейния" "нейният" "нейна" "нейната" "нейно" "нейното" "нейни" "нейните" (GSg Fem) P3 ;
   so_AdA = ss "толкова" ;
   somebody_NP = mkNP "някой" (GSg Masc) P3 ;
-  someSg_Det = mkDeterminerSg "някой" "някое" "някоя" ;
+  someSg_Det = mkDeterminerSg "някой" "някоя" "някое" ;
   somePl_Det = mkDeterminerPl "някои" ;
   something_NP = mkNP "нещо" (GSg Neut) P3 ;
   somewhere_Adv = ss "някъде" ;
@@ -97,7 +98,7 @@ concrete StructuralBul of Structural = CatBul **
   to_Prep = mkPrep "до" Acc ;
   under_Prep = mkPrep "под" Acc ;
   very_AdA = ss "много" ;
-  want_VV = mkVV (mkV186 "искам") ;
+  want_VV = mkVV (stateV (mkV186 "искам")) ;
   we_Pron = mkPron "ние" "нас" "ни" "наш" "нашия" "нашият" "наша" "нашата" "наше" "нашето" "наши" "нашите" GPl P1 ;
   whatPl_IP = mkIP "какви" "какви" GPl ;
   whatSg_IP = mkIP "какъв" "какъв" (GSg Masc) ;

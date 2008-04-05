@@ -24,16 +24,13 @@ concrete IdiomBul of Idiom = CatBul ** open Prelude, ParadigmsBul, ResBul in {
                                  
                       agr=agrP3 (GSg Neut);
                                  
-                      present = verb.s ! (VPres   (numGenNum agr.gn) agr.p) ;
-                      aorist  = verb.s ! (VAorist (numGenNum agr.gn) agr.p) ;
-                      perfect = verb.s ! (VPerfect (aform agr.gn Indef (RObj Acc))) ;
+                      present = verb ! (VPres   (numGenNum agr.gn) agr.p) ;
+                      aorist  = verb ! (VAorist (numGenNum agr.gn) agr.p) ;
+                      perfect = verb ! (VPerfect (aform agr.gn Indef (RObj Acc))) ;
                                  
-                      auxPres    = auxBe [] ! VPres (numGenNum agr.gn) agr.p ;
-                      auxAorist  = auxBe [] ! VAorist (numGenNum agr.gn) agr.p ;
-                      auxPerfect = auxBe [] ! VPerfect (aform agr.gn Indef (RObj Acc)) ;
-                      auxCondS   = auxWould [] ! VAorist (numGenNum agr.gn) agr.p ;
-                      auxCondA   = auxCondS ++
-                                   auxBe [] ! VPerfect (aform agr.gn Indef (RObj Acc)) ;
+                      auxPres    = auxBe ! VPres (numGenNum agr.gn) agr.p ;
+                      auxAorist  = auxBe ! VAorist (numGenNum agr.gn) agr.p ;
+                      auxCondS   = auxWould ! VAorist (numGenNum agr.gn) agr.p ;
 
                       v : {aux1:Str; aux2:Str; main:Str}
                         = case <t,a> of {
@@ -43,8 +40,7 @@ concrete IdiomBul of Idiom = CatBul ** open Prelude, ParadigmsBul, ResBul in {
                             <Past,Anter> => {aux1=[]; aux2=auxAorist; main=perfect} ;
                             <Fut, Simul> => {aux1="ще"; aux2=[]; main=present} ;
                             <Fut, Anter> => {aux1="ще"++auxPres; aux2=[]; main=perfect} ;
-                            <Cond,Simul> => {aux1=auxCondS; aux2=[]; main=perfect} ;
-                            <Cond,Anter> => {aux1=auxCondA; aux2=[]; main=perfect}
+                            <Cond,_>     => {aux1=auxCondS; aux2=[]; main=perfect}
                           } ;
 
 	          in case o of {
@@ -58,8 +54,16 @@ concrete IdiomBul of Idiom = CatBul ** open Prelude, ParadigmsBul, ResBul in {
       mkQuestion (ss (ip.s ! Nom)) 
         (mkClause "there" (agrP3 ip.n) (predAux auxBe)) ;
 -}
-    ProgrVP vp = vp ;
+    ProgrVP vp = {
+      s   = \\t,a,p,agr,q,asp => vp.s ! t ! a ! p ! agr ! q ! Imperf ;
+      imp = \\p,n,_ => vp.imp ! p ! n ! Imperf ;
+      ad = vp.ad ;
+      s2 = vp.s2 ;
+      subjRole = vp.subjRole
+      } ;
 
-    ImpPl1 vp = {s = "нека" ++ vp.s ! Pres ! Simul ! Pos ! {gn = GPl ; p = P1} ! False ++ vp.s2 ! {gn = GPl ; p = P1}} ;
+    ImpPl1 vp = {s = let verbs = vp.s ! Pres ! Simul ! Pos ! {gn = GPl ; p = P1} ! False ! Imperf ;
+                     in "нека" ++ vp.s2 ! {gn = GPl ; p = P1}
+                } ;
 }
 
