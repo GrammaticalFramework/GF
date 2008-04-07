@@ -37,7 +37,7 @@ import System.Directory (doesFileExist)
 
 -- This API is meant to be used when embedding GF grammars in Haskell 
 -- programs. The embedded system is supposed to use the
--- .gfcm grammar format, which is first produced by the gf program.
+-- .gfcc grammar format, which is first produced by the gf program.
 
 ---------------------------------------------------
 -- Interface
