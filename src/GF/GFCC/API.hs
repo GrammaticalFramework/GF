@@ -122,7 +122,7 @@ languages mgr = [l | CId l <- cncnames (gfcc mgr)]
 
 categories mgr = [c | CId c <- Map.keys (cats (abstract (gfcc mgr)))]
 
-startCat mgr = "S" ----
+startCat mgr = lookStartCat (gfcc mgr)
 
 emptyMultiGrammar = MultiGrammar emptyGFCC
 
