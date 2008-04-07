@@ -5,7 +5,9 @@ import GF.GFCC.DataGFCC
 import GF.Formalism.FCFG (FGrammar)
 import GF.Parsing.FCFG.PInfo (FCFPInfo, fcfPInfoToFGrammar)
 ----import GF.GFCC.PrintGFCC
+import Control.Monad
 import Data.Map
+import Data.Maybe
 import Data.List
 
 -- operations for manipulating GFCC grammars and objects
@@ -35,6 +37,10 @@ lookParser gfcc lang = parser $ lookMap (error "no lang") lang $ concretes gfcc
 
 lookFCFG :: GFCC -> CId -> Maybe FGrammar
 lookFCFG gfcc lang = fmap fcfPInfoToFGrammar $ lookParser gfcc lang
+
+lookStartCat :: GFCC -> String
+lookStartCat gfcc = fromMaybe "S" $ msum $ Data.List.map (Data.Map.lookup (CId "startcat"))
+                                              [gflags gfcc, aflags (abstract gfcc)]
 
 lookGlobalFlag :: GFCC -> CId -> String
 lookGlobalFlag gfcc f = 

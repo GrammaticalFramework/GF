@@ -141,7 +141,7 @@ allCommands mgr = Map.fromAscList [
    optLangs opts = case valIdOpts "lang" "" opts of
      "" -> languages mgr
      lang -> [lang] 
-   optCat opts = valIdOpts "cat" (lookAbsFlag gr (cid "startcat")) opts
+   optCat opts = valIdOpts "cat" (lookStartCat gr) opts
    optNum opts = valIntOpts "number" 1 opts
    optNumInf opts = valIntOpts "number" 1000000000 opts ---- 10^9
 
