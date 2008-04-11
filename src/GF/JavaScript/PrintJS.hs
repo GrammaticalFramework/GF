@@ -26,7 +26,7 @@ render d = rend 0 (map ($ "") $ d []) "" where
   space t = showString t . (\s -> if null s then "" else (' ':s))
 
 spaceAfter :: String -> Bool
-spaceAfter = (`notElem` [".","(","[","\n"])
+spaceAfter = (`notElem` [".","(","[","{","\n"])
 
 spaceBefore :: String -> Bool
 spaceBefore = (`notElem` [",",".",":",";","(",")","[","]","{","}","\n"])

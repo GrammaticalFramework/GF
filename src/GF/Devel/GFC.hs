@@ -58,9 +58,8 @@ outputFile outfile output =
 printOptions = [
   ("haskell","GSyntax.hs"),
   ("haskell_gadt","GSyntax.hs"),
-  ("js","grammar.js"),
-  ("jsref","grammarReference.js")
+  ("js","grammar.js")
   ]
 
 usageMsg = 
-  "usage: gfc (-h | --make (-noopt) (-noparse) (-target=PREFIX) (-js | -jsref | -haskell | -haskell_gadt)) (-src) FILES"
+  "usage: gfc (-h | --make (-noopt) (-noparse) (-target=PREFIX) (-js | -haskell | -haskell_gadt)) (-src) FILES"
