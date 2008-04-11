@@ -1,4 +1,4 @@
-module GF.Devel.GFCCtoJS (gfcc2js,gfcc2grammarRef) where
+module GF.Devel.GFCCtoJS (gfcc2js) where
 
 import qualified GF.GFCC.Macros as M
 import qualified GF.GFCC.DataGFCC as D
@@ -22,45 +22,40 @@ import qualified Data.Map as Map
 
 gfcc2js :: D.GFCC -> String
 gfcc2js gfcc =
-  encodeUTF8 $ JS.printTree $ JS.Program $ abstract2js start n as ++ 
-  concatMap (concrete2js start n) cs
+  encodeUTF8 $ JS.printTree $ JS.Program [JS.ElStmt $ JS.SDeclOrExpr $ JS.Decl [JS.DInit (JS.Ident n) grammar]]
  where
-   n  = D.absname gfcc
+   n  = D.printCId $ D.absname gfcc
    as = D.abstract gfcc
    cs = Map.assocs (D.concretes gfcc)
-   start = M.lookAbsFlag gfcc (M.cid "startcat")
+   start = M.lookStartCat gfcc
+   grammar = new "GFGrammar" [abstract, concrete]
+   abstract = abstract2js start as
+   concrete = JS.EObj $ map (concrete2js start n) cs
 
-abstract2js :: String -> CId -> D.Abstr -> [JS.Element]
-abstract2js start (CId n) ds = 
-    [JS.ElStmt $ JS.SDeclOrExpr $ JS.Decl [JS.DInit a (new "Abstract" [JS.EStr start])]] 
-    ++ concatMap (absdef2js a) (Map.assocs (D.funs ds))
-  where a = JS.Ident n
+abstract2js :: String -> D.Abstr -> JS.Expr
+abstract2js start ds = new "GFAbstract" [JS.EStr start, JS.EObj $ map absdef2js (Map.assocs (D.funs ds))]
 
-absdef2js :: JS.Ident -> (CId,(D.Type,D.Exp)) -> [JS.Element]
-absdef2js a (CId f,(typ,_)) =
+absdef2js :: (CId,(D.Type,D.Exp)) -> JS.Property
+absdef2js (CId f,(typ,_)) =
   let (args,CId cat) = M.catSkeleton typ in 
-    [JS.ElStmt $ JS.SDeclOrExpr $ JS.DExpr $ JS.ECall (JS.EMember (JS.EVar a) (JS.Ident "addType")) 
-           [JS.EStr f, JS.EArray [JS.EStr x | CId x <- args], JS.EStr cat]]
+    JS.Prop (JS.Ident f) (new "Type" [JS.EArray [JS.EStr x | CId x <- args], JS.EStr cat])
 
-concrete2js :: String -> CId -> (CId,D.Concr) -> [JS.Element]
-concrete2js start (CId a) (CId c, cnc) =
-    [JS.ElStmt $ JS.SDeclOrExpr $ JS.Decl [JS.DInit l (new "Concrete" [JS.EVar (JS.Ident a)])]] 
-    ++ concatMap (cncdef2js l) ds
-    ++ [JS.ElStmt $ JS.SDeclOrExpr $ JS.DExpr $ JS.ECall (JS.EMember (JS.EVar l) (JS.Ident "addRule")) [JS.EStr "Int", JS.EFun [children] [JS.SReturn $ new "Arr" [JS.EIndex (JS.EVar children) (JS.EInt 0)]]]]
-    ++ [JS.ElStmt $ JS.SDeclOrExpr $ JS.DExpr $ JS.ECall (JS.EMember (JS.EVar l) (JS.Ident "addRule")) [JS.EStr "Float", JS.EFun [children] [JS.SReturn $ new "Arr" [JS.EIndex (JS.EVar children) (JS.EInt 0)]]]]
-    ++ [JS.ElStmt $ JS.SDeclOrExpr $ JS.DExpr $ JS.ECall (JS.EMember (JS.EVar l) (JS.Ident "addRule")) [JS.EStr "String", JS.EFun [children] [JS.SReturn $ new "Arr" [JS.EIndex (JS.EVar children) (JS.EInt 0)]]]]
-    ++ fromMaybe [] (fmap (parser2js start l) (D.parser cnc))
+concrete2js :: String -> String -> (CId,D.Concr) -> JS.Property
+concrete2js start n (CId c, cnc) =
+    JS.Prop l (new "GFConcrete" ([(JS.EObj $ ((map (cncdef2js n c) ds) ++ litslins))] ++
+                                 maybe [] (parser2js start) (D.parser cnc)))
   where 
    l  = JS.Ident c
    ds = concatMap Map.assocs [D.lins cnc, D.opers cnc, D.lindefs cnc]
+   litslins = [JS.Prop (JS.Ident    "Int") (JS.EFun [children] [JS.SReturn $ new "Arr" [JS.EIndex (JS.EVar children) (JS.EInt 0)]]), 
+               JS.Prop (JS.Ident  "Float") (JS.EFun [children] [JS.SReturn $ new "Arr" [JS.EIndex (JS.EVar children) (JS.EInt 0)]]),
+               JS.Prop (JS.Ident "String") (JS.EFun [children] [JS.SReturn $ new "Arr" [JS.EIndex (JS.EVar children) (JS.EInt 0)]])]
 
+cncdef2js :: String -> String -> (CId,D.Term) -> JS.Property
+cncdef2js n l (CId f, t) = JS.Prop (JS.Ident f) (JS.EFun [children] [JS.SReturn (term2js n l t)])
 
-cncdef2js :: JS.Ident -> (CId,D.Term) -> [JS.Element]
-cncdef2js l (CId f, t) = 
-    [JS.ElStmt $ JS.SDeclOrExpr $ JS.DExpr $ JS.ECall (JS.EMember (JS.EVar l) (JS.Ident "addRule")) [JS.EStr f, JS.EFun [children] [JS.SReturn (term2js l t)]]]
-
-term2js :: JS.Ident -> D.Term -> JS.Expr
-term2js l t = f t
+term2js :: String -> String -> D.Term -> JS.Expr
+term2js n l t = f t
   where 
   f t = 
     case t of
@@ -70,7 +65,7 @@ term2js l t = f t
       D.K t            -> tokn2js t
       D.V i            -> JS.EIndex (JS.EVar children) (JS.EInt i)
       D.C i            -> new "Int" [JS.EInt i]
-      D.F (CId f)      -> JS.ECall (JS.EMember (JS.EVar l) (JS.Ident "rule")) [JS.EStr f, JS.EVar children]
+      D.F (CId f)      -> JS.ECall (JS.EMember (JS.EIndex (JS.EMember (JS.EVar $ JS.Ident n) (JS.Ident "concretes")) (JS.EStr l)) (JS.Ident "rule")) [JS.EStr f, JS.EVar children]
       D.FV xs          -> new "Variants" (map f xs)
       D.W str x        -> new "Suffix" [JS.EStr str, f x]
       D.RP x y         -> new "Rp" [f x, f y]
@@ -93,20 +88,16 @@ argIdent n = JS.Ident ("x" ++ show n)
 children :: JS.Ident
 children = JS.Ident "cs"
 
-
 -- Parser
-parser2js :: String -> JS.Ident -> FCFPInfo -> [JS.Element]
-parser2js start l p = [JS.ElStmt $ JS.SDeclOrExpr $ JS.DExpr $ JS.EAssign parser (new "Parser" [JS.EStr start])]
-                   ++ map (addRule . frule2js) (Array.elems (allRules p))
-                   ++ map addCat (Map.assocs (startupCats p))
-    where 
-      parser = JS.EMember (JS.EVar l) (JS.Ident "parser")
-      addRule r = JS.ElStmt $ JS.SDeclOrExpr $ JS.DExpr $ JS.ECall (JS.EMember parser (JS.Ident "addRule")) [r]
-      addCat (CId c,is) = JS.ElStmt $ JS.SDeclOrExpr $ JS.DExpr $ JS.ECall (JS.EMember parser (JS.Ident "addCat")) [JS.EStr c, JS.EArray (map JS.EInt is)]
+parser2js :: String -> FCFPInfo -> [JS.Expr]
+parser2js start p  = [new "Parser" [JS.EStr start,
+                                    JS.EArray $ map frule2js (Array.elems (allRules p)),
+                                    JS.EObj $ map cats (Map.assocs (startupCats p))]]
+  where 
+    cats (CId c,is) = JS.Prop (JS.Ident c) (JS.EArray (map JS.EInt is))
 
 frule2js :: FRule -> JS.Expr
-frule2js (FRule n args res lins) = 
-    new "Rule" [JS.EInt res, name2js n, JS.EArray (map JS.EInt args), lins2js lins]
+frule2js (FRule n args res lins) = new "Rule" [JS.EInt res, name2js n, JS.EArray (map JS.EInt args), lins2js lins]
 
 name2js :: FName -> JS.Expr
 name2js n = case n of
@@ -138,23 +129,3 @@ sym2js (FSymTok t) = new "Terminal" [JS.EStr t]
 
 new :: String -> [JS.Expr] -> JS.Expr
 new f xs = JS.ENew (JS.Ident f) xs
-
--- grammar reference file for js applications. AR 10/11/2007
-
-gfcc2grammarRef :: D.GFCC -> String
-gfcc2grammarRef gfcc =
-  encodeUTF8 $ refs
- where
-   CId abstr = D.absname gfcc
-   refs = unlines $ [
-     "// Grammar Reference",
-     "function concreteReference(concreteSyntax, concreteSyntaxName) {",
-     "this.concreteSyntax = concreteSyntax;",
-     "this.concreteSyntaxName = concreteSyntaxName;",
-     "}",
-     "var myAbstract = " ++ abstr ++ " ;",
-     "var myConcrete = new Array();"
-     ] ++ [
-     "myConcrete.push(new concreteReference(" ++ c ++ ",\"" ++ c ++ "\"));" 
-        | CId c <- D.cncnames gfcc]
-
