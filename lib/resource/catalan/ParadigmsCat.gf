@@ -266,7 +266,7 @@ oper
 ---- as an adverb. Likewise $AS, A2S, AV, A2V$ are just $A$.
 ---- $V0$ is just $V$.
 --
-  V0, V2S, V2V, V2Q : Type ;
+  V0 : Type ;
   AS, A2S, AV, A2V  : Type ;
 --
 --
@@ -368,7 +368,6 @@ oper
   dirdirV3 v = dirV3 v dative ;
 --
 --  V0 : Type = V ;
-  V2S, V2V, V2Q : Type = V2 ;
   AS, AV : Type = A ;
 --  A2S, A2V : Type = A2 ;
 --

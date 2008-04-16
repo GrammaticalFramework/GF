@@ -77,9 +77,10 @@ concrete CatFin of Cat = CommonX ** open ResFin, Prelude in {
 -- Open lexical classes, e.g. Lexicon
 
     V, VS, VQ = Verb1 ; -- = {s : VForm => Str ; sc : Case} ;
-    V2, VA = Verb1 ** {c2 : Compl} ;
+    V2, VA, V2Q, V2S = Verb1 ** {c2 : Compl} ;
     V2A = Verb1 ** {c2, c3 : Compl} ;
     VV = Verb1 ; ---- infinitive form
+    V2V = Verb1 ** {c2 : Compl} ; ---- infinitive form
     V3 = Verb1 ** {c2, c3 : Compl} ;
 
     A  = {s : Degree => AForm => Str} ;
