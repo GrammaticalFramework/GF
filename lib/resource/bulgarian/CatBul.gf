@@ -100,6 +100,7 @@ concrete CatBul of Cat = open ResBul, Prelude, (R = ParamX) in {
 
     V, VS, VQ, VA = Verb ;
     V2, V2A = Verb ** {c2 : Preposition} ;
+    V2V, V2S, V2Q = Verb ** {c2 : Preposition} ; --- AR
     V3 = Verb ** {c2, c3 : Preposition} ;
     VV = Verb ;
 

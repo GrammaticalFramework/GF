@@ -84,6 +84,7 @@ concrete CatAra of Cat = CommonX - [Utt]  ** open ResAra, Prelude, ParamX in {
     
     V, VS, VQ, VA = ResAra.Verb ; -- = {s : VForm => Str} ;
     V2, V2A = ResAra.Verb ** {c2 : Str} ;
+    V2V, V2S, V2Q = ResAra.Verb ** {c2 : Str} ; --- AR
     V3 = ResAra.Verb ** {c2, c3 : Str} ;
 --    VV = {s : VVForm => Str ; isAux : Bool} ;
 

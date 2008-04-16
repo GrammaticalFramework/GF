@@ -258,12 +258,11 @@ mkV2 : overload {
   mkAV  : A -> AV ;
   mkA2V : A -> Prep -> A2V ;
 
--- Notice: categories $V2S, V2V, V2Q$ are in v 1.0 treated
--- just as synonyms of $V2$, and the second argument is given
--- as an adverb. Likewise $AS, A2S, AV, A2V$ are just $A$.
+-- Notice: categories $AS, A2S, AV, A2V$ are just $A$, 
+-- and the second argument is given as an adverb. Likewise 
 -- $V0$ is just $V$.
 
-  V0, V2S, V2V, V2Q : Type ;
+  V0 : Type ;
   AS, A2S, AV, A2V : Type ;
 
 
@@ -438,16 +437,16 @@ mkV2 : overload {
   mkVV v = v ** {isAux = False ; lock_VV = <>} ;
 
   V0 : Type = V ;
-  V2S, V2V, V2Q : Type = V2 ;
+--  V2S, V2V, V2Q : Type = V2 ;
   AS, A2S, AV : Type = A ;
   A2V : Type = A2 ;
 
   mkV0  v = v ** {lock_V = <>} ;
-  mkV2S v p = prepV2 v p ** {lock_V2 = <>} ;
-  mkV2V v p = prepV2 v p ** {lock_V2 = <>} ;
+  mkV2S v p = prepV2 v p ** {lock_V2S = <>} ;
+  mkV2V v p = prepV2 v p ** {isAux = False ; lock_V2V = <>} ;
   mkVA  v = v ** {lock_VA = <>} ;
   mkV2A v p = prepV2 v p ** {lock_V2A = <>} ;
-  mkV2Q v p = prepV2 v p ** {lock_V2 = <>} ;
+  mkV2Q v p = prepV2 v p ** {lock_V2Q = <>} ;
 
   mkAS  v = v ** {lock_A = <>} ;
   mkA2S v p = mkA2 v p ** {lock_A = <>} ;

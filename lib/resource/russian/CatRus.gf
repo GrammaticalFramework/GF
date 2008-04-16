@@ -81,6 +81,7 @@ concrete CatRus of Cat = CommonX ** open ResRus, Prelude in {
 
     V, VS, VV, VQ, VA = Verbum ; -- = {s : VerbForm => Str ; asp : Aspect } ;
     V2, V2A = Verbum ** Complement ; 
+    V2V, V2S, V2Q = Verbum ** Complement ; --- AR 
     V3 = Verbum ** Complement** {s4 : Str; c2: Case} ; 
 --    VV = {s : VVForm => Str ; isAux : Bool} ;
 
