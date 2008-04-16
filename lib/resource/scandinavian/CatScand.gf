@@ -82,8 +82,8 @@ incomplete concrete CatScand of Cat =
 -- Open lexical classes, e.g. Lexicon
 
     V, VS, VQ, VA = Verb ;
-    V2, VV, V2A = Verb ** {c2 : Str} ;
-    V3 = Verb ** {c2,c3 : Str} ;
+    V2, VV, V2Q, V2S, V2A = Verb ** {c2 : Str} ;
+    V3,V2V = Verb ** {c2,c3 : Str} ;
 
     A  = Adjective ** {isComp : Bool} ;
        -- {s : AForm => Str} ;

@@ -14,10 +14,14 @@ abstract Verb = Cat ** {
 
     ComplVV  : VV  -> VP -> VP ;        -- want to run
     ComplVS  : VS  -> S  -> VP ;        -- know that she runs
-    ComplVQ  : VQ  -> QS -> VP ;        -- ask if she runs
-
+    ComplVQ  : VQ  -> QS -> VP ;        -- wonder if she runs
     ComplVA  : VA  -> AP -> VP ;        -- look red
-    ComplV2A : V2A -> NP -> AP -> VP ;  -- paint the house red
+
+    ComplV2V : V2V -> NP -> VP -> VP ;  -- cause it to burn
+    ComplV2S : V2S -> NP -> S  -> VP ;  -- tell me that it rains
+    ComplV2Q : V2Q -> NP -> QS -> VP ;  -- ask me who came
+    ComplV2A : V2A -> NP -> AP -> VP ;  -- paint it red
+
 
 --2 Other ways of forming verb phrases
 

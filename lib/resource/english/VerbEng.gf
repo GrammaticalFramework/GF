@@ -9,11 +9,19 @@ concrete VerbEng of Verb = CatEng ** open ResEng in {
       insertObj (\\_ => v.c2 ++ np.s ! Acc ++ v.c3 ++ np2.s ! Acc) (predV v) ;
 
     ComplVV v vp = insertObj (\\a => infVP v.isAux vp a) (predVV v) ;
-
     ComplVS v s  = insertObj (\\_ => conjThat ++ s.s) (predV v) ;
     ComplVQ v q  = insertObj (\\_ => q.s ! QIndir) (predV v) ;
-
     ComplVA  v    ap = insertObj (ap.s) (predV v) ;
+
+    ComplV2V v np vp = 
+      insertObj (\\a => infVP v.isAux vp a)
+        (insertObj (\\_ => v.c2 ++ np.s ! Acc) (predV v)) ;
+    ComplV2S v np s = 
+      insertObj (\\_ => conjThat ++ s.s)
+        (insertObj (\\_ => v.c2 ++ np.s ! Acc) (predV v)) ;
+    ComplV2Q v np q = 
+      insertObj (\\_ => q.s ! QIndir) 
+        (insertObj (\\_ => v.c2 ++ np.s ! Acc) (predV v)) ;
     ComplV2A v np ap = 
       insertObj (\\_ => v.c2 ++ np.s ! Acc ++ ap.s ! np.a) (predV v) ;
 

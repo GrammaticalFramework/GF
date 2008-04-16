@@ -4,12 +4,12 @@ fun
   airplane_N : N ;
   already_Adv : Adv ;
   animal_N : N ;
-  answer_V2S : V2 ;
+  answer_V2S : V2S ;
   apartment_N : N ;
   apple_N : N ;
   art_N : N ;
   ashes_N : N ;
-  ask_V2Q : V2 ;
+  ask_V2Q : V2Q ;
   baby_N : N ;
   back_N : N ;
   bad_A : A ;
@@ -18,7 +18,7 @@ fun
   beautiful_A : A ;
   become_VA : VA ;
   beer_N : N ;
-  beg_V2V : V2 ;
+  beg_V2V : V2V ;
   belly_N : N ;
   big_A : A ;
   bike_N : N ;

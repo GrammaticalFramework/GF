@@ -13,12 +13,24 @@ incomplete concrete VerbScand of Verb = CatScand ** open CommonScand, ResScand i
     ComplVV v vp = insertObj (\\a => v.c2 ++ infVP vp a) (predV v) ;
     ComplVS v s  = insertObj (\\_ => conjThat ++ s.s ! Sub) (predV v) ;
     ComplVQ v q  = insertObj (\\_ => q.s ! QIndir) (predV v) ;
-
     ComplVA  v ap = 
       insertObj (\\a => ap.s ! agrAdj a.gn DIndef) (predV v) ;
+
+    ComplV2V v np vp = 
+      insertObj
+        (\\a => v.c3 ++ infVP vp a)
+        (insertObj (\\_ => v.c2 ++ np.s ! accusative) (predV v)) ;
+    ComplV2S v np s = 
+      insertObj
+        (\\_ => conjThat ++ s.s ! Sub)
+        (insertObj (\\_ => v.c2 ++ np.s ! accusative) (predV v)) ;
+    ComplV2Q v np q = 
+      insertObj
+        (\\_ => q.s ! QIndir)
+        (insertObj (\\_ => v.c2 ++ np.s ! accusative) (predV v)) ;
     ComplV2A v np ap = 
-      insertAdv
-        (ap.s ! agrAdj np.a.gn DIndef)
+      insertObj
+        (\\_ => ap.s ! agrAdj np.a.gn DIndef)
         (insertObj (\\_ => v.c2 ++ np.s ! accusative) (predV v)) ;
 
     UseComp comp = insertObj (\\a => comp.s ! agrAdj a.gn DIndef) (predV verbBe) ;
