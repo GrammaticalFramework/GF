@@ -26,12 +26,22 @@ concrete VerbFin of Verb = CatFin ** open Prelude, ResFin in {
 
     ComplVS v s  = insertExtrapos ("että" ++ s.s) (predV v) ;
     ComplVQ v q  = insertExtrapos (          q.s) (predV v) ;
-
     ComplVA v ap = 
       insertObj 
         (\\_,b,agr => 
            ap.s ! False ! AN (NCase agr.n (npform2case agr.n v.c2.c))) --- v.cs.s ignored
         (predV v) ;
+
+    ComplV2S v np s = 
+      insertExtrapos ("että" ++ s.s) 
+        (insertObj (\\fin,b,_ => appCompl fin b v.c2 np) (predV v)) ;
+    ComplV2Q v np q = 
+      insertExtrapos (q.s) 
+        (insertObj (\\fin,b,_ => appCompl fin b v.c2 np) (predV v)) ;
+    ComplV2V v np vp = 
+      insertObj (\\_,b,a => infVP v.sc b a vp) ---- different infinitives
+        (insertObj (\\fin,b,_ => appCompl fin b v.c2 np) (predV v)) ;
+
     ComplV2A v np ap = 
       insertObj 
         (\\fin,b,_ => appCompl fin b v.c2 np ++ 
