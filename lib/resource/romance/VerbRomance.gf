@@ -12,12 +12,21 @@ incomplete concrete VerbRomance of Verb =
 
     ComplVV v vp = 
       insertComplement (\\a => prepCase v.c2.c ++ infVP vp a) (predV v) ;
-
     ComplVS v s  = insertExtrapos (\\b => conjThat ++ s.s ! (v.m ! b)) (predV v) ;
     ComplVQ v q  = insertExtrapos (\\_ => q.s ! QIndir) (predV v) ;
-
     ComplVA v ap = 
       insertComplement (\\a => ap.s ! AF a.g a.n) (predV v) ;
+
+    ComplV2V v np vp = 
+      insertComplement (\\a => prepCase v.c2.c ++ infVP vp a) 
+        (insertObject v.c2 np (predV v)) ;
+    ComplV2S v np s = 
+      insertExtrapos (\\b => s.s ! Indic) ---- mood
+        (insertObject v.c2 np (predV v)) ;
+    ComplV2Q v np q = 
+      insertExtrapos (\\_ => q.s ! QIndir)
+        (insertObject v.c2 np (predV v)) ;
+
     ComplV2A v np ap = 
       let af = case v.c3.isDir of {
         True => AF np.a.g np.a.n ;  -- ... bleues

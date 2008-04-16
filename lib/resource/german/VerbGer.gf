@@ -22,8 +22,23 @@ concrete VerbGer of Verb = CatGer ** open Prelude, ResGer in {
       insertExtrapos (conjThat ++ s.s ! Sub) (predV v) ;
     ComplVQ v q = 
       insertExtrapos (q.s ! QIndir) (predV v) ;
-
     ComplVA  v ap = insertObj (\\ _ => ap.s ! APred) (predV v) ;
+
+    ComplV2S v np s = 
+      insertExtrapos (conjThat ++ s.s ! Sub) 
+        (insertObj (\\_ => appPrep v.c2 np.s) (predV v)) ;
+    ComplV2Q v np q = 
+      insertExtrapos (q.s ! QIndir)
+        (insertObj (\\_ => appPrep v.c2 np.s) (predV v)) ;
+    ComplV2V v np vp = 
+      let 
+        vpi = infVP False vp 
+      in
+      insertExtrapos vpi.p3 (
+        insertInf vpi.p2 (
+          insertObj vpi.p1 (
+            (insertObj (\\_ => appPrep v.c2 np.s) (predV v))))) ;
+
     ComplV2A v np ap = 
       insertObj (\\_ => appPrep v.c2 np.s ++ ap.s ! APred) (predV v) ;
 
