@@ -108,8 +108,11 @@ abstract Cat = Common ** {
     V3 ;    -- three-place verb                    e.g. "show"
     VV ;    -- verb-phrase-complement verb         e.g. "want"
     VS ;    -- sentence-complement verb            e.g. "claim"
-    VQ ;    -- question-complement verb            e.g. "ask"
+    VQ ;    -- question-complement verb            e.g. "wonder"
     VA ;    -- adjective-complement verb           e.g. "look"
+    V2V ;   -- verb with NP and V complement       e.g. "cause"
+    V2S ;   -- verb with NP and S complement       e.g. "tell"
+    V2Q ;   -- verb with NP and Q complement       e.g. "ask"
     V2A ;   -- verb with NP and AP complement      e.g. "paint"
 
     A ;     -- one-place adjective                 e.g. "warm"

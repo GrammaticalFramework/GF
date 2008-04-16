@@ -271,12 +271,11 @@ oper
   mkAV  : A -> AV ;
   mkA2V : A -> Prep -> A2V ;
 
--- Notice: categories $V2S, V2V, V2Q$ are in v 1.0 treated
--- just as synonyms of $V2$, and the second argument is given
--- as an adverb. Likewise $AS, A2S, AV, A2V$ are just $A$.
+-- Notice: categories $AS, A2S, AV, A2V$ are just $A$, 
+-- and the second argument is given as an adverb..
 -- $V0$ is just $V$.
 
-  V0, V2S, V2V, V2Q : Type ;
+  V0 : Type ;
   AS, A2S, AV, A2V : Type ;
 
 --.
@@ -431,7 +430,7 @@ oper
   mkVS  v = v ** {lock_VS = <>} ;
   mkV2S v p = mk2V2 v p ** {lock_V2S = <>} ;
   mkVV  v = v ** {c2 = "å" ; lock_VV = <>} ;
-  mkV2V v p t = mk2V2 v p ** {s3 = t ; lock_V2V = <>} ;
+  mkV2V v p t = mk2V2 v p ** {c3 = "att" ; lock_V2V = <>} ;
   mkVA  v = v ** {lock_VA = <>} ;
   mkV2A v p = mk2V2 v p ** {lock_V2A = <>} ;
   mkVQ  v = v ** {lock_VQ = <>} ;
@@ -443,7 +442,6 @@ oper
   mkA2V v p = mkA2 v p ** {lock_A = <>} ;
 
   V0 : Type = V ;
-  V2S, V2V, V2Q : Type = V2 ;
   AS, A2S, AV : Type = A ;
   A2V : Type = A2 ;
 

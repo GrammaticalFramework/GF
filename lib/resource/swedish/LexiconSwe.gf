@@ -19,7 +19,7 @@ lin
   beautiful_A = mk3A "vacker" "vackert" "vackra" ;
   become_VA = mkVA (mkV "bli" "blir""bli" "blev" "blivit" "bliven") ;
   beer_N = regGenN "öl" neutrum ;
-  beg_V2V = mkV2V (mkV "be" "ber""be" "blad" "bett" "bedd") noPrep (mkPrep "att") ;
+  beg_V2V = mkV2V (mkV "be" "ber""be" "bad" "bett" "bedd") noPrep (mkPrep "att") ;
   big_A = irregA "stor" "större" "störst";
   bike_N = mk2N "cykel" "cyklar" ;
   bird_N = mk2N "fågel" "fåglar" ;
