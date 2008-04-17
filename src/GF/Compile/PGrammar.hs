@@ -29,10 +29,11 @@ import GF.Grammar.Macros
 import GF.Grammar.MMacros
 
 import GF.Data.Operations
+import qualified Data.ByteString.Char8 as BS
 
 pTerm :: String -> Err Term
 pTerm s = do
-  e <- err2err $ pExp $ myLexer s
+  e <- err2err $ pExp $ myLexer (BS.pack s)
   transExp e
 
 pTrm :: String -> Term
