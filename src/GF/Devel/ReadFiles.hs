@@ -35,6 +35,8 @@ import Data.Char
 import Control.Monad
 import Data.List
 import System.Directory
+import qualified Data.ByteString.Char8 as BS
+
 
 type ModName = String
 type ModEnv  = [(ModName,ModTime)]
@@ -202,7 +204,7 @@ getImports ps = get [] where
   get ds file0 = do
     let name = justModuleName file0 ---- fileBody file0
     (p,s) <- tryRead name
-    let ((typ,mname),imps) = importsOfFile s
+    let ((typ,mname),imps) = importsOfFile (BS.unpack s)
     let namebody = justFileName name
     ioeErr $ testErr  (mname == namebody) $ 
              "module name" +++ mname +++ "differs from file name" +++ namebody
@@ -317,14 +319,14 @@ lexs s = x:xs where
 getOptionsFromFile ::  FilePath -> IO Options
 getOptionsFromFile file = do
   s <- readFileIfStrict file
-  let ls = filter (isPrefixOf "--#") $ lines s
+  let ls = filter (isPrefixOf "--#") $ lines (BS.unpack s)
   return $ fst $ getOptions "-" $ map (unwords . words . drop 3) ls
 
 -- | check if old GF file
 isOldFile :: FilePath -> IO Bool
 isOldFile f = do
   s <- readFileIfStrict f
-  let s' = unComm s
+  let s' = unComm (BS.unpack s)
   return $ not (null s') && old (head (words s'))
  where
    old = flip elem $ words 

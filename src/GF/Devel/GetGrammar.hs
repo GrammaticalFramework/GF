@@ -34,6 +34,7 @@ import GF.Devel.ReadFiles ----
 
 import Data.Char (toUpper)
 import Data.List (nub)
+import qualified Data.ByteString.Char8 as BS
 import Control.Monad (foldM)
 import System (system)
 

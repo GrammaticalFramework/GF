@@ -26,6 +26,7 @@ import System.IO.Error
 import System.Environment
 import System.CPUTime
 import Control.Monad
+import qualified Data.ByteString.Char8 as BS
 
 #ifdef mingw32_HOST_OS
 import System.Win32.DLL
@@ -80,19 +81,15 @@ putPoint' f opts msg act = do
   ve $ putCPU
   return a
 
-readFileStrict :: String -> IO String
-readFileStrict f = do
-  s <- readFile f
-  return $ seq (length s) ()
-  return s
-
-readFileIf = readFileIfs readFile
-readFileIfStrict  = readFileIfs readFileStrict
-
-readFileIfs rf f = catch (rf f) (\_ -> reportOn f) where
+readFileIf f = catch (readFile f) (\_ -> reportOn f) where
  reportOn f = do
    putStrLnFlush ("File " ++ f ++ " does not exist. Returned empty string")
    return ""
+
+readFileIfStrict f = catch (BS.readFile f) (\_ -> reportOn f) where
+ reportOn f = do
+   putStrLnFlush ("File " ++ f ++ " does not exist. Returned empty string")
+   return BS.empty
 
 type FileName = String
 type InitPath = String
@@ -116,12 +113,12 @@ getFilePathMsg msg paths file = get paths where
     if exist then return (Just pfile) else get ps
 ---               catch (readFileStrict pfile >> return (Just pfile)) (\_ -> get ps)
 
-readFileIfPath :: [FilePath] -> String -> IOE (FilePath,String)
+readFileIfPath :: [FilePath] -> String -> IOE (FilePath,BS.ByteString)
 readFileIfPath paths file = do
   mpfile <- ioeIO $ getFilePath paths file
   case mpfile of
     Just pfile -> do
-      s <- ioeIO $ readFileStrict pfile
+      s <- ioeIO $ BS.readFile pfile
       return (justInitPath pfile,s)
     _ -> ioeErr $ Bad ("File " ++ file ++ " does not exist.")
 
@@ -319,8 +316,8 @@ putPointEVerb opts = putPointE (addOption beVerbose opts)
 gfLibraryPath = "GF_LIB_PATH"
 
 -- ((do {s <- readFile f; return (return s)}) ) 
-readFileIOE :: FilePath -> IOE (String)
-readFileIOE f = ioe $ catch (readFileStrict f >>= return . return)
+readFileIOE :: FilePath -> IOE BS.ByteString
+readFileIOE f = ioe $ catch (BS.readFile f >>= return . return)
                       (\_ -> return (Bad (reportOn f))) where
   reportOn f = "File " ++ f ++ " not found."
 
@@ -331,15 +328,15 @@ readFileIOE f = ioe $ catch (readFileStrict f >>= return . return)
 -- it returns not only contents of the file, but also the path used
 --
 -- FIXME: unix-specific, \/ is \\ on Windows
-readFileLibraryIOE :: String -> FilePath -> IOE (FilePath, String)
+readFileLibraryIOE :: String -> FilePath -> IOE (FilePath, BS.ByteString)
 readFileLibraryIOE ini f = 
-	ioe $ catch ((do {s <- readFileStrict initPath; return (return (initPath,s))}))
+	ioe $ catch (do {s <- BS.readFile initPath; return (return (initPath,s))})
 	 (\_ -> tryLibrary ini f) where
-		tryLibrary :: String -> FilePath -> IO (Err (FilePath, String))
+		tryLibrary :: String -> FilePath -> IO (Err (FilePath, BS.ByteString))
 		tryLibrary ini f = 
 			catch (do {
 				lp <- getLibPath; 
-				s <- readFileStrict (lp ++ f);
+				s <- BS.readFile (lp ++ f);
 				return (return (lp ++ f, s))
 			}) (\_ -> return (Bad (reportOn f)))
 		initPath = addInitFilePath ini f
