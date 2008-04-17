@@ -44,6 +44,7 @@ import GF.Infra.ReadFiles ----
 
 import Data.Char (toUpper)
 import Data.List (nub)
+import qualified Data.ByteString.Char8 as BS
 import Control.Monad (foldM)
 import System (system)
 
@@ -61,14 +62,14 @@ getSourceModule opts file0 = do
   let string = case getOptVal opts uniCoding of
         Just "utf8" -> decodeUTF8 string0
         _ -> string0
-  let tokens = myLexer string
+  let tokens = myLexer (BS.pack string)
   mo1  <- ioeErr $ err2err $ pModDef tokens
   ioeErr $ transModDef mo1
 
 getSourceGrammar :: Options -> FilePath -> IOE SourceGrammar
 getSourceGrammar opts file = do
   string    <- readFileIOE file
-  let tokens = myLexer string
+  let tokens = myLexer (BS.pack string)
   gr1  <- ioeErr $ err2err $ pGrammar tokens
   ioeErr $ transGrammar gr1
 
@@ -117,7 +118,7 @@ ioeEErr = ioeErr . err2err
 -- change them by turning the final letter to upper case.
 --- There is a risk of clash. 
 oldLexer :: String -> [L.Token]
-oldLexer = map change . L.tokens where
+oldLexer = map change . L.tokens . BS.pack where
   change t = case t of
     (L.PT p (L.TS s)) | elem s newReservedWords -> 
         (L.PT p (L.TV (init s ++ [toUpper (last s)])))
