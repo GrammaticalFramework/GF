@@ -30,13 +30,12 @@ import GF.Devel.Arch
 import Control.Monad
 import System.Directory
 
-batchCompile :: Options -> [FilePath] -> IO SourceGrammar
+batchCompile :: Options -> [FilePath] -> IOE SourceGrammar
 batchCompile opts files = do
-  let defOpts = addOptions opts (options [emitCode])
-  egr <- appIOE $ foldM (compileModule defOpts) emptyCompileEnv files 
-  case egr of
-    Ok (_,gr) -> return gr
-    Bad s -> error s
+  (_,gr) <- foldM (compileModule defOpts) emptyCompileEnv files
+  return gr
+  where
+    defOpts = addOptions opts (options [emitCode])
 
 -- to output an intermediate stage
 intermOut :: Options -> Option -> String -> IOE ()
@@ -83,10 +82,7 @@ compileModule opts1 env file = do
   ioeIOIf $ putStrLn $ "modules to include:" +++ show names ----
   let sgr2 = MGrammar [m | m@(i,_) <- modules sgr, 
                            notElem (prt i) $ map fileBody names]
-  let env0 = (0,sgr2)
-  (e,mm) <- foldIOE (compileOne opts) env0 files
-  maybe (return ()) putStrLnE mm
-  return e
+  foldM (compileOne opts) (0,sgr2) files
 
 
 compileOne :: Options -> CompileEnv -> FullPath -> IOE CompileEnv

@@ -18,7 +18,7 @@ mainGFC xx = do
   case opts of
     _ | oElem (iOpt "help") opts -> putStrLn usageMsg
     _ | oElem (iOpt "-make") opts -> do
-      gfcc <- compileToGFCC opts fs
+      gfcc <- appIOE (compileToGFCC opts fs) >>= err fail return
       let gfccFile = targetNameGFCC opts (absname gfcc)
       outputFile gfccFile (printGFCC gfcc)
       mapM_ (alsoPrint opts gfcc) printOptions
@@ -32,7 +32,7 @@ mainGFC xx = do
       mapM_ (alsoPrint opts gfcc) printOptions
       
     _ -> do
-      mapM_ (batchCompile opts) (map return fs)
+      appIOE (mapM_ (batchCompile opts) (map return fs)) >>= err fail return
       putStrLn "Done."
 
 targetName :: Options -> CId -> String
