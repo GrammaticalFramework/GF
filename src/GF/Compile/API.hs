@@ -9,12 +9,12 @@ import GF.Infra.Option
 import GF.Devel.UseIO
 
 -- | Compiles a number of source files and builds a 'GFCC' structure for them.
-compileToGFCC :: Options -> [FilePath] -> IO GFCC
+compileToGFCC :: Options -> [FilePath] -> IOE GFCC
 compileToGFCC opts fs = 
     do gr <- batchCompile opts fs
        let name = justModuleName (last fs)
        let (abs,gc0) = mkCanon2gfcc opts name gr
-       gc1 <- checkGFCCio gc0
+       gc1 <- ioeIO $ checkGFCCio gc0
        let opt = if oElem (iOpt "noopt") opts then id else optGFCC
            par = if oElem (iOpt "noparse") opts then id else addParsers
        return (par (opt gc1))
