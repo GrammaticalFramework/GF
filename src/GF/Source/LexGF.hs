@@ -4,6 +4,7 @@
 module GF.Source.LexGF where
 
 
+import qualified Data.ByteString.Char8 as BS
 
 #if __GLASGOW_HASKELL__ >= 603
 #include "ghcconfig.h"
@@ -119,24 +120,25 @@ alexMove (Pn a l c) _    = Pn (a+1)  l     (c+1)
 
 type AlexInput = (Posn, -- current position,
                Char,     -- previous char
-               String)   -- current input string
+               BS.ByteString)   -- current input string
 
-tokens :: String -> [Token]
+tokens :: BS.ByteString -> [Token]
 tokens str = go (alexStartPos, '\n', str)
     where
-      go :: (Posn, Char, String) -> [Token]
+      go :: AlexInput -> [Token]
       go inp@(pos, _, str) =
                case alexScan inp 0 of
                 AlexEOF                -> []
                 AlexError (pos, _, _)  -> [Err pos]
                 AlexSkip  inp' len     -> go inp'
-                AlexToken inp' len act -> act pos (take len str) : (go inp')
+                AlexToken inp' len act -> act pos (BS.unpack (BS.take len str)) : (go inp')
 
 alexGetChar :: AlexInput -> Maybe (Char,AlexInput)
-alexGetChar (p, c, [])    = Nothing
-alexGetChar (p, _, (c:s)) =
-    let p' = alexMove p c
-     in p' `seq` Just (c, (p', c, s))
+alexGetChar (p,_,cs) | BS.null cs  = Nothing
+                     | otherwise = let c   = BS.head cs
+                                       cs' = BS.tail cs
+                                       p'  = alexMove p c
+                                    in p' `seq` cs' `seq` Just (c, (p', c, cs'))
 
 alexInputPrevChar :: AlexInput -> Char
 alexInputPrevChar (p, c, s) = c
