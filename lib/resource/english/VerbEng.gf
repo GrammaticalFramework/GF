@@ -4,14 +4,15 @@ concrete VerbEng of Verb = CatEng ** open ResEng in {
 
   lin
     UseV = predV ;
-    ComplV2 v np = insertObj (\\_ => v.c2 ++ np.s ! Acc) (predV v) ;
-    ComplV3 v np np2 = 
-      insertObj (\\_ => v.c2 ++ np.s ! Acc ++ v.c3 ++ np2.s ! Acc) (predV v) ;
 
     ComplVV v vp = insertObj (\\a => infVP v.isAux vp a) (predVV v) ;
     ComplVS v s  = insertObj (\\_ => conjThat ++ s.s) (predV v) ;
     ComplVQ v q  = insertObj (\\_ => q.s ! QIndir) (predV v) ;
     ComplVA  v    ap = insertObj (ap.s) (predV v) ;
+
+    ComplV2 v np = insertObj (\\_ => v.c2 ++ np.s ! Acc) (predV v) ;
+    ComplV3 v np np2 = 
+      insertObj (\\_ => v.c2 ++ np.s ! Acc ++ v.c3 ++ np2.s ! Acc) (predV v) ;
 
     ComplV2V v np vp = 
       insertObj (\\a => infVP v.isAux vp a)
