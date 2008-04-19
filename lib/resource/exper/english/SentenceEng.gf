@@ -25,11 +25,6 @@ concrete SentenceEng of Sentence = CatEng ** open Prelude, ResEng in {
     SlashVP np vp = 
       mkClause (np.s ! Nom) np.a vp ** {c2 = vp.c2} ;
 
-    SlashVVV2 np vv v2 = 
-      mkClause (np.s ! Nom) np.a 
-        (insertObj (\\a => infVP vv.isAux (predV v2) a) (predVV vv))  **
-        {c2 = v2.c2} ;
-
     AdvSlash slash adv = {
       s  = \\t,a,b,o => slash.s ! t ! a ! b ! o ++ adv.s ;
       c2 = slash.c2
@@ -65,16 +60,6 @@ concrete SentenceEng of Sentence = CatEng ** open Prelude, ResEng in {
 
   oper
     ctr = contrNeg True ;  -- contracted negations
-
--- obsolete
-  lin
-    SlashV2 np v2 = 
-      mkClause (np.s ! Nom) np.a (predV v2) ** {c2 = v2.c2} ;
-
-    SlashVVV2 np vv v2 = 
-      mkClause (np.s ! Nom) np.a 
-        (insertObj (\\a => infVP vv.isAux (predV v2) a) (predVV vv))  **
-        {c2 = v2.c2} ;
 
 }
 

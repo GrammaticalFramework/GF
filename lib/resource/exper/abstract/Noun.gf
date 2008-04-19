@@ -35,24 +35,27 @@ abstract Noun = Cat ** {
 -- (This is modified from CLE by further dividing their $Num$ into 
 -- cardinal and ordinal.)
 
-    DetSg : Quant ->        Ord -> Det ;  -- this best man
-    DetPl : Quant -> Num -> Ord -> Det ;  -- these five best men
+    DetSg : Art ->        Ord -> Det ;  -- the best man
+    DetPl : Art -> Num -> Ord -> Det ;  -- the five best men
 
 -- Notice that $DetPl$ can still result in a singular determiner, because
 -- "one" is a numeral: "this one man".
 
--- Quantifiers that have both forms can be used in both ways.
+-- Quantifiers can form noun phrases directly.
 
---- DEPRECATED: no longer needed
----    SgQuant : Quant -> QuantSg ;            -- this
----    PlQuant : Quant -> QuantPl ;            -- these
+    DetSgNP : Quant ->        Ord -> NP ;  -- this
+    DetPlNP : Quant -> Num -> Ord -> NP ;  -- these five
+
+-- Quantifiers can also be used in the same way as articles.
+
+    ArtQuant : Quant -> Art ;
 
 -- Pronouns have possessive forms. Genitives of other kinds
 -- of noun phrases are not given here, since they are not possible
 -- in e.g. Romance languages. They can be found in
 -- [``Extra`` ../abstract/Extra.gf].
 
-    PossPron : Pron -> Quant ;    -- my (house)
+    PossPron : Pron -> Art ;    -- my (house)
 
 -- All parts of the determiner can be empty, except $Quant$, which is
 -- the "kernel" of a determiner.
@@ -62,7 +65,6 @@ abstract Noun = Cat ** {
 
 -- $Num$ consists of either digits or numeral words.
 
-    NumInt     : Int -> Num ;     -- 51 (DEPRECATED)
     NumDigits  : Digits -> Num ;  -- 51
     NumNumeral : Numeral -> Num ; -- fifty-one
 
@@ -74,27 +76,32 @@ abstract Noun = Cat ** {
 
 -- $Ord$ consists of either digits or numeral words.
 
-    OrdInt     : Int -> Ord ;     -- 51st (DEPRECATED)
     OrdDigits  : Digits -> Ord ;  -- 51st
     OrdNumeral : Numeral -> Ord ; -- fifty-first
     
 -- Superlative forms of adjectives behave syntactically in the same way as
 -- ordinals.
 
-    OrdSuperl : A -> Ord ;        -- largest
+    OrdSuperl : A -> Ord ; -- largest
+
+-- Ordinals and cardinals can be used as noun phrases alone.
+
+    OrdSuperlNP  : A -> NP ;        -- the largest
+    OrdNumeralNP : Numeral -> NP ;  -- the fiftieth
+    NumNumeralNP : Numeral -> NP ;  -- fifty
 
 -- Definite and indefinite constructions are sometimes realized as
 -- neatly distinct words (Spanish "un, unos ; el, los") but also without
 -- any particular word (Finnish; Swedish definites).
 
-    DefArt   : Quant ;            -- the (house), the (houses)
-    IndefArt : Quant ;            -- a (house), (houses)
+    DefArt   : Art ;       -- the (house), the (houses)
+    IndefArt : Art ;       -- a (house), (houses)
 
 -- Nouns can be used without an article as mass nouns. The resource does
 -- not distinguish mass nouns from other common nouns, which can result
 -- in semantically odd expressions.
 
-    MassDet  : Quant ;            -- (beer)
+    MassDet  : Art ;       -- (beer)
 
 -- Other determiners are defined in [Structural Structural.html].
 

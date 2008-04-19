@@ -66,11 +66,6 @@ abstract Sentence = Cat ** {
 
     AdvS   : Adv -> S  -> S ;            -- today, I will go home
 
---- Obsolete
-
-    SlashV2   : NP -> V2 -> Slash ;         -- (whom) he sees
-    SlashVVV2 : NP -> VV -> V2 -> Slash;    -- (whom) he wants to see 
-
 }
 
 --.
