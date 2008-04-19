@@ -77,13 +77,4 @@ abstract Verb = Cat ** {
     UseVQ   : VQ -> V2 ;                -- ask (a question)
     UseVS   : VS -> V2 ;                -- know (a secret)
 
---- Obsolete
-
-    ComplV2  : V2  -> NP -> VP ;        -- use it
-    ComplV3  : V3  -> NP -> NP -> VP ;  -- send a message to her
-    ComplV2V : V2V -> NP -> VP -> VP ;  -- cause it to burn
-    ComplV2S : V2S -> NP -> S  -> VP ;  -- tell me that it rains
-    ComplV2Q : V2Q -> NP -> QS -> VP ;  -- ask me who came
-    ComplV2A : V2A -> NP -> AP -> VP ;  -- paint it red
-
 }

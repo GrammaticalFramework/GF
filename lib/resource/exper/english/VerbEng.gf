@@ -47,21 +47,4 @@ concrete VerbEng of Verb = CatEng ** open ResEng in {
     CompNP np = {s = \\_ => np.s ! Acc} ;
     CompAdv a = {s = \\_ => a.s} ;
 
--- obsolete, just creating spurious ambiguity now
-
-    ComplV2 v np = insertObj (\\_ => v.c2 ++ np.s ! Acc) (predV v) ;
-    ComplV3 v np np2 = 
-      insertObj (\\_ => v.c2 ++ np.s ! Acc ++ v.c3 ++ np2.s ! Acc) (predV v) ;
-    ComplV2V v np vp = 
-      insertObj (\\a => infVP v.isAux vp a)
-        (insertObj (\\_ => v.c2 ++ np.s ! Acc) (predV v)) ;
-    ComplV2S v np s = 
-      insertObj (\\_ => conjThat ++ s.s)
-        (insertObj (\\_ => v.c2 ++ np.s ! Acc) (predV v)) ;
-    ComplV2Q v np q = 
-      insertObj (\\_ => q.s ! QIndir) 
-        (insertObj (\\_ => v.c2 ++ np.s ! Acc) (predV v)) ;
-    ComplV2A v np ap = 
-      insertObj (\\_ => v.c2 ++ np.s ! Acc ++ ap.s ! np.a) (predV v) ;
-
 }

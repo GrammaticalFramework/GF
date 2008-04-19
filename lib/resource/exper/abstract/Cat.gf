@@ -80,6 +80,7 @@ abstract Cat = Common ** {
     Det ;    -- determiner phrase                   e.g. "those seven"
     Predet ; -- predeterminer (prefixed Quant)      e.g. "all"
     Quant ;  -- quantifier ('nucleus' of Det)       e.g. "this/these"
+    Art ;    -- article (non-independent Quant)     e.g. "the"
     Num ;    -- cardinal number (used with QuantPl) e.g. "seven"
     Ord ;    -- ordinal number (used in Det)        e.g. "seventh"
 
