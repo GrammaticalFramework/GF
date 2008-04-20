@@ -23,6 +23,11 @@ fun
     NumInt     : Int -> Num ;     -- 51
     OrdInt     : Int -> Ord ;     -- 51st (DEPRECATED)
 
+    -- 20/4
+    DetSg : Art ->        Ord -> Det ;  -- the best man
+    DetPl : Art -> Num -> Ord -> Det ;  -- the five best men
+    NoNum : Num ;
+
 -- from Structural 19/4/2008
 
     that_NP : NP ;

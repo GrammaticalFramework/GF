@@ -39,6 +39,18 @@ concrete BackwardEng of Backward = CatEng ** open ResEng in {
     NumInt n = {s = n.s ; n = Pl} ; 
     OrdInt n = {s = n.s ++ "th"} ; --- DEPRECATED
 
+    DetSg quant ord = {
+      s = quant.s ! Sg ++ ord.s ; 
+      n = Sg
+      } ;
+
+    DetPl quant num ord = {
+      s = quant.s ! num.n ++ num.s ++ ord.s ; 
+      n = num.n
+      } ;
+
+    NoNum = {s = []; n = Pl } ;
+
 -- from Structural 19/4/2008
 
     that_NP = regNP "that" Sg ;
