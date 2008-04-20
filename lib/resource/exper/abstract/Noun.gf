@@ -35,16 +35,14 @@ abstract Noun = Cat ** {
 -- (This is modified from CLE by further dividing their $Num$ into 
 -- cardinal and ordinal.)
 
-    DetSg : Art ->        Ord -> Det ;  -- the best man
-    DetPl : Art -> Num -> Ord -> Det ;  -- the five best men
+    DetArt   : Art -> Num -> Ord -> Det ;  -- the five best men
 
 -- Notice that $DetPl$ can still result in a singular determiner, because
 -- "one" is a numeral: "this one man".
 
 -- Quantifiers can form noun phrases directly.
 
-    DetSgNP : Quant ->        Ord -> NP ;  -- this
-    DetPlNP : Quant -> Num -> Ord -> NP ;  -- these five
+    DetQuant : Quant -> Num -> Ord -> NP ;  -- these five
 
 -- Quantifiers can also be used in the same way as articles.
 
@@ -60,7 +58,8 @@ abstract Noun = Cat ** {
 -- All parts of the determiner can be empty, except $Quant$, which is
 -- the "kernel" of a determiner.
 
-    NoNum  : Num ;
+    NumSg  : Num ;
+    NumPl  : Num ;
     NoOrd  : Ord ;
 
 -- $Num$ consists of either digits or numeral words.
@@ -76,7 +75,7 @@ abstract Noun = Cat ** {
 
 -- $Ord$ consists of either digits or numeral words.
 
-    OrdDigits  : Digits -> Ord ;  -- 51st
+    OrdDigits  : Digits  -> Ord ; -- 51st
     OrdNumeral : Numeral -> Ord ; -- fifty-first
     
 -- Superlative forms of adjectives behave syntactically in the same way as
@@ -86,9 +85,9 @@ abstract Noun = Cat ** {
 
 -- Ordinals and cardinals can be used as noun phrases alone.
 
-    OrdSuperlNP  : A -> NP ;        -- the largest
-    OrdNumeralNP : Numeral -> NP ;  -- the fiftieth
-    NumNumeralNP : Numeral -> NP ;  -- fifty
+    OrdSuperlNP  : Num -> A -> NP ;  -- the five best
+    OrdNumeralNP : Numeral -> NP ;   -- the fiftieth
+    NumNumeralNP : Numeral -> NP ;   -- fifty
 
 -- Definite and indefinite constructions are sometimes realized as
 -- neatly distinct words (Spanish "un, unos ; el, los") but also without

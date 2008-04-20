@@ -26,22 +26,12 @@ concrete NounEng of Noun = CatEng ** open ResEng, Prelude in {
       a = np.a
       } ;
 
-    DetSg quant ord = {
-      s = quant.s ! Sg ++ ord.s ; 
-      n = Sg
-      } ;
-
-    DetPl quant num ord = {
+    DetArt quant num ord = {
       s = quant.s ! num.n ++ num.s ++ ord.s ; 
       n = num.n
       } ;
 
-    DetSgNP quant ord = {
-      s = \\c => quant.s ! Sg ++ ord.s ; ---- case 
-      a = agrP3 Sg
-      } ;
-
-    DetPlNP quant num ord = {
+    DetQuant quant num ord = {
       s = \\c => quant.s ! num.n ++ num.s ++ ord.s ; ---- case
       a = agrP3 num.n
       } ;
@@ -50,7 +40,8 @@ concrete NounEng of Noun = CatEng ** open ResEng, Prelude in {
 
     PossPron p = {s = \\_ => p.s ! Gen} ;
 
-    NoNum = {s = []; n = Pl } ;
+    NumSg = {s = []; n = Sg} ;
+    NumPl = {s = []; n = Pl} ;
     NoOrd = {s = []} ;
 
     NumDigits n = {s = n.s ! NCard ; n = n.n} ;
@@ -81,9 +72,9 @@ concrete NounEng of Noun = CatEng ** open ResEng, Prelude in {
       a = agrP3 Sg
       } ;
 
-    OrdSuperlNP a = {
-      s = \\c => "the" ++ a.s ! AAdj Superl ; ---- case
-      a = agrP3 Sg
+    OrdSuperlNP n a = {
+      s = \\c => "the" ++ n.s ++ a.s ! AAdj Superl ; ---- case
+      a = agrP3 n.n
       } ;
 
     DefArt = {s = \\_ => artDef} ;
