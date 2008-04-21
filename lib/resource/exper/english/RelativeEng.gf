@@ -16,7 +16,7 @@ concrete RelativeEng of Relative = CatEng ** open ResEng in {
             RNoAg => ag ;
             RAg a => a
             } ;
-          cl = mkClause (rp.s ! RC Nom) agr vp
+          cl = mkClause (rp.s ! RC agr.g Nom) agr vp
         in
         cl.s ! t ! ant ! b ! ODir ;
       c = Nom
@@ -27,20 +27,26 @@ concrete RelativeEng of Relative = CatEng ** open ResEng in {
 -- "we are looking at").
 
     RelSlash rp slash = {
-      s = \\t,a,p,_ => slash.c2 ++ rp.s ! RPrep ++ slash.s ! t ! a ! p ! ODir ;
+      s = \\t,a,p,agr => 
+          slash.c2 ++ rp.s ! RPrep agr.g ++ slash.s ! t ! a ! p ! ODir ;
       c = Acc
       } ;
 
     FunRP p np rp = {
-      s = \\c => np.s ! Acc ++ p.s ++ rp.s ! RPrep ;
+      s = \\c => np.s ! Acc ++ p.s ++ rp.s ! RPrep np.a.g ;
       a = RAg np.a
       } ;
 
-    IdRP = {
+    IdRP = 
+      let varr : Str -> Str = \x -> variants {x ; "that"} --- for bwc
+      in {
       s = table {
-        RC Gen => "whose" ; 
-        RC _   => "that" ;
-        RPrep  => "which"
+        RC _ Gen => "whose" ; 
+        RC Neutr _  => varr "which" ;
+        RC _ Acc    => varr "whom" ;
+        RC _ Nom    => varr "who" ;
+        RPrep Neutr => "which" ;
+        RPrep _     => "whom"
         } ;
       a = RNoAg
       } ;

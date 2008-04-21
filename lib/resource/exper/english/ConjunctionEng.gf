@@ -12,10 +12,10 @@ concrete ConjunctionEng of Conjunction =
     DConjAdv = conjunctDistrSS ;
 
     ConjNP conj ss = conjunctTable Case conj ss ** {
-      a = {n = conjNumber conj.n ss.a.n ; p = ss.a.p}
+      a = {n = conjNumber conj.n ss.a.n ; p = ss.a.p ; g = ss.a.g}
       } ;
     DConjNP conj ss = conjunctDistrTable Case conj ss ** {
-      a = {n = conjNumber conj.n ss.a.n ; p = ss.a.p}
+      a = {n = conjNumber conj.n ss.a.n ; p = ss.a.p ; g = ss.a.g}
       } ;
 
     ConjAP conj ss = conjunctTable Agr conj ss ** {

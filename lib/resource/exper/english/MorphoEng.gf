@@ -72,13 +72,12 @@ oper
 -- We record the form "mine" and the gender for later use.
 
   Pronoun : Type = 
-    {s : Case => Str ; a : Agr ; g : Gender} ;
+    {s : Case => Str ; a : Agr} ;
 
   mkPronoun : (_,_,_,_ : Str) -> Number -> Person -> Gender -> Pronoun = 
    \I,me,my,mine,n,p,g -> 
     {s = table {Nom => I ; Acc => me ; Gen => my} ; 
-     a = {n = n ; p = p} ; 
-     g = g
+     a = {n = n ; p = p ; g = g} 
     } ;
 
   human : Gender = Masc ; --- doesn't matter

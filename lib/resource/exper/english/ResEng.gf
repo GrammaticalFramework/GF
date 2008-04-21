@@ -21,10 +21,11 @@ resource ResEng = ParamX ** open Prelude in {
   param
     Case = Nom | Acc | Gen ;
 
--- Agreement of $NP$ is a record. We'll add $Gender$ later.
+-- Agreement of $NP$ is a record. $Gender$ is needed for "who"/"which" and
+-- for "himself"/"herself"/"itself".
 
   oper
-    Agr = {n : Number ; p : Person} ;
+    Agr = {n : Number ; p : Person ; g : Gender} ;
 
   param 
     Gender = Neutr | Masc | Fem ;
@@ -61,8 +62,8 @@ resource ResEng = ParamX ** open Prelude in {
 
 --2 For $Relative$
  
-    RAgr = RNoAg | RAg {n : Number ; p : Person} ;
-    RCase = RPrep | RC Case ;
+    RAgr = RNoAg | RAg {n : Number ; p : Person ; g : Gender} ;
+    RCase = RPrep Gender | RC Gender Case ;
 
 --2 For $Numeral$
 
@@ -73,11 +74,15 @@ resource ResEng = ParamX ** open Prelude in {
 
   oper
     agrP3 : Number -> Agr = \n -> 
-      {n = n ; p = P3} ;
+      {n = n ; p = P3 ; g = Neutr} ;
+
+    agrgP3 : Number -> Gender -> Agr = \n,g -> 
+      {n = n ; p = P3 ; g = g} ;
 
     conjAgr : Agr -> Agr -> Agr = \a,b -> {
       n = conjNumber a.n b.n ;
-      p = conjPerson a.p b.p
+      p = conjPerson a.p b.p ;
+      g = a.g ----
       } ;
 
 -- For $Lex$.
@@ -121,10 +126,14 @@ resource ResEng = ParamX ** open Prelude in {
       } ;
 
     mkIP : (i,me,my : Str) -> Number -> {s : Case => Str ; n : Number} =
-     \i,me,my,n -> let who = mkNP i me my n P3 in {s = who.s ; n = n} ;
+     \i,me,my,n -> let who = mkNP i me my n P3 Neutr in {
+        s = who.s ; 
+        n = n
+        } ;
 
-    mkNP : (i,me,my : Str) -> Number -> Person -> {s : Case => Str ; a : Agr} =
-     \i,me,my,n,p -> {
+    mkNP : (i,me,my : Str) -> Number -> Person -> Gender -> 
+     {s : Case => Str ; a : Agr} =
+     \i,me,my,n,p,g -> {
      s = table {
        Nom => i ;
        Acc => me ;
@@ -132,7 +141,8 @@ resource ResEng = ParamX ** open Prelude in {
        } ;
      a = {
        n = n ;
-       p = p
+       p = p ;
+       g = g
        }
      } ;
 
@@ -149,7 +159,7 @@ resource ResEng = ParamX ** open Prelude in {
       mkVerb walk (walk + "s") (walk + "ed") (walk + "ed") (walk + "ing") ;
 
     regNP : Str -> Number -> {s : Case => Str ; a : Agr} = \that,n ->
-      mkNP that that (that + "'s") n P3 ;
+      mkNP that that (that + "'s") n P3 Neutr ;
 
 -- We have just a heuristic definition of the indefinite article.
 -- There are lots of exceptions: consonantic "e" ("euphemism"), consonantic
@@ -380,7 +390,9 @@ resource ResEng = ParamX ** open Prelude in {
   reflPron : Agr => Str = table {
     {n = Sg ; p = P1} => "myself" ;
     {n = Sg ; p = P2} => "yourself" ;
-    {n = Sg ; p = P3} => "itself" ; ----
+    {n = Sg ; p = P3 ; g = Masc} => "himself" ;
+    {n = Sg ; p = P3 ; g = Fem} => "herself" ;
+    {n = Sg ; p = P3} => "itself" ;
     {n = Pl ; p = P1} => "ourselves" ;
     {n = Pl ; p = P2} => "yourselves" ;
     {n = Pl ; p = P3} => "themselves"

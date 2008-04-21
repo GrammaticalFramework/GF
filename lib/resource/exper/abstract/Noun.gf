@@ -22,10 +22,11 @@ abstract Noun = Cat ** {
     PredetNP : Predet -> NP -> NP; -- only the man 
 
 -- A noun phrase can also be postmodified by the past participle of a
--- verb or by an adverb.
+-- verb, by an adverb, or by a relative clause
 
     PPartNP : NP -> V2  -> NP ;    -- the number squared
     AdvNP   : NP -> Adv -> NP ;    -- Paris at midnight
+    RelNP   : NP -> RS  -> NP ;    -- Paris, which is in Europe
 
 --2 Determiners
 

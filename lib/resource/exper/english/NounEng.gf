@@ -21,6 +21,11 @@ concrete NounEng of Noun = CatEng ** open ResEng, Prelude in {
       a = np.a
       } ;
 
+    RelNP np rs = {
+      s = \\c => np.s ! c ++ "," ++ rs.s ! np.a ;
+      a = np.a
+      } ;
+
     AdvNP np adv = {
       s = \\c => np.s ! c ++ adv.s ;
       a = np.a
@@ -98,7 +103,9 @@ concrete NounEng of Noun = CatEng ** open ResEng, Prelude in {
     AdjCN ap cn = {
       s = \\n,c => preOrPost ap.isPre (ap.s ! agrP3 n) (cn.s ! n ! c)
       } ;
-    RelCN cn rs = {s = \\n,c => cn.s ! n ! c ++ rs.s ! {n = n ; p = P3}} ;
+    RelCN cn rs = {
+      s = \\n,c => cn.s ! n ! c ++ rs.s ! agrP3 n ---- g
+      } ;
     AdvCN cn ad = {s = \\n,c => cn.s ! n ! c ++ ad.s} ;
 
     SentCN cn sc = {s = \\n,c => cn.s ! n ! c ++ sc.s} ;
