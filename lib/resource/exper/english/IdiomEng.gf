@@ -24,7 +24,7 @@ concrete IdiomEng of Idiom = CatEng ** open Prelude, ResEng in {
 
     ProgrVP vp = insertObj (\\a => vp.ad ++ vp.prp ++ vp.s2 ! a) (predAux auxBe) ;
 
-    ImpPl1 vp = {s = "let's" ++ infVP True vp {n = Pl ; p = P1}} ;
+    ImpPl1 vp = {s = "let's" ++ infVP True vp {n = Pl ; p = P1 ; g = Neutr}} ;
 
 }
 
