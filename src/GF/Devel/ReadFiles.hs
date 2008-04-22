@@ -305,6 +305,7 @@ isOldFile f = do
  where
    old (PT _ (TS t)) = elem t $ words
      "cat category data def flags fun include lin lincat lindef lintype oper param pattern printname rule"
+   old _ = False
 
 
 
