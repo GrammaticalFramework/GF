@@ -70,6 +70,7 @@ import Data.Maybe (fromMaybe)
 
 import GF.System.Signal (runInterruptibly)
 import System.Exit (exitFailure)
+import System.FilePath
 
 ---- import qualified GrammarToGramlet as Gr
 ---- import qualified GrammarToCanonXML2 as Canon
@@ -192,7 +193,7 @@ execLine put (c@(co, os), arg, cs) (outps,st) = do
 execC :: CommandOpt -> ShellIO
 execC co@(comm, opts0) sa@(sh@(st,(h,_,_,_)),a) = checkOptions st co >> case comm of
 
-  CImport file | fileSuffix file == "gfwl" -> do
+  CImport file | takeExtensions file == ".gfwl" -> do
     fs <- mkWordlist file
     foldM (\x y -> execC (CImport y, opts) x) sa fs
 

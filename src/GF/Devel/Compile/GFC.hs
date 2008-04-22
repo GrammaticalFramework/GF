@@ -32,7 +32,7 @@ mainGFC xx = do
       mapM_ (alsoPrint opts target gc) printOptions
 
     -- gfc -o target.gfcc source_1.gfcc ... source_n.gfcc
-    _ | all ((=="gfcc") . fileSuffix) fs -> do
+    _ | all ((==".gfcc") . takeExtensions) fs -> do
       gfccs <- mapM file2gfcc fs
       let gfcc = foldl1 unionGFCC gfccs
       let abs = printCId $ absname gfcc

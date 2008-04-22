@@ -18,6 +18,7 @@ import GF.Data.Operations
 import GF.Infra.UseIO
 import Data.List
 import Data.Char
+import System.FilePath
 
 -- read File.gfwl, write File.gf (abstract) and a set of concretes
 -- return the names of the concretes
@@ -25,7 +26,7 @@ import Data.Char
 mkWordlist :: FilePath -> IO [FilePath]
 mkWordlist file = do
   s <- readFileIf file
-  let abs = fileBody file
+  let abs = dropExtension file
   let (cnchs,wlist) = pWordlist abs $ filter notComment $ lines s
   let (gr,grs) = mkGrammars abs cnchs wlist
   let cncfs = [cnc ++ ".gf" | (cnc,_) <- cnchs]

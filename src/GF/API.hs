@@ -79,6 +79,7 @@ import Data.Char (toLower)
 import Data.Maybe (fromMaybe)
 import Control.Monad (liftM)
 import System (system)
+import System.FilePath
 
 type GFGrammar = StateGrammar
 type GFCat     = CFCat
@@ -155,7 +156,7 @@ string2GFCat = string2CFCat
 
 optFile2grammar :: Options -> FilePath -> IOE GFGrammar
 optFile2grammar os f  
-  | fileSuffix f == "gfcm" = ioeIO $ liftM firstStateGrammar $ EA.file2grammar f
+  | takeExtensions f == ".gfcm" = ioeIO $ liftM firstStateGrammar $ EA.file2grammar f
   | otherwise = do
       ((_,_,gr,_),_) <- compileModule os emptyShellState f
       ioeErr $ grammar2stateGrammar os gr

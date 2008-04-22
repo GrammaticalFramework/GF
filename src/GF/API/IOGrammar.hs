@@ -35,6 +35,7 @@ import GF.System.Arch
 import qualified Transfer.InterpreterAPI as T
 
 import Control.Monad (liftM)
+import System.FilePath
 
 -- | a heuristic way of renaming constants is used
 string2absTerm :: String -> String -> Term 
@@ -58,14 +59,14 @@ shellStateFromFiles :: Options -> ShellState -> FilePath -> IOE ShellState
 shellStateFromFiles opts st file = do
  ign <- ioeIO $ getNoparseFromFile opts file
  let top = identC $ justModuleName file
- sh <- case fileSuffix file of
-  "trc" -> do
+ sh <- case takeExtensions file of
+  ".trc" -> do
      env <- ioeIO $ T.loadFile file
      return $ addTransfer (top,env) st
-  "gfcm" -> do
+  ".gfcm" -> do
      cenv <- compileOne opts (compileEnvShSt st []) file
      ioeErr $ updateShellState opts ign Nothing st cenv
-  s | elem s ["cf","ebnf"] -> do
+  s | elem s [".cf",".ebnf"] -> do
      let osb = addOptions (options []) opts
      grts <- compileModule osb st file
      ioeErr $ updateShellState opts ign Nothing st grts

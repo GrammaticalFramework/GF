@@ -12,6 +12,8 @@ import GF.Infra.Option
 import GF.GFCC.API
 import GF.Data.ErrM
 
+import System.FilePath
+
 mainGFC :: [String] -> IO ()
 mainGFC xx = do
   let (opts,fs) = getOptions "-" xx
@@ -24,7 +26,7 @@ mainGFC xx = do
       mapM_ (alsoPrint opts gfcc) printOptions
 
     -- gfc -o target.gfcc source_1.gfcc ... source_n.gfcc
-    _ | all ((=="gfcc") . fileSuffix) fs -> do
+    _ | all ((==".gfcc") . takeExtensions) fs -> do
       gfccs <- mapM file2gfcc fs
       let gfcc = foldl1 unionGFCC gfccs
       let gfccFile = targetNameGFCC opts (absname gfcc)

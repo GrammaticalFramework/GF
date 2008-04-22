@@ -30,16 +30,17 @@ import GF.Infra.Option
 import GF.Data.Operations
 import GF.Devel.UseIO
 
-import System
 import Data.Char
 import Control.Monad
 import Data.List
-import System.Directory
 import qualified Data.ByteString.Char8 as BS
 import GF.Source.AbsGF hiding (FileName)
 import GF.Source.LexGF
 import GF.Source.ParGF
 
+import System
+import System.Directory
+import System.FilePath
 
 type ModName = String
 type ModEnv  = [(ModName,ModTime)]
@@ -63,7 +64,7 @@ getAllFiles opts ps env file = do
   let paths = [(f,p) | ((f,_),p) <- ds]
   let pds1 = [(p,f) | f <- ds1, Just p <- [lookup f paths]]
   if oElem fromSource opts 
-    then return [gfFile (prefixPathName p f) | (p,f) <- pds1]
+    then return [gfFile (p </> f) | (p,f) <- pds1]
     else do
 
 
@@ -89,7 +90,7 @@ selectFormat :: Options -> ModEnv -> (InitPath,ModName) ->
                 IO (ModName,(InitPath,(CompStatus,Maybe ModTime)))
 
 selectFormat opts env (p,f) = do
-  let pf = prefixPathName p f
+  let pf = p </> f
   let mtenv = lookup f env   -- Nothing if f is not in env
   let rtenv = lookup (resModName f) env
   let fromComp = oElem isCompiled opts -- i -gfo
@@ -182,20 +183,20 @@ needCompile opts headers sfiles0 = paths $ res $ mark $ iter changed where
   -- construct list of paths to read
   paths cs = [mkName f p st | (f,(p,st)) <- cs, elem st [CSComp, CSRead,CSRes]]
 
-  mkName f p st = mk $ prefixPathName p f where
+  mkName f p st = mk (p </> f) where
     mk = case st of
       CSComp -> gfFile
       CSRead -> gfoFile
       CSRes  -> gfoFile ---- gfr
 
 isGFO :: FilePath -> Bool
-isGFO = (== "gfo") . fileSuffix
+isGFO = (== ".gfo") . takeExtensions
 
 gfoFile :: FilePath -> FilePath
-gfoFile = suffixFile "gfo"
+gfoFile f = addExtension f "gfo"
 
 gfFile :: FilePath -> FilePath
-gfFile  = suffixFile "gf"
+gfFile f = addExtension f "gf"
 
 resModName :: ModName -> ModName
 resModName = ('#':)
@@ -205,10 +206,10 @@ resModName = ('#':)
 getImports :: [InitPath] -> FileName -> IOE [(ModuleHeader,InitPath)]
 getImports ps = get [] where
   get ds file0 = do
-    let name = justModuleName file0 ---- fileBody file0
+    let name = justModuleName file0 ---- dropExtension file0
     (p,s) <- tryRead name
     ((typ,mname),imps) <- ioeErr (importsOfFile s)
-    let namebody = justFileName name
+    let namebody = takeFileName name
     ioeErr $ testErr  (mname == namebody) $ 
              "module name" +++ mname +++ "differs from file name" +++ namebody
     case imps of

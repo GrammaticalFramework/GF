@@ -50,6 +50,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 import qualified Data.List as L
 import Control.Monad (liftM)
+import System.FilePath
 
 -- Generate a treebank with a multilingual grammar. AR 8/2/2006
 -- (c) Aarne Ranta 2006 under GNU GPL
@@ -68,14 +69,14 @@ readUniTreebanks file = do
     then multi2uniTreebank $ getTreebank $ lines s
     else
       let tb = getUniTreebank $ lines s
-      in [(zIdent (unsuffixFile file),tb)]
+      in [(zIdent (dropExtension file),tb)]
 
 readMultiTreebank :: FilePath -> IO MultiTreebank
 readMultiTreebank file = do
   s <- readFileIf file
   return $ if isMultiTreebank s 
     then getTreebank $ lines s
-    else uni2multiTreebank (zIdent (unsuffixFile file)) $ getUniTreebank $ lines s
+    else uni2multiTreebank (zIdent (dropExtension file)) $ getUniTreebank $ lines s
 
 isMultiTreebank :: String -> Bool
 isMultiTreebank s = take 10 s == "<treebank>" 
