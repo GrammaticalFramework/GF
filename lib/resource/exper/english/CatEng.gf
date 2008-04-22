@@ -51,8 +51,8 @@ concrete CatEng of Cat = CommonX ** open ResEng, Prelude in {
     NP, Pron = {s : Case => Str ; a : Agr} ;
     Det = {s : Str ; n : Number} ;
     Predet, Ord = {s : Str} ;
-    Num = {s : Str; n : Number} ;
-    Quant, Art = {s : Number => Str} ;
+    Num = {s : Str; n : Number ; isNum : Bool} ;
+    Quant = {s : Number => Str} ;
 
 -- Numeral
 

@@ -31,39 +31,29 @@ concrete NounEng of Noun = CatEng ** open ResEng, Prelude in {
       a = np.a
       } ;
 
-    DetArt quant num ord = {
+    DetQuant quant num ord = {
       s = quant.s ! num.n ++ num.s ++ ord.s ; 
       n = num.n
       } ;
 
-    DetQuant quant num ord = {
+    DetNP quant num ord = {
       s = \\c => quant.s ! num.n ++ num.s ++ ord.s ; ---- case
       a = agrP3 num.n
       } ;
 
-    ArtQuant q = q ;
-
     PossPron p = {s = \\_ => p.s ! Gen} ;
 
-    NumSg = {s = []; n = Sg} ;
-    NumPl = {s = []; n = Pl} ;
+    NumSg = {s = []; n = Sg ; isNum = False} ;
+    NumPl = {s = []; n = Pl ; isNum = False} ;
     NoOrd = {s = []} ;
 
-    NumDigits n = {s = n.s ! NCard ; n = n.n} ;
-
-        --table (Predef.Ints 1 * Predef.Ints 9) {
-	--		        <0,1>  => Sg ;
-	--			_ => Pl  -- DEPRECATED
-	--		   } ! <1,2> ---- parser bug (AR 2/6/2007) 
-        --                       ---- <n.size,n.last>
-        -- } ;
-
+    NumDigits n = {s = n.s ! NCard ; n = n.n ; isNum = True} ;
     OrdDigits n = {s = n.s ! NOrd} ;
 
-    NumNumeral numeral = {s = numeral.s ! NCard; n = numeral.n} ;
+    NumNumeral numeral = {s = numeral.s ! NCard; n = numeral.n ; isNum = True} ;
     OrdNumeral numeral = {s = numeral.s ! NOrd} ;
 
-    AdNum adn num = {s = adn.s ++ num.s; n = num.n } ;
+    AdNum adn num = {s = adn.s ++ num.s ; n = num.n ; isNum = True} ; ----
 
     OrdSuperl a = {s = a.s ! AAdj Superl} ;
 
@@ -82,16 +72,25 @@ concrete NounEng of Noun = CatEng ** open ResEng, Prelude in {
       a = agrP3 n.n
       } ;
 
-    DefArt = {s = \\_ => artDef} ;
-
-    IndefArt = {
-      s = table {
-        Sg => artIndef ; 
-        Pl => []
-        }
+    DefNP num ord cn = {
+      s = \\c => artDef ++ num.s ++ ord.s ++ cn.s ! num.n ! c ;
+      a = agrP3 num.n
       } ;
 
-    MassDet = {s = \\_ => []} ;
+    IndefNP num ord cn = 
+      let an = case <num.n,num.isNum> of {
+        <Sg,False> => artIndef ;
+        _ => []
+        }
+      in {
+      s = \\c => an ++ num.s ++ ord.s ++ cn.s ! num.n ! c ;
+      a = agrP3 num.n
+      } ;
+
+    MassNP cn = {
+      s = cn.s ! Sg ;
+      a = agrP3 Sg
+      } ;
 
     UseN n = n ;
     UseN2 n = n ;

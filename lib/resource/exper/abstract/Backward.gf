@@ -24,9 +24,14 @@ fun
     OrdInt     : Int -> Ord ;     -- 51st (DEPRECATED)
 
     -- 20/4
-    DetSg : Art ->        Ord -> Det ;  -- the best man
-    DetPl : Art -> Num -> Ord -> Det ;  -- the five best men
+    DetSg : Quant ->        Ord -> Det ;  -- the best man
+    DetPl : Quant -> Num -> Ord -> Det ;  -- the five best men
     NoNum : Num ;
+
+    -- 22/4
+    DefArt   : Quant ;       -- the (house), the (houses)
+    IndefArt : Quant ;       -- a (house), (houses)
+    MassDet  : Quant ;       -- (beer)
 
 -- from Structural 19/4/2008
 
