@@ -19,7 +19,6 @@ import GF.Canon.ParGFC
 import GF.Canon.GFC
 import GF.Canon.MkGFC
 import GF.Infra.Modules
-import GF.Compile.GetGrammar (err2err) ---
 import GF.Infra.UseIO
 
 import System.IO

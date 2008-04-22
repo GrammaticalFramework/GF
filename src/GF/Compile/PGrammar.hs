@@ -33,7 +33,7 @@ import qualified Data.ByteString.Char8 as BS
 
 pTerm :: String -> Err Term
 pTerm s = do
-  e <- err2err $ pExp $ myLexer (BS.pack s)
+  e <- pExp $ myLexer (BS.pack s)
   transExp e
 
 pTrm :: String -> Term
