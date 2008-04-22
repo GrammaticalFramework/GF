@@ -24,12 +24,11 @@ import System.Directory
 import System.IO
 import System.IO.Error
 import System.Environment
+import System.FilePath
 import Control.Monad
 
 #ifdef mingw32_HOST_OS
 import System.Win32.DLL
-import System.FilePath.Windows
-import System.Directory
 import Foreign.Ptr
 #endif
 

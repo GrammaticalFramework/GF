@@ -31,7 +31,6 @@ import qualified Data.ByteString.Char8 as BS
 
 #ifdef mingw32_HOST_OS
 import System.Win32.DLL
-import System.FilePath.Windows
 import Foreign.Ptr
 #endif
 
