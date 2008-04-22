@@ -37,6 +37,7 @@ import Data.List
 import System.Directory
 import qualified Data.ByteString.Char8 as BS
 import GF.Source.AbsGF hiding (FileName)
+import GF.Source.LexGF
 import GF.Source.ParGF
 
 
@@ -287,17 +288,6 @@ importsOfFile bs = do
     modName (PIdent (_,s)) = s
 
 
-unComm s = case s of
-      '-':'-':cs -> unComm $ dropWhile (/='\n') cs
-      '{':'-':cs -> dpComm cs
-      c:cs -> c : unComm cs
-      _ -> s
-    
-dpComm s = case s of
-      '-':'}':cs -> unComm cs
-      c:cs -> dpComm cs
-      _ -> s
-
 -- | options can be passed to the compiler by comments in @--#@, in the main file
 getOptionsFromFile ::  FilePath -> IO Options
 getOptionsFromFile file = do
@@ -309,10 +299,10 @@ getOptionsFromFile file = do
 isOldFile :: FilePath -> IO Bool
 isOldFile f = do
   s <- readFileIfStrict f
-  let s' = unComm (BS.unpack s)
-  return $ not (null s') && old (head (words s'))
+  let toks = myLexer s
+  return $ not (null toks) && old (head toks)
  where
-   old = flip elem $ words 
+   old (PT _ (TS t)) = elem t $ words
      "cat category data def flags fun include lin lincat lindef lintype oper param pattern printname rule"
 
 
