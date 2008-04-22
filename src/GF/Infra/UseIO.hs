@@ -126,10 +126,15 @@ doesFileExistPath paths file = do
   mpfile <- ioeIO $ getFilePathMsg "" paths file
   return $ maybe False (const True) mpfile
 
+gfLibraryPath    = "GF_LIB_PATH"
+
+-- | environment variable for grammar search path
+gfGrammarPathVar = "GF_GRAMMAR_PATH"
+
 getLibraryPath :: IO FilePath
 getLibraryPath =
   catch
-    (getEnv "GF_LIB_PATH")
+    (getEnv gfLibraryPath)
 #ifdef mingw32_HOST_OS
     (\_ -> do exepath <- getModuleFileName nullPtr
               let (path,_) = splitFileName exepath
@@ -138,23 +143,26 @@ getLibraryPath =
     (const (return libdir))
 #endif
 
--- | first var is lib prefix, second is like class path
--- | path in environment variable has lower priority
-extendPathEnv :: String -> String -> [FilePath] -> IO [FilePath]
-extendPathEnv lib var ps = do
+-- | extends the search path with the
+-- 'gfLibraryPath' and 'gfGrammarPathVar'
+-- environment variables. Returns only existing paths.
+extendPathEnv :: [FilePath] -> IO [FilePath]
+extendPathEnv ps = do
   b <- getLibraryPath                             -- e.g. GF_LIB_PATH
-  s <- catch (getEnv var) (const (return ""))     -- e.g. GF_GRAMMAR_PATH
+  s <- catch (getEnv gfGrammarPathVar) (const (return ""))     -- e.g. GF_GRAMMAR_PATH
   let ss = ps ++ splitSearchPath s
   liftM concat $ mapM allSubdirs $ ss ++ [b </> s | s <- ss ++ ["prelude"]]
   where
     allSubdirs :: FilePath -> IO [FilePath]
     allSubdirs [] = return [[]]
     allSubdirs p = case last p of
-      '*' -> do
-        let path = init p
-        fs <- getSubdirs path
-        return [path </> f | f <- fs]
-      _ -> return [p]
+      '*' -> do let path = init p
+                fs <- getSubdirs path
+                return [path </> f | f <- fs]
+      _   -> do exists <- doesDirectoryExist p
+                if exists
+                  then return [p]
+                  else return []
 
 getSubdirs :: FilePath -> IO [FilePath]
 getSubdirs dir = do
@@ -290,8 +298,6 @@ putPointE opts msg act = do
 -- | forces verbosity
 putPointEVerb :: Options -> String -> IOE a -> IOE a
 putPointEVerb opts = putPointE (addOption beVerbose opts)
-
-gfLibraryPath = "GF_LIB_PATH"
 
 -- ((do {s <- readFile f; return (return s)}) ) 
 readFileIOE :: FilePath -> IOE (String)

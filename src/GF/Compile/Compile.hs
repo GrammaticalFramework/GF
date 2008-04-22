@@ -60,9 +60,6 @@ import Control.Monad
 import System.Directory
 import System.FilePath
 
--- | environment variable for grammar search path
-gfGrammarPathVar = "GF_GRAMMAR_PATH"
-
 -- | in batch mode: write code in a file
 batchCompile f = liftM fst $ compileModule defOpts emptyShellState f
   where
@@ -115,7 +112,7 @@ compileModule opts1 st0 file = do
   let ps1 = if (useFileOpt && not useLineOpt) 
               then (ps0 ++ map (combine fpath) ps0)
               else ps0
-  ps <- ioeIO $ extendPathEnv gfLibraryPath gfGrammarPathVar ps1
+  ps <- ioeIO $ extendPathEnv ps1
   let ioeIOIf = if oElem beVerbose opts then ioeIO else (const (return ()))
   ioeIOIf $ putStrLn $ "module search path:" +++ show ps ----
   let st = st0 --- if useFileOpt then emptyShellState else st0
@@ -396,7 +393,7 @@ getGFEFiles opts1 file = useIOE [] $ do
   let ps1 = if (useFileOpt && not useLineOpt) 
               then (map (combine fpath) ps0)
               else ps0
-  ps <- ioeIO $ extendPathEnv gfLibraryPath gfGrammarPathVar ps1
+  ps <- ioeIO $ extendPathEnv ps1
   let file' = if useFileOpt then takeFileName file else file -- to find file itself
   files <- getAllFiles opts ps [] file'
   efiles <- ioeIO $ filterM doesFileExist [replaceExtension f "gfe" | f <- files]
