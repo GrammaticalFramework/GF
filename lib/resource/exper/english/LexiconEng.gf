@@ -81,7 +81,7 @@ lin
   fruit_N = regN "fruit" ;
   fun_AV = mkAV (regA "fun") ;
   garden_N = regN "garden" ;
-  girl_N = regN "girl" ;
+  girl_N = mkN feminine (regN "girl") ;
   glove_N = regN "glove" ;
   gold_N = regN "gold" ;
   good_A = mkADeg "good" "better" "best" "well" ;
@@ -114,12 +114,12 @@ lin
   lose_V2 = dirV2 (irregV "lose" "lost" "lost") ;
   love_N = regN "love" ;
   love_V2 = dirV2 (regV "love") ;
-  man_N = mk2N "man" "men" ;
+  man_N = mkN masculine (mk2N "man" "men") ;
   married_A2 = mkA2 (regA "married") toP ;
   meat_N = regN "meat" ;
   milk_N = regN "milk" ;
   moon_N = regN "moon" ;
-  mother_N2 = regN2 "mother" ;
+  mother_N2 = mkN2 (mkN feminine (mkN "mother")) (mkPrep "of") ;
   mountain_N = regN "mountain" ;
   music_N = regN "music" ;
   narrow_A = regADeg "narrow" ;

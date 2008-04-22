@@ -77,7 +77,7 @@ oper
   mkPronoun : (_,_,_,_ : Str) -> Number -> Person -> Gender -> Pronoun = 
    \I,me,my,mine,n,p,g -> 
     {s = table {Nom => I ; Acc => me ; Gen => my} ; 
-     a = {n = n ; p = p ; g = g} 
+     a = toAgr n p g
     } ;
 
   human : Gender = Masc ; --- doesn't matter

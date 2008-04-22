@@ -16,7 +16,7 @@ concrete RelativeEng of Relative = CatEng ** open ResEng in {
             RNoAg => ag ;
             RAg a => a
             } ;
-          cl = mkClause (rp.s ! RC agr.g Nom) agr vp
+          cl = mkClause (rp.s ! RC (fromAgr agr).g Nom) agr vp
         in
         cl.s ! t ! ant ! b ! ODir ;
       c = Nom
@@ -28,12 +28,12 @@ concrete RelativeEng of Relative = CatEng ** open ResEng in {
 
     RelSlash rp slash = {
       s = \\t,a,p,agr => 
-          slash.c2 ++ rp.s ! RPrep agr.g ++ slash.s ! t ! a ! p ! ODir ;
+          slash.c2 ++ rp.s ! RPrep (fromAgr agr).g ++ slash.s ! t ! a ! p ! ODir ;
       c = Acc
       } ;
 
     FunRP p np rp = {
-      s = \\c => np.s ! Acc ++ p.s ++ rp.s ! RPrep np.a.g ;
+      s = \\c => np.s ! Acc ++ p.s ++ rp.s ! RPrep (fromAgr np.a).g ;
       a = RAg np.a
       } ;
 
