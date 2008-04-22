@@ -37,7 +37,7 @@ concrete VerbEng of Verb = CatEng ** open ResEng in {
 
     AdVVP adv vp = insertAdV adv.s vp ;
 
-    ReflV2 v = insertObj (\\a => v.c2 ++ reflPron ! a) (predV v) ;
+    ReflVP v = insertObjPre (\\a => v.c2 ++ reflPron ! a) v ;
 
     PassV2 v = insertObj (\\_ => v.s ! VPPart) (predAux auxBe) ;
 

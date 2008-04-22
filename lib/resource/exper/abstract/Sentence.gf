@@ -28,10 +28,10 @@ abstract Sentence = Cat ** {
 -- the style of CCG.
 -- *Note* the set is not complete and lacks e.g. verbs with more than 2 places.
 
-    SlashVP   : NP -> VPSlash -> Slash ;      -- (whom) he sees
-    AdvSlash  : Slash -> Adv -> Slash ;       -- (whom) he sees tomorrow
-    SlashPrep : Cl -> Prep -> Slash ;         -- (with whom) he walks 
-    SlashVS   : NP -> VS -> SSlash -> Slash ; -- (whom) he says that she loves
+    SlashVP   : NP -> VPSlash -> ClSlash ;      -- (whom) he sees
+    AdvSlash  : ClSlash -> Adv -> ClSlash ;     -- (whom) he sees tomorrow
+    SlashPrep : Cl -> Prep -> ClSlash ;         -- (with whom) he walks 
+    SlashVS   : NP -> VS -> SSlash -> ClSlash ; -- (whom) he says that she loves
 
 --2 Imperatives
 
@@ -60,7 +60,7 @@ abstract Sentence = Cat ** {
     UseCl  : Tense -> Ant -> Pol -> Cl  -> S ;
     UseQCl : Tense -> Ant -> Pol -> QCl -> QS ;
     UseRCl : Tense -> Ant -> Pol -> RCl -> RS ;
-    UseSlash : Tense -> Ant -> Pol -> Slash -> SSlash ;
+    UseSlash : Tense -> Ant -> Pol -> ClSlash -> SSlash ;
 
 -- An adverb can be added to the beginning of a sentence.
 

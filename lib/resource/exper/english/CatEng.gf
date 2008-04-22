@@ -14,7 +14,7 @@ concrete CatEng of Cat = CommonX ** open ResEng, Prelude in {
 -- Sentence
 
     Cl = {s : ResEng.Tense => Anteriority => CPolarity => Order => Str} ;
-    Slash = {
+    ClSlash = {
       s : ResEng.Tense => Anteriority => CPolarity => Order => Str ;
       c2 : Str
       } ;

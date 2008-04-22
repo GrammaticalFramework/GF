@@ -8,7 +8,7 @@ abstract Question = Cat ** {
   fun
     QuestCl     : Cl -> QCl ;                  -- does John walk
     QuestVP     : IP -> VP -> QCl ;            -- who walks
-    QuestSlash  : IP -> Slash -> QCl ;         -- who does John love
+    QuestSlash  : IP -> ClSlash -> QCl ;       -- who does John love
     QuestIAdv   : IAdv -> Cl -> QCl ;          -- why does John walk
     QuestIComp  : IComp -> NP -> QCl ;         -- where is John
 
