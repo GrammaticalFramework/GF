@@ -51,6 +51,19 @@ concrete BackwardEng of Backward = CatEng ** open ResEng in {
 
     NoNum = {s = []; n = Pl } ;
 
+    DefArt = {s = \\_ => artDef} ;
+
+    IndefArt = {
+      s = table {
+        Sg => artIndef ; 
+        Pl => []
+        }
+      } ;
+
+    MassDet = {s = \\_ => []} ;
+
+
+
 -- from Structural 19/4/2008
 
     that_NP = regNP "that" Sg ;
