@@ -2,6 +2,12 @@
 
 abstract Backward = Cat ** {
 
+
+-- from Cat 
+
+cat 
+    Slash ;
+   
 fun
 
 -- from Verb 19/4/2008
@@ -12,6 +18,8 @@ fun
     ComplV2S : V2S -> NP -> S  -> VP ;  -- tell me that it rains
     ComplV2Q : V2Q -> NP -> QS -> VP ;  -- ask me who came
     ComplV2A : V2A -> NP -> AP -> VP ;  -- paint it red
+
+    ReflV2   : V2 -> VP ;         -- use itself
 
 -- from Sentence 19/4/2008
 

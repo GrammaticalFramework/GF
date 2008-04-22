@@ -34,8 +34,8 @@ abstract Verb = Cat ** {
 -- Verb phrases can also be constructed reflexively and from
 -- copula-preceded complements.
 
-    ReflV2   : V2 -> VP ;               -- use itself
-    UseComp  : Comp -> VP ;             -- be warm
+    ReflVP   : VPSlash -> VP ;         -- use itself
+    UseComp  : Comp -> VP ;            -- be warm
 
 -- Passivization of two-place verbs is another way to use
 -- them. In many languages, the result is a participle that

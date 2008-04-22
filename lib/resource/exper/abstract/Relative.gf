@@ -14,7 +14,7 @@ abstract Relative = Cat ** {
 -- with a missing noun phrase (formed in [``Sentence`` Sentence.html]).
 
     RelVP    : RP -> VP -> RCl ;      -- who loves John
-    RelSlash : RP -> Slash -> RCl ;   -- whom John loves
+    RelSlash : RP -> ClSlash -> RCl ; -- whom John loves
 
 -- Relative pronouns are formed from an 'identity element' by prefixing
 -- or suffixing (depending on language) prepositional phrases.

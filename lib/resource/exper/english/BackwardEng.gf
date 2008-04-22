@@ -24,6 +24,8 @@ concrete BackwardEng of Backward = CatEng ** open ResEng in {
     ComplV2A v np ap = 
       insertObj (\\_ => v.c2 ++ np.s ! Acc ++ ap.s ! np.a) (predV v) ;
 
+    ReflV2 v = insertObj (\\a => v.c2 ++ reflPron ! a) (predV v) ;
+
 -- from Sentence 19/4/2008
 
     SlashV2 np v2 = 
