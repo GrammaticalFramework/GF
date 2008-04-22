@@ -40,6 +40,7 @@ oper
   human     : Gender ;
   nonhuman  : Gender ;
   masculine : Gender ;
+  feminine : Gender ;
 
 -- To abstract over number names, we define the following.
 
@@ -80,6 +81,10 @@ oper
 -- The theoretical worst case: give all four forms.
 
     mkN : (man,men,man's,men's : Str) -> N ;
+
+-- Change gender from the default $nonhuman$.
+
+    mkN : Gender -> N -> N ;
 
 --3 Compound nouns 
 --
@@ -346,7 +351,7 @@ oper
   cnN3 = \n,p,q -> n ** {lock_N3 = <> ; c2 = p.s ; c3 = q.s} ;
 
   regPN n = regGenPN n human ;
-  regGenPN n g = nameReg n g ** {lock_PN = <>} ;
+  regGenPN n g = nameReg n g ** {g = g ; lock_PN = <>} ;
   nounPN n = {s = n.s ! singular ; g = n.g ; lock_PN = <>} ;
 
   mk2A a b = mkAdjective a a a b ** {lock_A = <>} ;

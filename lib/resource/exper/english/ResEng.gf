@@ -21,11 +21,11 @@ resource ResEng = ParamX ** open Prelude in {
   param
     Case = Nom | Acc | Gen ;
 
--- Agreement of $NP$ is a record. $Gender$ is needed for "who"/"which" and
+-- Agreement of $NP$ has 8 values. $Gender$ is needed for "who"/"which" and
 -- for "himself"/"herself"/"itself".
 
-  oper
-    Agr = {n : Number ; p : Person ; g : Gender} ;
+  param
+    Agr = AgP1 Number | AgP2 Number | AgP3Sg Gender | AgP3Pl ;
 
   param 
     Gender = Neutr | Masc | Fem ;
@@ -62,7 +62,7 @@ resource ResEng = ParamX ** open Prelude in {
 
 --2 For $Relative$
  
-    RAgr = RNoAg | RAg {n : Number ; p : Person ; g : Gender} ;
+    RAgr = RNoAg | RAg Agr ;
     RCase = RPrep Gender | RC Gender Case ;
 
 --2 For $Numeral$
@@ -73,17 +73,33 @@ resource ResEng = ParamX ** open Prelude in {
 --2 Transformations between parameter types
 
   oper
-    agrP3 : Number -> Agr = \n -> 
-      {n = n ; p = P3 ; g = Neutr} ;
+    toAgr : Number -> Person -> Gender -> Agr = \n,p,g -> 
+      case p of {
+        P1 => AgP1 n ;
+        P2 => AgP2 n ;
+        P3 => case n of {
+          Sg => AgP3Sg g ;
+          Pl => AgP3Pl
+          }
+        } ;
 
-    agrgP3 : Number -> Gender -> Agr = \n,g -> 
-      {n = n ; p = P3 ; g = g} ;
-
-    conjAgr : Agr -> Agr -> Agr = \a,b -> {
-      n = conjNumber a.n b.n ;
-      p = conjPerson a.p b.p ;
-      g = a.g ----
+    fromAgr : Agr -> {n : Number ; p : Person ; g : Gender} = \a -> case a of {
+      AgP1 n => {n = n ; p = P1 ; g = Masc} ;
+      AgP2 n => {n = n ; p = P2 ; g = Masc} ;
+      AgP3Pl => {n = Pl ; p = P3 ; g = Masc} ;
+      AgP3Sg g => {n = Sg ; p = P3 ; g = g}
       } ;
+
+    agrP3 : Number -> Agr = \n -> agrgP3 n Neutr ;
+
+    agrgP3 : Number -> Gender -> Agr = \n,g -> toAgr n P3 g ;
+
+    conjAgr : Agr -> Agr -> Agr = \a0,b0 -> 
+      let a = fromAgr a0 ; b = fromAgr b0 
+      in
+      toAgr
+        (conjNumber a.n b.n)
+        (conjPerson a.p b.p) a.g ;
 
 -- For $Lex$.
 
@@ -139,11 +155,7 @@ resource ResEng = ParamX ** open Prelude in {
        Acc => me ;
        Gen => my
        } ;
-     a = {
-       n = n ;
-       p = p ;
-       g = g
-       }
+     a = toAgr n p g ;
      } ;
 
 -- These functions cover many cases; full coverage inflectional patterns are
@@ -350,8 +362,8 @@ resource ResEng = ParamX ** open Prelude in {
 
   agrVerb : Str -> Str -> Agr -> Str = \has,have,agr -> 
     case agr of {
-      {n = Sg ; p = P3} => has ;
-      _                 => have
+      AgP3Sg _ => has ;
+      _        => have
       } ;
 
   have   = agrVerb "has"     "have" ;
@@ -367,13 +379,13 @@ resource ResEng = ParamX ** open Prelude in {
 
   auxBe : Aux = {
     pres = \\b,a => case <b,a> of {
-      <Pos,{n = Sg ; p = P1}> => "am" ; 
-      <Neg,{n = Sg ; p = P1}> => ["am not"] ; --- am not I
+      <Pos,AgP1 Sg> => "am" ; 
+      <Neg,AgP1 Sg> => ["am not"] ; --- am not I
       _ => agrVerb (posneg b "is")  (posneg b "are") a
       } ;
-    past = \\b,a => case a of {                  --# notpresent
-      {n = Sg ; p = P1|P3} => (posneg b "was") ; --# notpresent
-      _                    => (posneg b "were") --# notpresent
+    past = \\b,a => case a of {          --# notpresent
+      AgP1 Sg | AgP3Sg _ => posneg b "was" ; --# notpresent
+      _                  => (posneg b "were")  --# notpresent
       } ; --# notpresent
     inf  = "be" ;
     ppart = "been" ;
@@ -388,14 +400,14 @@ resource ResEng = ParamX ** open Prelude in {
   conjThat : Str = "that" ;
 
   reflPron : Agr => Str = table {
-    {n = Sg ; p = P1} => "myself" ;
-    {n = Sg ; p = P2} => "yourself" ;
-    {n = Sg ; p = P3 ; g = Masc} => "himself" ;
-    {n = Sg ; p = P3 ; g = Fem} => "herself" ;
-    {n = Sg ; p = P3} => "itself" ;
-    {n = Pl ; p = P1} => "ourselves" ;
-    {n = Pl ; p = P2} => "yourselves" ;
-    {n = Pl ; p = P3} => "themselves"
+    AgP1 Sg      => "myself" ;
+    AgP2 Sg      => "yourself" ;
+    AgP3Sg Masc  => "himself" ;
+    AgP3Sg Fem   => "herself" ;
+    AgP3Sg Neutr => "itself" ;
+    AgP1 Pl      => "ourselves" ;
+    AgP2 Pl      => "yourselves" ;
+    AgP3Pl       => "themselves"
     } ;
 
 -- For $Sentence$.

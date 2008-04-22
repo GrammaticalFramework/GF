@@ -15,7 +15,7 @@ concrete IdiomEng of Idiom = CatEng ** open Prelude, ResEng in {
         (insertObj (\\_ => ad.s) (predAux auxBe))) ;
 
     ExistNP np = 
-      mkClause "there" (agrP3 np.a.n) 
+      mkClause "there" (agrP3 (fromAgr np.a).n) 
         (insertObj (\\_ => np.s ! Acc) (predAux auxBe)) ;
 
     ExistIP ip = 
@@ -24,7 +24,7 @@ concrete IdiomEng of Idiom = CatEng ** open Prelude, ResEng in {
 
     ProgrVP vp = insertObj (\\a => vp.ad ++ vp.prp ++ vp.s2 ! a) (predAux auxBe) ;
 
-    ImpPl1 vp = {s = "let's" ++ infVP True vp {n = Pl ; p = P1 ; g = Neutr}} ;
+    ImpPl1 vp = {s = "let's" ++ infVP True vp (AgP1 Pl)} ;
 
 }
 

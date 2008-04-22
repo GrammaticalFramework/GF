@@ -5,10 +5,10 @@ concrete NounEng of Noun = CatEng ** open ResEng, Prelude in {
   lin
     DetCN det cn = {
       s = \\c => det.s ++ cn.s ! det.n ! c ; 
-      a = agrP3 det.n
+      a = agrgP3 det.n cn.g
       } ;
 
-    UsePN pn = pn ** {a = agrP3 Sg} ;
+    UsePN pn = pn ** {a = agrgP3 Sg pn.g} ;
     UsePron p = p ;
 
     PredetNP pred np = {
@@ -97,19 +97,25 @@ concrete NounEng of Noun = CatEng ** open ResEng, Prelude in {
     UseN2 n = n ;
     UseN3 n = n ;
 
-    ComplN2 f x = {s = \\n,c => f.s ! n ! Nom ++ f.c2 ++ x.s ! c} ;
-    ComplN3 f x = {s = \\n,c => f.s ! n ! Nom ++ f.c2 ++ x.s ! c ; c2 = f.c3} ;
+    ComplN2 f x = {s = \\n,c => f.s ! n ! Nom ++ f.c2 ++ x.s ! c ; g = f.g} ;
+    ComplN3 f x = {
+      s = \\n,c => f.s ! n ! Nom ++ f.c2 ++ x.s ! c ;
+      g = f.g ;
+      c2 = f.c3
+      } ;
 
     AdjCN ap cn = {
-      s = \\n,c => preOrPost ap.isPre (ap.s ! agrP3 n) (cn.s ! n ! c)
+      s = \\n,c => preOrPost ap.isPre (ap.s ! agrgP3 n cn.g) (cn.s ! n ! c) ;
+      g = cn.g
       } ;
     RelCN cn rs = {
-      s = \\n,c => cn.s ! n ! c ++ rs.s ! agrP3 n ---- g
+      s = \\n,c => cn.s ! n ! c ++ rs.s ! agrgP3 n cn.g ;
+      g = cn.g
       } ;
-    AdvCN cn ad = {s = \\n,c => cn.s ! n ! c ++ ad.s} ;
+    AdvCN cn ad = {s = \\n,c => cn.s ! n ! c ++ ad.s ; g = cn.g} ;
 
-    SentCN cn sc = {s = \\n,c => cn.s ! n ! c ++ sc.s} ;
+    SentCN cn sc = {s = \\n,c => cn.s ! n ! c ++ sc.s ; g = cn.g} ;
 
-    ApposCN cn np = {s = \\n,c => cn.s ! n ! Nom ++ np.s ! c} ;
+    ApposCN cn np = {s = \\n,c => cn.s ! n ! Nom ++ np.s ! c ; g = cn.g} ;
 
 }
