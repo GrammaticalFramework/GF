@@ -99,20 +99,15 @@ type FileName = String
 type InitPath = String
 type FullPath = String
 
-isPathSep :: Char -> Bool
-isPathSep c = c == ':' || c == ';'
-
-isSep :: Char -> Bool
-isSep c = c == '/' || c == '\\'
-
 getFilePath :: [FilePath] -> String -> IO (Maybe FilePath)
-getFilePath ps file = getFilePathMsg ("file" +++ file +++ "not found\n") ps file
+getFilePath ps file = do
+  getFilePathMsg ("file" +++ file +++ "not found\n") ps file
 
 getFilePathMsg :: String -> [FilePath] -> String -> IO (Maybe FilePath)
 getFilePathMsg msg paths file = get paths where
   get []     = putStrFlush msg >> return Nothing
   get (p:ps) = do
-    let pfile = prefixPathName p file
+    let pfile = p </> file
     exist <- doesFileExist pfile
     if exist then return (Just pfile) else get ps
 ---               catch (readFileStrict pfile >> return (Just pfile)) (\_ -> get ps)
@@ -123,7 +118,7 @@ readFileIfPath paths file = do
   case mpfile of
     Just pfile -> do
       s <- ioeIO $ readFileStrict pfile
-      return (justInitPath pfile,s)
+      return (dropFileName pfile,s)
     _ -> ioeErr $ Bad ("File " ++ file ++ " does not exist.")
 
 doesFileExistPath :: [FilePath] -> String -> IOE Bool
@@ -149,67 +144,37 @@ extendPathEnv :: String -> String -> [FilePath] -> IO [FilePath]
 extendPathEnv lib var ps = do
   b <- getLibraryPath                             -- e.g. GF_LIB_PATH
   s <- catch (getEnv var) (const (return ""))     -- e.g. GF_GRAMMAR_PATH
-  let fs = pFilePaths s
-  let ss = ps ++ fs
-  liftM concat $ mapM allSubdirs $ ss ++ [b ++ "/" ++ s | s <- ss ++ ["prelude"]]
-
-pFilePaths :: String -> [FilePath]
-pFilePaths s = case break isPathSep s of
-  (f,_:cs) -> f : pFilePaths cs
-  (f,_)    -> [f]
-
-getFilePaths :: String -> IO [FilePath]
-getFilePaths s = do
-  let ps = pFilePaths s
-  liftM concat $ mapM allSubdirs ps
+  let ss = ps ++ splitSearchPath s
+  liftM concat $ mapM allSubdirs $ ss ++ [b </> s | s <- ss ++ ["prelude"]]
+  where
+    allSubdirs :: FilePath -> IO [FilePath]
+    allSubdirs [] = return [[]]
+    allSubdirs p = case last p of
+      '*' -> do
+        let path = init p
+        fs <- getSubdirs path
+        return [path </> f | f <- fs]
+      _ -> return [p]
 
 getSubdirs :: FilePath -> IO [FilePath]
-getSubdirs p = do
-  fs  <- catch (getDirectoryContents p) (const $ return [])
-  fps <- mapM getPermissions (map (prefixPathName p) fs)
-  let ds = [f | (f,p) <- zip fs fps, searchable p, not (take 1 f==".")]
-  return ds
-
-allSubdirs :: FilePath -> IO [FilePath]
-allSubdirs [] = return [[]]
-allSubdirs p = case last p of
-  '*' -> do
-    fs <- getSubdirs (init p)
-    return [prefixPathName (init p) f | f <- fs]
-  _ -> return [p]
-
-prefixPathName :: String -> FilePath -> FilePath
-prefixPathName p f = case f of
-    c:_ | isSep c -> f  -- do not prefix [Unix style] absolute paths
-    _ -> case p of
-        "" -> f
-        _  -> p ++ "/" ++ f -- note: / actually works on windows
-
-justInitPath :: FilePath -> FilePath
-justInitPath = reverse . drop 1 . dropWhile (not . isSep) . reverse
-
-nameAndSuffix :: FilePath -> (String,String)
-nameAndSuffix file = case span (/='.') (reverse file) of
-  (_,[])      -> (file,[])
-  (xet,deman) -> if any isSep xet 
-                   then (file,[]) -- cover cases like "foo.bar/baz"
-                   else (reverse $ drop 1 deman,reverse xet)
-
-unsuffixFile, fileBody :: FilePath -> String
-unsuffixFile = fst . nameAndSuffix
-fileBody = unsuffixFile
-
-fileSuffix :: FilePath -> String
-fileSuffix = snd . nameAndSuffix
-
-justFileName :: FilePath -> String
-justFileName = reverse . takeWhile (not . isSep) . reverse
-
-suffixFile :: String -> FilePath -> FilePath
-suffixFile suff file = file ++ "." ++ suff
+getSubdirs dir = do
+  fs  <- catch (getDirectoryContents dir) (const $ return [])
+  foldM (\fs f -> do let fpath = dir </> f
+                     p <- getPermissions fpath
+                     if searchable p && not (take 1 f==".")
+                       then return (fpath:fs)
+                       else return        fs ) [] fs
 
 justModuleName :: FilePath -> String
-justModuleName = fileBody . justFileName
+justModuleName = dropExtension . takeFileName
+
+splitInModuleSearchPath :: String -> [FilePath]
+splitInModuleSearchPath s = case break isPathSep s of
+  (f,_:cs) -> f : splitInModuleSearchPath cs
+  (f,_)    -> [f]
+  where
+    isPathSep :: Char -> Bool
+    isPathSep c = c == ':' || c == ';'
 
 --
 
@@ -331,39 +296,25 @@ gfLibraryPath = "GF_LIB_PATH"
 -- ((do {s <- readFile f; return (return s)}) ) 
 readFileIOE :: FilePath -> IOE (String)
 readFileIOE f = ioe $ catch (readFileStrict f >>= return . return)
-                      (\_ -> return (Bad (reportOn f))) where
-  reportOn f = "File " ++ f ++ " not found."
+                            (\e -> return (Bad (show e)))
 
 -- | like readFileIOE but look also in the GF library if file not found
 --
 -- intended semantics: if file is not found, try @\$GF_LIB_PATH\/file@
 -- (even if file is an absolute path, but this should always fail)
 -- it returns not only contents of the file, but also the path used
---
--- FIXME: unix-specific, \/ is \\ on Windows
 readFileLibraryIOE :: String -> FilePath -> IOE (FilePath, String)
-readFileLibraryIOE ini f = 
-	ioe $ catch ((do {s <- readFileStrict initPath; return (return (initPath,s))}))
-	 (\_ -> tryLibrary ini f) where
-		tryLibrary :: String -> FilePath -> IO (Err (FilePath, String))
-		tryLibrary ini f = 
-			catch (do {
-				lp <- getLibPath; 
-				s <- readFileStrict (lp ++ f);
-				return (return (lp ++ f, s))
-			}) (\_ -> return (Bad (reportOn f)))
-		initPath = addInitFilePath ini f
-		getLibPath :: IO String
-		getLibPath = do {
-			lp <- catch (getEnv gfLibraryPath) (const (return libdir)) ;
-			return (if isSep (last lp) then lp else lp ++ ['/']);
-		} 
-		reportOn f = "File " ++ f ++ " not found."
-		libPath ini f = f
-		addInitFilePath ini file = case file of
-			c:_ | isSep c -> file        -- absolute path name
-			_     -> ini ++ file -- relative path name
-
+readFileLibraryIOE ini f = ioe $ do
+  lp <- getLibraryPath
+  tryRead ini $ \_ ->
+    tryRead lp  $ \e ->
+      return (Bad (show e))
+  where
+    tryRead path onError =
+      catch (readFileStrict fpath >>= \s -> return (return (fpath,s)))
+            onError
+      where
+        fpath = path </> f
 
 -- | example
 koeIOE :: IO ()

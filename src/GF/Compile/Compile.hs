@@ -58,6 +58,7 @@ import GF.System.Arch
 
 import Control.Monad
 import System.Directory
+import System.FilePath
 
 -- | environment variable for grammar search path
 gfGrammarPathVar = "GF_GRAMMAR_PATH"
@@ -83,20 +84,20 @@ compileModule :: Options -> ShellState -> FilePath -> IOE TimedCompileEnv
 
 compileModule opts st0 file | 
      oElem showOld opts || 
-     elem suff ["cf","ebnf","gfm"] = do
+     elem suff [".cf",".ebnf",".gfm"] = do
   let putp  = putPointE opts
   let putpp = putPointEsil opts
   let path = [] ----
   grammar1 <- case suff of
-    "cf"   -> putp ("- parsing" +++ suff +++ file) $ getCFGrammar opts file
-    "ebnf" -> putp ("- parsing" +++ suff +++ file) $ getEBNFGrammar opts file
-    "gfm"  -> putp ("- parsing" +++ suff +++ file) $ getSourceGrammar opts file
-    _      -> putp ("- parsing old gf" +++ file)   $ getOldGrammar opts file
+    ".cf"   -> putp ("- parsing" +++ suff +++ file) $ getCFGrammar opts file
+    ".ebnf" -> putp ("- parsing" +++ suff +++ file) $ getEBNFGrammar opts file
+    ".gfm"  -> putp ("- parsing" +++ suff +++ file) $ getSourceGrammar opts file
+    _       -> putp ("- parsing old gf" +++ file)   $ getOldGrammar opts file
   let mods = modules grammar1
   let env = compileEnvShSt st0 []
   foldM (comp putpp path) env mods
  where
-   suff = fileSuffix file
+   suff = takeExtensions file
    comp putpp path env sm0 = do
      (k',sm,eenv')  <- makeSourceModule opts (fst env) sm0
      cm  <- putpp "  generating code... " $ generateModuleCode opts path sm
@@ -108,18 +109,18 @@ compileModule opts1 st0 file = do
   let useFileOpt = maybe False (const True) $ getOptVal opts0 pathList
   let useLineOpt = maybe False (const True) $ getOptVal opts1 pathList
   let opts = addOptions opts1 opts0 
-  let fpath = justInitPath file
+  let fpath = dropFileName file
   ps0 <- ioeIO $ pathListOpts opts fpath
 
   let ps1 = if (useFileOpt && not useLineOpt) 
-              then (ps0 ++ map (prefixPathName fpath) ps0)
+              then (ps0 ++ map (combine fpath) ps0)
               else ps0
   ps <- ioeIO $ extendPathEnv gfLibraryPath gfGrammarPathVar ps1
   let ioeIOIf = if oElem beVerbose opts then ioeIO else (const (return ()))
   ioeIOIf $ putStrLn $ "module search path:" +++ show ps ----
   let st = st0 --- if useFileOpt then emptyShellState else st0
   let rfs = [(m,t) | (m,(_,t)) <- readFiles st]
-  let file' = if useFileOpt then justFileName file else file -- to find file itself
+  let file' = if useFileOpt then takeFileName file else file -- to find file itself
   files <- getAllFiles opts ps rfs file'
   ioeIOIf $ putStrLn $ "files to read:" +++ show files ----
   let names = map justModuleName files
@@ -138,13 +139,13 @@ compileEnvShSt :: ShellState -> [ModName] -> TimedCompileEnv
 compileEnvShSt st fs = ((0,sgr,cgr,eenv),fts) where
   cgr = MGrammar [m | m@(i,_) <- modules (canModules st), notInc i]
   sgr = MGrammar [m | m@(i,_) <- modules (srcModules st), notIns i]
-  notInc i = notElem (prt i) $ map fileBody fs
-  notIns i = notElem (prt i) $ map fileBody fs
+  notInc i = notElem (prt i) $ map dropExtension fs
+  notIns i = notElem (prt i) $ map dropExtension fs
   fts = readFiles st
   eenv = evalEnv st
 
 pathListOpts :: Options -> FileName -> IO [InitPath]
-pathListOpts opts file = return $ maybe [file] pFilePaths $ getOptVal opts pathList
+pathListOpts opts file = return $ maybe [file] splitInModuleSearchPath $ getOptVal opts pathList
 
 reverseModules (MGrammar ms) = MGrammar $ reverse ms
 
@@ -181,20 +182,20 @@ compileOne opts env@((_,srcgr,cancgr0,eenv),_) file = do
        | oElem beSilent opts  =  putpp v act
        | otherwise = ioeIO (putStrFlush m) >> act
 
-  let gf   = fileSuffix file
-  let path = justInitPath file
-  let name = fileBody file
+  let gf   = takeExtensions file
+  let path = dropFileName file
+  let name = dropExtension file
   let mos  = modules srcgr
 
   case gf of
     -- for multilingual canonical gf, just read the file and update environment
-    "gfcm" -> do
+    ".gfcm" -> do
        cgr <- putp ("+ reading" +++ file) $ getCanonGrammar file
        ft <- getReadTimes file
        extendCompileEnvCanon env cgr eenv ft
 
     -- for canonical gf, read the file and update environment, also source env
-    "gfc" -> do
+    ".gfc" -> do
        cm <- putp ("+ reading" +++ file) $ getCanonModule file
        let cancgr = updateMGrammar (MGrammar [cm]) cancgr0 
        sm <- ioeErr $ CG.canon2sourceModule $ unoptimizeCanonMod cancgr $ unSubelimModule cm
@@ -202,7 +203,7 @@ compileOne opts env@((_,srcgr,cancgr0,eenv),_) file = do
        extendCompileEnv env (sm, cm) eenv ft
 
     -- for compiled resource, parse and organize, then update environment
-    "gfr" -> do
+    ".gfr" -> do
        sm0 <- putp ("| reading" +++ file) $ getSourceModule opts file
        let sm1 = unsubexpModule sm0
        sm <- {- putp "creating indirections" $ -} ioeErr $ extendModule mos sm1
@@ -219,7 +220,7 @@ compileOne opts env@((_,srcgr,cancgr0,eenv),_) file = do
 
       --- hack fix to a bug in ReadFiles with reused concrete
 
-      let modu = unsuffixFile file
+      let modu = dropExtension file
       b1 <- ioeIO $ doesFileExist file
       b2 <- ioeIO $ doesFileExist $ gfrFile modu
       if not b1
@@ -308,7 +309,7 @@ generateModuleCode opts path minfo@(name,info) = do
 ---    then ioeIO $ putStrLn $ prGrammar2gfcc minfo
 ---    else return ()
 
-  let pname = prefixPathName path (prt name)
+  let pname = path </> prt name
   minfo0     <- ioeErr $ redModInfo minfo
   let oopts  = addOptions opts (iOpts (flagsModule minfo))
       optims = maybe "all_subs" id $ getOptVal oopts useOptimizer
@@ -389,15 +390,15 @@ getGFEFiles opts1 file = useIOE [] $ do
   let useFileOpt = maybe False (const True) $ getOptVal opts0 pathList
   let useLineOpt = maybe False (const True) $ getOptVal opts1 pathList
   let opts = addOptions opts1 opts0 
-  let fpath = justInitPath file
+  let fpath = dropFileName file
   ps0 <- ioeIO $ pathListOpts opts fpath
 
   let ps1 = if (useFileOpt && not useLineOpt) 
-              then (map (prefixPathName fpath) ps0)
+              then (map (combine fpath) ps0)
               else ps0
   ps <- ioeIO $ extendPathEnv gfLibraryPath gfGrammarPathVar ps1
-  let file' = if useFileOpt then justFileName file else file -- to find file itself
+  let file' = if useFileOpt then takeFileName file else file -- to find file itself
   files <- getAllFiles opts ps [] file'
-  efiles <- ioeIO $ filterM doesFileExist [suffixFile "gfe" (unsuffixFile f) | f <- files]
+  efiles <- ioeIO $ filterM doesFileExist [replaceExtension f "gfe" | f <- files]
   es <- ioeIO $ mapM (uncurry selectLater) [(f, init f) | f <- efiles] -- init gfe == gf
   return $ filter ((=='e') . last) es

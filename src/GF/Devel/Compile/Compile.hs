@@ -61,24 +61,24 @@ compileModule opts1 env file = do
   let useFileOpt = maybe False (const True) $ getOptVal opts0 pathList
   let useLineOpt = maybe False (const True) $ getOptVal opts1 pathList
   let opts = addOptions opts1 opts0 
-  let fpath = justInitPath file
+  let fpath = dropFileName file
   ps0 <- ioeIO $ pathListOpts opts fpath
 
   let ps1 = if (useFileOpt && not useLineOpt) 
-              then (ps0 ++ map (prefixPathName fpath) ps0)
+              then (ps0 ++ map (combine fpath) ps0)
               else ps0
   ps <- ioeIO $ extendPathEnv gfLibraryPath gfGrammarPathVar ps1
   let ioeIOIf = if oElem beVerbose opts then ioeIO else (const (return ()))
   ioeIOIf $ putStrLn $ "module search path:" +++ show ps ----
   let sgr = snd env
   let rfs = [] ---- files already in memory and their read times
-  let file' = if useFileOpt then justFileName file else file -- find file itself
+  let file' = if useFileOpt then takeFileName file else file -- find file itself
   files <- getAllFiles opts ps rfs file'
   ioeIOIf $ putStrLn $ "files to read:" +++ show files ----
   let names = map justModuleName files
   ioeIOIf $ putStrLn $ "modules to include:" +++ show names ----
   let sgr2 = sgr ----MGrammar [m | m@(i,_) <- modules sgr, 
-                     ----      notElem (prt i) $ map fileBody names]
+                     ----      notElem (prt i) $ map dropExtension names]
   let env0 = (0,sgr2)
   (e,mm) <- foldIOE (compileOne opts) env0 files
   maybe (return ()) putStrLnE mm
@@ -95,9 +95,9 @@ compileOne opts env@(_,srcgr) file = do
        | oElem beSilent opts  =  putpp v act
        | otherwise = ioeIO (putStrFlush ("\n" ++ m)) >> act
 
-  let gf   = fileSuffix file
-  let path = justInitPath file
-  let name = fileBody file
+  let gf   = takeExtensions file
+  let path = dropFileName file
+  let name = dropExtension file
   let mos  = gfmodules srcgr
 
   case gf of
@@ -105,7 +105,7 @@ compileOne opts env@(_,srcgr) file = do
     -- for compiled gf, read the file and update environment
     -- also undo common subexp optimization, to enable normal computations
 
-    "gfn" -> do
+    ".gfn" -> do
        sm0 <- putp ("+ reading" +++ file) $ getSourceModule opts file
        let sm1 = unsubexpModule sm0
        sm <- {- putp "creating indirections" $ -} ioeErr $ extendModule srcgr sm1
@@ -114,7 +114,7 @@ compileOne opts env@(_,srcgr) file = do
     -- for gf source, do full compilation and generate code
     _ -> do
 
-      let modu = unsuffixFile file
+      let modu = dropExtension file
       b1 <- ioeIO $ doesFileExist file
       if not b1
         then compileOne opts env $ gfoFile $ modu 
@@ -178,7 +178,7 @@ compileSourceModule opts env@(k,gr) mo@(i,mi) = do
 generateModuleCode :: Options -> InitPath -> SourceModule -> IOE ()
 generateModuleCode opts path minfo@(name,info) = do
 
-  let pname  = prefixPathName path (prt name)
+  let pname  = combine path (prt name)
   let minfo0 = minfo 
   let minfo1 = subexpModule minfo0
   let minfo2 = minfo1
@@ -194,7 +194,7 @@ generateModuleCode opts path minfo@(name,info) = do
 -- auxiliaries
 
 pathListOpts :: Options -> FileName -> IO [InitPath]
-pathListOpts opts file = return $ maybe [file] pFilePaths $ getOptVal opts pathList
+pathListOpts opts file = return $ maybe [file] splitInModuleSearchPath $ getOptVal opts pathList
 
 ----reverseModules (MGrammar ms) = MGrammar $ reverse ms
 

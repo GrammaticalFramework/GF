@@ -178,7 +178,7 @@ moduleOptDescr =
     ]
     where
        addLibDir   x o = return $ o { optLibraryPath = x:optLibraryPath o }
-       setLibPath  x o = return $ o { optLibraryPath = splitSearchPath x }
+       setLibPath  x o = return $ o { optLibraryPath = splitInModuleSearchPath x }
        preproc     x o = return $ o { optPreprocessors = optPreprocessors o ++ [x] }
        optimize  x b o = return $ o { optOptimizations = (if b then (x:) else delete x) (optOptimizations o) }
        parser      x o = return $ o { optBuildParser = x }

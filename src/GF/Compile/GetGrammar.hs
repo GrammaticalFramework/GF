@@ -46,6 +46,7 @@ import Data.List (nub)
 import qualified Data.ByteString.Char8 as BS
 import Control.Monad (foldM)
 import System (system)
+import System.FilePath
 
 getSourceModule :: Options -> FilePath -> IOE SourceModule
 getSourceModule opts file0 = do
@@ -79,7 +80,7 @@ getOldGrammar :: Options -> FilePath -> IOE SourceGrammar
 getOldGrammar opts file = do
   defs <- parseOldGrammarFiles file
   let g = A.OldGr A.NoIncl defs
-  let name = justFileName file
+  let name = takeFileName file
   ioeErr $ transOldGrammar opts name g
 
 parseOldGrammarFiles :: FilePath -> IOE [A.TopDef]

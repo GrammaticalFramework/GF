@@ -35,6 +35,7 @@ import GF.Text.UTF8
 import GF.Today (today,version,libdir)
 import GF.System.Arch
 import System (getArgs,system,getEnv)
+import System.FilePath
 import Control.Monad (foldM,liftM)
 import Data.List (nub)
 
@@ -106,7 +107,7 @@ main = do
         mkConcretes os es
         doGF (removeOption fromExamples os) fs
   -- preprocessing gfwl
-    else if (length fs == 1 && fileSuffix (head fs) == "gfwl")
+    else if (length fs == 1 && takeExtensions (head fs) == ".gfwl")
     then do
       fs' <- mkWordlist (head fs)
       doGF os fs'
