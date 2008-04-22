@@ -48,9 +48,6 @@ prMod :: SourceModule -> String
 prMod = compactPrint . prModule
 
 
--- | environment variable for grammar search path
-gfGrammarPathVar = "GF_GRAMMAR_PATH"
-
 -- | the environment
 type CompileEnv = (Int,SourceGrammar)
 
@@ -71,7 +68,7 @@ compileModule opts1 env file = do
   let ps1 = if (useFileOpt && not useLineOpt) 
               then (ps0 ++ map (combine fpath) ps0)
               else ps0
-  ps <- ioeIO $ extendPathEnv gfLibraryPath gfGrammarPathVar ps1
+  ps <- ioeIO $ extendPathEnv ps1
   let ioeIOIf = if oElem beVerbose opts then ioeIO else (const (return ()))
   ioeIOIf $ putStrLn $ "module search path:" +++ show ps ----
   let sgr = snd env
