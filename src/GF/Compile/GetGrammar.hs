@@ -14,8 +14,7 @@
 
 module GF.Compile.GetGrammar (
   getSourceModule, getSourceGrammar,
-  getOldGrammar, getCFGrammar, getEBNFGrammar,
-		   err2err
+  getOldGrammar, getCFGrammar, getEBNFGrammar
 		  ) where
 
 import GF.Data.Operations
@@ -63,14 +62,14 @@ getSourceModule opts file0 = do
         Just "utf8" -> decodeUTF8 string0
         _ -> string0
   let tokens = myLexer (BS.pack string)
-  mo1  <- ioeErr $ err2err $ pModDef tokens
+  mo1  <- ioeErr $ pModDef tokens
   ioeErr $ transModDef mo1
 
 getSourceGrammar :: Options -> FilePath -> IOE SourceGrammar
 getSourceGrammar opts file = do
   string    <- readFileIOE file
   let tokens = myLexer (BS.pack string)
-  gr1  <- ioeErr $ err2err $ pGrammar tokens
+  gr1  <- ioeErr $ pGrammar tokens
   ioeErr $ transGrammar gr1
 
 
@@ -102,17 +101,11 @@ parseOldGrammar :: FilePath -> IOE ([FilePath],[A.TopDef])
 parseOldGrammar file = do
   putStrLnE $ "reading old file" +++ file
   s <- ioeIO $ readFileIf file
-  A.OldGr incl topdefs <- ioeErr $ err2err $ pOldGrammar $ oldLexer $ fixNewlines s
+  A.OldGr incl topdefs <- ioeErr $ pOldGrammar $ oldLexer $ fixNewlines s
   includes <- ioeErr $ transInclude incl
   return (includes, topdefs)
 
 ----
-
-err2err :: E.Err a -> Err a
-err2err (E.Ok v) = Ok v
-err2err (E.Bad s) = Bad s
-
-ioeEErr = ioeErr . err2err
 
 -- | To resolve the new reserved words: 
 -- change them by turning the final letter to upper case.

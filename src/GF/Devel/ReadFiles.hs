@@ -36,6 +36,8 @@ import Control.Monad
 import Data.List
 import System.Directory
 import qualified Data.ByteString.Char8 as BS
+import GF.Source.AbsGF hiding (FileName)
+import GF.Source.ParGF
 
 
 type ModName = String
@@ -204,7 +206,7 @@ getImports ps = get [] where
   get ds file0 = do
     let name = justModuleName file0 ---- fileBody file0
     (p,s) <- tryRead name
-    let ((typ,mname),imps) = importsOfFile (BS.unpack s)
+    ((typ,mname),imps) <- ioeErr (importsOfFile s)
     let namebody = justFileName name
     ioeErr $ testErr  (mname == namebody) $ 
              "module name" +++ mname +++ "differs from file name" +++ namebody
@@ -243,62 +245,47 @@ data ModTyp =
 
 type ModuleHeader = ((ModTyp,ModName),[(ModName,ModUse)])
 
-importsOfFile :: String -> ModuleHeader
-importsOfFile = 
-  getModuleHeader .          -- analyse into mod header
-  filter (not . spec) .      -- ignore keywords and special symbols
-  unqual .                   -- take away qualifiers
-  unrestr .                  -- take away union restrictions
-  takeWhile (not . term) .   -- read until curly or semic
-  lexs .                     -- analyse into lexical tokens
-  unComm                     -- ignore comments before the headed line
- where
-    term = flip elem ["{",";"]
-    spec = flip elem ["of", "open","in",":", "->","=", "-","(", ")",",","**","union"]
-    unqual ws = case ws of
-      "(":q:ws' -> unqual ws'
-      w:ws' -> w:unqual ws'
-      _ -> ws
-    unrestr ws = case ws of
-      "[":ws' -> unrestr $ tail $ dropWhile (/="]") ws'
-      w:ws' -> w:unrestr ws'
-      _ -> ws
+importsOfFile :: BS.ByteString -> Err ModuleHeader
+importsOfFile bs = do
+  (MModule compl typ body) <- (pModHeader . myLexer) bs
+  return $
+      case (compl,modType typ (modBody body [])) of
+            (CMIncompl, ((MTyResource,m),xs)) -> ((MTyIncResource,m),xs)
+            (CMIncompl, ((t,m),xs)) -> ((MTyIncomplete,m),xs)
+            (CMCompl,   v) -> v
+  where
+    modType (MTAbstract  m)      xs = ((MTyOther,modName m),xs)
+    modType (MTResource m)       xs = ((MTyResource,modName m),xs)
+    modType (MTInterface m)      xs = ((MTyIncResource,modName m),xs)
+    modType (MTConcrete m m2)    xs = ((MTyOther,modName m),(modName m2,MUOther):xs)
+    modType (MTInstance m m2)    xs = ((MTyResource,modName m),(modName m2,MUInstance):xs)
+    modType (MTTransfer m o1 o2) xs = ((MTyOther,modName m),open o1 (open o2 xs))
 
-getModuleHeader :: [String] -> ModuleHeader -- with, reuse
-getModuleHeader ws = case ws of
-  "incomplete":ws2 -> let ((ty,name),us) = getModuleHeader ws2 in
-    case ty of
-      MTyResource -> ((MTyIncResource,name),us)
-      _ -> ((MTyIncomplete,name),us)
-  "interface":ws2 -> let ((_,name),us) = getModuleHeader ("resource":ws2) in
-    ((MTyIncResource,name),us)
- 
-  "resource":name:ws2 -> case ws2 of
-    "reuse":m:_ -> ((MTyResource,name),[(m,MUReuse)])
-    m:"with":ms -> ((MTyResource,name),(m,MUOther):[(n,MUComplete) | n <- ms])
-    ms -> ((MTyResource,name),[(n,MUOther) | n <- ms])
+    modBody (MBody e o _)            xs = extend e (opens o xs)
+    modBody (MNoBody is)             xs = foldr include xs is
+    modBody (MWith i os)             xs = include i (foldr open xs os)
+    modBody (MWithBody i os o _)     xs = include i (foldr open (opens o xs) os)
+    modBody (MWithE is i os)         xs = foldr include (include i (foldr open xs os)) is
+    modBody (MWithEBody is i os o _) xs = foldr include (include i (foldr open (opens o xs) os)) is
+    modBody (MReuse m)               xs = (modName m,MUReuse):xs
+    modBody (MUnion is)              xs = foldr include xs is
 
-  "instance":name:m:ws2 -> case ws2 of
-    "reuse":n:_ -> ((MTyResource,name),(m,MUInstance):[(n,MUReuse)])
-    n:"with":ms -> 
-      ((MTyResource,name),(m,MUInstance):(n,MUComplete):[(n,MUOther) | n <- ms])
-    ms -> ((MTyResource,name),(m,MUInstance):[(n,MUOther) | n <- ms])
+    include (IAll   m)   xs = (modName m,MUOther):xs
+    include (ISome  m _) xs = (modName m,MUOther):xs
+    include (IMinus m _) xs = (modName m,MUOther):xs
 
-  "concrete":name:a:ws2 -> case span (/= "with") ws2 of
+    open (OName n)     xs = (modName n,MUComplete):xs
+    open (OQualQO _ n) xs = (modName n,MUComplete):xs
+    open (OQual _ _ n) xs = (modName n,MUComplete):xs
 
-    (es,_:ms) -> ((MTyOther,name),
-                  [(m,MUOther)    | m <- es] ++
-                  [(n,MUComplete) | n <- ms])
-    --- m:"with":ms -> ((MTyOther,name),(m,MUOther):[(n,MUComplete) | n <- ms])
-    (ms,[]) -> ((MTyOther,name),[(n,MUOther) | n <- a:ms])
+    extend NoExt    xs = xs
+    extend (Ext is) xs = foldr include xs is
 
-  _:name:ws2 -> case ws2 of
-    "reuse":m:_ -> ((MTyOther,name),[(m,MUReuse)])
-    ---- m:n:"with":ms -> 
-    ----  ((MTyOther,name),(m,MUInstance):(n,MUOther):[(n,MUComplete) | n <- ms])
-    m:"with":ms -> ((MTyOther,name),(m,MUOther):[(n,MUComplete) | n <- ms])
-    ms -> ((MTyOther,name),[(n,MUOther) | n <- ms])
-  _ -> error "the file is empty"
+    opens NoOpens     xs = xs
+    opens (OpenIn os) xs = foldr open xs os
+
+    modName (PIdent (_,s)) = s
+
 
 unComm s = case s of
       '-':'-':cs -> unComm $ dropWhile (/='\n') cs
@@ -310,17 +297,13 @@ dpComm s = case s of
       '-':'}':cs -> unComm cs
       c:cs -> dpComm cs
       _ -> s
-    
-lexs s = x:xs where 
-      (x,y) = head $ lex s
-      xs = if null y then [] else lexs y
 
 -- | options can be passed to the compiler by comments in @--#@, in the main file
 getOptionsFromFile ::  FilePath -> IO Options
 getOptionsFromFile file = do
   s <- readFileIfStrict file
-  let ls = filter (isPrefixOf "--#") $ lines (BS.unpack s)
-  return $ fst $ getOptions "-" $ map (unwords . words . drop 3) ls
+  let ls = filter (BS.isPrefixOf (BS.pack "--#")) $ BS.lines s
+  return $ fst $ getOptions "-" $ map (BS.unpack . BS.unwords . BS.words . BS.drop 3) ls
 
 -- | check if old GF file
 isOldFile :: FilePath -> IO Bool

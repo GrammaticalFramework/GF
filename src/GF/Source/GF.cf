@@ -32,6 +32,20 @@ separator Transfer "" ;--%
 TransferIn.  Transfer ::= "(" "transfer" "in" Open ")" ;  --%
 TransferOut. Transfer ::= "(" "transfer" "out" Open ")" ;  --%
 
+-- the module header
+
+MModule2. ModHeader ::= ComplMod ModType "=" ModHeaderBody ;
+
+MBody2.      ModHeaderBody ::= Extend Opens ;
+MNoBody2.    ModHeaderBody ::= [Included] ;
+MWith2.      ModHeaderBody ::=                 Included "with" [Open] ;
+MWithBody2.  ModHeaderBody ::=                 Included "with" [Open] "**" Opens ; 
+MWithE2.     ModHeaderBody ::= [Included] "**" Included "with" [Open] ;
+MWithEBody2. ModHeaderBody ::= [Included] "**" Included "with" [Open] "**" Opens ; 
+
+MReuse2. ModHeaderBody ::= "reuse" PIdent ; --%
+MUnion2. ModHeaderBody ::= "union" [Included] ;--%
+
 -- the individual modules
 
 MModule. ModDef ::= ComplMod ModType "=" ModBody ;

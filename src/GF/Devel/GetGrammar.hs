@@ -50,10 +50,5 @@ getSourceModule opts file0 = do
     _ -> return file0
   string    <- readFileIOE file
   let tokens = myLexer string
-  mo1  <- ioeErr $ err2err $ pModDef tokens
+  mo1  <- ioeErr $ pModDef tokens
   ioeErr $ transModDef mo1
-
-err2err :: E.Err a -> Err a
-err2err (E.Ok v) = Ok v
-err2err (E.Bad s) = Bad s
-
