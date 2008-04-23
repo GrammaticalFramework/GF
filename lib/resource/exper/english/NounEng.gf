@@ -99,7 +99,19 @@ concrete NounEng of Noun = CatEng ** open ResEng, Prelude in {
 
     UseN n = n ;
     UseN2 n = n ;
-    UseN3 n = n ;
+---b    UseN3 n = n ;
+
+    Use2N3 f = {
+      s = \\n,c => f.s ! n ! Nom ;
+      g = f.g ;
+      c2 = f.c2
+      } ;
+
+    Use3N3 f = {
+      s = \\n,c => f.s ! n ! Nom ;
+      g = f.g ;
+      c2 = f.c3
+      } ;
 
     ComplN2 f x = {s = \\n,c => f.s ! n ! Nom ++ f.c2 ++ x.s ! c ; g = f.g} ;
     ComplN3 f x = {

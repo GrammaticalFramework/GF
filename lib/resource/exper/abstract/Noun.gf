@@ -25,9 +25,9 @@ abstract Noun = Cat ** {
 -- A noun phrase can also be postmodified by the past participle of a
 -- verb, by an adverb, or by a relative clause
 
-    PPartNP : NP -> V2  -> NP ;    -- the number squared
-    AdvNP   : NP -> Adv -> NP ;    -- Paris at midnight
-    RelNP   : NP -> RS  -> NP ;    -- Paris, which is in Europe
+    PPartNP : NP -> V2  -> NP ;    -- the man seen
+    AdvNP   : NP -> Adv -> NP ;    -- Paris today
+    RelNP   : NP -> RS  -> NP ;    -- Paris, which is here
 
 -- Determiners can form noun phrases directly.
 
@@ -40,8 +40,8 @@ abstract Noun = Cat ** {
 -- quantifier and two optional parts can be discerned: a cardinal and
 -- an ordinal numeral.
 
-    DetQuantOrd : Quant -> Num -> Ord -> Det ;  -- these five best men
-    DetQuant    : Quant -> Num        -> Det ;  -- these five best men
+    DetQuantOrd : Quant -> Num -> Ord -> Det ;  -- these five best
+    DetQuant    : Quant -> Num        -> Det ;  -- these five
 
 -- Whether the resulting determiner is singular or plural depends on the
 -- cardinal.
@@ -70,7 +70,7 @@ abstract Noun = Cat ** {
 
     OrdDigits  : Digits  -> Ord ;  -- 51st
     OrdNumeral : Numeral -> Ord ;  -- fifty-first
-    OrdSuperl  : A       -> Ord ;  -- largest
+    OrdSuperl  : A       -> Ord ;  -- warmest
 
 -- Definite and indefinite noun phrases are sometimes realized as
 -- neatly distinct words (Spanish "un, unos ; el, los") but also without
@@ -111,33 +111,34 @@ abstract Noun = Cat ** {
 
 -- Relational nouns take one or two arguments.
 
-    ComplN2 : N2 -> NP -> CN ;    -- son of the king
-    ComplN3 : N3 -> NP -> N2 ;    -- flight from Moscow (to Paris)
+    ComplN2 : N2 -> NP -> CN ;    -- mother of the king
+    ComplN3 : N3 -> NP -> N2 ;    -- distance from this city (to Paris)
 
 -- Relational nouns can also be used without their arguments.
 -- The semantics is typically derivative of the relational meaning.
 
-    UseN2   : N2 -> CN ;          -- son
-    UseN3   : N3 -> CN ;          -- flight
+    UseN2   : N2 -> CN ;          -- mother
+    Use2N3  : N3 -> N2 ;          -- distance (from this city)
+    Use3N3  : N3 -> N2 ;          -- distance (to Paris)
 
 -- Nouns can be modified by adjectives, relative clauses, and adverbs
 -- (the last rule will give rise to many 'PP attachment' ambiguities
 -- when used in connection with verb phrases).
 
     AdjCN   : AP -> CN  -> CN ;   -- big house
-    RelCN   : CN -> RS  -> CN ;   -- house that John owns
+    RelCN   : CN -> RS  -> CN ;   -- house that John bought
     AdvCN   : CN -> Adv -> CN ;   -- house on the hill
 
 -- Nouns can also be modified by embedded sentences and questions.
 -- For some nouns this makes little sense, but we leave this for applications
 -- to decide. Sentential complements are defined in [Verb Verb.html].
 
-    SentCN  : CN -> SC  -> CN ;   -- fact that John smokes, question if he does
+    SentCN  : CN -> SC  -> CN ;   -- question where she sleeps
 
 --2 Apposition
 
 -- This is certainly overgenerating.
 
-    ApposCN : CN -> NP -> CN ;    -- number x, numbers x and y
+    ApposCN : CN -> NP -> CN ;    -- city Paris (, numbers x and y)
 
 } ;

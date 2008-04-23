@@ -105,8 +105,9 @@ concrete StructuralEng of Structural = CatEng **
   when_IAdv = ss "when" ;
   when_Subj = ss "when" ;
   where_IAdv = ss "where" ;
-  whichPl_IDet = mkDeterminer Pl ["which"] ;
-  whichSg_IDet = mkDeterminer Sg ["which"] ;
+  which_IQuant = {s = \\_ => "which"} ;
+---b  whichPl_IDet = mkDeterminer Pl ["which"] ;
+---b  whichSg_IDet = mkDeterminer Sg ["which"] ;
   whoSg_IP = mkIP "who" "whom" "whose" Sg ;
   whoPl_IP = mkIP "who" "whom" "whose" Pl ;
   why_IAdv = ss "why" ;

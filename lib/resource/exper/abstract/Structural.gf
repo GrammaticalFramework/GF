@@ -93,8 +93,7 @@ abstract Structural = Cat ** {
   when_IAdv : IAdv ;
   when_Subj : Subj ;
   where_IAdv : IAdv ;
-  whichPl_IDet : IDet ;
-  whichSg_IDet : IDet ;
+  which_IQuant : IQuant ;
   whoPl_IP : IP ;
   whoSg_IP : IP ;
   why_IAdv : IAdv ;

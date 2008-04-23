@@ -11,7 +11,7 @@ concrete IdiomEng of Idiom = CatEng ** open Prelude, ResEng in {
         (insertObj (\\_ => np.s ! rs.c) (predAux auxBe))) ;
 
     CleftAdv ad s = mkClause "it" (agrP3 Sg) 
-      (insertObj (\\_ => conjThat ++ s.s)
+      (insertObj (\\_ => strOpt conjThat ++ s.s)
         (insertObj (\\_ => ad.s) (predAux auxBe))) ;
 
     ExistNP np = 

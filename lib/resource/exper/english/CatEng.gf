@@ -26,6 +26,7 @@ concrete CatEng of Cat = CommonX ** open ResEng, Prelude in {
     IP = {s : Case => Str ; n : Number} ;
     IComp = {s : Str} ;    
     IDet = {s : Str ; n : Number} ;
+    IQuant = {s : Number => Str} ;
 
 -- Relative
 
