@@ -31,60 +31,65 @@ concrete NounEng of Noun = CatEng ** open ResEng, Prelude in {
       a = np.a
       } ;
 
-    DetQuant quant num ord = {
+    DetQuantOrd quant num ord = {
       s = quant.s ! num.n ++ num.s ++ ord.s ; 
       n = num.n
       } ;
 
-    DetNP quant num ord = {
-      s = \\c => quant.s ! num.n ++ num.s ++ ord.s ; ---- case
-      a = agrP3 num.n
+    DetQuant quant num = {
+      s = quant.s ! num.n ++ num.s ; 
+      n = num.n
+      } ;
+
+    DetNP det = {
+      s = \\c => det.s ; ---- case
+      a = agrP3 det.n
       } ;
 
     PossPron p = {s = \\_ => p.s ! Gen} ;
 
-    NumSg = {s = []; n = Sg ; isNum = False} ;
-    NumPl = {s = []; n = Pl ; isNum = False} ;
-    NoOrd = {s = []} ;
+    NumSg = {s = []; n = Sg ; hasCard = False} ;
+    NumPl = {s = []; n = Pl ; hasCard = False} ;
+---b    NoOrd = {s = []} ;
 
-    NumDigits n = {s = n.s ! NCard ; n = n.n ; isNum = True} ;
+    NumCard n = n ** {hasCard = True} ;
+
+    NumDigits n = {s = n.s ! NCard ; n = n.n} ;
     OrdDigits n = {s = n.s ! NOrd} ;
 
-    NumNumeral numeral = {s = numeral.s ! NCard; n = numeral.n ; isNum = True} ;
+    NumNumeral numeral = {s = numeral.s ! NCard; n = numeral.n} ;
     OrdNumeral numeral = {s = numeral.s ! NOrd} ;
 
-    AdNum adn num = {s = adn.s ++ num.s ; n = num.n ; isNum = True} ; ----
+    AdNum adn num = {s = adn.s ++ num.s ; n = num.n} ;
 
     OrdSuperl a = {s = a.s ! AAdj Superl} ;
 
-    NumNumeralNP num = {
-      s = \\c => num.s ! NCard ; ---- case
-      a = agrP3 num.n
+    DetArtOrd art num ord = {
+      s = art.s ! num.hasCard ! num.n ++ num.s ++ ord.s ;
+      n = num.n
       } ;
 
-    OrdNumeralNP ord = {
-      s = \\c => "the" ++ ord.s ! NOrd ; ---- case
+    DetArtCard art card = {
+      s = art.s ! True ! card.n ++ card.s ;
+      n = card.n
+      } ;
+
+    DetArtSg art cn = {
+      s = \\c => art.s ! False ! Sg ++ cn.s ! Sg ! c ;
       a = agrP3 Sg
       } ;
 
-    OrdSuperlNP n a = {
-      s = \\c => "the" ++ n.s ++ a.s ! AAdj Superl ; ---- case
-      a = agrP3 n.n
+    DetArtPl art cn = {
+      s = \\c => art.s ! False ! Pl ++ cn.s ! Pl ! c ;
+      a = agrP3 Pl
       } ;
 
-    DefNP num ord cn = {
-      s = \\c => artDef ++ num.s ++ ord.s ++ cn.s ! num.n ! c ;
-      a = agrP3 num.n
-      } ;
+    DefArt = {s = \\c,n => artDef} ;
 
-    IndefNP num ord cn = 
-      let an = case <num.n,num.isNum> of {
+    IndefArt = {s = \\c,n => case <n,c> of {
         <Sg,False> => artIndef ;
         _ => []
         }
-      in {
-      s = \\c => an ++ num.s ++ ord.s ++ cn.s ! num.n ! c ;
-      a = agrP3 num.n
       } ;
 
     MassNP cn = {

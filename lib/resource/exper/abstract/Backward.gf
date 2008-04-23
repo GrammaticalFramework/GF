@@ -30,6 +30,7 @@ fun
 
     NumInt     : Int -> Num ;     -- 51
     OrdInt     : Int -> Ord ;     -- 51st (DEPRECATED)
+    NoOrd : Ord ;
 
     -- 20/4
     DetSg : Quant ->        Ord -> Det ;  -- the best man
