@@ -2,6 +2,7 @@
 
 abstract Noun = Cat ** {
 
+
 --2 Noun phrases
 
 -- The three main types of noun phrases are
@@ -28,77 +29,75 @@ abstract Noun = Cat ** {
     AdvNP   : NP -> Adv -> NP ;    -- Paris at midnight
     RelNP   : NP -> RS  -> NP ;    -- Paris, which is in Europe
 
+-- Determiners can form noun phrases directly.
+
+    DetNP   : Det -> NP ;  -- these five
+
+
 --2 Determiners
 
 -- The determiner has a fine-grained structure, in which a 'nucleus'
--- quantifier and two optional parts can be discerned. 
--- The cardinal numeral is only available for plural determiners.
--- (This is modified from CLE by further dividing their $Num$ into 
--- cardinal and ordinal.)
+-- quantifier and two optional parts can be discerned: a cardinal and
+-- an ordinal numeral.
 
-    DetQuant : Quant -> Num -> Ord -> Det ;  -- the five best men
+    DetQuantOrd : Quant -> Num -> Ord -> Det ;  -- these five best men
+    DetQuant    : Quant -> Num        -> Det ;  -- these five best men
 
--- Notice that $DetPl$ can still result in a singular determiner, because
--- "one" is a numeral: "this one man".
-
--- Quantifiers can form noun phrases directly.
-
-    DetNP : Quant -> Num -> Ord -> NP ;  -- these five
-
--- Pronouns have possessive forms. Genitives of other kinds
--- of noun phrases are not given here, since they are not possible
--- in e.g. Romance languages. They can be found in
--- [``Extra`` ../abstract/Extra.gf].
-
-    PossPron : Pron -> Quant ;    -- my (house)
+-- Whether the resulting determiner is singular or plural depends on the
+-- cardinal.
 
 -- All parts of the determiner can be empty, except $Quant$, which is
 -- the "kernel" of a determiner. It is, however, the $Num$ that determines
--- the inherent numbers.
+-- the inherent number.
 
-    NumSg  : Num ;
-    NumPl  : Num ;
-    NoOrd  : Ord ;
+    NumSg   : Card ;
+    NumPl   : Card ;
+    NumCard : Card -> Num ;
 
--- $Num$ consists of either digits or numeral words.
+-- $Card$ consists of either digits or numeral words.
 
-    NumDigits  : Digits -> Num ;  -- 51
-    NumNumeral : Numeral -> Num ; -- fifty-one
+    NumDigits  : Digits  -> Card ;  -- 51
+    NumNumeral : Numeral -> Card ;  -- fifty-one
 
 -- The construction of numerals is defined in [Numeral Numeral.html].
 
 -- $Num$ can  be modified by certain adverbs.
 
-    AdNum : AdN -> Num -> Num ;   -- almost 51
+    AdNum : AdN -> Card -> Card ;   -- almost 51
 
 -- $Ord$ consists of either digits or numeral words.
+-- Also superlative forms of adjectives behave syntactically like ordinals.
 
-    OrdDigits  : Digits  -> Ord ; -- 51st
-    OrdNumeral : Numeral -> Ord ; -- fifty-first
-    
--- Superlative forms of adjectives behave syntactically in the same way as
--- ordinals.
-
-    OrdSuperl : A -> Ord ; -- largest
-
--- Ordinals and cardinals can be used as noun phrases alone.
-
-    OrdSuperlNP  : Num -> A -> NP ;  -- the five best
-    OrdNumeralNP : Numeral -> NP ;   -- the fiftieth
-    NumNumeralNP : Numeral -> NP ;   -- fifty
+    OrdDigits  : Digits  -> Ord ;  -- 51st
+    OrdNumeral : Numeral -> Ord ;  -- fifty-first
+    OrdSuperl  : A       -> Ord ;  -- largest
 
 -- Definite and indefinite noun phrases are sometimes realized as
 -- neatly distinct words (Spanish "un, unos ; el, los") but also without
 -- any particular word (Finnish; Swedish definites).
 
-    DefNP   : Num -> Ord -> CN -> NP ;  -- the (house), the (houses)
-    IndefNP : Num -> Ord -> CN -> NP ;  -- a (house), (houses)
+    DetArtOrd  : Art -> Num  -> Ord -> Det ;  -- the (five) best
+    DetArtCard : Art -> Card        -> Det ;  -- the five
+
+    IndefArt   : Art ;
+    DefArt     : Art ;
+
+-- Articles cannot alone form noun phrases, but need a noun.
+
+    DetArtSg   : Art -> CN -> NP ;   -- the man
+    DetArtPl   : Art -> CN -> NP ;   -- the men
 
 -- Nouns can be used without an article as mass nouns. The resource does
 -- not distinguish mass nouns from other common nouns, which can result
 -- in semantically odd expressions.
 
-    MassNP  : CN -> NP ;                -- (beer)
+    MassNP    : CN -> NP ;            -- (beer)
+
+-- Pronouns have possessive forms. Genitives of other kinds
+-- of noun phrases are not given here, since they are not possible
+-- in e.g. Romance languages. They can be found in $Extra$ modules.
+
+    PossPron : Pron -> Quant ;    -- my (house)
 
 -- Other determiners are defined in [Structural Structural.html].
 
