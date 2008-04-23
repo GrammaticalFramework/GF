@@ -28,12 +28,12 @@ lin
   boat_N = regN "boat" ;
   book_N = regN "book" ;
   boot_N = regN "boot" ;
-  boss_N = regN "boss" ;
-  boy_N = regN "boy" ;
+  boss_N = mkN human (regN "boss") ;
+  boy_N = mkN masculine (regN "boy") ;
   bread_N = regN "bread" ;
   break_V2 = dirV2 (irregV "break" "broke" "broken") ;
   broad_A = regADeg "broad" ;
-  brother_N2 = regN2 "brother" ;
+  brother_N2 = mkN2 (mkN masculine (mkN "brother")) (mkPrep "of") ;
   brown_A = regADeg "brown" ;
   butter_N = regN "butter" ;
   buy_V2 = dirV2 (irregV "buy" "bought" "bought") ;
@@ -56,12 +56,12 @@ lin
   come_V = (irregV "come" "came" "come") ;
   computer_N = regN "computer" ;
   country_N = regN "country" ;
-  cousin_N = regN "cousin" ;
+  cousin_N = mkN human (regN "cousin") ;
   cow_N = regN "cow" ;
   die_V = (regV "die") ;
   dirty_A = regADeg "dirty" ;
   distance_N3 = mkN3 (regN "distance") fromP toP ;
-  doctor_N = regN "doctor" ;
+  doctor_N = mkN human (regN "doctor") ;
   dog_N = regN "dog" ;
   door_N = regN "door" ;
   drink_V2 = dirV2 (irregV "drink" "drank" "drunk") ;
@@ -70,14 +70,14 @@ lin
   empty_A = regADeg "empty" ;
   enemy_N = regN "enemy" ;
   factory_N = regN "factory" ;
-  father_N2 = regN2 "father" ;
+  father_N2 = mkN2 (mkN masculine (mkN "father")) (mkPrep "of") ;
   fear_VS = mkVS (regV "fear") ;
   find_V2 = dirV2 (irregV "find" "found" "found") ;
   fish_N = mk2N "fish" "fish" ;
   floor_N = regN "floor" ;
   forget_V2 = dirV2 (irregDuplV "forget" "forgot" "forgotten") ;
   fridge_N = regN "fridge" ;
-  friend_N = regN "friend" ;
+  friend_N = mkN human (regN "friend") ;
   fruit_N = regN "fruit" ;
   fun_AV = mkAV (regA "fun") ;
   garden_N = regN "garden" ;
@@ -100,7 +100,7 @@ lin
   important_A = compoundADeg (regA "important") ;
   industry_N = regN "industry" ;
   iron_N = regN "iron" ;
-  king_N = regN "king" ;
+  king_N = mkN masculine (regN "king") ;
   know_V2 = dirV2 (irregV "know" "knew" "known") ;
   lake_N = regN "lake" ;
   lamp_N = regN "lamp" ;
@@ -136,10 +136,10 @@ lin
   planet_N = regN "planet" ;
   plastic_N = regN "plastic" ;
   play_V2 = dirV2 (regV "play") ;
-  policeman_N = regN "policeman" ;
-  priest_N = regN "priest" ;
+  policeman_N = mkN masculine (mkN "policeman" "policemen") ;
+  priest_N = mkN human (regN "priest") ;
   probable_AS = mkAS (regA "probable") ;
-  queen_N = regN "queen" ;
+  queen_N = mkN feminine (regN "queen") ;
   radio_N = regN "radio" ;
   rain_V0 = mkV0 (regV "rain") ;
   read_V2 = dirV2 (irregV "read" "read" "read") ;
@@ -166,7 +166,7 @@ lin
   shop_N = regN "shop" ;
   short_A = regADeg "short" ;
   silver_N = regN "silver" ;
-  sister_N = regN "sister" ;
+  sister_N = mkN2 (mkN feminine (mkN "sister")) (mkPrep "of") ;
   sleep_V = (irregV "sleep" "slept" "slept") ;
   small_A = regADeg "small" ;
   snake_N = regN "snake" ;
@@ -176,14 +176,14 @@ lin
   steel_N = regN "steel" ;
   stone_N = regN "stone" ;
   stove_N = regN "stove" ;
-  student_N = regN "student" ;
+  student_N = mkN human (regN "student") ;
   stupid_A = regADeg "stupid" ;
   sun_N = regN "sun" ;
   switch8off_V2 = dirV2 (partV (regV "switch") "off") ;
   switch8on_V2 = dirV2 (partV (regV "switch") "on") ;
   table_N = regN "table" ;
   talk_V3 = mkV3 (regV "talk") toP aboutP ;
-  teacher_N = regN "teacher" ;
+  teacher_N = mkN human (regN "teacher") ;
   teach_V2 = dirV2 (irregV "teach" "taught" "taught") ;
   television_N = regN "television" ;
   thick_A = regADeg "thick" ;
@@ -206,7 +206,7 @@ lin
   window_N = regN "window" ;
   wine_N = regN "wine" ;
   win_V2 = dirV2 (irregDuplV "win" "won" "won") ;
-  woman_N = mk2N "woman" "women" ;
+  woman_N = mkN feminine (mk2N "woman" "women") ;
   wonder_VQ = mkVQ (regV "wonder") ;
   wood_N = regN "wood" ;
   write_V2 = dirV2 (irregV "write" "wrote" "written") ;
@@ -269,7 +269,7 @@ lin
   head_N = regN "head" ;
   heart_N = regN "heart" ;
   horn_N = regN "horn" ;
-  husband_N = genderN masculine (regN "husband") ;
+  husband_N = mkN masculine (regN "husband") ;
   ice_N = regN "ice" ;
   knee_N = regN "knee" ;
   leaf_N = mk2N "leaf" "leaves" ;
@@ -281,7 +281,7 @@ lin
   neck_N = regN "neck" ;
   night_N = regN "night" ;
   nose_N = regN "nose" ;
-  person_N = genderN human (regN "person") ;
+  person_N = mkN human (regN "person") ;
   rain_N = regN "rain" ;
   road_N = regN "road" ;
   root_N = regN "root" ;
@@ -297,7 +297,7 @@ lin
   tail_N = regN "tail" ;
   tongue_N = regN "tongue" ;
   tooth_N = mk2N "tooth" "teeth" ;
-  wife_N = genderN feminine (mk2N "wife" "wives") ;
+  wife_N = mkN feminine (mk2N "wife" "wives") ;
   wind_N = regN "wind" ;
   wing_N = regN "wing" ;
   worm_N = regN "worm" ;
@@ -356,7 +356,7 @@ lin
   rule_N = regN "rule" ;
 
 -- added 4/6/2007
-    john_PN = regPN "John" ;
+    john_PN = mkPN (mkN masculine (mkN "John")) ;
     question_N = regN "question" ;
     ready_A = regA "ready" ;
     reason_N = regN "reason" ;
