@@ -7,15 +7,15 @@ abstract Phrase = Cat ** {
 -- and suffixing with a vocative (typically a noun phrase).
 
   fun
-    PhrUtt   : PConj -> Utt -> Voc -> Phr ; -- But go home my friend.
+    PhrUtt   : PConj -> Utt -> Voc -> Phr ; -- but come here, my friend
 
 -- Utterances are formed from sentences, questions, and imperatives.
 
     UttS      : S   -> Utt ;                -- John walks
     UttQS     : QS  -> Utt ;                -- is it good
-    UttImpSg  : Pol -> Imp -> Utt;          -- (don't) help yourself
-    UttImpPl  : Pol -> Imp -> Utt;          -- (don't) help yourselves
-    UttImpPol : Pol -> Imp -> Utt ;         -- (don't) help (polite)
+    UttImpSg  : Pol -> Imp -> Utt;          -- (don't) love yourself
+    UttImpPl  : Pol -> Imp -> Utt;          -- (don't) love yourselves
+    UttImpPol : Pol -> Imp -> Utt ;         -- (don't) sleep (polite)
 
 -- There are also 'one-word utterances'. A typical use of them is
 -- as answers to questions.

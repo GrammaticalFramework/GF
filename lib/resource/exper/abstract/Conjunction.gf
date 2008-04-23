@@ -17,15 +17,15 @@ abstract Conjunction = Cat ** {
 --2 Rules
 
   fun
-    ConjS    : Conj -> [S] -> S ;     -- "John walks and Mary runs"
-    ConjAP   : Conj -> [AP] -> AP ;   -- "even and prime"
-    ConjNP   : Conj -> [NP] -> NP ;   -- "John or Mary"
-    ConjAdv  : Conj -> [Adv] -> Adv ; -- "quickly or slowly"
+    ConjS    : Conj -> [S] -> S ;     -- "he walks and she runs"
+    ConjAP   : Conj -> [AP] -> AP ;   -- "cold and warm"
+    ConjNP   : Conj -> [NP] -> NP ;   -- "she or we"
+    ConjAdv  : Conj -> [Adv] -> Adv ; -- "here or there"
 
-    DConjS   : DConj -> [S] -> S ;    -- "either John walks or Mary runs"
-    DConjAP  : DConj -> [AP] -> AP ;  -- "both even and prime"
-    DConjNP  : DConj -> [NP] -> NP ;  -- "either John or Mary"
-    DConjAdv : DConj -> [Adv] -> Adv; -- "both badly and slowly"
+    DConjS   : DConj -> [S] -> S ;    -- "either he walks or she runs"
+    DConjAP  : DConj -> [AP] -> AP ;  -- "both warm and cold"
+    DConjNP  : DConj -> [NP] -> NP ;  -- "either he or she"
+    DConjAdv : DConj -> [Adv] -> Adv; -- "both here and there"
 
 --2 Categories
 

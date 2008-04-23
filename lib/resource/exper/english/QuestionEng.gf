@@ -27,18 +27,29 @@ concrete QuestionEng of Question = CatEng ** open ResEng, Prelude in {
       mkQuestion icomp (mkClause (np.s ! Nom) np.a (predAux auxBe)) ;
 
 
-    PrepIP p ip = {s = p.s ++ ip.s ! Nom} ;
+    PrepIP p ip = {s = p.s ++ ip.s ! Acc} ;
 
     AdvIP ip adv = {
       s = \\c => ip.s ! c ++ adv.s ;
       n = ip.n
       } ;
  
-    IDetCN idet num ord cn = {
-      s = \\c => idet.s ++ num.s ++ ord.s ++ cn.s ! idet.n ! c ; 
+    IdetCN idet cn = {
+      s = \\c => idet.s ++ cn.s ! idet.n ! c ; 
       n = idet.n
       } ;
 
+    IdetIP idet = {
+      s = \\c => idet.s ; 
+      n = idet.n
+      } ;
+
+    IdetQuant idet num = {
+      s = idet.s ! num.n ++ num.s ; 
+      n = num.n
+      } ;
+
     CompIAdv a = a ;
+    CompIP p = ss (p.s ! Nom) ;
 
 }

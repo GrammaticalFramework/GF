@@ -1,0 +1,146 @@
+-- Adjective
+
+PositA warm_A
+ComparA warm_A (UsePron i_Pron)
+ComplA2 married_A2 (DetNP (DetQuant (PossPron she_Pron) NumPl))
+ComplA2 married_A2 (DetNP (DetQuant (PossPron she_Pron) NumSg))
+ComplA2 married_A2 (UsePron she_Pron)
+ReflA2 married_A2
+PositA (UseA2 married_A2)
+SentAP (PositA good_A) (EmbedS (UseCl TPres ASimul PPos (PredVP (UsePron she_Pron) (UseComp (CompAdv here_Adv)))))
+AdAP very_AdA (PositA warm_A)
+
+
+-- Adverb
+
+PositAdvAdj warm_A
+PrepNP in_Prep (DetArtSg DefArt (UseN house_N))
+ComparAdvAdj more_CAdv warm_A (UsePN john_PN)
+ComparAdvAdjS more_CAdv warm_A (UseCl TPres ASimul PPos (PredVP (UsePron he_Pron) (UseV run_V)))
+SubjS when_Subj (UseCl TPres ASimul PPos (PredVP (UsePron she_Pron) (UseV sleep_V)))
+AdNum (AdnCAdv more_CAdv) (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n5))))))
+
+
+-- Conjunction
+
+ConjS and_Conj (BaseS (UseCl TPres ASimul PPos (PredVP (UsePron he_Pron) (UseV walk_V))) (UseCl TPres ASimul PPos (PredVP (UsePron she_Pron) (UseV run_V))))
+ConjAP and_Conj (BaseAP (PositA cold_A) (PositA warm_A))
+ConjNP or_Conj (BaseNP (UsePron she_Pron) (UsePron we_Pron))
+ConjAdv or_Conj (BaseAdv here_Adv there_Adv)
+DConjS either7or_DConj (BaseS (UseCl TPres ASimul PPos (PredVP (UsePron he_Pron) (UseV walk_V))) (UseCl TPres ASimul PPos (PredVP (UsePron she_Pron) (UseV run_V))))
+DConjAP both7and_DConj (BaseAP (PositA warm_A) (PositA cold_A))
+DConjNP either7or_DConj (BaseNP (UsePron he_Pron) (UsePron she_Pron))
+DConjAdv both7and_DConj (BaseAdv here_Adv there_Adv)
+
+-- Idiom
+
+ImpersCl (UseComp (CompAP (PositA hot_A)))
+GenericCl (UseV sleep_V)
+CleftNP (UsePron i_Pron) (UseRCl TPast ASimul PPos (RelVP IdRP (ComplSlash (SlashV2a do_V2) (UsePron it_Pron))))
+CleftAdv here_Adv (UseCl TPast ASimul PPos (PredVP (UsePron she_Pron) (UseV sleep_V)))
+ExistNP (DetArtSg IndefArt (UseN house_N))
+ExistIP (IdetCN (IdetQuant which_IQuant NumPl) (UseN house_N))
+PredVP (UsePron i_Pron) (ProgrVP (UseV sleep_V))
+ImpPl1 (UseV go_V)
+
+-- Noun
+
+DetArtSg DefArt (UseN man_N)
+UsePN john_PN
+UsePron he_Pron
+PredetNP only_Predet (DetArtSg DefArt (UseN man_N))
+PPartNP (DetArtSg DefArt (UseN man_N)) see_V2
+AdvNP (UsePN paris_PN) today_Adv
+RelNP (UsePN paris_PN) (UseRCl TPres ASimul PPos (RelVP IdRP (UseComp (CompAdv here_Adv))))
+DetNP (DetQuant this_Quant (NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n5))))))))
+DetCN (DetQuantOrd this_Quant (NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n5))))))) (OrdSuperl good_A)) (UseN man_N)
+DetCN (DetQuant this_Quant (NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n5)))))))) (UseN man_N)
+DetCN (DetQuant this_Quant NumPl) (UseN man_N)
+DetCN (DetQuant this_Quant NumSg) (UseN man_N)
+NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n5))))))
+NumCard (NumDigits (IIDig D_5 (IDig D_1)))
+NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot1plus n5 pot01)))))
+NumCard (AdNum almost_AdN (NumDigits (IIDig D_5 (IDig D_1))))
+OrdDigits (IIDig D_5 (IDig D_1))
+OrdNumeral (num (pot2as3 (pot1as2 (pot1plus n5 pot01))))
+OrdSuperl warm_A
+DetCN (DetArtOrd DefArt (NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n5))))))) (OrdSuperl good_A)) (UseN man_N)
+DetCN (DetArtCard DefArt (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n5))))))) (UseN man_N)
+DetCN (DetArtCard IndefArt (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 pot01)))))) (UseN man_N)
+DetCN (DetArtCard DefArt (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 pot01)))))) (UseN man_N)
+DetArtSg DefArt (UseN man_N)
+DetArtPl DefArt (UseN man_N)
+MassNP (UseN beer_N)
+DetCN (DetQuant (PossPron i_Pron) NumSg) (UseN house_N)
+UseN house_N
+ComplN2 mother_N2 (DetArtSg DefArt (UseN king_N))
+ComplN2 (ComplN3 distance_N3 (DetCN (DetQuant this_Quant NumSg) (UseN city_N))) (UsePN paris_PN)
+UseN2 mother_N2
+ComplN2 (Use2N3 distance_N3) (DetCN (DetQuant this_Quant NumSg) (UseN city_N))
+ComplN2 (Use3N3 distance_N3) (UsePN paris_PN)
+UseN2 (Use2N3 distance_N3)
+AdjCN (PositA big_A) (UseN house_N)
+RelCN (UseN house_N) (UseRCl TPast ASimul PPos (RelSlash IdRP (SlashVP (UsePN john_PN) (SlashV2a buy_V2))))
+AdvCN (UseN house_N) (PrepNP on_Prep (DetArtSg DefArt (UseN hill_N)))
+SentCN (UseN question_N) (EmbedQS (UseQCl TPres ASimul PPos (QuestIAdv where_IAdv (PredVP (UsePron she_Pron) (UseV sleep_V)))))
+ApposCN (UseN city_N) (UsePN paris_PN)
+
+
+-- Numeral
+
+num (pot2as3 (pot1as2 (pot0as1 (pot0 n6))))
+num (pot2as3 (pot1as2 (pot0as1 pot01)))
+num (pot2as3 (pot1as2 (pot1 n6)))
+num (pot2as3 (pot1as2 pot110))
+num (pot2as3 (pot1as2 pot111))
+num (pot2as3 (pot1as2 (pot1to19 n6)))
+num (pot2as3 (pot1as2 (pot1 n6)))
+num (pot2as3 (pot1as2 (pot1plus n6 (pot0 n5))))
+num (pot2as3 (pot2 (pot0 n4)))
+num (pot2as3 (pot2plus (pot0 n4) (pot1plus n6 (pot0 n7))))
+num (pot3 (pot2plus (pot0 n4) (pot1plus n6 (pot0 n7))))
+num (pot3plus (pot2plus (pot0 n4) (pot1plus n6 (pot0 n7))) (pot1as2 (pot1plus n8 (pot0 n9))))
+IDig D_8
+IIDig D_8 (IIDig D_0 (IIDig D_0 (IIDig D_1 (IIDig D_7 (IIDig D_8 (IDig D_9))))))
+
+
+-- Phrase
+
+PhrUtt but_PConj (UttImpSg PPos (ImpVP (AdvVP (UseV come_V) here_Adv))) (VocNP (DetCN (DetQuant (PossPron i_Pron) NumSg) (UseN friend_N)))
+PhrUtt NoPConj (UttS (UseCl TPres ASimul PPos (PredVP (UsePN john_PN) (UseV walk_V)))) NoVoc
+UttQS (UseQCl TPres ASimul PPos (QuestCl (PredVP (UsePron it_Pron) (UseComp (CompAP (PositA good_A))))))
+UttImpSg PNeg (ImpVP (ReflVP (SlashV2a love_V2)))
+UttImpPl PNeg (ImpVP (ReflVP (SlashV2a love_V2)))
+UttImpPol PNeg (ImpVP (UseV sleep_V))
+UttIP whoPl_IP
+UttIP whoSg_IP
+UttIAdv why_IAdv
+UttNP (DetCN (DetQuant this_Quant NumSg) (UseN man_N))
+UttAdv here_Adv
+UttVP (UseV sleep_V)
+VocNP (DetCN (DetQuant (PossPron i_Pron) NumSg) (UseN friend_N))
+
+
+-- Question
+
+QuestCl (PredVP (UsePN john_PN) (UseV walk_V))
+QuestVP whoSg_IP (UseV walk_V)
+QuestSlash whoSg_IP (SlashVP (UsePN john_PN) (SlashV2a love_V2))
+QuestIAdv why_IAdv (PredVP (UsePN john_PN) (UseV walk_V))
+QuestIComp (CompIAdv where_IAdv) (UsePN john_PN)
+IdetCN (IdetQuant which_IQuant (NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n5)))))))) (UseN song_N)
+IdetIP (IdetQuant which_IQuant (NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n5))))))))
+AdvIP whoSg_IP (PrepNP in_Prep (UsePN paris_PN))
+IdetIP (IdetQuant which_IQuant NumSg)
+PrepIP with_Prep whoSg_IP
+QuestIComp (CompIAdv where_IAdv) (UsePron it_Pron)
+QuestIComp (CompIP whoSg_IP) (UsePron it_Pron)
+
+
+-- Relative
+-- Sentence
+-- Text
+-- Verb
+
+
+

@@ -49,4 +49,11 @@ fun
     this_NP : NP ;
     those_NP : NP ;
 
+    whichPl_IDet : IDet ;
+    whichSg_IDet : IDet ;
+
+-- from Adverb
+
+    AdvSC : SC -> Adv ;     -- that he arrives ---- REMOVE?
+
 }
