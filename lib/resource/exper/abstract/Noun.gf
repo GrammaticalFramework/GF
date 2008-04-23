@@ -50,8 +50,8 @@ abstract Noun = Cat ** {
 -- the "kernel" of a determiner. It is, however, the $Num$ that determines
 -- the inherent number.
 
-    NumSg   : Card ;
-    NumPl   : Card ;
+    NumSg   : Num ;
+    NumPl   : Num ;
     NumCard : Card -> Num ;
 
 -- $Card$ consists of either digits or numeral words.

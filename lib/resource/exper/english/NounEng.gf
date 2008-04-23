@@ -76,12 +76,12 @@ concrete NounEng of Noun = CatEng ** open ResEng, Prelude in {
 
     DetArtSg art cn = {
       s = \\c => art.s ! False ! Sg ++ cn.s ! Sg ! c ;
-      a = agrP3 Sg
+      a = agrgP3 Sg cn.g
       } ;
 
     DetArtPl art cn = {
       s = \\c => art.s ! False ! Pl ++ cn.s ! Pl ! c ;
-      a = agrP3 Pl
+      a = agrgP3 Pl cn.g
       } ;
 
     DefArt = {s = \\c,n => artDef} ;
