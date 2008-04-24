@@ -60,7 +60,7 @@ incomplete concrete QuestionRomance of Question =
       s = \\c => ip.s ! c ++ adv.s ;
       a = ip.a
       } ;
- 
+{- ---b 
     IDetCN idet num ord cn = 
       let 
         g = cn.g ;
@@ -70,7 +70,7 @@ incomplete concrete QuestionRomance of Question =
       s = \\c => idet.s ! g ! c ++ num.s ! g ++ ord.s ! a ++ cn.s ! n ; 
       a = a
       } ;
-
+-}
     CompIAdv a = {s = \\_  => a.s} ;
 
 }
