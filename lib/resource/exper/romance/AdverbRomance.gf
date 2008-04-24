@@ -19,7 +19,7 @@ incomplete concrete AdverbRomance of Adverb =
     SubjS subj s = {
       s = subj.s ++ s.s ! subj.m
       }  ;
-    AdvSC s = s ;
+---b    AdvSC s = s ;
 
     AdnCAdv cadv = {s = cadv.s ++ conjThan} ;
 

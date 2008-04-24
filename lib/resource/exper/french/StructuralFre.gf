@@ -84,7 +84,7 @@ lin
   someSg_Det = {s = \\_,c => prepCase c ++ elision "quelqu" ; n = Sg} ;
   something_NP = pn2np (mkPN ["quelque chose"] Masc) ;
   somewhere_Adv = ss ["quelque part"] ; --- ne - pas
-  that_Quant = {s = \\_ => 
+  that_Quant = {s = 
     table {
       Sg => \\g,c => prepCase c ++ genForms "ce" "cette" ! g ;  ---- cet ; là
       Pl => \\_,_ => "ces"
@@ -99,7 +99,7 @@ lin
   they_Pron = mkPronoun
     "ils" "les" "leur" "eux" "leur" "leur" "leurs"
     Masc Pl P3 ;
-  this_Quant = {s = \\_ => 
+  this_Quant = {s = 
     table {
       Sg => \\g,c => 
         prepCase c ++ 
@@ -127,8 +127,12 @@ lin
   when_IAdv = ss "quand" ;
   when_Subj = ss "quand" ** {m = Indic} ;
   where_IAdv = ss "où" ;
-  whichSg_IDet = {s = \\g,c => prepCase c ++ genForms "quel" "quelle" ! g ; n = Sg} ;
-  whichPl_IDet = {s = \\g,c => prepCase c ++ genForms "quels" "quelles" ! g; n = Pl} ;
+  which_IQuant = {
+    s = \\n,g,c => 
+        prepCase c ++ aagrForms "quel" "quelle" "quels" "quelles" ! aagr g n
+    } ;
+---b  whichSg_IDet = {s = \\g,c => prepCase c ++ genForms "quel" "quelle" ! g ; n = Sg} ;
+---b  whichPl_IDet = {s = \\g,c => prepCase c ++ genForms "quels" "quelles" ! g; n = Pl} ;
   whoPl_IP = {s = \\c => prepCase c ++ "qui" ; a = aagr Masc Pl} ;
   whoSg_IP = {s = \\c => prepCase c ++ "qui" ; a = aagr Masc Sg} ;
   why_IAdv = ss "pourquoi" ;

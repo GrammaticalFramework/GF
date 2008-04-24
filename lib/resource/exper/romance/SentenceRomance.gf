@@ -14,6 +14,7 @@ incomplete concrete SentenceRomance of Sentence =
         }
       } ;
 
+{---- OK but inefficient
     SlashVP np v2 = 
       {s = \\d,ag =>case <v2.c2.c,v2.c2.isDir> of {
           <Acc,True> => 
@@ -24,7 +25,7 @@ incomplete concrete SentenceRomance of Sentence =
        c2 = v2.c2
       } ;
 
-{---b
+---b
     SlashV2 np v2 = 
       {s = \\d,ag =>case <v2.c2.c,v2.c2.isDir> of {
           <Acc,True> => 
@@ -54,6 +55,7 @@ incomplete concrete SentenceRomance of Sentence =
       c2 = {s = prep.s ; c = prep.c ; isDir = False}
       } ;
 
+{---- OK but inefficient
     SlashVS np vs slash = 
       {s = \\d,ag =>
         (mkClause
@@ -63,7 +65,7 @@ incomplete concrete SentenceRomance of Sentence =
         ).s ! d ;
        c2 = slash.c2
       } ;
-
+-}
     EmbedS  s  = {s = conjThat ++ s.s ! Indic} ; --- mood
     EmbedQS qs = {s = qs.s ! QIndir} ;
     EmbedVP vp = {s = infVP vp (agrP3 Masc Sg)} ; --- agr ---- compl

@@ -56,6 +56,6 @@ incomplete concrete VerbRomance of Verb =
 
     PassV2 v = insertComplement (\\a => v.s ! VPart a.g a.n) (predV auxPassive) ;
 
-    UseVS, UseVQ = \vv -> {s = vv.s ; c2 = complAcc ; vtyp = vv.vtyp} ;
+---b    UseVS, UseVQ = \vv -> {s = vv.s ; c2 = complAcc ; vtyp = vv.vtyp} ;
 
 }

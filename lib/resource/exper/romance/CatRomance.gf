@@ -28,10 +28,11 @@ incomplete concrete CatRomance of Cat =
 
 -- Question
 
-    QCl   = {s : RTense => Anteriority => Polarity => QForm => Str} ;
-    IP    = {s : Case => Str ; a : AAgr} ;
-    IComp = {s : AAgr => Str} ;     
-    IDet  = {s : Gender => Case => Str ; n : Number} ;
+    QCl    = {s : RTense => Anteriority => Polarity => QForm => Str} ;
+    IP     = {s : Case => Str ; a : AAgr} ;
+    IComp  = {s : AAgr => Str} ;     
+    IDet   = {s : Gender => Case => Str ; n : Number} ;
+    IQuant = {s : Number => Gender => Case => Str} ;
 
 -- Relative
 
@@ -58,9 +59,11 @@ incomplete concrete CatRomance of Cat =
     Det     = {s : Gender => Case => Str ; n : Number} ;
 ---    QuantSg = {s : Gender => Case => Str} ;
 ---    QuantPl = {s : Bool => Gender => Case => Str} ;
-    Quant   = {s : Bool => Number => Gender => Case => Str} ;
+    Quant   = {s :         Number => Gender => Case => Str} ;
+    Art     = {s : Bool => Number => Gender => Case => Str} ;
     Predet  = {s : AAgr   => Case => Str ; c : Case} ; -- c : la plupart de
     Num     = {s : Gender => Str ; isNum : Bool ; n : Number} ;
+    Card    = {s : Gender => Str ; n : Number} ;
     Ord     = {s : AAgr   => Str} ;
 
 -- Numeral

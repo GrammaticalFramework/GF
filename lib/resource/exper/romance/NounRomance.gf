@@ -38,6 +38,7 @@ incomplete concrete NounRomance of Noun =
       hasClit = False
       } ;
 
+{---b
     DetSg quant ord = {
       s = \\g,c => quant.s ! False ! Sg ! g ! c ++ ord.s ! aagr g Sg ;
       n = Sg
@@ -47,20 +48,19 @@ incomplete concrete NounRomance of Noun =
                    ord.s ! aagr g Pl ;
       n = num.n
       } ;
-
---- DEPREC   SgQuant q = {s = q.s ! False ! Sg} ;
---- DEPREC   PlQuant q = {s = \\b,g,c => q.s ! b ! Pl ! g ! c} ; 
-       --- part app: cf NounScand. AR 8/7/2007
+-}
 
     PossPron p = {
-      s = \\_,n,g,c => possCase g n c ++ p.s ! Poss (aagr g n) ---- il mio!
+      s = \\n,g,c => possCase g n c ++ p.s ! Poss (aagr g n) ---- il mio!
       } ;
 
-    NoNum = {s = \\_ => [] ; isNum = False ; n = Pl} ;
-    NoOrd = {s = \\_ => []} ;
+    NumSg = {s = \\_ => [] ; isNum = False ; n = Sg} ;
+    NumPl = {s = \\_ => [] ; isNum = False ; n = Pl} ;
+---b    NoNum = {s = \\_ => [] ; isNum = False ; n = Pl} ;
+---b    NoOrd = {s = \\_ => []} ;
 
-    NumInt n = {s = \\_ => n.s ; isNum = True ; n = Pl} ;
-    OrdInt n = {s = \\_ => n.s ++ "."} ; ---
+---b    NumInt n = {s = \\_ => n.s ; isNum = True ; n = Pl} ;
+---b    OrdInt n = {s = \\_ => n.s ++ "."} ; ---
 
     NumDigits nu = {s = \\g => nu.s ! NCard g ; isNum = True ; n = nu.n} ;
     OrdDigits nu = {s = \\a => nu.s ! NOrd a.g a.n} ;
@@ -80,16 +80,19 @@ incomplete concrete NounRomance of Noun =
       s = \\b,n,g,c => if_then_Str b [] (artIndef g n c) ;
       } ;
 
+{---b
     MassDet = {
       s = \\b,n,g,c => case <b,n> of {
         <False,Sg> => partitive g c ;
         _ => prepCase genitive ----
         }
       } ;
+-}
 
 -- This is based on record subtyping.
 
-    UseN, UseN2, UseN3 = \noun -> noun ;
+    UseN, UseN2 = \noun -> noun ;
+---b    UseN3 = \noun -> noun ;
 
     ComplN2 f x = {
       s = \\n => f.s ! n ++ appCompl f.c2 x.s ;
