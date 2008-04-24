@@ -160,6 +160,8 @@ UseCl TCond AAnter PNeg (PredVP (UsePN john_PN) (UseV walk_V))
 UseQCl TCond AAnter PNeg (QuestCl (PredVP (UsePN john_PN) (UseV walk_V)))
 RelCN (UseN girl_N) (UseRCl TCond AAnter PNeg (RelVP IdRP (UseV walk_V)))
 RelCN (UseN girl_N) (UseRCl TCond AAnter PNeg (RelSlash IdRP (SlashPrep (PredVP (UsePron i_Pron) (UseV walk_V)) with_Prep)))
+RelS (UseCl TPres ASimul PPos (PredVP (UsePron she_Pron) (UseV sleep_V))) (UseRCl TPres ASimul PPos (RelVP IdRP (UseComp (CompAP (PositA good_A)))))
+
 
 -- Text
 

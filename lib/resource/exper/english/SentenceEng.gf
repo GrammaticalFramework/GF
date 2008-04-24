@@ -58,6 +58,8 @@ concrete SentenceEng of Sentence = CatEng ** open Prelude, ResEng in {
 
     AdvS a s = {s = a.s ++ "," ++ s.s} ;
 
+    RelS s r = {s = s.s ++ "," ++ r.s ! agrP3 Sg} ;
+
   oper
     ctr = contrNeg True ;  -- contracted negations
 
