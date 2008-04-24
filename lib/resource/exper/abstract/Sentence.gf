@@ -66,6 +66,10 @@ abstract Sentence = Cat ** {
 
     AdvS   : Adv -> S  -> S ;            -- today, I will go home
 
+-- A sentence can be modified by a relative clause referring to its contents.
+
+    RelS   : S -> RS -> S ;              -- she sleeps, which is good
+
 }
 
 --.
