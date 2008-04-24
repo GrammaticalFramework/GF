@@ -6,7 +6,8 @@ concrete ExtraEng of ExtraEngAbs = CatEng **
     ComplBareVS v s  = insertObj (\\_ => s.s) (predV v) ;
 
     StrandRelSlash rp slash = {
-      s = \\t,a,p,_ => rp.s ! RC Acc ++ slash.s ! t ! a ! p ! ODir ++ slash.c2 ;
+      s = \\t,a,p,ag => 
+        rp.s ! RC (fromAgr ag).g Acc ++ slash.s ! t ! a ! p ! ODir ++ slash.c2 ;
       c = Acc
       } ;
     EmptyRelSlash rp slash = {
@@ -43,7 +44,7 @@ concrete ExtraEng of ExtraEngAbs = CatEng **
     UncNegImpSg imp = {s = imp.s ! neg ! ImpF Sg False} ;
     UncNegImpPl imp = {s = imp.s ! neg ! ImpF Pl False} ;
 
-    CompoundCN a b = {s = \\n,c => a.s ! Sg ! Nom ++ b.s ! n ! c} ;
+    CompoundCN a b = {s = \\n,c => a.s ! Sg ! Nom ++ b.s ! n ! c ; g = b.g} ;
 
 
   oper

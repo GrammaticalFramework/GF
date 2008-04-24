@@ -16,7 +16,7 @@ abstract Sentence = Cat ** {
 -- This can be overgenerating. E.g. "whether you go" as subject
 -- is only meaningful for some verb phrases.
 
-    PredSCVP  : SC -> VP -> Cl ;         -- that you go makes me happy
+    PredSCVP  : SC -> VP -> Cl ;         -- that she goes is good
 
 --2 Clauses missing object noun phrases
 
@@ -29,9 +29,9 @@ abstract Sentence = Cat ** {
 -- *Note* the set is not complete and lacks e.g. verbs with more than 2 places.
 
     SlashVP   : NP -> VPSlash -> ClSlash ;      -- (whom) he sees
-    AdvSlash  : ClSlash -> Adv -> ClSlash ;     -- (whom) he sees tomorrow
+    AdvSlash  : ClSlash -> Adv -> ClSlash ;     -- (whom) he sees today
     SlashPrep : Cl -> Prep -> ClSlash ;         -- (with whom) he walks 
-    SlashVS   : NP -> VS -> SSlash -> ClSlash ; -- (whom) he says that she loves
+    SlashVS   : NP -> VS -> SSlash -> ClSlash ; -- (whom) she says that he loves
 
 --2 Imperatives
 
@@ -39,15 +39,15 @@ abstract Sentence = Cat ** {
 -- It has variation over positive and negative, singular and plural.
 -- To fix these parameters, see [Phrase Phrase.html].
 
-    ImpVP     : VP -> Imp ;              -- go
+    ImpVP     : VP -> Imp ;              -- love yourselves
 
 --2 Embedded sentences
 
 -- Sentences, questions, and infinitival phrases can be used as
 -- subjects and (adverbial) complements.
 
-    EmbedS    : S  -> SC ;               -- that you go
-    EmbedQS   : QS -> SC ;               -- whether you go
+    EmbedS    : S  -> SC ;               -- that she goes
+    EmbedQS   : QS -> SC ;               -- who goes
     EmbedVP   : VP -> SC ;               -- to go
 
 --2 Sentences
@@ -69,9 +69,6 @@ abstract Sentence = Cat ** {
 }
 
 --.
-
---- todo: tense of embedded Slash
---    SlashVSS  : NP -> VS -> Slash -> Slash; -- (whom) I think he sees
 
 -- Examples for English $S$/$Cl$:
 {-

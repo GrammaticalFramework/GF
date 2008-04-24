@@ -21,6 +21,10 @@ fun
 
     ReflV2   : V2 -> VP ;         -- use itself
 
+    UseVQ   : VQ -> V2 ;                -- ask (a question)
+    UseVS   : VS -> V2 ;                -- know (a secret)
+
+
 -- from Sentence 19/4/2008
 
     SlashV2   : NP -> V2 -> Slash ;         -- (whom) he sees

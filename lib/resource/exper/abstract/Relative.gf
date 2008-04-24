@@ -20,7 +20,7 @@ abstract Relative = Cat ** {
 -- or suffixing (depending on language) prepositional phrases.
 
     IdRP  : RP ;                      -- which
-    FunRP : Prep -> NP -> RP -> RP ;  -- all the roots of which 
+    FunRP : Prep -> NP -> RP -> RP ;  -- the mother of whom
 
 }
 

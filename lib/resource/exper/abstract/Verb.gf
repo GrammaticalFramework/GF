@@ -11,30 +11,30 @@ abstract Verb = Cat ** {
     UseV     : V   -> VP ;        -- sleep
 
     ComplVV  : VV  -> VP -> VP ;  -- want to run
-    ComplVS  : VS  -> S  -> VP ;  -- know that she runs
-    ComplVQ  : VQ  -> QS -> VP ;  -- wonder if she runs
-    ComplVA  : VA  -> AP -> VP ;  -- look red
+    ComplVS  : VS  -> S  -> VP ;  -- say that she runs
+    ComplVQ  : VQ  -> QS -> VP ;  -- wonder who runs
+    ComplVA  : VA  -> AP -> VP ;  -- they become red
 
-    SlashV2a : V2        -> VPSlash ;  -- use (it)
-    Slash2V3 : V3  -> NP -> VPSlash ;  -- send it (to her)
-    Slash3V3 : V3  -> NP -> VPSlash ;  -- send (it) to her
+    SlashV2a : V2        -> VPSlash ;  -- love (it)
+    Slash2V3 : V3  -> NP -> VPSlash ;  -- give it (to her)
+    Slash3V3 : V3  -> NP -> VPSlash ;  -- give (it) to her
 
-    SlashV2V : V2V -> VP -> VPSlash ;  -- cause (it) to burn
-    SlashV2S : V2S -> S  -> VPSlash ;  -- tell (me) that it rains
-    SlashV2Q : V2Q -> QS -> VPSlash ;  -- ask (me) who came
+    SlashV2V : V2V -> VP -> VPSlash ;  -- beg (her) to go
+    SlashV2S : V2S -> S  -> VPSlash ;  -- answer (to him) that it is good
+    SlashV2Q : V2Q -> QS -> VPSlash ;  -- ask (him) who came
     SlashV2A : V2A -> AP -> VPSlash ;  -- paint (it) red
 
-    ComplSlash : VPSlash -> NP -> VP ; -- use it
+    ComplSlash : VPSlash -> NP -> VP ; -- love it
 
-    SlashVV    : VV  -> VPSlash -> VPSlash ;       -- want to give her
-    SlashV2VNP : V2V -> NP -> VPSlash -> VPSlash ; -- want me to give her
+    SlashVV    : VV  -> VPSlash -> VPSlash ;       -- want to buy
+    SlashV2VNP : V2V -> NP -> VPSlash -> VPSlash ; -- beg me to buy
 
 --2 Other ways of forming verb phrases
 
 -- Verb phrases can also be constructed reflexively and from
 -- copula-preceded complements.
 
-    ReflVP   : VPSlash -> VP ;         -- use itself
+    ReflVP   : VPSlash -> VP ;         -- love himself
     UseComp  : Comp -> VP ;            -- be warm
 
 -- Passivization of two-place verbs is another way to use
@@ -47,7 +47,7 @@ abstract Verb = Cat ** {
 -- *Note*. the rule can be overgenerating, since the $V2$ need not
 -- take a direct object.
 
-    PassV2   : V2 -> VP ;               -- be used
+    PassV2   : V2 -> VP ;               -- be loved
 
 -- Adverbs can be added to verb phrases. Many languages make
 -- a distinction between adverbs that are attached in the end
@@ -65,16 +65,7 @@ abstract Verb = Cat ** {
 -- Adjectival phrases, noun phrases, and adverbs can be used.
 
     CompAP   : AP  -> Comp ;            -- (be) small
-    CompNP   : NP  -> Comp ;            -- (be) a soldier
+    CompNP   : NP  -> Comp ;            -- (be) a man
     CompAdv  : Adv -> Comp ;            -- (be) here
-
---2 Coercions
-
--- Verbs can change subcategorization patterns in systematic ways,
--- but this is very much language-dependent. The following two
--- work in all the languages we cover.
-
-    UseVQ   : VQ -> V2 ;                -- ask (a question)
-    UseVS   : VS -> V2 ;                -- know (a secret)
 
 }
