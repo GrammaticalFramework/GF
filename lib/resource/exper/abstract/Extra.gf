@@ -10,9 +10,9 @@ abstract Extra = Cat ** {
     GenNP       : NP -> Quant ;       -- this man's
     ComplBareVS : VS -> S -> VP ;     -- know you go
 
-    StrandRelSlash   : RP -> Slash -> RCl ;   -- that he lives in
-    EmptyRelSlash    : RP -> Slash -> RCl ;   -- he lives in
-    StrandQuestSlash : IP -> Slash -> QCl ;   -- whom does John live with
+    StrandRelSlash   : RP -> ClSlash -> RCl ;   -- that he lives in
+    EmptyRelSlash    : RP -> ClSlash -> RCl ;   -- he lives in
+    StrandQuestSlash : IP -> ClSlash -> QCl ;   -- whom does John live with
 
 -- $VP$ conjunction, which has different fragments implemented in
 -- different languages - never a full $VP$, though.
