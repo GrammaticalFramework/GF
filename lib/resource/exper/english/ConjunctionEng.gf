@@ -5,6 +5,20 @@ concrete ConjunctionEng of Conjunction =
 
   lin
 
+    ConjS = conjunctDistrSS ;
+
+    ConjAdv = conjunctDistrSS ;
+
+    ConjNP conj ss = conjunctDistrTable Case conj ss ** {
+      a = conjAgr (agrP3 conj.n) ss.a
+      } ;
+
+    ConjAP conj ss = conjunctDistrTable Agr conj ss ** {
+      isPre = ss.isPre
+      } ;
+
+{---b
+
     ConjS = conjunctSS ;
     DConjS = conjunctDistrSS ;
 
@@ -24,6 +38,7 @@ concrete ConjunctionEng of Conjunction =
     DConjAP conj ss = conjunctDistrTable Agr conj ss ** {
       isPre = ss.isPre
       } ;
+-}
 
 -- These fun's are generated from the list cat's.
 

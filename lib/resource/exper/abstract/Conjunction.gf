@@ -22,10 +22,10 @@ abstract Conjunction = Cat ** {
     ConjNP   : Conj -> [NP] -> NP ;   -- "she or we"
     ConjAdv  : Conj -> [Adv] -> Adv ; -- "here or there"
 
-    DConjS   : DConj -> [S] -> S ;    -- "either he walks or she runs"
-    DConjAP  : DConj -> [AP] -> AP ;  -- "both warm and cold"
-    DConjNP  : DConj -> [NP] -> NP ;  -- "either he or she"
-    DConjAdv : DConj -> [Adv] -> Adv; -- "both here and there"
+---b    DConjS   : DConj -> [S] -> S ;    -- "either he walks or she runs"
+---b    DConjAP  : DConj -> [AP] -> AP ;  -- "both warm and cold"
+---b    DConjNP  : DConj -> [NP] -> NP ;  -- "either he or she"
+---b    DConjAdv : DConj -> [Adv] -> Adv; -- "both here and there"
 
 --2 Categories
 
