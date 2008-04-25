@@ -30,6 +30,7 @@ import GF.Devel.Arch
 import Control.Monad
 import System.Directory
 import System.FilePath
+import qualified Data.Map as Map
 
 batchCompile :: Options -> [FilePath] -> IOE SourceGrammar
 batchCompile opts files = do
@@ -72,7 +73,7 @@ compileModule opts1 env file = do
   let ioeIOIf = if oElem beVerbose opts then ioeIO else (const (return ()))
   ioeIOIf $ putStrLn $ "module search path:" +++ show ps ----
   let sgr = snd env
-  let rfs = [] ---- files already in memory and their read times
+  let rfs = Map.empty ---- files already in memory and their read times
   let file' = if useFileOpt then takeFileName file else file -- to find file itself
   files <- getAllFiles opts ps rfs file'
   ioeIOIf $ putStrLn $ "files to read:" +++ show files ----
