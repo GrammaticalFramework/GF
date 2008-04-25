@@ -70,7 +70,8 @@ concrete StructuralEng of Structural = CatEng **
       } ;
     isAux = True
     } ;
-  no_Phr = ss "no" ;
+---b  no_Phr = ss "no" ;
+  no_Utt = ss "no" ;
   on_Prep = ss "on" ;
 ----  one_Quant = mkDeterminer Sg "one" ; -- DEPRECATED
   only_Predet = ss "only" ;
@@ -114,7 +115,8 @@ concrete StructuralEng of Structural = CatEng **
   why_IAdv = ss "why" ;
   without_Prep = ss "without" ;
   with_Prep = ss "with" ;
-  yes_Phr = ss "yes" ;
+---b  yes_Phr = ss "yes" ;
+  yes_Utt = ss "yes" ;
   youSg_Pron = mkNP "you" "you" "your" Sg P2 Masc ;
   youPl_Pron = mkNP "you" "you" "your" Pl P2 Masc ;
   youPol_Pron = mkNP "you" "you" "your" Sg P2 Masc ;

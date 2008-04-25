@@ -59,7 +59,8 @@ abstract Structural = Cat ** {
   most_Predet : Predet ;
   much_Det : Det ;
   must_VV : VV ;
-  no_Phr : Phr ;
+---b  no_Phr : Phr ;
+  no_Utt : Utt ;
   on_Prep : Prep ;
 ---  one_Quant : QuantSg ; DEPRECATED
   only_Predet : Predet ;
@@ -101,7 +102,8 @@ abstract Structural = Cat ** {
   why_IAdv : IAdv ;
   with_Prep : Prep ;
   without_Prep : Prep ;
-  yes_Phr : Phr ;
+---b  yes_Phr : Phr ;
+  yes_Utt : Utt ;
   youSg_Pron : Pron ;
   youPl_Pron : Pron ;
   youPol_Pron : Pron ;
