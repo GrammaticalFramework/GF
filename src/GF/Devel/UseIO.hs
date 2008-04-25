@@ -104,8 +104,10 @@ getFilePathMsg msg paths file = get paths where
   get (p:ps) = do
     let pfile = p </> file
     exist <- doesFileExist pfile
-    if exist then return (Just pfile) else get ps
----               catch (readFileStrict pfile >> return (Just pfile)) (\_ -> get ps)
+    if not exist
+      then get ps
+      else do pfile <- canonicalizePath pfile
+              return (Just pfile)
 
 readFileIfPath :: [FilePath] -> String -> IOE (FilePath,BS.ByteString)
 readFileIfPath paths file = do
