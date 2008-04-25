@@ -20,7 +20,7 @@ importGrammar mgr0 opts files =
       case res of
         Ok gfcc2 -> do let gfcc3 = unionGFCC (gfcc mgr0) gfcc2
                        return $ MultiGrammar gfcc3
-        Bad msg  -> do print msg
+        Bad msg  -> do putStrLn msg
                        return mgr0
     ".gfcc" -> do
       gfcc2 <- mapM file2gfcc files >>= return . foldl1 unionGFCC
