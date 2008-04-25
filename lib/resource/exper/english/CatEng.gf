@@ -64,8 +64,9 @@ concrete CatEng of Cat = CommonX ** open ResEng, Prelude in {
 
 -- Structural
 
-    Conj = {s : Str ; n : Number} ;
-    DConj = {s1,s2 : Str ; n : Number} ;
+    Conj = {s1,s2 : Str ; n : Number} ;
+---b    Conj = {s : Str ; n : Number} ;
+---b    DConj = {s1,s2 : Str ; n : Number} ;
     Subj = {s : Str} ;
     Prep = {s : Str} ;
 

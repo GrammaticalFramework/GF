@@ -24,14 +24,16 @@ abstract Structural = Cat ** {
   before_Prep : Prep ;
   behind_Prep : Prep ;
   between_Prep : Prep ;
-  both7and_DConj : DConj ;
+  both7and_DConj : Conj ;
+---b  both7and_DConj : DConj ;
   but_PConj : PConj ;
   by8agent_Prep : Prep ;
   by8means_Prep : Prep ;
   can8know_VV : VV ;
   can_VV : VV ;
   during_Prep : Prep ;
-  either7or_DConj : DConj ;
+  either7or_DConj : Conj ;
+---b  either7or_DConj : DConj ;
   every_Det : Det ;
   everybody_NP : NP ;
   everything_NP : NP ;

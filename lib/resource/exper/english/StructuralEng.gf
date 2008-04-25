@@ -10,7 +10,8 @@ concrete StructuralEng of Structural = CatEng **
   almost_AdA, almost_AdN = ss "almost" ;
   although_Subj = ss "although" ;
   always_AdV = ss "always" ;
-  and_Conj = ss "and" ** {n = Pl} ;
+  and_Conj = sd2 [] "and" ** {n = Pl} ;
+---b  and_Conj = ss "and" ** {n = Pl} ;
   because_Subj = ss "because" ;
   before_Prep = ss "before" ;
   behind_Prep = ss "behind" ;
@@ -73,7 +74,7 @@ concrete StructuralEng of Structural = CatEng **
   on_Prep = ss "on" ;
 ----  one_Quant = mkDeterminer Sg "one" ; -- DEPRECATED
   only_Predet = ss "only" ;
-  or_Conj = ss "or" ** {n = Sg} ;
+  or_Conj = sd2 [] "or" ** {n = Sg} ;
   otherwise_PConj = ss "otherwise" ;
   part_Prep = ss "of" ;
   please_Voc = ss "please" ;

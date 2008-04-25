@@ -16,7 +16,7 @@ concrete PhraseEng of Phrase = CatEng ** open Prelude, ResEng in {
     UttAdv adv = adv ;
 
     NoPConj = {s = []} ;
-    PConjConj conj = conj ;
+    PConjConj conj = {s = conj.s2} ; ---
 
     NoVoc = {s = []} ;
     VocNP np = {s = "," ++ np.s ! Nom} ;
