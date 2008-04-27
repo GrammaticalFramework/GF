@@ -32,7 +32,7 @@ incomplete concrete RelativeRomance of Relative =
           in
           slash.c2.s ++ 
           rp.s ! False ! aag ! slash.c2.c ++ 
-          slash.s ! DDir ! aag ! t ! a ! p ! m ;    --- ragr
+          slash.s ! aag ! DDir ! t ! a ! p ! m ;    --- ragr
       c = Acc
       } ;
 

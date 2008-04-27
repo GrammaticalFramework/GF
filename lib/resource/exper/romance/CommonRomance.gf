@@ -60,7 +60,7 @@ oper
   conjGender : Gender -> Gender -> Gender = \m,n -> 
     case <m,n> of {
       <Fem,Fem> => Fem ;
-      _ => Fem 
+      _ => Masc 
       } ;
 
   conjAgr : Agr -> Agr -> Agr = \a,b -> {

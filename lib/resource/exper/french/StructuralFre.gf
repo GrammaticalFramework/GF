@@ -16,7 +16,7 @@ lin
   almost_AdA, almost_AdN = ss "presque" ;
   always_AdV = ss "toujours" ;
   although_Subj = ss ("bien" ++ elisQue) ** {m = Conjunct} ;
-  and_Conj = ss "et" ** {n = Pl} ;
+  and_Conj = {s1 = [] ; s2 = "et" ; n = Pl} ;
   because_Subj = ss ("parce" ++ elisQue) ** {m = Indic} ;
   before_Prep = mkPreposition "avant" ;
   behind_Prep = mkPreposition "derrière" ;
@@ -63,11 +63,12 @@ lin
   most_Predet = {s = \\_,c => prepCase c ++ ["la plupart"] ; c = CPrep P_de} ;
   much_Det = {s = \\_,c => prepCase c ++ "beaucoup" ++ elisDe ; n = Pl} ;
   must_VV = mkVV (devoir_V2 ** {lock_V = <>}) ;
-  no_Phr = ss "non" ;
+---b  no_Phr = ss "non" ;
+  no_Utt = ss "non" ;
   on_Prep = mkPreposition "sur" ;
 --- DEPREC   one_Quant = {s = \\g,c => prepCase c ++ genForms "un" "une" ! g} ;
   only_Predet = {s = \\_,c => prepCase c ++ "seulement" ; c = Nom} ; --- seul(e)(s)
-  or_Conj = {s = "ou" ; n = Sg} ;
+  or_Conj = {s1 = [] ; s2 = "ou" ; n = Sg} ;
   otherwise_PConj = ss "autrement" ;
   part_Prep = complGen ;
   please_Voc = ss ["s'il vous plaît"] ;
@@ -138,7 +139,8 @@ lin
   why_IAdv = ss "pourquoi" ;
   without_Prep = mkPreposition "sans" ;
   with_Prep = mkPreposition "avec" ;
-  yes_Phr = ss "oui" ; --- si
+  yes_Utt = ss "oui" ; --- si
+---b  yes_Phr = ss "oui" ; --- si
   youSg_Pron = mkPronoun 
     "tu" (elision "t") (elision "t") "toi" "ton" (elisPoss "t") "tes"
     Masc Sg P2 ;

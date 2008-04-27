@@ -14,18 +14,18 @@ incomplete concrete SentenceRomance of Sentence =
         }
       } ;
 
-{---- OK but inefficient
     SlashVP np v2 = 
-      {s = \\d,ag =>case <v2.c2.c,v2.c2.isDir> of {
-          <Acc,True> => 
-               (mkClause (np.s ! Aton Nom) np.hasClit np.a 
-                                 (insertAgr ag v2)).s ! d ;
-          _ => (mkClause (np.s ! Aton Nom) np.hasClit np.a v2).s ! d
-          } ;
+      -- agreement decided afterwards: la fille qu'il a trouvée
+      {s = \\ag => 
+          let vp = case <v2.c2.c, v2.c2.isDir> of {
+            <Acc,True> => insertAgr ag v2 ;
+            _ => v2
+            }
+          in (mkClause (np.s ! Aton Nom) np.hasClit np.a vp).s ;
        c2 = v2.c2
       } ;
 
----b
+{---b
     SlashV2 np v2 = 
       {s = \\d,ag =>case <v2.c2.c,v2.c2.isDir> of {
           <Acc,True> => 
@@ -46,26 +46,25 @@ incomplete concrete SentenceRomance of Sentence =
       } ;
 -}
     AdvSlash slash adv = {
-      s  = \\d,ag,t,a,b,m => slash.s ! d! ag ! t ! a ! b ! m ++ adv.s ;
+      s  = \\ag,d,t,a,b,m => slash.s ! ag ! d ! t ! a ! b ! m ++ adv.s ;
       c2 = slash.c2
       } ;
 
     SlashPrep cl prep = {
-      s  = \\d,_ => cl.s ! d ; 
+      s  = \\_ => cl.s ; 
       c2 = {s = prep.s ; c = prep.c ; isDir = False}
       } ;
 
-{---- OK but inefficient
     SlashVS np vs slash = 
-      {s = \\d,ag =>
+      {s = \\ag =>
         (mkClause
           (np.s ! Aton Nom) np.hasClit np.a
-          (insertExtrapos (\\b => conjThat ++ slash.s ! ag ! (vs.m ! b)) --- ag?
+          (insertExtrapos (\\b => conjThat ++ slash.s ! ag ! (vs.m ! b))
             (predV vs))
-        ).s ! d ;
+        ).s ;
        c2 = slash.c2
       } ;
--}
+
     EmbedS  s  = {s = conjThat ++ s.s ! Indic} ; --- mood
     EmbedQS qs = {s = qs.s ! QIndir} ;
     EmbedVP vp = {s = infVP vp (agrP3 Masc Sg)} ; --- agr ---- compl
@@ -81,11 +80,15 @@ incomplete concrete SentenceRomance of Sentence =
       c = cl.c
       } ;
     UseSlash t a p cl = {
-      s = \\agr,mo => 
-          t.s ++ a.s ++ p.s ++ cl.s ! DDir ! agr ! t.t ! a.a ! p.p ! mo ;
+      s = \\ag,mo => 
+          t.s ++ a.s ++ p.s ++ cl.s ! ag ! DDir ! t.t ! a.a ! p.p ! mo ;
       c2 = cl.c2
     } ;
 
     AdvS a s = {s = \\o => a.s ++ "," ++ s.s ! o} ;
+
+    RelS s r = {
+      s = \\o => s.s ! o ++ "," ++ partQIndir ++ r.s ! Indic ! agrP3 Masc Sg
+      } ;
 
 }
