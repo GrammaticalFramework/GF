@@ -122,7 +122,7 @@ oper
       clDat = cc.p2 ;
       clit2 = vp.clit2 ;
       neg   = vp.neg ;
-      comp  = \\a => vp.comp ! a ++ cc.p3 ;
+      comp  = \\a => cc.p3 ++ vp.comp ! a ;
       ext   = vp.ext ;
     } ;
 
@@ -194,6 +194,8 @@ oper
     comp  = vp.comp ;
     ext   = \\p => vp.ext ! p ++ co ! p ;
     } ;
+
+  mkVPSlash : Compl -> VP -> VP ** {c2 : Compl} = \c,vp -> vp ** {c2 = c} ;
 
   mkClause : Str -> Bool -> Agr -> VP -> 
     {s : Direct => RTense => Anteriority => Polarity => Mood => Str} =

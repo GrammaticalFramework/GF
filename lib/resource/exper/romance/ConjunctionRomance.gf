@@ -5,6 +5,7 @@ incomplete concrete ConjunctionRomance of Conjunction =
 
   lin
 
+{---b
     ConjS conj ss =  conjunctTable Mood conj ss ;
     DConjS conj ss = conjunctDistrTable Mood conj ss ;
 
@@ -26,6 +27,20 @@ incomplete concrete ConjunctionRomance of Conjunction =
     DConjAP conj ss = conjunctDistrTable AForm conj ss ** {
       isPre = ss.isPre
       } ;
+---}
+
+    ConjS conj ss = conjunctDistrTable Mood conj ss ;
+
+    ConjAdv conj ss = conjunctDistrSS conj ss ;
+
+    ConjNP conj ss = conjunctDistrTable NPForm conj ss ** {
+      a = {g = ss.a.g ; n = conjNumber conj.n ss.a.n ; p = ss.a.p} ;
+      hasClit = False
+      } ;
+    ConjAP conj ss = conjunctDistrTable AForm conj ss ** {
+      isPre = ss.isPre
+      } ;
+
 
 -- These fun's are generated from the list cat's.
 

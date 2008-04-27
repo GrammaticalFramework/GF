@@ -21,7 +21,7 @@ incomplete concrete CatRomance of Cat =
 
     Cl    = {s : Direct => RTense => Anteriority => Polarity => Mood => Str} ;
     ClSlash = {
-      s  : Direct => AAgr => RTense => Anteriority => Polarity => Mood => Str ; 
+      s  : AAgr => Direct => RTense => Anteriority => Polarity => Mood => Str ; 
       c2 : Compl
       } ;
     Imp   = {s : Polarity => ImpForm => Gender => Str} ;
@@ -73,10 +73,11 @@ incomplete concrete CatRomance of Cat =
 
 -- Structural
 
-    Conj  = {s : Str ; n : Number} ;
-    DConj = {s1,s2 : Str ; n : Number} ;
-    Subj  = {s : Str ; m : Mood} ;
-    Prep  = {s : Str ; c : Case ; isDir : Bool} ;
+---b    Conj  = {s : Str ; n : Number} ;
+---b    DConj = {s1,s2 : Str ; n : Number} ;
+    Conj = {s1,s2 : Str ; n : Number} ;
+    Subj = {s : Str ; m : Mood} ;
+    Prep = {s : Str ; c : Case ; isDir : Bool} ;
 
 -- Open lexical classes, e.g. Lexicon
 
