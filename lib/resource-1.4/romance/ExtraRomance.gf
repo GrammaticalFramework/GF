@@ -14,7 +14,7 @@ incomplete concrete ExtraRomance of ExtraRomanceAbs = CatRomance **
     ConsVPI = consrSS comma ;
 
     MkVPI vp = {s = infVP vp (agrP3 Masc Sg)} ;
-    ConjVPI = conjunctSS ;
+    ConjVPI = conjunctDistrSS ;
     ComplVPIVV v vpi = 
       insertComplement (\\a => prepCase v.c2.c ++ vpi.s) (predV v) ;
 

@@ -31,7 +31,7 @@ concrete ExtraEng of ExtraEngAbs = CatEng **
     MkVPI vp = {
       s = \\v,a => vp.ad ++ vp.inf ++ vp.s2 ! a
       } ;
-    ConjVPI = conjunctTable2 VPIForm Agr ;
+    ConjVPI = conjunctDistrTable2 VPIForm Agr ;
     ComplVPIVV vv vpi = 
       insertObj (\\a => (if_then_Str vv.isAux [] "to") ++ vpi.s ! VPIInf ! a) (predVV vv) ;
 
