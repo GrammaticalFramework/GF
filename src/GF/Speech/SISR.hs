@@ -83,5 +83,5 @@ ass = JS.EAssign
 
 tree n xs = obj [("name", JS.EStr n), ("args", JS.EArray xs)]
 
-obj ps = JS.EObj [JS.Prop (JS.Ident x) y | (x,y) <- ps]
+obj ps = JS.EObj [JS.Prop (JS.StringPropName x) y | (x,y) <- ps]
 

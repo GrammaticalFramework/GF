@@ -50,6 +50,11 @@ data Expr =
   deriving (Eq,Ord,Show)
 
 data Property =
-   Prop Ident Expr
+   Prop PropertyName Expr
+  deriving (Eq,Ord,Show)
+
+data PropertyName =
+   IdentPropName Ident
+ | StringPropName String
   deriving (Eq,Ord,Show)
 

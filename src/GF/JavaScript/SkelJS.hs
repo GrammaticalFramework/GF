@@ -68,7 +68,13 @@ transExpr x = case x of
 
 transProperty :: Property -> Result
 transProperty x = case x of
-  Prop id expr  -> failure x
+  Prop propertyname expr  -> failure x
+
+
+transPropertyName :: PropertyName -> Result
+transPropertyName x = case x of
+  IdentPropName id  -> failure x
+  StringPropName str  -> failure x
 
 
 
