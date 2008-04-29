@@ -89,12 +89,12 @@ compileModule opts1 env file = do
 compileOne :: Options -> CompileEnv -> FullPath -> IOE CompileEnv
 compileOne opts env@(_,srcgr,_) file = do
 
-  let putp s = putPointE opts ("\n" ++ s) 
+  let putp s = putPointE opts s
   let putpp = putPointEsil opts
   let putpOpt v m act
        | oElem beVerbose opts =  putp v act
        | oElem beSilent opts  =  putpp v act
-       | otherwise = ioeIO (putStrFlush ("\n" ++ m)) >> act
+       | otherwise = ioeIO (putStrFlush m) >> act
 
   let gf   = takeExtensions file
   let path = dropFileName file

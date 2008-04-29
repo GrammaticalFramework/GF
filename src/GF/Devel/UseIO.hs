@@ -26,6 +26,7 @@ import System.IO.Error
 import System.Environment
 import System.CPUTime
 import Control.Monad
+import Control.Exception(evaluate)
 import qualified Data.ByteString.Char8 as BS
 
 #ifdef mingw32_HOST_OS
@@ -252,10 +253,12 @@ putPointEgen :: (Options -> Bool) -> Options -> String -> IOE a -> IOE a
 putPointEgen cond opts msg act = do
   let ve x = if cond opts then return () else x
   ve $ ioeIO $ putStrFlush msg
-  a <- act
----  ve $ ioeIO $ putShow' id a --- replace by a statistics command
-  ve $ ioeIO $ putStrFlush " "
---  ve $ ioeIO $ putCPU
+
+  t1 <- ioeIO $ getCPUTime
+  a <- act >>= ioeIO . evaluate
+  t2 <- ioeIO $ getCPUTime
+
+  ve $ ioeIO $ putStrLnFlush (' ' : show ((t2 - t1) `div` 1000000000) ++ " msec")
   return a
 
 
