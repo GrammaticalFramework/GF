@@ -23,6 +23,10 @@ import GF.Grammar.Lookup
 import GF.Infra.Modules
 import GF.Devel.ReadFiles
 
+import GF.Source.GrammarToSource
+import qualified GF.Source.AbsGF as A
+import qualified GF.Source.PrintGF as P
+
 import GF.Data.Operations
 import GF.Devel.UseIO
 import GF.Devel.Arch
@@ -30,11 +34,12 @@ import GF.Devel.Arch
 import Control.Monad
 import System.Directory
 import System.FilePath
+import System.Time
 import qualified Data.Map as Map
 
 batchCompile :: Options -> [FilePath] -> IOE SourceGrammar
 batchCompile opts files = do
-  (_,gr) <- foldM (compileModule defOpts) emptyCompileEnv files
+  (_,gr,_) <- foldM (compileModule defOpts) emptyCompileEnv files
   return gr
   where
     defOpts = addOptions opts (options [emitCode])
@@ -50,7 +55,7 @@ prMod = compactPrint . prModule
 
 
 -- | the environment
-type CompileEnv = (Int,SourceGrammar)
+type CompileEnv = (Int,SourceGrammar,ModEnv)
 
 -- | compile with one module as starting point
 -- command-line options override options (marked by --#) in the file
@@ -72,20 +77,17 @@ compileModule opts1 env file = do
   ps <- ioeIO $ extendPathEnv ps1
   let ioeIOIf = if oElem beVerbose opts then ioeIO else (const (return ()))
   ioeIOIf $ putStrLn $ "module search path:" +++ show ps ----
-  let sgr = snd env
-  let rfs = Map.empty ---- files already in memory and their read times
+  let (_,sgr,rfs) = env
   let file' = if useFileOpt then takeFileName file else file -- to find file itself
   files <- getAllFiles opts ps rfs file'
   ioeIOIf $ putStrLn $ "files to read:" +++ show files ----
   let names = map justModuleName files
   ioeIOIf $ putStrLn $ "modules to include:" +++ show names ----
-  let sgr2 = MGrammar [m | m@(i,_) <- modules sgr, 
-                           notElem (prt i) $ map dropExtension names]
-  foldM (compileOne opts) (0,sgr2) files
+  foldM (compileOne opts) (0,sgr,rfs) files
 
 
 compileOne :: Options -> CompileEnv -> FullPath -> IOE CompileEnv
-compileOne opts env@(_,srcgr) file = do
+compileOne opts env@(_,srcgr,_) file = do
 
   let putp s = putPointE opts ("\n" ++ s) 
   let putpp = putPointEsil opts
@@ -107,25 +109,25 @@ compileOne opts env@(_,srcgr) file = do
        sm0 <- putp ("+ reading" +++ file) $ getSourceModule opts file
        let sm1 = unsubexpModule sm0
        sm <- {- putp "creating indirections" $ -} ioeErr $ extendModule mos sm1
-       extendCompileEnv env sm
+       
+       extendCompileEnv env file sm
 
     -- for gf source, do full compilation and generate code
     _ -> do
 
-      let modu = dropExtension file
+      let gfo = gfoFile (dropExtension file)
       b1 <- ioeIO $ doesFileExist file
       if not b1
-        then compileOne opts env $ gfoFile $ modu 
+        then compileOne opts env $ gfo
         else do
 
        sm0 <- putpOpt ("- parsing" +++ file) ("- compiling" +++ file ++ "... ") $ 
                                            getSourceModule opts file
        (k',sm)  <- compileSourceModule opts env sm0
        let sm1 = if isConcr sm then shareModule sm else sm -- cannot expand Str
-       cm  <- putpp "  generating code... " $ generateModuleCode opts path sm1
+       cm  <- putpp "  generating code... " $ generateModuleCode opts gfo sm1
           -- sm is optimized before generation, but not in the env
-       let cm2 = unsubexpModule cm
-       extendCompileEnvInt env (k',sm1)
+       extendCompileEnvInt env k' gfo sm1
   where
    isConcr (_,mi) = case mi of
      ModMod m -> isModCnc m && mstatus m /= MSIncomplete 
@@ -134,7 +136,7 @@ compileOne opts env@(_,srcgr) file = do
 
 compileSourceModule :: Options -> CompileEnv -> 
                        SourceModule -> IOE (Int,SourceModule)
-compileSourceModule opts env@(k,gr) mo@(i,mi) = do
+compileSourceModule opts env@(k,gr,_) mo@(i,mi) = do
 
   let putp  = putPointE opts
       putpp = putPointEsil opts
@@ -170,19 +172,13 @@ compileSourceModule opts env@(k,gr) mo@(i,mi) = do
    ----   prDebug mo = ioeIO $ putStrLn $ prGrammar $ MGrammar [mo] ---- debug
    prDebug mo = ioeIO $ print $ length $ lines $ prGrammar $ MGrammar [mo]
 
-generateModuleCode :: Options -> InitPath -> SourceModule -> IOE SourceModule
-generateModuleCode opts path minfo@(name,info) = do
-
-  let pname  = path </> prt name
-  let minfo0 = minfo 
-  let minfo1 = subexpModule minfo0
-  let minfo2 = minfo1
-
-  let (file,out) = (gfoFile pname, prGrammar (MGrammar [minfo2]))
+generateModuleCode :: Options -> FilePath -> SourceModule -> IOE SourceModule
+generateModuleCode opts file minfo = do
+  let minfo1 = subexpModule minfo
+      out    = prGrammar (MGrammar [minfo1])
   putp ("  wrote file" +++ file) $ ioeIO $ writeFile file $ compactPrint out
-
-  return minfo2
- where 
+  return minfo1
+ where
    putp  = putPointE opts
    putpp = putPointEsil opts
 
@@ -195,11 +191,13 @@ pathListOpts opts file = return $ maybe [file] splitInModuleSearchPath $ getOptV
 reverseModules (MGrammar ms) = MGrammar $ reverse ms
 
 emptyCompileEnv :: CompileEnv
-emptyCompileEnv = (0,emptyMGrammar)
+emptyCompileEnv = (0,emptyMGrammar,Map.empty)
 
-extendCompileEnvInt (_,MGrammar ss) (k,sm) = 
-  return (k,MGrammar (sm:ss)) --- reverse later
+extendCompileEnvInt (_,MGrammar ss,menv) k file sm = do
+  let (mod,imps) = importsOfModule (trModule sm)
+  t <- ioeIO $ getModificationTime file
+  return (k,MGrammar (sm:ss),Map.insert mod (t,imps) menv) --- reverse later
 
-extendCompileEnv e@(k,_) sm = extendCompileEnvInt e (k,sm)
+extendCompileEnv e@(k,_,_) file sm = extendCompileEnvInt e k file sm
 
 

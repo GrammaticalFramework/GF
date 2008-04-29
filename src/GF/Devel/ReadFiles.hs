@@ -19,7 +19,7 @@
 -----------------------------------------------------------------------------
 
 module GF.Devel.ReadFiles 
-           ( getAllFiles,ModName,getOptionsFromFile,importsOfModule,
+           ( getAllFiles,ModName,ModEnv,getOptionsFromFile,importsOfModule,
              gfoFile,gfFile,isGFO ) where
 
 import GF.Infra.Option
