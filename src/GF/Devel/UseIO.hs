@@ -16,7 +16,6 @@
 module GF.Devel.UseIO where
 
 import GF.Data.Operations
-import GF.Devel.Arch (prCPU)
 import GF.Infra.Option
 import GF.Today (libdir)
 
@@ -59,27 +58,6 @@ errOptIO os e m = case m of
   Bad k -> do  
     putIfVerb os k
     return e
-
-prOptCPU :: Options -> Integer -> IO Integer
-prOptCPU opts = if (oElem noCPU opts) then (const (return 0)) else prCPU
-
-putCPU :: IO ()
-putCPU = do 
-  prCPU 0 
-  return ()
-
-putPoint :: Show a => Options -> String -> IO a -> IO a
-putPoint = putPoint' id
-
-putPoint' :: Show a => (c -> a) -> Options -> String -> IO c -> IO c
-putPoint' f opts msg act = do
-  let sil x = if oElem beSilent opts then return () else x
-      ve  x = if oElem beVerbose opts then x else return ()
-  ve $ putStrLn msg
-  a <- act
-  ve $ putShow' f a
-  ve $ putCPU
-  return a
 
 readFileIf f = catch (readFile f) (\_ -> reportOn f) where
  reportOn f = do
