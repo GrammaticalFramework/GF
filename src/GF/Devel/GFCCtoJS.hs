@@ -38,21 +38,22 @@ abstract2js start ds = new "GFAbstract" [JS.EStr start, JS.EObj $ map absdef2js 
 absdef2js :: (CId,(D.Type,D.Exp)) -> JS.Property
 absdef2js (CId f,(typ,_)) =
   let (args,CId cat) = M.catSkeleton typ in 
-    JS.Prop (JS.Ident f) (new "Type" [JS.EArray [JS.EStr x | CId x <- args], JS.EStr cat])
+    JS.Prop (JS.StringPropName f) (new "Type" [JS.EArray [JS.EStr x | CId x <- args], JS.EStr cat])
 
 concrete2js :: String -> String -> (CId,D.Concr) -> JS.Property
 concrete2js start n (CId c, cnc) =
     JS.Prop l (new "GFConcrete" ([(JS.EObj $ ((map (cncdef2js n c) ds) ++ litslins))] ++
                                  maybe [] (parser2js start) (D.parser cnc)))
   where 
-   l  = JS.Ident c
+   l  = JS.StringPropName c
    ds = concatMap Map.assocs [D.lins cnc, D.opers cnc, D.lindefs cnc]
-   litslins = [JS.Prop (JS.Ident    "Int") (JS.EFun [children] [JS.SReturn $ new "Arr" [JS.EIndex (JS.EVar children) (JS.EInt 0)]]), 
-               JS.Prop (JS.Ident  "Float") (JS.EFun [children] [JS.SReturn $ new "Arr" [JS.EIndex (JS.EVar children) (JS.EInt 0)]]),
-               JS.Prop (JS.Ident "String") (JS.EFun [children] [JS.SReturn $ new "Arr" [JS.EIndex (JS.EVar children) (JS.EInt 0)]])]
+   litslins = [JS.Prop (JS.StringPropName    "Int") (JS.EFun [children] [JS.SReturn $ new "Arr" [JS.EIndex (JS.EVar children) (JS.EInt 0)]]), 
+               JS.Prop (JS.StringPropName  "Float") (JS.EFun [children] [JS.SReturn $ new "Arr" [JS.EIndex (JS.EVar children) (JS.EInt 0)]]),
+               JS.Prop (JS.StringPropName "String") (JS.EFun [children] [JS.SReturn $ new "Arr" [JS.EIndex (JS.EVar children) (JS.EInt 0)]])]
+
 
 cncdef2js :: String -> String -> (CId,D.Term) -> JS.Property
-cncdef2js n l (CId f, t) = JS.Prop (JS.Ident f) (JS.EFun [children] [JS.SReturn (term2js n l t)])
+cncdef2js n l (CId f, t) = JS.Prop (JS.StringPropName f) (JS.EFun [children] [JS.SReturn (term2js n l t)])
 
 term2js :: String -> String -> D.Term -> JS.Expr
 term2js n l t = f t
@@ -94,7 +95,7 @@ parser2js start p  = [new "Parser" [JS.EStr start,
                                     JS.EArray $ map frule2js (Array.elems (allRules p)),
                                     JS.EObj $ map cats (Map.assocs (startupCats p))]]
   where 
-    cats (CId c,is) = JS.Prop (JS.Ident c) (JS.EArray (map JS.EInt is))
+    cats (CId c,is) = JS.Prop (JS.StringPropName c) (JS.EArray (map JS.EInt is))
 
 frule2js :: FRule -> JS.Expr
 frule2js (FRule n args res lins) = new "Rule" [JS.EInt res, name2js n, JS.EArray (map JS.EInt args), lins2js lins]

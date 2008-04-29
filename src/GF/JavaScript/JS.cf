@@ -48,5 +48,8 @@ define eseq1 x xs = ESeq (x:xs);
 separator Expr "," ;
 coercions Expr 16 ;
 
-Prop. Property ::= Ident ":" Expr ;
+Prop. Property ::= PropertyName ":" Expr ;
 separator Property "," ;
+
+IdentPropName.  PropertyName ::= Ident ;
+StringPropName. PropertyName ::= String ;

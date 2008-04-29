@@ -188,13 +188,18 @@ Expr12 : Expr13 { $1 }
 
 
 Property :: { Property }
-Property : Ident ':' Expr { Prop $1 $3 } 
+Property : PropertyName ':' Expr { Prop $1 $3 } 
 
 
 ListProperty :: { [Property] }
 ListProperty : {- empty -} { [] } 
   | Property { (:[]) $1 }
   | Property ',' ListProperty { (:) $1 $3 }
+
+
+PropertyName :: { PropertyName }
+PropertyName : Ident { IdentPropName $1 } 
+  | String { StringPropName $1 }
 
 
 

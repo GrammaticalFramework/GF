@@ -114,19 +114,19 @@ alexMove (Pn a l c) '\n' = Pn (a+1) (l+1)   1
 alexMove (Pn a l c) _    = Pn (a+1)  l     (c+1)
 
 type AlexInput = (Posn, -- current position,
-		  Char,	-- previous char
-		  String)	-- current input string
+               Char,     -- previous char
+               String)   -- current input string
 
 tokens :: String -> [Token]
 tokens str = go (alexStartPos, '\n', str)
     where
       go :: (Posn, Char, String) -> [Token]
       go inp@(pos, _, str) =
-    	  case alexScan inp 0 of
-    	    AlexEOF                -> []
-    	    AlexError (pos, _, _)  -> [Err pos]
-    	    AlexSkip  inp' len     -> go inp'
-    	    AlexToken inp' len act -> act pos (take len str) : (go inp')
+               case alexScan inp 0 of
+                AlexEOF                -> []
+                AlexError (pos, _, _)  -> [Err pos]
+                AlexSkip  inp' len     -> go inp'
+                AlexToken inp' len act -> act pos (take len str) : (go inp')
 
 alexGetChar :: AlexInput -> Maybe (Char,AlexInput)
 alexGetChar (p, c, [])    = Nothing

@@ -153,11 +153,17 @@ instance Print Expr where
 
 instance Print Property where
   prt i e = case e of
-   Prop id expr -> prPrec i 0 (concatD [prt 0 id , doc (showString ":") , prt 0 expr])
+   Prop propertyname expr -> prPrec i 0 (concatD [prt 0 propertyname , doc (showString ":") , prt 0 expr])
 
   prtList es = case es of
    [] -> (concatD [])
    [x] -> (concatD [prt 0 x])
    x:xs -> (concatD [prt 0 x , doc (showString ",") , prt 0 xs])
+
+instance Print PropertyName where
+  prt i e = case e of
+   IdentPropName id -> prPrec i 0 (concatD [prt 0 id])
+   StringPropName str -> prPrec i 0 (concatD [prt 0 str])
+
 
 
