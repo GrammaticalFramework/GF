@@ -57,13 +57,16 @@ resource ResHin = ParamX ** open Prelude in {
      | VPerf Gender Number
      | VSubj Number Person
      | VFut  Number Person Gender
+     | VReq
+     | VImp
+     | VReqFut
      ;
 
   oper
     Verb = {s : VForm => Str} ;
 
-    mkVerb : (x1,_,_,_,_,_,_,_,_,_,_,_,_,x14 : Str) -> Verb = 
-      \inf,stem,ims,imp,ifs,ifp,pms,pmp,pfs,pfp,ss1,ss2,sp2,sp3 -> {
+    mkVerb : (x1,_,_,_,_,_,_,_,_,_,_,_,_,_,x15 : Str) -> Verb = 
+      \inf,stem,ims,imp,ifs,ifp,pms,pmp,pfs,pfp,ss1,ss2,sp2,sp3,r -> {
         s = 
         let ga : Number -> Gender -> Str = \n,g -> (regAdjective "ga:").s ! g ! n ! Dir 
         in table {
@@ -84,7 +87,10 @@ resource ResHin = ParamX ** open Prelude in {
           VFut  Sg   P1 g => ss1 + ga Sg g ; 
           VFut  Sg   _  g => ss2 + ga Sg g ; 
           VFut  Pl   P2 g => sp2 + ga Pl g ; 
-          VFut  Pl   _  g => sp3 + ga Pl g
+          VFut  Pl   _  g => sp3 + ga Pl g ;
+          VReq  => r ;
+          VImp  => stem + "o" ;
+          VReqFut => stem + "iega:"
           }
         } ;
 
@@ -92,7 +98,8 @@ resource ResHin = ParamX ** open Prelude in {
       (cal + "na:") cal
       (cal + "ta:") (cal + "te") (cal + "ti:") (cal + "ti:")
       (cal + "a:")  (cal + "e")  (cal + "i:")  (cal + "i:~")
-      (cal + "u:~") (cal + "e")  (cal + "o")   (cal + "e~") ;
+      (cal + "u:~") (cal + "e")  (cal + "o")   (cal + "e~") 
+      (cal + "ie") ;
 
   param
     CTense = CPresent | CPast | CFuture ;
@@ -114,11 +121,10 @@ resource ResHin = ParamX ** open Prelude in {
         <CFuture, Sg,_ ,Masc> => "hoga:" ;
         <CFuture, Sg,_ ,Fem > => "hogi:" ;
         <CFuture, Pl,P2,Masc> => "hoge" ;
-        <CFuture, Pl,P2,Masc> => "hogi:" ;
         <CFuture, Pl,_ ,Masc> => "ho~ge" ;
+        <CFuture, Pl,P2,Fem > => "hogi:" ;
         <CFuture, Pl,_ ,Fem > => "ho~gi:"
         } ;
-
 
   param
     PronCase = PCase Case | PObj | PPoss ;
@@ -132,5 +138,66 @@ resource ResHin = ParamX ** open Prelude in {
         <P3,Sg> => {s = table PronCase ["vah"  ; "us"  ; "use~"   ; "uska:"]} ;
         <P3,Pl> => {s = table PronCase ["ve"   ; "un"  ; "unhe~"  ; "unka:"]}
         } ;
+
+  -- the Hindi verb phrase
+
+---    CTense = CPresent | CPast | CFuture ;
+
+      
+
+  param
+    VPHTense = 
+       VPGenPres  -- impf hum       nahim    "I go"
+     | VPImpPast  -- impf Ta        nahim    "I went"
+     | VPContPres -- stem raha hum  nahim    "I am going"
+     | VPContPast -- stem raha Ta   nahim    "I was going"
+     | VPPerf     -- perf           na/nahim "I went"
+     | VPPerfPres -- perf hum       na/nahim "I have gone"
+     | VPPerfPast -- perf Ta        na/nahim "I had gone"          
+     | VPSubj     -- subj           na       "I may go"
+     | VPFut      -- fut            na/nahim "I shall go"
+     ;
+
+    VPHForm = 
+       VPTense VPHTense Number Person Gender -- 9 * 12
+     | VPReq
+     | VPImp
+     | VPReqFut
+     | VPInf
+     | VPStem
+     ;
+
+  oper
+    VPH : Type = {
+      s    : Bool => VPHForm => {fin, inf, neg : Str} ;
+      obj  : Str ;
+      comp : Gender => Number => Str
+      } ; 
+
+    mkVPH : Verb -> VPH = \verb -> {
+      s = \\b,vh => 
+       let 
+         na = if_then_Str b [] "na" ;
+         nahim = if_then_Str b [] "nahim" ;
+       in
+       case vh of {
+         VPTense VPGenPres n p g => 
+           {fin = copula CPresent n p g ; inf = verb.s ! VImpf g n ; neg = nahim} ;
+         VPTense VPImpPast n p g => 
+           {fin = copula CPast n p g ; inf = verb.s ! VImpf g n ; neg = nahim} ;
+         VPTense VPPerf n _ g => 
+           {fin = verb.s ! VPerf g n ; inf = [] ; neg = nahim} ;
+         VPTense VPPerfPres n p g => 
+           {fin = copula CPresent n p g ; inf = verb.s ! VPerf g n ; neg = nahim} ;
+         VPTense VPPerfPast n p g => 
+           {fin = copula CPast n p g ; inf = verb.s ! VPerf g n ; neg = nahim} ;
+         VPTense VPSubj n p _ => {fin = verb.s ! VSubj n p ; inf = [] ; neg = na} ;
+         VPTense VPFut n p g => {fin = verb.s ! VFut n p g ; inf = [] ; neg = na} ;
+         VPInf => {fin = verb.s ! VStem ; inf = [] ; neg = na} ;
+         _ => {fin = verb.s ! VStem ; inf = [] ; neg = na}
+         } ;
+      obj = [] ;
+      comp = \\_,_ => []
+      } ;
 
 }
