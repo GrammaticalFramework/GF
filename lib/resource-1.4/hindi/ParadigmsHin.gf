@@ -1,59 +1,52 @@
 --# -path=.:../abstract:../../prelude:../common
 --
 ----1 Hindi Lexical Paradigms
-----
----- Aarne Ranta 2003--2005
-----
----- This is an API for the user of the resource grammar 
----- for adding lexical items. It gives functions for forming
----- expressions of open categories: nouns, adjectives, verbs.
----- 
----- Closed categories (determiners, pronouns, conjunctions) are
----- accessed through the resource syntax API, $Structural.gf$. 
-----
----- The main difference with $MorphoHin.gf$ is that the types
----- referred to are compiled resource grammar types. We have moreover
----- had the design principle of always having existing forms, rather
----- than stems, as string arguments of the paradigms.
-----
----- The structure of functions for each word class $C$ is the following:
----- first we give a handful of patterns that aim to cover all
----- regular cases. Then we give a worst-case function $mkC$, which serves as an
----- escape to construct the most irregular words of type $C$.
----- However, this function should only seldom be needed: we have a
----- separate module [``IrregHin`` ../../english/IrregHin.gf], 
----- which covers irregular verbss.
---
+
 resource ParadigmsHin = open 
   (Predef=Predef), 
   Prelude, 
   MorphoHin,
   CatHin
   in {
+
 --2 Parameters 
---
--- To abstract over gender names, we define the following identifiers.
 
 oper
-----  Gender : Type ; 
-
   masculine : Gender ;
   feminine : Gender ;
 
   masculine = Masc ; feminine = Fem ; --i
 
+
 --2 Nouns
---
--- Nouns are constructed by the function $mkN$, which takes a varying
--- number of arguments.
 
   mkN = overload {
     mkN : Str -> N 
       = \s -> regNoun s ** {lock_N = <>} ;
     mkN : Str -> Gender -> N 
       = \s,g -> reggNoun s g ** {lock_N = <>} ;
-    mkN : (x1,_,_,_,_,x6 : Str) -> Gender -> Noun 
+    mkN : (x1,_,_,_,_,x6 : Str) -> Gender -> N 
       = \sd,so,sv,pd,po,pv,g -> mkNoun sd so sv pd po pv g ** {lock_N = <>} ;
+    } ;
+
+--2 Adjectives
+
+  mkA = overload {
+    mkA : Str -> A 
+      = \s -> regAdjective s ** {lock_A = <>} ;
+    mkA : (x1,_,x3 : Str) -> A
+      = \msd,m,f -> mkAdjective msd m f ** {lock_A = <>} ;
+    } ;
+
+--2 Verbs
+
+  mkV = overload {
+    mkV : Str -> V 
+      = \s -> regVerb s ** {lock_V = <>} ;
+    mkV : (x1,_,_,_,_,_,_,_,_,_,_,_,_,x14 : Str) -> V
+      = \inf,stem,ims,imp,ifs,ifp,pms,pmp,pfs,pfp,ss1,ss2,sp2,sp3 -> 
+           mkVerb inf stem ims imp ifs ifp pms pmp pfs pfp ss1 ss2 sp2 sp3 ** 
+             {lock_V = <>} ;
     } ;
 
 

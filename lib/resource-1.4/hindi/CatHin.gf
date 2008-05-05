@@ -72,7 +72,7 @@ concrete CatHin of Cat = CommonX ** open ResHin, Prelude in {
 --
 ---- Open lexical classes, e.g. Lexicon
 --
---    V, VS, VQ, VA = Verb ; -- = {s : VForm => Str} ;
+    V, VS, VQ, VA = Verb ; -- = {s : VForm => Str} ;
 --    V2, V2A, V2Q, V2S = Verb ** {c2 : Str} ;
 --    V3 = Verb ** {c2, c3 : Str} ;
 --    VV = {s : VVForm => Str ; isAux : Bool} ;
