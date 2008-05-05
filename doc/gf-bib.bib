@@ -18,7 +18,42 @@
 @STRING{sc = "Soft Computing---A Fusion of Foundations, Methodologies
 		  and Applications"}
 
+@article{goldsmith,
+ author = {John Goldsmith},
+ title = {{An Algorithm for the Unsupervised Learning of Morphology}},
+ journal = {{Nat. Lang. Eng.}},
+ volume = {12},
+ number = {4},
+ year = {2006},
+ issn = {1351-3249},
+ pages = {353--371},
+ doi = {http://dx.doi.org/10.1017/S1351324905004055},
+ publisher = {Cambridge University Press},
+ address = {New York, NY, USA},
+ }
 
+@article{creutz,
+ author = {Mathias Creutz and Krista Lagus},
+ title = {{Unsupervised Models for Morpheme Segmentation and Morphology Learning}},
+ journal = {{ACM Trans. Speech Lang. Process.}},
+ volume = {4},
+ number = {1},
+ year = {2007},
+ issn = {1550-4875},
+ pages = {3},
+ doi = {http://doi.acm.org/10.1145/1187415.1187418},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+ }
+
+@article{swadesh,
+ author = {Morris Swadesh},
+ title = {{Towards Greater Accuracy in Lexicostatistic Dating}},
+ journal = {{International Journal of American Linguistics}},
+ volume = {21},
+ year = {1955},
+ pages = {121--137}
+ }
 
 @INPROCEEDINGS{isar,
   AUTHOR = {M. Wenzel},
@@ -63,7 +98,7 @@
 }
 
 @misc{talk-deliv,
-  author = {P. Ljunglöf and G. Amores and R. Cooper and D. Hjelm and O. Lemon and P. Manchón
+  author = {P. Ljungl\"of and G. Amores and R. Cooper and D. Hjelm and O. Lemon and P. Manchón
     and G. Pérez and A. Ranta},
   year = 2006,
   title = {{Multimodal Grammar Library}},
@@ -154,6 +189,13 @@
   year = {2006}
 }
 
+@inproceedings{bos-steedman,
+  title = {{Wide-Coverage Semantic Representations from a CCG Parser}},
+  author = {J. Bos and S. Clark and M. Steedman and J. Curran and J. Hockenmaier},
+  booktitle = {{Coling 2004}},
+  year = {2004}
+}
+
 @inproceedings{FM,
   title = {{Functional Morphology}},
   author = {M. Forsberg and A. Ranta},
@@ -162,11 +204,30 @@
   year = {2004}
 }
 
+@inproceedings{ranta-features,
+  title = {{Features in Abstract and Concrete Syntax}},
+  author = {A. Ranta},
+  booktitle = {{NODALIDA Workshop on Typed Feature Structure Grammars, Tartu, 24 May 2007}},
+  year = {2007}
+}
+
+
 @inproceedings{eldada,
   title =  {{Implementing an Open Source Arabic Resource Grammar in GF}},
   author = {A. El Dada and A. Ranta},
   booktitle = {{20th Arabic Linguistics Symposium. Western Michigan University March 3-5 2006}},
   year = {2006}
+
+}
+
+@incollection{eldada-book,
+  title =  {{Implementing an Open Source Arabic Resource Grammar in GF}},
+  author = {A. El Dada and A. Ranta},
+  booktitle = {{Perspectives on Arabic Linguistics XX}},
+  editor = {M.A. Mughazy},
+  publisher = {{John Benjamin's}},
+  pages = {209--232},
+  year = {2007}
 
 }
 
@@ -202,6 +263,15 @@
   author = {O. Caprotti},
   booktitle = {{Proceedings of SITE 2006. Orlando March 20-24}},
   year = {2006}
+}
+
+@inproceedings{ranta-kahn,
+  title = {{Grammars as Software Libraries}},
+  author = {A. Ranta},
+  booktitle = {{From Semantics to Computer Science}},
+  editor = {Y. Bertot and G. Huet and J-J. L\'evy and G. Plotkin},
+  publisher = {{Cambridge University Press}},
+  year = {2008}
 }
 
 
@@ -250,7 +320,8 @@
     AUTHOR = "A. Ranta",
     TITLE = {{Modular Grammar Engineering in GF}},
     JOURNAL = {{Research on Language and Computation}},
-    note = {To appear},
+    volume = {5},
+    pages = {133--158},
     YEAR = {2007} 
 }
 
@@ -350,9 +421,16 @@
 
 @Book{ttg,
   author =	 {A. Ranta},
-  title = 	 {Type Theoretical Grammar},
-  publisher = 	 {Oxford University Press},
+  title = 	 {{Type Theoretical Grammar}},
+  publisher = 	 {{Oxford University Press}},
   year = 	 {1994}
+}
+
+@Book{lyons,
+  author =	 {J. Lyons},
+  title = 	 {{Introduction to Theoretical Linguistics}},
+  publisher = 	 {{Cambridge University Press}},
+  year = 	 {1968}
 }
 
 @Book{b-b,
@@ -991,14 +1069,6 @@
 }
 
 
-@book{martin-lof,
-	AUTHOR	= {P. Martin-L\"{o}f},
-	TITLE	= {{Intuitionistic Type Theory}},
-	ADDRESS = {Napoli},
-	YEAR	= {1984},
-	PUBLISHER = {Bibliopolis}
-}
-
 @InProceedings{dymetman,
   author = 	 {M.\ Dymetman and V.\ Lux and A.\ Ranta},
   title = 	 {{XML} and Multilingual Document Authoring: Convergent Trends},
@@ -1068,7 +1138,7 @@
 
 @ARTICLE{gf-jfp,
     AUTHOR = "A. Ranta",
-    TITLE = {{Grammatical Framework: A Type-theoretical Grammar Formalism}},
+    TITLE = {{Grammatical Framework: A Type-Theoretical Grammar Formalism}},
     JOURNAL = {{The Journal of Functional Programming}},
     pages={145--189},
     volume={14(2)},
@@ -1083,13 +1153,22 @@
     YEAR = {2005} }
 
 @InProceedings{extract-2006,
-    AUTHOR = "M. Forsberg and H. Hammarstroem and A. Ranta",
+    AUTHOR = {M. Forsberg and H. Hammarstr\"{o}m and A. Ranta},
     TITLE = {{Morphological Lexicon Extraction from Raw Text Data}},
     booktitle = 	 {{FinTAL 2006}},
     year =	 {{2006}},
     series =	 {{LNCS/LNAI}},
     volume =       {4139},
     editor =       {T. Salakoski}
+  }
+
+@InProceedings{numerals,
+    AUTHOR = {H. Hammarstr\"{o}m and A. Ranta},
+    TITLE = {{Cardinal Numerals Revisited in GF}}, 
+    booktitle = {{Workshop on Numerals in the World's Languages, 
+      Dept. of Linguistics, Max Planck Institute for Evolutionary Anthropology, 
+      Leipzig}},
+    year =	 {{2004}}
   }
 
 @misc{minnen95offline,
@@ -1193,7 +1272,7 @@
 
 @InProceedings{brodda-karlsson,
   author =       {B. Brodda and F. Karlsson},
-  title =        {{An experiment with Automatic morphological Analysis of Finnish}},
+  title =        {{An Experiment with Automatic Morphological Analysis of Finnish}},
   series =       {{Papers from the Institute of Linguistics, University of Stockholm}},
   volume =       40,
   year =         1978
@@ -1302,6 +1381,23 @@
   title = {Survey of Existing Interactive Systems},
   note = {Trindi deliverable D1.3, Gothenburg University}
   }
+
+@misc{cooper-anna,
+  author = {R. Cooper},
+  year = 2008,
+  title = "The Abstract-Concrete Syncat Distinction and Unification in Multilingual Grammar",
+  note = {to appear}
+  }
+
+@misc{fracas,
+  author = {H. Kamp and R. Crouch and J. van Genabith and R. Cooper and M. Poesio 
+            and J. van Eijck and J. Jaspars and M. Pinkal and E. Vestre and S. Pulman}, 
+  year = 1994,
+  title = "Specification of Linguistic Coverage",
+  note = {{FRACAS Deliverable D2}} 
+  }
+
+
 
 @Article{teitelbaum,
   author =       "T. Teitelbaum and T. Reps",
@@ -2006,6 +2102,14 @@
     PAGES = {828--832}
 }
 
+@BOOK{rei48,
+    AUTHOR = "Reichenbach, Hans",
+    TITLE = "Elements of Symbolic Logic",
+    PUBLISHER = {The MacMillan Company},
+    ADDRESS = {New York},
+    YEAR = {1948} }
+
+
 @InProceedings{BaarHaehnle00a,
   author = 	 {Thomas Baar and Reiner H\"ahnle},
   title = 	 {An Integrated Metamodel for {OCL} Types},
@@ -2279,15 +2383,6 @@ Book{GoldbergRubin95,
   pages =        "854--874",
   publisher =    spv
 }
-@INCOLLECTION{steedman,
-    AUTHOR = "M. Steedman",
-    TITLE = "Combinators and grammars",
-    EDITOR = "R. Oehrle and E. Bach and D. Wheeler",
-    BOOKTITLE = {{Categorial Grammars and Natural Language Structures}},
-    PUBLISHER = {D. Reidel},
-    ADDRESS = {Dordrecht},
-    YEAR = {1988}, 
-    PAGES = {417-442}}
 
 @InProceedings{DLR00,
   author = 	 {M.\ Dymetman and V.\ Lux and A.\ Ranta},
@@ -2307,7 +2402,7 @@ Book{GoldbergRubin95,
 }
 
 
-@inproceedings{ mccarthy62towards,
+@inproceedings{mccarthy62towards,
     author = "J.\ McCarthy",
     title = "Towards a mathematical science of computation",
     booktitle = "Proceedings of the Information Processing Cong. 62",
@@ -2609,16 +2704,6 @@ Book{GoldbergRubin95,
   volume =       {3},
   pages =        {184--195},
   year =         {1960}
-}
-
-
-@inproceedings{bringert-speechgram,
-	 AUTHOR = {B. Bringert},
-	 TITLE = {{Speech Recognition Grammar Compilation in Grammatical Framework}},
-	 BOOKTITLE = 
-           {{SPEECHGRAM 2007: ACL Workshop on Grammar-Based Approaches to Spoken Language Processing, 
-             29 June 2007, Prague}},
-	 YEAR = {2007}
 }
 
 
