@@ -181,7 +181,7 @@ resource ResHin = ParamX ** open Prelude in {
       s = \\b,vh => 
        let 
          na = if_then_Str b [] "na" ;
-         nahim = if_then_Str b [] "nahim" ;
+         nahim = if_then_Str b [] "nahi:*" ;
        in
        case vh of {
          VPTense VPGenPres (Ag g n p) => 
@@ -197,7 +197,7 @@ resource ResHin = ParamX ** open Prelude in {
          VPTense VPSubj (Ag _ n p) => {fin = verb.s ! VSubj n p ; inf = [] ; neg = na} ;
          VPTense VPFut (Ag g n p) => {fin = verb.s ! VFut n p g ; inf = [] ; neg = na} ;
          VPInf => {fin = verb.s ! VStem ; inf = [] ; neg = na} ;
-         _ => {fin = verb.s ! VStem ; inf = [] ; neg = na}
+         _ => {fin = verb.s ! VStem ; inf = [] ; neg = na} ----
          } ;
       obj = [] ;
       subj = VIntrans ;
