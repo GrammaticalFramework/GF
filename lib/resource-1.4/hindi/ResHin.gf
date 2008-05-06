@@ -204,9 +204,22 @@ resource ResHin = ParamX ** open Prelude in {
       comp = \\_ => []
       } ;
 
+    VPHSlash = VPH ** {c2 : Compl} ;
+
     Clause : Type = {s : VPHTense => Bool => Str} ;
 
     Compl : Type = {s : Str ; c : VType} ;
+
+    insertObject : NP -> VPHSlash -> VPH = \np,vp -> {
+      s = \\b,vh => case <vp.c2.c,vh> of {
+        <VTrans, VPTense VPPerf _> => 
+          vp.s ! b ! VPTense VPPerf np.a ;  -- ergative: agr to object
+        _ => vp.s ! b ! vh
+        } ;
+      obj = vp.obj ++ np.s ! NPC Obl ++ vp.c2.s ;
+      subj = vp.c2.c ;
+      comp = vp.comp 
+      } ;
 
   param
     Agr = Ag Gender Number Person ;
@@ -231,7 +244,10 @@ resource ResHin = ParamX ** open Prelude in {
       s = \\vt,b => 
         let 
           vps = vp.s ! b ! VPTense vt np.a ;
-          subj = NPC Dir
+          subj = case <vp.subj,vt> of {
+            <VTrans,VPPerf> => NPErg ;
+            _ => NPC Dir
+            }
         in
         np.s ! subj ++ vp.obj ++ vp.comp ! np.a ++ vps.neg ++ vps.inf ++ vps.fin
       } ;
