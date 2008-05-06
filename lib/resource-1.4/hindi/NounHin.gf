@@ -1,15 +1,15 @@
 concrete NounHin of Noun = CatHin ** open ResHin, Prelude in {
---
---  flags optimize=all_subs ;
---
---  lin
+
+  flags optimize=all_subs ;
+
+  lin
 --    DetCN det cn = {
 --      s = \\c => det.s ++ cn.s ! det.n ! c ; 
 --      a = agrgP3 det.n cn.g
 --      } ;
 --
---    UsePN pn = pn ** {a = agrgP3 Sg pn.g} ;
---    UsePron p = p ;
+    UsePN pn = {s = \\c => toNP pn.s c ; a = agrP3 pn.g Sg} ;
+    UsePron p = p ;
 --
 --    PredetNP pred np = {
 --      s = \\c => pred.s ++ np.s ! c ;
@@ -72,31 +72,26 @@ concrete NounHin of Noun = CatHin ** open ResHin, Prelude in {
 --      s = art.s ! True ! card.n ++ card.s ;
 --      n = card.n
 --      } ;
---
---    DetArtSg art cn = {
---      s = \\c => art.s ! False ! Sg ++ cn.s ! Sg ! c ;
---      a = agrgP3 Sg cn.g
---      } ;
---
---    DetArtPl art cn = {
---      s = \\c => art.s ! False ! Pl ++ cn.s ! Pl ! c ;
---      a = agrgP3 Pl cn.g
---      } ;
---
---    DefArt = {s = \\c,n => artDef} ;
---
---    IndefArt = {s = \\c,n => case <n,c> of {
---        <Sg,False> => artIndef ;
---        _ => []
---        }
---      } ;
---
+
+    DetArtSg art cn = {
+      s = \\c => art.s ++ toNP (cn.s ! Sg) c ;
+      a = agrP3 cn.g Sg
+      } ;
+
+    DetArtPl art cn = {
+      s = \\c => art.s ++ toNP (cn.s ! Pl) c ;
+      a = agrP3 cn.g Pl
+      } ;
+
+      DefArt = {s = []} ;
+      IndefArt = {s = []} ;
+
 --    MassNP cn = {
 --      s = cn.s ! Sg ;
 --      a = agrP3 Sg
 --      } ;
---
---    UseN n = n ;
+
+      UseN n = n ;
 --    UseN2 n = n ;
 --
 --    Use2N3 f = {

@@ -13,7 +13,7 @@ concrete CatHin of Cat = CommonX ** open ResHin, Prelude in {
 --
 ---- Sentence
 --
---    Cl = {s : ResHin.Tense => Anteriority => CPolarity => Order => Str} ;
+    Cl = ResHin.Clause ;
 --    ClSlash = {
 --      s : ResHin.Tense => Anteriority => CPolarity => Order => Str ;
 --      c2 : Str
@@ -38,7 +38,7 @@ concrete CatHin of Cat = CommonX ** open ResHin, Prelude in {
 --
 ---- Verb
 --
---    VP = ResHin.VP ;
+    VP = ResHin.VPH ;
 --    VPSlash = ResHin.VP ** {c2 : Str} ;
 --    Comp = {s : Agr => Str} ; 
 --
@@ -48,8 +48,8 @@ concrete CatHin of Cat = CommonX ** open ResHin, Prelude in {
 --
 ---- Noun
 --
---    CN = {s : Number => Case => Str ; g : Gender} ;
---    NP, Pron = {s : Case => Str ; a : Agr} ;
+    CN = ResHin.Noun ;
+    NP, Pron = ResHin.NP ;
 --    Det = {s : Str ; n : Number} ;
 --    Predet, Ord = {s : Str} ;
 --    Num  = {s : Str; n : Number ; hasCard : Bool} ;
@@ -73,7 +73,7 @@ concrete CatHin of Cat = CommonX ** open ResHin, Prelude in {
 ---- Open lexical classes, e.g. Lexicon
 --
     V, VS, VQ, VA = Verb ; -- = {s : VForm => Str} ;
---    V2, V2A, V2Q, V2S = Verb ** {c2 : Str} ;
+    V2, V2A, V2Q, V2S = Verb ** {c2 : Compl} ;
 --    V3 = Verb ** {c2, c3 : Str} ;
 --    VV = {s : VVForm => Str ; isAux : Bool} ;
 --    V2V = Verb ** {c2 : Str ; isAux : Bool} ;
@@ -84,6 +84,6 @@ concrete CatHin of Cat = CommonX ** open ResHin, Prelude in {
     N = {s : Number => Case => Str ; g : Gender} ;
 --    N2 = {s : Number => Case => Str ; g : Gender} ** {c2 : Str} ;
 --    N3 = {s : Number => Case => Str ; g : Gender} ** {c2,c3 : Str} ;
---    PN = {s : Case => Str ; g : Gender} ;
+    PN = {s : Case => Str ; g : Gender} ;
 --
 }

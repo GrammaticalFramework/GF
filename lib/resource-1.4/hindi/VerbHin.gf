@@ -1,10 +1,10 @@
 concrete VerbHin of Verb = CatHin ** open ResHin in {
---
---  flags optimize=all_subs ;
---
---  lin
---    UseV = predV ;
---
+
+  flags optimize=all_subs ;
+
+  lin
+    UseV = predV ;
+
 --    SlashV2a v = predVc v ;
 --    Slash2V3 v np = 
 --      insertObjc (\\_ => v.c2 ++ np.s ! Acc) (predV v ** {c2 = v.c3}) ;
