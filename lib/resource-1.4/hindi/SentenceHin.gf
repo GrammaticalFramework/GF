@@ -1,11 +1,11 @@
 concrete SentenceHin of Sentence = CatHin ** open Prelude, ResHin in {
---
---  flags optimize=all_subs ;
---
---  lin
---
---    PredVP np vp = mkClause (np.s ! Nom) np.a vp ;
---
+
+  flags optimize=all_subs ;
+
+  lin
+
+    PredVP np vp = mkClause np vp ;
+
 --    PredSCVP sc vp = mkClause sc.s (agrP3 Sg) vp ;
 --
 --    ImpVP vp = {

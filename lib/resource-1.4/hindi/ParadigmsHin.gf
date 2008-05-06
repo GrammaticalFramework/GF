@@ -50,6 +50,16 @@ oper
     } ;
 
 
+  mkV2 = overload {
+    mkV2 : Str -> V2 
+      = \s -> regVerb s ** {c2 = {s = [] ; c = VTrans} ; lock_V2 = <>} ;
+    mkV2 : V -> V2 
+      = \v -> v ** {c2 = {s = [] ; c = VTrans} ; lock_V2 = <>} ;
+    mkV2 : V -> Str -> V2 
+      = \v,p -> v ** {c2 = {s = p ; c = VIntrans} ; lock_V2 = <>} ;
+    } ;
+
+
 ----3 Compound nouns 
 ----
 ---- A compound noun is an uninflected string attached to an inflected noun,

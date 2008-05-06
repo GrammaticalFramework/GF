@@ -2,15 +2,15 @@
 
 concrete LexiconHin of Lexicon = CatHin ** 
   open ParadigmsHin, Prelude in {
---
---flags 
---  optimize=values ;
---
---lin
+
+  flags 
+    optimize=values ;
+
+  lin
 --  airplane_N = regN "airplane" ;
 --  answer_V2S = mkV2S (regV "answer") toP ;
 --  apartment_N = regN "apartment" ;
---  apple_N = regN "apple" ;
+  apple_N = mkN "seb" ;
 --  art_N = regN "art" ;
 --  ask_V2Q = mkV2Q (regV "ask") noPrep ;
 --  baby_N = regN "baby" ;
@@ -29,7 +29,7 @@ concrete LexiconHin of Lexicon = CatHin **
 --  book_N = regN "book" ;
 --  boot_N = regN "boot" ;
 --  boss_N = mkN human (regN "boss") ;
---  boy_N = mkN masculine (regN "boy") ;
+  boy_N = mkN "laRka:" ;
 --  bread_N = regN "bread" ;
 --  break_V2 = dirV2 (irregV "break" "broke" "broken") ;
 --  broad_A = regADeg "broad" ;
@@ -66,7 +66,7 @@ concrete LexiconHin of Lexicon = CatHin **
 --  door_N = regN "door" ;
 --  drink_V2 = dirV2 (irregV "drink" "drank" "drunk") ;
 --  easy_A2V = mkA2V (regA "easy") forP ;
---  eat_V2 = dirV2 (irregV "eat" "ate" "eaten") ;
+  eat_V2 = mkV2 "Ka:" ;
 --  empty_A = regADeg "empty" ;
 --  enemy_N = regN "enemy" ;
 --  factory_N = regN "factory" ;
@@ -81,11 +81,11 @@ concrete LexiconHin of Lexicon = CatHin **
 --  fruit_N = regN "fruit" ;
 --  fun_AV = mkAV (regA "fun") ;
 --  garden_N = regN "garden" ;
---  girl_N = mkN feminine (regN "girl") ;
+  girl_N = mkN "laRki:" ;
 --  glove_N = regN "glove" ;
 --  gold_N = regN "gold" ;
 --  good_A = mkADeg "good" "better" "best" "well" ;
---  go_V = mk5V "go" "goes" "went" "gone" "going" ;
+  go_V = mkV "cal" ;
 --  green_A = regADeg "green" ;
 --  harbour_N = regN "harbour" ;
 --  hate_V2 = dirV2 (regV "hate") ;

@@ -10,7 +10,7 @@ resource ResHin = ParamX ** open Prelude in {
   flags optimize=all ;
 
   param 
-    Case = Dir | Obj | Voc ;
+    Case = Dir | Obl | Voc ;
     Gender = Masc | Fem ;
 
   oper
@@ -27,10 +27,10 @@ resource ResHin = ParamX ** open Prelude in {
       } ; 
 
     regNoun : Str -> Noun = \s -> case s of {
-      x + "iya:" => mkNoun s s       s   (x + "iya:~") (x + "iyo~") (x + "iyo") Fem ;
-      x + "a:"   => mkNoun s (x + "e") (x + "e") (x + "e") (x + "o~") (x + "o") Masc ;
-      x + "i:"   => mkNoun s s       s   (x + "iya:~") (x + "iyo~") (x + "iyo") Fem ;
-      _          => mkNoun s s       s         s           (s + "o~") (s + "o") Masc
+      x + "iya:" => mkNoun s s       s   (x + "iya:~") (x + "iyo*") (x + "iyo") Fem ;
+      x + "a:"   => mkNoun s (x + "e") (x + "e") (x + "e") (x + "o*") (x + "o") Masc ;
+      x + "i:"   => mkNoun s s       s   (x + "iya:~") (x + "iyo*") (x + "iyo") Fem ;
+      _          => mkNoun s s       s         s           (s + "o*") (s + "o") Masc
       } ; 
 
 
@@ -97,8 +97,8 @@ resource ResHin = ParamX ** open Prelude in {
     regVerb : Str -> Verb = \cal -> mkVerb
       (cal + "na:") cal
       (cal + "ta:") (cal + "te") (cal + "ti:") (cal + "ti:")
-      (cal + "a:")  (cal + "e")  (cal + "i:")  (cal + "i:~")
-      (cal + "u:~") (cal + "e")  (cal + "o")   (cal + "e~") 
+      (cal + "a:")  (cal + "e")  (cal + "i:")  (cal + "i:*")
+      (cal + "u:~") (cal + "e")  (cal + "o")   (cal + "e*") 
       (cal + "ie") ;
 
   param
@@ -107,23 +107,23 @@ resource ResHin = ParamX ** open Prelude in {
     copula : CTense -> Number -> Person -> Gender -> Str = \t,n,p,g -> 
       case <t,n,p,g> of {
         <CPresent,Sg,P1,_   > => "hu:~" ;
-        <CPresent,Sg,P2,_   > => "hai" ;
-        <CPresent,Sg,P3,_   > => "hai" ;
-        <CPresent,Pl,P1,_   > => "hai:~" ;
+        <CPresent,Sg,P2,_   > => "hE" ;
+        <CPresent,Sg,P3,_   > => "hE" ;
+        <CPresent,Pl,P1,_   > => "hE*" ;
         <CPresent,Pl,P2,_   > => "ho" ;
-        <CPresent,Pl,P3,_   > => "hai:~" ;
+        <CPresent,Pl,P3,_   > => "hE*" ;
         <CPast,   Sg,_ ,Masc> => "Ta:" ;
         <CPast,   Sg,_ ,Fem > => "Ti:" ;
         <CPast,   Pl,_ ,Masc> => "Te" ;
-        <CPast,   Pl,_ ,Fem > => "Ti:~" ;
-        <CFuture, Sg,P1,Masc> => "hu:~ga:" ;
-        <CFuture, Sg,P1,Fem > => "hu:~gi:" ;
+        <CPast,   Pl,_ ,Fem > => "Ti:*" ;
+        <CFuture, Sg,P1,Masc> => "hu:*ga:" ;
+        <CFuture, Sg,P1,Fem > => "hu:*gi:" ;
         <CFuture, Sg,_ ,Masc> => "hoga:" ;
         <CFuture, Sg,_ ,Fem > => "hogi:" ;
         <CFuture, Pl,P2,Masc> => "hoge" ;
-        <CFuture, Pl,_ ,Masc> => "ho~ge" ;
+        <CFuture, Pl,_ ,Masc> => "ho*ge" ;
         <CFuture, Pl,P2,Fem > => "hogi:" ;
-        <CFuture, Pl,_ ,Fem > => "ho~gi:"
+        <CFuture, Pl,_ ,Fem > => "ho*gi:"
         } ;
 
   param
@@ -131,12 +131,12 @@ resource ResHin = ParamX ** open Prelude in {
   oper
     personalPronoun : Person -> Number -> {s : PronCase => Str} = \p,n -> 
       case <p,n> of {
-        <P1,Sg> => {s = table PronCase ["mai~" ; "muJ" ; "muJe"   ; "mera:"]} ;
-        <P1,Pl> => {s = table PronCase ["ham"  ; "ham" ; "hame~"  ; "hama:ra:"]} ;
+        <P1,Sg> => {s = table PronCase ["mE*"  ; "muJ" ; "muJe"   ; "mera:"]} ;
+        <P1,Pl> => {s = table PronCase ["ham"  ; "ham" ; "hame*"  ; "hama:ra:"]} ;
         <P2,Sg> => {s = table PronCase ["tu:"  ; "tuJ" ; "tuJe"   ; "tera:"]} ;
-        <P2,Pl> => {s = table PronCase ["tum"  ; "tum" ; "tumhe~" ; "tumha:ra:"]} ;
-        <P3,Sg> => {s = table PronCase ["vah"  ; "us"  ; "use~"   ; "uska:"]} ;
-        <P3,Pl> => {s = table PronCase ["ve"   ; "un"  ; "unhe~"  ; "unka:"]}
+        <P2,Pl> => {s = table PronCase ["tum"  ; "tum" ; "tumhe*" ; "tumha:ra:"]} ;
+        <P3,Sg> => {s = table PronCase ["vah"  ; "us"  ; "use"    ; "uska:"]} ;
+        <P3,Pl> => {s = table PronCase ["ve"   ; "un"  ; "unhe*"  ; "unka:"]}
         } ;
 
   -- the Hindi verb phrase
@@ -159,7 +159,7 @@ resource ResHin = ParamX ** open Prelude in {
      ;
 
     VPHForm = 
-       VPTense VPHTense Number Person Gender -- 9 * 12
+       VPTense VPHTense Agr -- 9 * 12
      | VPReq
      | VPImp
      | VPReqFut
@@ -167,37 +167,74 @@ resource ResHin = ParamX ** open Prelude in {
      | VPStem
      ;
 
+    VType = VIntrans | VTrans ;
+
   oper
     VPH : Type = {
       s    : Bool => VPHForm => {fin, inf, neg : Str} ;
       obj  : Str ;
-      comp : Gender => Number => Str
+      subj : VType ;
+      comp : Agr => Str
       } ; 
 
-    mkVPH : Verb -> VPH = \verb -> {
+    predV : Verb -> VPH = \verb -> {
       s = \\b,vh => 
        let 
          na = if_then_Str b [] "na" ;
          nahim = if_then_Str b [] "nahim" ;
        in
        case vh of {
-         VPTense VPGenPres n p g => 
+         VPTense VPGenPres (Ag g n p) => 
            {fin = copula CPresent n p g ; inf = verb.s ! VImpf g n ; neg = nahim} ;
-         VPTense VPImpPast n p g => 
+         VPTense VPImpPast (Ag g n p) => 
            {fin = copula CPast n p g ; inf = verb.s ! VImpf g n ; neg = nahim} ;
-         VPTense VPPerf n _ g => 
+         VPTense VPPerf (Ag g n _) => 
            {fin = verb.s ! VPerf g n ; inf = [] ; neg = nahim} ;
-         VPTense VPPerfPres n p g => 
+         VPTense VPPerfPres (Ag g n p) => 
            {fin = copula CPresent n p g ; inf = verb.s ! VPerf g n ; neg = nahim} ;
-         VPTense VPPerfPast n p g => 
+         VPTense VPPerfPast (Ag g n p) => 
            {fin = copula CPast n p g ; inf = verb.s ! VPerf g n ; neg = nahim} ;
-         VPTense VPSubj n p _ => {fin = verb.s ! VSubj n p ; inf = [] ; neg = na} ;
-         VPTense VPFut n p g => {fin = verb.s ! VFut n p g ; inf = [] ; neg = na} ;
+         VPTense VPSubj (Ag _ n p) => {fin = verb.s ! VSubj n p ; inf = [] ; neg = na} ;
+         VPTense VPFut (Ag g n p) => {fin = verb.s ! VFut n p g ; inf = [] ; neg = na} ;
          VPInf => {fin = verb.s ! VStem ; inf = [] ; neg = na} ;
          _ => {fin = verb.s ! VStem ; inf = [] ; neg = na}
          } ;
       obj = [] ;
-      comp = \\_,_ => []
+      subj = VIntrans ;
+      comp = \\_ => []
       } ;
+
+    Clause : Type = {s : VPHTense => Bool => Str} ;
+
+    Compl : Type = {s : Str ; c : VType} ;
+
+  param
+    Agr = Ag Gender Number Person ;
+    NPCase = NPC Case | NPErg ;
+
+  oper
+    agrP3 : Gender -> Number -> Agr = \g,n -> Ag g n P3 ;
+
+    npcase2case : NPCase -> Case = \npc -> case npc of {
+      NPC c => c ;
+      NPErg => Obl
+      } ;
+
+    toNP : (Case => Str) -> NPCase -> Str = \pn, npc -> case npc of {
+      NPC c => pn ! c ;
+      NPErg => pn ! Obl ++ "ne"
+      } ;
+
+    NP : Type = {s : NPCase => Str ; a : Agr} ;
+
+    mkClause : NP -> VPH -> Clause = \np,vp -> {
+      s = \\vt,b => 
+        let 
+          vps = vp.s ! b ! VPTense vt np.a ;
+          subj = NPC Dir
+        in
+        np.s ! subj ++ vp.obj ++ vp.comp ! np.a ++ vps.neg ++ vps.inf ++ vps.fin
+      } ;
+
 
 }
