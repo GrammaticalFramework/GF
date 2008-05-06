@@ -5,6 +5,6 @@ concrete LangHin of Lang =
   LexiconHin
   ** {
 
-flags startcat = Phr ; unlexer = text ; lexer = text ;
+flags startcat = Phr ; unlexer=unwords ; lexer=words ;
 
 }

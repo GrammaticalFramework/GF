@@ -5,7 +5,8 @@ concrete VerbHin of Verb = CatHin ** open ResHin in {
   lin
     UseV = predV ;
 
---    SlashV2a v = predVc v ;
+    SlashV2a v = predV v ** {c2 = v.c2} ;
+
 --    Slash2V3 v np = 
 --      insertObjc (\\_ => v.c2 ++ np.s ! Acc) (predV v ** {c2 = v.c3}) ;
 --    Slash3V3 v np = 
@@ -20,9 +21,9 @@ concrete VerbHin of Verb = CatHin ** open ResHin in {
 --    SlashV2S v s  = insertObjc (\\_ => conjThat ++ s.s) (predVc v) ;
 --    SlashV2Q v q  = insertObjc (\\_ => q.s ! QIndir) (predVc v) ;
 --    SlashV2A v ap = insertObjc (\\a => ap.s ! a) (predVc v) ; ----
---
---    ComplSlash vp np = insertObjPre (\\_ => vp.c2 ++ np.s ! Acc) vp ;
---
+
+    ComplSlash vp np = insertObject np vp ;
+
 --    SlashVV vv vp = 
 --      insertObj (\\a => infVP vv.isAux vp a) (predVV vv) **
 --        {c2 = vp.c2} ;

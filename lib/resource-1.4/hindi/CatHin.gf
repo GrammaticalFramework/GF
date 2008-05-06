@@ -39,7 +39,7 @@ concrete CatHin of Cat = CommonX ** open ResHin, Prelude in {
 ---- Verb
 --
     VP = ResHin.VPH ;
---    VPSlash = ResHin.VP ** {c2 : Str} ;
+    VPSlash = ResHin.VPHSlash ;
 --    Comp = {s : Agr => Str} ; 
 --
 ---- Adjective
