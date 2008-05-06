@@ -89,6 +89,7 @@ encode s = case s of
   "*"  -> 0x0902
 
   " "  -> space
+  "\n" -> fromEnum '\n'
 
   _    -> 0x093e  --- a:
 
