@@ -1,0 +1,17 @@
+#!/bin/sh
+
+DIR="."
+LANGS=`ls $DIR/Examples???.gf | perl -pe 's/.*(\w{3})\.gf/$1/'`
+
+LATIN1_LANGS="Dan Fin Fre Ger Ita Nor Spa Swe"
+
+for L in $LANGS; do
+  echo "gt | l | wf tmp.txt" | gf -s -batch -nocpu $DIR/Examples${L}.gf
+  grep -v '^$' tmp.txt > examples-$L.txt
+  echo "Wrote examples-$L.txt..."
+done
+
+for L in $LATIN1_LANGS; do
+  iconv -f iso-8859-1 -t utf8 examples-${L}.txt > tmp.txt
+  mv tmp.txt examples-${L}.txt
+done
