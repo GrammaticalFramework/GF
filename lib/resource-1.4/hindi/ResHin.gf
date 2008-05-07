@@ -91,14 +91,15 @@ resource ResHin = ParamX ** open Prelude in {
           VFut  Pl   _  g => sp3 + ga Pl g ;
           VAbs  => stem + "kar" ; --- ke
           VReq  => r ;
-          VImp  => stem + "o" ;
-          VReqFut => stem + "iega:"
+          VImp  => sp2 ;
+          VReqFut => stem + "i-ega:"
           }
         } ;
 
     regVerb : Str -> Verb = \cal -> 
       let caly : Str = case cal of {
-        _ + "a:" => cal + "y" ;
+        _ + ("a:" | "e") => cal + "y" ;
+        c + v@("u" | "i") + ":" => c + v + "y" ;
         _ => cal
         }
       in
