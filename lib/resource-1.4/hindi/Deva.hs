@@ -1,7 +1,7 @@
 main = interact udeva
 
 udeva :: String -> String
-udeva = encodeUTF8 . str2deva
+udeva = unlines . map (unwords . map (encodeUTF8 . str2deva) . words) . lines
 
 str2deva :: String -> String
 str2deva s = map toEnum $ case chop s of
@@ -9,6 +9,8 @@ str2deva s = map toEnum $ case chop s of
   _ -> []
 
 chop s = case s of 
+  ['-']    -> [s]
+  '-'  :cs -> let (c:r) = chop cs in  ('-':c) : r -- to force initial vowel
   v:':':cs -> [v,':'] : chop cs
   v:'.':cs -> [v,'.'] : chop cs
   c:'a':cs -> [c]     : chop cs
@@ -17,6 +19,7 @@ chop s = case s of
 
 encodeInit :: String -> Int
 encodeInit s = case s of
+  '-':c -> encodeInit c
   "a"  -> 0x0905
   "a:" -> 0x0906
   "i"  -> 0x0907
@@ -90,6 +93,8 @@ encode s = case s of
 
   " "  -> space
   "\n" -> fromEnum '\n'
+
+  '-':c -> encodeInit c
 
   _    -> 0x093e  --- a:
 

@@ -32,7 +32,7 @@ concrete VerbHin of Verb = CatHin ** open ResHin in {
 --        (insertObjc (\\a => infVP vv.isAux vp a) (predVc vv)) **
 --          {c2 = vp.c2} ;
 --
---    UseComp comp = insertObj comp.s (predAux auxBe) ;
+--    UseComp comp = insertComplement comp.s (predAux auxBe) ;
 --
 --    AdvVP vp adv = insertObj (\\_ => adv.s) vp ;
 --

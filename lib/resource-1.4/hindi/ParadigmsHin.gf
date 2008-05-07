@@ -56,7 +56,7 @@ oper
     mkV2 : V -> V2 
       = \v -> v ** {c2 = {s = [] ; c = VTrans} ; lock_V2 = <>} ;
     mkV2 : V -> Str -> V2 
-      = \v,p -> v ** {c2 = {s = p ; c = VIntrans} ; lock_V2 = <>} ;
+      = \v,p -> v ** {c2 = {s = p ; c = VTransPost} ; lock_V2 = <>} ;
     } ;
 
 

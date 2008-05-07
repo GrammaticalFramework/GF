@@ -1,9 +1,9 @@
 concrete StructuralHin of Structural = CatHin ** 
   open MorphoHin, (P = ParadigmsHin), Prelude in {
---
---  flags optimize=all ;
---
---  lin
+
+  flags optimize=all ;
+
+  lin
 --  above_Prep = ss "above" ;
 --  after_Prep = ss "after" ;
 --  all_Predet = ss "all" ;
@@ -50,8 +50,8 @@ concrete StructuralHin of Structural = CatHin **
 --  how8many_IDet = mkDeterminer Pl ["how many"] ;
 --  if_Subj = ss "if" ;
 --  in8front_Prep = ss ["in front of"] ;
---  i_Pron  = mkNP "I" "me" "my"  Sg P1 Masc ;
---  in_Prep = ss "in" ;
+--  i_Pron = mkNP "I" "me" "my"  Sg P1 Masc ;
+  in_Prep = ss "me*" ;
 --  it_Pron  = mkNP "it" "it" "its" Sg P3 Neutr ;
 --  less_CAdv = ss "less" ;
 --  many_Det = mkDeterminer Pl "many" ;
