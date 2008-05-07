@@ -44,7 +44,7 @@ concrete CatHin of Cat = CommonX ** open ResHin, Prelude in {
 --
 ---- Adjective
 --
---    AP = {s : Agr => Str ; isPre : Bool} ; 
+    AP = ResHin.Adjective ;
 --
 ---- Noun
 --
@@ -78,7 +78,7 @@ concrete CatHin of Cat = CommonX ** open ResHin, Prelude in {
 --    VV = {s : VVForm => Str ; isAux : Bool} ;
 --    V2V = Verb ** {c2 : Str ; isAux : Bool} ;
 --
-    A = {s : Gender => Number => Case => Str} ;
+    A = ResHin.Adjective ; --- {s : Gender => Number => Case => Str} ;
 --    A2 = {s : AForm => Str ; c2 : Str} ;
 --
     N = {s : Number => Case => Str ; g : Gender} ;

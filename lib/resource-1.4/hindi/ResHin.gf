@@ -57,6 +57,7 @@ resource ResHin = ParamX ** open Prelude in {
      | VPerf Gender Number
      | VSubj Number Person
      | VFut  Number Person Gender
+     | VAbs
      | VReq
      | VImp
      | VReqFut
@@ -88,18 +89,25 @@ resource ResHin = ParamX ** open Prelude in {
           VFut  Sg   _  g => ss2 + ga Sg g ; 
           VFut  Pl   P2 g => sp2 + ga Pl g ; 
           VFut  Pl   _  g => sp3 + ga Pl g ;
+          VAbs  => stem + "kar" ; --- ke
           VReq  => r ;
           VImp  => stem + "o" ;
           VReqFut => stem + "iega:"
           }
         } ;
 
-    regVerb : Str -> Verb = \cal -> mkVerb
-      (cal + "na:") cal
-      (cal + "ta:") (cal + "te") (cal + "ti:") (cal + "ti:")
-      (cal + "a:")  (cal + "e")  (cal + "i:")  (cal + "i:*")
-      (cal + "u:~") (cal + "e")  (cal + "o")   (cal + "e*") 
-      (cal + "ie") ;
+    regVerb : Str -> Verb = \cal -> 
+      let caly : Str = case cal of {
+        _ + "a:" => cal + "y" ;
+        _ => cal
+        }
+      in
+      mkVerb
+        (cal + "na:") cal
+        (cal + "ta:") (cal + "te") (cal + "ti:") (cal + "ti:")
+        (caly + "a:")  (caly + "e")  (caly + "i:")  (caly + "i:*")
+        (caly + "u:~") (caly + "e")  (caly + "o")   (caly + "e*") 
+        (caly + "i-e") ;
 
   param
     CTense = CPresent | CPast | CFuture ;
@@ -167,12 +175,12 @@ resource ResHin = ParamX ** open Prelude in {
      | VPStem
      ;
 
-    VType = VIntrans | VTrans ;
+    VType = VIntrans | VTrans | VTransPost ;
 
   oper
     VPH : Type = {
       s    : Bool => VPHForm => {fin, inf, neg : Str} ;
-      obj  : Str ;
+      obj  : {s : Str ; a : Agr} ; 
       subj : VType ;
       comp : Agr => Str
       } ; 
@@ -188,6 +196,12 @@ resource ResHin = ParamX ** open Prelude in {
            {fin = copula CPresent n p g ; inf = verb.s ! VImpf g n ; neg = nahim} ;
          VPTense VPImpPast (Ag g n p) => 
            {fin = copula CPast n p g ; inf = verb.s ! VImpf g n ; neg = nahim} ;
+         VPTense VPContPres (Ag g n p) => 
+           {fin = copula CPresent n p g ; 
+            inf = verb.s ! VStem ++ raha g n ; neg = nahim} ;
+         VPTense VPContPast (Ag g n p) => 
+           {fin = copula CPast n p g ; 
+            inf = verb.s ! VStem ++ raha g n ; neg = nahim} ;
          VPTense VPPerf (Ag g n _) => 
            {fin = verb.s ! VPerf g n ; inf = [] ; neg = nahim} ;
          VPTense VPPerfPres (Ag g n p) => 
@@ -199,10 +213,13 @@ resource ResHin = ParamX ** open Prelude in {
          VPInf => {fin = verb.s ! VStem ; inf = [] ; neg = na} ;
          _ => {fin = verb.s ! VStem ; inf = [] ; neg = na} ----
          } ;
-      obj = [] ;
+      obj = {s = [] ; a = defaultAgr} ;
       subj = VIntrans ;
       comp = \\_ => []
       } ;
+
+    raha : Gender -> Number -> Str = \g,n -> 
+      (regAdjective "raha:").s ! g ! n ! Dir ;
 
     VPHSlash = VPH ** {c2 : Compl} ;
 
@@ -210,15 +227,11 @@ resource ResHin = ParamX ** open Prelude in {
 
     Compl : Type = {s : Str ; c : VType} ;
 
-    insertObject : NP -> VPHSlash -> VPH = \np,vp -> {
-      s = \\b,vh => case <vp.c2.c,vh> of {
-        <VTrans, VPTense VPPerf _> => 
-          vp.s ! b ! VPTense VPPerf np.a ;  -- ergative: agr to object
-        _ => vp.s ! b ! vh
-        } ;
-      obj = vp.obj ++ np.s ! NPC Obl ++ vp.c2.s ;
-      subj = vp.c2.c ;
-      comp = vp.comp 
+    insertObject : NP -> VPHSlash -> VPH = \np,vps -> {
+      s = vps.s ;
+      obj = {s = vps.obj.s ++ np.s ! NPC Obl ++ vps.c2.s ; a = np.a} ;
+      subj = vps.c2.c ;
+      comp = vps.comp 
       } ;
 
   param
@@ -227,6 +240,8 @@ resource ResHin = ParamX ** open Prelude in {
 
   oper
     agrP3 : Gender -> Number -> Agr = \g,n -> Ag g n P3 ;
+
+    defaultAgr : Agr = agrP3 Masc Sg ;
 
     npcase2case : NPCase -> Case = \npc -> case npc of {
       NPC c => c ;
@@ -240,16 +255,26 @@ resource ResHin = ParamX ** open Prelude in {
 
     NP : Type = {s : NPCase => Str ; a : Agr} ;
 
+---  param
+---    PronCase = PCase Case | PObj | PPoss ;
+---  oper
+---    personalPronoun : Person -> Number -> {s : PronCase => Str} = \p,n -> 
+
+
+
     mkClause : NP -> VPH -> Clause = \np,vp -> {
       s = \\vt,b => 
         let 
-          vps = vp.s ! b ! VPTense vt np.a ;
-          subj = case <vp.subj,vt> of {
-            <VTrans,VPPerf> => NPErg ;
-            _ => NPC Dir
-            }
+          subjagr : NPCase * Agr = case <vp.subj,vt> of {
+            <VTrans,VPPerf> => <NPErg, vp.obj.a> ;
+            <VTransPost,VPPerf> => <NPErg, defaultAgr> ;
+            _ => <NPC Dir, np.a>
+            } ;
+          subj = subjagr.p1 ;
+          agr  = subjagr.p2 ;
+          vps  = vp.s ! b ! VPTense vt agr ;
         in
-        np.s ! subj ++ vp.obj ++ vp.comp ! np.a ++ vps.neg ++ vps.inf ++ vps.fin
+        np.s ! subj ++ vp.obj.s ++ vp.comp ! np.a ++ vps.neg ++ vps.inf ++ vps.fin
       } ;
 
 

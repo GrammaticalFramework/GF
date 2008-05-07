@@ -112,11 +112,12 @@ concrete NounHin of Noun = CatHin ** open ResHin, Prelude in {
 --      g = f.g ;
 --      c2 = f.c3
 --      } ;
---
---    AdjCN ap cn = {
---      s = \\n,c => preOrPost ap.isPre (ap.s ! agrgP3 n cn.g) (cn.s ! n ! c) ;
---      g = cn.g
---      } ;
+
+    AdjCN ap cn = {
+      s = \\n,c => ap.s ! cn.g ! n ! c ++ cn.s ! n ! c ;
+      g = cn.g
+      } ;
+
 --    RelCN cn rs = {
 --      s = \\n,c => cn.s ! n ! c ++ rs.s ! agrgP3 n cn.g ;
 --      g = cn.g

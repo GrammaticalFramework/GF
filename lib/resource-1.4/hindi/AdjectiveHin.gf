@@ -1,11 +1,9 @@
 concrete AdjectiveHin of Adjective = CatHin ** open ResHin, Prelude in {
---
---  lin
---
---    PositA  a = {
---      s = \\_ => a.s ! AAdj Posit ;
---      isPre = True
---      } ;
+
+  lin
+
+    PositA a = a ;
+
 --    ComparA a np = {
 --      s = \\_ => a.s ! AAdj Compar ++ "than" ++ np.s ! Nom ; 
 --      isPre = False
