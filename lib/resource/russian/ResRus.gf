@@ -283,8 +283,11 @@ oper
 
 
 --2 For $Adjective$
+
+-- The short form is only inflected in gender and number.
+-- Fixing this would require changing the Degree type.
 param
-  AdjForm = AF Case Animacy GenNum | AdvF;
+  AdjForm = AF Case Animacy GenNum | AFShort GenNum | AdvF;
 
 oper
   Complement =  {s2 : Str ; c : Case} ;
@@ -323,13 +326,13 @@ oper genGNum : GenNum -> Gender = \gn ->
    case gn of { ASg Fem => Fem; ASg Masc => Masc; _ => Neut } ;
 
 oper numAF: AdjForm -> Number = \af ->
-   case af of { AdvF => Sg; AF _ _  gn => (numGNum gn) } ;
+   case af of { AdvF => Sg; AFShort gn => numGNum gn; AF _ _  gn => (numGNum gn) } ;
 
 oper genAF: AdjForm -> Gender = \af ->
-   case af of { AdvF => Neut; AF _ _  gn => (genGNum gn) } ;
+   case af of { AdvF => Neut; AFShort gn => genGNum gn; AF _ _  gn => (genGNum gn) } ;
 
 oper caseAF: AdjForm -> Case = \af ->
-   case af of { AdvF => Nom; AF c _ _ => c } ;
+   case af of { AdvF => Nom; AFShort _ => Nom; AF c _ _ => c } ;
 
 -- The Degree parameter should also be more complex, since most Russian
 -- adjectives have two comparative forms: 

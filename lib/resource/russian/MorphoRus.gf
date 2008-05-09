@@ -1861,7 +1861,11 @@ oper totDet: Adjective = {s = table {
       AF Prepos2 _ (ASg Neut) => "том";
       AF Prepos _ APl => "тех" ;
       AF Prepos2 _ APl => "тех" ;
-      AdvF => "то"
+      AFShort (ASg Masc) => "тот";
+      AFShort (ASg Fem) => "та";
+      AFShort (ASg Neut) => "то";
+      AFShort APl => "те";
+      AdvF => "то" 
       }
   } ;
 
@@ -1896,6 +1900,10 @@ oper odinDet: Adjective = {s = table {
       AF Prepos2 _ (ASg Neut) => "одном";
       AF Prepos _ APl => "одних";
       AF Prepos2 _ APl => "одних";
+      AFShort (ASg Masc) => "один";
+      AFShort (ASg Fem) => "одна";
+      AFShort (ASg Neut) => "одно";
+      AFShort APl => "одни";
       AdvF =>  "одно"
        }
   } ;
@@ -1931,6 +1939,10 @@ oper etotDet: Adjective = {s = table {
       AF Prepos2 _ (ASg Neut) => "этом";
       AF Prepos _ APl => "этих";
       AF Prepos2 _ APl => "этих";
+      AFShort (ASg Masc) => "этот";
+      AFShort (ASg Fem) => "эта";
+      AFShort (ASg Neut) => "это";
+      AFShort APl => "эти";
       AdvF =>   "это"
        }
   } ;
@@ -1965,7 +1977,11 @@ oper vesDet: Adjective = {s = table {
       AF Prepos _ (ASg Neut) => "всём";
       AF Prepos2 _ (ASg Neut) => "всём";
       AF Prepos _ APl => "всех" ;
-      AF Prepos2 _ APl => "всех" ;
+      AF Prepos2 _ APl => "всех";
+      AFShort (ASg Masc) => "весь";
+      AFShort (ASg Fem) => "вся";
+      AFShort (ASg Neut) => "всё";
+      AFShort APl => "все";
       AdvF =>  "полностью"
       }
   } ;
@@ -2001,10 +2017,16 @@ oper uy_j_EndDecl : Str -> Adjective = \s ->{s = table {
       AF Prepos2 _ (ASg Neut) => s + "ом";
       AF Prepos _ APl => s + "ых";
       AF Prepos2 _ APl => s + "ых";
+      AFShort (ASg Masc) => s;
+      AFShort (ASg Fem)  => s + "а";
+      AFShort (ASg Neut) => s + "о" ;
+      AFShort APl        => s + "ы";
       AdvF => s +"о"
       }
   } ;
 
+{-
+-- Commented out since I don't know what the short forms are
 oper ti_j_EndDecl : Str -> Adjective = \s ->{s = table {
       AF Nom _ (ASg Masc) => s+"ий";
       AF Nom _ (ASg Fem) => s+"ья";
@@ -2039,6 +2061,7 @@ oper ti_j_EndDecl : Str -> Adjective = \s ->{s = table {
       AdvF => s +  "ье"
       }
   } ;
+-}
 
 --oper shi_j_EndDecl : Str -> Adjective = \s ->{s = table {
 --      AF Nom _ (ASg Masc) => s+"ий";
@@ -2116,6 +2139,10 @@ oper ij_EndK_G_KH_Decl : Str -> Adjective = \s ->{s = table {
     AF Prepos2 _ (ASg Neut) => s+"ом";
     AF Prepos _ APl => s+"их";
     AF Prepos2 _ APl => s+"их";
+    AFShort (ASg Masc) => s;
+    AFShort (ASg Fem)  => s + "а";
+    AFShort (ASg Neut) => s + "о" ;
+    AFShort APl        => s + "и";
      AdvF => s +  "о"
     }
   } ;
@@ -2123,12 +2150,12 @@ oper ij_EndK_G_KH_Decl : Str -> Adjective = \s ->{s = table {
 oper shij_End_Decl : Str -> Adjective = \s ->{s = table {
     AF Nom _ (ASg Masc) => s+"ий";
     AF Nom _ (ASg Fem) => s+"ая";
-    AF Nom _ (ASg Neut) => s+"ое";
+    AF Nom _ (ASg Neut) => s+"ее";
     AF Nom _ APl => s+"ие";
     AF Acc Animate (ASg Masc) => s+"его";
     AF Acc Inanimate (ASg Masc) => s+"ий";
     AF Acc  _ (ASg Fem) => s+"ую";
-    AF Acc  _ (ASg Neut) => s+"ое";
+    AF Acc  _ (ASg Neut) => s+"ее";
     AF Acc  Animate APl => s+"их";
     AF Acc  Inanimate APl => s+"ие";
     AF Gen  _ (ASg Masc) => s+"его";
@@ -2151,6 +2178,10 @@ oper shij_End_Decl : Str -> Adjective = \s ->{s = table {
     AF Prepos2 _ (ASg Neut) => s+"ем";
     AF Prepos _ APl => s+"их";
     AF Prepos2 _ APl => s+"их";
+    AFShort (ASg Masc) => s;
+    AFShort (ASg Fem)  => s + "а";
+    AFShort (ASg Neut) => s + "е" ;
+    AFShort APl        => s + "и";
      AdvF => s +  "о"
     }
   } ;
@@ -2189,6 +2220,10 @@ oper i_oj_EndDecl : Str -> Str -> Adjective = \s, chastica ->{s = table {
     AF Prepos2 _ (ASg Neut) => s+"ом"+ chastica ;
     AF Prepos _ APl => s+"их" + chastica;
     AF Prepos2 _ APl => s+"их" + chastica;
+    AFShort (ASg Masc) => s;
+    AFShort (ASg Fem)  => s + "а";
+    AFShort (ASg Neut) => s + "о" ;
+    AFShort APl        => s + "и";
      AdvF => s +  "о"
     }
   } ;
@@ -2225,6 +2260,10 @@ oper uy_oj_EndDecl : Str -> Adjective = \s ->{s = table {
     AF Prepos2 _ (ASg Neut) => s+"ом";
     AF Prepos _ APl => s+"ых";
     AF Prepos2 _ APl => s+"ых";
+    AFShort (ASg Masc) => s;
+    AFShort (ASg Fem)  => s + "а";
+    AFShort (ASg Neut) => s + "о" ;
+    AFShort APl        => s + "ы";
     AdvF => s +  "о"
     }
   } ;
