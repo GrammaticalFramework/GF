@@ -30,18 +30,18 @@ lin
   WePatient = WeNP ;
 
 
-  Influenza = UseN ( gripp**{lock_N = <>}) ; 
-  Malaria = UseN ( malaria**{lock_N = <>}) ; 
-  Diarrhea = UseN ( ponos **{lock_N = <>});  
-  SkinAllergy = ModAdj (AdjP1(adj1Staruyj "кожн")) (UseN ( allergiya **{lock_N = <>}));  
-  Heartburn = UseN ( izzhoga **{lock_N = <>});  
-  Rheumatism = UseN ( revmatizm **{lock_N = <>});  
-  Cystitis = UseN ( tsistit **{lock_N = <>});  
-  Asthma = UseN ( astma **{lock_N = <>}); 
-  Arthritis = UseN ( artrit **{lock_N = <>}); 
-  Diabetes = UseN ( diabet **{lock_N = <>}); 
-  Tonsillitis = UseN ( angina **{lock_N = <>}); 
-  Constipation = UseN ( zapor **{lock_N = <>}); 
+--  Influenza = UseN ( gripp**{lock_N = <>}) ; 
+--  Malaria = UseN ( malaria**{lock_N = <>}) ; 
+--  Diarrhea = UseN ( ponos **{lock_N = <>});  
+--  SkinAllergy = ModAdj (AdjP1(adj1Staruyj "кожн")) (UseN ( allergiya **{lock_N = <>}));  
+--  Heartburn = UseN ( izzhoga **{lock_N = <>});  
+--  Rheumatism = UseN ( revmatizm **{lock_N = <>});  
+--  Cystitis = UseN ( tsistit **{lock_N = <>});  
+--  Asthma = UseN ( astma **{lock_N = <>}); 
+--  Arthritis = UseN ( artrit **{lock_N = <>}); 
+--  Diabetes = UseN ( diabet **{lock_N = <>}); 
+--  Tonsillitis = UseN ( angina **{lock_N = <>}); 
+--  Constipation = UseN ( zapor **{lock_N = <>}); 
   
   Dentist  = IndefOneNP ( UseN ( stomatolog**{lock_N = <>})) ; 
   Gynecologist = IndefOneNP (UseN ( ginekolog**{lock_N = <>})) ; 
@@ -77,8 +77,8 @@ lin
   Broken patient painkiller = predV2 (mkDirectVerb
    (extVerb verbSlomat active past)**{lock_TV = <>}) patient (mkNounPhrase patient.n painkiller ** {lock_NP = <>}) ;
                                
-  HaveIllness patient symptom = U_predTransVerb true tvHave
-     patient (mkNounPhrase singular symptom ** {lock_NP = <>}) ;
+--  HaveIllness patient symptom = U_predTransVerb true tvHave
+--     patient (mkNounPhrase singular symptom ** {lock_NP = <>}) ;
   Complain = U_predTransVerb true tvHave ;
 
   NeedDoctor = predNeedShortAdjective true ; 
