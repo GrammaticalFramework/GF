@@ -111,7 +111,7 @@ patch directly from darcs. If so, replace ``-o mypatch.patch`` with
 
 If you have a user account on code.haskell.org, you can get read-write access over SSH
 to the GF repository. 
-To get an account, [http://community.haskell.org/admin/account_request.html fill out this form].
+To get an account, [fill out this form http://community.haskell.org/admin/account_request.html].
 Once you have an account, ask <bringert@cs.chalmers.se> to add you to the ``gf`` project.
 
 
