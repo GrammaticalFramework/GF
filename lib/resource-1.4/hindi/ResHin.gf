@@ -16,21 +16,27 @@ resource ResHin = ParamX ** open Prelude in {
   oper
     Noun = {s : Number => Case => Str ; g : Gender} ;
 
-    mkNoun : (x1,_,_,_,_,x6 : Str) -> Gender -> Noun = \sd,so,sv,pd,po,pv,g -> {
+    mkNoun : (x1,_,_,_,_,x6 : Str) -> Gender -> Noun = 
+      \sd,so,sv,pd,po,pv,g -> {
       s = table Number [table Case [sd;so;sv] ; table Case [pd;po;pv]] ;
       g = g
       } ;
 
     reggNoun : Str -> Gender -> Noun = \s,g -> case <s,g> of {
-      <-(_ + ("+a:" | "+i:")), Fem> => mkNoun s s s (s + "+e~") (s + "+o~") (s + "+o") Fem ; 
+      <-(_ + ("a:" | "i:")), Fem> => 
+           mkNoun s s s (s + "e~") (s + "o~") (s + "o") Fem ; 
       _ => regNoun s ** {g = g}
       } ; 
 
     regNoun : Str -> Noun = \s -> case s of {
-      x + "+iya:" => mkNoun s s       s   (x + "+iya:~") (x + "+iyo*") (x + "+iyo") Fem ;
-      x + "+a:"   => mkNoun s (x + "+e") (x + "+e") (x + "+e") (x + "+o*") (x + "+o") Masc ;
-      x + "+i:"   => mkNoun s s       s   (x + "+iya:~") (x + "+iyo*") (x + "+iyo") Fem ;
-      _          => mkNoun s s       s         s           (s + "+o*") (s + "+o") Masc
+      x + "iya:" => 
+        mkNoun s s       s   (x + "iya:~") (x + "iyo*") (x + "iyo") Fem ;
+      x + "a:"   => 
+        mkNoun s (x + "e") (x + "e") (x + "e") (x + "o*") (x + "o") Masc ;
+      x + "i:"   => 
+        mkNoun s s       s   (x + "iya:~") (x + "iyo*") (x + "iyo") Fem ;
+      _  => 
+        mkNoun s s       s   s             (s + "o*")   (s + "o")   Masc
       } ; 
 
 
@@ -45,7 +51,7 @@ resource ResHin = ParamX ** open Prelude in {
       } ;
 
     regAdjective : Str -> Adjective = \s -> case s of {
-      acch + "+a:" => mkAdjective s (acch + "+e") (acch + "+i:") ;
+      acch + "a:" => mkAdjective s (acch + "e") (acch + "i:") ;
       _ => mkAdjective s s s
       } ;
 
@@ -98,19 +104,18 @@ resource ResHin = ParamX ** open Prelude in {
 
     regVerb : Str -> Verb = \cal -> 
       let caly : Str = case cal of {
-        _ + ("+a:" | "+e") => cal + "+y" ;
-        c + "+u:" => c + "+uy" ;
-        c + "+i:" => c + "+iy" ;
----        c + v@("+u" | "+i") + ":" => c + v + "+y" ;
+        _ + ("a:" | "e") => cal + "y" ;
+        c + "u:" => c + "uy" ;
+        c + "i:" => c + "iy" ;
         _ => cal
         }
       in
       mkVerb
         (cal + "na:") cal
         (cal + "ta:") (cal + "te") (cal + "ti:") (cal + "ti:")
-        (caly + "+a:")  (caly + "+e")  (caly + "+i:")  (caly + "+i:*")
-        (caly + "+u:~") (caly + "+e")  (caly + "+o")   (caly + "+e*") 
-        (caly + "+i-e") ;
+        (caly + "a:")  (caly + "e")  (caly + "i:")  (caly + "i:*")
+        (caly + "u:~") (caly + "e")  (caly + "o")   (caly + "e*") 
+        (caly + "i-e") ;
 
   param
     CTense = CPresent | CPast | CFuture ;
