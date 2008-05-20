@@ -1,0 +1,27 @@
+--entrypoints CommandLine, Tree ;
+
+CLine.   CommandLine ::= [Pipe] ;
+CEmpty.  CommandLine ::= ;
+PComm.   Pipe        ::= [Command] ;
+Comm.    Command     ::= Ident [Option] Argument ;
+CNoarg.  Command     ::= Ident [Option] ;
+OOpt.    Option      ::= "-" Ident ;
+OFlag.   Option      ::= "-" Ident "=" Value ;
+VId.     Value       ::= Ident ;
+VInt.    Value       ::= Integer ;
+ATree.   Argument    ::= Tree ;
+
+TApp.    Tree1       ::= Ident [Tree2] ;
+TAbs.    Tree        ::= "\\" [Ident] "->" Tree ;
+TId.     Tree2       ::= Ident ;
+TInt.    Tree2       ::= Integer ; 
+TStr.    Tree2       ::= String ; 
+TFloat.  Tree2       ::= Double ; 
+
+coercions Tree 2 ;
+
+separator nonempty Pipe ";" ;
+separator nonempty Command "|" ;
+terminator Option "" ;
+terminator nonempty Tree2 "" ;
+terminator nonempty Ident "," ;
