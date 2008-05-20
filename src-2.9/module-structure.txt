@@ -1,0 +1,76 @@
+
+
+följande är en föreslagen hierarkisk modulstruktur för GF 2.2
+
+* katalogen src kommer att innehålla (åtminstone) följande:
+  - GF.hs     	     	modulen Main
+  - GF/			resten av Haskell-filerna
+  - JavaGUI/		java-filer
+  - haddock/		filer för haddock
+  -         html/
+  -         resources/
+  -         run-haddock.csh
+  -         check-haddock.perl
+
+
+* struktur för haskell-filer:
+
+	   	GF.Formalism	(finns redan)
+		GF.Conversion	(...)
+		GF.Parsing	(heter nu GF.NewParsing, bör byta namn)
+		GF.System	(finns redan, för filer som har med
+				operativsystemet att göra, t.ex. Tracing och Arch)
+
+filerna GF.NewParsing.GeneralChart och GF.NewParsing.IncrementalChart 
+flyttas och byter namn till GF.Data.GeneralDeduction och GF.Data.IncrementalDeduction
+
+vart ska filerna GFModes, Help, HelpFile, Today flyttas?
+förslag: Help, HelpFile, Today -> GF.System
+
+api 	   ->	GF.API
+cf	   ->	GF.CF
+canonical  ->	GF.Canon
+compile	   ->	GF.Compile
+
+infra	   ->	GF.Data	 (datatyper, algoritmer - helst ej direkt beroende av GF)
+	   	GF.Infra (GF-infrastruktur)
+		GF.Text  (t.ex. olika språk, teckenkodningar)
+
+(...)	   ->	GF.Fudgets  (alla filer som har med fudgets att göra)
+grammar	   ->	GF.Grammar
+cfgm	   ->	GF.CFGM
+source	   ->	GF.Source
+shell	   ->	GF.Shell
+speech	   ->	GF.Speech
+translate  ->	GF.Translate
+useGrammar ->	GF.UseGrammar
+visuali... ->	GF.Visualization
+
+parsers	   ->	filerna (ParGF och ParGFC) flyttas till där GF.cf och GFC.cf finns
+
+util	   ->	Extras (kanske på toppnivå - inte GF.Extras)
+
+
+* java-katalogen byter namn:
+
+java   ->  JavaGUI
+
+
+* haddock samlas på ett ställe:
+
+haddock-check.perl -> haddock/check-haddock.perl
+haddock-script.csh -> haddock/run-haddock.csh
+haddock-resources/ -> haddock/resources/
+haddock/	   -> haddock/html
+
+
+* kataloger som kan tas bort?
+
+for-xxx         (obsoleta)
+haddock
+newparsing	(tom)
+notrace		(tom)
+trace		(tom)
+parsers		(tom efter flytt av filer)
+old-stuff	(obsolet)
+GF.OldParsing   (obsolet)

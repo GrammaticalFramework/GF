@@ -1,0 +1,20 @@
+GFCC, 6/9/2006
+
+66661   24  Par remaining to be sent to GFC
+66662    0  not covered by mkTerm
+66663   36  label not in numeric format in mkTerm
+66664    2  label not found in symbol table
+66665   36  projection from deeper than just arg var: NP.agr.n
+66667    0  parameter value not found in symbol table
+66668    1  variable in parameter argument
+
+
+
+66664    2
+66665  125  missing: (VP.s!vf).fin
+66668    1
+
+
+66661/3 24  same lines: 
+66664    2
+66668    1

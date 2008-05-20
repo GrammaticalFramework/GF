@@ -1,0 +1,55 @@
+entrypoints Program;
+
+Program. Program ::= [Element];
+
+FunDef.  Element ::= "function" Ident "(" [Ident] ")" "{" [Stmt] "}" ;
+ElStmt.  Element ::= Stmt;
+separator Element "" ;
+
+separator Ident "," ;
+
+SCompound.   Stmt ::= "{" [Stmt] "}" ;
+SReturnVoid. Stmt ::= "return" ";" ;
+SReturn.     Stmt ::= "return" Expr ";" ;
+SDeclOrExpr. Stmt ::= DeclOrExpr ";" ;
+separator Stmt "" ;
+
+Decl.  DeclOrExpr ::= "var" [DeclVar];
+DExpr. DeclOrExpr ::= Expr1 ;
+
+DVar.  DeclVar ::= Ident ;
+DInit. DeclVar ::= Ident "=" Expr ;
+separator DeclVar "," ;
+
+EAssign. Expr13 ::= Expr14 "=" Expr13 ;
+
+ENew.    Expr14 ::= "new" Ident "(" [Expr] ")" ;
+
+EMember. Expr15 ::= Expr15 "." Ident ;
+EIndex.  Expr15 ::= Expr15 "[" Expr "]" ;
+ECall.   Expr15 ::= Expr15 "(" [Expr] ")" ;
+
+EVar.    Expr16 ::= Ident ;
+EInt.    Expr16 ::= Integer ;
+EDbl.    Expr16 ::= Double ;
+EStr.    Expr16 ::= String ;
+ETrue.   Expr16 ::= "true" ;
+EFalse.  Expr16 ::= "false" ;
+ENull.   Expr16 ::= "null" ;
+EThis.   Expr16 ::= "this" ;
+EFun.    Expr16 ::= "function" "(" [Ident] ")" "{" [Stmt] "}" ;
+EArray.  Expr16 ::= "[" [Expr] "]" ;
+EObj.    Expr16 ::= "{" [Property] "}" ;
+
+eseq1.   Expr16  ::= "(" Expr "," [Expr] ")";
+internal ESeq. Expr16 ::= "(" [Expr] ")" ;
+define eseq1 x xs = ESeq (x:xs); 
+
+separator Expr "," ;
+coercions Expr 16 ;
+
+Prop. Property ::= PropertyName ":" Expr ;
+separator Property "," ;
+
+IdentPropName.  PropertyName ::= Ident ;
+StringPropName. PropertyName ::= String ;

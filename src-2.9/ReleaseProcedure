@@ -1,0 +1,153 @@
+Procedure for making a GF release:
+
+1. Make sure everything that should be in the release has been
+   checked in.
+
+2. Go to the src/ dir.
+
+   $ cd src
+
+3. Edit configure.ac to set the right version number 
+   (the second argument to the AC_INIT macro).
+
+4. Edit gf.spec to set the version and release numbers 
+   (change %define version and %define release).
+
+5. Commit configure.ac and gf.spec:
+
+   $ darcs record -m 'Updated version numbers.' configure.ac gf.spec
+
+6. Run autoconf to generate configure with the right version number:
+
+   $ autoconf
+
+7. Go back to the root of the tree.
+
+   $ cd ..
+
+8. Tag the release. (X_X should be replaced by the version number, with
+   _ instead of ., e.g. 2_0)
+
+   $ darcs tag -m RELEASE-X_X
+
+9. Push the changes that you made for the release to the main repo:
+
+   $ darcs push
+
+10. Build a source package:
+
+   $ cd src
+   $ ./configure
+   $ make dist
+
+11. (Only if releasing a new grammars distribution)
+    Build a grammar tarball:
+
+   $ cd src
+   $ ./configure && make grammar-dist
+
+12. Build an x86/linux RPM (should be done on a Mandrake Linux box):
+
+    Setup for building RPMs (first time only):
+
+    - Make sure that you have the directories neccessary to build
+      RPMs:
+      
+      $ mkdir -p ~/rpm/{BUILD,RPMS/i586,RPMS/noarch,SOURCES,SRPMS,SPECS,tmp}
+
+    - Create ~/.rpmrc with the following contents:
+
+buildarchtranslate: i386: i586
+buildarchtranslate: i486: i586
+buildarchtranslate: i586: i586
+buildarchtranslate: i686: i586
+
+    - Create ~/.rpmmacros with the following contents:
+
+%_topdir        %(echo ${HOME}/rpm)
+%_tmppath       %{_topdir}/tmp
+
+%packager       Your Name <yourusername@cs.chalmers.se>
+
+    Build the RPM:
+
+   $ cd src 
+   $ ./configure && make rpm
+
+13. Build a generic binary x86/linux package (should be done on a Linux box,
+    e.g. banded.medic.chalmers.se):
+
+   $ cd src
+   $ ./configure --host=i386-pc-linux-gnu && make binary-dist
+
+14. Build a generic binary sparc/solaris package (should be done 
+    on a Solaris box, e.g. remote1.cs.chalmers.se):
+
+   $ cd src
+   $ ./configure --host=sparc-sun-solaris2 && gmake binary-dist
+
+15. Build a Mac OS X package (should be done on a Mac OS X box, 
+    e.g. csmisc99.cs.chalmers.se):
+
+    $ cd src
+    $ ./configure && make binary-dist
+    
+    Note that to run GHC-compiled binaries on OS X, you need
+    a "Haskell Support Framework". This should be available 
+    separately from the GF download page. 
+    
+    TODO: Use OS X PackageMaker to build  a .pkg-file which can
+    be installed using the standard OS X Installer program. 
+
+16. Build a binary Cygwin package (should be done on a Windows
+    machine with Cygwin):
+
+    $ cd src
+    $ ./configure && make binary-dist
+
+17. Build a Windows MSI package (FIXME: This doesn't work right,
+    pathnames with backslashes and spaces are not handled 
+    correctly in Windows. We only release a binary tarball
+    for Cygwin right now.):
+
+    $ cd src
+    $ ./configure && make all windows-msi
+
+18. Add new GF package release to SourceForge:
+
+    - https://sourceforge.net/projects/gf-tools
+
+    - Project page -> Admin -> File releases -> Add release (for the
+      GF package)
+
+    - New release name: X.X (just the version number, e.g. 2.2)
+
+    - Paste in release notes
+
+    - Upload files using anonymous FTP to upload.sourceforge.net 
+      in the incoming directory.
+
+    - Add the files to the release and set the processor 
+      and file type for each file (remember to press 
+      Update/Refresh for each file):
+      * x86 rpm -> i386/.rpm
+      * source rpm -> Any/Source .rpm
+      * x86 binary tarball -> i386/.gz
+      * sparc binary tarball -> Sparc/.gz
+      * source package -> Any/Source .gz
+
+19. Add new GF-editor release. Repeat the steps above, but
+    with GF-editor:
+
+     - Add files and set properties:
+
+      * editor rpm -> i386/.rpm (not really true, but I haven't
+        figured out how to make noarch rpms from the same spec as 
+	arch-specific ones)
+
+20. Mail to gf-tools-users@lists.sourceforge.net
+
+21. Update website.
+
+22. Party!
+

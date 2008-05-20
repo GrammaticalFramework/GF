@@ -1,0 +1,370 @@
+-- AR 2/5/2003, 14-16 o'clock, Torino
+
+-- 17/6/2007: marked with suffix --% those lines that are obsolete and
+-- should not be included in documentation
+
+entrypoints Grammar, ModDef, 
+  OldGrammar, --%
+  Exp ; -- let's see if more are needed
+
+comment "--" ;
+comment "{-" "-}" ;
+
+-- the top-level grammar
+
+Gr. Grammar ::= [ModDef] ;
+
+-- semicolon after module is permitted but not obligatory
+
+terminator ModDef "" ;
+_. ModDef ::= ModDef ";" ;
+
+-- The $main$ multilingual grammar structure --%
+
+MMain. ModDef ::= "grammar" PIdent "=" "{" "abstract" "=" PIdent ";" [ConcSpec] "}" ;--%
+
+ConcSpec. ConcSpec ::= PIdent "=" ConcExp ;--%
+separator ConcSpec ";" ;--%
+
+ConcExp. ConcExp ::= PIdent [Transfer] ;--%
+
+separator Transfer "" ;--%
+TransferIn.  Transfer ::= "(" "transfer" "in" Open ")" ;  --%
+TransferOut. Transfer ::= "(" "transfer" "out" Open ")" ;  --%
+
+-- the module header
+
+MModule2. ModHeader ::= ComplMod ModType "=" ModHeaderBody ;
+
+MBody2.      ModHeaderBody ::= Extend Opens ;
+MNoBody2.    ModHeaderBody ::= [Included] ;
+MWith2.      ModHeaderBody ::=                 Included "with" [Open] ;
+MWithBody2.  ModHeaderBody ::=                 Included "with" [Open] "**" Opens ; 
+MWithE2.     ModHeaderBody ::= [Included] "**" Included "with" [Open] ;
+MWithEBody2. ModHeaderBody ::= [Included] "**" Included "with" [Open] "**" Opens ; 
+
+MReuse2. ModHeaderBody ::= "reuse" PIdent ; --%
+MUnion2. ModHeaderBody ::= "union" [Included] ;--%
+
+-- the individual modules
+
+MModule. ModDef ::= ComplMod ModType "=" ModBody ;
+
+MTAbstract.  ModType ::= "abstract" PIdent ;
+MTResource.  ModType ::= "resource" PIdent ;
+MTInterface. ModType ::= "interface" PIdent ;
+MTConcrete.  ModType ::= "concrete" PIdent "of" PIdent ;
+MTInstance.  ModType ::= "instance" PIdent "of" PIdent ;
+MTTransfer.  ModType ::= "transfer" PIdent ":" Open "->" Open ;
+
+
+MBody.      ModBody ::= Extend Opens "{" [TopDef] "}" ;
+MNoBody.    ModBody ::= [Included] ;
+MWith.      ModBody ::=                 Included "with" [Open] ;
+MWithBody.  ModBody ::=                 Included "with" [Open] "**" Opens "{" [TopDef] "}" ; 
+MWithE.     ModBody ::= [Included] "**" Included "with" [Open] ;
+MWithEBody. ModBody ::= [Included] "**" Included "with" [Open] "**" Opens "{" [TopDef] "}" ; 
+
+MReuse. ModBody ::= "reuse" PIdent ; --%
+MUnion. ModBody ::= "union" [Included] ;--%
+
+separator TopDef "" ;
+
+Ext.   Extend ::= [Included] "**" ;
+NoExt. Extend ::= ;
+
+separator Open "," ;
+NoOpens. Opens ::= ;
+OpenIn.  Opens ::= "open" [Open] "in" ;
+
+OName.   Open ::= PIdent ;
+OQualQO. Open ::= "(" QualOpen PIdent ")" ;
+OQual.   Open ::= "(" QualOpen PIdent "=" PIdent ")" ;
+
+CMCompl.   ComplMod ::= ;
+CMIncompl. ComplMod ::= "incomplete" ;
+
+QOCompl.     QualOpen ::= ;
+QOIncompl.   QualOpen ::= "incomplete" ;--%
+QOInterface. QualOpen ::= "interface" ;--%
+
+separator Included "," ;
+
+IAll.   Included ::= PIdent ;
+ISome.  Included ::= PIdent "[" [PIdent] "]" ;
+IMinus. Included ::= PIdent "-" "[" [PIdent] "]" ;
+
+-- definitions after the $oper$ keywords
+
+DDecl.  Def ::= [Name] ":" Exp ;
+DDef.   Def ::= [Name] "=" Exp ;
+DPatt.  Def ::= Name [Patt] "=" Exp ;  -- non-empty pattern list
+DFull.  Def ::= [Name] ":" Exp "=" Exp ;
+
+-- top-level definitions
+
+DefCat.    TopDef ::= "cat" [CatDef] ;
+DefFun.    TopDef ::= "fun" [FunDef] ;
+DefFunData.TopDef ::= "data" [FunDef] ;
+DefDef.    TopDef ::= "def" [Def] ;
+DefData.   TopDef ::= "data" [DataDef] ;
+
+DefTrans.  TopDef ::= "transfer" [Def] ;--%
+
+DefPar.    TopDef ::= "param" [ParDef] ;
+DefOper.   TopDef ::= "oper"  [Def] ;
+
+DefLincat. TopDef ::= "lincat" [PrintDef] ;
+DefLindef. TopDef ::= "lindef" [Def] ;
+DefLin.    TopDef ::= "lin"    [Def] ;
+
+DefPrintCat. TopDef ::= "printname" "cat" [PrintDef] ;
+DefPrintFun. TopDef ::= "printname" "fun" [PrintDef] ;
+DefFlag.     TopDef ::= "flags" [FlagDef] ;
+
+SimpleCatDef.   CatDef ::= PIdent [DDecl] ;
+ListCatDef.     CatDef ::= "[" PIdent [DDecl] "]" ;
+ListSizeCatDef. CatDef ::= "[" PIdent [DDecl] "]" "{" Integer "}" ;
+
+FunDef.    FunDef ::= [PIdent] ":" Exp ;
+
+DataDef.   DataDef    ::= PIdent "=" [DataConstr] ;
+DataId.    DataConstr ::= PIdent ;
+DataQId.   DataConstr ::= PIdent "." PIdent ;
+separator DataConstr "|" ;
+
+
+ParDefDir.   ParDef ::= PIdent "=" [ParConstr] ;
+ParDefIndir. ParDef ::= PIdent "=" "(" "in" PIdent ")" ;
+ParDefAbs.   ParDef ::= PIdent ;
+
+ParConstr. ParConstr ::= PIdent [DDecl] ;
+
+PrintDef. PrintDef ::= [Name] "=" Exp ;
+
+FlagDef. FlagDef ::= PIdent "=" PIdent ;
+
+terminator nonempty Def ";" ;
+terminator nonempty CatDef ";" ;
+terminator nonempty FunDef ";" ;
+terminator nonempty DataDef ";" ;
+terminator nonempty ParDef ";" ;
+
+terminator nonempty PrintDef ";" ;
+terminator nonempty FlagDef ";" ;
+
+separator ParConstr "|" ;
+
+separator nonempty PIdent "," ;
+
+-- names of categories and functions in definition LHS
+
+IdentName. Name ::= PIdent ;
+ListName.  Name ::= "[" PIdent "]" ;
+
+separator nonempty Name "," ;
+
+-- definitions in records and $let$ expressions
+
+LDDecl.  LocDef ::= [PIdent] ":" Exp ;
+LDDef.   LocDef ::= [PIdent] "=" Exp ;
+LDFull.  LocDef ::= [PIdent] ":" Exp "=" Exp ;
+
+separator LocDef ";" ;
+
+-- terms and types
+
+EIdent.    Exp6 ::= PIdent ;
+EConstr.   Exp6 ::= "{" PIdent "}" ;--%
+ECons.     Exp6 ::= "%" PIdent "%" ;--%
+ESort.     Exp6 ::= Sort ;
+EString.   Exp6 ::= String ;
+EInt.      Exp6 ::= Integer ;
+EFloat.    Exp6 ::= Double ;
+EMeta.     Exp6 ::= "?" ;
+EEmpty.    Exp6 ::= "[" "]" ;
+EData.     Exp6 ::= "data" ;
+EList.     Exp6 ::= "[" PIdent Exps "]" ;
+EStrings.  Exp6 ::= "[" String "]" ;
+ERecord.   Exp6 ::= "{" [LocDef] "}" ; -- !
+ETuple.    Exp6 ::= "<" [TupleComp] ">" ;  --- needed for separator ","
+EIndir.    Exp6 ::= "(" "in" PIdent ")" ;   -- indirection, used in judgements --%
+ETyped.    Exp6 ::= "<" Exp ":" Exp ">" ;  -- typing, used for annotations
+
+EProj.     Exp5 ::= Exp5 "." Label ;
+EQConstr.  Exp5 ::= "{" PIdent "." PIdent "}" ;  -- qualified constructor --%
+EQCons.    Exp5 ::= "%" PIdent "." PIdent  ;     -- qualified constant --%
+
+EApp.      Exp4 ::= Exp4 Exp5 ;
+ETable.    Exp4 ::= "table" "{" [Case] "}" ;
+ETTable.   Exp4 ::= "table" Exp6 "{" [Case] "}" ;
+EVTable.   Exp4 ::= "table" Exp6 "[" [Exp] "]" ;
+ECase.     Exp4 ::= "case" Exp "of" "{" [Case] "}" ;
+EVariants. Exp4 ::= "variants" "{" [Exp] "}" ;
+--- EPreCase.  Exp4 ::= "pre" "{" [Case] "}" ;
+EPre.      Exp4 ::= "pre" "{" Exp ";" [Altern] "}" ;
+EStrs.     Exp4 ::= "strs" "{" [Exp] "}" ;
+EConAt.    Exp4 ::= PIdent "@" Exp6 ; --%
+
+EPatt.     Exp4 ::= "#" Patt2 ;
+EPattType. Exp4 ::= "pattern" Exp5 ;
+
+ESelect.   Exp3 ::= Exp3 "!" Exp4 ;
+ETupTyp.   Exp3 ::= Exp3 "*" Exp4 ;
+EExtend.   Exp3 ::= Exp3 "**" Exp4 ;
+
+EGlue.     Exp1 ::= Exp2 "+"  Exp1 ;
+
+EConcat.   Exp  ::= Exp1 "++" Exp ;
+
+EAbstr.    Exp  ::= "\\" [Bind] "->" Exp ;
+ECTable.   Exp  ::= "\\""\\" [Bind] "=>" Exp ;
+EProd.     Exp  ::= Decl "->" Exp ;
+ETType.    Exp  ::= Exp3 "=>" Exp ; -- these are thus right associative
+ELet.      Exp  ::= "let" "{" [LocDef] "}" "in" Exp ;
+ELetb.     Exp  ::= "let" [LocDef] "in" Exp ;
+EWhere.    Exp  ::= Exp3 "where" "{" [LocDef] "}" ;
+EEqs.      Exp  ::= "fn" "{" [Equation] "}" ; --%
+
+EExample.  Exp  ::= "in" Exp5 String ;
+
+coercions Exp 6 ;
+
+separator Exp ";" ; -- in variants
+
+-- list of arguments to category
+NilExp. Exps ::= ;
+ConsExp. Exps ::= Exp6 Exps ; -- Exp6 to force parantheses
+
+-- patterns
+
+PChar.  Patt2  ::= "?" ;
+PChars. Patt2  ::= "[" String "]" ;
+PMacro. Patt2  ::= "#" PIdent ;
+PM.     Patt2  ::= "#" PIdent "." PIdent ;
+PW.     Patt2  ::= "_" ;
+PV.     Patt2  ::= PIdent ;
+PCon.   Patt2  ::= "{" PIdent "}" ; --%
+PQ.     Patt2  ::= PIdent "." PIdent ;
+PInt.   Patt2  ::= Integer ;
+PFloat. Patt2  ::= Double ;
+PStr.   Patt2  ::= String ;
+PR.     Patt2  ::= "{" [PattAss] "}" ;
+PTup.   Patt2  ::= "<" [PattTupleComp] ">" ;
+PC.     Patt1  ::= PIdent [Patt] ;
+PQC.    Patt1  ::= PIdent "." PIdent [Patt] ;
+PDisj.  Patt   ::= Patt "|" Patt1 ;
+PSeq.   Patt   ::= Patt "+" Patt1 ;
+PRep.   Patt1  ::= Patt2 "*" ;
+PAs.    Patt1  ::= PIdent "@" Patt2 ;
+PNeg.   Patt1  ::= "-" Patt2 ;
+
+coercions Patt 2 ;
+
+PA.  PattAss ::= [PIdent] "=" Patt ;
+
+-- labels
+
+LIdent. Label ::= PIdent ;
+LVar.   Label ::= "$" Integer ;
+
+-- basic types
+
+rules Sort ::= 
+    "Type" 
+  | "PType" 
+  | "Tok"  --%
+  | "Str" 
+  | "Strs" ;
+
+separator PattAss ";" ;
+
+-- this is explicit to force higher precedence level on rhs
+(:[]). [Patt] ::= Patt2 ;
+(:).   [Patt] ::= Patt2 [Patt] ;
+
+
+-- binds in lambdas and lin rules
+
+BIdent. Bind ::= PIdent ;
+BWild.  Bind ::= "_" ;
+
+separator Bind "," ;
+
+
+-- declarations in function types
+
+DDec.  Decl ::= "(" [Bind] ":" Exp ")" ;
+DExp.  Decl ::= Exp4 ; -- can thus be an application
+
+-- tuple component (term or pattern)
+
+TComp. TupleComp ::= Exp ;
+PTComp. PattTupleComp ::= Patt ;
+
+separator TupleComp "," ;
+separator PattTupleComp "," ;
+
+-- case branches
+
+Case. Case ::= Patt "=>" Exp ;
+
+separator nonempty Case ";" ;
+
+-- cases in abstract syntax --%
+
+Equ. Equation ::= [Patt] "->" Exp ; --%
+
+separator Equation ";" ; --%
+
+-- prefix alternatives
+
+Alt. Altern ::= Exp "/" Exp ;
+
+separator Altern ";" ;
+
+-- in a context, higher precedence is required than in function types
+
+DDDec.  DDecl ::= "(" [Bind] ":" Exp ")" ;
+DDExp.  DDecl ::= Exp6 ;  -- can thus *not* be an application
+
+separator DDecl "" ;
+
+
+-------------------------------------- --%
+
+-- for backward compatibility --%
+
+OldGr.  OldGrammar ::= Include [TopDef] ; --%
+
+NoIncl. Include ::= ; --%
+Incl.   Include ::= "include" [FileName] ; --%
+
+FString. FileName ::= String ; --%
+
+terminator nonempty FileName ";" ; --%
+
+FIdent.  FileName ::= PIdent ; --%
+FSlash.  FileName ::= "/" FileName ; --%
+FDot.    FileName ::= "." FileName ; --%
+FMinus.  FileName ::= "-" FileName ; --%
+FAddId.  FileName ::= PIdent FileName ; --%
+
+token LString '\'' (char - '\'')* '\'' ; --%
+ELString.  Exp6 ::= LString ; --%
+ELin.      Exp4 ::= "Lin" PIdent ; --%
+
+DefPrintOld.  TopDef ::= "printname" [PrintDef] ; --%
+DefLintype.   TopDef ::= "lintype"   [Def] ; --%
+DefPattern.   TopDef ::= "pattern"   [Def] ; --%
+
+-- deprecated packages are attempted to be interpreted --%
+DefPackage.   TopDef ::= "package" PIdent "=" "{" [TopDef] "}" ";" ; --%
+
+-- these two are just ignored after parsing --%
+DefVars.      TopDef ::= "var" [Def] ; --%
+DefTokenizer. TopDef ::= "tokenizer" PIdent ";" ; --%
+
+-- identifiers
+
+position token PIdent ('_' | letter) (letter | digit | '_' | '\'')* ;

@@ -1,0 +1,93 @@
+-- This is a subset of the front-end language
+
+entrypoints Module, Exp ;
+
+comment "--" ;
+comment "{-" "-}" ;
+
+Module. Module ::= [Decl] ;
+separator Decl ";" ;
+
+DataDecl.  Decl ::= "data" CIdent ":" Exp "where" "{" [ConsDecl] "}" ;
+TypeDecl.  Decl ::= CIdent ":" Exp ;
+ValueDecl. Decl ::= CIdent "=" Exp ;
+
+ConsDecl. ConsDecl ::= CIdent ":" Exp ;
+separator ConsDecl ";" ;
+
+separator Pattern "";
+
+-- Constructor patterns.
+PCons.     Pattern ::= "(" CIdent [Pattern] ")" ;
+
+-- Variable patterns. Note that in the core language,
+-- constructor patterns must have parantheses.
+PVar.      Pattern ::= PatternVariable ;
+-- Record patterns.
+PRec.      Pattern ::= "rec" "{" [FieldPattern] "}";
+-- String literal patterns.
+PStr.      Pattern ::= String ;
+-- Integer literal patterns.
+PInt.      Pattern ::= Integer ;
+
+FieldPattern. FieldPattern ::= CIdent "=" Pattern ;
+separator FieldPattern ";" ;
+
+-- Variable patterns
+PVVar. PatternVariable  ::= CIdent ;
+-- Wild card patterns
+PVWild. PatternVariable ::= "_" ;
+
+-- Let expressions.
+ELet.      Exp  ::= "let" "{" [LetDef] "}" "in" Exp ;
+LetDef.    LetDef ::= CIdent "=" Exp ;
+separator LetDef ";" ;
+
+-- Case expressions.
+ECase.     Exp  ::= "case" Exp "of" "{" [Case] "}" ;
+Case.      Case ::= Pattern "|" Exp "->" Exp ;
+separator  Case ";" ;
+
+-- Lambda abstractions.
+EAbs.      Exp1 ::= "\\" PatternVariable "->" Exp ;
+-- Function types.
+EPi.       Exp1 ::= "(" PatternVariable ":" Exp ")" "->" Exp ;
+
+-- Function application.
+EApp.      Exp3 ::= Exp3 Exp4 ;
+
+-- Record field projection.
+EProj.     Exp4 ::= Exp4 "." CIdent ;
+
+-- Record types.
+ERecType.  Exp5 ::= "sig" "{" [FieldType] "}" ;
+FieldType. FieldType  ::= CIdent ":" Exp ;
+separator FieldType ";" ;
+
+-- Record expressions.
+ERec.      Exp5 ::= "rec" "{" [FieldValue] "}" ;
+FieldValue.FieldValue ::= CIdent "=" Exp ;
+separator FieldValue ";" ;
+
+
+-- Functions, constructors and local variables.
+EVar.      Exp5 ::= CIdent ;
+-- The constant Type.
+EType.     Exp5 ::= "Type" ;
+-- String literal expressions.
+EStr.      Exp5 ::= String ;
+-- Integer literal expressions.
+EInteger.  Exp5 ::= Integer ;
+-- Double literal expressions.
+EDouble.   Exp5 ::= Double ;
+-- Meta variables
+EMeta.     Exp5 ::= TMeta ;
+
+token TMeta ('?' digit+) ;
+
+coercions Exp 5 ;
+
+
+-- Identifiers in core can start with underscore to allow
+-- generating unique identifiers easily.
+token CIdent ((letter | '_') (letter | digit | '_' | '\'')*) ;
