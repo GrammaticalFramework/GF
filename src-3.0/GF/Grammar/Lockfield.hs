@@ -16,8 +16,10 @@
 
 module GF.Grammar.Lockfield (lockRecType, unlockRecord, lockLabel, isLockLabel) where
 
-import GF.Grammar.Grammar
+import qualified Data.ByteString.Char8 as BS
+
 import GF.Infra.Ident
+import GF.Grammar.Grammar
 import GF.Grammar.Macros
 import GF.Grammar.PrGrammar
 
@@ -38,9 +40,12 @@ unlockRecord c ft = do
   return $ mkAbs xs t'
 
 lockLabel :: Ident -> Label
-lockLabel c = LIdent $ "lock_" ++ prt c ----
+lockLabel c = LIdent $! BS.append lockPrefix (ident2bs c)
 
 isLockLabel :: Label -> Bool
 isLockLabel l = case l of
-  LIdent c -> take 5 c == "lock_"
-  _ -> False
+  LIdent c -> BS.isPrefixOf lockPrefix c
+  _        -> False
+
+
+lockPrefix = BS.pack "lock_"

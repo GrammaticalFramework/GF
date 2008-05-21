@@ -4,7 +4,7 @@ include config.mk
 GHMAKE=$(GHC) --make
 GHCXMAKE=ghcxmake
 GHCFLAGS+= -fglasgow-exts
-GHCOPTFLAGS=-O2
+GHCOPTFLAGS=-O2 -prof
 GHCFUDFLAG=
 JAVAFLAGS=-target 1.4 -source 1.4
 GFEDITOR=JavaGUI2
@@ -207,7 +207,7 @@ gfc: gf3
 gfi: gf3
 
 gf3:
-	$(GHMAKE) $(GHCOPTFLAGS) $(GHCFLAGS) -o gf3 GF/Devel/GF.hs
+	$(GHMAKE) $(GHCOPTFLAGS) -o gf3 GF/Devel/GF.hs
 	strip $(GF3_EXE)
 	mv $(GF3_EXE) ../bin/
 

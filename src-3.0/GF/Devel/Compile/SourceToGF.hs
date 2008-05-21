@@ -235,7 +235,7 @@ transCatDef x = case x of
 	   constyp = mkProd (cont ++ [cd, M.mkDecl lc]) lc
 	   consfund = (consId, absFun constyp) ---- (yes constyp) (yes G.EData))
 	 return [catd,nilfund,consfund]
-   mkId x i = if isWildIdent x then (mkIdent "x" i) else x
+   mkId x i = if isWildIdent x then (identV "x" i) else x
 
 transFunDef :: FunDef -> Err ([Ident], G.Type)
 transFunDef x = case x of

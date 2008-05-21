@@ -42,7 +42,7 @@ mkRules conf f t = (fun f ty, lin f (takeWhile (/=':') t)) where
   args = mkArgs conf ts
   ty   = concat [a ++ " -> " | a <- map snd args] ++ val
   (ts,val) = let tt = lexTerm t in (init tt,last tt)
----  f  = mkIdent t
+---  f  = identV t
   fun c a = unwords   ["  fun", c, ":",a,";"] 
   lin c a = unwords $ ["  lin", c] ++ map fst args ++ ["=",a,";"] 
 

@@ -89,7 +89,7 @@ sameECat :: ECat -> ECat -> Bool
 sameECat ec1 ec2 = ecat2scat ec1 == ecat2scat ec2
 
 coercionName :: Name
-coercionName = Name Ident.wildIdent [Unify [0]]
+coercionName = Name Ident.identW [Unify [0]]
 
 isCoercion :: Name -> Bool
 isCoercion (Name fun [Unify [0]]) = Ident.isWildIdent fun

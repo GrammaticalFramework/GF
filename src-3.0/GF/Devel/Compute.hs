@@ -21,6 +21,7 @@ import GF.Infra.Option
 import GF.Data.Str
 import GF.Grammar.PrGrammar
 import GF.Infra.Modules
+import GF.Grammar.Predef
 import GF.Grammar.Macros
 import GF.Grammar.Lookup
 import GF.Grammar.Refresh
@@ -50,8 +51,8 @@ computeTermOpt rec gr = comput True where
    comput full g t = ---- errIn ("subterm" +++ prt t) $ --- for debugging 
               case t of
 
-     Q (IC "Predef") _ -> return t
-     Q p c -> look p c 
+     Q p c | p == cPredef -> return t
+           | otherwise    -> look p c 
 
      -- if computed do nothing
      Computed t' -> return $ unComputed t'
@@ -89,7 +90,7 @@ computeTermOpt rec gr = comput True where
           _ | not (null [() | FV _ <- as']) -> compApp g (mkApp h' as')
           c@(QC _ _) -> do
             return $ mkApp c as'
-          Q (IC "Predef") f -> do     
+          Q mod f | mod == cPredef -> do     
             (t',b) <- appPredefined (mkApp h' as')
             if b then return t' else comp g t'
 
@@ -446,8 +447,8 @@ computeTermOpt rec gr = comput True where
 -- | argument variables cannot be glued
 checkNoArgVars :: Term -> Err Term
 checkNoArgVars t = case t of
-  Vr (IA _)  -> Bad $ glueErrorMsg $ prt t 
-  Vr (IAV _) -> Bad $ glueErrorMsg $ prt t 
+  Vr (IA _ _)    -> Bad $ glueErrorMsg $ prt t 
+  Vr (IAV _ _ _) -> Bad $ glueErrorMsg $ prt t 
   _ -> composOp checkNoArgVars t
 
 glueErrorMsg s = 

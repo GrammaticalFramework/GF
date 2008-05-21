@@ -1,6 +1,7 @@
 module GF.GFCC.DataGFCC where
 
 import GF.GFCC.CId
+import GF.Infra.PrintClass(prt)
 import GF.Infra.CompactPrint
 import GF.Text.UTF8
 import GF.Formalism.FCFG
@@ -90,21 +91,17 @@ data Equation =
 
 statGFCC :: GFCC -> String
 statGFCC gfcc = unlines [
-  "Abstract\t" ++ pr (absname gfcc), 
-  "Concretes\t" ++ unwords (lmap pr (cncnames gfcc)), 
-  "Categories\t" ++ unwords (lmap pr (keys (cats (abstract gfcc)))) 
+  "Abstract\t" ++ prt (absname gfcc), 
+  "Concretes\t" ++ unwords (lmap prt (cncnames gfcc)), 
+  "Categories\t" ++ unwords (lmap prt (keys (cats (abstract gfcc)))) 
   ]
- where pr (CId s) = s
-
-printCId :: CId -> String
-printCId (CId s) = s
 
 -- merge two GFCCs; fails is differens absnames; priority to second arg
 
 unionGFCC :: GFCC -> GFCC -> GFCC
 unionGFCC one two = case absname one of
-  CId "" -> two                  -- extending empty grammar
-  n | n == absname two -> one {  -- extending grammar with same abstract
+  n | n == wildCId     -> two    -- extending empty grammar
+    | n == absname two -> one {  -- extending grammar with same abstract
       concretes = Data.Map.union (concretes two) (concretes one),
       cncnames  = Data.List.union (cncnames two) (cncnames one)
     }
@@ -112,7 +109,7 @@ unionGFCC one two = case absname one of
 
 emptyGFCC :: GFCC
 emptyGFCC = GFCC {
-  absname   = CId "",
+  absname   = wildCId,
   cncnames  = [] ,
   gflags    = empty,
   abstract  = error "empty grammar, no abstract",

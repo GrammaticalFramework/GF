@@ -20,8 +20,10 @@ module GF.Grammar.Macros where
 
 import GF.Data.Operations
 import GF.Data.Str
-import GF.Grammar.Grammar
 import GF.Infra.Ident
+import GF.Grammar.Grammar
+import GF.Grammar.Values
+import GF.Grammar.Predef
 import GF.Grammar.PrGrammar
 
 import Control.Monad (liftM, liftM2)
@@ -55,12 +57,6 @@ qq (m,c) = Q m c
 typeForm :: Type -> Err (Context, Cat, [Term])
 typeForm = qTypeForm ---- no need to distinguish any more
 
-cPredef :: Ident
-cPredef = identC "Predef"
-
-cnPredef :: String -> Term
-cnPredef f = Q cPredef (identC f)
-
 typeFormCnc :: Type -> Err (Context, Type)
 typeFormCnc t = case t of
   Prod x a b  -> do
@@ -91,18 +87,11 @@ typeRawSkeleton typ =
 
 type MCat = (Ident,Ident)
 
-sortMCat :: String -> MCat
-sortMCat s = (zIdent "_", zIdent s)
-
---- hack for Editing.actCat in empty state
-errorCat :: MCat
-errorCat = (zIdent "?", zIdent "?")
-
 getMCat :: Term -> Err MCat
 getMCat t = case t of
   Q  m c -> return (m,c)
   QC m c -> return (m,c)
-  Sort s -> return $ sortMCat s
+  Sort c -> return (identW, c)
   App f _ -> getMCat f
   _ -> prtBad "no qualified constant" t
 
@@ -213,12 +202,6 @@ mkAbs xx t = foldr Abs t xx
 appCons :: Ident -> [Term] -> Term
 appCons = mkApp . Cn
 
-appc :: String -> [Term] -> Term
-appc = appCons . zIdent
-
-appqc :: String -> String -> [Term] -> Term
-appqc q c = mkApp (Q (zIdent q) (zIdent c))
-
 mkLet :: [LocalDef] -> Term -> Term
 mkLet defs t = foldr Let t defs
 
@@ -232,11 +215,8 @@ isVariable _ = False
 eqIdent :: Ident -> Ident -> Bool
 eqIdent = (==)
 
-zIdent :: String -> Ident
-zIdent s = identC s
-
 uType :: Type
-uType = Cn (zIdent "UndefinedType")
+uType = Cn cUndefinedType
 
 assign :: Label -> Term -> Assign
 assign l t = (l,(Nothing,t))
@@ -252,15 +232,6 @@ mkAssign lts = [assign l t | (l,t) <- lts]
 
 zipAssign :: [Label] -> [Term] -> [Assign]
 zipAssign ls ts = [assign l t | (l,t) <- zip ls ts]
-
-ident2label :: Ident -> Label
-ident2label c = LIdent (prIdent c)
-
-label2ident :: Label -> Ident
-label2ident = identC . prLabel
-
-prLabel :: Label -> String
-prLabel = prt
 
 mapAssignM :: Monad m => (Term -> m c) -> [Assign] -> m [(Label,(Maybe c,c))]
 mapAssignM f = mapM (\ (ls,tv) -> liftM ((,) ls) (g tv))
@@ -280,41 +251,40 @@ mkRecType = mkRecTypeN 0
 
 record2subst :: Term -> Err Substitution
 record2subst t = case t of
-  R fs -> return [(zIdent x, t) | (LIdent x,(_,t)) <- fs]
+  R fs -> return [(identC x, t) | (LIdent x,(_,t)) <- fs]
   _ -> prtBad "record expected, found" t
 
 typeType, typePType, typeStr, typeTok, typeStrs :: Term
 
-typeType  = srt "Type"
-typePType = srt "PType"
-typeStr   = srt "Str"
-typeTok   = srt "Tok"
-typeStrs  = srt "Strs"
+typeType  = Sort cType
+typePType = Sort cPType
+typeStr   = Sort cStr
+typeTok   = Sort cTok
+typeStrs  = Sort cStrs
 
 typeString, typeFloat, typeInt :: Term
 typeInts :: Integer -> Term
+typePBool :: Term
+typeError :: Term
 
-typeString = constPredefRes "String"
-typeInt = constPredefRes "Int"
-typeFloat = constPredefRes "Float"
-typeInts i = App (constPredefRes "Ints") (EInt i)
+typeString = cnPredef cString
+typeInt = cnPredef cInt
+typeFloat = cnPredef cFloat
+typeInts i = App (cnPredef cInts) (EInt i)
+typePBool = cnPredef cPBool
+typeError = cnPredef cErrorType
 
-isTypeInts :: Term -> Bool
-isTypeInts ty = case ty of
-  App c _ -> c == constPredefRes "Ints"
-  _ -> False
-
-constPredefRes :: String -> Term
-constPredefRes s = Q (IC "Predef") (zIdent s)
+isTypeInts :: Term -> Maybe Integer
+isTypeInts (App c (EInt i)) | c == cnPredef cInts = Just i
+isTypeInts _                                      = Nothing
 
 isPredefConstant :: Term -> Bool
 isPredefConstant t = case t of
-  Q (IC "Predef") _ -> True
-  Q (IC "PredefAbs") _ -> True
-  _ -> False
+  Q mod _ | mod == cPredef || mod == cPredefAbs -> True
+  _                                             -> False
 
-isPredefAbsType :: Ident -> Bool
-isPredefAbsType c = elem c [zIdent "Int", zIdent "String"]
+cnPredef :: Ident -> Term
+cnPredef f = Q cPredef f
 
 mkSelects :: Term -> [Term] -> Term
 mkSelects t tt = foldl S t tt
@@ -327,17 +297,10 @@ mkCTable ids v = foldr ccase v ids where
   ccase x t = T TRaw [(PV x,t)]
 
 mkDecl :: Term -> Decl
-mkDecl typ = (wildIdent, typ)
+mkDecl typ = (identW, typ)
 
 eqStrIdent :: Ident -> Ident -> Bool
 eqStrIdent = (==)
-
-tupleLabel, linLabel :: Int -> Label
-tupleLabel i = LIdent $ "p" ++ show i
-linLabel i = LIdent $ "s" ++ show i
-
-theLinLabel :: Label
-theLinLabel = LIdent "s"
 
 tuple2record :: [Term] -> [Assign]
 tuple2record ts = [assign (tupleLabel i) t | (i,t) <- zip [1..] ts]
@@ -352,10 +315,10 @@ mkCases :: Ident -> Term -> Term
 mkCases x t = T TRaw [(PV x, t)]
 
 mkWildCases :: Term -> Term
-mkWildCases = mkCases wildIdent
+mkWildCases = mkCases identW
 
 mkFunType :: [Type] -> Type -> Type
-mkFunType tt t = mkProd ([(wildIdent, ty) | ty <- tt], t, []) -- nondep prod
+mkFunType tt t = mkProd ([(identW, ty) | ty <- tt], t, []) -- nondep prod
 
 plusRecType :: Type -> Type -> Err Type
 plusRecType t1 t2 = case (unComputed t1, unComputed t2) of
@@ -376,11 +339,7 @@ plusRecord t1 t2 =
 
 -- | default linearization type
 defLinType :: Type
-defLinType = RecType [(LIdent "s",  typeStr)]
-
--- | refreshing variables
-varX :: Int -> Ident
-varX i = identV (i,"x")
+defLinType = RecType [(theLinLabel,  typeStr)]
 
 -- | refreshing variables
 mkFreshVar :: [Ident] -> Ident
@@ -414,27 +373,11 @@ float2term = EFloat
 ident2terminal :: Ident -> Term
 ident2terminal = K . prIdent
 
--- | create a constant
-string2CnTrm :: String -> Term
-string2CnTrm = Cn . zIdent
-
 symbolOfIdent :: Ident -> String
 symbolOfIdent = prIdent
 
 symid :: Ident -> String
 symid = symbolOfIdent
-
-vr :: Ident -> Term
-cn :: Ident -> Term
-srt :: String -> Term
-meta :: MetaSymb -> Term
-cnIC :: String -> Term
-
-vr = Vr
-cn = Cn
-srt = Sort
-meta = Meta
-cnIC = cn . IC
 
 justIdentOf :: Term -> Maybe Ident
 justIdentOf (Vr x) = Just x
@@ -490,9 +433,6 @@ linTypeStr = mkRecType linLabel [typeStr] -- default lintype {s :: Str}
 linAsStr :: String -> Term
 linAsStr s = mkRecord linLabel [K s] -- default linearization {s = s}
 
-linDefStr :: Term
-linDefStr = Abs s (R [assign (linLabel 0) (Vr s)]) where s = zIdent "s"
-
 term2patt :: Term -> Err Patt
 term2patt trm = case termForm trm of
   Ok ([], Vr x, []) -> return (PV x)
@@ -516,24 +456,24 @@ term2patt trm = case termForm trm of
   Ok ([],K s,   []) -> return $ PString s
 
 --- encodings due to excessive use of term-patt convs. AR 7/1/2005
-  Ok ([], Cn (IC "@"), [Vr a,b]) -> do
+  Ok ([], Cn id, [Vr a,b]) | id == cAs -> do
     b' <- term2patt b
     return (PAs a b')
-  Ok ([], Cn (IC "-"), [a]) -> do
+  Ok ([], Cn id, [a]) | id == cNeg  -> do
     a' <- term2patt a
     return (PNeg a')
-  Ok ([], Cn (IC "*"), [a]) -> do
+  Ok ([], Cn id, [a]) | id == cRep -> do
     a' <- term2patt a
     return (PRep a')
-  Ok ([], Cn (IC "?"), []) -> do
+  Ok ([], Cn id, []) | id == cRep -> do
     return PChar
-  Ok ([], Cn (IC "[]"),[K s]) -> do
+  Ok ([], Cn id,[K s]) | id == cChars  -> do
     return $ PChars s
-  Ok ([], Cn (IC "+"), [a,b]) -> do
+  Ok ([], Cn id, [a,b]) | id == cSeq -> do
     a' <- term2patt a
     b' <- term2patt b
     return (PSeq a' b')
-  Ok ([], Cn (IC "|"), [a,b]) -> do
+  Ok ([], Cn id, [a,b]) | id == cAlt -> do
     a' <- term2patt a
     b' <- term2patt b
     return (PAlt a' b')
@@ -546,7 +486,7 @@ term2patt trm = case termForm trm of
 patt2term :: Patt -> Term
 patt2term pt = case pt of
   PV x      -> Vr x
-  PW        -> Vr wildIdent             --- not parsable, should not occur
+  PW        -> Vr identW             --- not parsable, should not occur
   PVal t i  -> Val t i
   PMacro c  -> Cn c
   PM p c    -> Q p c
@@ -560,13 +500,13 @@ patt2term pt = case pt of
   PFloat i  -> EFloat i
   PString s -> K s 
 
-  PAs x p   -> appc "@" [Vr x, patt2term p]            --- an encoding
-  PChar     -> appc "?" []                             --- an encoding
-  PChars s  -> appc "[]" [K s]                         --- an encoding
-  PSeq a b  -> appc "+" [(patt2term a), (patt2term b)] --- an encoding
-  PAlt a b  -> appc "|" [(patt2term a), (patt2term b)] --- an encoding
-  PRep a    -> appc "*" [(patt2term a)]                --- an encoding
-  PNeg a    -> appc "-" [(patt2term a)]                --- an encoding
+  PAs x p   -> appCons cAs    [Vr x, patt2term p]            --- an encoding
+  PChar     -> appCons cChar  []                             --- an encoding
+  PChars s  -> appCons cChars [K s]                          --- an encoding
+  PSeq a b  -> appCons cSeq   [(patt2term a), (patt2term b)] --- an encoding
+  PAlt a b  -> appCons cAlt   [(patt2term a), (patt2term b)] --- an encoding
+  PRep a    -> appCons cRep   [(patt2term a)]                --- an encoding
+  PNeg a    -> appCons cNeg   [(patt2term a)]                --- an encoding
 
 
 redirectTerm :: Ident -> Term -> Term
@@ -575,44 +515,11 @@ redirectTerm n t = case t of
   Q _ f  -> Q  n f
   _ -> composSafeOp (redirectTerm n) t
 
--- | to gather s-fields; assumes term in normal form, preserves label
-allLinFields :: Term -> Err [[(Label,Term)]]
-allLinFields trm = case unComputed trm of
-----  R rs  -> return [[(l,t) | (l,(Just ty,t)) <- rs, isStrType ty]] -- good
-  R rs  -> return [[(l,t) | (l,(_,t)) <- rs, isLinLabel l]] ---- bad
-  FV ts -> do
-    lts <- mapM allLinFields ts
-    return $ concat lts
-  _ -> prtBad "fields can only be sought in a record not in" trm
-
--- | deprecated
-isLinLabel :: Label -> Bool
-isLinLabel l = case l of
-     LIdent ('s':cs) | all isDigit cs -> True
-     _ -> False
-
 -- | to gather ultimate cases in a table; preserves pattern list
 allCaseValues :: Term -> [([Patt],Term)]
 allCaseValues trm = case unComputed trm of
   T _ cs -> [(p:ps, t) | (p,t0) <- cs, (ps,t) <- allCaseValues t0]
   _      -> [([],trm)]
-
--- | to gather all linearizations; assumes normal form, preserves label and args
-allLinValues :: Term -> Err [[(Label,[([Patt],Term)])]]
-allLinValues trm = do
-  lts <- allLinFields trm
-  mapM (mapPairsM (return . allCaseValues)) lts
-
--- | to mark str parts of fields in a record f by a function f
-markLinFields :: (Term -> Term) -> Term -> Term
-markLinFields f t = case t of
-    R r -> R $ map mkField r
-    _ -> t
- where
-  mkField (l,(_,t)) = if (isLinLabel l) then (assign l (mkTbl t)) else (assign l t)
-  mkTbl t = case t of
-    T i cs -> T i [(p, mkTbl v) | (p,v) <- cs]
-    _ -> f t
 
 -- | to get a string from a term that represents a sequence of terminals
 strsFromTerm :: Term -> Err [Str]

@@ -21,10 +21,12 @@ module GF.Source.GrammarToSource ( trGrammar,
 
 import GF.Data.Operations
 import GF.Grammar.Grammar
+import GF.Grammar.Predef 
 import GF.Infra.Modules
 import GF.Infra.Option
 import qualified GF.Source.AbsGF as P
 import GF.Infra.Ident
+import qualified Data.ByteString.Char8 as BS
 
 -- | AR 13\/5\/2003
 --
@@ -96,7 +98,7 @@ trAnyDef (i,info) = let i' = tri i in case info of
 
   ResOverload tysts -> 
     [P.DefOper [P.DDef [mkName i'] (
-      P.EApp (P.EIdent $ tri $ identC "overload") 
+      P.EApp (P.EIdent $ tri $ cOverload)
         (P.ERecord [P.LDFull [i'] (trt ty) (trt fu) | (ty,fu) <- tysts]))]]
 
   CncCat (Yes ty) Nope _ -> 
@@ -131,7 +133,7 @@ trPerh p = case p of
 
 trFlag :: Option -> P.TopDef
 trFlag o = case o of
-  Opt (f,[x]) -> P.DefFlag [P.FlagDef (tri $ identC f) (tri $ identC x)]
+  Opt (f,[x]) -> P.DefFlag [P.FlagDef (tri $ identC (BS.pack f)) (tri $ identC (BS.pack x))]
   _ -> P.DefFlag [] --- warning?
 
 trt :: Term -> P.Exp 
@@ -139,14 +141,12 @@ trt trm = case trm of
     Vr s -> P.EIdent $ tri s
     Cn s -> P.ECons $ tri s
     Con s -> P.EConstr $ tri s
-    Sort s -> P.ESort $ case s of
-      "Type" -> P.Sort_Type
-      "PType" -> P.Sort_PType
-      "Tok" -> P.Sort_Tok
-      "Str" -> P.Sort_Str
-      "Strs" -> P.Sort_Strs
-      _ -> error $ "not yet sort " +++ show trm ----
-
+    Sort s -> P.ESort $! if s == cType  then P.Sort_Type  else
+                         if s == cPType then P.Sort_PType else
+                         if s == cTok   then P.Sort_Tok   else
+                         if s == cStr   then P.Sort_Str   else
+                         if s == cStrs  then P.Sort_Strs  else
+                           error $ "not yet sort " +++ show trm
     App c a -> P.EApp (trt c) (trt a)
     Abs x b -> P.EAbstr [trb x] (trt b)
     Eqs pts -> P.EEqs [P.Equ (map trp ps) (trt t) | (ps,t) <- pts]
@@ -210,7 +210,7 @@ trp p = case p of
     PC c a -> P.PC (tri c) (map trp a)
     PP p c [] -> P.PQ (tri p) (tri c)
     PP p c a -> P.PQC (tri p) (tri c) (map trp a)
-    PR r -> P.PR [P.PA [tri $ trLabelIdent l] (trp p) | (l,p) <- r]
+    PR r -> P.PR [P.PA [tri $ label2ident l] (trp p) | (l,p) <- r]
     PString s -> P.PStr s
     PInt i -> P.PInt i
     PFloat i -> P.PFloat i
@@ -230,9 +230,9 @@ trp p = case p of
 trAssign (lab, (mty, t)) = maybe (P.LDDef x t') (\ty -> P.LDFull x (trt ty) t') mty
   where 
     t' = trt t
-    x  = [tri $ trLabelIdent lab]
+    x  = [tri $ label2ident lab]
 
-trLabelling (lab,ty) = P.LDDecl [tri $ trLabelIdent lab] (trt ty)
+trLabelling (lab,ty) = P.LDDecl [tri $ label2ident lab] (trt ty)
 
 trCase  (patt, trm) = P.Case (trp patt) (trt trm)
 trCases (patts,trm) = P.Case (foldl1 P.PDisj (map trp patts)) (trt trm)
@@ -240,7 +240,7 @@ trCases (patts,trm) = P.Case (foldl1 P.PDisj (map trp patts)) (trt trm)
 trDecl (x,ty) = P.DDDec [trb x] (trt ty)
 
 tri :: Ident -> P.PIdent
-tri = ppIdent . prIdent 
+tri = ppIdent . ident2bs 
 
 ppIdent i = P.PIdent ((0,0),i)
 
@@ -250,10 +250,6 @@ trLabel :: Label -> P.Label
 trLabel i = case i of
   LIdent s -> P.LIdent $ ppIdent s
   LVar i -> P.LVar $ toInteger i
-
-trLabelIdent i = identC $ case i of
-  LIdent s -> s
-  LVar i -> "v" ++ show i --- should not happen
 
 mkName :: P.PIdent -> P.Name
 mkName = P.IdentName

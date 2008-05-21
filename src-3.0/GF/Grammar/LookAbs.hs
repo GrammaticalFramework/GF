@@ -115,7 +115,7 @@ lookupRef gr binds at = case at of
 refsForType :: (Val -> Type -> Bool) -> GFCGrammar -> Binds -> Val -> [(Term,(Val,Bool))]
 refsForType compat gr binds val =     
     -- bound variables --- never recursive?
-    [(vr i, (t,False)) | (i,t) <- binds, Ok ty <- [val2exp t], compat val ty] ++
+    [(Vr i, (t,False)) | (i,t) <- binds, Ok ty <- [val2exp t], compat val ty] ++
     -- integer and string literals
     [(EInt i, (val,False)) | val == valAbsInt, i <- [0,1,2,5,11,1978]] ++
     [(EFloat i, (val,False)) | val == valAbsFloat, i <- [3.1415926]] ++

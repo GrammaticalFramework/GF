@@ -75,7 +75,7 @@ addSubexpConsts tree cnc = cnc {
        W s t  -> W s (recomp f t)
        P t p  -> P (recomp f t) (recomp f p)
        _ -> t
-   fid n = CId $ "_" ++ show n
+   fid n = mkCId $ "_" ++ show n
    rec field = Map.fromAscList [(f,recomp f trm) | (f,trm) <- Map.assocs (field cnc)]
 
 

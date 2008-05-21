@@ -1,9 +1,11 @@
 module GF.GFCC.Raw.ParGFCCRaw (parseGrammar) where
 
+import GF.GFCC.CId
 import GF.GFCC.Raw.AbsGFCCRaw
 
 import Control.Monad
 import Data.Char
+import qualified Data.ByteString.Char8 as BS
 
 parseGrammar :: String -> IO Grammar
 parseGrammar s = case runP pGrammar s of
@@ -27,7 +29,7 @@ pTerm n = skipSpaces >> (pParen <++ pApp <++ pNum <++ pStr <++ pMeta)
                    <++
                    return (AInt (read x)))
         pMeta = char '?' >> return AMet
-        pIdent = liftM CId $ liftM2 (:) (satisfy isIdentFirst) (munch isIdentRest)
+        pIdent = liftM2 (:) (satisfy isIdentFirst) (munch isIdentRest)
         isIdentFirst c = c == '_' || isAlpha c
         isIdentRest c = c == '_' || c == '\'' || isAlphaNum c
 

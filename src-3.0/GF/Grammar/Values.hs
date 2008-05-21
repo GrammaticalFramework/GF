@@ -19,15 +19,15 @@ module GF.Grammar.Values (-- * values used in TC type checking
 	       -- * for TC
 	       valAbsInt, valAbsFloat, valAbsString, vType,
 	       isPredefCat,
-	       cType, cPredefAbs, cInt, cFloat, cString,
 	       eType, tree2exp, loc2treeFocus
 	      ) where
 
 import GF.Data.Operations
 import GF.Data.Zipper
 
-import GF.Grammar.Grammar
 import GF.Infra.Ident
+import GF.Grammar.Grammar
+import GF.Grammar.Predef
 
 -- values used in TC type checking
 
@@ -67,26 +67,8 @@ valAbsString = VCn (cPredefAbs, cString)
 vType :: Val
 vType = VType
 
-cType :: Ident
-cType = identC "Type" --- #0
-
-cPredefAbs :: Ident
-cPredefAbs = identC "PredefAbs"
-
-cInt :: Ident
-cInt = identC "Int"
-
-cFloat :: Ident
-cFloat = identC "Float"
-
-cString :: Ident
-cString = identC "String"
-
-isPredefCat :: Ident -> Bool
-isPredefCat c = elem c [cInt,cString,cFloat]
-
 eType :: Exp
-eType = Sort "Type"
+eType = Sort cType
 
 tree2exp :: Tree -> Exp
 tree2exp (Tr (N (bi,at,_,_,_),ts)) = foldr Abs (foldl App at' ts') bi' where

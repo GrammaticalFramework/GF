@@ -40,7 +40,7 @@ mainGFC xx = do
 targetName :: Options -> CId -> String
 targetName opts abs = case getOptVal opts (aOpt "target") of
   Just n -> n
-  _ -> prIdent abs
+  _ -> prCId abs
 
 targetNameGFCC :: Options -> CId -> FilePath
 targetNameGFCC opts abs = targetName opts abs ++ ".gfcc"

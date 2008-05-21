@@ -46,6 +46,23 @@ transTransfer x = case x of
   TransferOut open  -> failure x
 
 
+transModHeader :: ModHeader -> Result
+transModHeader x = case x of
+  MModule2 complmod modtype modheaderbody  -> failure x
+
+
+transModHeaderBody :: ModHeaderBody -> Result
+transModHeaderBody x = case x of
+  MBody2 extend opens  -> failure x
+  MNoBody2 includeds  -> failure x
+  MWith2 included opens  -> failure x
+  MWithBody2 included opens0 opens  -> failure x
+  MWithE2 includeds included opens  -> failure x
+  MWithEBody2 includeds included opens0 opens  -> failure x
+  MReuse2 pident  -> failure x
+  MUnion2 includeds  -> failure x
+
+
 transModType :: ModType -> Result
 transModType x = case x of
   MTAbstract pident  -> failure x

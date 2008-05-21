@@ -81,7 +81,7 @@ typeSkeleton typ = do
 -- construct types and terms
 
 mkFunType :: [Type] -> Type -> Type
-mkFunType tt t = mkProd ([(wildIdent, ty) | ty <- tt]) t -- nondep prod
+mkFunType tt t = mkProd ([(identW, ty) | ty <- tt]) t -- nondep prod
 
 mkApp :: Term -> [Term] -> Term
 mkApp = foldl App
@@ -121,7 +121,7 @@ unzipR :: [Assign] -> ([Label],[Term])
 unzipR r = (ls, map snd ts) where (ls,ts) = unzip r
 
 mkDecl :: Term -> Decl
-mkDecl typ = (wildIdent, typ)
+mkDecl typ = (identW, typ)
 
 mkLet :: [LocalDef] -> Term -> Term
 mkLet defs t = foldr Let t defs
@@ -336,7 +336,7 @@ changeTableType co i = case i of
 patt2term :: Patt -> Term
 patt2term pt = case pt of
   PV x      -> Vr x
-  PW        -> Vr wildIdent             --- not parsable, should not occur
+  PW        -> Vr identW             --- not parsable, should not occur
   PC c pp   -> mkApp (Con c) (map patt2term pp)
   PP p c pp -> mkApp (QC p c) (map patt2term pp)
   PR r      -> R [assign l (patt2term p) | (l,p) <- r] 

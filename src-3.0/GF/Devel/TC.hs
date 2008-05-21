@@ -22,6 +22,7 @@ module GF.Devel.TC (AExp(..),
 	  ) where
 
 import GF.Data.Operations
+import GF.Grammar.Predef
 import GF.Grammar.Abstract
 import GF.Devel.AbsCompute
 
@@ -145,10 +146,9 @@ checkInferExp th tenv@(k,_,_) e typ = do
 inferExp :: Theory -> TCEnv -> Exp -> Err (AExp, Val, [(Val,Val)])
 inferExp th tenv@(k,rho,gamma) e = case e of
    Vr x -> mkAnnot (AVr x) $ noConstr $ lookupVar gamma x
-   Q m c 
-    | m == cPredefAbs && (elem c (map identC ["Int","String","Float"])) ->
-                                       return (ACn (m,c) vType, vType, [])
-    | otherwise -> mkAnnot (ACn (m,c)) $ noConstr $ lookupConst th (m,c)
+   Q m c | m == cPredefAbs && isPredefCat c
+                     -> return (ACn (m,c) vType, vType, [])
+         | otherwise -> mkAnnot (ACn (m,c)) $ noConstr $ lookupConst th (m,c)
    QC m c -> mkAnnot (ACn (m,c)) $ noConstr $ lookupConst th (m,c) ----
    EInt i -> return (AInt i, valAbsInt, [])
    EFloat i -> return (AFloat i, valAbsFloat, [])
@@ -164,12 +164,6 @@ inferExp th tenv@(k,rho,gamma) e = case e of
 	return $ (AApp f' a' b', b', csf ++ csa)
       _ -> prtBad ("Prod expected for function" +++ prt f +++ "instead of") typ
    _ -> prtBad "cannot infer type of expression" e
- where
-   predefAbs c s = case c of
-     IC "Int" -> return $ const $ Q cPredefAbs cInt
-     IC "Float" -> return $ const $ Q cPredefAbs cFloat
-     IC "String" -> return $ const $ Q cPredefAbs cString
-     _ -> Bad s
 
 checkEqs :: Theory -> TCEnv -> (Fun,Trm) -> Val -> Err [(Val,Val)]
 checkEqs th tenv@(k,rho,gamma) (fun@(m,f),def) val = case def of
@@ -188,9 +182,9 @@ checkEqs th tenv@(k,rho,gamma) (fun@(m,f),def) val = case def of
     (_,cs2)  <- errIn (show bds) $ checkExp th tenv' df typ
     return $ (cs1 ++ cs2)
   p2t p (ps,i,g) = case p of
-     PW      -> (meta (MetaSymb i) : ps, i+1,        g) 
-     PV IW   -> (meta (MetaSymb i) : ps, i+1,        g) 
-     PV x    -> (meta (MetaSymb i) : ps, i+1,upd x i g)
+     PW      -> (Meta (MetaSymb i) : ps, i+1,        g) 
+     PV IW   -> (Meta (MetaSymb i) : ps, i+1,        g) 
+     PV x    -> (Meta (MetaSymb i) : ps, i+1,upd x i g)
      PString s -> (            K s : ps, i,          g)
      PInt n -> (EInt n : ps, i, g)
      PFloat n -> (EFloat n : ps, i, g)
@@ -238,9 +232,9 @@ checkBranch th tenv b@(ps,t) ty = errIn ("branch" +++ show b) $
 
   ps2ts k = foldr p2t ([],0,[],k) 
   p2t p (ps,i,g,k) = case p of
-     PW      -> (meta (MetaSymb i) : ps, i+1,g,k) 
-     PV IW   -> (meta (MetaSymb i) : ps, i+1,g,k) 
-     PV x    -> (vr x   : ps, i, upd x k g,k+1)
+     PW      -> (Meta (MetaSymb i) : ps, i+1,g,k) 
+     PV IW   -> (Meta (MetaSymb i) : ps, i+1,g,k) 
+     PV x    -> (Vr x   : ps, i, upd x k g,k+1)
      PString s -> (K s : ps, i, g, k)
      PInt n -> (EInt n : ps, i, g, k)
      PFloat n -> (EFloat n : ps, i, g, k)

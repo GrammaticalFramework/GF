@@ -36,8 +36,8 @@ genRandom gen gfcc cat = genTrees (randomRs (0.0, 1.0 :: Double) gen) cat where
                 (genTrees ds2 cat)          -- else (drop k ds)
 
   genTree rs = gett rs where
-    gett ds (CId "String") = (tree (AS "foo") [], 1)
-    gett ds (CId "Int")    = (tree (AI 12345) [], 1)
+    gett ds cid | cid == mkCId "String" = (tree (AS "foo") [], 1)
+    gett ds cid | cid == mkCId "Int"    = (tree (AI 12345) [], 1)
     gett [] _ = (tree (AS "TIMEOUT") [], 1) ----
     gett ds cat = case fns cat of
       [] -> (tree (AM 0) [],1)

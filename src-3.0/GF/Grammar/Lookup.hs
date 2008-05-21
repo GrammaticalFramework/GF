@@ -1,3 +1,4 @@
+{-# LANGUAGE PatternGuards #-}
 ----------------------------------------------------------------------
 -- |
 -- Module      : Lookup
@@ -28,13 +29,13 @@ module GF.Grammar.Lookup (
 	       allParamValues, 
 	       lookupAbsDef, 
 	       lookupLincat, 
-	       opersForType,
-               linTypeInt
+	       opersForType
 	      ) where
 
 import GF.Data.Operations
 import GF.Grammar.Abstract
 import GF.Infra.Modules
+import GF.Grammar.Predef
 import GF.Grammar.Lockfield
 
 import Data.List (nub,sortBy)
@@ -192,8 +193,7 @@ allOrigInfos gr m = errVal [] $ do
 
 allParamValues :: SourceGrammar -> Type -> Err [Term]
 allParamValues cnc ptyp = case ptyp of
-     App (Q (IC "Predef") (IC "Ints")) (EInt n) -> 
-       return [EInt i | i <- [0..n]]
+     _ | Just n <- isTypeInts ptyp -> return [EInt i | i <- [0..n]]
      QC p c -> lookupParamValues cnc p c
      Q  p c -> lookupParamValues cnc p c ----
      RecType r -> do
@@ -230,17 +230,8 @@ lookupAbsDef gr m c = errIn ("looking up absdef of" +++ prt c) $ do
         _ -> return Nothing
     _ -> Bad $ prt m +++ "is not an abstract module"
 
-linTypeInt :: Type
-linTypeInt = defLinType
----      let ints k = App (Q (IC "Predef") (IC "Ints")) (EInt k) in
----      RecType [
----        (LIdent "last",ints 9),(LIdent "s", typeStr), (LIdent "size",ints 1)]
-
 lookupLincat :: SourceGrammar -> Ident -> Ident -> Err Type
-lookupLincat gr m c | elem c [zIdent "Int"] = return linTypeInt
-lookupLincat gr m c | elem c [zIdent "String", zIdent "Float"] = 
-  return defLinType --- ad hoc; not needed?
-
+lookupLincat gr m c | isPredefCat c = return defLinType --- ad hoc; not needed?
 lookupLincat gr m c = do
   mi <- lookupModule gr m
   case mi of
@@ -265,7 +256,7 @@ opersForType gr orig val =
         Ok valt <- [valTypeCnc ty],
         elem valt [val,orig]
         ] ++
-      let cat = err zIdent snd (valCat orig) in --- ignore module
+      let cat = err error snd (valCat orig) in --- ignore module
       [(f,ty) |
         Ok a <- [abstractOfConcrete gr i >>= lookupModMod gr],
         (f, AbsFun (Yes ty0) _) <- tree2list $ jments a,
