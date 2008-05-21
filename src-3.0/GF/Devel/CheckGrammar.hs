@@ -974,7 +974,7 @@ checkIfEqLType env t u trm = do
      -- the following say that Ints n is a subset of Int and of Ints m >= n
      (t,u) | Just m <- isTypeInts t, Just n <- isTypeInts t -> m >= n
            | Just _ <- isTypeInts t, u == typeInt           -> True ---- check size!
-           | t == typeInt,           Just _ <- isTypeInts t -> True ---- why this ???? AR 11/12/2005
+           | t == typeInt,           Just _ <- isTypeInts u -> True ---- why this ???? AR 11/12/2005
 
      ---- this should be made in Rename
      (Q  m a, Q  n b) | a == b -> elem m (allExtendsPlus env n) 
