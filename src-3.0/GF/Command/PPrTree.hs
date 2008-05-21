@@ -21,7 +21,7 @@ tree2exp t = case t of
   TStr s    -> tree (AS s) []
   TFloat d  -> tree (AF d) [] 
  where
-   i2i (Ident s) = CId s
+   i2i (Ident s) = mkCId s
 
 prExp :: Exp -> String
 prExp = printTree . exp2tree
@@ -36,4 +36,4 @@ exp2tree (DTr xs at ts) = tabs (map i4i xs) (tapp at (map exp2tree ts))
     tapp (AS i) [] = TStr i
     tapp (AF i) [] = TFloat i
     tapp (AM i) [] = TId (Ident "?") ----
-    i4i (CId s) = Ident s
+    i4i s = Ident (prCId s)

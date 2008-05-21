@@ -1,3 +1,4 @@
+{-# LANGUAGE PatternGuards #-}
 ----------------------------------------------------------------------
 -- |
 -- Module      : CheckGrammar
@@ -29,11 +30,12 @@ import GF.Infra.Modules
 import GF.Grammar.Refresh ----
 
 import GF.Devel.TypeCheck
-import GF.Grammar.Values (cPredefAbs) ---
+import GF.Grammar.Predef (cPredef, cPredefAbs) ---
 
 import GF.Grammar.PrGrammar
 import GF.Grammar.Lookup
 import GF.Grammar.LookAbs
+import GF.Grammar.Predef
 import GF.Grammar.Macros
 import GF.Grammar.ReservedWords ----
 import GF.Grammar.PatternMatch
@@ -334,16 +336,10 @@ computeLType gr t = do
   checkInContext g $ comp t
  where
   comp ty = case ty of
-
-    App (Q (IC "Predef") (IC "Ints")) _ -> return ty ---- shouldn't be needed
-    Q (IC "Predef") (IC "Int")          -> return ty ---- shouldn't be needed
-    Q (IC "Predef") (IC "Float")        -> return ty ---- shouldn't be needed
-    Q (IC "Predef") (IC "Error")        -> return ty ---- shouldn't be needed
-
-    Q m c | elem c [cPredef,cPredefAbs] -> return ty
-    Q m c | elem c [zIdent "Int"] -> 
-      return $ linTypeInt
-    Q m c | elem c [zIdent "Float",zIdent "String"] -> return defLinType ----
+    _ | Just _ <- isTypeInts ty -> return ty ---- shouldn't be needed
+      | ty == typeInt           -> return ty ---- shouldn't be needed
+      | ty == typeFloat         -> return ty ---- shouldn't be needed
+      | ty == typeError         -> return ty ---- shouldn't be needed
 
     Q m ident -> checkIn ("module" +++ prt m) $ do
       ty' <- checkErr (lookupResDef gr m ident) 
@@ -525,7 +521,7 @@ inferLType gr trm = case trm of
      check2 (flip justCheck typeStr) Glue s1 s2 typeStr ---- typeTok
 
 ---- hack from Rename.identRenameTerm, to live with files with naming conflicts 18/6/2007
-   Strs (Cn (IC "#conflict") : ts) -> do
+   Strs (Cn c : ts) | c == cConflict -> do
      trace ("WARNING: unresolved constant, could be any of" +++ unwords (map prt ts)) (infer $ head ts)
 --     checkWarn ("WARNING: unresolved constant, could be any of" +++ unwords (map prt ts))
 --     infer $ head ts
@@ -964,7 +960,7 @@ checkIfEqLType env t u trm = do
    alpha g t u = case (t,u) of  
 
      -- error (the empty type!) is subtype of any other type
-     (_,Q (IC "Predef") (IC "Error")) -> True
+     (_,u) | u == typeError -> True
 
      -- contravariance
      (Prod x a b, Prod y c d) -> alpha g c a && alpha ((x,y):g) b d 
@@ -976,13 +972,9 @@ checkIfEqLType env t u trm = do
      (ExtR r s, t) -> alpha g r t || alpha g s t
 
      -- the following say that Ints n is a subset of Int and of Ints m >= n
-     (App (Q (IC "Predef") (IC "Ints")) (EInt n), 
-        App (Q (IC "Predef") (IC "Ints")) (EInt m)) -> m >= n
-     (App (Q (IC "Predef") (IC "Ints")) (EInt n), 
-        Q (IC "Predef") (IC "Int"))                 -> True ---- check size!
-     
-     (Q (IC "Predef") (IC "Int"),  ---- why this ???? AR 11/12/2005
-        App (Q (IC "Predef") (IC "Ints")) (EInt n)) -> True
+     (t,u) | Just m <- isTypeInts t, Just n <- isTypeInts t -> m >= n
+           | Just _ <- isTypeInts t, u == typeInt           -> True ---- check size!
+           | t == typeInt,           Just _ <- isTypeInts t -> True ---- why this ???? AR 11/12/2005
 
      ---- this should be made in Rename
      (Q  m a, Q  n b) | a == b -> elem m (allExtendsPlus env n) 

@@ -30,6 +30,7 @@ import GF.Data.Operations
 import Control.Monad
 import Data.Map (Map)
 import qualified Data.Map as Map
+import qualified Data.ByteString.Char8 as BS
 import Data.List
 
 optModule :: (Ident, SourceModInfo) -> (Ident, SourceModInfo)
@@ -88,7 +89,7 @@ factor c i t = case t of
 
 --- we hope this will be fresh and don't check... in GFC would be safe
 
-qqIdent c i = identC ("q_" ++ prt c ++ "__" ++ show i)
+qqIdent c i = identC (BS.pack ("q_" ++ prt c ++ "__" ++ show i))
 
 
 --  we need to replace subterms
@@ -190,7 +191,7 @@ unsubexpModule mo@(i,m) = case m of
       ResOper pty (Yes t) -> [(c, ResOper pty (Yes (unparTerm t)))]
       _ -> [(c,info)]
     unparTerm t = case t of
-      Q m c@(IC ('A':'\'':'\'':_)) -> --- name convention of subexp opers
+      Q m c | isOperIdent c -> --- name convention of subexp opers
         errVal t $ liftM unparTerm $ lookupResDef gr m c 
       _ -> C.composSafeOp unparTerm t
     gr = M.MGrammar [mo] 
@@ -217,12 +218,12 @@ addSubexpConsts mo tree lins = do
        return (f,ResOper ty (Yes trm'))
      _ -> return (f,def)
    recomp f t = case Map.lookup t tree of
-     Just (_,id) | ident id /= f -> return $ Q mo (ident id)
+     Just (_,id) | operIdent id /= f -> return $ Q mo (operIdent id)
      _ -> C.composOp (recomp f) t
 
    list = Map.toList tree
 
-   oper id trm = (ident id, ResOper (Yes (EInt 8)) (Yes trm)) 
+   oper id trm = (operIdent id, ResOper (Yes (EInt 8)) (Yes trm)) 
    --- impossible type encoding generated opers
 
 getSubtermsMod :: Ident -> [(Ident,Info)] -> TermM (Map Term (Int,Int))
@@ -266,6 +267,10 @@ collectSubterms mo t = case t of
      writeSTM (Map.insert t (count,id) ts, next)
      return t --- only because of composOp
 
-ident :: Int -> Ident
-ident i = identC ("A''" ++ show i) ---
+operIdent :: Int -> Ident
+operIdent i = identC (operPrefix `BS.append` (BS.pack (show i))) ---
 
+isOperIdent :: Ident -> Bool
+isOperIdent id = BS.isPrefixOf operPrefix (ident2bs id)
+
+operPrefix = BS.pack ("A''")

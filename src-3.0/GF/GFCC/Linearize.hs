@@ -3,6 +3,7 @@ module GF.GFCC.Linearize where
 import GF.GFCC.Macros
 import GF.GFCC.DataGFCC
 import GF.GFCC.CId
+import GF.Infra.PrintClass
 import Data.Map
 import Data.List
 
@@ -35,7 +36,7 @@ linExp mcfg lang tree@(DTr xs at trees) =
                 --- [C lst, kks (show i), C size] where 
                 --- lst = mod (fromInteger i) 10 ; size = if i < 10 then 0 else 1
     AF d   -> R [kks (show d)]
-    AV x   -> TM (prCId x)
+    AV x   -> TM (prt x)
     AM i   -> TM (show i)
  where
    lin  = linExp mcfg lang
@@ -44,8 +45,8 @@ linExp mcfg lang tree@(DTr xs at trees) =
    addB t 
      | Data.List.null xs = t
      | otherwise = case t of
-         R ts -> R $ ts ++ (Data.List.map (kks . prCId) xs)
-         TM s -> R $ t : (Data.List.map (kks . prCId) xs)
+         R ts -> R $ ts ++ (Data.List.map (kks . prt) xs)
+         TM s -> R $ t : (Data.List.map (kks . prt) xs)
 
 compute :: GFCC -> CId -> [Term] -> Term -> Term
 compute mcfg lang args = comp where

@@ -26,6 +26,7 @@ import GF.Grammar.Values
 import GF.Grammar.Macros
 
 import Control.Monad
+import qualified Data.ByteString.Char8 as BS
 
 nodeTree :: Tree -> TrNode
 argsTree :: Tree -> [Tree]
@@ -120,9 +121,6 @@ funAtom a = case a of
   AtC f -> return f
   _ -> prtBad "not function head" a
 
-uBoundVar :: Ident
-uBoundVar = zIdent "#h" -- used for suppressed bindings
-
 atomIsMeta :: Atom -> Bool
 atomIsMeta atom = case atom of
   AtM _ -> True
@@ -186,7 +184,7 @@ val2expP safe v = case v of
   VCn c     -> return $ qq c
   VGen i x  -> if safe 
                then prtBad "unsafe val2exp" v
-               else return $ vr $ x  --- in editing, no alpha conversions presentv
+               else return $ Vr $ x  --- in editing, no alpha conversions presentv
  where 
    substVal g e = mapPairsM (val2expP safe) g >>= return . (\s -> substTerm [] s e)
 
@@ -278,7 +276,7 @@ mkJustProd :: Context -> Term -> Term
 mkJustProd cont typ = mkProd (cont,typ,[])
 
 int2var :: Int -> Ident
-int2var = zIdent . ('$':) . show
+int2var = identC . BS.pack . ('$':) . show
 
 meta0 :: Meta
 meta0 = int2meta 0
@@ -301,12 +299,12 @@ qualifTerm m  = qualif [] where
     Cn c  -> Q m c
     Con c -> QC m c
     _ -> composSafeOp (qualif xs) t
-  chV x = string2var $ prIdent x
+  chV x = string2var $ ident2bs x
     
-string2var :: String -> Ident
-string2var s = case s of
-  c:'_':i -> identV (readIntArg i,[c]) ---
-  _ -> zIdent s
+string2var :: BS.ByteString -> Ident
+string2var s = case BS.unpack s of
+  c:'_':i -> identV (BS.singleton c) (readIntArg i) ---
+  _       -> identC s
 
 -- | reindex variables so that they tell nesting depth level
 reindexTerm :: Term -> Term
@@ -317,7 +315,7 @@ reindexTerm = qualif (0,[]) where
     Vr x       -> Vr $ look x g
     _ -> composSafeOp (qualif dg) t
   look x  = maybe x id . lookup x --- if x is not in scope it is unchanged
-  ind x d = identC $ prIdent x ++ "_" ++ show d
+  ind x d = identC $ ident2bs x `BS.append` BS.singleton '_' `BS.append` BS.pack (show d)
 
 
 -- this method works for context-free abstract syntax

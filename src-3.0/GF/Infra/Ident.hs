@@ -13,45 +13,48 @@
 -----------------------------------------------------------------------------
 
 module GF.Infra.Ident (-- * Identifiers
-	      Ident(..), prIdent,
+	      Ident(..), ident2bs, prIdent,
 	      identC, identV, identA, identAV, identW,
-	      argIdent, strVar, wildIdent, isWildIdent,
-	      newIdent, mkIdent, varIndex,
+	      argIdent, varStr, varX, isWildIdent, varIndex,
 	      -- * refreshing identifiers
 	      IdState, initIdStateN, initIdState,
 	      lookVar, refVar, refVarPlus
 	     ) where
 
 import GF.Data.Operations
+import qualified Data.ByteString.Char8 as BS
 -- import Monad
 
 
 -- | the constructors labelled /INTERNAL/ are
 -- internal representation never returned by the parser
 data Ident = 
-   IC String            -- ^ raw identifier after parsing, resolved in Rename
- | IW                   -- ^ wildcard
+   IC !BS.ByteString             -- ^ raw identifier after parsing, resolved in Rename
+ | IW                           -- ^ wildcard
 --
 -- below this constructor: internal representation never returned by the parser
- | IV (Int,String)      -- ^ /INTERNAL/ variable
- | IA (String,Int)      -- ^ /INTERNAL/ argument of cat at position
- | IAV (String,Int,Int) -- ^ /INTERNAL/ argument of cat with bindings at position
+ | IV !BS.ByteString Int       -- ^ /INTERNAL/ variable
+ | IA !BS.ByteString Int       -- ^ /INTERNAL/ argument of cat at position
+ | IAV !BS.ByteString Int Int  -- ^ /INTERNAL/ argument of cat with bindings at position
 -- 
 
   deriving (Eq, Ord, Show, Read)
 
-prIdent :: Ident -> String
-prIdent i = case i of
+ident2bs :: Ident -> BS.ByteString
+ident2bs i = case i of
   IC s -> s
-  IV (n,s) -> s ++ "_" ++ show n
-  IA (s,j) -> s ++ "_" ++ show j
-  IAV (s,b,j) -> s ++ "_" ++ show b ++ "_" ++ show j
-  IW -> "_"
+  IV s n -> BS.append s (BS.pack ('_':show n))
+  IA s j -> BS.append s (BS.pack ('_':show j))
+  IAV s b j -> BS.append s (BS.pack ('_':show b ++ '_':show j))
+  IW -> BS.singleton '_'
 
-identC :: String -> Ident
-identV :: (Int, String) -> Ident
-identA :: (String, Int) -> Ident
-identAV:: (String, Int, Int) -> Ident
+prIdent :: Ident -> String
+prIdent i = BS.unpack $! ident2bs i
+
+identC :: BS.ByteString -> Ident
+identV :: BS.ByteString -> Int -> Ident
+identA :: BS.ByteString -> Int -> Ident
+identAV:: BS.ByteString -> Int -> Int -> Ident
 identW :: Ident
 (identC, identV, identA, identAV, identW) = 
     (IC,     IV,     IA,     IAV,     IW)
@@ -61,31 +64,25 @@ identW :: Ident
 
 -- | to mark argument variables
 argIdent :: Int -> Ident -> Int -> Ident
-argIdent 0 (IC c) i = identA  (c,i)
-argIdent b (IC c) i = identAV (c,b,i)
+argIdent 0 (IC c) i = identA  c i
+argIdent b (IC c) i = identAV c b i
 
 -- | used in lin defaults
-strVar :: Ident
-strVar = identA ("str",0)
+varStr :: Ident
+varStr = identA (BS.pack "str") 0
 
--- | wild card
-wildIdent :: Ident
-wildIdent = identW
+-- | refreshing variables
+varX :: Int -> Ident
+varX = identV (BS.singleton 'x')
 
 isWildIdent :: Ident -> Bool
 isWildIdent x = case x of
   IW -> True
-  IC "_" -> True
+  IC s | s == BS.pack "_" -> True
   _ -> False
 
-newIdent :: Ident
-newIdent = identC "#h"
-
-mkIdent :: String -> Int -> Ident
-mkIdent s i = identV (i,s)
-
 varIndex :: Ident -> Int
-varIndex (IV (n,_)) = n
+varIndex (IV _ n) = n
 varIndex _ = -1 --- other than IV should not count
 
 -- refreshing identifiers
@@ -99,7 +96,7 @@ initIdState :: IdState
 initIdState = initIdStateN 0
 
 lookVar :: Ident -> STM IdState Ident
-lookVar a@(IA _) = return a
+lookVar a@(IA _ _) = return a
 lookVar x = do
   (sys,_) <- readSTM
   stm (\s -> maybe (Bad ("cannot find" +++ show x +++ prParenth (show sys))) 
@@ -110,8 +107,8 @@ refVar :: Ident -> STM IdState Ident
 ----refVar IW = return IW --- no update of wildcard
 refVar x = do
   (_,m) <- readSTM
-  let x' = IV (m, prIdent x)
-  updateSTM (\ (sys,mx) -> ((x, x'):sys, mx + 1))
+  let x' = IV (ident2bs x) m
+  updateSTM (\(sys,mx) -> ((x, x'):sys, mx + 1))
   return x'
 
 refVarPlus :: Ident -> STM IdState Ident

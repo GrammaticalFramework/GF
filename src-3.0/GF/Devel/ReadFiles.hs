@@ -185,7 +185,7 @@ importsOfModule (MModule _ typ body) = modType typ (modBody body [])
     opens NoOpens     xs = xs
     opens (OpenIn os) xs = foldr open xs os
 
-    modName (PIdent (_,s)) = s
+    modName (PIdent (_,s)) = BS.unpack s
 
 
 -- | options can be passed to the compiler by comments in @--#@, in the main file

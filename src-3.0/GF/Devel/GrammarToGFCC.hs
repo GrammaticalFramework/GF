@@ -1,3 +1,4 @@
+{-# LANGUAGE PatternGuards #-}
 module GF.Devel.GrammarToGFCC (prGrammar2gfcc,mkCanon2gfcc,addParsers) where
 
 import GF.Devel.OptimizeGF (unshareModule)
@@ -9,6 +10,7 @@ import qualified GF.GFCC.Macros as CM
 import qualified GF.GFCC.DataGFCC as C
 import qualified GF.GFCC.DataGFCC as D
 import GF.GFCC.CId
+import GF.Grammar.Predef
 import qualified GF.Grammar.Abstract as A
 import qualified GF.Grammar.Macros as GM
 --import qualified GF.Grammar.Compute as Compute
@@ -28,6 +30,7 @@ import GF.Text.UTF8
 import Data.List
 import Data.Char (isDigit,isSpace)
 import qualified Data.Map as Map
+import qualified Data.ByteString.Char8 as BS
 import Debug.Trace ----
 
 -- when developing, swap commenting
@@ -46,7 +49,7 @@ mkCanon2gfcc :: Options -> String -> SourceGrammar -> (String,D.GFCC)
 mkCanon2gfcc opts cnc gr = 
   (prIdent abs, (canon2gfcc opts pars . reorder abs . canon2canon abs) gr)
   where
-    abs = err error id $ M.abstractOfConcrete gr (identC cnc)
+    abs = err error id $ M.abstractOfConcrete gr (identC (BS.pack cnc))
     pars = mkParamLincat gr
 
 -- Adds parsers for all concretes
@@ -67,9 +70,9 @@ canon2gfcc opts pars cgr@(M.MGrammar ((a,M.ModMod abm):cms)) =
   an  = (i2i a)
   cns = map (i2i . fst) cms
   abs = D.Abstr aflags funs cats catfuns
-  gflags = Map.fromList [(CId fg,x) | Just x <- [getOptVal opts (aOpt fg)]] 
+  gflags = Map.fromList [(mkCId fg,x) | Just x <- [getOptVal opts (aOpt fg)]] 
                                           where fg = "firstlang"
-  aflags = Map.fromList [(CId f,x) | Opt (f,[x]) <- M.flags abm]
+  aflags = Map.fromList [(mkCId f,x) | Opt (f,[x]) <- M.flags abm]
   mkDef pty = case pty of
     Yes t -> mkExp t
     _ -> CM.primNotion
@@ -89,7 +92,7 @@ canon2gfcc opts pars cgr@(M.MGrammar ((a,M.ModMod abm):cms)) =
       (lang,D.Concr flags lins opers lincats lindefs printnames params fcfg)
     where
       js = tree2list (M.jments mo)
-      flags   = Map.fromList [(CId f,x) | Opt (f,[x]) <- M.flags mo]
+      flags   = Map.fromList [(mkCId f,x) | Opt (f,[x]) <- M.flags mo]
       opers   = Map.fromAscList [] -- opers will be created as optimization
       utf     = if elem (Opt ("coding",["utf8"])) (M.flags mo) 
                   then D.convertStringsInTerm decodeUTF8 else id
@@ -107,7 +110,7 @@ canon2gfcc opts pars cgr@(M.MGrammar ((a,M.ModMod abm):cms)) =
       fcfg = Nothing
 
 i2i :: Ident -> CId
-i2i = CId . prIdent
+i2i = CId . ident2bs
 
 mkType :: A.Type -> C.Type
 mkType t = case GM.typeForm t of
@@ -131,7 +134,7 @@ mkExp t = case t of
   mkPatt p = uncurry CM.tree $ case p of
     A.PP _ c ps -> (C.AC (i2i c), map mkPatt ps)
     A.PV x      -> (C.AV (i2i x), [])
-    A.PW        -> (C.AV CM.wildCId, [])
+    A.PW        -> (C.AV wildCId, [])
     A.PInt i    -> (C.AI i, [])
 
 mkContext :: A.Context -> [C.Hypo]
@@ -139,10 +142,10 @@ mkContext hyps = [C.Hyp (i2i x) (mkType ty) | (x,ty) <- hyps]
 
 mkTerm :: Term -> C.Term
 mkTerm tr = case tr of
-  Vr (IA (_,i)) -> C.V i
-  Vr (IAV (_,_,i)) -> C.V i
-  Vr (IC s) | isDigit (last s) -> 
-    C.V (read (reverse (takeWhile (/='_') (reverse s)))) 
+  Vr (IA _ i) -> C.V i
+  Vr (IAV _ _ i) -> C.V i
+  Vr (IC s) | isDigit (BS.last s) -> 
+    C.V ((read . BS.unpack . snd . BS.spanEnd isDigit) s)
     ---- from gf parser of gfc
   EInt i      -> C.C $ fromInteger i
   R rs     -> C.R [mkTerm t | (_, (_,t)) <- rs]
@@ -162,7 +165,7 @@ mkTerm tr = case tr of
     C.K (C.KP (strings td) [C.Var (strings u) (strings v) | (u,v) <- tvs])
   _ -> prtTrace tr $ C.S [C.K (C.KS (A.prt tr +++ "66662"))] ---- for debugging
  where
-   mkLab (LIdent l) = case l of
+   mkLab (LIdent l) = case BS.unpack l of
      '_':ds -> (read ds) :: Int
      _ -> prtTrace tr $ 66663
    strings t = case t of
@@ -182,8 +185,8 @@ mkCType t = case t of
   Table pt vt -> case pt of
     EInt i -> C.R $ replicate (1 + fromInteger i) $ mkCType vt
     RecType rs -> mkCType $ foldr Table vt (map snd rs) 
-  Sort "Str"        -> C.S [] --- Str only
-  App (Q (IC "Predef") (IC "Ints")) (EInt i) -> C.C $ fromInteger i
+  Sort s | s == cStr -> C.S [] --- Str only
+  _ | Just i <- GM.isTypeInts t -> C.C $ fromInteger i
   _ -> error  $ "mkCType " ++ show t
 
 -- encoding showable lincats (as in source gf) as terms
@@ -204,7 +207,7 @@ mkParamLincat sgr lang cat = errVal (C.R [C.S []]) $ do
       p' <- mkPType p
       v' <- mkPType v
       return $ C.S [p',v']
-    Sort "Str" -> return $ C.S []
+    Sort s | s == cStr -> return $ C.S []
     _ -> return $ 
       C.FV $ map (kks . filter showable . prt_) $ 
              errVal [] $ Look.allParamValues sgr typ
@@ -225,7 +228,7 @@ reorder abs cg = M.MGrammar $
        adefs = sorted2tree $ sortIds $
                  predefADefs ++ Look.allOrigInfos cg abs
        predefADefs = 
-         [(IC c, AbsCat (Yes []) Nope) | c <- ["Float","Int","String"]]
+         [(c, AbsCat (Yes []) Nope) | c <- [cFloat,cInt,cString]]
        aflags = nubFlags $ 
          concat [M.flags mo | (_,mo) <- M.allModMod cg, M.isModAbs mo]
 
@@ -238,10 +241,7 @@ reorder abs cg = M.MGrammar $
                      Just r <- [lookup i (M.allExtendSpecs cg la)]]
 
          predefCDefs = 
-           (IC "Int", CncCat (Yes Look.linTypeInt) Nope Nope) : 
-           [(IC c, CncCat (Yes GM.defLinType) Nope Nope) | 
-                                    ---- lindef,printname 
-                         c <- ["Float","String"]]
+           [(c, CncCat (Yes GM.defLinType) Nope Nope) | c <- [cInt,cFloat,cString]]
 
        sortIds = sortBy (\ (f,_) (g,_) -> compare f g) 
        nubFlags = nubBy (\ (Opt (f,_)) (Opt (g,_)) -> f == g)
@@ -369,13 +369,11 @@ paramValues cgr = (labels,untyps,typs) where
   untyps = 
     Map.fromList $ concatMap Map.toList [typ | (_,typ) <- Map.toList typs]
   lincats = 
-    [(IC "Int",[f | let RecType fs = Look.linTypeInt, f <- fs])] ++
-    [(IC cat,[(LIdent "s",GM.typeStr)]) | cat <- ["Float", "String"]] ++
+    [(cat,[f | let RecType fs = GM.defLinType, f <- fs]) | cat <- [cInt,cFloat, cString]] ++
     reverse ---- TODO: really those lincats that are reached
             ---- reverse is enough to expel overshadowed ones... 
       [(cat,ls) | (_,(cat,CncCat (Yes ty) _ _)) <- jments, 
                   RecType ls <- [unlockTy ty]]
-----      [(cat,(unlockTyp ls)) | (_,(cat,CncCat (Yes (RecType ls)) _ _)) <- jments]
   labels = Map.fromList $ concat 
     [((cat,[lab]),(typ,i)): 
       [((cat,[LVar v]),(typ,toInteger (mx + v))) | v <- [0,1]] ++ ---- 1 or 2 vars 
@@ -449,7 +447,7 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
    doVar tr = case getLab tr of
      Ok (cat, lab) -> do
        k <- readSTM >>= return . length
-       let tr' = Vr $ identC $ show k -----
+       let tr' = Vr $ identC $ (BS.pack (show k)) -----
 
        let tyvs = case Map.lookup (cat,lab) labels of
              Just (ty,_) -> case Map.lookup ty typs of
@@ -472,10 +470,10 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
 
    -- this goes recursively into tables (ignored) and records (accumulated)
    getLab tr = case tr of
-     Vr (IA (cat, _)) -> return (identC cat,[])
-     Vr (IAV (cat,_,_)) -> return (identC cat,[])
+     Vr (IA cat _) -> return (identC cat,[])
+     Vr (IAV cat _ _) -> return (identC cat,[])
      Vr (IC s) -> return (identC cat,[]) where
-       cat = takeWhile (/='_') s ---- also to match IAVs; no _ in a cat tolerated
+       cat = BS.takeWhile (/='_') s ---- also to match IAVs; no _ in a cat tolerated
              ---- init (reverse (dropWhile (/='_') (reverse s))) ---- from gf parser
 ----     Vr _ -> error $ "getLab " ++ show tr
      P p lab2 -> do
@@ -518,7 +516,7 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
    mkCurrySel t p = S t p -- done properly in CheckGFCC
 
 
-mkLab k = LIdent (("_" ++ show k))
+mkLab k = LIdent (BS.pack ("_" ++ show k))
 
 -- remove lock fields; in fact, any empty records and record types
 unlock = filter notlock where

@@ -53,13 +53,13 @@ typPredefined c@(IC f) = case f of
   "plus"   -> return $ mkFunType [cnPredef "Int",cnPredef "Int"] (cnPredef "Int")
 ----  "read"   -> (P : Type) -> Tok -> P
   "show"   -> return $ mkProds -- (P : PType) -> P -> Tok
-    ([(identC "P",typePType),(wildIdent,Vr (identC "P"))],typeStr,[]) 
+    ([(identC "P",typePType),(identW,Vr (identC "P"))],typeStr,[]) 
   "toStr"  -> return $ mkProds -- (L : Type)  -> L -> Str
-    ([(identC "L",typeType),(wildIdent,Vr (identC "L"))],typeStr,[]) 
+    ([(identC "L",typeType),(identW,Vr (identC "L"))],typeStr,[]) 
   "mapStr" -> 
     let ty = identC "L" in
     return $ mkProds -- (L : Type)  -> (Str -> Str) -> L -> L
-    ([(ty,typeType),(wildIdent,mkFunType [typeStr] typeStr),(wildIdent,Vr ty)],Vr ty,[]) 
+    ([(ty,typeType),(identW,mkFunType [typeStr] typeStr),(identW,Vr ty)],Vr ty,[]) 
   "take"   -> return $ mkFunType [cnPredef "Int",typeStr] typeStr
   "tk"     -> return $ mkFunType [cnPredef "Int",typeStr] typeStr
   _        -> prtBad "unknown in Predef:" c

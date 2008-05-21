@@ -5,6 +5,7 @@
 
 entrypoints Grammar, ModDef, 
   OldGrammar, --%
+  ModHeader,
   Exp ; -- let's see if more are needed
 
 comment "--" ;

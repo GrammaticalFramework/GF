@@ -71,7 +71,7 @@ prModule :: SourceModule -> String
 prModule = cprintTree . trModule
 
 instance Print Judgement where
-  prt j = cprintTree $ trAnyDef (wildIdent, j)
+  prt j = cprintTree $ trAnyDef (identW, j)
 ----  prt_ = prExp
 
 instance Print Term where

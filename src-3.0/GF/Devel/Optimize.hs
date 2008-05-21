@@ -1,3 +1,4 @@
+{-# LANGUAGE PatternGuards #-}
 ----------------------------------------------------------------------
 -- |
 -- Module      : Optimize
@@ -20,6 +21,7 @@ import GF.Infra.Modules
 import GF.Grammar.PrGrammar
 import GF.Grammar.Macros
 import GF.Grammar.Lookup
+import GF.Grammar.Predef
 import GF.Grammar.Refresh
 import GF.Devel.Compute
 import GF.Compile.BackOpt
@@ -128,9 +130,9 @@ evalCncInfo opts gr cnc abs (c,info) = do
   CncCat ptyp pde ppr -> do
     pde' <- case (ptyp,pde) of
       (Yes typ, Yes de) -> 
-        liftM yes $ pEval ([(strVar, typeStr)], typ) de
+        liftM yes $ pEval ([(varStr, typeStr)], typ) de
       (Yes typ, Nope)   -> 
-        liftM yes $ mkLinDefault gr typ >>= partEval noOptions gr ([(strVar, typeStr)],typ)
+        liftM yes $ mkLinDefault gr typ >>= partEval noOptions gr ([(varStr, typeStr)],typ)
       (May b, Nope) ->
         return $ May b
       _ -> return pde   -- indirection
@@ -161,72 +163,20 @@ partEval opts gr (context, val) trm = errIn ("parteval" +++ prt_ trm) $ do
   let vars  = map fst context
       args  = map Vr vars
       subst = [(v, Vr v) | v <- vars]
-      trm1  = mkApp trm args
-  trm3 <- if globalTable 
-             then etaExpand subst trm1 >>= outCase subst
-             else etaExpand subst trm1
+      trm1 = mkApp trm args
+  trm2 <- computeTerm gr subst trm1
+  trm3 <- if rightType trm2
+            then computeTerm gr subst trm2
+            else recordExpand val trm2 >>= computeTerm gr subst
   return $ mkAbs vars trm3
+  where
+    -- don't eta expand records of right length (correct by type checking)
+    rightType (R rs) = case val of
+                         RecType ts -> length rs == length ts
+                         _          -> False
+    rightType _      = False
 
- where 
 
-   globalTable = oElem showAll opts --- i -all
-
-   comp g t = {- refreshTerm t >>= -} computeTerm gr g t
-
-   etaExpand su t = do
-     t' <- comp su t 
-     case t' of
-       R _ | rightType t' -> comp su t' --- return t' wo noexpand...
-       _ -> recordExpand val t' >>= comp su
-   -- don't eta expand records of right length (correct by type checking)
-   rightType t = case (t,val) of
-     (R rs, RecType ts) -> length rs == length ts
-     _ -> False
-
-   outCase subst t = do
-     pts <- getParams context
-     let (args,ptyps) = unzip $ filter (flip occur t . fst) pts
-     if null args 
-       then return t 
-       else do 
-         let argtyp = RecType $ tuple2recordType ptyps
-         let pvars = map (Vr . zIdent . prt) args -- gets eliminated
-         patt <- term2patt $ R $ tuple2record $ pvars
-         let t' = replace (zip args pvars) t
-         t1 <- comp subst $ T (TTyped argtyp) [(patt, t')]
-         return $ S t1 $ R $ tuple2record args
-
-   --- notice: this assumes that all lin types follow the "old JFP style" 
-   getParams = liftM concat . mapM getParam 
-   getParam (argv,RecType rs) = return 
-     [(P (Vr argv) lab, ptyp) | (lab,ptyp) <- rs,  not (isLinLabel lab)] 
-   ---getParam (_,ty) | ty==typeStr = return [] --- in lindef 
-   getParam (av,ty) = 
-     Bad ("record type expected not" +++ prt ty +++ "for" +++ prt av) 
-     --- all lin types are rec types
-
-   replace :: [(Term,Term)] -> Term -> Term
-   replace reps trm = case trm of  
-     -- this is the important case
-     P _ _ -> maybe trm id $ lookup trm reps
-     _ -> composSafeOp (replace reps) trm
-
-   occur t trm = case trm of
-
-     -- this is the important case
-     P _ _   -> t == trm
-     S x y   -> occur t y || occur t x
-     App f x -> occur t x || occur t f
-     Abs _ f -> occur t f
-     R rs    -> any (occur t) (map (snd . snd) rs)
-     T _ cs  -> any (occur t) (map snd cs)
-     C x y   -> occur t x || occur t y
-     Glue x y -> occur t x || occur t y
-     ExtR x y -> occur t x || occur t y
-     FV ts   -> any (occur t) ts
-     V _ ts   -> any (occur t) ts
-     Let (_,(_,x)) y -> occur t x || occur t y
-     _ -> False
 
 
 -- here we must be careful not to reduce
@@ -246,8 +196,8 @@ recordExpand typ trm = case unComputed typ of
 mkLinDefault :: SourceGrammar -> Type -> Err Term
 mkLinDefault gr typ = do
   case unComputed typ of
-    RecType lts -> mapPairsM mkDefField lts >>= (return . Abs strVar . R . mkAssign)
-    _ -> liftM (Abs strVar) $ mkDefField typ
+    RecType lts -> mapPairsM mkDefField lts >>= (return . Abs varStr . R . mkAssign)
+    _ -> liftM (Abs varStr) $ mkDefField typ
 ----    _ -> prtBad "linearization type must be a record type, not" typ
  where
    mkDefField typ = case unComputed typ of
@@ -255,13 +205,13 @@ mkLinDefault gr typ = do
        t' <- mkDefField t
        let T _ cs = mkWildCases t'
        return $ T (TWild p) cs 
-     Sort "Str" -> return $ Vr strVar
-     QC q p     -> lookupFirstTag gr q p
+     Sort s | s == cStr -> return $ Vr varStr
+     QC q p             -> lookupFirstTag gr q p
      RecType r  -> do
        let (ls,ts) = unzip r
        ts' <- mapM mkDefField ts
        return $ R $ [assign l t | (l,t) <- zip ls ts']
-     _ | isTypeInts typ -> return $ EInt 0 -- exists in all as first val
+     _ | Just _ <- isTypeInts typ -> return $ EInt 0 -- exists in all as first val
      _ -> prtBad "linearization type field cannot be" typ
 
 -- | Form the printname: if given, compute. If not, use the computed

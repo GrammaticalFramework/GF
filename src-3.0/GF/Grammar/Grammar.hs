@@ -48,7 +48,8 @@ module GF.Grammar.Grammar (SourceGrammar,
 		Con,
 		Trm,
 		wildPatt,
-		varLabel
+		varLabel, tupleLabel, linLabel, theLinLabel,
+		ident2label, label2ident
 	       ) where
 
 import GF.Data.Str
@@ -57,6 +58,8 @@ import GF.Infra.Option ---
 import GF.Infra.Modules
 
 import GF.Data.Operations
+
+import qualified Data.ByteString.Char8 as BS
 
 -- | grammar as presented to the compiler
 type SourceGrammar = MGrammar Ident Option Info
@@ -119,7 +122,7 @@ data Term =
  | Cn Ident             -- ^ constant
  | Con Ident            -- ^ constructor
  | EData                -- ^ to mark in definition that a fun is a constructor
- | Sort String          -- ^ basic type
+ | Sort Ident           -- ^ basic type
  | EInt Integer         -- ^ integer literal
  | EFloat Double        -- ^ floating point literal
  | K String             -- ^ string literal or token: @\"foo\"@
@@ -210,7 +213,7 @@ data TInfo =
 
 -- | record label
 data Label = 
-    LIdent String
+    LIdent BS.ByteString
   | LVar Int
    deriving (Read, Show, Eq, Ord)
 
@@ -238,7 +241,21 @@ type Con = Ident ---
 varLabel :: Int -> Label
 varLabel = LVar
 
+tupleLabel, linLabel :: Int -> Label
+tupleLabel i = LIdent $! BS.pack ('p':show i)
+linLabel   i = LIdent $! BS.pack ('s':show i)
+
+theLinLabel :: Label
+theLinLabel = LIdent (BS.singleton 's')
+
+ident2label :: Ident -> Label
+ident2label c = LIdent (ident2bs c)
+
+label2ident :: Label -> Ident
+label2ident (LIdent s) = identC s
+label2ident (LVar i)   = identC (BS.pack ('$':show i))
+
 wildPatt :: Patt
-wildPatt = PV wildIdent
+wildPatt = PV identW
 
 type Trm = Term

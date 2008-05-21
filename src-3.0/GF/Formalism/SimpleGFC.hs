@@ -27,7 +27,7 @@ type Var    = Ident.Ident
 type Label  = AbsGFC.Label
 
 anyVar :: Var
-anyVar = Ident.wildIdent
+anyVar = Ident.identW
 
 ----------------------------------------------------------------------
 -- * simple GFC

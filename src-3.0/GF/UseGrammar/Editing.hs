@@ -20,7 +20,6 @@ import qualified GF.Canon.GFC as GFC
 import GF.Grammar.TypeCheck
 import GF.Grammar.LookAbs
 import GF.Grammar.AbsCompute
-import GF.Grammar.Macros (errorCat)
 
 import GF.Data.Operations
 import GF.Data.Zipper
@@ -51,7 +50,7 @@ actVal :: State -> Val
 actVal = valNode . nodeTree . actTree
 
 actCat :: State -> Cat
-actCat = errVal errorCat . val2cat . actVal ---- undef
+actCat = errVal (cMeta,cMeta) . val2cat . actVal ---- undef
 
 actAtom :: State -> Atom
 actAtom = atomTree . actTree

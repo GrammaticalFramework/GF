@@ -4,7 +4,7 @@ import GF.GFCC.CId
 import GF.GFCC.DataGFCC
 import GF.Formalism.FCFG (FGrammar)
 import GF.Parsing.FCFG.PInfo (FCFPInfo, fcfPInfoToFGrammar)
-----import GF.GFCC.PrintGFCC
+import GF.Infra.PrintClass
 import Control.Monad
 import Data.Map
 import Data.Maybe
@@ -39,7 +39,7 @@ lookFCFG :: GFCC -> CId -> Maybe FGrammar
 lookFCFG gfcc lang = fmap fcfPInfoToFGrammar $ lookParser gfcc lang
 
 lookStartCat :: GFCC -> String
-lookStartCat gfcc = fromMaybe "S" $ msum $ Data.List.map (Data.Map.lookup (CId "startcat"))
+lookStartCat gfcc = fromMaybe "S" $ msum $ Data.List.map (Data.Map.lookup (mkCId "startcat"))
                                               [gflags gfcc, aflags (abstract gfcc)]
 
 lookGlobalFlag :: GFCC -> CId -> String
@@ -87,12 +87,6 @@ contextLength :: Type -> Int
 contextLength ty = case ty of
   DTyp hyps _ _ -> length hyps
 
-cid :: String -> CId
-cid = CId
-
-wildCId :: CId
-wildCId = cid "_"
-
 exp0 :: Exp
 exp0 = tree (AM 0) []
 
@@ -100,7 +94,7 @@ primNotion :: Exp
 primNotion = EEq []
 
 term0 :: CId -> Term
-term0 = TM . prCId
+term0 = TM . prt
 
 tm0 :: Term
 tm0 = TM "?"

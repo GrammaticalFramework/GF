@@ -33,6 +33,7 @@ import GF.Data.Utilities (updateNthM, sortNub)
 import qualified Data.Map as Map
 import qualified Data.Set as Set
 import qualified Data.List as List
+import qualified Data.ByteString.Char8 as BS
 import Data.Array
 import Data.Maybe
 
@@ -81,24 +82,24 @@ expandHOAS funs lins lincats = (funs' ++ hoFuns ++ varFuns,
       modifyRec f (R xs) = R (f xs)
       modifyRec _ t = error $ "Not a record: " ++ show t
 
-      varCat = CId "_Var"
+      varCat = mkCId "_Var"
 
       catName :: (Int,CId) -> CId
       catName (0,c) = c
-      catName (n,CId c) = CId ("_" ++ show n ++ c)
+      catName (n,c) = mkCId ("_" ++ show n ++ prt c)
 
       funName :: (Int,CId) -> CId
-      funName (n,CId c) = CId ("__" ++ show n ++ c)
+      funName (n,c) = mkCId ("__" ++ show n ++ prt c)
 
       varFunName :: CId -> CId
-      varFunName (CId c) = CId ("_Var_" ++ c)
+      varFunName c = mkCId ("_Var_" ++ prt c)
 
 -- replaces __NCat with _B and _Var_Cat with _.
 -- the temporary names are just there to avoid name collisions.
 fixHoasFuns :: FGrammar -> FGrammar
 fixHoasFuns (rs, cs) = ([FRule (fixName n) args cat lins | FRule n args cat lins <- rs], cs)
-  where fixName (Name (CId ('_':'_':_)) p) = Name (CId "_B") p
-        fixName (Name (CId n) p) | "_Var_" `List.isPrefixOf` n = Name wildCId p
+  where fixName (Name (CId n) p) | BS.pack "__"    `BS.isPrefixOf` n = Name (mkCId "_B") p
+                                 | BS.pack "_Var_" `BS.isPrefixOf` n = Name wildCId p
         fixName n = n
 
 convert :: [(CId,(Type,Exp))] -> TermMap -> TermMap -> FGrammar
@@ -291,10 +292,10 @@ data ProtoFCat = PFCat CId [FPath] [(FPath,FIndex)]
 protoFCat :: CId -> ProtoFCat
 protoFCat cat = PFCat cat [] []
 
-emptyFRulesEnv = FRulesEnv 0 (ins fcatString (CId "String") [[0]] [] $
-                              ins fcatInt    (CId "Int")    [[0]] [] $
-                              ins fcatFloat  (CId "Float")  [[0]] [] $
-                              ins fcatVar    (CId "_Var")   [[0]] [] $
+emptyFRulesEnv = FRulesEnv 0 (ins fcatString (mkCId "String") [[0]] [] $
+                              ins fcatInt    (mkCId "Int")    [[0]] [] $
+                              ins fcatFloat  (mkCId "Float")  [[0]] [] $
+                              ins fcatVar    (mkCId "_Var")   [[0]] [] $
                               Map.empty) []
   where
     ins fcat cat rcs tcs fcatSet =
@@ -340,7 +341,7 @@ genFCatArg cnc_defs ctype env@(FRulesEnv last_id fcatSet rules) (PFCat cat rcs t
           (either_fcat,last_id1,tmap1,rules1)
                   = foldBM (\tcs st (either_fcat,last_id,tmap,rules) ->
                                    let (last_id1,tmap1,fcat_arg) = addArg tcs last_id tmap
-                                       rule = FRule (Name (CId "_") [Unify [0]]) [fcat_arg] fcat
+                                       rule = FRule (Name wildCId [Unify [0]]) [fcat_arg] fcat
                                                     (listArray (0,length rcs-1) [listArray (0,0) [FSymCat fcat_arg lbl 0] | lbl <- [0..length rcs-1]])
                                    in if st
                                         then (Right fcat, last_id1,tmap1,rule:rules)

@@ -114,9 +114,9 @@ evalCncInfo opts gr cnc abs (c,info) = errIn ("optimizing" +++ prt c) $ case inf
 
     pde' <- case (ptyp,pde) of
       (Yes typ, Yes de) -> 
-        liftM yes $ pEval ([(strVar, typeStr)], typ) de
+        liftM yes $ pEval ([(varStr, typeStr)], typ) de
       (Yes typ, Nope)   -> 
-        liftM yes $ mkLinDefault gr typ >>= partEval noOptions gr ([(strVar, typeStr)],typ)
+        liftM yes $ mkLinDefault gr typ >>= partEval noOptions gr ([(varStr, typeStr)],typ)
       (May b, Nope) ->
         return $ May b
       _ -> return pde   -- indirection
@@ -222,7 +222,7 @@ recordExpand typ trm = case unComputed typ of
 mkLinDefault :: SourceGrammar -> Type -> Err Term
 mkLinDefault gr typ = do
   case unComputed typ of
-    RecType lts -> mapPairsM mkDefField lts >>= (return . Abs strVar . R . mkAssign)
+    RecType lts -> mapPairsM mkDefField lts >>= (return . Abs varStr . R . mkAssign)
     _ -> prtBad "linearization type must be a record type, not" typ
  where
    mkDefField typ = case unComputed typ of
@@ -230,7 +230,7 @@ mkLinDefault gr typ = do
        t' <- mkDefField t
        let T _ cs = mkWildCases t'
        return $ T (TWild p) cs 
-     Sort "Str" -> return $ Vr strVar
+     Sort "Str" -> return $ Vr varStr
      QC q p     -> lookupFirstTag gr q p
      RecType r  -> do
        let (ls,ts) = unzip r

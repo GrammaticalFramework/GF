@@ -24,6 +24,7 @@ import GF.Grammar.PrGrammar (prt)
 import GF.Data.Operations
 import Data.List
 import qualified GF.Infra.Modules as M
+import qualified Data.ByteString.Char8 as BS
 
 type OptSpec = [Integer] ---
 
@@ -110,7 +111,7 @@ factor c i t = case t of
 
 --- we hope this will be fresh and don't check... in GFC would be safe
 
-qqIdent c i = identC ("q_" ++ prt c ++ "__" ++ show i)
+qqIdent c i = identC (BS.pack ("q_" ++ prt c ++ "__" ++ show i))
 
 
 --  we need to replace subterms

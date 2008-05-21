@@ -46,7 +46,7 @@ cf2rule :: CFRule -> ((Ident,Info),(Ident,Info))
 cf2rule (fun, (cat, items)) = (def,ldef) where
  f     = cfFun2Ident fun
  def   = (f, AbsFun (yes (mkProd (args', Cn (cfCat2Ident cat), []))) nope)
- args0 = zip (map (mkIdent "x") [0..]) items
+ args0 = zip (map (identV "x") [0..]) items
  args  = [(v, Cn (cfCat2Ident c)) | (v, CFNonterm c) <- args0]
  args' = [(zIdent "_", Cn (cfCat2Ident c)) | (_, CFNonterm c) <- args0]
  ldef  = (f, CncFun 

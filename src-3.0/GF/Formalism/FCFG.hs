@@ -41,7 +41,6 @@ import GF.Formalism.Utilities
 import qualified GF.GFCC.CId as AbsGFCC
 import GF.Infra.PrintClass
 
-
 ------------------------------------------------------------
 -- Token
 type FToken    = String
@@ -72,7 +71,7 @@ data FSymbol
 type FName     = NameProfile AbsGFCC.CId
 
 isCoercionF :: FName -> Bool
-isCoercionF (Name fun [Unify [0]]) = fun == AbsGFCC.CId "_"
+isCoercionF (Name fun [Unify [0]]) = fun == AbsGFCC.wildCId
 isCoercionF _ = False
 
 
@@ -87,7 +86,7 @@ data FRule     = FRule FName [FCat] FCat (Array FIndex (Array FPointPos FSymbol)
 -- pretty-printing
 
 instance Print AbsGFCC.CId where
-  prt (AbsGFCC.CId s) = s
+    prt = AbsGFCC.prCId
 
 instance Print FSymbol where
     prt (FSymCat c l n) = "($" ++ prt n ++ "!" ++ prt l ++ ")"

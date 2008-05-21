@@ -45,7 +45,7 @@ labelBoolErr ms iob = do
 
 checkConcrete :: GFCC -> (CId,Concr) -> Err ((CId,Concr),Bool)
 checkConcrete gfcc (lang,cnc) = 
-  labelBoolErr ("happened in language " ++ printCId lang) $ do
+  labelBoolErr ("happened in language " ++ prCId lang) $ do
     (rs,bs) <- mapM checkl (Map.assocs (lins cnc)) >>= return . unzip
     return ((lang,cnc{lins = Map.fromAscList rs}),and bs)
  where
@@ -53,7 +53,7 @@ checkConcrete gfcc (lang,cnc) =
 
 checkLin :: GFCC -> CId -> (CId,Term) -> Err ((CId,Term),Bool)
 checkLin gfcc lang (f,t) = 
-  labelBoolErr ("happened in function " ++ printCId f) $ do
+  labelBoolErr ("happened in function " ++ prCId f) $ do
     (t',b) <- checkTerm (lintype gfcc lang f) t --- $ inline gfcc lang t
     return ((f,t'),b)
 

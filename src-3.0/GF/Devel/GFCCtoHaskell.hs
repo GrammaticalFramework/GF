@@ -175,15 +175,14 @@ fInstance m (cat,rules) =
 --type HSkeleton = [(OIdent, [(OIdent, [OIdent])])]
 hSkeleton :: GFCC -> (String,HSkeleton)
 hSkeleton gr = 
-  (pr (absname gr), 
-   [(pr c, [(pr f, map pr cs) | (f, (cs,_)) <- fs]) | 
+  (prCId (absname gr), 
+   [(prCId c, [(prCId f, map prCId cs) | (f, (cs,_)) <- fs]) | 
                                         fs@((_, (_,c)):_) <- fns]
   )
  where
    fns = groupBy valtypg (sortBy valtyps (map jty (Map.assocs (funs (abstract gr)))))
    valtyps (_, (_,x)) (_, (_,y)) = compare x y
    valtypg (_, (_,x)) (_, (_,y)) = x == y
-   pr (CId c) = c
    jty (f,(ty,_)) = (f,catSkeleton ty)
 
 updateSkeleton :: OIdent -> HSkeleton -> (OIdent, [OIdent]) -> HSkeleton

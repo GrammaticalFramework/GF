@@ -12,6 +12,7 @@ module GF.Command.Commands (
 import GF.Command.AbsGFShell hiding (Tree)
 import GF.Command.PPrTree
 import GF.Command.ParGFShell
+import GF.GFCC.CId
 import GF.GFCC.ShowLinearize
 import GF.GFCC.API
 import GF.GFCC.Macros
@@ -131,10 +132,10 @@ allCommands mgr = Map.fromAscList [
  
    optLin opts t = unlines [linea lang t | lang <- optLangs opts] where
      linea lang = case opts of
-       _ | isOpt "all"    opts -> allLinearize gr (cid lang)
-       _ | isOpt "table"  opts -> tableLinearize gr (cid lang)
-       _ | isOpt "term"   opts -> termLinearize gr (cid lang)
-       _ | isOpt "record" opts -> recordLinearize gr (cid lang)
+       _ | isOpt "all"    opts -> allLinearize gr (mkCId lang)
+       _ | isOpt "table"  opts -> tableLinearize gr (mkCId lang)
+       _ | isOpt "term"   opts -> termLinearize gr (mkCId lang)
+       _ | isOpt "record" opts -> recordLinearize gr (mkCId lang)
        _  -> linearize mgr lang
 
 

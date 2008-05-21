@@ -39,6 +39,7 @@ import GF.Data.Operations
 import qualified GF.Infra.Modules as M
 
 import Data.Char
+import qualified Data.ByteString.Char8 as BS
 import Control.Arrow (first)
 
 type Context = [(Ident,Exp)]
@@ -73,7 +74,7 @@ mapInfoTerms f i = case i of
 	 _ -> i
 
 setFlag :: String -> String -> [Flag] -> [Flag]
-setFlag n v fs = flagCanon n v : [f | f@(Flg (IC n') _) <- fs, n' /= n]
+setFlag n v fs = flagCanon n v : [f | f@(Flg (IC n') _) <- fs, n' /= BS.pack n]
 
 flagIncomplete :: Flag
 flagIncomplete = flagCanon "incomplete" "true"
@@ -86,7 +87,7 @@ hasFlagCanon f (_,M.ModMod mo) = elem f $ M.flags mo
 hasFlagCanon f _ = True ---- safe, useless 
 
 flagCanon :: String -> String -> Flag
-flagCanon f v = Flg (identC f) (identC v)
+flagCanon f v = Flg (identC (BS.pack f)) (identC (BS.pack v))
 
 -- for Ha-Jo 20/2/2005
 

@@ -84,12 +84,12 @@ file2gfcc f = do
   g <- parseGrammar s
   return $ toGFCC g
 
-linearize mgr lang = GF.GFCC.Linearize.linearize (gfcc mgr) (CId lang)
+linearize mgr lang = GF.GFCC.Linearize.linearize (gfcc mgr) (mkCId lang)
 
 parse mgr lang cat s = 
-  case lookParser (gfcc mgr) (CId lang) of
+  case lookParser (gfcc mgr) (mkCId lang) of
     Nothing    -> error "no parser"
-    Just pinfo -> case parseFCF "bottomup" pinfo (CId cat) (words s) of
+    Just pinfo -> case parseFCF "bottomup" pinfo (mkCId cat) (words s) of
                     Ok x -> x
                     Bad s -> error s
 
@@ -104,23 +104,20 @@ parseAllLang mgr cat s =
 
 generateRandom mgr cat = do
   gen <- newStdGen
-  return $ genRandom gen (gfcc mgr) (CId cat)
+  return $ genRandom gen (gfcc mgr) (mkCId cat)
 
-generateAll mgr cat = generate (gfcc mgr) (CId cat) Nothing
-generateAllDepth mgr cat = generate (gfcc mgr) (CId cat)
+generateAll mgr cat = generate (gfcc mgr) (mkCId cat) Nothing
+generateAllDepth mgr cat = generate (gfcc mgr) (mkCId cat)
 
 readTree _ = pTree
 
 showTree = prExp
 
-prIdent :: CId -> String
-prIdent (CId s) = s
+abstractName mgr = prCId (absname (gfcc mgr))
 
-abstractName mgr = prIdent (absname (gfcc mgr))
+languages mgr = [prCId l | l <- cncnames (gfcc mgr)]
 
-languages mgr = [l | CId l <- cncnames (gfcc mgr)]
-
-categories mgr = [c | CId c <- Map.keys (cats (abstract (gfcc mgr)))]
+categories mgr = [prCId c | c <- Map.keys (cats (abstract (gfcc mgr)))]
 
 startCat mgr = lookStartCat (gfcc mgr)
 

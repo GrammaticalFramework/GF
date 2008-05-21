@@ -29,6 +29,7 @@ module GF.Compile.Rename (renameGrammar,
 
 import GF.Grammar.Grammar
 import GF.Grammar.Values
+import GF.Grammar.Predef
 import GF.Infra.Modules
 import GF.Infra.Ident
 import GF.Grammar.Macros
@@ -90,11 +91,9 @@ renameIdentTerm env@(act,imps) t =
              [(m, st) | (OSimple _ m, st) <- imps] -- qualif is always possible
 
    -- this facility is mainly for BWC with GF1: you need not import PredefAbs
-   predefAbs c s = case c of
-     IC "Int" -> return $ Q cPredefAbs cInt
-     IC "Float" -> return $ Q cPredefAbs cFloat
-     IC "String" -> return $ Q cPredefAbs cString
-     _ -> Bad s
+   predefAbs c s
+     | isPredefCat c = return $ Q cPredefAbs c
+     | otherwise     = Bad s
 
    ident alt c = case lookupTree prt c act of
       Ok f -> return $ f c
@@ -104,7 +103,6 @@ renameIdentTerm env@(act,imps) t =
         fs -> case nub [f c | f <- fs]  of
           [tr] -> return tr
           ts@(t:_) -> trace ("WARNING: conflict" +++ unwords (map prt ts)) (return t)
-----          ts -> return $ Strs $ (cnIC "#conflict") : reverse ts
             -- a warning will be generated in CheckGrammar, and the head returned
             -- in next V: 
             -- Bad $ "conflicting imports:" +++ unwords (map prt ts) 

@@ -23,6 +23,7 @@ import GF.Infra.Ident
 import GF.Infra.Modules
 import GF.Grammar.Macros
 import GF.Grammar.Lookup
+import GF.Grammar.Predef
 
 import GF.Data.Operations
 
@@ -60,4 +61,4 @@ remlTerm gr trm = case trm of
    look c = err (const $ return defLinType) return $ lookupLincat gr m c
    m = case [cnc | (cnc,ModMod m) <- modules gr, isModCnc m] of
      cnc:_ -> cnc   -- actually there is always exactly one
-     _ -> zIdent "CNC" 
+     _ -> cCNC

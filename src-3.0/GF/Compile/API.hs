@@ -10,7 +10,7 @@ import GF.Devel.UseIO
 
 -- | Compiles a number of source files and builds a 'GFCC' structure for them.
 compileToGFCC :: Options -> [FilePath] -> IOE GFCC
-compileToGFCC opts fs = 
+compileToGFCC opts fs =
     do gr <- batchCompile opts fs
        let name = justModuleName (last fs)
        gc1 <- putPointE opts "linking ... " $
