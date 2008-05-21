@@ -5,6 +5,7 @@ import GF.Command.Importing
 import GF.Command.Commands
 import GF.GFCC.API
 
+import GF.System.Arch (fetchCommand)
 import GF.Devel.UseIO
 import GF.Devel.Arch
 import GF.Infra.Option ---- Haskell's option lib
@@ -20,8 +21,7 @@ mainGFI xx = do
 loop :: GFEnv -> IO GFEnv
 loop gfenv0 = do
   let env = commandenv gfenv0
-  putStrFlush (prompt env)
-  s <- getLine
+  s <- fetchCommand (prompt env)
   let gfenv = gfenv0 {history = s : history gfenv0}
   case words s of
 
