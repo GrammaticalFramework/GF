@@ -29,13 +29,13 @@ import qualified Data.ByteString.Char8 as BS
 -- | the constructors labelled /INTERNAL/ are
 -- internal representation never returned by the parser
 data Ident = 
-   IC !BS.ByteString             -- ^ raw identifier after parsing, resolved in Rename
- | IW                           -- ^ wildcard
+   IC  {-# UNPACK #-} !BS.ByteString                                           -- ^ raw identifier after parsing, resolved in Rename
+ | IW                                                                          -- ^ wildcard
 --
 -- below this constructor: internal representation never returned by the parser
- | IV !BS.ByteString Int       -- ^ /INTERNAL/ variable
- | IA !BS.ByteString Int       -- ^ /INTERNAL/ argument of cat at position
- | IAV !BS.ByteString Int Int  -- ^ /INTERNAL/ argument of cat with bindings at position
+ | IV  {-# UNPACK #-} !BS.ByteString {-# UNPACK #-} !Int                       -- ^ /INTERNAL/ variable
+ | IA  {-# UNPACK #-} !BS.ByteString {-# UNPACK #-} !Int                       -- ^ /INTERNAL/ argument of cat at position
+ | IAV {-# UNPACK #-} !BS.ByteString {-# UNPACK #-} !Int {-# UNPACK #-} !Int   -- ^ /INTERNAL/ argument of cat with bindings at position
 -- 
 
   deriving (Eq, Ord, Show, Read)
@@ -46,7 +46,7 @@ ident2bs i = case i of
   IV s n -> BS.append s (BS.pack ('_':show n))
   IA s j -> BS.append s (BS.pack ('_':show j))
   IAV s b j -> BS.append s (BS.pack ('_':show b ++ '_':show j))
-  IW -> BS.singleton '_'
+  IW -> BS.pack "_"
 
 prIdent :: Ident -> String
 prIdent i = BS.unpack $! ident2bs i
@@ -73,7 +73,7 @@ varStr = identA (BS.pack "str") 0
 
 -- | refreshing variables
 varX :: Int -> Ident
-varX = identV (BS.singleton 'x')
+varX = identV (BS.pack "x")
 
 isWildIdent :: Ident -> Bool
 isWildIdent x = case x of
