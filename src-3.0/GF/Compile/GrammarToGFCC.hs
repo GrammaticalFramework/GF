@@ -1,5 +1,5 @@
 {-# LANGUAGE PatternGuards #-}
-module GF.Devel.GrammarToGFCC (prGrammar2gfcc,mkCanon2gfcc,addParsers) where
+module GF.Compile.GrammarToGFCC (prGrammar2gfcc,mkCanon2gfcc,addParsers) where
 
 import GF.Devel.OptimizeGF (unshareModule)
 
@@ -13,7 +13,6 @@ import GF.GFCC.CId
 import GF.Grammar.Predef
 import qualified GF.Grammar.Abstract as A
 import qualified GF.Grammar.Macros as GM
---import qualified GF.Grammar.Compute as Compute
 import qualified GF.Infra.Modules as M
 import qualified GF.Infra.Option as O
 
