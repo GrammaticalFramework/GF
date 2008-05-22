@@ -207,7 +207,7 @@ gfc: gf3
 gfi: gf3
 
 gf3:
-	$(GHMAKE) $(GHCOPTFLAGS) $(GHCFLAGS) -o gf3 GF/Devel/GF.hs
+	$(GHMAKE) $(GHCOPTFLAGS) $(GHCFLAGS) -o gf3 GF.hs
 	strip $(GF3_EXE)
 	mv $(GF3_EXE) ../bin/
 
