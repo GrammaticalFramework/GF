@@ -5,13 +5,13 @@ import GF.Compile.GetGrammar
 import GF.Compile.Extend
 import GF.Compile.Rebuild
 import GF.Compile.Rename
-import GF.Grammar.Refresh
 import GF.Devel.CheckGrammar
-import GF.Devel.Optimize
+import GF.Compile.Optimize
 import GF.Devel.OptimizeGF
 import GF.Devel.GrammarToGFCC
 
 import GF.Grammar.Grammar
+import GF.Grammar.Refresh
 import GF.Infra.Ident
 import GF.Infra.Option
 import GF.Infra.CompactPrint
