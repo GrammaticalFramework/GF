@@ -24,20 +24,19 @@
 module GF.Compile.CheckGrammar (
   showCheckModule, justCheckLTerm, allOperDependencies, topoSortOpers) where
 
-import GF.Grammar.Grammar
 import GF.Infra.Ident
 import GF.Infra.Modules
-import GF.Grammar.Refresh ----
 
-import GF.Devel.TypeCheck
-import GF.Grammar.Predef (cPredef, cPredefAbs) ---
+import GF.Compile.TypeCheck
 
+import GF.Grammar.Refresh
+import GF.Grammar.Grammar
 import GF.Grammar.PrGrammar
 import GF.Grammar.Lookup
 import GF.Grammar.LookAbs
 import GF.Grammar.Predef
 import GF.Grammar.Macros
-import GF.Grammar.ReservedWords ----
+import GF.Grammar.ReservedWords
 import GF.Grammar.PatternMatch
 import GF.Grammar.AppPredefined
 import GF.Grammar.Lockfield (isLockLabel)
