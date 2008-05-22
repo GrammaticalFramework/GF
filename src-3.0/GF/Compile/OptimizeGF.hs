@@ -15,7 +15,7 @@
 -- following advice of Josef Svenningsson
 -----------------------------------------------------------------------------
 
-module GF.Devel.OptimizeGF (
+module GF.Compile.OptimizeGF (
   optModule,unshareModule,unsubexpModule,unoptModule,subexpModule,shareModule
   ) where 
 
