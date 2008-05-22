@@ -5,7 +5,7 @@ import GF.Compile.GetGrammar
 import GF.Compile.Extend
 import GF.Compile.Rebuild
 import GF.Compile.Rename
-import GF.Devel.CheckGrammar
+import GF.Compile.CheckGrammar
 import GF.Compile.Optimize
 import GF.Devel.OptimizeGF
 import GF.Devel.GrammarToGFCC

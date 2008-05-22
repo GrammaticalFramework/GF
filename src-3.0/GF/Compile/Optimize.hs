@@ -25,9 +25,8 @@ import GF.Grammar.Predef
 import GF.Grammar.Refresh
 import GF.Devel.Compute
 import GF.Compile.BackOpt
-import GF.Devel.CheckGrammar
+import GF.Compile.CheckGrammar
 import GF.Compile.Update
---import GF.Compile.Evaluate
 
 import GF.Data.Operations
 import GF.Infra.CheckM
