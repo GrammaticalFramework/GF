@@ -7,7 +7,7 @@ import GF.GFCC.CId
 import GF.GFCC.DataGFCC
 import GF.GFCC.Raw.ParGFCCRaw
 import GF.GFCC.Raw.ConvertGFCC
-import GF.Devel.UseIO
+import GF.Infra.UseIO
 import GF.Infra.Option
 import GF.GFCC.API
 import GF.Data.ErrM

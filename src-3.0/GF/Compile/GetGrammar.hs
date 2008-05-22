@@ -17,9 +17,9 @@ module GF.Compile.GetGrammar where
 import GF.Data.Operations
 import qualified GF.Source.ErrM as E
 
-import GF.Devel.UseIO
-import GF.Grammar.Grammar
+import GF.Infra.UseIO
 import GF.Infra.Modules
+import GF.Grammar.Grammar
 import GF.Devel.PrGrammar
 import qualified GF.Source.AbsGF as A
 import GF.Source.SourceToGrammar

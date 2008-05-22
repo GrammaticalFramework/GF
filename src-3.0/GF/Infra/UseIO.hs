@@ -13,7 +13,7 @@
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
-module GF.Devel.UseIO where
+module GF.Infra.UseIO where
 
 import GF.Data.Operations
 import GF.Infra.Option
