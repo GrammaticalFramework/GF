@@ -8,7 +8,7 @@ import GF.Compile.Rename
 import GF.Compile.CheckGrammar
 import GF.Compile.Optimize
 import GF.Devel.OptimizeGF
-import GF.Devel.GrammarToGFCC
+import GF.Compile.GrammarToGFCC
 
 import GF.Grammar.Grammar
 import GF.Grammar.Refresh
