@@ -21,7 +21,7 @@
 --  - tables are type-annotated
 -----------------------------------------------------------------------------
 
-module GF.Devel.CheckGrammar (
+module GF.Compile.CheckGrammar (
   showCheckModule, justCheckLTerm, allOperDependencies, topoSortOpers) where
 
 import GF.Grammar.Grammar
