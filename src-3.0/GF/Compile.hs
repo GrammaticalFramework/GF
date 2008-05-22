@@ -9,6 +9,7 @@ import GF.Compile.CheckGrammar
 import GF.Compile.Optimize
 import GF.Devel.OptimizeGF
 import GF.Compile.GrammarToGFCC
+import GF.Compile.ReadFiles
 
 import GF.Grammar.Grammar
 import GF.Grammar.Refresh
@@ -19,7 +20,6 @@ import GF.Devel.PrGrammar
 import GF.Compile.Update
 import GF.Grammar.Lookup
 import GF.Infra.Modules
-import GF.Devel.ReadFiles
 
 import GF.Source.GrammarToSource
 import qualified GF.Source.AbsGF as A
