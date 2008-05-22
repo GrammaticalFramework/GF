@@ -30,7 +30,7 @@ import GF.Infra.Option
 import GF.Source.ParGF
 import qualified GF.Source.LexGF as L
 
-import GF.Devel.ReadFiles ----
+import GF.Compile.ReadFiles
 
 import Data.Char (toUpper)
 import Data.List (nub)

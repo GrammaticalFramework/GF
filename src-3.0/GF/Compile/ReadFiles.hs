@@ -18,7 +18,7 @@
 -- and @file.gfo@ otherwise.
 -----------------------------------------------------------------------------
 
-module GF.Devel.ReadFiles 
+module GF.Compile.ReadFiles 
            ( getAllFiles,ModName,ModEnv,getOptionsFromFile,importsOfModule,
              gfoFile,gfFile,isGFO ) where
 
