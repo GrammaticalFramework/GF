@@ -3,8 +3,8 @@ module GF.GFCC.PrintGFCC where
 import GF.GFCC.DataGFCC (GFCC)
 import GF.GFCC.Raw.ConvertGFCC (fromGFCC)
 import GF.GFCC.Raw.PrintGFCCRaw (printTree)
-import GF.Devel.GFCCtoHaskell
-import GF.Devel.GFCCtoJS
+import GF.GFCC.GFCCtoHaskell
+import GF.GFCC.GFCCtoJS
 import GF.Text.UTF8
 
 -- top-level access to code generation
