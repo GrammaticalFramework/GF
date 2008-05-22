@@ -10,23 +10,24 @@ import GF.Compile.Optimize
 import GF.Devel.OptimizeGF
 import GF.Compile.GrammarToGFCC
 import GF.Compile.ReadFiles
+import GF.Compile.Update
 
 import GF.Grammar.Grammar
 import GF.Grammar.Refresh
+import GF.Grammar.Lookup
+
 import GF.Infra.Ident
 import GF.Infra.Option
 import GF.Infra.CompactPrint
-import GF.Devel.PrGrammar
-import GF.Compile.Update
-import GF.Grammar.Lookup
 import GF.Infra.Modules
+import GF.Infra.UseIO
+import GF.Devel.PrGrammar
 
 import GF.Source.GrammarToSource
 import qualified GF.Source.AbsGF as A
 import qualified GF.Source.PrintGF as P
 
 import GF.Data.Operations
-import GF.Devel.UseIO
 
 import Control.Monad
 import System.Directory

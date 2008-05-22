@@ -5,9 +5,9 @@ import GF.Command.Importing
 import GF.Command.Commands
 import GF.GFCC.API
 
-import GF.Devel.UseIO
-import GF.System.Readline (fetchCommand)
+import GF.Infra.UseIO
 import GF.Infra.Option ---- Haskell's option lib
+import GF.System.Readline (fetchCommand)
 
 import System.CPUTime
 

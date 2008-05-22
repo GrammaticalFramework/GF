@@ -28,8 +28,6 @@ import GF.Data.ErrM
 
 import GF.Parsing.FCFG
 
---import GF.Data.Operations
---import GF.Infra.UseIO
 import qualified Data.Map as Map
 import System.Random (newStdGen)
 import System.Directory (doesFileExist)

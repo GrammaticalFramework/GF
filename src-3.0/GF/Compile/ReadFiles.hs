@@ -22,9 +22,9 @@ module GF.Compile.ReadFiles
            ( getAllFiles,ModName,ModEnv,getOptionsFromFile,importsOfModule,
              gfoFile,gfFile,isGFO ) where
 
+import GF.Infra.UseIO
 import GF.Infra.Option
 import GF.Data.Operations
-import GF.Devel.UseIO
 import GF.Source.AbsGF hiding (FileName)
 import GF.Source.LexGF
 import GF.Source.ParGF

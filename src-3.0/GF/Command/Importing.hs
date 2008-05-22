@@ -4,7 +4,7 @@ import GF.Compile
 import GF.GFCC.DataGFCC
 import GF.GFCC.API
 
-import GF.Devel.UseIO
+import GF.Infra.UseIO
 import GF.Infra.Option
 import GF.Data.ErrM
 
