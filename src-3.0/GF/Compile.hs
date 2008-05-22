@@ -1,4 +1,4 @@
-module GF.Devel.Compile (batchCompile) where
+module GF.Compile (batchCompile, compileToGFCC) where
 
 -- the main compiler passes
 import GF.Devel.GetGrammar
@@ -8,10 +8,8 @@ import GF.Compile.Rename
 import GF.Grammar.Refresh
 import GF.Devel.CheckGrammar
 import GF.Devel.Optimize
---import GF.Compile.Evaluate ----
 import GF.Devel.OptimizeGF
---import GF.Canon.Share
---import GF.Canon.Subexpressions (elimSubtermsMod,unSubelimModule)
+import GF.Devel.GrammarToGFCC
 
 import GF.Grammar.Grammar
 import GF.Infra.Ident
@@ -35,6 +33,24 @@ import System.Directory
 import System.FilePath
 import System.Time
 import qualified Data.Map as Map
+
+import GF.GFCC.OptimizeGFCC
+import GF.GFCC.CheckGFCC
+import GF.GFCC.DataGFCC
+
+
+-- | Compiles a number of source files and builds a 'GFCC' structure for them.
+compileToGFCC :: Options -> [FilePath] -> IOE GFCC
+compileToGFCC opts fs =
+    do gr <- batchCompile opts fs
+       let name = justModuleName (last fs)
+       gc1 <- putPointE opts "linking ... " $
+                let (abs,gc0) = mkCanon2gfcc opts name gr
+                in ioeIO $ checkGFCCio gc0
+       let opt = if oElem (iOpt "noopt") opts then id else optGFCC
+           par = if oElem (iOpt "noparse") opts then id else addParsers
+       return (par (opt gc1))
+
 
 batchCompile :: Options -> [FilePath] -> IOE SourceGrammar
 batchCompile opts files = do
