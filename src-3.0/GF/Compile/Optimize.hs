@@ -13,7 +13,7 @@
 -- Top-level partial evaluation for GF source modules.
 -----------------------------------------------------------------------------
 
-module GF.Devel.Optimize (optimizeModule) where
+module GF.Compile.Optimize (optimizeModule) where
 
 import GF.Grammar.Grammar
 import GF.Infra.Ident
