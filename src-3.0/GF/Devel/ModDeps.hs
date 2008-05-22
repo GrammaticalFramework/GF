@@ -20,13 +20,13 @@ module GF.Devel.ModDeps (mkSourceGrammar,
 		requiredCanModules
 	       ) where
 
-import GF.Grammar.Grammar
 import GF.Infra.Ident
 import GF.Infra.Option
-import GF.Devel.PrGrammar
-import GF.Compile.Update
-import GF.Grammar.Lookup
 import GF.Infra.Modules
+import GF.Grammar.Grammar
+import GF.Grammar.PrGrammar
+import GF.Grammar.Lookup
+import GF.Compile.Update
 
 import GF.Data.Operations
 

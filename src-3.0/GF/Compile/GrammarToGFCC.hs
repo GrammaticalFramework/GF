@@ -3,14 +3,14 @@ module GF.Compile.GrammarToGFCC (prGrammar2gfcc,mkCanon2gfcc,addParsers) where
 
 import GF.Compile.OptimizeGF (unshareModule)
 
-import GF.Grammar.Grammar
-import qualified GF.Grammar.Lookup as Look
-
 import qualified GF.GFCC.Macros as CM
 import qualified GF.GFCC.DataGFCC as C
 import qualified GF.GFCC.DataGFCC as D
 import GF.GFCC.CId
 import GF.Grammar.Predef
+import GF.Grammar.PrGrammar
+import GF.Grammar.Grammar
+import qualified GF.Grammar.Lookup as Look
 import qualified GF.Grammar.Abstract as A
 import qualified GF.Grammar.Macros as GM
 import qualified GF.Infra.Modules as M
@@ -18,7 +18,6 @@ import qualified GF.Infra.Option as O
 
 import GF.Conversion.SimpleToFCFG (convertConcrete)
 import GF.Parsing.FCFG.PInfo (buildFCFPInfo)
-import GF.Devel.PrGrammar
 import GF.Devel.PrintGFCC
 import GF.Devel.ModDeps
 import GF.Infra.Ident
