@@ -33,7 +33,6 @@ import GF.System.Signal
 import GF.Text.UTF8
 
 import GF.Today (today,version,libdir)
-import GF.System.Arch
 import System (getArgs,system,getEnv)
 import System.FilePath
 import Control.Monad (foldM,liftM)

@@ -29,7 +29,6 @@ import qualified GF.Source.PrintGF as P
 
 import GF.Data.Operations
 import GF.Devel.UseIO
-import GF.Devel.Arch
 
 import Control.Monad
 import System.Directory

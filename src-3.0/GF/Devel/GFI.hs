@@ -6,9 +6,10 @@ import GF.Command.Commands
 import GF.GFCC.API
 
 import GF.Devel.UseIO
-import GF.Devel.Arch
-import GF.System.Arch (fetchCommand)
+import GF.System.Readline (fetchCommand)
 import GF.Infra.Option ---- Haskell's option lib
+
+import System.CPUTime
 
 
 mainGFI :: [String] -> IO ()
@@ -39,8 +40,9 @@ loop gfenv0 = do
       loopNewCPU gfenv
 
 loopNewCPU gfenv = do
-  cpu <- prCPU $ cputime gfenv
-  loop $ gfenv {cputime = cpu}
+  cpu' <- getCPUTime
+  putStrLn (show ((cpu' - cputime gfenv) `div` 1000000000) ++ " msec")
+  loop $ gfenv {cputime = cpu'}
 
 importInEnv mgr0 xx = do
   let (opts,files) = getOptions "-" xx
