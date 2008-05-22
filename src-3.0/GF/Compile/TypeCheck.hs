@@ -12,7 +12,7 @@
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
-module GF.Devel.TypeCheck (-- * top-level type checking functions; TC should not be called directly.
+module GF.Compile.TypeCheck (-- * top-level type checking functions; TC should not be called directly.
 		  checkContext,
 		  checkTyp,
 		  checkEquation,
@@ -26,10 +26,9 @@ import GF.Grammar.Abstract
 import GF.Grammar.Refresh
 import GF.Grammar.LookAbs
 import qualified GF.Grammar.Lookup as Lookup ---
-
-import GF.Devel.TC
-
 import GF.Grammar.Unify ---
+
+import GF.Compile.TC
 
 import Control.Monad (foldM, liftM, liftM2)
 import Data.List (nub) ---
