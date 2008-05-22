@@ -15,13 +15,12 @@ import GF.Compile.Update
 import GF.Grammar.Grammar
 import GF.Grammar.Refresh
 import GF.Grammar.Lookup
+import GF.Grammar.PrGrammar
 
 import GF.Infra.Ident
 import GF.Infra.Option
-import GF.Infra.CompactPrint
 import GF.Infra.Modules
 import GF.Infra.UseIO
-import GF.Devel.PrGrammar
 
 import GF.Source.GrammarToSource
 import qualified GF.Source.AbsGF as A
@@ -65,9 +64,6 @@ intermOut :: Options -> Option -> String -> IOE ()
 intermOut opts opt s = if oElem opt opts then 
   ioeIO (putStrLn ("\n\n--#" +++ prOpt opt) >> putStrLn s) 
   else return ()
-
-prMod :: SourceModule -> String
-prMod = compactPrint . prModule
 
 
 -- | the environment
@@ -159,25 +155,25 @@ compileSourceModule opts env@(k,gr,_) mo@(i,mi) = do
       mos   = modules gr
 
   mo1   <- ioeErr $ rebuildModule mos mo
-  intermOut opts (iOpt "show_rebuild") (prMod mo1)
+  intermOut opts (iOpt "show_rebuild") (prModule mo1)
 
   mo1b  <- ioeErr $ extendModule mos mo1
-  intermOut opts (iOpt "show_extend") (prMod mo1b)
+  intermOut opts (iOpt "show_extend") (prModule mo1b)
 
   case mo1b of
     (_,ModMod n) | not (isCompleteModule n) -> do
       return (k,mo1b)   -- refresh would fail, since not renamed
     _ -> do
       mo2:_ <- putpp "  renaming " $ ioeErr $ renameModule mos mo1b
-      intermOut opts (iOpt "show_rename") (prMod mo2)
+      intermOut opts (iOpt "show_rename") (prModule mo2)
 
       (mo3:_,warnings) <- putpp "  type checking" $ ioeErr $ showCheckModule mos mo2
       if null warnings then return () else putp warnings $ return ()
-      intermOut opts (iOpt "show_typecheck") (prMod mo3)
+      intermOut opts (iOpt "show_typecheck") (prModule mo3)
 
 
       (k',mo3r:_) <- putpp "  refreshing " $ ioeErr $ refreshModule (k,mos) mo3
-      intermOut opts (iOpt "show_refresh") (prMod mo3r)
+      intermOut opts (iOpt "show_refresh") (prModule mo3r)
 
       let eenv = () --- emptyEEnv
       (mo4,eenv') <- 
@@ -192,7 +188,7 @@ generateModuleCode :: Options -> FilePath -> SourceModule -> IOE SourceModule
 generateModuleCode opts file minfo = do
   let minfo1 = subexpModule minfo
       out    = prGrammar (MGrammar [minfo1])
-  putp ("  wrote file" +++ file) $ ioeIO $ writeFile file $ compactPrint out
+  putp ("  wrote file" +++ file) $ ioeIO $ writeFile file $ out
   return minfo1
  where
    putp  = putPointE opts
