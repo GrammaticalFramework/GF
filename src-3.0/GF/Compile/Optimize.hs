@@ -23,7 +23,7 @@ import GF.Grammar.Macros
 import GF.Grammar.Lookup
 import GF.Grammar.Predef
 import GF.Grammar.Refresh
-import GF.Devel.Compute
+import GF.Compile.Compute
 import GF.Compile.BackOpt
 import GF.Compile.CheckGrammar
 import GF.Compile.Update
