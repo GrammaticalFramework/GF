@@ -1,4 +1,4 @@
-module GF.Devel.PrintGFCC where
+module GF.GFCC.PrintGFCC where
 
 import GF.GFCC.DataGFCC (GFCC)
 import GF.GFCC.Raw.ConvertGFCC (fromGFCC)

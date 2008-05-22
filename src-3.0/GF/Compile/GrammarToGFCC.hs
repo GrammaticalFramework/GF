@@ -7,6 +7,7 @@ import qualified GF.GFCC.Macros as CM
 import qualified GF.GFCC.DataGFCC as C
 import qualified GF.GFCC.DataGFCC as D
 import GF.GFCC.CId
+import GF.GFCC.PrintGFCC
 import GF.Grammar.Predef
 import GF.Grammar.PrGrammar
 import GF.Grammar.Grammar
@@ -18,7 +19,6 @@ import qualified GF.Infra.Option as O
 
 import GF.Conversion.SimpleToFCFG (convertConcrete)
 import GF.Parsing.FCFG.PInfo (buildFCFPInfo)
-import GF.Devel.PrintGFCC
 import GF.Infra.Ident
 import GF.Infra.Option
 import GF.Data.Operations
