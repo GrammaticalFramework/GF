@@ -256,7 +256,7 @@ checkCncInfo gr m (a,abs) (c,info) = do
   case info of
 
     CncFun _ (Yes trm) mpr -> chIn "linearization of" $ do
-      typ        <- checkErr $ lookupFunTypeSrc gr a c
+      typ        <- checkErr $ lookupFunType gr a c
       cat0       <- checkErr $ valCat typ
       (cont,val) <- linTypeOfType gr m typ         -- creates arg vars
       (trm',_)   <- check trm (mkFunType (map snd cont) val)  -- erases arg vars
@@ -266,7 +266,7 @@ checkCncInfo gr m (a,abs) (c,info) = do
                                                    -- cat for cf, typ for pe
 
     CncCat (Yes typ) mdef mpr -> chIn "linearization type of" $ do
-      checkErr $ lookupCatContextSrc gr a c
+      checkErr $ lookupCatContext gr a c
       typ'  <- checkIfLinType gr typ
       mdef' <- case mdef of
         Yes def -> do
