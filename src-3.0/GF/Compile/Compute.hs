@@ -12,7 +12,7 @@
 -- Computation of source terms. Used in compilation and in @cc@ command.
 -----------------------------------------------------------------------------
 
-module GF.Devel.Compute (computeConcrete, computeTerm,computeConcreteRec) where
+module GF.Compile.Compute (computeConcrete, computeTerm,computeConcreteRec) where
 
 import GF.Data.Operations
 import GF.Grammar.Grammar
