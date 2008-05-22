@@ -1,7 +1,7 @@
 {-# LANGUAGE PatternGuards #-}
 module GF.Compile.GrammarToGFCC (prGrammar2gfcc,mkCanon2gfcc,addParsers) where
 
-import GF.Devel.OptimizeGF (unshareModule)
+import GF.Compile.OptimizeGF (unshareModule)
 
 import GF.Grammar.Grammar
 import qualified GF.Grammar.Lookup as Look
