@@ -1,7 +1,7 @@
 module GF.Devel.GFC (mainGFC) where
 -- module Main where
 
-import GF.Compile.API
+import GF.Compile
 import GF.Devel.PrintGFCC
 import GF.GFCC.CId
 import GF.GFCC.DataGFCC

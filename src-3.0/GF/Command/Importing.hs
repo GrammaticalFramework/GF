@@ -1,6 +1,6 @@
 module GF.Command.Importing (importGrammar) where
 
-import GF.Compile.API
+import GF.Compile
 import GF.GFCC.DataGFCC
 import GF.GFCC.API
 
