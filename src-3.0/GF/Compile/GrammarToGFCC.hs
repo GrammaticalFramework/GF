@@ -19,7 +19,6 @@ import qualified GF.Infra.Option as O
 import GF.Conversion.SimpleToFCFG (convertConcrete)
 import GF.Parsing.FCFG.PInfo (buildFCFPInfo)
 import GF.Devel.PrintGFCC
-import GF.Devel.ModDeps
 import GF.Infra.Ident
 import GF.Infra.Option
 import GF.Data.Operations
@@ -539,3 +538,17 @@ prtTrace tr n =
 prTrace  tr n = trace ("-- OBSERVE" +++ A.prt tr +++ show n +++ show tr) n
 
 
+-- | this function finds out what modules are really needed in the canonical gr.
+-- its argument is typically a concrete module name
+requiredCanModules :: (Ord i, Show i) => Bool -> M.MGrammar i f a -> i -> [i]
+requiredCanModules isSingle gr c = nub $ filter notReuse ops ++ exts where
+  exts = M.allExtends gr c
+  ops  = if isSingle 
+         then map fst (M.modules gr) 
+         else iterFix (concatMap more) $ exts
+  more i = errVal [] $ do
+    m <- M.lookupModMod gr i
+    return $ M.extends m ++ [o | o <- map M.openedModule (M.opens m)]
+  notReuse i = errVal True $ do
+    m <- M.lookupModMod gr i
+    return $ M.isModRes m -- to exclude reused Cnc and Abs from required
