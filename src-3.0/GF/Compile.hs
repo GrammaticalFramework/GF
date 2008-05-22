@@ -1,7 +1,7 @@
 module GF.Compile (batchCompile, compileToGFCC) where
 
 -- the main compiler passes
-import GF.Devel.GetGrammar
+import GF.Compile.GetGrammar
 import GF.Compile.Extend
 import GF.Compile.Rebuild
 import GF.Compile.Rename
