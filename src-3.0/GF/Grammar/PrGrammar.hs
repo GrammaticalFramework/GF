@@ -29,7 +29,7 @@ module GF.Grammar.PrGrammar (Print(..),
 		  tree2string, prprTree,
 		  prConstrs, prConstraints, 
 		  prMetaSubst, prEnv, prMSubst, 
-		  prExp, prPatt, prOperSignature,
+		  prExp, prOperSignature,
                   lookupIdent, lookupIdentInfo
 		 ) where
 
@@ -38,8 +38,6 @@ import GF.Data.Zipper
 import GF.Grammar.Grammar
 import GF.Infra.Modules
 import qualified GF.Source.PrintGF as P
-import qualified GF.Canon.PrintGFC as C
-import qualified GF.Canon.AbsGFC as A
 import GF.Grammar.Values
 import GF.Source.GrammarToSource
 --- import GFC (CanonGrammar) --- cycle of modules
@@ -105,32 +103,6 @@ prContext :: Context -> String
 prContext co = unwords $ map prParenth [prt x +++ ":" +++ prt t | (x,t) <- co]
 
 -- some GFC notions
-
-instance Print A.Exp where prt = C.printTree
-instance Print A.Term where prt = C.printTree
-instance Print A.Case where prt = C.printTree
-instance Print A.CType where prt = C.printTree
-instance Print A.Label where prt = C.printTree
-instance Print A.Module where prt = C.printTree
-instance Print A.Def where prt = C.printTree
-instance Print A.Canon where prt = C.printTree
-instance Print A.Sort where prt = C.printTree
-
-instance Print A.Atom where 
-  prt = C.printTree
-  prt_ (A.AC c) = prt_ c
-  prt_ (A.AD c) = prt_ c
-  prt_ a = prt a
-
-instance Print A.Patt where 
-  prt = C.printTree
-  prt_ = prPatt
-
-instance Print A.CIdent where 
-  prt = C.printTree
-  prt_ (A.CIQ _ c) = prt c
-
--- printing values and trees in editing
 
 instance Print a => Print (Tr a) where
   prt (Tr (n, trees)) = prt n +++ unwords (map prt2 trees)
@@ -251,15 +223,6 @@ prExp e = case e of
    pr2 e = case e of
      App _ _ -> prParenth $ prExp e
      _ -> pr1 e
-
-prPatt :: A.Patt -> String
-prPatt p = case p of
-  A.PC c ps -> prt_ c +++ unwords (map pr1 ps)
-  _ -> prt p --- PR
- where
-   pr1 p = case p of
-     A.PC _ (_:_) -> prParenth $ prPatt p
-     _ -> prPatt p
 
 -- | option @-strip@ strips qualifications
 prTermOpt :: Options -> Term -> String

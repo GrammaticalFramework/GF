@@ -24,7 +24,6 @@ module GF.Devel.TC (AExp(..),
 import GF.Data.Operations
 import GF.Grammar.Predef
 import GF.Grammar.Abstract
-import GF.Devel.AbsCompute
 
 import Control.Monad
 import Data.List (sortBy)
