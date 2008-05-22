@@ -1,4 +1,4 @@
-module GF.Devel.GFCCtoJS (gfcc2js) where
+module GF.GFCC.GFCCtoJS (gfcc2js) where
 
 import qualified GF.GFCC.Macros as M
 import qualified GF.GFCC.DataGFCC as D

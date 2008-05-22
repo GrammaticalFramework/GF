@@ -14,7 +14,7 @@
 -- AR 11/11/1999 -- 7/12/2000 -- 18/5/2004
 -----------------------------------------------------------------------------
 
-module GF.Devel.GFCCtoHaskell (grammar2haskell, grammar2haskellGADT) where
+module GF.GFCC.GFCCtoHaskell (grammar2haskell, grammar2haskellGADT) where
 
 import GF.GFCC.Macros
 import GF.GFCC.DataGFCC
