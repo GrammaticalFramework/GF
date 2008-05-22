@@ -2,7 +2,7 @@ module GFC (mainGFC) where
 -- module Main where
 
 import GF.Compile
-import GF.Devel.PrintGFCC
+import GF.GFCC.PrintGFCC
 import GF.GFCC.CId
 import GF.GFCC.DataGFCC
 import GF.GFCC.Raw.ParGFCCRaw
