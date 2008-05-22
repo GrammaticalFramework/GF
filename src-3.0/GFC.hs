@@ -1,4 +1,4 @@
-module GF.Devel.GFC (mainGFC) where
+module GFC (mainGFC) where
 -- module Main where
 
 import GF.Compile
