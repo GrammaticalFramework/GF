@@ -7,6 +7,7 @@ import GF.GFCC.API
 
 import GF.Devel.UseIO
 import GF.Devel.Arch
+import GF.System.Arch (fetchCommand)
 import GF.Infra.Option ---- Haskell's option lib
 
 
@@ -20,8 +21,7 @@ mainGFI xx = do
 loop :: GFEnv -> IO GFEnv
 loop gfenv0 = do
   let env = commandenv gfenv0
-  putStrFlush (prompt env)
-  s <- getLine
+  s <- fetchCommand (prompt env)
   let gfenv = gfenv0 {history = s : history gfenv0}
   case words s of
 
@@ -68,7 +68,10 @@ welcome = unlines [
   "Some things may work.         "
   ]
 
-prompt env = abstractName (multigrammar env) ++ "> "
+prompt env = absname ++ "> " where
+  absname = case abstractName (multigrammar env) of
+    "_" -> ""  --- created by new Ident handling 22/5/2008
+    n   -> n
 
 data GFEnv = GFEnv {
   commandenv :: CommandEnv,
