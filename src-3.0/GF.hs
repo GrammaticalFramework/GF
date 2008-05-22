@@ -1,14 +1,13 @@
 module Main where
 
-import GF.Devel.GFC
-import GF.Devel.GFI
+import GFC
+import GFI
 
-import System (getArgs)
+import System.Environment (getArgs)
 
 main :: IO ()
 main = do
-  xx <- getArgs
-  case xx of
+  args <- getArgs
+  case args of
     "--batch":args -> mainGFC args
-    _ -> mainGFI xx
-
+    _              -> mainGFI args

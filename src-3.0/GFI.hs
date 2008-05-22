@@ -1,4 +1,4 @@
-module GF.Devel.GFI (mainGFI) where
+module GFI (mainGFI) where
 
 import GF.Command.Interpreter
 import GF.Command.Importing
