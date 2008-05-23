@@ -245,5 +245,5 @@ lookupIdent c t = case lookupTree prt c t of
   Ok v -> return v
   _ -> prtBad "unknown identifier" c
 
-lookupIdentInfo :: Module Ident f a -> Ident -> Err a
+lookupIdentInfo :: Module Ident a -> Ident -> Err a
 lookupIdentInfo mo i = lookupIdent i (jments mo)

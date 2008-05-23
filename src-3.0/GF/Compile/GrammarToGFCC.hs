@@ -540,7 +540,7 @@ prTrace  tr n = trace ("-- OBSERVE" +++ A.prt tr +++ show n +++ show tr) n
 
 -- | this function finds out what modules are really needed in the canonical gr.
 -- its argument is typically a concrete module name
-requiredCanModules :: (Ord i, Show i) => Bool -> M.MGrammar i f a -> i -> [i]
+requiredCanModules :: (Ord i, Show i) => Bool -> M.MGrammar i a -> i -> [i]
 requiredCanModules isSingle gr c = nub $ filter notReuse ops ++ exts where
   exts = M.allExtends gr c
   ops  = if isSingle 
