@@ -139,16 +139,17 @@ ghci-nofud:
 	$(GHCI) $(GHCFLAGS)
 
 today:
-	echo 'module GF.Today (today,version,libdir) where' > GF/Today.hs
-	echo '{-# NOINLINE today #-}' >> GF/Today.hs
-	echo 'today :: String' >> GF/Today.hs
-	echo 'today = "'`date`'"' >> GF/Today.hs
-	echo '{-# NOINLINE version #-}' >> GF/Today.hs
+	echo 'module Paths_gf (getDataDir) where' > Paths_gf.hs
+	echo '{-# NOINLINE today #-}' >> Paths_gf.hs
+	echo 'today :: String' >> Paths_gf.hs
+	echo 'today = "'`date`'"' >> Paths_gf.hs
+	echo '{-# NOINLINE version #-}' >> Paths_gf.hs
 	echo 'version :: String' >> GF/Today.hs
-	echo 'version = "'$(PACKAGE_VERSION)'"' >> GF/Today.hs
-	echo '{-# NOINLINE libdir #-}' >> GF/Today.hs
-	echo 'libdir :: String' >> GF/Today.hs
-	echo 'libdir = "'$(GF_LIB_DIR)'"' >> GF/Today.hs
+	echo 'version = "'$(PACKAGE_VERSION)'"' >> Paths_gf.hs
+	echo '{-# NOINLINE libdir #-}' >> Paths_gf.hs
+	echo 'libdir :: String' >> Paths_gf.hs
+	echo 'libdir = "'$(GF_LIB_DIR)'"' >> Paths_gf.hs
+	echo 'getDataDir = return libdir :: IO FilePath' >> Paths_gf.hs
 
 javac:
 	$(JAVAC) $(JAVAFLAGS) -classpath $(GFEDITOR)/jargs-1.0.jar $(GFEDITOR)/de/uka/ilkd/key/ocl/gf/*.java
