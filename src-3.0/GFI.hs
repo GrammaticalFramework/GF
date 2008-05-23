@@ -11,6 +11,9 @@ import GF.System.Readline (fetchCommand)
 
 import System.CPUTime
 
+import Data.Version
+import Paths_gf
+
 
 mainGFI :: [String] -> IO ()
 mainGFI xx = do
@@ -66,7 +69,7 @@ welcome = unlines [
   "      *     *      *          ",
   "         *  *  *              ",
   "                              ",
-  "This is GF version 3.0 alpha. ",
+  "This is GF version "++showVersion version++". ",
   "Some things may work.         "
   ]
 
