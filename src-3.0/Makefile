@@ -139,13 +139,11 @@ ghci-nofud:
 	$(GHCI) $(GHCFLAGS)
 
 today:
-	echo 'module Paths_gf (getDataDir) where' > Paths_gf.hs
-	echo '{-# NOINLINE today #-}' >> Paths_gf.hs
-	echo 'today :: String' >> Paths_gf.hs
-	echo 'today = "'`date`'"' >> Paths_gf.hs
+	echo 'module Paths_gf (version, getDataDir) where' > Paths_gf.hs
+	echo 'import Data.Version' >> Paths_gf.hs
 	echo '{-# NOINLINE version #-}' >> Paths_gf.hs
-	echo 'version :: String' >> GF/Today.hs
-	echo 'version = "'$(PACKAGE_VERSION)'"' >> Paths_gf.hs
+	echo 'version :: Version' >> Paths_gf.hs
+	echo 'version = Version {versionBranch = [3,0], versionTags = ["alpha"]}' >> Paths_gf.hs
 	echo '{-# NOINLINE libdir #-}' >> Paths_gf.hs
 	echo 'libdir :: String' >> Paths_gf.hs
 	echo 'libdir = "'$(GF_LIB_DIR)'"' >> Paths_gf.hs
