@@ -23,7 +23,6 @@ realize trm = case trm of
     KP s _ -> unwords s ---- prefix choice TODO
   W s t    -> s ++ realize t
   FV ts    -> realize (ts !! 0)  ---- other variants TODO
-  RP _ r   -> realize r ---- DEPREC
   TM s     -> s
   _ -> "ERROR " ++ show trm ---- debug
 
@@ -52,7 +51,6 @@ compute :: GFCC -> CId -> [Term] -> Term -> Term
 compute mcfg lang args = comp where
   comp trm = case trm of
     P r p  -> proj (comp r) (comp p) 
-    RP i t -> RP (comp i) (comp t)  ---- DEPREC
     W s t  -> W s (comp t)
     R ts   -> R $ lmap comp ts
     V i    -> idx args i          -- already computed
@@ -80,13 +78,11 @@ compute mcfg lang args = comp where
 
   getIndex t =  case t of
     C i    -> i
-    RP p _ -> getIndex p ---- DEPREC
     TM _   -> 0  -- default value for parameter
     _ -> trace ("ERROR in grammar compiler: index from " ++ show t) 666
 
   getField t i = case t of
     R rs   -> idx rs i
-    RP _ r -> getField r i ---- DEPREC
     TM s   -> TM s
     _ -> error ("ERROR in grammar compiler: field from " ++ show t) t
 
