@@ -34,7 +34,6 @@ import Data.Char
 import Data.List
 import qualified Data.ByteString.Char8 as BS
 import qualified Data.Map as Map
-import System
 import System.Time
 import System.Directory
 import System.FilePath
