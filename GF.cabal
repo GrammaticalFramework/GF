@@ -67,7 +67,7 @@ executable gf3
   if os(windows)
     build-depends: Win32
   else
-    build-depends: posix
+    build-depends: unix
   ghc-options: -O2
   hs-source-dirs: src-3.0
   extensions:
