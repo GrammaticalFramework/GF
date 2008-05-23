@@ -14,6 +14,7 @@ import GF.Grammar.Grammar
 import qualified GF.Grammar.Lookup as Look
 import qualified GF.Grammar.Abstract as A
 import qualified GF.Grammar.Macros as GM
+import qualified GF.Compile.Compute as Compute ---- 
 import qualified GF.Infra.Modules as M
 import qualified GF.Infra.Option as O
 
@@ -270,7 +271,7 @@ canon2canon abs =
         (c, M.ModMod $ M.replaceJudgements mo $ mapTree f2 js)
       _ -> (c,m)    
   j2j cg (f,j) = case j of
-      CncFun x (Yes tr) z -> (f,CncFun x (Yes (t2t tr)) z)
+      CncFun x (Yes tr) z -> (f,CncFun x (Yes (trace ("\n" ++ prt f) (t2t tr))) z)
       CncCat (Yes ty) (Yes x) y -> (f,CncCat (Yes (ty2ty ty)) (Yes (t2t x)) y)
       _ -> (f,j)
    where
@@ -322,12 +323,6 @@ paramValues :: SourceGrammar -> ParamEnv
 paramValues cgr = (labels,untyps,typs) where
   partyps = nub $ 
             --- [App (Q (IC "Predef") (IC "Ints")) (EInt i) | i <- [1,9]] ---linTypeInt 
-{-
-            [ty | 
-              (_,(_,CncCat (Yes (RecType ls)) _ _)) <- jments,
-              ty0 <- [ty | (_, ty) <- unlockTyp ls],
-              ty  <- typsFrom ty0
--}
             [ty | 
               (_,(_,CncCat (Yes ty0) _ _)) <- jments,
               ty  <- typsFrom ty0
@@ -427,15 +422,20 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
      _ -> valNum $ comp tr
 
    --- this is mainly needed for parameter record projections
-   ---- was: errVal t $ Compute.computeConcreteRec cgr t
-   comp t = case t of
+   ---- was: 
+   comp t = errVal t $ Compute.computeConcreteRec cgr t
+   compt t = case t of
      T (TComp typ) ts  -> comp $ V typ (map (comp . snd) ts)  ---- should...
      T (TTyped typ) ts -> comp $ V typ (map (comp . snd) ts)  ---- should
      V typ ts -> V typ (map comp ts)
      S tb (FV ts) -> FV $ map (comp . S tb) ts
-     S (V typ ts) v0 -> err error id $ do
+     S tb@(V typ ts) v0 -> err error id $ do
        let v = comp v0 
-       return $ maybe t (comp . (ts !!) . fromInteger) $ Map.lookup v untyps
+       let mv1 = Map.lookup v untyps
+       case mv1 of 
+         Just v1 -> return $ (comp . (ts !!) . fromInteger) v1 
+         _ -> return (S (comp tb) v) 
+                  
      R r -> R [(l,(ty,comp t)) | (l,(ty,t)) <- r]
      P (R r) l -> maybe t (comp . snd) $ lookup l r
      _ -> GM.composSafeOp comp t
@@ -493,7 +493,7 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
         (FV ts,_) -> ts
         _ -> [tr]
       valNumFV ts = case ts of
-        [tr] -> prtTrace tr $ K "66667"
+        [tr] -> error (prt tr) ----- prtTrace tr $ K "66667"
         _ -> FV $ map valNum ts
 
    mkCurry trm = case trm of
