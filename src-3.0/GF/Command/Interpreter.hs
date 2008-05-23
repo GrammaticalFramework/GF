@@ -10,6 +10,7 @@ import GF.Command.ParGFShell
 import GF.GFCC.API
 import GF.GFCC.Macros
 import GF.GFCC.DataGFCC
+import GF.System.Signal
 
 import GF.Data.ErrM ----
 
@@ -23,7 +24,10 @@ data CommandEnv = CommandEnv {
 interpretCommandLine :: CommandEnv -> String -> IO ()
 interpretCommandLine env line = case (pCommandLine (myLexer line)) of
   Ok CEmpty -> return ()
-  Ok (CLine pipes) -> mapM_ interPipe pipes
+  Ok (CLine pipes) -> do res <- runInterruptibly (mapM_ interPipe pipes)
+                         case res of
+                           Left ex -> print ex
+                           Right x -> return x
   _ -> putStrLn "command not parsed"
  where
    interPipe (PComm cs) = do
