@@ -62,15 +62,15 @@ import GF.Data.Operations
 import qualified Data.ByteString.Char8 as BS
 
 -- | grammar as presented to the compiler
-type SourceGrammar = MGrammar Ident Option Info
+type SourceGrammar = MGrammar Ident Info
 
-type SourceModInfo = ModInfo Ident Option Info
+type SourceModInfo = ModInfo Ident Info
 
 type SourceModule = (Ident, SourceModInfo)
 
-type SourceAbs = Module Ident Option Info
-type SourceRes = Module Ident Option Info
-type SourceCnc = Module Ident Option Info
+type SourceAbs = Module Ident Info
+type SourceRes = Module Ident Info
+type SourceCnc = Module Ident Info
 
 -- this is created in CheckGrammar, and so are Val and PVal
 type PValues = [Term]

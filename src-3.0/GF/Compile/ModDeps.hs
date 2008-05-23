@@ -125,7 +125,7 @@ openInterfaces ds m = do
 
 -- | this function finds out what modules are really needed in the canonical gr.
 -- its argument is typically a concrete module name
-requiredCanModules :: (Ord i, Show i) => Bool -> MGrammar i f a -> i -> [i]
+requiredCanModules :: (Ord i, Show i) => Bool -> MGrammar i a -> i -> [i]
 requiredCanModules isSingle gr c = nub $ filter notReuse ops ++ exts where
   exts = allExtends gr c
   ops  = if isSingle 
