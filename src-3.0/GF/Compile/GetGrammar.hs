@@ -35,7 +35,7 @@ import Data.Char (toUpper)
 import Data.List (nub)
 import qualified Data.ByteString.Char8 as BS
 import Control.Monad (foldM)
-import System (system)
+import System.Cmd (system)
 
 getSourceModule :: Options -> FilePath -> IOE SourceModule
 getSourceModule opts file0 = do

@@ -1,0 +1,166 @@
+name: gf
+version: 3.0
+cabal-version: >= 1.2
+build-type: Simple
+license: GPL
+license-file: LICENSE
+synopsis: Grammatical Framework
+
+
+library
+  build-depends: base,
+                 array,
+                 containers,
+                 bytestring,
+                 random
+  ghc-options: -O2
+  hs-source-dirs: src-3.0
+  extensions: 
+  exposed-modules: 
+    GF.GFCC.API
+  other-modules:
+    GF.GFCC.Raw.AbsGFCCRaw
+    GF.GFCC.DataGFCC
+    GF.GFCC.CId
+    GF.GFCC.Raw.ParGFCCRaw
+    GF.GFCC.Macros
+    GF.GFCC.Generate
+    GF.GFCC.Linearize
+    GF.Command.LexGFShell
+    GF.Command.AbsGFShell
+    GF.Command.PrintGFShell
+    GF.Data.RedBlackSet
+    GF.Data.GeneralDeduction
+    GF.Infra.CompactPrint
+    GF.Text.UTF8
+    GF.Data.Utilities
+    GF.Data.SortedList
+    GF.Data.Assoc
+    GF.Infra.PrintClass
+    GF.Formalism.Utilities
+    GF.Parsing.FCFG.Range
+    GF.Formalism.FCFG
+    GF.Parsing.FCFG.PInfo
+    GF.Parsing.FCFG.Active
+    GF.GFCC.Raw.ConvertGFCC
+    GF.Data.ErrM
+    GF.Command.ParGFShell
+    GF.Command.PPrTree
+    GF.Parsing.FCFG
+
+
+executable gf3
+  build-depends: base,
+                 array,
+                 containers,
+                 bytestring,
+                 filepath,
+                 directory,
+                 random,
+                 old-time,
+                 process
+  if os(windows)
+    build-depends: Win32
+  else
+    build-depends: posix
+  ghc-options: -O2
+  hs-source-dirs: src-3.0
+  extensions:
+  main-is: GF.hs
+  other-modules:
+    GF.Source.ErrM
+    GF.Grammar.ReservedWords
+    GF.Data.BacktrackM
+    GF.Source.SharedString
+    GF.Source.LexGF
+    GF.Source.AbsGF
+    GF.Source.PrintGF
+    GF.JavaScript.AbsJS
+    GF.JavaScript.PrintJS
+    GF.GFCC.Raw.AbsGFCCRaw
+    GF.Command.LexGFShell
+    GF.Command.AbsGFShell
+    GF.Command.PrintGFShell
+    GF.Data.RedBlackSet
+    GF.Data.GeneralDeduction
+    GF.Infra.CompactPrint
+    GF.Text.UTF8
+    GF.Data.Utilities
+    GF.Data.SortedList
+    GF.Data.Assoc
+    GF.Infra.PrintClass
+    GF.GFCC.CId
+    GF.GFCC.Raw.ParGFCCRaw
+    GF.GFCC.Raw.PrintGFCCRaw
+    GF.Formalism.Utilities
+    GF.Parsing.FCFG.Range
+    GF.Formalism.FCFG
+    GF.Parsing.FCFG.PInfo
+    GF.GFCC.DataGFCC
+    GF.Parsing.FCFG.Active
+    GF.GFCC.Raw.ConvertGFCC
+    GF.GFCC.Macros
+    GF.GFCC.Generate
+    GF.GFCC.Linearize
+    GF.Conversion.SimpleToFCFG
+    GF.Data.ErrM
+    GF.Parsing.FCFG
+    GF.Command.ParGFShell
+    GF.Command.PPrTree
+    GF.GFCC.API
+    GF.GFCC.CheckGFCC
+    GF.Source.ParGF
+    GF.Data.Operations
+    GF.GFCC.GFCCtoHaskell
+    GF.GFCC.ShowLinearize
+    GF.GFCC.OptimizeGFCC
+    GF.Infra.Ident
+    GF.Grammar.Predef
+    GF.Data.Str
+    GF.Data.Zipper
+    GF.Today
+    GF.Infra.Option
+    GF.Infra.UseIO
+    GF.GFCC.GFCCtoJS
+    GF.GFCC.PrintGFCC
+    GF.Command.Commands
+    GF.Command.Interpreter
+    GF.Infra.Modules
+    GF.Grammar.Grammar
+    GF.Source.GrammarToSource
+    GF.Grammar.Values
+    GF.Grammar.PrGrammar
+    GF.Grammar.Macros
+    GF.Grammar.Lockfield
+    GF.Grammar.Refresh
+    GF.Grammar.MMacros
+    GF.Grammar.Abstract
+    GF.Grammar.Lookup
+    GF.Compile.RemoveLiT
+    GF.Grammar.LookAbs
+    GF.Compile.TC
+    GF.Grammar.Unify
+    GF.Compile.TypeCheck
+    GF.Compile.Update
+    GF.Compile.OptimizeGF
+    GF.Infra.CheckM
+    GF.Grammar.AppPredefined 
+    GF.Grammar.PatternMatch
+    GF.Compile.CheckGrammar
+    GF.Compile.BackOpt
+    GF.Compile.Extend
+    GF.Compile.Rename
+    GF.Compile.ReadFiles
+    GF.Compile.GrammarToGFCC
+    GF.Compile.Compute
+    GF.Compile.Optimize
+    GF.Compile.ModDeps
+    GF.Compile.Rebuild
+    GF.Source.SourceToGrammar
+    GF.Compile.GetGrammar
+    GF.Compile
+    GF.Command.Importing
+    GFC
+    GF.System.NoReadline
+    GF.System.Readline
+    GFI
