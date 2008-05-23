@@ -7,6 +7,11 @@ license-file: LICENSE
 synopsis: Grammatical Framework
 
 
+flag readline
+  Description: Enable Readline in the shell
+  Default:     True
+
+
 library
   build-depends: base,
                  array,
@@ -159,7 +164,13 @@ executable gf3
     GF.Compile.GetGrammar
     GF.Compile
     GF.Command.Importing
-    GFC
-    GF.System.NoReadline
     GF.System.Readline
+    GFC
     GFI
+  
+  if flag(readline)
+    build-depends: readline
+    ghc-options: -DUSE_READLINE
+    other-modules: GF.System.UseReadline
+  else
+    other-modules: GF.System.NoReadline
