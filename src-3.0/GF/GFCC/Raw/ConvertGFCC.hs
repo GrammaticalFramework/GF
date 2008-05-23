@@ -136,7 +136,6 @@ toTerm e = case e of
   App "S" es    -> S  (lmap toTerm es)
   App "FV" es   -> FV (lmap toTerm es)
   App "P" [e,v] -> P  (toTerm e) (toTerm v)
-  App "RP" [e,v] -> RP  (toTerm e) (toTerm v) ----
   App "W" [AStr s,v] -> W s (toTerm v)
   App "A" [AInt i] -> V (fromInteger i)
   App f []  -> F (mkCId f)
@@ -203,7 +202,6 @@ fromTerm e = case e of
   S es    -> App "S" (lmap fromTerm es)
   FV es   -> App "FV" (lmap fromTerm es)
   P e v   -> App "P"  [fromTerm e, fromTerm v]
-  RP e v  -> App "RP" [fromTerm e, fromTerm v] ----
   W s v   -> App "W" [AStr s, fromTerm v]
   C i     -> AInt (toInteger i)
   TM _    -> AMet

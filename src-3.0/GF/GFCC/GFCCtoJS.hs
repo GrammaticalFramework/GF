@@ -69,7 +69,6 @@ term2js n l t = f t
       D.F f            -> JS.ECall (JS.EMember (JS.EIndex (JS.EMember (JS.EVar $ JS.Ident n) (JS.Ident "concretes")) (JS.EStr l)) (JS.Ident "rule")) [JS.EStr (prCId f), JS.EVar children]
       D.FV xs          -> new "Variants" (map f xs)
       D.W str x        -> new "Suffix" [JS.EStr str, f x]
-      D.RP x y         -> new "Rp" [f x, f y]
       D.TM _           -> new "Meta" []
 
 tokn2js :: D.Tokn -> JS.Expr

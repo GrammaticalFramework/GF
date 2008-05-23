@@ -199,7 +199,6 @@ convertTerm cnc_defs selector (K (KP strs vars))((lbl_path,lin) : lins) =
   do projectHead lbl_path
      toks <- member (strs:[strs' | Var strs' _ <- vars])
      return ((lbl_path, map Tok toks ++ lin) : lins)
-convertTerm cnc_defs selector (RP _ term)                    lins  = convertTerm cnc_defs selector term lins
 convertTerm cnc_defs selector (F id)                         lins  = do term <- Map.lookup id cnc_defs
                                                                         convertTerm cnc_defs selector term lins
 convertTerm cnc_defs selector (W s t)     ((lbl_path,lin) : lins) = do
@@ -257,7 +256,6 @@ evalTerm cnc_defs path (R record)   = case path of
 evalTerm cnc_defs path (P term sel) = do index <- evalTerm cnc_defs [] sel
                                          evalTerm cnc_defs (index:path) term
 evalTerm cnc_defs path (FV terms)   = member terms >>= evalTerm cnc_defs path
-evalTerm cnc_defs path (RP alias _) = evalTerm cnc_defs path alias
 evalTerm cnc_defs path (F id)       = do term <- Map.lookup id cnc_defs
                                          evalTerm cnc_defs path term
 evalTerm cnc_defs path x = error ("evalTerm ("++show x++")")
@@ -271,14 +269,11 @@ unifyPType nr path (C max_index) =
          Nothing    -> do index <- member [0..max_index]
 		          restrictArg nr path index
 		          return index
-unifyPType nr path (RP alias _) = unifyPType nr path alias
-
 unifyPType nr path t = error $ "unifyPType " ++ show t ---- AR 2/10/2007
 
 selectTerm :: FPath -> Term -> Term
 selectTerm []           term        = term
 selectTerm (index:path) (R  record) = selectTerm path (record !! index)
-selectTerm path         (RP _ term) = selectTerm path term
 
 
 ----------------------------------------------------------------------
@@ -362,7 +357,6 @@ genFCatArg cnc_defs ctype env@(FRulesEnv last_id fcatSet rules) (PFCat cat rcs t
     gen_tcs :: Term -> FPath -> [(FPath,FIndex)] -> BacktrackM Bool [(FPath,FIndex)]
     gen_tcs (R record)    path acc = foldM (\acc (label,ctype) -> gen_tcs ctype (label:path) acc) acc (zip [0..] record)
     gen_tcs (S _)         path acc = return acc
-    gen_tcs (RP _ term)   path acc = gen_tcs term path acc
     gen_tcs (C max_index) path acc =
       case List.lookup path tcs of
         Just index -> return $! addConstraint path index acc
@@ -429,7 +423,6 @@ mkSingletonSelectors cnc_defs term = sels0
     (sels0,tcss0) = loop [] ([],[]) term
 
     loop path st          (R record) = List.foldl' (\st (index,term) -> loop (index:path) st term) st (zip [0..] record)
-    loop path st          (RP _ t)   = loop path st t
     loop path (sels,tcss) (C i)      = (                          sels,map ((,) path) [0..i] : tcss)
     loop path (sels,tcss) (S _)      = (mkSelector [path] tcss0 : sels,                        tcss)
     loop path (sels,tcss) (F id)     = case Map.lookup id cnc_defs of

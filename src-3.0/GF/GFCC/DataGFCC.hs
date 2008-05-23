@@ -67,7 +67,6 @@ data Term =
  | FV [Term]
  | W String Term
  | TM String
- | RP Term Term
   deriving (Eq,Ord,Show)
 
 data Tokn =
