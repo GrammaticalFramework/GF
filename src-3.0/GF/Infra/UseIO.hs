@@ -17,7 +17,7 @@ module GF.Infra.UseIO where
 
 import GF.Data.Operations
 import GF.Infra.Option
-import GF.Today (libdir)
+import Paths_gf(getDataDir)
 
 import System.Directory
 import System.FilePath
@@ -114,7 +114,7 @@ getLibraryPath =
               let (path,_) = splitFileName exepath
               canonicalizePath (combine path "../lib"))
 #else
-    (const (return libdir))
+    (const getDataDir)
 #endif
 
 -- | extends the search path with the

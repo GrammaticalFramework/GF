@@ -118,7 +118,6 @@ executable gf3
     GF.Grammar.Predef
     GF.Data.Str
     GF.Data.Zipper
-    GF.Today
     GF.Infra.Option
     GF.Infra.UseIO
     GF.GFCC.GFCCtoJS
