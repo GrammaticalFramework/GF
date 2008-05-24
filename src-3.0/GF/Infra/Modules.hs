@@ -403,7 +403,7 @@ allResources gr = [i | (i,ModMod m) <- modules gr, isModRes m]
 greatestResource :: MGrammar i a -> Maybe i
 greatestResource gr = case allResources gr of
   [] -> Nothing
-  a -> return $ head a
+  a -> return $ head a ---- why not last as in Abstract? works though AR 24/5/2008
 
 -- | all concretes for a given abstract
 allConcretes :: Eq i => MGrammar i a -> i -> [i]
