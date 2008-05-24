@@ -399,7 +399,7 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
   App _ _ -> mkValCase (unrec tr)
   QC  _ _ -> mkValCase tr 
   R rs    -> R [(mkLab i, (Nothing, t2t t)) | 
-                 (i,(l,(_,t))) <- zip [0..] (sort (unlock rs))]
+                 (i,(l,(_,t))) <- zip [0..] (GM.sortRec (unlock rs))]
   P  t l   -> r2r tr
   PI t l i -> EInt $ toInteger i
 
@@ -529,7 +529,7 @@ notlock (l, t) = case t of --- need not look at l
      _ -> True
 
 unlockTy ty = case ty of
-  RecType ls -> RecType $ sort [(l, unlockTy t) | (l,t) <- ls, notlock (l,t)]
+  RecType ls -> RecType $ GM.sortRec [(l, unlockTy t) | (l,t) <- ls, notlock (l,t)]
   _ -> GM.composSafeOp unlockTy ty
 
 

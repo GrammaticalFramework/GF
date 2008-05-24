@@ -28,6 +28,7 @@ import GF.Grammar.PrGrammar
 
 import Control.Monad (liftM, liftM2)
 import Data.Char (isDigit)
+import Data.List (sortBy)
 
 firstTypeForm :: Type -> Err (Context, Type)
 firstTypeForm t = case t of
@@ -718,4 +719,15 @@ isInOneType :: Type -> Bool
 isInOneType t = case t of
   Prod _ a b -> a == b
   _ -> False
+
+-- normalize records and record types; put s first
+
+sortRec :: [(Label,a)] -> [(Label,a)]
+sortRec = sortBy ordLabel where
+  ordLabel (r1,_) (r2,_) = case (prt r1, prt r2) of
+    ("s",_) -> LT
+    (_,"s") -> GT
+    (s1,s2) -> compare s1 s2
+
+
 
