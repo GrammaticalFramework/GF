@@ -5,7 +5,7 @@ import GF.Command.Importing
 import GF.Command.Commands
 import GF.GFCC.API
 
-import GF.Grammar.Grammar (SourceGrammar,emptySourceGrammar) -- for cc command
+import GF.Grammar.API  -- for cc command
 
 import GF.Infra.UseIO
 import GF.Infra.Option ---- Haskell's option lib
@@ -21,22 +21,28 @@ mainGFI :: [String] -> IO ()
 mainGFI xx = do
   putStrLn welcome
   env <- importInEnv emptyMultiGrammar xx
-  loop (GFEnv emptySourceGrammar env [] 0)
+  loop (GFEnv emptyGrammar env [] 0)
   return ()
 
 loop :: GFEnv -> IO GFEnv
 loop gfenv0 = do
   let env = commandenv gfenv0
+  let sgr = sourcegrammar gfenv0
   s <- fetchCommand (prompt env)
   let gfenv = gfenv0 {history = s : history gfenv0}
   case words s of
 
   -- special commands, requiring source grammar in env
+    "cc":ws -> do
+       let t = pTerm (unwords ws) >>= checkTerm sgr >>= computeTerm sgr
+       err putStrLn (putStrLn . prTerm) t ---- make pipable
+       loopNewCPU gfenv
+
     "i":args -> do
       let (opts,files) = getOptions "-" args
       case opts of
         _ | oElem (iOpt "retain") opts -> do
-          src <- importSource (sourcegrammar gfenv) opts files
+          src <- importSource sgr opts files
           loopNewCPU $ gfenv {sourcegrammar = src}
 
   -- other special commands, working on GFEnv
@@ -89,7 +95,7 @@ prompt env = absname ++ "> " where
     n   -> n
 
 data GFEnv = GFEnv {
-  sourcegrammar :: SourceGrammar, -- gfo grammar -retain
+  sourcegrammar :: Grammar, -- gfo grammar -retain
   commandenv :: CommandEnv,
   history    :: [String],
   cputime    :: Integer
