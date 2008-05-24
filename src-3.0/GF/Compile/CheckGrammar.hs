@@ -370,7 +370,7 @@ computeLType gr t = do
         _ -> return $ ExtR r' s'
 
     RecType fs -> do
-      let fs' = sortBy (\x y -> compare (fst x) (fst y)) fs
+      let fs' = sortRec fs
       liftM RecType $ mapPairsM comp fs'
 
     _ | ty == typeTok -> return typeStr
@@ -395,7 +395,7 @@ labelIndex ty lab = case ty of
   RecType ts -> maybe (error ("label index" +++ prt lab)) id $ lookup lab $ labs ts
   _ -> error $ "label index" +++ prt ty
  where 
-  labs ts = zip (map fst (sortBy (\ x y -> compare (fst x) (fst y)) ts)) [0..]
+  labs ts = zip (map fst (sortRec ts)) [0..]
 
 -- the underlying algorithms
 
@@ -667,9 +667,12 @@ getOverload env@gr mt t = case appForm t of
 
        vfs' -> case [(v,f) | (v,f) <- vfs', noProd v] of
          [(val,fun)] -> do
-           checkWarn $ "WARNING: overloading of" +++ prt f +++ 
-             "resolved by excluding partial applications:" ++++
-             unlines [prtType env ty | (ty,_) <- vfs', not (noProd ty)]
+
+----- unsafely exclude irritating warning AR 24/5/2008
+-----           checkWarn $ "WARNING: overloading of" +++ prt f +++ 
+-----             "resolved by excluding partial applications:" ++++
+-----             unlines [prtType env ty | (ty,_) <- vfs', not (noProd ty)]
+
            return (mkApp fun tts, val)
 
          _ -> raise $ "ambiguous overloading of" +++ prt f +++
