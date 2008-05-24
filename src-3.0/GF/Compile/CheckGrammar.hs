@@ -502,10 +502,13 @@ inferLType gr trm = case trm of
 
    K s  -> do
      if elem ' ' s
-        then checkWarn ("WARNING: space in token \"" ++ s ++ 
-                        "\". Lexical analysis may fail.")
-        else return ()
-     return (trm, typeStr)
+        then do
+          let ss = foldr C Empty (map K (words s))  
+          ----- removed irritating warning AR 24/5/2008
+          ----- checkWarn ("WARNING: token \"" ++ s ++ 
+          -----              "\" converted to token list" ++ prt ss)
+          return (ss, typeStr)
+        else return (trm, typeStr)
 
    EInt i -> return (trm, typeInt)
 
