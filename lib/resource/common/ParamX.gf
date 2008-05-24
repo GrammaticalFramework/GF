@@ -33,10 +33,19 @@ resource ParamX = open Prelude in {
         } ;
 
     conjNumber : Number -> Number -> Number = \m,n -> 
+      case m of {
+        Sg => n ;
+        _ => Pl 
+        } ;
+
+{- ----- this provokes a bug in gfcc AR 24/5/2008
+
+    conjjNumber : Number -> Number -> Number = \m,n -> 
       case <m,n> of {
         <Sg,Sg> => Sg ;
         _ => Pl 
         } ;
+-}
 
 -- For persons, we let the latter argument win ("either you or I am absent"
 -- but "either I or you are absent"). This is not quite clear.

@@ -75,7 +75,8 @@ resource ResHin = ParamX ** open Prelude in {
     mkVerb : (x1,_,_,_,_,_,_,_,_,_,_,_,_,_,x15 : Str) -> Verb = 
       \inf,stem,ims,imp,ifs,ifp,pms,pmp,pfs,pfp,ss1,ss2,sp2,sp3,r -> {
         s = 
-        let ga : Number -> Gender -> Str = \n,g -> (regAdjective "ga:").s ! g ! n ! Dir 
+        let ga : Number -> Gender -> Str = \n,g -> 
+          (regAdjective "ga:").s ! g ! n ! Dir 
         in table {
           VInf => inf ;
           VStem => stem ;
@@ -273,11 +274,22 @@ resource ResHin = ParamX ** open Prelude in {
     mkClause : NP -> VPH -> Clause = \np,vp -> {
       s = \\vt,b => 
         let 
+          subjagr : NPCase * Agr = case vt of {
+            VPPerf => case vp.subj of {
+              VTrans     => <NPErg, vp.obj.a> ;
+              VTransPost => <NPErg, defaultAgr> ;
+              _ => <NPC Dir, np.a>
+              } ;
+            _ => <NPC Dir, np.a>
+            } ;
+
+{- ----- this provokes a bug in gfcc AR 24/5/2008
           subjagr : NPCase * Agr = case <vp.subj,vt> of {
             <VTrans,VPPerf> => <NPErg, vp.obj.a> ;
             <VTransPost,VPPerf> => <NPErg, defaultAgr> ;
             _ => <NPC Dir, np.a>
             } ;
+-}
           subj = subjagr.p1 ;
           agr  = subjagr.p2 ;
           vps  = vp.s ! b ! VPTense vt agr ;
