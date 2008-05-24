@@ -282,14 +282,6 @@ resource ResHin = ParamX ** open Prelude in {
               } ;
             _ => <NPC Dir, np.a>
             } ;
-
-{- ----- this provokes a bug in gfcc AR 24/5/2008
-          subjagr : NPCase * Agr = case <vp.subj,vt> of {
-            <VTrans,VPPerf> => <NPErg, vp.obj.a> ;
-            <VTransPost,VPPerf> => <NPErg, defaultAgr> ;
-            _ => <NPC Dir, np.a>
-            } ;
--}
           subj = subjagr.p1 ;
           agr  = subjagr.p2 ;
           vps  = vp.s ! b ! VPTense vt agr ;
