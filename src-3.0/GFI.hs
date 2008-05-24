@@ -5,6 +5,8 @@ import GF.Command.Importing
 import GF.Command.Commands
 import GF.GFCC.API
 
+import GF.Grammar.Grammar (SourceGrammar,emptySourceGrammar) -- for cc command
+
 import GF.Infra.UseIO
 import GF.Infra.Option ---- Haskell's option lib
 import GF.System.Readline (fetchCommand)
@@ -19,7 +21,7 @@ mainGFI :: [String] -> IO ()
 mainGFI xx = do
   putStrLn welcome
   env <- importInEnv emptyMultiGrammar xx
-  loop (GFEnv env [] 0)
+  loop (GFEnv emptySourceGrammar env [] 0)
   return ()
 
 loop :: GFEnv -> IO GFEnv
@@ -29,10 +31,18 @@ loop gfenv0 = do
   let gfenv = gfenv0 {history = s : history gfenv0}
   case words s of
 
-  -- special commands, working on GFEnv
+  -- special commands, requiring source grammar in env
     "i":args -> do
-      env1 <- importInEnv (multigrammar env) args
-      loopNewCPU $ gfenv {commandenv = env1}
+      let (opts,files) = getOptions "-" args
+      case opts of
+        _ | oElem (iOpt "retain") opts -> do
+          src <- importSource (sourcegrammar gfenv) opts files
+          loopNewCPU $ gfenv {sourcegrammar = src}
+
+  -- other special commands, working on GFEnv
+        _  -> do
+          env1 <- importInEnv (multigrammar env) args
+          loopNewCPU $ gfenv {commandenv = env1}
     "e":_ -> loopNewCPU $ gfenv {commandenv=env{multigrammar=emptyMultiGrammar}}
     "ph":_ -> mapM_ putStrLn (reverse (history gfenv0)) >> loopNewCPU gfenv
     "q":_  -> putStrLn "See you." >> return gfenv
@@ -79,6 +89,7 @@ prompt env = absname ++ "> " where
     n   -> n
 
 data GFEnv = GFEnv {
+  sourcegrammar :: SourceGrammar, -- gfo grammar -retain
   commandenv :: CommandEnv,
   history    :: [String],
   cputime    :: Integer

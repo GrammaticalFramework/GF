@@ -1,8 +1,10 @@
-module GF.Command.Importing (importGrammar) where
+module GF.Command.Importing (importGrammar, importSource) where
 
 import GF.Compile
 import GF.GFCC.DataGFCC
 import GF.GFCC.API
+
+import GF.Grammar.Grammar (SourceGrammar) -- for cc command
 
 import GF.Infra.UseIO
 import GF.Infra.Option
@@ -26,3 +28,12 @@ importGrammar mgr0 opts files =
       gfcc2 <- mapM file2gfcc files >>= return . foldl1 unionGFCC
       let gfcc3 = unionGFCC (gfcc mgr0) gfcc2
       return $ MultiGrammar gfcc3
+
+importSource :: SourceGrammar -> Options -> [FilePath] -> IO SourceGrammar
+importSource src0 opts files = do
+  src <- appIOE $ batchCompile opts files
+  case src of
+    Ok gr -> return gr
+    Bad msg -> do 
+      putStrLn msg
+      return src0
