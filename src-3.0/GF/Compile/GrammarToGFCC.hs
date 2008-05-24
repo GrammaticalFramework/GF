@@ -271,7 +271,7 @@ canon2canon abs =
         (c, M.ModMod $ M.replaceJudgements mo $ mapTree f2 js)
       _ -> (c,m)    
   j2j cg (f,j) = case j of
-      CncFun x (Yes tr) z -> (f,CncFun x (Yes (trace ("\n" ++ prt f) (t2t tr))) z)
+      CncFun x (Yes tr) z -> (f,CncFun x (Yes (trace ("+ " ++ prt f) (t2t tr))) z)
       CncCat (Yes ty) (Yes x) y -> (f,CncCat (Yes (ty2ty ty)) (Yes (t2t x)) y)
       _ -> (f,j)
    where
@@ -493,7 +493,7 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
         (FV ts,_) -> ts
         _ -> [tr]
       valNumFV ts = case ts of
-        [tr] -> error (prt tr) ----- prtTrace tr $ K "66667"
+        [tr] -> error ("valNum" +++ prt tr) ----- prtTrace tr $ K "66667"
         _ -> FV $ map valNum ts
 
    mkCurry trm = case trm of
