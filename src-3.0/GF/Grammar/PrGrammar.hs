@@ -30,7 +30,8 @@ module GF.Grammar.PrGrammar (Print(..),
 		  prConstrs, prConstraints, 
 		  prMetaSubst, prEnv, prMSubst, 
 		  prExp, prOperSignature,
-                  lookupIdent, lookupIdentInfo
+                  lookupIdent, lookupIdentInfo,
+                  prTermTabular
 		 ) where
 
 import GF.Data.Operations
@@ -89,6 +90,12 @@ instance Print Ident where
 
 instance Print Patt where
   prt = pprintTree . trp
+  prt_ = prt . unqual where
+    unqual p = case p of
+      PP _ c [] -> PV c --- to remove curlies
+      PP _ c ps -> PC c (map unqual ps)
+      PC   c ps -> PC c (map unqual ps)
+      _ -> p ---- records
 
 instance Print Label where
   prt = pprintTree . trLabel
@@ -247,3 +254,20 @@ lookupIdent c t = case lookupTree prt c t of
 
 lookupIdentInfo :: Module Ident a -> Ident -> Err a
 lookupIdentInfo mo i = lookupIdent i (jments mo)
+
+
+--- printing cc command output AR 26/5/2008
+
+prTermTabular :: Term -> [(String,String)]
+prTermTabular = pr where
+  pr t = case t of
+    R rs   -> 
+      [(prt_ lab +++ "." +++ path, str) | (lab,(_,val)) <- rs, (path,str) <- pr val]
+    T _ cs -> 
+      [(prt_ lab +++"=>" +++ path, str) | (lab,   val)  <- cs, (path,str) <- pr val]
+    _ -> [([],ps t)]
+  ps t = case t of
+    K s   -> s
+    C s u -> ps s +++ ps u
+    FV ts -> unwords (intersperse "/" (map ps ts))
+    _ -> prt_ t 

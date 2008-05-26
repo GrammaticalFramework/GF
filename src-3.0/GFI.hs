@@ -34,8 +34,9 @@ loop gfenv0 = do
 
   -- special commands, requiring source grammar in env
     "cc":ws -> do
-       let t = pTerm (unwords ws) >>= checkTerm sgr >>= computeTerm sgr
-       err putStrLn (putStrLn . prTerm) t ---- make pipable
+       let (opts,term) = getOptions "-" ws
+       let t = pTerm (unwords term) >>= checkTerm sgr >>= computeTerm sgr
+       err putStrLn (putStrLn . showTerm opts) t ---- make pipable
        loopNewCPU gfenv
 
     "i":args -> do
