@@ -18,7 +18,7 @@ import GF.Grammar.PrGrammar
 
 import GF.Compile.Rename (renameSourceTerm)
 import GF.Compile.CheckGrammar (justCheckLTerm)
-import GF.Compile.Compute (computeConcreteRec)
+import GF.Compile.Compute (computeConcrete)
 
 import GF.Data.Operations
 import qualified Data.ByteString.Char8 as BS
@@ -47,6 +47,5 @@ checkTermAny gr m t = do
   justCheckLTerm gr t1
 
 computeTerm :: Grammar -> Term -> Err Term
-computeTerm = computeConcreteRec
-
+computeTerm = computeConcrete
 

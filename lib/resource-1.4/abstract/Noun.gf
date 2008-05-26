@@ -61,11 +61,11 @@ abstract Noun = Cat ** {
 
 -- The construction of numerals is defined in [Numeral Numeral.html].
 
--- $Num$ can  be modified by certain adverbs.
+-- A $Card$ can  be modified by certain adverbs.
 
     AdNum : AdN -> Card -> Card ;   -- almost 51
 
--- $Ord$ consists of either digits or numeral words.
+-- An $Ord$ consists of either digits or numeral words.
 -- Also superlative forms of adjectives behave syntactically like ordinals.
 
     OrdDigits  : Digits  -> Ord ;  -- 51st
