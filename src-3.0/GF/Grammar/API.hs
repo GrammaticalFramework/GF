@@ -4,7 +4,8 @@ module GF.Grammar.API (
   pTerm,
   prTerm,
   checkTerm,
-  computeTerm
+  computeTerm,
+  showTerm
   ) where
 
 import GF.Source.ParGF
@@ -21,6 +22,8 @@ import GF.Compile.CheckGrammar (justCheckLTerm)
 import GF.Compile.Compute (computeConcrete)
 
 import GF.Data.Operations
+import GF.Infra.Option
+
 import qualified Data.ByteString.Char8 as BS
 
 type Grammar = SourceGrammar
@@ -49,3 +52,9 @@ checkTermAny gr m t = do
 computeTerm :: Grammar -> Term -> Err Term
 computeTerm = computeConcrete
 
+showTerm :: Options -> Term -> String
+showTerm opts t
+  | oElem (iOpt "table")  opts = unlines [p +++ s | (p,s) <- prTermTabular t]
+  | oElem (iOpt "all")    opts = unlines [      s | (p,s) <- prTermTabular t]
+  | oElem (iOpt "unqual") opts = prt_ t
+  | otherwise = prt t
