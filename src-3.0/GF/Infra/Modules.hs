@@ -397,7 +397,7 @@ greatestAbstract gr = case allAbstracts gr of
 
 -- | all resource modules
 allResources :: MGrammar i a -> [i]
-allResources gr = [i | (i,ModMod m) <- modules gr, isModRes m]
+allResources gr = [i | (i,ModMod m) <- modules gr, isModRes m || isModCnc m]
 
 -- | the greatest resource in dependency order
 greatestResource :: MGrammar i a -> Maybe i
