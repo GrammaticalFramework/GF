@@ -265,6 +265,8 @@ prTermTabular = pr where
       [(prt_ lab +++ "." +++ path, str) | (lab,(_,val)) <- rs, (path,str) <- pr val]
     T _ cs -> 
       [(prt_ lab +++"=>" +++ path, str) | (lab,   val)  <- cs, (path,str) <- pr val]
+    V _ cs -> 
+      [("#" ++ show i +++"=>" +++ path, str) | (i,val)  <- zip [0..] cs, (path,str) <- pr val]
     _ -> [([],ps t)]
   ps t = case t of
     K s   -> s
