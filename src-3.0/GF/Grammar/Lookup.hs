@@ -144,7 +144,6 @@ lookupParams gr = look True where
         info <- lookupIdentInfo mo c
         case info of
           ResParam (Yes psm) -> return psm
-
           AnyInd _ n        -> look False n c
           _   -> Bad $ prt c +++ "has no parameters defined in resource" +++ prt m
       _ -> Bad $ prt m +++ "is not a resource"
@@ -195,7 +194,7 @@ allParamValues :: SourceGrammar -> Type -> Err [Term]
 allParamValues cnc ptyp = case ptyp of
      _ | Just n <- isTypeInts ptyp -> return [EInt i | i <- [0..n]]
      QC p c -> lookupParamValues cnc p c
-     Q  p c -> lookupParamValues cnc p c ----
+     Q  p c -> lookupResDef cnc p c >>= allParamValues cnc
      RecType r -> do
        let (ls,tys) = unzip $ sortByFst r
        tss <- mapM allPV tys

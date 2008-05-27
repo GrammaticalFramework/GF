@@ -11,7 +11,7 @@
 resource MorphoFre = CommonRomance, ResFre ** 
   open PhonoFre, Prelude, Predef in {
 
-flags optimize=noexpand ;
+flags optimize=all ;
 
 --2 Front vowels
 --
