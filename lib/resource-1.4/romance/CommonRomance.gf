@@ -58,8 +58,8 @@ oper
     } ;
   
   conjGender : Gender -> Gender -> Gender = \m,n -> 
-    case <m,n> of {
-      <Fem,Fem> => Fem ;
+    case m of {
+      Fem => n ;
       _ => Masc 
       } ;
 
