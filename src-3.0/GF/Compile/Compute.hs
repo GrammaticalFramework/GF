@@ -137,79 +137,28 @@ computeTermOpt rec gr = comput True where
          _   -> returnC $ P t' l
 
      PI t l i -> comp g $ P t l -----
-
+-- {-
      S t@(T ti cc) v -> do
        v'     <- comp g v
        case v' of
          FV vs -> do
            ts' <- mapM (comp g . S t) vs
            return $ variants ts' 
-         _ -> case ti of
-{-
-           TComp _  -> do
-             case term2patt v' of
-               Ok p' -> case lookup p' cc of
-                 Just u -> comp g u
-                 _ -> do
-                   t' <- comp g t
-                   return $ S t' v' -- if v' is not canonical
-               _ -> do
-                  t' <- comp g t
-                  return $ S t' v'
--}
-           _ -> case matchPattern cc v' of
-             Ok (c,g') -> comp (g' ++ g) c
-             _ | isCan v' -> prtBad ("missing case" +++ prt v' +++ "in") t 
-             _ -> do
-               t' <- comp g t
-               return $ S t' v' -- if v' is not canonical
-
+         _ -> case matchPattern cc v' of
+           Ok (c,g') -> comp (g' ++ g) c
+           _ | isCan v' -> prtBad ("missing case" +++ prt v' +++ "in") t 
+           _ -> do
+             t' <- comp g t
+             return $ S t' v' -- if v' is not canonical
+-- -}
 
      S t v -> do
-
-      t'     <- case t of
---        T _ _ -> return t
---        V _ _ -> return t
-        _ -> comp g t
-
-      v'     <- comp g v
-
-      case v' of
-       FV vs -> mapM (\c -> comp g (S t' c)) vs >>= returnC . variants        
-       _ -> case t' of
-         FV ccs -> mapM (\c -> comp g (S c v')) ccs >>= returnC . variants
-
-         T _ [(PV IW,c)] -> comp g c           --- an optimization
-         T _ [(PT _ (PV IW),c)] -> comp g c
-
-         T _ [(PV z,c)] -> comp (ext z v' g) c --- another optimization
-         T _ [(PT _ (PV z),c)] -> comp (ext z v' g) c
-
-         -- course-of-values table: look up by index, no pattern matching needed
-         V ptyp ts -> do
-           vs <- allParamValues gr ptyp
-           case lookup v' (zip vs [0 .. length vs - 1]) of
-             Just i -> comp g $ ts !! i
------             _ -> prtBad "selection" $ S t' v' -- debug
-             _ -> return $ S t' v' -- if v' is not canonical
-
-         T (TComp _) cs -> do
-           case term2patt v' of
-             Ok p' -> case lookup p' cs of
-               Just u -> comp g u
-               _ -> return $ S t' v' -- if v' is not canonical
-             _ -> return $ S t' v'
-
-         T _ cc -> case matchPattern cc v' of
-             Ok (c,g') -> comp (g' ++ g) c
-             _ | isCan v' -> prtBad ("missing case" +++ prt v' +++ "in") t 
-             _ -> return $ S t' v' -- if v' is not canonical
-
-         Alias _ _ d -> comp g (S d v')
-
-         S (T i cs) e -> prawitz g i (flip S v') cs e
-         S (V i cs) e -> prawitzV g i (flip S v') cs e
-         _    -> returnC $ S t' v'
+       t' <- compTable True g t
+       v' <- comp g v
+       t1 <- case getArgType t' of
+           Ok (RecType fs) -> uncurrySelect gr fs t' v'
+           _ -> return $ S t' v'
+       compSelect g $ S t' v' 
 
      -- normalize away empty tokens
      K "" -> return Empty
@@ -291,33 +240,11 @@ computeTermOpt rec gr = comput True where
          (RecType rs, RecType ss) -> plusRecType r' s'
          _ -> return $ ExtR r' s'
 
-     -- case-expand tables
-     -- if already expanded, don't expand again
-     T i@(TComp ty) cs -> do
-       -- if there are no variables, don't even go inside
-       cs' <- if (null g) then return cs else mapPairsM (comp g) cs
-----       return $ V ty (map snd cs')
-       return $ T i cs'
+     T _ _ -> compTable False g t
+     V _ _ -> compTable False g t
+
      --- this means some extra work; should implement TSh directly
-     TSh i cs -> comp g $ T i [(p,v) | (ps,v) <- cs, p <- ps]
-
-     T i cs -> do
-       pty0 <- getTableType i
-       ptyp <- comp g pty0
-       case allParamValues gr ptyp of
-         Ok vs -> do
-
-           ps0  <- mapM (compPatternMacro . fst) cs
-           cs'  <- mapM (compBranchOpt g) (zip ps0 (map snd cs))
-           sts  <- mapM (matchPattern cs') vs 
-           ts   <- mapM (\ (c,g') -> comp (g' ++ g) c) sts
-           ps   <- mapM term2patt vs
-           let ps' = ps --- PT ptyp (head ps) : tail ps
-----           return $ V ptyp ts -- to save space, just course of values
-           return $ T (TComp ptyp) (zip ps' ts)
-         _ -> do
-           cs' <- mapM (compBranch g) cs
-           return $ T i cs'  -- happens with variable types
+     --- obsolete: TSh i cs -> comp g $ T i [(p,v) | (ps,v) <- cs, p <- ps]
 
      Alias c a d -> do
        d' <- comp g d
@@ -411,6 +338,79 @@ computeTermOpt rec gr = comput True where
 
        _ -> return p
 
+     compSelect g (S t' v') = case v' of
+       FV vs -> mapM (\c -> comp g (S t' c)) vs >>= returnC . variants        
+       _ -> case t' of
+         FV ccs -> mapM (\c -> comp g (S c v')) ccs >>= returnC . variants
+
+         T _ [(PV IW,c)] -> comp g c           --- an optimization
+         T _ [(PT _ (PV IW),c)] -> comp g c
+
+         T _ [(PV z,c)] -> comp (ext z v' g) c --- another optimization
+         T _ [(PT _ (PV z),c)] -> comp (ext z v' g) c
+
+         -- course-of-values table: look up by index, no pattern matching needed
+         V ptyp ts -> do
+           vs <- allParamValues gr ptyp
+           case lookup v' (zip vs [0 .. length vs - 1]) of
+             Just i -> comp g $ ts !! i
+-----             _ -> prtBad "selection" $ S t' v' -- debug
+             _ -> return $ S t' v' -- if v' is not canonical
+
+         T (TComp _) cs -> do
+           case term2patt v' of
+             Ok p' -> case lookup p' cs of
+               Just u -> comp g u
+               _ -> return $ S t' v' -- if v' is not canonical
+             _ -> return $ S t' v'
+
+         T _ cc -> case matchPattern cc v' of
+             Ok (c,g') -> comp (g' ++ g) c
+             _ | isCan v' -> prtBad ("missing case" +++ prt v' +++ "in") t 
+             _ -> return $ S t' v' -- if v' is not canonical
+
+         Alias _ _ d -> comp g (S d v')
+
+         S (T i cs) e -> prawitz g i (flip S v') cs e
+         S (V i cs) e -> prawitzV g i (flip S v') cs e
+         _    -> returnC $ S t' v'
+
+
+     -- case-expand tables
+     -- if already expanded, don't expand again
+     compTable isSel g t = do
+       t2 <- case t of
+         T i@(TComp ty) cs -> do
+          -- if there are no variables, don't even go inside
+          cs' <- if (null g) then return cs else mapPairsM (comp g) cs
+----          return $ V ty (map snd cs')
+          return $ T i cs'
+         V ty cs -> do
+          -- if there are no variables, don't even go inside
+          cs' <- if (null g) then return cs else mapM (comp g) cs
+----       return $ V ty (map snd cs')
+          return $ V ty cs'
+
+         T i cs -> do
+          pty0 <- getTableType i
+          ptyp <- comp g pty0
+          case allParamValues gr ptyp of
+            Ok vs -> do
+
+              ps0  <- mapM (compPatternMacro . fst) cs
+              cs'  <- mapM (compBranchOpt g) (zip ps0 (map snd cs))
+              sts  <- mapM (matchPattern cs') vs 
+              ts   <- mapM (\ (c,g') -> comp (g' ++ g) c) sts
+              ps   <- mapM term2patt vs
+              let ps' = ps --- PT ptyp (head ps) : tail ps
+----           return $ V ptyp ts -- to save space, just course of values
+              return $ T (TComp ptyp) (zip ps' ts)
+            _ -> do
+              cs' <- mapM (compBranch g) cs
+              return $ T i cs'  -- happens with variable types
+         _ -> comp g t
+       return t2 ---- $ if isSel then uncurryTable t2 else t2
+
      compBranch g (p,v) = do
        let g' = contP p ++ g
        v' <- comp g' v
@@ -454,3 +454,16 @@ checkNoArgVars t = case t of
 glueErrorMsg s = 
   "Cannot glue (+) term with run-time variable" +++ s ++ "." ++++
   "Use Prelude.bind instead."
+
+getArgType t = case t of
+  V ty _ -> return ty
+  T (TComp ty) _ -> return ty
+  _ -> prtBad "cannot get argument type of table" t
+
+
+---- uncurryTable gr t = do
+
+uncurrySelect gr fs t v = do
+  return $ S t v ---
+
+
