@@ -61,7 +61,7 @@ optimize opts = cse . suf
 
 buildParser :: Options -> GFCC -> GFCC
 buildParser opts = 
-    if moduleFlag optBuildParser opts then id else addParsers
+    if moduleFlag optBuildParser opts then addParsers else id
 
 batchCompile :: Options -> [FilePath] -> IOE SourceGrammar
 batchCompile opts files = do
