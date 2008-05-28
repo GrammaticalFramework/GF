@@ -48,7 +48,7 @@ compileToGFCC opts fs =
 
 link :: Options -> String -> SourceGrammar -> IOE GFCC
 link opts cnc gr =
-    do gc1 <- putPointE opts "linking ... " $
+    do gc1 <- putPointE Normal opts "linking ... " $
                 let (abs,gc0) = mkCanon2gfcc opts cnc gr
                 in ioeIO $ checkGFCCio gc0
        return $ buildParser opts $ optimize opts gc1
@@ -103,12 +103,10 @@ compileModule opts1 env file = do
 compileOne :: Options -> CompileEnv -> FullPath -> IOE CompileEnv
 compileOne opts env@(_,srcgr,_) file = do
 
-  let putp s = putPointE opts s
-  let putpp = putPointEsil opts
   let putpOpt v m act
-       | beVerbose opts =  putp v act
-       | beSilent opts  =  putpp v act
-       | otherwise = ioeIO (putStrFlush m) >> act
+       | verbAtLeast opts Verbose = putPointE Normal opts v act
+       | verbAtLeast opts Normal  = ioeIO (putStrFlush m) >> act
+       | otherwise                = putPointE Verbose opts v act
 
   let gf   = takeExtensions file
   let path = dropFileName file
@@ -120,9 +118,9 @@ compileOne opts env@(_,srcgr,_) file = do
     -- for compiled gf, read the file and update environment
     -- also undo common subexp optimization, to enable normal computations
     ".gfo" -> do
-       sm0 <- putp ("+ reading" +++ file) $ getSourceModule opts file
+       sm0 <- putPointE Normal opts ("+ reading" +++ file) $ getSourceModule opts file
        let sm1 = unsubexpModule sm0
-       sm <- {- putp "creating indirections" $ -} ioeErr $ extendModule mos sm1
+       sm <- {- putPointE Normal opts "creating indirections" $ -} ioeErr $ extendModule mos sm1
        
        extendCompileEnv env file sm
 
@@ -139,7 +137,7 @@ compileOne opts env@(_,srcgr,_) file = do
                                            getSourceModule opts file
        (k',sm)  <- compileSourceModule opts env sm0
        let sm1 = if isConcr sm then shareModule sm else sm -- cannot expand Str
-       cm  <- putpp "  generating code... " $ generateModuleCode opts gfo sm1
+       cm  <- putPointE Verbose opts "  generating code... " $ generateModuleCode opts gfo sm1
           -- sm is optimized before generation, but not in the env
        extendCompileEnvInt env k' gfo sm1
   where
@@ -152,8 +150,8 @@ compileSourceModule :: Options -> CompileEnv ->
                        SourceModule -> IOE (Int,SourceModule)
 compileSourceModule opts env@(k,gr,_) mo@(i,mi) = do
 
-  let putp  = putPointE opts
-      putpp = putPointEsil opts
+  let putp  = putPointE Normal opts
+      putpp = putPointE Verbose opts
       mos   = modules gr
 
   mo1   <- ioeErr $ rebuildModule mos mo
@@ -190,12 +188,8 @@ generateModuleCode :: Options -> FilePath -> SourceModule -> IOE SourceModule
 generateModuleCode opts file minfo = do
   let minfo1 = subexpModule minfo
       out    = prGrammar (MGrammar [minfo1])
-  putp ("  wrote file" +++ file) $ ioeIO $ writeFile file $ out
+  putPointE Normal opts ("  wrote file" +++ file) $ ioeIO $ writeFile file $ out
   return minfo1
- where
-   putp  = putPointE opts
-   putpp = putPointEsil opts
-
 
 -- auxiliaries
 

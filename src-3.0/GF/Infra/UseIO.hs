@@ -40,15 +40,11 @@ putShow' f = putStrLn . show . length . show . f
 
 putIfVerb :: Options -> String -> IO ()
 putIfVerb opts msg =
-      if beVerbose opts
-         then putStrLn msg
-         else return ()
+      when (verbAtLeast opts Verbose) $ putStrLn msg
 
 putIfVerbW :: Options -> String -> IO ()
 putIfVerbW opts msg =
-      if beVerbose opts
-         then putStr (' ' : msg)
-         else return ()
+      when (verbAtLeast opts Verbose) $ putStr (' ' : msg)
 
 errOptIO :: Options -> a -> Err a -> IO a
 errOptIO os e m = case m of
@@ -245,17 +241,9 @@ putStrLnE = ioeIO . putStrLnFlush
 putStrE :: String -> IOE ()
 putStrE = ioeIO . putStrFlush 
 
--- this is more verbose
-putPointE :: Options -> String -> IOE a -> IOE a
-putPointE = putPointEgen beSilent
-
--- this is less verbose
-putPointEsil :: Options -> String -> IOE a -> IOE a
-putPointEsil = putPointEgen (not . beVerbose)
-
-putPointEgen :: (Options -> Bool) -> Options -> String -> IOE a -> IOE a
-putPointEgen cond opts msg act = do
-  when (cond opts) $ ioeIO $ putStrFlush msg
+putPointE :: Verbosity -> Options -> String -> IOE a -> IOE a
+putPointE v opts msg act = do
+  when (verbAtLeast opts v) $ ioeIO $ putStrFlush msg
 
   t1 <- ioeIO $ getCPUTime
   a <- act >>= ioeIO . evaluate
@@ -264,10 +252,6 @@ putPointEgen cond opts msg act = do
   when (flag optShowCPUTime opts) $ ioeIO $ putStrLnFlush (' ' : show ((t2 - t1) `div` 1000000000) ++ " msec")
   return a
 
-
--- | forces verbosity
-putPointEVerb :: Options -> String -> IOE a -> IOE a
-putPointEVerb = putPointEgen (const False)
 
 -- ((do {s <- readFile f; return (return s)}) ) 
 readFileIOE :: FilePath -> IOE BS.ByteString

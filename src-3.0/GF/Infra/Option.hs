@@ -3,7 +3,7 @@ module GF.Infra.Option
      -- * Option types
      Options, ModuleOptions,
      Flags(..), ModuleFlags(..),
-     Mode(..), Phase(..), Encoding(..), OutputFormat(..), Optimization(..),
+     Mode(..), Phase(..), Verbosity(..), Encoding(..), OutputFormat(..), Optimization(..),
      Dump(..), Printer(..), Recomp(..),
      -- * Option parsing 
      parseOptions, parseModuleOptions,
@@ -17,8 +17,7 @@ module GF.Infra.Option
      -- * Checking options
      flag, moduleFlag,
      -- * Convenience methods for checking options    
-     beVerbose, beSilent,
-     dump
+     verbAtLeast, dump
     ) where
 
 import Control.Monad
@@ -64,6 +63,9 @@ errors = fail . unlines
 
 data Mode = ModeVersion | ModeHelp | ModeInteractive | ModeCompiler
   deriving (Show,Eq,Ord)
+
+data Verbosity = Quiet | Normal | Verbose | Debug
+  deriving (Show,Eq,Ord,Enum,Bounded)
 
 data Phase = Preproc | Convert | Compile | Link
   deriving (Show,Eq,Ord)
@@ -112,7 +114,7 @@ data ModuleFlags = ModuleFlags {
 data Flags = Flags {
       optMode            :: Mode,
       optStopAfterPhase  :: Phase,
-      optVerbosity       :: Int,
+      optVerbosity       :: Verbosity,
       optShowCPUTime     :: Bool,
       optEmitGFO         :: Bool,
       optGFODir          :: FilePath,
@@ -245,7 +247,7 @@ defaultFlags :: Flags
 defaultFlags = Flags {
       optMode            = ModeInteractive,
       optStopAfterPhase  = Compile,
-      optVerbosity       = 1,
+      optVerbosity       = Normal,
       optShowCPUTime     = False,
       optEmitGFO         = True,
       optGFODir          = ".",
@@ -334,7 +336,7 @@ optDescr =
     [
      Option ['?','h'] ["help"] (NoArg (mode ModeHelp)) "Show help message.",
      Option ['V'] ["version"] (NoArg (mode ModeVersion)) "Display GF version number.",
-     Option ['v'] ["verbose"] (OptArg verbosity "N") "Set verbosity (default 1). -v alone is the same as -v 3.",
+     Option ['v'] ["verbose"] (OptArg verbosity "N") "Set verbosity (default 1). -v alone is the same as -v 2.",
      Option ['q','s'] ["quiet"] (NoArg (verbosity (Just "0"))) "Quiet, same as -v 0.",
      Option [] ["batch"] (NoArg (mode ModeCompiler)) "Run in batch compiler mode.",
      Option [] ["interactive"] (NoArg (mode ModeInteractive)) "Run in interactive mode (default).",
@@ -370,10 +372,10 @@ optDescr =
  where phase       x = set $ \o -> o { optStopAfterPhase = x }
        mode        x = set $ \o -> o { optMode = x }
        verbosity mv  = case mv of
-                           Nothing -> set $ \o -> o { optVerbosity = 3 }
-                           Just v  -> case reads v of
-                                        [(i,"")] | i >= 0 -> set $ \o -> o { optVerbosity = i }
-                                        _        -> fail $ "Bad verbosity: " ++ show v
+                           Nothing -> set $ \o -> o { optVerbosity = Verbose }
+                           Just v  -> case readMaybe v >>= toEnumBounded of
+                                        Just i  -> set $ \o -> o { optVerbosity = i }
+                                        Nothing -> fail $ "Bad verbosity: " ++ show v
        cpu         x = set $ \o -> o { optShowCPUTime = x }
        emitGFO     x = set $ \o -> o { optEmitGFO = x }
        gfoDir      x = set $ \o -> o { optGFODir = x }
@@ -386,14 +388,6 @@ optDescr =
        prob        x = set $ \o -> o { optProb = x }
 
        set = return . Options
-
-instance Functor OptDescr where
-    fmap f (Option cs ss d s) = Option cs ss (fmap f d) s
-
-instance Functor ArgDescr where
-    fmap f (NoArg x)    = NoArg (f x)
-    fmap f (ReqArg g s) = ReqArg (f . g) s
-    fmap f (OptArg g s) = OptArg (f . g) s
 
 outputFormats :: [(String,OutputFormat)]
 outputFormats = 
@@ -453,12 +447,34 @@ splitInModuleSearchPath s = case break isPathSep s of
 -- * Convenience functions for checking options
 --
 
-beVerbose :: Options -> Bool
-beVerbose = flag ((>= 3) . optVerbosity)
-
-beSilent :: Options -> Bool
-beSilent = flag ((<= 0) . optVerbosity)
+verbAtLeast :: Options -> Verbosity -> Bool
+verbAtLeast opts v = flag optVerbosity opts >= v
 
 dump :: Options -> Dump -> Bool
 dump opts d = moduleFlag ((d `elem`) . optDump) opts
 
+
+--
+-- * General utilities
+--
+
+readMaybe :: Read a => String -> Maybe a
+readMaybe s = case reads s of
+                [(x,"")] -> Just x
+                _        -> Nothing
+
+toEnumBounded :: (Bounded a, Enum a, Ord a) => Int -> Maybe a
+toEnumBounded i = let mi = minBound
+                      ma = maxBound `asTypeOf` mi                      
+                   in if i >= fromEnum mi && i <= fromEnum ma 
+                        then Just (toEnum i `asTypeOf` mi)
+                        else Nothing
+
+
+instance Functor OptDescr where
+    fmap f (Option cs ss d s) = Option cs ss (fmap f d) s
+
+instance Functor ArgDescr where
+    fmap f (NoArg x)    = NoArg (f x)
+    fmap f (ReqArg g s) = ReqArg (f . g) s
+    fmap f (OptArg g s) = OptArg (f . g) s
