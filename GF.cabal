@@ -110,7 +110,7 @@ executable gf3
     GF.GFCC.Macros
     GF.GFCC.Generate
     GF.GFCC.Linearize
-    GF.Conversion.SimpleToFCFG
+    GF.Compile.GenerateFCFG
     GF.Data.ErrM
     GF.Parsing.FCFG
     GF.Command.ParGFShell
