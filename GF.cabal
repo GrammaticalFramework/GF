@@ -126,6 +126,7 @@ executable gf3
     GF.Grammar.Predef
     GF.Data.Str
     GF.Data.Zipper
+    GF.Infra.GetOpt
     GF.Infra.Option
     GF.Infra.UseIO
     GF.GFCC.GFCCtoJS
