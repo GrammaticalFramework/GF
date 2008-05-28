@@ -18,7 +18,7 @@ import qualified GF.Compile.Compute as Compute ----
 import qualified GF.Infra.Modules as M
 import qualified GF.Infra.Option as O
 
-import GF.Conversion.SimpleToFCFG (convertConcrete)
+import GF.Compile.GenerateFCFG (convertConcrete)
 import GF.Parsing.FCFG.PInfo (buildFCFPInfo)
 import GF.Infra.Ident
 import GF.Infra.Option

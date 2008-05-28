@@ -12,7 +12,7 @@
 -----------------------------------------------------------------------------
 
 
-module GF.Conversion.SimpleToFCFG
+module GF.Compile.GenerateFCFG
     (convertConcrete) where
 
 import GF.Infra.PrintClass
