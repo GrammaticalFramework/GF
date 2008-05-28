@@ -110,7 +110,7 @@ evalCncInfo ::
   Options -> SourceGrammar -> Ident -> Ident -> (Ident,Info) -> Err (Ident,Info)
 evalCncInfo opts gr cnc abs (c,info) = do
 
- seq (prtIf (beVerbose opts) c) $ return ()
+ seq (prtIf (verbAtLeast opts Verbose) c) $ return ()
 
  errIn ("optimizing" +++ prt c) $ case info of
 
