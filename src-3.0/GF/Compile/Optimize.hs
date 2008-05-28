@@ -43,9 +43,6 @@ import Debug.Trace
 prtIf :: (Print a) => Bool -> a -> a
 prtIf b t = if b then trace (" " ++ prt t) t else t
 
--- experimental evaluation, option to import
-oEval = iOpt "eval"
-
 -- | partial evaluation of concrete syntax. AR 6\/2001 -- 16\/5\/2003 -- 5\/2\/2005.
 
 type EEnv = () --- not used
@@ -55,28 +52,21 @@ optimizeModule :: Options -> ([(Ident,SourceModInfo)],EEnv) ->
                   (Ident,SourceModInfo) -> Err ((Ident,SourceModInfo),EEnv)
 optimizeModule opts mse@(ms,eenv) mo@(_,mi) = case mi of
   ModMod m0@(Module mt st fs me ops js) | 
-    st == MSComplete && isModRes m0 && not (oElem oEval oopts)-> do
+    st == MSComplete && isModRes m0 -> do
       (mo1,_) <- evalModule oopts mse mo
-      let 
-       mo2 = case optim of
-        "parametrize" -> shareModule paramOpt mo1  -- parametrization and sharing
-        "values"      -> shareModule valOpt mo1    -- tables as courses-of-values
-        "share"       -> shareModule shareOpt mo1  -- sharing of branches
-        "all"         -> shareModule allOpt mo1    -- first parametrize then values
-        "none"        -> mo1                       -- no optimization
-        _             -> mo1                       -- none; default for src
+      let mo2 = shareModule optim mo1
       return (mo2,eenv)
   _ -> evalModule oopts mse mo
  where
-   oopts = addOptions opts (iOpts (flagsModule mo))
-   optim = maybe "all" id $ getOptVal oopts useOptimizer
+   oopts = addOptions opts (moduleOptions (flagsModule mo))
+   optim = moduleFlag optOptimizations oopts
 
 evalModule :: Options -> ([(Ident,SourceModInfo)],EEnv) -> (Ident,SourceModInfo) -> 
                Err ((Ident,SourceModInfo),EEnv)
 evalModule oopts (ms,eenv) mo@(name,mod) = case mod of
 
   ModMod m0@(Module mt st fs me ops js) | st == MSComplete -> case mt of
-    _ | isModRes m0 && not (oElem oEval oopts) -> do
+    _ | isModRes m0 -> do
       let deps = allOperDependencies name js
       ids <- topoSortOpers deps
       MGrammar (mod' : _) <- foldM evalOp gr ids
@@ -112,17 +102,15 @@ evalResInfo oopts gr (c,info) = case info of
  where
    comp = if optres then computeConcrete gr else computeConcreteRec gr
    eIn cat = errIn ("Error optimizing" +++ cat +++ prt c +++ ":")
-   optim = maybe "all" id $ getOptVal oopts useOptimizer
-   optres = case optim of
-     "noexpand" -> False
-     _ -> True
+   optim = moduleFlag optOptimizations oopts
+   optres = OptExpand `elem` optim
 
 
 evalCncInfo :: 
   Options -> SourceGrammar -> Ident -> Ident -> (Ident,Info) -> Err (Ident,Info)
 evalCncInfo opts gr cnc abs (c,info) = do
 
- seq (prtIf (oElem beVerbose opts) c) $ return ()
+ seq (prtIf (beVerbose opts) c) $ return ()
 
  errIn ("optimizing" +++ prt c) $ case info of
 
@@ -143,7 +131,7 @@ evalCncInfo opts gr cnc abs (c,info) = do
   CncFun (mt@(Just (_,ty@(cont,val)))) pde ppr -> 
        eIn ("linearization in type" +++ prt (mkProd (cont,val,[])) ++++ "of function") $ do
     pde' <- case pde of
-      Yes de | notNewEval -> do
+      Yes de -> do
         liftM yes $ pEval ty de
 
       _ -> return pde
@@ -154,7 +142,6 @@ evalCncInfo opts gr cnc abs (c,info) = do
  where
    pEval = partEval opts gr
    eIn cat = errIn ("Error optimizing" +++ cat +++ prt c +++ ":")
-   notNewEval = not (oElem oEval opts)
 
 -- | the main function for compiling linearizations
 partEval :: Options -> SourceGrammar -> (Context,Type) -> Term -> Err Term

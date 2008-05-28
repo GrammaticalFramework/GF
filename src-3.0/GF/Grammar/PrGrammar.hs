@@ -233,7 +233,7 @@ prExp e = case e of
 
 -- | option @-strip@ strips qualifications
 prTermOpt :: Options -> Term -> String
-prTermOpt opts = if oElem nostripQualif opts then prt else prExp
+prTermOpt opts = if PrinterStrip `elem` flag optPrinter opts then prt else prExp
 
 -- | to get rid of brackets in the editor
 prRefinement :: Term -> String

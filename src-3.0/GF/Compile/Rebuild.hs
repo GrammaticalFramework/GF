@@ -23,6 +23,7 @@ import GF.Grammar.Macros
 
 import GF.Infra.Ident
 import GF.Infra.Modules
+import GF.Infra.Option
 import GF.Data.Operations
 
 import Data.List (nub)
@@ -76,7 +77,7 @@ rebuildModule ms mo@(i,mi) = do
                        ++ [oSimple i   | i <- map snd insts] ----
 
       --- check if me is incomplete
-      let fs1 = fs_ ++ fs                            -- new flags have priority
+      let fs1 = addModuleOptions fs fs_                           -- new flags have priority
       let js0 = [ci | ci@(c,_) <- tree2list js, isInherited incl c]
       let js1 = buildTree (tree2list js_ ++ js0)
       return $ ModMod $ Module mt0 stat' fs1 me ops1 js1 

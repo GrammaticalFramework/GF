@@ -107,14 +107,14 @@ transModDef x = case x of
         opens'   <- transOpens opens
         defs0    <- mapM trDef $ getTopDefs defs
         defs'    <- U.buildAnyTree [d | Left  ds <- defs0, d <- ds]
-        flags'   <- return       [f | Right fs <- defs0, f <- fs]
+        flags'   <- return $ concatModuleOptions [o | Right o <- defs0]
         return (id',GM.ModMod (GM.Module mtyp' mstat' flags' extends' opens' defs'))
        MReuse _ -> do
-        return (id', GM.ModMod (GM.Module mtyp' mstat' [] [] [] emptyBinTree))
+        return (id', GM.ModMod (GM.Module mtyp' mstat' noModuleOptions [] [] emptyBinTree))
        MUnion imps -> do
         imps' <- mapM transIncluded imps        
         return (id', 
-          GM.ModMod (GM.Module (GM.MTUnion mtyp' imps') mstat' [] [] [] emptyBinTree))
+          GM.ModMod (GM.Module (GM.MTUnion mtyp' imps') mstat' noModuleOptions [] [] emptyBinTree))
 
        MWith m insts -> mkBody xx $ MWithEBody [] m insts NoOpens []
        MWithBody m insts opens defs -> mkBody xx $ MWithEBody [] m insts opens defs
@@ -126,7 +126,7 @@ transModDef x = case x of
         opens'   <- transOpens opens
         defs0    <- mapM trDef $ getTopDefs defs
         defs'    <- U.buildAnyTree [d | Left  ds <- defs0, d <- ds]
-        flags'   <- return       [f | Right fs <- defs0, f <- fs]
+        flags'   <- return $ concatModuleOptions [o | Right o <- defs0]
         return (id',
           GM.ModWith (GM.Module mtyp' mstat' flags' extends' opens' defs') m' insts')
 
@@ -215,7 +215,7 @@ transIncludedExt x = case x of
   ISome  i ids -> liftM2 (,) (transIdent i) (liftM GM.MIOnly   $ mapM transIdent ids) 
   IMinus i ids -> liftM2 (,) (transIdent i) (liftM GM.MIExcept $ mapM transIdent ids)
 
-transAbsDef :: TopDef -> Err (Either [(Ident, G.Info)] [GO.Option])
+transAbsDef :: TopDef -> Err (Either [(Ident, G.Info)] GO.ModuleOptions)
 transAbsDef x = case x of
   DefCat catdefs -> liftM (Left . concat) $ mapM transCatDef catdefs
   DefFun fundefs -> do
@@ -240,7 +240,7 @@ transAbsDef x = case x of
   DefTrans defs  -> do
     defs' <- liftM concat $ mapM getDefsGen defs
     returnl [(c, G.AbsTrans f) | (c,(_,Yes f)) <- defs']
-  DefFlag defs -> liftM Right $ mapM transFlagDef defs
+  DefFlag defs -> liftM (Right . concatModuleOptions) $ mapM transFlagDef defs
   _ -> Bad $ "illegal definition in abstract module:" ++++ printTree x
  where
    -- to get data constructors as terms
@@ -253,9 +253,9 @@ transAbsDef x = case x of
 returnl :: a -> Err (Either a b)
 returnl = return . Left
 
-transFlagDef :: FlagDef -> Err GO.Option
+transFlagDef :: FlagDef -> Err GO.ModuleOptions
 transFlagDef x = case x of
-  FlagDef f x  -> return $ GO.Opt (prPIdent f,[prPIdent x])
+  FlagDef f x  -> parseModuleOptions ["--" ++ prPIdent f ++ "=" ++ prPIdent x]
   where
     prPIdent (PIdent (_,c)) = BS.unpack c
 
@@ -306,7 +306,7 @@ transDataDef x = case x of
      DataId id  -> liftM G.Cn $ transIdent id
      DataQId id0 id  -> liftM2 G.QC (transIdent id0) (transIdent id)
 
-transResDef :: TopDef -> Err (Either [(Ident, G.Info)] [GO.Option])
+transResDef :: TopDef -> Err (Either [(Ident, G.Info)] GO.ModuleOptions)
 transResDef x = case x of
   DefPar pardefs -> do
     pardefs' <- mapM transParDef pardefs
@@ -332,7 +332,7 @@ transResDef x = case x of
     defs' <- liftM concat $ mapM getDefs defs
     returnl [(f, G.ResOper pt pe) | (f,(pt,pe)) <- defs']
 
-  DefFlag defs -> liftM Right $ mapM transFlagDef defs
+  DefFlag defs -> liftM (Right . concatModuleOptions) $ mapM transFlagDef defs
   _ -> Bad $ "illegal definition form in resource" +++ printTree x
  where
    mkOverload (c,j) = case j of
@@ -354,7 +354,7 @@ transParDef x = case x of
   ParDefAbs id -> liftM2 (,) (transIdent id) (return [])
   _ -> Bad $ "illegal definition in resource:" ++++ printTree x
 
-transCncDef :: TopDef -> Err (Either [(Ident, G.Info)] [GO.Option])
+transCncDef :: TopDef -> Err (Either [(Ident, G.Info)] GO.ModuleOptions)
 transCncDef x = case x of
   DefLincat defs  -> do
     defs' <- liftM concat $ mapM transPrintDef defs
@@ -374,7 +374,7 @@ transCncDef x = case x of
   DefPrintOld defs -> do  --- a guess, for backward compatibility
     defs' <- liftM concat $ mapM transPrintDef defs
     returnl [(f, G.CncFun Nothing nope (yes e)) | (f,e) <- defs']    
-  DefFlag defs -> liftM Right $ mapM transFlagDef defs
+  DefFlag defs -> liftM (Right . concatModuleOptions) $ mapM transFlagDef defs
   DefPattern defs  -> do
     defs' <- liftM concat $ mapM getDefs defs
     let defs2 = [(f, termInPattern t) | (f,(_,Yes t)) <- defs']
@@ -700,10 +700,10 @@ transOldGrammar opts name0 x = case x of
    ne = NoExt
    q = CMCompl
 
-   name = maybe name0 (++ ".gf") $ getOptVal opts useName
-   absName = identPI $ maybe topic id $ getOptVal opts useAbsName
-   resName = identPI $ maybe ("Res" ++ lang) id $ getOptVal opts useResName
-   cncName = identPI $ maybe lang id $ getOptVal opts useCncName
+   name = maybe name0 (++ ".gf") $ moduleFlag optName opts
+   absName = identPI $ maybe topic id $ moduleFlag optAbsName opts
+   resName = identPI $ maybe ("Res" ++ lang) id $ moduleFlag optResName opts
+   cncName = identPI $ maybe lang id $ moduleFlag optCncName opts
 
    identPI s = PIdent ((0,0),BS.pack s)
 

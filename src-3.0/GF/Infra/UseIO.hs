@@ -24,6 +24,7 @@ import System.FilePath
 import System.IO
 import System.IO.Error
 import System.Environment
+import System.Exit
 import System.CPUTime
 import Control.Monad
 import Control.Exception(evaluate)
@@ -39,19 +40,15 @@ putShow' f = putStrLn . show . length . show . f
 
 putIfVerb :: Options -> String -> IO ()
 putIfVerb opts msg =
-      if oElem beVerbose opts
+      if beVerbose opts
          then putStrLn msg
          else return ()
 
 putIfVerbW :: Options -> String -> IO ()
 putIfVerbW opts msg =
-      if oElem beVerbose opts
+      if beVerbose opts
          then putStr (' ' : msg)
          else return ()
-
--- | obsolete with IOE monad
-errIO :: a -> Err a -> IO a
-errIO = errOptIO noOptions
 
 errOptIO :: Options -> a -> Err a -> IO a
 errOptIO os e m = case m of
@@ -235,6 +232,13 @@ foldIOE f s xs = case xs of
       Ok v  -> foldIOE f v xx
       Bad m -> return $ (s, Just m)
 
+dieIOE :: IOE a -> IO a
+dieIOE x = appIOE x >>= err die return
+
+die :: String -> IO a
+die s = do hPutStrLn stderr s
+           exitFailure
+
 putStrLnE :: String -> IOE ()
 putStrLnE = ioeIO . putStrLnFlush 
 
@@ -243,28 +247,27 @@ putStrE = ioeIO . putStrFlush
 
 -- this is more verbose
 putPointE :: Options -> String -> IOE a -> IOE a
-putPointE = putPointEgen (oElem beSilent)
+putPointE = putPointEgen beSilent
 
 -- this is less verbose
 putPointEsil :: Options -> String -> IOE a -> IOE a
-putPointEsil = putPointEgen (not . oElem beVerbose)
+putPointEsil = putPointEgen (not . beVerbose)
 
 putPointEgen :: (Options -> Bool) -> Options -> String -> IOE a -> IOE a
 putPointEgen cond opts msg act = do
-  let ve x = if cond opts then return () else x
-  ve $ ioeIO $ putStrFlush msg
+  when (cond opts) $ ioeIO $ putStrFlush msg
 
   t1 <- ioeIO $ getCPUTime
   a <- act >>= ioeIO . evaluate
   t2 <- ioeIO $ getCPUTime
 
-  ve $ ioeIO $ putStrLnFlush (' ' : show ((t2 - t1) `div` 1000000000) ++ " msec")
+  when (flag optShowCPUTime opts) $ ioeIO $ putStrLnFlush (' ' : show ((t2 - t1) `div` 1000000000) ++ " msec")
   return a
 
 
 -- | forces verbosity
 putPointEVerb :: Options -> String -> IOE a -> IOE a
-putPointEVerb opts = putPointE (addOption beVerbose opts)
+putPointEVerb = putPointEgen (const False)
 
 -- ((do {s <- readFile f; return (return s)}) ) 
 readFileIOE :: FilePath -> IOE BS.ByteString

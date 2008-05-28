@@ -12,56 +12,40 @@ import GF.Infra.Option
 import GF.GFCC.API
 import GF.Data.ErrM
 
+import Data.Maybe
 import System.FilePath
 
-mainGFC :: [String] -> IO ()
-mainGFC xx = do
-  let (opts,fs) = getOptions "-" xx
-  case opts of
-    _ | oElem (iOpt "help") opts -> putStrLn usageMsg
-    _ | oElem (iOpt "-make") opts -> do
-      gfcc <- appIOE (compileToGFCC opts fs) >>= err fail return
-      let gfccFile = targetNameGFCC opts (absname gfcc)
-      outputFile gfccFile (printGFCC gfcc)
-      mapM_ (alsoPrint opts gfcc) printOptions
 
-    -- gfc -o target.gfcc source_1.gfcc ... source_n.gfcc
-    _ | all ((==".gfcc") . takeExtensions) fs -> do
-      gfccs <- mapM file2gfcc fs
-      let gfcc = foldl1 unionGFCC gfccs
-      let gfccFile = targetNameGFCC opts (absname gfcc)
-      outputFile gfccFile (printGFCC gfcc)
-      mapM_ (alsoPrint opts gfcc) printOptions
-      
-    _ -> do
-      appIOE (mapM_ (batchCompile opts) (map return fs)) >>= err fail return
-      putStrLn "Done."
+mainGFC :: Options -> [FilePath] -> IOE ()
+mainGFC opts fs = 
+    do gr <- batchCompile opts fs
+       let cnc = justModuleName (last fs)
+       if flag optStopAfterPhase opts == Compile 
+         then return ()
+         else do gfcc <- link opts cnc gr
+                 writeOutputs opts gfcc
 
-targetName :: Options -> CId -> String
-targetName opts abs = case getOptVal opts (aOpt "target") of
-  Just n -> n
-  _ -> prCId abs
+writeOutputs :: Options -> GFCC -> IOE ()
+writeOutputs opts gfcc = mapM_ (\fmt -> writeOutput opts fmt gfcc) (flag optOutputFormats opts)
 
-targetNameGFCC :: Options -> CId -> FilePath
-targetNameGFCC opts abs = targetName opts abs ++ ".gfcc"
+writeOutput :: Options -> OutputFormat-> GFCC -> IOE ()
+writeOutput opts fmt gfcc =
+    do let path = outputFilePath opts fmt (prCId (absname gfcc))
+           s = prGFCC fmt gfcc
+       writeOutputFile path s
 
----- TODO: nicer and richer print options
+outputFilePath :: Options -> OutputFormat -> String -> FilePath
+outputFilePath opts fmt name0 = addDir name <.> fmtExtension fmt
+  where name = fromMaybe name0 (moduleFlag optName opts)
+        addDir = maybe id (</>) (flag optOutputDir opts)
 
-alsoPrint opts gr (opt,name) = do
-  if oElem (iOpt opt) opts 
-    then outputFile name (prGFCC opt gr)
-    else return ()
+fmtExtension :: OutputFormat -> String
+fmtExtension FmtGFCC        = "gfcc"
+fmtExtension FmtJavaScript  = "js"
+fmtExtension FmtHaskell     = "hs"
+fmtExtension FmtHaskellGADT = "hs"
 
-outputFile :: FilePath -> String -> IO ()
-outputFile outfile output = 
+writeOutputFile :: FilePath -> String -> IOE ()
+writeOutputFile outfile output = ioeIO $
       do writeFile outfile output
          putStrLn $ "wrote file " ++ outfile
-
-printOptions = [
-  ("haskell","GSyntax.hs"),
-  ("haskell_gadt","GSyntax.hs"),
-  ("js","grammar.js")
-  ]
-
-usageMsg = 
-  "usage: gfc (-h | --make (-noopt) (-noparse) (-target=PREFIX) (-js | -haskell | -haskell_gadt)) (-src) FILES"

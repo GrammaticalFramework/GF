@@ -39,15 +39,17 @@ import System.Cmd (system)
 
 getSourceModule :: Options -> FilePath -> IOE SourceModule
 getSourceModule opts file0 = do
-  file <- case getOptVal opts usePreprocessor of
-    Just p -> do
-      let tmp = "_gf_preproc.tmp"
-          cmd = p +++ file0 ++ ">" ++ tmp
-      ioeIO $ system cmd
-      -- ioeIO $ putStrLn $ "preproc" +++ cmd
-      return tmp
-    _ -> return file0
+  file <- foldM runPreprocessor file0 (moduleFlag optPreprocessors opts)
   string    <- readFileIOE file
   let tokens = myLexer string
   mo1  <- ioeErr $ pModDef tokens
   ioeErr $ transModDef mo1
+
+-- FIXME: should use System.IO.openTempFile
+runPreprocessor :: FilePath -> String -> IOE FilePath
+runPreprocessor file0 p =
+    do let tmp = "_gf_preproc.tmp"
+           cmd = p +++ file0 ++ ">" ++ tmp
+       ioeIO $ system cmd
+       -- ioeIO $ putStrLn $ "preproc" +++ cmd
+       return tmp

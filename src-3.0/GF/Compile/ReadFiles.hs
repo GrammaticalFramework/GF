@@ -19,8 +19,9 @@
 -----------------------------------------------------------------------------
 
 module GF.Compile.ReadFiles 
-           ( getAllFiles,ModName,ModEnv,getOptionsFromFile,importsOfModule,
-             gfoFile,gfFile,isGFO ) where
+           ( getAllFiles,ModName,ModEnv,importsOfModule,
+             gfoFile,gfFile,isGFO,
+             getOptionsFromFile) where
 
 import GF.Infra.UseIO
 import GF.Infra.Option
@@ -48,9 +49,7 @@ getAllFiles :: Options -> [InitPath] -> ModEnv -> FileName -> IOE [FullPath]
 getAllFiles opts ps env file = do
   -- read module headers from all files recursively
   ds <- liftM reverse $ get [] [] (justModuleName file)
-  if oElem beVerbose opts
-    then ioeIO $ putStrLn $ "all modules:" +++ show [name | (name,_,_,_,_) <- ds]
-    else return ()
+  ioeIO $ putIfVerb opts $ "all modules:" +++ show [name | (name,_,_,_,_) <- ds]
   return $ paths ds
   where
     -- construct list of paths to read
@@ -135,8 +134,8 @@ selectFormat opts mtenv mtgf mtgfo =
     (_,_,        Nothing) -> (CSRead,Nothing)  -- source does not exist
     _ -> (CSComp,Nothing)
   where
-    fromComp = oElem isCompiled opts -- i -gfo
-    fromSrc  = oElem fromSource opts
+    fromComp = flag optRecomp opts == NeverRecomp
+    fromSrc  = flag optRecomp opts == AlwaysRecomp
 
 
 -- internal module dep information
@@ -188,8 +187,9 @@ importsOfModule (MModule _ typ body) = modType typ (modBody body [])
 
 
 -- | options can be passed to the compiler by comments in @--#@, in the main file
-getOptionsFromFile ::  FilePath -> IO Options
+getOptionsFromFile :: FilePath -> IOE Options
 getOptionsFromFile file = do
-  s <- readFileIfStrict file
+  s <- ioeIO $ readFileIfStrict file
   let ls = filter (BS.isPrefixOf (BS.pack "--#")) $ BS.lines s
-  return $ fst $ getOptions "-" $ map (BS.unpack . BS.unwords . BS.words . BS.drop 3) ls
+      fs = map (BS.unpack . BS.unwords . BS.words . BS.drop 3) ls
+  ioeErr $ liftM moduleOptions $ parseModuleOptions fs
