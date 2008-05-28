@@ -65,7 +65,7 @@ data ModInfo i a =
 data Module i a = Module {
     mtype   :: ModuleType i ,
     mstatus :: ModuleStatus ,
-    flags   :: [Option] ,
+    flags   :: ModuleOptions,
     extend  :: [(i,MInclude i)],
     opens   :: [OpenSpec i] ,
     jments  :: BinTree i a
@@ -126,16 +126,16 @@ addOpenQualif :: i -> i -> Module i t -> Module i t
 addOpenQualif i j (Module mt ms fs me ops js) = 
   Module mt ms fs me (oQualif i j : ops) js
 
-addFlag :: Option -> Module i t -> Module i t
-addFlag f mo = mo {flags = f : flags mo} 
+addFlag :: ModuleOptions -> Module i t -> Module i t
+addFlag f mo = mo {flags = addModuleOptions (flags mo) f} 
 
-flagsModule :: (i,ModInfo i a) -> [Option]
+flagsModule :: (i,ModInfo i a) -> ModuleOptions
 flagsModule (_,mi) = case mi of
   ModMod m -> flags m
-  _ -> []
+  _ -> noModuleOptions
 
-allFlags :: MGrammar i a -> [Option]
-allFlags gr = concat $ map flags $ [m | (_, ModMod m) <- modules gr]
+allFlags :: MGrammar i a -> ModuleOptions
+allFlags gr = concatModuleOptions $ map flags $ [m | (_, ModMod m) <- modules gr]
 
 mapModules :: (Module i a -> Module i a) 
 	   -> MGrammar i a -> MGrammar i a 
@@ -267,7 +267,7 @@ emptyModInfo :: ModInfo i a
 emptyModInfo = ModMod emptyModule
 
 emptyModule :: Module i a
-emptyModule = Module MTResource MSComplete [] [] [] emptyBinTree
+emptyModule = Module MTResource MSComplete noModuleOptions [] [] emptyBinTree
 
 -- | we store the module type with the identifier
 data IdentM i = IdentM {

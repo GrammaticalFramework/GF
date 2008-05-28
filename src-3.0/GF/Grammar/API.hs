@@ -5,7 +5,8 @@ module GF.Grammar.API (
   prTerm,
   checkTerm,
   computeTerm,
-  showTerm
+  showTerm,
+  TermPrintStyle(..)
   ) where
 
 import GF.Source.ParGF
@@ -52,9 +53,15 @@ checkTermAny gr m t = do
 computeTerm :: Grammar -> Term -> Err Term
 computeTerm = computeConcrete
 
-showTerm :: Options -> Term -> String
-showTerm opts t
-  | oElem (iOpt "table")  opts = unlines [p +++ s | (p,s) <- prTermTabular t]
-  | oElem (iOpt "all")    opts = unlines [      s | (p,s) <- prTermTabular t]
-  | oElem (iOpt "unqual") opts = prt_ t
-  | otherwise = prt t
+showTerm :: TermPrintStyle -> Term -> String
+showTerm style t = 
+    case style of
+      TermPrintTable   -> unlines [p +++ s | (p,s) <- prTermTabular t]
+      TermPrintAll     -> unlines [      s | (p,s) <- prTermTabular t]
+      TermPrintUnqual  -> prt_ t
+      TermPrintDefault -> prt t
+
+
+data TermPrintStyle = TermPrintTable | TermPrintAll | TermPrintUnqual | TermPrintDefault
+  deriving (Show,Eq)
+

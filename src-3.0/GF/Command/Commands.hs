@@ -156,5 +156,5 @@ allCommands mgr = Map.fromAscList [
 
    prGrammar opts = case valIdOpts "printer" "" opts of
      "cats" -> unwords $ categories mgr
-     v -> prGFCC v gr 
+     v -> prGFCC (read v) gr 
 

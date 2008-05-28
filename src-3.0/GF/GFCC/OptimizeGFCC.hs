@@ -13,7 +13,10 @@ import qualified Data.Map as Map
 -- suffix analysis followed by common subexpression elimination
 
 optGFCC :: GFCC -> GFCC
-optGFCC gfcc = gfcc {
+optGFCC = cseOptimize . suffixOptimize
+
+suffixOptimize :: GFCC -> GFCC
+suffixOptimize gfcc = gfcc {
   concretes = Map.map opt (concretes gfcc)
   }
  where 
@@ -21,6 +24,11 @@ optGFCC gfcc = gfcc {
     lins = Map.map optTerm (lins cnc),
     lindefs = Map.map optTerm (lindefs cnc),
     printnames = Map.map optTerm (printnames cnc)
+  }
+
+cseOptimize :: GFCC -> GFCC
+cseOptimize gfcc = gfcc {
+  concretes = Map.map subex (concretes gfcc)
   }
 
 -- analyse word form lists into prefix + suffixes

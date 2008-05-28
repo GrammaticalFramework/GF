@@ -51,7 +51,7 @@ trModule (i,mo) = case mo of
     body = P.MBody 
              (trExtends (extend m)) 
              (mkOpens (map trOpen (opens m)))
-             (mkTopDefs (concatMap trAnyDef (tree2list (jments m)) ++ map trFlag (flags m)))
+             (mkTopDefs (concatMap trAnyDef (tree2list (jments m)) ++ trFlags (flags m)))
 
 trExtends :: [(Ident,MInclude Ident)] -> P.Extend
 trExtends [] = P.NoExt 
@@ -130,11 +130,11 @@ trPerh p = case p of
   May b -> P.EIndir $ tri b
   _ -> P.EMeta ---
 
+trFlags :: ModuleOptions -> [P.TopDef]
+trFlags = map trFlag . moduleOptionsGFO
 
-trFlag :: Option -> P.TopDef
-trFlag o = case o of
-  Opt (f,[x]) -> P.DefFlag [P.FlagDef (tri $ identC (BS.pack f)) (tri $ identC (BS.pack x))]
-  _ -> P.DefFlag [] --- warning?
+trFlag :: (String,String) -> P.TopDef
+trFlag (f,x) = P.DefFlag [P.FlagDef (tri $ identC (BS.pack f)) (tri $ identC (BS.pack x))]
 
 trt :: Term -> P.Exp 
 trt trm = case trm of

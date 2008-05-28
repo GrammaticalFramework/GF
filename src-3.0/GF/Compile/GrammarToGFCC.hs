@@ -61,16 +61,15 @@ addParsers gfcc = gfcc { D.concretes = Map.map conv (D.concretes gfcc) }
 
 canon2gfcc :: Options -> (Ident -> Ident -> C.Term) -> SourceGrammar -> D.GFCC
 canon2gfcc opts pars cgr@(M.MGrammar ((a,M.ModMod abm):cms)) = 
-  (if (oElem (iOpt "show_canon") opts) then trace (prGrammar cgr) else id) $
+  (if dump opts DumpCanon then trace (prGrammar cgr) else id) $
      D.GFCC an cns gflags abs cncs 
  where
   -- abstract
   an  = (i2i a)
   cns = map (i2i . fst) cms
   abs = D.Abstr aflags funs cats catfuns
-  gflags = Map.fromList [(mkCId fg,x) | Just x <- [getOptVal opts (aOpt fg)]] 
-                                          where fg = "firstlang"
-  aflags = Map.fromList [(mkCId f,x) | Opt (f,[x]) <- M.flags abm]
+  gflags = Map.empty
+  aflags = Map.fromList [(mkCId f,x) | (f,x) <- moduleOptionsGFO (M.flags abm)]
   mkDef pty = case pty of
     Yes t -> mkExp t
     _ -> CM.primNotion
@@ -90,9 +89,9 @@ canon2gfcc opts pars cgr@(M.MGrammar ((a,M.ModMod abm):cms)) =
       (lang,D.Concr flags lins opers lincats lindefs printnames params fcfg)
     where
       js = tree2list (M.jments mo)
-      flags   = Map.fromList [(mkCId f,x) | Opt (f,[x]) <- M.flags mo]
+      flags   = Map.fromList [(mkCId f,x) | (f,x) <- moduleOptionsGFO (M.flags mo)]
       opers   = Map.fromAscList [] -- opers will be created as optimization
-      utf     = if elem (Opt ("coding",["utf8"])) (M.flags mo) 
+      utf     = if moduleFlag optEncoding (moduleOptions (M.flags mo)) == UTF_8
                   then D.convertStringsInTerm decodeUTF8 else id
       lins    = Map.fromAscList 
         [(i2i f, utf (mkTerm tr))  | (f,CncFun _ (Yes tr) _) <- js]
@@ -227,14 +226,15 @@ reorder abs cg = M.MGrammar $
                  predefADefs ++ Look.allOrigInfos cg abs
        predefADefs = 
          [(c, AbsCat (Yes []) Nope) | c <- [cFloat,cInt,cString]]
-       aflags = nubFlags $ 
-         concat [M.flags mo | (_,mo) <- M.allModMod cg, M.isModAbs mo]
+       aflags = 
+         concatModuleOptions [M.flags mo | (_,mo) <- M.allModMod cg, M.isModAbs mo]
 
        cncs = sortIds [(lang, concr lang) | lang <- M.allConcretes cg abs]
-       concr la = (nubFlags flags, 
+       concr la = (flags, 
                    sortIds (predefCDefs ++ jments)) where 
          jments = Look.allOrigInfos cg la
-         flags  = concat [M.flags mo | 
+         flags  = concatModuleOptions 
+                    [M.flags mo | 
                      (i,mo) <- mos, M.isModCnc mo, 
                      Just r <- [lookup i (M.allExtendSpecs cg la)]]
 
@@ -242,7 +242,6 @@ reorder abs cg = M.MGrammar $
            [(c, CncCat (Yes GM.defLinType) Nope Nope) | c <- [cInt,cFloat,cString]]
 
        sortIds = sortBy (\ (f,_) (g,_) -> compare f g) 
-       nubFlags = nubBy (\ (Opt (f,_)) (Opt (g,_)) -> f == g)
 
 
 -- one grammar per language - needed for symtab generation

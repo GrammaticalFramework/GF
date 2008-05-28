@@ -15,10 +15,11 @@
 -- following advice of Josef Svenningsson
 -----------------------------------------------------------------------------
 
-module GF.Compile.BackOpt (shareModule, OptSpec, shareOpt, paramOpt, valOpt, allOpt) where
+module GF.Compile.BackOpt (shareModule, OptSpec) where
 
 import GF.Grammar.Grammar
 import GF.Infra.Ident
+import GF.Infra.Option
 import qualified GF.Grammar.Macros as C
 import GF.Grammar.PrGrammar (prt)
 import GF.Data.Operations
@@ -26,25 +27,7 @@ import Data.List
 import qualified GF.Infra.Modules as M
 import qualified Data.ByteString.Char8 as BS
 
-type OptSpec = [Integer] ---
-
-doOptFactor :: OptSpec -> Bool
-doOptFactor opt = elem 2 opt
-
-doOptValues :: OptSpec -> Bool
-doOptValues opt = elem 3 opt
-
-shareOpt :: OptSpec
-shareOpt = []
-
-paramOpt :: OptSpec
-paramOpt = [2]
-
-valOpt :: OptSpec
-valOpt = [3]
-
-allOpt :: OptSpec
-allOpt = [2,3]
+type OptSpec = [Optimization]
 
 shareModule :: OptSpec -> (Ident, SourceModInfo) -> (Ident, SourceModInfo)
 shareModule opt (i,m) = case m of
@@ -59,31 +42,8 @@ shareInfo _ i = i
 
 -- the function putting together optimizations
 shareOptim :: OptSpec -> Ident -> Term -> Term
-shareOptim opt c 
-  | doOptFactor opt && doOptValues opt = values . factor c 0
-  | doOptFactor opt = share . factor c 0
-  | doOptValues opt = values    
-  | otherwise = share
-
--- we need no counter to create new variable names, since variables are 
--- local to tables (only true in GFC) ---
-
-share :: Term -> Term
-share t = case t of
-  T ty@(TComp _) cs -> shareT ty [(p, share v) | (p, v) <- cs]
-  _ -> C.composSafeOp share t
-
- where
-   shareT ty = finalize ty . groupC . sortC
- 
-   sortC :: [(Patt,Term)] -> [(Patt,Term)]
-   sortC = sortBy $ \a b -> compare (snd a) (snd b)
-
-   groupC :: [(Patt,Term)] -> [[(Patt,Term)]]
-   groupC = groupBy $ \a b -> snd a == snd b
-
-   finalize :: TInfo -> [[(Patt,Term)]] -> Term
-   finalize ty css = TSh ty [(map fst ps, t) | ps@((_,t):_) <- css]
+shareOptim opt c =   (if OptValues      `elem` opt then values     else id)
+                   . (if OptParametrize `elem` opt then factor c 0 else id)
 
 -- do even more: factor parametric branches
 

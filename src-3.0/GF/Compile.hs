@@ -1,4 +1,4 @@
-module GF.Compile (batchCompile, compileToGFCC) where
+module GF.Compile (batchCompile, link, compileToGFCC) where
 
 -- the main compiler passes
 import GF.Compile.GetGrammar
@@ -44,25 +44,34 @@ compileToGFCC :: Options -> [FilePath] -> IOE GFCC
 compileToGFCC opts fs =
     do gr <- batchCompile opts fs
        let name = justModuleName (last fs)
-       gc1 <- putPointE opts "linking ... " $
-                let (abs,gc0) = mkCanon2gfcc opts name gr
-                in ioeIO $ checkGFCCio gc0
-       let opt = if oElem (iOpt "noopt") opts then id else optGFCC
-           par = if oElem (iOpt "noparse") opts then id else addParsers
-       return (par (opt gc1))
+       link opts name gr
 
+link :: Options -> String -> SourceGrammar -> IOE GFCC
+link opts cnc gr =
+    do gc1 <- putPointE opts "linking ... " $
+                let (abs,gc0) = mkCanon2gfcc opts cnc gr
+                in ioeIO $ checkGFCCio gc0
+       return $ buildParser opts $ optimize opts gc1
+
+optimize :: Options -> GFCC -> GFCC
+optimize opts = cse . suf
+  where os  = moduleFlag optOptimizations opts
+        cse = if OptCSE  `elem` os then cseOptimize    else id
+        suf = if OptStem `elem` os then suffixOptimize else id
+
+buildParser :: Options -> GFCC -> GFCC
+buildParser opts = 
+    if moduleFlag optBuildParser opts then id else addParsers
 
 batchCompile :: Options -> [FilePath] -> IOE SourceGrammar
 batchCompile opts files = do
-  (_,gr,_) <- foldM (compileModule defOpts) emptyCompileEnv files
+  (_,gr,_) <- foldM (compileModule opts) emptyCompileEnv files
   return gr
-  where
-    defOpts = addOptions opts (options [emitCode])
 
 -- to output an intermediate stage
-intermOut :: Options -> Option -> String -> IOE ()
-intermOut opts opt s = if oElem opt opts then 
-  ioeIO (putStrLn ("\n\n--#" +++ prOpt opt) >> putStrLn s) 
+intermOut :: Options -> Dump -> String -> IOE ()
+intermOut opts d s = if dump opts d then 
+  ioeIO (putStrLn ("\n\n--#" +++ show d) >> putStrLn s) 
   else return ()
 
 
@@ -74,29 +83,22 @@ type CompileEnv = (Int,SourceGrammar,ModEnv)
 -- As for path: if it is read from file, the file path is prepended to each name.
 -- If from command line, it is used as it is.
 
-compileModule :: Options -> CompileEnv -> FilePath -> IOE CompileEnv
+compileModule :: Options -- ^ Options from program command line and shell command.
+              -> CompileEnv -> FilePath -> IOE CompileEnv
 compileModule opts1 env file = do
-  opts0 <- ioeIO $ getOptionsFromFile file
-  let useFileOpt = maybe False (const True) $ getOptVal opts0 pathList
-  let useLineOpt = maybe False (const True) $ getOptVal opts1 pathList
-  let opts = addOptions opts1 opts0 
-  let fpath = dropFileName file
-  ps0 <- ioeIO $ pathListOpts opts fpath
-
-  let ps1 = if (useFileOpt && not useLineOpt) 
-              then (ps0 ++ map (combine fpath) ps0)
-              else ps0
-  ps <- ioeIO $ extendPathEnv ps1
-  let ioeIOIf = if oElem beVerbose opts then ioeIO else (const (return ()))
-  ioeIOIf $ putStrLn $ "module search path:" +++ show ps ----
+  opts0 <- getOptionsFromFile file
+  let opts = addOptions opts0 opts1
+  let fdir = dropFileName file
+  let ps0 = moduleFlag optLibraryPath opts
+  ps2 <- ioeIO $ extendPathEnv $ fdir : ps0
+  let ps = ps2 ++ map (fdir </>) ps0
+  ioeIO $ putIfVerb opts $ "module search path:" +++ show ps ----
   let (_,sgr,rfs) = env
-  let file' = if useFileOpt then takeFileName file else file -- to find file itself
-  files <- getAllFiles opts ps rfs file'
-  ioeIOIf $ putStrLn $ "files to read:" +++ show files ----
+  files <- getAllFiles opts ps rfs file
+  ioeIO $ putIfVerb opts $ "files to read:" +++ show files ----
   let names = map justModuleName files
-  ioeIOIf $ putStrLn $ "modules to include:" +++ show names ----
+  ioeIO $ putIfVerb opts $ "modules to include:" +++ show names ----
   foldM (compileOne opts) (0,sgr,rfs) files
-
 
 compileOne :: Options -> CompileEnv -> FullPath -> IOE CompileEnv
 compileOne opts env@(_,srcgr,_) file = do
@@ -104,8 +106,8 @@ compileOne opts env@(_,srcgr,_) file = do
   let putp s = putPointE opts s
   let putpp = putPointEsil opts
   let putpOpt v m act
-       | oElem beVerbose opts =  putp v act
-       | oElem beSilent opts  =  putpp v act
+       | beVerbose opts =  putp v act
+       | beSilent opts  =  putpp v act
        | otherwise = ioeIO (putStrFlush m) >> act
 
   let gf   = takeExtensions file
@@ -155,25 +157,25 @@ compileSourceModule opts env@(k,gr,_) mo@(i,mi) = do
       mos   = modules gr
 
   mo1   <- ioeErr $ rebuildModule mos mo
-  intermOut opts (iOpt "show_rebuild") (prModule mo1)
+  intermOut opts DumpRebuild (prModule mo1)
 
   mo1b  <- ioeErr $ extendModule mos mo1
-  intermOut opts (iOpt "show_extend") (prModule mo1b)
+  intermOut opts DumpExtend (prModule mo1b)
 
   case mo1b of
     (_,ModMod n) | not (isCompleteModule n) -> do
       return (k,mo1b)   -- refresh would fail, since not renamed
     _ -> do
       mo2:_ <- putpp "  renaming " $ ioeErr $ renameModule mos mo1b
-      intermOut opts (iOpt "show_rename") (prModule mo2)
+      intermOut opts DumpRename (prModule mo2)
 
       (mo3:_,warnings) <- putpp "  type checking" $ ioeErr $ showCheckModule mos mo2
       if null warnings then return () else putp warnings $ return ()
-      intermOut opts (iOpt "show_typecheck") (prModule mo3)
+      intermOut opts DumpTypeCheck (prModule mo3)
 
 
       (k',mo3r:_) <- putpp "  refreshing " $ ioeErr $ refreshModule (k,mos) mo3
-      intermOut opts (iOpt "show_refresh") (prModule mo3r)
+      intermOut opts DumpRefresh (prModule mo3r)
 
       let eenv = () --- emptyEEnv
       (mo4,eenv') <- 
@@ -196,9 +198,6 @@ generateModuleCode opts file minfo = do
 
 
 -- auxiliaries
-
-pathListOpts :: Options -> FileName -> IO [InitPath]
-pathListOpts opts file = return $ maybe [file] splitInModuleSearchPath $ getOptVal opts pathList
 
 reverseModules (MGrammar ms) = MGrammar $ reverse ms
 
