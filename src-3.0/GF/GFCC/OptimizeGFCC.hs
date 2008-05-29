@@ -20,7 +20,7 @@ suffixOptimize gfcc = gfcc {
   concretes = Map.map opt (concretes gfcc)
   }
  where 
-  opt cnc = subex $ cnc {
+  opt cnc = cnc {
     lins = Map.map optTerm (lins cnc),
     lindefs = Map.map optTerm (lindefs cnc),
     printnames = Map.map optTerm (printnames cnc)
@@ -58,7 +58,7 @@ optTerm tr = case tr of
 
 ---subex :: [(CId,Term)] -> [(CId,Term)]
 subex :: Concr -> Concr
-subex cnc = errVal cnc $ do
+subex cnc = err error id $ do
   (tree,_) <- appSTM (getSubtermsMod cnc) (Map.empty,0)
   return $ addSubexpConsts tree cnc
 
