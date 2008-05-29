@@ -13,19 +13,18 @@
 -- embedded GF systems. AR 19/9/2007
 -----------------------------------------------------------------------------
 
-module  GF.GFCC.API where
+module PGF where
 
-import GF.GFCC.Linearize
-import GF.GFCC.Generate
-import GF.GFCC.Macros
-import GF.GFCC.DataGFCC
-import GF.GFCC.CId
-import GF.GFCC.Raw.ConvertGFCC
-import GF.GFCC.Raw.ParGFCCRaw
+import PGF.CId
+import PGF.Linearize
+import PGF.Generate
+import PGF.Macros
+import PGF.Data
+import PGF.Raw.Convert
+import PGF.Raw.Parse
+import PGF.Parsing.FCFG
 
 import GF.Data.ErrM
-
-import GF.GFCC.Parsing.FCFG
 
 import Data.Char
 import qualified Data.Map as Map
@@ -85,7 +84,7 @@ file2gfcc f = do
   g <- parseGrammar s
   return $ toGFCC g
 
-linearize mgr lang = GF.GFCC.Linearize.linearize (gfcc mgr) (mkCId lang)
+linearize mgr lang = PGF.Linearize.linearize (gfcc mgr) (mkCId lang)
 
 parse mgr lang cat s = 
   case lookParser (gfcc mgr) (mkCId lang) of
@@ -96,7 +95,7 @@ parse mgr lang cat s =
 
 linearizeAll mgr = map snd . linearizeAllLang mgr
 linearizeAllLang mgr t = 
-  [(lang,linearThis mgr lang t) | lang <- languages mgr]
+  [(lang,PGF.linearize mgr lang t) | lang <- languages mgr]
 
 parseAll mgr cat = map snd . parseAllLang mgr cat
 
@@ -171,8 +170,6 @@ startCat mgr = lookStartCat (gfcc mgr)
 emptyMultiGrammar = MultiGrammar emptyGFCC
 
 ------------ for internal use only
-
-linearThis = GF.GFCC.API.linearize
 
 err f g ex = case ex of
   Ok x -> g x

@@ -1,7 +1,7 @@
-module GF.GFCC.Raw.ParGFCCRaw (parseGrammar) where
+module PGF.Raw.Parse (parseGrammar) where
 
-import GF.GFCC.CId
-import GF.GFCC.Raw.AbsGFCCRaw
+import PGF.CId
+import PGF.Raw.Abstract
 
 import Control.Monad
 import Data.Char

@@ -7,13 +7,13 @@
 -- FCFG parsing, parser information
 -----------------------------------------------------------------------------
 
-module GF.GFCC.BuildParser where
+module PGF.BuildParser where
 
-import GF.GFCC.Parsing.FCFG.Utilities
 import GF.Data.SortedList
 import GF.Data.Assoc
-import GF.GFCC.CId
-import GF.GFCC.DataGFCC
+import PGF.CId
+import PGF.Data
+import PGF.Parsing.FCFG.Utilities
 
 import Data.Array
 import Data.Maybe

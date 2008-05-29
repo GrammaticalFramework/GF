@@ -1,10 +1,10 @@
-module GF.GFCC.PrintGFCC where
+module GF.Compile.Export where
 
-import GF.GFCC.DataGFCC (GFCC)
-import GF.GFCC.Raw.ConvertGFCC (fromGFCC)
-import GF.GFCC.Raw.PrintGFCCRaw (printTree)
-import GF.GFCC.GFCCtoHaskell
-import GF.GFCC.GFCCtoJS
+import PGF.Data (GFCC)
+import PGF.Raw.Print (printTree)
+import PGF.Raw.Convert (fromGFCC)
+import GF.Compile.GFCCtoHaskell
+import GF.Compile.GFCCtoJS
 import GF.Infra.Option
 import GF.Text.UTF8
 

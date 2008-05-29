@@ -1,7 +1,7 @@
-module GF.GFCC.Macros where
+module PGF.Macros where
 
-import GF.GFCC.CId
-import GF.GFCC.DataGFCC
+import PGF.CId
+import PGF.Data
 import Control.Monad
 import qualified Data.Map   as Map
 import qualified Data.Array as Array

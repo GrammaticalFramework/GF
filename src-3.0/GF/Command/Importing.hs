@@ -1,11 +1,10 @@
 module GF.Command.Importing (importGrammar, importSource) where
 
+import PGF
+import PGF.Data
+
 import GF.Compile
-import GF.GFCC.DataGFCC
-import GF.GFCC.API
-
 import GF.Grammar.Grammar (SourceGrammar) -- for cc command
-
 import GF.Infra.UseIO
 import GF.Infra.Option
 import GF.Data.ErrM

@@ -12,7 +12,7 @@
 -----------------------------------------------------------------------------
 
 
-module GF.GFCC.Parsing.FCFG.Utilities where
+module PGF.Parsing.FCFG.Utilities where
 
 import Control.Monad
 import Data.Array

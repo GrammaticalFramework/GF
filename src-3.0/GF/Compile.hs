@@ -8,6 +8,7 @@ import GF.Compile.Rename
 import GF.Compile.CheckGrammar
 import GF.Compile.Optimize
 import GF.Compile.OptimizeGF
+import GF.Compile.OptimizeGFCC
 import GF.Compile.GrammarToGFCC
 import GF.Compile.ReadFiles
 import GF.Compile.Update
@@ -34,9 +35,8 @@ import System.FilePath
 import System.Time
 import qualified Data.Map as Map
 
-import GF.GFCC.OptimizeGFCC
-import GF.GFCC.CheckGFCC
-import GF.GFCC.DataGFCC
+import PGF.Check
+import PGF.Data
 
 
 -- | Compiles a number of source files and builds a 'GFCC' structure for them.

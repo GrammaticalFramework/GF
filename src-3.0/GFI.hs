@@ -4,12 +4,11 @@ import GF.Command.Interpreter
 import GF.Command.Importing
 import GF.Command.Commands
 import GF.Data.ErrM
-import GF.GFCC.API
 import GF.Grammar.API  -- for cc command
-
 import GF.Infra.UseIO
 import GF.Infra.Option
 import GF.System.Readline (fetchCommand)
+import PGF
 
 import System.CPUTime
 

@@ -1,8 +1,8 @@
-module GF.GFCC.CheckGFCC (checkGFCC, checkGFCCio, checkGFCCmaybe) where
+module PGF.Check (checkGFCC, checkGFCCio, checkGFCCmaybe) where
 
-import GF.GFCC.CId
-import GF.GFCC.Macros
-import GF.GFCC.DataGFCC
+import PGF.CId
+import PGF.Data
+import PGF.Macros
 import GF.Data.ErrM
 
 import qualified Data.Map as Map

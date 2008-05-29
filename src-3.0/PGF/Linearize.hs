@@ -1,8 +1,8 @@
-module GF.GFCC.Linearize where
+module PGF.Linearize where
 
-import GF.GFCC.Macros
-import GF.GFCC.DataGFCC
-import GF.GFCC.CId
+import PGF.CId
+import PGF.Data
+import PGF.Macros
 import qualified Data.Map as Map
 import Data.List
 

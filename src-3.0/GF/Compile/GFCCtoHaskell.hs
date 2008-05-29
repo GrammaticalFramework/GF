@@ -14,11 +14,11 @@
 -- AR 11/11/1999 -- 7/12/2000 -- 18/5/2004
 -----------------------------------------------------------------------------
 
-module GF.GFCC.GFCCtoHaskell (grammar2haskell, grammar2haskellGADT) where
+module GF.Compile.GFCCtoHaskell (grammar2haskell, grammar2haskellGADT) where
 
-import GF.GFCC.Macros
-import GF.GFCC.DataGFCC
-import GF.GFCC.CId
+import PGF.CId
+import PGF.Data
+import PGF.Macros
 
 import GF.Data.Operations
 import GF.Text.UTF8
@@ -46,8 +46,8 @@ haskPreamble =
  [
   "module GSyntax where",
   "",
-  "import GF.GFCC.DataGFCC",
-  "import GF.GFCC.CId",
+  "import PGF.CId",
+  "import PGF.Data",
   "----------------------------------------------------",
   "-- automatic translation from GF to Haskell",
   "----------------------------------------------------",

@@ -1,7 +1,7 @@
-module GF.GFCC.OptimizeGFCC where
+module GF.Compile.OptimizeGFCC where
 
-import GF.GFCC.CId
-import GF.GFCC.DataGFCC
+import PGF.CId
+import PGF.Data
 
 import GF.Data.Operations
 

@@ -1,14 +1,15 @@
 {-# LANGUAGE PatternGuards #-}
 module GF.Compile.GrammarToGFCC (prGrammar2gfcc,mkCanon2gfcc,addParsers) where
 
+import GF.Compile.Export
 import GF.Compile.OptimizeGF (unshareModule)
+import GF.Compile.GenerateFCFG (convertConcrete)
 
-import qualified GF.GFCC.Macros as CM
-import qualified GF.GFCC.DataGFCC as C
-import qualified GF.GFCC.DataGFCC as D
-import GF.GFCC.CId
-import GF.GFCC.PrintGFCC
-import GF.GFCC.BuildParser (buildParserInfo)
+import PGF.CId
+import PGF.BuildParser (buildParserInfo)
+import qualified PGF.Macros as CM
+import qualified PGF.Data as C
+import qualified PGF.Data as D
 import GF.Grammar.Predef
 import GF.Grammar.PrGrammar
 import GF.Grammar.Grammar
@@ -19,7 +20,6 @@ import qualified GF.Compile.Compute as Compute ----
 import qualified GF.Infra.Modules as M
 import qualified GF.Infra.Option as O
 
-import GF.Compile.GenerateFCFG (convertConcrete)
 import GF.Infra.Ident
 import GF.Infra.Option
 import GF.Data.Operations

@@ -1,6 +1,6 @@
-module GF.GFCC.DataGFCC where
+module PGF.Data where
 
-import GF.GFCC.CId
+import PGF.CId
 import GF.Text.UTF8
 import GF.Data.Assoc
 

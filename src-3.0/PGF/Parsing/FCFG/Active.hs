@@ -7,16 +7,16 @@
 -- MCFG parsing, the active algorithm
 -----------------------------------------------------------------------------
 
-module GF.GFCC.Parsing.FCFG.Active (FCFParser, parse, makeFinalEdge) where
+module PGF.Parsing.FCFG.Active (FCFParser, parse, makeFinalEdge) where
 
 import GF.Data.GeneralDeduction
 import GF.Data.Assoc
 import GF.Data.SortedList
 import GF.Data.Utilities
 
-import GF.GFCC.CId
-import GF.GFCC.DataGFCC
-import GF.GFCC.Parsing.FCFG.Utilities
+import PGF.CId
+import PGF.Data
+import PGF.Parsing.FCFG.Utilities
 
 import Control.Monad (guard)
 
