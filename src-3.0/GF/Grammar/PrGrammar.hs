@@ -245,7 +245,7 @@ prRefinement t = case t of
 prOperSignature :: (QIdent,Type) -> String
 prOperSignature (f, t) = prQIdent f +++ ":" +++ prt t
 
--- to look up a constant etc in a search tree
+-- to look up a constant etc in a search tree --- why here? AR 29/5/2008
 
 lookupIdent :: Ident -> BinTree Ident b -> Err b
 lookupIdent c t = case lookupTree prt c t of

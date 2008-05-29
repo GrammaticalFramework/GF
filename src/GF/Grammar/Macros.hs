@@ -307,6 +307,9 @@ isTypeInts ty = case ty of
 constPredefRes :: String -> Term
 constPredefRes s = Q (IC "Predef") (zIdent s)
 
+constPredefAbs :: String -> Term
+constPredefAbs s = Q (IC "Predef") (zIdent s)
+
 isPredefConstant :: Term -> Bool
 isPredefConstant t = case t of
   Q (IC "Predef") _ -> True
