@@ -22,15 +22,18 @@ import GF.GFCC.DataGFCC
 import GF.GFCC.CId
 import GF.GFCC.Raw.ConvertGFCC
 import GF.GFCC.Raw.ParGFCCRaw
-import GF.Command.PPrTree
 
 import GF.Data.ErrM
 
 import GF.GFCC.Parsing.FCFG
 
+import Data.Char
 import qualified Data.Map as Map
+import Control.Monad
 import System.Random (newStdGen)
 import System.Directory (doesFileExist)
+import qualified Text.PrettyPrint as PP
+import qualified Text.ParserCombinators.ReadP as RP
 
 
 -- This API is meant to be used when embedding GF grammars in Haskell 
@@ -61,8 +64,8 @@ generateAll      :: MultiGrammar -> Category -> [Tree]
 generateRandom   :: MultiGrammar -> Category -> IO [Tree]
 generateAllDepth :: MultiGrammar -> Category -> Maybe Int -> [Tree]
 
-readTree   :: MultiGrammar -> String -> Tree
-showTree   ::                 Tree -> String
+readTree   :: String -> Tree
+showTree   :: Tree -> String
 
 languages  :: MultiGrammar -> [Language]
 categories :: MultiGrammar -> [Category]
@@ -107,9 +110,55 @@ generateRandom mgr cat = do
 generateAll mgr cat = generate (gfcc mgr) (mkCId cat) Nothing
 generateAllDepth mgr cat = generate (gfcc mgr) (mkCId cat)
 
-readTree _ = pTree
+readTree s = case RP.readP_to_S (pExp 0) s of
+               [(x,"")] -> x
+               _        -> error "no parse"
 
-showTree = prExp
+pExps :: RP.ReadP [Exp]
+pExps = liftM2 (:) (pExp 1) pExps RP.<++ (RP.skipSpaces >> return [])
+
+pExp :: Int -> RP.ReadP Exp
+pExp n = RP.skipSpaces >> (pParen RP.<++ pApp RP.<++ pNum RP.<++ pStr RP.<++ pMeta)
+  where 
+        pParen = RP.between (RP.char '(') (RP.char ')') (pExp 0)
+        pApp = do xs <- RP.option [] (RP.between (RP.char '\\') (RP.string "->") (RP.sepBy1 pIdent (RP.char ',')))
+                  f  <- pIdent
+                  ts <- (if n == 0 then pExps else return [])
+                  return (DTr xs (AC f) ts)
+        pStr = RP.char '"' >> liftM (\s -> DTr [] (AS s) []) (RP.manyTill (pEsc RP.<++ RP.get) (RP.char '"'))
+        pEsc = RP.char '\\' >> RP.get
+        pNum = do x <- RP.munch1 isDigit
+                  ((RP.char '.' >> RP.munch1 isDigit >>= \y -> return (DTr [] (AF (read (x++"."++y))) []))
+                   RP.<++
+                   (return (DTr [] (AI (read x)) [])))
+        pMeta = do RP.char '?'
+                   x <- RP.munch1 isDigit
+                   return (DTr [] (AM (read x)) [])
+
+        pIdent = fmap mkCId (liftM2 (:) (RP.satisfy isIdentFirst) (RP.munch isIdentRest))
+        isIdentFirst c = c == '_' || isLetter c
+        isIdentRest c = c == '_' || c == '\'' || isAlphaNum c
+
+
+showTree = PP.render . ppExp False
+
+ppExp isNested (DTr [] at []) = ppAtom at
+ppExp isNested (DTr xs at ts) = ppParens isNested (ppLambdas xs PP.<+> ppAtom at PP.<+> PP.hsep (map (ppExp True) ts))
+                                where
+                                  ppLambdas [] = PP.empty
+                                  ppLambdas xs = PP.char '\\' PP.<>
+                                                 PP.hsep (PP.punctuate PP.comma (map (PP.text . prCId) xs)) PP.<+>
+                                                 PP.text "->"
+
+                                  ppParens True  = PP.parens
+                                  ppParens False = id
+
+ppAtom (AC id) = PP.text (prCId id)
+ppAtom (AS s)  = PP.text (show s)
+ppAtom (AI n)  = PP.integer n
+ppAtom (AF d)  = PP.double d
+ppAtom (AM n)  = PP.char '?' PP.<> PP.integer n
+ppAtom (AV id) = PP.text (prCId id)
 
 abstractName mgr = prCId (absname (gfcc mgr))
 
