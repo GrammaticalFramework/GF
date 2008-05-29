@@ -7,7 +7,7 @@ import GF.GFCC.Raw.AbsGFCCRaw
 import GF.Infra.PrintClass
 import GF.Data.Assoc
 import GF.Formalism.FCFG
-import GF.Formalism.Utilities (NameProfile(..), Profile(..), SyntaxForest(..))
+import GF.Formalism.Utilities
 import GF.Parsing.FCFG.PInfo (FCFPInfo(..), buildFCFPInfo)
 
 import qualified Data.Array as Array
@@ -78,29 +78,21 @@ toPInfo [App "rules" rs, App "startupcats" cs] = buildFCFPInfo (rules, cats)
     toFRule (App "rule"
               [n,                      
                App "cats" (rt:at),
-               App "R" ls]) = FRule name args res lins
+               App "R" ls]) = FRule fun prof args res lins
       where 
-        name = toFName n
+        (fun,prof) = toFName n
         args = lmap expToInt at
         res  = expToInt rt
         lins = mkArray [mkArray [toSymbol s | s <- l] | App "S" l <- ls]
 
-toFName :: RExp -> FName
-toFName (App "_A" [x]) = Name wildCId [Unify [expToInt x]]
-toFName (App f ts) = Name (mkCId f) (lmap toProfile ts)
+toFName :: RExp -> (CId,[Profile])
+toFName (App "_A" [x]) = (wildCId, [[expToInt x]])
+toFName (App f ts)     = (mkCId f, lmap toProfile ts)
     where
-      toProfile :: RExp -> Profile (SyntaxForest CId)
-      toProfile AMet = Unify []
-      toProfile (App "_A" [t]) = Unify [expToInt t]
-      toProfile (App "_U" ts) = Unify [expToInt t | App "_A" [t] <- ts]
-      toProfile t = Constant (toSyntaxForest t)
-
-      toSyntaxForest :: RExp -> SyntaxForest CId
-      toSyntaxForest AMet = FMeta
-      toSyntaxForest (App n ts) = FNode (mkCId n) [lmap toSyntaxForest ts]
-      toSyntaxForest (AStr s) = FString s
-      toSyntaxForest (AInt i) = FInt i
-      toSyntaxForest (AFlt f) = FFloat f
+      toProfile :: RExp -> Profile
+      toProfile AMet           = []
+      toProfile (App "_A" [t]) = [expToInt t]
+      toProfile (App "_U" ts)  = [expToInt t | App "_A" [t] <- ts]
 
 toSymbol :: RExp -> FSymbol
 toSymbol (App "P" [c,n,l]) = FSymCat (expToInt c) (expToInt l) (expToInt n)
@@ -221,32 +213,22 @@ fromPInfo p = App "parser" [
         ]
 
 fromFRule :: FRule -> RExp
-fromFRule (FRule n args res lins) = 
-    App "rule" [fromFName n,
+fromFRule (FRule fun prof args res lins) = 
+    App "rule" [fromFName (fun,prof),
                 App "cats" (intToExp res:lmap intToExp args),
                 App "R" [App "S" [fromSymbol s | s <- Array.elems l] | l <- Array.elems lins]
                ]
 
-fromFName :: FName -> RExp
-fromFName n = case n of
-                Name f ps | f == wildCId -> fromProfile (head ps)
-                          | otherwise    -> App (prCId f) (lmap fromProfile ps)
+fromFName :: (CId,[Profile]) -> RExp
+fromFName (f,ps) | f == wildCId = fromProfile (head ps)
+                 | otherwise    = App (prCId f) (lmap fromProfile ps)
   where
-    fromProfile :: Profile (SyntaxForest CId) -> RExp
-    fromProfile (Unify []) = AMet
-    fromProfile (Unify [x]) = daughter x
-    fromProfile (Unify args) = App "_U" (lmap daughter args)
-    fromProfile (Constant forest) = fromSyntaxForest forest
+    fromProfile :: Profile -> RExp
+    fromProfile []   = AMet
+    fromProfile [x]  = daughter x
+    fromProfile args = App "_U" (lmap daughter args)
 
     daughter n = App "_A" [intToExp n]
-
-    fromSyntaxForest :: SyntaxForest CId -> RExp
-    fromSyntaxForest FMeta = AMet
-    -- FIXME: is there always just one element here?
-    fromSyntaxForest (FNode n [args]) = App (prCId n) (lmap fromSyntaxForest args)
-    fromSyntaxForest (FString s) = AStr s
-    fromSyntaxForest (FInt i) = AInt i
-    fromSyntaxForest (FFloat f) = AFlt f
 
 fromSymbol :: FSymbol -> RExp
 fromSymbol (FSymCat c l n) = App "P" [intToExp c, intToExp n, intToExp l]

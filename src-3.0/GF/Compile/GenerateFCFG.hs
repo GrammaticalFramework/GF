@@ -97,9 +97,9 @@ expandHOAS funs lins lincats = (funs' ++ hoFuns ++ varFuns,
 -- replaces __NCat with _B and _Var_Cat with _.
 -- the temporary names are just there to avoid name collisions.
 fixHoasFuns :: FGrammar -> FGrammar
-fixHoasFuns (rs, cs) = ([FRule (fixName n) args cat lins | FRule n args cat lins <- rs], cs)
-  where fixName (Name (CId n) p) | BS.pack "__"    `BS.isPrefixOf` n = Name (mkCId "_B") p
-                                 | BS.pack "_Var_" `BS.isPrefixOf` n = Name wildCId p
+fixHoasFuns (rs, cs) = ([FRule (fixName n) ps args cat lins | FRule n ps args cat lins <- rs], cs)
+  where fixName (CId n) | BS.pack "__"    `BS.isPrefixOf` n = (mkCId "_B")
+                        | BS.pack "_Var_" `BS.isPrefixOf` n = wildCId
         fixName n = n
 
 convert :: [(CId,(Type,Exp))] -> TermMap -> TermMap -> FGrammar
@@ -148,11 +148,11 @@ convertRule cnc_defs selector (XRule fun args cat ctypes ctype term) frulesEnv =
 
           (_,newProfile) = List.mapAccumL accumProf 0 newArgs'
             where
-              accumProf nr (PFCat _ [] _,_     ) = (nr,       Unify []          )
-              accumProf nr (_           ,xpaths) = (nr+cnt+1, Unify [nr..nr+cnt])
+              accumProf nr (PFCat _ [] _,_     ) = (nr,       []          )
+              accumProf nr (_           ,xpaths) = (nr+cnt+1, [nr..nr+cnt])
                 where cnt = length xpaths
 
-          rule = FRule (Name fun newProfile) newArgs newCat newLinRec
+          rule = FRule fun newProfile newArgs newCat newLinRec
       in addFRule env2 rule
 
 translateLin idxArgs lbl' []                    = array (0,-1) []
@@ -336,7 +336,7 @@ genFCatArg cnc_defs ctype env@(FRulesEnv last_id fcatSet rules) (PFCat cat rcs t
           (either_fcat,last_id1,tmap1,rules1)
                   = foldBM (\tcs st (either_fcat,last_id,tmap,rules) ->
                                    let (last_id1,tmap1,fcat_arg) = addArg tcs last_id tmap
-                                       rule = FRule (Name wildCId [Unify [0]]) [fcat_arg] fcat
+                                       rule = FRule wildCId [[0]] [fcat_arg] fcat
                                                     (listArray (0,length rcs-1) [listArray (0,0) [FSymCat fcat_arg lbl 0] | lbl <- [0..length rcs-1]])
                                    in if st
                                         then (Right fcat, last_id1,tmap1,rule:rules)

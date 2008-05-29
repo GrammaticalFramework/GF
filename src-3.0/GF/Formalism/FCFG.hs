@@ -22,11 +22,8 @@ module GF.Formalism.FCFG
          , FIndex
          , FSymbol(..)
 
-         -- * Name
-         , FName
-         , isCoercionF
-
          -- * Grammar
+         , Profile
          , FPointPos
          , FGrammar
          , FRule(..)
@@ -38,7 +35,7 @@ import Data.Array
 import qualified Data.Map as Map
 
 import GF.Formalism.Utilities
-import qualified GF.GFCC.CId as AbsGFCC
+import GF.GFCC.CId
 import GF.Infra.PrintClass
 
 ------------------------------------------------------------
@@ -67,26 +64,18 @@ data FSymbol
 
 
 ------------------------------------------------------------
--- Name
-type FName     = NameProfile AbsGFCC.CId
-
-isCoercionF :: FName -> Bool
-isCoercionF (Name fun [Unify [0]]) = fun == AbsGFCC.wildCId
-isCoercionF _ = False
-
-
-------------------------------------------------------------
 -- Grammar
 
+type Profile   = [Int]
 type FPointPos = Int
-type FGrammar  = ([FRule], Map.Map AbsGFCC.CId [FCat])
-data FRule     = FRule FName [FCat] FCat (Array FIndex (Array FPointPos FSymbol))
+type FGrammar  = ([FRule], Map.Map CId [FCat])
+data FRule     = FRule CId [Profile] [FCat] FCat (Array FIndex (Array FPointPos FSymbol))
 
 ------------------------------------------------------------
 -- pretty-printing
 
-instance Print AbsGFCC.CId where
-    prt = AbsGFCC.prCId
+instance Print CId where
+    prt = prCId
 
 instance Print FSymbol where
     prt (FSymCat c l n) = "($" ++ prt n ++ "!" ++ prt l ++ ")"
@@ -100,6 +89,11 @@ instance Print FSymbol where
     prtList = prtSep " "
 
 instance Print FRule where
-    prt (FRule name args res lins) = prt name ++ " : " ++ (if null args then "" else prtSep " " args ++ " -> ") ++ prt res ++
-                                     " =\n   [" ++ prtSep "\n    " ["("++prtSep " " [prt sym | (_,sym) <- assocs syms]++")" | (_,syms) <- assocs lins]++"]"
+    prt (FRule fun profile args res lins) =
+      prt fun ++ prtProf profile ++ " : " ++ (if null args then "" else prtSep " " args ++ " -> ") ++ prt res ++
+      " =\n   [" ++ prtSep "\n    " ["("++prtSep " " [prt sym | (_,sym) <- assocs syms]++")" | (_,syms) <- assocs lins]++"]"
+      where
+        prtProf []   = "?"
+	prtProf args = prtSep "=" args
+
     prtList = prtSep "\n"

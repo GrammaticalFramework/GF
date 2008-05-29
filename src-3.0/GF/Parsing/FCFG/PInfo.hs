@@ -15,7 +15,7 @@ import GF.Formalism.FCFG
 import GF.Data.SortedList
 import GF.Data.Assoc
 import GF.Parsing.FCFG.Range
-import qualified GF.GFCC.CId as AbsGFCC
+import GF.GFCC.CId
 
 import Data.Array
 import Data.Maybe
@@ -30,7 +30,7 @@ import Debug.Trace
 type FCFParser =  FCFPInfo
                -> [FCat]
                -> Input FToken
-               -> SyntaxChart FName (FCat,RangeRec)
+               -> SyntaxChart (CId,[Profile]) (FCat,RangeRec)
 
 makeFinalEdge cat 0 0 = (cat, [EmptyRange])
 makeFinalEdge cat i j = (cat, [makeRange i j])
@@ -52,7 +52,7 @@ data FCFPInfo
 		 -- ^ used in 'GF.Parsing.MCFG.Active' (Kilbury):
 	       , grammarCats        :: SList FCat
 	       , grammarToks        :: SList FToken
-	       , startupCats        :: Map.Map AbsGFCC.CId [FCat]
+	       , startupCats        :: Map.Map CId [FCat]
 	       }
 
 
@@ -86,18 +86,17 @@ buildFCFPInfo (grammar,startup) = -- trace (unlines [prt (x,Set.toList set) | (x
 	     }
 
     where allrules = listArray (0,length grammar-1) grammar
-	  topdownrules  = accumAssoc id [(cat,  ruleid) | (ruleid, FRule _ _ cat _) <- assocs allrules]
-	  -- emptyrules    = [ruleid | (ruleid, FRule _ [] _ _) <- assocs allrules]
-	  epsilonrules  = [ ruleid | (ruleid, FRule _ _ _ lins) <- assocs allrules,
+	  topdownrules  = accumAssoc id [(cat,  ruleid) | (ruleid, FRule _ _ _ cat _) <- assocs allrules]
+	  epsilonrules  = [ ruleid | (ruleid, FRule _ _ _ _ lins) <- assocs allrules,
                             not (inRange (bounds (lins ! 0)) 0) ]
 	  leftcorncats  = accumAssoc id
 			  [ (fromJust (getLeftCornerCat lins), ruleid) | 
-			    (ruleid, FRule _ _ _ lins) <- assocs allrules, isJust (getLeftCornerCat lins) ]
+			    (ruleid, FRule _ _ _ _ lins) <- assocs allrules, isJust (getLeftCornerCat lins) ]
 	  leftcorntoks  = accumAssoc id 
 			  [ (fromJust (getLeftCornerTok lins), ruleid) | 
-			    (ruleid, FRule _ _ _ lins) <- assocs allrules, isJust (getLeftCornerTok lins) ]
+			    (ruleid, FRule _ _ _ _ lins) <- assocs allrules, isJust (getLeftCornerTok lins) ]
 	  grammarcats   = aElems topdownrules
-	  grammartoks   = nubsort [t | (FRule _ _ _ lins) <- grammar, lin <- elems lins, FSymTok t <- elems lin]
+	  grammartoks   = nubsort [t | (FRule _ _ _ _ lins) <- grammar, lin <- elems lins, FSymTok t <- elems lin]
 
 fcfPInfoToFGrammar :: FCFPInfo -> FGrammar
 fcfPInfoToFGrammar pinfo = (elems (allRules pinfo), startupCats pinfo)
