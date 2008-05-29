@@ -20,7 +20,6 @@ import GF.Formalism.Utilities
 
 import GF.Infra.PrintClass
 
-import GF.Parsing.FCFG.Range
 import GF.Parsing.FCFG.PInfo
 
 import Control.Monad (guard)
@@ -69,8 +68,8 @@ process strategy pinfo toks ((c,item):items) chart = process strategy pinfo toks
 	     			found' -> let items = do rng  <- concatRange rng (found' !! r)
 	     			                         return (c, Active found rng lbl (ppos+1) node)
 	     			          in process strategy pinfo toks items chart
-	     FSymTok tok   -> let items = do (i,j) <- inputToken toks ? tok
-	                                     rng' <- concatRange rng (makeRange i j)
+	     FSymTok tok   -> let items = do t_rng <- inputToken toks ? tok
+	                                     rng' <- concatRange rng t_rng
 	                                     return (cat, Active found rng' lbl (ppos+1) node)
                               in process strategy pinfo toks items chart
       | otherwise =
@@ -143,7 +142,7 @@ xchart2syntaxchart (XChart actives finals) pinfo =
 
 literals :: FCFPInfo -> Input FToken -> [(FCat,Item)]
 literals pinfo toks =
-  [let (c,node) = lexer t in (c,Final [makeRange i j] node) | Edge i j t <- inputEdges toks, not (t `elem` grammarToks pinfo)]
+  [let (c,node) = lexer t in (c,Final [rng] node) | (t,rngs) <- aAssocs (inputToken toks), rng <- rngs, not (t `elem` grammarToks pinfo)]
   where
     lexer t =
       case reads t of
@@ -172,8 +171,8 @@ initialBU pinfo toks =
     do (tok,rngs) <- aAssocs (inputToken toks)
        ruleid <- leftcornerTokens pinfo ? tok
        let FRule _ _ _ cat _ = allRules pinfo ! ruleid
-       (i,j) <- rngs
-       return (cat,Active [] (makeRange i j) 0 1 (emptyChildren ruleid pinfo))
+       rng <- rngs
+       return (cat,Active [] rng 0 1 (emptyChildren ruleid pinfo))
     ++
     do ruleid <- epsilonRules pinfo
        let FRule _ _ _ cat _ = allRules pinfo ! ruleid
