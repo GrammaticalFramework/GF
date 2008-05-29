@@ -15,13 +15,10 @@
 module GF.Compile.GenerateFCFG
     (convertConcrete) where
 
-import Control.Monad
-
-import GF.GFCC.Parsing.FCFG.Utilities
-
-import GF.GFCC.Macros --hiding (prt)
-import GF.GFCC.DataGFCC
-import GF.GFCC.CId
+import PGF.CId
+import PGF.Data
+import PGF.Macros --hiding (prt)
+import PGF.Parsing.FCFG.Utilities
 
 import GF.Data.BacktrackM
 import GF.Data.SortedList
@@ -33,6 +30,7 @@ import qualified Data.List as List
 import qualified Data.ByteString.Char8 as BS
 import Data.Array
 import Data.Maybe
+import Control.Monad
 
 ----------------------------------------------------------------------
 -- main conversion function

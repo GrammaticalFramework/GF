@@ -1,7 +1,7 @@
-module GF.GFCC.Raw.PrintGFCCRaw (printTree) where
+module PGF.Raw.Print (printTree) where
 
-import GF.GFCC.CId
-import GF.GFCC.Raw.AbsGFCCRaw
+import PGF.CId
+import PGF.Raw.Abstract
 
 import Data.List (intersperse)
 import Numeric (showFFloat)

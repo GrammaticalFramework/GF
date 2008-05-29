@@ -7,9 +7,9 @@ import GF.Command.Commands
 import GF.Command.AbsGFShell hiding (Tree)
 import GF.Command.PPrTree
 import GF.Command.ParGFShell
-import GF.GFCC.API
-import GF.GFCC.Macros
-import GF.GFCC.DataGFCC
+import PGF
+import PGF.Data
+import PGF.Macros
 import GF.System.Signal
 
 import GF.Data.ErrM ----

@@ -7,20 +7,19 @@
 -- FCFG parsing
 -----------------------------------------------------------------------------
 
-module GF.GFCC.Parsing.FCFG
+module PGF.Parsing.FCFG
     (parseFCF,buildParserInfo,ParserInfo(..),makeFinalEdge) where
 
-import GF.Data.SortedList 
-import GF.Data.Assoc
-
-import GF.GFCC.Parsing.FCFG.Utilities
-import GF.GFCC.Parsing.FCFG.Active
-
-import GF.GFCC.CId
-import GF.GFCC.DataGFCC
-import GF.GFCC.BuildParser
-import GF.GFCC.Macros
 import GF.Data.ErrM
+import GF.Data.Assoc
+import GF.Data.SortedList 
+
+import PGF.CId
+import PGF.Data
+import PGF.Macros
+import PGF.BuildParser
+import PGF.Parsing.FCFG.Utilities
+import PGF.Parsing.FCFG.Active
 
 import qualified Data.Map as Map
 

@@ -1,8 +1,8 @@
 module GF.Command.PPrTree (pTree, prExp, tree2exp) where
 
-import GF.GFCC.DataGFCC
-import GF.GFCC.CId
-import GF.GFCC.Macros
+import PGF.CId
+import PGF.Data
+import PGF.Macros
 import qualified GF.Command.ParGFShell as P
 import GF.Command.PrintGFShell
 import GF.Command.AbsGFShell

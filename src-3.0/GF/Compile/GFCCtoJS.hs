@@ -1,8 +1,8 @@
-module GF.GFCC.GFCCtoJS (gfcc2js) where
+module GF.Compile.GFCCtoJS (gfcc2js) where
 
-import qualified GF.GFCC.Macros as M
-import GF.GFCC.CId
-import GF.GFCC.DataGFCC
+import PGF.CId
+import PGF.Data
+import qualified PGF.Macros as M
 import qualified GF.JavaScript.AbsJS as JS
 import qualified GF.JavaScript.PrintJS as JS
 

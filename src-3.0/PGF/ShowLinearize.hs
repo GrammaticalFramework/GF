@@ -1,15 +1,14 @@
-module GF.GFCC.ShowLinearize (
+module PGF.ShowLinearize (
   tableLinearize,
   recordLinearize,
   termLinearize,
   allLinearize
   ) where
 
-import GF.GFCC.Linearize
-import GF.GFCC.Macros
-import GF.GFCC.DataGFCC
-import GF.GFCC.CId
---import GF.GFCC.PrintGFCC ----
+import PGF.CId
+import PGF.Data
+import PGF.Macros
+import PGF.Linearize
 
 import GF.Data.Operations
 import Data.List

@@ -1,8 +1,8 @@
-module GF.GFCC.Generate where
+module PGF.Generate where
 
-import GF.GFCC.Macros
-import GF.GFCC.DataGFCC
-import GF.GFCC.CId
+import PGF.CId
+import PGF.Data
+import PGF.Macros
 
 import qualified Data.Map as M
 import System.Random

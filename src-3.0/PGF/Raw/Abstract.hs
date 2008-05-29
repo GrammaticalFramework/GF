@@ -1,4 +1,4 @@
-module GF.GFCC.Raw.AbsGFCCRaw where
+module PGF.Raw.Abstract where
 
 data Grammar =
    Grm [RExp]

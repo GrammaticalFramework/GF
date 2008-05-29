@@ -12,12 +12,12 @@ module GF.Command.Commands (
 import GF.Command.AbsGFShell hiding (Tree)
 import GF.Command.PPrTree
 import GF.Command.ParGFShell
-import GF.GFCC.CId
-import GF.GFCC.ShowLinearize
-import GF.GFCC.API
-import GF.GFCC.Macros
-import GF.GFCC.PrintGFCC
-import GF.GFCC.DataGFCC ----
+import PGF
+import PGF.CId
+import PGF.ShowLinearize
+import PGF.Macros
+import PGF.Data ----
+import GF.Compile.Export
 
 import GF.Data.ErrM ----
 

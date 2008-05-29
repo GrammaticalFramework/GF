@@ -1,15 +1,15 @@
 module GFC (mainGFC) where
 -- module Main where
 
+import PGF
+import PGF.CId
+import PGF.Data
+import PGF.Raw.Parse
+import PGF.Raw.Convert
 import GF.Compile
-import GF.GFCC.PrintGFCC
-import GF.GFCC.CId
-import GF.GFCC.DataGFCC
-import GF.GFCC.Raw.ParGFCCRaw
-import GF.GFCC.Raw.ConvertGFCC
+import GF.Compile.Export
 import GF.Infra.UseIO
 import GF.Infra.Option
-import GF.GFCC.API
 import GF.Data.ErrM
 
 import Data.Maybe

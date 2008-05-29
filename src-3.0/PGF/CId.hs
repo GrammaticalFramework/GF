@@ -1,4 +1,4 @@
-module GF.GFCC.CId (CId(..), wildCId, mkCId, prCId) where
+module PGF.CId (CId(..), wildCId, mkCId, prCId) where
 
 import Data.ByteString.Char8 as BS
 

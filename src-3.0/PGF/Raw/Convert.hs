@@ -1,10 +1,10 @@
-module GF.GFCC.Raw.ConvertGFCC (toGFCC,fromGFCC) where
+module PGF.Raw.Convert (toGFCC,fromGFCC) where
 
-import GF.GFCC.CId
-import GF.GFCC.DataGFCC
-import GF.GFCC.Raw.AbsGFCCRaw
-import GF.GFCC.BuildParser (buildParserInfo)
-import GF.GFCC.Parsing.FCFG.Utilities
+import PGF.CId
+import PGF.Data
+import PGF.Raw.Abstract
+import PGF.BuildParser (buildParserInfo)
+import PGF.Parsing.FCFG.Utilities
 
 import qualified Data.Array as Array
 import qualified Data.Map   as Map
