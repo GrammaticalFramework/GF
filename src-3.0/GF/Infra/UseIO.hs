@@ -249,7 +249,10 @@ putPointE v opts msg act = do
   a <- act >>= ioeIO . evaluate
   t2 <- ioeIO $ getCPUTime
 
-  when (flag optShowCPUTime opts) $ ioeIO $ putStrLnFlush (' ' : show ((t2 - t1) `div` 1000000000) ++ " msec")
+  ioeIO $ putStrLnFlush
+            (if flag optShowCPUTime opts
+               then (' ' : show ((t2 - t1) `div` 1000000000) ++ " msec")
+               else "")
   return a
 
 
