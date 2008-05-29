@@ -7,7 +7,7 @@
 -- FCFG parsing
 -----------------------------------------------------------------------------
 
-module GF.Parsing.FCFG
+module GF.GFCC.Parsing.FCFG
     (parseFCF,buildParserInfo,ParserInfo(..),makeFinalEdge) where
 
 import GF.Data.SortedList 
@@ -15,9 +15,8 @@ import GF.Data.Assoc
 
 import GF.Infra.PrintClass
 
-import GF.Formalism.Utilities
-
-import GF.Parsing.FCFG.Active
+import GF.GFCC.Parsing.FCFG.Utilities
+import GF.GFCC.Parsing.FCFG.Active
 
 import GF.GFCC.CId
 import GF.GFCC.DataGFCC

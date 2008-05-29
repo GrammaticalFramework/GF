@@ -26,7 +26,7 @@ import GF.Command.PPrTree
 
 import GF.Data.ErrM
 
-import GF.Parsing.FCFG
+import GF.GFCC.Parsing.FCFG
 
 import qualified Data.Map as Map
 import System.Random (newStdGen)

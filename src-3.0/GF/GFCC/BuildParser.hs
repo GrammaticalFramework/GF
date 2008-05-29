@@ -10,7 +10,7 @@
 module GF.GFCC.BuildParser where
 
 import GF.Infra.PrintClass
-import GF.Formalism.Utilities
+import GF.GFCC.Parsing.FCFG.Utilities
 import GF.Data.SortedList
 import GF.Data.Assoc
 import GF.GFCC.CId

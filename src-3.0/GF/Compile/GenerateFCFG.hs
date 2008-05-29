@@ -19,7 +19,7 @@ import GF.Infra.PrintClass
 
 import Control.Monad
 
-import GF.Formalism.Utilities
+import GF.GFCC.Parsing.FCFG.Utilities
 
 import GF.GFCC.Macros --hiding (prt)
 import GF.GFCC.DataGFCC
