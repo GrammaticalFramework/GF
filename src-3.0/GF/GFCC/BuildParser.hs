@@ -9,7 +9,6 @@
 
 module GF.GFCC.BuildParser where
 
-import GF.Infra.PrintClass
 import GF.GFCC.Parsing.FCFG.Utilities
 import GF.Data.SortedList
 import GF.Data.Assoc
@@ -63,22 +62,3 @@ buildParserInfo (grammar,startup) = -- trace (unlines [prt (x,Set.toList set) | 
 	  leftcorntoks  = accumAssoc id [ (tok, ruleid) | (ruleid, rule) <- assocs allrules, tok <- getLeftCornerTok rule ]
 	  grammarcats   = aElems topdownrules
 	  grammartoks   = nubsort [t | (FRule _ _ _ _ lins) <- grammar, lin <- elems lins, FSymTok t <- elems lin]
-
-
-----------------------------------------------------------------------
--- pretty-printing of statistics
-
-instance Print ParserInfo where
-    prt pI = "[ allRules=" ++ sl (elems . allRules) ++
-	     "; tdRules=" ++ sla topdownRules ++
-	     -- "; emptyRules=" ++ sl emptyRules ++ 
-	     "; epsilonRules=" ++ sl epsilonRules ++ 
-	     "; lcCats=" ++ sla leftcornerCats ++
-	     "; lcTokens=" ++ sla leftcornerTokens ++
-	     "; categories=" ++ sl grammarCats ++ 
-	     " ]"
-
-	where sl  f = show $ length $ f pI
-	      sla f = let (as, bs) = unzip $ aAssocs $ f pI
-		       in show (length as) ++ "/" ++ show (length (concat bs))
-

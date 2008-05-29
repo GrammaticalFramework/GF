@@ -15,8 +15,6 @@
 module GF.Compile.GenerateFCFG
     (convertConcrete) where
 
-import GF.Infra.PrintClass
-
 import Control.Monad
 
 import GF.GFCC.Parsing.FCFG.Utilities

@@ -6,8 +6,6 @@ import GF.GFCC.Raw.AbsGFCCRaw
 import GF.GFCC.BuildParser (buildParserInfo)
 import GF.GFCC.Parsing.FCFG.Utilities
 
-import GF.Infra.PrintClass
-
 import qualified Data.Array as Array
 import qualified Data.Map   as Map
 

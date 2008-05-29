@@ -13,8 +13,6 @@ module GF.GFCC.Parsing.FCFG
 import GF.Data.SortedList 
 import GF.Data.Assoc
 
-import GF.Infra.PrintClass
-
 import GF.GFCC.Parsing.FCFG.Utilities
 import GF.GFCC.Parsing.FCFG.Active
 
@@ -59,7 +57,6 @@ parseFCF strategy pinfo startCat inString =
 
 tree2term :: SyntaxTree CId -> Exp
 tree2term (TNode f ts) = tree (AC f) (map tree2term ts)
-
 tree2term (TString  s) = tree (AS s) []
 tree2term (TInt     n) = tree (AI n) []
 tree2term (TFloat   f) = tree (AF f) []

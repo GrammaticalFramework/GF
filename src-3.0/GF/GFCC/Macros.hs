@@ -2,7 +2,6 @@ module GF.GFCC.Macros where
 
 import GF.GFCC.CId
 import GF.GFCC.DataGFCC
-import GF.Infra.PrintClass
 import Control.Monad
 import qualified Data.Map   as Map
 import qualified Data.Array as Array

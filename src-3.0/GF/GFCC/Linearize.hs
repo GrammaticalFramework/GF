@@ -3,7 +3,6 @@ module GF.GFCC.Linearize where
 import GF.GFCC.Macros
 import GF.GFCC.DataGFCC
 import GF.GFCC.CId
-import GF.Infra.PrintClass
 import qualified Data.Map as Map
 import Data.List
 
