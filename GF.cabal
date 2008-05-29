@@ -35,24 +35,24 @@ library
     GF.GFCC.Generate
     GF.GFCC.Linearize
     GF.GFCC.BuildParser
-    GF.Command.LexGFShell
-    GF.Command.AbsGFShell
-    GF.Command.PrintGFShell
-    GF.Data.RedBlackSet
-    GF.Data.GeneralDeduction
-    GF.Infra.CompactPrint
-    GF.Text.UTF8
-    GF.Data.Utilities
-    GF.Data.SortedList
-    GF.Data.Assoc
-    GF.Infra.PrintClass
     GF.GFCC.Parsing.FCFG.Utilities
     GF.GFCC.Parsing.FCFG.Active
     GF.GFCC.Parsing.FCFG
     GF.GFCC.Raw.ConvertGFCC
-    GF.Data.ErrM
+    GF.Command.LexGFShell
+    GF.Command.AbsGFShell
+    GF.Command.PrintGFShell
     GF.Command.ParGFShell
     GF.Command.PPrTree
+    GF.Data.RedBlackSet
+    GF.Data.GeneralDeduction
+    GF.Data.Utilities
+    GF.Data.SortedList
+    GF.Data.Assoc
+    GF.Data.ErrM
+    GF.Infra.CompactPrint
+    GF.Infra.PrintClass
+    GF.Text.UTF8
 
 
 executable gf3
