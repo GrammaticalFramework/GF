@@ -1,13 +1,10 @@
 module GF.GFCC.GFCCtoJS (gfcc2js) where
 
 import qualified GF.GFCC.Macros as M
-import qualified GF.GFCC.DataGFCC as D
 import GF.GFCC.CId
+import GF.GFCC.DataGFCC
 import qualified GF.JavaScript.AbsJS as JS
 import qualified GF.JavaScript.PrintJS as JS
-
-import GF.Formalism.FCFG
-import GF.Parsing.FCFG.PInfo
 
 import GF.Text.UTF8
 import GF.Data.ErrM
@@ -19,60 +16,60 @@ import qualified Data.Array as Array
 import Data.Maybe (fromMaybe)
 import qualified Data.Map as Map
 
-gfcc2js :: D.GFCC -> String
+gfcc2js :: GFCC -> String
 gfcc2js gfcc =
   encodeUTF8 $ JS.printTree $ JS.Program [JS.ElStmt $ JS.SDeclOrExpr $ JS.Decl [JS.DInit (JS.Ident n) grammar]]
  where
-   n  = prCId $ D.absname gfcc
-   as = D.abstract gfcc
-   cs = Map.assocs (D.concretes gfcc)
+   n  = prCId $ absname gfcc
+   as = abstract gfcc
+   cs = Map.assocs (concretes gfcc)
    start = M.lookStartCat gfcc
-   grammar = new "GFGrammar" [abstract, concrete]
-   abstract = abstract2js start as
-   concrete = JS.EObj $ map (concrete2js start n) cs
+   grammar = new "GFGrammar" [js_abstract, js_concrete]
+   js_abstract = abstract2js start as
+   js_concrete = JS.EObj $ map (concrete2js start n) cs
 
-abstract2js :: String -> D.Abstr -> JS.Expr
-abstract2js start ds = new "GFAbstract" [JS.EStr start, JS.EObj $ map absdef2js (Map.assocs (D.funs ds))]
+abstract2js :: String -> Abstr -> JS.Expr
+abstract2js start ds = new "GFAbstract" [JS.EStr start, JS.EObj $ map absdef2js (Map.assocs (funs ds))]
 
-absdef2js :: (CId,(D.Type,D.Exp)) -> JS.Property
+absdef2js :: (CId,(Type,Exp)) -> JS.Property
 absdef2js (f,(typ,_)) =
   let (args,cat) = M.catSkeleton typ in 
     JS.Prop (JS.IdentPropName (JS.Ident (prCId f))) (new "Type" [JS.EArray [JS.EStr (prCId x) | x <- args], JS.EStr (prCId cat)])
 
-concrete2js :: String -> String -> (CId,D.Concr) -> JS.Property
+concrete2js :: String -> String -> (CId,Concr) -> JS.Property
 concrete2js start n (c, cnc) =
     JS.Prop l (new "GFConcrete" ([(JS.EObj $ ((map (cncdef2js n (prCId c)) ds) ++ litslins))] ++
-                                 maybe [] (parser2js start) (D.parser cnc)))
+                                 maybe [] (parser2js start) (parser cnc)))
   where 
    l  = JS.IdentPropName (JS.Ident (prCId c))
-   ds = concatMap Map.assocs [D.lins cnc, D.opers cnc, D.lindefs cnc]
+   ds = concatMap Map.assocs [lins cnc, opers cnc, lindefs cnc]
    litslins = [JS.Prop (JS.StringPropName    "Int") (JS.EFun [children] [JS.SReturn $ new "Arr" [JS.EIndex (JS.EVar children) (JS.EInt 0)]]), 
                JS.Prop (JS.StringPropName  "Float") (JS.EFun [children] [JS.SReturn $ new "Arr" [JS.EIndex (JS.EVar children) (JS.EInt 0)]]),
                JS.Prop (JS.StringPropName "String") (JS.EFun [children] [JS.SReturn $ new "Arr" [JS.EIndex (JS.EVar children) (JS.EInt 0)]])]
 
 
-cncdef2js :: String -> String -> (CId,D.Term) -> JS.Property
+cncdef2js :: String -> String -> (CId,Term) -> JS.Property
 cncdef2js n l (f, t) = JS.Prop (JS.IdentPropName (JS.Ident (prCId f))) (JS.EFun [children] [JS.SReturn (term2js n l t)])
 
-term2js :: String -> String -> D.Term -> JS.Expr
+term2js :: String -> String -> Term -> JS.Expr
 term2js n l t = f t
   where 
   f t = 
     case t of
-      D.R xs           -> new "Arr" (map f xs)
-      D.P x y          -> JS.ECall (JS.EMember (f x) (JS.Ident "sel")) [f y]
-      D.S xs           -> mkSeq (map f xs)
-      D.K t            -> tokn2js t
-      D.V i            -> JS.EIndex (JS.EVar children) (JS.EInt i)
-      D.C i            -> new "Int" [JS.EInt i]
-      D.F f            -> JS.ECall (JS.EMember (JS.EIndex (JS.EMember (JS.EVar $ JS.Ident n) (JS.Ident "concretes")) (JS.EStr l)) (JS.Ident "rule")) [JS.EStr (prCId f), JS.EVar children]
-      D.FV xs          -> new "Variants" (map f xs)
-      D.W str x        -> new "Suffix" [JS.EStr str, f x]
-      D.TM _           -> new "Meta" []
+      R xs           -> new "Arr" (map f xs)
+      P x y          -> JS.ECall (JS.EMember (f x) (JS.Ident "sel")) [f y]
+      S xs           -> mkSeq (map f xs)
+      K t            -> tokn2js t
+      V i            -> JS.EIndex (JS.EVar children) (JS.EInt i)
+      C i            -> new "Int" [JS.EInt i]
+      F f            -> JS.ECall (JS.EMember (JS.EIndex (JS.EMember (JS.EVar $ JS.Ident n) (JS.Ident "concretes")) (JS.EStr l)) (JS.Ident "rule")) [JS.EStr (prCId f), JS.EVar children]
+      FV xs          -> new "Variants" (map f xs)
+      W str x        -> new "Suffix" [JS.EStr str, f x]
+      TM _           -> new "Meta" []
 
-tokn2js :: D.Tokn -> JS.Expr
-tokn2js (D.KS s) = mkStr s
-tokn2js (D.KP ss vs) = mkSeq (map mkStr ss) -- FIXME
+tokn2js :: Tokn -> JS.Expr
+tokn2js (KS s) = mkStr s
+tokn2js (KP ss vs) = mkSeq (map mkStr ss) -- FIXME
 
 mkStr :: String -> JS.Expr
 mkStr s = new "Str" [JS.EStr s]

@@ -15,7 +15,6 @@ import GF.Data.Assoc
 
 import GF.Infra.PrintClass
 
-import GF.Formalism.FCFG
 import GF.Formalism.Utilities
 
 import qualified GF.Parsing.FCFG.Active as Active

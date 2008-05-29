@@ -15,7 +15,7 @@ import GF.Data.SortedList
 import GF.Data.Utilities
 
 import GF.GFCC.CId
-import GF.Formalism.FCFG
+import GF.GFCC.DataGFCC
 import GF.Formalism.Utilities
 
 import GF.Infra.PrintClass

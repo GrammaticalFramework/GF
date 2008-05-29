@@ -11,10 +11,10 @@ module GF.Parsing.FCFG.PInfo where
 
 import GF.Infra.PrintClass
 import GF.Formalism.Utilities
-import GF.Formalism.FCFG
 import GF.Data.SortedList
 import GF.Data.Assoc
 import GF.GFCC.CId
+import GF.GFCC.DataGFCC
 
 import Data.Array
 import Data.Maybe
@@ -36,24 +36,6 @@ makeFinalEdge cat i j = (cat, [makeRange i j])
 
 ------------------------------------------------------------
 -- parser information
-
-type RuleId = Int
-
-data FCFPInfo
-    = FCFPInfo { allRules           :: Array RuleId FRule
-               , topdownRules       :: Assoc FCat (SList RuleId)
-		 -- ^ used in 'GF.Parsing.MCFG.Active' (Earley):
-	         -- , emptyRules    :: [RuleId]
-	       , epsilonRules       :: [RuleId]
-		 -- ^ used in 'GF.Parsing.MCFG.Active' (Kilbury):
-	       , leftcornerCats     :: Assoc FCat (SList RuleId)
-	       , leftcornerTokens   :: Assoc FToken (SList RuleId)
-		 -- ^ used in 'GF.Parsing.MCFG.Active' (Kilbury):
-	       , grammarCats        :: SList FCat
-	       , grammarToks        :: SList FToken
-	       , startupCats        :: Map.Map CId [FCat]
-	       }
-
 
 getLeftCornerTok (FRule _ _ _ _ lins)
   | inRange (bounds syms) 0 = case syms ! 0 of
