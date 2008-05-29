@@ -8,7 +8,6 @@ import qualified GF.JavaScript.PrintJS as JS
 
 import GF.Formalism.FCFG
 import GF.Parsing.FCFG.PInfo
-import GF.Formalism.Utilities (NameProfile(..), Profile(..), SyntaxForest(..))
 
 import GF.Text.UTF8
 import GF.Data.ErrM
@@ -97,28 +96,18 @@ parser2js start p  = [new "Parser" [JS.EStr start,
     cats (c,is) = JS.Prop (JS.IdentPropName (JS.Ident (prCId c))) (JS.EArray (map JS.EInt is))
 
 frule2js :: FRule -> JS.Expr
-frule2js (FRule n args res lins) = new "Rule" [JS.EInt res, name2js n, JS.EArray (map JS.EInt args), lins2js lins]
+frule2js (FRule f ps args res lins) = new "Rule" [JS.EInt res, name2js (f,ps), JS.EArray (map JS.EInt args), lins2js lins]
 
-name2js :: FName -> JS.Expr
-name2js n = case n of
-              Name f [p] | f == wildCId -> fromProfile p
-              Name f ps -> new "FunApp" $ [JS.EStr $ prCId f, JS.EArray (map fromProfile ps)]
+name2js :: (CId,[Profile]) -> JS.Expr
+name2js (f,ps) | f == wildCId = fromProfile (head ps)
+               | otherwise    = new "FunApp" $ [JS.EStr $ prCId f, JS.EArray (map fromProfile ps)]
   where
-    fromProfile :: Profile (SyntaxForest CId) -> JS.Expr
-    fromProfile (Unify []) = new "MetaVar" []
-    fromProfile (Unify [x]) = daughter x
-    fromProfile (Unify args) = new "Unify" [JS.EArray (map daughter args)]
-    fromProfile (Constant forest) = fromSyntaxForest forest
+    fromProfile :: Profile -> JS.Expr
+    fromProfile []   = new "MetaVar" []
+    fromProfile [x]  = daughter x
+    fromProfile args = new "Unify" [JS.EArray (map daughter args)]
 
     daughter i = new "Arg" [JS.EInt i]
-
-    fromSyntaxForest :: SyntaxForest CId -> JS.Expr
-    fromSyntaxForest FMeta = new "MetaVar" []
-    -- FIXME: is there always just one element here?
-    fromSyntaxForest (FNode n [args]) = new "FunApp" $ [JS.EStr $ prCId n, JS.EArray (map fromSyntaxForest args)]
-    fromSyntaxForest (FString s) = new "Lit" $ [JS.EStr s]
-    fromSyntaxForest (FInt i) = new "Lit" $ [JS.EInt $ fromIntegral i]
-    fromSyntaxForest (FFloat f) = new "Lit" $ [JS.EDbl f]
 
 lins2js :: Array FIndex (Array FPointPos FSymbol) -> JS.Expr
 lins2js ls = JS.EArray [ JS.EArray [ sym2js s | s <- Array.elems l] | l <- Array.elems ls]
