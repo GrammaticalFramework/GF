@@ -5,7 +5,6 @@ import GF.GFCC.DataGFCC
 import GF.GFCC.Raw.AbsGFCCRaw
 
 import GF.Infra.PrintClass
-import GF.Data.Assoc
 import GF.Formalism.FCFG
 import GF.Formalism.Utilities
 import GF.Parsing.FCFG.PInfo (FCFPInfo(..), buildFCFPInfo)
@@ -95,7 +94,7 @@ toFName (App f ts)     = (mkCId f, lmap toProfile ts)
       toProfile (App "_U" ts)  = [expToInt t | App "_A" [t] <- ts]
 
 toSymbol :: RExp -> FSymbol
-toSymbol (App "P" [c,n,l]) = FSymCat (expToInt c) (expToInt l) (expToInt n)
+toSymbol (App "P" [n,l]) = FSymCat (expToInt l) (expToInt n)
 toSymbol (AStr t) = FSymTok t
 
 toType :: RExp -> Type
@@ -231,7 +230,7 @@ fromFName (f,ps) | f == wildCId = fromProfile (head ps)
     daughter n = App "_A" [intToExp n]
 
 fromSymbol :: FSymbol -> RExp
-fromSymbol (FSymCat c l n) = App "P" [intToExp c, intToExp n, intToExp l]
+fromSymbol (FSymCat l n) = App "P" [intToExp n, intToExp l]
 fromSymbol (FSymTok t) = AStr t
 
 -- ** Utilities

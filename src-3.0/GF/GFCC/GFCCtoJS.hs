@@ -113,7 +113,7 @@ lins2js :: Array FIndex (Array FPointPos FSymbol) -> JS.Expr
 lins2js ls = JS.EArray [ JS.EArray [ sym2js s | s <- Array.elems l] | l <- Array.elems ls]
 
 sym2js :: FSymbol -> JS.Expr
-sym2js (FSymCat _ l n) = new "ArgProj" [JS.EInt n, JS.EInt l]
+sym2js (FSymCat l n) = new "ArgProj" [JS.EInt n, JS.EInt l]
 sym2js (FSymTok t) = new "Terminal" [JS.EStr t]
 
 new :: String -> [JS.Expr] -> JS.Expr

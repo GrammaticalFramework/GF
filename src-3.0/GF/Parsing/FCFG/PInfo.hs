@@ -55,19 +55,19 @@ data FCFPInfo
 	       }
 
 
-getLeftCornerTok lins
+getLeftCornerTok (FRule _ _ _ _ lins)
   | inRange (bounds syms) 0 = case syms ! 0 of
-                                FSymTok tok -> Just tok
-                                _           -> Nothing
-  | otherwise               = Nothing
+                                FSymTok tok -> [tok]
+                                _           -> []
+  | otherwise               = []
   where
     syms = lins ! 0
 
-getLeftCornerCat lins
+getLeftCornerCat (FRule _ _ args _ lins)
   | inRange (bounds syms) 0 = case syms ! 0 of
-                                FSymCat c _ _ -> Just c
-                                _             -> Nothing
-  | otherwise               = Nothing
+                                FSymCat _ d -> [args !! d]
+                                _           -> []
+  | otherwise               = []
   where
     syms = lins ! 0
 
@@ -88,12 +88,8 @@ buildFCFPInfo (grammar,startup) = -- trace (unlines [prt (x,Set.toList set) | (x
 	  topdownrules  = accumAssoc id [(cat,  ruleid) | (ruleid, FRule _ _ _ cat _) <- assocs allrules]
 	  epsilonrules  = [ ruleid | (ruleid, FRule _ _ _ _ lins) <- assocs allrules,
                             not (inRange (bounds (lins ! 0)) 0) ]
-	  leftcorncats  = accumAssoc id
-			  [ (fromJust (getLeftCornerCat lins), ruleid) | 
-			    (ruleid, FRule _ _ _ _ lins) <- assocs allrules, isJust (getLeftCornerCat lins) ]
-	  leftcorntoks  = accumAssoc id 
-			  [ (fromJust (getLeftCornerTok lins), ruleid) | 
-			    (ruleid, FRule _ _ _ _ lins) <- assocs allrules, isJust (getLeftCornerTok lins) ]
+	  leftcorncats  = accumAssoc id [ (cat, ruleid) | (ruleid, rule) <- assocs allrules, cat <- getLeftCornerCat rule ]
+	  leftcorntoks  = accumAssoc id [ (tok, ruleid) | (ruleid, rule) <- assocs allrules, tok <- getLeftCornerTok rule ]
 	  grammarcats   = aElems topdownrules
 	  grammartoks   = nubsort [t | (FRule _ _ _ _ lins) <- grammar, lin <- elems lins, FSymTok t <- elems lin]
 

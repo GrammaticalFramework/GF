@@ -59,7 +59,7 @@ fcatVar    = (-4)
 -- Symbol
 type FIndex    = Int
 data FSymbol
-  = FSymCat {-# UNPACK #-} !FCat {-# UNPACK #-} !FIndex {-# UNPACK #-} !Int 
+  = FSymCat {-# UNPACK #-} !FIndex {-# UNPACK #-} !Int
   | FSymTok FToken
 
 
@@ -78,7 +78,7 @@ instance Print CId where
     prt = prCId
 
 instance Print FSymbol where
-    prt (FSymCat c l n) = "($" ++ prt n ++ "!" ++ prt l ++ ")"
+    prt (FSymCat l n) = "($" ++ prt n ++ "!" ++ prt l ++ ")"
     prt (FSymTok t)     = simpleShow (prt t)
       where simpleShow str = "\"" ++ concatMap mkEsc str ++ "\""
             mkEsc '\\' = "\\\\"
