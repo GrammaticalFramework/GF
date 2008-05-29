@@ -34,6 +34,7 @@ library
     GF.GFCC.Macros
     GF.GFCC.Generate
     GF.GFCC.Linearize
+    GF.GFCC.BuildParser
     GF.Command.LexGFShell
     GF.Command.AbsGFShell
     GF.Command.PrintGFShell
@@ -46,7 +47,6 @@ library
     GF.Data.Assoc
     GF.Infra.PrintClass
     GF.Formalism.Utilities
-    GF.Parsing.FCFG.PInfo
     GF.Parsing.FCFG.Active
     GF.GFCC.Raw.ConvertGFCC
     GF.Data.ErrM
@@ -99,7 +99,7 @@ executable gf3
     GF.GFCC.Raw.ParGFCCRaw
     GF.GFCC.Raw.PrintGFCCRaw
     GF.Formalism.Utilities
-    GF.Parsing.FCFG.PInfo
+    GF.GFCC.BuildParser
     GF.GFCC.DataGFCC
     GF.Parsing.FCFG.Active
     GF.GFCC.Raw.ConvertGFCC

@@ -85,7 +85,7 @@ children :: JS.Ident
 children = JS.Ident "cs"
 
 -- Parser
-parser2js :: String -> FCFPInfo -> [JS.Expr]
+parser2js :: String -> ParserInfo -> [JS.Expr]
 parser2js start p  = [new "Parser" [JS.EStr start,
                                     JS.EArray $ map frule2js (Array.elems (allRules p)),
                                     JS.EObj $ map cats (Map.assocs (startupCats p))]]
