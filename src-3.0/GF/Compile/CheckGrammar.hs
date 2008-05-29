@@ -336,9 +336,7 @@ computeLType gr t = do
  where
   comp ty = case ty of
     _ | Just _ <- isTypeInts ty -> return ty ---- shouldn't be needed
-      | ty == typeInt           -> return ty ---- shouldn't be needed
-      | ty == typeFloat         -> return ty ---- shouldn't be needed
-      | ty == typeError         -> return ty ---- shouldn't be needed
+      | isPredefConstant ty     -> return ty ---- shouldn't be needed
 
     Q m ident -> checkIn ("module" +++ prt m) $ do
       ty' <- checkErr (lookupResDef gr m ident) 
@@ -409,14 +407,6 @@ inferLType gr trm = case trm of
      ,
      checkErr (lookupResDef gr m ident) >>= infer
      ,
-{-
-     do
-       over <- getOverload gr Nothing trm
-       case over of
-         Just trty -> return trty
-         _ -> prtFail "not overloaded" trm
-     ,
--}
      prtFail "cannot infer type of constant" trm
      ]
 

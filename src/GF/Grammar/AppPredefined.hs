@@ -30,7 +30,7 @@ isInPredefined = err (const True) (const False) . typPredefined
 typPredefined :: Ident -> Err Type
 typPredefined c@(IC f) = case f of
   "Int"    -> return typePType
-  "Float"  -> return typePType
+  "Float"  -> return typeType
   "Error"  -> return typeType
   "Ints"   -> return $ mkFunType [cnPredef "Int"] typePType
   "PBool"  -> return typePType
