@@ -39,11 +39,6 @@ library
     GF.GFCC.Parsing.FCFG.Active
     GF.GFCC.Parsing.FCFG
     GF.GFCC.Raw.ConvertGFCC
-    GF.Command.LexGFShell
-    GF.Command.AbsGFShell
-    GF.Command.PrintGFShell
-    GF.Command.ParGFShell
-    GF.Command.PPrTree
     GF.Data.RedBlackSet
     GF.Data.GeneralDeduction
     GF.Data.Utilities
@@ -62,7 +57,8 @@ executable gf3
                  directory,
                  random,
                  old-time,
-                 process
+                 process,
+                 pretty
   if os(windows)
     build-depends: Win32
   else
