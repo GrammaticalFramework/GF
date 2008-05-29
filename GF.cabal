@@ -46,7 +46,6 @@ library
     GF.Data.Assoc
     GF.Infra.PrintClass
     GF.Formalism.Utilities
-    GF.Formalism.FCFG
     GF.Parsing.FCFG.PInfo
     GF.Parsing.FCFG.Active
     GF.GFCC.Raw.ConvertGFCC
@@ -100,7 +99,6 @@ executable gf3
     GF.GFCC.Raw.ParGFCCRaw
     GF.GFCC.Raw.PrintGFCCRaw
     GF.Formalism.Utilities
-    GF.Formalism.FCFG
     GF.Parsing.FCFG.PInfo
     GF.GFCC.DataGFCC
     GF.Parsing.FCFG.Active

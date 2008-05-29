@@ -2,11 +2,10 @@ module GF.GFCC.Macros where
 
 import GF.GFCC.CId
 import GF.GFCC.DataGFCC
-import GF.Formalism.FCFG (FGrammar)
-import GF.Parsing.FCFG.PInfo (FCFPInfo, fcfPInfoToFGrammar)
+import GF.Parsing.FCFG.PInfo (fcfPInfoToFGrammar)
 import GF.Infra.PrintClass
 import Control.Monad
-import Data.Map
+import qualified Data.Map as Map
 import Data.Maybe
 import Data.List
 
@@ -39,7 +38,7 @@ lookFCFG :: GFCC -> CId -> Maybe FGrammar
 lookFCFG gfcc lang = fmap fcfPInfoToFGrammar $ lookParser gfcc lang
 
 lookStartCat :: GFCC -> String
-lookStartCat gfcc = fromMaybe "S" $ msum $ Data.List.map (Data.Map.lookup (mkCId "startcat"))
+lookStartCat gfcc = fromMaybe "S" $ msum $ Data.List.map (Map.lookup (mkCId "startcat"))
                                               [gflags gfcc, aflags (abstract gfcc)]
 
 lookGlobalFlag :: GFCC -> CId -> String
@@ -56,14 +55,14 @@ lookCncFlag gfcc lang f =
 
 functionsToCat :: GFCC -> CId -> [(CId,Type)]
 functionsToCat gfcc cat =
-  [(f,ty) | f <- fs, Just (ty,_) <- [Data.Map.lookup f $ funs $ abstract gfcc]]
+  [(f,ty) | f <- fs, Just (ty,_) <- [Map.lookup f $ funs $ abstract gfcc]]
  where 
    fs = lookMap [] cat $ catfuns $ abstract gfcc
 
 depth :: Exp -> Int
 depth tr = case tr of
   DTr _ _ [] -> 1
-  DTr _ _ ts -> maximum (lmap depth ts) + 1
+  DTr _ _ ts -> maximum (map depth ts) + 1
 
 tree :: Atom -> [Exp] -> Exp
 tree = DTr []
@@ -94,7 +93,7 @@ primNotion :: Exp
 primNotion = EEq []
 
 term0 :: CId -> Term
-term0 = TM . prt
+term0 = TM . prCId
 
 tm0 :: Term
 tm0 = TM "?"
@@ -103,8 +102,8 @@ kks :: String -> Term
 kks = K . KS
 
 -- lookup with default value
-lookMap :: (Show i, Ord i) => a -> i -> Map i a -> a 
-lookMap d c m = maybe d id $ Data.Map.lookup c m
+lookMap :: (Show i, Ord i) => a -> i -> Map.Map i a -> a 
+lookMap d c m = maybe d id $ Map.lookup c m
 
 --- from Operations
 combinations :: [[a]] -> [[a]]
