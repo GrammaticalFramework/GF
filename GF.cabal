@@ -50,8 +50,6 @@ library
     GF.Data.SortedList
     GF.Data.Assoc
     GF.Data.ErrM
-    GF.Infra.CompactPrint
-    GF.Infra.PrintClass
     GF.Text.UTF8
 
 

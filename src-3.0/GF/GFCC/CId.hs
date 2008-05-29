@@ -1,6 +1,5 @@
 module GF.GFCC.CId (CId(..), wildCId, mkCId, prCId) where
 
-import GF.Infra.PrintClass
 import Data.ByteString.Char8 as BS
 
 newtype CId = CId BS.ByteString deriving (Eq,Ord,Show)

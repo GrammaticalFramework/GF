@@ -18,8 +18,6 @@ import GF.GFCC.CId
 import GF.GFCC.DataGFCC
 import GF.GFCC.Parsing.FCFG.Utilities
 
-import GF.Infra.PrintClass
-
 import Control.Monad (guard)
 
 import qualified Data.List as List

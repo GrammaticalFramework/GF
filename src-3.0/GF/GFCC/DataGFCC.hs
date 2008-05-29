@@ -1,8 +1,6 @@
 module GF.GFCC.DataGFCC where
 
 import GF.GFCC.CId
-import GF.Infra.PrintClass(prt)
-import GF.Infra.CompactPrint
 import GF.Text.UTF8
 import GF.Data.Assoc
 

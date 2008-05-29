@@ -22,8 +22,6 @@ import GF.Data.SortedList
 import GF.Data.Assoc
 import GF.Data.Utilities (sameLength, foldMerge, splitBy)
 
-import GF.Infra.PrintClass
-
 
 ------------------------------------------------------------
 -- ranges as single pairs
@@ -271,33 +269,3 @@ forest2trees (FString s) = [TString s]
 forest2trees (FInt    n) = [TInt    n]
 forest2trees (FFloat  f) = [TFloat  f]
 forest2trees (FMeta)     = [TMeta]
-
-------------------------------------------------------------
--- pretty-printing
-
-instance Print Range where
-    prt (Range i j)  = "(" ++ show i ++ "-" ++ show j ++ ")"
-    prt (EmptyRange) = "(?)"
-
-
-instance (Print s) => Print (SyntaxTree s) where
-    prt (TNode s trees)
-	| null trees = prt s
-	| otherwise  = "(" ++ prt s ++ prtBefore " " trees ++ ")"
-    prt (TString  s) = show s
-    prt (TInt     n) = show n
-    prt (TFloat   f) = show f
-    prt (TMeta)      = "?"
-    prtList = prtAfter "\n"
-
-instance (Print s) => Print (SyntaxForest s) where
-    prt (FNode s []) = "(" ++ prt s ++ " - ERROR: null forests)"
-    prt (FNode s [[]]) = prt s
-    prt (FNode s [forests]) = "(" ++ prt s ++ prtBefore " " forests ++ ")"
-    prt (FNode s children) = "{" ++ prtSep " | " [ prt s ++ prtBefore " " forests | 
-						   forests <- children ] ++ "}"
-    prt (FString s) = show s
-    prt (FInt    n) = show n
-    prt (FFloat  f) = show f
-    prt (FMeta)     = "?"
-    prtList = prtAfter "\n"
