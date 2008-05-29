@@ -160,7 +160,7 @@ translateLin idxArgs lbl' ((lbl,syms) : lins)
   | lbl' == lbl = listArray (0,length syms-1) (map instSym syms)
   | otherwise   = translateLin idxArgs lbl' lins
   where
-    instSym = symbol (\(lbl, nr, xnr) -> instCat lbl nr xnr 0 idxArgs) FSymTok
+    instSym = either (\(lbl, nr, xnr) -> instCat lbl nr xnr 0 idxArgs) FSymTok
     instCat lbl nr xnr nr' ((idx,xargs):idxArgs)
       | nr == idx = let (fcat, PFCat _ rcs _) = xargs !! xnr
                     in FSymCat fcat (index lbl rcs 0) (nr'+xnr)
@@ -177,7 +177,7 @@ translateLin idxArgs lbl' ((lbl,syms) : lins)
 type CnvMonad a = BacktrackM Env a
 
 type Env     = (ProtoFCat, [(ProtoFCat,[FPath])], Term, [Term])
-type LinRec  = [(FPath, [Symbol (FPath, FIndex, Int) FToken])]
+type LinRec  = [(FPath, [Either (FPath, FIndex, Int) FToken])]
 
 type TermMap = Map.Map CId Term
 
@@ -194,11 +194,11 @@ convertTerm cnc_defs selector (S ts)       ((lbl_path,lin) : lins) = do projectH
                                                                         foldM (\lins t -> convertTerm cnc_defs selector t lins) ((lbl_path,lin) : lins) (reverse ts)
 convertTerm cnc_defs selector (K (KS str)) ((lbl_path,lin) : lins) = 
   do projectHead lbl_path
-     return ((lbl_path,Tok str : lin) : lins)
+     return ((lbl_path,Right str : lin) : lins)
 convertTerm cnc_defs selector (K (KP strs vars))((lbl_path,lin) : lins) = 
   do projectHead lbl_path
      toks <- member (strs:[strs' | Var strs' _ <- vars])
-     return ((lbl_path, map Tok toks ++ lin) : lins)
+     return ((lbl_path, map Right toks ++ lin) : lins)
 convertTerm cnc_defs selector (F id)                         lins  = do term <- Map.lookup id cnc_defs
                                                                         convertTerm cnc_defs selector term lins
 convertTerm cnc_defs selector (W s t)     ((lbl_path,lin) : lins) = do
@@ -224,7 +224,7 @@ convertArg (ConSel indices) nr path lbl_path lin lins = do
 convertArg StrSel nr path lbl_path lin lins = do
   projectHead lbl_path
   xnr <- projectArg nr path
-  return ((lbl_path, GF.Formalism.Utilities.Cat (path, nr, xnr) : lin) : lins)
+  return ((lbl_path, Left (path, nr, xnr) : lin) : lins)
 
 convertCon (ConSel indices) index lbl_path lin lins = do
   guard (index `elem` indices)
