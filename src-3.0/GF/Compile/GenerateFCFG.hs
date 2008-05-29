@@ -163,7 +163,7 @@ translateLin idxArgs lbl' ((lbl,syms) : lins)
     instSym = either (\(lbl, nr, xnr) -> instCat lbl nr xnr 0 idxArgs) FSymTok
     instCat lbl nr xnr nr' ((idx,xargs):idxArgs)
       | nr == idx = let (fcat, PFCat _ rcs _) = xargs !! xnr
-                    in FSymCat fcat (index lbl rcs 0) (nr'+xnr)
+                    in FSymCat (index lbl rcs 0) (nr'+xnr)
       | otherwise = instCat lbl nr xnr (nr'+length xargs) idxArgs
 
     index lbl' (lbl:lbls) idx
@@ -337,7 +337,7 @@ genFCatArg cnc_defs ctype env@(FRulesEnv last_id fcatSet rules) (PFCat cat rcs t
                   = foldBM (\tcs st (either_fcat,last_id,tmap,rules) ->
                                    let (last_id1,tmap1,fcat_arg) = addArg tcs last_id tmap
                                        rule = FRule wildCId [[0]] [fcat_arg] fcat
-                                                    (listArray (0,length rcs-1) [listArray (0,0) [FSymCat fcat_arg lbl 0] | lbl <- [0..length rcs-1]])
+                                                    (listArray (0,length rcs-1) [listArray (0,0) [FSymCat lbl 0] | lbl <- [0..length rcs-1]])
                                    in if st
                                         then (Right fcat, last_id1,tmap1,rule:rules)
                                         else (either_fcat,last_id, tmap,      rules))

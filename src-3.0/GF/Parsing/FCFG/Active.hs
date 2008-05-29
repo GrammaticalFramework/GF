@@ -54,7 +54,8 @@ process strategy pinfo toks ((c,item):items) chart = process strategy pinfo toks
     univRule cat item@(Active found rng lbl ppos node@(SNode ruleid recs)) chart
       | inRange (bounds lin) ppos =
            case lin ! ppos of
-             FSymCat c r d -> case recs !! d of
+             FSymCat r d -> let c = args !! d
+                            in case recs !! d of
                                 [] -> case insertXChart chart item c of
 	                                Nothing    -> chart
 	                                Just chart -> let items = do item@(Final found' _) <- lookupXChartFinal chart c
@@ -68,31 +69,31 @@ process strategy pinfo toks ((c,item):items) chart = process strategy pinfo toks
 	     			found' -> let items = do rng  <- concatRange rng (found' !! r)
 	     			                         return (c, Active found rng lbl (ppos+1) node)
 	     			          in process strategy pinfo toks items chart
-	     FSymTok tok   -> let items = do t_rng <- inputToken toks ? tok
-	                                     rng' <- concatRange rng t_rng
-	                                     return (cat, Active found rng' lbl (ppos+1) node)
-                              in process strategy pinfo toks items chart
+	     FSymTok tok -> let items = do t_rng <- inputToken toks ? tok
+	                                   rng' <- concatRange rng t_rng
+	                                   return (cat, Active found rng' lbl (ppos+1) node)
+                            in process strategy pinfo toks items chart
       | otherwise =
            if inRange (bounds lins) (lbl+1)
              then univRule cat (Active          (rng:found)  EmptyRange (lbl+1) 0 node) chart
              else univRule cat (Final  (reverse (rng:found))                      node) chart
       where
-        (FRule _ _ _ cat lins) = allRules pinfo ! ruleid
-        lin                   = lins ! lbl
+        (FRule _ _ args cat lins) = allRules pinfo ! ruleid
+        lin                       = lins ! lbl
     univRule cat item@(Final found' node) chart =
       case insertXChart chart item cat of
         Nothing    -> chart
         Just chart -> let items = do (Active found rng l ppos node@(SNode ruleid _)) <- lookupXChartAct chart cat
-                                     let FRule _ _ _ _ lins = allRules pinfo ! ruleid
-                                         FSymCat cat r d  = lins ! l ! ppos
+                                     let FRule _ _ args _ lins = allRules pinfo ! ruleid
+                                         FSymCat r d = lins ! l ! ppos
                                      rng  <- concatRange rng (found' !! r)
-                                     return (cat, Active found rng l (ppos+1) (updateChildren node d found'))
+                                     return (args !! d, Active found rng l (ppos+1) (updateChildren node d found'))
                                   ++
     			          do guard (isBU strategy)
 			             ruleid <- leftcornerCats pinfo ? cat
-			             let FRule _ _ _ _ lins = allRules pinfo ! ruleid
-			                 FSymCat cat r d  = lins ! 0 ! 0
-                                     return (cat, Active [] (found' !! r) 0 1 (updateChildren (emptyChildren ruleid pinfo) d found'))
+			             let FRule _ _ args _ lins = allRules pinfo ! ruleid
+			                 FSymCat r d  = lins ! 0 ! 0
+                                     return (args !! d, Active [] (found' !! r) 0 1 (updateChildren (emptyChildren ruleid pinfo) d found'))
 
                           updateChildren :: SyntaxNode RuleId RangeRec -> Int -> RangeRec -> SyntaxNode RuleId RangeRec
                           updateChildren (SNode ruleid recs) i rec = SNode ruleid $! updateNth (const rec) i recs
