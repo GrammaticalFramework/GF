@@ -330,10 +330,10 @@ computeTermOpt rec gr = comput True where
 ----           return $ V ty (map snd cs')
            return $ T i cs'
          V ty cs -> do
-          -- if there are no variables, don't even go inside
-          cs' <- if (null g) then return cs else mapM (comp g) cs
-----       return $ V ty (map snd cs')
-          return $ V ty cs'
+           ty' <- comp g ty
+           -- if there are no variables, don't even go inside
+           cs' <- if (null g) then return cs else mapM (comp g) cs
+           return $ V ty' cs'
 
          T i cs -> do
            pty0 <- getTableType i
