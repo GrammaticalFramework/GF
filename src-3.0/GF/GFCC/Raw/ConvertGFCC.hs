@@ -4,9 +4,9 @@ import GF.GFCC.CId
 import GF.GFCC.DataGFCC
 import GF.GFCC.Raw.AbsGFCCRaw
 import GF.GFCC.BuildParser (buildParserInfo)
+import GF.GFCC.Parsing.FCFG.Utilities
 
 import GF.Infra.PrintClass
-import GF.Formalism.Utilities
 
 import qualified Data.Array as Array
 import qualified Data.Map   as Map

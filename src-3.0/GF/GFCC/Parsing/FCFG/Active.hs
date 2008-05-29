@@ -7,7 +7,7 @@
 -- MCFG parsing, the active algorithm
 -----------------------------------------------------------------------------
 
-module GF.Parsing.FCFG.Active (FCFParser, parse, makeFinalEdge) where
+module GF.GFCC.Parsing.FCFG.Active (FCFParser, parse, makeFinalEdge) where
 
 import GF.Data.GeneralDeduction
 import GF.Data.Assoc
@@ -16,7 +16,7 @@ import GF.Data.Utilities
 
 import GF.GFCC.CId
 import GF.GFCC.DataGFCC
-import GF.Formalism.Utilities
+import GF.GFCC.Parsing.FCFG.Utilities
 
 import GF.Infra.PrintClass
 

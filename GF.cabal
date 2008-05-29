@@ -46,13 +46,13 @@ library
     GF.Data.SortedList
     GF.Data.Assoc
     GF.Infra.PrintClass
-    GF.Formalism.Utilities
-    GF.Parsing.FCFG.Active
+    GF.GFCC.Parsing.FCFG.Utilities
+    GF.GFCC.Parsing.FCFG.Active
+    GF.GFCC.Parsing.FCFG
     GF.GFCC.Raw.ConvertGFCC
     GF.Data.ErrM
     GF.Command.ParGFShell
     GF.Command.PPrTree
-    GF.Parsing.FCFG
 
 
 executable gf3
@@ -97,18 +97,18 @@ executable gf3
     GF.Infra.PrintClass
     GF.GFCC.CId
     GF.GFCC.Raw.ParGFCCRaw
-    GF.GFCC.Raw.PrintGFCCRaw
-    GF.Formalism.Utilities
+    GF.GFCC.Raw.PrintGFCCRaw    
     GF.GFCC.BuildParser
     GF.GFCC.DataGFCC
-    GF.Parsing.FCFG.Active
+    GF.GFCC.Parsing.FCFG.Utilities
+    GF.GFCC.Parsing.FCFG.Active
+    GF.GFCC.Parsing.FCFG
     GF.GFCC.Raw.ConvertGFCC
     GF.GFCC.Macros
     GF.GFCC.Generate
     GF.GFCC.Linearize
     GF.Compile.GenerateFCFG
     GF.Data.ErrM
-    GF.Parsing.FCFG
     GF.Command.ParGFShell
     GF.Command.PPrTree
     GF.GFCC.API
