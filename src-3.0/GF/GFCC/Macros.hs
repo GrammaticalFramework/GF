@@ -2,10 +2,10 @@ module GF.GFCC.Macros where
 
 import GF.GFCC.CId
 import GF.GFCC.DataGFCC
-import GF.Parsing.FCFG.PInfo (fcfPInfoToFGrammar)
 import GF.Infra.PrintClass
 import Control.Monad
-import qualified Data.Map as Map
+import qualified Data.Map   as Map
+import qualified Data.Array as Array
 import Data.Maybe
 import Data.List
 
@@ -31,11 +31,14 @@ lookType :: GFCC -> CId -> Type
 lookType gfcc f = 
   fst $ lookMap (error $ "lookType " ++ show f) f (funs (abstract gfcc))
 
-lookParser :: GFCC -> CId -> Maybe FCFPInfo
+lookParser :: GFCC -> CId -> Maybe ParserInfo
 lookParser gfcc lang = parser $ lookMap (error "no lang") lang $ concretes gfcc
 
 lookFCFG :: GFCC -> CId -> Maybe FGrammar
-lookFCFG gfcc lang = fmap fcfPInfoToFGrammar $ lookParser gfcc lang
+lookFCFG gfcc lang = fmap toFGrammar $ lookParser gfcc lang
+  where
+    toFGrammar :: ParserInfo -> FGrammar
+    toFGrammar pinfo = (Array.elems (allRules pinfo), startupCats pinfo)
 
 lookStartCat :: GFCC -> String
 lookStartCat gfcc = fromMaybe "S" $ msum $ Data.List.map (Map.lookup (mkCId "startcat"))

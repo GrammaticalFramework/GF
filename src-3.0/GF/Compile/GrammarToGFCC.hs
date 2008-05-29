@@ -8,6 +8,7 @@ import qualified GF.GFCC.DataGFCC as C
 import qualified GF.GFCC.DataGFCC as D
 import GF.GFCC.CId
 import GF.GFCC.PrintGFCC
+import GF.GFCC.BuildParser (buildParserInfo)
 import GF.Grammar.Predef
 import GF.Grammar.PrGrammar
 import GF.Grammar.Grammar
@@ -19,7 +20,6 @@ import qualified GF.Infra.Modules as M
 import qualified GF.Infra.Option as O
 
 import GF.Compile.GenerateFCFG (convertConcrete)
-import GF.Parsing.FCFG.PInfo (buildFCFPInfo)
 import GF.Infra.Ident
 import GF.Infra.Option
 import GF.Data.Operations
@@ -54,7 +54,7 @@ mkCanon2gfcc opts cnc gr =
 addParsers :: D.GFCC -> D.GFCC
 addParsers gfcc = gfcc { D.concretes = Map.map conv (D.concretes gfcc) }
   where
-    conv cnc = cnc { D.parser = Just (buildFCFPInfo (convertConcrete (D.abstract gfcc) cnc)) }
+    conv cnc = cnc { D.parser = Just (buildParserInfo (convertConcrete (D.abstract gfcc) cnc)) }
 
 -- Generate GFCC from GFCM.
 -- this assumes a grammar translated by canon2canon

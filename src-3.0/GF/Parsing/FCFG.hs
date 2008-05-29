@@ -8,7 +8,7 @@
 -----------------------------------------------------------------------------
 
 module GF.Parsing.FCFG
-    (parseFCF,buildFCFPInfo,FCFPInfo(..),makeFinalEdge) where
+    (parseFCF,buildParserInfo,ParserInfo(..),makeFinalEdge) where
 
 import GF.Data.SortedList 
 import GF.Data.Assoc
@@ -17,11 +17,11 @@ import GF.Infra.PrintClass
 
 import GF.Formalism.Utilities
 
-import qualified GF.Parsing.FCFG.Active as Active
-import GF.Parsing.FCFG.PInfo
+import GF.Parsing.FCFG.Active
 
-import GF.GFCC.DataGFCC
 import GF.GFCC.CId
+import GF.GFCC.DataGFCC
+import GF.GFCC.BuildParser
 import GF.GFCC.Macros
 import GF.Data.ErrM
 
@@ -34,7 +34,7 @@ import qualified Data.Map as Map
 
 parseFCF :: 
       String ->         -- ^ parsing strategy
-      FCFPInfo ->       -- ^ compiled grammar (fcfg) 
+      ParserInfo ->     -- ^ compiled grammar (fcfg) 
       CId ->            -- ^ starting category
       [String] ->       -- ^ input tokens
       Err [Exp]         -- ^ resulting GF terms
@@ -51,8 +51,8 @@ parseFCF strategy pinfo startCat inString =
        return $ map tree2term trees
     where
       parseFCF :: String -> Err (FCFParser)
-      parseFCF "bottomup" = Ok  $ Active.parse "b"
-      parseFCF "topdown"  = Ok  $ Active.parse "t"
+      parseFCF "bottomup" = Ok  $ parse "b"
+      parseFCF "topdown"  = Ok  $ parse "t"
       parseFCF strat      = Bad $ "FCFG parsing strategy not defined: " ++ strat
 
 ----------------------------------------------------------------------

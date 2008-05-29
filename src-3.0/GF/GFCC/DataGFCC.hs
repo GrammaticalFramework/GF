@@ -35,7 +35,7 @@ data Concr = Concr {
   lindefs :: Map.Map CId Term,      -- lin default of a cat
   printnames :: Map.Map CId Term,   -- printname of a cat or a fun
   paramlincats :: Map.Map CId Term, -- lin type of cat, with printable param names
-  parser  :: Maybe FCFPInfo     -- parser
+  parser  :: Maybe ParserInfo       -- parser
   }
 
 data Type =
@@ -100,20 +100,20 @@ data FRule     = FRule CId [Profile] [FCat] FCat (Array FIndex (Array FPointPos 
 
 type RuleId = Int
 
-data FCFPInfo
-    = FCFPInfo { allRules           :: Array RuleId FRule
-               , topdownRules       :: Assoc FCat [RuleId]
-		 -- ^ used in 'GF.Parsing.MCFG.Active' (Earley):
-	         -- , emptyRules    :: [RuleId]
-	       , epsilonRules       :: [RuleId]
-		 -- ^ used in 'GF.Parsing.MCFG.Active' (Kilbury):
-	       , leftcornerCats     :: Assoc FCat   [RuleId]
-	       , leftcornerTokens   :: Assoc FToken [RuleId]
-		 -- ^ used in 'GF.Parsing.MCFG.Active' (Kilbury):
-	       , grammarCats        :: [FCat]
-	       , grammarToks        :: [FToken]
-	       , startupCats        :: Map.Map CId [FCat]
-	       }
+data ParserInfo
+    = ParserInfo { allRules           :: Array RuleId FRule
+                 , topdownRules       :: Assoc FCat [RuleId]
+	  	   -- ^ used in 'GF.Parsing.MCFG.Active' (Earley):
+	           -- , emptyRules    :: [RuleId]
+	         , epsilonRules       :: [RuleId]
+		   -- ^ used in 'GF.Parsing.MCFG.Active' (Kilbury):
+	         , leftcornerCats     :: Assoc FCat   [RuleId]
+	         , leftcornerTokens   :: Assoc FToken [RuleId]
+		   -- ^ used in 'GF.Parsing.MCFG.Active' (Kilbury):
+	         , grammarCats        :: [FCat]
+	         , grammarToks        :: [FToken]
+	         , startupCats        :: Map.Map CId [FCat]
+	         }
 
 
 fcatString, fcatInt, fcatFloat, fcatVar :: Int

@@ -3,10 +3,10 @@ module GF.GFCC.Raw.ConvertGFCC (toGFCC,fromGFCC) where
 import GF.GFCC.CId
 import GF.GFCC.DataGFCC
 import GF.GFCC.Raw.AbsGFCCRaw
+import GF.GFCC.BuildParser (buildParserInfo)
 
 import GF.Infra.PrintClass
 import GF.Formalism.Utilities
-import GF.Parsing.FCFG.PInfo (buildFCFPInfo)
 
 import qualified Data.Array as Array
 import qualified Data.Map   as Map
@@ -66,8 +66,8 @@ toConcr = foldl add (Concr {
     add cnc (App "param" ts)     = cnc { paramlincats = mkTermMap ts }
     add cnc (App "parser" ts)    = cnc { parser = Just (toPInfo ts) }
 
-toPInfo :: [RExp] -> FCFPInfo
-toPInfo [App "rules" rs, App "startupcats" cs] = buildFCFPInfo (rules, cats)
+toPInfo :: [RExp] -> ParserInfo
+toPInfo [App "rules" rs, App "startupcats" cs] = buildParserInfo (rules, cats)
   where 
     rules = map toFRule rs
     cats = Map.fromList [(mkCId c, map expToInt fs) | App c fs <- cs]
@@ -204,7 +204,7 @@ fromTerm e = case e of
 
 -- ** Parsing info
 
-fromPInfo :: FCFPInfo -> RExp
+fromPInfo :: ParserInfo -> RExp
 fromPInfo p = App "parser" [
           App "rules"         [fromFRule rule | rule <- Array.elems (allRules p)],
           App "startupcats"   [App (prCId f) (map intToExp cs) | (f,cs) <- Map.toList (startupCats p)]
