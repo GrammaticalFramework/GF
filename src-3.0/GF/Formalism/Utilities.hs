@@ -25,25 +25,6 @@ import GF.Data.Utilities (sameLength, foldMerge, splitBy)
 import GF.Infra.PrintClass
 
 ------------------------------------------------------------
--- * symbols
-
-data Symbol c t = Cat c | Tok t
-		  deriving (Eq, Ord, Show)
-
-symbol :: (c -> a) -> (t -> a) -> Symbol c t -> a
-symbol fc ft (Cat cat) = fc cat
-symbol fc ft (Tok tok) = ft tok
-
-mapSymbol :: (c -> d) -> (t -> u) -> Symbol c t -> Symbol d u
-mapSymbol fc ft = symbol (Cat . fc) (Tok . ft)
-
-filterCats :: [Symbol c t] -> [c]
-filterCats syms = [ cat | Cat cat <- syms ]
-
-filterToks :: [Symbol c t] -> [t]
-filterToks syms = [ tok | Tok tok <- syms ]
-
-------------------------------------------------------------
 -- * edges
 
 data Edge s = Edge Int Int s
@@ -312,16 +293,6 @@ forest2trees (FMeta)     = [TMeta]
 
 ------------------------------------------------------------
 -- pretty-printing
-
-instance (Print c, Print t) => Print (Symbol c t) where
-    prt = symbol prt (simpleShow . prt)
-	where simpleShow str = "\"" ++ concatMap mkEsc str ++ "\""
-	      mkEsc '\\' = "\\\\"
-	      mkEsc '\"' = "\\\""
-	      mkEsc '\n' = "\\n"
-	      mkEsc '\t' = "\\t"
-	      mkEsc chr  = [chr]
-    prtList = prtSep " "
 
 instance Print t => Print (Input t) where
     prt input = "input " ++ prt (inputEdges input)
