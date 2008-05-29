@@ -157,7 +157,8 @@ parseModuleOptions args
 -- | Pretty-print the module options that are preserved in .gfo files.
 moduleOptionsGFO :: ModuleOptions -> [(String,String)]
 moduleOptionsGFO (ModuleOptions o) = 
-      maybe [] (\l -> [("language",l)]) (optSpeechLanguage mfs)
+         maybe [] (\x -> [("language",x)]) (optSpeechLanguage mfs)
+      ++ maybe [] (\x -> [("startcat",x)]) (optStartCat mfs)
   where mfs = o defaultModuleFlags
 
 
