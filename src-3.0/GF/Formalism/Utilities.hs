@@ -24,64 +24,49 @@ import GF.Data.Utilities (sameLength, foldMerge, splitBy)
 
 import GF.Infra.PrintClass
 
+
 ------------------------------------------------------------
--- * edges
+-- ranges as single pairs
 
-data Edge s = Edge Int Int s
-	      deriving (Eq, Ord, Show)
+type RangeRec = [Range]
 
-instance Functor Edge where
-    fmap f (Edge i j s) = Edge i j (f s)
+data Range = Range {-# UNPACK #-} !Int {-# UNPACK #-} !Int
+	   | EmptyRange
+             deriving (Eq, Ord)
+
+makeRange :: Int -> Int -> Range
+makeRange = Range 
+
+concatRange :: Range -> Range -> [Range]
+concatRange EmptyRange  rng          = return rng
+concatRange rng         EmptyRange   = return rng
+concatRange (Range i j) (Range j' k) = [Range i k | j==j']
+
+minRange :: Range -> Int
+minRange (Range i j) = i
+
+maxRange :: Range -> Int
+maxRange (Range i j) = j
 
 
 ------------------------------------------------------------
 -- * representaions of input tokens
 
-data Input t = MkInput { inputEdges  :: [Edge t],
-			 inputBounds :: (Int, Int),
-			 inputFrom   :: Array Int (Assoc t [Int]),
-			 inputTo     :: Array Int (Assoc t [Int]),
-			 inputToken  :: Assoc t [(Int, Int)]
+data Input t = MkInput { inputBounds :: (Int, Int),
+			 inputToken  :: Assoc t [Range]
 		       }
 
-makeInput :: Ord t => [Edge t] -> Input t
-input     :: Ord t =>  [t]     -> Input t
-inputMany :: Ord t => [[t]]    -> Input t
+input     :: Ord t => [t] -> Input t
+input toks = MkInput inBounds inToken
+  where
+    inBounds = (0, length toks)
+    inToken  = accumAssoc id [ (tok, makeRange i j) | (i,j,tok) <- zip3 [0..] [1..] toks ]
 
-instance Show t => Show (Input t) where
-    show input = "makeInput " ++ show (inputEdges input)
-
-----------
-
-makeInput inEdges  | null inEdges = input []
-		   | otherwise    = MkInput inEdges inBounds inFrom inTo inToken
-    where inBounds = foldr1 minmax [ (i, j) | Edge i j _ <- inEdges ]
-	      where minmax (a, b) (a', b') = (min a a', max b b')
-	  inFrom   = fmap (accumAssoc id) $ accumArray (<++>) [] inBounds $
-		     [ (i, [(tok, j)]) | Edge i j tok <- inEdges ]
-	  inTo     = fmap (accumAssoc id) $ accumArray (<++>) [] inBounds
-		     [ (j, [(tok, i)]) | Edge i j tok <- inEdges ]
-	  inToken  = accumAssoc id [ (tok, (i, j)) | Edge i j tok <- inEdges ]
-
-input toks         = MkInput inEdges inBounds inFrom inTo inToken
-    where inEdges  = zipWith3 Edge [0..] [1..] toks
-	  inBounds = (0, length toks)
-	  inFrom   = listArray inBounds $
-		     [ listAssoc [(tok, [j])] | (tok, j) <- zip toks [1..] ] ++ [ listAssoc [] ]
-	  inTo     = listArray inBounds $
-		     [ listAssoc [] ] ++ [ listAssoc [(tok, [i])] | (tok, i) <- zip toks [0..] ]
-	  inToken  = accumAssoc id [ (tok, (i, j)) | Edge i j tok <- inEdges ]
-
-inputMany toks     = MkInput inEdges inBounds inFrom inTo inToken
-    where inEdges  = [ Edge i j t | (i, j, ts) <- zip3 [0..] [1..] toks, t <- ts ]
-	  inBounds = (0, length toks)
-	  inFrom   = listArray inBounds $
-		     [ listAssoc [ (t, [j]) | t <- nubsort ts ] | (ts, j) <- zip toks [1..] ]
-		     ++ [ listAssoc [] ]
-	  inTo     = listArray inBounds $
-		     [ listAssoc [] ] ++ 
-		     [ listAssoc [ (t, [i]) | t <- nubsort ts ] | (ts, i) <- zip toks [0..] ]
-	  inToken  = accumAssoc id [ (tok, (i, j)) | Edge i j tok <- inEdges ]
+inputMany :: Ord t => [[t]] -> Input t
+inputMany toks = MkInput inBounds inToken
+  where
+    inBounds = (0, length toks)
+    inToken  = accumAssoc id [ (tok, makeRange i j) | (i,j,ts) <- zip3 [0..] [1..] toks, tok <- ts ]
 
 
 ------------------------------------------------------------
@@ -287,19 +272,13 @@ forest2trees (FInt    n) = [TInt    n]
 forest2trees (FFloat  f) = [TFloat  f]
 forest2trees (FMeta)     = [TMeta]
 
-----------------------------------------------------------------------
--- * profiles
-
-
 ------------------------------------------------------------
 -- pretty-printing
 
-instance Print t => Print (Input t) where
-    prt input = "input " ++ prt (inputEdges input)
+instance Print Range where
+    prt (Range i j)  = "(" ++ show i ++ "-" ++ show j ++ ")"
+    prt (EmptyRange) = "(?)"
 
-instance (Print s) => Print (Edge s) where
-    prt (Edge i j s) = "[" ++ show i ++ "-" ++ show j ++ ": " ++ prt s ++ "]"
-    prtList = prtSep ""
 
 instance (Print s) => Print (SyntaxTree s) where
     prt (TNode s trees)

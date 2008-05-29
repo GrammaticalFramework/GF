@@ -14,7 +14,6 @@ import GF.Formalism.Utilities
 import GF.Formalism.FCFG
 import GF.Data.SortedList
 import GF.Data.Assoc
-import GF.Parsing.FCFG.Range
 import GF.GFCC.CId
 
 import Data.Array
