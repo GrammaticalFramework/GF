@@ -200,11 +200,11 @@ flag f (Options o) = f (o defaultFlags)
 moduleFlag :: (ModuleFlags -> a) -> Options -> a
 moduleFlag f = flag (f . optModuleFlags)
 
-onFlags :: (Flags -> Flags) -> Options -> Options
-onFlags f opts = addOptions opts (Options f)
+modifyFlags :: (Flags -> Flags) -> Options
+modifyFlags = Options
 
-onModuleFlags :: (ModuleFlags -> ModuleFlags) -> Options -> Options
-onModuleFlags f opts = addOptions opts (moduleOptions (ModuleOptions f))
+modifyModuleFlags :: (ModuleFlags -> ModuleFlags) -> Options
+modifyModuleFlags = moduleOptions . ModuleOptions
 
 
 {-
@@ -469,8 +469,8 @@ dump opts d = moduleFlag ((d `elem`) . optDump) opts
 -- * Convenience functions for setting options
 --
 
-setOptimization :: Optimization -> Bool -> Options -> Options
-setOptimization o b = onModuleFlags (setOptimization' o b)
+setOptimization :: Optimization -> Bool -> Options
+setOptimization o b = modifyModuleFlags (setOptimization' o b)
 
 setOptimization' :: Optimization -> Bool -> ModuleFlags -> ModuleFlags
 setOptimization' o b f = f { optOptimizations = g (optOptimizations f)}
