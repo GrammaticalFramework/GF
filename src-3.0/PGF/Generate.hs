@@ -11,13 +11,13 @@ import System.Random
 generate :: GFCC -> CId -> Maybe Int -> [Exp]
 generate gfcc cat dp = concatMap (\i -> gener i cat) depths
  where
-  gener 0 c = [tree (AC f) [] | (f, ([],_)) <- fns c]
+  gener 0 c = [EApp f [] | (f, ([],_)) <- fns c]
   gener i c = [
     tr | 
       (f, (cs,_)) <- fns c,
       let alts = map (gener (i-1)) cs,
       ts <- combinations alts,
-      let tr = tree (AC f) ts,
+      let tr = EApp f ts,
       depth tr >= i
     ]
   fns c = [(f,catSkeleton ty) | (f,ty) <- functionsToCat gfcc c]
@@ -36,16 +36,16 @@ genRandom gen gfcc cat = genTrees (randomRs (0.0, 1.0 :: Double) gen) cat where
                 (genTrees ds2 cat)          -- else (drop k ds)
 
   genTree rs = gett rs where
-    gett ds cid | cid == mkCId "String" = (tree (AS "foo") [], 1)
-    gett ds cid | cid == mkCId "Int"    = (tree (AI 12345) [], 1)
-    gett [] _ = (tree (AS "TIMEOUT") [], 1) ----
+    gett ds cid | cid == mkCId "String" = (EStr "foo", 1)
+    gett ds cid | cid == mkCId "Int"    = (EInt 12345, 1)
+    gett [] _   = (EStr "TIMEOUT", 1) ----
     gett ds cat = case fns cat of
-      [] -> (tree (AM 0) [],1)
+      [] -> (EMeta 0,1)
       fs -> let 
           d:ds2    = ds
           (f,args) = getf d fs
           (ts,k)   = getts ds2 args
-        in (tree (AC f) ts, k+1)
+        in (EApp f ts, k+1)
     getf d fs = let lg = (length fs) in
       fs !! (floor (d * fromIntegral lg))
     getts ds cats = case cats of

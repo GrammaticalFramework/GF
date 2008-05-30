@@ -149,10 +149,9 @@ allCommands mgr = Map.fromAscList [
    gr       = gfcc mgr
 
    fromTrees ts = (ts,unlines (map showTree ts))
-   fromStrings ss = (map tStr ss, unlines ss)
-   fromString  s  = ([tStr s], s)
-   toStrings ts = [s | DTr [] (AS s) [] <- ts] 
-   tStr s = DTr [] (AS s) []
+   fromStrings ss = (map EStr ss, unlines ss)
+   fromString  s  = ([EStr s], s)
+   toStrings ts = [s | EStr s <- ts] 
 
    prGrammar opts = case valIdOpts "printer" "" opts of
      "cats" -> unwords $ categories mgr

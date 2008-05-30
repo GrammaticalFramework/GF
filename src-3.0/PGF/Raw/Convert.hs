@@ -107,15 +107,14 @@ toHypo e = case e of
 
 toExp :: RExp -> Exp
 toExp e = case e of
-  App "App" [App fun [], App "B" xs, App "X" exps] ->
-    DTr [mkCId x | App x [] <- xs] (AC (mkCId fun)) (map toExp exps)
-  App "Eq" eqs -> 
-    EEq [Equ (map toExp ps) (toExp v) | App "E" (v:ps) <- eqs]
-  App "Var" [App i []] -> DTr [] (AV (mkCId i)) []
-  AMet -> DTr [] (AM 0) []
-  AInt i -> DTr [] (AI i) []
-  AFlt i -> DTr [] (AF i) []
-  AStr i -> DTr [] (AS i) []
+  App "Abs" [App "B" xs, exp]   -> EAbs [mkCId x | App x [] <- xs] (toExp exp)
+  App "App" (App fun [] : exps) -> EApp (mkCId fun) (map toExp exps)
+  App "Eq" eqs -> EEq [Equ (map toExp ps) (toExp v) | App "E" (v:ps) <- eqs]
+  App "Var" [App i []] -> EVar (mkCId i)
+  AMet   -> EMeta  0
+  AInt i -> EInt   i
+  AFlt i -> EFloat i
+  AStr i -> EStr   i
   _ -> error $ "exp " ++ show e
 
 toTerm :: RExp -> Term
@@ -173,14 +172,14 @@ fromHypo e = case e of
 
 fromExp :: Exp -> RExp
 fromExp e = case e of
-  DTr xs (AC fun) exps ->
-    App "App" [App (prCId fun) [], App "B" (map (flip App [] . prCId) xs), App "X" (map fromExp exps)]
-  DTr [] (AV x) [] -> App "Var" [App (prCId x) []]
-  DTr [] (AS s) [] -> AStr s
-  DTr [] (AF d) [] -> AFlt d
-  DTr [] (AI i) [] -> AInt (toInteger i)
-  DTr [] (AM _) [] -> AMet ----
-  EEq eqs -> 
+  EAbs xs exp   -> App "Abs" [App "B" (map (flip App [] . prCId) xs), fromExp exp]
+  EApp fun exps -> App "App" (App (prCId fun) [] : map fromExp exps)
+  EVar   x -> App "Var" [App (prCId x) []]
+  EStr   s -> AStr s
+  EFloat d -> AFlt d
+  EInt   i -> AInt (toInteger i)
+  EMeta _  -> AMet ----
+  EEq eqs  -> 
     App "Eq" [App "E" (map fromExp (v:ps)) | Equ ps v <- eqs]
   _ -> error $ "exp " ++ show e
 

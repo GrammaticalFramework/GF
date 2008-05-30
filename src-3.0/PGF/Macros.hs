@@ -62,12 +62,9 @@ functionsToCat gfcc cat =
    fs = lookMap [] cat $ catfuns $ abstract gfcc
 
 depth :: Exp -> Int
-depth tr = case tr of
-  DTr _ _ [] -> 1
-  DTr _ _ ts -> maximum (map depth ts) + 1
-
-tree :: Atom -> [Exp] -> Exp
-tree = DTr []
+depth (EAbs _  t) = depth t
+depth (EApp _ ts) = maximum (0:map depth ts) + 1
+depth _           = 1
 
 cftype :: [CId] -> CId -> Type
 cftype args val = DTyp [Hyp wildCId (cftype [] arg) | arg <- args] val []
@@ -87,9 +84,6 @@ valCat ty = case ty of
 contextLength :: Type -> Int
 contextLength ty = case ty of
   DTyp hyps _ _ -> length hyps
-
-exp0 :: Exp
-exp0 = tree (AM 0) []
 
 primNotion :: Exp
 primNotion = EEq []

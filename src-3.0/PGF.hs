@@ -109,30 +109,32 @@ generateRandom mgr cat = do
 generateAll mgr cat = generate (gfcc mgr) (mkCId cat) Nothing
 generateAllDepth mgr cat = generate (gfcc mgr) (mkCId cat)
 
-readTree s = case RP.readP_to_S (pExp 0) s of
+readTree s = case RP.readP_to_S (pExp False) s of
                [(x,"")] -> x
                _        -> error "no parse"
 
 pExps :: RP.ReadP [Exp]
-pExps = liftM2 (:) (pExp 1) pExps RP.<++ (RP.skipSpaces >> return [])
+pExps = liftM2 (:) (pExp True) pExps RP.<++ (RP.skipSpaces >> return [])
 
-pExp :: Int -> RP.ReadP Exp
-pExp n = RP.skipSpaces >> (pParen RP.<++ pApp RP.<++ pNum RP.<++ pStr RP.<++ pMeta)
+pExp :: Bool -> RP.ReadP Exp
+pExp isNested = RP.skipSpaces >> (pParen RP.<++ pAbs RP.<++ pApp RP.<++ pNum RP.<++ pStr RP.<++ pMeta)
   where 
-        pParen = RP.between (RP.char '(') (RP.char ')') (pExp 0)
-        pApp = do xs <- RP.option [] (RP.between (RP.char '\\') (RP.string "->") (RP.sepBy1 pIdent (RP.char ',')))
-                  f  <- pIdent
-                  ts <- (if n == 0 then pExps else return [])
-                  return (DTr xs (AC f) ts)
-        pStr = RP.char '"' >> liftM (\s -> DTr [] (AS s) []) (RP.manyTill (pEsc RP.<++ RP.get) (RP.char '"'))
+        pParen = RP.between (RP.char '(') (RP.char ')') (pExp False)
+        pAbs = do xs <- RP.between (RP.char '\\') (RP.skipSpaces >> RP.string "->") (RP.sepBy1 (RP.skipSpaces >> pIdent) (RP.skipSpaces >> RP.char ','))
+                  t  <- pExp False
+                  return (EAbs xs t)
+        pApp = do f  <- pIdent
+                  ts <- (if isNested then return [] else pExps)
+                  return (EApp f ts)
+        pStr = RP.char '"' >> liftM EStr (RP.manyTill (pEsc RP.<++ RP.get) (RP.char '"'))
         pEsc = RP.char '\\' >> RP.get
         pNum = do x <- RP.munch1 isDigit
-                  ((RP.char '.' >> RP.munch1 isDigit >>= \y -> return (DTr [] (AF (read (x++"."++y))) []))
+                  ((RP.char '.' >> RP.munch1 isDigit >>= \y -> return (EFloat (read (x++"."++y))))
                    RP.<++
-                   (return (DTr [] (AI (read x)) [])))
+                   (return (EInt (read x))))
         pMeta = do RP.char '?'
                    x <- RP.munch1 isDigit
-                   return (DTr [] (AM (read x)) [])
+                   return (EMeta (read x))
 
         pIdent = fmap mkCId (liftM2 (:) (RP.satisfy isIdentFirst) (RP.munch isIdentRest))
         isIdentFirst c = c == '_' || isLetter c
@@ -141,23 +143,20 @@ pExp n = RP.skipSpaces >> (pParen RP.<++ pApp RP.<++ pNum RP.<++ pStr RP.<++ pMe
 
 showTree = PP.render . ppExp False
 
-ppExp isNested (DTr [] at []) = ppAtom at
-ppExp isNested (DTr xs at ts) = ppParens isNested (ppLambdas xs PP.<+> ppAtom at PP.<+> PP.hsep (map (ppExp True) ts))
-                                where
-                                  ppLambdas [] = PP.empty
-                                  ppLambdas xs = PP.char '\\' PP.<>
-                                                 PP.hsep (PP.punctuate PP.comma (map (PP.text . prCId) xs)) PP.<+>
-                                                 PP.text "->"
+ppExp isNested (EAbs xs t) = ppParens isNested (PP.char '\\' PP.<>
+                                                PP.hsep (PP.punctuate PP.comma (map (PP.text . prCId) xs)) PP.<+>
+                                                PP.text "->" PP.<+>
+                                                ppExp False t)
+ppExp isNested (EApp f []) = PP.text (prCId f)
+ppExp isNested (EApp f ts) = ppParens isNested (PP.text (prCId f) PP.<+> PP.hsep (map (ppExp True) ts))
+ppExp isNested (EStr   s)  = PP.text (show s)
+ppExp isNested (EInt   n)  = PP.integer n
+ppExp isNested (EFloat d)  = PP.double d
+ppExp isNested (EMeta  n)  = PP.char '?' PP.<> PP.integer n
+ppExp isNested (EVar  id)  = PP.text (prCId id)
 
-                                  ppParens True  = PP.parens
-                                  ppParens False = id
-
-ppAtom (AC id) = PP.text (prCId id)
-ppAtom (AS s)  = PP.text (show s)
-ppAtom (AI n)  = PP.integer n
-ppAtom (AF d)  = PP.double d
-ppAtom (AM n)  = PP.char '?' PP.<> PP.integer n
-ppAtom (AV id) = PP.text (prCId id)
+ppParens True  = PP.parens
+ppParens False = id
 
 abstractName mgr = prCId (absname (gfcc mgr))
 

@@ -41,17 +41,14 @@ data Type =
   deriving (Eq,Ord,Show)
 
 data Exp =
-   DTr [CId] Atom [Exp]
+   EAbs [CId] Exp
+ | EApp CId [Exp]
+ | EStr   String
+ | EInt   Integer
+ | EFloat Double
+ | EMeta  Integer
+ | EVar   CId
  | EEq [Equation]
-  deriving (Eq,Ord,Show)
-
-data Atom =
-   AC CId
- | AS String
- | AI Integer
- | AF Double
- | AM Integer
- | AV CId
   deriving (Eq,Ord,Show)
 
 data Term =

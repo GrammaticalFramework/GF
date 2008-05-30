@@ -180,8 +180,8 @@ applyProfileToForest (FMeta)     = [FMeta]
 
 
 forest2exps :: SyntaxForest CId -> [Exp]
-forest2exps (FNode n forests) = map (DTr [] (AC n)) $ forests >>= mapM forest2exps
-forest2exps (FString s) = [DTr [] (AS s) []]
-forest2exps (FInt    n) = [DTr [] (AI n) []]
-forest2exps (FFloat  f) = [DTr [] (AF f) []]
-forest2exps (FMeta)     = [DTr [] (AM 0) []]
+forest2exps (FNode n forests) = map (EApp n) $ forests >>= mapM forest2exps
+forest2exps (FString s) = [EStr   s]
+forest2exps (FInt    n) = [EInt   n]
+forest2exps (FFloat  f) = [EFloat f]
+forest2exps (FMeta)     = [EMeta  0]

@@ -1,39 +1,26 @@
-module GF.Command.PPrTree (pTree, prExp, tree2exp) where
+module GF.Command.PPrTree (tree2exp, exp2tree) where
 
 import PGF.CId
 import PGF.Data
-import PGF.Macros
-import qualified GF.Command.ParGFShell as P
-import GF.Command.PrintGFShell
 import GF.Command.AbsGFShell
-import GF.Data.ErrM
-
-pTree :: String -> Exp
-pTree s = case P.pTree (P.myLexer s) of
-  Ok t -> tree2exp t
-  Bad s -> error s
 
 tree2exp t = case t of
-  TApp f ts -> tree (AC (i2i f)) (map tree2exp ts)  
-  TAbs xs t -> DTr (map i2i xs ++ ys) f ts where DTr ys f ts = tree2exp t 
-  TId c     -> tree (AC (i2i c)) [] 
-  TInt i    -> tree (AI i) []
-  TStr s    -> tree (AS s) []
-  TFloat d  -> tree (AF d) [] 
+  TApp f ts -> EApp (i2i f) (map tree2exp ts)
+  TAbs xs t -> EAbs (map i2i xs) (tree2exp t)
+  TId c     -> EApp (i2i c) []
+  TInt i    -> EInt   i
+  TStr s    -> EStr   s
+  TFloat d  -> EFloat d
  where
    i2i (Ident s) = mkCId s
 
-prExp :: Exp -> String
-prExp = printTree . exp2tree
-
-exp2tree (DTr xs at ts) = tabs (map i4i xs) (tapp at (map exp2tree ts)) 
+exp2tree t = case t of
+  (EAbs xs e) -> TAbs (map i4i xs) (exp2tree e)
+  (EApp f []) -> TId (i4i f)
+  (EApp f es) -> TApp (i4i f) (map exp2tree es)
+  (EInt   i)  -> TInt i
+  (EStr   i)  -> TStr i
+  (EFloat i)  -> TFloat i
+  (EMeta  i)  -> TId (Ident "?") ----
   where
-    tabs [] t = t
-    tabs ys t = TAbs ys t
-    tapp (AC f) [] = TId (i4i f)
-    tapp (AC f) vs = TApp (i4i f) vs
-    tapp (AI i) [] = TInt i
-    tapp (AS i) [] = TStr i
-    tapp (AF i) [] = TFloat i
-    tapp (AM i) [] = TId (Ident "?") ----
     i4i s = Ident (prCId s)
