@@ -51,9 +51,12 @@ lookAbsFlag :: PGF -> CId -> String
 lookAbsFlag pgf f = 
   lookMap "?" f (aflags (abstract pgf))
 
-lookCncFlag :: PGF -> CId -> CId -> String
-lookCncFlag pgf lang f = 
-  lookMap "?" f $ cflags $ lookMap (error "no lang") lang $ concretes pgf
+lookConcr :: PGF -> CId -> Concr
+lookConcr pgf cnc = 
+    lookMap (error $ "Missing concrete syntax: " ++ prCId cnc) cnc $ concretes pgf
+
+lookConcrFlag :: PGF -> CId -> CId -> Maybe String
+lookConcrFlag pgf lang f = Map.lookup f $ cflags $ lookConcr pgf lang
 
 functionsToCat :: PGF -> CId -> [(CId,Type)]
 functionsToCat pgf cat =
