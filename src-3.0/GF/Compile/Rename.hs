@@ -58,7 +58,7 @@ renameModule ms (name,mod) = errIn ("renaming module" +++ prt name) $ case mod o
   ModMod m@(Module mt st fs me ops js) -> do
     let js1 = jments m
     status <- buildStatus (MGrammar ms) name mod
-    js2    <- mapMTree (renameInfo status) js1
+    js2    <- mapsErrTree (renameInfo status) js1
     let mod2 = ModMod $ Module mt st fs me (map forceQualif ops) js2
     return $ (name,mod2) : ms
 
