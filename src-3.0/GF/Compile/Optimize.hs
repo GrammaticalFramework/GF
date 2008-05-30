@@ -34,6 +34,7 @@ import GF.Infra.Option
 
 import Control.Monad
 import Data.List
+import qualified Data.Set as Set
 
 import Debug.Trace
 
@@ -103,7 +104,7 @@ evalResInfo oopts gr (c,info) = case info of
    comp = if optres then computeConcrete gr else computeConcreteRec gr
    eIn cat = errIn ("Error optimizing" +++ cat +++ prt c +++ ":")
    optim = moduleFlag optOptimizations oopts
-   optres = OptExpand `elem` optim
+   optres = OptExpand `Set.member` optim
 
 
 evalCncInfo :: 

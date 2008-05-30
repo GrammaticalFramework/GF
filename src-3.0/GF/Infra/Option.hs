@@ -14,8 +14,10 @@ module GF.Infra.Option
      moduleOptions,
      addModuleOptions, concatModuleOptions, noModuleOptions,
      helpMessage,
-     -- * Checking options
+     -- * Checking specific options
      flag, moduleFlag,
+     -- * Setting specific options
+     setOptimization,
      -- * Convenience methods for checking options    
      verbAtLeast, dump
     ) where
@@ -29,6 +31,9 @@ import GF.Infra.GetOpt
 import System.FilePath
 
 import GF.Data.ErrM
+
+import Data.Set (Set)
+import qualified Data.Set as Set
 
 
 
@@ -99,7 +104,7 @@ data ModuleFlags = ModuleFlags {
       optResName         :: Maybe String,
       optPreprocessors   :: [String],
       optEncoding        :: Encoding,
-      optOptimizations   :: [Optimization],
+      optOptimizations   :: Set Optimization,
       optLibraryPath     :: [FilePath],
       optStartCat        :: Maybe String,
       optSpeechLanguage  :: Maybe String,
@@ -195,6 +200,12 @@ flag f (Options o) = f (o defaultFlags)
 moduleFlag :: (ModuleFlags -> a) -> Options -> a
 moduleFlag f = flag (f . optModuleFlags)
 
+onFlags :: (Flags -> Flags) -> Options -> Options
+onFlags f opts = addOptions opts (Options f)
+
+onModuleFlags :: (ModuleFlags -> ModuleFlags) -> Options -> Options
+onModuleFlags f opts = addOptions opts (moduleOptions (ModuleOptions f))
+
 
 {-
 
@@ -233,7 +244,7 @@ defaultModuleFlags = ModuleFlags {
       optResName         = Nothing,
       optPreprocessors   = [],
       optEncoding        = ISO_8859_1,
-      optOptimizations   = [OptStem,OptCSE,OptExpand,OptParametrize,OptValues],
+      optOptimizations   = Set.fromList [OptStem,OptCSE,OptExpand,OptParametrize,OptValues],
       optLibraryPath     = [],
       optStartCat        = Nothing,
       optSpeechLanguage  = Nothing,
@@ -326,7 +337,7 @@ moduleOptDescr =
                          Just p  -> set $ \o -> o { optOptimizations = p }
                          Nothing -> fail $ "Unknown optimization package: " ++ x
 
-       toggleOptimize x b = set $ \o -> o { optOptimizations = (if b then (x:) else delete x) (optOptimizations o) }
+       toggleOptimize x b = set $ setOptimization' x b
 
        dumpOption s d = Option [] ["dump-"++s] (NoArg (set $ \o -> o { optDump = d:optDump o})) ("Dump output of the " ++ s ++ " phase.")
 
@@ -403,14 +414,14 @@ instance Show OutputFormat where
 instance Read OutputFormat where
     readsPrec = lookupReadsPrec outputFormats
 
-optimizationPackages :: [(String,[Optimization])]
+optimizationPackages :: [(String, Set Optimization)]
 optimizationPackages = 
-    [("all_subs",    [OptStem,OptCSE,OptExpand,OptParametrize,OptValues]), -- deprecated
-     ("all",         [OptStem,OptCSE,OptExpand,OptParametrize,OptValues]),
-     ("values",      [OptStem,OptCSE,OptExpand,OptValues]),
-     ("parametrize", [OptStem,OptCSE,OptExpand,OptParametrize]),
-     ("none",        [OptStem,OptCSE,OptExpand]),
-     ("noexpand",    [OptStem,OptCSE])]
+    [("all_subs",    Set.fromList [OptStem,OptCSE,OptExpand,OptParametrize,OptValues]), -- deprecated
+     ("all",         Set.fromList [OptStem,OptCSE,OptExpand,OptParametrize,OptValues]),
+     ("values",      Set.fromList [OptStem,OptCSE,OptExpand,OptValues]),
+     ("parametrize", Set.fromList [OptStem,OptCSE,OptExpand,OptParametrize]),
+     ("none",        Set.fromList [OptStem,OptCSE,OptExpand]),
+     ("noexpand",    Set.fromList [OptStem,OptCSE])]
 
 encodings :: [(String,Encoding)]
 encodings = 
@@ -454,6 +465,16 @@ verbAtLeast opts v = flag optVerbosity opts >= v
 dump :: Options -> Dump -> Bool
 dump opts d = moduleFlag ((d `elem`) . optDump) opts
 
+-- 
+-- * Convenience functions for setting options
+--
+
+setOptimization :: Optimization -> Bool -> Options -> Options
+setOptimization o b = onModuleFlags (setOptimization' o b)
+
+setOptimization' :: Optimization -> Bool -> ModuleFlags -> ModuleFlags
+setOptimization' o b f = f { optOptimizations = g (optOptimizations f)}
+  where g = if b then Set.insert o else Set.delete o
 
 --
 -- * General utilities
