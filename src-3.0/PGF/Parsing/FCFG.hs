@@ -43,36 +43,9 @@ parseFCF strategy pinfo startCat inString =
 	   finalEdges = [makeFinalEdge cat i j | cat <- startCats]
 	   forests = chart2forests chart (const False) finalEdges
            filteredForests = forests >>= applyProfileToForest
-	   trees = nubsort $ filteredForests >>= forest2trees
-       return $ map tree2term trees
+       return $ nubsort $ filteredForests >>= forest2exps
     where
       parseFCF :: String -> Err (FCFParser)
       parseFCF "bottomup" = Ok  $ parse "b"
       parseFCF "topdown"  = Ok  $ parse "t"
       parseFCF strat      = Bad $ "FCFG parsing strategy not defined: " ++ strat
-
-----------------------------------------------------------------------
--- parse trees to GFCC terms
-
-tree2term :: SyntaxTree CId -> Exp
-tree2term (TNode f ts) = tree (AC f) (map tree2term ts)
-tree2term (TString  s) = tree (AS s) []
-tree2term (TInt     n) = tree (AI n) []
-tree2term (TFloat   f) = tree (AF f) []
-tree2term (TMeta)      = exp0
-
-----------------------------------------------------------------------
--- conversion and unification of forests
-
--- simplest implementation
-applyProfileToForest :: SyntaxForest (CId,[Profile]) -> [SyntaxForest CId]
-applyProfileToForest (FNode (fun,profiles) children) 
-    | fun == wildCId = concat chForests
-    | otherwise      = [ FNode fun chForests | not (null chForests) ]
-    where chForests  = concat [ mapM (unifyManyForests . map (forests !!)) profiles |
-			        forests0 <- children,
-			        forests <- mapM applyProfileToForest forests0 ]
-applyProfileToForest (FString s) = [FString s]
-applyProfileToForest (FInt    n) = [FInt    n]
-applyProfileToForest (FFloat  f) = [FFloat  f]
-applyProfileToForest (FMeta)     = [FMeta]
