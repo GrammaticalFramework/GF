@@ -30,7 +30,7 @@ EMBED = GF/Embed/TemplateApp
 
 # use the temporary binary file name 'gf-bin' to not clash with directory 'GF' 
 # on case insensitive file systems (such as FAT)
-GF_EXE=gf$(EXEEXT)
+GF_EXE=gf3$(EXEEXT)
 GF_EXE_TMP=gf-bin$(EXEEXT)
 GF_DOC_EXE=gfdoc$(EXEEXT)
 GF3_EXE=gf3$(EXEEXT)
