@@ -23,7 +23,7 @@ importGrammar pgf0 opts files =
         Bad msg -> do putStrLn msg
                       return pgf0
     ".pgf" -> do
-      pgf2 <- mapM file2pgf files >>= return . foldl1 unionPGF
+      pgf2 <- mapM readPGF files >>= return . foldl1 unionPGF
       return $ unionPGF pgf0 pgf2
 
 importSource :: SourceGrammar -> Options -> [FilePath] -> IO SourceGrammar

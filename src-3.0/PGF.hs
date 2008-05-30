@@ -1,28 +1,54 @@
-----------------------------------------------------------------------
+-------------------------------------------------
 -- |
--- Module      : GFCCAPI
+-- Module      : PGF
 -- Maintainer  : Aarne Ranta
--- Stability   : (stable)
--- Portability : (portable)
+-- Stability   : stable
+-- Portability : portable
 --
--- > CVS $Date: 
--- > CVS $Author: 
--- > CVS $Revision: 
---
--- Reduced Application Programmer's Interface to GF, meant for
--- embedded GF systems. AR 19/9/2007
------------------------------------------------------------------------------
+-- Application Programming Interface to PGF.
+-------------------------------------------------
 
-module PGF(module PGF, PGF, emptyPGF) where
+module PGF(
+           -- * PGF
+           PGF,
+           readPGF,
+
+           -- * Identifiers
+           -- ** CId
+           CId, mkCId, prCId,
+           
+           -- ** Language
+           Language, languages, abstractName,
+           
+           -- ** Category
+           Category, categories, startCat,
+
+           -- * Expressions
+           Exp(..),
+           showExp, readExp,
+
+           -- * Operations
+           -- ** Linearization
+           linearize, linearizeAllLang, linearizeAll,
+           
+           -- ** Parsing
+           parse, parseAllLang, parseAll,
+
+           -- ** Generation
+           generateRandom, generateAll, generateAllDepth
+          ) where
 
 import PGF.CId
-import PGF.Linearize
+import PGF.Linearize hiding (linearize)
+import qualified PGF.Linearize (linearize)
 import PGF.Generate
 import PGF.Macros
 import PGF.Data
 import PGF.Raw.Convert
 import PGF.Raw.Parse
+import PGF.Raw.Print (printTree)
 import PGF.Parsing.FCFG
+import GF.Text.UTF8
 
 import GF.Data.ErrM
 
@@ -37,45 +63,105 @@ import qualified Text.ParserCombinators.ReadP as RP
 
 -- This API is meant to be used when embedding GF grammars in Haskell 
 -- programs. The embedded system is supposed to use the
--- .gfcc grammar format, which is first produced by the gf program.
+-- .pgf grammar format, which is first produced by the gf program.
 
 ---------------------------------------------------
 -- Interface
 ---------------------------------------------------
 
+-- | This is just a string with the language name.
+-- A language name is the identifier that you write in the 
+-- top concrete or abstract module in GF after the 
+-- concrete/abstract keyword. Example:
+-- 
+-- > abstract Lang = ...
+-- > concrete LangEng of Lang = ...
 type Language     = String
+
+-- | This is just a string with the category name.
+-- The categories are defined in the abstract syntax
+-- with the \'cat\' keyword.
 type Category     = String
-type Tree         = Exp
 
-file2pgf :: FilePath -> IO PGF
+-- | Reads file in Portable Grammar Format and produces
+-- 'PGF' structure. The file is usually produced with:
+--
+-- > $ gfc --make <grammar file name>
+readPGF  :: FilePath -> IO PGF
 
-linearize    :: PGF -> Language -> Tree -> String
-parse        :: PGF -> Language -> Category -> String -> [Tree]
+-- | Linearizes given expression as string in the language
+linearize    :: PGF -> Language -> Exp -> String
 
-linearizeAll     :: PGF -> Tree -> [String]
-linearizeAllLang :: PGF -> Tree -> [(Language,String)]
+-- | Tries to parse the given string in the specified language
+-- and to produce abstract syntax expression. An empty
+-- list is returned if the parsing is not successful. The list may also
+-- contain more than one element if the grammar is ambiguous.
+parse        :: PGF -> Language -> Category -> String -> [Exp]
 
-parseAll     :: PGF -> Category -> String -> [[Tree]]
-parseAllLang :: PGF -> Category -> String -> [(Language,[Tree])]
+-- | The same as 'linearizeAllLang' but does not return
+-- the language.
+linearizeAll     :: PGF -> Exp -> [String]
 
-generateAll      :: PGF -> Category -> [Tree]
-generateRandom   :: PGF -> Category -> IO [Tree]
-generateAllDepth :: PGF -> Category -> Maybe Int -> [Tree]
+-- | Linearizes given expression as string in all languages
+-- available in the grammar.
+linearizeAllLang :: PGF -> Exp -> [(Language,String)]
 
-readTree   :: String -> Tree
-showTree   :: Tree -> String
+-- | The same as 'parseAllLang' but does not return
+-- the language.
+parseAll     :: PGF -> Category -> String -> [[Exp]]
 
-languages  :: PGF -> [Language]
+-- | Tries to parse the given string with every language
+-- available in the grammar and to produce abstract syntax 
+-- expression. The returned list contains pairs of language
+-- and list of possible expressions. Only those languages
+-- for which at least one parsing is possible are listed.
+-- More than one abstract syntax expressions are possible
+-- if the grammar is ambiguous.
+parseAllLang :: PGF -> Category -> String -> [(Language,[Exp])]
+
+-- | The same as 'generateAllDepth' but does not limit
+-- the depth in the generation.
+generateAll      :: PGF -> Category -> [Exp]
+
+-- | Generates an infinite list of random abstract syntax expressions.
+-- This is usefull for tree bank generation which after that can be used
+-- for grammar testing.
+generateRandom   :: PGF -> Category -> IO [Exp]
+
+-- | Generates an exhaustive possibly infinite list of
+-- abstract syntax expressions. A depth can be specified
+-- to limit the search space.
+generateAllDepth :: PGF -> Category -> Maybe Int -> [Exp]
+
+-- | parses 'String' as an expression
+readExp :: String -> Maybe Exp
+
+-- | renders expression as 'String'
+showExp :: Exp -> String
+
+-- | List of all languages available in the given grammar.
+languages    :: PGF -> [Language]
+
+-- | The abstract language name is the name of the top-level
+-- abstract module
+abstractName :: PGF -> Language
+
+-- | List of all categories defined in the given grammar.
 categories :: PGF -> [Category]
 
+-- | The start category is defined in the grammar with
+-- the \'startcat\' flag. This is usually the sentence category
+-- but it is not necessary. Despite that there is a start category
+-- defined you can parse with any category. The start category
+-- definition is just for convenience.
 startCat   :: PGF -> Category
 
 ---------------------------------------------------
 -- Implementation
 ---------------------------------------------------
 
-file2pgf f = do
-  s <- readFileIf f
+readPGF f = do
+  s <- readFile f
   g <- parseGrammar s
   return $! toPGF g
 
@@ -83,9 +169,9 @@ linearize pgf lang = PGF.Linearize.linearize pgf (mkCId lang)
 
 parse pgf lang cat s = 
   case lookParser pgf (mkCId lang) of
-    Nothing    -> error "no parser"
+    Nothing    -> error ("Unknown language: " ++ lang)
     Just pinfo -> case parseFCF "bottomup" pinfo (mkCId cat) (words s) of
-                    Ok x -> x
+                    Ok x  -> x
                     Bad s -> error s
 
 linearizeAll mgr = map snd . linearizeAllLang mgr
@@ -104,9 +190,9 @@ generateRandom pgf cat = do
 generateAll pgf cat = generate pgf (mkCId cat) Nothing
 generateAllDepth pgf cat = generate pgf (mkCId cat)
 
-readTree s = case RP.readP_to_S (pExp False) s of
-               [(x,"")] -> x
-               _        -> error "no parse"
+readExp s = case RP.readP_to_S (pExp False) s of
+              [(x,"")] -> Just x
+              _        -> Nothing
 
 pExps :: RP.ReadP [Exp]
 pExps = liftM2 (:) (pExp True) pExps RP.<++ (RP.skipSpaces >> return [])
@@ -136,7 +222,7 @@ pExp isNested = RP.skipSpaces >> (pParen RP.<++ pAbs RP.<++ pApp RP.<++ pNum RP.
         isIdentRest c = c == '_' || c == '\'' || isAlphaNum c
 
 
-showTree = PP.render . ppExp False
+showExp = PP.render . ppExp False
 
 ppExp isNested (EAbs xs t) = ppParens isNested (PP.char '\\' PP.<>
                                                 PP.hsep (PP.punctuate PP.comma (map (PP.text . prCId) xs)) PP.<+>
@@ -160,15 +246,3 @@ languages pgf = [prCId l | l <- cncnames pgf]
 categories pgf = [prCId c | c <- Map.keys (cats (abstract pgf))]
 
 startCat pgf = lookStartCat pgf
-
-
------------- for internal use only
-
-err f g ex = case ex of
-  Ok x -> g x
-  Bad s -> f s
-
-readFileIf f = do
-  b <- doesFileExist f
-  if b then readFile f 
-       else putStrLn ("file " ++ f ++ " not found") >> return ""
