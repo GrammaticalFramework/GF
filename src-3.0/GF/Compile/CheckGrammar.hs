@@ -56,6 +56,11 @@ showCheckModule mos m = do
   (st,(_,msg)) <- checkStart $ checkModule mos m
   return (st, unlines $ reverse msg)
 
+mapsCheckTree :: 
+  (Ord a) => ((a,b) -> Check (a,c)) -> BinTree a b -> Check (BinTree a c)
+mapsCheckTree f = checkErr . mapsErrTree (\t -> checkStart (f t) >>= return . fst)
+
+
 -- | checking is performed in the dependency order of modules
 checkModule :: [SourceModule] -> SourceModule -> Check [SourceModule]
 checkModule ms (name,mod) = checkIn ("checking module" +++ prt name) $ case mod of
@@ -63,24 +68,24 @@ checkModule ms (name,mod) = checkIn ("checking module" +++ prt name) $ case mod 
   ModMod mo@(Module mt st fs me ops js) -> do
     checkRestrictedInheritance ms (name, mo)
     js' <- case mt of
-      MTAbstract -> mapMTree (checkAbsInfo gr name) js
+      MTAbstract -> mapsCheckTree (checkAbsInfo gr name) js
 
-      MTTransfer a b -> mapMTree (checkAbsInfo gr name) js
+      MTTransfer a b -> mapsCheckTree (checkAbsInfo gr name) js
 
-      MTResource -> mapMTree (checkResInfo gr name) js
+      MTResource -> mapsCheckTree (checkResInfo gr name) js
 
       MTConcrete a -> do
         checkErr $ topoSortOpers $ allOperDependencies name js
         ModMod abs <- checkErr $ lookupModule gr a
         js1 <- checkCompleteGrammar abs mo
-        mapMTree (checkCncInfo gr name (a,abs)) js1
+        mapsCheckTree (checkCncInfo gr name (a,abs)) js1
 
-      MTInterface -> mapMTree (checkResInfo gr name) js
+      MTInterface -> mapsCheckTree (checkResInfo gr name) js
 
       MTInstance a -> do
         ModMod abs <- checkErr $ lookupModule gr a
         -- checkCompleteInstance abs mo -- this is done in Rebuild
-        mapMTree (checkResInfo gr name) js
+        mapsCheckTree (checkResInfo gr name) js
 
     return $ (name, ModMod (Module mt st fs me ops js')) : ms
 

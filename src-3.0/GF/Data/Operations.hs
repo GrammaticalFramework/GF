@@ -22,7 +22,7 @@ module GF.Data.Operations (-- * misc functions
 		   performOps, repeatUntilErr, repeatUntil, okError, isNotError,
 		   showBad, lookupErr, lookupErrMsg, lookupDefault, updateLookupList,
 		   mapPairListM, mapPairsM, pairM, mapErr, mapErrN, foldErr,
-		   (!?), errList, singleton, 
+		   (!?), errList, singleton, mapsErr, mapsErrTree,
 		   
 		   -- ** checking
 		   checkUnique, titleIfNeeded, errMsg, errAndMsg,
@@ -182,6 +182,7 @@ mapErrN maxN f xs = Ok (ys, unlines (errHdr : ss2))
     ss2 = map ("* "++) $ take maxN ss 
     nss = length ss
     fxs = map f xs
+
 
 -- | like @foldM@, but also return the latest value if fails
 foldErr :: (a -> b -> Err a) -> a -> [b] -> Err (a, Maybe String)
@@ -629,6 +630,23 @@ instance ErrorMonad (STM s) where
   handle (STM f) g = STM (\s -> (f s) 
                                 `handle` (\e -> let STM g' = (g e) in
                                                     g' s))
+
+-- error recovery with multiple reporting AR 30/5/2008
+mapsErr :: (a -> Err b) -> [a] -> Err [b]
+
+mapsErr f = seqs . map f where
+  seqs es = case es of
+    Ok v : ms -> case seqs ms of
+      Ok vs -> return (v : vs)
+      b     -> b
+    Bad s : ms -> case seqs ms of
+      Ok vs  -> Bad s
+      Bad ss -> Bad (s +++++ ss)
+    [] -> return []
+
+mapsErrTree :: (Ord a) => ((a,b) -> Err (a,c)) -> BinTree a b -> Err (BinTree a c)
+mapsErrTree f t =  mapsErr f (tree2list t) >>= return . sorted2tree
+
 
 -- | if the first check fails try another one
 checkAgain :: ErrorMonad m => m a -> m a -> m a
