@@ -1,4 +1,4 @@
-module GF.Compile.GFCCtoJS (gfcc2js) where
+module GF.Compile.GFCCtoJS (pgf2js) where
 
 import PGF.CId
 import PGF.Data
@@ -16,14 +16,14 @@ import qualified Data.Array as Array
 import Data.Maybe (fromMaybe)
 import qualified Data.Map as Map
 
-gfcc2js :: GFCC -> String
-gfcc2js gfcc =
+pgf2js :: PGF -> String
+pgf2js pgf =
   encodeUTF8 $ JS.printTree $ JS.Program [JS.ElStmt $ JS.SDeclOrExpr $ JS.Decl [JS.DInit (JS.Ident n) grammar]]
  where
-   n  = prCId $ absname gfcc
-   as = abstract gfcc
-   cs = Map.assocs (concretes gfcc)
-   start = M.lookStartCat gfcc
+   n  = prCId $ absname pgf
+   as = abstract pgf
+   cs = Map.assocs (concretes pgf)
+   start = M.lookStartCat pgf
    grammar = new "GFGrammar" [js_abstract, js_concrete]
    js_abstract = abstract2js start as
    js_concrete = JS.EObj $ map (concrete2js start n) cs

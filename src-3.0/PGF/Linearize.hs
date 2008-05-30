@@ -8,10 +8,10 @@ import Data.List
 
 import Debug.Trace
 
--- linearization and computation of concrete GFCC Terms
+-- linearization and computation of concrete PGF Terms
 
-linearize :: GFCC -> CId -> Exp -> String
-linearize mcfg lang = realize . linExp mcfg lang
+linearize :: PGF -> CId -> Exp -> String
+linearize pgf lang = realize . linExp pgf lang
 
 realize :: Term -> String
 realize trm = case trm of
@@ -25,8 +25,8 @@ realize trm = case trm of
   TM s     -> s
   _ -> "ERROR " ++ show trm ---- debug
 
-linExp :: GFCC -> CId -> Exp -> Term
-linExp gfcc lang = lin
+linExp :: PGF -> CId -> Exp -> Term
+linExp pgf lang = lin
   where
     lin (EAbs   xs  e ) = case lin e of
                             R ts -> R $ ts     ++ (Data.List.map (kks . prCId) xs)
@@ -38,12 +38,12 @@ linExp gfcc lang = lin
     lin (EVar   x     ) = TM (prCId x)
     lin (EMeta  i     ) = TM (show i)
  
-    comp = compute gfcc lang
-    look = lookLin gfcc lang
+    comp = compute pgf lang
+    look = lookLin pgf lang
 
 
-compute :: GFCC -> CId -> [Term] -> Term -> Term
-compute mcfg lang args = comp where
+compute :: PGF -> CId -> [Term] -> Term -> Term
+compute pgf lang args = comp where
   comp trm = case trm of
     P r p  -> proj (comp r) (comp p) 
     W s t  -> W s (comp t)
@@ -54,7 +54,7 @@ compute mcfg lang args = comp where
     S ts   -> S $ filter (/= S []) $ map comp ts
     _ -> trm
 
-  look = lookOper mcfg lang
+  look = lookOper pgf lang
 
   idx xs i = if i > length xs - 1 
     then trace 

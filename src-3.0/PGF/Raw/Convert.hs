@@ -1,4 +1,4 @@
-module PGF.Raw.Convert (toGFCC,fromGFCC) where
+module PGF.Raw.Convert (toPGF,fromPGF) where
 
 import PGF.CId
 import PGF.Data
@@ -12,10 +12,10 @@ import qualified Data.Map   as Map
 pgfMajorVersion, pgfMinorVersion :: Integer
 (pgfMajorVersion, pgfMinorVersion) = (1,0)
 
--- convert parsed grammar to internal GFCC
+-- convert parsed grammar to internal PGF
 
-toGFCC :: Grammar -> GFCC
-toGFCC (Grm [
+toPGF :: Grammar -> PGF
+toPGF (Grm [
   App "pgf" (AInt v1 : AInt v2 : App a []:cs),
   App "flags"     gfs, 
   ab@(
@@ -24,7 +24,7 @@ toGFCC (Grm [
       App "cat"   cts
       ]), 
   App "concrete" ccs
-  ]) = GFCC {
+  ]) = PGF {
     absname = mkCId a,
     cncnames = [mkCId c | App c [] <- cs],
     gflags = Map.fromAscList [(mkCId f,v) | App f [AStr v] <- gfs],
@@ -135,20 +135,20 @@ toTerm e = case e of
 --- from internal to parser --
 ------------------------------
 
-fromGFCC :: GFCC -> Grammar
-fromGFCC gfcc0 = Grm [
+fromPGF :: PGF -> Grammar
+fromPGF pgf0 = Grm [
   App "pgf" (AInt pgfMajorVersion:AInt pgfMinorVersion
-             : App (prCId (absname gfcc)) [] : map (flip App [] . prCId) (cncnames gfcc)), 
-  App "flags" [App (prCId f) [AStr v] | (f,v) <- Map.toList (gflags gfcc `Map.union` aflags agfcc)],
+             : App (prCId (absname pgf)) [] : map (flip App [] . prCId) (cncnames pgf)), 
+  App "flags" [App (prCId f) [AStr v] | (f,v) <- Map.toList (gflags pgf `Map.union` aflags apgf)],
   App "abstract" [
-    App "fun"   [App (prCId f) [fromType t,fromExp d] | (f,(t,d)) <- Map.toList (funs agfcc)],
-    App "cat"   [App (prCId f) (map fromHypo hs) | (f,hs) <- Map.toList (cats agfcc)]
+    App "fun"   [App (prCId f) [fromType t,fromExp d] | (f,(t,d)) <- Map.toList (funs apgf)],
+    App "cat"   [App (prCId f) (map fromHypo hs) | (f,hs) <- Map.toList (cats apgf)]
     ],
-  App "concrete" [App (prCId lang) (fromConcrete c) | (lang,c) <- Map.toList (concretes gfcc)]
+  App "concrete" [App (prCId lang) (fromConcrete c) | (lang,c) <- Map.toList (concretes pgf)]
   ]
  where
-  gfcc = utf8GFCC gfcc0
-  agfcc = abstract gfcc
+  pgf = utf8GFCC pgf0
+  apgf = abstract pgf
   fromConcrete cnc = [
       App "flags"     [App (prCId f) [AStr v]     | (f,v) <- Map.toList (cflags cnc)],
       App "lin"       [App (prCId f) [fromTerm v] | (f,v) <- Map.toList (lins cnc)],

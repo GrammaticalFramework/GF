@@ -19,7 +19,7 @@ import Paths_gf
 mainGFI :: Options -> [FilePath] -> IO ()
 mainGFI opts files = do
   putStrLn welcome
-  env <- importInEnv emptyMultiGrammar opts files
+  env <- importInEnv emptyPGF opts files
   loop (GFEnv emptyGrammar env [] 0)
   return ()
 
@@ -50,7 +50,7 @@ loop gfenv0 = do
                       loopNewCPU gfenv
 
   -- other special commands, working on GFEnv
-    "e":_ -> loopNewCPU $ gfenv {commandenv=env{multigrammar=emptyMultiGrammar}}
+    "e":_ -> loopNewCPU $ gfenv {commandenv=env{multigrammar=emptyPGF}}
     "ph":_ -> mapM_ putStrLn (reverse (history gfenv0)) >> loopNewCPU gfenv
     "q":_  -> putStrLn "See you." >> return gfenv
 
@@ -64,13 +64,13 @@ loopNewCPU gfenv = do
   putStrLn (show ((cpu' - cputime gfenv) `div` 1000000000) ++ " msec")
   loop $ gfenv {cputime = cpu'}
 
-importInEnv :: MultiGrammar -> Options -> [FilePath] -> IO CommandEnv
-importInEnv mgr0 opts files = do
-  mgr1 <- case files of
-    [] -> return mgr0
-    _  -> importGrammar mgr0 opts files
-  let env = CommandEnv mgr1 (allCommands mgr1)
-  putStrLn $ unwords $ "\nLanguages:" : languages mgr1
+importInEnv :: PGF -> Options -> [FilePath] -> IO CommandEnv
+importInEnv pgf0 opts files = do
+  pgf1 <- case files of
+    [] -> return pgf0
+    _  -> importGrammar pgf0 opts files
+  let env = CommandEnv pgf1 (allCommands pgf1)
+  putStrLn $ unwords $ "\nLanguages:" : languages pgf1
   return env
 
 welcome = unlines [

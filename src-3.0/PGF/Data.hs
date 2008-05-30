@@ -8,9 +8,9 @@ import qualified Data.Map as Map
 import Data.List
 import Data.Array
 
--- internal datatypes for GFCC
+-- internal datatypes for PGF
 
-data GFCC = GFCC {
+data PGF = PGF {
   absname   :: CId ,
   cncnames  :: [CId] ,
   gflags    :: Map.Map CId String,   -- value of a global flag
@@ -120,17 +120,17 @@ fcatVar    = (-4)
 
 -- print statistics
 
-statGFCC :: GFCC -> String
-statGFCC gfcc = unlines [
-  "Abstract\t" ++ prCId (absname gfcc), 
-  "Concretes\t" ++ unwords (map prCId (cncnames gfcc)), 
-  "Categories\t" ++ unwords (map prCId (Map.keys (cats (abstract gfcc)))) 
+statGFCC :: PGF -> String
+statGFCC pgf = unlines [
+  "Abstract\t" ++ prCId (absname pgf), 
+  "Concretes\t" ++ unwords (map prCId (cncnames pgf)), 
+  "Categories\t" ++ unwords (map prCId (Map.keys (cats (abstract pgf)))) 
   ]
 
 -- merge two GFCCs; fails is differens absnames; priority to second arg
 
-unionGFCC :: GFCC -> GFCC -> GFCC
-unionGFCC one two = case absname one of
+unionPGF :: PGF -> PGF -> PGF
+unionPGF one two = case absname one of
   n | n == wildCId     -> two    -- extending empty grammar
     | n == absname two -> one {  -- extending grammar with same abstract
       concretes = Map.union (concretes two) (concretes one),
@@ -138,8 +138,8 @@ unionGFCC one two = case absname one of
     }
   _ -> one   -- abstracts don't match ---- print error msg
 
-emptyGFCC :: GFCC
-emptyGFCC = GFCC {
+emptyPGF :: PGF
+emptyPGF = PGF {
   absname   = wildCId,
   cncnames  = [] ,
   gflags    = Map.empty,
@@ -149,9 +149,9 @@ emptyGFCC = GFCC {
 
 -- encode idenfifiers and strings in UTF8
 
-utf8GFCC :: GFCC -> GFCC
-utf8GFCC gfcc = gfcc {
-  concretes = Map.map u8concr (concretes gfcc)
+utf8GFCC :: PGF -> PGF
+utf8GFCC pgf = pgf {
+  concretes = Map.map u8concr (concretes pgf)
   }
  where 
    u8concr cnc = cnc {

@@ -37,13 +37,13 @@ import Debug.Trace ----
 traceD s t = t 
 
 
--- the main function: generate GFCC from GF.
+-- the main function: generate PGF from GF.
 
 prGrammar2gfcc :: Options -> String -> SourceGrammar -> (String,String)
-prGrammar2gfcc opts cnc gr = (abs,printGFCC gc) where
+prGrammar2gfcc opts cnc gr = (abs,printPGF gc) where
   (abs,gc) = mkCanon2gfcc opts cnc gr 
 
-mkCanon2gfcc :: Options -> String -> SourceGrammar -> (String,D.GFCC)
+mkCanon2gfcc :: Options -> String -> SourceGrammar -> (String,D.PGF)
 mkCanon2gfcc opts cnc gr = 
   (prIdent abs, (canon2gfcc opts pars . reorder abs . canon2canon abs) gr)
   where
@@ -51,18 +51,18 @@ mkCanon2gfcc opts cnc gr =
     pars = mkParamLincat gr
 
 -- Adds parsers for all concretes
-addParsers :: D.GFCC -> D.GFCC
-addParsers gfcc = gfcc { D.concretes = Map.map conv (D.concretes gfcc) }
+addParsers :: D.PGF -> D.PGF
+addParsers pgf = pgf { D.concretes = Map.map conv (D.concretes pgf) }
   where
-    conv cnc = cnc { D.parser = Just (buildParserInfo (convertConcrete (D.abstract gfcc) cnc)) }
+    conv cnc = cnc { D.parser = Just (buildParserInfo (convertConcrete (D.abstract pgf) cnc)) }
 
--- Generate GFCC from GFCM.
+-- Generate PGF from GFCM.
 -- this assumes a grammar translated by canon2canon
 
-canon2gfcc :: Options -> (Ident -> Ident -> C.Term) -> SourceGrammar -> D.GFCC
+canon2gfcc :: Options -> (Ident -> Ident -> C.Term) -> SourceGrammar -> D.PGF
 canon2gfcc opts pars cgr@(M.MGrammar ((a,M.ModMod abm):cms)) = 
   (if dump opts DumpCanon then trace (prGrammar cgr) else id) $
-     D.GFCC an cns gflags abs cncs 
+     D.PGF an cns gflags abs cncs 
  where
   -- abstract
   an  = (i2i a)
@@ -176,7 +176,7 @@ mkTerm tr = case tr of
      C.S ts -> concatMap flats ts
      _ -> [t]
 
--- encoding GFCC-internal lincats as terms
+-- encoding PGF-internal lincats as terms
 mkCType :: Type -> C.Term
 mkCType t = case t of
   EInt i      -> C.C $ fromInteger i

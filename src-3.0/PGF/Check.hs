@@ -1,4 +1,4 @@
-module PGF.Check (checkGFCC, checkGFCCio, checkGFCCmaybe) where
+module PGF.Check (checkPGF) where
 
 import PGF.CId
 import PGF.Data
@@ -9,26 +9,11 @@ import qualified Data.Map as Map
 import Control.Monad
 import Debug.Trace
 
-checkGFCCio :: GFCC -> IO GFCC
-checkGFCCio gfcc = case checkGFCC gfcc of
-  Ok (gc,b) -> do 
-    putStrLn $ if b then "OK" else "Corrupted GFCC"
-    return gc
-  Bad s -> do
-    putStrLn s
-    error "building GFCC failed"
-
----- needed in old Custom
-checkGFCCmaybe :: GFCC -> Maybe GFCC
-checkGFCCmaybe gfcc = case checkGFCC gfcc of
-  Ok (gc,b) -> return gc 
-  Bad s -> Nothing
-
-checkGFCC :: GFCC -> Err (GFCC,Bool)
-checkGFCC gfcc = do
-  (cs,bs) <- mapM (checkConcrete gfcc) 
-               (Map.assocs (concretes gfcc)) >>= return . unzip
-  return (gfcc {concretes = Map.fromAscList cs}, and bs)
+checkPGF :: PGF -> Err (PGF,Bool)
+checkPGF pgf = do
+  (cs,bs) <- mapM (checkConcrete pgf) 
+               (Map.assocs (concretes pgf)) >>= return . unzip
+  return (pgf {concretes = Map.fromAscList cs}, and bs)
 
 
 -- errors are non-fatal; replace with 'fail' to change this
@@ -43,18 +28,18 @@ labelBoolErr ms iob = do
   if b then return (x,b) else (msg ms >> return (x,b))
 
 
-checkConcrete :: GFCC -> (CId,Concr) -> Err ((CId,Concr),Bool)
-checkConcrete gfcc (lang,cnc) = 
+checkConcrete :: PGF -> (CId,Concr) -> Err ((CId,Concr),Bool)
+checkConcrete pgf (lang,cnc) = 
   labelBoolErr ("happened in language " ++ prCId lang) $ do
     (rs,bs) <- mapM checkl (Map.assocs (lins cnc)) >>= return . unzip
     return ((lang,cnc{lins = Map.fromAscList rs}),and bs)
  where
-   checkl = checkLin gfcc lang
+   checkl = checkLin pgf lang
 
-checkLin :: GFCC -> CId -> (CId,Term) -> Err ((CId,Term),Bool)
-checkLin gfcc lang (f,t) = 
+checkLin :: PGF -> CId -> (CId,Term) -> Err ((CId,Term),Bool)
+checkLin pgf lang (f,t) = 
   labelBoolErr ("happened in function " ++ prCId f) $ do
-    (t',b) <- checkTerm (lintype gfcc lang f) t --- $ inline gfcc lang t
+    (t',b) <- checkTerm (lintype pgf lang f) t --- $ inline pgf lang t
     return ((f,t'),b)
 
 inferTerm :: [CType] -> Term -> Err (Term,CType)
@@ -137,22 +122,22 @@ ints = C
 str :: CType
 str = S []
 
-lintype :: GFCC -> CId -> CId -> LinType
-lintype gfcc lang fun = case typeSkeleton (lookType gfcc fun) of
+lintype :: PGF -> CId -> CId -> LinType
+lintype pgf lang fun = case typeSkeleton (lookType pgf fun) of
   (cs,c) -> (map vlinc cs, linc c) ---- HOAS
  where 
-   linc = lookLincat gfcc lang
+   linc = lookLincat pgf lang
    vlinc (0,c) = linc c
    vlinc (i,c) = case linc c of
      R ts -> R (ts ++ replicate i str)
 
-inline :: GFCC -> CId -> Term -> Term
-inline gfcc lang t = case t of
+inline :: PGF -> CId -> Term -> Term
+inline pgf lang t = case t of
   F c -> inl $ look c
   _ -> composSafeOp inl t
  where
-  inl  = inline gfcc lang
-  look = lookLin gfcc lang
+  inl  = inline pgf lang
+  look = lookLin pgf lang
 
 composOp :: Monad m => (Term -> m Term) -> Term -> m Term
 composOp f trm = case trm of

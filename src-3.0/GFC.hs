@@ -22,16 +22,16 @@ mainGFC opts fs =
        let cnc = justModuleName (last fs)
        if flag optStopAfterPhase opts == Compile 
          then return ()
-         else do gfcc <- link opts cnc gr
-                 writeOutputs opts gfcc
+         else do pgf <- link opts cnc gr
+                 writeOutputs opts pgf
 
-writeOutputs :: Options -> GFCC -> IOE ()
-writeOutputs opts gfcc = mapM_ (\fmt -> writeOutput opts fmt gfcc) (flag optOutputFormats opts)
+writeOutputs :: Options -> PGF -> IOE ()
+writeOutputs opts pgf = mapM_ (\fmt -> writeOutput opts fmt pgf) (flag optOutputFormats opts)
 
-writeOutput :: Options -> OutputFormat-> GFCC -> IOE ()
-writeOutput opts fmt gfcc =
-    do let path = outputFilePath opts fmt (prCId (absname gfcc))
-           s = prGFCC fmt gfcc
+writeOutput :: Options -> OutputFormat-> PGF -> IOE ()
+writeOutput opts fmt pgf =
+    do let path = outputFilePath opts fmt (prCId (absname pgf))
+           s = prPGF fmt pgf
        writeOutputFile path s
 
 outputFilePath :: Options -> OutputFormat -> String -> FilePath
@@ -40,7 +40,7 @@ outputFilePath opts fmt name0 = addDir name <.> fmtExtension fmt
         addDir = maybe id (</>) (flag optOutputDir opts)
 
 fmtExtension :: OutputFormat -> String
-fmtExtension FmtGFCC        = "gfcc"
+fmtExtension FmtPGF         = "pgf"
 fmtExtension FmtJavaScript  = "js"
 fmtExtension FmtHaskell     = "hs"
 fmtExtension FmtHaskellGADT = "hs"

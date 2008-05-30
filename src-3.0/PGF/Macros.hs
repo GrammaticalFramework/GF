@@ -8,58 +8,58 @@ import qualified Data.Array as Array
 import Data.Maybe
 import Data.List
 
--- operations for manipulating GFCC grammars and objects
+-- operations for manipulating PGF grammars and objects
 
-lookLin :: GFCC -> CId -> CId -> Term
-lookLin gfcc lang fun = 
-  lookMap tm0 fun $ lins $ lookMap (error "no lang") lang $ concretes gfcc
+lookLin :: PGF -> CId -> CId -> Term
+lookLin pgf lang fun = 
+  lookMap tm0 fun $ lins $ lookMap (error "no lang") lang $ concretes pgf
 
-lookOper :: GFCC -> CId -> CId -> Term
-lookOper gfcc lang fun = 
-  lookMap tm0 fun $ opers $ lookMap (error "no lang") lang $ concretes gfcc
+lookOper :: PGF -> CId -> CId -> Term
+lookOper pgf lang fun = 
+  lookMap tm0 fun $ opers $ lookMap (error "no lang") lang $ concretes pgf
 
-lookLincat :: GFCC -> CId -> CId -> Term
-lookLincat gfcc lang fun = 
-  lookMap tm0 fun $ lincats $ lookMap (error "no lang") lang $ concretes gfcc
+lookLincat :: PGF -> CId -> CId -> Term
+lookLincat pgf lang fun = 
+  lookMap tm0 fun $ lincats $ lookMap (error "no lang") lang $ concretes pgf
 
-lookParamLincat :: GFCC -> CId -> CId -> Term
-lookParamLincat gfcc lang fun = 
-  lookMap tm0 fun $ paramlincats $ lookMap (error "no lang") lang $ concretes gfcc
+lookParamLincat :: PGF -> CId -> CId -> Term
+lookParamLincat pgf lang fun = 
+  lookMap tm0 fun $ paramlincats $ lookMap (error "no lang") lang $ concretes pgf
 
-lookType :: GFCC -> CId -> Type
-lookType gfcc f = 
-  fst $ lookMap (error $ "lookType " ++ show f) f (funs (abstract gfcc))
+lookType :: PGF -> CId -> Type
+lookType pgf f = 
+  fst $ lookMap (error $ "lookType " ++ show f) f (funs (abstract pgf))
 
-lookParser :: GFCC -> CId -> Maybe ParserInfo
-lookParser gfcc lang = parser $ lookMap (error "no lang") lang $ concretes gfcc
+lookParser :: PGF -> CId -> Maybe ParserInfo
+lookParser pgf lang = parser $ lookMap (error "no lang") lang $ concretes pgf
 
-lookFCFG :: GFCC -> CId -> Maybe FGrammar
-lookFCFG gfcc lang = fmap toFGrammar $ lookParser gfcc lang
+lookFCFG :: PGF -> CId -> Maybe FGrammar
+lookFCFG pgf lang = fmap toFGrammar $ lookParser pgf lang
   where
     toFGrammar :: ParserInfo -> FGrammar
     toFGrammar pinfo = (Array.elems (allRules pinfo), startupCats pinfo)
 
-lookStartCat :: GFCC -> String
-lookStartCat gfcc = fromMaybe "S" $ msum $ Data.List.map (Map.lookup (mkCId "startcat"))
-                                              [gflags gfcc, aflags (abstract gfcc)]
+lookStartCat :: PGF -> String
+lookStartCat pgf = fromMaybe "S" $ msum $ Data.List.map (Map.lookup (mkCId "startcat"))
+                                                        [gflags pgf, aflags (abstract pgf)]
 
-lookGlobalFlag :: GFCC -> CId -> String
-lookGlobalFlag gfcc f = 
-  lookMap "?" f (gflags gfcc)
+lookGlobalFlag :: PGF -> CId -> String
+lookGlobalFlag pgf f = 
+  lookMap "?" f (gflags pgf)
 
-lookAbsFlag :: GFCC -> CId -> String
-lookAbsFlag gfcc f = 
-  lookMap "?" f (aflags (abstract gfcc))
+lookAbsFlag :: PGF -> CId -> String
+lookAbsFlag pgf f = 
+  lookMap "?" f (aflags (abstract pgf))
 
-lookCncFlag :: GFCC -> CId -> CId -> String
-lookCncFlag gfcc lang f = 
-  lookMap "?" f $ cflags $ lookMap (error "no lang") lang $ concretes gfcc
+lookCncFlag :: PGF -> CId -> CId -> String
+lookCncFlag pgf lang f = 
+  lookMap "?" f $ cflags $ lookMap (error "no lang") lang $ concretes pgf
 
-functionsToCat :: GFCC -> CId -> [(CId,Type)]
-functionsToCat gfcc cat =
-  [(f,ty) | f <- fs, Just (ty,_) <- [Map.lookup f $ funs $ abstract gfcc]]
+functionsToCat :: PGF -> CId -> [(CId,Type)]
+functionsToCat pgf cat =
+  [(f,ty) | f <- fs, Just (ty,_) <- [Map.lookup f $ funs $ abstract pgf]]
  where 
-   fs = lookMap [] cat $ catfuns $ abstract gfcc
+   fs = lookMap [] cat $ catfuns $ abstract pgf
 
 depth :: Exp -> Int
 depth (EAbs _  t) = depth t

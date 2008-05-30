@@ -37,7 +37,7 @@ prRecord = prr where
     RS s -> prQuotedString s
     RCon s -> s
 
--- uses the encoding of record types in GFCC.paramlincat
+-- uses the encoding of record types in PGF.paramlincat
 mkRecord :: Term -> Term -> Record
 mkRecord typ trm = case (typ,trm) of
   (R rs,      R ts) -> RR [(str lab, mkRecord ty t) | (P lab ty, t) <- zip rs ts]
@@ -50,18 +50,18 @@ mkRecord typ trm = case (typ,trm) of
    str = realize
 
 -- show all branches, without labels and params
-allLinearize :: GFCC -> CId -> Exp -> String
-allLinearize gfcc lang = concat . map pr . tabularLinearize gfcc lang where
+allLinearize :: PGF -> CId -> Exp -> String
+allLinearize pgf lang = concat . map pr . tabularLinearize pgf lang where
   pr (p,vs) = unlines vs
 
 -- show all branches, with labels and params
-tableLinearize :: GFCC -> CId -> Exp -> String
-tableLinearize gfcc lang = unlines . map pr . tabularLinearize gfcc lang where
+tableLinearize :: PGF -> CId -> Exp -> String
+tableLinearize pgf lang = unlines . map pr . tabularLinearize pgf lang where
   pr (p,vs) = p +++ ":" +++ unwords (intersperse "|" vs)
 
 -- create a table from labels+params to variants
-tabularLinearize :: GFCC -> CId -> Exp -> [(String,[String])]
-tabularLinearize gfcc lang = branches . recLinearize gfcc lang where
+tabularLinearize :: PGF -> CId -> Exp -> [(String,[String])]
+tabularLinearize pgf lang = branches . recLinearize pgf lang where
   branches r = case r of
     RR  fs -> [(lab +++ b,s) | (lab,t) <- fs, (b,s) <- branches t]
     RT  fs -> [(lab +++ b,s) | (lab,t) <- fs, (b,s) <- branches t]
@@ -70,17 +70,17 @@ tabularLinearize gfcc lang = branches . recLinearize gfcc lang where
     RCon _ -> []
 
 -- show record in GF-source-like syntax
-recordLinearize :: GFCC -> CId -> Exp -> String
-recordLinearize gfcc lang = prRecord . recLinearize gfcc lang
+recordLinearize :: PGF -> CId -> Exp -> String
+recordLinearize pgf lang = prRecord . recLinearize pgf lang
 
 -- create a GF-like record, forming the basis of all functions above
-recLinearize :: GFCC -> CId -> Exp -> Record
-recLinearize gfcc lang exp = mkRecord typ $ linExp gfcc lang exp where
+recLinearize :: PGF -> CId -> Exp -> Record
+recLinearize pgf lang exp = mkRecord typ $ linExp pgf lang exp where
   typ = case exp of
-          EApp f _ -> lookParamLincat gfcc lang $ valCat $ lookType gfcc f
+          EApp f _ -> lookParamLincat pgf lang $ valCat $ lookType pgf f
 
--- show GFCC term
-termLinearize :: GFCC -> CId -> Exp -> String
-termLinearize gfcc lang = show . linExp gfcc lang
+-- show PGF term
+termLinearize :: PGF -> CId -> Exp -> String
+termLinearize pgf lang = show . linExp pgf lang
 
 
