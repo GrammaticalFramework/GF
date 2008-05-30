@@ -14,6 +14,7 @@ import System.FilePath
 
 -- import a grammar in an environment where it extends an existing grammar
 importGrammar :: PGF -> Options -> [FilePath] -> IO PGF
+importGrammar pgf0 _ [] = return pgf0
 importGrammar pgf0 opts files =
   case takeExtensions (last files) of
     s | elem s [".gf",".gfo"] -> do
