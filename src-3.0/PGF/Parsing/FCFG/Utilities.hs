@@ -18,7 +18,8 @@ import Control.Monad
 import Data.Array
 import Data.List (groupBy)
 
-import GF.Data.SortedList
+import PGF.CId
+import PGF.Data
 import GF.Data.Assoc
 import GF.Data.Utilities (sameLength, foldMerge, splitBy)
 
@@ -98,12 +99,6 @@ groupSyntaxNodes (SString s:xs) = (SString s) : groupSyntaxNodes xs
 groupSyntaxNodes (SInt    n:xs) = (SInt    n) : groupSyntaxNodes xs
 groupSyntaxNodes (SFloat  f:xs) = (SFloat  f) : groupSyntaxNodes xs
 
--- better(?) representation of forests:
--- data Forest n = F (SMap n (SList [Forest n])) Bool
--- ==
--- type Forest n = GeneralTrie n (SList [Forest n]) Bool
--- (the Bool == isMeta)
-
 -- ** syntax forests
 
 data SyntaxForest n = FMeta 
@@ -149,67 +144,6 @@ unifyForests (FFloat f1) (FFloat f2)
     | f1 == f2  = return $ FFloat f1
 unifyForests _ _ = fail "forest unification failure"
 
-{- måste tänka mer på detta:
-compactForests :: Ord n => [SyntaxForest n] -> SList (SyntaxForest n)
-compactForests = map joinForests . groupBy eqNames . sortForests
-    where eqNames f g    = forestName f == forestName g
-	  sortForests    = foldMerge mergeForests [] . map return 
-	  mergeForests [] gs = gs
-	  mergeForests fs [] = fs
-	  mergeForests fs@(f:fs') gs@(g:gs') 
-	      = case forestName f `compare` forestName g of
-		  LT ->     f : mergeForests fs' gs
-		  GT ->     g : mergeForests fs  gs'
-		  EQ -> f : g : mergeForests fs' gs'
-	  joinForests fs = case forestName (head fs) of
-			     Nothing   -> FMeta
-			     Just name -> FNode name $
-					  compactDaughters $
-					  concat [ fss | FNode _ fss <- fs ]
-	  compactDaughters fss = case head fss of
-				   []  -> [[]]
-				   [_] -> map return $ compactForests $ concat fss
-				   _   -> nubsort fss
--}
-
--- ** syntax trees
-
-data SyntaxTree n = TMeta
-                  | TNode n [SyntaxTree n]
-                  | TString  String
-                  | TInt     Integer
-                  | TFloat   Double
-		  deriving (Eq, Ord, Show)
-
-instance Functor SyntaxTree where
-    fmap f (TNode n trees) = TNode (f n) $ map (fmap f) trees
-    fmap _ (TString s)     = TString s
-    fmap _ (TInt    n)     = TInt    n
-    fmap _ (TFloat  f)     = TFloat  f
-    fmap _ (TMeta)         = TMeta 
-
-treeName :: SyntaxTree n -> Maybe n
-treeName (TNode n _) = Just n
-treeName (TMeta)     = Nothing
-
-unifyManyTrees :: (Monad m, Eq n) => [SyntaxTree n] -> m (SyntaxTree n)
-unifyManyTrees = foldM unifyTrees TMeta
-
--- | two trees can be unified, if either is 'TMeta', 
--- or both have the same parent, and their children can be unified
-unifyTrees :: (Monad m, Eq n) => SyntaxTree n -> SyntaxTree n -> m (SyntaxTree n)
-unifyTrees TMeta tree = return tree
-unifyTrees tree TMeta = return tree
-unifyTrees (TNode name1 children1) (TNode name2 children2)
-    | name1 == name2 && sameLength children1 children2 
-	= liftM (TNode name1) $ zipWithM unifyTrees children1 children2 
-unifyTrees (TString s1) (TString s2)
-    | s1 == s2 = return (TString s1)
-unifyTrees (TInt n1) (TInt n2)
-    | n1 == n2 = return (TInt n1)
-unifyTrees (TFloat f1) (TFloat f2)
-    | f1 == f2 = return (TFloat f1)
-unifyTrees _ _ = fail "tree unification failure"
 
 -- ** conversions between representations
 
@@ -217,11 +151,8 @@ chart2forests :: (Ord n, Ord e) =>
 		 SyntaxChart n e  -- ^ The complete chart
 	      -> (e -> Bool)      -- ^ When is an edge 'FMeta'?
 	      -> [e]              -- ^ The starting edges
-	      -> SList (SyntaxForest n) -- ^ The result has unique keys, ie. all 'n' are joined together.
-					-- In essence, the result is a map from 'n' to forest daughters
-
--- simplest implementation
-
+	      -> [SyntaxForest n] -- ^ The result has unique keys, ie. all 'n' are joined together.
+				  -- In essence, the result is a map from 'n' to forest daughters
 chart2forests chart isMeta = concatMap (edge2forests [])
     where edge2forests edges edge
               | isMeta edge       = [FMeta]
@@ -234,38 +165,23 @@ chart2forests chart isMeta = concatMap (edge2forests [])
           item2forest edges (SInt    n)           = FInt    n
           item2forest edges (SFloat  f)           = FFloat  f
 
-{- -before AR inserted peb's patch 8/7/2007, this was:
 
-chart2forests chart isMeta  = concatMap edge2forests
-    where edge2forests edge = if isMeta edge then [FMeta]
-			      else map item2forest $ chart ? edge
-	  item2forest (SMeta)               = FMeta
-	  item2forest (SNode name children) = FNode name $ children >>= mapM edge2forests
-	  item2forest (SString s)           = FString s
-	  item2forest (SInt    n)           = FInt    n
-	  item2forest (SFloat  f)           = FFloat  f
-	  
--}
-
-{-
--- more intelligent(?) implementation,
--- requiring that charts and forests are sorted maps and sorted sets
-chart2forests chart isMeta = es2fs
-    where e2fs  e  = if isMeta e then [FMeta] else map i2f $ chart ? e
-	  es2fs es = if null metas then fs else FMeta : fs
-	      where (metas, nonMetas) = splitBy isMeta es
-		    fs = map i2f $ unionMap (<++>) $ map (chart ?) nonMetas
-	  i2f (name, children) = FNode name $ 
-				 case head children of
-				   []  -> [[]]
-				   [_] -> map return $ es2fs $ concat children
-				   _   -> children >>= mapM e2fs
--}
+applyProfileToForest :: SyntaxForest (CId,[Profile]) -> [SyntaxForest CId]
+applyProfileToForest (FNode (fun,profiles) children) 
+    | fun == wildCId = concat chForests
+    | otherwise      = [ FNode fun chForests | not (null chForests) ]
+    where chForests  = concat [ mapM (unifyManyForests . map (forests !!)) profiles |
+			        forests0 <- children,
+			        forests <- mapM applyProfileToForest forests0 ]
+applyProfileToForest (FString s) = [FString s]
+applyProfileToForest (FInt    n) = [FInt    n]
+applyProfileToForest (FFloat  f) = [FFloat  f]
+applyProfileToForest (FMeta)     = [FMeta]
 
 
-forest2trees :: SyntaxForest n -> SList (SyntaxTree n)
-forest2trees (FNode n forests) = map (TNode n) $ forests >>= mapM forest2trees
-forest2trees (FString s) = [TString s]
-forest2trees (FInt    n) = [TInt    n]
-forest2trees (FFloat  f) = [TFloat  f]
-forest2trees (FMeta)     = [TMeta]
+forest2exps :: SyntaxForest CId -> [Exp]
+forest2exps (FNode n forests) = map (DTr [] (AC n)) $ forests >>= mapM forest2exps
+forest2exps (FString s) = [DTr [] (AS s) []]
+forest2exps (FInt    n) = [DTr [] (AI n) []]
+forest2exps (FFloat  f) = [DTr [] (AF f) []]
+forest2exps (FMeta)     = [DTr [] (AM 0) []]
