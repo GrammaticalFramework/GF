@@ -13,7 +13,7 @@
 -- embedded GF systems. AR 19/9/2007
 -----------------------------------------------------------------------------
 
-module PGF where
+module PGF(module PGF, PGF, emptyPGF) where
 
 import PGF.CId
 import PGF.Linearize
@@ -43,51 +43,46 @@ import qualified Text.ParserCombinators.ReadP as RP
 -- Interface
 ---------------------------------------------------
 
-data MultiGrammar = MultiGrammar {gfcc :: GFCC}
 type Language     = String
 type Category     = String
 type Tree         = Exp
 
-file2grammar :: FilePath -> IO MultiGrammar
+file2pgf :: FilePath -> IO PGF
 
-linearize    :: MultiGrammar -> Language -> Tree -> String
-parse        :: MultiGrammar -> Language -> Category -> String -> [Tree]
+linearize    :: PGF -> Language -> Tree -> String
+parse        :: PGF -> Language -> Category -> String -> [Tree]
 
-linearizeAll     :: MultiGrammar -> Tree -> [String]
-linearizeAllLang :: MultiGrammar -> Tree -> [(Language,String)]
+linearizeAll     :: PGF -> Tree -> [String]
+linearizeAllLang :: PGF -> Tree -> [(Language,String)]
 
-parseAll     :: MultiGrammar -> Category -> String -> [[Tree]]
-parseAllLang :: MultiGrammar -> Category -> String -> [(Language,[Tree])]
+parseAll     :: PGF -> Category -> String -> [[Tree]]
+parseAllLang :: PGF -> Category -> String -> [(Language,[Tree])]
 
-generateAll      :: MultiGrammar -> Category -> [Tree]
-generateRandom   :: MultiGrammar -> Category -> IO [Tree]
-generateAllDepth :: MultiGrammar -> Category -> Maybe Int -> [Tree]
+generateAll      :: PGF -> Category -> [Tree]
+generateRandom   :: PGF -> Category -> IO [Tree]
+generateAllDepth :: PGF -> Category -> Maybe Int -> [Tree]
 
 readTree   :: String -> Tree
 showTree   :: Tree -> String
 
-languages  :: MultiGrammar -> [Language]
-categories :: MultiGrammar -> [Category]
+languages  :: PGF -> [Language]
+categories :: PGF -> [Category]
 
-startCat   :: MultiGrammar -> Category
+startCat   :: PGF -> Category
 
 ---------------------------------------------------
 -- Implementation
 ---------------------------------------------------
 
-file2grammar f = do
-  gfcc <- file2gfcc f
-  return (MultiGrammar gfcc)
-
-file2gfcc f = do
+file2pgf f = do
   s <- readFileIf f
   g <- parseGrammar s
-  return $ toGFCC g
+  return $! toPGF g
 
-linearize mgr lang = PGF.Linearize.linearize (gfcc mgr) (mkCId lang)
+linearize pgf lang = PGF.Linearize.linearize pgf (mkCId lang)
 
-parse mgr lang cat s = 
-  case lookParser (gfcc mgr) (mkCId lang) of
+parse pgf lang cat s = 
+  case lookParser pgf (mkCId lang) of
     Nothing    -> error "no parser"
     Just pinfo -> case parseFCF "bottomup" pinfo (mkCId cat) (words s) of
                     Ok x -> x
@@ -102,12 +97,12 @@ parseAll mgr cat = map snd . parseAllLang mgr cat
 parseAllLang mgr cat s = 
   [(lang,ts) | lang <- languages mgr, let ts = parse mgr lang cat s, not (null ts)]
 
-generateRandom mgr cat = do
+generateRandom pgf cat = do
   gen <- newStdGen
-  return $ genRandom gen (gfcc mgr) (mkCId cat)
+  return $ genRandom gen pgf (mkCId cat)
 
-generateAll mgr cat = generate (gfcc mgr) (mkCId cat) Nothing
-generateAllDepth mgr cat = generate (gfcc mgr) (mkCId cat)
+generateAll pgf cat = generate pgf (mkCId cat) Nothing
+generateAllDepth pgf cat = generate pgf (mkCId cat)
 
 readTree s = case RP.readP_to_S (pExp False) s of
                [(x,"")] -> x
@@ -158,15 +153,14 @@ ppExp isNested (EVar  id)  = PP.text (prCId id)
 ppParens True  = PP.parens
 ppParens False = id
 
-abstractName mgr = prCId (absname (gfcc mgr))
+abstractName pgf = prCId (absname pgf)
 
-languages mgr = [prCId l | l <- cncnames (gfcc mgr)]
+languages pgf = [prCId l | l <- cncnames pgf]
 
-categories mgr = [prCId c | c <- Map.keys (cats (abstract (gfcc mgr)))]
+categories pgf = [prCId c | c <- Map.keys (cats (abstract pgf))]
 
-startCat mgr = lookStartCat (gfcc mgr)
+startCat pgf = lookStartCat pgf
 
-emptyMultiGrammar = MultiGrammar emptyGFCC
 
 ------------ for internal use only
 

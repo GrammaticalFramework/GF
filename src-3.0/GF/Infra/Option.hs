@@ -73,7 +73,7 @@ data Phase = Preproc | Convert | Compile | Link
 data Encoding = UTF_8 | ISO_8859_1
   deriving (Show,Eq,Ord)
 
-data OutputFormat = FmtGFCC | FmtJavaScript | FmtHaskell | FmtHaskellGADT
+data OutputFormat = FmtPGF | FmtJavaScript | FmtHaskell | FmtHaskellGADT
   deriving (Eq,Ord)
 
 data Optimization = OptStem | OptCSE | OptExpand | OptParametrize | OptValues
@@ -252,7 +252,7 @@ defaultFlags = Flags {
       optShowCPUTime     = False,
       optEmitGFO         = True,
       optGFODir          = ".",
-      optOutputFormats   = [FmtGFCC],
+      optOutputFormats   = [FmtPGF],
       optOutputFile      = Nothing,
       optOutputDir       = Nothing,
       optRecomp          = RecompIfNewer,
@@ -344,7 +344,7 @@ optDescr =
      Option ['E'] [] (NoArg (phase Preproc)) "Stop after preprocessing (with --preproc).",
      Option ['C'] [] (NoArg (phase Convert)) "Stop after conversion to .gf.",
      Option ['c'] [] (NoArg (phase Compile)) "Stop after compiling to .gfo (default) .",
-     Option [] ["make"] (NoArg (phase Link)) "Build .gfcc file and other output files.",
+     Option [] ["make"] (NoArg (phase Link)) "Build .pgf file and other output files.",
      Option [] ["cpu"] (NoArg (cpu True)) "Show compilation CPU time statistics.",
      Option [] ["no-cpu"] (NoArg (cpu False)) "Don't show compilation CPU time statistics (default).",
      Option [] ["emit-gfo"] (NoArg (emitGFO True)) "Create .gfo files (default).",
@@ -352,7 +352,7 @@ optDescr =
      Option [] ["gfo-dir"] (ReqArg gfoDir "DIR") "Directory to put .gfo files in (default = '.').",
      Option ['f'] ["output-format"] (ReqArg outFmt "FMT") 
         (unlines ["Output format. FMT can be one of:",
-                  "Multiple concrete: gfcc (default), gar, js, ...",
+                  "Multiple concrete: pgf (default), gar, js, ...",
                   "Single concrete only: cf, bnf, lbnf, gsl, srgs_xml, srgs_abnf, ...",
                   "Abstract only: haskell, ..."]),
      Option ['o'] ["output-file"] (ReqArg outFile "FILE") 
@@ -392,7 +392,7 @@ optDescr =
 
 outputFormats :: [(String,OutputFormat)]
 outputFormats = 
-    [("gfcc",         FmtGFCC),
+    [("pgf",          FmtPGF),
      ("js",           FmtJavaScript),
      ("haskell",      FmtHaskell),
      ("haskell_gadt", FmtHaskellGADT)]

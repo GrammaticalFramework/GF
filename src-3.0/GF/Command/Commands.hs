@@ -47,10 +47,10 @@ emptyCommandInfo = CommandInfo {
 lookCommand :: String -> Map.Map String CommandInfo -> Maybe CommandInfo
 lookCommand = Map.lookup
 
-commandHelpAll :: MultiGrammar -> [Option] -> String
-commandHelpAll mgr opts = unlines
+commandHelpAll :: PGF -> [Option] -> String
+commandHelpAll pgf opts = unlines
   [commandHelp (isOpt "full" opts) (co,info)
-    | (co,info) <- Map.assocs (allCommands mgr)]
+    | (co,info) <- Map.assocs (allCommands pgf)]
 
 commandHelp :: Bool -> (String,CommandInfo) -> String
 commandHelp full (co,info) = unlines $ [
@@ -82,14 +82,14 @@ isOpt :: String -> [Option] -> Bool
 isOpt o opts = elem o [x | OOpt (Ident x) <- opts]
 
 -- this list must be kept sorted by the command name!
-allCommands :: MultiGrammar -> Map.Map String CommandInfo
-allCommands mgr = Map.fromAscList [
+allCommands :: PGF -> Map.Map String CommandInfo
+allCommands pgf = Map.fromAscList [
   ("gr", emptyCommandInfo {
      longname = "generate_random",
      synopsis = "generates a list of random trees, by default one tree",
      flags = ["cat","number"],
      exec = \opts _ -> do
-       ts <- generateRandom mgr (optCat opts)
+       ts <- generateRandom pgf (optCat opts)
        return $ fromTrees $ take (optNum opts) ts
      }),
   ("gt", emptyCommandInfo {
@@ -98,7 +98,7 @@ allCommands mgr = Map.fromAscList [
      flags = ["cat","depth","number"],
      exec = \opts _ -> do
        let dp = return $ valIntOpts "depth" 4 opts
-       let ts = generateAllDepth mgr (optCat opts) dp
+       let ts = generateAllDepth pgf (optCat opts) dp
        return $ fromTrees $ take (optNumInf opts) ts
      }),
   ("h", emptyCommandInfo {
@@ -107,10 +107,10 @@ allCommands mgr = Map.fromAscList [
      options = ["full"],
      exec = \opts ts -> return ([], case ts of
        [t] -> let co = (showTree t) in 
-              case lookCommand co (allCommands mgr) of   ---- new map ??!!
+              case lookCommand co (allCommands pgf) of   ---- new map ??!!
                 Just info -> commandHelp True (co,info)
                 _ -> "command not found"
-       _ -> commandHelpAll mgr opts)
+       _ -> commandHelpAll pgf opts)
      }),
   ("l", emptyCommandInfo {
      exec = \opts -> return . fromStrings . map (optLin opts),
@@ -127,26 +127,24 @@ allCommands mgr = Map.fromAscList [
      })
   ]
  where
-   lin opts t = unlines [linearize mgr lang t    | lang <- optLangs opts]
-   par opts s = concat  [parse mgr lang (optCat opts) s | lang <- optLangs opts]
+   lin opts t = unlines [linearize pgf lang t    | lang <- optLangs opts]
+   par opts s = concat  [parse pgf lang (optCat opts) s | lang <- optLangs opts]
  
    optLin opts t = unlines [linea lang t | lang <- optLangs opts] where
      linea lang = case opts of
-       _ | isOpt "all"    opts -> allLinearize gr (mkCId lang)
-       _ | isOpt "table"  opts -> tableLinearize gr (mkCId lang)
-       _ | isOpt "term"   opts -> termLinearize gr (mkCId lang)
-       _ | isOpt "record" opts -> recordLinearize gr (mkCId lang)
-       _  -> linearize mgr lang
+       _ | isOpt "all"    opts -> allLinearize pgf (mkCId lang)
+       _ | isOpt "table"  opts -> tableLinearize pgf (mkCId lang)
+       _ | isOpt "term"   opts -> termLinearize pgf (mkCId lang)
+       _ | isOpt "record" opts -> recordLinearize pgf (mkCId lang)
+       _  -> linearize pgf lang
 
 
    optLangs opts = case valIdOpts "lang" "" opts of
-     "" -> languages mgr
+     "" -> languages pgf
      lang -> [lang] 
-   optCat opts = valIdOpts "cat" (lookStartCat gr) opts
+   optCat opts = valIdOpts "cat" (lookStartCat pgf) opts
    optNum opts = valIntOpts "number" 1 opts
    optNumInf opts = valIntOpts "number" 1000000000 opts ---- 10^9
-
-   gr       = gfcc mgr
 
    fromTrees ts = (ts,unlines (map showTree ts))
    fromStrings ss = (map EStr ss, unlines ss)
@@ -154,6 +152,6 @@ allCommands mgr = Map.fromAscList [
    toStrings ts = [s | EStr s <- ts] 
 
    prGrammar opts = case valIdOpts "printer" "" opts of
-     "cats" -> unwords $ categories mgr
-     v -> prGFCC (read v) gr 
+     "cats" -> unwords $ categories pgf
+     v -> prPGF (read v) pgf 
 

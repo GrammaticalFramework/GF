@@ -17,7 +17,7 @@ import GF.Data.ErrM ----
 import qualified Data.Map as Map
 
 data CommandEnv = CommandEnv {
-  multigrammar :: MultiGrammar,
+  multigrammar :: PGF,
   commands     :: Map.Map String CommandInfo
   }
 

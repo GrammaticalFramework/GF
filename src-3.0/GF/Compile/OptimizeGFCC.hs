@@ -12,12 +12,12 @@ import qualified Data.Map as Map
 -- back-end optimization: 
 -- suffix analysis followed by common subexpression elimination
 
-optGFCC :: GFCC -> GFCC
-optGFCC = cseOptimize . suffixOptimize
+optPGF :: PGF -> PGF
+optPGF = cseOptimize . suffixOptimize
 
-suffixOptimize :: GFCC -> GFCC
-suffixOptimize gfcc = gfcc {
-  concretes = Map.map opt (concretes gfcc)
+suffixOptimize :: PGF -> PGF
+suffixOptimize pgf = pgf {
+  concretes = Map.map opt (concretes pgf)
   }
  where 
   opt cnc = cnc {
@@ -26,9 +26,9 @@ suffixOptimize gfcc = gfcc {
     printnames = Map.map optTerm (printnames cnc)
   }
 
-cseOptimize :: GFCC -> GFCC
-cseOptimize gfcc = gfcc {
-  concretes = Map.map subex (concretes gfcc)
+cseOptimize :: PGF -> PGF
+cseOptimize pgf = pgf {
+  concretes = Map.map subex (concretes pgf)
   }
 
 -- analyse word form lists into prefix + suffixes

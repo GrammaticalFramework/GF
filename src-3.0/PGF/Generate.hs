@@ -8,8 +8,8 @@ import qualified Data.Map as M
 import System.Random
 
 -- generate an infinite list of trees exhaustively
-generate :: GFCC -> CId -> Maybe Int -> [Exp]
-generate gfcc cat dp = concatMap (\i -> gener i cat) depths
+generate :: PGF -> CId -> Maybe Int -> [Exp]
+generate pgf cat dp = concatMap (\i -> gener i cat) depths
  where
   gener 0 c = [EApp f [] | (f, ([],_)) <- fns c]
   gener i c = [
@@ -20,12 +20,12 @@ generate gfcc cat dp = concatMap (\i -> gener i cat) depths
       let tr = EApp f ts,
       depth tr >= i
     ]
-  fns c = [(f,catSkeleton ty) | (f,ty) <- functionsToCat gfcc c]
+  fns c = [(f,catSkeleton ty) | (f,ty) <- functionsToCat pgf c]
   depths = maybe [0 ..] (\d -> [0..d]) dp
 
 -- generate an infinite list of trees randomly
-genRandom :: StdGen -> GFCC -> CId -> [Exp]
-genRandom gen gfcc cat = genTrees (randomRs (0.0, 1.0 :: Double) gen) cat where
+genRandom :: StdGen -> PGF -> CId -> [Exp]
+genRandom gen pgf cat = genTrees (randomRs (0.0, 1.0 :: Double) gen) cat where
 
   timeout = 47 -- give up
 
@@ -55,7 +55,7 @@ genRandom gen gfcc cat = genTrees (randomRs (0.0, 1.0 :: Double) gen) cat where
         in (t:ts, k + ks)
       _ -> ([],0)
 
-    fns cat = [(f,(fst (catSkeleton ty))) | (f,ty) <- functionsToCat gfcc cat]
+    fns cat = [(f,(fst (catSkeleton ty))) | (f,ty) <- functionsToCat pgf cat]
 
 
 {-
@@ -63,8 +63,8 @@ genRandom gen gfcc cat = genTrees (randomRs (0.0, 1.0 :: Double) gen) cat where
 -- note: you cannot throw away rules with unknown words from the grammar
 -- because it is not known which field in each rule may match the input
 
-searchParse :: Int -> GFCC -> CId -> [String] -> [Exp]
-searchParse i gfcc cat ws = [t | t <- gen, s <- lins t, words s == ws] where 
-  gen    = take i $ generate gfcc cat
-  lins t = [linearize gfcc lang t | lang <- cncnames gfcc]
+searchParse :: Int -> PGF -> CId -> [String] -> [Exp]
+searchParse i pgf cat ws = [t | t <- gen, s <- lins t, words s == ws] where 
+  gen    = take i $ generate pgf cat
+  lins t = [linearize pgf lang t | lang <- cncnames pgf]
 -}

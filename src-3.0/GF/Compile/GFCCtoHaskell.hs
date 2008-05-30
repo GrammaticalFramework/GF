@@ -27,12 +27,12 @@ import Data.List --(isPrefixOf, find, intersperse)
 import qualified Data.Map as Map
 
 -- | the main function
-grammar2haskell :: GFCC -> String
+grammar2haskell :: PGF -> String
 grammar2haskell gr = encodeUTF8 $ foldr (++++) [] $  
   haskPreamble ++ [datatypes gr', gfinstances gr']
     where gr' = hSkeleton gr
 
-grammar2haskellGADT :: GFCC -> String
+grammar2haskellGADT :: PGF -> String
 grammar2haskellGADT gr = encodeUTF8 $ foldr (++++) [] $  
   ["{-# OPTIONS_GHC -fglasgow-exts #-}"] ++ 
   haskPreamble ++ [datatypesGADT gr', gfinstances gr']
@@ -173,7 +173,7 @@ fInstance m (cat,rules) =
 
 
 --type HSkeleton = [(OIdent, [(OIdent, [OIdent])])]
-hSkeleton :: GFCC -> (String,HSkeleton)
+hSkeleton :: PGF -> (String,HSkeleton)
 hSkeleton gr = 
   (prCId (absname gr), 
    [(prCId c, [(prCId f, map prCId cs) | (f, (cs,_)) <- fs]) | 

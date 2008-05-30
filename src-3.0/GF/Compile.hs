@@ -1,4 +1,4 @@
-module GF.Compile (batchCompile, link, compileToGFCC) where
+module GF.Compile (batchCompile, link, compileToPGF) where
 
 -- the main compiler passes
 import GF.Compile.GetGrammar
@@ -39,27 +39,31 @@ import PGF.Check
 import PGF.Data
 
 
--- | Compiles a number of source files and builds a 'GFCC' structure for them.
-compileToGFCC :: Options -> [FilePath] -> IOE GFCC
-compileToGFCC opts fs =
+-- | Compiles a number of source files and builds a 'PGF' structure for them.
+compileToPGF :: Options -> [FilePath] -> IOE PGF
+compileToPGF opts fs =
     do gr <- batchCompile opts fs
        let name = justModuleName (last fs)
        link opts name gr
 
-link :: Options -> String -> SourceGrammar -> IOE GFCC
+link :: Options -> String -> SourceGrammar -> IOE PGF
 link opts cnc gr =
     do gc1 <- putPointE Normal opts "linking ... " $
                 let (abs,gc0) = mkCanon2gfcc opts cnc gr
-                in ioeIO $ checkGFCCio gc0
+                in case checkPGF gc0 of
+		     Ok (gc,b) -> do 
+		       ioeIO $ putStrLn $ if b then "OK" else "Corrupted PGF"
+		       return gc
+		     Bad s -> fail s
        return $ buildParser opts $ optimize opts gc1
 
-optimize :: Options -> GFCC -> GFCC
+optimize :: Options -> PGF -> PGF
 optimize opts = cse . suf
   where os  = moduleFlag optOptimizations opts
         cse = if OptCSE  `elem` os then cseOptimize    else id
         suf = if OptStem `elem` os then suffixOptimize else id
 
-buildParser :: Options -> GFCC -> GFCC
+buildParser :: Options -> PGF -> PGF
 buildParser opts = 
     if moduleFlag optBuildParser opts then addParsers else id
 
