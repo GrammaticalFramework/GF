@@ -1,5 +1,6 @@
 module GF.Command.Interpreter (
   CommandEnv (..),
+  mkCommandEnv,
   interpretCommandLine
   ) where
 
@@ -20,6 +21,9 @@ data CommandEnv = CommandEnv {
   multigrammar :: PGF,
   commands     :: Map.Map String CommandInfo
   }
+
+mkCommandEnv :: PGF -> CommandEnv
+mkCommandEnv pgf = CommandEnv pgf (allCommands pgf)
 
 interpretCommandLine :: CommandEnv -> String -> IO ()
 interpretCommandLine env line = case (pCommandLine (myLexer line)) of

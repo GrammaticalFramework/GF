@@ -20,36 +20,34 @@ import Paths_gf
 mainGFI :: Options -> [FilePath] -> IO ()
 mainGFI opts files = do
   putStrLn welcome
-  env <- importInEnv emptyPGF opts files
-  loop (GFEnv emptyGrammar env [] 0)
+  gfenv <- importInEnv emptyGFEnv opts files
+  loop opts gfenv
   return ()
 
-loop :: GFEnv -> IO GFEnv
-loop gfenv0 = do
+loop :: Options -> GFEnv -> IO GFEnv
+loop opts gfenv0 = do
   let env = commandenv gfenv0
   let sgr = sourcegrammar gfenv0
   s <- fetchCommand (prompt env)
   let gfenv = gfenv0 {history = s : history gfenv0}
+  let loopNewCPU gfenv' = do cpu' <- getCPUTime
+                             putStrLn (show ((cpu' - cputime gfenv') `div` 1000000000) ++ " msec")
+                             loop opts $ gfenv' {cputime = cpu'}
   case words s of
   -- special commands, requiring source grammar in env
     "cc":ws -> do
        -- FIXME: add options parsing for cc arguments
-       let (opts,term) = (TermPrintDefault, ws)
+       let (style,term) = (TermPrintDefault, ws)
        case pTerm (unwords term) >>= checkTerm sgr >>= computeTerm sgr of   ---- make pipable
-         Ok  x -> putStrLn (showTerm opts x)
+         Ok  x -> putStrLn (showTerm style x)
          Bad s -> putStrLn s
        loopNewCPU gfenv
     "i":args -> do
-      case parseOptions args of
-        Ok (opts,files) 
-         | flag optRetainResource opts -> 
-             do src <- importSource sgr opts files
-                loopNewCPU $ gfenv {sourcegrammar = src}
-         | otherwise ->
-             do env1 <- importInEnv (multigrammar env) opts files
-                loopNewCPU $ gfenv {commandenv = env1}
-        Bad err -> do putStrLn $ "Command parse error: " ++ err
-                      loopNewCPU gfenv
+        gfenv' <- case parseOptions args of
+                    Ok (opts',files) -> importInEnv gfenv (addOptions opts opts') files
+                    Bad err -> do putStrLn $ "Command parse error: " ++ err
+                                  return gfenv
+        loopNewCPU gfenv
 
   -- other special commands, working on GFEnv
     "e":_ -> loopNewCPU $ gfenv {commandenv=env{multigrammar=emptyPGF}}
@@ -61,19 +59,17 @@ loop gfenv0 = do
       interpretCommandLine env s
       loopNewCPU gfenv
 
-loopNewCPU gfenv = do
-  cpu' <- getCPUTime
-  putStrLn (show ((cpu' - cputime gfenv) `div` 1000000000) ++ " msec")
-  loop $ gfenv {cputime = cpu'}
-
-importInEnv :: PGF -> Options -> [FilePath] -> IO CommandEnv
-importInEnv pgf0 opts files = do
-  pgf1 <- case files of
-    [] -> return pgf0
-    _  -> importGrammar pgf0 opts files
-  let env = CommandEnv pgf1 (allCommands pgf1)
-  putStrLn $ unwords $ "\nLanguages:" : languages pgf1
-  return env
+importInEnv :: GFEnv -> Options -> [FilePath] -> IO GFEnv
+importInEnv gfenv opts files
+    | flag optRetainResource opts =
+        do src <- importSource (sourcegrammar gfenv) opts files
+           return $ gfenv {sourcegrammar = src}
+    | otherwise =
+        do let opts' = addOptions (setOptimization OptCSE False) opts
+               pgf0 = multigrammar (commandenv gfenv)
+           pgf1 <- importGrammar pgf0 opts' files
+           putStrLn $ unwords $ "\nLanguages:" : languages pgf1
+           return $ gfenv { commandenv = mkCommandEnv pgf1 }
 
 welcome = unlines [
   "                              ",
@@ -103,3 +99,6 @@ data GFEnv = GFEnv {
   history    :: [String],
   cputime    :: Integer
   }
+
+emptyGFEnv :: GFEnv
+emptyGFEnv = GFEnv emptyGrammar (mkCommandEnv emptyPGF) [] 0
