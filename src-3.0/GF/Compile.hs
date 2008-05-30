@@ -34,6 +34,7 @@ import System.Directory
 import System.FilePath
 import System.Time
 import qualified Data.Map as Map
+import qualified Data.Set as Set
 
 import PGF.Check
 import PGF.Data
@@ -60,8 +61,8 @@ link opts cnc gr =
 optimize :: Options -> PGF -> PGF
 optimize opts = cse . suf
   where os  = moduleFlag optOptimizations opts
-        cse = if OptCSE  `elem` os then cseOptimize    else id
-        suf = if OptStem `elem` os then suffixOptimize else id
+        cse = if OptCSE  `Set.member` os then cseOptimize    else id
+        suf = if OptStem `Set.member` os then suffixOptimize else id
 
 buildParser :: Options -> PGF -> PGF
 buildParser opts = 

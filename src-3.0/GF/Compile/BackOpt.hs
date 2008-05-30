@@ -27,7 +27,10 @@ import Data.List
 import qualified GF.Infra.Modules as M
 import qualified Data.ByteString.Char8 as BS
 
-type OptSpec = [Optimization]
+import Data.Set (Set)
+import qualified Data.Set as Set
+
+type OptSpec = Set Optimization
 
 shareModule :: OptSpec -> (Ident, SourceModInfo) -> (Ident, SourceModInfo)
 shareModule opt (i,m) = case m of
@@ -42,8 +45,8 @@ shareInfo _ i = i
 
 -- the function putting together optimizations
 shareOptim :: OptSpec -> Ident -> Term -> Term
-shareOptim opt c =   (if OptValues      `elem` opt then values     else id)
-                   . (if OptParametrize `elem` opt then factor c 0 else id)
+shareOptim opt c =   (if OptValues      `Set.member` opt then values     else id)
+                   . (if OptParametrize `Set.member` opt then factor c 0 else id)
 
 -- do even more: factor parametric branches
 
