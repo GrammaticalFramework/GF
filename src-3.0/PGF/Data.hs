@@ -10,6 +10,8 @@ import Data.Array
 
 -- internal datatypes for PGF
 
+-- | An abstract data type representing multilingual grammar
+-- in Portable Grammar Format.
 data PGF = PGF {
   absname   :: CId ,
   cncnames  :: [CId] ,

@@ -4,7 +4,7 @@ module GF.Command.Interpreter (
   ) where
 
 import GF.Command.Commands
-import GF.Command.AbsGFShell hiding (Tree)
+import GF.Command.AbsGFShell
 import GF.Command.PPrTree
 import GF.Command.ParGFShell
 import PGF
@@ -40,7 +40,7 @@ interpretCommandLine env line = case (pCommandLine (myLexer line)) of
    interc = interpret env
 
 -- return the trees to be sent in pipe, and the output possibly printed
-interpret :: CommandEnv -> [Tree] -> Command -> IO CommandOutput
+interpret :: CommandEnv -> [Exp] -> Command -> IO CommandOutput
 interpret env trees0 comm = case lookCommand co comms of
   Just info -> do
     checkOpts info
@@ -64,7 +64,7 @@ interpret env trees0 comm = case lookCommand co comms of
         os  -> putStrLn $ "options not interpreted: " ++ unwords os
 
 -- analyse command parse tree to a uniform datastructure, normalizing comm name
-getCommand :: Command -> [Tree] -> (String,[Option],[Tree])
+getCommand :: Command -> [Exp] -> (String,[Option],[Exp])
 getCommand co ts = case co of
   Comm   (Ident c) opts (ATree t) -> (getOp c,opts,[tree2exp t]) -- ignore piped
   CNoarg (Ident c) opts           -> (getOp c,opts,ts)           -- use piped

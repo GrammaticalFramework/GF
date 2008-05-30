@@ -28,16 +28,17 @@ import qualified Data.Map as Map
 
 -- main parsing function
 
-parseFCF :: 
-      String ->         -- ^ parsing strategy
-      ParserInfo ->     -- ^ compiled grammar (fcfg) 
-      CId ->            -- ^ starting category
-      [String] ->       -- ^ input tokens
-      Err [Exp]         -- ^ resulting GF terms
+parseFCF :: String            -- ^ parsing strategy
+         -> ParserInfo        -- ^ compiled grammar (fcfg) 
+         -> CId               -- ^ starting category
+         -> [String]          -- ^ input tokens
+         -> Err [Exp]         -- ^ resulting GF terms
 parseFCF strategy pinfo startCat inString =
     do let inTokens = input inString
-       startCats <- Map.lookup startCat (startupCats pinfo)
-       fcfParser <- {- trace lctree $ -} parseFCF strategy
+       startCats <- case Map.lookup startCat (startupCats pinfo) of
+                      Just cats -> return cats
+                      Nothing   -> fail $ "Unknown startup category: " ++ prCId startCat
+       fcfParser <- parseFCF strategy
        let chart = fcfParser pinfo startCats inTokens
 	   (i,j) = inputBounds inTokens
 	   finalEdges = [makeFinalEdge cat i j | cat <- startCats]
@@ -46,6 +47,6 @@ parseFCF strategy pinfo startCat inString =
        return $ nubsort $ filteredForests >>= forest2exps
     where
       parseFCF :: String -> Err (FCFParser)
-      parseFCF "bottomup" = Ok  $ parse "b"
-      parseFCF "topdown"  = Ok  $ parse "t"
-      parseFCF strat      = Bad $ "FCFG parsing strategy not defined: " ++ strat
+      parseFCF "bottomup" = return $ parse "b"
+      parseFCF "topdown"  = return $ parse "t"
+      parseFCF strat      = fail $ "FCFG parsing strategy not defined: " ++ strat

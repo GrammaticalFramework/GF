@@ -9,7 +9,7 @@ module GF.Command.Commands (
   CommandOutput
   ) where
 
-import GF.Command.AbsGFShell hiding (Tree)
+import GF.Command.AbsGFShell
 import GF.Command.PPrTree
 import GF.Command.ParGFShell
 import PGF
@@ -23,10 +23,10 @@ import GF.Data.ErrM ----
 
 import qualified Data.Map as Map
 
-type CommandOutput = ([Tree],String) ---- errors, etc
+type CommandOutput = ([Exp],String) ---- errors, etc
 
 data CommandInfo = CommandInfo {
-  exec     :: [Option] -> [Tree] -> IO CommandOutput,
+  exec     :: [Option] -> [Exp] -> IO CommandOutput,
   synopsis :: String,
   explanation :: String,
   longname :: String,
@@ -106,7 +106,7 @@ allCommands pgf = Map.fromAscList [
      synopsis = "get description of a command, or a the full list of commands",
      options = ["full"],
      exec = \opts ts -> return ([], case ts of
-       [t] -> let co = (showTree t) in 
+       [t] -> let co = showExp t in 
               case lookCommand co (allCommands pgf) of   ---- new map ??!!
                 Just info -> commandHelp True (co,info)
                 _ -> "command not found"
@@ -146,7 +146,7 @@ allCommands pgf = Map.fromAscList [
    optNum opts = valIntOpts "number" 1 opts
    optNumInf opts = valIntOpts "number" 1000000000 opts ---- 10^9
 
-   fromTrees ts = (ts,unlines (map showTree ts))
+   fromTrees ts = (ts,unlines (map showExp ts))
    fromStrings ss = (map EStr ss, unlines ss)
    fromString  s  = ([EStr s], s)
    toStrings ts = [s | EStr s <- ts] 

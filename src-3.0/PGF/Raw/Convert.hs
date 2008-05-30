@@ -181,7 +181,6 @@ fromExp e = case e of
   EMeta _  -> AMet ----
   EEq eqs  -> 
     App "Eq" [App "E" (map fromExp (v:ps)) | Equ ps v <- eqs]
-  _ -> error $ "exp " ++ show e
 
 fromTerm :: Term -> RExp
 fromTerm e = case e of

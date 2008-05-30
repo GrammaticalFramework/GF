@@ -9,6 +9,7 @@ import GF.Infra.UseIO
 import GF.Infra.Option
 import GF.System.Readline (fetchCommand)
 import PGF
+import PGF.Data
 
 import System.CPUTime
 
@@ -34,8 +35,9 @@ loop gfenv0 = do
     "cc":ws -> do
        -- FIXME: add options parsing for cc arguments
        let (opts,term) = (TermPrintDefault, ws)
-       let t = pTerm (unwords term) >>= checkTerm sgr >>= computeTerm sgr
-       err putStrLn (putStrLn . showTerm opts) t ---- make pipable
+       case pTerm (unwords term) >>= checkTerm sgr >>= computeTerm sgr of   ---- make pipable
+         Ok  x -> putStrLn (showTerm opts x)
+         Bad s -> putStrLn s
        loopNewCPU gfenv
     "i":args -> do
       case parseOptions args of
