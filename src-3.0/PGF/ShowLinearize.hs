@@ -77,7 +77,7 @@ recordLinearize gfcc lang = prRecord . recLinearize gfcc lang
 recLinearize :: GFCC -> CId -> Exp -> Record
 recLinearize gfcc lang exp = mkRecord typ $ linExp gfcc lang exp where
   typ = case exp of
-    DTr _ (AC f) _ -> lookParamLincat gfcc lang $ valCat $ lookType gfcc f
+          EApp f _ -> lookParamLincat gfcc lang $ valCat $ lookType gfcc f
 
 -- show GFCC term
 termLinearize :: GFCC -> CId -> Exp -> String

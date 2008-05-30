@@ -117,22 +117,24 @@ mkExp :: A.Term -> C.Exp
 mkExp t = case t of
   A.Eqs eqs -> C.EEq [C.Equ (map mkPatt ps) (mkExp e) | (ps,e) <- eqs]
   _ -> case GM.termForm t of
-    Ok (xx,c,args) -> C.DTr [i2i x | x <- xx] (mkAt c) (map mkExp args) 
- where
-  mkAt c = case c of 
-    Q _ c  -> C.AC $ i2i c
-    QC _ c -> C.AC $ i2i c
-    Vr x   -> C.AV $ i2i x
-    EInt i -> C.AI i
-    EFloat f -> C.AF f
-    K s    -> C.AS s
-    Meta (MetaSymb i) -> C.AM $ toInteger i
-    _ -> C.AM 0
-  mkPatt p = uncurry CM.tree $ case p of
-    A.PP _ c ps -> (C.AC (i2i c), map mkPatt ps)
-    A.PV x      -> (C.AV (i2i x), [])
-    A.PW        -> (C.AV wildCId, [])
-    A.PInt i    -> (C.AI i, [])
+    Ok (xs,c,args) -> mkAbs xs (mkApp c (map mkExp args))
+  where
+    mkAbs [] t = t
+    mkAbs xs t = C.EAbs [i2i x | x <- xs] t
+    mkApp c args = case c of 
+      Q _ c    -> C.EApp (i2i c) args
+      QC _ c   -> C.EApp (i2i c) args
+      Vr x     -> C.EVar (i2i x)
+      EInt i   -> C.EInt   i
+      EFloat f -> C.EFloat f
+      K s      -> C.EStr   s
+      Meta (MetaSymb i) -> C.EMeta (toInteger i)
+      _        -> C.EMeta 0
+    mkPatt p = case p of
+      A.PP _ c ps -> C.EApp (i2i c) (map mkPatt ps)
+      A.PV x      -> C.EVar (i2i x)
+      A.PW        -> C.EVar wildCId
+      A.PInt i    -> C.EInt i
 
 mkContext :: A.Context -> [C.Hypo]
 mkContext hyps = [C.Hyp (i2i x) (mkType ty) | (x,ty) <- hyps]
