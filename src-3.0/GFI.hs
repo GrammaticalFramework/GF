@@ -47,7 +47,7 @@ loop opts gfenv0 = do
                     Ok (opts',files) -> importInEnv gfenv (addOptions opts opts') files
                     Bad err -> do putStrLn $ "Command parse error: " ++ err
                                   return gfenv
-        loopNewCPU gfenv
+        loopNewCPU gfenv'
 
   -- other special commands, working on GFEnv
     "e":_ -> loopNewCPU $ gfenv {commandenv=env{multigrammar=emptyPGF}}
