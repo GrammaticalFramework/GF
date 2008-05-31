@@ -58,7 +58,7 @@ renameModule ms (name,mod) = errIn ("renaming module" +++ prt name) $ case mod o
   ModMod mo -> do
     let js1 = jments mo
     status <- buildStatus (MGrammar ms) name mod
-    js2    <- mapsErrTree (renameInfo status) js1
+    js2    <- mapsErrTree (renameInfo mo status) js1
     let mod2 = ModMod $ mo {opens = map forceQualif (opens mo), jments = js2}
     return $ (name,mod2) : ms
 
@@ -160,8 +160,9 @@ forceQualif o = case o of
   OSimple q i   -> OQualif q i i
   OQualif q _ i -> OQualif q i i
   
-renameInfo :: Status -> (Ident,Info) -> Err (Ident,Info)
-renameInfo status (i,info) = errIn ("renaming definition of" +++ prt i) $ 
+renameInfo :: Module Ident Info -> Status -> (Ident,Info) -> Err (Ident,Info)
+renameInfo mo status (i,info) = errIn 
+    ("renaming definition of" +++ prt i +++ showPosition mo i) $ 
                                 liftM ((,) i) $ case info of
   AbsCat pco pfs -> liftM2 AbsCat (renPerh (renameContext status) pco)
                                   (renPerh (mapM rent) pfs)

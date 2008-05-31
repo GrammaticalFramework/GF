@@ -69,24 +69,24 @@ checkModule ms (name,mod) = checkIn ("checking module" +++ prt name) $ case mod 
     let js = jments mo
     checkRestrictedInheritance ms (name, mo)
     js' <- case mtype mo of
-      MTAbstract -> mapsCheckTree (checkAbsInfo gr name) js
+      MTAbstract -> mapsCheckTree (checkAbsInfo gr name mo) js
 
-      MTTransfer a b -> mapsCheckTree (checkAbsInfo gr name) js
+      MTTransfer a b -> mapsCheckTree (checkAbsInfo gr name mo) js
 
-      MTResource -> mapsCheckTree (checkResInfo gr name) js
+      MTResource -> mapsCheckTree (checkResInfo gr name mo) js
 
       MTConcrete a -> do
         checkErr $ topoSortOpers $ allOperDependencies name js
         ModMod abs <- checkErr $ lookupModule gr a
         js1 <- checkCompleteGrammar abs mo
-        mapsCheckTree (checkCncInfo gr name (a,abs)) js1
+        mapsCheckTree (checkCncInfo gr name mo (a,abs)) js1
 
-      MTInterface -> mapsCheckTree (checkResInfo gr name) js
+      MTInterface -> mapsCheckTree (checkResInfo gr name mo) js
 
       MTInstance a -> do
         ModMod abs <- checkErr $ lookupModule gr a
         -- checkCompleteInstance abs mo -- this is done in Rebuild
-        mapsCheckTree (checkResInfo gr name) js
+        mapsCheckTree (checkResInfo gr name mo) js
 
     return $ (name, ModMod (replaceJudgements mo js')) : ms
 
@@ -126,8 +126,9 @@ justCheckLTerm src t = do
   ((t',_),_) <- checkStart (inferLType src t)
   return t'
 
-checkAbsInfo :: SourceGrammar -> Ident -> (Ident,Info) -> Check (Ident,Info)
-checkAbsInfo st m (c,info) = do
+checkAbsInfo :: 
+  SourceGrammar -> Ident -> Module Ident Info -> (Ident,Info) -> Check (Ident,Info)
+checkAbsInfo st m mo (c,info) = do
 ---- checkReservedId c
  case info of
    AbsCat (Yes cont) _ -> mkCheck "category" $ 
@@ -147,12 +148,17 @@ checkAbsInfo st m (c,info) = do
    mkCheck cat ss = case ss of
      [] -> return (c,info)
      ["[]"] -> return (c,info) ----
-     _  -> checkErr $ prtBad (unlines ss ++++ "in" +++ cat) c
+     _  -> checkErr $ Bad (unlines ss ++++ "in" +++ cat +++ prt c +++ pos c)
    ---- temporary solution when tc of defs is incomplete
    mkCheckWarn cat ss = case ss of
      [] -> return (c,info)
      ["[]"] -> return (c,info) ----
-     _  -> checkWarn (unlines ss ++++ "in" +++ cat +++ prt c) >> return (c,info)
+     _  -> do
+       checkWarn (unlines ss ++++ "in" +++ cat +++ prt c +++ pos c)
+       return (c,info)
+
+   pos c = showPosition mo c
+
    compAbsTyp g t = case t of
      Vr x -> maybe (fail ("no value given to variable" +++ prt x)) return $ lookup x g
      Let (x,(_,a)) b -> do
@@ -205,8 +211,9 @@ checkCompleteGrammar abs cnc = do
 
 -- | General Principle: only Yes-values are checked. 
 -- A May-value has always been checked in its origin module.
-checkResInfo :: SourceGrammar -> Ident -> (Ident,Info) -> Check (Ident,Info)
-checkResInfo gr mo (c,info) = do
+checkResInfo :: 
+  SourceGrammar -> Ident -> Module Ident Info -> (Ident,Info) -> Check (Ident,Info)
+checkResInfo gr mo mm (c,info) = do
   checkReservedId c
   case info of
     ResOper pty pde -> chIn "operation" $ do
@@ -243,8 +250,9 @@ checkResInfo gr mo (c,info) = do
  where
    infer = inferLType gr
    check = checkLType gr
-   chIn cat = checkIn ("Happened in" +++ cat +++ prt c +++ ":")
+   chIn cat = checkIn ("Happened in" +++ cat +++ prt c +++ pos c +++ ":")
    comp = computeLType gr
+   pos c = showPosition mm c
 
    checkUniq xss = case xss of
      x:y:xs 
@@ -254,9 +262,10 @@ checkResInfo gr mo (c,info) = do
      _ -> return ()
 
 
-checkCncInfo :: SourceGrammar -> Ident -> (Ident,SourceAbs) -> 
+checkCncInfo :: SourceGrammar -> Ident -> Module Ident Info -> 
+                (Ident,SourceAbs) -> 
                 (Ident,Info) -> Check (Ident,Info)
-checkCncInfo gr m (a,abs) (c,info) = do
+checkCncInfo gr m mo (a,abs) (c,info) = do
   checkReservedId c
   case info of
 
@@ -281,14 +290,15 @@ checkCncInfo gr m (a,abs) (c,info) = do
       checkPrintname gr mpr
       return (c,CncCat (Yes typ') mdef' mpr)
 
-    _ -> checkResInfo gr m (c,info)
+    _ -> checkResInfo gr m mo (c,info)
 
  where
    env = gr
    infer = inferLType gr
    comp = computeLType gr 
    check = checkLType gr
-   chIn cat = checkIn ("Happened in" +++ cat +++ prt c +++ ":")
+   chIn cat = checkIn ("Happened in" +++ cat +++ prt c +++ pos c +++ ":")
+   pos c = showPosition mo c
 
 checkIfParType :: SourceGrammar -> Type -> Check ()
 checkIfParType st typ = checkCond ("Not parameter type" +++ prt typ) (isParType typ)
