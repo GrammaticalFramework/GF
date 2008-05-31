@@ -65,7 +65,7 @@ lin
   on_Prep = {s = [] ; c = CPrep P_su ; isDir = False} ;
 ----  one_Quant = {s = \\g,c => prepCase c ++ genForms "uno" "una" ! g} ;
   only_Predet = {s = \\_,c => prepCase c ++ "soltanto" ; c = Nom} ; --- solo|a|i|e
-  or_Conj = {s1 = [] ; s2 = "o" ; n = Pl} ;
+  or_Conj = {s1 = [] ; s2 = "o" ; n = Sg} ;
   otherwise_PConj = ss "altramente" ;
   part_Prep = complGen ;
   please_Voc = ss ["per favore"] ;
