@@ -29,7 +29,7 @@ import GF.Infra.Modules
 
 import GF.Compile.TypeCheck
 
-import GF.Grammar.Refresh
+import GF.Compile.Refresh
 import GF.Grammar.Grammar
 import GF.Grammar.PrGrammar
 import GF.Grammar.Lookup
@@ -65,9 +65,10 @@ mapsCheckTree f = checkErr . mapsErrTree (\t -> checkStart (f t) >>= return . fs
 checkModule :: [SourceModule] -> SourceModule -> Check [SourceModule]
 checkModule ms (name,mod) = checkIn ("checking module" +++ prt name) $ case mod of
 
-  ModMod mo@(Module mt st fs me ops js) -> do
+  ModMod mo -> do
+    let js = jments mo
     checkRestrictedInheritance ms (name, mo)
-    js' <- case mt of
+    js' <- case mtype mo of
       MTAbstract -> mapsCheckTree (checkAbsInfo gr name) js
 
       MTTransfer a b -> mapsCheckTree (checkAbsInfo gr name) js
@@ -87,7 +88,7 @@ checkModule ms (name,mod) = checkIn ("checking module" +++ prt name) $ case mod 
         -- checkCompleteInstance abs mo -- this is done in Rebuild
         mapsCheckTree (checkResInfo gr name) js
 
-    return $ (name, ModMod (Module mt st fs me ops js')) : ms
+    return $ (name, ModMod (replaceJudgements mo js')) : ms
 
   _ -> return $ (name,mod) : ms
  where

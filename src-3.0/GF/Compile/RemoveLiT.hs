@@ -34,9 +34,9 @@ removeLiT gr = liftM MGrammar $ mapM (remlModule gr) (modules gr)
 
 remlModule :: SourceGrammar -> (Ident,SourceModInfo) -> Err (Ident,SourceModInfo)
 remlModule gr mi@(name,mod) = case mod of
-  ModMod (Module mt st fs me ops js) -> do
-    js1 <- mapMTree (remlResInfo gr) js
-    let mod2 = ModMod $ Module mt st fs me ops js1
+  ModMod mo -> do
+    js1 <- mapMTree (remlResInfo gr) (jments mo)
+    let mod2 = ModMod $ mo {jments = js1}
     return $ (name,mod2)
   _ -> return mi
 

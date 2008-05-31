@@ -55,11 +55,11 @@ renameSourceTerm g m t = do
 
 renameModule :: [SourceModule] -> SourceModule -> Err [SourceModule]
 renameModule ms (name,mod) = errIn ("renaming module" +++ prt name) $ case mod of
-  ModMod m@(Module mt st fs me ops js) -> do
-    let js1 = jments m
+  ModMod mo -> do
+    let js1 = jments mo
     status <- buildStatus (MGrammar ms) name mod
     js2    <- mapsErrTree (renameInfo status) js1
-    let mod2 = ModMod $ Module mt st fs me (map forceQualif ops) js2
+    let mod2 = ModMod $ mo {opens = map forceQualif (opens mo), jments = js2}
     return $ (name,mod2) : ms
 
 type Status = (StatusTree, [(OpenSpec Ident, StatusTree)])

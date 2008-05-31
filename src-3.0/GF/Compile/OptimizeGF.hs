@@ -47,8 +47,8 @@ unshareModule gr = processModule (const (unoptim gr))
 processModule :: 
   (Ident -> Term -> Term) -> (Ident, SourceModInfo) -> (Ident, SourceModInfo)
 processModule opt (i,m) = case m of
-  M.ModMod (M.Module mt st fs me ops js) -> 
-    (i,M.ModMod (M.Module mt st fs me ops (mapTree (shareInfo opt) js)))
+  M.ModMod mo -> 
+    (i,M.ModMod (M.replaceJudgements mo (mapTree (shareInfo opt) (M.jments mo))))
   _ -> (i,m)
 
 shareInfo opt (c, CncCat ty (Yes t) m) = (c,CncCat ty (Yes (opt c t)) m)
@@ -168,19 +168,20 @@ cse is possible in the grammar. It is used by the flag pg -printer=subs.
 -}
 
 subexpModule :: SourceModule -> SourceModule
-subexpModule (mo,m) = errVal (mo,m) $ case m of
-  M.ModMod (M.Module mt st fs me ops js) -> do
-    (tree,_) <- appSTM (getSubtermsMod mo (tree2list js)) (Map.empty,0)
-    js2 <- liftM buildTree $ addSubexpConsts mo tree $ tree2list js
-    return (mo,M.ModMod (M.Module mt st fs me ops js2))
-  _ -> return (mo,m)
+subexpModule (n,m) = errVal (n,m) $ case m of
+  M.ModMod mo -> do
+    let ljs = tree2list (M.jments mo)
+    (tree,_) <- appSTM (getSubtermsMod n ljs) (Map.empty,0)
+    js2 <- liftM buildTree $ addSubexpConsts n tree $ ljs
+    return (n,M.ModMod (M.replaceJudgements mo js2))
+  _ -> return (n,m)
 
 unsubexpModule :: SourceModule -> SourceModule
-unsubexpModule mo@(i,m) = case m of
-    M.ModMod (M.Module mt st fs me ops js) | hasSub ljs ->
-      (i, M.ModMod (M.Module mt st fs me ops 
+unsubexpModule sm@(i,m) = case m of
+    M.ModMod mo | hasSub ljs ->
+      (i, M.ModMod (M.replaceJudgements mo
                      (rebuild (map unparInfo ljs)))) 
-                        where ljs = tree2list js
+                        where ljs = tree2list (M.jments mo)
     _ -> (i,m)
   where
     -- perform this iff the module has opers
@@ -194,7 +195,7 @@ unsubexpModule mo@(i,m) = case m of
       Q m c | isOperIdent c -> --- name convention of subexp opers
         errVal t $ liftM unparTerm $ lookupResDef gr m c 
       _ -> C.composSafeOp unparTerm t
-    gr = M.MGrammar [mo] 
+    gr = M.MGrammar [sm] 
     rebuild = buildTree . concat
 
 -- implementation

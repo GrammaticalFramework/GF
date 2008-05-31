@@ -218,11 +218,12 @@ mkParamLincat sgr lang cat = errVal (C.R [C.S []]) $ do
 reorder :: Ident -> SourceGrammar -> SourceGrammar
 reorder abs cg = M.MGrammar $ 
     (abs, M.ModMod $ 
-          M.Module M.MTAbstract M.MSComplete aflags [] [] adefs):
+          M.Module M.MTAbstract M.MSComplete aflags [] [] adefs poss):
       [(c, M.ModMod $ 
-          M.Module (M.MTConcrete abs) M.MSComplete fs [] [] (sorted2tree js)) 
+          M.Module (M.MTConcrete abs) M.MSComplete fs [] [] (sorted2tree js) poss) 
             | (c,(fs,js)) <- cncs] 
      where
+       poss = emptyBinTree -- positions no longer needed
        mos = M.allModMod cg
        adefs = sorted2tree $ sortIds $
                  predefADefs ++ Look.allOrigInfos cg abs
@@ -268,8 +269,8 @@ canon2canon abs =
   js2js ms = map (c2c (j2j (M.MGrammar ms))) ms
 
   c2c f2 (c,m) = case m of
-      M.ModMod mo@(M.Module _ _ _ _ _ js) ->
-        (c, M.ModMod $ M.replaceJudgements mo $ mapTree f2 js)
+      M.ModMod mo ->
+        (c, M.ModMod $ M.replaceJudgements mo $ mapTree f2 (M.jments mo))
       _ -> (c,m)    
   j2j cg (f,j) = case j of
       CncFun x (Yes tr) z -> (f,CncFun x (Yes (trace ("+ " ++ prt f) (t2t tr))) z)

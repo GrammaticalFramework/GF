@@ -99,6 +99,8 @@ transModDef x = case x of
 
     mkBody (mstat', trDef, mtyp', id') body
   where
+      poss = emptyBinTree ----
+
       mkBody xx@(mstat', trDef, mtyp', id') bod = case bod of 
        MNoBody incls -> do
         mkBody xx $ MBody (Ext incls) NoOpens []
@@ -108,13 +110,13 @@ transModDef x = case x of
         defs0    <- mapM trDef $ getTopDefs defs
         defs'    <- U.buildAnyTree [d | Left  ds <- defs0, d <- ds]
         flags'   <- return $ concatModuleOptions [o | Right o <- defs0]
-        return (id',GM.ModMod (GM.Module mtyp' mstat' flags' extends' opens' defs'))
+        return (id',GM.ModMod (GM.Module mtyp' mstat' flags' extends' opens' defs' poss))
        MReuse _ -> do
-        return (id', GM.ModMod (GM.Module mtyp' mstat' noModuleOptions [] [] emptyBinTree))
+        return (id', GM.ModMod (GM.Module mtyp' mstat' noModuleOptions [] [] emptyBinTree poss))
        MUnion imps -> do
         imps' <- mapM transIncluded imps        
         return (id', 
-          GM.ModMod (GM.Module (GM.MTUnion mtyp' imps') mstat' noModuleOptions [] [] emptyBinTree))
+          GM.ModMod (GM.Module (GM.MTUnion mtyp' imps') mstat' noModuleOptions [] [] emptyBinTree poss))
 
        MWith m insts -> mkBody xx $ MWithEBody [] m insts NoOpens []
        MWithBody m insts opens defs -> mkBody xx $ MWithEBody [] m insts opens defs
@@ -128,7 +130,7 @@ transModDef x = case x of
         defs'    <- U.buildAnyTree [d | Left  ds <- defs0, d <- ds]
         flags'   <- return $ concatModuleOptions [o | Right o <- defs0]
         return (id',
-          GM.ModWith (GM.Module mtyp' mstat' flags' extends' opens' defs') m' insts')
+          GM.ModWith (GM.Module mtyp' mstat' flags' extends' opens' defs' poss) m' insts')
 
       mkModRes id mtyp body = do
          id' <- transIdent id

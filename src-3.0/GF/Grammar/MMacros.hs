@@ -20,7 +20,7 @@ import GF.Data.Zipper
 import GF.Grammar.Grammar
 import GF.Grammar.PrGrammar
 import GF.Infra.Ident
-import GF.Grammar.Refresh
+import GF.Compile.Refresh
 import GF.Grammar.Values
 ----import GrammarST
 import GF.Grammar.Macros

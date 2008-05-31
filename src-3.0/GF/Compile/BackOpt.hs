@@ -34,8 +34,8 @@ type OptSpec = Set Optimization
 
 shareModule :: OptSpec -> (Ident, SourceModInfo) -> (Ident, SourceModInfo)
 shareModule opt (i,m) = case m of
-  M.ModMod (M.Module mt st fs me ops js) -> 
-    (i,M.ModMod (M.Module mt st fs me ops (mapTree (shareInfo opt) js)))
+  M.ModMod mo -> 
+    (i,M.ModMod (M.replaceJudgements mo (mapTree (shareInfo opt) (M.jments mo))))
   _ -> (i,m)
 
 shareInfo opt (c, CncCat ty (Yes t) m) = (c,CncCat ty (Yes (shareOptim opt c t)) m)

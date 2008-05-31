@@ -68,7 +68,8 @@ data Module i a = Module {
     flags   :: ModuleOptions,
     extend  :: [(i,MInclude i)],
     opens   :: [OpenSpec i] ,
-    jments  :: BinTree i a
+    jments  :: BinTree i a ,
+    positions :: BinTree i (String,(Int,Int)) -- file, first line, last line
   }
 ---  deriving Show
 instance Show (Module i a) where
@@ -116,15 +117,15 @@ updateMGrammar old new = MGrammar $
    ns = modules new
 
 updateModule :: Ord i => Module i t -> i -> t -> Module i t
-updateModule (Module  mt ms fs me ops js) i t = 
-  Module mt ms fs me ops (updateTree (i,t) js)
+updateModule (Module  mt ms fs me ops js ps) i t = 
+  Module mt ms fs me ops (updateTree (i,t) js) ps
 
 replaceJudgements :: Module i t -> BinTree i t -> Module i t
-replaceJudgements (Module mt ms fs me ops _) js = Module mt ms fs me ops js
+replaceJudgements (Module mt ms fs me ops _ ps) js = Module mt ms fs me ops js ps
 
 addOpenQualif :: i -> i -> Module i t -> Module i t
-addOpenQualif i j (Module mt ms fs me ops js) = 
-  Module mt ms fs me (oQualif i j : ops) js
+addOpenQualif i j (Module mt ms fs me ops js ps) = 
+  Module mt ms fs me (oQualif i j : ops) js ps
 
 addFlag :: ModuleOptions -> Module i t -> Module i t
 addFlag f mo = mo {flags = addModuleOptions (flags mo) f} 
@@ -267,7 +268,8 @@ emptyModInfo :: ModInfo i a
 emptyModInfo = ModMod emptyModule
 
 emptyModule :: Module i a
-emptyModule = Module MTResource MSComplete noModuleOptions [] [] emptyBinTree
+emptyModule = Module 
+  MTResource MSComplete noModuleOptions [] [] emptyBinTree emptyBinTree
 
 -- | we store the module type with the identifier
 data IdentM i = IdentM {
