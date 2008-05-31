@@ -1,3 +1,3 @@
---# -path=.:alltenses-1.4:prelude
+--# -path=.:alltenses:prelude
 
 resource TryEng = SyntaxEng, LexiconEng, ParadigmsEng - [mkAdv] ;
