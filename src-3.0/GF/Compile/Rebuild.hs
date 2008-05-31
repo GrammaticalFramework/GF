@@ -56,7 +56,10 @@ rebuildModule ms mo@(i,mi) = do
                 m0s <- mapM (lookupModMod gr) j0s
                 let notInM0 c _  = all (not . isInBinTree c . jments) m0s
                 let js2 = filterBinTree notInM0 js'
-                return $ replaceJudgements m js2
+                return $ (replaceJudgements m js2) 
+                  {positions = 
+                    buildTree (tree2list (positions m1) ++ 
+                               tree2list (positions m))}
           return $ ModMod m'
         _ -> return mi
 

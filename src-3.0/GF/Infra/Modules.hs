@@ -34,6 +34,7 @@ module GF.Infra.Modules (
 		IdentM(..),
 		typeOfModule, abstractOfConcrete, abstractModOfConcrete,
 		lookupModule, lookupModuleType, lookupModMod, lookupInfo,
+                lookupPosition, showPosition,
 		allModMod, isModAbs, isModRes, isModCnc, isModTrans,
 		sameMType, isCompilableModule, isCompleteModule,
 		allAbstracts, greatestAbstract, allResources,
@@ -325,6 +326,16 @@ lookupModMod gr i = do
 
 lookupInfo :: (Show i, Ord i) => Module i a -> i -> Err a
 lookupInfo mo i = lookupTree show i (jments mo)
+
+lookupPosition :: (Show i, Ord i) => Module i a -> i -> Err (String,(Int,Int))
+lookupPosition mo i = lookupTree show i (positions mo)
+
+showPosition :: (Show i, Ord i) => Module i a -> i -> String
+showPosition mo i = case lookupPosition mo i of
+  Ok (f,(b,e)) | b == e -> "in" +++ f ++ ", line" +++ show b
+  Ok (f,(b,e)) -> "in" +++ f ++ ", lines" +++ show b ++ "-" ++ show e
+  _ -> ""
+
 
 allModMod :: (Show i,Eq i) => MGrammar i a -> [(i,Module i a)]
 allModMod gr = [(i,m) | (i, ModMod m) <- modules gr]
