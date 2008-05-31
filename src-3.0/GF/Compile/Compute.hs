@@ -24,7 +24,7 @@ import GF.Infra.Modules
 import GF.Grammar.Predef
 import GF.Grammar.Macros
 import GF.Grammar.Lookup
-import GF.Grammar.Refresh
+import GF.Compile.Refresh
 import GF.Grammar.PatternMatch
 import GF.Grammar.Lockfield (isLockLabel) ----
 

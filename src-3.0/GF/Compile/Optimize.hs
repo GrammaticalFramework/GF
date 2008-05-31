@@ -22,7 +22,7 @@ import GF.Grammar.PrGrammar
 import GF.Grammar.Macros
 import GF.Grammar.Lookup
 import GF.Grammar.Predef
-import GF.Grammar.Refresh
+import GF.Compile.Refresh
 import GF.Compile.Compute
 import GF.Compile.BackOpt
 import GF.Compile.CheckGrammar
@@ -52,8 +52,7 @@ type EEnv = () --- not used
 optimizeModule :: Options -> ([(Ident,SourceModInfo)],EEnv) -> 
                   (Ident,SourceModInfo) -> Err ((Ident,SourceModInfo),EEnv)
 optimizeModule opts mse@(ms,eenv) mo@(_,mi) = case mi of
-  ModMod m0@(Module mt st fs me ops js) | 
-    st == MSComplete && isModRes m0 -> do
+  ModMod m0 | mstatus m0 == MSComplete && isModRes m0 -> do
       (mo1,_) <- evalModule oopts mse mo
       let mo2 = shareModule optim mo1
       return (mo2,eenv)
@@ -66,16 +65,16 @@ evalModule :: Options -> ([(Ident,SourceModInfo)],EEnv) -> (Ident,SourceModInfo)
                Err ((Ident,SourceModInfo),EEnv)
 evalModule oopts (ms,eenv) mo@(name,mod) = case mod of
 
-  ModMod m0@(Module mt st fs me ops js) | st == MSComplete -> case mt of
+  ModMod m0 | mstatus m0 == MSComplete -> case mtype m0 of
     _ | isModRes m0 -> do
-      let deps = allOperDependencies name js
+      let deps = allOperDependencies name (jments m0)
       ids <- topoSortOpers deps
       MGrammar (mod' : _) <- foldM evalOp gr ids
       return $ (mod',eenv)
 
     MTConcrete a -> do
-      js' <- mapMTree (evalCncInfo oopts gr name a) js ---- <- gr0 6/12/2005
-      return $ ((name, ModMod (Module mt st fs me ops js')),eenv)
+      js' <- mapMTree (evalCncInfo oopts gr name a) (jments m0)
+      return $ ((name, ModMod (replaceJudgements m0 js')),eenv)
 
     _ -> return $ ((name,mod),eenv)
   _ -> return $ ((name,mod),eenv)

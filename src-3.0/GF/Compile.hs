@@ -12,9 +12,9 @@ import GF.Compile.OptimizeGFCC
 import GF.Compile.GrammarToGFCC
 import GF.Compile.ReadFiles
 import GF.Compile.Update
+import GF.Compile.Refresh
 
 import GF.Grammar.Grammar
-import GF.Grammar.Refresh
 import GF.Grammar.Lookup
 import GF.Grammar.PrGrammar
 

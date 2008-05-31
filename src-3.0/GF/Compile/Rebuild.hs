@@ -62,14 +62,14 @@ rebuildModule ms mo@(i,mi) = do
 
     -- add the instance opens to an incomplete module "with" instances
     --      ModWith mt stat ext me ops -> do
-    ModWith (Module mt stat fs_ me ops_ js_) (ext,incl) ops -> do
+    ModWith (Module mt stat fs_ me ops_ js_ ps_) (ext,incl) ops -> do
       let insts = [(inf,inst) | OQualif _ inf inst <- ops]
       let infs  = map fst insts
       let stat' = ifNull MSComplete (const MSIncomplete)
                     [i | i <- is, notElem i infs]
       testErr (stat' == MSComplete || stat == MSIncomplete) 
               ("module" +++ prt i +++ "remains incomplete")
-      Module mt0 _ fs me' ops0 js <- lookupModMod gr ext
+      Module mt0 _ fs me' ops0 js ps0 <- lookupModMod gr ext
       let ops1 = nub $
                    ops_ ++ -- N.B. js has been name-resolved already
                    ops ++ [o | o <- ops0, notElem (openedModule o) infs]
@@ -80,7 +80,8 @@ rebuildModule ms mo@(i,mi) = do
       let fs1 = addModuleOptions fs fs_                           -- new flags have priority
       let js0 = [ci | ci@(c,_) <- tree2list js, isInherited incl c]
       let js1 = buildTree (tree2list js_ ++ js0)
-      return $ ModMod $ Module mt0 stat' fs1 me ops1 js1 
+      let ps1 = buildTree (tree2list ps_ ++ tree2list ps0)
+      return $ ModMod $ Module mt0 stat' fs1 me ops1 js1 ps1 
                           ---- (mapTree (qualifInstanceInfo insts) js) -- not needed
 
     _ -> return mi

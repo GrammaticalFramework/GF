@@ -12,7 +12,7 @@
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
-module GF.Grammar.Refresh (refreshTerm, refreshTermN,
+module GF.Compile.Refresh (refreshTerm, refreshTermN,
 		refreshModule
 	       ) where
 
@@ -110,9 +110,9 @@ refreshGrammar = liftM (MGrammar . snd) . foldM refreshModule (0,[]) . modules
 
 refreshModule :: (Int,[SourceModule]) -> SourceModule -> Err (Int,[SourceModule])
 refreshModule (k,ms) mi@(i,m) = case m of
-    ModMod mo@(Module mt fs st me ops js) | (isModCnc mo || isModRes mo) -> do
-      (k',js') <- foldM refreshRes (k,[]) $ tree2list js
-      return (k', (i, ModMod(Module mt fs st me ops (buildTree js'))) : ms)
+    ModMod mo | (isModCnc mo || isModRes mo) -> do
+      (k',js') <- foldM refreshRes (k,[]) $ tree2list $ jments mo
+      return (k', (i, ModMod(replaceJudgements mo (buildTree js'))) : ms)
     _ -> return (k, mi:ms)
  where
   refreshRes (k,cs) ci@(c,info) = case info of

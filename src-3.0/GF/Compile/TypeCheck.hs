@@ -23,7 +23,7 @@ import GF.Data.Operations
 import GF.Data.Zipper
 
 import GF.Grammar.Abstract
-import GF.Grammar.Refresh
+import GF.Compile.Refresh
 import GF.Grammar.LookAbs
 import qualified GF.Grammar.Lookup as Lookup ---
 import GF.Grammar.Unify ---

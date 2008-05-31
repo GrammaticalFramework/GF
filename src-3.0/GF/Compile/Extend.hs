@@ -40,22 +40,22 @@ extendModule ms (name,mod) = case mod of
     mod' <- foldM extOne m (extend m) 
     return (name,ModMod mod') 
  where
-   extOne mod@(Module mt st fs es ops js) (n,cond) = do
+   extOne mo (n,cond) = do
         (m0,isCompl) <- do
           m <- lookupModMod  (MGrammar ms) n
 
           -- test that the module types match, and find out if the old is complete
-          testErr (sameMType (mtype m) mt) 
+          testErr (sameMType (mtype m) (mtype mo)) 
                     ("illegal extension type to module" +++ prt name)
           return (m, isCompleteModule m)
-----       return (m, if (isCompleteModule m) then True else not (isCompleteModule mod))
 
         -- build extension in a way depending on whether the old module is complete
-        js1 <- extendMod isCompl (n, isInherited cond) name (jments m0) js
+        js1 <- extendMod isCompl (n, isInherited cond) name (jments m0) (jments mo)
 
         -- if incomplete, throw away extension information
-        let me' = if isCompl then es else (filter ((/=n) . fst) es) 
-        return $ Module mt st fs me' ops js1
+        let es  = extend mo
+        let es' = if isCompl then es else (filter ((/=n) . fst) es) 
+        return $ mo {extend = es', jments = js1}
 
 -- | When extending a complete module: new information is inserted,
 -- and the process is interrupted if unification fails.
