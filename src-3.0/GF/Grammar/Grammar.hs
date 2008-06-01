@@ -98,7 +98,7 @@ data Info =
  | ResValue (Perh (Type,Maybe Int))        -- ^ (/RES/) to mark parameter constructors for lookup
  | ResOper  (Perh Type) (Perh Term)        -- ^ (/RES/)
 
- | ResOverload [(Type,Term)]               -- ^ (/RES/)
+ | ResOverload [Term] [(Type,Term)]        -- ^ (/RES/)
 
 -- judgements in concrete syntax
  | CncCat  (Perh Type) (Perh Term) MPr     -- ^ (/CNC/) lindef ini'zed, 
