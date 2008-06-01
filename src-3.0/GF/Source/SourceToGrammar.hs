@@ -353,18 +353,26 @@ transResDef x = case x of
   DefFlag defs -> liftM (Right . concatModuleOptions) $ mapM transFlagDef defs
   _ -> Bad $ "illegal definition form in resource" +++ printTree x
  where
-   mkOverload (c,p,j) = case j of
-     G.ResOper _ (Yes (G.App keyw (G.R fs@(_:_:_)))) | 
-                                          isOverloading keyw c fs -> 
-       [(c,p,G.ResOverload [(ty,fu) | (_,(Just ty,fu)) <- fs])]
+   mkOverload op@(c,p,j) = case j of
+     G.ResOper _ (Yes df) -> case M.appForm df of
+       (keyw, ts@(_:_)) | isOverloading keyw -> case last ts of
+         G.R fs -> 
+           [(c,p,G.ResOverload (init ts) [(ty,fu) | (_,(Just ty,fu)) <- fs])]
+         _ -> [op]
+       _ -> [op]
 
      -- to enable separare type signature --- not type-checked
-     G.ResOper (Yes (G.App keyw (G.RecType fs@(_:_:_)))) _ | 
-                                          isOverloading keyw c fs -> []
+     G.ResOper (Yes df) _ -> case M.appForm df of
+       (keyw, ts@(_:_)) | isOverloading keyw -> case last ts of
+         G.RecType _ -> [] 
+         _ -> [op]
+       _ -> [op]
      _ -> [(c,p,j)]
-   isOverloading keyw c fs = 
-     GP.prt keyw == "overload" &&       -- overload is a "soft keyword"
-     all (== GP.prt c) (map (GP.prt . fst) fs)
+   isOverloading keyw = 
+     GP.prt keyw == "overload"       -- overload is a "soft keyword"
+   isRec t = case t of
+     G.R _ -> True
+     _ -> False
 
 transParDef :: ParDef -> Err (Ident, [G.Param])
 transParDef x = case x of

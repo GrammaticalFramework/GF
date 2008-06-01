@@ -96,10 +96,12 @@ trAnyDef (i,info) = let i' = tri i in case info of
     May b  -> P.ParDefIndir i' $ tri b
     _      -> P.ParDefAbs i']]
 
-  ResOverload tysts -> 
+  ResOverload os tysts -> 
     [P.DefOper [P.DDef [mkName i'] (
-      P.EApp (P.EIdent $ tri $ cOverload)
-        (P.ERecord [P.LDFull [i'] (trt ty) (trt fu) | (ty,fu) <- tysts]))]]
+      foldl P.EApp 
+        (P.EIdent $ tri $ cOverload)
+          (map trt os ++ 
+           [P.ERecord [P.LDFull [i'] (trt ty) (trt fu) | (ty,fu) <- tysts]]))]]
 
   CncCat (Yes ty) Nope _ -> 
     [P.DefLincat [P.PrintDef [mkName i'] (trt ty)]] 

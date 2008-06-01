@@ -231,14 +231,14 @@ checkResInfo gr mo mm (c,info) = do
          _ -> return (pty, pde) --- other cases are uninteresting
       return (c, ResOper pty' pde')
 
-    ResOverload tysts -> chIn "overloading" $ do
+    ResOverload os tysts -> chIn "overloading" $ do
       tysts' <- mapM (uncurry $ flip check) tysts
       let tysts2 = [(y,x) | (x,y) <- tysts']
       --- this can only be a partial guarantee, since matching
       --- with value type is only possible if expected type is given
       checkUniq $ 
         sort [t : map snd xs | (x,_) <- tysts2, Ok (xs,t) <- [typeFormCnc x]]
-      return (c,ResOverload tysts2)
+      return (c,ResOverload os tysts2)
 
     ResParam (Yes (pcs,_)) -> chIn "parameter type" $ do
 ----      mapM ((mapM (computeLType gr . snd)) . snd) pcs

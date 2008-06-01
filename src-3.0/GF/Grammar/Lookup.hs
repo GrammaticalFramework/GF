@@ -116,7 +116,7 @@ lookupOverload gr m c = do
       ModMod mo -> do
         info <- lookupIdentInfo mo c
         case info of
-          ResOverload tysts -> 
+          ResOverload os tysts -> 
             return [(map snd args,(val,tr)) | 
                       (ty,tr) <- tysts, Ok (args,val) <- [typeFormCnc ty]]
 
