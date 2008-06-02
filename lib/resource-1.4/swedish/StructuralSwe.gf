@@ -100,8 +100,13 @@ concrete StructuralSwe of Structural = CatSwe **
   when_IAdv = ss "när" ;
   when_Subj = ss "när" ;
   where_IAdv = ss "var" ;
---  whichPl_IDet = {s = \\_ => "vilka" ; n = Pl ; det = DIndef} ;
---  whichSg_IDet = {s = genderForms "vilken" "vilket" ; n = Sg ; det = DIndef} ;
+  which_IQuant = {
+    s = table {
+      Sg => genderForms "vilken" "vilket" ;
+      Pl => \\_ => "vilka" 
+      } ; 
+    det = DIndef
+    } ;
   whoSg_IP = {s = vem.s ; gn = SgUtr} ;
   whoPl_IP = {s = \\_ => "vilka" ; gn = Plg} ;
   why_IAdv = ss "varför" ;

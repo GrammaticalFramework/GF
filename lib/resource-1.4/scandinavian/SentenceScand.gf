@@ -16,19 +16,13 @@ incomplete concrete SentenceScand of Sentence =
         in
         verb.fin ++ vp.a1 ! pol ++ verb.inf ++ vp.n2 ! agr ++ vp.a2 ++ vp.ext
     } ;
-{-
-    SlashV2 np v2 = 
+
+    SlashVP np vp = 
       mkClause 
         (np.s ! nominative) np.a 
-        (predV v2) **
-      {c2 = v2.c2} ;
+        vp **
+      {c2 = vp.c2} ;
 
-    SlashVVV2 np vv v2 = 
-      mkClause
-        (np.s ! nominative) np.a 
-        (insertObj (\\_ => vv.c2 ++ infVP (predV v2) np.a) (predV vv)) ** 
-      {c2 = v2.c2} ;
--}
     AdvSlash slash adv = {
       s  = \\t,a,b,o => slash.s ! t ! a ! b ! o ++ adv.s ;
       c2 = slash.c2
@@ -62,4 +56,7 @@ incomplete concrete SentenceScand of Sentence =
     } ;
 
     AdvS a s = {s = \\o => a.s ++ s.s ! Inv} ;
+
+    RelS s r = {s = \\o => s.s ! o ++ "," ++ r.s ! agrP3 Neutr Sg} ; --- vilket
+
 }

@@ -44,6 +44,7 @@ incomplete concrete CatScand of Cat =
       ext : Str ;            -- S-Ext att hon går   ---s7
       en2,ea2,eext : Bool    -- indicate if the field exists
       } ;
+    VPSlash = CommonScand.VP ** {c2 : Str} ;
     Comp = {s : AFormPos => Str} ; 
 
 
@@ -61,14 +62,12 @@ incomplete concrete CatScand of Cat =
     CN = {s : Number => DetSpecies => Case => Str ; g : Gender ; isMod : Bool} ;
     NP,Pron = {s : NPForm => Str ; a : Agr} ;
     Det = {s : Bool => Gender => Str ; n : Number ; det : DetSpecies} ;
----    QuantSg = {s : Bool => Gender => Str ; det : DetSpecies} ;
----    QuantPl = {s : Bool => Gender => Str ; n : Number ; det : DetSpecies} ;
     Quant = {s : Number => Bool => Gender => Str ; det : DetSpecies} ;
     Art = {s : Number => Bool => Gender => Str ; det : DetSpecies} ;
     Predet = {s : GenNum => Str} ;
     Num = {s : Gender => Str ; isDet : Bool ; n : Number} ;
     Card = {s : Gender => Str ; n : Number} ;
-    Ord = {s : Str ; isDet : Bool} ;
+    Ord = {s : Str} ;
 
 -- Numeral
 
