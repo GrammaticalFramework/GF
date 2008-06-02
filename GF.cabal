@@ -111,7 +111,6 @@ executable gf3
     GF.Grammar.PrGrammar
     GF.Grammar.Macros
     GF.Grammar.Lockfield
-    GF.Grammar.Refresh
     GF.Grammar.MMacros
     GF.Grammar.Abstract
     GF.Grammar.Lookup
@@ -125,6 +124,7 @@ executable gf3
     GF.Grammar.AppPredefined 
     GF.Grammar.PatternMatch
     GF.Compile.CheckGrammar
+    GF.Compile.Refresh
     GF.Compile.BackOpt
     GF.Compile.Extend
     GF.Compile.Rename
