@@ -9,10 +9,10 @@
 
 module PGF.Parsing.FCFG.Active (FCFParser, parse, makeFinalEdge) where
 
-import GF.Data.GeneralDeduction
 import GF.Data.Assoc
 import GF.Data.SortedList
 import GF.Data.Utilities
+import qualified GF.Data.MultiMap as MM
 
 import PGF.CId
 import PGF.Data
@@ -117,23 +117,23 @@ data Item
   | Final RangeRec (SyntaxNode RuleId RangeRec)
   deriving (Eq, Ord)
 
-data XChart c = XChart !(ParseChart Item c) !(ParseChart Item c)
+data XChart c = XChart !(MM.MultiMap c Item) !(MM.MultiMap c Item)
 
 emptyXChart :: Ord c => XChart c
-emptyXChart = XChart emptyChart emptyChart
+emptyXChart = XChart MM.empty MM.empty
 
 insertXChart (XChart actives finals) item@(Active _ _ _ _ _) c = 
-  case chartInsert actives item c of
+  case MM.insert' c item actives of
     Nothing      -> Nothing
     Just actives -> Just (XChart actives finals)
 
 insertXChart (XChart actives finals) item@(Final _ _) c =
-  case chartInsert finals item c of
+  case MM.insert' c item finals of
     Nothing     -> Nothing
     Just finals -> Just (XChart actives finals)
 
-lookupXChartAct   (XChart actives finals) c = chartLookup actives c
-lookupXChartFinal (XChart actives finals) c = chartLookup finals  c
+lookupXChartAct   (XChart actives finals) c = actives MM.! c
+lookupXChartFinal (XChart actives finals) c = finals  MM.! c
 
 xchart2syntaxchart :: XChart FCat -> ParserInfo -> SyntaxChart (CId,[Profile]) (FCat,RangeRec)
 xchart2syntaxchart (XChart actives finals) pinfo =
@@ -144,7 +144,7 @@ xchart2syntaxchart (XChart actives finals) pinfo =
         SString s          ->    ((cat,found), SString s)
         SInt    n          ->    ((cat,found), SInt    n)
         SFloat  f          ->    ((cat,found), SFloat  f)
-    | (cat, Final found node) <- chartAssocs finals
+    | (cat, Final found node) <- MM.toList finals
     ]
 
 literals :: ParserInfo -> Input FToken -> [(FCat,Item)]
