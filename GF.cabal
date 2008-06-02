@@ -40,8 +40,7 @@ library
     PGF.Raw.Print
     PGF.Raw.Convert
     PGF.Raw.Abstract
-    GF.Data.RedBlackSet
-    GF.Data.GeneralDeduction
+    GF.Data.MultiMap
     GF.Data.Utilities
     GF.Data.SortedList
     GF.Data.Assoc
@@ -81,10 +80,9 @@ executable gf3
     GF.Command.LexGFShell
     GF.Command.AbsGFShell
     GF.Command.PrintGFShell
-    GF.Data.RedBlackSet
-    GF.Data.GeneralDeduction
     GF.Infra.CompactPrint
     GF.Text.UTF8
+    GF.Data.MultiMap
     GF.Data.Utilities
     GF.Data.SortedList
     GF.Data.Assoc
