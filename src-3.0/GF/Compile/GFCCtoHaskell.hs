@@ -48,8 +48,7 @@ haskPreamble name =
  [
   "module " ++ name ++ " where",
   "",
-  "import PGF.CId",
-  "import PGF.Data",
+  "import PGF",
   "----------------------------------------------------",
   "-- automatic translation from GF to Haskell",
   "----------------------------------------------------",
@@ -58,11 +57,11 @@ haskPreamble name =
   "  gf :: a -> Exp",
   "  fg :: Exp -> a",
   "",
-  predefInst "GString" "String" "DTr [] (AS s) []",
+  predefInst "GString" "String" "EStr s",
   "",
-  predefInst "GInt" "Integer" "DTr [] (AI s) []",
+  predefInst "GInt" "Integer" "EInt s",
   "",
-  predefInst "GFloat" "Double" "DTr [] (AF s) []",
+  predefInst "GFloat" "Double" "EFloat s",
   "",
   "----------------------------------------------------",
   "-- below this line machine-generated",
@@ -144,7 +143,7 @@ hInstance m (cat,rules)
      (if length xx == 0 then gId f else prParenth (gId f +++ foldr1 (+++) xx')) +++
      "=" +++ mkRHS f xx'
    mkVars n = ["x" ++ show i | i <- [1..n]]
-   mkRHS f vars = "DTr [] (AC (CId \"" ++ f ++ "\"))" +++ 
+   mkRHS f vars = "EApp (mkCId \"" ++ f ++ "\")" +++ 
 		   "[" ++ prTList ", " ["gf" +++ x | x <- vars] ++ "]"
 
 
@@ -157,9 +156,9 @@ fInstance m (cat,rules) =
   "      _ -> error (\"no" +++ cat ++ " \" ++ show t)"
    where
     mkInst f xx =
-     "      DTr [] (AC (CId \"" ++ f ++ "\")) " ++
+     "      EApp i " ++
      "[" ++ prTList "," xx' ++ "]" +++
-     "->" +++ mkRHS f xx'
+     "| i == mkCId \"" ++ f ++ "\" ->" +++ mkRHS f xx'
        where xx' = ["x" ++ show i | (_,i) <- zip xx [1..]]
 	     mkRHS f vars 
 		 | isListCat (cat,rules) =
