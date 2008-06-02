@@ -42,15 +42,18 @@ data Type =
    DTyp [Hypo] CId [Exp]
   deriving (Eq,Ord,Show)
 
+-- | An expression representing the abstract syntax tree
+-- in PGF. The same expression is used in the dependent
+-- types.
 data Exp =
-   EAbs [CId] Exp
- | EApp CId [Exp]
- | EStr   String
- | EInt   Integer
- | EFloat Double
- | EMeta  Integer
- | EVar   CId
- | EEq [Equation]
+   EAbs [CId] Exp                   -- ^ lambda abstraction. The list should contain at least one variable
+ | EApp CId [Exp]                   -- ^ application. Note that unevaluated lambda abstractions are not allowed
+ | EStr   String                    -- ^ string constant
+ | EInt   Integer                   -- ^ integer constant
+ | EFloat Double                    -- ^ floating point constant
+ | EMeta  Integer                   -- ^ meta variable
+ | EVar   CId                       -- ^ variable reference
+ | EEq [Equation]                   -- ^ lambda function defined as a set of equations with pattern matching
   deriving (Eq,Ord,Show)
 
 data Term =
@@ -79,6 +82,10 @@ data Hypo =
    Hyp CId Type
   deriving (Eq,Ord,Show)
 
+-- | The equation is used to define lambda function as a sequence
+-- of equations with pattern matching. The list of 'Exp' represents
+-- the patterns and the second 'Exp' is the function body for this
+-- equation.
 data Equation =
    Equ [Exp] Exp
   deriving (Eq,Ord,Show)
