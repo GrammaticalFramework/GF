@@ -5,7 +5,11 @@
 -- Stability   : stable
 -- Portability : portable
 --
--- Application Programming Interface to PGF.
+-- This module is an Application Programming Interface to 
+-- to load and interpret grammars compiled Portable Grammar Format (PGF).
+-- The PGF format is produced as a final output from the GF compiler.
+-- The API is meant to be used when embedding GF grammars in Haskell 
+-- programs.
 -------------------------------------------------
 
 module PGF(
@@ -24,7 +28,7 @@ module PGF(
            Category, categories, startCat,
 
            -- * Expressions
-           Exp(..),
+           Exp(..), Equation(..),
            showExp, readExp,
 
            -- * Operations
@@ -60,10 +64,6 @@ import System.Directory (doesFileExist)
 import qualified Text.PrettyPrint as PP
 import qualified Text.ParserCombinators.ReadP as RP
 
-
--- This API is meant to be used when embedding GF grammars in Haskell 
--- programs. The embedded system is supposed to use the
--- .pgf grammar format, which is first produced by the gf program.
 
 ---------------------------------------------------
 -- Interface
