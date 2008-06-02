@@ -69,13 +69,27 @@ incomplete concrete QuestionScand of Question =
       gn = ip.gn
       } ;
 
-{- 
-    IDetCN idet num ord cn = let g = cn.g in {
+    IdetCN idet cn = let g = cn.g in {
       s  = \\c => 
-           idet.s ! g ++ num.s ! g ++ ord.s ++ cn.s !idet.n ! idet.det ! caseNP c ;
+           idet.s ! g ++ cn.s ! idet.n ! idet.det ! caseNP c ;
       gn = gennum g idet.n
       } ;
--}
+
+    IdetIP idet = 
+      let
+        g = Neutr ;
+      in {
+      s  = \\c => idet.s ! g  ;
+      gn = (agrP3 g idet.n).gn
+      } ;
+
+    IdetQuant idet num = {
+      s = \\g => idet.s ! num.n ! g ++ num.s ! g ;
+      n = num.n ;
+      det = idet.det
+      } ;
+
     CompIAdv a = {s = \\_ => a.s} ;
+    CompIP ip = {s = \\_ => ip.s ! nominative} ;
 
 }

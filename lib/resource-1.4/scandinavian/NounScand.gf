@@ -46,25 +46,87 @@ incomplete concrete NounScand of Noun =
       } ;
 
     DetQuantOrd quant num ord = {
-      s = \\b,g => quant.s ! num.n ! (orB b (orB num.isDet ord.isDet)) ! g ++ 
+      s = \\b,g => quant.s ! num.n ! (orB b num.isDet) ! g ++ 
                    num.s ! g ++ ord.s ;
       n = num.n ;
       det = quant.det
       } ;
+
+    DetQuant quant num = {
+      s = \\b,g => quant.s ! num.n ! (orB b num.isDet) ! g ++ 
+                   num.s ! g ;
+      n = num.n ;
+      det = quant.det
+      } ;
+
+    DetNP det = 
+      let 
+        g = Neutr ; ----
+        m = True ;  ---- is this needed for other than Art?
+      in {
+        s = \\c => det.s ! m ! g ;
+        a = agrP3 g det.n
+      } ;
+
+    DetArtOrd quant num ord = {
+      s = \\b,g => quant.s ! num.n ! (orB b num.isDet) ! g ++ 
+                   num.s ! g ++ ord.s ;
+      n = num.n ;
+      det = quant.det
+      } ;
+
+    DetArtCard quant num = {
+      s = \\b,g => quant.s ! num.n ! b ! g ++ num.s ! g ;
+      n = num.n ;
+      det = quant.det
+      } ;
+
+    DetArtSg det cn = 
+      let 
+        g = cn.g ;
+        n = Sg ;
+        m = cn.isMod ;
+        dd = case <det.det,detDef,m> of {
+          <DDef Def, Indef, True> => DDef Indef ;
+          <d,_,_> => d
+          }
+      in {
+      s = \\c => det.s ! n ! cn.isMod ! cn.g ++
+                 cn.s ! n ! dd ! caseNP c ; 
+      a = agrP3 g n
+      } ;
+
+    DetArtPl det cn = 
+      let 
+        g = cn.g ;
+        n = Pl ;
+        m = cn.isMod ;
+        dd = case <det.det,detDef,m> of {
+          <DDef Def, Indef, True> => DDef Indef ;
+          <d,_,_> => d
+          }
+      in {
+      s = \\c => det.s ! n ! cn.isMod ! cn.g ++
+                 cn.s ! n ! dd ! caseNP c ; 
+      a = agrP3 g n
+      } ;
+
 
     PossPron p = {
       s = \\n,_,g => p.s ! NPPoss (gennum g n) ; 
       det = DDef Indef
       } ;
 
+    NumCard c = c ** {isDet = True} ;
+
     NumSg = {s = \\_ => [] ; isDet = False ; n = Sg} ;
     NumPl = {s = \\_ => [] ; isDet = False ; n = Pl} ;
 
-    NumDigits nu = {s = \\g => nu.s ! NCard g ; isDet = True ; n = nu.n} ;
-    OrdDigits nu = {s = nu.s ! NOrd SupWeak ; isDet = True} ;
+    NumDigits nu = {s = \\g => nu.s ! NCard g ; n = nu.n} ;
+    OrdDigits nu = {s = nu.s ! NOrd SupWeak} ;
 
-    NumNumeral nu = {s = \\g => nu.s ! NCard g ; isDet = True ; n = nu.n} ;
-    OrdNumeral nu = {s = nu.s ! NOrd SupWeak ; isDet = True} ;
+    NumNumeral nu = {s = \\g => nu.s ! NCard g ; n = nu.n} ;
+    OrdNumeral nu = {s = nu.s ! NOrd SupWeak} ;
 
     AdNum adn num = {s = \\g => adn.s ++ num.s ! g ; isDet = True ; n = num.n} ;
 
@@ -88,13 +150,30 @@ incomplete concrete NounScand of Noun =
         } ; 
       det = DIndef
       } ;
-{-
-    MassDet = {s = \\_,_,_ => [] ; n = Sg ; det = DIndef} ;
--}
+
+    MassNP cn = {
+      s = \\c => cn.s ! Sg ! DIndef ! caseNP c ; 
+      a = agrP3 cn.g Sg
+      } ;
+
     UseN, UseN2 = \noun -> {
       s = \\n,d,c => noun.s ! n ! specDet d ! c ; 
            ---- part app wo c shows editor bug. AR 8/7/2007
       g = noun.g ;
+      isMod = False
+      } ;
+
+    Use2N3 f = {
+      s = \\n,d,c => f.s ! n ! d ! Nom ;
+      g = f.g ;
+      c2 = f.c2 ;
+      isMod = False
+      } ;
+
+    Use3N3 f = {
+      s = \\n,d,c => f.s ! n ! d ! Nom ;
+      g = f.g ;
+      c2 = f.c3 ;
       isMod = False
       } ;
 
@@ -126,6 +205,13 @@ incomplete concrete NounScand of Noun =
       g = g ;
       isMod = cn.isMod
       } ;
+
+    RelNP np rs = {
+      s = \\c => np.s ! c ++ rs.s ! np.a ;
+      a = np.a ;
+      isMod = np.isMod
+      } ;
+
     AdvCN  cn sc = let g = cn.g in {
       s = \\n,d,c => cn.s ! n ! d ! c ++ sc.s ;
       g = g ;

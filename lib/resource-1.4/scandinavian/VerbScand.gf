@@ -4,36 +4,38 @@ incomplete concrete VerbScand of Verb = CatScand ** open CommonScand, ResScand i
 
   lin
     UseV = predV ;
-{-
-    ComplV2 v np = insertObj (\\_ => v.c2 ++ np.s ! accusative) (predV v) ;
-    ComplV3 v np np2 = 
-      insertObj 
-        (\\_ => v.c2 ++ np.s ! accusative ++ v.c3 ++ np2.s ! accusative) 
-        (predV v) ;
--}
+
+    SlashV2a v = predV v ** {c2 = v.c2} ;
+
+    Slash2V3 v np = 
+      insertObj (\\_ => v.c2 ++ np.s ! accusative) (predV v) ** {c2 = v.c3} ;
+    Slash3V3 v np = 
+      insertObj (\\_ => v.c3 ++ np.s ! accusative) (predV v) ** {c2 = v.c2} ;
+
     ComplVV v vp = insertObj (\\a => v.c2 ++ infVP vp a) (predV v) ;
     ComplVS v s  = insertObj (\\_ => conjThat ++ s.s ! Sub) (predV v) ;
     ComplVQ v q  = insertObj (\\_ => q.s ! QIndir) (predV v) ;
-    ComplVA  v ap = 
-      insertObj (\\a => ap.s ! agrAdj a.gn DIndef) (predV v) ;
-{-
-    ComplV2V v np vp = 
-      insertObj
-        (\\a => v.c3 ++ infVP vp a)
-        (insertObj (\\_ => v.c2 ++ np.s ! accusative) (predV v)) ;
-    ComplV2S v np s = 
-      insertObj
-        (\\_ => conjThat ++ s.s ! Sub)
-        (insertObj (\\_ => v.c2 ++ np.s ! accusative) (predV v)) ;
-    ComplV2Q v np q = 
-      insertObj
-        (\\_ => q.s ! QIndir)
-        (insertObj (\\_ => v.c2 ++ np.s ! accusative) (predV v)) ;
-    ComplV2A v np ap = 
-      insertObj
-        (\\_ => ap.s ! agrAdj np.a.gn DIndef)
-        (insertObj (\\_ => v.c2 ++ np.s ! accusative) (predV v)) ;
--}
+    ComplVA  v ap = insertObj (\\a => ap.s ! agrAdj a.gn DIndef) (predV v) ;
+
+    SlashV2V v vp = 
+      insertObj (\\a => v.c3 ++ infVP vp a) (predV v) ** {c2 = v.c2} ;
+    SlashV2S v s = 
+      insertObj (\\_ => conjThat ++ s.s ! Sub) (predV v) ** {c2 = v.c2} ;
+    SlashV2Q v q = 
+      insertObj (\\_ => q.s ! QIndir) (predV v) ** {c2 = v.c2} ;
+    SlashV2A v ap = 
+      insertObj 
+        (\\a => ap.s ! agrAdj a.gn DIndef) (predV v) ** {c2 = v.c2} ; ---- agr to obj
+
+    ComplSlash vp np = insertObj (\\_ => vp.c2 ++ np.s ! accusative) vp ;
+
+    SlashVV v vp = 
+      insertObj (\\a => v.c2 ++ infVP vp a) (predV v) ** {c2 = vp.c2} ;
+    SlashV2VNP v np vp = 
+      insertObj 
+        (\\a => vp.c2 ++ np.s ! accusative ++ v.c3 ++ infVP vp a) (predV v) 
+        ** {c2 = v.c2} ;
+
     UseComp comp = insertObj (\\a => comp.s ! agrAdj a.gn DIndef) (predV verbBe) ;
 
     CompAP ap = ap ;
@@ -44,7 +46,7 @@ incomplete concrete VerbScand of Verb = CatScand ** open CommonScand, ResScand i
     AdVVP adv vp = insertAdV adv.s vp ;
 
 
-----    ReflV2 v = insertObj (\\a => v.c2 ++ reflPron a) (predV v) ;
+    ReflVP vp = insertObj (\\a => vp.c2 ++ reflPron a) vp ;
 
     PassV2 v = 
       insertObj 

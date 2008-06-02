@@ -233,6 +233,17 @@ oper
   insertObj : (Agr => Str) -> VP -> VP = \obj,vp -> {
     s = vp.s ;
     a1 = vp.a1 ;
+    n2 = \\a => obj ! a ++ vp.n2 ! a ;
+    a2 = vp.a2 ;
+    ext = vp.ext ;
+    en2 = True ;
+    ea2 = vp.ea2 ;
+    eext = vp.eext
+    } ;
+
+  insertObjPost : (Agr => Str) -> VP -> VP = \obj,vp -> {
+    s = vp.s ;
+    a1 = vp.a1 ;
     n2 = \\a => vp.n2 ! a ++ obj ! a ;
     a2 = vp.a2 ;
     ext = vp.ext ;
