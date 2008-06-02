@@ -27,24 +27,26 @@ import Data.List --(isPrefixOf, find, intersperse)
 import qualified Data.Map as Map
 
 -- | the main function
-grammar2haskell :: PGF -> String
-grammar2haskell gr = encodeUTF8 $ foldr (++++) [] $  
-  haskPreamble ++ [datatypes gr', gfinstances gr']
+grammar2haskell :: PGF 
+                -> String  -- ^ Module name.
+                -> String
+grammar2haskell gr name = encodeUTF8 $ foldr (++++) [] $  
+  haskPreamble name ++ [datatypes gr', gfinstances gr']
     where gr' = hSkeleton gr
 
-grammar2haskellGADT :: PGF -> String
-grammar2haskellGADT gr = encodeUTF8 $ foldr (++++) [] $  
+grammar2haskellGADT :: PGF -> String -> String
+grammar2haskellGADT gr name = encodeUTF8 $ foldr (++++) [] $  
   ["{-# OPTIONS_GHC -fglasgow-exts #-}"] ++ 
-  haskPreamble ++ [datatypesGADT gr', gfinstances gr']
+  haskPreamble name ++ [datatypesGADT gr', gfinstances gr']
     where gr' = hSkeleton gr
 
 -- | by this you can prefix all identifiers with stg; the default is 'G'
 gId :: OIdent -> OIdent 
 gId i = 'G':i
 
-haskPreamble =
+haskPreamble name =
  [
-  "module GSyntax where",
+  "module " ++ name ++ " where",
   "",
   "import PGF.CId",
   "import PGF.Data",

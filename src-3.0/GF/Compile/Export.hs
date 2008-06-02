@@ -10,13 +10,16 @@ import GF.Text.UTF8
 
 -- top-level access to code generation
 
-prPGF :: OutputFormat -> PGF -> String
-prPGF fmt gr = case fmt of
+prPGF :: OutputFormat 
+      -> PGF 
+      -> String -- ^ Output name, for example used for generated Haskell
+                -- module name.
+      -> String
+prPGF fmt gr name = case fmt of
   FmtPGF         -> printPGF gr
   FmtJavaScript  -> pgf2js gr
-  FmtHaskell     -> grammar2haskell gr
-  FmtHaskellGADT -> grammar2haskellGADT gr
+  FmtHaskell     -> grammar2haskell gr name
+  FmtHaskellGADT -> grammar2haskellGADT gr name
 
 printPGF :: PGF -> String
 printPGF = encodeUTF8 . printTree . fromPGF
-

@@ -30,8 +30,9 @@ writeOutputs opts pgf = mapM_ (\fmt -> writeOutput opts fmt pgf) (flag optOutput
 
 writeOutput :: Options -> OutputFormat-> PGF -> IOE ()
 writeOutput opts fmt pgf =
-    do let path = outputFilePath opts fmt (prCId (absname pgf))
-           s = prPGF fmt pgf
+    do let name = fromMaybe (prCId (absname pgf)) (moduleFlag optName opts)
+           path = outputFilePath opts fmt name
+           s = prPGF fmt pgf name
        writeOutputFile path s
 
 outputFilePath :: Options -> OutputFormat -> String -> FilePath
