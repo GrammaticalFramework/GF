@@ -41,10 +41,11 @@ outputFilePath opts fmt name0 = addDir name <.> fmtExtension fmt
         addDir = maybe id (</>) (flag optOutputDir opts)
 
 fmtExtension :: OutputFormat -> String
-fmtExtension FmtPGF         = "pgf"
-fmtExtension FmtJavaScript  = "js"
-fmtExtension FmtHaskell     = "hs"
-fmtExtension FmtHaskellGADT = "hs"
+fmtExtension FmtPGF          = "pgf"
+fmtExtension FmtJavaScript   = "js"
+fmtExtension FmtHaskell      = "hs"
+fmtExtension FmtHaskell_GADT = "hs"
+fmtExtension FmtSRGS_XML     = "grxml"
 
 writeOutputFile :: FilePath -> String -> IOE ()
 writeOutputFile outfile output = ioeIO $

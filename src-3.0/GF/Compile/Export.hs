@@ -1,11 +1,13 @@
 module GF.Compile.Export where
 
-import PGF.Data (PGF)
+import PGF.CId
+import PGF.Data (PGF(..))
 import PGF.Raw.Print (printTree)
 import PGF.Raw.Convert (fromPGF)
 import GF.Compile.GFCCtoHaskell
 import GF.Compile.GFCCtoJS
 import GF.Infra.Option
+import GF.Speech.SRGS
 import GF.Text.UTF8
 
 -- top-level access to code generation
@@ -16,10 +18,18 @@ prPGF :: OutputFormat
                 -- module name.
       -> String
 prPGF fmt gr name = case fmt of
-  FmtPGF         -> printPGF gr
-  FmtJavaScript  -> pgf2js gr
-  FmtHaskell     -> grammar2haskell gr name
-  FmtHaskellGADT -> grammar2haskellGADT gr name
+  FmtPGF          -> printPGF gr
+  FmtJavaScript   -> pgf2js gr
+  FmtHaskell      -> grammar2haskell gr name
+  FmtHaskell_GADT -> grammar2haskellGADT gr name
+  FmtSRGS_XML     -> srgsXmlPrinter Nothing gr (outputConcr gr)
+
+-- | Get the name of the concrete syntax to generate output from.
+-- FIXME: there should be an option to change this.
+outputConcr :: PGF -> CId
+outputConcr pgf = case cncnames pgf of
+                    []     -> error "No concrete syntax."
+                    cnc:_  -> cnc
 
 printPGF :: PGF -> String
 printPGF = encodeUTF8 . printTree . fromPGF

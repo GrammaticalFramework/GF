@@ -78,7 +78,18 @@ data Phase = Preproc | Convert | Compile | Link
 data Encoding = UTF_8 | ISO_8859_1
   deriving (Show,Eq,Ord)
 
-data OutputFormat = FmtPGF | FmtJavaScript | FmtHaskell | FmtHaskellGADT
+data OutputFormat = FmtPGF 
+                  | FmtJavaScript 
+                  | FmtHaskell 
+                  | FmtHaskell_GADT 
+                  | FmtSRGS_XML 
+                  | FmtSRGS_ABNF 
+                  | FmtJSGF 
+                  | FmtGSL 
+                  | FmtVoiceXML
+                  | FmtSLF
+                  | FmtRegExp
+                  | FmtFA
   deriving (Eq,Ord)
 
 data Optimization = OptStem | OptCSE | OptExpand | OptParametrize | OptValues
@@ -406,7 +417,16 @@ outputFormats =
     [("pgf",          FmtPGF),
      ("js",           FmtJavaScript),
      ("haskell",      FmtHaskell),
-     ("haskell_gadt", FmtHaskellGADT)]
+     ("haskell_gadt", FmtHaskell_GADT),
+     ("srgs",         FmtSRGS_XML),
+     ("srgs_xml",     FmtSRGS_XML),
+     ("srgs_abnf",    FmtSRGS_ABNF),
+     ("jsgf",         FmtJSGF),
+     ("gsl",          FmtGSL),
+     ("vxml",         FmtVoiceXML),
+     ("slf",          FmtSLF),
+     ("regexp",       FmtRegExp),
+     ("fa",           FmtFA)]
 
 instance Show OutputFormat where
     show = lookupShow outputFormats
