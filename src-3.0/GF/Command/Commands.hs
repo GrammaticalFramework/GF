@@ -21,6 +21,7 @@ import qualified PGF.Parsing.FCFG.Incremental as Incremental
 import GF.Compile.Export
 import GF.Infra.UseIO
 import GF.Data.ErrM ----
+import GF.System.Readline
 
 import Data.Maybe
 import qualified Data.Map as Map
@@ -167,9 +168,9 @@ allCommands pgf = Map.fromAscList [
          cat  = optCat opts
          pinfo = fromMaybe (error ("Unknown language: " ++ lang)) (lookParser pgf (mkCId lang))
          state0 = Incremental.initState pinfo (mkCId cat)
-     putStrFlush ">> "
-     s <- getLine
-     if null s
+     setCompletionFunction (Just (myCompletion pinfo state0))
+     s <- fetchCommand ">> "
+     if s == "q"
        then return ()
        else do cpu1 <- getCPUTime
                st <- parse pinfo state0 (words s)
@@ -184,3 +185,9 @@ allCommands pgf = Map.fromAscList [
        parse pinfo st (t:ts) = do putStrFlush "."
                                   st1 <- return $! (Incremental.nextState pinfo t st)
                                   parse pinfo st1 ts
+
+       myCompletion pinfo state0 line prefix p = do
+         let ws = words (take (p-length prefix) line)
+             state = foldl (\st t -> Incremental.nextState pinfo t st) state0 ws
+             compls = Incremental.getCompletions pinfo prefix state
+         return (Map.keys compls)
