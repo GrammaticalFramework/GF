@@ -270,7 +270,7 @@ countRules = length . allRules
 prCFG :: CFG -> String
 prCFG = unlines . map prRule . allRules
     where 
-      prRule r = lhsCat r ++ " --> " ++ unwords (map prSym (ruleRhs r))
+      prRule r = lhsCat r ++ " ::= " ++ unwords (map prSym (ruleRhs r))
       prSym = symbol id (\t -> "\""++ t ++"\"")
 
 --

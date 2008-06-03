@@ -7,6 +7,8 @@ import PGF.Raw.Convert (fromPGF)
 import GF.Compile.GFCCtoHaskell
 import GF.Compile.GFCCtoJS
 import GF.Infra.Option
+import GF.Speech.CFG
+import GF.Speech.PGFToCFG
 import GF.Speech.SRGS
 import GF.Text.UTF8
 
@@ -22,6 +24,7 @@ prPGF fmt gr name = case fmt of
   FmtJavaScript   -> pgf2js gr
   FmtHaskell      -> grammar2haskell gr name
   FmtHaskell_GADT -> grammar2haskellGADT gr name
+  FmtBNF          -> prCFG $ pgfToCFG gr (outputConcr gr)
   FmtSRGS_XML     -> srgsXmlPrinter Nothing gr (outputConcr gr)
 
 -- | Get the name of the concrete syntax to generate output from.

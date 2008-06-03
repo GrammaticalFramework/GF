@@ -45,6 +45,7 @@ fmtExtension FmtPGF          = "pgf"
 fmtExtension FmtJavaScript   = "js"
 fmtExtension FmtHaskell      = "hs"
 fmtExtension FmtHaskell_GADT = "hs"
+fmtExtension FmtBNF          = "bnf"
 fmtExtension FmtSRGS_XML     = "grxml"
 
 writeOutputFile :: FilePath -> String -> IOE ()
