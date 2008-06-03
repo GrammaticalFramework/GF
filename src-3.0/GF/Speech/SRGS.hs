@@ -33,7 +33,7 @@ srgsXmlNonRecursivePrinter pgf cnc = prSrgsXml Nothing $ makeNonRecursiveSRG pgf
 prSrgsXml :: Maybe SISRFormat -> SRG -> String
 prSrgsXml sisr srg = showXMLDoc (optimizeSRGS xmlGr)
     where
-    xmlGr = grammar sisr (catFormId (srgStartCat srg)) (srgLanguage srg) $
+    xmlGr = grammar sisr (srgStartCat srg) (srgLanguage srg) $
               [meta "description" 
                  ("SRGS XML speech recognition grammar for " ++ srgName srg ++ "."),
                meta "generator" "Grammatical Framework"]
@@ -72,10 +72,6 @@ tag Nothing _ = []
 tag (Just fmt) t = case t fmt of
                      [] -> []
                      ts -> [Tag "tag" [] [Data (prSISR ts)]]
-
-catFormId :: String -> String
-catFormId = (++ "_cat")
-
 
 showToken :: Token -> String
 showToken t = t
