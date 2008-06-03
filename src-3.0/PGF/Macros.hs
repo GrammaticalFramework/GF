@@ -26,6 +26,10 @@ lookParamLincat :: PGF -> CId -> CId -> Term
 lookParamLincat pgf lang fun = 
   lookMap tm0 fun $ paramlincats $ lookMap (error "no lang") lang $ concretes pgf
 
+lookPrintName :: PGF -> CId -> CId -> Term
+lookPrintName pgf lang fun = 
+  lookMap tm0 fun $ printnames $ lookMap (error "no lang") lang $ concretes pgf
+
 lookType :: PGF -> CId -> Type
 lookType pgf f = 
   fst $ lookMap (error $ "lookType " ++ show f) f (funs (abstract pgf))
