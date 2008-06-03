@@ -1,4 +1,4 @@
-{-# OPTIONS -fbang-patterns #-}
+{-# LANGUAGE BangPatterns #-}
 module PGF.Parsing.FCFG.Incremental
           ( State
           , initState
@@ -10,6 +10,8 @@ module PGF.Parsing.FCFG.Incremental
 
 import Data.Array
 import Data.Array.Base (unsafeAt)
+import Data.List (isPrefixOf)
+import Data.Maybe (fromMaybe)
 import qualified Data.Map as Map
 import qualified Data.IntMap as IntMap
 import qualified Data.Set as Set
@@ -44,24 +46,42 @@ initState pinfo start =
                   Just ((fid,_), _) -> fid+1
                   Nothing           -> 0
 
-  in process (allRules pinfo) items (State MM.empty [] MM.empty Map.empty forest max_fid 0)
+  in State (Chart MM.empty [] Map.empty forest max_fid 0)
+           (Set.fromList items)
 
 nextState :: ParserInfo -> FToken -> State -> State
-nextState pinfo t state =
-  process (allRules pinfo) (tokens state MM.! t) state{ chart=MM.empty
-                                                      , charts=chart state : charts state
-                                                      , tokens=MM.empty
-                                                      , passive=Map.empty
-                                                      , currOffset=currOffset state+1
-                                                      }
+nextState pinfo t (State chart items) =
+  let (items1,chart1) = process add (allRules pinfo) (Set.toList items) (Set.empty,chart)
+      chart2 = chart1{ active =MM.empty
+                     , actives=active chart1 : actives chart1
+                     , passive=Map.empty
+                     , offset =offset chart1+1
+                     }
+  in State chart2 items1
+  where
+    add tok item set
+      | tok == t  = Set.insert item set
+      | otherwise = set
 
-getCompletions :: State -> FToken -> [FToken]
-getCompletions state w =
-  [t | t <- MM.keys (tokens state), take (length w) t == w]
+getCompletions :: ParserInfo -> FToken -> State -> Map.Map FToken State
+getCompletions pinfo w (State chart items) =
+  let (map',chart1) = process add (allRules pinfo) (Set.toList items) (MM.empty,chart)
+      chart2 = chart1{ active =MM.empty
+                     , actives=active chart1 : actives chart1
+                     , passive=Map.empty
+                     , offset =offset chart1+1
+                     }
+  in fmap (State chart2) map'
+  where
+    add tok item map
+      | isPrefixOf w tok = fromMaybe map (MM.insert' tok item map)
+      | otherwise        = map
 
 extractExps :: ParserInfo -> CId -> State -> [Exp]
-extractExps pinfo start st = exps
+extractExps pinfo start (State chart items) = exps
   where
+    (_,st) = process (\_ _ -> id) (allRules pinfo) (Set.toList items) ((),chart)
+
     exps = nubsort $ do
       c <- Map.findWithDefault [] start (startupCats pinfo)
       ruleid <- topdownRules pinfo ? c
@@ -77,46 +97,42 @@ extractExps pinfo start st = exps
       args <- mapM go args
       return (EApp fn args)
 
-process !rules []           state = state
-process !rules (item:items) state = process rules items $! univRule item state
+process fn !rules []           acc_chart = acc_chart
+process fn !rules (item:items) acc_chart = process fn rules items $! univRule item acc_chart
   where
-    univRule (Active j lbl ppos ruleid args fid0) state
+    univRule (Active j lbl ppos ruleid args fid0) acc_chart@(acc,chart)
       | inRange (bounds lin) ppos =
           case unsafeAt lin ppos of
-            FSymCat r d -> {-# SCC "COND11" #-}
-                           let !fid = args !! d
-                           in case MM.insert' (AK fid r) item (chart state) of
-                                Nothing     -> state
-                                Just actCat -> (case Map.lookup (PK fid r k) (passive state) of
+            FSymCat r d -> let !fid = args !! d
+                           in case MM.insert' (AK fid r) item (active chart) of
+                                Nothing     -> acc_chart
+                                Just actCat -> (case Map.lookup (PK fid r k) (passive chart) of
                                                   Nothing -> id
-                                                  Just id -> process rules [Active j lbl (ppos+1) ruleid (updateAt d id args) fid0]) $
-                                               (case IntMap.lookup fid (forest state) of
+                                                  Just id -> process fn rules [Active j lbl (ppos+1) ruleid (updateAt d id args) fid0]) $
+                                               (case IntMap.lookup fid (forest chart) of
                                                   Nothing  -> id
-                                                  Just set -> process rules (Set.fold (\(Passive ruleid args) -> (:) (Active k r 0 ruleid args fid)) [] set)) $
-                                               state{chart=actCat}
-      	    FSymTok tok   -> {-# SCC "COND12" #-}
-      	                     case MM.insert' tok (Active j lbl (ppos+1) ruleid args fid0) (tokens state) of
-                               Nothing     -> state
-                               Just actTok -> state{tokens=actTok}
-      | otherwise = {-# SCC "COND2" #-}
-                    case Map.lookup (PK fid0 lbl j) (passive state) of
-                      Nothing -> let fid = nextId state
-	                         in process rules [Active j' lbl (ppos+1) ruleid (updateAt d fid args) fidc
-	                                             | Active j' lbl ppos ruleid args fidc <- ((chart state:charts state) !! (k-j)) MM.! (AK fid0 lbl),
-	                                               let FSymCat _ d = unsafeAt (rhs ruleid lbl) ppos] $
-	                            state{passive=Map.insert (PK fid0 lbl j) fid (passive state)
-                                         ,forest =IntMap.insert fid (Set.singleton (Passive ruleid args)) (forest state)
-                                         ,nextId =nextId state+1
-                                         }
-                      Just id -> state{forest = IntMap.insertWith Set.union id (Set.singleton (Passive ruleid args)) (forest state)}
+                                                  Just set -> process fn rules (Set.fold (\(Passive ruleid args) -> (:) (Active k r 0 ruleid args fid)) [] set)) $
+                                               (acc,chart{active=actCat})
+      	    FSymTok tok   -> (fn tok (Active j lbl (ppos+1) ruleid args fid0) acc,chart)
+      | otherwise = case Map.lookup (PK fid0 lbl j) (passive chart) of
+                      Nothing -> let fid = nextId chart
+	                         in process fn rules [Active j' lbl (ppos+1) ruleid (updateAt d fid args) fidc
+	                                                | Active j' lbl ppos ruleid args fidc <- ((active chart:actives chart) !! (k-j)) MM.! (AK fid0 lbl),
+	                                                  let FSymCat _ d = unsafeAt (rhs ruleid lbl) ppos] $
+	                            (acc,chart{passive=Map.insert (PK fid0 lbl j) fid (passive chart)
+                                              ,forest =IntMap.insert fid (Set.singleton (Passive ruleid args)) (forest chart)
+                                              ,nextId =nextId chart+1
+                                              })
+                      Just id -> (acc,chart{forest = IntMap.insertWith Set.union id (Set.singleton (Passive ruleid args)) (forest chart)})
       where
         !lin = rhs ruleid lbl
-        !k   = currOffset state
+        !k   = offset chart
 
     rhs ruleid lbl = unsafeAt lins lbl
       where
         (FRule _ _ _ cat lins) = unsafeAt rules ruleid
 
+    updateAt :: Int -> a -> [a] -> [a]
     updateAt nr x xs = [if i == nr then x else y | (i,y) <- zip [0..] xs]
 
 
@@ -143,14 +159,15 @@ data PassiveKey
        {-# UNPACK #-} !Int
   deriving (Eq,Ord,Show)
 
-data State
-  = State
-      { chart      :: MM.MultiMap ActiveKey Active
-      , charts     :: [MM.MultiMap ActiveKey Active]
-      , tokens     :: MM.MultiMap FToken Active
-      , passive    :: Map.Map PassiveKey FCat
-      , forest     :: IntMap.IntMap (Set.Set Passive)
-      , nextId     :: {-# UNPACK #-} !FCat
-      , currOffset :: {-# UNPACK #-} !Int
+
+data State = State Chart (Set.Set Active)
+
+data Chart
+  = Chart
+      { active  :: MM.MultiMap ActiveKey Active
+      , actives :: [MM.MultiMap ActiveKey Active]
+      , passive :: Map.Map PassiveKey FCat
+      , forest  :: IntMap.IntMap (Set.Set Passive)
+      , nextId  :: {-# UNPACK #-} !FCat
+      , offset  :: {-# UNPACK #-} !Int
       }
-      deriving Show
