@@ -12,7 +12,7 @@
 -- Do not use readline.
 -----------------------------------------------------------------------------
 
-module GF.System.NoReadline (fetchCommand) where
+module GF.System.NoReadline (fetchCommand, setCompletionFunction) where
 
 import System.IO.Error (try)
 import System.IO (stdout,hFlush)
@@ -25,3 +25,6 @@ fetchCommand s = do
   case res of
    Left e -> return "q"
    Right l -> return l
+
+setCompletionFunction :: Maybe (String -> String -> Int -> IO [String]) -> IO ()
+setCompletionFunction _ = return ()

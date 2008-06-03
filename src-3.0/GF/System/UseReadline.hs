@@ -12,9 +12,9 @@
 -- Use GNU readline
 -----------------------------------------------------------------------------
 
-module GF.System.UseReadline (fetchCommand) where
+module GF.System.UseReadline (fetchCommand, setCompletionFunction) where
 
-import System.Console.Readline (readline, addHistory)
+import System.Console.Readline
 
 fetchCommand :: String -> IO (String)
 fetchCommand s = do
@@ -23,3 +23,12 @@ fetchCommand s = do
    Nothing -> return "q"
    Just s -> do addHistory s
                 return s
+
+setCompletionFunction :: Maybe (String -> String -> Int -> IO [String]) -> IO ()
+setCompletionFunction Nothing   = setCompletionEntryFunction Nothing
+setCompletionFunction (Just fn) = setCompletionEntryFunction (Just my_fn)
+  where
+    my_fn prefix = do
+      s <- getLineBuffer
+      p <- getPoint
+      fn s prefix p
