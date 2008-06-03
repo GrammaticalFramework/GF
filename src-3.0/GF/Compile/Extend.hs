@@ -94,6 +94,8 @@ extendAnyInfo isc n o i j =
     liftM ResParam $ updn isc n mt1 mt2
   (ResValue mt1, ResValue mt2) -> 
     liftM ResValue $ updn isc n mt1 mt2
+  (_, ResOverload ms t) | elem n ms ->
+    return $ ResOverload ms t
   (ResOper mt1 m1, ResOper mt2 m2) ->           ---- extendResOper n mt1 m1 mt2 m2 
     liftM2 ResOper (updn isc n mt1 mt2) (updn isc n m1 m2)
   (CncCat mc1 mf1 mp1, CncCat mc2 mf2 mp2) -> 

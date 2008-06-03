@@ -260,7 +260,7 @@ checkResInfo gr mo mm (c,info) = do
    checkUniq xss = case xss of
      x:y:xs 
       | x == y -> raise $ "ambiguous for type" +++ 
-                           prtType gr (mkFunType (init x) (last x))  
+                           prtType gr (mkFunType (tail x) (head x))  
       | otherwise -> checkUniq $ y:xs
      _ -> return ()
 

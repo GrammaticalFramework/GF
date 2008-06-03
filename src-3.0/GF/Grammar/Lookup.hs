@@ -65,7 +65,7 @@ lookupResDefKind gr m c = look True m c where
           CncCat _ _ _        -> liftM (flip (,) 1) $ lock c defLinType
           CncFun (Just (cat,_)) (Yes tr) _ -> liftM (flip (,) 1) $ unlock cat tr
 
-          CncFun _ (Yes tr) _ -> liftM (flip (,) 1) $ unlock c tr
+          CncFun _ (Yes tr) _ -> liftM (flip (,) 1) (return tr) ---- $ unlock c tr
 
           AnyInd _ n        -> look False n c
           ResParam _        -> return (QC m c,2)
