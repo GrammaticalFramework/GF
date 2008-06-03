@@ -232,16 +232,16 @@ checkResInfo gr mo mm (c,info) = do
       return (c, ResOper pty' pde')
 
     ResOverload os tysts -> chIn "overloading" $ do
-      --tysts' <- mapM (uncurry $ flip check) tysts
-      tysts0 <- checkErr $ lookupOverload gr mo c
-      tysts' <- mapM (uncurry $ flip check) 
+      tysts' <- mapM (uncurry $ flip check) tysts  -- return explicit ones
+      tysts0 <- checkErr $ lookupOverload gr mo c  -- check against inherited ones too
+      tysts1 <- mapM (uncurry $ flip check) 
                   [(mkFunType args val,tr) | (args,(val,tr)) <- tysts0]
-      let tysts2 = [(y,x) | (x,y) <- tysts']
+      let tysts2 = [(y,x) | (x,y) <- tysts1]
       --- this can only be a partial guarantee, since matching
       --- with value type is only possible if expected type is given
       checkUniq $ 
         sort [t : map snd xs | (x,_) <- tysts2, Ok (xs,t) <- [typeFormCnc x]]
-      return (c,ResOverload os tysts2)
+      return (c,ResOverload os [(y,x) | (x,y) <- tysts'])
 
     ResParam (Yes (pcs,_)) -> chIn "parameter type" $ do
 ----      mapM ((mapM (computeLType gr . snd)) . snd) pcs
