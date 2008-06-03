@@ -232,7 +232,10 @@ checkResInfo gr mo mm (c,info) = do
       return (c, ResOper pty' pde')
 
     ResOverload os tysts -> chIn "overloading" $ do
-      tysts' <- mapM (uncurry $ flip check) tysts
+      --tysts' <- mapM (uncurry $ flip check) tysts
+      tysts0 <- checkErr $ lookupOverload gr mo c
+      tysts' <- mapM (uncurry $ flip check) 
+                  [(mkFunType args val,tr) | (args,(val,tr)) <- tysts0]
       let tysts2 = [(y,x) | (x,y) <- tysts']
       --- this can only be a partial guarantee, since matching
       --- with value type is only possible if expected type is given
@@ -256,8 +259,8 @@ checkResInfo gr mo mm (c,info) = do
 
    checkUniq xss = case xss of
      x:y:xs 
-      | x == y -> raise $ "ambiguous for argument list" +++ 
-                         unwords (map (prtType gr) x)  
+      | x == y -> raise $ "ambiguous for type" +++ 
+                           prtType gr (mkFunType (init x) (last x))  
       | otherwise -> checkUniq $ y:xs
      _ -> return ()
 

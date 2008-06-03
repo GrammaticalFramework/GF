@@ -357,7 +357,7 @@ transResDef x = case x of
      G.ResOper _ (Yes df) -> case M.appForm df of
        (keyw, ts@(_:_)) | isOverloading keyw -> case last ts of
          G.R fs -> 
-           [(c,p,G.ResOverload (init ts) [(ty,fu) | (_,(Just ty,fu)) <- fs])]
+           [(c,p,G.ResOverload [m | G.Vr m <- ts] [(ty,fu) | (_,(Just ty,fu)) <- fs])]
          _ -> [op]
        _ -> [op]
 

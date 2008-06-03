@@ -100,7 +100,7 @@ trAnyDef (i,info) = let i' = tri i in case info of
     [P.DefOper [P.DDef [mkName i'] (
       foldl P.EApp 
         (P.EIdent $ tri $ cOverload)
-          (map trt os ++ 
+          (map (P.EIdent . tri) os ++ 
            [P.ERecord [P.LDFull [i'] (trt ty) (trt fu) | (ty,fu) <- tysts]]))]]
 
   CncCat (Yes ty) Nope _ -> 

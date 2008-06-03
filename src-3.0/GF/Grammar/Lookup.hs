@@ -116,9 +116,11 @@ lookupOverload gr m c = do
       ModMod mo -> do
         info <- lookupIdentInfo mo c
         case info of
-          ResOverload os tysts -> 
-            return [(map snd args,(val,tr)) | 
-                      (ty,tr) <- tysts, Ok (args,val) <- [typeFormCnc ty]]
+          ResOverload os tysts -> do
+            tss <- mapM (\x -> lookupOverload gr x c) os
+            return $ [(map snd args,(val,tr)) | 
+                      (ty,tr) <- tysts, Ok (args,val) <- [typeFormCnc ty]] ++ 
+                     concat tss
 
           AnyInd _ n  -> lookupOverload gr n c
           _   -> Bad $ prt c +++ "is not an overloaded operation"

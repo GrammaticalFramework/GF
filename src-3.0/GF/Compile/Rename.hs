@@ -171,7 +171,7 @@ renameInfo mo status (i,info) = errIn
 
   ResOper pty ptr -> liftM2 ResOper (ren pty) (ren ptr)
   ResOverload os tysts -> 
-    liftM2 ResOverload (mapM rent os) (mapM (pairM rent) tysts)
+    liftM (ResOverload os) (mapM (pairM rent) tysts)
 
   ResParam (Yes (pp,m)) -> do
     pp' <- mapM (renameParam status) pp
