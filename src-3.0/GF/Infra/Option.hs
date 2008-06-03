@@ -82,6 +82,7 @@ data OutputFormat = FmtPGF
                   | FmtJavaScript 
                   | FmtHaskell 
                   | FmtHaskell_GADT 
+                  | FmtBNF
                   | FmtSRGS_XML 
                   | FmtSRGS_ABNF 
                   | FmtJSGF 
@@ -418,6 +419,7 @@ outputFormats =
      ("js",           FmtJavaScript),
      ("haskell",      FmtHaskell),
      ("haskell_gadt", FmtHaskell_GADT),
+     ("bnf",          FmtBNF),
      ("srgs",         FmtSRGS_XML),
      ("srgs_xml",     FmtSRGS_XML),
      ("srgs_abnf",    FmtSRGS_ABNF),
