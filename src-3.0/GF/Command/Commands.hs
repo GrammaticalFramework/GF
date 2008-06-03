@@ -160,7 +160,7 @@ allCommands pgf = Map.fromAscList [
 
    prGrammar opts = case valIdOpts "printer" "" opts of
      "cats" -> unwords $ categories pgf
-     v -> prPGF (read v) pgf 
+     v -> prPGF (read v) pgf (prCId (absname pgf))
 
    wordCompletion opts = do
      let lang = head (optLangs opts)
