@@ -170,7 +170,7 @@ linearize pgf lang = PGF.Linearize.linearize pgf (mkCId lang)
 parse pgf lang cat s = 
   case lookParser pgf (mkCId lang) of
     Nothing    -> error ("Unknown language: " ++ lang)
-    Just pinfo -> case parseFCF "bottomup" pinfo (mkCId cat) (words s) of
+    Just pinfo -> case parseFCFG "bottomup" pinfo (mkCId cat) (words s) of
                     Ok x  -> x
                     Bad s -> error s
 

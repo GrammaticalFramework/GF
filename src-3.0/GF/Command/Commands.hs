@@ -17,11 +17,14 @@ import PGF.CId
 import PGF.ShowLinearize
 import PGF.Macros
 import PGF.Data ----
+import qualified PGF.Parsing.FCFG.Incremental as Incremental
 import GF.Compile.Export
-
+import GF.Infra.UseIO
 import GF.Data.ErrM ----
 
+import Data.Maybe
 import qualified Data.Map as Map
+import System.CPUTime
 
 type CommandOutput = ([Exp],String) ---- errors, etc
 
@@ -124,6 +127,10 @@ allCommands pgf = Map.fromAscList [
   ("pg", emptyCommandInfo {
      exec  = \opts _ -> return $ fromString $ prGrammar opts,
      flags = ["cat","lang","printer"]
+     }),
+  ("wc", emptyCommandInfo {
+     exec  = \opts _ -> wordCompletion opts >> return ([],[]),
+     flags = ["cat","lang"]
      })
   ]
  where
@@ -153,5 +160,27 @@ allCommands pgf = Map.fromAscList [
 
    prGrammar opts = case valIdOpts "printer" "" opts of
      "cats" -> unwords $ categories pgf
-     v -> prPGF (read v) pgf (prCId (absname pgf))
+     v -> prPGF (read v) pgf 
 
+   wordCompletion opts = do
+     let lang = head (optLangs opts)
+         cat  = optCat opts
+         pinfo = fromMaybe (error ("Unknown language: " ++ lang)) (lookParser pgf (mkCId lang))
+         state0 = Incremental.initState pinfo (mkCId cat)
+     putStrFlush ">> "
+     s <- getLine
+     if null s
+       then return ()
+       else do cpu1 <- getCPUTime
+               st <- parse pinfo state0 (words s)
+               let exps = Incremental.extractExps pinfo (mkCId cat) st
+               mapM_ (putStrLn . showExp) exps
+               cpu2 <- getCPUTime
+	       putStrLn (show ((cpu2 - cpu1) `div` 1000000000) ++ " msec")
+               wordCompletion opts
+     where
+       parse pinfo st []     = do putStrLnFlush ""
+                                  return st
+       parse pinfo st (t:ts) = do putStrFlush "."
+                                  st1 <- return $! (Incremental.nextState pinfo t st)
+                                  parse pinfo st1 ts

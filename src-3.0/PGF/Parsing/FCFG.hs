@@ -8,7 +8,7 @@
 -----------------------------------------------------------------------------
 
 module PGF.Parsing.FCFG
-    (parseFCF,buildParserInfo,ParserInfo(..),makeFinalEdge) where
+    (buildParserInfo,ParserInfo,parseFCFG) where
 
 import GF.Data.ErrM
 import GF.Data.Assoc
@@ -19,7 +19,8 @@ import PGF.Data
 import PGF.Macros
 import PGF.BuildParser
 import PGF.Parsing.FCFG.Utilities
-import PGF.Parsing.FCFG.Active
+import qualified PGF.Parsing.FCFG.Active      as Active
+import qualified PGF.Parsing.FCFG.Incremental as Incremental
 
 import qualified Data.Map as Map
 
@@ -28,25 +29,12 @@ import qualified Data.Map as Map
 
 -- main parsing function
 
-parseFCF :: String            -- ^ parsing strategy
+parseFCFG :: String            -- ^ parsing strategy
          -> ParserInfo        -- ^ compiled grammar (fcfg) 
          -> CId               -- ^ starting category
          -> [String]          -- ^ input tokens
          -> Err [Exp]         -- ^ resulting GF terms
-parseFCF strategy pinfo startCat inString =
-    do let inTokens = input inString
-       startCats <- case Map.lookup startCat (startupCats pinfo) of
-                      Just cats -> return cats
-                      Nothing   -> fail $ "Unknown startup category: " ++ prCId startCat
-       fcfParser <- parseFCF strategy
-       let chart = fcfParser pinfo startCats inTokens
-	   (i,j) = inputBounds inTokens
-	   finalEdges = [makeFinalEdge cat i j | cat <- startCats]
-	   forests = chart2forests chart (const False) finalEdges
-           filteredForests = forests >>= applyProfileToForest
-       return $ nubsort $ filteredForests >>= forest2exps
-    where
-      parseFCF :: String -> Err (FCFParser)
-      parseFCF "bottomup" = return $ parse "b"
-      parseFCF "topdown"  = return $ parse "t"
-      parseFCF strat      = fail $ "FCFG parsing strategy not defined: " ++ strat
+parseFCFG "bottomup"    pinfo start toks = return $ Active.parse "b"  pinfo start toks 
+parseFCFG "topdown"     pinfo start toks = return $ Active.parse "t"  pinfo start toks 
+parseFCFG "incremental" pinfo start toks = return $ Incremental.parse pinfo start toks 
+parseFCFG strat         pinfo start toks = fail   $ "FCFG parsing strategy not defined: " ++ strat

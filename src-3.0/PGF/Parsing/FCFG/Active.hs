@@ -7,7 +7,7 @@
 -- MCFG parsing, the active algorithm
 -----------------------------------------------------------------------------
 
-module PGF.Parsing.FCFG.Active (FCFParser, parse, makeFinalEdge) where
+module PGF.Parsing.FCFG.Active (parse) where
 
 import GF.Data.Assoc
 import GF.Data.SortedList
@@ -32,17 +32,20 @@ makeFinalEdge cat 0 0 = (cat, [EmptyRange])
 makeFinalEdge cat i j = (cat, [makeRange i j])
 
 -- | the list of categories = possible starting categories
-type FCFParser =  ParserInfo
-               -> [FCat]
-               -> Input FToken
-               -> SyntaxChart (CId,[Profile]) (FCat,RangeRec)
-
-
-parse :: String -> FCFParser
-parse strategy pinfo starts toks = xchart2syntaxchart chart pinfo
-    where chart = process strategy pinfo toks axioms emptyXChart
-          axioms | isBU  strategy = literals pinfo toks ++ initialBU pinfo toks
-		 | isTD  strategy = literals pinfo toks ++ initialTD pinfo starts toks
+parse :: String -> ParserInfo -> CId -> [FToken] -> [Exp]
+parse strategy pinfo start toks = nubsort $ filteredForests >>= forest2exps
+  where
+    inTokens = input toks
+    starts = Map.findWithDefault [] start (startupCats pinfo)
+    schart = xchart2syntaxchart chart pinfo
+    (i,j) = inputBounds inTokens
+    finalEdges = [makeFinalEdge cat i j | cat <- starts]
+    forests = chart2forests schart (const False) finalEdges
+    filteredForests = forests >>= applyProfileToForest
+        
+    chart = process strategy pinfo inTokens axioms emptyXChart
+    axioms | isBU  strategy = literals pinfo inTokens ++ initialBU pinfo inTokens
+           | isTD  strategy = literals pinfo inTokens ++ initialTD pinfo starts inTokens
 
 isBU  s = s=="b"
 isTD  s = s=="t"
