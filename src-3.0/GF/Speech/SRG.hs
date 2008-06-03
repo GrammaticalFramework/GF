@@ -13,6 +13,7 @@ module GF.Speech.SRG (SRG(..), SRGRule(..), SRGAlt(..), SRGItem
                      , makeSRG
                      , makeSimpleSRG
                      , makeNonRecursiveSRG
+                     , getSpeechLanguage
                      , lookupFM_, prtS
                      ) where
 

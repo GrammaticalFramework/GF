@@ -1,42 +1,22 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : GrammarToVoiceXML
--- Maintainer  : Bjorn Bringert
--- Stability   : (stable)
--- Portability : (portable)
+-- Module      : GF.Speech.VoiceXML
 --
--- Create VoiceXML dialogue system from a GF grammar.
+-- Creates VoiceXML dialogue systems from PGF grammars.
 -----------------------------------------------------------------------------
+module GF.Speech.VoiceXML (grammar2vxml) where
 
-module GF.Speech.GrammarToVoiceXML (grammar2vxml) where
-
-import GF.Canon.CanonToGFCC (canon2gfcc)
-import qualified GF.GFCC.CId as C
-import GF.GFCC.DataGFCC (GFCC(..), Abstr(..))
-import GF.GFCC.Macros
-import qualified GF.Canon.GFC as GFC
-import GF.Canon.AbsGFC (Term)
-import GF.Canon.PrintGFC (printTree)
-import GF.Canon.CMacros (noMark, strsFromTerm)
-import GF.Canon.Unlex (formatAsText)
-import GF.Data.Utilities
-import GF.CF.CFIdent (cfCat2Ident)
-import GF.Compile.ShellState (StateGrammar,stateGrammarST,cncId,grammar,
-                              startCatStateOpts,stateOptions)
-import GF.Data.Str (sstrV)
-import GF.Grammar.Macros hiding (assign,strsFromTerm)
-import GF.Grammar.Grammar (Fun)
-import GF.Grammar.Values (Tree)
-import GF.Infra.Option (Options, addOptions, getOptVal, speechLanguage)
-import GF.UseGrammar.GetTree (string2treeErr)
-import GF.UseGrammar.Linear (linTree2strings)
-
-import GF.Infra.Ident
-import GF.Infra.Option (noOptions)
-import GF.Infra.Modules
 import GF.Data.Operations
-
+import GF.Data.Str (sstrV)
+import GF.Data.Utilities
 import GF.Data.XML
+import GF.Infra.Ident
+import GF.Infra.Modules
+import GF.Speech.SRG (getSpeechLanguage)
+import PGF.CId
+import PGF.Data
+import PGF.Macros
+import PGF.Linearize (realize)
 
 import Control.Monad (liftM)
 import Data.List (isPrefixOf, find, intersperse)
@@ -46,58 +26,35 @@ import Data.Maybe (fromMaybe)
 import Debug.Trace
 
 -- | the main function
-grammar2vxml :: Options -> StateGrammar -> String
-grammar2vxml opt s = showsXMLDoc (skel2vxml name language startcat gr' qs) ""
-    where (_, gr') = vSkeleton (stateGrammarST s)
-          name = prIdent (cncId s)
-          qs = catQuestions s (map fst gr')
-          opts = addOptions opt (stateOptions s)
-          language = fmap (replace '_' '-') $ getOptVal opts speechLanguage
-          startcat = C.CId $ prIdent $ cfCat2Ident $ startCatStateOpts opts s
+grammar2vxml :: PGF -> CId -> String
+grammar2vxml pgf cnc = showsXMLDoc (skel2vxml name language start skel qs) ""
+    where skel = pgfSkeleton pgf
+          name = prCId cnc
+          qs = catQuestions pgf cnc (map fst skel)
+          language = getSpeechLanguage pgf cnc
+          start = mkCId (lookStartCat pgf)
 
 --
 -- * VSkeleton: a simple description of the abstract syntax.
 --
 
-type VSkeleton = [(VIdent, [(VIdent, [VIdent])])]
-type VIdent = C.CId
+type Skeleton = [(CId, [(CId, [CId])])]
 
-prid :: VIdent -> String
-prid (C.CId x) = x
-
-vSkeleton :: GFC.CanonGrammar -> (VIdent,VSkeleton)
-vSkeleton = gfccSkeleton . canon2gfcc noOptions
-
-gfccSkeleton :: GFCC -> (VIdent,VSkeleton)
-gfccSkeleton gfcc = (absname gfcc, ts)
-  where a = abstract gfcc
-        ts = [(c,[(f,ft f) | f <- fs]) | (c,fs) <- Map.toList (catfuns a)]
-        ft f = case lookMap (error $ prid f) f (funs a) of
-                 (ty,_) -> fst $ GF.GFCC.Macros.catSkeleton ty
+pgfSkeleton :: PGF -> Skeleton
+pgfSkeleton pgf = [(c,[(f,fst (catSkeleton (lookType pgf f))) | f <- fs]) 
+                   | (c,fs) <- Map.toList (catfuns (abstract pgf))]
 
 --
 -- * Questions to ask 
 --
 
-type CatQuestions = [(VIdent,String)]
+type CatQuestions = [(CId,String)]
 
-catQuestions :: StateGrammar -> [VIdent] -> CatQuestions
-catQuestions gr cats = [(c,catQuestion gr c) | c <- cats]
+catQuestions :: PGF -> CId -> [CId] -> CatQuestions
+catQuestions pgf cnc cats = [(c,catQuestion pgf cnc c) | c <- cats]
 
-catQuestion :: StateGrammar -> VIdent -> String
-catQuestion gr cat = err errHandler id (getPrintname gr cat >>= term2string)
-  where -- FIXME: use some better warning facility
-        errHandler e = trace ("GrammarToVoiceXML: " ++ e) ("quest_"++prid cat)
-        term2string = liftM sstrV . strsFromTerm
-
-getPrintname :: StateGrammar -> VIdent -> Err Term
-getPrintname gr cat = 
-    do m <- lookupModMod (grammar gr) (cncId gr)
-       i <- lookupInfo m (IC (prid cat))
-       case i of
-         GFC.CncCat _ _ p -> return p
-         _ -> fail $ "getPrintname " ++ prid cat
-                      ++ ": Expected CncCat, got " ++ show i
+catQuestion :: PGF -> CId -> CId -> String
+catQuestion pgf cnc cat = realize (lookPrintName pgf cnc cat)
 
 
 {-
@@ -113,15 +70,15 @@ lin gr fun = do
         unt = formatAsText 
 -}
 
-getCatQuestion :: VIdent -> CatQuestions -> String
+getCatQuestion :: CId -> CatQuestions -> String
 getCatQuestion c qs = 
-    fromMaybe (error "No question for category " ++ prid c) (lookup c qs)
+    fromMaybe (error "No question for category " ++ prCId c) (lookup c qs)
 
 --
 -- * Generate VoiceXML
 --
 
-skel2vxml :: String -> Maybe String -> VIdent -> VSkeleton -> CatQuestions -> XML
+skel2vxml :: String -> Maybe String -> CId -> Skeleton -> CatQuestions -> XML
 skel2vxml name language start skel qs = 
     vxml language ([startForm] ++ concatMap (uncurry (catForms gr qs)) skel)
   where 
@@ -133,12 +90,12 @@ grammarURI :: String -> String
 grammarURI name = name ++ ".grxml"
 
 
-catForms :: String -> CatQuestions -> VIdent -> [(VIdent, [VIdent])] -> [XML]
+catForms :: String -> CatQuestions -> CId -> [(CId, [CId])] -> [XML]
 catForms gr qs cat fs = 
-    comments [prid cat ++ " category."]
+    comments [prCId cat ++ " category."]
     ++ [cat2form gr qs cat fs] 
 
-cat2form :: String -> CatQuestions -> VIdent -> [(VIdent, [VIdent])] -> XML
+cat2form :: String -> CatQuestions -> CId -> [(CId, [CId])] -> XML
 cat2form gr qs cat fs = 
   form (catFormId cat) $ 
       [var "old" Nothing, 
@@ -151,22 +108,22 @@ cat2form gr qs cat fs =
      ++ concatMap (uncurry (fun2sub gr cat)) fs
      ++ [block [return_ ["term"]{-]-}]]
 
-fun2sub :: String -> VIdent -> VIdent -> [VIdent] -> [XML]
+fun2sub :: String -> CId -> CId -> [CId] -> [XML]
 fun2sub gr cat fun args = 
-    comments [prid fun ++ " : (" 
-              ++ concat (intersperse ", " (map prid args))
-              ++ ") " ++ prid cat] ++ ss
+    comments [prCId fun ++ " : (" 
+              ++ concat (intersperse ", " (map prCId args))
+              ++ ") " ++ prCId cat] ++ ss
   where 
   ss = zipWith mkSub [0..] args
   mkSub n t = subdialog s [("src","#"++catFormId t),
-                           ("cond","term.name == "++string (prid fun))] 
+                           ("cond","term.name == "++string (prCId fun))] 
               [param "old" v,
                filled [] [assign v (s++".term")]]
-    where s = prid fun ++ "_" ++ show n
+    where s = prCId fun ++ "_" ++ show n
           v = "term.args["++show n++"]"
 
-catFormId :: VIdent -> String
-catFormId c = prid c ++ "_cat"
+catFormId :: CId -> String
+catFormId c = prCId c ++ "_cat"
 
 
 --
@@ -267,19 +224,19 @@ string s = "'" ++ concatMap esc s ++ "'"
 -- * List stuff
 --
 
-isListCat :: (VIdent, [(VIdent, [VIdent])]) -> Bool
+isListCat :: (CId, [(CId, [CId])]) -> Bool
 isListCat (cat,rules) = "List" `isPrefixOf` prIdent cat && length rules == 2
 		    && ("Base"++c) `elem` fs && ("Cons"++c) `elem` fs
     where c = drop 4 (prIdent cat)
 	  fs = map (prIdent . fst) rules
 
-isBaseFun :: VIdent -> Bool
+isBaseFun :: CId -> Bool
 isBaseFun f = "Base" `isPrefixOf` prIdent f
 
-isConsFun :: VIdent -> Bool
+isConsFun :: CId -> Bool
 isConsFun f = "Cons" `isPrefixOf` prIdent f
 
-baseSize :: (VIdent, [(VIdent, [VIdent])]) -> Int
+baseSize :: (CId, [(CId, [CId])]) -> Int
 baseSize (_,rules) = length bs
     where Just (_,bs) = find (isBaseFun . fst) rules
 -}
