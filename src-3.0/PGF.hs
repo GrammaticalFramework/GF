@@ -37,6 +37,10 @@ module PGF(
            
            -- ** Parsing
            parse, parseAllLang, parseAll,
+           
+           -- ** Word Completion (Incremental Parsing)
+           Incremental.ParseState,
+	   initState, Incremental.nextState, Incremental.getCompletions, extractExps,
 
            -- ** Generation
            generateRandom, generateAll, generateAllDepth
@@ -52,6 +56,7 @@ import PGF.Raw.Convert
 import PGF.Raw.Parse
 import PGF.Raw.Print (printTree)
 import PGF.Parsing.FCFG
+import qualified PGF.Parsing.FCFG.Incremental as Incremental
 import GF.Text.UTF8
 
 import GF.Data.ErrM
@@ -119,6 +124,16 @@ parseAll     :: PGF -> Category -> String -> [[Exp]]
 -- if the grammar is ambiguous.
 parseAllLang :: PGF -> Category -> String -> [(Language,[Exp])]
 
+-- | Creates an initial parsing state for a given language and
+-- startup category.
+initState :: PGF -> Language -> Category -> Incremental.ParseState
+
+-- | This function extracts the list of all completed parse trees
+-- that spans the whole input consumed so far. The trees are also
+-- limited by the category specified, which is usually
+-- the same as the startup category.
+extractExps :: Incremental.ParseState -> Category -> [Exp]
+
 -- | The same as 'generateAllDepth' but does not limit
 -- the depth in the generation.
 generateAll      :: PGF -> Category -> [Exp]
@@ -182,6 +197,16 @@ parseAll mgr cat = map snd . parseAllLang mgr cat
 
 parseAllLang mgr cat s = 
   [(lang,ts) | lang <- languages mgr, let ts = parse mgr lang cat s, not (null ts)]
+
+initState pgf lang cat = Incremental.initState pinfo catCId
+  where
+    langCId = mkCId lang
+    catCId  = mkCId cat
+    pinfo   = case lookParser pgf langCId of
+                Just pinfo -> pinfo
+                _          -> error ("Unknown language: " ++ lang)
+
+extractExps state cat = Incremental.extractExps state (mkCId cat)
 
 generateRandom pgf cat = do
   gen <- newStdGen

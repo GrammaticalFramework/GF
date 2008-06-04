@@ -1,6 +1,6 @@
 {-# LANGUAGE BangPatterns #-}
 module PGF.Parsing.FCFG.Incremental
-          ( State
+          ( ParseState
           , initState
           , nextState
           , getCompletions
@@ -10,7 +10,7 @@ module PGF.Parsing.FCFG.Incremental
 
 import Data.Array
 import Data.Array.Base (unsafeAt)
-import Data.List (isPrefixOf)
+import Data.List (isPrefixOf, foldl')
 import Data.Maybe (fromMaybe)
 import qualified Data.Map as Map
 import qualified Data.IntMap as IntMap
@@ -26,12 +26,9 @@ import PGF.Parsing.FCFG.Utilities
 import Debug.Trace
 
 parse :: ParserInfo -> CId -> [FToken] -> [Exp]
-parse pinfo start toks = go (initState pinfo start) toks
-  where
-    go st []     = extractExps pinfo start st
-    go st (t:ts) = go (nextState pinfo t st) ts
+parse pinfo start toks = extractExps (foldl' nextState (initState pinfo start) toks) start
 
-initState :: ParserInfo -> CId -> State
+initState :: ParserInfo -> CId -> ParseState
 initState pinfo start = 
   let items = do
         c <- Map.findWithDefault [] start (startupCats pinfo)
@@ -46,39 +43,47 @@ initState pinfo start =
                   Just ((fid,_), _) -> fid+1
                   Nothing           -> 0
 
-  in State (Chart MM.empty [] Map.empty forest max_fid 0)
+  in State pinfo
+           (Chart MM.empty [] Map.empty forest max_fid 0)
            (Set.fromList items)
 
-nextState :: ParserInfo -> FToken -> State -> State
-nextState pinfo t (State chart items) =
+-- | From the current state and the next token
+-- 'nextState' computes a new state where the token
+-- is consumed and the current position shifted by one.
+nextState :: ParseState -> String -> ParseState
+nextState (State pinfo chart items) t =
   let (items1,chart1) = process add (allRules pinfo) (Set.toList items) (Set.empty,chart)
       chart2 = chart1{ active =MM.empty
                      , actives=active chart1 : actives chart1
                      , passive=Map.empty
                      , offset =offset chart1+1
                      }
-  in State chart2 items1
+  in State pinfo chart2 items1
   where
     add tok item set
       | tok == t  = Set.insert item set
       | otherwise = set
 
-getCompletions :: ParserInfo -> FToken -> State -> Map.Map FToken State
-getCompletions pinfo w (State chart items) =
+-- | If the next token is not known but only its prefix (possible empty prefix)
+-- then the 'getCompletions' function can be used to calculate the possible
+-- next words and the consequent states. This is used for word completions in
+-- the GF interpreter.
+getCompletions :: ParseState -> String -> Map.Map String ParseState
+getCompletions (State pinfo chart items) w =
   let (map',chart1) = process add (allRules pinfo) (Set.toList items) (MM.empty,chart)
       chart2 = chart1{ active =MM.empty
                      , actives=active chart1 : actives chart1
                      , passive=Map.empty
                      , offset =offset chart1+1
                      }
-  in fmap (State chart2) map'
+  in fmap (State pinfo chart2) map'
   where
     add tok item map
       | isPrefixOf w tok = fromMaybe map (MM.insert' tok item map)
       | otherwise        = map
 
-extractExps :: ParserInfo -> CId -> State -> [Exp]
-extractExps pinfo start (State chart items) = exps
+extractExps :: ParseState -> CId -> [Exp]
+extractExps (State pinfo chart items) start = exps
   where
     (_,st) = process (\_ _ -> id) (allRules pinfo) (Set.toList items) ((),chart)
 
@@ -160,7 +165,9 @@ data PassiveKey
   deriving (Eq,Ord,Show)
 
 
-data State = State Chart (Set.Set Active)
+-- | An abstract data type whose values represent
+-- the current state in an incremental parser.
+data ParseState = State ParserInfo Chart (Set.Set Active)
 
 data Chart
   = Chart
