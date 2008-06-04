@@ -572,4 +572,6 @@ oper
     a = agrP3 Sg ;  -- does not matter (--- at least in Slash)
     isPron = False  -- has no special accusative
     } ;
+
+  etta_Conj : Str = "että" ;
 }

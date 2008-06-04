@@ -35,6 +35,22 @@ concrete NounFin of Noun = CatFin ** open ResFin, Prelude in {
       isPron = False
       } ;
 
+    DetNP det = 
+      let
+        n : Number = case det.isNum of {
+          True => Sg ;
+          _ => det.n
+          } ;
+      in {
+        s = \\c => let k = npform2case n c in
+                 det.s1 ! k ; -- det.s2 is possessive suffix 
+        a = agrP3 (case det.isDef of {
+            False => Sg ;  -- autoja menee; kolme autoa menee
+            _ => det.n
+            }) ;
+        isPron = False
+      } ;
+
     UsePN pn = {
       s = \\c => pn.s ! npform2case Sg c ; 
       a = agrP3 Sg ;
@@ -59,23 +75,70 @@ concrete NounFin of Noun = CatFin ** open ResFin, Prelude in {
       a = np.a ;
       isPron = np.isPron  -- minun täällä - ni
       } ;
-{-
-    DetSg quant ord = {
-      s1 = \\c => quant.s1 ! Sg ! c ++ ord.s ! Sg ! c ;
-      s2 = quant.s2 ; 
-      n  = Sg ; 
-      isNum = False ; 
-      isPoss = quant.isPoss ;
-      isDef = False -- doesn't matter with Sg
-      } ;
--}
+
     DetQuantOrd quant num ord = {
       s1 = \\c => quant.s1 ! num.n ! c ++ num.s ! Sg ! c ++ ord.s ! Pl ! c ; 
       s2 = quant.s2 ;
       n = num.n ;
       isNum = num.isNum ;
       isPoss = quant.isPoss ;
-      isDef = quant.isDef
+      isDef = True
+      } ;
+
+    DetQuant quant num = {
+      s1 = \\c => quant.s1 ! num.n ! c ++ num.s ! Sg ! c ;
+      s2 = quant.s2 ;
+      n = num.n ;
+      isNum = num.isNum ;
+      isPoss = quant.isPoss ;
+      isDef = True
+      } ;
+
+    DetArtOrd quant num ord = {
+      s1 = \\c => quant.s1 ! num.n ! c ++ num.s ! Sg ! c ++ ord.s ! Pl ! c ; 
+      s2 = [] ;
+      n = num.n ;
+      isNum = num.isNum ;
+      isPoss = False ;
+      isDef = True
+      } ;
+
+    DetArtCard quant num = {
+      s1 = \\c => quant.s1 ! num.n ! c ++ num.s ! Sg ! c ;
+      s2 = [] ;
+      n = num.n ;
+      isNum = True ;
+      isPoss = False ;
+      isDef = True
+      } ;
+
+    DetArtSg det cn = 
+      let
+        n : Number = Sg ;
+        ncase : Case -> NForm = \c -> NCase n c ;
+      in {
+        s = \\c => let k = npform2case n c in
+                 det.s1 ! Sg ! k ++ cn.s ! ncase k ; 
+        a = agrP3 Sg ;
+        isPron = False
+      } ;
+
+    DetArtPl det cn = 
+      let
+        n : Number = Pl ;
+        ncase : Case -> NForm = \c -> 
+          case <n,c,det.isDef> of {
+            <Pl,Nom,False> => NCase Pl Part ; -- kytkimiä 
+            _ => NCase n c                          -- kytkin, kytkimen,...
+            }
+      in {
+      s = \\c => let k = npform2case n c in
+                 det.s1 ! Pl ! k ++ cn.s ! ncase k ; 
+      a = agrP3 (case det.isDef of {
+            False => Sg ;  -- autoja menee; kolme autoa menee
+            _ => Pl
+            }) ;
+      isPron = False
       } ;
 
     PossPron p = {
@@ -89,8 +152,7 @@ concrete NounFin of Noun = CatFin ** open ResFin, Prelude in {
     NumSg = {s = \\_,_ => [] ; isNum = False ; n = Sg} ;
     NumPl = {s = \\_,_ => [] ; isNum = False ; n = Pl} ;
 
-----b    NumInt n = {s = \\_,_ => n.s ; isNum = True ; n = Pl} ; --DEPREC
-----b    OrdInt n = {s = \\_,_ => n.s ++ "."} ;
+    NumCard n = n ** {isNum = True} ;
 
     NumDigits numeral = {
       s = \\n,c => numeral.s ! NCard (NCase n c) ; 
@@ -106,7 +168,11 @@ concrete NounFin of Noun = CatFin ** open ResFin, Prelude in {
       } ;
     OrdNumeral numeral = {s = \\n,c => numeral.s ! NOrd  (NCase n c)} ;
 
-    AdNum adn num = {s = \\n,c => adn.s ++ num.s ! n ! c ; isNum = num.isNum ; n = num.n} ;
+    AdNum adn num = {
+      s = \\n,c => adn.s ++ num.s ! n ! c ; 
+      isNum = num.isNum ; 
+      n = num.n
+      } ;
 
     OrdSuperl a = {s = \\n,c => a.s ! Superl ! AN (NCase n c)} ;
 
@@ -123,17 +189,30 @@ concrete NounFin of Noun = CatFin ** open ResFin, Prelude in {
       isNum,isPoss,isDef = False -- autoja on
       } ;
 
-{-
-    MassDet = {
-      s1 = \\_,_ => [] ; --- Nom is Part ?
-      s2 = [] ; 
-      isNum,isPoss,isDef = False
+    MassNP cn =
+      let
+        n : Number = Sg ;
+        ncase : Case -> NForm = \c -> NCase n c ;
+      in {
+        s = \\c => let k = npform2case n c in
+                cn.s ! ncase k ; 
+        a = agrP3 Sg ;
+        isPron = False
       } ;
--}
+
     UseN n = n ;
 
     UseN2 n = n ;
-----b    UseN3 n = n ;
+
+    Use2N3 f = {
+      s = f.s ;
+      c2 = f.c2
+      } ;
+    Use3N3 f = {
+      s = f.s ;
+      c2 = f.c3
+      } ;
+
 
 --- If a possessive suffix is added here it goes after the complements...
 
@@ -150,6 +229,13 @@ concrete NounFin of Noun = CatFin ** open ResFin, Prelude in {
       } ;
 
     RelCN cn rs = {s = \\nf => cn.s ! nf ++ rs.s ! agrP3 (numN nf)} ;
+
+    RelNP np rs = {
+      s = \\c => np.s ! c ++ "," ++ rs.s ! np.a ; 
+      a = np.a ;  
+      isPron = np.isPron ---- correct ?
+      } ;
+
     AdvCN cn ad = {s = \\nf => cn.s ! nf ++ ad.s} ;
 
     SentCN cn sc = {s = \\nf=> cn.s ! nf ++ sc.s} ;

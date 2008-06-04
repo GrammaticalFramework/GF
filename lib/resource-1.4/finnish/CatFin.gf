@@ -19,10 +19,10 @@ concrete CatFin of Cat = CommonX ** open ResFin, Prelude in {
 
 -- Question
 
-    QCl   = {s : ResFin.Tense => Anteriority => Polarity => Str} ;
-    IP    = {s : NPForm => Str ; n : Number} ;
-    IComp = {s : Agr => Str} ; 
-    IDet  = {s : Case => Str ; n : Number} ;
+    QCl    = {s : ResFin.Tense => Anteriority => Polarity => Str} ;
+    IP     = {s : NPForm => Str ; n : Number} ;
+    IComp  = {s : Agr => Str} ; 
+    IDet   = {s : Case => Str ; n : Number ; isNum : Bool} ;
     IQuant = {s : Number => Case => Str} ;
 
 -- Relative
@@ -33,6 +33,7 @@ concrete CatFin of Cat = CommonX ** open ResFin, Prelude in {
 -- Verb
 
     VP   = ResFin.VP ;
+    VPSlash = ResFin.VP ** {c2 : Compl} ; 
     Comp = {s : Agr => Str} ; 
 
 -- Adjective
@@ -60,10 +61,10 @@ concrete CatFin of Cat = CommonX ** open ResFin, Prelude in {
 ----    QuantSg, QuantPl = {s1 : Case => Str ; s2 : Str ; isPoss, isDef : Bool} ;
     Ord = {s : Number => Case => Str} ;
     Predet = {s : Number => NPForm => Str} ;
-    Quant = {s1 : Number => Case => Str ; s2 : Str ; isPoss, isDef : Bool} ;
-    Art = {s1 : Number => Case => Str ; s2 : Str ; isPoss, isDef : Bool} ;
-    Card = {s : Number => Case => Str ; n : Number} ;
-    Num = {s : Number => Case => Str ; isNum : Bool ; n : Number} ;
+    Quant = {s1 : Number => Case => Str ; s2 : Str ; isPoss : Bool} ;
+    Art   = {s1 : Number => Case => Str ; isDef : Bool} ;
+    Card  = {s : Number => Case => Str ; n : Number} ;
+    Num   = {s : Number => Case => Str ; isNum : Bool ; n : Number} ;
 
 -- Numeral
 

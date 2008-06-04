@@ -33,7 +33,7 @@ incomplete concrete VerbScand of Verb = CatScand ** open CommonScand, ResScand i
       insertObj (\\a => v.c2 ++ infVP vp a) (predV v) ** {c2 = vp.c2} ;
     SlashV2VNP v np vp = 
       insertObj 
-        (\\a => vp.c2 ++ np.s ! accusative ++ v.c3 ++ infVP vp a) (predV v) 
+        (\\a => v.c2 ++ np.s ! accusative ++ v.c3 ++ infVP vp a) (predV v) 
         ** {c2 = v.c2} ;
 
     UseComp comp = insertObj (\\a => comp.s ! agrAdj a.gn DIndef) (predV verbBe) ;
