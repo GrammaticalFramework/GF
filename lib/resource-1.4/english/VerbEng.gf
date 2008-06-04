@@ -27,7 +27,7 @@ concrete VerbEng of Verb = CatEng ** open ResEng in {
       insertObj (\\a => infVP vv.isAux vp a) (predVV vv) **
         {c2 = vp.c2} ;
     SlashV2VNP vv np vp = 
-      insertObjPre (\\_ => vp.c2 ++ np.s ! Acc)
+      insertObjPre (\\_ => v.c2 ++ np.s ! Acc)
         (insertObjc (\\a => infVP vv.isAux vp a) (predVc vv)) **
           {c2 = vp.c2} ;
 

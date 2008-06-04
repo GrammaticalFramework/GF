@@ -20,30 +20,11 @@ concrete SentenceFin of Sentence = CatFin ** open Prelude, ResFin in {
 
 -- The object case is formed at the use site of $c2$, in $Relative$ and $Question$.
 
-{-
-    SlashV2 np v2 = { 
-      s = \\t,a,p => (mkClause (subjForm np v2.sc) np.a (predV v2)).s ! t ! a ! p ! SDecl ;
-      c2 = v2.c2
+    SlashVP np vp = { 
+      s = \\t,a,p => (mkClause (subjForm np vp.sc) np.a vp).s ! t ! a ! p ! SDecl ;
+      c2 = vp.c2
       } ;
 
-    SlashVVV2 np vv v2 =
-      let
-        sc = case v2.sc of {
-          NPCase Nom => vv.sc ;   -- joka minun täytyy pestä
-          c => c                  -- joka minulla täytyy olla
-          } 
-      in
-      {s = \\t,ag,p => 
-         (mkClause 
-            (subjForm np sc) np.a 
-            (insertObj 
-              (\\_,b,a => infVP vv.sc b a (predV v2)) 
-              (predV vv)
-            )
-         ).s ! t ! ag ! p ! SDecl ;
-      c2 = v2.c2
-      } ;
--}
     AdvSlash slash adv = {
       s  = \\t,a,b => slash.s ! t ! a ! b ++ adv.s ;
       c2 = slash.c2
@@ -64,7 +45,7 @@ concrete SentenceFin of Sentence = CatFin ** open Prelude, ResFin in {
       } ;
 
 
-    EmbedS  s  = {s = "että" ++ s.s} ;
+    EmbedS  s  = {s = etta_Conj ++ s.s} ;
     EmbedQS qs = {s = qs.s} ;
     EmbedVP vp = {s = infVP (NPCase Nom) Pos (agrP3 Sg) vp} ; --- case,pol,agr
 
@@ -80,5 +61,7 @@ concrete SentenceFin of Sentence = CatFin ** open Prelude, ResFin in {
     } ;
 
     AdvS a s = {s = a.s ++ s.s} ;
+
+    RelS s r = {s = s.s ++ "," ++ r.s ! agrP3 Sg} ; ---- mikä
 
 }

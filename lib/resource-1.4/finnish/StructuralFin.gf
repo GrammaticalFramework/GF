@@ -47,7 +47,7 @@ concrete StructuralFin of Structural = CatFin **
   here7from_Adv = ss "täältä" ;
   how_IAdv = ss "miten" ;
   how8many_IDet = 
-    {s = \\c => "kuinka" ++ (mkN "moni" "monia").s ! NCase Sg c ; n = Sg} ;
+    {s = \\c => "kuinka" ++ (mkN "moni" "monia").s ! NCase Sg c ; n = Sg ; isNum = False} ;
   if_Subj = ss "jos" ;
   in8front_Prep = postGenPrep "edessä" ;
   i_Pron  = mkPronoun "minä" "minun" "minua" "minuna" "minuun" Sg P1 ;

@@ -49,21 +49,48 @@ concrete QuestionFin of Question = CatFin ** open ResFin, Prelude in {
 -- since we don't have possessive suffixes or definiteness. 
 --- It could still be nice to have a common oper...
 
-{-
-    IDetCN idet num ord cn = let n = idet.n in {
+    IdetCN idet cn = let n = idet.n in {
       s = \\c => 
         let 
           k = npform2case n c ;
-          ncase = case <k,num.isNum> of {
+          ncase = case <k,idet.isNum> of {
             <Nom,  True> => NCase Sg Part ; -- mitkä kolme kytkintä
             <_,    True> => NCase Sg k ;    -- miksi kolmeksi kytkimeksi
             _            => NCase n  k      -- mitkä kytkimet
             }
         in
-        idet.s ! k ++ num.s ! Sg ! k ++ ord.s ! n ! k ++ cn.s ! ncase ; 
+        idet.s ! k ++ cn.s ! ncase ; 
       n = n
       } ;
--}
+
+    IdetIP idet = let n = idet.n in {
+      s = \\c => 
+        let 
+          k = npform2case n c ;
+        in
+        idet.s ! k ; 
+      n = n
+      } ;
+
+    IdetQuant idet num = 
+      let 
+        n = num.n ;
+        isn = num.isNum 
+      in {
+        s = \\k => 
+        let 
+          ncase = case <k,isn> of {
+            <Nom,  True> => NCase Sg Part ; -- mitkä kolme kytkintä
+            <_,    True> => NCase Sg k ;    -- miksi kolmeksi kytkimeksi
+            _            => NCase n  k      -- mitkä kytkimet
+            }
+        in
+        idet.s ! n ! k ++ num.s ! Sg ! k ; 
+      n = n ;
+      isNum = isn
+      } ;
+
     CompIAdv a = {s = \\_ => a.s} ;
+    CompIP ip = {s = \\_ => ip.s ! NPCase Nom} ;
 
 }
