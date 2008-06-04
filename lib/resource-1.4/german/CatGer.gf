@@ -28,6 +28,7 @@ concrete CatGer of Cat =
     IP = {s : Case => Str ; n : Number} ;
     IComp = {s : Agr => Str} ; 
     IDet = {s : Gender => Case => Str ; n : Number} ;
+    IQuant = {s : Number => Gender => Case => Str} ;
 
 -- Relative
 
@@ -37,6 +38,7 @@ concrete CatGer of Cat =
 -- Verb
 
     VP = ResGer.VP ;
+    VPSlash = ResGer.VP ** {c2 : Preposition} ;
     Comp = {s : Agr => Str} ; 
 
 -- Adjective
@@ -53,7 +55,8 @@ concrete CatGer of Cat =
     Quant = {s : Number => Gender => Case => Str ; a : Adjf} ;
     Art = {s : Bool => Number => Gender => Case => Str ; a : Adjf} ;
     Predet = {s : Number => Gender => Case => Str} ;
-    Num = {s : Str; n : Number } ;
+    Num = {s : Str ; n : Number ; isNum : Bool} ;
+    Card = {s : Str ; n : Number} ;
     Ord = {s : AForm => Str} ;
 
 -- Numeral

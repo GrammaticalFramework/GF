@@ -9,6 +9,12 @@ concrete NounGer of Noun = CatGer ** open ResGer, Prelude in {
       isPron = False
       } ;
 
+    DetNP det = {
+      s = \\c => det.s ! Neutr ! c ; ---- genders
+      a = agrP3 det.n ;
+      isPron = False
+      } ;
+
     UsePN pn = pn ** {a = agrP3 Sg} ;
 
     UsePron pron = {
@@ -31,18 +37,7 @@ concrete NounGer of Noun = CatGer ** open ResGer, Prelude in {
       a = np.a
       } ;
 
-{- ---b
-    DetSg quant ord = 
-      let 
-        n = Sg ;
-        a = quant.a
-      in {
-        s = \\g,c => quant.s ! n ! g ! c ++ 
-                     ord.s ! agrAdj g (adjfCase a c) n c ;
-        n = n ;
-        a = a
-        } ;
-    DetPl quant num ord = 
+    DetQuantOrd quant num ord = 
       let 
         n = num.n ;
         a = quant.a
@@ -52,24 +47,60 @@ concrete NounGer of Noun = CatGer ** open ResGer, Prelude in {
         n = n ;
         a = a
         } ;
--}
+
+    DetQuant quant num = 
+      let 
+        n = num.n ;
+        a = quant.a
+      in {
+        s = \\g,c => quant.s ! n ! g ! c ++ num.s ;
+        n = n ;
+        a = a
+        } ;
+
+    DetArtOrd quant num ord = 
+      let 
+        n = num.n ;
+        a = quant.a
+      in {
+        s = \\g,c => quant.s ! num.isNum ! n ! g ! c ++ 
+                     num.s ++ ord.s ! agrAdj g (adjfCase a c) n c ;
+        n = n ;
+        a = a
+        } ;
+
+    DetArtCard quant num = 
+      let 
+        n = num.n ;
+        a = quant.a
+      in {
+        s = \\g,c => quant.s ! True ! n ! g ! c ++ 
+                     num.s ;
+        n = n ;
+        a = a
+        } ;
+
+    DetArtPl det cn = {
+      s = \\c => det.s ! False ! Pl ! cn.g ! c ++ cn.s ! adjfCase det.a c ! Pl ! c ;
+      a = agrP3 Pl ;
+      isPron = False
+      } ;
+
+    DetArtSg det cn = {
+      s = \\c => det.s ! False ! Sg ! cn.g ! c ++ cn.s ! adjfCase det.a c ! Sg ! c ;
+      a = agrP3 Sg ;
+      isPron = False
+      } ;
 
     PossPron p = {
       s = \\n,g,c => p.s ! NPPoss (gennum g n) c ;
       a = Strong --- need separately weak for Pl ?
       } ;
 
----b    NoNum = {s = []; n = Pl } ; 
----b    NoOrd = {s = \\_ => []} ;
+    NumCard n = n ** {isNum = True} ;
 
-{- ---b
-    NumInt n = {s = n.s; n = table (Predef.Ints 1 * Predef.Ints 9) {
-			        <0,1>  => Sg ;
-				_ => Pl
-			   } ! <1,2> ---- parser bug (AR 2/6/2007) <n.size,n.last>
-      } ;
-    OrdInt n = {s = \\_   => n.s ++ "."} ;
--}
+    NumPl = {s = []; n = Pl ; isNum = False} ; 
+    NumSg = {s = []; n = Sg ; isNum = False} ; 
 
     NumDigits numeral = {s = numeral.s ! NCard; n = numeral.n } ;
     OrdDigits numeral = {s = \\af => numeral.s ! NOrd af} ;
@@ -87,18 +118,22 @@ concrete NounGer of Noun = CatGer ** open ResGer, Prelude in {
       } ;
 
     IndefArt = {
-      s = \\_ => table {
-        Sg => \\g,c => "ein" + pronEnding ! GSg g ! c ;  
-        Pl =>  \\_,_ => []
+      s = table {
+        True => \\_,_,_ => [] ; 
+        False => table {
+          Sg => \\g,c => "ein" + pronEnding ! GSg g ! c ;  
+          Pl =>  \\_,_ => []
+          }
         } ; 
       a = Strong
       } ;
-{- ---b
-    MassDet = {
-      s = \\_,g,c => [] ;
-      a = Strong
+
+    MassNP cn = {
+      s = \\c => cn.s ! adjfCase Strong c ! Sg ! c ;
+      a = agrP3 Sg ;
+      isPron = False
       } ;
--}
+
     UseN, UseN2 = \n -> {
       s = \\_ => n.s ;
       g = n.g
@@ -108,8 +143,21 @@ concrete NounGer of Noun = CatGer ** open ResGer, Prelude in {
       s = \\_,n,c => f.s ! n ! c ++ appPrep f.c2 x.s ;
       g = f.g
       } ;
+
     ComplN3 f x = {
       s = \\n,c => f.s ! n ! c ++ appPrep f.c2 x.s ;
+      g = f.g ; 
+      c2 = f.c3
+      } ;
+
+    Use2N3 f = {
+      s = f.s ;
+      g = f.g ; 
+      c2 = f.c2
+      } ;
+
+    Use3N3 f = {
+      s = f.s ;
       g = f.g ; 
       c2 = f.c3
       } ;
@@ -128,6 +176,12 @@ concrete NounGer of Noun = CatGer ** open ResGer, Prelude in {
     RelCN cn rs = {
       s = \\a,n,c => cn.s ! a ! n ! c ++ rs.s ! gennum cn.g n ;
       g = cn.g
+      } ;
+
+    RelNP np rs = {
+      s = \\c => np.s ! c ++ rs.s ! gennum np.a.g np.a.n ;
+      a = np.a ;
+      isPron = False
       } ;
 
     SentCN cn s = {

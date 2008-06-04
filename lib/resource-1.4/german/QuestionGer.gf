@@ -66,20 +66,36 @@ concrete QuestionGer of Question = CatGer ** open ResGer in {
       s = \\c => ip.s ! c ++ adv.s ;
       n = ip.n
       } ;
- 
-{- ---b
-    IDetCN idet num ord cn = 
+
+    IdetCN idet cn = 
       let 
         g = cn.g ;
         n = idet.n
       in {
-      s = \\c => 
-           idet.s ! g ! c ++ num.s ++ ord.s ! agrAdj g Weak n c ++ 
-           cn.s ! Weak ! n ! c ; 
+      s = \\c => idet.s ! g ! c ++ cn.s ! Weak ! n ! c ; 
       n = n
       } ;
--}
+
+    IdetIP idet = 
+      let 
+        g = Neutr ; ----
+        n = idet.n
+      in {
+      s = idet.s ! g ;
+      n = n
+      } ;
+
+    IdetQuant idet num = 
+      let 
+        n = num.n
+      in {
+      s = \\g,c => idet.s ! n ! g ! c ++ num.s  ; 
+      n = n
+      } ;
+ 
     CompIAdv a = {s = \\_ => a.s} ;
+
+    CompIP ip = {s = \\_ => ip.s ! Nom} ;
 
 }
 

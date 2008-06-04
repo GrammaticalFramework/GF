@@ -164,14 +164,14 @@ incomplete concrete NounScand of Noun =
       } ;
 
     Use2N3 f = {
-      s = \\n,d,c => f.s ! n ! d ! Nom ;
+      s = f.s ;
       g = f.g ;
       c2 = f.c2 ;
       isMod = False
       } ;
 
     Use3N3 f = {
-      s = \\n,d,c => f.s ! n ! d ! Nom ;
+      s = f.s ;
       g = f.g ;
       c2 = f.c3 ;
       isMod = False

@@ -507,7 +507,7 @@ resource ResGer = ParamX ** open Prelude in {
 
   insertAdV : Str -> VP -> VP = \adv,vp -> {
     s = vp.s ;
-    a1 = \\a => vp.a1 ! a ++ adv ;
+    a1 = \\a => adv ++ vp.a1 ! a ; -- immer nicht
     n2 = vp.n2 ;
     a2 = vp.a2 ;
     isAux = vp.isAux ;

@@ -22,16 +22,12 @@ concrete SentenceGer of Sentence = CatGer ** open ResGer, Prelude in {
         verb.fin ++ ps.p2 ++ 
         vp.n2 ! agr ++ vp.a1 ! pol ++ vp.a2 ++ inf ++ vp.ext
     } ;
-{- ---b
-    SlashV2 np v2 = 
-      mkClause (np.s ! Nom) np.a (predV v2) ** {c2 = v2.c2} ;
 
-    SlashVVV2 np vv v2 = 
-        mkClause (np.s ! Nom) np.a 
-          (insertInf (v2.prefix ++ v2.s ! VInf (notB vv.isAux)) 
-             (predVGen vv.isAux vv)) **
-        {c2 = v2.c2} ;
--}
+    SlashVP np vp = 
+      mkClause 
+        (np.s ! Nom) np.a 
+        vp **
+      {c2 = vp.c2} ;
 
     AdvSlash slash adv = {
       s  = \\m,t,a,b,o => slash.s ! m ! t ! a ! b ! o ++ adv.s ;
@@ -65,5 +61,7 @@ concrete SentenceGer of Sentence = CatGer ** open ResGer, Prelude in {
       } ;
 
     AdvS a s = {s = \\o => a.s ++ s.s ! Inv} ;
+
+    RelS s r = {s = \\o => s.s ! o ++ "," ++ r.s ! gennum Neutr Sg} ; --- "welches"
 
 }
