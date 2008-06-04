@@ -210,20 +210,17 @@ oper
       } ;
 
   kukaInt : MorphoFin.Number => (MorphoFin.Case) => Str = 
-    let {
-      ku = mkN "kuka" "keitä" ;    -----
-      ket = mkN "kuka" "keitä"} in
+    let 
+      kuka = mkN "kuka" "kenen" "kenä" "ketä" "keneen" 
+                 "keiden" "keitä" "keinä" "keissä" "keihin" ;
+    in
     table {
       Sg => table {
-        Nom => "kuka" ;
-        Part => "ketä" ;
-        Illat => "keneen" ;
-        c   => ku.s ! NCase Sg c
+        c   => kuka.s ! NCase Sg c
        } ; 
       Pl => table {
         Nom => "ketkä" ;
-        Illat => "keihin" ;
-        c   => ket.s ! NCase Pl c
+        c   => kuka.s ! NCase Pl c
         }
       } ;
   mikaanPron : MorphoFin.Number => (MorphoFin.Case) => Str = \\n,c =>
