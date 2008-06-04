@@ -1,3 +1,4 @@
+{-# OPTIONS -cpp #-}
 module Main where
 
 import GFC
@@ -11,15 +12,24 @@ import Data.Version
 import System.Environment (getArgs)
 import System.Exit
 import System.IO
+#ifdef mingw32_HOST_OS
+import System.Win32.Console
+import System.Win32.NLS
+#endif
 
 main :: IO ()
-main = 
-    do args <- getArgs
-       case parseOptions args of
-         Ok (opts,files) -> mainOpts opts files
-         Bad err         -> do hPutStrLn stderr err
-                               hPutStrLn stderr "You may want to try --help."
-                               exitFailure
+main = do
+#ifdef mingw32_HOST_OS
+  codepage <- getACP
+  setConsoleCP codepage
+  setConsoleOutputCP codepage
+#endif
+  args <- getArgs
+  case parseOptions args of
+    Ok (opts,files) -> mainOpts opts files
+    Bad err         -> do hPutStrLn stderr err
+                          hPutStrLn stderr "You may want to try --help."
+                          exitFailure
 
 mainOpts :: Options -> [FilePath] -> IO ()
 mainOpts opts files = 
