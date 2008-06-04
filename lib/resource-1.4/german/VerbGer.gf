@@ -20,30 +20,48 @@ concrete VerbGer of Verb = CatGer ** open Prelude, ResGer in {
       insertExtrapos (q.s ! QIndir) (predV v) ;
     ComplVA  v ap = insertObj (\\ _ => ap.s ! APred) (predV v) ;
 
-{- ---b
-    ComplV2 v np = 
-      insertObj (\\_ => appPrep v.c2 np.s) (predV v) ;
-    ComplV3 v np np2 =
-      insertObj (\\_ => appPrep v.c2 np.s ++ appPrep v.c3 np2.s) (predV v) ;
+    SlashV2a v = predV v ** {c2 = v.c2} ; 
+      
+    Slash2V3 v np =
+      insertObj (\\_ => appPrep v.c2 np.s) (predV v) ** {c2 = v.c3} ;
+    Slash3V3 v np =
+      insertObj (\\_ => appPrep v.c3 np.s) (predV v) ** {c2 = v.c2} ;
 
-    ComplV2S v np s = 
-      insertExtrapos (conjThat ++ s.s ! Sub) 
-        (insertObj (\\_ => appPrep v.c2 np.s) (predV v)) ;
-    ComplV2Q v np q = 
-      insertExtrapos (q.s ! QIndir)
-        (insertObj (\\_ => appPrep v.c2 np.s) (predV v)) ;
-    ComplV2V v np vp = 
+    SlashV2S v s = 
+      insertExtrapos (conjThat ++ s.s ! Sub) (predV v) ** {c2 = v.c2} ;
+    SlashV2Q v q = 
+      insertExtrapos (q.s ! QIndir) (predV v) ** {c2 = v.c2} ;
+    SlashV2V v vp = 
+      let 
+        vpi = infVP False vp 
+      in
+      insertExtrapos vpi.p3 (
+        insertInf vpi.p2 (
+          insertObj vpi.p1 ((predV v)))) ** {c2 = v.c2} ;
+
+    SlashV2A v ap = 
+      insertObj (\\_ => ap.s ! APred) (predV v) ** {c2 = v.c2} ;
+
+    ComplSlash vp np = insertObj (\\_ => appPrep vp.c2 np.s) vp ;
+
+    SlashVV v vp = 
+      let 
+        vpi = infVP v.isAux vp 
+      in
+      insertExtrapos vpi.p3 (
+        insertInf vpi.p2 (
+          insertObj vpi.p1 (
+            predVGen v.isAux v))) ** {c2 = vp.c2} ;
+
+    SlashV2VNP v np vp = 
       let 
         vpi = infVP False vp 
       in
       insertExtrapos vpi.p3 (
         insertInf vpi.p2 (
           insertObj vpi.p1 (
-            (insertObj (\\_ => appPrep v.c2 np.s) (predV v))))) ;
-
-    ComplV2A v np ap = 
-      insertObj (\\_ => appPrep v.c2 np.s ++ ap.s ! APred) (predV v) ;
--}
+            insertObj (\\_ => appPrep v.c2 np.s) (
+              predV v)))) ** {c2 = v.c2} ;
 
     UseComp comp = insertAdv (comp.s ! agrP3 Sg) (predV sein_V) ; -- agr not used
     -- we want to say "ich liebe sie nicht" but not "ich bin alt nicht"
@@ -55,7 +73,7 @@ concrete VerbGer of Verb = CatGer ** open Prelude, ResGer in {
     AdvVP vp adv = insertAdv adv.s vp ;
     AdVVP adv vp = insertAdV adv.s vp ;
 
----b    ReflV2 v = insertObj (\\a => appPrep v.c2 (reflPron ! a)) (predV v) ;
+    ReflVP vp = insertObj (\\a => appPrep vp.c2 (reflPron ! a)) vp ;
 
     PassV2 v = insertInf (v.s ! VPastPart APred) (predV werdenPass) ;
 
