@@ -59,7 +59,8 @@ executable gf3
                  random,
                  old-time,
                  process,
-                 pretty
+                 pretty,
+                 mtl
   if os(windows)
     build-depends: Win32
   else
