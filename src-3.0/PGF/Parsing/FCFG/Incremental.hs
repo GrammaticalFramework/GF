@@ -103,32 +103,36 @@ extractExps (State pinfo chart items) start = exps
       return (EApp fn args)
 
 process fn !rules []           acc_chart = acc_chart
-process fn !rules (item:items) acc_chart = process fn rules items $! univRule item acc_chart
+process fn !rules (item:items) acc_chart = univRule item acc_chart
   where
     univRule (Active j lbl ppos ruleid args fid0) acc_chart@(acc,chart)
       | inRange (bounds lin) ppos =
           case unsafeAt lin ppos of
             FSymCat r d -> let !fid = args !! d
                            in case MM.insert' (AK fid r) item (active chart) of
-                                Nothing     -> acc_chart
+                                Nothing     -> process fn rules items $ acc_chart
                                 Just actCat -> (case Map.lookup (PK fid r k) (passive chart) of
                                                   Nothing -> id
                                                   Just id -> process fn rules [Active j lbl (ppos+1) ruleid (updateAt d id args) fid0]) $
                                                (case IntMap.lookup fid (forest chart) of
                                                   Nothing  -> id
                                                   Just set -> process fn rules (Set.fold (\(Passive ruleid args) -> (:) (Active k r 0 ruleid args fid)) [] set)) $
+                                               process fn rules items $
                                                (acc,chart{active=actCat})
-      	    FSymTok tok   -> (fn tok (Active j lbl (ppos+1) ruleid args fid0) acc,chart)
+      	    FSymTok tok   -> process fn rules items $
+      	                     (fn tok (Active j lbl (ppos+1) ruleid args fid0) acc,chart)
       | otherwise = case Map.lookup (PK fid0 lbl j) (passive chart) of
                       Nothing -> let fid = nextId chart
 	                         in process fn rules [Active j' lbl (ppos+1) ruleid (updateAt d fid args) fidc
 	                                                | Active j' lbl ppos ruleid args fidc <- ((active chart:actives chart) !! (k-j)) MM.! (AK fid0 lbl),
 	                                                  let FSymCat _ d = unsafeAt (rhs ruleid lbl) ppos] $
+	                            process fn rules items $
 	                            (acc,chart{passive=Map.insert (PK fid0 lbl j) fid (passive chart)
                                               ,forest =IntMap.insert fid (Set.singleton (Passive ruleid args)) (forest chart)
                                               ,nextId =nextId chart+1
                                               })
-                      Just id -> (acc,chart{forest = IntMap.insertWith Set.union id (Set.singleton (Passive ruleid args)) (forest chart)})
+                      Just id -> process fn rules items $
+                                 (acc,chart{forest = IntMap.insertWith Set.union id (Set.singleton (Passive ruleid args)) (forest chart)})
       where
         !lin = rhs ruleid lbl
         !k   = offset chart
