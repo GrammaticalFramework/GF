@@ -173,21 +173,14 @@ allCommands pgf = Map.fromAscList [
      if s == "q"
        then return ()
        else do cpu1 <- getCPUTime
-               st <- parse pinfo state0 (words s)
-               let exps = Incremental.extractExps pinfo (mkCId cat) st
+               exps <- return $! Incremental.parse pinfo (mkCId cat) (words s)
                mapM_ (putStrLn . showExp) exps
                cpu2 <- getCPUTime
 	       putStrLn (show ((cpu2 - cpu1) `div` 1000000000) ++ " msec")
                wordCompletion opts
      where
-       parse pinfo st []     = do putStrLnFlush ""
-                                  return st
-       parse pinfo st (t:ts) = do putStrFlush "."
-                                  st1 <- return $! (Incremental.nextState pinfo t st)
-                                  parse pinfo st1 ts
-
        myCompletion pinfo state0 line prefix p = do
          let ws = words (take (p-length prefix) line)
-             state = foldl (\st t -> Incremental.nextState pinfo t st) state0 ws
-             compls = Incremental.getCompletions pinfo prefix state
+             state = foldl Incremental.nextState state0 ws
+             compls = Incremental.getCompletions state prefix
          return (Map.keys compls)
