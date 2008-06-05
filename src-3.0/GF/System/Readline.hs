@@ -14,14 +14,14 @@
 -- Uses the right readline library to read user input.
 -----------------------------------------------------------------------------
 
-module GF.System.Readline (fetchCommand, setCompletionFunction) where
+module GF.System.Readline (fetchCommand, setCompletionFunction, filenameCompletionFunction) where
 
 #ifdef USE_READLINE
 
-import GF.System.UseReadline (fetchCommand, setCompletionFunction)
+import GF.System.UseReadline
 
 #else
 
-import GF.System.NoReadline (fetchCommand, setCompletionFunction)
+import GF.System.NoReadline
 
 #endif

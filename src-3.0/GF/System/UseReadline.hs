@@ -12,7 +12,7 @@
 -- Use GNU readline
 -----------------------------------------------------------------------------
 
-module GF.System.UseReadline (fetchCommand, setCompletionFunction) where
+module GF.System.UseReadline (fetchCommand, setCompletionFunction, filenameCompletionFunction) where
 
 import System.Console.Readline
 
