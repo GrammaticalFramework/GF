@@ -35,7 +35,7 @@ lookType pgf f =
   fst $ lookMap (error $ "lookType " ++ show f) f (funs (abstract pgf))
 
 lookParser :: PGF -> CId -> Maybe ParserInfo
-lookParser pgf lang = parser $ lookMap (error "no lang") lang $ concretes pgf
+lookParser pgf lang = Map.lookup lang (concretes pgf) >>= parser
 
 lookFCFG :: PGF -> CId -> Maybe FGrammar
 lookFCFG pgf lang = fmap toFGrammar $ lookParser pgf lang
@@ -106,7 +106,7 @@ kks = K . KS
 
 -- lookup with default value
 lookMap :: (Show i, Ord i) => a -> i -> Map.Map i a -> a 
-lookMap d c m = maybe d id $ Map.lookup c m
+lookMap d c m = fromMaybe d $ Map.lookup c m
 
 --- from Operations
 combinations :: [[a]] -> [[a]]
