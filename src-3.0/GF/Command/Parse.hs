@@ -1,4 +1,4 @@
-module GF.Command.Parse(readCommandLine) where
+module GF.Command.Parse(readCommandLine, pCommand) where
 
 import PGF.ExprSyntax
 import GF.Command.Abstract

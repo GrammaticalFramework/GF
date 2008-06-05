@@ -18,6 +18,8 @@ import System.Console.Readline
 
 fetchCommand :: String -> IO (String)
 fetchCommand s = do
+  setCompletionAppendCharacter Nothing
+  setBasicQuoteCharacters ""
   res <- readline s
   case res of
    Nothing -> return "q"
