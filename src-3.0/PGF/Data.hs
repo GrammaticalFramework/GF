@@ -51,7 +51,7 @@ data Exp =
  | EStr   String                    -- ^ string constant
  | EInt   Integer                   -- ^ integer constant
  | EFloat Double                    -- ^ floating point constant
- | EMeta  Integer                   -- ^ meta variable
+ | EMeta  Int                       -- ^ meta variable
  | EVar   CId                       -- ^ variable reference
  | EEq [Equation]                   -- ^ lambda function defined as a set of equations with pattern matching
   deriving (Eq,Ord,Show)

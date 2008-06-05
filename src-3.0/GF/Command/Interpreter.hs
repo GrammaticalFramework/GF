@@ -5,9 +5,8 @@ module GF.Command.Interpreter (
   ) where
 
 import GF.Command.Commands
-import GF.Command.AbsGFShell
-import GF.Command.PPrTree
-import GF.Command.ParGFShell
+import GF.Command.Abstract
+import GF.Command.Parse
 import PGF
 import PGF.Data
 import PGF.Macros
@@ -26,15 +25,16 @@ mkCommandEnv :: PGF -> CommandEnv
 mkCommandEnv pgf = CommandEnv pgf (allCommands pgf)
 
 interpretCommandLine :: CommandEnv -> String -> IO ()
-interpretCommandLine env line = case (pCommandLine (myLexer line)) of
-  Ok CEmpty -> return ()
-  Ok (CLine pipes) -> do res <- runInterruptibly (mapM_ interPipe pipes)
-                         case res of
-                           Left ex -> print ex
-                           Right x -> return x
-  _ -> putStrLn "command not parsed"
+interpretCommandLine env line =
+  case readCommandLine line of
+    Just []    -> return ()
+    Just pipes -> do res <- runInterruptibly (mapM_ interPipe pipes)
+                     case res of
+                       Left ex -> print ex
+                       Right x -> return x
+    Nothing    -> putStrLn "command not parsed"
  where
-   interPipe (PComm cs) = do
+   interPipe cs = do
      (_,s) <- intercs ([],"") cs
      putStrLn s
    intercs treess [] = return treess
@@ -60,8 +60,8 @@ interpret env trees0 comm = case lookCommand co comms of
    comms = commands env
    checkOpts info = 
      case
-       [o | OOpt  (Ident o)   <- opts, notElem o (options info)] ++
-       [o | OFlag (Ident o) _ <- opts, notElem o (flags info)]
+       [o | OOpt  o   <- opts, notElem o (options info)] ++
+       [o | OFlag o _ <- opts, notElem o (flags info)]
       of
         []  -> return () 
         [o] -> putStrLn $ "option not interpreted: " ++ o
@@ -70,8 +70,8 @@ interpret env trees0 comm = case lookCommand co comms of
 -- analyse command parse tree to a uniform datastructure, normalizing comm name
 getCommand :: Command -> [Exp] -> (String,[Option],[Exp])
 getCommand co ts = case co of
-  Comm   (Ident c) opts (ATree t) -> (getOp c,opts,[tree2exp t]) -- ignore piped
-  CNoarg (Ident c) opts           -> (getOp c,opts,ts)           -- use piped
+  Command c opts (AExp t) -> (getOp c,opts,[t]) -- ignore piped
+  Command c opts ANoArg   -> (getOp c,opts,ts)  -- use piped
  where
    -- abbreviation convention from gf
    getOp s = case break (=='_') s of
