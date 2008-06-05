@@ -187,13 +187,13 @@ parseAll mgr cat = map snd . parseAllLang mgr cat
 parseAllLang mgr cat s = 
   [(lang,ts) | lang <- languages mgr, let ts = parse mgr lang cat s, not (null ts)]
 
-initState pgf lang cat = Incremental.initState pinfo catCId
+initState pgf lang cat =
+  case lookParser pgf langCId of
+    Just pinfo -> Incremental.initState pinfo catCId
+    _          -> error ("Unknown language: " ++ lang)
   where
     langCId = mkCId lang
     catCId  = mkCId cat
-    pinfo   = case lookParser pgf langCId of
-                Just pinfo -> pinfo
-                _          -> error ("Unknown language: " ++ lang)
 
 extractExps state cat = Incremental.extractExps state (mkCId cat)
 
