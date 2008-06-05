@@ -9,22 +9,18 @@ module GF.Command.Commands (
   CommandOutput
   ) where
 
-import GF.Command.Abstract
-import GF.Command.Parse
 import PGF
 import PGF.CId
 import PGF.ShowLinearize
 import PGF.Macros
 import PGF.Data ----
-import qualified PGF.Parsing.FCFG.Incremental as Incremental
 import GF.Compile.Export
 import GF.Infra.UseIO
 import GF.Data.ErrM ----
-import GF.System.Readline
+import GF.Command.Abstract
 
 import Data.Maybe
 import qualified Data.Map as Map
-import System.CPUTime
 
 type CommandOutput = ([Exp],String) ---- errors, etc
 
@@ -107,10 +103,6 @@ allCommands pgf = Map.fromAscList [
   ("pg", emptyCommandInfo {
      exec  = \opts _ -> return $ fromString $ prGrammar opts,
      flags = ["cat","lang","printer"]
-     }),
-  ("wc", emptyCommandInfo {
-     exec  = \opts _ -> wordCompletion opts >> return ([],[]),
-     flags = ["cat","lang"]
      })
   ]
  where
@@ -141,25 +133,3 @@ allCommands pgf = Map.fromAscList [
    prGrammar opts = case valIdOpts "printer" "" opts of
      "cats" -> unwords $ categories pgf
      v -> prPGF (read v) pgf (prCId (absname pgf))
-
-   wordCompletion opts = do
-     let lang = head (optLangs opts)
-         cat  = optCat opts
-         pinfo = fromMaybe (error ("Unknown language: " ++ lang)) (lookParser pgf (mkCId lang))
-         state0 = Incremental.initState pinfo (mkCId cat)
-     setCompletionFunction (Just (myCompletion pinfo state0))
-     s <- fetchCommand ">> "
-     if s == "q"
-       then return ()
-       else do cpu1 <- getCPUTime
-               exps <- return $! Incremental.parse pinfo (mkCId cat) (words s)
-               mapM_ (putStrLn . showExp) exps
-               cpu2 <- getCPUTime
-	       putStrLn (show ((cpu2 - cpu1) `div` 1000000000) ++ " msec")
-               wordCompletion opts
-     where
-       myCompletion pinfo state0 line prefix p = do
-         let ws = words (take (p-length prefix) line)
-             state = foldl Incremental.nextState state0 ws
-             compls = Incremental.getCompletions state prefix
-         return (Map.keys compls)
