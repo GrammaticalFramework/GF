@@ -114,7 +114,7 @@ emptyGFEnv :: GFEnv
 emptyGFEnv = GFEnv emptyGrammar (mkCommandEnv emptyPGF) [] 0
 
 
-wordCompletion cmdEnv line prefix p = do
+wordCompletion cmdEnv line prefix p =
   case wc_type (take p line) of
     CmplCmd pref
       -> ret ' ' [name | name <- Map.keys (commands cmdEnv), isPrefixOf pref name]
@@ -134,7 +134,10 @@ wordCompletion cmdEnv line prefix p = do
                               (flg_compls++opt_compls)
            Nothing  -> ret ' ' []
     CmplIdent _ pref
-      -> ret ' ' [name | cid <- Map.keys (funs (abstract pgf)), let name = prCId cid, isPrefixOf pref name]
+      -> do mb_abs <- try (evaluate (abstract pgf))
+            case mb_abs of
+              Right abs -> ret ' ' [name | cid <- Map.keys (funs abs), let name = prCId cid, isPrefixOf pref name]
+              Left  _   -> ret ' ' []
     _ -> ret ' ' []
   where
     pgf = multigrammar cmdEnv
