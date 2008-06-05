@@ -63,6 +63,10 @@ commandHelp full (co,info) = unlines $ [
 -- this list must be kept sorted by the command name!
 allCommands :: PGF -> Map.Map String CommandInfo
 allCommands pgf = Map.fromAscList [
+  ("cc", emptyCommandInfo),
+  ("e",  emptyCommandInfo),
+  ("ph", emptyCommandInfo),
+  ("q",  emptyCommandInfo),
   ("gr", emptyCommandInfo {
      longname = "generate_random",
      synopsis = "generates a list of random trees, by default one tree",
@@ -90,6 +94,9 @@ allCommands pgf = Map.fromAscList [
                 Just info -> commandHelp True (co,info)
                 _ -> "command not found"
        _ -> commandHelpAll pgf opts)
+     }),
+  ("i", emptyCommandInfo {
+     options = ["prob", "retain", "gfo", "src", "no-cpu", "cpu", "quiet", "verbose"]
      }),
   ("l", emptyCommandInfo {
      exec = \opts -> return . fromStrings . map (optLin opts),
