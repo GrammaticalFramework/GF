@@ -133,6 +133,8 @@ wordCompletion cmdEnv line prefix p =
                           ret (if null flg_compls then ' ' else '=')
                               (flg_compls++opt_compls)
            Nothing  -> ret ' ' []
+    CmplIdent (Just (Command "i" _ _)) _        -- HACK: file name completion for command i
+      -> filenameCompletionFunction prefix
     CmplIdent _ pref
       -> do mb_abs <- try (evaluate (abstract pgf))
             case mb_abs of

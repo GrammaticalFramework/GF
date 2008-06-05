@@ -12,7 +12,7 @@
 -- Do not use readline.
 -----------------------------------------------------------------------------
 
-module GF.System.NoReadline (fetchCommand, setCompletionFunction) where
+module GF.System.NoReadline (fetchCommand, setCompletionFunction, filenameCompletionFunction) where
 
 import System.IO.Error (try)
 import System.IO (stdout,hFlush)
@@ -28,3 +28,6 @@ fetchCommand s = do
 
 setCompletionFunction :: Maybe (String -> String -> Int -> IO [String]) -> IO ()
 setCompletionFunction _ = return ()
+
+filenameCompletionFunction :: String -> IO [String]
+filenameCompletionFunction _ = return []
