@@ -9,9 +9,8 @@ module GF.Command.Commands (
   CommandOutput
   ) where
 
-import GF.Command.AbsGFShell
-import GF.Command.PPrTree
-import GF.Command.ParGFShell
+import GF.Command.Abstract
+import GF.Command.Parse
 import PGF
 import PGF.CId
 import PGF.ShowLinearize
@@ -66,24 +65,24 @@ commandHelp full (co,info) = unlines $ [
   ] else []
 
 valIdOpts :: String -> String -> [Option] -> String
-valIdOpts flag def opts = case valOpts flag (VId (Ident def)) opts of
-  VId (Ident v) -> v
-  _ -> def
+valIdOpts flag def opts = case valOpts flag (VId def) opts of
+  VId v -> v
+  _     -> def
 
 valIntOpts :: String -> Integer -> [Option] -> Int
 valIntOpts flag def opts = fromInteger $ case valOpts flag (VInt def) opts of
   VInt v -> v
-  _ -> def
+  _      -> def
 
 valOpts :: String -> Value -> [Option] -> Value
 valOpts flag def opts = case lookup flag flags of
   Just v -> v
   _ -> def
  where
-   flags = [(f,v) | OFlag (Ident f) v <- opts]
+   flags = [(f,v) | OFlag f v <- opts]
 
 isOpt :: String -> [Option] -> Bool
-isOpt o opts = elem o [x | OOpt (Ident x) <- opts]
+isOpt o opts = elem o [x | OOpt x <- opts]
 
 -- this list must be kept sorted by the command name!
 allCommands :: PGF -> Map.Map String CommandInfo

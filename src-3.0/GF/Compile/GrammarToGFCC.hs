@@ -128,7 +128,7 @@ mkExp t = case t of
       EInt i   -> C.EInt   i
       EFloat f -> C.EFloat f
       K s      -> C.EStr   s
-      Meta (MetaSymb i) -> C.EMeta (toInteger i)
+      Meta (MetaSymb i) -> C.EMeta i
       _        -> C.EMeta 0
     mkPatt p = case p of
       A.PP _ c ps -> C.EApp (i2i c) (map mkPatt ps)
