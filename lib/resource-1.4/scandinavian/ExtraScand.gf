@@ -41,7 +41,7 @@ incomplete concrete ExtraScand of ExtraScandAbs = CatScand **
     MkVPI vp = {
       s = \\v,a => infVP vp a ---- no sup
       } ;
-    ConjVPI = conjunctTable2 VPIForm Agr ;
+    ConjVPI = conjunctDistrTable2 VPIForm Agr ;
     ComplVPIVV vv vpi = insertObj (\\a => vv.c2 ++ vpi.s ! VPIInf ! a) (predV vv) ;
 
 } 

@@ -59,7 +59,7 @@ instance DiffSpa of DiffRomance = open CommonRomance, PhonoSpa, BeschSpa, Prelud
     vpAgrClit : Agr -> VPAgr = \a ->
       vpAgrNone ;
 
-    pronArg = \n,p,acc,dat ->
+    pronArg = \n,p,acc,dat -> 
       let 
         paccp = case acc of {
           CRefl   => <reflPron n p Acc, p,True> ;
@@ -69,11 +69,15 @@ instance DiffSpa of DiffRomance = open CommonRomance, PhonoSpa, BeschSpa, Prelud
         pdatp = case dat of {
           CPron ag an ap => <argPron ag an ap dative, ap,True> ;
           _ => <[],P2,False>
-          }
-       in case <<paccp.p2, pdatp.p2> : Person * Person> of {
-          <P3,P3> => <"se" ++ paccp.p1, [],True> ;
-         _       => <pdatp.p1 ++ paccp.p1, [],orB paccp.p3 pdatp.p3>
-         } ;
+          } ;
+        defaultPronArg = <pdatp.p1 ++ paccp.p1, [], orB paccp.p3 pdatp.p3>
+      in 
+        case <<paccp.p2, pdatp.p2> : Person * Person> of {
+           <P3,P3> => <"se" ++ paccp.p1, [], True> ;
+           _ => defaultPronArg
+           } ;
+      ---- 8/6/2008 efficiency problem in pgf generation: replace the case expr with
+      ---- defaultPronArg ;
 
     mkImperative b p vp = {
       s = \\pol,aag => 
