@@ -211,7 +211,7 @@ lin
   write_V2 = dirV2 (stateV (mkV159 "пиша")) ;
   yellow_A = mkA076 "жълт" ;
   young_A = mkA076 "млад" ;
-  do_V2 = dirV2 (stateV (mkV160a "върша")) ;
+  do_V2 = dirV2 (actionV (mkV173 "правя") (mkV173 "направя")) ;
   now_Adv = mkAdv "сега" ;
   already_Adv = mkAdv "вече" ;
   song_N = mkN050 "песен" ;
