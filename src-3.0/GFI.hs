@@ -41,7 +41,7 @@ loop opts gfenv0 = do
   s <- fetchCommand (prompt env)
   let gfenv = gfenv0 {history = s : history gfenv0}
   let loopNewCPU gfenv' = do cpu' <- getCPUTime
-                             putStrLn (show ((cpu' - cputime gfenv') `div` 1000000000) ++ " msec")
+                             putStrLnFlush (show ((cpu' - cputime gfenv') `div` 1000000000) ++ " msec")
                              loop opts $ gfenv' {cputime = cpu'}
   case words s of
   -- special commands, requiring source grammar in env
@@ -78,7 +78,7 @@ importInEnv gfenv opts files
         do let opts' = addOptions (setOptimization OptCSE False) opts
                pgf0 = multigrammar (commandenv gfenv)
            pgf1 <- importGrammar pgf0 opts' files
-           putStrLn $ unwords $ "\nLanguages:" : languages pgf1
+           putStrLnFlush $ unwords $ "\nLanguages:" : languages pgf1
            return $ gfenv { commandenv = mkCommandEnv pgf1 }
 
 welcome = unlines [

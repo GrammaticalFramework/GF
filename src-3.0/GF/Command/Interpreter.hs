@@ -11,6 +11,7 @@ import PGF
 import PGF.Data
 import PGF.Macros
 import GF.System.Signal
+import GF.Infra.UseIO
 
 import GF.Data.ErrM ----
 
@@ -30,13 +31,13 @@ interpretCommandLine env line =
     Just []    -> return ()
     Just pipes -> do res <- runInterruptibly (mapM_ interPipe pipes)
                      case res of
-                       Left ex -> print ex
+                       Left ex -> putStrLnFlush (show ex)
                        Right x -> return x
-    Nothing    -> putStrLn "command not parsed"
+    Nothing    -> putStrLnFlush "command not parsed"
  where
    interPipe cs = do
      (_,s) <- intercs ([],"") cs
-     putStrLn s
+     putStrLnFlush s
    intercs treess [] = return treess
    intercs (trees,_) (c:cs) = do
      treess2 <- interc trees c
