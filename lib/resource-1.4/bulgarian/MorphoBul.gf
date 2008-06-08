@@ -171,6 +171,7 @@ oper
           APl Indef      => dobri ;
           APl Def        => dobrite
         } ;
+    adv = dobro ;
     lock_A = <>
     } ;
 }

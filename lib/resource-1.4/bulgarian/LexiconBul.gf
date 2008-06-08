@@ -84,7 +84,7 @@ lin
   girl_N = mkN065 "момиче" ;
   glove_N = mkN041 "ръкавица" ;
   gold_N = mkN054 "злато" ;
-  good_A = mkA080 "добър" ;
+  good_A = adjAdv (mkA080 "добър") "добре" ;
   go_V = actionV (mkV186 "отивам") (mkV146 "отида") ;
   green_A = mkA076 "зелен" ;
   harbour_N = mkN066 "пристанище" ;

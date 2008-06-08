@@ -699,15 +699,15 @@ oper
                                (v0+"ите") ;
   mkA078 : Str -> A ;
   mkA078 base = let v0 = tk 1 base
-                in mkAdjective (v0+"и")
-                               (v0+"ия")
-                               (v0+"ият")
-                               (v0+"а")
-                               (v0+"ата")
-                               (v0+"о")
-                               (v0+"ото")
-                               (v0+"и")
-                               (v0+"ите") ;
+                in adjAdv (mkAdjective (v0+"и")
+                                       (v0+"ия")
+                                       (v0+"ият")
+                                       (v0+"а")
+                                       (v0+"ата")
+                                       (v0+"о")
+                                       (v0+"ото")
+                                       (v0+"и")
+                                       (v0+"ите")) (v0+"и") ;
   mkA079 : Str -> A ;
   mkA079 base = let v0 = tk 2 base
                 in mkAdjective (v0+"ен")
@@ -1452,4 +1452,7 @@ oper
                           (v0+"ян")
                           (v0+"ящ")
                           (v0+"яй") ;
+
+  adjAdv : A -> Str -> A =
+    \a,adv -> {s = a.s; adv = adv; lock_A=<>} ;
 }

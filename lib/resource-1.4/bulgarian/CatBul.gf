@@ -66,7 +66,7 @@ concrete CatBul of Cat = open ResBul, Prelude, (R = ParamX) in {
 
 -- Adjective
 
-    AP = {s : AForm => Str; isPre : Bool} ; 
+    AP = {s : AForm => Str; adv : Str; isPre : Bool} ;
 
 -- Adjective
 
@@ -108,8 +108,8 @@ concrete CatBul of Cat = open ResBul, Prelude, (R = ParamX) in {
     V3 = Verb ** {c2, c3 : Preposition} ;
     VV = Verb ;
 
-    A = {s : AForm => Str} ;
-    A2 = {s : AForm => Str ; c2 : Str} ;
+    A = {s : AForm => Str; adv : Str} ;
+    A2 = {s : AForm => Str; adv : Str; c2 : Str} ;
     
     N = {s : NForm => Str; g : DGender} ;
     N2 = {s : NForm => Str; g : DGender} ** {c2 : Preposition} ;
