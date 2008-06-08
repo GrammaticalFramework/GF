@@ -79,18 +79,6 @@ allCommands pgf = Map.fromAscList [
      longname = "empty",
      synopsis = "Takes away all languages and resets all global flags."
      }),
-  ("ph", emptyCommandInfo {
-     longname = "print_history",
-     synopsis = "print readline history",
-     explanation = "Prints the commands issued during the GF session.\n"++
-                   "The result is readable by the eh command.\n"++
-                   "example:\n"++
-                   "  ph | wf foo.hist  -- save the history into a file"
-     }),
-  ("q",  emptyCommandInfo {
-     longname = "quit",
-     synopsis = "exit GF interpreter"
-     }),
   ("gr", emptyCommandInfo {
      longname = "generate_random",
      synopsis = "generates a list of random trees, by default one tree",
@@ -176,6 +164,18 @@ allCommands pgf = Map.fromAscList [
                    "source.",
      exec  = \opts _ -> return $ fromString $ prGrammar opts,
      flags = ["cat","lang","printer"]
+     }),
+  ("ph", emptyCommandInfo {
+     longname = "print_history",
+     synopsis = "print readline history",
+     explanation = "Prints the commands issued during the GF session.\n"++
+                   "The result is readable by the eh command.\n"++
+                   "example:\n"++
+                   "  ph | wf foo.hist  -- save the history into a file"
+     }),
+  ("q",  emptyCommandInfo {
+     longname = "quit",
+     synopsis = "exit GF interpreter"
      })
   ]
  where
