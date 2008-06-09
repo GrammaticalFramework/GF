@@ -19,7 +19,7 @@ incomplete concrete ExtFoodsI of ExtFoods = FoodsI ** open Syntax, LexFoods in {
       mkText (mkQS (mkQCl (mkIP whichSg_IDet kind) guest verb)) ;
     WhichVerbWant kind guest verb = 
       mkText (mkQS (mkQCl (mkIP whichSg_IDet kind) 
-        (mkSlash guest want_VV verb))) ;
+        (mkClSlash guest want_VV verb))) ;
     WhichIs kind quality = 
       mkText (mkQS (mkQCl (mkIP whichSg_IDet kind) (mkVP quality))) ;
 
