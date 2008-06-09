@@ -65,45 +65,52 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
       a = np.a
       } ;
 
-    DetQuantOrd, DetArtOrd = \quant, num, ord -> {
-      s = \\g,c => num.s ! dgenderSpecies g quant.spec c ++
-                   quant.s ! aform (gennum g num.n) Def c ++                   
-                   ord.s ! aform (gennum g num.n) (case num.nonEmpty of {False => quant.spec; _ => Indef}) c ; 
-      n = num.n ;
-      countable = num.nonEmpty ;
-      spec=case <num.nonEmpty,ord.nonEmpty> of {<False,False> => quant.spec; _ => Indef}
-      } ;
-
     DetQuant quant num = {
-      s = \\g,c => num.s ! dgenderSpecies g quant.spec c ++
-                   quant.s ! aform (gennum g num.n) Def c ;                   
+      s = \\g,c => quant.s ! aform (gennum g num.n) Def c ++
+                   num.s ! dgenderSpecies g Indef c ;                   
       n = num.n ;
       countable = num.nonEmpty ;
-      spec=case num.nonEmpty of {False => quant.spec; _ => Indef} ---- FIXME AR
+      spec=Indef
       } ;
 
-    DetArtCard quant num = {
-      s = \\g,c => num.s ! dgenderSpecies g quant.spec c ++
-                   quant.s ! aform (gennum g num.n) Def c ;                   
+    DetQuantOrd = \quant, num, ord -> {
+      s = \\g,c => quant.s ! aform (gennum g num.n) Def c ++
+                   num.s ! dgenderSpecies g Indef c ++
+                   ord.s ! aform (gennum g num.n) Indef c ; 
       n = num.n ;
-      countable = True ;
-      spec= Indef ---- FIXME AR
+      countable = num.nonEmpty ;
+      spec=Indef
       } ;
 
-    ---- FIXME AR
-    DetArtPl quant = detCN {
-      s = \\g,c => quant.s ! aform (gennum g Pl) Def c ;                   
+    DetArtCard art card = {
+      s = \\g,c => art.s ++
+                   card.s ! dgenderSpecies g art.spec c ;
+      n = card.n ;
+      countable = True ;
+      spec=Indef
+      } ;
+
+    DetArtOrd = \art, num, ord -> {
+      s = \\g,c => art.s ++
+                   num.s ! dgenderSpecies g art.spec c ++
+                   ord.s ! aform (gennum g num.n) (case num.nonEmpty of {False => art.spec; _ => Indef}) c ; 
+      n = num.n ;
+      countable = num.nonEmpty ;
+      spec=Indef
+      } ;
+
+    DetArtPl art = detCN {
+      s = \\g,c => art.s ;
       n = Pl ;
       countable = False ;
-      spec=quant.spec;
+      spec=art.spec;
       } ;
 
-    ---- FIXME AR
-    DetArtSg quant = detCN {
-      s = \\g,c => quant.s ! aform (gennum g Sg) Def c ;                   
+    DetArtSg art = detCN {
+      s = \\g,c => art.s ;
       n = Sg ;
       countable = False ;
-      spec=quant.spec;
+      spec=art.spec;
       } ;
 
     PossPron p = {
@@ -117,22 +124,22 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
     NumCard n = n ** {nonEmpty = True} ;
 
     NumDigits n = {s = \\gspec => n.s ! NCard gspec; n = n.n} ;
-    OrdDigits n = {s = \\aform => n.s ! NOrd aform; nonEmpty = True} ;
+    OrdDigits n = {s = \\aform => n.s ! NOrd aform} ;
 
     NumNumeral numeral = {s = \\gspec => numeral.s ! NCard gspec; n = numeral.n; nonEmpty = True} ;
-    OrdNumeral numeral = {s = \\aform => numeral.s ! NOrd aform; nonEmpty = True} ;
+    OrdNumeral numeral = {s = \\aform => numeral.s ! NOrd aform} ;
     
     AdNum adn num = {s = \\gspec => adn.s ++ num.s ! gspec; n = num.n; nonEmpty = num.nonEmpty} ;
 
-    OrdSuperl a = {s = \\aform => "най" ++ "-" ++ a.s ! aform; nonEmpty = True} ;
+    OrdSuperl a = {s = \\aform => "най" ++ "-" ++ a.s ! aform} ;
 
     DefArt = {
-      s = \\_ => [] ; 
+      s = [] ; 
       spec = ResBul.Def
       } ;
 
     IndefArt = {
-      s = \\_ => [] ;
+      s = [] ;
       spec = ResBul.Indef
       } ;
 
