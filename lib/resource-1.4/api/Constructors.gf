@@ -215,8 +215,8 @@ incomplete resource Constructors = open Grammar in {
 -- Sentences can be combined with conjunctions. This can apply to a pair
 -- of sentences, but also to a list of more than two.
 
-      mkS : Conj  -> S -> S -> S ;  -- 3. John walks and I run   
-      mkS : Conj  -> ListS  -> S ;  -- 4. John walks, I run and you sleep
+      mkS : Conj -> S -> S -> S ;  -- 3. John walks and I run   
+      mkS : Conj -> ListS  -> S ;  -- 4. John walks, I run and you sleep
 
 -- A sentence can be prefixed by an adverb.
 
@@ -841,11 +841,6 @@ incomplete resource Constructors = open Grammar in {
 --. 
 -- Definitions
 
-    QuantSg : Type = Quant ** {isSg : {}} ;
-    QuantPl : Type = Quant ** {isPl : {}} ;
-    SgQuant : Quant -> QuantSg = \q -> q ** {isSg = <>} ;
-    PlQuant : Quant -> QuantPl = \q -> q ** {isPl = <>} ;
-
     mkAP = overload {
       mkAP : A -> AP           -- warm
                                          =    PositA   ;
@@ -885,9 +880,9 @@ incomplete resource Constructors = open Grammar in {
       mkAdv : Subj -> S -> Adv                 -- when he arrives
                                          =    SubjS ;
       mkAdv : Conj -> Adv -> Adv -> Adv
-                                        = \c,x,y -> ConjAdv c (BaseAdv x y) ;
+                                         = \c,x,y -> ConjAdv c (BaseAdv x y) ;
       mkAdv : Conj -> ListAdv -> Adv
-                                        = \c,xy -> ConjAdv c xy ;
+                                         = \c,xy -> ConjAdv c xy ;
       } ;
 
     mkCl = overload {
@@ -900,13 +895,22 @@ incomplete resource Constructors = open Grammar in {
       mkCl : NP -> V3 -> NP -> NP -> Cl
                                          =    \s,v,o,i -> PredVP s (ComplV3 v o i);
 
-      mkCl : NP  -> VV -> VP -> Cl = \s,v,vp -> PredVP s (ComplVV v vp) ;
-      mkCl : NP  -> VS -> S  -> Cl = \s,v,p -> PredVP s (ComplVS v p) ;
-      mkCl : NP  -> VQ -> QS -> Cl = \s,v,q -> PredVP s (ComplVQ v q) ;
-      mkCl : NP  -> VA -> AP -> Cl = \s,v,q -> PredVP s (ComplVA v q) ;
-      mkCl : NP  -> V2A ->NP -> AP -> Cl = \s,v,n,q -> PredVP s (ComplV2A v n q) ;
-
-
+      mkCl : NP  -> VV -> VP -> Cl 
+        = \s,v,vp -> PredVP s (ComplVV v vp) ;
+      mkCl : NP  -> VS -> S  -> Cl
+        = \s,v,p -> PredVP s (ComplVS v p) ;
+      mkCl : NP  -> VQ -> QS -> Cl
+        = \s,v,q -> PredVP s (ComplVQ v q) ;
+      mkCl : NP  -> VA -> AP -> Cl
+        = \s,v,q -> PredVP s (ComplVA v q) ;
+      mkCl : NP  -> V2A -> NP -> AP -> Cl
+        = \s,v,n,q -> PredVP s (ComplV2A v n q) ;
+      mkCl : NP  -> V2S -> NP -> S -> Cl          --n14
+        = \s,v,n,q -> PredVP s (ComplSlash (SlashV2S v q) n) ;
+      mkCl : NP  -> V2Q -> NP -> QS -> Cl         --n14
+        = \s,v,n,q -> PredVP s (ComplSlash (SlashV2Q v q) n) ;
+      mkCl : NP  -> V2V -> NP -> VP -> Cl         --n14
+        = \s,v,n,q -> PredVP s (ComplSlash (SlashV2V v q) n) ;
 
       mkCl : VP -> Cl          -- it rains
                                          =    ImpersCl   ;
@@ -915,39 +919,75 @@ incomplete resource Constructors = open Grammar in {
       mkCl : Adv -> S  -> Cl   -- it is yesterday she arrived
                                          =    CleftAdv   ;
       mkCl : N -> Cl           -- there is a house
-                                         =    \y -> ExistNP (DetArtSg IndefArt (UseN y)) ;
+                                   = \y -> ExistNP (DetArtSg IndefArt (UseN y)) ;
       mkCl : CN -> Cl          -- there is a house
                                          =    \y -> ExistNP (DetArtSg IndefArt y) ;
       mkCl : NP -> Cl          -- there is a house
                                          =    ExistNP    ;
       mkCl : NP -> AP -> Cl    -- John is nice and warm
-	                                =     \x,y -> PredVP x (UseComp (CompAP y)) ;
+	                      =     \x,y -> PredVP x (UseComp (CompAP y)) ;
       mkCl : NP -> A  -> Cl    -- John is warm
-	                                =     \x,y -> PredVP x (UseComp (CompAP (PositA y))) ;
+	                      =     \x,y -> PredVP x (UseComp (CompAP (PositA y))) ;
       mkCl : NP -> A -> NP -> Cl -- John is warmer than Mary
-	                                =     \x,y,z -> PredVP x (UseComp (CompAP (ComparA y z))) ;
+                    =     \x,y,z -> PredVP x (UseComp (CompAP (ComparA y z))) ;
       mkCl : NP -> A2 -> NP -> Cl -- John is married to Mary
-	                                =     \x,y,z -> PredVP x (UseComp (CompAP (ComplA2 y z))) ;
+	            =     \x,y,z -> PredVP x (UseComp (CompAP (ComplA2 y z))) ;
       mkCl : NP -> NP -> Cl    -- John is the man
 	                                 =    \x,y -> PredVP x (UseComp (CompNP y)) ;
       mkCl : NP -> CN -> Cl    -- John is a man
-	                                 =    \x,y -> PredVP x (UseComp (CompNP (DetArtSg IndefArt y))) ;
+	            =    \x,y -> PredVP x (UseComp (CompNP (DetArtSg IndefArt y))) ;
       mkCl : NP -> N -> Cl    -- John is a man
-	                                 =    \x,y -> PredVP x (UseComp (CompNP (DetArtSg IndefArt (UseN y)))) ;
+	    =    \x,y -> PredVP x (UseComp (CompNP (DetArtSg IndefArt (UseN y)))) ;
       mkCl : NP -> Adv -> Cl   -- John is here
-	                                 =    \x,y -> PredVP x (UseComp (CompAdv y)) ;
+	    =    \x,y -> PredVP x (UseComp (CompAdv y)) ;
       mkCl : V -> Cl   -- it rains
-	                                 =    \v -> ImpersCl (UseV v)
+	    =    \v -> ImpersCl (UseV v)
       } ;
 
     genericCl : VP -> Cl = GenericCl ;
 
 
     mkNP = overload {
+      mkNP : Art -> CN -> NP         -- the old man --n14
+          =  DetArtSg ;
+      mkNP : Art -> N -> NP          -- the man  --n14
+          =  \d,n -> DetArtSg d (UseN n)   ;
+      mkNP : Art -> Num -> CN -> NP  -- the old men --n14
+          =  \d,nu,cn -> case nu.n of {
+               Sg => DetArtSg d cn ;
+               Pl => DetArtPl d cn
+             } ;
+      mkNP : Art -> Num -> N -> NP   -- the men --n14
+          =  \d,nu,cn -> case nu.n of {
+               Sg => DetArtSg d (UseN cn) ;
+               Pl => DetArtPl d (UseN cn)
+             } ;
+
+      mkNP : Art -> Num -> Ord -> CN -> NP   -- the five best men --n14
+          =  \d,nu,ord,cn -> DetCN (DetArtOrd d nu ord) (cn) ;
+      mkNP : Art -> Ord -> CN -> NP   -- the best men --n14
+          =  \d,ord,cn -> DetCN (DetArtOrd d sgNum ord) (cn) ;
+      mkNP : Art -> Card -> CN -> NP   -- the five men --n14
+          =  \d,nu,cn -> DetCN (DetArtCard d nu) (cn) ;
+
+      mkNP : Art -> Num -> Ord -> N -> NP   -- the five best men --n14
+          =  \d,nu,ord,cn -> DetCN (DetArtOrd d nu ord) (UseN cn) ;
+      mkNP : Art -> Ord -> N -> NP   -- the best men --n14
+          =  \d,ord,cn -> DetCN (DetArtOrd d sgNum ord) (UseN cn) ;
+      mkNP : Art -> Card -> N -> NP   -- the five men --n14
+          =  \d,nu,cn -> DetCN (DetArtCard d nu) (UseN cn) ;
+
+      mkNP : CN -> NP  -- old beer --n14
+          = MassNP ;
+      mkNP : N -> NP  -- beer --n14
+          = \n -> MassNP (UseN n) ;
+
       mkNP : Det -> CN -> NP      -- the old man
           =  DetCN    ;
       mkNP : Det -> N -> NP       -- the man
           =  \d,n -> DetCN d (UseN n)   ;
+      mkNP : Det -> NP            -- this
+          =  DetNP ;
       mkNP : Card -> CN -> NP     -- forty-five old men
 	  =  \d,n -> DetCN (DetArtCard IndefArt d) n ;
       mkNP : Card -> N -> NP       -- forty-five men
@@ -996,9 +1036,25 @@ incomplete resource Constructors = open Grammar in {
                                         = \c,x,y -> ConjNP c (BaseNP x y) ;
       mkNP : Conj -> ListNP -> NP
                                         = \c,xy -> ConjNP c xy ;
+-- backward compat
+      mkNP : QuantSg -> CN -> NP 
+          = \q,n -> DetCN (DetQuant q NumSg) n ;
+      mkNP : QuantPl -> CN -> NP 
+          = \q,n -> DetCN (DetQuant q NumPl) n ;
+
       } ;
 
     mkDet = overload {
+
+      mkDet : Art -> Num -> Ord -> Det   -- the five best men --n14
+          =  \d,nu,ord -> (DetArtOrd d nu ord) ;
+      mkDet : Art -> Ord -> Det   -- the best men --n14
+          =  \d,ord -> (DetArtOrd d sgNum ord) ;
+      mkDet : Art -> Card -> Det   -- the five men --n14
+          =  \d,nu -> (DetArtCard d nu) ;
+
+
+
       mkDet : Quant ->  Ord -> Det     -- this best man
         = \q,o -> DetQuantOrd q NumSg o  ;
       mkDet : Quant ->  Det       -- this man
@@ -1020,33 +1076,34 @@ incomplete resource Constructors = open Grammar in {
       } ;
 
 
-{-
+
 -- 1.4
-      defSgDet   : Det  = DetSg (SgQuant DefArt) NoOrd ;   -- the (man)
-      defPlDet   : Det  = DetPl (PlQuant DefArt) NoNum NoOrd ;   -- the (man)
-      indefSgDet : Det  = DetSg (SgQuant IndefArt) NoOrd ;   -- the (man)
-      indefPlDet : Det  = DetPl (PlQuant IndefArt) NoNum NoOrd ;   -- the (man)
+--      defSgDet   : Det  = DetSg (SgQuant DefArt) NoOrd ;   -- the (man)
+--      defPlDet   : Det  = DetPl (PlQuant DefArt) NoNum NoOrd ;   -- the (man)
+--      indefSgDet : Det  = DetSg (SgQuant IndefArt) NoOrd ;   -- the (man)
+--      indefPlDet : Det  = DetPl (PlQuant IndefArt) NoNum NoOrd ;   -- the (man)
 
     ---- obsol
 
     mkQuantSg : Quant -> QuantSg = SgQuant ;
     mkQuantPl : Quant -> QuantPl = PlQuant ;
 
-    defQuant = DefArt ;
-    indefQuant = IndefArt ;   
+--    defQuant = DefArt ;
+--    indefQuant = IndefArt ;   
 
-    massQuant : QuantSg = SgQuant MassDet  ;
-
-      the_QuantSg  : QuantSg = SgQuant DefArt ;
-      a_QuantSg    : QuantSg = mkQuantSg indefQuant ;
+--    massQuant : QuantSg = SgQuant MassDet  ;
+--      the_QuantSg  : QuantSg = SgQuant DefArt ;
+--      a_QuantSg    : QuantSg = mkQuantSg indefQuant ;
       this_QuantSg : QuantSg = mkQuantSg this_Quant ;
       that_QuantSg : QuantSg = mkQuantSg that_Quant ; 
 
-      the_QuantPl  : QuantPl = mkQuantPl defQuant ; 
-      a_QuantPl    : QuantPl = mkQuantPl indefQuant ; 
+--      the_QuantPl  : QuantPl = mkQuantPl defQuant ; 
+--      a_QuantPl    : QuantPl = mkQuantPl indefQuant ; 
       these_QuantPl : QuantPl = mkQuantPl this_Quant ; 
       those_QuantPl : QuantPl = mkQuantPl that_Quant ; 
--}
+
+    sgNum : Num = NumSg ;
+    plNum : Num = NumPl ;
 
 
     mkNum = overload {
@@ -1252,22 +1309,18 @@ incomplete resource Constructors = open Grammar in {
                                          =    ExistIP 
 
       } ;
-{-
+
     mkIP = overload {
-      mkIP : IDet -> Num -> Ord -> CN -> IP   -- which five best songs
-                                         =    IDetCN   ;
-      mkIP : IDet -> Ord -> CN -> IP   -- which five best songs
-                                         = \i ->   IDetCN i NoNum  ;
-      mkIP : IDet -> Num -> CN -> IP   -- which five best songs
-                                         = \i,n ->   IDetCN i n NoOrd  ;
-      mkIP : IDet -> CN -> IP   -- which best songs
-                                         = \i ->   IDetCN i NoNum NoOrd  ;
+      mkIP : IDet -> CN -> IP          -- which songs
+                                         = IdetCN ;
       mkIP : IDet -> N -> IP      -- which song
-                                         =    \i,n -> IDetCN i NoNum NoOrd (UseN n)  ;
+                                         =    \i,n -> IdetCN i (UseN n)  ;
       mkIP : IP -> Adv -> IP                  -- who in Europe
                                          =    AdvIP
       } ;
--}
+
+    whichSg_IDet : IDet = IdetQuant which_IQuant NumSg ;
+
     mkIAdv : Prep -> IP -> IAdv = PrepIP ;
 
     mkRCl = overload {
@@ -1431,12 +1484,18 @@ incomplete resource Constructors = open Grammar in {
                                          =    ComplVS   ;
       mkVP : VQ  -> QS -> VP          -- ask if she runs
                                          =    ComplVQ   ;
----      mkVP : VS  -> NP -> VP = \v -> ComplV2 (UseVS v) ;
----      mkVP : VQ  -> NP -> VP = \v -> ComplV2 (UseVQ v) ;
       mkVP : VA  -> AP -> VP          -- look red
                                          =    ComplVA   ;
       mkVP : V2A -> NP -> AP -> VP    -- paint the house red
                                          =    ComplV2A  ;
+
+      mkVP : V2S -> NP -> S  -> VP          --n14
+        = \v,n,q -> (ComplSlash (SlashV2S v q) n) ;
+      mkVP : V2Q -> NP -> QS -> VP         --n14
+        = \v,n,q -> (ComplSlash (SlashV2Q v q) n) ;
+      mkVP : V2V -> NP -> VP -> VP         --n14
+        = \v,n,q -> (ComplSlash (SlashV2V v q) n) ;
+
       mkVP : A -> VP               -- be warm
                                          =    \a -> UseComp (CompAP (PositA a)) ;
       mkVP : A -> NP -> VP -- John is warmer than Mary
@@ -1460,6 +1519,7 @@ incomplete resource Constructors = open Grammar in {
       } ;
 
   reflexiveVP   : V2 -> VP = \v -> ReflVP (SlashV2a v) ;
+
   passiveVP = overload {
       passiveVP : V2 ->       VP = PassV2 ;
       passiveVP : V2 -> NP -> VP = \v,np -> 
@@ -1488,6 +1548,14 @@ incomplete resource Constructors = open Grammar in {
    mkListNP : NP -> ListNP -> ListNP = ConsNP
    } ;
 
+
+------------ for backward compatibility
+
+    QuantSg : Type = Quant ** {isSg : {}} ;
+    QuantPl : Type = Quant ** {isPl : {}} ;
+    SgQuant : Quant -> QuantSg = \q -> q ** {isSg = <>} ;
+    PlQuant : Quant -> QuantPl = \q -> q ** {isPl = <>} ;
+
 -- Pre-1.4 constants defined
 
   DetSg : Quant -> Ord -> Det = \q -> DetQuantOrd q NumSg ;
@@ -1496,5 +1564,7 @@ incomplete resource Constructors = open Grammar in {
   ComplV2 : V2 -> NP -> VP = \v,np -> ComplSlash (SlashV2a v) np ;
   ComplV2A : V2A -> NP -> AP -> VP = \v,np,ap -> ComplSlash (SlashV2A v ap) np ;
   ComplV3 : V3 -> NP -> NP -> VP = \v,o,d -> ComplSlash (Slash2V3 v o) d ;
+
+
 
 }
