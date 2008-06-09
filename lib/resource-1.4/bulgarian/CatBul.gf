@@ -82,11 +82,11 @@ concrete CatBul of Cat = open ResBul, Prelude, (R = ParamX) in {
     Pron = {s : Role => Str; gen : AForm => Str; a : Agr} ;
     Det = {s : DGender => Role => Str ; n : Number; countable : Bool; spec : Species} ;
     Predet = {s : GenNum => Str} ;
-    Ord = {s : AForm => Str; nonEmpty : Bool} ;
+    Ord = {s : AForm => Str} ;
     Num = {s : DGenderSpecies => Str; n : Number; nonEmpty : Bool} ;
     Card = {s : DGenderSpecies => Str; n : Number} ;
-    Quant = {s : AForm => Str; spec : Species} ;
-    Art = {s : AForm => Str; spec : Species} ;
+    Quant = {s : AForm => Str} ;
+    Art = {s : Str; spec : Species} ;
 
 -- Numeral
 
