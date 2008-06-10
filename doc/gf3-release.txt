@@ -1,0 +1,58 @@
+GF 3.0
+Krasimir Angelov, Björn Bringert, and Aarne Ranta
+
+
+
+GF Version 3.0 is a major revision of GF. The source language is a superset of the
+language in 2.9, which means backward compatibility. But the target languages, the
+compiler implementation, and the functionalities (e.g. the shell) have undergone
+radical changes. 
+
+The release of GF 3.0 is projected for 27 June. As usual, the developing sources
+are available all the time via Darcs.
+
+
+==New features==
+
+Here is a summary of the main novelties visible to the user:
+- **Size**: the source code and the executable binary size have gone 
+  down to about the half of 2.9.
+- **Portability**: the new back end format PGF (Portable Grammar Format) is
+  much simpler than the old GFC format, and therefore easier to port to new
+  platforms.
+- **Multilingual web page support**: as an example of portability, GF 3.0 provides a
+  compiler from PGF to JavaScript. There are also JavaScript libraries for creating
+  translators and syntax editors as client-side web applications.
+- **Incremental parsing**: there is a possibility of word completion when
+  input strings are sent to the parser.
+- **Application programmer's interfaces**: both source-GF and PGF formats,
+  the shell, and the compiler are accessible via high-level APIs.
+- **Resource library version 1.4**: more coverage, more languages; some of
+  the new GF language features are exploited.
+
+
+==Non-supported features==
+
+There are some features of GF 2.9 that will //not// work in the 2.7 June release.
+- Java Editor GUI: we now see the JavaScript editor as the main form of 
+  syntax editing.
+- Pre-module multi-file grammar format: the grammar format of GF before version 2.0 
+  is still supported, but its include mechanism is not; this means that grammars 
+  consisting of multiple files have to be concatenated before use.
+- Probabilistic GF grammars.
+- Some output formats: LBNF.
+- Some GF shell commands: while the main ones will be supported with their familiar
+  syntax and options, some old commands have not been included.
+
+
+Users who want to have these features are welcome to contact us, 
+and even more welcome to contribute code that restores them!
+
+
+==GF language extensions==
+
+Operations for defining patterns.
+
+Inheritance of overload groups.
+
+
