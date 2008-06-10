@@ -135,16 +135,6 @@ resource ResBul = ParamX ** open Prelude in {
         GPl    => Pl
       } ;
 
-
-  ---- FIXME: added by AR, used in QuestionBul and StructuralBul
-  genGenNum : GenNum -> DGender = \g -> case g of {
-    GSg Masc => DMasc ;
-    GSg Fem  => DFem ;
-    GSg Neut => DNeut ;
-    _     => DNeut ----
-    } ;
-
-
     aform : GenNum -> Species -> Role -> AForm = \gn,spec,role -> 
       case gn of {
         GSg g  => case <g,spec,role> of {
