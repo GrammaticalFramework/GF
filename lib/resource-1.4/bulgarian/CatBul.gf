@@ -41,7 +41,7 @@ concrete CatBul of Cat = open ResBul, Prelude, (R = ParamX) in {
     QCl = {s : ResBul.Tense => Anteriority => Polarity => QForm => Str} ;
     IP = {s : Role => Str; gn : GenNum} ;
     IComp = {s1,s2 : Str} ;    
-    IDet = {s : GenNum => Str; n : Number ; nonEmpty : Bool} ; ---- nonEmpty by AR
+    IDet = {s : DGender => Str; n : Number ; nonEmpty : Bool} ;
     IQuant = {s : GenNum => Str} ;
 
 -- Relative
