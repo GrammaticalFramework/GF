@@ -1,4 +1,5 @@
 module PGF.ShowLinearize (
+  Record (..), recLinearize, --- used in PGF.Morphology
   tableLinearize,
   recordLinearize,
   termLinearize,

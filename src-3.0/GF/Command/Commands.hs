@@ -14,6 +14,7 @@ import PGF.CId
 import PGF.ShowLinearize
 import PGF.Macros
 import PGF.Data ----
+import PGF.Morphology
 import GF.Compile.Export
 import GF.Infra.UseIO
 import GF.Data.ErrM ----
@@ -60,9 +61,9 @@ commandHelp full (co,info) = unlines $ [
   "flags: " ++ unwords (flags info)
   ] else []
 
--- this list must be kept sorted by the command name!
+-- this list must no more be kept sorted by the command name
 allCommands :: PGF -> Map.Map String CommandInfo
-allCommands pgf = Map.fromAscList [
+allCommands pgf = Map.fromList [
   ("cc", emptyCommandInfo {
      longname = "compute_concrete",
      synopsis = "computes concrete syntax term using the source grammar",
@@ -144,14 +145,38 @@ allCommands pgf = Map.fromAscList [
      options = ["all","record","table","term"],
      flags = ["lang"]
      }),
+
+  ("ma", emptyCommandInfo {
+     longname = "morpho_analyse",
+     synopsis = "print the morphological analyses of all words in the string",
+     explanation = unlines [
+       "Prints all the analyses of space-separated words in the input string,",
+       "using the morphological analyser of the actual grammar (see command pf)"
+       ],
+     exec  = \opts ->  
+               return . fromString . unlines . 
+               map prMorphoAnalysis . concatMap (morphos opts) . 
+               concatMap words . toStrings
+     }),
+
   ("p", emptyCommandInfo {
      longname = "parse",
      synopsis = "parse a string to abstract syntax expression",
      explanation = "Shows all trees (expressions) returned for String by the actual\n"++
                    "grammar (overridden by the -lang flag), in the category S (overridden\n"++
                    "by the -cat flag).",
-     exec = \opts -> return . fromTrees . concatMap (par opts). toStrings,
+     exec = \opts -> return . fromTrees . concatMap (par opts) . toStrings,
      flags = ["cat","lang"]
+     }),
+  ("pf", emptyCommandInfo {
+     longname = "print_fullform",
+     synopsis = "print the full-form lexicon of the actual grammar",
+     explanation = unlines [
+       "Prints all the strings in the actual grammar with their possible analyses"
+       ],
+     exec  = \opts _ -> 
+               return $ fromString $ concatMap 
+                  (prFullFormLexicon . buildMorpho pgf . mkCId) $ optLangs opts
      }),
   ("pg", emptyCommandInfo {
      longname = "print_grammar",
@@ -206,3 +231,6 @@ allCommands pgf = Map.fromAscList [
    prGrammar opts = case valIdOpts "printer" "" opts of
      "cats" -> unwords $ categories pgf
      v -> prPGF (read v) pgf (prCId (absname pgf))
+
+   morphos opts s = 
+     [lookupMorpho (buildMorpho pgf (mkCId la)) s | la <- optLangs opts]
