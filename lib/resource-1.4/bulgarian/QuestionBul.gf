@@ -34,8 +34,6 @@ concrete QuestionBul of Question = CatBul ** open ResBul, Prelude in {
 
     CompIAdv a = a ;
 
----- FIXME: the rest of this module guessed by AR
-
     IdetCN idet cn = {
       s = \\c => let nf = case <idet.n, idet.nonEmpty> of {
                             <Pl,True> => NFPlCount ;
