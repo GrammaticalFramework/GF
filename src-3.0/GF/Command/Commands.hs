@@ -18,6 +18,7 @@ import PGF.Morphology
 import GF.Compile.Export
 import GF.Infra.UseIO
 import GF.Data.ErrM ----
+import PGF.ExprSyntax (readExp)
 import GF.Command.Abstract
 
 import Data.Maybe
@@ -120,14 +121,15 @@ allCommands pgf = Map.fromList [
   ("i", emptyCommandInfo {
      longname = "import",
      synopsis = "import a grammar from source code or compiled .pgf file",
-     explanation = "Reads a grammar from File and compiles it into a GF runtime grammar.\n"++
-                   "Files \"include\"d in File are read recursively, nubbing repetitions.\n"++
-                   "If a grammar with the same language name is already in the state,\n"++
-                   "it is overwritten - but only if compilation succeeds.\n"++
-                   "The grammar parser depends on the file name suffix:\n"++
-                   "  .gf    normal GF source\n"++
-                   "  .gfo   canonical GF\n"++
-                   "  .pgf   precompiled grammar in Portable Grammar Format",
+     explanation = unlines [
+       "Reads a grammar from File and compiles it into a GF runtime grammar.",
+       "If a grammar with the same concrete name is already in the state",
+       "it is overwritten - but only if compilation succeeds.",
+       "The grammar parser depends on the file name suffix:",
+       "  .gf    normal GF source",
+       "  .gfo   compiled GF source",
+       "  .pgf   precompiled grammar in Portable Grammar Format"
+       ],
      options = ["prob", "retain", "gfo", "src", "no-cpu", "cpu", "quiet", "verbose"]
      }),
   ("l", emptyCommandInfo {
@@ -197,6 +199,27 @@ allCommands pgf = Map.fromList [
   ("q",  emptyCommandInfo {
      longname = "quit",
      synopsis = "exit GF interpreter"
+     }),
+  ("rf",  emptyCommandInfo {
+     longname = "read_file",
+     synopsis = "read string or tree input from a file",
+     explanation = unlines [
+       "Reads input from file. The filename must be in double quotes.",
+       "The input is interpreted as a string by default, and can hence be",
+       "piped e.g. to the parse command. The option -term interprets the",
+       "input as a term, which can be given e.g. to the linearize command.",
+       "The option -lines will result in a list of strings or trees, one by line." 
+       ],
+     options = ["lines","term"],
+     exec = \opts arg -> do 
+       s <- readFile (toString arg)
+       return $ case opts of
+         _ | isOpt "lines" opts && isOpt "term" opts -> 
+               fromTrees [t | l <- lines s, Just t <- [readExp l]] 
+         _ | isOpt "term" opts -> 
+               fromTrees [t | Just t <- [readExp s]] 
+         _ | isOpt "lines" opts -> fromStrings $ lines s 
+         _ -> fromString s 
      })
   ]
  where
@@ -227,6 +250,7 @@ allCommands pgf = Map.fromList [
    fromStrings ss = (map EStr ss, unlines ss)
    fromString  s  = ([EStr s], s)
    toStrings ts = [s | EStr s <- ts] 
+   toString ts = unwords [s | EStr s <- ts] 
 
    prGrammar opts = case valIdOpts "printer" "" opts of
      "cats" -> unwords $ categories pgf
