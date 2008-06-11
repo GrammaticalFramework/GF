@@ -19,7 +19,7 @@ import Data.Char
 import Data.List(isPrefixOf)
 import qualified Data.Map as Map
 import qualified Text.ParserCombinators.ReadP as RP
-import System
+import System.Cmd
 import System.CPUTime
 import Control.Exception
 
