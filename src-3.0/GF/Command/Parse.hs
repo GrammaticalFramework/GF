@@ -20,7 +20,8 @@ pPipe = RP.sepBy (RP.skipSpaces >> pCommand) (RP.skipSpaces >> RP.char '|')
 pCommand = do
   cmd  <- pIdent
   RP.skipSpaces
-  opts <- RP.many pOption
+  opts <- RP.sepBy pOption RP.skipSpaces
+--  opts <- RP.many pOption
   arg  <- RP.option ANoArg (fmap AExp (pExp False))
   return (Command cmd opts arg)
 

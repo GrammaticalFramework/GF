@@ -133,16 +133,12 @@ allCommands pgf = Map.fromList [
   ("l", emptyCommandInfo {
      longname = "linearize",
      synopsis = "convert an abstract syntax expression to string",
-     explanation = "Shows all linearization forms of Tree by the actual grammar\n"++
-                   "(which is overridden by the -lang flag).\n"++
-                   "The pattern list has the form [P, ... ,Q] where P,...,Q follow GF\n"++
-                   "syntax for patterns. All those forms are generated that match with the\n"++
-                   "pattern list. Too short lists are filled with variables in the end.\n"++
-                   "Only the -table flag is available if a pattern list is specified.\n"++
-                   "HINT: see GF language specification for the syntax of Pattern and Term.\n"++
-                   "You can also copy and past parsing results.",
+     explanation = unlines [
+       "Shows the linearization of a Tree by the actual grammar",
+       "(which is overridden by the -lang flag)."
+       ],
      exec = \opts -> return . fromStrings . map (optLin opts),
-     options = ["all","record","table","term"],
+     options = ["all","record","table","term", "treebank"],
      flags = ["lang"]
      }),
 
@@ -207,7 +203,11 @@ allCommands pgf = Map.fromList [
    lin opts t = unlines [linearize pgf lang t    | lang <- optLangs opts]
    par opts s = concat  [parse pgf lang (optCat opts) s | lang <- optLangs opts]
  
-   optLin opts t = unlines [linea lang t | lang <- optLangs opts] where
+   optLin opts t = case opts of 
+     _ | isOpt "treebank" opts -> unlines $ (abstractName pgf ++ ": " ++ showExp t) :
+          [lang ++ ": " ++ linea lang t | lang <- optLangs opts]
+     _ -> unlines [linea lang t | lang <- optLangs opts] 
+    where
      linea lang = case opts of
        _ | isOpt "all"    opts -> allLinearize pgf (mkCId lang)
        _ | isOpt "table"  opts -> tableLinearize pgf (mkCId lang)
