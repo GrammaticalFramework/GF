@@ -19,6 +19,7 @@ import Data.Char
 import Data.List(isPrefixOf)
 import qualified Data.Map as Map
 import qualified Text.ParserCombinators.ReadP as RP
+import System
 import System.CPUTime
 import Control.Exception
 
@@ -45,6 +46,9 @@ loop opts gfenv0 = do
                              loop opts $ gfenv' {cputime = cpu'}
   case words s of
   -- special commands, requiring source grammar in env
+    "!":ws -> do
+       system $ unwords ws
+       loopNewCPU gfenv
     "cc":ws -> do
        -- FIXME: add options parsing for cc arguments
        let (style,term) = (TermPrintDefault, ws)
@@ -60,7 +64,9 @@ loop opts gfenv0 = do
         loopNewCPU gfenv'
 
   -- other special commands, working on GFEnv
-    "e":_ -> loopNewCPU $ gfenv {commandenv=env{multigrammar=emptyPGF}}
+    "e":_ -> loopNewCPU $ gfenv {
+       commandenv=env{multigrammar=emptyPGF}, sourcegrammar = emptyGrammar
+       }
     "ph":_ -> mapM_ putStrLn (reverse (history gfenv0)) >> loopNewCPU gfenv
     "q":_  -> putStrLn "See you." >> return gfenv
 
