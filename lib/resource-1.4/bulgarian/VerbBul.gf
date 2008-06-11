@@ -33,7 +33,7 @@ concrete VerbBul of Verb = CatBul ** open Prelude, ResBul, ParadigmsBul in {
 
 
     SlashV2A v ap = 
-      insertObj (\\a => v.c2.s ++ ap.s ! aform a.gn Indef (RObj Acc)) 
+      insertObj (\\a => ap.s ! aform a.gn Indef (RObj Acc)) 
         (predV v) ** {c2 = v.c2} ;  ---- FIXME: agreement with obj.a 
 
     ---- AR guessed these five, copying from Compl(VS,VQ,VV)
@@ -86,7 +86,7 @@ concrete VerbBul of Verb = CatBul ** open Prelude, ResBul, ParadigmsBul in {
 
 ---- END guesses by AR
 
-    ComplSlash vp np = insertObj (\\_ => vp.c2.s ++ np.s ! RObj vp.c2.c) vp ;
+    ComplSlash vp np = insertObjPre (\\_ => vp.c2.s ++ np.s ! RObj vp.c2.c) vp ;
 
     UseComp comp = insertObj comp.s (predV verbBe) ;
 
