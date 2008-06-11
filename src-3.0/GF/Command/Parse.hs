@@ -1,6 +1,7 @@
 module GF.Command.Parse(readCommandLine, pCommand) where
 
 import PGF.ExprSyntax
+import PGF.Data(Exp)
 import GF.Command.Abstract
 
 import Data.Char
