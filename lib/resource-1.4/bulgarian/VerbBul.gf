@@ -11,7 +11,7 @@ concrete VerbBul of Verb = CatBul ** open Prelude, ResBul, ParadigmsBul in {
       insertObj (\\_ => v.c2.s ++ np.s ! RObj v.c2.c) (predV v) ** {c2 = v.c3} ;
 
     Slash3V3 v np = 
-      insertObj (\\_ => v.c3.s ++ np.s ! RObj v.c2.c) (predV v) ** {c2 = v.c2} ;
+      insertObj (\\_ => v.c3.s ++ np.s ! RObj v.c3.c) (predV v) ** {c2 = v.c2} ;
 
     ComplVV vv vp = {
       s   = \\t,a,p,agr,q,asp => 
