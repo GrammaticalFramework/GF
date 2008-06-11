@@ -36,12 +36,6 @@ concrete VerbBul of Verb = CatBul ** open Prelude, ResBul, ParadigmsBul in {
       insertObj (\\a => v.c2.s ++ ap.s ! aform a.gn Indef (RObj Acc)) 
         (predV v) ** {c2 = v.c2} ;  ---- FIXME: agreement with obj.a 
 
-
-    SlashV2A v ap = 
-      insertObj (\\a => v.c2.s ++ ap.s ! aform a.gn Indef (RObj Acc)) 
-        (predV v) ** {c2 = v.c2} ;  ---- FIXME: agreement with obj.a 
-
-
     ---- AR guessed these five, copying from Compl(VS,VQ,VV)
 
     -- test: I saw a boy to whom she said that they are here
