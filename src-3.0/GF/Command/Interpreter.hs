@@ -61,7 +61,7 @@ interpret env trees0 comm = case lookCommand co comms of
    comms = commands env
    checkOpts info = 
      case
-       [o | OOpt  o   <- opts, notElem o (options info)] ++
+       [o | OOpt  o   <- opts, notElem o ("tr" : options info)] ++
        [o | OFlag o _ <- opts, notElem o (flags info)]
       of
         []  -> return () 

@@ -1,5 +1,5 @@
 module PGF.ShowLinearize (
-  Record (..), recLinearize, --- used in PGF.Morphology
+  collectWords,
   tableLinearize,
   recordLinearize,
   termLinearize,
@@ -13,6 +13,7 @@ import PGF.Linearize
 
 import GF.Data.Operations
 import Data.List
+import qualified Data.Map as Map
 
 -- printing linearizations in different ways with source parameters
 
@@ -84,4 +85,19 @@ recLinearize pgf lang exp = mkRecord typ $ linExp pgf lang exp where
 termLinearize :: PGF -> CId -> Exp -> String
 termLinearize pgf lang = show . linExp pgf lang
 
+
+-- for Morphology: word, lemma, tags
+collectWords :: PGF -> CId -> [(String, [(String,String)])]
+collectWords pgf lang = 
+    concatMap collOne 
+      [(f,c,0) | (f,(DTyp [] c _,_)) <- Map.toList $ funs $ abstract pgf] 
+  where
+    collOne (f,c,i) = 
+      fromRec f [prCId c] (recLinearize pgf lang (EApp f (replicate i (EMeta 888))))
+    fromRec f v r = case r of
+      RR  rs -> concat [fromRec f v t | (_,t) <- rs] 
+      RT  rs -> concat [fromRec f (p:v) t | (p,t) <- rs]
+      RFV rs -> concatMap (fromRec f v) rs
+      RS  s  -> [(s,[(prCId f,unwords (reverse v))])]
+      RCon c -> [] ---- inherent
 
