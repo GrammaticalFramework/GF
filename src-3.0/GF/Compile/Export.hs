@@ -9,7 +9,7 @@ import GF.Compile.GFCCtoJS
 import GF.Infra.Option
 import GF.Speech.CFG
 import GF.Speech.PGFToCFG
-import GF.Speech.SRGS
+import GF.Speech.SRGS_XML
 import GF.Speech.VoiceXML
 import GF.Text.UTF8
 
