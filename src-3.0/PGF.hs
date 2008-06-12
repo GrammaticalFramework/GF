@@ -172,11 +172,15 @@ readPGF f = do
 linearize pgf lang = PGF.Linearize.linearize pgf (mkCId lang)
 
 parse pgf lang cat s = 
-  case lookParser pgf (mkCId lang) of
-    Nothing    -> error ("Unknown language: " ++ lang)
-    Just pinfo -> case parseFCFG "bottomup" pinfo (mkCId cat) (words s) of
-                    Ok x  -> x
-                    Bad s -> error s
+  case Map.lookup (mkCId lang) (concretes pgf) of
+    Just cnc -> case parser cnc of
+                  Just pinfo -> if Map.lookup (mkCId "erasing") (cflags cnc) == Just "on"
+                                  then Incremental.parse pinfo (mkCId cat) (words s)
+                                  else case parseFCFG "bottomup" pinfo (mkCId cat) (words s) of
+                                         Ok x  -> x
+                                         Bad s -> error s
+                  Nothing    -> error ("No parser built fo language: " ++ lang)
+    Nothing  -> error ("Unknown language: " ++ lang)
 
 linearizeAll mgr = map snd . linearizeAllLang mgr
 linearizeAllLang mgr t = 
