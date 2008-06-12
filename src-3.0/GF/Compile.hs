@@ -176,7 +176,6 @@ compileSourceModule opts env@(k,gr,_) mo@(i,mi) = do
       if null warnings then return () else putp warnings $ return ()
       intermOut opts DumpTypeCheck (prModule mo3)
 
-
       (k',mo3r:_) <- putpp "  refreshing " $ ioeErr $ refreshModule (k,mos) mo3
       intermOut opts DumpRefresh (prModule mo3r)
 

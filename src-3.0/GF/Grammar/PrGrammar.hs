@@ -30,7 +30,7 @@ module GF.Grammar.PrGrammar (Print(..),
 		  prConstrs, prConstraints, 
 		  prMetaSubst, prEnv, prMSubst, 
 		  prExp, prOperSignature,
-                  lookupIdent, lookupIdentInfo,
+                  lookupIdent, lookupIdentInfo, lookupIdentInfoIn,
                   prTermTabular
 		 ) where
 
@@ -254,6 +254,10 @@ lookupIdent c t = case lookupTree prt c t of
 
 lookupIdentInfo :: Module Ident a -> Ident -> Err a
 lookupIdentInfo mo i = lookupIdent i (jments mo)
+
+lookupIdentInfoIn :: Module Ident a -> Ident -> Ident -> Err a
+lookupIdentInfoIn mo m i = 
+  err (\s -> Bad (s +++ "in module" +++ prt m)) return $ lookupIdentInfo mo i
 
 
 --- printing cc command output AR 26/5/2008
