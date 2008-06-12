@@ -5,6 +5,7 @@ import PGF.Data(Exp)
 import GF.Command.Abstract
 
 import Data.Char
+import Control.Monad
 import qualified Text.ParserCombinators.ReadP as RP
 
 readCommandLine :: String -> Maybe CommandLine
@@ -32,6 +33,9 @@ pOption = do
   RP.option (OOpt flg) (fmap (OFlag flg) (RP.char '=' >> pValue))
 
 pValue = do
-  fmap VId  pIdent
+  fmap VId  pFilename
   RP.<++
   fmap (VInt . read) (RP.munch1 isDigit)
+
+pFilename = liftM2 (:) (RP.satisfy isFileFirst) (RP.munch (not . isSpace)) where
+  isFileFirst c = not (isSpace c) && not (isDigit c)

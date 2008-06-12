@@ -200,9 +200,14 @@ allCommands pgf = Map.fromList [
   ("ps", emptyCommandInfo {
      longname = "put_string",
      synopsis = "return a string, possibly processed with a function",
-     exec = \opts -> 
-       return . fromString . maybe id id (stringOp (concatMap prOpt opts)) . toString,
-     flags = ["cat","lang"]
+     explanation = unlines [
+       "Returns a string obtained by its argument string by applying",
+       "string processing functions in the order given in the command line",
+       "option list. Thus 'ps -f -g s' returns g (f s). Typical string processors",
+       "are lexers and unlexers."
+       ], 
+     exec = \opts -> return . fromString . stringOps opts . toString,
+     options = ["lextext","lexcode","lexmixed","unlextext","unlexcode","unlexmixed"]
      }),
   ("q",  emptyCommandInfo {
      longname = "quit",
@@ -228,12 +233,22 @@ allCommands pgf = Map.fromList [
                fromTrees [t | Just t <- [readExp s]] 
          _ | isOpt "lines" opts -> fromStrings $ lines s 
          _ -> fromString s 
+     }),
+  ("wf", emptyCommandInfo {
+     longname = "write_file",
+     synopsis = "send string or tree to a file",
+     exec = \opts arg -> do
+         let file = valIdOpts "file" "_gftmp" opts
+         writeFile file (toString arg)
+         return void
      })
   ]
  where
    lin opts t = unlines [linearize pgf lang t    | lang <- optLangs opts]
    par opts s = concat  [parse pgf lang (optCat opts) s | lang <- optLangs opts]
  
+   void = ([],[])
+
    optLin opts t = case opts of 
      _ | isOpt "treebank" opts -> unlines $ (abstractName pgf ++ ": " ++ showExp t) :
           [lang ++ ": " ++ linea lang t | lang <- optLangs opts]
@@ -266,3 +281,7 @@ allCommands pgf = Map.fromList [
 
    morphos opts s = 
      [lookupMorpho (buildMorpho pgf (mkCId la)) s | la <- optLangs opts]
+
+   -- ps -f -g s returns g (f s)
+   stringOps opts s = foldr app s (reverse (map prOpt opts)) where
+     app f = maybe id id (stringOp f) 
