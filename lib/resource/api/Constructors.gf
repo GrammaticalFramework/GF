@@ -1083,6 +1083,8 @@ incomplete resource Constructors = open Grammar in {
       those_QuantPl : QuantPl = mkQuantPl that_Quant ; 
 
 
+      mkiNum : Int -> Num         -- 51
+                                         =    NumInt      ;
 
     mkNum = overload {
       mkNum : Numeral -> Num = NumNumeral ;

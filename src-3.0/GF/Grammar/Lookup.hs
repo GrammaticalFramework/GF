@@ -50,12 +50,14 @@ lookupResDef gr m c = liftM fst $ lookupResDefKind gr m c
 
 -- 0 = oper, 1 = lin, 2 = canonical. v > 0 means: no need to be recomputed
 lookupResDefKind :: SourceGrammar -> Ident -> Ident -> Err (Term,Int)
-lookupResDefKind gr m c = look True m c where 
+lookupResDefKind gr m c 
+ | isPredefCat c = return (Q cPredefAbs c,2) --- need this in gf3 12/6/2008 
+ | otherwise = look True m c where 
   look isTop m c = do
     mi   <- lookupModule gr m
     case mi of
       ModMod mo -> do
-        info <- lookupIdentInfo mo c
+        info <- lookupIdentInfoIn mo m c
         case info of
           ResOper _ (Yes t) -> return (qualifAnnot m t, 0) 
           ResOper _ Nope    -> return (Q m c, 0) ---- if isTop then lookExt m c 
