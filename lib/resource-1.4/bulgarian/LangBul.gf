@@ -5,6 +5,6 @@ concrete LangBul of Lang =
   LexiconBul
   ** {
 
-flags startcat = Phr ; unlexer = text ; lexer = text ;
+flags startcat = Phr ; unlexer = text ; lexer = text ; erasing = on ;
 
 } ;
