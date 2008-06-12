@@ -20,7 +20,6 @@ import Data.Char (toUpper,toLower)
 import Data.List
 import Data.Maybe
 import qualified Data.Map as Map
-import qualified Data.Set as Set
 
 srgsXmlPrinter :: Maybe SISRFormat 
                -> PGF -> CId -> String
@@ -39,7 +38,7 @@ prSrgsXml sisr srg = showXMLDoc (optimizeSRGS xmlGr)
                meta "generator" "Grammatical Framework"]
 	    ++ map ruleToXML (srgRules srg)
     ruleToXML (SRGRule cat alts) = Tag "rule" ([("id",cat)]++pub) (prRhs alts)
-        where pub | cat `Set.member` srgExternalCats srg = [("scope","public")]
+        where pub | isExternalCat srg cat = [("scope","public")]
                   | otherwise = []
     prRhs rhss = [oneOf (map (mkProd sisr) rhss)] 
 

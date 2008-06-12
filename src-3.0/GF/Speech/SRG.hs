@@ -8,12 +8,13 @@
 -- FIXME: remove \/ warn \/ fail if there are int \/ string literal
 -- categories in the grammar
 ----------------------------------------------------------------------
-module GF.Speech.SRG (SRG(..), SRGRule(..), SRGAlt(..), SRGItem
+module GF.Speech.SRG (SRG(..), SRGRule(..), SRGAlt(..), SRGItem, SRGSymbol
                      , SRGNT, CFTerm
                      , makeSRG
                      , makeSimpleSRG
                      , makeNonRecursiveSRG
                      , getSpeechLanguage
+                     , isExternalCat
                      , lookupFM_, prtS
                      ) where
 
@@ -138,6 +139,9 @@ cfRulesToSRGRule rs@(r:_) = SRGRule (lhsCat r) rhs
 
 allSRGCats :: SRG -> [String]
 allSRGCats SRG { srgRules = rs } = [c | SRGRule c _ <- rs]
+
+isExternalCat :: SRG -> Cat -> Bool
+isExternalCat srg c = c `Set.member` srgExternalCats srg
 
 --
 -- * Size-optimized EBNF SRGs
