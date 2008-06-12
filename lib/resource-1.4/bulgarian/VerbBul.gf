@@ -45,17 +45,10 @@ concrete VerbBul of Verb = CatBul ** open Prelude, ResBul, ParadigmsBul in {
     SlashV2Q v q  = insertObj (\\_ => q.s ! QIndir) (predV v) ** {c2 = v.c2} ;
 
     -- test: I saw a boy whom she begged to walk 
-    SlashV2V vv vp = {
-      s   = \\t,a,p,agr,q,asp => 
-        let 
-          vv_verb = (predV vv).s ! t ! a ! p ! agr ! q ! asp ;
-          vp_verb = vp.s ! Pres ! Simul ! Pos ! agr ! False ! Perf ;
-        in vv_verb ++ vp.ad ! False ++ "да" ++ vp_verb ;
-      imp = vp.imp ;
-      ad = \\_ => [] ;
-      s2 = vp.s2 ;
-      subjRole = vp.subjRole
-      } ** {c2 = vv.c2} ;
+    SlashV2V vv vp =
+      insertObj (\\agr => vp.ad ! False ++ "да" ++ vp.s ! Pres ! Simul ! Pos ! agr ! False ! Perf)
+                (predV vv)
+         ** {c2 = vv.c2} ;  ---- FIXME: agreement with obj.a 
 
     -- test: I saw a car whom she wanted to buy
     SlashVV vv vp = {
