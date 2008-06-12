@@ -3,7 +3,8 @@ module GF.Compile.GrammarToGFCC (prGrammar2gfcc,mkCanon2gfcc,addParsers) where
 
 import GF.Compile.Export
 import GF.Compile.OptimizeGF (unshareModule)
-import GF.Compile.GenerateFCFG (convertConcrete)
+import qualified GF.Compile.GenerateFCFG  as FCFG
+import qualified GF.Compile.GeneratePMCFG as PMCFG
 
 import PGF.CId
 import PGF.BuildParser (buildParserInfo)
@@ -54,7 +55,12 @@ mkCanon2gfcc opts cnc gr =
 addParsers :: D.PGF -> D.PGF
 addParsers pgf = pgf { D.concretes = Map.map conv (D.concretes pgf) }
   where
-    conv cnc = cnc { D.parser = Just (buildParserInfo (convertConcrete (D.abstract pgf) cnc)) }
+    conv cnc = cnc { D.parser = Just (buildParserInfo fcfg) }
+      where
+        fcfg
+          | Map.lookup (mkCId "erasing") (D.cflags cnc) == Just "on" = PMCFG.convertConcrete (D.abstract pgf) cnc
+          | otherwise                                                = FCFG.convertConcrete  (D.abstract pgf) cnc
+    
 
 -- Generate PGF from GFCM.
 -- this assumes a grammar translated by canon2canon

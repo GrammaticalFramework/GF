@@ -122,6 +122,7 @@ data ModuleFlags = ModuleFlags {
       optSpeechLanguage  :: Maybe String,
       optLexer           :: Maybe String,
       optUnlexer         :: Maybe String,
+      optErasing         :: Bool,
       optBuildParser     :: Bool,
       optWarnings        :: [Warning],
       optDump            :: [Dump]
@@ -176,6 +177,7 @@ moduleOptionsGFO :: ModuleOptions -> [(String,String)]
 moduleOptionsGFO (ModuleOptions o) = 
          maybe [] (\x -> [("language",x)]) (optSpeechLanguage mfs)
       ++ maybe [] (\x -> [("startcat",x)]) (optStartCat mfs)
+      ++ (if optErasing mfs then [("erasing","on")] else [])
   where mfs = o defaultModuleFlags
 
 
@@ -262,6 +264,7 @@ defaultModuleFlags = ModuleFlags {
       optSpeechLanguage  = Nothing,
       optLexer           = Nothing,
       optUnlexer         = Nothing,
+      optErasing         = False,
       optBuildParser     = True,
       optWarnings        = [],
       optDump            = []
@@ -311,6 +314,7 @@ moduleOptDescr =
      Option [] ["coding"] (ReqArg coding "ENCODING") 
                 ("Character encoding of the source grammar, ENCODING = "
                  ++ concat (intersperse " | " (map fst encodings)) ++ "."),
+     Option [] ["erasing"] (onOff erasing False) "Generate erasing grammar (default off).",
      Option [] ["parser"] (onOff parser True) "Build parser (default on).",
      Option [] ["startcat"] (ReqArg startcat "CAT") "Grammar start category.",
      Option [] ["language"] (ReqArg language "LANG") "Set the speech language flag to LANG in the generated grammar.",
@@ -339,6 +343,7 @@ moduleOptDescr =
        coding      x = case lookup x encodings of
                          Just c  -> set $ \o -> o { optEncoding = c }
                          Nothing -> fail $ "Unknown character encoding: " ++ x
+       erasing     x = set $ \o -> o { optErasing = x }
        parser      x = set $ \o -> o { optBuildParser = x }
        startcat    x = set $ \o -> o { optStartCat = Just x }
        language    x = set $ \o -> o { optSpeechLanguage = Just x }
