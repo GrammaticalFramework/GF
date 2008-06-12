@@ -93,14 +93,17 @@ extractExps (State pinfo chart items) start = exps
       let (FRule fn _ args cat lins) = allRules pinfo ! ruleid
       lbl <- indices lins
       fid <- Map.lookup (PK c lbl 0) (passive st)
-      go fid
+      go Set.empty fid
 
-    go fid = do
-      set <- IntMap.lookup fid (forest st)
-      Passive ruleid args <- Set.toList set
-      let (FRule fn _ _ cat lins) = allRules pinfo ! ruleid
-      args <- mapM go args
-      return (EApp fn args)
+    go rec fid
+      | Set.member fid rec = mzero
+      | otherwise          = do set <- IntMap.lookup fid (forest st)
+                                Passive ruleid args <- Set.toList set
+                                let (FRule fn _ _ cat lins) = allRules pinfo ! ruleid
+                                if fn == wildCId
+                                  then go (Set.insert fid rec) (head args)
+                                  else do args <- mapM (go (Set.insert fid rec)) args
+                                          return (EApp fn args)
 
 process fn !rules []           acc_chart = acc_chart
 process fn !rules (item:items) acc_chart = univRule item acc_chart
