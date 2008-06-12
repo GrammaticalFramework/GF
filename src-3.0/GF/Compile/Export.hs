@@ -10,6 +10,7 @@ import GF.Infra.Option
 import GF.Speech.CFG
 import GF.Speech.PGFToCFG
 import GF.Speech.SRGS_XML
+import GF.Speech.JSGF
 import GF.Speech.VoiceXML
 import GF.Text.UTF8
 
@@ -27,7 +28,9 @@ prPGF fmt gr name = case fmt of
   FmtHaskell_GADT -> grammar2haskellGADT gr name
   FmtBNF          -> prCFG $ pgfToCFG gr (outputConcr gr)
   FmtSRGS_XML     -> srgsXmlPrinter Nothing gr (outputConcr gr)
+  FmtJSGF         -> jsgfPrinter Nothing gr (outputConcr gr)
   FmtVoiceXML     -> grammar2vxml gr (outputConcr gr)
+
 
 
 -- | Get the name of the concrete syntax to generate output from.
