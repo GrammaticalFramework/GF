@@ -46,3 +46,8 @@ valOpts flag def opts = case lookup flag flags of
 
 isOpt :: String -> [Option] -> Bool
 isOpt o opts = elem o [x | OOpt x <- opts]
+
+prOpt :: Option -> String
+prOpt (OOpt i) = i ----
+
+
