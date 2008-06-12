@@ -1,10 +1,10 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : SRGS
+-- Module      : GF.Speech.SRGS_XML
 --
 -- Prints an SRGS XML speech recognition grammars.
 ----------------------------------------------------------------------
-module GF.Speech.SRGS (srgsXmlPrinter, srgsXmlNonRecursivePrinter) where
+module GF.Speech.SRGS_XML (srgsXmlPrinter, srgsXmlNonRecursivePrinter) where
 
 import GF.Data.Utilities
 import GF.Data.XML
