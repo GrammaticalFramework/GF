@@ -20,6 +20,7 @@ import GF.Infra.UseIO
 import GF.Data.ErrM ----
 import PGF.ExprSyntax (readExp)
 import GF.Command.Abstract
+import GF.Text.Lexing
 
 import Data.Maybe
 import qualified Data.Map as Map
@@ -195,6 +196,13 @@ allCommands pgf = Map.fromList [
                    "The result is readable by the eh command.\n"++
                    "example:\n"++
                    "  ph | wf foo.hist  -- save the history into a file"
+     }),
+  ("ps", emptyCommandInfo {
+     longname = "put_string",
+     synopsis = "return a string, possibly processed with a function",
+     exec = \opts -> 
+       return . fromString . maybe id id (stringOp (concatMap prOpt opts)) . toString,
+     flags = ["cat","lang"]
      }),
   ("q",  emptyCommandInfo {
      longname = "quit",
