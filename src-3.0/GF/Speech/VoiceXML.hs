@@ -42,7 +42,12 @@ type Skeleton = [(CId, [(CId, [CId])])]
 
 pgfSkeleton :: PGF -> Skeleton
 pgfSkeleton pgf = [(c,[(f,fst (catSkeleton (lookType pgf f))) | f <- fs]) 
-                   | (c,fs) <- Map.toList (catfuns (abstract pgf))]
+                   | (c,fs) <- Map.toList (catfuns (abstract pgf)),
+                     not (isLiteralCat c)]
+
+-- FIXME: should this go in a more general module?
+isLiteralCat :: CId -> Bool
+isLiteralCat = (`elem` [mkCId "String", mkCId "Float", mkCId "Int"])
 
 --
 -- * Questions to ask 
