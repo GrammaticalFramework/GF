@@ -66,6 +66,15 @@ commandHelp full (co,info) = unlines $ [
 -- this list must no more be kept sorted by the command name
 allCommands :: PGF -> Map.Map String CommandInfo
 allCommands pgf = Map.fromList [
+  ("af", emptyCommandInfo {
+     longname = "append_file",
+     synopsis = "append string or tree to a file",
+     exec = \opts arg -> do
+         let file = valIdOpts "file" "_gftmp" opts
+         appendFile file (toString arg)
+         return void,
+     flags = ["file"]
+    }),
   ("cc", emptyCommandInfo {
      longname = "compute_concrete",
      synopsis = "computes concrete syntax term using the source grammar",
@@ -225,14 +234,16 @@ allCommands pgf = Map.fromList [
        ],
      options = ["lines","term"],
      exec = \opts arg -> do 
-       s <- readFile (toString arg)
+       let file = valIdOpts "file" "_gftmp" opts
+       s <- readFile file
        return $ case opts of
          _ | isOpt "lines" opts && isOpt "term" opts -> 
                fromTrees [t | l <- lines s, Just t <- [readExp l]] 
          _ | isOpt "term" opts -> 
                fromTrees [t | Just t <- [readExp s]] 
          _ | isOpt "lines" opts -> fromStrings $ lines s 
-         _ -> fromString s 
+         _ -> fromString s,
+     flags = ["file"] 
      }),
   ("wf", emptyCommandInfo {
      longname = "write_file",
@@ -240,7 +251,8 @@ allCommands pgf = Map.fromList [
      exec = \opts arg -> do
          let file = valIdOpts "file" "_gftmp" opts
          writeFile file (toString arg)
-         return void
+         return void,
+     flags = ["file"] 
      })
   ]
  where
