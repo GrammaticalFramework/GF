@@ -79,7 +79,13 @@ concrete VerbBul of Verb = CatBul ** open Prelude, ResBul, ParadigmsBul in {
 
 ---- END guesses by AR
 
-    ComplSlash vp np = insertObjPre (\\_ => vp.c2.s ++ np.s ! RObj vp.c2.c) vp ;
+    ComplSlash slash np = {
+      s   = slash.s ;
+      imp = slash.imp ;
+      ad  = slash.ad ;
+      s2 = \\_ => slash.c2.s ++ np.s ! RObj slash.c2.c ++ slash.s2 ! np.a ;
+      subjRole = slash.subjRole
+      } ;
 
     UseComp comp = insertObj comp.s (predV verbBe) ;
 
