@@ -51,31 +51,31 @@ concrete VerbBul of Verb = CatBul ** open Prelude, ResBul, ParadigmsBul in {
          ** {c2 = vv.c2} ;  ---- FIXME: agreement with obj.a 
 
     -- test: I saw a car whom she wanted to buy
-    SlashVV vv vp = {
+    SlashVV vv slash = {
       s   = \\t,a,p,agr,q,asp => 
         let 
           vv_verb = (predV vv).s ! t ! a ! p ! agr ! q ! asp ;
-          vp_verb = vp.s ! Pres ! Simul ! Pos ! agr ! False ! Perf ;
-        in vv_verb ++ vp.ad ! False ++ "да" ++ vp_verb ;
-      imp = vp.imp ;
+          slash_verb = slash.s ! Pres ! Simul ! Pos ! agr ! False ! Perf ;
+        in vv_verb ++ slash.ad ! False ++ "да" ++ slash_verb ;
+      imp = slash.imp ;
       ad = \\_ => [] ;
-      s2 = vp.s2 ;
-      subjRole = vp.subjRole
-      } ** {c2 = vp.c2} ;
+      s2 = slash.s2 ;
+      subjRole = slash.subjRole
+      } ** {c2 = slash.c2} ;
 
     -- test: I saw a car whom she begged me to buy
-    SlashV2VNP vv np vp = 
+    SlashV2VNP vv np slash = 
       insertObj (\\_ => vv.c2.s ++ np.s ! RObj vv.c2.c) {
       s   = \\t,a,p,agr,q,asp => 
         let 
           vv_verb = (predV vv).s ! t ! a ! p ! agr ! q ! asp ;
-          vp_verb = vp.s ! Pres ! Simul ! Pos ! agr ! False ! Perf ;
-        in vv_verb ++ vp.ad ! False ++ "да" ++ vp_verb ;
-      imp = vp.imp ;
+          slash_verb = slash.s ! Pres ! Simul ! Pos ! agr ! False ! Perf ;
+        in vv_verb ++ slash.ad ! False ++ "да" ++ slash_verb ;
+      imp = slash.imp ;
       ad = \\_ => [] ;
-      s2 = vp.s2 ;
-      subjRole = vp.subjRole
-      } ** {c2 = vp.c2} ;
+      s2 = slash.s2 ;
+      subjRole = slash.subjRole
+      } ** {c2 = slash.c2} ;
 
 ---- END guesses by AR
 
