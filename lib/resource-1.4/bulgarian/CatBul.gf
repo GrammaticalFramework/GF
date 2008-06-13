@@ -55,7 +55,7 @@ concrete CatBul of Cat = open ResBul, Prelude, (R = ParamX) in {
       s : ResBul.Tense => Anteriority => Polarity => Agr => Bool => Aspect => Str ;
       imp : Polarity => Number => Aspect => Str ;
       ad : Bool => Str ;
-      s2 : Agr => Str ;
+      compl : Agr => Str ;
       subjRole : Role
     } ;
 

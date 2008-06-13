@@ -196,10 +196,10 @@ resource ResBul = ParamX ** open Prelude in {
     } ;
 
     VP : Type = {
-      s   : Tense => Anteriority => Polarity => Agr => Bool => Aspect => Str ;
-      imp : Polarity => Number => Aspect => Str ;
-      ad  : Bool => Str ;          -- sentential adverb
-      s2  : Agr => Str ;
+      s     : Tense => Anteriority => Polarity => Agr => Bool => Aspect => Str ;
+      imp   : Polarity => Number => Aspect => Str ;
+      ad    : Bool => Str ;          -- sentential adverb
+      compl : Agr => Str ;
       subjRole : Role
     } ;
 
@@ -275,7 +275,7 @@ resource ResBul = ParamX ** open Prelude in {
                               Neg => "не" ++ verb.s ! Imperf ! VImperative n
                             } ;
              ad = \\_ => [] ;
-             s2 = \\_ => [] ;
+             compl = \\_ => [] ;
              subjRole = case verb.vtype of {
                           VNormal    => RSubj ;
                           VMedial  _ => RSubj ;
@@ -284,10 +284,10 @@ resource ResBul = ParamX ** open Prelude in {
            } ;
 
     insertObj : (Agr => Str) -> VP -> VP = \obj,vp -> {
-      s   = vp.s ;
-      imp = vp.imp ;
-      ad  = vp.ad ;
-      s2 = \\a => vp.s2 ! a ++ obj ! a ;
+      s     = vp.s ;
+      imp   = vp.imp ;
+      ad    = vp.ad ;
+      compl = \\a => vp.compl ! a ++ obj ! a ;
       subjRole = vp.subjRole
       } ;
 
@@ -418,7 +418,7 @@ resource ResBul = ParamX ** open Prelude in {
         let 
           verb  : Bool => Str
                 = \\q => vp.ad ! q ++ vp.s ! t ! a ! p ! agr_vp ! q ! Perf ;
-          compl = vp.s2 ! agr_compl
+          compl = vp.compl ! agr_compl
         in case o of {
              Main  => subj ++ verb ! False ++ compl ;
              Inv   => verb ! False ++ compl ++ subj ;
