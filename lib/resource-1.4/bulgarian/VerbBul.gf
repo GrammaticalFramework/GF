@@ -21,7 +21,7 @@ concrete VerbBul of Verb = CatBul ** open Prelude, ResBul, ParadigmsBul in {
         in vv_verb ++ vp.ad ! False ++ "да" ++ vp_verb ;
       imp = vp.imp ;
       ad = \\_ => [] ;
-      s2 = vp.s2 ;
+      compl = vp.compl ;
       subjRole = vp.subjRole
       } ;
 
@@ -61,7 +61,7 @@ concrete VerbBul of Verb = CatBul ** open Prelude, ResBul, ParadigmsBul in {
           slash_verb = slash.s ! Pres ! Simul ! Pos ! {gn = gennum DMasc n; p = P2} ! False ! Perf ;
         in vv_verb ++ slash.ad ! False ++ "да" ++ slash_verb ;
       ad = \\_ => [] ;
-      s2 = slash.s2 ;
+      compl = slash.compl ;
       subjRole = (predV vv).subjRole
       } ** {c2 = slash.c2} ;
 
@@ -78,7 +78,7 @@ concrete VerbBul of Verb = CatBul ** open Prelude, ResBul, ParadigmsBul in {
           slash_verb = slash.s ! Pres ! Simul ! Pos ! np.a ! False ! Perf ;
         in vv_verb ++ vv.c2.s ++ np.s ! RObj vv.c2.c ++ slash.ad ! False ++ "да" ++ slash_verb ;
       ad = \\_ => [] ;
-      s2 = slash.s2 ;
+      compl = slash.compl ;
       subjRole = (predV vv).subjRole
       } ** {c2 = slash.c2} ;
 
@@ -86,7 +86,7 @@ concrete VerbBul of Verb = CatBul ** open Prelude, ResBul, ParadigmsBul in {
       s   = slash.s ;
       imp = slash.imp ;
       ad  = slash.ad ;
-      s2 = \\_ => slash.c2.s ++ np.s ! RObj slash.c2.c ++ slash.s2 ! np.a ;
+      compl = \\_ => slash.c2.s ++ np.s ! RObj slash.c2.c ++ slash.compl ! np.a ;
       subjRole = slash.subjRole
       } ;
 
@@ -98,7 +98,7 @@ concrete VerbBul of Verb = CatBul ** open Prelude, ResBul, ParadigmsBul in {
       s   = \\t,a,p,agr,q,asp => vp.s ! t ! a ! p ! agr ! False ! asp ;
       imp = vp.imp ;
       ad  = \\q => vp.ad ! q ++ adv.s ++ case q of {True => "ли"; False => []} ;
-      s2 = vp.s2 ;
+      compl = vp.compl ;
       subjRole = vp.subjRole
       } ;
 

@@ -58,13 +58,13 @@ concrete IdiomBul of Idiom = CatBul ** open Prelude, ParadigmsBul, ResBul in {
       s   = \\t,a,p,agr,q,asp => vp.s ! t ! a ! p ! agr ! q ! Imperf ;
       imp = \\p,n,_ => vp.imp ! p ! n ! Imperf ;
       ad = vp.ad ;
-      s2 = vp.s2 ;
+      compl = vp.compl ;
       subjRole = vp.subjRole
       } ;
 
     ImpPl1 vp = {s = "нека" ++
                      vp.s ! Pres ! Simul ! Pos ! {gn = GPl ; p = P1} ! False ! Imperf ++
-                     vp.s2 ! {gn = GPl ; p = P1}
+                     vp.compl ! {gn = GPl ; p = P1}
                 } ;
 }
 

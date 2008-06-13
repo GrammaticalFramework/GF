@@ -11,7 +11,7 @@ concrete SentenceBul of Sentence = CatBul ** open Prelude, ResBul in {
       s = \\p,gn => 
         let agr = {gn = gn ; p = P2} ;
             verb = vp.imp ! p ! numGenNum gn ! Perf ;
-            compl = vp.s2 ! agr
+            compl = vp.compl ! agr
         in
         verb ++ compl
     } ;
