@@ -158,3 +158,6 @@ l PhrUtt NoPConj (UttS (UseCl TPres ASimul PPos (PredVP (DetCN every_Det (UseN b
 l PhrUtt NoPConj (UttAdv (ConjAdv either7or_DConj (ConsAdv here7from_Adv (BaseAdv there_Adv everywhere_Adv)))) NoVoc
 l PhrUtt NoPConj (UttVP (PassV2 know_V2)) NoVoc
 l RelCN (UseN bird_N) (UseRCl TPres ASimul PPos (RelSlash IdRP (SlashVP (UsePron i_Pron) (SlashVV want_VV (SlashV2A paint_V2A (PositA red_A))))))
+l UttImpSg PPos (ImpVP (ComplSlash (SlashVV want_VV (SlashV2a buy_V2)) (UsePron it_Pron)))
+l UttImpSg PPos (ImpVP (ComplSlash (SlashVV want_VV (SlashV2A paint_V2A (PositA red_A))) (UsePron it_Pron)))
+l UttImpSg PPos (ImpVP (ComplSlash (SlashVV want_VV (SlashV2VNP beg_V2V (UsePron i_Pron) (SlashV2a buy_V2))) (UsePron it_Pron)))
