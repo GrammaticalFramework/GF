@@ -151,3 +151,7 @@ l PredVP (UsePron we_Pron) (AdVVP always_AdV (UseV sleep_V))
 l PredVP (UsePron we_Pron) (UseComp (CompAP (PositA small_A)))
 l PredVP (UsePron i_Pron) (UseComp (CompNP (DetArtSg IndefArt (UseN man_N))))
 l PredVP (UsePron i_Pron) (UseComp (CompAdv here_Adv))
+l PhrUtt NoPConj (UttImpSg  PPos (ImpVP (ComplSlash (SlashV2A paint_V2A (ConjAP both7and_DConj (BaseAP (ComparA small_A (DetArtSg DefArt (UseN sun_N))) (ComparA big_A (DetArtSg DefArt (UseN moon_N)))))) (DetArtSg DefArt (UseN earth_N))))) NoVoc
+l PhrUtt NoPConj (ImpPl1 (ComplVS hope_VS (ConjS either7or_DConj (BaseS (UseCl TPres ASimul PPos (PredVP (DetArtSg DefArt (ComplN2 father_N2 (DetArtSg DefArt (UseN baby_N)))) (UseV run_V))) (UseCl TPres ASimul PPos (PredVP (DetArtSg DefArt (UseN2 (Use2N3 distance_N3))) (UseComp (CompAP (PositA small_A))))))))) NoVoc
+l PhrUtt NoPConj (UttS (UseCl TPres ASimul PPos (PredVP (DetCN every_Det (UseN baby_N)) (UseComp (CompNP (ConjNP either7or_DConj (BaseNP (DetArtSg IndefArt (UseN boy_N)) (DetArtSg IndefArt (UseN girl_N))))))))) NoVoc
+l PhrUtt NoPConj (UttAdv (ConjAdv either7or_DConj (ConsAdv here7from_Adv (BaseAdv there_Adv everywhere_Adv)))) NoVoc
