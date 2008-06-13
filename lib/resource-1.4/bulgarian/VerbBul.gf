@@ -36,8 +36,6 @@ concrete VerbBul of Verb = CatBul ** open Prelude, ResBul, ParadigmsBul in {
       insertObj (\\a => ap.s ! aform a.gn Indef (RObj Acc)) 
         (predV v) ** {c2 = v.c2} ;  ---- FIXME: agreement with obj.a 
 
-    ---- AR guessed these five, copying from Compl(VS,VQ,VV)
-
     -- test: I saw a boy to whom she said that they are here
     SlashV2S v s  = insertObj (\\_ => "," ++ "че" ++ s.s) (predV v) ** {c2 = v.c2} ;
 
@@ -48,7 +46,7 @@ concrete VerbBul of Verb = CatBul ** open Prelude, ResBul, ParadigmsBul in {
     SlashV2V vv vp =
       insertObj (\\agr => vp.ad ! False ++ "да" ++ vp.s ! Pres ! Simul ! Pos ! agr ! False ! Perf)
                 (predV vv)
-         ** {c2 = vv.c2} ;  ---- FIXME: agreement with obj.a 
+         ** {c2 = vv.c2} ;
 
     -- test: I saw a car whom she wanted to buy
     SlashVV vv slash = {
@@ -64,20 +62,17 @@ concrete VerbBul of Verb = CatBul ** open Prelude, ResBul, ParadigmsBul in {
       } ** {c2 = slash.c2} ;
 
     -- test: I saw a car whom she begged me to buy
-    SlashV2VNP vv np slash = 
-      insertObj (\\_ => vv.c2.s ++ np.s ! RObj vv.c2.c) {
+    SlashV2VNP vv np slash = {
       s   = \\t,a,p,agr,q,asp => 
         let 
           vv_verb = (predV vv).s ! t ! a ! p ! agr ! q ! asp ;
-          slash_verb = slash.s ! Pres ! Simul ! Pos ! agr ! False ! Perf ;
-        in vv_verb ++ slash.ad ! False ++ "да" ++ slash_verb ;
+          slash_verb = slash.s ! Pres ! Simul ! Pos ! np.a ! False ! Perf ;
+        in vv_verb ++ vv.c2.s ++ np.s ! RObj vv.c2.c ++ slash.ad ! False ++ "да" ++ slash_verb ;
       imp = slash.imp ;
       ad = \\_ => [] ;
       s2 = slash.s2 ;
       subjRole = slash.subjRole
       } ** {c2 = slash.c2} ;
-
----- END guesses by AR
 
     ComplSlash slash np = {
       s   = slash.s ;
