@@ -157,3 +157,4 @@ l PhrUtt NoPConj (ImpPl1 (ComplVS hope_VS (ConjS either7or_DConj (BaseS (UseCl T
 l PhrUtt NoPConj (UttS (UseCl TPres ASimul PPos (PredVP (DetCN every_Det (UseN baby_N)) (UseComp (CompNP (ConjNP either7or_DConj (BaseNP (DetArtSg IndefArt (UseN boy_N)) (DetArtSg IndefArt (UseN girl_N))))))))) NoVoc
 l PhrUtt NoPConj (UttAdv (ConjAdv either7or_DConj (ConsAdv here7from_Adv (BaseAdv there_Adv everywhere_Adv)))) NoVoc
 l PhrUtt NoPConj (UttVP (PassV2 know_V2)) NoVoc
+l RelCN (UseN bird_N) (UseRCl TPres ASimul PPos (RelSlash IdRP (SlashVP (UsePron i_Pron) (SlashVV want_VV (SlashV2A paint_V2A (PositA red_A))))))
