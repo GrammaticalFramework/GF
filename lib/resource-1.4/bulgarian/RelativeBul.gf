@@ -23,7 +23,7 @@ concrete RelativeBul of Relative = CatBul ** open ResBul in {
       } ;
 
     FunRP p np rp = {
-      s = \\gn => np.s ! RObj Acc ++ p.s ++ rp.s ! gn ;
+      s = \\gn => np.s ! RObj Acc ++ p.s ++ (case p.c of {Acc => []; Dat => "на"}) ++ rp.s ! gn ;
       } ;
 
     IdRP = {
