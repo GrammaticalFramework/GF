@@ -16,20 +16,23 @@ concrete SentenceBul of Sentence = CatBul ** open Prelude, ResBul in {
         verb ++ compl
     } ;
 
-    SlashVP np vp = 
-      mkClause (np.s ! RSubj) np.a vp ** {c2 = vp.c2} ;
-
-    AdvSlash slash adv = {
-      s  = \\t,a,b,o => slash.s ! t ! a ! b ! o ++ adv.s ;
+    SlashVP np slash =  {
+      s = \\agr => (mkClSlash (np.s ! RSubj) np.a agr slash).s ;
       c2 = slash.c2
     } ;
 
-    SlashPrep cl prep = cl ** {c2 = prep} ;
+    AdvSlash slash adv = {
+      s  = \\agr,t,a,b,o => slash.s ! agr ! t ! a ! b ! o ++ adv.s ;
+      c2 = slash.c2
+    } ;
+
+    SlashPrep cl prep = {s = \\_ => cl.s; c2 = prep} ;
     
-    SlashVS np vs slash = 
-      mkClause (np.s ! RSubj) np.a 
-        (insertObj (\\_ => "че" ++ slash.s) (predV vs))  **
-      {c2 = slash.c2} ;
+    SlashVS np vs slash = {
+      s = \\agr => (mkClause (np.s ! RSubj) np.a 
+                             (insertObj (\\_ => "че" ++ slash.s ! agr) (predV vs))).s ;
+      c2 = slash.c2
+    } ;
 
     EmbedS  s  = {s = "," ++ "че" ++ s.s} ;
     EmbedQS qs = {s = qs.s ! QIndir} ;
@@ -46,7 +49,7 @@ concrete SentenceBul of Sentence = CatBul ** open Prelude, ResBul in {
       role = cl.role
     } ;
     UseSlash t a p cl = {
-      s = t.s ++ a.s ++ p.s ++ cl.s ! t.t ! a.a ! p.p ! Main ;
+      s = \\agr => t.s ++ a.s ++ p.s ++ cl.s ! agr ! t.t ! a.a ! p.p ! Main ;
       c2 = cl.c2
     } ;
 

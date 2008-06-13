@@ -25,13 +25,13 @@ concrete CatBul of Cat = open ResBul, Prelude, (R = ParamX) in {
     QS = {s : QForm => Str} ;
     RS = {s : GenNum => Str} ;
     SC  = {s : Str} ;
-    SSlash = {s : Str ; c2 : Preposition} ;
+    SSlash = {s : Agr => Str ; c2 : Preposition} ;
 
 -- Sentence
 
     Cl = {s : ResBul.Tense => Anteriority => Polarity => Order => Str} ;
     ClSlash = {
-      s : ResBul.Tense => Anteriority => Polarity => Order => Str ;
+      s : Agr => ResBul.Tense => Anteriority => Polarity => Order => Str ;
       c2 : Preposition
       } ;
     Imp = {s : Polarity => GenNum => Str} ;

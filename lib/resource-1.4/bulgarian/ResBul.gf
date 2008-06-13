@@ -412,20 +412,23 @@ resource ResBul = ParamX ** open Prelude in {
     s : Tense => Anteriority => Polarity => Order => Str
   } ;
 
-  mkClause : Str -> Agr -> VP -> Clause =
-    \subj,agr,vp -> {
+  mkClSlash : Str -> Agr -> Agr -> VP -> Clause =
+    \subj,agr_vp,agr_compl,vp -> {
       s = \\t,a,p,o => 
         let 
           verb  : Bool => Str
-                = \\q => vp.ad ! q ++ vp.s ! t ! a ! p ! agr ! q ! Perf ;
-          compl = vp.s2 ! agr
+                = \\q => vp.ad ! q ++ vp.s ! t ! a ! p ! agr_vp ! q ! Perf ;
+          compl = vp.s2 ! agr_compl
         in case o of {
              Main  => subj ++ verb ! False ++ compl ;
              Inv   => verb ! False ++ compl ++ subj ;
              Quest => subj ++ verb ! True ++ compl
            }
     } ;
-      
+
+  mkClause : Str -> Agr -> VP -> Clause =
+    \subj,agr,vp -> mkClSlash subj agr agr vp ;
+
 -- For $Numeral$.
 
     mkDigit : Str -> Str -> Str -> Str -> Str -> {s : DForm => CardOrd => Str} =
