@@ -55,10 +55,14 @@ concrete VerbBul of Verb = CatBul ** open Prelude, ResBul, ParadigmsBul in {
           vv_verb = (predV vv).s ! t ! a ! p ! agr ! q ! asp ;
           slash_verb = slash.s ! Pres ! Simul ! Pos ! agr ! False ! Perf ;
         in vv_verb ++ slash.ad ! False ++ "да" ++ slash_verb ;
-      imp = slash.imp ;
+      imp = \\p,n,asp =>
+        let 
+          vv_verb = (predV vv).imp ! p ! n ! asp ;
+          slash_verb = slash.s ! Pres ! Simul ! Pos ! {gn = gennum DMasc n; p = P2} ! False ! Perf ;
+        in vv_verb ++ slash.ad ! False ++ "да" ++ slash_verb ;
       ad = \\_ => [] ;
       s2 = slash.s2 ;
-      subjRole = slash.subjRole
+      subjRole = (predV vv).subjRole
       } ** {c2 = slash.c2} ;
 
     -- test: I saw a car whom she begged me to buy
@@ -68,10 +72,14 @@ concrete VerbBul of Verb = CatBul ** open Prelude, ResBul, ParadigmsBul in {
           vv_verb = (predV vv).s ! t ! a ! p ! agr ! q ! asp ;
           slash_verb = slash.s ! Pres ! Simul ! Pos ! np.a ! False ! Perf ;
         in vv_verb ++ vv.c2.s ++ np.s ! RObj vv.c2.c ++ slash.ad ! False ++ "да" ++ slash_verb ;
-      imp = slash.imp ;
+      imp = \\p,n,asp =>
+        let 
+          vv_verb = (predV vv).imp ! p ! n ! asp ;
+          slash_verb = slash.s ! Pres ! Simul ! Pos ! np.a ! False ! Perf ;
+        in vv_verb ++ vv.c2.s ++ np.s ! RObj vv.c2.c ++ slash.ad ! False ++ "да" ++ slash_verb ;
       ad = \\_ => [] ;
       s2 = slash.s2 ;
-      subjRole = slash.subjRole
+      subjRole = (predV vv).subjRole
       } ** {c2 = slash.c2} ;
 
     ComplSlash slash np = {
