@@ -104,7 +104,7 @@ lin
   know_V2 = dirV2 (stateV (mkV162 "зная")) ;
   lake_N = mkN054 "езеро" ;
   lamp_N = mkN041 "лампа" ;
-  learn_V2 = dirV2 (stateV (mkV176 "уча")) ;
+  learn_V2 = dirV2 (actionV (mkV176 "уча") (mkV176 "науча")) ;
   leather_N = mkN041 "кожа" ;
   leave_V2 = dirV2 (actionV (mkV187 "оставям") (mkV173 "оставя")) ;
   like_V2 = dirV2 (actionV (mkV186 "харесвам") (mkV186 "харесам")) ;
