@@ -18,7 +18,7 @@ concrete RelativeBul of Relative = CatBul ** open ResBul in {
       } ;
 
     RelSlash rp slash = {
-      s = \\t,a,p,gn => slash.c2.s ++ (rp.s ! gn) ++ slash.s ! t ! a ! p ! Main ;
+      s = \\t,a,p,gn => slash.c2.s ++ rp.s ! gn ++ slash.s ! (agrP3 gn) ! t ! a ! p ! Main ;
       role = RObj Acc
       } ;
 
