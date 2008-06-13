@@ -291,14 +291,6 @@ resource ResBul = ParamX ** open Prelude in {
       subjRole = vp.subjRole
       } ;
 
-    insertObjPre : (Agr => Str) -> VP -> VP = \obj,vp -> {
-      s = vp.s ;
-      imp = vp.imp ;
-      ad  = vp.ad ;
-      s2 = \\a => obj ! a ++ vp.s2 ! a ;
-      subjRole = vp.subjRole
-      } ;
-
     auxBe : VTable =
       table {
         VPres      Sg P1  => "съм" ; 
