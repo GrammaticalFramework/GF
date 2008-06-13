@@ -578,4 +578,10 @@ resource ResBul = ParamX ** open Prelude in {
                GSg Neut => "това" ;
                GPl      => "тези"
              } ;
+
+    linCoord : Bool => Str ;
+    linCoord = table {True => "и"; False=>"или"} ;
+    
+    linCoordSep : Str -> Bool => Bool => Str ;
+    linCoordSep s = table {True => linCoord; False=> \\_ => s} ;
 }

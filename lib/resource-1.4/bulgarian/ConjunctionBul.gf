@@ -4,46 +4,51 @@ concrete ConjunctionBul of Conjunction =
   flags optimize=all_subs ;
 
   lin
+    ConjS conj ss = {
+      s = (linCoordSep [])!conj.distr!conj.conj++ss.s!conj.distr!conj.conj;
+      } ;
 
-    ConjS = conjunctDistrSS ;
+    ConjAdv conj ss = {
+      s = (linCoordSep [])!conj.distr!conj.conj++ss.s!conj.distr!conj.conj;
+      } ;
 
-    ConjAdv = conjunctDistrSS ;
-
-    ConjNP conj ss = conjunctDistrTable Role conj ss ** {
+    ConjNP conj ss = {
+      s = \\role => (linCoordSep [])!conj.distr!conj.conj++ss.s!conj.distr!conj.conj!role;
       a = {gn = conjGenNum (gennum DMasc conj.n) ss.a.gn; p = ss.a.p}
       } ;
 
     ConjAP conj ss = {
-      s   = \\aform => conj.s1++ ss.s1.s ! aform ++ conj.s2 ++ ss.s2.s ! aform;
-      adv = conj.s1++ ss.s1.adv ++ conj.s2 ++ ss.s2.adv;
+      s     = \\aform => (linCoordSep [])!conj.distr!conj.conj++ss.s!conj.distr!conj.conj!aform;
+      adv   =            (linCoordSep [])!conj.distr!conj.conj++ss.adv!conj.distr!conj.conj;
       isPre = ss.isPre
       } ;
 
 -- These fun's are generated from the list cat's.
+    BaseS x y  = {s  = \\d,t=>x.s++linCoord!t++ y.s} ; 
+    ConsS x xs = {s  = \\d,t=>x.s++(linCoordSep comma)!d!t++xs.s!d!t} ;
 
-    BaseS = twoSS ;
-    ConsS = consrSS comma ;
+    BaseAdv x y  = {s  = \\d,t=>x.s++linCoord!t++ y.s} ; 
+    ConsAdv x xs = {s  = \\d,t=>x.s++(linCoordSep comma)!d!t++xs.s!d!t} ;
 
-    BaseAdv = twoSS ;
-    ConsAdv = consrSS comma ;
-
-    BaseNP x y = twoTable Role x y ** {a = conjAgr x.a y.a} ;
-    ConsNP xs x = consrTable Role comma xs x ** {a = conjAgr xs.a x.a} ;
+    BaseNP x y =
+      {s = \\d,t,role=>x.s!role++linCoord!t++y.s!role; 
+       a = conjAgr x.a y.a} ;
+    ConsNP x xs =
+      {s = \\d,t,role=>x.s!role++(linCoordSep comma)!d!t++xs.s!d!t!role; 
+       a = conjAgr xs.a x.a} ;
 
     BaseAP x y =
-      {s1 = {s=x.s; adv=x.adv};
-       s2 = {s=y.s; adv=y.adv};
+      {s  = \\d,t,aform=>x.s!aform++linCoord!t++y.s!aform; 
+       adv= \\d,t      =>x.adv    ++linCoord!t++y.adv;
        isPre = andB x.isPre y.isPre} ; 
-    
     ConsAP x xs =
-      {s1    = {s   = \\aform => x.s ! aform ++ comma ++ xs.s1.s ! aform;
-                adv = x.adv ++ comma ++ xs.s1.adv};
-       s2    = xs.s2;
+      {s  = \\d,t,aform=>x.s!aform++(linCoordSep comma)!d!t++xs.s!d!t!aform; 
+       adv= \\d,t      =>x.adv    ++(linCoordSep comma)!d!t++xs.adv!d!t;
        isPre = andB x.isPre xs.isPre} ; 
 
   lincat
-    [S] = {s1,s2 : Str} ;
-    [Adv] = {s1,s2 : Str} ;
-    [NP] = {s1,s2 : Role => Str ; a : Agr} ;
-    [AP] = {s1,s2 : {s : AForm => Str; adv : Str}; isPre : Bool} ;
+    [S] = {s : Bool => Bool => Str} ;
+    [Adv] = {s : Bool => Bool => Str} ;
+    [NP] = {s : Bool => Bool => Role  => Str; a : Agr} ;
+    [AP] = {s : Bool => Bool => AForm => Str; adv : Bool => Bool => Str; isPre : Bool} ;
 }
