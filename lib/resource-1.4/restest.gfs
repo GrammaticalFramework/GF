@@ -156,3 +156,4 @@ l PhrUtt NoPConj (UttImpSg  PPos (ImpVP (ComplSlash (SlashV2A paint_V2A (ConjAP 
 l PhrUtt NoPConj (ImpPl1 (ComplVS hope_VS (ConjS either7or_DConj (BaseS (UseCl TPres ASimul PPos (PredVP (DetArtSg DefArt (ComplN2 father_N2 (DetArtSg DefArt (UseN baby_N)))) (UseV run_V))) (UseCl TPres ASimul PPos (PredVP (DetArtSg DefArt (UseN2 (Use2N3 distance_N3))) (UseComp (CompAP (PositA small_A))))))))) NoVoc
 l PhrUtt NoPConj (UttS (UseCl TPres ASimul PPos (PredVP (DetCN every_Det (UseN baby_N)) (UseComp (CompNP (ConjNP either7or_DConj (BaseNP (DetArtSg IndefArt (UseN boy_N)) (DetArtSg IndefArt (UseN girl_N))))))))) NoVoc
 l PhrUtt NoPConj (UttAdv (ConjAdv either7or_DConj (ConsAdv here7from_Adv (BaseAdv there_Adv everywhere_Adv)))) NoVoc
+l PhrUtt NoPConj (UttVP (PassV2 know_V2)) NoVoc
