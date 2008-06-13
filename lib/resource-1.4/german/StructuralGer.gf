@@ -111,6 +111,7 @@ concrete StructuralGer of Structural = CatGer **
   when_IAdv = ss "wann" ;
   when_Subj = ss "wenn" ;
   where_IAdv = ss "wo" ;
+  which_IQuant = {s = \\n => (detLikeAdj n "welch").s} ;
 
 ---b  whichPl_IDet = detLikeAdj Pl "welch" ;
 ---b  whichSg_IDet = detLikeAdj Sg "welch" ;
