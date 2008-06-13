@@ -19,7 +19,7 @@ concrete PhraseBul of Phrase = CatBul ** open Prelude, ResBul in {
     UttAdv adv = adv ;
 
     NoPConj = {s = []} ;
-    PConjConj conj = {s = conj.s2} ; ---- AR
+    PConjConj conj = {s = conj.s ++ linCoord!conj.conj} ;
 
     NoVoc = {s = []} ;
     VocNP np = {s = "," ++ np.s ! RVoc} ;
