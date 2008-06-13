@@ -101,7 +101,14 @@ lin
   industry_N = mkN047 "индустрия" ;
   iron_N = mkN057 "желязо" ;
   king_N = mkN035a "цар" ;
-  know_V2 = dirV2 (stateV (mkV162 "зная")) ;
+  know_V2 = dirV2 {
+              s      = \\_,vform => case vform of {
+                                      VPassive aform => (mkA079 "известен").s ! aform ;
+                                      _              => mkV162 "зная" ! vform
+                                    } ;
+              vtype  = VNormal ;
+              lock_V = <>
+            } ;
   lake_N = mkN054 "езеро" ;
   lamp_N = mkN041 "лампа" ;
   learn_V2 = dirV2 (actionV (mkV176 "уча") (mkV176 "науча")) ;
