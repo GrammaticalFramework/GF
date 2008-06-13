@@ -62,8 +62,9 @@ concrete IdiomBul of Idiom = CatBul ** open Prelude, ParadigmsBul, ResBul in {
       subjRole = vp.subjRole
       } ;
 
-    ImpPl1 vp = {s = let verbs = vp.s ! Pres ! Simul ! Pos ! {gn = GPl ; p = P1} ! False ! Imperf ;
-                     in "нека" ++ vp.s2 ! {gn = GPl ; p = P1}
+    ImpPl1 vp = {s = "нека" ++
+                     vp.s ! Pres ! Simul ! Pos ! {gn = GPl ; p = P1} ! False ! Imperf ++
+                     vp.s2 ! {gn = GPl ; p = P1}
                 } ;
 }
 
