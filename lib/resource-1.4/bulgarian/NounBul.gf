@@ -66,7 +66,7 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
       } ;
 
     DetQuant quant num = {
-      s = \\g,c => quant.s ! aform (gennum g num.n) Def c ++
+      s = \\g,c => quant.s ! aform (gennum g num.n) (case c of {RVocative=>Indef; _=>Def}) c ++
                    num.s ! dgenderSpecies g Indef c ;                   
       n = num.n ;
       countable = num.nonEmpty ;
@@ -74,7 +74,7 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
       } ;
 
     DetQuantOrd = \quant, num, ord -> {
-      s = \\g,c => quant.s ! aform (gennum g num.n) Def c ++
+      s = \\g,c => quant.s ! aform (gennum g num.n) (case c of {RVocative=>Indef; _=>Def}) c ++
                    num.s ! dgenderSpecies g Indef c ++
                    ord.s ! aform (gennum g num.n) Indef c ; 
       n = num.n ;
