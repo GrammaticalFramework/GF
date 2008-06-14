@@ -41,18 +41,21 @@ loop opts gfenv0 = do
   setCompletionFunction (Just (wordCompletion (commandenv gfenv0)))
   s <- fetchCommand (prompt env)
   let gfenv = gfenv0 {history = s : history gfenv0}
-  let loopNewCPU gfenv' = do cpu' <- getCPUTime
-                             putStrLnFlush (show ((cpu' - cputime gfenv') `div` 1000000000) ++ " msec")
-                             loop opts $ gfenv' {cputime = cpu'}
+  let loopNewCPU gfenv' = do 
+        cpu' <- getCPUTime
+        putStrLnFlush (show ((cpu' - cputime gfenv') `div` 1000000000) ++ " msec")
+        loop opts $ gfenv' {cputime = cpu'}
   case words s of
   -- special commands, requiring source grammar in env
     "!":ws -> do
        system $ unwords ws
        loopNewCPU gfenv
     "cc":ws -> do
-       -- FIXME: add options parsing for cc arguments
-       let (style,term) = (TermPrintDefault, ws)
-       case pTerm (unwords term) >>= checkTerm sgr >>= computeTerm sgr of   ---- make pipable
+       let 
+         (style,term) = case ws of 
+           ('-':w):ws2 -> (pTermPrintStyle w, ws2)
+           _ -> (TermPrintDefault, ws)
+       case pTerm (unwords term) >>= checkTerm sgr >>= computeTerm sgr of   ---- pipe!
          Ok  x -> putStrLn (showTerm style x)
          Bad s -> putStrLn s
        loopNewCPU gfenv
@@ -67,6 +70,9 @@ loop opts gfenv0 = do
     "e":_ -> loopNewCPU $ gfenv {
        commandenv=env{multigrammar=emptyPGF}, sourcegrammar = emptyGrammar
        }
+
+    ---- "eh":file:_ ->
+
     "ph":_ -> mapM_ putStrLn (reverse (history gfenv0)) >> loopNewCPU gfenv
     "q":_  -> putStrLn "See you." >> return gfenv
 
