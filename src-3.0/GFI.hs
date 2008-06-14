@@ -134,8 +134,8 @@ wordCompletion cmdEnv line prefix p =
               Left  _      -> ret ' ' []
     CmplOpt (Just (Command n _ _)) pref
       -> case Map.lookup n (commands cmdEnv) of
-           Just inf -> do let flg_compls = ['-':flg | flg <- flags   inf, isPrefixOf pref flg]
-                              opt_compls = ['-':opt | opt <- options inf, isPrefixOf pref opt]
+           Just inf -> do let flg_compls = ['-':flg | (flg,_) <- flags   inf, isPrefixOf pref flg]
+                              opt_compls = ['-':opt | (opt,_) <- options inf, isPrefixOf pref opt]
                           ret (if null flg_compls then ' ' else '=')
                               (flg_compls++opt_compls)
            Nothing  -> ret ' ' []

@@ -23,6 +23,8 @@ import PGF.ExprSyntax (readExp)
 import GF.Command.Abstract
 import GF.Text.Lexing
 
+import GF.Data.Operations
+
 import Data.Maybe
 import qualified Data.Map as Map
 
@@ -31,20 +33,24 @@ type CommandOutput = ([Exp],String) ---- errors, etc
 data CommandInfo = CommandInfo {
   exec     :: [Option] -> [Exp] -> IO CommandOutput,
   synopsis :: String,
+  syntax   :: String,
   explanation :: String,
   longname :: String,
-  options  :: [String],
-  flags    :: [String]
+  options  :: [(String,String)],
+  flags    :: [(String,String)],
+  examples :: [String]
   }
 
 emptyCommandInfo :: CommandInfo
 emptyCommandInfo = CommandInfo {
   exec = \_ ts -> return (ts,[]), ----
   synopsis = "synopsis",
+  syntax = "syntax",
   explanation = "explanation",
   longname = "longname",
   options = [],
-  flags = []
+  flags = [],
+  examples = []
   }
 
 lookCommand :: String -> Map.Map String CommandInfo -> Maybe CommandInfo
@@ -59,9 +65,11 @@ commandHelp :: Bool -> (String,CommandInfo) -> String
 commandHelp full (co,info) = unlines $ [
   co ++ ", " ++ longname info,
   synopsis info] ++ if full then [
+  "syntax:" ++++ "  " ++ syntax info,
   explanation info,
-  "options: " ++ unwords (options info),
-  "flags: " ++ unwords (flags info)
+  "options:" ++++ unlines [" -" ++ o ++ "\t" ++ e | (o,e) <- options info],
+  "flags:" ++++ unlines [" -" ++ o ++ "\t" ++ e | (o,e) <- flags info],
+  "examples:" ++++ unlines ["  " ++ s | s <- examples info]
   ] else []
 
 -- this list must no more be kept sorted by the command name
@@ -74,7 +82,7 @@ allCommands pgf = Map.fromList [
          let file = valIdOpts "file" "_gftmp" opts
          appendFile file (toString arg)
          return void,
-     flags = ["file"]
+     flags = [("file","name of the file")]
     }),
   ("cc", emptyCommandInfo {
      longname = "compute_concrete",
@@ -90,15 +98,25 @@ allCommands pgf = Map.fromList [
      }),
   ("e",  emptyCommandInfo {
      longname = "empty",
-     synopsis = "Takes away all languages and resets all global flags."
+     synopsis = "empty the environment"
      }),
   ("gr", emptyCommandInfo {
      longname = "generate_random",
-     synopsis = "generates a list of random trees, by default one tree",
-     explanation = "Generates a random Tree of a given category. If a Tree\n"++
-                   "argument is given, the command completes the Tree with values to\n"++
-                   "the metavariables in the tree.",
-     flags = ["cat","number"],
+     synopsis = "generate random trees in the current abstract syntax",
+     syntax = "gr [-cat=CAT] [-number=INT]",
+     examples = [
+       "gr                     -- one tree in the startcat of the current grammar",
+       "gr -cat=NP -number=16  -- 16 trees in the category NP"
+       ],
+     explanation = unlines [
+       "Generates a list of random trees, by default one tree."
+----       "If a tree argument is given, the command completes the Tree with values to",
+----       "the metavariables in the tree."
+       ],
+     flags = [
+       ("cat","generation category"),
+       ("number","number of trees generated")
+       ],
      exec = \opts _ -> do
        ts <- generateRandom pgf (optCat opts)
        return $ fromTrees $ take (optNum opts) ts
@@ -110,7 +128,11 @@ allCommands pgf = Map.fromList [
                    "a small -alts is recommended. If a Tree argument is given, the\n"++
                    "command completes the Tree with values to the metavariables in\n"++
                    "the tree.",
-     flags = ["cat","depth","number"],
+     flags = [
+       ("cat","the generation category"),
+       ("depth","the maximum generation depth"),
+       ("number","the number of trees generated")
+       ],
      exec = \opts _ -> do
        let dp = return $ valIntOpts "depth" 4 opts
        let ts = generateAllDepth pgf (optCat opts) dp
@@ -121,7 +143,9 @@ allCommands pgf = Map.fromList [
      synopsis = "get description of a command, or a the full list of commands",
      explanation = "Displays the paragraph concerning the command from this help file.\n"++
                    "Without argument, shows the first lines of all paragraphs.",
-     options = ["full"],
+     options = [
+       ("full","give full information of the commands")
+       ],
      exec = \opts ts -> return ([], case ts of
        [t] -> let co = showExp t in 
               case lookCommand co (allCommands pgf) of   ---- new map ??!!
@@ -141,7 +165,9 @@ allCommands pgf = Map.fromList [
        "  .gfo   compiled GF source",
        "  .pgf   precompiled grammar in Portable Grammar Format"
        ],
-     options = ["prob", "retain", "gfo", "src", "no-cpu", "cpu", "quiet", "verbose"]
+     options = [ -- ["prob", "retain", "gfo", "src", "no-cpu", "cpu", "quiet", "verbose"]
+       ("retain","retain operations (used for cc command)")
+       ]
      }),
   ("l", emptyCommandInfo {
      longname = "linearize",
@@ -151,8 +177,14 @@ allCommands pgf = Map.fromList [
        "(which is overridden by the -lang flag)."
        ],
      exec = \opts -> return . fromStrings . map (optLin opts),
-     options = ["all","record","table","term", "treebank"],
-     flags = ["lang"]
+     options = [
+       ("all","show all forms and variants"),
+       ("record","show source-code-like record"),
+       ("table","show all forms labelled by parameters"),
+       ("term", "show PGF term"),
+       ("treebank","show the tree and tag linearizations with language names")
+       ],
+     flags = [("lang","the language of linearization")]
      }),
 
   ("ma", emptyCommandInfo {
@@ -176,17 +208,26 @@ allCommands pgf = Map.fromList [
          let cat  = optCat opts
          morphologyQuiz pgf lang cat
          return void,
-     flags = ["lang","cat","number"] 
+     flags = [
+       ("lang","language of the quiz"),
+       ("cat","category of the quiz"),
+       ("number","maximum number of questions")
+       ] 
      }),
 
   ("p", emptyCommandInfo {
      longname = "parse",
      synopsis = "parse a string to abstract syntax expression",
-     explanation = "Shows all trees (expressions) returned for String by the actual\n"++
-                   "grammar (overridden by the -lang flag), in the category S (overridden\n"++
-                   "by the -cat flag).",
+     explanation = unlines [
+       "Shows all trees returned for the string argument by the actual grammar",
+       "(overridden by the -lang flag), in the default category (overridden",
+       "by the -cat flag)."
+       ],
      exec = \opts -> return . fromTrees . concatMap (par opts) . toStrings,
-     flags = ["cat","lang"]
+     flags = [
+       ("cat","target category of parsing"),
+       ("lang","parsing language")
+       ]
      }),
   ("pf", emptyCommandInfo {
      longname = "print_fullform",
@@ -198,7 +239,7 @@ allCommands pgf = Map.fromList [
                return $ fromString $ concatMap 
                   (prFullFormLexicon . buildMorpho pgf . mkCId) $ optLangs opts
      }),
-  ("pg", emptyCommandInfo {
+  ("pg", emptyCommandInfo { -----
      longname = "print_grammar",
      synopsis = "print the actual grammar with the given printer",
      explanation = "Prints the actual grammar (overridden by the -lang=X flag).\n"++
@@ -208,7 +249,7 @@ allCommands pgf = Map.fromList [
                    "generally does not show the grammar in the same format as the\n"++
                    "source.",
      exec  = \opts _ -> return $ fromString $ prGrammar opts,
-     flags = ["cat","lang","printer"]
+     flags = let fs = ["cat","lang","printer"] in zip fs fs 
      }),
   ("ph", emptyCommandInfo {
      longname = "print_history",
@@ -228,7 +269,16 @@ allCommands pgf = Map.fromList [
        "are lexers and unlexers."
        ], 
      exec = \opts -> return . fromString . stringOps opts . toString,
-     options = ["lextext","lexcode","lexmixed","unlextext","unlexcode","unlexmixed"]
+     options = [
+       ("lextext","text-like lexer"),
+       ("lexcode","code-like lexer"),
+       ("lexmixed","mixture of text and code (code between $...$)"), 
+       ("unlextext","text-like unlexer"),
+       ("unlexcode","code-like unlexer"),
+       ("unlexmixed","mixture of text and code (code between $...$)"), 
+       ("unwords","unlexer that puts a single space between tokens (default)"),
+       ("words","lexer that assumes tokens separated by spaces (default)")
+       ]
      }),
   ("q",  emptyCommandInfo {
      longname = "quit",
@@ -244,7 +294,10 @@ allCommands pgf = Map.fromList [
        "input as a term, which can be given e.g. to the linearize command.",
        "The option -lines will result in a list of strings or trees, one by line." 
        ],
-     options = ["lines","term"],
+     options = [
+       ("lines","return the list of lines, instead of the singleton of all contents"),
+       ("term","convert strings into terms")
+       ],
      exec = \opts arg -> do 
        let file = valIdOpts "file" "_gftmp" opts
        s <- readFile file
@@ -255,7 +308,7 @@ allCommands pgf = Map.fromList [
                fromTrees [t | Just t <- [readExp s]] 
          _ | isOpt "lines" opts -> fromStrings $ lines s 
          _ -> fromString s,
-     flags = ["file"] 
+     flags = [("file","the input file name")] 
      }),
   ("tq", emptyCommandInfo {
      longname = "translation_quiz",
@@ -266,7 +319,12 @@ allCommands pgf = Map.fromList [
          let cat  = optCat opts
          translationQuiz pgf from to cat
          return void,
-     flags = ["from","to","cat","number"] 
+     flags = [
+       ("from","translate from this language"),
+       ("to","translate to this language"),
+       ("cat","translate in this category"),
+       ("number","the maximum number of questions")
+       ] 
      }),
   ("wf", emptyCommandInfo {
      longname = "write_file",
@@ -275,7 +333,7 @@ allCommands pgf = Map.fromList [
          let file = valIdOpts "file" "_gftmp" opts
          writeFile file (toString arg)
          return void,
-     flags = ["file"] 
+     flags = [("file","the output filename")] 
      })
   ]
  where
