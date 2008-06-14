@@ -114,8 +114,7 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
       } ;
 
     PossPron p = {
-      s = p.gen ;
-      spec = Indef
+      s = p.gen
       } ;
 
     NumSg = {s = \\_ => []; n = Sg; nonEmpty = False} ;
