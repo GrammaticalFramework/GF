@@ -90,7 +90,7 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
       spec=Indef
       } ;
 
-    DetArtOrd = \art, num, ord -> {
+    DetArtOrd art num ord = {
       s = \\g,c => art.s ++
                    num.s ! dgenderSpecies g art.spec c ++
                    ord.s ! aform (gennum g num.n) (case num.nonEmpty of {False => art.spec; _ => Indef}) c ; 
