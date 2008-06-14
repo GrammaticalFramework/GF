@@ -86,20 +86,42 @@ allCommands pgf = Map.fromList [
     }),
   ("cc", emptyCommandInfo {
      longname = "compute_concrete",
-     synopsis = "computes concrete syntax term using the source grammar",
-     explanation = "Compute a term by concrete syntax definitions. Uses the topmost\n"++
-                   "resource module (the last in listing by command po) to resolve\n"++
-                   "constant names.\n"++
-                   "N.B. You need the flag -retain when importing the grammar, if you want\n"++
-                   "the oper definitions to be retained after compilation; otherwise this\n"++
-                   "command does not expand oper constants.\n"++
-                   "N.B.' The resulting Term is not a term in the sense of abstract syntax,\n"++
-                   "and hence not a valid input to a Tree-demanding command."
+     syntax = "cc (-all | -table | -unqual)? TERM",
+     synopsis = "computes concrete syntax term using a source grammar",
+     explanation = unlines [
+       "Compute TERM by concrete syntax definitions. Uses the topmost",
+       "module (the last one imported) to resolve constant names.",
+       "N.B.1 You need the flag -retain when importing the grammar, if you want",
+       "the definitions to be retained after compilation.",
+       "N.B.2 The resulting term is not a tree in the sense of abstract syntax",
+       "and hence not a valid input to a Tree-expecting command."
+       ],
+     options = [
+       ("all","pick all strings (forms and variants) from records and tables"),
+       ("table","show all strings labelled by parameters"),
+       ("unqual","hide qualifying module names")
+       ]
      }),
   ("e",  emptyCommandInfo {
      longname = "empty",
      synopsis = "empty the environment"
      }),
+{- ----
+  ("eh", emptyCommandInfo {
+     longname = "execute_history",
+     synopsis = "execute commands in a file",
+     explanation = unlines [
+       "Runs the sequence of GF commands from the lines of a file.",
+       "One way to produce such a file is the ph command."
+       ],
+     flags = [
+       ("file","the script file")
+       ],
+     examples = [
+      "eh -file=foo.gfs  -- run the script in file foo.gfs"
+      ]
+     }),
+-}
   ("gr", emptyCommandInfo {
      longname = "generate_random",
      synopsis = "generate random trees in the current abstract syntax",
@@ -124,25 +146,30 @@ allCommands pgf = Map.fromList [
   ("gt", emptyCommandInfo {
      longname = "generate_trees",
      synopsis = "generates a list of trees, by default exhaustive",
-     explanation = "Generates all trees up to a given depth. If the depth is large,\n"++
-                   "a small -alts is recommended. If a Tree argument is given, the\n"++
-                   "command completes the Tree with values to the metavariables in\n"++
-                   "the tree.",
+     explanation = unlines [
+       "Generates all trees of a given category, with increasing depth.",
+       "By default, the depth is inlimited, but this can be changed by a flag."
+       ---- "If a Tree argument is given, thecommand completes the Tree with values",
+       ---- "to the metavariables in the tree."
+       ],
      flags = [
        ("cat","the generation category"),
        ("depth","the maximum generation depth"),
        ("number","the number of trees generated")
        ],
      exec = \opts _ -> do
-       let dp = return $ valIntOpts "depth" 4 opts
+       let dp = return $ valIntOpts "depth" 999999 opts
        let ts = generateAllDepth pgf (optCat opts) dp
        return $ fromTrees $ take (optNumInf opts) ts
      }),
   ("h", emptyCommandInfo {
      longname = "help",
+     syntax = "h (-full)? COMMAND?",
      synopsis = "get description of a command, or a the full list of commands",
-     explanation = "Displays the paragraph concerning the command from this help file.\n"++
-                   "Without argument, shows the first lines of all paragraphs.",
+     explanation = unlines [
+       "Displays information concerning the COMMAND.",
+       "Without argument, shows the synopsis of all commands."
+       ],
      options = [
        ("full","give full information of the commands")
        ],
@@ -253,11 +280,15 @@ allCommands pgf = Map.fromList [
      }),
   ("ph", emptyCommandInfo {
      longname = "print_history",
-     synopsis = "print readline history",
-     explanation = "Prints the commands issued during the GF session.\n"++
-                   "The result is readable by the eh command.\n"++
-                   "example:\n"++
-                   "  ph | wf foo.hist  -- save the history into a file"
+     synopsis = "print command history",
+     explanation = unlines [
+       "Prints the commands issued during the GF session.",
+       "The result is readable by the eh command.", 
+       "The result can be used as a script when starting GF."
+       ],
+     examples = [
+      "ph | wf -file=foo.gfs  -- save the history into a file"
+      ]
      }),
   ("ps", emptyCommandInfo {
      longname = "put_string",

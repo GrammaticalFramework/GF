@@ -6,7 +6,8 @@ module GF.Grammar.API (
   checkTerm,
   computeTerm,
   showTerm,
-  TermPrintStyle(..)
+  TermPrintStyle(..),
+  pTermPrintStyle
   ) where
 
 import GF.Source.ParGF
@@ -64,4 +65,11 @@ showTerm style t =
 
 data TermPrintStyle = TermPrintTable | TermPrintAll | TermPrintUnqual | TermPrintDefault
   deriving (Show,Eq)
+
+pTermPrintStyle s = case s of
+  "table"  -> TermPrintTable
+  "all"    -> TermPrintAll
+  "unqual" -> TermPrintUnqual
+  _        -> TermPrintDefault
+
 
