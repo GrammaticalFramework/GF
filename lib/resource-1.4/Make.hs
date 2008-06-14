@@ -67,7 +67,7 @@ make xx = do
 gfc pres path file = do
   let preproc = if pres then " -preproc=./mkPresent " else ""
   putStrLn $ "compiling " ++ file
-  system $ "gfc -s " ++ preproc ++ path ++ file
+  system $ "gfc -s -src " ++ preproc ++ path ++ file
 
 gf comm file = do
   putStrLn $ "reading " ++ file
