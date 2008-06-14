@@ -7,14 +7,14 @@ concrete DemoEng of Demo =
   AdjectiveEng,
   AdverbEng,
   NumeralEng,
-  SentenceEng,
-  QuestionEng,
-  RelativeEng,
-  ConjunctionEng,
-  PhraseEng,
-  TextX,
+----  SentenceEng,
+----  QuestionEng,
+----  RelativeEng,
+----  ConjunctionEng,
+----  PhraseEng,
+----  TextX,
+----  IdiomEng,
   StructuralEng,
-  IdiomEng,
   LexiconEng
   ** {
 
