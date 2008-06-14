@@ -3,6 +3,7 @@ module PGF.ShowLinearize (
   tableLinearize,
   recordLinearize,
   termLinearize,
+  tabularLinearize,
   allLinearize
   ) where
 

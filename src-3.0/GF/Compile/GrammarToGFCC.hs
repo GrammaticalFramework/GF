@@ -279,7 +279,7 @@ canon2canon abs =
         (c, M.ModMod $ M.replaceJudgements mo $ mapTree f2 (M.jments mo))
       _ -> (c,m)    
   j2j cg (f,j) = case j of
-      CncFun x (Yes tr) z -> (f,CncFun x (Yes (trace ("+ " ++ prt f) (t2t tr))) z)
+      CncFun x (Yes tr) z -> (f,CncFun x (Yes ({-trace ("+ " ++ prt f)-} (t2t tr))) z)
       CncCat (Yes ty) (Yes x) y -> (f,CncCat (Yes (ty2ty ty)) (Yes (t2t x)) y)
       _ -> (f,j)
    where

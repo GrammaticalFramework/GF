@@ -15,6 +15,7 @@ import PGF.ShowLinearize
 import PGF.Macros
 import PGF.Data ----
 import PGF.Morphology
+import PGF.Quiz
 import GF.Compile.Export
 import GF.Infra.UseIO
 import GF.Data.ErrM ----
@@ -167,6 +168,17 @@ allCommands pgf = Map.fromList [
                concatMap words . toStrings
      }),
 
+  ("mq", emptyCommandInfo {
+     longname = "morpho_quiz",
+     synopsis = "start a morphology quiz",
+     exec = \opts _ -> do
+         let lang = optLang opts
+         let cat  = optCat opts
+         morphologyQuiz pgf lang cat
+         return void,
+     flags = ["lang","cat","number"] 
+     }),
+
   ("p", emptyCommandInfo {
      longname = "parse",
      synopsis = "parse a string to abstract syntax expression",
@@ -245,6 +257,17 @@ allCommands pgf = Map.fromList [
          _ -> fromString s,
      flags = ["file"] 
      }),
+  ("tq", emptyCommandInfo {
+     longname = "translation_quiz",
+     synopsis = "start a translation quiz",
+     exec = \opts _ -> do
+         let from = valIdOpts "from" (optLang opts) opts
+         let to   = valIdOpts "to"   (optLang opts) opts
+         let cat  = optCat opts
+         translationQuiz pgf from to cat
+         return void,
+     flags = ["from","to","cat","number"] 
+     }),
   ("wf", emptyCommandInfo {
      longname = "write_file",
      synopsis = "send string or tree to a file",
@@ -276,7 +299,8 @@ allCommands pgf = Map.fromList [
 
    optLangs opts = case valIdOpts "lang" "" opts of
      "" -> languages pgf
-     lang -> [lang] 
+     lang -> [lang]
+   optLang opts = head $ optLangs opts ++ ["#NOLANG"] 
    optCat opts = valIdOpts "cat" (lookStartCat pgf) opts
    optNum opts = valIntOpts "number" 1 opts
    optNumInf opts = valIntOpts "number" 1000000000 opts ---- 10^9
