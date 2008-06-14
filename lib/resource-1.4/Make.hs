@@ -3,7 +3,7 @@ module Main where
 import System
 
 -- Make commands for compiling and testing resource grammars.
--- usage: runghc Make (lang | api | pgf | test | clean)?
+-- usage: runghc Make present? (lang | api | pgf | test | clean)?
 -- With no argument, lang and api are done, in this order.
 -- See 'make' below for what is done by which command.
 
@@ -46,25 +46,28 @@ main = do
 make xx = do
   let ifx  opt act = if null xx || elem opt xx then act >> return () else return () 
   let ifxx opt act = if            elem opt xx then act >> return () else return () 
+  let pres = elem "present" xx
+  let dir = if pres then "../present" else "../alltenses"
   ifx "lang" $ do
-    mapM_ (gfc . lang) langsLang
-    system $ "cp */*.gfo ../alltenses"
+    mapM_ (gfc pres [] . lang) langsLang
+    system $ "cp */*.gfo " ++ dir
   ifx "api" $ do
-    mapM_ (gfc . try) langsAPI
-    system $ "cp */*.gfo ../alltenses"
+    mapM_ (gfc pres presApiPath . try) langsAPI
+    system $ "cp */*.gfo " ++ dir
   ifxx "pgf" $ do
-    system $ "gfc -s --make --name=langs --parser=off --output-dir=../alltenses " ++
-              unwords ["../alltenses/Lang" ++ la ++ ".gfo" | (_,la) <- langsPGF] ++
+    system $ "gfc -s --make --name=langs --parser=off --output-dir=" ++ dir ++ " " ++
+              unwords [dir ++ "/Lang" ++ la ++ ".gfo" | (_,la) <- langsPGF] ++
               " +RTS -K100M"
   ifxx "test" $ do
-    gf treeb $ unwords ["../alltenses/Lang" ++ la ++ ".gfo" | (_,la) <- langsTest]
+    gf treeb $ unwords [dir ++ "/Lang" ++ la ++ ".gfo" | (_,la) <- langsTest]
   ifxx "clean" $ do
-    system "rm */*.gfo ../alltenses/*.gfo"
+    system "rm */*.gfo ../alltenses/*.gfo ../present/*.gfo"
   return ()
 
-gfc file = do
+gfc pres path file = do
+  let preproc = if pres then " -preproc=./mkPresent " else ""
   putStrLn $ "compiling " ++ file
-  system $ "gfc -s " ++ file
+  system $ "gfc -s " ++ preproc ++ path ++ file
 
 gf comm file = do
   putStrLn $ "reading " ++ file
@@ -78,3 +81,6 @@ try  (lla,la) = "api/Try"  ++ la ++ ".gf"
 
 except ls es = filter (flip notElem es . snd) ls
 only   ls es = filter (flip elem es . snd) ls
+
+presApiPath = " -path=api:present "
+
