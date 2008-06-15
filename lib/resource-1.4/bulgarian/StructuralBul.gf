@@ -54,11 +54,11 @@ concrete StructuralBul of Structural = CatBul **
                     VPres      _ _ => "трябва" ;
                     VAorist    _ _ => "трябваше" ;
                     VImperfect _ _ => "трябвало" ;
-                    VPerfect    aform => regAdjective "трябвал" ! aform ;
-                    VPluPerfect aform => regAdjective "трябвал" ! aform ;
-                    VPassive    aform => regAdjective "трябвал" ! aform ;
-                    VPresPart   aform => regAdjective "трябвал" ! aform ;
-                    VImperative Sg => "трябвай" ;
+                    VPerfect     _ => "трябвало" ;
+                    VPluPerfect  _ => "трябвало" ;
+                    VPassive     _ => "трябвало" ;
+                    VPresPart    _ => "трябвало" ;
+                    VImperative Sg => "трябвай"  ;
                     VImperative Pl => "трябвайте" ;
                     VGerund        => "трябвайки"
                   } ;

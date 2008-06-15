@@ -53,10 +53,10 @@ lin
   close_V2 = dirV2 (actionV (mkV187 "затварям") (mkV173 "затворя")) ;
   coat_N = mkN054 "палто" ;
   cold_A = mkA076 "студен" ;
-  come_V = actionV (mkV165 "ида") (table {                                           -- special case "дойди", "дойдете" are archaic
-                                     VImperative Sg => "ела";
-                                     VImperative Pl => "елате";
-                                     vform          => mkV146a "дойда" ! vform}) ;
+  come_V = actionV (mkV186 "идвам") (table {                                           -- special case "дойди", "дойдете" are archaic
+                                       VImperative Sg => "ела";
+                                       VImperative Pl => "елате";
+                                       vform          => mkV146a "дойда" ! vform}) ;
   computer_N = mkN009 "компютър" ;
   country_N = mkN041 "държава" ;
   cousin_N = mkN007a "братовчед" ;
