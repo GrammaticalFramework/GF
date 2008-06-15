@@ -13,12 +13,13 @@ concrete QuestionBul of Question = CatBul ** open ResBul, Prelude in {
               } ---- "whether" in ExtEng
       } ;
       
-    QuestVP ip vp = 
-      let cl = mkClause (ip.s ! RSubj) {gn = ip.gn ; p = P3} vp
-      in {s = \\t,a,b,_ => cl.s ! t ! a ! b ! Main} ;
+    QuestVP ip vp = {
+      s = \\t,a,b,qform =>
+             (mkClause (ip.s ! RSubj ! (case qform of {QDir=>Indef; QIndir=>Def})) {gn = ip.gn ; p = P3} vp).s ! t ! a ! b ! Main
+      } ;
 
     QuestSlash ip slash = 
-      mkQuestion {s1 = slash.c2.s ++ ip.s ! (RObj slash.c2.c); s2 = slash.c2.s ++ ip.s ! (RObj slash.c2.c)}
+      mkQuestion {s = \\spec => slash.c2.s ++ ip.s ! (RObj slash.c2.c) ! spec}
                  {s = slash.s ! (agrP3 ip.gn) } ;
 
     QuestIAdv iadv cl = mkQuestion iadv cl ;
@@ -26,37 +27,35 @@ concrete QuestionBul of Question = CatBul ** open ResBul, Prelude in {
     QuestIComp icomp np = 
       mkQuestion icomp (mkClause (np.s ! RSubj) np.a (predV verbBe)) ;
 
-    PrepIP p ip = {s1 = p.s ++ ip.s ! RSubj; s2 = p.s ++ ip.s ! RSubj} ;
+    PrepIP p ip = {s = \\spec => p.s ++ ip.s ! RSubj ! spec} ;
 
     AdvIP ip adv = {
-      s = \\c => ip.s ! c ++ adv.s ;
+      s = \\role,spec => ip.s ! role ! spec ++ adv.s ;
       gn = ip.gn
       } ;
 
     CompIAdv a = a ;
 
     IdetCN idet cn = {
-      s = \\c => let nf = case <idet.n, idet.nonEmpty> of {
-                            <Pl,True> => NFPlCount ;
-                            _         => NF idet.n Indef
-                          }
-                 in idet.s ! cn.g ++ cn.s ! nf ;
+      s = \\_,spec => let nf = case <idet.n, idet.nonEmpty> of {
+                                 <Pl,True> => NFPlCount ;
+                                 _         => NF idet.n Indef
+                               }
+                      in idet.s ! cn.g ! spec ++ cn.s ! nf ;
       gn = gennum cn.g idet.n
       } ;
 
     IdetIP idet = {
-      s  = \\c => idet.s ! DNeut ;         
+      s  = \\_ => idet.s ! DNeut ;
       gn = gennum DNeut idet.n
       } ;
 
     IdetQuant iquant num = {
-      s = \\g => iquant.s ! gennum g num.n ++
-                    num.s ! dgenderSpecies g Indef RSubj ;
+      s = \\g,spec => iquant.s ! gennum g num.n ! spec ++
+                      num.s ! dgenderSpecies g Indef RSubj ;
       n = num.n ;
       nonEmpty = num.nonEmpty
       } ;
 
-    ---- what should there be in s1,s2 ? AR
-    CompIP ip = {s1 = ip.s ! RSubj ; s2 = []} ;
-
+    CompIP ip = {s = ip.s ! RSubj} ;
 }

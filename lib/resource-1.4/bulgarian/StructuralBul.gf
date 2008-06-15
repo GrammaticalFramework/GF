@@ -35,7 +35,7 @@ concrete StructuralBul of Structural = CatBul **
   here7to_Adv = ss ["до тук"] ;
   here7from_Adv = ss ["от тук"] ;
   how_IAdv = mkIAdv "как" ;
-  how8many_IDet = {s = \\_ => "колко"; n = Pl; nonEmpty = False} ;
+  how8many_IDet = {s = \\_ => table Species ["колко";"колкото"]; n = Pl; nonEmpty = False} ;
   if_Subj = ss "ако" ;
   in8front_Prep = mkPrep "пред" Acc ;
   i_Pron  = mkPron "аз" "мен" "ми" "мой" "моя" "моят" "моя" "моята" "мое" "моето" "мои" "моите" (GSg Masc) P1 ;
@@ -101,7 +101,10 @@ concrete StructuralBul of Structural = CatBul **
   when_IAdv = mkIAdv "кога" ;
   when_Subj = ss "когато" ;
   where_IAdv = mkIAdv "къде" ;
-  which_IQuant = {s = table GenNum ["кой";"коя";"кое";"кои"]} ;
+  which_IQuant = {s = table GenNum [table Species ["кой";"който"];
+                                    table Species ["коя";"която"];
+                                    table Species ["кое";"което"];
+                                    table Species ["кои";"които"]]} ;
   whoSg_IP = mkIP "кой" "кого" (GSg Masc) ;
   whoPl_IP = mkIP "кои" "кои" GPl ;
   why_IAdv = mkIAdv "защо" ;

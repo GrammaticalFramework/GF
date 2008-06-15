@@ -522,13 +522,13 @@ resource ResBul = ParamX ** open Prelude in {
                     DNeutDef            => addDef dve
                   } ;
 
-    mkIP : Str -> Str -> GenNum -> {s : Role => Str ; gn : GenNum} =
+    mkIP : Str -> Str -> GenNum -> {s : Role => Species => Str ; gn : GenNum} =
       \koi,kogo,gn -> {
       s = table {
-            RSubj    => koi ;
-            RObj Acc => kogo ;
-            RObj Dat => "на" ++ kogo ;
-            RVoc     => koi
+            RSubj    => table {Indef=>koi;  Def=>koi+"то"} ;
+            RObj Acc => table {Indef=>kogo; Def=>kogo+"то"} ;
+            RObj Dat => table {Indef=>"на" ++ kogo; Def=>"на" ++ kogo+"то"} ;
+            RVoc     => table {Indef=>koi;  Def=>koi+"то"}
           } ;
       gn = gn
       } ;
@@ -575,14 +575,14 @@ resource ResBul = ParamX ** open Prelude in {
     Preposition : Type = {s : Str; c : Case};
 
     mkQuestion : 
-      {s1,s2 : Str} -> Clause -> 
+      {s : Species => Str} -> Clause -> 
       {s : Tense => Anteriority => Polarity => QForm => Str} = \wh,cl ->
       {
       s = \\t,a,p => 
             let cls = cl.s ! t ! a ! p ;
             in table {
-                 QDir   => wh.s1 ++ cls ! Inv ;
-                 QIndir => wh.s2 ++ cls ! Main
+                 QDir   => wh.s ! Indef ++ cls ! Inv ;
+                 QIndir => wh.s ! Def   ++ cls ! Main
                }
       } ;
 
