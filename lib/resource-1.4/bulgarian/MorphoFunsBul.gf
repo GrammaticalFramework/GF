@@ -178,5 +178,5 @@ oper
 --
 
   mkIAdv : Str -> IAdv ;
-  mkIAdv s = {s = table {Indef=>s;Def=>s+"то"}; lock_IAdv = <>} ;
+  mkIAdv s = {s = table {QDir=>s;QIndir=>s+"то"}; lock_IAdv = <>} ;
 }

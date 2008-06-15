@@ -522,13 +522,13 @@ resource ResBul = ParamX ** open Prelude in {
                     DNeutDef            => addDef dve
                   } ;
 
-    mkIP : Str -> Str -> GenNum -> {s : Role => Species => Str ; gn : GenNum} =
+    mkIP : Str -> Str -> GenNum -> {s : Role => QForm => Str ; gn : GenNum} =
       \koi,kogo,gn -> {
       s = table {
-            RSubj    => table {Indef=>koi;  Def=>koi+"то"} ;
-            RObj Acc => table {Indef=>kogo; Def=>kogo+"то"} ;
-            RObj Dat => table {Indef=>"на" ++ kogo; Def=>"на" ++ kogo+"то"} ;
-            RVoc     => table {Indef=>koi;  Def=>koi+"то"}
+            RSubj    => table QForm [koi;  koi+"то"] ;
+            RObj Acc => table QForm [kogo; kogo+"то"] ;
+            RObj Dat => table QForm ["на" ++ kogo; kogo+"то"] ;
+            RVoc     => table QForm [koi;  koi+"то"]
           } ;
       gn = gn
       } ;
@@ -575,15 +575,15 @@ resource ResBul = ParamX ** open Prelude in {
     Preposition : Type = {s : Str; c : Case};
 
     mkQuestion : 
-      {s : Species => Str} -> Clause -> 
+      {s : QForm => Str} -> Clause -> 
       {s : Tense => Anteriority => Polarity => QForm => Str} = \wh,cl ->
       {
-      s = \\t,a,p => 
+      s = \\t,a,p,qform => 
             let cls = cl.s ! t ! a ! p ;
-            in table {
-                 QDir   => wh.s ! Indef ++ cls ! Inv ;
-                 QIndir => wh.s ! Def   ++ cls ! Main
-               }
+            in wh.s ! qform ++ cls ! case qform of {
+                                       QDir   => Inv ;
+                                       QIndir => Main
+                                     }
       } ;
 
     whichRP : GenNum => Str
