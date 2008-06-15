@@ -28,7 +28,10 @@ l CleftNP (UsePron i_Pron) (UseRCl TPast ASimul PPos (RelVP IdRP (ComplSlash (Sl
 l CleftAdv here_Adv (UseCl TPast ASimul PPos (PredVP (UsePron she_Pron) (UseV sleep_V)))
 l ExistNP (DetArtSg IndefArt (UseN house_N))
 l ExistIP (IdetCN (IdetQuant which_IQuant NumPl) (UseN house_N))
-l PredVP (UsePron i_Pron) (ProgrVP (UseV sleep_V))
+l PhrUtt NoPConj (UttS (UseCl TPres ASimul PPos (PredVP (UsePron i_Pron) (ProgrVP (UseV sleep_V))))) NoVoc
+l PhrUtt NoPConj (UttS (UseCl TPres ASimul PPos (PredVP (UsePron i_Pron) (ProgrVP (UseV come_V))))) NoVoc
+l PhrUtt NoPConj (UttS (UseCl TPast ASimul PPos (PredVP (UsePron i_Pron) (ProgrVP (UseV come_V))))) NoVoc
+l PhrUtt NoPConj (UttS (UseCl TPres ASimul PPos (PredVP (UsePron i_Pron) (ComplVV must_VV (ProgrVP (UseV come_V)))))) NoVoc
 l ImpPl1 (UseV go_V)
 l DetArtSg DefArt (UseN man_N)
 l UsePN john_PN
@@ -84,6 +87,7 @@ l num (pot3plus (pot2plus (pot0 n4) (pot1plus n6 (pot0 n7))) (pot1as2 (pot1plus 
 l IDig D_8
 l IIDig D_8 (IIDig D_0 (IIDig D_0 (IIDig D_1 (IIDig D_7 (IIDig D_8 (IDig D_9))))))
 l PhrUtt but_PConj (UttImpSg PPos (ImpVP (AdvVP (UseV come_V) here_Adv))) (VocNP (DetCN (DetQuant (PossPron i_Pron) NumSg) (UseN friend_N)))
+l PhrUtt NoPConj (UttImpSg PPos (ImpVP (AdVVP always_AdV (ComplSlash (SlashV2a listen_V2) (DetArtSg DefArt (UseN sea_N)))))) NoVoc
 l PhrUtt NoPConj (UttS (UseCl TPres ASimul PPos (PredVP (UsePN john_PN) (UseV walk_V)))) NoVoc
 l UttQS (UseQCl TPres ASimul PPos (QuestCl (PredVP (UsePron it_Pron) (UseComp (CompAP (PositA good_A))))))
 l UttImpSg PNeg (ImpVP (ReflVP (SlashV2a love_V2)))
@@ -143,6 +147,7 @@ l PredVP (UsePron i_Pron) (ComplSlash (SlashV2Q ask_V2Q (UseQCl TPast ASimul PPo
 l PredVP (UsePron i_Pron) (ComplSlash (SlashV2A paint_V2A (PositA red_A)) (UsePron it_Pron))
 l RelCN (UseN car_N) (UseRCl TPres ASimul PPos (RelSlash IdRP (SlashVP (UsePron i_Pron) (SlashVV want_VV (SlashV2a buy_V2)))))
 l RelCN (UseN car_N) (UseRCl TPres ASimul PPos (RelSlash IdRP (SlashVP (UsePron they_Pron) (SlashV2VNP beg_V2V (UsePron i_Pron) (SlashV2a buy_V2)))))
+l RelCN (UseN car_N) (UseRCl TPres ASimul PPos (RelSlash IdRP (SlashVP (UsePron they_Pron) (SlashV2VNP beg_V2V (UsePron i_Pron) (SlashVV want_VV (SlashV2A paint_V2A (PositA red_A)))))))
 l PredVP (UsePron he_Pron) (ReflVP (SlashV2a love_V2))
 l PredVP (DetNP (DetQuant this_Quant NumSg)) (UseComp (CompAP (PositA warm_A)))
 l PredVP (UsePron we_Pron) (PassV2 love_V2)
@@ -161,3 +166,8 @@ l RelCN (UseN bird_N) (UseRCl TPres ASimul PPos (RelSlash IdRP (SlashVP (UsePron
 l UttImpSg PPos (ImpVP (ComplSlash (SlashVV want_VV (SlashV2a buy_V2)) (UsePron it_Pron)))
 l UttImpSg PPos (ImpVP (ComplSlash (SlashVV want_VV (SlashV2A paint_V2A (PositA red_A))) (UsePron it_Pron)))
 l UttImpSg PPos (ImpVP (ComplSlash (SlashVV want_VV (SlashV2VNP beg_V2V (UsePron i_Pron) (SlashV2a buy_V2))) (UsePron it_Pron)))
+l PhrUtt NoPConj (UttS (UseCl TPres ASimul PPos (PredVP (DetArtPl DefArt (UseN fruit_N)) (ReflVP (Slash3V3 sell_V3 (DetArtSg DefArt (UseN road_N))))))) NoVoc
+l PhrUtt NoPConj (UttS (UseCl TPres ASimul PPos (PredVP (UsePron i_Pron) (ReflVP (SlashV2V beg_V2V (UseV live_V)))))) NoVoc
+l PhrUtt NoPConj (UttS (UseCl TPres ASimul PPos (PredVP (UsePron i_Pron) (ReflVP (SlashV2S answer_V2S (UseCl TPres ASimul PPos (ImpersCl (ComplVV must_VV (ReflVP (SlashV2a understand_V2)))))))))) NoVoc
+l PhrUtt NoPConj (UttImpSg PPos (ImpVP (ReflVP (SlashV2Q ask_V2Q (UseQCl TPast ASimul PPos (QuestVP whoSg_IP (UseV come_V))))))) NoVoc
+l PhrUtt NoPConj (UttS (UseCl TPast ASimul PPos (PredVP (UsePron i_Pron) (ReflVP (SlashV2A paint_V2A (ComparA beautiful_A (UsePN john_PN))))))) NoVoc
