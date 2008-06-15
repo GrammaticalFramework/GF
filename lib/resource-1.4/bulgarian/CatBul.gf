@@ -39,10 +39,10 @@ concrete CatBul of Cat = open ResBul, Prelude, (R = ParamX) in {
 -- Question
 
     QCl = {s : ResBul.Tense => Anteriority => Polarity => QForm => Str} ;
-    IP = {s : Role => Str; gn : GenNum} ;
-    IComp = {s1,s2 : Str} ;    
-    IDet = {s : DGender => Str; n : Number ; nonEmpty : Bool} ;
-    IQuant = {s : GenNum => Str} ;
+    IP = {s : Role => Species => Str; gn : GenNum} ;
+    IComp = {s : Species => Str} ;
+    IDet = {s : DGender => Species => Str; n : Number ; nonEmpty : Bool} ;
+    IQuant = {s : GenNum => Species => Str} ;
 
 -- Relative
 
@@ -65,7 +65,7 @@ concrete CatBul of Cat = open ResBul, Prelude, (R = ParamX) in {
 
     Adv = {s : Str} ;
     CAdv = {s : Str; sn : Str} ;
-    IAdv = {s1,s2 : Str} ;
+    IAdv = {s : Species => Str} ;
     AdA = {s : Str} ;
 
 -- Noun

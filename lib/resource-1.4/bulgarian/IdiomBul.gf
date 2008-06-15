@@ -48,8 +48,8 @@ concrete IdiomBul of Idiom = CatBul ** open Prelude, ParadigmsBul, ResBul in {
       } ;
 
     ExistIP ip = 
-      mkQuestion {s1=ip.s ! RSubj; s2=ip.s ! RSubj} 
-        (mkClause "тук" (agrP3 ip.gn) (predV verbBe)) ;
+      mkQuestion {s = ip.s ! RSubj}
+                 (mkClause "тук" (agrP3 ip.gn) (predV verbBe)) ;
 
     ProgrVP vp = {
       s   = \\_ => vp.s ! Imperf ;
