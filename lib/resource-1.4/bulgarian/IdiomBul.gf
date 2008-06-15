@@ -49,11 +49,11 @@ concrete IdiomBul of Idiom = CatBul ** open Prelude, ParadigmsBul, ResBul in {
 	               Quest => v.aux1 ++ v.main ++ "ли" ++ v.aux2 ++ np.s ! RObj Acc
 	             }
       } ;
-{-
+
     ExistIP ip = 
-      mkQuestion (ss (ip.s ! Nom)) 
-        (mkClause "there" (agrP3 ip.n) (predAux auxBe)) ;
--}
+      mkQuestion {s1=ip.s ! RSubj; s2=ip.s ! RSubj} 
+        (mkClause "тук" (agrP3 ip.gn) (predV verbBe)) ;
+
     ProgrVP vp = {
       s   = \\_ => vp.s ! Imperf ;
       ad = vp.ad ;
