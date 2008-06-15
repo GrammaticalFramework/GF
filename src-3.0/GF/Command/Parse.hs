@@ -17,7 +17,7 @@ test s = RP.readP_to_S pCommandLine s
 
 pCommandLine = RP.sepBy (RP.skipSpaces >> pPipe) (RP.skipSpaces >> RP.char ';')
 
-pPipe = RP.sepBy (RP.skipSpaces >> pCommand) (RP.skipSpaces >> RP.char '|')
+pPipe = RP.sepBy1 (RP.skipSpaces >> pCommand) (RP.skipSpaces >> RP.char '|')
 
 pCommand = do
   cmd  <- pIdent
