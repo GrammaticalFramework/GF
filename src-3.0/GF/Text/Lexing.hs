@@ -1,5 +1,7 @@
 module GF.Text.Lexing (stringOp) where
 
+import GF.Text.UTF8
+
 import Data.Char
 
 -- lexers and unlexers - they work on space-separated word strings
@@ -9,16 +11,21 @@ stringOp name = case name of
   "lextext"    -> Just $ appLexer lexText
   "lexcode"    -> Just $ appLexer lexText
   "lexmixed"   -> Just $ appLexer lexMixed
+  "words"      -> Just $ appLexer words
+  "bind"       -> Just $ appUnlexer bindTok
   "unlextext"  -> Just $ appUnlexer unlexText
   "unlexcode"  -> Just $ appUnlexer unlexCode
   "unlexmixed" -> Just $ appUnlexer unlexMixed
+  "unwords"    -> Just $ appUnlexer unwords
+  "to_utf8"    -> Just encodeUTF8
+  "from_utf8"  -> Just decodeUTF8
   _ -> Nothing
 
 appLexer :: (String -> [String]) -> String -> String
 appLexer f = unwords . filter (not . null) . f
 
 appUnlexer :: ([String] -> String) -> String -> String
-appUnlexer f = f . words
+appUnlexer f = unlines . map (f . words) . lines
 
 lexText :: String -> [String]
 lexText s = case s of
@@ -42,6 +49,13 @@ lexMixed = concat . alternate False where
       (t,c:m) -> lex env t : [[c]] : alternate (not env) m
     _ -> []
   lex env = if env then lexCode else lexText
+
+bindTok :: [String] -> String
+bindTok ws = case ws of
+    w:"&+":ws2 -> w ++ bindTok ws2
+    w:[]       -> w
+    w:ws2      -> w ++ " " ++ bindTok ws2
+    []         -> ""
 
 unlexText :: [String] -> String
 unlexText s = case s of
