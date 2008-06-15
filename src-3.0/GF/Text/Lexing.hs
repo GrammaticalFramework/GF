@@ -1,5 +1,6 @@
 module GF.Text.Lexing (stringOp) where
 
+import GF.Text.Transliterations
 import GF.Text.UTF8
 
 import Data.Char
@@ -19,7 +20,7 @@ stringOp name = case name of
   "unwords"    -> Just $ appUnlexer unwords
   "to_utf8"    -> Just encodeUTF8
   "from_utf8"  -> Just decodeUTF8
-  _ -> Nothing
+  _ -> transliterate name
 
 appLexer :: (String -> [String]) -> String -> String
 appLexer f = unwords . filter (not . null) . f

@@ -131,26 +131,28 @@ Libraries are at the heart of modern software engineering. In natural language
 applications, libraries are a way to cope with thousands of details involved in
 syntax, lexicon, and inflection. The [GF resource grammar library lib/] has
 support for an increasing number of languages, currently including
-- Arabic (partial)
-- Bulgarian
-- Catalan (partial)
-- Danish
-- English
-- Finnish
-- French
-- German 
-- Hindi/Urdu (partial)
-- [Interlingua http://www.interlingua.com/]
-- Italian
-- Norwegian bokmål
-- Russian
-- Spanish
-- Swedish
++ Arabic (partial)
++ Bulgarian
++ Catalan (partial)
++ Danish
++ English
++ Finnish
++ French
++ German 
++ Hindi/Urdu (fragments)
++ [Interlingua http://www.interlingua.com/]
++ Italian
++ Norwegian bokmål
++ Russian
++ Spanish
++ Swedish
++ Thai (fragments)
 
 
 Adding a language to the resource library takes 3 to 9 
 months - [contributions doc/projects.html]
 are welcome!
 
+% [doc/10lang-small.png]
 
 
