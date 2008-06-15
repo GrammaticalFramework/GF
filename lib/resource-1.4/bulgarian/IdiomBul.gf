@@ -55,16 +55,12 @@ concrete IdiomBul of Idiom = CatBul ** open Prelude, ParadigmsBul, ResBul in {
         (mkClause "there" (agrP3 ip.n) (predAux auxBe)) ;
 -}
     ProgrVP vp = {
-      s   = \\t,a,p,agr,q,asp => vp.s ! t ! a ! p ! agr ! q ! Imperf ;
-      imp = \\p,n,_ => vp.imp ! p ! n ! Imperf ;
+      s   = \\_ => vp.s ! Imperf ;
       ad = vp.ad ;
       compl = vp.compl ;
-      subjRole = vp.subjRole
+      vtype = vp.vtype
       } ;
 
-    ImpPl1 vp = {s = "нека" ++
-                     vp.s ! Pres ! Simul ! Pos ! {gn = GPl ; p = P1} ! False ! Imperf ++
-                     vp.compl ! {gn = GPl ; p = P1}
-                } ;
+    ImpPl1 vp = {s = "нека" ++ daComplex vp ! Perf ! {gn = GPl ; p = P1}} ;
 }
 

@@ -51,15 +51,8 @@ concrete CatBul of Cat = open ResBul, Prelude, (R = ParamX) in {
 
 -- Verb
 
-    VP = {
-      s : ResBul.Tense => Anteriority => Polarity => Agr => Bool => Aspect => Str ;
-      imp : Polarity => Number => Aspect => Str ;
-      ad : Bool => Str ;
-      compl : Agr => Str ;
-      subjRole : Role
-    } ;
-
-    VPSlash = ResBul.VP ** {c2 : Preposition} ;
+    VP = ResBul.VP ;
+    VPSlash = ResBul.VPSlash ;
 
     Comp = {s : Agr => Str} ; 
     AdV = {s : Str} ; --lock_AdV : {}} ;
