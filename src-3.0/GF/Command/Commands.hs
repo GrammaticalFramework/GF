@@ -109,22 +109,6 @@ allCommands pgf = Map.fromList [
      longname = "empty",
      synopsis = "empty the environment"
      }),
-{- ----
-  ("eh", emptyCommandInfo {
-     longname = "execute_history",
-     synopsis = "execute commands in a file",
-     explanation = unlines [
-       "Runs the sequence of GF commands from the lines of a file.",
-       "One way to produce such a file is the ph command."
-       ],
-     flags = [
-       ("file","the script file")
-       ],
-     examples = [
-      "eh -file=foo.gfs  -- run the script in file foo.gfs"
-      ]
-     }),
--}
   ("gr", emptyCommandInfo {
      longname = "generate_random",
      synopsis = "generate random trees in the current abstract syntax",
@@ -140,10 +124,12 @@ allCommands pgf = Map.fromList [
        ],
      flags = [
        ("cat","generation category"),
+       ("lang","excludes functions that have no linearization in this language"),
        ("number","number of trees generated")
        ],
      exec = \opts _ -> do
-       ts <- generateRandom pgf (optCat opts)
+       let pgfr = optRestricted opts
+       ts <- generateRandom pgfr (optCat opts)
        return $ fromTrees $ take (optNum opts) ts
      }),
   ("gt", emptyCommandInfo {
@@ -158,11 +144,13 @@ allCommands pgf = Map.fromList [
      flags = [
        ("cat","the generation category"),
        ("depth","the maximum generation depth"),
+       ("lang","excludes functions that have no linearization in this language"),
        ("number","the number of trees generated")
        ],
      exec = \opts _ -> do
+       let pgfr = optRestricted opts
        let dp = return $ valIntOpts "depth" 999999 opts
-       let ts = generateAllDepth pgf (optCat opts) dp
+       let ts = generateAllDepth pgfr (optCat opts) dp
        return $ fromTrees $ take (optNumInf opts) ts
      }),
   ("h", emptyCommandInfo {
@@ -195,16 +183,20 @@ allCommands pgf = Map.fromList [
        "  .gfo   compiled GF source",
        "  .pgf   precompiled grammar in Portable Grammar Format"
        ],
-     options = [ -- ["prob", "retain", "gfo", "src", "no-cpu", "cpu", "quiet", "verbose"]
-       ("retain","retain operations (used for cc command)")
+     options = [ 
+       -- ["prob", "retain", "gfo", "src", "no-cpu", "cpu", "quiet", "verbose"]
+       ("retain","retain operations (used for cc command)"),
+       ("src",   "force compilation from source"),
+       ("v",     "be verbose - show intermediate status information")
        ]
      }),
   ("l", emptyCommandInfo {
      longname = "linearize",
      synopsis = "convert an abstract syntax expression to string",
      explanation = unlines [
-       "Shows the linearization of a Tree by the actual grammar",
-       "(which is overridden by the -lang flag)."
+       "Shows the linearization of a Tree by the grammars in scope.",
+       "The -lang flag can be used to restrict this to one language.",
+       "See also the ps command for unlexing and character encoding."
        ],
      exec = \opts -> return . fromStrings . map (optLin opts),
      options = [
@@ -214,9 +206,10 @@ allCommands pgf = Map.fromList [
        ("term", "show PGF term"),
        ("treebank","show the tree and tag linearizations with language names")
        ],
-     flags = [("lang","the language of linearization")]
+     flags = [
+       ("lang","the language of linearization")
+       ]
      }),
-
   ("ma", emptyCommandInfo {
      longname = "morpho_analyse",
      synopsis = "print the morphological analyses of all words in the string",
@@ -249,9 +242,10 @@ allCommands pgf = Map.fromList [
      longname = "parse",
      synopsis = "parse a string to abstract syntax expression",
      explanation = unlines [
-       "Shows all trees returned for the string argument by the actual grammar",
-       "(overridden by the -lang flag), in the default category (overridden",
-       "by the -cat flag)."
+       "Shows all trees returned by parsing a string in the grammars in scope.",
+       "The -lang flag can be used to restrict this to one language.",
+       "The default start category can be overridden by the -cat flag.",
+       "See also the ps command for lexing and character encoding."
        ],
      exec = \opts -> return . fromTrees . concatMap (par opts) . toStrings,
      flags = [
@@ -272,14 +266,24 @@ allCommands pgf = Map.fromList [
   ("pg", emptyCommandInfo { -----
      longname = "print_grammar",
      synopsis = "print the actual grammar with the given printer",
-     explanation = "Prints the actual grammar (overridden by the -lang=X flag).\n"++
-                   "The -printer=X flag sets the format in which the grammar is\n"++
-                   "written.\n"++
-                   "N.B. since grammars are compiled when imported, this command\n"++
-                   "generally does not show the grammar in the same format as the\n"++
-                   "source.",
+     explanation = unlines [
+       "Prints the actual grammar (overridden by the -lang=X flag).",
+       "The -printer=X flag sets the format in which the grammar is printed.",
+       "N.B.1 Since grammars are compiled when imported, this command",
+       "generally shows a grammar that looks rather different from the source.",
+       "N.B.2 This command is slightly obsolete: to produce different formats",
+       "the batch compiler gfc is recommended, and has many more options."
+       ],
      exec  = \opts _ -> return $ fromString $ prGrammar opts,
-     flags = let fs = ["cat","lang","printer"] in zip fs fs 
+     flags = [
+       --"cat",
+       ("lang",   "select language for the -missing option (default all languages)"),
+       ("printer","select the printing format (see gfc --help)")
+       ],
+     options = [
+       ("cats",   "show just the names of abstract syntax categories"),
+       ("missing","show just the names of functions that have no linearization")
+       ]
      }),
   ("ph", emptyCommandInfo {
      longname = "print_history",
@@ -406,17 +410,21 @@ allCommands pgf = Map.fromList [
    void = ([],[])
 
    optLin opts t = case opts of 
-     _ | isOpt "treebank" opts -> unlines $ (abstractName pgf ++ ": " ++ showExp t) :
-          [lang ++ ": " ++ linea lang t | lang <- optLangs opts]
-     _ -> unlines [linea lang t | lang <- optLangs opts] 
-    where
-     linea lang = case opts of
+     _ | isOpt "treebank" opts -> treebank opts t
+     _ -> unlines [linear opts lang t | lang <- optLangs opts] 
+    
+   linear opts lang = case opts of
        _ | isOpt "all"    opts -> allLinearize pgf (mkCId lang)
        _ | isOpt "table"  opts -> tableLinearize pgf (mkCId lang)
        _ | isOpt "term"   opts -> termLinearize pgf (mkCId lang)
        _ | isOpt "record" opts -> recordLinearize pgf (mkCId lang)
        _  -> linearize pgf lang
 
+   treebank opts t = unlines $ 
+     (abstractName pgf ++ ": " ++ showExp t) :
+     [lang ++ ": " ++ linear opts lang t | lang <- optLangs opts]
+
+   optRestricted opts = restrictPGF (hasLin pgf (mkCId (optLang opts))) pgf
 
    optLangs opts = case valIdOpts "lang" "" opts of
      "" -> languages pgf
@@ -432,9 +440,13 @@ allCommands pgf = Map.fromList [
    toStrings ts = [s | EStr s <- ts] 
    toString ts = unwords [s | EStr s <- ts] 
 
-   prGrammar opts = case valIdOpts "printer" "" opts of
-     "cats" -> unwords $ categories pgf
-     v -> prPGF (read v) pgf (prCId (absname pgf))
+   prGrammar opts = case opts of
+     _ | isOpt "cats" opts -> unwords $ categories pgf
+     _ | isOpt "missing" opts -> 
+           unlines $ [unwords (la:":": map prCId cs) | 
+                       la <- optLangs opts, let cs = missingLins pgf (mkCId la)]
+     _ -> case valIdOpts "printer" "pgf" opts of
+       v -> prPGF (read v) pgf (prCId (absname pgf))
 
    morphos opts s = 
      [lookupMorpho (buildMorpho pgf (mkCId la)) s | la <- optLangs opts]

@@ -68,6 +68,25 @@ functionsToCat pgf cat =
  where 
    fs = lookMap [] cat $ catfuns $ abstract pgf
 
+missingLins :: PGF -> CId -> [CId]
+missingLins pgf lang = [c | c <- fs, not (hasl c)] where
+  fs = Map.keys $ funs $ abstract pgf
+  hasl = hasLin pgf lang
+
+hasLin :: PGF -> CId -> CId -> Bool
+hasLin pgf lang f = Map.member f $ lins $ lookConcr pgf lang
+
+restrictPGF :: (CId -> Bool) -> PGF -> PGF
+restrictPGF cond pgf = pgf {
+  abstract = abstr {
+    funs = restrict $ funs $ abstr,
+    cats = restrict $ cats $ abstr
+    }
+  }  ---- restrict concrs also, might be needed
+ where
+  restrict = Map.filterWithKey (\c _ -> cond c)
+  abstr = abstract pgf
+
 depth :: Exp -> Int
 depth (EAbs _  t) = depth t
 depth (EApp _ ts) = maximum (0:map depth ts) + 1
