@@ -15,7 +15,7 @@ concrete QuestionBul of Question = CatBul ** open ResBul, Prelude in {
       
     QuestVP ip vp = {
       s = \\t,a,b,qform =>
-             (mkClause (ip.s ! RSubj ! (case qform of {QDir=>Indef; QIndir=>Def})) {gn = ip.gn ; p = P3} vp).s ! t ! a ! b ! Main
+             (mkClause (ip.s ! RSubj ! qform) {gn = ip.gn ; p = P3} vp).s ! t ! a ! b ! Main
       } ;
 
     QuestSlash ip slash = 

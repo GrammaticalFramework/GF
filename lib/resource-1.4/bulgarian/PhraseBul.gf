@@ -9,8 +9,8 @@ concrete PhraseBul of Phrase = CatBul ** open Prelude, ResBul in {
     UttImpPl  pol imp = {s = pol.s ++ imp.s ! pol.p ! GPl} ;
     UttImpPol pol imp = {s = pol.s ++ imp.s ! pol.p ! GPl} ;
 
-    UttIP ip = {s = ip.s ! RSubj ! Indef} ;
-    UttIAdv iadv = {s = iadv.s ! Indef} ;
+    UttIP ip = {s = ip.s ! RSubj ! QDir} ;
+    UttIAdv iadv = {s = iadv.s ! QDir} ;
     UttNP np = {s = np.s ! RSubj} ;
     UttVP vp = {s = daComplex vp ! Perf ! agrP3 (GSg Neut)} ;
     UttAdv adv = adv ;
