@@ -1,0 +1,157 @@
+
+
+
+%!postproc(html): "#BECE" "<center>"
+%!postproc(html): "#ENCE" "</center>"
+%!postproc(html): "#BESMALL" "<font size=-1>"
+%!postproc(html): "#ENSMALL" "</font>"
+
+#BECE
+
+[doc/gf-logo.png]
+
+=Grammatical Framework=
+
+Version 3.0
+
+June 2008
+
+#ENCE
+
+``|`` [Demos demos/]
+``|`` [Download download]
+``|`` [Development download]
+``|`` [Events doc/events.html]
+``|`` [Libraries lib/]
+``|`` [People doc/gf-people.html]
+``|`` [Projects doc/projects.html]
+``|`` [Publications doc/gf-tutorial.html]
+``|`` [Reference doc/gf-refman.html]
+``|`` [Tutorial doc/gf-tutorial.html]
+``|`` 
+
+#BESMALL
+
+==News==
+
+27 June 2008: release of GF 3.0 and a new web page; the old web page is 
+[here index-2.html].
+
+
+#ENSMALL
+
+
+==What is GF==
+
+GF, Grammatical Framework, is a programming language for 
+**multilingual grammar applications**. It is
+- a **special-purpose language for grammars**, like YACC, Bison, Happy, BNFC
+- a **functional language**, like Haskell, Lisp, OCaml, Scheme, SML
+- a **natural language processing framework**, like LKB, XLE, Regulus
+- a **categorial grammar formalism**, like ACG, CCG
+- a **logical framework**, like Agda, Coq, Isabelle
+
+
+Don't worry if you don't know most of the references above - but if you do know at
+least one, it may help you to get a first idea of what GF is.
+
+
+==Applications==
+
+GF can be used for building
+- [text translators ]
+- [speech translators ]
+- [natural-language interfaces ]
+- [multilingual web pages ]
+- [multilingual authoring systems ]
+- [dialogue systems ]
+- [language training systems ]
+- [natural language resources ]
+
+
+==Availability==
+
+GF is **open-source**, licensed under [GPL ] (the program) and [LGPL ] (the libraries). It
+is available for 
+- [Linux ]
+- [Mac OS X ]
+- [Windows ]
+- via compilation to [JavaScript ], almost any platform that has a web browser
+
+
+==Projects==
+
+GF was born in 1998 at Xerox Research Centre Europe, Grenoble in the project
+Multilingual Document Authoring. At Xerox, it was used for prototypes including
+- restaurant phrase book in 6 languages
+- database queries in 7 languages
+- alarm system instructions in 5 languages
+- medical drug descriptions in 2 languages
+
+
+Later projects using GF and involving third parties include, in chronological order,
+- GF-Alfa: natural language interface to formal proofs
+- GF-KeY: authoring and translation of software specifications
+- TALK: multilingual and multimodal spoken dialogue systems
+- WebALT: multilingual generation of mathematical exercises (commercial project)
+- MultiWiki: multilingual Wiki for restaurant reviews
+- SALDO: Swedish morphological dictionary based on tools developed for GF
+
+
+Academically, GF has been used in four [PhD theses ], and resulted in around
+fifty [scientific publications ].
+
+
+==Programming in GF==
+
+GF is easy to learn by following the [tutorial doc/gf-tutorial.html]. You can write your
+first translator in 15 minutes.
+
+GF has an interactive command interpreter, as well as a batch compiler. Grammars can be
+compiled to parser and translator code in many different formats.  These components can 
+then be embedded in applications written in other programming languages. The formats
+currently supported are:
+- Haskell
+- Java
+- JavaScript
+- Prolog
+- Speech recognition: HTK/ATK, Nuance, JSGF
+
+
+The GF programming language is high-level and advanced, featuring
+- static type checking
+- higher-order functions
+- dependent types
+- pattern matching with data constructors and regular expressions
+- module system with multiple inheritance and parametrized modules
+
+
+==Libraries==
+
+Libraries are at the heart of modern software engineering. In natural language 
+applications, libraries are a way to cope with thousands of details involved in
+syntax, lexicon, and inflection. The [GF resource grammar library lib/] has
+support for an increasing number of languages, currently including
+- Arabic (partial)
+- Bulgarian
+- Catalan (partial)
+- Danish
+- English
+- Finnish
+- French
+- German 
+- Hindi/Urdu (partial)
+- [Interlingua http://www.interlingua.com/]
+- Italian
+- Norwegian bokmål
+- Russian
+- Spanish
+- Swedish
+
+
+Adding a language to the resource library takes 3 to 9 
+months - [contributions doc/projects.html]
+are welcome!
+
+
+
