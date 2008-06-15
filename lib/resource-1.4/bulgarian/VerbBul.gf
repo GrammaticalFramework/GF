@@ -5,25 +5,16 @@ concrete VerbBul of Verb = CatBul ** open Prelude, ResBul, ParadigmsBul in {
   lin
     UseV = predV ;
 
-    SlashV2a v = predV v ** {c2 = v.c2} ;
+    SlashV2a v = slashV v v.c2 ;
 
     Slash2V3 v np = 
-      insertObj (\\_ => v.c2.s ++ np.s ! RObj v.c2.c) (predV v) ** {c2 = v.c3} ;
+      insertSlashObj1 (\\_ => v.c2.s ++ np.s ! RObj v.c2.c) (slashV v v.c3) ;
 
     Slash3V3 v np = 
-      insertObj (\\_ => v.c3.s ++ np.s ! RObj v.c3.c) (predV v) ** {c2 = v.c2} ;
+      insertSlashObj2 (\\_ => v.c3.s ++ np.s ! RObj v.c3.c) (slashV v v.c2) ;
 
-    ComplVV vv vp = {
-      s   = \\t,a,p,agr,q,asp => 
-        let 
-          vv_verb = (predV vv).s ! t ! a ! p ! agr ! q ! asp ;
-          vp_verb = vp.s ! Pres ! Simul ! Pos ! agr ! False ! Perf ;
-        in vv_verb ++ vp.ad ! False ++ "да" ++ vp_verb ;
-      imp = vp.imp ;
-      ad = \\_ => [] ;
-      compl = vp.compl ;
-      subjRole = vp.subjRole
-      } ;
+    ComplVV vv vp =
+      insertObj (daComplex vp ! Perf) (predV vv) ;
 
     ComplVS v s  = insertObj (\\_ => "," ++ "че" ++ s.s) (predV v) ;
     ComplVQ v q  = insertObj (\\_ => q.s ! QIndir) (predV v) ;
@@ -33,61 +24,44 @@ concrete VerbBul of Verb = CatBul ** open Prelude, ResBul, ParadigmsBul in {
 
 
     SlashV2A v ap = 
-      insertObj (\\a => ap.s ! aform a.gn Indef (RObj Acc)) 
-        (predV v) ** {c2 = v.c2} ;  ---- FIXME: agreement with obj.a 
+      insertSlashObj2 (\\a => ap.s ! aform a.gn Indef (RObj Acc)) (slashV v v.c2) ;
 
     -- test: I saw a boy to whom she said that they are here
-    SlashV2S v s  = insertObj (\\_ => "," ++ "че" ++ s.s) (predV v) ** {c2 = v.c2} ;
+    SlashV2S v s  = insertSlashObj2 (\\_ => "," ++ "че" ++ s.s) (slashV v v.c2) ;
 
     -- test: I saw a boy whom she asked who is here
-    SlashV2Q v q  = insertObj (\\_ => q.s ! QIndir) (predV v) ** {c2 = v.c2} ;
+    SlashV2Q v q  = insertSlashObj2 (\\_ => q.s ! QIndir) (slashV v v.c2) ;
 
     -- test: I saw a boy whom she begged to walk 
     SlashV2V vv vp =
-      insertObj (\\agr => vp.ad ! False ++ "да" ++ vp.s ! Pres ! Simul ! Pos ! agr ! False ! Perf)
-                (predV vv)
-         ** {c2 = vv.c2} ;
+      insertSlashObj2 (daComplex vp ! Perf) (slashV vv vv.c2) ;
 
     -- test: I saw a car whom she wanted to buy
     SlashVV vv slash = {
-      s   = \\t,a,p,agr,q,asp => 
-        let 
-          vv_verb = (predV vv).s ! t ! a ! p ! agr ! q ! asp ;
-          slash_verb = slash.s ! Pres ! Simul ! Pos ! agr ! False ! Perf ;
-        in vv_verb ++ slash.ad ! False ++ "да" ++ slash_verb ;
-      imp = \\p,n,asp =>
-        let 
-          vv_verb = (predV vv).imp ! p ! n ! asp ;
-          slash_verb = slash.s ! Pres ! Simul ! Pos ! {gn = gennum DMasc n; p = P2} ! False ! Perf ;
-        in vv_verb ++ slash.ad ! False ++ "да" ++ slash_verb ;
-      ad = \\_ => [] ;
-      compl = slash.compl ;
-      subjRole = (predV vv).subjRole
-      } ** {c2 = slash.c2} ;
+      s = vv.s ;
+      ad = {isEmpty=True; s=[]};
+      compl1 = daComplex {s=slash.s; ad=slash.ad; compl=slash.compl1; vtype=slash.vtype} ! Perf ;
+      compl2 = slash.compl2 ;
+      vtype  = vv.vtype ;
+      c2 = slash.c2
+      } ;
 
     -- test: I saw a car whom she begged me to buy
     SlashV2VNP vv np slash = {
-      s   = \\t,a,p,agr,q,asp => 
-        let 
-          vv_verb = (predV vv).s ! t ! a ! p ! agr ! q ! asp ;
-          slash_verb = slash.s ! Pres ! Simul ! Pos ! np.a ! False ! Perf ;
-        in vv_verb ++ vv.c2.s ++ np.s ! RObj vv.c2.c ++ slash.ad ! False ++ "да" ++ slash_verb ;
-      imp = \\p,n,asp =>
-        let 
-          vv_verb = (predV vv).imp ! p ! n ! asp ;
-          slash_verb = slash.s ! Pres ! Simul ! Pos ! np.a ! False ! Perf ;
-        in vv_verb ++ vv.c2.s ++ np.s ! RObj vv.c2.c ++ slash.ad ! False ++ "да" ++ slash_verb ;
-      ad = \\_ => [] ;
-      compl = slash.compl ;
-      subjRole = (predV vv).subjRole
-      } ** {c2 = slash.c2} ;
+      s = vv.s ;
+      ad = {isEmpty=True; s=[]};
+      compl1 = \\agr => vv.c2.s ++ np.s ! RObj vv.c2.c ++ 
+                        daComplex {s=slash.s; ad=slash.ad; compl=slash.compl1; vtype=slash.vtype} ! Perf ! np.a ;
+      compl2 = slash.compl2 ;
+      vtype = vv.vtype ;
+      c2 = slash.c2
+      } ;
 
     ComplSlash slash np = {
       s   = slash.s ;
-      imp = slash.imp ;
       ad  = slash.ad ;
-      compl = \\_ => slash.c2.s ++ np.s ! RObj slash.c2.c ++ slash.compl ! np.a ;
-      subjRole = slash.subjRole
+      compl = \\a => slash.compl1 ! a ++ slash.c2.s ++ np.s ! RObj slash.c2.c ++ slash.compl2 ! np.a ;
+      vtype = slash.vtype
       } ;
 
     UseComp comp = insertObj comp.s (predV verbBe) ;
@@ -95,21 +69,20 @@ concrete VerbBul of Verb = CatBul ** open Prelude, ResBul, ParadigmsBul in {
     AdvVP vp adv = insertObj (\\_ => adv.s) vp ;
 
     AdVVP adv vp = {
-      s   = \\t,a,p,agr,q,asp => vp.s ! t ! a ! p ! agr ! False ! asp ;
-      imp = vp.imp ;
-      ad  = \\q => vp.ad ! q ++ adv.s ++ case q of {True => "ли"; False => []} ;
+      s   = vp.s ;
+      ad  = {isEmpty=False; s=vp.ad.s ++ adv.s} ;
       compl = vp.compl ;
-      subjRole = vp.subjRole
+      vtype = vp.vtype
       } ;
 
-----    ReflV2 v = predV (reflV (v ** {lock_V=<>}) v.c2.c) ;
-
-----  FIXME: AR cannot do this
-----  ReflVP : VPSlash -> VP
-
+    ReflVP slash = {
+      s = slash.s ;
+      ad = slash.ad ;
+      compl = \\agr => slash.compl1 ! agr ++ slash.compl2 ! agr ;
+      vtype = VMedial slash.c2.c ;
+      } ;
+      
     PassV2 v = insertObj (\\a => v.s ! Perf ! VPassive (aform a.gn Indef (RObj Acc))) (predV verbBe) ;
-
-----    UseVS, UseVQ = \vv -> {s = vv.s; c2 = noPrep; vtype = vv.vtype} ; -- no "to"
 
     CompAP ap = {s = \\agr => ap.s ! aform agr.gn Indef (RObj Acc)} ;
     CompNP np = {s = \\_ => np.s ! RObj Acc} ;
