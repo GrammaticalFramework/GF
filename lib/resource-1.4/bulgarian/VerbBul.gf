@@ -17,7 +17,7 @@ concrete VerbBul of Verb = CatBul ** open Prelude, ResBul, ParadigmsBul in {
       insertObj (daComplex vp ! Perf) (predV vv) ;
 
     ComplVS v s  = insertObj (\\_ => "," ++ "че" ++ s.s) (predV v) ;
-    ComplVQ v q  = insertObj (\\_ => q.s ! QIndir) (predV v) ;
+    ComplVQ v q  = insertObj (\\_ => q.s ! QDir) (predV v) ;
 
     ComplVA v ap = 
       insertObj (\\agr => ap.s ! aform agr.gn Indef (RObj Acc)) (predV v) ;
@@ -30,7 +30,7 @@ concrete VerbBul of Verb = CatBul ** open Prelude, ResBul, ParadigmsBul in {
     SlashV2S v s  = insertSlashObj2 (\\_ => "," ++ "че" ++ s.s) (slashV v v.c2) ;
 
     -- test: I saw a boy whom she asked who is here
-    SlashV2Q v q  = insertSlashObj2 (\\_ => q.s ! QIndir) (slashV v v.c2) ;
+    SlashV2Q v q  = insertSlashObj2 (\\_ => q.s ! QDir) (slashV v v.c2) ;
 
     -- test: I saw a boy whom she begged to walk 
     SlashV2V vv vp =
