@@ -5,6 +5,18 @@ import GF.Text.UTF8
 import Data.Char
 import qualified Data.Map as Map
 
+-- transliterations between ASCII and a Unicode character set
+
+-- current transliterations: devanagari, thai
+
+-- to add a new one: define the Unicode range and the corresponding ASCII strings,
+-- which may be one or two characters long
+
+-- conventions to be followed: 
+--   each character is either [letter] or [letter+nonletter]
+--   when using a sparse range of unicodes, mark missing codes as "-" in transliterations
+--   characters can be invisible: ignored in translation to unicode
+
 transliterate :: String -> Maybe (String -> String)
 transliterate s = case s of
   'f':'r':'o':'m':'_':t -> fmap appTransFromUnicode $ transliteration t
@@ -45,11 +57,6 @@ appTransFromUnicode trans =
   map fromEnum
 
 
--- conventions: 
---   each character is either [letter] or [letter+nonletter]
---   when using a sparse range of unicodes, mark missing codes as "-" in transliterations
---   characters can be invisible: ignored in translation to unicode
-
 mkTransliteration :: [String] -> [Int] -> Transliteration
 mkTransliteration ts us = Trans (Map.fromList (tzip ts us)) (Map.fromList (uzip us ts)) []
   where
@@ -60,9 +67,9 @@ mkTransliteration ts us = Trans (Map.fromList (tzip ts us)) (Map.fromList (uzip 
 unchar :: String -> [String]
 unchar s = case s of
   c:d:cs 
-   | isAlpha d -> [c]   : unchar (d:cs)
-   | isSpace d -> [c]   : unchar cs
-   | otherwise -> [c,d] : unchar cs
+   | isAlpha d -> [c]    : unchar (d:cs)
+   | isSpace d -> [c]:[d]: unchar cs
+   | otherwise -> [c,d]  : unchar cs
   [_]          -> [s]
   _            -> []
 
