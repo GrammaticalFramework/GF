@@ -23,7 +23,8 @@ characterTable = unlines . map prOne . Map.assocs . trans_from_unicode where
 
 data Transliteration = Trans {
   trans_to_unicode   :: Map.Map String Int,
-  trans_from_unicode :: Map.Map Int String
+  trans_from_unicode :: Map.Map Int String,
+  invisible_chars    :: [String]
   }
 
 appTransToUnicode :: Transliteration -> String -> String
@@ -32,6 +33,7 @@ appTransToUnicode trans =
   map (\c -> maybe c (return . toEnum) $
              Map.lookup c (trans_to_unicode trans)
       ) . 
+  filter (flip notElem (invisible_chars trans)) . 
   unchar
 
 appTransFromUnicode :: Transliteration -> String -> String
@@ -46,9 +48,10 @@ appTransFromUnicode trans =
 -- conventions: 
 --   each character is either [letter] or [letter+nonletter]
 --   when using a sparse range of unicodes, mark missing codes as "-" in transliterations
+--   characters can be invisible: ignored in translation to unicode
 
 mkTransliteration :: [String] -> [Int] -> Transliteration
-mkTransliteration ts us = Trans (Map.fromList (tzip ts us)) (Map.fromList (uzip us ts)) 
+mkTransliteration ts us = Trans (Map.fromList (tzip ts us)) (Map.fromList (uzip us ts)) []
   where
     tzip ts us = [(t,u) | (t,u) <- zip ts us, t /= "-"]
     uzip us ts = [(u,t) | (u,t) <- zip us ts, t /= "-"]
@@ -75,9 +78,9 @@ transThai = mkTransliteration allTrans allCodes where
   allCodes = [0x0e00 .. 0x0e7f]
 
 transDevanagari :: Transliteration
-transDevanagari = mkTransliteration allTrans allCodes where
+transDevanagari = (mkTransliteration allTrans allCodes){invisible_chars = ["a"]} where
   allTrans = words $
-    "~  *  -  - " ++
+    "M  N  -  - " ++
     "a- A- i- I- u- U- R- -  -  -  e- E- -  -  o- O- " ++
     "k  K  g  G  N: c  C  j  J  n: t. T. d. D. n. t  " ++
     "T  d  D  n  -  p  P  b  B  m  y  r  -  l  -  -  v  " ++

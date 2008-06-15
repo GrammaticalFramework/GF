@@ -23,20 +23,20 @@ resource ResHin = ParamX ** open Prelude in {
       } ;
 
     reggNoun : Str -> Gender -> Noun = \s,g -> case <s,g> of {
-      <-(_ + ("a:" | "i:")), Fem> => 
-           mkNoun s s s (s + "e~") (s + "o~") (s + "o") Fem ; 
+      <-(_ + ("A" | "I")), Fem> => 
+           mkNoun s s s (s + "eM") (s + "oM") (s + "o") Fem ; 
       _ => regNoun s ** {g = g}
       } ; 
 
     regNoun : Str -> Noun = \s -> case s of {
-      x + "iya:" => 
-        mkNoun s s       s   (x + "iya:~") (x + "iyo*") (x + "iyo") Fem ;
-      x + "a:"   => 
-        mkNoun s (x + "e") (x + "e") (x + "e") (x + "o*") (x + "o") Masc ;
-      x + "i:"   => 
-        mkNoun s s       s   (x + "iya:~") (x + "iyo*") (x + "iyo") Fem ;
+      x + "iyA" => 
+        mkNoun s s       s   (x + "iyAM") (x + "iyoN") (x + "iyo") Fem ;
+      x + "A"   => 
+        mkNoun s (x + "e") (x + "e") (x + "e") (x + "oN") (x + "o") Masc ;
+      x + "I"   => 
+        mkNoun s s       s   (x + "iyAM") (x + "iyoN") (x + "iyo") Fem ;
       _  => 
-        mkNoun s s       s   s             (s + "o*")   (s + "o")   Masc
+        mkNoun s s       s   s             (s + "oN")   (s + "o")   Masc
       } ; 
 
 
@@ -51,7 +51,7 @@ resource ResHin = ParamX ** open Prelude in {
       } ;
 
     regAdjective : Str -> Adjective = \s -> case s of {
-      acch + "a:" => mkAdjective s (acch + "e") (acch + "i:") ;
+      acch + "A" => mkAdjective s (acch + "e") (acch + "I") ;
       _ => mkAdjective s s s
       } ;
 
@@ -76,7 +76,7 @@ resource ResHin = ParamX ** open Prelude in {
       \inf,stem,ims,imp,ifs,ifp,pms,pmp,pfs,pfp,ss1,ss2,sp2,sp3,r -> {
         s = 
         let ga : Number -> Gender -> Str = \n,g -> 
-          (regAdjective "ga:").s ! g ! n ! Dir 
+          (regAdjective "gA").s ! g ! n ! Dir 
         in table {
           VInf => inf ;
           VStem => stem ;
@@ -99,48 +99,48 @@ resource ResHin = ParamX ** open Prelude in {
           VAbs  => stem + "kar" ; --- ke
           VReq  => r ;
           VImp  => sp2 ;
-          VReqFut => stem + "i-ega:"
+          VReqFut => stem + "ie-gA"
           }
         } ;
 
     regVerb : Str -> Verb = \cal -> 
       let caly : Str = case cal of {
-        _ + ("a:" | "e") => cal + "y" ;
-        c + "u:" => c + "uy" ;
-        c + "i:" => c + "iy" ;
+        _ + ("A" | "e") => cal + "y" ;
+        c + "U" => c + "uy" ;
+        c + "I" => c + "iy" ;
         _ => cal
         }
       in
       mkVerb
-        (cal + "na:") cal
-        (cal + "ta:") (cal + "te") (cal + "ti:") (cal + "ti:")
-        (caly + "a:")  (caly + "e")  (caly + "i:")  (caly + "i:*")
-        (caly + "u:~") (caly + "e")  (caly + "o")   (caly + "e*") 
-        (caly + "i-e") ;
+        (cal + "nA") cal
+        (cal + "tA") (cal + "te") (cal + "tI") (cal + "tI")
+        (caly + "A")  (caly + "e")  (caly + "I")  (caly + "IN")
+        (caly + "UM") (caly + "e")  (caly + "o")   (caly + "eN") 
+        (caly + "ie-") ;
 
   param
     CTense = CPresent | CPast | CFuture ;
   oper 
     copula : CTense -> Number -> Person -> Gender -> Str = \t,n,p,g -> 
       case <t,n,p,g> of {
-        <CPresent,Sg,P1,_   > => "hu:~" ;
+        <CPresent,Sg,P1,_   > => "hUM" ;
         <CPresent,Sg,P2,_   > => "hE" ;
         <CPresent,Sg,P3,_   > => "hE" ;
-        <CPresent,Pl,P1,_   > => "hE*" ;
+        <CPresent,Pl,P1,_   > => "hEN" ;
         <CPresent,Pl,P2,_   > => "ho" ;
-        <CPresent,Pl,P3,_   > => "hE*" ;
-        <CPast,   Sg,_ ,Masc> => "Ta:" ;
-        <CPast,   Sg,_ ,Fem > => "Ti:" ;
+        <CPresent,Pl,P3,_   > => "hEN" ;
+        <CPast,   Sg,_ ,Masc> => "TA" ;
+        <CPast,   Sg,_ ,Fem > => "TI" ;
         <CPast,   Pl,_ ,Masc> => "Te" ;
-        <CPast,   Pl,_ ,Fem > => "Ti:*" ;
-        <CFuture, Sg,P1,Masc> => "hu:*ga:" ;
-        <CFuture, Sg,P1,Fem > => "hu:*gi:" ;
-        <CFuture, Sg,_ ,Masc> => "hoga:" ;
-        <CFuture, Sg,_ ,Fem > => "hogi:" ;
+        <CPast,   Pl,_ ,Fem > => "TIN" ;
+        <CFuture, Sg,P1,Masc> => "hUNgA" ;
+        <CFuture, Sg,P1,Fem > => "hUNgI" ;
+        <CFuture, Sg,_ ,Masc> => "hogA" ;
+        <CFuture, Sg,_ ,Fem > => "hogI" ;
         <CFuture, Pl,P2,Masc> => "hoge" ;
-        <CFuture, Pl,_ ,Masc> => "ho*ge" ;
+        <CFuture, Pl,_ ,Masc> => "hoNge" ;
         <CFuture, Pl,P2,Fem > => "hogi:" ;
-        <CFuture, Pl,_ ,Fem > => "ho*gi:"
+        <CFuture, Pl,_ ,Fem > => "hoNgi:"
         } ;
 
   param
@@ -148,12 +148,12 @@ resource ResHin = ParamX ** open Prelude in {
   oper
     personalPronoun : Person -> Number -> {s : PronCase => Str} = \p,n -> 
       case <p,n> of {
-        <P1,Sg> => {s = table PronCase ["mE*"  ; "muJ" ; "muJe"   ; "mera:"]} ;
-        <P1,Pl> => {s = table PronCase ["ham"  ; "ham" ; "hame*"  ; "hama:ra:"]} ;
-        <P2,Sg> => {s = table PronCase ["tu:"  ; "tuJ" ; "tuJe"   ; "tera:"]} ;
-        <P2,Pl> => {s = table PronCase ["tum"  ; "tum" ; "tumhe*" ; "tumha:ra:"]} ;
-        <P3,Sg> => {s = table PronCase ["vah"  ; "us"  ; "use"    ; "uska:"]} ;
-        <P3,Pl> => {s = table PronCase ["ve"   ; "un"  ; "unhe*"  ; "unka:"]}
+        <P1,Sg> => {s = table PronCase ["mEN"  ; "muJ" ; "muJe"   ; "merA"]} ;
+        <P1,Pl> => {s = table PronCase ["ham"  ; "ham" ; "hameN"  ; "hamArA"]} ;
+        <P2,Sg> => {s = table PronCase ["tU"   ; "tuJ" ; "tuJe"   ; "terA"]} ;
+        <P2,Pl> => {s = table PronCase ["tum"  ; "tum" ; "tumheN" ; "tumhArA"]} ;
+        <P3,Sg> => {s = table PronCase ["vah"  ; "u-s" ; "u-se"   ; "u-skA"]} ;
+        <P3,Pl> => {s = table PronCase ["ve"   ; "u-n" ; "u-nheN" ; "u-nkA"]}
         } ;
 
   -- the Hindi verb phrase
@@ -198,7 +198,7 @@ resource ResHin = ParamX ** open Prelude in {
       s = \\b,vh => 
        let 
          na = if_then_Str b [] "na" ;
-         nahim = if_then_Str b [] "nahi:*" ;
+         nahim = if_then_Str b [] "nahIN" ;
        in
        case vh of {
          VPTense VPGenPres (Ag g n p) => 
@@ -228,7 +228,7 @@ resource ResHin = ParamX ** open Prelude in {
       } ;
 
     raha : Gender -> Number -> Str = \g,n -> 
-      (regAdjective "raha:").s ! g ! n ! Dir ;
+      (regAdjective "rahA").s ! g ! n ! Dir ;
 
     VPHSlash = VPH ** {c2 : Compl} ;
 
