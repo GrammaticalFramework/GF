@@ -65,7 +65,9 @@ commandHelp :: Bool -> (String,CommandInfo) -> String
 commandHelp full (co,info) = unlines $ [
   co ++ ", " ++ longname info,
   synopsis info] ++ if full then [
+  "",
   "syntax:" ++++ "  " ++ syntax info,
+  "",
   explanation info,
   "options:" ++++ unlines [" -" ++ o ++ "\t" ++ e | (o,e) <- options info],
   "flags:" ++++ unlines [" -" ++ o ++ "\t" ++ e | (o,e) <- flags info],
@@ -292,18 +294,29 @@ allCommands pgf = Map.fromList [
      }),
   ("ps", emptyCommandInfo {
      longname = "put_string",
+     syntax = "ps OPT? STRING",
      synopsis = "return a string, possibly processed with a function",
      explanation = unlines [
-       "Returns a string obtained by its argument string by applying",
+       "Returns a string obtained from its argument string by applying",
        "string processing functions in the order given in the command line",
        "option list. Thus 'ps -f -g s' returns g (f s). Typical string processors",
-       "are lexers and unlexers."
+       "are lexers and unlexers, but also character encoding conversions are possible.",
+       "The unlexers preserve the division of their input to lines."
        ], 
+     examples = [
+       "l (EAdd 3 4) | ps -code              -- linearize code-like output",
+       "ps -lexer=code | p -cat=Exp          -- parse code-like input",
+       "gr -cat=QCl | l | ps -bind -to_utf8  -- linearization output from LangFin", 
+       "ps -from_utf8 \"jag ?r h?r\" | p       -- parser in LangSwe in UYF8 terminal"
+       ],
      exec = \opts -> return . fromString . stringOps opts . toString,
      options = [
+       ("bind","bind tokens separated by Prelude.BIND, i.e. &+"),
+       ("from_utf8","decode from utf8"),
        ("lextext","text-like lexer"),
        ("lexcode","code-like lexer"),
        ("lexmixed","mixture of text and code (code between $...$)"), 
+       ("to_utf8","encode to utf8"),
        ("unlextext","text-like unlexer"),
        ("unlexcode","code-like unlexer"),
        ("unlexmixed","mixture of text and code (code between $...$)"), 
