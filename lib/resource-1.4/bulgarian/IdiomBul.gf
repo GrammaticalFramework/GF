@@ -10,10 +10,7 @@ concrete IdiomBul of Idiom = CatBul ** open Prelude, ParadigmsBul, ResBul in {
                {gn=GSg Neut; p=np.a.p}
                (insertObj (\\_ => thisRP ! np.a.gn ++ rs.s ! np.a.gn) (predV verbBe)) ;        
         
-    CleftAdv ad s =
-      mkClause (ad.s)
-               (agrP3 (GSg Neut)) 
-               (insertObj (\\_ => thisRP ! GPl ++ s.s) (predV verbBe)) ;        
+    CleftAdv ad s = {s = \\t,a,p,o => case p of {Pos=>[]; Neg=>"не"} ++ ad.s ++ s.s } ;
 
     ExistNP np = 
       { s = \\t,a,p,o => 
