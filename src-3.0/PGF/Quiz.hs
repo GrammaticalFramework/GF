@@ -13,9 +13,8 @@
 --------------------------------------------------------------------------------
 
 module PGF.Quiz (
-  translationQuiz,
+  mkQuiz,
   translationList,
-  morphologyQuiz,
   morphologyList
   ) where
 
@@ -31,25 +30,21 @@ import Data.List (nub)
 
 -- translation and morphology quiz. AR 10/5/2000 -- 12/4/2002
 
-translationQuiz :: PGF -> Language -> Language -> Category -> IO ()
-translationQuiz pgf ig og cat = do
-  tts <- translationList pgf ig og cat infinity
-  let qas = [ (q, mkAnswer as) | (q,as) <- tts]
-  teachDialogue qas "Welcome to GF Translation Quiz."
+-- generic quiz function
 
-translationList :: PGF -> Language -> Language -> Category -> Int -> IO [(String,[String])]
+mkQuiz :: String -> [(String,[String])] -> IO ()
+mkQuiz msg tts = do
+  let qas = [ (q, mkAnswer as) | (q,as) <- tts]
+  teachDialogue qas msg
+
+translationList :: 
+  PGF -> Language -> Language -> Category -> Int -> IO [(String,[String])]
 translationList pgf ig og cat number = do
   ts <- generateRandom pgf cat >>= return . take number
   return $ map mkOne $ ts
  where
    mkOne t = (norml (linearize pgf ig t), map (norml . linearize pgf og) (homonyms t))
    homonyms = nub . parse pgf ig cat . linearize pgf ig
-
-morphologyQuiz :: PGF -> Language -> Category -> IO ()
-morphologyQuiz pgf ig cat = do
-  tts <- morphologyList pgf ig cat infinity
-  let qas = [ (q, mkAnswer as) | (q,as) <- tts]
-  teachDialogue qas "Welcome to GF Morphology Quiz."
 
 morphologyList :: PGF -> Language -> Category -> Int -> IO [(String,[String])]
 morphologyList pgf ig cat number = do
@@ -69,8 +64,4 @@ mkAnswer as s = if (elem (norml s) as)
 
 norml :: String -> String
 norml = unwords . words
-
--- | the maximal number of precompiled quiz problems
-infinity :: Int
-infinity = 256
 

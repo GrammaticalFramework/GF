@@ -15,23 +15,25 @@ langs = [
   ("english",  "Eng"),
   ("finnish",  "Fin"),
   ("french",   "Fre"),
+  ("hindi",    "Hin"),
   ("german",   "Ger"),
   ("interlingua","Ina"),
   ("italian",  "Ita"),
   ("norwegian","Nor"),
   ("russian",  "Rus"),
   ("spanish",  "Spa"),
-  ("swedish",  "Swe")
+  ("swedish",  "Swe"),
+  ("thai",     "Tha")
   ]
 
 -- languagues for which to compile Lang
-langsLang = langs `except` ["Ara","Ina","Rus"]
+langsLang = langs `except` ["Ara","Rus"]
 
 -- languages for which to compile Try 
-langsAPI  = langsLang `except` ["Bul","Cat"]
+langsAPI  = langsLang `except` ["Cat","Hin","Tha"]
 
 -- languages for which to run treebank test
-langsTest = langsLang `except` ["Bul","Cat","Spa"]
+langsTest = langsLang `except` ["Cat","Hin","Spa","Tha"]
 
 -- languages for which langs.pgf is built
 langsPGF = langsTest `only` ["Eng","Fre","Swe"]
@@ -64,8 +66,9 @@ make xx = do
     system "rm */*.gfo ../alltenses/*.gfo ../present/*.gfo"
   return ()
 
-gfc pres path file = do
+gfc pres ppath file = do
   let preproc = if pres then " -preproc=./mkPresent " else ""
+  let path    = if pres then ppath else ""
   putStrLn $ "compiling " ++ file
   system $ "gfc -s -src " ++ preproc ++ path ++ file
 
