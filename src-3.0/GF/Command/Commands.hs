@@ -454,3 +454,18 @@ allCommands pgf = Map.fromList [
    -- ps -f -g s returns g (f s)
    stringOps opts s = foldr app s (reverse (map prOpt opts)) where
      app f = maybe id id (stringOp f) 
+
+translationQuiz :: PGF -> Language -> Language -> Category -> IO ()
+translationQuiz pgf ig og cat = do
+  tts <- translationList pgf ig og cat infinity
+  mkQuiz "Welcome to GF Translation Quiz." tts
+
+morphologyQuiz :: PGF -> Language -> Category -> IO ()
+morphologyQuiz pgf ig cat = do
+  tts <- morphologyList pgf ig cat infinity
+  mkQuiz "Welcome to GF Morphology Quiz." tts
+
+-- | the maximal number of precompiled quiz problems
+infinity :: Int
+infinity = 256
+
