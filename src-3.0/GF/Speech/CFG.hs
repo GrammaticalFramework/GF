@@ -80,12 +80,13 @@ bottomUpFilter gr = fix grow (gr { cfgRules = Map.empty })
   where grow g = g `unionCFG` filterCFG (all (okSym g) . ruleRhs) gr
         okSym g = symbol (`elem` allCats g) (const True)
 
--- | Removes categories which are not reachable from the start category.
+-- | Removes categories which are not reachable from any external category.
 topDownFilter :: CFG -> CFG
-topDownFilter cfg = filterCFGCats (isRelatedTo uses (cfgStartCat cfg)) cfg
+topDownFilter cfg = filterCFGCats (`Set.member` keep) cfg
   where
     rhsCats = [ (lhsCat r, c') | r <- allRules cfg, c' <- filterCats (ruleRhs r) ]
     uses = reflexiveClosure_ (allCats cfg) $ transitiveClosure $ mkRel rhsCats
+    keep = Set.unions $ map (allRelated uses) $ Set.toList $ cfgExternalCats cfg
 
 -- | Merges categories with identical right-hand-sides.
 -- FIXME: handle probabilities

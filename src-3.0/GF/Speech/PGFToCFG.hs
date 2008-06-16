@@ -45,15 +45,19 @@ pgfToCFG pgf lang = mkCFG (lookStartCat pgf) extCats (startRules ++ concatMap fr
     -- NOTE: this is only correct for cats that have a lincat with exactly one row.
     startRules :: [CFRule]
     startRules = [CFRule (prCId c) [NonTerminal (fcatToCat fc 0)] (CFRes 0) 
-                      | (c,fcs) <- Map.toList (startupCats pinfo), fc <- fcs]
+                      | (c,fcs) <- Map.toList (startupCats pinfo), 
+                        fc <- fcs, not (isLiteralFCat fc)]
 
     fruleToCFRule :: FRule -> [CFRule]
     fruleToCFRule (FRule f ps args c rhs) = 
         [CFRule (fcatToCat c l) (mkRhs row) (profilesToTerm (map (fixProfile row) ps))
-         | (l,row) <- Array.assocs rhs]
+         | (l,row) <- Array.assocs rhs, not (containsLiterals row)]
       where
         mkRhs :: Array FPointPos FSymbol -> [CFSymbol]
         mkRhs = map fsymbolToSymbol . Array.elems
+
+        containsLiterals :: Array FPointPos FSymbol -> Bool
+        containsLiterals row = any isLiteralFCat [args!!n | FSymCat _ n <- Array.elems row]
 
         fsymbolToSymbol :: FSymbol -> CFSymbol
         fsymbolToSymbol (FSymCat l n) = NonTerminal (fcatToCat (args!!n) l)
@@ -73,3 +77,6 @@ pgfToCFG pgf lang = mkCFG (lookStartCat pgf) extCats (startRules ++ concatMap fr
         profileToTerm :: CId -> Profile -> CFTerm
         profileToTerm t [] = CFMeta t
         profileToTerm _ xs = CFRes (last xs) -- FIXME: unify
+
+isLiteralFCat :: FCat -> Bool
+isLiteralFCat = (`elem` [fcatString, fcatInt, fcatFloat, fcatVar])
