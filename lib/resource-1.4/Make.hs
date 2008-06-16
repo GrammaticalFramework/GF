@@ -76,7 +76,7 @@ gf comm file = do
   putStrLn $ "reading " ++ file
   system $ "echo \"" ++ comm ++ "\" | gf3 -s " ++ file
 
-treeb = "rf -lines -term -file=" ++ treebankExx ++ 
+treeb = "rf -lines -tree -file=" ++ treebankExx ++ 
         " | l -treebank | wf -file=" ++ treebankResults
 
 lang (lla,la) = lla ++ "/Lang" ++ la ++ ".gf"
