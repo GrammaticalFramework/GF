@@ -96,7 +96,7 @@ lin
   have_V2 = dirV2 (stateV (mkV186 "имам")) ;
   hear_V2 = dirV2 (actionV (mkV186 "чувам") (mkV163 "чуя")) ;
   hill_N = mkN001 "хълм" ;
-  hope_VS = mkVS (reflV (stateV (mkV186 "надявам")) Acc) ;
+  hope_VS = mkVS (medialV (stateV (mkV186 "надявам")) Acc) ;
   horse_N = mkN035 "кон" ;
   hot_A = mkA076 "горещ" ;
   house_N = mkN041 "къща" ;
@@ -216,7 +216,7 @@ lin
   wine_N = mkN054 "вино" ;
   win_V2 = dirV2 (actionV (mkV186 "побеждавам") (mkV174 "победя")) ;
   woman_N = mkN041a "жена" ;
-  wonder_VQ = mkVQ (reflV (actionV (mkV186 "учудвам") (mkV173 "чудя")) Acc) ;
+  wonder_VQ = mkVQ (medialV (actionV (mkV186 "учудвам") (mkV173 "чудя")) Acc) ;
   wood_N = mkN041 "дървесина" ;
   write_V2 = dirV2 (stateV (mkV159 "пиша")) ;
   yellow_A = mkA076 "жълт" ;
@@ -319,7 +319,7 @@ lin
   fly_V = stateV (mkV177 "летя") ;
   freeze_V = stateV (mkV186 "замръзвам") ;
   give_V3 = dirV3 (actionV (mkV186 "давам") (mkV186 "дам")) naP ;
-  laugh_V = reflV (stateV (mkV160 "смея")) Acc ;
+  laugh_V = medialV (stateV (mkV160 "смея")) Acc ;
   lie_V = stateV (mkV178 "лежа") ;
   play_V = stateV (mkV161 "играя") ;
   sew_V = stateV (mkV163 "шия") ;
@@ -337,8 +337,8 @@ lin
   bite_V2 = dirV2 (stateV (mkV154 "хапя")) ;
   count_V2 = dirV2 (stateV (mkV175 "броя")) ;
   cut_V2 = dirV2 (stateV (mkV157 "режа"))  ;
-  fear_V2 = dirV2 (reflV (stateV (mkV186 "страхувам")) Acc) ;
-  fight_V2 = dirV2 (reflV (stateV (mkV173 "боря")) Acc) ;
+  fear_V2 = dirV2 (medialV (stateV (mkV186 "страхувам")) Acc) ;
+  fight_V2 = dirV2 (medialV (stateV (mkV173 "боря")) Acc) ;
   hit_V2 = dirV2 (actionV (mkV187 "удрям") (mkV173 "ударя")) ;
   hold_V2 = dirV2 (stateV (mkV179 "държа")) ;
   hunt_V2 = dirV2 (stateV (mkV174 "ловя")) ;
