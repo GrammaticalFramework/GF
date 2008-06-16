@@ -45,8 +45,8 @@ oper
 --2 Verbs
 --
 
-  reflV : V -> Case -> V ;
-  reflV v c = {s = v.s; vtype = VMedial  c; lock_V=<>} ;
+  medialV : V -> Case -> V ;
+  medialV v c = {s = v.s; vtype = VMedial  c; lock_V=<>} ;
 
   phrasalV : V -> Case -> V ;
   phrasalV v c = {s = v.s; vtype = VPhrasal c; lock_V=<>} ;
