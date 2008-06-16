@@ -32,7 +32,7 @@ writeOutput :: Options -> OutputFormat-> PGF -> IOE ()
 writeOutput opts fmt pgf =
     do let name = fromMaybe (prCId (absname pgf)) (moduleFlag optName opts)
            path = outputFilePath opts fmt name
-           s = prPGF fmt pgf name
+           s = prPGF opts fmt pgf name
        writeOutputFile path s
 
 outputFilePath :: Options -> OutputFormat -> String -> FilePath

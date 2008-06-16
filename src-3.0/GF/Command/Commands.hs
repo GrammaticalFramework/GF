@@ -17,6 +17,7 @@ import PGF.Data ----
 import PGF.Morphology
 import PGF.Quiz
 import GF.Compile.Export
+import GF.Infra.Option (noOptions)
 import GF.Infra.UseIO
 import GF.Data.ErrM ----
 import PGF.ExprSyntax (readExp)
@@ -446,7 +447,7 @@ allCommands pgf = Map.fromList [
            unlines $ [unwords (la:":": map prCId cs) | 
                        la <- optLangs opts, let cs = missingLins pgf (mkCId la)]
      _ -> case valIdOpts "printer" "pgf" opts of
-       v -> prPGF (read v) pgf (prCId (absname pgf))
+       v -> prPGF noOptions (read v) pgf (prCId (absname pgf))
 
    morphos opts s = 
      [lookupMorpho (buildMorpho pgf (mkCId la)) s | la <- optLangs opts]
