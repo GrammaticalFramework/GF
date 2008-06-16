@@ -90,7 +90,8 @@ makeSimpleSRG = makeSRG preprocess
 traceStats s g = trace ("---- " ++ s ++ ": " ++ stats g {- ++ "\n" ++ prCFRules g ++ "----" -}) g
 
 stats g = "Categories: " ++ show (countCats g)
-          ++ " Rules: " ++ show (countRules g)
+          ++ ", External categories: " ++ show (Set.size (cfgExternalCats g))
+          ++ ", Rules: " ++ show (countRules g)
 
 makeNonRecursiveSRG :: PGF
                     -> CId -- ^ Concrete syntax name.
