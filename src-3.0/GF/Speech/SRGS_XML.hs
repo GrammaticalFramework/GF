@@ -32,18 +32,14 @@ srgsXmlNonRecursivePrinter pgf cnc = prSrgsXml Nothing $ makeNonRecursiveSRG pgf
 prSrgsXml :: Maybe SISRFormat -> SRG -> String
 prSrgsXml sisr srg = showXMLDoc (optimizeSRGS xmlGr)
     where
-    xmlGr = grammar sisr (externalCat (srgStartCat srg)) (srgLanguage srg) $
+    xmlGr = grammar sisr (srgStartCat srg) (srgLanguage srg) $
               [meta "description" 
                  ("SRGS XML speech recognition grammar for " ++ srgName srg ++ "."),
                meta "generator" "Grammatical Framework"]
 	    ++ map ruleToXML (srgRules srg)
-    ruleToXML (SRGRule cat alts) 
-        | isExternalCat srg cat = Tag "rule" [("id",externalCat cat),("scope","public")] (prRhs alts)
-        | otherwise = Tag "rule" [("id",cat)] (prRhs alts)
+    ruleToXML (SRGRule cat alts) = Tag "rule" ([("id",cat)]++pub) (prRhs alts)
+        where pub = if isExternalCat srg cat then [("scope","public")] else []
     prRhs rhss = [oneOf (map (mkProd sisr) rhss)] 
-
-externalCat :: Cat -> Cat
-externalCat c = c ++ "_cat"
 
 mkProd :: Maybe SISRFormat -> SRGAlt -> XML
 mkProd sisr (SRGAlt mp n rhs) = Tag "item" [] (ti ++ [x] ++ tf)

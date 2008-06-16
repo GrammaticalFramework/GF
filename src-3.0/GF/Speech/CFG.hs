@@ -242,6 +242,11 @@ catRules gr c = Set.toList $ Map.findWithDefault Set.empty c (cfgRules gr)
 catSetRules :: CFG -> Set Cat -> [CFRule]
 catSetRules gr cs = allRules $ filterCFGCats (`Set.member` cs) gr
 
+mapCFGCats :: (Cat -> Cat) -> CFG -> CFG
+mapCFGCats f cfg = mkCFG (f (cfgStartCat cfg)) 
+                         (Set.map f (cfgExternalCats cfg))
+                         [CFRule (f lhs) (map (mapSymbol f id) rhs) t | CFRule lhs rhs t <- allRules cfg]
+
 onCFG :: (Map Cat (Set CFRule) -> Map Cat (Set CFRule)) -> CFG -> CFG
 onCFG f cfg = cfg { cfgRules = f (cfgRules cfg) }
 

@@ -96,17 +96,12 @@ stats g = "Categories: " ++ show (countCats g)
 makeNonRecursiveSRG :: PGF
                     -> CId -- ^ Concrete syntax name.
                     -> SRG
-makeNonRecursiveSRG pgf cnc = 
-      SRG { srgName = prCId cnc,
-	    srgStartCat = start,
-            srgExternalCats = cfgExternalCats cfg,
-            srgLanguage = getSpeechLanguage pgf cnc,
-	    srgRules = rs }
-  where
-    cfg = pgfToCFG pgf cnc
-    MFA start dfas = cfgToMFA cfg
-    rs = [SRGRule l [SRGAlt Nothing dummyCFTerm (dfaToSRGItem dfa)] | (l,dfa) <- dfas]
-      where dfaToSRGItem = mapRE dummySRGNT . minimizeRE . dfa2re
+makeNonRecursiveSRG = mkSRG mkRules
+    where
+      mkRules cfg = [SRGRule l [SRGAlt Nothing dummyCFTerm (dfaToSRGItem dfa)] | (l,dfa) <- dfas]
+          where
+            MFA _ dfas = cfgToMFA cfg
+            dfaToSRGItem = mapRE dummySRGNT . minimizeRE . dfa2re
             dummyCFTerm = CFMeta (mkCId "dummy")
             dummySRGNT = mapSymbol (\c -> (c,0)) id
 
@@ -114,16 +109,19 @@ makeSRG :: (CFG -> CFG)
 	-> PGF
         -> CId -- ^ Concrete syntax name.
 	-> SRG
-makeSRG preprocess pgf cnc = 
-      SRG { srgName = prCId cnc,
-	    srgStartCat = cfgStartCat cfg,
-            srgExternalCats = cfgExternalCats cfg,
-            srgLanguage = getSpeechLanguage pgf cnc,
-	    srgRules = rs }
+makeSRG preprocess = mkSRG mkRules
     where 
-    cfg = pgfToCFG pgf cnc
-    (_,cfgRules) = unzip $ allRulesGrouped $ preprocess cfg
-    rs = map cfRulesToSRGRule cfgRules
+      mkRules = map cfRulesToSRGRule . snd . unzip . allRulesGrouped . preprocess
+
+mkSRG :: (CFG -> [SRGRule]) -> PGF -> CId -> SRG
+mkSRG mkRules pgf cnc =
+    SRG { srgName = prCId cnc,
+	  srgStartCat = cfgStartCat cfg,
+          srgExternalCats = cfgExternalCats cfg,
+          srgLanguage = getSpeechLanguage pgf cnc,
+	  srgRules = mkRules cfg }
+    where cfg = renameExternal $ pgfToCFG pgf cnc
+          renameExternal cfg' = mapCFGCats (\c -> if c `Set.member` cfgExternalCats cfg' then c ++ "_cat" else c) cfg'
 
 getSpeechLanguage :: PGF -> CId -> Maybe String
 getSpeechLanguage pgf cnc = fmap (replace '_' '-') $ lookConcrFlag pgf cnc (mkCId "language")
