@@ -1,16 +1,28 @@
+-- Adjective
+
 PositA warm_A
 ComparA warm_A (UsePron i_Pron)
+ComplA2 married_A2 (DetNP (DetQuant (PossPron she_Pron) NumPl))
+ComplA2 married_A2 (DetNP (DetQuant (PossPron she_Pron) NumSg))
 ComplA2 married_A2 (UsePron she_Pron)
 ReflA2 married_A2
 PositA (UseA2 married_A2)
 SentAP (PositA good_A) (EmbedS (UseCl TPres ASimul PPos (PredVP (UsePron she_Pron) (UseComp (CompAdv here_Adv)))))
 AdAP very_AdA (PositA warm_A)
+
+
+-- Adverb
+
 PositAdvAdj warm_A
 PrepNP in_Prep (DetArtSg DefArt (UseN house_N))
 ComparAdvAdj more_CAdv warm_A (UsePN john_PN)
 ComparAdvAdjS more_CAdv warm_A (UseCl TPres ASimul PPos (PredVP (UsePron he_Pron) (UseV run_V)))
 SubjS when_Subj (UseCl TPres ASimul PPos (PredVP (UsePron she_Pron) (UseV sleep_V)))
 AdNum (AdnCAdv more_CAdv) (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n5))))))
+
+
+-- Conjunction
+
 ConjS and_Conj (BaseS (UseCl TPres ASimul PPos (PredVP (UsePron he_Pron) (UseV walk_V))) (UseCl TPres ASimul PPos (PredVP (UsePron she_Pron) (UseV run_V))))
 ConjAP and_Conj (BaseAP (PositA cold_A) (PositA warm_A))
 ConjNP or_Conj (BaseNP (UsePron she_Pron) (UsePron we_Pron))
@@ -19,6 +31,9 @@ ConjS either7or_DConj (BaseS (UseCl TPres ASimul PPos (PredVP (UsePron he_Pron) 
 ConjAP both7and_DConj (BaseAP (PositA warm_A) (PositA cold_A))
 ConjNP either7or_DConj (BaseNP (UsePron he_Pron) (UsePron she_Pron))
 ConjAdv both7and_DConj (BaseAdv here_Adv there_Adv)
+
+-- Idiom
+
 ImpersCl (UseComp (CompAP (PositA hot_A)))
 GenericCl (UseV sleep_V)
 CleftNP (UsePron i_Pron) (UseRCl TPast ASimul PPos (RelVP IdRP (ComplSlash (SlashV2a do_V2) (UsePron it_Pron))))
@@ -27,6 +42,9 @@ ExistNP (DetArtSg IndefArt (UseN house_N))
 ExistIP (IdetCN (IdetQuant which_IQuant NumPl) (UseN house_N))
 PredVP (UsePron i_Pron) (ProgrVP (UseV sleep_V))
 ImpPl1 (UseV go_V)
+
+-- Noun
+
 DetArtSg DefArt (UseN man_N)
 UsePN john_PN
 UsePron he_Pron
@@ -66,6 +84,10 @@ RelCN (UseN house_N) (UseRCl TPast ASimul PPos (RelSlash IdRP (SlashVP (UsePN jo
 AdvCN (UseN house_N) (PrepNP on_Prep (DetArtSg DefArt (UseN hill_N)))
 SentCN (UseN question_N) (EmbedQS (UseQCl TPres ASimul PPos (QuestIAdv where_IAdv (PredVP (UsePron she_Pron) (UseV sleep_V)))))
 ApposCN (UseN city_N) (UsePN paris_PN)
+
+
+-- Numeral
+
 num (pot2as3 (pot1as2 (pot0as1 (pot0 n6))))
 num (pot2as3 (pot1as2 (pot0as1 pot01)))
 num (pot2as3 (pot1as2 (pot1 n6)))
@@ -80,6 +102,10 @@ num (pot3 (pot2plus (pot0 n4) (pot1plus n6 (pot0 n7))))
 num (pot3plus (pot2plus (pot0 n4) (pot1plus n6 (pot0 n7))) (pot1as2 (pot1plus n8 (pot0 n9))))
 IDig D_8
 IIDig D_8 (IIDig D_0 (IIDig D_0 (IIDig D_1 (IIDig D_7 (IIDig D_8 (IDig D_9))))))
+
+
+-- Phrase
+
 PhrUtt but_PConj (UttImpSg PPos (ImpVP (AdvVP (UseV come_V) here_Adv))) (VocNP (DetCN (DetQuant (PossPron i_Pron) NumSg) (UseN friend_N)))
 PhrUtt NoPConj (UttS (UseCl TPres ASimul PPos (PredVP (UsePN john_PN) (UseV walk_V)))) NoVoc
 UttQS (UseQCl TPres ASimul PPos (QuestCl (PredVP (UsePron it_Pron) (UseComp (CompAP (PositA good_A))))))
@@ -93,6 +119,10 @@ UttNP (DetCN (DetQuant this_Quant NumSg) (UseN man_N))
 UttAdv here_Adv
 UttVP (UseV sleep_V)
 VocNP (DetCN (DetQuant (PossPron i_Pron) NumSg) (UseN friend_N))
+
+
+-- Question
+
 QuestCl (PredVP (UsePN john_PN) (UseV walk_V))
 QuestVP whoSg_IP (UseV walk_V)
 QuestSlash whoSg_IP (SlashVP (UsePN john_PN) (SlashV2a love_V2))
@@ -105,10 +135,17 @@ IdetIP (IdetQuant which_IQuant NumSg)
 PrepIP with_Prep whoSg_IP
 QuestIComp (CompIAdv where_IAdv) (UsePron it_Pron)
 QuestIComp (CompIP whoSg_IP) (UsePron it_Pron)
+
+
+-- Relative
+
 ExistNP (DetArtSg IndefArt (RelCN (UseN woman_N) (UseRCl TPres ASimul PPos (RelCl (PredVP (UsePN john_PN) (ComplSlash (SlashV2a love_V2) (UsePron she_Pron)))))))
 ExistNP (DetArtSg IndefArt (RelCN (UseN woman_N) (UseRCl TPres ASimul PPos (RelVP IdRP (ComplSlash (SlashV2a love_V2) (UsePN john_PN))))))
 ExistNP (DetArtSg IndefArt (RelCN (UseN woman_N) (UseRCl TPres ASimul PPos (RelSlash IdRP (SlashVP (UsePN john_PN) (SlashV2a love_V2))))))
 ExistNP (DetArtSg IndefArt (RelCN (UseN woman_N) (UseRCl TPres ASimul PPos (RelSlash (FunRP possess_Prep (DetArtSg DefArt (UseN2 mother_N2)) IdRP) (SlashVP (UsePN john_PN) (SlashV2a love_V2))))))
+
+-- Sentence
+
 PredVP (UsePN john_PN) (UseV walk_V)
 PredSCVP (EmbedS (UseCl TPres ASimul PPos (PredVP (UsePron she_Pron) (UseV go_V)))) (UseComp (CompAP (PositA good_A)))
 RelCN (UseN girl_N) (UseRCl TPres ASimul PPos (RelSlash IdRP (SlashVP (UsePron he_Pron) (SlashV2a see_V2))))
@@ -124,10 +161,17 @@ UseQCl TCond AAnter PNeg (QuestCl (PredVP (UsePN john_PN) (UseV walk_V)))
 RelCN (UseN girl_N) (UseRCl TCond AAnter PNeg (RelVP IdRP (UseV walk_V)))
 RelCN (UseN girl_N) (UseRCl TCond AAnter PNeg (RelSlash IdRP (SlashPrep (PredVP (UsePron i_Pron) (UseV walk_V)) with_Prep)))
 RelS (UseCl TPres ASimul PPos (PredVP (UsePron she_Pron) (UseV sleep_V))) (UseRCl TPres ASimul PPos (RelVP IdRP (UseComp (CompAP (PositA good_A)))))
+
+
+-- Text
+
 TEmpty
 TFullStop (PhrUtt NoPConj (UttS (UseCl TPres ASimul PPos (PredVP (UsePN john_PN) (UseV walk_V)))) NoVoc) TEmpty
 TQuestMark (PhrUtt NoPConj (UttQS (UseQCl TPres ASimul PPos (QuestCl (PredVP (UsePron they_Pron) (UseComp (CompAdv here_Adv)))))) NoVoc) TEmpty
 TExclMark (PhrUtt NoPConj (ImpPl1 (UseV go_V)) NoVoc) TEmpty
+
+-- Verb
+
 PredVP (UsePron i_Pron) (UseV sleep_V)
 PredVP (UsePron i_Pron) (ComplVV want_VV (UseV run_V))
 PredVP (UsePron i_Pron) (ComplVS say_VS (UseCl TPres ASimul PPos (PredVP (UsePron she_Pron) (UseV run_V))))
@@ -148,3 +192,24 @@ PredVP (UsePron we_Pron) (AdVVP always_AdV (UseV sleep_V))
 PredVP (UsePron we_Pron) (UseComp (CompAP (PositA small_A)))
 PredVP (UsePron i_Pron) (UseComp (CompNP (DetArtSg IndefArt (UseN man_N))))
 PredVP (UsePron i_Pron) (UseComp (CompAdv here_Adv))
+
+
+
+-- Janna's and Krasimir's long examples
+
+PhrUtt NoPConj (UttS (UseCl TPres ASimul PPos (ExistNP (PredetNP only_Predet (DetCN (DetArtCard IndefArt (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n2))))))) (AdvCN (SentCN (UseN woman_N) (EmbedQS (UseQCl TCond ASimul PPos (QuestSlash (IdetIP (IdetQuant which_IQuant NumPl)) (SlashPrep (PredVP (UsePron i_Pron) (ComplVV want_VV (PassV2 see_V2))) with_Prep))))) (PrepNP in_Prep (DetArtSg DefArt (UseN rain_N))))))))) NoVoc
+PhrUtt NoPConj (UttImpSg  PPos (ImpVP (ComplSlash (SlashV2A paint_V2A (ConjAP both7and_DConj (BaseAP (ComparA small_A (DetArtSg DefArt (UseN sun_N))) (ComparA big_A (DetArtSg DefArt (UseN moon_N)))))) (DetArtSg DefArt (UseN earth_N))))) NoVoc
+PhrUtt NoPConj (ImpPl1 (ComplVS hope_VS (ConjS either7or_DConj (BaseS (UseCl TPres ASimul PPos (PredVP (DetArtSg DefArt (ComplN2 father_N2 (DetArtSg DefArt (UseN baby_N)))) (UseV run_V))) (UseCl TPres ASimul PPos (PredVP (DetArtSg DefArt (UseN2 (Use2N3 distance_N3))) (UseComp (CompAP (PositA small_A))))))))) NoVoc
+PhrUtt NoPConj (UttS (UseCl TPres ASimul PPos (PredVP (DetCN every_Det (UseN baby_N)) (UseComp (CompNP (ConjNP either7or_DConj (BaseNP (DetArtSg IndefArt (UseN boy_N)) (DetArtSg IndefArt (UseN girl_N))))))))) NoVoc
+PhrUtt NoPConj (UttAdv (ConjAdv either7or_DConj (ConsAdv here7from_Adv (BaseAdv there_Adv everywhere_Adv)))) NoVoc
+PhrUtt NoPConj (UttVP (PassV2 know_V2)) NoVoc
+RelCN (UseN bird_N) (UseRCl TPres ASimul PPos (RelSlash IdRP (SlashVP (UsePron i_Pron) (SlashVV want_VV (SlashV2A paint_V2A (PositA red_A))))))
+UttImpSg PPos (ImpVP (ComplSlash (SlashVV want_VV (SlashV2a buy_V2)) (UsePron it_Pron)))
+UttImpSg PPos (ImpVP (ComplSlash (SlashVV want_VV (SlashV2A paint_V2A (PositA red_A))) (UsePron it_Pron)))
+UttImpSg PPos (ImpVP (ComplSlash (SlashVV want_VV (SlashV2VNP beg_V2V (UsePron i_Pron) (SlashV2a buy_V2))) (UsePron it_Pron)))
+PhrUtt NoPConj (UttS (UseCl TPres ASimul PPos (PredVP (DetArtPl DefArt (UseN fruit_N)) (ReflVP (Slash3V3 sell_V3 (DetArtSg DefArt (UseN road_N))))))) NoVoc
+PhrUtt NoPConj (UttS (UseCl TPres ASimul PPos (PredVP (UsePron i_Pron) (ReflVP (SlashV2V beg_V2V (UseV live_V)))))) NoVoc
+PhrUtt NoPConj (UttS (UseCl TPres ASimul PPos (PredVP (UsePron i_Pron) (ReflVP (SlashV2S answer_V2S (UseCl TPres ASimul PPos (ImpersCl (ComplVV must_VV (ReflVP (SlashV2a understand_V2)))))))))) NoVoc
+PhrUtt NoPConj (UttImpSg PPos (ImpVP (ReflVP (SlashV2Q ask_V2Q (UseQCl TPast ASimul PPos (QuestVP whoSg_IP (UseV come_V))))))) NoVoc
+PhrUtt NoPConj (UttS (UseCl TPast ASimul PPos (PredVP (UsePron i_Pron) (ReflVP (SlashV2A paint_V2A (ComparA beautiful_A (UsePN john_PN))))))) NoVoc
+
