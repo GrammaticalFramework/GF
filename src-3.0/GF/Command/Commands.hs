@@ -79,15 +79,6 @@ commandHelp full (co,info) = unlines $ [
 -- this list must no more be kept sorted by the command name
 allCommands :: PGF -> Map.Map String CommandInfo
 allCommands pgf = Map.fromList [
-  ("af", emptyCommandInfo {
-     longname = "append_file",
-     synopsis = "append string or tree to a file",
-     exec = \opts arg -> do
-         let file = valIdOpts "file" "_gftmp" opts
-         appendFile file (toString arg)
-         return void,
-     flags = [("file","name of the file")]
-    }),
   ("cc", emptyCommandInfo {
      longname = "compute_concrete",
      syntax = "cc (-all | -table | -unqual)? TERM",
@@ -196,8 +187,11 @@ allCommands pgf = Map.fromList [
      synopsis = "convert an abstract syntax expression to string",
      explanation = unlines [
        "Shows the linearization of a Tree by the grammars in scope.",
-       "The -lang flag can be used to restrict this to one language.",
+       "The -lang flag can be used to restrict this to fewer languages.",
        "See also the ps command for unlexing and character encoding."
+       ],
+     examples = [
+       "l -langs=LangSwe,LangNor no_Utt   -- linearize to LangSwe and LangNor"
        ],
      exec = \opts -> return . fromStrings . map (optLin opts),
      options = [
@@ -208,7 +202,7 @@ allCommands pgf = Map.fromList [
        ("treebank","show the tree and tag linearizations with language names")
        ],
      flags = [
-       ("lang","the language of linearization")
+       ("lang","the languages of linearization (comma-separated, no spaces)")
        ]
      }),
   ("ma", emptyCommandInfo {
@@ -244,32 +238,24 @@ allCommands pgf = Map.fromList [
      synopsis = "parse a string to abstract syntax expression",
      explanation = unlines [
        "Shows all trees returned by parsing a string in the grammars in scope.",
-       "The -lang flag can be used to restrict this to one language.",
+       "The -lang flag can be used to restrict this to fewer languages.",
        "The default start category can be overridden by the -cat flag.",
        "See also the ps command for lexing and character encoding."
        ],
      exec = \opts -> return . fromTrees . concatMap (par opts) . toStrings,
      flags = [
        ("cat","target category of parsing"),
-       ("lang","parsing language")
+       ("lang","the languages of parsing (comma-separated, no spaces)")
        ]
-     }),
-  ("pf", emptyCommandInfo {
-     longname = "print_fullform",
-     synopsis = "print the full-form lexicon of the actual grammar",
-     explanation = unlines [
-       "Prints all the strings in the actual grammar with their possible analyses"
-       ],
-     exec  = \opts _ -> 
-               return $ fromString $ concatMap 
-                  (prFullFormLexicon . buildMorpho pgf . mkCId) $ optLangs opts
      }),
   ("pg", emptyCommandInfo { -----
      longname = "print_grammar",
      synopsis = "print the actual grammar with the given printer",
      explanation = unlines [
-       "Prints the actual grammar (overridden by the -lang=X flag).",
-       "The -printer=X flag sets the format in which the grammar is printed.",
+       "Prints the actual grammar, with all involved languages.", 
+       "In some printers, this can be restricted to a subset of languages",
+       "with the -lang=X,Y flag (comma-separated, no spaces).",
+       "The -printer=P flag sets the format in which the grammar is printed.",
        "N.B.1 Since grammars are compiled when imported, this command",
        "generally shows a grammar that looks rather different from the source.",
        "N.B.2 This command is slightly obsolete: to produce different formats",
@@ -278,11 +264,12 @@ allCommands pgf = Map.fromList [
      exec  = \opts _ -> return $ fromString $ prGrammar opts,
      flags = [
        --"cat",
-       ("lang",   "select language for the -missing option (default all languages)"),
+       ("lang",   "select languages for the some options (default all languages)"),
        ("printer","select the printing format (see gfc --help)")
        ],
      options = [
        ("cats",   "show just the names of abstract syntax categories"),
+       ("fullform", "print the fullform lexicon"),
        ("missing","show just the names of functions that have no linearization")
        ]
      }),
@@ -346,21 +333,21 @@ allCommands pgf = Map.fromList [
      explanation = unlines [
        "Reads input from file. The filename must be in double quotes.",
        "The input is interpreted as a string by default, and can hence be",
-       "piped e.g. to the parse command. The option -term interprets the",
-       "input as a term, which can be given e.g. to the linearize command.",
+       "piped e.g. to the parse command. The option -tree interprets the",
+       "input as a tree, which can be given e.g. to the linearize command.",
        "The option -lines will result in a list of strings or trees, one by line." 
        ],
      options = [
        ("lines","return the list of lines, instead of the singleton of all contents"),
-       ("term","convert strings into terms")
+       ("tree","convert strings into trees")
        ],
      exec = \opts arg -> do 
        let file = valIdOpts "file" "_gftmp" opts
        s <- readFile file
        return $ case opts of
-         _ | isOpt "lines" opts && isOpt "term" opts -> 
+         _ | isOpt "lines" opts && isOpt "tree" opts -> 
                fromTrees [t | l <- lines s, Just t <- [readExp l]] 
-         _ | isOpt "term" opts -> 
+         _ | isOpt "tree" opts -> 
                fromTrees [t | Just t <- [readExp s]] 
          _ | isOpt "lines" opts -> fromStrings $ lines s 
          _ -> fromString s,
@@ -399,8 +386,13 @@ allCommands pgf = Map.fromList [
      synopsis = "send string or tree to a file",
      exec = \opts arg -> do
          let file = valIdOpts "file" "_gftmp" opts
-         writeFile file (toString arg)
+         if isOpt "append" opts 
+           then appendFile file (toString arg)
+           else writeFile file (toString arg)
          return void,
+     options = [
+       ("append","append to file, instead of overwriting it")
+       ],
      flags = [("file","the output filename")] 
      })
   ]
@@ -429,7 +421,7 @@ allCommands pgf = Map.fromList [
 
    optLangs opts = case valIdOpts "lang" "" opts of
      "" -> languages pgf
-     lang -> [lang]
+     lang -> chunks ',' lang
    optLang opts = head $ optLangs opts ++ ["#NOLANG"] 
    optCat opts = valIdOpts "cat" (lookStartCat pgf) opts
    optNum opts = valIntOpts "number" 1 opts
@@ -443,6 +435,8 @@ allCommands pgf = Map.fromList [
 
    prGrammar opts = case opts of
      _ | isOpt "cats" opts -> unwords $ categories pgf
+     _ | isOpt "fullform" opts -> concatMap 
+          (prFullFormLexicon . buildMorpho pgf . mkCId) $ optLangs opts
      _ | isOpt "missing" opts -> 
            unlines $ [unwords (la:":": map prCId cs) | 
                        la <- optLangs opts, let cs = missingLins pgf (mkCId la)]
