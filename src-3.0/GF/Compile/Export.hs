@@ -16,19 +16,20 @@ import GF.Text.UTF8
 
 -- top-level access to code generation
 
-prPGF :: OutputFormat 
+prPGF :: Options
+      -> OutputFormat 
       -> PGF 
       -> String -- ^ Output name, for example used for generated Haskell
                 -- module name.
       -> String
-prPGF fmt gr name = case fmt of
+prPGF opts fmt gr name = case fmt of
   FmtPGF          -> printPGF gr
   FmtJavaScript   -> pgf2js gr
   FmtHaskell      -> grammar2haskell gr name
   FmtHaskell_GADT -> grammar2haskellGADT gr name
   FmtBNF          -> prCFG $ pgfToCFG gr (outputConcr gr)
-  FmtSRGS_XML     -> srgsXmlPrinter Nothing gr (outputConcr gr)
-  FmtJSGF         -> jsgfPrinter Nothing gr (outputConcr gr)
+  FmtSRGS_XML     -> srgsXmlPrinter (flag optSISR opts) gr (outputConcr gr)
+  FmtJSGF         -> jsgfPrinter (flag optSISR opts) gr (outputConcr gr)
   FmtVoiceXML     -> grammar2vxml gr (outputConcr gr)
 
 

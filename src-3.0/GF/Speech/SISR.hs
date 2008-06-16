@@ -12,18 +12,13 @@ import Data.List
 
 import GF.Data.Utilities
 import GF.Infra.Ident
+import GF.Infra.Option (SISRFormat(..))
 import GF.Speech.CFG
 import GF.Speech.SRG (SRGNT)
 import PGF.CId
 
 import qualified GF.JavaScript.AbsJS   as JS
 import qualified GF.JavaScript.PrintJS as JS
-
-data SISRFormat = 
-    -- SISR Working draft 1 April 2003
-    -- http://www.w3.org/TR/2003/WD-semantic-interpretation-20030401/
-    SISROld
- deriving Show
 
 type SISRTag = [JS.DeclOrExpr]
 
@@ -62,9 +57,9 @@ profileFinalSISR term fmt = [JS.DExpr $ fmtOut fmt `ass` f term]
         f (CFVar v) = JS.EVar (var v)
         f (CFMeta typ) = obj [("name",JS.EStr "?"), ("type",JS.EStr (prCId typ))]
 
-fmtOut SISROld = JS.EVar (JS.Ident "$")
+fmtOut SISR_WD20030401 = JS.EVar (JS.Ident "$")
 
-fmtRef SISROld c = JS.EVar (JS.Ident ("$" ++ c))
+fmtRef SISR_WD20030401 c = JS.EVar (JS.Ident ("$" ++ c))
 
 args = JS.Ident "a"
 

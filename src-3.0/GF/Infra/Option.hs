@@ -3,7 +3,8 @@ module GF.Infra.Option
      -- * Option types
      Options, ModuleOptions,
      Flags(..), ModuleFlags(..),
-     Mode(..), Phase(..), Verbosity(..), Encoding(..), OutputFormat(..), Optimization(..),
+     Mode(..), Phase(..), Verbosity(..), Encoding(..), OutputFormat(..), 
+     SISRFormat(..), Optimization(..),
      Dump(..), Printer(..), Recomp(..),
      -- * Option parsing 
      parseOptions, parseModuleOptions,
@@ -93,6 +94,13 @@ data OutputFormat = FmtPGF
                   | FmtFA
   deriving (Eq,Ord)
 
+data SISRFormat = 
+    -- | SISR Working draft 1 April 2003
+    --   <http://www.w3.org/TR/2003/WD-semantic-interpretation-20030401/>
+    SISR_WD20030401    
+  | SISR_1_0
+ deriving (Show,Eq,Ord)
+
 data Optimization = OptStem | OptCSE | OptExpand | OptParametrize | OptValues
   deriving (Show,Eq,Ord)
 
@@ -137,6 +145,7 @@ data Flags = Flags {
       optEmitGFO         :: Bool,
       optGFODir          :: FilePath,
       optOutputFormats   :: [OutputFormat],
+      optSISR            :: Maybe SISRFormat,
       optOutputFile      :: Maybe FilePath,
       optOutputDir       :: Maybe FilePath,
       optRecomp          :: Recomp,
@@ -279,6 +288,7 @@ defaultFlags = Flags {
       optEmitGFO         = True,
       optGFODir          = ".",
       optOutputFormats   = [FmtPGF],
+      optSISR            = Nothing,
       optOutputFile      = Nothing,
       optOutputDir       = Nothing,
       optRecomp          = RecompIfNewer,
@@ -383,6 +393,9 @@ optDescr =
                   "Multiple concrete: pgf (default), gar, js, ...",
                   "Single concrete only: cf, bnf, lbnf, gsl, srgs_xml, srgs_abnf, ...",
                   "Abstract only: haskell, ..."]),
+     Option [] ["sisr"] (ReqArg sisrFmt "FMT") 
+        (unlines ["Include SISR tags in generated speech recognition grammars.",
+                  "FMT can be one of: old, 1.0"]),
      Option ['o'] ["output-file"] (ReqArg outFile "FILE") 
            "Save output in FILE (default is out.X, where X depends on output format.",
      Option ['D'] ["output-dir"] (ReqArg outDir "DIR") 
@@ -410,6 +423,10 @@ optDescr =
        gfoDir      x = set $ \o -> o { optGFODir = x }
        outFmt      x = readOutputFormat x >>= \f ->
                          set $ \o -> o { optOutputFormats = optOutputFormats o ++ [f] }
+       sisrFmt     x = case x of
+                         "old" -> set $ \o -> o { optSISR = Just SISR_WD20030401 }
+                         "1.0" -> set $ \o -> o { optSISR = Just SISR_1_0 }
+                         _     -> fail $ "Unknown SISR format: " ++ show x
        outFile     x = set $ \o -> o { optOutputFile = Just x }
        outDir      x = set $ \o -> o { optOutputDir = Just x }
        recomp      x = set $ \o -> o { optRecomp = x }
