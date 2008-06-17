@@ -23,7 +23,6 @@ pCommand = do
   cmd  <- pIdent
   RP.skipSpaces
   opts <- RP.sepBy pOption RP.skipSpaces
---  opts <- RP.many pOption
   arg  <- RP.option ANoArg (fmap AExp (pExp False))
   return (Command cmd opts arg)
 
