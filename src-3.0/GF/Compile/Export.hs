@@ -11,6 +11,7 @@ import GF.Speech.CFG
 import GF.Speech.PGFToCFG
 import GF.Speech.SRGS_XML
 import GF.Speech.JSGF
+import GF.Speech.GSL
 import GF.Speech.VoiceXML
 import GF.Text.UTF8
 
@@ -30,6 +31,7 @@ prPGF opts fmt gr name = case fmt of
   FmtBNF          -> prCFG $ pgfToCFG gr (outputConcr gr)
   FmtSRGS_XML     -> srgsXmlPrinter (flag optSISR opts) gr (outputConcr gr)
   FmtJSGF         -> jsgfPrinter (flag optSISR opts) gr (outputConcr gr)
+  FmtGSL          -> gslPrinter gr (outputConcr gr)
   FmtVoiceXML     -> grammar2vxml gr (outputConcr gr)
 
 

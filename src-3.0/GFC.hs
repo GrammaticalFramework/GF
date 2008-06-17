@@ -48,6 +48,7 @@ fmtExtension FmtHaskell_GADT = "hs"
 fmtExtension FmtBNF          = "bnf"
 fmtExtension FmtSRGS_XML     = "grxml"
 fmtExtension FmtJSGF         = "jsgf"
+fmtExtension FmtGSL          = "gsl"
 fmtExtension FmtVoiceXML     = "vxml"
 
 writeOutputFile :: FilePath -> String -> IOE ()
