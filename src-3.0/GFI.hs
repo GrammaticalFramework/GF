@@ -45,7 +45,11 @@ loop opts gfenv0 = do
         cpu' <- getCPUTime
         putStrLnFlush (show ((cpu' - cputime gfenv') `div` 1000000000) ++ " msec")
         loop opts $ gfenv' {cputime = cpu'}
-  case words s of
+  let 
+    pwords = case words s of
+      w:ws -> getCommandOp w :ws
+      ws -> ws
+  case pwords of
   -- special commands, requiring source grammar in env
     "!":ws -> do
        system $ unwords ws

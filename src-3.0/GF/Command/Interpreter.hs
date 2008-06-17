@@ -1,7 +1,8 @@
 module GF.Command.Interpreter (
   CommandEnv (..),
   mkCommandEnv,
-  interpretCommandLine
+  interpretCommandLine,
+  getCommandOp
   ) where
 
 import GF.Command.Commands
@@ -71,11 +72,11 @@ interpret env trees0 comm = case lookCommand co comms of
 -- analyse command parse tree to a uniform datastructure, normalizing comm name
 getCommand :: Command -> [Exp] -> (String,[Option],[Exp])
 getCommand co ts = case co of
-  Command c opts (AExp t) -> (getOp c,opts,[t]) -- ignore piped
-  Command c opts ANoArg   -> (getOp c,opts,ts)  -- use piped
- where
-   -- abbreviation convention from gf
-   getOp s = case break (=='_') s of
+  Command c opts (AExp t) -> (getCommandOp c,opts,[t]) -- ignore piped
+  Command c opts ANoArg   -> (getCommandOp c,opts,ts)  -- use piped
+
+-- abbreviation convention from gf commands
+getCommandOp s = case break (=='_') s of
      (a:_,_:b:_) -> [a,b]  -- axx_byy --> ab
      _ -> case s of
        [a,b] -> s          -- ab  --> ab
