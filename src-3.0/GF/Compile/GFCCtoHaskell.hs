@@ -27,15 +27,15 @@ import Data.List --(isPrefixOf, find, intersperse)
 import qualified Data.Map as Map
 
 -- | the main function
-grammar2haskell :: PGF 
-                -> String  -- ^ Module name.
+grammar2haskell :: String  -- ^ Module name.
+                -> PGF
                 -> String
-grammar2haskell gr name = encodeUTF8 $ foldr (++++) [] $  
+grammar2haskell name gr = encodeUTF8 $ foldr (++++) [] $  
   haskPreamble name ++ [datatypes gr', gfinstances gr']
     where gr' = hSkeleton gr
 
-grammar2haskellGADT :: PGF -> String -> String
-grammar2haskellGADT gr name = encodeUTF8 $ foldr (++++) [] $  
+grammar2haskellGADT :: String -> PGF -> String
+grammar2haskellGADT name gr = encodeUTF8 $ foldr (++++) [] $  
   ["{-# OPTIONS_GHC -fglasgow-exts #-}"] ++ 
   haskPreamble name ++ [datatypesGADT gr', gfinstances gr']
     where gr' = hSkeleton gr

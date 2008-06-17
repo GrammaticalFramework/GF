@@ -15,26 +15,35 @@ import GF.Speech.GSL
 import GF.Speech.VoiceXML
 import GF.Text.UTF8
 
+import Data.Maybe
+import System.FilePath
+
 -- top-level access to code generation
 
-prPGF :: Options
-      -> OutputFormat 
-      -> PGF 
-      -> String -- ^ Output name, for example used for generated Haskell
-                -- module name.
-      -> String
-prPGF opts fmt gr name = case fmt of
-  FmtPGF          -> printPGF gr
-  FmtJavaScript   -> pgf2js gr
-  FmtHaskell      -> grammar2haskell gr name
-  FmtHaskell_GADT -> grammar2haskellGADT gr name
-  FmtBNF          -> prCFG $ pgfToCFG gr (outputConcr gr)
-  FmtSRGS_XML     -> srgsXmlPrinter (flag optSISR opts) gr (outputConcr gr)
-  FmtJSGF         -> jsgfPrinter (flag optSISR opts) gr (outputConcr gr)
-  FmtGSL          -> gslPrinter gr (outputConcr gr)
-  FmtVoiceXML     -> grammar2vxml gr (outputConcr gr)
+exportPGF :: Options
+          -> OutputFormat 
+          -> PGF 
+          -> [(FilePath,String)] -- ^ List of recommended file names and contents.
+exportPGF opts fmt pgf = 
+    case fmt of
+      FmtPGF          -> multi "pgf" printPGF
+      FmtJavaScript   -> multi "js"  pgf2js
+      FmtHaskell      -> multi "hs"  (grammar2haskell name)
+      FmtHaskell_GADT -> multi "hs"  (grammar2haskellGADT name)
+      FmtBNF          -> single "bnf"   bnfPrinter
+      FmtSRGS_XML     -> single "grxml" (srgsXmlPrinter sisr)
+      FmtJSGF         -> single "jsgf"  (jsgfPrinter sisr)
+      FmtGSL          -> single "gsl"   gslPrinter
+      FmtVoiceXML     -> single "vxml"  grammar2vxml
+ where
+   name = fromMaybe (prCId (absname pgf)) (moduleFlag optName opts)
+   sisr = flag optSISR opts
 
+   multi :: String -> (PGF -> String) -> [(FilePath,String)]
+   multi ext pr = [(name <.> ext, pr pgf)]
 
+   single :: String -> (PGF -> CId -> String) -> [(FilePath,String)]
+   single ext pr = [(prCId cnc <.> ext, pr pgf cnc) | cnc <- cncnames pgf]
 
 -- | Get the name of the concrete syntax to generate output from.
 -- FIXME: there should be an option to change this.

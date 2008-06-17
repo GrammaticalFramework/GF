@@ -26,30 +26,17 @@ mainGFC opts fs =
                  writeOutputs opts pgf
 
 writeOutputs :: Options -> PGF -> IOE ()
-writeOutputs opts pgf = mapM_ (\fmt -> writeOutput opts fmt pgf) (flag optOutputFormats opts)
+writeOutputs opts pgf =
+    sequence_ [writeOutput opts name str 
+                   | fmt <- flag optOutputFormats opts, 
+                     (name,str) <- exportPGF opts fmt pgf]
 
-writeOutput :: Options -> OutputFormat-> PGF -> IOE ()
-writeOutput opts fmt pgf =
-    do let name = fromMaybe (prCId (absname pgf)) (moduleFlag optName opts)
-           path = outputFilePath opts fmt name
-           s = prPGF opts fmt pgf name
-       writeOutputFile path s
-
-outputFilePath :: Options -> OutputFormat -> String -> FilePath
-outputFilePath opts fmt name0 = addDir name <.> fmtExtension fmt
-  where name = fromMaybe name0 (moduleFlag optName opts)
-        addDir = maybe id (</>) (flag optOutputDir opts)
-
-fmtExtension :: OutputFormat -> String
-fmtExtension FmtPGF          = "pgf"
-fmtExtension FmtJavaScript   = "js"
-fmtExtension FmtHaskell      = "hs"
-fmtExtension FmtHaskell_GADT = "hs"
-fmtExtension FmtBNF          = "bnf"
-fmtExtension FmtSRGS_XML     = "grxml"
-fmtExtension FmtJSGF         = "jsgf"
-fmtExtension FmtGSL          = "gsl"
-fmtExtension FmtVoiceXML     = "vxml"
+writeOutput :: Options -> FilePath-> String -> IOE ()
+writeOutput opts file str =
+    do let path = case flag optOutputDir opts of
+                    Nothing  -> file
+                    Just dir -> dir </> file
+       writeOutputFile path str
 
 writeOutputFile :: FilePath -> String -> IOE ()
 writeOutputFile outfile output = ioeIO $
