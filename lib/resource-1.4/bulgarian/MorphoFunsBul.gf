@@ -101,7 +101,7 @@ oper
 --3 Other verbs
 --
 
-  V2S, V2V, V2Q : Type = V2 ;
+--  V2S, V2V, V2Q : Type = V2 ;
 
   mkV2S : V -> Prep -> V2S ;
   mkV2S v p = prepV2 v p ** {lock_V2 = <>} ;
