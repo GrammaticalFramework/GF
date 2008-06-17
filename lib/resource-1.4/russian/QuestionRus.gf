@@ -47,26 +47,26 @@ concrete QuestionRus of Question = CatRus ** open ResRus, Prelude in {
      anim = okhotnik.anim 
     } ;
 
-{- 
-    IDetCN kakoj pyat umeluj okhotnik =
-    {s = \\pf => case kakoj.c of {
-       Nom => 
-        kakoj.s ! AF (extCase pf) okhotnik.anim (gNum okhotnik.g kakoj.n) ++ 
-         pyat.s! (extCase pf) ! okhotnik.g ++ 
-         umeluj.s!AF (extCase pf) okhotnik.anim (gNum okhotnik.g kakoj.n)++
-         okhotnik.s ! kakoj.n ! (extCase pf) ; 
-       _ => 
-        kakoj.s ! AF (extCase pf) okhotnik.anim (gNum okhotnik.g kakoj.n) ++ 
-        pyat.s! (extCase pf) ! okhotnik.g ++ 
-        umeluj.s!AF (extCase pf) okhotnik.anim (gNum okhotnik.g kakoj.n)++  
-        okhotnik.s ! kakoj.n ! kakoj.c };
+-- 1.4 additions 17/6/2008 by AR
+
+    IdetIP kakoj = let anim = Inanimate in
+    {s = \\pf => kakoj.s ! AF (extCase pf) anim (pgNum kakoj.g kakoj.n) ;
      n = kakoj.n ; 
      p = P3 ;
      pron = False;
-     g = kakoj.g ;
-     anim = okhotnik.anim 
+     g = kakoj.g ; 
+     anim = anim 
     } ;
--}
+ 
+    IdetQuant kakoj pyat = -- okhotnik =
+    {s = \\af => 
+           kakoj.s ! pyat.n ! af ++
+           pyat.s ! caseAF af ! genAF af ;
+     n = pyat.n ;
+     g = kakoj.g ;
+     c = kakoj.c 
+    } ;
 
     CompIAdv a = a ;
+    CompIP ip = {s = ip.s ! PF Nom No NonPoss} ;
 }

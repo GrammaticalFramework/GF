@@ -27,7 +27,7 @@ langs = [
   ]
 
 -- languagues for which to compile Lang
-langsLang = langs `except` ["Ara","Rus"]
+langsLang = langs `except` ["Ara"]
 
 -- languages for which to compile Try 
 langsAPI  = langsLang `except` ["Cat","Hin","Tha"]
