@@ -225,10 +225,10 @@ resource ResIna = ParamX ** open Prelude in {
       };
     
     tenseToVFrom = table {
-      Pres => VPres;
-      Past => VPast;
-      Fut => VFut;
-      Cond => VCond
+      Pres => VPres
+      ;Past => VPast; --# notpresent
+      Fut => VFut; --# notpresent
+      Cond => VCond --# notpresent
       };
 
     insertInvarObj : Str -> VP -> VP = \obj -> insertObj "" Acc (mkInvarNP obj);
