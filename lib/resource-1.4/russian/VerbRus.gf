@@ -3,6 +3,8 @@
 
 concrete VerbRus of Verb = CatRus ** open ResRus, Prelude in {
 
+-- 1.4 additions by AR 17/6/2008
+
   flags optimize=all_subs ;  coding=utf8 ;
   lin
   CompNP masha =
@@ -161,6 +163,34 @@ concrete VerbRus of Verb = CatRus ** open ResRus, Prelude in {
       negBefore = se.negBefore
     } ;
 
+  Slash2V3 dat tu =
+      let
+        tebepivo = dat.s2 ++ tu.s ! PF dat.c No NonPoss ++ dat.s4 ;
+      in
+      {s  = \\clf,gn,p => dat.s ! (getActVerbForm clf (genGNum gn) (numGNum gn) p) ++ tebepivo ; 
+      asp = dat.asp ;
+      w = Act;
+      negBefore = True;
+      s2 = "";
+      s3 = \\g,n=> "" ;
+      sc = dat.s4 ;
+      c = dat.c2
+    } ;
+
+  Slash3V3 dat pivo =
+      let
+        tebepivo = dat.s4 ++ pivo.s ! PF dat.c2 Yes NonPoss 
+      in
+      {s  = \\clf,gn,p => dat.s ! (getActVerbForm clf (genGNum gn) (numGNum gn) p) ++ tebepivo ; 
+      asp = dat.asp ;
+      w = Act;
+      negBefore = True;
+      s2 = "";
+      s3 = \\g,n=> "" ;
+      sc = dat.s2 ;
+      c = dat.c
+    } ;
+
 {-
   ComplV3 dat tu pivo =
       let
@@ -225,19 +255,21 @@ concrete VerbRus of Verb = CatRus ** open ResRus, Prelude in {
       s2 = "";
       s3 = \\g,n => molodoj.s!(AF Inst Animate (gNum g n))  
     } ;
-{-
-  SlashV2A  obechat tu molodoj =
-    {s  = \\clf,gn,p => obechat.s2++
+
+  SlashV2A  obechat molodoj =
+    {s  = \\clf,gn,p => 
           obechat.s ! (getActVerbForm clf (genGNum gn) (numGNum gn) p) ++  
-         tu.s ! PF obechat.c No NonPoss ++
-         molodoj.s!AF Inst tu.anim (pgNum tu.g tu.n) ; 
+          molodoj.s ! AF Inst Inanimate (ASg Neut) ;
+                      ---- AR 17/6; AF Inst tu.anim (pgNum tu.g tu.n) ; 
       asp = obechat.asp ;
       w = Act;
       negBefore = True;
       s2 = "";
-      s3 = \\g,n =>""
+      s3 = \\g,n =>"" ;
+      sc = obechat.s2 ;
+      c = obechat.c
     } ;
--}
+
   AdvVP poet khorosho =
     {s = \\clf,gn,p => poet.s ! clf!gn!p; s2 = poet.s2 ++ khorosho.s; s3 = poet.s3;
      asp = poet.asp; w = poet.w; t = poet.t ; negBefore = poet.negBefore } ;

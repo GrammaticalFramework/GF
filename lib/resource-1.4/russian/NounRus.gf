@@ -55,24 +55,85 @@ concrete NounRus of Noun = CatRus ** open ResRus, Prelude, MorphoRus in {
       pron = np.pron
       } ;
 
-{-
-    DetSg quant ord = {
-      s = \\af => quant.s!af ++ ord.s!af ; 
-      n = Sg ;
+-- 1.4 additions AR 17/6/2008
+
+    DetNP kazhduj = 
+     let
+       g = Neut ; ----
+       anim = Inanimate ;
+     in {
+      s = \\c => kazhduj.s ! AF (extCase c) anim (gNum g kazhduj.n) ;
+      n = kazhduj.n ; 
+      p = P3 ;
+      pron = False;
+      g = case kazhduj.g of { PNoGen => (PGen g); _ => kazhduj.g };
+      anim = anim 
+    } ;
+
+    DetQuantOrd quant num ord = {
+      s =  \\af => quant.s !af ++ num.s! (caseAF af) ! (genAF af)  ++ ord.s!af ; 
+      n = num.n ;
       g = quant.g;
       c = quant.c
       } ;
 
-    DetPl quant num ord = {
-      s =  \\af => quant.s !af ++ num.s! (caseAF af) ! (genAF af)  ++ ord.s!af ; 
-      n = num.n; ---- ?? AR 18/12/2007
+    DetQuant quant num = {
+      s =  \\af => quant.s !af ++ num.s! (caseAF af) ! (genAF af) ;
+      n = num.n ;
       g = quant.g;
       c = quant.c
       } ;
--}
+
+    DetArtOrd quant num ord = {
+      s =  \\af => quant.s !af ++ num.s! (caseAF af) ! (genAF af)  ++ ord.s!af ; 
+      n = num.n ;
+      g = quant.g;
+      c = quant.c
+      } ;
+
+    DetArtCard quant num = {
+      s =  \\af => quant.s !af ++ num.s! (caseAF af) ! (genAF af) ;
+      n = num.n ;
+      g = quant.g;
+      c = quant.c
+      } ;
+
+--    MassDet = {s = \\_=>[] ; c=Nom; g = PNoGen; n = Sg} ;
+
+    MassNP okhotnik = {
+      s = \\c => okhotnik.s ! Sg ! (extCase c) ; 
+      n = Sg ; 
+      p = P3 ;
+      pron = False;
+      g = PGen okhotnik.g ;
+      anim = okhotnik.anim 
+    } ;
+
+    DetArtSg kazhduj okhotnik = {
+      s = \\c =>  -- art case always Nom (AR 17/6/2008) 
+          kazhduj.s ! AF (extCase c) okhotnik.anim (gNum okhotnik.g Sg) ++ 
+          okhotnik.s ! Sg ! (extCase c) ; 
+      n = Sg ; 
+      p = P3 ;
+      pron = False;
+      g = case kazhduj.g of { PNoGen => (PGen okhotnik.g); _ => kazhduj.g };
+      anim = okhotnik.anim 
+    } ;
+
+    DetArtPl kazhduj okhotnik = {
+      s = \\c =>  -- art case always Nom (AR 17/6/2008) 
+          kazhduj.s ! AF (extCase c) okhotnik.anim (gNum okhotnik.g Pl) ++ 
+          okhotnik.s ! Pl ! (extCase c) ; 
+      n = Pl ; 
+      p = P3 ;
+      pron = False;
+      g = case kazhduj.g of { PNoGen => (PGen okhotnik.g); _ => kazhduj.g };
+      anim = okhotnik.anim 
+    } ;
 
     PossPron p = {s = \\af => p.s ! mkPronForm (caseAF af) No (Poss (gNum (genAF af) (numAF af) )); c=Nom; g = PNoGen} ;
 
+   NumCard c = c ;
    NumSg = {s = \\_,_ => [] ; n = Sg} ;
    NumPl = {s = \\_,_ => [] ; n = Pl} ;
 
@@ -90,7 +151,6 @@ concrete NounRus of Noun = CatRus ** open ResRus, Prelude, MorphoRus in {
 
     DefArt = {s = \\_=>[] ; c=Nom; g = PNoGen };
     IndefArt = { s = \\_=>[] ; c=Nom; g = PNoGen };
---    MassDet = {s = \\_=>[] ; c=Nom; g = PNoGen; n = Sg} ;
 
   UseN  sb =
     {s = \\n,c => sb.s ! SF n c ; 
