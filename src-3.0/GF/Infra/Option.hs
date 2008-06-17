@@ -442,7 +442,6 @@ outputFormats =
      ("haskell",      FmtHaskell),
      ("haskell_gadt", FmtHaskell_GADT),
      ("bnf",          FmtBNF),
-     ("srgs",         FmtSRGS_XML),
      ("srgs_xml",     FmtSRGS_XML),
      ("srgs_abnf",    FmtSRGS_ABNF),
      ("jsgf",         FmtJSGF),
