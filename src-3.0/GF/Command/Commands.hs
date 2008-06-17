@@ -441,7 +441,7 @@ allCommands pgf = Map.fromList [
            unlines $ [unwords (la:":": map prCId cs) | 
                        la <- optLangs opts, let cs = missingLins pgf (mkCId la)]
      _ -> case valIdOpts "printer" "pgf" opts of
-       v -> prPGF noOptions (read v) pgf (prCId (absname pgf))
+       v -> concatMap snd $ exportPGF noOptions (read v) pgf
 
    morphos opts s = 
      [lookupMorpho (buildMorpho pgf (mkCId la)) s | la <- optLangs opts]
