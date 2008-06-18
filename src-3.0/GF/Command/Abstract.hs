@@ -25,6 +25,7 @@ data Value
 data Argument
   = AExp Exp
   | ANoArg
+  | AMacro Ident
   deriving (Eq,Ord,Show)
 
 valIdOpts :: String -> String -> [Option] -> String
