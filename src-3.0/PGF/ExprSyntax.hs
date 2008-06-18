@@ -2,7 +2,7 @@ module PGF.ExprSyntax(readExp, showExp,
                       pExp,ppExp,
                       
                      -- helpers
-                      pIdent
+                      pIdent,pStr
                      ) where
 
 import PGF.CId
@@ -28,7 +28,8 @@ pExps :: RP.ReadP [Exp]
 pExps = liftM2 (:) (pExp True) pExps RP.<++ (RP.skipSpaces >> return [])
 
 pExp :: Bool -> RP.ReadP Exp
-pExp isNested = RP.skipSpaces >> (pParen RP.<++ pAbs RP.<++ pApp RP.<++ pNum RP.<++ pStr RP.<++ pMeta)
+pExp isNested = RP.skipSpaces >> (pParen RP.<++ pAbs RP.<++ pApp RP.<++ pNum RP.<++ 
+    liftM EStr pStr RP.<++ pMeta)
   where 
         pParen = RP.between (RP.char '(') (RP.char ')') (pExp False)
         pAbs = do xs <- RP.between (RP.char '\\') (RP.skipSpaces >> RP.string "->") (RP.sepBy1 (RP.skipSpaces >> pCId) (RP.skipSpaces >> RP.char ','))
@@ -40,13 +41,14 @@ pExp isNested = RP.skipSpaces >> (pParen RP.<++ pAbs RP.<++ pApp RP.<++ pNum RP.
         pMeta = do RP.char '?'
                    x <- RP.munch1 isDigit
                    return (EMeta (read x))
-        pStr = RP.char '"' >> liftM EStr (RP.manyTill (pEsc RP.<++ RP.get) (RP.char '"'))
-          where
-            pEsc = RP.char '\\' >> RP.get    
         pNum = do x <- RP.munch1 isDigit
                   ((RP.char '.' >> RP.munch1 isDigit >>= \y -> return (EFloat (read (x++"."++y))))
                    RP.<++
                    (return (EInt (read x))))
+
+pStr = RP.char '"' >> (RP.manyTill (pEsc RP.<++ RP.get) (RP.char '"'))
+          where
+            pEsc = RP.char '\\' >> RP.get    
 
 pCId = fmap mkCId pIdent
 
