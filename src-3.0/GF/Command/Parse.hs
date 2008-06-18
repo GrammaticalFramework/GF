@@ -32,9 +32,11 @@ pOption = do
   RP.option (OOpt flg) (fmap (OFlag flg) (RP.char '=' >> pValue))
 
 pValue = do
-  fmap VId  pFilename
-  RP.<++
   fmap (VInt . read) (RP.munch1 isDigit)
+  RP.<++
+  fmap VStr pStr
+  RP.<++
+  fmap VId  pFilename
 
 pFilename = liftM2 (:) (RP.satisfy isFileFirst) (RP.munch (not . isSpace)) where
   isFileFirst c = not (isSpace c) && not (isDigit c)

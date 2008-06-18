@@ -20,6 +20,7 @@ data Option
 data Value
   = VId  Ident
   | VInt Integer
+  | VStr String
   deriving (Eq,Ord,Show)
 
 data Argument
@@ -36,6 +37,11 @@ valIdOpts flag def opts = case valOpts flag (VId def) opts of
 valIntOpts :: String -> Integer -> [Option] -> Int
 valIntOpts flag def opts = fromInteger $ case valOpts flag (VInt def) opts of
   VInt v -> v
+  _      -> def
+
+valStrOpts :: String -> String -> [Option] -> String
+valStrOpts flag def opts = case valOpts flag (VStr def) opts of
+  VStr v -> v
   _      -> def
 
 valOpts :: String -> Value -> [Option] -> Value

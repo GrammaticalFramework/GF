@@ -29,6 +29,7 @@ import GF.Data.Operations
 
 import Data.Maybe
 import qualified Data.Map as Map
+import System
 
 type CommandOutput = ([Exp],String) ---- errors, etc
 
@@ -403,6 +404,26 @@ allCommands pgf = Map.fromList [
        ("number","the maximum number of questions")
        ] 
      }),
+  ("sp", emptyCommandInfo {
+     longname = "system_pipe",
+     synopsis = "send argument to a system command",
+     syntax   = "sp -command=\"SYSTEMCOMMAND\" STRING",
+     exec = \opts arg -> do
+       let tmpi = "_tmpi" ---
+       let tmpo = "_tmpo"
+       writeFile tmpi $ toString arg
+       let syst = optComm opts ++ " " ++ tmpi
+       system $ syst ++ " <" ++ tmpi ++ " >" ++ tmpo 
+       s <- readFile tmpo
+       return $ fromString s,
+     flags = [
+       ("command","the system command applied to the argument")
+       ],
+     examples = [
+       "ps -command=\"wc\" \"foo\"",
+       "gt | l | sp -command=\"grep \\\"who\\\"\" | sp -command=\"wc\""
+       ]
+     }),
   ("ut", emptyCommandInfo {
      longname = "unicode_table",
      synopsis = "show a transliteration table for a unicode character set",
@@ -458,6 +479,7 @@ allCommands pgf = Map.fromList [
      lang -> chunks ',' lang
    optLang opts = head $ optLangs opts ++ ["#NOLANG"] 
    optCat opts = valIdOpts "cat" (lookStartCat pgf) opts
+   optComm opts = valStrOpts "command" "" opts
    optNum opts = valIntOpts "number" 1 opts
    optNumInf opts = valIntOpts "number" 1000000000 opts ---- 10^9
 
