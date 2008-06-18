@@ -114,14 +114,21 @@ allCommands pgf = Map.fromList [
      }),
   ("dt",  emptyCommandInfo {
      longname = "define_tree",
-     syntax = "dt IDENT (TREE | STRING)", -- | '<' COMMANDLINE)",
+     syntax = "dt IDENT (TREE | STRING | \"<\" COMMANDLINE)",
      synopsis = "define a tree or string macro",
      explanation = unlines [
        "Defines IDENT as macro for TREE or STRING, until IDENT gets redefined.",
-       -- "The defining value can also come from a command, preceded by '<'.",
+       "The defining value can also come from a command, preceded by \"<\".",
+       "If the command gives many values, the first one is selected.",
        "A use of the macro has the form %IDENT. Currently this use cannot be",
        "a subtree of another tree. This command must be a line of its own",
        "and thus cannot be a part of a pipe."
+       ],
+     examples = [
+       ("dt ex \"hello world\"                    -- define ex as string"),
+       ("dt ex UseN man_N                         -- define ex as string"),
+       ("dt ex < p -cat=NP \"the man in the car\" -- define ex as parse result"),
+       ("l -lang=LangSwe %ex | ps -to_utf8        -- linearize the tree ex")
        ] 
      }),
   ("e",  emptyCommandInfo {

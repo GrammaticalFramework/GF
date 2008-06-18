@@ -3,6 +3,7 @@ module GF.Command.Interpreter (
   mkCommandEnv,
   emptyCommandEnv,
   interpretCommandLine,
+  interpretPipe,
   getCommandOp
   ) where
 
@@ -36,15 +37,17 @@ interpretCommandLine :: CommandEnv -> String -> IO ()
 interpretCommandLine env line =
   case readCommandLine line of
     Just []    -> return ()
-    Just pipes -> do res <- runInterruptibly (mapM_ interPipe pipes)
+    Just pipes -> do res <- runInterruptibly (mapM_ (interpretPipe env) pipes)
                      case res of
                        Left ex -> putStrLnFlush (show ex)
                        Right x -> return x
     Nothing    -> putStrLnFlush "command not parsed"
- where
-   interPipe cs = do
-     (_,s) <- intercs ([],"") cs
+
+interpretPipe env cs = do
+     v@(_,s) <- intercs ([],"") cs
      putStrLnFlush s
+     return v
+  where
    intercs treess [] = return treess
    intercs (trees,_) (c:cs) = do
      treess2 <- interc trees c
@@ -52,7 +55,7 @@ interpretCommandLine env line =
    interc es comm@(Command co _ arg) = case co of
      '%':f -> case Map.lookup f (commandmacros env) of
        Just css -> do
-         mapM_ interPipe (appLine (getCommandArg env arg es) css) 
+         mapM_ (interpretPipe env) (appLine (getCommandArg env arg es) css) 
          return ([],[]) ---- return ?
        _ -> do
          putStrLn $ "command macro " ++ co ++ " not interpreted"
