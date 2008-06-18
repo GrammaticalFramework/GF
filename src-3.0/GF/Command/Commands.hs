@@ -89,13 +89,40 @@ allCommands pgf = Map.fromList [
        "N.B.1 You need the flag -retain when importing the grammar, if you want",
        "the definitions to be retained after compilation.",
        "N.B.2 The resulting term is not a tree in the sense of abstract syntax",
-       "and hence not a valid input to a Tree-expecting command."
+       "and hence not a valid input to a Tree-expecting command.",
+       "This command must be a line of its own, and thus cannot be a part",
+       "of a pipe."
        ],
      options = [
        ("all","pick all strings (forms and variants) from records and tables"),
        ("table","show all strings labelled by parameters"),
        ("unqual","hide qualifying module names")
        ]
+     }),
+  ("dc",  emptyCommandInfo {
+     longname = "define_command",
+     syntax = "dc IDENT COMMANDLINE",
+     synopsis = "define a command macro",
+     explanation = unlines [
+       "Defines IDENT as macro for COMMANDLINE, until IDENT gets redefined.",
+       "A call of the command has the form %IDENT. The command may take an", 
+       "argument, which in COMMANDLINE is marked as ?0. Both strings and",
+       "trees can be arguments. Currently at most one argument is possible.",
+       "This command must be a line of its own, and thus cannot be a part",
+       "of a pipe."
+       ] 
+     }),
+  ("dt",  emptyCommandInfo {
+     longname = "define_tree",
+     syntax = "dt IDENT (TREE | STRING)", -- | '<' COMMANDLINE)",
+     synopsis = "define a tree or string macro",
+     explanation = unlines [
+       "Defines IDENT as macro for TREE or STRING, until IDENT gets redefined.",
+       -- "The defining value can also come from a command, preceded by '<'.",
+       "A use of the macro has the form %IDENT. Currently this use cannot be",
+       "a subtree of another tree. This command must be a line of its own",
+       "and thus cannot be a part of a pipe."
+       ] 
      }),
   ("e",  emptyCommandInfo {
      longname = "empty",

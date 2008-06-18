@@ -14,6 +14,7 @@ import GF.System.Readline
 import PGF
 import PGF.Data
 import PGF.Macros
+import PGF.ExprSyntax (readExp)
 
 import Data.Char
 import Data.List(isPrefixOf)
@@ -25,7 +26,6 @@ import Control.Exception
 
 import Data.Version
 import Paths_gf
-
 
 mainGFI :: Options -> [FilePath] -> IO ()
 mainGFI opts files = do
@@ -72,10 +72,26 @@ loop opts gfenv0 = do
 
   -- other special commands, working on GFEnv
     "e":_ -> loopNewCPU $ gfenv {
-       commandenv=env{multigrammar=emptyPGF}, sourcegrammar = emptyGrammar
+       commandenv=emptyCommandEnv, sourcegrammar = emptyGrammar
        }
 
-    ---- "eh":file:_ ->
+    "dc":f:ws -> do
+       case readCommandLine (unwords ws) of
+         Just comm -> loopNewCPU $ gfenv {
+           commandenv = env {
+             commandmacros = Map.insert f comm (commandmacros env)
+             }
+           }
+         _ -> putStrLn "command definition not parsed" >> loopNewCPU gfenv
+
+    "dt":f:ws -> do
+       case readExp (unwords ws) of
+         Just exp -> loopNewCPU $ gfenv {
+           commandenv = env {
+             expmacros = Map.insert f exp (expmacros env)
+             }
+           }
+         _ -> putStrLn "value definition not parsed" >> loopNewCPU gfenv
 
     "ph":_ -> mapM_ putStrLn (reverse (history gfenv0)) >> loopNewCPU gfenv
     "q":_  -> putStrLn "See you." >> return gfenv

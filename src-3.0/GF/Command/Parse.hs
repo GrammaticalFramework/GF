@@ -20,10 +20,10 @@ pCommandLine = RP.sepBy (RP.skipSpaces >> pPipe) (RP.skipSpaces >> RP.char ';')
 pPipe = RP.sepBy1 (RP.skipSpaces >> pCommand) (RP.skipSpaces >> RP.char '|')
 
 pCommand = do
-  cmd  <- pIdent
+  cmd  <- pIdent RP.<++ (RP.char '%' >> pIdent >>= return . ('%':))
   RP.skipSpaces
   opts <- RP.sepBy pOption RP.skipSpaces
-  arg  <- RP.option ANoArg (fmap AExp (pExp False))
+  arg  <- pArgument
   return (Command cmd opts arg)
 
 pOption = do
@@ -38,3 +38,9 @@ pValue = do
 
 pFilename = liftM2 (:) (RP.satisfy isFileFirst) (RP.munch (not . isSpace)) where
   isFileFirst c = not (isSpace c) && not (isDigit c)
+
+pArgument =          
+  RP.option ANoArg 
+    (fmap AExp (pExp False)
+              RP.<++ 
+    (RP.munch isSpace >> RP.char '%' >> fmap AMacro pIdent))
