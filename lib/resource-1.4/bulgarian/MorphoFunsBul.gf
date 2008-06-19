@@ -104,16 +104,16 @@ oper
 --  V2S, V2V, V2Q : Type = V2 ;
 
   mkV2S : V -> Prep -> V2S ;
-  mkV2S v p = prepV2 v p ** {lock_V2 = <>} ;
+  mkV2S v p = prepV2 v p ** {lock_V2S = <>} ;
   
   mkV2V : V -> Prep -> Prep -> V2V ;
-  mkV2V v p t = prepV2 v p ** {s4 = t ; lock_V2 = <>} ;
+  mkV2V v p t = prepV2 v p ** {s4 = t ; lock_V2V = <>} ;
   
   mkV2A : V -> Prep -> V2A ;
   mkV2A v p = prepV2 v p ** {lock_V2A = <>} ;
   
   mkV2Q : V -> Prep -> V2Q ;
-  mkV2Q v p = prepV2 v p ** {lock_V2 = <>} ;
+  mkV2Q v p = prepV2 v p ** {lock_V2Q = <>} ;
   
   mkVS  : V -> VS ;
   mkVS  v = v ** {lock_VS = <>} ;
@@ -131,7 +131,7 @@ oper
   mkVQ  v = v ** {lock_VQ = <>} ;
   
   mkV2Q : V -> Prep -> V2Q ;  
-  mkV2Q v p = prepV2 v p ** {lock_V2 = <>} ;
+  mkV2Q v p = prepV2 v p ** {lock_V2Q = <>} ;
 
 
 --2 Nouns
