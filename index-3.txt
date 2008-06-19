@@ -5,6 +5,8 @@
 %!postproc(html): "#ENCE" "</center>"
 %!postproc(html): "#BESMALL" "<font size=-1>"
 %!postproc(html): "#ENSMALL" "</font>"
+%!postproc(html): "#BELARGE" "<font size=+2>"
+%!postproc(html): "#ENLARGE" "</font>"
 
 #BECE
 
@@ -17,6 +19,17 @@ Version 3.0
 June 2008
 
 #ENCE
+
+#BELARGE
+
+``|`` [Demos demos/]
+``|`` [Download download]
+``|`` [Libraries lib/]
+``|`` [Reference doc/gf-refman.html]
+``|`` [Tutorial doc/gf-tutorial.html]
+``|`` 
+
+#ENLARGE
 
 ``|`` [Demos demos/]
 ``|`` [Download download]
@@ -45,11 +58,16 @@ June 2008
 
 GF, Grammatical Framework, is a programming language for 
 **multilingual grammar applications**. It is
-- a **special-purpose language for grammars**, like YACC, Bison, Happy, BNFC
-- a **functional language**, like Haskell, Lisp, OCaml, Scheme, SML
-- a **natural language processing framework**, like LKB, XLE, Regulus
-- a **categorial grammar formalism**, like ACG, CCG
-- a **logical framework**, like Agda, Coq, Isabelle
+- a **special-purpose language for grammars**, like YACC, Bison, Happy, BNFC, 
+  but not restricted to programming languages
+- a **functional language**, like Haskell, Lisp, OCaml, Scheme, SML,
+  but specialized to grammar writing
+- a **natural language processing framework**, like LKB, XLE, Regulus,
+  but based on functional programming and type theory
+- a **categorial grammar formalism**, like ACG, CCG,
+  but different and equipped with different tools
+- a **logical framework**, like Agda, Coq, Isabelle,
+  but equipped with concrete syntax in addition to logic
 
 
 Don't worry if you don't know most of the references above - but if you do know at
