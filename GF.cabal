@@ -100,8 +100,6 @@ data-files:
     lib/resource-1.4/arabic/VerbAra.gf
     lib/resource-1.4/bulgarian/AdjectiveBul.gf
     lib/resource-1.4/bulgarian/AdverbBul.gf
-    lib/resource-1.4/bulgarian/bgoffice/BGLexicon.gf
-    lib/resource-1.4/bulgarian/bgoffice/BGLexiconAbs.gf
     lib/resource-1.4/bulgarian/Bulgarian.gf
     lib/resource-1.4/bulgarian/BulgarianAbs.gf
     lib/resource-1.4/bulgarian/CatBul.gf
