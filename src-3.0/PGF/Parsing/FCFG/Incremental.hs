@@ -25,7 +25,7 @@ import PGF.Data
 import PGF.Parsing.FCFG.Utilities
 import Debug.Trace
 
-parse :: ParserInfo -> CId -> [FToken] -> [Exp]
+parse :: ParserInfo -> CId -> [FToken] -> [Tree]
 parse pinfo start toks = extractExps (foldl' nextState (initState pinfo start) toks) start
 
 initState :: ParserInfo -> CId -> ParseState
@@ -82,7 +82,7 @@ getCompletions (State pinfo chart items) w =
       | isPrefixOf w tok = fromMaybe map (MM.insert' tok item map)
       | otherwise        = map
 
-extractExps :: ParseState -> CId -> [Exp]
+extractExps :: ParseState -> CId -> [Tree]
 extractExps (State pinfo chart items) start = exps
   where
     (_,st) = process (\_ _ -> id) (allRules pinfo) (Set.toList items) ((),chart)
@@ -103,7 +103,7 @@ extractExps (State pinfo chart items) start = exps
                                 if fn == wildCId
                                   then go (Set.insert fid rec) (head args)
                                   else do args <- mapM (go (Set.insert fid rec)) args
-                                          return (EApp fn args)
+                                          return (Fun fn args)
 
 process fn !rules []           acc_chart = acc_chart
 process fn !rules (item:items) acc_chart = univRule item acc_chart

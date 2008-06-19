@@ -10,8 +10,8 @@ import Debug.Trace
 
 -- linearization and computation of concrete PGF Terms
 
-linearize :: PGF -> CId -> Exp -> String
-linearize pgf lang = realize . linExp pgf lang
+linearize :: PGF -> CId -> Tree -> String
+linearize pgf lang = realize . linTree pgf lang
 
 realize :: Term -> String
 realize trm = case trm of
@@ -25,18 +25,18 @@ realize trm = case trm of
   TM s     -> s
   _ -> "ERROR " ++ show trm ---- debug
 
-linExp :: PGF -> CId -> Exp -> Term
-linExp pgf lang = lin
+linTree :: PGF -> CId -> Tree -> Term
+linTree pgf lang = lin
   where
-    lin (EAbs   xs  e ) = case lin e of
-                            R ts -> R $ ts     ++ (Data.List.map (kks . prCId) xs)
-                            TM s -> R $ (TM s)  : (Data.List.map (kks . prCId) xs)
-    lin (EApp   fun es) = comp (map lin es) $ look fun
-    lin (EStr   s     ) = R [kks (show s)] -- quoted
-    lin (EInt   i     ) = R [kks (show i)] 
-    lin (EFloat d     ) = R [kks (show d)]
-    lin (EVar   x     ) = TM (prCId x)
-    lin (EMeta  i     ) = TM (show i)
+    lin (Abs xs  e )   = case lin e of
+                             R ts -> R $ ts     ++ (Data.List.map (kks . prCId) xs)
+                             TM s -> R $ (TM s)  : (Data.List.map (kks . prCId) xs)
+    lin (Fun fun es)   = comp (map lin es) $ look fun
+    lin (Lit (LStr s)) = R [kks (show s)] -- quoted
+    lin (Lit (LInt i)) = R [kks (show i)] 
+    lin (Lit (LFlt d)) = R [kks (show d)]
+    lin (Var x)        = TM (prCId x)
+    lin (Meta i)       = TM (show i)
  
     comp = compute pgf lang
     look = lookLin pgf lang

@@ -20,7 +20,7 @@ import GF.Compile.Export
 import GF.Infra.Option (noOptions)
 import GF.Infra.UseIO
 import GF.Data.ErrM ----
-import PGF.ExprSyntax (readExp)
+import PGF.Expr (readTree)
 import GF.Command.Abstract
 import GF.Text.Lexing
 import GF.Text.Transliterations
@@ -29,12 +29,12 @@ import GF.Data.Operations
 
 import Data.Maybe
 import qualified Data.Map as Map
-import System
+import System.Cmd
 
-type CommandOutput = ([Exp],String) ---- errors, etc
+type CommandOutput = ([Tree],String) ---- errors, etc
 
 data CommandInfo = CommandInfo {
-  exec     :: [Option] -> [Exp] -> IO CommandOutput,
+  exec     :: [Option] -> [Tree] -> IO CommandOutput,
   synopsis :: String,
   syntax   :: String,
   explanation :: String,
@@ -192,7 +192,7 @@ allCommands pgf = Map.fromList [
        ("full","give full information of the commands")
        ],
      exec = \opts ts -> return ([], case ts of
-       [t] -> let co = showExp t in 
+       [t] -> let co = showTree t in 
               case lookCommand co (allCommands pgf) of   ---- new map ??!!
                 Just info -> commandHelp True (co,info)
                 _ -> "command not found"
@@ -381,9 +381,9 @@ allCommands pgf = Map.fromList [
        s <- readFile file
        return $ case opts of
          _ | isOpt "lines" opts && isOpt "tree" opts -> 
-               fromTrees [t | l <- lines s, Just t <- [readExp l]] 
+               fromTrees [t | l <- lines s, Just t <- [readTree l]] 
          _ | isOpt "tree" opts -> 
-               fromTrees [t | Just t <- [readExp s]] 
+               fromTrees [t | Just t <- [readTree s]] 
          _ | isOpt "lines" opts -> fromStrings $ lines s 
          _ -> fromString s,
      flags = [("file","the input file name")] 
@@ -469,7 +469,7 @@ allCommands pgf = Map.fromList [
        _  -> linearize pgf lang
 
    treebank opts t = unlines $ 
-     (abstractName pgf ++ ": " ++ showExp t) :
+     (abstractName pgf ++ ": " ++ showTree t) :
      [lang ++ ": " ++ linear opts lang t | lang <- optLangs opts]
 
    optRestricted opts = restrictPGF (hasLin pgf (mkCId (optLang opts))) pgf
@@ -483,11 +483,11 @@ allCommands pgf = Map.fromList [
    optNum opts = valIntOpts "number" 1 opts
    optNumInf opts = valIntOpts "number" 1000000000 opts ---- 10^9
 
-   fromTrees ts = (ts,unlines (map showExp ts))
-   fromStrings ss = (map EStr ss, unlines ss)
-   fromString  s  = ([EStr s], s)
-   toStrings ts = [s | EStr s <- ts] 
-   toString ts = unwords [s | EStr s <- ts] 
+   fromTrees ts = (ts,unlines (map showTree ts))
+   fromStrings ss = (map (Lit . LStr) ss, unlines ss)
+   fromString  s  = ([Lit (LStr s)], s)
+   toStrings ts = [s | Lit (LStr s) <- ts] 
+   toString ts = unwords [s | Lit (LStr s) <- ts] 
 
    prGrammar opts = case opts of
      _ | isOpt "cats" opts -> unwords $ categories pgf

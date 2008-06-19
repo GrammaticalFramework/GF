@@ -44,7 +44,7 @@ convertConcrete abs cnc = fixHoasFuns $ convert abs_defs' conc' cats'
              cats = lincats cnc
              (abs_defs',conc',cats') = expandHOAS abs_defs conc cats
 
-expandHOAS :: [(CId,(Type,Exp))] -> TermMap -> TermMap -> ([(CId,(Type,Exp))],TermMap,TermMap)
+expandHOAS :: [(CId,(Type,Expr))] -> TermMap -> TermMap -> ([(CId,(Type,Expr))],TermMap,TermMap)
 expandHOAS funs lins lincats = (funs' ++ hoFuns ++ varFuns, 
                                 Map.unions [lins, hoLins, varLins], 
                                 Map.unions [lincats, hoLincats, varLincat])
@@ -99,7 +99,7 @@ fixHoasFuns (!rs, !cs) = ([FRule (fixName n) ps args cat lins | FRule n ps args 
                         | BS.pack "_Var_" `BS.isPrefixOf` n = wildCId
         fixName n = n
 
-convert :: [(CId,(Type,Exp))] -> TermMap -> TermMap -> FGrammar
+convert :: [(CId,(Type,Expr))] -> TermMap -> TermMap -> FGrammar
 convert abs_defs cnc_defs cat_defs = getFGrammar (List.foldl' (convertRule cnc_defs) emptyFRulesEnv srules)
   where
     srules = [
@@ -159,7 +159,7 @@ convertTerm cnc_defs sel ctype (FV vars)                      lins  = do term <-
 convertTerm cnc_defs sel ctype (S ts)       ((lbl_path,lin) : lins) = foldM (\lins t -> convertTerm cnc_defs sel ctype t lins) ((lbl_path,lin) : lins) (reverse ts)
 convertTerm cnc_defs sel ctype (K (KS str)) ((lbl_path,lin) : lins) = return ((lbl_path,FSymTok str : lin) : lins)
 convertTerm cnc_defs sel ctype (K (KP strs vars))((lbl_path,lin) : lins) = 
-  do toks <- member (strs:[strs' | Var strs' _ <- vars])
+  do toks <- member (strs:[strs' | Alt strs' _ <- vars])
      return ((lbl_path, map FSymTok toks ++ lin) : lins)
 convertTerm cnc_defs sel ctype (F id)                         lins  = do term <- Map.lookup id cnc_defs
                                                                          convertTerm cnc_defs sel ctype term lins
