@@ -30,11 +30,6 @@ import Control.Monad
 import Control.Exception(evaluate)
 import qualified Data.ByteString.Char8 as BS
 
-#ifdef mingw32_HOST_OS
-import System.Win32.DLL
-import Foreign.Ptr
-#endif
-
 putShow' :: Show a => (c -> a) -> c -> IO ()
 putShow' f = putStrLn . show . length . show . f
 
@@ -102,13 +97,7 @@ getLibraryPath :: IO FilePath
 getLibraryPath =
   catch
     (getEnv gfLibraryPath)
-#ifdef mingw32_HOST_OS
-    (\_ -> do exepath <- getModuleFileName nullPtr
-              let (path,_) = splitFileName exepath
-              canonicalizePath (combine path "../lib"))
-#else
-    (const getDataDir)
-#endif
+    (\ex -> getDataDir >>= \path -> return (path </> "lib"))
 
 -- | extends the search path with the
 -- 'gfLibraryPath' and 'gfGrammarPathVar'
