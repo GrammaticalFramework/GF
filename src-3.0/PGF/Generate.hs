@@ -8,23 +8,23 @@ import qualified Data.Map as M
 import System.Random
 
 -- generate an infinite list of trees exhaustively
-generate :: PGF -> CId -> Maybe Int -> [Exp]
+generate :: PGF -> CId -> Maybe Int -> [Tree]
 generate pgf cat dp = concatMap (\i -> gener i cat) depths
  where
-  gener 0 c = [EApp f [] | (f, ([],_)) <- fns c]
+  gener 0 c = [Fun f [] | (f, ([],_)) <- fns c]
   gener i c = [
     tr | 
       (f, (cs,_)) <- fns c,
       let alts = map (gener (i-1)) cs,
       ts <- combinations alts,
-      let tr = EApp f ts,
+      let tr = Fun f ts,
       depth tr >= i
     ]
   fns c = [(f,catSkeleton ty) | (f,ty) <- functionsToCat pgf c]
   depths = maybe [0 ..] (\d -> [0..d]) dp
 
 -- generate an infinite list of trees randomly
-genRandom :: StdGen -> PGF -> CId -> [Exp]
+genRandom :: StdGen -> PGF -> CId -> [Tree]
 genRandom gen pgf cat = genTrees (randomRs (0.0, 1.0 :: Double) gen) cat where
 
   timeout = 47 -- give up
@@ -36,16 +36,16 @@ genRandom gen pgf cat = genTrees (randomRs (0.0, 1.0 :: Double) gen) cat where
                 (genTrees ds2 cat)          -- else (drop k ds)
 
   genTree rs = gett rs where
-    gett ds cid | cid == mkCId "String" = (EStr "foo", 1)
-    gett ds cid | cid == mkCId "Int"    = (EInt 12345, 1)
-    gett [] _   = (EStr "TIMEOUT", 1) ----
+    gett ds cid | cid == mkCId "String" = (Lit (LStr "foo"), 1)
+    gett ds cid | cid == mkCId "Int"    = (Lit (LInt 12345), 1)
+    gett [] _   = (Lit (LStr "TIMEOUT"), 1) ----
     gett ds cat = case fns cat of
-      [] -> (EMeta 0,1)
+      [] -> (Meta 0,1)
       fs -> let 
           d:ds2    = ds
           (f,args) = getf d fs
           (ts,k)   = getts ds2 args
-        in (EApp f ts, k+1)
+        in (Fun f ts, k+1)
     getf d fs = let lg = (length fs) in
       fs !! (floor (d * fromIntegral lg))
     getts ds cats = case cats of

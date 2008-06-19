@@ -29,11 +29,11 @@ import qualified Data.Map as Map
 
 -- main parsing function
 
-parseFCFG :: String            -- ^ parsing strategy
+parseFCFG :: String           -- ^ parsing strategy
          -> ParserInfo        -- ^ compiled grammar (fcfg) 
          -> CId               -- ^ starting category
          -> [String]          -- ^ input tokens
-         -> Err [Exp]         -- ^ resulting GF terms
+         -> Err [Tree]        -- ^ resulting GF terms
 parseFCFG "bottomup"    pinfo start toks = return $ Active.parse "b"  pinfo start toks 
 parseFCFG "topdown"     pinfo start toks = return $ Active.parse "t"  pinfo start toks 
 parseFCFG "incremental" pinfo start toks = return $ Incremental.parse pinfo start toks 

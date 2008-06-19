@@ -14,7 +14,7 @@ import GF.System.Readline
 import PGF
 import PGF.Data
 import PGF.Macros
-import PGF.ExprSyntax (readExp)
+import PGF.Expr (readTree)
 
 import Data.Char
 import Data.List(isPrefixOf)
@@ -60,15 +60,14 @@ loop opts gfenv0 = do
            ('-':w):ws2 -> (pTermPrintStyle w, ws2)
            _ -> (TermPrintDefault, ws)
        case pTerm (unwords term) >>= checkTerm sgr >>= computeTerm sgr of   ---- pipe!
-         Ok  x -> putStrLnFlush (showTerm style x)
-         Bad s -> putStrLnFlush s
+         Ok  x -> putStrLn (showTerm style x)
+         Bad s -> putStrLn s
        loopNewCPU gfenv
     "i":args -> do
         gfenv' <- case parseOptions args of
-          Ok (opts',files) -> importInEnv gfenv (addOptions opts opts') files
-          Bad err -> do 
-            putStrLn $ "Command parse error: " ++ err
-            return gfenv
+                    Ok (opts',files) -> importInEnv gfenv (addOptions opts opts') files
+                    Bad err -> do putStrLn $ "Command parse error: " ++ err
+                                  return gfenv
         loopNewCPU gfenv'
 
   -- other special commands, working on GFEnv
@@ -83,35 +82,19 @@ loop opts gfenv0 = do
              commandmacros = Map.insert f comm (commandmacros env)
              }
            }
-         _ -> putStrLnFlush "command definition not parsed" >> loopNewCPU gfenv
-
-    "dt":f:"<":ws -> do
-       case readCommandLine (unwords ws) of
-         Just [pip] -> do
-           ip <- interpretPipe env pip
-           case ip of
-             (exp:es,_) -> do 
-               if null es then return () else
-                 putStrLnFlush $ "ambiguous definition, selected the first one"
-               loopNewCPU $ gfenv {
-                 commandenv = env {
-                   expmacros = Map.insert f exp (expmacros env)
-                   }
-                 }
-             _ -> putStrLnFlush "no value given in definition" >> loopNewCPU gfenv
-         _ -> putStrLnFlush "value definition not parsed" >> loopNewCPU gfenv
+         _ -> putStrLn "command definition not parsed" >> loopNewCPU gfenv
 
     "dt":f:ws -> do
-       case readExp (unwords ws) of
+       case readTree (unwords ws) of
          Just exp -> loopNewCPU $ gfenv {
            commandenv = env {
              expmacros = Map.insert f exp (expmacros env)
              }
            }
-         _ -> putStrLnFlush "value definition not parsed" >> loopNewCPU gfenv
+         _ -> putStrLn "value definition not parsed" >> loopNewCPU gfenv
 
-    "ph":_ -> mapM_ putStrLnFlush (reverse (history gfenv0)) >> loopNewCPU gfenv
-    "q":_  -> putStrLnFlush "See you." >> return gfenv
+    "ph":_ -> mapM_ putStrLn (reverse (history gfenv0)) >> loopNewCPU gfenv
+    "q":_  -> putStrLn "See you." >> return gfenv
 
   -- ordinary commands, working on CommandEnv
     _ -> do
@@ -125,13 +108,10 @@ importInEnv gfenv opts files
            return $ gfenv {sourcegrammar = src}
     | otherwise =
         do let opts' = addOptions (setOptimization OptCSE False) opts
-               cenv0 = commandenv gfenv
-               pgf0  = multigrammar cenv0 
+               pgf0 = multigrammar (commandenv gfenv)
            pgf1 <- importGrammar pgf0 opts' files
            putStrLnFlush $ unwords $ "\nLanguages:" : languages pgf1
-           return $ gfenv { commandenv = (mkCommandEnv pgf1) 
-             {commandmacros = commandmacros cenv0, expmacros = expmacros cenv0}}
----           return $ gfenv { commandenv = cenv0 {multigrammar = pgf1} } -- WHY NOT
+           return $ gfenv { commandenv = mkCommandEnv pgf1 }
 
 welcome = unlines [
   "                              ",

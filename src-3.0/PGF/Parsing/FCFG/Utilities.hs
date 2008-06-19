@@ -179,9 +179,9 @@ applyProfileToForest (FFloat  f) = [FFloat  f]
 applyProfileToForest (FMeta)     = [FMeta]
 
 
-forest2exps :: SyntaxForest CId -> [Exp]
-forest2exps (FNode n forests) = map (EApp n) $ forests >>= mapM forest2exps
-forest2exps (FString s) = [EStr   s]
-forest2exps (FInt    n) = [EInt   n]
-forest2exps (FFloat  f) = [EFloat f]
-forest2exps (FMeta)     = [EMeta  0]
+forest2trees :: SyntaxForest CId -> [Tree]
+forest2trees (FNode n forests) = map (Fun n) $ forests >>= mapM forest2trees
+forest2trees (FString s) = [Lit (LStr s)]
+forest2trees (FInt    n) = [Lit (LInt n)]
+forest2trees (FFloat  f) = [Lit (LFlt f)]
+forest2trees (FMeta)     = [Meta 0]

@@ -21,10 +21,10 @@ data PGF = PGF {
   }
 
 data Abstr = Abstr {
-  aflags  :: Map.Map CId String,     -- value of a flag
-  funs    :: Map.Map CId (Type,Exp), -- type and def of a fun
-  cats    :: Map.Map CId [Hypo],     -- context of a cat
-  catfuns :: Map.Map CId [CId]       -- funs to a cat (redundant, for fast lookup)
+  aflags  :: Map.Map CId String,      -- value of a flag
+  funs    :: Map.Map CId (Type,Expr), -- type and def of a fun
+  cats    :: Map.Map CId [Hypo],      -- context of a cat
+  catfuns :: Map.Map CId [CId]        -- funs to a cat (redundant, for fast lookup)
   }
 
 data Concr = Concr {
@@ -39,20 +39,40 @@ data Concr = Concr {
   }
 
 data Type =
-   DTyp [Hypo] CId [Exp]
+   DTyp [Hypo] CId [Expr]
   deriving (Eq,Ord,Show)
 
--- | An expression representing the abstract syntax tree
--- in PGF. The same expression is used in the dependent
--- types.
-data Exp =
-   EAbs [CId] Exp                   -- ^ lambda abstraction. The list should contain at least one variable
- | EApp CId [Exp]                   -- ^ application. Note that unevaluated lambda abstractions are not allowed
- | EStr   String                    -- ^ string constant
- | EInt   Integer                   -- ^ integer constant
- | EFloat Double                    -- ^ floating point constant
+data Literal = 
+   LStr String                      -- ^ string constant
+ | LInt Integer                     -- ^ integer constant
+ | LFlt Double                      -- ^ floating point constant
+ deriving (Eq,Ord,Show)
+
+-- | The tree is an evaluated expression in the abstract syntax
+-- of the grammar. The type is especially restricted to not
+-- allow unapplied lambda abstractions. The meta variables
+-- also does not have indices because both the parser and
+-- the linearizer consider all meta variable occurrences as
+-- distinct. The tree is used directly from the linearizer
+-- and is produced directly from the parser.
+data Tree = 
+   Abs [CId] Tree                   -- ^ lambda abstraction. The list of variables is non-empty
+ | Var CId                          -- ^ variable
+ | Fun CId [Tree]                   -- ^ function application
+ | Lit Literal                      -- ^ literal
+ | Meta Int                         -- ^ meta variable. Each occurency of 'Meta' means a different metavariable
+  deriving (Show, Eq, Ord)
+
+-- | An expression represents a potentially unevaluated expression
+-- in the abstract syntax of the grammar. It can be evaluated with
+-- the 'expr2tree' function and then linearized or it can be used
+-- directly in the dependent types.
+data Expr =
+   EAbs CId Expr                    -- ^ lambda abstraction
+ | EApp Expr Expr                   -- ^ application
+ | ELit Literal                     -- ^ literal
  | EMeta  Int                       -- ^ meta variable
- | EVar   CId                       -- ^ variable reference
+ | EVar   CId                       -- ^ variable or function reference
  | EEq [Equation]                   -- ^ lambda function defined as a set of equations with pattern matching
   deriving (Eq,Ord,Show)
 
@@ -71,11 +91,11 @@ data Term =
 
 data Tokn =
    KS String
- | KP [String] [Variant]
+ | KP [String] [Alternative]
   deriving (Eq,Ord,Show)
 
-data Variant =
-   Var [String] [String]
+data Alternative =
+   Alt [String] [String]
   deriving (Eq,Ord,Show)
 
 data Hypo =
@@ -83,11 +103,11 @@ data Hypo =
   deriving (Eq,Ord,Show)
 
 -- | The equation is used to define lambda function as a sequence
--- of equations with pattern matching. The list of 'Exp' represents
--- the patterns and the second 'Exp' is the function body for this
+-- of equations with pattern matching. The list of 'Expr' represents
+-- the patterns and the second 'Expr' is the function body for this
 -- equation.
 data Equation =
-   Equ [Exp] Exp
+   Equ [Expr] Expr
   deriving (Eq,Ord,Show)
 
 

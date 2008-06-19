@@ -1,7 +1,7 @@
 module GF.Command.Parse(readCommandLine, pCommand) where
 
-import PGF.ExprSyntax
-import PGF.Data(Exp)
+import PGF.Expr
+import PGF.Data(Tree)
 import GF.Command.Abstract
 
 import Data.Char
@@ -43,6 +43,6 @@ pFilename = liftM2 (:) (RP.satisfy isFileFirst) (RP.munch (not . isSpace)) where
 
 pArgument =          
   RP.option ANoArg 
-    (fmap AExp (pExp False)
+    (fmap ATree (pTree False)
               RP.<++ 
     (RP.munch isSpace >> RP.char '%' >> fmap AMacro pIdent))

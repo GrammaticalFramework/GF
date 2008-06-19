@@ -37,7 +37,7 @@ library
     PGF.Parsing.FCFG.Active
     PGF.Parsing.FCFG.Incremental
     PGF.Parsing.FCFG
-    PGF.ExprSyntax
+    PGF.Expr
     PGF.Raw.Parse
     PGF.Raw.Print
     PGF.Raw.Convert

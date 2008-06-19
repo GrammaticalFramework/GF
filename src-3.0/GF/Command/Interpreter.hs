@@ -24,7 +24,7 @@ data CommandEnv = CommandEnv {
   multigrammar  :: PGF,
   commands      :: Map.Map String CommandInfo,
   commandmacros :: Map.Map String CommandLine,
-  expmacros     :: Map.Map String Exp
+  expmacros     :: Map.Map String Tree
   }
 
 mkCommandEnv :: PGF -> CommandEnv
@@ -64,18 +64,18 @@ interpretPipe env cs = do
    appLine es = map (map (appCommand es))
 
 -- macro definition applications: replace ?i by (exps !! i)
-appCommand :: [Exp] -> Command -> Command
+appCommand :: [Tree] -> Command -> Command
 appCommand xs c@(Command i os arg) = case arg of
-  AExp e -> Command i os (AExp (app e))
-  _ -> c
+  ATree e -> Command i os (ATree (app e))
+  _       -> c
  where
   app e = case e of
-    EMeta i -> xs !! i
-    EApp f as -> EApp f (map app as)
-    EAbs x b  -> EAbs x (app b)
+    Meta i   -> xs !! i
+    Fun f as -> Fun f (map app as)
+    Abs x b  -> Abs x (app b)
 
 -- return the trees to be sent in pipe, and the output possibly printed
-interpret :: CommandEnv -> [Exp] -> Command -> IO CommandOutput
+interpret :: CommandEnv -> [Tree] -> Command -> IO CommandOutput
 interpret env trees0 comm = case lookCommand co comms of
     Just info -> do
       checkOpts info
@@ -100,17 +100,17 @@ interpret env trees0 comm = case lookCommand co comms of
 
 -- analyse command parse tree to a uniform datastructure, normalizing comm name
 --- the env is needed for macro lookup
-getCommand :: CommandEnv -> Command -> [Exp] -> (String,[Option],[Exp])
+getCommand :: CommandEnv -> Command -> [Tree] -> (String,[Option],[Tree])
 getCommand env co@(Command c opts arg) ts = 
   (getCommandOp c,opts,getCommandArg env arg ts) 
 
-getCommandArg :: CommandEnv -> Argument -> [Exp] -> [Exp]
+getCommandArg :: CommandEnv -> Argument -> [Tree] -> [Tree]
 getCommandArg env a ts = case a of
   AMacro m -> case Map.lookup m (expmacros env) of
     Just t -> [t]
     _ -> [] 
-  AExp t -> [t] -- ignore piped
-  ANoArg -> ts  -- use piped
+  ATree t -> [t] -- ignore piped
+  ANoArg  -> ts  -- use piped
 
 -- abbreviation convention from gf commands
 getCommandOp s = case break (=='_') s of

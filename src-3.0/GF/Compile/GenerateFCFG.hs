@@ -42,7 +42,7 @@ convertConcrete abs cnc = fixHoasFuns $ convert abs_defs' conc' cats'
              cats = lincats cnc
              (abs_defs',conc',cats') = expandHOAS abs_defs conc cats
 
-expandHOAS :: [(CId,(Type,Exp))] -> TermMap -> TermMap -> ([(CId,(Type,Exp))],TermMap,TermMap)
+expandHOAS :: [(CId,(Type,Expr))] -> TermMap -> TermMap -> ([(CId,(Type,Expr))],TermMap,TermMap)
 expandHOAS funs lins lincats = (funs' ++ hoFuns ++ varFuns, 
                                 Map.unions [lins, hoLins, varLins], 
                                 Map.unions [lincats, hoLincats, varLincat])
@@ -97,7 +97,7 @@ fixHoasFuns (rs, cs) = ([FRule (fixName n) ps args cat lins | FRule n ps args ca
                         | BS.pack "_Var_" `BS.isPrefixOf` n = wildCId
         fixName n = n
 
-convert :: [(CId,(Type,Exp))] -> TermMap -> TermMap -> FGrammar
+convert :: [(CId,(Type,Expr))] -> TermMap -> TermMap -> FGrammar
 convert abs_defs cnc_defs cat_defs = getFGrammar (loop frulesEnv)
       where
         srules = [
@@ -193,7 +193,7 @@ convertTerm cnc_defs selector (K (KS str)) ((lbl_path,lin) : lins) =
      return ((lbl_path,Right str : lin) : lins)
 convertTerm cnc_defs selector (K (KP strs vars))((lbl_path,lin) : lins) = 
   do projectHead lbl_path
-     toks <- member (strs:[strs' | Var strs' _ <- vars])
+     toks <- member (strs:[strs' | Alt strs' _ <- vars])
      return ((lbl_path, map Right toks ++ lin) : lins)
 convertTerm cnc_defs selector (F id)                         lins  = do term <- Map.lookup id cnc_defs
                                                                         convertTerm cnc_defs selector term lins

@@ -28,8 +28,13 @@ module PGF(
            Category, categories, startCat,
 
            -- * Expressions
-           Exp(..), Equation(..),
-           showExp, readExp,
+           -- ** Tree
+           Tree(..),
+           showTree, readTree,
+           
+           -- ** Expr
+           Expr(..), Equation(..),
+           showExpr, readExpr,
 
            -- * Operations
            -- ** Linearization
@@ -37,6 +42,9 @@ module PGF(
            
            -- ** Parsing
            parse, parseAllLang, parseAll,
+           
+           -- ** Evaluation
+           tree2expr, expr2tree,
            
            -- ** Word Completion (Incremental Parsing)
            Incremental.ParseState,
@@ -52,7 +60,7 @@ import qualified PGF.Linearize (linearize)
 import PGF.Generate
 import PGF.Macros
 import PGF.Data
-import PGF.ExprSyntax
+import PGF.Expr
 import PGF.Raw.Convert
 import PGF.Raw.Parse
 import PGF.Raw.Print (printTree)
@@ -90,25 +98,25 @@ type Category     = String
 readPGF  :: FilePath -> IO PGF
 
 -- | Linearizes given expression as string in the language
-linearize    :: PGF -> Language -> Exp -> String
+linearize    :: PGF -> Language -> Tree -> String
 
 -- | Tries to parse the given string in the specified language
 -- and to produce abstract syntax expression. An empty
 -- list is returned if the parsing is not successful. The list may also
 -- contain more than one element if the grammar is ambiguous.
-parse        :: PGF -> Language -> Category -> String -> [Exp]
+parse        :: PGF -> Language -> Category -> String -> [Tree]
 
 -- | The same as 'linearizeAllLang' but does not return
 -- the language.
-linearizeAll     :: PGF -> Exp -> [String]
+linearizeAll     :: PGF -> Tree -> [String]
 
 -- | Linearizes given expression as string in all languages
 -- available in the grammar.
-linearizeAllLang :: PGF -> Exp -> [(Language,String)]
+linearizeAllLang :: PGF -> Tree -> [(Language,String)]
 
 -- | The same as 'parseAllLang' but does not return
 -- the language.
-parseAll     :: PGF -> Category -> String -> [[Exp]]
+parseAll     :: PGF -> Category -> String -> [[Tree]]
 
 -- | Tries to parse the given string with every language
 -- available in the grammar and to produce abstract syntax 
@@ -117,7 +125,7 @@ parseAll     :: PGF -> Category -> String -> [[Exp]]
 -- for which at least one parsing is possible are listed.
 -- More than one abstract syntax expressions are possible
 -- if the grammar is ambiguous.
-parseAllLang :: PGF -> Category -> String -> [(Language,[Exp])]
+parseAllLang :: PGF -> Category -> String -> [(Language,[Tree])]
 
 -- | Creates an initial parsing state for a given language and
 -- startup category.
@@ -127,21 +135,21 @@ initState :: PGF -> Language -> Category -> Incremental.ParseState
 -- that spans the whole input consumed so far. The trees are also
 -- limited by the category specified, which is usually
 -- the same as the startup category.
-extractExps :: Incremental.ParseState -> Category -> [Exp]
+extractExps :: Incremental.ParseState -> Category -> [Tree]
 
 -- | The same as 'generateAllDepth' but does not limit
 -- the depth in the generation.
-generateAll      :: PGF -> Category -> [Exp]
+generateAll      :: PGF -> Category -> [Tree]
 
 -- | Generates an infinite list of random abstract syntax expressions.
 -- This is usefull for tree bank generation which after that can be used
 -- for grammar testing.
-generateRandom   :: PGF -> Category -> IO [Exp]
+generateRandom   :: PGF -> Category -> IO [Tree]
 
 -- | Generates an exhaustive possibly infinite list of
 -- abstract syntax expressions. A depth can be specified
 -- to limit the search space.
-generateAllDepth :: PGF -> Category -> Maybe Int -> [Exp]
+generateAllDepth :: PGF -> Category -> Maybe Int -> [Tree]
 
 -- | List of all languages available in the given grammar.
 languages    :: PGF -> [Language]

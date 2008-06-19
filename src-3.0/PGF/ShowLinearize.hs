@@ -53,17 +53,17 @@ mkRecord typ trm = case (typ,trm) of
    str = realize
 
 -- show all branches, without labels and params
-allLinearize :: PGF -> CId -> Exp -> String
+allLinearize :: PGF -> CId -> Tree -> String
 allLinearize pgf lang = concat . map pr . tabularLinearize pgf lang where
   pr (p,vs) = unlines vs
 
 -- show all branches, with labels and params
-tableLinearize :: PGF -> CId -> Exp -> String
+tableLinearize :: PGF -> CId -> Tree -> String
 tableLinearize pgf lang = unlines . map pr . tabularLinearize pgf lang where
   pr (p,vs) = p +++ ":" +++ unwords (intersperse "|" vs)
 
 -- create a table from labels+params to variants
-tabularLinearize :: PGF -> CId -> Exp -> [(String,[String])]
+tabularLinearize :: PGF -> CId -> Tree -> [(String,[String])]
 tabularLinearize pgf lang = branches . recLinearize pgf lang where
   branches r = case r of
     RR  fs -> [(lab +++ b,s) | (lab,t) <- fs, (b,s) <- branches t]
@@ -73,18 +73,18 @@ tabularLinearize pgf lang = branches . recLinearize pgf lang where
     RCon _ -> []
 
 -- show record in GF-source-like syntax
-recordLinearize :: PGF -> CId -> Exp -> String
+recordLinearize :: PGF -> CId -> Tree -> String
 recordLinearize pgf lang = prRecord . recLinearize pgf lang
 
 -- create a GF-like record, forming the basis of all functions above
-recLinearize :: PGF -> CId -> Exp -> Record
-recLinearize pgf lang exp = mkRecord typ $ linExp pgf lang exp where
-  typ = case exp of
-          EApp f _ -> lookParamLincat pgf lang $ valCat $ lookType pgf f
+recLinearize :: PGF -> CId -> Tree -> Record
+recLinearize pgf lang tree = mkRecord typ $ linTree pgf lang tree where
+  typ = case tree of
+          Fun f _ -> lookParamLincat pgf lang $ valCat $ lookType pgf f
 
 -- show PGF term
-termLinearize :: PGF -> CId -> Exp -> String
-termLinearize pgf lang = show . linExp pgf lang
+termLinearize :: PGF -> CId -> Tree -> String
+termLinearize pgf lang = show . linTree pgf lang
 
 
 -- for Morphology: word, lemma, tags
@@ -94,7 +94,7 @@ collectWords pgf lang =
       [(f,c,0) | (f,(DTyp [] c _,_)) <- Map.toList $ funs $ abstract pgf] 
   where
     collOne (f,c,i) = 
-      fromRec f [prCId c] (recLinearize pgf lang (EApp f (replicate i (EMeta 888))))
+      fromRec f [prCId c] (recLinearize pgf lang (Fun f (replicate i (Meta 888))))
     fromRec f v r = case r of
       RR  rs -> concat [fromRec f v t | (_,t) <- rs] 
       RT  rs -> concat [fromRec f (p:v) t | (p,t) <- rs]

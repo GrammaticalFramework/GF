@@ -119,28 +119,27 @@ mkType :: A.Type -> C.Type
 mkType t = case GM.typeForm t of
   Ok (hyps,(_,cat),args) -> C.DTyp (mkContext hyps) (i2i cat) (map mkExp args)
 
-mkExp :: A.Term -> C.Exp
+mkExp :: A.Term -> C.Expr
 mkExp t = case t of
   A.Eqs eqs -> C.EEq [C.Equ (map mkPatt ps) (mkExp e) | (ps,e) <- eqs]
   _ -> case GM.termForm t of
     Ok (xs,c,args) -> mkAbs xs (mkApp c (map mkExp args))
   where
-    mkAbs [] t = t
-    mkAbs xs t = C.EAbs [i2i x | x <- xs] t
-    mkApp c args = case c of 
-      Q _ c    -> C.EApp (i2i c) args
-      QC _ c   -> C.EApp (i2i c) args
+    mkAbs xs t = foldr (C.EAbs . i2i) t xs
+    mkApp c args = case c of
+      Q _ c    -> foldl C.EApp (C.EVar (i2i c)) args
+      QC _ c   -> foldl C.EApp (C.EVar (i2i c)) args
       Vr x     -> C.EVar (i2i x)
-      EInt i   -> C.EInt   i
-      EFloat f -> C.EFloat f
-      K s      -> C.EStr   s
+      EInt i   -> C.ELit (C.LInt i)
+      EFloat f -> C.ELit (C.LFlt f)
+      K s      -> C.ELit (C.LStr s)
       Meta (MetaSymb i) -> C.EMeta i
       _        -> C.EMeta 0
     mkPatt p = case p of
-      A.PP _ c ps -> C.EApp (i2i c) (map mkPatt ps)
+      A.PP _ c ps -> foldl C.EApp (C.EVar (i2i c)) (map mkPatt ps)
       A.PV x      -> C.EVar (i2i x)
       A.PW        -> C.EVar wildCId
-      A.PInt i    -> C.EInt i
+      A.PInt i    -> C.ELit (C.LInt i)
 
 mkContext :: A.Context -> [C.Hypo]
 mkContext hyps = [C.Hyp (i2i x) (mkType ty) | (x,ty) <- hyps]
@@ -167,7 +166,7 @@ mkTerm tr = case tr of
   App _ _  -> prtTrace tr $ C.C 66661          ---- for debugging
   Abs _ t  -> mkTerm t ---- only on toplevel
   Alts (td,tvs) -> 
-    C.K (C.KP (strings td) [C.Var (strings u) (strings v) | (u,v) <- tvs])
+    C.K (C.KP (strings td) [C.Alt (strings u) (strings v) | (u,v) <- tvs])
   _ -> prtTrace tr $ C.S [C.K (C.KS (A.prt tr +++ "66662"))] ---- for debugging
  where
    mkLab (LIdent l) = case BS.unpack l of
