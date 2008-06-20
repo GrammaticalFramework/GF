@@ -29,8 +29,8 @@ abstract Structural = Cat ** {
   but_PConj : PConj ;
   by8agent_Prep : Prep ; -- by (agent)
   by8means_Prep : Prep ; -- by (means of)
-  can8know_VV : VV ;
-  can_VV : VV ;
+  can8know_VV : VV ; -- can (capacity)
+  can_VV : VV ;      -- can (possibility)
   during_Prep : Prep ;
   either7or_DConj : Conj ; -- either...or
 ---b  either7or_DConj : DConj ;

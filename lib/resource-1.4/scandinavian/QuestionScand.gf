@@ -30,7 +30,7 @@ incomplete concrete QuestionScand of Question =
       s = \\t,a,p => 
             let 
               cls = slash.s ! t ! a ! p ;
-              who = slash.c2 ++ ip.s ! accusative --- stranding in ExtScand 
+              who = slash.c2.s ++ ip.s ! accusative --- stranding in ExtScand 
             in table {
               QDir   => who ++ cls ! Inv ;
               QIndir => who ++ cls ! Sub

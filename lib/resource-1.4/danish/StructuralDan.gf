@@ -21,7 +21,7 @@ concrete StructuralDan of Structural = CatDan **
   by8means_Prep = ss "med" ;
   can8know_VV, can_VV = 
     mkV "kunne" "kan" "kan" "kunne" "kunnet" "kan" **
-    {c2 = [] ; lock_VV = <>} ;
+    {c2 = mkComplement [] ; lock_VV = <>} ;
   during_Prep = ss "under" ;
   either7or_DConj = sd2 "enten" "eller" ** {n = Sg} ;
   everybody_NP = regNP "alle" "alles" Plg ;
@@ -50,7 +50,8 @@ concrete StructuralDan of Structural = CatDan **
   most_Predet = {s = gennumForms ["den meste"] ["det meste"] ["de fleste"]} ;
   much_Det = {s = \\_,_ => "meget" ; n = Pl ; det = DDef Indef} ;
   must_VV = 
-    mkV "måtte" "må" "må" "måtte" "måttet" "mått" ** {c2 = [] ; lock_VV = <>} ;
+    mkV "måtte" "må" "må" "måtte" "måttet" "mått" ** 
+    {c2 = mkComplement [] ; lock_VV = <>} ;
   no_Utt = ss ["nej"] ;
   on_Prep = ss "på" ;
 ---  one_Quant = {s = \\_ => genderForms ["en"] ["et"] ; n = Sg ; det = DIndef} ; --- ei
@@ -94,7 +95,7 @@ concrete StructuralDan of Structural = CatDan **
   very_AdA = ss "meget" ;
   want_VV = 
     mkV "ville" "vil" "vil" "ville" "villet" "villed" ** 
-    {c2 = [] ; lock_VV = <>} ;
+    {c2 = mkComplement [] ; lock_VV = <>} ;
   we_Pron = MorphoDan.mkNP "vi"  "os"  "vores" "vores" "vores"  Plg P1 ;
   whatSg_IP = {s = \\_ => "hvad" ; gn = SgUtr} ; ---- infl
   whatPl_IP = {s = \\_ => "hvilke" ; gn = Plg} ; ---- infl

@@ -69,14 +69,14 @@ incomplete concrete NounScand of Noun =
       } ;
 
     DetArtOrd quant num ord = {
-      s = \\b,g => quant.s ! num.n ! (orB b num.isDet) ! g ++ 
+      s = \\b,g => quant.s ! num.n ! b ! num.isDet ! g ++ 
                    num.s ! g ++ ord.s ;
       n = num.n ;
       det = quant.det
       } ;
 
     DetArtCard quant num = {
-      s = \\b,g => quant.s ! num.n ! b ! g ++ num.s ! g ;
+      s = \\b,g => quant.s ! num.n ! b ! True ! g ++ num.s ! g ;
       n = num.n ;
       det = quant.det
       } ;
@@ -91,7 +91,7 @@ incomplete concrete NounScand of Noun =
           <d,_,_> => d
           }
       in {
-      s = \\c => det.s ! n ! cn.isMod ! cn.g ++
+      s = \\c => det.s ! n ! cn.isMod ! False ! cn.g ++
                  cn.s ! n ! dd ! caseNP c ; 
       a = agrP3 g n
       } ;
@@ -106,7 +106,7 @@ incomplete concrete NounScand of Noun =
           <d,_,_> => d
           }
       in {
-      s = \\c => det.s ! n ! cn.isMod ! cn.g ++
+      s = \\c => det.s ! n ! cn.isMod ! False !cn.g ++
                  cn.s ! n ! dd ! caseNP c ; 
       a = agrP3 g n
       } ;
@@ -139,14 +139,14 @@ incomplete concrete NounScand of Noun =
       } ;
 
     DefArt = {
-      s = \\n,b,g => if_then_Str b (artDef (gennum g n)) [] ; 
+      s = \\n,bm,bn,g => if_then_Str (orB bm bn) (artDef (gennum g n)) [] ; 
       det = DDef Def
       } ;
 
     IndefArt = {
       s = table {
-        Sg => \\_ => artIndef ; 
-        Pl => \\_,_ => []
+        Sg => \\_,bn,g => if_then_Str bn [] (artIndef ! g) ; 
+        Pl => \\_,bn,_ => []
         } ; 
       det = DIndef
       } ;
@@ -180,12 +180,12 @@ incomplete concrete NounScand of Noun =
 -- The genitive of this $NP$ is not correct: "sonen till mig" (not "migs").
 
     ComplN2 f x = {
-      s = \\n,d,c => f.s ! n ! specDet d ! Nom ++ f.c2 ++ x.s ! accusative ;
+      s = \\n,d,c => f.s ! n ! specDet d ! Nom ++ f.c2.s ++ x.s ! accusative ;
       g = f.g ;
       isMod = False
       } ;
     ComplN3 f x = {
-      s = \\n,d,c => f.s ! n ! d ! Nom ++ f.c2 ++ x.s ! accusative ; 
+      s = \\n,d,c => f.s ! n ! d ! Nom ++ f.c2.s ++ x.s ! accusative ; 
       g = f.g ;
       c2 = f.c3 ;
       isMod = False
@@ -207,7 +207,7 @@ incomplete concrete NounScand of Noun =
       } ;
 
     RelNP np rs = {
-      s = \\c => np.s ! c ++ rs.s ! np.a ;
+      s = \\c => np.s ! c ++ "," ++ rs.s ! np.a ;
       a = np.a ;
       isMod = np.isMod
       } ;

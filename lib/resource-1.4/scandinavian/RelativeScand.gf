@@ -1,5 +1,5 @@
 incomplete concrete RelativeScand of Relative = 
-  CatScand ** open CommonScand, ResScand in {
+  CatScand ** open CommonScand, ResScand, Prelude in {
 
   flags optimize=all_subs ;
 
@@ -29,14 +29,15 @@ incomplete concrete RelativeScand of Relative =
 
     RelSlash rp slash = {
       s = \\t,a,p,ag => 
-          slash.c2 ++ rp.s ! ag.gn ! RPrep ++ slash.s ! t ! a ! p ! Sub ;
+          slash.c2.s ++ rp.s ! ag.gn ! RPrep slash.c2.hasPrep ++ 
+          slash.s ! t ! a ! p ! Sub ;
       c = NPAcc
       } ;
 
 --- The case here could be genitive.
 
     FunRP p np rp = {
-      s = \\gn,c => np.s ! nominative ++ p.s ++ rp.s ! gn ! RPrep ;
+      s = \\gn,c => np.s ! nominative ++ p.s ++ rp.s ! gn ! RPrep True ;
       a = RAg np.a
       } ;
 
