@@ -30,10 +30,10 @@ langs = [
 langsLang = langs `except` ["Ara"]
 
 -- languages for which to compile Try 
-langsAPI  = langsLang `except` ["Cat","Hin","Ina","Rus","Tha"]
+langsAPI  = langsLang `except` ["Bul","Cat","Hin","Ina","Rus","Tha"]
 
 -- languages for which to compile Mathematical 
-langsMath = langsLang `except` ["Bul","Cat","Hin","Ina","Rus","Tha"]
+langsMath = langsAPI
 
 -- languages for which to run treebank test
 langsTest = langsLang `except` ["Cat","Hin","Spa","Tha"]

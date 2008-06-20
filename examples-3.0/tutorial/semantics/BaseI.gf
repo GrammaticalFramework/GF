@@ -50,7 +50,7 @@ lin
               (mkCN common_A (mkCN divisor_N2 (mkNP and_Conj nps))) ;
 
   WhatIs np = mkPhr (mkQS (mkQCl whatSg_IP (mkVP np))) ;
---  WhichAre cn ap = mkPhr (mkQS (mkQCl (mkIP (mkIDet which_IQuant plNum) cn) (mkVP ap))) ;
+  WhichAre cn ap = mkPhr (mkQS (mkQCl (mkIP which_IQuant cn) (mkVP ap))) ;
   QuestS s = mkPhr (mkQS (mkQCl s)) ;
 
   Yes = mkPhr yes_Utt ;
