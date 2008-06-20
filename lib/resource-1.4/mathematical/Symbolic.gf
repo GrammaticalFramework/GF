@@ -10,8 +10,8 @@ incomplete resource Symbolic = open Symbol, Grammar in {
       symb : N  -> Digits -> NP ;              -- level 4
       symb : N  -> Card -> NP ;                -- level four
       symb : CN -> Card -> NP ;                -- advanced level four
-      symb : Det -> N  -> Num -> NP ;          -- the number four
-      symb : Det -> CN -> Num -> NP ;          -- the even number four
+      symb : Det -> N  -> Card -> NP ;         -- the number four
+      symb : Det -> CN -> Card -> NP ;         -- the even number four
       symb : Det -> N  -> Str -> Str -> NP ;   -- the levels i and j
       symb : Det -> CN -> [Symb] -> NP         -- the basic levels i, j, and k
       } ;
@@ -31,13 +31,13 @@ incomplete resource Symbolic = open Symbol, Grammar in {
                           = \i -> UsePN (FloatPN i) ;
       symb : N -> Digits -> NP 
                           = \c,i -> CNNumNP (UseN c) (NumDigits i) ;
-      symb : N -> Num -> NP 
+      symb : N -> Card -> NP 
                           = \c,n -> CNNumNP (UseN c) n ;
-      symb : CN -> Num -> NP 
+      symb : CN -> Card -> NP 
                           = \c,n -> CNNumNP c n ;
-      symb : Det -> N  -> Num -> NP
+      symb : Det -> N  -> Card -> NP
                           = \d,n,x -> DetCN d (ApposCN (UseN n) (UsePN (NumPN x))) ;
-      symb : Det -> CN -> Num -> NP
+      symb : Det -> CN -> Card -> NP
                           = \d,n,x -> DetCN d (ApposCN n (UsePN (NumPN x))) ;
       symb : Det -> N  -> Str -> Str -> NP 
                           = \c,n,x,y -> CNSymbNP c (UseN n) (BaseSymb (mkSymb x) (mkSymb y)) ;
