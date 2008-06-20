@@ -102,6 +102,7 @@ lin
   important_A = regADeg "vigtig" ;
   industry_N = mk2N "industri" "industrien" ;
   iron_N = mk2N "jern" "jernet" ;
+  john_PN = mkPN "John" utrum ;
   king_N = mk2N "konge" "kongen" ;
   know_V2 = dirV2 vide_V ;
   lake_N = mk2N "sø" "søen" ;
@@ -354,6 +355,11 @@ lin
   language_N = mk2N "sprog" "sproget" ;
   rule_N = mkN "regel" "regeln" "regler" "reglerne" ;
 
+----    question_N = regN "fråga" ;
+----    ready_A = regA "färdig" ;
+----    reason_N = regN "anledning" ;
+    today_Adv = mkAdv "idag" ;
+----    uncertain_A = mk3A "osäker" "osäkert" "osäkra" ;
 
 } ;
 

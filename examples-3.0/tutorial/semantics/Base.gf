@@ -30,7 +30,7 @@ fun
 
 -- lexicon
 
-  UseInt  : Int -> PN ;
+  UseInt : Int -> PN ;
 
   Number : CN ;
   Even, Odd, Prime : AP ;

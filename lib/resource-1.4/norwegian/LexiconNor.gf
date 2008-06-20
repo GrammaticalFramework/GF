@@ -100,6 +100,7 @@ lin
   important_A = regADeg "viktig" ;
   industry_N = mk2N "industri" "industrien" ;
   iron_N = regGenN "jern" neutrum ;
+  john_PN = mkPN "John" utrum ;
   king_N = regGenN "konge" masculine ;
   know_V2 = dirV2 IrregNor.vite_V ;
   lake_N = regGenN "vann" neutrum ;
@@ -352,6 +353,12 @@ lin
   grammar_N = regN "grammatikk" ;
   language_N = mk2N "språk" "språket" ;
   rule_N = mkN "regel" "regelen" "regler" "reglene" ;
+
+----    question_N = regN "fråga" ;
+----    ready_A = regA "färdig" ;
+----    reason_N = regN "anledning" ;
+    today_Adv = mkAdv "idag" ;
+----    uncertain_A = mk3A "osäker" "osäkert" "osäkra" ;
 
 } ;
 
