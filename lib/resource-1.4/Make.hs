@@ -36,7 +36,7 @@ langsAPI  = langsLang `except` ["Bul","Cat","Hin","Ina","Rus","Tha"]
 langsMath = langsAPI
 
 -- languages for which to run treebank test
-langsTest = langsLang `except` ["Cat","Hin","Spa","Tha"]
+langsTest = langsLang `except` ["Bul","Cat","Hin","Rus","Spa","Tha"]
 
 -- languages for which langs.pgf is built
 langsPGF = langsTest `only` ["Eng","Fre","Swe"]

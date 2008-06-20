@@ -7,9 +7,16 @@ present:
 	$(RUNMAKE) present lang
 	$(RUNMAKE) present api
 
-alltenses:
+alltenses: lang api
+
+lang:
 	$(RUNMAKE) lang
+
+api:
 	$(RUNMAKE) api
+
+math:
+	$(RUNMAKE) math
 
 test:
 	$(RUNMAKE) test

@@ -101,6 +101,7 @@ lin
   important_A = regADeg "importante" ;
   industry_N = regN "industria" ;
   iron_N = regN "ferro" ;
+  john_PN = mkPN "Giovanni" masculine ;
   king_N = regN "ré" ;
   know_V2 = dirV2 (verboV (conoscere_37 "conoscere")) ; --- savoir_V2 : VS
   lake_N = regN "lago" ;
@@ -354,5 +355,6 @@ lin
   language_N = regN "lingua" ;
   rule_N = regN "regola" ;
 
+  today_Adv = mkAdv "oggi" ;
 
 } ;
