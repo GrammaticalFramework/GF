@@ -653,7 +653,7 @@ inferLType gr trm = case trm of
 -- type inference: Nothing, type checking: Just t
 -- the latter permits matching with value type
 getOverload :: SourceGrammar -> Maybe Type -> Term -> Check (Maybe (Term,Type))
-getOverload env@gr mt t = case appForm t of
+getOverload env@gr mt ot = case appForm ot of
      (f@(Q m c), ts) -> case lookupOverload gr m c of
        Ok typs -> do
          ttys <- mapM infer ts
@@ -666,44 +666,53 @@ getOverload env@gr mt t = case appForm t of
    matchOverload f typs ttys = do
      let (tts,tys) = unzip ttys
      let vfs = lookupOverloadInstance tys typs
+     let matches = [vf | vf@((v,_),_) <- vfs, matchVal mt v]
 
-     case [vf | vf@(v,f) <- vfs, matchVal mt v] of
-       [(val,fun)] -> return (mkApp fun tts, val)
-       [] -> raise $ "no overload instance of" +++ prt f +++ 
-         "for" +++ unwords (map (prtType env) tys) +++ "among" ++++ 
-         unlines ["  " ++ unwords (map (prtType env) ty) | (ty,_) <- typs] ++
-         maybe [] (("with value type" +++) . prtType env) mt
+     case ([vf | (vf,True) <- matches],[vf | (vf,False) <- matches]) of
+       ([(val,fun)],_) -> return (mkApp fun tts, val)
+       ([],[(val,fun)]) -> do
+         checkWarn ("ignoring lock fields in resolving" +++ prt ot) 
+         return (mkApp fun tts, val)
+       ([],[]) -> do
+         raise $ "no overload instance of" +++ prt f +++ 
+           "for" +++ unwords (map (prtType env) tys) +++ "among" ++++ 
+           unlines ["  " ++ unwords (map (prtType env) ty) | (ty,_) <- typs] ++
+           maybe [] (("with value type" +++) . prtType env) mt
 
-      ----  ++++ "DEBUG" +++ unwords (map show tys) +++ ";" 
-      ----  ++++ unlines (map (show . fst) typs) ----
-
-       vfs' -> case [(v,f) | (v,f) <- vfs', noProd v] of
-         [(val,fun)] -> do
+       (vfs1,vfs2) -> case (noProds vfs1,noProds vfs2) of
+         ([(val,fun)],_) -> do
+           return (mkApp fun tts, val)
+         ([],[(val,fun)]) -> do
+           checkWarn ("ignoring lock fields in resolving" +++ prt ot) 
+           return (mkApp fun tts, val)
 
 ----- unsafely exclude irritating warning AR 24/5/2008
 -----           checkWarn $ "WARNING: overloading of" +++ prt f +++ 
 -----             "resolved by excluding partial applications:" ++++
 -----             unlines [prtType env ty | (ty,_) <- vfs', not (noProd ty)]
 
-           return (mkApp fun tts, val)
 
          _ -> raise $ "ambiguous overloading of" +++ prt f +++
-           "for" +++ unwords (map (prtType env) tys) ++++ "with alternatives" ++++ 
-           unlines [prtType env ty | (ty,_) <- vfs']
+             "for" +++ unwords (map (prtType env) tys) ++++ "with alternatives" ++++ 
+             unlines [prtType env ty | (ty,_) <- if (null vfs1) then vfs2 else vfs2]
 
-   matchVal mt v = elem mt ([Nothing,Just v] ++ unlocked) where
-     unlocked = case v of
-       RecType fs -> [Just $ RecType $ filter (not . isLockLabel . fst) fs]
-       _ -> []
+   matchVal mt v = elem mt [Nothing,Just v,Just (unlocked v)]
+
+   unlocked v = case v of
+     RecType fs -> RecType $ filter (not . isLockLabel . fst) fs
+     _ -> v
    ---- TODO: accept subtypes
    ---- TODO: use a trie
    lookupOverloadInstance tys typs = 
-     [(mkFunType rest val, t) | 
+     [((mkFunType rest val, t),isExact) | 
        let lt = length tys,
        (ty,(val,t)) <- typs, length ty >= lt,
        let (pre,rest) = splitAt lt ty, 
-       pre == tys
+       let isExact = pre == tys,
+       isExact || map unlocked pre == map unlocked tys
      ]
+
+   noProds vfs = [(v,f) | (v,f) <- vfs, noProd v]
 
    noProd ty = case ty of
      Prod _ _ _ -> False

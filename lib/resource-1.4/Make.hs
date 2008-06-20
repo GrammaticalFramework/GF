@@ -3,7 +3,7 @@ module Main where
 import System
 
 -- Make commands for compiling and testing resource grammars.
--- usage: runghc Make present? (lang | api | pgf | test | clean)?
+-- usage: runghc Make present? (lang | api | math | pgf | test | clean)?
 -- With no argument, lang and api are done, in this order.
 -- See 'make' below for what is done by which command.
 
@@ -32,6 +32,9 @@ langsLang = langs `except` ["Ara"]
 -- languages for which to compile Try 
 langsAPI  = langsLang `except` ["Cat","Hin","Ina","Rus","Tha"]
 
+-- languages for which to compile Mathematical 
+langsMath = langsLang `except` ["Bul","Cat","Hin","Ina","Rus","Tha"]
+
 -- languages for which to run treebank test
 langsTest = langsLang `except` ["Cat","Hin","Spa","Tha"]
 
@@ -56,6 +59,9 @@ make xx = do
   ifx "api" $ do
     mapM_ (gfc pres presApiPath . try) langsAPI
     system $ "cp */*.gfo " ++ dir
+  ifx "math" $ do
+    mapM_ (gfc False [] . math) langsMath
+    system $ "cp mathematical/*.gfo ../mathematical"
   ifxx "pgf" $ do
     system $ "gfc -s --make --name=langs --parser=off --output-dir=" ++ dir ++ " " ++
               unwords [dir ++ "/Lang" ++ la ++ ".gfo" | (_,la) <- langsPGF] ++
@@ -81,6 +87,7 @@ treeb = "rf -lines -tree -file=" ++ treebankExx ++
 
 lang (lla,la) = lla ++ "/Lang" ++ la ++ ".gf"
 try  (lla,la) = "api/Try"  ++ la ++ ".gf"
+math (lla,la) = "mathematical/Mathematical"  ++ la ++ ".gf"
 
 except ls es = filter (flip notElem es . snd) ls
 only   ls es = filter (flip elem es . snd) ls
