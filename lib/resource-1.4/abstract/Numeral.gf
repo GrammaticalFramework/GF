@@ -49,11 +49,11 @@ fun
 -- Numerals as sequences of digits have a separate, simpler grammar
 
   cat 
-    Dig ;
+    Dig ;  -- single digit 0..9
 
   fun
-    IDig  : Dig -> Digits ;
-    IIDig : Dig -> Digits -> Digits ;
+    IDig  : Dig -> Digits ;       -- 8
+    IIDig : Dig -> Digits -> Digits ; -- 876
 
     D_0, D_1, D_2, D_3, D_4, D_5, D_6, D_7, D_8, D_9 : Dig ;
 

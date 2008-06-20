@@ -1,0 +1,34 @@
+
+
+
+
+=Browsing the libraries with GF commands=
+
+**New**: Browsing by syntax editor 
+[directly on the web ../../../demos/resource-api/editor.html].
+
+All of the following assume
+```
+  cd $GF_LIB_PATH
+```
+To try out inflection paradigms:
+```
+  > i -path=alltenses -retain alltenses/ParadigmsGer.gfo
+  > cc mkN "Farbe"
+```
+To try out overloaded syntax, test lexicon, and inflection paradigms:
+```
+  > i -path=alltenses -retain alltenses/TryGer.gfo
+  > cc mkCl (mkNP this_Quant (mkN "Farbe")) (mkA "dunkel")
+```
+% To look for a syntax tree in the overload API by parsing:
+% ```
+%  > i -path=alltenses alltenses/OverLangEng.gf
+%  > p -cat=S -overload "this grammar is too big"
+% ```
+% To view linearizations in all languages by parsing from English:
+% ```
+%  > i alltenses/langs.gfcm
+%  > p -cat=S -lang=LangEng "this grammar is too big" | tb
+% ```
+

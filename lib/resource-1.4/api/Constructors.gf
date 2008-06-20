@@ -238,41 +238,44 @@ incomplete resource Constructors = open Grammar in {
       mkCl : NP  -> VQ -> QS ->       Cl ;  -- 6. John wonders if it is good
       mkCl : NP  -> VA -> AP ->       Cl ;  -- 7. John becomes old
       mkCl : NP  -> V2A -> NP -> AP -> Cl ; -- 8. John paints it red
-      mkCl : NP  -> A  ->             Cl ;  -- 9. John is old
-      mkCl : NP  -> A  -> NP ->       Cl ;  -- 10. John is older than her
-      mkCl : NP  -> A2 -> NP ->       Cl ;  -- 11. John is married to her
-      mkCl : NP  -> AP ->             Cl ;  -- 12. John is very old
-      mkCl : NP  -> N  ->             Cl ;  -- 13. John is a man
-      mkCl : NP  -> CN ->             Cl ;  -- 14. John is an old man
-      mkCl : NP  -> NP ->             Cl ;  -- 15. John is the man
-      mkCl : NP  -> Adv ->            Cl ;  -- 16. John is here
+      mkCl : NP  -> V2S -> NP -> S -> Cl ;  -- 9. John tells her that we are here
+      mkCl : NP  -> V2Q -> NP -> QS -> Cl ; -- 10. John asks her who is here
+      mkCl : NP  -> V2V -> NP -> VP -> Cl ; -- 11. John forces us to sleep
+      mkCl : NP  -> A  ->             Cl ;  -- 12. John is old
+      mkCl : NP  -> A  -> NP ->       Cl ;  -- 13. John is older than her
+      mkCl : NP  -> A2 -> NP ->       Cl ;  -- 14. John is married to her
+      mkCl : NP  -> AP ->             Cl ;  -- 15. John is very old
+      mkCl : NP  -> N  ->             Cl ;  -- 16. John is a man
+      mkCl : NP  -> CN ->             Cl ;  -- 17. John is an old man
+      mkCl : NP  -> NP ->             Cl ;  -- 18. John is the man
+      mkCl : NP  -> Adv ->            Cl ;  -- 19. John is here
 
 -- As the general rule, a clause can be built from a subject noun phrase and 
 -- a verb phrase.
 
-      mkCl : NP  -> VP -> Cl ;  -- 17. John walks here
+      mkCl : NP  -> VP -> Cl ;  -- 20. John walks here
 
 -- Subjectless verb phrases are used for impersonal actions.
 
-      mkCl : V   ->  Cl ;  -- 18. it rains
-      mkCl : VP  ->  Cl ;  -- 19. it is raining
+      mkCl : V   ->  Cl ;  -- 21. it rains
+      mkCl : VP  ->  Cl ;  -- 22. it is raining
 
 -- Existentials are a special form of clauses.
 
-      mkCl : N   ->  Cl ;  -- 20. there is a house
-      mkCl : CN  ->  Cl ;  -- 21. there is an old houses
-      mkCl : NP  ->  Cl ;  -- 22. there are five houses
+      mkCl : N   ->  Cl ;  -- 23. there is a house
+      mkCl : CN  ->  Cl ;  -- 24. there is an old houses
+      mkCl : NP  ->  Cl ;  -- 25. there are five houses
 
 -- There are also special forms in which a noun phrase or an adverb is
 -- emphasized.
 
-      mkCl : NP  -> RS -> Cl ;  -- 23. it is John that walks
-      mkCl : Adv -> S  -> Cl    -- 24. it is here John walks
+      mkCl : NP  -> RS -> Cl ;  -- 26. it is John that walks
+      mkCl : Adv -> S  -> Cl    -- 27. it is here John walks
       } ;
 
 -- Generic clauses are one with an impersonal subject.
 
-      genericCl : VP ->  Cl ;   -- 25. one walks              
+      genericCl : VP ->  Cl ;   -- 28. one walks              
 
 
 --2 Verb phrases and imperatives
@@ -306,7 +309,13 @@ incomplete resource Constructors = open Grammar in {
 -- A verb phrase can be modified with a postverbal or a preverbal adverb.
 
       mkVP : VP  -> Adv -> VP ;  -- 17. sleep here
-      mkVP : AdV -> VP  -> VP    -- 18. always sleep
+      mkVP : AdV -> VP  -> VP ;  -- 18. always sleep
+
+-- Objectless verb phrases can be taken to verb phrases in two ways.
+
+      mkVP : VPSlash -> NP -> VP ; -- 19. paint it black
+      mkVP : VPSlash -> VP ;       -- 20. paint itself black
+
       } ;
 
 -- Two-place verbs can be used reflexively.
@@ -346,12 +355,12 @@ incomplete resource Constructors = open Grammar in {
 -- special case of a simple common noun ($N$) is always provided.
 
     mkNP : overload {
-      mkNP : Det     -> N  -> NP ;       --  1. the first man
-      mkNP : Det     -> CN -> NP ;       --  2. the first old man
-      mkNP : Quant   -> N  -> NP ;       --  3. this man
-      mkNP : Quant   -> CN -> NP ;       --  4. this old man
-      mkNP : Quant -> Num -> N  -> NP ;  --  5. these men
-      mkNP : Quant -> Num -> CN -> NP ;  --  6. these old men
+      mkNP : Art                -> NP ;  --  1. the man
+      mkNP : Art -> (Num) -> CN -> NP ;  --  2. the five old men
+      mkNP : Quant   -> N  -> NP ;       --  3. this men
+      mkNP : Quant -> (Num) -> CN -> NP; --  4. these five old men
+      mkNP : Det     -> N  -> NP ;       --  5. the first man
+      mkNP : Det     -> CN -> NP ;       --  6. the first old man
       mkNP : Numeral -> N  -> NP ;       --  7. twenty men
       mkNP : Numeral -> CN -> NP ;       --  8. twenty old men
       mkNP : Digits  -> N  -> NP ;       --  9. 45 men
@@ -366,18 +375,28 @@ incomplete resource Constructors = open Grammar in {
       mkNP : PN    -> NP ;  -- 15. John
       mkNP : Pron  -> NP ;  -- 16. he
 
+-- Determiners alone can form noun phrases (this excludes articles, $Art$)
+
+      mkNP : Quant -> NP ;  -- 17. this
+      mkNP : Det   -> NP ;  -- 18. these five
+
+-- Determinesless mass noun phrases.
+
+      mkNP : N ->  NP ; -- 19. beer
+      mkNP : CN -> NP ; -- 20. beer
+
 -- A noun phrase once formed can be prefixed by a predeterminer and
 -- suffixed by a past participle or an adverb.
 
-      mkNP : Predet -> NP -> NP ;  -- 17. only John
-      mkNP : NP ->    V2  -> NP ;  -- 18. John killed
-      mkNP : NP ->    Adv -> NP ;  -- 19. John in Paris
+      mkNP : Predet -> NP -> NP ;  -- 21. only John
+      mkNP : NP ->    V2  -> NP ;  -- 22. John killed
+      mkNP : NP ->    Adv -> NP ;  -- 23. John in Paris
 
 -- A conjunction can be formed both from two noun phrases and a longer
 -- list of them.
 
-      mkNP : Conj  -> NP -> NP -> NP ; -- 20. John and I
-      mkNP : Conj  -> ListNP ->   NP ; -- 21. John, I, and that
+      mkNP : Conj  -> NP -> NP -> NP ; -- 22. John and I
+      mkNP : Conj  -> ListNP   -> NP ; -- 23. John, I, and that
 
       } ;
 
@@ -410,51 +429,12 @@ incomplete resource Constructors = open Grammar in {
       mkDet : Pron -> Num -> Det    -- 11. my (houses)
       } ;
 
+--3 Art, articles
 
-{-
--- The definite and indefinite articles are commonly used determiners.
+-- There are definite and indefinite articles.
 
-      defSgDet   : Det ;  -- 11. the (house)
-      defPlDet   : Det ;  -- 12. the (houses)
-      indefSgDet : Det ;  -- 13. a (house)
-      indefPlDet : Det ;  -- 14. (houses)
-
-
---3 QuantSg, singular quantifiers
-
--- From quantifiers that can have both forms, this constructor 
--- builds the singular form.
-
-      mkQuantSg : Quant -> QuantSg ;  -- 1. this
-
--- The mass noun phrase constructor is treated as a singular quantifier.
-
-      massQuant : QuantSg ;  -- 2. (mass terms)
-
--- More singular quantifiers are available in the $Structural$ module.
--- The following singular cases of quantifiers are often used.
-
-      the_QuantSg  : QuantSg ; -- 3. the
-      a_QuantSg    : QuantSg ; -- 4. a
-      this_QuantSg : QuantSg ; -- 5. this
-      that_QuantSg : QuantSg ; -- 6. that
-
-
---3 QuantPl, plural quantifiers
-
--- From quantifiers that can have both forms, this constructor 
--- builds the plural form.
-
-      mkQuantPl : Quant -> QuantPl ;  -- 1. these
-
--- More plural quantifiers are available in the $Structural$ module.   
--- The following plural cases of quantifiers are often used.
-
-      the_QuantPl   : QuantPl ; -- 2. the
-      a_QuantPl     : QuantPl ; -- 3. (indefinite plural)
-      these_QuantPl : QuantPl ; -- 4. these
-      those_QuantPl : QuantPl ; -- 5. those
--}
+      the_Art : Art ;   -- the
+      a_Art   : Art ;   -- a
 
 --3 Num, cardinal numerals 
 
@@ -470,6 +450,10 @@ incomplete resource Constructors = open Grammar in {
       mkNum : AdN -> Num -> Num  -- 3. almost ten
       } ;
 
+-- Dummy numbers are sometimes to select the grammatical number of a determiner.
+
+      sgNum : Num ;  -- singular
+      plNum : Num ;  -- plural
 
 --3 Ord, ordinal numerals
 
@@ -512,6 +496,11 @@ incomplete resource Constructors = open Grammar in {
 -- See $Numeral$ for the full set of constructors, and use the category 
 -- $Digits$ for other numbers from one million.
 
+   mkDigits : overload {
+      mkDigits : Dig -> Digits ;           -- 1. 8 
+      mkDigits : Dig -> Digits -> Digits ; -- 2. 876
+      } ;
+
       n1_Digits    : Digits ; -- 1. 1
       n2_Digits    : Digits ; -- 2. 2
       n3_Digits    : Digits ; -- 3. 3
@@ -526,8 +515,20 @@ incomplete resource Constructors = open Grammar in {
       n100_Digits  : Digits ; -- 12. 100
       n1000_Digits : Digits ; -- 13. 1,000
 
+--3 Dig, single digits
 
+      n0_Dig    : Dig ; -- 0. 0
+      n1_Dig    : Dig ; -- 1. 1
+      n2_Dig    : Dig ; -- 2. 2
+      n3_Dig    : Dig ; -- 3. 3
+      n4_Dig    : Dig ; -- 4. 4
+      n5_Dig    : Dig ; -- 5. 5
+      n6_Dig    : Dig ; -- 6. 6
+      n7_Dig    : Dig ; -- 7. 7
+      n8_Dig    : Dig ; -- 8. 8
+      n9_Dig    : Dig ; -- 9. 9
 
+      
 --2 Nouns
 
 --3 CN, common noun phrases
@@ -779,7 +780,7 @@ incomplete resource Constructors = open Grammar in {
       mkRP : Prep -> NP -> RP -> RP ;  -- 2. all the houses in which
 
 
---3 Slash, objectless sentences
+--3 ClSlash, objectless sentences
 
     mkClSlash : overload {
 
@@ -800,6 +801,22 @@ incomplete resource Constructors = open Grammar in {
 -- An objectless sentence can be modified by an adverb.
 
       mkClSlash : ClSlash -> Adv -> ClSlash  -- 4. (whom) John loves today
+      } ;
+
+
+--3 VPSlash, verb phrases missing an object
+
+    mkVPSlash : overload {
+
+-- This is the deep level of many-argument predication, permitting extraction.
+
+      mkVPSlash : V2  -> VPSlash ;        -- 1. (whom) (John) loves
+      mkVPSlash : V3  -> NP -> VPSlash ;  -- 2. (whom) (John) gives an apple
+      mkVPSlash : V2A -> AP -> VPSlash ;  -- 3. (whom) (John) paints red
+      mkVPSlash : V2Q -> QS -> VPSlash ;  -- 4. (whom) (John) asks who sleeps
+      mkVPSlash : V2S -> S  -> VPSlash ;  -- 5. (whom) (John) tells that we sleep
+      mkVPSlash : V2V -> VP -> VPSlash ;  -- 6. (whom) (John) forces to sleep
+
       } ;
 
 
@@ -948,10 +965,10 @@ incomplete resource Constructors = open Grammar in {
 
 
     mkNP = overload {
-      mkNP : Art -> CN -> NP         -- the old man --n14
-          =  DetArtSg ;
       mkNP : Art -> N -> NP          -- the man  --n14
           =  \d,n -> DetArtSg d (UseN n)   ;
+      mkNP : Art -> CN -> NP         -- the old man --n14
+          =  DetArtSg ;
       mkNP : Art -> Num -> CN -> NP  -- the old men --n14
           =  \d,nu,cn -> case nu.n of {
                Sg => DetArtSg d cn ;
@@ -986,6 +1003,8 @@ incomplete resource Constructors = open Grammar in {
           =  DetCN    ;
       mkNP : Det -> N -> NP       -- the man
           =  \d,n -> DetCN d (UseN n)   ;
+      mkNP : Quant -> NP            -- this
+          =  \q -> DetNP (DetQuant q sgNum) ;
       mkNP : Det -> NP            -- this
           =  DetNP ;
       mkNP : Card -> CN -> NP     -- forty-five old men
@@ -1076,6 +1095,8 @@ incomplete resource Constructors = open Grammar in {
       } ;
 
 
+      the_Art : Art = DefArt ;     -- the
+      a_Art   : Art = IndefArt ;   -- a
 
 -- 1.4
 --      defSgDet   : Det  = DetSg (SgQuant DefArt) NoOrd ;   -- the (man)
@@ -1163,6 +1184,23 @@ incomplete resource Constructors = open Grammar in {
 
 
     mkAdN : CAdv -> AdN = AdnCAdv ;                  -- more (than five)
+
+   mkDigits = overload {
+      mkDigits : Dig -> Digits = IDig ; 
+      mkDigits : Dig -> Digits -> Digits = IIDig ; 
+      } ;
+
+      n0_Dig = D_0 ;
+      n1_Dig = D_1 ;
+      n2_Dig    = D_2 ;
+      n3_Dig    = D_3 ;
+      n4_Dig    = D_4 ;
+      n5_Dig    = D_5 ;
+      n6_Dig        = D_6 ;
+      n7_Dig        = D_7 ;
+      n8_Dig        = D_8 ;
+      n9_Dig        = D_9 ;
+
 
 
 
@@ -1522,10 +1560,32 @@ incomplete resource Constructors = open Grammar in {
       mkVP : VP -> Adv -> VP          -- sleep here
                                          =    AdvVP     ;
       mkVP : AdV -> VP -> VP          -- always sleep
-                                         =    AdVVP
+                                         =    AdVVP ;
+      mkVP : VPSlash -> NP -> VP          -- always sleep
+                                         =    ComplSlash ;
+      mkVP : VPSlash -> VP
+        = ReflVP
       } ;
 
   reflexiveVP   : V2 -> VP = \v -> ReflVP (SlashV2a v) ;
+
+    mkVPSlash = overload {
+
+      mkVPSlash : V2  -> VPSlash         -- 1. (whom) (John) loves
+        = SlashV2a ;
+      mkVPSlash : V3  -> NP -> VPSlash   -- 2. (whom) (John) gives an apple
+        = Slash2V3 ;
+      mkVPSlash : V2A -> AP -> VPSlash   -- 3. (whom) (John) paints red
+        = SlashV2A ;
+      mkVPSlash : V2Q -> QS -> VPSlash   -- 4. (whom) (John) asks who sleeps
+        = SlashV2Q ;
+      mkVPSlash : V2S -> S  -> VPSlash   -- 5. (whom) (John) tells that we sleep
+        = SlashV2S ;
+      mkVPSlash : V2V -> VP -> VPSlash   -- 6. (whom) (John) forces to sleep
+        = SlashV2V ;
+      } ;
+
+
 
   passiveVP = overload {
       passiveVP : V2 ->       VP = PassV2 ;
@@ -1573,5 +1633,49 @@ incomplete resource Constructors = open Grammar in {
   ComplV3 : V3 -> NP -> NP -> VP = \v,o,d -> ComplSlash (Slash2V3 v o) d ;
 
 
+{-
+-- The definite and indefinite articles are commonly used determiners.
+
+      defSgDet   : Det ;  -- 11. the (house)
+      defPlDet   : Det ;  -- 12. the (houses)
+      indefSgDet : Det ;  -- 13. a (house)
+      indefPlDet : Det ;  -- 14. (houses)
+
+
+--3 QuantSg, singular quantifiers
+
+-- From quantifiers that can have both forms, this constructor 
+-- builds the singular form.
+
+      mkQuantSg : Quant -> QuantSg ;  -- 1. this
+
+-- The mass noun phrase constructor is treated as a singular quantifier.
+
+      massQuant : QuantSg ;  -- 2. (mass terms)
+
+-- More singular quantifiers are available in the $Structural$ module.
+-- The following singular cases of quantifiers are often used.
+
+      the_QuantSg  : QuantSg ; -- 3. the
+      a_QuantSg    : QuantSg ; -- 4. a
+      this_QuantSg : QuantSg ; -- 5. this
+      that_QuantSg : QuantSg ; -- 6. that
+
+
+--3 QuantPl, plural quantifiers
+
+-- From quantifiers that can have both forms, this constructor 
+-- builds the plural form.
+
+      mkQuantPl : Quant -> QuantPl ;  -- 1. these
+
+-- More plural quantifiers are available in the $Structural$ module.   
+-- The following plural cases of quantifiers are often used.
+
+      the_QuantPl   : QuantPl ; -- 2. the
+      a_QuantPl     : QuantPl ; -- 3. (indefinite plural)
+      these_QuantPl : QuantPl ; -- 4. these
+      those_QuantPl : QuantPl ; -- 5. those
+-}
 
 }

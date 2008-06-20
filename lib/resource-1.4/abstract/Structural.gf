@@ -12,7 +12,7 @@ abstract Structural = Cat ** {
 
 -- This is an alphabetical list of structural words
 
-  above_Prep : Prep ;
+  above_Prep : Prep ;  
   after_Prep : Prep ;
   all_Predet : Predet ;
   almost_AdA : AdA ;   
@@ -24,18 +24,18 @@ abstract Structural = Cat ** {
   before_Prep : Prep ;
   behind_Prep : Prep ;
   between_Prep : Prep ;
-  both7and_DConj : Conj ;
+  both7and_DConj : Conj ; -- both...and
 ---b  both7and_DConj : DConj ;
   but_PConj : PConj ;
-  by8agent_Prep : Prep ;
-  by8means_Prep : Prep ;
+  by8agent_Prep : Prep ; -- by (agent)
+  by8means_Prep : Prep ; -- by (means of)
   can8know_VV : VV ;
   can_VV : VV ;
   during_Prep : Prep ;
-  either7or_DConj : Conj ;
+  either7or_DConj : Conj ; -- either...or
 ---b  either7or_DConj : DConj ;
   every_Det : Det ;
-  everybody_NP : NP ;
+  everybody_NP : NP ;  -- everybody
   everything_NP : NP ;
   everywhere_Adv : Adv ;
 ---  first_Ord : Ord ; DEPRECATED
@@ -44,13 +44,13 @@ abstract Structural = Cat ** {
   from_Prep : Prep ;
   he_Pron : Pron ;
   here_Adv : Adv ;
-  here7to_Adv : Adv ;
-  here7from_Adv : Adv ;
+  here7to_Adv : Adv ; -- to here
+  here7from_Adv : Adv ;  -- from here
   how_IAdv : IAdv ;
   how8many_IDet : IDet ;
   i_Pron : Pron ;
   if_Subj : Subj ;
-  in8front_Prep : Prep ;
+  in8front_Prep : Prep ; -- in front of
   in_Prep : Prep ;
   it_Pron : Pron ;
   less_CAdv : CAdv ;
@@ -68,7 +68,7 @@ abstract Structural = Cat ** {
   otherwise_PConj : PConj ;
   part_Prep : Prep ;
   please_Voc : Voc ;
-  possess_Prep : Prep ;
+  possess_Prep : Prep ; -- of (possessive)
   quite_Adv : AdA ;
   she_Pron : Pron ;
   so_AdA : AdA ;
@@ -79,8 +79,8 @@ abstract Structural = Cat ** {
   somewhere_Adv : Adv ;
   that_Quant : Quant ;
   there_Adv : Adv ;
-  there7to_Adv : Adv ;
-  there7from_Adv : Adv ;
+  there7to_Adv : Adv ; -- to there
+  there7from_Adv : Adv ; -- from there
   therefore_PConj : PConj ;
   they_Pron : Pron ; 
   this_Quant : Quant ;
@@ -91,21 +91,21 @@ abstract Structural = Cat ** {
   very_AdA : AdA ;
   want_VV : VV ;
   we_Pron : Pron ;
-  whatPl_IP : IP ;
-  whatSg_IP : IP ;
+  whatPl_IP : IP ; -- what (plural)
+  whatSg_IP : IP ; -- what (singular)
   when_IAdv : IAdv ;
   when_Subj : Subj ;
   where_IAdv : IAdv ;
   which_IQuant : IQuant ;
-  whoPl_IP : IP ;
-  whoSg_IP : IP ;
+  whoPl_IP : IP ;  -- who (plural)
+  whoSg_IP : IP ;  -- who (singular)
   why_IAdv : IAdv ;
   with_Prep : Prep ;
   without_Prep : Prep ;
 ---b  yes_Phr : Phr ;
   yes_Utt : Utt ;
-  youSg_Pron : Pron ;
-  youPl_Pron : Pron ;
-  youPol_Pron : Pron ;
+  youSg_Pron : Pron ; -- you (singular)
+  youPl_Pron : Pron ; -- you (plural)
+  youPol_Pron : Pron ; -- you (polite)
 
 }
