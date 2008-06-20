@@ -12,8 +12,8 @@ fun
   SymbPN   : Symb -> PN ;                -- x
   IntPN    : Int -> PN ;                 -- 27
   FloatPN  : Float -> PN ;               -- 3.14159
-  NumPN    : Num -> PN ;
-  CNNumNP  : CN -> Num -> NP ;           -- level five ; level 5
+  NumPN    : Card -> PN ;
+  CNNumNP  : CN -> Card -> NP ;          -- level five ; level 5
   CNSymbNP : Det -> CN -> [Symb] -> NP ; -- (the) (2) numbers x and y
 
 
@@ -23,7 +23,7 @@ fun
 
 --2 Symbols as numerals
 
-  SymbNum  : Symb -> Num ;               -- n
+  SymbNum  : Symb -> Card ;              -- n
   SymbOrd  : Symb -> Ord ;               -- n'th
 
 --2 Symbol lists
