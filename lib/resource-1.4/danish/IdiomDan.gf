@@ -8,13 +8,10 @@ concrete IdiomDan of Idiom = CatDan **
     GenericCl vp = mkClause "man" (agrP3 MorphoDan.utrum Sg) vp ;
 
     CleftNP np rs = mkClause "det" (agrP3 MorphoDan.neutrum Sg) 
-      (insertObj (\\_ => rs.s ! np.a)
-        (insertObj (\\_ => np.s ! rs.c) (predV verbBe))) ;
+        (insertObj (\\_ => np.s ! rs.c ++ rs.s ! np.a) (predV verbBe)) ;
 
     CleftAdv ad s = mkClause "det" (agrP3 MorphoDan.neutrum Sg) 
-      (insertObj (\\_ => "som" ++ s.s ! Sub)
-        (insertObj (\\_ => ad.s) (predV verbBe))) ;
-
+      (insertObj (\\_ => ad.s ++ s.s ! Sub) (predV verbBe)) ;
 
     ExistNP np = 
       mkClause "det" (agrP3 MorphoDan.neutrum Sg) (insertObj 

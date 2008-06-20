@@ -19,12 +19,12 @@ incomplete concrete AdjectiveScand of Adjective =
 -- $SuperlA$ belongs to determiner syntax in $Noun$.
 
     ComplA2 a np = {
-      s = \\ap => a.s ! AF (APosit ap) Nom ++ a.c2 ++ np.s ! accusative ; 
+      s = \\ap => a.s ! AF (APosit ap) Nom ++ a.c2.s ++ np.s ! accusative ; 
       isPre = False
       } ;
 
     ReflA2 a = {
-      s = \\ap => a.s ! AF (APosit ap) Nom ++ a.c2 ++ 
+      s = \\ap => a.s ! AF (APosit ap) Nom ++ a.c2.s ++ 
                   reflPron (agrP3 utrum Sg) ; ---- 
       isPre = False
       } ;

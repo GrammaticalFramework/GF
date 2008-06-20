@@ -10,12 +10,15 @@ incomplete concrete CatScand of Cat =
     S  = {s : Order => Str} ;
     QS = {s : QForm => Str} ;
     RS = {s : Agr => Str ; c : NPForm} ;
-    SSlash = {s : Order => Str} ** {c2 : Str} ;
+    SSlash = {s : Order => Str} ** {c2 : Complement} ;
 
 -- Sentence
 
     Cl = {s : R.Tense => Anteriority => Polarity => Order => Str} ;
-    ClSlash = {s : R.Tense => Anteriority => Polarity => Order => Str} ** {c2 : Str} ;
+    ClSlash = {
+      s : R.Tense => Anteriority => Polarity => Order => Str ; 
+      c2 : Complement
+      } ;
     Imp = {s : Polarity => Number => Str} ;
 
 -- Question
@@ -44,7 +47,7 @@ incomplete concrete CatScand of Cat =
       ext : Str ;            -- S-Ext att hon går   ---s7
       en2,ea2,eext : Bool    -- indicate if the field exists
       } ;
-    VPSlash = CommonScand.VP ** {c2 : Str} ;
+    VPSlash = CommonScand.VP ** {c2 : Complement} ;
     Comp = {s : AFormPos => Str} ; 
 
 
@@ -63,7 +66,7 @@ incomplete concrete CatScand of Cat =
     NP,Pron = {s : NPForm => Str ; a : Agr} ;
     Det = {s : Bool => Gender => Str ; n : Number ; det : DetSpecies} ;
     Quant = {s : Number => Bool => Gender => Str ; det : DetSpecies} ;
-    Art = {s : Number => Bool => Gender => Str ; det : DetSpecies} ;
+    Art = {s : Number => Bool => Bool => Gender => Str ; det : DetSpecies} ;
     Predet = {s : GenNum => Str} ;
     Num = {s : Gender => Str ; isDet : Bool ; n : Number} ;
     Card = {s : Gender => Str ; n : Number} ;
@@ -83,17 +86,17 @@ incomplete concrete CatScand of Cat =
 -- Open lexical classes, e.g. Lexicon
 
     V, VS, VQ, VA = Verb ;
-    V2, VV, V2Q, V2S, V2A = Verb ** {c2 : Str} ;
-    V3, V2V = Verb ** {c2,c3 : Str} ;
+    V2, VV, V2Q, V2S, V2A = Verb ** {c2 : Complement} ;
+    V3, V2V = Verb ** {c2,c3 : Complement} ;
 
     A  = Adjective ** {isComp : Bool} ;
        -- {s : AForm => Str} ;
-    A2 = Adjective ** {isComp : Bool ; c2 : Str} ;
+    A2 = Adjective ** {isComp : Bool ; c2 : Complement} ;
 
     N  = Noun ; 
       -- {s : Number => Species => Case => Str ; g : Gender} ;
-    N2   = Noun  ** {c2 : Str} ;
-    N3   = Noun  ** {c2,c3 : Str} ;
+    N2   = Noun  ** {c2 : Complement} ;
+    N3   = Noun  ** {c2,c3 : Complement} ;
     PN = {s : Case => Str ; g : Gender} ;
 
 }

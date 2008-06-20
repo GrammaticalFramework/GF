@@ -21,7 +21,7 @@ concrete StructuralNor of Structural = CatNor **
   by8means_Prep = ss "med" ;
   can8know_VV, can_VV = 
     mkV "kunne" "kan" "kunn" "kunne" "kunnet" "kunnen" **
-    {c2 = [] ; lock_VV = <>} ;
+    {c2 = mkComplement [] ; lock_VV = <>} ;
   during_Prep = ss "under" ;
   either7or_DConj = sd2 "enten" "eller" ** {n = Sg} ;
   everybody_NP = regNP "alle" "alles" Plg ;
@@ -50,7 +50,8 @@ concrete StructuralNor of Structural = CatNor **
   most_Predet = {s = gennumForms ["den meste"] ["det meste"] ["de fleste"]} ;
   much_Det = {s = \\_,_ => "mye" ; n = Pl ; det = DDef Indef} ;
   must_VV = 
-    mkV "måtte" "må" "må" "måtte" "måttet" "mått" ** {c2 = [] ; lock_VV = <>} ;
+    mkV "måtte" "må" "må" "måtte" "måttet" "mått" ** 
+    {c2 = mkComplement [] ; lock_VV = <>} ;
   no_Utt = ss ["nei"] ;
   on_Prep = ss "på" ;
 ---  one_Quant = {s = \\_ => genderForms ["en"] ["et"] ; n = Sg ; det = DIndef} ; DEPREC
@@ -94,7 +95,7 @@ concrete StructuralNor of Structural = CatNor **
   very_AdA = ss "mye" ;
   want_VV = 
     mkV "ville" "vil" "vill" "ville" "villet" "villed" ** 
-    {c2 = [] ; lock_VV = <>} ;
+    {c2 = mkComplement [] ; lock_VV = <>} ;
   we_Pron = MorphoNor.mkNP "vi"  "oss"  "vår" "vårt" "våre"  Plg P1 ;
   whatSg_IP = {s = \\_ => "hva" ; gn = SgUtr} ; ---- infl
   whatPl_IP = {s = \\_ => "hva" ; gn = Plg} ; ---- infl

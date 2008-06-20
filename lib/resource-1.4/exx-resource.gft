@@ -83,8 +83,8 @@ AdjCN (PositA big_A) (UseN house_N)
 RelCN (UseN house_N) (UseRCl TPast ASimul PPos (RelSlash IdRP (SlashVP (UsePN john_PN) (SlashV2a buy_V2))))
 AdvCN (UseN house_N) (PrepNP on_Prep (DetArtSg DefArt (UseN hill_N)))
 SentCN (UseN question_N) (EmbedQS (UseQCl TPres ASimul PPos (QuestIAdv where_IAdv (PredVP (UsePron she_Pron) (UseV sleep_V)))))
-ApposCN (UseN city_N) (UsePN paris_PN)
-
+DetArtSg DefArt (ApposCN (UseN city_N) (UsePN paris_PN))
+DetCN (DetQuant (PossPron i_Pron) NumSg) (ApposCN (UseN friend_N) (UsePN john_PN))
 
 -- Numeral
 

@@ -327,9 +327,9 @@ oper
 
    mk3N x y z = let u = ifTok Str x z "ene" "ne" in mk4N x y z (z + u) ;
 
-  mkN2 = \n,p -> n ** {lock_N2 = <> ; c2 = p.s} ;
+  mkN2 = \n,p -> n ** {lock_N2 = <> ; c2 = mkComplement  p.s} ;
   regN2 n g = mkN2 (regGenN n g) (mkPreposition "av") ;
-  mkN3 = \n,p,q -> n ** {lock_N3 = <> ; c2 = p.s ; c3 = q.s} ;
+  mkN3 = \n,p,q -> n ** {lock_N3 = <> ; c2 = mkComplement  p.s ; c3 = mkComplement  q.s} ;
 
   mk2PN n g = {s = \\c => mkCase c n ; g = g} ** {lock_PN = <>} ;
   regPN n = mk2PN n utrum ;
@@ -347,7 +347,7 @@ oper
   mk2A a b = mk3A a b (a + "e") ;
   regA a = (regADeg a) **  {lock_A = <>} ;
 
-  mkA2 a p = a ** {c2 = p.s ; lock_A2 = <>} ;
+  mkA2 a p = a ** {c2 = mkComplement  p.s ; lock_A2 = <>} ;
 
   mkADeg a b c d e = mkAdject a b c d e ** {isComp = False ; lock_A = <>} ;
 
@@ -419,18 +419,18 @@ oper
     s = v.s ; part = v.part ; vtype = VRefl ; isVaere = False ; lock_V = <>
     } ;
 
-  mk2V2 v p = v ** {c2 = p.s ; lock_V2 = <>} ;
+  mk2V2 v p = v ** {c2 = mkComplement  p.s ; lock_V2 = <>} ;
   dirV2 v = mk2V2 v (mkPrep []) ;
 
-  mkV3 v p q = v ** {c2 = p.s ; c3 = q.s ; lock_V3 = <>} ;
+  mkV3 v p q = v ** {c2 = mkComplement  p.s ; c3 = mkComplement  q.s ; lock_V3 = <>} ;
   dirV3 v p = mkV3 v noPrep p ;
   dirdirV3 v = dirV3 v noPrep ;
 
   mkV0  v = v ** {lock_V0 = <>} ;
   mkVS  v = v ** {lock_VS = <>} ;
   mkV2S v p = mk2V2 v p ** {lock_V2S = <>} ;
-  mkVV  v = v ** {c2 = "å" ; lock_VV = <>} ;
-  mkV2V v p t = mk2V2 v p ** {c3 = "att" ; lock_V2V = <>} ;
+  mkVV  v = v ** {c2 = mkComplement "at" ; lock_VV = <>} ;
+  mkV2V v p t = mk2V2 v p ** {c3 = mkComplement  "at" ; lock_V2V = <>} ;
   mkVA  v = v ** {lock_VA = <>} ;
   mkV2A v p = mk2V2 v p ** {lock_V2A = <>} ;
   mkVQ  v = v ** {lock_VQ = <>} ;

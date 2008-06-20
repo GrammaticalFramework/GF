@@ -155,7 +155,7 @@ lin
   say_VS = mkVS (mkV "säga" "säger" "säg" "sade" "sagt" "sagd") ;
   school_N = regGenN "skola" utrum;
   science_N = mk2N "vetenskap" "vetenskaper" ;
-  sea_N = mkN "sjö" "sjön" "sjöar" "sjöarna" ;
+  sea_N = mkN "hav" "hav" ;
   seek_V2 = dirV2 (mk2V "söka" "sökte") ;
   see_V2 = dirV2 (mkV "se" "ser" "se" "såg" "sett" "sedd") ;
   sell_V3 = dirV3 (irregV "sälja" "sålde" "sålt") (mkPrep "till") ;

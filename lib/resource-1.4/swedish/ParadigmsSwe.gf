@@ -415,9 +415,10 @@ oper
   regN2 : Str -> Gender -> N2 ;
 
 
-  mmkN2 = \n,p -> n ** {lock_N2 = <> ; c2 = p.s} ;
+  mmkN2 = \n,p -> n ** {lock_N2 = <> ; c2 = mkComplement p.s} ;
   regN2 n g = mmkN2 (regGenN n g) (mkPrep "av") ;
-  mkN3 = \n,p,q -> n ** {lock_N3 = <> ; c2 = p.s ; c3 = q.s} ;
+  mkN3 = \n,p,q -> n ** 
+    {lock_N3 = <> ; c2 = mkComplement p.s ; c3 = mkComplement q.s} ;
 
   mkPN = overload {
     mkPN : Str -> PN = regPN ;
@@ -474,7 +475,7 @@ oper
 
   compoundA adj = {s = adj.s ; isComp = True ; lock_A = <>} ;
 
-  mkA2 a p = a ** {c2 = p.s ; lock_A2 = <>} ;
+  mkA2 a p = a ** {c2 = mkComplement p.s ; lock_A2 = <>} ;
 
   mkAdv x = ss x ** {lock_Adv = <>} ;
   mkAdV x = ss x ** {lock_AdV = <>} ;
@@ -566,7 +567,7 @@ oper
     } ;
 
 
-  mmkV2 v p = v ** {c2 = p.s ; lock_V2 = <>} ;
+  mmkV2 v p = v ** {c2 = mkComplement p.s ; lock_V2 = <>} ;
   dirV2 v = mmkV2 v noPrep ;
 
   mkV3 = overload {
@@ -581,13 +582,13 @@ oper
   dirdirV3 : V -> V3 ;                 -- ge, (dat), (acc)
 
 
-  mmkV3 v p q = v ** {c2 = p.s ; c3 = q.s ; lock_V3 = <>} ;
+  mmkV3 v p q = v ** {c2 = mkComplement p.s ; c3 = mkComplement q.s ; lock_V3 = <>} ;
   dirV3 v p = mmkV3 v noPrep p ;
   dirdirV3 v = dirV3 v noPrep ;
 
   mkV0  v = v ** {lock_V0 = <>} ;
   mkVS  v = v ** {lock_VS = <>} ;
-  mkVV  v = v ** {c2 = "att" ; lock_VV = <>} ;
+  mkVV  v = v ** {c2 = mkComplement "att" ; lock_VV = <>} ;
   mkVQ  v = v ** {lock_VQ = <>} ;
 
   mkVA  v = v ** {lock_VA = <>} ;
@@ -599,7 +600,7 @@ oper
   A2V : Type = A2 ;
 
   mkV2S v p = mmkV2 v p ** {lock_V2S = <>} ;
-  mkV2V v p t = mmkV2 v p ** {c3 = "att" ; lock_V2V = <>} ;
+  mkV2V v p t = mmkV2 v p ** {c3 = mkComplement "att" ; lock_V2V = <>} ;
   mkV2Q v p = mmkV2 v p ** {lock_V2Q = <>} ;
 
   mkAS  v = v ** {lock_A = <>} ;

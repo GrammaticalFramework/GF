@@ -1,5 +1,5 @@
 incomplete concrete SentenceScand of Sentence = 
-  CatScand ** open CommonScand, ResScand in {
+  CatScand ** open CommonScand, ResScand, Prelude in {
 
   flags optimize=all_subs ;
 
@@ -28,7 +28,7 @@ incomplete concrete SentenceScand of Sentence =
       c2 = slash.c2
     } ;
 
-    SlashPrep cl prep = cl ** {c2 = prep.s} ;
+    SlashPrep cl prep = cl ** {c2 = {s = prep.s ; hasPrep = True}} ;
 
     SlashVS np vs slash = 
       mkClause

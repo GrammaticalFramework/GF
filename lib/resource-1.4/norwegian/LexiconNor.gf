@@ -100,7 +100,7 @@ lin
   important_A = regADeg "viktig" ;
   industry_N = mk2N "industri" "industrien" ;
   iron_N = regGenN "jern" neutrum ;
-  john_PN = mkPN "John" utrum ;
+  john_PN = mkPN "John" masculine ;
   king_N = regGenN "konge" masculine ;
   know_V2 = dirV2 IrregNor.vite_V ;
   lake_N = regGenN "vann" neutrum ;

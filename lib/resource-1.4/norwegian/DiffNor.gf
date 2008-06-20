@@ -72,9 +72,9 @@ instance DiffNor of DiffScand = open CommonScand, Prelude in {
         } ;
 
     relPron : GenNum => RCase => Str = \\gn,c => case c of {
-      RNom  => "som" ;
+      RNom | RPrep False => "som" ;
       RGen  => "hvis" ;
-      RPrep => gennumForms "hvilken" "hvilket" "hvilke" ! gn
+      RPrep _ => gennumForms "hvilken" "hvilket" "hvilke" ! gn
       } ;
 
     pronSuch = gennumForms "sådan" "sådant" "sådanne" ;

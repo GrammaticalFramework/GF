@@ -59,11 +59,13 @@ param
 ---  AdjPronForm = APron GenNum Case ;
 ---  AuxVerbForm = AuxInf | AuxPres | AuxPret | AuxSup ;
 
-  RCase = RNom | RGen | RPrep ;
+  RCase = RNom | RGen | RPrep Bool ;
 
   RAgr = RNoAg | RAg {gn : GenNum ; p : Person} ;
 
 oper
+  Complement : Type = {s : Str ; hasPrep : Bool} ;
+
   Agr : PType = {gn : GenNum ; p : Person} ;
 
   nominative : NPForm = NPNom ;
@@ -79,6 +81,13 @@ oper
     _ => Indef
     } ;
 
+  mkComplement : Str -> Complement = \s -> {
+    s = s ;
+    hasPrep = case s of {
+      "" => False ;
+      _ => True
+      }
+    } ;
 -- Used in $Noun.AdjCN$.
 
 -----  agrAdj : GenNum -> DetSpecies -> AFormPos = \gn,d -> Strong gn ; --- debug
