@@ -704,25 +704,25 @@ incomplete resource Constructors = open Grammar in {
       mkQCl : IP -> QCl  -- 8. what is there
       } ;
 
-{-
+
 --3 IP, interrogative pronouns
 
     mkIP : overload {
 
 -- Interrogative pronouns 
--- can be formed much like noun phrases, by using interrogative determiners.
+-- can be formed much like noun phrases, by using interrogative quantifiers.
 
-      mkIP : IDet ->                   N  -> IP ; -- 1. which city
-      mkIP : IDet -> (Num) -> (Ord) -> CN -> IP ; -- 2. which five best cities
+      mkIP : IQuant ->          N  -> IP ; -- 1. which city
+      mkIP : IQuant -> (Num) -> CN -> IP ; -- 2. which five big cities
 
 -- An interrogative pronoun can be modified by an adverb.
 
-      mkIP : IP -> Adv -> IP  -- 3. who in Paris
+      mkIP : IP -> Adv -> IP               -- 3. who in Paris
       } ;
 
 -- More interrogative pronouns and determiners can be found in $Structural$.
 
--}
+
 
 --3 IAdv, interrogative adverbs.
 
@@ -1315,11 +1315,18 @@ incomplete resource Constructors = open Grammar in {
                                          = IdetCN ;
       mkIP : IDet -> N -> IP      -- which song
                                          =    \i,n -> IdetCN i (UseN n)  ;
+      mkIP : IQuant -> CN -> IP          -- which songs
+                     =  \i,n -> IdetCN (IdetQuant i NumSg) n ;
+      mkIP : IQuant -> Num -> CN -> IP          -- which songs
+                     =  \i,nu,n -> IdetCN (IdetQuant i nu) n ;
+      mkIP : IQuant -> N -> IP      -- which song
+                     =  \i,n -> IdetCN (IdetQuant i NumSg) (UseN n) ;
       mkIP : IP -> Adv -> IP                  -- who in Europe
                                          =    AdvIP
       } ;
 
     whichSg_IDet : IDet = IdetQuant which_IQuant NumSg ;
+    whichPl_IDet : IDet = IdetQuant which_IQuant NumPl ;
 
     mkIAdv : Prep -> IP -> IAdv = PrepIP ;
 
