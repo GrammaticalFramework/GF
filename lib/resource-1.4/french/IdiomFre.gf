@@ -33,7 +33,7 @@ concrete IdiomFre of Idiom = CatFre **
         (\\a => "en" ++ "train" ++ elisDe ++ infVP vp a) 
         (predV copula) ;
 
-    ImpPl1 vp = {s =
+    ImpPl1 vpr = let vp = useVP vpr in {s =
       (mkImperative False P1 vp).s ! Pos ! {n = Pl ; g = Masc} --- fem
       } ;
 

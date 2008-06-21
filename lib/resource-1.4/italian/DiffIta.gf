@@ -78,7 +78,7 @@ instance DiffIta of DiffRomance = open CommonRomance, PhonoIta, BeschIta, Prelud
       } ;
 
     vpAgrClit : Agr -> VPAgr = \a ->
-      VPAgrClit (aagr a.g a.n) ; --- subty
+      VPAgrClit a.g a.n ; --- subty
 
     pronArg = \n,p,acc,dat ->
       let 

@@ -355,7 +355,8 @@ lin
   language_N = mk2N "sprog" "sproget" ;
   rule_N = mkN "regel" "regeln" "regler" "reglerne" ;
 
-----    question_N = regN "fråga" ;
+    question_N = mk2N "spørgsmål" "spørgsmålet" ;
+
 ----    ready_A = regA "färdig" ;
 ----    reason_N = regN "anledning" ;
     today_Adv = mkAdv "idag" ;

@@ -5,7 +5,9 @@ concrete IdiomSpa of Idiom = CatSpa **
 
   lin
     ImpersCl vp = mkClause [] True (agrP3 Masc Sg) vp ;
-    GenericCl vp = mkClause "se" True (agrP3 Masc Sg) vp ; ---- just Italian ?
+
+    GenericCl vp = 
+      mkClause [] True (agrP3 Masc Sg) (insertRefl vp) ; ---- just Italian ?
 
     CleftNP np rs = mkClause [] True (agrP3 Masc Sg) 
       (insertComplement (\\_ => rs.s ! Indic ! np.a)
@@ -25,7 +27,7 @@ concrete IdiomSpa of Idiom = CatSpa **
         (mkClause [] True (agrP3 Masc Sg) (predV (verboV (hay_3 "haber")))).s ! DDir ! t ! a ! p ! Indic
       } ;
 
-    ProgrVP vp = 
+    ProgrVP vpr = let vp = useVP vpr in
       insertComplement 
         (\\agr => 
            let 
@@ -36,7 +38,7 @@ concrete IdiomSpa of Idiom = CatSpa **
         )
         (predV (verboV (estar_2 "estar"))) ;
 
-    ImpPl1 vp = {s =
+    ImpPl1 vpr = let vp = useVP vpr in {s =
       (mkImperative False P1 vp).s ! Pos ! {n = Pl ; g = Masc} --- fem
       } ;
 

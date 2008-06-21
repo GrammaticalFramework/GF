@@ -36,15 +36,17 @@ incomplete concrete VerbRomance of Verb =
          (\\_ => q.s ! QIndir)
          (predV v)) ; 
 
+    {- ---- lincat should be fixed
     SlashV2A v ap = 
 
-      let af = AF Masc Sg
-    {- ---- lincat should be fixed
       let af = case v.c3.isDir of {
         True => AF np.a.g np.a.n ;  -- ... bleues
         _ => AF Masc Sg             -- il les peint en bleu
         }
     -}
+
+    SlashV2A v ap = 
+      let af = AF Masc Sg
       in
       mkVPSlash v.c2
         (insertComplement 
@@ -54,7 +56,7 @@ incomplete concrete VerbRomance of Verb =
     ComplSlash vp np = insertObject vp.c2 np vp ;
 
     ReflVP v = case v.c2.isDir of {
-      True  => v ** {vtyp = vRefl} ;
+      True  => insertRefl v ;
       False => insertComplement 
                  (\\a => v.c2.s ++ reflPron a.n  a.p v.c2.c) v
       } ;

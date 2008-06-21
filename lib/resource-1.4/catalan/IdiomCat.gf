@@ -10,7 +10,7 @@ concrete IdiomCat of Idiom = CatCat **
     ImpersCl vp = mkClause [] True (agrP3 Masc Sg) vp ;
 
 
-    ProgrVP vp = 
+    ProgrVP vpr = let vp = useVP vpr in 
       insertComplement 
         (\\agr => 
            let 

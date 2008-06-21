@@ -355,6 +355,7 @@ lin
   language_N = regN "lingua" ;
   rule_N = regN "regola" ;
 
+  question_N = regN "domanda" ;
   today_Adv = mkAdv "oggi" ;
 
 } ;

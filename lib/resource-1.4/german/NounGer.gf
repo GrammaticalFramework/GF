@@ -179,7 +179,7 @@ concrete NounGer of Noun = CatGer ** open ResGer, Prelude in {
       } ;
 
     RelNP np rs = {
-      s = \\c => np.s ! c ++ rs.s ! gennum np.a.g np.a.n ;
+      s = \\c => np.s ! c ++ "," ++ rs.s ! gennum np.a.g np.a.n ;
       a = np.a ;
       isPron = False
       } ;
