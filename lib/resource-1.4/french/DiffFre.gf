@@ -62,7 +62,7 @@ instance DiffFre of DiffRomance = open CommonRomance, PhonoFre, Prelude in {
       } ;
 
     vpAgrClit : Agr -> VPAgr = \a ->
-      VPAgrClit (aagr a.g a.n) ; --- subty
+      VPAgrClit a.g a.n ;
 
 ----    pronArg = pronArgGen Neg ; --- takes more space and time
 

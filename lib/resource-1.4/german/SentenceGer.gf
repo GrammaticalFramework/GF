@@ -8,7 +8,7 @@ concrete SentenceGer of Sentence = CatGer ** open ResGer, Prelude in {
 
     PredSCVP sc vp = mkClause sc.s (agrP3 Sg) vp ;
 
-    ImpVP vp = {
+    ImpVP vp =  let vps = useVP vp in {
       s = \\pol,n => 
         let 
           ps = case n of {
@@ -16,7 +16,7 @@ concrete SentenceGer of Sentence = CatGer ** open ResGer, Prelude in {
             _ => <P2,[],False>
             } ;
           agr  = {g = Fem ; n = numImp n ; p = ps.p1} ; --- g does not matter
-          verb = vp.s ! False ! agr ! VPImperat ps.p3 ;
+          verb = vps.s ! False ! agr ! VPImperat ps.p3 ;
           inf  = vp.inf ++ verb.inf ;
         in
         verb.fin ++ ps.p2 ++ 

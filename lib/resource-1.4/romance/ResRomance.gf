@@ -48,8 +48,23 @@ oper
   appCompl : Compl -> (NPForm => Str) -> Str = \comp,np ->
     comp.s ++ np ! Ton comp.c ;
 
-  predV : Verb -> VP = \verb -> 
+  oper
+
+  VP : Type = {
+      s : Verb ;
+      agr    : VPAgr ;                   -- dit/dite dep. on verb, subj, and clitic
+      neg    : Polarity => (Str * Str) ; -- ne-pas
+      clAcc  : CAgr ;                    -- le/se
+      clDat  : CAgr ;                    -- lui
+      clit2  : Str ;                     -- y en
+      comp   : Agr => Str ;              -- content(e) ; à ma mère ; hier
+      ext    : Polarity => Str ;         -- que je dors / que je dorme
+      } ;
+
+
+  useVP : VP -> VPC = \vp -> 
     let
+      verb = vp.s ;
       vfin  : TMood -> Agr -> Str = \tm,a -> verb.s ! VFin tm a.n a.p ;
       vpart : AAgr -> Str = \a -> verb.s ! VPart a.g a.n ;
       vinf  : Bool -> Str = \b -> verb.s ! VInfin b ;
@@ -86,6 +101,23 @@ oper
       VPGerund         => vf (\_ -> []) (\_ -> vger) ;
       VPInfinit Simul b=> vf (\_ -> []) (\_ -> vinf b)
       } ;
+    agr    = vp.agr ; -- partAgr typ ;
+    neg    = vp.neg ; -- negation ;
+    clAcc  = vp.clAcc ; -- case isVRefl typ of {
+         -- True => CRefl ;
+         -- _    => CNone
+         -- } ;
+    clDat  = vp.clDat ; -- CNone ; --- no dative refls
+    clit2  = vp.clit2 ; -- [] ;
+    comp   = vp.comp ; -- \\a => [] ;
+    ext    = vp.ext -- \\p => []
+    } ;
+
+  predV : Verb -> VP = \verb -> 
+    let
+      typ = verb.vtyp ;
+    in {
+    s = {s = verb.s ; vtyp = typ} ;
     agr    = partAgr typ ;
     neg    = negation ;
     clAcc  = case isVRefl typ of {
@@ -137,6 +169,7 @@ oper
     ext   = vp.ext ;
     } ;
 
+
 -- Agreement with preceding relative or interrogative: 
 -- "les femmes que j'ai aimées"
 
@@ -144,6 +177,17 @@ oper
     s     = vp.s ;
     agr   = vpAgrClit (agrP3 ag.g ag.n) ;
     clAcc = vp.clAcc ; 
+    clDat = vp.clDat ; 
+    clit2 = vp.clit2 ; 
+    neg   = vp.neg ;
+    comp  = vp.comp ;
+    ext   = vp.ext ;
+    } ;
+
+  insertRefl : VP -> VP = \vp -> { 
+    s     = {s = vp.s.s ; vtyp = vRefl} ;
+    agr   = vp.agr ;
+    clAcc = CRefl ; 
     clDat = vp.clDat ; 
     clit2 = vp.clit2 ; 
     neg   = vp.neg ;
@@ -199,7 +243,7 @@ oper
 
   mkClause : Str -> Bool -> Agr -> VP -> 
     {s : Direct => RTense => Anteriority => Polarity => Mood => Str} =
-    \subj,hasClit,agr,vp -> {
+    \subj,hasClit,agr,vpr -> {
       s = \\d,t,a,b,m => 
         let 
           tm = case t of {
@@ -209,6 +253,7 @@ oper
             RPasse => VPasse ;      --# notpresent
             RPres  => VPres m
             } ;
+          vp    = useVP vpr ;
           vps   = vp.s ! VPFinite tm a ;
           verb  = vps.fin ! agr ;
           inf   = vps.inf ! (appVPAgr vp.agr (aagr agr.g agr.n)) ; --- subtype bug
@@ -229,8 +274,9 @@ oper
 --- have a "-" with possibly a special verb form with "t":
 --- "comment fera-t-il" vs. "comment fera Pierre"
 
-  infVP : VP -> Agr -> Str = \vp,agr ->
+  infVP : VP -> Agr -> Str = \vpr,agr ->
       let
+        vp   = useVP vpr ;
         clpr = pronArg agr.n agr.p vp.clAcc vp.clDat ;
         inf  = (vp.s ! VPInfinit Simul clpr.p3).inf ! (aagr agr.g agr.n) ;
         neg  = vp.neg ! Pos ; --- Neg not in API

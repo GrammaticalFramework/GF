@@ -367,11 +367,15 @@ resource ResGer = ParamX ** open Prelude in {
 
 -- For $Verb$.
 
-  VP : Type = {
+  VPC : Type = {
       s : Bool => Agr => VPForm => { -- True = prefix glued to verb
         fin : Str ;          -- hat
         inf : Str            -- wollen
-        } ;
+        } 
+      } ;
+
+  VP : Type = {
+      s  : Verb ;
       a1 : Polarity => Str ; -- nicht
       n2 : Agr => Str ;      -- dich
       a2 : Str ;             -- heute
@@ -382,8 +386,10 @@ resource ResGer = ParamX ** open Prelude in {
 
   predV : Verb -> VP = predVGen False ;
 
-  predVGen : Bool -> Verb -> VP = \isAux, verb ->
+  useVP : VP -> VPC = \vp ->
     let
+      isAux = vp.isAux ;
+      verb = vp.s ;
       vfin : Bool -> Mood -> Tense -> Agr -> Str = \b,m,t,a -> 
         verb.s ! vFin b m t a ;
       vinf = verb.s ! VInf False ;
@@ -426,7 +432,18 @@ resource ResGer = ParamX ** open Prelude in {
       VPImperat True  => vf False (verb.s ! VFin False (VPresSubj Pl P3)) [] ;
       VPInfinit Anter => vf True [] (vpart ++ haben) ; --# notpresent
       VPInfinit Simul => vf True [] (verb.s ! VInf b)
-      } ;
+      }
+    } ;
+
+
+  predVGen : Bool -> Verb -> VP = \isAux, verb -> {
+    s = {
+     s = verb.s ;
+     prefix = verb.prefix ;
+     aux = verb.aux ;
+     vtype = verb.vtype
+     } ;
+
     a1  : Polarity => Str = negation ;
     n2  : Agr => Str = case verb.vtype of {
       VAct => \\_ => [] ;
@@ -498,7 +515,7 @@ resource ResGer = ParamX ** open Prelude in {
   insertObj : (Agr => Str) -> VP -> VP = \obj,vp -> {
     s = vp.s ;
     a1 = vp.a1 ;
-    n2 = \\a => vp.n2 ! a ++ obj ! a ;
+    n2 = \\a => obj ! a ++ vp.n2 ! a ;
     a2 = vp.a2 ;
     isAux = vp.isAux ;
     inf = vp.inf ;
@@ -551,14 +568,14 @@ resource ResGer = ParamX ** open Prelude in {
     s : Mood => Tense => Anteriority => Polarity => Order => Str
     } ;
 
-  mkClause : Str -> Agr -> VP -> Clause = \subj,agr,vp -> {
+  mkClause : Str -> Agr -> VP -> Clause = \subj,agr,vp ->  let vps = useVP vp in {
       s = \\m,t,a,b,o =>
         let
           ord   = case o of {
             Sub => True ;  -- glue prefix to verb
             _ => False
             } ;
-          verb  = vp.s  ! ord ! agr ! VPFinite m t a ;
+          verb  = vps.s  ! ord ! agr ! VPFinite m t a ;
           neg   = vp.a1 ! b ;
           obj   = vp.n2 ! agr ;
           compl = obj ++ neg ++ vp.a2 ;
@@ -578,10 +595,10 @@ resource ResGer = ParamX ** open Prelude in {
           }
     } ;
 
-  infVP : Bool -> VP -> ((Agr => Str) * Str * Str) = \isAux, vp ->
+  infVP : Bool -> VP -> ((Agr => Str) * Str * Str) = \isAux, vp -> let vps = useVP vp in
     <
      \\agr => vp.n2 ! agr ++  vp.a2,
-     vp.a1 ! Pos ++ (vp.s ! (notB isAux) ! agrP3 Sg ! VPInfinit Simul).inf,
+     vp.a1 ! Pos ++ (vps.s ! (notB isAux) ! agrP3 Sg ! VPInfinit Simul).inf,
      vp.inf ++ vp.ext
     > ;
 

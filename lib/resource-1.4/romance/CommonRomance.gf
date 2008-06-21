@@ -176,11 +176,11 @@ oper
 
     appVPAgr : VPAgr -> AAgr -> AAgr = \vp,agr -> 
       case vp of {
-        VPAgrSubj   => agr ;
-        VPAgrClit a => a
+        VPAgrSubj     => agr ;
+        VPAgrClit g n => {g = g ; n = n}
         } ;
 
-    vpAgrNone : VPAgr = VPAgrClit (aagr Masc Sg) ;
+    vpAgrNone : VPAgr = VPAgrClit Masc Sg ;
 
   oper
     mkOrd : {s : Degree => AForm => Str} -> {s : AAgr => Str} ;
@@ -193,11 +193,10 @@ oper
   param
     VPAgr = 
        VPAgrSubj                    -- elle est partie, elle s'est vue
-     | VPAgrClit                    -- elle a dormi; elle les a vues
-         {g : Gender ; n : Number} ;
+     | VPAgrClit Gender Number ;    -- elle a dormi; elle les a vues
 
   oper
-  VP : Type = {
+  VPC : Type = {
       s : VPForm => {
         fin : Agr  => Str ;              -- ai  
         inf : AAgr => Str                -- dit 

@@ -44,8 +44,8 @@ incomplete concrete CatRomance of Cat =
 
 -- Verb
 
-    VP = CommonRomance.VP ;
-    VPSlash = CommonRomance.VP ** {c2 : Compl} ;
+    VP = ResRomance.VP ;
+    VPSlash = ResRomance.VP ** {c2 : Compl} ;
     Comp = {s : Agr => Str} ; 
 
 -- Adjective

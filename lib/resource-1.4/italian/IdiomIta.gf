@@ -5,7 +5,9 @@ concrete IdiomIta of Idiom = CatIta **
 
   lin
     ImpersCl vp = mkClause [] True (agrP3 Masc Sg) vp ;
-    GenericCl vp = mkClause "si" True (agrP3 Masc Sg) vp ; ---- non se ci fanno cose
+
+    GenericCl vp = 
+      mkClause [] True (agrP3 Masc Sg) (insertRefl vp) ;
 
     CleftNP np rs = mkClause [] True (agrP3 Masc Sg) 
       (insertComplement (\\_ => rs.s ! Indic ! np.a)
@@ -29,7 +31,8 @@ concrete IdiomIta of Idiom = CatIta **
               (predV copula))).s ! DDir ! t ! a ! p ! Indic
       } ;
 
-    ProgrVP vp = 
+    ProgrVP vpr =
+      let vp = useVP vpr in 
       insertComplement 
         (\\agr => 
            let 
@@ -40,7 +43,7 @@ concrete IdiomIta of Idiom = CatIta **
         )
         (predV (essereV (verboV (stare_16 "stare")))) ;
 
-    ImpPl1 vp = {s =
+    ImpPl1 vpr = let vp = useVP vpr in {s =
       (mkImperative False P1 vp).s ! Pos ! {n = Pl ; g = Masc} --- fem
       } ;
 

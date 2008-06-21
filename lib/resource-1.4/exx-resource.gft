@@ -197,7 +197,7 @@ PredVP (UsePron i_Pron) (UseComp (CompAdv here_Adv))
 
 -- Janna's and Krasimir's long examples
 
-RelCN (UseN car_N) (UseRCl TPres ASimul PPos (RelSlash IdRP (SlashVP (Us ePron they_Pron) (SlashV2VNP beg_V2V (UsePron i_Pron) (SlashVV want_VV (SlashV2A paint_V2A (PositA red_A)))))))
+RelCN (UseN car_N) (UseRCl TPres ASimul PPos (RelSlash IdRP (SlashVP (UsePron they_Pron) (SlashV2VNP beg_V2V (UsePron i_Pron) (SlashVV want_VV (SlashV2A paint_V2A (PositA red_A)))))))
 PhrUtt NoPConj (UttImpSg PPos (ImpVP (AdVVP always_AdV (ComplSlash (SlashV2a listen_V2) (DetArtSg DefArt (UseN sea_N)))))) NoVoc
 PhrUtt NoPConj (UttS (UseCl TPres ASimul PPos (ExistNP (PredetNP only_Predet (DetCN (DetArtCard IndefArt (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n2))))))) (AdvCN (SentCN (UseN woman_N) (EmbedQS (UseQCl TCond ASimul PPos (QuestSlash (IdetIP (IdetQuant which_IQuant NumPl)) (SlashPrep (PredVP (UsePron i_Pron) (ComplVV want_VV (PassV2 see_V2))) with_Prep))))) (PrepNP in_Prep (DetArtSg DefArt (UseN rain_N))))))))) NoVoc
 PhrUtt NoPConj (UttImpSg  PPos (ImpVP (ComplSlash (SlashV2A paint_V2A (ConjAP both7and_DConj (BaseAP (ComparA small_A (DetArtSg DefArt (UseN sun_N))) (ComparA big_A (DetArtSg DefArt (UseN moon_N)))))) (DetArtSg DefArt (UseN earth_N))))) NoVoc
