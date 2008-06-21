@@ -12,7 +12,7 @@ lin
   apartment_N = regN "apartamento" ;
   apple_N = regN "mela" ;
   art_N = femN (regN "arte") ;
-  ask_V2Q = mkV2Q (verboV (rispondere_76 "chiedere")) ParadigmsIta.dative ;
+  ask_V2Q = mkV2Q (verboV (chiedere_29 "chiedere")) ParadigmsIta.dative ;
   baby_N = regN "bambino" ;
   bad_A = prefA (mkADeg (regA "cattivo") (regA "peggio")) ;
   bank_N = regN "banca" ;

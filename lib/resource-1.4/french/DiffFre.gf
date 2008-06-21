@@ -6,7 +6,7 @@ instance DiffFre of DiffRomance = open CommonRomance, PhonoFre, Prelude in {
 --  flags optimize=all ;
 
   param 
-    Prepos = P_de | P_a ;
+    Prepos = P_de | P_a | PNul ;
     VType = VHabere | VEsse | VRefl ;
 
   oper
@@ -17,7 +17,8 @@ instance DiffFre of DiffRomance = open CommonRomance, PhonoFre, Prelude in {
       Nom => [] ;
       Acc => [] ; 
       CPrep P_a => "à" ;
-      CPrep P_de => elisDe
+      CPrep P_de => elisDe ;
+      CPrep PNul => []
       } ;
 
     artDef : Gender -> Number -> Case -> Str = \g,n,c ->
@@ -163,7 +164,7 @@ instance DiffFre of DiffRomance = open CommonRomance, PhonoFre, Prelude in {
 
     quelPron : AAgr => Str = aagrForms "quel" "quelle" "quels" "quelles" ;
 
-    partQIndir = [] ; --- only for qui,que: elision "c" ;
+    partQIndir = "ce" ; --- only for qui,que: elision "c" ;
 
     reflPron : Number -> Person -> Case -> Str = \n,p,c ->
       let pron = argPron Fem n p c in

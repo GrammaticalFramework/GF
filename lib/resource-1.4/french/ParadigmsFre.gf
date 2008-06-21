@@ -300,7 +300,7 @@ oper
   accusative = complAcc ** {lock_Prep = <>} ;
   genitive = complGen ** {lock_Prep = <>} ;
   dative = complDat ** {lock_Prep = <>} ;
-  mkPrep p = {s = p ; c = Acc ; isDir = False ; lock_Prep = <>} ;
+  mkPrep p = {s = p ; c = CPrep PNul ; isDir = False ; lock_Prep = <>} ;
 
   --- obsolete
   Preposition : Type ;

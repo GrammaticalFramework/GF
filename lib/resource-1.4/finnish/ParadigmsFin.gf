@@ -55,6 +55,8 @@ oper
   ablative    : Case ; 
   allative    : Case ;
 
+  infFirst, infElat, infIllat : InfForm ;
+
 -- The following type is used for defining *rection*, i.e. complements
 -- of many-place verbs and adjective. A complement can be defined by
 -- just a case, or a pre/postposition and a case.
@@ -194,7 +196,9 @@ oper
   mkVS  : V -> VS ;
   mkV2S : V -> Prep -> V2S ;
   mkVV  : V -> VV ;
+  mkVVf : V -> InfForm -> VV ;
   mkV2V : V -> Prep -> V2V ;
+  mkV2Vf : V -> Prep -> InfForm -> V2V ;
   mkVA  : V -> Prep -> VA ;
   mkV2A : V -> Prep -> Prep -> V2A ;
   mkVQ  : V -> VQ ;
@@ -233,6 +237,8 @@ oper
   adessive = Adess ;
   ablative = Ablat ;
   allative = Allat ;
+
+  infFirst = Inf1 ; infElat = Inf3Elat ; infIllat = Inf3Illat ;
 
   prePrep  : Case -> Str -> Prep = 
     \c,p -> {c = NPCase c ; s = p ; isPre = True ; lock_Prep = <>} ;
@@ -563,7 +569,8 @@ oper
   dirdirV3 v = dirV3 v allative ;
 
   mkVS  v = v ** {lock_VS = <>} ;
-  mkVV  v = v ** {lock_VV = <>} ;
+  mkVV  v = mkVVf v infFirst ;
+  mkVVf  v f = v ** {vi = f ; lock_VV = <>} ;
   mkVQ  v = v ** {lock_VQ = <>} ;
 
   V0 : Type = V ;
@@ -572,7 +579,9 @@ oper
 
   mkV0  v = v ** {lock_V = <>} ;
   mkV2S v p = mk2V2 v p ** {lock_V2S = <>} ;
-  mkV2V v p = mk2V2 v p ** {lock_V2V = <>} ;
+  mkV2V v p = mkV2Vf v p infIllat ;
+  mkV2Vf v p f = mk2V2 v p ** {vi = f ; lock_V2V = <>} ;
+
   mkVA  v p = v ** {c2 = p ; lock_VA = <>} ;
   mkV2A v p q = v ** {c2 = p ; c3 = q ; lock_V2A = <>} ;
   mkV2Q v p = mk2V2 v p ** {lock_V2Q = <>} ;

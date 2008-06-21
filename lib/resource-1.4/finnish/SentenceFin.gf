@@ -47,7 +47,7 @@ concrete SentenceFin of Sentence = CatFin ** open Prelude, ResFin in {
 
     EmbedS  s  = {s = etta_Conj ++ s.s} ;
     EmbedQS qs = {s = qs.s} ;
-    EmbedVP vp = {s = infVP (NPCase Nom) Pos (agrP3 Sg) vp} ; --- case,pol,agr
+    EmbedVP vp = {s = infVP (NPCase Nom) Pos (agrP3 Sg) vp Inf1} ; --- case,pol,agr,infform
 
     UseCl  t a p cl = {s = t.s ++ a.s ++ p.s ++ cl.s ! t.t ! a.a ! p.p ! SDecl} ;
     UseQCl t a p cl = {s = t.s ++ a.s ++ p.s ++ cl.s ! t.t ! a.a ! p.p} ;

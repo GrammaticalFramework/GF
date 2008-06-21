@@ -18,7 +18,7 @@ concrete VerbFin of Verb = CatFin ** open Prelude, ResFin in {
 
     ComplVV v vp = 
       insertObj 
-        (\\_,b,a => infVP v.sc b a vp) 
+        (\\_,b,a => infVP v.sc b a vp v.vi) 
         (predV {s = v.s ; 
                 sc = case vp.sc of {
                   NPCase Nom => v.sc ;   -- minun täytyy pestä auto
@@ -40,7 +40,7 @@ concrete VerbFin of Verb = CatFin ** open Prelude, ResFin in {
     SlashV2Q v q = 
       insertExtrapos (q.s) (predV v) ** {c2 = v.c2} ;
     SlashV2V v vp = 
-      insertObj (\\_,b,a => infVP v.sc b a vp) (predV v) ** {c2 = v.c2} ;
+      insertObj (\\_,b,a => infVP v.sc b a vp v.vi) (predV v) ** {c2 = v.c2} ;
       ---- different infinitives
     SlashV2A v ap = 
       insertObj 
@@ -55,7 +55,7 @@ concrete VerbFin of Verb = CatFin ** open Prelude, ResFin in {
 
     SlashVV v vp = 
       insertObj 
-        (\\_,b,a => infVP v.sc b a vp) 
+        (\\_,b,a => infVP v.sc b a vp v.vi) 
         (predV {s = v.s ; 
                 sc = case vp.sc of {
                   NPCase Nom => v.sc ;   -- minun täytyy pestä auto
@@ -66,7 +66,7 @@ concrete VerbFin of Verb = CatFin ** open Prelude, ResFin in {
 
     SlashV2VNP v np vp = 
       insertObj 
-        (\\fin,b,a => appCompl fin b v.c2 np ++ infVP v.sc b a vp) 
+        (\\fin,b,a => appCompl fin b v.c2 np ++ infVP v.sc b a vp v.vi) 
           (predV v) ** {c2 = vp.c2} ;
 
     AdvVP vp adv = insertObj (\\_,_,_ => adv.s) vp ;

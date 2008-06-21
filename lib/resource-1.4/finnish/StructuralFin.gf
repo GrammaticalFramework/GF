@@ -28,8 +28,8 @@ concrete StructuralFin of Structural = CatFin **
   but_PConj = ss "mutta" ;
   by8agent_Prep = postGenPrep "toimesta" ;
   by8means_Prep = casePrep adessive ;
-  can8know_VV = mkV "osata" "osasi" ;
-  can_VV = mkV "voida" "voi" ;
+  can8know_VV = mkVV (mkV "osata" "osasi") ;
+  can_VV = mkVV (mkV "voida" "voi") ;
   during_Prep = postGenPrep "aikana" ;
   either7or_DConj = sd2 "joko" "tai" ** {n = Sg} ;
   everybody_NP = makeNP (mkN "jokainen") Sg ;
@@ -62,7 +62,7 @@ concrete StructuralFin of Structural = CatFin **
   more_CAdv = ss "enemmän" ;
   most_Predet = {s = \\n,c => (nForms2N (dSuurin "useinta")).s ! NCase n (npform2case n c)} ;
   much_Det = mkDet Sg {s = \\_ => "paljon"} ;
-  must_VV = caseV genitive (mkV "täytyä") ;
+  must_VV = mkVV (caseV genitive (mkV "täytyä")) ;
   no_Utt = ss "ei" ;
   on_Prep = casePrep adessive ;
 ---  one_Quant = mkDet Sg  DEPREC
@@ -128,7 +128,7 @@ concrete StructuralFin of Structural = CatFin **
   to_Prep = casePrep illative ; --- allative
   under_Prep = postGenPrep "alla" ;
   very_AdA = ss "erittäin" ;
-  want_VV = mkV "tahtoa" ;
+  want_VV = mkVV (mkV "tahtoa") ;
   we_Pron = mkPronoun "me" "meidän" "meitä" "meinä" "meihin" Pl P1 ;
   whatPl_IP = {
     s = table {NPAcc => "mitkä" ; c => mikaInt ! Pl ! npform2case Pl c} ;
@@ -200,11 +200,13 @@ oper
       Sg => table {
         Nom => "mikä" ;
         Gen => "minkä" ;
+        Part => "mitä" ;
         c   => mi.s ! NCase Sg c
        } ; 
       Pl => table {
         Nom => "mitkä" ;
-        Gen => "mittenkä" ;
+        Gen => "minkä" ;
+        Part => "mitä" ;
         c   => mi.s ! NCase Sg c
         }
       } ;
@@ -282,7 +284,7 @@ oper
 
 
 oper
-  makeNP  : N -> Number -> CatFin.NP ; 
+  makeNP  : N -> MorphoFin.Number -> CatFin.NP ; 
   makeNP noun num = {
     s = \\c => noun.s ! NCase num (npform2case num c) ; 
     a = agrP3 num ;
