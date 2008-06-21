@@ -14,7 +14,7 @@ concrete NounFin of Noun = CatFin ** open ResFin, Prelude in {
           _ => det.n
           } ;
         ncase : Case -> NForm = \c -> 
-          case <n,c,det.isNum,det.isPoss, det.isDef> of {
+          case <n, c, det.isNum, det.isPoss, det.isDef> of {
             <_, Nom,  True,_,_>  => NCase Sg Part ; -- kolme kytkintä(ni)
             <_, _, True,False,_> => NCase Sg c ;    -- kolmeksi kytkimeksi
             <Pl,Nom,  _,_,False> => NCase Pl Part ; -- kytkimiä
@@ -107,7 +107,7 @@ concrete NounFin of Noun = CatFin ** open ResFin, Prelude in {
       s1 = \\c => quant.s1 ! num.n ! c ++ num.s ! Sg ! c ;
       s2 = [] ;
       n = num.n ;
-      isNum = True ;
+      isNum = case num.n of {Sg => False ; _ => True} ;
       isPoss = False ;
       isDef = True
       } ;
@@ -152,25 +152,22 @@ concrete NounFin of Noun = CatFin ** open ResFin, Prelude in {
     NumSg = {s = \\_,_ => [] ; isNum = False ; n = Sg} ;
     NumPl = {s = \\_,_ => [] ; isNum = False ; n = Pl} ;
 
-    NumCard n = n ** {isNum = True} ;
+    NumCard n = n ** {isNum = case n.n of {Sg => False ; _ => True}} ;  -- yksi talo/kaksi taloa
 
     NumDigits numeral = {
       s = \\n,c => numeral.s ! NCard (NCase n c) ; 
-      n = numeral.n ;
-      isNum = True
+      n = numeral.n 
       } ;
     OrdDigits numeral = {s = \\n,c => numeral.s ! NOrd  (NCase n c)} ;
 
     NumNumeral numeral = {
       s = \\n,c => numeral.s ! NCard (NCase n c) ; 
-      n = numeral.n ;
-      isNum = True
+      n = numeral.n
       } ;
     OrdNumeral numeral = {s = \\n,c => numeral.s ! NOrd  (NCase n c)} ;
 
     AdNum adn num = {
       s = \\n,c => adn.s ++ num.s ! n ! c ; 
-      isNum = num.isNum ; 
       n = num.n
       } ;
 
@@ -217,10 +214,10 @@ concrete NounFin of Noun = CatFin ** open ResFin, Prelude in {
 --- If a possessive suffix is added here it goes after the complements...
 
     ComplN2 f x = {
-      s = \\nf => appCompl True Pos f.c2 x ++ f.s ! nf
+      s = \\nf => f.s ! nf ++ appCompl True Pos f.c2 x
       } ;
     ComplN3 f x = {
-      s = \\nf => appCompl True Pos f.c2 x ++ f.s ! nf ;
+      s = \\nf => f.s ! nf ++ appCompl True Pos f.c2 x ;
       c2 = f.c3
       } ;
 

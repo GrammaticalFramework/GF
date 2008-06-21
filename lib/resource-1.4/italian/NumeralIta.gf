@@ -25,7 +25,7 @@ lin pot01 =
      ental pred => [] ;
      _ => uno ! f ! g
      } ; 
-   n = Pl} ;
+   n = Sg} ;
 
 lin pot0 d = {s = d.s ; n = Pl} ;
 lin pot110 = spl ((mkTal "dieci" [] [] "decimo").s ! ental indip) ;

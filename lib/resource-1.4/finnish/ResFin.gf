@@ -223,10 +223,9 @@ oper
     sc = verb.sc 
     } ;
 
-
   insertObj : (Bool => Polarity => Agr => Str) -> VP -> VP = \obj,vp -> {
     s = vp.s ;
-    s2 = \\fin,b,a => vp.s2 ! fin ! b ! a ++ obj ! fin ! b ! a ;
+    s2 = \\fin,b,a => obj ! fin ! b ! a ++ vp.s2 ! fin ! b ! a ;
     ext = vp.ext ;
     sc = vp.sc
     } ;
@@ -269,14 +268,14 @@ oper
 
   questPart : Str -> Str = \on -> on ++ BIND ++ "ko" ; ----
 
-  infVP : NPForm -> Polarity -> Agr -> VP -> Str =
-    \sc,pol,agr,vp ->
+  infVP : NPForm -> Polarity -> Agr -> VP -> InfForm -> Str =
+    \sc,pol,agr,vp,vi ->
         let 
           fin = case sc of {     -- subject case
             NPCase Nom => True ; -- minä tahdon nähdä auton
             _ => False           -- minun täytyy nähdä auto
             } ;
-          verb  = vp.s ! VIInf Inf1 ! Simul ! Pos ! agr ; -- no "ei"
+          verb  = vp.s ! VIInf vi ! Simul ! Pos ! agr ; -- no "ei"
           compl = vp.s2 ! fin ! pol ! agr ++ vp.ext     -- but compl. case propagated
         in
         verb.fin ++ verb.inf ++ compl ;
@@ -551,7 +550,7 @@ oper
   reflPron : Agr -> NP = \agr -> 
     let 
       itse = (nhn (sKukko "itse" "itsen" "itsejä")).s ;
-      nsa  = possSuffix agr
+      nsa  = possSuffixFront agr
     in {
       s = table {
         NPCase (Nom | Gen) | NPAcc => itse ! NPossNom Sg + nsa ;
@@ -563,6 +562,8 @@ oper
       isPron = False -- no special acc form
       } ;
 
+  possSuffixFront : Agr -> Str = \agr -> 
+    table Agr ["ni" ; "si" ; "nsä" ; "mme" ; "nne" ; "nsä"] ! agr ;
   possSuffix : Agr -> Str = \agr -> 
     table Agr ["ni" ; "si" ; "nsa" ; "mme" ; "nne" ; "nsa"] ! agr ;
 

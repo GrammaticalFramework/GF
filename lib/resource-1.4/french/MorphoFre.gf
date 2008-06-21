@@ -168,7 +168,7 @@ oper
        Aton Nom => il ;
        Aton Acc => le ; 
        Aton (CPrep P_de) => "en" ; --- hmm
-       Aton (CPrep P_a) => lui ; 
+       Aton (CPrep _) => lui ; 
        Poss {n = Sg ; g = Masc} => son ;
        Poss {n = Sg ; g = Fem}  => sa ;
        Poss {n = Pl}    => ses

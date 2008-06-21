@@ -30,14 +30,18 @@ incomplete concrete QuestionRomance of Question =
               who = slash.c2.s ++ ip.s ! slash.c2.c
             in table {
               QDir   => who ++ cls DInv ;
-              QIndir => partQIndir ++ who ++ cls DDir
+              QIndir => who ++ cls DDir
               }
       } ;
 
     QuestIAdv iadv cl = {
-      s = \\t,a,p,_ => 
+      s = \\t,a,p,q => 
             let 
-              cls = cl.s ! DInv ! t ! a ! p ! Indic ;
+              ord = case q of {
+                QDir   => DInv ;
+                QIndir => DDir
+              } ;
+              cls = cl.s ! ord ! t ! a ! p ! Indic ;
               why = iadv.s
             in why ++ cls
       } ;

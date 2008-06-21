@@ -27,7 +27,7 @@ incomplete concrete VerbRomance of Verb =
     SlashV2S v s = 
       mkVPSlash v.c2
        (insertExtrapos 
-         (\\b => s.s ! Indic) ---- mood
+         (\\b => conjThat ++ s.s ! Indic) ---- mood
          (predV v)) ; 
 
     SlashV2Q v q = 

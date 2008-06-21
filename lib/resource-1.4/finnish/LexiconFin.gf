@@ -19,7 +19,7 @@ lin
   beautiful_A = mkA (mkN "kaunis") "kauniimpi" "kaunein" ;
   become_VA = mkVA (mkV "tulla") (casePrep translative) ;
   beer_N = mkN "olut" "oluita" ;
-  beg_V2V = mkV2 (mk2V "pyytää" "pyysi") (casePrep partitive) ;
+  beg_V2V = mkV2V (mk2V "pyytää" "pyysi") (casePrep partitive) ;
   big_A = mkA (mkN "suuri" "suuria") "suurempi" "suurin" ;
   bike_N = mkN "polkupyörä" ; --- for correct vowel harmony
   bird_N = mkN "lintu" ;
