@@ -165,8 +165,8 @@ allCommands pgf = Map.fromList [
      synopsis = "generates a list of trees, by default exhaustive",
      explanation = unlines [
        "Generates all trees of a given category, with increasing depth.",
-       "By default, the depth is inlimited, but this can be changed by a flag."
-       ---- "If a Tree argument is given, thecommand completes the Tree with values",
+       "By default, the depth is 4, but this can be changed by a flag."
+       ---- "If a Tree argument is given, the command completes the Tree with values",
        ---- "to the metavariables in the tree."
        ],
      flags = [
@@ -177,7 +177,7 @@ allCommands pgf = Map.fromList [
        ],
      exec = \opts _ -> do
        let pgfr = optRestricted opts
-       let dp = return $ valIntOpts "depth" 999999 opts
+       let dp = return $ valIntOpts "depth" 4 opts
        let ts = generateAllDepth pgfr (optCat opts) dp
        return $ fromTrees $ take (optNumInf opts) ts
      }),
@@ -449,7 +449,9 @@ allCommands pgf = Map.fromList [
        "flag -format."
        ],
      exec = \opts ts -> do
-         let grph = visualizeTrees False ts -- True=digraph
+         let funs = not (isOpt "nofun" opts)
+         let cats = not (isOpt "nocat" opts)
+         let grph = visualizeTrees pgf (funs,cats) ts -- True=digraph
          if isFlag "view" opts || isFlag "format" opts then do
            let file s = "_grph." ++ s
            let view = optViewGraph opts ++ " "
@@ -463,7 +465,10 @@ allCommands pgf = Map.fromList [
        "p \"hello\" | vt              -- parse a string and show trees as graph script",
        "p \"hello\" | vt -view=\"open\" -- parse a string and display trees on a Mac"
        ],
-
+     options = [
+       ("nofun","don't show functions but only categories"),
+       ("nocat","don't show categories but only functions")
+       ],
      flags = [
        ("format","format of the visualization file (default \"ps\")"),
        ("view","program to open the resulting file (default \"gv\")")
