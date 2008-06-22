@@ -1,4 +1,4 @@
-module GF.Compile (batchCompile, link, compileToPGF) where
+module GF.Compile (batchCompile, link, compileToPGF, compileSourceGrammar) where
 
 -- the main compiler passes
 import GF.Compile.GetGrammar
@@ -73,6 +73,16 @@ batchCompile opts files = do
   (_,gr,_) <- foldM (compileModule opts) emptyCompileEnv files
   return gr
 
+-- to compile a set of modules, e.g. an old GF or a .cf file
+compileSourceGrammar :: Options -> SourceGrammar -> IOE SourceGrammar
+compileSourceGrammar opts gr@(MGrammar ms) = do
+  (_,gr',_) <- foldM compOne (0,emptySourceGrammar,Map.empty) ms
+  return gr'
+ where
+  compOne env mo = do
+    (k,mo') <- compileSourceModule opts env mo
+    extendCompileEnvInt env k Nothing mo'    --- file for the same of modif time...
+
 -- to output an intermediate stage
 intermOut :: Options -> Dump -> String -> IOE ()
 intermOut opts d s = if dump opts d then 
@@ -144,7 +154,7 @@ compileOne opts env@(_,srcgr,_) file = do
        let sm1 = if isConcr sm then shareModule sm else sm -- cannot expand Str
        cm  <- putPointE Verbose opts "  generating code... " $ generateModuleCode opts gfo sm1
           -- sm is optimized before generation, but not in the env
-       extendCompileEnvInt env k' gfo sm1
+       extendCompileEnvInt env k' (Just gfo) sm1
   where
    isConcr (_,mi) = case mi of
      ModMod m -> isModCnc m && mstatus m /= MSIncomplete 
@@ -202,11 +212,15 @@ reverseModules (MGrammar ms) = MGrammar $ reverse ms
 emptyCompileEnv :: CompileEnv
 emptyCompileEnv = (0,emptyMGrammar,Map.empty)
 
-extendCompileEnvInt (_,MGrammar ss,menv) k file sm = do
+extendCompileEnvInt (_,MGrammar ss,menv) k mfile sm = do
   let (mod,imps) = importsOfModule (trModule sm)
-  t <- ioeIO $ getModificationTime file
-  return (k,MGrammar (sm:ss),Map.insert mod (t,imps) menv) --- reverse later
+  menv2 <- case mfile of
+    Just file -> do
+      t <- ioeIO $ getModificationTime file
+      return $ Map.insert mod (t,imps) menv
+    _ -> return menv
+  return (k,MGrammar (sm:ss),menv2) --- reverse later
 
-extendCompileEnv e@(k,_,_) file sm = extendCompileEnvInt e k file sm
+extendCompileEnv e@(k,_,_) file sm = extendCompileEnvInt e k (Just file) sm
 
 
