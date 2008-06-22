@@ -9,11 +9,13 @@ import Data.Char
 
 stringOp :: String -> Maybe (String -> String)
 stringOp name = case name of
+  "chars"      -> Just $ appLexer (filter (not . all isSpace) . map return)
   "lextext"    -> Just $ appLexer lexText
   "lexcode"    -> Just $ appLexer lexText
   "lexmixed"   -> Just $ appLexer lexMixed
   "words"      -> Just $ appLexer words
   "bind"       -> Just $ appUnlexer bindTok
+  "uncars"     -> Just $ appUnlexer concat
   "unlextext"  -> Just $ appUnlexer unlexText
   "unlexcode"  -> Just $ appUnlexer unlexCode
   "unlexmixed" -> Just $ appUnlexer unlexMixed

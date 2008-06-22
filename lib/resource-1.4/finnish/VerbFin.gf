@@ -23,7 +23,8 @@ concrete VerbFin of Verb = CatFin ** open Prelude, ResFin in {
                 sc = case vp.sc of {
                   NPCase Nom => v.sc ;   -- minun täytyy pestä auto
                   c => c                 -- minulla täytyy olla auto
-                  }
+                  } ;
+                qp = v.qp
                }
          ) ;
 
@@ -51,7 +52,7 @@ concrete VerbFin of Verb = CatFin ** open Prelude, ResFin in {
     ComplSlash vp np = insertObj (\\fin,b,_ => appCompl fin b vp.c2 np) vp ;
 
     UseComp comp = 
-      insertObj (\\_,_ => comp.s) (predV (verbOlla ** {sc = NPCase Nom})) ;
+      insertObj (\\_,_ => comp.s) (predV (verbOlla ** {sc = NPCase Nom ; qp = "ko"})) ;
 
     SlashVV v vp = 
       insertObj 
@@ -60,7 +61,8 @@ concrete VerbFin of Verb = CatFin ** open Prelude, ResFin in {
                 sc = case vp.sc of {
                   NPCase Nom => v.sc ;   -- minun täytyy pestä auto
                   c => c                 -- minulla täytyy olla auto
-                  }
+                  } ;
+                qp = v.qp
                }
          ) ** {c2 = vp.c2} ; ---- correct ??
 
@@ -79,6 +81,7 @@ concrete VerbFin of Verb = CatFin ** open Prelude, ResFin in {
       s = \\_ => vp.s ! VIPass ;
       s2 = \\_,_,_ => [] ;
       ext = [] ;
+      qp = v.qp ;
       sc = v.c2.c  -- minut valitaan ; minua rakastetaan ; minulle kuiskataan 
       } ;          ---- talon valitaan: should be marked like inf.
 

@@ -159,10 +159,11 @@ oper
     s   : VIForm => Anteriority => Polarity => Agr => {fin, inf : Str} ; 
     s2  : Bool => Polarity => Agr => Str ; -- talo/talon/taloa
     ext : Str ;
-    sc  : NPForm
+    sc  : NPForm ;
+    qp  : Str
     } ;
     
-  predV : (Verb ** {sc : NPForm}) -> VP = \verb -> {
+  predV : (Verb ** {sc : NPForm ; qp : Str}) -> VP = \verb -> {
     s = \\vi,ant,b,agr => 
       let
 
@@ -220,21 +221,24 @@ oper
 
     s2 = \\_,_,_ => [] ;
     ext = [] ;
-    sc = verb.sc 
+    sc = verb.sc ;
+    qp = verb.qp
     } ;
 
   insertObj : (Bool => Polarity => Agr => Str) -> VP -> VP = \obj,vp -> {
     s = vp.s ;
     s2 = \\fin,b,a => obj ! fin ! b ! a ++ vp.s2 ! fin ! b ! a ;
     ext = vp.ext ;
-    sc = vp.sc
+    sc = vp.sc ; 
+    qp = vp.qp
     } ;
 
   insertExtrapos : Str -> VP -> VP = \obj,vp -> {
     s = vp.s ;
     s2 = vp.s2 ;
     ext = vp.ext ++ obj ;
-    sc = vp.sc
+    sc = vp.sc ; 
+    qp = vp.qp
     } ;
 
 -- For $Sentence$.
@@ -257,7 +261,7 @@ oper
         in
         case o of {
           SDecl  => subj ++ verb.fin ++ verb.inf ++ compl ;
-          SQuest => questPart verb.fin ++ subj ++ verb.inf ++ compl
+          SQuest => questPart vp a b verb.fin ++ subj ++ verb.inf ++ compl
           }
     } ;
 
@@ -266,7 +270,14 @@ oper
   subjForm : NP -> NPForm -> Polarity -> Str = \np,sc,b -> 
     appCompl False b {s = [] ; c = sc ; isPre = True} np ;
 
-  questPart : Str -> Str = \on -> on ++ BIND ++ "ko" ; ----
+  questPart : VP -> Anteriority -> Polarity -> Str -> Str = \vp,a,p,on -> on ++ BIND ++ 
+    case p of {
+      Neg => "kö" ;  -- eikö tule
+      _ => case a of {
+        Anter => "ko" ; -- onko mennyt
+        _ => vp.qp  -- tuleeko, meneekö
+        }
+      } ;
 
   infVP : NPForm -> Polarity -> Agr -> VP -> InfForm -> Str =
     \sc,pol,agr,vp,vi ->

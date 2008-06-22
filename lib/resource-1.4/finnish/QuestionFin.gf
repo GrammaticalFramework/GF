@@ -31,7 +31,7 @@ concrete QuestionFin of Question = CatFin ** open ResFin, Prelude in {
     QuestIComp icomp np = {
       s = \\t,a,p => 
         let 
-          vp = predV (verbOlla ** {sc = NPCase Nom}) ;
+          vp = predV (verbOlla ** {sc = NPCase Nom ; qp = "ko"}) ;
           cl = mkClause (subjForm np vp.sc) np.a vp ;
         in
         icomp.s ! np.a ++ cl.s ! t ! a ! p ! SDecl

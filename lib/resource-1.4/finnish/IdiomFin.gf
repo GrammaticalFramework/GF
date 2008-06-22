@@ -41,7 +41,8 @@ concrete IdiomFin of Idiom = CatFin **
       s = \\_ => vp.s ! VIPass ;
       s2 = vp.s2 ;
       ext = vp.ext ;
-      sc = vp.sc
+      sc = vp.sc ; 
+      qp = vp.qp
       } ;
 
     ProgrVP vp = 
@@ -52,7 +53,8 @@ concrete IdiomFin of Idiom = CatFin **
         s = on.s ;
         s2 = \\b,p,a => inf ++ vp.s2 ! b ! p ! a ;
         ext = vp.ext ;
-        sc = vp.sc
+        sc = vp.sc ; 
+        qp = vp.qp
         } ;
 
 -- This gives "otetaan oluet" instead of "ottakaamme oluet".
@@ -66,7 +68,7 @@ concrete IdiomFin of Idiom = CatFin **
     } ;
 
   oper
-    olla = verbOlla ** {sc = NPCase Nom} ;
+    olla = verbOlla ** {sc = NPCase Nom ; qp = "ko"} ;
 
     noSubj : Polarity -> Str = \_ -> [] ;
 }
