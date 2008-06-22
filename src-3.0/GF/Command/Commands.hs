@@ -48,10 +48,10 @@ data CommandInfo = CommandInfo {
 emptyCommandInfo :: CommandInfo
 emptyCommandInfo = CommandInfo {
   exec = \_ ts -> return (ts,[]), ----
-  synopsis = "synopsis",
-  syntax = "syntax",
-  explanation = "explanation",
-  longname = "longname",
+  synopsis = "",
+  syntax = "",
+  explanation = "",
+  longname = "",
   options = [],
   flags = [],
   examples = []
@@ -224,10 +224,13 @@ allCommands pgf = Map.fromList [
      explanation = unlines [
        "Shows the linearization of a Tree by the grammars in scope.",
        "The -lang flag can be used to restrict this to fewer languages.",
-       "See also the ps command for unlexing and character encoding."
+       "A sequence of string operations (see command ps) can be given",
+       "as options, and works then like a pipe to the ps command, except",
+       "that it only affect the strings, not e.g. the table labels."
        ],
      examples = [
-       "l -langs=LangSwe,LangNor no_Utt   -- linearize to LangSwe and LangNor"
+       "l -langs=LangSwe,LangNor no_Utt   -- linearize tree to LangSwe and LangNor",
+       "gr -lang=LangHin -cat=Cl | l -table -to_devanagari -to_utf8 -- hindi table"
        ],
      exec = \opts -> return . fromStrings . map (optLin opts),
      options = [
@@ -236,7 +239,7 @@ allCommands pgf = Map.fromList [
        ("table","show all forms labelled by parameters"),
        ("term", "show PGF term"),
        ("treebank","show the tree and tag linearizations with language names")
-       ],
+       ] ++ stringOpOptions,
      flags = [
        ("lang","the languages of linearization (comma-separated, no spaces)")
        ]
@@ -341,25 +344,7 @@ allCommands pgf = Map.fromList [
        "ps -to_devanagari -to_utf8 \"A-p\"     -- show Devanagari in UTF8 terminal"
        ],
      exec = \opts -> return . fromString . stringOps opts . toString,
-     options = [
-       ("bind","bind tokens separated by Prelude.BIND, i.e. &+"),
-       ("chars","lexer that makes every non-space character a token"),
-       ("from_devanagari","from unicode to GF Devanagari transliteration"),
-       ("from_thai","from unicode to GF Thai transliteration"),
-       ("from_utf8","decode from utf8"),
-       ("lextext","text-like lexer"),
-       ("lexcode","code-like lexer"),
-       ("lexmixed","mixture of text and code (code between $...$)"), 
-       ("to_devanagari","from GF Devanagari transliteration to unicode"),
-       ("to_thai","from GF Thai transliteration to unicode"),
-       ("to_utf8","encode to utf8"),
-       ("unlextext","text-like unlexer"),
-       ("unlexcode","code-like unlexer"),
-       ("unlexmixed","mixture of text and code (code between $...$)"), 
-       ("unchars","unlexer that puts no spaces between tokens"),
-       ("unwords","unlexer that puts a single space between tokens (default)"),
-       ("words","lexer that assumes tokens separated by spaces (default)")
-       ]
+     options = stringOpOptions
      }),
   ("q",  emptyCommandInfo {
      longname = "quit",
@@ -501,12 +486,12 @@ allCommands pgf = Map.fromList [
      _ | isOpt "treebank" opts -> treebank opts t
      _ -> unlines [linear opts lang t | lang <- optLangs opts] 
     
-   linear opts lang = unlex opts lang . case opts of
-       _ | isOpt "all"    opts -> allLinearize pgf (mkCId lang)
-       _ | isOpt "table"  opts -> tableLinearize pgf (mkCId lang)
+   linear opts lang = let unl = unlex opts lang in case opts of
+       _ | isOpt "all"    opts -> allLinearize unl pgf (mkCId lang)
+       _ | isOpt "table"  opts -> tableLinearize unl pgf (mkCId lang)
        _ | isOpt "term"   opts -> termLinearize pgf (mkCId lang)
        _ | isOpt "record" opts -> recordLinearize pgf (mkCId lang)
-       _  -> linearize pgf lang
+       _  -> unl . linearize pgf lang
 
    treebank opts t = unlines $ 
      (abstractName pgf ++ ": " ++ showTree t) :
@@ -549,6 +534,26 @@ allCommands pgf = Map.fromList [
    -- ps -f -g s returns g (f s)
    stringOps opts s = foldr app s (reverse (map prOpt opts)) where
      app f = maybe id id (stringOp f) 
+
+stringOpOptions = [
+       ("bind","bind tokens separated by Prelude.BIND, i.e. &+"),
+       ("chars","lexer that makes every non-space character a token"),
+       ("from_devanagari","from unicode to GF Devanagari transliteration"),
+       ("from_thai","from unicode to GF Thai transliteration"),
+       ("from_utf8","decode from utf8"),
+       ("lextext","text-like lexer"),
+       ("lexcode","code-like lexer"),
+       ("lexmixed","mixture of text and code (code between $...$)"), 
+       ("to_devanagari","from GF Devanagari transliteration to unicode"),
+       ("to_thai","from GF Thai transliteration to unicode"),
+       ("to_utf8","encode to utf8"),
+       ("unlextext","text-like unlexer"),
+       ("unlexcode","code-like unlexer"),
+       ("unlexmixed","mixture of text and code (code between $...$)"), 
+       ("unchars","unlexer that puts no spaces between tokens"),
+       ("unwords","unlexer that puts a single space between tokens (default)"),
+       ("words","lexer that assumes tokens separated by spaces (default)")
+       ]
 
 translationQuiz :: PGF -> Language -> Language -> Category -> IO ()
 translationQuiz pgf ig og cat = do
