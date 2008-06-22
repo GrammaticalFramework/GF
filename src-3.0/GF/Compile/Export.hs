@@ -13,6 +13,8 @@ import GF.Speech.SRGS_XML
 import GF.Speech.JSGF
 import GF.Speech.GSL
 import GF.Speech.VoiceXML
+import GF.Speech.SLF
+import GF.Speech.PrRegExp
 import GF.Text.UTF8
 
 import Data.Maybe
@@ -35,6 +37,9 @@ exportPGF opts fmt pgf =
       FmtJSGF         -> single "jsgf"  (jsgfPrinter sisr)
       FmtGSL          -> single "gsl"   gslPrinter
       FmtVoiceXML     -> single "vxml"  grammar2vxml
+      FmtSLF          -> single ".slf"  slfPrinter
+      FmtRegExp       -> single ".rexp" regexpPrinter
+      FmtFA           -> single ".dot"  slfGraphvizPrinter
  where
    name = fromMaybe (prCId (absname pgf)) (moduleFlag optName opts)
    sisr = flag optSISR opts
