@@ -55,8 +55,7 @@ module PGF(
           ) where
 
 import PGF.CId
-import PGF.Linearize hiding (linearize)
-import qualified PGF.Linearize (linearize)
+import PGF.Linearize
 import PGF.Generate
 import PGF.Macros
 import PGF.Data
@@ -177,7 +176,7 @@ readPGF f = do
   g <- parseGrammar s
   return $! toPGF g
 
-linearize pgf lang = PGF.Linearize.linearize pgf (mkCId lang)
+linearize pgf lang = concat . take 1 . PGF.Linearize.linearizes pgf (mkCId lang)
 
 parse pgf lang cat s = 
   case Map.lookup (mkCId lang) (concretes pgf) of
