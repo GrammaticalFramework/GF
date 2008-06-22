@@ -684,7 +684,7 @@ transDDecl x = case x of
   DDDec binds exp  -> transDecl $ DDec binds exp
   DDExp exp  ->  transDecl $ DExp exp
 
--- | to deal with the old format, sort judgements in three modules, forming
+-- | to deal with the old format, sort judgements in two modules, forming
 -- their names from a given string, e.g. file name or overriding user-given string
 transOldGrammar :: Options -> FilePath -> OldGrammar -> Err G.SourceGrammar
 transOldGrammar opts name0 x = case x of
@@ -693,7 +693,7 @@ transOldGrammar opts name0 x = case x of
     g1 <- transGrammar $ Gr moddefs
     removeLiT g1 --- needed for bw compatibility with an obsolete feature
  where
-   sortTopDefs ds = [mkAbs a,mkRes ops r,mkCnc ops c] ++ map mkPack ps
+   sortTopDefs ds = [mkAbs a, mkCnc ops (c ++ r)]
      where 
        ops = map fst ps
        (a,r,c,ps) = foldr srt ([],[],[],[]) ds
@@ -714,14 +714,10 @@ transOldGrammar opts name0 x = case x of
      DefPrintCat printdefs  -> (a,r,d:c,ps)
      DefPrintFun printdefs  -> (a,r,d:c,ps)
      DefPrintOld printdefs  -> (a,r,d:c,ps)
-     DefPackage m ds        -> (a,r,c,(m,ds):ps)
+     -- DefPackage m ds        -> (a,r,c,(m,ds):ps) -- OBSOLETE
      _ -> (a,r,c,ps)
    mkAbs a = MModule q (MTAbstract absName) (MBody ne (OpenIn [])  (topDefs a))
-   mkRes ps r = MModule q (MTResource resName) (MBody ne (OpenIn ops) (topDefs r))
-                  where ops = map OName ps
-   mkCnc ps r = MModule q (MTConcrete cncName absName) 
-                               (MBody ne (OpenIn (map OName (resName:ps))) (topDefs r))
-   mkPack (m, ds) = MModule q (MTResource m) (MBody ne  (OpenIn []) (topDefs ds))
+   mkCnc ps r = MModule q (MTConcrete cncName absName) (MBody ne (OpenIn []) (topDefs r))
    topDefs t = t
    ne = NoExt
    q = CMCompl
@@ -742,21 +738,7 @@ transOldGrammar opts name0 x = case x of
      _:s   -> (beg, takeWhile (/='.') s)
 
 transInclude :: Include -> Err [FilePath]
-transInclude x = case x of
-  NoIncl -> return []
-  Incl filenames  -> return $ map trans filenames
- where
-   trans f = case f of
-     FString s  -> s
-     FIdent (PIdent (_, s)) -> modif s
-     FSlash filename  -> '/' : trans filename
-     FDot filename  -> '.' : trans filename
-     FMinus filename  -> '-' : trans filename
-     FAddId (PIdent (_, s)) filename  -> modif s ++ trans filename
-   modif s = let s' = BS.snoc (BS.init s) (toLower (BS.last s)) in 
-             BS.unpack (if elem (BS.unpack s') newReservedWords then s' else s)
-                      --- unsafe hack ; cf. GetGrammar.oldLexer
-
+transInclude x = Bad "Old GF with includes no more supported in GF 3.0"
 
 newReservedWords :: [String]
 newReservedWords =

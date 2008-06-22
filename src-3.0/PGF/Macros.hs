@@ -34,6 +34,9 @@ lookType :: PGF -> CId -> Type
 lookType pgf f = 
   fst $ lookMap (error $ "lookType " ++ show f) f (funs (abstract pgf))
 
+lookValCat :: PGF -> CId -> CId
+lookValCat pgf = valCat . lookType pgf
+
 lookParser :: PGF -> CId -> Maybe ParserInfo
 lookParser pgf lang = Map.lookup lang (concretes pgf) >>= parser
 
