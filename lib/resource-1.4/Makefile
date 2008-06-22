@@ -7,7 +7,9 @@ present:
 	$(RUNMAKE) present lang
 	$(RUNMAKE) present api
 
-alltenses: lang api
+alltenses: 
+	$(RUNMAKE) lang
+	$(RUNMAKE) api
 
 lang:
 	$(RUNMAKE) lang
