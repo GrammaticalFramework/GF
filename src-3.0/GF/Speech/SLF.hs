@@ -1,38 +1,26 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : PrSLF
--- Maintainer  : BB
--- Stability   : (stable)
--- Portability : (portable)
---
--- > CVS $Date: 2005/11/10 16:43:44 $ 
--- > CVS $Author: bringert $
--- > CVS $Revision: 1.12 $
+-- Module      : GF.Speech.SLF
 --
 -- This module converts a CFG to an SLF finite-state network
 -- for use with the ATK recognizer. The SLF format is described
 -- in the HTK manual, and an example for use in ATK is shown
 -- in the ATK manual.
 --
--- FIXME: remove \/ warn \/ fail if there are int \/ string literal
--- categories in the grammar
 -----------------------------------------------------------------------------
 
-module GF.Speech.PrSLF (slfPrinter,slfGraphvizPrinter,
+module GF.Speech.SLF (slfPrinter,slfGraphvizPrinter,
                         slfSubPrinter,slfSubGraphvizPrinter) where
 
 import GF.Data.Utilities
-import GF.Conversion.Types
-import GF.Formalism.CFG
-import GF.Formalism.Utilities (Symbol(..),symbol,mapSymbol)
-import GF.Infra.Ident
-import GF.Infra.Option (Options)
-import GF.Infra.Print
-import GF.Speech.CFGToFiniteState
+import GF.Speech.CFG
 import GF.Speech.FiniteState
-import GF.Speech.TransformCFG
-import qualified GF.Visualization.Graphviz as Dot
-import GF.Compile.ShellState (StateGrammar)
+import GF.Speech.CFG
+import GF.Speech.CFGToFA
+import GF.Speech.PGFToCFG
+import qualified GF.Speech.Graphviz as Dot
+import PGF
+import PGF.CId
 
 import Control.Monad
 import qualified Control.Monad.State as STM
@@ -52,19 +40,19 @@ type SLFWord = Maybe String
 
 data SLFEdge = SLFEdge { eId :: Int, eStart :: Int, eEnd :: Int }
 
-type SLF_FA = FA State (Maybe (MFALabel String)) ()
+type SLF_FA = FA State (Maybe CFSymbol) ()
 
-mkFAs :: Options -> StateGrammar -> (SLF_FA, [(String,SLF_FA)])
-mkFAs opts s = (slfStyleFA main, [(c,slfStyleFA n) | (c,n) <- subs])
-  where MFA start subs = {- renameSubs $ -} cfgToMFA opts s
-        main = let (fa,s,f) = newFA_ in newTransition s f (Cat start) fa        
+mkFAs :: PGF -> CId -> (SLF_FA, [(String,SLF_FA)])
+mkFAs pgf cnc = (slfStyleFA main, [(c,slfStyleFA n) | (c,n) <- subs])
+  where MFA start subs = {- renameSubs $ -} cfgToMFA $ pgfToCFG pgf cnc
+        main = let (fa,s,f) = newFA_ in newTransition s f (NonTerminal start) fa
 
 slfStyleFA :: Eq a => DFA a -> FA State (Maybe a) ()
 slfStyleFA = renameStates [0..] . removeTrivialEmptyNodes . oneFinalState Nothing ()
              . moveLabelsToNodes . dfa2nfa
 
 -- | Give sequential names to subnetworks.
-renameSubs :: MFA String -> MFA String
+renameSubs :: MFA -> MFA
 renameSubs (MFA start subs) = MFA (newName start) subs'
   where newNames = zip (map fst subs) ["sub"++show n | n <- [0..]]
         newName s = lookup' s newNames
@@ -75,9 +63,9 @@ renameSubs (MFA start subs) = MFA (newName start) subs'
 -- * SLF graphviz printing (without sub-networks)
 --
 
-slfGraphvizPrinter :: Options -> StateGrammar -> String
-slfGraphvizPrinter opts s
-    = prFAGraphviz $ gvFA $ slfStyleFA $ cfgToFA' opts s
+slfGraphvizPrinter :: PGF -> CId -> String
+slfGraphvizPrinter pgf cnc
+    = prFAGraphviz $ gvFA $ slfStyleFA $ cfgToFA' $ pgfToCFG pgf cnc
   where 
   gvFA = mapStates (fromMaybe "") . mapTransitions (const "")
 
@@ -85,9 +73,9 @@ slfGraphvizPrinter opts s
 -- * SLF graphviz printing (with sub-networks)
 --
 
-slfSubGraphvizPrinter :: Options -> StateGrammar -> String
-slfSubGraphvizPrinter opts s = Dot.prGraphviz g
-  where (main, subs) = mkFAs opts s
+slfSubGraphvizPrinter :: PGF -> CId -> String
+slfSubGraphvizPrinter pgf cnc = Dot.prGraphviz g
+  where (main, subs) = mkFAs pgf cnc
         g = STM.evalState (liftM2 Dot.addSubGraphs ss m) [0..] 
         ss = mapM (\ (c,f) -> gvSLFFA (Just c) f) subs
         m = gvSLFFA Nothing main
@@ -111,19 +99,19 @@ gvSLFFA n fa =
 -- * SLF printing (without sub-networks)
 --
 
-slfPrinter :: Options -> StateGrammar -> String
-slfPrinter opts s 
-    = prSLF $ automatonToSLF mkSLFNode $ slfStyleFA $ cfgToFA' opts s
+slfPrinter :: PGF -> CId -> String
+slfPrinter pgf cnc
+    = prSLF $ automatonToSLF mkSLFNode $ slfStyleFA $ cfgToFA' $ pgfToCFG pgf cnc
 
 --
 -- * SLF printing (with sub-networks)
 --
 
 -- | Make a network with subnetworks in SLF
-slfSubPrinter :: Options -> StateGrammar -> String
-slfSubPrinter opts s = prSLFs slfs
+slfSubPrinter :: PGF -> CId -> String
+slfSubPrinter pgf cnc = prSLFs slfs
   where 
-  (main,subs) = mkFAs opts s
+  (main,subs) = mkFAs pgf cnc
   slfs = SLFs [(c, faToSLF fa) | (c,fa) <- subs] (faToSLF main)
   faToSLF = automatonToSLF mfaNodeToSLFNode
 
@@ -132,11 +120,11 @@ automatonToSLF mkNode fa = SLF { slfNodes = ns, slfEdges = es }
   where ns = map (uncurry mkNode) (states fa)
         es = zipWith (\i (f,t,()) -> mkSLFEdge i (f,t)) [0..] (transitions fa)
 
-mfaNodeToSLFNode :: Int -> Maybe (MFALabel String) -> SLFNode
+mfaNodeToSLFNode :: Int -> Maybe CFSymbol -> SLFNode
 mfaNodeToSLFNode i l = case l of
                               Nothing -> mkSLFNode i Nothing
-                              Just (Tok x) -> mkSLFNode i (Just x)
-                              Just (Cat s) -> mkSLFSubLat i s
+                              Just (Terminal x) -> mkSLFNode i (Just x)
+                              Just (NonTerminal s) -> mkSLFSubLat i s
 
 mkSLFNode :: Int -> Maybe String -> SLFNode
 mkSLFNode i Nothing = SLFNode { nId = i, nWord = Nothing, nTag = Nothing }
