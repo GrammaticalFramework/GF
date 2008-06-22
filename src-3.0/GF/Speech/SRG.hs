@@ -66,16 +66,11 @@ type SRGSymbol = Symbol SRGNT Token
 type SRGNT = (Cat, Int)
 
 
--- | Create a non-left-recursive SRG. 
---   FIXME: the probabilities in the returned 
---   grammar may be meaningless.
-makeSimpleSRG :: PGF
-              -> CId -- ^ Concrete syntax name.
-	      -> SRG
-makeSimpleSRG pgf cnc = makeSRG preprocess pgf cnc
+-- | Create a compact filtered non-left-recursive SRG. 
+makeSimpleSRG :: PGF -> CId -> SRG
+makeSimpleSRG  = mkSRG cfgToSRG preprocess
     where
-      preprocess =   renameCats (prCId cnc)
-                   . traceStats "After mergeIdentical"
+      preprocess =   traceStats "After mergeIdentical"
                    . mergeIdentical
                    . traceStats "After removeLeftRecursion"
                    . removeLeftRecursion 
@@ -86,6 +81,7 @@ makeSimpleSRG pgf cnc = makeSRG preprocess pgf cnc
                    . traceStats "After removeCycles"
                    . removeCycles 
                    . traceStats "Inital CFG"
+      cfgToSRG cfg = [cfRulesToSRGRule rs | (_,rs) <- allRulesGrouped cfg]
 
 traceStats s g = trace ("---- " ++ s ++ ": " ++ stats g {- ++ "\n" ++ prCFRules g ++ "----" -}) g
 
@@ -96,31 +92,23 @@ stats g = "Categories: " ++ show (countCats g)
 makeNonRecursiveSRG :: PGF
                     -> CId -- ^ Concrete syntax name.
                     -> SRG
-makeNonRecursiveSRG = mkSRG mkRules
+makeNonRecursiveSRG = mkSRG cfgToSRG id
     where
-      mkRules cfg = [SRGRule l [SRGAlt Nothing dummyCFTerm (dfaToSRGItem dfa)] | (l,dfa) <- dfas]
+      cfgToSRG cfg = [SRGRule l [SRGAlt Nothing dummyCFTerm (dfaToSRGItem dfa)] | (l,dfa) <- dfas]
           where
             MFA _ dfas = cfgToMFA cfg
             dfaToSRGItem = mapRE dummySRGNT . minimizeRE . dfa2re
             dummyCFTerm = CFMeta (mkCId "dummy")
             dummySRGNT = mapSymbol (\c -> (c,0)) id
 
-makeSRG :: (CFG -> CFG)
-	-> PGF
-        -> CId -- ^ Concrete syntax name.
-	-> SRG
-makeSRG preprocess = mkSRG mkRules
-    where 
-      mkRules = map cfRulesToSRGRule . snd . unzip . allRulesGrouped . preprocess
-
-mkSRG :: (CFG -> [SRGRule]) -> PGF -> CId -> SRG
-mkSRG mkRules pgf cnc = 
+mkSRG :: (CFG -> [SRGRule]) -> (CFG -> CFG) -> PGF -> CId -> SRG
+mkSRG mkRules preprocess pgf cnc =
     SRG { srgName = prCId cnc,
 	  srgStartCat = cfgStartCat cfg,
           srgExternalCats = cfgExternalCats cfg,
           srgLanguage = getSpeechLanguage pgf cnc,
 	  srgRules = mkRules cfg }
-    where cfg = pgfToCFG pgf cnc
+    where cfg = renameCats (prCId cnc) $ preprocess $ pgfToCFG pgf cnc
 
 -- | Renames all external cats C to C_cat, and all internal cats to
 --   GrammarName_N where N is an integer.
