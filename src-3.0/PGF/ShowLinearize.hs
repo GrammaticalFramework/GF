@@ -54,20 +54,20 @@ mkRecord typ trm = case (typ,trm) of
    str = realize
 
 -- show all branches, without labels and params
-allLinearize :: PGF -> CId -> Tree -> String
-allLinearize pgf lang = concat . map pr . tabularLinearize pgf lang where
+allLinearize :: (String -> String) -> PGF -> CId -> Tree -> String
+allLinearize unlex pgf lang = concat . map (unlex . pr) . tabularLinearize pgf lang where
   pr (p,vs) = unlines vs
 
 -- show all branches, with labels and params
-tableLinearize :: PGF -> CId -> Tree -> String
-tableLinearize pgf lang = unlines . map pr . tabularLinearize pgf lang where
-  pr (p,vs) = p +++ ":" +++ unwords (intersperse "|" vs)
+tableLinearize :: (String -> String) -> PGF -> CId -> Tree -> String
+tableLinearize unlex pgf lang = unlines . map pr . tabularLinearize pgf lang where
+  pr (p,vs) = p +++ ":" +++ unwords (intersperse "|" (map unlex vs))
 
 -- create a table from labels+params to variants
 tabularLinearize :: PGF -> CId -> Tree -> [(String,[String])]
 tabularLinearize pgf lang = branches . recLinearize pgf lang where
   branches r = case r of
-    RR  fs -> [(lab +++ b,s) | (lab,t) <- fs, (b,s) <- branches t]
+    RR  fs -> [(        b,s) | (lab,t) <- fs, (b,s) <- branches t]
     RT  fs -> [(lab +++ b,s) | (lab,t) <- fs, (b,s) <- branches t]
     RFV rs -> [([], ss) | (_,ss) <- concatMap branches rs]
     RS  s  -> [([], [s])]
