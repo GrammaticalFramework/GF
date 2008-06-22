@@ -169,9 +169,9 @@ removeLeftRecursion gr
 
     retainedLeftRecursive = filter (isLeftRecursive . NonTerminal) $ Set.toList retained
 
-mkCat :: CFSymbol -> CFSymbol -> Cat
-mkCat x y = showSymbol x ++ "-" ++ showSymbol y
-  where showSymbol = symbol id show
+    mkCat :: CFSymbol -> CFSymbol -> Cat
+    mkCat x y = showSymbol x ++ "-" ++ showSymbol y
+        where showSymbol = symbol id show
 
 -- | Get the sets of mutually recursive non-terminals for a grammar.
 mutRecCats :: Bool    -- ^ If true, all categories will be in some set.

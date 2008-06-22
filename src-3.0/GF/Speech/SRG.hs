@@ -10,7 +10,6 @@
 ----------------------------------------------------------------------
 module GF.Speech.SRG (SRG(..), SRGRule(..), SRGAlt(..), SRGItem, SRGSymbol
                      , SRGNT, CFTerm
-                     , makeSRG
                      , makeSimpleSRG
                      , makeNonRecursiveSRG
                      , getSpeechLanguage
@@ -73,9 +72,10 @@ type SRGNT = (Cat, Int)
 makeSimpleSRG :: PGF
               -> CId -- ^ Concrete syntax name.
 	      -> SRG
-makeSimpleSRG = makeSRG preprocess 
+makeSimpleSRG pgf cnc = makeSRG preprocess pgf cnc
     where
-      preprocess = traceStats "After mergeIdentical"
+      preprocess =   renameCats (prCId cnc)
+                   . traceStats "After mergeIdentical"
                    . mergeIdentical
                    . traceStats "After removeLeftRecursion"
                    . removeLeftRecursion 
@@ -114,14 +114,22 @@ makeSRG preprocess = mkSRG mkRules
       mkRules = map cfRulesToSRGRule . snd . unzip . allRulesGrouped . preprocess
 
 mkSRG :: (CFG -> [SRGRule]) -> PGF -> CId -> SRG
-mkSRG mkRules pgf cnc =
+mkSRG mkRules pgf cnc = 
     SRG { srgName = prCId cnc,
 	  srgStartCat = cfgStartCat cfg,
           srgExternalCats = cfgExternalCats cfg,
           srgLanguage = getSpeechLanguage pgf cnc,
 	  srgRules = mkRules cfg }
-    where cfg = renameExternal $ pgfToCFG pgf cnc
-          renameExternal cfg' = mapCFGCats (\c -> if c `Set.member` cfgExternalCats cfg' then c ++ "_cat" else c) cfg'
+    where cfg = pgfToCFG pgf cnc
+
+-- | Renames all external cats C to C_cat, and all internal cats to
+--   GrammarName_N where N is an integer.
+renameCats :: String -> CFG -> CFG
+renameCats prefix cfg = mapCFGCats renameCat cfg
+  where renameCat c | isExternal c = c ++ "_cat"
+                    | otherwise = fromMaybe ("renameCats: " ++ c) (Map.lookup c names)
+        isExternal c = c `Set.member` cfgExternalCats cfg        
+        names = Map.fromList $ zip (allCats cfg) [prefix ++ "_" ++ show x | x <- [0..]]
 
 getSpeechLanguage :: PGF -> CId -> Maybe String
 getSpeechLanguage pgf cnc = fmap (replace '_' '-') $ lookConcrFlag pgf cnc (mkCId "language")
