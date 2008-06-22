@@ -43,11 +43,12 @@ prRecord = prr where
 -- uses the encoding of record types in PGF.paramlincat
 mkRecord :: Term -> Term -> Record
 mkRecord typ trm = case (typ,trm) of
-  (R rs,      R ts) -> RR [(str lab, mkRecord ty t) | (P lab ty, t) <- zip rs ts]
+  (_,         FV ts)  -> RFV $ map (mkRecord typ) ts
+  (R rs,      R ts)   -> RR [(str lab, mkRecord ty t) | (P lab ty, t) <- zip rs ts]
   (S [FV ps,ty],R ts) -> RT [(str par, mkRecord ty t) | (par,    t) <- zip ps ts]
   (_,W s (R ts))      -> mkRecord typ (R [K (KS (s ++ u)) | K (KS u) <- ts])
   (FV ps,       C i)  -> RCon $ str $ ps !! i
-  (S [],        _)    -> RS $ realize trm
+  (S [],        _)    -> RS $ str trm
   _                   -> RS $ show trm ---- printTree trm
  where
    str = realize

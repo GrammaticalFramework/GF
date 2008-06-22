@@ -1,8 +1,9 @@
-module PGF.Linearize where
+module PGF.Linearize (linearizes,realize,realizes,linTree) where
 
 import PGF.CId
 import PGF.Data
 import PGF.Macros
+
 import qualified Data.Map as Map
 import Data.List
 
@@ -10,20 +11,35 @@ import Debug.Trace
 
 -- linearization and computation of concrete PGF Terms
 
-linearize :: PGF -> CId -> Tree -> String
-linearize pgf lang = realize . linTree pgf lang
+linearizes :: PGF -> CId -> Tree -> [String]
+linearizes pgf lang = realizes . linTree pgf lang
 
 realize :: Term -> String
-realize trm = case trm of
-  R ts     -> realize (ts !! 0)
-  S ss     -> unwords $ map realize ss
-  K t -> case t of
-    KS s -> s
-    KP s _ -> unwords s ---- prefix choice TODO
-  W s t    -> s ++ realize t
-  FV ts    -> realize (ts !! 0)  ---- other variants TODO
-  TM s     -> s
-  _ -> "ERROR " ++ show trm ---- debug
+realize = concat . take 1 . realizes
+
+realizes :: Term -> [String]
+realizes = map (unwords . untokn) . realizest
+
+realizest :: Term -> [[Tokn]]
+realizest trm = case trm of
+  R ts     -> realizest (ts !! 0)
+  S ss     -> map concat $ combinations $ map realizest ss
+  K t      -> [[t]]
+  W s t    -> [[KS (s ++ r)] | [KS r] <- realizest t]
+  FV ts    -> concatMap realizest ts
+  TM s     -> [[KS s]]
+  _ -> [[KS $ "REALIZE_ERROR " ++ show trm]] ---- debug
+
+untokn :: [Tokn] -> [String]
+untokn ts = case ts of
+  KP d _  : [] -> d
+  KP d vs : ws -> let ss@(s:_) = untokn ws in sel d vs s ++ ss
+  KS s    : ws -> s : untokn ws
+  []           -> []
+ where
+   sel d vs w = case [v | Alt v cs <- vs, any (\c -> isPrefixOf c w) cs] of
+     v:_ -> v
+     _   -> d
 
 linTree :: PGF -> CId -> Tree -> Term
 linTree pgf lang = lin
