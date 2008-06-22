@@ -16,6 +16,7 @@ import PGF.Macros
 import PGF.Data ----
 import PGF.Morphology
 import PGF.Quiz
+import PGF.VisualizeTree
 import GF.Compile.Export
 import GF.Infra.Option (noOptions)
 import GF.Infra.UseIO
@@ -436,6 +437,38 @@ allCommands pgf = Map.fromList [
        ("thai",      "Thai")
        ] 
      }),
+  ("vt", emptyCommandInfo {
+     longname = "visualize_tree",
+     synopsis = "show a set of trees graphically",
+     explanation = unlines [
+       "Prints a set of trees in the .dot format (the graphviz format).",
+       "The graph can be saved in a file by the wf command as usual.",
+       "If the -view flag is defined, the graph is saved in a temporary file",
+       "which is processed by graphviz and displayed by the program indicated",
+       "by the flag. The target format is postscript, unless overridden by the",
+       "flag -format."
+       ],
+     exec = \opts ts -> do
+         let grph = visualizeTrees False ts -- True=digraph
+         if isFlag "view" opts || isFlag "format" opts then do
+           let file s = "_grph." ++ s
+           let view = optViewGraph opts ++ " "
+           let format = optViewFormat opts 
+           writeFile (file "dot") grph
+           system $ "dot -T" ++ format ++ " " ++ file "dot" ++ " > " ++ file format ++ 
+                    " ; " ++ view ++ file format
+           return void
+          else return $ fromString grph,
+     examples = [
+       "p \"hello\" | vt              -- parse a string and show trees as graph script",
+       "p \"hello\" | vt -view=\"open\" -- parse a string and display trees on a Mac"
+       ],
+
+     flags = [
+       ("format","format of the visualization file (default \"ps\")"),
+       ("view","program to open the resulting file (default \"gv\")")
+       ] 
+     }),
   ("wf", emptyCommandInfo {
      longname = "write_file",
      synopsis = "send string or tree to a file",
@@ -480,6 +513,8 @@ allCommands pgf = Map.fromList [
    optLang opts = head $ optLangs opts ++ ["#NOLANG"] 
    optCat opts = valIdOpts "cat" (lookStartCat pgf) opts
    optComm opts = valStrOpts "command" "" opts
+   optViewFormat opts = valStrOpts "format" "ps" opts
+   optViewGraph opts = valStrOpts "view" "gv" opts
    optNum opts = valIntOpts "number" 1 opts
    optNumInf opts = valIntOpts "number" 1000000000 opts ---- 10^9
 
