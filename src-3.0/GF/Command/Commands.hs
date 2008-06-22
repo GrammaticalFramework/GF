@@ -343,6 +343,7 @@ allCommands pgf = Map.fromList [
      exec = \opts -> return . fromString . stringOps opts . toString,
      options = [
        ("bind","bind tokens separated by Prelude.BIND, i.e. &+"),
+       ("chars","lexer that makes every non-space character a token"),
        ("from_devanagari","from unicode to GF Devanagari transliteration"),
        ("from_thai","from unicode to GF Thai transliteration"),
        ("from_utf8","decode from utf8"),
@@ -355,6 +356,7 @@ allCommands pgf = Map.fromList [
        ("unlextext","text-like unlexer"),
        ("unlexcode","code-like unlexer"),
        ("unlexmixed","mixture of text and code (code between $...$)"), 
+       ("unchars","unlexer that puts no spaces between tokens"),
        ("unwords","unlexer that puts a single space between tokens (default)"),
        ("words","lexer that assumes tokens separated by spaces (default)")
        ]
@@ -499,7 +501,7 @@ allCommands pgf = Map.fromList [
      _ | isOpt "treebank" opts -> treebank opts t
      _ -> unlines [linear opts lang t | lang <- optLangs opts] 
     
-   linear opts lang = case opts of
+   linear opts lang = unlex opts lang . case opts of
        _ | isOpt "all"    opts -> allLinearize pgf (mkCId lang)
        _ | isOpt "table"  opts -> tableLinearize pgf (mkCId lang)
        _ | isOpt "term"   opts -> termLinearize pgf (mkCId lang)
@@ -509,6 +511,8 @@ allCommands pgf = Map.fromList [
    treebank opts t = unlines $ 
      (abstractName pgf ++ ": " ++ showTree t) :
      [lang ++ ": " ++ linear opts lang t | lang <- optLangs opts]
+
+   unlex opts lang = stringOps opts
 
    optRestricted opts = restrictPGF (hasLin pgf (mkCId (optLang opts))) pgf
 

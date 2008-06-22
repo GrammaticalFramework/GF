@@ -473,8 +473,11 @@ oper
       huusin,huusi,huusisi,huutanut,huudettu,huutanee : Str) -> V = mk12V ;
   } ;
 
-  mk1V : Str -> V = \s -> vforms2V (vForms1 s) ** {sc = NPCase Nom ; lock_V = <>} ;
-  mk2V : (_,_ : Str) -> V = \x,y -> vforms2V (vForms2 x y) ** {sc = NPCase Nom ; lock_V = <>} ;
+  mk1V : Str -> V = \s -> 
+    let vfs = vforms2V (vForms1 s) in 
+      vfs ** {sc = NPCase Nom ; lock_V = <>} ;
+  mk2V : (_,_ : Str) -> V = \x,y -> 
+    let vfs = vforms2V (vForms2 x y) in vfs ** {sc = NPCase Nom ; lock_V = <>} ;
   mk3V : (huutaa,huudan,huusi : Str) -> V = \x,_,y -> mk2V x y ; ----
   mk12V : (
       huutaa,huudan,huutaa,huutavat,huutakaa,huudetaan,
@@ -543,9 +546,9 @@ oper
 
 
 
-  caseV c v = {s = v.s ; sc = NPCase c ; lock_V = <>} ;
+  caseV c v = {s = v.s ; sc = NPCase c ; qp = v.qp ; lock_V = <>} ;
 
-  vOlla = verbOlla ** {sc = NPCase Nom ; lock_V = <>} ;
+  vOlla = verbOlla ** {sc = NPCase Nom ; qp = "ko" ; lock_V = <>} ; ---- lieneekö
 
   mk2V2 : V -> Prep -> V2 = \v,c -> v ** {c2 = c ; lock_V2 = <>} ;
   caseV2 : V -> Case -> V2 = \v,c -> mk2V2 v (casePrep c) ; 
