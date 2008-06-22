@@ -2,9 +2,9 @@
 
 PositA warm_A
 ComparA warm_A (UsePron i_Pron)
+ComplA2 married_A2 (UsePron she_Pron)
 ComplA2 married_A2 (DetNP (DetQuant (PossPron she_Pron) NumPl))
 ComplA2 married_A2 (DetNP (DetQuant (PossPron she_Pron) NumSg))
-ComplA2 married_A2 (UsePron she_Pron)
 ReflA2 married_A2
 PositA (UseA2 married_A2)
 SentAP (PositA good_A) (EmbedS (UseCl TPres ASimul PPos (PredVP (UsePron she_Pron) (UseComp (CompAdv here_Adv)))))
