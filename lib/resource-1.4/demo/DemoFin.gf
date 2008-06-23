@@ -1,17 +1,17 @@
 --# -path=.:alltenses
 
 concrete DemoFin of Demo = 
-  NounFin - [AdvCN], 
+  NounFin - [AdvCN,PredetNP,PPartNP,RelNP,RelCN,SentCN,ApposCN,MassNP,DetNP],
 --  VerbFin, 
   ClauseFin, --
-  AdjectiveFin,
+  AdjectiveFin - [SentAP],
   AdverbFin,
   NumeralFin,
 ----  SentenceFin,
-----  QuestionFin,
+  QuestionFin - [QuestVP,QuestSlash],
 ----  RelativeFin,
 ----  ConjunctionFin,
-----  PhraseFin,
+  PhraseFin,
 ----  TextX,
 ----  IdiomFin,
   StructuralFin,
