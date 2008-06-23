@@ -355,17 +355,23 @@ resource ResBul = ParamX ** open Prelude in {
             };
 
   regAdjective : Str -> AForm => Str = 
-    \base -> table {
-          ASg Masc Indef => base  ;
-          ASg Masc Def   => (base+"ия") ;
-          ASgMascDefNom  => (base+"ият") ;
-          ASg Fem  Indef => (base+"a") ;
-          ASg Fem  Def   => (base+"ата") ;
-          ASg Neut Indef => (base+"о") ;
-          ASg Neut Def   => (base+"ото") ;
-          APl Indef      => (ia2e base+"и") ;
-          APl Def        => (ia2e base+"ите")
-        };
+    \base -> 
+       let base0 : Str
+                 = case base of {
+                     x+"и" => x;
+                     x     => x
+                   }
+       in table {
+            ASg Masc Indef => base  ;
+            ASg Masc Def   => (base0+"ия") ;
+            ASgMascDefNom  => (base0+"ият") ;
+            ASg Fem  Indef => (base0+"a") ;
+            ASg Fem  Def   => (base0+"ата") ;
+            ASg Neut Indef => (base0+"о") ;
+            ASg Neut Def   => (base0+"ото") ;
+            APl Indef      => (ia2e base0+"и") ;
+            APl Def        => (ia2e base0+"ите")
+          };
     
 -- For $Sentence$.
 
