@@ -345,6 +345,7 @@ foreign = Foreign; -- +++ MG_UR: added +++
   dative = Dat ;
   genitive = Gen ;
   instructive = Inst ;
+  prepositional = Prepos PrepOther ; -- FIXME: not correct for v and na
   singular = Sg ;
   plural = Pl ;
   animate = Animate ;
@@ -479,10 +480,7 @@ regN = \ray ->
   nDen = \s -> softSignEndDeclMascInAnimateGenEWithout s ** {lock_N = <>};
   nDrug = \s -> nullEndAnimateDeclDrug s** {lock_N = <>};
   nSyn = \s -> nullEndAnimateDeclSyn s** {lock_N = <>};
-
--- preposition types added by Magda Gerritsen and Ulrich Real
-  nLes = \s -> preposition_V s ** {lock_N = <>};
-  nMost = \s -> preposition_Na s ** {lock_N = <>};
+  nLes = \s -> preposVNaEndUMasc s ** {lock_N = <>};
 
 
 -- An individual-valued function is a common noun together with the
@@ -556,13 +554,13 @@ regN = \ray ->
    mkV = \asp, sgP1, sgP2, sgP3, plP1, plP2, plP3, 
      sgMascPast, imperSgP2, inf -> case asp of { 
        Perfective  =>  
-         mkVerb (perfectiveActivePattern inf imperSgP2 
-         (presentConj sgP1 sgP2 sgP3 plP1 plP2 plP3) (pastConj sgMascPast))
-         (pastConj sgMascPast) ** {    lock_V=<> };
+         mkVerbPerfective inf imperSgP2 
+         (presentConj sgP1 sgP2 sgP3 plP1 plP2 plP3) (pastConj sgMascPast)
+         ** {    lock_V=<> };
        Imperfective  =>  
-         mkVerb (imperfectiveActivePattern inf imperSgP2 
-         (presentConj sgP1 sgP2 sgP3 plP1 plP2 plP3) (pastConj sgMascPast))
-         (pastConj sgMascPast) ** {    lock_V=<> }
+         mkVerbImperfective inf imperSgP2 
+         (presentConj sgP1 sgP2 sgP3 plP1 plP2 plP3) (pastConj sgMascPast)
+         ** {    lock_V=<> }
         }; 
 
    oper presentConj: (_,_,_,_,_,_: Str) -> PresentVerb = 
