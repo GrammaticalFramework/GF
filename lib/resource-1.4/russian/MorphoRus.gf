@@ -18,83 +18,58 @@ resource MorphoRus = ResRus ** open Prelude, (Predef=Predef) in {
 flags  coding=utf8 ;
 
 ----2 Personal (together with possesive) pronouns.
-oper pronYa: Pronoun =
+
+oper pronYa : Pronoun = 
+  let nonPoss = { s = table { Nom      => "я" ;
+			      Gen      => "меня" ;
+			      Dat      => "мне" ;
+			      Acc      => "меня" ;
+			      Inst     => "мной" ;
+			      Prepos _ => "мне" } }
+   in pronYaTu nonPoss "мо" P1 ;
+
+oper pronTu : Pronoun = 
+  let nonPoss = { s = table { Nom      => "ты" ;
+			      Gen      => "тебя" ;
+			      Dat      => "тебе" ;
+			      Acc      => "тебя" ;
+			      Inst     => "тобой" ;
+			      Prepos _ => "тебе" } }
+   in pronYaTu nonPoss "тво" P2 ;
+
+-- Pronouns ya, tu, svoj
+oper pronYaTu : { s : Case => Str } -> Str -> Person -> Pronoun =
+  \nonPoss, mo, pers ->
   { s = table {
-    PF Nom _ NonPoss  => "я"  ;
-    PF Gen _ NonPoss => "меня" ;
-    PF Dat _  NonPoss => "мне" ;
-    PF Acc _  NonPoss => "меня" ;
-    PF Inst _ NonPoss => "мной" ;
-    PF (Prepos _) _ NonPoss => "мне" ;
-    PF Nom _ (Poss  (ASg Masc)) => "мой"  ;
-    PF Gen _ (Poss  (ASg Masc)) => "моего" ;
-    PF Dat _  (Poss  (ASg Masc)) => "моему" ;
-    PF Acc _ (Poss  (ASg Masc)) => "моего" ;
-    PF Inst _ (Poss  (ASg Masc)) => "моим" ;
-    PF (Prepos _) _ (Poss  (ASg Masc)) => "моём" ;
-    PF Nom _ (Poss  (ASg Fem)) => "моя"  ;
-    PF Gen _ (Poss (ASg Fem)) => "моей" ;
-    PF Dat _  (Poss  (ASg Fem)) => "моей" ;
-    PF Acc _ (Poss  (ASg Fem)) => "мою" ;
-    PF Inst _ (Poss (ASg Fem)) => "моею" ;
-    PF (Prepos _) _ (Poss (ASg Fem)) => "моей" ;
-    PF Nom _ (Poss  (ASg Neut)) => "моё"  ;
-    PF Gen _ (Poss  (ASg Neut)) => "моего" ;
-    PF Dat _  (Poss  (ASg Neut)) => "моему" ;
-    PF Acc _ (Poss  (ASg Neut)) => "моё" ;
-    PF Inst _ (Poss  (ASg Neut)) => "моим" ;
-    PF (Prepos _) _ (Poss  (ASg Neut)) => "моём" ;
-    PF Nom _ (Poss APl)  => "мои"  ;
-    PF Gen _ (Poss APl)=> "моих" ;
-    PF Dat _  (Poss APl)  => "моим" ;
-    PF Acc _ (Poss APl)  => "моих" ;
-    PF Inst _ (Poss APl) => "моими" ;
-    PF (Prepos _) _ (Poss APl) => "моих"
+    PF c _ NonPoss   => nonPoss.s!c ;
+    PF c _ (Poss gn) => case <c, gn> of {
+        <Nom,      ASg Neut         > => mo + "ё" ;
+        <Nom,      ASg Masc         > => mo + "й" ;
+        <Gen,      ASg (Masc | Neut)> => mo + "его" ;
+        <Dat,      ASg (Masc | Neut)> => mo + "ему" ;
+        <Acc,      ASg (Masc | Neut)> => mo + "его" ;
+        <Inst,     ASg (Masc | Neut)> => mo + "им" ;
+        <Prepos _, ASg (Masc | Neut)> => mo + "ём" ;
+
+        <Nom,      ASg Fem> => mo + "я" ;
+        <Gen,      ASg Fem> => mo + "ей" ;
+        <Dat,      ASg Fem> => mo + "ей" ;
+        <Acc,      ASg Fem> => mo + "ю" ;
+        <Inst,     ASg Fem> => mo + "ей" ;
+        <Prepos _, ASg Fem> => mo + "ей" ;
+
+        <Nom,      APl> => mo + "и" ;
+        <Gen,      APl> => mo + "их" ;
+        <Dat,      APl> => mo + "им" ;
+        <Acc,      APl> => mo + "их" ;
+        <Inst,     APl> => mo + "им" ;
+        <Prepos _, APl> => mo + "их" 
+	
+      }
     } ;
-    g = PNoGen ;
-    n = Sg ;
-    p = P1  ;
-    pron = True
+    g = PNoGen ; n = Sg ; p = pers ; pron = True
   } ;
 
-oper pronTu: Pronoun =
-  { s = table {
-    PF Nom _ NonPoss  => "ты" ;
-    PF Gen _ NonPoss  => "тебя" ;
-    PF Dat _ NonPoss  => "тебе" ;
-    PF Acc _ NonPoss  => "тебя"  ;
-    PF Inst _ NonPoss  => "тобой" ;
-    PF (Prepos _) _ NonPoss  => ["о тебе"]  ;
-    PF Nom _ (Poss  (ASg Masc)) => "твой"  ;
-    PF Gen _ (Poss (ASg Masc)) => "твоего" ;
-    PF Dat _  (Poss  (ASg Masc)) => "твоему" ;
-    PF Acc _ (Poss  (ASg Masc)) => "твоего" ;
-    PF Inst _ (Poss (ASg Masc)) => "твоим" ;
-    PF (Prepos _) _ (Poss (ASg Masc)) => "твоём" ;
-    PF Nom _ (Poss  (ASg Fem)) => "твоя"  ;
-    PF Gen _ (Poss (ASg Fem)) => "твоей" ;
-    PF Dat _  (Poss  (ASg Fem)) => "твоей" ;
-    PF Acc _ (Poss  (ASg Fem)) => "твою" ;
-    PF Inst _ (Poss (ASg Fem)) => "твоею" ;
-    PF (Prepos _) _ (Poss (ASg Fem)) => "твоей" ;
-    PF Nom _ (Poss  (ASg Neut)) => "твоё"  ;
-    PF Gen _ (Poss  (ASg Neut)) => "твоего" ;
-    PF Dat _  (Poss  (ASg Neut)) => "твоему" ;
-    PF Acc _ (Poss  (ASg Neut)) => "твоё" ;
-    PF Inst _ (Poss  (ASg Neut)) => "твоим" ;
-    PF (Prepos _) _ (Poss  (ASg Neut)) => "твоём" ;
-    PF Nom _ (Poss APl)  => "твои"  ;
-    PF Gen _ (Poss APl)=> "твоих" ;
-    PF Dat _  (Poss APl)  => "твоим" ;
-    PF Acc _ (Poss APl)  => "твоих" ;
-    PF Inst _ (Poss APl) => "твоими" ;
-    PF (Prepos _) _ (Poss APl) => "твоих"
-    } ;
-    g = PNoGen ;
-    n = Sg ;
-    p = P2 ;
-    pron = True
-  } ;
 
 oper pronOn: Pronoun =
   { s = table {
