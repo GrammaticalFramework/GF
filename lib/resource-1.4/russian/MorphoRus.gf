@@ -2373,16 +2373,11 @@ oper PresentVerb : Type = PresentVF => Str ;
 
 oper presentConjDolzhen: Str -> Str -> PresentVerb = \del, sgP1End ->
   table {
-    PRF APl _ => del+ "ны" ;
-    PRF (ASg Masc) P1 => del+ sgP1End ;
-    PRF (ASg Fem) P1 => del+ "на" ;
-    PRF (ASg Neut) P1 => del+ "но" ;
-    PRF (ASg Masc) P2 => del+ sgP1End ;
-    PRF (ASg Fem) P2 => del+ "на" ;
-    PRF (ASg Neut) P2 => del+ "но" ;
-    PRF (ASg Masc) P3 => del+ sgP1End ;
-    PRF (ASg Fem) P3 => del+ "на" ;
-    PRF (ASg Neut) P3 => del+ "но"   };
+    PRF APl _        => del + "ны" ;
+    PRF (ASg Masc) _ => del + sgP1End ;
+    PRF (ASg Fem)  _ => del + "на" ;
+    PRF (ASg Neut) _ => del + "но"
+  };
 
 -- +++ MG_UR: changed! +++
 oper presentConjMixed: Str -> Str -> PresentVerb = \del, sgP1End ->
@@ -2610,25 +2605,13 @@ oper perfectiveActivePattern: Str -> Str -> PresentVerb -> PastVerb -> AspectVoi
     VIMP Pl P2 => imper+"те" ;
     VIMP Sg P3 => "пусть" ++ presentFuture ! (PRF (ASg Masc) P3) ;
     VIMP Pl P3 => "пусть" ++ presentFuture ! (PRF APl P3) ;
-    VSUB (ASg Masc) => past ! (PSF (ASg Masc)) ++"бы";
-    VSUB (ASg Fem) => past ! (PSF (ASg Fem)) ++"бы";
-
-    VSUB (ASg Neut)  => past ! (PSF (ASg Neut) )++"бы";
-    VSUB APl  => past ! (PSF APl) ++"бы";
+    VSUB gn => past ! (PSF gn) ++"бы";
     VIND (ASg _) (VPresent _) => [] ;
     VIND APl (VPresent P1) => nonExist ;
     VIND APl (VPresent P2) => nonExist ;
     VIND APl (VPresent P3) => [] ;
-    VIND (ASg _) (VFuture P1) => presentFuture ! (PRF (ASg Masc) P1) ;
-    VIND (ASg _) (VFuture P2) => presentFuture ! (PRF (ASg Masc) P2) ;
-    VIND (ASg _) (VFuture P3) => presentFuture ! (PRF (ASg Masc) P3) ;
-    VIND APl (VFuture P1) => presentFuture ! (PRF APl P1) ;
-    VIND APl (VFuture P2) => presentFuture ! (PRF APl P2) ;
-    VIND APl (VFuture P3) => presentFuture ! (PRF APl P3) ;
-    VIND (ASg Masc) VPast => past ! (PSF (ASg Masc)) ;
-    VIND (ASg Fem) VPast   => past ! (PSF (ASg Fem) ) ;
-    VIND (ASg Neut) VPast   => past ! (PSF (ASg Neut))  ;
-    VIND APl VPast => past ! (PSF APl)
+    VIND gn (VFuture p) => presentFuture ! (PRF gn p) ;
+    VIND gn VPast => past ! (PSF gn)
   } ;
   asp = Perfective
 } ;

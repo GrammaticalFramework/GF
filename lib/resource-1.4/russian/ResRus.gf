@@ -109,15 +109,7 @@ oper
 
 
 oper
-  extCase: PronForm -> Case = \pf -> case pf of 
-   { PF Nom _ _ => Nom ;
-     PF Gen _ _ => Gen ;
-     PF Dat _ _ => Dat ;
-     PF Inst _ _ => Inst ;
-     PF Acc _ _ => Acc ;
-     PF Prepos _ _ => Prepos ; 
-     PF Prepos2 _ _ => Prepos2 -- +++ MG_UR: added +++
-    } ;
+  extCase: PronForm -> Case = \pf -> case pf of { PF c _ _ => c } ;
 
   mkPronForm: Case -> AfterPrep -> Possessive -> PronForm = 
     \c,n,p -> PF c n p ;
@@ -307,11 +299,7 @@ oper sam: Refl=
 
   pgNum : PronGen -> Number -> GenNum = \g,n -> 
     case n of 
-   {   Sg => case g of 
-                 { PGen Fem => ASg Fem ;
-                   PGen Masc => ASg Masc ;
-                   PGen Neut => ASg Neut ;
-                   _ => ASg Masc } ; -- assuming pronoun "I" is a male
+   {   Sg => ASg (pgen2gen g) ; -- assuming pronoun "I" is a male
         Pl => APl
    } ;
               --    _  => variants {ASg Masc ; ASg Fem}  } ; 
@@ -405,21 +393,8 @@ oper gg : Str -> Gender => Str = \s -> table {_ => s} ;
 
 oper 
 
-   numSF: SubstForm -> Number = \sf -> case sf of 
-    {
-      SF Sg _ => Sg ;
-      _       => Pl
-    } ;
+   numSF: SubstForm -> Number = \sf -> case sf of { SF n _ => n } ;
    
-   caseSF: SubstForm -> Case = \sf -> case sf of 
-    {
-      SF _ Nom => Nom ;
-      SF _ Gen => Gen ;
-      SF _ Dat => Dat ;
-      SF _ Inst => Inst ;
-      SF _ Acc => Acc ;
-      SF _ Prepos => Prepos ; 
-      SF _ Prepos2 => Prepos2 -- +++ MG_UR: added +++
-    } ;
+   caseSF: SubstForm -> Case = \sf -> case sf of { SF _ c => c } ;
 
 }
