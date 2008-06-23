@@ -19,7 +19,8 @@ flags  coding=utf8 ; optimize=all ;
 -- Some parameters, such as $Number$, are inherited from $ParamX$.
 param
   Gender     = Masc | Fem | Neut ;
-  Case       = Nom | Gen | Dat | Acc | Inst | Prepos | Prepos2 ; -- +++ MG_UR: new case Prepos2 introduced! +++
+  Case       = Nom | Gen | Dat | Acc | Inst | Prepos PrepKind ;
+  PrepKind   = PrepOther | PrepVNa;
   Animacy    = Animate | Inanimate ;
   Voice        = Act | Pass ;
   Aspect     = Imperfective | Perfective ;
@@ -292,8 +293,7 @@ oper sam: Refl=
      Dat => "себе";
      Acc => "себя";
      Inst => "собой";
-     Prepos => "себе";
-     Prepos2 => "себе" -- +++ MG_UR: added +++
+     Prepos _ => "себе"
      }
 };
 
