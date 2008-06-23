@@ -10,9 +10,6 @@
 
 -- We use the parameter types and word classes defined for morphology.
 
--- Note: mkPassive operation is at the moment incorrect. Low-level ending-analysis
--- is needed to fix the operation.
-
 resource MorphoRus = ResRus ** open Prelude, (Predef=Predef) in {
 
 flags  coding=utf8 ;
@@ -1397,11 +1394,9 @@ oper softSignEndDeclFemInstr_MI: Str -> SubstFormDecl =  \loshad ->
 -- +++ MG_UR: end of our feminine patterns +++
 
 
--- preposition types added by Magda Gerritsen and Ulrich Real
-
-oper preposition_V: Str -> CommNoun =  \les ->
+oper preposVNaEndUMasc: Str -> CommNoun =  \les ->
   {  s  =  table
-      { SF Sg Nom =>  les+"";
+      { SF Sg Nom => les+"";
         SF Sg Gen => les+"а" ;
         SF Sg Dat => les+"у" ;
         SF Sg Acc => les+"";
@@ -1417,27 +1412,6 @@ oper preposition_V: Str -> CommNoun =  \les ->
     } ;
     g = Neut  ; anim = Inanimate
   } ;
-
-oper preposition_Na: Str -> CommNoun =  \most ->
-  {  s  =  table
-      { SF Sg Nom =>  most+"";
-        SF Sg Gen => most+"а" ;
-        SF Sg Dat => most+"у" ;
-        SF Sg Acc => most+"";
-        SF Sg Inst => most+"ом" ;
-        SF Sg (Prepos PrepOther) => most+"е" ;
-        SF Sg (Prepos PrepVNa) => most+"у" ;
-        SF Pl Nom => most+"ы" ;
-        SF Pl Gen => most+"ов";
-        SF Pl Dat => most+"ам" ;
-        SF Pl Acc => most+"ы" ;
-        SF Pl Inst => most+"ами" ;
-        SF Pl (Prepos _) => most+"ах"
-    } ;
-    g = Neut  ; anim = Inanimate
-  } ;
--- +++ MG_UR: end of our preposition patterns +++
-
 
 --oper oEnd_Decl: Str -> CommNoun =  \bolshinstv ->
 --{ s  =  table  {
@@ -2065,16 +2039,7 @@ oper verbDolzhen : Verbum = verbDecl Imperfective Dolzhen "долж" "ен" "д�
 oper verbOrganisuet : Verbum = verbDecl Imperfective Foreign "организу" "ю" "организовал" "организуй" "организовать";
 
 
--- To reduces the redundancies in the definitions
--- we introduce some intermediate types,
--- so that the full type can be described as a combination
--- of the intermediate types. For example "AspectVoice"
--- is a type for defining a pattern for a particular
--- aspect and voice.
-
-oper AspectVoice: Type = { s : VerbConj => Str ;  asp: Aspect } ;
-
-idetDozhd: Verbum -> Verbum = \idet -> {s = \\vf=>idet.s!vf ++ "дождь"; asp = Imperfective};
+oper idetDozhd: Verbum -> Verbum = \idet -> {s = \\vf=>idet.s!vf ++ "дождь"; asp = Imperfective};
 
 -- "PresentVerb" takes care of the present  tense conjugation.
 
@@ -2186,138 +2151,91 @@ oper presentConjForeign: Str -> Str -> PresentVerb = \del, sgP1End ->
 -- It produces the full conjugation table for a verb entry
 
 -- +++ MG_UR: new conjugation class 'Foreign' introduced +++
-oper verbDecl: Aspect -> Conjugation -> Str -> Str -> Str -> Str ->Str -> Verbum =
-   \a, c, del, sgP1End, sgMascPast, imperSgP2, inf -> case a of
-{  Perfective  =>  case c of  {
-     First =>    mkVerb (perfectiveActivePattern inf imperSgP2 (presentConj1 del sgP1End) (pastConj sgMascPast))  (pastConj sgMascPast);
-     FirstE =>    mkVerb (perfectiveActivePattern inf imperSgP2 (presentConj1E del sgP1End) (pastConj sgMascPast))  (pastConj sgMascPast);
-     Second =>    mkVerb (perfectiveActivePattern inf imperSgP2 (presentConj2 del sgP1End) (pastConj sgMascPast)) (pastConj sgMascPast);
-     SecondA =>    mkVerb (perfectiveActivePattern inf imperSgP2 (presentConj2a del sgP1End) (pastConj sgMascPast)) (pastConj sgMascPast);
-    Mixed => mkVerb (perfectiveActivePattern inf imperSgP2 (presentConjMixed del sgP1End) (pastConj sgMascPast)) (pastConj sgMascPast);
-    Dolzhen => mkVerb (perfectiveActivePattern inf imperSgP2 (presentConjDolzhen del sgP1End) (pastConjDolzhen sgMascPast)) (pastConjDolzhen sgMascPast);
-    Foreign => mkVerb (perfectiveActivePattern inf imperSgP2 (presentConjForeign del sgP1End) (pastConj sgMascPast)) (pastConj sgMascPast)
-} ;
-   Imperfective  => case c of {
-     First => mkVerb (imperfectiveActivePattern inf imperSgP2 (presentConj1 del sgP1End) (pastConj sgMascPast))  (pastConj sgMascPast);
-     FirstE => mkVerb (imperfectiveActivePattern inf imperSgP2 (presentConj1E del sgP1End) (pastConj sgMascPast))  (pastConj sgMascPast);
-    Second => mkVerb (imperfectiveActivePattern inf imperSgP2 (presentConj2 del sgP1End) (pastConj sgMascPast)) (pastConj sgMascPast);
-    SecondA => mkVerb (imperfectiveActivePattern inf imperSgP2 (presentConj2a del sgP1End) (pastConj sgMascPast)) (pastConj sgMascPast);
-    Mixed => mkVerb (imperfectiveActivePattern inf imperSgP2 (presentConjMixed del sgP1End) (pastConj sgMascPast)) (pastConj sgMascPast) ;
-    Dolzhen => mkVerb (imperfectiveActivePattern inf imperSgP2 (presentConjDolzhen del sgP1End) (pastConjDolzhen sgMascPast)) (pastConjDolzhen sgMascPast);
-    Foreign => mkVerb (imperfectiveActivePattern inf imperSgP2 (presentConjForeign del sgP1End) (pastConj sgMascPast)) (pastConj sgMascPast)
-    }
-};
+oper verbDecl: Aspect -> Conjugation -> Str -> Str -> Str -> Str -> Str -> Verbum =
+   \a, c, del, sgP1End, sgMascPast, imperSgP2, inf -> 
+       let conj = case c of {
+	                   First   => <presentConj1,pastConj> ;
+			   FirstE  => <presentConj1E,pastConj> ;
+			   Second  => <presentConj2,pastConj> ;
+			   SecondA => <presentConj2a,pastConj> ;
+			   Mixed   => <presentConjMixed,pastConj> ;
+			   Dolzhen => <presentConjDolzhen,pastConjDolzhen> ;
+			   Foreign => <presentConjForeign,pastConj> } in 
+       let patt = case a of {
+	            Perfective   => mkVerbImperfective;
+		    Imperfective => mkVerbImperfective } in
+       patt inf imperSgP2 (conj.p1 del sgP1End) (conj.p2 sgMascPast) ;
 
 -- for verbs like "мочь" ("can") with changing consonants (first conjugation):
 -- "могу - можешь"
 oper verbDeclMoch: Aspect -> Conjugation -> Str -> Str -> Str -> Str ->Str -> Str -> Verbum =
-   \a, c, del, sgP1End, sgMascPast, imperSgP2, inf, altRoot -> case a of
- {  Perfective  => mkVerb (perfectiveActivePattern inf imperSgP2 (presentConj1Moch del sgP1End altRoot) (pastConj sgMascPast))  (pastConj sgMascPast);
-    Imperfective  => mkVerb (imperfectiveActivePattern inf imperSgP2 (presentConj1Moch del sgP1End altRoot) (pastConj sgMascPast))  (pastConj sgMascPast)
- };
+   \a, c, del, sgP1End, sgMascPast, imperSgP2, inf, altRoot -> 
+       let patt = case a of {
+	            Perfective   => mkVerbImperfective;
+		    Imperfective => mkVerbImperfective } in
+        patt inf imperSgP2 (presentConj1Moch del sgP1End altRoot) (pastConj sgMascPast);
 
+oper add_sya : Voice -> Str -> Str = \v,x ->
+       case v of {
+	 Act => x ;
+	 Pas => case Predef.dp 2 x of {
+                  "а" | "е" | "ё" | "и" | "о" | "у" | "ы" | "э" | "ю" | "я" => x + "сь" ;
+		  _ => x + "ся"
+	   }
+       };
 
--- "mkVerb" produce the passive forms from
--- the active forms using the "mkPassive" method.
--- Passive is expressed in Russian by so called reflexive verbs,
--- which are formed from the active form by suffixation.
-oper mkVerb : AspectVoice -> PastVerb -> Verbum = \av1, pv -> { s =   table {
-      VFORM Act vf => av1.s !vf;
-      VFORM Pass vf => (mkPassive av1 pv ).s ! vf
-   } ;
-   asp = av1.asp
-};
-
---  vowels : Strs = strs {
---    "а" ; "е" ; "ё" ; "и" ; "о" ; "у" ;
---    "ы" ; "э" ; "ю" ; "я"
---    } ;
---
-oper mkPassive: AspectVoice -> PastVerb -> AspectVoice =  \av, pv ->
-  { s =    table {
-    VINF  => av.s ! VINF + "ся";
-    VIMP  Sg P1 =>  av.s ! (VIMP  Sg P1) +"сь" ;
-    VIMP  Pl  P1 => av.s ! (VIMP  Pl  P1) +"ся";
-    VIMP  Sg P2 => av.s ! (VIMP  Sg P2 ) +"сь";
-    VIMP  Pl  P2 => av.s! (VIMP  Pl P2) +"сь";
-    VIMP  Sg P3 => av.s ! (VIMP Sg P3)  +"ся";
-    VIMP  Pl  P3 => av.s ! (VIMP Pl P3) +"ся";
-    VSUB (ASg Masc) => pv !  (PSF (ASg Masc)) + "ся"++"бы";
-    VSUB (ASg Fem) => pv  ! (PSF (ASg Fem)) + "сь"++"бы";
-    VSUB (ASg Neut)  => pv ! (PSF (ASg Neut)) + "сь"++"бы";
-    VSUB APl  => pv ! (PSF APl) + "сь"+"бы" ;
-    VIND (ASg _) (VPresent P1)  =>
-     --           case av.asp of { Imperfective =>
-                       av.s ! (VIND (ASg Masc) (VPresent P1)) + "сь" ;
-     --                  Perfective = > nonExist
-     --            }  ;
-    VIND (ASg _) (VPresent  P2) => av.s ! (VIND (ASg Masc) (VPresent P2))+ "ся" ;
-    VIND (ASg _) (VPresent  P3) => av.s ! (VIND (ASg Masc) (VPresent  P3))+ "ся" ;
-    VIND APl (VPresent P1) =>  av.s !( VIND APl (VPresent P1)) + "ся" ;
-    VIND APl (VPresent P2) => av.s !( VIND APl (VPresent P2)) + "сь" ;
-    VIND APl (VPresent P3) => av.s !( VIND APl (VPresent P3)) + "ся" ;
-    VIND (ASg _) (VFuture P1) => av.s ! (VIND (ASg Masc) (VFuture P1)) + "сь";
-    VIND (ASg _) (VFuture P2) => av.s! (VIND (ASg Masc) (VFuture P2) )+ "ся";
-    VIND (ASg  _) (VFuture P3) => av.s! (VIND (ASg Masc) (VFuture  P3)) + "ся";
-    VIND APl (VFuture P1) => av.s! (VIND APl (VFuture P1) )+ "ся";
-    VIND APl (VFuture P2) => av.s! (VIND APl (VFuture P2) )+ "сь";
-    VIND APl (VFuture P3) => av.s! (VIND APl (VFuture P3)) + "ся";
-    VIND  (ASg Masc) VPast => av.s ! (VIND  (ASg Masc) VPast ) + "ся";
-    VIND (ASg Fem) VPast    => av.s ! (VIND (ASg Fem) VPast ) + "сь";
-    VIND (ASg Neut) VPast    => av.s ! (VIND (ASg Neut) VPast) + "сь";
-    VIND APl VPast   => av.s ! (VIND APl VPast ) + "сь"
-  } ;
-  asp = av.asp
-};
 
 -- Generation the imperfective active pattern given
 -- a number of basic conjugation forms.
 
-oper imperfectiveActivePattern : Str -> Str -> PresentVerb -> PastVerb -> AspectVoice =
-     \inf, imper, presentFuture, past -> { s=  table {
-    VINF  => inf ;
-    VIMP Sg P1 => "давайте" ++ inf ;
-    VIMP Pl P1 => "давайте" ++ inf ;
-    VIMP Sg P2 => imper ;
-    VIMP Pl P2 => imper+"те" ;
-    VIMP Sg P3 => "пусть"  ++ presentFuture ! (PRF (ASg Masc) P3) ;
-    VIMP Pl P3 => "пусть" ++ presentFuture ! (PRF APl P3) ;
-    VSUB (ASg Masc) => past ! (PSF (ASg Masc)) ++"бы";
-    VSUB (ASg Fem) => past ! (PSF (ASg Fem)) ++"бы";
-    VSUB (ASg Neut)  => past ! (PSF (ASg Neut) )++"бы";
-    VSUB APl  => past ! (PSF APl) ++"бы";
-    VIND (ASg _) (VPresent p) => presentFuture ! ( PRF (ASg Masc) p);
-    VIND APl (VPresent p) => presentFuture ! (PRF APl p);
-    VIND (ASg _) (VFuture P1) => "буду" ++ inf ;
-    VIND (ASg _) (VFuture P2) => "будешь" ++ inf ;
-    VIND (ASg _) (VFuture P3) => "будет" ++ inf ;
-    VIND APl (VFuture P1) => "будем" ++ inf ;
-    VIND APl (VFuture P2) => "будете" ++ inf ;
-    VIND APl (VFuture P3) => "будут" ++ inf ;
-    VIND gn VPast   => past ! (PSF gn)
-  } ;
-  asp = Imperfective
-} ;
+oper mkVerbImperfective : Str -> Str -> PresentVerb -> PastVerb -> Verbum =
+     \inf, imper, presentFuture, past -> { s = table { VFORM vox vf => 
+       case vf of {
+	 VINF => add_sya vox inf ;
 
-oper perfectiveActivePattern: Str -> Str -> PresentVerb -> PastVerb -> AspectVoice =
-     \inf, imper, presentFuture, past -> { s=  table {
-    VINF  => inf ;
-    VIMP Sg P1 => "давайте"++ presentFuture ! (PRF (ASg Masc) P1);
-    VIMP Pl P1 => "давайте" ++ presentFuture ! (PRF APl P1);
-    VIMP Sg P2 => imper ;
-    VIMP Pl P2 => imper+"те" ;
-    VIMP Sg P3 => "пусть" ++ presentFuture ! (PRF (ASg Masc) P3) ;
-    VIMP Pl P3 => "пусть" ++ presentFuture ! (PRF APl P3) ;
-    VSUB gn => past ! (PSF gn) ++"бы";
-    VIND (ASg _) (VPresent _) => [] ;
-    VIND APl (VPresent P1) => nonExist ;
-    VIND APl (VPresent P2) => nonExist ;
-    VIND APl (VPresent P3) => [] ;
-    VIND gn (VFuture p) => presentFuture ! (PRF gn p) ;
-    VIND gn VPast => past ! (PSF gn)
-  } ;
-  asp = Perfective
-} ;
+	 VIMP _  P1 => "давайте" ++ add_sya vox inf ;
+	 VIMP Sg P2 => add_sya vox imper ;
+	 VIMP Pl P2 => add_sya vox (imper+"те") ;
+	 VIMP Sg P3 => "пусть" ++ add_sya vox (presentFuture ! (PRF (ASg Masc) P3)) ;
+	 VIMP Pl P3 => "пусть" ++ add_sya vox (presentFuture ! (PRF APl P3)) ;
+
+	 VSUB gn => add_sya vox (past ! (PSF gn)) ++ "бы";
+
+	 VIND (ASg _) (VPresent p) => add_sya vox (presentFuture ! (PRF (ASg Masc) p));
+	 VIND APl (VPresent p)     => add_sya vox (presentFuture ! (PRF APl p));
+	 VIND (ASg _) (VFuture P1) => "буду"   ++ add_sya vox inf ;
+	 VIND (ASg _) (VFuture P2) => "будешь" ++ add_sya vox  inf ;
+	 VIND (ASg _) (VFuture P3) => "будет"  ++ add_sya vox inf ;
+	 VIND APl     (VFuture P1) => "будем"  ++ add_sya vox inf ;
+	 VIND APl     (VFuture P2) => "будете" ++ add_sya vox inf ;
+	 VIND APl     (VFuture P3) => "будут"  ++ add_sya vox inf ;
+	 VIND gn      VPast        => add_sya vox (past ! (PSF gn))
+     } } ;
+     asp = Imperfective
+    } ;
+
+oper mkVerbPerfective: Str -> Str -> PresentVerb -> PastVerb -> Verbum =
+     \inf, imper, presentFuture, past -> { s = table { VFORM vox vf => 
+       case vf of {
+	 VINF  =>  add_sya vox inf ;
+	 VIMP Sg P1 => "давайте" ++ add_sya vox (presentFuture ! (PRF (ASg Masc) P1));
+	 VIMP Pl P1 => "давайте" ++ add_sya vox (presentFuture ! (PRF APl P1));
+	 VIMP Sg P2 => add_sya vox imper ;
+	 VIMP Pl P2 => add_sya vox (imper+"те") ;
+	 VIMP Sg P3 => "пусть" ++ add_sya vox (presentFuture ! (PRF (ASg Masc) P3)) ;
+	 VIMP Pl P3 => "пусть" ++ add_sya vox (presentFuture ! (PRF APl P3)) ;
+
+	 VSUB gn => add_sya vox (past ! (PSF gn)) ++ "бы" ;
+
+	 VIND (ASg _) (VPresent _)  => nonExist ;
+	 VIND APl     (VPresent P1) => nonExist ;
+	 VIND APl     (VPresent P2) => nonExist ;
+	 VIND APl     (VPresent P3) => nonExist ;
+	 VIND gn      (VFuture p)   => add_sya vox (presentFuture ! (PRF gn p)) ;
+	 VIND gn      VPast         => add_sya vox (past ! (PSF gn))
+     } } ;
+     asp = Perfective
+   } ;
 
 ----2 Proper names are a simple kind of noun phrases.
 --
