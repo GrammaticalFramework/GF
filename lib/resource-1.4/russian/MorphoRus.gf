@@ -102,7 +102,7 @@ oper pronOna: Pronoun =
     PF Acc Yes NonPoss => "неё" ;
     PF Inst No NonPoss => "ей" ;
     PF Inst Yes NonPoss => "ней" ;
-    PF (Prepos _) _ NonPoss => ["о ней"] ;
+    PF (Prepos _) _ NonPoss => "ней" ;
     PF _ _ (Poss  _ ) => "её"
     } ;
     g = PGen Fem ;
@@ -126,7 +126,7 @@ oper pronMu: Pronoun =
     PF Dat _ NonPoss => "нам" ;
     PF Acc _ NonPoss => "нас" ;
     PF Inst _ NonPoss => "нами" ;
-    PF (Prepos _) _ NonPoss => ["о нас"] ;
+    PF (Prepos _) _ NonPoss => "нас" ;
     PF Nom _ ((Poss  (ASg Masc))) => "наш"  ;
     PF Gen _ (Poss (ASg Masc)) => "нашего" ;
     PF Dat _  ((Poss  (ASg Masc))) => "нашему" ;
@@ -208,7 +208,7 @@ oper pronOni: Pronoun =
     PF Acc Yes NonPoss => "них" ;
     PF Inst No NonPoss => "ими" ;
     PF Inst Yes NonPoss => "ними" ;
-    PF (Prepos _) _ NonPoss => ["о них"]  ;
+    PF (Prepos _) _ NonPoss => "них" ;
     PF _ _ (Poss  _) => "их"
     } ;
     g = PNoGen ;
