@@ -1,14 +1,14 @@
 --# -path=.:alltenses
 
 concrete DemoGer of Demo = 
-  NounGer - [AdvCN], 
+  NounGer - [AdvCN,PredetNP,PPartNP,RelNP,RelCN,SentCN,ApposCN,MassNP,DetNP],
 --  VerbGer, 
   ClauseGer, --
-  AdjectiveGer,
+  AdjectiveGer - [SentAP],
   AdverbGer,
   NumeralGer,
 --  SentenceGer,
---  QuestionGer,
+  QuestionGer - [QuestVP,QuestSlash],
 --  RelativeGer,
 --  ConjunctionGer,
 --  PhraseGer,

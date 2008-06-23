@@ -1,10 +1,10 @@
 --# -path=.:alltenses
 
 concrete DemoFre of Demo = 
-  NounFre - [AdvCN], 
+  NounFre - [AdvCN,PredetNP,PPartNP,RelNP,RelCN,SentCN,ApposCN,MassNP,DetNP],
 --  VerbFre, 
   ClauseFre, --
-  AdjectiveFre,
+  AdjectiveFre - [SentAP],
   AdverbFre,
   NumeralFre,
 ----  SentenceFre,

@@ -1,14 +1,14 @@
 --# -path=.:alltenses
 
 concrete DemoEng of Demo = 
-  NounEng - [AdvCN], 
+  NounEng - [AdvCN,PredetNP,PPartNP,RelNP,RelCN,SentCN,ApposCN,MassNP,DetNP], 
 --  VerbEng, 
   ClauseEng, --
-  AdjectiveEng,
+  AdjectiveEng - [SentAP],
   AdverbEng,
   NumeralEng,
 ----  SentenceEng,
-----  QuestionEng,
+  QuestionEng - [QuestVP,QuestSlash],
 ----  RelativeEng,
 ----  ConjunctionEng,
 ----  PhraseEng,
