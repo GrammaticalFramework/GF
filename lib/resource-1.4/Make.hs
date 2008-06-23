@@ -3,7 +3,7 @@ module Main where
 import System
 
 -- Make commands for compiling and testing resource grammars.
--- usage: runghc Make present? (lang | api | math | pgf | test | clean)?
+-- usage: runghc Make present? (lang | api | math | pgf | test | demo | clean)?
 -- With no argument, lang and api are done, in this order.
 -- See 'make' below for what is done by which command.
 
@@ -38,6 +38,9 @@ langsMath = langsAPI
 -- languages for which to run treebank test
 langsTest = langsLang `except` ["Bul","Cat","Hin","Rus","Spa","Tha"]
 
+-- languages for which to run demo test
+langsDemo = langsLang `except` ["Bul","Hin","Ina","Rus","Tha"] ---- fix utf8 for Bul,Rus
+
 -- languages for which langs.pgf is built
 langsPGF = langsTest `only` ["Eng","Fre","Swe"]
 
@@ -70,6 +73,8 @@ make xx = do
               " +RTS -K100M"
   ifxx "test" $ do
     gf treeb $ unwords [dir ++ "/Lang" ++ la ++ ".gfo" | (_,la) <- langsTest]
+  ifxx "demo" $ do
+    gf demos $ unwords ["demo/Demo" ++ la ++ ".gf" | (_,la) <- langsDemo]
   ifxx "clean" $ do
     system "rm */*.gfo ../alltenses/*.gfo ../present/*.gfo"
   return ()
@@ -86,6 +91,8 @@ gf comm file = do
 
 treeb = "rf -lines -tree -file=" ++ treebankExx ++ 
         " | l -treebank | wf -file=" ++ treebankResults
+
+demos = "gr -number=100 | l -treebank | ps -to_utf8 -to_html | wf -file=resdemo.html"
 
 lang (lla,la) = lla ++ "/Lang" ++ la ++ ".gf"
 try  (lla,la) = "api/Try"  ++ la ++ ".gf"
