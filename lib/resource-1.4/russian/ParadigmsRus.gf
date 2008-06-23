@@ -84,7 +84,7 @@ oper
 
   -- +++ MG_UR: new case Prepos2 introduced! +++
   mkN  : (nomSg, genSg, datSg, accSg, instSg, preposSg, prepos2Sg,
-          nomPl, genPl, datPl, accPl, instPl, preposPl, prepos2Pl: Str) -> Gender -> Animacy -> N ; 
+          nomPl, genPl, datPl, accPl, instPl, preposPl : Str) -> Gender -> Animacy -> N ; 
 
      -- мужчина, мужчины, мужчине, мужчину, мужчиной, мужчине
      -- мужчины, мужчин, мужчинам, мужчин, мужчинами, мужчинах
@@ -371,7 +371,7 @@ foreign = Foreign; -- +++ MG_UR: added +++
 
   -- +++ MG_UR: new case Prepos2 introduced! +++
   mkN =  \nomSg, genSg, datSg, accSg, instSg, preposSg, prepos2Sg,
-          nomPl, genPl, datPl, accPl, instPl, preposPl, prepos2Pl, g, anim ->
+          nomPl, genPl, datPl, accPl, instPl, preposPl, g, anim ->
    {
      s = table { 
            SF Sg Nom => nomSg ;
@@ -386,8 +386,7 @@ foreign = Foreign; -- +++ MG_UR: added +++
            SF Pl Dat => datPl ;
            SF Pl Acc => accPl ;
            SF Pl Inst => instPl ;
-           SF Pl (Prepos PrepOther) => preposPl ;
-           SF Pl (Prepos PrepVNa) => prepos2Pl
+           SF Pl (Prepos _) => preposPl
      } ;                           
      g = g ;
      anim = anim
