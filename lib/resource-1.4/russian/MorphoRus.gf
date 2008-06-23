@@ -270,36 +270,6 @@ oper pronKto: Pronoun =
     pron = False
   } ;
 
-oper pronKtoTo: Pronoun =
-  { s = table {
-    PF Nom _ _  => "кто-то"  ;
-    PF Gen _ _ => "кого-то" ;
-    PF Dat _  _ => "кому-то" ;
-    PF Acc _  _ => "кого-то" ;
-    PF Inst _ _ => "кем-то" ;
-    PF (Prepos _) _ _ => "ком-то"
-    } ;
-    g = PGen  Masc;
-    n = Sg ;
-    p = P3 ;
-    pron = False
-  } ;
-
-oper pronChtoTo: Pronoun =
-  { s = table {
-    PF Nom _ _  => "что-то"  ;
-    PF Gen _ _ => "чего-то" ;
-    PF Dat _  _ => "чему-то" ;
-    PF Acc _  _ => "что-то" ;
-    PF Inst _ _ => "чем-то" ;
-    PF (Prepos _) _ _ => "чём-то"
-    } ;
-    g = PGen  Masc;
-    n = Sg ;
-    p = P3 ;
-    pron = False
-  } ;
-
 oper pronChto: Pronoun =
   { s = table {
     PF Nom _ _  => "что"  ;
@@ -314,6 +284,18 @@ oper pronChto: Pronoun =
     p = P3 ;
     pron = False
   } ;
+
+oper pron_add_to : Pronoun -> Pronoun = \p -> 
+  { s = \\pf => (p.s!pf) + "-то" ;
+    g = p.g ;
+    n = p.n ;
+    p = p.p ;
+    pron = p.pron
+  } ;
+
+oper pronKtoTo : Pronoun = pron_add_to pronKto ;
+
+oper pronChtoTo: Pronoun = pron_add_to pronChto ;
 
 oper pronEti: Pronoun =
   { s = table {
