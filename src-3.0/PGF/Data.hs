@@ -50,17 +50,14 @@ data Literal =
 
 -- | The tree is an evaluated expression in the abstract syntax
 -- of the grammar. The type is especially restricted to not
--- allow unapplied lambda abstractions. The meta variables
--- also does not have indices because both the parser and
--- the linearizer consider all meta variable occurrences as
--- distinct. The tree is used directly from the linearizer
--- and is produced directly from the parser.
+-- allow unapplied lambda abstractions. The tree is used directly 
+-- from the linearizer and is produced directly from the parser.
 data Tree = 
    Abs [CId] Tree                   -- ^ lambda abstraction. The list of variables is non-empty
  | Var CId                          -- ^ variable
  | Fun CId [Tree]                   -- ^ function application
  | Lit Literal                      -- ^ literal
- | Meta Int                         -- ^ meta variable. Each occurency of 'Meta' means a different metavariable
+ | Meta Int                         -- ^ meta variable
   deriving (Show, Eq, Ord)
 
 -- | An expression represents a potentially unevaluated expression
