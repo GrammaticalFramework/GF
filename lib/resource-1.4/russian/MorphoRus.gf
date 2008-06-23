@@ -119,83 +119,44 @@ oper pronOno: Pronoun =
     g = PGen Neut ; n = Sg ; p = P3 ; pron = True
   } ;
 
-oper pronMu: Pronoun =
+oper pronMuVu : Str -> Str -> Person -> Pronoun =
+  \mu,na,pers -> 
   { s = table {
-    PF Nom _ NonPoss => "мы"  ;
-    PF Gen _ NonPoss => "нас" ;
-    PF Dat _ NonPoss => "нам" ;
-    PF Acc _ NonPoss => "нас" ;
-    PF Inst _ NonPoss => "нами" ;
-    PF (Prepos _) _ NonPoss => "нас" ;
-    PF Nom _ ((Poss  (ASg Masc))) => "наш"  ;
-    PF Gen _ (Poss (ASg Masc)) => "нашего" ;
-    PF Dat _  ((Poss  (ASg Masc))) => "нашему" ;
-    PF Acc _ ((Poss  (ASg Masc))) => "нашего" ;
-    PF Inst _ (Poss (ASg Masc)) => "нашим" ;
-    PF (Prepos _) _ (Poss (ASg Masc)) => "нашем" ;
-    PF Nom _ (Poss  (ASg Fem)) => "наша"  ;
-    PF Gen _ (Poss (ASg Fem)) => "нашей" ;
-    PF Dat _  (Poss  (ASg Fem)) => "нашей" ;
-    PF Acc _ (Poss  (ASg Fem)) => "нашу" ;
-    PF Inst _ (Poss (ASg Fem)) => "нашею" ;
-    PF (Prepos _) _ (Poss (ASg Fem)) => "нашей" ;
-    PF Nom _ (Poss  (ASg Neut)) => "наше"  ;
-    PF Gen _ (Poss  (ASg Neut)) => "нашего" ;
-    PF Dat _  (Poss  (ASg Neut)) => "нашему" ;
-    PF Acc _ (Poss  (ASg Neut)) => "наше" ;
-    PF Inst _ (Poss  (ASg Neut)) => "нашим" ;
-    PF (Prepos _) _ (Poss  (ASg Neut)) => "нашем" ;
-    PF Nom _ (Poss APl)  => "наши"  ;
-    PF Gen _ (Poss APl)=> "наших" ;
-    PF Dat _  (Poss APl)  => "нашим" ;
-    PF Acc _ (Poss APl)  => "наших" ;
-    PF Inst _ (Poss APl) => "нашими" ;
-    PF (Prepos _) _ (Poss APl) => "наших"
+    PF Nom        _ NonPoss => mu ;
+    PF Gen        _ NonPoss => na + "с" ;
+    PF Dat        _ NonPoss => na + "м" ;
+    PF Acc        _ NonPoss => na + "с" ;
+    PF Inst       _ NonPoss => na + "ми" ;
+    PF (Prepos _) _ NonPoss => na + "с" ;
+
+    PF Nom        _ (Poss (ASg Masc))          => na + "ш" ;
+    PF Nom        _ (Poss (ASg Neut))          => na + "ше" ;
+    PF Gen        _ (Poss (ASg (Masc | Neut))) => na + "шего" ;
+    PF Dat        _ (Poss (ASg (Masc | Neut))) => na + "шему" ;
+    PF Acc        _ (Poss (ASg (Masc | Neut))) => na + "шего" ;
+    PF Inst       _ (Poss (ASg (Masc | Neut))) => na + "шим" ;
+    PF (Prepos _) _ (Poss (ASg (Masc | Neut))) => na + "шем" ;
+
+    PF Nom        _ (Poss (ASg Fem)) => na + "ша" ;
+    PF Gen        _ (Poss (ASg Fem)) => na + "шей" ;
+    PF Dat        _ (Poss (ASg Fem)) => na + "шей" ;
+    PF Acc        _ (Poss (ASg Fem)) => na + "шу" ;
+    PF Inst       _ (Poss (ASg Fem)) => na + "шею" ;
+    PF (Prepos _) _ (Poss (ASg Fem)) => na + "шей" ;
+
+    PF Nom        _ (Poss APl) => na + "ши" ;
+    PF Gen        _ (Poss APl) => na + "ших" ;
+    PF Dat        _ (Poss APl) => na + "шим" ;
+    PF Acc        _ (Poss APl) => na + "ших" ;
+    PF Inst       _ (Poss APl) => na + "шими" ;
+    PF (Prepos _) _ (Poss APl) => na + "ших"
     };
-    g = PNoGen ;
-    n = Pl ;
-    p = P1 ;
-    pron = True
+    g = PNoGen ; n = Pl ; p = pers ; pron = True
   } ;
 
-oper pronVu: Pronoun =
-  { s = table {
-    PF Nom _ NonPoss => "вы" ;
-    PF Gen _ NonPoss => "вас" ;
-    PF Dat _ NonPoss => "вам" ;
-    PF Acc _ NonPoss => "вас" ;
-    PF Inst _ NonPoss => "вами" ;
-    PF (Prepos _) _ NonPoss => "вас" ;
-    PF Nom _ (Poss  (ASg Masc)) => "ваш"  ;
-    PF Gen _ (Poss  (ASg Masc)) => "вашего" ;
-    PF Dat _  (Poss  (ASg Masc)) => "вашему" ;
-    PF Acc _ (Poss  (ASg Masc)) => "вашего" ;
-    PF Inst _ (Poss  (ASg Masc)) => "вашим" ;
-    PF (Prepos _) _ (Poss  (ASg Masc)) => "вашем" ;
-    PF Nom _ (Poss  (ASg Fem)) => "ваша"  ;
-    PF Gen _ (Poss (ASg Fem)) => "вашей" ;
-    PF Dat _  (Poss  (ASg Fem)) => "вашей" ;
-    PF Acc _ (Poss  (ASg Fem)) => "вашу" ;
-    PF Inst _ (Poss (ASg Fem)) => "вашею" ;
-    PF (Prepos _) _ (Poss (ASg Fem)) => "вашей" ;
-    PF Nom _ (Poss  (ASg Neut)) => "ваше"  ;
-    PF Gen _ (Poss  (ASg Neut)) => "вашего" ;
-    PF Dat _  (Poss  (ASg Neut)) => "вашему" ;
-    PF Acc _ (Poss  (ASg Neut)) => "ваше" ;
-    PF Inst _ (Poss  (ASg Neut)) => "вашим" ;
-    PF (Prepos _) _ (Poss  (ASg Neut)) => "вашем" ;
-    PF Nom _ (Poss APl)  => "ваши"  ;
-    PF Gen _ (Poss APl)=> "ваших" ;
-    PF Dat _  (Poss APl)  => "вашим" ;
-    PF Acc _ (Poss APl)  => "ваших" ;
-    PF Inst _ (Poss APl) => "вашими" ;
-    PF (Prepos _) _ (Poss APl) => "ваших"
-    };
-    g = PNoGen ;
-    n = Pl ;
-    p = P2 ;
-    pron = True
-  } ;
+oper pronMu: Pronoun = pronMuVu "мы" "на" P1;
+
+oper pronVu: Pronoun = pronMuVu "вы" "ва" P2;
 
 oper pronOni: Pronoun =
   { s = table {
