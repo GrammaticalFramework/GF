@@ -165,6 +165,7 @@ tree2expr (Var x)    = EVar x
 
 -- | Converts an expression to tree. If the expression
 -- contains unevaluated applications they will be applied.
+expr2tree :: Expr -> Tree
 expr2tree e = value2tree (eval Map.empty e) [] []
   where
     value2tree (VApp v1 v2)              xs ts = value2tree v1 xs (value2tree v2 [] []:ts)
