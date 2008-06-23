@@ -6,9 +6,9 @@
 -- Portability : portable
 --
 -- This module is an Application Programming Interface to 
--- to load and interpret grammars compiled Portable Grammar Format (PGF).
+-- load and interpret grammars compiled in Portable Grammar Format (PGF).
 -- The PGF format is produced as a final output from the GF compiler.
--- The API is meant to be used when embedding GF grammars in Haskell 
+-- The API is meant to be used for embedding GF grammars in Haskell 
 -- programs.
 -------------------------------------------------
 
