@@ -54,14 +54,14 @@ haskPreamble name =
   "----------------------------------------------------",
   "", 
   "class Gf a where",
-  "  gf :: a -> Exp",
-  "  fg :: Exp -> a",
+  "  gf :: a -> Tree",
+  "  fg :: Tree -> a",
   "",
-  predefInst "GString" "String" "EStr s",
+  predefInst "GString" "String"  "Lit (LStr s)",
   "",
-  predefInst "GInt" "Integer" "EInt s",
+  predefInst "GInt"    "Integer" "Lit (LInt s)",
   "",
-  predefInst "GFloat" "Double" "EFloat s",
+  predefInst "GFloat"  "Double"  "Lit (LFlt s)",
   "",
   "----------------------------------------------------",
   "-- below this line machine-generated",
@@ -143,7 +143,7 @@ hInstance m (cat,rules)
      (if length xx == 0 then gId f else prParenth (gId f +++ foldr1 (+++) xx')) +++
      "=" +++ mkRHS f xx'
    mkVars n = ["x" ++ show i | i <- [1..n]]
-   mkRHS f vars = "EApp (mkCId \"" ++ f ++ "\")" +++ 
+   mkRHS f vars = "Fun (mkCId \"" ++ f ++ "\")" +++ 
 		   "[" ++ prTList ", " ["gf" +++ x | x <- vars] ++ "]"
 
 
@@ -156,7 +156,7 @@ fInstance m (cat,rules) =
   "      _ -> error (\"no" +++ cat ++ " \" ++ show t)"
    where
     mkInst f xx =
-     "      EApp i " ++
+     "      Fun i " ++
      "[" ++ prTList "," xx' ++ "]" +++
      "| i == mkCId \"" ++ f ++ "\" ->" +++ mkRHS f xx'
        where xx' = ["x" ++ show i | (_,i) <- zip xx [1..]]

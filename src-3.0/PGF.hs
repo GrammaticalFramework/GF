@@ -29,7 +29,7 @@ module PGF(
 
            -- * Expressions
            -- ** Tree
-           Tree(..),
+           Tree(..), Literal(..),
            showTree, readTree,
            
            -- ** Expr
