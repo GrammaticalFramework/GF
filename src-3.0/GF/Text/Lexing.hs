@@ -4,6 +4,7 @@ import GF.Text.Transliterations
 import GF.Text.UTF8
 
 import Data.Char
+import Data.List (intersperse)
 
 -- lexers and unlexers - they work on space-separated word strings
 
@@ -20,6 +21,7 @@ stringOp name = case name of
   "unlexcode"  -> Just $ appUnlexer unlexCode
   "unlexmixed" -> Just $ appUnlexer unlexMixed
   "unwords"    -> Just $ appUnlexer unwords
+  "to_html"    -> Just wrapHTML
   "to_utf8"    -> Just encodeUTF8
   "from_utf8"  -> Just decodeUTF8
   _ -> transliterate name
@@ -29,6 +31,10 @@ appLexer f = unwords . filter (not . null) . f
 
 appUnlexer :: ([String] -> String) -> String -> String
 appUnlexer f = unlines . map (f . words) . lines
+
+wrapHTML :: String -> String
+wrapHTML = unlines . tag . intersperse "<br>" . lines where
+  tag ss = "<html>":"<body>" : ss ++ ["</body>","</html>"]
 
 lexText :: String -> [String]
 lexText s = case s of

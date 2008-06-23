@@ -545,6 +545,7 @@ stringOpOptions = [
        ("lexcode","code-like lexer"),
        ("lexmixed","mixture of text and code (code between $...$)"), 
        ("to_devanagari","from GF Devanagari transliteration to unicode"),
+       ("to_html","wrap in a html file with linebreaks"),
        ("to_thai","from GF Thai transliteration to unicode"),
        ("to_utf8","encode to utf8"),
        ("unlextext","text-like unlexer"),
