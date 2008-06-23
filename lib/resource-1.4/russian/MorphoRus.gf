@@ -114,22 +114,9 @@ oper pronOna: Pronoun =
 oper pronOno: Pronoun =
   { s = table {
     PF Nom _ NonPoss => "оно" ;
-    PF Gen No  NonPoss => "его" ;
-    PF Gen Yes NonPoss => "него"  ;
-    PF Dat No NonPoss => "ему" ;
-    PF Dat Yes NonPoss => "нему" ;
-    PF Acc No NonPoss => "его" ;
-    PF Acc Yes NonPoss => "него" ;
-    PF Inst No NonPoss => "им" ;
-    PF Inst Yes NonPoss => "ним" ;
-    PF (Prepos _) _ NonPoss => "нём" ;
-    PF _ _ (Poss  _ ) => "его"
+    pf => pronOn.s!pf
     } ;
-    g = PGen Neut ;
-    n = Sg ;
-    p = P3 ;
-
-    pron = True
+    g = PGen Neut ; n = Sg ; p = P3 ; pron = True
   } ;
 
 oper pronMu: Pronoun =
