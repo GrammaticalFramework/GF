@@ -21,7 +21,8 @@ oper
 			Pl => case co of {
 				NCard Masc => "-cents" ;
 				NCard Fem => "-centes" ;
-				_ => "-cents" ; ---- variants {} } ; ---- AR 23/6/2008
+				_ => "-cents" ---- variants {} ---- AR 23/6/2008
+                                } ;
 			Sg => "cent" 
 		} ;
 	cardOrd1 : CardOrd -> (_,_,_:Str) -> Str  = \co,dos,dues,segon -> case co of {

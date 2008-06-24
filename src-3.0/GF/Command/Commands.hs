@@ -497,7 +497,11 @@ allCommands pgf = Map.fromList [
      (abstractName pgf ++ ": " ++ showTree t) :
      [lang ++ ": " ++ linear opts lang t | lang <- optLangs opts]
 
-   unlex opts lang = stringOps opts
+   unlex opts lang = stringOps (exceptUTF8 opts) where
+     exceptUTF8 = if isUTF8 then filter ((/="to_UTF8") . prOpt) else id
+     isUTF8 = case lookFlag pgf lang "coding" of
+       Just "utf8" -> True
+       _ -> False
 
    optRestricted opts = restrictPGF (hasLin pgf (mkCId (optLang opts))) pgf
 
@@ -570,3 +574,5 @@ morphologyQuiz pgf ig cat = do
 infinity :: Int
 infinity = 256
 
+lookFlag :: PGF -> String -> String -> Maybe String
+lookFlag pgf lang flag = lookConcrFlag pgf (mkCId lang) (mkCId flag)
