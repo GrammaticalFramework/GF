@@ -14,7 +14,7 @@ concrete DemoEng of Demo =
 ----  PhraseEng,
 ----  TextX,
 ----  IdiomEng,
-  StructuralEng,
+  StructuralEng - [everybody_NP,everything_NP,something_NP],
   LexiconEng
   ** {
 

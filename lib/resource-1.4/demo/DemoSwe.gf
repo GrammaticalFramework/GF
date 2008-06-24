@@ -1,20 +1,20 @@
 --# -path=.:alltenses
 
 concrete DemoSwe of Demo = 
-  NounSwe - [AdvCN,PredetNP,PPartNP,RelNP,RelCN,SentCN,ApposCN,MassNP,DetNP],
+  NounSwe - [AdvCN,PredetNP,PPartNP,RelNP,RelCN,SentCN,ApposCN,MassNP,DetNP], 
 --  VerbSwe, 
   ClauseSwe, --
   AdjectiveSwe - [SentAP],
   AdverbSwe,
   NumeralSwe,
 ----  SentenceSwe,
-----  QuestionSwe,
+  QuestionSwe - [QuestVP,QuestSlash],
 ----  RelativeSwe,
 ----  ConjunctionSwe,
 ----  PhraseSwe,
-----  TextX - [Tense,TPres,TPast,TFut,TCond],
+----  TextX,
 ----  IdiomSwe,
-  StructuralSwe,
+  StructuralSwe - [everybody_NP,everything_NP,something_NP],
   LexiconSwe
   ** {
 

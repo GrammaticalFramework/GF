@@ -51,7 +51,7 @@ langsMath = langsAPI
 langsTest = langsLang `except` ["Bul","Cat","Hin","Rus","Spa","Tha"]
 
 -- languages for which to run demo test
-langsDemo = langsLang `except` ["Bul","Hin","Ina","Rus","Tha"] ---- fix utf8 for Bul,Rus
+langsDemo = langsLang `except` ["Hin","Ina","Tha"]
 
 -- languages for which langs.pgf is built
 langsPGF = langsTest `only` ["Eng","Fre","Swe"]

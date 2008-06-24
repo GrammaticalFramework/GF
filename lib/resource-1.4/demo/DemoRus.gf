@@ -1,23 +1,23 @@
 --# -path=.:alltenses
 
 concrete DemoRus of Demo = 
-  NounRus - [AdvCN,PredetNP,PPartNP,RelNP,RelCN,SentCN,ApposCN,MassNP,DetNP],
+  NounRus - [AdvCN,PredetNP,PPartNP,RelNP,RelCN,SentCN,ApposCN,MassNP,DetNP], 
 --  VerbRus, 
   ClauseRus, --
   AdjectiveRus - [SentAP],
   AdverbRus,
   NumeralRus,
 ----  SentenceRus,
-----  QuestionRus,
+  QuestionRus - [QuestVP,QuestSlash],
 ----  RelativeRus,
 ----  ConjunctionRus,
 ----  PhraseRus,
-----  TextX - [Tense,TPres,TPast,TFut,TCond],
+----  TextX,
 ----  IdiomRus,
-  StructuralRus,
+  StructuralRus - [everybody_NP,everything_NP,something_NP],
   LexiconRus
   ** {
 
-flags startcat = Phr ; unlexer = text ; lexer = text ; coding = utf8 ;
+flags startcat = Phr ; unlexer = text ; lexer = text ;
 
 } ;

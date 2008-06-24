@@ -12,6 +12,6 @@ abstract Demo =
   Phrase,
 ----  Text,
 ----  Idiom,
-  Structural,
+  Structural - [everybody_NP,everything_NP,something_NP],
   Lexicon ;
 
