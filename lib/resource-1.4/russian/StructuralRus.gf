@@ -37,7 +37,7 @@ lin
   everybody_NP = mkNP Pl (UseN ((eEnd_Decl "вс")**{lock_N=<>})) ;
   everything_NP  = UsePron (pronVseInanimate ** {lock_Pron=<>}) ;
   everywhere_Adv = ss "везде" ;
-  few_Det = (ij_EndK_G_KH_Decl "немног") **{lock_Det= <>; n= Sg; g = PNoGen; c = Nom}; -- AMalenkij  
+  few_Det = nemnogoSgDet **{lock_Det= <>; n= Sg; g = PNoGen; c = Nom};
 --- DEPREC  first_Ord = (uy_j_EndDecl  "перв" ) ** {lock_A = <>};  --AStaruyj 
   from_Prep  = { s = "от" ; c = Gen };
   he_Pron  = pronOn ;
