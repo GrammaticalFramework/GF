@@ -305,6 +305,267 @@ oper pronVseInanimate: Pronoun =
 ---- namely, the String component "s" of the CommNoun type
 ---- without any reference to the Gender parameter "g".
 --
+
+{-
+
+Paradigms:
+1.  hard regular
+    Masc  -Consonant
+    Neut -o
+    Fem   -a
+1*. with vowel changes, Masc in Gen Sg, Fem and Neut in Gen Pl
+2.  soft regular:
+    Masc -ь
+    Neut -е
+    Fem -я
+2*. with vowel changes, Masc in Gen Sg, Fem in Gen Pl (no Neut)
+3.  stem ending in г, к, х 
+    - Masc, Fem same as 1 but use и instead of ы (Nom/Acc Pl, Gen Sg)
+    - Neut -кo has Nom Pl -ки instead of -кa
+3*  with vowel changes, Masc in Gen Sg, Fem and Neut in Gen Pl
+4.  stem ending in ш, ж, ч, щ, hard endings,
+    use и instead of ы, and use е instead of unstressed o
+5.  stem ending in ц, hard endings, use е instead of unstressed o
+5*. with vowel changes, Masc in Gen Sg, Fem and Neut in Gen Pl
+6.  Masc ending in -й, Fem stem ending in vowel, Neut ending in ь?
+6*  with vowel changes
+7.  stem ending in и
+8.  F2, Fem ending in -ь
+    all -чь, -щь, -шь, -жь
+    all -пь, -энь, -мь, -фь, 
+    most -дь, -ть, -сть, -сь, -вь, -бь, 
+8*. with vowel changes in Ins Sg, Gen Sg
+9.  Neut ending in -мя
+10. Masc in -oнoк
+11. Masc in -aнин
+12. Nom Pl in -ья
+
+-}
+
+
+  oper iAfter : Str -> Str = \stem -> 
+	 case stem of { 
+	           _ + ("г"|"к"|"х")     => "и" ;
+		   _ + ("ш"|"ж"|"ч"|"щ") => "и" ;
+		   _                     => "ы"
+	       };
+
+  oper oAfter : Str -> Str = \stem -> 
+	 case stem of { 
+		   _ + ("ш"|"ж"|"ч"|"щ") => "е" ;
+		   _ + "ц"               => "е" ;
+		   _                     => "о"
+	       };
+
+  -- 1.  Hard regular masculine inanimate, e.g. spor.
+  -- 3.  stem ending in г, к, х 
+  -- 4.  stem ending in ш, ж, ч, щ
+  -- 5.  stem ending in ц
+  oper nRegHardMasc : Str ->CommNoun= \stem -> 
+	 let i = iAfter stem in
+	 let o = oAfter stem in
+  { s = table {
+	SF Sg Nom        => stem ;
+	SF Sg Gen        => stem+"а" ;
+	SF Sg Dat        => stem+"у" ;
+	SF Sg Acc        => stem ;
+	SF Sg Inst       => stem+o+"м" ;
+	SF Sg (Prepos _) => stem+"е" ;
+	SF Pl Nom        => stem+i ;
+	SF Pl Gen        => stem+case stem of { _+("ш"|"ж"|"ч"|"щ") => "ей"; _ => "ов" } ;
+	SF Pl Dat        => stem+"ам" ;
+	SF Pl Acc        => stem+i ;
+	SF Pl Inst       => stem+"ами" ;
+	SF Pl (Prepos _) => stem+"ах" };
+      g = Masc; anim = Inanimate };
+
+  -- 1. Hard regular neuter inanimate, e.g. pravilo.
+  -- 3.  stem ending in г, к, х 
+  -- 4.  stem ending in ш, ж, ч, щ
+  -- 5.  stem ending in ц
+  oper nRegHardNeut : Str ->CommNoun= \stem -> 
+	 let o = oAfter stem in
+    { s = table {
+	SF Sg Nom        => stem+o ;
+	SF Sg Gen        => stem+"а" ;
+	SF Sg Dat        => stem+"у" ;
+	SF Sg Acc        => stem+o ;
+	SF Sg Inst       => stem+o+"м" ;
+	SF Sg (Prepos _) => stem+"е" ;
+	SF Pl Nom        => stem+case stem of { _+"к" => "и" ; _ => "а" } ;
+	SF Pl Gen        => stem ;
+	SF Pl Dat        => stem+"ам" ;
+	SF Pl Acc        => stem+"а" ;
+	SF Pl Inst       => stem+"ами" ;
+	SF Pl (Prepos _) => stem+"ах" };
+      g = Neut; anim = Inanimate };
+
+  -- 1. Hard regular feminine inanimate, e.g. karta.
+  -- 3.  stem ending in г, к, х 
+  -- 4.  stem ending in ш, ж, ч, щ
+  -- 5.  stem ending in ц
+  oper nRegHardFem : Str ->CommNoun= \stem -> 
+	 let i = iAfter stem in
+	 let o = oAfter stem in
+    { s = table {
+	SF Sg Nom        => stem+"а" ;
+	SF Sg Gen        => stem+i ;
+	SF Sg Dat        => stem+"е" ;
+	SF Sg Acc        => stem+"у" ;
+	SF Sg Inst       => stem+o+"й" ;
+	SF Sg (Prepos _) => stem+"е" ;
+	SF Pl Nom        => stem+i ;
+	SF Pl Gen        => stem ;
+	SF Pl Dat        => stem+"ам" ;
+	SF Pl Acc        => stem+i ;
+	SF Pl Inst       => stem+"ами" ;
+	SF Pl (Prepos _) => stem+"ах" };
+      g = Fem; anim = Inanimate };
+
+  -- 2. Soft regular masculine inanimate, e.g. vichr'
+  oper nRegSoftMasc : Str ->CommNoun= \stem -> 
+    { s = table {
+	SF Sg Nom        => stem+"ь";
+	SF Sg Gen        => stem+"я" ;
+	SF Sg Dat        => stem+"ю" ;
+	SF Sg Acc        => stem+"ь" ;
+	SF Sg Inst       => stem+"ем" ;
+	SF Sg (Prepos _) => stem+"е" ;
+	SF Pl Nom        => stem+"и" ;
+	SF Pl Gen        => stem+"ей" ;
+	SF Pl Dat        => stem+"ям" ;
+	SF Pl Acc        => stem+"и" ;
+	SF Pl Inst       => stem+"ями" ;
+	SF Pl (Prepos _) => stem+"ях" };
+      g = Masc; anim = Inanimate };
+
+  -- 2. Soft regular neuter inanimate, e.g. more
+  oper nRegSoftNeut : Str ->CommNoun= \stem -> 
+    { s = table {
+	SF Sg Nom        => stem+"е";
+	SF Sg Gen        => stem+"я" ;
+	SF Sg Dat        => stem+"ю" ;
+	SF Sg Acc        => stem+"е" ;
+	SF Sg Inst       => stem+"ем" ;
+	SF Sg (Prepos _) => stem+"е" ;
+	SF Pl Nom        => stem+"я" ;
+	SF Pl Gen        => stem+"ей" ;
+	SF Pl Dat        => stem+"ям" ;
+	SF Pl Acc        => stem+"я" ;
+	SF Pl Inst       => stem+"ями" ;
+	SF Pl (Prepos _) => stem+"ях" };
+      g = Neut; anim = Inanimate };
+
+  -- 2. Soft regular feminine inanimate, e.g. burya
+  oper nRegSoftFem : Str ->CommNoun= \stem -> 
+    { s = table {
+	SF Sg Nom        => stem+"я";
+	SF Sg Gen        => stem+"и" ;
+	SF Sg Dat        => stem+"е" ;
+	SF Sg Acc        => stem+"ю" ;
+	SF Sg Inst       => stem+"ей" ;
+	SF Sg (Prepos _) => stem+"е" ;
+	SF Pl Nom        => stem+"и" ;
+	SF Pl Gen        => stem+"ь" ;
+	SF Pl Dat        => stem+"ям" ;
+	SF Pl Acc        => stem+"и" ;
+	SF Pl Inst       => stem+"ями" ;
+	SF Pl (Prepos _) => stem+"ях" };
+      g = Fem; anim = Inanimate };
+
+  -- 6.  Masc ending in -Vй (V = vowel)
+  oper nDecl6Masc : Str ->CommNoun= \stem -> 
+     let n = nRegSoftMasc stem in
+    { s = table {
+	SF Sg (Nom|Acc)  => stem+"й";
+	SF Pl Gen        => stem+"ев" ;
+        sf               => n.s!sf };
+      g = n.g; anim = n.anim };
+
+  -- 6.  Neut ending in -Ve (V = vowel) (not adjectives)
+  oper nDecl6Neut : Str ->CommNoun= \stem -> 
+     let n = nRegSoftNeut stem in
+    { s = table {
+	SF Pl Gen        => stem+"й" ;
+        sf               => n.s!sf };
+      g = n.g; anim = n.anim };
+
+  -- 6.  Fem ending in -Vя (V = vowel)
+  oper nDecl6Fem : Str ->CommNoun= \stem -> 
+     let n = nRegSoftFem stem in
+    { s = table {
+	SF Pl Gen        => stem+"й" ;
+        sf               => n.s!sf };
+      g = n.g; anim = n.anim };
+
+  -- 7.  stem ending in и
+  oper nDecl7Masc : Str ->CommNoun= \stem -> 
+    let n = nDecl6Masc stem in
+    { s = table {
+	SF Sg (Prepos _) => stem+"и" ;
+	sf               => n.s!sf };
+      g = n.g; anim = n.anim };
+
+  -- 7.  stem ending in и
+  oper nDecl7Neut : Str ->CommNoun= \stem -> 
+    let n = nDecl6Neut stem in
+    { s = table {
+	SF Sg (Prepos _) => stem+"и" ;
+	sf               => n.s!sf };
+      g = n.g; anim = n.anim };
+
+  -- 7.  stem ending in и
+  oper nDecl7Fem : Str ->CommNoun= \stem -> 
+    let n = nDecl6Fem stem in
+    { s = table {
+	SF Sg (Dat|Prepos _) => stem+"и" ;
+	sf                   => n.s!sf };
+      g = n.g; anim = n.anim };
+
+
+  -- 8. Feminine ending in soft consonant
+  oper nDecl8 : Str ->CommNoun= \stem -> 
+      let a : Str = case stem of { _+("ч"|"щ"|"ш"|"ж") => "а"; _ => "я" } in
+    { s = table {
+	SF Sg Nom        => stem+"ь";
+	SF Sg Gen        => stem+"и" ;
+	SF Sg Dat        => stem+"и" ;
+	SF Sg Acc        => stem+"ь" ;
+	SF Sg Inst       => stem+"ью" ;
+	SF Sg (Prepos _) => stem+"и" ;
+	SF Pl Nom        => stem+"и" ;
+	SF Pl Gen        => stem+"ей" ;
+	SF Pl Dat        => stem+a+"м" ;
+	SF Pl Acc        => stem+"и" ;
+	SF Pl Inst       => stem+a+"ми" ;
+	SF Pl (Prepos _) => stem+a+"х" };
+      g = Fem; anim = Inanimate };
+
+  -- 9.  Neut ending in -мя
+  oper nDecl9 : Str ->CommNoun= \stem ->
+    { s = table {
+	SF Sg Nom        => stem+"мя";
+	SF Sg Gen        => stem+"мени" ;
+	SF Sg Dat        => stem+"мени" ;
+	SF Sg Acc        => stem+"мя" ;
+	SF Sg Inst       => stem+"менем" ;
+	SF Sg (Prepos _) => stem+"мени" ;
+	SF Pl Nom        => stem+"мена" ;
+	SF Pl Gen        => stem+"мён" ;
+	SF Pl Dat        => stem+"менам" ;
+	SF Pl Acc        => stem+"мена" ;
+	SF Pl Inst       => stem+"менами" ;
+	SF Pl (Prepos _) => stem+"менах" };
+      g = Fem; anim = Inanimate };
+
+  -- Nouns inflected as adjectives.
+  oper nAdj : Adjective -> Gender ->CommNoun= \a,g -> 
+    { s = table {
+	SF Sg c           => a.s!AF c Inanimate (ASg g) ;
+	SF Pl c           => a.s!AF c Inanimate APl };
+      g = g; anim = Inanimate } ;
+
+
 oper
     CommNoun = {s : SubstForm => Str ; g : Gender ; anim : Animacy } ;
     SubstFormDecl = SS1 SubstForm ;
@@ -365,42 +626,6 @@ oper eeEndInAnimateDecl: Str -> CommNoun =  \obezbolivauch ->
     g = Neut  ; anim = Inanimate
   } ;
 
-oper oeEndInAnimateDecl: Str -> CommNoun =  \snotvorn ->
-  {  s  =  table
-      { SF Sg Nom =>  snotvorn +"ое";
-        SF Sg Gen => snotvorn+"ого" ;
-        SF Sg Dat => snotvorn+"ому" ;
-        SF Sg Acc => snotvorn +"ое";
-        SF Sg Inst => snotvorn+"ым" ;
-        SF Sg (Prepos _) => snotvorn+"ом" ;
-        SF Pl Nom => snotvorn+"ые" ;
-        SF Pl Gen => snotvorn+"ых" ;
-        SF Pl Dat => snotvorn+"ым" ;
-        SF Pl Acc => snotvorn+"ые" ;
-        SF Pl Inst => snotvorn+"ыми" ;
-        SF Pl (Prepos _) => snotvorn+"ых"
-    } ;
-    g = Neut  ; anim = Inanimate
-  } ;
-
-oper oeEndAnimateDecl: Str -> CommNoun =  \snotvorn ->
-  {  s  =  table
-      { SF Sg Nom =>  snotvorn +"ое";
-        SF Sg Gen => snotvorn+"ого" ;
-        SF Sg Dat => snotvorn+"ому" ;
-        SF Sg Acc => snotvorn +"ое";
-        SF Sg Inst => snotvorn+"ым" ;
-        SF Sg (Prepos _) => snotvorn+"ом" ;
-        SF Pl Nom => snotvorn+"ые" ;
-        SF Pl Gen => snotvorn+"ых" ;
-        SF Pl Dat => snotvorn+"ым" ;
-        SF Pl Acc => snotvorn+"ые" ;
-        SF Pl Inst => snotvorn+"ыми" ;
-        SF Pl (Prepos _) => snotvorn+"ых"
-    } ;
-    g = Neut  ; anim = Animate
-  } ;
-
 oper irregPl_StemInAnimateDecl: Str -> CommNoun =  \derev ->
   { s  =  table
       { SF Sg Nom =>  derev+"о" ;
@@ -438,25 +663,6 @@ oper LittleAnimalDecl: Str -> CommNoun =  \reb ->
     } ;
     g = Masc   ; anim = Animate
    } ;
-
-
-oper aEndG_K_KH_Decl: Str -> CommNoun =  \nog ->
-{ s  =  table  {
-      SF Sg Nom =>  nog+"а" ;
-      SF Sg Gen => nog+"и" ;
-      SF Sg Dat => nog+"е" ;
-      SF Sg Acc => nog+"у" ;
-      SF Sg Inst => nog+"ой" ;
-      SF Sg (Prepos _) => nog+"е" ;
-      SF Pl Nom => nog+"и" ;
-      SF Pl Gen => nog ;
-      SF Pl Dat => nog+"ам" ;
-      SF Pl  Acc => nog+ "и" ;
-      SF Pl Inst => nog+"ами" ;
-      SF Pl (Prepos _) => nog+"ах"
-    } ;
-    g = Fem  ; anim = Inanimate
-} ;
 
 
 oper kg_oEnd_SgDecl: Str -> CommNoun =  \mnog ->
@@ -518,73 +724,118 @@ oper eEnd_Decl: Str -> CommNoun =  \vs ->
     g = Neut  ; anim = Inanimate
 } ;
 
---mkAdjCommNounMascInanim: Adjective -> CommNoun =
---\a ->
---{ s = table {
---      SF Sg Nom =>  a.s ! AF Nom Inanimate (ASg Masc) ;
---      SF Sg Gen => a.s ! AF Gen Inanimate (ASg Masc) ;
---      SF Sg Dat => a.s ! AF Dat Inanimate (ASg Masc) ;
---      SF Sg Acc => a.s ! AF Acc Inanimate (ASg Masc) ;
---      SF Sg Inst => a.s ! AF Inst Inanimate (ASg Masc) ;
---      SF Sg (Prepos _) => a.s ! AF Prepos Inanimate (ASg Masc) ;
---      SF Pl Nom => a.s ! AF Nom Inanimate APl ;
---      SF Pl Gen => a.s ! AF Gen Inanimate APl;
---      SF Pl Dat => a.s ! AF Dat Inanimate APl ;
---      SF Pl  Acc => a.s ! AF Acc Inanimate APl ;
---      SF Pl Inst => a.s ! AF Inst Inanimate APl ;
---      SF Pl (Prepos _) => a.s ! AF Prepos Inanimate APl;
---  };
--- g = Masc ;
--- anim = Inanimate
---};
+
 ----2 Adjectives
 --
 ---- Type Adjective only has positive degree while AdjDegr type
 ---- includes also comparative and superlative forms.
----- The later entries can be converted into the former using
----- "extAdjective" operation defined in the syntax module
----- and vice verca using "mkAdjDeg" operation.
 --
---oper
---   adjInvar: Str -> Adjective = \s -> { s = \\af => s };
---
-   kazhdujDet: Adjective = uy_j_EndDecl "кажд" ;
-   samuj: Adjective = uy_j_EndDecl "сам" ;
+   kazhdujDet: Adjective = aRegHardStemStress "кажд" ;
+   samuj : Adjective = aRegHardStemStress "сам" ;
+
 --   lubojDet: Adjective = uy_oj_EndDecl "люб" ;
 --   drugojDet: Adjective = uy_oj_EndDecl "друг" ;
 --   glaznoj: Adjective = uy_oj_EndDecl "глазн" ;
-   kotorujDet: Adjective = uy_j_EndDecl "котор";
-   nekotorujDet: Adjective = uy_j_EndDecl "некотор";
-   takoj: Adjective = i_oj_EndDecl "так" [];
+   kotorujDet: Adjective = aRegHardStemStress "котор";
+   nekotorujDet: Adjective = aRegHardStemStress "некотор";
+   takoj: Adjective = aRegHardEndStress "так";
 --   kakojNibudDet: Adjective = i_oj_EndDecl "как" "-нибудь";
 --   kakojDet: Adjective = i_oj_EndDecl "как" [];
 --   nikakojDet: Adjective = i_oj_EndDecl "никак" [];
-   bolshinstvoSgDet: Adjective  = extAdjFromSubst (oEnd_SgDecl "большинств");
-   mnogoSgDet: Adjective  = extAdjFromSubst (kg_oEnd_SgDecl "мног");
-   skolkoSgDet: Adjective  = extAdjFromSubst (kg_oEnd_SgDecl "скольк");
+   bolshinstvoSgDet: Adjective  = extAdjFromSubst (nRegHardNeut "большинств");
+   mnogoSgDet: Adjective  = extAdjFromSubst (nRegHardNeut "мног");
+   nemnogoSgDet: Adjective  = extAdjFromSubst (nRegHardNeut "немног");
+   skolkoSgDet: Adjective  = extAdjFromSubst (nRegHardNeut "скольк");
 
-  bolshinstvoPlDet: Adjective  = extAdjFromSubst (oEnd_PlDecl "большинств");
+--  bolshinstvoPlDet: Adjective  = extAdjFromSubst (oEnd_PlDecl "большинств");
+
+
+
+  oper aRegHardStemStress : Str -> Adjective = \stem -> aRegHard stem False ;
+
+  oper aRegHardEndStress : Str -> Adjective = \stem -> aRegHard stem True;
+
+  -- 1. regular hard adjective
+  -- 3. stem ending with г, к, х
+  -- 4. stem ending with ш, ж, ч, щ
+  -- 5. stem ending with ц
+  oper aRegHard : Str -> Bool -> Adjective = \stem, endStress ->
+    let i = iAfter stem in
+    let o = case endStress of {
+	       True  => "о" ;
+	       False => oAfter stem } in
+    { s = table {
+	 AF Nom _ (ASg Masc)               => stem + case endStress of {
+                                                        True => "ой";
+							False => iAfter stem + "й" } ;
+	 AF Nom _ (ASg Neut)               => stem + o+"е";
+	 AF Gen _ (ASg (Masc|Neut))        => stem + o+"го";
+	 AF Dat _ (ASg (Masc|Neut))        => stem + o+"му";
+	 AF Acc Inanimate (ASg Masc)       => stem + i+"й";
+	 AF Acc Animate (ASg Masc)         => stem + o+"го";
+	 AF Acc _ (ASg Neut)               => stem + o+"е";
+	 AF Inst _ (ASg (Masc|Neut))       => stem + i+"м";
+	 AF (Prepos _) _ (ASg (Masc|Neut)) => stem + o+"м";
+
+	 AF Nom  _ (ASg Fem) => stem + "ая";
+	 AF Acc  _ (ASg Fem) => stem + "ую";
+	 AF _    _ (ASg Fem) => stem + o+"й";
+
+	 AF Nom _ APl          => stem + i+"е";
+	 AF Acc  Inanimate APl => stem + i+"е";
+	 AF Acc  Animate APl   => stem + i+"х";
+	 AF Gen  _ APl         => stem + i+"х";
+	 AF Inst _ APl         => stem + i+"ми";
+	 AF Dat  _ APl         => stem + i+"м";
+	 AF (Prepos _) _ APl   => stem + i+"х";
+
+	 AFShort (ASg Masc) => stem;
+	 AFShort (ASg Fem)  => stem + "а";
+	 AFShort (ASg Neut) => stem + o ;
+	 AFShort APl        => stem + i;
+
+	 AdvF => stem + o
+     } } ;
+
+  oper aRegSoft : Str -> Adjective = \stem ->
+    { s = table {
+	 AF Nom _ (ASg Masc)               => stem + "ий" ;
+	 AF Nom _ (ASg Neut)               => stem + "ее";
+	 AF Gen _ (ASg (Masc|Neut))        => stem + "его";
+	 AF Dat _ (ASg (Masc|Neut))        => stem + "ему";
+	 AF Acc Inanimate (ASg Masc)       => stem + "ий";
+	 AF Acc Animate (ASg Masc)         => stem + "его";
+	 AF Acc _ (ASg Neut)               => stem + "ее";
+	 AF Inst _ (ASg (Masc|Neut))       => stem + "им";
+	 AF (Prepos _) _ (ASg (Masc|Neut)) => stem + "ем";
+
+	 AF Nom  _ (ASg Fem) => stem + "яя";
+	 AF Acc  _ (ASg Fem) => stem + "юю";
+	 AF _    _ (ASg Fem) => stem + "ей";
+
+	 AF Nom _ APl          => stem + "ие";
+	 AF Acc  Inanimate APl => stem + "ие";
+	 AF Acc  Animate APl   => stem + "их";
+	 AF Gen  _ APl         => stem + "их";
+	 AF Inst _ APl         => stem + "ими";
+	 AF Dat  _ APl         => stem + "им";
+	 AF (Prepos _) _ APl   => stem + "их";
+
+	 AFShort (ASg Masc) => stem; -- FIXME: add e if stem ends in consonant + n
+	 AFShort (ASg Fem)  => stem + "я";
+	 AFShort (ASg Neut) => stem + "е" ;
+	 AFShort APl        => stem + "и" ;
+
+	 AdvF => stem + "е"
+     } } ;
+
+
+
 
    vseDetPl: Adjective   =  extAdjFromSubst (eEnd_Decl "вс") ;
    extAdjFromSubst: CommNoun -> Adjective = \ vse ->
     {s = \\af => vse.s ! SF (numAF af) (caseAF af) } ;
 
-oper
-  AdjDegr : Type = {s : Degree => AdjForm => Str} ;
-
-oper mkAdjDeg: Adjective -> Str -> AdjDegr = \adj, s ->
-  {  s = table
-           {
-              Posit => adj.s ;
-              Compar => \\af => s ;
-              Superl => \\af =>  samuj.s !af ++ adj.s ! af
-           }
-  };
-
---oper uzhasnuj: AdjDegr = mkAdjDeg (uy_j_EndDecl "ужасн") "ужаснее";
---oper schastlivyuj: AdjDegr = mkAdjDeg (uy_j_EndDecl "счастлив") "счастливее";
---oper deshevuj: AdjDegr = mkAdjDeg (uy_j_EndDecl "дешев") "дешевле";
---oper staruj: AdjDegr = mkAdjDeg (uy_j_EndDecl "стар") "старше";
 
 oper totDet: Adjective = {s = table {
       AF Nom _ (ASg Masc) => "тот";
@@ -795,210 +1046,8 @@ oper ti_j_EndDecl : Str -> Adjective = \s ->{s = table {
   } ;
 -}
 
---oper shi_j_EndDecl : Str -> Adjective = \s ->{s = table {
---      AF Nom _ (ASg Masc) => s+"ий";
---      AF Nom _ (ASg Fem) => s+"ая";
---      AF Nom _ (ASg Neut) => s+"ое";
---      AF Nom _ APl => s+"ие";
---      AF Acc  Inanimate (ASg Masc) => s+"ий";
---      AF Acc  Animate (ASg Masc) => s+"его";
---      AF Acc  _ (ASg Fem) => s+"ую";
---      AF Acc  _ (ASg Neut) => s+"ое";
---      AF Acc  Inanimate APl => s+"ие";
---      AF Acc  Animate APl => s+"их";
---      AF Gen  _ (ASg Masc) => s+"его";
---      AF Gen  _ (ASg Fem) => s+"ей";
---      AF Gen  _ (ASg Neut) => s+"его";
---      AF Gen  _ APl => s+"их";
---      AF Inst _ (ASg Masc) => s+"им";
---      AF Inst _ (ASg Fem) => s+"ей";
---      AF Inst _ (ASg Neut) => s+"им";
---      AF Inst _ APl => s+"ими";
---      AF Dat  _ (ASg Masc) => s+"ему";
---      AF Dat  _ (ASg Fem) => s+"ей";
---      AF Dat  _ (ASg Neut) => s+"ему";
---      AF Dat  _ APl => s+"им";
---      AF (Prepos _) _ (ASg Masc) => s+"ем";
---      AF (Prepos _) _ (ASg Fem) => s+"ей";
---      AF (Prepos _) _ (ASg Neut) => s+"ем";
---      AF (Prepos _) _ APl => s+"их";
---      AdvF => s +  "о"
---      }
---  } ;
 
---oper indijskij: Adjective = ij_EndK_G_KH_Decl "индийск" ;
---oper francuzskij: Adjective = ij_EndK_G_KH_Decl "французск" ;
---oper anglijskij: Adjective = ij_EndK_G_KH_Decl "английск" ;
---oper datskij: Adjective = ij_EndK_G_KH_Decl "датск" ;
---oper russkij: Adjective = ij_EndK_G_KH_Decl "русск" ;
---oper italyanskij: Adjective = ij_EndK_G_KH_Decl "итальянск" ;
---oper yaponskij: Adjective = ij_EndK_G_KH_Decl "японск" ;
---oper malenkij: AdjDegr = mkAdjDeg  (ij_EndK_G_KH_Decl "маленьк") "меньше" ;
---oper vusokij: AdjDegr = mkAdjDeg (ij_EndK_G_KH_Decl "высок") "выше";
 
-oper ij_EndK_G_KH_Decl : Str -> Adjective = \s ->{s = table {
-    AF Nom _ (ASg Masc) => s+"ий";
-    AF Nom _ (ASg Fem) => s+"ая";
-    AF Nom _ (ASg Neut) => s+"ое";
-    AF Nom _ APl => s+"ие";
-    AF Acc Animate (ASg Masc) => s+"ого";
-    AF Acc Inanimate (ASg Masc) => s+"ий";
-    AF Acc  _ (ASg Fem) => s+"ую";
-    AF Acc  _ (ASg Neut) => s+"ое";
-    AF Acc  Animate APl => s+"их";
-    AF Acc  Inanimate APl => s+"ие";
-    AF Gen  _ (ASg Masc) => s+"ого";
-    AF Gen  _ (ASg Fem) => s+"ой";
-    AF Gen  _ (ASg Neut) => s+"ого";
-    AF Gen  _ APl => s+"их";
-    AF Inst _ (ASg Masc) => s+"им";
-    AF Inst _ (ASg Fem) => s+"ой";
-    AF Inst _ (ASg Neut) => s+"им";
-    AF Inst _ APl => s+"ими";
-    AF Dat  _ (ASg Masc) => s+"ому";
-    AF Dat  _ (ASg Fem) => s+"ой";
-    AF Dat  _ (ASg Neut) => s+"ому";
-    AF Dat  _ APl => s+"им";
-    AF (Prepos _) _ (ASg Masc) => s+"ом";
-    AF (Prepos _) _ (ASg Fem) => s+"ой";
-    AF (Prepos _) _ (ASg Neut) => s+"ом";
-    AF (Prepos _) _ APl => s+"их";
-    AFShort (ASg Masc) => s;
-    AFShort (ASg Fem)  => s + "а";
-    AFShort (ASg Neut) => s + "о" ;
-    AFShort APl        => s + "и";
-     AdvF => s +  "о"
-    }
-  } ;
-
-oper shij_End_Decl : Str -> Adjective = \s ->{s = table {
-    AF Nom _ (ASg Masc) => s+"ий";
-    AF Nom _ (ASg Fem) => s+"ая";
-    AF Nom _ (ASg Neut) => s+"ее";
-    AF Nom _ APl => s+"ие";
-    AF Acc Animate (ASg Masc) => s+"его";
-    AF Acc Inanimate (ASg Masc) => s+"ий";
-    AF Acc  _ (ASg Fem) => s+"ую";
-    AF Acc  _ (ASg Neut) => s+"ее";
-    AF Acc  Animate APl => s+"их";
-    AF Acc  Inanimate APl => s+"ие";
-    AF Gen  _ (ASg Masc) => s+"его";
-    AF Gen  _ (ASg Fem) => s+"ей";
-    AF Gen  _ (ASg Neut) => s+"его";
-    AF Gen  _ APl => s+"их";
-    AF Inst _ (ASg Masc) => s+"им";
-    AF Inst _ (ASg Fem) => s+"ей";
-    AF Inst _ (ASg Neut) => s+"им";
-    AF Inst _ APl => s+"ими";
-    AF Dat  _ (ASg Masc) => s+"ему";
-    AF Dat  _ (ASg Fem) => s+"ей";
-    AF Dat  _ (ASg Neut) => s+"ему";
-    AF Dat  _ APl => s+"им";
-    AF (Prepos _) _ (ASg Masc) => s+"ем";
-    AF (Prepos _) _ (ASg Fem) => s+"ей";
-    AF (Prepos _) _ (ASg Neut) => s+"ем";
-    AF (Prepos _) _ APl => s+"их";
-    AFShort (ASg Masc) => s;
-    AFShort (ASg Fem)  => s + "а";
-    AFShort (ASg Neut) => s + "е" ;
-    AFShort APl        => s + "и";
-     AdvF => s +  "о"
-    }
-  } ;
-
---oper bolshoj: AdjDegr = mkAdjDeg  (i_oj_EndDecl "больш" []) "больше";
---oper dorogoj: AdjDegr = mkAdjDeg  (i_oj_EndDecl "дорог" []) "дороже";
-
-oper i_oj_EndDecl : Str -> Str -> Adjective = \s, chastica ->{s = table {
-    AF Nom _ (ASg Masc) => s+"ой" + chastica ;
-    AF Nom _ (ASg Fem) => s+"ая"+ chastica ;
-    AF Nom _ (ASg Neut) => s+"ое"+ chastica ;
-    AF Nom _ APl => s+"ие"+ chastica ;
-    AF Acc  Animate (ASg Masc) => s+"ого"+ chastica ;
-    AF Acc  Inanimate (ASg Masc) => s+"ой"+ chastica ;
-    AF Acc  _ (ASg Fem) => s+"ую"+ chastica ;
-    AF Acc  _ (ASg Neut) => s+"ое"+ chastica ;
-    AF Acc Animate APl => s+"их"+ chastica ;
-    AF Acc Inanimate APl => s+"ие"+ chastica ;
-    AF Gen _ (ASg Masc) => s+"ого"+ chastica ;
-    AF Gen _ (ASg Fem) => s+"ой"+ chastica ;
-    AF Gen _ (ASg Neut) => s+"ого"+ chastica ;
-    AF Gen _ APl => s+"их"+ chastica ;
-    AF Inst _ (ASg Masc) => s+"им"+ chastica ;
-     AF Inst _ (ASg Fem) => s+"ой"+ chastica ;
-    AF Inst _ (ASg Neut) => s+"им"+ chastica ;
-    AF Inst _ APl => s+"ими"+ chastica ;
-    AF Dat _ (ASg Masc) => s+"ому"+ chastica ;
-    AF Dat _ (ASg Fem) => s+"ой"+ chastica ;
-    AF Dat _ (ASg Neut) => s+"ому"+ chastica ;
-    AF Dat _ APl => s+"им"+ chastica ;
-    AF (Prepos _) _ (ASg Masc) => s+"ом"+ chastica ;
-    AF (Prepos _) _ (ASg Fem) => s+"ой"+ chastica ;
-    AF (Prepos _) _ (ASg Neut) => s+"ом"+ chastica ;
-    AF (Prepos _) _ APl => s+"их" + chastica;
-    AFShort (ASg Masc) => s;
-    AFShort (ASg Fem)  => s + "а";
-    AFShort (ASg Neut) => s + "о" ;
-    AFShort APl        => s + "и";
-     AdvF => s +  "о"
-    }
-  } ;
---oper molodoj: AdjDegr = mkAdjDeg (uy_oj_EndDecl "молод") "моложе";
-
-oper uy_oj_EndDecl : Str -> Adjective = \s ->{s = table {
-    AF Nom _ (ASg Masc) => s+"ой";
-    AF Nom _ (ASg Fem) => s+"ая";
-    AF Nom _ (ASg Neut) => s+"ое";
-    AF Nom _ APl => s+"ые";
-    AF Acc Animate (ASg Masc) => s+"ого";
-    AF Acc Inanimate (ASg Masc) => s+"ой";
-    AF Acc _ (ASg Fem) => s+"ую";
-    AF Acc _ (ASg Neut) => s+"ое";
-    AF Acc Animate APl => s+"ых";
-    AF Acc Inanimate APl => s+"ые";
-    AF Gen _ (ASg Masc) => s+"ого";
-    AF Gen _ (ASg Fem) => s+"ой";
-    AF Gen _ (ASg Neut) => s+"ого";
-    AF Gen _ APl => s+"ых";
-    AF Inst _ (ASg Masc) => s+"ым";
-    AF Inst _ (ASg Fem) => s+"ой";
-    AF Inst _ (ASg Neut) => s+"ым";
-    AF Inst _ APl => s+"ыми";
-    AF Dat _ (ASg Masc) => s+"ому";
-    AF Dat _ (ASg Fem) => s+"ой";
-    AF Dat _ (ASg Neut) => s+"ому";
-    AF Dat _ APl => s+"ым";
-    AF (Prepos _) _ (ASg Masc) => s+"ом";
-    AF (Prepos _) _ (ASg Fem) => s+"ой";
-    AF (Prepos _) _ (ASg Neut) => s+"ом";
-    AF (Prepos _) _ APl => s+"ых";
-    AFShort (ASg Masc) => s;
-    AFShort (ASg Fem)  => s + "а";
-    AFShort (ASg Neut) => s + "о" ;
-    AFShort APl        => s + "ы";
-    AdvF => s +  "о"
-    }
-  } ;
-
---oper prostuzhen: Adjective = shortDecl1 "простужен" ;
---oper beremenen: Adjective = shortDecl "беремен" ;
---oper need: Adjective = shortDecl "нуж" ;
---oper shortDecl1 : Str -> Adjective = \s ->{s = table {
---    AF _ _ (ASg Masc) => s;
---    AF _ _ (ASg Fem) => s+"а";
---    AF _ _ (ASg Neut) => s+"о";
---    AF _ _ APl => s+"ы" ;
---    AdvF => s +  "о"
---    }
---  } ;
---oper shortDecl : Str -> Adjective = \s ->{s = table {
---    AF _ _ (ASg Masc) => s +"ен";
---    AF _ _ (ASg Fem) => s+"на";
---    AF _ _ (ASg Neut) => s+"но";
---    AF _ _ APl => s+"ны" ;
---    AdvF => s +  "о"
---    }--  } ;
---
 ---- 2 Adverbs
 --
 --oper vsegda: Adverb = { s = "всегда" } ;
