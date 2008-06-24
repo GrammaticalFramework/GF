@@ -24,7 +24,6 @@
 -- The following modules are presupposed:
 
 resource ParadigmsRus = open 
-  (Predef=Predef), 
   Prelude, 
   MorphoRus,
   CatRus,

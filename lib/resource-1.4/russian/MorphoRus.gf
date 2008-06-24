@@ -10,7 +10,7 @@
 
 -- We use the parameter types and word classes defined for morphology.
 
-resource MorphoRus = ResRus ** open Prelude, (Predef=Predef) in {
+resource MorphoRus = ResRus ** open Prelude in {
 
 flags  coding=utf8 ;
 
