@@ -348,8 +348,8 @@ foreign = Foreign; -- +++ MG_UR: added +++
           stem@(_+("а"|"е"|"ё"|"о"|"у"|"ы"|"э"|"ю"|"я"))+"й" => nDecl6Masc stem ;
           stem@(_+("а"|"е"|"ё"|"о"|"у"|"ы"|"э"|"ю"|"я"))+"е" => nDecl6Neut stem ;
           stem@(_+("а"|"е"|"ё"|"о"|"у"|"ы"|"э"|"ю"|"я"))+"я" => nDecl6Fem stem ;
---	  stem+"ее"   => nAdjectiveSoftNeut
---	  stem+"ое"   => nAdjectiveHardNeut
+--	  stem+"ее"   => nAdj (regA (stem+"ий")) Neut;
+--	  stem+"ое"   => nAdj (regA (stem+(iAfter stem)+"й")) Neut;
           stem+"мя"   => nDecl9 stem ;
           stem@(_+("ч"|"щ"|"ш"|"ж"|"п"|"эн"|"м"|"ф"))+"ь" => nDecl8 stem ;
           stem@(_+("д"|"т"|"ст"|"с"|"в"|"б"))+"ь"         => nDecl8 stem ;
@@ -528,23 +528,6 @@ Paradigms:
 	SF Pl (Prepos _) => stem+"ях" };
       g = Fem; anim = Inanimate } ** {lock_N = <>} ;
 
-  -- 8. Feminine ending in soft consonant
-  oper nDecl8 : Str -> N = \stem -> 
-    { s = table {
-	SF Sg Nom        => stem+"ь";
-	SF Sg Gen        => stem+"и" ;
-	SF Sg Dat        => stem+"и" ;
-	SF Sg Acc        => stem+"ь" ;
-	SF Sg Inst       => stem+"ью" ;
-	SF Sg (Prepos _) => stem+"и" ;
-	SF Pl Nom        => stem+"и" ;
-	SF Pl Gen        => stem+"ей" ;
-	SF Pl Dat        => stem+"ям" ;
-	SF Pl Acc        => stem+"и" ;
-	SF Pl Inst       => stem+"ями" ;
-	SF Pl (Prepos _) => stem+"ях" };
-      g = Fem; anim = Inanimate } ** {lock_N = <>} ;
-
   -- 6.  Masc ending in -Vй (V = vowel)
   oper nDecl6Masc : Str -> N = \stem -> 
      let n = regSoftMasc stem in
@@ -594,6 +577,25 @@ Paradigms:
 	sf                   => n.s!sf };
       g = n.g; anim = n.anim } ** {lock_N = <>} ;
 
+
+  -- 8. Feminine ending in soft consonant
+  oper nDecl8 : Str -> N = \stem -> 
+      let a : Str = case stem of { _+("ч"|"щ"|"ш"|"ж") => "а"; _ => "я" } in
+    { s = table {
+	SF Sg Nom        => stem+"ь";
+	SF Sg Gen        => stem+"и" ;
+	SF Sg Dat        => stem+"и" ;
+	SF Sg Acc        => stem+"ь" ;
+	SF Sg Inst       => stem+"ью" ;
+	SF Sg (Prepos _) => stem+"и" ;
+	SF Pl Nom        => stem+"и" ;
+	SF Pl Gen        => stem+"ей" ;
+	SF Pl Dat        => stem+a+"м" ;
+	SF Pl Acc        => stem+"и" ;
+	SF Pl Inst       => stem+a+"ми" ;
+	SF Pl (Prepos _) => stem+a+"х" };
+      g = Fem; anim = Inanimate } ** {lock_N = <>} ;
+
   -- 9.  Neut ending in -мя
   oper nDecl9 : Str -> N = \stem ->
     { s = table {
@@ -610,6 +612,15 @@ Paradigms:
 	SF Pl Inst       => stem+"менами" ;
 	SF Pl (Prepos _) => stem+"менах" };
       g = Fem; anim = Inanimate } ** {lock_N = <>} ;
+
+  -- Nouns inflected as adjectives.
+  oper nAdj : A -> Gender -> N = \a,g -> 
+    { s = table {
+	SF Sg c           => a.s!Posit!AF c Inanimate (ASg g) ;
+	SF Pl c           => a.s!Posit!AF c Inanimate APl };
+      g = g; anim = Inanimate } ** {lock_N = <>} ;
+
+
 
 -- An individual-valued function is a common noun together with the
 -- preposition prefixed to its argument ("клZ+ о' дома").
