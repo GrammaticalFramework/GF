@@ -76,7 +76,7 @@ data Verbosity = Quiet | Normal | Verbose | Debug
 data Phase = Preproc | Convert | Compile | Link
   deriving (Show,Eq,Ord)
 
-data Encoding = UTF_8 | ISO_8859_1
+data Encoding = UTF_8 | ISO_8859_1 | CP_1251
   deriving (Show,Eq,Ord)
 
 data OutputFormat = FmtPGF 
@@ -469,7 +469,9 @@ optimizationPackages =
 encodings :: [(String,Encoding)]
 encodings = 
     [("utf8",   UTF_8),
-     ("latin1", ISO_8859_1)]
+     ("cp1251", CP_1251),
+     ("latin1", ISO_8859_1)
+    ]
 
 lookupShow :: Eq a => [(String,a)] -> a -> String
 lookupShow xs z = fromMaybe "lookupShow" $ lookup z [(y,x) | (x,y) <- xs]
