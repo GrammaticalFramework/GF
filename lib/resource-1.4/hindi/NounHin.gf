@@ -3,13 +3,13 @@ concrete NounHin of Noun = CatHin ** open ResHin, Prelude in {
   flags optimize=all_subs ;
 
   lin
---    DetCN det cn = {
---      s = \\c => det.s ++ cn.s ! det.n ! c ; 
---      a = agrgP3 det.n cn.g
---      } ;
---
+    DetCN det cn = {
+      s = \\c => det.s ! cn.g ! npcase2case c ++ toNP (cn.s ! det.n) c ;
+      a = agrP3 cn.g det.n
+      } ;
+
     UsePN pn = {s = \\c => toNP pn.s c ; a = agrP3 pn.g Sg} ;
-    UsePron p = p ;
+    UsePron p = {s = \\c => p.s ! np2pronCase c ; a = p.a} ;
 --
 --    PredetNP pred np = {
 --      s = \\c => pred.s ++ np.s ! c ;
@@ -35,22 +35,22 @@ concrete NounHin of Noun = CatHin ** open ResHin, Prelude in {
 --      s = quant.s ! num.n ++ num.s ++ ord.s ; 
 --      n = num.n
 --      } ;
---
---    DetQuant quant num = {
---      s = quant.s ! num.n ++ num.s ; 
---      n = num.n
---      } ;
---
+
+    DetQuant quant num = {
+      s = \\g,c => quant.s ! num.n ! g ! c ++ num.s ; 
+      n = num.n
+      } ;
+
 --    DetNP det = {
 --      s = \\c => det.s ; ---- case
 --      a = agrP3 det.n
 --      } ;
 --
---    PossPron p = {s = \\_ => p.s ! Gen} ;
---
---    NumSg = {s = []; n = Sg ; hasCard = False} ;
---    NumPl = {s = []; n = Pl ; hasCard = False} ;
---
+    PossPron p = {s = \\_,_,_ => p.s ! PPoss} ;
+
+    NumSg = {s = []; n = Sg} ;
+    NumPl = {s = []; n = Pl} ;
+
 --    NumCard n = n ** {hasCard = True} ;
 --
 --    NumDigits n = {s = n.s ! NCard ; n = n.n} ;

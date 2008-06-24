@@ -42,7 +42,7 @@ concrete StructuralHin of Structural = CatHin **
 -----  first_Ord = ss "first" ; DEPRECATED
 --  for_Prep = ss "for" ;
 --  from_Prep = ss "from" ;
---  he_Pron = mkNP "he" "him" "his" Sg P3 Masc ;
+  he_Pron = personalPronoun P3 Sg ** {a = Ag Masc Sg P3} ;
 --  here_Adv = ss "here" ;
 --  here7to_Adv = ss ["to here"] ;
 --  here7from_Adv = ss ["from here"] ;
@@ -50,7 +50,7 @@ concrete StructuralHin of Structural = CatHin **
 --  how8many_IDet = mkDeterminer Pl ["how many"] ;
 --  if_Subj = ss "if" ;
 --  in8front_Prep = ss ["in front of"] ;
---  i_Pron = mkNP "I" "me" "my"  Sg P1 Masc ;
+  i_Pron = personalPronoun P1 Sg ** {a = Ag Masc Sg P1} ;
   in_Prep = ss "meN" ;
 --  it_Pron  = mkNP "it" "it" "its" Sg P3 Neutr ;
 --  less_CAdv = ss "less" ;
@@ -101,7 +101,8 @@ concrete StructuralHin of Structural = CatHin **
 --  under_Prep = ss "under" ;
 --  very_AdA = ss "very" ;
 --  want_VV = P.mkVV (P.regV "want") ;
---  we_Pron = mkNP "we" "us" "our" Pl P1 Masc ;
+  we_Pron = personalPronoun P1 Pl ** {a = Ag Masc Pl P1} ;
+
 --  whatPl_IP = mkIP "what" "what" "what's" Sg ;
 --  whatSg_IP = mkIP "what" "what" "what's" Sg ;
 --  when_IAdv = ss "when" ;

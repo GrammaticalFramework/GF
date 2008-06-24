@@ -418,9 +418,18 @@ oper
     mkN2 : N -> Prep -> N2 = mmkN2
     } ;
 
-  mmkN2 : N -> Prep -> N2 = \n,c -> n ** {c2 = c ; lock_N2 = <>} ;
-  mkN3 = \n,c,e -> n ** {c2 = c ; c3 = e ; lock_N3 = <>} ;
+  mmkN2 : N -> Prep -> N2 = \n,c -> n ** {c2 = c ; isPre = mkIsPre c ; lock_N2 = <>} ;
+  mkN3 = \n,c,e -> n ** {c2 = c ; c3 = e ; 
+    isPre = mkIsPre c  ; -- matka Lontoosta Pariisiin
+    isPre2 = mkIsPre e ;          -- Suomen voitto Ruotsista
+    lock_N3 = <>
+    } ;
   
+  mkIsPre : Prep -> Bool = \p -> case p.c of {
+    NPCase Gen => notB p.isPre ;  -- Jussin veli (prep is <Gen,"",True>, isPre becomes False)
+    _ => True                     -- syyte Jussia vastaan, puhe Jussin puolesta
+    } ;
+
   mkPN = overload {
     mkPN : Str -> PN = mkPN_1 ;
     mkPN : N -> PN = \s -> {s = \\c => s.s ! NCase Sg c ; lock_PN = <>} ;

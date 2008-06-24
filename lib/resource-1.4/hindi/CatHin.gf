@@ -49,13 +49,14 @@ concrete CatHin of Cat = CommonX ** open ResHin, Prelude in {
 ---- Noun
 --
     CN = ResHin.Noun ;
-    NP, Pron = ResHin.NP ;
---    Det = {s : Str ; n : Number} ;
+    NP = ResHin.NP ;
+    Pron = {s : PronCase => Str ; a : Agr} ;
+    Det = {s : Gender => Case => Str ; n : Number} ;
 --    Predet, Ord = {s : Str} ;
---    Num  = {s : Str; n : Number ; hasCard : Bool} ;
+    Num  = {s : Str ; n : Number} ;
 --    Card = {s : Str; n : Number} ;
---    Quant = {s : Number => Str} ;
---    Art = {s : Bool => Number => Str} ;
+    Quant = {s : Number => Gender => Case => Str} ;
+    Art = {s : Str} ;
 --
 ---- Numeral
 --

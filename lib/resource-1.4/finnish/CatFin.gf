@@ -91,8 +91,8 @@ concrete CatFin of Cat = CommonX ** open ResFin, Prelude in {
     A2 = {s : Degree => AForm => Str ; c2 : Compl} ;
 
     N  = {s : NForm => Str} ;
-    N2 = {s : NForm => Str} ** {c2 : Compl} ;
-    N3 = {s : NForm => Str} ** {c2,c3 : Compl} ;
+    N2 = {s : NForm => Str} ** {c2 : Compl ; isPre : Bool} ;
+    N3 = {s : NForm => Str} ** {c2,c3 : Compl ; isPre,isPre2 : Bool} ;
     PN = {s : Case  => Str} ;
 
 oper Verb1 = {s : VForm => Str ; sc : NPForm ; qp : Str} ;
