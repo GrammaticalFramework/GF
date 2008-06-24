@@ -3,7 +3,8 @@ module Main where
 import System
 
 -- Make commands for compiling and testing resource grammars.
--- usage: runghc Make present? (lang | api | math | pgf | test | demo | clean)?
+-- usage: runghc Make present? (lang | api | math | pgf | test | demo | clean)? langs?
+-- where langs has the form e.g. langs=Eng,Fin,Rus
 -- With no argument, lang and api are done, in this order.
 -- See 'make' below for what is done by which command.
 
@@ -56,25 +57,28 @@ make xx = do
   let ifxx opt act = if            elem opt xx then act >> return () else return () 
   let pres = elem "present" xx
   let dir = if pres then "../present" else "../alltenses"
+   
+  let optl ls = maybe ls id $ getOptLangs xx
+
   ifx "lang" $ do
-    mapM_ (gfc pres [] . lang) langsLang
+    mapM_ (gfc pres [] . lang) (optl langsLang)
     system $ "cp */*.gfo " ++ dir
   ifx "api" $ do
-    mapM_ (gfc pres presApiPath . try) langsAPI
+    mapM_ (gfc pres presApiPath . try) (optl langsAPI)
     system $ "cp */*.gfo " ++ dir
   ifx "math" $ do
-    mapM_ (gfc False [] . math) langsMath
+    mapM_ (gfc False [] . math) (optl langsMath)
     system $ "cp mathematical/*.gfo ../mathematical"
-    mapM_ (gfc False [] . symbolic) langsMath
+    mapM_ (gfc False [] . symbolic) (optl langsMath)
     system $ "cp mathematical/Symbolic*.gfo ../mathematical"
   ifxx "pgf" $ do
     system $ "gfc -s --make --name=langs --parser=off --output-dir=" ++ dir ++ " " ++
-              unwords [dir ++ "/Lang" ++ la ++ ".gfo" | (_,la) <- langsPGF] ++
+              unwords [dir ++ "/Lang" ++ la ++ ".gfo" | (_,la) <- optl langsPGF] ++
               " +RTS -K100M"
   ifxx "test" $ do
-    gf treeb $ unwords [dir ++ "/Lang" ++ la ++ ".gfo" | (_,la) <- langsTest]
+    gf treeb $ unwords [dir ++ "/Lang" ++ la ++ ".gfo" | (_,la) <- optl langsTest]
   ifxx "demo" $ do
-    gf demos $ unwords ["demo/Demo" ++ la ++ ".gf" | (_,la) <- langsDemo]
+    gf demos $ unwords ["demo/Demo" ++ la ++ ".gf" | (_,la) <- optl langsDemo]
   ifxx "clean" $ do
     system "rm */*.gfo ../alltenses/*.gfo ../present/*.gfo"
   return ()
@@ -104,3 +108,9 @@ only   ls es = filter (flip elem es . snd) ls
 
 presApiPath = " -path=api:present "
 
+getOptLangs args = case [ls | a <- args, let (f,ls) = splitAt 6 a, f=="langs="] of
+  ls:_ -> return $ findLangs $ seps ls
+  _ -> Nothing
+ where
+  seps = words . map (\c -> if c==',' then ' ' else c)
+  findLangs ls = [lang | lang@(_,la) <- langs, elem la ls]

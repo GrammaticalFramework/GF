@@ -106,10 +106,17 @@ appPredefined t = case t of
   _ -> retb t
                   ---- should really check the absence of arg variables
  where
-   retb t = return (t,True)  -- no further computing needed
-   retf t = return (t,False) -- must be computed further
+   retb t = return (retc t,True)  -- no further computing needed
+   retf t = return (retc t,False) -- must be computed further
+   retc t = case t of
+     K [] -> t
+     K s  -> foldr1 C (map K (words s))
+     _    -> t
    norm t = case t of
      Empty -> K []
+     C u v -> case (norm u,norm v) of
+       (K x,K y) -> K (x +++ y)
+       _ -> t
      _ -> t
    fi = fromInteger
 

@@ -5,6 +5,6 @@ concrete LangRus of Lang =
   LexiconRus
   ** {
 
-flags startcat = Phr ; unlexer = text ; lexer = text ;
+flags startcat = Phr ; unlexer = text ; lexer = text ; coding=utf8 ;
 
 } ;
