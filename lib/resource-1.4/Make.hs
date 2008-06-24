@@ -13,24 +13,30 @@ import System
 -- With no argument, lang and api are done, in this order.
 -- See 'make' below for what is done by which command.
 
-langs = [
-  ("arabic",   "Ara"),
-  ("bulgarian","Bul"),
-  ("catalan",  "Cat"),
-  ("danish",   "Dan"),
-  ("english",  "Eng"),
-  ("finnish",  "Fin"),
-  ("french",   "Fre"),
-  ("hindi",    "Hin"),
-  ("german",   "Ger"),
-  ("interlingua","Ina"),
-  ("italian",  "Ita"),
-  ("norwegian","Nor"),
-  ("russian",  "Rus"),
-  ("spanish",  "Spa"),
-  ("swedish",  "Swe"),
-  ("thai",     "Tha")
+-- the languages have long directory names and short ISO codes (3 letters)
+-- we also give the decodings for postprocessing linearizations, as long as grammars
+-- don't support all flags needed; they are used in tests
+ 
+langsCoding = [
+  (("arabic",   "Ara"),""),
+  (("bulgarian","Bul"),"from_cp1251,to_utf8"),
+  (("catalan",  "Cat"),"to_utf8"),
+  (("danish",   "Dan"),"to_utf8"),
+  (("english",  "Eng"),""),
+  (("finnish",  "Fin"),"to_utf8"),
+  (("french",   "Fre"),"to_utf8"),
+  (("hindi",    "Hin"),"to_devanagari,to_utf8"),
+  (("german",   "Ger"),"to_utf8"),
+  (("interlingua","Ina"),""),
+  (("italian",  "Ita"),"to_utf8"),
+  (("norwegian","Nor"),"to_utf8"),
+  (("russian",  "Rus"),""),
+  (("spanish",  "Spa"),"to_utf8"),
+  (("swedish",  "Swe"),"to_utf8"), 
+  (("thai",     "Tha"),"to_thai,to_utf8")
   ]
+
+langs = map fst langsCoding
 
 -- languagues for which to compile Lang
 langsLang = langs `except` ["Ara"]
@@ -81,9 +87,11 @@ make xx = do
               unwords [dir ++ "/Lang" ++ la ++ ".gfo" | (_,la) <- optl langsPGF] ++
               " +RTS -K100M"
   ifxx "test" $ do
-    gf treeb $ unwords [dir ++ "/Lang" ++ la ++ ".gfo" | (_,la) <- optl langsTest]
+    let ls = optl langsTest
+    gf (treeb "Lang" ls) $ unwords [dir ++ "/Lang" ++ la ++ ".gfo" | (_,la) <- ls] 
   ifxx "demo" $ do
-    gf demos $ unwords ["demo/Demo" ++ la ++ ".gf" | (_,la) <- optl langsDemo]
+    let ls = optl langsDemo
+    gf (demos "Demo" ls) $ unwords ["demo/Demo" ++ la ++ ".gf" | (_,la) <- ls]
   ifxx "clean" $ do
     system "rm */*.gfo ../alltenses/*.gfo ../present/*.gfo"
   ifxx "clone" $ do
@@ -104,10 +112,11 @@ gf comm file = do
   putStrLn $ "reading " ++ file
   system $ "echo \"" ++ comm ++ "\" | gf3 -s " ++ file
 
-treeb = "rf -lines -tree -file=" ++ treebankExx ++ 
-        " | l -treebank | wf -file=" ++ treebankResults
+treeb abstr ls = "rf -lines -tree -file=" ++ treebankExx ++ 
+        " | l -treebank " ++ unlexer abstr ls ++ " | wf -file=" ++ treebankResults
 
-demos = "gr -number=100 | l -treebank | ps -to_utf8 -to_html | wf -file=resdemo.html"
+demos abstr ls = "gr -number=100 | l -treebank " ++ unlexer abstr ls ++ 
+           " | ps -to_html | wf -file=resdemo.html"
 
 lang (lla,la) = lla ++ "/Lang" ++ la ++ ".gf"
 try  (lla,la) = "api/Try"  ++ la ++ ".gf"
@@ -139,4 +148,12 @@ replaceLang s1 s2 = repl where
       _                      -> c : repl cs
     _ -> s
   lgs = 3 -- length s1
+
+unlexer abstr ls = 
+  "-unlexer=\\\"" ++ unwords 
+      [abstr ++ la ++ "=" ++ unl | 
+        lla@(_,la) <- ls, let unl = unlex lla, not (null unl)] ++ 
+      "\\\""
+    where
+      unlex lla = maybe "" id $ lookup lla langsCoding
 

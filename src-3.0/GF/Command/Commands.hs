@@ -228,11 +228,16 @@ allCommands pgf = Map.fromList [
        "The -lang flag can be used to restrict this to fewer languages.",
        "A sequence of string operations (see command ps) can be given",
        "as options, and works then like a pipe to the ps command, except",
-       "that it only affect the strings, not e.g. the table labels."
+       "that it only affect the strings, not e.g. the table labels.",
+       "These can be given separately to each language with the unlexer flag",
+       "whose results are prepended to the other lexer flags. The value of the",
+       "unlexer flag is a space-separated list of comma-separated string operation",
+       "sequences; see example."
        ],
      examples = [
        "l -langs=LangSwe,LangNor no_Utt   -- linearize tree to LangSwe and LangNor",
-       "gr -lang=LangHin -cat=Cl | l -table -to_devanagari -to_utf8 -- hindi table"
+       "gr -lang=LangHin -cat=Cl | l -table -to_devanagari -to_utf8 -- hindi table",
+       "l -unlexer=\"LangSwe=to_utf8 LangHin=to_devanagari,to_utf8\" -- different lexers"
        ],
      exec = \opts -> return . fromStrings . map (optLin opts),
      options = [
@@ -243,7 +248,8 @@ allCommands pgf = Map.fromList [
        ("treebank","show the tree and tag linearizations with language names")
        ] ++ stringOpOptions,
      flags = [
-       ("lang","the languages of linearization (comma-separated, no spaces)")
+       ("lang","the languages of linearization (comma-separated, no spaces)"),
+       ("unlexer","set unlexers separately to each language (space-separated)")
        ]
      }),
   ("ma", emptyCommandInfo {
@@ -499,12 +505,20 @@ allCommands pgf = Map.fromList [
      (abstractName pgf ++ ": " ++ showTree t) :
      [lang ++ ": " ++ linear opts lang t | lang <- optLangs opts]
 
--- logic of coding in unlexing:
+   unlex opts lang = stringOps (getUnlex opts lang ++ map prOpt opts)
+
+   getUnlex opts lang = case words (valStrOpts "unlexer" "" opts) of
+     lexs -> case lookup lang 
+               [(la,tail le) | lex <- lexs, let (la,le) = span (/='=') lex, not (null le)] of
+       Just le -> chunks ',' le
+       _ -> []
+
+-- Proposed logic of coding in unlexing:
 --   - If lang has no coding flag, or -to_utf8 is not in opts, just opts are used.
 --   - If lang has flag coding=utf8, -to_utf8 is ignored.
 --   - If lang has coding=other, and -to_utf8 is in opts, from_other is applied first.
-
-   unlex opts lang = {- trace (unwords optsC) $ -} stringOps optsC where
+-- THIS DOES NOT WORK UNFORTUNATELY - can't use the grammar flag properly
+   unlexx opts lang = {- trace (unwords optsC) $ -} stringOps optsC where
      optsC = case lookFlag pgf lang "coding" of
        Just "utf8" -> filter (/="to_utf8") $ map prOpt opts
        Just other | isOpt "to_utf8" opts -> 
@@ -551,12 +565,14 @@ allCommands pgf = Map.fromList [
 stringOpOptions = [
        ("bind","bind tokens separated by Prelude.BIND, i.e. &+"),
        ("chars","lexer that makes every non-space character a token"),
+       ("from_cp1251","decode from cp1251 (Cyrillic used in Bulgarian resource)"),
        ("from_devanagari","from unicode to GF Devanagari transliteration"),
        ("from_thai","from unicode to GF Thai transliteration"),
        ("from_utf8","decode from utf8"),
        ("lextext","text-like lexer"),
        ("lexcode","code-like lexer"),
        ("lexmixed","mixture of text and code (code between $...$)"), 
+       ("to_cp1251","encode to cp1251 (Cyrillic used in Bulgarian resource)"),
        ("to_devanagari","from GF Devanagari transliteration to unicode"),
        ("to_html","wrap in a html file with linebreaks"),
        ("to_thai","from GF Thai transliteration to unicode"),

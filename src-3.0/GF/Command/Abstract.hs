@@ -58,10 +58,10 @@ isFlag :: String -> [Option] -> Bool
 isFlag o opts = elem o [x | OFlag x _ <- opts]
 
 prOpt :: Option -> String
-prOpt (OOpt i) = i ----
+prOpt o = case o of
+  OOpt i    -> i
+  OFlag f x -> f ++ "=" ++ show x
 
 mkOpt :: String -> Option
 mkOpt = OOpt
-
-
 
