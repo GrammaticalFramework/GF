@@ -55,7 +55,7 @@ lin
   carpet_N = mkN "ковёр"; -- vowel change
   cat_N = mkN "кошка" animate ; -- vowel change
   ceiling_N = mkN "потолок" ; -- vowel change
-  chair_N = mkN "стул" ;
+  chair_N = mkN "стул" ; -- irregular
   cheese_N = mkN "сыр" ;
 ---  child2_N = nRebenok "реб" ; -- Achtung: Hier 'child' im Sinne von "junge Lebewesen" (dann keine Suppletivformen(?))!
   child_N = mkN "ребёнок" "ребёнка" "ребёнку" "ребёнка" "ребёнком" "ребёнке" "ребёнке" "дети" "детей" "детям" "детей" "детьми" "детях"  masculine animate ;
@@ -150,7 +150,7 @@ lin
   hold_V2 = dirV2 (regV imperfective second "держ" "у" "держал" "держи" "держать" );
   hope_VS= regV imperfective first "наде" "ю" "надеял" "надей" "надеять" ;
   horn_N = mkN "рог" ;
-  horse_N = mkN "лошадь" animate;
+  horse_N = mkN "лошадь" animate; -- irregular
   hot_A = AKhoroshij "горяч" "горячее" ;
   house_N = mkN "дом" ;
   hunt_V2 = dirV2 (regV imperfective second "охоч" "у" "охотил" "охоть" "охотить" ) ;
@@ -189,7 +189,7 @@ lin
   meat_N = mkN "мясо" ;
   milk_N = mkN "молоко" ;
   moon_N = mkN "луна" ;
-  mother_N2 = mkN2 (mkN "мама") ;
+  mother_N2 = mkN2 (mkN "мать" "матери" "матери" "мать" "матерью" "матери" "матери" "матери" "матерей" "матерям" "матерей" "матерями" "матерях" feminine animate) ;
   mountain_N = mkN "гора" ;
   mouth_N = mkN "рот" "рта" "рту" "рот" "ртом" "рте" "рте" "рты" "ртов" "ртам" "рты" "ртами" "ртах" masculine inanimate ;
   music_N = mkN "музыка" ;
