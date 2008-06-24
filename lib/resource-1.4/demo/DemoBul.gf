@@ -1,20 +1,20 @@
 --# -path=.:alltenses
 
 concrete DemoBul of Demo = 
-  NounBul - [AdvCN,PredetNP,PPartNP,RelNP,RelCN,SentCN,ApposCN,MassNP,DetNP],
+  NounBul - [AdvCN,PredetNP,PPartNP,RelNP,RelCN,SentCN,ApposCN,MassNP,DetNP], 
 --  VerbBul, 
   ClauseBul, --
   AdjectiveBul - [SentAP],
   AdverbBul,
   NumeralBul,
 ----  SentenceBul,
-----  QuestionBul,
+  QuestionBul - [QuestVP,QuestSlash],
 ----  RelativeBul,
 ----  ConjunctionBul,
 ----  PhraseBul,
-----  TextX - [Tense,TPres,TPast,TFut,TCond],
+----  TextX,
 ----  IdiomBul,
-  StructuralBul,
+  StructuralBul - [everybody_NP,everything_NP,something_NP],
   LexiconBul
   ** {
 

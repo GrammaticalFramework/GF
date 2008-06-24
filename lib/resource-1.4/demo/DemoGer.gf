@@ -1,20 +1,20 @@
 --# -path=.:alltenses
 
 concrete DemoGer of Demo = 
-  NounGer - [AdvCN,PredetNP,PPartNP,RelNP,RelCN,SentCN,ApposCN,MassNP,DetNP],
+  NounGer - [AdvCN,PredetNP,PPartNP,RelNP,RelCN,SentCN,ApposCN,MassNP,DetNP], 
 --  VerbGer, 
   ClauseGer, --
   AdjectiveGer - [SentAP],
   AdverbGer,
   NumeralGer,
---  SentenceGer,
+----  SentenceGer,
   QuestionGer - [QuestVP,QuestSlash],
---  RelativeGer,
---  ConjunctionGer,
---  PhraseGer,
---  TextX - [Tense,TPres,TPast,TFut,TCond],
---  IdiomGer,
-  StructuralGer,
+----  RelativeGer,
+----  ConjunctionGer,
+----  PhraseGer,
+----  TextX,
+----  IdiomGer,
+  StructuralGer - [everybody_NP,everything_NP,something_NP],
   LexiconGer
   ** {
 

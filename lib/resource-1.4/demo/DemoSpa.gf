@@ -1,20 +1,20 @@
 --# -path=.:alltenses
 
 concrete DemoSpa of Demo = 
-  NounSpa - [AdvCN,PredetNP,PPartNP,RelNP,RelCN,SentCN,ApposCN,MassNP,DetNP],
+  NounSpa - [AdvCN,PredetNP,PPartNP,RelNP,RelCN,SentCN,ApposCN,MassNP,DetNP], 
 --  VerbSpa, 
   ClauseSpa, --
   AdjectiveSpa - [SentAP],
   AdverbSpa,
   NumeralSpa,
 ----  SentenceSpa,
-----  QuestionSpa,
+  QuestionSpa - [QuestVP,QuestSlash],
 ----  RelativeSpa,
 ----  ConjunctionSpa,
 ----  PhraseSpa,
-----  TextX - [Tense,TPres,TPast,TFut,TCond],
+----  TextX,
 ----  IdiomSpa,
-  StructuralSpa,
+  StructuralSpa - [everybody_NP,everything_NP,something_NP],
   LexiconSpa
   ** {
 

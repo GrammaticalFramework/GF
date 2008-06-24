@@ -1,20 +1,20 @@
 --# -path=.:alltenses
 
 concrete DemoNor of Demo = 
-  NounNor - [AdvCN,PredetNP,PPartNP,RelNP,RelCN,SentCN,ApposCN,MassNP,DetNP],
+  NounNor - [AdvCN,PredetNP,PPartNP,RelNP,RelCN,SentCN,ApposCN,MassNP,DetNP], 
 --  VerbNor, 
   ClauseNor, --
   AdjectiveNor - [SentAP],
   AdverbNor,
   NumeralNor,
 ----  SentenceNor,
-----  QuestionNor,
+  QuestionNor - [QuestVP,QuestSlash],
 ----  RelativeNor,
 ----  ConjunctionNor,
 ----  PhraseNor,
-----  TextX - [Tense,TPres,TPast,TFut,TCond],
+----  TextX,
 ----  IdiomNor,
-  StructuralNor,
+  StructuralNor - [everybody_NP,everything_NP,something_NP],
   LexiconNor
   ** {
 

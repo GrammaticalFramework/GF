@@ -1,20 +1,20 @@
 --# -path=.:alltenses
 
 concrete DemoFre of Demo = 
-  NounFre - [AdvCN,PredetNP,PPartNP,RelNP,RelCN,SentCN,ApposCN,MassNP,DetNP],
+  NounFre - [AdvCN,PredetNP,PPartNP,RelNP,RelCN,SentCN,ApposCN,MassNP,DetNP], 
 --  VerbFre, 
   ClauseFre, --
   AdjectiveFre - [SentAP],
   AdverbFre,
   NumeralFre,
 ----  SentenceFre,
-----  QuestionFre,
+  QuestionFre - [QuestVP,QuestSlash],
 ----  RelativeFre,
 ----  ConjunctionFre,
 ----  PhraseFre,
-----  TextX - [Tense,TPres,TPast,TFut,TCond],
+----  TextX,
 ----  IdiomFre,
-  StructuralFre,
+  StructuralFre - [everybody_NP,everything_NP,something_NP],
   LexiconFre
   ** {
 

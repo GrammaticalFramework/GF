@@ -1,20 +1,20 @@
 --# -path=.:alltenses
 
 concrete DemoCat of Demo = 
-  NounCat - [AdvCN,PredetNP,PPartNP,RelNP,RelCN,SentCN,ApposCN,MassNP,DetNP],
+  NounCat - [AdvCN,PredetNP,PPartNP,RelNP,RelCN,SentCN,ApposCN,MassNP,DetNP], 
 --  VerbCat, 
   ClauseCat, --
   AdjectiveCat - [SentAP],
   AdverbCat,
   NumeralCat,
 ----  SentenceCat,
-----  QuestionCat,
+  QuestionCat - [QuestVP,QuestSlash],
 ----  RelativeCat,
 ----  ConjunctionCat,
 ----  PhraseCat,
-----  TextX - [Tense,TPres,TPast,TFut,TCond],
+----  TextX,
 ----  IdiomCat,
-  StructuralCat,
+  StructuralCat - [everybody_NP,everything_NP,something_NP],
   LexiconCat
   ** {
 
