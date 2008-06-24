@@ -82,12 +82,8 @@ oper
 -- to the Nominative or the Genetive one) is actually of no help, 
 -- since there are a lot of exceptions and the gain is just one form less.
 
-  -- +++ MG_UR: new case Prepos2 introduced! +++
-  mkN  : (nomSg, genSg, datSg, accSg, instSg, preposSg, prepos2Sg,
+  mkWorstN  : (nomSg, genSg, datSg, accSg, instSg, preposSg, prepos2Sg,
           nomPl, genPl, datPl, accPl, instPl, preposPl : Str) -> Gender -> Animacy -> N ; 
-
-     -- мужчина, мужчины, мужчине, мужчину, мужчиной, мужчине
-     -- мужчины, мужчин, мужчинам, мужчин, мужчинами, мужчинах
 
 -- The regular function captures the variants for some popular nouns 
 -- endings below:
@@ -363,6 +359,21 @@ foreign = Foreign; -- +++ MG_UR: added +++
 
 -- Noun definitions
 
+ mkN : overload {
+    mkN : (karta : Str) -> N ;
+    mkN : (tigr : Str) -> Animacy -> N ;
+    mkN : (nomSg, genSg, datSg, accSg, instSg, preposSg, prepos2Sg,
+          nomPl, genPl, datPl, accPl, instPl, preposPl : Str) -> Gender -> Animacy -> N
+  } ;
+
+ mkN = overload {
+    mkN : (karta : Str) -> N = regN ;
+    mkN : (tigr : Str) -> Animacy -> N = \nom, anim -> case anim of { Animate   => animateN (regN nom) ;
+								      Inanimate => regN nom } ;
+    mkN : (nomSg, genSg, datSg, accSg, instSg, preposSg, prepos2Sg,
+          nomPl, genPl, datPl, accPl, instPl, preposPl : Str) -> Gender -> Animacy -> N = mkWorstN
+  } ;
+
   mkIndeclinableNoun = \s,g, anim ->
    {
      s = table { SF _ _ => s } ;
@@ -370,8 +381,7 @@ foreign = Foreign; -- +++ MG_UR: added +++
      anim = anim 
    } ** {lock_N = <>};
 
-  -- +++ MG_UR: new case Prepos2 introduced! +++
-  mkN =  \nomSg, genSg, datSg, accSg, instSg, preposSg, prepos2Sg,
+  mkWorstN =  \nomSg, genSg, datSg, accSg, instSg, preposSg, prepos2Sg,
           nomPl, genPl, datPl, accPl, instPl, preposPl, g, anim ->
    {
      s = table { 
@@ -393,95 +403,292 @@ foreign = Foreign; -- +++ MG_UR: added +++
      anim = anim
    } ** {lock_N = <>} ;
 
+-- Makes a noun animate.
+animateN : N -> N = \n -> 
+   {
+     s = table { 
+       SF Sg Acc => case n.g of {
+                       Masc => n.s!(SF Sg Gen);
+		       _    => n.s!(SF Sg Acc)
+	            };
+       SF Pl Acc => n.s!(SF Pl Gen);
+       sf        => n.s!sf } ;
+     g = n.g ;
+     anim = Animate 
+   } ** {lock_N = <>};
 
-regN = \ray ->
-    let
-      ra  = Predef.tk 1 ray ; 
-      y   = Predef.dp 1 ray ; 
-      r   = Predef.tk 2 ray ; 
-      ay  = Predef.dp 2 ray ;
-      rays =
-        case y of {
-          "а" => nMashina ray ; 
-          "ь" => nBol ray ;
-          "я" => case ay of { 
-                   "ия" => nMalyariya ray; 
-                    _  => nTetya ray };
-          "е" => case ay of {
-            "ее" => nObezbolivauchee ray ;
-            "ое" => nZhivotnoe ray  ;
-            _ => nProizvedenie ray  };
-          -- "о" => nChislo ray ; +++ MG_UR: commented out +++
-           _=>  nStomatolog ray
-         }
-     in
-       rays ;
+regN = \x ->
+        case x of {
+--	  stem+"oнoк" => nDecl10 stem ;
+--        stem+"aнин" => nDecl11 stem ;
+          stem@(_+"и")+"й"   => nDecl7Masc stem;
+          stem@(_+"и")+"я"   => nDecl7Fem stem;
+	  stem@(_+"и")+"е"   => nDecl7Neut stem;
+          stem@(_+("а"|"е"|"ё"|"о"|"у"|"ы"|"э"|"ю"|"я"))+"й" => nDecl6Masc stem ;
+          stem@(_+("а"|"е"|"ё"|"о"|"у"|"ы"|"э"|"ю"|"я"))+"е" => nDecl6Neut stem ;
+          stem@(_+("а"|"е"|"ё"|"о"|"у"|"ы"|"э"|"ю"|"я"))+"я" => nDecl6Fem stem ;
+--	  stem+"ее"   => nAdjectiveSoftNeut
+--	  stem+"ое"   => nAdjectiveHardNeut
+          stem+"мя"   => nDecl9 stem ;
+          stem@(_+("ч"|"щ"|"ш"|"ж"|"п"|"эн"|"м"|"ф"))+"ь" => nDecl8 stem ;
+          stem@(_+("д"|"т"|"ст"|"с"|"в"|"б"))+"ь"         => nDecl8 stem ;
+	  stem@(_+"ш"|"ж"|"ч"|"щ"|"ц")+"е" => regHardNeut stem;
+          stem+"е"                         => regSoftNeut stem ;
+          stem+"я"                         => regSoftFem stem ;
+          stem+"ь"                         => regSoftMasc stem ;
+          stem+"о"                         => regHardNeut stem ; 
+          stem+"а"                         => regHardFem stem ; 
+          stem                             => regHardMasc stem
+         };
 
-  
-  nMashina   = \s -> aEndInAnimateDecl s ** {lock_N = <>};
-  nEdinica   = \s -> ej_aEndInAnimateDecl s ** {lock_N = <>};
-  nZhenchina = \s -> (aEndAnimateDecl s) ** { g = Fem ; anim = Animate } ** {lock_N = <>}; 
-  nNoga      = \s -> aEndG_K_KH_Decl s ** {lock_N = <>};    
-  nMalyariya = \s -> i_yaEndDecl s ** {lock_N = <>};
-  nTetya     = \s -> (yaEndAnimateDecl s) ** {g = Fem; anim = Animate; lock_N = <>} ;
-  nBol       = \s -> softSignEndDeclFem  s ** {lock_N = <>};
+{-
 
--- further classes added by Magda Gerritsen and Ulrich Real
-  nSvecha  = \s -> oj_aEndInAnimateDecl s ** {lock_N = <>};
-  nMat = \s -> irregStemAnimateDecl s ** {g = Fem; anim = Animate; lock_N = <>};
-  nDoch = \s -> irregStemAnimateDeclInstr_MI s ** {g = Fem; anim = Animate; lock_N = <>};
-  nLoshad = \s -> softSignEndDeclFemInstr_MI  s ** {g = Fem; anim = Animate; lock_N = <>};
-  nNoch = \s -> softSignEndDeclFemInanimate_ZH  s ** {g = Fem; anim = Inanimate; lock_N = <>};
+Paradigms:
+1.  hard regular
+    Masc  -Consonant
+    Neut -o
+    Fem   -a
+1*. with vowel changes, Masc in Gen Sg, Fem and Neut in Gen Pl
+2.  soft regular:
+    Masc -ь
+    Neut -е
+    Fem -я
+2*. with vowel changes, Masc in Gen Sg, Fem in Gen Pl (no Neut)
+3.  stem ending in г, к, х 
+    - Masc, Fem same as 1 but use и instead of ы (Nom/Acc Pl, Gen Sg)
+    - Neut -кo has Nom Pl -ки instead of -кa
+3*  with vowel changes, Masc in Gen Sg, Fem and Neut in Gen Pl
+4.  stem ending in ш, ж, ч, щ, hard endings,
+    use и instead of ы, and use е instead of unstressed o
+5.  stem ending in ц, hard endings, use е instead of unstressed o
+5*. with vowel changes, Masc in Gen Sg, Fem and Neut in Gen Pl
+6.  Masc ending in -й, Fem stem ending in vowel, Neut ending in ь?
+6*  with vowel changes
+7.  stem ending in и
+8.  F2, Fem ending in -ь
+    all -чь, -щь, -шь, -жь
+    all -пь, -энь, -мь, -фь, 
+    most -дь, -ть, -сть, -сь, -вь, -бь, 
+8*. with vowel changes in Ins Sg, Gen Sg
+9.  Neut ending in -мя
+10. Masc in -oнoк
+11. Masc in -aнин
+12. Nom Pl in -ья
 
+-}
 
--- Neuter patterns. 
-  nObezbolivauchee = \s -> eeEndInAnimateDecl s ** {lock_N = <>};
-  nZhivotnoe = \s -> oeEndAnimateDecl s ** {lock_N = <>};
-  nProizvedenie = \s -> eEndInAnimateDecl s ** {lock_N = <>};
-  nChislo = \s, o -> oEndInAnimateDecl3 s o ** {lock_N = <>}; -- +++ MG_UR: nChislo now expects two arguments +++
+  oper iAfter : Str -> Str = \stem -> 
+	 case stem of { 
+	           _ + ("г"|"к"|"х")     => "и" ;
+		   _ + ("ш"|"ж"|"ч"|"щ") => "и" ;
+		   _                     => "ы"
+	       };
 
--- further classes added by Magda Gerritsen and Ulrich Real
-  nSlovo = \s -> hardCons_ZHInAnimateDecl s ** {lock_N = <>};
-  nMorje = \s -> weakConsInAnimateDecl s ** {lock_N = <>};
-  nUchilishe = \s -> hardCons_ZHInAnimateDeclE s ** {lock_N = <>};
-  nNebo = \s -> irregPlInAnimateDecl s ** {lock_N = <>};
-  nDerevo = \s -> irregPl_StemInAnimateDecl s ** {lock_N = <>};
-  nVremja = \s -> irregTotalInAnimateDecl s ** {lock_N = <>};
+  oper oAfter : Str -> Str = \stem -> 
+	 case stem of { 
+		   _ + ("ш"|"ж"|"ч"|"щ") => "е" ;
+		   _ + "ц"               => "е" ;
+		   _                     => "о"
+	       };
 
+  -- 1.  Hard regular masculine inanimate, e.g. spor.
+  -- 3.  stem ending in г, к, х 
+  -- 4.  stem ending in ш, ж, ч, щ
+  -- 5.  stem ending in ц
+  oper regHardMasc : Str -> N = \stem -> 
+	 let i = iAfter stem in
+	 let o = oAfter stem in
+  { s = table {
+	SF Sg Nom        => stem ;
+	SF Sg Gen        => stem+"а" ;
+	SF Sg Dat        => stem+"у" ;
+	SF Sg Acc        => stem ;
+	SF Sg Inst       => stem+o+"м" ;
+	SF Sg (Prepos _) => stem+"е" ;
+	SF Pl Nom        => stem+i ;
+	SF Pl Gen        => stem+case stem of { _+("ш"|"ж"|"ч"|"щ") => "ей"; _ => "ов" } ;
+	SF Pl Dat        => stem+"ам" ;
+	SF Pl Acc        => stem+i ;
+	SF Pl Inst       => stem+"ами" ;
+	SF Pl (Prepos _) => stem+"ах" };
+      g = Masc; anim = Inanimate } ** {lock_N = <>} ;
 
--- Masculine patterns. 
-  nBank = \s -> nullEndInAnimateDecl s ** {lock_N = <>}; 
-  nStomatolog = \s -> nullEndAnimateDecl s ** {lock_N = <>};
-  nMalush = \s -> shEndDeclMasc s ** {lock_N = <>};
-  nPotolok = \s ->okEndDeclMasc s ** {lock_N = <>};
+  -- 1. Hard regular neuter inanimate, e.g. pravilo.
+  -- 3.  stem ending in г, к, х 
+  -- 4.  stem ending in ш, ж, ч, щ
+  -- 5.  stem ending in ц
+  oper regHardNeut : Str -> N = \stem -> 
+	 let o = oAfter stem in
+    { s = table {
+	SF Sg Nom        => stem+o ;
+	SF Sg Gen        => stem+"а" ;
+	SF Sg Dat        => stem+"у" ;
+	SF Sg Acc        => stem+o ;
+	SF Sg Inst       => stem+o+"м" ;
+	SF Sg (Prepos _) => stem+"е" ;
+	SF Pl Nom        => stem+case stem of { _+"к" => "и" ; _ => "а" } ;
+	SF Pl Gen        => stem ;
+	SF Pl Dat        => stem+"ам" ;
+	SF Pl Acc        => stem+"а" ;
+	SF Pl Inst       => stem+"ами" ;
+	SF Pl (Prepos _) => stem+"ах" };
+      g = Neut; anim = Inanimate } ** {lock_N = <>} ;
 
-  nBrat = \s -> nullEndAnimateDeclBrat s** {lock_N = <>}; 
-  nStul = \s -> nullEndInAnimateDeclStul s** {lock_N = <>}; 
+  -- 1. Hard regular feminine inanimate, e.g. karta.
+  -- 3.  stem ending in г, к, х 
+  -- 4.  stem ending in ш, ж, ч, щ
+  -- 5.  stem ending in ц
+  oper regHardFem : Str -> N = \stem -> 
+	 let i = iAfter stem in
+	 let o = oAfter stem in
+    { s = table {
+	SF Sg Nom        => stem+"а" ;
+	SF Sg Gen        => stem+i ;
+	SF Sg Dat        => stem+"е" ;
+	SF Sg Acc        => stem+"у" ;
+	SF Sg Inst       => stem+o+"й" ;
+	SF Sg (Prepos _) => stem+"е" ;
+	SF Pl Nom        => stem+i ;
+	SF Pl Gen        => stem ;
+	SF Pl Dat        => stem+"ам" ;
+	SF Pl Acc        => stem+i ;
+	SF Pl Inst       => stem+"ами" ;
+	SF Pl (Prepos _) => stem+"ах" };
+      g = Fem; anim = Inanimate } ** {lock_N = <>} ;
 
-  nAdres     = \s -> nullEndInAnimateDecl2 s ** {lock_N = <>}; 
-  nTelefon   = \s -> nullEndInAnimateDecl1 s ** {lock_N = <>}; 
-  nPepel   = \s -> nullEndInAnimateDeclPepel s ** {lock_N = <>}; 
+  -- 2. Soft regular masculine inanimate, e.g. vichr'
+  oper regSoftMasc : Str -> N = \stem -> 
+    { s = table {
+	SF Sg Nom        => stem+"ь";
+	SF Sg Gen        => stem+"я" ;
+	SF Sg Dat        => stem+"ю" ;
+	SF Sg Acc        => stem+"ь" ;
+	SF Sg Inst       => stem+"ем" ;
+	SF Sg (Prepos _) => stem+"е" ;
+	SF Pl Nom        => stem+"и" ;
+	SF Pl Gen        => stem+"ей" ;
+	SF Pl Dat        => stem+"ям" ;
+	SF Pl Acc        => stem+"и" ;
+	SF Pl Inst       => stem+"ями" ;
+	SF Pl (Prepos _) => stem+"ях" };
+      g = Masc; anim = Inanimate } ** {lock_N = <>} ;
 
-  nNol       = \s -> softSignEndDeclMasc s ** {lock_N = <>};
-  nUchitel   = \s -> softSignEndDeclMascAnimate s ** {lock_N = <>}; -- +++ MG_UR: added +++
-  nUroven    = \s -> EN_softSignEndDeclMasc s ** {lock_N = <>};
+  -- 2. Soft regular neuter inanimate, e.g. more
+  oper regSoftNeut : Str -> N = \stem -> 
+    { s = table {
+	SF Sg Nom        => stem+"е";
+	SF Sg Gen        => stem+"я" ;
+	SF Sg Dat        => stem+"ю" ;
+	SF Sg Acc        => stem+"е" ;
+	SF Sg Inst       => stem+"ем" ;
+	SF Sg (Prepos _) => stem+"е" ;
+	SF Pl Nom        => stem+"я" ;
+	SF Pl Gen        => stem+"ей" ;
+	SF Pl Dat        => stem+"ям" ;
+	SF Pl Acc        => stem+"я" ;
+	SF Pl Inst       => stem+"ями" ;
+	SF Pl (Prepos _) => stem+"ях" };
+      g = Neut; anim = Inanimate } ** {lock_N = <>} ;
 
--- further classes added by Magda Gerritsen and Ulrich Real
-  nStol = \s -> nullEndDecl s ** {lock_N = <>};
-  nSlovar   = \s -> softSignEndDeclMascInAnimateInstrJO s ** {lock_N = <>};
-  nMusej = \s -> nullEndInAnimateDeclSoft s ** {lock_N = <>};
-  nDvorec = \s -> ZH_EndInAnimateDeclSoftGenOWithout s ** {lock_N = <>};
-  nTovarish = \s -> ZH_EndAnimateDeclSoftInstrE s ** {lock_N = <>};
-  nMesjac = \s -> ZH_EndInAnimateDeclSoftGenE s ** {lock_N = <>};
-  nGrazhdanin = \s -> PlStemChangeAnimateDecl s ** {lock_N = <>};
-  nRebenok = \s -> LittleAnimalDecl s ** {lock_N = <>};
-  nPut = \s -> UniqueIrregularDecl s ** {lock_N = <>};
-  nGospodin = \s -> A_PlStemChangeAnimateDecl s ** {lock_N = <>};
-  nDen = \s -> softSignEndDeclMascInAnimateGenEWithout s ** {lock_N = <>};
-  nDrug = \s -> nullEndAnimateDeclDrug s** {lock_N = <>};
-  nSyn = \s -> nullEndAnimateDeclSyn s** {lock_N = <>};
-  nLes = \s -> preposVNaEndUMasc s ** {lock_N = <>};
+  -- 2. Soft regular feminine inanimate, e.g. burya
+  oper regSoftFem : Str -> N = \stem -> 
+    { s = table {
+	SF Sg Nom        => stem+"я";
+	SF Sg Gen        => stem+"и" ;
+	SF Sg Dat        => stem+"е" ;
+	SF Sg Acc        => stem+"ю" ;
+	SF Sg Inst       => stem+"ей" ;
+	SF Sg (Prepos _) => stem+"е" ;
+	SF Pl Nom        => stem+"и" ;
+	SF Pl Gen        => stem+"ь" ;
+	SF Pl Dat        => stem+"ям" ;
+	SF Pl Acc        => stem+"и" ;
+	SF Pl Inst       => stem+"ями" ;
+	SF Pl (Prepos _) => stem+"ях" };
+      g = Fem; anim = Inanimate } ** {lock_N = <>} ;
 
+  -- 8. Feminine ending in soft consonant
+  oper nDecl8 : Str -> N = \stem -> 
+    { s = table {
+	SF Sg Nom        => stem+"ь";
+	SF Sg Gen        => stem+"и" ;
+	SF Sg Dat        => stem+"и" ;
+	SF Sg Acc        => stem+"ь" ;
+	SF Sg Inst       => stem+"ью" ;
+	SF Sg (Prepos _) => stem+"и" ;
+	SF Pl Nom        => stem+"и" ;
+	SF Pl Gen        => stem+"ей" ;
+	SF Pl Dat        => stem+"ям" ;
+	SF Pl Acc        => stem+"и" ;
+	SF Pl Inst       => stem+"ями" ;
+	SF Pl (Prepos _) => stem+"ях" };
+      g = Fem; anim = Inanimate } ** {lock_N = <>} ;
+
+  -- 6.  Masc ending in -Vй (V = vowel)
+  oper nDecl6Masc : Str -> N = \stem -> 
+     let n = regSoftMasc stem in
+    { s = table {
+	SF Sg (Nom|Acc)  => stem+"й";
+	SF Pl Gen        => stem+"ев" ;
+        sf               => n.s!sf };
+      g = n.g; anim = n.anim } ** {lock_N = <>} ;
+
+  -- 6.  Neut ending in -Ve (V = vowel) (not adjectives)
+  oper nDecl6Neut : Str -> N = \stem -> 
+     let n = regSoftNeut stem in
+    { s = table {
+	SF Pl Gen        => stem+"й" ;
+        sf               => n.s!sf };
+      g = n.g; anim = n.anim } ** {lock_N = <>} ;
+
+  -- 6.  Fem ending in -Vя (V = vowel)
+  oper nDecl6Fem : Str -> N = \stem -> 
+     let n = regSoftFem stem in
+    { s = table {
+	SF Pl Gen        => stem+"й" ;
+        sf               => n.s!sf };
+      g = n.g; anim = n.anim } ** {lock_N = <>} ;
+
+  -- 7.  stem ending in и
+  oper nDecl7Masc : Str -> N = \stem -> 
+    let n = nDecl6Masc stem in
+    { s = table {
+	SF Sg (Prepos _) => stem+"и" ;
+	sf               => n.s!sf };
+      g = n.g; anim = n.anim } ** {lock_N = <>} ;
+
+  -- 7.  stem ending in и
+  oper nDecl7Neut : Str -> N = \stem -> 
+    let n = nDecl6Neut stem in
+    { s = table {
+	SF Sg (Prepos _) => stem+"и" ;
+	sf               => n.s!sf };
+      g = n.g; anim = n.anim } ** {lock_N = <>} ;
+
+  -- 7.  stem ending in и
+  oper nDecl7Fem : Str -> N = \stem -> 
+    let n = nDecl6Fem stem in
+    { s = table {
+	SF Sg (Dat|Prepos _) => stem+"и" ;
+	sf                   => n.s!sf };
+      g = n.g; anim = n.anim } ** {lock_N = <>} ;
+
+  -- 9.  Neut ending in -мя
+  oper nDecl9 : Str -> N = \stem ->
+    { s = table {
+	SF Sg Nom        => stem+"мя";
+	SF Sg Gen        => stem+"мени" ;
+	SF Sg Dat        => stem+"мени" ;
+	SF Sg Acc        => stem+"мя" ;
+	SF Sg Inst       => stem+"менем" ;
+	SF Sg (Prepos _) => stem+"мени" ;
+	SF Pl Nom        => stem+"мена" ;
+	SF Pl Gen        => stem+"мён" ;
+	SF Pl Dat        => stem+"менам" ;
+	SF Pl Acc        => stem+"мена" ;
+	SF Pl Inst       => stem+"менами" ;
+	SF Pl (Prepos _) => stem+"менах" };
+      g = Fem; anim = Inanimate } ** {lock_N = <>} ;
 
 -- An individual-valued function is a common noun together with the
 -- preposition prefixed to its argument ("клZ+ о' дома").
