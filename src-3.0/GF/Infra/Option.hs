@@ -186,9 +186,11 @@ moduleOptionsGFO :: ModuleOptions -> [(String,String)]
 moduleOptionsGFO (ModuleOptions o) = 
          maybe [] (\x -> [("language",x)]) (optSpeechLanguage mfs)
       ++ maybe [] (\x -> [("startcat",x)]) (optStartCat mfs)
+--      ++ maybe [] (\x -> [("coding",  e2s x)]) (Just (optEncoding mfs))
       ++ (if optErasing mfs then [("erasing","on")] else [])
-  where mfs = o defaultModuleFlags
-
+  where 
+    mfs = o defaultModuleFlags
+    e2s e = maybe [] id $ lookup e [(s,e) | (e,s) <- encodings]
 
 -- Option manipulation
 
