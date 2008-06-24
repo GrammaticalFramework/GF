@@ -21,20 +21,21 @@ incomplete concrete SentenceScand of Sentence =
       mkClause 
         (np.s ! nominative) np.a 
         vp **
-      {c2 = vp.c2} ;
+      {n3 = vp.n3 ; c2 = vp.c2} ;
 
     AdvSlash slash adv = {
       s  = \\t,a,b,o => slash.s ! t ! a ! b ! o ++ adv.s ;
+      n3 = slash.n3 ;
       c2 = slash.c2
     } ;
 
-    SlashPrep cl prep = cl ** {c2 = {s = prep.s ; hasPrep = True}} ;
+    SlashPrep cl prep = cl ** {n3 = \\_ => [] ; c2 = {s = prep.s ; hasPrep = True}} ;
 
     SlashVS np vs slash = 
       mkClause
         (np.s ! nominative) np.a 
         (insertObj (\\_ => conjThat ++ slash.s ! Sub) (predV vs)) **
-      {c2 = slash.c2} ;
+      {n3 = slash.n3 ; c2 = slash.c2} ;
 
     EmbedS  s  = {s = conjThat ++ s.s ! Sub} ;
     EmbedQS qs = {s = qs.s ! QIndir} ;
@@ -52,6 +53,7 @@ incomplete concrete SentenceScand of Sentence =
     } ;
     UseSlash t a p cl = {
       s = \\o => t.s ++ a.s ++ p.s ++ cl.s ! t.t ! a.a ! p.p ! o ;
+      n3 = cl.n3 ;
       c2 = cl.c2
     } ;
 

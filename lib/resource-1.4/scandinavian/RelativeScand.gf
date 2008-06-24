@@ -29,8 +29,14 @@ incomplete concrete RelativeScand of Relative =
 
     RelSlash rp slash = {
       s = \\t,a,p,ag => 
-          slash.c2.s ++ rp.s ! ag.gn ! RPrep slash.c2.hasPrep ++ 
-          slash.s ! t ! a ! p ! Sub ;
+        let 
+          agr = case rp.a of {
+            RNoAg => ag ;
+            RAg agg => agg
+            }
+        in
+          slash.c2.s ++ rp.s ! ag.gn ! RPrep slash.c2.hasPrep ++  
+          slash.s ! t ! a ! p ! Sub ++ slash.n3 ! agr ;
       c = NPAcc
       } ;
 

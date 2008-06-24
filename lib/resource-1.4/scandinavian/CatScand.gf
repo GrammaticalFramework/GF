@@ -10,13 +10,14 @@ incomplete concrete CatScand of Cat =
     S  = {s : Order => Str} ;
     QS = {s : QForm => Str} ;
     RS = {s : Agr => Str ; c : NPForm} ;
-    SSlash = {s : Order => Str} ** {c2 : Complement} ;
+    SSlash = {s : Order => Str ; n3 : Agr => Str ; c2 : Complement} ;
 
 -- Sentence
 
     Cl = {s : R.Tense => Anteriority => Polarity => Order => Str} ;
     ClSlash = {
       s : R.Tense => Anteriority => Polarity => Order => Str ; 
+      n3 : Agr => Str ;
       c2 : Complement
       } ;
     Imp = {s : Polarity => Number => Str} ;
@@ -47,7 +48,10 @@ incomplete concrete CatScand of Cat =
       ext : Str ;            -- S-Ext att hon går   ---s7
       en2,ea2,eext : Bool    -- indicate if the field exists
       } ;
-    VPSlash = CommonScand.VP ** {c2 : Complement} ;
+    VPSlash = CommonScand.VP ** {
+      n3 : Agr => Str ;  -- object-control complement
+      c2 : Complement
+      } ;
     Comp = {s : AFormPos => Str} ; 
 
 
