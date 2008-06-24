@@ -60,4 +60,8 @@ isFlag o opts = elem o [x | OFlag x _ <- opts]
 prOpt :: Option -> String
 prOpt (OOpt i) = i ----
 
+mkOpt :: String -> Option
+mkOpt = OOpt
+
+
 

@@ -32,6 +32,8 @@ import Data.Maybe
 import qualified Data.Map as Map
 import System.Cmd
 
+import Debug.Trace
+
 type CommandOutput = ([Tree],String) ---- errors, etc
 
 data CommandInfo = CommandInfo {
@@ -343,7 +345,7 @@ allCommands pgf = Map.fromList [
        "ps -from_utf8 \"jag ?r h?r\" | p       -- parser in LangSwe in UTF8 terminal",
        "ps -to_devanagari -to_utf8 \"A-p\"     -- show Devanagari in UTF8 terminal"
        ],
-     exec = \opts -> return . fromString . stringOps opts . toString,
+     exec = \opts -> return . fromString . stringOps (map prOpt opts) . toString,
      options = stringOpOptions
      }),
   ("q",  emptyCommandInfo {
@@ -497,11 +499,18 @@ allCommands pgf = Map.fromList [
      (abstractName pgf ++ ": " ++ showTree t) :
      [lang ++ ": " ++ linear opts lang t | lang <- optLangs opts]
 
-   unlex opts lang = stringOps (exceptUTF8 opts) where
-     exceptUTF8 = if isUTF8 then filter ((/="to_UTF8") . prOpt) else id
-     isUTF8 = case lookFlag pgf lang "coding" of
-       Just "utf8" -> True
-       _ -> False
+-- logic of coding in unlexing:
+--   - If lang has no coding flag, or -to_utf8 is not in opts, just opts are used.
+--   - If lang has flag coding=utf8, -to_utf8 is ignored.
+--   - If lang has coding=other, and -to_utf8 is in opts, from_other is applied first.
+
+   unlex opts lang = {- trace (unwords optsC) $ -} stringOps optsC where
+     optsC = case lookFlag pgf lang "coding" of
+       Just "utf8" -> filter (/="to_utf8") $ map prOpt opts
+       Just other | isOpt "to_utf8" opts -> 
+                      let cod = ("from_" ++ other) 
+                      in cod : filter (/=cod) (map prOpt opts)
+       _ -> map prOpt opts
 
    optRestricted opts = restrictPGF (hasLin pgf (mkCId (optLang opts))) pgf
 
@@ -536,7 +545,7 @@ allCommands pgf = Map.fromList [
      [lookupMorpho (buildMorpho pgf (mkCId la)) s | la <- optLangs opts]
 
    -- ps -f -g s returns g (f s)
-   stringOps opts s = foldr app s (reverse (map prOpt opts)) where
+   stringOps opts s = foldr app s (reverse opts) where
      app f = maybe id id (stringOp f) 
 
 stringOpOptions = [

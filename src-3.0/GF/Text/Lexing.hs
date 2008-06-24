@@ -24,6 +24,8 @@ stringOp name = case name of
   "to_html"    -> Just wrapHTML
   "to_utf8"    -> Just encodeUTF8
   "from_utf8"  -> Just decodeUTF8
+  "to_cp1251"  -> Just encodeCP1251
+  "from_cp1251" -> Just decodeCP1251
   _ -> transliterate name
 
 appLexer :: (String -> [String]) -> String -> String
@@ -97,3 +99,17 @@ isPunct = flip elem ".?!,:;"
 isParen = flip elem "()[]{}"
 isClosing = flip elem ")]}"
  
+
+-- might be in a file of its own: Windows Cyrillic, used in Bulgarian resource
+
+decodeCP1251 = map convert where
+  convert c
+   | c >= '\192' && c <= '\255' = chr (ord c + 848)
+   | otherwise                  = c
+
+encodeCP1251 = map convert where
+  convert c
+   | oc >= 1040 && oc <= 1103 = chr (oc - 848)
+   | otherwise                  = c
+   where oc = ord c
+
