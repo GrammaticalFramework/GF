@@ -3,8 +3,13 @@ module Main where
 import System
 
 -- Make commands for compiling and testing resource grammars.
--- usage: runghc Make present? (lang | api | math | pgf | test | demo | clean)? langs?
--- where langs has the form e.g. langs=Eng,Fin,Rus
+-- usage: runghc Make ((present? OPT?) | (clone FILE))? LANGS? 
+-- where 
+-- - OPT = (lang | api | math | pgf | test | demo | clean)
+-- - LANGS has the form e.g. langs=Eng,Fin,Rus
+-- - clone with a flag file=FILENAME clones the file to the specified languages,
+--   by replacing the 3-letter language name of the original in both the filename and the body
+--   with each name in the list (default: all languages)
 -- With no argument, lang and api are done, in this order.
 -- See 'make' below for what is done by which command.
 
@@ -81,6 +86,12 @@ make xx = do
     gf demos $ unwords ["demo/Demo" ++ la ++ ".gf" | (_,la) <- optl langsDemo]
   ifxx "clean" $ do
     system "rm */*.gfo ../alltenses/*.gfo ../present/*.gfo"
+  ifxx "clone" $ do
+    let (pref,lang) = case getLangName xx of
+          Just pl -> pl
+          _ -> error "expected flag option file=ppppppLLL.gf"
+    s <- readFile (pref ++ lang ++ ".gf")
+    mapM_ (\la -> writeFile (pref ++ la ++ ".gf") (replaceLang lang la s)) (map snd (optl langs))
   return ()
 
 gfc pres ppath file = do
@@ -108,9 +119,24 @@ only   ls es = filter (flip elem es . snd) ls
 
 presApiPath = " -path=api:present "
 
+-- list of languages overriding the definitions above
 getOptLangs args = case [ls | a <- args, let (f,ls) = splitAt 6 a, f=="langs="] of
   ls:_ -> return $ findLangs $ seps ls
   _ -> Nothing
  where
   seps = words . map (\c -> if c==',' then ' ' else c)
   findLangs ls = [lang | lang@(_,la) <- langs, elem la ls]
+
+-- the file name has the form p....pLLL.gf, i.e. 3-letter lang name, suffix .gf
+getLangName args = case [ls | a <- args, let (f,ls) = splitAt 5 a, f=="file="] of
+  fi:_ -> let (nal,ferp) = splitAt 3 (drop 3 (reverse fi)) in return (reverse ferp,reverse nal)  
+  _ -> Nothing
+
+replaceLang s1 s2 = repl where
+  repl s = case s of
+    c:cs -> case splitAt lgs s of
+      (pre,rest) | pre == s1 -> s2 ++ repl rest
+      _                      -> c : repl cs
+    _ -> s
+  lgs = 3 -- length s1
+
