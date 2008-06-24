@@ -65,113 +65,39 @@ oper
 
 --2 Nouns
 
--- Best case: indeclinabe nouns: "кофе", "пальто", "ВУЗ".
   Animacy: Type ; 
   
   animate: Animacy;
   inanimate: Animacy; 
+
+-- Indeclinabe nouns: "кофе", "пальто", "ВУЗ".
  
   mkIndeclinableNoun: Str -> Gender -> Animacy -> N ; 
 
+  mkN : overload {
+
+-- The regular function captures the variants for some common noun endings.
+
+    mkN : (karta : Str) -> N ;
+    mkN : (tigr : Str) -> Animacy -> N ;
+
 -- Worst case - give six singular forms:
 -- Nominative, Genetive, Dative, Accusative, Instructive and Prepositional;
--- corresponding six plural forms and the gender.
--- May be the number of forms needed can be reduced, 
--- but this requires a separate investigation.
--- Animacy parameter (determining whether the Accusative form is equal 
--- to the Nominative or the Genetive one) is actually of no help, 
--- since there are a lot of exceptions and the gain is just one form less.
+-- and the prepositional form after в and на, and
+-- the corresponding six plural forms and the gender and animacy.
 
-  mkWorstN  : (nomSg, genSg, datSg, accSg, instSg, preposSg, prepos2Sg,
-          nomPl, genPl, datPl, accPl, instPl, preposPl : Str) -> Gender -> Animacy -> N ; 
+    mkN : (nomSg, genSg, datSg, accSg, instSg, preposSg, prepos2Sg, nomPl, genPl, datPl, accPl, instPl, preposPl : Str) -> Gender -> Animacy -> N
+  } ;
 
--- The regular function captures the variants for some popular nouns 
--- endings below:
+  mkN2 : overload {
 
-  regN : Str -> N ;
+-- Genitive with no preposition.
 
-
--- Here are some common patterns. The list is far from complete.
-
--- Feminine patterns.
-
-  nMashina   : Str -> N ;    -- feminine, inanimate, ending with "-а", Inst -"машин-ой"
-  nEdinica   : Str -> N ;    -- feminine, inanimate, ending with "-а", Inst -"единиц-ей"
-  nZhenchina : Str -> N ;    -- feminine, animate, ending with "-a"
-  nNoga      : Str -> N ;    -- feminine, inanimate, ending with "г_к_х-a"
-  nMalyariya : Str -> N ;    -- feminine, inanimate, ending with "-ия"   
-  nTetya     : Str -> N ;    -- feminine, animate, ending with "-я"   
-  nBol       : Str -> N ;    -- feminine, inanimate, ending with "-ь"(soft sign)     
-
--- further classes added by Magda Gerritsen and Ulrich Real
-  nSvecha: Str -> N ; -- like nEdinica, but instrumental case with -oj
-  nMat: Str -> N ; -- irregular, changing stem, other example 'daughter'
-  nDoch: Str -> N ; -- like nMat but different instrumental case
-  nLoshad: Str -> N ; -- i-declination but instrumental plural -mi
-  nNoch: Str -> N ; -- like nBol but after ZH no "soft behaviour"
+    mkN2 : N -> N2 ;
+    mkN2 : N -> Prep -> N2 ;
+  } ;
 
 
--- Neuter patterns. 
-
-  nObezbolivauchee : Str -> N ;   -- neutral, inanimate, ending with "-ee" 
-  nProizvedenie : Str -> N ;   -- neutral, inanimate, ending with "-e" 
-  nChislo : Str -> Str -> N ;   -- neutral, inanimate, ending with "-o" +++ MG_UR: nChislo now expects two arguments +++
-  nZhivotnoe : Str -> N ;    -- masculine, inanimate, ending with "-ень"
-
--- further classes added by Magda Gerritsen and Ulrich Real
-  nSlovo: Str -> N ; -- hard consonants and zh, ending with -o
-  nMorje: Str -> N ; -- weak consonants, ending with -e
-  nUchilishe: Str -> N ; -- like nSlovo but because not stressed (betont) of with -e
--- nOkno: Str -> N ; -- like nSlovo but without -o- and genetive plural with -o- in between; no longer needed because of nChislo with two arguments +++
--- nKreslo: Str -> N ; -- like nSlovo but without -o- and genetive plural with -o- in between; no longer needed because of nChislo with two arguments +++
-  nNebo: Str -> N ;   -- irregular, other example 'chudo' (wonder)
-  nDerevo: Str -> N ; -- irregular, change of stem, other example 'krylo' (wing)
-  nVremja: Str -> N ; -- irregular total, the most important ones: 'imja' (name), 'plamja' (flame), 'znamja' (flag), 'semja' (seed)
-
-
--- Masculine patterns. 
-
--- Ending with consonant: 
-  nPepel : Str -> N ;    -- masculine, inanimate, ending with "-ел"- "пеп-ла"
-  nBrat: Str -> N ;   -- animate, брат-ья
-  nStul: Str -> N ;    -- same as above, but inanimate
-  nMalush : Str -> N ; -- малышей
-  nPotolok : Str -> N ; -- потол-ок - потол-ка
-
--- the next four differ in plural nominative and/or accusative form(s) :
-  nBank: Str -> N ;    -- банк-и (Nom=Acc)
-  nStomatolog : Str -> N ;  -- same as above, but animate
-  nAdres     : Str -> N ;     -- адрес-а (Nom=Acc), +++ MG_UR: other examples: 'bereg, vecher, gorod, dom, lec, glaz, poezd' +++
-  nTelefon   : Str -> N ;     -- телефон-ы (Nom=Acc)
-  nNol       : Str -> N ;    -- masculine, inanimate, ending with "-ь" (soft sign)
-  nUchitel   : Str -> N ;    -- masculine, animate, ending with "-ь" (soft sign) -- +++ MG_UR: added +++
-  nUroven    : Str -> N ;    -- masculine, inanimate, ending with "-ень"
-
--- further classes added by Magda Gerritsen and Ulrich Real
-  nStol: Str -> N ; -- masculine "standard" declination (most simple case), hard consonants
-  nSlovar : Str -> N ; -- masculine, inanimate, ending soft ending, instrumental case with -jo-
-  nMusej : Str -> N ; -- masculine, inanimate, without ending
-  nDvorec : Str -> N ; -- masculine, inanimate, ending like nEtazh but genetive with -o- and with missing vowel
-  nTovarish : Str -> N ; -- masculine, animate, ending like nEtazh but instrumental case with -e-
-  nMesjac : Str -> N ; -- masculine, inanimate, ending like nDvorec but genitive wiht -e-
-  nGrazhdanin : Str -> N ; -- masculine, animate, ending with "-anin" and change of stem
-  nRebenok : Str -> N ; -- masculine, little beings, change of stem
-  nPut : Str -> N ; -- unique irregular Form, frequent use of the word
-  nGospodin : Str -> N ; -- like nGrazhdanin, but nominative plural ending with -a
-  nDen : Str -> N ; -- masculine, animate, ending with "-ь" (soft sign) but without vowel
-  nDrug : Str -> N ; -- like nBrat, but change of stemm 
-  nSyn : Str -> N ; -- like nDrug, but another stem
-
--- further classes added by Magda Gerritsen and Ulrich Real
--- attention: these are not declension classes but classes in which
--- one case differs depending on the preposition used with it!
-  nLes : Str -> N ; -- preposition 'v' requires the case Prepos2
-  nMost : Str -> N ; -- preposition 'na' requires the case Prepos2
-
--- Nouns used as functions need a preposition. The most common is with Genitive.
-
-  mkFun  : N -> Prep -> N2 ;
-  mkN2 : N -> N2 ;
   mkN3 : N -> Prep -> Prep -> N3 ;
 
 -- Proper names.
@@ -359,13 +285,6 @@ foreign = Foreign; -- +++ MG_UR: added +++
 
 -- Noun definitions
 
- mkN : overload {
-    mkN : (karta : Str) -> N ;
-    mkN : (tigr : Str) -> Animacy -> N ;
-    mkN : (nomSg, genSg, datSg, accSg, instSg, preposSg, prepos2Sg,
-          nomPl, genPl, datPl, accPl, instPl, preposPl : Str) -> Gender -> Animacy -> N
-  } ;
-
  mkN = overload {
     mkN : (karta : Str) -> N = regN ;
     mkN : (tigr : Str) -> Animacy -> N = \nom, anim -> case anim of { Animate   => animateN (regN nom) ;
@@ -381,7 +300,9 @@ foreign = Foreign; -- +++ MG_UR: added +++
      anim = anim 
    } ** {lock_N = <>};
 
-  mkWorstN =  \nomSg, genSg, datSg, accSg, instSg, preposSg, prepos2Sg,
+  oper mkWorstN  : (nomSg, genSg, datSg, accSg, instSg, preposSg, prepos2Sg,
+          nomPl, genPl, datPl, accPl, instPl, preposPl : Str) -> Gender -> Animacy -> N
+    =  \nomSg, genSg, datSg, accSg, instSg, preposSg, prepos2Sg,
           nomPl, genPl, datPl, accPl, instPl, preposPl, g, anim ->
    {
      s = table { 
@@ -404,7 +325,7 @@ foreign = Foreign; -- +++ MG_UR: added +++
    } ** {lock_N = <>} ;
 
 -- Makes a noun animate.
-animateN : N -> N = \n -> 
+  oper animateN : N -> N = \n -> 
    {
      s = table { 
        SF Sg Acc => case n.g of {
@@ -417,7 +338,7 @@ animateN : N -> N = \n ->
      anim = Animate 
    } ** {lock_N = <>};
 
-regN = \x ->
+  oper regN : Str -> N = \x ->
         case x of {
 --	  stem+"oнoк" => nDecl10 stem ;
 --        stem+"aнин" => nDecl11 stem ;
@@ -699,10 +620,13 @@ Paradigms:
 -- to allow it when the required case is genitive. We don't know if there
 -- are counterexamples to the liberal choice we've made.
 
-  mkFun f p = (UseN f) ** {s2 = p.s ; c = p.c}** {lock_N2 = <>}  ;
+  oper mkN2 = overload {
+    mkN2 : N -> N2 = \n -> mkFun n nullPrep ;
+    mkN2 : N -> Prep -> N2 = mkFun;
+  } ;
 
--- The commonest cases are functions with Genitive.
-  mkN2 n = mkFun n nullPrep ;
+  mkFun : N -> Prep -> N2 = \f,p -> (UseN f) ** {s2 = p.s ; c = p.c}** {lock_N2 = <>}  ;
+
   nullPrep : Prep = {s = []; c= Gen; lock_Prep=<>} ;  
 
   mkN3 f p r = (UseN f) ** {s2 = p.s ; c=p.c; s3=r.s ; c2=r.c; lock_N3 = <>} ; 

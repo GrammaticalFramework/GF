@@ -282,7 +282,7 @@ lin
   snake_N = mkN "змея" animate ;
   snow_N = mkN "снег" ;
   sock_N = mkN "носок" ;
-  song_N = nTetya "песн" ;
+  song_N = mkN "песня" ;
   speak_V2 = mkV2 (regV imperfective secondA "говор" "ю" "говорил" "говори" "говорить")
                "на" prepositional ;
   spit_V = regV imperfective firstE "плю" "ю" "плевал" "плюй" "плевать" ;
