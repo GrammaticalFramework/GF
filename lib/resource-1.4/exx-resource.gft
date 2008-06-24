@@ -206,8 +206,8 @@ PhrUtt NoPConj (UttS (UseCl TPres ASimul PPos (PredVP (DetCN every_Det (UseN bab
 PhrUtt NoPConj (UttAdv (ConjAdv either7or_DConj (ConsAdv here7from_Adv (BaseAdv there_Adv everywhere_Adv)))) NoVoc
 PhrUtt NoPConj (UttVP (PassV2 know_V2)) NoVoc
 RelCN (UseN bird_N) (UseRCl TPres ASimul PPos (RelSlash IdRP (SlashVP (UsePron i_Pron) (SlashVV want_VV (SlashV2A paint_V2A (PositA red_A))))))
-UttImpSg PPos (ImpVP (ComplSlash (SlashVV want_VV (SlashV2a buy_V2)) (UsePron it_Pron)))
-UttImpSg PPos (ImpVP (ComplSlash (SlashVV want_VV (SlashV2A paint_V2A (PositA red_A))) (UsePron it_Pron)))
+UttImpSg PPos (ImpVP (ComplVV want_VV (ComplSlash (SlashV2a buy_V2) (UsePron it_Pron))))
+UttImpSg PPos (ImpVP (ComplVV want_VV (ComplSlash (SlashV2A paint_V2A (PositA red_A)) (UsePron it_Pron))))
 UttImpSg PPos (ImpVP (ComplSlash (SlashVV want_VV (SlashV2VNP beg_V2V (UsePron i_Pron) (SlashV2a buy_V2))) (UsePron it_Pron)))
 PhrUtt NoPConj (UttS (UseCl TPres ASimul PPos (PredVP (DetArtPl DefArt (UseN fruit_N)) (ReflVP (Slash3V3 sell_V3 (DetArtSg DefArt (UseN road_N))))))) NoVoc
 PhrUtt NoPConj (UttS (UseCl TPres ASimul PPos (PredVP (UsePron i_Pron) (ReflVP (SlashV2V beg_V2V (UseV live_V)))))) NoVoc
@@ -215,3 +215,6 @@ PhrUtt NoPConj (UttS (UseCl TPres ASimul PPos (PredVP (UsePron i_Pron) (ReflVP (
 PhrUtt NoPConj (UttImpSg PPos (ImpVP (ReflVP (SlashV2Q ask_V2Q (UseQCl TPast ASimul PPos (QuestVP whoSg_IP (UseV come_V))))))) NoVoc
 PhrUtt NoPConj (UttS (UseCl TPast ASimul PPos (PredVP (UsePron i_Pron) (ReflVP (SlashV2A paint_V2A (ComparA beautiful_A (UsePN john_PN))))))) NoVoc
 
+-- more long examples
+
+UttS (UseCl TPres ASimul PPos (PredVP (DetCN (DetQuant this_Quant NumSg) (UseN grammar_N)) (ComplSlash (SlashV2a speak_V2) (DetCN (DetArtCard IndefArt (NumNumeral (num (pot2as3 (pot1as2 (pot1to19 n2)))))) (UseN language_N)))))

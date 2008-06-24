@@ -1618,36 +1618,36 @@ LangIna: ave que io wan pinger in rubie
 LangIta: uccello che voglio pingere in rosso
 LangNor: fugl som jeg vil male rød
 LangSwe: fågel som jag vill måla röd
- Lang: UttImpSg PPos (ImpVP (ComplSlash (SlashVV want_VV (SlashV2a buy_V2)) (UsePron it_Pron)))
-LangDan: villed det købe
-LangEng: want it to buy
-LangFin: tahdo sen ostaa
-LangFre: veux - l' acheter
+ Lang: UttImpSg PPos (ImpVP (ComplVV want_VV (ComplSlash (SlashV2a buy_V2) (UsePron it_Pron))))
+LangDan: villed købe det
+LangEng: want to buy it
+LangFin: tahdo ostaa se
+LangFre: veux l' acheter
 LangGer: woll es kaufen
 LangIna: wan lo compra
-LangIta: vuoi &+ lo comprare
-LangNor: villed det kjøpe
-LangSwe: vilj det köpa
- Lang: UttImpSg PPos (ImpVP (ComplSlash (SlashVV want_VV (SlashV2A paint_V2A (PositA red_A))) (UsePron it_Pron)))
-LangDan: villed det male rød
-LangEng: want it to paint red
-LangFin: tahdo sen maalata punaiseksi
-LangFre: veux - le peindre en rouge
+LangIta: vuoi comprar &+ lo
+LangNor: villed kjøpe det
+LangSwe: vilj köpa det
+ Lang: UttImpSg PPos (ImpVP (ComplVV want_VV (ComplSlash (SlashV2A paint_V2A (PositA red_A)) (UsePron it_Pron))))
+LangDan: villed male det rødt
+LangEng: want to paint it red
+LangFin: tahdo maalata se punaiseksi
+LangFre: veux le peindre en rouge
 LangGer: woll es rot malen
 LangIna: wan lo pinger in rubie
-LangIta: vuoi &+ lo pingere in rosso
-LangNor: villed det male rød
-LangSwe: vilj det måla röd
+LangIta: vuoi pinger &+ lo in rosso
+LangNor: villed male det rødt
+LangSwe: vilj måla det rött
  Lang: UttImpSg PPos (ImpVP (ComplSlash (SlashVV want_VV (SlashV2VNP beg_V2V (UsePron i_Pron) (SlashV2a buy_V2))) (UsePron it_Pron)))
-LangDan: villed det bede mig at købe
-LangEng: want it to beg me to buy
-LangFin: tahdo sen pyytää minua ostamaan
-LangFre: veux - le me demander acheter
-LangGer: woll es mich bitten zu kaufen
-LangIna: wan lo me rogar compra
-LangIta: vuoi &+ lo pregar &+ mi comprare
-LangNor: villed det be meg att kjøpe
-LangSwe: vilj det be mig att köpa
+LangDan: villed bede mig at købe det
+LangEng: want to beg me to buy it
+LangFin: tahdo pyytää minua ostamaan se
+LangFre: veux me demander l' acheter
+LangGer: woll mich bitten es zu kaufen
+LangIna: wan me rogar lo compra
+LangIta: vuoi pregar &+ mi comprar &+ lo 
+LangNor: villed be meg att kjøpe det
+LangSwe: vilj be mig att köpa det
  Lang: PhrUtt NoPConj (UttS (UseCl TPres ASimul PPos (PredVP (DetArtPl DefArt (UseN fruit_N)) (ReflVP (Slash3V3 sell_V3 (DetArtSg DefArt (UseN road_N))))))) NoVoc
 LangDan: frugterne sælger sig til vejen
 LangEng: the fruits sell themselves to the road
@@ -1698,3 +1698,6 @@ LangIna: io pingeva me in plus belle que John
 LangIta: mi pingevo in più bello che Giovanni
 LangNor: jeg mala meg vakkerere enn John
 LangSwe: jag målade mig vackrare än Johan
+ Lang: UttImpSg PPos (ImpVP (ComplVV (ComplVV want_VV (ComplSlash (SlashV2a buy_V2) (UsePron it_Pron)))))
+
+

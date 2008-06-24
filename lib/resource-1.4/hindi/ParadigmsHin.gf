@@ -29,6 +29,11 @@ oper
       = \sd,so,sv,pd,po,pv,g -> mkNoun sd so sv pd po pv g ** {lock_N = <>} ;
     } ;
 
+  mkPN = overload {
+    mkPN : Str -> PN = \s -> let n = regNoun s in {s = n.s ! Sg ; g = n.g ; lock_PN = <>} ;
+    mkPN : N -> Gender -> PN = \n,g -> {s = n.s ! Sg ; g = g ; lock_PN = <>} ;
+    } ;
+
 --2 Adjectives
 
   mkA = overload {

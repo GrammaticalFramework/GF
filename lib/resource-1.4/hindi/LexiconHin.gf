@@ -356,7 +356,7 @@ concrete LexiconHin of Lexicon = CatHin **
 --  rule_N = regN "rule" ;
 --
 ---- added 4/6/2007
---    john_PN = mkPN (mkN masculine (mkN "John")) ;
+    john_PN = mkPN "jon" ;
 --    question_N = regN "question" ;
 --    ready_A = regA "ready" ;
 --    reason_N = regN "reason" ;

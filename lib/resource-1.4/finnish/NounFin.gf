@@ -203,22 +203,25 @@ concrete NounFin of Noun = CatFin ** open ResFin, Prelude in {
 
     Use2N3 f = {
       s = f.s ;
-      c2 = f.c2
+      c2 = f.c2 ;
+      isPre = f.isPre
       } ;
     Use3N3 f = {
       s = f.s ;
-      c2 = f.c3
+      c2 = f.c3 ;
+      isPre = f.isPre2
       } ;
 
 
 --- If a possessive suffix is added here it goes after the complements...
 
     ComplN2 f x = {
-      s = \\nf => f.s ! nf ++ appCompl True Pos f.c2 x
+      s = \\nf => preOrPost f.isPre (f.s ! nf) (appCompl True Pos f.c2 x)
       } ;
     ComplN3 f x = {
-      s = \\nf => f.s ! nf ++ appCompl True Pos f.c2 x ;
-      c2 = f.c3
+      s = \\nf => preOrPost f.isPre (f.s ! nf) (appCompl True Pos f.c2 x) ;
+      c2 = f.c3 ;
+      isPre = f.isPre2
       } ;
 
     AdjCN ap cn = {

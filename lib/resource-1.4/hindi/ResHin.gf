@@ -144,17 +144,18 @@ resource ResHin = ParamX ** open Prelude in {
         } ;
 
   param
-    PronCase = PCase Case | PObj | PPoss ;
+    PronCase = PC Case | PObj | PPoss ;
   oper
     personalPronoun : Person -> Number -> {s : PronCase => Str} = \p,n -> 
       case <p,n> of {
-        <P1,Sg> => {s = table PronCase ["mEN"  ; "muJ" ; "muJe"   ; "merA"]} ;
-        <P1,Pl> => {s = table PronCase ["ham"  ; "ham" ; "hameN"  ; "hamArA"]} ;
-        <P2,Sg> => {s = table PronCase ["tU"   ; "tuJ" ; "tuJe"   ; "terA"]} ;
-        <P2,Pl> => {s = table PronCase ["tum"  ; "tum" ; "tumheN" ; "tumhArA"]} ;
-        <P3,Sg> => {s = table PronCase ["vah"  ; "u-s" ; "u-se"   ; "u-skA"]} ;
-        <P3,Pl> => {s = table PronCase ["ve"   ; "u-n" ; "u-nheN" ; "u-nkA"]}
-        } ;
+        <P1,Sg> => {s = table PronCase ["mEN"  ; "muJ" ; "muJ"  ; "muJe"   ; "merA"]} ;
+        <P1,Pl> => {s = table PronCase ["ham"  ; "ham" ; "ham"  ; "hameN"  ; "hamArA"]} ;
+        <P2,Sg> => {s = table PronCase ["tU"   ; "tuJ" ; "tuJ"  ; "tuJe"   ; "terA"]} ;
+        <P2,Pl> => {s = table PronCase ["tum"  ; "tum" ; "tum"  ; "tum"    ; "tumhArA"]} ;
+        <P3,Sg> => {s = table PronCase ["vah"  ; "u-s" ; "u-s"  ; "u-se"    ; "u-skA"]} ;
+        <P3,Pl> => {s = table PronCase ["ve"   ; "u-n" ; "u-n"  ; "u-nheN" ; "u-nkA"]}
+        } ;  
+      ---- the third is the vocative - is it really this way?
 
   -- the Hindi verb phrase
 
@@ -187,6 +188,11 @@ resource ResHin = ParamX ** open Prelude in {
     VType = VIntrans | VTrans | VTransPost ;
 
   oper
+    objVType : VType -> NPCase = \vt -> case vt of {
+      VTrans => NPObj ;
+      _ => NPC Obl
+      } ;
+
     VPH : Type = {
       s    : Bool => VPHForm => {fin, inf, neg : Str} ;
       obj  : {s : Str ; a : Agr} ; 
@@ -238,14 +244,14 @@ resource ResHin = ParamX ** open Prelude in {
 
     insertObject : NP -> VPHSlash -> VPH = \np,vps -> {
       s = vps.s ;
-      obj = {s = vps.obj.s ++ np.s ! NPC Obl ++ vps.c2.s ; a = np.a} ;
+      obj = {s = vps.obj.s ++ np.s ! objVType vps.c2.c ++ vps.c2.s ; a = np.a} ;
       subj = vps.c2.c ;
       comp = vps.comp 
       } ;
 
   param
     Agr = Ag Gender Number Person ;
-    NPCase = NPC Case | NPErg ;
+    NPCase = NPC Case | NPObj | NPErg ;
 
   oper
     agrP3 : Gender -> Number -> Agr = \g,n -> Ag g n P3 ;
@@ -254,22 +260,23 @@ resource ResHin = ParamX ** open Prelude in {
 
     npcase2case : NPCase -> Case = \npc -> case npc of {
       NPC c => c ;
+      NPObj => Obl ;
       NPErg => Obl
+      } ;
+
+    np2pronCase : NPCase -> PronCase = \np -> case np of {
+      NPC c => PC c ;
+      NPObj => PObj ;
+      NPErg => PC Obl
       } ;
 
     toNP : (Case => Str) -> NPCase -> Str = \pn, npc -> case npc of {
       NPC c => pn ! c ;
+      NPObj => pn ! Obl ;
       NPErg => pn ! Obl ++ "ne"
       } ;
 
     NP : Type = {s : NPCase => Str ; a : Agr} ;
-
----  param
----    PronCase = PCase Case | PObj | PPoss ;
----  oper
----    personalPronoun : Person -> Number -> {s : PronCase => Str} = \p,n -> 
-
-
 
     mkClause : NP -> VPH -> Clause = \np,vp -> {
       s = \\vt,b => 
