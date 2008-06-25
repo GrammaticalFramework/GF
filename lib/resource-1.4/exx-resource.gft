@@ -218,3 +218,5 @@ PhrUtt NoPConj (UttS (UseCl TPast ASimul PPos (PredVP (UsePron i_Pron) (ReflVP (
 -- more long examples
 
 UttS (UseCl TPres ASimul PPos (PredVP (DetCN (DetQuant this_Quant NumSg) (UseN grammar_N)) (ComplSlash (SlashV2a speak_V2) (DetCN (DetArtCard IndefArt (NumNumeral (num (pot2as3 (pot1as2 (pot1to19 n2)))))) (UseN language_N)))))
+UseCl TPast AAnter PPos (PredVP (UsePron she_Pron) (ComplSlash (SlashV2a buy_V2) (DetArtSg IndefArt (AdjCN (PositA red_A) (UseN house_N)))))
+
