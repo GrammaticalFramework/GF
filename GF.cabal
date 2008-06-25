@@ -559,7 +559,7 @@ library
                  bytestring,
                  random
   ghc-options: -O2
-  hs-source-dirs: src-3.0
+  hs-source-dirs: src
   extensions: 
   exposed-modules: 
     PGF
@@ -604,7 +604,7 @@ executable gf3
   else
     build-depends: unix
   ghc-options: -O2
-  hs-source-dirs: src-3.0
+  hs-source-dirs: src
   extensions:
   main-is: GF.hs
   other-modules:
