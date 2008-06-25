@@ -144,7 +144,7 @@ today:
 	echo '{-# NOINLINE version #-}' >> Paths_gf.hs
 	echo 'version :: Version' >> Paths_gf.hs
 	echo 'version = Version {versionBranch = [3,0], versionTags = ["alpha"]}' >> Paths_gf.hs
-	echo 'getDataDir = return $(GF_DATA_DIR) :: IO FilePath' >> Paths_gf.hs
+	echo 'getDataDir = return "$(GF_DATA_DIR)" :: IO FilePath' >> Paths_gf.hs
 
 javac:
 	$(JAVAC) $(JAVAFLAGS) -classpath $(GFEDITOR)/jargs-1.0.jar $(GFEDITOR)/de/uka/ilkd/key/ocl/gf/*.java
