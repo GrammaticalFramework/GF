@@ -55,8 +55,8 @@ concrete CatGer of Cat =
     Quant = {s : Number => Gender => Case => Str ; a : Adjf} ;
     Art = {s : Bool => Number => Gender => Case => Str ; a : Adjf} ;
     Predet = {s : Number => Gender => Case => Str} ;
-    Num = {s : Str ; n : Number ; isNum : Bool} ;
-    Card = {s : Str ; n : Number} ;
+    Num = {s : Gender => Case => Str ; n : Number ; isNum : Bool} ;
+    Card = {s : Gender => Case => Str ; n : Number} ;
     Ord = {s : AForm => Str} ;
 
 -- Numeral

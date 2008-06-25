@@ -89,7 +89,7 @@ concrete QuestionGer of Question = CatGer ** open ResGer in {
       let 
         n = num.n
       in {
-      s = \\g,c => idet.s ! n ! g ! c ++ num.s  ; 
+      s = \\g,c => idet.s ! n ! g ! c ++ num.s!g!c  ; 
       n = n
       } ;
  

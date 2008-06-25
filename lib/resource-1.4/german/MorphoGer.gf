@@ -71,7 +71,7 @@ oper
 
   cardOrd : Str -> Str -> CardOrd => Str = \drei,dritte ->
     table {
-      NCard  => drei ;
+      NCard _ _ => drei ;
       NOrd a => (regA (init dritte)).s ! Posit ! a
       } ;
 
@@ -90,7 +90,7 @@ oper
   regDigit : Str -> LinDigit = \vier -> 
     mkDigit vier (vier + "zehn") (vier + "zig") (vier + "te") ;
 
-  invNum : CardOrd = NCard ;
+  invNum : CardOrd = NCard Masc Nom ;
 
 } ;
 
