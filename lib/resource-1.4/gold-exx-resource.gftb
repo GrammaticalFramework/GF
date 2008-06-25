@@ -1,7 +1,7 @@
 Lang: PositA warm_A
 LangDan: varm
 LangEng: warm
-LangFin: l‰mmin
+LangFin: l√§mmin
 LangFre: chaud
 LangGer: warm
 LangIna: calde
@@ -11,18 +11,18 @@ LangSwe: varm
  Lang: ComparA warm_A (UsePron i_Pron)
 LangDan: varmere end jeg
 LangEng: warmer than I
-LangFin: minua l‰mpim‰mpi
+LangFin: minua l√§mpim√§mpi
 LangFre: plus chaud que moi
-LangGer: w‰rmer als ich
+LangGer: w√§rmer als ich
 LangIna: plus calde que io
-LangIta: pi˘ caldo che io
+LangIta: pi√π caldo che io
 LangNor: varmere enn jeg
-LangSwe: varmare ‰n jag
+LangSwe: varmare √§n jag
  Lang: ComplA2 married_A2 (UsePron she_Pron)
 LangDan: gift med hende
 LangEng: married to her
-LangFin: h‰nen kanssa &+ nsa avioitunut
-LangFre: mariÈ ‡ elle
+LangFin: h√§nen kanssa &+ nsa avioitunut
+LangFre: mari√© √† elle
 LangGer: verheiratet mit ihr
 LangIna: sponsate a la
 LangIta: sposato a lei
@@ -31,8 +31,8 @@ LangSwe: gift med henne
  Lang: ComplA2 married_A2 (DetNP (DetQuant (PossPron she_Pron) NumPl))
 LangDan: gift med hendes
 LangEng: married to hers
-LangFin: h‰nen kanssa avioitunut
-LangFre: mariÈ aux siens
+LangFin: h√§nen kanssa avioitunut
+LangFre: mari√© aux siens
 LangGer: verheiratet mit ihren
 LangIna: sponsate a su
 LangIta: sposato ai suoi
@@ -41,8 +41,8 @@ LangSwe: gift med hennes
  Lang: ComplA2 married_A2 (DetNP (DetQuant (PossPron she_Pron) NumSg))
 LangDan: gift med hendes
 LangEng: married to hers
-LangFin: h‰nen kanssa avioitunut
-LangFre: mariÈ au sien
+LangFin: h√§nen kanssa avioitunut
+LangFre: mari√© au sien
 LangGer: verheiratet mit ihrem
 LangIna: sponsate a su
 LangIta: sposato al suo
@@ -51,8 +51,8 @@ LangSwe: gift med hennes
  Lang: ReflA2 married_A2
 LangDan: gift med sig
 LangEng: married to myself
-LangFin: itsens‰ kanssa avioitunut
-LangFre: mariÈ ‡ soi
+LangFin: itsens√§ kanssa avioitunut
+LangFre: mari√© √† soi
 LangGer: verheiratet mit sich
 LangIna: sponsate a me
 LangIta: sposato a se
@@ -62,7 +62,7 @@ LangSwe: gift med sig
 LangDan: gift
 LangEng: married
 LangFin: avioitunut
-LangFre: mariÈ
+LangFre: mari√©
 LangGer: verheiratet
 LangIna: sponsate
 LangIta: sposato
@@ -71,18 +71,18 @@ LangSwe: gift
  Lang: SentAP (PositA good_A) (EmbedS (UseCl TPres ASimul PPos (PredVP (UsePron she_Pron) (UseComp (CompAdv here_Adv)))))
 LangDan: god at hun er her
 LangEng: good that she is here
-LangFin: hyv‰ ett‰ h‰n on t‰‰ll‰
+LangFin: hyv√§ ett√§ h√§n on t√§√§ll√§
 LangFre: bon qu' elle est ici
-LangGer: gut daﬂ sie hier ist
+LangGer: gut da√ü sie hier ist
 LangIna: bon que illa es hic
-LangIta: buono che Ë quÏ
+LangIta: buono che √® qu√¨
 LangNor: god at hun er her
-LangSwe: god att hon ‰r h‰r
+LangSwe: god att hon √§r h√§r
  Lang: AdAP very_AdA (PositA warm_A)
 LangDan: meget varm
 LangEng: very warm
-LangFin: eritt‰in l‰mmin
-LangFre: trËs chaud
+LangFin: eritt√§in l√§mmin
+LangFre: tr√®s chaud
 LangGer: sehr warm
 LangIna: multo calde
 LangIta: molto caldo
@@ -91,7 +91,7 @@ LangSwe: mycket varm
  Lang: PositAdvAdj warm_A
 LangDan: varmt
 LangEng: warmly
-LangFin: l‰mpim‰sti
+LangFin: l√§mpim√§sti
 LangFre: chaudement
 LangGer: warm
 LangIna: caldemente
@@ -111,57 +111,57 @@ LangSwe: i huset
  Lang: ComparAdvAdj more_CAdv warm_A (UsePN john_PN)
 LangDan: mer varmt end John
 LangEng: more warmly than John
-LangFin: enemm‰n l‰mpim‰sti kuin Jussi
+LangFin: enemm√§n l√§mpim√§sti kuin Jussi
 LangFre: plus chaudement que Jean
 LangGer: mehr warm als Johann
 LangIna: plus caldemente que John
-LangIta: pi˘ caldamente che Giovanni
+LangIta: pi√π caldamente che Giovanni
 LangNor: mer varmt enn John
-LangSwe: mer varmt ‰n Johan
+LangSwe: mer varmt √§n Johan
  Lang: ComparAdvAdjS more_CAdv warm_A (UseCl TPres ASimul PPos (PredVP (UsePron he_Pron) (UseV run_V)))
-LangDan: mer varmt end han l¯ber
+LangDan: mer varmt end han l√∏ber
 LangEng: more warmly than he runs
-LangFin: enemm‰n l‰mpim‰sti kuin h‰n juoksee
+LangFin: enemm√§n l√§mpim√§sti kuin h√§n juoksee
 LangFre: plus chaudement qu' il ne coure
-LangGer: mehr warm als er l‰uft
+LangGer: mehr warm als er l√§uft
 LangIna: plus caldemente que ille curre
-LangIta: pi˘ caldamente che corra
+LangIta: pi√π caldamente che corra
 LangNor: mer varmt enn han springer
-LangSwe: mer varmt ‰n han springer
+LangSwe: mer varmt √§n han springer
  Lang: SubjS when_Subj (UseCl TPres ASimul PPos (PredVP (UsePron she_Pron) (UseV sleep_V)))
-LangDan: nÂr hun sover
+LangDan: n√•r hun sover
 LangEng: when she sleeps
-LangFin: kun h‰n nukkuu
+LangFin: kun h√§n nukkuu
 LangFre: quand elle dort
-LangGer: wenn sie schl‰ft
+LangGer: wenn sie schl√§ft
 LangIna: quando illa dormi
 LangIta: quando dorme
-LangNor: nÂr hun sover
-LangSwe: n‰r hon sover
+LangNor: n√•r hun sover
+LangSwe: n√§r hon sover
  Lang: AdNum (AdnCAdv more_CAdv) (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n5))))))
 LangDan: mer end fem
 LangEng: more than five
-LangFin: enemm‰n kuin viisi
+LangFin: enemm√§n kuin viisi
 LangFre: plus que cinq
-LangGer: mehr als f¸nf
+LangGer: mehr als f√ºnf
 LangIna: plus que cinque
-LangIta: pi˘ che cinque
+LangIta: pi√π che cinque
 LangNor: mer enn fem
-LangSwe: mer ‰n fem
+LangSwe: mer √§n fem
  Lang: ConjS and_Conj (BaseS (UseCl TPres ASimul PPos (PredVP (UsePron he_Pron) (UseV walk_V))) (UseCl TPres ASimul PPos (PredVP (UsePron she_Pron) (UseV run_V))))
-LangDan: han gÂr og hun l¯ber
+LangDan: han g√•r og hun l√∏ber
 LangEng: he walks and she runs
-LangFin: h‰n k‰velee ja h‰n juoksee
+LangFin: h√§n k√§velee ja h√§n juoksee
 LangFre: il marche et elle court
-LangGer: er geht und sie l‰uft
+LangGer: er geht und sie l√§uft
 LangIna: ille ambula e illa curre
 LangIta: cammina e corre
-LangNor: han gÂr og hun springer
-LangSwe: han gÂr och hon springer
+LangNor: han g√•r og hun springer
+LangSwe: han g√•r och hon springer
  Lang: ConjAP and_Conj (BaseAP (PositA cold_A) (PositA warm_A))
 LangDan: kold og varm
 LangEng: cold and warm
-LangFin: kylm‰ ja l‰mmin
+LangFin: kylm√§ ja l√§mmin
 LangFre: froid et chaud
 LangGer: kalt und warm
 LangIna: frigide e calde
@@ -171,7 +171,7 @@ LangSwe: kall och varm
  Lang: ConjNP or_Conj (BaseNP (UsePron she_Pron) (UsePron we_Pron))
 LangDan: hun eller vi
 LangEng: she or we
-LangFin: h‰n tai me
+LangFin: h√§n tai me
 LangFre: elle ou nous
 LangGer: sie oder wir
 LangIna: illa o nos
@@ -181,37 +181,37 @@ LangSwe: hon eller vi
  Lang: ConjAdv or_Conj (BaseAdv here_Adv there_Adv)
 LangDan: her eller der
 LangEng: here or there
-LangFin: t‰‰ll‰ tai siell‰
-LangFre: ici ou l‡
+LangFin: t√§√§ll√§ tai siell√§
+LangFre: ici ou l√†
 LangGer: hier oder da
 LangIna: hic o ibi
-LangIta: quÏ o l‡
+LangIta: qu√¨ o l√†
 LangNor: her eller der
-LangSwe: h‰r eller d‰r
+LangSwe: h√§r eller d√§r
  Lang: ConjS either7or_DConj (BaseS (UseCl TPres ASimul PPos (PredVP (UsePron he_Pron) (UseV walk_V))) (UseCl TPres ASimul PPos (PredVP (UsePron she_Pron) (UseV run_V))))
-LangDan: enten han gÂr eller hun l¯ber
+LangDan: enten han g√•r eller hun l√∏ber
 LangEng: either he walks or she runs
-LangFin: joko h‰n k‰velee tai h‰n juoksee
+LangFin: joko h√§n k√§velee tai h√§n juoksee
 LangFre: ou il marche ou elle court
-LangGer: entweder er geht oder sie l‰uft
+LangGer: entweder er geht oder sie l√§uft
 LangIna: o ille ambula o illa curre
 LangIta: o cammina o corre
-LangNor: enten han gÂr eller hun springer
-LangSwe: antingen han gÂr eller hon springer
+LangNor: enten han g√•r eller hun springer
+LangSwe: antingen han g√•r eller hon springer
  Lang: ConjAP both7and_DConj (BaseAP (PositA warm_A) (PositA cold_A))
-LangDan: bÂde varm og kold
+LangDan: b√•de varm og kold
 LangEng: both warm and cold
-LangFin: sek‰ l‰mmin ett‰ kylm‰
+LangFin: sek√§ l√§mmin ett√§ kylm√§
 LangFre: et chaud et froid
 LangGer: sowohl warm als auch kalt
 LangIna: e calde e frigide
 LangIta: e caldo e freddo
-LangNor: bÂde varm og kald
-LangSwe: bÂde varm och kall
+LangNor: b√•de varm og kald
+LangSwe: b√•de varm och kall
  Lang: ConjNP either7or_DConj (BaseNP (UsePron he_Pron) (UsePron she_Pron))
 LangDan: enten han eller hun
 LangEng: either he or she
-LangFin: joko h‰n tai h‰n
+LangFin: joko h√§n tai h√§n
 LangFre: ou lui ou elle
 LangGer: entweder er oder sie
 LangIna: o ille o illa
@@ -219,31 +219,31 @@ LangIta: o lui o lei
 LangNor: enten han eller hun
 LangSwe: antingen han eller hon
  Lang: ConjAdv both7and_DConj (BaseAdv here_Adv there_Adv)
-LangDan: bÂde her og der
+LangDan: b√•de her og der
 LangEng: both here and there
-LangFin: sek‰ t‰‰ll‰ ett‰ siell‰
-LangFre: et ici et l‡
+LangFin: sek√§ t√§√§ll√§ ett√§ siell√§
+LangFre: et ici et l√†
 LangGer: sowohl hier als auch da
 LangIna: e hic e ibi
-LangIta: e quÏ e l‡
-LangNor: bÂde her og der
-LangSwe: bÂde h‰r och d‰r
+LangIta: e qu√¨ e l√†
+LangNor: b√•de her og der
+LangSwe: b√•de h√§r och d√§r
  Lang: ImpersCl (UseComp (CompAP (PositA hot_A)))
 LangDan: det er hedt
 LangEng: it is hot
 LangFin: on kuuma
 LangFre: il est chaud
-LangGer: es ist heiﬂ
+LangGer: es ist hei√ü
 LangIna: il es calide
-LangIta: Ë caldo
+LangIta: √® caldo
 LangNor: det er heitt
-LangSwe: det ‰r hett
+LangSwe: det √§r hett
  Lang: GenericCl (UseV sleep_V)
 LangDan: man sover
 LangEng: one sleeps
 LangFin: nukutaan
 LangFre: on dort
-LangGer: man schl‰ft
+LangGer: man schl√§ft
 LangIna: on dormi
 LangIta: si dorme
 LangNor: man sover
@@ -251,23 +251,23 @@ LangSwe: man sover
  Lang: CleftNP (UsePron i_Pron) (UseRCl TPast ASimul PPos (RelVP IdRP (ComplSlash (SlashV2a do_V2) (UsePron it_Pron))))
 LangDan: det er jeg som gjorde det
 LangEng: it is I who did it
-LangFin: se on min‰ joka tein sen
+LangFin: se on min√§ joka tein sen
 LangFre: c' est moi qui le faisais
 LangGer: es ist ich der es tat
 LangIna: lo es me qui faceva lo
-LangIta: Ë io che lo facevo
+LangIta: √® io che lo facevo
 LangNor: det er jeg som gjorde det
-LangSwe: det ‰r jag som gjorde det
+LangSwe: det √§r jag som gjorde det
  Lang: CleftAdv here_Adv (UseCl TPast ASimul PPos (PredVP (UsePron she_Pron) (UseV sleep_V)))
 LangDan: det er her hun sov
 LangEng: it is here that she slept
-LangFin: se on t‰‰ll‰ kun h‰n nukkui
+LangFin: se on t√§√§ll√§ kun h√§n nukkui
 LangFre: c' est ici qu' elle dormait
-LangGer: es ist hier daﬂ sie schlief
+LangGer: es ist hier da√ü sie schlief
 LangIna: lo es hic que illa dormiva
-LangIta: Ë quÏ che dormiva
+LangIta: √® qu√¨ che dormiva
 LangNor: det er her hun sov
-LangSwe: det ‰r h‰r hon sov
+LangSwe: det √§r h√§r hon sov
  Lang: ExistNP (DetArtSg IndefArt (UseN house_N))
 LangDan: det findes et hus
 LangEng: there is a house
@@ -275,39 +275,39 @@ LangFin: on olemassa talo
 LangFre: il y a une maison
 LangGer: es gibt ein Haus
 LangIna: il ha un domo
-LangIta: c' Ë una casa
+LangIta: c' √® una casa
 LangNor: det finnes et hus
 LangSwe: det finns ett hus
  Lang: ExistIP (IdetCN (IdetQuant which_IQuant NumPl) (UseN house_N))
 LangDan: hvilke huse findes det
 LangEng: which houses are there
-LangFin: mit‰ taloja on olemassa
+LangFin: mit√§ taloja on olemassa
 LangFre: quelles maisons il y a
-LangGer: welche H‰user gibt es
+LangGer: welche H√§user gibt es
 LangIna: qual domos il ha
 LangIta: quali case ci sono
 LangNor: hvilke hus finnes det
 LangSwe: vilka hus finns det
  Lang: PredVP (UsePron i_Pron) (ProgrVP (UseV sleep_V))
-LangDan: jeg er ved Â sove
+LangDan: jeg er ved √• sove
 LangEng: I am sleeping
-LangFin: min‰ olen nukkumassa
+LangFin: min√§ olen nukkumassa
 LangFre: je suis en train de dormir
 LangGer: ich schlafe eben
 LangIna: io dormi
 LangIta: sto dormendo
-LangNor: jeg er ved Â sove
-LangSwe: jag hÂller pÂ att sova
+LangNor: jeg er ved √• sove
+LangSwe: jag h√•ller p√• att sova
  Lang: ImpPl1 (UseV go_V)
-LangDan: lad os gÂ
+LangDan: lad os g√•
 LangEng: let's go
-LangFin: menn‰‰n
+LangFin: menn√§√§n
 LangFre: allons
 LangGer: gehen wir
 LangIna: que nos i
 LangIta: andiamo
-LangNor: lat oss gÂ
-LangSwe: lÂt oss gÂ
+LangNor: lat oss g√•
+LangSwe: l√•t oss g√•
  Lang: DetArtSg DefArt (UseN man_N)
 LangDan: manden
 LangEng: the man
@@ -331,7 +331,7 @@ LangSwe: Johan
  Lang: UsePron he_Pron
 LangDan: han
 LangEng: he
-LangFin: h‰n
+LangFin: h√§n
 LangFre: lui
 LangGer: er
 LangIna: ille
@@ -351,7 +351,7 @@ LangSwe: bara mannen
  Lang: PPartNP (DetArtSg DefArt (UseN man_N)) see_V2
 LangDan: manden set
 LangEng: the man seen
-LangFin: mies n‰htyn‰
+LangFin: mies n√§htyn√§
 LangFre: l' homme vu
 LangGer: der Mann gesehen
 LangIna: le viro vidite
@@ -361,7 +361,7 @@ LangSwe: mannen sedd
  Lang: AdvNP (UsePN paris_PN) today_Adv
 LangDan: Paris idag
 LangEng: Paris today
-LangFin: Pariisi t‰n‰‰n
+LangFin: Pariisi t√§n√§√§n
 LangFre: Paris aujourd'hui
 LangGer: Paris heute
 LangIna: Paris hodie
@@ -371,69 +371,69 @@ LangSwe: Paris idag
  Lang: RelNP (UsePN paris_PN) (UseRCl TPres ASimul PPos (RelVP IdRP (UseComp (CompAdv here_Adv))))
 LangDan: Paris , som er her
 LangEng: Paris , which is here
-LangFin: Pariisi , joka on t‰‰ll‰
+LangFin: Pariisi , joka on t√§√§ll√§
 LangFre: Paris qui est ici
 LangGer: Paris , das hier ist
 LangIna: Paris , qui es hic
-LangIta: Parigi che Ë quÏ
+LangIta: Parigi che √® qu√¨
 LangNor: Paris , som er her
-LangSwe: Paris , som ‰r h‰r
+LangSwe: Paris , som √§r h√§r
  Lang: DetNP (DetQuant this_Quant (NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n5))))))))
 LangDan: disse fem
 LangEng: these five
-LangFin: n‰m‰ viisi
+LangFin: n√§m√§ viisi
 LangFre: ces cinq
-LangGer: diese f¸nf
+LangGer: diese f√ºnf
 LangIna: istes cinque
 LangIta: questi cinque
 LangNor: disse fem
-LangSwe: de h‰r fem
+LangSwe: de h√§r fem
  Lang: DetCN (DetQuantOrd this_Quant (NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n5))))))) (OrdSuperl good_A)) (UseN man_N)
-LangDan: disse fem bedste mÊnd
+LangDan: disse fem bedste m√¶nd
 LangEng: these five best men
-LangFin: n‰m‰ viisi parasta miest‰
+LangFin: n√§m√§ viisi parasta miest√§
 LangFre: ces cinq meilleurs hommes
-LangGer: diese f¸nf besten M‰nner
+LangGer: diese f√ºnf besten M√§nner
 LangIna: istes cinque optime viros
 LangIta: questi cinque migliori uomini
 LangNor: disse fem beste mennen
-LangSwe: de h‰r fem b‰sta m‰nnen
+LangSwe: de h√§r fem b√§sta m√§nnen
  Lang: DetCN (DetQuant this_Quant (NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n5)))))))) (UseN man_N)
-LangDan: disse fem mÊnd
+LangDan: disse fem m√¶nd
 LangEng: these five men
-LangFin: n‰m‰ viisi miest‰
+LangFin: n√§m√§ viisi miest√§
 LangFre: ces cinq hommes
-LangGer: diese f¸nf M‰nner
+LangGer: diese f√ºnf M√§nner
 LangIna: istes cinque viros
 LangIta: questi cinque uomini
 LangNor: disse fem mennen
-LangSwe: de h‰r fem m‰nnen
+LangSwe: de h√§r fem m√§nnen
  Lang: DetCN (DetQuant this_Quant NumPl) (UseN man_N)
-LangDan: disse mÊnd
+LangDan: disse m√¶nd
 LangEng: these men
-LangFin: n‰m‰ miehet
+LangFin: n√§m√§ miehet
 LangFre: ces hommes
-LangGer: diese M‰nner
+LangGer: diese M√§nner
 LangIna: istes viros
 LangIta: questi uomini
 LangNor: disse mennen
-LangSwe: de h‰r m‰nnen
+LangSwe: de h√§r m√§nnen
  Lang: DetCN (DetQuant this_Quant NumSg) (UseN man_N)
 LangDan: denne mand
 LangEng: this man
-LangFin: t‰m‰ mies
+LangFin: t√§m√§ mies
 LangFre: cet homme
 LangGer: dieser Mann
 LangIna: iste viro
 LangIta: questo uomo
 LangNor: denne mannen
-LangSwe: den h‰r mannen
+LangSwe: den h√§r mannen
  Lang: NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n5))))))
 LangDan: fem
 LangEng: five
 LangFin: viisi
 LangFre: cinq
-LangGer: f¸nf
+LangGer: f√ºnf
 LangIna: cinque
 LangIta: cinque
 LangNor: fem
@@ -451,15 +451,15 @@ LangSwe: 5 1
  Lang: NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot1plus n5 pot01)))))
 LangDan: et og halvtreds
 LangEng: fifty - one
-LangFin: viisi kymment‰ yksi
+LangFin: viisi kymment√§ yksi
 LangFre: cinquante et un
-LangGer: ein und f¸nfzig
+LangGer: ein und f√ºnfzig
 LangIna: quinte - un
 LangIta: cinquanta uno
 LangNor: femti en
 LangSwe: femtio en
  Lang: NumCard (AdNum almost_AdN (NumDigits (IIDig D_5 (IDig D_1))))
-LangDan: nÊsten 5 1
+LangDan: n√¶sten 5 1
 LangEng: almost 5 1
 LangFin: melkein 5 1
 LangFre: presque 5 1
@@ -467,7 +467,7 @@ LangGer: fast 5 1
 LangIna: quasi 5 1
 LangIta: quasi 5 1
 LangNor: nesten 5 1
-LangSwe: n‰stan 5 1
+LangSwe: n√§stan 5 1
  Lang: OrdDigits (IIDig D_5 (IDig D_1))
 LangDan: 5 1:e
 LangEng: 5 1st
@@ -482,42 +482,42 @@ LangSwe: 5 1:a
 LangDan: et og halvtredsindstyvende
 LangEng: fifty - first
 LangFin: viides kymmenes yhdes
-LangFre: cinquante et uniËme
-LangGer: ein und f¸nfzigst
+LangFre: cinquante et uni√®me
+LangGer: ein und f√ºnfzigst
 LangIna: quinte - dece
 LangIta: cinquanta primo
-LangNor: femti f¯rste
-LangSwe: femtio fˆrsta
+LangNor: femti f√∏rste
+LangSwe: femtio f√∂rsta
  Lang: OrdSuperl warm_A
 LangDan: varmeste
 LangEng: warmest
-LangFin: l‰mpimin
+LangFin: l√§mpimin
 LangFre: plus chaud
-LangGer: w‰rmst
+LangGer: w√§rmst
 LangIna: le plus calde
-LangIta: pi˘ caldo
+LangIta: pi√π caldo
 LangNor: varmeste
 LangSwe: varmaste
  Lang: DetCN (DetArtOrd DefArt (NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n5))))))) (OrdSuperl good_A)) (UseN man_N)
-LangDan: de fem bedste mÊndene
+LangDan: de fem bedste m√¶ndene
 LangEng: the five best men
-LangFin: viisi parhaimmat miest‰
+LangFin: viisi parhaimmat miest√§
 LangFre: les cinq meilleurs hommes
-LangGer: die f¸nf besten M‰nner
+LangGer: die f√ºnf besten M√§nner
 LangIna: le cinque optime viros
 LangIta: i cinque migliori uomini
 LangNor: de fem beste mennen
-LangSwe: de fem b‰sta m‰nnen
+LangSwe: de fem b√§sta m√§nnen
  Lang: DetCN (DetArtCard DefArt (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n5))))))) (UseN man_N)
-LangDan: de fem mÊndene
+LangDan: de fem m√¶ndene
 LangEng: the five men
-LangFin: viisi miest‰
+LangFin: viisi miest√§
 LangFre: les cinq hommes
-LangGer: die f¸nf M‰nner
+LangGer: die f√ºnf M√§nner
 LangIna: le cinque viros
 LangIta: i cinque uomini
 LangNor: de fem mennen
-LangSwe: de fem m‰nnen
+LangSwe: de fem m√§nnen
  Lang: DetCN (DetArtCard IndefArt (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 pot01)))))) (UseN man_N)
 LangDan: en mand
 LangEng: one man
@@ -549,25 +549,25 @@ LangIta: l' uomo
 LangNor: mannen
 LangSwe: mannen
  Lang: DetArtPl DefArt (UseN man_N)
-LangDan: mÊndene
+LangDan: m√¶ndene
 LangEng: the men
 LangFin: miehet
 LangFre: les hommes
-LangGer: die M‰nner
+LangGer: die M√§nner
 LangIna: le viros
 LangIta: gli uomini
 LangNor: mennen
-LangSwe: m‰nnen
+LangSwe: m√§nnen
  Lang: MassNP (UseN beer_N)
-LangDan: ¯l
+LangDan: √∏l
 LangEng: beer
 LangFin: olut
-LangFre: de la biËre
+LangFre: de la bi√®re
 LangGer: Bier
 LangIna: bira
 LangIta: della birra
-LangNor: ¯l
-LangSwe: ˆl
+LangNor: √∏l
+LangSwe: √∂l
  Lang: DetCN (DetQuant (PossPron i_Pron) NumSg) (UseN house_N)
 LangDan: mit hus
 LangEng: my house
@@ -591,28 +591,28 @@ LangSwe: hus
  Lang: ComplN2 mother_N2 (DetArtSg DefArt (UseN king_N))
 LangDan: moder til kongen
 LangEng: mother of the king
-LangFin: kuninkaan ‰iti
-LangFre: mËre du roi
-LangGer: Mutter von dem Kˆnig
+LangFin: kuninkaan √§iti
+LangFre: m√®re du roi
+LangGer: Mutter von dem K√∂nig
 LangIna: matre del rege
-LangIta: madre del rÈ
+LangIta: madre del r√©
 LangNor: mor til kongen
 LangSwe: mor till kungen
  Lang: ComplN2 (ComplN3 distance_N3 (DetCN (DetQuant this_Quant NumSg) (UseN city_N))) (UsePN paris_PN)
 LangDan: afstand fra denne by til Paris
 LangEng: distance from this city to Paris
-LangFin: et‰isyys t‰st‰ kaupungista Pariisiin
-LangFre: distance de cette ville ‡ Paris
+LangFin: et√§isyys t√§st√§ kaupungista Pariisiin
+LangFre: distance de cette ville √† Paris
 LangGer: Entfernung von dieser Stadt zu Paris
 LangIna: distantia de iste urbe a Paris
-LangIta: distanza di questa citt‡ a Parigi
+LangIta: distanza di questa citt√† a Parigi
 LangNor: avstand fra denne byen til Paris
-LangSwe: avstÂnd frÂn den h‰r staden till Paris
+LangSwe: avst√•nd fr√•n den h√§r staden till Paris
  Lang: UseN2 mother_N2
 LangDan: moder
 LangEng: mother
-LangFin: ‰iti
-LangFre: mËre
+LangFin: √§iti
+LangFre: m√®re
 LangGer: Mutter
 LangIna: matre
 LangIta: madre
@@ -621,73 +621,73 @@ LangSwe: mor
  Lang: ComplN2 (Use2N3 distance_N3) (DetCN (DetQuant this_Quant NumSg) (UseN city_N))
 LangDan: afstand fra denne by
 LangEng: distance from this city
-LangFin: et‰isyys t‰st‰ kaupungista
+LangFin: et√§isyys t√§st√§ kaupungista
 LangFre: distance de cette ville
 LangGer: Entfernung von dieser Stadt
 LangIna: distantia de iste urbe
-LangIta: distanza di questa citt‡
+LangIta: distanza di questa citt√†
 LangNor: avstand fra denne byen
-LangSwe: avstÂnd frÂn den h‰r staden
+LangSwe: avst√•nd fr√•n den h√§r staden
  Lang: ComplN2 (Use3N3 distance_N3) (UsePN paris_PN)
 LangDan: afstand til Paris
 LangEng: distance to Paris
-LangFin: et‰isyys Pariisiin
+LangFin: et√§isyys Pariisiin
 LangFre: distance de Paris
 LangGer: Entfernung zu Paris
 LangIna: distantia a Paris
 LangIta: distanza di Parigi
 LangNor: avstand til Paris
-LangSwe: avstÂnd till Paris
+LangSwe: avst√•nd till Paris
  Lang: UseN2 (Use2N3 distance_N3)
 LangDan: afstand
 LangEng: distance
-LangFin: et‰isyys
+LangFin: et√§isyys
 LangFre: distance
 LangGer: Entfernung
 LangIna: distantia
 LangIta: distanza
 LangNor: avstand
-LangSwe: avstÂnd
+LangSwe: avst√•nd
  Lang: AdjCN (PositA big_A) (UseN house_N)
 LangDan: stort hus
 LangEng: big house
 LangFin: suuri talo
 LangFre: grande maison
-LangGer: groﬂes Haus
+LangGer: gro√ües Haus
 LangIna: domo magne
 LangIta: grande casa
 LangNor: stort hus
 LangSwe: stort hus
  Lang: RelCN (UseN house_N) (UseRCl TPast ASimul PPos (RelSlash IdRP (SlashVP (UsePN john_PN) (SlashV2a buy_V2))))
-LangDan: hus som John k¯bte
+LangDan: hus som John k√∏bte
 LangEng: house which John bought
 LangFin: talo jonka Jussi osti
 LangFre: maison que Jean achetait
 LangGer: Haus das Johann kaufte
 LangIna: domo que John comprva
 LangIta: casa che Giovanni comprava
-LangNor: hus som John kj¯pte
-LangSwe: hus som Johan kˆpte
+LangNor: hus som John kj√∏pte
+LangSwe: hus som Johan k√∂pte
  Lang: AdvCN (UseN house_N) (PrepNP on_Prep (DetArtSg DefArt (UseN hill_N)))
-LangDan: hus pÂ h¯jen
+LangDan: hus p√• h√∏jen
 LangEng: house on the hill
 LangFin: talo kukkulalla
 LangFre: maison sur la colline
-LangGer: Haus auf dem H¸gel
+LangGer: Haus auf dem H√ºgel
 LangIna: domo super le monticulo
 LangIta: casa sulla collina
-LangNor: hus pÂ haugen
-LangSwe: hus pÂ kullen
+LangNor: hus p√• haugen
+LangSwe: hus p√• kullen
  Lang: SentCN (UseN question_N) (EmbedQS (UseQCl TPres ASimul PPos (QuestIAdv where_IAdv (PredVP (UsePron she_Pron) (UseV sleep_V)))))
-LangDan: sp¯rgsmÂl hver hun sover
+LangDan: sp√∏rgsm√•l hver hun sover
 LangEng: question where she sleeps
-LangFin: kysymys miss‰ h‰n nukkuu
-LangFre: question o˘ elle dort
-LangGer: Frage wo sie schl‰ft
+LangFin: kysymys miss√§ h√§n nukkuu
+LangFre: question o√π elle dort
+LangGer: Frage wo sie schl√§ft
 LangIna: question ubi illa dormi
 LangIta: domanda dove dorme
-LangNor: sp¯rsmÂl hver hun sover
-LangSwe: frÂga var hon sover
+LangNor: sp√∏rsm√•l hver hun sover
+LangSwe: fr√•ga var hon sover
  Lang: DetArtSg DefArt (ApposCN (UseN city_N) (UsePN paris_PN))
 LangDan: byen Paris
 LangEng: the city Paris
@@ -695,19 +695,19 @@ LangFin: kaupunki Pariisi
 LangFre: la ville Paris
 LangGer: die Stadt Paris
 LangIna: le urbe Paris
-LangIta: la citt‡ Parigi
+LangIta: la citt√† Parigi
 LangNor: byen Paris
 LangSwe: staden Paris
  Lang: DetCN (DetQuant (PossPron i_Pron) NumSg) (ApposCN (UseN friend_N) (UsePN john_PN))
 LangDan: min ven John
 LangEng: my friend John
-LangFin: minun yst‰v‰ &+ ni Jussi
+LangFin: minun yst√§v√§ &+ ni Jussi
 LangFre: mon ami Jean
 LangGer: mein Freund Johann
 LangIna: mi amico John
 LangIta: il mio amico Giovanni
 LangNor: min venn John
-LangSwe: min v‰n Johan
+LangSwe: min v√§n Johan
  Lang: num (pot2as3 (pot1as2 (pot0as1 (pot0 n6))))
 LangDan: seks
 LangEng: six
@@ -731,7 +731,7 @@ LangSwe: en
  Lang: num (pot2as3 (pot1as2 (pot1 n6)))
 LangDan: tres
 LangEng: sixty
-LangFin: kuusi kymment‰
+LangFin: kuusi kymment√§
 LangFre: soixante
 LangGer: sechszig
 LangIna: sexte
@@ -771,7 +771,7 @@ LangSwe: sexton
  Lang: num (pot2as3 (pot1as2 (pot1 n6)))
 LangDan: tres
 LangEng: sixty
-LangFin: kuusi kymment‰
+LangFin: kuusi kymment√§
 LangFre: soixante
 LangGer: sechszig
 LangIna: sexte
@@ -781,9 +781,9 @@ LangSwe: sextio
  Lang: num (pot2as3 (pot1as2 (pot1plus n6 (pot0 n5))))
 LangDan: fem og tres
 LangEng: sixty - five
-LangFin: kuusi kymment‰ viisi
+LangFin: kuusi kymment√§ viisi
 LangFre: soixante - cinq
-LangGer: f¸nf und sechszig
+LangGer: f√ºnf und sechszig
 LangIna: sexte - cinque
 LangIta: sessanta cinque
 LangNor: seksti fem
@@ -791,7 +791,7 @@ LangSwe: sextio fem
  Lang: num (pot2as3 (pot2 (pot0 n4)))
 LangDan: fire hundrede
 LangEng: four hundred
-LangFin: nelj‰ sataa
+LangFin: nelj√§ sataa
 LangFre: quatre cents
 LangGer: vier hundert
 LangIna: quatro cento
@@ -801,7 +801,7 @@ LangSwe: fyra hundra
  Lang: num (pot2as3 (pot2plus (pot0 n4) (pot1plus n6 (pot0 n7))))
 LangDan: fire hundrede og syv og tres
 LangEng: four hundred and sixty - seven
-LangFin: nelj‰ sataa kuusi kymment‰ seitsem‰n
+LangFin: nelj√§ sataa kuusi kymment√§ seitsem√§n
 LangFre: quatre cent soixante - sept
 LangGer: vier hundert sieben und sechszig
 LangIna: quatro cento sexte - septe
@@ -811,7 +811,7 @@ LangSwe: fyra hundra sextio sju
  Lang: num (pot3 (pot2plus (pot0 n4) (pot1plus n6 (pot0 n7))))
 LangDan: fire hundrede og syv og tres tusind
 LangEng: four hundred and sixty - seven thousand
-LangFin: nelj‰ sataa kuusi kymment‰ seitsem‰n tuhatta
+LangFin: nelj√§ sataa kuusi kymment√§ seitsem√§n tuhatta
 LangFre: quatre cent soixante - sept mille
 LangGer: vier hundert sieben und sechszig tausend
 LangIna: quatro cento sexte - septe mille
@@ -821,13 +821,13 @@ LangSwe: fyra hundra sextio sju tusen
  Lang: num (pot3plus (pot2plus (pot0 n4) (pot1plus n6 (pot0 n7))) (pot1as2 (pot1plus n8 (pot0 n9))))
 LangDan: fire hundrede og syv og tres tusind og ni og firs
 LangEng: four hundred and sixty - seven thousand eighty - nine
-LangFin: nelj‰ sataa kuusi kymment‰ seitsem‰n tuhatta kahdeksan kymment‰ yhdeks‰n
+LangFin: nelj√§ sataa kuusi kymment√§ seitsem√§n tuhatta kahdeksan kymment√§ yhdeks√§n
 LangFre: quatre cent soixante - sept mille quatre-vingt - neuf
 LangGer: vier hundert sieben und sechszig tausend neun und achzig
 LangIna: quatro cento sexte - septe mille octave - novem
 LangIta: quattro cento sessanta sette mila ottanta nove
-LangNor: fire hundre og seksti sju tusen og Âtti ni
-LangSwe: fyra hundra sextio sju tusen Âttio nio
+LangNor: fire hundre og seksti sju tusen og √•tti ni
+LangSwe: fyra hundra sextio sju tusen √•ttio nio
  Lang: IDig D_8
 LangDan: 8
 LangEng: 8
@@ -851,57 +851,57 @@ LangSwe: 8 0 0 1 7 8 9
  Lang: PhrUtt but_PConj (UttImpSg PPos (ImpVP (AdvVP (UseV come_V) here_Adv))) (VocNP (DetCN (DetQuant (PossPron i_Pron) NumSg) (UseN friend_N)))
 LangDan: men kom her , min ven
 LangEng: but come here , my friend
-LangFin: mutta tule t‰‰ll‰ , minun yst‰v‰ &+ ni
+LangFin: mutta tule t√§√§ll√§ , minun yst√§v√§ &+ ni
 LangFre: mais viens ici , mon ami
 LangGer: aber komm hier , mein Freund
 LangIna: sed veni hic , mi amico
-LangIta: ma vieni quÏ , il mio amico
+LangIta: ma vieni qu√¨ , il mio amico
 LangNor: men komm her , min venn
-LangSwe: men kom h‰r , min v‰n
+LangSwe: men kom h√§r , min v√§n
  Lang: PhrUtt NoPConj (UttS (UseCl TPres ASimul PPos (PredVP (UsePN john_PN) (UseV walk_V)))) NoVoc
-LangDan: John gÂr
+LangDan: John g√•r
 LangEng: John walks
-LangFin: Jussi k‰velee
+LangFin: Jussi k√§velee
 LangFre: Jean marche
 LangGer: Johann geht
 LangIna: John ambula
 LangIta: Giovanni cammina
-LangNor: John gÂr
-LangSwe: Johan gÂr
+LangNor: John g√•r
+LangSwe: Johan g√•r
  Lang: UttQS (UseQCl TPres ASimul PPos (QuestCl (PredVP (UsePron it_Pron) (UseComp (CompAP (PositA good_A))))))
 LangDan: er det godt
 LangEng: is it good
-LangFin: on &+ ko se hyv‰
+LangFin: on &+ ko se hyv√§
 LangFre: il est bon
 LangGer: ist es gut
 LangIna: es illo bon
-LangIta: Ë buono
+LangIta: √® buono
 LangNor: er det godt
-LangSwe: ‰r det gott
+LangSwe: √§r det gott
  Lang: UttImpSg PNeg (ImpVP (ReflVP (SlashV2a love_V2)))
 LangDan: elsk ikke dig
 LangEng: don't love yourself
-LangFin: ‰l‰ rakasta itse‰si
+LangFin: √§l√§ rakasta itse√§si
 LangFre: ne t' aime pas
 LangGer: liebe dich nicht
 LangIna: non adora te
 LangIta: non amar &+ ti
 LangNor: elsk ikke deg
-LangSwe: ‰lska inte dig
+LangSwe: √§lska inte dig
  Lang: UttImpPl PNeg (ImpVP (ReflVP (SlashV2a love_V2)))
 LangDan: elsk ikke jer
 LangEng: don't love yourselves
-LangFin: ‰lk‰‰ rakastako itse‰nne
+LangFin: √§lk√§√§ rakastako itse√§nne
 LangFre: ne vous aimez pas
 LangGer: liebt euch nicht
 LangIna: non adora vos
 LangIta: non amate &+ vi
 LangNor: elsk ikke jer
-LangSwe: ‰lska inte er
+LangSwe: √§lska inte er
  Lang: UttImpPol PNeg (ImpVP (UseV sleep_V))
 LangDan: sov ikke
 LangEng: don't sleep
-LangFin: ‰lk‰‰ nukkuko
+LangFin: √§lk√§√§ nukkuko
 LangFre: ne dormez pas
 LangGer: schlafen Sie nicht
 LangIna: non dormi
@@ -911,7 +911,7 @@ LangSwe: sov inte
  Lang: UttIP whoPl_IP
 LangDan: hvilke
 LangEng: who
-LangFin: ketk‰
+LangFin: ketk√§
 LangFre: qui
 LangGer: wer
 LangIna: qui
@@ -935,29 +935,29 @@ LangFin: miksi
 LangFre: pourquoi
 LangGer: warum
 LangIna: proque
-LangIta: perchÈ
+LangIta: perch√©
 LangNor: hvorfor
-LangSwe: varfˆr
+LangSwe: varf√∂r
  Lang: UttNP (DetCN (DetQuant this_Quant NumSg) (UseN man_N))
 LangDan: denne mand
 LangEng: this man
-LangFin: t‰m‰ mies
+LangFin: t√§m√§ mies
 LangFre: cet homme
 LangGer: dieser Mann
 LangIna: iste viro
 LangIta: questo uomo
 LangNor: denne mannen
-LangSwe: den h‰r mannen
+LangSwe: den h√§r mannen
  Lang: UttAdv here_Adv
 LangDan: her
 LangEng: here
-LangFin: t‰‰ll‰
+LangFin: t√§√§ll√§
 LangFre: ici
 LangGer: hier
 LangIna: hic
-LangIta: quÏ
+LangIta: qu√¨
 LangNor: her
-LangSwe: h‰r
+LangSwe: h√§r
  Lang: UttVP (UseV sleep_V)
 LangDan: at sove
 LangEng: to sleep
@@ -966,84 +966,84 @@ LangFre: dormir
 LangGer: schlafen
 LangIna: dormir
 LangIta: dormire
-LangNor: Â sove
+LangNor: √• sove
 LangSwe: att sova
  Lang: VocNP (DetCN (DetQuant (PossPron i_Pron) NumSg) (UseN friend_N))
 LangDan: , min ven
 LangEng: , my friend
-LangFin: , minun yst‰v‰ &+ ni
+LangFin: , minun yst√§v√§ &+ ni
 LangFre: , mon ami
 LangGer: , mein Freund
 LangIna: , mi amico
 LangIta: , il mio amico
 LangNor: , min venn
-LangSwe: , min v‰n
+LangSwe: , min v√§n
  Lang: QuestCl (PredVP (UsePN john_PN) (UseV walk_V))
-LangDan: gÂr John
+LangDan: g√•r John
 LangEng: does John walk
-LangFin: k‰velee &+ kˆ Jussi
+LangFin: k√§velee &+ k√∂ Jussi
 LangFre: Jean marche
 LangGer: geht Johann
 LangIna: an John ambula
 LangIta: Giovanni cammina
-LangNor: gÂr John
-LangSwe: gÂr Johan
+LangNor: g√•r John
+LangSwe: g√•r Johan
  Lang: QuestVP whoSg_IP (UseV walk_V)
-LangDan: hvem gÂr
+LangDan: hvem g√•r
 LangEng: who walks
-LangFin: kuka k‰velee
+LangFin: kuka k√§velee
 LangFre: qui marche
 LangGer: wer geht
 LangIna: qui ambula
 LangIta: chi cammina
-LangNor: hvem gÂr
-LangSwe: vem gÂr
+LangNor: hvem g√•r
+LangSwe: vem g√•r
  Lang: QuestSlash whoSg_IP (SlashVP (UsePN john_PN) (SlashV2a love_V2))
 LangDan: hvem elsker John
 LangEng: whom does John love
-LangFin: ken‰ Jussi rakastaa
+LangFin: ken√§ Jussi rakastaa
 LangFre: qui aime Jean
 LangGer: wen liebt Johann
 LangIna: qui John adora
 LangIta: chi ama Giovanni
 LangNor: hvem elsker John
-LangSwe: vem ‰lskar Johan
+LangSwe: vem √§lskar Johan
  Lang: QuestIAdv why_IAdv (PredVP (UsePN john_PN) (UseV walk_V))
-LangDan: hvorfor gÂr John
+LangDan: hvorfor g√•r John
 LangEng: why does John walk
-LangFin: miksi Jussi k‰velee
+LangFin: miksi Jussi k√§velee
 LangFre: pourquoi marche Jean
 LangGer: warum geht Johann
 LangIna: proque John ambula
-LangIta: perchÈ cammina Giovanni
-LangNor: hvorfor gÂr John
-LangSwe: varfˆr gÂr Johan
+LangIta: perch√© cammina Giovanni
+LangNor: hvorfor g√•r John
+LangSwe: varf√∂r g√•r Johan
  Lang: QuestIComp (CompIAdv where_IAdv) (UsePN john_PN)
 LangDan: hver er John
 LangEng: where is John
-LangFin: miss‰ Jussi on
-LangFre: o˘ est Jean
+LangFin: miss√§ Jussi on
+LangFre: o√π est Jean
 LangGer: wo ist Johann
 LangIna: ubi John es
-LangIta: dove Ë Giovanni
+LangIta: dove √® Giovanni
 LangNor: hver er John
-LangSwe: var ‰r Johan
+LangSwe: var √§r Johan
  Lang: IdetCN (IdetQuant which_IQuant (NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n5)))))))) (UseN song_N)
 LangDan: hvilke fem sanger
 LangEng: which five songs
-LangFin: mitk‰ viisi laulua
+LangFin: mitk√§ viisi laulua
 LangFre: quelles cinq chansons
-LangGer: welche f¸nf Lieder
+LangGer: welche f√ºnf Lieder
 LangIna: qual cinque cantos
 LangIta: quali cinque canzoni
 LangNor: hvilke fem sanger
-LangSwe: vilka fem sÂnger
+LangSwe: vilka fem s√•nger
  Lang: IdetIP (IdetQuant which_IQuant (NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n5))))))))
 LangDan: hvilke fem
 LangEng: which five
-LangFin: mitk‰ viisi
+LangFin: mitk√§ viisi
 LangFre: quels cinq
-LangGer: welche f¸nf
+LangGer: welche f√ºnf
 LangIna: qual cinque
 LangIta: quali cinque
 LangNor: hvilke fem
@@ -1061,7 +1061,7 @@ LangSwe: vem i Paris
  Lang: IdetIP (IdetQuant which_IQuant NumSg)
 LangDan: hvilket
 LangEng: which
-LangFin: mik‰
+LangFin: mik√§
 LangFre: quel
 LangGer: welches
 LangIna: quales
@@ -1081,13 +1081,13 @@ LangSwe: med vem
  Lang: QuestIComp (CompIAdv where_IAdv) (UsePron it_Pron)
 LangDan: hver er det
 LangEng: where is it
-LangFin: miss‰ se on
-LangFre: o˘ est il
+LangFin: miss√§ se on
+LangFre: o√π est il
 LangGer: wo ist es
 LangIna: ubi illo es
-LangIta: dove Ë
+LangIta: dove √®
 LangNor: hver er det
-LangSwe: var ‰r det
+LangSwe: var √§r det
  Lang: QuestIComp (CompIP whoSg_IP) (UsePron it_Pron)
 LangDan: hvem er det
 LangEng: who is it
@@ -1095,19 +1095,19 @@ LangFin: kuka se on
 LangFre: qui est il
 LangGer: wer ist es
 LangIna: qui illo es
-LangIta: chi Ë
+LangIta: chi √®
 LangNor: hvem er det
-LangSwe: vem ‰r det
+LangSwe: vem √§r det
  Lang: ExistNP (DetArtSg IndefArt (RelCN (UseN woman_N) (UseRCl TPres ASimul PPos (RelCl (PredVP (UsePN john_PN) (ComplSlash (SlashV2a love_V2) (UsePron she_Pron)))))))
-LangDan: det findes en kvinde sÂdan at John elsker hende
+LangDan: det findes en kvinde s√•dan at John elsker hende
 LangEng: there is a woman such that John loves her
-LangFin: on olemassa nainen siten ett‰ Jussi rakastaa h‰nt‰
+LangFin: on olemassa nainen siten ett√§ Jussi rakastaa h√§nt√§
 LangFre: il y a une femme telle que Jean l' aime
-LangGer: es gibt eine Frau derart daﬂ Johann sie liebt
+LangGer: es gibt eine Frau derart da√ü Johann sie liebt
 LangIna: il ha un femina tal que John adora la
-LangIta: c' Ë una donna tale che Giovanni la ama
-LangNor: det finnes ei kvinne sÂdan at John elsker henne
-LangSwe: det finns en kvinna sÂdan att Johan ‰lskar henne
+LangIta: c' √® una donna tale che Giovanni la ama
+LangNor: det finnes ei kvinne s√•dan at John elsker henne
+LangSwe: det finns en kvinna s√•dan att Johan √§lskar henne
  Lang: ExistNP (DetArtSg IndefArt (RelCN (UseN woman_N) (UseRCl TPres ASimul PPos (RelVP IdRP (ComplSlash (SlashV2a love_V2) (UsePN john_PN))))))
 LangDan: det findes en kvinde som elsker John
 LangEng: there is a woman who loves John
@@ -1115,9 +1115,9 @@ LangFin: on olemassa nainen joka rakastaa Jussia
 LangFre: il y a une femme qui aime Jean
 LangGer: es gibt eine Frau die Johann liebt
 LangIna: il ha un femina qui adora John
-LangIta: c' Ë una donna che ama Giovanni
+LangIta: c' √® una donna che ama Giovanni
 LangNor: det finnes ei kvinne som elsker John
-LangSwe: det finns en kvinna som ‰lskar Johan
+LangSwe: det finns en kvinna som √§lskar Johan
  Lang: ExistNP (DetArtSg IndefArt (RelCN (UseN woman_N) (UseRCl TPres ASimul PPos (RelSlash IdRP (SlashVP (UsePN john_PN) (SlashV2a love_V2))))))
 LangDan: det findes en kvinde som John elsker
 LangEng: there is a woman whom John loves
@@ -1125,45 +1125,45 @@ LangFin: on olemassa nainen jota Jussi rakastaa
 LangFre: il y a une femme que Jean aime
 LangGer: es gibt eine Frau die Johann liebt
 LangIna: il ha un femina que John adora
-LangIta: c' Ë una donna che Giovanni ama
+LangIta: c' √® una donna che Giovanni ama
 LangNor: det finnes ei kvinne som John elsker
-LangSwe: det finns en kvinna som Johan ‰lskar
+LangSwe: det finns en kvinna som Johan √§lskar
  Lang: ExistNP (DetArtSg IndefArt (RelCN (UseN woman_N) (UseRCl TPres ASimul PPos (RelSlash (FunRP possess_Prep (DetArtSg DefArt (UseN2 mother_N2)) IdRP) (SlashVP (UsePN john_PN) (SlashV2a love_V2))))))
 LangDan: det findes en kvinde moderen af hvilken John elsker
 LangEng: there is a woman the mother of whom John loves
-LangFin: on olemassa nainen jonka ‰iti‰ Jussi rakastaa
-LangFre: il y a une femme la mËre de laquelle Jean aime
+LangFin: on olemassa nainen jonka √§iti√§ Jussi rakastaa
+LangFre: il y a une femme la m√®re de laquelle Jean aime
 LangGer: es gibt eine Frau die Mutter von der Johann liebt
 LangIna: il ha un femina le matre cuje John adora
-LangIta: c' Ë una donna la madre cui Giovanni ama
+LangIta: c' √® una donna la madre cui Giovanni ama
 LangNor: det finnes ei kvinne moren av hvilken John elsker
-LangSwe: det finns en kvinna modern av vilken Johan ‰lskar
+LangSwe: det finns en kvinna modern av vilken Johan √§lskar
  Lang: PredVP (UsePN john_PN) (UseV walk_V)
-LangDan: John gÂr
+LangDan: John g√•r
 LangEng: John walks
-LangFin: Jussi k‰velee
+LangFin: Jussi k√§velee
 LangFre: Jean marche
 LangGer: Johann geht
 LangIna: John ambula
 LangIta: Giovanni cammina
-LangNor: John gÂr
-LangSwe: Johan gÂr
+LangNor: John g√•r
+LangSwe: Johan g√•r
  Lang: PredSCVP (EmbedS (UseCl TPres ASimul PPos (PredVP (UsePron she_Pron) (UseV go_V)))) (UseComp (CompAP (PositA good_A)))
-LangDan: at hun gÂr er godt
+LangDan: at hun g√•r er godt
 LangEng: that she goes is good
-LangFin: ett‰ h‰n menee on hyv‰
+LangFin: ett√§ h√§n menee on hyv√§
 LangFre: qu' elle va est bon
-LangGer: daﬂ sie geht ist gut
+LangGer: da√ü sie geht ist gut
 LangIna: que illa i es bon
-LangIta: che va Ë buono
-LangNor: at hun gÂr er godt
-LangSwe: att hon gÂr ‰r gott
+LangIta: che va √® buono
+LangNor: at hun g√•r er godt
+LangSwe: att hon g√•r √§r gott
  Lang: RelCN (UseN girl_N) (UseRCl TPres ASimul PPos (RelSlash IdRP (SlashVP (UsePron he_Pron) (SlashV2a see_V2))))
 LangDan: pige som han ser
 LangEng: girl whom he sees
-LangFin: tyttˆ jonka h‰n n‰kee
+LangFin: tytt√∂ jonka h√§n n√§kee
 LangFre: fille qu' il voit
-LangGer: M‰dchen das er sieht
+LangGer: M√§dchen das er sieht
 LangIna: puera que ille vide
 LangIta: ragazza che vede
 LangNor: jente som han ser
@@ -1171,123 +1171,123 @@ LangSwe: flicka som han ser
  Lang: RelCN (UseN girl_N) (UseRCl TPres ASimul PPos (RelSlash IdRP (AdvSlash (SlashVP (UsePron he_Pron) (SlashV2a see_V2)) today_Adv)))
 LangDan: pige som han ser idag
 LangEng: girl whom he sees today
-LangFin: tyttˆ jonka h‰n n‰kee t‰n‰‰n
+LangFin: tytt√∂ jonka h√§n n√§kee t√§n√§√§n
 LangFre: fille qu' il voit aujourd'hui
-LangGer: M‰dchen das er sieht heute
+LangGer: M√§dchen das er sieht heute
 LangIna: puera que ille vide hodie
 LangIta: ragazza che vede oggi
 LangNor: jente som han ser idag
 LangSwe: flicka som han ser idag
  Lang: RelCN (UseN girl_N) (UseRCl TPres ASimul PPos (RelSlash IdRP (SlashPrep (PredVP (UsePron he_Pron) (UseV walk_V)) with_Prep)))
-LangDan: pige med hvilken han gÂr
+LangDan: pige med hvilken han g√•r
 LangEng: girl with whom he walks
-LangFin: tyttˆ jonka kanssa h‰n k‰velee
+LangFin: tytt√∂ jonka kanssa h√§n k√§velee
 LangFre: fille avec laquelle il marche
-LangGer: M‰dchen mit dem er geht
+LangGer: M√§dchen mit dem er geht
 LangIna: puera con que ille ambula
 LangIta: ragazza con cui cammina
-LangNor: jente med hvilken han gÂr
-LangSwe: flicka med vilken han gÂr
+LangNor: jente med hvilken han g√•r
+LangSwe: flicka med vilken han g√•r
  Lang: RelCN (UseN girl_N) (UseRCl TPres ASimul PPos (RelSlash IdRP (SlashVS (UsePron she_Pron) say_VS (UseSlash TPres ASimul PPos (SlashVP (UsePron he_Pron) (SlashV2a love_V2))))))
 LangDan: pige som hun siger at han elsker
 LangEng: girl whom she says that he loves
-LangFin: tyttˆ jota h‰n sanoo ett‰ h‰n rakastaa
+LangFin: tytt√∂ jota h√§n sanoo ett√§ h√§n rakastaa
 LangFre: fille qu' elle dit qu' il aime
-LangGer: M‰dchen das sie sagt daﬂ er liebt
+LangGer: M√§dchen das sie sagt da√ü er liebt
 LangIna: puera que illa dice que ille adora
 LangIta: ragazza che dice che ama
 LangNor: jente som hun sier at han elsker
-LangSwe: flicka som hon s‰ger att han ‰lskar
+LangSwe: flicka som hon s√§ger att han √§lskar
  Lang: ImpVP (ReflVP (SlashV2a love_V2))
 LangDan: elsk dig
 LangEng: love yourself
-LangFin: rakasta itse‰si
+LangFin: rakasta itse√§si
 LangFre: aimez - vous
 LangGer: lieben Sie sich
 LangIna: adora te
 LangIta: ami &+ si
 LangNor: elsk deg
-LangSwe: ‰lska dig
+LangSwe: √§lska dig
  Lang: EmbedS (UseCl TPres ASimul PPos (PredVP (UsePron she_Pron) (UseV go_V)))
-LangDan: at hun gÂr
+LangDan: at hun g√•r
 LangEng: that she goes
-LangFin: ett‰ h‰n menee
+LangFin: ett√§ h√§n menee
 LangFre: qu' elle va
-LangGer: daﬂ sie geht
+LangGer: da√ü sie geht
 LangIna: que illa i
 LangIta: che va
-LangNor: at hun gÂr
-LangSwe: att hon gÂr
+LangNor: at hun g√•r
+LangSwe: att hon g√•r
  Lang: EmbedQS (UseQCl TPres ASimul PPos (QuestVP whoSg_IP (UseV go_V)))
-LangDan: hvem som gÂr
+LangDan: hvem som g√•r
 LangEng: who goes
 LangFin: kuka menee
 LangFre: qui va
 LangGer: wer geht
 LangIna: qui i
 LangIta: chi va
-LangNor: hvem som gÂr
-LangSwe: vem som gÂr
+LangNor: hvem som g√•r
+LangSwe: vem som g√•r
  Lang: EmbedVP (UseV go_V)
-LangDan: at gÂ
+LangDan: at g√•
 LangEng: to go
-LangFin: menn‰
+LangFin: menn√§
 LangFre: aller
 LangGer: zu gehen
 LangIna: ir
 LangIta: andare
-LangNor: Â gÂ
-LangSwe: att gÂ
+LangNor: √• g√•
+LangSwe: att g√•
  Lang: UseCl TCond AAnter PNeg (PredVP (UsePN john_PN) (UseV walk_V))
-LangDan: John ville ikke vÊre gÂet
+LangDan: John ville ikke v√¶re g√•et
 LangEng: John wouldn't have walked
-LangFin: Jussi ei olisi k‰vellyt
-LangFre: Jean n' aurait pas marchÈ
-LangGer: Johann w¸rde nicht gegangen sein
+LangFin: Jussi ei olisi k√§vellyt
+LangFre: Jean n' aurait pas march√©
+LangGer: Johann w√ºrde nicht gegangen sein
 LangIna: John non haberea ambulate
 LangIta: Giovanni non avrebbe camminato
-LangNor: John ville ikke vÊre gÂtt
-LangSwe: Johan skulle inte ha gÂtt
+LangNor: John ville ikke v√¶re g√•tt
+LangSwe: Johan skulle inte ha g√•tt
  Lang: UseQCl TCond AAnter PNeg (QuestCl (PredVP (UsePN john_PN) (UseV walk_V)))
-LangDan: ville John ikke vÊre gÂet
+LangDan: ville John ikke v√¶re g√•et
 LangEng: wouldn't John have walked
-LangFin: ei &+ kˆ Jussi olisi k‰vellyt
-LangFre: Jean n' aurait pas marchÈ
-LangGer: w¸rde Johann nicht gegangen sein
+LangFin: ei &+ k√∂ Jussi olisi k√§vellyt
+LangFre: Jean n' aurait pas march√©
+LangGer: w√ºrde Johann nicht gegangen sein
 LangIna: an John non haberea ambulate
 LangIta: Giovanni non avrebbe camminato
-LangNor: ville John ikke vÊre gÂtt
-LangSwe: skulle Johan inte ha gÂtt
+LangNor: ville John ikke v√¶re g√•tt
+LangSwe: skulle Johan inte ha g√•tt
  Lang: RelCN (UseN girl_N) (UseRCl TCond AAnter PNeg (RelVP IdRP (UseV walk_V)))
-LangDan: pige som ikke ville vÊre gÂet
+LangDan: pige som ikke ville v√¶re g√•et
 LangEng: girl who wouldn't have walked
-LangFin: tyttˆ joka ei olisi k‰vellyt
-LangFre: fille qui n' aurait pas marchÈ
-LangGer: M‰dchen das nicht gegangen sein w¸rde
+LangFin: tytt√∂ joka ei olisi k√§vellyt
+LangFre: fille qui n' aurait pas march√©
+LangGer: M√§dchen das nicht gegangen sein w√ºrde
 LangIna: puera qui non haberea ambulate
 LangIta: ragazza che non avrebbe camminato
-LangNor: jente som ikke ville vÊre gÂtt
-LangSwe: flicka som inte skulle ha gÂtt
+LangNor: jente som ikke ville v√¶re g√•tt
+LangSwe: flicka som inte skulle ha g√•tt
  Lang: RelCN (UseN girl_N) (UseRCl TCond AAnter PNeg (RelSlash IdRP (SlashPrep (PredVP (UsePron i_Pron) (UseV walk_V)) with_Prep)))
-LangDan: pige med hvilken jeg ikke ville vÊre gÂet
+LangDan: pige med hvilken jeg ikke ville v√¶re g√•et
 LangEng: girl with whom I wouldn't have walked
-LangFin: tyttˆ jonka kanssa min‰ en olisi k‰vellyt
-LangFre: fille avec laquelle je n' aurais pas marchÈ
-LangGer: M‰dchen mit dem ich nicht gegangen sein w¸rde
+LangFin: tytt√∂ jonka kanssa min√§ en olisi k√§vellyt
+LangFre: fille avec laquelle je n' aurais pas march√©
+LangGer: M√§dchen mit dem ich nicht gegangen sein w√ºrde
 LangIna: puera con que io non haberea ambulate
 LangIta: ragazza con cui non avrei camminato
-LangNor: jente med hvilken jeg ikke ville vÊre gÂtt
-LangSwe: flicka med vilken jag inte skulle ha gÂtt
+LangNor: jente med hvilken jeg ikke ville v√¶re g√•tt
+LangSwe: flicka med vilken jag inte skulle ha g√•tt
  Lang: RelS (UseCl TPres ASimul PPos (PredVP (UsePron she_Pron) (UseV sleep_V))) (UseRCl TPres ASimul PPos (RelVP IdRP (UseComp (CompAP (PositA good_A)))))
 LangDan: hun sover , hvilket er godt
 LangEng: she sleeps , which is good
-LangFin: h‰n nukkuu , mik‰ on hyv‰
+LangFin: h√§n nukkuu , mik√§ on hyv√§
 LangFre: elle dort , ce qui est bon
-LangGer: sie schl‰ft , das gut ist
+LangGer: sie schl√§ft , das gut ist
 LangIna: illa dormi , qui es bon
-LangIta: dorme , ciÚ che Ë buono
+LangIta: dorme , ci√≤ che √® buono
 LangNor: hun sover , hvilket er godt
-LangSwe: hon sover , vilket ‰r gott
+LangSwe: hon sover , vilket √§r gott
  Lang: TEmpty
 LangDan: 
 LangEng: 
@@ -1299,39 +1299,39 @@ LangIta:
 LangNor: 
 LangSwe: 
  Lang: TFullStop (PhrUtt NoPConj (UttS (UseCl TPres ASimul PPos (PredVP (UsePN john_PN) (UseV walk_V)))) NoVoc) TEmpty
-LangDan: John gÂr .
+LangDan: John g√•r .
 LangEng: John walks .
-LangFin: Jussi k‰velee .
+LangFin: Jussi k√§velee .
 LangFre: Jean marche .
 LangGer: Johann geht .
 LangIna: John ambula .
 LangIta: Giovanni cammina .
-LangNor: John gÂr .
-LangSwe: Johan gÂr .
+LangNor: John g√•r .
+LangSwe: Johan g√•r .
  Lang: TQuestMark (PhrUtt NoPConj (UttQS (UseQCl TPres ASimul PPos (QuestCl (PredVP (UsePron they_Pron) (UseComp (CompAdv here_Adv)))))) NoVoc) TEmpty
 LangDan: er de her ?
 LangEng: are they here ?
-LangFin: ovat &+ ko he t‰‰ll‰ ?
+LangFin: ovat &+ ko he t√§√§ll√§ ?
 LangFre: ils sont ici ?
 LangGer: sind sie hier ?
 LangIna: es illos hic ?
-LangIta: sono quÏ ?
+LangIta: sono qu√¨ ?
 LangNor: er de her ?
-LangSwe: ‰r de h‰r ?
+LangSwe: √§r de h√§r ?
  Lang: TExclMark (PhrUtt NoPConj (ImpPl1 (UseV go_V)) NoVoc) TEmpty
-LangDan: lad os gÂ !
+LangDan: lad os g√• !
 LangEng: let's go !
-LangFin: menn‰‰n !
+LangFin: menn√§√§n !
 LangFre: allons !
 LangGer: gehen wir !
 LangIna: que nos i !
 LangIta: andiamo !
-LangNor: lat oss gÂ !
-LangSwe: lÂt oss gÂ !
+LangNor: lat oss g√• !
+LangSwe: l√•t oss g√• !
  Lang: PredVP (UsePron i_Pron) (UseV sleep_V)
 LangDan: jeg sover
 LangEng: I sleep
-LangFin: min‰ nukun
+LangFin: min√§ nukun
 LangFre: je dors
 LangGer: ich schlafe
 LangIna: io dormi
@@ -1339,9 +1339,9 @@ LangIta: dormo
 LangNor: jeg sover
 LangSwe: jag sover
  Lang: PredVP (UsePron i_Pron) (ComplVV want_VV (UseV run_V))
-LangDan: jeg vil l¯be
+LangDan: jeg vil l√∏be
 LangEng: I want to run
-LangFin: min‰ tahdon juosta
+LangFin: min√§ tahdon juosta
 LangFre: je veux courir
 LangGer: ich will laufen
 LangIna: io wan currer
@@ -1349,39 +1349,39 @@ LangIta: voglio correre
 LangNor: jeg vil springe
 LangSwe: jag vill springa
  Lang: PredVP (UsePron i_Pron) (ComplVS say_VS (UseCl TPres ASimul PPos (PredVP (UsePron she_Pron) (UseV run_V))))
-LangDan: jeg siger at hun l¯ber
+LangDan: jeg siger at hun l√∏ber
 LangEng: I say that she runs
-LangFin: min‰ sanon ett‰ h‰n juoksee
+LangFin: min√§ sanon ett√§ h√§n juoksee
 LangFre: je dis qu' elle court
-LangGer: ich sage daﬂ sie l‰uft
+LangGer: ich sage da√ü sie l√§uft
 LangIna: io dice que illa curre
 LangIta: dico che corre
 LangNor: jeg sier at hun springer
-LangSwe: jag s‰ger att hon springer
+LangSwe: jag s√§ger att hon springer
  Lang: PredVP (UsePron i_Pron) (ComplVQ wonder_VQ (UseQCl TPres ASimul PPos (QuestVP whoSg_IP (UseV run_V))))
-LangDan: jeg undres hvem som l¯ber
+LangDan: jeg undres hvem som l√∏ber
 LangEng: I wonder who runs
-LangFin: min‰ ihmettelen kuka juoksee
-LangFre: je m' Ètonne qui court
-LangGer: ich wundere mich wer l‰uft
+LangFin: min√§ ihmettelen kuka juoksee
+LangFre: je m' √©tonne qui court
+LangGer: ich wundere mich wer l√§uft
 LangIna: io demanda qui curre
 LangIta: mi domando chi corre
 LangNor: jeg undrer hvem som springer
 LangSwe: jag undrar vem som springer
  Lang: PredVP (UsePron they_Pron) (ComplVA become_VA (PositA red_A))
-LangDan: de bliver r¯de
+LangDan: de bliver r√∏de
 LangEng: they become red
 LangFin: he tulevat punaisiksi
 LangFre: ils deviennent rouges
 LangGer: sie werden rot
 LangIna: illos deveni rubie
 LangIta: diventano rossi
-LangNor: de blir r¯de
-LangSwe: de blir rˆda
+LangNor: de blir r√∏de
+LangSwe: de blir r√∂da
  Lang: PredVP (UsePron i_Pron) (ComplSlash (Slash3V3 give_V3 (UsePron he_Pron)) (UsePron it_Pron))
 LangDan: jeg giver det til ham
 LangEng: I give it to him
-LangFin: min‰ annan sen h‰nelle
+LangFin: min√§ annan sen h√§nelle
 LangFre: je le lui donne
 LangGer: ich gebe es ihm
 LangIna: io da lo le
@@ -1389,105 +1389,105 @@ LangIta: glie lo do
 LangNor: jeg gir det til ham
 LangSwe: jag ger det till honom
  Lang: PredVP (UsePron i_Pron) (ComplSlash (SlashV2V beg_V2V (UseV go_V)) (UsePron she_Pron))
-LangDan: jeg beder hende at gÂ
+LangDan: jeg beder hende at g√•
 LangEng: I beg her to go
-LangFin: min‰ pyyd‰n h‰nt‰ menem‰‰n
+LangFin: min√§ pyyd√§n h√§nt√§ menem√§√§n
 LangFre: je la demande aller
 LangGer: ich bitte sie zu gehen
 LangIna: io roga la ir
 LangIta: la prego andare
-LangNor: jeg ber henne att gÂ
-LangSwe: jag ber henne att gÂ
+LangNor: jeg ber henne att g√•
+LangSwe: jag ber henne att g√•
  Lang: PredVP (UsePron i_Pron) (ComplSlash (SlashV2S answer_V2S (UseCl TPres ASimul PPos (PredVP (UsePron it_Pron) (UseComp (CompAP (PositA good_A)))))) (UsePron he_Pron))
 LangDan: jeg svarer til ham at det er godt
 LangEng: I answer to him that it is good
-LangFin: min‰ vastaan h‰nelle ett‰ se on hyv‰
-LangFre: je lui rÈponds qu' il est bon
-LangGer: ich antworte ihm daﬂ es gut ist
+LangFin: min√§ vastaan h√§nelle ett√§ se on hyv√§
+LangFre: je lui r√©ponds qu' il est bon
+LangGer: ich antworte ihm da√ü es gut ist
 LangIna: io responde le que illo es bon
-LangIta: gli rispondo che Ë buono
+LangIta: gli rispondo che √® buono
 LangNor: jeg svarer til ham at det er godt
-LangSwe: jag svarar till honom att det ‰r gott
+LangSwe: jag svarar till honom att det √§r gott
  Lang: PredVP (UsePron i_Pron) (ComplSlash (SlashV2Q ask_V2Q (UseQCl TPast ASimul PPos (QuestVP whoSg_IP (UseV come_V)))) (UsePron he_Pron))
-LangDan: jeg sp¯rger ham hvem som kom
+LangDan: jeg sp√∏rger ham hvem som kom
 LangEng: I ask him who came
-LangFin: min‰ kysyn h‰nelt‰ kuka tuli
+LangFin: min√§ kysyn h√§nelt√§ kuka tuli
 LangFre: je lui demande qui venait
 LangGer: ich frage ihn wer kam
 LangIna: io demanda le qui veniva
 LangIta: gli chiedo chi veniva
-LangNor: jeg sp¯rr ham hvem som kom
-LangSwe: jag frÂgar honom vem som kom
+LangNor: jeg sp√∏rr ham hvem som kom
+LangSwe: jag fr√•gar honom vem som kom
  Lang: PredVP (UsePron i_Pron) (ComplSlash (SlashV2A paint_V2A (PositA red_A)) (UsePron it_Pron))
-LangDan: jeg maler det r¯dt
+LangDan: jeg maler det r√∏dt
 LangEng: I paint it red
-LangFin: min‰ maalaan sen punaiseksi
+LangFin: min√§ maalaan sen punaiseksi
 LangFre: je le peins en rouge
 LangGer: ich male es rot
 LangIna: io pinge lo in rubie
 LangIta: lo pingo in rosso
-LangNor: jeg maler det r¯dt
-LangSwe: jag mÂlar det rˆtt
+LangNor: jeg maler det r√∏dt
+LangSwe: jag m√•lar det r√∂tt
  Lang: RelCN (UseN car_N) (UseRCl TPres ASimul PPos (RelSlash IdRP (SlashVP (UsePron i_Pron) (SlashVV want_VV (SlashV2a buy_V2)))))
-LangDan: bil som jeg vil k¯be
+LangDan: bil som jeg vil k√∏be
 LangEng: car which I want to buy
-LangFin: auto jonka min‰ tahdon ostaa
+LangFin: auto jonka min√§ tahdon ostaa
 LangFre: voiture que je veux acheter
 LangGer: Wagen den ich kaufen will
 LangIna: automobile que io wan compra
 LangIta: macchina che voglio comprare
-LangNor: bil som jeg vil kj¯pe
-LangSwe: bil som jag vill kˆpa
+LangNor: bil som jeg vil kj√∏pe
+LangSwe: bil som jag vill k√∂pa
  Lang: RelCN (UseN car_N) (UseRCl TPres ASimul PPos (RelSlash IdRP (SlashVP (UsePron they_Pron) (SlashV2VNP beg_V2V (UsePron i_Pron) (SlashV2a buy_V2)))))
-LangDan: bil som de beder mig at k¯be
+LangDan: bil som de beder mig at k√∏be
 LangEng: car which they beg me to buy
-LangFin: auto jonka he pyyt‰v‰t minua ostamaan
+LangFin: auto jonka he pyyt√§v√§t minua ostamaan
 LangFre: voiture qu' ils me demandent acheter
 LangGer: Wagen den sie mich zu kaufen bitten
 LangIna: automobile que illos roga me compra
 LangIta: macchina che mi pregano comprare
-LangNor: bil som de ber meg att kj¯pe
-LangSwe: bil som de ber mig att kˆpa
+LangNor: bil som de ber meg att kj√∏pe
+LangSwe: bil som de ber mig att k√∂pa
  Lang: PredVP (UsePron he_Pron) (ReflVP (SlashV2a love_V2))
 LangDan: han elsker sig
 LangEng: he loves himself
-LangFin: h‰n rakastaa itse‰ns‰
+LangFin: h√§n rakastaa itse√§ns√§
 LangFre: il s' aime
 LangGer: er liebt sich
 LangIna: ille adora se
 LangIta: si ama
 LangNor: han elsker seg
-LangSwe: han ‰lskar sig
+LangSwe: han √§lskar sig
  Lang: PredVP (DetNP (DetQuant this_Quant NumSg)) (UseComp (CompAP (PositA warm_A)))
 LangDan: dette er varmt
 LangEng: this is warm
-LangFin: t‰m‰ on l‰mmin
+LangFin: t√§m√§ on l√§mmin
 LangFre: ceci est chaud
 LangGer: dieses ist warm
 LangIna: iste es calde
-LangIta: questo Ë caldo
+LangIta: questo √® caldo
 LangNor: dette er varmt
-LangSwe: det h‰r ‰r varmt
+LangSwe: det h√§r √§r varmt
  Lang: PredVP (UsePron we_Pron) (PassV2 love_V2)
 LangDan: vi bliver elskete
 LangEng: we are loved
-LangFin: meit‰ rakastetaan
-LangFre: nous sommes aimÈs
+LangFin: meit√§ rakastetaan
+LangFre: nous sommes aim√©s
 LangGer: wir werden geliebt
 LangIna: nos es adorate
 LangIta: veniamo amati
 LangNor: vi blir elska
-LangSwe: vi blir ‰lskade
+LangSwe: vi blir √§lskade
  Lang: PredVP (UsePron we_Pron) (AdvVP (UseV sleep_V) here_Adv)
 LangDan: vi sover her
 LangEng: we sleep here
-LangFin: me nukumme t‰‰ll‰
+LangFin: me nukumme t√§√§ll√§
 LangFre: nous dormons ici
 LangGer: wir schlafen hier
 LangIna: nos dormi hic
-LangIta: dormiamo quÏ
+LangIta: dormiamo qu√¨
 LangNor: vi sover her
-LangSwe: vi sover h‰r
+LangSwe: vi sover h√§r
  Lang: PredVP (UsePron we_Pron) (AdVVP always_AdV (UseV sleep_V))
 LangDan: vi sover altid
 LangEng: we always sleep
@@ -1499,169 +1499,169 @@ LangIta: dormiamo sempre
 LangNor: vi sover altid
 LangSwe: vi sover alltid
  Lang: PredVP (UsePron we_Pron) (UseComp (CompAP (PositA small_A)))
-LangDan: vi er smÂ
+LangDan: vi er sm√•
 LangEng: we are small
-LangFin: me olemme pieni‰
+LangFin: me olemme pieni√§
 LangFre: nous sommes petits
 LangGer: wir sind klein
 LangIna: nos es parve
 LangIta: siamo piccoli
-LangNor: vi er smÂ
-LangSwe: vi ‰r smÂ
+LangNor: vi er sm√•
+LangSwe: vi √§r sm√•
  Lang: PredVP (UsePron i_Pron) (UseComp (CompNP (DetArtSg IndefArt (UseN man_N))))
 LangDan: jeg er en mand
 LangEng: I am a man
-LangFin: min‰ olen mies
+LangFin: min√§ olen mies
 LangFre: je suis un homme
 LangGer: ich bin ein Mann
 LangIna: io es un viro
 LangIta: sono un uomo
 LangNor: jeg er en mann
-LangSwe: jag ‰r en man
+LangSwe: jag √§r en man
  Lang: PredVP (UsePron i_Pron) (UseComp (CompAdv here_Adv))
 LangDan: jeg er her
 LangEng: I am here
-LangFin: min‰ olen t‰‰ll‰
+LangFin: min√§ olen t√§√§ll√§
 LangFre: je suis ici
 LangGer: ich bin hier
 LangIna: io es hic
-LangIta: sono quÏ
+LangIta: sono qu√¨
 LangNor: jeg er her
-LangSwe: jag ‰r h‰r
+LangSwe: jag √§r h√§r
  Lang: RelCN (UseN car_N) (UseRCl TPres ASimul PPos (RelSlash IdRP (SlashVP (UsePron they_Pron) (SlashV2VNP beg_V2V (UsePron i_Pron) (SlashVV want_VV (SlashV2A paint_V2A (PositA red_A)))))))
-LangDan: bil som de beder mig at ville male r¯d
+LangDan: bil som de beder mig at ville male r√∏d
 LangEng: car which they beg me to want to paint red
-LangFin: auto jonka he pyyt‰v‰t minua tahtomaan maalata punaiseksi
+LangFin: auto jonka he pyyt√§v√§t minua tahtomaan maalata punaiseksi
 LangFre: voiture qu' ils me demandent vouloir peindre en rouge
 LangGer: Wagen den sie rot mich zu wollen bitten malen
 LangIna: automobile que illos roga me want pinger in rubie
 LangIta: macchina che mi pregano volere pingere in rosso
-LangNor: bil som de ber meg att ville male r¯d
-LangSwe: bil som de ber mig att vilja mÂla rˆd
+LangNor: bil som de ber meg att ville male r√∏d
+LangSwe: bil som de ber mig att vilja m√•la r√∂d
  Lang: PhrUtt NoPConj (UttImpSg PPos (ImpVP (AdVVP always_AdV (ComplSlash (SlashV2a listen_V2) (DetArtSg DefArt (UseN sea_N)))))) NoVoc
 LangDan: lyt altid havet
 LangEng: always listen to the sea
 LangFin: kuuntele aina merta
-LangFre: Ècoute toujours la mer
-LangGer: hˆre dem Meer immer zu
+LangFre: √©coute toujours la mer
+LangGer: h√∂re dem Meer immer zu
 LangIna: ascolta le mar sempre
 LangIta: ascolta sempre il mare
-LangNor: lytt altid sj¯en
-LangSwe: lyssna alltid pÂ havet
+LangNor: lytt altid sj√∏en
+LangSwe: lyssna alltid p√• havet
  Lang: PhrUtt NoPConj (UttS (UseCl TPres ASimul PPos (ExistNP (PredetNP only_Predet (DetCN (DetArtCard IndefArt (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n2))))))) (AdvCN (RelCN (UseN woman_N) (UseRCl TCond ASimul PPos (RelSlash IdRP (SlashPrep (PredVP (UsePron i_Pron) (ComplVV want_VV (PassV2 see_V2))) with_Prep)))) (PrepNP in_Prep (DetArtSg DefArt (UseN rain_N))))))))) NoVoc
 LangDan: det findes kun to kvinder med hvilke jeg ville ville blive set i regnet
 LangEng: there are only two women with whom I would want to be seen in the rain
-LangFin: on olemassa vain kaksi naista joiden minut tahdottaisiin n‰hd‰ sateessa
-LangFre: il y a seulement deux femmes avec lesquelles je voudrais Ítre vu dans la pluie
-LangGer: es gibt nur zwei Frauen mit denen ich in dem Regen gesehen werden wollen w¸rde
+LangFin: on olemassa vain kaksi naista joiden minut tahdottaisiin n√§hd√§ sateessa
+LangFre: il y a seulement deux femmes avec lesquelles je voudrais √™tre vu dans la pluie
+LangGer: es gibt nur zwei Frauen mit denen ich in dem Regen gesehen werden wollen w√ºrde
 LangIna: il ha unic duo feminas con que io wantea esser vidite in le pluvia
 LangIta: ci sono soltanto due donne con cui vorrei venire visto nella pioggia
 LangNor: det finnes kun to kvinner med hvilke jeg ville ville bli sett i regnet
-LangSwe: det finns bara tvÂ kvinnor med vilka jag skulle vilja bli sedd i regnet
+LangSwe: det finns bara tv√• kvinnor med vilka jag skulle vilja bli sedd i regnet
  Lang: PhrUtt NoPConj (UttImpSg PPos (ImpVP (ComplSlash (SlashV2A paint_V2A (ConjAP both7and_DConj (BaseAP (ComparA small_A (DetArtSg DefArt (UseN sun_N))) (ComparA big_A (DetArtSg DefArt (UseN moon_N)))))) (DetArtSg DefArt (UseN earth_N))))) NoVoc
-LangDan: mal jorden bÂde mindre end solen og st¯rre end mÂnen
+LangDan: mal jorden b√•de mindre end solen og st√∏rre end m√•nen
 LangEng: paint the earth both smaller than the sun and bigger than the moon
-LangFin: maalaa maa sek‰ pienemm‰ksi kuin aurinko ett‰ suuremmaksi kuin kuu
+LangFin: maalaa maa sek√§ pienemm√§ksi kuin aurinko ett√§ suuremmaksi kuin kuu
 LangFre: peins la terre en et plus petit que le soleil et plus grand que la lune
-LangGer: male die Erde sowohl kleiner als die Sonne als auch grˆﬂer als der Mond
+LangGer: male die Erde sowohl kleiner als die Sonne als auch gr√∂√üer als der Mond
 LangIna: pinge in e plus parve que le sol e plus magne que le luna le terra
-LangIta: pingi la terra in e pi˘ piccolo che il sole e pi˘ grande che la luna
-LangNor: mal jorda bÂde mindre enn sola og st¯rre enn mÂnen
-LangSwe: mÂla jorden bÂde mindre ‰n solen och stˆrre ‰n mÂnen
+LangIta: pingi la terra in e pi√π piccolo che il sole e pi√π grande che la luna
+LangNor: mal jorda b√•de mindre enn sola og st√∏rre enn m√•nen
+LangSwe: m√•la jorden b√•de mindre √§n solen och st√∂rre √§n m√•nen
  Lang: PhrUtt NoPConj (ImpPl1 (ComplVS hope_VS (ConjS either7or_DConj (BaseS (UseCl TPres ASimul PPos (PredVP (DetArtSg DefArt (ComplN2 father_N2 (DetArtSg DefArt (UseN baby_N)))) (UseV run_V))) (UseCl TPres ASimul PPos (PredVP (DetArtSg DefArt (UseN2 (Use2N3 distance_N3))) (UseComp (CompAP (PositA small_A))))))))) NoVoc
-LangDan: lad os hÂbe at enten fadren til babyen l¯ber eller afstanden er lille
+LangDan: lad os h√•be at enten fadren til babyen l√∏ber eller afstanden er lille
 LangEng: let's hope that either the father of the baby runs or the distance is small
-LangFin: toivotaan ett‰ joko vauvan is‰ juoksee tai et‰isyys on pieni
-LangFre: espÈrons qu' ou le pËre du bÈbÈ court ou la distance est petite
-LangGer: hoffen wir daﬂ entweder der Vater von dem Baby l‰uft oder die Entfernung klein ist
+LangFin: toivotaan ett√§ joko vauvan is√§ juoksee tai et√§isyys on pieni
+LangFre: esp√©rons qu' ou le p√®re du b√©b√© court ou la distance est petite
+LangGer: hoffen wir da√ü entweder der Vater von dem Baby l√§uft oder die Entfernung klein ist
 LangIna: que nos spera que o le patre del bebe curre o le distantia es parve
-LangIta: speriamo che o il padre del bambino corre o la distanza Ë piccola
-LangNor: lat oss hÂpe at enten faren til babyen springer eller avstanden er liten
-LangSwe: lÂt oss hoppas att antingen fadern till bebisen springer eller avstÂndet ‰r litet
+LangIta: speriamo che o il padre del bambino corre o la distanza √® piccola
+LangNor: lat oss h√•pe at enten faren til babyen springer eller avstanden er liten
+LangSwe: l√•t oss hoppas att antingen fadern till bebisen springer eller avst√•ndet √§r litet
  Lang: PhrUtt NoPConj (UttS (UseCl TPres ASimul PPos (PredVP (DetCN every_Det (UseN baby_N)) (UseComp (CompNP (ConjNP either7or_DConj (BaseNP (DetArtSg IndefArt (UseN boy_N)) (DetArtSg IndefArt (UseN girl_N))))))))) NoVoc
 LangDan: hver baby er enten en dreng eller en pige
 LangEng: every baby is either a boy or a girl
-LangFin: jokainen vauva on joko poika tai tyttˆ
-LangFre: chaque bÈbÈ est ou un garÁon ou une fille
-LangGer: jedes Baby ist entweder ein Junge oder ein M‰dchen
+LangFin: jokainen vauva on joko poika tai tytt√∂
+LangFre: chaque b√©b√© est ou un gar√ßon ou une fille
+LangGer: jedes Baby ist entweder ein Junge oder ein M√§dchen
 LangIna: tote bebe es o un puero o un puera
-LangIta: ogni bambino Ë o un ragazzo o una ragazza
+LangIta: ogni bambino √® o un ragazzo o una ragazza
 LangNor: hver baby er enten en gutt eller ei jente
-LangSwe: varje bebis ‰r antingen en pojke eller en flicka
+LangSwe: varje bebis √§r antingen en pojke eller en flicka
  Lang: PhrUtt NoPConj (UttAdv (ConjAdv either7or_DConj (ConsAdv here7from_Adv (BaseAdv there_Adv everywhere_Adv)))) NoVoc
 LangDan: enten herfra , der eller overalt
 LangEng: either from here , there or everywhere
-LangFin: joko t‰‰lt‰ , siell‰ tai kaikkialla
-LangFre: ou d'ici , l‡ ou partout
-LangGer: entweder hieraus , da oder ¸berall
+LangFin: joko t√§√§lt√§ , siell√§ tai kaikkialla
+LangFre: ou d'ici , l√† ou partout
+LangGer: entweder hieraus , da oder √ºberall
 LangIna: o de ci , ibi o ubique
-LangIta: o da quÏ , l‡ o dappertutto
+LangIta: o da qu√¨ , l√† o dappertutto
 LangNor: enten herfra , der eller overalt
-LangSwe: antingen h‰rifrÂn , d‰r eller ˆverallt
+LangSwe: antingen h√§rifr√•n , d√§r eller √∂verallt
  Lang: PhrUtt NoPConj (UttVP (PassV2 know_V2)) NoVoc
 LangDan: at blive vidst
 LangEng: to be known
-LangFin: tiedet‰‰n
-LangFre: Ítre connue
-LangGer: gewuﬂt werden
+LangFin: tiedet√§√§n
+LangFre: √™tre connue
+LangGer: gewu√üt werden
 LangIna: esser cognoscite
 LangIta: venire conosciuta
-LangNor: Â bli visst
+LangNor: √• bli visst
 LangSwe: att bli visst
  Lang: RelCN (UseN bird_N) (UseRCl TPres ASimul PPos (RelSlash IdRP (SlashVP (UsePron i_Pron) (SlashVV want_VV (SlashV2A paint_V2A (PositA red_A))))))
-LangDan: fugl som jeg vil male r¯d
+LangDan: fugl som jeg vil male r√∏d
 LangEng: bird which I want to paint red
-LangFin: lintu jonka min‰ tahdon maalata punaiseksi
+LangFin: lintu jonka min√§ tahdon maalata punaiseksi
 LangFre: oiseau que je veux peindre en rouge
 LangGer: Vogel den ich rot malen will
 LangIna: ave que io wan pinger in rubie
 LangIta: uccello che voglio pingere in rosso
-LangNor: fugl som jeg vil male r¯d
-LangSwe: fÂgel som jag vill mÂla rˆd
+LangNor: fugl som jeg vil male r√∏d
+LangSwe: f√•gel som jag vill m√•la r√∂d
  Lang: UttImpSg PPos (ImpVP (ComplVV want_VV (ComplSlash (SlashV2a buy_V2) (UsePron it_Pron))))
-LangDan: villed k¯be det
+LangDan: villed k√∏be det
 LangEng: want to buy it
 LangFin: tahdo ostaa se
 LangFre: veux l' acheter
 LangGer: woll es kaufen
 LangIna: wan lo compra
 LangIta: vuoi comprar &+ lo
-LangNor: villed kj¯pe det
-LangSwe: vilj kˆpa det
+LangNor: villed kj√∏pe det
+LangSwe: vilj k√∂pa det
  Lang: UttImpSg PPos (ImpVP (ComplVV want_VV (ComplSlash (SlashV2A paint_V2A (PositA red_A)) (UsePron it_Pron))))
-LangDan: villed male det r¯dt
+LangDan: villed male det r√∏dt
 LangEng: want to paint it red
 LangFin: tahdo maalata se punaiseksi
 LangFre: veux le peindre en rouge
 LangGer: woll es rot malen
 LangIna: wan lo pinger in rubie
 LangIta: vuoi pinger &+ lo in rosso
-LangNor: villed male det r¯dt
-LangSwe: vilj mÂla det rˆtt
+LangNor: villed male det r√∏dt
+LangSwe: vilj m√•la det r√∂tt
  Lang: UttImpSg PPos (ImpVP (ComplSlash (SlashVV want_VV (SlashV2VNP beg_V2V (UsePron i_Pron) (SlashV2a buy_V2))) (UsePron it_Pron)))
-LangDan: villed bede mig at k¯be det
+LangDan: villed bede mig at k√∏be det
 LangEng: want to beg me to buy it
-LangFin: tahdo pyyt‰‰ minua ostamaan se
+LangFin: tahdo pyyt√§√§ minua ostamaan se
 LangFre: veux me demander l' acheter
 LangGer: woll mich bitten es zu kaufen
 LangIna: wan me rogar lo compra
 LangIta: vuoi pregar &+ mi comprar &+ lo 
-LangNor: villed be meg att kj¯pe det
-LangSwe: vilj be mig att kˆpa det
+LangNor: villed be meg att kj√∏pe det
+LangSwe: vilj be mig att k√∂pa det
  Lang: PhrUtt NoPConj (UttS (UseCl TPres ASimul PPos (PredVP (DetArtPl DefArt (UseN fruit_N)) (ReflVP (Slash3V3 sell_V3 (DetArtSg DefArt (UseN road_N))))))) NoVoc
-LangDan: frugterne sÊlger sig til vejen
+LangDan: frugterne s√¶lger sig til vejen
 LangEng: the fruits sell themselves to the road
-LangFin: hedelm‰t myyv‰t itsens‰ tielle
-LangFre: les fruits se vendent ‡ la route
-LangGer: die Fr¸chte verkaufen sich der Straﬂe
+LangFin: hedelm√§t myyv√§t itsens√§ tielle
+LangFre: les fruits se vendent √† la route
+LangGer: die Fr√ºchte verkaufen sich der Stra√üe
 LangIna: le fructos vende se al via
 LangIta: le frutte si vendono alla strada
 LangNor: fruktene selger seg til veien
-LangSwe: frukterna s‰ljer sig till v‰gen
+LangSwe: frukterna s√§ljer sig till v√§gen
  Lang: PhrUtt NoPConj (UttS (UseCl TPres ASimul PPos (PredVP (UsePron i_Pron) (ReflVP (SlashV2V beg_V2V (UseV live_V)))))) NoVoc
 LangDan: jeg beder mig at leve
 LangEng: I beg myself to live
-LangFin: min‰ pyyd‰n itse‰ni el‰m‰‰n
+LangFin: min√§ pyyd√§n itse√§ni el√§m√§√§n
 LangFre: je me demande vivre
 LangGer: ich bitte mich zu leben
 LangIna: io roga me vive
@@ -1669,35 +1669,52 @@ LangIta: mi prego vivere
 LangNor: jeg ber meg att leve
 LangSwe: jag ber mig att leva
  Lang: PhrUtt NoPConj (UttS (UseCl TPres ASimul PPos (PredVP (UsePron i_Pron) (ReflVP (SlashV2S answer_V2S (UseCl TPres ASimul PPos (ImpersCl (ComplVV must_VV (ReflVP (SlashV2a understand_V2)))))))))) NoVoc
-LangDan: jeg svarer til mig at det mÂ forstÂ sig
+LangDan: jeg svarer til mig at det m√• forst√• sig
 LangEng: I answer to myself that it must understand itself
-LangFin: min‰ vastaan itselleni ett‰ t‰ytyy ymm‰rt‰‰ itsens‰
-LangFre: je me rÈponds qu' il doit se comprendre
-LangGer: ich antworte mir daﬂ es sich verstehen muﬂ
+LangFin: min√§ vastaan itselleni ett√§ t√§ytyy ymm√§rt√§√§ itsens√§
+LangFre: je me r√©ponds qu' il doit se comprendre
+LangGer: ich antworte mir da√ü es sich verstehen mu√ü
 LangIna: io responde me que il debe se comprender
 LangIta: mi rispondo che deve capir &+ si
-LangNor: jeg svarer til meg at det mÂ forstÂ seg
-LangSwe: jag svarar till mig att det mÂste fˆrstÂ sig
+LangNor: jeg svarer til meg at det m√• forst√• seg
+LangSwe: jag svarar till mig att det m√•ste f√∂rst√• sig
  Lang: PhrUtt NoPConj (UttImpSg PPos (ImpVP (ReflVP (SlashV2Q ask_V2Q (UseQCl TPast ASimul PPos (QuestVP whoSg_IP (UseV come_V))))))) NoVoc
-LangDan: sp¯rg dig hvem som kom
+LangDan: sp√∏rg dig hvem som kom
 LangEng: ask yourself who came
-LangFin: kysy itselt‰si kuka tuli
+LangFin: kysy itselt√§si kuka tuli
 LangFre: demande - toi qui venait
 LangGer: frage dich wer kam
 LangIna: demanda te qui veniva
 LangIta: chiedi &+ ti chi veniva
-LangNor: sp¯rr deg hvem som kom
-LangSwe: frÂga dig vem som kom
+LangNor: sp√∏rr deg hvem som kom
+LangSwe: fr√•ga dig vem som kom
  Lang: PhrUtt NoPConj (UttS (UseCl TPast ASimul PPos (PredVP (UsePron i_Pron) (ReflVP (SlashV2A paint_V2A (ComparA beautiful_A (UsePN john_PN))))))) NoVoc
 LangDan: jeg malede mig smukkere end John
 LangEng: I painted myself more beautiful than John
-LangFin: min‰ maalasin itseni kauniimmaksi kuin Jussi
+LangFin: min√§ maalasin itseni kauniimmaksi kuin Jussi
 LangFre: je me peignais en plus joli que Jean
-LangGer: ich malte mich schˆner als Johann
+LangGer: ich malte mich sch√∂ner als Johann
 LangIna: io pingeva me in plus belle que John
-LangIta: mi pingevo in pi˘ bello che Giovanni
+LangIta: mi pingevo in pi√π bello che Giovanni
 LangNor: jeg mala meg vakkerere enn John
-LangSwe: jag mÂlade mig vackrare ‰n Johan
- Lang: UttImpSg PPos (ImpVP (ComplVV (ComplVV want_VV (ComplSlash (SlashV2a buy_V2) (UsePron it_Pron)))))
-
-
+LangSwe: jag m√•lade mig vackrare √§n Johan
+ Lang: UttS (UseCl TPres ASimul PPos (PredVP (DetCN (DetQuant this_Quant NumSg) (UseN grammar_N)) (ComplSlash (SlashV2a speak_V2) (DetCN (DetArtCard IndefArt (NumNumeral (num (pot2as3 (pot1as2 (pot1to19 n2)))))) (UseN language_N)))))
+LangDan: denne grammatik taler tolv sprog
+LangEng: this grammar speaks twelve languages
+LangFin: t√§m√§ kielioppi puhuu kahta toista kielt√§
+LangFre: cette grammaire parle douze langues
+LangGer: diese Grammatik spricht zw√∂lf Sprachen
+LangIna: iste grammatica parla dece - duo linguages
+LangIta: questa grammatica parla venti lingue
+LangNor: denne grammatikken snakker tolv spr√•k
+LangSwe: den h√§r grammatiken talar tolv spr√•k
+ Lang: UseCl TPast AAnter PPos (PredVP (UsePron she_Pron) (ComplSlash (SlashV2a buy_V2) (DetArtSg IndefArt (AdjCN (PositA red_A) (UseN house_N)))))
+LangDan: hun havde k√∏bt et r√∏dt hus
+LangEng: she had bought a red house
+LangFin: h√§n oli ostanut punaisen talon
+LangFre: elle avait achet√© une maison rouge
+LangGer: sie hatte ein rotes Haus gekauft
+LangIna: illa habeva comprte un domo rubie
+LangIta: aveva comprato una casa rossa
+LangNor: hun hadde kj√∏pt et r√∏dt hus
+LangSwe: hon hade k√∂pt ett r√∂tt hus
