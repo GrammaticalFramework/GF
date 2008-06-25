@@ -57,7 +57,6 @@ lin
   ceiling_N = mkN "потолок" ; -- vowel change
   chair_N = mkN "стул" ; -- irregular
   cheese_N = mkN "сыр" ;
----  child2_N = nRebenok "реб" ; -- Achtung: Hier 'child' im Sinne von "junge Lebewesen" (dann keine Suppletivformen(?))!
   child_N = mkN "ребёнок" "ребёнка" "ребёнку" "ребёнка" "ребёнком" "ребёнке" "ребёнке" "дети" "детей" "детям" "детей" "детьми" "детях"  masculine animate ;
   church_N = mkN "церковь" "церкви" "церкви" "церковь" "церковью" "церкви" "церкви" "церкви" "церквей" "церквям" "церкви" "церквями" "церквях"  masculine inanimate ;
   city_N = mkN "город" ;
