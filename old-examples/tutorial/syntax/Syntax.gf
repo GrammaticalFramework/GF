@@ -10,17 +10,17 @@ oper
 
   mkS = overload {
     mkS : Pol -> NP -> VP -> S
-       = \p,np,vp -> UseCl p (PredVP np vp) ;
+       = PredVP ;
     mkS : NP -> VP -> S
-       = \np,vp -> UseCl PPos (PredVP np vp) ;
+       = PredVP PPos ;
     mkS : Pol -> NP -> V2 -> NP -> S
-       = \p,np,v,o -> UseCl p (PredVP np (ComplV2 v o)) ;
+       = \p,np,v,o -> PredVP p np (ComplV2 v o) ;
     mkS : NP -> V2 -> NP -> S
-       = \np,v,o -> UseCl PPos (PredVP np (ComplV2 v o)) ;
+       = \np,v,o -> PredVP PPos np (ComplV2 v o) ;
     mkS : Pol -> NP -> AP -> S
-       = \p,np,ap -> UseCl p (PredVP np (ComplAP ap)) ;
+       = \p,np,ap -> PredVP p np (ComplAP ap) ;
     mkS : NP -> AP -> S
-       = \np,ap -> UseCl PPos (PredVP np (ComplAP ap)) ;
+       = \np,ap -> PredVP PPos np (ComplAP ap) ;
     } ;
 
   mkNP : Det -> CN -> NP 
