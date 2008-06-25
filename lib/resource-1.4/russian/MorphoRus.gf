@@ -606,26 +606,6 @@ oper nullEndAnimateDeclBrat: Str -> CommNoun =  \brat ->
     g = Masc   ; anim = Animate
   } ;
 
---oper obezbolivauchee : CommNoun = eeEndInAnimateDecl "обезболивающ" ;
-
-oper eeEndInAnimateDecl: Str -> CommNoun =  \obezbolivauch ->
-  {  s  =  table
-      { SF Sg Nom =>  obezbolivauch +"ее";
-        SF Sg Gen => obezbolivauch+"его" ;
-        SF Sg Dat => obezbolivauch+"ему" ;
-        SF Sg Acc => obezbolivauch +"ее";
-        SF Sg Inst => obezbolivauch+"им" ;
-        SF Sg (Prepos _) => obezbolivauch+"ем" ;
-        SF Pl Nom => obezbolivauch+"ие" ;
-        SF Pl Gen => obezbolivauch+"их" ;
-        SF Pl Dat => obezbolivauch+"им" ;
-        SF Pl Acc => obezbolivauch+"ие" ;
-        SF Pl Inst => obezbolivauch+"ими" ;
-        SF Pl (Prepos _) => obezbolivauch+"их"
-    } ;
-    g = Neut  ; anim = Inanimate
-  } ;
-
 oper irregPl_StemInAnimateDecl: Str -> CommNoun =  \derev ->
   { s  =  table
       { SF Sg Nom =>  derev+"о" ;

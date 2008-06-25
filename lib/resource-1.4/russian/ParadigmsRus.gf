@@ -332,12 +332,12 @@ foreign = Foreign; -- +++ MG_UR: added +++
           stem@(_+"и")+"й"   => nDecl7Masc stem;
           stem@(_+"и")+"я"   => nDecl7Fem stem;
 	  stem@(_+"и")+"е"   => nDecl7Neut stem;
-          stem@(_+("а"|"е"|"ё"|"о"|"у"|"ы"|"э"|"ю"|"я"))+"й" => nDecl6Masc stem ;
-          stem@(_+("а"|"е"|"ё"|"о"|"у"|"ы"|"э"|"ю"|"я"))+"е" => nDecl6Neut stem ;
-          stem@(_+("а"|"е"|"ё"|"о"|"у"|"ы"|"э"|"ю"|"я"))+"я" => nDecl6Fem stem ;
 	  stem+"ее"   => nAdj { s = (mk1A (stem+"ий")).s!Posit } Neut;
 	  stem+"ое"   => nAdj { s = (mk1A (stem+(iAfter stem)+"й")).s!Posit } Neut;
           stem+"мя"   => nDecl9 stem ;
+          stem@(_+("а"|"е"|"ё"|"о"|"у"|"ы"|"э"|"ю"|"я"))+"й" => nDecl6Masc stem ;
+          stem@(_+("а"|"е"|"ё"|"о"|"у"|"ы"|"э"|"ю"|"я"))+"е" => nDecl6Neut stem ;
+          stem@(_+("а"|"е"|"ё"|"о"|"у"|"ы"|"э"|"ю"|"я"))+"я" => nDecl6Fem stem ;
           stem@(_+("ч"|"щ"|"ш"|"ж"|"п"|"эн"|"м"|"ф"))+"ь" => nDecl8 stem ;
           stem@(_+("д"|"т"|"ст"|"с"|"в"|"б"))+"ь"         => nDecl8 stem ;
 	  stem@(_+"ш"|"ж"|"ч"|"щ"|"ц")+"е" => nRegHardNeut stem;
