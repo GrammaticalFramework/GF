@@ -67,45 +67,36 @@ oper pronYaTu : { s : Case => Str } -> Str -> Person -> Pronoun =
     g = PNoGen ; n = Sg ; p = pers ; pron = True
   } ;
 
-
-oper pronOn: Pronoun =
+-- FIXME: do the possesives also get the n prefix?
+oper pronNAfterPrep : Pronoun -> Pronoun = \p ->
   { s = table {
-    PF Nom _ NonPoss  => "он" ;
-    PF Gen No NonPoss  => "его" ;
-    PF Gen Yes NonPoss => "него"  ;
-    PF Dat No NonPoss => "ему" ;
-    PF Dat Yes NonPoss => "нему" ;
-    PF Acc No NonPoss => "его" ;
-    PF Acc Yes NonPoss => "него" ;
-    PF Inst No NonPoss => "им" ;
-    PF Inst Yes NonPoss => "ним" ;
-    PF (Prepos _) _ NonPoss => "нём" ;
-    PF _ _ (Poss  _) => "его"
-    } ;
-    g = PGen Masc ;
-    n = Sg ;
-    p = P3 ;
-    pron = True
+    PF c Yes NonPoss  => case p.s!(PF c No NonPoss) of {
+                        x@(("е"|"ё"|"и")+_) => "н"+x;
+                        x => x };
+    pf => p.s!pf };
+    g = p.g ; n = p.n ; p = p.p ; pron = p.pron
   } ;
 
-oper pronOna: Pronoun =
+oper pronOn : Pronoun = pronNAfterPrep
   { s = table {
-    PF Nom _ NonPoss => "она" ;
-    PF Gen No  NonPoss => "её" ;
-    PF Gen Yes NonPoss => "неё"  ;
-    PF Dat No NonPoss => "ей" ;
-    PF Dat Yes NonPoss => "ней" ;
-    PF Acc No NonPoss => "её" ;
-    PF Acc Yes NonPoss => "неё" ;
-    PF Inst No NonPoss => "ей" ;
-    PF Inst Yes NonPoss => "ней" ;
-    PF (Prepos _) _ NonPoss => "ней" ;
-    PF _ _ (Poss  _ ) => "её"
+    PF _ _  (Poss  _) => "его" ;
+    PF Nom        _ _ => "он" ;
+    PF (Gen|Acc)  _ _ => "его" ;
+    PF Dat        _ _ => "ему" ;
+    PF Inst       _ _ => "им" ;
+    PF (Prepos _) _ _ => "ём"
     } ;
-    g = PGen Fem ;
-    n = Sg ;
-    p = P3 ;
-    pron = True
+    g = PGen Masc ; n = Sg ; p = P3 ; pron = True
+  } ;
+
+oper pronOna : Pronoun = pronNAfterPrep
+  { s = table {
+    PF _ _ (Poss  _ )          => "её" ;
+    PF Nom _ NonPoss           => "она" ;
+    PF (Gen|Acc) _ _           => "её" ;
+    PF (Dat|Inst|Prepos _) _ _ => "ей"
+    } ;
+    g = PGen Fem ; n = Sg ; p = P3 ; pron = True
   } ;
 
 oper pronOno: Pronoun =
@@ -155,24 +146,15 @@ oper pronMu: Pronoun = pronMuVu "мы" "на" P1;
 
 oper pronVu: Pronoun = pronMuVu "вы" "ва" P2;
 
-oper pronOni: Pronoun =
+oper pronOni: Pronoun = pronNAfterPrep
   { s = table {
-    PF Nom _ NonPoss => "они" ;
-    PF Gen No NonPoss => "их" ;
-    PF Gen Yes NonPoss => "них" ;
-    PF Dat No NonPoss => "им" ;
-    PF Dat Yes NonPoss => "ним" ;
-    PF Acc No NonPoss => "их" ;
-    PF Acc Yes NonPoss => "них" ;
-    PF Inst No NonPoss => "ими" ;
-    PF Inst Yes NonPoss => "ними" ;
-    PF (Prepos _) _ NonPoss => "них" ;
-    PF _ _ (Poss  _) => "их"
+    PF _ _ (Poss  _)          => "их" ;
+    PF Nom _ _                => "они" ;
+    PF Dat _ _                => "им" ;
+    PF (Gen|Acc|Prepos _) _ _ => "их" ;
+    PF Inst _ _               => "ими"
     } ;
-    g = PNoGen ;
-    n = Pl ;
-    p = P3 ;
-    pron = True
+    g = PNoGen ; n = Pl ; p = P3 ; pron = True
   } ;
 
 oper pronKto: Pronoun =
