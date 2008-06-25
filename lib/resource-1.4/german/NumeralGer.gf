@@ -22,7 +22,7 @@ lin
 
   pot01 = {
     s = \\f => table {
-          NCard => "ein" ; ----
+          NCard g c => "ein" + pronEnding ! GSg g ! c ;
           NOrd af => (regA "erst").s ! Posit ! af
           } ; 
     n = Sg
@@ -53,7 +53,7 @@ lin
     IDig d = d ; 
 
     IIDig d i = {
-      s = \\o => d.s ! NCard ++ i.s ! o ;
+      s = \\o => d.s ! invNum ++ i.s ! o ;
       n = Pl
     } ;
 
@@ -74,7 +74,7 @@ lin
     mkDig : Str -> TDigit = \c -> mk2Dig c (c + "e") ;
 
     mk3Dig : Str -> Str -> Number -> TDigit = \c,o,n -> {
-      s = table {NCard => c ; NOrd _ => o} ;
+      s = table {NCard _ _ => c ; NOrd _ => o} ;
       n = n
       } ;
 

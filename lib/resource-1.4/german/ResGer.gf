@@ -87,7 +87,7 @@ resource ResGer = ParamX ** open Prelude in {
 
 --2 For $Numeral$
 
-    CardOrd = NCard | NOrd AForm ;
+    CardOrd = NCard Gender Case | NOrd AForm ;
     DForm = DUnit  | DTeen  | DTen ;
 
 --2 Transformations between parameter types

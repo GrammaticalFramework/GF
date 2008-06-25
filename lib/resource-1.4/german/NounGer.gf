@@ -43,7 +43,7 @@ concrete NounGer of Noun = CatGer ** open ResGer, Prelude in {
         a = quant.a
       in {
         s = \\g,c => quant.s ! n ! g ! c ++ 
-                     num.s ++ ord.s ! agrAdj g (adjfCase a c) n c ;
+                     num.s!g!c ++ ord.s ! agrAdj g (adjfCase a c) n c ;
         n = n ;
         a = a
         } ;
@@ -53,7 +53,7 @@ concrete NounGer of Noun = CatGer ** open ResGer, Prelude in {
         n = num.n ;
         a = quant.a
       in {
-        s = \\g,c => quant.s ! n ! g ! c ++ num.s ;
+        s = \\g,c => quant.s ! n ! g ! c ++ num.s!g!c ;
         n = n ;
         a = a
         } ;
@@ -64,7 +64,7 @@ concrete NounGer of Noun = CatGer ** open ResGer, Prelude in {
         a = quant.a
       in {
         s = \\g,c => quant.s ! num.isNum ! n ! g ! c ++ 
-                     num.s ++ ord.s ! agrAdj g (adjfCase a c) n c ;
+                     num.s!g!c ++ ord.s ! agrAdj g (adjfCase a c) n c ;
         n = n ;
         a = a
         } ;
@@ -75,7 +75,7 @@ concrete NounGer of Noun = CatGer ** open ResGer, Prelude in {
         a = quant.a
       in {
         s = \\g,c => quant.s ! True ! n ! g ! c ++ 
-                     num.s ;
+                     num.s!g!c ;
         n = n ;
         a = a
         } ;
@@ -99,16 +99,16 @@ concrete NounGer of Noun = CatGer ** open ResGer, Prelude in {
 
     NumCard n = n ** {isNum = True} ;
 
-    NumPl = {s = []; n = Pl ; isNum = False} ; 
-    NumSg = {s = []; n = Sg ; isNum = False} ; 
+    NumPl = {s = \\g,c => []; n = Pl ; isNum = False} ; 
+    NumSg = {s = \\g,c => []; n = Sg ; isNum = False} ; 
 
-    NumDigits numeral = {s = numeral.s ! NCard; n = numeral.n } ;
+    NumDigits numeral = {s = \\g,c => numeral.s ! NCard g c; n = numeral.n } ;
     OrdDigits numeral = {s = \\af => numeral.s ! NOrd af} ;
 
-    NumNumeral numeral = {s = numeral.s ! NCard; n = numeral.n } ;
+    NumNumeral numeral = {s = \\g,c => numeral.s ! NCard g c; n = numeral.n } ;
     OrdNumeral numeral = {s = \\af => numeral.s ! NOrd af} ;
 
-    AdNum adn num = {s = adn.s ++ num.s; n = num.n } ;
+    AdNum adn num = {s = \\g,c => adn.s ++ num.s!g!c; n = num.n } ;
 
     OrdSuperl a = {s = a.s ! Superl} ;
 
