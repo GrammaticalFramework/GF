@@ -27,6 +27,7 @@ transliteration :: String -> Maybe Transliteration
 transliteration s = case s of
   "devanagari" -> Just transDevanagari
   "thai" -> Just transThai
+  "urdu" -> Just transUrdu
   _ -> Nothing
 
 characterTable :: Transliteration -> String
@@ -85,13 +86,20 @@ transThai = mkTransliteration allTrans allCodes where
   allCodes = [0x0e00 .. 0x0e7f]
 
 transDevanagari :: Transliteration
-transDevanagari = (mkTransliteration allTrans allCodes){invisible_chars = ["a"]} where
-  allTrans = words $
+transDevanagari = 
+  (mkTransliteration allTransUrduHindi allCodes){invisible_chars = ["a"]} where
+    allCodes = [0x0901 .. 0x094c]
+
+allTransUrduHindi = words $
     "M  N  -  - " ++
     "a- A- i- I- u- U- R- -  -  -  e- E- -  -  o- O- " ++
     "k  K  g  G  N: c  C  j  J  n: t. T. d. D. n. t  " ++
     "T  d  D  n  -  p  P  b  B  m  y  r  -  l  -  -  v  " ++
     "S  s. s  h  -  -  r. -  A  i  I  u  U  R  -  -  " ++
     "-  e  E  o  O "
-  allCodes = [0x0901 .. 0x094c]
+
+transUrdu :: Transliteration
+transUrdu = 
+  (mkTransliteration allTransUrduHindi allCodes){invisible_chars = ["a"]} where
+    allCodes = [0x0901 .. 0x094c]
 
