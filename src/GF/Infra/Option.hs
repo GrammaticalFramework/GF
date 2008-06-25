@@ -77,7 +77,7 @@ data Phase = Preproc | Convert | Compile | Link
   deriving (Show,Eq,Ord)
 
 data Encoding = UTF_8 | ISO_8859_1 | CP_1251
-  deriving (Show,Eq,Ord)
+  deriving (Eq,Ord)
 
 data OutputFormat = FmtPGF 
                   | FmtJavaScript 
@@ -186,11 +186,10 @@ moduleOptionsGFO :: ModuleOptions -> [(String,String)]
 moduleOptionsGFO (ModuleOptions o) = 
          maybe [] (\x -> [("language",x)]) (optSpeechLanguage mfs)
       ++ maybe [] (\x -> [("startcat",x)]) (optStartCat mfs)
---      ++ maybe [] (\x -> [("coding",  e2s x)]) (Just (optEncoding mfs))
+      ++ [("coding", show (optEncoding mfs))]
       ++ (if optErasing mfs then [("erasing","on")] else [])
   where 
     mfs = o defaultModuleFlags
-    e2s e = maybe [] id $ lookup e [(s,e) | (e,s) <- encodings]
 
 -- Option manipulation
 
@@ -474,6 +473,9 @@ encodings =
      ("cp1251", CP_1251),
      ("latin1", ISO_8859_1)
     ]
+
+instance Show Encoding where
+    show = lookupShow encodings
 
 lookupShow :: Eq a => [(String,a)] -> a -> String
 lookupShow xs z = fromMaybe "lookupShow" $ lookup z [(y,x) | (x,y) <- xs]
