@@ -274,7 +274,7 @@ foreign = Foreign; -- +++ MG_UR: added +++
 
  mkN = overload {
     mkN : (karta : Str) -> N = mk1N ;
-    mkN : (tigr : Str) -> Animacy -> N = \nom, anim -> case anim of { Animate   => animateN (mk1N nom) ;
+    mkN : (tigr : Str) -> Animacy -> N = \nom, anim -> case anim of { Animate   => nAnimate (mk1N nom) ;
 								      Inanimate => mk1N nom } ;
     mkN : (nomSg, genSg, datSg, accSg, instSg, preposSg, prepos2Sg,
           nomPl, genPl, datPl, accPl, instPl, preposPl : Str) -> Gender -> Animacy -> N = mkWorstN
@@ -311,23 +311,10 @@ foreign = Foreign; -- +++ MG_UR: added +++
      anim = anim
    } ** {lock_N = <>} ;
 
--- Makes a noun animate.
-  oper animateN : N -> N = \n -> 
-   {
-     s = table { 
-       SF Sg Acc => case n.g of {
-                       Masc => n.s!(SF Sg Gen);
-		       _    => n.s!(SF Sg Acc)
-	            };
-       SF Pl Acc => n.s!(SF Pl Gen);
-       sf        => n.s!sf } ;
-     g = n.g ;
-     anim = Animate 
-   } ** {lock_N = <>};
-
   oper mk1N : Str -> N = \x ->
         case x of {
---	  stem+"oнoк" => nDecl10 stem ;
+	  stem+"онок" => nDecl10Hard stem ;
+	  stem+"ёнок" => nDecl10Soft stem ;
 --        stem+"aнин" => nDecl11 stem ;
           stem@(_+"и")+"й"   => nDecl7Masc stem;
           stem@(_+"и")+"я"   => nDecl7Fem stem;

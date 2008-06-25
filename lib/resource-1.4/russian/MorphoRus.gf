@@ -558,6 +558,24 @@ Paradigms:
 	SF Pl (Prepos _) => stem+"менах" };
       g = Fem; anim = Inanimate };
 
+   -- 10. Masc in -oнoк
+  oper nDecl10Hard : Str -> CommNoun = \stem -> 
+	 nAnimate (nSplitSgPl (nRegHardMasc (stem+"онок")) -- FIXME: vowel change in sg
+	                      (nRegHardNeut (stem+"ат"))) ; 
+
+   -- 10. Masc in -ёнoк
+  oper nDecl10Soft : Str -> CommNoun = \stem -> 
+	 nAnimate (nSplitSgPl (nRegHardMasc (stem+"ёнок")) -- FIXME: vowel change in sg
+	                      (nRegHardNeut (stem+"ят"))) ; 
+
+  oper nSplitSgPl : CommNoun -> CommNoun -> CommNoun = \x, y -> 
+  {s  = table {
+        SF Sg c => x.s!(SF Sg c) ;
+        SF Pl c => y.s!(SF Pl c)
+    } ;
+    g = x.g ; anim = y.anim
+   } ;
+
   -- Nouns inflected as adjectives.
   oper nAdj : Adjective -> Gender ->CommNoun= \a,g -> 
     { s = table {
@@ -565,6 +583,18 @@ Paradigms:
 	SF Pl c           => a.s!AF c Inanimate APl };
       g = g; anim = Inanimate } ;
 
+-- Makes a noun animate.
+  oper nAnimate : CommNoun -> CommNoun = \n -> 
+   { s = table { 
+       SF Sg Acc => case n.g of {
+                       Masc => n.s!(SF Sg Gen);
+		       _    => n.s!(SF Sg Acc)
+	            };
+       SF Pl Acc => n.s!(SF Pl Gen);
+       sf        => n.s!sf } ;
+     g = n.g ;
+     anim = Animate 
+   } ;
 
 oper
     CommNoun = {s : SubstForm => Str ; g : Gender ; anim : Animacy } ;
@@ -623,27 +653,6 @@ oper irregPl_StemInAnimateDecl: Str -> CommNoun =  \derev ->
     } ;
     g = Masc   ; anim = Inanimate
   } ;
-
-
-
-oper LittleAnimalDecl: Str -> CommNoun =  \reb ->
-  {s  =  table
-      { SF Sg Nom => reb+"ёноk" ;
-        SF Sg Gen => reb+"ёнkа" ;
-        SF Sg Dat => reb+"ёнkу" ;
-        SF Sg Acc => reb+"ёнkа" ;
-        SF Sg Inst => reb+"ёнkом" ;
-        SF Sg (Prepos _) => reb+"ёнkе" ;
-        SF Pl Nom => reb+"ята" ;
-        SF Pl Gen => reb+"ят" ;
-        SF Pl Dat => reb+"ятам" ;
-        SF Pl Acc => reb+"ят" ;
-        SF Pl Inst => reb+"ятами" ;
-        SF Pl (Prepos _) => reb+"ятах"
-    } ;
-    g = Masc   ; anim = Animate
-   } ;
-
 
 oper kg_oEnd_SgDecl: Str -> CommNoun =  \mnog ->
 { s  =  table  {
