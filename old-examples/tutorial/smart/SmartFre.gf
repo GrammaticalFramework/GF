@@ -1,6 +1,6 @@
 --# -path=.:prelude
 
-concrete SmartFre of Smart = open Prelude in {
+concrete Toy1Fre of Toy1 = open Prelude in {
 
 -- grammar Toy1 from the Regulus book
 

@@ -32,7 +32,7 @@ lin
   And = and_Conj ;
   Or  = or_Conj ;
 
-  UseInt i = symb (i ** {lock_Int = <>}) ; ---- terrible to need this
+  UseInt i = symb i ;
 
   Number = mkCN number_N ;
 
@@ -46,15 +46,15 @@ lin
  
   Sum     = prefix sum_N2 ;
   Product = prefix product_N2 ;
-  GCD nps = mkNP (mkDet DefArt (mkOrd great_A)) 
+  GCD nps = mkNP (mkDet (mkQuantSg defQuant) (mkOrd great_A)) 
               (mkCN common_A (mkCN divisor_N2 (mkNP and_Conj nps))) ;
 
   WhatIs np = mkPhr (mkQS (mkQCl whatSg_IP (mkVP np))) ;
-  WhichAre cn ap = mkPhr (mkQS (mkQCl (mkIP which_IQuant cn) (mkVP ap))) ;
+  WhichAre cn ap = mkPhr (mkQS (mkQCl (mkIP whichPl_IDet cn) (mkVP ap))) ;
   QuestS s = mkPhr (mkQS (mkQCl s)) ;
 
-  Yes = mkPhr yes_Utt ;
-  No = mkPhr no_Utt ;
+  Yes = yes_Phr ;
+  No = no_Phr ;
 
   Value np = mkPhr (mkUtt np) ;
   Many list = mkNP and_Conj list ;
@@ -65,6 +65,6 @@ lin
 
 oper
   prefix : G.N2 -> G.ListNP -> G.NP = \n2,nps -> 
-    mkNP DefArt (mkCN n2 (mkNP and_Conj nps)) ;
+    mkNP defSgDet (mkCN n2 (mkNP and_Conj nps)) ;
   
 }
