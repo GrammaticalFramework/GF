@@ -19,21 +19,21 @@ import System
  
 langsCoding = [
   (("arabic",   "Ara"),""),
-  (("bulgarian","Bul"),"from_cp1251,to_utf8"),
-  (("catalan",  "Cat"),"to_utf8"),
-  (("danish",   "Dan"),"to_utf8"),
+  (("bulgarian","Bul"),""),
+  (("catalan",  "Cat"),""),
+  (("danish",   "Dan"),""),
   (("english",  "Eng"),""),
-  (("finnish",  "Fin"),"to_utf8"),
-  (("french",   "Fre"),"to_utf8"),
-  (("hindi",    "Hin"),"to_devanagari,to_utf8"),
-  (("german",   "Ger"),"to_utf8"),
+  (("finnish",  "Fin"),""),
+  (("french",   "Fre"),""),
+  (("hindi",    "Hin"),"to_devanagari"),
+  (("german",   "Ger"),""),
   (("interlingua","Ina"),""),
-  (("italian",  "Ita"),"to_utf8"),
-  (("norwegian","Nor"),"to_utf8"),
+  (("italian",  "Ita"),""),
+  (("norwegian","Nor"),""),
   (("russian",  "Rus"),""),
-  (("spanish",  "Spa"),"to_utf8"),
-  (("swedish",  "Swe"),"to_utf8"), 
-  (("thai",     "Tha"),"to_thai,to_utf8")
+  (("spanish",  "Spa"),""),
+  (("swedish",  "Swe"),""), 
+  (("thai",     "Tha"),"to_thai")
   ]
 
 langs = map fst langsCoding

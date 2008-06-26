@@ -2,7 +2,7 @@
 
 concrete NounRus of Noun = CatRus ** open ResRus, Prelude, MorphoRus in {
 
-  flags optimize=all_subs ;
+  flags optimize=all_subs ; coding=utf8 ;
 
   lin
     DetCN kazhduj okhotnik = {

@@ -4,6 +4,8 @@ resource ParadigmsBul = MorphoFunsBul ** open
   MorphoBul,
   CatBul
   in {
+  flags coding=cp1251 ;
+
 oper
   mkN001 : Str -> N ;
   mkN001 base = let v0 = base

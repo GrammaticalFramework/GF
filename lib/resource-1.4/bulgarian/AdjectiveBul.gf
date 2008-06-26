@@ -1,4 +1,6 @@
 concrete AdjectiveBul of Adjective = CatBul ** open ResBul, Prelude in {
+  flags coding=cp1251 ;
+
   lin
     PositA  a = {
       s = \\aform => a.s ! aform ;

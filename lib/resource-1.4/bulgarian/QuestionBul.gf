@@ -1,4 +1,6 @@
 concrete QuestionBul of Question = CatBul ** open ResBul, Prelude in {
+  flags coding=cp1251 ;
+
 
   flags optimize=all_subs ;
 

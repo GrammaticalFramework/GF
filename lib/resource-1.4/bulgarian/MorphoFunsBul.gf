@@ -5,6 +5,8 @@ resource MorphoFunsBul = open
   CatBul,
   MorphoBul
   in {
+  flags coding=cp1251 ;
+
 
 oper
 --2 Adverbs

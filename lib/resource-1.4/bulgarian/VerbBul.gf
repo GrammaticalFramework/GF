@@ -1,4 +1,6 @@
 concrete VerbBul of Verb = CatBul ** open Prelude, ResBul, ParadigmsBul in {
+  flags coding=cp1251 ;
+
 
   flags optimize=all_subs ;
 

@@ -62,10 +62,10 @@ emptyCommandInfo = CommandInfo {
 lookCommand :: String -> Map.Map String CommandInfo -> Maybe CommandInfo
 lookCommand = Map.lookup
 
-commandHelpAll :: PGF -> [Option] -> String
-commandHelpAll pgf opts = unlines
+commandHelpAll :: (String -> String) -> PGF -> [Option] -> String
+commandHelpAll enc pgf opts = unlines
   [commandHelp (isOpt "full" opts) (co,info)
-    | (co,info) <- Map.assocs (allCommands pgf)]
+    | (co,info) <- Map.assocs (allCommands enc pgf)]
 
 commandHelp :: Bool -> (String,CommandInfo) -> String
 commandHelp full (co,info) = unlines $ [
@@ -81,8 +81,8 @@ commandHelp full (co,info) = unlines $ [
   ] else []
 
 -- this list must no more be kept sorted by the command name
-allCommands :: PGF -> Map.Map String CommandInfo
-allCommands pgf = Map.fromList [
+allCommands :: (String -> String) -> PGF -> Map.Map String CommandInfo
+allCommands enc pgf = Map.fromList [
   ("cc", emptyCommandInfo {
      longname = "compute_concrete",
      syntax = "cc (-all | -table | -unqual)? TERM",
@@ -145,7 +145,8 @@ allCommands pgf = Map.fromList [
      syntax = "gr [-cat=CAT] [-number=INT]",
      examples = [
        "gr                     -- one tree in the startcat of the current grammar",
-       "gr -cat=NP -number=16  -- 16 trees in the category NP"
+       "gr -cat=NP -number=16  -- 16 trees in the category NP",
+       "gr -lang=LangHin,LangTha -cat=Cl  -- Cl, both in LangHin and LangTha"
        ],
      explanation = unlines [
        "Generates a list of random trees, by default one tree."
@@ -154,7 +155,7 @@ allCommands pgf = Map.fromList [
        ],
      flags = [
        ("cat","generation category"),
-       ("lang","excludes functions that have no linearization in this language"),
+       ("lang","uses only functions that have linearizations in all these languages"),
        ("number","number of trees generated")
        ],
      exec = \opts _ -> do
@@ -196,10 +197,10 @@ allCommands pgf = Map.fromList [
        ],
      exec = \opts ts -> return ([], case ts of
        [t] -> let co = showTree t in 
-              case lookCommand co (allCommands pgf) of   ---- new map ??!!
+              case lookCommand co (allCommands enc pgf) of   ---- new map ??!!
                 Just info -> commandHelp True (co,info)
                 _ -> "command not found"
-       _ -> commandHelpAll pgf opts)
+       _ -> commandHelpAll enc pgf opts)
      }),
   ("i", emptyCommandInfo {
      longname = "import",
@@ -400,6 +401,15 @@ allCommands pgf = Map.fromList [
        ("number","the maximum number of questions")
        ] 
      }),
+  ("se", emptyCommandInfo {
+     longname = "set_encoding",
+     synopsis = "set the encoding used in current terminal",
+     syntax   = "se ID",
+     examples = [
+      "se cp1251 -- set encoding to cp1521",
+      "se utf8   -- set encoding to utf8 (default)"
+      ]
+    }),
   ("sp", emptyCommandInfo {
      longname = "system_pipe",
      synopsis = "send argument to a system command",
@@ -407,7 +417,7 @@ allCommands pgf = Map.fromList [
      exec = \opts arg -> do
        let tmpi = "_tmpi" ---
        let tmpo = "_tmpo"
-       writeFile tmpi $ toString arg
+       writeFile tmpi $ enc $ toString arg
        let syst = optComm opts ++ " " ++ tmpi
        system $ syst ++ " <" ++ tmpi ++ " >" ++ tmpo 
        s <- readFile tmpo
@@ -451,7 +461,7 @@ allCommands pgf = Map.fromList [
            let file s = "_grph." ++ s
            let view = optViewGraph opts ++ " "
            let format = optViewFormat opts 
-           writeFile (file "dot") grph
+           writeFile (file "dot") (enc grph)
            system $ "dot -T" ++ format ++ " " ++ file "dot" ++ " > " ++ file format ++ 
                     " ; " ++ view ++ file format
            return void
@@ -475,8 +485,8 @@ allCommands pgf = Map.fromList [
      exec = \opts arg -> do
          let file = valIdOpts "file" "_gftmp" opts
          if isOpt "append" opts 
-           then appendFile file (toString arg)
-           else writeFile file (toString arg)
+           then appendFile file (enc (toString arg))
+           else writeFile file (enc (toString arg))
          return void,
      options = [
        ("append","append to file, instead of overwriting it")
@@ -526,7 +536,8 @@ allCommands pgf = Map.fromList [
                       in cod : filter (/=cod) (map prOpt opts)
        _ -> map prOpt opts
 
-   optRestricted opts = restrictPGF (hasLin pgf (mkCId (optLang opts))) pgf
+   optRestricted opts = 
+     restrictPGF (\f -> and [hasLin pgf (mkCId la) f | la <- optLangs opts]) pgf
 
    optLangs opts = case valIdOpts "lang" "" opts of
      "" -> languages pgf

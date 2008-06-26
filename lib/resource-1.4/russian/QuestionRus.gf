@@ -2,7 +2,7 @@
 
 concrete QuestionRus of Question = CatRus ** open ResRus, Prelude in {
 
-  flags optimize=all_subs ;
+  flags optimize=all_subs ; coding=utf8 ;
 
   lin
 

@@ -1,4 +1,6 @@
 concrete IdiomBul of Idiom = CatBul ** open Prelude, ParadigmsBul, ResBul in {
+  flags coding=cp1251 ;
+
   flags optimize=all_subs ;
 
   lin

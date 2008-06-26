@@ -15,6 +15,8 @@ concrete GrammarBul of Grammar =
   StructuralBul,
   IdiomBul
   ** {
+  flags coding=cp1251 ;
+
 
 flags startcat = Phr ; unlexer = text ; lexer = text ;
 

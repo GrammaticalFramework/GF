@@ -1,4 +1,6 @@
 concrete AdverbBul of Adverb = CatBul ** open ResBul, Prelude in {
+  flags coding=cp1251 ;
+
   lin
     PositAdvAdj a = {s = a.adv} ;
     ComparAdvAdj cadv a np = {

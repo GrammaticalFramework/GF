@@ -11,6 +11,8 @@ import GF.Infra.UseIO
 import GF.Infra.Option
 import GF.System.Readline
 
+import GF.Text.UTF8 ----
+
 import PGF
 import PGF.Data
 import PGF.Macros
@@ -23,8 +25,8 @@ import qualified Text.ParserCombinators.ReadP as RP
 import System.Cmd
 import System.CPUTime
 import Control.Exception
-
 import Data.Version
+
 import Paths_gf
 
 mainGFI :: Options -> [FilePath] -> IO ()
@@ -39,13 +41,15 @@ loop opts gfenv0 = do
   let env = commandenv gfenv0
   let sgr = sourcegrammar gfenv0
   setCompletionFunction (Just (wordCompletion (commandenv gfenv0)))
-  s <- fetchCommand (prompt env)
-  let gfenv = gfenv0 {history = s : history gfenv0}
+  s0 <- fetchCommand (prompt env)
+  let gfenv = gfenv0 {history = s0 : history gfenv0}
   let loopNewCPU gfenv' = do 
         cpu' <- getCPUTime
         putStrLnFlush (show ((cpu' - cputime gfenv') `div` 1000000000) ++ " msec")
         loop opts $ gfenv' {cputime = cpu'}
   let 
+    enc = encode gfenv
+    s = decode gfenv s0
     pwords = case words s of
       w:ws -> getCommandOp w :ws
       ws -> ws
@@ -60,8 +64,8 @@ loop opts gfenv0 = do
            ('-':w):ws2 -> (pTermPrintStyle w, ws2)
            _ -> (TermPrintDefault, ws)
        case pTerm (unwords term) >>= checkTerm sgr >>= computeTerm sgr of   ---- pipe!
-         Ok  x -> putStrLn (showTerm style x)
-         Bad s -> putStrLn s
+         Ok  x -> putStrLn $ enc (showTerm style x)
+         Bad s -> putStrLn $ enc s
        loopNewCPU gfenv
     "i":args -> do
         gfenv' <- case parseOptions args of
@@ -93,12 +97,14 @@ loop opts gfenv0 = do
            }
          _ -> putStrLn "value definition not parsed" >> loopNewCPU gfenv
 
-    "ph":_ -> mapM_ putStrLn (reverse (history gfenv0)) >> loopNewCPU gfenv
+    "ph":_ -> mapM_ (putStrLn . enc) (reverse (history gfenv0)) >> loopNewCPU gfenv
+    "se":c -> loopNewCPU $ gfenv {coding = s}
+
     "q":_  -> putStrLn "See you." >> return gfenv
 
   -- ordinary commands, working on CommandEnv
     _ -> do
-      interpretCommandLine env s
+      interpretCommandLine enc env s
       loopNewCPU gfenv
 
 importInEnv :: GFEnv -> Options -> [FilePath] -> IO GFEnv
@@ -111,7 +117,7 @@ importInEnv gfenv opts files
                pgf0 = multigrammar (commandenv gfenv)
            pgf1 <- importGrammar pgf0 opts' files
            putStrLnFlush $ unwords $ "\nLanguages:" : languages pgf1
-           return $ gfenv { commandenv = mkCommandEnv pgf1 }
+           return $ gfenv { commandenv = mkCommandEnv (encode gfenv) pgf1 }
 
 welcome = unlines [
   "                              ",
@@ -139,11 +145,21 @@ data GFEnv = GFEnv {
   sourcegrammar :: Grammar, -- gfo grammar -retain
   commandenv :: CommandEnv,
   history    :: [String],
-  cputime    :: Integer
+  cputime    :: Integer,
+  coding     :: String
   }
 
 emptyGFEnv :: GFEnv
-emptyGFEnv = GFEnv emptyGrammar (mkCommandEnv emptyPGF) [] 0
+emptyGFEnv = GFEnv emptyGrammar (mkCommandEnv encodeUTF8 emptyPGF) [] 0 "utf8"
+
+encode env = case coding env of
+  "utf8" -> encodeUTF8
+  _ -> id
+
+decode env = case coding env of
+  "utf8" -> decodeUTF8
+  _ -> id
+
 
 
 wordCompletion cmdEnv line prefix p =

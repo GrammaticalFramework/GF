@@ -1,4 +1,6 @@
 concrete TextBul of Text = CatBul ** {
+  flags coding=cp1251 ;
+
 
 -- This will work for almost all languages except Spanish.
 
