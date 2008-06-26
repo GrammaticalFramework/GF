@@ -1,5 +1,7 @@
 resource PatternsAra =  {
 
+flags coding=utf8 ;
+
   oper
     
 	fA'  = { h = "" ; m1 = ""; m2 = ""; t = "َاء"} ;

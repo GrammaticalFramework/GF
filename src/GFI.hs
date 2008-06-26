@@ -26,6 +26,8 @@ import System.Cmd
 import System.CPUTime
 import Control.Exception
 import Data.Version
+import GF.System.Signal
+
 
 import Paths_gf
 
@@ -53,7 +55,7 @@ loop opts gfenv0 = do
     pwords = case words s of
       w:ws -> getCommandOp w :ws
       ws -> ws
-  case pwords of
+  r <- runInterruptibly $ case pwords of
   -- special commands, requiring source grammar in env
     "!":ws -> do
        system $ unwords ws
@@ -106,6 +108,8 @@ loop opts gfenv0 = do
     _ -> do
       interpretCommandLine enc env s
       loopNewCPU gfenv
+  gfenv' <- return $ either (const gfenv) id r
+  loopNewCPU gfenv'
 
 importInEnv :: GFEnv -> Options -> [FilePath] -> IO GFEnv
 importInEnv gfenv opts files

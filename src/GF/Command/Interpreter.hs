@@ -38,10 +38,13 @@ interpretCommandLine :: (String -> String) -> CommandEnv -> String -> IO ()
 interpretCommandLine enc env line =
   case readCommandLine line of
     Just []    -> return ()
+    Just pipes -> mapM_ (interpretPipe enc env) pipes
+{-
     Just pipes -> do res <- runInterruptibly (mapM_ (interpretPipe enc env) pipes)
                      case res of
                        Left ex -> putStrLnFlush $ enc (show ex)
                        Right x -> return x
+-}
     Nothing    -> putStrLnFlush "command not parsed"
 
 interpretPipe enc env cs = do

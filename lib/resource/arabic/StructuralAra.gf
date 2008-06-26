@@ -1,7 +1,7 @@
 concrete StructuralAra of Structural = CatAra ** 
   open MorphoAra, ResAra, ParadigmsAra, Prelude in {
 
-  flags optimize=all ;
+  flags optimize=all ;  coding=utf8 ;
 
   lin
   above_Prep = ss "فَوْقَ" ;
