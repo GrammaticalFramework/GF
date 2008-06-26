@@ -1,2 +1,0 @@
-abstract IrregInaAbs = Cat ** {
-}

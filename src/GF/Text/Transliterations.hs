@@ -32,7 +32,7 @@ transliteration s = case s of
 
 characterTable :: Transliteration -> String
 characterTable = unlines . map prOne . Map.assocs . trans_from_unicode where
-  prOne (i,s) = unwords ["|", show i, "|", encodeUTF8 [toEnum i], "|", s, "|"]
+  prOne (i,s) = unwords ["|", show i, "|", [toEnum i], "|", s, "|"]
 
 data Transliteration = Trans {
   trans_to_unicode   :: Map.Map String Int,

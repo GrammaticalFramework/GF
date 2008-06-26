@@ -1,4 +1,0 @@
-abstract FinnishAbs = 
-  Lang,
-  ExtraFinAbs
-  ** {} ;
