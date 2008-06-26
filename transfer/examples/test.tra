@@ -1,4 +1,0 @@
-import nat
-import fib
-
-main = (\x -> (\x -> \x -> x) 1 x) 5

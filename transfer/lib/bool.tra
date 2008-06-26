@@ -1,6 +1,0 @@
-import prelude
-
-depif : (A:Type) -> (B:Type) -> (b:Bool) -> A -> B -> if Type b then A else B
-depif _ _ True x _ = x
-depif _ _ False _ y = y
-

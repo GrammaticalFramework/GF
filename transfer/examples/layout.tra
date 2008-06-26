@@ -1,9 +1,0 @@
-x : Apa
-x = let x = y 
-     in case y of
-         f -> q
-         _ -> a
-
-f = apa 
-
-g = bepa
