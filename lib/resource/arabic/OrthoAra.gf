@@ -1,5 +1,7 @@
 resource OrthoAra = open Prelude, Predef in {
 
+flags coding=utf8 ;
+
   oper
     
     rectifyHmz: Str -> Str = \word ->

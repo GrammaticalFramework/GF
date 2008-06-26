@@ -55,61 +55,70 @@ loop opts gfenv0 = do
     pwords = case words s of
       w:ws -> getCommandOp w :ws
       ws -> ws
-  r <- runInterruptibly $ case pwords of
+  
   -- special commands, requiring source grammar in env
-    "!":ws -> do
-       system $ unwords ws
-       loopNewCPU gfenv
-    "cc":ws -> do
-       let 
-         (style,term) = case ws of 
-           ('-':w):ws2 -> (pTermPrintStyle w, ws2)
-           _ -> (TermPrintDefault, ws)
-       case pTerm (unwords term) >>= checkTerm sgr >>= computeTerm sgr of   ---- pipe!
-         Ok  x -> putStrLn $ enc (showTerm style x)
-         Bad s -> putStrLn $ enc s
-       loopNewCPU gfenv
-    "i":args -> do
-        gfenv' <- case parseOptions args of
-                    Ok (opts',files) -> importInEnv gfenv (addOptions opts opts') files
-                    Bad err -> do putStrLn $ "Command parse error: " ++ err
-                                  return gfenv
-        loopNewCPU gfenv'
+
+  case pwords of
+
+      "q":_  -> putStrLn "See you." >> return gfenv
+
+      _ -> do
+        r <- runInterruptibly $ case pwords of
+
+          "!":ws -> do
+             system $ unwords ws
+             loopNewCPU gfenv
+          "cc":ws -> do
+             let 
+               (style,term) = case ws of 
+                 ('-':w):ws2 -> (pTermPrintStyle w, ws2)
+                 _ -> (TermPrintDefault, ws)
+             case pTerm (unwords term) >>= checkTerm sgr >>= computeTerm sgr of
+               Ok  x -> putStrLn $ enc (showTerm style x)
+               Bad s -> putStrLn $ enc s
+             loopNewCPU gfenv
+          "i":args -> do
+              gfenv' <- case parseOptions args of
+                          Ok (opts',files) -> 
+                            importInEnv gfenv (addOptions opts opts') files
+                          Bad err -> do 
+                            putStrLn $ "Command parse error: " ++ err
+                            return gfenv
+              loopNewCPU gfenv'
 
   -- other special commands, working on GFEnv
-    "e":_ -> loopNewCPU $ gfenv {
-       commandenv=emptyCommandEnv, sourcegrammar = emptyGrammar
-       }
-
-    "dc":f:ws -> do
-       case readCommandLine (unwords ws) of
-         Just comm -> loopNewCPU $ gfenv {
-           commandenv = env {
-             commandmacros = Map.insert f comm (commandmacros env)
+          "e":_ -> loopNewCPU $ gfenv {
+             commandenv=emptyCommandEnv, sourcegrammar = emptyGrammar
              }
-           }
-         _ -> putStrLn "command definition not parsed" >> loopNewCPU gfenv
 
-    "dt":f:ws -> do
-       case readTree (unwords ws) of
-         Just exp -> loopNewCPU $ gfenv {
-           commandenv = env {
-             expmacros = Map.insert f exp (expmacros env)
-             }
-           }
-         _ -> putStrLn "value definition not parsed" >> loopNewCPU gfenv
+          "dc":f:ws -> do
+             case readCommandLine (unwords ws) of
+               Just comm -> loopNewCPU $ gfenv {
+                 commandenv = env {
+                   commandmacros = Map.insert f comm (commandmacros env)
+                   }
+                 }
+               _ -> putStrLn "command definition not parsed" >> loopNewCPU gfenv
 
-    "ph":_ -> mapM_ (putStrLn . enc) (reverse (history gfenv0)) >> loopNewCPU gfenv
-    "se":c -> loopNewCPU $ gfenv {coding = s}
+          "dt":f:ws -> do
+             case readTree (unwords ws) of
+               Just exp -> loopNewCPU $ gfenv {
+                 commandenv = env {
+                   expmacros = Map.insert f exp (expmacros env)
+                   }
+                 }
+               _ -> putStrLn "value definition not parsed" >> loopNewCPU gfenv
 
-    "q":_  -> putStrLn "See you." >> return gfenv
+          "ph":_ -> 
+            mapM_ (putStrLn . enc) (reverse (history gfenv0)) >> loopNewCPU gfenv
+          "se":c -> loopNewCPU $ gfenv {coding = s}
 
   -- ordinary commands, working on CommandEnv
-    _ -> do
-      interpretCommandLine enc env s
-      loopNewCPU gfenv
-  gfenv' <- return $ either (const gfenv) id r
-  loopNewCPU gfenv'
+          _ -> do
+            interpretCommandLine enc env s
+            loopNewCPU gfenv
+        gfenv' <- return $ either (const gfenv) id r
+        loopNewCPU gfenv'
 
 importInEnv :: GFEnv -> Options -> [FilePath] -> IO GFEnv
 importInEnv gfenv opts files
