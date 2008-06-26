@@ -97,8 +97,10 @@ canon2gfcc opts pars cgr@(M.MGrammar ((a,M.ModMod abm):cms)) =
       js = tree2list (M.jments mo)
       flags   = Map.fromList [(mkCId f,x) | (f,x) <- moduleOptionsGFO (M.flags mo)]
       opers   = Map.fromAscList [] -- opers will be created as optimization
-      utf     = if moduleFlag optEncoding (moduleOptions (M.flags mo)) == UTF_8
-                  then D.convertStringsInTerm decodeUTF8 else id
+      utf     = id -- trace (show lang0 +++ show flags) $ 
+                -- if moduleFlag optEncoding (moduleOptions (M.flags mo)) == UTF_8
+                --  then id else id 
+                ---- then (trace "decode" D.convertStringsInTerm decodeUTF8) else id
       umkTerm = utf . mkTerm
       lins    = Map.fromAscList 
         [(i2i f, umkTerm tr)  | (f,CncFun _ (Yes tr) _) <- js]

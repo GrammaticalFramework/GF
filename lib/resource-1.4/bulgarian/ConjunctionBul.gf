@@ -1,5 +1,7 @@
 concrete ConjunctionBul of Conjunction = 
   CatBul ** open ResBul, Coordination, Prelude in {
+  flags coding=cp1251 ;
+
 
   flags optimize=all_subs ;
 

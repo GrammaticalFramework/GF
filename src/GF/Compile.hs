@@ -14,6 +14,9 @@ import GF.Compile.ReadFiles
 import GF.Compile.Update
 import GF.Compile.Refresh
 
+import GF.Compile.Coding
+import GF.Text.UTF8 ----
+
 import GF.Grammar.Grammar
 import GF.Grammar.Lookup
 import GF.Grammar.PrGrammar
@@ -133,7 +136,8 @@ compileOne opts env@(_,srcgr,_) file = do
     -- for compiled gf, read the file and update environment
     -- also undo common subexp optimization, to enable normal computations
     ".gfo" -> do
-       sm0 <- putPointE Normal opts ("+ reading" +++ file) $ getSourceModule opts file
+       sm00 <- putPointE Normal opts ("+ reading" +++ file) $ getSourceModule opts file
+       let sm0 = codeSourceModule decodeUTF8 sm00 -- always UTF8 in gfo
        let sm1 = unsubexpModule sm0
        sm <- {- putPointE Normal opts "creating indirections" $ -} ioeErr $ extendModule mos sm1
        
@@ -148,8 +152,9 @@ compileOne opts env@(_,srcgr,_) file = do
         then compileOne opts env $ gfo
         else do
 
-       sm0 <- putpOpt ("- parsing" +++ file) ("- compiling" +++ file ++ "... ") $ 
+       sm00 <- putpOpt ("- parsing" +++ file) ("- compiling" +++ file ++ "... ") $ 
                                            getSourceModule opts file
+       let sm0 = decodeStringsInModule sm00
        (k',sm)  <- compileSourceModule opts env sm0
        let sm1 = if isConcr sm then shareModule sm else sm -- cannot expand Str
        cm  <- putPointE Verbose opts "  generating code... " $ generateModuleCode opts gfo sm1
@@ -201,7 +206,7 @@ compileSourceModule opts env@(k,gr,_) mo@(i,mi) = do
 generateModuleCode :: Options -> FilePath -> SourceModule -> IOE SourceModule
 generateModuleCode opts file minfo = do
   let minfo1 = subexpModule minfo
-      out    = prGrammar (MGrammar [minfo1])
+      out    = prGrammar (MGrammar [codeSourceModule encodeUTF8 minfo1])
   putPointE Normal opts ("  wrote file" +++ file) $ ioeIO $ writeFile file $ out
   return minfo1
 

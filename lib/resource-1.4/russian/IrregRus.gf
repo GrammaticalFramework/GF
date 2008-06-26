@@ -3,7 +3,7 @@
 --
 concrete IrregRus of IrregRusAbs = CatRus ** open ParadigmsRus in {
 --
---flags optimize=values ;
+flags optimize=values ; coding=utf8 ;
 --
 --  lin
 --  awake_V = irregV "awake" "awoke" "awoken" ;

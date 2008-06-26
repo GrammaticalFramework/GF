@@ -13,6 +13,8 @@ resource MorphoBul = ResBul ** open
   Prelude,
   CatBul
   in {
+  flags coding=cp1251 ;
+
 
   flags optimize=all ;
 

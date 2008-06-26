@@ -1,4 +1,6 @@
 abstract ExtraBulAbs = Extra ** {
+  flags coding=cp1251 ;
+
 
 fun
 -- Feminine variants of pronouns (those in $Structural$ are

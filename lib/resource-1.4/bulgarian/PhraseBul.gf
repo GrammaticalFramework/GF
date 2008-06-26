@@ -1,4 +1,6 @@
 concrete PhraseBul of Phrase = CatBul ** open Prelude, ResBul in {
+  flags coding=cp1251 ;
+
 
   lin
     PhrUtt pconj utt voc = {s = pconj.s ++ utt.s ++ voc.s} ;

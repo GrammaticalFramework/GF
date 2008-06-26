@@ -1,5 +1,7 @@
 concrete ExtraBul of ExtraBulAbs = CatBul ** 
   open ResBul, Coordination, Prelude in {
+  flags coding=cp1251 ;
+
 
   lin
     PossIndefPron p = {

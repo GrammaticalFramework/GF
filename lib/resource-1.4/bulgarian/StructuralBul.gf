@@ -1,5 +1,7 @@
 concrete StructuralBul of Structural = CatBul ** 
   open MorphoBul, ParadigmsBul, Prelude in {
+  flags coding=cp1251 ;
+
 
   flags optimize=all ;
 

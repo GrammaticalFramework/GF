@@ -2,6 +2,8 @@
 
 concrete LexiconBul of Lexicon = CatBul ** 
   open ParadigmsBul, ResBul, Prelude in {
+  flags coding=cp1251 ;
+
 
 flags 
   optimize=values ;

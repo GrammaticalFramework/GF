@@ -1,4 +1,6 @@
 concrete RelativeBul of Relative = CatBul ** open ResBul in {
+  flags coding=cp1251 ;
+
 
   flags optimize=all_subs ;
 

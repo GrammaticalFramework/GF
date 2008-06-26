@@ -1,4 +1,6 @@
 concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
+  flags coding=cp1251 ;
+
 
   flags optimize=all_subs ;
 

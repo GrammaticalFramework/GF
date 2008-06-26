@@ -2,6 +2,7 @@
 
 concrete PhraseRus of Phrase = CatRus ** open Prelude, ResRus in {
 
+  flags coding=utf8 ;
   lin
     PhrUtt pconj utt voc = {s = pconj.s ++ utt.s ++ voc.s} ;
 

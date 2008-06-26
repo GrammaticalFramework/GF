@@ -8,6 +8,8 @@
 -- patterns needed for $Lex$.
 
 resource ResBul = ParamX ** open Prelude in {
+  flags coding=cp1251 ;
+
 
   flags optimize=all ;
 

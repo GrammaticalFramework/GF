@@ -1,4 +1,6 @@
 concrete CatBul of Cat = open ResBul, Prelude, (R = ParamX) in {
+  flags coding=cp1251 ;
+
 
   flags optimize=all_subs ;
 
