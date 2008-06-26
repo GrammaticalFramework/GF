@@ -7,7 +7,7 @@ concrete LexiconAra of Lexicon = CatAra ** open
   Prelude in { 
 
 flags 
-  optimize=values ;
+  optimize=values ;  coding=utf8 ;
 
   lin
 

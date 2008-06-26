@@ -31,7 +31,7 @@ resource ParadigmsAra = open
   CatAra
   in {
 
-  flags optimize = noexpand;
+  flags optimize = noexpand;  coding=utf8 ;
 
   oper
     
