@@ -27,7 +27,7 @@ resource ParadigmsAra = open
   Predef, 
   Prelude, 
   MorphoAra,
-  OrthoAra,
+  OrthoAra,(ResAra=ResAra),
   CatAra
   in {
 
@@ -206,7 +206,8 @@ resource ParadigmsAra = open
       lock_V = <>
     } ;
   
-  
+  va : Vowel = ResAra.a ;
+
   v1' : Str ->  Vowel -> Vowel -> Verb = 
     \rootStr,vPerf,vImpf ->
     let { root = mkRoot3 rootStr ;
