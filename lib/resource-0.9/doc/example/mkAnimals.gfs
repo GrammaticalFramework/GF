@@ -1,4 +1,0 @@
-  i -ex AnimalsEng.gf ;; s
-  i AnimalsFre.gf ;; s
-  i AnimalsSwe.gf ;; s
-  pm | wf animals.gfcm

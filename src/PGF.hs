@@ -172,7 +172,7 @@ startCat   :: PGF -> Category
 ---------------------------------------------------
 
 readPGF f = do
-  s <- readFile f
+  s <- readFile f >>= return . decodeUTF8 -- pgf is in UTF8, internal in unicode
   g <- parseGrammar s
   return $! toPGF g
 

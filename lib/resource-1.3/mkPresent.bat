@@ -1,1 +1,0 @@
-@grep -v "\-\-\# notpresent" %1
