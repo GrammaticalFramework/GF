@@ -99,15 +99,16 @@ canon2gfcc opts pars cgr@(M.MGrammar ((a,M.ModMod abm):cms)) =
       opers   = Map.fromAscList [] -- opers will be created as optimization
       utf     = if moduleFlag optEncoding (moduleOptions (M.flags mo)) == UTF_8
                   then D.convertStringsInTerm decodeUTF8 else id
+      umkTerm = utf . mkTerm
       lins    = Map.fromAscList 
-        [(i2i f, utf (mkTerm tr))  | (f,CncFun _ (Yes tr) _) <- js]
+        [(i2i f, umkTerm tr)  | (f,CncFun _ (Yes tr) _) <- js]
       lincats = Map.fromAscList 
         [(i2i c, mkCType ty) | (c,CncCat (Yes ty) _ _) <- js]
       lindefs = Map.fromAscList 
-        [(i2i c, mkTerm tr)  | (c,CncCat _ (Yes tr) _) <- js]
+        [(i2i c, umkTerm tr)  | (c,CncCat _ (Yes tr) _) <- js]
       printnames = Map.union 
-        (Map.fromAscList [(i2i f, mkTerm tr) | (f,CncFun _ _ (Yes tr)) <- js])
-        (Map.fromAscList [(i2i f, mkTerm tr) | (f,CncCat _ _ (Yes tr)) <- js])
+        (Map.fromAscList [(i2i f, umkTerm tr) | (f,CncFun _ _ (Yes tr)) <- js])
+        (Map.fromAscList [(i2i f, umkTerm tr) | (f,CncCat _ _ (Yes tr)) <- js])
       params = Map.fromAscList 
         [(i2i c, pars lang0 c) | (c,CncCat (Yes ty) _ _) <- js]
       fcfg = Nothing

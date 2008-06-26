@@ -58,4 +58,5 @@ outputConcr pgf = case cncnames pgf of
                     cnc:_  -> cnc
 
 printPGF :: PGF -> String
-printPGF = encodeUTF8 . printTree . fromPGF
+printPGF = ---- encodeUTF8 .  -- out by AR26/6/2008: the PGF may already be UTF8 
+  printTree . fromPGF
