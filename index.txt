@@ -81,14 +81,14 @@ least one, it may help you to get a first idea of what GF is.
 ==Applications==
 
 GF can be used for building
-- [text translators ]
-- [speech translators ]
-- [natural-language interfaces ]
-- [multilingual web pages ]
-- [multilingual authoring systems ]
-- [dialogue systems ]
-- [language training systems ]
-- [natural language resources ]
+- [text translators lib/resource/doc/resdemo.html]
+- [speech translators http://www.cs.chalmers.se/~bringert/gf/translatespeech.html]
+- [natural-language interfaces http://www.cs.chalmers.se/~hallgren/Alfa/Tutorial/GFplugin.html]
+- [multilingual web pages http://www.restauranggajden.se/tomas/]
+- [multilingual authoring systems http://www.cs.chalmers.se/~markus/gramlets/letter-applet.html]
+- [dialogue systems http://www.cs.chalmers.se/~bringert/xv/pizza/]
+- [language training systems http://csmisc14.cs.chalmers.se/~bjorn/langtrain.cgi]
+- [natural language resources lib/resource/synopsis.html]
 
 
 ==Availability==
@@ -104,7 +104,9 @@ is available for
 
 ==Projects==
 
-GF was first created in 1998 at Xerox Research Centre Europe, Grenoble in the project
+GF was first created in 1998 at 
+[Xerox Research Centre Europe http://www.xrce.xerox.com/], 
+Grenoble, in the project
 Multilingual Document Authoring. At Xerox, it was used for prototypes including
 a restaurant phrase book,
 a database query system,
@@ -112,12 +114,19 @@ a formalization of an alarm system instructions with translations to 5 languages
 an authoring system for medical drug descriptions.
 
 Later projects using GF and involving third parties include, in chronological order,
-- GF-Alfa: natural language interface to formal proofs
-- GF-KeY: authoring and translation of software specifications
-- TALK: multilingual and multimodal spoken dialogue systems
-- WebALT: multilingual generation of mathematical exercises (commercial project)
-- MultiWiki: multilingual Wiki for restaurant reviews
-- SALDO: Swedish morphological dictionary based on tools developed for GF
+- [GF-Alfa http://www.cs.chalmers.se/~hallgren/Alfa/Tutorial/GFplugin.html]: 
+  natural language interface to formal proofs
+- [Efficient http://efficient.citi.tudor.lu/index_noframe.html]:
+  authoring tool for business models.
+- [GF-KeY http://www.key-project.org/]: 
+  authoring and translation of software specifications
+- [TALK http://www.talk-project.org]: 
+  multilingual and multimodal spoken dialogue systems
+- [WebALT http://webalt.math.helsinki.fi/]: 
+  multilingual generation of mathematical exercises (commercial project)
+- [SALDO http://spraakbanken.gu.se/sal/]: 
+  Swedish morphological dictionary based on rules developed for GF and
+  [Functional Morphology http://www.cs.chalmers.se/~markus/FM/]
 
 
 Academically, GF has been used in four PhD theses and resulted in around
