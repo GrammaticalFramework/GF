@@ -1,10 +1,11 @@
 --# -path=.:alltenses
 
 concrete DemoGer of Demo = 
-  NounGer - [AdvCN,PredetNP,PPartNP,RelNP,RelCN,SentCN,ApposCN,MassNP,DetNP], 
+  NounGer - [AdvCN,PredetNP,PPartNP,RelNP,RelCN,SentCN,
+             ApposCN,MassNP,DetNP,ComplN3,Use2N3,Use3N3,AdvNP], 
 --  VerbGer, 
   ClauseGer, --
-  AdjectiveGer - [SentAP],
+  AdjectiveGer - [SentAP,ComplA2,UseA2,DemoA2],
   AdverbGer,
   NumeralGer,
 ----  SentenceGer,

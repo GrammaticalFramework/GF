@@ -348,6 +348,9 @@ lin
   wipe_V2 = dirV2 (regV "secar") ;
     breathe_V = (regV "respirar") ;
 
+  john_PN = mkPN "Juan" masculine ;
+  today_Adv = mkAdv "hoy" ;
+
   grammar_N = regN "gramática" ;
   language_N = regN "lengua" ;
   rule_N = regN "regla" ;

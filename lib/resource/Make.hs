@@ -8,7 +8,8 @@ import System
 -- - OPT = (lang | api | math | pgf | test | demo | clean)
 -- - LANGS has the form e.g. langs=Eng,Fin,Rus
 -- - clone with a flag file=FILENAME clones the file to the specified languages,
---   by replacing the 3-letter language name of the original in both the filename and the body
+--   by replacing the 3-letter language name of the original in both 
+--   the filename and the body
 --   with each name in the list (default: all languages)
 -- With no argument, lang and api are done, in this order.
 -- See 'make' below for what is done by which command.
@@ -39,7 +40,7 @@ langsCoding = [
 langs = map fst langsCoding
 
 -- languagues for which to compile Lang
-langsLang = langs
+langsLang = langs `except` ["Ara"]
 
 -- languages for which to compile Try 
 langsAPI  = langsLang `except` ["Ara","Bul","Cat","Hin","Ina","Rus","Tha"]
@@ -114,7 +115,7 @@ mathstack = " +RTS -K100M"
 
 gf comm file = do
   putStrLn $ "reading " ++ file
-  system $ "echo \"" ++ comm ++ "\" | gf3 -s " ++ file
+  system $ "echo \"" ++ comm ++ "\" | gf -s " ++ file
 
 treeb abstr ls = "rf -lines -tree -file=" ++ treebankExx ++ 
         " | l -treebank " ++ unlexer abstr ls ++ " | wf -file=" ++ treebankResults

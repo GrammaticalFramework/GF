@@ -72,12 +72,13 @@ instance DiffSpa of DiffRomance = open CommonRomance, PhonoSpa, BeschSpa, Prelud
           } ;
         defaultPronArg = <pdatp.p1 ++ paccp.p1, [], orB paccp.p3 pdatp.p3>
       in 
-        case <<paccp.p2, pdatp.p2> : Person * Person> of {
-           <P3,P3> => <"se" ++ paccp.p1, [], True> ;
-           _ => defaultPronArg
-           } ;
+      ----  case <<paccp.p2, pdatp.p2> : Person * Person> of {
+      ----     <P3,P3> => <"se" ++ paccp.p1, [], True> ;
+      ----     _ => defaultPronArg
+      ---     } ;
       ---- 8/6/2008 efficiency problem in pgf generation: replace the case expr with
-      ---- defaultPronArg ;
+      ---- a constant produces an error in V3 predication with two pronouns
+         defaultPronArg ;
 
     mkImperative b p vp = {
       s = \\pol,aag => 

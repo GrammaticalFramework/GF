@@ -1,10 +1,11 @@
 --# -path=.:alltenses
 
 concrete DemoIta of Demo = 
-  NounIta - [AdvCN,PredetNP,PPartNP,RelNP,RelCN,SentCN,ApposCN,MassNP,DetNP], 
+  NounIta - [AdvCN,PredetNP,PPartNP,RelNP,RelCN,SentCN,
+             ApposCN,MassNP,DetNP,ComplN3,Use2N3,Use3N3,AdvNP], 
 --  VerbIta, 
   ClauseIta, --
-  AdjectiveIta - [SentAP],
+  AdjectiveIta - [SentAP,ComplA2,UseA2,DemoA2],
   AdverbIta,
   NumeralIta,
 ----  SentenceIta,

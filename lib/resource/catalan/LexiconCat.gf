@@ -353,5 +353,8 @@ lin
     wipe_V2 = dirV2 (verbV (pregar_86 "eixugar")) ;
     breathe_V = regV "respirar" ;
 --
+    john_PN = mkPN "Joan" masculine ;
+    today_Adv = mkAdv "hui" ;
+
 
 } ;

@@ -74,7 +74,10 @@ oper
           _ => <[],P2,False>
           }
        in case <paccp.p2, pdatp.p2> of {
-         <P3,P3> => <"se" ++ paccp.p1, [],True> ;
+         ---- AR 8/6/2008 efficiency problem in pgf generation: 
+         ---- replace the case expr with
+         ---- a constant produces an error in V3 predication with two pronouns
+         ---- <P3,P3> => <"se" ++ paccp.p1, [],True> ;
          _       => <pdatp.p1 ++ paccp.p1, [],orB paccp.p3 pdatp.p3>
          } ;
          

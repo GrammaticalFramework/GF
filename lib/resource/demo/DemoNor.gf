@@ -1,10 +1,11 @@
 --# -path=.:alltenses
 
 concrete DemoNor of Demo = 
-  NounNor - [AdvCN,PredetNP,PPartNP,RelNP,RelCN,SentCN,ApposCN,MassNP,DetNP], 
+  NounNor - [AdvCN,PredetNP,PPartNP,RelNP,RelCN,SentCN,
+             ApposCN,MassNP,DetNP,ComplN3,Use2N3,Use3N3,AdvNP], 
 --  VerbNor, 
   ClauseNor, --
-  AdjectiveNor - [SentAP],
+  AdjectiveNor - [SentAP,ComplA2,UseA2,DemoA2],
   AdverbNor,
   NumeralNor,
 ----  SentenceNor,

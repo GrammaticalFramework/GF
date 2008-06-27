@@ -1,0 +1,26 @@
+Grammatical Framework Demos
+
+
+
+
+[Letter editor http://www.cs.chalmers.se/~markus/gramlets/letter-applet.html]: compose
+a letter in a language you don't know.
+
+[Numeral translator http://www.cs.chalmers.se/~bringert/gf/translate/]: see 
+number words in 88 languages.
+
+[Pizza http://www.cs.chalmers.se/~bringert/xv/pizza/]: order a pizza by speaking
+to your web browser.
+
+[Restauranggajden http://www.restauranggajden.se/tomas/]: write and read
+restaurant reviews in a multilingual Wiki.
+
+[WebALT Math Editor  http://webalt.math.helsinki.fi/PublicFiles/CD/Screencast/TextMathEditor%20Demo.swf]:
+create mathematical exercises in six languages simultaneously.
+
+[Tramdemo http://www.cs.chalmers.se/~bringert/misc/tramdemo.avi]: find your way in
+Gothenburg public transport system, in six languages (film).
+
+[Library API browser-editor resource-api/editor.html]: construct phrases in
+the [GF resource library ../lib/resource/doc/synopsis.html]
+
