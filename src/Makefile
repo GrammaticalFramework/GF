@@ -213,7 +213,6 @@ binary-dist:
 	$(INSTALL) -m 0644 ../README ../LICENSE $(BIN_DIST_DIR)
 	$(INSTALL) -m 0644 INSTALL.binary $(BIN_DIST_DIR)/INSTALL
 	$(INSTALL) -m 0644 Makefile.binary $(BIN_DIST_DIR)/Makefile
-	$(MAKE) lib
 	$(TAR) -C $(BIN_DIST_DIR)/lib -zxf ../lib/compiled.tgz
 	$(TAR) -zcf GF-$(PACKAGE_VERSION)-$(host).tgz $(BIN_DIST_DIR)
 	rm -rf $(BIN_DIST_DIR)
