@@ -1,10 +1,12 @@
 resource PhonoFre = open Prelude in {
 
+flags coding=utf8 ;
+
 oper 
   voyelle : Strs = strs {
-    "a" ; "à" ; "â" ; "e" ; "é" ; "è" ; "ê¨" ; 
+    "a" ; "Ã " ; "Ã¢" ; "e" ; "Ã©" ; "Ã¨" ; "ÃªÂ¨" ; 
     "h" ; 
-    "i" ; "î" ; "o" ; "ô" ; "u" ; "û" ; "y"
+    "i" ; "Ã®" ; "o" ; "Ã´" ; "u" ; "Ã»" ; "y"
     } ;
 
   elision : Str -> Str = \d -> d + pre {"e" ; "'" / voyelle} ;

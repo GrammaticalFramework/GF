@@ -5,6 +5,8 @@
 
 resource BeschCat = open Prelude, CommonRomance in {
 
+flags coding=utf8 ;
+
 --flags optimize=noexpand ; -- faster than values
 --
 oper Verbum = {s : VFB => Str} ;

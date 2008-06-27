@@ -3,7 +3,7 @@
 concrete StructuralFre of Structural = CatFre ** 
   open PhonoFre, MorphoFre, ParadigmsFre, IrregFre, Prelude in {
 
-  flags optimize=all ;
+  flags optimize=all ; coding=utf8 ;
 
 lin
 
