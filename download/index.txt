@@ -9,7 +9,9 @@ Grammatical Framework Download and Installation
 
 - [GF 3.0 beta Linux binary    gf-3.0beta-linux-ubuntu.gz] (Intel, Ubuntu)
 
-- [GF 3.0 beta MacOS X binary  gf-3.0beta-mac-leopard.gz] (Intel Mac with Leopard)
+- GF 3.0 beta MacOS X binaries: 
+  [Leopard  gf-3.0beta-mac-leopard.gz] (Intel Mac with MacOS X Leopard)
+  [Leopard  gf-3.0beta-mac-tiger.gz] (Intel Mac with MacOS X Tiger)
 
 - [GF 3.0 beta Windows binary  gf-3.0beta-mac.exe]
 
@@ -26,7 +28,7 @@ Grammatical Framework Download and Installation
 ==Installation instructions==
 
 To install a binary, just uncompress it and copy to a place that is on your path,
-for instance, in ``/usr/local/bin``.
+for instance, in ``/usr/local/bin``. You may want to rename it to ``gf``.
 
 If you want to use GF as a batch compiler, put the following script in the
 same place as the GF binary. If it is //not// ``/usr/local/bin``, change
