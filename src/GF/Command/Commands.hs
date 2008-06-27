@@ -23,6 +23,7 @@ import GF.Infra.UseIO
 import GF.Data.ErrM ----
 import PGF.Expr (readTree)
 import GF.Command.Abstract
+import GF.Command.Messages
 import GF.Text.Lexing
 import GF.Text.Transliterations
 
@@ -193,10 +194,16 @@ allCommands enc pgf = Map.fromList [
        "Without argument, shows the synopsis of all commands."
        ],
      options = [
-       ("full","give full information of the commands")
+       ("changes","give a summary of changes from GF 2.9"),
+       ("coding","give advice on character encoding"),
+       ("full","give full information of the commands"),
+       ("license","show copyright and license information")
        ],
      exec = \opts ts -> return ([], case ts of
-       [t] -> let co = showTree t in 
+       _ | isOpt "changes" opts -> changesMsg
+       _ | isOpt "coding" opts -> codingMsg
+       _ | isOpt "license" opts -> licenseMsg
+       [t] -> let co = getCommandOp (showTree t) in 
               case lookCommand co (allCommands enc pgf) of   ---- new map ??!!
                 Just info -> commandHelp True (co,info)
                 _ -> "command not found"
@@ -612,3 +619,5 @@ infinity = 256
 
 lookFlag :: PGF -> String -> String -> Maybe String
 lookFlag pgf lang flag = lookConcrFlag pgf (mkCId lang) (mkCId flag)
+
+

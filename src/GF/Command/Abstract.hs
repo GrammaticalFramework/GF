@@ -65,3 +65,10 @@ prOpt o = case o of
 mkOpt :: String -> Option
 mkOpt = OOpt
 
+-- abbreviation convention from gf commands
+getCommandOp s = case break (=='_') s of
+     (a:_,_:b:_) -> [a,b]  -- axx_byy --> ab
+     _ -> case s of
+       [a,b] -> s          -- ab  --> ab
+       a:_ -> [a]          -- axx --> a
+

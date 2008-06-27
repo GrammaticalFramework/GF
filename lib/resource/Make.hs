@@ -39,19 +39,19 @@ langsCoding = [
 langs = map fst langsCoding
 
 -- languagues for which to compile Lang
-langsLang = langs `except` ["Ara"]
+langsLang = langs
 
 -- languages for which to compile Try 
-langsAPI  = langsLang `except` ["Bul","Cat","Hin","Ina","Rus","Tha"]
+langsAPI  = langsLang `except` ["Ara","Bul","Cat","Hin","Ina","Rus","Tha"]
 
 -- languages for which to compile Mathematical 
 langsMath = langsAPI
 
 -- languages for which to run treebank test
-langsTest = langsLang `except` ["Bul","Cat","Hin","Rus","Spa","Tha"]
+langsTest = langsLang `except` ["Ara","Bul","Cat","Hin","Rus","Spa","Tha"]
 
 -- languages for which to run demo test
-langsDemo = langsLang `except` ["Hin","Ina","Tha"]
+langsDemo = langsLang `except` ["Ara","Hin","Ina","Tha"]
 
 -- languages for which langs.pgf is built
 langsPGF = langsTest `only` ["Eng","Fre","Swe"]
@@ -78,7 +78,7 @@ make xx = do
     mapM_ (gfc pres presApiPath . try) (optl langsAPI)
     system $ "cp */*.gfo " ++ dir
   ifx "math" $ do
-    mapM_ (gfc False [] . math) (optl langsMath)
+    mapM_ (gfc_stack mathstack False [] . math) (optl langsMath)
     system $ "cp mathematical/*.gfo ../mathematical"
     mapM_ (gfc False [] . symbolic) (optl langsMath)
     system $ "cp mathematical/Symbolic*.gfo ../mathematical"
@@ -93,7 +93,7 @@ make xx = do
     let ls = optl langsDemo
     gf (demos "Demo" ls) $ unwords ["demo/Demo" ++ la ++ ".gf" | (_,la) <- ls]
   ifxx "clean" $ do
-    system "rm */*.gfo ../alltenses/*.gfo ../present/*.gfo"
+    system "rm -f */*.gfo ../alltenses/*.gfo ../present/*.gfo"
   ifxx "clone" $ do
     let (pref,lang) = case getLangName xx of
           Just pl -> pl
@@ -102,11 +102,15 @@ make xx = do
     mapM_ (\la -> writeFile (pref ++ la ++ ".gf") (replaceLang lang la s)) (map snd (optl langs))
   return ()
 
-gfc pres ppath file = do
+gfc_stack stack pres ppath file = do
   let preproc = if pres then " -preproc=./mkPresent " else ""
   let path    = if pres then ppath else ""
   putStrLn $ "compiling " ++ file
-  system $ "gfc -s -src " ++ preproc ++ path ++ file
+  system $ "gfc -s -src " ++ preproc ++ path ++ file ++ stack
+
+gfc = gfc_stack ""
+
+mathstack = " +RTS -K100M"
 
 gf comm file = do
   putStrLn $ "reading " ++ file
