@@ -21,8 +21,8 @@ June 2008
 
 #BELARGE
 
-``[`` [Demos demos/]
-``|`` [Download download]
+``[`` [Demos demos/index.html]
+``|`` [Download download/index.html]
 ``|`` [Libraries lib/resource/doc/synopsis.html]
 ``|`` [Reference doc/gf-refman.html]
 ``|`` [Tutorial doc/gf-tutorial.html]
@@ -30,14 +30,15 @@ June 2008
 
 #ENLARGE
 
-``[`` [Demos demos/]
-``|`` [Download download]
+``[`` [Demos demos/index.html]
+``|`` [Download download/index.html]
 ``|`` [Developers doc/darcs.html]
 ``|`` [Events doc/events.html]
-``|`` [Libraries lib/]
+``|`` [Libraries lib/resource/doc/synopsis.html]
 ``|`` [People doc/gf-people.html]
 ``|`` [Projects doc/projects.html]
 ``|`` [Publications doc/gf-tutorial.html]
+``|`` [QuickRefCard doc/gf-reference.html]
 ``|`` [Reference doc/gf-refman.html]
 ``|`` [Tutorial doc/gf-tutorial.html]
 ``]`` 
@@ -49,7 +50,8 @@ June 2008
 
 ==News==
 
-27 June 2008: release of GF 3.0 and a new web page; the old web page is 
+27 June 2008: 
+[release of GF 3.0 doc/gf3-relesase.html] and this new web page; the old web page is 
 [here index-2.html].
 
 
@@ -91,22 +93,23 @@ GF can be used for building
 
 ==Availability==
 
-GF is **open-source**, licensed under [GPL ] (the program) and [LGPL ] (the libraries). It
+GF is **open-source**, licensed under [GPL LICENSE] (the program) and 
+[LGPL lib/LICENSE] (the libraries). It
 is available for 
-- [Linux ]
-- [Mac OS X ]
-- [Windows ]
-- via compilation to [JavaScript ], almost any platform that has a web browser
+- Linux
+- Mac OS X
+- Windows
+- via compilation to JavaScript, almost any platform that has a web browser
 
 
 ==Projects==
 
-GF was born in 1998 at Xerox Research Centre Europe, Grenoble in the project
+GF was first created in 1998 at Xerox Research Centre Europe, Grenoble in the project
 Multilingual Document Authoring. At Xerox, it was used for prototypes including
-a restaurant phrase book in 6 languages,
-a database query system in 7 languages,
+a restaurant phrase book,
+a database query system,
 a formalization of an alarm system instructions with translations to 5 languages, and
-an authoring system for medical drug descriptions in 2 languages.
+an authoring system for medical drug descriptions.
 
 Later projects using GF and involving third parties include, in chronological order,
 - GF-Alfa: natural language interface to formal proofs
@@ -123,13 +126,13 @@ fifty [scientific publications ].
 
 ==Programming in GF==
 
-GF is easy to learn by following the [tutorial doc/gf-tutorial.html]. You can write your
-first translator in 15 minutes.
+GF is easy to learn by following the [tutorial doc/gf-tutorial.html]. 
+You can write your first translator in 15 minutes.
 
-GF has an interactive command interpreter, as well as a batch compiler. Grammars can be
-compiled to parser and translator code in many different formats.  These components can 
-then be embedded in applications written in other programming languages. The formats
-currently supported are:
+GF has an interactive command interpreter, as well as a batch compiler. 
+Grammars can be compiled to parser and translator code in many different 
+formats.  These components can then be embedded in applications written 
+in other programming languages. The formats currently supported are:
 - Haskell
 - Java
 - JavaScript
@@ -170,7 +173,7 @@ support for an increasing number of languages, currently including
 
 
 Adding a language to the resource library takes 3 to 9 
-months - [contributions doc/projects.html]
+months - [contributions doc/gf-projects.html]
 are welcome!
 
 % [doc/10lang-small.png]

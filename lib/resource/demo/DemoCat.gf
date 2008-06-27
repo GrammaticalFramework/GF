@@ -1,10 +1,11 @@
 --# -path=.:alltenses
 
 concrete DemoCat of Demo = 
-  NounCat - [AdvCN,PredetNP,PPartNP,RelNP,RelCN,SentCN,ApposCN,MassNP,DetNP], 
+  NounCat - [AdvCN,PredetNP,PPartNP,RelNP,RelCN,SentCN,
+             ApposCN,MassNP,DetNP,ComplN3,Use2N3,Use3N3,AdvNP], 
 --  VerbCat, 
   ClauseCat, --
-  AdjectiveCat - [SentAP],
+  AdjectiveCat - [SentAP,ComplA2,UseA2,DemoA2],
   AdverbCat,
   NumeralCat,
 ----  SentenceCat,

@@ -2,7 +2,7 @@ resource PhonoFre = open Prelude in {
 
 oper 
   voyelle : Strs = strs {
-    "a" ; "à" ; "â " ; "e" ; "é" ; "è" ; "ê¨" ; 
+    "a" ; "à" ; "â" ; "e" ; "é" ; "è" ; "ê¨" ; 
     "h" ; 
     "i" ; "î" ; "o" ; "ô" ; "u" ; "û" ; "y"
     } ;

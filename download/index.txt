@@ -1,0 +1,53 @@
+Grammatical Framework Download and Installation
+
+
+==Latest developer code==
+
+[GF darcs repository  ../doc/darcs.html]
+
+==Latest release==
+
+[GF 3.0 beta Linux binary    gf-3.0beta-linux.gz] (Intel, Ubuntu)
+
+[GF 3.0 beta MacOS X binary  gf-3.0beta-mac.gz] (Intel Mac with Leopard)
+
+[GF 3.0 beta Windows binary  gf-3.0beta-mac.exe]
+
+[GF 3.0 beta sources         gf-3.0beta.tgz]
+
+[GF libraries v 1.4          gf-lib-1.4.tgz] (compiled resource grammar libraries)
+
+
+==Old releases==
+
+[GF 2.9 download page ../GF2/download/index.html]
+
+
+==Installation instructions==
+
+To compile and install from source: 
+```
+  tar xvfz gf-3.0beta.tgz
+  cd GF/src
+  autoconf
+  ./configure
+  make
+  make install
+```
+To install a binary,
+```
+  tar xvfz BINARY-PACKAGE.tgz
+  cd GF-...
+  ./configure
+  make install
+```
+You may need ``sudo make install``. 
+If you cannot write in ``/usr/local/``, you can change the target directory
+by ``./configure --prefix=MYDIR``.
+
+The Mac OS X binary (Intel) requires Readline from
+[Mac Ports http://www.macports.org/]. To install, see above item.
+
+The Windows binary is easiest if you have
+[Cygwin http://www.cygwin.com/]. To install, see above item.
+

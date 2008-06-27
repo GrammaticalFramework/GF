@@ -1,10 +1,11 @@
 --# -path=.:alltenses
 
 concrete DemoSwe of Demo = 
-  NounSwe - [AdvCN,PredetNP,PPartNP,RelNP,RelCN,SentCN,ApposCN,MassNP,DetNP], 
+  NounSwe - [AdvCN,PredetNP,PPartNP,RelNP,RelCN,SentCN,
+             ApposCN,MassNP,DetNP,ComplN3,Use2N3,Use3N3,AdvNP], 
 --  VerbSwe, 
   ClauseSwe, --
-  AdjectiveSwe - [SentAP],
+  AdjectiveSwe - [SentAP,ComplA2,UseA2,DemoA2],
   AdverbSwe,
   NumeralSwe,
 ----  SentenceSwe,

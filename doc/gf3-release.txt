@@ -1,15 +1,12 @@
 GF 3.0
 Krasimir Angelov, Björn Bringert, and Aarne Ranta
-
+Beta release, 27 June 2008
 
 
 GF Version 3.0 is a major revision of GF. The source language is a superset of the
 language in 2.9, which means backward compatibility. But the target languages, the
 compiler implementation, and the functionalities (e.g. the shell) have undergone
 radical changes. 
-
-The release of GF 3.0 is projected for 27 June. As usual, the developing sources
-are available all the time via Darcs.
 
 
 ==New features==
@@ -29,20 +26,23 @@ Here is a summary of the main novelties visible to the user:
   the shell, and the compiler are accessible via high-level APIs.
 - **Resource library version 1.4**: more coverage, more languages; some of
   the new GF language features are exploited.
+- **Uniform character encoding**: UTF8 in generated files, user-definable in
+  source files
 
 
 ==Non-supported features==
 
-There are some features of GF 2.9 that will //not// work in the 2.7 June release.
+There are some features of GF 2.9 that will //not// work in the 3.0 beta release.
 - Java Editor GUI: we now see the JavaScript editor as the main form of 
   syntax editing.
 - Pre-module multi-file grammar format: the grammar format of GF before version 2.0 
-  is still supported, but its include mechanism is not; this means that grammars 
-  consisting of multiple files have to be concatenated before use.
+  is still not yet supported.
+- Context-free and EBNF input grammar formats.
 - Probabilistic GF grammars.
 - Some output formats: LBNF.
 - Some GF shell commands: while the main ones will be supported with their familiar
-  syntax and options, some old commands have not been included.
+  syntax and options, some old commands have not been included. The GF shell
+  command ``help -changes`` gives the actual list.
 
 
 Users who want to have these features are welcome to contact us, 
