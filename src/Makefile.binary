@@ -7,17 +7,13 @@ GF_LIB_DIR=$(GF_DATA_DIR)/lib
 
 install: 
 	$(INSTALL) -d $(bindir)
-	$(INSTALL) gf$(EXEEXT) gfdoc$(EXEEXT) jgf gfeditor $(bindir)
+	$(INSTALL) gf$(EXEEXT) gfdoc$(EXEEXT) $(bindir)
 	$(INSTALL) -d $(GF_DATA_DIR)
-	$(INSTALL) -m 0644 gf-java.jar $(GF_DATA_DIR)
-	$(INSTALL) -m 0644 gfeditor.jar $(GF_DATA_DIR)
 	cp -r lib $(GF_DATA_DIR)
 
 uninstall:
-	-rm -f $(bindir)/gf$(EXEEXT) $(bindir)/gfdoc$(EXEEXT) $(bindir)/jgf $(bindir)/gfeditor
-	-rm -f $(GF_DATA_DIR)/gf-java.jar
-	-rm -f $(GF_DATA_DIR)/gfeditor.jar
-	-rm -f $GF_LIB_DIR)/*/*.gf{c,r,cm}
+	-rm -f $(bindir)/gf$(EXEEXT) $(bindir)/gfdoc$(EXEEXT) $(bindir)/gfeditor
+	-rm -f $GF_LIB_DIR)/*/*.gf{o}
 	-rmdir $(GF_LIB_DIR)/*
 	-rmdir $(GF_LIB_DIR)
 	-rmdir $(GF_DATA_DIR)
