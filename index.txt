@@ -18,22 +18,21 @@ Version 3.0
 
 June 2008
 
-#ENCE
 
 #BELARGE
 
-``|`` [Demos demos/]
+``[`` [Demos demos/]
 ``|`` [Download download]
-``|`` [Libraries lib/]
+``|`` [Libraries lib/resource/doc/synopsis.html]
 ``|`` [Reference doc/gf-refman.html]
 ``|`` [Tutorial doc/gf-tutorial.html]
-``|`` 
+``]`` 
 
 #ENLARGE
 
-``|`` [Demos demos/]
+``[`` [Demos demos/]
 ``|`` [Download download]
-``|`` [Development download]
+``|`` [Developers doc/darcs.html]
 ``|`` [Events doc/events.html]
 ``|`` [Libraries lib/]
 ``|`` [People doc/gf-people.html]
@@ -41,7 +40,10 @@ June 2008
 ``|`` [Publications doc/gf-tutorial.html]
 ``|`` [Reference doc/gf-refman.html]
 ``|`` [Tutorial doc/gf-tutorial.html]
-``|`` 
+``]`` 
+
+#ENCE
+
 
 #BESMALL
 

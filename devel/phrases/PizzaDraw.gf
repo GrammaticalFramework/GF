@@ -1,4 +1,0 @@
-concrete PizzaDraw of Pizza = {
-
-
-}
