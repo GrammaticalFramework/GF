@@ -30,11 +30,9 @@ EMBED = GF/Embed/TemplateApp
 
 # use the temporary binary file name 'gf-bin' to not clash with directory 'GF' 
 # on case insensitive file systems (such as FAT)
-GF_EXE=gf3$(EXEEXT)
+GF_EXE=gf$(EXEEXT)
 GF_EXE_TMP=gf-bin$(EXEEXT)
 GF_DOC_EXE=gfdoc$(EXEEXT)
-GF3_EXE=gf3$(EXEEXT)
-TESTGF3_EXE=testgf3$(EXEEXT)
 
 
 ifeq ("$(READLINE)","readline")
@@ -65,9 +63,9 @@ endif
 
 .PHONY: all unix jar tags gfdoc windows install install-gf \
         lib temp install-gfdoc install-editor \
-        today help clean windows-msi dist
+        today help clean windows-msi dist gfc
 
-all: unix gfdoc $(BUILD_JAR) lib
+all: unix gfc lib
 
 static: GHCFLAGS += -optl-static
 static: unix
@@ -80,7 +78,6 @@ unix: today opt
 windows: unix
 
 temp: today noopt
-
 
 
 build: 
@@ -98,28 +95,8 @@ embed:
 
 noopt: build
 
-ghci: ghci-nofud
-
-fud:
-	$(GHCXMAKE) $(GHCFLAGS) $(GHCFUDFLAG) GF.hs -o fgf
-	strip fgf
-	mv fgf ../bin/
-
-gft:
-	$(GHMAKE) $(GHCFLAGS) -itranslate translate/GFT.hs -o gft-bin
-	strip gft-bin
-	mv gft-bin ../bin/gft
-
-api: 
-	$(GHMAKE) $(GHCFLAGS) $(GHCOPTFLAGS) GF/API.hs
-
-shell: 
-	$(GHMAKE) $(GHCFLAGS) $(GHCOPTFLAGS) GF/Shell.hs
-
 clean: 
 	find . '(' -name '*~' -o -name '*.hi' -o -name '*.ghi' -o -name '*.o' ')' -exec rm -f '{}' ';'
-	-rm -f JavaGUI/*.class
-	-rm -f $(GFEDITOR)/de/uka/ilkd/key/ocl/gf/*.class
 	-rm -f gf.wixobj
 	-rm -f ../bin/$(GF_EXE)
 	$(MAKE) -C tools/c clean
@@ -127,32 +104,20 @@ clean:
 	-rm -f ../bin/gfcc2c
 
 distclean: clean
-	-rm -f JavaGUI/gf-java.jar jgf
-	-rm -f $(GFEDITOR)/gfeditor.jar jgf
 	-rm -f tools/$(GF_DOC_EXE)
 	-rm -f config.status config.mk config.log
 	-rm -f *.tgz *.zip
 	-rm -rf $(DIST_DIR) $(BIN_DIST_DIR)
 	-rm -rf gf.wxs *.msi
 
-ghci-nofud:
-	$(GHCI) $(GHCFLAGS)
-
 today:
 	echo 'module Paths_gf (version, getDataDir) where' > Paths_gf.hs
 	echo 'import Data.Version' >> Paths_gf.hs
 	echo '{-# NOINLINE version #-}' >> Paths_gf.hs
 	echo 'version :: Version' >> Paths_gf.hs
-	echo 'version = Version {versionBranch = [3,0], versionTags = ["alpha"]}' >> Paths_gf.hs
+	echo 'version = Version {versionBranch = [3,0], versionTags = ["beta"]}' >> Paths_gf.hs
 	echo 'getDataDir = return "$(GF_DATA_DIR)" :: IO FilePath' >> Paths_gf.hs
 
-javac:
-	$(JAVAC) $(JAVAFLAGS) -classpath $(GFEDITOR)/jargs-1.0.jar $(GFEDITOR)/de/uka/ilkd/key/ocl/gf/*.java
-	$(JAVAC) $(JAVAFLAGS) JavaGUI/*.java
-
-jar: javac
-	cd JavaGUI; $(JAR) -cmf manifest.txt gf-java.jar *.class ; cd ..
-	cd $(GFEDITOR) ; rm -rf jarcontents ; mkdir jarcontents ; cp -r de ManifestMain.txt ../../LICENSE LICENCE_jargs gf-icon.gif jarcontents ; cat jargs-1.0.jar | (cd jarcontents; jar -x jargs) ; cd jarcontents ; $(JAR) -cmf ManifestMain.txt ../gfeditor.jar  de/uka/ilkd/key/ocl/gf/*.class jargs LICENSE LICENCE_jargs gf-icon.gif ; cd .. ; cd ..
 
 showflags:
 	@echo $(GHCFLAGS)
@@ -196,21 +161,10 @@ gfdoc: tools/$(GF_DOC_EXE)
 tools/$(GF_DOC_EXE): tools/GFDoc.hs
 	$(GHMAKE) $(GHCOPTFLAGS) -o $@ $^
 
-gfc: gf3
+gfc: gf
+	echo GFC!
 	cp -f gfc ../bin/
 	chmod a+x ../bin/gfc
-
-gfi: gf3
-
-gf3:
-	$(GHMAKE) $(GHCOPTFLAGS) $(GHCFLAGS) -o gf3 GF.hs
-	strip $(GF3_EXE)
-	mv $(GF3_EXE) ../bin/
-
-testgf3:
-	$(GHMAKE) $(GHCOPTFLAGS) -o testgf3 GF/Devel/TestGF3.hs
-	strip $(TESTGF3_EXE)
-	mv $(TESTGF3_EXE) ../bin/
 
 gfcc2c:
 	$(MAKE) -C tools/c
@@ -222,7 +176,7 @@ gfcc2c:
 #
 
 lib:
-	$(MAKE) -C ../lib/resource clean new
+	$(MAKE) -C ../lib/resource clean all
 
 #
 # Distribution
@@ -291,11 +245,6 @@ install: install-gf install-gfdoc install-lib install-editor
 install-gf:
 	$(INSTALL) -d $(bindir)
 	$(INSTALL) ../bin/$(GF_EXE) $(bindir)
-
-install-gf3:
-	$(INSTALL) -d $(bindir)
-	$(INSTALL) ../bin/$(GF3_EXE) $(bindir)
-	$(INSTALL) ../bin/gfc $(bindir)
 
 install-gfdoc: 
 	$(INSTALL) -d $(bindir)

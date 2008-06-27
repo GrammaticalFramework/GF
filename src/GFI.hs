@@ -147,7 +147,9 @@ welcome = unlines [
   "         *  *  *              ",
   "                              ",
   "This is GF version "++showVersion version++". ",
-  "Some things may work.         "
+  "License: see help -license.   ",
+  "Differences from GF 2.9: see help -changes.",
+  "Bug reports: http://trac.haskell.org/gf/"
   ]
 
 prompt env = absname ++ "> " where
