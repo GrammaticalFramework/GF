@@ -1,7 +1,0 @@
-\documentclass[11pt,a4paper]{article}
-
-\usepackage[T2A,OT1]{fontenc}
-\usepackage[ot2enc]{inputenc}
-\usepackage[russian,german,french,english]{babel}
-\usepackage{isolatin1}  % user defined package
-
