@@ -11,9 +11,9 @@ Grammatical Framework Download and Installation
 
 - GF 3.0 beta MacOS X binaries: 
   [Leopard  gf-3.0beta-mac-leopard.gz] (Intel Mac with MacOS X Leopard)
-  [Leopard  gf-3.0beta-mac-tiger.gz] (Intel Mac with MacOS X Tiger)
+  [Tiger  gf-3.0beta-mac-tiger.gz] (Intel Mac with MacOS X Tiger)
 
-- [GF 3.0 beta Windows binary  gf-3.0beta-mac.exe]
+% - [GF 3.0 beta Windows binary  gf-3.0beta-windows.exe]
 
 - [GF 3.0 beta sources         gf-3.0beta.tgz]
 
