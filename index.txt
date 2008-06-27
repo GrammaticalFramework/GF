@@ -88,7 +88,7 @@ GF can be used for building
 - [multilingual authoring systems http://www.cs.chalmers.se/~markus/gramlets/letter-applet.html]
 - [dialogue systems http://www.cs.chalmers.se/~bringert/xv/pizza/]
 - [language training systems http://csmisc14.cs.chalmers.se/~bjorn/langtrain.cgi]
-- [natural language resources lib/resource/synopsis.html]
+- [natural language resources lib/resource/doc/synopsis.html]
 
 
 ==Availability==
@@ -182,7 +182,7 @@ support for an increasing number of languages, currently including
 
 
 Adding a language to the resource library takes 3 to 9 
-months - [contributions doc/gf-projects.html]
+months - contributions 
 are welcome!
 
 % [doc/10lang-small.png]
