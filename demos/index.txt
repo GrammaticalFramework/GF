@@ -24,3 +24,4 @@ Gothenburg public transport system, in six languages (film).
 [Library API browser-editor resource-api/editor.html]: construct phrases in
 the [GF resource library ../lib/resource/doc/synopsis.html]
 
+[Random library examples ../lib/resource/doc/resdemo.html]

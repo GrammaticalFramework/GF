@@ -33,11 +33,11 @@ June 2008
 ``[`` [Demos demos/index.html]
 ``|`` [Download download/index.html]
 ``|`` [Developers doc/darcs.html]
-``|`` [Events doc/events.html]
+% ``|`` [Events doc/events.html]
 ``|`` [Libraries lib/resource/doc/synopsis.html]
 ``|`` [People doc/gf-people.html]
-``|`` [Projects doc/projects.html]
-``|`` [Publications doc/gf-tutorial.html]
+% ``|`` [Projects doc/projects.html]
+``|`` [Publications doc/gf-bibliography.html]
 ``|`` [QuickRefCard doc/gf-reference.html]
 ``|`` [Reference doc/gf-refman.html]
 ``|`` [Tutorial doc/gf-tutorial.html]
@@ -52,7 +52,7 @@ June 2008
 
 27 June 2008: 
 [release of GF 3.0 doc/gf3-relesase.html] and this new web page; the old web page is 
-[here index-2.html].
+[here ../GF2/index.html].
 
 
 #ENSMALL

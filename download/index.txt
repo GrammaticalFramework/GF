@@ -20,7 +20,7 @@ Grammatical Framework Download and Installation
 
 ==Old releases==
 
-[GF 2.9 download page ../GF2/download/index.html]
+[GF 2.9 download page ../../GF2/download/index.html]
 
 
 ==Installation instructions==
