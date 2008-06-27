@@ -21,6 +21,9 @@ create mathematical exercises in six languages simultaneously.
 [Tramdemo http://www.cs.chalmers.se/~bringert/misc/tramdemo.avi]: find your way in
 Gothenburg public transport system, in six languages (film).
 
+[GF Language Trainer http://csmisc14.cs.chalmers.se/~bjorn/langtrain.cgi]:
+translation quizzes in Arabic, English, Russian, Swedish.
+
 [Library API browser-editor resource-api/editor.html]: construct phrases in
 the [GF resource library ../lib/resource/doc/synopsis.html]
 
