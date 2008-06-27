@@ -48,7 +48,7 @@ loop opts gfenv0 = do
   let loopNewCPU gfenv' = do 
         cpu' <- getCPUTime
         putStrLnFlush (show ((cpu' - cputime gfenv') `div` 1000000000) ++ " msec")
-        loop opts $ gfenv' {cputime = cpu'}
+        return $ gfenv' {cputime = cpu'}
   let 
     enc = encode gfenv
     s = decode gfenv s0
@@ -118,7 +118,8 @@ loop opts gfenv0 = do
             interpretCommandLine enc env s
             loopNewCPU gfenv
         gfenv' <- return $ either (const gfenv) id r
-        loopNewCPU gfenv'
+        e <- loopNewCPU gfenv'
+        loop opts e
 
 importInEnv :: GFEnv -> Options -> [FilePath] -> IO GFEnv
 importInEnv gfenv opts files
