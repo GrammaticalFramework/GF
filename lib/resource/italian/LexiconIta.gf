@@ -4,7 +4,7 @@ concrete LexiconIta of Lexicon = CatIta ** open
   MorphoIta, ParadigmsIta, BeschIta in {
 
 flags 
-  optimize=values ;
+  optimize=values ; coding=utf8 ;
 
 lin
   airplane_N = regN "aereo" ;
@@ -24,7 +24,7 @@ lin
   bike_N = regN "bicicletta" ;
   bird_N = regN "uccello" ;
   black_A = regADeg "nero" ;
-  blue_A = mkA "blù" "blù" "blù" "blù" "blumente" ;
+  blue_A = mkA "blÃ¹" "blÃ¹" "blÃ¹" "blÃ¹" "blumente" ;
   boat_N = regN "batello" ;
   book_N = regN "libro" ;
   boot_N = regN "stivale" ;
@@ -47,7 +47,7 @@ lin
   cheese_N = regN "formaggio" ;
   child_N = regN "bambino" ;
   church_N = regN "chiesa" ;
-  city_N = regN "città" ;
+  city_N = regN "cittÃ " ;
   clean_A = regADeg "proprio" ;
   clever_A = regADeg "saggio" ;
   close_V2 = dirV2 (verboV (chiudere_30 "chiudere")) ;
@@ -102,7 +102,7 @@ lin
   industry_N = regN "industria" ;
   iron_N = regN "ferro" ;
   john_PN = mkPN "Giovanni" masculine ;
-  king_N = regN "ré" ;
+  king_N = regN "rÃ©" ;
   know_V2 = dirV2 (verboV (conoscere_37 "conoscere")) ; --- savoir_V2 : VS
   lake_N = regN "lago" ;
   lamp_N = regN "lampa" ;
@@ -197,7 +197,7 @@ lin
  --- trousers_N = regN "pantalon" ;
   ugly_A = regADeg "brutto" ;
   understand_V2 = dirV2 (regV "capire") ;
-  university_N = regN "università" ;
+  university_N = regN "universitÃ " ;
   village_N = regN "paese" ;
   wait_V2 = mkV2 (regV "aspettare") ParadigmsIta.dative ;
   walk_V = regV "camminare" ;
@@ -218,7 +218,7 @@ lin
 
   do_V2 =  dirV2 (verboV (fare_52 "fare")) ;
   now_Adv = mkAdv "adesso" ;
-  already_Adv = mkAdv "già" ;
+  already_Adv = mkAdv "giÃ " ;
   song_N = femN (regN "canzone") ;
   add_V3 = dirV3 (verboV (giungere_55 "aggiungere")) ParadigmsIta.dative ;
   number_N = regN "numero" ;

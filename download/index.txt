@@ -7,23 +7,39 @@ Grammatical Framework Download and Installation
 
 ==Latest release==
 
-[GF 3.0 beta Linux binary    gf-3.0beta-linux.gz] (Intel, Ubuntu)
+- [GF 3.0 beta Linux binary    gf-3.0beta-linux.gz] (Intel, Ubuntu)
 
-[GF 3.0 beta MacOS X binary  gf-3.0beta-mac.gz] (Intel Mac with Leopard)
+- [GF 3.0 beta MacOS X binary  gf-3.0beta-mac.gz] (Intel Mac with Leopard)
 
-[GF 3.0 beta Windows binary  gf-3.0beta-mac.exe]
+- [GF 3.0 beta Windows binary  gf-3.0beta-mac.exe]
 
-[GF 3.0 beta sources         gf-3.0beta.tgz]
+- [GF 3.0 beta sources         gf-3.0beta.tgz]
 
-[GF libraries v 1.4          gf-lib-1.4.tgz] (compiled resource grammar libraries)
+- [GF libraries v 1.4          gf-lib-1.4.tgz] (compiled resource grammar libraries)
 
 
 ==Old releases==
 
-[GF 2.9 download page ../../GF2/download/index.html]
+- [GF 2.9 download page ../../GF2/download/index.html]
 
 
 ==Installation instructions==
+
+To install a binary, just uncompress it and copy to a place that is on your path,
+for instance, in ``/usr/local/bin``.
+
+If you want to use GF as a batch compiler, put the following script in the
+same place as the GF binary. If it is //not// ``/usr/local/bin``, change
+the ``prefix`` variable in the script.
+
+- [gfc script for patch compiler ./gfc]
+
+
+The Mac OS X binary (Intel) requires Readline from
+[Mac Ports http://www.macports.org/]. To install, see above item.
+
+The Windows binary is easiest if you have
+[Cygwin http://www.cygwin.com/]. To install, see above item.
 
 To compile and install from source: 
 ```
@@ -34,20 +50,15 @@ To compile and install from source:
   make
   make install
 ```
-To install a binary,
+To install the libraries, unpack them in the place to which your
+``GF_LIB_PATH`` points.
 ```
-  tar xvfz BINARY-PACKAGE.tgz
-  cd GF-...
-  ./configure
-  make install
+  cd $GF_LIB_PATH
+  gtar xvfz gf-lib-1.4.tgz
 ```
-You may need ``sudo make install``. 
-If you cannot write in ``/usr/local/``, you can change the target directory
-by ``./configure --prefix=MYDIR``.
+If this variable hasn't been defined, it is useful define it, e.g.
+```
+  export GF_LIB_PATH=/usr/local/lib/gf/
+```
 
-The Mac OS X binary (Intel) requires Readline from
-[Mac Ports http://www.macports.org/]. To install, see above item.
-
-The Windows binary is easiest if you have
-[Cygwin http://www.cygwin.com/]. To install, see above item.
 

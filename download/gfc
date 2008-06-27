@@ -1,15 +1,15 @@
 #!/bin/sh
 
-prefix="@prefix@"
+prefix="/usr/local"
 
-case "@host@" in
+case "i386-apple-darwin9.3.0" in
       *-cygwin)
           prefix=`cygpath -w "$prefix"`;;
 esac
 
-exec_prefix="@exec_prefix@"
-GF_BIN_DIR="@bindir@"
-GF_DATA_DIR="@datadir@/GF-@PACKAGE_VERSION@"
+exec_prefix="${prefix}"
+GF_BIN_DIR="${exec_prefix}/bin"
+GF_DATA_DIR="${prefix}/share/GF-3.0-beta"
 
 GFBIN="$GF_BIN_DIR/gf"
 

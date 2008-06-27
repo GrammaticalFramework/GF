@@ -4,7 +4,7 @@ concrete LexiconFre of Lexicon = CatFre **
   open (M = MorphoFre), ParadigmsFre, IrregFre in {
 
 flags 
-  optimize=values ;
+  optimize=values ; 
 
 lin
   airplane_N = regGenN "avion" masculine ;
