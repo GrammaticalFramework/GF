@@ -37,7 +37,7 @@ appUnlexer f = unlines . map (f . words) . lines
 
 wrapHTML :: String -> String
 wrapHTML = unlines . tag . intersperse "<br>" . lines where
-  tag ss = "<html>":"<body>" : ss ++ ["</body>","</html>"]
+  tag ss = "<html>":"<head>":"<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />":"</head>":"<body>" : ss ++ ["</body>","</html>"]
 
 lexText :: String -> [String]
 lexText s = case s of
