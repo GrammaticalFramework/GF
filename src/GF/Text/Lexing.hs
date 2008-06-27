@@ -2,6 +2,7 @@ module GF.Text.Lexing (stringOp) where
 
 import GF.Text.Transliterations
 import GF.Text.UTF8
+import GF.Text.CP1251
 
 import Data.Char
 import Data.List (intersperse)
@@ -98,18 +99,3 @@ unlexMixed = concat . alternate False where
 isPunct = flip elem ".?!,:;"
 isParen = flip elem "()[]{}"
 isClosing = flip elem ")]}"
- 
-
--- might be in a file of its own: Windows Cyrillic, used in Bulgarian resource
-
-decodeCP1251 = map convert where
-  convert c
-   | c >= '\192' && c <= '\255' = chr (ord c + 848)
-   | otherwise                  = c
-
-encodeCP1251 = map convert where
-  convert c
-   | oc >= 1040 && oc <= 1103 = chr (oc - 848)
-   | otherwise                  = c
-   where oc = ord c
-

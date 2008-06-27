@@ -3,6 +3,7 @@ module GF.Compile.Coding where
 import GF.Grammar.Grammar
 import GF.Grammar.Macros
 import GF.Text.UTF8
+import GF.Text.CP1251
 import GF.Infra.Modules
 import GF.Infra.Option
 import GF.Data.Operations
@@ -47,9 +48,3 @@ codeSourceModule co (id,moi) = case moi of
       PSeq p q -> PSeq (codp p) (codp q)
       PAlt p q -> PAlt (codp p) (codp q)
       _ -> p
-
----- from Text.Lexing
-decodeCP1251 = map convert where
-  convert c
-   | c >= '\192' && c <= '\255' = chr (ord c + 848)
-   | otherwise                  = c
