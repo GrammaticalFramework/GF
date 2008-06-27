@@ -1,8 +1,0 @@
-[ |- A -> B -> A ] 
------------------------------- Implication strategy 
-[ A |- B -> A ] 
------------------------------- Implication strategy 
-[ A , B |- A ] 
------------------------------- Hypothesis 
-Ø
-

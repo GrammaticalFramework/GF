@@ -1,6 +1,0 @@
-n Program
-open gft.tmp
-'
-c solve
-'
-save ImperJVM jvm.tmp

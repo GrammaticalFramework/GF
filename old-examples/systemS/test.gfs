@@ -1,7 +1,0 @@
-i proof.gfcm
-rf ex1.txt | p -tr -lang=ProofSymb | l -lang=ProofEng
-rf ex2.txt | p -tr -lang=ProofSymb | l -lang=ProofEng
-rf ex4.txt | p -tr -lang=ProofSymb | l -lang=ProofEng
-rf ex1eng.txt | p -tr -lang=ProofEng | l -lang=ProofSymb
-rf ex2eng.txt | p -tr -lang=ProofEng | l -lang=ProofSymb
-rf ex4eng.txt | p -tr -lang=ProofEng | l -lang=ProofSymb
