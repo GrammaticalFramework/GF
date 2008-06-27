@@ -2924,12 +2924,12 @@ Lexical category, constructors given in
 <TR>
 <TD><CODE>can8know_VV</CODE></TD>
 <TD><A HREF="#VV" TITLE="VV - verb-phrase-complement verb">VV</A></TD>
-<TD><I>can8know</I></TD>
+<TD><I>can (capacity)</I></TD>
 </TR>
 <TR>
 <TD><CODE>can_VV</CODE></TD>
 <TD><A HREF="#VV" TITLE="VV - verb-phrase-complement verb">VV</A></TD>
-<TD><I>can</I></TD>
+<TD><I>can (possibility)</I></TD>
 </TR>
 <TR>
 <TD><CODE>must_VV</CODE></TD>
@@ -4360,8 +4360,16 @@ source <A HREF="../finnish/ParadigmsFin.gf"><CODE>http://www.cs.chalmers.se/~aar
 <TD><A HREF="#V" TITLE="V - one-place verb">V</A> <CODE>-&gt;</CODE> <A HREF="#VV" TITLE="VV - verb-phrase-complement verb">VV</A></TD>
 </TR>
 <TR>
+<TD><CODE>mkVVf</CODE></TD>
+<TD><A HREF="#V" TITLE="V - one-place verb">V</A> <CODE>-&gt;</CODE> <A HREF="#InfForm">InfForm</A> <CODE>-&gt;</CODE> <A HREF="#VV" TITLE="VV - verb-phrase-complement verb">VV</A></TD>
+</TR>
+<TR>
 <TD><CODE>mkV2V</CODE></TD>
 <TD><A HREF="#V" TITLE="V - one-place verb">V</A> <CODE>-&gt;</CODE> <A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A> <CODE>-&gt;</CODE> <A HREF="#V2V" TITLE="V2V - verb with NP and V complement">V2V</A></TD>
+</TR>
+<TR>
+<TD><CODE>mkV2Vf</CODE></TD>
+<TD><A HREF="#V" TITLE="V - one-place verb">V</A> <CODE>-&gt;</CODE> <A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A> <CODE>-&gt;</CODE> <A HREF="#InfForm">InfForm</A> <CODE>-&gt;</CODE> <A HREF="#V2V" TITLE="V2V - verb with NP and V complement">V2V</A></TD>
 </TR>
 <TR>
 <TD><CODE>mkVA</CODE></TD>
@@ -5456,155 +5464,23 @@ source <A HREF="../russian/ParadigmsRus.gf"><CODE>http://www.cs.chalmers.se/~aar
 </TR>
 <TR>
 <TD><CODE>mkN</CODE></TD>
-<TD><CODE>(nomSg,</CODE> <CODE>genSg,</CODE> <CODE>datSg,</CODE> <CODE>accSg,</CODE> <CODE>instSg,</CODE> <CODE>preposSg,</CODE> <CODE>prepos2Sg,</CODE></TD>
+<TD><CODE>(karta</CODE> <CODE>:</CODE> <CODE>Str)</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
 </TR>
 <TR>
-<TD><CODE>regN</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
+<TD><CODE>mkN</CODE></TD>
+<TD><CODE>(tigr</CODE> <CODE>:</CODE> <CODE>Str)</CODE> <CODE>-&gt;</CODE> <A HREF="#Animacy">Animacy</A> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
 </TR>
 <TR>
-<TD><CODE>nMashina</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
-</TR>
-<TR>
-<TD><CODE>nEdinica</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
-</TR>
-<TR>
-<TD><CODE>nZhenchina</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
-</TR>
-<TR>
-<TD><CODE>nNoga</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
-</TR>
-<TR>
-<TD><CODE>nMalyariya</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
-</TR>
-<TR>
-<TD><CODE>nTetya</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
-</TR>
-<TR>
-<TD><CODE>nBol</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
-</TR>
-<TR>
-<TD><CODE>nObezbolivauchee</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
-</TR>
-<TR>
-<TD><CODE>nProizvedenie</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
-</TR>
-<TR>
-<TD><CODE>nChislo</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
-</TR>
-<TR>
-<TD><CODE>nZhivotnoe</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
-</TR>
-<TR>
-<TD><CODE>nPepel</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
-</TR>
-<TR>
-<TD><CODE>nMalush</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
-</TR>
-<TR>
-<TD><CODE>nPotolok</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
-</TR>
-<TR>
-<TD><CODE>nStomatolog</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
-</TR>
-<TR>
-<TD><CODE>nAdres</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
-</TR>
-<TR>
-<TD><CODE>nTelefon</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
-</TR>
-<TR>
-<TD><CODE>nNol</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
-</TR>
-<TR>
-<TD><CODE>nUchitel</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
-</TR>
-<TR>
-<TD><CODE>nUroven</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
-</TR>
-<TR>
-<TD><CODE>nSlovar</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
-</TR>
-<TR>
-<TD><CODE>nMusej</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
-</TR>
-<TR>
-<TD><CODE>nDvorec</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
-</TR>
-<TR>
-<TD><CODE>nTovarish</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
-</TR>
-<TR>
-<TD><CODE>nMesjac</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
-</TR>
-<TR>
-<TD><CODE>nGrazhdanin</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
-</TR>
-<TR>
-<TD><CODE>nRebenok</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
-</TR>
-<TR>
-<TD><CODE>nPut</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
-</TR>
-<TR>
-<TD><CODE>nGospodin</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
-</TR>
-<TR>
-<TD><CODE>nDen</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
-</TR>
-<TR>
-<TD><CODE>nDrug</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
-</TR>
-<TR>
-<TD><CODE>nSyn</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
-</TR>
-<TR>
-<TD><CODE>nLes</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
-</TR>
-<TR>
-<TD><CODE>nMost</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
-</TR>
-<TR>
-<TD><CODE>mkFun</CODE></TD>
-<TD><A HREF="#N" TITLE="N - common noun">N</A> <CODE>-&gt;</CODE> <A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A> <CODE>-&gt;</CODE> <A HREF="#N2" TITLE="N2 - relational noun">N2</A></TD>
+<TD><CODE>mkN</CODE></TD>
+<TD><CODE>(nomSg,</CODE> <CODE>genSg,</CODE> <CODE>datSg,</CODE> <CODE>accSg,</CODE> <CODE>instSg,</CODE> <CODE>preposSg,</CODE> <CODE>prepos2Sg,</CODE> <CODE>nomPl,</CODE> <CODE>genPl,</CODE> <CODE>datPl,</CODE> <CODE>accPl,</CODE> <CODE>instPl,</CODE> <CODE>preposPl</CODE> <CODE>:</CODE> <CODE>Str)</CODE> <CODE>-&gt;</CODE> <A HREF="#Gender">Gender</A> <CODE>-&gt;</CODE> <A HREF="#Animacy">Animacy</A> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A></TD>
 </TR>
 <TR>
 <TD><CODE>mkN2</CODE></TD>
 <TD><A HREF="#N" TITLE="N - common noun">N</A> <CODE>-&gt;</CODE> <A HREF="#N2" TITLE="N2 - relational noun">N2</A></TD>
+</TR>
+<TR>
+<TD><CODE>mkN2</CODE></TD>
+<TD><A HREF="#N" TITLE="N - common noun">N</A> <CODE>-&gt;</CODE> <A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A> <CODE>-&gt;</CODE> <A HREF="#N2" TITLE="N2 - relational noun">N2</A></TD>
 </TR>
 <TR>
 <TD><CODE>mkN3</CODE></TD>
@@ -5619,32 +5495,12 @@ source <A HREF="../russian/ParadigmsRus.gf"><CODE>http://www.cs.chalmers.se/~aar
 <TD><A HREF="#N" TITLE="N - common noun">N</A> <CODE>-&gt;</CODE> <A HREF="#PN" TITLE="PN - proper name">PN</A></TD>
 </TR>
 <TR>
-<TD><CODE>regA</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#A" TITLE="A - one-place adjective">A</A></TD>
+<TD><CODE>mkA</CODE></TD>
+<TD><CODE>(positive</CODE> <CODE>:</CODE> <CODE>Str)</CODE> <CODE>-&gt;</CODE> <A HREF="#A" TITLE="A - one-place adjective">A</A></TD>
 </TR>
 <TR>
-<TD><CODE>adjInvar</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#A" TITLE="A - one-place adjective">A</A></TD>
-</TR>
-<TR>
-<TD><CODE>AStaruyj</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#A" TITLE="A - one-place adjective">A</A></TD>
-</TR>
-<TR>
-<TD><CODE>AMalenkij</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#A" TITLE="A - one-place adjective">A</A></TD>
-</TR>
-<TR>
-<TD><CODE>AKhoroshij</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#A" TITLE="A - one-place adjective">A</A></TD>
-</TR>
-<TR>
-<TD><CODE>AMolodoj</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#A" TITLE="A - one-place adjective">A</A></TD>
-</TR>
-<TR>
-<TD><CODE>AKakoj_Nibud</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#A" TITLE="A - one-place adjective">A</A></TD>
+<TD><CODE>mkA</CODE></TD>
+<TD><CODE>(positive,</CODE> <CODE>comparative</CODE> <CODE>:</CODE> <CODE>Str)</CODE> <CODE>-&gt;</CODE> <A HREF="#A" TITLE="A - one-place adjective">A</A></TD>
 </TR>
 <TR>
 <TD><CODE>mkA2</CODE></TD>

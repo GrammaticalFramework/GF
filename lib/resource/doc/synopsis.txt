@@ -666,8 +666,8 @@ Lexical category, constructors given in
 [lexical paradigms #RParadigms].
 ==VV - verb-phrase-complement verb==[VV]
 || Function  | Type  | Example  ||
-| ``can8know_VV`` | [VV #VV] | //can8know// |
-| ``can_VV`` | [VV #VV] | //can// |
+| ``can8know_VV`` | [VV #VV] | //can (capacity)// |
+| ``can_VV`` | [VV #VV] | //can (possibility)// |
 | ``must_VV`` | [VV #VV] | //must// |
 | ``want_VV`` | [VV #VV] | //want// |
 ==Voc - vocative or "please"==[Voc]
@@ -1059,7 +1059,9 @@ source [``http://www.cs.chalmers.se/~aarne/GF/lib/resource/finnish/ParadigmsFin.
 | ``mkVS`` | [V #V] ``->`` [VS #VS] |
 | ``mkV2S`` | [V #V] ``->`` [Prep #Prep] ``->`` [V2S #V2S] |
 | ``mkVV`` | [V #V] ``->`` [VV #VV] |
+| ``mkVVf`` | [V #V] ``->`` [InfForm #InfForm] ``->`` [VV #VV] |
 | ``mkV2V`` | [V #V] ``->`` [Prep #Prep] ``->`` [V2V #V2V] |
+| ``mkV2Vf`` | [V #V] ``->`` [Prep #Prep] ``->`` [InfForm #InfForm] ``->`` [V2V #V2V] |
 | ``mkVA`` | [V #V] ``->`` [Prep #Prep] ``->`` [VA #VA] |
 | ``mkV2A`` | [V #V] ``->`` [Prep #Prep] ``->`` [Prep #Prep] ``->`` [V2A #V2A] |
 | ``mkVQ`` | [V #V] ``->`` [VQ #VQ] |
@@ -1374,54 +1376,16 @@ source [``http://www.cs.chalmers.se/~aarne/GF/lib/resource/russian/ParadigmsRus.
 | ``Number`` | [Type #Type] |
 | ``singular`` | [Number #Number] |
 | ``plural`` | [Number #Number] |
-| ``mkN`` | ``(nomSg,`` ``genSg,`` ``datSg,`` ``accSg,`` ``instSg,`` ``preposSg,`` ``prepos2Sg,`` |
-| ``regN`` | ``Str`` ``->`` [N #N] |
-| ``nMashina`` | ``Str`` ``->`` [N #N] |
-| ``nEdinica`` | ``Str`` ``->`` [N #N] |
-| ``nZhenchina`` | ``Str`` ``->`` [N #N] |
-| ``nNoga`` | ``Str`` ``->`` [N #N] |
-| ``nMalyariya`` | ``Str`` ``->`` [N #N] |
-| ``nTetya`` | ``Str`` ``->`` [N #N] |
-| ``nBol`` | ``Str`` ``->`` [N #N] |
-| ``nObezbolivauchee`` | ``Str`` ``->`` [N #N] |
-| ``nProizvedenie`` | ``Str`` ``->`` [N #N] |
-| ``nChislo`` | ``Str`` ``->`` ``Str`` ``->`` [N #N] |
-| ``nZhivotnoe`` | ``Str`` ``->`` [N #N] |
-| ``nPepel`` | ``Str`` ``->`` [N #N] |
-| ``nMalush`` | ``Str`` ``->`` [N #N] |
-| ``nPotolok`` | ``Str`` ``->`` [N #N] |
-| ``nStomatolog`` | ``Str`` ``->`` [N #N] |
-| ``nAdres`` | ``Str`` ``->`` [N #N] |
-| ``nTelefon`` | ``Str`` ``->`` [N #N] |
-| ``nNol`` | ``Str`` ``->`` [N #N] |
-| ``nUchitel`` | ``Str`` ``->`` [N #N] |
-| ``nUroven`` | ``Str`` ``->`` [N #N] |
-| ``nSlovar`` | ``Str`` ``->`` [N #N] |
-| ``nMusej`` | ``Str`` ``->`` [N #N] |
-| ``nDvorec`` | ``Str`` ``->`` [N #N] |
-| ``nTovarish`` | ``Str`` ``->`` [N #N] |
-| ``nMesjac`` | ``Str`` ``->`` [N #N] |
-| ``nGrazhdanin`` | ``Str`` ``->`` [N #N] |
-| ``nRebenok`` | ``Str`` ``->`` [N #N] |
-| ``nPut`` | ``Str`` ``->`` [N #N] |
-| ``nGospodin`` | ``Str`` ``->`` [N #N] |
-| ``nDen`` | ``Str`` ``->`` [N #N] |
-| ``nDrug`` | ``Str`` ``->`` [N #N] |
-| ``nSyn`` | ``Str`` ``->`` [N #N] |
-| ``nLes`` | ``Str`` ``->`` [N #N] |
-| ``nMost`` | ``Str`` ``->`` [N #N] |
-| ``mkFun`` | [N #N] ``->`` [Prep #Prep] ``->`` [N2 #N2] |
+| ``mkN`` | ``(karta`` ``:`` ``Str)`` ``->`` [N #N] |
+| ``mkN`` | ``(tigr`` ``:`` ``Str)`` ``->`` [Animacy #Animacy] ``->`` [N #N] |
+| ``mkN`` | ``(nomSg,`` ``genSg,`` ``datSg,`` ``accSg,`` ``instSg,`` ``preposSg,`` ``prepos2Sg,`` ``nomPl,`` ``genPl,`` ``datPl,`` ``accPl,`` ``instPl,`` ``preposPl`` ``:`` ``Str)`` ``->`` [Gender #Gender] ``->`` [Animacy #Animacy] ``->`` [N #N] |
 | ``mkN2`` | [N #N] ``->`` [N2 #N2] |
+| ``mkN2`` | [N #N] ``->`` [Prep #Prep] ``->`` [N2 #N2] |
 | ``mkN3`` | [N #N] ``->`` [Prep #Prep] ``->`` [Prep #Prep] ``->`` [N3 #N3] |
 | ``mkPN`` | ``Str`` ``->`` [Gender #Gender] ``->`` [Animacy #Animacy] ``->`` [PN #PN] |
 | ``nounPN`` | [N #N] ``->`` [PN #PN] |
-| ``regA`` | ``Str`` ``->`` ``Str`` ``->`` [A #A] |
-| ``adjInvar`` | ``Str`` ``->`` [A #A] |
-| ``AStaruyj`` | ``Str`` ``->`` ``Str`` ``->`` [A #A] |
-| ``AMalenkij`` | ``Str`` ``->`` ``Str`` ``->`` [A #A] |
-| ``AKhoroshij`` | ``Str`` ``->`` ``Str`` ``->`` [A #A] |
-| ``AMolodoj`` | ``Str`` ``->`` ``Str`` ``->`` [A #A] |
-| ``AKakoj_Nibud`` | ``Str`` ``->`` ``Str`` ``->`` ``Str`` ``->`` [A #A] |
+| ``mkA`` | ``(positive`` ``:`` ``Str)`` ``->`` [A #A] |
+| ``mkA`` | ``(positive,`` ``comparative`` ``:`` ``Str)`` ``->`` [A #A] |
 | ``mkA2`` | [A #A] ``->`` ``Str`` ``->`` [Case #Case] ``->`` [A2 #A2] |
 | ``mkAdv`` | ``Str`` ``->`` [Adv #Adv] |
 | ``mkV`` | [Aspect #Aspect] ``->`` ``(presentSgP1,presentSgP2,presentSgP3,`` |
