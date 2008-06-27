@@ -207,7 +207,7 @@ binary-dist:
 	mkdir $(BIN_DIST_DIR)
 	mkdir $(BIN_DIST_DIR)/lib
 	./configure --host="$(host)" --build="$(build)"
-	$(MAKE) all
+	$(MAKE) all gfdoc
 	$(INSTALL) ../bin/$(GF_EXE) tools/$(GF_DOC_EXE) $(BIN_DIST_DIR)
 	$(INSTALL) configure config.guess config.sub install-sh $(BIN_DIST_DIR)
 	$(INSTALL) -m 0644 ../README ../LICENSE $(BIN_DIST_DIR)
