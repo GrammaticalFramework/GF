@@ -1,4 +1,4 @@
-To make and install GF (Updated for version 2.4).
+To make and install GF (Updated for version 2.4 and 3.0beta).
 
 1. Unpack GF and go to the source directory (the place where this 
    INSTALL file is - so you have probably done this already!)
@@ -23,10 +23,6 @@ To make and install GF (Updated for version 2.4).
    the --prefix flag. E.g.
 
      ./configure --prefix=/usr
-
-   To compile on Chalmers Solaris systems using VCS, use this configuration:
-
-     ./configure CPPFLAGS="`lib__readline -I` `lib__ncurses -I`" LDFLAGS="`lib__readline -l` `lib__ncurses -l`"
 
    If you experience problems with readline, try:
 
@@ -68,26 +64,18 @@ To make and install GF (Updated for version 2.4).
 
      -- when gf has started and shows the prompt >:
 
-     > parse "this cheese is very very Italian" | tree_bank
+     > parse "this cheese is very very Italian" | linearize -treebank
 
      -- this is the response from GF:
      Is (This Cheese) (Very (Very Italian))
      this cheese is very very Italian
      questo formaggio è molto molto italiano
 
-10. If you want to run the Java GUI, go back to $GFHOME/src directory
-    and also do
+     > generate_random | linearize -treebank
 
-     make install-java
+     > help
 
-   Test the GUI with some grammars:
 
-     cd ../examples/letter
-     gf <mkLetter.gfs
-     jgf Letter.gfcm
-
-   When the window opens, push the Random button. 
-
-Author: Aarne Ranta, Björn Bringert 8/11/2004 -- 26/01/2006 -- 3/9/2007
+Author: Aarne Ranta, Björn Bringert 8/11/2004 -- 26/01/2006 -- 27/6/2008
 
 

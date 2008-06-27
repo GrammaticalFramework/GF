@@ -120,8 +120,8 @@ Later projects using GF and involving third parties include, in chronological or
 - SALDO: Swedish morphological dictionary based on tools developed for GF
 
 
-Academically, GF has been used in four [PhD theses ], and resulted in around
-fifty [scientific publications ].
+Academically, GF has been used in four PhD theses and resulted in around
+fifty scientific publications (see [GF publication list doc/gf-bibliography.html]).
 
 
 ==Programming in GF==
