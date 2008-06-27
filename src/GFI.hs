@@ -12,6 +12,7 @@ import GF.Infra.Option
 import GF.System.Readline
 
 import GF.Text.UTF8 ----
+import GF.Text.CP1251
 
 import PGF
 import PGF.Data
@@ -42,7 +43,7 @@ loop :: Options -> GFEnv -> IO GFEnv
 loop opts gfenv0 = do
   let env = commandenv gfenv0
   let sgr = sourcegrammar gfenv0
-  setCompletionFunction (Just (wordCompletion (commandenv gfenv0)))
+  setCompletionFunction (Just (wordCompletion gfenv0))
   s0 <- fetchCommand (prompt env)
   let gfenv = gfenv0 {history = s0 : history gfenv0}
   let loopNewCPU gfenv' = do 
@@ -111,7 +112,7 @@ loop opts gfenv0 = do
 
           "ph":_ -> 
             mapM_ (putStrLn . enc) (reverse (history gfenv0)) >> loopNewCPU gfenv
-          "se":c -> loopNewCPU $ gfenv {coding = s}
+          "se":c:_ -> loopNewCPU $ gfenv {coding = c}
 
   -- ordinary commands, working on CommandEnv
           _ -> do
@@ -169,16 +170,17 @@ emptyGFEnv :: GFEnv
 emptyGFEnv = GFEnv emptyGrammar (mkCommandEnv encodeUTF8 emptyPGF) [] 0 "utf8"
 
 encode env = case coding env of
-  "utf8" -> encodeUTF8
-  _ -> id
+  "utf8"   -> encodeUTF8
+  "cp1251" -> encodeCP1251
+  _        -> id
 
 decode env = case coding env of
-  "utf8" -> decodeUTF8
-  _ -> id
+  "utf8"   -> decodeUTF8
+  "cp1251" -> decodeCP1251
+  _        -> id
 
 
-
-wordCompletion cmdEnv line prefix p =
+wordCompletion gfenv line0 prefix0 p =
   case wc_type (take p line) of
     CmplCmd pref
       -> ret ' ' [name | name <- Map.keys (commands cmdEnv), isPrefixOf pref name]
@@ -188,7 +190,7 @@ wordCompletion cmdEnv line prefix p =
               Right state0 -> let ws     = words (take (length s - length prefix) s)
                                   state  = foldl nextState state0 ws
                                   compls = getCompletions state prefix
-                              in ret ' ' (Map.keys compls)
+                              in ret ' ' (map (encode gfenv) (Map.keys compls))
               Left  _      -> ret ' ' []
     CmplOpt (Just (Command n _ _)) pref
       -> case Map.lookup n (commands cmdEnv) of
@@ -206,7 +208,11 @@ wordCompletion cmdEnv line prefix p =
               Left  _   -> ret ' ' []
     _ -> ret ' ' []
   where
-    pgf = multigrammar cmdEnv
+    line   = decode gfenv line0
+    prefix = decode gfenv prefix0
+
+    pgf    = multigrammar cmdEnv
+    cmdEnv = commandenv gfenv
     optLang opts = valIdOpts "lang" (head (languages pgf)) opts
     optCat  opts = valIdOpts "cat"  (lookStartCat pgf)     opts
     
