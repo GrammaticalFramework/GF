@@ -1,6 +1,0 @@
-i -old -optimize=none -abs=Numerals -cnc=decimal decimal.gf
-i -old -optimize=none -abs=Numerals -cnc=thai_decimal thaiDU.gf
-i -old -optimize=none -abs=Numerals -cnc=thai thaiU.gf
-i -old -optimize=none -abs=Numerals -cnc=thai_pronounce thaiP.gf
-sf -unlexer=unwords
-pm | wf thainum.gfcm

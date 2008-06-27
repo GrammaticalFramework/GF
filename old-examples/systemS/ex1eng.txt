@@ -1,4 +1,0 @@
-We will show that A -> B -> A.
-It is enough to assume A and show B -> A.
-It is enough to assume A, B and show A.
-But this holds trivially.

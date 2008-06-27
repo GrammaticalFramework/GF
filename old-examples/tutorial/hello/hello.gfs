@@ -1,4 +1,0 @@
-import HelloEng.gf
-import HelloFin.gf
-import HelloIta.gf
-linearize -multi Hello World

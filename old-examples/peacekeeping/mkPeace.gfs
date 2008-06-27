@@ -1,4 +1,0 @@
-i -optimize=share english/Peace_Eng.gf
-i -optimize=share swedish/Peace_Swe.gf
-s
-pm | wf peace.gfcm

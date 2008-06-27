@@ -1,6 +1,0 @@
-abstract Core = {
-
-  cat
-    
-
-}
