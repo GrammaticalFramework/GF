@@ -7,9 +7,9 @@ Grammatical Framework Download and Installation
 
 ==Latest release==
 
-- [GF 3.0 beta Linux binary    gf-3.0beta-linux.gz] (Intel, Ubuntu)
+- [GF 3.0 beta Linux binary    gf-3.0beta-linux-ubuntu.gz] (Intel, Ubuntu)
 
-- [GF 3.0 beta MacOS X binary  gf-3.0beta-mac.gz] (Intel Mac with Leopard)
+- [GF 3.0 beta MacOS X binary  gf-3.0beta-mac-leopard.gz] (Intel Mac with Leopard)
 
 - [GF 3.0 beta Windows binary  gf-3.0beta-mac.exe]
 
