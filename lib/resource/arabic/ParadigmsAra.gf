@@ -160,7 +160,7 @@ resource ParadigmsAra = open
   mkV0  : V -> V0 ;
   mkVS  : V -> VS ;
   mkV2S : V -> Str -> V2S ;
-  mkVV  : V -> VV ;
+--  mkVV  : V -> VV ;
   mkV2V : V -> Str -> Str -> V2V ;
   mkVA  : V -> VA ;
   mkV2A : V -> Str -> V2A ;
@@ -187,6 +187,8 @@ resource ParadigmsAra = open
 -- The definitions should not bother the user of the API. So they are
 -- hidden from the document.
 
+{-
+-- AED's original definition of regV
 
   regV = \word ->
     case word of {
@@ -195,6 +197,36 @@ resource ParadigmsAra = open
       "يَ" + f@_ + c@_ + "َ" + l@_ => v1 (f+c+l) a a ;
       f@_ + "َ" + c@_ + "ِ" + l@_   => v1 (f+c+l) i a 
     };
+-}
+
+---- begin workaround for a problem with pattern matching, AR 27/6/2008
+
+  regV = \word ->
+    case Predef.eqStr (Predef.take 2 word) "يَ" of {
+      Predef.PTrue => vYa (Predef.drop 2 word) ; 
+      _ => vCo word
+    };
+
+  vYa : Str -> V = \word ->
+    let
+      fcl = Predef.take 2 word + Predef.drop 3 word ;
+      voc = case Predef.take 1 (Predef.drop 2 word) of {
+        "ُ" => u ;
+        "ِ" => i ;
+        _ => a 
+        }
+    in
+    v1 fcl a voc ;
+    
+  vCo : Str -> V = \word -> 
+    let 
+      f = Predef.take 1 word ;
+      c = Predef.take 1 (Predef.drop 2 word) ;
+      l = Predef.drop 4 word
+    in
+    v1 (f + c + l) i a ;
+
+---- end workaround definition
 
   v1 = \rootStr,vPerf,vImpf -> 
     let { raw = v1' rootStr vPerf vImpf } in

@@ -91,7 +91,7 @@ resource ResAra = PatternsAra ** open  Prelude, Predef   in {
           case <length rS : Ints 100> of {
             6 | 5 => mkWeak pat rS ; --3=>
             4 | 3 => mkBilit pat (mkRoot2 rS) ; --2=>
-            _ => error "expected 3--6" 
+            _ => rS ---- AR error "expected 3--6" 
           }
       };
 
@@ -734,8 +734,9 @@ patHollowImp : (_,_ :Str) -> Gender => Number => Str =\xaf,xAf ->
     sing : Str -> State => Case => Str = 
       \word -> 
       case word of {
-        lemma + "ِي"       => \\s,c => Al ! s + lemma + dec2sg ! s ! c ;
-        lemma + ("ا"|"ى") => \\s,c => Al ! s + word + dec3sg ! s ! c ;
+---- the first case gives compiler error in gf3, AR 27/6/2008
+----         lemma + "ِي" => \\s,c => Al ! s + lemma + dec2sg ! s ! c ;
+        _ + ("ا"|"ى") => \\s,c => Al ! s + word + dec3sg ! s ! c ;
         _                 => \\s,c => Al ! s + word + dec1sg ! s ! c 
       };
 
