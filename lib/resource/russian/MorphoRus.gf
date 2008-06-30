@@ -67,7 +67,6 @@ oper pronYaTu : { s : Case => Str } -> Str -> Person -> Pronoun =
     g = PNoGen ; n = Sg ; p = pers ; pron = True
   } ;
 
--- FIXME: do the possesives also get the n prefix?
 oper pronNAfterPrep : Pronoun -> Pronoun = \p ->
   { s = table {
     PF c Yes NonPoss  => case p.s!(PF c No NonPoss) of {
