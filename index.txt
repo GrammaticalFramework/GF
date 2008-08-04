@@ -51,7 +51,7 @@ June 2008
 ==News==
 
 27 June 2008: 
-[release of GF 3.0 doc/gf3-relesase.html] and this new web page; the old web page is 
+[release of GF 3.0 doc/gf3-release.html] and this new web page; the old web page is 
 [here ../GF2/index.html].
 
 
@@ -161,7 +161,8 @@ The GF programming language is high-level and advanced, featuring
 
 Libraries are at the heart of modern software engineering. In natural language 
 applications, libraries are a way to cope with thousands of details involved in
-syntax, lexicon, and inflection. The [GF resource grammar library lib/] has
+syntax, lexicon, and inflection. The 
+[GF resource grammar library lib/resource/doc/synopsis.html] has
 support for an increasing number of languages, currently including
 + Arabic (partial)
 + Bulgarian
