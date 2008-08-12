@@ -5,12 +5,14 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <script type="text/javascript" src="gflib.js"></script>
     <script type="text/javascript" src="grammar.js"></script>
+    <script type="text/javascript" src="translator.js"></script>
     <title>Web-based GF Translator</title>
   </head>
   <body>
     <form>
-      <input type="text" name="inputText" />
-      <input type="button" value="Translate" onclick="alert(Literals.translate(this.form.inputText.value).length)" />
+      <input type="text" name="inputText" value="this cheese is warm" />
+      <input type="button" value="Translate" onclick="document.getElementById('output').appendChild(formatTranslation(Food.translate(this.form.inputText.value))); return false;" />
     </form>
+    <div id="output"></div>
   </body>
 </html>
