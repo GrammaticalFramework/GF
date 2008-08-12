@@ -9,7 +9,7 @@ concrete ExtraGer of ExtraGerAbs = CatGer **
     ConsVPI = consrTable Bool comma ;
 
     MkVPI vp = {s = \\b => useInfVP b vp} ;
-    ConjVPI = conjunctTable Bool ;
+    ConjVPI = conjunctDistrTable Bool ;
 
     ComplVPIVV v vpi = 
         insertInf (vpi.s ! v.isAux) (
