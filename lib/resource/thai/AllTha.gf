@@ -1,3 +1,3 @@
 --# -path=.:../abstract:../common:prelude
 
-abstract ArabicAbs = Lang ;
+concrete AllTha of AllThaAbs = LangTha ;

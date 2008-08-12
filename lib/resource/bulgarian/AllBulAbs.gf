@@ -1,8 +1,8 @@
 --# -path=.:../abstract:../common:prelude
 
-concrete Bulgarian of BulgarianAbs = 
-  LangBul,
-  ExtraBul
+abstract AllBulAbs = 
+  Lang,
+  ExtraBulAbs
   ** {
   flags coding=cp1251 ;
 } ;

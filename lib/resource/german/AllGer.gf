@@ -1,6 +1,6 @@
 --# -path=.:../abstract:../common:prelude
 
-concrete German of GermanAbs = 
+concrete AllGer of AllGerAbs = 
   LangGer,
   IrregGer,
   ExtraGer

@@ -1,6 +1,6 @@
 --# -path=.:../scandinavian:../abstract:../common:prelude
 
-concrete Norwegian of NorwegianAbs = 
+concrete AllNor of AllNorAbs = 
   LangNor,
   IrregNor - [fly_V],
   ExtraNor 

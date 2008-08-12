@@ -1,4 +1,4 @@
-abstract FinnishAbs = 
+abstract AllFinAbs = 
   Lang,
   ExtraFinAbs
   ** {} ;

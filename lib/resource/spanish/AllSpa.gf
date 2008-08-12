@@ -1,6 +1,6 @@
 --# -path=.:../romance:../abstract:../common:prelude
 
-concrete Spanish of SpanishAbs = 
+concrete AllSpa of AllSpaAbs = 
   LangSpa,
   IrregSpa,
   ExtraSpa 

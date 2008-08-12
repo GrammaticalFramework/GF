@@ -1,6 +1,6 @@
 --# -path=.:../romance:../abstract:../common:prelude
 
-concrete Italian of ItalianAbs = 
+concrete AllIta of AllItaAbs = 
   LangIta,
 --  IrregIta,
   ExtraIta 

@@ -1,4 +1,4 @@
-abstract ItalianAbs = 
+abstract AllItaAbs = 
   Lang,
 --  IrregItaAbs,
   ExtraItaAbs

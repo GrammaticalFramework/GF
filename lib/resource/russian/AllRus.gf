@@ -1,6 +1,6 @@
 --# -path=.:../abstract:../common:prelude
 
-concrete Russian of RussianAbs = 
+concrete AllRus of AllRusAbs = 
   LangRus,
   ExtraRus
   ** {flags coding=utf8 ;} ;

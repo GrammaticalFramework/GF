@@ -1,6 +1,6 @@
 --# -path=.:../scandinavian:../abstract:../common:prelude
 
-concrete Danish of DanishAbs = 
+concrete AllDan of AllDanAbs = 
   LangDan,
   IrregDan - [fly_V],
   ExtraDan 

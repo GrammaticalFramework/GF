@@ -1,6 +1,6 @@
 --# -path=.:../romance:../abstract:../common:prelude
 
-concrete Catalan of CatalanAbs = 
+concrete AllCat of AllCatAbs = 
   LangCat,
   IrregCat,
   ExtraCat 

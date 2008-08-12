@@ -1,6 +1,6 @@
 --# -path=.:../abstract:../common:prelude
 
-concrete Finnish of FinnishAbs = 
+concrete AllFin of AllFinAbs = 
   LangFin,
   ExtraFin
   ** {} ;

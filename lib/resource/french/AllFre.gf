@@ -1,6 +1,6 @@
 --# -path=.:../romance:../abstract:../common:prelude
 
-concrete French of FrenchAbs = 
+concrete AllFre of AllFreAbs = 
   LangFre,
   IrregFre,
   ExtraFre 

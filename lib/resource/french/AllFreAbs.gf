@@ -1,4 +1,4 @@
-abstract FrenchAbs = 
+abstract AllFreAbs = 
   Lang,
   IrregFreAbs,
   ExtraFreAbs

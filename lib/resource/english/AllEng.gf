@@ -1,6 +1,6 @@
 --# -path=.:../abstract:../common:prelude
 
-concrete English of EnglishAbs = 
+concrete AllEng of AllEngAbs = 
   LangEng,
   IrregEng-[
     blow_V,burn_V,come_V,dig_V,fall_V,fly_V,freeze_V,go_V,lie_V,run_V,

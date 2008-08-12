@@ -1,4 +1,4 @@
-abstract SpanishAbs = 
+abstract AllSpaAbs = 
   Lang,
   IrregSpaAbs,
   ExtraSpaAbs

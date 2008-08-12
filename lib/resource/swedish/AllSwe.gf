@@ -1,6 +1,6 @@
 --# -path=.:../scandinavian:../abstract:../common:prelude
 
-concrete Swedish of SwedishAbs = 
+concrete AllSwe of AllSweAbs = 
   LangSwe,
   IrregSwe,
   ExtraSwe 

@@ -1,7 +1,6 @@
 --# -path=.:../abstract:../common:prelude
 
-abstract GermanAbs = 
+abstract AllRusAbs = 
   Lang,
-  IrregGerAbs,
-  ExtraGerAbs
+  ExtraRusAbs
   ** {} ;
