@@ -20,14 +20,14 @@ concrete ExtraFin of ExtraFinAbs = CatFin **
     BaseVPI = twoSS ;
     ConsVPI = consrSS comma ;
 
-    MkVPI vp = {s = infVP (NPCase Nom) Pos (agrP3 Sg) vp} ;
-    ConjVPI = conjunctSS ;
+    MkVPI vp = {s = infVP (NPCase Nom) Pos (agrP3 Sg) vp Inf1} ;
+    ConjVPI = conjunctDistrSS ;
     ComplVPIVV vv vpi = 
       insertObj (\\_,_,_ => vpi.s) (predV vv) ;
 
     AdvExistNP adv np = 
       mkClause (\_ -> adv.s) np.a (insertObj 
-        (\\_,b,_ => np.s ! NPCase Nom) (predV (verbOlla ** {sc = NPCase Nom}))) ;
+        (\\_,b,_ => np.s ! NPCase Nom) (predV (verbOlla ** {sc = NPCase Nom ; qp = "ko"}))) ;
 
     RelExistNP prep rp np = {
       s = \\t,ant,bo,ag => 
@@ -37,7 +37,7 @@ concrete ExtraFin of ExtraFinAbs = CatFin **
           np.a 
           (insertObj 
             (\\_,b,_ => np.s ! NPCase Nom) 
-            (predV (verbOlla ** {sc = NPCase Nom}))) ;
+            (predV (verbOlla ** {sc = NPCase Nom ; qp = "ko"}))) ;
       in 
       cl.s ! t ! ant ! bo ! SDecl ;
       c = NPCase Nom
@@ -58,7 +58,7 @@ concrete ExtraFin of ExtraFinAbs = CatFin **
 
     PartCN cn = 
       let 
-        acn = DetCN (DetArtSg IndefArt) cn
+        acn = DetArtSg IndefArt cn
       in {
         s = table {
           NPCase Nom | NPAcc => acn.s ! NPCase Part ;
@@ -69,7 +69,7 @@ concrete ExtraFin of ExtraFinAbs = CatFin **
         } ;
 
 
-    vai_Conj = {s = "vai" ; n = Sg} ;
+    vai_Conj = {s1 = [] ; s2 = "vai" ; n = Sg} ;
 
 
     CompPartAP ap = {
