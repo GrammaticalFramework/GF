@@ -1,6 +1,11 @@
 module Main where
 
-import System
+import Control.Monad
+import Data.Maybe
+import System.Cmd
+import System.Directory
+import System.Environment
+import System.Exit
 
 -- Make commands for compiling and testing resource grammars.
 -- usage: runghc Make ((present? OPT?) | (clone FILE))? LANGS? 
@@ -13,6 +18,10 @@ import System
 --   with each name in the list (default: all languages)
 -- With no argument, lang and api are done, in this order.
 -- See 'make' below for what is done by which command.
+
+default_gfc = "../../bin/gfc"
+
+presApiPath = "-path=api:present"
 
 -- the languages have long directory names and short ISO codes (3 letters)
 -- we also give the decodings for postprocessing linearizations, as long as grammars
@@ -64,6 +73,7 @@ main = do
   xx <- getArgs
   make xx
 
+make :: [String] -> IO ()
 make xx = do
   let ifx  opt act = if null xx || elem opt xx then act >> return () else return () 
   let ifxx opt act = if            elem opt xx then act >> return () else return () 
@@ -74,19 +84,19 @@ make xx = do
 
   ifx "lang" $ do
     mapM_ (gfc pres [] . lang) (optl langsLang)
-    system $ "cp */*.gfo " ++ dir
+    copy "*/*.gfo" dir
   ifx "api" $ do
     mapM_ (gfc pres presApiPath . try) (optl langsAPI)
-    system $ "cp */*.gfo " ++ dir
+    copy "*/*.gfo" dir
   ifx "math" $ do
-    mapM_ (gfc_stack mathstack False [] . math) (optl langsMath)
-    system $ "cp mathematical/*.gfo ../mathematical"
+    mapM_ (gfc False [] . math) (optl langsMath)
+    copy "mathematical/*.gfo" "../mathematical"
     mapM_ (gfc False [] . symbolic) (optl langsMath)
-    system $ "cp mathematical/Symbolic*.gfo ../mathematical"
+    copy "mathematical/Symbolic*.gfo" "../mathematical"
   ifxx "pgf" $ do
-    system $ "gfc -s --make --name=langs --parser=off --output-dir=" ++ dir ++ " " ++
-              unwords [dir ++ "/Lang" ++ la ++ ".gfo" | (_,la) <- optl langsPGF] ++
-              " +RTS -K100M"
+    run_gfc $ ["-s","--make","--name=langs","--parser=off",
+               "--output-dir=" ++ dir]
+               ++ [dir ++ "/Lang" ++ la ++ ".gfo" | (_,la) <- optl langsPGF]
   ifxx "test" $ do
     let ls = optl langsTest
     gf (treeb "Lang" ls) $ unwords [dir ++ "/Lang" ++ la ++ ".gfo" | (_,la) <- ls] 
@@ -103,18 +113,14 @@ make xx = do
     mapM_ (\la -> writeFile (pref ++ la ++ ".gf") (replaceLang lang la s)) (map snd (optl langs))
   return ()
 
-gfc_stack stack pres ppath file = do
-  let preproc = if pres then " -preproc=./mkPresent " else ""
+gfc pres ppath file = do
+  let preproc = if pres then "-preproc=./mkPresent" else ""
   let path    = if pres then ppath else ""
-  putStrLn $ "compiling " ++ file
-  system $ "gfc -s -src " ++ preproc ++ path ++ file ++ stack
-
-gfc = gfc_stack ""
-
-mathstack = " +RTS -K100M"
+  putStrLn $ "Compiling " ++ file
+  run_gfc ["-s","-src", preproc, path, file]
 
 gf comm file = do
-  putStrLn $ "reading " ++ file
+  putStrLn $ "Reading " ++ file
   system $ "echo \"" ++ comm ++ "\" | gf -s " ++ file
 
 treeb abstr ls = "rf -lines -tree -file=" ++ treebankExx ++ 
@@ -130,8 +136,6 @@ symbolic (lla,la) = "mathematical/Symbolic"  ++ la ++ ".gf"
 
 except ls es = filter (flip notElem es . snd) ls
 only   ls es = filter (flip elem es . snd) ls
-
-presApiPath = " -path=api:present "
 
 -- list of languages overriding the definitions above
 getOptLangs args = case [ls | a <- args, let (f,ls) = splitAt 6 a, f=="langs="] of
@@ -162,3 +166,25 @@ unlexer abstr ls =
     where
       unlex lla = maybe "" id $ lookup lla langsCoding
 
+-- | Runs the gfc executable with the given arguments.
+run_gfc :: [String] -> IO ()
+run_gfc args = 
+    do p <- liftM (fromMaybe default_gfc) $ findExecutable "gfc"
+       env <- getEnvironment
+       case lookup "GF_LIB_PATH" env of
+            Nothing -> putStrLn "$GF_LIB_PATH is not set."
+            Just _  -> 
+                do let args' = filter (not . null) args ++ ["+RTS"] ++ rts_flags ++ ["-RTS"]
+                       cmd = p ++ " " ++ unwords (map showArg args')
+                   putStrLn $ "Running: " ++ cmd
+                   e <- system cmd
+                   case e of
+                     ExitSuccess -> return ()
+                     ExitFailure i -> putStrLn $ "gfc exited with exit code: " ++ show i
+  where rts_flags = ["-K100M"]
+        showArg arg = "'" ++ arg ++ "'"
+
+copy :: String -> String -> IO ()
+copy from to = 
+    do system $ "cp " ++ from ++ " " ++ to
+       return ()
