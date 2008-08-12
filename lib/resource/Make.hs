@@ -129,7 +129,7 @@ treeb abstr ls = "rf -lines -tree -file=" ++ treebankExx ++
 demos abstr ls = "gr -number=100 | l -treebank " ++ unlexer abstr ls ++ 
            " | ps -to_html | wf -file=resdemo.html"
 
-lang (lla,la) = lla ++ "/Lang" ++ la ++ ".gf"
+lang (lla,la) = lla ++ "/All" ++ la ++ ".gf"
 try  (lla,la) = "api/Try"  ++ la ++ ".gf"
 math (lla,la) = "mathematical/Mathematical"  ++ la ++ ".gf"
 symbolic (lla,la) = "mathematical/Symbolic"  ++ la ++ ".gf"
