@@ -58,7 +58,7 @@ concrete ExtraFin of ExtraFinAbs = CatFin **
 
     PartCN cn = 
       let 
-        acn = DetCN (DetSg IndefArt NoOrd) cn
+        acn = DetCN (DetArtSg IndefArt) cn
       in {
         s = table {
           NPCase Nom | NPAcc => acn.s ! NPCase Part ;
