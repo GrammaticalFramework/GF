@@ -1,4 +1,4 @@
-abstract SwedishAbs = 
+abstract AllSweAbs = 
   Lang,
   IrregSweAbs,
   ExtraSweAbs

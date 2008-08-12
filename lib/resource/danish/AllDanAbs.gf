@@ -1,4 +1,4 @@
-abstract DanishAbs = 
+abstract AllDanAbs = 
   Lang,
   IrregDanAbs - [fly_V],
   ExtraDanAbs

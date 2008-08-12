@@ -1,4 +1,4 @@
-abstract CatalanAbs = 
+abstract AllCatAbs = 
   Lang,
   IrregCatAbs,
   ExtraCatAbs
