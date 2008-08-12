@@ -10,12 +10,12 @@ incomplete concrete ExtraScand of ExtraScandAbs = CatScand **
 
     StrandRelSlash rp slash  = {
       s = \\t,a,p,ag => 
-          rp.s ! ag.gn ! RNom ++ slash.s ! t ! a ! p ! Sub ++ slash.c2 ;
+          rp.s ! ag.gn ! RNom ++ slash.s ! t ! a ! p ! Sub ++ slash.c2.s ;
       c = NPAcc
       } ;
     EmptyRelSlash rp slash = {
       s = \\t,a,p,ag => 
-          slash.s ! t ! a ! p ! Sub ++ slash.c2 ;
+          slash.s ! t ! a ! p ! Sub ++ slash.c2.s ;
       c = NPAcc
       } ;
 
@@ -25,8 +25,8 @@ incomplete concrete ExtraScand of ExtraScandAbs = CatScand **
               cls = slash.s ! t ! a ! p ;
               who = ip.s ! accusative
             in table {
-              QDir   => who ++ cls ! Inv ++ slash.c2 ;
-              QIndir => who ++ cls ! Sub ++ slash.c2
+              QDir   => who ++ cls ! Inv ++ slash.c2.s ;
+              QIndir => who ++ cls ! Sub ++ slash.c2.s
               }
       } ;
 
@@ -42,6 +42,6 @@ incomplete concrete ExtraScand of ExtraScandAbs = CatScand **
       s = \\v,a => infVP vp a ---- no sup
       } ;
     ConjVPI = conjunctDistrTable2 VPIForm Agr ;
-    ComplVPIVV vv vpi = insertObj (\\a => vv.c2 ++ vpi.s ! VPIInf ! a) (predV vv) ;
+    ComplVPIVV vv vpi = insertObj (\\a => vv.c2.s ++ vpi.s ! VPIInf ! a) (predV vv) ;
 
 } 
