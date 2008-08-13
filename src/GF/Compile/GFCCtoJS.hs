@@ -14,6 +14,7 @@ import Control.Monad (mplus)
 import Data.Array (Array)
 import qualified Data.Array as Array
 import Data.Maybe (fromMaybe)
+import Data.Map (Map)
 import qualified Data.Map as Map
 
 pgf2js :: PGF -> String
@@ -38,9 +39,10 @@ absdef2js (f,(typ,_)) =
 
 concrete2js :: String -> String -> (CId,Concr) -> JS.Property
 concrete2js start n (c, cnc) =
-    JS.Prop l (new "GFConcrete" ([(JS.EObj $ ((map (cncdef2js n (prCId c)) ds) ++ litslins))] ++
+    JS.Prop l (new "GFConcrete" ([flags,(JS.EObj $ ((map (cncdef2js n (prCId c)) ds) ++ litslins))] ++
                                  maybe [] (parser2js start) (parser cnc)))
   where 
+   flags = mapToJSObj JS.EStr $ cflags cnc
    l  = JS.IdentPropName (JS.Ident (prCId c))
    ds = concatMap Map.assocs [lins cnc, opers cnc, lindefs cnc]
    litslins = [JS.Prop (JS.StringPropName    "Int") (JS.EFun [children] [JS.SReturn $ new "Arr" [JS.EIndex (JS.EVar children) (JS.EInt 0)]]), 
@@ -115,3 +117,6 @@ sym2js (FSymTok t) = new "Terminal" [JS.EStr t]
 
 new :: String -> [JS.Expr] -> JS.Expr
 new f xs = JS.ENew (JS.Ident f) xs
+
+mapToJSObj :: (a -> JS.Expr) -> Map CId a -> JS.Expr
+mapToJSObj f m = JS.EObj [ JS.Prop (JS.IdentPropName (JS.Ident (prCId k))) (f v) | (k,v) <- Map.toList m ]
