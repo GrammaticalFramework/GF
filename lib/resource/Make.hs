@@ -121,7 +121,9 @@ gfc pres ppath file = do
 
 gf comm file = do
   putStrLn $ "Reading " ++ file
-  system $ "echo \"" ++ comm ++ "\" | gf -s " ++ file
+  let cmd = "echo \"" ++ comm ++ "\" | gf -s " ++ file
+  putStrLn cmd
+  system cmd
 
 treeb abstr ls = "rf -lines -tree -file=" ++ treebankExx ++ 
         " | l -treebank " ++ unlexer abstr ls ++ " | wf -file=" ++ treebankResults
