@@ -6,6 +6,26 @@
     <script type="text/javascript" src="gflib.js"></script>
     <script type="text/javascript" src="grammar.js"></script>
     <script type="text/javascript" src="translator.js"></script>
+    <script type="text/javascript">
+      /* CHANGE ME */
+     var grammar = Food;
+
+     function updateTranslation () {
+        var input = document.getElementById('inputText').value;
+        var fromLang = document.getElementById('fromLang').value;
+        var toLang = document.getElementById('toLang').value;
+        addTranslation('output', grammar.translate(input, fromLang, toLang));        
+      }
+
+      function populateLangs () {
+        var f = document.getElementById('fromLang');
+        var t = document.getElementById('toLang');
+        for (var c in grammar.concretes) {
+          addOption(f, c, c);
+          addOption(t, c, c);
+        }
+      }
+    </script>
     <title>Web-based GF Translator</title>
   </head>
   <body onload="populateLangs(Food, 'fromLang', 'toLang')">
@@ -16,7 +36,7 @@
       <p>
         From: <select name="fromLang" id="fromLang" onchange=""><option value="">Any language</option></select>
         To: <select name="toLang" id="toLang"><option value="">All languages</option></select>
-        <input type="button" value="Translate" onclick="updateTranslation(Food, 'inputText','fromLang','toLang','output'); return false;" />
+        <input type="button" value="Translate" onclick="updateTranslation()" />
       </p>
     </form>
     <div id="output"></div>
