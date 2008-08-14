@@ -1,0 +1,21 @@
+name: gf-server
+version: 1.0
+cabal-version: >= 1.2
+build-type: Simple
+license: GPL
+license-file: LICENSE
+synopsis: FastCGI Server for Grammatical Framework
+
+executable gf.fcgi
+  build-depends: base,
+                 old-time,
+                 unix,
+                 directory,
+                 gf,
+                 cgi,
+                 fastcgi,
+                 json,
+                 utf8-string
+  main-is: MainFastCGI.hs
+  other-modules:
+    FastCGIUtils
