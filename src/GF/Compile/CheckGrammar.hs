@@ -184,10 +184,25 @@ checkAbsInfo st m mo (c,info) = do
 
 checkCompleteGrammar :: SourceAbs -> SourceCnc -> Check (BinTree Ident Info)
 checkCompleteGrammar abs cnc = do
-  let js = jments cnc
-  let fs = tree2list $ jments abs
-  foldM checkOne js fs
+  let jsa = jments abs
+  let fsa = tree2list jsa
+  let jsc = jments cnc
+  let fsc = map fst $ filter (isCnc . snd) $ tree2list jsc
+
+  -- remove those lincat and lin in concrete that are not in abstract
+  let unkn = filter (not . flip isInBinTree jsa) fsc
+  jsc1 <- if (null unkn) then return jsc else do
+    checkWarn $ "WARNING: ignoring constants not in abstract:" +++ 
+                unwords (map prt unkn)
+    return $ filterBinTree (\f _ -> notElem f unkn) jsc 
+
+  -- check that all abstract constants are in concrete; build default lincats
+  foldM checkOne jsc1 fsa
  where
+   isCnc j = case j of
+     CncFun _ _ _ -> True
+     CncCat _ _ _ -> True
+     _ -> False
    checkOne js i@(c,info) = case info of
      AbsFun (Yes _) _ -> case lookupIdent c js of
        Ok _ -> return js
