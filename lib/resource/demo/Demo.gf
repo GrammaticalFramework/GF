@@ -2,7 +2,7 @@ abstract Demo =
   Noun - [AdvCN,PredetNP,PPartNP,RelNP,RelCN,SentCN,ApposCN,MassNP,DetNP],
 --  Verb,
   Clause, -- 
-  Adjective - [SentAP],
+  Adjective - [SentAP,ReflA2],
   Adverb,
   Numeral,
 --  Sentence, 

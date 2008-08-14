@@ -1,3 +1,3 @@
 --# -path=.:../abstract:../common:prelude
 
-concrete AllHin of AllHinAbs = LanHin ;
+concrete AllHin of AllHinAbs = LangHin ;
