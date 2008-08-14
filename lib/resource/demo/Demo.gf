@@ -15,7 +15,7 @@ abstract Demo =
   Structural - [everybody_NP,everything_NP,something_NP],
   Lexicon ** {
 
-flags startcat = Phr ;
+flags startcat = S ;
 
 }
 
