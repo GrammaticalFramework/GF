@@ -103,7 +103,9 @@ canon2gfcc opts pars cgr@(M.MGrammar ((a,M.ModMod abm):cms)) =
                 ---- then (trace "decode" D.convertStringsInTerm decodeUTF8) else id
       umkTerm = utf . mkTerm
       lins    = Map.fromAscList 
-        [(i2i f, umkTerm tr)  | (f,CncFun _ (Yes tr) _) <- js]
+        [(f', umkTerm tr)  | (f,CncFun _ (Yes tr) _) <- js, 
+            let f' = i2i f, exists f'] -- eliminating lins without fun 
+            -- needed even here because of restricted inheritance
       lincats = Map.fromAscList 
         [(i2i c, mkCType ty) | (c,CncCat (Yes ty) _ _) <- js]
       lindefs = Map.fromAscList 
@@ -114,6 +116,8 @@ canon2gfcc opts pars cgr@(M.MGrammar ((a,M.ModMod abm):cms)) =
       params = Map.fromAscList 
         [(i2i c, pars lang0 c) | (c,CncCat (Yes ty) _ _) <- js]
       fcfg = Nothing
+
+      exists f = Map.member f funs
 
 i2i :: Ident -> CId
 i2i = CId . ident2bs
