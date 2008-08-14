@@ -13,5 +13,9 @@ abstract Demo =
 ----  Text,
 ----  Idiom,
   Structural - [everybody_NP,everything_NP,something_NP],
-  Lexicon ;
+  Lexicon ** {
+
+flags startcat = Phr ;
+
+}
 
