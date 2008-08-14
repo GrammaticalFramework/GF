@@ -38,14 +38,31 @@ cgiMain pgf =
     do path <- pathInfo
        case path of
          "/translate" -> do input <- liftM (fromMaybe "") $ getInput "input"
-                            mcat  <- getInput "cat"
-                            mfrom <- getInput "from"
-                            mto   <- getInput "to"
-                            maybe (return ()) (checkCategory pgf) mcat
-                            maybe (return ()) (checkLanguage pgf) mfrom
-                            maybe (return ()) (checkLanguage pgf) mto
+                            mcat  <- getCat pgf "cat"
+                            mfrom <- getLang pgf "from"
+                            mto   <- getLang pgf "to"
                             outputJSON $ translate pgf input mcat mfrom mto
+         "/cats"  -> outputJSON $ categories pgf
+         "/langs" -> outputJSON $ languages pgf
          _ -> outputNotFound path
+
+getCat :: PGF -> String -> CGI (Maybe Category)
+getCat pgf i = 
+    do mcat  <- getInput i
+       case mcat of
+         Just "" -> return Nothing
+         Just cat | cat `notElem` categories pgf ->
+                      throwCGIError 400 "Unknown category" ["Unknown category: " ++ cat]
+         _ -> return mcat
+
+getLang :: PGF -> String -> CGI (Maybe Language)
+getLang pgf i = 
+    do mlang <- getInput i
+       case mlang of
+         Just "" -> return Nothing
+         Just lang | lang `notElem` languages pgf ->
+                       throwCGIError 400 "Unknown language" ["Unknown language: " ++ lang]
+         _ -> return mlang
 
 outputJSON :: JSON a => a -> CGI CGIResult
 outputJSON x = do setHeader "Content-Type" "text/json; charset=utf-8"
@@ -54,14 +71,6 @@ outputJSON x = do setHeader "Content-Type" "text/json; charset=utf-8"
 outputStrict :: String -> CGI CGIResult
 outputStrict x | x == x = output x
                | otherwise = fail "I am the pope."
-
-checkCategory :: PGF -> Category -> CGI ()
-checkCategory pgf cat = unless (cat `elem` categories pgf) $ 
-                        throwCGIError 400 "Unknown category" ["Unknown category: " ++ cat]
-
-checkLanguage :: PGF -> Category -> CGI ()
-checkLanguage pgf lang = unless (lang `elem` languages pgf) $ 
-                         throwCGIError 400 "Unknown language" ["Unknown language: " ++ lang]
 
 translate :: PGF -> String -> Maybe Category -> Maybe Language -> Maybe Language -> Translation
 translate pgf input mcat mfrom mto = 
