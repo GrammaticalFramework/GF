@@ -1,6 +1,8 @@
 RUNGHC=runghc
 RUNMAKE=$(RUNGHC) Make.hs
 
+.PHONY: all present alltenses lang api math test demo synopsis link clean
+
 all: link present alltenses math
 
 present:
@@ -22,6 +24,9 @@ math:
 
 test:
 	$(RUNMAKE) test
+
+demo:
+	$(RUNMAKE) demo
 
 synopsis:
 	cd doc ; $(RUNGHC) MkSynopsis ; cd ..
