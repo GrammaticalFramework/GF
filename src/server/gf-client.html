@@ -1,0 +1,22 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <script type="text/javascript" src="gf-server-jsapi.js"></script>
+    <title>Web-based GF Translator</title>
+  </head>
+  <body>
+    <form id="translate">
+      <p>
+        <input type="text" name="inputText" id="inputText" value="this cheese is warm" size="50" />
+      </p>
+      <p>
+        From: <select name="fromLang" id="fromLang" onchange=""><option value="">Any language</option></select>
+        To: <select name="toLang" id="toLang"><option value="">All languages</option></select>
+        <input type="button" value="Translate" onclick="translate(document.getElementById('inputText').value,document.getElementById('fromLang').value,document.getElementById('toLang').value,'');" />
+      </p>
+    </form>
+    <div id="output"></div>
+  </body>
+</html>
