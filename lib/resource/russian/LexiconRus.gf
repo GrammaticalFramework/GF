@@ -158,6 +158,7 @@ lin
   important_A = mkA "важный" ;
   industry_N = mkN "промышленность" ; 
   iron_N = mkN "железо" ;
+  john_PN = mkPN "Иван" Masc Animate ;
   jump_V = regV imperfective first "прыга" "ю" "прыгал" "прыгай" "прыгать" ;
   kill_V2 = dirV2 (regV imperfective first "убива" "ю" "убивал" "убивай" "убивать" ) ;
   king_N = mkN "король" "короля" "королю" "короля" "королем" "короле" "короле" "короли" "королей" "королям" "королей" "королями" "королях"  masculine animate ;
