@@ -9,6 +9,8 @@ a letter in a language you don't know.
 [Numeral translator http://www.cs.chalmers.se/~bringert/gf/translate/]: see 
 number words in 88 languages.
 
+**NEW** [Numeral translator for the iPhone index-numbers.html].
+
 [Pizza http://www.cs.chalmers.se/~bringert/xv/pizza/]: order a pizza by speaking
 to your web browser.
 

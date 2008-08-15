@@ -20,5 +20,5 @@ concrete DemoEng of Demo =
   ** {
 
 flags startcat = Phr ; unlexer = text ; lexer = text ;
-
+  lin foo = "bar" ;
 } ;

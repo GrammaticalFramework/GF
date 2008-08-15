@@ -50,6 +50,9 @@ June 2008
 
 ==News==
 
+15 August 2008:
+[Numeral translator for the iPhone demos/index-numbers.html]
+
 27 June 2008: 
 [release of GF 3.0 doc/gf3-release.html] and this new web page; the old web page is 
 [here ../GF2/index.html].
