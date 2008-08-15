@@ -1,0 +1,54 @@
+body {
+  color: black;
+  background-color: white;
+}
+
+dl {
+
+}
+
+dt {
+  margin: 0;
+  padding: 0;
+}
+
+dl dd {
+  margin: 0;
+  padding: 0;
+}
+
+dl.fromLang dt {
+  display: none;
+}
+
+dl.toLang {
+  border-width: 1px 0 0 0;
+  border-style: solid;
+  border-color: #c0c0c0;
+}
+
+dl.toLang dt {
+  color: #c0c0c0;
+  display: block;
+  float: left;
+  width: 5em;
+}
+
+
+dl.toLang dd {
+  border-width: 0 0 1px 0;
+  border-style: solid;
+  border-color: #c0c0c0;
+}
+
+
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+li {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}

@@ -1,10 +1,12 @@
 function formatTranslation (outputs) {
   var dl1 = document.createElement("dl");
+  dl1.className = "fromLang";
   for (var fromLang in outputs) {
     var ul = document.createElement("ul");
     addDefinition(dl1, document.createTextNode(fromLang), ul);
     for (var i in outputs[fromLang]) {
-      var dl2 = document.createElement("dl");      
+      var dl2 = document.createElement("dl");
+      dl2.className = "toLang";
       for (var toLang in outputs[fromLang][i]) {
 	addDefinition(dl2, document.createTextNode(toLang), document.createTextNode(outputs[fromLang][i][toLang]));
       }
