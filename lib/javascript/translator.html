@@ -14,7 +14,10 @@
         var input = document.getElementById('inputText').value;
         var fromLang = document.getElementById('fromLang').value;
         var toLang = document.getElementById('toLang').value;
-        addTranslation('output', grammar.translate(input, fromLang, toLang));        
+        var output = document.getElementById('output');
+        var translation = grammar.translate(input, fromLang, toLang);
+        removeChildren(output);
+        output.appendChild(formatTranslation(translation));
       }
 
       function populateLangs () {
