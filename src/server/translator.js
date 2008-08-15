@@ -27,7 +27,7 @@ function addDefinition (dl, t, d) {
 }
 
 function addItem (ul, i) {
-    var li = document.createElement("ul");
+    var li = document.createElement("li");
     li.appendChild(i);
     ul.appendChild(li);
 }
