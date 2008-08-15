@@ -1,0 +1,27 @@
+Portable Numeral Translator
+15 August 2008
+
+Here is the first GF application for the iPhone. It translates
+numerals from digits into number words in 15 languages. It works for
+numerals in the range 1-999,999. You can use the demo online in your iPhone's
+browser, or download and install it by using FileMagnet (from AppStore).
+
+The demo should work in any web browser supporting JavaScript, but it has been
+specially dimensioned for the iPhone screen. It is an application of a general
+technology, namely the compilation of GF grammars to JavaScript. Thus you can 
+easily build similar applications from your own grammars.
+
+The 
+[full numeral translator http://www.cs.chalmers.se/~bringert/gf/translate/], which
+works in 88 language and permits arbitrary cross translations, cannot yet be ported
+to the iPhone because of memory problems.
+
+The current version has some encoding/font issues in Hebrew and Hindi.
+
+[Use the translator online numbers/numbers.html]
+
+[Download the translator numbers.tgz]. To install: unpack the file and move
+the directory ``numbers`` to your FileMagnet uploader.
+
+
+
