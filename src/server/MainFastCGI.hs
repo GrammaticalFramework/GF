@@ -42,8 +42,8 @@ cgiMain pgf =
                             mfrom <- getLang pgf "from"
                             mto   <- getLang pgf "to"
                             outputJSON $ translate pgf input mcat mfrom mto
-         "/cats"  -> outputJSON $ categories pgf
-         "/langs" -> outputJSON $ languages pgf
+         "/categories" -> outputJSON $ categories pgf
+         "/languages"  -> outputJSON $ languages pgf
          _ -> outputNotFound path
 
 getCat :: PGF -> String -> CGI (Maybe Category)
