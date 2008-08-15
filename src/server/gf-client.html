@@ -4,9 +4,36 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <script type="text/javascript" src="gf-server-jsapi.js"></script>
+    <script type="text/javascript" src="translator.js"></script>
+    <script type="text/javascript">
+     function updateTranslation () {
+        var input = document.getElementById('inputText').value;
+        var fromLang = document.getElementById('fromLang').value;
+        var toLang = document.getElementById('toLang').value;
+        var output = document.getElementById('output');
+        var callback = function(translation) {
+                         removeChildren(output);
+                         output.appendChild(formatTranslation(translation));
+                       };
+        gf.translate(input, fromLang, toLang, '', callback);
+      }
+
+      function populateLangs (langs) {
+        var f = document.getElementById('fromLang');
+        var t = document.getElementById('toLang');
+        for (var i in langs) {
+          addOption(f, langs[i], langs[i]);
+          addOption(t, langs[i], langs[i]);
+        }
+      }
+
+      function initialize() {
+        gf.getLanguages(populateLangs);
+      }
+    </script>
     <title>Web-based GF Translator</title>
   </head>
-  <body>
+  <body onload="initialize()">
     <form id="translate">
       <p>
         <input type="text" name="inputText" id="inputText" value="this cheese is warm" size="50" />
@@ -14,7 +41,7 @@
       <p>
         From: <select name="fromLang" id="fromLang" onchange=""><option value="">Any language</option></select>
         To: <select name="toLang" id="toLang"><option value="">All languages</option></select>
-        <input type="button" value="Translate" onclick="translate(document.getElementById('inputText').value,document.getElementById('fromLang').value,document.getElementById('toLang').value,'');" />
+        <input type="button" value="Translate" onclick="updateTranslation();" />
       </p>
     </form>
     <div id="output"></div>
