@@ -18,12 +18,27 @@ import System.FilePath
 
 mainGFC :: Options -> [FilePath] -> IOE ()
 mainGFC opts fs = 
+    case () of
+      _ | null fs -> fail $ "No input files."
+      _ | all (extensionIs ".gf")  fs -> compileSourceFiles opts fs
+      _ | all (extensionIs ".pgf") fs -> unionPGFFiles opts fs
+      _ -> fail $ "Don't know what to do with these input files: " ++ show fs
+ where extensionIs ext = (== ext) .  takeExtension
+
+compileSourceFiles :: Options -> [FilePath] -> IOE ()
+compileSourceFiles opts fs = 
     do gr <- batchCompile opts fs
        let cnc = justModuleName (last fs)
        if flag optStopAfterPhase opts == Compile 
          then return ()
          else do pgf <- link opts cnc gr
                  writeOutputs opts pgf
+
+unionPGFFiles :: Options -> [FilePath] -> IOE ()
+unionPGFFiles opts fs = 
+    do pgfs <- ioeIO $ mapM readPGF fs
+       let pgf = foldl1 unionPGF pgfs
+       writeOutputs opts pgf
 
 writeOutputs :: Options -> PGF -> IOE ()
 writeOutputs opts pgf =
