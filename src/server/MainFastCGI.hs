@@ -1,9 +1,10 @@
 {-# LANGUAGE DeriveDataTypeable #-}
 
-import PGF
+import PGF (PGF)
+import qualified PGF
 import FastCGIUtils
 
-import Network.CGI hiding (Language)
+import Network.CGI
 import Text.JSON
 import qualified Codec.Binary.UTF8.String as UTF8 (encodeString)
 
@@ -31,7 +32,7 @@ main = do initFastCGI
           loopFastCGI (handleErrors (handleCGIErrors (fcgiMain r)))
 
 fcgiMain :: DataRef PGF -> CGI CGIResult
-fcgiMain ref = getData readPGF ref grammarFile >>= cgiMain
+fcgiMain ref = getData PGF.readPGF ref grammarFile >>= cgiMain
 
 cgiMain :: PGF -> CGI CGIResult
 cgiMain pgf =
@@ -42,25 +43,25 @@ cgiMain pgf =
                             mfrom <- getLang pgf "from"
                             mto   <- getLang pgf "to"
                             outputJSON $ translate pgf input mcat mfrom mto
-         "/categories" -> outputJSON $ categories pgf
-         "/languages"  -> outputJSON $ languages pgf
+         "/categories" -> outputJSON $ PGF.categories pgf
+         "/languages"  -> outputJSON $ PGF.languages pgf
          _ -> outputNotFound path
 
-getCat :: PGF -> String -> CGI (Maybe Category)
+getCat :: PGF -> String -> CGI (Maybe PGF.Category)
 getCat pgf i = 
     do mcat  <- getInput i
        case mcat of
          Just "" -> return Nothing
-         Just cat | cat `notElem` categories pgf ->
+         Just cat | cat `notElem` PGF.categories pgf ->
                       throwCGIError 400 "Unknown category" ["Unknown category: " ++ cat]
          _ -> return mcat
 
-getLang :: PGF -> String -> CGI (Maybe Language)
+getLang :: PGF -> String -> CGI (Maybe PGF.Language)
 getLang pgf i = 
     do mlang <- getInput i
        case mlang of
          Just "" -> return Nothing
-         Just lang | lang `notElem` languages pgf ->
+         Just lang | lang `notElem` PGF.languages pgf ->
                        throwCGIError 400 "Unknown language" ["Unknown language: " ++ lang]
          _ -> return mlang
 
@@ -72,13 +73,13 @@ outputStrict :: String -> CGI CGIResult
 outputStrict x | x == x = output x
                | otherwise = fail "I am the pope."
 
-translate :: PGF -> String -> Maybe Category -> Maybe Language -> Maybe Language -> Translation
+translate :: PGF -> String -> Maybe PGF.Category -> Maybe PGF.Language -> Maybe PGF.Language -> Translation
 translate pgf input mcat mfrom mto = 
-    Record [(from, [Record [(to, linearize pgf to tree) | to <- toLangs] | tree <- trees]) 
-                | from <- fromLangs, let trees = parse pgf from cat input, not (null trees)]
-  where cat       = fromMaybe (startCat pgf) mcat
-        fromLangs = maybe (languages pgf) (:[]) mfrom
-        toLangs   = maybe (languages pgf) (:[]) mto
+    Record [(from, [Record [(to, PGF.linearize pgf to tree) | to <- toLangs] | tree <- trees]) 
+                | from <- fromLangs, let trees = PGF.parse pgf from cat input, not (null trees)]
+  where cat       = fromMaybe (PGF.startCat pgf) mcat
+        fromLangs = maybe (PGF.languages pgf) (:[]) mfrom
+        toLangs   = maybe (PGF.languages pgf) (:[]) mto
 
 
 -- * General CGI Error exception mechanism
