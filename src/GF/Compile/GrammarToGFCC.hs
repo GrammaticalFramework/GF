@@ -289,7 +289,7 @@ canon2canon abs =
       CncCat (Yes ty) (Yes x) y -> (f,CncCat (Yes (ty2ty ty)) (Yes (t2t x)) y)
       _ -> (f,j)
    where
-      t2t = term2term cg pv
+      t2t = term2term f cg pv
       ty2ty = type2type cg pv
       pv@(labels,untyps,typs) = trs $ paramValues cg
 
@@ -408,8 +408,8 @@ type2type cgr env@(labels,untyps,typs) ty = case ty of
      Just vs -> length $ Map.assocs vs
      _ -> trace ("unknown partype " ++ show ty) 66669
 
-term2term :: SourceGrammar -> ParamEnv -> Term -> Term
-term2term cgr env@(labels,untyps,typs) tr = case tr of
+term2term :: Ident -> SourceGrammar -> ParamEnv -> Term -> Term
+term2term fun cgr env@(labels,untyps,typs) tr = case tr of
   App _ _ -> mkValCase (unrec tr)
   QC  _ _ -> mkValCase tr 
   R rs    -> R [(mkLab i, (Nothing, t2t t)) | 
@@ -425,7 +425,7 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
 
   _ -> GM.composSafeOp t2t tr
  where
-   t2t = term2term cgr env
+   t2t = term2term fun cgr env
 
    unrec t = case t of
      App f (R fs) -> GM.mkApp (unrec f) [unrec u | (_,(_,u)) <- fs]
@@ -507,7 +507,8 @@ term2term cgr env@(labels,untyps,typs) tr = case tr of
         (FV ts,_) -> ts
         _ -> [tr]
       valNumFV ts = case ts of
-        [tr] -> error ("valNum" +++ prt tr) ----- prtTrace tr $ K "66667"
+        [tr] -> let msg = ("DEBUG" +++ prt fun ++ ": error in valNum" +++ prt tr) in 
+                trace msg $ error (prt fun)
         _ -> FV $ map valNum ts
 
    mkCurry trm = case trm of
