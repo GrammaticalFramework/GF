@@ -103,6 +103,13 @@ param
 oper
   Verb = {s : VF => Str ; vtyp : VType} ;
 
+--2 Workarounds, to be eliminated
+
+-- This should be provided by $pronArg$ above, but causes trouble in compilation.
+-- (AR 16/8/2008)
+
+  oper infForm : Number -> Person -> CAgr -> CAgr -> Bool ;
+
 
 }
 

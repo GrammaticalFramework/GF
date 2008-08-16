@@ -278,7 +278,8 @@ oper
       let
         vp   = useVP vpr ;
         clpr = pronArg agr.n agr.p vp.clAcc vp.clDat ;
-        inf  = (vp.s ! VPInfinit Simul clpr.p3).inf ! (aagr agr.g agr.n) ;
+        iform = infForm agr.n agr.p vp.clAcc vp.clDat ;
+        inf  = (vp.s ! VPInfinit Simul iform).inf ! (aagr agr.g agr.n) ;
         neg  = vp.neg ! Pos ; --- Neg not in API
         obj  = neg.p2 ++ clpr.p2 ++ vp.comp ! agr ++ vp.ext ! Pos ---- pol
       in
