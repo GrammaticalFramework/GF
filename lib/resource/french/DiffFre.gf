@@ -87,6 +87,7 @@ instance DiffFre of DiffRomance = open CommonRomance, PhonoFre, Prelude in {
           _ => <pacc.p1, [],pacc.p2>
           } ;
 
+    infForm _ _ _ _  = True ;
 
 -- Positive polarity is used in the imperative: stressed for 1st and
 -- 2nd persons.

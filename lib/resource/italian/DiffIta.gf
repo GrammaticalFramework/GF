@@ -105,6 +105,8 @@ instance DiffIta of DiffRomance = open CommonRomance, PhonoIta, BeschIta, Prelud
        in
        <pdat ++ pacc, [], orB hasAcc hasDat> ;
 
+    infForm n p x y = (pronArg n p x y).p3 ;
+
     mkImperative b p vp = {
       s = \\pol,aag => 
         let 
