@@ -445,6 +445,7 @@ allCommands enc pgf = Map.fromList [
          let out = maybe "no such transliteration" characterTable $ transliteration t
          return $ fromString out,
      options = [
+       ("arabic",    "Arabic"),
        ("devanagari","Devanagari"),
        ("thai",      "Thai")
        ] 
@@ -584,6 +585,7 @@ stringOpOptions = [
        ("bind","bind tokens separated by Prelude.BIND, i.e. &+"),
        ("chars","lexer that makes every non-space character a token"),
        ("from_cp1251","decode from cp1251 (Cyrillic used in Bulgarian resource)"),
+       ("from_arabic","from unicode to GF Arabic transliteration"),
        ("from_devanagari","from unicode to GF Devanagari transliteration"),
        ("from_thai","from unicode to GF Thai transliteration"),
        ("from_utf8","decode from utf8"),
@@ -591,6 +593,7 @@ stringOpOptions = [
        ("lexcode","code-like lexer"),
        ("lexmixed","mixture of text and code (code between $...$)"), 
        ("to_cp1251","encode to cp1251 (Cyrillic used in Bulgarian resource)"),
+       ("to_arabic","from GF Arabic transliteration to unicode"),
        ("to_devanagari","from GF Devanagari transliteration to unicode"),
        ("to_html","wrap in a html file with linebreaks"),
        ("to_thai","from GF Thai transliteration to unicode"),
