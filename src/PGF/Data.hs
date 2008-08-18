@@ -172,30 +172,3 @@ emptyPGF = PGF {
   abstract  = error "empty grammar, no abstract",
   concretes = Map.empty
   }
-
--- encode idenfifiers and strings in UTF8
-
-utf8GFCC :: PGF -> PGF
-utf8GFCC pgf = pgf {
-  concretes = Map.map u8concr (concretes pgf)
-  }
- where 
-   u8concr cnc = cnc {
-     lins = Map.map u8term (lins cnc),
-     opers = Map.map u8term (opers cnc)
-     }
-   u8term = convertStringsInTerm encodeUTF8
-
----- TODO: convert identifiers and flags
-
-convertStringsInTerm conv t = case t of
-  K (KS s) -> K (KS (conv s))
-  W s r    -> W (conv s) (convs r)
-  R ts     -> R $ map convs ts
-  S ts     -> S $ map convs ts
-  FV ts    -> FV $ map convs ts
-  P u v    -> P (convs u) (convs v)
-  _        -> t
- where
-  convs = convertStringsInTerm conv
-

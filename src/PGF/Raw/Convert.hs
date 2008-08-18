@@ -136,7 +136,7 @@ toTerm e = case e of
 ------------------------------
 
 fromPGF :: PGF -> Grammar
-fromPGF pgf0 = Grm [
+fromPGF pgf = Grm [
   App "pgf" (AInt pgfMajorVersion:AInt pgfMinorVersion
              : App (prCId (absname pgf)) [] : map (flip App [] . prCId) (cncnames pgf)), 
   App "flags" [App (prCId f) [AStr v] | (f,v) <- Map.toList (gflags pgf `Map.union` aflags apgf)],
@@ -147,7 +147,6 @@ fromPGF pgf0 = Grm [
   App "concrete" [App (prCId lang) (fromConcrete c) | (lang,c) <- Map.toList (concretes pgf)]
   ]
  where
-  pgf = utf8GFCC pgf0
   apgf = abstract pgf
   fromConcrete cnc = [
       App "flags"     [App (prCId f) [AStr v]     | (f,v) <- Map.toList (cflags cnc)],
