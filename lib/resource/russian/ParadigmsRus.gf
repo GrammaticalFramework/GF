@@ -383,7 +383,7 @@ foreign = Foreign; -- +++ MG_UR: added +++
   } ;
 
   mk1A : Str -> A = \positive -> 
-    let stem = Predef.dp 2 positive in mk2A positive (stem+"ее") ;
+    let stem = Predef.tk 2 positive in mk2A positive (stem+"ее") ;
 
   mk2A : Str -> Str -> A = \positive, comparative -> 
     case positive of {
