@@ -23,8 +23,10 @@
         var f = document.getElementById('fromLang');
         var t = document.getElementById('toLang');
         for (var i in langs) {
-          addOption(f, langs[i], langs[i]);
-          addOption(t, langs[i], langs[i]);
+          if (langs[i].canParse) {
+            addOption(f, i, i);
+          }
+          addOption(t, i, i);
         }
       }
 
@@ -32,7 +34,7 @@
         gf.getLanguages(populateLangs);
       }
     </script>
-    <title>Web-based GF Translator</title>
+    <title>AJAX GF Translator</title>
   </head>
   <body onload="initialize()">
     <form id="translate">

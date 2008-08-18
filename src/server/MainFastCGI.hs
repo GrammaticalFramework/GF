@@ -44,7 +44,7 @@ cgiMain pgf =
                             mto   <- getLang pgf "to"
                             outputJSON $ translate pgf input mcat mfrom mto
          "/categories" -> outputJSON $ PGF.categories pgf
-         "/languages"  -> outputJSON $ PGF.languages pgf
+         "/languages"  -> outputJSON $ toJSObject $ listLanguages pgf
          _ -> outputNotFound path
 
 getCat :: PGF -> String -> CGI (Maybe PGF.Category)
@@ -75,12 +75,26 @@ outputStrict x | x == x = output x
 
 translate :: PGF -> String -> Maybe PGF.Category -> Maybe PGF.Language -> Maybe PGF.Language -> Translation
 translate pgf input mcat mfrom mto = 
-    Record [(from, [Record [(to, PGF.linearize pgf to tree) | to <- toLangs] | tree <- trees]) 
-                | from <- fromLangs, let trees = PGF.parse pgf from cat input, not (null trees)]
-  where cat       = fromMaybe (PGF.startCat pgf) mcat
-        fromLangs = maybe (PGF.languages pgf) (:[]) mfrom
-        toLangs   = maybe (PGF.languages pgf) (:[]) mto
+    Record [(from,[Record (linearize' pgf mto tree) | tree <- trees]) 
+           | (from,trees) <- parse' pgf input mcat mfrom]
 
+parse' :: PGF -> String -> Maybe PGF.Category -> Maybe PGF.Language -> [(PGF.Language,[PGF.Tree])]
+parse' pgf input mcat mfrom = 
+    case mfrom of
+      Nothing   -> PGF.parseAllLang pgf cat input
+      Just from -> [(from, PGF.parse pgf from cat input)]
+  where cat = fromMaybe (PGF.startCat pgf) mcat
+
+linearize' :: PGF -> Maybe PGF.Language -> PGF.Tree -> [(PGF.Language,String)]
+linearize' pgf mto tree = 
+    case mto of
+      Nothing -> PGF.linearizeAllLang pgf tree
+      Just to -> [(to,PGF.linearize pgf to tree)]
+
+listLanguages :: PGF -> [(PGF.Language,JSObject JSValue)]
+listLanguages pgf = [(l,toJSObject (info l)) | l <- PGF.languages pgf]
+  where info l = [("languageCode", showJSON (fromMaybe "" (PGF.languageCode pgf l))),
+                  ("canParse",     showJSON (PGF.canParse pgf l))]
 
 -- * General CGI Error exception mechanism
 
