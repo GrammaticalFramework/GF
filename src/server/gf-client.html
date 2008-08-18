@@ -42,8 +42,8 @@
         <input type="text" name="inputText" id="inputText" value="this cheese is warm" size="50" />
       </p>
       <p>
-        From: <select name="fromLang" id="fromLang" onchange=""><option value="">Any language</option></select>
-        To: <select name="toLang" id="toLang"><option value="">All languages</option></select>
+        From: <select name="fromLang" id="fromLang" onchange="updateTranslation()"><option value="">Any language</option></select>
+        To: <select name="toLang" id="toLang" onchange="updateTranslation()"><option value="">All languages</option></select>
         <input type="button" value="Translate" onclick="updateTranslation();" />
       </p>
     </form>
