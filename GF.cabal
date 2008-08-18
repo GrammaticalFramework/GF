@@ -75,8 +75,8 @@ data-files:
     lib/resource/api/TrySwe.gf
     lib/resource/arabic/AdjectiveAra.gf
     lib/resource/arabic/AdverbAra.gf
-    lib/resource/arabic/Arabic.gf
-    lib/resource/arabic/ArabicAbs.gf
+    lib/resource/arabic/AllAra.gf
+    lib/resource/arabic/AllAraAbs.gf
     lib/resource/arabic/CatAra.gf
     lib/resource/arabic/ConjunctionAra.gf
     lib/resource/arabic/ExtAra.gf
@@ -100,8 +100,8 @@ data-files:
     lib/resource/arabic/VerbAra.gf
     lib/resource/bulgarian/AdjectiveBul.gf
     lib/resource/bulgarian/AdverbBul.gf
-    lib/resource/bulgarian/Bulgarian.gf
-    lib/resource/bulgarian/BulgarianAbs.gf
+    lib/resource/bulgarian/AllBul.gf
+    lib/resource/bulgarian/AllBulAbs.gf
     lib/resource/bulgarian/CatBul.gf
     lib/resource/bulgarian/ConjunctionBul.gf
     lib/resource/bulgarian/ExtraBul.gf
@@ -125,9 +125,9 @@ data-files:
     lib/resource/bulgarian/VerbBul.gf
     lib/resource/catalan/AdjectiveCat.gf
     lib/resource/catalan/AdverbCat.gf
+    lib/resource/catalan/AllCat.gf
+    lib/resource/catalan/AllCatAbs.gf
     lib/resource/catalan/BeschCat.gf
-    lib/resource/catalan/Catalan.gf
-    lib/resource/catalan/CatalanAbs.gf
     lib/resource/catalan/CatCat.gf
     lib/resource/catalan/ConjunctionCat.gf
     lib/resource/catalan/DiffCat.gf
@@ -160,10 +160,10 @@ data-files:
     lib/resource/common/TextX.gf
     lib/resource/danish/AdjectiveDan.gf
     lib/resource/danish/AdverbDan.gf
+    lib/resource/danish/AllDan.gf
+    lib/resource/danish/AllDanAbs.gf
     lib/resource/danish/CatDan.gf
     lib/resource/danish/ConjunctionDan.gf
-    lib/resource/danish/Danish.gf
-    lib/resource/danish/DanishAbs.gf
     lib/resource/danish/DiffDan.gf
     lib/resource/danish/ExtraDan.gf
     lib/resource/danish/ExtraDanAbs.gf
@@ -197,14 +197,13 @@ data-files:
     lib/resource/demo/DemoFin.gf
     lib/resource/demo/DemoFre.gf
     lib/resource/demo/DemoGer.gf
-    lib/resource/demo/DemoI.gf
     lib/resource/english/AdjectiveEng.gf
     lib/resource/english/AdverbEng.gf
+    lib/resource/english/AllEng.gf
+    lib/resource/english/AllEngAbs.gf
     lib/resource/english/BackwardEng.gf
     lib/resource/english/CatEng.gf
     lib/resource/english/ConjunctionEng.gf
-    lib/resource/english/English.gf
-    lib/resource/english/EnglishAbs.gf
     lib/resource/english/ExtraEng.gf
     lib/resource/english/ExtraEngAbs.gf
     lib/resource/english/GrammarEng.gf
@@ -227,12 +226,12 @@ data-files:
     lib/resource/english/VerbEng.gf
     lib/resource/finnish/AdjectiveFin.gf
     lib/resource/finnish/AdverbFin.gf
+    lib/resource/finnish/AllFin.gf
+    lib/resource/finnish/AllFinAbs.gf
     lib/resource/finnish/CatFin.gf
     lib/resource/finnish/ConjunctionFin.gf
     lib/resource/finnish/ExtraFin.gf
     lib/resource/finnish/ExtraFinAbs.gf
-    lib/resource/finnish/Finnish.gf
-    lib/resource/finnish/FinnishAbs.gf
     lib/resource/finnish/GrammarFin.gf
     lib/resource/finnish/IdiomFin.gf
     lib/resource/finnish/LangFin.gf
@@ -250,6 +249,8 @@ data-files:
     lib/resource/finnish/VerbFin.gf
     lib/resource/french/AdjectiveFre.gf
     lib/resource/french/AdverbFre.gf
+    lib/resource/french/AllFre.gf
+    lib/resource/french/AllFreAbs.gf
     lib/resource/french/BeschFre.gf
     lib/resource/french/CatFre.gf
     lib/resource/french/ConjunctionFre.gf
@@ -257,8 +258,6 @@ data-files:
     lib/resource/french/ExtraFre.gf
     lib/resource/french/ExtraFreAbs.gf
     lib/resource/french/ExtraRomanceFre.gf
-    lib/resource/french/French.gf
-    lib/resource/french/FrenchAbs.gf
     lib/resource/french/GrammarFre.gf
     lib/resource/french/IdiomFre.gf
     lib/resource/french/IrregFre.gf
@@ -279,13 +278,13 @@ data-files:
     lib/resource/french/VerbFre.gf
     lib/resource/german/AdjectiveGer.gf
     lib/resource/german/AdverbGer.gf
+    lib/resource/german/AllGer.gf
+    lib/resource/german/AllGerAbs.gf
     lib/resource/german/CatGer.gf
     lib/resource/german/ConjunctionGer.gf
     lib/resource/german/ExtGer.gf
     lib/resource/german/ExtraGer.gf
     lib/resource/german/ExtraGerAbs.gf
-    lib/resource/german/German.gf
-    lib/resource/german/GermanAbs.gf
     lib/resource/german/GrammarGer.gf
     lib/resource/german/IdiomGer.gf
     lib/resource/german/IrregGer.gf
@@ -305,11 +304,12 @@ data-files:
     lib/resource/german/VerbGer.gf
     lib/resource/hindi/AdjectiveHin.gf
     lib/resource/hindi/AdverbHin.gf
+    lib/resource/hindi/AllHin.gf
+    lib/resource/hindi/AllHinAbs.gf
     lib/resource/hindi/BackwardHin.gf
     lib/resource/hindi/CatHin.gf
     lib/resource/hindi/ConjunctionHin.gf
     lib/resource/hindi/GrammarHin.gf
-    lib/resource/hindi/Hindi.gf
     lib/resource/hindi/IdiomHin.gf
     lib/resource/hindi/IrregHin.gf
     lib/resource/hindi/LangHin.gf
@@ -329,6 +329,8 @@ data-files:
     lib/resource/hindi/VerbHin.gf
     lib/resource/interlingua/AdjectiveIna.gf
     lib/resource/interlingua/AdverbIna.gf
+    lib/resource/interlingua/AllIna.gf
+    lib/resource/interlingua/AllInaAbs.gf
     lib/resource/interlingua/CatIna.gf
     lib/resource/interlingua/ConjunctionIna.gf
     lib/resource/interlingua/ExtraIna.gf
@@ -353,6 +355,8 @@ data-files:
     lib/resource/interlingua/VerbIna.gf
     lib/resource/italian/AdjectiveIta.gf
     lib/resource/italian/AdverbIta.gf
+    lib/resource/italian/AllIta.gf
+    lib/resource/italian/AllItaAbs.gf
     lib/resource/italian/BeschIta.gf
     lib/resource/italian/CatIta.gf
     lib/resource/italian/ConjunctionIta.gf
@@ -362,8 +366,6 @@ data-files:
     lib/resource/italian/ExtraRomanceIta.gf
     lib/resource/italian/GrammarIta.gf
     lib/resource/italian/IdiomIta.gf
-    lib/resource/italian/Italian.gf
-    lib/resource/italian/ItalianAbs.gf
     lib/resource/italian/LangIta.gf
     lib/resource/italian/LexiconIta.gf
     lib/resource/italian/MorphoIta.gf
@@ -380,6 +382,8 @@ data-files:
     lib/resource/italian/VerbIta.gf
     lib/resource/norwegian/AdjectiveNor.gf
     lib/resource/norwegian/AdverbNor.gf
+    lib/resource/norwegian/AllNor.gf
+    lib/resource/norwegian/AllNorAbs.gf
     lib/resource/norwegian/CatNor.gf
     lib/resource/norwegian/ConjunctionNor.gf
     lib/resource/norwegian/DiffNor.gf
@@ -394,8 +398,6 @@ data-files:
     lib/resource/norwegian/LexiconNor.gf
     lib/resource/norwegian/MathNor.gf
     lib/resource/norwegian/MorphoNor.gf
-    lib/resource/norwegian/Norwegian.gf
-    lib/resource/norwegian/NorwegianAbs.gf
     lib/resource/norwegian/NounNor.gf
     lib/resource/norwegian/NumeralNor.gf
     lib/resource/norwegian/ParadigmsNor.gf
@@ -424,6 +426,8 @@ data-files:
     lib/resource/romance/VerbRomance.gf
     lib/resource/russian/AdjectiveRus.gf
     lib/resource/russian/AdverbRus.gf
+    lib/resource/russian/AllRus.gf
+    lib/resource/russian/AllRusAbs.gf
     lib/resource/russian/CatRus.gf
     lib/resource/russian/ConjunctionRus.gf
     lib/resource/russian/ExtraRus.gf
@@ -441,8 +445,6 @@ data-files:
     lib/resource/russian/QuestionRus.gf
     lib/resource/russian/RelativeRus.gf
     lib/resource/russian/ResRus.gf
-    lib/resource/russian/Russian.gf
-    lib/resource/russian/RussianAbs.gf
     lib/resource/russian/SentenceRus.gf
     lib/resource/russian/StructuralRus.gf
     lib/resource/russian/VerbRus.gf
@@ -464,6 +466,8 @@ data-files:
     lib/resource/scandinavian/VerbScand.gf
     lib/resource/spanish/AdjectiveSpa.gf
     lib/resource/spanish/AdverbSpa.gf
+    lib/resource/spanish/AllSpa.gf
+    lib/resource/spanish/AllSpaAbs.gf
     lib/resource/spanish/BeschSpa.gf
     lib/resource/spanish/CatSpa.gf
     lib/resource/spanish/ConjunctionSpa.gf
@@ -487,13 +491,13 @@ data-files:
     lib/resource/spanish/RelativeSpa.gf
     lib/resource/spanish/ResSpa.gf
     lib/resource/spanish/SentenceSpa.gf
-    lib/resource/spanish/Spanish.gf
-    lib/resource/spanish/SpanishAbs.gf
     lib/resource/spanish/StructuralSpa.gf
     lib/resource/spanish/TextSpa.gf
     lib/resource/spanish/VerbSpa.gf
     lib/resource/swedish/AdjectiveSwe.gf
     lib/resource/swedish/AdverbSwe.gf
+    lib/resource/swedish/AllSwe.gf
+    lib/resource/swedish/AllSweAbs.gf
     lib/resource/swedish/CatSwe.gf
     lib/resource/swedish/ConjunctionSwe.gf
     lib/resource/swedish/DiffSwe.gf
@@ -516,11 +520,11 @@ data-files:
     lib/resource/swedish/ResSwe.gf
     lib/resource/swedish/SentenceSwe.gf
     lib/resource/swedish/StructuralSwe.gf
-    lib/resource/swedish/Swedish.gf
-    lib/resource/swedish/SwedishAbs.gf
     lib/resource/swedish/VerbSwe.gf
     lib/resource/thai/AdjectiveTha.gf
     lib/resource/thai/AdverbTha.gf
+    lib/resource/thai/AllTha.gf
+    lib/resource/thai/AllThaAbs.gf
     lib/resource/thai/CatTha.gf
     lib/resource/thai/ConjunctionTha.gf
     lib/resource/thai/ExtraTha.gf
