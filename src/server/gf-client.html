@@ -39,14 +39,14 @@
     <title>AJAX GF Translator</title>
   </head>
   <body onload="initialize()">
-    <form id="translate">
+    <form id="translate" onsubmit="updateTranslation(); return false;">
       <p>
         <input type="text" name="inputText" id="inputText" value="this cheese is warm" size="50" />
       </p>
       <p>
         From: <select name="fromLang" id="fromLang" onchange="updateTranslation()"><option value="">Any language</option></select>
         To: <select name="toLang" id="toLang" onchange="updateTranslation()"><option value="">All languages</option></select>
-        <input type="button" value="Translate" onclick="updateTranslation();" />
+        <input type="submit" value="Translate" />
       </p>
     </form>
     <div id="output"></div>
