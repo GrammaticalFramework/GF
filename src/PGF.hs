@@ -22,7 +22,7 @@ module PGF(
            CId, mkCId, prCId,
            
            -- ** Language
-           Language, languages, abstractName,
+           Language, languages, abstractName, languageCode,
            
            -- ** Category
            Category, categories, startCat,
@@ -68,6 +68,7 @@ import qualified PGF.Parsing.FCFG.Incremental as Incremental
 import GF.Text.UTF8
 
 import GF.Data.ErrM
+import GF.Data.Utilities
 
 import qualified Data.Map as Map
 import System.Random (newStdGen)
@@ -153,6 +154,13 @@ generateAllDepth :: PGF -> Category -> Maybe Int -> [Tree]
 -- | List of all languages available in the given grammar.
 languages    :: PGF -> [Language]
 
+-- | Gets the RFC 4646 language tag 
+-- of the language which the given concrete syntax implements,
+-- if this is listed in the source grammar.
+-- Example language tags include @"en"@ for English,
+-- and @"en-UK"@ for British English.
+languageCode :: PGF -> Language -> Maybe String
+
 -- | The abstract language name is the name of the top-level
 -- abstract module
 abstractName :: PGF -> Language
@@ -218,6 +226,9 @@ generateAllDepth pgf cat = generate pgf (mkCId cat)
 abstractName pgf = prCId (absname pgf)
 
 languages pgf = [prCId l | l <- cncnames pgf]
+
+languageCode pgf lang = 
+    fmap (replace '_' '-') $ lookConcrFlag pgf (mkCId lang) (mkCId "language")
 
 categories pgf = [prCId c | c <- Map.keys (cats (abstract pgf))]
 
