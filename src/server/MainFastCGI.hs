@@ -12,6 +12,7 @@ import Control.Exception
 import Control.Monad
 import Data.Dynamic
 import Data.Maybe
+import Data.List
 
 
 grammarFile :: FilePath
@@ -92,7 +93,7 @@ linearize' pgf mto tree =
       Just to -> [(to,PGF.linearize pgf to tree)]
 
 listLanguages :: PGF -> [(PGF.Language,JSObject JSValue)]
-listLanguages pgf = [(l,toJSObject (info l)) | l <- PGF.languages pgf]
+listLanguages pgf = [(l,toJSObject (info l)) | l <- sort (PGF.languages pgf)]
   where info l = [("languageCode", showJSON (fromMaybe "" (PGF.languageCode pgf l))),
                   ("canParse",     showJSON (PGF.canParse pgf l))]
 
