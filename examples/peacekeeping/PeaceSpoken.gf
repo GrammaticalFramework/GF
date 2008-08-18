@@ -1,1 +1,5 @@
-abstract PeaceSpoken = Peace ** {}
+abstract PeaceSpoken = Peace ** {
+
+  flags startcat = PhraseSpoken ; 
+
+}

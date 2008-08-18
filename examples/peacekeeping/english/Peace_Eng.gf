@@ -2,9 +2,4 @@
 
 concrete Peace_Eng of Peace = 
   PeaceSyntax_Eng, PeaceLexCommon_Eng, 
-  PeaceLexExt_Eng, PeacePhrases_Eng
-  ** {
-
-  flags startcat = PhraseWritten ; 
-
-}
+  PeaceLexExt_Eng, PeacePhrases_Eng;
