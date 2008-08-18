@@ -41,7 +41,7 @@ module PGF(
            linearize, linearizeAllLang, linearizeAll,
            
            -- ** Parsing
-           parse, parseAllLang, parseAll,
+           parse, canParse, parseAllLang, parseAll,
            
            -- ** Evaluation
            tree2expr, expr2tree,
@@ -71,6 +71,7 @@ import GF.Data.ErrM
 import GF.Data.Utilities
 
 import qualified Data.Map as Map
+import Data.Maybe
 import System.Random (newStdGen)
 
 ---------------------------------------------------
@@ -104,7 +105,12 @@ linearize    :: PGF -> Language -> Tree -> String
 -- and to produce abstract syntax expression. An empty
 -- list is returned if the parsing is not successful. The list may also
 -- contain more than one element if the grammar is ambiguous.
+-- Throws an exception if the given language cannot be used
+-- for parsing, see 'canParse'.
 parse        :: PGF -> Language -> Category -> String -> [Tree]
+
+-- | Checks whether the given language can be used for parsing.
+canParse     :: PGF -> Language -> Bool
 
 -- | The same as 'linearizeAllLang' but does not return
 -- the language.
@@ -118,13 +124,14 @@ linearizeAllLang :: PGF -> Tree -> [(Language,String)]
 -- the language.
 parseAll     :: PGF -> Category -> String -> [[Tree]]
 
--- | Tries to parse the given string with every language
--- available in the grammar and to produce abstract syntax 
--- expression. The returned list contains pairs of language
--- and list of possible expressions. Only those languages
+-- | Tries to parse the given string with all available languages.
+-- Languages which cannot be used for parsing (see 'canParse')
+-- are ignored.
+-- The returned list contains pairs of language
+-- and list of abstract syntax expressions 
+-- (this is a list, since grammars can be ambiguous). 
+-- Only those languages
 -- for which at least one parsing is possible are listed.
--- More than one abstract syntax expressions are possible
--- if the grammar is ambiguous.
 parseAllLang :: PGF -> Category -> String -> [(Language,[Tree])]
 
 -- | Creates an initial parsing state for a given language and
@@ -194,8 +201,10 @@ parse pgf lang cat s =
                                   else case parseFCFG "bottomup" pinfo (mkCId cat) (words s) of
                                          Ok x  -> x
                                          Bad s -> error s
-                  Nothing    -> error ("No parser built fo language: " ++ lang)
+                  Nothing    -> error ("No parser built for language: " ++ lang)
     Nothing  -> error ("Unknown language: " ++ lang)
+
+canParse pgf cnc = isJust (lookParser pgf (mkCId cnc))
 
 linearizeAll mgr = map snd . linearizeAllLang mgr
 linearizeAllLang mgr t = 
@@ -204,7 +213,7 @@ linearizeAllLang mgr t =
 parseAll mgr cat = map snd . parseAllLang mgr cat
 
 parseAllLang mgr cat s = 
-  [(lang,ts) | lang <- languages mgr, let ts = parse mgr lang cat s, not (null ts)]
+  [(lang,ts) | lang <- languages mgr, canParse mgr lang, let ts = parse mgr lang cat s, not (null ts)]
 
 initState pgf lang cat =
   case lookParser pgf langCId of
