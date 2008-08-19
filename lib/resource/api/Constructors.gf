@@ -971,12 +971,12 @@ incomplete resource Constructors = open Grammar in {
           =  DetArtSg ;
       mkNP : Art -> Num -> CN -> NP  -- the old men --n14
           =  \d,nu,cn -> case nu.n of {
-               Sg => DetArtSg d cn ;
+               ParamX.Sg => DetArtSg d cn ;
                Pl => DetArtPl d cn
              } ;
       mkNP : Art -> Num -> N -> NP   -- the men --n14
           =  \d,nu,cn -> case nu.n of {
-               Sg => DetArtSg d (UseN cn) ;
+               ParamX.Sg => DetArtSg d (UseN cn) ;
                Pl => DetArtPl d (UseN cn)
              } ;
 
