@@ -160,7 +160,7 @@ unionPGF one two = case absname one of
   n | n == wildCId     -> two    -- extending empty grammar
     | n == absname two -> one {  -- extending grammar with same abstract
       concretes = Map.union (concretes two) (concretes one),
-      cncnames  = union (cncnames two) (cncnames one)
+      cncnames  = union (cncnames one) (cncnames two)
     }
   _ -> one   -- abstracts don't match ---- print error msg
 
