@@ -1,10 +1,12 @@
 body {
   color: black;
   background-color: white;
+  font-family: sans-serif;
 }
 
 dl {
-
+  margin: 0;
+  padding: 0;
 }
 
 dt {
@@ -15,6 +17,29 @@ dt {
 dl dd {
   margin: 0;
   padding: 0;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+li {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Translator widget */
+
+#translator {
+
+}
+
+/* Translations */
+
+#translation {
+  clear: both;   
 }
 
 dl.fromLang dt {
@@ -32,23 +57,33 @@ dl.toLang dt {
   display: block;
   float: left;
   width: 5em;
+  font-size: 80%;
+  padding: 1px 0;
 }
-
 
 dl.toLang dd {
   border-width: 0 0 1px 0;
   border-style: solid;
   border-color: #c0c0c0;
+  padding: 0.2em 0;
 }
 
+/* Completions */
 
-ul {
-  margin: 0;
-  padding: 0;
+#completion {
+   font-size: 80%;
+   color: #c0c0c0;
+   white-space: nowrap;
+   width: 100%;
+   overflow: hidden;
 }
 
-li {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
+#completion dt {
+  display: none;   
 }
+
+#completion li {
+  display: inline;
+  padding: 0 0.1em;
+}
+

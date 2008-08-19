@@ -17,6 +17,18 @@ function formatTranslation (outputs) {
   return dl1;
 }
 
+function formatCompletions (compls) {
+  var dl = document.createElement("dl");
+  for (var fromLang in compls) {
+    var ul = document.createElement("ul");
+    for (var i in compls[fromLang]) {
+      addItem(ul, document.createTextNode(compls[fromLang][i]));
+    }
+    addDefinition(dl, document.createTextNode(fromLang), ul);
+  }
+  return dl;
+}
+
 /* DOM utilities for specific tags */
 
 function addDefinition (dl, t, d) {

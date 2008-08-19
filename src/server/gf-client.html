@@ -13,10 +13,11 @@
         var input = document.getElementById('inputText').value;
         var fromLang = document.getElementById('fromLang').value;
         var toLang = document.getElementById('toLang').value;
-        var output = document.getElementById('output');
+        var output = document.getElementById('translation');
+
         var callback = function(translation) {
-                         removeChildren(output);
-                         output.appendChild(formatTranslation(translation));
+                          clearTranslation();
+                          output.appendChild(formatTranslation(translation));
                        };
         gf.translate(input, fromLang, toLang, '', callback);
       }
@@ -32,23 +33,55 @@
         }
       }
 
+      function updateCompletion() {
+        var input = document.getElementById('inputText').value;
+        var fromLang = document.getElementById('fromLang').value;
+        var completions = document.getElementById('completion');
+
+//        if (document.getElementById('enableCompletion').checked) {
+          var callback = function(output) {
+            clearCompletion();
+            completions.appendChild(formatCompletions(output));
+          };
+          gf.complete(input, fromLang, '', callback);
+//        }
+      }
+
+      function update() {
+        updateCompletion();
+        updateTranslation();
+      }
+
+      function clearTranslation() {
+        var output = document.getElementById('translation');
+        removeChildren(output);
+      }
+
+      function clearCompletion() {
+        var completions = document.getElementById('completion');
+        removeChildren(completions);
+      }
+
       function initialize() {
-        gf.getLanguages(populateLangs);
+        gf.languages(populateLangs);
       }
     </script>
     <title>AJAX GF Translator</title>
   </head>
   <body onload="initialize()">
-    <form id="translate" onsubmit="updateTranslation(); return false;">
-      <p>
-        <input type="text" name="inputText" id="inputText" value="this cheese is warm" size="50" />
-      </p>
-      <p>
-        From: <select name="fromLang" id="fromLang" onchange="updateTranslation()"><option value="">Any language</option></select>
-        To: <select name="toLang" id="toLang" onchange="updateTranslation()"><option value="">All languages</option></select>
-        <input type="submit" value="Translate" />
-      </p>
-    </form>
-    <div id="output"></div>
+    <div id="translator">
+      <form onsubmit="update(); return false;">
+        <p>
+          <input type="text" id="inputText" value="this cheese is warm" size="50" onkeyup="update()"/>
+        </p>
+        <p>
+          <label>From: <select id="fromLang" onchange="update()"><option value="">Any language</option></select></label>
+          <label>To: <select id="toLang" onchange="update()"><option value="">All languages</option></select></label>
+          <input type="submit" value="Translate" />
+        </p>
+      </form>
+      <div id="completion"></div>
+      <div id="translation"></div>
+    </div>
   </body>
 </html>

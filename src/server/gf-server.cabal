@@ -11,6 +11,7 @@ executable gf.fcgi
                  old-time,
                  unix,
                  directory,
+                 containers,
                  gf,
                  cgi,
                  fastcgi,
