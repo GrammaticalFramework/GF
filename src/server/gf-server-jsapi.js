@@ -4,7 +4,11 @@ gf.translate = function (input,from,to,cat,callback) {
   gf.httpGetText("gf.fcgi/translate?input="+escape(input)+"&from="+escape(from)+"&to="+escape(to)+"&cat="+escape(cat), function (output) { callback(gf.readJSON(output)); });
 };
 
-gf.getLanguages = function (callback) {
+gf.complete = function (input,from,cat,callback) {
+  gf.httpGetText("gf.fcgi/complete?input="+escape(input)+"&from="+escape(from)+"&cat="+escape(cat), function (output) { callback(gf.readJSON(output)); });
+};
+
+gf.languages = function (callback) {
     gf.httpGetText("gf.fcgi/languages", function (output) { callback(gf.readJSON(output)); });
 };
 
