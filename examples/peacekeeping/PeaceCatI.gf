@@ -1,11 +1,19 @@
 incomplete concrete PeaceCatI of PeaceCat = 
-  Cat ** open Lang, PeaceRes, Prelude in {
+  open Lang, PeaceRes, Prelude in {
 
   lincat
+    N = N; A = A; V = V; V2 = V2; V3 = V3; Pron = Pron;
+    IP = IP; IAdv = IAdv;
+    Adv = Adv; NP = NP; CN = CN; Imp = Imp; Det = Det; Num = Num;
+
     MassN = N ;
     Phrase = { s : Str; p : Punct } ;
     PhraseWritten = { s : Str } ;
     PhraseSpoken = { s : Str } ;
+
+    Sent = {s : SForm => Str} ; 
+    Quest = { s : Str } ;
+    MassCN = CN ;
 
   lin 
     Written x = mkWritten x.s x.p ;

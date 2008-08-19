@@ -1,10 +1,5 @@
 abstract PeaceSyntax = PeaceCat ** {
 
-  cat
-    Sent ; 
-    Quest ; 
-    MassCN ; 
-
   fun
     PhrPos    : Sent -> Phrase ;
     PhrNeg    : Sent -> Phrase ;
