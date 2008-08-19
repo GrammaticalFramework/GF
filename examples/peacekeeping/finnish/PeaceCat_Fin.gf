@@ -1,3 +1,3 @@
 --# -path=.:present:prelude
 
-concrete PeaceCat_Fin of PeaceCat = CatFin ** PeaceCatI with (Lang = LangFin);
+concrete PeaceCat_Fin of PeaceCat = PeaceCatI with (Lang = LangFin);
