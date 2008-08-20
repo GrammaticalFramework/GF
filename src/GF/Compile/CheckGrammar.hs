@@ -689,6 +689,7 @@ getOverload env@gr mt ot = case appForm ot of
          checkWarn ("ignoring lock fields in resolving" +++ prt ot) 
          return (mkApp fun tts, val)
        ([],[]) -> do
+         ---- let prtType _ = prt  -- to debug grammars
          raise $ "no overload instance of" +++ prt f +++ 
            "for" +++ unwords (map (prtType env) tys) +++ "among" ++++ 
            unlines ["  " ++ unwords (map (prtType env) ty) | (ty,_) <- typs] ++
