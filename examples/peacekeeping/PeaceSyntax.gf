@@ -42,8 +42,10 @@ abstract PeaceSyntax = PeaceCat ** {
     UsePron : Pron -> NP ;
     PossPronCNSg : Pron -> CN -> NP ;
     PossPronCNPl : Pron -> CN -> NP ;
+    ArtCNSg : Art -> CN -> NP ; --a
+    ArtCNPl : Art -> CN -> NP ; --a
     DetCN : Det -> CN -> NP ;
-    NumCN : Num -> CN -> NP ;
+    NumCN : Card -> CN -> NP ;  --a
 
     UseN  : N -> CN ;
     ModCN : A -> CN -> CN ;

@@ -1,5 +1,6 @@
 --# -path=.:present:prelude
 
 concrete PeaceLexCommon_Eng of PeaceLexCommon = 
-  PeaceCat_Eng ** PeaceLexCommonI with (Lang = LangEng) ;
+  PeaceCat_Eng ** PeaceLexCommonI with (Lang = LangEng), 
+  (Constructors = ConstructorsEng) ;
 

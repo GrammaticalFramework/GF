@@ -6,39 +6,39 @@ concrete PeaceLexExt_Fin of PeaceLexExt =
   lin
 
     -- Adjectives
-    dangerous_A = regA "vaarallinen" ;
-    dead_A = mkA (nRae "kuollut" "kuolleena") ;
-    hungry_A = regA "n‰lk‰inen" ;
-    large_A = regA "iso" ;
-    sick_A = regA "sairas" ;
+    dangerous_A = mkA "vaarallinen" ;
+    dead_A = mkA (mkN "kuollut" "kuolleita") ;
+    hungry_A = mkA "n‰lk‰inen" ;
+    large_A = mkA "iso" ;
+    sick_A = mkA "sairas" ;
 
     -- Nouns
-    air_N = regN "ilma" ;
-    arm_N = reg3N "k‰si" "k‰den" "k‰si‰" ;
-    building_N = regN "rakennus" ;
-    car_N = regN "auto" ;
-    corpse_N = regN "ruumis" ;
-    doctor_N = regN "l‰‰k‰ri";
-    enemy_N = regN "vihollinen";
-    face_N = regN "naama" ; ---- kasvot
-    food_N = regN "ruoka";
-    friend_N = regN "yst‰v‰";
-    ground_N = regN "maa" ;
-    knife_N = reg2N "veitsi" "veitsi‰" ; ---- veist‰
-    landmine_N = regN "maamiina" ;
-    map_N = regN "kartta" ;
-    medicine_N = regN "l‰‰ke" ;
-    police8officer_N = regN "poliisi" ;
-    skin_N = regN "iho" ;
-    soldier_N = regN "sotilas" ;
-    weapon_N = regN "ase";
+    air_N = mkN "ilma" ;
+    arm_N = mk3N "k‰si" "k‰den" "k‰si‰" ;
+    building_N = mkN "rakennus" ;
+    car_N = mkN "auto" ;
+    corpse_N = mkN "ruumis" ;
+    doctor_N = mkN "l‰‰k‰ri";
+    enemy_N = mkN "vihollinen";
+    face_N = mkN "naama" ; ---- kasvot
+    food_N = mkN "ruoka";
+    friend_N = mkN "yst‰v‰";
+    ground_N = mkN "maa" ;
+    knife_N = mk2N "veitsi" "veitsi‰" ; ---- veist‰
+    landmine_N = mkN "maamiina" ;
+    map_N = mkN "kartta" ;
+    medicine_N = mkN "l‰‰ke" ;
+    police8officer_N = mkN "poliisi" ;
+    skin_N = mkN "iho" ;
+    soldier_N = mkN "sotilas" ;
+    weapon_N = mkN "ase";
 
     -- Verbs
-    cough_V = regV "yski‰" ;
-    drop_V2 = dirV2 (regV "pudottaa") ;
-    hurt_V = regV "sattua" ;
-    need_V2 = dirV2 (regV "tarvita");
-    own_V2 = dirV2 (regV "omistaa") ;
-    show_V3 = dirdirV3 (regV "n‰ytt‰‰") ;
+    cough_V = mkV "yski‰" ;
+    drop_V2 = dirV2 (mkV "pudottaa") ;
+    hurt_V = mkV "sattua" ;
+    need_V2 = dirV2 (mkV "tarvita");
+    own_V2 = dirV2 (mkV "omistaa") ;
+    show_V3 = dirdirV3 (mkV "n‰ytt‰‰") ;
 
 }

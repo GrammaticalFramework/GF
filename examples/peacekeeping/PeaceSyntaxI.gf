@@ -14,7 +14,7 @@ incomplete concrete PeaceSyntaxI of PeaceSyntax =
     PhrYes = stop yes_Utt.s ;
     PhrNo = stop no_Utt.s ;
 
-{-
+
     QuestSent sent = { s = sent.s!SQuest } ; 
     QuestIP_V v ip = mkQuest (QuestVP ip (UseV v)) ;
     QuestIP_V2 v2 ip x = mkQuest (QuestVP ip (mkVP v2 x)) ;
@@ -26,9 +26,9 @@ incomplete concrete PeaceSyntaxI of PeaceSyntax =
 
     QuestIAdv_V v x ia = mkQuest (QuestIAdv ia (PredVP x (UseV v)));
     QuestIAdv_V2 v x y ia = mkQuest (QuestIAdv ia (PredVP x (ComplV2 v y)));
--}
 
-    SentV  v np = mkSent (mkS np v) ;
+
+    SentV  v np = mkSent (mkCl np v) ;
 
     SentV2 v2 x y = mkSent (mkCl x v2 y) ;
     SentV2Mass v2 x y = mkSent (mkCl x v2 (MassNP y)) ;
@@ -47,10 +47,12 @@ incomplete concrete PeaceSyntaxI of PeaceSyntax =
     ImpV3Mass v3 x y = mkImp (mkVP v3 (MassNP x) y) ;
 
     UsePron p = mkNP p ;
---    PossPronCNSg p n = DetCN (DetSg (SgQuant (PossPron p)) NoOrd) n;
---    PossPronCNPl p n = mkNP  (DetPl (PlQuant (PossPron p)) NoNum NoOrd) n;
+    PossPronCNSg p n = mkNP (mkDet p) n ;
+    PossPronCNPl p n = mkNP (mkDet p plNum) n ;
     DetCN d n = mkNP d n ;
     NumCN k cn = mkNP a_Art k cn ;
+    ArtCNSg = DetArtSg ;
+    ArtCNPl = DetArtPl ;
 
     UseN n = mkCN n ;
     ModCN a cn = mkCN a cn ;
@@ -59,19 +61,19 @@ incomplete concrete PeaceSyntaxI of PeaceSyntax =
     ModMass a cn = mkCN a cn ;
 
   oper
-    mkSent : Cl -> Sent ;
+    mkSent : Lang.Cl -> Sent ;
     mkSent cl = 
       {
         s = table {
-          SPos   => Predef.toStr S  (mkS cl) ;
-          SNeg   => Predef.toStr S  (mkS negativePol cl) ;
-          SQuest => Predef.toStr QS (mkQS cl)
+          SPos   => Predef.toStr Lang.S  (mkS cl) ;
+          SNeg   => Predef.toStr Lang.S  (mkS negativePol cl) ;
+          SQuest => Predef.toStr Lang.QS (mkQS cl)
           } ;
         lock_Sent = <>
       } ;
 
-    mkQuest : QCl -> Quest ;
-    mkQuest q = { s = Predef.toStr QS (mkQS q);
+    mkQuest : Lang.QCl -> Quest ;
+    mkQuest q = { s = Predef.toStr Lang.QS (mkQS q);
 		  lock_Quest = <> } ;
 
 }
