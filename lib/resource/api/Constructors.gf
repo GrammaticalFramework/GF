@@ -1005,6 +1005,8 @@ incomplete resource Constructors = open Grammar in {
           =  \d,n -> DetCN d (UseN n)   ;
       mkNP : Quant -> NP            -- this
           =  \q -> DetNP (DetQuant q sgNum) ;
+      mkNP : Quant -> Num -> NP            -- this
+          =  \q,n -> DetNP (DetQuant q n) ;
       mkNP : Det -> NP            -- this
           =  DetNP ;
       mkNP : Card -> CN -> NP     -- forty-five old men
@@ -1631,6 +1633,11 @@ incomplete resource Constructors = open Grammar in {
   ComplV2 : V2 -> NP -> VP = \v,np -> ComplSlash (SlashV2a v) np ;
   ComplV2A : V2A -> NP -> AP -> VP = \v,np,ap -> ComplSlash (SlashV2A v ap) np ;
   ComplV3 : V3 -> NP -> NP -> VP = \v,o,d -> ComplSlash (Slash2V3 v o) d ;
+
+    that_NP : NP = DetNP (DetQuant that_Quant sgNum) ;
+    this_NP : NP = DetNP (DetQuant this_Quant sgNum) ;
+    those_NP : NP = DetNP (DetQuant that_Quant plNum) ;
+    these_NP : NP = DetNP (DetQuant this_Quant plNum) ;
 
 
 {-

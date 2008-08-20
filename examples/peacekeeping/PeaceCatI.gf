@@ -3,6 +3,7 @@ incomplete concrete PeaceCatI of PeaceCat =
 
   lincat
     N = N; A = A; V = V; V2 = V2; V3 = V3; Pron = Pron;
+    Card = Card ; Art = Art ; --a
     IP = IP; IAdv = IAdv;
     Adv = Adv; NP = NP; CN = CN; Imp = Imp; Det = Det; Num = Num;
 

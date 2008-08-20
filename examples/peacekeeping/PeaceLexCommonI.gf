@@ -1,4 +1,5 @@
-incomplete concrete PeaceLexCommonI of PeaceLexCommon = PeaceCatI ** open Lang in {
+incomplete concrete PeaceLexCommonI of PeaceLexCommon = PeaceCatI ** 
+  open Lang, Constructors in {
 
   lin
 
@@ -15,20 +16,17 @@ incomplete concrete PeaceLexCommonI of PeaceLexCommon = PeaceCatI ** open Lang i
     whatPl_IP = whatPl_IP ;
     whatSg_IP = whatSg_IP ;
 
-    this_NP = this_NP ;
-    that_NP = that_NP ;
+    this_NP = mkNP this_Quant ;
+    that_NP = mkNP that_Quant ;
 
     -- Determiners
 
-    aSg_Det =  DetSg (SgQuant IndefArt) NoOrd;
-    aPl_Det =  DetPl (PlQuant IndefArt) NoNum NoOrd;
-    theSg_Det = DetSg (SgQuant DefArt) NoOrd ;
-    thePl_Det = DetPl (PlQuant DefArt) NoNum NoOrd ;
-    that_Det = DetSg (SgQuant that_Quant) NoOrd ;
-    those_Det = DetPl (PlQuant that_Quant) NoNum NoOrd ;
-    this_Det = DetSg (SgQuant this_Quant) NoOrd ;
-    these_Det = DetPl (PlQuant this_Quant) NoNum NoOrd ;
-
+    a_Art =  IndefArt ;
+    the_Art = DefArt ;
+    that_Det = mkDet that_Quant ;
+    those_Det = mkDet that_Quant plNum ;
+    this_Det = mkDet this_Quant ;
+    these_Det = mkDet this_Quant plNum ;
  
     -- Adverbs
     here_Adv = here_Adv;

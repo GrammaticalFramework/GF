@@ -3,7 +3,8 @@ abstract PeaceCat = {
   cat
     N; A; V; V2; V3; Pron;
     IP; IAdv;
-    Adv; NP; CN; Imp; Det; Num;
+    Adv; NP; CN; Imp; Det; Num ; 
+    Card ; Art ; --a
     MassN ;
     Phrase ;
     PhraseWritten ;

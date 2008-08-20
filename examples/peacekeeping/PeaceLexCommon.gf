@@ -20,10 +20,13 @@ abstract PeaceLexCommon = PeaceCat ** {
 
     -- Determiners
 
-    aSg_Det : Det ;
-    aPl_Det : Det ;
-    theSg_Det : Det ;
-    thePl_Det : Det ;
+    the_Art : Art ; --a
+    a_Art : Art ; --a
+    -- aSg_Det : Det ;
+    -- aPl_Det : Det ;
+    -- theSg_Det : Det ;
+    -- thePl_Det : Det ; --a
+
     that_Det : Det ;
     those_Det : Det ;
     this_Det : Det ;
@@ -40,10 +43,10 @@ abstract PeaceLexCommon = PeaceCat ** {
 
 -- Causes too much ambiguity
 --    one_Det : Det ;
-    two_Num : Num ;
-    three_Num : Num ;
-    four_Num : Num ;
-    five_Num : Num ;
+    two_Num : Card ; --a
+    three_Num : Card ;
+    four_Num : Card ;
+    five_Num : Card ;
 
     -- Adjectives
 
