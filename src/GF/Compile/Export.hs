@@ -34,6 +34,7 @@ exportPGF opts fmt pgf =
       FmtHaskell_GADT -> multi "hs"  (grammar2haskellGADT name)
       FmtBNF          -> single "bnf"   bnfPrinter
       FmtSRGS_XML     -> single "grxml" (srgsXmlPrinter sisr)
+      FmtSRGS_XML_NonRec -> single "grxml" srgsXmlNonRecursivePrinter
       FmtJSGF         -> single "jsgf"  (jsgfPrinter sisr)
       FmtGSL          -> single "gsl"   gslPrinter
       FmtVoiceXML     -> single "vxml"  grammar2vxml

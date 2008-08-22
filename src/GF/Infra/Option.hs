@@ -84,7 +84,8 @@ data OutputFormat = FmtPGF
                   | FmtHaskell 
                   | FmtHaskell_GADT 
                   | FmtBNF
-                  | FmtSRGS_XML 
+                  | FmtSRGS_XML
+                  | FmtSRGS_XML_NonRec
                   | FmtSRGS_ABNF 
                   | FmtJSGF 
                   | FmtGSL 
@@ -444,6 +445,7 @@ outputFormats =
      ("haskell_gadt", FmtHaskell_GADT),
      ("bnf",          FmtBNF),
      ("srgs_xml",     FmtSRGS_XML),
+     ("srgs_xml_nonrec",     FmtSRGS_XML_NonRec),
      ("srgs_abnf",    FmtSRGS_ABNF),
      ("jsgf",         FmtJSGF),
      ("gsl",          FmtGSL),
