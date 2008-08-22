@@ -1,0 +1,33 @@
+== Requirements ==
+
+- cabal
+  * See quick installation instructions at the bottom of 
+     http://hackage.haskell.org/trac/hackage/wiki/CabalInstall
+
+- FastCGI development kit
+  * MacPorts: sudo port install fcgi
+
+- Haskell packages: fastcgi, json, utf8-string
+  * cabal install fastcgi json utf8-string
+
+- GF installed as a Cabal package
+   * (cd ../.. && cabal install)
+   * Maye need to remove "-beta" from the Version field in ../../GF.cabal
+
+== Building ==
+
+- Build gf.fcgi
+
+$ make
+
+- Build small example grammar:
+
+$ make food
+
+== Running ==
+
+- Make sure that your web server supports FastCGI.
+
+- Copy or symlink this directory to your web directory.
+
+- Go to SERVER_URL/gf-client.html in your web browser.
