@@ -38,9 +38,9 @@ exportPGF opts fmt pgf =
       FmtJSGF         -> single "jsgf"  (jsgfPrinter sisr)
       FmtGSL          -> single "gsl"   gslPrinter
       FmtVoiceXML     -> single "vxml"  grammar2vxml
-      FmtSLF          -> single ".slf"  slfPrinter
-      FmtRegExp       -> single ".rexp" regexpPrinter
-      FmtFA           -> single ".dot"  slfGraphvizPrinter
+      FmtSLF          -> single "slf"  slfPrinter
+      FmtRegExp       -> single "rexp" regexpPrinter
+      FmtFA           -> single "dot"  slfGraphvizPrinter
  where
    name = fromMaybe (prCId (absname pgf)) (moduleFlag optName opts)
    sisr = flag optSISR opts
