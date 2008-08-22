@@ -1,7 +1,7 @@
 RUNGHC=runghc
 RUNMAKE=$(RUNGHC) Make.hs
 
-.PHONY: all present alltenses lang api math test demo synopsis link clean
+.PHONY: all present alltenses lang api math test demo synopsis link compiled clean
 
 all: link present alltenses math
 
@@ -33,6 +33,9 @@ synopsis:
 
 link:
 	chmod a+x mkPresent
+
+compiled:
+	(cd .. && tar -zcf resource-compiled.tar.gz prelude alltenses present mathematical)
 
 clean:
 	$(RUNMAKE) clean
