@@ -154,7 +154,6 @@ data-files:
     lib/resource/catalan/VerbCat.gf
     lib/resource/common/CommonX.gf
     lib/resource/common/ConstructX.gf
-    lib/resource/common/Overload.gf
     lib/resource/common/ParamX.gf
     lib/resource/common/TenseX.gf
     lib/resource/common/TextX.gf
@@ -215,7 +214,6 @@ data-files:
     lib/resource/english/MorphoEng.gf
     lib/resource/english/NounEng.gf
     lib/resource/english/NumeralEng.gf
-    lib/resource/english/OverloadEng.gf
     lib/resource/english/ParadigmsEng.gf
     lib/resource/english/PhraseEng.gf
     lib/resource/english/QuestionEng.gf
@@ -317,7 +315,6 @@ data-files:
     lib/resource/hindi/MorphoHin.gf
     lib/resource/hindi/NounHin.gf
     lib/resource/hindi/NumeralHin.gf
-    lib/resource/hindi/OverloadHin.gf
     lib/resource/hindi/ParadigmsHin.gf
     lib/resource/hindi/PhraseHin.gf
     lib/resource/hindi/QuestionHin.gf
@@ -343,7 +340,6 @@ data-files:
     lib/resource/interlingua/MorphoIna.gf
     lib/resource/interlingua/NounIna.gf
     lib/resource/interlingua/NumeralIna.gf
-    lib/resource/interlingua/OverloadIna.gf
     lib/resource/interlingua/ParadigmsIna.gf
     lib/resource/interlingua/PhraseIna.gf
     lib/resource/interlingua/QuestionIna.gf
@@ -536,7 +532,6 @@ data-files:
     lib/resource/thai/MorphoTha.gf
     lib/resource/thai/NounTha.gf
     lib/resource/thai/NumeralTha.gf
-    lib/resource/thai/OverloadTha.gf
     lib/resource/thai/ParadigmsTha.gf
     lib/resource/thai/PhraseTha.gf
     lib/resource/thai/QuestionTha.gf
