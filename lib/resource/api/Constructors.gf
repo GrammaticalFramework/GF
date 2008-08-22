@@ -355,7 +355,7 @@ incomplete resource Constructors = open Grammar in {
 -- special case of a simple common noun ($N$) is always provided.
 
     mkNP : overload {
-      mkNP : Art                -> NP ;  --  1. the man
+      mkNP : Art              N -> NP ;  --  1. the man
       mkNP : Art -> (Num) -> CN -> NP ;  --  2. the five old men
       mkNP : Quant   -> N  -> NP ;       --  3. this men
       mkNP : Quant -> (Num) -> CN -> NP; --  4. these five old men
