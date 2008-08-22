@@ -586,7 +586,7 @@ library
     GF.Text.UTF8
 
 
-executable gf3
+executable gf
   build-depends: base,
                  array,
                  containers,
