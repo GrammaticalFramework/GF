@@ -5,27 +5,27 @@ concrete StructuralCat of Structural = CatCat **
 
 lin
 
-  above_Prep = mkPreposition "sobre" ;
-  after_Prep = {s = ["desprŽs"] ; c = MorphoCat.genitive ; isDir = False} ;
+  above_Prep = mkPrep "sobre" ;
+  after_Prep = {s = ["desprÃ©s"] ; c = MorphoCat.genitive ; isDir = False} ;
   all_Predet = {
     s = \\a,c => prepCase c ++ aagrForms "tot" "tota" "tots" "totes" ! a ;
     c = Nom
     } ;
-  almost_AdA, almost_AdN = ss (variants {"quasi"; "gairebè"}) ;
+  almost_AdA, almost_AdN = ss (variants {"quasi"; "gairebÃ©"}) ;
   always_AdV = ss "sempre" ;
-  although_Subj = ss "benché" ** {m = Conjunct} ;
+  although_Subj = ss "benchÃ©" ** {m = Conjunct} ;
   and_Conj = {s1 = [] ; s2 = etConj.s ; n = Pl} ;
   because_Subj = ss "perque" ** {m = Indic} ;
   before_Prep = {s = "abans" ; c = MorphoCat.genitive ; isDir = False} ;
   behind_Prep = {s = "darrera" ; c = MorphoCat.genitive ; isDir = False} ;
-  between_Prep = mkPreposition "entre" ;
+  between_Prep = mkPrep "entre" ;
   both7and_DConj = {s1,s2 = etConj.s ; n = Pl} ;
-  but_PConj = ss "per˜" ;
-  by8agent_Prep = mkPreposition "per" ;
-  by8means_Prep = mkPreposition "mitjançant" ;
---  can8know_VV = mkVV (verbV (saber_71 "saber")) ;
---  can_VV = mkVV (verbV (poder_58 "poder")) ;
-  during_Prep = mkPreposition "durant" ; ----
+  but_PConj = ss "perÃ²" ;
+  by8agent_Prep = mkPrep "per" ;
+  by8means_Prep = mkPrep "mitjanÃ§ant" ;
+  can8know_VV = mkVV (verbV (saber_99 "saber")) ;
+  can_VV = mkVV (verbV (poder_85 "poder")) ;
+  during_Prep = mkPrep "durant" ; ----
   either7or_DConj = {s1,s2 = "o" ; n = Sg} ;
   everybody_NP = makeNP ["tothom"] Masc Sg ;
   every_Det = {s = \\_,_ => "cada" ; n = Sg} ;
@@ -33,15 +33,16 @@ lin
   everywhere_Adv = ss ["a tot arreu"] ;
   few_Det  = {s = \\g,c => prepCase c ++ genForms "pocs" "poques" ! g ; n = Pl} ;
 ---  first_Ord = {s = \\ag => (regA "primer").s ! Posit ! AF ag.g ag.n} ;
+  for_Prep = mkPrep ["per a"] ;
   from_Prep = complGen ; ---
   he_Pron = 
     mkPronoun 
      "ell" "lo" "el" "ell"
      ["el seu"] ["la seva"] ["els seus"] ["les seves"]
       Masc Sg P3 ;
-  here_Adv = mkAdv "aquí" ;		-- ací
-  here7to_Adv = mkAdv ["cap aquí"] ;
-  here7from_Adv = mkAdv ["de aquí"] ;
+  here_Adv = mkAdv "aquÃ­" ;		-- acÃŒ
+  here7to_Adv = mkAdv ["cap aquÃ­"] ;
+  here7from_Adv = mkAdv ["d'aquÃ­"] ;
   how_IAdv = ss "com" ;
   how8many_IDet = 
     {s = \\g,c => prepCase c ++ genForms "quants" "quantes" ! g ; n = Pl} ;
@@ -52,7 +53,7 @@ lin
       "jo" "em" "em" "mi"
       ["el meu"] ["la meva"] ["els meus"] ["les meves"]
       Fem Sg P1 ;
-  in_Prep = mkPreposition "en" ;
+  in_Prep = mkPrep "en" ;
   it_Pron = 
 	mkPronoun 
      "ell" "lo" "el" "ell"
@@ -60,14 +61,14 @@ lin
      Masc Sg P3 ;
   less_CAdv = ss "menys" ; ----
   many_Det = {s = \\g,c => prepCase c ++ genForms "molts" "moltes" ! g ; n = Pl} ;
-  more_CAdv = ss "més" ;
+  more_CAdv = ss "mÃ©s" ;
   most_Predet = {s = \\_,c => prepCase c ++ ["la majoria"] ; c = CPrep P_de} ;
   much_Det = {s = \\g,c => prepCase c ++ genForms "molt" "molta" ! g ; n = Sg} ;
---  must_VV = mkVV (verbV (deber_6 "deber")) ;
+  must_VV = mkVV (verbV (haver_59 "haver")) ;   -- + of_Prep
   no_Utt = ss "no" ;
-  on_Prep = mkPreposition "sobre" ;
+  on_Prep = mkPrep "sobre" ;
 ---  one_Quant = {s = \\g,c => prepCase c ++ genForms "un" "una" ! g} ;
-  only_Predet = {s = \\_,c => prepCase c ++ "només" ; c = Nom} ;
+  only_Predet = {s = \\_,c => prepCase c ++ "nomÃˆs" ; c = Nom} ;
   or_Conj = {s1 = [] ; s2 = "o" ; n = Sg} ;
   otherwise_PConj = ss "altrament" ;
   part_Prep = complGen ;
@@ -80,7 +81,7 @@ lin
       ["el seu"] ["la seva"] ["els seus"] ["les seves"]
       Fem Sg P3 ;
   so_AdA = ss "tan" ;
-  somebody_NP = pn2np (mkPN ["algú"] Masc) ;
+  somebody_NP = pn2np (mkPN ["algË™"] Masc) ;
   somePl_Det = {s = \\g,c => prepCase c ++ genForms "alguns" "algunes" ! g ; n = Pl} ;
   someSg_Det = {s = \\g,c => prepCase c ++ genForms "algun" "alguna" ! g ; n = Sg} ;
   something_NP = pn2np (mkPN ["quelcom"] Masc) ;
@@ -91,9 +92,9 @@ lin
       Pl => \\g,c => prepCase c ++ genForms "aquells" "aquelles" ! g
       }
     } ;
-  there_Adv = mkAdv "allà" ;		-- allá
-  there7to_Adv = mkAdv ["cap a allà"] ;
-  there7from_Adv = mkAdv ["d'allà"] ;	
+  there_Adv = mkAdv "allÃ " ;		-- allÂ·
+  there7to_Adv = mkAdv ["cap a allÃ "] ;
+  there7from_Adv = mkAdv ["d'allÃ "] ;	
   therefore_PConj = ss ["per tant"] ;
   they_Pron = mkPronoun
     "elles" "les" "les" "elles"
@@ -105,33 +106,33 @@ lin
       Pl => \\g,c => prepCase c ++ genForms "aquests" "aquestes" ! g
       }
     } ;
-  through_Prep = mkPreposition "mitjançant" ;
+  through_Prep = mkPrep "mitjanÃ§ant" ;
   too_AdA = ss "massa" ;
   to_Prep = complDat ;
-  under_Prep = mkPreposition "sota" ;
+  under_Prep = mkPrep "sota" ;
   very_AdA = ss "molt" ;
---  want_VV = mkVV (verbV (querer_64 "querer")) ;
+  want_VV = mkVV (verbV (voler_120 "voler")) ;
   we_Pron = 
     mkPronoun 
       "nosaltres" "nos" "nos" "nosaltres"
       ["el nostre"] ["la nostra"] ["els nostres"] ["les nostres"]
       Fem Pl P1 ;
-   whatSg_IP = {s = \\c => prepCase c ++ ["què"] ; a = aagr Masc Sg} ;
-    whatPl_IP = {s = \\c => prepCase c ++ ["qué"] ; a = aagr Masc Pl} ; ---
-    when_IAdv = ss "quan" ;
-    when_Subj = ss "quan" ** {m = Indic} ;
-    where_IAdv = ss "on" ;
-    which_IQuant = {s = table {
-      Sg => \\g,c => prepCase c ++ "quin" ;  --per fer: femení quina
+   whatSg_IP = {s = \\c => prepCase c ++ ["quÃ¨"] ; a = aagr Masc Sg} ;
+   whatPl_IP = {s = \\c => prepCase c ++ ["quÃ¨"] ; a = aagr Masc Pl} ; ---
+   when_IAdv = ss "quan" ;
+   when_Subj = ss "quan" ** {m = Indic} ;
+   where_IAdv = ss "on" ;
+   which_IQuant = {s = table {
+      Sg => \\g,c => prepCase c ++ "quin" ;  --per fer: femenÃŒ quina
       Pl => \\g,c => prepCase c ++ "quins"
       }
-     } ;  --per fer: femení quines
+     } ;  --per fer: femenÃŒ quines
     whoPl_IP = {s = \\c => prepCase c ++ "qui" ; a = aagr Fem Pl} ;
     whoSg_IP = {s = \\c => prepCase c ++ "qui" ; a = aagr Fem Sg} ;
-    why_IAdv = ss ["per què"] ;
-    without_Prep = mkPreposition "sense" ;
-    with_Prep = mkPreposition "amb" ;
-  yes_Utt = ss "sí" ;  
+    why_IAdv = ss ["per quÃ‹"] ;
+    without_Prep = mkPrep "sense" ;
+    with_Prep = mkPrep "amb" ;
+  yes_Utt = ss "sÃ­" ;  
   youSg_Pron = mkPronoun 
     "tu" "et" "et" "tu"
     ["el teu"] ["la teva"] ["els teus"] ["les teves"]
@@ -143,7 +144,7 @@ lin
       Fem Pl P2 ;
   youPol_Pron =
     mkPronoun
-      "vostè" "li" "li" "vostè"
+      "vostÃ©" "li" "li" "vostÃ©"
       ["el seu"] ["la seva"] ["els seus"] ["les seves"]
       Fem Pl P2 ;
 
@@ -151,4 +152,3 @@ oper
   etConj : {s : Str ; n : MorphoCat.Number} = {s = "i" } ** {n = Pl} ;
 
 }
-
