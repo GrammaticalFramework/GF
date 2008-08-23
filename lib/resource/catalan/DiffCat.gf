@@ -85,6 +85,8 @@ oper
     --    <Sg,P2,CRefl,CPron {n = Sg ; p = P1}> => <"te" ++ "me", []> ;
     --    <_,_,CPron {n = Sg ; p = P2},CPron {n = Sg ; p = P1}> => <"te" ++ "me", []> ;
 
+   infForm _ _ _ _  = True ;
+
    mkImperative _ p vp = { --- politeness
       s = \\pol,aag => 
         let 
