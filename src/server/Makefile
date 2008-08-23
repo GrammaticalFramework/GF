@@ -26,5 +26,20 @@ demo:
 	gfc $(GFCFLAGS) --make --parser=on  --name=DemoSwe ../../lib/resource/demo/DemoSwe.gf
 	gfc $(GFCFLAGS) --name=grammar Demo???.pgf
 
+lang: 
+	gfc $(GFCFLAGS) --make --parser=off --name=LangBul ../../lib/resource/bulgarian/LangBul.gf
+#	gfc $(GFCFLAGS) --make --parser=off --name=LangCat ../../lib/resource/catalan/LangCat.gf
+	gfc $(GFCFLAGS) --make --parser=off --name=LangDan ../../lib/resource/danish/LangDan.gf
+	gfc $(GFCFLAGS) --make --parser=on  --name=LangEng ../../lib/resource/english/LangEng.gf
+	gfc $(GFCFLAGS) --make --parser=off --name=LangFin ../../lib/resource/finnish/LangFin.gf
+	gfc $(GFCFLAGS) --make --parser=off --name=LangFre ../../lib/resource/french/LangFre.gf
+	gfc $(GFCFLAGS) --make --parser=off --name=LangGer ../../lib/resource/german/LangGer.gf
+	gfc $(GFCFLAGS) --make --parser=off --name=LangIta ../../lib/resource/italian/LangIta.gf
+	gfc $(GFCFLAGS) --make --parser=off --name=LangNor ../../lib/resource/norwegian/LangNor.gf
+	gfc $(GFCFLAGS) --make --parser=off --name=LangRus ../../lib/resource/russian/LangRus.gf
+	gfc $(GFCFLAGS) --make --parser=off --name=LangSpa ../../lib/resource/spanish/LangSpa.gf
+	gfc $(GFCFLAGS) --make --parser=on  --name=LangSwe ../../lib/resource/swedish/LangSwe.gf
+	gfc $(GFCFLAGS) --name=grammar Lang???.pgf
+
 clean:
 	cabal clean
