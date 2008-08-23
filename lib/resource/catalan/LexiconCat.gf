@@ -9,6 +9,7 @@ flags
 oper
     regFN : Str -> N = \s -> femN (regN s) ;
     regMN : Str -> N = \s -> regN s ; 
+	irregMN : Str -> Str -> N = \pa,pans ->  M.mkNounIrreg pa pans masculine ;
 
 lin
    airplane_N = regMN "avió" ;  
@@ -35,7 +36,7 @@ lin
    boot_N = regFN "bota" ;
    boss_N = regMN "cap" ;
    boy_N = regMN "noi" ;
-   bread_N = regMN "pa" ;
+   bread_N = irregMN "pa" "pans" ;
    break_V2 = dirV2 (regV "trencar") ;
 	broad_A = regADeg "ample" ;
    brother_N2 = deN2 (regMN "germà") ;
@@ -58,16 +59,16 @@ lin
    close_V2 = dirV2 (regV "tancar") ;
    coat_N = regMN "abric" ;
    cold_A = regADeg "fred" ;
---   come_V = verbV (venir_117 "venir") ;
+	come_V = verbV (venir_117 "venir") ;
     computer_N = regMN "ordinador" ;    
    country_N = regMN "país" ;       -- masc
    cousin_N = regMN "cosí" ;
    cow_N = regFN "vaca" ;
---   die_V = verbV (morir_71 "morir") ;
+  	die_V = verbV (morir_71 "morir") ;
 	dirty_A = regADeg "brut" ;
    distance_N3 = mkN3 (regFN "distància") genitive dative ;
-   doctor_N = regMN "metge" ;       -- médica
-   dog_N = regMN "gos" ;        -- perra
+   doctor_N = regMN "metge" ;       -- metgessa
+   dog_N = regMN "gos" ;        -- gossa
    door_N = regFN "porta" ;
 --   drink_V2 = dirV2 (regV "tomar") ;     -- beber
 --   easy_A2V = mkA2V (regA "fácil") dative genitive ;
@@ -79,7 +80,7 @@ lin
 --   fear_VS = mkVS (regV "temer") ;
    find_V2 = dirV2 (regV "trobar") ;
    fish_N = regMN "peix" ;
-   floor_N = regMN "terra" ;        -- piso
+   floor_N = regMN "terra" ;        -- sòl
    forget_V2 = dirV2 (regV "oblidar") ;
    fridge_N = regFN "nevera" ;
    friend_N = regMN "amic" ;        -- amiga
@@ -340,7 +341,7 @@ lin
 --  split_V2 = dirV2 (regV "separar") ; -- dividir,) ;
 --  squeeze_V2 = dirV2 (regV "exprimir") ;
 --  stab_V2 = dirV2 (regV "apuñalar") ;
---   stand_V = verbV (estar_2 "estar") ; ---- "estar de pie" ;
+--   stand_V = verbV (estar_2 "estar") ; ---- "estar dret" ;
     suck_V2 = dirV2 (regV "xuclar") ;
     swell_V = regV "inflar" ;
     swim_V = regV "nedar" ;
