@@ -14,8 +14,8 @@ number words in 88 languages.
 [Pizza http://www.cs.chalmers.se/~bringert/xv/pizza/]: order a pizza by speaking
 to your web browser.
 
-[Restauranggajden http://www.restauranggajden.se/tomas/]: write and read
-restaurant reviews in a multilingual Wiki.
+%[Restauranggajden http://www.restauranggajden.se/tomas/]: write and read
+%restaurant reviews in a multilingual Wiki.
 
 [WebALT Math Editor  http://webalt.math.helsinki.fi/PublicFiles/CD/Screencast/TextMathEditor%20Demo.swf]:
 create mathematical exercises in six languages simultaneously.

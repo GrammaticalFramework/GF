@@ -13,6 +13,80 @@ Aarne Ranta
 
 In reverse temporal order:
 
+Moisés Salvador Meza Moreno and B. Bringert.
+Interactive Multilingual Web Applications with Grammatical Framework.
+In B. Nordström and A. Ranta (eds), 
+//Advances in Natural Language Processing (GoTAL 2008)//, 
+LNCS/LNAI 5221, Springer,
+2008.
+#BR
+//Shows how GF compiled to JavaScript is used in dynamic multilingual web pages.//
+
+Peter Ljunglöf and Staffan Larsson. 
+A grammar formalism for specifying ISU-based dialogue systems.
+In B. Nordström and A. Ranta (eds), 
+//Advances in Natural Language Processing (GoTAL 2008)//, 
+LNCS/LNAI 5221, Springer,
+2008.
+[pdf http://www.ling.gu.se/~peb/pubs/LjunglofLarsson-2008a.pdf]
+#BR
+//Explains how GoDiS dialogue systems are specified by GF grammars.//
+
+K. Angelov.
+Type-Theoretical Bulgarian Grammar.
+In B. Nordström and A. Ranta (eds), 
+//Advances in Natural Language Processing (GoTAL 2008)//, 
+LNCS/LNAI 5221, Springer,
+2008.
+#BR
+//Explains the implementation of a Bulgarian resource grammar in GF.//
+
+B. Bringert.
+High-precision Domain-specific Interlingua-based Speech Translation
+with Grammatical Framework.
+//Coling 2008 Workshop on Speech Translation for Medical and Other Safety-Critical Applications//, 
+Manchester, UK, August 23, 
+2008.
+#BR
+//Shows how to build spoken language translators based on GF grammars and their compilation to Nuance.//
+
+A. Ranta.
+How predictable is Finnish morphology? An experiment on lexicon construction.
+In J. Nivre, M. Dahllöf and B. Megyesi (eds),
+//Resourceful Language Technology: Festschrift in Honor of Anna Sågvall Hein//,
+University of Uppsala,
+2008.
+Available from [series homepage http://publications.uu.se/abstract.xsql?dbid=8933]
+#BR
+//Presents an experiment on smart paradigms in Finnish.//
+
+A. Ranta.
+Grammars as Software Libraries.
+To appear in G. Huet, G. Plotkin, J.-J. Lévy, and Y. Bertot (eds),
+//From semantics to computer science: essays in honor of Gilles Kahn//,
+Cambridge University Press,
+2008.
+[pdf (preliminary version) http://www.cs.chalmers.se/~aarne/articles/libraries-kahn.pdf]
+#BR
+//Presents the GF Resource Grammar Library from a software engineering point of view.//
+
+A. Ranta.
+Example-based grammar writing.
+To appear in L. Borin and S. Larsson (eds),
+Festschrift for Robin Cooper,
+2007.
+#BR
+//Presents and discusses the ideas of grammar composition and example-based grammar writing.//
+
+B. Bringert.
+Rapid Development of Dialogue Systems by Grammar Compilation.
+//8th SIGdial Workshop on Discourse and Dialogue//, 
+Antwerp, Belgium, September 1-2, 
+2007.
+[pdf http://www.cs.chalmers.se/~bringert/publ/gf-voicexml/gf-voicexml.pdf]
+#BR
+//Shows how to build a web-based spoken dialogue system by generating VoiceXML and JavaScript.//
+
 A. El Dada and A. Ranta.
 Implementing an Open Source Arabic Resource Grammar in GF.
 In M. Mughazy (ed),
@@ -33,10 +107,20 @@ June 28, 2007, Prague.
 //and agreement of constructions with numerals.//
 
 A. Ranta.
+Modular Grammar Engineering in GF.
+//Research on Language and Computation//, 
+5:133-158, 2007.
+Draft available as [pdf http://www.cs.chalmers.se/~aarne/articles/multieng3.pdf].
+#BR
+//Adapts library-based software engineering methods to grammar writing// 
+//and introduces the module system of GF.//
+
+A. Ranta.
 The GF Grammar Compiler.
 //Workshop on New Directions in Type-theoretic Grammars//,
 Dublin, August 2007 (ESSLLI workshop).
 2007.
+[pdf http://www.cs.chalmers.se/~aarne/articles/ar-compiler.pdf]
 #BR
 //Describes the compilation of GF source code to lower-level run-time formats.//
 
@@ -53,6 +137,7 @@ Dialogue System Localization with the GF Resource Grammar Library.
 //SPEECHGRAM 2007: ACL Workshop on Grammar-Based Approaches to Spoken Language Processing//,
 June 29, 2007, Prague.
 2007.
+[pdf http://www.cs.chalmers.se/~aarne/articles/perera-ranta.pdf]
 #BR
 //An experiment in porting an in-car dialogue system from two to six languages.// 
 
@@ -71,6 +156,7 @@ Features in Abstract and Concrete Syntax.
 //The 2nd International Workshop on Typed Feature Structure Grammars//,
 Tartu, 24 May 2007 (NODALIDA workshop).
 2007.
+[pdf http://www.cs.chalmers.se/~aarne/articles/ranta-tfsg2007.pdf]
 #BR
 //Explores the design choices of incorporating features in a GF-like grammar,//
 //with comparisons to feature-based unification grammars.//
@@ -201,16 +287,6 @@ Computer Science, Göteborg University,
 [http://www.cs.chalmers.se/~krijo/thesis/thesisA4.pdf]
 #BR
 //Collection of articles in the GF-KeY project, with an introduction.//
-
-A. Ranta.
-Modular Grammar Engineering in GF.
-//Research on Language and Computation//, 
-2007, to appear.
-Draft available as [pdf http://www.cs.chalmers.se/~aarne/articles/multieng3.pdf].
-#BR
-//Adapts library-based software engineering methods to grammar writing// 
-//and introduces the module system of GF.//
-
 
 P. Ljunglöf.
 Expressivity and Complexity of the  Grammatical Framework.
