@@ -39,6 +39,11 @@ mainGFI opts files = do
   loop opts gfenv
   return ()
 
+loopNewCPU gfenv' = do 
+   cpu' <- getCPUTime
+   putStrLnFlush (show ((cpu' - cputime gfenv') `div` 1000000000) ++ " msec")
+   return $ gfenv' {cputime = cpu'}
+
 loop :: Options -> GFEnv -> IO GFEnv
 loop opts gfenv0 = do
   let env = commandenv gfenv0
@@ -46,10 +51,6 @@ loop opts gfenv0 = do
   setCompletionFunction (Just (wordCompletion gfenv0))
   s0 <- fetchCommand (prompt env)
   let gfenv = gfenv0 {history = s0 : history gfenv0}
-  let loopNewCPU gfenv' = do 
-        cpu' <- getCPUTime
-        putStrLnFlush (show ((cpu' - cputime gfenv') `div` 1000000000) ++ " msec")
-        return $ gfenv' {cputime = cpu'}
   let 
     enc = encode gfenv
     s = decode gfenv s0
@@ -119,8 +120,7 @@ loop opts gfenv0 = do
             interpretCommandLine enc env s
             loopNewCPU gfenv
         gfenv' <- return $ either (const gfenv) id r
-        e <- loopNewCPU gfenv'
-        loop opts e
+        loop opts gfenv'
 
 importInEnv :: GFEnv -> Options -> [FilePath] -> IO GFEnv
 importInEnv gfenv opts files
