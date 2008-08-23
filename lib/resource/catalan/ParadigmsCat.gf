@@ -55,13 +55,13 @@ oper
 -- amalgamate with the following word (the 'genitive' "de" and the
 -- 'dative' "a").
 
-  Preposition : Type ;
+ --- Preposition : Type ;
 
-  accusative : Preposition ;
-  genitive   : Preposition ;
-  dative     : Preposition ;
+  accusative : Prep ;
+  genitive   : Prep ;
+  dative     : Prep ;
 
-  mkPreposition : Str -> Preposition ;
+  mkPrep : Str -> Prep ;
 
 
 --2 Nouns
@@ -100,7 +100,7 @@ oper
 -- 
 -- Relational nouns ("filla de x") need a case and a preposition. 
 
-  mkN2 : N -> Preposition -> N2 ;
+  mkN2 : N -> Prep -> N2 ;
 
 -- The most common cases are the genitive "de" and the dative "a", 
 -- with the empty preposition.
@@ -110,7 +110,7 @@ oper
 
 -- Three-place relational nouns ("la connexió de x a y") need two prepositions.
 
-  mkN3 : N -> Preposition -> Preposition -> N3 ;
+  mkN3 : N -> Prep -> Prep -> N3 ;
 
 
 ----3 Relational common noun phrases
@@ -156,7 +156,7 @@ oper
 ----
 ---- Two-place adjectives need a preposition for their second argument.
 --
-      mkA2 : A -> Preposition -> A2 ;
+      mkA2 : A -> Prep -> A2 ;
 --
 ----3 Comparison adjectives 
 --
@@ -221,7 +221,7 @@ oper
 -- Two-place verbs need a preposition, except the special case with direct object.
 -- (transitive verbs). Notice that a particle comes from the $V$.
 
-  mkV2  : V -> Preposition -> V2 ;
+  mkV2  : V -> Prep -> V2 ;
 
   dirV2 : V -> V2 ;
 
@@ -234,8 +234,8 @@ oper
 ---- Three-place (ditransitive) verbs need two prepositions, of which
 ---- the first one or both can be absent.
 
-  mkV3     : V -> Preposition -> Preposition -> V3 ; -- parlar, a, de
-  dirV3    : V -> Preposition -> V3 ;                -- donar,_,a
+  mkV3     : V -> Prep -> Prep -> V3 ; -- parlar, a, de
+  dirV3    : V -> Prep -> V3 ;                -- donar,_,a
   dirdirV3 : V -> V3 ;                               -- donar,_,_
 
 ----3 Other complement patterns
@@ -243,23 +243,23 @@ oper
 ---- Verbs and adjectives can take complements such as sentences,
 ---- questions, verb phrases, and adjectives.
 --
---  mkV0  : V -> V0 ;
+  mkV0  : V -> V0 ;
   mkVS  : V -> VS ;
-  mkV2S : V -> Preposition -> V2S ;
+  mkV2S : V -> Prep -> V2S ;
   mkVV  : V -> VV ;  -- plain infinitive: "je veux parler"
 --  deVV  : V -> VV ;  -- "j'essaie de parler"
 --  aVV   : V -> VV ;  -- "j'arrive à parler"
---  mkV2V : V -> Preposition -> Preposition -> V2V ;
+  mkV2V : V -> Prep -> Prep -> V2V ;
 --  mkVA  : V -> VA ;
---  mkV2A : V -> Preposition -> Preposition -> V2A ;
-    mkVQ  : V -> VQ ;
---  mkV2Q : V -> Preposition -> V2Q ;
+  mkV2A : V -> Prep -> Prep -> V2A ;
+  mkVQ  : V -> VQ ;
+  mkV2Q : V -> Prep -> V2Q ;
 --
     mkAS  : A -> AS ;
 
 --  mkA2S : A -> Preposition -> A2S ;
---  mkAV  : A -> Preposition -> AV ;
---  mkA2V : A -> Preposition -> Preposition -> A2V ;
+    mkAV  : A -> Prep -> AV ;
+    mkA2V : A -> Prep -> Prep -> A2V ;
 --
 ---- Notice: categories $V2S, V2V, V2Q$ are in v 1.0 treated
 ---- just as synonyms of $V2$, and the second argument is given
@@ -283,11 +283,11 @@ oper
   singular = Sg ;
   plural = Pl ;
 
-  Preposition = Compl ;
+  --- Preposition = Compl ;
   accusative = complAcc ;
   genitive = complGen ;
   dative = complDat ;
-  mkPreposition p = {s = p ; c = Acc ; isDir = False} ;
+  mkPrep p = {s = p ; c = Acc ; isDir = False; lock_Prep = <>} ;
 --
 --
   mkN x y g = mkNounIrreg x y g ** {lock_N = <>} ;
@@ -344,7 +344,7 @@ oper
 --            }
     in verbBesch verb ** {vtyp = VHabere ; lock_V = <>} ;
 
---  reflV v = {s = v.s ; vtyp = VRefl ; lock_V = <>} ;
+  reflV v = {s = v.s ; vtyp = VRefl ; lock_V = <>} ;
 
   verbV ve = verbBesch ve ** {vtyp = VHabere ; lock_V = <>} ;
 
@@ -367,25 +367,25 @@ oper
   dirV3 v p = mkV3 v accusative p ;
   dirdirV3 v = dirV3 v dative ;
 --
---  V0 : Type = V ;
+  V0 : Type = V ;
   AS, AV : Type = A ;
---  A2S, A2V : Type = A2 ;
+  A2S, A2V : Type = A2 ;
 --
---  mkV0  v = v ** {lock_V0 = <>} ;
+  mkV0  v = v ** {lock_V0 = <>} ;
   mkVS  v = v ** {m = \\_ => Indic ; lock_VS = <>} ;  ---- more moods
   mkV2S v p = mkV2 v p ** {mn,mp = Indic ; lock_V2S = <>} ;
   mkVV  v = v ** {c2 = complAcc ; lock_VV = <>} ;
 --  deVV  v = v ** {c2 = complGen ; lock_VV = <>} ;
 --  aVV  v = v ** {c2 = complDat ; lock_VV = <>} ;
---  mkV2V v p t = mkV2 v p ** {c3 = t.p1  ; s3 = p.p2 ; lock_V2V = <>} ;
+  mkV2V v p t = mkV3 v p t ** { lock_V2V = <>} ;
 --  mkVA  v = v ** {lock_VA = <>} ;
---  mkV2A v p q = mkV3 v p q ** {lock_V2A = <>} ;
+  mkV2A v p q = mkV3 v p q ** {lock_V2A = <>} ;
     mkVQ  v = v ** {lock_VQ = <>} ;
---  mkV2Q v p = mkV2 v p ** {lock_V2Q = <>} ;
+    mkV2Q v p = mkV2 v p ** {lock_V2Q = <>} ;
 --
     mkAS  v = v ** {lock_AS = <>} ; ---- more moods
 --  mkA2S v p = mkA2 v p ** {lock_A2S = <>} ;
---  mkAV  v p = v ** {c = p.p1 ; s2 = p.p2 ; lock_AV = <>} ;
---  mkA2V v p q = mkA2 v p ** {s3 = q.p2 ; c3 = q.p1 ; lock_A2V = <>} ;
+    mkAV  v p = v ** {c = p.p1 ; s2 = p.p2 ; lock_AV = <>} ;
+    mkA2V v p q = mkA2 v p ** {s3 = q.p2 ; c3 = q.p1 ; lock_A2V = <>} ;
 --
 } ;
