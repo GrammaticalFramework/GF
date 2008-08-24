@@ -13,7 +13,7 @@ food:
 demo: 
 #	gfc $(GFCFLAGS) --make --name=grammar ../../lib/resource/demo/Demo{Bul,Cat,Dan,Eng,Fin,Fre,Ger,Ita,Nor,Rus,Spa,Swe}.gf
 	gfc $(GFCFLAGS) --make --parser=off --name=DemoBul ../../lib/resource/demo/DemoBul.gf
-#	gfc $(GFCFLAGS) --make --parser=off --name=DemoCat ../../lib/resource/demo/DemoCat.gf
+	gfc $(GFCFLAGS) --make --parser=off --name=DemoCat ../../lib/resource/demo/DemoCat.gf
 	gfc $(GFCFLAGS) --make --parser=off --name=DemoDan ../../lib/resource/demo/DemoDan.gf
 	gfc $(GFCFLAGS) --make --parser=on  --name=DemoEng ../../lib/resource/demo/DemoEng.gf
 	gfc $(GFCFLAGS) --make --parser=off --name=DemoFin ../../lib/resource/demo/DemoFin.gf
@@ -28,7 +28,7 @@ demo:
 
 lang: 
 	gfc $(GFCFLAGS) --make --parser=off --name=LangBul ../../lib/resource/bulgarian/LangBul.gf
-#	gfc $(GFCFLAGS) --make --parser=off --name=LangCat ../../lib/resource/catalan/LangCat.gf
+	gfc $(GFCFLAGS) --make --parser=off --name=LangCat ../../lib/resource/catalan/LangCat.gf
 	gfc $(GFCFLAGS) --make --parser=off --name=LangDan ../../lib/resource/danish/LangDan.gf
 	gfc $(GFCFLAGS) --make --parser=on  --name=LangEng ../../lib/resource/english/LangEng.gf
 	gfc $(GFCFLAGS) --make --parser=off --name=LangFin ../../lib/resource/finnish/LangFin.gf
