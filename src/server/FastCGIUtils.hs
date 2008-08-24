@@ -109,15 +109,15 @@ type DataRef a = IORef (Maybe (ClockTime, a))
 newDataRef :: MonadIO m => m (DataRef a)
 newDataRef = liftIO $ newIORef Nothing
 
-getData :: MonadIO m => (FilePath -> IO a) -> DataRef a -> FilePath -> m a
-getData loadData ref file = liftIO $
-    do t' <- getModificationTime file
-       m <- readIORef ref
+getData :: MonadIO m => (FilePath -> m a) -> DataRef a -> FilePath -> m a
+getData loadData ref file = 
+    do t' <- liftIO $ getModificationTime file
+       m <- liftIO $ readIORef ref
        case m of
          Just (t,x) | t' == t -> return x
          _                    -> do logCGI $ "Loading " ++ show file ++ "..."
                                     x <- loadData file
-                                    writeIORef ref (Just (t',x))
+                                    liftIO $ writeIORef ref (Just (t',x))
                                     return x
 
 -- Logging
