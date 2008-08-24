@@ -401,8 +401,12 @@ oper
     mk4N rike (rike + "t") (rike + "n") (rike + "na") ;
 
   decl5Noun : Str -> N = \lik ->
-    case Predef.dp 3 lik of {
-      "are" => mk4N lik (lik + "n") lik (init lik + "na") ; -- kikare 
+    case lik of {
+      nu + "mme" + l@("l" | "r") => 
+        mk4N lik (nu + "m" + l + "et") lik (nu + "m" + l + "en") ; 
+      vad@(?+?+?+_) + "e" + l@("l" | "r") => 
+        mk4N lik (vad + l + "et") lik (vad + l + "en") ; 
+      _ + "are" => mk4N lik (lik + "n") lik (init lik + "na") ; -- kikare 
       _ => mk4N lik (lik + "et") lik (lik + "en")
       } ;
 
