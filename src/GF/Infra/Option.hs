@@ -14,6 +14,7 @@ module GF.Infra.Option
      addOptions, concatOptions, noOptions,
      moduleOptions,
      addModuleOptions, concatModuleOptions, noModuleOptions,
+     modifyFlags, modifyModuleFlags,
      helpMessage,
      -- * Checking specific options
      flag, moduleFlag,
