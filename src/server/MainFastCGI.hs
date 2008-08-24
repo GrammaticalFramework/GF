@@ -3,6 +3,7 @@
 import PGF (PGF)
 import qualified PGF
 import FastCGIUtils
+import URLEncoding
 
 import Network.CGI
 import Text.JSON
@@ -42,7 +43,7 @@ cgiMain pgf =
        outputJSON json
   where
     getText :: CGI String
-    getText = liftM (fromMaybe "") $ getInput "input"
+    getText = liftM (maybe "" urlDecodeUnicode) $ getInput "input"
 
     getTree :: CGI PGF.Tree
     getTree = do mt <- getInput "tree"
