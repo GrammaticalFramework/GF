@@ -9,9 +9,7 @@ import Network.CGI
 import Text.JSON
 import qualified Codec.Binary.UTF8.String as UTF8 (encodeString)
 
-import Control.Exception
 import Control.Monad
-import Data.Dynamic
 import qualified Data.Map as Map
 import Data.Maybe
 
@@ -126,21 +124,6 @@ linearize' pgf mto tree =
     case mto of
       Nothing -> PGF.linearizeAllLang pgf tree
       Just to -> [(to,PGF.linearize pgf to tree)]
-
--- * General CGI Error exception mechanism
-
-data CGIError = CGIError { cgiErrorCode :: Int, cgiErrorMessage :: String, cgiErrorText :: [String] }
-                deriving Typeable
-
-throwCGIError :: Int -> String -> [String] -> CGI a
-throwCGIError c m t = throwCGI $ DynException $ toDyn $ CGIError c m t
-
-handleCGIErrors :: CGI CGIResult -> CGI CGIResult
-handleCGIErrors x = x `catchCGI` \e -> case e of
-                                         DynException d -> case fromDynamic d of
-                                                             Nothing -> throw e
-                                                             Just (CGIError c m t) -> outputError c m t
-                                         _ -> throw e
 
 -- * General CGI and JSON stuff
 

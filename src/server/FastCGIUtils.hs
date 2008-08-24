@@ -1,9 +1,12 @@
+{-# LANGUAGE DeriveDataTypeable #-}
 module FastCGIUtils (initFastCGI, loopFastCGI,
-                     DataRef, newDataRef, getData) where
+                     DataRef, newDataRef, getData,
+                     throwCGIError, handleCGIErrors) where
 
 import Control.Concurrent
 import Control.Exception
 import Control.Monad
+import Data.Dynamic
 import Data.IORef
 import Prelude hiding (catch)
 import System.Directory
@@ -13,6 +16,7 @@ import System.IO
 import System.IO.Unsafe
 import System.Posix
 import System.Time
+
 
 import Network.FastCGI
 
@@ -120,3 +124,18 @@ getData loadData ref file = liftIO $
 
 logError :: String -> IO ()
 logError s = hPutStrLn stderr s
+
+-- * General CGI Error exception mechanism
+
+data CGIError = CGIError { cgiErrorCode :: Int, cgiErrorMessage :: String, cgiErrorText :: [String] }
+                deriving Typeable
+
+throwCGIError :: Int -> String -> [String] -> CGI a
+throwCGIError c m t = throwCGI $ DynException $ toDyn $ CGIError c m t
+
+handleCGIErrors :: CGI CGIResult -> CGI CGIResult
+handleCGIErrors x = x `catchCGI` \e -> case e of
+                                         DynException d -> case fromDynamic d of
+                                                             Nothing -> throw e
+                                                             Just (CGIError c m t) -> outputError c m t
+                                         _ -> throw e
