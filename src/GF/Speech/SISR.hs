@@ -58,8 +58,10 @@ profileFinalSISR term fmt = [JS.DExpr $ fmtOut fmt `ass` f term]
         f (CFMeta typ) = obj [("name",JS.EStr "?"), ("type",JS.EStr (prCId typ))]
 
 fmtOut SISR_WD20030401 = JS.EVar (JS.Ident "$")
+fmtOut SISR_1_0 = JS.EVar (JS.Ident "out")
 
 fmtRef SISR_WD20030401 c = JS.EVar (JS.Ident ("$" ++ c))
+fmtRef SISR_1_0 c = field (JS.EVar (JS.Ident "rules")) c
 
 args = JS.Ident "a"
 
