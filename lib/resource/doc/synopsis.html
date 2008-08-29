@@ -1695,7 +1695,7 @@ Lexical category, constructors given in
 </TR>
 <TR>
 <TD><CODE>mkNP</CODE></TD>
-<TD><A HREF="#Art" TITLE="Art - article">Art</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A></TD>
+<TD><A HREF="#Art" TITLE="Art - article">Art</A> <A HREF="#N" TITLE="N - common noun">N</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A></TD>
 <TD><I>the man</I></TD>
 </TR>
 <TR>
@@ -1707,6 +1707,11 @@ Lexical category, constructors given in
 <TD><CODE>mkNP</CODE></TD>
 <TD><A 'HREF="#Quant" TITLE="Quant - quantifier ('nucleus' of Det)"'>Quant</A> <CODE>-&gt;</CODE> <A HREF="#N" TITLE="N - common noun">N</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A></TD>
 <TD><I>this men</I></TD>
+</TR>
+<TR>
+<TD><CODE>mkNP</CODE></TD>
+<TD><A 'HREF="#Quant" TITLE="Quant - quantifier ('nucleus' of Det)"'>Quant</A> <CODE>-&gt;</CODE> (<A HREF="#Num" TITLE="Num - number determining element">Num</A>) <CODE>-&gt;</CODE> <A HREF="#CN" TITLE="CN - common noun (without determiner)">CN</A> <CODE>-&gt;</CODE> <A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A></TD>
+<TD><I>these five old men</I></TD>
 </TR>
 <TR>
 <TD><CODE>mkNP</CODE></TD>
@@ -1822,22 +1827,6 @@ Lexical category, constructors given in
 <TD><CODE>something_NP</CODE></TD>
 <TD><A HREF="#NP" TITLE="NP - noun phrase (subject or object)">NP</A></TD>
 <TD><I>something</I></TD>
-</TR>
-</TABLE>
-
-<P>
-==NP;==[NP;]
-</P>
-<TABLE CELLPADDING="4" BORDER="1">
-<TR>
-<TH>Function</TH>
-<TH>Type</TH>
-<TH COLSPAN="2">Example</TH>
-</TR>
-<TR>
-<TD><CODE>mkNP</CODE></TD>
-<TD><A 'HREF="#Quant" TITLE="Quant - quantifier ('nucleus' of Det)"'>Quant</A> <CODE>-&gt;</CODE> (<A HREF="#Num" TITLE="Num - number determining element">Num</A>) <CODE>-&gt;</CODE> <A HREF="#CN" TITLE="CN - common noun (without determiner)">CN</A> <CODE>-&gt;</CODE> <CODE>NP;</CODE></TD>
-<TD><I>these five old men</I></TD>
 </TR>
 </TABLE>
 

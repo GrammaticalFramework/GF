@@ -399,9 +399,10 @@ Lexical category, constructors given in
 || Function  | Type  | Example  ||
 | ``everybody_NP`` | [NP #NP] | //everybody// |
 | ``everything_NP`` | [NP #NP] | //everything// |
-| ``mkNP`` | [Art #Art] ``->`` [NP #NP] | //the man// |
+| ``mkNP`` | [Art #Art] [N #N] ``->`` [NP #NP] | //the man// |
 | ``mkNP`` | [Art #Art] ``->`` ([Num #Num]) ``->`` [CN #CN] ``->`` [NP #NP] | //the five old men// |
 | ``mkNP`` | [Quant #Quant] ``->`` [N #N] ``->`` [NP #NP] | //this men// |
+| ``mkNP`` | [Quant #Quant] ``->`` ([Num #Num]) ``->`` [CN #CN] ``->`` [NP #NP] | //these five old men// |
 | ``mkNP`` | [Det #Det] ``->`` [N #N] ``->`` [NP #NP] | //the first man// |
 | ``mkNP`` | [Det #Det] ``->`` [CN #CN] ``->`` [NP #NP] | //the first old man// |
 | ``mkNP`` | [Numeral #Numeral] ``->`` [N #N] ``->`` [NP #NP] | //twenty men// |
@@ -425,9 +426,6 @@ Lexical category, constructors given in
 | ``mkNP`` | [Conj #Conj] ``->`` [ListNP #ListNP] ``->`` [NP #NP] | //John, I, and that// |
 | ``somebody_NP`` | [NP #NP] | //somebody// |
 | ``something_NP`` | [NP #NP] | //something// |
-==NP;==[NP;]
-|| Function  | Type  | Example  ||
-| ``mkNP`` | [Quant #Quant] ``->`` ([Num #Num]) ``->`` [CN #CN] ``->`` ``NP;`` | //these five old men// |
 ==Num - number determining element==[Num]
 || Function  | Type  | Example  ||
 | ``mkNum`` | [Numeral #Numeral] ``->`` [Num #Num] | //twenty// |

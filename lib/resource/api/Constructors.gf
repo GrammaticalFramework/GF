@@ -358,7 +358,7 @@ incomplete resource Constructors = open Grammar in {
       mkNP : Art              N -> NP ;  --  1. the man
       mkNP : Art -> (Num) -> CN -> NP ;  --  2. the five old men
       mkNP : Quant   -> N  -> NP ;       --  3. this men
-      mkNP : Quant -> (Num) -> CN -> NP; --  4. these five old men
+      mkNP : Quant -> (Num) -> CN -> NP ; --  4. these five old men
       mkNP : Det     -> N  -> NP ;       --  5. the first man
       mkNP : Det     -> CN -> NP ;       --  6. the first old man
       mkNP : Numeral -> N  -> NP ;       --  7. twenty men
