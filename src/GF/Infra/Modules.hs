@@ -378,6 +378,7 @@ sameMType m n = case (n,m) of
   (MTInterface,  MTInstance _) -> True
   (MTInterface,  MTResource)   -> True    -- for reuse
   (MTInterface,  MTAbstract)   -> True    -- for reuse
+  (MTInterface,  MTConcrete _) -> True    -- for reuse
 
   (MTResource,   MTInstance _) -> True
   (MTResource,   MTConcrete _) -> True    -- for reuse

@@ -15,7 +15,7 @@ module GF.Grammar.Predef
           , cTok
           , cStr
           , cStrs
-          , cPredefAbs, cPredef
+          , cPredefAbs, cPredefCnc, cPredef
           , cInt
           , cFloat
           , cString
@@ -57,6 +57,9 @@ cStrs = identC (BS.pack "Strs")
 
 cPredefAbs :: Ident
 cPredefAbs = identC (BS.pack "PredefAbs")
+
+cPredefCnc :: Ident
+cPredefCnc = identC (BS.pack "PredefCnc")
 
 cPredef :: Ident
 cPredef = identC (BS.pack "Predef")
