@@ -5,6 +5,7 @@ import PGF.Data (PGF(..))
 import PGF.Raw.Print (printTree)
 import PGF.Raw.Convert (fromPGF)
 import GF.Compile.GFCCtoHaskell
+import GF.Compile.GFCCtoProlog
 import GF.Compile.GFCCtoJS
 import GF.Infra.Option
 import GF.Speech.CFG
@@ -32,6 +33,8 @@ exportPGF opts fmt pgf =
       FmtJavaScript   -> multi "js"  pgf2js
       FmtHaskell      -> multi "hs"  (grammar2haskell name)
       FmtHaskell_GADT -> multi "hs"  (grammar2haskellGADT name)
+      FmtProlog       -> multi "pl"  grammar2prolog 
+      FmtProlog_Abs   -> multi "pl"  grammar2prolog_abs 
       FmtBNF          -> single "bnf"   bnfPrinter
       FmtSRGS_XML     -> single "grxml" (srgsXmlPrinter sisr)
       FmtSRGS_XML_NonRec -> single "grxml" srgsXmlNonRecursivePrinter
