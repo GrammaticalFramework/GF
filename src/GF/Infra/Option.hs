@@ -84,6 +84,8 @@ data OutputFormat = FmtPGF
                   | FmtJavaScript 
                   | FmtHaskell 
                   | FmtHaskell_GADT 
+                  | FmtProlog
+                  | FmtProlog_Abs
                   | FmtBNF
                   | FmtSRGS_XML
                   | FmtSRGS_XML_NonRec
@@ -393,9 +395,9 @@ optDescr =
      Option [] ["gfo-dir"] (ReqArg gfoDir "DIR") "Directory to put .gfo files in (default = '.').",
      Option ['f'] ["output-format"] (ReqArg outFmt "FMT") 
         (unlines ["Output format. FMT can be one of:",
-                  "Multiple concrete: pgf (default), gar, js, ...",
+                  "Multiple concrete: pgf (default), gar, js, prolog, ...",
                   "Single concrete only: cf, bnf, lbnf, gsl, srgs_xml, srgs_abnf, ...",
-                  "Abstract only: haskell, ..."]),
+                  "Abstract only: haskell, prolog_abs, ..."]),
      Option [] ["sisr"] (ReqArg sisrFmt "FMT") 
         (unlines ["Include SISR tags in generated speech recognition grammars.",
                   "FMT can be one of: old, 1.0"]),
@@ -444,6 +446,8 @@ outputFormats =
      ("js",           FmtJavaScript),
      ("haskell",      FmtHaskell),
      ("haskell_gadt", FmtHaskell_GADT),
+     ("prolog",       FmtProlog),
+     ("prolog_abs",   FmtProlog_Abs),
      ("bnf",          FmtBNF),
      ("srgs_xml",     FmtSRGS_XML),
      ("srgs_xml_nonrec",     FmtSRGS_XML_NonRec),
