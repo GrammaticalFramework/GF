@@ -31,8 +31,8 @@ exportPGF opts fmt pgf =
     case fmt of
       FmtPGF          -> multi "pgf" printPGF
       FmtJavaScript   -> multi "js"  pgf2js
-      FmtHaskell      -> multi "hs"  (grammar2haskell name)
-      FmtHaskell_GADT -> multi "hs"  (grammar2haskellGADT name)
+      FmtHaskell      -> multi "hs"  (grammar2haskell hsPrefix name)
+      FmtHaskell_GADT -> multi "hs"  (grammar2haskellGADT hsPrefix name)
       FmtProlog       -> multi "pl"  grammar2prolog 
       FmtProlog_Abs   -> multi "pl"  grammar2prolog_abs 
       FmtBNF          -> single "bnf"   bnfPrinter
@@ -47,6 +47,7 @@ exportPGF opts fmt pgf =
  where
    name = fromMaybe (prCId (absname pgf)) (moduleFlag optName opts)
    sisr = flag optSISR opts
+   hsPrefix = flag optHaskellPrefix opts
 
    multi :: String -> (PGF -> String) -> [(FilePath,String)]
    multi ext pr = [(name <.> ext, pr pgf)]

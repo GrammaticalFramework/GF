@@ -26,23 +26,27 @@ import GF.Text.UTF8
 import Data.List --(isPrefixOf, find, intersperse)
 import qualified Data.Map as Map
 
+type Prefix = String -> String
+
 -- | the main function
-grammar2haskell :: String  -- ^ Module name.
+grammar2haskell :: String -- ^ Constructor prefix 
+                -> String  -- ^ Module name.
                 -> PGF
                 -> String
-grammar2haskell name gr = encodeUTF8 $ foldr (++++) [] $  
-  haskPreamble name ++ [datatypes gr', gfinstances gr']
+grammar2haskell prefix name gr = encodeUTF8 $ foldr (++++) [] $  
+  haskPreamble name ++ [datatypes gId gr', gfinstances gId gr']
     where gr' = hSkeleton gr
+          gId = (prefix++)
 
-grammar2haskellGADT :: String -> PGF -> String
-grammar2haskellGADT name gr = encodeUTF8 $ foldr (++++) [] $  
+grammar2haskellGADT :: String  -- ^ Constructor prefix
+                    -> String   -- ^ Module name.
+                    -> PGF
+                    -> String
+grammar2haskellGADT prefix name gr = encodeUTF8 $ foldr (++++) [] $  
   ["{-# OPTIONS_GHC -fglasgow-exts #-}"] ++ 
-  haskPreamble name ++ [datatypesGADT gr', gfinstances gr']
+  haskPreamble name ++ [datatypesGADT gId gr', gfinstances gId gr']
     where gr' = hSkeleton gr
-
--- | by this you can prefix all identifiers with stg; the default is 'G'
-gId :: OIdent -> OIdent 
-gId i = 'G':i
+          gId = (prefix++)
 
 haskPreamble name =
  [
@@ -82,49 +86,49 @@ type OIdent = String
 
 type HSkeleton = [(OIdent, [(OIdent, [OIdent])])]
 
-datatypes, gfinstances :: (String,HSkeleton) -> String
-datatypes   = (foldr (+++++) "") . (filter (/="")) . (map hDatatype) . snd
-gfinstances (m,g) = (foldr (+++++) "") $ (filter (/="")) $ (map (gfInstance m)) g
+datatypes, gfinstances :: Prefix -> (String,HSkeleton) -> String
+datatypes gId = (foldr (+++++) "") . (filter (/="")) . (map (hDatatype gId)) . snd
+gfinstances gId (m,g) = (foldr (+++++) "") $ (filter (/="")) $ (map (gfInstance gId m)) g
 
-hDatatype  :: (OIdent, [(OIdent, [OIdent])]) -> String
-gfInstance :: String -> (OIdent, [(OIdent, [OIdent])]) -> String
+hDatatype  :: Prefix -> (OIdent, [(OIdent, [OIdent])]) -> String
+gfInstance :: Prefix -> String -> (OIdent, [(OIdent, [OIdent])]) -> String
 
-hDatatype ("Cn",_) = "" ---
-hDatatype (cat,[]) = ""
-hDatatype (cat,rules) | isListCat (cat,rules) = 
+hDatatype _ ("Cn",_) = "" ---
+hDatatype _ (cat,[]) = ""
+hDatatype gId (cat,rules) | isListCat (cat,rules) = 
  "newtype" +++ gId cat +++ "=" +++ gId cat +++ "[" ++ gId (elemCat cat) ++ "]" 
   +++ "deriving Show"
-hDatatype (cat,rules) =
+hDatatype gId (cat,rules) =
  "data" +++ gId cat +++ "=" ++
  (if length rules == 1 then "" else "\n  ") +++
  foldr1 (\x y -> x ++ "\n |" +++ y) 
-        [gId f +++ foldr (+++) "" (map gId xx) | (f,xx) <- rules] ++++
+        [gId f +++ foldr (+++) "" (map (gId) xx) | (f,xx) <- rules] ++++
  "  deriving Show"
 
 -- GADT version of data types
-datatypesGADT :: (String,HSkeleton) -> String
-datatypesGADT (_,skel) = 
-    unlines (concatMap hCatTypeGADT skel)
+datatypesGADT :: Prefix -> (String,HSkeleton) -> String
+datatypesGADT gId (_,skel) = 
+    unlines (concatMap (hCatTypeGADT gId) skel)
     +++++
-    "data Tree :: * -> * where" ++++ unlines (concatMap (map ("  "++) . hDatatypeGADT) skel)
+    "data Tree :: * -> * where" ++++ unlines (concatMap (map ("  "++) . hDatatypeGADT gId) skel)
 
-hCatTypeGADT :: (OIdent, [(OIdent, [OIdent])]) -> [String]
-hCatTypeGADT (cat,rules)
+hCatTypeGADT :: Prefix -> (OIdent, [(OIdent, [OIdent])]) -> [String]
+hCatTypeGADT gId (cat,rules)
     = ["type"+++gId cat+++"="+++"Tree"+++gId cat++"_",
        "data"+++gId cat++"_"]
 
-hDatatypeGADT :: (OIdent, [(OIdent, [OIdent])]) -> [String]
-hDatatypeGADT (cat, rules) 
+hDatatypeGADT :: Prefix -> (OIdent, [(OIdent, [OIdent])]) -> [String]
+hDatatypeGADT gId (cat, rules) 
     | isListCat (cat,rules) = [gId cat+++"::"+++"["++gId (elemCat cat)++"]" +++ "->" +++ t]
     | otherwise =
         [ gId f +++ "::" +++ concatMap (\a -> gId a +++ "-> ") args ++ t | (f,args) <- rules ]
   where t = "Tree" +++ gId cat ++ "_"
 
-gfInstance m crs = hInstance m crs ++++ fInstance m crs
+gfInstance gId m crs = hInstance gId m crs ++++ fInstance gId m crs
 
 ----hInstance m ("Cn",_) = "" --- seems to belong to an old applic. AR 18/5/2004
-hInstance m (cat,[]) = "" 
-hInstance m (cat,rules) 
+hInstance _ m (cat,[]) = "" 
+hInstance gId m (cat,rules) 
  | isListCat (cat,rules) =
   "instance Gf" +++ gId cat +++ "where" ++++
      "  gf (" ++ gId cat +++ "[" ++ concat (intersperse "," baseVars) ++ "])" 
@@ -148,8 +152,8 @@ hInstance m (cat,rules)
 
 
 ----fInstance m ("Cn",_) = "" ---
-fInstance m (cat,[]) = ""
-fInstance m (cat,rules) =
+fInstance _ m (cat,[]) = ""
+fInstance gId m (cat,rules) =
   "  fg t =" ++++
   "    case t of" ++++
   unlines [mkInst f xx | (f,xx) <- rules] ++++

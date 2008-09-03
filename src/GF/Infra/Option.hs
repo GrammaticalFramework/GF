@@ -150,6 +150,7 @@ data Flags = Flags {
       optGFODir          :: FilePath,
       optOutputFormats   :: [OutputFormat],
       optSISR            :: Maybe SISRFormat,
+      optHaskellPrefix   :: String,
       optOutputFile      :: Maybe FilePath,
       optOutputDir       :: Maybe FilePath,
       optRecomp          :: Recomp,
@@ -294,6 +295,7 @@ defaultFlags = Flags {
       optGFODir          = ".",
       optOutputFormats   = [FmtPGF],
       optSISR            = Nothing,
+      optHaskellPrefix   = "G",
       optOutputFile      = Nothing,
       optOutputDir       = Nothing,
       optRecomp          = RecompIfNewer,
@@ -401,6 +403,8 @@ optDescr =
      Option [] ["sisr"] (ReqArg sisrFmt "FMT") 
         (unlines ["Include SISR tags in generated speech recognition grammars.",
                   "FMT can be one of: old, 1.0"]),
+     Option [] ["haskell-prefix"] (ReqArg hsPrefix "PREFIX") 
+                "Constructor prefix for generated Haskell code. Default: G",
      Option ['o'] ["output-file"] (ReqArg outFile "FILE") 
            "Save output in FILE (default is out.X, where X depends on output format.",
      Option ['D'] ["output-dir"] (ReqArg outDir "DIR") 
@@ -432,6 +436,7 @@ optDescr =
                          "old" -> set $ \o -> o { optSISR = Just SISR_WD20030401 }
                          "1.0" -> set $ \o -> o { optSISR = Just SISR_1_0 }
                          _     -> fail $ "Unknown SISR format: " ++ show x
+       hsPrefix    x = set $ \o -> o { optHaskellPrefix = x }
        outFile     x = set $ \o -> o { optOutputFile = Just x }
        outDir      x = set $ \o -> o { optOutputDir = Just x }
        recomp      x = set $ \o -> o { optRecomp = x }
