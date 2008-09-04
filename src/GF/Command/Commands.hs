@@ -199,15 +199,18 @@ allCommands enc pgf = Map.fromList [
        ("full","give full information of the commands"),
        ("license","show copyright and license information")
        ],
-     exec = \opts ts -> return ([], case ts of
-       _ | isOpt "changes" opts -> changesMsg
-       _ | isOpt "coding" opts -> codingMsg
-       _ | isOpt "license" opts -> licenseMsg
-       [t] -> let co = getCommandOp (showTree t) in 
-              case lookCommand co (allCommands enc pgf) of   ---- new map ??!!
-                Just info -> commandHelp True (co,info)
-                _ -> "command not found"
-       _ -> commandHelpAll enc pgf opts)
+     exec = \opts ts -> 
+       let
+        msg = case ts of
+          _ | isOpt "changes" opts -> changesMsg
+          _ | isOpt "coding" opts -> codingMsg
+          _ | isOpt "license" opts -> licenseMsg
+          [t] -> let co = getCommandOp (showTree t) in 
+                 case lookCommand co (allCommands enc pgf) of   ---- new map ??!!
+                   Just info -> commandHelp True (co,info)
+                   _ -> "command not found"
+          _ -> commandHelpAll enc pgf opts
+       in return (fromString msg) 
      }),
   ("i", emptyCommandInfo {
      longname = "import",
@@ -561,8 +564,8 @@ allCommands enc pgf = Map.fromList [
    fromTrees ts = (ts,unlines (map showTree ts))
    fromStrings ss = (map (Lit . LStr) ss, unlines ss)
    fromString  s  = ([Lit (LStr s)], s)
-   toStrings ts = [s | Lit (LStr s) <- ts] 
-   toString ts = unwords [s | Lit (LStr s) <- ts] 
+   toStrings = map showAsString 
+   toString = unwords . toStrings
 
    prGrammar opts = case opts of
      _ | isOpt "cats" opts -> unwords $ categories pgf
@@ -580,6 +583,10 @@ allCommands enc pgf = Map.fromList [
    -- ps -f -g s returns g (f s)
    stringOps opts s = foldr app s (reverse opts) where
      app f = maybe id id (stringOp f) 
+
+   showAsString t = case t of
+     Lit (LStr s) -> s
+     _ -> "\n" ++ showTree t  --- newline needed in other cases than the first
 
 stringOpOptions = [
        ("bind","bind tokens separated by Prelude.BIND, i.e. &+"),
