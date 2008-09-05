@@ -17,7 +17,7 @@ stringOp name = case name of
   "lexmixed"   -> Just $ appLexer lexMixed
   "words"      -> Just $ appLexer words
   "bind"       -> Just $ appUnlexer bindTok
-  "uncars"     -> Just $ appUnlexer concat
+  "unchars"    -> Just $ appUnlexer concat
   "unlextext"  -> Just $ appUnlexer unlexText
   "unlexcode"  -> Just $ appUnlexer unlexCode
   "unlexmixed" -> Just $ appUnlexer unlexMixed
@@ -40,11 +40,16 @@ wrapHTML = unlines . tag . intersperse "<br>" . lines where
   tag ss = "<html>":"<head>":"<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />":"</head>":"<body>" : ss ++ ["</body>","</html>"]
 
 lexText :: String -> [String]
-lexText s = case s of
-  c:cs | isPunct c -> [c] : lexText cs
-  c:cs | isSpace c ->       lexText cs
-  _:_ -> let (w,cs) = break (\x -> isSpace x || isPunct x) s in w : lexText cs
-  _ -> [s]
+lexText = uncap . lext where
+  lext s = case s of
+    c:cs | isMajorPunct c -> [c] : uncap (lext cs)
+    c:cs | isMinorPunct c -> [c] : lext cs
+    c:cs | isSpace c ->       lext cs
+    _:_ -> let (w,cs) = break (\x -> isSpace x || isPunct x) s in w : lext cs
+    _ -> [s]
+  uncap s = case s of
+    (c:cs):ws -> (toLower c : cs):ws
+    _ -> s
 
 -- | Haskell lexer, usable for much code
 lexCode :: String -> [String]
@@ -70,12 +75,17 @@ bindTok ws = case ws of
     []         -> ""
 
 unlexText :: [String] -> String
-unlexText s = case s of
-  w:[] -> w
-  w:[c]:[] | isPunct c -> w ++ [c]
-  w:[c]:cs | isPunct c -> w ++ [c] ++ " " ++ unlexText cs
-  w:ws -> w ++ " " ++ unlexText ws
-  _ -> []
+unlexText = cap . unlext where
+  unlext s = case s of
+    w:[] -> w
+    w:[c]:[] | isPunct c -> w ++ [c]
+    w:[c]:cs | isMajorPunct c -> w ++ [c] ++ " " ++ cap (unlext cs)
+    w:[c]:cs | isMinorPunct c -> w ++ [c] ++ " " ++ unlext cs
+    w:ws -> w ++ " " ++ unlext ws
+    _ -> []
+  cap s = case s of
+     c:cs -> toUpper c : cs
+     _ -> s
 
 unlexCode :: [String] -> String
 unlexCode s = case s of
@@ -97,5 +107,7 @@ unlexMixed = concat . alternate False where
   sep env c = if env then c ++ " " else " " ++ c
 
 isPunct = flip elem ".?!,:;"
+isMajorPunct = flip elem ".?!"
+isMinorPunct = flip elem ",:;"
 isParen = flip elem "()[]{}"
 isClosing = flip elem ")]}"
