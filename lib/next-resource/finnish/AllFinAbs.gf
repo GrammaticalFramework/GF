@@ -1,0 +1,4 @@
+abstract AllFinAbs = 
+  Lang,
+  ExtraFinAbs
+  ** {} ;
