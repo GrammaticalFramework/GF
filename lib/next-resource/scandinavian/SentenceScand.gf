@@ -41,18 +41,18 @@ incomplete concrete SentenceScand of Sentence =
     EmbedQS qs = {s = qs.s ! QIndir} ;
     EmbedVP vp = {s = infMark ++ infVP vp (agrP3 utrum Sg)} ; --- agr
 
-    UseCl t a p cl = {
-      s = \\o => t.s ++ a.s ++ p.s ++ cl.s ! t.t ! a.a ! p.p ! o
+    UseCl t p cl = {
+      s = \\o => t.s ++ p.s ++ cl.s ! t.t ! t.a ! p.p ! o
     } ;
-    UseQCl t a p cl = {
-      s = \\q => t.s ++ a.s ++ p.s ++ cl.s ! t.t ! a.a ! p.p ! q
+    UseQCl t p cl = {
+      s = \\q => t.s ++ p.s ++ cl.s ! t.t ! t.a ! p.p ! q
     } ;
-    UseRCl t a p cl = {
-      s = \\r => t.s ++ a.s ++ p.s ++ cl.s ! t.t ! a.a ! p.p ! r ;
+    UseRCl t p cl = {
+      s = \\r => t.s ++ p.s ++ cl.s ! t.t ! t.a ! p.p ! r ;
       c = cl.c
     } ;
-    UseSlash t a p cl = {
-      s = \\o => t.s ++ a.s ++ p.s ++ cl.s ! t.t ! a.a ! p.p ! o ;
+    UseSlash t p cl = {
+      s = \\o => t.s ++ p.s ++ cl.s ! t.t ! t.a ! p.p ! o ;
       n3 = cl.n3 ;
       c2 = cl.c2
     } ;

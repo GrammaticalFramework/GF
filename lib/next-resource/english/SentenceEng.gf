@@ -41,18 +41,18 @@ concrete SentenceEng of Sentence = CatEng ** open Prelude, ResEng in {
     EmbedQS qs = {s = qs.s ! QIndir} ;
     EmbedVP vp = {s = infVP False vp (agrP3 Sg)} ; --- agr
 
-    UseCl  t a p cl = {
-      s = t.s ++ a.s ++ p.s ++ cl.s ! t.t ! a.a ! ctr p.p ! ODir
+    UseCl  t p cl = {
+      s = t.s ++ p.s ++ cl.s ! t.t ! t.a ! ctr p.p ! ODir
     } ;
-    UseQCl t a p cl = {
-      s = \\q => t.s ++ a.s ++ p.s ++ cl.s ! t.t ! a.a ! ctr p.p ! q
+    UseQCl t p cl = {
+      s = \\q => t.s ++ p.s ++ cl.s ! t.t ! t.a ! ctr p.p ! q
     } ;
-    UseRCl t a p cl = {
-      s = \\r => t.s ++ a.s ++ p.s ++ cl.s ! t.t ! a.a ! ctr p.p ! r ;
+    UseRCl t p cl = {
+      s = \\r => t.s ++ p.s ++ cl.s ! t.t ! t.a ! ctr p.p ! r ;
       c = cl.c
     } ;
-    UseSlash t a p cl = {
-      s = t.s ++ a.s ++ p.s ++ cl.s ! t.t ! a.a ! ctr p.p  ! ODir ;
+    UseSlash t p cl = {
+      s = t.s ++ p.s ++ cl.s ! t.t ! t.a ! ctr p.p  ! ODir ;
       c2 = cl.c2
     } ;
 
