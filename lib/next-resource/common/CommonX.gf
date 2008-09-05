@@ -14,11 +14,14 @@ concrete CommonX of Common = open (R = ParamX) in {
     CAdv = {s : Str} ; --lock_CAdv : {}} ;
     PConj = {s : Str} ; --lock_PConj : {}} ;
 
+    Temp  = {s : Str ; t : R.Tense ; a : R.Anteriority} ;
     Tense = {s : Str ; t : R.Tense} ;
     Ant   = {s : Str ; a : R.Anteriority} ;
     Pol   = {s : Str ; p : R.Polarity} ;
 
   lin
+    TTAnt t a = {s = t.s ++ a.s ; t = t.t ; a = a.a} ;
+
     PPos  = {s = []} ** {p = R.Pos} ;
     PNeg  = {s = []} ** {p = R.Neg} ;
     TPres = {s = []} ** {t = R.Pres} ;

@@ -57,18 +57,18 @@ abstract Sentence = Cat ** {
 -- anteriority, which are defined in [``Common`` Common.html].
 
   fun
-    UseCl  : Tense -> Ant -> Pol -> Cl  -> S ;
-    UseQCl : Tense -> Ant -> Pol -> QCl -> QS ;
-    UseRCl : Tense -> Ant -> Pol -> RCl -> RS ;
-    UseSlash : Tense -> Ant -> Pol -> ClSlash -> SSlash ;
+    UseCl    : Temp -> Pol -> Cl  -> S ;
+    UseQCl   : Temp -> Pol -> QCl -> QS ;
+    UseRCl   : Temp -> Pol -> RCl -> RS ;
+    UseSlash : Temp -> Pol -> ClSlash -> SSlash ;
 
 -- An adverb can be added to the beginning of a sentence.
 
-    AdvS   : Adv -> S  -> S ;            -- today, I will go home
+    AdvS     : Adv -> S  -> S ;            -- today, I will go home
 
 -- A sentence can be modified by a relative clause referring to its contents.
 
-    RelS   : S -> RS -> S ;              -- she sleeps, which is good
+    RelS     : S -> RS -> S ;              -- she sleeps, which is good
 
 }
 

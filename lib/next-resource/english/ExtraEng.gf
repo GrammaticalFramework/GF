@@ -2,7 +2,7 @@ concrete ExtraEng of ExtraEngAbs = CatEng **
   open ResEng, Coordination, Prelude in {
 
   lin
-    GenNP np = {s = \\_ => np.s ! Gen} ;
+    GenNP np = {s,sp = \\_,_ => np.s ! Gen} ;
     ComplBareVS v s  = insertObj (\\_ => s.s) (predV v) ;
 
     StrandRelSlash rp slash = {
