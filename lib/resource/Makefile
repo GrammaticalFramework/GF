@@ -22,6 +22,13 @@ api:
 math:
 	$(RUNMAKE) math
 
+compat:
+	gfc */Compatibility*.gf
+	cp -p */Compatibility*.gfo ../alltenses/
+	cp -p */Compatibility*.gfo ../present/
+#	$(RUNMAKE) present compat
+#	$(RUNMAKE) compat
+
 test:
 	$(RUNMAKE) test
 
