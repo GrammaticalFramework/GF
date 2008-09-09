@@ -12,7 +12,7 @@
 
 - GF installed as a Cabal package
    * (cd ../.. && cabal install)
-   * Maye need to remove "-beta" from the Version field in ../../GF.cabal
+   * Maybe need to remove "-beta" from the Version field in ../../GF.cabal
 
 == Building ==
 
@@ -28,6 +28,47 @@ $ make food
 
 - Make sure that your web server supports FastCGI.
 
+- Make sure that your web server knows that gf.fcgi is a FastCGI
+program.
+
+- Make sure that you are allowed to run FastCGI programs in the 
+directory that you use.
+
+- With large grammars, gf.fcgi may take long enough to start that the web server
+thinks that the program has died. With Apache, you can fix this by adding 
+"FastCgiConfig -startDelay 30" to your httpd.conf. 
+
+These sections from my Apache config fixes the above two:
+
+(On OS X, this is in /etc/httpd/httpd.conf)
+
+LoadModule fastcgi_module     libexec/httpd/mod_fastcgi.so
+AddModule mod_fastcgi.c
+
+<IfModule mod_fastcgi.c> 
+  FastCgiIpcDir /tmp/fcgi_ipc/ 
+  AddHandler fastcgi-script .fcgi 
+  FastCgiConfig -startDelay 30
+</IfModule>
+
+
+(On OS X, this is in /etc/httpd/users/bringert.conf)
+
+<Directory "/Users/bringert/Sites/">
+    Options Indexes MultiViews FollowSymlinks ExecCGI
+    AddHandler cgi-script .cgi
+    AllowOverride None
+    Order allow,deny
+    Allow from all
+</Directory>
+
+
 - Copy or symlink this directory to your web directory.
+
+- First test from the command-line, since debugging is harder from the AJAX UI:
+
+$ curl 'http://localhost/~bringert/gf-server/gf.fcgi/translate?input=this+fish&cat=Item&from=FoodEng'
+
+- Check server logs (e.g. /var/log/httpd/error_log) if it doesn't work.
 
 - Go to SERVER_URL/gf-client.html in your web browser.
