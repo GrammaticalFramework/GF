@@ -119,7 +119,8 @@ loop opts gfenv0 = do
           _ -> do
             interpretCommandLine enc env s
             loopNewCPU gfenv
-        gfenv' <- return $ either (const gfenv) id r
+--        gfenv' <- return $ either (const gfenv) id r
+        gfenv' <- either (\e -> (print e >> return gfenv)) return r
         loop opts gfenv'
 
 importInEnv :: GFEnv -> Options -> [FilePath] -> IO GFEnv

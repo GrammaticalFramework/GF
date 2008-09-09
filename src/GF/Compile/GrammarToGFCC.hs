@@ -450,7 +450,11 @@ term2term fun cgr env@(labels,untyps,typs) tr = case tr of
        let v = comp v0 
        let mv1 = Map.lookup v untyps
        case mv1 of 
-         Just v1 -> return $ (comp . (ts !!) . fromInteger) v1 
+         Just v0 -> 
+           let v1 = fromInteger v0
+               v2 = v1 --if length ts > v1 then v1 
+                       --else trace ("DEBUG" +++ show v1 +++ "of" +++ show ts) 0
+           in return $ (comp . (ts !!)) v2 
          _ -> return (S (comp tb) v) 
                   
      R r -> R [(l,(ty,comp t)) | (l,(ty,t)) <- r]
