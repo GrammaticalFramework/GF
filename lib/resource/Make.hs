@@ -66,6 +66,9 @@ langsDemo = langsLang `except` ["Ara","Hin","Ina","Tha"]
 -- languages for which langs.pgf is built
 langsPGF = langsTest `only` ["Eng","Fre","Swe"]
 
+-- languages for which Compatibility exists (to be extended)
+langsCompat = langsLang `only` ["Cat","Eng","Fin","Fre","Ita","Spa","Swe"]
+
 treebankExx = "exx-resource.gft"
 treebankResults = "exx-resource.gftb"
 
@@ -86,8 +89,8 @@ make xx = do
     mapM_ (gfc pres [] . lang) (optl langsLang)
     copy "*/*.gfo" dir
   ifx "compat" $ do
-    mapM_ (gfc pres [] . compat) (optl langsLang)
-    copy "*/*.gfo" dir
+    mapM_ (gfc pres [] . compat) (optl langsCompat)
+    copy "*/Compatibility*.gfo" dir
   ifx "api" $ do
     mapM_ (gfc pres presApiPath . try) (optl langsAPI)
     copy "*/*.gfo" dir
