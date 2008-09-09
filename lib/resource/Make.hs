@@ -85,6 +85,9 @@ make xx = do
   ifx "lang" $ do
     mapM_ (gfc pres [] . lang) (optl langsLang)
     copy "*/*.gfo" dir
+  ifx "compat" $ do
+    mapM_ (gfc pres [] . compat) (optl langsLang)
+    copy "*/*.gfo" dir
   ifx "api" $ do
     mapM_ (gfc pres presApiPath . try) (optl langsAPI)
     copy "*/*.gfo" dir
@@ -132,6 +135,7 @@ demos abstr ls = "gr -number=100 | l -treebank " ++ unlexer abstr ls ++
            " | ps -to_html | wf -file=resdemo.html"
 
 lang (lla,la) = lla ++ "/All" ++ la ++ ".gf"
+compat (lla,la) = lla ++ "/Compatibility" ++ la ++ ".gf"
 try  (lla,la) = "api/Try"  ++ la ++ ".gf"
 math (lla,la) = "mathematical/Mathematical"  ++ la ++ ".gf"
 symbolic (lla,la) = "mathematical/Symbolic"  ++ la ++ ".gf"

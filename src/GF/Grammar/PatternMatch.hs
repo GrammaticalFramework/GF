@@ -31,9 +31,23 @@ matchPattern :: [(Patt,Term)] -> Term -> Err (Term, Substitution)
 matchPattern pts term = 
   if not (isInConstantForm term)
     then prtBad "variables occur in" term
-  else 
+  else do
+    term' <- mkK term
     errIn ("trying patterns" +++ unwords (intersperse "," (map (prt . fst) pts))) $
-    findMatch [([p],t) | (p,t) <- pts] [term]
+      findMatch [([p],t) | (p,t) <- pts] [term']
+ where
+  -- to capture all Str with string pattern matching
+  mkK s = case s of
+    C _ _ -> do
+      s' <- getS s
+      return (K (unwords s'))
+    _ -> return s
+
+  getS s = case s of
+    K w -> return [w]
+    C v w -> liftM2 (++) (getS v) (getS w)
+    Empty -> return []
+    _ -> prtBad "cannot get string from" s
 
 testOvershadow :: [Patt] -> [Term] -> Err [Patt]
 testOvershadow pts vs = do
@@ -57,7 +71,8 @@ tryMatch (p,t) = do
   t' <- termForm t
   trym p t'
  where
-  isInConstantFormt = True -- tested already
+
+  isInConstantFormt = True -- tested already in matchPattern
   trym p t' =
     case (p,t') of
       (PVal _ i, (_,Val _ j,_)) 
@@ -129,6 +144,7 @@ isInConstantForm trm = case trm of
     Q _ _    -> True
     QC _ _   -> True
     Abs _ _  -> True
+    C c a    -> isInConstantForm c && isInConstantForm a
     App c a  -> isInConstantForm c && isInConstantForm a
     R r      -> all (isInConstantForm . snd . snd) r
     K _      -> True
