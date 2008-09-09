@@ -885,7 +885,7 @@ checkLType env trm typ0 = do
      Just (_,t) -> do
        (t',ty') <- check t ty
        return (l,(Just ty',t'))
-     _ -> prtFail "cannot find value for label" l
+     _ -> raise $ "cannot find value for label" +++ prt l +++ "in" +++ prt_ (R rms)
 
    checkCase arg val (p,t) = do
      cont <- pattContext env arg p
