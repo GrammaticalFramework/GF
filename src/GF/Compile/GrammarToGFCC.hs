@@ -33,8 +33,8 @@ import qualified Data.ByteString.Char8 as BS
 import Debug.Trace ----
 
 -- when developing, swap commenting
---traceD s t = trace s t 
-traceD s t = t 
+traceD s t = trace s t 
+--traceD s t = t 
 
 
 -- the main function: generate PGF from GF.
