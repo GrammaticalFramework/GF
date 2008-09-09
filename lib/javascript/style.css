@@ -78,7 +78,7 @@ body {
 #tree {
 	left: -10px;
 	top: -10px;	
-	width: 230px;
+	width: 250px;
 	height: 250px;
 	margin: 0px;
 	padding: 10px;
@@ -197,28 +197,35 @@ td.hotKey {
 td.language {
 	color: black;
 	background-color: white;
+	margin: 1px;
+	padding: 1px;
 }
 
 td.language:hover {
 	color: blue;
 	background-color: white;
 	text-decoration: underline;
+	margin: 1px;
+	padding: 1px;
 }
 
 td.selected {
 	color: white;
 	background-color: #3366CC;
+	margin: 1px;
+	padding: 1px;
 }
 
 td.selected:hover {
 	color: white;
 	background-color: #3366CC;
 	text-decoration: underline;
+	margin: 1px;
+	padding: 1px;
 }
 	
 p {
 	margin-bottom: 40px;
-	text-align: justify;
 }
 
 span.normal {
