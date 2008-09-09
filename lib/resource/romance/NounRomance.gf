@@ -79,7 +79,7 @@ incomplete concrete NounRomance of Noun =
         } ;
 
     PossPron p = {
-      s = \\n,g,c => possCase g n c ++ p.s ! Poss (aagr g n) ---- il mio!
+      s = \\n,g,c => possCase g n c ++ p.s ! Poss g n ---- il mio!
       } ;
 
     NumSg = {s = \\_ => [] ; isNum = False ; n = Sg} ;

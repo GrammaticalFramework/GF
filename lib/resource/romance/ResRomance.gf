@@ -28,7 +28,7 @@ oper
 
   npform2case : NPForm -> Case = \p -> case p of {
     Ton  x => x ;
-    Poss _ => genitive ;
+    Poss _ _ => genitive ;
     Aton x => x
     } ;
 

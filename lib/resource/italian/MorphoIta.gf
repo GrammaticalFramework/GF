@@ -146,10 +146,10 @@ oper
        Aton (CPrep P_di) => "ne" ; --- hmm
        Aton (CPrep P_a) => lui ;
        Aton q       => prepCase q ++ Lui ; ---- GF bug with c or p!
-       Poss {n = Sg ; g = Masc} => son ;
-       Poss {n = Sg ; g = Fem}  => sa ;
-       Poss {n = Pl ; g = Masc} => ses ;
-       Poss {n = Pl ; g = Fem}  => see
+       Poss Masc Sg => son ;
+       Poss Fem Sg  => sa ;
+       Poss Masc Pl => ses ;
+       Poss Fem Pl  => see
        } ;
      a = {g = g ; n = n ; p = p} ;
      hasClit = True

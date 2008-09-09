@@ -169,9 +169,9 @@ oper
        Aton Acc => le ; 
        Aton (CPrep P_de) => "en" ; --- hmm
        Aton (CPrep _) => lui ; 
-       Poss {n = Sg ; g = Masc} => son ;
-       Poss {n = Sg ; g = Fem}  => sa ;
-       Poss {n = Pl}    => ses
+       Poss Masc Sg => son ;
+       Poss Fem Sg  => sa ;
+       Poss _ Pl    => ses
        } ;
      a = {g = g ; n = n ; p = p} ;
      hasClit = True

@@ -53,7 +53,7 @@ interface DiffRomance = open CommonRomance, Prelude in {
 
 --2 Constants that must derivatively depend on language
 
-  param NPForm = Ton Case | Aton Case | Poss {g : Gender ; n : Number} ; --- AAgr
+  param NPForm = Ton Case | Aton Case | Poss Gender Number ; --- AAgr
 
   oper dative   : Case ;
   oper genitive : Case ;
