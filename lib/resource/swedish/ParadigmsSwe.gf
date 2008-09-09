@@ -312,8 +312,15 @@ oper
     mkN : (apa : Str) -> N = regN ;
     mkN : Str -> Gender -> N = regGenN ; 
     mkN : (nyckel, nycklar : Str) -> N = mk2N ; 
-    mkN : (museum,museet,museer,museerna : Str) -> N = mk4N
+    mkN : (museum,museet,museer,museerna : Str) -> N = mk4N ;
+    mkN : Str -> N -> N = compoundN ;
   } ;
+
+  compoundN : Str -> N -> N = \s,no -> {
+    s = \\n,d,c => s ++ no.s ! n ! d ! c ;
+    g = no.g ;
+    lock_N = <>
+    } ;
 
   mk4N : (museum,museet,museer,museerna : Str) -> N = \apa,apan,apor,aporna ->  {
     s = nounForms apa apan apor aporna ;
