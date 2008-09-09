@@ -358,6 +358,7 @@ paramValues cgr = (labels,untyps,typs) where
  
   isParam ty = case ty of
     Q _ _ -> True
+    QC _ _ -> True
     RecType rs -> all isParam (map snd rs)
     _ -> False
 
