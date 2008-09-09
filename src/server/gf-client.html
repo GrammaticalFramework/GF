@@ -48,7 +48,7 @@
       }
 
       function update() {
-        updateCompletion();
+//        updateCompletion();
         updateTranslation();
       }
 
@@ -72,7 +72,7 @@
     <div id="translator">
       <form onsubmit="update(); return false;">
         <p>
-          <input type="text" id="inputText" value="this cheese is warm" size="50" onkeyup="update()"/>
+          <input type="text" id="inputText" value="this cheese is warm" size="50" />
         </p>
         <p>
           <label>From: <select id="fromLang" onchange="update()"><option value="" selected="selected">Any language</option></select></label>
