@@ -52,7 +52,7 @@ langs = map fst langsCoding
 langsLang = langs `except` ["Ara"]
 
 -- languages for which to compile Try 
-langsAPI  = langsLang `except` ["Ara","Bul","Cat","Hin","Ina","Rus","Tha"]
+langsAPI  = langsLang `except` ["Ara","Bul","Hin","Ina","Rus","Tha"]
 
 -- languages for which to compile Mathematical 
 langsMath = langsAPI
