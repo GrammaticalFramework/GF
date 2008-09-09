@@ -33,7 +33,6 @@ import qualified Data.ByteString.Char8 as BS
 import Debug.Trace ----
 
 -- when developing, swap commenting
-
 --traceD s t = trace s t 
 traceD s t = t 
 
@@ -272,8 +271,8 @@ repartition abs cg = [M.partOfGrammar cg (lang,mo) |
 -- translate tables and records to arrays, parameters and labels to indices
 
 canon2canon :: Ident -> SourceGrammar -> SourceGrammar
-canon2canon abs = 
-   recollect . map cl2cl . repartition abs . purgeGrammar abs 
+canon2canon abs cg0 = 
+   (recollect . map cl2cl . repartition abs . purgeGrammar abs) cg0 
  where
   recollect = M.MGrammar . nubBy (\ (i,_) (j,_) -> i==j) . concatMap M.modules
   cl2cl = M.MGrammar . js2js . map (c2c p2p) . M.modules
@@ -285,16 +284,16 @@ canon2canon abs =
         (c, M.ModMod $ M.replaceJudgements mo $ mapTree f2 (M.jments mo))
       _ -> (c,m)    
   j2j cg (f,j) = 
-----    let debug = trace ("+ " ++ prt f) in
-    let debug = id in
+    let debug = traceD ("+ " ++ prt f) in
     case j of
       CncFun x (Yes tr) z -> (f,CncFun x (Yes (debug (t2t tr))) z)
       CncCat (Yes ty) (Yes x) y -> (f,CncCat (Yes (ty2ty ty)) (Yes (t2t x)) y)
       _ -> (f,j)
    where
-      t2t = term2term f cg pv
-      ty2ty = type2type cg pv
-      pv@(labels,untyps,typs) = trs $ paramValues cg
+      cg1 = cg
+      t2t = term2term f cg1 pv
+      ty2ty = type2type cg1 pv
+      pv@(labels,untyps,typs) = trs $ paramValues cg1
 
     -- flatten record arguments of param constructors
   p2p (f,j) = case j of
@@ -352,11 +351,16 @@ paramValues cgr = (labels,untyps,typs) where
             ]
   params = [(ty, errVal (traceD ("UNKNOWN PARAM TYPE" +++ show ty) []) $ 
                                          Look.allParamValues cgr ty) | ty <- partyps]
-  typsFrom ty = unlockTy ty : case ty of
+  typsFrom ty = (if isParam ty then (ty:) else id) $ case ty of
     Table p t  -> typsFrom p ++ typsFrom t
     RecType ls -> concat [typsFrom t | (_, t) <- ls]
     _ -> []
  
+  isParam ty = case ty of
+    Q _ _ -> True
+    RecType rs -> all isParam (map snd rs)
+    _ -> False
+
   typsFromTrm :: Term -> STM [Type] Term
   typsFromTrm tr = case tr of
     R fs -> mapM_ (typsFromField . snd) fs >> return tr 
@@ -371,8 +375,10 @@ paramValues cgr = (labels,untyps,typs) where
       updateSTM (ty:) >> mapM_ typsFromTrm [t | (_, t) <- cs] >> return tr
     _ -> GM.composOp typsFromTrm tr
 
+  mods = traceD (unwords (map (prt . fst) ms)) ms where ms = M.allModMod cgr
+
   jments = 
-    [(m,j) | (m,mo) <- M.allModMod cgr, j <- tree2list $ M.jments mo]
+    [(m,j) | (m,mo) <- mods, j <- tree2list $ M.jments mo]
   typs = 
     Map.fromList [(ci,Map.fromList (zip vs [0..])) | (ci,vs) <- params]
   untyps = 
