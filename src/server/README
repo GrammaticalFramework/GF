@@ -26,7 +26,14 @@ $ make food
 
 == Running ==
 
-- Make sure that your web server supports FastCGI.
+- Make sure that your web server supports FastCGI. For Apache on OS X,
+  do this:
+
+$  curl -O http://www.fastcgi.com/dist/mod_fastcgi-2.4.6.tar.gz
+$  tar -zxf mod_fastcgi-2.4.6.tar.gz 
+$  cd mod_fastcgi-2.4.6/
+$  apxs -o mod_fastcgi.so -c *.c
+$  apxs -i -a -n fastcgi mod_fastcgi.so
 
 - Make sure that your web server knows that gf.fcgi is a FastCGI
 program.
@@ -38,7 +45,8 @@ directory that you use.
 thinks that the program has died. With Apache, you can fix this by adding 
 "FastCgiConfig -startDelay 30" to your httpd.conf. 
 
-These sections from my Apache config fixes the above two:
+These sections from my Apache config fixes the above two 
+(some of this may be fixed by the second apxs command above):
 
 (On OS X, this is in /etc/httpd/httpd.conf)
 
