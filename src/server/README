@@ -76,6 +76,11 @@ AddModule mod_fastcgi.c
 
 $ sudo apachectl restart
 
+- If Apache complains about a syntax error on the FastCgiIpcDir line, try deleting
+  any existing /tmp/fcgi_ipc/ directory:
+
+$ sudo rm -rf /tmp/fcgi_ipc/
+
 - Copy or symlink this directory to your web directory.
 
 - First test from the command-line, since debugging is harder from the AJAX UI:
