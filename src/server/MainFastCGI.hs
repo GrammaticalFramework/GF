@@ -25,7 +25,7 @@ main = do initFastCGI
           loopFastCGI (handleErrors (handleCGIErrors (fcgiMain r)))
 
 fcgiMain :: DataRef PGF -> CGI CGIResult
-fcgiMain ref = getData PGF.readPGF ref grammarFile >>= cgiMain
+fcgiMain ref = getData (liftIO . PGF.readPGF) ref grammarFile >>= cgiMain
 
 cgiMain :: PGF -> CGI CGIResult
 cgiMain pgf =
