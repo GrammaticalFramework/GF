@@ -62,6 +62,11 @@ AddModule mod_fastcgi.c
     Allow from all
 </Directory>
 
+- If you have changed the web server config, you need to restart the web server
+ (this is also useful to get a clean slate if you end up with dead or resource-hogging 
+ FastCGI processes):
+
+$ sudo apachectl restart
 
 - Copy or symlink this directory to your web directory.
 
