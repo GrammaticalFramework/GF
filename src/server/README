@@ -33,7 +33,7 @@ $  curl -O http://www.fastcgi.com/dist/mod_fastcgi-2.4.6.tar.gz
 $  tar -zxf mod_fastcgi-2.4.6.tar.gz 
 $  cd mod_fastcgi-2.4.6/
 $  apxs -o mod_fastcgi.so -c *.c
-$  apxs -i -a -n fastcgi mod_fastcgi.so
+$  sudo apxs -i -a -n fastcgi mod_fastcgi.so
 
 - Make sure that your web server knows that gf.fcgi is a FastCGI
 program.
