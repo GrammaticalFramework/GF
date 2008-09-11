@@ -6,8 +6,6 @@ GHCXMAKE=ghcxmake
 GHCFLAGS+= -fglasgow-exts
 GHCOPTFLAGS=-O2
 GHCFUDFLAG=
-JAVAFLAGS=-target 1.4 -source 1.4
-GFEDITOR=JavaGUI2
 
 DIST_DIR=GF-$(PACKAGE_VERSION)
 NOT_IN_DIST= \
@@ -62,7 +60,7 @@ else
 endif
 
 .PHONY: all unix jar tags gfdoc windows install install-gf \
-        lib temp install-gfdoc install-editor \
+        lib temp install-gfdoc \
         today help clean windows-msi dist gfc
 
 all: unix gfc lib
@@ -236,7 +234,7 @@ windows-msi: gf.wxs
 # Installation
 #
 
-install: install-gf install-gfdoc install-lib install-editor
+install: install-gf install-gfdoc install-lib
 
 install-gf:
 	$(INSTALL) -d $(bindir)
@@ -249,17 +247,3 @@ install-gfdoc:
 install-lib:
 	$(INSTALL) -d $(GF_LIB_DIR)
 	$(TAR) -C $(GF_LIB_DIR) -zxf ../lib/compiled.tgz
-
-install-editor:
-	$(INSTALL) -d $(GF_DATA_DIR)
-	$(INSTALL) jgf $(bindir)
-	$(INSTALL) -m 0644 JavaGUI/gf-java.jar $(GF_DATA_DIR)
-	$(INSTALL) gfeditor $(bindir)
-	$(INSTALL) -m 0644 $(GFEDITOR)/gfeditor.jar $(GF_DATA_DIR)
-
-install-java:
-	-rm -f ../bin/JavaGUI
-	ln -s ../src/JavaGUI ../bin
-	@echo "PLEASE set GFHOME and GF_LIB_PATH in your environment"
-	-rm -f ../bin/$(GFEDITOR)
-	ln -s ../src/$(GFEDITOR) ../bin
