@@ -8,6 +8,7 @@ GF_LIB_DIR=$(GF_DATA_DIR)/lib
 install: 
 	$(INSTALL) -d $(bindir)
 	$(INSTALL) gf$(EXEEXT) gfdoc$(EXEEXT) $(bindir)
+	$(INSTALL) gfc$(EXEEXT) $(bindir)
 	$(INSTALL) -d $(GF_DATA_DIR)
 	cp -r lib $(GF_DATA_DIR)
 
