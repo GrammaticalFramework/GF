@@ -205,13 +205,14 @@ binary-dist:
 	mkdir $(BIN_DIST_DIR)
 	mkdir $(BIN_DIST_DIR)/lib
 	./configure --host="$(host)" --build="$(build)"
-	$(MAKE) all gfdoc
+	$(MAKE) gfc gfdoc
 	$(INSTALL) ../bin/$(GF_EXE) tools/$(GF_DOC_EXE) $(BIN_DIST_DIR)
-	$(INSTALL) configure config.guess config.sub install-sh $(BIN_DIST_DIR)
+	$(INSTALL) configure config.guess config.sub install-sh config.mk.in $(BIN_DIST_DIR)
+	$(INSTALL) gfc.in $(BIN_DIST_DIR)
 	$(INSTALL) -m 0644 ../README ../LICENSE $(BIN_DIST_DIR)
 	$(INSTALL) -m 0644 INSTALL.binary $(BIN_DIST_DIR)/INSTALL
 	$(INSTALL) -m 0644 Makefile.binary $(BIN_DIST_DIR)/Makefile
-	$(TAR) -C $(BIN_DIST_DIR)/lib -zxf ../lib/compiled.tgz
+#	$(TAR) -C $(BIN_DIST_DIR)/lib -zxf ../lib/compiled.tgz
 	$(TAR) -zcf GF-$(PACKAGE_VERSION)-$(host).tgz $(BIN_DIST_DIR)
 	rm -rf $(BIN_DIST_DIR)
 
