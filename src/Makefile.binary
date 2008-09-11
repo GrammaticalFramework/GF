@@ -12,7 +12,7 @@ install:
 	cp -r lib $(GF_DATA_DIR)
 
 uninstall:
-	-rm -f $(bindir)/gf$(EXEEXT) $(bindir)/gfdoc$(EXEEXT) $(bindir)/gfeditor
+	-rm -f $(bindir)/gf$(EXEEXT) $(bindir)/gfdoc$(EXEEXT)
 	-rm -f $GF_LIB_DIR)/*/*.gf{o}
 	-rmdir $(GF_LIB_DIR)/*
 	-rmdir $(GF_LIB_DIR)
