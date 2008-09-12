@@ -32,7 +32,7 @@ cgiMain pgf =
     do path <- pathInfo
        json <- case path of
          "/parse"          -> return (doParse pgf) `ap` getText `ap` getCat `ap` getFrom
-         "/complete"       -> return (doComplete pgf) `ap` getText `ap` getCat `ap` getFrom
+         "/complete"       -> return (doComplete pgf) `ap` getText `ap` getCat `ap` getFrom `ap` getLimit
          "/linearize"      -> return (doLinearize pgf) `ap` getTree `ap` getTo
          "/translate"      -> return (doTranslate pgf) `ap` getText `ap` getCat `ap` getFrom `ap` getTo
          "/categories"     -> return $ doCategories pgf
@@ -63,6 +63,9 @@ cgiMain pgf =
     getTo :: CGI (Maybe PGF.Language)
     getTo = getLang "to"
 
+    getLimit :: CGI (Maybe Int)
+    getLimit = readInput "limit"
+
     getLang :: String -> CGI (Maybe PGF.Language)
     getLang i = 
        do mlang <- getInput i
@@ -81,8 +84,8 @@ doParse :: PGF -> String -> Maybe PGF.Category -> Maybe PGF.Language -> JSValue
 doParse pgf input mcat mfrom = showJSON $ toJSObject $
      [(from, map PGF.showTree trees) | (from,trees) <- parse' pgf input mcat mfrom]
 
-doComplete :: PGF -> String -> Maybe PGF.Category -> Maybe PGF.Language -> JSValue
-doComplete pgf input mcat mfrom = showJSON $ toJSObject $ complete' pgf input mcat mfrom
+doComplete :: PGF -> String -> Maybe PGF.Category -> Maybe PGF.Language -> Maybe Int -> JSValue
+doComplete pgf input mcat mfrom mlimit = showJSON $ toJSObject $ complete' pgf input mcat mfrom mlimit
 
 doLinearize :: PGF -> PGF.Tree -> Maybe PGF.Language -> JSValue
 doLinearize pgf tree mto = showJSON $ toJSObject $ linearize' pgf mto tree
@@ -104,11 +107,12 @@ parse' pgf input mcat mfrom =
   where froms = maybe (PGF.languages pgf) (:[]) mfrom
         cat = fromMaybe (PGF.startCat pgf) mcat
 
-complete' :: PGF -> String -> Maybe PGF.Category -> Maybe PGF.Language -> [(PGF.Language,[String])]
-complete' pgf input mcat mfrom = 
-   [(from,ss) | from <- froms, PGF.canParse pgf from, let ss = complete pgf from cat input, not (null ss)]
+complete' :: PGF -> String -> Maybe PGF.Category -> Maybe PGF.Language -> Maybe Int -> [(PGF.Language,[String])]
+complete' pgf input mcat mfrom mlimit = 
+   limit [(from,ss) | from <- froms, PGF.canParse pgf from, let ss = complete pgf from cat input, not (null ss)]
   where froms = maybe (PGF.languages pgf) (:[]) mfrom
         cat = fromMaybe (PGF.startCat pgf) mcat
+        limit xs = maybe xs (\n -> take n xs) mlimit
 
 complete :: PGF -> PGF.Language -> PGF.Category -> String -> [String]
 complete pgf from cat input = 
