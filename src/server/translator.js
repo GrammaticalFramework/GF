@@ -1,32 +1,20 @@
 function formatTranslation (outputs) {
   var dl1 = document.createElement("dl");
-  dl1.className = "fromLang";
-  for (var fromLang in outputs) {
-    var ul = document.createElement("ul");
-    addDefinition(dl1, document.createTextNode(fromLang), ul);
-    for (var i in outputs[fromLang]) {
-      var dl2 = document.createElement("dl");
-      dl2.className = "toLang";
-      for (var toLang in outputs[fromLang][i]) {
-	addDefinition(dl2, document.createTextNode(toLang), document.createTextNode(outputs[fromLang][i][toLang]));
-      }
-      addItem(ul, dl2);
-    }
+  for (var i in outputs) {
+    var o = outputs[i];
+    addDefinition(dl1, document.createTextNode(o.to), document.createTextNode(o.text));
   }
 
   return dl1;
 }
 
 function formatCompletions (compls) {
-  var dl = document.createElement("dl");
-  for (var fromLang in compls) {
-    var ul = document.createElement("ul");
-    for (var i in compls[fromLang]) {
-      addItem(ul, document.createTextNode(compls[fromLang][i]));
-    }
-    addDefinition(dl, document.createTextNode(fromLang), ul);
+  var ul = document.createElement("ul");
+  for (var i in compls) {
+    var c = compls[i];
+    addItem(ul, document.createTextNode(c.text));
   }
-  return dl;
+  return ul;
 }
 
 /* DOM utilities for specific tags */
