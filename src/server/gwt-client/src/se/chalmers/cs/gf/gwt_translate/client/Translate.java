@@ -32,17 +32,21 @@ public class Translate implements EntryPoint {
     private SuggestBox suggest;
     private List<String> fromLangs;
     private List<String> toLangs;
-    private Grid outputTable;
+    private VerticalPanel outputPanel;
+
+    private void addTranslation(String text) {
+	Label l = new Label(text);
+	l.addStyleName("my-translation");
+	outputPanel.add(l);
+    }
 
     private void translate() {
 	gf.translate(suggest.getText(), fromLangs, null, toLangs, new GF.TranslateCallback() {
 		public void onTranslateDone (GF.Translations translations) {
-		    outputTable.resizeRows(translations.length());
+		    outputPanel.clear();
 		    for (int i = 0; i < translations.length(); i++) {
 			GF.Translation t = translations.get(i);
-			outputTable.setText(i, 0, t.getFrom());
-			outputTable.setText(i, 1, t.getTo());
-			outputTable.setText(i, 2, t.getText());
+			addTranslation(t.getText());
 		    }
 		}
 	    });
@@ -66,7 +70,6 @@ public class Translate implements EntryPoint {
 	oracle = new CompletionOracle(gf);
 
 	suggest = new SuggestBox(oracle);
-	suggest.setWidth("50em");
 	suggest.setText("this cheese is warm");
 	suggest.addKeyboardListener(new KeyboardListenerAdapter() {
 		public void onKeyUp (Widget sender, char keyCode, int modifiers) {
@@ -102,21 +105,28 @@ public class Translate implements EntryPoint {
 		}
 	    });
 
-	HorizontalPanel hPanel = new HorizontalPanel();
-	hPanel.add(new Label("From:"));
-	hPanel.add(fromLangBox);
-	hPanel.add(new Label("To:"));
-	hPanel.add(toLangBox);
-	hPanel.add(translateButton);
+	HorizontalPanel settingsPanel = new HorizontalPanel();
+	settingsPanel.addStyleName("my-settingsPanel");
+	settingsPanel.setVerticalAlignment(HorizontalPanel.ALIGN_MIDDLE);
+	settingsPanel.add(new Label("From:"));
+	settingsPanel.add(fromLangBox);
+	settingsPanel.add(new Label("To:"));
+	settingsPanel.add(toLangBox);
+	settingsPanel.add(translateButton);
 
-	outputTable = new Grid(0, 3);
+	outputPanel = new VerticalPanel();
+	outputPanel.addStyleName("my-translations");
+
+	// CSS debug
+	//	addTranslation("hello");
+	//	addTranslation("world");
 
 	VerticalPanel vPanel = new VerticalPanel();
 	vPanel.setWidth("100%");
 	vPanel.setHorizontalAlignment(VerticalPanel.ALIGN_CENTER);
 	vPanel.add(suggest);
-	vPanel.add(hPanel);
-	vPanel.add(outputTable);
+	vPanel.add(settingsPanel);
+	vPanel.add(outputPanel);
 
 	RootPanel.get().add(vPanel);
 
