@@ -8,8 +8,19 @@ public class CompletionOracle extends SuggestOracle {
 
     private GF gf;
 
-    public CompletionOracle (String gfBaseURL) {
-	gf = new GF(gfBaseURL);
+    private List<String> inputLangs;
+
+    public CompletionOracle (GF gf) {
+	this.gf = gf;
+	inputLangs = new ArrayList<String>();
+    }
+
+    public void setInputLangs(List<String> inputLangs) {
+	this.inputLangs = inputLangs;
+    }
+
+    public List<String> getInputLangs() {
+	return inputLangs;
     }
 
     public static class CompletionSuggestion implements SuggestOracle.Suggestion {
@@ -28,15 +39,13 @@ public class CompletionOracle extends SuggestOracle {
     }
 
     public void requestSuggestions(final SuggestOracle.Request request, final SuggestOracle.Callback callback) {
-	gf.complete(request.getQuery(), request.getLimit(), new GF.CompleteCallback() {
+	gf.complete(request.getQuery(), getInputLangs(), null, request.getLimit(), 
+		    new GF.CompleteCallback() {
 		public void onCompleteDone(GF.Completions completions) {
 		    Collection<CompletionSuggestion> suggestions = new ArrayList<CompletionSuggestion>();
-		    for (String lang : completions.getCompletionLanguages()) {
-			int c = completions.countCompletions(lang);
-			for (int i = 0; i < c; i++) {
-			    String text = request.getQuery() + " " + completions.getCompletion(lang,i);
-			    suggestions.add(new CompletionSuggestion(text));
-			}
+		    for (int i = 0; i < completions.length(); i++) {
+			String text = request.getQuery() + " " + completions.get(i).getText();
+			suggestions.add(new CompletionSuggestion(text));
 		    }
 		    callback.onSuggestionsReady(request, new SuggestOracle.Response(suggestions));
 		}
