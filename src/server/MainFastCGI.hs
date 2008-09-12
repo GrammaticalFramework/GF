@@ -76,27 +76,40 @@ cgiMain pgf =
             _ -> return mlang
 
 doTranslate :: PGF -> String -> Maybe PGF.Category -> Maybe PGF.Language -> Maybe PGF.Language -> JSValue
-doTranslate pgf input mcat mfrom mto = showJSON $ toJSObject $
-     [(from, [toJSObject (linearize' pgf mto tree) | tree <- trees]) 
-           | (from,trees) <- parse' pgf input mcat mfrom]
+doTranslate pgf input mcat mfrom mto = showJSON $ map toJSObject
+     [[("from",from),("to",to),("text",output)]
+           | (from,trees) <- parse' pgf input mcat mfrom,
+             tree <- trees,
+             (to,output) <- linearize' pgf mto tree]
 
 doParse :: PGF -> String -> Maybe PGF.Category -> Maybe PGF.Language -> JSValue
-doParse pgf input mcat mfrom = showJSON $ toJSObject $
-     [(from, map PGF.showTree trees) | (from,trees) <- parse' pgf input mcat mfrom]
+doParse pgf input mcat mfrom = showJSON $ map toJSObject
+     [[("from",from),("tree",PGF.showTree tree)]
+         | (from,trees) <- parse' pgf input mcat mfrom,
+           tree <- trees ]
 
 doComplete :: PGF -> String -> Maybe PGF.Category -> Maybe PGF.Language -> Maybe Int -> JSValue
-doComplete pgf input mcat mfrom mlimit = showJSON $ toJSObject $ complete' pgf input mcat mfrom mlimit
+doComplete pgf input mcat mfrom mlimit = showJSON $ map toJSObject $ limit
+     [[("from",from),("text",text)]
+          | (from,compls) <- complete' pgf input mcat mfrom,
+            text <- compls]
+  where
+    limit xs = maybe xs (\n -> take n xs) mlimit
 
 doLinearize :: PGF -> PGF.Tree -> Maybe PGF.Language -> JSValue
-doLinearize pgf tree mto = showJSON $ toJSObject $ linearize' pgf mto tree
+doLinearize pgf tree mto = showJSON $ map toJSObject
+     [[("to",to),("text",text)] | (to,text) <- linearize' pgf mto tree]
 
 doLanguages :: PGF -> JSValue
-doLanguages pgf = showJSON $ toJSObject [(l,toJSObject (info l)) | l <- PGF.languages pgf]
-  where info l = [("languageCode", showJSON (fromMaybe "" (PGF.languageCode pgf l))),
-                  ("canParse",     showJSON (PGF.canParse pgf l))]
+doLanguages pgf = showJSON $ map toJSObject
+     [[("lang", showJSON l), 
+      ("languageCode", showJSON $ fromMaybe "" (PGF.languageCode pgf l)),
+      ("canParse",     showJSON $ PGF.canParse pgf l)]
+          | l <- PGF.languages pgf]
 
 doCategories :: PGF -> JSValue
-doCategories pgf = showJSON (PGF.categories pgf)
+doCategories pgf = showJSON $ map toJSObject
+      [[("cat",cat)] | cat <- PGF.categories pgf]
 
 
 -- * PGF utilities
@@ -107,12 +120,11 @@ parse' pgf input mcat mfrom =
   where froms = maybe (PGF.languages pgf) (:[]) mfrom
         cat = fromMaybe (PGF.startCat pgf) mcat
 
-complete' :: PGF -> String -> Maybe PGF.Category -> Maybe PGF.Language -> Maybe Int -> [(PGF.Language,[String])]
-complete' pgf input mcat mfrom mlimit = 
-   limit [(from,ss) | from <- froms, PGF.canParse pgf from, let ss = complete pgf from cat input, not (null ss)]
+complete' :: PGF -> String -> Maybe PGF.Category -> Maybe PGF.Language -> [(PGF.Language,[String])]
+complete' pgf input mcat mfrom = 
+   [(from,ss) | from <- froms, PGF.canParse pgf from, let ss = complete pgf from cat input, not (null ss)]
   where froms = maybe (PGF.languages pgf) (:[]) mfrom
         cat = fromMaybe (PGF.startCat pgf) mcat
-        limit xs = maybe xs (\n -> take n xs) mlimit
 
 complete :: PGF -> PGF.Language -> PGF.Category -> String -> [String]
 complete pgf from cat input = 
