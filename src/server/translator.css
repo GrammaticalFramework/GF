@@ -42,31 +42,22 @@ li {
   clear: both;   
 }
 
-dl.fromLang dt {
-  display: none;
+#translation dl {
+  border-width: 0 0 1px 0;
+  border-style: solid;
+  border-color: #c0c0c0;
 }
 
-dl.toLang {
+#translation dt {
+    display: none;
+}
+    
+#translation dd {
   border-width: 1px 0 0 0;
   border-style: solid;
   border-color: #c0c0c0;
 }
 
-dl.toLang dt {
-  color: #c0c0c0;
-  display: block;
-  float: left;
-  width: 5em;
-  font-size: 80%;
-  padding: 1px 0;
-}
-
-dl.toLang dd {
-  border-width: 0 0 1px 0;
-  border-style: solid;
-  border-color: #c0c0c0;
-  padding: 0.2em 0;
-}
 
 /* Completions */
 
@@ -76,10 +67,6 @@ dl.toLang dd {
    white-space: nowrap;
    width: 100%;
    overflow: hidden;
-}
-
-#completion dt {
-  display: none;   
 }
 
 #completion li {
