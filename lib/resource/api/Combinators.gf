@@ -34,7 +34,11 @@ incomplete resource Combinators = open Grammar in {
       app : N2 -> NP -> NP ; 
       app : N3 -> NP -> NP -> NP ;
       app : N2 -> NP -> NP -> NP ;
-      app : N2 -> N -> CN
+      app : N2 -> N  -> CN ;
+
+      app : N2 -> NP -> CN ;         -- divisor of x
+      app : N3 -> NP -> NP -> CN ;   -- path from x to y
+      app : N2 -> NP -> NP -> CN ;   -- path between x and y
       } ;
 
 --2 Coordination
@@ -126,7 +130,12 @@ incomplete resource Combinators = open Grammar in {
       app : N2 -> NP -> NP -> NP
                                        = \n,x,y -> (DetArtSg DefArt (ComplN2 n (ConjNP and_Conj (BaseNP x y)))) ;
       app : N2 -> N -> CN
-                                       = \f,n -> ComplN2 f (DetArtPl (IndefArt) (UseN n))
+                                       = \f,n -> ComplN2 f (DetArtPl (IndefArt) (UseN n)) ;
+
+      app : N2 -> NP -> CN = ComplN2 ;
+      app : N3 -> NP -> NP -> CN = \n,x,y -> ComplN2 (ComplN3 n x) y ; 
+      app : N2 -> NP -> NP -> CN = \n,x,y -> 
+        ComplN2 n (ConjNP and_Conj (BaseNP x y)) ;
       } ;
 
     coord = overload {

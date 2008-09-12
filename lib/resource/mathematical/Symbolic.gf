@@ -1,11 +1,12 @@
 --1 Symbolic: Noun Phrases with mathematical symbols
 
-incomplete resource Symbolic = open Symbol, Grammar in {
+incomplete resource Symbolic = open 
+    Symbol, Grammar, PredefCnc in {
 
   oper
     symb : overload {
       symb : Str -> NP ;                       -- x
-      symb : Integer -> NP ;                   -- 23
+      symb : Int -> NP ;                       -- 23
       symb : Float -> NP ;                     -- 0.99
       symb : N  -> Digits -> NP ;              -- level 4
       symb : N  -> Card -> NP ;                -- level four
@@ -13,21 +14,24 @@ incomplete resource Symbolic = open Symbol, Grammar in {
       symb : Det -> N  -> Card -> NP ;         -- the number four
       symb : Det -> CN -> Card -> NP ;         -- the even number four
       symb : Det -> N  -> Str -> Str -> NP ;   -- the levels i and j
-      symb : Det -> CN -> [Symb] -> NP         -- the basic levels i, j, and k
+      symb : Det -> CN -> [Symb] -> NP ;       -- the basic levels i, j, and k
+      symb : Symb -> S ;                       -- A
+      symb : Symb -> Card ;                    -- n
+      symb : Symb -> Ord                       -- n'th
       } ;
 
-    mkSymb : Str -> Symb ;
-    mkInteger : Predef.Int -> Integer ;
-    mkFloating : Predef.Float -> Floating ;
+    mkSymb  : Str -> Symb ;
+    mkInt   : Str -> PredefCnc.Int ;
+    mkFloat : Str -> PredefCnc.Float ;
 
 --.
 
     symb = overload {
       symb : Str -> NP 
                           = \s -> UsePN (SymbPN (mkSymb s)) ;
-      symb : Integer -> NP 
+      symb : Int -> NP 
                           = \i -> UsePN (IntPN i) ;
-      symb : Floating -> NP 
+      symb : Float -> NP 
                           = \i -> UsePN (FloatPN i) ;
       symb : N -> Digits -> NP 
                           = \c,i -> CNNumNP (UseN c) (NumDigits i) ;
@@ -42,15 +46,19 @@ incomplete resource Symbolic = open Symbol, Grammar in {
       symb : Det -> N  -> Str -> Str -> NP 
                           = \c,n,x,y -> CNSymbNP c (UseN n) (BaseSymb (mkSymb x) (mkSymb y)) ;
       symb : Det -> CN -> [Symb] -> NP 
-                          = CNSymbNP
+                          = CNSymbNP ;
+      symb : Symb -> S = SymbS ;
+      symb : Symb -> Card = SymbNum ;
+      symb : Symb -> Ord = SymbOrd
+
       } ;
 
     mkSymb : Str -> Symb = \s -> {s = s ; lock_Symb = <>} ;
 
-    mkInteger i = {s = Predef.show Predef.Int i ; lock_Int = <>} ;
-    mkFloating f = {s = Predef.show Predef.Float f ; lock_Float = <>} ;
+    mkInt i = {s = i ; lock_Int = <>} ;
+    mkFloat f = {s = f ; lock_Float = <>} ;
 
-    Integer : Type = {s : Str ; lock_Int : {}} ;
-    Floating : Type = {s : Str ; lock_Float : {}} ;
+--    Integer : Type = {s : Str ; lock_Int : {}} ;
+--    Floating : Type = {s : Str ; lock_Float : {}} ;
 
 }
