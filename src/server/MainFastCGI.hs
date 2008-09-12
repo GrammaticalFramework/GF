@@ -102,9 +102,9 @@ doLinearize pgf tree mto = showJSON $ map toJSObject
 
 doLanguages :: PGF -> JSValue
 doLanguages pgf = showJSON $ map toJSObject
-     [[("lang", showJSON l), 
-      ("languageCode", showJSON $ fromMaybe "" (PGF.languageCode pgf l)),
-      ("canParse",     showJSON $ PGF.canParse pgf l)]
+     [[("name", showJSON l), 
+       ("languageCode", showJSON $ fromMaybe "" (PGF.languageCode pgf l)),
+       ("canParse",     showJSON $ PGF.canParse pgf l)]
           | l <- PGF.languages pgf]
 
 doCategories :: PGF -> JSValue
