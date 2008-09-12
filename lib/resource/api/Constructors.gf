@@ -444,10 +444,11 @@ incomplete resource Constructors = open Grammar in {
     mkNum : overload {
       mkNum : Numeral -> Num ;   -- 1. twenty
       mkNum : Digits  -> Num ;   -- 2. 51
+      mkNum : Card    -> Num ;   -- 3. twenty
 
 -- A numeral can be modified by an adnumeral.
 
-      mkNum : AdN -> Num -> Num  -- 3. almost ten
+      mkNum : AdN -> Card -> Num -- 4. almost ten
       } ;
 
 -- Dummy numbers are sometimes to select the grammatical number of a determiner.
@@ -1136,7 +1137,7 @@ incomplete resource Constructors = open Grammar in {
         = \d -> NumCard (NumDigits d)      ;
       mkNum : Digit -> Num
         = \d -> NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 d)))))) ;
-
+      mkNum : Card -> Num = NumCard ;
       mkNum : AdN -> Card -> Num = \a,c -> NumCard (AdNum a c)
       } ;
 
@@ -1639,6 +1640,10 @@ incomplete resource Constructors = open Grammar in {
     those_NP : NP = DetNP (DetQuant that_Quant plNum) ;
     these_NP : NP = DetNP (DetQuant this_Quant plNum) ;
 
+  ListAdv : Type = Grammar.ListAdv ;
+  ListAP : Type = Grammar.ListAP ;
+  ListNP : Type = Grammar.ListNP ;
+  ListS : Type = Grammar.ListS ;
 
 {-
 -- The definite and indefinite articles are commonly used determiners.
