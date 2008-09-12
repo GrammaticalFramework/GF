@@ -27,9 +27,9 @@
         var t = document.getElementById('toLang');
         for (var i in langs) {
           if (langs[i].canParse) {
-            addOption(f, langs[i].lang, langs[i].lang);
+            addOption(f, langs[i].name, langs[i].name);
           }
-          addOption(t, langs[i].lang, langs[i].lang);
+          addOption(t, langs[i].name, langs[i].name);
         }
       }
 
