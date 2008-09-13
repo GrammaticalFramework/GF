@@ -1,3 +1,6 @@
 --# -path=.:alltenses:prelude
 
-resource CombinatorsGer = Combinators with (Grammar = GrammarGer) ;
+resource CombinatorsGer = Combinators with 
+  (Cat = CatGer),
+  (Structural = StructuralGer),
+  (Constructors = ConstructorsGer) ;

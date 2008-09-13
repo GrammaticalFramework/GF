@@ -5,7 +5,7 @@
 -- language-specific ``Paradigms`` modules are usually needed
 -- to construct arguments of these functions.
 
-incomplete resource Combinators = open Grammar in {
+incomplete resource Combinators = open Cat, Structural, Constructors in {
 
   oper
 
@@ -90,110 +90,104 @@ incomplete resource Combinators = open Grammar in {
 
     pred = overload {
       pred : V  -> NP -> Cl
-                                       = \v,np -> PredVP np (UseV v) ;
+           = \v,np -> mkCl np v ;
       pred : V2 -> NP -> NP -> Cl
-                                       = \v,np,ob -> PredVP np (ComplSlash (SlashV2a v) ob) ;
+           = \v,np,ob -> mkCl np v ob ;
       pred : V3 -> NP -> NP -> NP -> Cl 
-                                       = \v,np,ob,ob2 -> 
-                                          PredVP np (ComplSlash (Slash2V3 v ob) ob2) ;
+           = \v,np,ob,ob2 -> mkCl np v ob ob2 ;
       pred : V  -> NP -> NP -> Cl
-                                       = \v,x,y -> PredVP (ConjNP and_Conj (BaseNP x y)) (UseV v) ;
+           = \v,x,y -> mkCl (mkNP and_Conj x y) v ;
       pred : A  -> NP -> Cl 
-                                       = \a,np -> PredVP np (UseComp (CompAP (PositA a))) ;
+           = \a,np -> mkCl np a ;
       pred : A2 -> NP -> NP -> Cl
-                                       = \a,x,y -> PredVP x (UseComp (CompAP (ComplA2 a y))) ;
+           = \a,x,y -> mkCl x a y ;
       pred : A  -> NP -> NP -> Cl      
-                                       = \a,x,y -> PredVP (ConjNP and_Conj (BaseNP x y)) (UseComp (CompAP (PositA a))) ;
+           = \a,x,y -> mkCl (mkNP and_Conj x y) a ;
       pred : N -> NP -> Cl
-                                       = \n,x -> PredVP x (UseComp (CompNP (DetArtSg (IndefArt) (UseN n)))) ;
+           = \n,x -> mkCl x (mkNP a_Art n) ;
       pred : CN -> NP -> Cl
-                                       = \n,x -> PredVP x (UseComp (CompNP (DetArtSg (IndefArt) n))) ;
+           = \n,x -> mkCl x (mkNP a_Art n) ;
       pred : NP -> NP -> Cl
-                                       = \n,x -> PredVP x (UseComp (CompNP n)) ;      pred : N2 -> NP -> NP -> Cl 
-                                       = \n,x,y -> PredVP x (UseComp (CompNP (DetArtSg (IndefArt) (ComplN2 n y)))) ;
+           = \n,x -> mkCl x n ;
+      pred : N2 -> NP -> NP -> Cl 
+           = \n,x,y -> mkCl x (mkNP a_Art (mkCN n y)) ;
       pred : N -> NP -> NP -> Cl 
-                                       = \n,x,y -> PredVP (ConjNP and_Conj (BaseNP x y)) (UseComp (CompNP (DetArtPl (IndefArt) (UseN n)))) ;
+           = \n,x,y -> mkCl (mkNP and_Conj x y) (mkNP a_Art plNum n) ;
       pred : Adv -> NP -> Cl 
-                                       = \a,x -> PredVP x (UseComp (CompAdv a)) ;
+           = \a,x -> mkCl x a ;
       pred : Prep -> NP -> NP -> Cl        
-                                       = \p,x,y -> PredVP x (UseComp (CompAdv (PrepNP p y)))
-
+           = \p,x,y -> mkCl x (mkAdv p y) ;
       } ;
 
     app = overload {
       app : N  -> NP
-                                       = \n -> (DetArtSg (DefArt) (UseN n)) ;
+           = \n -> mkNP the_Art n ;
       app : N2 -> NP -> NP 
-                                       = \n,x -> (DetArtSg (DefArt) (ComplN2 n x)) ;
+           = \n,x -> mkNP the_Art (mkCN n x) ;
       app : N3 -> NP -> NP -> NP
-                                       = \n,x,y -> (DetArtSg (DefArt) (ComplN2 (ComplN3 n x) y)) ;
+           = \n,x,y -> mkNP the_Art (mkCN n x y) ;
       app : N2 -> NP -> NP -> NP
-                                       = \n,x,y -> (DetArtSg DefArt (ComplN2 n (ConjNP and_Conj (BaseNP x y)))) ;
+           = \n,x,y -> mkNP the_Art (mkCN n (mkNP and_Conj x y)) ;
       app : N2 -> N -> CN
-                                       = \f,n -> ComplN2 f (DetArtPl (IndefArt) (UseN n)) ;
-
-      app : N2 -> NP -> CN = ComplN2 ;
-      app : N3 -> NP -> NP -> CN = \n,x,y -> ComplN2 (ComplN3 n x) y ; 
-      app : N2 -> NP -> NP -> CN = \n,x,y -> 
-        ComplN2 n (ConjNP and_Conj (BaseNP x y)) ;
+           = \f,n -> mkCN f (mkNP a_Art plNum n) ;
+      app : N2 -> NP -> CN 
+           = mkCN ;
+      app : N3 -> NP -> NP -> CN 
+           = mkCN ;
+      app : N2 -> NP -> NP -> CN 
+           = \n,x,y -> mkCN n (mkNP and_Conj x y) ;
       } ;
 
     coord = overload {
       coord : Conj -> Adv -> Adv -> Adv
-                                        = \c,x,y -> ConjAdv c (BaseAdv x y) ;
+           = mkAdv ;
       coord : Conj -> AP -> AP -> AP
-                                        = \c,x,y -> ConjAP c (BaseAP x y) ;
+           = mkAP ;
       coord : Conj -> NP -> NP -> NP
-                                        = \c,x,y -> ConjNP c (BaseNP x y) ;
+           = mkNP ;
       coord : Conj -> S  -> S  -> S  
-                                        = \c,x,y -> ConjS c (BaseS x y) ;
+           = mkS ;
       coord : Conj -> ListAdv -> Adv
-                                        = \c,xy -> ConjAdv c xy ;
+           = mkAdv ;
       coord : Conj -> ListAP -> AP
-                                        = \c,xy -> ConjAP c xy ; 
+           = mkAP ;
       coord : Conj -> ListNP -> NP
-                                        = \c,xy -> ConjNP c xy ;
+           = mkNP ;
       coord : Conj -> ListS  -> S  
-                                        = \c,xy -> ConjS c xy
+           = mkS ;
       } ;
 
     mod = overload {
       mod : A -> N -> CN
-                                  = \a,n -> AdjCN (PositA a) (UseN n) ;
+           = mkCN ;
       mod : AP -> CN -> CN
-                                  = \a,n -> AdjCN a n ;
+           = mkCN ;
       mod : AdA -> A -> AP
-                                  = \m,a -> AdAP m (PositA a) ;
-
+           = mkAP ;
       mod : Det -> N -> NP 
-	                          = \d,n -> DetCN d (UseN n) ;
+	   = mkNP ;
       mod : Det -> CN -> NP 
-	                          = \d,n -> DetCN d n ;
+	   = mkNP ;
       mod : Quant -> N -> NP
-                                  = \q,n -> DetCN (DetQuant (q) NumSg) (UseN n) ;
+           = mkNP ;
       mod : Quant -> CN -> NP
-                                  = \q,n -> DetCN (DetQuant (q) NumSg) n ;
+           = mkNP ;
       mod : Predet -> N -> NP 
-                                  = \q,n -> PredetNP q (DetArtPl (IndefArt)  (UseN n)) ;
+           = \p,n -> mkNP p (mkNP a_Art n) ;
       mod : Numeral -> N -> NP
-                                  = \nu,n -> DetCN (DetArtCard (IndefArt) (NumNumeral nu)) (UseN n)
-
+           = mkNP ;
       } ;
 
     neg = overload {
       neg : Imp -> Utt 
-	                 = UttImpSg PNeg ;
+	   = mkUtt negativePol ;
       neg : Cl -> S 
-	                 = UseCl TPres ASimul PNeg;
+	   = mkS negativePol ;
       neg : QCl -> QS 
-	                 = UseQCl TPres ASimul PNeg;
+           = mkQS negativePol ;
       neg : RCl -> RS 
-	                 = UseRCl TPres ASimul PNeg
+           = mkRS negativePol ;
     };
 
--- This is not in ground API, because it would destroy parsing.
-
-    appendText : Text -> Text -> Text 
-                = \x,y -> {s = x.s ++ y.s ; lock_Text = <>} ;
 
 }
