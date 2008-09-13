@@ -1,4 +1,4 @@
 --# -path=.:alltenses:prelude
 
-interface Syntax = Constructors, Cat, Structural, Numeral ;
+interface Syntax = Constructors, Cat, Structural, Combinators ;
 
