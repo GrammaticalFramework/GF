@@ -1109,6 +1109,13 @@ incomplete resource Constructors = open Grammar in {
     plNum : Num = NumPl ;
 
 
+    mkCard = overload {
+      mkCard : Numeral -> Card 
+        = NumNumeral ;
+      mkNum : Digits -> Card         -- 51
+        = NumDigits ;
+      } ;
+
     mkNum = overload {
       mkNum : Numeral -> Num 
         = \d -> NumCard (NumNumeral d) ;
