@@ -1,4 +1,4 @@
 --# -path=.:alltenses:prelude
 
-instance SyntaxBul of Syntax = ConstructorsBul, CatBul, StructuralBul, NumeralBul ;
+instance SyntaxBul of Syntax = ConstructorsBul, CatBul, StructuralBul, CombinatorsBul ;
 
