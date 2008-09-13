@@ -1,3 +1,6 @@
 --# -path=.:alltenses:prelude
 
-resource CombinatorsRus = Combinators with (Grammar = GrammarRus) ;
+resource CombinatorsRus = Combinators with 
+  (Cat = CatRus),
+  (Structural = StructuralRus),
+  (Constructors = ConstructorsRus) ;

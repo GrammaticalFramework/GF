@@ -1666,6 +1666,13 @@ incomplete resource Constructors = open Grammar in {
       those_QuantPl : QuantPl ; -- 5. those
 -}
 
+-- export needed, since not in Cat
+
+  ListAdv : Type = Grammar.ListAdv ;
+  ListAP : Type = Grammar.ListAP ;
+  ListNP : Type = Grammar.ListNP ;
+  ListS : Type = Grammar.ListS ;
+
 -- bw to 1.4
 
     Art : Type = Quant ;

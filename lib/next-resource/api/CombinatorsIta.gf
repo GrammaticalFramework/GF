@@ -1,3 +1,6 @@
 --# -path=.:alltenses:prelude
 
-resource CombinatorsIta = Combinators with (Grammar = GrammarIta) ;
+resource CombinatorsIta = Combinators with 
+  (Cat = CatIta),
+  (Structural = StructuralIta),
+  (Constructors = ConstructorsIta) ;

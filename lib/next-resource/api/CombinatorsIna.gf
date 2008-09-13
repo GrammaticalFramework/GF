@@ -1,3 +1,6 @@
 --# -path=.:alltenses:prelude
 
-resource CombinatorsIna = Combinators with (Grammar = GrammarIna) ;
+resource CombinatorsIna = Combinators with 
+  (Cat = CatIna),
+  (Structural = StructuralIna),
+  (Constructors = ConstructorsIna) ;
