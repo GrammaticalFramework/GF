@@ -82,13 +82,16 @@ lin
   something_NP = pn2np (mkPN ["qualche cosa"] Masc) ;
   somewhere_Adv = ss ["qualche parte"] ;
   that_Quant = let
-    quello : Number => Gender => Case => Str = table {
-      Sg => \\g,c => prepCase c ++ genForms "quello" "quella" ! g ;
-      Pl => \\g,c => prepCase c ++ genForms "quelli" "quelle" ! g ---- quegli
+    quello : Str -> Str -> Number => Gender => Case => Str = 
+     \quel, quelli -> table {
+      Sg => \\g,c => prepCase c ++ genForms quel "quella" ! g ;
+      Pl => \\g,c => prepCase c ++ genForms quelli "quelle" ! g ---- quegli
       }
     in {
-      s = \\_ => quello ;
-      sp = quello ;
+      s = \\_ => 
+        quello (elision "quel" "quell'" "quello") 
+               (elision "quelli" "quegli" "quegli")  ;
+      sp = quello "quello" "quelli" ;
       s2 = []
       } ;
 
