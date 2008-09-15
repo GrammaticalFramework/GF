@@ -24,7 +24,7 @@ import java.util.Set;
 
 public class Translate implements EntryPoint {
 
-    private static final String gfBaseURL = "http://localhost/~bringert/gf-server/gf.fcgi";
+    private static final String gfBaseURL = "gf.fcgi";
 
     private GF gf;
 
@@ -70,7 +70,6 @@ public class Translate implements EntryPoint {
 	oracle = new CompletionOracle(gf);
 
 	suggest = new SuggestBox(oracle);
-	suggest.setText("this cheese is warm");
 	suggest.addKeyboardListener(new KeyboardListenerAdapter() {
 		public void onKeyUp (Widget sender, char keyCode, int modifiers) {
 		    if (keyCode == KEY_ENTER) {
