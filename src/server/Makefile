@@ -7,6 +7,9 @@ gf.fcgi:
 	cabal build
 	cp dist/build/gf.fcgi/gf.fcgi .
 
+gwt:
+	gwt-client/Translate-compile
+
 food:
 	gfc --make --name=grammar ../../examples/tutorial/food/Food{Eng,Ita}.gf
 
@@ -40,6 +43,17 @@ lang:
 	gfc $(GFCFLAGS) --make --parser=off --name=LangSpa ../../lib/resource/spanish/LangSpa.gf
 	gfc $(GFCFLAGS) --make --parser=on  --name=LangSwe ../../lib/resource/swedish/LangSwe.gf
 	gfc $(GFCFLAGS) --name=grammar Lang???.pgf
+
+installball: gf.fcgi gwt
+	rm -rf gf-server
+	rm -f gf-server-installball.tar.gz
+	mkdir gf-server
+	cp -pr gwt-client/www/se.chalmers.cs.gf.gwt_translate.Translate/* gf-server
+	mv gf-server/Translate.html gf-server/index.html
+	cp grammar.pgf gf-server
+	cp gf.fcgi gf-server
+	cp README gf-server
+	tar -zcf gf-server-installball.tar.gz gf-server
 
 clean:
 	cabal clean
