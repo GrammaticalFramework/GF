@@ -10,6 +10,7 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -65,6 +66,10 @@ public class Translate implements EntryPoint {
 
     public void onModuleLoad() {
     
+	final PopupPanel loading = new PopupPanel();
+	loading.add(new Label("Loading..."));
+	loading.center();
+
 	gf = new GF(gfBaseURL);
 
 	oracle = new CompletionOracle(gf);
@@ -138,6 +143,8 @@ public class Translate implements EntryPoint {
 			}
 			toLangBox.addItem(l.getName());
 		    }
+
+		    loading.hide();
 		}
 	    });
 	
