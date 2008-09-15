@@ -10,6 +10,9 @@ public class CompletionOracle extends SuggestOracle {
 
     private List<String> inputLangs;
 
+    private GFRequest gfRequest = null;
+
+
     public CompletionOracle (GF gf) {
 	this.gf = gf;
 	inputLangs = new ArrayList<String>();
@@ -39,7 +42,12 @@ public class CompletionOracle extends SuggestOracle {
     }
 
     public void requestSuggestions(final SuggestOracle.Request request, final SuggestOracle.Callback callback) {
-	gf.complete(request.getQuery(), getInputLangs(), null, request.getLimit(), 
+
+	// only allow a single completion request at a time
+	if (gfRequest != null)
+	    gfRequest.cancel();
+
+	gfRequest = gf.complete(request.getQuery(), getInputLangs(), null, request.getLimit(), 
 		    new GF.CompleteCallback() {
 		public void onCompleteDone(GF.Completions completions) {
 		    Collection<CompletionSuggestion> suggestions = new ArrayList<CompletionSuggestion>();

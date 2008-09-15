@@ -23,8 +23,8 @@ public class GF {
 
     /* Languages */
 
-    public void languages (final LanguagesCallback callback) {
-	sendRequest("languages", null, new JSONRequestCallback() {
+    public GFRequest languages (final LanguagesCallback callback) {
+	return sendRequest("languages", null, new JSONRequestCallback() {
 		public void onJSONReceived(JSONValue json) {
 		    callback.onLanguagesDone((Languages)json.isArray().getJavaScriptObject().cast());
 		}
@@ -50,7 +50,7 @@ public class GF {
 
     /* Translation */
 
-    public void translate (String input, List<String> fromLangs, String cat, List<String> toLangs, 
+    public GFRequest translate (String input, List<String> fromLangs, String cat, List<String> toLangs, 
 			   final TranslateCallback callback) {
 	List<Arg> args = new ArrayList<Arg>();
 	args.add(new Arg("input", input));
@@ -65,7 +65,7 @@ public class GF {
 		args.add(new Arg("to", to));
 	    }
 	}
-	sendRequest("translate", args, new JSONRequestCallback() {
+	return sendRequest("translate", args, new JSONRequestCallback() {
 		public void onJSONReceived(JSONValue json) {
 		    callback.onTranslateDone((Translations)json.isArray().getJavaScriptObject().cast());
 		}
@@ -89,8 +89,8 @@ public class GF {
     }
 
     /* Completion */
-
-    public void complete (String input, List<String> fromLangs, String cat, int limit, final CompleteCallback callback) {
+    
+    public GFRequest complete (String input, List<String> fromLangs, String cat, int limit, final CompleteCallback callback) {
 	List<Arg> args = new ArrayList<Arg>();
 	args.add(new Arg("input", input));
 	if (fromLangs != null) {
@@ -100,7 +100,7 @@ public class GF {
 	}
 	args.add(new Arg("cat", cat));
 	args.add(new Arg("limit", limit));
-	sendRequest("complete", args, new JSONRequestCallback() {
+        return sendRequest("complete", args, new JSONRequestCallback() {
 		public void onJSONReceived(JSONValue json) {
 		    callback.onCompleteDone((Completions)json.isArray().getJavaScriptObject().cast());
 		}
@@ -129,12 +129,13 @@ public class GF {
 	public void onJSONReceived(JSONValue json);
     }
 
-    private void sendRequest (String resource, List<Arg> vars, final JSONRequestCallback callback) {
+    private GFRequest sendRequest (String resource, List<Arg> vars, final JSONRequestCallback callback) {
 	String url = baseURL + "/" + resource + "?" + buildQueryString(vars);
 	RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, url);
+	Request request = null;
 
 	try {
-	    Request request = builder.sendRequest(null, new RequestCallback() {
+	    request = builder.sendRequest(null, new RequestCallback() {
 		    public void onError(Request request, Throwable e) {
 			GWT.log("onError called", e);
 		    }
@@ -150,6 +151,8 @@ public class GF {
 	} catch (RequestException e) {
 	    GWT.log("Failed to send request", e);
 	}
+
+	return new GFRequest(request);
     }
 
     private static class Arg {
