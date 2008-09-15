@@ -5,8 +5,7 @@ compactPrint = compactPrintCustom keywordGF (const False)
 
 compactPrintGFCC = compactPrintCustom (const False) keywordGFCC
 
--- FIXME: using words is not safe, since this is run on UTF-8 encoded data.
-compactPrintCustom pre post = id -- dps . concat . map (spaceIf pre post) . words 
+compactPrintCustom pre post = dps . concat . map (spaceIf pre post) . words 
 
 dps = dropWhile isSpace
 

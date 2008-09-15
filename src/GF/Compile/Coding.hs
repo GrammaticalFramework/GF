@@ -48,3 +48,13 @@ codeSourceModule co (id,moi) = case moi of
       PSeq p q -> PSeq (codp p) (codp q)
       PAlt p q -> PAlt (codp p) (codp q)
       _ -> p
+
+-- | Run an encoding function on all string literals within the given string.
+codeStringLiterals :: (String -> String) -> String -> String
+codeStringLiterals _ [] = []
+codeStringLiterals co ('"':cs) = '"' : inStringLiteral cs
+  where inStringLiteral [] = error "codeStringLiterals: unterminated string literal"
+        inStringLiteral ('"':ds) = '"' : codeStringLiterals co ds
+        inStringLiteral ('\\':d:ds) = '\\' : co [d] ++ inStringLiteral ds
+        inStringLiteral (d:ds) = co [d] ++ inStringLiteral ds
+codeStringLiterals co (c:cs) = c : codeStringLiterals co cs
