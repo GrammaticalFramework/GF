@@ -10,6 +10,7 @@ import Text.JSON
 import qualified Codec.Binary.UTF8.String as UTF8 (encodeString)
 
 import Control.Monad
+import Data.Char
 import qualified Data.Map as Map
 import Data.Maybe
 
@@ -128,12 +129,17 @@ complete' pgf input mcat mfrom =
 
 complete :: PGF -> PGF.Language -> PGF.Category -> String -> [String]
 complete pgf from cat input = 
-         let ws = words input
-             prefix = "" -- FIXME
+         let (ws,prefix) = tokensAndPrefix input
              state0 = PGF.initState pgf from cat
              state = foldl PGF.nextState state0 ws
              compls = PGF.getCompletions state prefix
-          in Map.keys compls
+          in [unwords (ws++[c]) ++ " " | c <- Map.keys compls]
+
+tokensAndPrefix :: String -> ([String],String)
+tokensAndPrefix s | not (null s) && isSpace (last s) = (words s, "")
+                  | null ws = ([],"")
+                  | otherwise = (init ws, last ws)
+  where ws = words s
 
 linearize' :: PGF -> Maybe PGF.Language -> PGF.Tree -> [(PGF.Language,String)]
 linearize' pgf mto tree = 
