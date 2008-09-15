@@ -34,7 +34,7 @@ public class CompletionOracle extends SuggestOracle {
 	}
 
 	public String getReplacementString() {
-	    return string + " ";
+	    return string;
 	}
     }
 
@@ -44,7 +44,7 @@ public class CompletionOracle extends SuggestOracle {
 		public void onCompleteDone(GF.Completions completions) {
 		    Collection<CompletionSuggestion> suggestions = new ArrayList<CompletionSuggestion>();
 		    for (int i = 0; i < completions.length(); i++) {
-			String text = request.getQuery() + " " + completions.get(i).getText();
+			String text = completions.get(i).getText();
 			suggestions.add(new CompletionSuggestion(text));
 		    }
 		    callback.onSuggestionsReady(request, new SuggestOracle.Response(suggestions));
