@@ -132,6 +132,7 @@ public class GF {
     private GFRequest sendRequest (String resource, List<Arg> vars, final JSONRequestCallback callback) {
 	String url = baseURL + "/" + resource + "?" + buildQueryString(vars);
 	RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, url);
+	builder.setHeader("Accept","text/plain, text/html;q=0.5, */*;q=0.1");
 	Request request = null;
 
 	try {
