@@ -82,7 +82,7 @@ oper
       bella bella (bell + "orum") (bell + "is")
       Neutr ;
 
--- smart paradigm
+-- smart paradigm for declensions 1&2
 
   noun12 : Str -> Noun = \verbum -> 
     case verbum of {
@@ -92,6 +92,21 @@ oper
       _ + "er" => noun2er verbum ;
       _  => Predef.error ("noun12 does not apply to" ++ verbum)
       } ;
+
+  noun3c : Str -> Str -> Gender -> Noun = \rex,regis,g ->
+    let
+      reg = Predef.tk 2 regis ;
+      regemes : Str * Str = case g of {
+        Neutr => <rex,reg + "a"> ;
+        _     => <reg + "em", reg + "es">
+        } ;
+    in
+    mkNoun
+      rex regemes.p1 (reg + "is") (reg + "i") (reg + "e") rex
+      regemes.p2 regemes.p2 (reg + "um") (reg + "ibus") 
+      g ;
+
+
 
 -- adjectives
 
