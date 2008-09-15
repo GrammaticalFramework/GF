@@ -44,16 +44,13 @@ lang:
 	gfc $(GFCFLAGS) --make --parser=on  --name=LangSwe ../../lib/resource/swedish/LangSwe.gf
 	gfc $(GFCFLAGS) --name=grammar Lang???.pgf
 
-installball: gf.fcgi gwt
-	rm -rf gf-server
+gwt-installball: gf.fcgi gwt
+	rm -rf tmp/gwt-client
 	rm -f gf-server-installball.tar.gz
-	mkdir gf-server
-	cp -pr gwt-client/www/se.chalmers.cs.gf.gwt_translate.Translate/* gf-server
-	mv gf-server/Translate.html gf-server/index.html
-	cp grammar.pgf gf-server
-	cp gf.fcgi gf-server
-	cp README gf-server
-	tar -zcf gf-server-installball.tar.gz gf-server
+	mkdir -p tmp/gwt-client
+	cp -pr gwt-client/www/se.chalmers.cs.gf.gwt_translate.Translate/* tmp/gwt-client
+	mv tmp/gwt-client/Translate.html tmp/gwt-client/index.html
+	(cd tmp && tar -zcf ../gwt-client-installball.tar.gz gwt-client)
 
 clean:
 	cabal clean
