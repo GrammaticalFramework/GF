@@ -7,7 +7,7 @@ import URLEncoding
 
 import Network.CGI
 import Text.JSON
-import qualified Codec.Binary.UTF8.String as UTF8 (encodeString)
+import qualified Codec.Binary.UTF8.String as UTF8 (encodeString, decodeString)
 
 import Control.Monad
 import Data.Char
@@ -42,7 +42,7 @@ cgiMain pgf =
        outputJSON json
   where
     getText :: CGI String
-    getText = liftM (maybe "" urlDecodeUnicode) $ getInput "input"
+    getText = liftM (maybe "" (urlDecodeUnicode . UTF8.decodeString)) $ getInput "input"
 
     getTree :: CGI PGF.Tree
     getTree = do mt <- getInput "tree"
