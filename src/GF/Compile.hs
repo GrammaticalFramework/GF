@@ -208,7 +208,7 @@ compileSourceModule opts env@(k,gr,_) mo@(i,mi) = do
 generateModuleCode :: Options -> FilePath -> SourceModule -> IOE SourceModule
 generateModuleCode opts file minfo = do
   let minfo1 = subexpModule minfo
-      out    = prGrammar (MGrammar [codeSourceModule encodeUTF8 minfo1])
+      out    = codeStringLiterals encodeUTF8 $ prGrammar (MGrammar [minfo1])
   putPointE Normal opts ("  wrote file" +++ file) $ ioeIO $ writeFile file $ out
   return minfo1
 
