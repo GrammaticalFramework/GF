@@ -39,9 +39,7 @@ initState pinfo start =
         
       forest = IntMap.fromListWith Set.union [(cat, Set.singleton (Passive ruleid args)) | (ruleid, FRule _ _ args cat _) <- assocs (allRules pinfo)]
 
-      max_fid = case IntMap.maxViewWithKey forest of
-                  Just ((fid,_), _) -> fid+1
-                  Nothing           -> 0
+      max_fid = maximum (0:[maximum (cat:args) | (ruleid, FRule _ _ args cat _) <- assocs (allRules pinfo)])+1
 
   in State pinfo
            (Chart MM.empty [] Map.empty forest max_fid 0)
