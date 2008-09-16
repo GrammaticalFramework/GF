@@ -5,6 +5,8 @@ import PGF.Data
 import PGF.Raw.Abstract
 import PGF.BuildParser (buildParserInfo)
 import PGF.Parsing.FCFG.Utilities
+import qualified GF.Compile.GenerateFCFG  as FCFG
+import qualified GF.Compile.GeneratePMCFG as PMCFG
 
 import qualified Data.Array as Array
 import qualified Data.Map   as Map
@@ -24,7 +26,7 @@ toPGF (Grm [
       App "cat"   cts
       ]), 
   App "concrete" ccs
-  ]) = PGF {
+  ]) = let pgf = PGF {
     absname = mkCId a,
     cncnames = [mkCId c | App c [] <- cs],
     gflags = Map.fromAscList [(mkCId f,v) | App f [AStr v] <- gfs],
@@ -38,21 +40,27 @@ toPGF (Grm [
       catfuns = Map.fromAscList 
         [(cat,[f | (f, (DTyp _ c _,_)) <- lfuns, c==cat]) | (cat,_) <- lcats]
      in Abstr aflags funs cats catfuns,
-    concretes = Map.fromAscList [(mkCId lang, toConcr ts) | App lang ts <- ccs]
+    concretes = Map.fromAscList [(mkCId lang, toConcr pgf ts) | App lang ts <- ccs]
     }
+    in pgf
  where
 
-toConcr :: [RExp] -> Concr
-toConcr = foldl add (Concr {
-               cflags       = Map.empty,
-               lins         = Map.empty,
-               opers        = Map.empty,
-               lincats      = Map.empty,
-               lindefs      = Map.empty,
-               printnames   = Map.empty,
-               paramlincats = Map.empty,
-               parser       = Nothing
-             })
+toConcr :: PGF -> [RExp] -> Concr
+toConcr pgf rexp = 
+  let cnc = foldl add (Concr {cflags       = Map.empty,
+                              lins         = Map.empty,
+                              opers        = Map.empty,
+                              lincats      = Map.empty,
+                              lindefs      = Map.empty,
+                              printnames   = Map.empty,
+                              paramlincats = Map.empty,
+                              parser       = Just (buildParserOnDemand cnc)   -- This thunk will be overwritten if there is a parser
+                                                                              -- compiled in the PGF file. We use lazy evaluation here
+                                                                              -- to make sure that buildParserOnDemand is called only
+                                                                              -- if it is needed.
+
+                             }) rexp
+  in cnc
   where
     add :: Concr -> RExp -> Concr
     add cnc (App "flags" ts)     = cnc { cflags = Map.fromAscList [(mkCId f,v) | App f [AStr v] <- ts] }
@@ -63,6 +71,12 @@ toConcr = foldl add (Concr {
     add cnc (App "printname" ts) = cnc { printnames = mkTermMap ts }
     add cnc (App "param" ts)     = cnc { paramlincats = mkTermMap ts }
     add cnc (App "parser" ts)    = cnc { parser = Just (toPInfo ts) }
+
+    buildParserOnDemand cnc = buildParserInfo fcfg
+      where
+        fcfg
+          | Map.lookup (mkCId "erasing") (cflags cnc) == Just "on" = PMCFG.convertConcrete (abstract pgf) cnc
+          | otherwise                                              = FCFG.convertConcrete  (abstract pgf) cnc
 
 toPInfo :: [RExp] -> ParserInfo
 toPInfo [App "rules" rs, App "startupcats" cs] = buildParserInfo (rules, cats)
