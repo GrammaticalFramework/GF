@@ -4,6 +4,7 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.ClickListener;
+import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.Image;
@@ -16,6 +17,8 @@ import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.KeyboardListenerAdapter;
+
+import com.google.gwt.core.client.GWT;
 
 import com.google.gwt.user.client.Window;
 
@@ -34,6 +37,7 @@ public class Translate implements EntryPoint {
     private List<String> fromLangs;
     private List<String> toLangs;
     private VerticalPanel outputPanel;
+    private Label statusLabel;
 
     private void addTranslation(String text) {
 	Label l = new Label(text);
@@ -43,12 +47,15 @@ public class Translate implements EntryPoint {
 
     private void translate() {
 	gf.translate(suggest.getText(), fromLangs, null, toLangs, new GF.TranslateCallback() {
-		public void onTranslateDone (GF.Translations translations) {
+		public void onResult (GF.Translations translations) {
 		    outputPanel.clear();
 		    for (int i = 0; i < translations.length(); i++) {
 			GF.Translation t = translations.get(i);
 			addTranslation(t.getText());
 		    }
+		}
+		public void onError (Throwable e) {
+		    showError("Translation failed", e);
 		}
 	    });
     }
@@ -64,15 +71,26 @@ public class Translate implements EntryPoint {
 	return l;
     }
 
+    private void setStatus(String msg) {
+	statusLabel.setText(msg);
+    }
+
+    private void showError(String msg, Throwable e) {
+	GWT.log(msg, e);
+	setStatus(msg);
+    }
+
     public void onModuleLoad() {
     
-	final PopupPanel loading = new PopupPanel();
-	loading.add(new Label("Loading..."));
-	loading.center();
+	statusLabel = new Label("Loading...");
 
 	gf = new GF(gfBaseURL);
 
-	oracle = new CompletionOracle(gf);
+	oracle = new CompletionOracle(gf, new CompletionOracle.ErrorHandler() {
+		public void onError(Throwable e) {
+		    showError("Completion failed", e);
+		}
+	    });
 
 	suggest = new SuggestBox(oracle);
 	suggest.addKeyboardListener(new KeyboardListenerAdapter() {
@@ -133,9 +151,10 @@ public class Translate implements EntryPoint {
 	vPanel.add(outputPanel);
 
 	RootPanel.get().add(vPanel);
+	RootPanel.get().add(statusLabel, (Window.getClientWidth() - statusLabel.getOffsetWidth())/2, (Window.getClientHeight() - statusLabel.getOffsetHeight()));
 
 	gf.languages(new GF.LanguagesCallback() {
-		public void onLanguagesDone(GF.Languages languages) {
+		public void onResult(GF.Languages languages) {
 		    for (int i = 0; i < languages.length(); i++) {
 			GF.Language l = languages.get(i);
 			if (l.canParse()) {
@@ -144,7 +163,11 @@ public class Translate implements EntryPoint {
 			toLangBox.addItem(l.getName());
 		    }
 
-		    loading.hide();
+		    setStatus("Loaded languages.");
+		}
+
+		public void onError (Throwable e) {
+		    showError("Error getting language information", e);
 		}
 	    });
 	
