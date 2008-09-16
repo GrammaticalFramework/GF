@@ -1,0 +1,789 @@
+Resource grammar writing HOWTO
+Author: Aarne Ranta <aarne (at) cs.chalmers.se>
+Last update: %%date(%c)
+
+% NOTE: this is a txt2tags file.
+% Create an html file from this file using:
+% txt2tags --toc -thtml Resource-HOWTO.txt
+
+%!target:html
+
+**History**
+
+September 2008: partly outdated - to be updated for API 1.5.
+
+October 2007: updated for API 1.2.
+
+January 2006: first version.
+
+
+The purpose of this document is to tell how to implement the GF
+resource grammar API for a new language. We will //not// cover how
+to use the resource grammar, nor how to change the API. But we
+will give some hints how to extend the API.
+
+A manual for using the resource grammar is found in
+
+[``http://www.cs.chalmers.se/~aarne/GF/lib/resource-1.0/doc/synopsis.html`` http://www.cs.chalmers.se/~aarne/GF/lib/resource-1.0/doc/synopsis.html].
+
+A tutorial on GF, also introducing the idea of resource grammars, is found in
+
+[``http://www.cs.chalmers.se/~aarne/GF/doc/tutorial/gf-tutorial2.html`` ../../../doc/tutorial/gf-tutorial2.html].
+
+This document concerns the API v. 1.0. You can find the current code in 
+
+[``http://www.cs.chalmers.se/~aarne/GF/lib/resource-1.0/`` ..]
+
+
+
+
+==The resource grammar structure==
+
+The library is divided into a bunch of modules, whose dependencies
+are given in the following figure.
+
+[Syntax.png] 
+
+- solid contours: module used by end users
+- dashed contours: internal module
+- ellipse: abstract/concrete pair of modules
+- rectangle: resource or instance
+- diamond: interface
+
+
+The solid ellipses show the API as visible to the user of the library. The
+dashed ellipses form the main of the implementation, on which the resource
+grammar programmer has to work with. With the exception of the ``Paradigms``
+module, the visible API modules can be produced mechanically.
+
+[Grammar.png] 
+
+Thus the API consists of a grammar and a lexicon, which is
+provided for test purposes.
+
+The module structure is rather flat: most modules are direct
+parents of ``Grammar``. The idea
+is that you can concentrate on one linguistic aspect at a time, or
+also distribute the work among several authors. The module ``Cat``
+defines the "glue" that ties the aspects together - a type system
+to which all the other modules conform, so that e.g. ``NP`` means
+the same thing in those modules that use ``NP``s and those that
+constructs them.
+
+
+
+===Phrase category modules===
+
+The direct parents of the top will be called **phrase category modules**,
+since each of them concentrates on a particular phrase category (nouns, verbs,
+adjectives, sentences,...). A phrase category module tells 
+//how to construct phrases in that category//. You will find out that
+all functions in any of these modules have the same value type (or maybe
+one of a small number of different types). Thus we have
+
+
+- ``Noun``: construction of nouns and noun phrases
+- ``Adjective``: construction of adjectival phrases
+- ``Verb``: construction of verb phrases
+- ``Adverb``: construction of adverbial phrases
+- ``Numeral``: construction of cardinal and ordinal numerals
+- ``Sentence``: construction of sentences and imperatives
+- ``Question``: construction of questions
+- ``Relative``: construction of relative clauses
+- ``Conjunction``: coordination of phrases
+- ``Phrase``: construction of the major units of text and speech
+- ``Text``: construction of texts as sequences of phrases
+- ``Idiom``: idiomatic phrases such as existentials
+
+
+
+
+===Infrastructure modules===
+
+Expressions of each phrase category are constructed in the corresponding
+phrase category module. But their //use// takes mostly place in other modules.
+For instance, noun phrases, which are constructed in ``Noun``, are
+used as arguments of functions of almost all other phrase category modules. 
+How can we build all these modules independently of each other?
+
+As usual in typeful programming, the //only// thing you need to know
+about an object you use is its type. When writing a linearization rule
+for a GF abstract syntax function, the only thing you need to know is
+the linearization types of its value and argument categories. To achieve
+the division of the resource grammar to several parallel phrase category modules,
+what we need is an underlying definition of the linearization types. This
+definition is given as the implementation of
+
+- ``Cat``: syntactic categories of the resource grammar
+
+
+Any resource grammar implementation has first to agree on how to implement
+``Cat``. Luckily enough, even this can be done incrementally: you
+can skip the ``lincat`` definition of a category and use the default
+``{s : Str}`` until you need to change it to something else. In
+English, for instance, many categories do have this linearization type.
+
+
+
+===Lexical modules===
+
+What is lexical and what is syntactic is not as clearcut in GF as in
+some other grammar formalisms. Logically, lexical means atom, i.e. a
+``fun`` with no arguments. Linguistically, one may add to this
+that the ``lin`` consists of only one token (or of a table whose values
+are single tokens). Even in the restricted lexicon included in the resource
+API, the latter rule is sometimes violated in some languages. For instance,
+``Structural.both7and_DConj`` is an atom, but its linearization is
+two words e.g. //both - and//.
+
+Another characterization of lexical is that lexical units can be added
+almost //ad libitum//, and they cannot be defined in terms of already
+given rules. The lexical modules of the resource API are thus more like
+samples than complete lists. There are two such modules:
+
+- ``Structural``: structural words (determiners, conjunctions,...)
+- ``Lexicon``: basic everyday content words (nouns, verbs,...)
+
+
+The module ``Structural`` aims for completeness, and is likely to
+be extended in future releases of the resource. The module ``Lexicon``
+gives a "random" list of words, which enable interesting testing of syntax,
+and also a check list for morphology, since those words are likely to include
+most morphological patterns of the language.
+
+In the case of ``Lexicon`` it may come out clearer than anywhere else
+in the API that it is impossible to give exact translation equivalents in
+different languages on the level of a resource grammar. In other words,
+application grammars are likely to use the resource in different ways for
+different languages.
+
+
+==Language-dependent syntax modules==
+
+In addition to the common API, there is room for language-dependent extensions
+of the resource. The top level of each languages looks as follows (with English as example):
+```
+  abstract English = Grammar, ExtraEngAbs, DictEngAbs
+```
+where ``ExtraEngAbs`` is a collection of syntactic structures specific to English,
+and ``DictEngAbs`` is an English dictionary 
+(at the moment, it consists of ``IrregEngAbs``,
+the irregular verbs of English). Each of these language-specific grammars has 
+the potential to grow into a full-scale grammar of the language. These grammar
+can also be used as libraries, but the possibility of using functors is lost.
+
+To give a better overview of language-specific structures, 
+modules like ``ExtraEngAbs``
+are built from a language-independent module ``ExtraAbs`` 
+by restricted inheritance:
+```
+  abstract ExtraEngAbs = Extra [f,g,...]
+```
+Thus any category and function in ``Extra`` may be shared by a subset of all
+languages. One can see this set-up as a matrix, which tells 
+what ``Extra`` structures
+are implemented in what languages. For the common API in ``Grammar``, the matrix
+is filled with 1's (everything is implemented in every language).
+
+In a minimal resource grammar implementation, the language-dependent
+extensions are just empty modules, but it is good to provide them for
+the sake of uniformity.
+
+
+==The core of the syntax==
+
+Among all categories and functions, a handful are 
+most important and distinct ones, of which the others are can be 
+seen as variations. The categories are
+```
+  Cl ; VP ; V2 ; NP ; CN ; Det ; AP ;
+```
+The functions are
+```
+  PredVP  : NP  -> VP -> Cl ;  -- predication
+  ComplV2 : V2  -> NP -> VP ;  -- complementization
+  DetCN   : Det -> CN -> NP ;  -- determination
+  ModCN   : AP  -> CN -> CN ;  -- modification
+```
+This [toy Latin grammar  latin.gf] shows in a nutshell how these
+rules relate the categories to each other. It is intended to be a
+first approximation when designing the parameter system of a new
+language. 
+
+
+===Another reduced API===
+
+If you want to experiment with a small subset of the resource API first, 
+try out the module 
+[Syntax http://www.cs.chalmers.se/~aarne/GF/doc/tutorial/resource/Syntax.gf]
+explained in the
+[GF Tutorial http://www.cs.chalmers.se/~aarne/GF/doc/tutorial/gf-tutorial2.html].
+
+
+===The present-tense fragment===
+
+Some lines in the resource library are suffixed with the comment
+```--# notpresent
+which is used by a preprocessor to exclude those lines from 
+a reduced version of the full resource. This present-tense-only
+version is useful for applications in most technical text, since
+they reduce the grammar size and compilation time. It can also
+be useful to exclude those lines in a first version of resource
+implementation. To compile a grammar with present-tense-only, use
+```
+  i -preproc=GF/lib/resource-1.0/mkPresent LangGer.gf
+```
+
+
+
+==Phases of the work==
+
+===Putting up a directory===
+
+Unless you are writing an instance of a parametrized implementation
+(Romance or Scandinavian), which will be covered later, the
+simplest way is to follow roughly the following procedure. Assume you
+are building a grammar for the German language. Here are the first steps,
+which we actually followed ourselves when building the German implementation
+of resource v. 1.0.
+
++ Create a sister directory for ``GF/lib/resource/english``, named
+     ``german``.
+```
+       cd GF/lib/resource/
+       mkdir german
+       cd german
+```
+
++ Check out the [ISO 639 3-letter language code 
+   http://www.w3.org/WAI/ER/IG/ert/iso639.htm] 
+   for German: both ``Ger`` and ``Deu`` are given, and we pick ``Ger``.
+
++ Copy the ``*Eng.gf`` files from ``english`` ``german``,
+     and rename them:
+```
+       cp ../english/*Eng.gf .
+       rename 's/Eng/Ger/' *Eng.gf
+```
+
++ Change the ``Eng`` module references to ``Ger`` references
+     in all files:
+```
+       sed -i 's/English/German/g' *Ger.gf
+       sed -i 's/Eng/Ger/g' *Ger.gf
+```
+  The first line prevents changing the word ``English``, which appears
+  here and there in comments, to ``Gerlish``.
+
++ This may of course change unwanted occurrences of the 
+     string ``Eng`` - verify this by
+```
+       grep Ger *.gf
+```
+     But you will have to make lots of manual changes in all files anyway!
+
++ Comment out the contents of these files:
+``` 
+       sed -i 's/^/--/' *Ger.gf
+```
+     This will give you a set of templates out of which the grammar
+     will grow as you uncomment and modify the files rule by rule.
+
++ In all ``.gf`` files, uncomment the module headers and brackets,
+  leaving the module bodies commented. Unfortunately, there is no
+  simple way to do this automatically (or to avoid commenting these
+  lines in the previous step) - but uncommenting the first
+  and the last lines will actually do the job for many of the files.
+
++ Uncomment the contents of the main grammar file:
+``` 
+       sed -i 's/^--//' LangGer.gf
+```
+
++ Now you can open the grammar ``LangGer`` in GF:
+``` 
+       gf LangGer.gf
+```
+  You will get lots of warnings on missing rules, but the grammar will compile.
+
++ At all following steps you will now have a valid, but incomplete
+     GF grammar. The GF command
+``` 
+       pg -printer=missing
+```
+     tells you what exactly is missing.
+
+
+Here is the module structure of ``LangGer``. It has been simplified by leaving out
+the majority of the phrase category modules. Each of them has the same dependencies
+as e.g. ``VerbGer``.
+
+[German.png]
+
+
+===Direction of work===
+
+The real work starts now. There are many ways to proceed, the main ones being
+- Top-down: start from the module ``Phrase`` and go down to ``Sentence``, then
+  ``Verb``, ``Noun``, and in the end ``Lexicon``. In this way, you are all the time
+  building complete phrases, and add them with more content as you proceed.
+  **This approach is not recommended**. It is impossible to test the rules if
+  you have no words to apply the constructions to.
+
+- Bottom-up: set as your first goal to implement ``Lexicon``. To this end, you
+  need to write ``ParadigmsGer``, which in turn needs parts of 
+  ``MorphoGer`` and ``ResGer``.
+  **This approach is not recommended**. You can get stuck to details of
+  morphology such as irregular words, and you don't have enough grasp about
+  the type system to decide what forms to cover in morphology.
+
+
+The practical working direction is thus a saw-like motion between the morphological
+and top-level modules. Here is a possible course of the work that gives enough
+test data and enough general view at any point:
++ Define ``Cat.N`` and the required parameter types in ``ResGer``. As we define
+```
+  lincat N  = {s : Number => Case => Str ; g : Gender} ;
+```
+we need the parameter types ``Number``, ``Case``, and ``Gender``. The definition
+of ``Number`` in [``common/ParamX``  ../common/ParamX.gf] works for German, so we
+use it and just define ``Case`` and ``Gender`` in ``ResGer``.
+
++ Define ``regN`` in ``ParadigmsGer``. In this way you can 
+already implement a huge amount of nouns correctly in ``LexiconGer``. Actually
+just adding ``mkN`` should suffice for every noun - but, 
+since it is tedious to use, you
+might proceed to the next step before returning to morphology and defining the
+real work horse ``reg2N``.
+
++ While doing this, you may want to test the resource independently. Do this by
+```
+       i -retain ParadigmsGer
+       cc regN "Kirche"
+```
+
++ Proceed to determiners and pronouns in 
+``NounGer`` (``DetCN UsePron DetSg SgQuant NoNum NoOrd DefArt IndefArt UseN``)and 
+``StructuralGer`` (``i_Pron every_Det``). You also need some categories and
+parameter types. At this point, it is maybe not possible to find out the final
+linearization types of ``CN``, ``NP``, and ``Det``, but at least you should
+be able to correctly inflect noun phrases such as //every airplane//:
+```
+  i LangGer.gf
+  l -table DetCN every_Det (UseN airplane_N)
+
+  Nom: jeder Flugzeug
+  Acc: jeden Flugzeug
+  Dat: jedem Flugzeug
+  Gen: jedes Flugzeugs
+```
+
++ Proceed to verbs: define ``CatGer.V``,  ``ResGer.VForm``, and
+``ParadigmsGer.regV``. You may choose to exclude ``notpresent``
+cases at this point. But anyway, you will be able to inflect a good
+number of verbs in ``Lexicon``, such as
+``live_V`` (``regV "leven"``).
+
++ Now you can soon form your first sentences: define ``VP`` and
+``Cl`` in ``CatGer``, ``VerbGer.UseV``, and ``SentenceGer.PredVP``.
+Even if you have excluded the tenses, you will be able to produce
+```
+  i -preproc=mkPresent LangGer.gf
+  > l -table PredVP (UsePron i_Pron) (UseV live_V)
+
+  Pres Simul Pos Main: ich lebe
+  Pres Simul Pos Inv:  lebe ich
+  Pres Simul Pos Sub:  ich lebe
+  Pres Simul Neg Main: ich lebe nicht
+  Pres Simul Neg Inv:  lebe ich nicht
+  Pres Simul Neg Sub:  ich nicht lebe
+```
+
++ Transitive verbs (``CatGer.V2 ParadigmsGer.dirV2 VerbGer.ComplV2``) 
+are a natural next step, so that you can
+produce ``ich liebe dich``.
+
++ Adjectives (``CatGer.A ParadigmsGer.regA NounGer.AdjCN AdjectiveGer.PositA``) 
+will force you to think about strong and weak declensions, so that you can
+correctly inflect //my new car, this new car//. 
+
++ Once you have implemented the set
+(``Noun.DetCN Noun.AdjCN Verb.UseV Verb.ComplV2 Sentence.PredVP),
+you have overcome most of difficulties. You know roughly what parameters
+and dependences there are in your language, and you can now produce very
+much in the order you please. 
+
+
+
+===The develop-test cycle===
+
+The following develop-test cycle will
+be applied most of the time, both in the first steps described above
+and in later steps where you are more on your own.
+
++ Select a phrase category module, e.g. ``NounGer``, and uncomment some
+  linearization rules (for instance, ``DefSg``, which is
+  not too complicated).
+
++ Write down some German examples of this rule, for instance translations
+     of "the dog", "the house", "the big house", etc. Write these in all their
+     different forms (two numbers and four cases).
+
++ Think about the categories involved (``CN, NP, N``) and the
+     variations they have. Encode this in the lincats of ``CatGer``.
+     You may have to define some new parameter types in ``ResGer``.
+
++ To be able to test the construction, 
+     define some words you need to instantiate it
+     in ``LexiconGer``. You will also need some regular inflection patterns
+     in``ParadigmsGer``.
+
++ Test by parsing, linearization,
+     and random generation. In particular, linearization to a table should
+     be used so that you see all forms produced:
+```
+       gr -cat=NP -number=20 -tr | l -table
+```
+
++ Spare some tree-linearization pairs for later regression testing. Use the
+  ``tree_bank`` command,
+```
+       gr -cat=NP -number=20 | tb -xml | wf NP.tb
+```
+  You can later compared your modified grammar to this treebank by
+```
+       rf NP.tb | tb -c
+```
+
+
+
+You are likely to run this cycle a few times for each linearization rule
+you implement, and some hundreds of times altogether. There are 66 ``cat``s and
+458 ``funs`` in ``Lang`` at the moment; 149 of the ``funs`` are outside the two
+lexicon modules).
+
+Here is a [live log ../german/log.txt] of the actual process of
+building the German implementation of resource API v. 1.0.
+It is the basis of the more detailed explanations, which will
+follow soon. (You will found out that these explanations involve
+a rational reconstruction of the live process! Among other things, the
+API was changed during the actual process to make it more intuitive.)
+
+
+===Resource modules used===
+
+These modules will be written by you.
+
+- ``ResGer``: parameter types and auxiliary operations 
+(a resource for the resource grammar!)
+- ``ParadigmsGer``: complete inflection engine and most important regular paradigms
+- ``MorphoGer``: auxiliaries for ``ParadigmsGer`` and ``StructuralGer``. This need
+not be separate from ``ResGer``.
+
+
+These modules are language-independent and provided by the existing resource
+package.
+
+- ``ParamX``: parameter types used in many languages
+- ``CommonX``: implementation of language-uniform categories 
+    such as $Text$ and $Phr$, as well as of
+    the logical tense, anteriority, and polarity parameters
+- ``Coordination``: operations to deal with lists and coordination
+- ``Prelude``: general-purpose operations on strings, records,
+      truth values, etc.
+- ``Predefined``: general-purpose operations with hard-coded definitions
+
+
+An important decision is what rules to implement in terms of operations in
+``ResGer``. A golden rule of functional programming says that, whenever
+you find yourself programming by copy and paste, you should write a function
+instead. This indicates that an operation should be created if it is to be
+used at least twice. At the same time, a sound principle of vicinity says that
+it should not require too much browsing to understand what a rule does.
+From these two principles, we have derived the following practice:
+- If an operation is needed //in two different modules//, 
+it should be created in ``ResGer``. An example is ``mkClause``, 
+used in ``Sentence``, ``Question``, and ``Relative``-
+- If an operation is needed //twice in the same module//, but never
+outside, it should be created in the same module. Many examples are
+found in ``Numerals``.
+- If an operation is only needed once, it should not be created (but rather
+inlined). Most functions in phrase category modules are implemented in this
+way.
+
+
+This discipline is very different from the one followed in earlier
+versions of the library (up to 0.9). We then valued the principle of
+abstraction more than vicinity, creating layers of abstraction for
+almost everything. This led in practice to the duplication of almost
+all code on the ``lin`` and ``oper`` levels, and made the code
+hard to understand and maintain.
+
+
+
+===Morphology and lexicon===
+
+The paradigms needed to implement
+``LexiconGer`` are defined in
+``ParadigmsGer``.
+This module provides high-level ways to define the linearization of
+lexical items, of categories ``N, A, V`` and their complement-taking
+variants.
+
+
+
+For ease of use, the ``Paradigms`` modules follow a certain
+naming convention. Thus they for each lexical category, such as ``N``,
+the functions
+
+- ``mkN``, for worst-case construction of ``N``. Its type signature
+     has the form
+```
+       mkN : Str -> ... -> Str -> P -> ... -> Q -> N
+```
+     with as many string and parameter arguments as can ever be needed to
+     construct an ``N``.
+- ``regN``, for the most common cases, with just one string argument:
+```
+       regN : Str -> N
+```
+- A language-dependent (small) set of functions to handle mild irregularities
+     and common exceptions.
+
+For the complement-taking variants, such as ``V2``, we provide
+
+- ``mkV2``, which takes a ``V`` and all necessary arguments, such
+     as case and preposition:
+```
+       mkV2 : V -> Case -> Str -> V2 ;
+```
+- A language-dependent (small) set of functions to handle common special cases,
+     such as direct transitive verbs:
+```
+       dirV2 : V -> V2 ;
+       -- dirV2 v = mkV2 v accusative [] 
+```
+
+
+The golden rule for the design of paradigms is that
+
+- The user will only need function applications with constants and strings,
+     never any records or tables.
+
+
+The discipline of data abstraction moreover requires that the user of the resource
+is not given access to parameter constructors, but only to constants that denote 
+them. This gives the resource grammarian the freedom to change the underlying
+data representation if needed. It means that the ``ParadigmsGer`` module has
+to define constants for those parameter types and constructors that 
+the application grammarian may need to use, e.g.
+```
+  oper 
+    Case : Type ;
+    nominative, accusative, genitive, dative : Case ;
+```
+These constants are defined in terms of parameter types and constructors
+in ``ResGer`` and ``MorphoGer``, which modules are not
+visible to the application grammarian.
+
+
+===Lock fields===
+
+An important difference between ``MorphoGer`` and
+``ParadigmsGer`` is that the former uses "raw" record types
+for word classes, whereas the latter used category symbols defined in
+``CatGer``. When these category symbols are used to denote
+record types in a resource modules, such as ``ParadigmsGer``,
+a **lock field** is added to the record, so that categories
+with the same implementation are not confused with each other.
+(This is inspired by the ``newtype`` discipline in Haskell.)
+For instance, the lincats of adverbs and conjunctions are the same
+in ``CommonX`` (and therefore in ``CatGer``, which inherits it):
+```
+  lincat Adv  = {s : Str} ;
+  lincat Conj = {s : Str} ;
+```
+But when these category symbols are used to denote their linearization 
+types in resource module, these definitions are translated to
+```
+  oper Adv  : Type = {s : Str  ; lock_Adv  : {}} ;
+  oper Conj : Type = {s : Str} ; lock_Conj : {}} ;
+```
+In this way, the user of a resource grammar cannot confuse adverbs with
+conjunctions. In other words, the lock fields force the type checker
+to function as grammaticality checker.
+
+When the resource grammar is ``open``ed in an application grammar, the
+lock fields are never seen (except possibly in type error messages),
+and the application grammarian should never write them herself. If she
+has to do this, it is a sign that the resource grammar is incomplete, and
+the proper way to proceed is to fix the resource grammar.
+
+The resource grammarian has to provide the dummy lock field values
+in her hidden definitions of constants in ``Paradigms``. For instance,
+```
+  mkAdv : Str -> Adv ;
+  -- mkAdv s = {s = s ; lock_Adv = <>} ;
+```
+
+
+===Lexicon construction===
+
+The lexicon belonging to ``LangGer`` consists of two modules:
+
+- ``StructuralGer``, structural words, built by directly using
+     ``MorphoGer``.
+- ``BasicGer``, content words, built by using ``ParadigmsGer``.
+
+
+The reason why ``MorphoGer`` has to be used in ``StructuralGer``
+is that ``ParadigmsGer`` does not contain constructors for closed
+word classes such as pronouns and determiners. The reason why we
+recommend ``ParadigmsGer`` for building ``LexiconGer`` is that
+the coverage of the paradigms gets thereby tested and that the
+use of the paradigms in ``LexiconGer`` gives a good set of examples for
+those who want to build new lexica.
+
+
+
+
+
+
+
+==Inside grammar modules==
+
+Detailed implementation tricks
+are found in the comments of each module.
+
+
+===The category system===
+
+- [Common gfdoc/Common.html], [CommonX ../common/CommonX.gf]
+- [Cat gfdoc/Cat.html], [CatGer gfdoc/CatGer.gf]
+
+
+===Phrase category modules===
+
+- [Noun gfdoc/Noun.html], [NounGer ../german/NounGer.gf]
+- [Adjective gfdoc/Adjective.html], [AdjectiveGer ../german/AdjectiveGer.gf]
+- [Verb gfdoc/Verb.html], [VerbGer ../german/VerbGer.gf]
+- [Adverb gfdoc/Adverb.html], [AdverbGer ../german/AdverbGer.gf]
+- [Numeral gfdoc/Numeral.html], [NumeralGer ../german/NumeralGer.gf]
+- [Sentence gfdoc/Sentence.html], [SentenceGer ../german/SentenceGer.gf]
+- [Question gfdoc/Question.html], [QuestionGer ../german/QuestionGer.gf]
+- [Relative gfdoc/Relative.html], [RelativeGer ../german/RelativeGer.gf]
+- [Conjunction gfdoc/Conjunction.html], [ConjunctionGer ../german/ConjunctionGer.gf]
+- [Phrase gfdoc/Phrase.html], [PhraseGer ../german/PhraseGer.gf]
+- [Text gfdoc/Text.html], [TextX ../common/TextX.gf]
+- [Idiom gfdoc/Idiom.html], [IdiomGer ../german/IdiomGer.gf]
+- [Lang gfdoc/Lang.html], [LangGer ../german/LangGer.gf]
+
+
+===Resource modules===
+
+- [ResGer ../german/ResGer.gf]
+- [MorphoGer ../german/MorphoGer.gf]
+- [ParadigmsGer gfdoc/ParadigmsGer.html], [ParadigmsGer.gf ../german/ParadigmsGer.gf]
+
+
+===Lexicon===
+
+- [Structural gfdoc/Structural.html], [StructuralGer ../german/StructuralGer.gf]
+- [Lexicon gfdoc/Lexicon.html], [LexiconGer ../german/LexiconGer.gf]
+
+
+==Lexicon extension==
+
+===The irregularity lexicon===
+
+It may be handy to provide a separate module of irregular
+verbs and other words which are difficult for a lexicographer
+to handle. There are usually a limited number of such words - a
+few hundred perhaps. Building such a lexicon separately also
+makes it less important to cover //everything// by the
+worst-case paradigms (``mkV`` etc).
+
+
+
+===Lexicon extraction from a word list===
+
+You can often find resources such as lists of 
+irregular verbs on the internet. For instance, the
+[Irregular German Verbs http://www.iee.et.tu-dresden.de/~wernerr/grammar/verben_dt.html] 
+page gives a list of verbs in the
+traditional tabular format, which begins as follows:
+```
+  backen (du bäckst, er bäckt)	                 backte [buk]              gebacken
+  befehlen (du befiehlst, er befiehlt; befiehl!) befahl (beföhle; befähle) befohlen
+  beginnen                                       begann (begönne; begänne) begonnen
+  beißen                                         biß                       gebissen
+```
+All you have to do is to write a suitable verb paradigm
+```
+  irregV : (x1,_,_,_,_,x6 : Str) -> V ;
+```
+and a Perl or Python or Haskell script that transforms
+the table to
+```
+  backen_V   = irregV "backen" "bäckt" "back" "backte" "backte" "gebacken" ;
+  befehlen_V = irregV "befehlen" "befiehlt" "befiehl" "befahl" "beföhle" "befohlen" ;
+```
+
+When using ready-made word lists, you should think about
+coyright issues. Ideally, all resource grammar material should
+be provided under GNU General Public License.
+
+
+
+===Lexicon extraction from raw text data===
+
+This is a cheap technique to build a lexicon of thousands
+of words, if text data is available in digital format.
+See the [Functional Morphology http://www.cs.chalmers.se/~markus/FM/] 
+homepage for details.
+
+
+
+===Extending the resource grammar API===
+
+Sooner or later it will happen that the resource grammar API
+does not suffice for all applications. A common reason is
+that it does not include idiomatic expressions in a given language.
+The solution then is in the first place to build language-specific
+extension modules. This chapter will deal with this issue (to be completed).
+
+
+==Writing an instance of parametrized resource grammar implementation==
+
+Above we have looked at how a resource implementation is built by
+the copy and paste method (from English to German), that is, formally
+speaking, from scratch. A more elegant solution available for 
+families of languages such as Romance and Scandinavian is to
+use parametrized modules. The advantages are
+
+- theoretical: linguistic generalizations and insights
+- practical: maintainability improves with fewer components
+
+
+In this chapter, we will look at an example: adding Italian to
+the Romance family (to be completed). Here is a set of
+[slides http://www.cs.chalmers.se/~aarne/geocal2006.pdf]
+on the topic.
+
+
+==Parametrizing a resource grammar implementation==
+
+This is the most demanding form of resource grammar writing.
+We do //not// recommend the method of parametrizing from the
+beginning: it is easier to have one language first implemented 
+in the conventional way and then add another language of the
+same family by aprametrization. This means that the copy and
+paste method is still used, but at this time the differences
+are put into an ``interface`` module. 
+
+
+
+This chapter will work out an example of how an Estonian grammar
+is constructed from the Finnish grammar through parametrization.
+
+
