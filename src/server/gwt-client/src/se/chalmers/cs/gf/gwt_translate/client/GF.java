@@ -21,15 +21,18 @@ public class GF {
 	this.baseURL = baseURL;
     }
 
+    public static interface GFCallback<T extends JavaScriptObject> {
+	public void onResult (T result) ;
+	public void onError (Throwable e) ;
+    }
+
     /* Languages */
 
     public GFRequest languages (final LanguagesCallback callback) {
-	return sendRequest("languages", null, new JSONRequestCallback() {
-		public void onJSONReceived(JSONValue json) {
-		    callback.onLanguagesDone((Languages)json.isArray().getJavaScriptObject().cast());
-		}
-	    });
+	return sendRequest("languages", null, callback);
     }
+
+    public interface LanguagesCallback extends GFCallback<Languages> { }
 
     public static class Languages extends JsArray<Language> {
 	protected Languages() { }
@@ -41,11 +44,6 @@ public class GF {
         public final native String getName() /*-{ return this.name; }-*/;
         public final native String getLanguageCode() /*-{ return this.languageCode; }-*/;
         public final native boolean canParse() /*-{ return this.canParse; }-*/;
-    }
-
-
-    public interface LanguagesCallback {
-	public void onLanguagesDone (Languages languages);
     }
 
     /* Translation */
@@ -65,12 +63,10 @@ public class GF {
 		args.add(new Arg("to", to));
 	    }
 	}
-	return sendRequest("translate", args, new JSONRequestCallback() {
-		public void onJSONReceived(JSONValue json) {
-		    callback.onTranslateDone((Translations)json.isArray().getJavaScriptObject().cast());
-		}
-	    });
+	return sendRequest("translate", args, callback);
     }
+
+    public interface TranslateCallback extends GFCallback<Translations> {  }
 
     public static class Translations extends JsArray<Translation> {
 	protected Translations() { }
@@ -82,10 +78,6 @@ public class GF {
         public final native String getFrom() /*-{ return this.from; }-*/;
         public final native String getTo() /*-{ return this.to; }-*/;
         public final native String getText() /*-{ return this.text; }-*/;
-    }
-
-    public interface TranslateCallback {
-	public void onTranslateDone (Translations translations);
     }
 
     /* Completion */
@@ -100,12 +92,10 @@ public class GF {
 	}
 	args.add(new Arg("cat", cat));
 	args.add(new Arg("limit", limit));
-        return sendRequest("complete", args, new JSONRequestCallback() {
-		public void onJSONReceived(JSONValue json) {
-		    callback.onCompleteDone((Completions)json.isArray().getJavaScriptObject().cast());
-		}
-	    });
+        return sendRequest("complete", args, callback);
     }
+
+    public interface CompleteCallback extends GFCallback<Completions> { }
 
     public static class Completions extends JsArray<Translation> {
 	protected Completions() { }
@@ -118,43 +108,40 @@ public class GF {
         public final native String getText() /*-{ return this.text; }-*/;
     }
 
-    public interface CompleteCallback {
-	public void onCompleteDone (Completions completions);
-    }
-
-
     /* Utilities */
 
-    public interface JSONRequestCallback {
-	public void onJSONReceived(JSONValue json);
-    }
-
-    private GFRequest sendRequest (String resource, List<Arg> vars, final JSONRequestCallback callback) {
+    private <T extends JavaScriptObject> GFRequest sendRequest (String resource, List<Arg> vars, final GFCallback<T> callback) {
 	String url = baseURL + "/" + resource + "?" + buildQueryString(vars);
 	RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, url);
+	builder.setTimeoutMillis(30000);
 	builder.setHeader("Accept","text/plain, text/html;q=0.5, */*;q=0.1");
 	Request request = null;
 
 	try {
 	    request = builder.sendRequest(null, new RequestCallback() {
 		    public void onError(Request request, Throwable e) {
-			GWT.log("onError called", e);
+			callback.onError(e);
 		    }
 		    
 		    public void onResponseReceived(Request request, Response response) {
 			if (200 == response.getStatusCode()) {
-			    callback.onJSONReceived(JSONParser.parse(response.getText()));
+			    callback.onResult((T)eval(response.getText()).cast());
 			} else {
-			    GWT.log("Response not OK: " + response.getStatusCode() + ". " + response.getText(), null);
+			    RequestException e = new RequestException("Response not OK: " + response.getStatusCode() + ". " + response.getText());
+			    callback.onError(e);
 			}
 		    }
 		});
 	} catch (RequestException e) {
-	    GWT.log("Failed to send request", e);
+	    callback.onError(e);
 	}
 
 	return new GFRequest(request);
     }
+
+    private static native JavaScriptObject eval(String json) /*-{ 
+        return eval('(' + json + ')');
+    }-*/;
 
     private static class Arg {
 	public final String name;
