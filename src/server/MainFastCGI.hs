@@ -36,9 +36,7 @@ cgiMain pgf =
          "/complete"       -> return (doComplete pgf) `ap` getText `ap` getCat `ap` getFrom `ap` getLimit
          "/linearize"      -> return (doLinearize pgf) `ap` getTree `ap` getTo
          "/translate"      -> return (doTranslate pgf) `ap` getText `ap` getCat `ap` getFrom `ap` getTo
-         "/categories"     -> return $ doCategories pgf
-         "/languages"      -> return $ doLanguages pgf
-         "/mylanguage"     -> return (doMyLanguage pgf) `ap` requestAcceptLanguage
+         "/info"           -> return (doInfo pgf) `ap` requestAcceptLanguage
          _                 -> throwCGIError 404 "Not Found" ["Resource not found: " ++ path]
        outputJSON json
   where
@@ -102,19 +100,18 @@ doLinearize :: PGF -> PGF.Tree -> Maybe PGF.Language -> JSValue
 doLinearize pgf tree mto = showJSON $ map toJSObject
      [[("to",to),("text",text)] | (to,text) <- linearize' pgf mto tree]
 
-doLanguages :: PGF -> JSValue
-doLanguages pgf = showJSON $ map toJSObject
-     [[("name", showJSON l), 
-       ("languageCode", showJSON $ fromMaybe "" (PGF.languageCode pgf l)),
-       ("canParse",     showJSON $ PGF.canParse pgf l)]
-          | l <- PGF.languages pgf]
-
-doCategories :: PGF -> JSValue
-doCategories pgf = showJSON $ map toJSObject
-      [[("cat",cat)] | cat <- PGF.categories pgf]
-
-doMyLanguage :: PGF -> Maybe (Accept Language) -> JSValue
-doMyLanguage pgf macc = showJSON $ toJSObject [("languageName", selectLanguage pgf macc)]
+doInfo :: PGF -> Maybe (Accept Language) -> JSValue
+doInfo pgf macc = showJSON $ toJSObject 
+             [("name", showJSON (PGF.abstractName pgf)),
+              ("userLanguage", showJSON (selectLanguage pgf macc)),
+              ("categories", showJSON categories), 
+              ("languages", showJSON languages)]
+  where languages = map toJSObject
+                    [[("name", showJSON l), 
+                      ("languageCode", showJSON $ fromMaybe "" (PGF.languageCode pgf l)),
+                      ("canParse",     showJSON $ PGF.canParse pgf l)]
+                     | l <- PGF.languages pgf]
+        categories = map toJSObject [[("cat", cat)] | cat <- PGF.categories pgf]
 
 -- * PGF utilities
 

@@ -170,6 +170,10 @@ public class Translate implements EntryPoint {
 			}
 			toLangBox.addItem(l.getName());
 		    }
+		    gf.mylanguage(new GF.MyLanguageCallback() {
+
+			}
+
 		    setStatus("Loaded languages.");		    
 		}
 
