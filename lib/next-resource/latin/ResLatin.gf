@@ -1,9 +1,14 @@
 --# -path=.:common
 
-resource ResLatin = open Prelude in {
+resource ResLatin = open 
+-- ParamX, 
+ Prelude 
+
+in {
 
 param
   Number = Sg | Pl ;
+  Person = P1 | P2 | P3 ;
   Gender = Masc | Fem | Neutr ;
   Case = Nom | Acc | Gen | Dat | Abl | Voc ;
   Degree = DPos | DComp | DSup ;
@@ -217,5 +222,132 @@ oper
        }
     in
     mkAdjective (noun12 bonus) (noun1 (bon + "a")) (noun2um (bon + "um")) ;
+
+-- verbs
+
+  param 
+  VActForm  = VAct VAnter VTense Number Person ;
+  VPassForm = VPass VTense Number Person ;
+  VInfForm  = VInfActPres | VInfActPerf ;
+  VImpForm  = VImpPres Number | VImpFut2 Number | VImpFut3 Number ;
+  VGerund   = VGenAcc | VGenGen |VGenDat | VGenAbl ;
+  VSupine   = VSupAcc | VSupAbl ;
+
+  VAnter = VSim | VAnt ;
+  VTense = VPres VMood | VImpf VMood | VFut ; 
+  VMood  = VInd | VConj ;
+
+  oper
+  Verb : Type = {
+    act  : VActForm => Str ;
+{-
+    pass : VPassForm => Str ;
+    inf  : VAnter => Str ;
+    imp  : VImpForm => Str ;
+    ger  : VGerund => Str ;
+    sup  : VSupine => Str ;
+    partActPres  : Adjective ;
+    partActFut   : Adjective ;
+    partPassPerf : Adjective ;
+    partPassFut  : Adjective
+-}
+    } ;
+
+  mkVerb : 
+    (cela,cele,celab,celo,celare,celavi,celatus,celabo,celabunt,celabi : Str) 
+      -> Verb = 
+    \cela,cele,celab,celo,celare,celavi,celatus,celabo,celabunt,celabi -> 
+    let
+      celav = init celavi
+    in {
+      act = table {
+        VAct VSim (VPres VInd)  Sg P1 => celo ; 
+        VAct VSim (VPres VInd)  n  p  => cela + actPresEnding n p ;
+        VAct VSim (VPres VConj) n  p  => cele + actPresEnding n p ;
+        VAct VSim (VImpf VInd)  n  p  => celab + "ba" + actPresEnding n p ;
+        VAct VSim (VImpf VConj) n  p  => celare + actPresEnding n p ;
+        VAct VSim VFut          Sg P1 => celabo ;
+        VAct VSim VFut          Pl P3 => celabunt ;
+        VAct VSim VFut          n  p  => celabi + actPresEnding n p ;
+        VAct VAnt (VPres VInd)  Pl P3 => celav + "erunt" ; 
+        VAct VAnt (VPres VInd)  n  p  => celavi + actPerfEnding n p ;
+        VAct VAnt (VPres VConj) n  p  => celav + "eri" + actPresEnding n p ;
+        VAct VAnt (VImpf VInd)  n  p  => celav + "era" + actPresEnding n p ;
+        VAct VAnt (VImpf VConj) n  p  => celav + "isse" + actPresEnding n p ;
+        VAct VAnt VFut          Sg P1 => celav + "ero" ;
+        VAct VAnt VFut          n  p  => celav + "eri" + actPresEnding n p
+        } ;
+      } ;
+
+  actPresEnding : Number -> Person -> Str = 
+    useEndingTable <"m", "s", "t", "mus", "tis", "nt"> ;
+
+  actPerfEnding : Number -> Person -> Str = 
+    useEndingTable <"", "sti", "t", "mus", "stis", "erunt"> ;
+
+  useEndingTable : (Str*Str*Str*Str*Str*Str) -> Number -> Person -> Str = 
+    \es,n,p -> case n of {
+      Sg => case p of {
+        P1 => es.p1 ;
+        P2 => es.p2 ;
+        P3 => es.p3
+        } ;
+      Pl => case p of {
+        P1 => es.p4 ;
+        P2 => es.p5 ;
+        P3 => es.p6
+        }
+      } ;
+
+  verb1 : Str -> Verb = \celare ->
+    let 
+      cela = Predef.tk 2 celare ;
+      cel  = init cela ;
+      celo = cel + "o" ;
+      cele = cel + "e" ;
+      celavi = cela + "vi" ;
+      celatus = cela + "tus" ;
+    in mkVerb cela cele cela celo celare celavi celatus 
+              (cela + "bo") (cela + "bunt") (cela + "bi") ;
+
+  verb2 : Str -> Verb = \habere ->
+    let 
+      habe = Predef.tk 2 habere ;
+      hab  = init habe ;
+      habeo = habe + "o" ;
+      habea = habe + "a" ;
+      habui = hab + "ui" ;
+      habitus = hab + "itus" ;
+    in mkVerb habe habea habe habeo habere habui habitus
+              (habe + "bo") (habe + "bunt") (habe + "bi") ;
+
+  verb3 : (_,_,_ : Str) -> Verb = \gerere,gessi,gestus ->
+    let 
+      gere = Predef.tk 2 gerere ;
+      ger  = init gere ;
+      gero = ger + "o" ;
+      geri = ger + "i" ;
+      gera = ger + "a" ;
+    in mkVerb geri gera gere gero gerere gessi gestus
+              (ger + "am") (ger + "ent") gere ; 
+
+  verb3i : (_,_,_ : Str) -> Verb = \iacere,ieci,iactus ->
+    let 
+      iac   = Predef.tk 3 iacere ;
+      iaco  = iac + "io" ;
+      iaci  = iac + "i" ;
+      iacie = iac + "ie" ;
+      iacia = iac + "ia" ;
+    in mkVerb iaci iacia iacie iaco iacere ieci iactus
+              (iac + "iam") (iac + "ient") iacie ; 
+
+  verb4 : (_,_,_ : Str) -> Verb = \sentire,sensi,sensus ->
+    let 
+      senti  = Predef.tk 2 sentire ;
+      sentio = senti + "o" ;
+      sentia = senti + "a" ;
+      sentie = senti + "e" ;
+    in mkVerb senti sentia sentie sentio sentire sensi sensus
+              (senti + "am") (senti + "ent") sentie ; 
 
 }
