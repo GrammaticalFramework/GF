@@ -12,11 +12,11 @@ executable gf.fcgi
                  unix,
                  directory,
                  containers,
-                 gf,
-                 cgi,
-                 fastcgi,
-                 json,
-                 utf8-string
+                 gf >= 3.0,
+                 cgi >= 3001.1.7.0,
+                 fastcgi >= 3001.0.2.1,
+                 json >= 0.3.3,
+                 utf8-string >= 0.3.1.1
   main-is: MainFastCGI.hs
   other-modules:
     FastCGIUtils
