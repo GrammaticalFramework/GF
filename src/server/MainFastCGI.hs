@@ -38,6 +38,7 @@ cgiMain pgf =
          "/translate"      -> return (doTranslate pgf) `ap` getText `ap` getCat `ap` getFrom `ap` getTo
          "/categories"     -> return $ doCategories pgf
          "/languages"      -> return $ doLanguages pgf
+         "/mylanguage"     -> return (doMyLanguage pgf) `ap` requestAcceptLanguage
          _                 -> throwCGIError 404 "Not Found" ["Resource not found: " ++ path]
        outputJSON json
   where
@@ -112,6 +113,8 @@ doCategories :: PGF -> JSValue
 doCategories pgf = showJSON $ map toJSObject
       [[("cat",cat)] | cat <- PGF.categories pgf]
 
+doMyLanguage :: PGF -> Maybe (Accept Language) -> JSValue
+doMyLanguage pgf macc = showJSON $ toJSObject [("languageName", selectLanguage pgf macc)]
 
 -- * PGF utilities
 
@@ -146,6 +149,18 @@ linearize' pgf mto tree =
     case mto of
       Nothing -> PGF.linearizeAllLang pgf tree
       Just to -> [(to,PGF.linearize pgf to tree)]
+
+selectLanguage :: PGF -> Maybe (Accept Language) -> PGF.Language
+selectLanguage pgf macc = case acceptable of
+                            []  -> case PGF.languages pgf of
+                                     []  -> "" -- FIXME: error?
+                                     l:_ -> l
+                            Language c:_ -> fromJust (langCodeLanguage pgf c)
+  where langCodes = mapMaybe (PGF.languageCode pgf) (PGF.languages pgf)
+        acceptable = negotiate (map Language langCodes) macc
+
+langCodeLanguage :: PGF -> String -> Maybe PGF.Language
+langCodeLanguage pgf code = listToMaybe [l | l <- PGF.languages pgf, PGF.languageCode pgf l == Just code]
 
 -- * General CGI and JSON stuff
 
