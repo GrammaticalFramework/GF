@@ -26,21 +26,27 @@ public class GF {
 	public void onError (Throwable e) ;
     }
 
-    /* Languages */
+    /* Grammar */
 
-    public GFRequest languages (final LanguagesCallback callback) {
-	return sendRequest("languages", null, callback);
+    public GFRequest grammar (final GrammarCallback callback) {
+	return sendRequest("grammar", null, callback);
     }
 
-    public interface LanguagesCallback extends GFCallback<Languages> { }
+    public interface GrammarCallback extends GFCallback<Grammar> { }
 
-    public static class Languages extends JsArray<Language> {
-	protected Languages() { }
+    public static class Grammar extends JavaScriptObject {
+	protected Grammar() { }
+
+	public final native String getName() /*-{ return this.name; }-*/;
+
+	public final native String getUserLanguage() /*-{ return this.userLanguage; }-*/;
+
+	public final native JsArray<Language> getLanguages() /*-{ return this.languages; }-*/;
 
 	public final Language getLanguage(String name) {
-	    int c = length();
+	    int c = getLanguages().length();
 	    for (int i = 0; i < c; i++) {
-		Language l = get(i);
+		Language l = getLanguages().get(i);
 		if (l.getName().equals(name))
 		    return l;
 	    }
