@@ -15,9 +15,22 @@
 }
     
 .my-translation {
-    border-width: 0 0 0 0;
-    border-style: solid;
-    border-color: silver;
-    padding: 0.2em;
+    margin: 0.2em;
+    padding-left: 25px;
     font-size: 150%;
+    background-repeat: no-repeat;
+    background-position: 0% 50%;
 }
+
+* [LANG=bg] { background-image: url("flags/bg.png"); }
+* [LANG=ca] { background-image: url("flags/catalonia.png"); }
+* [LANG=da] { background-image: url("flags/dk.png"); }
+* [LANG=de] { background-image: url("flags/de.png"); }
+* [LANG=en] { background-image: url("flags/gb.png"); }
+* [LANG=fi] { background-image: url("flags/fi.png"); }
+* [LANG=fr] { background-image: url("flags/fr.png"); }
+* [LANG=it] { background-image: url("flags/it.png"); }
+* [LANG=no] { background-image: url("flags/no.png"); }
+* [LANG=ru] { background-image: url("flags/ru.png"); }
+* [LANG=es] { background-image: url("flags/es.png"); }
+* [LANG=sv] { background-image: url("flags/se.png"); }

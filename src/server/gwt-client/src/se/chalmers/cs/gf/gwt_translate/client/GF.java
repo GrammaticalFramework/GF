@@ -36,6 +36,16 @@ public class GF {
 
     public static class Languages extends JsArray<Language> {
 	protected Languages() { }
+
+	public final Language getLanguage(String name) {
+	    int c = length();
+	    for (int i = 0; i < c; i++) {
+		Language l = get(i);
+		if (l.getName().equals(name))
+		    return l;
+	    }
+	    return null;
+	}
     }
 
     public static class Language extends JavaScriptObject {

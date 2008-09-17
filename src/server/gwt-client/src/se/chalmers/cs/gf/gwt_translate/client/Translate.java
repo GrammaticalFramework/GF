@@ -22,6 +22,8 @@ import com.google.gwt.core.client.GWT;
 
 import com.google.gwt.user.client.Window;
 
+import com.google.gwt.i18n.client.LocaleInfo;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -34,14 +36,19 @@ public class Translate implements EntryPoint {
 
     private CompletionOracle oracle;
     private SuggestBox suggest;
+    private GF.Languages availableLangs;
     private List<String> fromLangs;
     private List<String> toLangs;
     private VerticalPanel outputPanel;
     private Label statusLabel;
 
-    private void addTranslation(String text) {
+    private void addTranslation(String text, String toLang) {
 	Label l = new Label(text);
 	l.addStyleName("my-translation");
+	GF.Language lang = availableLangs.getLanguage(toLang);
+	if (lang != null) {
+	    l.getElement().setLang(lang.getLanguageCode());
+	}
 	outputPanel.add(l);
     }
 
@@ -51,7 +58,7 @@ public class Translate implements EntryPoint {
 		    outputPanel.clear();
 		    for (int i = 0; i < translations.length(); i++) {
 			GF.Translation t = translations.get(i);
-			addTranslation(t.getText());
+			addTranslation(t.getText(), t.getTo());
 		    }
 		}
 		public void onError (Throwable e) {
@@ -155,6 +162,7 @@ public class Translate implements EntryPoint {
 
 	gf.languages(new GF.LanguagesCallback() {
 		public void onResult(GF.Languages languages) {
+		    availableLangs = languages;
 		    for (int i = 0; i < languages.length(); i++) {
 			GF.Language l = languages.get(i);
 			if (l.canParse()) {
@@ -162,14 +170,15 @@ public class Translate implements EntryPoint {
 			}
 			toLangBox.addItem(l.getName());
 		    }
-
-		    setStatus("Loaded languages.");
+		    setStatus("Loaded languages.");		    
 		}
 
 		public void onError (Throwable e) {
 		    showError("Error getting language information", e);
 		}
 	    });
+
+	GWT.log("Current locale: " + LocaleInfo.getCurrentLocale().getLocaleName(), null);
 	
     }
 }
