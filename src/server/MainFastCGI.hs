@@ -36,7 +36,7 @@ cgiMain pgf =
          "/complete"       -> return (doComplete pgf) `ap` getText `ap` getCat `ap` getFrom `ap` getLimit
          "/linearize"      -> return (doLinearize pgf) `ap` getTree `ap` getTo
          "/translate"      -> return (doTranslate pgf) `ap` getText `ap` getCat `ap` getFrom `ap` getTo
-         "/info"           -> return (doInfo pgf) `ap` requestAcceptLanguage
+         "/grammar"        -> return (doGrammar pgf) `ap` requestAcceptLanguage
          _                 -> throwCGIError 404 "Not Found" ["Resource not found: " ++ path]
        outputJSON json
   where
@@ -100,8 +100,8 @@ doLinearize :: PGF -> PGF.Tree -> Maybe PGF.Language -> JSValue
 doLinearize pgf tree mto = showJSON $ map toJSObject
      [[("to",to),("text",text)] | (to,text) <- linearize' pgf mto tree]
 
-doInfo :: PGF -> Maybe (Accept Language) -> JSValue
-doInfo pgf macc = showJSON $ toJSObject 
+doGrammar :: PGF -> Maybe (Accept Language) -> JSValue
+doGrammar pgf macc = showJSON $ toJSObject 
              [("name", showJSON (PGF.abstractName pgf)),
               ("userLanguage", showJSON (selectLanguage pgf macc)),
               ("categories", showJSON categories), 
