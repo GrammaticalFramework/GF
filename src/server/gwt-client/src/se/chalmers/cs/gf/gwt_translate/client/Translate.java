@@ -36,16 +36,16 @@ public class Translate implements EntryPoint {
 
     private CompletionOracle oracle;
     private SuggestBox suggest;
-    private GF.Languages availableLangs;
-    private List<String> fromLangs;
-    private List<String> toLangs;
+    private GF.Grammar grammar;
+    private ListBox fromLangBox;
+    private ListBox toLangBox;
     private VerticalPanel outputPanel;
     private Label statusLabel;
 
     private void addTranslation(String text, String toLang) {
 	Label l = new Label(text);
 	l.addStyleName("my-translation");
-	GF.Language lang = availableLangs.getLanguage(toLang);
+	GF.Language lang = grammar.getLanguage(toLang);
 	if (lang != null) {
 	    l.getElement().setLang(lang.getLanguageCode());
 	}
@@ -53,18 +53,25 @@ public class Translate implements EntryPoint {
     }
 
     private void translate() {
-	gf.translate(suggest.getText(), fromLangs, null, toLangs, new GF.TranslateCallback() {
+	outputPanel.clear();
+	setStatus("Translating...");
+	gf.translate(suggest.getText(), listBoxSelection(fromLangBox), null, 
+		     listBoxSelection(toLangBox), new GF.TranslateCallback() {
 		public void onResult (GF.Translations translations) {
-		    outputPanel.clear();
 		    for (int i = 0; i < translations.length(); i++) {
 			GF.Translation t = translations.get(i);
 			addTranslation(t.getText(), t.getTo());
 		    }
+		    setStatus("Translation done.");
 		}
 		public void onError (Throwable e) {
 		    showError("Translation failed", e);
 		}
 	    });
+    }
+
+    private void updateLangs() {
+	oracle.setInputLangs(listBoxSelection(fromLangBox));
     }
 
     private List<String> listBoxSelection(ListBox box) {
@@ -108,21 +115,20 @@ public class Translate implements EntryPoint {
 		}
 	    });
 
-	final ListBox fromLangBox = new ListBox();
+	fromLangBox = new ListBox();
 	fromLangBox.addItem("Any language", "");
 	fromLangBox.addChangeListener(new ChangeListener() {
 		public void onChange(Widget sender) {
-		    fromLangs = listBoxSelection(fromLangBox);
-		    oracle.setInputLangs(fromLangs);
+		    updateLangs();
 		    translate();
 		}
 	    });
 
-	final ListBox toLangBox = new ListBox();
+	toLangBox = new ListBox();
 	toLangBox.addItem("All languages", "");
 	toLangBox.addChangeListener(new ChangeListener() {
 		public void onChange(Widget sender) {
-		    toLangs = listBoxSelection(toLangBox);
+		    updateLangs();
 		    translate();
 		}
 	    });
@@ -160,19 +166,21 @@ public class Translate implements EntryPoint {
 	RootPanel.get().add(vPanel);
 	RootPanel.get().add(statusLabel, (Window.getClientWidth() - statusLabel.getOffsetWidth())/2, (Window.getClientHeight() - statusLabel.getOffsetHeight()));
 
-	gf.languages(new GF.LanguagesCallback() {
-		public void onResult(GF.Languages languages) {
-		    availableLangs = languages;
-		    for (int i = 0; i < languages.length(); i++) {
-			GF.Language l = languages.get(i);
+	gf.grammar(new GF.GrammarCallback() {
+		public void onResult(GF.Grammar grammar) {
+		    Translate.this.grammar = grammar;
+		    for (int i = 0; i < grammar.getLanguages().length(); i++) {
+			GF.Language l = grammar.getLanguages().get(i);
+			String name = l.getName();
 			if (l.canParse()) {
-			    fromLangBox.addItem(l.getName());
+			    fromLangBox.addItem(name);
+			    if (name.equals(grammar.getUserLanguage())) {
+				fromLangBox.setSelectedIndex(fromLangBox.getItemCount()-1);
+			    }
 			}
-			toLangBox.addItem(l.getName());
+			toLangBox.addItem(name);
 		    }
-		    gf.mylanguage(new GF.MyLanguageCallback() {
-
-			}
+		    updateLangs();
 
 		    setStatus("Loaded languages.");		    
 		}
@@ -180,9 +188,6 @@ public class Translate implements EntryPoint {
 		public void onError (Throwable e) {
 		    showError("Error getting language information", e);
 		}
-	    });
-
-	GWT.log("Current locale: " + LocaleInfo.getCurrentLocale().getLocaleName(), null);
-	
+	    });	
     }
 }
