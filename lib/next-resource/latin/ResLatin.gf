@@ -240,17 +240,15 @@ oper
   oper
   Verb : Type = {
     act  : VActForm => Str ;
-{-
-    pass : VPassForm => Str ;
+--    pass : VPassForm => Str ;
     inf  : VAnter => Str ;
-    imp  : VImpForm => Str ;
-    ger  : VGerund => Str ;
-    sup  : VSupine => Str ;
-    partActPres  : Adjective ;
-    partActFut   : Adjective ;
-    partPassPerf : Adjective ;
-    partPassFut  : Adjective
--}
+--    imp  : VImpForm => Str ;
+--    ger  : VGerund => Str ;
+--    sup  : VSupine => Str ;
+--    partActPres  : Adjective ;
+--    partActFut   : Adjective ;
+--    partPassPerf : Adjective ;
+--    partPassFut  : Adjective ;
     } ;
 
   mkVerb : 
@@ -277,6 +275,10 @@ oper
         VAct VAnt VFut          Sg P1 => celav + "ero" ;
         VAct VAnt VFut          n  p  => celav + "eri" + actPresEnding n p
         } ;
+      inf = table {
+        VSim => celare ;
+        VAnt => celav + "isse"
+        }
       } ;
 
   actPresEnding : Number -> Person -> Str = 
@@ -297,6 +299,20 @@ oper
         P2 => es.p5 ;
         P3 => es.p6
         }
+      } ;
+
+  esseV : Verb = 
+    let
+      esse = mkVerb "es" "si" "era" "sum" "esse" "fui" "*futus"
+                    "ero" "erunt" "eri" ;
+    in {
+      act = table {
+        VAct VSim (VPres VInd)  Sg P2 => "es" ; 
+        VAct VSim (VPres VInd)  Pl P1 => "sumus" ; 
+        VAct VSim (VPres VInd)  Pl P3 => "sunt" ; 
+        v => esse.act ! v
+        } ;
+      inf = esse.inf
       } ;
 
   verb1 : Str -> Verb = \celare ->
@@ -349,5 +365,69 @@ oper
       sentie = senti + "e" ;
     in mkVerb senti sentia sentie sentio sentire sensi sensus
               (senti + "am") (senti + "ent") sentie ; 
+
+
+-- smart paradigms
+
+  verb_pppi : (iacio,ieci,iactus,iacere : Str) -> Verb = 
+    \iacio,ieci,iactus,iacere ->
+    case iacere of {
+    _ + "are" => verb1 iacere ;
+    _ + "ire" => verb4 iacere ieci iactus ;
+    _ + "ere" => case iacio of {
+      _ + "eo" => verb2 iacere ;
+      _ + "io" => verb3i iacere ieci iactus ;
+      _ => verb3 iacere ieci iactus
+      } ;
+    _ => Predef.error ("verb_pppi: illegal infinitive form" ++ iacere) 
+    } ;
+
+  verb : (iacere : Str) -> Verb = 
+    \iacere ->
+    case iacere of {
+    _ + "are" => verb1 iacere ;
+    _ + "ire" => let iaci = Predef.tk 2 iacere 
+                 in verb4 iacere (iaci + "vi") (iaci + "tus") ;
+    _ + "ere" => verb2 iacere ;
+    _ => Predef.error ("verb: illegal infinitive form" ++ iacere) 
+    } ;
+
+-- pronouns
+
+  Pronoun : Type = {
+    s : Case => Str ;
+    g : Gender ;
+    n : Number ;
+    p : Person ;
+    } ;
+
+  mkPronoun : (_,_,_,_,_ : Str) -> Gender -> Number -> Person -> Pronoun = 
+    \ego,me,mei,mihi,mee,g,n,p -> {
+      s = pronForms ego me mei mihi mee ;
+      g = g ;
+      n = n ;
+      p = p
+      } ;
+
+  pronForms : (_,_,_,_,_ : Str) -> Case => Str = 
+    \ego,me,mei,mihi,mee -> table Case [ego ; me ; mei ; mihi ; mee ; ego] ;
+
+  personalPronoun : Gender -> Number -> Person -> Pronoun = \g,n,p -> {
+    s = case <g,n,p> of {
+      <_,Sg,P1> => pronForms "ego" "me" "mei" "mihi" "me" ;
+      <_,Sg,P2> => pronForms "tu"  "te" "tui" "tibi" "te" ;
+      <_,Pl,P1> => pronForms "nos" "nos" "nostri" "nobis" "nobis" ; --- nostrum
+      <_,Pl,P2> => pronForms "vos" "vos" "vestri" "vobis" "vobis" ; --- vestrum
+      <Masc, Sg,P3> => pronForms "is" "eum" "eius" "ei" "eo" ;
+      <Fem,  Sg,P3> => pronForms "ea" "eam" "eius" "ei" "ea" ;
+      <Neutr,Sg,P3> => pronForms "id" "id"  "eius" "ei" "eo" ;
+      <Masc, Pl,P3> => pronForms "ii" "eos" "eorum" "iis" "iis" ;
+      <Fem,  Pl,P3> => pronForms "ii" "eas" "earum" "iis" "iis" ;
+      <Neutr,Pl,P3> => pronForms "ea" "ea"  "eorum" "iis" "iis"
+      } ;
+    g = g ;
+    n = n ;
+    p = p
+    } ;
 
 }
