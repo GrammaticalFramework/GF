@@ -39,7 +39,9 @@ public class Translate implements EntryPoint {
     private GF.Grammar grammar;
     private ListBox fromLangBox;
     private ListBox toLangBox;
+    private Button translateButton;
     private VerticalPanel outputPanel;
+    private PopupPanel statusPopup;
     private Label statusLabel;
 
     private void addTranslation(String text, String toLang) {
@@ -62,7 +64,7 @@ public class Translate implements EntryPoint {
 			GF.Translation t = translations.get(i);
 			addTranslation(t.getText(), t.getTo());
 		    }
-		    setStatus("Translation done.");
+		    clearStatus();
 		}
 		public void onError (Throwable e) {
 		    showError("Translation failed", e);
@@ -87,6 +89,7 @@ public class Translate implements EntryPoint {
 
     private void setStatus(String msg) {
 	statusLabel.setText(msg);
+	statusPopup.center();
     }
 
     private void showError(String msg, Throwable e) {
@@ -94,11 +97,33 @@ public class Translate implements EntryPoint {
 	setStatus(msg);
     }
 
-    public void onModuleLoad() {
-    
-	statusLabel = new Label("Loading...");
+    private void clearStatus() {
+	statusPopup.hide();
+    }
 
-	gf = new GF(gfBaseURL);
+    private void setGrammar(GF.Grammar grammar) {
+	this.grammar = grammar;
+
+	for (int i = 0; i < grammar.getLanguages().length(); i++) {
+	    GF.Language l = grammar.getLanguages().get(i);
+	    String name = l.getName();
+	    if (l.canParse()) {
+		fromLangBox.addItem(name);
+		if (name.equals(grammar.getUserLanguage())) {
+		    fromLangBox.setSelectedIndex(fromLangBox.getItemCount()-1);
+		}
+	    }
+	    toLangBox.addItem(name);
+	}
+
+	updateLangs();
+	clearStatus();
+	fromLangBox.setEnabled(true);
+	toLangBox.setEnabled(true);
+	translateButton.setEnabled(true);
+    }
+
+    private void createTranslationUI() {
 
 	oracle = new CompletionOracle(gf, new CompletionOracle.ErrorHandler() {
 		public void onError(Throwable e) {
@@ -116,6 +141,7 @@ public class Translate implements EntryPoint {
 	    });
 
 	fromLangBox = new ListBox();
+	fromLangBox.setEnabled(false);
 	fromLangBox.addItem("Any language", "");
 	fromLangBox.addChangeListener(new ChangeListener() {
 		public void onChange(Widget sender) {
@@ -125,6 +151,7 @@ public class Translate implements EntryPoint {
 	    });
 
 	toLangBox = new ListBox();
+	toLangBox.setEnabled(false);
 	toLangBox.addItem("All languages", "");
 	toLangBox.addChangeListener(new ChangeListener() {
 		public void onChange(Widget sender) {
@@ -133,7 +160,8 @@ public class Translate implements EntryPoint {
 		}
 	    });
 
-	Button translateButton = new Button("Translate");
+        translateButton = new Button("Translate");
+	translateButton.setEnabled(false);
         translateButton.addClickListener(new ClickListener() {
 		public void onClick(Widget sender) {
 		    translate();
@@ -152,10 +180,6 @@ public class Translate implements EntryPoint {
 	outputPanel = new VerticalPanel();
 	outputPanel.addStyleName("my-translations");
 
-	// CSS debug
-	//	addTranslation("hello");
-	//	addTranslation("world");
-
 	VerticalPanel vPanel = new VerticalPanel();
 	vPanel.setWidth("100%");
 	vPanel.setHorizontalAlignment(VerticalPanel.ALIGN_CENTER);
@@ -164,25 +188,22 @@ public class Translate implements EntryPoint {
 	vPanel.add(outputPanel);
 
 	RootPanel.get().add(vPanel);
-	RootPanel.get().add(statusLabel, (Window.getClientWidth() - statusLabel.getOffsetWidth())/2, (Window.getClientHeight() - statusLabel.getOffsetHeight()));
+
+    }
+
+    public void onModuleLoad() {    
+	statusLabel = new Label("Loading...");
+	statusPopup = new PopupPanel(true, true);
+	statusPopup.add(statusLabel);
+	statusPopup.center();
+
+	gf = new GF(gfBaseURL);
+
+	createTranslationUI();
 
 	gf.grammar(new GF.GrammarCallback() {
 		public void onResult(GF.Grammar grammar) {
-		    Translate.this.grammar = grammar;
-		    for (int i = 0; i < grammar.getLanguages().length(); i++) {
-			GF.Language l = grammar.getLanguages().get(i);
-			String name = l.getName();
-			if (l.canParse()) {
-			    fromLangBox.addItem(name);
-			    if (name.equals(grammar.getUserLanguage())) {
-				fromLangBox.setSelectedIndex(fromLangBox.getItemCount()-1);
-			    }
-			}
-			toLangBox.addItem(name);
-		    }
-		    updateLangs();
-
-		    setStatus("Loaded languages.");		    
+		    setGrammar(grammar);
 		}
 
 		public void onError (Throwable e) {
@@ -190,4 +211,5 @@ public class Translate implements EntryPoint {
 		}
 	    });	
     }
+
 }
