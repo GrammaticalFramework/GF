@@ -3,11 +3,11 @@ concrete NounLat of Noun = CatLat ** open ResLat, Prelude in {
   flags optimize=all_subs ;
 
   lin
---    DetCN det cn = {
---      s = \\c => det.s ++ cn.s ! det.n ! c ; 
---      a = agrgP3 det.n cn.g
---      } ;
---
+    DetCN det cn = {
+      s = \\c => det.s ! cn.g ! c ++ cn.s ! det.n ! c ; 
+      n = det.n ; g = cn.g ; p = P3
+      } ;
+
 --    UsePN pn = pn ** {a = agrgP3 Sg pn.g} ;
     UsePron p = p ;
 
@@ -37,12 +37,12 @@ concrete NounLat of Noun = CatLat ** open ResLat, Prelude in {
 --      n  = num.n
 --      } ;
 --
---    DetQuant quant num = {
---      s  = quant.s ! num.hasCard ! num.n ++ num.s ;
---      sp = quant.sp ! num.hasCard ! num.n ++ num.s ;
---      n  = num.n
---      } ;
---
+    DetQuant quant num = {
+      s  = \\g,c => quant.s  ! num.n ! g ! c ++ num.s ! g ! c ;
+      sp = \\g,c => quant.sp ! num.n ! g ! c ++ num.s ! g ! c ;
+      n  = num.n
+      } ;
+
 --    DetNP det = {
 --      s = \\c => det.sp ; ---- case
 --      a = agrP3 det.n
@@ -53,10 +53,9 @@ concrete NounLat of Noun = CatLat ** open ResLat, Prelude in {
 --      sp = \\_,_ => p.sp 
 --      } ;
 --
---    NumSg = {s = []; n = Sg ; hasCard = False} ;
---    NumPl = {s = []; n = Pl ; hasCard = False} ;
------b    NoOrd = {s = []} ;
---
+    NumSg = {s = \\_,_ => [] ; n = Sg} ;
+    NumPl = {s = \\_,_ => [] ; n = Pl} ;
+
 --    NumCard n = n ** {hasCard = True} ;
 --
 --    NumDigits n = {s = n.s ! NCard ; n = n.n} ;
@@ -95,7 +94,7 @@ concrete NounLat of Noun = CatLat ** open ResLat, Prelude in {
 --      a = agrP3 Sg
 --      } ;
 --
---    UseN n = n ;
+    UseN n = n ;
 --    UseN2 n = n ;
 -----b    UseN3 n = n ;
 --
