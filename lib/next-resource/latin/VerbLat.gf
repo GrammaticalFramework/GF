@@ -32,11 +32,11 @@ concrete VerbLat of Verb = CatLat ** open ResLat in {
 --          {c2 = vp.c2} ;
 --
     UseComp comp = insertAdj comp.s (predV esse_V) ;
---
---    AdvVP vp adv = insertObj (\\_ => adv.s) vp ;
---
---    AdVVP adv vp = insertAdV adv.s vp ;
---
+
+    AdvVP vp adv = insertObj adv.s vp ;
+
+    AdVVP adv vp = insertObj adv.s vp ;
+
 --    ReflVP v = insertObjPre (\\a => v.c2 ++ reflPron ! a) v ;
 --
 --    PassV2 v = insertObj (\\_ => v.s ! VPPart) (predAux auxBe) ;

@@ -63,11 +63,9 @@ concrete CatLat of Cat = CommonX ** open ResLat, Prelude in {
 --
 ---- Structural
 --
---    Conj = {s1,s2 : Str ; n : Number} ;
------b    Conj = {s : Str ; n : Number} ;
------b    DConj = {s1,s2 : Str ; n : Number} ;
+    Conj = {s1,s2 : Str ; n : Number} ;
 --    Subj = {s : Str} ;
---    Prep = {s : Str} ;
+    Prep = {s : Str ; c : Case} ;
 --
 ---- Open lexical classes, e.g. Lexicon
 
@@ -85,6 +83,6 @@ concrete CatLat of Cat = CommonX ** open ResLat, Prelude in {
     N = Noun ;
 --    N2 = {s : Number => Case => Str ; g : Gender} ** {c2 : Str} ;
 --    N3 = {s : Number => Case => Str ; g : Gender} ** {c2,c3 : Str} ;
---    PN = {s : Case => Str ; g : Gender} ;
+    PN = {s : Case => Str ; g : Gender} ;
 --
 }

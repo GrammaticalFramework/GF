@@ -43,11 +43,11 @@ concrete NounLat of Noun = CatLat ** open ResLat, Prelude in {
       n  = num.n
       } ;
 
---    DetNP det = {
---      s = \\c => det.sp ; ---- case
---      a = agrP3 det.n
---      } ;
---
+    DetNP det = {
+      s = det.sp ! Neutr ;
+      g = Neutr ; n = det.n ; p = P3
+      } ;
+
 --    PossPron p = {
 --      s = \\_,_ => p.s ! Gen ;
 --      sp = \\_,_ => p.sp 
@@ -67,16 +67,12 @@ concrete NounLat of Noun = CatLat ** open ResLat, Prelude in {
 --    AdNum adn num = {s = adn.s ++ num.s ; n = num.n} ;
 --
 --    OrdSuperl a = {s = a.s ! AAdj Superl} ;
---
---    DefArt = {
---      s = \\c,n => artDef ;
---      sp = \\c,n => case <n,c> of {
---        <Sg,False> => "it" ;
---        <Pl,False> => "they" ;
---        _ => artDef
---        }
---      } ;
---
+
+    DefArt = {
+      s = \\_,_,_ => [] ;
+      sp = \\n,g => (personalPronoun g n P3).s 
+      } ;
+
 --    IndefArt = {
 --      s = \\c,n => case <n,c> of {
 --        <Sg,False> => artIndef ;
@@ -116,17 +112,19 @@ concrete NounLat of Noun = CatLat ** open ResLat, Prelude in {
 --      g = f.g ;
 --      c2 = f.c3
 --      } ;
---
---    AdjCN ap cn = {
---      s = \\n,c => preOrPost ap.isPre (ap.s ! agrgP3 n cn.g) (cn.s ! n ! c) ;
---      g = cn.g
---      } ;
+
+    AdjCN ap cn = {
+      s = \\n,c => preOrPost ap.isPre (ap.s ! cn.g ! n ! c) (cn.s ! n ! c) ;
+      g = cn.g
+      } ;
+
 --    RelCN cn rs = {
 --      s = \\n,c => cn.s ! n ! c ++ rs.s ! agrgP3 n cn.g ;
 --      g = cn.g
 --      } ;
---    AdvCN cn ad = {s = \\n,c => cn.s ! n ! c ++ ad.s ; g = cn.g} ;
---
+
+    AdvCN cn ad = {s = \\n,c => cn.s ! n ! c ++ ad.s ; g = cn.g} ;
+
 --    SentCN cn sc = {s = \\n,c => cn.s ! n ! c ++ sc.s ; g = cn.g} ;
 --
 --    ApposCN cn np = {s = \\n,c => cn.s ! n ! Nom ++ np.s ! c ; g = cn.g} ;
