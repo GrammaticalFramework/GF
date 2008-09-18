@@ -1,0 +1,21 @@
+Note, some paths are still hardcoded in MorphoServer.hs, you have to
+change them before compiling.
+
+See ../server/README for requirements and installation instructions
+(replace gf.fcgi with gf-morpho.fcgi).
+
+To build (doesn't yet use Cabal, since it needs some modules not yet in 
+the gf Cabal package):
+
+$ make
+
+When installed, try for example (change URL as appropriate):
+
+http://localhost/~bringert/morpho-server/gf-morpho.fcgi/eval?term=mkN+%22talo%22
+
+This will output a JSON representation of the resulting inflection table.
+The JSON representation should be changed, I've noticed that it's much nicer
+to have fixed object field names in JSON when using GWT. Perhaps the format
+should be:
+
+[[key, value]]
