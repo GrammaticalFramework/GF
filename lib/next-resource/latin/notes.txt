@@ -1,0 +1,29 @@
+Renaming on Mac:
+
+  for each in *Eng.gf ;  
+  do 
+  mv $each $(basename $each Eng.gf)Lat.gf
+  done
+
+In-place change:
+
+  sed -e 's/Eng/Lat/g' -i *Lat.gf
+
+Start with the following:
+
+concrete GrammarLat of Grammar = 
+  NounLat, 
+  VerbLat, 
+  AdjectiveLat,
+--  AdverbLat,
+--  NumeralLat,
+  SentenceLat,
+--  QuestionLat,
+--  RelativeLat,
+--  ConjunctionLat,
+--  PhraseLat,
+  TextX,
+  StructuralLat,
+--  IdiomLat
+
+

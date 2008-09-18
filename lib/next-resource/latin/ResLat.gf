@@ -550,9 +550,21 @@ oper
     (mkQuantifG 
        "hic" "hunc" "huius" "huic" "hoc"  "haec" "hanc" "huius" "hac"  "hoc" "huius" "hoc")
     (mkQuantifG 
-       "hi" "hos" "horum" "his" "his"  "hae" "has" "harum" "his"  "hocec" "horum" "his")
+       "hi" "hos" "horum" "his" "his"  "hae" "has" "harum" "his"  "haec" "horum" "his")
     ;
 
+  ille_Quantifier = mkQuantifier
+    (mkQuantifG 
+       "ille" "illum" "illius" "illi" "illo"  
+       "illa" "illam" "illius" "illa"  
+       "illud" "illius" "illo")
+    (mkQuantifG 
+       "illi" "illos" "illorum" "illis" "illis"  
+       "illae" "illas" "illarum" "illis"  
+       "illa" "illorum" "illis")
+    ;
+
+  mkPrep : Str -> Case -> {s : Str ; c : Case} = \s,c -> {s = s ; c = c} ;
 
 }
 

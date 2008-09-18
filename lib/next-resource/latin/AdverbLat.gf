@@ -1,6 +1,6 @@
---concrete AdverbLat of Adverb = CatLat ** open ResLat, Prelude in {
---
---  lin
+concrete AdverbLat of Adverb = CatLat ** open ResLat, Prelude in {
+
+  lin
 --    PositAdvAdj a = {s = a.s ! AAdv} ;
 --    ComparAdvAdj cadv a np = {
 --      s = cadv.s ++ a.s ! AAdv ++ "than" ++ np.s ! Nom
@@ -8,9 +8,9 @@
 --    ComparAdvAdjS cadv a s = {
 --      s = cadv.s ++ a.s ! AAdv ++ "than" ++ s.s
 --      } ;
---
---    PrepNP prep np = {s = prep.s ++ np.s ! Acc} ;
---
+
+    PrepNP prep np = {s = appPrep prep np.s} ;
+
 --    AdAdv = cc2 ;
 --
 --    SubjS = cc2 ;
