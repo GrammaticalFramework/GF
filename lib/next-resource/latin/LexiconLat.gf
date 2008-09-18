@@ -85,8 +85,8 @@ lin
 --  garden_N = regN "garden" ;
 --  girl_N = mkN feminine (regN "girl") ;
 --  glove_N = regN "glove" ;
---  gold_N = regN "gold" ;
---  good_A = mkADeg "good" "better" "best" "well" ;
+  gold_N = mkN "aurum" ;
+  good_A = mkA "bonus" ;
 --  go_V = mk5V "go" "goes" "went" "gone" "going" ;
 --  green_A = regADeg "green" ;
 --  harbour_N = regN "harbour" ;

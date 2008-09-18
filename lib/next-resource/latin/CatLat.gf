@@ -40,21 +40,21 @@ concrete CatLat of Cat = CommonX ** open ResLat, Prelude in {
 --
     VP = ResLat.VP ;
     VPSlash = ResLat.VP ** {c2 : Preposition} ;
---    Comp = {s : Agr => Str} ; 
+    Comp = {s : Gender => Number => Case => Str} ; 
 --
 ---- Adjective
 --
---    AP = {s : Agr => Str ; isPre : Bool} ; 
+    AP = Adjective ** {isPre : Bool} ; ---- {s : Agr => Str ; isPre : Bool} ; 
 --
 ---- Noun
 --
---    CN = {s : Number => Case => Str ; g : Gender} ;
+    CN = {s : Number => Case => Str ; g : Gender} ;
     NP, Pron = {s : Case => Str ; g : Gender ; n : Number ; p : Person} ;
---    Det = {s,sp : Str ; n : Number} ;
+    Det = Determiner ;
 --    Predet, Ord = {s : Str} ;
---    Num  = {s : Str ; n : Number ; hasCard : Bool} ;
+    Num  = {s : Gender => Case => Str ; n : Number} ;
 --    Card = {s : Str ; n : Number} ;
---    Quant = {s,sp : Bool => Number => Str} ;
+    Quant = Quantifier ;
 --
 ---- Numeral
 --
@@ -79,7 +79,7 @@ concrete CatLat of Cat = CommonX ** open ResLat, Prelude in {
 --    VV = {s : VVForm => Str ; isAux : Bool} ;
 --    V2V = Verb ** {c2 : Str ; isAux : Bool} ;
 --
-    A = Adjective ;
+    A = Adjective ** {isPre : Bool} ;
 --    A2 = {s : AForm => Str ; c2 : Str} ;
 --
     N = Noun ;

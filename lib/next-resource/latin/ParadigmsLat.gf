@@ -34,6 +34,15 @@ oper
       = \x,y,z -> noun_ngg x y z ** {lock_N = <>} ;
   } ;
   
+  mkA = overload {
+    mkA : (verbum : Str) -> A 
+      = \n -> adj n ** {isPre = False ; lock_A = <>} ;
+    mkA : (verbum, verbi : Str) -> A 
+      = \x,y -> adj123 x y ** {isPre = False ; lock_A = <>} ;
+    mkA : (bonus,bona,bonum : N) -> A 
+      = \x,y,z -> mkAdjective x y z ** {isPre = False ; lock_A = <>} ;
+  } ;
+  
 
   mkV = overload {
     mkV : (tacere : Str) -> V

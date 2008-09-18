@@ -219,6 +219,52 @@ oper
     in
     mkAdjective (noun12 bonus) (noun1 (bon + "a")) (noun2um (bon + "um")) ;
 
+  adj3x : (_,_ : Str) -> Adjective = \acer,acris ->
+   let
+     ac = Predef.tk 2 acer ;
+     acrise : Str * Str = case acer of {
+       _ + "er" => <ac + "ris", ac + "re"> ; 
+       _ + "is" => <acer      , ac + "e"> ;
+       _        => <acer      , acer> 
+       }
+   in
+   mkAdjective 
+     (noun3adj acer acris Masc) 
+     (noun3adj acrise.p1 acris Fem) 
+     (noun3adj acrise.p2 acris Neutr) ;
+
+  noun3adj : Str -> Str -> Gender -> Noun = \audax,audacis,g ->
+    let 
+      audac   = Predef.tk 2 audacis ;
+      audacem = case g of {Neutr => audax ; _ => audac + "em"} ;
+      audaces = case g of {Neutr => audac +"ia" ; _ => audac + "es"} ;
+      audaci  = audac + "i" ;
+    in
+    mkNoun
+      audax audacem (audac + "is") audaci audaci audax
+      audaces audaces (audac + "ium") (audac + "ibus") 
+      g ;
+
+
+-- smart paradigm
+
+  adj123 : Str -> Str -> Adjective = \bonus,boni ->
+    case <bonus,boni> of {
+      <_ + ("us" | "er"), _ + "i">  => adj12 bonus ;
+      <_ + ("us" | "er"), _ + "is"> => adj3x bonus boni ;
+      <_                , _ + "is"> => adj3x bonus boni ;
+      _ => Predef.error ("adj123: not applicable to" ++ bonus ++ boni)
+    } ;
+
+  adj : Str -> Adjective = \bonus ->
+    case bonus of {
+      _ + ("us" | "er") => adj12 bonus ;
+      facil + "is"      => adj3x bonus bonus ;
+      feli  + "x"       => adj3x bonus (feli + "cis") ;
+      _                 => adj3x bonus (bonus + "is") ---- any example?
+    } ;
+
+
 -- verbs
 
   param 
@@ -297,7 +343,7 @@ oper
         }
       } ;
 
-  esseV : Verb = 
+  esse_V : Verb = 
     let
       esse = mkVerb "es" "si" "era" "sum" "esse" "fui" "*futus"
                     "ero" "erunt" "eri" ;
@@ -431,7 +477,8 @@ oper
   VP : Type = {
     fin : VActForm => Str ;
     inf : VAnter => Str ;
-    obj : Str
+    obj : Str ;
+    adj : Gender => Number => Str
   } ;
 
   VPSlash = VP ** {c2 : Preposition} ;
@@ -439,7 +486,8 @@ oper
   predV : Verb -> VP = \v -> {
     fin = v.act ;
     inf = v.inf ;
-    obj = []
+    obj = [] ;
+    adj = \\_,_ => []
   } ;
 
   predV2 : (Verb ** {c : Preposition}) -> VPSlash = \v -> predV v ** {c2 = v.c} ;
@@ -449,13 +497,21 @@ oper
   insertObj : Str -> VP -> VP = \obj,vp -> {
     fin = vp.fin ;
     inf = vp.inf ;
-    obj = obj ++ vp.obj
+    obj = obj ++ vp.obj ;
+    adj = vp.adj
+  } ;
+
+  insertAdj : (Gender => Number => Case => Str) -> VP -> VP = \adj,vp -> {
+    fin = vp.fin ;
+    inf = vp.inf ;
+    obj = vp.obj ;
+    adj = \\g,n => adj ! g ! n ! Nom ++ vp.adj ! g ! n
   } ;
 
   Clause = {s : VAnter => VTense => Polarity => Str} ;
 
   mkClause : Pronoun -> VP -> Clause = \np,vp -> {
-    s = \\a,t,p => np.s ! Nom ++ vp.obj ++ negation p ++ 
+    s = \\a,t,p => np.s ! Nom ++ vp.obj ++ vp.adj ! np.g ! np.n ++ negation p ++ 
         vp.fin ! VAct a t np.n np.p
   } ;
     
@@ -463,5 +519,40 @@ oper
     Pos => [] ;   
     Neg => "non"
   } ;
+
+-- determiners
+
+  Determiner : Type = {
+    s,sp : Gender => Case => Str ;
+    n : Number
+    } ;
+
+  Quantifier : Type = {
+    s,sp : Number => Gender => Case => Str ;
+    } ;
+
+  mkQuantifG : (_,_,_,_,_ : Str) -> (_,_,_,_ : Str) -> (_,_,_ : Str) -> 
+    Gender => Case => Str = 
+    \mn,ma,mg,md,mab, fno,fa,fg,fab, nn,ng,nab -> table {
+      Masc  => pronForms mn  ma mg md mab ;
+      Fem   => pronForms fno fa fg md fab ;
+      Neutr => pronForms nn  nn ng md nab     
+    } ;
+      
+  mkQuantifier : (sg,pl : Gender => Case => Str) -> Quantifier = \sg,pl ->
+    let ssp = table {Sg => sg ; Pl => pl}
+    in {
+      s  = ssp ;
+      sp = ssp 
+      } ;
+
+  hic_Quantifier = mkQuantifier
+    (mkQuantifG 
+       "hic" "hunc" "huius" "huic" "hoc"  "haec" "hanc" "huius" "hac"  "hoc" "huius" "hoc")
+    (mkQuantifG 
+       "hi" "hos" "horum" "his" "his"  "hae" "has" "harum" "his"  "hocec" "horum" "his")
+    ;
+
+
 }
 
