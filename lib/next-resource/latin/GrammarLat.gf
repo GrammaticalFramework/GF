@@ -4,7 +4,7 @@ concrete GrammarLat of Grammar =
   NounLat, 
   VerbLat, 
   AdjectiveLat,
---  AdverbLat,
+  AdverbLat,
 --  NumeralLat,
   SentenceLat,
 --  QuestionLat,
