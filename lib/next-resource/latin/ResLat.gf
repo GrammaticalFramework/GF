@@ -294,14 +294,15 @@ oper
     } ;
 
   mkVerb : 
-    (cela,cele,celab,celo,celare,celavi,celatus,celabo,celabunt,celabi : Str) 
+    (cela,cele,celab,celo,celant,celare,celavi,celatus,celabo,celabunt,celabi : Str) 
       -> Verb = 
-    \cela,cele,celab,celo,celare,celavi,celatus,celabo,celabunt,celabi -> 
+    \cela,cele,celab,celo,celant,celare,celavi,celatus,celabo,celabunt,celabi -> 
     let
       celav = init celavi
     in {
       act = table {
         VAct VSim (VPres VInd)  Sg P1 => celo ; 
+        VAct VSim (VPres VInd)  Pl P3 => celant ; 
         VAct VSim (VPres VInd)  n  p  => cela + actPresEnding n p ;
         VAct VSim (VPres VConj) n  p  => cele + actPresEnding n p ;
         VAct VSim (VImpf VInd)  n  p  => celab + "ba" + actPresEnding n p ;
@@ -345,13 +346,12 @@ oper
 
   esse_V : Verb = 
     let
-      esse = mkVerb "es" "si" "era" "sum" "esse" "fui" "*futus"
+      esse = mkVerb "es" "si" "era" "sum" "sunt" "esse" "fui" "*futus"
                     "ero" "erunt" "eri" ;
     in {
       act = table {
         VAct VSim (VPres VInd)  Sg P2 => "es" ; 
         VAct VSim (VPres VInd)  Pl P1 => "sumus" ; 
-        VAct VSim (VPres VInd)  Pl P3 => "sunt" ; 
         v => esse.act ! v
         } ;
       inf = esse.inf
@@ -365,7 +365,7 @@ oper
       cele = cel + "e" ;
       celavi = cela + "vi" ;
       celatus = cela + "tus" ;
-    in mkVerb cela cele cela celo celare celavi celatus 
+    in mkVerb cela cele cela celo (cela + "nt") celare celavi celatus 
               (cela + "bo") (cela + "bunt") (cela + "bi") ;
 
   verb2 : Str -> Verb = \habere ->
@@ -376,7 +376,7 @@ oper
       habea = habe + "a" ;
       habui = hab + "ui" ;
       habitus = hab + "itus" ;
-    in mkVerb habe habea habe habeo habere habui habitus
+    in mkVerb habe habea habe habeo (habe + "nt") habere habui habitus
               (habe + "bo") (habe + "bunt") (habe + "bi") ;
 
   verb3 : (_,_,_ : Str) -> Verb = \gerere,gessi,gestus ->
@@ -386,7 +386,7 @@ oper
       gero = ger + "o" ;
       geri = ger + "i" ;
       gera = ger + "a" ;
-    in mkVerb geri gera gere gero gerere gessi gestus
+    in mkVerb geri gera gere gero (ger + "unt") gerere gessi gestus
               (ger + "am") (ger + "ent") gere ; 
 
   verb3i : (_,_,_ : Str) -> Verb = \iacere,ieci,iactus ->
@@ -396,7 +396,7 @@ oper
       iaci  = iac + "i" ;
       iacie = iac + "ie" ;
       iacia = iac + "ia" ;
-    in mkVerb iaci iacia iacie iaco iacere ieci iactus
+    in mkVerb iaci iacia iacie iaco (iaci + "unt") iacere ieci iactus
               (iac + "iam") (iac + "ient") iacie ; 
 
   verb4 : (_,_,_ : Str) -> Verb = \sentire,sensi,sensus ->
@@ -405,7 +405,7 @@ oper
       sentio = senti + "o" ;
       sentia = senti + "a" ;
       sentie = senti + "e" ;
-    in mkVerb senti sentia sentie sentio sentire sensi sensus
+    in mkVerb senti sentia sentie sentio (senti + "unt") sentire sensi sensus
               (senti + "am") (senti + "ent") sentie ; 
 
 

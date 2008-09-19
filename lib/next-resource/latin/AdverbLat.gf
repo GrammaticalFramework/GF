@@ -18,4 +18,4 @@ concrete AdverbLat of Adverb = CatLat ** open ResLat, Prelude in {
 --
 --    AdnCAdv cadv = {s = cadv.s ++ "than"} ;
 --
---}
+}
