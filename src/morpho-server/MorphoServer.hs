@@ -19,11 +19,13 @@ import FastCGIUtils
 import URLEncoding
 
 -- FIXME !!!!!!
-grammarFile :: IO FilePath
-grammarFile = return "/Users/bringert/Projects/gf/lib/alltenses/ParadigmsFin.gfo"
 
+grammarFile :: IO FilePath
+grammarFile = return "/Users/aarne/GF/lib/alltenses/ParadigmsFin.gfo"
+--grammarFile = return "/Users/bringert/Projects/gf/lib/alltenses/ParadigmsFin.gfo"
 grammarPath :: FilePath
-grammarPath = "/Users/bringert/Projects/gf/lib/prelude"
+grammarPath = "/Users/aarne/GF/lib/prelude"
+--grammarPath = "/Users/bringert/Projects/gf/lib/prelude"
 
 main :: IO ()
 main = do initFastCGI
