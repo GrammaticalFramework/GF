@@ -10,9 +10,9 @@ Last update: %%date(%c)
 
 **History**
 
-September 2008: partly outdated - to be updated for API 1.5.
+September 2008: updated for Version 1.5.
 
-October 2007: updated for API 1.2.
+October 2007: updated for Version 1.2.
 
 January 2006: first version.
 
@@ -24,15 +24,22 @@ will give some hints how to extend the API.
 
 A manual for using the resource grammar is found in
 
-[``http://www.cs.chalmers.se/~aarne/GF/lib/resource-1.0/doc/synopsis.html`` http://www.cs.chalmers.se/~aarne/GF/lib/resource-1.0/doc/synopsis.html].
+[``www.cs.chalmers.se/Cs/Research/Language-technology/GF/lib/resource/doc/synopsis.html`` ../lib/resource/doc/synopsis.html].
 
 A tutorial on GF, also introducing the idea of resource grammars, is found in
 
-[``http://www.cs.chalmers.se/~aarne/GF/doc/tutorial/gf-tutorial2.html`` ../../../doc/tutorial/gf-tutorial2.html].
+[``www.cs.chalmers.se/Cs/Research/Language-technology/GF/doc/gf-tutorial.html`` ./gf-tutorial.html].
 
-This document concerns the API v. 1.0. You can find the current code in 
+This document concerns the API v. 1.5, while the current stable release is 1.4. 
+You can find the code for the stable release in 
 
-[``http://www.cs.chalmers.se/~aarne/GF/lib/resource-1.0/`` ..]
+[``www.cs.chalmers.se/Cs/Research/Language-technology/GF/lib/resource/`` ../lib/resource]
+
+and the next release in
+
+[``www.cs.chalmers.se/Cs/Research/Language-technology/GF/lib/next-resource/`` ../lib/next-resource]
+
+It is recommended to build new grammars to match the next release.
 
 
 
@@ -44,26 +51,29 @@ are given in the following figure.
 
 [Syntax.png] 
 
-- solid contours: module used by end users
+Modules of different kinds are distinguished as follows:
+- solid contours: module seen by end users
 - dashed contours: internal module
 - ellipse: abstract/concrete pair of modules
 - rectangle: resource or instance
 - diamond: interface
 
 
-The solid ellipses show the API as visible to the user of the library. The
-dashed ellipses form the main of the implementation, on which the resource
-grammar programmer has to work with. With the exception of the ``Paradigms``
-module, the visible API modules can be produced mechanically.
+Put in another way:
+- solid rectangles and diamonds: user-accessible library API
+- solid ellipses: user-accessible top-level grammar for parsing and linearization
+- dashed contours: not visible to users
 
-[Grammar.png] 
 
-Thus the API consists of a grammar and a lexicon, which is
-provided for test purposes.
+The dashed ellipses form the main parts of the implementation, on which the resource
+grammar programmer has to work with. She also has to work on the ``Paradigms``
+module. The rest of the modules can be produced mechanically from corresponding
+modules for other languages, by just changing the language codes appearing in
+their module headers.
 
 The module structure is rather flat: most modules are direct
 parents of ``Grammar``. The idea
-is that you can concentrate on one linguistic aspect at a time, or
+is that the implementors can concentrate on one linguistic aspect at a time, or
 also distribute the work among several authors. The module ``Cat``
 defines the "glue" that ties the aspects together - a type system
 to which all the other modules conform, so that e.g. ``NP`` means
@@ -71,17 +81,34 @@ the same thing in those modules that use ``NP``s and those that
 constructs them.
 
 
+===Library API modules===
+
+For the user of the library, these modules are the most important ones.
+In a typical application, it is enough to open ``Paradigms`` and ``Syntax``.
+The module ``Try`` combines these two, making it possible to experiment
+with combinations of syntactic and lexical constructors by using the
+``cc`` command in the GF shell. Here are short explanations of each API module:
+- ``Try``: the whole resource library for a language (``Paradigms``, ``Syntax``,
+  ``Irreg``, and ``Extra``); 
+  produced mechanically as a collection of modules
+- ``Syntax``: language-independent categories, syntax functions, and structural words;
+  produced mechanically as a collection of modules
+- ``Constructors``: language-independent syntax functions and structural words;
+  produced mechanically via functor instantiation
+- ``Paradigms``: language-dependent morphological paradigms
+
+
+
+
 
 ===Phrase category modules===
 
-The direct parents of the top will be called **phrase category modules**,
+The immediate parents of ``Grammar`` will be called **phrase category modules**,
 since each of them concentrates on a particular phrase category (nouns, verbs,
 adjectives, sentences,...). A phrase category module tells 
 //how to construct phrases in that category//. You will find out that
 all functions in any of these modules have the same value type (or maybe
 one of a small number of different types). Thus we have
-
-
 - ``Noun``: construction of nouns and noun phrases
 - ``Adjective``: construction of adjectival phrases
 - ``Verb``: construction of verb phrases
@@ -93,7 +120,7 @@ one of a small number of different types). Thus we have
 - ``Conjunction``: coordination of phrases
 - ``Phrase``: construction of the major units of text and speech
 - ``Text``: construction of texts as sequences of phrases
-- ``Idiom``: idiomatic phrases such as existentials
+- ``Idiom``: idiomatic expressions such as existentials
 
 
 
@@ -113,7 +140,6 @@ the linearization types of its value and argument categories. To achieve
 the division of the resource grammar to several parallel phrase category modules,
 what we need is an underlying definition of the linearization types. This
 definition is given as the implementation of
-
 - ``Cat``: syntactic categories of the resource grammar
 
 
@@ -140,44 +166,43 @@ Another characterization of lexical is that lexical units can be added
 almost //ad libitum//, and they cannot be defined in terms of already
 given rules. The lexical modules of the resource API are thus more like
 samples than complete lists. There are two such modules:
-
 - ``Structural``: structural words (determiners, conjunctions,...)
 - ``Lexicon``: basic everyday content words (nouns, verbs,...)
 
 
 The module ``Structural`` aims for completeness, and is likely to
 be extended in future releases of the resource. The module ``Lexicon``
-gives a "random" list of words, which enable interesting testing of syntax,
-and also a check list for morphology, since those words are likely to include
+gives a "random" list of words, which enables testing the syntax.
+It also provides a check list for morphology, since those words are likely to include
 most morphological patterns of the language.
 
 In the case of ``Lexicon`` it may come out clearer than anywhere else
 in the API that it is impossible to give exact translation equivalents in
-different languages on the level of a resource grammar. In other words,
-application grammars are likely to use the resource in different ways for
+different languages on the level of a resource grammar. This is no problem,
+since application grammars can use the resource in different ways for
 different languages.
 
 
 ==Language-dependent syntax modules==
 
 In addition to the common API, there is room for language-dependent extensions
-of the resource. The top level of each languages looks as follows (with English as example):
+of the resource. The top level of each languages looks as follows (with German 
+as example):
 ```
-  abstract English = Grammar, ExtraEngAbs, DictEngAbs
+  abstract AllGerAbs = Lang, ExtraGerAbs, IrregGerAbs
 ```
-where ``ExtraEngAbs`` is a collection of syntactic structures specific to English,
-and ``DictEngAbs`` is an English dictionary 
-(at the moment, it consists of ``IrregEngAbs``,
-the irregular verbs of English). Each of these language-specific grammars has 
+where ``ExtraGerAbs`` is a collection of syntactic structures specific to German,
+and ``IrregGerAbs`` is a dictionary of irregular words of German 
+(at the moment, just verbs). Each of these language-specific grammars has 
 the potential to grow into a full-scale grammar of the language. These grammar
 can also be used as libraries, but the possibility of using functors is lost.
 
 To give a better overview of language-specific structures, 
-modules like ``ExtraEngAbs``
+modules like ``ExtraGerAbs``
 are built from a language-independent module ``ExtraAbs`` 
 by restricted inheritance:
 ```
-  abstract ExtraEngAbs = Extra [f,g,...]
+  abstract ExtraGerAbs = Extra [f,g,...]
 ```
 Thus any category and function in ``Extra`` may be shared by a subset of all
 languages. One can see this set-up as a matrix, which tells 
@@ -190,40 +215,13 @@ extensions are just empty modules, but it is good to provide them for
 the sake of uniformity.
 
 
-==The core of the syntax==
-
-Among all categories and functions, a handful are 
-most important and distinct ones, of which the others are can be 
-seen as variations. The categories are
-```
-  Cl ; VP ; V2 ; NP ; CN ; Det ; AP ;
-```
-The functions are
-```
-  PredVP  : NP  -> VP -> Cl ;  -- predication
-  ComplV2 : V2  -> NP -> VP ;  -- complementization
-  DetCN   : Det -> CN -> NP ;  -- determination
-  ModCN   : AP  -> CN -> CN ;  -- modification
-```
-This [toy Latin grammar  latin.gf] shows in a nutshell how these
-rules relate the categories to each other. It is intended to be a
-first approximation when designing the parameter system of a new
-language. 
-
-
-===Another reduced API===
-
-If you want to experiment with a small subset of the resource API first, 
-try out the module 
-[Syntax http://www.cs.chalmers.se/~aarne/GF/doc/tutorial/resource/Syntax.gf]
-explained in the
-[GF Tutorial http://www.cs.chalmers.se/~aarne/GF/doc/tutorial/gf-tutorial2.html].
-
 
 ===The present-tense fragment===
 
 Some lines in the resource library are suffixed with the comment
-```--# notpresent
+```
+  --# notpresent
+```
 which is used by a preprocessor to exclude those lines from 
 a reduced version of the full resource. This present-tense-only
 version is useful for applications in most technical text, since
@@ -231,8 +229,9 @@ they reduce the grammar size and compilation time. It can also
 be useful to exclude those lines in a first version of resource
 implementation. To compile a grammar with present-tense-only, use
 ```
-  i -preproc=GF/lib/resource-1.0/mkPresent LangGer.gf
+  make Present
 ```
+with ``resource/Makefile``.
 
 
 
@@ -245,7 +244,8 @@ Unless you are writing an instance of a parametrized implementation
 simplest way is to follow roughly the following procedure. Assume you
 are building a grammar for the German language. Here are the first steps,
 which we actually followed ourselves when building the German implementation
-of resource v. 1.0.
+of resource v. 1.0 at Ubuntu linux. We have slightly modified them to
+match resource v. 1.5 and GF v. 3.0.
 
 + Create a sister directory for ``GF/lib/resource/english``, named
      ``german``.
@@ -258,6 +258,8 @@ of resource v. 1.0.
 + Check out the [ISO 639 3-letter language code 
    http://www.w3.org/WAI/ER/IG/ert/iso639.htm] 
    for German: both ``Ger`` and ``Deu`` are given, and we pick ``Ger``.
+   (We use the 3-letter codes rather than the more common 2-letter codes,
+    since they will suffice for many more languages!)
 
 + Copy the ``*Eng.gf`` files from ``english`` ``german``,
      and rename them:
@@ -265,6 +267,8 @@ of resource v. 1.0.
        cp ../english/*Eng.gf .
        rename 's/Eng/Ger/' *Eng.gf
 ```
+  If you don't have the ``rename`` command, you can use a bash script with ``mv``.
+
 
 + Change the ``Eng`` module references to ``Ger`` references
      in all files:
@@ -273,7 +277,8 @@ of resource v. 1.0.
        sed -i 's/Eng/Ger/g' *Ger.gf
 ```
   The first line prevents changing the word ``English``, which appears
-  here and there in comments, to ``Gerlish``.
+  here and there in comments, to ``Gerlish``. The ``sed`` command syntax
+  may vary depending on your operating system.
 
 + This may of course change unwanted occurrences of the 
      string ``Eng`` - verify this by
@@ -306,24 +311,24 @@ of resource v. 1.0.
 ```
   You will get lots of warnings on missing rules, but the grammar will compile.
 
-+ At all following steps you will now have a valid, but incomplete
++ At all the following steps you will now have a valid, but incomplete
      GF grammar. The GF command
 ``` 
-       pg -printer=missing
+       pg -missing
 ```
      tells you what exactly is missing.
 
 
 Here is the module structure of ``LangGer``. It has been simplified by leaving out
 the majority of the phrase category modules. Each of them has the same dependencies
-as e.g. ``VerbGer``.
+as ``VerbGer``, whose complete dependencies are shown as an example.
 
 [German.png]
 
 
 ===Direction of work===
 
-The real work starts now. There are many ways to proceed, the main ones being
+The real work starts now. There are many ways to proceed, the most obvious ones being
 - Top-down: start from the module ``Phrase`` and go down to ``Sentence``, then
   ``Verb``, ``Noun``, and in the end ``Lexicon``. In this way, you are all the time
   building complete phrases, and add them with more content as you proceed.
@@ -346,31 +351,34 @@ test data and enough general view at any point:
   lincat N  = {s : Number => Case => Str ; g : Gender} ;
 ```
 we need the parameter types ``Number``, ``Case``, and ``Gender``. The definition
-of ``Number`` in [``common/ParamX``  ../common/ParamX.gf] works for German, so we
+of ``Number`` in [``common/ParamX``  ../lib/resource/common/ParamX.gf] 
+works for German, so we
 use it and just define ``Case`` and ``Gender`` in ``ResGer``.
 
-+ Define ``regN`` in ``ParadigmsGer``. In this way you can 
++ Define some cases of ``mkN`` in ``ParadigmsGer``. In this way you can 
 already implement a huge amount of nouns correctly in ``LexiconGer``. Actually
-just adding ``mkN`` should suffice for every noun - but, 
+just adding the worst-case instance of ``mkN`` (the one taking the most
+arguments) should suffice for every noun - but, 
 since it is tedious to use, you
 might proceed to the next step before returning to morphology and defining the
-real work horse ``reg2N``.
+real work horse, ``mkN`` taking two forms and a gender.
 
 + While doing this, you may want to test the resource independently. Do this by
+  starting the GF shell in the ``resource`` directory, by the commands
 ```
-       i -retain ParadigmsGer
-       cc regN "Kirche"
+  > i -retain german/ParadigmsGer
+  > cc -table mkN "Kirche"
 ```
 
 + Proceed to determiners and pronouns in 
-``NounGer`` (``DetCN UsePron DetSg SgQuant NoNum NoOrd DefArt IndefArt UseN``)and 
-``StructuralGer`` (``i_Pron every_Det``). You also need some categories and
+``NounGer`` (``DetCN UsePron DetQuant NumSg DefArt IndefArt UseN``) and 
+``StructuralGer`` (``i_Pron this_Quant``). You also need some categories and
 parameter types. At this point, it is maybe not possible to find out the final
-linearization types of ``CN``, ``NP``, and ``Det``, but at least you should
+linearization types of ``CN``, ``NP``, ``Det``, and ``Quant``, but at least you should
 be able to correctly inflect noun phrases such as //every airplane//:
 ```
-  i LangGer.gf
-  l -table DetCN every_Det (UseN airplane_N)
+  > i german/LangGer.gf
+  > l -table DetCN every_Det (UseN airplane_N)
 
   Nom: jeder Flugzeug
   Acc: jeden Flugzeug
@@ -379,16 +387,16 @@ be able to correctly inflect noun phrases such as //every airplane//:
 ```
 
 + Proceed to verbs: define ``CatGer.V``,  ``ResGer.VForm``, and
-``ParadigmsGer.regV``. You may choose to exclude ``notpresent``
+``ParadigmsGer.mkV``. You may choose to exclude ``notpresent``
 cases at this point. But anyway, you will be able to inflect a good
 number of verbs in ``Lexicon``, such as
-``live_V`` (``regV "leven"``).
+``live_V`` (``mkV "leben"``).
 
 + Now you can soon form your first sentences: define ``VP`` and
 ``Cl`` in ``CatGer``, ``VerbGer.UseV``, and ``SentenceGer.PredVP``.
 Even if you have excluded the tenses, you will be able to produce
 ```
-  i -preproc=mkPresent LangGer.gf
+  > i -preproc=./mkPresent german/LangGer.gf
   > l -table PredVP (UsePron i_Pron) (UseV live_V)
 
   Pres Simul Pos Main: ich lebe
@@ -398,19 +406,26 @@ Even if you have excluded the tenses, you will be able to produce
   Pres Simul Neg Inv:  lebe ich nicht
   Pres Simul Neg Sub:  ich nicht lebe
 ```
+You should also be able to parse:
+```
+  > p -cat=Cl "ich lebe"
+  PredVP (UsePron i_Pron) (UseV live_V)
+```
 
-+ Transitive verbs (``CatGer.V2 ParadigmsGer.dirV2 VerbGer.ComplV2``) 
++ Transitive verbs 
+(``CatGer.V2 CatGer.VPSlash ParadigmsGer.mkV2 VerbGer.ComplSlash VerbGer.SlashV2a``) 
 are a natural next step, so that you can
-produce ``ich liebe dich``.
+produce ``ich liebe dich`` ("I love you").
 
-+ Adjectives (``CatGer.A ParadigmsGer.regA NounGer.AdjCN AdjectiveGer.PositA``) 
++ Adjectives (``CatGer.A ParadigmsGer.mkA NounGer.AdjCN AdjectiveGer.PositA``) 
 will force you to think about strong and weak declensions, so that you can
-correctly inflect //my new car, this new car//. 
+correctly inflect //mein neuer Wagen, dieser neue Wagen// 
+("my new car, this new car"). 
 
 + Once you have implemented the set
-(``Noun.DetCN Noun.AdjCN Verb.UseV Verb.ComplV2 Sentence.PredVP),
+(``Noun.DetCN Noun.AdjCN Verb.UseV Verb.ComplSlash Verb.SlashV2a Sentence.PredVP),
 you have overcome most of difficulties. You know roughly what parameters
-and dependences there are in your language, and you can now produce very
+and dependences there are in your language, and you can now proceed very
 much in the order you please. 
 
 
@@ -422,14 +437,13 @@ be applied most of the time, both in the first steps described above
 and in later steps where you are more on your own.
 
 + Select a phrase category module, e.g. ``NounGer``, and uncomment some
-  linearization rules (for instance, ``DefSg``, which is
-  not too complicated).
+  linearization rules (for instance, ``DetCN``, as above).
 
 + Write down some German examples of this rule, for instance translations
      of "the dog", "the house", "the big house", etc. Write these in all their
      different forms (two numbers and four cases).
 
-+ Think about the categories involved (``CN, NP, N``) and the
++ Think about the categories involved (``CN, NP, N, Det``) and the
      variations they have. Encode this in the lincats of ``CatGer``.
      You may have to define some new parameter types in ``ResGer``.
 
@@ -440,39 +454,39 @@ and in later steps where you are more on your own.
 
 + Test by parsing, linearization,
      and random generation. In particular, linearization to a table should
-     be used so that you see all forms produced:
+     be used so that you see all forms produced; the ``treebank`` option
+     preserves the tree
 ```
-       gr -cat=NP -number=20 -tr | l -table
+    > gr -cat=NP -number=20 | l -table -treebank
 ```
 
-+ Spare some tree-linearization pairs for later regression testing. Use the
-  ``tree_bank`` command,
++ Save some tree-linearization pairs for later regression testing. You can save
+  a gold standard treebank and use the Unix ``diff`` command to compare later
+  linearizations produced from the same list of trees. If you save the trees
+  in a file ``trees``, you can do as follows:
 ```
-       gr -cat=NP -number=20 | tb -xml | wf NP.tb
+    > rf -file=trees -tree -lines | l -table -treebank | wf -file=treebank
 ```
-  You can later compared your modified grammar to this treebank by
+
++ A file with trees testing all resource functions is included in the resource,
+  entitled ``resource/exx-resource.gft``. A treebank can be created from this by
+  the Unix command
 ```
-       rf NP.tb | tb -c
+  % runghc Make.hs test langs=Ger
 ```
 
 
 
 You are likely to run this cycle a few times for each linearization rule
-you implement, and some hundreds of times altogether. There are 66 ``cat``s and
-458 ``funs`` in ``Lang`` at the moment; 149 of the ``funs`` are outside the two
+you implement, and some hundreds of times altogether. There are roughly
+70 ``cat``s and
+600 ``funs`` in ``Lang`` at the moment; 170 of the ``funs`` are outside the two
 lexicon modules).
 
-Here is a [live log ../german/log.txt] of the actual process of
-building the German implementation of resource API v. 1.0.
-It is the basis of the more detailed explanations, which will
-follow soon. (You will found out that these explanations involve
-a rational reconstruction of the live process! Among other things, the
-API was changed during the actual process to make it more intuitive.)
 
+===Auxiliary modules===
 
-===Resource modules used===
-
-These modules will be written by you.
+These auxuliary ``resource`` modules will be written by you.
 
 - ``ResGer``: parameter types and auxiliary operations 
 (a resource for the resource grammar!)
@@ -491,28 +505,36 @@ package.
 - ``Coordination``: operations to deal with lists and coordination
 - ``Prelude``: general-purpose operations on strings, records,
       truth values, etc.
-- ``Predefined``: general-purpose operations with hard-coded definitions
+- ``Predef``: general-purpose operations with hard-coded definitions
 
 
 An important decision is what rules to implement in terms of operations in
-``ResGer``. A golden rule of functional programming says that, whenever
-you find yourself programming by copy and paste, you should write a function
-instead. This indicates that an operation should be created if it is to be
-used at least twice. At the same time, a sound principle of vicinity says that
-it should not require too much browsing to understand what a rule does.
+``ResGer``. The **golden rule of functional programming** says:
+- //Whenever you find yourself programming by copy and paste, write a function instead!//. 
+
+
+This rule suggests that an operation should be created if it is to be
+used at least twice. At the same time, a sound principle of **vicinity** says: 
+- //It should not require too much browsing to understand what a piece of code does.//
+
+
 From these two principles, we have derived the following practice:
 - If an operation is needed //in two different modules//, 
-it should be created in ``ResGer``. An example is ``mkClause``, 
-used in ``Sentence``, ``Question``, and ``Relative``-
+  it should be created in as an ``oper`` in ``ResGer``. An example is ``mkClause``, 
+  used in ``Sentence``, ``Question``, and ``Relative``-
 - If an operation is needed //twice in the same module//, but never
-outside, it should be created in the same module. Many examples are
-found in ``Numerals``.
-- If an operation is only needed once, it should not be created (but rather
-inlined). Most functions in phrase category modules are implemented in this
-way.
+  outside, it should be created in the same module. Many examples are
+  found in ``Numerals``.
+- If an operation is needed //twice in the same judgement//, but never
+  outside, it should be created by a ``let`` definition. 
+- If an operation is only needed once, it should not be created as an ``oper``, 
+  but rather inlined. However, a ``let`` definition may well be in place just
+  to make the readable. 
+  Most functions in phrase category modules 
+  are implemented in this way. 
 
 
-This discipline is very different from the one followed in earlier
+This discipline is very different from the one followed in early
 versions of the library (up to 0.9). We then valued the principle of
 abstraction more than vicinity, creating layers of abstraction for
 almost everything. This led in practice to the duplication of almost
@@ -530,45 +552,45 @@ This module provides high-level ways to define the linearization of
 lexical items, of categories ``N, A, V`` and their complement-taking
 variants.
 
-
-
 For ease of use, the ``Paradigms`` modules follow a certain
 naming convention. Thus they for each lexical category, such as ``N``,
-the functions
+the overloaded functions, such as ``mkN``, with the following cases:
 
-- ``mkN``, for worst-case construction of ``N``. Its type signature
+- the worst-case construction of ``N``. Its type signature
      has the form
 ```
        mkN : Str -> ... -> Str -> P -> ... -> Q -> N
 ```
      with as many string and parameter arguments as can ever be needed to
      construct an ``N``.
-- ``regN``, for the most common cases, with just one string argument:
+- the most regular cases, with just one string argument:
 ```
-       regN : Str -> N
+       mkN : Str -> N
 ```
 - A language-dependent (small) set of functions to handle mild irregularities
      and common exceptions.
 
-For the complement-taking variants, such as ``V2``, we provide
 
-- ``mkV2``, which takes a ``V`` and all necessary arguments, such
+For the complement-taking variants, such as ``V2``, we provide
+- a case that takes a ``V`` and all necessary arguments, such
      as case and preposition:
 ```
        mkV2 : V -> Case -> Str -> V2 ;
 ```
-- A language-dependent (small) set of functions to handle common special cases,
-     such as direct transitive verbs:
+- a case that takes a ``Str`` and produces a transitive verb with the direct
+  object case:
 ```
-       dirV2 : V -> V2 ;
-       -- dirV2 v = mkV2 v accusative [] 
+       mkV2 : Str -> V2 ;
+```
+- A language-dependent (small) set of functions to handle common special cases,
+  such as transitive verbs that are not regular:
+```
+       mkV2 : V -> V2 ;
 ```
 
 
 The golden rule for the design of paradigms is that
-
-- The user will only need function applications with constants and strings,
-     never any records or tables.
+- //The user of the library will only need function applications with constants and strings, never any records or tables.//
 
 
 The discipline of data abstraction moreover requires that the user of the resource
@@ -630,10 +652,9 @@ in her hidden definitions of constants in ``Paradigms``. For instance,
 ===Lexicon construction===
 
 The lexicon belonging to ``LangGer`` consists of two modules:
-
-- ``StructuralGer``, structural words, built by directly using
-     ``MorphoGer``.
-- ``BasicGer``, content words, built by using ``ParadigmsGer``.
+- ``StructuralGer``, structural words, built by using both
+  ``ParadigmsGer`` and ``MorphoGer``.
+- ``LexiconGer``, content words, built by using ``ParadigmsGer`` only.
 
 
 The reason why ``MorphoGer`` has to be used in ``StructuralGer``
@@ -648,60 +669,16 @@ those who want to build new lexica.
 
 
 
-
-
-==Inside grammar modules==
-
-Detailed implementation tricks
-are found in the comments of each module.
-
-
-===The category system===
-
-- [Common gfdoc/Common.html], [CommonX ../common/CommonX.gf]
-- [Cat gfdoc/Cat.html], [CatGer gfdoc/CatGer.gf]
-
-
-===Phrase category modules===
-
-- [Noun gfdoc/Noun.html], [NounGer ../german/NounGer.gf]
-- [Adjective gfdoc/Adjective.html], [AdjectiveGer ../german/AdjectiveGer.gf]
-- [Verb gfdoc/Verb.html], [VerbGer ../german/VerbGer.gf]
-- [Adverb gfdoc/Adverb.html], [AdverbGer ../german/AdverbGer.gf]
-- [Numeral gfdoc/Numeral.html], [NumeralGer ../german/NumeralGer.gf]
-- [Sentence gfdoc/Sentence.html], [SentenceGer ../german/SentenceGer.gf]
-- [Question gfdoc/Question.html], [QuestionGer ../german/QuestionGer.gf]
-- [Relative gfdoc/Relative.html], [RelativeGer ../german/RelativeGer.gf]
-- [Conjunction gfdoc/Conjunction.html], [ConjunctionGer ../german/ConjunctionGer.gf]
-- [Phrase gfdoc/Phrase.html], [PhraseGer ../german/PhraseGer.gf]
-- [Text gfdoc/Text.html], [TextX ../common/TextX.gf]
-- [Idiom gfdoc/Idiom.html], [IdiomGer ../german/IdiomGer.gf]
-- [Lang gfdoc/Lang.html], [LangGer ../german/LangGer.gf]
-
-
-===Resource modules===
-
-- [ResGer ../german/ResGer.gf]
-- [MorphoGer ../german/MorphoGer.gf]
-- [ParadigmsGer gfdoc/ParadigmsGer.html], [ParadigmsGer.gf ../german/ParadigmsGer.gf]
-
-
-===Lexicon===
-
-- [Structural gfdoc/Structural.html], [StructuralGer ../german/StructuralGer.gf]
-- [Lexicon gfdoc/Lexicon.html], [LexiconGer ../german/LexiconGer.gf]
-
-
 ==Lexicon extension==
 
 ===The irregularity lexicon===
 
-It may be handy to provide a separate module of irregular
+It is useful in most languages to provide a separate module of irregular
 verbs and other words which are difficult for a lexicographer
 to handle. There are usually a limited number of such words - a
 few hundred perhaps. Building such a lexicon separately also
 makes it less important to cover //everything// by the
-worst-case paradigms (``mkV`` etc).
+worst-case variants of the paradigms ``mkV`` etc.
 
 
 
@@ -709,11 +686,13 @@ worst-case paradigms (``mkV`` etc).
 
 You can often find resources such as lists of 
 irregular verbs on the internet. For instance, the
-[Irregular German Verbs http://www.iee.et.tu-dresden.de/~wernerr/grammar/verben_dt.html] 
+Irregular German Verb page 
+previously found in 
+``http://www.iee.et.tu-dresden.de/~wernerr/grammar/verben_dt.html``
 page gives a list of verbs in the
 traditional tabular format, which begins as follows:
 ```
-  backen (du bäckst, er bäckt)	                 backte [buk]              gebacken
+  backen (du bäckst, er bäckt)                   backte [buk]              gebacken
   befehlen (du befiehlst, er befiehlt; befiehl!) befahl (beföhle; befähle) befohlen
   beginnen                                       begann (begönne; begänne) begonnen
   beißen                                         biß                       gebissen
@@ -730,8 +709,8 @@ the table to
 ```
 
 When using ready-made word lists, you should think about
-coyright issues. Ideally, all resource grammar material should
-be provided under GNU General Public License.
+coyright issues. All resource grammar material should
+be provided under GNU Lesser General Public License (LGPL).
 
 
 
@@ -739,39 +718,55 @@ be provided under GNU General Public License.
 
 This is a cheap technique to build a lexicon of thousands
 of words, if text data is available in digital format.
-See the [Functional Morphology http://www.cs.chalmers.se/~markus/FM/] 
+See the [Extract Homepage http://www.cs.chalmers.se/~markus/extract/] 
 homepage for details.
 
 
+===Bootstrapping with smart paradigms===
 
-===Extending the resource grammar API===
+This is another cheap technique, where you need as input a list of words with
+part-of-speech marking. You initialize the lexicon by using the one-argument
+``mkN`` etc paradigms, and add forms to those words that do not come out right.
+This procedure is described in the paper
+
+A. Ranta.
+How predictable is Finnish morphology? An experiment on lexicon construction.
+In J. Nivre, M. Dahllöf and B. Megyesi (eds),
+//Resourceful Language Technology: Festschrift in Honor of Anna Sågvall Hein//,
+University of Uppsala,
+2008.
+Available from the [series homepage http://publications.uu.se/abstract.xsql?dbid=8933]
+
+
+
+
+==Extending the resource grammar API==
 
 Sooner or later it will happen that the resource grammar API
 does not suffice for all applications. A common reason is
 that it does not include idiomatic expressions in a given language.
 The solution then is in the first place to build language-specific
-extension modules. This chapter will deal with this issue (to be completed).
+extension modules, like ``ExtraGer``. 
 
+==Using parametrized modules==
 
-==Writing an instance of parametrized resource grammar implementation==
+===Writing an instance of parametrized resource grammar implementation===
 
 Above we have looked at how a resource implementation is built by
 the copy and paste method (from English to German), that is, formally
 speaking, from scratch. A more elegant solution available for 
 families of languages such as Romance and Scandinavian is to
 use parametrized modules. The advantages are
-
 - theoretical: linguistic generalizations and insights
 - practical: maintainability improves with fewer components
 
 
-In this chapter, we will look at an example: adding Italian to
-the Romance family (to be completed). Here is a set of
+Here is a set of
 [slides http://www.cs.chalmers.se/~aarne/geocal2006.pdf]
 on the topic.
 
 
-==Parametrizing a resource grammar implementation==
+===Parametrizing a resource grammar implementation===
 
 This is the most demanding form of resource grammar writing.
 We do //not// recommend the method of parametrizing from the
@@ -782,8 +777,51 @@ paste method is still used, but at this time the differences
 are put into an ``interface`` module. 
 
 
+==Character encoding and transliterations==
 
-This chapter will work out an example of how an Estonian grammar
-is constructed from the Finnish grammar through parametrization.
+This section is relevant for languages using a non-ASCII character set. 
+
+==Coding conventions in GF==
+
+From version 3.0, GF follows a simple encoding convention:
+- GF source files may follow any encoding, such as isolatin-1 or UTF-8;
+  the default is isolatin-1, and UTF8 must be indicated by the judgement
+```
+    flags coding = utf8 ;
+``` 
+  in each source module.
+- for internal processing, all characters are converted to 16-bit unicode, 
+  as the first step of grammar compilation guided by the ``coding`` flag
+- as the last step of compilation, all characters are converted to UTF-8
+- thus, GF object files (``gfo``) and the Portable Grammar Format (``pgf``)
+  are in UTF-8
+
+
+Most current resource grammars use isolatin-1 in the source, but this does
+not affect their use in parallel with grammars written in other encodings.
+In fact, a grammar can be put up from modules using different codings.
+
+**Warning**. While string literals may contain any characters, identifiers
+must be isolatin-1 letters (or digits, underscores, or dashes). This has to
+do with the restrictions of the lexer tool that is used.
+
+
+==Transliterations==
+
+While UTF-8 is well supported by most web browsers, its use in terminals and
+text editors may cause disappointment. Many grammarians therefore prefer to
+use ASCII transliterations. GF 3.0beta2 provides the following built-in
+transliterations:
+- Arabic
+- Devanagari (Hindi)
+- Thai
+
+
+New transliterations can be defined in the GF source file
+[``GF/Text/Transliterations.hs`` ../src/GF/Text/Transliterations.hs].
+This file also gives instructions on how new ones are added.
+
+
+
 
 
