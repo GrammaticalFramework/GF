@@ -60,8 +60,7 @@ public class Translate implements EntryPoint {
 	gf.translate(suggest.getText(), listBoxSelection(fromLangBox), null, 
 		     listBoxSelection(toLangBox), new GF.TranslateCallback() {
 		public void onResult (GF.Translations translations) {
-		    for (int i = 0; i < translations.length(); i++) {
-			GF.Translation t = translations.get(i);
+		    for (GF.Translation t : GF.iterable(translations)) {
 			addTranslation(t.getText(), t.getTo());
 		    }
 		    clearStatus();
@@ -104,8 +103,7 @@ public class Translate implements EntryPoint {
     private void setGrammar(GF.Grammar grammar) {
 	this.grammar = grammar;
 
-	for (int i = 0; i < grammar.getLanguages().length(); i++) {
-	    GF.Language l = grammar.getLanguages().get(i);
+	for (GF.Language l :GF.iterable(grammar.getLanguages())) {
 	    String name = l.getName();
 	    if (l.canParse()) {
 		fromLangBox.addItem(name);

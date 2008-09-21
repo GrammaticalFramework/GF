@@ -10,7 +10,9 @@ import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONParser;
 
 import java.util.Set;
+import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.ArrayList;
 
 public class GF {
@@ -24,6 +26,29 @@ public class GF {
     public static interface GFCallback<T extends JavaScriptObject> {
 	public void onResult (T result) ;
 	public void onError (Throwable e) ;
+    }
+
+    public static <T extends JavaScriptObject> Iterable<T> iterable(final JsArray<T> array) {
+	return new Iterable<T>() {
+	    public Iterator<T> iterator() {	    
+		return new Iterator<T>() {
+		    int i = 0;
+
+		    public boolean hasNext() { 
+			return i < array.length(); 
+		    }
+		    public T next() { 
+			if (!hasNext()) { 
+			throw new NoSuchElementException(); 
+			}
+			return array.get(i++); 
+		    }
+		    public void remove() { 
+			throw new UnsupportedOperationException(); 
+		    }
+		};
+	    }
+	};
     }
 
     /* Grammar */
