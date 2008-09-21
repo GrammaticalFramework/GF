@@ -1,0 +1,40 @@
+GF Resource Grammar Library Version 1.5
+
+This will be the next release of the library.
+
+If you have new contributions and bug fixes in 1.4 - please also carry over the changes 
+in 1.5! Preferably, work directly with 1.5.
+
+The Syntax and Paradigms APIs are supersets of the old ones - thus backward compatibility
+is guaranteed for applications using them. This of course with the reservation that, since
+the APIs may contain new functions, name clashes with other modules may result if names are
+not qualified.
+
+Visible differences from 1.4:
+
+- Cat, Noun : Quant and Art fused ; Quant has both substantival and adjectival forms. This
+  is to eliminate the duplication of Quant and Art rules, and also to account for the different
+  forms some quantifiers, have when the word stands alone vs. is attached to an adjective.
+  For instance, in Italian, "that wine" is "quel vino", whereas "that" alone is "quello".
+
+- CommonX, Sentence : Tense and Ant fused. This is to leave room for the radically different
+  tense systems in different languages. However, the Syntax API still displays the 
+  two-dimensional tense structure.
+
+- Mathematical is dropped as obsolete. Combinators and Symbolic together give a sufficient
+  interface for this kind of applications.
+
+- Combinators is included in Syntax.
+
+
+To see the full change history, do
+
+  GF/lib/next-resource% darcs changes .
+
+It starts with these two entries:
+
+Fri Sep  5 15:27:56 CEST 2008  aarne@cs.chalmers.se
+  * Temp = Tense + Ant in next-resource
+
+Fri Sep  5 15:12:47 CEST 2008  aarne@cs.chalmers.se
+  * starting next-resource by fusing Art and Quant in english and scandinavian; substantival forms added for e.g. possessive pronouns
