@@ -1,0 +1,10 @@
+--# -path=.:../abstract:../common
+
+concrete LangGer of Lang = 
+  GrammarGer,
+  LexiconGer
+  ** {
+
+flags startcat = Phr ; unlexer = text ; lexer = text ;
+
+} ;
