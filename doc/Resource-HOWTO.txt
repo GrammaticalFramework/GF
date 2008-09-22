@@ -37,7 +37,7 @@ You can find the code for the stable release in
 
 and the next release in
 
-[``www.cs.chalmers.se/Cs/Research/Language-technology/GF/lib/next-resource/`` ../lib/next-resource]
+[``www.cs.chalmers.se/Cs/Research/Language-technology/GF/next-lib/src/`` ../next-lib/src]
 
 It is recommended to build new grammars to match the next release.
 
