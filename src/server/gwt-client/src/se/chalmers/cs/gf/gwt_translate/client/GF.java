@@ -28,27 +28,30 @@ public class GF {
 	public void onError (Throwable e) ;
     }
 
-    public static <T extends JavaScriptObject> Iterable<T> iterable(final JsArray<T> array) {
-	return new Iterable<T>() {
-	    public Iterator<T> iterator() {	    
-		return new Iterator<T>() {
-		    int i = 0;
+    public static class IterableJsArray<T extends JavaScriptObject> extends JsArray<T> {
+	protected IterableJsArray() {}
 
-		    public boolean hasNext() { 
-			return i < array.length(); 
-		    }
-		    public T next() { 
-			if (!hasNext()) { 
-			throw new NoSuchElementException(); 
+	public final Iterable<T> iterable() {
+	    return new Iterable<T>() {
+		public Iterator<T> iterator() {
+		    return new Iterator<T>() {
+			private int i = 0;
+			public boolean hasNext() { 
+			    return i < length(); 
 			}
-			return array.get(i++); 
-		    }
-		    public void remove() { 
-			throw new UnsupportedOperationException(); 
-		    }
-		};
-	    }
-	};
+			public T next() { 
+			    if (!hasNext()) { 
+				throw new NoSuchElementException(); 
+			    }
+			    return get(i++); 
+			}
+			public void remove() { 
+			    throw new UnsupportedOperationException(); 
+			}
+		    };
+		}
+	    };
+	}
     }
 
     /* Grammar */
@@ -66,7 +69,7 @@ public class GF {
 
 	public final native String getUserLanguage() /*-{ return this.userLanguage; }-*/;
 
-	public final native JsArray<Language> getLanguages() /*-{ return this.languages; }-*/;
+	public final native IterableJsArray<Language> getLanguages() /*-{ return this.languages; }-*/;
 
 	public final Language getLanguage(String name) {
 	    int c = getLanguages().length();
@@ -109,7 +112,7 @@ public class GF {
 
     public interface TranslateCallback extends GFCallback<Translations> {  }
 
-    public static class Translations extends JsArray<Translation> {
+    public static class Translations extends IterableJsArray<Translation> {
 	protected Translations() { }
     }
 
@@ -138,7 +141,7 @@ public class GF {
 
     public interface CompleteCallback extends GFCallback<Completions> { }
 
-    public static class Completions extends JsArray<Translation> {
+    public static class Completions extends IterableJsArray<Translation> {
 	protected Completions() { }
     }
 
