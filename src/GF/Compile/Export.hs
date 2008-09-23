@@ -10,6 +10,7 @@ import GF.Compile.GFCCtoJS
 import GF.Infra.Option
 import GF.Speech.CFG
 import GF.Speech.PGFToCFG
+import GF.Speech.SRGS_ABNF
 import GF.Speech.SRGS_XML
 import GF.Speech.JSGF
 import GF.Speech.GSL
@@ -38,6 +39,8 @@ exportPGF opts fmt pgf =
       FmtBNF          -> single "bnf"   bnfPrinter
       FmtSRGS_XML     -> single "grxml" (srgsXmlPrinter sisr)
       FmtSRGS_XML_NonRec -> single "grxml" srgsXmlNonRecursivePrinter
+      FmtSRGS_ABNF    -> single "gram" (srgsAbnfPrinter sisr)
+      FmtSRGS_ABNF_NonRec -> single "gram" srgsXmlNonRecursivePrinter
       FmtJSGF         -> single "jsgf"  (jsgfPrinter sisr)
       FmtGSL          -> single "gsl"   gslPrinter
       FmtVoiceXML     -> single "vxml"  grammar2vxml

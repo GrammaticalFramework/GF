@@ -50,8 +50,7 @@ data SRG = SRG { srgName :: String    -- ^ grammar name
 	       }
 	 deriving (Eq,Show)
 
-data SRGRule = SRGRule Cat [SRGAlt] -- ^ SRG category name, original category name
-	                                      --   and productions
+data SRGRule = SRGRule Cat [SRGAlt]
 	     deriving (Eq,Show)
 
 -- | maybe a probability, a rule name and an EBNF right-hand side
