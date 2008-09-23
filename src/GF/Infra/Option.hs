@@ -90,6 +90,7 @@ data OutputFormat = FmtPGF
                   | FmtSRGS_XML
                   | FmtSRGS_XML_NonRec
                   | FmtSRGS_ABNF 
+                  | FmtSRGS_ABNF_NonRec
                   | FmtJSGF 
                   | FmtGSL 
                   | FmtVoiceXML
@@ -457,6 +458,7 @@ outputFormats =
      ("srgs_xml",     FmtSRGS_XML),
      ("srgs_xml_nonrec",     FmtSRGS_XML_NonRec),
      ("srgs_abnf",    FmtSRGS_ABNF),
+     ("srgs_abnf_nonrec",    FmtSRGS_ABNF_NonRec),
      ("jsgf",         FmtJSGF),
      ("gsl",          FmtGSL),
      ("vxml",         FmtVoiceXML),
