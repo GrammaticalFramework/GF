@@ -450,6 +450,7 @@ allCommands enc pgf = Map.fromList [
      options = [
        ("arabic",    "Arabic"),
        ("devanagari","Devanagari"),
+       ("telugu",    "Telugu"),
        ("thai",      "Thai")
        ] 
      }),
@@ -594,6 +595,7 @@ stringOpOptions = [
        ("from_cp1251","decode from cp1251 (Cyrillic used in Bulgarian resource)"),
        ("from_arabic","from unicode to GF Arabic transliteration"),
        ("from_devanagari","from unicode to GF Devanagari transliteration"),
+       ("from_thai","from unicode to GF Telugu transliteration"),
        ("from_thai","from unicode to GF Thai transliteration"),
        ("from_utf8","decode from utf8"),
        ("lextext","text-like lexer"),
@@ -603,6 +605,7 @@ stringOpOptions = [
        ("to_arabic","from GF Arabic transliteration to unicode"),
        ("to_devanagari","from GF Devanagari transliteration to unicode"),
        ("to_html","wrap in a html file with linebreaks"),
+       ("to_telugu","from GF Telugu transliteration to unicode"),
        ("to_thai","from GF Thai transliteration to unicode"),
        ("to_utf8","encode to utf8"),
        ("unlextext","text-like unlexer"),
