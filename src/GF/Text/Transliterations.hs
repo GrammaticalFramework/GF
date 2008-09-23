@@ -3,6 +3,7 @@ module GF.Text.Transliterations (transliterate,transliteration,characterTable) w
 import GF.Text.UTF8
 
 import Data.Char
+import Numeric
 import qualified Data.Map as Map
 
 -- transliterations between ASCII and a Unicode character set
@@ -34,7 +35,7 @@ transliteration s = case s of
 
 characterTable :: Transliteration -> String
 characterTable = unlines . map prOne . Map.assocs . trans_from_unicode where
-  prOne (i,s) = unwords ["|", show i, "|", [toEnum i], "|", s, "|"]
+  prOne (i,s) = unwords ["|", showHex i "", "|", [toEnum i], "|", s, "|"]
 
 data Transliteration = Trans {
   trans_to_unicode   :: Map.Map String Int,
