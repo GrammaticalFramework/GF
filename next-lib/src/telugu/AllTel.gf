@@ -1,0 +1,3 @@
+----# -path=.:../abstract:../common:prelude
+--
+--concrete AllTel of AllTelAbs = LangTel ;
