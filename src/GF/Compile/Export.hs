@@ -37,6 +37,7 @@ exportPGF opts fmt pgf =
       FmtProlog       -> multi "pl"  grammar2prolog 
       FmtProlog_Abs   -> multi "pl"  grammar2prolog_abs 
       FmtBNF          -> single "bnf"   bnfPrinter
+      FmtFCFG         -> single "fcfg"  fcfgPrinter
       FmtSRGS_XML     -> single "grxml" (srgsXmlPrinter sisr)
       FmtSRGS_XML_NonRec -> single "grxml" srgsXmlNonRecursivePrinter
       FmtSRGS_ABNF    -> single "gram" (srgsAbnfPrinter sisr)
@@ -67,3 +68,4 @@ outputConcr pgf = case cncnames pgf of
 
 printPGF :: PGF -> String
 printPGF = encodeUTF8 . printTree . fromPGF
+

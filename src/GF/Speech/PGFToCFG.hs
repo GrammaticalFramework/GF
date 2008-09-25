@@ -4,7 +4,7 @@
 --
 -- Approximates PGF grammars with context-free grammars.
 ----------------------------------------------------------------------
-module GF.Speech.PGFToCFG (bnfPrinter, pgfToCFG) where
+module GF.Speech.PGFToCFG (bnfPrinter, fcfgPrinter, pgfToCFG) where
 
 import PGF.CId
 import PGF.Data as PGF
@@ -13,6 +13,7 @@ import GF.Infra.Ident
 import GF.Speech.CFG
 
 import Data.Array as Array
+import Data.List
 import Data.Map (Map)
 import qualified Data.Map as Map
 import Data.Maybe
@@ -21,6 +22,22 @@ import qualified Data.Set as Set
 
 bnfPrinter :: PGF -> CId -> String
 bnfPrinter pgf cnc = prCFG $ pgfToCFG pgf cnc
+
+-- FIXME: move this somewhere else
+fcfgPrinter :: PGF -> CId -> String
+fcfgPrinter pgf cnc = unlines (map showRule rules)
+  where
+    pinfo = fromMaybe (error "fcfgPrinter") (lookParser pgf cnc)
+
+    rules :: [FRule]
+    rules = Array.elems (PGF.allRules pinfo)
+
+    showRule (FRule cid ps cs fc arr) = prCId cid ++ " " ++ show ps ++ ". " ++ showCat fc ++ " ::= " ++ unwords (map showCat cs) ++ " = " ++ showLin arr
+        where
+          showLin arr = "[" ++ concat (intersperse ", " [ unwords (map showFSymbol (Array.elems r)) | r <- Array.elems arr]) ++ "]"
+          showFSymbol (FSymCat i j) = showCat (cs!!j) ++ "_" ++ show j ++ "." ++ show i
+          showFSymbol (FSymTok t) = t
+    showCat c = "C" ++ show c
 
 pgfToCFG :: PGF 
           -> CId   -- ^ Concrete syntax name
