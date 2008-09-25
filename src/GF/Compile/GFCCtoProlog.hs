@@ -22,8 +22,9 @@ import Data.Char (isAlphaNum, isAsciiLower, isAsciiUpper, ord)
 import Data.List (isPrefixOf)
 
 grammar2prolog, grammar2prolog_abs :: PGF -> String
-grammar2prolog     = encodeUTF8 . foldr (++++) [] . pgf2clauses 
-grammar2prolog_abs = encodeUTF8 . foldr (++++) [] . pgf2clauses_abs 
+-- Most prologs have problems with UTF8 encodings, so we skip that:
+grammar2prolog     = {- encodeUTF8 . -} foldr (++++) [] . pgf2clauses 
+grammar2prolog_abs = {- encodeUTF8 . -} foldr (++++) [] . pgf2clauses_abs 
 
 
 pgf2clauses :: PGF -> [String]
@@ -125,7 +126,20 @@ instance PLPrint Expr where
                               Equ patterns result <- eqs]
 
 instance PLPrint Term where
-    plp (S terms)  = plList (map plp terms)
+    plp (S terms) = plTerm "s"  [plp terms]
+    plp (C n)     = plTerm "c"  [show n]
+    plp (K tokn)  = plTerm "k"  [plp tokn]
+    plp (FV trms) = plTerm "fv" [plp trms]
+    plp (P t1 t2) = plTerm "p"  [plp t1, plp t2]
+    plp (W s trm) = plTerm "w"  [plp s, plp trm]
+    plp (R terms) = plTerm "r"  [plp terms]
+    plp (F oper)  = plTerm "f"  [plp oper]
+    plp (V n)     = plTerm "v"  [show n]
+    plp (TM str)  = plTerm "tm" [plp str]
+
+{-- more prolog-like syntax for PGF terms, but also more difficult to handle:
+instance PLPrint Term where
+    plp (S terms)  = plp terms
     plp (C n)      = show n
     plp (K token)  = plp token
     plp (FV terms) = prCurlyList (map plp terms)
@@ -135,19 +149,6 @@ instance PLPrint Term where
     plp (F oper)   = plTerm "f" [plp oper]
     plp (V n)      = plTerm "arg"  [show n]
     plp (TM str)   = plTerm "meta" [plp str]
-
-{-- alternative prolog syntax for PGF terms:
-instance PLPrint Term where
-    plp (R terms) = plTerm "r"  [plp terms]
-    plp (P t1 t2) = plTerm "p"  [plp t1, plp t2]
-    plp (S terms) = plTerm "s"  [plp terms]
-    plp (K tokn)  = plTerm "k"  [plp tokn]
-    plp (V n)     = plTerm "v"  [show n]
-    plp (C n)     = plTerm "c"  [show n]
-    plp (F oper)  = plTerm "f"  [plp oper]
-    plp (FV trms) = plTerm "fv" [plp trms]
-    plp (W s trm) = plTerm "w"  [plp s, plp trm]
-    plp (TM str)  = plTerm "tm" [plp str]
 --}
 
 instance PLPrint CId where
