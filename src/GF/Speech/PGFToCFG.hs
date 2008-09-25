@@ -32,7 +32,7 @@ fcfgPrinter pgf cnc = unlines (map showRule rules)
     rules :: [FRule]
     rules = Array.elems (PGF.allRules pinfo)
 
-    showRule (FRule cid ps cs fc arr) = prCId cid ++ " " ++ show ps ++ ". " ++ showCat fc ++ " ::= " ++ unwords (map showCat cs) ++ " = " ++ showLin arr
+    showRule (FRule cid ps cs fc arr) = prCId cid ++ " " ++ show ps ++ ". " ++ showCat fc ++ " ::= [" ++ concat (intersperse ", " (map showCat cs)) ++ "] = " ++ showLin arr
         where
           showLin arr = "[" ++ concat (intersperse ", " [ unwords (map showFSymbol (Array.elems r)) | r <- Array.elems arr]) ++ "]"
           showFSymbol (FSymCat i j) = showCat (cs!!j) ++ "_" ++ show j ++ "." ++ show i
