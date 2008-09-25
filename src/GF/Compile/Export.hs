@@ -41,7 +41,7 @@ exportPGF opts fmt pgf =
       FmtSRGS_XML     -> single "grxml" (srgsXmlPrinter sisr)
       FmtSRGS_XML_NonRec -> single "grxml" srgsXmlNonRecursivePrinter
       FmtSRGS_ABNF    -> single "gram" (srgsAbnfPrinter sisr)
-      FmtSRGS_ABNF_NonRec -> single "gram" srgsXmlNonRecursivePrinter
+      FmtSRGS_ABNF_NonRec -> single "gram" srgsAbnfNonRecursivePrinter
       FmtJSGF         -> single "jsgf"  (jsgfPrinter sisr)
       FmtGSL          -> single "gsl"   gslPrinter
       FmtVoiceXML     -> single "vxml"  grammar2vxml
