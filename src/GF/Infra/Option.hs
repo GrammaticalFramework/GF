@@ -88,6 +88,7 @@ data OutputFormat = FmtPGF
                   | FmtProlog_Abs
                   | FmtBNF
                   | FmtRegular
+                  | FmtNoLR
                   | FmtFCFG
                   | FmtSRGS_XML
                   | FmtSRGS_XML_NonRec
@@ -458,6 +459,7 @@ outputFormats =
      ("prolog_abs",   FmtProlog_Abs),
      ("bnf",          FmtBNF),
      ("regular",      FmtRegular),
+     ("nolr",         FmtNoLR),
      ("fcfg",         FmtFCFG),
      ("srgs_xml",     FmtSRGS_XML),
      ("srgs_xml_nonrec",     FmtSRGS_XML_NonRec),

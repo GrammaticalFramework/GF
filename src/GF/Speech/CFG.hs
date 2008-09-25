@@ -190,14 +190,13 @@ makeSimpleRegular = makeRegular . topDownFilter . bottomUpFilter . removeCycles
 
 -- Use the transformation algorithm from \"Regular Approximation of Context-free
 -- Grammars through Approximation\", Mohri and Nederhof, 2000
--- to create an over-generating regular frammar for a context-free 
+-- to create an over-generating regular grammar for a context-free 
 -- grammar
 makeRegular :: CFG -> CFG
 makeRegular g = g { cfgRules = groupProds $ concatMap trSet (mutRecCats True g) }
   where trSet cs | allXLinear cs rs = rs
-                 | otherwise = concatMap handleCat csl
-            where csl = Set.toList cs 
-                  rs = catSetRules g cs
+                 | otherwise = concatMap handleCat (Set.toList cs)
+            where rs = catSetRules g cs
                   handleCat c = [CFRule c' [] (mkCFTerm (c++"-empty"))] -- introduce A' -> e
                                 ++ concatMap (makeRightLinearRules c) (catRules g c)
                       where c' = newCat c

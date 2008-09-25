@@ -37,6 +37,7 @@ exportPGF opts fmt pgf =
       FmtProlog       -> multi "pl"  grammar2prolog 
       FmtProlog_Abs   -> multi "pl"  grammar2prolog_abs 
       FmtBNF          -> single "bnf"   bnfPrinter
+      FmtNoLR         -> single "bnf"   nonLeftRecursivePrinter
       FmtRegular      -> single "bnf"   regularPrinter
       FmtFCFG         -> single "fcfg"  fcfgPrinter
       FmtSRGS_XML     -> single "grxml" (srgsXmlPrinter sisr)
