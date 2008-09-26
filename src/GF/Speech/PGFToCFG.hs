@@ -61,14 +61,16 @@ pgfToCFG pgf lang = mkCFG (lookStartCat pgf) extCats (startRules ++ concatMap fr
     rules :: [FRule]
     rules = Array.elems (PGF.allRules pinfo)
 
-    fcatGFCats :: Map FCat CId
-    fcatGFCats = Map.fromList [(fc,c) | (c,fcs) <- Map.toList (startupCats pinfo), fc <- fcs]
-    
-    fcatGFCat :: FCat -> CId
-    fcatGFCat c = fromMaybe (mkCId "Unknown") (Map.lookup c fcatGFCats)
+    fcatCats :: Map FCat Cat
+    fcatCats = Map.fromList [(fc, prCId c ++ "_" ++ show i) 
+                                 | (c,fcs) <- Map.toList (startupCats pinfo), 
+                                   (fc,i) <- zip fcs [1..]]
+
+    fcatCat :: FCat -> Cat
+    fcatCat c = Map.findWithDefault ("Unknown_" ++ show c) c fcatCats
 
     fcatToCat :: FCat -> FIndex -> Cat
-    fcatToCat c l = prCId (fcatGFCat c) ++ "_" ++ show c ++ row
+    fcatToCat c l = fcatCat c ++ row
       where row = if catLinArity c == 1 then "" else "_" ++ show l
 
     -- gets the number of fields in the lincat for the given category
