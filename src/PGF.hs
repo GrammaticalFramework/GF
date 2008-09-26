@@ -47,6 +47,7 @@ module PGF(
            tree2expr, expr2tree,
            
            -- ** Word Completion (Incremental Parsing)
+           complete,
            Incremental.ParseState,
 	   initState, Incremental.nextState, Incremental.getCompletions, extractExps,
 
@@ -70,6 +71,7 @@ import GF.Text.UTF8
 import GF.Data.ErrM
 import GF.Data.Utilities
 
+import Data.Char
 import qualified Data.Map as Map
 import Data.Maybe
 import System.Random (newStdGen)
@@ -182,6 +184,15 @@ categories :: PGF -> [Category]
 -- definition is just for convenience.
 startCat   :: PGF -> Category
 
+-- | Complete the last word in the given string. If the input
+-- is empty or ends in whitespace, the last word is considred
+-- to be the empty string. This means that the completions
+-- will be all possible next words.
+complete :: PGF -> Language -> Category -> String 
+         -> [String] -- ^ Possible word completions of, 
+                     -- including the given input.
+
+
 ---------------------------------------------------
 -- Implementation
 ---------------------------------------------------
@@ -242,3 +253,16 @@ languageCode pgf lang =
 categories pgf = [prCId c | c <- Map.keys (cats (abstract pgf))]
 
 startCat pgf = lookStartCat pgf
+
+complete pgf from cat input = 
+         let (ws,prefix) = tokensAndPrefix input
+             state0 = initState pgf from cat
+             state = foldl Incremental.nextState state0 ws
+             compls = Incremental.getCompletions state prefix
+          in [unwords (ws++[c]) ++ " " | c <- Map.keys compls]
+  where
+    tokensAndPrefix :: String -> ([String],String)
+    tokensAndPrefix s | not (null s) && isSpace (last s) = (words s, "")
+                      | null ws = ([],"")
+                      | otherwise = (init ws, last ws)
+        where ws = words s
