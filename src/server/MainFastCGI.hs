@@ -123,23 +123,9 @@ parse' pgf input mcat mfrom =
 
 complete' :: PGF -> String -> Maybe PGF.Category -> Maybe PGF.Language -> [(PGF.Language,[String])]
 complete' pgf input mcat mfrom = 
-   [(from,ss) | from <- froms, PGF.canParse pgf from, let ss = complete pgf from cat input, not (null ss)]
+   [(from,ss) | from <- froms, PGF.canParse pgf from, let ss = PGF.complete pgf from cat input, not (null ss)]
   where froms = maybe (PGF.languages pgf) (:[]) mfrom
         cat = fromMaybe (PGF.startCat pgf) mcat
-
-complete :: PGF -> PGF.Language -> PGF.Category -> String -> [String]
-complete pgf from cat input = 
-         let (ws,prefix) = tokensAndPrefix input
-             state0 = PGF.initState pgf from cat
-             state = foldl PGF.nextState state0 ws
-             compls = PGF.getCompletions state prefix
-          in [unwords (ws++[c]) ++ " " | c <- Map.keys compls]
-
-tokensAndPrefix :: String -> ([String],String)
-tokensAndPrefix s | not (null s) && isSpace (last s) = (words s, "")
-                  | null ws = ([],"")
-                  | otherwise = (init ws, last ws)
-  where ws = words s
 
 linearize' :: PGF -> Maybe PGF.Language -> PGF.Tree -> [(PGF.Language,String)]
 linearize' pgf mto tree = 
