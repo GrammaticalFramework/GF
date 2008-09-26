@@ -285,6 +285,18 @@ prProductions prods =
       maxLHSWidth = maximum $ 0:(map (length . fst) prods)
       rpad n s = s ++ replicate (n - length s) ' '
 
+prCFTerm :: CFTerm -> String
+prCFTerm = pr 0
+  where
+    pr p (CFObj f args) = paren p (prCId f ++ " (" ++ concat (intersperse "," (map (pr 0) args)) ++ ")")
+    pr p (CFAbs i t) = paren p ("\\x" ++ show i ++ ". " ++ pr 0 t)
+    pr p (CFApp t1 t2) = paren p (pr 1 t1 ++ "(" ++ pr 0 t2 ++ ")")
+    pr _ (CFRes i) = "$" ++ show i
+    pr _ (CFVar i) = "x" ++ show i
+    pr _ (CFMeta c) = "?" ++ prCId c
+    paren 0 x = x
+    paren 1 x = "(" ++ x ++ ")"
+
 --
 -- * CFRule Utilities
 --

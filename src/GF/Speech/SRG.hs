@@ -68,14 +68,14 @@ type SRGSymbol = Symbol SRGNT Token
 type SRGNT = (Cat, Int)
 
 
-ebnfPrinter :: PGF -> CId -> String
-ebnfPrinter pgf cnc = prSRG $ makeSRG id pgf cnc
+ebnfPrinter :: Maybe SISRFormat -> PGF -> CId -> String
+ebnfPrinter sisr pgf cnc = prSRG sisr $ makeSRG id pgf cnc
 
-nonLeftRecursivePrinter :: PGF -> CId -> String
-nonLeftRecursivePrinter pgf cnc = prSRG $ makeSRG removeLeftRecursion pgf cnc
+nonLeftRecursivePrinter :: Maybe SISRFormat -> PGF -> CId -> String
+nonLeftRecursivePrinter sisr pgf cnc = prSRG sisr $ makeSRG removeLeftRecursion pgf cnc
 
 regularPrinter :: PGF -> CId -> String
-regularPrinter pgf cnc = prSRG $ makeSRG makeRegular pgf cnc
+regularPrinter pgf cnc = prSRG Nothing $ makeSRG makeRegular pgf cnc
 
 makeSRG :: (CFG -> CFG) -> PGF -> CId -> SRG
 makeSRG = mkSRG cfgToSRG
@@ -182,12 +182,24 @@ ungroupTokens = joinRE . mapRE (symbol (RESymbol . NonTerminal) (REConcat . map 
 -- * Utilities for building and printing SRGs
 --
 
-prSRG :: SRG -> String
-prSRG srg = prProductions $ map prRule $ ext ++ int
+prSRG :: Maybe SISRFormat -> SRG -> String
+prSRG sisr srg = prProductions $ map prRule $ ext ++ int
     where 
       (ext,int) = partition (isExternalCat srg . srgLHSCat) (srgRules srg)
-      prRule (SRGRule c alts) = (c,unwords (intersperse "|" (map prAlt alts)))
-      prAlt (SRGAlt _ _ rhs) = prRE prSym rhs
+      prRule (SRGRule c alts) = (c,unwords (intersperse "|" (concatMap prAlt alts)))
+      prAlt (SRGAlt _ t rhs) = 
+          -- FIXME: hack: we high-jack the --sisr flag to add 
+          -- a simple lambda calculus format for semantic interpretation
+          -- Maybe the --sisr flag should be renamed.
+          case sisr of
+            Just _  -> 
+                -- copy tags to each part of a top-level union,
+                -- to get simpler output
+                case rhs of
+                  REUnion xs -> map prOneAlt xs
+                  _          -> [prOneAlt rhs]
+                where prOneAlt a = prRE prSym a ++ " { " ++ prCFTerm t ++ " }"
+            Nothing -> [prRE prSym rhs]
       prSym = symbol fst (\t -> "\""++ t ++"\"")
 
 lookupFM_ :: (Ord key, Show key) => Map key elt -> key -> elt
