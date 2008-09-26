@@ -10,6 +10,8 @@ module GF.Speech.PGFToCFG (bnfPrinter, nonLeftRecursivePrinter, regularPrinter,
 import PGF.CId
 import PGF.Data as PGF
 import PGF.Macros
+import GF.Data.MultiMap (MultiMap)
+import qualified GF.Data.MultiMap as MultiMap
 import GF.Infra.Ident
 import GF.Speech.CFG
 
@@ -66,7 +68,15 @@ pgfToCFG pgf lang = mkCFG (lookStartCat pgf) extCats (startRules ++ concatMap fr
     fcatGFCat c = fromMaybe (mkCId "Unknown") (Map.lookup c fcatGFCats)
 
     fcatToCat :: FCat -> FIndex -> Cat
-    fcatToCat c l = prCId (fcatGFCat c) ++ "_" ++ show c ++ "_" ++ show l
+    fcatToCat c l = prCId (fcatGFCat c) ++ "_" ++ show c ++ row
+      where row = if catLinArity c == 1 then "" else "_" ++ show l
+
+    -- gets the number of fields in the lincat for the given category
+    catLinArity :: FCat -> Int
+    catLinArity c = maximum (1:[rangeSize (bounds rhs) | FRule _ _ _ _ rhs <- Map.findWithDefault [] c rulesByFCat])
+
+    rulesByFCat :: Map FCat [FRule]
+    rulesByFCat = Map.fromListWith (++) [(c,[r]) | r@(FRule _ _ _ c _) <- rules]
 
     extCats :: Set Cat
     extCats = Set.fromList $ map lhsCat startRules
