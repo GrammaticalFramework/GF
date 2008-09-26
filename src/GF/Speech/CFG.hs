@@ -273,10 +273,17 @@ countRules :: CFG -> Int
 countRules = length . allRules
 
 prCFG :: CFG -> String
-prCFG = unlines . map prRule . allRules
+prCFG = prProductions . map prRule . allRules
     where 
-      prRule r = lhsCat r ++ " ::= " ++ unwords (map prSym (ruleRhs r))
+      prRule r = (lhsCat r, unwords (map prSym (ruleRhs r)))
       prSym = symbol id (\t -> "\""++ t ++"\"")
+
+prProductions :: [(Cat,String)] -> String
+prProductions prods = 
+    unlines [rpad maxLHSWidth lhs ++ " ::= " ++ rhs | (lhs,rhs) <- prods]
+    where
+      maxLHSWidth = maximum $ 0:(map (length . fst) prods)
+      rpad n s = s ++ replicate (n - length s) ' '
 
 --
 -- * CFRule Utilities
