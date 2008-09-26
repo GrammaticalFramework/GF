@@ -117,14 +117,15 @@ mkSRG mkRules preprocess pgf cnc =
 	  srgRules = mkRules cfg }
     where cfg = renameCats (prCId cnc) $ preprocess $ pgfToCFG pgf cnc
 
--- | Renames all external cats C to C_cat, and all internal cats to
---   GrammarName_N where N is an integer.
+-- | Renames all external cats C to C_cat, and all internal cats C_X (where X is any string), 
+--   to C_N where N is an integer.
 renameCats :: String -> CFG -> CFG
 renameCats prefix cfg = mapCFGCats renameCat cfg
   where renameCat c | isExternal c = c ++ "_cat"
-                    | otherwise = fromMaybe ("renameCats: " ++ c) (Map.lookup c names)
+                    | otherwise = Map.findWithDefault (error ("renameCats: " ++ c)) c names
         isExternal c = c `Set.member` cfgExternalCats cfg        
-        names = Map.fromList $ zip (allCats cfg) [prefix ++ "_" ++ show x | x <- [0..]]
+        catsByPrefix = buildMultiMap [(takeWhile (/='_') cat, cat) | cat <- allCats cfg]
+        names = Map.fromList [(c,pref++"_"++show i) | (pref,cs) <- catsByPrefix, (c,i) <- zip cs [1..]]
 
 getSpeechLanguage :: PGF -> CId -> Maybe String
 getSpeechLanguage pgf cnc = fmap (replace '_' '-') $ lookConcrFlag pgf cnc (mkCId "language")
