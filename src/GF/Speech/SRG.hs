@@ -140,8 +140,8 @@ cfRulesToSRGRule rs@(r:_) = SRGRule (lhsCat r) rhs
       mkSRGSymbols i (NonTerminal c:ss) = NonTerminal (c,i) : mkSRGSymbols (i+1) ss
       mkSRGSymbols i (Terminal t:ss)    = Terminal t : mkSRGSymbols i ss
 
-allSRGCats :: SRG -> [String]
-allSRGCats SRG { srgRules = rs } = [c | SRGRule c _ <- rs]
+srgLHSCat :: SRGRule -> Cat
+srgLHSCat (SRGRule c _) = c
 
 isExternalCat :: SRG -> Cat -> Bool
 isExternalCat srg c = c `Set.member` srgExternalCats srg
@@ -175,8 +175,9 @@ ungroupTokens = joinRE . mapRE (symbol (RESymbol . NonTerminal) (REConcat . map 
 --
 
 prSRG :: SRG -> String
-prSRG = prProductions . map prRule . srgRules
+prSRG srg = prProductions $ map prRule $ ext ++ int
     where 
+      (ext,int) = partition (isExternalCat srg . srgLHSCat) (srgRules srg)
       prRule (SRGRule c alts) = (c,unwords (intersperse "|" (map prAlt alts)))
       prAlt (SRGAlt _ _ rhs) = prRE prSym rhs
       prSym = symbol fst (\t -> "\""++ t ++"\"")
