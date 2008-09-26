@@ -7,6 +7,7 @@ import PGF.Raw.Convert (fromPGF)
 import GF.Compile.GFCCtoHaskell
 import GF.Compile.GFCCtoProlog
 import GF.Compile.GFCCtoJS
+import GF.Compile.PGFPretty
 import GF.Infra.Option
 import GF.Speech.CFG
 import GF.Speech.PGFToCFG
@@ -32,6 +33,7 @@ exportPGF :: Options
 exportPGF opts fmt pgf = 
     case fmt of
       FmtPGF          -> multi "pgf" printPGF
+      FmtPGFPretty    -> multi "txt" prPGFPretty
       FmtJavaScript   -> multi "js"  pgf2js
       FmtHaskell      -> multi "hs"  (grammar2haskell hsPrefix name)
       FmtHaskell_GADT -> multi "hs"  (grammar2haskellGADT hsPrefix name)

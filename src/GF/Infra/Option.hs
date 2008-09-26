@@ -81,6 +81,7 @@ data Encoding = UTF_8 | ISO_8859_1 | CP_1251
   deriving (Eq,Ord)
 
 data OutputFormat = FmtPGF 
+                  | FmtPGFPretty
                   | FmtJavaScript 
                   | FmtHaskell 
                   | FmtHaskell_GADT 
@@ -453,6 +454,7 @@ optDescr =
 outputFormats :: [(String,OutputFormat)]
 outputFormats = 
     [("pgf",          FmtPGF),
+     ("pgf-pretty",   FmtPGFPretty),
      ("js",           FmtJavaScript),
      ("haskell",      FmtHaskell),
      ("haskell_gadt", FmtHaskell_GADT),
