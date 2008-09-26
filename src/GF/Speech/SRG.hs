@@ -10,6 +10,7 @@
 ----------------------------------------------------------------------
 module GF.Speech.SRG (SRG(..), SRGRule(..), SRGAlt(..), SRGItem, SRGSymbol
                      , SRGNT, CFTerm
+                     , ebnfPrinter
                      , makeSimpleSRG
                      , makeNonRecursiveSRG
                      , getSpeechLanguage
@@ -65,9 +66,17 @@ type SRGSymbol = Symbol SRGNT Token
 type SRGNT = (Cat, Int)
 
 
+ebnfPrinter :: PGF -> CId -> String
+ebnfPrinter pgf cnc = prSRG $ makeSRG id pgf cnc
+
+makeSRG :: (CFG -> CFG) -> PGF -> CId -> SRG
+makeSRG preproces = mkSRG cfgToSRG id
+    where
+      cfgToSRG cfg = [cfRulesToSRGRule rs | (_,rs) <- allRulesGrouped cfg]
+
 -- | Create a compact filtered non-left-recursive SRG. 
 makeSimpleSRG :: PGF -> CId -> SRG
-makeSimpleSRG  = mkSRG cfgToSRG preprocess
+makeSimpleSRG  = makeSRG preprocess
     where
       preprocess =   traceStats "After mergeIdentical"
                    . mergeIdentical
@@ -80,7 +89,6 @@ makeSimpleSRG  = mkSRG cfgToSRG preprocess
                    . traceStats "After removeCycles"
                    . removeCycles 
                    . traceStats "Inital CFG"
-      cfgToSRG cfg = [cfRulesToSRGRule rs | (_,rs) <- allRulesGrouped cfg]
 
 traceStats s g = trace ("---- " ++ s ++ ": " ++ stats g {- ++ "\n" ++ prCFRules g ++ "----" -}) g
 
@@ -164,6 +172,13 @@ ungroupTokens = joinRE . mapRE (symbol (RESymbol . NonTerminal) (REConcat . map 
 --
 -- * Utilities for building and printing SRGs
 --
+
+prSRG :: SRG -> String
+prSRG = unlines . map prRule . srgRules
+    where 
+      prRule (SRGRule c alts) = c ++ " ::= " ++ unwords (intersperse "|" (map prAlt alts))
+      prAlt (SRGAlt _ _ rhs) = prRE prSym rhs
+      prSym = symbol fst (\t -> "\""++ t ++"\"")
 
 lookupFM_ :: (Ord key, Show key) => Map key elt -> key -> elt
 lookupFM_ fm k = Map.findWithDefault err k fm

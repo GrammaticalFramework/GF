@@ -87,6 +87,7 @@ data OutputFormat = FmtPGF
                   | FmtProlog
                   | FmtProlog_Abs
                   | FmtBNF
+                  | FmtEBNF
                   | FmtRegular
                   | FmtNoLR
                   | FmtFCFG
@@ -458,6 +459,7 @@ outputFormats =
      ("prolog",       FmtProlog),
      ("prolog_abs",   FmtProlog_Abs),
      ("bnf",          FmtBNF),
+     ("ebnf",         FmtEBNF),
      ("regular",      FmtRegular),
      ("nolr",         FmtNoLR),
      ("fcfg",         FmtFCFG),

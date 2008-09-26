@@ -14,6 +14,7 @@ import GF.Speech.SRGS_ABNF
 import GF.Speech.SRGS_XML
 import GF.Speech.JSGF
 import GF.Speech.GSL
+import GF.Speech.SRG (ebnfPrinter)
 import GF.Speech.VoiceXML
 import GF.Speech.SLF
 import GF.Speech.PrRegExp
@@ -37,6 +38,7 @@ exportPGF opts fmt pgf =
       FmtProlog       -> multi "pl"  grammar2prolog 
       FmtProlog_Abs   -> multi "pl"  grammar2prolog_abs 
       FmtBNF          -> single "bnf"   bnfPrinter
+      FmtEBNF         -> single "ebnf"  ebnfPrinter
       FmtNoLR         -> single "bnf"   nonLeftRecursivePrinter
       FmtRegular      -> single "bnf"   regularPrinter
       FmtFCFG         -> single "fcfg"  fcfgPrinter
