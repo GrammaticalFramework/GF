@@ -70,7 +70,7 @@ ebnfPrinter :: PGF -> CId -> String
 ebnfPrinter pgf cnc = prSRG $ makeSRG id pgf cnc
 
 makeSRG :: (CFG -> CFG) -> PGF -> CId -> SRG
-makeSRG preproces = mkSRG cfgToSRG id
+makeSRG = mkSRG cfgToSRG
     where
       cfgToSRG cfg = [cfRulesToSRGRule rs | (_,rs) <- allRulesGrouped cfg]
 
