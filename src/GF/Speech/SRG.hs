@@ -124,7 +124,7 @@ renameCats prefix cfg = mapCFGCats renameCat cfg
   where renameCat c | isExternal c = c ++ "_cat"
                     | otherwise = Map.findWithDefault (error ("renameCats: " ++ c)) c names
         isExternal c = c `Set.member` cfgExternalCats cfg        
-        catsByPrefix = buildMultiMap [(takeWhile (/='_') cat, cat) | cat <- allCats cfg]
+        catsByPrefix = buildMultiMap [(takeWhile (/='_') cat, cat) | cat <- allCats cfg, not (isExternal cat)]
         names = Map.fromList [(c,pref++"_"++show i) | (pref,cs) <- catsByPrefix, (c,i) <- zip cs [1..]]
 
 getSpeechLanguage :: PGF -> CId -> Maybe String
