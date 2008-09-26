@@ -130,14 +130,14 @@ symbolsRE (RESymbol x) = [x]
 
 -- Debugging
 
-prRE :: RE String -> String
+prRE :: (a -> String) -> RE a -> String
 prRE = prRE' 0
 
-prRE' _ (REUnion []) = "<NULL>"
-prRE' n (REUnion xs) = p n 1 (concat (intersperse " | " (map (prRE' 1) xs)))
-prRE' n (REConcat xs) = p n 2 (unwords (map (prRE' 2) xs))
-prRE' n (RERepeat x) = p n 3 (prRE' 3 x) ++ "*"
-prRE' _ (RESymbol s) = s
+prRE' _ _ (REUnion []) = "<NULL>"
+prRE' n f (REUnion xs) = p n 1 (concat (intersperse " | " (map (prRE' 1 f) xs)))
+prRE' n f (REConcat xs) = p n 2 (unwords (map (prRE' 2 f) xs))
+prRE' n f (RERepeat x) = p n 3 (prRE' 3 f x) ++ "*"
+prRE' _ f (RESymbol s) = f s
 
 p n m s | n >= m = "(" ++ s ++ ")"
         | True = s

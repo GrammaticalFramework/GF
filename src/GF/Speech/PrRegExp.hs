@@ -14,13 +14,13 @@ import GF.Speech.RegExp
 import PGF
 
 regexpPrinter :: PGF -> CId -> String
-regexpPrinter pgf cnc = (++"\n") $ prRE $ dfa2re $ cfgToFA $ pgfToCFG pgf cnc
+regexpPrinter pgf cnc = (++"\n") $ prRE id $ dfa2re $ cfgToFA $ pgfToCFG pgf cnc
 
 multiRegexpPrinter :: PGF -> CId -> String
 multiRegexpPrinter pgf cnc = prREs $ mfa2res $ cfgToMFA $ pgfToCFG pgf cnc
 
 prREs :: [(String,RE CFSymbol)] -> String
-prREs res = unlines [l ++ " = " ++ prRE (mapRE showLabel re) | (l,re) <- res]
+prREs res = unlines [l ++ " = " ++ prRE id (mapRE showLabel re) | (l,re) <- res]
   where showLabel = symbol (\l -> "<" ++ l ++ ">") id
 
 mfa2res :: MFA -> [(String,RE CFSymbol)]
