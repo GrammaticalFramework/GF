@@ -175,9 +175,9 @@ ungroupTokens = joinRE . mapRE (symbol (RESymbol . NonTerminal) (REConcat . map 
 --
 
 prSRG :: SRG -> String
-prSRG = unlines . map prRule . srgRules
+prSRG = prProductions . map prRule . srgRules
     where 
-      prRule (SRGRule c alts) = c ++ " ::= " ++ unwords (intersperse "|" (map prAlt alts))
+      prRule (SRGRule c alts) = (c,unwords (intersperse "|" (map prAlt alts)))
       prAlt (SRGAlt _ _ rhs) = prRE prSym rhs
       prSym = symbol fst (\t -> "\""++ t ++"\"")
 
