@@ -4,7 +4,7 @@
 --
 -- Approximates PGF grammars with context-free grammars.
 ----------------------------------------------------------------------
-module GF.Speech.PGFToCFG (bnfPrinter, regularPrinter, 
+module GF.Speech.PGFToCFG (bnfPrinter, 
                            fcfgPrinter, pgfToCFG) where
 
 import PGF.CId
@@ -25,9 +25,6 @@ import qualified Data.Set as Set
 
 bnfPrinter :: PGF -> CId -> String
 bnfPrinter = toBNF id
-
-regularPrinter :: PGF -> CId -> String
-regularPrinter = toBNF makeRegular
 
 toBNF :: (CFG -> CFG) -> PGF -> CId -> String
 toBNF f pgf cnc = prCFG $ f $ pgfToCFG pgf cnc
