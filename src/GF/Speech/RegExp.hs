@@ -133,6 +133,7 @@ symbolsRE (RESymbol x) = [x]
 prRE :: (a -> String) -> RE a -> String
 prRE = prRE' 0
 
+prRE' :: Int -> (a -> String) -> RE a -> String
 prRE' _ _ (REUnion []) = "<NULL>"
 prRE' n f (REUnion xs) = p n 1 (concat (intersperse " | " (map (prRE' 1 f) xs)))
 prRE' n f (REConcat xs) = p n 2 (unwords (map (prRE' 2 f) xs))
