@@ -12,6 +12,7 @@ module GF.Speech.SRG (SRG(..), SRGRule(..), SRGAlt(..), SRGItem, SRGSymbol
                      , SRGNT, CFTerm
                      , ebnfPrinter
                      , nonLeftRecursivePrinter
+                     , regularPrinter
                      , makeSimpleSRG
                      , makeNonRecursiveSRG
                      , getSpeechLanguage
@@ -72,6 +73,9 @@ ebnfPrinter pgf cnc = prSRG $ makeSRG id pgf cnc
 
 nonLeftRecursivePrinter :: PGF -> CId -> String
 nonLeftRecursivePrinter pgf cnc = prSRG $ makeSRG removeLeftRecursion pgf cnc
+
+regularPrinter :: PGF -> CId -> String
+regularPrinter pgf cnc = prSRG $ makeSRG makeRegular pgf cnc
 
 makeSRG :: (CFG -> CFG) -> PGF -> CId -> SRG
 makeSRG = mkSRG cfgToSRG

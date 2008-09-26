@@ -14,7 +14,7 @@ import GF.Speech.SRGS_ABNF
 import GF.Speech.SRGS_XML
 import GF.Speech.JSGF
 import GF.Speech.GSL
-import GF.Speech.SRG (ebnfPrinter, nonLeftRecursivePrinter)
+import GF.Speech.SRG
 import GF.Speech.VoiceXML
 import GF.Speech.SLF
 import GF.Speech.PrRegExp
@@ -40,7 +40,7 @@ exportPGF opts fmt pgf =
       FmtBNF          -> single "bnf"   bnfPrinter
       FmtEBNF         -> single "ebnf"  ebnfPrinter
       FmtNoLR         -> single "ebnf"  nonLeftRecursivePrinter
-      FmtRegular      -> single "bnf"   regularPrinter
+      FmtRegular      -> single "ebnf"   regularPrinter
       FmtFCFG         -> single "fcfg"  fcfgPrinter
       FmtSRGS_XML     -> single "grxml" (srgsXmlPrinter sisr)
       FmtSRGS_XML_NonRec -> single "grxml" srgsXmlNonRecursivePrinter
