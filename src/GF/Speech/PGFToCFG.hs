@@ -4,7 +4,7 @@
 --
 -- Approximates PGF grammars with context-free grammars.
 ----------------------------------------------------------------------
-module GF.Speech.PGFToCFG (bnfPrinter, nonLeftRecursivePrinter, regularPrinter, 
+module GF.Speech.PGFToCFG (bnfPrinter, regularPrinter, 
                            fcfgPrinter, pgfToCFG) where
 
 import PGF.CId
@@ -25,9 +25,6 @@ import qualified Data.Set as Set
 
 bnfPrinter :: PGF -> CId -> String
 bnfPrinter = toBNF id
-
-nonLeftRecursivePrinter :: PGF -> CId -> String
-nonLeftRecursivePrinter = toBNF removeLeftRecursion
 
 regularPrinter :: PGF -> CId -> String
 regularPrinter = toBNF makeRegular
