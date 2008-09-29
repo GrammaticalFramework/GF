@@ -329,7 +329,7 @@ oper
    {s = table {Posit => a.s ! Posit ; _ => b.s ! Posit} ; 
     isPre = a.isPre ; lock_A = <>} ;
   compADeg a = 
-    {s = table {Posit => a.s ! Posit ; _ => \\f => "más" ++ a.s ! Posit ! f} ; 
+    {s = table {Posit => a.s ! Posit ; _ => \\f => "més" ++ a.s ! Posit ! f} ; 
      isPre = a.isPre ;
      lock_A = <>} ;
   regADeg a = compADeg (regA a) ;
@@ -338,15 +338,18 @@ oper
   mkAdV x = ss x ** {lock_AdV = <>} ;
   mkAdA x = ss x ** {lock_AdA = <>} ;
 
-  regV x = -- cantar, perdre, témer, dormir, (servir)
+  regIIIV : (Str -> Verbum) -> Str -> V = \v,x -> -- I, IIa, IIb, III model given by v
     let 
       verb = case (Predef.dp 2 x) of {
-        "re" =>  perdre_83 x ;
-        "er" =>  témer_107 x ;
-		"ir" =>  dormir_44 x ; -- JS TODO: Consider "servir" 
-		_	 => cantar_15 x 
+        "re" =>  perdre_83 x ;	-- IIa
+        "er" =>  témer_107 x ;	-- IIb
+		"ir" =>  v x ; 			-- III?
+		_	 => cantar_15 x  	-- Ia
 		}
     in verbBesch verb ** {vtyp = VHabere ; lock_V = <>} ;
+
+  regVa	= regIIIV dormir_44 ; -- IIIa
+  regV = regIIIV servir_101 ; -- IIIb
 
   reflV v = {s = v.s ; vtyp = VRefl ; lock_V = <>} ;
 
@@ -356,7 +359,7 @@ oper
 
   special_ppV ve pa = {
     s = table {
-      VPart g n => (adjFort pa).s ! AF g n ;
+      VPart g n => (adjPrim pa).s ! AF g n ;
       p => ve.s ! p
       } ;
     lock_V = <> ;
@@ -439,7 +442,7 @@ oper
 --JS    mkV : (mostrar,muestro : Str) -> V = regAltV ;
     mkV : Verbum -> V = verbV
     } ;
-  regV : Str -> V ;
+  regV, regVa : Str -> V ;
 --JS  regAltV : (mostrar,muestro : Str) -> V ;
   verbV : Verbum -> V ;
 
