@@ -40,23 +40,20 @@ exportPGF opts fmt pgf =
       FmtProlog       -> multi "pl"  grammar2prolog 
       FmtProlog_Abs   -> multi "pl"  grammar2prolog_abs 
       FmtBNF          -> single "bnf"   bnfPrinter
-      FmtEBNF         -> single "ebnf"  (ebnfPrinter sisr)
-      FmtNoLR         -> single "ebnf"  (nonLeftRecursivePrinter sisr)
-      FmtRegular      -> single "ebnf"   regularPrinter
+      FmtEBNF         -> single "ebnf"  (ebnfPrinter opts)
       FmtFCFG         -> single "fcfg"  fcfgPrinter
-      FmtSRGS_XML     -> single "grxml" (srgsXmlPrinter sisr)
-      FmtSRGS_XML_NonRec -> single "grxml" srgsXmlNonRecursivePrinter
-      FmtSRGS_ABNF    -> single "gram" (srgsAbnfPrinter sisr)
-      FmtSRGS_ABNF_NonRec -> single "gram" srgsAbnfNonRecursivePrinter
-      FmtJSGF         -> single "jsgf"  (jsgfPrinter sisr)
-      FmtGSL          -> single "gsl"   gslPrinter
+      FmtSRGS_XML     -> single "grxml" (srgsXmlPrinter opts)
+      FmtSRGS_XML_NonRec -> single "grxml" (srgsXmlNonRecursivePrinter opts)
+      FmtSRGS_ABNF    -> single "gram" (srgsAbnfPrinter opts)
+      FmtSRGS_ABNF_NonRec -> single "gram" (srgsAbnfNonRecursivePrinter opts)
+      FmtJSGF         -> single "jsgf"  (jsgfPrinter opts)
+      FmtGSL          -> single "gsl"   (gslPrinter opts)
       FmtVoiceXML     -> single "vxml"  grammar2vxml
       FmtSLF          -> single "slf"  slfPrinter
       FmtRegExp       -> single "rexp" regexpPrinter
       FmtFA           -> single "dot"  slfGraphvizPrinter
  where
    name = fromMaybe (prCId (absname pgf)) (moduleFlag optName opts)
-   sisr = flag optSISR opts
    hsPrefix = flag optHaskellPrefix opts
 
    multi :: String -> (PGF -> String) -> [(FilePath,String)]

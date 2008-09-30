@@ -21,12 +21,13 @@ import Data.List
 import Data.Maybe
 import qualified Data.Map as Map
 
-srgsXmlPrinter :: Maybe SISRFormat 
+srgsXmlPrinter :: Options
                -> PGF -> CId -> String
-srgsXmlPrinter sisr pgf cnc = prSrgsXml sisr $ makeNonLeftRecursiveSRG pgf cnc
+srgsXmlPrinter opts pgf cnc = prSrgsXml sisr $ makeNonLeftRecursiveSRG opts pgf cnc
+    where sisr = flag optSISR opts
 
-srgsXmlNonRecursivePrinter :: PGF -> CId -> String
-srgsXmlNonRecursivePrinter pgf cnc = prSrgsXml Nothing $ makeNonRecursiveSRG pgf cnc
+srgsXmlNonRecursivePrinter :: Options -> PGF -> CId -> String
+srgsXmlNonRecursivePrinter opts pgf cnc = prSrgsXml Nothing $ makeNonRecursiveSRG opts pgf cnc
 
 
 prSrgsXml :: Maybe SISRFormat -> SRG -> String

@@ -12,6 +12,7 @@ import GF.Data.Utilities
 import GF.Speech.CFG
 import GF.Speech.SRG
 import GF.Speech.RegExp
+import GF.Infra.Option
 import GF.Infra.Ident
 import PGF.CId
 import PGF.Data
@@ -23,8 +24,8 @@ import Text.PrettyPrint.HughesPJ
 width :: Int
 width = 75
 
-gslPrinter :: PGF -> CId -> String
-gslPrinter pgf cnc = renderStyle st $ prGSL $ makeNonLeftRecursiveSRG pgf cnc
+gslPrinter :: Options -> PGF -> CId -> String
+gslPrinter opts pgf cnc = renderStyle st $ prGSL $ makeNonLeftRecursiveSRG opts pgf cnc
   where st = style { lineLength = width } 
 
 prGSL :: SRG -> Doc

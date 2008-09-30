@@ -4,7 +4,7 @@ module GF.Infra.Option
      Options, ModuleOptions,
      Flags(..), ModuleFlags(..),
      Mode(..), Phase(..), Verbosity(..), Encoding(..), OutputFormat(..), 
-     SISRFormat(..), Optimization(..),
+     SISRFormat(..), Optimization(..), CFGTransform(..),
      Dump(..), Printer(..), Recomp(..),
      -- * Option parsing 
      parseOptions, parseModuleOptions,
@@ -17,9 +17,9 @@ module GF.Infra.Option
      modifyFlags, modifyModuleFlags,
      helpMessage,
      -- * Checking specific options
-     flag, moduleFlag,
+     flag, moduleFlag, cfgTransform,
      -- * Setting specific options
-     setOptimization,
+     setOptimization, setCFGTransform,
      -- * Convenience methods for checking options    
      verbAtLeast, dump
     ) where
@@ -114,6 +114,15 @@ data SISRFormat =
 data Optimization = OptStem | OptCSE | OptExpand | OptParametrize | OptValues
   deriving (Show,Eq,Ord)
 
+data CFGTransform = CFGNoLR 
+                  | CFGRegular
+                  | CFGTopDownFilter 
+                  | CFGBottomUpFilter 
+                  | CFGStartCatOnly
+                  | CFGMergeIdentical
+                  | CFGRemoveCycles
+  deriving (Show,Eq,Ord)
+
 data Warning = WarnMissingLincat
   deriving (Show,Eq,Ord)
 
@@ -135,6 +144,7 @@ data ModuleFlags = ModuleFlags {
       optPreprocessors   :: [String],
       optEncoding        :: Encoding,
       optOptimizations   :: Set Optimization,
+      optCFGTransforms   :: Set CFGTransform,
       optLibraryPath     :: [FilePath],
       optStartCat        :: Maybe String,
       optSpeechLanguage  :: Maybe String,
@@ -280,6 +290,8 @@ defaultModuleFlags = ModuleFlags {
       optPreprocessors   = [],
       optEncoding        = ISO_8859_1,
       optOptimizations   = Set.fromList [OptStem,OptCSE,OptExpand,OptParametrize,OptValues],
+      optCFGTransforms   = Set.fromList [CFGRemoveCycles, CFGBottomUpFilter, 
+                                         CFGTopDownFilter, CFGMergeIdentical],
       optLibraryPath     = [],
       optStartCat        = Nothing,
       optSpeechLanguage  = Nothing,
@@ -347,6 +359,7 @@ moduleOptDescr =
                 "Select an optimization package. OPT = all | values | parametrize | none",
      Option [] ["stem"] (onOff (toggleOptimize OptStem) True) "Perform stem-suffix analysis (default on).",
      Option [] ["cse"] (onOff (toggleOptimize OptCSE) True) "Perform common sub-expression elimination (default on).",
+     Option [] ["cfg"] (ReqArg cfgTransform "TRANS") "Enable or disable specific CFG transformations. TRANS = merge, no-merge, bottomup, no-bottomup, ...",
      dumpOption "rebuild" DumpRebuild,
      dumpOption "extend" DumpExtend,
      dumpOption "rename" DumpRename,
@@ -378,6 +391,14 @@ moduleOptDescr =
                          Nothing -> fail $ "Unknown optimization package: " ++ x
 
        toggleOptimize x b = set $ setOptimization' x b
+
+       cfgTransform x = let (x', b) = case x of
+                                        'n':'o':'-':rest -> (rest, False)
+                                        _                -> (x, True)
+                         in case lookup x' cfgTransformNames of
+                              Just t  -> set $ setCFGTransform' t b
+                              Nothing -> fail $ "Unknown CFG transformation: " ++ x'
+                                                ++ " Known: " ++ show (map fst cfgTransformNames)
 
        dumpOption s d = Option [] ["dump-"++s] (NoArg (set $ \o -> o { optDump = d:optDump o})) ("Dump output of the " ++ s ++ " phase.")
 
@@ -491,6 +512,16 @@ optimizationPackages =
      ("none",        Set.fromList [OptStem,OptCSE,OptExpand]),
      ("noexpand",    Set.fromList [OptStem,OptCSE])]
 
+cfgTransformNames :: [(String, CFGTransform)]
+cfgTransformNames = 
+    [("nolr",         CFGNoLR),
+     ("regular",      CFGRegular),
+     ("topdown",      CFGTopDownFilter),
+     ("bottomup",     CFGBottomUpFilter),
+     ("startcatonly", CFGStartCatOnly),
+     ("merge",        CFGMergeIdentical),
+     ("removecycles", CFGRemoveCycles)]
+
 encodings :: [(String,Encoding)]
 encodings = 
     [("utf8",   UTF_8),
@@ -538,6 +569,9 @@ verbAtLeast opts v = flag optVerbosity opts >= v
 dump :: Options -> Dump -> Bool
 dump opts d = moduleFlag ((d `elem`) . optDump) opts
 
+cfgTransform :: Options -> CFGTransform -> Bool
+cfgTransform opts t = Set.member t (moduleFlag optCFGTransforms opts)
+
 -- 
 -- * Convenience functions for setting options
 --
@@ -546,8 +580,17 @@ setOptimization :: Optimization -> Bool -> Options
 setOptimization o b = modifyModuleFlags (setOptimization' o b)
 
 setOptimization' :: Optimization -> Bool -> ModuleFlags -> ModuleFlags
-setOptimization' o b f = f { optOptimizations = g (optOptimizations f)}
-  where g = if b then Set.insert o else Set.delete o
+setOptimization' o b f = f { optOptimizations = toggle o b (optOptimizations f)}
+
+setCFGTransform :: CFGTransform -> Bool -> Options
+setCFGTransform t b = modifyModuleFlags (setCFGTransform' t b)
+
+setCFGTransform' :: CFGTransform -> Bool -> ModuleFlags -> ModuleFlags
+setCFGTransform' t b f = f { optCFGTransforms = toggle t b (optCFGTransforms f) }
+
+toggle :: Ord a => a -> Bool -> Set a -> Set a
+toggle o True  = Set.insert o
+toggle o False = Set.delete o
 
 --
 -- * General utilities

@@ -13,6 +13,7 @@
 module GF.Speech.JSGF (jsgfPrinter) where
 
 import GF.Data.Utilities
+import GF.Infra.Option
 import GF.Speech.CFG
 import GF.Speech.RegExp
 import GF.Speech.SISR
@@ -29,11 +30,12 @@ import Debug.Trace
 width :: Int
 width = 75
 
-jsgfPrinter :: Maybe SISRFormat
+jsgfPrinter :: Options
 	    -> PGF 
             -> CId -> String
-jsgfPrinter sisr pgf cnc = renderStyle st $ prJSGF sisr $ makeNonLeftRecursiveSRG pgf cnc
+jsgfPrinter opts pgf cnc = renderStyle st $ prJSGF sisr $ makeNonLeftRecursiveSRG opts pgf cnc
   where st = style { lineLength = width }
+        sisr = flag optSISR opts
 
 prJSGF :: Maybe SISRFormat -> SRG -> Doc
 prJSGF sisr srg

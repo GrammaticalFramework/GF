@@ -36,12 +36,13 @@ import Debug.Trace
 width :: Int
 width = 75
 
-srgsAbnfPrinter :: Maybe SISRFormat
+srgsAbnfPrinter :: Options
 	        -> PGF -> CId -> String
-srgsAbnfPrinter sisr pgf cnc = showDoc $ prABNF sisr $ makeNonLeftRecursiveSRG pgf cnc
+srgsAbnfPrinter opts pgf cnc = showDoc $ prABNF sisr $ makeNonLeftRecursiveSRG opts pgf cnc
+    where sisr = flag optSISR opts
 
-srgsAbnfNonRecursivePrinter :: PGF -> CId -> String
-srgsAbnfNonRecursivePrinter pgf cnc = showDoc $ prABNF Nothing $ makeNonRecursiveSRG pgf cnc
+srgsAbnfNonRecursivePrinter :: Options -> PGF -> CId -> String
+srgsAbnfNonRecursivePrinter opts pgf cnc = showDoc $ prABNF Nothing $ makeNonRecursiveSRG opts pgf cnc
 
 showDoc = renderStyle (style { lineLength = width })
 
