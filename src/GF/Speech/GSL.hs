@@ -24,7 +24,7 @@ width :: Int
 width = 75
 
 gslPrinter :: PGF -> CId -> String
-gslPrinter pgf cnc = renderStyle st $ prGSL $ makeSimpleSRG pgf cnc
+gslPrinter pgf cnc = renderStyle st $ prGSL $ makeNonLeftRecursiveSRG pgf cnc
   where st = style { lineLength = width } 
 
 prGSL :: SRG -> Doc
