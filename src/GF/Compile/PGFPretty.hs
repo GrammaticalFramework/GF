@@ -39,11 +39,11 @@ prCnc abstr name c = prAll prLinCat (lincats c) $$ prAll prLin (lins (expand c))
   where
     prLinCat :: CId -> Term -> Doc
     prLinCat c t | isLiteralCat c = empty
-                 | otherwise = text "lincat" <+> text (prCId c) <+> text "=" <+> pr t
+                 | otherwise = text "lincat" <+> text (prCId c) <+> text "=" <+> pr 0 t
         where
-          pr (R ts) = hsep (punctuate (text " *") (map pr ts))
-          pr (S []) = text "Str"
-          pr (C n) = text "Int_" <> text (show (n+1))
+          pr p (R ts) = prec p 1 (hsep (punctuate (text " *") (map (pr 1) ts)))
+          pr _ (S []) = text "Str"
+          pr _ (C n) = text "Int_" <> text (show (n+1))
 
     prLin :: CId -> Term -> Doc
     prLin f t = text "lin" <+> text (prCId f) <+> text "=" <+> pr 0 t
