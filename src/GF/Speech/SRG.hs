@@ -79,9 +79,12 @@ nonLeftRecursivePrinter :: Maybe SISRFormat -> PGF -> CId -> String
 nonLeftRecursivePrinter sisr pgf cnc = prSRG sisr $ makeNonLeftRecursiveSRG pgf cnc
 
 regularPrinter :: PGF -> CId -> String
-regularPrinter pgf cnc = prSRG Nothing $ makeSRG makeRegular pgf cnc
+regularPrinter pgf cnc = prSRG Nothing $ makeSRG preprocess pgf cnc
     where
-      preprocess = makeRegular
+      preprocess =   mergeIdentical
+                   . makeRegular
+                   . topDownFilter
+                   . bottomUpFilter
 
 makeSRG :: (CFG -> CFG) -> PGF -> CId -> SRG
 makeSRG = mkSRG cfgToSRG
