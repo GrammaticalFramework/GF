@@ -4,15 +4,14 @@ oper
 
 -- primitive
 
-  PS : Type ;
   S  : Type ;
-  Cl : Type ;
   NP : Type ;
   CN : Type ;
   AP : Type ;
 
   VPComp : Type ;
 
+  ITense : Type ;
   CCase : Type ;
   Agr : Type ;
 
@@ -28,7 +27,13 @@ oper
 
   insertVPComp : VPComp -> VP -> VP ;
 
+  insertNP : CCase -> NP -> VP -> VP ;
+
+  iTense : Tense -> ITense ;
+
 -- derived
+
+  Cl : Type = {s : ITense => Polarity => S} ;
 
   VP : Type = {
     verb : V ; 
@@ -45,5 +50,9 @@ oper
   SlashV : V -> (Agr => Str) -> Str -> Str -> CCase -> VPSlash = 
     \v,comp,adv,ext,c -> 
       insertVPComp (mkVPComp comp adv ext) (UseV v) ** {c = c} ;
+
+  ComplSlash : VPSlash -> NP -> VP = \vp,np -> insertNP vp.c np vp ;
+
+  UseCl : Tense -> Polarity -> Cl -> S = \t,p,cl -> cl.s ! iTense t ! p ;
 
 }
