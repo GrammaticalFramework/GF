@@ -101,6 +101,10 @@ mergeIdentical g = onRules (map subst) g
     subst (CFRule c r n) = CFRule (substCat c) (map (mapSymbol substCat id) r) n
     substCat c = Map.findWithDefault (error $ "mergeIdentical: " ++ c) c m
 
+-- | Keeps only the start category as an external category.
+purgeExternalCats :: CFG -> CFG
+purgeExternalCats cfg = cfg { cfgExternalCats = Set.singleton (cfgStartCat cfg) }
+
 --
 -- * Removing left recursion
 --

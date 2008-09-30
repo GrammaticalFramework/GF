@@ -11,8 +11,6 @@
 module GF.Speech.SRG (SRG(..), SRGRule(..), SRGAlt(..), SRGItem, SRGSymbol
                      , SRGNT, CFTerm
                      , ebnfPrinter
-                     , nonLeftRecursivePrinter
-                     , regularPrinter
                      , makeNonLeftRecursiveSRG
                      , makeNonRecursiveSRG
                      , getSpeechLanguage
@@ -23,6 +21,7 @@ module GF.Speech.SRG (SRG(..), SRGRule(..), SRGAlt(..), SRGItem, SRGSymbol
 import GF.Data.Operations
 import GF.Data.Utilities
 import GF.Infra.Ident
+import GF.Infra.Option
 import GF.Infra.PrintClass
 import GF.Speech.CFG
 import GF.Speech.PGFToCFG
@@ -67,45 +66,32 @@ type SRGSymbol = Symbol SRGNT Token
 -- | An SRG non-terminal. Category name and its number in the profile.
 type SRGNT = (Cat, Int)
 
-
-ebnfPrinter :: Maybe SISRFormat -> PGF -> CId -> String
-ebnfPrinter sisr pgf cnc = prSRG sisr $ makeSRG preprocess pgf cnc
-    where
-      preprocess =   mergeIdentical
-                   . topDownFilter
-                   . bottomUpFilter
-
-nonLeftRecursivePrinter :: Maybe SISRFormat -> PGF -> CId -> String
-nonLeftRecursivePrinter sisr pgf cnc = prSRG sisr $ makeNonLeftRecursiveSRG pgf cnc
-
-regularPrinter :: PGF -> CId -> String
-regularPrinter pgf cnc = prSRG Nothing $ makeSRG preprocess pgf cnc
-    where
-      preprocess =   mergeIdentical
-                   . makeRegular
-                   . topDownFilter
-                   . bottomUpFilter
-
-makeSRG :: (CFG -> CFG) -> PGF -> CId -> SRG
-makeSRG = mkSRG cfgToSRG
-    where
-      cfgToSRG cfg = [cfRulesToSRGRule rs | (_,rs) <- allRulesGrouped cfg]
+ebnfPrinter :: Options -> PGF -> CId -> String
+ebnfPrinter opts pgf cnc = prSRG opts $ makeSRG opts pgf cnc
 
 -- | Create a compact filtered non-left-recursive SRG. 
-makeNonLeftRecursiveSRG :: PGF -> CId -> SRG
-makeNonLeftRecursiveSRG  = makeSRG preprocess
+makeNonLeftRecursiveSRG :: Options -> PGF -> CId -> SRG
+makeNonLeftRecursiveSRG opts = makeSRG opts'
     where
-      preprocess =   traceStats "After mergeIdentical"
-                   . mergeIdentical
-                   . traceStats "After removeLeftRecursion"
-                   . removeLeftRecursion 
-                   . traceStats "After topDownFilter" 
-                   . topDownFilter
-                   . traceStats "After bottomUpFilter"
-                   . bottomUpFilter
-                   . traceStats "After removeCycles"
-                   . removeCycles 
-                   . traceStats "Inital CFG"
+      opts' = setDefaultCFGTransform opts CFGNoLR True
+
+makeSRG :: Options -> PGF -> CId -> SRG
+makeSRG opts = mkSRG cfgToSRG preprocess
+    where
+      cfgToSRG cfg = [cfRulesToSRGRule rs | (_,rs) <- allRulesGrouped cfg]
+      preprocess =   maybeTransform opts CFGMergeIdentical mergeIdentical
+                   . maybeTransform opts CFGNoLR removeLeftRecursion 
+                   . maybeTransform opts CFGRegular makeRegular
+                   . maybeTransform opts CFGTopDownFilter topDownFilter
+                   . maybeTransform opts CFGBottomUpFilter bottomUpFilter
+                   . maybeTransform opts CFGRemoveCycles removeCycles 
+                   . maybeTransform opts CFGStartCatOnly purgeExternalCats
+
+setDefaultCFGTransform :: Options -> CFGTransform -> Bool -> Options
+setDefaultCFGTransform opts t b = setCFGTransform t b `addOptions` opts
+
+maybeTransform :: Options -> CFGTransform -> (CFG -> CFG) -> (CFG -> CFG)
+maybeTransform opts t f = if cfgTransform opts t then f else id
 
 traceStats s g = trace ("---- " ++ s ++ ": " ++ stats g {- ++ "\n" ++ prCFRules g ++ "----" -}) g
 
@@ -113,10 +99,11 @@ stats g = "Categories: " ++ show (countCats g)
           ++ ", External categories: " ++ show (Set.size (cfgExternalCats g))
           ++ ", Rules: " ++ show (countRules g)
 
-makeNonRecursiveSRG :: PGF
+makeNonRecursiveSRG :: Options 
+                    -> PGF
                     -> CId -- ^ Concrete syntax name.
                     -> SRG
-makeNonRecursiveSRG = mkSRG cfgToSRG id
+makeNonRecursiveSRG opts = mkSRG cfgToSRG id
     where
       cfgToSRG cfg = [SRGRule l [SRGAlt Nothing dummyCFTerm (dfaToSRGItem dfa)] | (l,dfa) <- dfas]
           where
@@ -192,9 +179,10 @@ ungroupTokens = joinRE . mapRE (symbol (RESymbol . NonTerminal) (REConcat . map 
 -- * Utilities for building and printing SRGs
 --
 
-prSRG :: Maybe SISRFormat -> SRG -> String
-prSRG sisr srg = prProductions $ map prRule $ ext ++ int
+prSRG :: Options -> SRG -> String
+prSRG opts srg = prProductions $ map prRule $ ext ++ int
     where 
+      sisr = flag optSISR opts
       (ext,int) = partition (isExternalCat srg . srgLHSCat) (srgRules srg)
       prRule (SRGRule c alts) = (c,unwords (intersperse "|" (concatMap prAlt alts)))
       prAlt (SRGAlt _ t rhs) = 
