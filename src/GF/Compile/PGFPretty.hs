@@ -49,7 +49,6 @@ prCnc abstr name c = prAll prLinCat (lincats c) $$ prAll prLin (lins (expand c))
     prLin f t = text "lin" <+> text (prCId f) <+> text "=" <+> pr 0 t
         where
           pr :: Int -> Term -> Doc
-          pr p (R [t]) = pr p t
           pr p (R ts) = text "<" <+> hsep (punctuate (text ",") (map (pr 0) ts)) <+> text ">"
           pr p (P t1 t2) = prec p 3 (pr 3 t1 <> text "!" <> pr 3 t2)
           pr p (S ts) = prec p 2 (hsep (punctuate (text " ++") (map (pr 2) ts)))
@@ -73,7 +72,7 @@ expand cnc = cnc { lins = Map.map (f "") (lins cnc) }
     f :: String -> Term -> Term
     f w (R ts) = R (map (f w) ts)
     f w (P t1 t2) = P (f w t1) (f w t2)
-    f w (S []) = S [K (KS w)]
+    f w (S []) = S (if null w then [] else [K (KS w)])
     f w (S (t:ts)) = S (f w t : map (f "") ts)
     f w (FV ts) = FV (map (f w) ts)
     f w (W s t) = f (w++s) t
