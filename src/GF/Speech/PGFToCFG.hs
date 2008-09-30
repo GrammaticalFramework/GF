@@ -77,11 +77,11 @@ pgfToCFG pgf lang = mkCFG (lookStartCat pgf) extCats (startRules ++ concatMap fr
     extCats :: Set Cat
     extCats = Set.fromList $ map lhsCat startRules
 
-    -- NOTE: this is only correct for cats that have a lincat with exactly one row.
     startRules :: [CFRule]
-    startRules = [CFRule (prCId c) [NonTerminal (fcatToCat fc 0)] (CFRes 0) 
+    startRules = [CFRule (prCId c) [NonTerminal (fcatToCat fc r)] (CFRes 0) 
                       | (c,fcs) <- Map.toList (startupCats pinfo), 
-                        fc <- fcs, not (isLiteralFCat fc)]
+                        fc <- fcs, not (isLiteralFCat fc),
+                        r <- [0..catLinArity fc-1]]
 
     fruleToCFRule :: FRule -> [CFRule]
     fruleToCFRule (FRule f ps args c rhs) = 
