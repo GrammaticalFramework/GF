@@ -32,7 +32,7 @@ width = 75
 jsgfPrinter :: Maybe SISRFormat
 	    -> PGF 
             -> CId -> String
-jsgfPrinter sisr pgf cnc = renderStyle st $ prJSGF sisr $ makeSimpleSRG pgf cnc
+jsgfPrinter sisr pgf cnc = renderStyle st $ prJSGF sisr $ makeNonLeftRecursiveSRG pgf cnc
   where st = style { lineLength = width }
 
 prJSGF :: Maybe SISRFormat -> SRG -> Doc

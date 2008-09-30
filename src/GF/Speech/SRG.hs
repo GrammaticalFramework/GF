@@ -13,7 +13,7 @@ module GF.Speech.SRG (SRG(..), SRGRule(..), SRGAlt(..), SRGItem, SRGSymbol
                      , ebnfPrinter
                      , nonLeftRecursivePrinter
                      , regularPrinter
-                     , makeSimpleSRG
+                     , makeNonLeftRecursiveSRG
                      , makeNonRecursiveSRG
                      , getSpeechLanguage
                      , isExternalCat
@@ -69,13 +69,19 @@ type SRGNT = (Cat, Int)
 
 
 ebnfPrinter :: Maybe SISRFormat -> PGF -> CId -> String
-ebnfPrinter sisr pgf cnc = prSRG sisr $ makeSRG id pgf cnc
+ebnfPrinter sisr pgf cnc = prSRG sisr $ makeSRG preprocess pgf cnc
+    where
+      preprocess =   mergeIdentical
+                   . topDownFilter
+                   . bottomUpFilter
 
 nonLeftRecursivePrinter :: Maybe SISRFormat -> PGF -> CId -> String
-nonLeftRecursivePrinter sisr pgf cnc = prSRG sisr $ makeSRG removeLeftRecursion pgf cnc
+nonLeftRecursivePrinter sisr pgf cnc = prSRG sisr $ makeNonLeftRecursiveSRG pgf cnc
 
 regularPrinter :: PGF -> CId -> String
 regularPrinter pgf cnc = prSRG Nothing $ makeSRG makeRegular pgf cnc
+    where
+      preprocess = makeRegular
 
 makeSRG :: (CFG -> CFG) -> PGF -> CId -> SRG
 makeSRG = mkSRG cfgToSRG
@@ -83,8 +89,8 @@ makeSRG = mkSRG cfgToSRG
       cfgToSRG cfg = [cfRulesToSRGRule rs | (_,rs) <- allRulesGrouped cfg]
 
 -- | Create a compact filtered non-left-recursive SRG. 
-makeSimpleSRG :: PGF -> CId -> SRG
-makeSimpleSRG  = makeSRG preprocess
+makeNonLeftRecursiveSRG :: PGF -> CId -> SRG
+makeNonLeftRecursiveSRG  = makeSRG preprocess
     where
       preprocess =   traceStats "After mergeIdentical"
                    . mergeIdentical
@@ -130,10 +136,11 @@ mkSRG mkRules preprocess pgf cnc =
 renameCats :: String -> CFG -> CFG
 renameCats prefix cfg = mapCFGCats renameCat cfg
   where renameCat c | isExternal c = c ++ "_cat"
-                    | otherwise = Map.findWithDefault (error ("renameCats: " ++ c)) c names
+                    | otherwise = Map.findWithDefault (badCat c) c names
         isExternal c = c `Set.member` cfgExternalCats cfg        
         catsByPrefix = buildMultiMap [(takeWhile (/='_') cat, cat) | cat <- allCats cfg, not (isExternal cat)]
         names = Map.fromList [(c,pref++"_"++show i) | (pref,cs) <- catsByPrefix, (c,i) <- zip cs [1..]]
+        badCat c = error ("GF.Speech.SRG.renameCats: " ++ c ++ "\n" ++ prCFG cfg)
 
 getSpeechLanguage :: PGF -> CId -> Maybe String
 getSpeechLanguage pgf cnc = fmap (replace '_' '-') $ lookConcrFlag pgf cnc (mkCId "language")

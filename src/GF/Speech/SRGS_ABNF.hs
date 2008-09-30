@@ -38,7 +38,7 @@ width = 75
 
 srgsAbnfPrinter :: Maybe SISRFormat
 	        -> PGF -> CId -> String
-srgsAbnfPrinter sisr pgf cnc = showDoc $ prABNF sisr $ makeSimpleSRG pgf cnc
+srgsAbnfPrinter sisr pgf cnc = showDoc $ prABNF sisr $ makeNonLeftRecursiveSRG pgf cnc
 
 srgsAbnfNonRecursivePrinter :: PGF -> CId -> String
 srgsAbnfNonRecursivePrinter pgf cnc = showDoc $ prABNF Nothing $ makeNonRecursiveSRG pgf cnc

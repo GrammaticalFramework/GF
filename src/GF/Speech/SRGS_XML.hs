@@ -23,7 +23,7 @@ import qualified Data.Map as Map
 
 srgsXmlPrinter :: Maybe SISRFormat 
                -> PGF -> CId -> String
-srgsXmlPrinter sisr pgf cnc = prSrgsXml sisr $ makeSimpleSRG pgf cnc
+srgsXmlPrinter sisr pgf cnc = prSrgsXml sisr $ makeNonLeftRecursiveSRG pgf cnc
 
 srgsXmlNonRecursivePrinter :: PGF -> CId -> String
 srgsXmlNonRecursivePrinter pgf cnc = prSrgsXml Nothing $ makeNonRecursiveSRG pgf cnc
