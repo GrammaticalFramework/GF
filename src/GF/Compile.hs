@@ -52,12 +52,16 @@ compileToPGF opts fs =
        link opts name gr
 
 link :: Options -> String -> SourceGrammar -> IOE PGF
-link opts cnc gr =
-    do gc1 <- putPointE Normal opts "linking ... " $
+link opts cnc gr = do
+       let isv = (verbAtLeast opts Normal)
+       gc1 <- putPointE Normal opts "linking ... " $
                 let (abs,gc0) = mkCanon2gfcc opts cnc gr
                 in case checkPGF gc0 of
 		     Ok (gc,b) -> do 
-		       ioeIO $ putStrLn $ if b then "OK" else "Corrupted PGF"
+                       case (isv,b) of
+                         (True, True) -> ioeIO $ putStrLn "OK" 
+                         (False,True) -> return ()
+                         _            -> ioeIO $ putStrLn $ "Corrupted PGF"
 		       return gc
 		     Bad s -> fail s
        return $ buildParser opts $ optimize opts gc1

@@ -68,7 +68,7 @@ errors = fail . unlines
 
 -- Types
 
-data Mode = ModeVersion | ModeHelp | ModeInteractive | ModeCompiler
+data Mode = ModeVersion | ModeHelp | ModeInteractive | ModeRun | ModeCompiler
   deriving (Show,Eq,Ord)
 
 data Verbosity = Quiet | Normal | Verbose | Debug
@@ -413,6 +413,7 @@ optDescr =
      Option ['q','s'] ["quiet"] (NoArg (verbosity (Just "0"))) "Quiet, same as -v 0.",
      Option [] ["batch"] (NoArg (mode ModeCompiler)) "Run in batch compiler mode.",
      Option [] ["interactive"] (NoArg (mode ModeInteractive)) "Run in interactive mode (default).",
+     Option [] ["run"] (NoArg (mode ModeRun)) "Run in interactive mode, showing output only (no other messages).",
      Option ['E'] [] (NoArg (phase Preproc)) "Stop after preprocessing (with --preproc).",
      Option ['C'] [] (NoArg (phase Convert)) "Stop after conversion to .gf.",
      Option ['c'] [] (NoArg (phase Compile)) "Stop after compiling to .gfo (default) .",

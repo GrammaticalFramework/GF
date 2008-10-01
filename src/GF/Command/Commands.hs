@@ -28,6 +28,7 @@ import GF.Text.Lexing
 import GF.Text.Transliterations
 
 import GF.Data.Operations
+import GF.Text.Coding
 
 import Data.Maybe
 import qualified Data.Map as Map
@@ -63,10 +64,10 @@ emptyCommandInfo = CommandInfo {
 lookCommand :: String -> Map.Map String CommandInfo -> Maybe CommandInfo
 lookCommand = Map.lookup
 
-commandHelpAll :: (String -> String) -> PGF -> [Option] -> String
-commandHelpAll enc pgf opts = unlines
+commandHelpAll :: String -> PGF -> [Option] -> String
+commandHelpAll cod pgf opts = unlines
   [commandHelp (isOpt "full" opts) (co,info)
-    | (co,info) <- Map.assocs (allCommands enc pgf)]
+    | (co,info) <- Map.assocs (allCommands cod pgf)]
 
 commandHelp :: Bool -> (String,CommandInfo) -> String
 commandHelp full (co,info) = unlines $ [
@@ -82,8 +83,8 @@ commandHelp full (co,info) = unlines $ [
   ] else []
 
 -- this list must no more be kept sorted by the command name
-allCommands :: (String -> String) -> PGF -> Map.Map String CommandInfo
-allCommands enc pgf = Map.fromList [
+allCommands :: String -> PGF -> Map.Map String CommandInfo
+allCommands cod pgf = Map.fromList [
   ("cc", emptyCommandInfo {
      longname = "compute_concrete",
      syntax = "cc (-all | -table | -unqual)? TERM",
@@ -206,10 +207,10 @@ allCommands enc pgf = Map.fromList [
           _ | isOpt "coding" opts -> codingMsg
           _ | isOpt "license" opts -> licenseMsg
           [t] -> let co = getCommandOp (showTree t) in 
-                 case lookCommand co (allCommands enc pgf) of   ---- new map ??!!
+                 case lookCommand co (allCommands cod pgf) of   ---- new map ??!!
                    Just info -> commandHelp True (co,info)
                    _ -> "command not found"
-          _ -> commandHelpAll enc pgf opts
+          _ -> commandHelpAll cod pgf opts
        in return (fromString msg) 
      }),
   ("i", emptyCommandInfo {
@@ -253,6 +254,7 @@ allCommands enc pgf = Map.fromList [
      exec = \opts -> return . fromStrings . map (optLin opts),
      options = [
        ("all","show all forms and variants"),
+       ("multi","linearize to all languages (default)"),
        ("record","show source-code-like record"),
        ("table","show all forms labelled by parameters"),
        ("term", "show PGF term"),
@@ -282,7 +284,7 @@ allCommands enc pgf = Map.fromList [
      exec = \opts _ -> do
          let lang = optLang opts
          let cat  = optCat opts
-         morphologyQuiz pgf lang cat
+         morphologyQuiz cod pgf lang cat
          return void,
      flags = [
        ("lang","language of the quiz"),
@@ -402,7 +404,7 @@ allCommands enc pgf = Map.fromList [
          let from = valIdOpts "from" (optLang opts) opts
          let to   = valIdOpts "to"   (optLang opts) opts
          let cat  = optCat opts
-         translationQuiz pgf from to cat
+         translationQuiz cod pgf from to cat
          return void,
      flags = [
        ("from","translate from this language"),
@@ -507,6 +509,7 @@ allCommands enc pgf = Map.fromList [
      })
   ]
  where
+   enc = encodeUnicode cod
    lin opts t = unlines [linearize pgf lang t    | lang <- optLangs opts]
    par opts s = concat  [parse pgf lang (optCat opts) s | lang <- optLangs opts]
  
@@ -616,15 +619,15 @@ stringOpOptions = [
        ("words","lexer that assumes tokens separated by spaces (default)")
        ]
 
-translationQuiz :: PGF -> Language -> Language -> Category -> IO ()
-translationQuiz pgf ig og cat = do
+translationQuiz :: String -> PGF -> Language -> Language -> Category -> IO ()
+translationQuiz cod pgf ig og cat = do
   tts <- translationList pgf ig og cat infinity
-  mkQuiz "Welcome to GF Translation Quiz." tts
+  mkQuiz cod "Welcome to GF Translation Quiz." tts
 
-morphologyQuiz :: PGF -> Language -> Category -> IO ()
-morphologyQuiz pgf ig cat = do
+morphologyQuiz :: String -> PGF -> Language -> Category -> IO ()
+morphologyQuiz cod pgf ig cat = do
   tts <- morphologyList pgf ig cat infinity
-  mkQuiz "Welcome to GF Morphology Quiz." tts
+  mkQuiz cod "Welcome to GF Morphology Quiz." tts
 
 -- | the maximal number of precompiled quiz problems
 infinity :: Int
