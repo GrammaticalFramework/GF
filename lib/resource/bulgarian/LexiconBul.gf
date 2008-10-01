@@ -263,7 +263,7 @@ lin
   earth_N = mkN047 "земя" ;
   egg_N = mkN066 "яйце" ;
   eye_N = mkN063 "око" ;
-  fat_N = mkN041 "fat" ;
+  fat_N = mkN041 "мазнина" ;
   feather_N = mkN038 "баща" ;
   fingernail_N = mkN034 "нокът" ;
   fire_N = mkN030 "огън" ;
