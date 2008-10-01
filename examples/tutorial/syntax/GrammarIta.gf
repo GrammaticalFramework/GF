@@ -66,9 +66,9 @@ concrete GrammarIta of Grammar = open Prelude, MorphoIta in {
     UseV v = {s = \\b,_,n => posneg b ++ v.s ! n} ;
 
     this_Det = mkDet Sg (regAdjective "questo") ;
-    that_Det = mkDet Sg (regAdjective "quello") ;
+    that_Det = mkDet Sg quello ;
     these_Det = mkDet Pl (regAdjective "questo") ;
-    those_Det = mkDet Pl (regAdjective "quello") ;
+    those_Det = mkDet Pl quello ;
     every_Det = {s = \\_ => "ogni" ; n = Sg} ;
     theSg_Det = {s = artDef Sg ; n = Sg} ;
     thePl_Det = {s = artDef Pl ; n = Pl} ;
@@ -124,6 +124,12 @@ concrete GrammarIta of Grammar = open Prelude, MorphoIta in {
       Masc => Masc ;
       _ => h
     } ;
+
+    quello : Adjective = 
+      let 
+        quel = pre {"quel"  ; "quello" / sImpuro ; "quell'" / vowel} ;
+        quei = pre {"quei"  ; "quegli" / sImpuro ; "quegli" / vowel} ;
+      in mkAdjective quel "quella" quei "quelle" ;
 
     sImpuro : Strs = strs {"sb" ; "sp" ; "sy" ; "z"} ;
     vowel   : Strs = strs {"a" ; "e" ; "i" ; "o" ; "u"} ;
