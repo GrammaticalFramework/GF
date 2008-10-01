@@ -18,9 +18,12 @@ to your web browser.
 %restaurant reviews in a multilingual Wiki.
 
 [WebALT Math Editor  http://webalt.math.helsinki.fi/PublicFiles/CD/Screencast/TextMathEditor%20Demo.swf]:
-create mathematical exercises in six languages simultaneously.
+create mathematical exercises in six languages simultaneously (film).
 
-[Tramdemo http://www.cs.chalmers.se/~bringert/demos/tramdemo/]: find your way in
+**NEW** [WebALT Math translator http://www.jem-thematic.net/en/node/846#comment-209]:
+translate mathematical exercises in a web service using incremental parsing.
+
+[Tramdemo http://www.cs.chalmers.se/~bringert/demos/gotgodis/]: find your way in
 Gothenburg public transport system, in six languages (film).
 
 [GF Language Trainer http://csmisc14.cs.chalmers.se/~bjorn/langtrain.cgi]:
