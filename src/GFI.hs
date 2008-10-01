@@ -1,4 +1,4 @@
-module GFI (mainGFI) where
+module GFI (mainGFI,mainRunGFI) where
 
 import GF.Command.Interpreter
 import GF.Command.Importing
@@ -11,8 +11,7 @@ import GF.Infra.UseIO
 import GF.Infra.Option
 import GF.System.Readline
 
-import GF.Text.UTF8 ----
-import GF.Text.CP1251
+import GF.Text.Coding
 
 import PGF
 import PGF.Data
@@ -28,9 +27,16 @@ import System.CPUTime
 import Control.Exception
 import Data.Version
 import GF.System.Signal
-
+--import System.IO.Error (try)
 
 import Paths_gf
+
+mainRunGFI :: Options -> [FilePath] -> IO ()
+mainRunGFI opts files = do
+  let opts1 = addOptions (modifyFlags (\f -> f{optVerbosity=Quiet})) opts
+  gfenv <- importInEnv emptyGFEnv opts1 files
+  loop opts1 gfenv
+  return ()
 
 mainGFI :: Options -> [FilePath] -> IO ()
 mainGFI opts files = do
@@ -39,17 +45,25 @@ mainGFI opts files = do
   loop opts gfenv
   return ()
 
-loopNewCPU gfenv' = do 
-   cpu' <- getCPUTime
-   putStrLnFlush (show ((cpu' - cputime gfenv') `div` 1000000000) ++ " msec")
-   return $ gfenv' {cputime = cpu'}
+loopOptNewCPU opts gfenv' 
+ | not (verbAtLeast opts Normal) = return gfenv'
+ | otherwise = do 
+     cpu' <- getCPUTime
+     putStrLnFlush (show ((cpu' - cputime gfenv') `div` 1000000000) ++ " msec")
+     return $ gfenv' {cputime = cpu'}
 
 loop :: Options -> GFEnv -> IO GFEnv
 loop opts gfenv0 = do
+  let loopNewCPU = loopOptNewCPU opts
+  let isv = verbAtLeast opts Normal
+  let ifv act = if isv then act else return ()
   let env = commandenv gfenv0
   let sgr = sourcegrammar gfenv0
   setCompletionFunction (Just (wordCompletion gfenv0))
-  s0 <- fetchCommand (prompt env)
+  let fetch = case flag optMode opts of
+        ModeRun -> tryGetLine
+        _ -> fetchCommand (prompt env)
+  s0 <- fetch 
   let gfenv = gfenv0 {history = s0 : history gfenv0}
   let 
     enc = encode gfenv
@@ -62,7 +76,7 @@ loop opts gfenv0 = do
 
   case pwords of
 
-      "q":_  -> putStrLn "See you." >> return gfenv
+      "q":_  -> ifv (putStrLn "See you.") >> return gfenv
 
       _ -> do
         r <- runInterruptibly $ case pwords of
@@ -132,8 +146,16 @@ importInEnv gfenv opts files
         do let opts' = addOptions (setOptimization OptCSE False) opts
                pgf0 = multigrammar (commandenv gfenv)
            pgf1 <- importGrammar pgf0 opts' files
-           putStrLnFlush $ unwords $ "\nLanguages:" : languages pgf1
-           return $ gfenv { commandenv = mkCommandEnv (encode gfenv) pgf1 }
+           if (verbAtLeast opts Normal)
+             then putStrLnFlush $ unwords $ "\nLanguages:" : languages pgf1
+             else return ()
+           return $ gfenv { commandenv = mkCommandEnv (coding gfenv) pgf1 }
+
+tryGetLine = do
+  res <- try getLine
+  case res of
+   Left e -> return "q"
+   Right l -> return l
 
 welcome = unlines [
   "                              ",
@@ -168,18 +190,10 @@ data GFEnv = GFEnv {
   }
 
 emptyGFEnv :: GFEnv
-emptyGFEnv = GFEnv emptyGrammar (mkCommandEnv encodeUTF8 emptyPGF) [] 0 "utf8"
+emptyGFEnv = GFEnv emptyGrammar (mkCommandEnv "utf8" emptyPGF) [] 0 "utf8"
 
-encode env = case coding env of
-  "utf8"   -> encodeUTF8
-  "cp1251" -> encodeCP1251
-  _        -> id
-
-decode env = case coding env of
-  "utf8"   -> decodeUTF8
-  "cp1251" -> decodeCP1251
-  _        -> id
-
+encode = encodeUnicode . coding 
+decode = decodeUnicode . coding
 
 wordCompletion gfenv line0 prefix0 p =
   case wc_type (take p line) of

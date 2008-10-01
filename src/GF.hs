@@ -37,5 +37,6 @@ mainOpts opts files =
       ModeVersion     -> putStrLn $ "Grammatical Framework (GF) version " ++ showVersion version
       ModeHelp        -> putStrLn helpMessage
       ModeInteractive -> mainGFI opts files
+      ModeRun         -> mainRunGFI opts files
       ModeCompiler    -> dieIOE (mainGFC opts files)
 

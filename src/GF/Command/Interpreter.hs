@@ -28,11 +28,11 @@ data CommandEnv = CommandEnv {
   expmacros     :: Map.Map String Tree
   }
 
-mkCommandEnv :: (String -> String) -> PGF -> CommandEnv
+mkCommandEnv :: String -> PGF -> CommandEnv
 mkCommandEnv enc pgf = CommandEnv pgf (allCommands enc pgf) Map.empty Map.empty
 
 emptyCommandEnv :: CommandEnv
-emptyCommandEnv = mkCommandEnv encodeUTF8 emptyPGF
+emptyCommandEnv = mkCommandEnv "utf8" emptyPGF
 
 interpretCommandLine :: (String -> String) -> CommandEnv -> String -> IO ()
 interpretCommandLine enc env line =
