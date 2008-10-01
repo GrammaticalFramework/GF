@@ -715,13 +715,13 @@ Default of the language flag (<CODE>-lang</CODE>): the last-imported concrete sy
 <B>Multilingual generation</B>:
 </P>
 <PRE>
-    &gt; parse -lang=HelloEng "hello friends" | linearize -multi
+    &gt; parse -lang=HelloEng "hello friends" | linearize
     terve ystävät
     ciao amici
     hello friends
 </PRE>
 <P>
-As <CODE>-multi</CODE> is the default, it can be omitted.
+Linearization is by default to all available languages.
 </P>
 <P>
 <!-- NEW -->
@@ -788,7 +788,7 @@ You can also write a <B>script</B>, a file containing the lines
 If we name this script <CODE>hello.gfs</CODE>, we can do
 </P>
 <PRE>
-    $ gf --run &lt;hello.gfs s
+    $ gf --run &lt;hello.gfs
   
     ciao mondo
     terve maailma
