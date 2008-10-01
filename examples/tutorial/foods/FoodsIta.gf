@@ -12,9 +12,9 @@ concrete FoodsIta of Foods = open Prelude in {
     Is item quality = 
       ss (item.s ++ copula item.n ++ quality.s ! item.g ! item.n) ;
     This  = det Sg "questo" "questa" ;
-    That  = det Sg "quello" "quella" ;
+    That  = det Sg "quel"   "quella" ;
     These = det Pl "questi" "queste" ;
-    Those = det Pl "quelli" "quelle" ;
+    Those = det Pl "quei"   "quelle" ;
     QKind quality kind = {
       s = \\n => kind.s ! n ++ quality.s ! kind.g ! n ;
       g = kind.g

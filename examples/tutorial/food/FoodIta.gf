@@ -6,7 +6,7 @@ concrete FoodIta of Food = {
   lin
     Is item quality = {s = item.s ++ "è" ++ quality.s} ;
     This kind = {s = "questo" ++ kind.s} ;
-    That kind = {s = "quello" ++ kind.s} ;
+    That kind = {s = "quel" ++ kind.s} ;
     QKind quality kind = {s = kind.s ++ quality.s} ;
     Wine = {s = "vino"} ;
     Cheese = {s = "formaggio"} ;
