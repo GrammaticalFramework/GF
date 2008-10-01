@@ -1,6 +1,6 @@
 module SemBase where
 
-import GSyntax
+import Base
 import Logic
 
 -- translation of Base syntax to Logic
@@ -8,7 +8,6 @@ import Logic
 iS :: GS -> Prop
 iS s = case s of
   GPredAP np ap -> iNP np (iAP ap)
-  GConjS c s t  -> iConj c (iS s) (iS t)
 
 iNP :: GNP -> (Exp -> Prop) -> Prop
 iNP np p = case np of

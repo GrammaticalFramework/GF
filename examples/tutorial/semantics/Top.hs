@@ -1,16 +1,16 @@
 module Main where
 
-import GSyntax
+import Base
 import SemBase
 import Logic
-import GF.GFCC.API
+import PGF
 
 main :: IO ()
 main = do
-  gr <- file2grammar "base.gfcc"
+  gr <- file2grammar "Base.pgf"
   loop gr
 
-loop :: MultiGrammar -> IO ()
+loop :: PGF -> IO ()
 loop gr = do
   s <- getLine
   let t:_ = parse gr "BaseEng" "S" s
