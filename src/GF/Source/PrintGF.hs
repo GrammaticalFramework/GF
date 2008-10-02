@@ -128,6 +128,22 @@ instance Print Transfer where
    [] -> (concatD [])
    x:xs -> (concatD [prt 0 x , prt 0 xs])
 
+instance Print ModHeader where
+  prt i e = case e of
+   MModule2 complmod modtype modheaderbody -> prPrec i 0 (concatD [prt 0 complmod , prt 0 modtype , doc (showString "=") , prt 0 modheaderbody])
+
+
+instance Print ModHeaderBody where
+  prt i e = case e of
+   MBody2 extend opens -> prPrec i 0 (concatD [prt 0 extend , prt 0 opens])
+   MNoBody2 includeds -> prPrec i 0 (concatD [prt 0 includeds])
+   MWith2 included opens -> prPrec i 0 (concatD [prt 0 included , doc (showString "with") , prt 0 opens])
+   MWithBody2 included opens0 opens -> prPrec i 0 (concatD [prt 0 included , doc (showString "with") , prt 0 opens0 , doc (showString "**") , prt 0 opens])
+   MWithE2 includeds included opens -> prPrec i 0 (concatD [prt 0 includeds , doc (showString "**") , prt 0 included , doc (showString "with") , prt 0 opens])
+   MWithEBody2 includeds included opens0 opens -> prPrec i 0 (concatD [prt 0 includeds , doc (showString "**") , prt 0 included , doc (showString "with") , prt 0 opens0 , doc (showString "**") , prt 0 opens])
+   MReuse2 pident -> prPrec i 0 (concatD [doc (showString "reuse") , prt 0 pident])
+   MUnion2 includeds -> prPrec i 0 (concatD [doc (showString "union") , prt 0 includeds])
+
 
 instance Print ModType where
   prt i e = case e of

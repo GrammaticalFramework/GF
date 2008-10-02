@@ -103,13 +103,29 @@ getAllFiles opts ps env file = do
       imps <- if st == CSEnv
                 then return (maybe [] snd mb_envmod)
                 else do s <- ioeIO $ BS.readFile file
-                        (mname,imps) <- ioeErr ((liftM importsOfModule . pModHeader . myLexer) s)
+                        (mname,imps) <- ioeErr ((liftM (importsOfModule . modHeaderToModDef) . pModHeader . myLexer) s)
                         ioeErr $ testErr  (mname == name)
                                           ("module name" +++ mname +++ "differs from file name" +++ name)
                         return imps
 
       return (name,st,t,imps,dropFileName file)
 
+-- FIXME: this is pretty ugly, it's just to get around the difference
+-- between ModHeader as returned when parsing just the module header 
+-- when looking for imports, and ModDef, which includes the whole module.
+modHeaderToModDef :: ModHeader -> ModDef
+modHeaderToModDef (MModule2 x y z) = MModule x y (modHeaderBodyToModBody z)
+  where
+    modHeaderBodyToModBody :: ModHeaderBody -> ModBody
+    modHeaderBodyToModBody b = case b of
+                                 MBody2 x y -> MBody x y []
+                                 MNoBody2 x -> MNoBody x
+                                 MWith2 x y -> MWith x y
+                                 MWithBody2 x y z -> MWithBody x y z []
+                                 MWithE2 x y z -> MWithE x y z
+                                 MWithEBody2 x y z w -> MWithEBody x y z w []
+                                 MReuse2 x -> MReuse x
+                                 MUnion2 x -> MUnion x
 
 isGFO :: FilePath -> Bool
 isGFO = (== ".gfo") . takeExtensions

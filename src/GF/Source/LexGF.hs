@@ -147,7 +147,7 @@ alexGetChar (p, _, s) =
 alexInputPrevChar :: AlexInput -> Char
 alexInputPrevChar (p, c, s) = c
 
-alex_action_3 =  tok (\p s -> PT p (eitherResIdent (T_PIdent . share) s)) 
+alex_action_3 =  tok (\p s -> PT p (eitherResIdent (TV . share) s)) 
 alex_action_4 =  tok (\p s -> PT p (eitherResIdent (T_LString . share) s)) 
 alex_action_5 =  tok (\p s -> PT p (eitherResIdent (T_PIdent . share) s)) 
 alex_action_6 =  tok (\p s -> PT p (eitherResIdent (TV . share) s)) 

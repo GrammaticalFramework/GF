@@ -27,6 +27,21 @@ data Transfer =
  | TransferOut Open
   deriving (Eq,Ord,Show)
 
+data ModHeader =
+   MModule2 ComplMod ModType ModHeaderBody
+  deriving (Eq,Ord,Show)
+
+data ModHeaderBody =
+   MBody2 Extend Opens
+ | MNoBody2 [Included]
+ | MWith2 Included [Open]
+ | MWithBody2 Included [Open] Opens
+ | MWithE2 [Included] Included [Open]
+ | MWithEBody2 [Included] Included [Open] Opens
+ | MReuse2 PIdent
+ | MUnion2 [Included]
+  deriving (Eq,Ord,Show)
+
 data ModType =
    MTAbstract PIdent
  | MTResource PIdent
