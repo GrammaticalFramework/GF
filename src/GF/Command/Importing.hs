@@ -26,6 +26,7 @@ importGrammar pgf0 opts files =
     ".pgf" -> do
       pgf2 <- mapM readPGF files >>= return . foldl1 unionPGF
       return $ unionPGF pgf0 pgf2
+    ext -> die $ "Unknown filename extension: " ++ show ext
 
 importSource :: SourceGrammar -> Options -> [FilePath] -> IO SourceGrammar
 importSource src0 opts files = do
