@@ -151,19 +151,19 @@ Transfer : '(' 'transfer' 'in' Open ')' { TransferIn $4 }
   | '(' 'transfer' 'out' Open ')' { TransferOut $4 }
 
 
-ModHeader :: { ModDef }
-ModHeader : ComplMod ModType '=' ModHeaderBody { MModule $1 $2 $4 } 
+ModHeader :: { ModHeader }
+ModHeader : ComplMod ModType '=' ModHeaderBody { MModule2 $1 $2 $4 } 
 
 
-ModHeaderBody :: { ModBody }
-ModHeaderBody : Extend Opens { MBody $1 $2 [] } 
-  | ListIncluded { MNoBody $1 }
-  | Included 'with' ListOpen { MWith $1 $3 }
-  | Included 'with' ListOpen '**' Opens { MWithBody $1 $3 $5 [] }
-  | ListIncluded '**' Included 'with' ListOpen { MWithE $1 $3 $5 }
-  | ListIncluded '**' Included 'with' ListOpen '**' Opens { MWithEBody $1 $3 $5 $7 [] }
-  | 'reuse' PIdent { MReuse $2 }
-  | 'union' ListIncluded { MUnion $2 }
+ModHeaderBody :: { ModHeaderBody }
+ModHeaderBody : Extend Opens { MBody2 $1 $2 } 
+  | ListIncluded { MNoBody2 $1 }
+  | Included 'with' ListOpen { MWith2 $1 $3 }
+  | Included 'with' ListOpen '**' Opens { MWithBody2 $1 $3 $5 }
+  | ListIncluded '**' Included 'with' ListOpen { MWithE2 $1 $3 $5 }
+  | ListIncluded '**' Included 'with' ListOpen '**' Opens { MWithEBody2 $1 $3 $5 $7 }
+  | 'reuse' PIdent { MReuse2 $2 }
+  | 'union' ListIncluded { MUnion2 $2 }
 
 
 ModType :: { ModType }

@@ -24,7 +24,7 @@ $u = [\0-\255]          -- universal: any character
 "{-" ([$u # \-] | \- [$u # \}])* ("-")+ "}" ; 
 
 $white+ ;
-@rsyms { tok (\p s -> PT p (eitherResIdent (T_PIdent . share) s)) }
+@rsyms { tok (\p s -> PT p (eitherResIdent (TV . share) s)) }
 \' ($u # \')* \' { tok (\p s -> PT p (eitherResIdent (T_LString . share) s)) }
 (\_ | $l)($l | $d | \_ | \')* { tok (\p s -> PT p (eitherResIdent (T_PIdent . share) s)) }
 
