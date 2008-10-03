@@ -67,9 +67,18 @@ linTree pgf lang = lin
     lin (Var x)        = TM (prCId x)
     lin (Meta i)       = TM (show i)
  
-    comp = compute pgf lang
+    comp ls t = variants [compute pgf lang ts t | ts <- combinations (map unvariants ls)]
     look = lookLin pgf lang
 
+variants :: [Term] -> Term
+variants ts = case ts of
+  [t] -> t
+  _   -> FV ts
+
+unvariants :: Term -> [Term]
+unvariants t = case t of
+  FV ts -> ts
+  _     -> [t]
 
 compute :: PGF -> CId -> [Term] -> Term -> Term
 compute pgf lang args = comp where
