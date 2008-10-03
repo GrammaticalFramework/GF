@@ -84,7 +84,7 @@ checkModule ms (name,mod) = checkIn ("checking module" +++ prt name) $ case mod 
       MTInterface -> mapsCheckTree (checkResInfo gr name mo) js
 
       MTInstance a -> do
-        ModMod abs <- checkErr $ lookupModule gr a
+        -- ModMod abs <- checkErr $ lookupModule gr a
         -- checkCompleteInstance abs mo -- this is done in Rebuild
         mapsCheckTree (checkResInfo gr name mo) js
 
@@ -241,8 +241,8 @@ checkResInfo gr mo mm (c,info) = do
            (de',ty') <- infer de
            return (Yes ty', Yes de')
          (_,Nope) -> do
-           checkWarn "No definition given to oper"
-           return (pty,pde)
+           raise "No definition given to oper"
+           --return (pty,pde)
          _ -> return (pty, pde) --- other cases are uninteresting
       return (c, ResOper pty' pde')
 
