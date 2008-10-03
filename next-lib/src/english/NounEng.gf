@@ -31,15 +31,15 @@ concrete NounEng of Noun = CatEng ** open ResEng, Prelude in {
       a = np.a
       } ;
 
-    DetQuantOrd quant num ord = {
-      s  = quant.s ! num.hasCard ! num.n ++ num.s ++ ord.s ; 
-      sp = quant.sp ! num.hasCard ! num.n ++ num.s ++ ord.s ; 
-      n  = num.n
-      } ;
-
     DetQuant quant num = {
       s  = quant.s ! num.hasCard ! num.n ++ num.s ;
       sp = quant.sp ! num.hasCard ! num.n ++ num.s ;
+      n  = num.n
+      } ;
+
+    DetQuantOrd quant num ord = {
+      s  = quant.s ! num.hasCard ! num.n ++ num.s ++ ord.s ; 
+      sp = quant.sp ! num.hasCard ! num.n ++ num.s ++ ord.s ; 
       n  = num.n
       } ;
 

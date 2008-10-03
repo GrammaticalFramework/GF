@@ -80,12 +80,6 @@ incomplete resource Combinators = open Cat, Structural, Constructors in {
       neg : RCl -> RS 
     };
 
---2 Text append
-
--- This is not in ground API, because it would destroy parsing.
-
-    appendText : Text -> Text -> Text ;
-
 --.
 
     pred = overload {

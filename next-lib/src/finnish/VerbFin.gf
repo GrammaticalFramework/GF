@@ -33,7 +33,7 @@ concrete VerbFin of Verb = CatFin ** open Prelude, ResFin in {
     ComplVA v ap = 
       insertObj 
         (\\_,b,agr => 
-           ap.s ! False ! AN (NCase agr.n (npform2case agr.n v.c2.c))) --- v.cs.s ignored
+           ap.s ! False ! (NCase agr.n (npform2case agr.n v.c2.c))) --- v.cs.s ignored
         (predV v) ;
 
     SlashV2S v s = 
@@ -46,7 +46,7 @@ concrete VerbFin of Verb = CatFin ** open Prelude, ResFin in {
     SlashV2A v ap = 
       insertObj 
         (\\fin,b,_ => 
-          ap.s ! False ! AN (NCase Sg (npform2case Sg v.c3.c))) ----agr to obj
+          ap.s ! False ! (NCase Sg (npform2case Sg v.c3.c))) ----agr to obj
         (predV v) ** {c2 = v.c2} ;
 
     ComplSlash vp np = insertObj (\\fin,b,_ => appCompl fin b vp.c2 np) vp ;
@@ -95,7 +95,7 @@ concrete VerbFin of Verb = CatFin ** open Prelude, ResFin in {
               Sg => Nom ;  -- minä olen iso
               Pl => Part   -- me olemme isoja
               }            --- definiteness of NP ?
-          in ap.s ! False ! AN (NCase agr.n c)
+          in ap.s ! False ! (NCase agr.n c)
       } ;
     CompNP np = {s = \\_ => np.s ! NPCase Nom} ;
     CompAdv a = {s = \\_ => a.s} ;

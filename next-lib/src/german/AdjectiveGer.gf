@@ -12,6 +12,14 @@ concrete AdjectiveGer of Adjective = CatGer ** open ResGer, Prelude in {
       s = \\af => a.s ! Compar ! af ++ conjThan ++ np.s ! Nom ;
       isPre = True
       } ;
+    UseComparA a = {
+      s = \\af => a.s ! Compar ! af ;
+      isPre = True
+      } ;
+    AdjOrd  a = {
+      s = a.s ;
+      isPre = True
+      } ;
 
 -- $SuperlA$ belongs to determiner syntax in $Noun$.
 
@@ -35,6 +43,9 @@ concrete AdjectiveGer of Adjective = CatGer ** open ResGer, Prelude in {
       isPre = ap.isPre
       } ;
 
-    UseA2 a = a ;
+    UseA2 a = {
+      s = a.s ! Posit ;
+      isPre = True
+      } ;
 
 }

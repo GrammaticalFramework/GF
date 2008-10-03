@@ -77,7 +77,7 @@ concrete NounFin of Noun = CatFin ** open ResFin, Prelude in {
       } ;
 
     DetQuantOrd quant num ord = {
-      s1 = \\c => quant.s1 ! num.n ! c ++ num.s ! Sg ! c ++ ord.s ! Pl ! c ; 
+      s1 = \\c => quant.s1 ! num.n ! c ++ num.s ! Sg ! c ++ ord.s ! NCase Pl c ; 
       s2 = quant.s2 ;
       n = num.n ;
       isNum = num.isNum ;
@@ -93,38 +93,6 @@ concrete NounFin of Noun = CatFin ** open ResFin, Prelude in {
       isPoss = quant.isPoss ;
       isDef = True
       } ;
-
-
-{-
-    DetArtSg det cn = 
-      let
-        n : Number = Sg ;
-        ncase : Case -> NForm = \c -> NCase n c ;
-      in {
-        s = \\c => let k = npform2case n c in
-                 det.s1 ! Sg ! k ++ cn.s ! ncase k ; 
-        a = agrP3 Sg ;
-        isPron = False
-      } ;
-
-    DetArtPl det cn = 
-      let
-        n : Number = Pl ;
-        ncase : Case -> NForm = \c -> 
-          case <n,c,det.isDef> of {
-            <Pl,Nom,False> => NCase Pl Part ; -- kytkimiä 
-            _ => NCase n c                          -- kytkin, kytkimen,...
-            }
-      in {
-      s = \\c => let k = npform2case n c in
-                 det.s1 ! Pl ! k ++ cn.s ! ncase k ; 
-      a = agrP3 (case det.isDef of {
-            False => Sg ;  -- autoja menee; kolme autoa menee
-            _ => Pl
-            }) ;
-      isPron = False
-      } ;
--}
 
     PossPron p = {
       s1 = \\_,_ => p.s ! NPCase Gen ;
@@ -143,20 +111,20 @@ concrete NounFin of Noun = CatFin ** open ResFin, Prelude in {
       s = \\n,c => numeral.s ! NCard (NCase n c) ; 
       n = numeral.n 
       } ;
-    OrdDigits numeral = {s = \\n,c => numeral.s ! NOrd  (NCase n c)} ;
+    OrdDigits numeral = {s = \\nc => numeral.s ! NOrd nc} ;
 
     NumNumeral numeral = {
       s = \\n,c => numeral.s ! NCard (NCase n c) ; 
       n = numeral.n
       } ;
-    OrdNumeral numeral = {s = \\n,c => numeral.s ! NOrd  (NCase n c)} ;
+    OrdNumeral numeral = {s = \\nc => numeral.s ! NOrd nc} ;
 
     AdNum adn num = {
       s = \\n,c => adn.s ++ num.s ! n ! c ; 
       n = num.n
       } ;
 
-    OrdSuperl a = {s = \\n,c => a.s ! Superl ! AN (NCase n c)} ;
+    OrdSuperl a = {s = \\nc => a.s ! Superl ! AN nc} ;
 
     DefArt = {
       s1 = \\_,_ => [] ; 
@@ -210,7 +178,7 @@ concrete NounFin of Noun = CatFin ** open ResFin, Prelude in {
       } ;
 
     AdjCN ap cn = {
-      s = \\nf => ap.s ! True ! AN (n2nform nf) ++ cn.s ! nf
+      s = \\nf => ap.s ! True ! (n2nform nf) ++ cn.s ! nf
       } ;
 
     RelCN cn rs = {s = \\nf => cn.s ! nf ++ rs.s ! agrP3 (numN nf)} ;

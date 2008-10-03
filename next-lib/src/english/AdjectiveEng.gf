@@ -10,8 +10,16 @@ concrete AdjectiveEng of Adjective = CatEng ** open ResEng, Prelude in {
       s = \\_ => a.s ! AAdj Compar ++ "than" ++ np.s ! Nom ; 
       isPre = False
       } ;
+    UseComparA a = {
+      s = \\_ => a.s ! AAdj Compar ; 
+      isPre = True
+      } ;
 
--- $SuperlA$ belongs to determiner syntax in $Noun$.
+    AdjOrd ord = {
+      s = \\_ => ord.s ;
+      isPre = True
+      } ;
+
 
     ComplA2 a np = {
       s = \\_ => a.s ! AAdj Posit ++ a.c2 ++ np.s ! Acc ; 
@@ -33,6 +41,9 @@ concrete AdjectiveEng of Adjective = CatEng ** open ResEng, Prelude in {
       isPre = ap.isPre
       } ;
 
-    UseA2 a = a ;
+    UseA2 a = {
+      s = \\_ => a.s ! AAdj Posit ;
+      isPre = True
+      } ;
 
 }

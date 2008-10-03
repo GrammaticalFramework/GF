@@ -37,11 +37,10 @@ abstract Noun = Cat ** {
 --2 Determiners
 
 -- The determiner has a fine-grained structure, in which a 'nucleus'
--- quantifier and two optional parts can be discerned: a cardinal and
--- an ordinal numeral.
+-- quantifier and an optional numeral can be discerned.
 
+    DetQuant    : Quant -> Num ->        Det ;  -- these five
     DetQuantOrd : Quant -> Num -> Ord -> Det ;  -- these five best
-    DetQuant    : Quant -> Num        -> Det ;  -- these five
 
 -- Whether the resulting determiner is singular or plural depends on the
 -- cardinal.
