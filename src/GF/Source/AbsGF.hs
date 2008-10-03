@@ -209,6 +209,7 @@ data Exp =
  | EExtend Exp Exp
  | EGlue Exp Exp
  | EConcat Exp Exp
+ | EVariant Exp Exp
  | EAbstr [Bind] Exp
  | ECTable [Bind] Exp
  | EProd Decl Exp
