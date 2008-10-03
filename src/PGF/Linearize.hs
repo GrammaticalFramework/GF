@@ -60,7 +60,9 @@ linTree pgf lang = lin
                              R ts -> R $ ts     ++ (Data.List.map (kks . prCId) xs)
                              TM s -> R $ (TM s)  : (Data.List.map (kks . prCId) xs)
     lin (Fun fun es)   = let argVariants = mapM (liftVariants . lin) es
-                          in FV [comp args $ look fun | args <- argVariants]
+                             mkVariants [t] = t
+                             mkVariants ts  = FV ts
+                          in mkVariants [comp args $ look fun | args <- argVariants]
     lin (Lit (LStr s)) = R [kks (show s)] -- quoted
     lin (Lit (LInt i)) = R [kks (show i)] 
     lin (Lit (LFlt d)) = R [kks (show d)]
