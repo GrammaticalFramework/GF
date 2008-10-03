@@ -593,7 +593,7 @@ incomplete resource Constructors = open Grammar in {
 -- Relational adjectives can be used with a complement or a reflexive
 
       mkAP : A2 -> NP -> AP ;  -- 3. married to her
-      mkAP : A2 ->       AP ;  -- 4. married to myself
+      mkAP : A2 ->       AP ;  -- 4. married
 
 -- Some adjectival phrases can take as complements sentences, 
 -- questions, or infinitives. Syntactically this is possible for
@@ -613,7 +613,11 @@ incomplete resource Constructors = open Grammar in {
       mkAP : Conj  -> AP -> AP -> AP ; -- 10. old and big
       mkAP : Conj  -> ListAP   -> AP ; -- 11. old, big, and warm
 
+      mkAP : Ord   -> AP ;             -- 12. oldest
       } ;
+
+      reflAP   : A2 -> AP ;            -- married to himself
+      comparAP : A -> AP ;             -- warmer
 
 --3 Adv, adverbial phrases
 
@@ -865,7 +869,7 @@ incomplete resource Constructors = open Grammar in {
       mkAP : A2 -> NP -> AP    -- divisible by 2
                                          =    ComplA2  ;
       mkAP : A2 -> AP          -- divisible by itself
-                                         =    ReflA2   ;
+                                         =    UseA2   ;
       mkAP : AP -> S -> AP    -- great that she won
                                          =  \ap,s -> SentAP ap (EmbedS s) ;
       mkAP : AP -> QS -> AP    -- great that she won
@@ -881,6 +885,9 @@ incomplete resource Constructors = open Grammar in {
       mkAP : Conj -> ListAP -> AP
                                         = \c,xy -> ConjAP c xy ;
       } ;
+
+      reflAP = ReflA2 ;
+      comparAP = UseComparA ;
 
     mkAdv = overload {
       mkAdv : A -> Adv                   -- quickly
@@ -1686,10 +1693,13 @@ incomplete resource Constructors = open Grammar in {
       the_Art : Art = DefArt ;   -- the
       a_Art : Art  = IndefArt ;   -- a
 
+    the_Quant : Quant = DefArt ;   -- the
+    a_Quant : Quant  = IndefArt ;   -- a
+
     DetArtSg : Art -> CN -> NP = \a -> DetCN (DetQuant a sgNum) ;
     DetArtPl : Art -> CN -> NP = \a -> DetCN (DetQuant a plNum) ;
 
-    DetArtOrd = DetQuantOrd ;
+    DetArtOrd : Quant -> Num -> Ord -> Det = DetQuantOrd ;
     DetArtCard : Art -> Card -> Det = \a,c -> DetQuant a (NumCard c) ;
 
     TUseCl  : Tense -> Ant -> Pol ->  Cl ->  S = \t,a -> UseCl  (TTAnt t a) ;

@@ -15,8 +15,18 @@ incomplete concrete AdjectiveScand of Adjective =
         ++ conjThan ++ np.s ! nominative ; 
       isPre = False
       } ;
+    UseComparA a = {
+      s = \\ap => case a.isComp of {
+        True => compMore ++ a.s ! AF (APosit ap) Nom ;
+        _    => a.s ! AF ACompar Nom
+        } ;
+      isPre = False
+      } ;
 
--- $SuperlA$ belongs to determiner syntax in $Noun$.
+    AdjOrd ord = {
+      s = \\_ => ord.s ;
+      isPre = True
+      } ;
 
     ComplA2 a np = {
       s = \\ap => a.s ! AF (APosit ap) Nom ++ a.c2.s ++ np.s ! accusative ; 
@@ -39,6 +49,9 @@ incomplete concrete AdjectiveScand of Adjective =
       isPre = ap.isPre
       } ;
 
-    UseA2 a = a ;
+    UseA2 a = {
+      s = \\ap => a.s ! AF (APosit ap) Nom ;
+      isPre = True
+      } ;
 
 }

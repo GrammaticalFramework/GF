@@ -41,7 +41,7 @@ concrete CatFin of Cat = CommonX ** open ResFin, Prelude in {
 -- The $Bool$ tells whether usage is modifying (as opposed to
 -- predicative), e.g. "x on suurempi kuin y" vs. "y:tä suurempi luku".
 
-    AP   = {s : Bool => AForm => Str} ; 
+    AP = {s : Bool => NForm => Str} ; 
 
 -- Noun
 
@@ -59,11 +59,11 @@ concrete CatFin of Cat = CommonX ** open ResFin, Prelude in {
       isDef : Bool             -- True (verb agrees in Pl, Nom is not Part)
       } ;
 ----    QuantSg, QuantPl = {s1 : Case => Str ; s2 : Str ; isPoss, isDef : Bool} ;
-    Ord = {s : Number => Case => Str} ;
+    Ord    = {s : NForm => Str} ;
     Predet = {s : Number => NPForm => Str} ;
-    Quant = {s1 : Number => Case => Str ; s2 : Str ; isPoss : Bool ; isDef : Bool} ;
-    Card  = {s : Number => Case => Str ; n : Number} ;
-    Num   = {s : Number => Case => Str ; isNum : Bool ; n : Number} ;
+    Quant  = {s1 : Number => Case => Str ; s2 : Str ; isPoss : Bool ; isDef : Bool} ;
+    Card   = {s : Number => Case => Str ; n : Number} ;
+    Num    = {s : Number => Case => Str ; isNum : Bool ; n : Number} ;
 
 -- Numeral
 

@@ -11,6 +11,17 @@ incomplete concrete AdjectiveRomance of Adjective =
       s = \\af => a.s ! Compar ! af ++ conjThan ++ np.s ! Ton Nom ; 
       isPre = False
       } ;
+    UseComparA a = {
+      s = \\af => a.s ! Compar ! af ;
+      isPre = a.isPre
+      } ;
+    AdjOrd ord = {
+      s = \\af => ord.s ! (case af of {
+        AF g n => aagr g n ; 
+        _ => aagr Masc Sg ----
+        }) ;
+      isPre = False ----
+      } ;
 
 -- $SuperlA$ belongs to determiner syntax in $Noun$.
 
@@ -36,6 +47,9 @@ incomplete concrete AdjectiveRomance of Adjective =
       isPre = ap.isPre
       } ;
 
-    UseA2 a = a ** {isPre = False} ;
+    UseA2 a = {
+      s = a.s ! Posit ;
+      isPre = False ---- A2 has no isPre
+      } ;
 
 }

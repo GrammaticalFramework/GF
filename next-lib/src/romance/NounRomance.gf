@@ -93,30 +93,6 @@ incomplete concrete NounRomance of Noun =
 
     OrdSuperl adj = {s = \\a => adj.s ! Superl ! AF a.g a.n} ;
 
-{-
-    DetArtSg det cn = 
-      let 
-        g = cn.g ;
-        n = Sg
-      in {
-        s = \\c => let cs = npform2case c in 
-              det.s ! False ! n ! g ! cs ++ cn.s ! n ;
-        a = agrP3 g n ;
-        hasClit = False
-        } ;
-
-    DetArtPl det cn = 
-      let 
-        g = cn.g ;
-        n = Pl
-      in {
-        s = \\c => let cs = npform2case c in 
-              det.s ! False ! n ! g ! cs ++ cn.s ! n ;
-        a = agrP3 g n ;
-        hasClit = False
-        } ;
--}
-
     DefArt = {
       s = \\_,n,g,c => artDef g n c ;  
       sp = \\n,g,c => artDef g n c ; ---- not for Fre 
@@ -137,15 +113,6 @@ incomplete concrete NounRomance of Noun =
         a = agrP3 g n ;
         hasClit = False
         } ;
-
-{---b
-    MassDet = {
-      s = \\b,n,g,c => case <b,n> of {
-        <False,Sg> => partitive g c ;
-        _ => prepCase genitive ----
-        }
-      } ;
--}
 
 -- This is based on record subtyping.
 

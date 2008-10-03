@@ -381,7 +381,7 @@ lin
 
  oper
     mkOrd : N -> Ord ;
-    mkOrd x = {s = \\n,c => x.s ! NCase n c; lock_Ord = <> } ;
+    mkOrd x = {s = x.s ; lock_Ord = <> } ;
     cpartitive = casePrep partitive ;
 
 } ;
