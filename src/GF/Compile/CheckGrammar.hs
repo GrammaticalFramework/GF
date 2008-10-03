@@ -690,9 +690,17 @@ getOverload env@gr mt ot = case appForm ot of
          return (mkApp fun tts, val)
        ([],[]) -> do
          ---- let prtType _ = prt  -- to debug grammars
+         let sought = unwords (map (prtType env) tys)
+         let showTypes ty = case unwords (map (prtType env) ty) of
+               s | s == sought -> 
+                 s +++ "  -- i.e." +++ unwords (map prt ty) ++++
+                 "     where we sought" +++ unwords (map prt tys)
+               s -> s
          raise $ "no overload instance of" +++ prt f +++ 
-           "for" +++ unwords (map (prtType env) tys) +++ "among" ++++ 
-           unlines ["  " ++ unwords (map (prtType env) ty) | (ty,_) <- typs] ++
+           "for" +++ 
+           sought +++
+           "among" ++++ 
+           unlines ["  " ++ showTypes ty | (ty,_) <- typs] ++
            maybe [] (("with value type" +++) . prtType env) mt
 
        (vfs1,vfs2) -> case (noProds vfs1,noProds vfs2) of
@@ -752,7 +760,7 @@ checkLType env trm typ0 = do
                           check c b'
           checkReset
           return $ (Abs x c', Prod x a b')
-        _ -> raise $ "product expected instead of" +++ prtType env typ
+        _ -> raise $ "function type expected instead of" +++ prtType env typ
 
     App f a -> do
        over <- getOverload env (Just typ) trm
@@ -1053,6 +1061,12 @@ checkIfEqLType env t u trm = do
 
    sTypes = [typeStr, typeTok, typeString]
    comp = computeLType env
+
+-- if prtType is misleading, print the full type
+prtTypeF :: LTEnv -> Type -> Type -> String
+prtTypeF env exp ty = 
+ let pty = prtType env ty 
+ in if pty == prtType env exp then prt ty else pty
 
 -- printing a type with a lock field lock_C as C
 prtType :: LTEnv -> Type -> String
