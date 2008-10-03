@@ -60,6 +60,7 @@ rebuildModule ms mo@(i,mi) = do
                   {positions = 
                     buildTree (tree2list (positions m1) ++ 
                                tree2list (positions m))}
+--          checkCompleteInstance m1 m'
           return $ ModMod m'
         _ -> return mi
 
