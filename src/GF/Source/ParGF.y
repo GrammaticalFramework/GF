@@ -428,13 +428,18 @@ Exp3 : Exp3 '!' Exp4 { ESelect $1 $3 }
   | Exp4 { $1 }
 
 
+Exp2 :: { Exp }
+Exp2 : Exp3 '+' Exp2 { EGlue $1 $3 } 
+  | Exp3 { $1 }
+
+
 Exp1 :: { Exp }
-Exp1 : Exp2 '+' Exp1 { EGlue $1 $3 } 
+Exp1 : Exp2 '++' Exp1 { EConcat $1 $3 } 
   | Exp2 { $1 }
 
 
 Exp :: { Exp }
-Exp : Exp1 '++' Exp { EConcat $1 $3 } 
+Exp : Exp1 '|' Exp { EVariant $1 $3 } 
   | '\\' ListBind '->' Exp { EAbstr $2 $4 }
   | '\\' '\\' ListBind '=>' Exp { ECTable $3 $5 }
   | Decl '->' Exp { EProd $1 $3 }
@@ -445,10 +450,6 @@ Exp : Exp1 '++' Exp { EConcat $1 $3 }
   | 'fn' '{' ListEquation '}' { EEqs $3 }
   | 'in' Exp5 String { EExample $2 $3 }
   | Exp1 { $1 }
-
-
-Exp2 :: { Exp }
-Exp2 : Exp3 { $1 } 
 
 
 ListExp :: { [Exp] }

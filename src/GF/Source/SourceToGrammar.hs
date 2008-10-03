@@ -501,6 +501,11 @@ transExp x = case x of
   ECTable binds exp  -> liftM2 M.mkCTable (mapM transBind binds) (transExp exp)
 
   EVariants exps    -> liftM G.FV $ mapM transExp exps
+  EVariant exp0 exp -> do let fvList (G.FV xs) = xs
+                              fvList t         = [t]
+                          exp0' <- transExp exp0
+                          exp'  <- transExp exp
+                          return $ G.FV $ fvList exp0' ++ fvList exp'
   EPre exp alts     -> liftM2 (curry G.Alts) (transExp exp) (mapM transAltern alts)
   EStrs exps        -> liftM G.Strs $ mapM transExp exps
   ESelect exp0 exp  -> liftM2 G.S (transExp exp0) (transExp exp)

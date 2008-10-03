@@ -214,10 +214,11 @@ ESelect.   Exp3 ::= Exp3 "!" Exp4 ;
 ETupTyp.   Exp3 ::= Exp3 "*" Exp4 ;
 EExtend.   Exp3 ::= Exp3 "**" Exp4 ;
 
-EGlue.     Exp1 ::= Exp2 "+"  Exp1 ;
+EGlue.     Exp2 ::= Exp3 "+"  Exp2 ;
 
-EConcat.   Exp  ::= Exp1 "++" Exp ;
+EConcat.   Exp1 ::= Exp2 "++" Exp1 ;
 
+EVariant.  Exp  ::= Exp1 "|" Exp ;
 EAbstr.    Exp  ::= "\\" [Bind] "->" Exp ;
 ECTable.   Exp  ::= "\\""\\" [Bind] "=>" Exp ;
 EProd.     Exp  ::= Decl "->" Exp ;
