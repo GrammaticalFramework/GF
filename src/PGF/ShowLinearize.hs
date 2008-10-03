@@ -48,7 +48,9 @@ mkRecord typ trm = case (typ,trm) of
   (S [FV ps,ty],R ts) -> RT [(str par, mkRecord ty t) | (par,    t) <- zip ps ts]
   (_,W s (R ts))      -> mkRecord typ (R [K (KS (s ++ u)) | K (KS u) <- ts])
   (FV ps,       C i)  -> RCon $ str $ ps !! i
-  (S [],        _)    -> RS $ str trm
+  (S [],        _)    -> case realizes trm of
+                           [s] -> RS s
+                           ss  -> RFV $ map RS ss
   _                   -> RS $ show trm ---- printTree trm
  where
    str = realize
