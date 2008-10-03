@@ -80,7 +80,7 @@ inferTerm args trm = case trm of
   FV (t:ts) -> do
     (t',ty) <- infer t
     (ts',tys) <- mapM infer ts >>= return . unzip
-    testErr (all (eqType ty) tys) ("different types in variants " ++ show trm)
+    testErr (all (eqType True ty) tys) ("different types in variants " ++ show trm)
     return (FV (t':ts'),ty)
   W s r -> infer r
   _ -> Bad ("no type inference for " ++ show trm)
@@ -90,7 +90,7 @@ inferTerm args trm = case trm of
 
 checkTerm :: LinType -> Term -> Err (Term,Bool)
 checkTerm (args,val) trm = case inferTerm args trm of
-  Ok (t,ty) -> if eqType ty val 
+  Ok (t,ty) -> if eqType False ty val 
              then return (t,True) 
              else do
     msg ("term: " ++ show trm ++ 
@@ -101,10 +101,12 @@ checkTerm (args,val) trm = case inferTerm args trm of
     msg s
     return (trm,False)
 
-eqType :: CType -> CType -> Bool
-eqType inf exp = case (inf,exp) of
-  (C k, C n)  -> k <= n -- only run-time corr.
-  (R rs,R ts) -> length rs == length ts && and [eqType r t | (r,t) <- zip rs ts]
+-- symmetry in (Ints m == Ints n) is all we can use in variants
+
+eqType :: Bool -> CType -> CType -> Bool
+eqType symm inf exp = case (inf,exp) of
+  (C k, C n)  -> if symm then True else k <= n -- only run-time corr.
+  (R rs,R ts) -> length rs == length ts && and [eqType symm r t | (r,t) <- zip rs ts]
   (TM _,  _)  -> True ---- for variants [] ; not safe
   _ -> inf == exp
 
