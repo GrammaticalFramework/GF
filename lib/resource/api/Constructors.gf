@@ -1618,6 +1618,13 @@ incomplete resource Constructors = open Grammar in {
    mkListNP : NP -> ListNP -> ListNP = ConsNP
    } ;
 
+    mkCard = overload {
+      mkCard : Numeral -> Card 
+        = NumNumeral ;
+      mkNum : Digits -> Card         -- 51
+        = NumDigits ;
+      } ;
+
 
 ------------ for backward compatibility
 
