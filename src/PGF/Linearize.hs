@@ -4,6 +4,7 @@ import PGF.CId
 import PGF.Data
 import PGF.Macros
 
+import Control.Monad
 import qualified Data.Map as Map
 import Data.List
 
@@ -41,13 +42,25 @@ untokn ts = case ts of
      v:_ -> v
      _   -> d
 
+-- Lifts all variants to the top level (except those in macros).
+liftVariants :: Term -> [Term]
+liftVariants = f
+  where
+    f (R ts)    = liftM R $ mapM f ts
+    f (P t1 t2) = liftM2 P (f t1) (f t2)
+    f (S ts)    = liftM S $ mapM f ts
+    f (FV ts)   = ts >>= f
+    f (W s t)   = liftM (W s) $ f t
+    f t         = return t
+
 linTree :: PGF -> CId -> Tree -> Term
 linTree pgf lang = lin
   where
     lin (Abs xs  e )   = case lin e of
                              R ts -> R $ ts     ++ (Data.List.map (kks . prCId) xs)
                              TM s -> R $ (TM s)  : (Data.List.map (kks . prCId) xs)
-    lin (Fun fun es)   = comp (map lin es) $ look fun
+    lin (Fun fun es)   = let argVariants = mapM (liftVariants . lin) es
+                          in FV [comp args $ look fun | args <- argVariants]
     lin (Lit (LStr s)) = R [kks (show s)] -- quoted
     lin (Lit (LInt i)) = R [kks (show i)] 
     lin (Lit (LFlt d)) = R [kks (show d)]
