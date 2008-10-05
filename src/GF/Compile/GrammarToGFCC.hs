@@ -260,13 +260,15 @@ reorder abs cg = M.MGrammar $
 
 -- one grammar per language - needed for symtab generation
 repartition :: Ident -> SourceGrammar -> [SourceGrammar]
-repartition abs cg = [M.partOfGrammar cg (lang,mo) | 
-  let mos = M.allModMod cg,
-  lang <- M.allConcretes cg abs,
-  let mo = errVal 
-       (error ("no module found for " ++ A.prt lang)) $ M.lookupModule cg lang
-  ]
- 
+repartition abs cg = 
+  [M.partOfGrammar cg (lang,mo) | 
+    let mos = M.allModMod cg,
+    lang <- case M.allConcretes cg abs of
+      [] -> [abs]  -- to make pgf nonempty even when there are no concretes
+      cncs -> cncs,
+    let mo = errVal 
+         (error ("no module found for " ++ A.prt lang)) $ M.lookupModule cg lang
+    ]
 
 -- translate tables and records to arrays, parameters and labels to indices
 
