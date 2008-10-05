@@ -139,7 +139,8 @@ checkAbsInfo st m mo (c,info) = do
     md' <- case md of
        Yes d -> do
          let d' = elimTables d
-         mkCheckWarn "definition of function" $ checkEquation st (m,c) d'
+----         mkCheckWarn "definition of function" $ checkEquation st (m,c) d'
+         mkCheck "definition of function" $ checkEquation st (m,c) d'
          return $ Yes d'
        _ -> return md
     return $ (c,AbsFun (Yes typ) md')
