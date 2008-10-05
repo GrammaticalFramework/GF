@@ -47,7 +47,7 @@ mkCanon2gfcc :: Options -> String -> SourceGrammar -> (String,D.PGF)
 mkCanon2gfcc opts cnc gr = 
   (prIdent abs, (canon2gfcc opts pars . reorder abs . canon2canon abs) gr)
   where
-    abs = err error id $ M.abstractOfConcrete gr (identC (BS.pack cnc))
+    abs = err (const c) id $ M.abstractOfConcrete gr c where c = identC (BS.pack cnc)
     pars = mkParamLincat gr
 
 -- Adds parsers for all concretes

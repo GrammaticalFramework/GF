@@ -85,14 +85,12 @@ cont2val = type2val . cont2exp
 justTypeCheck :: Grammar -> Exp -> Val -> Err Constraints
 justTypeCheck gr e v = do
   (_,constrs0) <- checkExp (grammar2theory gr) (initTCEnv []) e v
-  return $ filter notJustMeta constrs0
-----  return $ fst $ splitConstraintsSrc gr constrs0
----- this change was to force proper tc of abstract modules. 
----- May not be quite right. AR 13/9/2005 
+  (constrs1,_) <- unifyVal constrs0
+  return $ filter notJustMeta constrs1
 
 notJustMeta (c,k) = case (c,k) of
-     (VClos g1 (Meta m1), VClos g2 (Meta m2)) -> False
-     _ -> True
+    (VClos g1 (Meta m1), VClos g2 (Meta m2)) -> False
+    _ -> True
 
 grammar2theory :: Grammar -> Theory
 grammar2theory gr (m,f) = case lookupFunType gr m f of
