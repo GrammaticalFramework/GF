@@ -27,6 +27,8 @@ import GF.Command.Messages
 import GF.Text.Lexing
 import GF.Text.Transliterations
 
+import GF.Command.TreeOperations ---- temporary place for typecheck and compute
+
 import GF.Data.Operations
 import GF.Text.Coding
 
@@ -367,6 +369,23 @@ allCommands cod pgf = Map.fromList [
      exec = \opts -> return . fromString . stringOps (map prOpt opts) . toString,
      options = stringOpOptions
      }),
+  ("pt", emptyCommandInfo {
+     longname = "put_tree",
+     syntax = "ps OPT? TREE",
+     synopsis = "return a tree, possibly processed with a function",
+     explanation = unlines [
+       "Returns a tree obtained from its argument tree by applying",
+       "tree processing functions in the order given in the command line",
+       "option list. Thus 'pt -f -g s' returns g (f s). Typical tree processors",
+       "are type checking and semantic computation."
+       ], 
+     examples = [
+       "pt -compute (plus one two)   -- compute value",
+       "p \"foo\" | pt -typecheck      -- type check parse results"
+       ],
+     exec = \opts -> return . fromTrees . treeOps (map prOpt opts),
+     options = treeOpOptions
+     }),
   ("q",  emptyCommandInfo {
      longname = "quit",
      synopsis = "exit GF interpreter"
@@ -588,6 +607,9 @@ allCommands cod pgf = Map.fromList [
    stringOps opts s = foldr app s (reverse opts) where
      app f = maybe id id (stringOp f) 
 
+   treeOps opts s = foldr app s (reverse opts) where
+     app f = maybe id id (treeOp f) 
+
    showAsString t = case t of
      Lit (LStr s) -> s
      _ -> "\n" ++ showTree t  --- newline needed in other cases than the first
@@ -618,6 +640,8 @@ stringOpOptions = [
        ("unwords","unlexer that puts a single space between tokens (default)"),
        ("words","lexer that assumes tokens separated by spaces (default)")
        ]
+
+treeOpOptions = [(op,expl) | (op,(expl,_)) <- allTreeOps]
 
 translationQuiz :: String -> PGF -> Language -> Language -> Category -> IO ()
 translationQuiz cod pgf ig og cat = do
