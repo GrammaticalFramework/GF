@@ -1,5 +1,5 @@
---# -path=.:present:prelude
+--# -path=.:present:mathematical:prelude
 
 resource SymbolicEng = Symbolic with 
   (Symbol = SymbolEng),
-  (Syntax = SyntaxEng) ;
+  (Grammar = GrammarEng) ;

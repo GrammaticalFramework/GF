@@ -34,6 +34,10 @@ lookType :: PGF -> CId -> Type
 lookType pgf f = 
   fst $ lookMap (error $ "lookType " ++ show f) f (funs (abstract pgf))
 
+lookDef :: PGF -> CId -> Expr
+lookDef pgf f = 
+  snd $ lookMap (error $ "lookDef " ++ show f) f (funs (abstract pgf))
+
 lookValCat :: PGF -> CId -> CId
 lookValCat pgf = valCat . lookType pgf
 

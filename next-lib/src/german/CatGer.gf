@@ -95,6 +95,8 @@ concrete CatGer of Cat =
     Tense = {s : Str ; t : ResGer.Tense ; m : Mood} ;
 
   lin
+    TTAnt t a = {s = t.s ++ a.s ; t = t.t ; a = a.a ; m = t.m} ;
+
     TPres = {s = [] ; t = Pres ; m = MIndic} ;
     TPast = {s = [] ; t = Past ; m = MIndic} ;   --# notpresent
     TFut  = {s = [] ; t = Fut  ; m = MIndic} ;   --# notpresent

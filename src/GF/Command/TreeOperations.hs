@@ -11,8 +11,10 @@ import GF.Compile.AbsCompute
 -- for conversions
 import PGF.Data
 --import GF.Compile.GrammarToGFCC (mkType,mkExp)
-import GF.Grammar.Grammar
+import qualified GF.Grammar.Grammar as G
+import qualified GF.Grammar.Macros as M
 
+import Data.List
 
 type TreeOp = [Tree] -> [Tree]
 
@@ -24,7 +26,7 @@ allTreeOps = [
    ("compute",("compute by using semantic definitions (def)",
       id)),
    ("smallest",("sort trees from smallest to largest, in number of nodes",
-      id)),
+      smallest)),
    ("typecheck",("type check and solve metavariables; reject if incorrect",
       id))
   ]
@@ -35,7 +37,24 @@ typeCheck pgf t = (t,(True,[]))
 compute :: PGF -> Tree -> Tree
 compute pgf t = t
 
+smallest :: [Tree] -> [Tree]
+smallest = sortBy (\t u -> compare (size t) (size u)) where
+  size t = case t of
+    Abs _ b -> size b + 1
+    Fun f ts -> sum (map size ts) + 1
+    _ -> 1
 
+{-
+toTree :: G.Term -> Tree
+toTree t = case M.termForm t of
+  Ok (xx,f,aa) -> Abs xx (Fun f (map toTree aa))
+
+fromTree :: Tree -> G.Term
+fromTree t = case t of
+  Abs xx b -> M.mkAbs xx (fromTree b)
+  Var x    -> M.vr x
+  Fun f ts -> M.mkApp f (map fromTree ts)
+-}
 
 {-
 data Tree = 

@@ -21,4 +21,32 @@ concrete IdiomCat of Idiom = CatCat **
         )
         (predV (verbV (estar_54 "estar"))) ;
 
+----AR, for completeness
+
+    CleftNP np rs = mkClause [] True (agrP3 Masc Sg) 
+      (insertComplement (\\_ => rs.s ! Indic ! np.a)
+        (insertComplement (\\_ => np.s ! Ton rs.c) (predV copula))) ;
+
+
+    ExistIP ip = {
+      s = \\t,a,p,_ =>
+        ip.s ! Nom ++ 
+        (mkClause [] True 
+          (agrP3 Masc Sg) 
+          (insertClit2 "hi" (insertComplement (\\_ => ip.s ! Acc) (predV haver_V))))
+          .s ! DDir ! t ! a ! p ! Indic
+      } ;
+
+    ImpPl1 vpr = let vp = useVP vpr in {s =
+      (mkImperative False P1 vp).s ! Pos ! {n = Pl ; g = Masc} --- fem
+      } ;
+
+    CleftAdv ad s = mkClause [] True (agrP3 Masc Sg) 
+      (insertComplement (\\_ => conjThat ++ s.s ! Indic)
+        (insertComplement (\\_ => ad.s) (predV copula))) ;
+
+        
+
+
+
 }

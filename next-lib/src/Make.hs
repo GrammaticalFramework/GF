@@ -49,13 +49,10 @@ langsCoding = [
 langs = map fst langsCoding
 
 -- languagues for which to compile Lang
-langsLang = langs `except` ["Ara"]
+langsLang = langs `except` ["Ara","Bul","Ina","Rus"]
 
 -- languages for which to compile Try 
 langsAPI  = langsLang `except` ["Ara","Bul","Hin","Ina","Rus","Tha"]
-
--- languages for which to compile Mathematical 
-langsMath = langsAPI
 
 -- languages for which to run treebank test
 langsTest = langsLang `except` ["Ara","Bul","Cat","Hin","Rus","Spa","Tha"]
@@ -88,17 +85,10 @@ make xx = do
   ifx "lang" $ do
     mapM_ (gfc pres [] . lang) (optl langsLang)
     copy "*/*.gfo" dir
-  ifx "compat" $ do
-    mapM_ (gfc pres [] . compat) (optl langsCompat)
-    copy "*/Compatibility*.gfo" dir
   ifx "api" $ do
     mapM_ (gfc pres presApiPath . try) (optl langsAPI)
+    mapM_ (gfc pres presApiPath . symbolic) (optl langsAPI)
     copy "*/*.gfo" dir
-  ifx "math" $ do
-    mapM_ (gfc False [] . math) (optl langsMath)
-    copy "mathematical/*.gfo" "../mathematical"
-    mapM_ (gfc False [] . symbolic) (optl langsMath)
-    copy "mathematical/Symbolic*.gfo" "../mathematical"
   ifxx "pgf" $ do
     run_gfc $ ["-s","--make","--name=langs","--parser=off",
                "--output-dir=" ++ dir]
@@ -138,10 +128,8 @@ demos abstr ls = "gr -number=100 | l -treebank " ++ unlexer abstr ls ++
            " | ps -to_html | wf -file=resdemo.html"
 
 lang (lla,la) = lla ++ "/All" ++ la ++ ".gf"
-compat (lla,la) = lla ++ "/Compatibility" ++ la ++ ".gf"
 try  (lla,la) = "api/Try"  ++ la ++ ".gf"
-math (lla,la) = "mathematical/Mathematical"  ++ la ++ ".gf"
-symbolic (lla,la) = "mathematical/Symbolic"  ++ la ++ ".gf"
+symbolic (lla,la) = "api/Symbolic"  ++ la ++ ".gf"
 
 except ls es = filter (flip notElem es . snd) ls
 only   ls es = filter (flip elem es . snd) ls
