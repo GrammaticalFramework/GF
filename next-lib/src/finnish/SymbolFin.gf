@@ -1,3 +1,5 @@
+--# -path=.:abstract:common
+
 concrete SymbolFin of Symbol = CatFin ** open Prelude, NounFin, ResFin in {
 
 lin
@@ -25,7 +27,7 @@ lin
   SymbS sy = sy ;
 
   SymbNum n = {s = \\_,_ => n.s ; isNum = True ; n = Pl} ;
-  SymbOrd n = {s = \\_,_ => n.s ++ "."} ;
+  SymbOrd n = {s = \\_ => n.s ++ "."} ;
 
 lincat 
 

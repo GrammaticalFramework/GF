@@ -1,3 +1,5 @@
+--# -path=.:abstract:common
+
 concrete SymbolEng of Symbol = CatEng ** open Prelude, ResEng in {
 
 lin

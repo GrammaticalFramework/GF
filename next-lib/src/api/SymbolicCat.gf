@@ -2,4 +2,4 @@
 
 resource SymbolicCat = Symbolic with 
   (Symbol = SymbolCat),
-  (Syntax = SyntaxCat) ;
+  (Grammar = GrammarCat) ;

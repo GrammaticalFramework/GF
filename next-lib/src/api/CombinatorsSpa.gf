@@ -1,4 +1,4 @@
---# -path=.:alltenses:prelude
+--# -path=.:alltenses
 
 resource CombinatorsSpa = Combinators with 
   (Cat = CatSpa),

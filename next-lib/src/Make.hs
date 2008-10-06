@@ -22,6 +22,7 @@ import System.Exit
 default_gfc = "../../bin/gfc"
 
 presApiPath = "-path=api:present"
+presSymbolPath = "-path=.:abstract:present:common:romance:scandinavian" ----
 
 -- the languages have long directory names and short ISO codes (3 letters)
 -- we also give the decodings for postprocessing linearizations, as long as grammars
@@ -84,7 +85,11 @@ make xx = do
 
   ifx "lang" $ do
     mapM_ (gfc pres [] . lang) (optl langsLang)
+    mapM_ (gfc pres presSymbolPath . symbol) (optl langsAPI)
     copy "*/*.gfo" dir
+  ifx "compat" $ do
+    mapM_ (gfc pres [] . compat) (optl langsCompat)
+    copy "*/Compatibility*.gfo" dir
   ifx "api" $ do
     mapM_ (gfc pres presApiPath . try) (optl langsAPI)
     mapM_ (gfc pres presApiPath . symbolic) (optl langsAPI)
@@ -128,6 +133,8 @@ demos abstr ls = "gr -number=100 | l -treebank " ++ unlexer abstr ls ++
            " | ps -to_html | wf -file=resdemo.html"
 
 lang (lla,la) = lla ++ "/All" ++ la ++ ".gf"
+compat (lla,la) = lla ++ "/Compatibility" ++ la ++ ".gf"
+symbol (lla,la) = lla ++ "/Symbol" ++ la ++ ".gf"
 try  (lla,la) = "api/Try"  ++ la ++ ".gf"
 symbolic (lla,la) = "api/Symbolic"  ++ la ++ ".gf"
 
