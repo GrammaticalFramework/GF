@@ -1510,7 +1510,8 @@ incomplete resource Constructors = open Grammar in {
 	                                 =    \p,i -> TExclMark (PhrUtt NoPConj (UttImpSg p i) NoVoc) TEmpty;
       mkText : Phr -> Text -> Text    -- John walks. ...
                                          =    TFullStop ;
-      mkText : Text -> Text -> Text = \t,u -> {s = t.s ++ u.s ; lock_Text = <>} ;
+      mkText : Text -> Text -> Text 
+        = \t,u -> {s = t.s ++ u.s ; lock_Text = <>} ;
       } ;
 
     mkVP = overload {

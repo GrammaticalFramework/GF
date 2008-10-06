@@ -68,12 +68,10 @@ concrete ExtraFin of ExtraFinAbs = CatFin **
         isPron = False
         } ;
 
-
     vai_Conj = {s1 = [] ; s2 = "vai" ; n = Sg} ;
 
-
     CompPartAP ap = {
-      s = \\agr => ap.s ! False ! AN (NCase agr.n Part)
+      s = \\agr => ap.s ! False ! NCase agr.n Part
       } ;
 
 } 
