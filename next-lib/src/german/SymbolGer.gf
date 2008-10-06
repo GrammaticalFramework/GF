@@ -1,3 +1,5 @@
+--# -path=.:abstract:common
+
 concrete SymbolGer of Symbol = CatGer ** open Prelude, ResGer in {
 
 lin

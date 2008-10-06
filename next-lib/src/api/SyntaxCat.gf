@@ -1,4 +1,5 @@
---# -path=.:alltenses:prelude
+--# -path=.:alltenses
 
-instance SyntaxCat of Syntax = ConstructorsCat, CatCat, StructuralCat, CombinatorsCat ;
+instance SyntaxCat of Syntax = 
+  ConstructorsCat, CatCat, StructuralCat, CombinatorsCat ;
 
