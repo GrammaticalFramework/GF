@@ -58,7 +58,7 @@ concrete SentenceBul of Sentence = CatBul ** open Prelude, ResBul in {
       s = \\q => t.s ++ a.s ++ p.s ++ cl.s ! t.t ! a.a ! p.p ! q
     } ;
     UseRCl t a p cl = {
-      s    = \\r => t.s ++ a.s ++ p.s ++ cl.s ! t.t ! a.a ! p.p ! r ;
+      s    = \\agr => t.s ++ a.s ++ p.s ++ cl.s ! t.t ! a.a ! p.p ! agr ;
       role = cl.role
     } ;
     UseSlash t a p cl = {
@@ -68,9 +68,5 @@ concrete SentenceBul of Sentence = CatBul ** open Prelude, ResBul in {
 
     AdvS a s = {s = a.s ++ "," ++ s.s} ;
 
----- FIXME: guessed by AR
--- test: she walks , which is good
-
-    RelS s r = {s = s.s ++ "," ++ r.s ! gennum DNeut Sg} ;
-
+    RelS s r = {s = s.s ++ "," ++ r.s ! {gn=gennum DNeut Sg; p=P3}} ;
 }

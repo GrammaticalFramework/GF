@@ -168,7 +168,7 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
       g = cn.g
       } ;
     RelCN cn rs = {
-      s = \\nf => cn.s ! nf ++ rs.s ! gennum cn.g (numNForm nf) ;
+      s = \\nf => cn.s ! nf ++ rs.s ! {gn=gennum cn.g (numNForm nf); p=P3} ;
       g = cn.g
       } ;
     AdvCN cn ad = {
@@ -180,9 +180,8 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
 
     ApposCN cn np = {s = \\nf => cn.s ! nf ++ np.s ! RSubj; g=cn.g} ;
 
----- FIXME AR
     RelNP np rs = {
-      s = \\r => np.s ! r ++ rs.s ! np.a.gn ; ---- gennum cn.g (numNForm nf) ;
+      s = \\r => np.s ! r ++ rs.s ! np.a ;
       a = np.a
       } ;
 }
