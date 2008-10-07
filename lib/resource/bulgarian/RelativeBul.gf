@@ -6,21 +6,21 @@ concrete RelativeBul of Relative = CatBul ** open ResBul in {
 
   lin
     RelCl cl = {
-      s = \\t,a,p,gn => suchRP ! gn ++ "че" ++ cl.s ! t ! a ! p ! Main ; 
+      s = \\t,a,p,agr => suchRP ! agr.gn ++ "че" ++ cl.s ! t ! a ! p ! Main ; 
       role = RSubj
       } ;
 
     RelVP rp vp = {
-      s = \\t,a,p,gn => 
+      s = \\t,a,p,agr => 
         let 
-          cl = mkClause (rp.s ! gn) {gn=gn; p=P3} vp
+          cl = mkClause (rp.s ! agr.gn) agr vp
         in
         cl.s ! t ! a ! p ! Main ;
       role = RSubj
       } ;
 
     RelSlash rp slash = {
-      s = \\t,a,p,gn => slash.c2.s ++ rp.s ! gn ++ slash.s ! (agrP3 gn) ! t ! a ! p ! Main ;
+      s = \\t,a,p,agr => slash.c2.s ++ rp.s ! agr.gn ++ slash.s ! agr ! t ! a ! p ! Main ;
       role = RObj Acc
       } ;
 
