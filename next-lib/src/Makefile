@@ -1,6 +1,8 @@
 RUNGHC=runghc
 RUNMAKE=$(RUNGHC) Make.hs
 
+GF_LIB_PATH=..
+
 .PHONY: all present alltenses lang api math prelude test demo synopsis link compiled clean
 
 all: link prelude present alltenses compat
