@@ -35,8 +35,7 @@ exportPGF opts fmt pgf =
       FmtPGF          -> multi "pgf" printPGF
       FmtPGFPretty    -> multi "txt" prPGFPretty
       FmtJavaScript   -> multi "js"  pgf2js
-      FmtHaskell      -> multi "hs"  (grammar2haskell hsPrefix name)
-      FmtHaskell_GADT -> multi "hs"  (grammar2haskellGADT hsPrefix name)
+      FmtHaskell      -> multi "hs"  (grammar2haskell opts name)
       FmtProlog       -> multi "pl"  grammar2prolog 
       FmtProlog_Abs   -> multi "pl"  grammar2prolog_abs 
       FmtBNF          -> single "bnf"   bnfPrinter
@@ -54,7 +53,6 @@ exportPGF opts fmt pgf =
       FmtFA           -> single "dot"  slfGraphvizPrinter
  where
    name = fromMaybe (prCId (absname pgf)) (moduleFlag optName opts)
-   hsPrefix = flag optHaskellPrefix opts
 
    multi :: String -> (PGF -> String) -> [(FilePath,String)]
    multi ext pr = [(name <.> ext, pr pgf)]
