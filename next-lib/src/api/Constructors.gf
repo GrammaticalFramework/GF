@@ -868,7 +868,7 @@ incomplete resource Constructors = open Grammar in {
                                          =    ComparA  ;
       mkAP : A2 -> NP -> AP    -- divisible by 2
                                          =    ComplA2  ;
-      mkAP : A2 -> AP          -- divisible by itself
+      mkAP : A2 -> AP          -- divisible
                                          =    UseA2   ;
       mkAP : AP -> S -> AP    -- great that she won
                                          =  \ap,s -> SentAP ap (EmbedS s) ;
@@ -884,6 +884,9 @@ incomplete resource Constructors = open Grammar in {
                                         = \c,x,y -> ConjAP c (BaseAP x y) ;
       mkAP : Conj -> ListAP -> AP
                                         = \c,xy -> ConjAP c xy ;
+      mkAP : Ord   -> AP
+        = AdjOrd ;
+
       } ;
 
       reflAP = ReflA2 ;
