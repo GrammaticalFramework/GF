@@ -56,7 +56,7 @@ beta vv c = case c of
 
 subst :: [CId] -> Subst -> Expr -> Expr
 subst xs g e = case e of
-  EAbs x b -> EAbs x (subst (x:xs) g e)
+  EAbs x b -> EAbs x (subst (x:xs) g e) ---- TODO: refresh variables
   EApp f a -> EApp (substg f) (substg a)
   EVar x -> maybe e id $ lookup x g
   _ -> e
