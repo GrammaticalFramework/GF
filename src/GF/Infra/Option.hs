@@ -4,7 +4,7 @@ module GF.Infra.Option
      Options, ModuleOptions,
      Flags(..), ModuleFlags(..),
      Mode(..), Phase(..), Verbosity(..), Encoding(..), OutputFormat(..), 
-     SISRFormat(..), Optimization(..), CFGTransform(..),
+     SISRFormat(..), Optimization(..), CFGTransform(..), HaskellOption(..),
      Dump(..), Printer(..), Recomp(..),
      -- * Option parsing 
      parseOptions, parseModuleOptions,
@@ -17,7 +17,8 @@ module GF.Infra.Option
      modifyFlags, modifyModuleFlags,
      helpMessage,
      -- * Checking specific options
-     flag, moduleFlag, cfgTransform,
+     flag, moduleFlag, cfgTransform, haskellOption,
+     isLexicalCat,
      -- * Setting specific options
      setOptimization, setCFGTransform,
      -- * Convenience methods for checking options    
@@ -84,7 +85,6 @@ data OutputFormat = FmtPGF
                   | FmtPGFPretty
                   | FmtJavaScript 
                   | FmtHaskell 
-                  | FmtHaskell_GADT 
                   | FmtProlog
                   | FmtProlog_Abs
                   | FmtBNF
@@ -121,6 +121,9 @@ data CFGTransform = CFGNoLR
                   | CFGStartCatOnly
                   | CFGMergeIdentical
                   | CFGRemoveCycles
+  deriving (Show,Eq,Ord)
+
+data HaskellOption = HaskellNoPrefix | HaskellGADT | HaskellLexical
   deriving (Show,Eq,Ord)
 
 data Warning = WarnMissingLincat
@@ -166,7 +169,8 @@ data Flags = Flags {
       optGFODir          :: FilePath,
       optOutputFormats   :: [OutputFormat],
       optSISR            :: Maybe SISRFormat,
-      optHaskellPrefix   :: String,
+      optHaskellOptions  :: Set HaskellOption,
+      optLexicalCats     :: Set String,
       optOutputFile      :: Maybe FilePath,
       optOutputDir       :: Maybe FilePath,
       optRecomp          :: Recomp,
@@ -313,7 +317,8 @@ defaultFlags = Flags {
       optGFODir          = ".",
       optOutputFormats   = [FmtPGF],
       optSISR            = Nothing,
-      optHaskellPrefix   = "G",
+      optHaskellOptions  = Set.empty,
+      optLexicalCats     = Set.empty,
       optOutputFile      = Nothing,
       optOutputDir       = Nothing,
       optRecomp          = RecompIfNewer,
@@ -431,8 +436,11 @@ optDescr =
      Option [] ["sisr"] (ReqArg sisrFmt "FMT") 
         (unlines ["Include SISR tags in generated speech recognition grammars.",
                   "FMT can be one of: old, 1.0"]),
-     Option [] ["haskell-prefix"] (ReqArg hsPrefix "PREFIX") 
-                "Constructor prefix for generated Haskell code. Default: G",
+     Option [] ["haskell"] (ReqArg hsOption "OPTION") 
+            ("Turn on an optional feature when generating Haskell data types. OPTION = " 
+             ++ concat (intersperse " | " (map fst haskellOptionNames))),
+     Option [] ["lexical"] (ReqArg lexicalCat "CAT[,CAT[...]]") 
+            "Treat CAT as a lexical category.",
      Option ['o'] ["output-file"] (ReqArg outFile "FILE") 
            "Save output in FILE (default is out.X, where X depends on output format.",
      Option ['D'] ["output-dir"] (ReqArg outDir "DIR") 
@@ -464,7 +472,11 @@ optDescr =
                          "old" -> set $ \o -> o { optSISR = Just SISR_WD20030401 }
                          "1.0" -> set $ \o -> o { optSISR = Just SISR_1_0 }
                          _     -> fail $ "Unknown SISR format: " ++ show x
-       hsPrefix    x = set $ \o -> o { optHaskellPrefix = x }
+       hsOption    x = case lookup x haskellOptionNames of
+                         Just p  -> set $ \o -> o { optHaskellOptions = Set.insert p (optHaskellOptions o) }
+                         Nothing -> fail $ "Unknown Haskell option: " ++ x
+                                            ++ " Known: " ++ show (map fst haskellOptionNames)
+       lexicalCat  x = set $ \o -> o { optLexicalCats = foldr Set.insert (optLexicalCats o) (splitBy (==',') x) }
        outFile     x = set $ \o -> o { optOutputFile = Just x }
        outDir      x = set $ \o -> o { optOutputDir = Just x }
        recomp      x = set $ \o -> o { optRecomp = x }
@@ -479,7 +491,6 @@ outputFormats =
      ("pgf-pretty",   FmtPGFPretty),
      ("js",           FmtJavaScript),
      ("haskell",      FmtHaskell),
-     ("haskell_gadt", FmtHaskell_GADT),
      ("prolog",       FmtProlog),
      ("prolog_abs",   FmtProlog_Abs),
      ("bnf",          FmtBNF),
@@ -522,6 +533,12 @@ cfgTransformNames =
      ("startcatonly", CFGStartCatOnly),
      ("merge",        CFGMergeIdentical),
      ("removecycles", CFGRemoveCycles)]
+
+haskellOptionNames :: [(String, HaskellOption)]
+haskellOptionNames =
+    [("noprefix", HaskellNoPrefix),
+     ("gadt",     HaskellGADT),
+     ("lexical",  HaskellLexical)]
 
 encodings :: [(String,Encoding)]
 encodings = 
@@ -573,6 +590,12 @@ dump opts d = moduleFlag ((d `elem`) . optDump) opts
 cfgTransform :: Options -> CFGTransform -> Bool
 cfgTransform opts t = Set.member t (moduleFlag optCFGTransforms opts)
 
+haskellOption :: Options -> HaskellOption -> Bool
+haskellOption opts o = Set.member o (flag optHaskellOptions opts)
+
+isLexicalCat :: Options -> String -> Bool
+isLexicalCat opts c = Set.member c (flag optLexicalCats opts)
+
 -- 
 -- * Convenience functions for setting options
 --
@@ -609,6 +632,11 @@ toEnumBounded i = let mi = minBound
                         then Just (toEnum i `asTypeOf` mi)
                         else Nothing
 
+splitBy :: (a -> Bool) -> [a] -> [[a]]
+splitBy _ [] = []
+splitBy p s = case break p s of
+                (l, _ : t@(_ : _)) -> l : splitBy p t
+                (l, _) -> [l]
 
 instance Functor OptDescr where
     fmap f (Option cs ss d s) = Option cs ss (fmap f d) s
