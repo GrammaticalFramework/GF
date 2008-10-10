@@ -2,11 +2,10 @@ module GF.Command.TreeOperations (
   treeOp,
   allTreeOps
   --typeCheck,
-  --compute
   ) where
 
 import GF.Compile.TypeCheck
-import GF.Compile.AbsCompute
+import PGF (compute)
 
 -- for conversions
 import PGF.Data
@@ -18,13 +17,13 @@ import Data.List
 
 type TreeOp = [Tree] -> [Tree]
 
-treeOp :: String -> Maybe TreeOp
-treeOp f = fmap snd $ lookup f allTreeOps
+treeOp :: PGF -> String -> Maybe TreeOp
+treeOp pgf f = fmap snd $ lookup f $ allTreeOps pgf
 
-allTreeOps :: [(String,(String,TreeOp))]
-allTreeOps = [
+allTreeOps :: PGF -> [(String,(String,TreeOp))]
+allTreeOps pgf = [
    ("compute",("compute by using semantic definitions (def)",
-      id)),
+      map (compute pgf))),
    ("smallest",("sort trees from smallest to largest, in number of nodes",
       smallest)),
    ("typecheck",("type check and solve metavariables; reject if incorrect",
@@ -33,9 +32,6 @@ allTreeOps = [
 
 typeCheck :: PGF -> Tree -> (Tree,(Bool,[String]))
 typeCheck pgf t = (t,(True,[]))
-
-compute :: PGF -> Tree -> Tree
-compute pgf t = t
 
 smallest :: [Tree] -> [Tree]
 smallest = sortBy (\t u -> compare (size t) (size u)) where

@@ -384,7 +384,7 @@ allCommands cod pgf = Map.fromList [
        "p \"foo\" | pt -typecheck      -- type check parse results"
        ],
      exec = \opts -> return . fromTrees . treeOps (map prOpt opts),
-     options = treeOpOptions
+     options = treeOpOptions pgf
      }),
   ("q",  emptyCommandInfo {
      longname = "quit",
@@ -608,7 +608,7 @@ allCommands cod pgf = Map.fromList [
      app f = maybe id id (stringOp f) 
 
    treeOps opts s = foldr app s (reverse opts) where
-     app f = maybe id id (treeOp f) 
+     app f = maybe id id (treeOp pgf f) 
 
    showAsString t = case t of
      Lit (LStr s) -> s
@@ -641,7 +641,7 @@ stringOpOptions = [
        ("words","lexer that assumes tokens separated by spaces (default)")
        ]
 
-treeOpOptions = [(op,expl) | (op,(expl,_)) <- allTreeOps]
+treeOpOptions pgf = [(op,expl) | (op,(expl,_)) <- allTreeOps pgf]
 
 translationQuiz :: String -> PGF -> Language -> Language -> Category -> IO ()
 translationQuiz cod pgf ig og cat = do
