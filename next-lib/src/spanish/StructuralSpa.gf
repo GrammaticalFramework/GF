@@ -34,7 +34,7 @@ lin
   few_Det  = {
     s,sp = \\g,c => prepCase c ++ genForms "pocos" "pocas" ! g ; n = Pl ; s2 = []} ;
 ---  first_Ord = {s = \\ag => (regA "primero").s ! Posit ! AF ag.g ag.n} ;
-  for_Prep = mkPrep "por" ;
+  for_Prep = mkPrep "para" ;
   from_Prep = complGen ; ---
   he_Pron = 
     mkPronoun 
