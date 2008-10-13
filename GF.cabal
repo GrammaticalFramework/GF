@@ -610,7 +610,6 @@ executable gf
   extensions:
   main-is: GF.hs
   other-modules:
-    GF.Source.ErrM
     GF.Grammar.ReservedWords
     GF.Data.BacktrackM
     GF.Source.SharedString
