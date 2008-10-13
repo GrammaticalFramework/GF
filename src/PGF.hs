@@ -44,7 +44,7 @@ module PGF(
            parse, canParse, parseAllLang, parseAll,
            
            -- ** Evaluation
-           tree2expr, expr2tree, compute,
+           tree2expr, expr2tree, compute, paraphrase,
            
            -- ** Word Completion (Incremental Parsing)
            complete,
@@ -59,6 +59,7 @@ import PGF.CId
 import PGF.Linearize
 import PGF.Generate
 import PGF.AbsCompute
+import PGF.Paraphrase
 import PGF.Macros
 import PGF.Data
 import PGF.Expr
