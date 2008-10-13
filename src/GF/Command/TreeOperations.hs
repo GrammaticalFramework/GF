@@ -5,7 +5,7 @@ module GF.Command.TreeOperations (
   ) where
 
 import GF.Compile.TypeCheck
-import PGF (compute)
+import PGF (compute,paraphrase)
 
 -- for conversions
 import PGF.Data
@@ -24,6 +24,8 @@ allTreeOps :: PGF -> [(String,(String,TreeOp))]
 allTreeOps pgf = [
    ("compute",("compute by using semantic definitions (def)",
       map (compute pgf))),
+   ("paraphrase",("paraphrase by using semantic definitions (def)",
+      concatMap (paraphrase pgf))),
    ("smallest",("sort trees from smallest to largest, in number of nodes",
       smallest)),
    ("typecheck",("type check and solve metavariables; reject if incorrect",
