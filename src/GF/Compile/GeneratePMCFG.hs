@@ -262,10 +262,18 @@ type FunSet   = Map.Map FFun FunId
 type CoerceSet= Map.Map [FCat] FCat
 
 emptyFRulesEnv cnc_defs lincats = 
-  let (last_id,catSet) = Map.mapAccum computeCatRange 0 lincats
+  let (last_id,catSet) = Map.mapAccumWithKey computeCatRange 0 lincats
   in GrammarEnv last_id catSet Map.empty Map.empty Map.empty IntMap.empty
   where
-    computeCatRange index ctype = (index+size,(index,index+size-1,poly))
+    cidString = mkCId "String"
+    cidInt    = mkCId "Int"
+    cidFloat  = mkCId "Float"
+    
+    computeCatRange index cat ctype
+      | cat == cidString = (index,     (fcatString,fcatString,[]))
+      | cat == cidInt    = (index,     (fcatInt,   fcatInt,   []))
+      | cat == cidFloat  = (index,     (fcatFloat, fcatFloat, []))
+      | otherwise        = (index+size,(index,index+size-1,poly))
       where
         (size,poly) = getMultipliers 1 [] ctype
  
