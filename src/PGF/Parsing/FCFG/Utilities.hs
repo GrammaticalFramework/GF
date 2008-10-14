@@ -31,7 +31,7 @@ type RangeRec = [Range]
 
 data Range = Range {-# UNPACK #-} !Int {-# UNPACK #-} !Int
 	   | EmptyRange
-             deriving (Eq, Ord)
+             deriving (Eq, Ord, Show)
 
 makeRange :: Int -> Int -> Range
 makeRange = Range 
@@ -83,7 +83,7 @@ data SyntaxNode n e = SMeta
                     | SString String
                     | SInt    Integer
                     | SFloat  Double
-                    deriving (Eq,Ord)
+                    deriving (Eq,Ord,Show)
 
 groupSyntaxNodes :: Ord n => [SyntaxNode n e] -> [SyntaxNode n [e]]
 groupSyntaxNodes []                =  []

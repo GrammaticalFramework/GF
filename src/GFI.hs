@@ -25,6 +25,7 @@ import qualified Text.ParserCombinators.ReadP as RP
 import System.Cmd
 import System.CPUTime
 import Control.Exception
+import Control.Monad
 import Data.Version
 import GF.System.Signal
 --import System.IO.Error (try)
@@ -203,9 +204,10 @@ wordCompletion gfenv line0 prefix0 p =
       -> do mb_state0 <- try (evaluate (initState pgf (optLang opts) (optCat  opts)))
             case mb_state0 of
               Right state0 -> let ws     = words (take (length s - length prefix) s)
-                                  state  = foldl nextState state0 ws
-                                  compls = getCompletions state prefix
-                              in ret ' ' (map (encode gfenv) (Map.keys compls))
+                              in case foldM nextState state0 ws of
+                                   Nothing    -> ret ' ' []
+                                   Just state -> let compls = getCompletions state prefix
+                                                 in ret ' ' (map (encode gfenv) (Map.keys compls))
               Left  _      -> ret ' ' []
     CmplOpt (Just (Command n _ _)) pref
       -> case Map.lookup n (commands cmdEnv) of

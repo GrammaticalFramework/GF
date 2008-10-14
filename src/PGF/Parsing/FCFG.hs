@@ -8,7 +8,7 @@
 -----------------------------------------------------------------------------
 
 module PGF.Parsing.FCFG
-    (buildParserInfo,ParserInfo,parseFCFG) where
+    (ParserInfo,parseFCFG) where
 
 import GF.Data.ErrM
 import GF.Data.Assoc
@@ -17,7 +17,6 @@ import GF.Data.SortedList
 import PGF.CId
 import PGF.Data
 import PGF.Macros
-import PGF.BuildParser
 import PGF.Parsing.FCFG.Utilities
 import qualified PGF.Parsing.FCFG.Active      as Active
 import qualified PGF.Parsing.FCFG.Incremental as Incremental

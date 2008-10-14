@@ -8,55 +8,54 @@ module PGF.Parsing.FCFG.Incremental
           , parse
           ) where
 
-import Data.Array
+import Data.Array.IArray
 import Data.Array.Base (unsafeAt)
 import Data.List (isPrefixOf, foldl')
-import Data.Maybe (fromMaybe)
+import Data.Maybe (fromMaybe, maybe)
 import qualified Data.Map as Map
 import qualified Data.IntMap as IntMap
 import qualified Data.Set as Set
 import Control.Monad
 
-import GF.Data.Assoc
 import GF.Data.SortedList
-import qualified GF.Data.MultiMap as MM
 import PGF.CId
 import PGF.Data
-import PGF.Parsing.FCFG.Utilities
 import Debug.Trace
 
-parse :: ParserInfo -> CId -> [FToken] -> [Tree]
-parse pinfo start toks = extractExps (foldl' nextState (initState pinfo start) toks) start
+parse :: ParserInfo -> CId -> [String] -> [Tree]
+parse pinfo start toks = maybe [] (\ps -> extractExps ps start) (foldM nextState (initState pinfo start) toks)
 
 initState :: ParserInfo -> CId -> ParseState
 initState pinfo start = 
   let items = do
-        c <- Map.findWithDefault [] start (startupCats pinfo)
-        ruleid <- topdownRules pinfo ? c
-        let (FRule fn _ args cat lins) = allRules pinfo ! ruleid
-        lbl <- indices lins
-        return (Active 0 lbl 0 ruleid args cat)
+        cat <- fromMaybe [] (Map.lookup start (startCats pinfo))
+        (funid,args) <- foldForest (\funid args -> (:) (funid,args)) [] cat (productions pinfo)
+        let FFun fn _ lins = functions pinfo ! funid
+        (lbl,seqid) <- assocs lins
+        return (Active 0 0 funid seqid args (AK cat lbl))
         
-      forest = IntMap.fromListWith Set.union [(cat, Set.singleton (Passive ruleid args)) | (ruleid, FRule _ _ args cat _) <- assocs (allRules pinfo)]
-
-      max_fid = maximum (0:[maximum (cat:args) | (ruleid, FRule _ _ args cat _) <- assocs (allRules pinfo)])+1
+      max_fid = maximum (0:[maximum (cat:args) | (cat, set) <- IntMap.toList (productions pinfo)
+                                               , p <- Set.toList set
+                                               , let args = case p of {FApply _ args -> args; FCoerce cat -> [cat]}])+1
 
   in State pinfo
-           (Chart MM.empty [] Map.empty forest max_fid 0)
+           (Chart emptyAC [] emptyPC (productions pinfo) max_fid 0)
            (Set.fromList items)
 
 -- | From the current state and the next token
 -- 'nextState' computes a new state where the token
 -- is consumed and the current position shifted by one.
-nextState :: ParseState -> String -> ParseState
+nextState :: ParseState -> String -> Maybe ParseState
 nextState (State pinfo chart items) t =
-  let (items1,chart1) = process add (allRules pinfo) (Set.toList items) (Set.empty,chart)
-      chart2 = chart1{ active =MM.empty
+  let (items1,chart1) = process add (sequences pinfo) (functions pinfo) (Set.toList items) Set.empty chart
+      chart2 = chart1{ active =emptyAC
                      , actives=active chart1 : actives chart1
-                     , passive=Map.empty
+                     , passive=emptyPC
                      , offset =offset chart1+1
                      }
-  in State pinfo chart2 items1
+  in if Set.null items1
+       then Nothing
+       else Just (State pinfo chart2 items1)
   where
     add tok item set
       | tok == t  = Set.insert item set
@@ -68,107 +67,157 @@ nextState (State pinfo chart items) t =
 -- the GF interpreter.
 getCompletions :: ParseState -> String -> Map.Map String ParseState
 getCompletions (State pinfo chart items) w =
-  let (map',chart1) = process add (allRules pinfo) (Set.toList items) (MM.empty,chart)
-      chart2 = chart1{ active =MM.empty
+  let (map',chart1) = process add (sequences pinfo) (functions pinfo) (Set.toList items) Map.empty chart
+      chart2 = chart1{ active =emptyAC
                      , actives=active chart1 : actives chart1
-                     , passive=Map.empty
+                     , passive=emptyPC
                      , offset =offset chart1+1
                      }
   in fmap (State pinfo chart2) map'
   where
     add tok item map
-      | isPrefixOf w tok = fromMaybe map (MM.insert' tok item map)
+      | isPrefixOf w tok = Map.insertWith Set.union tok (Set.singleton item) map
       | otherwise        = map
 
 extractExps :: ParseState -> CId -> [Tree]
 extractExps (State pinfo chart items) start = exps
   where
-    (_,st) = process (\_ _ -> id) (allRules pinfo) (Set.toList items) ((),chart)
+    (_,st) = process (\_ _ -> id) (sequences pinfo) (functions pinfo) (Set.toList items) () chart
 
     exps = nubsort $ do
-      c <- Map.findWithDefault [] start (startupCats pinfo)
-      ruleid <- topdownRules pinfo ? c
-      let (FRule fn _ args cat lins) = allRules pinfo ! ruleid
+      cat <- fromMaybe [] (Map.lookup start (startCats pinfo))
+      (funid,args) <- foldForest (\funid args -> (:) (funid,args)) [] cat (productions pinfo)
+      let FFun fn _ lins = functions pinfo ! funid
       lbl <- indices lins
-      fid <- Map.lookup (PK c lbl 0) (passive st)
+      Just fid <- [lookupPC (PK cat lbl 0) (passive st)]
       go Set.empty fid
 
-    go rec fid
-      | Set.member fid rec = mzero
-      | otherwise          = do set <- IntMap.lookup fid (forest st)
-                                Passive ruleid args <- Set.toList set
-                                let (FRule fn _ _ cat lins) = allRules pinfo ! ruleid
-                                if fn == wildCId
-                                  then go (Set.insert fid rec) (head args)
-                                  else do args <- mapM (go (Set.insert fid rec)) args
-                                          return (Fun fn args)
+    go rec fcat
+      | Set.member fcat rec = mzero
+      | otherwise           = do (funid,args) <- foldForest (\funid args -> (:) (funid,args)) [] fcat (forest st)
+                                 let FFun fn _ lins = functions pinfo ! funid
+                                 args <- mapM (go (Set.insert fcat rec)) args
+                                 return (Fun fn args)
 
-process fn !rules []           acc_chart = acc_chart
-process fn !rules (item:items) acc_chart = univRule item acc_chart
+process fn !seqs !funs []                                                 acc chart = (acc,chart)
+process fn !seqs !funs (item@(Active j ppos funid seqid args key0):items) acc chart
+  | inRange (bounds lin) ppos =
+      case unsafeAt lin ppos of
+        FSymCat d r      -> let !fid = args !! d
+                                key  = AK fid r
+                                
+                                items2 = case lookupPC (mkPK key k) (passive chart) of
+                                           Nothing -> items
+                                           Just id -> (Active j (ppos+1) funid seqid (updateAt d id args) key0) : items
+                                items3 = foldForest (\funid args -> (:) (Active k 0 funid (rhs funid r) args key)) items2 fid (forest chart)
+                            in case lookupAC key (active chart) of
+                                 Nothing                        -> process fn seqs funs items3 acc chart{active=insertAC key (Set.singleton item) (active chart)}
+                                 Just set | Set.member item set -> process fn seqs funs items  acc chart
+                                          | otherwise           -> process fn seqs funs items2 acc chart{active=insertAC key (Set.insert item set) (active chart)}
+      	FSymTok (KS tok) -> let !acc' = fn tok (Active j (ppos+1) funid seqid args key0) acc
+                            in process fn seqs funs items acc' chart
+  | otherwise =
+      case lookupPC (mkPK key0 j) (passive chart) of
+        Nothing -> let fid = nextId chart
+                       
+                       items2 = case lookupAC key0 ((active chart:actives chart) !! (k-j)) of
+                                  Nothing  -> items
+                                  Just set -> Set.fold (\(Active j' ppos funid seqid args keyc) -> 
+                                                            let FSymCat d _ = unsafeAt (unsafeAt seqs seqid) ppos
+                                                            in (:) (Active j' (ppos+1) funid seqid (updateAt d fid args) keyc)) items set
+	           in process fn seqs funs items2 acc chart{passive=insertPC (mkPK key0 j) fid (passive chart)
+                                                           ,forest =IntMap.insert fid (Set.singleton (FApply funid args)) (forest chart)
+                                                           ,nextId =nextId chart+1
+                                                           }
+        Just id -> let items2 = [Active k 0 funid (rhs funid r) args (AK id r) | r <- labelsAC id (active chart)] ++ items
+                   in process fn seqs funs items2 acc chart{forest = IntMap.insertWith Set.union id (Set.singleton (FApply funid args)) (forest chart)}
   where
-    univRule (Active j lbl ppos ruleid args fid0) acc_chart@(acc,chart)
-      | inRange (bounds lin) ppos =
-          case unsafeAt lin ppos of
-            FSymCat r d -> let !fid = args !! d
-                           in case MM.insert' (AK fid r) item (active chart) of
-                                Nothing     -> process fn rules items $ acc_chart
-                                Just actCat -> (case Map.lookup (PK fid r k) (passive chart) of
-                                                  Nothing -> id
-                                                  Just id -> process fn rules [Active j lbl (ppos+1) ruleid (updateAt d id args) fid0]) $
-                                               (case IntMap.lookup fid (forest chart) of
-                                                  Nothing  -> id
-                                                  Just set -> process fn rules (Set.fold (\(Passive ruleid args) -> (:) (Active k r 0 ruleid args fid)) [] set)) $
-                                               process fn rules items $
-                                               (acc,chart{active=actCat})
-      	    FSymTok tok   -> process fn rules items $
-      	                     (fn tok (Active j lbl (ppos+1) ruleid args fid0) acc,chart)
-      | otherwise = case Map.lookup (PK fid0 lbl j) (passive chart) of
-                      Nothing -> let fid = nextId chart
-	                         in process fn rules [Active j' lbl (ppos+1) ruleid (updateAt d fid args) fidc
-	                                                | Active j' lbl ppos ruleid args fidc <- ((active chart:actives chart) !! (k-j)) MM.! (AK fid0 lbl),
-	                                                  let FSymCat _ d = unsafeAt (rhs ruleid lbl) ppos] $
-	                            process fn rules items $
-	                            (acc,chart{passive=Map.insert (PK fid0 lbl j) fid (passive chart)
-                                              ,forest =IntMap.insert fid (Set.singleton (Passive ruleid args)) (forest chart)
-                                              ,nextId =nextId chart+1
-                                              })
-                      Just id -> process fn rules items $
-                                 (acc,chart{forest = IntMap.insertWith Set.union id (Set.singleton (Passive ruleid args)) (forest chart)})
-      where
-        !lin = rhs ruleid lbl
-        !k   = offset chart
+    !lin = unsafeAt seqs seqid
+    !k   = offset chart
 
-    rhs ruleid lbl = unsafeAt lins lbl
+    mkPK (AK fid lbl) j = PK fid lbl j
+    
+    rhs funid lbl = unsafeAt lins lbl
       where
-        (FRule _ _ _ cat lins) = unsafeAt rules ruleid
+        FFun _ _ lins = unsafeAt funs funid
 
     updateAt :: Int -> a -> [a] -> [a]
     updateAt nr x xs = [if i == nr then x else y | (i,y) <- zip [0..] xs]
 
 
+----------------------------------------------------------------
+-- Active Chart
+----------------------------------------------------------------
+
 data Active
   = Active {-# UNPACK #-} !Int
-           {-# UNPACK #-} !FIndex
            {-# UNPACK #-} !FPointPos
-           {-# UNPACK #-} !RuleId
+           {-# UNPACK #-} !FunId
+           {-# UNPACK #-} !SeqId
                            [FCat]
-           {-# UNPACK #-} !FCat
+           {-# UNPACK #-} !ActiveKey
   deriving (Eq,Show,Ord)
-data Passive
-  = Passive {-# UNPACK #-} !RuleId
-                            [FCat]
-  deriving (Eq,Ord,Show)
-
 data ActiveKey
   = AK {-# UNPACK #-} !FCat
        {-# UNPACK #-} !FIndex
   deriving (Eq,Ord,Show)
+type ActiveChart  = IntMap.IntMap (IntMap.IntMap (Set.Set Active))
+
+emptyAC :: ActiveChart
+emptyAC = IntMap.empty
+
+lookupAC :: ActiveKey -> ActiveChart -> Maybe (Set.Set Active)
+lookupAC (AK fcat l) chart = IntMap.lookup fcat chart >>= IntMap.lookup l
+
+labelsAC :: FCat -> ActiveChart -> [FIndex]
+labelsAC fcat chart = 
+  case IntMap.lookup fcat chart of
+    Nothing  -> []
+    Just map -> IntMap.keys map
+
+insertAC :: ActiveKey -> Set.Set Active -> ActiveChart -> ActiveChart
+insertAC (AK fcat l) set chart = IntMap.insertWith IntMap.union fcat (IntMap.singleton l set) chart
+
+
+----------------------------------------------------------------
+-- Passive Chart
+----------------------------------------------------------------
+
 data PassiveKey
   = PK {-# UNPACK #-} !FCat
        {-# UNPACK #-} !FIndex
        {-# UNPACK #-} !Int
   deriving (Eq,Ord,Show)
 
+type PassiveChart = Map.Map PassiveKey FCat 
+
+emptyPC :: PassiveChart
+emptyPC = Map.empty
+
+lookupPC :: PassiveKey -> PassiveChart -> Maybe FCat
+lookupPC key chart = Map.lookup key chart
+
+insertPC :: PassiveKey -> FCat -> PassiveChart -> PassiveChart
+insertPC key fcat chart = Map.insert key fcat chart
+
+
+----------------------------------------------------------------
+-- Forest
+----------------------------------------------------------------
+
+foldForest :: (FunId -> [FCat] -> b -> b) -> b -> FCat -> IntMap.IntMap (Set.Set Production) -> b
+foldForest f b fcat forest =
+  case IntMap.lookup fcat forest of
+    Nothing  -> b
+    Just set -> Set.fold foldPassive b set
+  where
+    foldPassive (FCoerce fcat)       b = foldForest f b fcat forest
+    foldPassive (FApply funid args) b = f funid args b
+
+
+----------------------------------------------------------------
+-- Parse State
+----------------------------------------------------------------
 
 -- | An abstract data type whose values represent
 -- the current state in an incremental parser.
@@ -176,10 +225,11 @@ data ParseState = State ParserInfo Chart (Set.Set Active)
 
 data Chart
   = Chart
-      { active  :: MM.MultiMap ActiveKey Active
-      , actives :: [MM.MultiMap ActiveKey Active]
-      , passive :: Map.Map PassiveKey FCat
-      , forest  :: IntMap.IntMap (Set.Set Passive)
+      { active  :: ActiveChart
+      , actives :: [ActiveChart]
+      , passive :: PassiveChart
+      , forest  :: IntMap.IntMap (Set.Set Production)
       , nextId  :: {-# UNPACK #-} !FCat
       , offset  :: {-# UNPACK #-} !Int
       }
+      deriving Show
