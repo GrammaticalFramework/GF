@@ -73,6 +73,7 @@ data Expr =
  | EMeta  Int                       -- ^ meta variable
  | EVar   CId                       -- ^ variable or function reference
  | EEq [Equation]                   -- ^ lambda function defined as a set of equations with pattern matching
+ | EPi CId Expr Expr                -- ^ dependent function type
   deriving (Eq,Ord,Show)
 
 data Term =

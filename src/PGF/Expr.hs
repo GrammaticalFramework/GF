@@ -4,7 +4,7 @@ module PGF.Expr(readTree, showTree, pTree, ppTree,
                 tree2expr, expr2tree,
 
                 -- needed in the typechecker
-                Value(..), Env, eval,
+                Value(..), Env, eval, apply,
 
                 -- helpers
                 pIdent,pStr
@@ -188,6 +188,7 @@ data Value
   | VMeta Int 
   | VLit Literal
   | VClosure Env Expr
+ deriving (Show,Eq,Ord)
 
 type Env = Map.Map CId Value
 
@@ -197,7 +198,10 @@ eval env (EApp e1 e2) = apply (eval env e1) (eval env e2)
 eval env (EAbs x e)   = VClosure env (EAbs x e)
 eval env (EMeta k)    = VMeta k
 eval env (ELit l)     = VLit l
+eval env e            = VClosure env e
 
 apply :: Value -> Value -> Value
 apply (VClosure env (EAbs x e)) v = eval (Map.insert x v env) e
 apply v0                        v = VApp v0 v
+
+
