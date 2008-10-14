@@ -57,7 +57,7 @@ nextState (State pinfo chart items) t =
        then Nothing
        else Just (State pinfo chart2 items1)
   where
-    add tok item set
+    add (KS tok) item set
       | tok == t  = Set.insert item set
       | otherwise = set
 
@@ -75,7 +75,7 @@ getCompletions (State pinfo chart items) w =
                      }
   in fmap (State pinfo chart2) map'
   where
-    add tok item map
+    add (KS tok) item map
       | isPrefixOf w tok = Map.insertWith Set.union tok (Set.singleton item) map
       | otherwise        = map
 
@@ -103,19 +103,19 @@ process fn !seqs !funs []                                                 acc ch
 process fn !seqs !funs (item@(Active j ppos funid seqid args key0):items) acc chart
   | inRange (bounds lin) ppos =
       case unsafeAt lin ppos of
-        FSymCat d r      -> let !fid = args !! d
-                                key  = AK fid r
+        FSymCat d r -> let !fid = args !! d
+                           key  = AK fid r
                                 
-                                items2 = case lookupPC (mkPK key k) (passive chart) of
-                                           Nothing -> items
-                                           Just id -> (Active j (ppos+1) funid seqid (updateAt d id args) key0) : items
-                                items3 = foldForest (\funid args -> (:) (Active k 0 funid (rhs funid r) args key)) items2 fid (forest chart)
-                            in case lookupAC key (active chart) of
-                                 Nothing                        -> process fn seqs funs items3 acc chart{active=insertAC key (Set.singleton item) (active chart)}
-                                 Just set | Set.member item set -> process fn seqs funs items  acc chart
-                                          | otherwise           -> process fn seqs funs items2 acc chart{active=insertAC key (Set.insert item set) (active chart)}
-      	FSymTok (KS tok) -> let !acc' = fn tok (Active j (ppos+1) funid seqid args key0) acc
-                            in process fn seqs funs items acc' chart
+                           items2 = case lookupPC (mkPK key k) (passive chart) of
+                                      Nothing -> items
+                                      Just id -> (Active j (ppos+1) funid seqid (updateAt d id args) key0) : items
+                           items3 = foldForest (\funid args -> (:) (Active k 0 funid (rhs funid r) args key)) items2 fid (forest chart)
+                       in case lookupAC key (active chart) of
+                            Nothing                        -> process fn seqs funs items3 acc chart{active=insertAC key (Set.singleton item) (active chart)}
+                            Just set | Set.member item set -> process fn seqs funs items  acc chart
+                                     | otherwise           -> process fn seqs funs items2 acc chart{active=insertAC key (Set.insert item set) (active chart)}
+      	FSymTok tok -> let !acc' = fn tok (Active j (ppos+1) funid seqid args key0) acc
+                       in process fn seqs funs items acc' chart
   | otherwise =
       case lookupPC (mkPK key0 j) (passive chart) of
         Nothing -> let fid = nextId chart
