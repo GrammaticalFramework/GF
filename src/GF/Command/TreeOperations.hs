@@ -1,11 +1,10 @@
 module GF.Command.TreeOperations (
   treeOp,
   allTreeOps
-  --typeCheck,
   ) where
 
 import GF.Compile.TypeCheck
-import PGF (compute,paraphrase)
+import PGF (compute,paraphrase,typecheck)
 
 -- for conversions
 import PGF.Data
@@ -29,11 +28,8 @@ allTreeOps pgf = [
    ("smallest",("sort trees from smallest to largest, in number of nodes",
       smallest)),
    ("typecheck",("type check and solve metavariables; reject if incorrect",
-      id))
+      concatMap (typecheck pgf)))
   ]
-
-typeCheck :: PGF -> Tree -> (Tree,(Bool,[String]))
-typeCheck pgf t = (t,(True,[]))
 
 smallest :: [Tree] -> [Tree]
 smallest = sortBy (\t u -> compare (size t) (size u)) where
