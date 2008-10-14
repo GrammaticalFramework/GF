@@ -5,9 +5,7 @@
 -- Stability   : (stable)
 -- Portability : (portable)
 --
--- generate parapharases with def definitions.
---
--- modified from src GF computation
+-- Generate parapharases with def definitions.
 -----------------------------------------------------------------------------
 
 module PGF.Paraphrase (
@@ -20,8 +18,10 @@ import PGF.Macros (lookDef,isData)
 import PGF.Expr
 import PGF.CId
 
-import Data.List
+import Data.List (nub,sort,group)
 import qualified Data.Map as Map
+
+import Debug.Trace ----
 
 paraphrase :: PGF -> Tree -> [Tree]
 paraphrase pgf = nub . paraphraseN 2 pgf
@@ -38,8 +38,8 @@ paraphraseN i pgf t =
 
 fromDef :: PGF -> Tree -> [Tree]
 fromDef pgf t@(Fun f ts) = defDown t ++ defUp t where
-  defDown t = [subst g u | let equ = equsFrom f, (u,g) <- match equ ts]
-  defUp   t = [subst g u | equ <- equsTo   f, (u,g) <- match [equ] ts]
+  defDown t = [subst g u | let equ = equsFrom f, (u,g) <- match equ ts, trequ "U" f equ]
+  defUp   t = [subst g u | equ <- equsTo   f, (u,g) <- match [equ] ts, trequ "D" f equ]
 
   equsFrom f = [(ps,d) | Just equs <- [lookup f equss], (Fun _ ps,d) <- equs]
 
@@ -50,7 +50,14 @@ fromDef pgf t@(Fun f ts) = defDown t ++ defUp t where
               isClosed d || (length equs == 1 && isLinear d)]
 
   equss = [(f,[(Fun f (map expr2tree ps), expr2tree d) | (Equ ps d) <- eqs]) | 
-                       (f,(_,EEq eqs)) <- Map.assocs (funs (abstract pgf))]
+                       (f,(_,d)) <- Map.assocs (funs (abstract pgf)), eqs <- defs d]
+
+  defs d = case d of
+    EEq eqs -> [eqs]
+    EMeta _ -> []
+    _      -> [[Equ [] d]]
+
+  trequ s f e = True ----trace (s ++ ": " ++ show f ++ "  " ++ show e) True
 
 subst :: Subst -> Tree -> Tree
 subst g e = case e of
