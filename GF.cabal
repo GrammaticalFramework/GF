@@ -578,6 +578,8 @@ library
     PGF.Raw.Print
     PGF.Raw.Convert
     PGF.Raw.Abstract
+    PGF.AbsCompute
+    PGF.Paraphrase
     GF.Data.MultiMap
     GF.Data.Utilities
     GF.Data.SortedList
@@ -691,6 +693,8 @@ executable gf
     PGF.Raw.Print
     PGF.Raw.Convert
     PGF.Raw.Abstract
+    PGF.AbsCompute
+    PGF.Paraphrase
     GFC
     GFI
   
