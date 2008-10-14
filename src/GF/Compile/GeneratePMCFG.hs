@@ -126,7 +126,7 @@ brk f (GrammarEnv last_id catSet seqSet funSet crcSet prodSet) =
             ys    = foldr (zipWith Set.insert) (repeat Set.empty) xs
 
 convertRule :: TermMap -> GrammarEnv -> XRule -> GrammarEnv
-convertRule cnc_defs grammarEnv (XRule fun args cat ctypes ctype term) = trace (show fun) $
+convertRule cnc_defs grammarEnv (XRule fun args cat ctypes ctype term) =
   brk (\grammarEnv -> foldBM addRule
                              grammarEnv
                              (convertTerm cnc_defs [] ctype term [([],[])])
