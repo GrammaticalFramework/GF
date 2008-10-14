@@ -7,7 +7,6 @@ import qualified GF.Compile.GenerateFCFG  as FCFG
 import qualified GF.Compile.GeneratePMCFG as PMCFG
 
 import PGF.CId
-import PGF.BuildParser (buildParserInfo)
 import qualified PGF.Macros as CM
 import qualified PGF.Data as C
 import qualified PGF.Data as D
@@ -54,9 +53,9 @@ mkCanon2gfcc opts cnc gr =
 addParsers :: D.PGF -> D.PGF
 addParsers pgf = pgf { D.concretes = Map.map conv (D.concretes pgf) }
   where
-    conv cnc = cnc { D.parser = Just (buildParserInfo fcfg) }
+    conv cnc = cnc { D.parser = Just pinfo }
       where
-        fcfg
+        pinfo
           | Map.lookup (mkCId "erasing") (D.cflags cnc) == Just "on" = PMCFG.convertConcrete (D.abstract pgf) cnc
           | otherwise                                                = FCFG.convertConcrete  (D.abstract pgf) cnc
     

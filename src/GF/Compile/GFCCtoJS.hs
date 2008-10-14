@@ -11,11 +11,13 @@ import GF.Data.ErrM
 import GF.Infra.Option
 
 import Control.Monad (mplus)
-import Data.Array (Array)
-import qualified Data.Array as Array
+import Data.Array.Unboxed (UArray)
+import qualified Data.Array.IArray as Array
 import Data.Maybe (fromMaybe)
 import Data.Map (Map)
+import qualified Data.Set as Set
 import qualified Data.Map as Map
+import qualified Data.IntMap as IntMap
 
 pgf2js :: PGF -> String
 pgf2js pgf =
@@ -89,31 +91,44 @@ children = JS.Ident "cs"
 -- Parser
 parser2js :: String -> ParserInfo -> [JS.Expr]
 parser2js start p  = [new "Parser" [JS.EStr start,
-                                    JS.EArray $ map frule2js (Array.elems (allRules p)),
-                                    JS.EObj $ map cats (Map.assocs (startupCats p))]]
+                                    JS.EArray $ [frule2js p cat prod | (cat,set) <- IntMap.toList (productions p), prod <- Set.toList set],
+                                    JS.EObj $ map cats (Map.assocs (startCats p))]]
   where 
     cats (c,is) = JS.Prop (JS.IdentPropName (JS.Ident (prCId c))) (JS.EArray (map JS.EInt is))
 
-frule2js :: FRule -> JS.Expr
-frule2js (FRule f ps args res lins) = new "Rule" [JS.EInt res, name2js (f,ps), JS.EArray (map JS.EInt args), lins2js lins]
+frule2js :: ParserInfo -> FCat -> Production -> JS.Expr
+frule2js p res (FApply funid args) = new "Rule" [JS.EInt res, name2js (f,ps), JS.EArray (map JS.EInt args), lins2js p lins]
+  where
+    FFun f ps lins = functions p Array.! funid
+frule2js p res (FCoerce arg) = new "Rule" [JS.EInt res, daughter 0, JS.EArray [JS.EInt arg], JS.EArray [JS.EArray [sym2js (FSymCat 0 i)] | i <- [0..catLinArity arg-1]]]
+  where
+    catLinArity :: FCat -> Int
+    catLinArity c = maximum (1:[Array.rangeSize (Array.bounds rhs) | (FFun _ _ rhs, _) <- topdownRules c])
+
+    topdownRules cat = f cat []
+      where
+        f cat rules = maybe rules (Set.fold g rules) (IntMap.lookup cat (productions p))
+	 
+        g (FApply funid args) rules = (functions p Array.! funid,args) : rules
+        g (FCoerce cat)       rules = f cat rules
+
 
 name2js :: (CId,[Profile]) -> JS.Expr
-name2js (f,ps) | f == wildCId = fromProfile (head ps)
-               | otherwise    = new "FunApp" $ [JS.EStr $ prCId f, JS.EArray (map fromProfile ps)]
+name2js (f,ps) = new "FunApp" $ [JS.EStr $ prCId f, JS.EArray (map fromProfile ps)]
   where
     fromProfile :: Profile -> JS.Expr
     fromProfile []   = new "MetaVar" []
     fromProfile [x]  = daughter x
     fromProfile args = new "Unify" [JS.EArray (map daughter args)]
 
-    daughter i = new "Arg" [JS.EInt i]
+daughter i = new "Arg" [JS.EInt i]
 
-lins2js :: Array FIndex (Array FPointPos FSymbol) -> JS.Expr
-lins2js ls = JS.EArray [ JS.EArray [ sym2js s | s <- Array.elems l] | l <- Array.elems ls]
+lins2js :: ParserInfo -> UArray FIndex SeqId -> JS.Expr
+lins2js p ls = JS.EArray [JS.EArray [sym2js s | s <- Array.elems (sequences p Array.! seqid)] | seqid <- Array.elems ls]
 
 sym2js :: FSymbol -> JS.Expr
-sym2js (FSymCat l n) = new "ArgProj" [JS.EInt n, JS.EInt l]
-sym2js (FSymTok t) = new "Terminal" [JS.EStr t]
+sym2js (FSymCat n l) = new "ArgProj" [JS.EInt n, JS.EInt l]
+sym2js (FSymTok (KS t)) = new "Terminal" [JS.EStr t]
 
 new :: String -> [JS.Expr] -> JS.Expr
 new f xs = JS.ENew (JS.Ident f) xs

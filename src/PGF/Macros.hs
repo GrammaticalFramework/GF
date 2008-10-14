@@ -49,12 +49,6 @@ lookValCat pgf = valCat . lookType pgf
 lookParser :: PGF -> CId -> Maybe ParserInfo
 lookParser pgf lang = Map.lookup lang (concretes pgf) >>= parser
 
-lookFCFG :: PGF -> CId -> Maybe FGrammar
-lookFCFG pgf lang = fmap toFGrammar $ lookParser pgf lang
-  where
-    toFGrammar :: ParserInfo -> FGrammar
-    toFGrammar pinfo = (Array.elems (allRules pinfo), startupCats pinfo)
-
 lookStartCat :: PGF -> String
 lookStartCat pgf = fromMaybe "S" $ msum $ Data.List.map (Map.lookup (mkCId "startcat"))
                                                         [gflags pgf, aflags (abstract pgf)]

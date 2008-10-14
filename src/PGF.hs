@@ -77,6 +77,7 @@ import Data.Char
 import qualified Data.Map as Map
 import Data.Maybe
 import System.Random (newStdGen)
+import Control.Monad
 
 ---------------------------------------------------
 -- Interface
@@ -211,7 +212,7 @@ parse pgf lang cat s =
     Just cnc -> case parser cnc of
                   Just pinfo -> if Map.lookup (mkCId "erasing") (cflags cnc) == Just "on"
                                   then Incremental.parse pinfo (mkCId cat) (words s)
-                                  else case parseFCFG "bottomup" pinfo (mkCId cat) (words s) of
+                                  else case parseFCFG "topdown" pinfo (mkCId cat) (words s) of
                                          Ok x  -> x
                                          Bad s -> error s
                   Nothing    -> error ("No parser built for language: " ++ lang)
@@ -259,9 +260,10 @@ startCat pgf = lookStartCat pgf
 complete pgf from cat input = 
          let (ws,prefix) = tokensAndPrefix input
              state0 = initState pgf from cat
-             state = foldl Incremental.nextState state0 ws
-             compls = Incremental.getCompletions state prefix
-          in [unwords (ws++[c]) ++ " " | c <- Map.keys compls]
+         in case foldM Incremental.nextState state0 ws of
+              Nothing -> []
+              Just state -> let compls = Incremental.getCompletions state prefix
+                            in [unwords (ws++[c]) ++ " " | c <- Map.keys compls]
   where
     tokensAndPrefix :: String -> ([String],String)
     tokensAndPrefix s | not (null s) && isSpace (last s) = (words s, "")

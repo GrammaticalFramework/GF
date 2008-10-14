@@ -3,13 +3,12 @@ module PGF.Raw.Convert (toPGF,fromPGF) where
 import PGF.CId
 import PGF.Data
 import PGF.Raw.Abstract
-import PGF.BuildParser (buildParserInfo)
-import PGF.Parsing.FCFG.Utilities
-import qualified GF.Compile.GenerateFCFG  as FCFG
 import qualified GF.Compile.GeneratePMCFG as PMCFG
 
-import qualified Data.Array as Array
-import qualified Data.Map   as Map
+import Data.Array.IArray
+import qualified Data.Map    as Map
+import qualified Data.Set    as Set
+import qualified Data.IntMap as IntMap
 
 pgfMajorVersion, pgfMinorVersion :: Integer
 (pgfMajorVersion, pgfMinorVersion) = (1,0)
@@ -54,11 +53,11 @@ toConcr pgf rexp =
                               lindefs      = Map.empty,
                               printnames   = Map.empty,
                               paramlincats = Map.empty,
-                              parser       = Just (buildParserOnDemand cnc)   -- This thunk will be overwritten if there is a parser
+                              parser       = Just (PMCFG.convertConcrete (abstract pgf) cnc)
+                                                                              -- This thunk will be overwritten if there is a parser
                                                                               -- compiled in the PGF file. We use lazy evaluation here
                                                                               -- to make sure that buildParserOnDemand is called only
                                                                               -- if it is needed.
-
                              }) rexp
   in cnc
   where
@@ -72,41 +71,44 @@ toConcr pgf rexp =
     add cnc (App "param" ts)     = cnc { paramlincats = mkTermMap ts }
     add cnc (App "parser" ts)    = cnc { parser = Just (toPInfo ts) }
 
-    buildParserOnDemand cnc = buildParserInfo fcfg
-      where
-        fcfg
-          | Map.lookup (mkCId "erasing") (cflags cnc) == Just "on" = PMCFG.convertConcrete (abstract pgf) cnc
-          | otherwise                                              = FCFG.convertConcrete  (abstract pgf) cnc
-
 toPInfo :: [RExp] -> ParserInfo
-toPInfo [App "rules" rs, App "startupcats" cs] = buildParserInfo (rules, cats)
+toPInfo [App "functions" fs, App "sequences" ss, App "productions" ps,App "startcats" cs] = 
+  ParserInfo { functions   = functions
+             , sequences   = seqs
+	     , productions = productions
+	     , startCats   = cats
+	     }
   where 
-    rules = map toFRule rs
-    cats = Map.fromList [(mkCId c, map expToInt fs) | App c fs <- cs]
+    functions   = mkArray (map toFFun fs)
+    seqs        = mkArray (map toFSeq ss)
+    productions = IntMap.fromList (map toProductionSet ps)
+    cats        = Map.fromList [(mkCId c, (map expToInt xs)) | App c xs <- cs]
 
-    toFRule :: RExp -> FRule
-    toFRule (App "rule"
-              [n,                      
-               App "cats" (rt:at),
-               App "R" ls]) = FRule fun prof args res lins
+    toFFun :: RExp -> FFun
+    toFFun (App f [App "P" ts,App "R" ls]) = FFun fun prof lins
+      where
+        fun  = mkCId f
+        prof = map toProfile ts
+        lins = mkArray [fromIntegral seqid | AInt seqid <- ls]
+
+    toProfile :: RExp -> Profile
+    toProfile AMet           = []
+    toProfile (App "_A" [t]) = [expToInt t]
+    toProfile (App "_U" ts)  = [expToInt t | App "_A" [t] <- ts]
+
+    toFSeq :: RExp -> FSeq
+    toFSeq (App "seq" ss) = mkArray [toSymbol s | s <- ss]
+
+    toProductionSet :: RExp -> (FCat,Set.Set Production)
+    toProductionSet (App "td" (rt : xs)) = (expToInt rt, Set.fromList (map toProduction xs))
       where 
-        (fun,prof) = toFName n
-        args = map expToInt at
-        res  = expToInt rt
-        lins = mkArray [mkArray [toSymbol s | s <- l] | App "S" l <- ls]
-
-toFName :: RExp -> (CId,[Profile])
-toFName (App "_A" [x]) = (wildCId, [[expToInt x]])
-toFName (App f ts)     = (mkCId f, map toProfile ts)
-    where
-      toProfile :: RExp -> Profile
-      toProfile AMet           = []
-      toProfile (App "_A" [t]) = [expToInt t]
-      toProfile (App "_U" ts)  = [expToInt t | App "_A" [t] <- ts]
+        toProduction (App "A" (ruleid : at)) = FApply (expToInt ruleid) (map expToInt at)
+        toProduction (App "C" [fcat])        = FCoerce (expToInt fcat)
 
 toSymbol :: RExp -> FSymbol
-toSymbol (App "P" [n,l]) = FSymCat (expToInt l) (expToInt n)
-toSymbol (AStr t) = FSymTok t
+toSymbol (App "P" [n,l]) = FSymCat (expToInt n) (expToInt l)
+toSymbol (App "KP" (d:alts)) = FSymTok (toKP d alts)
+toSymbol (AStr t) = FSymTok (KS t)
 
 toType :: RExp -> Type
 toType e = case e of
@@ -142,8 +144,15 @@ toTerm e = case e of
   App f []  -> F (mkCId f)
   AInt i -> C (fromInteger i)
   AMet   -> TM "?"
-  AStr s -> K (KS s) ----
+  App "KP" (d:alts) -> K (toKP d alts)
+  AStr s -> K (KS s)
   _ -> error $ "term " ++ show e
+  
+toKP d alts = KP (toStr d) (map toAlt alts)
+  where
+    toStr (App "S" vs) = [v | AStr v <- vs]
+    toAlt (App "A" [x,y]) = Alt (toStr x) (toStr y)
+
 
 ------------------------------
 --- from internal to parser --
@@ -192,8 +201,7 @@ fromExp e = case e of
   ELit (LFlt d) -> AFlt d
   ELit (LInt i) -> AInt (toInteger i)
   EMeta _  -> AMet ----
-  EEq eqs  -> 
-    App "Eq" [App "E" (map fromExp (v:ps)) | Equ ps v <- eqs]
+  EEq eqs  -> App "Eq" [App "E" (map fromExp (v:ps)) | Equ ps v <- eqs]
 
 fromTerm :: Term -> RExp
 fromTerm e = case e of
@@ -206,8 +214,11 @@ fromTerm e = case e of
   TM _    -> AMet
   F f     -> App (prCId f) []
   V i     -> App "A" [AInt (toInteger i)]
-  K (KS s) -> AStr s ----
-  K (KP d vs) -> App "FV" (str d : [str v | Alt v _ <- vs]) ----
+  K t     -> fromTokn t
+
+fromTokn :: Tokn -> RExp
+fromTokn (KS s)    = AStr s
+fromTokn (KP d vs) = App "KP" (str d : [App "A" [str v, str x] | Alt v x <- vs])
  where
    str v = App "S" (map AStr v)
 
@@ -215,39 +226,42 @@ fromTerm e = case e of
 
 fromPInfo :: ParserInfo -> RExp
 fromPInfo p = App "parser" [
-          App "rules"         [fromFRule rule | rule <- Array.elems (allRules p)],
-          App "startupcats"   [App (prCId f) (map intToExp cs) | (f,cs) <- Map.toList (startupCats p)]
+          App "functions"   [fromFFun fun | fun <- elems (functions p)],
+          App "sequences"   [fromFSeq seq | seq <- elems (sequences p)],
+          App "productions" [fromProductionSet xs  | xs <- IntMap.toList (productions p)],
+          App "startcats"   [App (prCId f) (map intToExp xs) | (f,xs) <- Map.toList (startCats p)]
         ]
 
-fromFRule :: FRule -> RExp
-fromFRule (FRule fun prof args res lins) = 
-    App "rule" [fromFName (fun,prof),
-                App "cats" (intToExp res:map intToExp args),
-                App "R" [App "S" [fromSymbol s | s <- Array.elems l] | l <- Array.elems lins]
-               ]
-
-fromFName :: (CId,[Profile]) -> RExp
-fromFName (f,ps) | f == wildCId = fromProfile (head ps)
-                 | otherwise    = App (prCId f) (map fromProfile ps)
+fromFFun :: FFun -> RExp
+fromFFun (FFun fun prof lins) = App (prCId fun) [App "P" (map fromProfile prof), App "R" [intToExp seqid | seqid <- elems lins]]
   where
     fromProfile :: Profile -> RExp
     fromProfile []   = AMet
     fromProfile [x]  = daughter x
     fromProfile args = App "_U" (map daughter args)
-
+    
     daughter n = App "_A" [intToExp n]
 
 fromSymbol :: FSymbol -> RExp
-fromSymbol (FSymCat l n) = App "P" [intToExp n, intToExp l]
-fromSymbol (FSymTok t) = AStr t
+fromSymbol (FSymCat n l) = App "P" [intToExp n, intToExp l]
+fromSymbol (FSymTok t)   = fromTokn t
+
+fromFSeq :: FSeq -> RExp
+fromFSeq seq = App "seq" [fromSymbol s | s <- elems seq]
+
+fromProductionSet :: (FCat,Set.Set Production) -> RExp
+fromProductionSet (cat,xs) = App "td" (intToExp cat : map fromPassive (Set.toList xs))
+  where
+    fromPassive (FApply ruleid args) = App "A" (intToExp ruleid : map intToExp args)
+    fromPassive (FCoerce fcat)       = App "C" [intToExp fcat]
 
 -- ** Utilities
 
 mkTermMap :: [RExp] -> Map.Map CId Term
 mkTermMap ts = Map.fromAscList [(mkCId f,toTerm v) | App f [v] <- ts]
 
-mkArray :: [a] -> Array.Array Int a
-mkArray xs = Array.listArray (0, length xs - 1) xs
+mkArray :: IArray a e => [e] -> a Int e
+mkArray xs = listArray (0, length xs - 1) xs
 
 expToInt :: Integral a => RExp -> a
 expToInt (App "neg" [AInt i]) = fromIntegral (negate i)

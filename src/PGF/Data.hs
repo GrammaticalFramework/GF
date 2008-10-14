@@ -2,11 +2,13 @@ module PGF.Data where
 
 import PGF.CId
 import GF.Text.UTF8
-import GF.Data.Assoc
 
 import qualified Data.Map as Map
+import qualified Data.Set as Set
+import qualified Data.IntMap as IntMap
 import Data.List
 import Data.Array
+import Data.Array.Unboxed
 
 -- internal datatypes for PGF
 
@@ -108,32 +110,28 @@ data Equation =
   deriving (Eq,Ord,Show)
 
 
-type FToken    = String
 type FCat      = Int
 type FIndex    = Int
-data FSymbol
-  = FSymCat {-# UNPACK #-} !FIndex {-# UNPACK #-} !Int
-  | FSymTok FToken
-type Profile   = [Int]
 type FPointPos = Int
-type FGrammar  = ([FRule], Map.Map CId [FCat])
-data FRule     = FRule CId [Profile] [FCat] FCat (Array FIndex (Array FPointPos FSymbol))
-
-type RuleId = Int
+data FSymbol
+  = FSymCat {-# UNPACK #-} !Int {-# UNPACK #-} !FIndex
+  | FSymTok Tokn
+  deriving (Eq,Ord,Show)
+type Profile = [Int]
+data Production
+  = FApply  {-# UNPACK #-} !FunId [FCat]
+  | FCoerce {-# UNPACK #-} !FCat
+  deriving (Eq,Ord,Show)
+data FFun  = FFun CId [Profile] {-# UNPACK #-} !(UArray FIndex SeqId) deriving (Eq,Ord,Show)
+type FSeq  = Array FPointPos FSymbol
+type FunId = Int
+type SeqId = Int
 
 data ParserInfo
-    = ParserInfo { allRules           :: Array RuleId FRule
-                 , topdownRules       :: Assoc FCat [RuleId]
-	  	   -- ^ used in 'GF.Parsing.MCFG.Active' (Earley):
-	           -- , emptyRules    :: [RuleId]
-	         , epsilonRules       :: [RuleId]
-		   -- ^ used in 'GF.Parsing.MCFG.Active' (Kilbury):
-	         , leftcornerCats     :: Assoc FCat   [RuleId]
-	         , leftcornerTokens   :: Assoc FToken [RuleId]
-		   -- ^ used in 'GF.Parsing.MCFG.Active' (Kilbury):
-	         , grammarCats        :: [FCat]
-	         , grammarToks        :: [FToken]
-	         , startupCats        :: Map.Map CId [FCat]
+    = ParserInfo { functions   :: Array FunId FFun
+                 , sequences   :: Array SeqId FSeq
+	         , productions :: IntMap.IntMap (Set.Set Production)
+	         , startCats   :: Map.Map CId [FCat]
 	         }
 
 

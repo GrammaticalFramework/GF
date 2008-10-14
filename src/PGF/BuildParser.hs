@@ -15,50 +15,62 @@ import PGF.CId
 import PGF.Data
 import PGF.Parsing.FCFG.Utilities
 
-import Data.Array
+import Data.Array.IArray
 import Data.Maybe
+import qualified Data.IntMap as IntMap
 import qualified Data.Map as Map
 import qualified Data.Set as Set
 import Debug.Trace
 
 
+data ParserInfoEx
+  = ParserInfoEx { epsilonRules :: [(FunId,[FCat],FCat)]
+	         , leftcornerCats   :: Assoc FCat   [(FunId,[FCat],FCat)]
+	         , leftcornerTokens :: Assoc String [(FunId,[FCat],FCat)]
+	         , grammarToks :: [String]
+	         }
+
 ------------------------------------------------------------
 -- parser information
 
-getLeftCornerTok (FRule _ _ _ _ lins)
+getLeftCornerTok pinfo (FFun _ _ lins)
   | inRange (bounds syms) 0 = case syms ! 0 of
-                                FSymTok tok -> [tok]
+                                FSymTok (KS tok) -> [tok]
+                                _                -> []
+  | otherwise               = []
+  where
+    syms = (sequences pinfo) ! (lins ! 0)
+
+getLeftCornerCat pinfo args (FFun _ _ lins)
+  | inRange (bounds syms) 0 = case syms ! 0 of
+                                FSymCat d _ -> let cat = args !! d
+                                               in case IntMap.lookup cat (productions pinfo) of
+                                                    Just set -> cat : [cat' | FCoerce cat' <- Set.toList set]
+                                                    Nothing  -> [cat]
                                 _           -> []
   | otherwise               = []
   where
-    syms = lins ! 0
+    syms = (sequences pinfo) ! (lins ! 0)
 
-getLeftCornerCat (FRule _ _ args _ lins)
-  | inRange (bounds syms) 0 = case syms ! 0 of
-                                FSymCat _ d -> [args !! d]
-                                _           -> []
-  | otherwise               = []
-  where
-    syms = lins ! 0
+buildParserInfo :: ParserInfo -> ParserInfoEx
+buildParserInfo pinfo =
+    ParserInfoEx { epsilonRules = epsilonrules
+	         , leftcornerCats = leftcorncats
+	         , leftcornerTokens = leftcorntoks
+	         , grammarToks = grammartoks
+	         }
 
-buildParserInfo :: FGrammar -> ParserInfo
-buildParserInfo (grammar,startup) = -- trace (unlines [prt (x,Set.toList set) | (x,set) <- Map.toList leftcornFilter]) $
-    ParserInfo { allRules = allrules
-               , topdownRules = topdownrules
-	       -- , emptyRules = emptyrules
-	       , epsilonRules = epsilonrules
-	       , leftcornerCats = leftcorncats
-	       , leftcornerTokens = leftcorntoks
-	       , grammarCats = grammarcats
-	       , grammarToks = grammartoks
-	       , startupCats = startup
-	       }
-
-    where allrules = listArray (0,length grammar-1) grammar
-	  topdownrules  = accumAssoc id [(cat,  ruleid) | (ruleid, FRule _ _ _ cat _) <- assocs allrules]
-	  epsilonrules  = [ ruleid | (ruleid, FRule _ _ _ _ lins) <- assocs allrules,
-                            not (inRange (bounds (lins ! 0)) 0) ]
-	  leftcorncats  = accumAssoc id [ (cat, ruleid) | (ruleid, rule) <- assocs allrules, cat <- getLeftCornerCat rule ]
-	  leftcorntoks  = accumAssoc id [ (tok, ruleid) | (ruleid, rule) <- assocs allrules, tok <- getLeftCornerTok rule ]
-	  grammarcats   = aElems topdownrules
-	  grammartoks   = nubsort [t | (FRule _ _ _ _ lins) <- grammar, lin <- elems lins, FSymTok t <- elems lin]
+    where epsilonrules  = [ (ruleid,args,cat)
+                                   | (cat,set) <- IntMap.toList (productions pinfo)
+	                           , (FApply ruleid args) <- Set.toList set
+	                           , let (FFun _ _ lins) = (functions pinfo) ! ruleid
+                                   , not (inRange (bounds ((sequences pinfo) ! (lins ! 0))) 0) ]
+	  leftcorncats  = accumAssoc id [ (cat', (ruleid, args, cat))
+	                                                | (cat,set) <- IntMap.toList (productions pinfo)
+	                                                , (FApply ruleid args) <- Set.toList set
+	                                                , cat' <- getLeftCornerCat pinfo args ((functions pinfo) ! ruleid) ]
+	  leftcorntoks  = accumAssoc id [ (tok, (ruleid, args, cat))
+	                                                | (cat,set) <- IntMap.toList (productions pinfo)
+	                                                , (FApply ruleid args) <- Set.toList set
+	                                                , tok <- getLeftCornerTok pinfo ((functions pinfo) ! ruleid) ]
+	  grammartoks   = nubsort [t | lin <- elems (sequences pinfo), FSymTok (KS t) <- elems lin]

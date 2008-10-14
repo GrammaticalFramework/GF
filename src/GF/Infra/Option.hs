@@ -91,7 +91,6 @@ data OutputFormat = FmtPGF
                   | FmtEBNF
                   | FmtRegular
                   | FmtNoLR
-                  | FmtFCFG
                   | FmtSRGS_XML
                   | FmtSRGS_XML_NonRec
                   | FmtSRGS_ABNF 
@@ -497,7 +496,6 @@ outputFormats =
      ("ebnf",         FmtEBNF),
      ("regular",      FmtRegular),
      ("nolr",         FmtNoLR),
-     ("fcfg",         FmtFCFG),
      ("srgs_xml",     FmtSRGS_XML),
      ("srgs_xml_nonrec",     FmtSRGS_XML_NonRec),
      ("srgs_abnf",    FmtSRGS_ABNF),
