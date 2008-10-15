@@ -23,7 +23,7 @@ module GF.Infra.Modules (
 		MReuseType(..), MInclude (..),
 		extends, isInherited,inheritAll, 
                 updateMGrammar, updateModule, replaceJudgements, addFlag,
-		addOpenQualif, flagsModule, allFlags, mapModules,
+		addOpenQualif, flagsModule, allFlags, mapModules, mapModules',
 		MainGrammar(..), MainConcreteSpec(..), OpenSpec(..), OpenQualif(..),
 		oSimple, oQualif,
 		ModuleStatus(..),
@@ -141,9 +141,12 @@ allFlags gr = concatOptions $ map flags $ [m | (_, ModMod m) <- modules gr]
 
 mapModules :: (Module i a -> Module i a) 
 	   -> MGrammar i a -> MGrammar i a 
-mapModules f = MGrammar . map (onSnd mapModules') . modules
-    where mapModules' (ModMod m) = ModMod (f m)
-	  mapModules' m = m
+mapModules f = MGrammar . map (onSnd (mapModules' f)) . modules
+
+mapModules' :: (Module i a -> Module i a) 
+	   -> ModInfo i a -> ModInfo i a 
+mapModules' f (ModMod m) = ModMod (f m)
+mapModules' _ m = m
 
 data MainGrammar i = MainGrammar {
     mainAbstract  :: i ,
