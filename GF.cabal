@@ -580,6 +580,7 @@ library
     PGF.Raw.Abstract
     PGF.AbsCompute
     PGF.Paraphrase
+    PGF.TypeCheck
     GF.Data.MultiMap
     GF.Data.Utilities
     GF.Data.SortedList
@@ -695,6 +696,7 @@ executable gf
     PGF.Raw.Abstract
     PGF.AbsCompute
     PGF.Paraphrase
+    PGF.TypeCheck
     GFC
     GFI
   
