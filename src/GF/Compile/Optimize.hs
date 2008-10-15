@@ -58,8 +58,8 @@ optimizeModule opts mse@(ms,eenv) mo@(_,mi) = case mi of
       return (mo2,eenv)
   _ -> evalModule oopts mse mo
  where
-   oopts = addOptions opts (moduleOptions (flagsModule mo))
-   optim = moduleFlag optOptimizations oopts
+   oopts = opts `addOptions` toOptions (flagsModule mo)
+   optim = flag optOptimizations oopts
 
 evalModule :: Options -> ([(Ident,SourceModInfo)],EEnv) -> (Ident,SourceModInfo) -> 
                Err ((Ident,SourceModInfo),EEnv)
@@ -102,7 +102,7 @@ evalResInfo oopts gr (c,info) = case info of
  where
    comp = if optres then computeConcrete gr else computeConcreteRec gr
    eIn cat = errIn ("Error optimizing" +++ cat +++ prt c +++ ":")
-   optim = moduleFlag optOptimizations oopts
+   optim = flag optOptimizations oopts
    optres = OptExpand `Set.member` optim
 
 

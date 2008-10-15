@@ -38,7 +38,7 @@ import System.Cmd (system)
 
 getSourceModule :: Options -> FilePath -> IOE SourceModule
 getSourceModule opts file0 = do
-  file <- foldM runPreprocessor file0 (moduleFlag optPreprocessors opts)
+  file <- foldM runPreprocessor file0 (flag optPreprocessors opts)
   string    <- readFileIOE file
   let tokens = myLexer string
   mo1  <- ioeErr $ pModDef tokens

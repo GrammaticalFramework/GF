@@ -129,15 +129,15 @@ addOpenQualif i j (Module mt ms fs me ops js ps) =
   Module mt ms fs me (oQualif i j : ops) js ps
 
 addFlag :: ModuleOptions -> Module i t -> Module i t
-addFlag f mo = mo {flags = addModuleOptions (flags mo) f} 
+addFlag f mo = mo {flags = flags mo `addOptions` f} 
 
 flagsModule :: (i,ModInfo i a) -> ModuleOptions
 flagsModule (_,mi) = case mi of
   ModMod m -> flags m
-  _ -> noModuleOptions
+  _ -> noOptions
 
 allFlags :: MGrammar i a -> ModuleOptions
-allFlags gr = concatModuleOptions $ map flags $ [m | (_, ModMod m) <- modules gr]
+allFlags gr = concatOptions $ map flags $ [m | (_, ModMod m) <- modules gr]
 
 mapModules :: (Module i a -> Module i a) 
 	   -> MGrammar i a -> MGrammar i a 
@@ -270,7 +270,7 @@ emptyModInfo = ModMod emptyModule
 
 emptyModule :: Module i a
 emptyModule = Module 
-  MTResource MSComplete noModuleOptions [] [] emptyBinTree emptyBinTree
+  MTResource MSComplete noOptions [] [] emptyBinTree emptyBinTree
 
 -- | we store the module type with the identifier
 data IdentM i = IdentM {

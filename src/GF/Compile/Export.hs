@@ -51,7 +51,7 @@ exportPGF opts fmt pgf =
       FmtRegExp       -> single "rexp" regexpPrinter
       FmtFA           -> single "dot"  slfGraphvizPrinter
  where
-   name = fromMaybe (prCId (absname pgf)) (moduleFlag optName opts)
+   name = fromMaybe (prCId (absname pgf)) (flag optName opts)
 
    multi :: String -> (PGF -> String) -> [(FilePath,String)]
    multi ext pr = [(name <.> ext, pr pgf)]

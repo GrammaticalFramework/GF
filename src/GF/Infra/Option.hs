@@ -11,13 +11,12 @@ module GF.Infra.Option
      -- * Option pretty-printing
      moduleOptionsGFO,
      -- * Option manipulation
+     OPTIONS(..),
      addOptions, concatOptions, noOptions,
-     moduleOptions,
-     addModuleOptions, concatModuleOptions, noModuleOptions,
      modifyFlags, modifyModuleFlags,
      helpMessage,
      -- * Checking specific options
-     flag, moduleFlag, cfgTransform, haskellOption,
+     flag, cfgTransform, haskellOption,
      isLexicalCat,
      -- * Setting specific options
      setOptimization, setCFGTransform,
@@ -200,7 +199,7 @@ parseModuleOptions :: [String] -> Err ModuleOptions
 parseModuleOptions args 
     | not (null errs)  = errors errs
     | not (null files) = errors $ map ("Non-option among module options: " ++) files
-    | otherwise        = liftM concatModuleOptions $ sequence flags
+    | otherwise        = liftM concatOptions $ sequence flags
   where (flags, files, errs) = getOpt RequireOrder moduleOptDescr args
 
 -- Showing options
@@ -217,42 +216,45 @@ moduleOptionsGFO (ModuleOptions o) =
 
 -- Option manipulation
 
-noOptions :: Options
-noOptions = Options id
+class OPTIONS a where
+    toOptions :: a -> Options
+    fromOptions :: Options -> a
 
-addOptions :: Options -- ^ Existing options.
-           -> Options -- ^ Options to add (these take preference).
-           -> Options
-addOptions (Options o1) (Options o2) = Options (o2 . o1)
+instance OPTIONS Options where
+    toOptions = id
+    fromOptions = id
 
-concatOptions :: [Options] -> Options
+instance OPTIONS ModuleOptions where
+    toOptions (ModuleOptions f) = Options (\fs -> fs { optModuleFlags = f (optModuleFlags fs) })
+    fromOptions (Options f) = ModuleOptions (\fs -> optModuleFlags (f (defaultFlags { optModuleFlags = fs})))
+
+instance OPTIONS Flags where
+    toOptions fs = Options (\_ -> fs)
+    fromOptions (Options f) = f defaultFlags
+
+instance OPTIONS ModuleFlags where
+    toOptions mfs = Options (\fs -> fs { optModuleFlags = mfs })
+    fromOptions (Options f) = optModuleFlags (f defaultFlags)
+
+flag :: (OPTIONS a, OPTIONS b) => (a -> c) -> b -> c
+flag f o = f (fromOptions (toOptions o))
+
+addOptions :: OPTIONS a => a -> a -> a
+addOptions x y = let Options o1 = toOptions x
+                     Options o2 = toOptions y
+                  in fromOptions (Options (o2 . o1))
+
+noOptions :: OPTIONS a => a
+noOptions = fromOptions (Options id)
+
+concatOptions :: OPTIONS a => [a] -> a
 concatOptions = foldr addOptions noOptions
-
-moduleOptions :: ModuleOptions -> Options
-moduleOptions (ModuleOptions f) = Options (\o -> o { optModuleFlags = f (optModuleFlags o) })
-
-addModuleOptions :: ModuleOptions -- ^ Existing options.
-                 -> ModuleOptions -- ^ Options to add (these take preference).
-                 -> ModuleOptions
-addModuleOptions (ModuleOptions o1) (ModuleOptions o2) = ModuleOptions (o2 . o1)
-
-concatModuleOptions :: [ModuleOptions] -> ModuleOptions
-concatModuleOptions = foldr addModuleOptions noModuleOptions
-
-noModuleOptions :: ModuleOptions
-noModuleOptions = ModuleOptions id
-
-flag :: (Flags -> a) -> Options -> a
-flag f (Options o) = f (o defaultFlags)
-
-moduleFlag :: (ModuleFlags -> a) -> Options -> a
-moduleFlag f = flag (f . optModuleFlags)
 
 modifyFlags :: (Flags -> Flags) -> Options
 modifyFlags = Options
 
 modifyModuleFlags :: (ModuleFlags -> ModuleFlags) -> Options
-modifyModuleFlags = moduleOptions . ModuleOptions
+modifyModuleFlags = toOptions . ModuleOptions
 
 
 {-
@@ -454,7 +456,7 @@ optDescr =
                  "Remove name qualifiers when pretty-printing.",
      Option [] ["retain"] (NoArg (set $ \o -> o { optRetainResource = True })) "Retain opers.",
      Option [] ["prob"] (NoArg (prob True)) "Read probabilities from '--# prob' pragmas."
-    ] ++ map (fmap (liftM moduleOptions)) moduleOptDescr
+    ] ++ map (fmap (liftM toOptions)) moduleOptDescr
  where phase       x = set $ \o -> o { optStopAfterPhase = x }
        mode        x = set $ \o -> o { optMode = x }
        verbosity mv  = case mv of
@@ -583,10 +585,10 @@ verbAtLeast :: Options -> Verbosity -> Bool
 verbAtLeast opts v = flag optVerbosity opts >= v
 
 dump :: Options -> Dump -> Bool
-dump opts d = moduleFlag ((d `elem`) . optDump) opts
+dump opts d = flag ((d `elem`) . optDump) opts
 
 cfgTransform :: Options -> CFGTransform -> Bool
-cfgTransform opts t = Set.member t (moduleFlag optCFGTransforms opts)
+cfgTransform opts t = Set.member t (flag optCFGTransforms opts)
 
 haskellOption :: Options -> HaskellOption -> Bool
 haskellOption opts o = Set.member o (flag optHaskellOptions opts)
