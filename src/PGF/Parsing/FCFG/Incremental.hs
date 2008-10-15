@@ -109,20 +109,38 @@ extractExps (State pinfo chart items) start = exps
       let FFun fn _ lins = functions pinfo ! funid
       lbl <- indices lins
       Just fid <- [lookupPC (PK cat lbl 0) (passive st)]
-      go Set.empty 0 (0,fid)
+      (fvs,tree) <- go Set.empty 0 (0,fid)
+      guard (Set.null fvs)
+      return tree
 
     go rec fcat' (d,fcat)
-      | fcat < totalCats pinfo = [Meta (fcat'*10+d)]   -- FIXME: here we assume that every rule has at most 10 arguments
+      | fcat < totalCats pinfo = return (Set.empty,Meta (fcat'*10+d))   -- FIXME: here we assume that every rule has at most 10 arguments
       | Set.member fcat rec    = mzero
       | otherwise              = foldForest (\funid args trees -> 
                                                   do let FFun fn _ lins = functions pinfo ! funid
                                                      args <- mapM (go (Set.insert fcat rec) fcat) (zip [0..] args)
-                                                     return (Fun fn args)
+                                                     check_ho_fun fn args
                                                   `mplus`
                                                   trees)
-                                            (\const _ trees -> const : trees)
+                                            (\const _ trees ->
+                                                  return (freeVar const,const)
+                                                  `mplus`
+                                                  trees)
                                             [] fcat (forest st)
 
+    check_ho_fun fun args
+      | fun == _V = return (head args)
+      | fun == _B = return (foldl1 Set.difference (map fst args),Abs [mkVar (snd e) | e <- tail args] (snd (head args)))
+      | otherwise = return (Set.unions (map fst args),Fun fun (map snd args))
+    
+    mkVar (Var  v) = v
+    mkVar (Meta _) = wildCId
+    
+    freeVar (Var v) = Set.singleton v
+    freeVar _       = Set.empty
+
+_B = mkCId "_B"
+_V = mkCId "_V"
 
 process fn !seqs !funs []                                                 acc chart = (acc,chart)
 process fn !seqs !funs (item@(Active j ppos funid seqid args key0):items) acc chart
