@@ -239,7 +239,7 @@ buildPosTree m = buildTree . mkPoss . filter ((>0) . snd) where
     _ -> []
   name = prIdent m ++ ".gf" ----
 
-transAbsDef :: TopDef -> Err (Either [(Ident, Int, G.Info)] GO.ModuleOptions)
+transAbsDef :: TopDef -> Err (Either [(Ident, Int, G.Info)] GO.Options)
 transAbsDef x = case x of
   DefCat catdefs -> liftM (Left . concat) $ mapM transCatDef catdefs
   DefFun fundefs -> do
@@ -277,7 +277,7 @@ transAbsDef x = case x of
 returnl :: a -> Err (Either a b)
 returnl = return . Left
 
-transFlagDef :: FlagDef -> Err GO.ModuleOptions
+transFlagDef :: FlagDef -> Err GO.Options
 transFlagDef x = case x of
   FlagDef f x  -> parseModuleOptions ["--" ++ prPIdent f ++ "=" ++ prPIdent x]
   where
@@ -330,7 +330,7 @@ transDataDef x = case x of
      DataId id  -> liftM G.Cn $ transIdent id
      DataQId id0 id  -> liftM2 G.QC (transIdent id0) (transIdent id)
 
-transResDef :: TopDef -> Err (Either [(Ident, Int, G.Info)] GO.ModuleOptions)
+transResDef :: TopDef -> Err (Either [(Ident, Int, G.Info)] GO.Options)
 transResDef x = case x of
   DefPar pardefs -> do
     pardefs' <- mapM transParDef pardefs
@@ -380,7 +380,7 @@ transParDef x = case x of
   ParDefAbs id -> liftM2 (,) (transIdent id) (return [])
   _ -> Bad $ "illegal definition in resource:" ++++ printTree x
 
-transCncDef :: TopDef -> Err (Either [(Ident, Int, G.Info)] GO.ModuleOptions)
+transCncDef :: TopDef -> Err (Either [(Ident, Int, G.Info)] GO.Options)
 transCncDef x = case x of
   DefLincat defs  -> do
     defs' <- liftM concat $ mapM transPrintDef defs

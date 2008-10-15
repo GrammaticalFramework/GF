@@ -66,7 +66,7 @@ data ModInfo i a =
 data Module i a = Module {
     mtype   :: ModuleType i ,
     mstatus :: ModuleStatus ,
-    flags   :: ModuleOptions,
+    flags   :: Options,
     extend  :: [(i,MInclude i)],
     opens   :: [OpenSpec i] ,
     jments  :: BinTree i a ,
@@ -128,15 +128,15 @@ addOpenQualif :: i -> i -> Module i t -> Module i t
 addOpenQualif i j (Module mt ms fs me ops js ps) = 
   Module mt ms fs me (oQualif i j : ops) js ps
 
-addFlag :: ModuleOptions -> Module i t -> Module i t
+addFlag :: Options -> Module i t -> Module i t
 addFlag f mo = mo {flags = flags mo `addOptions` f} 
 
-flagsModule :: (i,ModInfo i a) -> ModuleOptions
+flagsModule :: (i,ModInfo i a) -> Options
 flagsModule (_,mi) = case mi of
   ModMod m -> flags m
   _ -> noOptions
 
-allFlags :: MGrammar i a -> ModuleOptions
+allFlags :: MGrammar i a -> Options
 allFlags gr = concatOptions $ map flags $ [m | (_, ModMod m) <- modules gr]
 
 mapModules :: (Module i a -> Module i a) 

@@ -132,7 +132,7 @@ trPerh p = case p of
   May b -> P.EIndir $ tri b
   _ -> P.EMeta ---
 
-trFlags :: ModuleOptions -> [P.TopDef]
+trFlags :: Options -> [P.TopDef]
 trFlags = map trFlag . moduleOptionsGFO
 
 trFlag :: (String,String) -> P.TopDef
