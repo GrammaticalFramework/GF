@@ -99,9 +99,9 @@ fixHoasFuns pinfo = pinfo{functions=mkArray [FFun (fixName n) prof lins | FFun n
         fixName n = n
 
 convert :: [(CId,(Type,Expr))] -> TermMap -> TermMap -> ParserInfo
-convert abs_defs cnc_defs cat_defs = getParserInfo (List.foldl' (convertRule cnc_defs) (emptyGrammarEnv cnc_defs cat_defs) srules)
+convert abs_defs cnc_defs cat_defs = getParserInfo (List.foldl' (convertRule cnc_defs) (emptyGrammarEnv cnc_defs cat_defs) xrules)
   where
-    srules = [
+    xrules = [
       (XRule id args res (map findLinType args) (findLinType res) term) | 
         (id, (ty,_)) <- abs_defs, let (args,res) = catSkeleton ty, 
         term <- Map.lookup id cnc_defs]
@@ -126,11 +126,11 @@ brk f (GrammarEnv last_id catSet seqSet funSet crcSet prodSet) =
             ys    = foldr (zipWith Set.insert) (repeat Set.empty) xs
 
 convertRule :: TermMap -> GrammarEnv -> XRule -> GrammarEnv
-convertRule cnc_defs grammarEnv (XRule fun args cat ctypes ctype term) =
+convertRule cnc_defs grammarEnv (XRule fun args res ctypes ctype term) =
   brk (\grammarEnv -> foldBM addRule
                              grammarEnv
                              (convertTerm cnc_defs [] ctype term [([],[])])
-                             (protoFCat cnc_defs cat ctype, zipWith (protoFCat cnc_defs) args ctypes)) grammarEnv
+                             (protoFCat cnc_defs res ctype, zipWith (protoFCat cnc_defs) args ctypes)) grammarEnv
   where
     addRule linRec (newCat', newArgs') env0 =
       let [newCat]        = getFCats env0 newCat'
