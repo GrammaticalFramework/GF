@@ -99,7 +99,7 @@ fixHoasFuns pinfo = pinfo{functions=mkArray [FFun (fixName n) prof lins | FFun n
         fixName n = n
 
 convert :: [(CId,(Type,Expr))] -> TermMap -> TermMap -> ParserInfo
-convert abs_defs cnc_defs cat_defs = getParserInfo (List.foldl' (convertRule cnc_defs) (emptyFRulesEnv cnc_defs cat_defs) srules)
+convert abs_defs cnc_defs cat_defs = getParserInfo (List.foldl' (convertRule cnc_defs) (emptyGrammarEnv cnc_defs cat_defs) srules)
   where
     srules = [
       (XRule id args res (map findLinType args) (findLinType res) term) | 
@@ -261,7 +261,7 @@ type SeqSet   = Map.Map FSeq SeqId
 type FunSet   = Map.Map FFun FunId
 type CoerceSet= Map.Map [FCat] FCat
 
-emptyFRulesEnv cnc_defs lincats = 
+emptyGrammarEnv cnc_defs lincats = 
   let (last_id,catSet) = Map.mapAccumWithKey computeCatRange 0 lincats
   in GrammarEnv last_id catSet Map.empty Map.empty Map.empty IntMap.empty
   where
