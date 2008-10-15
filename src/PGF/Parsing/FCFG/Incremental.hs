@@ -108,18 +108,19 @@ extractExps (State pinfo chart items) start = exps
       let FFun fn _ lins = functions pinfo ! funid
       lbl <- indices lins
       Just fid <- [lookupPC (PK cat lbl 0) (passive st)]
-      go Set.empty fid
+      go Set.empty 0 (0,fid)
 
-    go rec fcat
-      | Set.member fcat rec = mzero
-      | otherwise           = foldForest (\funid args trees -> 
-                                               do let FFun fn _ lins = functions pinfo ! funid
-                                                  args <- mapM (go (Set.insert fcat rec)) args
-                                                  return (Fun fn args)
-                                               `mplus`
-                                               trees)
-                                         (\lit _ trees -> Lit lit : trees)
-                                         [] fcat (forest st)
+    go rec fcat' (d,fcat)
+      | fcat < totalCats pinfo = [Meta (fcat'*10+d)]   -- FIXME: here we assume that every rule has at most 10 arguments
+      | Set.member fcat rec    = mzero
+      | otherwise              = foldForest (\funid args trees -> 
+                                                  do let FFun fn _ lins = functions pinfo ! funid
+                                                     args <- mapM (go (Set.insert fcat rec) fcat) (zip [0..] args)
+                                                     return (Fun fn args)
+                                                  `mplus`
+                                                  trees)
+                                            (\lit _ trees -> Lit lit : trees)
+                                            [] fcat (forest st)
 
 
 process fn !seqs !funs []                                                 acc chart = (acc,chart)
