@@ -35,12 +35,8 @@ initState pinfo start =
         (lbl,seqid) <- assocs lins
         return (Active 0 0 funid seqid args (AK cat lbl))
         
-      max_fid = maximum (0:[maximum (cat:args) | (cat, set) <- IntMap.toList (productions pinfo)
-                                               , p <- Set.toList set
-                                               , let args = case p of {FApply _ args -> args; FCoerce cat -> [cat]}])+1
-
   in State pinfo
-           (Chart emptyAC [] emptyPC (productions pinfo) max_fid 0)
+           (Chart emptyAC [] emptyPC (productions pinfo) (totalCats pinfo) 0)
            (Set.fromList items)
 
 -- | From the current state and the next token
