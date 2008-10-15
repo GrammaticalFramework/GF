@@ -58,7 +58,7 @@ optimizeModule opts mse@(ms,eenv) mo@(_,mi) = case mi of
       return (mo2,eenv)
   _ -> evalModule oopts mse mo
  where
-   oopts = opts `addOptions` toOptions (flagsModule mo)
+   oopts = opts `addOptions` flagsModule mo
    optim = flag optOptimizations oopts
 
 evalModule :: Options -> ([(Ident,SourceModInfo)],EEnv) -> (Ident,SourceModInfo) -> 

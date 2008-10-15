@@ -1,8 +1,8 @@
 module GF.Infra.Option
     (
      -- * Option types
-     Options, ModuleOptions,
-     Flags(..), ModuleFlags(..),
+     Options, 
+     Flags(..), 
      Mode(..), Phase(..), Verbosity(..), Encoding(..), OutputFormat(..), 
      SISRFormat(..), Optimization(..), CFGTransform(..), HaskellOption(..),
      Dump(..), Printer(..), Recomp(..),
@@ -11,9 +11,8 @@ module GF.Infra.Option
      -- * Option pretty-printing
      moduleOptionsGFO,
      -- * Option manipulation
-     OPTIONS(..),
      addOptions, concatOptions, noOptions,
-     modifyFlags, modifyModuleFlags,
+     modifyFlags,
      helpMessage,
      -- * Checking specific options
      flag, cfgTransform, haskellOption,
@@ -137,7 +136,23 @@ data Printer = PrinterStrip -- ^ Remove name qualifiers.
 data Recomp = AlwaysRecomp | RecompIfNewer | NeverRecomp
   deriving (Show,Eq,Ord)
 
-data ModuleFlags = ModuleFlags {
+data Flags = Flags {
+      optMode            :: Mode,
+      optStopAfterPhase  :: Phase,
+      optVerbosity       :: Verbosity,
+      optShowCPUTime     :: Bool,
+      optEmitGFO         :: Bool,
+      optGFODir          :: FilePath,
+      optOutputFormats   :: [OutputFormat],
+      optSISR            :: Maybe SISRFormat,
+      optHaskellOptions  :: Set HaskellOption,
+      optLexicalCats     :: Set String,
+      optOutputFile      :: Maybe FilePath,
+      optOutputDir       :: Maybe FilePath,
+      optRecomp          :: Recomp,
+      optPrinter         :: [Printer],
+      optProb            :: Bool,
+      optRetainResource  :: Bool,
       optName            :: Maybe String,
       optAbsName         :: Maybe String,
       optCncName         :: Maybe String,
@@ -158,33 +173,10 @@ data ModuleFlags = ModuleFlags {
     }
   deriving (Show)
 
-data Flags = Flags {
-      optMode            :: Mode,
-      optStopAfterPhase  :: Phase,
-      optVerbosity       :: Verbosity,
-      optShowCPUTime     :: Bool,
-      optEmitGFO         :: Bool,
-      optGFODir          :: FilePath,
-      optOutputFormats   :: [OutputFormat],
-      optSISR            :: Maybe SISRFormat,
-      optHaskellOptions  :: Set HaskellOption,
-      optLexicalCats     :: Set String,
-      optOutputFile      :: Maybe FilePath,
-      optOutputDir       :: Maybe FilePath,
-      optRecomp          :: Recomp,
-      optPrinter         :: [Printer],
-      optProb            :: Bool,
-      optRetainResource  :: Bool,
-      optModuleFlags     :: ModuleFlags
-    }
-  deriving (Show)
-
 newtype Options = Options (Flags -> Flags)
 
 instance Show Options where
     show (Options o) = show (o defaultFlags)
-
-newtype ModuleOptions = ModuleOptions (ModuleFlags -> ModuleFlags)
 
 -- Option parsing
 
@@ -195,99 +187,60 @@ parseOptions args
                      return (opts, files)
   where (optss, files, errs) = getOpt RequireOrder optDescr args
 
-parseModuleOptions :: [String] -> Err ModuleOptions
-parseModuleOptions args 
-    | not (null errs)  = errors errs
-    | not (null files) = errors $ map ("Non-option among module options: " ++) files
-    | otherwise        = liftM concatOptions $ sequence flags
-  where (flags, files, errs) = getOpt RequireOrder moduleOptDescr args
+parseModuleOptions :: [String] -> Err Options
+parseModuleOptions args = do (opts,nonopts) <- parseOptions args
+                             if null nonopts 
+                                then return opts
+                                else errors $ map ("Non-option among module options: " ++) nonopts
 
 -- Showing options
 
 -- | Pretty-print the module options that are preserved in .gfo files.
-moduleOptionsGFO :: ModuleOptions -> [(String,String)]
-moduleOptionsGFO (ModuleOptions o) = 
-         maybe [] (\x -> [("language",x)]) (optSpeechLanguage mfs)
-      ++ maybe [] (\x -> [("startcat",x)]) (optStartCat mfs)
-      ++ [("coding", show (optEncoding mfs))]
-      ++ (if optErasing mfs then [("erasing","on")] else [])
-  where 
-    mfs = o defaultModuleFlags
+moduleOptionsGFO :: Options -> [(String,String)]
+moduleOptionsGFO opts = 
+         maybe [] (\x -> [("language",x)]) (flag optSpeechLanguage opts)
+      ++ maybe [] (\x -> [("startcat",x)]) (flag optStartCat opts)
+      ++ [("coding", show (flag optEncoding opts))]
+      ++ (if flag optErasing opts then [("erasing","on")] else [])
 
 -- Option manipulation
 
-class OPTIONS a where
-    toOptions :: a -> Options
-    fromOptions :: Options -> a
+flag :: (Flags -> a) -> Options -> a
+flag f (Options o) = f (o defaultFlags)
 
-instance OPTIONS Options where
-    toOptions = id
-    fromOptions = id
+addOptions :: Options -> Options -> Options
+addOptions (Options o1) (Options o2) = Options (o2 . o1)
 
-instance OPTIONS ModuleOptions where
-    toOptions (ModuleOptions f) = Options (\fs -> fs { optModuleFlags = f (optModuleFlags fs) })
-    fromOptions (Options f) = ModuleOptions (\fs -> optModuleFlags (f (defaultFlags { optModuleFlags = fs})))
+noOptions :: Options
+noOptions = Options id
 
-instance OPTIONS Flags where
-    toOptions fs = Options (\_ -> fs)
-    fromOptions (Options f) = f defaultFlags
-
-instance OPTIONS ModuleFlags where
-    toOptions mfs = Options (\fs -> fs { optModuleFlags = mfs })
-    fromOptions (Options f) = optModuleFlags (f defaultFlags)
-
-flag :: (OPTIONS a, OPTIONS b) => (a -> c) -> b -> c
-flag f o = f (fromOptions (toOptions o))
-
-addOptions :: OPTIONS a => a -> a -> a
-addOptions x y = let Options o1 = toOptions x
-                     Options o2 = toOptions y
-                  in fromOptions (Options (o2 . o1))
-
-noOptions :: OPTIONS a => a
-noOptions = fromOptions (Options id)
-
-concatOptions :: OPTIONS a => [a] -> a
+concatOptions :: [Options] -> Options
 concatOptions = foldr addOptions noOptions
 
 modifyFlags :: (Flags -> Flags) -> Options
 modifyFlags = Options
 
-modifyModuleFlags :: (ModuleFlags -> ModuleFlags) -> Options
-modifyModuleFlags = toOptions . ModuleOptions
-
-
-{-
-
-parseModuleFlags :: Options -> [(String,Maybe String)] -> Err ModuleOptions
-parseModuleFlags opts flags = 
-    mapM (uncurry (findFlag moduleOptDescr)) flags >>= foldM (flip ($)) (optModuleOptions opts)
-
-findFlag :: Monad m => [OptDescr a] -> String -> Maybe String -> m a
-findFlag opts n mv = 
-    case filter (`flagMatches` n) opts of
-      []    -> fail $ "Unknown option: " ++ n
-      [opt] -> flagValue opt n mv
-      _     -> fail $ n ++ " matches multiple options."
-
-flagMatches :: OptDescr a -> String -> Bool
-flagMatches (Option cs ss _ _) n = n `elem` (map (:[]) cs ++ ss)
-
-flagValue :: Monad m => OptDescr a -> String -> Maybe String -> m a
-flagValue (Option _ _ arg _) n mv =
-    case (arg, mv) of
-      (NoArg x,    Nothing) -> return x
-      (NoArg _,    Just _ ) -> fail $ "Option " ++ n ++ " does not take a value."
-      (ReqArg _ _, Nothing) -> fail $ "Option " ++ n ++ " requires a value."
-      (ReqArg f _, Just x ) -> return (f x)
-      (OptArg f _, mx     ) -> return (f mx)
-
--}
-
 -- Default options
 
-defaultModuleFlags :: ModuleFlags
-defaultModuleFlags = ModuleFlags {
+defaultFlags :: Flags
+defaultFlags = Flags {
+      optMode            = ModeInteractive,
+      optStopAfterPhase  = Compile,
+      optVerbosity       = Normal,
+      optShowCPUTime     = False,
+      optEmitGFO         = True,
+      optGFODir          = ".",
+      optOutputFormats   = [FmtPGF],
+      optSISR            = Nothing,
+      optHaskellOptions  = Set.empty,
+      optLexicalCats     = Set.empty,
+      optOutputFile      = Nothing,
+      optOutputDir       = Nothing,
+      optRecomp          = RecompIfNewer,
+      optPrinter         = [],
+      optProb            = False,
+      optRetainResource  = False,
+
       optName            = Nothing,
       optAbsName         = Nothing,
       optCncName         = Nothing,
@@ -308,107 +261,7 @@ defaultModuleFlags = ModuleFlags {
       optDump            = []
     }
 
-defaultFlags :: Flags
-defaultFlags = Flags {
-      optMode            = ModeInteractive,
-      optStopAfterPhase  = Compile,
-      optVerbosity       = Normal,
-      optShowCPUTime     = False,
-      optEmitGFO         = True,
-      optGFODir          = ".",
-      optOutputFormats   = [FmtPGF],
-      optSISR            = Nothing,
-      optHaskellOptions  = Set.empty,
-      optLexicalCats     = Set.empty,
-      optOutputFile      = Nothing,
-      optOutputDir       = Nothing,
-      optRecomp          = RecompIfNewer,
-      optPrinter         = [],
-      optProb            = False,
-      optRetainResource  = False,
-      optModuleFlags     = defaultModuleFlags
-    }
-
 -- Option descriptions
-
-moduleOptDescr :: [OptDescr (Err ModuleOptions)]
-moduleOptDescr = 
-    [
-     Option ['n'] ["name"] (ReqArg name "NAME") 
-           (unlines ["Use NAME as the name of the output. This is used in the output file names, ",
-                     "with suffixes depending on the formats, and, when relevant, ",
-                     "internally in the output."]),
-     Option [] ["abs"] (ReqArg absName "NAME")
-            ("Use NAME as the name of the abstract syntax module generated from "
-             ++ "a grammar in GF 1 format."),
-     Option [] ["cnc"] (ReqArg cncName "NAME")
-            ("Use NAME as the name of the concrete syntax module generated from "
-             ++ "a grammar in GF 1 format."),
-     Option [] ["res"] (ReqArg resName "NAME")
-            ("Use NAME as the name of the resource module generated from "
-             ++ "a grammar in GF 1 format."),
-     Option ['i'] [] (ReqArg addLibDir "DIR") "Add DIR to the library search path.",
-     Option [] ["path"] (ReqArg setLibPath "DIR:DIR:...") "Set the library search path.",
-     Option [] ["preproc"] (ReqArg preproc "CMD") 
-                 (unlines ["Use CMD to preprocess input files.",
-                           "Multiple preprocessors can be used by giving this option multiple times."]),
-     Option [] ["coding"] (ReqArg coding "ENCODING") 
-                ("Character encoding of the source grammar, ENCODING = "
-                 ++ concat (intersperse " | " (map fst encodings)) ++ "."),
-     Option [] ["erasing"] (onOff erasing False) "Generate erasing grammar (default off).",
-     Option [] ["parser"] (onOff parser True) "Build parser (default on).",
-     Option [] ["startcat"] (ReqArg startcat "CAT") "Grammar start category.",
-     Option [] ["language"] (ReqArg language "LANG") "Set the speech language flag to LANG in the generated grammar.",
-     Option [] ["lexer"] (ReqArg lexer "LEXER") "Use lexer LEXER.",
-     Option [] ["unlexer"] (ReqArg unlexer "UNLEXER") "Use unlexer UNLEXER.",
-     Option [] ["optimize"] (ReqArg optimize "OPT") 
-                "Select an optimization package. OPT = all | values | parametrize | none",
-     Option [] ["stem"] (onOff (toggleOptimize OptStem) True) "Perform stem-suffix analysis (default on).",
-     Option [] ["cse"] (onOff (toggleOptimize OptCSE) True) "Perform common sub-expression elimination (default on).",
-     Option [] ["cfg"] (ReqArg cfgTransform "TRANS") "Enable or disable specific CFG transformations. TRANS = merge, no-merge, bottomup, no-bottomup, ...",
-     dumpOption "rebuild" DumpRebuild,
-     dumpOption "extend" DumpExtend,
-     dumpOption "rename" DumpRename,
-     dumpOption "tc" DumpTypeCheck,
-     dumpOption "refresh" DumpRefresh,
-     dumpOption "opt" DumpOptimize,
-     dumpOption "canon" DumpCanon
-    ]
-    where
-       name        x = set $ \o -> o { optName = Just x }
-       absName     x = set $ \o -> o { optAbsName = Just x }
-       cncName     x = set $ \o -> o { optCncName = Just x }
-       resName     x = set $ \o -> o { optResName = Just x }
-       addLibDir   x = set $ \o -> o { optLibraryPath = x:optLibraryPath o }
-       setLibPath  x = set $ \o -> o { optLibraryPath = splitInModuleSearchPath x }
-       preproc     x = set $ \o -> o { optPreprocessors = optPreprocessors o ++ [x] }
-       coding      x = case lookup x encodings of
-                         Just c  -> set $ \o -> o { optEncoding = c }
-                         Nothing -> fail $ "Unknown character encoding: " ++ x
-       erasing     x = set $ \o -> o { optErasing = x }
-       parser      x = set $ \o -> o { optBuildParser = x }
-       startcat    x = set $ \o -> o { optStartCat = Just x }
-       language    x = set $ \o -> o { optSpeechLanguage = Just x }
-       lexer       x = set $ \o -> o { optLexer = Just x }
-       unlexer     x = set $ \o -> o { optUnlexer = Just x }
-
-       optimize    x = case lookup x optimizationPackages of
-                         Just p  -> set $ \o -> o { optOptimizations = p }
-                         Nothing -> fail $ "Unknown optimization package: " ++ x
-
-       toggleOptimize x b = set $ setOptimization' x b
-
-       cfgTransform x = let (x', b) = case x of
-                                        'n':'o':'-':rest -> (rest, False)
-                                        _                -> (x, True)
-                         in case lookup x' cfgTransformNames of
-                              Just t  -> set $ setCFGTransform' t b
-                              Nothing -> fail $ "Unknown CFG transformation: " ++ x'
-                                                ++ " Known: " ++ show (map fst cfgTransformNames)
-
-       dumpOption s d = Option [] ["dump-"++s] (NoArg (set $ \o -> o { optDump = d:optDump o})) ("Dump output of the " ++ s ++ " phase.")
-
-       set = return . ModuleOptions
 
 optDescr :: [OptDescr (Err Options)]
 optDescr = 
@@ -455,8 +308,48 @@ optDescr =
      Option [] ["strip"] (NoArg (printer PrinterStrip))
                  "Remove name qualifiers when pretty-printing.",
      Option [] ["retain"] (NoArg (set $ \o -> o { optRetainResource = True })) "Retain opers.",
-     Option [] ["prob"] (NoArg (prob True)) "Read probabilities from '--# prob' pragmas."
-    ] ++ map (fmap (liftM toOptions)) moduleOptDescr
+     Option [] ["prob"] (NoArg (prob True)) "Read probabilities from '--# prob' pragmas.",
+     Option ['n'] ["name"] (ReqArg name "NAME") 
+           (unlines ["Use NAME as the name of the output. This is used in the output file names, ",
+                     "with suffixes depending on the formats, and, when relevant, ",
+                     "internally in the output."]),
+     Option [] ["abs"] (ReqArg absName "NAME")
+            ("Use NAME as the name of the abstract syntax module generated from "
+             ++ "a grammar in GF 1 format."),
+     Option [] ["cnc"] (ReqArg cncName "NAME")
+            ("Use NAME as the name of the concrete syntax module generated from "
+             ++ "a grammar in GF 1 format."),
+     Option [] ["res"] (ReqArg resName "NAME")
+            ("Use NAME as the name of the resource module generated from "
+             ++ "a grammar in GF 1 format."),
+     Option ['i'] [] (ReqArg addLibDir "DIR") "Add DIR to the library search path.",
+     Option [] ["path"] (ReqArg setLibPath "DIR:DIR:...") "Set the library search path.",
+     Option [] ["preproc"] (ReqArg preproc "CMD") 
+                 (unlines ["Use CMD to preprocess input files.",
+                           "Multiple preprocessors can be used by giving this option multiple times."]),
+     Option [] ["coding"] (ReqArg coding "ENCODING") 
+                ("Character encoding of the source grammar, ENCODING = "
+                 ++ concat (intersperse " | " (map fst encodings)) ++ "."),
+     Option [] ["erasing"] (onOff erasing False) "Generate erasing grammar (default off).",
+     Option [] ["parser"] (onOff parser True) "Build parser (default on).",
+     Option [] ["startcat"] (ReqArg startcat "CAT") "Grammar start category.",
+     Option [] ["language"] (ReqArg language "LANG") "Set the speech language flag to LANG in the generated grammar.",
+     Option [] ["lexer"] (ReqArg lexer "LEXER") "Use lexer LEXER.",
+     Option [] ["unlexer"] (ReqArg unlexer "UNLEXER") "Use unlexer UNLEXER.",
+     Option [] ["optimize"] (ReqArg optimize "OPT") 
+                "Select an optimization package. OPT = all | values | parametrize | none",
+     Option [] ["stem"] (onOff (toggleOptimize OptStem) True) "Perform stem-suffix analysis (default on).",
+     Option [] ["cse"] (onOff (toggleOptimize OptCSE) True) "Perform common sub-expression elimination (default on).",
+     Option [] ["cfg"] (ReqArg cfgTransform "TRANS") "Enable or disable specific CFG transformations. TRANS = merge, no-merge, bottomup, no-bottomup, ...",
+     dumpOption "rebuild" DumpRebuild,
+     dumpOption "extend" DumpExtend,
+     dumpOption "rename" DumpRename,
+     dumpOption "tc" DumpTypeCheck,
+     dumpOption "refresh" DumpRefresh,
+     dumpOption "opt" DumpOptimize,
+     dumpOption "canon" DumpCanon
+
+    ]
  where phase       x = set $ \o -> o { optStopAfterPhase = x }
        mode        x = set $ \o -> o { optMode = x }
        verbosity mv  = case mv of
@@ -483,6 +376,39 @@ optDescr =
        recomp      x = set $ \o -> o { optRecomp = x }
        printer     x = set $ \o -> o { optPrinter = x : optPrinter o }
        prob        x = set $ \o -> o { optProb = x }
+
+       name        x = set $ \o -> o { optName = Just x }
+       absName     x = set $ \o -> o { optAbsName = Just x }
+       cncName     x = set $ \o -> o { optCncName = Just x }
+       resName     x = set $ \o -> o { optResName = Just x }
+       addLibDir   x = set $ \o -> o { optLibraryPath = x:optLibraryPath o }
+       setLibPath  x = set $ \o -> o { optLibraryPath = splitInModuleSearchPath x }
+       preproc     x = set $ \o -> o { optPreprocessors = optPreprocessors o ++ [x] }
+       coding      x = case lookup x encodings of
+                         Just c  -> set $ \o -> o { optEncoding = c }
+                         Nothing -> fail $ "Unknown character encoding: " ++ x
+       erasing     x = set $ \o -> o { optErasing = x }
+       parser      x = set $ \o -> o { optBuildParser = x }
+       startcat    x = set $ \o -> o { optStartCat = Just x }
+       language    x = set $ \o -> o { optSpeechLanguage = Just x }
+       lexer       x = set $ \o -> o { optLexer = Just x }
+       unlexer     x = set $ \o -> o { optUnlexer = Just x }
+
+       optimize    x = case lookup x optimizationPackages of
+                         Just p  -> set $ \o -> o { optOptimizations = p }
+                         Nothing -> fail $ "Unknown optimization package: " ++ x
+
+       toggleOptimize x b = set $ setOptimization' x b
+
+       cfgTransform x = let (x', b) = case x of
+                                        'n':'o':'-':rest -> (rest, False)
+                                        _                -> (x, True)
+                         in case lookup x' cfgTransformNames of
+                              Just t  -> set $ setCFGTransform' t b
+                              Nothing -> fail $ "Unknown CFG transformation: " ++ x'
+                                                ++ " Known: " ++ show (map fst cfgTransformNames)
+
+       dumpOption s d = Option [] ["dump-"++s] (NoArg (set $ \o -> o { optDump = d:optDump o})) ("Dump output of the " ++ s ++ " phase.")
 
        set = return . Options
 
@@ -601,15 +527,15 @@ isLexicalCat opts c = Set.member c (flag optLexicalCats opts)
 --
 
 setOptimization :: Optimization -> Bool -> Options
-setOptimization o b = modifyModuleFlags (setOptimization' o b)
+setOptimization o b = modifyFlags (setOptimization' o b)
 
-setOptimization' :: Optimization -> Bool -> ModuleFlags -> ModuleFlags
+setOptimization' :: Optimization -> Bool -> Flags -> Flags
 setOptimization' o b f = f { optOptimizations = toggle o b (optOptimizations f)}
 
 setCFGTransform :: CFGTransform -> Bool -> Options
-setCFGTransform t b = modifyModuleFlags (setCFGTransform' t b)
+setCFGTransform t b = modifyFlags (setCFGTransform' t b)
 
-setCFGTransform' :: CFGTransform -> Bool -> ModuleFlags -> ModuleFlags
+setCFGTransform' :: CFGTransform -> Bool -> Flags -> Flags
 setCFGTransform' t b f = f { optCFGTransforms = toggle t b (optCFGTransforms f) }
 
 toggle :: Ord a => a -> Bool -> Set a -> Set a
