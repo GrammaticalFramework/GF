@@ -72,11 +72,12 @@ toConcr pgf rexp =
     add cnc (App "parser" ts)    = cnc { parser = Just (toPInfo ts) }
 
 toPInfo :: [RExp] -> ParserInfo
-toPInfo [App "functions" fs, App "sequences" ss, App "productions" ps,App "startcats" cs] = 
+toPInfo [App "functions" fs, App "sequences" ss, App "productions" ps,App "categories" (t:cs)] =
   ParserInfo { functions   = functions
              , sequences   = seqs
 	     , productions = productions
 	     , startCats   = cats
+	     , totalCats   = expToInt t
 	     }
   where 
     functions   = mkArray (map toFFun fs)
@@ -229,7 +230,7 @@ fromPInfo p = App "parser" [
           App "functions"   [fromFFun fun | fun <- elems (functions p)],
           App "sequences"   [fromFSeq seq | seq <- elems (sequences p)],
           App "productions" [fromProductionSet xs  | xs <- IntMap.toList (productions p)],
-          App "startcats"   [App (prCId f) (map intToExp xs) | (f,xs) <- Map.toList (startCats p)]
+          App "categories"  (intToExp (totalCats p) : [App (prCId f) (map intToExp xs) | (f,xs) <- Map.toList (startCats p)])
         ]
 
 fromFFun :: FFun -> RExp

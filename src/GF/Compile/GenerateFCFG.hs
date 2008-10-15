@@ -330,6 +330,7 @@ getParserInfo (GrammarEnv last_id catSet seqSet funSet prodSet) =
              , sequences   = mkArray seqSet
 	     , productions = prodSet
 	     , startCats   = Map.map getFCatList catSet
+	     , totalCats   = last_id+1
 	     }
   where
     mkArray map = array (0,Map.size map-1) [(v,k) | (k,v) <- Map.toList map]

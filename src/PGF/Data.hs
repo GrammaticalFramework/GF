@@ -134,6 +134,7 @@ data ParserInfo
                  , sequences   :: Array SeqId FSeq
 	         , productions :: IntMap.IntMap (Set.Set Production)
 	         , startCats   :: Map.Map CId [FCat]
+	         , totalCats   :: {-# UNPACK #-} !FCat
 	         }
 
 
