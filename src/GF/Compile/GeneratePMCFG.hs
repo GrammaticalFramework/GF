@@ -268,11 +268,13 @@ emptyFRulesEnv cnc_defs lincats =
     cidString = mkCId "String"
     cidInt    = mkCId "Int"
     cidFloat  = mkCId "Float"
+    cidVar    = mkCId "_Var"
     
     computeCatRange index cat ctype
       | cat == cidString = (index,     (fcatString,fcatString,[]))
       | cat == cidInt    = (index,     (fcatInt,   fcatInt,   []))
       | cat == cidFloat  = (index,     (fcatFloat, fcatFloat, []))
+      | cat == cidVar    = (index,     (fcatVar,   fcatVar,   []))
       | otherwise        = (index+size,(index,index+size-1,poly))
       where
         (size,poly) = getMultipliers 1 [] ctype
