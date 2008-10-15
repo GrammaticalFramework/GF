@@ -36,7 +36,7 @@ inferExpr :: PGF -> Expr -> Err Expr
 inferExpr pgf e = case infer pgf emptyTCEnv e of
   Ok (e,_,cs) -> let (ms,cs2) = splitConstraints cs in case cs2 of
     [] -> Ok (metaSubst ms e)
-    _  -> Bad ("Error: " ++ prConstraints cs2)
+    _  -> Bad ("Error in tree " ++ showExpr e ++ " :\n  " ++ prConstraints cs2)
   Bad s -> Bad s
 
 infer :: PGF -> TCEnv -> Expr -> Err (Expr, Value, [(Value,Value)])

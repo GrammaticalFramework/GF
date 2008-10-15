@@ -8,6 +8,9 @@ import PGF.Raw.Parse
 import PGF.Raw.Convert
 import GF.Compile
 import GF.Compile.Export
+
+import GF.Source.CF ---- should this be on a deeper level? AR 15/10/2008
+
 import GF.Infra.UseIO
 import GF.Infra.Option
 import GF.Data.ErrM
@@ -20,6 +23,7 @@ mainGFC :: Options -> [FilePath] -> IOE ()
 mainGFC opts fs = 
     case () of
       _ | null fs -> fail $ "No input files."
+      _ | all (extensionIs ".cf")  fs -> compileCFFiles opts fs
       _ | all (extensionIs ".gf")  fs -> compileSourceFiles opts fs
       _ | all (extensionIs ".pgf") fs -> unionPGFFiles opts fs
       _ -> fail $ "Don't know what to do with these input files: " ++ show fs
@@ -29,6 +33,17 @@ compileSourceFiles :: Options -> [FilePath] -> IOE ()
 compileSourceFiles opts fs = 
     do gr <- batchCompile opts fs
        let cnc = justModuleName (last fs)
+       if flag optStopAfterPhase opts == Compile 
+         then return ()
+         else do pgf <- link opts cnc gr
+                 writeOutputs opts pgf
+
+compileCFFiles :: Options -> [FilePath] -> IOE ()
+compileCFFiles opts fs = 
+    do s  <- ioeIO $ fmap unlines $ mapM readFile fs 
+       let cnc = justModuleName (last fs)
+       gf <- ioeErr $ getCF cnc s
+       gr <- compileSourceGrammar opts gf
        if flag optStopAfterPhase opts == Compile 
          then return ()
          else do pgf <- link opts cnc gr
