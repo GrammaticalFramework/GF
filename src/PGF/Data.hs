@@ -122,7 +122,7 @@ type Profile = [Int]
 data Production
   = FApply  {-# UNPACK #-} !FunId [FCat]
   | FCoerce {-# UNPACK #-} !FCat
-  | FLit    Literal String
+  | FConst  Tree String
   deriving (Eq,Ord,Show)
 data FFun  = FFun CId [Profile] {-# UNPACK #-} !(UArray FIndex SeqId) deriving (Eq,Ord,Show)
 type FSeq  = Array FPointPos FSymbol
