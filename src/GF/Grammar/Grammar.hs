@@ -21,6 +21,7 @@ module GF.Grammar.Grammar (SourceGrammar,
 		SourceAbs,
 		SourceRes,
 		SourceCnc,
+                mapSourceModule,
 		Info(..),
                 PValues,
 		Perh,
@@ -74,6 +75,9 @@ type SourceModule = (Ident, SourceModInfo)
 type SourceAbs = Module Ident Info
 type SourceRes = Module Ident Info
 type SourceCnc = Module Ident Info
+
+mapSourceModule :: (Module Ident Info -> Module Ident Info) -> SourceModule -> SourceModule
+mapSourceModule f (i,mi) = (i, mapModules' f mi)
 
 -- this is created in CheckGrammar, and so are Val and PVal
 type PValues = [Term]

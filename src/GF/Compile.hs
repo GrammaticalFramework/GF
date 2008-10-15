@@ -158,8 +158,9 @@ compileOne opts env@(_,srcgr,_) file = do
         then compileOne opts env $ gfo
         else do
 
-       sm00 <- putpOpt ("- parsing" +++ file) ("- compiling" +++ file ++ "... ") $ 
+       sm000 <- putpOpt ("- parsing" +++ file) ("- compiling" +++ file ++ "... ") $ 
                                            getSourceModule opts file
+       let sm00 = mapSourceModule (\m -> m { flags = flags m `addOptions` opts }) sm000
        let sm0 = decodeStringsInModule sm00
        (k',sm)  <- compileSourceModule opts env sm0
        let sm1 = if isConcr sm then shareModule sm else sm -- cannot expand Str
@@ -170,7 +171,6 @@ compileOne opts env@(_,srcgr,_) file = do
    isConcr (_,mi) = case mi of
      ModMod m -> isModCnc m && mstatus m /= MSIncomplete 
      _ -> False
-
 
 compileSourceModule :: Options -> CompileEnv -> 
                        SourceModule -> IOE (Int,SourceModule)
