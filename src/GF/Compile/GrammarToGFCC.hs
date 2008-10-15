@@ -240,13 +240,13 @@ reorder abs cg = M.MGrammar $
        predefADefs = 
          [(c, AbsCat (Yes []) Nope) | c <- [cFloat,cInt,cString]]
        aflags = 
-         concatModuleOptions [M.flags mo | (_,mo) <- M.allModMod cg, M.isModAbs mo]
+         concatOptions [M.flags mo | (_,mo) <- M.allModMod cg, M.isModAbs mo]
 
        cncs = sortIds [(lang, concr lang) | lang <- M.allConcretes cg abs]
        concr la = (flags, 
                    sortIds (predefCDefs ++ jments)) where 
          jments = Look.allOrigInfos cg la
-         flags  = concatModuleOptions 
+         flags  = concatOptions 
                     [M.flags mo | 
                      (i,mo) <- mos, M.isModCnc mo, 
                      Just r <- [lookup i (M.allExtendSpecs cg la)]]

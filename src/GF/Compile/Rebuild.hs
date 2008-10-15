@@ -81,7 +81,7 @@ rebuildModule ms mo@(i,mi) = do
                        ++ [oSimple i   | i <- map snd insts] ----
 
       --- check if me is incomplete
-      let fs1 = addModuleOptions fs fs_                           -- new flags have priority
+      let fs1 = fs `addOptions` fs_                           -- new flags have priority
       let js0 = [ci | ci@(c,_) <- tree2list js, isInherited incl c]
       let js1 = buildTree (tree2list js_ ++ js0)
       let ps1 = buildTree (tree2list ps_ ++ tree2list ps0)

@@ -68,13 +68,13 @@ link opts cnc gr = do
 
 optimize :: Options -> PGF -> PGF
 optimize opts = cse . suf
-  where os  = moduleFlag optOptimizations opts
+  where os  = flag optOptimizations opts
         cse = if OptCSE  `Set.member` os then cseOptimize    else id
         suf = if OptStem `Set.member` os then suffixOptimize else id
 
 buildParser :: Options -> PGF -> PGF
 buildParser opts = 
-    if moduleFlag optBuildParser opts then addParsers else id
+    if flag optBuildParser opts then addParsers else id
 
 batchCompile :: Options -> [FilePath] -> IOE SourceGrammar
 batchCompile opts files = do
@@ -112,7 +112,7 @@ compileModule opts1 env file = do
   opts0 <- getOptionsFromFile file
   let opts = addOptions opts0 opts1
   let fdir = dropFileName file
-  let ps0 = moduleFlag optLibraryPath opts
+  let ps0 = flag optLibraryPath opts
   ps1 <- ioeIO $ extendPathEnv $ fdir : ps0
   let ps2 = ps1 ++ map (fdir </>) ps0
   ps <- ioeIO $ fmap nub $ mapM canonicalizePath ps2

@@ -15,7 +15,7 @@ encodeStringsInModule = codeSourceModule encodeUTF8
 
 decodeStringsInModule :: SourceModule -> SourceModule
 decodeStringsInModule mo = case mo of
-  (_,ModMod m) -> case moduleFlag optEncoding (moduleOptions (flags m)) of
+  (_,ModMod m) -> case flag optEncoding (flags m) of
     UTF_8   -> codeSourceModule decodeUTF8 mo
     CP_1251 -> codeSourceModule decodeCP1251 mo
     _ -> mo
