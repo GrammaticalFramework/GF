@@ -257,7 +257,7 @@ lin
   egg_N = regN "Ei" ;
   eye_N = regN "Auge" ;
   fat_N = regN "Fett" ;
-  feather_N = regN "feather" ;
+  feather_N = regN "Feder" feminine ;
   fingernail_N = reg2N "Fingernagel" "Fingernägel" masculine ;
   fire_N = regN "Feuer" ;
   flower_N = regN "Blume" ;
