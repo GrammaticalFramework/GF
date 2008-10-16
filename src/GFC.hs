@@ -24,7 +24,7 @@ mainGFC opts fs =
     case () of
       _ | null fs -> fail $ "No input files."
       _ | all (extensionIs ".cf")  fs -> compileCFFiles opts fs
-      _ | all (extensionIs ".gf")  fs -> compileSourceFiles opts fs
+      _ | all (\f -> extensionIs ".gf" f || extensionIs ".gfo" f)  fs -> compileSourceFiles opts fs
       _ | all (extensionIs ".pgf") fs -> unionPGFFiles opts fs
       _ -> fail $ "Don't know what to do with these input files: " ++ show fs
  where extensionIs ext = (== ext) .  takeExtension
