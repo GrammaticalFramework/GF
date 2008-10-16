@@ -20,3 +20,4 @@ executable gf.fcgi
   main-is: MainFastCGI.hs
   other-modules:
     FastCGIUtils
+  ghc-options: -threaded
