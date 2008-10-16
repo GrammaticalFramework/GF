@@ -22,9 +22,10 @@
         gf.translate(input, fromLang, toLang, '', callback);
       }
 
-      function populateLangs (langs) {
+      function populateLangs (grammar) {
         var f = document.getElementById('fromLang');
         var t = document.getElementById('toLang');
+        var langs = grammar.languages;
         for (var i in langs) {
           if (langs[i].canParse) {
             addOption(f, langs[i].name, langs[i].name);
@@ -63,7 +64,7 @@
       }
 
       function initialize() {
-        gf.languages(populateLangs);
+        gf.grammar(populateLangs);
       }
     </script>
     <title>AJAX GF Translator</title>
