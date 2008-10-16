@@ -26,6 +26,7 @@ import System.IO.Error
 import System.Environment
 import System.Exit
 import System.CPUTime
+import Text.Printf
 import Control.Monad
 import Control.Exception(evaluate)
 import qualified Data.ByteString.Char8 as BS
@@ -239,7 +240,8 @@ putPointE v opts msg act = do
   t2 <- ioeIO $ getCPUTime
 
   if flag optShowCPUTime opts
-      then putStrLnE (" " ++ show ((t2 - t1) `div` 1000000000) ++ " msec")
+      then do let msec = (t2 - t1) `div` 1000000000
+              putStrLnE (printf " %5d msec" msec)
       else when (verbAtLeast opts v) $ putStrLnE ""
 
   return a
