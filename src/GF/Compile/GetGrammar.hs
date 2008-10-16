@@ -12,7 +12,7 @@
 -- this module builds the internal GF grammar that is sent to the type checker
 -----------------------------------------------------------------------------
 
-module GF.Compile.GetGrammar where
+module GF.Compile.GetGrammar (getSourceModule) where
 
 import GF.Data.Operations
 
