@@ -3,7 +3,6 @@ module PGF.Raw.Convert (toPGF,fromPGF) where
 import PGF.CId
 import PGF.Data
 import PGF.Raw.Abstract
-import qualified GF.Compile.GeneratePMCFG as PMCFG
 
 import Data.Array.IArray
 import qualified Data.Map    as Map
@@ -53,11 +52,7 @@ toConcr pgf rexp =
                               lindefs      = Map.empty,
                               printnames   = Map.empty,
                               paramlincats = Map.empty,
-                              parser       = Just (PMCFG.convertConcrete (abstract pgf) cnc)
-                                                                              -- This thunk will be overwritten if there is a parser
-                                                                              -- compiled in the PGF file. We use lazy evaluation here
-                                                                              -- to make sure that buildParserOnDemand is called only
-                                                                              -- if it is needed.
+                              parser       = Nothing
                              }) rexp
   in cnc
   where
