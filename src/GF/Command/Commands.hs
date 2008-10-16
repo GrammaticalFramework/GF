@@ -530,7 +530,7 @@ allCommands cod pgf = Map.fromList [
  where
    enc = encodeUnicode cod
    lin opts t = unlines [linearize pgf lang t    | lang <- optLangs opts]
-   par opts s = concat  [parse pgf lang (optCat opts) s | lang <- optLangs opts]
+   par opts s = concat  [parse pgf lang (optCat opts) s | lang <- optLangs opts, canParse pgf lang]
  
    void = ([],[])
 
