@@ -42,7 +42,11 @@ getSourceModule opts file0 = do
   string    <- readFileIOE file
   let tokens = myLexer string
   mo1  <- ioeErr $ pModDef tokens
-  ioeErr $ transModDef mo1
+  mo2 <- ioeErr $ transModDef mo1
+  return $ addOptionsToModule opts mo2
+
+addOptionsToModule :: Options -> SourceModule -> SourceModule
+addOptionsToModule opts = mapSourceModule (\m -> m { flags = flags m `addOptions` opts })
 
 -- FIXME: should use System.IO.openTempFile
 runPreprocessor :: FilePath -> String -> IOE FilePath
