@@ -5,28 +5,29 @@ import qualified PGF
 import FastCGIUtils
 import URLEncoding
 
-import Network.CGI
+import Network.FastCGI
 import Text.JSON
 import qualified Codec.Binary.UTF8.String as UTF8 (encodeString, decodeString)
 
+import Control.Concurrent
 import Control.Monad
 import Data.Char
 import qualified Data.Map as Map
 import Data.Maybe
+import System.Environment
 
 
-grammarFile :: FilePath
-grammarFile = "grammar.pgf"
-
-
+grammarFile :: IO FilePath
+grammarFile = do env <- getEnvironment
+                 return $ fromMaybe "grammar.pgf" $ lookup "PGF_FILE" env
 
 main :: IO ()
 main = do initFastCGI
-          r <- newDataRef
-          loopFastCGI (handleErrors (handleCGIErrors (fcgiMain r)))
+          ref <- grammarFile >>= newDataRef PGF.readPGF
+          runFastCGIConcurrent' forkIO 100 (handleErrors (handleCGIErrors (fcgiMain ref)))
 
 fcgiMain :: DataRef PGF -> CGI CGIResult
-fcgiMain ref = getData (liftIO . PGF.readPGF) ref grammarFile >>= cgiMain
+fcgiMain ref = liftIO (getData ref) >>= cgiMain
 
 cgiMain :: PGF -> CGI CGIResult
 cgiMain pgf =

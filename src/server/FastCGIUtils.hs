@@ -104,21 +104,26 @@ restartIfModified =
 -- Utilities for getting and caching read-only data from disk.
 -- The data is reloaded when the file on disk has been modified.
 
-type DataRef a = IORef (Maybe (ClockTime, a))
+data DataRef a = DataRef {
+      dataFile :: FilePath,
+      dataLoad :: FilePath -> IO a,
+      dataValue :: MVar (ClockTime, a)
+    }
 
-newDataRef :: MonadIO m => m (DataRef a)
-newDataRef = liftIO $ newIORef Nothing
+newDataRef :: (FilePath -> IO a) -> FilePath -> IO (DataRef a)
+newDataRef load file = 
+    do t <- getModificationTime file
+       x <- load file
+       v <- newMVar (t,x)
+       return $ DataRef { dataFile = file, dataLoad = load, dataValue = v }
 
-getData :: MonadIO m => (FilePath -> m a) -> DataRef a -> FilePath -> m a
-getData loadData ref file = 
-    do t' <- liftIO $ getModificationTime file
-       m <- liftIO $ readIORef ref
-       case m of
-         Just (t,x) | t' == t -> return x
-         _                    -> do logCGI $ "Loading " ++ show file ++ "..."
-                                    x <- loadData file
-                                    liftIO $ writeIORef ref (Just (t',x))
-                                    return x
+getData :: DataRef a -> IO a
+getData ref = 
+    do t' <- getModificationTime (dataFile ref)
+       (t,x) <- takeMVar (dataValue ref)
+       x' <- if t' == t then return x else (dataLoad ref) (dataFile ref)
+       putMVar (dataValue ref) (t',x')
+       return x'
 
 -- Logging
 
