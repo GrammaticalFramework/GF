@@ -131,7 +131,7 @@ kks = K . KS
 
 -- lookup with default value
 lookMap :: (Show i, Ord i) => a -> i -> Map.Map i a -> a 
-lookMap d c m = fromMaybe d $ Map.lookup c m
+lookMap d c m = Map.findWithDefault d c m
 
 --- from Operations
 combinations :: [[a]] -> [[a]]
