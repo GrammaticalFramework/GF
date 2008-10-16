@@ -74,7 +74,7 @@ optimize opts = cse . suf
 
 buildParser :: Options -> PGF -> PGF
 buildParser opts = 
-    if flag optBuildParser opts then addParsers else id
+    if flag optBuildParser opts then addParsers opts else id
 
 batchCompile :: Options -> [FilePath] -> IOE SourceGrammar
 batchCompile opts files = do
