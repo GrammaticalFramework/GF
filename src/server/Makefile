@@ -31,6 +31,9 @@ demo.pgf: DemoBul-noparse.pgf DemoCat-noparse.pgf DemoDan-parse.pgf DemoEng-pars
 lang.pgf: LangBul-noparse.pgf LangCat-noparse.pgf LangDan-parse.pgf LangEng-parse.pgf LangFin-noparse.pgf LangFre-noparse.pgf LangGer-parse.pgf LangIta-noparse.pgf LangNor-parse.pgf LangRus-noparse.pgf LangSpa-noparse.pgf LangSwe-parse.pgf
 	gfc $(GFCFLAGS) --name=lang $^
 
+test.pgf: LangEng-parse.pgf LangGer-parse.pgf
+	gfc $(GFCFLAGS) --name=test $^
+
 gwt-installball: gf.fcgi gwt
 	rm -rf tmp/gwt-client
 	rm -f gf-server-installball.tar.gz
