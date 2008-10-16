@@ -30,7 +30,7 @@ import java.util.Set;
 
 public class Translate implements EntryPoint {
 
-    private static final String gfBaseURL = "/~bringert/gf-server/gf.fcgi";
+    private static final String gfBaseURL = "/pgf";
 
     private GF gf;
 

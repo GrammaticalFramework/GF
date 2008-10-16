@@ -6,7 +6,7 @@ license: GPL
 license-file: LICENSE
 synopsis: FastCGI Server for Grammatical Framework
 
-executable gf.fcgi
+executable pgf.fcgi
   build-depends: base,
                  old-time,
                  unix,

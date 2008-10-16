@@ -1,16 +1,35 @@
 var gf = new Object();
+var pgf_base_url = "pgf"
 
 gf.translate = function (input,from,to,cat,callback) {
-  gf.httpGetText("gf.fcgi/translate?input="+escape(input)+"&from="+escape(from)+"&to="+escape(to)+"&cat="+escape(cat), function (output) { callback(gf.readJSON(output)); });
+  var args = [];
+  args["input"] = input;
+  args["from"] = from;
+  args["to"] = to;
+  args["cat"] = cat;
+  gf.callFunction("translate", args, callback);
 };
 
 gf.complete = function (input,from,cat,callback) {
-  gf.httpGetText("gf.fcgi/complete?input="+escape(input)+"&from="+escape(from)+"&cat="+escape(cat), function (output) { callback(gf.readJSON(output)); });
+  var args = [];
+  args["input"] = input;
+  args["from"] = from;
+  args["cat"] = cat;
+  gf.callFunction("complete", args, callback);
 };
 
-gf.languages = function (callback) {
-    gf.httpGetText("gf.fcgi/languages", function (output) { callback(gf.readJSON(output)); });
+gf.grammar = function (callback) {
+  gf.callFunction("grammar", [], callback);
 };
+
+gf.callFunction = function (fun, args, callback) {
+  var query = "";
+  for (var i in args) {
+    query += (query == "") ? "?" : "&";
+    query += i + "=" + escape(args[i]);
+  }
+  gf.httpGetText(pgf_base_url + "/" + fun + query, function (output) { callback(gf.readJSON(output)); });
+}
 
 gf.httpGetText = function (url, callback) { 
   var XMLHttpRequestObject = false; 

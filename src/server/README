@@ -24,7 +24,25 @@ $ make
 
 $ make food
 
-== Running ==
+
+
+== Running (lighttpd) ==
+
+- Install lighttpd
+  - MacPorts:
+  $ sudo port install lighttpd
+
+- Run lighttpd:
+  $ lighttpd -f lighttpd.conf -D
+
+- First test from the command-line, since debugging is harder from the AJAX UI:
+  $ curl 'http://localhost:41296/gf/translate?input=this+fish&cat=Item&from=FoodEng'
+
+
+- Go to http://localhost:41296/simple-client.html in your web browser.
+
+
+== Running (Apache) ==
 
 - Make sure that your web server supports FastCGI. For Apache on OS X,
   do this:
@@ -89,4 +107,4 @@ $ curl 'http://localhost/~bringert/gf-server/gf.fcgi/translate?input=this+fish&c
 
 - Check server logs (e.g. /var/log/httpd/error_log) if it doesn't work.
 
-- Go to SERVER_URL/gf-client.html in your web browser.
+- Go to SERVER_URL/simple-client.html in your web browser.

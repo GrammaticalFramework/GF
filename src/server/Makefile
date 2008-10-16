@@ -1,11 +1,11 @@
 GFCFLAGS = +RTS -K100M -RTS --cpu
 
-.PHONY: gf.fcgi food demo
+.PHONY: pgf.fcgi food demo
 
-gf.fcgi: 
+pgf.fcgi: 
 	cabal configure
 	cabal build
-	cp dist/build/gf.fcgi/gf.fcgi .
+	cp dist/build/pgf.fcgi/pgf.fcgi .
 
 gwt:
 	gwt-client/Translate-compile
@@ -34,7 +34,7 @@ lang.pgf: LangBul-noparse.pgf LangCat-noparse.pgf LangDan-parse.pgf LangEng-pars
 test.pgf: LangEng-parse.pgf LangGer-parse.pgf
 	gfc $(GFCFLAGS) --name=test $^
 
-gwt-installball: gf.fcgi gwt
+gwt-installball: pgf.fcgi gwt
 	rm -rf tmp/gwt-client
 	rm -f gf-server-installball.tar.gz
 	mkdir -p tmp/gwt-client
