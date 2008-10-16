@@ -51,9 +51,10 @@ compileCFFiles opts fs =
 
 unionPGFFiles :: Options -> [FilePath] -> IOE ()
 unionPGFFiles opts fs = 
-    do pgfs <- ioeIO $ mapM readPGF fs
+    do pgfs <- mapM readPGFVerbose fs
        let pgf = foldl1 unionPGF pgfs
        writeOutputs opts pgf
+  where readPGFVerbose f = putPointE Normal opts ("Reading " ++ f ++ "...") $ ioeIO $ readPGF f
 
 writeOutputs :: Options -> PGF -> IOE ()
 writeOutputs opts pgf =
@@ -66,9 +67,8 @@ writeOutput opts file str =
     do let path = case flag optOutputDir opts of
                     Nothing  -> file
                     Just dir -> dir </> file
-       writeOutputFile path str
+       writeOutputFile opts path str
 
-writeOutputFile :: FilePath -> String -> IOE ()
-writeOutputFile outfile output = ioeIO $
-      do writeFile outfile output
-         putStrLn $ "wrote file " ++ outfile
+writeOutputFile :: Options -> FilePath -> String -> IOE ()
+writeOutputFile opts outfile output = 
+      do putPointE Normal opts ("Writing " ++ outfile ++ "...") $ ioeIO $ writeFile outfile output
