@@ -50,15 +50,15 @@ mkCanon2gfcc opts cnc gr =
     pars = mkParamLincat gr
 
 -- Adds parsers for all concretes
-addParsers :: D.PGF -> D.PGF
-addParsers pgf = pgf { D.concretes = Map.map conv (D.concretes pgf) }
+addParsers :: Options -> D.PGF -> D.PGF
+addParsers opts pgf = pgf { D.concretes = Map.map conv (D.concretes pgf) }
   where
     conv cnc = cnc { D.parser = Just pinfo }
       where
         pinfo
-          | Map.lookup (mkCId "erasing") (D.cflags cnc) == Just "on" = PMCFG.convertConcrete (D.abstract pgf) cnc
-          | otherwise                                                = FCFG.convertConcrete  (D.abstract pgf) cnc
-    
+          | flag optErasing (erasingFromCnc `addOptions` opts) = PMCFG.convertConcrete (D.abstract pgf) cnc
+          | otherwise                                          = FCFG.convertConcrete  (D.abstract pgf) cnc
+        erasingFromCnc = modifyFlags (\o -> o { optErasing = Map.lookup (mkCId "erasing") (D.cflags cnc) == Just "on"})
 
 -- Generate PGF from GFCM.
 -- this assumes a grammar translated by canon2canon
