@@ -44,3 +44,4 @@ gwt-installball: pgf.fcgi gwt
 
 clean:
 	cabal clean
+	-rm -f pgf.fcgi
