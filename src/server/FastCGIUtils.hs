@@ -1,6 +1,5 @@
 {-# LANGUAGE DeriveDataTypeable #-}
 module FastCGIUtils (initFastCGI, loopFastCGI,
-                     DataRef, newDataRef, getData,
                      throwCGIError, handleCGIErrors) where
 
 import Control.Concurrent
@@ -16,7 +15,6 @@ import System.IO
 import System.IO.Unsafe
 import System.Posix
 import System.Time
-
 
 import Network.FastCGI
 
@@ -100,30 +98,6 @@ restartIfModified =
                          hPutStrLn stderr $ prog ++ " has been modified, restarting ..."
                          -- FIXME: setCurrentDirectory?
                          executeFile prog False args Nothing
-
--- Utilities for getting and caching read-only data from disk.
--- The data is reloaded when the file on disk has been modified.
-
-data DataRef a = DataRef {
-      dataFile :: FilePath,
-      dataLoad :: FilePath -> IO a,
-      dataValue :: MVar (ClockTime, a)
-    }
-
-newDataRef :: (FilePath -> IO a) -> FilePath -> IO (DataRef a)
-newDataRef load file = 
-    do t <- getModificationTime file
-       x <- load file
-       v <- newMVar (t,x)
-       return $ DataRef { dataFile = file, dataLoad = load, dataValue = v }
-
-getData :: DataRef a -> IO a
-getData ref = 
-    do t' <- getModificationTime (dataFile ref)
-       (t,x) <- takeMVar (dataValue ref)
-       x' <- if t' == t then return x else (dataLoad ref) (dataFile ref)
-       putMVar (dataValue ref) (t',x')
-       return x'
 
 -- Logging
 
