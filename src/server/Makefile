@@ -25,10 +25,10 @@ Lang%-parse.pgf: ../../lib/alltenses/Lang%.gfo
 Lang%-noparse.pgf: ../../lib/alltenses/Lang%.gfo
 	gfc $(GFCFLAGS) --make --parser=off --name=Lang$*-noparse $^
 
-demo.pgf: DemoBul-noparse.pgf DemoCat-noparse.pgf DemoDan-parse.pgf DemoEng-parse.pgf DemoFin-noparse.pgf DemoFre-noparse.pgf DemoGer-parse.pgf DemoIta-noparse.pgf DemoNor-parse.pgf DemoRus-noparse.pgf DemoSpa-noparse.pgf DemoSwe-parse.pgf
+demo.pgf: DemoBul-noparse.pgf DemoCat-noparse.pgf DemoDan-noparse.pgf DemoEng-parse.pgf DemoFin-noparse.pgf DemoFre-noparse.pgf DemoGer-noparse.pgf DemoIta-noparse.pgf DemoNor-noparse.pgf DemoRus-noparse.pgf DemoSpa-noparse.pgf DemoSwe-parse.pgf
 	gfc $(GFCFLAGS) --name=demo $^
 
-lang.pgf: LangBul-noparse.pgf LangCat-noparse.pgf LangDan-parse.pgf LangEng-parse.pgf LangFin-noparse.pgf LangFre-noparse.pgf LangGer-parse.pgf LangIta-noparse.pgf LangNor-parse.pgf LangRus-noparse.pgf LangSpa-noparse.pgf LangSwe-parse.pgf
+lang.pgf: LangBul-noparse.pgf LangCat-noparse.pgf LangDan-parse.pgf LangEng-parse.pgf LangFin-noparse.pgf LangFre-noparse.pgf LangGer-noparse.pgf LangIta-noparse.pgf LangNor-parse.pgf LangRus-noparse.pgf LangSpa-noparse.pgf LangSwe-parse.pgf
 	gfc $(GFCFLAGS) --name=lang $^
 
 test.pgf: LangEng-parse.pgf LangGer-parse.pgf
