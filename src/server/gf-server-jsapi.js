@@ -42,10 +42,15 @@ gf.httpGetJSONP = function (url, callback) {
   }
   var callbackIndex = window.jsonCallbacks.length;
   window.jsonCallbacks.push(function (output) { 
+    // get rid of the script tag
     document.getElementsByTagName("head")[0].removeChild(script);
+    // let this function be garbage-collected
+    window.jsonCallbacks[callbackIndex] = null;
+    // shrink the array if possible
+    while (window.jsonCallbacks.length > 0 && window.jsonCallbacks[window.jsonCallbacks.length-1] == null) {
+      window.jsonCallbacks.pop();
+    }
     callback(output);
-    window.jsonCallbacks[callbackIndex] = null; // let the function be garbage-collected
-    // FIXME: there will be lots of nulls in that array, we should purge it
   });
   var callbackName = "jsonCallbacks[" + callbackIndex + "]";
 
