@@ -20,4 +20,6 @@ executable pgf.fcgi
   main-is: MainFastCGI.hs
   other-modules:
     FastCGIUtils
+    Cache
+    URLEncoding
   ghc-options: -threaded

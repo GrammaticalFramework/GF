@@ -2,6 +2,7 @@
 
 import PGF (PGF)
 import qualified PGF
+import Cache
 import FastCGIUtils
 import URLEncoding
 
@@ -17,17 +18,18 @@ import Data.Maybe
 import System.Environment
 
 
-grammarFile :: IO FilePath
-grammarFile = do env <- getEnvironment
-                 return $ fromMaybe "grammar.pgf" $ lookup "PGF_FILE" env
+defaultGrammarFile :: IO FilePath
+defaultGrammarFile = 
+    do env <- getEnvironment
+       return $ fromMaybe "grammar.pgf" $ lookup "PGF_FILE" env
 
 main :: IO ()
 main = do initFastCGI
-          ref <- grammarFile >>= newDataRef PGF.readPGF
-          runFastCGIConcurrent' forkIO 100 (handleErrors (handleCGIErrors (fcgiMain ref)))
+          cache <- newCache PGF.readPGF
+          runFastCGIConcurrent' forkIO 100 (handleErrors (handleCGIErrors (fcgiMain cache)))
 
-fcgiMain :: DataRef PGF -> CGI CGIResult
-fcgiMain ref = liftIO (getData ref) >>= cgiMain
+fcgiMain :: Cache PGF -> CGI CGIResult
+fcgiMain cache = liftIO (defaultGrammarFile >>= readCache cache) >>= cgiMain
 
 cgiMain :: PGF -> CGI CGIResult
 cgiMain pgf =
