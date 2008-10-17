@@ -39,7 +39,7 @@ cgiMain pgf =
          "/translate"      -> return (doTranslate pgf) `ap` getText `ap` getCat `ap` getFrom `ap` getTo
          "/grammar"        -> return (doGrammar pgf) `ap` requestAcceptLanguage
          _                 -> throwCGIError 404 "Not Found" ["Resource not found: " ++ path]
-       outputJSON json
+       outputJSONP json
   where
     getText :: CGI String
     getText = liftM (maybe "" (urlDecodeUnicode . UTF8.decodeString)) $ getInput "input"
@@ -148,9 +148,14 @@ langCodeLanguage pgf code = listToMaybe [l | l <- PGF.languages pgf, PGF.languag
 
 -- * General CGI and JSON stuff
 
-outputJSON :: JSON a => a -> CGI CGIResult
-outputJSON x = do setHeader "Content-Type" "text/json; charset=utf-8"
-                  outputStrict $ UTF8.encodeString $ encode x
+outputJSONP :: JSON a => a -> CGI CGIResult
+outputJSONP x = 
+    do mc <- getInput "jsonp"
+       let str = case mc of
+                   Nothing -> encode x
+                   Just c  -> c ++ "(" ++ encode x ++ ")"
+       setHeader "Content-Type" "text/json; charset=utf-8"
+       outputStrict $ UTF8.encodeString str
 
 outputStrict :: String -> CGI CGIResult
 outputStrict x | x == x = output x
