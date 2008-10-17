@@ -26,10 +26,40 @@ gf.callFunction = function (fun, args, callback) {
   var query = "";
   for (var i in args) {
     query += (query == "") ? "?" : "&";
-    query += i + "=" + escape(args[i]);
+    query += i + "=" + encodeURIComponent(args[i]);
   }
-  gf.httpGetText(pgf_base_url + "/" + fun + query, function (output) { callback(gf.readJSON(output)); });
+  var url = pgf_base_url + "/" + fun + query;
+
+  // FIXME: if same domain, use gf.httpGetText
+  gf.httpGetJSONP(url, callback);
 }
+
+gf.httpGetJSONP = function (url, callback) { 
+  var script = document.createElement("script");
+
+  if (!window.jsonCallbacks) {
+    window.jsonCallbacks = new Array();
+  }
+  var callbackIndex = window.jsonCallbacks.length;
+  window.jsonCallbacks.push(function (output) { 
+    document.getElementsByTagName("head")[0].removeChild(script);
+    callback(output);
+    window.jsonCallbacks[callbackIndex] = null; // let the function be garbage-collected
+    // FIXME: there will be lots of nulls in that array, we should purge it
+  });
+  var callbackName = "jsonCallbacks[" + callbackIndex + "]";
+
+  var questionMarkPos = url.indexOf("?");
+  if (questionMarkPos > -1) {
+    url += (questionMarkPos < url.length-1) ? "&" : "";
+  } else {
+    url += "?";
+  }
+  url += "jsonp=" + callbackName;
+  script.setAttribute("src", url);
+  script.setAttribute("type", "text/javascript");
+  document.getElementsByTagName("head")[0].appendChild(script);
+};
 
 gf.httpGetText = function (url, callback) { 
   var XMLHttpRequestObject = false; 
