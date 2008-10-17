@@ -5,6 +5,7 @@ lin
   PredV2 s v o = PredVP s (ComplSlash (SlashV2a v) o) ;
   PredAP s a = PredVP s (UseComp (CompAP a)) ;
   PredAdv s a = PredVP s (UseComp (CompAdv a)) ;
+  PredNP s n = PredVP s (UseComp (CompNP n)) ;
 
   UseCl = Grammar.UseCl ;
 

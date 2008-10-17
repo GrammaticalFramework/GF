@@ -5,6 +5,7 @@ fun
   PredV2  : NP -> V2 -> NP -> Cl ;
   PredAP  : NP -> AP -> Cl ;
   PredAdv : NP -> Adv -> Cl ;
+  PredNP  : NP -> NP -> Cl ;
 
     UseCl  : Tense -> Ant -> Pol -> Cl  -> S ;
 
