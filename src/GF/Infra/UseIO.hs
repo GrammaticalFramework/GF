@@ -153,34 +153,6 @@ putStrFlush s = putStr s >> hFlush stdout
 putStrLnFlush :: String -> IO ()
 putStrLnFlush s = putStrLn s >> hFlush stdout
 
--- * a generic quiz session
-
-type QuestionsAndAnswers = [(String, String -> (Integer,String))]
-
-teachDialogue :: QuestionsAndAnswers -> String -> IO ()
-teachDialogue qas welc = do
-  putStrLn $ welc ++++ genericTeachWelcome
-  teach (0,0) qas
- where 
-    teach _ [] = do putStrLn "Sorry, ran out of problems"
-    teach (score,total) ((question,grade):quas) = do
-      putStr ("\n" ++ question ++ "\n> ") 
-      answer <- getLine
-      if (answer == ".") then return () else do
-        let (result, feedback) = grade answer
-            score' = score + result 
-            total' = total + 1
-        putStr (feedback ++++ "Score" +++ show score' ++ "/" ++ show total')
-        if (total' > 9 && fromInteger score' / fromInteger total' >= 0.75)
-           then do putStrLn "\nCongratulations - you passed!"
-           else teach (score',total') quas
-
-    genericTeachWelcome = 
-      "The quiz is over when you have done at least 10 examples" ++++
-      "with at least 75 % success." +++++
-      "You can interrupt the quiz by entering a line consisting of a dot ('.').\n"
-
-
 -- * IO monad with error; adapted from state monad
 
 newtype IOE a = IOE (IO (Err a))

@@ -12,7 +12,7 @@
 -- translation and morphology quiz. AR 10\/5\/2000 -- 12\/4\/2002 -- 14\/6\/2008
 --------------------------------------------------------------------------------
 
-module PGF.Quiz (
+module GF.Quiz (
   mkQuiz,
   translationList,
   morphologyList
@@ -69,3 +69,30 @@ mkAnswer cod as s =
 
 norml = unwords . words
 
+
+-- * a generic quiz session
+
+type QuestionsAndAnswers = [(String, String -> (Integer,String))]
+
+teachDialogue :: QuestionsAndAnswers -> String -> IO ()
+teachDialogue qas welc = do
+  putStrLn $ welc ++++ genericTeachWelcome
+  teach (0,0) qas
+ where 
+    teach _ [] = do putStrLn "Sorry, ran out of problems"
+    teach (score,total) ((question,grade):quas) = do
+      putStr ("\n" ++ question ++ "\n> ") 
+      answer <- getLine
+      if (answer == ".") then return () else do
+        let (result, feedback) = grade answer
+            score' = score + result 
+            total' = total + 1
+        putStr (feedback ++++ "Score" +++ show score' ++ "/" ++ show total')
+        if (total' > 9 && fromInteger score' / fromInteger total' >= 0.75)
+           then do putStrLn "\nCongratulations - you passed!"
+           else teach (score',total') quas
+
+    genericTeachWelcome = 
+      "The quiz is over when you have done at least 10 examples" ++++
+      "with at least 75 % success." +++++
+      "You can interrupt the quiz by entering a line consisting of a dot ('.').\n"
