@@ -15,7 +15,6 @@ import PGF.ShowLinearize
 import PGF.Macros
 import PGF.Data ----
 import PGF.Morphology
-import PGF.Quiz
 import PGF.VisualizeTree
 import GF.Compile.Export
 import GF.Infra.Option (noOptions)
@@ -26,6 +25,7 @@ import GF.Command.Abstract
 import GF.Command.Messages
 import GF.Text.Lexing
 import GF.Text.Transliterations
+import GF.Quiz
 
 import GF.Command.TreeOperations ---- temporary place for typecheck and compute
 

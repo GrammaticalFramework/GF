@@ -676,6 +676,7 @@ executable gf
     GF.Compile.GetGrammar
     GF.Compile
     GF.System.Readline
+    GF.Quiz
     PGF
     PGF.CId
     PGF.Data
