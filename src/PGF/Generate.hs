@@ -36,8 +36,9 @@ genRandom gen pgf cat = genTrees (randomRs (0.0, 1.0 :: Double) gen) cat where
                 (genTrees ds2 cat)          -- else (drop k ds)
 
   genTree rs = gett rs where
-    gett ds cid | cid == mkCId "String" = (Lit (LStr "foo"), 1)
-    gett ds cid | cid == mkCId "Int"    = (Lit (LInt 12345), 1)
+    gett ds cid | cid == cidString = (Lit (LStr "foo"), 1)
+    gett ds cid | cid == cidInt    = (Lit (LInt 12345), 1)
+    gett ds cid | cid == cidFloat  = (Lit (LFlt 12345), 1)
     gett [] _   = (Lit (LStr "TIMEOUT"), 1) ----
     gett ds cat = case fns cat of
       [] -> (Meta 0,1)
