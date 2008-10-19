@@ -6,5 +6,5 @@ concrete LangGer of Lang =
   ** {
 
 flags startcat = Phr ; unlexer = text ; lexer = text ;
-
+erasing = on ;
 } ;
