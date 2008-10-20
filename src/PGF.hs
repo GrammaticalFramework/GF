@@ -16,24 +16,21 @@ module PGF(
            -- * PGF
            PGF,
            readPGF,
-
-           -- * Identifiers
-           -- ** CId
-           CId, mkCId, prCId, wildCId,
            
-           -- ** Languages
+           -- * Languages
            Language, 
            showLanguage, readLanguage,
            languages, abstractName, languageCode,
            
-           -- ** Categories
-           categories, startCat,
-           
            -- * Types
            Type(..),
            showType, readType,
+           categories, startCat,
 
            -- * Expressions
+           -- ** Identifiers
+           CId, mkCId, prCId, wildCId,
+
            -- ** Tree
            Tree(..), Literal(..),
            showTree, readTree,
