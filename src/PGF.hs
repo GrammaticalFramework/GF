@@ -21,11 +21,13 @@ module PGF(
            -- ** CId
            CId, mkCId, prCId, wildCId,
            
-           -- ** Language
-           Language, languages, abstractName, languageCode,
+           -- ** Languages
+           Language, 
+           showLanguage, readLanguage,
+           languages, abstractName, languageCode,
            
-           -- ** Category
-           Category, categories, startCat,
+           -- ** Categories
+           categories, startCat,
            
            -- * Types
            Type(..),
@@ -98,10 +100,9 @@ import Control.Monad
 -- > concrete LangEng of Lang = ...
 type Language     = CId
 
--- | This is just a 'CId' with the category name.
--- The categories are defined in the abstract syntax
--- with the \'cat\' keyword.
-type Category     = CId
+readLanguage :: String -> Language
+
+showLanguage :: Language -> String
 
 -- | Reads file in Portable Grammar Format and produces
 -- 'PGF' structure. The file is usually produced with:
@@ -184,14 +185,16 @@ languageCode :: PGF -> Language -> Maybe String
 abstractName :: PGF -> Language
 
 -- | List of all categories defined in the given grammar.
-categories :: PGF -> [Category]
+-- The categories are defined in the abstract syntax
+-- with the \'cat\' keyword.
+categories :: PGF -> [Type]
 
 -- | The start category is defined in the grammar with
 -- the \'startcat\' flag. This is usually the sentence category
 -- but it is not necessary. Despite that there is a start category
 -- defined you can parse with any category. The start category
 -- definition is just for convenience.
-startCat   :: PGF -> Category
+startCat   :: PGF -> Type
 
 -- | Complete the last word in the given string. If the input
 -- is empty or ends in whitespace, the last word is considred
@@ -205,6 +208,10 @@ complete :: PGF -> Language -> Type -> String
 ---------------------------------------------------
 -- Implementation
 ---------------------------------------------------
+
+readLanguage = mkCId
+
+showLanguage = prCId
 
 readPGF f = do
   s <- readFile f >>= return . decodeUTF8 -- pgf is in UTF8, internal in unicode
@@ -256,9 +263,9 @@ languages pgf = cncnames pgf
 languageCode pgf lang = 
     fmap (replace '_' '-') $ lookConcrFlag pgf lang (mkCId "language")
 
-categories pgf = Map.keys (cats (abstract pgf))
+categories pgf = [DTyp [] c [EMeta i | (Hyp _ _,i) <- zip hs [0..]] | (c,hs) <- Map.toList (cats (abstract pgf))]
 
-startCat pgf = mkCId (lookStartCat pgf)
+startCat pgf = DTyp [] (lookStartCat pgf) []
 
 complete pgf from typ input = 
          let (ws,prefix) = tokensAndPrefix input

@@ -578,7 +578,7 @@ allCommands cod pgf = Map.fromList [
      lang -> map mkCId (chunks ',' lang)
    optLang opts = head $ optLangs opts ++ [wildCId]
    optType opts = 
-     let str = valStrOpts "cat" (lookStartCat pgf) opts
+     let str = valStrOpts "cat" (prCId $ lookStartCat pgf) opts
      in case readType str of
           Just ty -> ty
           Nothing -> error ("Can't parse '"++str++"' as type")
@@ -595,7 +595,7 @@ allCommands cod pgf = Map.fromList [
    toString = unwords . toStrings
 
    prGrammar opts = case opts of
-     _ | isOpt "cats" opts -> unwords $ map prCId $ categories pgf
+     _ | isOpt "cats" opts -> unwords $ map showType $ categories pgf
      _ | isOpt "fullform" opts -> concatMap 
           (prFullFormLexicon . buildMorpho pgf) $ optLangs opts
      _ | isOpt "missing" opts -> 

@@ -50,7 +50,7 @@ pgfMain pgf command =
                  t <- maybe (throwCGIError 400 "No tree given" ["No tree given"]) return mt
                  maybe (throwCGIError 400 "Bad tree" ["Bad tree: " ++ t]) return (PGF.readTree t)
 
-    getCat :: CGI (Maybe PGF.Category)
+    getCat :: CGI (Maybe PGF.Type)
     getCat = 
        do mcat  <- getInput "cat"
           case mcat of

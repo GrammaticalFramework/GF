@@ -31,7 +31,7 @@ toBNF f pgf cnc = prCFG $ f $ pgfToCFG pgf cnc
 pgfToCFG :: PGF 
           -> CId   -- ^ Concrete syntax name
           -> CFG
-pgfToCFG pgf lang = mkCFG (lookStartCat pgf) extCats (startRules ++ concatMap fruleToCFRule rules)
+pgfToCFG pgf lang = mkCFG (prCId (lookStartCat pgf)) extCats (startRules ++ concatMap fruleToCFRule rules)
   where
     pinfo = fromMaybe (error "pgfToCFG: No parser.") (lookParser pgf lang)
 

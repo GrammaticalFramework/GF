@@ -232,7 +232,7 @@ wordCompletion gfenv line0 prefix0 p =
     pgf    = multigrammar cmdEnv
     cmdEnv = commandenv gfenv
     optLang opts = valCIdOpts "lang" (head (languages pgf)) opts
-    optType opts = DTyp [] (mkCId (valStrOpts "type" (lookStartCat pgf) opts)) []
+    optType opts = DTyp [] (mkCId (valStrOpts "type" (prCId $ lookStartCat pgf) opts)) []
     
     ret c [x] = return [x++[c]]
     ret _ xs  = return xs
