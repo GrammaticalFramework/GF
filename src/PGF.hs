@@ -69,8 +69,6 @@ import PGF.TypeCheck
 import PGF.Paraphrase
 import PGF.Macros
 import PGF.Data
-import PGF.Expr
-import PGF.Type
 import PGF.Raw.Convert
 import PGF.Raw.Parse
 import PGF.Raw.Print (printTree)

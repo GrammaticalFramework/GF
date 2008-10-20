@@ -54,6 +54,7 @@ pgfMain pgf command =
     getCat = 
        do mcat  <- getInput "cat"
           case mcat of
+            Nothing -> return Nothing
             Just "" -> return Nothing
             Just cat | cat `notElem` PGF.categories pgf ->
                          throwCGIError 400 "Unknown category" ["Unknown category: " ++ cat]
