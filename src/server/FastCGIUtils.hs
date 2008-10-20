@@ -1,6 +1,8 @@
 {-# LANGUAGE DeriveDataTypeable #-}
 module FastCGIUtils (initFastCGI, loopFastCGI,
-                     throwCGIError, handleCGIErrors) where
+                     throwCGIError, handleCGIErrors,
+                     outputJSONP, 
+                     splitBy) where
 
 import Control.Concurrent
 import Control.Exception
@@ -17,6 +19,10 @@ import System.Posix
 import System.Time
 
 import Network.FastCGI
+
+import Text.JSON
+import qualified Codec.Binary.UTF8.String as UTF8 (encodeString, decodeString)
+
 
 initFastCGI :: IO ()
 initFastCGI = installSignalHandlers
@@ -118,3 +124,26 @@ handleCGIErrors x = x `catchCGI` \e -> case e of
                                                              Nothing -> throw e
                                                              Just (CGIError c m t) -> outputError c m t
                                          _ -> throw e
+
+-- * General CGI and JSON stuff
+
+outputJSONP :: JSON a => a -> CGI CGIResult
+outputJSONP x = 
+    do mc <- getInput "jsonp"
+       let str = case mc of
+                   Nothing -> encode x
+                   Just c  -> c ++ "(" ++ encode x ++ ")"
+       setHeader "Content-Type" "text/json; charset=utf-8"
+       outputStrict $ UTF8.encodeString str
+
+outputStrict :: String -> CGI CGIResult
+outputStrict x | x == x = output x
+               | otherwise = fail "I am the pope."
+
+-- * General utilities
+
+splitBy :: (a -> Bool) -> [a] -> [[a]]
+splitBy _ [] = [[]]
+splitBy f list = case break f list of
+                   (first,[]) -> [first]
+                   (first,_:rest) -> first : splitBy f rest

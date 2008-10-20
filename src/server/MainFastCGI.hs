@@ -154,26 +154,3 @@ selectLanguage pgf macc = case acceptable of
 
 langCodeLanguage :: PGF -> String -> Maybe PGF.Language
 langCodeLanguage pgf code = listToMaybe [l | l <- PGF.languages pgf, PGF.languageCode pgf l == Just code]
-
--- * General CGI and JSON stuff
-
-outputJSONP :: JSON a => a -> CGI CGIResult
-outputJSONP x = 
-    do mc <- getInput "jsonp"
-       let str = case mc of
-                   Nothing -> encode x
-                   Just c  -> c ++ "(" ++ encode x ++ ")"
-       setHeader "Content-Type" "text/json; charset=utf-8"
-       outputStrict $ UTF8.encodeString str
-
-outputStrict :: String -> CGI CGIResult
-outputStrict x | x == x = output x
-               | otherwise = fail "I am the pope."
-
--- * General utilities
-
-splitBy :: (a -> Bool) -> [a] -> [[a]]
-splitBy _ [] = [[]]
-splitBy f list = case break f list of
-                   (first,[]) -> [first]
-                   (first,_:rest) -> first : splitBy f rest
