@@ -171,8 +171,8 @@ languages    :: PGF -> [Language]
 -- | Gets the RFC 4646 language tag 
 -- of the language which the given concrete syntax implements,
 -- if this is listed in the source grammar.
--- Example language tags include @"en"@ for English,
--- and @"en-UK"@ for British English.
+-- Example language tags include @\"en\"@ for English,
+-- and @\"en-UK\"@ for British English.
 languageCode :: PGF -> Language -> Maybe String
 
 -- | The abstract language name is the name of the top-level
