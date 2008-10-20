@@ -5,11 +5,12 @@ module GF.Infra.Option
      Flags(..), 
      Mode(..), Phase(..), Verbosity(..), Encoding(..), OutputFormat(..), 
      SISRFormat(..), Optimization(..), CFGTransform(..), HaskellOption(..),
-     Dump(..), Printer(..), Recomp(..),
+     Dump(..), Printer(..), Recomp(..), BuildParser(..),
      -- * Option parsing 
      parseOptions, parseModuleOptions,
      -- * Option pretty-printing
-     moduleOptionsGFO,
+     optionsGFO,
+     optionsPGF,
      -- * Option manipulation
      addOptions, concatOptions, noOptions,
      modifyFlags,
@@ -136,6 +137,9 @@ data Printer = PrinterStrip -- ^ Remove name qualifiers.
 data Recomp = AlwaysRecomp | RecompIfNewer | NeverRecomp
   deriving (Show,Eq,Ord)
 
+data BuildParser = BuildParser | DontBuildParser | BuildParserOnDemand
+  deriving (Show,Eq,Ord)
+
 data Flags = Flags {
       optMode            :: Mode,
       optStopAfterPhase  :: Phase,
@@ -167,7 +171,7 @@ data Flags = Flags {
       optLexer           :: Maybe String,
       optUnlexer         :: Maybe String,
       optErasing         :: Bool,
-      optBuildParser     :: Bool,
+      optBuildParser     :: BuildParser,
       optWarnings        :: [Warning],
       optDump            :: [Dump]
     }
@@ -195,13 +199,18 @@ parseModuleOptions args = do (opts,nonopts) <- parseOptions args
 
 -- Showing options
 
--- | Pretty-print the module options that are preserved in .gfo files.
-moduleOptionsGFO :: Options -> [(String,String)]
-moduleOptionsGFO opts = 
+-- | Pretty-print the options that are preserved in .gfo files.
+optionsGFO :: Options -> [(String,String)]
+optionsGFO opts = optionsPGF opts
+      ++ [("coding", show (flag optEncoding opts))]
+
+-- | Pretty-print the options that are preserved in .pgf files.
+optionsPGF :: Options -> [(String,String)]
+optionsPGF opts = 
          maybe [] (\x -> [("language",x)]) (flag optSpeechLanguage opts)
       ++ maybe [] (\x -> [("startcat",x)]) (flag optStartCat opts)
-      ++ [("coding", show (flag optEncoding opts))]
       ++ (if flag optErasing opts then [("erasing","on")] else [])
+      ++ (if flag optBuildParser opts == BuildParserOnDemand then [("parser","ondemand")] else [])
 
 -- Option manipulation
 
@@ -256,7 +265,7 @@ defaultFlags = Flags {
       optLexer           = Nothing,
       optUnlexer         = Nothing,
       optErasing         = False,
-      optBuildParser     = True,
+      optBuildParser     = BuildParser,
       optWarnings        = [],
       optDump            = []
     }
@@ -331,7 +340,7 @@ optDescr =
                 ("Character encoding of the source grammar, ENCODING = "
                  ++ concat (intersperse " | " (map fst encodings)) ++ "."),
      Option [] ["erasing"] (onOff erasing False) "Generate erasing grammar (default off).",
-     Option [] ["parser"] (onOff parser True) "Build parser (default on).",
+     Option [] ["parser"] (ReqArg buildParser "VALUE") "Build parser (default on). VALUE = on | off | ondemand",
      Option [] ["startcat"] (ReqArg startcat "CAT") "Grammar start category.",
      Option [] ["language"] (ReqArg language "LANG") "Set the speech language flag to LANG in the generated grammar.",
      Option [] ["lexer"] (ReqArg lexer "LEXER") "Use lexer LEXER.",
@@ -388,7 +397,11 @@ optDescr =
                          Just c  -> set $ \o -> o { optEncoding = c }
                          Nothing -> fail $ "Unknown character encoding: " ++ x
        erasing     x = set $ \o -> o { optErasing = x }
-       parser      x = set $ \o -> o { optBuildParser = x }
+       buildParser x = do v <- case x of
+                                 "on"       -> return BuildParser
+                                 "off"      -> return DontBuildParser
+                                 "ondemand" -> return BuildParserOnDemand
+                          set $ \o -> o { optBuildParser = v }
        startcat    x = set $ \o -> o { optStartCat = Just x }
        language    x = set $ \o -> o { optSpeechLanguage = Just x }
        lexer       x = set $ \o -> o { optLexer = Just x }

@@ -76,7 +76,10 @@ optimize opts = cse . suf
 
 buildParser :: Options -> PGF -> PGF
 buildParser opts = 
-    if flag optBuildParser opts then addParsers opts else id
+    case flag optBuildParser opts of
+      BuildParser         -> addParsers opts
+      DontBuildParser     -> id
+      BuildParserOnDemand -> mapConcretes (\cnc -> cnc { cflags = Map.insert (mkCId "parser") "ondemand" (cflags cnc) })
 
 batchCompile :: Options -> [FilePath] -> IOE SourceGrammar
 batchCompile opts files = do

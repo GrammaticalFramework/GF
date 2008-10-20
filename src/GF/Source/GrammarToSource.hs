@@ -133,7 +133,7 @@ trPerh p = case p of
   _ -> P.EMeta ---
 
 trFlags :: Options -> [P.TopDef]
-trFlags = map trFlag . moduleOptionsGFO
+trFlags = map trFlag . optionsGFO
 
 trFlag :: (String,String) -> P.TopDef
 trFlag (f,x) = P.DefFlag [P.FlagDef (tri $ identC (BS.pack f)) (tri $ identC (BS.pack x))]
