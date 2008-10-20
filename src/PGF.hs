@@ -71,6 +71,7 @@ import PGF.Raw.Parse
 import PGF.Raw.Print (printTree)
 import PGF.Parsing.FCFG
 import qualified PGF.Parsing.FCFG.Incremental as Incremental
+import qualified GF.Compile.GeneratePMCFG as PMCFG
 import GF.Text.UTF8
 
 import GF.Data.ErrM
@@ -211,7 +212,14 @@ showLanguage = prCId
 readPGF f = do
   s <- readFile f >>= return . decodeUTF8 -- pgf is in UTF8, internal in unicode
   g <- parseGrammar s
-  return $! toPGF g
+  return $! addParsers $ toPGF g
+
+-- Adds parsers for all concretes that don't have a parser.
+addParsers :: PGF -> PGF
+addParsers pgf = pgf { concretes = Map.map conv (concretes pgf) }
+  where
+    conv cnc | isJust (parser cnc) = cnc
+             | otherwise = cnc { parser = Just (PMCFG.convertConcrete (abstract pgf) cnc) }
 
 linearize pgf lang = concat . take 1 . PGF.Linearize.linearizes pgf lang
 
