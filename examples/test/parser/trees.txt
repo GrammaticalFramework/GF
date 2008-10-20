@@ -1,0 +1,1000 @@
+PhrUtt but_PConj (UttAdv everywhere_Adv) (VocNP everything_NP) 
+PhrUtt therefore_PConj (UttIP whatSg_IP) please_Voc 
+PhrUtt otherwise_PConj (UttVP (PassV2 hit_V2)) NoVoc 
+PhrUtt otherwise_PConj yes_Utt (VocNP (AdvNP (AdvNP (MassNP (ComplN2 father_N2 everything_NP)) (PrepNP possess_Prep (DetArtPl DefArt (AdvCN (UseN sock_N) now_Adv)))) there7from_Adv)) 
+PhrUtt therefore_PConj (UttIP whatPl_IP) (VocNP something_NP) 
+PhrUtt but_PConj (UttAdv (ComparAdvAdjS less_CAdv fun_AV (UseCl TPast ASimul PNeg (CleftNP everybody_NP (UseRCl TFut AAnter PNeg (RelVP IdRP (ComplVQ wonder_VQ (UseQCl TCond AAnter PPos (QuestIAdv how_IAdv (GenericCl (UseV burn_V))))))))))) please_Voc 
+PhrUtt (PConjConj and_Conj) (UttImpPol PPos (ImpVP (UseV float_V))) (VocNP (DetArtPl DefArt (UseN2 (Use3N3 distance_N3)))) 
+PhrUtt otherwise_PConj (UttImpSg PNeg (ImpVP (ComplVA become_VA (AdAP almost_AdA (ConjAP and_Conj (BaseAP (ComplA2 easy_A2V (MassNP (ComplN2 (Use2N3 distance_N3) everything_NP))) (ComplA2 married_A2 (UsePN paris_PN)))))))) please_Voc 
+PhrUtt NoPConj (UttImpSg PPos (ImpVP (ComplVV must_VV (ComplVV must_VV (ComplVA become_VA (PositA beautiful_A)))))) please_Voc 
+PhrUtt but_PConj no_Utt (VocNP (MassNP (ComplN2 (ComplN3 distance_N3 something_NP) something_NP))) 
+PhrUtt therefore_PConj (UttQS (UseQCl TFut ASimul PNeg (QuestIAdv why_IAdv (CleftAdv now_Adv (UseCl TPres AAnter PPos (PredVP everybody_NP (ComplVQ wonder_VQ (UseQCl TCond AAnter PNeg (QuestIComp (CompIP whatPl_IP) something_NP))))))))) NoVoc 
+PhrUtt NoPConj (UttIP whoPl_IP) (VocNP (UsePron youPl_Pron)) 
+PhrUtt NoPConj (UttS (UseCl TPast ASimul PPos (ImpersCl (ComplVV can_VV (UseV swim_V))))) please_Voc 
+PhrUtt therefore_PConj (UttImpPol PNeg (ImpVP (ComplVQ wonder_VQ (UseQCl TFut ASimul PPos (QuestCl (PredVP everything_NP (UseComp (CompAdv here7to_Adv)))))))) (VocNP everything_NP) 
+PhrUtt NoPConj no_Utt please_Voc 
+PhrUtt NoPConj (UttNP somebody_NP) NoVoc 
+PhrUtt but_PConj (UttVP (PassV2 wait_V2)) (VocNP (RelNP (PPartNP (MassNP (ApposCN (ComplN2 (Use3N3 distance_N3) (DetCN (DetQuant this_Quant NumPl) (UseN rope_N))) something_NP)) cut_V2) (UseRCl TPast AAnter PNeg (RelVP IdRP (ComplVV must_VV (ComplVA become_VA (AdAP too_AdA (AdAP quite_Adv (ComplA2 easy_A2V (UsePN paris_PN)))))))))) 
+PhrUtt NoPConj (UttAdv somewhere_Adv) (VocNP (RelNP somebody_NP (UseRCl TFut ASimul PPos (RelSlash IdRP (AdvSlash (SlashVP (AdvNP somebody_NP here7to_Adv) (Slash3V3 add_V3 (DetArtPl IndefArt (UseN2 brother_N2)))) there7from_Adv))))) 
+PhrUtt therefore_PConj (UttVP (PassV2 find_V2)) (VocNP something_NP) 
+PhrUtt otherwise_PConj (ImpPl1 (PassV2 find_V2)) please_Voc 
+PhrUtt therefore_PConj yes_Utt please_Voc 
+PhrUtt but_PConj (UttNP somebody_NP) NoVoc 
+PhrUtt (PConjConj both7and_DConj) (UttIAdv why_IAdv) please_Voc 
+PhrUtt otherwise_PConj (UttIP whatPl_IP) (VocNP everybody_NP) 
+PhrUtt but_PConj (UttNP (DetArtSg IndefArt (ApposCN (UseN2 father_N2) (DetArtPl IndefArt (UseN snake_N))))) please_Voc 
+PhrUtt but_PConj (UttImpPl PNeg (ImpVP (AdvVP (ComplVV want_VV (AdVVP always_AdV (UseComp (CompAP (AdAP quite_Adv (ReflA2 married_A2)))))) now_Adv))) (VocNP (DetArtSg DefArt (ComplN2 father_N2 (DetNP (DetArtCard DefArt (NumNumeral (num (pot2as3 (pot2 pot01))))))))) 
+PhrUtt NoPConj (UttImpPol PNeg (ImpVP (ComplSlash (SlashV2V beg_V2V (ComplVQ wonder_VQ (UseQCl TPres ASimul PPos (ExistIP (AdvIP whatPl_IP (AdAdv quite_Adv there7from_Adv)))))) everybody_NP))) (VocNP everything_NP) 
+PhrUtt but_PConj (UttQS (UseQCl TPast ASimul PNeg (ExistIP (IdetIP how8many_IDet)))) NoVoc 
+PhrUtt otherwise_PConj no_Utt please_Voc 
+PhrUtt but_PConj (UttImpPol PNeg (ImpVP (PassV2 cut_V2))) please_Voc 
+PhrUtt (PConjConj and_Conj) (UttIAdv how_IAdv) (VocNP (DetNP someSg_Det)) 
+PhrUtt NoPConj (UttIAdv why_IAdv) please_Voc 
+PhrUtt NoPConj (UttIAdv (PrepIP to_Prep whoPl_IP)) NoVoc 
+PhrUtt otherwise_PConj (UttNP (DetNP somePl_Det)) NoVoc 
+PhrUtt but_PConj yes_Utt (VocNP everything_NP) 
+PhrUtt but_PConj no_Utt NoVoc 
+PhrUtt but_PConj (UttNP everything_NP) (VocNP (UsePN paris_PN)) 
+PhrUtt but_PConj (UttImpPl PNeg (ImpVP (UseV float_V))) (VocNP (DetNP (DetArtOrd DefArt (NumCard (AdNum almost_AdN (NumDigits (IDig D_3)))) (OrdDigits (IDig D_2))))) 
+PhrUtt therefore_PConj (UttNP (PPartNP something_NP play_V2)) please_Voc 
+PhrUtt but_PConj (UttVP (PassV2 switch8on_V2)) please_Voc 
+PhrUtt therefore_PConj (UttNP (DetCN few_Det (AdjCN (ComparA thin_A (PPartNP (DetArtSg DefArt (AdjCN (ComplA2 married_A2 everybody_NP) (UseN sheep_N))) cut_V2)) (ComplN2 brother_N2 (PPartNP everything_NP cut_V2))))) NoVoc 
+PhrUtt otherwise_PConj (UttVP (ProgrVP (ComplVS fear_VS (AdvS (AdAdv quite_Adv (PositAdvAdj green_A)) (UseCl TCond ASimul PPos (ExistNP (PredetNP only_Predet something_NP))))))) NoVoc 
+PhrUtt NoPConj (UttAdv here7from_Adv) please_Voc 
+PhrUtt therefore_PConj no_Utt NoVoc 
+PhrUtt therefore_PConj (UttImpPol PPos (ImpVP (ComplVV must_VV (ComplVA become_VA (PositA round_A))))) (VocNP something_NP) 
+PhrUtt otherwise_PConj (UttImpSg PNeg (ImpVP (ReflVP (SlashV2Q ask_V2Q (UseQCl TPast AAnter PNeg (QuestIAdv (PrepIP from_Prep whatSg_IP) (ImpersCl (ComplSlash (SlashVV want_VV (SlashVV can8know_VV (SlashVV want_VV (SlashV2Q ask_V2Q (UseQCl TFut ASimul PPos (QuestIComp (CompIAdv where_IAdv) everything_NP)))))) (PredetNP only_Predet everything_NP))))))))) please_Voc 
+PhrUtt but_PConj (UttImpSg PNeg (ImpVP (ComplVS hope_VS (UseCl TFut AAnter PNeg (GenericCl (ProgrVP (AdVVP always_AdV (ComplSlash (Slash2V3 talk_V3 (AdvNP everybody_NP here7from_Adv)) (PredetNP most_Predet something_NP))))))))) NoVoc 
+PhrUtt but_PConj (UttIP whoSg_IP) please_Voc 
+PhrUtt NoPConj (UttImpPl PNeg (ImpVP (UseComp (CompAP (PositA black_A))))) NoVoc 
+PhrUtt therefore_PConj (UttImpSg PNeg (ImpVP (ComplSlash (SlashVV want_VV (SlashV2A paint_V2A (PositA heavy_A))) everybody_NP))) (VocNP (AdvNP (DetCN (DetQuant that_Quant (NumCard (NumNumeral (num (pot2as3 (pot2plus (pot0 n5) pot111)))))) (UseN2 mother_N2)) today_Adv)) 
+PhrUtt NoPConj (UttAdv everywhere_Adv) please_Voc 
+PhrUtt (PConjConj and_Conj) (UttIAdv where_IAdv) (VocNP somebody_NP) 
+PhrUtt therefore_PConj (UttIP (IdetCN how8many_IDet (ComplN2 (Use2N3 distance_N3) (DetNP much_Det)))) please_Voc 
+PhrUtt otherwise_PConj yes_Utt please_Voc 
+PhrUtt NoPConj (UttImpSg PNeg (ImpVP (UseComp (CompAP (ReflA2 easy_A2V))))) please_Voc 
+PhrUtt (PConjConj and_Conj) (UttNP (MassNP (AdvCN (UseN2 (Use2N3 distance_N3)) today_Adv))) NoVoc 
+PhrUtt therefore_PConj (UttAdv (ComparAdvAdj less_CAdv red_A something_NP)) please_Voc 
+PhrUtt therefore_PConj (UttIAdv (PrepIP after_Prep whoPl_IP)) (VocNP (DetArtSg IndefArt (ComplN2 father_N2 (AdvNP (UsePN john_PN) here_Adv)))) 
+PhrUtt but_PConj (UttImpPl PPos (ImpVP (ReflVP (SlashVV must_VV (Slash3V3 add_V3 (UsePN john_PN)))))) NoVoc 
+PhrUtt NoPConj (UttIP (IdetIP (IdetQuant which_IQuant NumSg))) please_Voc 
+PhrUtt therefore_PConj no_Utt please_Voc 
+PhrUtt otherwise_PConj (UttAdv there7from_Adv) NoVoc 
+PhrUtt (PConjConj and_Conj) (UttIP whatPl_IP) (VocNP (PredetNP only_Predet (PredetNP most_Predet something_NP))) 
+PhrUtt but_PConj (UttVP (PassV2 wait_V2)) NoVoc 
+PhrUtt (PConjConj and_Conj) (UttIAdv when_IAdv) NoVoc 
+PhrUtt but_PConj (UttIP (IdetCN (IdetQuant which_IQuant NumPl) (RelCN (UseN2 brother_N2) (UseRCl TPast ASimul PNeg (RelVP IdRP (ComplVA become_VA (ReflA2 married_A2))))))) please_Voc 
+PhrUtt therefore_PConj (UttImpPl PPos (ImpVP (ProgrVP (ComplVV can8know_VV (PassV2 throw_V2))))) (VocNP (ConjNP both7and_DConj (ConsNP (PredetNP most_Predet (UsePron she_Pron)) (BaseNP everything_NP (DetCN few_Det (SentCN (UseN river_N) (EmbedVP (AdVVP always_AdV (UseV die_V))))))))) 
+PhrUtt NoPConj (UttNP everything_NP) NoVoc 
+PhrUtt but_PConj (UttAdv here7to_Adv) (VocNP (PredetNP most_Predet everything_NP)) 
+PhrUtt NoPConj no_Utt please_Voc 
+PhrUtt but_PConj (UttQS (UseQCl TPast ASimul PNeg (QuestIAdv when_IAdv (GenericCl (ComplVA become_VA (ConjAP or_Conj (ConsAP (PositA dry_A) (BaseAP (ComplA2 married_A2 (UsePN paris_PN)) (PositA cold_A))))))))) (VocNP (DetArtPl IndefArt (UseN2 father_N2))) 
+PhrUtt (PConjConj and_Conj) (UttAdv there7from_Adv) please_Voc 
+PhrUtt but_PConj (UttImpPol PPos (ImpVP (ReflVP (SlashV2S answer_V2S (AdvS already_Adv (AdvS (ConjAdv either7or_DConj (BaseAdv somewhere_Adv there7from_Adv)) (UseCl TFut ASimul PPos (GenericCl (ComplVQ wonder_VQ (UseQCl TPast ASimul PNeg (ExistIP (AdvIP (AdvIP whatSg_IP there_Adv) (PositAdvAdj empty_A))))))))))))) (VocNP somebody_NP) 
+PhrUtt but_PConj yes_Utt please_Voc 
+PhrUtt therefore_PConj no_Utt please_Voc 
+PhrUtt otherwise_PConj no_Utt please_Voc 
+PhrUtt NoPConj (UttImpPl PNeg (ImpVP (PassV2 close_V2))) NoVoc 
+PhrUtt (PConjConj both7and_DConj) yes_Utt NoVoc 
+PhrUtt NoPConj yes_Utt please_Voc 
+PhrUtt NoPConj yes_Utt please_Voc 
+PhrUtt but_PConj (UttIAdv how_IAdv) please_Voc 
+PhrUtt (PConjConj or_Conj) no_Utt please_Voc 
+PhrUtt otherwise_PConj (UttAdv (PrepNP before_Prep (PredetNP most_Predet (UsePN paris_PN)))) (VocNP everybody_NP) 
+PhrUtt (PConjConj or_Conj) (UttAdv here7to_Adv) NoVoc 
+PhrUtt otherwise_PConj (UttIAdv (PrepIP on_Prep (AdvIP whatPl_IP there7to_Adv))) NoVoc 
+PhrUtt NoPConj yes_Utt NoVoc 
+PhrUtt (PConjConj either7or_DConj) (UttQS (UseQCl TPres ASimul PNeg (QuestIComp (CompIP whatPl_IP) something_NP))) please_Voc 
+PhrUtt therefore_PConj (ImpPl1 (PassV2 have_V2)) please_Voc 
+PhrUtt (PConjConj both7and_DConj) (UttIAdv when_IAdv) please_Voc 
+PhrUtt otherwise_PConj yes_Utt NoVoc 
+PhrUtt (PConjConj or_Conj) (UttQS (UseQCl TFut AAnter PNeg (ExistIP whoSg_IP))) NoVoc 
+PhrUtt (PConjConj either7or_DConj) no_Utt please_Voc 
+PhrUtt NoPConj (UttIAdv how_IAdv) NoVoc 
+PhrUtt therefore_PConj no_Utt NoVoc 
+PhrUtt therefore_PConj (UttImpSg PPos (ImpVP (UseV swell_V))) please_Voc 
+PhrUtt otherwise_PConj (UttNP (DetNP someSg_Det)) NoVoc 
+PhrUtt (PConjConj or_Conj) (UttQS (UseQCl TFut AAnter PNeg (QuestSlash whatPl_IP (SlashVP somebody_NP (SlashV2Q ask_V2Q (UseQCl TPast AAnter PPos (ExistIP whoSg_IP))))))) (VocNP (UsePron they_Pron)) 
+PhrUtt NoPConj (UttIP (IdetIP how8many_IDet)) please_Voc 
+PhrUtt NoPConj (UttIP whoSg_IP) please_Voc 
+PhrUtt otherwise_PConj (UttAdv today_Adv) please_Voc 
+PhrUtt (PConjConj and_Conj) (UttAdv somewhere_Adv) (VocNP everybody_NP) 
+PhrUtt therefore_PConj (UttImpPol PPos (ImpVP (ComplVS hope_VS (UseCl TPres ASimul PPos (ImpersCl (UseV flow_V)))))) (VocNP everything_NP) 
+PhrUtt NoPConj (UttAdv here7to_Adv) NoVoc 
+PhrUtt but_PConj (UttImpPl PPos (ImpVP (ComplVA become_VA (PositA empty_A)))) please_Voc 
+PhrUtt therefore_PConj (UttImpSg PPos (ImpVP (PassV2 have_V2))) NoVoc 
+PhrUtt but_PConj (UttIP (IdetIP how8many_IDet)) NoVoc 
+PhrUtt NoPConj (UttVP (UseV jump_V)) NoVoc 
+PhrUtt NoPConj no_Utt please_Voc 
+PhrUtt therefore_PConj (UttIP whoPl_IP) (VocNP (DetArtSg DefArt (UseN2 (ComplN3 distance_N3 (ConjNP or_Conj (BaseNP somebody_NP (PPartNP (UsePron youPol_Pron) leave_V2))))))) 
+PhrUtt therefore_PConj (UttNP (UsePron youSg_Pron)) NoVoc 
+PhrUtt therefore_PConj (UttImpPol PPos (ImpVP (PassV2 watch_V2))) please_Voc 
+PhrUtt therefore_PConj (UttImpPl PPos (ImpVP (AdVVP always_AdV (AdvVP (UseComp (CompAP (ComplA2 easy_A2V (UsePron she_Pron)))) (ComparAdvAdjS more_CAdv rotten_A (UseCl TCond ASimul PNeg (ExistNP (DetNP (DetQuantOrd this_Quant NumPl (OrdNumeral (num (pot3 (pot1as2 (pot1to19 n2)))))))))))))) please_Voc 
+PhrUtt NoPConj (UttIAdv why_IAdv) NoVoc 
+PhrUtt NoPConj (UttIP whoPl_IP) please_Voc 
+PhrUtt NoPConj no_Utt NoVoc 
+PhrUtt otherwise_PConj (ImpPl1 (PassV2 kill_V2)) (VocNP (DetNP (DetArtOrd DefArt NumPl (OrdDigits (IIDig D_0 (IIDig D_6 (IDig D_9))))))) 
+PhrUtt otherwise_PConj (UttS (UseCl TCond ASimul PPos (PredVP (DetArtPl DefArt (UseN root_N)) (ProgrVP (UseV go_V))))) (VocNP (UsePN john_PN)) 
+PhrUtt otherwise_PConj yes_Utt please_Voc 
+PhrUtt (PConjConj or_Conj) (UttIAdv when_IAdv) (VocNP (DetNP few_Det)) 
+PhrUtt otherwise_PConj (UttImpPol PPos (ImpVP (ComplVV want_VV (PassV2 wash_V2)))) please_Voc 
+PhrUtt otherwise_PConj (UttImpPol PPos (ImpVP (ReflVP (SlashV2a close_V2)))) please_Voc 
+PhrUtt but_PConj (UttIP (IdetCN how8many_IDet (ComplN2 brother_N2 (AdvNP (PredetNP only_Predet something_NP) far_Adv)))) (VocNP (DetArtSg IndefArt (RelCN (AdvCN (UseN queen_N) far_Adv) (UseRCl TPres AAnter PPos (RelVP IdRP (ReflVP (SlashV2V beg_V2V (UseComp (CompNP (UsePron youPol_Pron)))))))))) 
+PhrUtt therefore_PConj (UttImpPl PPos (ImpVP (UseV fall_V))) please_Voc 
+PhrUtt therefore_PConj no_Utt please_Voc 
+PhrUtt NoPConj (ImpPl1 (UseComp (CompNP (DetNP few_Det)))) NoVoc 
+PhrUtt NoPConj (UttAdv here7from_Adv) please_Voc 
+PhrUtt but_PConj (UttImpPl PNeg (ImpVP (ComplSlash (SlashV2Q ask_V2Q (UseQCl TCond ASimul PPos (QuestIAdv how_IAdv (ExistNP (DetCN many_Det (AdvCN (UseN2 (Use2N3 distance_N3)) today_Adv)))))) (DetArtPl IndefArt (UseN baby_N))))) NoVoc 
+PhrUtt but_PConj (UttVP (UseV come_V)) (VocNP (AdvNP (PPartNP (ConjNP either7or_DConj (BaseNP (DetNP many_Det) (ConjNP or_Conj (ConsNP everything_NP (ConsNP everybody_NP (BaseNP (PredetNP only_Predet (PredetNP most_Predet somebody_NP)) everybody_NP)))))) find_V2) everywhere_Adv)) 
+PhrUtt but_PConj (UttNP (DetCN someSg_Det (UseN stick_N))) NoVoc 
+PhrUtt NoPConj no_Utt NoVoc 
+PhrUtt but_PConj (ImpPl1 (ComplVA become_VA (ReflA2 married_A2))) NoVoc 
+PhrUtt (PConjConj both7and_DConj) (ImpPl1 (UseComp (CompAdv (PrepNP for_Prep (ConjNP and_Conj (BaseNP (DetCN (DetQuant (PossPron he_Pron) (NumCard (AdNum almost_AdN (NumNumeral (num (pot3 (pot1as2 (pot0as1 pot01)))))))) (ComplN2 father_N2 (DetArtPl IndefArt (UseN door_N)))) somebody_NP)))))) NoVoc 
+PhrUtt NoPConj (UttIP whoSg_IP) NoVoc 
+PhrUtt therefore_PConj yes_Utt please_Voc 
+PhrUtt but_PConj (UttQS (UseQCl TFut ASimul PNeg (ExistIP (IdetCN how8many_IDet (AdvCN (UseN television_N) (ComparAdvAdjS less_CAdv fun_AV (UseCl TPres AAnter PPos (ExistNP everything_NP)))))))) NoVoc 
+PhrUtt NoPConj (UttImpPol PPos (ImpVP (PassV2 throw_V2))) please_Voc 
+PhrUtt therefore_PConj yes_Utt NoVoc 
+PhrUtt but_PConj (UttImpSg PPos (ImpVP (AdvVP (PassV2 switch8on_V2) there_Adv))) please_Voc 
+PhrUtt otherwise_PConj (UttNP (MassNP (ApposCN (UseN2 (Use2N3 distance_N3)) (AdvNP everybody_NP here_Adv)))) NoVoc 
+PhrUtt otherwise_PConj (ImpPl1 (PassV2 hit_V2)) please_Voc 
+PhrUtt therefore_PConj no_Utt please_Voc 
+PhrUtt otherwise_PConj (UttNP (PredetNP only_Predet (DetNP someSg_Det))) (VocNP (DetArtSg DefArt (RelCN (UseN2 (ComplN3 distance_N3 everybody_NP)) (UseRCl TCond AAnter PNeg (RelSlash IdRP (SlashVP everything_NP (SlashV2V beg_V2V (AdvVP (PassV2 have_V2) (ComparAdvAdj less_CAdv dull_A (DetCN (DetArtOrd DefArt NumSg (OrdNumeral (num (pot2as3 (pot2plus pot01 (pot1 n5)))))) (UseN2 (Use2N3 distance_N3)))))))))))) 
+PhrUtt but_PConj (UttQS (UseQCl TCond AAnter PNeg (QuestIAdv how_IAdv (PredSCVP (EmbedQS (UseQCl TPast AAnter PPos (QuestIAdv where_IAdv (ExistNP everybody_NP)))) (ReflVP (SlashV2VNP beg_V2V (DetArtPl DefArt (ComplN2 (Use3N3 distance_N3) (DetArtSg DefArt (UseN doctor_N)))) (Slash3V3 give_V3 somebody_NP))))))) NoVoc 
+PhrUtt NoPConj (UttImpSg PPos (ImpVP (ComplVA become_VA (PositA hot_A)))) please_Voc 
+PhrUtt otherwise_PConj yes_Utt NoVoc 
+PhrUtt otherwise_PConj (UttNP (DetArtSg IndefArt (UseN bike_N))) please_Voc 
+PhrUtt NoPConj (UttNP somebody_NP) please_Voc 
+PhrUtt otherwise_PConj (UttIP whatSg_IP) NoVoc 
+PhrUtt (PConjConj either7or_DConj) (UttAdv here_Adv) NoVoc 
+PhrUtt (PConjConj both7and_DConj) (UttIAdv how_IAdv) (VocNP (DetArtSg IndefArt (AdjCN (PositA long_A) (AdjCN (AdAP almost_AdA (ComparA rotten_A everybody_NP)) (ComplN2 father_N2 (DetArtPl DefArt (ComplN2 mother_N2 (DetNP (DetQuant (PossPron youSg_Pron) NumSg))))))))) 
+PhrUtt but_PConj yes_Utt NoVoc 
+PhrUtt therefore_PConj (UttNP (PredetNP only_Predet everybody_NP)) please_Voc 
+PhrUtt (PConjConj both7and_DConj) yes_Utt NoVoc 
+PhrUtt therefore_PConj no_Utt NoVoc 
+PhrUtt therefore_PConj no_Utt please_Voc 
+PhrUtt NoPConj (UttIP (IdetCN how8many_IDet (UseN2 (Use2N3 distance_N3)))) (VocNP (ConjNP or_Conj (ConsNP (UsePN john_PN) (ConsNP (AdvNP (UsePron he_Pron) here7from_Adv) (ConsNP (PPartNP (UsePN john_PN) understand_V2) (BaseNP something_NP (AdvNP (DetNP someSg_Det) here7to_Adv))))))) 
+PhrUtt NoPConj (ImpPl1 (ReflVP (Slash2V3 sell_V3 (MassNP (AdvCN (AdjCN (ReflA2 easy_A2V) (AdvCN (UseN foot_N) somewhere_Adv)) (ComparAdvAdj more_CAdv good_A (DetCN (DetArtOrd DefArt NumPl left_Ord) (ApposCN (UseN2 (ComplN3 distance_N3 (PPartNP somebody_NP watch_V2))) (AdvNP (UsePron he_Pron) far_Adv))))))))) (VocNP (UsePron it_Pron)) 
+PhrUtt otherwise_PConj no_Utt NoVoc 
+PhrUtt but_PConj yes_Utt (VocNP somebody_NP) 
+PhrUtt but_PConj (UttQS (UseQCl TPast ASimul PNeg (QuestSlash (IdetIP (IdetQuant which_IQuant NumSg)) (SlashPrep (CleftAdv now_Adv (UseCl TPast AAnter PPos (PredVP (UsePN paris_PN) (AdVVP always_AdV (ReflVP (SlashV2a find_V2)))))) between_Prep)))) NoVoc 
+PhrUtt (PConjConj both7and_DConj) yes_Utt NoVoc 
+PhrUtt (PConjConj both7and_DConj) yes_Utt please_Voc 
+PhrUtt NoPConj (UttIAdv how_IAdv) (VocNP everybody_NP) 
+PhrUtt otherwise_PConj (UttQS (UseQCl TCond AAnter PPos (QuestVP whatPl_IP (ComplVV want_VV (UseV sing_V))))) (VocNP (DetCN someSg_Det (AdjCN (AdAP too_AdA (ConjAP both7and_DConj (BaseAP (ReflA2 easy_A2V) (ComparA long_A something_NP)))) (AdvCN (UseN beer_N) (PositAdvAdj clean_A))))) 
+PhrUtt (PConjConj both7and_DConj) yes_Utt NoVoc 
+PhrUtt otherwise_PConj (UttAdv now_Adv) (VocNP (UsePN paris_PN)) 
+PhrUtt therefore_PConj (ImpPl1 (ProgrVP (AdVVP always_AdV (UseComp (CompAdv far_Adv))))) please_Voc 
+PhrUtt otherwise_PConj (UttImpSg PPos (ImpVP (ComplSlash (Slash3V3 send_V3 (DetArtSg IndefArt (ApposCN (ComplN2 mother_N2 (DetNP (DetArtOrd DefArt NumSg (OrdNumeral (num (pot3 (pot2 pot01))))))) (UsePron he_Pron)))) (UsePron he_Pron)))) (VocNP (PPartNP (UsePN john_PN) learn_V2)) 
+PhrUtt otherwise_PConj (UttNP (DetArtSg IndefArt (SentCN (AdjCN (PositA blue_A) (RelCN (RelCN (ApposCN (UseN salt_N) (UsePN paris_PN)) (UseRCl TPres AAnter PPos (RelCl (ImpersCl (ComplVV can_VV (PassV2 cut_V2)))))) (UseRCl TPast AAnter PNeg (RelCl (ImpersCl (ComplVA become_VA (ComplA2 easy_A2V somebody_NP))))))) (EmbedVP (ComplVA become_VA (ReflA2 easy_A2V)))))) NoVoc 
+PhrUtt therefore_PConj (UttAdv (ComparAdvAdjS more_CAdv full_A (UseCl TPres AAnter PNeg (GenericCl (ComplVA become_VA (ComparA long_A everything_NP)))))) please_Voc 
+PhrUtt NoPConj (UttImpPl PPos (ImpVP (ComplVV can8know_VV (UseComp (CompAP (ConjAP both7and_DConj (BaseAP (ConjAP either7or_DConj (ConsAP (AdAP so_AdA (PositA near_A)) (BaseAP (PositA fun_AV) (ComplA2 married_A2 (PredetNP most_Predet (PredetNP all_Predet everything_NP)))))) (ComplA2 married_A2 everybody_NP)))))))) NoVoc 
+PhrUtt NoPConj (UttImpSg PPos (ImpVP (UseV run_V))) NoVoc 
+PhrUtt otherwise_PConj (UttIAdv why_IAdv) NoVoc 
+PhrUtt therefore_PConj (ImpPl1 (ComplVV can8know_VV (AdvVP (UseComp (CompNP (UsePron it_Pron))) already_Adv))) please_Voc 
+PhrUtt therefore_PConj no_Utt NoVoc 
+PhrUtt (PConjConj either7or_DConj) (UttIP whatPl_IP) please_Voc 
+PhrUtt therefore_PConj no_Utt NoVoc 
+PhrUtt but_PConj (UttVP (ComplVA become_VA (AdAP so_AdA (ReflA2 married_A2)))) please_Voc 
+PhrUtt (PConjConj and_Conj) (UttImpPol PNeg (ImpVP (AdVVP always_AdV (UseV spit_V)))) please_Voc 
+PhrUtt (PConjConj both7and_DConj) yes_Utt NoVoc 
+PhrUtt but_PConj (UttIP whatPl_IP) NoVoc 
+PhrUtt but_PConj (UttIAdv when_IAdv) (VocNP everybody_NP) 
+PhrUtt otherwise_PConj (UttIP whatPl_IP) NoVoc 
+PhrUtt NoPConj (UttVP (ProgrVP (ComplSlash (SlashVV can_VV (Slash3V3 send_V3 everybody_NP)) (DetArtSg IndefArt (ComplN2 father_N2 something_NP))))) NoVoc 
+PhrUtt NoPConj (UttImpPol PNeg (ImpVP (ReflVP (SlashVV must_VV (SlashV2a push_V2))))) NoVoc 
+PhrUtt otherwise_PConj (UttNP everybody_NP) please_Voc 
+PhrUtt otherwise_PConj (UttNP (DetCN somePl_Det (AdvCN (ComplN2 mother_N2 (UsePron he_Pron)) everywhere_Adv))) NoVoc 
+PhrUtt therefore_PConj (UttImpPl PPos (ImpVP (ComplVQ wonder_VQ (UseQCl TCond AAnter PPos (QuestIAdv when_IAdv (PredVP (PPartNP (ConjNP and_Conj (ConsNP (MassNP (UseN priest_N)) (BaseNP (DetNP every_Det) something_NP))) drink_V2) (UseComp (CompNP (UsePN john_PN))))))))) NoVoc 
+PhrUtt but_PConj (UttQS (UseQCl TFut AAnter PNeg (QuestVP whatSg_IP (ReflVP (SlashV2a write_V2))))) please_Voc 
+PhrUtt but_PConj (UttAdv now_Adv) (VocNP something_NP) 
+PhrUtt therefore_PConj (UttImpPl PPos (ImpVP (ComplVA become_VA (ComplA2 married_A2 (UsePN john_PN))))) please_Voc 
+PhrUtt NoPConj no_Utt (VocNP (DetArtPl IndefArt (RelCN (UseN dog_N) (UseRCl TPres ASimul PNeg (RelCl (ExistNP everything_NP)))))) 
+PhrUtt (PConjConj either7or_DConj) (UttImpPol PNeg (ImpVP (PassV2 tie_V2))) (VocNP (PredetNP most_Predet somebody_NP)) 
+PhrUtt NoPConj (UttVP (ComplVA become_VA (ReflA2 easy_A2V))) please_Voc 
+PhrUtt NoPConj (UttIAdv why_IAdv) please_Voc 
+PhrUtt otherwise_PConj no_Utt NoVoc 
+PhrUtt (PConjConj either7or_DConj) no_Utt NoVoc 
+PhrUtt NoPConj no_Utt (VocNP (PredetNP most_Predet (PredetNP only_Predet (PredetNP only_Predet (DetNP someSg_Det))))) 
+PhrUtt otherwise_PConj yes_Utt NoVoc 
+PhrUtt (PConjConj or_Conj) yes_Utt NoVoc 
+PhrUtt therefore_PConj (UttIP whatSg_IP) (VocNP (RelNP (UsePron i_Pron) (UseRCl TFut ASimul PNeg (RelVP (FunRP between_Prep (UsePN john_PN) (FunRP above_Prep something_NP IdRP)) (AdvVP (AdvVP (ComplVA become_VA (ReflA2 married_A2)) now_Adv) (ComparAdvAdj more_CAdv narrow_A (UsePron he_Pron))))))) 
+PhrUtt (PConjConj both7and_DConj) (ImpPl1 (ComplVQ wonder_VQ (UseQCl TPast AAnter PNeg (QuestVP whatSg_IP (AdVVP always_AdV (ComplSlash (SlashV2A paint_V2A (PositA new_A)) something_NP)))))) please_Voc 
+PhrUtt otherwise_PConj (UttIAdv (PrepIP without_Prep (AdvIP (AdvIP whatSg_IP somewhere_Adv) now_Adv))) (VocNP (AdvNP everything_NP today_Adv)) 
+PhrUtt otherwise_PConj (UttQS (UseQCl TFut AAnter PPos (QuestIComp (CompIP whoPl_IP) (DetNP somePl_Det)))) NoVoc 
+PhrUtt NoPConj (UttIP whatPl_IP) please_Voc 
+PhrUtt otherwise_PConj (UttNP (MassNP (UseN2 brother_N2))) please_Voc 
+PhrUtt NoPConj yes_Utt NoVoc 
+PhrUtt therefore_PConj (UttImpPl PPos (ImpVP (UseV sing_V))) NoVoc 
+PhrUtt but_PConj no_Utt (VocNP something_NP) 
+PhrUtt therefore_PConj (UttVP (PassV2 like_V2)) please_Voc 
+PhrUtt but_PConj (UttIP whatPl_IP) (VocNP somebody_NP) 
+PhrUtt NoPConj (UttImpPol PPos (ImpVP (AdVVP always_AdV (PassV2 scratch_V2)))) (VocNP (DetNP (DetArtCard IndefArt (NumDigits (IDig D_6))))) 
+PhrUtt (PConjConj or_Conj) yes_Utt please_Voc 
+PhrUtt NoPConj (UttIAdv (PrepIP under_Prep whoPl_IP)) please_Voc 
+PhrUtt but_PConj yes_Utt NoVoc 
+PhrUtt otherwise_PConj (UttS (AdvS here7to_Adv (AdvS here7to_Adv (UseCl TPast ASimul PNeg (PredVP (DetNP someSg_Det) (ProgrVP (AdVVP always_AdV (UseV run_V)))))))) NoVoc 
+PhrUtt (PConjConj either7or_DConj) (UttNP (DetNP (DetQuantOrd this_Quant (NumCard (AdNum almost_AdN (NumDigits (IDig D_6)))) left_Ord))) (VocNP (DetNP few_Det)) 
+PhrUtt but_PConj (UttIAdv when_IAdv) NoVoc 
+PhrUtt therefore_PConj yes_Utt NoVoc 
+PhrUtt otherwise_PConj (ImpPl1 (UseV fall_V)) please_Voc 
+PhrUtt (PConjConj or_Conj) (UttImpSg PPos (ImpVP (PassV2 wait_V2))) NoVoc 
+PhrUtt NoPConj (UttIP whoSg_IP) (VocNP (PPartNP (UsePron he_Pron) wash_V2)) 
+PhrUtt NoPConj (UttAdv (PrepNP from_Prep (DetNP (DetArtOrd DefArt (NumCard (NumDigits (IDig D_9))) left_Ord)))) (VocNP (DetCN much_Det (UseN2 brother_N2))) 
+PhrUtt NoPConj (UttImpSg PPos (ImpVP (UseV vomit_V))) please_Voc 
+PhrUtt therefore_PConj (ImpPl1 (UseV run_V)) NoVoc 
+PhrUtt NoPConj (UttImpSg PNeg (ImpVP (AdVVP always_AdV (UseComp (CompNP (MassNP (ApposCN (SentCN (UseN2 father_N2) (EmbedS (UseCl TPast ASimul PNeg (PredVP everything_NP (UseComp (CompNP (PPartNP somebody_NP eat_V2))))))) (UsePron youPol_Pron)))))))) (VocNP something_NP) 
+PhrUtt NoPConj (UttImpPol PNeg (ImpVP (ComplVV must_VV (ComplVA become_VA (AdAP so_AdA (ComparA small_A (DetArtPl DefArt (AdjCN (ReflA2 married_A2) (SentCN (ApposCN (UseN hill_N) (DetNP every_Det)) (EmbedQS (UseQCl TPres ASimul PPos (QuestCl (ImpersCl (ReflVP (SlashV2A paint_V2A (ComparA big_A (PPartNP (PPartNP (UsePron youPl_Pron) cut_V2) teach_V2))))))))))))))))) (VocNP somebody_NP) 
+PhrUtt NoPConj (UttImpPol PNeg (ImpVP (UseV think_V))) please_Voc 
+PhrUtt otherwise_PConj (UttVP (ComplSlash (SlashV2A paint_V2A (ComplA2 easy_A2V (UsePron he_Pron))) something_NP)) NoVoc 
+PhrUtt otherwise_PConj (UttAdv already_Adv) (VocNP (PredetNP all_Predet (ConjNP either7or_DConj (BaseNP (UsePN paris_PN) (PPartNP (DetArtSg IndefArt (ComplN2 mother_N2 everybody_NP)) hate_V2))))) 
+PhrUtt NoPConj (UttS (UseCl TCond ASimul PPos (ExistNP somebody_NP))) NoVoc 
+PhrUtt otherwise_PConj (UttAdv here7from_Adv) please_Voc 
+PhrUtt NoPConj yes_Utt please_Voc 
+PhrUtt NoPConj no_Utt NoVoc 
+PhrUtt but_PConj (UttVP (UseV go_V)) NoVoc 
+PhrUtt otherwise_PConj (UttImpSg PPos (ImpVP (PassV2 hunt_V2))) NoVoc 
+PhrUtt otherwise_PConj yes_Utt please_Voc 
+PhrUtt otherwise_PConj (UttVP (AdVVP always_AdV (UseV fly_V))) NoVoc 
+PhrUtt but_PConj (UttVP (ComplSlash (SlashV2V beg_V2V (PassV2 wipe_V2)) (UsePron they_Pron))) NoVoc 
+PhrUtt but_PConj (UttQS (UseQCl TPres AAnter PPos (ExistIP whoPl_IP))) please_Voc 
+PhrUtt (PConjConj either7or_DConj) (UttAdv far_Adv) please_Voc 
+PhrUtt (PConjConj either7or_DConj) (UttIAdv why_IAdv) NoVoc 
+PhrUtt but_PConj (UttIP (IdetIP (IdetQuant which_IQuant NumPl))) NoVoc 
+PhrUtt but_PConj (UttAdv far_Adv) (VocNP something_NP) 
+PhrUtt but_PConj (ImpPl1 (PassV2 eat_V2)) NoVoc 
+PhrUtt (PConjConj both7and_DConj) no_Utt NoVoc 
+PhrUtt otherwise_PConj (UttVP (AdvVP (ComplVA become_VA (ComplA2 married_A2 (DetNP somePl_Det))) here7from_Adv)) (VocNP something_NP) 
+PhrUtt but_PConj (UttIP whatPl_IP) NoVoc 
+PhrUtt NoPConj (UttNP something_NP) please_Voc 
+PhrUtt therefore_PConj yes_Utt please_Voc 
+PhrUtt therefore_PConj (UttNP (DetArtPl IndefArt (UseN husband_N))) (VocNP somebody_NP) 
+PhrUtt but_PConj (UttIAdv where_IAdv) please_Voc 
+PhrUtt NoPConj (UttIP (IdetCN (IdetQuant which_IQuant NumPl) (AdjCN (ComplA2 married_A2 (UsePN john_PN)) (UseN2 (Use2N3 distance_N3))))) please_Voc 
+PhrUtt therefore_PConj no_Utt (VocNP (UsePN john_PN)) 
+PhrUtt therefore_PConj (UttImpPol PPos (ImpVP (UseComp (CompAdv today_Adv)))) please_Voc 
+PhrUtt therefore_PConj yes_Utt (VocNP (UsePron youSg_Pron)) 
+PhrUtt (PConjConj either7or_DConj) (UttIP whatPl_IP) NoVoc 
+PhrUtt therefore_PConj (ImpPl1 (AdvVP (ComplVQ wonder_VQ (UseQCl TFut ASimul PPos (QuestIComp (CompIAdv (PrepIP during_Prep whatPl_IP)) somebody_NP))) already_Adv)) NoVoc 
+PhrUtt NoPConj (UttIAdv when_IAdv) (VocNP (DetNP much_Det)) 
+PhrUtt otherwise_PConj (ImpPl1 (ComplVS fear_VS (UseCl TCond ASimul PNeg (ExistNP (UsePN john_PN))))) NoVoc 
+PhrUtt otherwise_PConj (UttIP (IdetIP how8many_IDet)) (VocNP (MassNP (UseN2 (Use3N3 distance_N3)))) 
+PhrUtt therefore_PConj yes_Utt please_Voc 
+PhrUtt otherwise_PConj (UttImpPl PNeg (ImpVP (UseComp (CompAP (ComplA2 married_A2 everything_NP))))) (VocNP (AdvNP (AdvNP (UsePN paris_PN) (PrepNP possess_Prep something_NP)) somewhere_Adv)) 
+PhrUtt therefore_PConj (UttImpPol PPos (ImpVP (ComplVA become_VA (PositA round_A)))) (VocNP (DetArtPl DefArt (UseN sock_N))) 
+PhrUtt (PConjConj both7and_DConj) yes_Utt please_Voc 
+PhrUtt NoPConj no_Utt please_Voc 
+PhrUtt otherwise_PConj (UttImpPol PPos (ImpVP (ComplVV want_VV (ComplVA become_VA (ComparA sharp_A (AdvNP everybody_NP there7to_Adv)))))) please_Voc 
+PhrUtt (PConjConj and_Conj) (UttImpSg PNeg (ImpVP (PassV2 scratch_V2))) (VocNP (AdvNP everything_NP there7to_Adv)) 
+PhrUtt otherwise_PConj (UttIAdv when_IAdv) NoVoc 
+PhrUtt otherwise_PConj (UttNP everything_NP) NoVoc 
+PhrUtt NoPConj yes_Utt (VocNP (UsePN john_PN)) 
+PhrUtt otherwise_PConj no_Utt (VocNP everything_NP) 
+PhrUtt (PConjConj either7or_DConj) (UttIP (IdetIP how8many_IDet)) (VocNP somebody_NP) 
+PhrUtt therefore_PConj (UttImpPl PNeg (ImpVP (ComplVV can_VV (ProgrVP (UseV run_V))))) please_Voc 
+PhrUtt but_PConj yes_Utt NoVoc 
+PhrUtt but_PConj (ImpPl1 (AdVVP always_AdV (UseV sit_V))) NoVoc 
+PhrUtt therefore_PConj (UttImpSg PPos (ImpVP (ComplVQ wonder_VQ (UseQCl TPres AAnter PPos (QuestIComp (CompIAdv how_IAdv) (UsePron youPol_Pron)))))) (VocNP (PredetNP only_Predet somebody_NP)) 
+PhrUtt (PConjConj or_Conj) (UttNP everybody_NP) please_Voc 
+PhrUtt therefore_PConj (UttIAdv how_IAdv) please_Voc 
+PhrUtt therefore_PConj (UttImpSg PNeg (ImpVP (ComplVA become_VA (SentAP (ReflA2 easy_A2V) (EmbedVP (ReflVP (Slash2V3 add_V3 something_NP))))))) (VocNP everything_NP) 
+PhrUtt otherwise_PConj (UttQS (UseQCl TFut AAnter PNeg (QuestVP whatSg_IP (AdvVP (UseV fly_V) there_Adv)))) (VocNP (DetNP somePl_Det)) 
+PhrUtt (PConjConj both7and_DConj) (UttImpPol PPos (ImpVP (ReflVP (SlashV2VNP beg_V2V (DetArtPl IndefArt (UseN2 (Use2N3 distance_N3))) (SlashV2V beg_V2V (ComplVS fear_VS (AdvS there7from_Adv (UseCl TPres AAnter PPos (ExistNP somebody_NP))))))))) NoVoc 
+PhrUtt otherwise_PConj (UttImpPol PPos (ImpVP (ComplVV can_VV (UseV lie_V)))) (VocNP (DetNP someSg_Det)) 
+PhrUtt (PConjConj either7or_DConj) no_Utt please_Voc 
+PhrUtt (PConjConj both7and_DConj) (UttQS (UseQCl TCond AAnter PPos (QuestVP whatPl_IP (ComplVA become_VA (ReflA2 married_A2))))) NoVoc 
+PhrUtt (PConjConj both7and_DConj) (UttAdv now_Adv) please_Voc 
+PhrUtt therefore_PConj (UttQS (UseQCl TPres ASimul PNeg (QuestIComp (CompIAdv how_IAdv) (ConjNP either7or_DConj (BaseNP (UsePron he_Pron) (PredetNP most_Predet (PPartNP (PredetNP most_Predet (DetCN (DetArtOrd DefArt (NumCard (AdNum almost_AdN (NumNumeral (num (pot3 (pot2plus pot01 (pot1to19 n8))))))) (OrdSuperl empty_A)) (UseN2 brother_N2))) wash_V2))))))) NoVoc 
+PhrUtt therefore_PConj (UttIP whoPl_IP) please_Voc 
+PhrUtt NoPConj no_Utt please_Voc 
+PhrUtt otherwise_PConj (UttQS (UseQCl TPast AAnter PNeg (QuestIComp (CompIAdv when_IAdv) (DetArtSg IndefArt (UseN leg_N))))) NoVoc 
+PhrUtt therefore_PConj (UttIAdv (PrepIP before_Prep whatSg_IP)) please_Voc 
+PhrUtt (PConjConj and_Conj) (UttIP whoSg_IP) please_Voc 
+PhrUtt otherwise_PConj (UttIAdv where_IAdv) (VocNP (DetArtPl IndefArt (AdjCN (ReflA2 married_A2) (UseN shoe_N)))) 
+PhrUtt but_PConj (UttAdv here7to_Adv) (VocNP (UsePN john_PN)) 
+PhrUtt NoPConj (UttImpSg PPos (ImpVP (PassV2 write_V2))) NoVoc 
+PhrUtt but_PConj (UttVP (ComplSlash (SlashV2V beg_V2V (ComplVS say_VS (UseCl TFut AAnter PPos (CleftNP (UsePron we_Pron) (UseRCl TFut AAnter PNeg (RelVP IdRP (AdVVP always_AdV (UseV sing_V)))))))) everything_NP)) NoVoc 
+PhrUtt but_PConj (UttAdv here7from_Adv) NoVoc 
+PhrUtt but_PConj yes_Utt NoVoc 
+PhrUtt NoPConj no_Utt (VocNP (PPartNP something_NP drink_V2)) 
+PhrUtt otherwise_PConj (UttVP (UseV dig_V)) (VocNP (PredetNP most_Predet (DetArtSg IndefArt (UseN2 (Use3N3 distance_N3))))) 
+PhrUtt NoPConj yes_Utt NoVoc 
+PhrUtt but_PConj yes_Utt please_Voc 
+PhrUtt NoPConj no_Utt NoVoc 
+PhrUtt otherwise_PConj (UttQS (UseQCl TCond AAnter PNeg (QuestIComp (CompIAdv how_IAdv) something_NP))) please_Voc 
+PhrUtt otherwise_PConj yes_Utt (VocNP something_NP) 
+PhrUtt but_PConj (UttIAdv where_IAdv) please_Voc 
+PhrUtt NoPConj (UttAdv there7to_Adv) please_Voc 
+PhrUtt otherwise_PConj (UttImpPl PNeg (ImpVP (AdVVP always_AdV (UseComp (CompAdv there7from_Adv))))) please_Voc 
+PhrUtt NoPConj (UttIAdv how_IAdv) NoVoc 
+PhrUtt but_PConj (UttNP something_NP) please_Voc 
+PhrUtt (PConjConj or_Conj) yes_Utt NoVoc 
+PhrUtt NoPConj (UttImpPl PNeg (ImpVP (ProgrVP (ComplSlash (SlashV2Q ask_V2Q (UseQCl TPres AAnter PPos (QuestIComp (CompIAdv where_IAdv) something_NP))) (DetCN (DetQuant this_Quant (NumCard (NumDigits (IDig D_9)))) (UseN carpet_N)))))) please_Voc 
+PhrUtt (PConjConj either7or_DConj) (UttIAdv how_IAdv) please_Voc 
+PhrUtt NoPConj no_Utt NoVoc 
+PhrUtt (PConjConj both7and_DConj) (ImpPl1 (AdvVP (PassV2 wait_V2) there7from_Adv)) (VocNP everybody_NP) 
+PhrUtt (PConjConj and_Conj) no_Utt NoVoc 
+PhrUtt but_PConj yes_Utt NoVoc 
+PhrUtt NoPConj no_Utt (VocNP (UsePron youPol_Pron)) 
+PhrUtt NoPConj (UttIAdv where_IAdv) please_Voc 
+PhrUtt (PConjConj or_Conj) (UttImpPl PNeg (ImpVP (ComplVV can8know_VV (AdVVP always_AdV (ComplVA become_VA (PositA uncertain_A)))))) please_Voc 
+PhrUtt (PConjConj or_Conj) (UttIAdv (PrepIP under_Prep whatPl_IP)) NoVoc 
+PhrUtt (PConjConj both7and_DConj) (ImpPl1 (ProgrVP (ComplVA become_VA (ComplA2 easy_A2V (DetCN (DetArtCard DefArt (NumNumeral (num (pot3 (pot2 pot01))))) (UseN smoke_N)))))) NoVoc 
+PhrUtt otherwise_PConj no_Utt NoVoc 
+PhrUtt NoPConj (UttNP (PPartNP (UsePN paris_PN) hold_V2)) please_Voc 
+PhrUtt but_PConj (UttIP whatSg_IP) please_Voc 
+PhrUtt (PConjConj or_Conj) (ImpPl1 (ComplVS fear_VS (AdvS today_Adv (UseCl TPast AAnter PPos (GenericCl (ComplVV want_VV (ComplVV can_VV (UseV die_V)))))))) (VocNP (AdvNP everything_NP already_Adv)) 
+PhrUtt (PConjConj both7and_DConj) (UttNP (DetArtPl DefArt (ComplN2 (Use2N3 distance_N3) everybody_NP))) please_Voc 
+PhrUtt (PConjConj and_Conj) (UttQS (UseQCl TPres ASimul PPos (QuestIComp (CompIAdv how_IAdv) somebody_NP))) (VocNP (PredetNP only_Predet everybody_NP)) 
+PhrUtt (PConjConj both7and_DConj) yes_Utt (VocNP (ConjNP or_Conj (BaseNP somebody_NP everybody_NP))) 
+PhrUtt otherwise_PConj (UttIP whatPl_IP) (VocNP (DetArtSg IndefArt (SentCN (UseN2 (Use3N3 distance_N3)) (EmbedQS (UseQCl TCond AAnter PPos (QuestCl (GenericCl (UseV come_V)))))))) 
+PhrUtt therefore_PConj (UttImpSg PPos (ImpVP (UseV freeze_V))) (VocNP everybody_NP) 
+PhrUtt but_PConj (UttVP (ComplVQ wonder_VQ (UseQCl TCond ASimul PPos (QuestVP whoSg_IP (PassV2 find_V2))))) NoVoc 
+PhrUtt (PConjConj and_Conj) no_Utt NoVoc 
+PhrUtt NoPConj no_Utt please_Voc 
+PhrUtt (PConjConj or_Conj) (UttImpPl PPos (ImpVP (ComplSlash (Slash2V3 sell_V3 (AdvNP (DetNP much_Det) somewhere_Adv)) something_NP))) please_Voc 
+PhrUtt (PConjConj and_Conj) (UttNP (DetCN many_Det (UseN2 (Use3N3 distance_N3)))) please_Voc 
+PhrUtt otherwise_PConj no_Utt (VocNP everybody_NP) 
+PhrUtt otherwise_PConj (UttAdv everywhere_Adv) please_Voc 
+PhrUtt NoPConj (UttIAdv (PrepIP by8agent_Prep (IdetIP (IdetQuant which_IQuant (NumCard (AdNum (AdnCAdv more_CAdv) (NumDigits (IIDig D_4 (IIDig D_3 (IDig D_5)))))))))) (VocNP (UsePron they_Pron)) 
+PhrUtt otherwise_PConj (UttImpPl PNeg (ImpVP (AdVVP always_AdV (PassV2 like_V2)))) NoVoc 
+PhrUtt otherwise_PConj (UttIAdv how_IAdv) NoVoc 
+PhrUtt NoPConj (UttImpPl PPos (ImpVP (UseV sew_V))) NoVoc 
+PhrUtt but_PConj yes_Utt please_Voc 
+PhrUtt NoPConj (UttVP (ComplVA become_VA (ComparA correct_A (DetCN (DetArtOrd DefArt (NumCard (NumDigits (IIDig D_8 (IDig D_8)))) right_Ord) (ApposCN (AdvCN (AdjCN (ComplA2 easy_A2V (DetNP much_Det)) (UseN2 mother_N2)) somewhere_Adv) (MassNP (AdjCN (ComplA2 married_A2 something_NP) (ComplN2 (Use2N3 distance_N3) everybody_NP)))))))) please_Voc 
+PhrUtt therefore_PConj (UttVP (ProgrVP (AdVVP always_AdV (UseV die_V)))) NoVoc 
+PhrUtt therefore_PConj no_Utt NoVoc 
+PhrUtt otherwise_PConj (UttNP (DetCN (DetQuantOrd that_Quant NumPl right_Ord) (UseN2 brother_N2))) NoVoc 
+PhrUtt but_PConj (UttIAdv how_IAdv) (VocNP (AdvNP everything_NP there7to_Adv)) 
+PhrUtt therefore_PConj yes_Utt (VocNP (DetArtPl DefArt (SentCN (AdvCN (UseN flower_N) today_Adv) (EmbedQS (UseQCl TCond AAnter PNeg (QuestVP (IdetCN how8many_IDet (UseN song_N)) (ComplVA become_VA (SentAP (ComplA2 married_A2 everything_NP) (EmbedVP (PassV2 leave_V2)))))))))) 
+PhrUtt NoPConj (UttImpPol PNeg (ImpVP (UseComp (CompNP something_NP)))) NoVoc 
+PhrUtt NoPConj (UttImpPol PPos (ImpVP (ProgrVP (PassV2 hold_V2)))) please_Voc 
+PhrUtt (PConjConj and_Conj) (UttImpPol PPos (ImpVP (ReflVP (Slash3V3 add_V3 everything_NP)))) please_Voc 
+PhrUtt but_PConj (UttQS (UseQCl TCond AAnter PNeg (QuestCl (GenericCl (PassV2 wash_V2))))) (VocNP (DetNP (DetArtOrd IndefArt NumSg (OrdNumeral (num (pot3plus (pot2plus (pot0 n8) (pot1to19 n4)) (pot2plus (pot0 n9) (pot1 n6)))))))) 
+PhrUtt NoPConj (UttImpPol PNeg (ImpVP (UseComp (CompNP somebody_NP)))) please_Voc 
+PhrUtt but_PConj yes_Utt NoVoc 
+PhrUtt otherwise_PConj no_Utt NoVoc 
+PhrUtt otherwise_PConj (UttImpPl PNeg (ImpVP (ComplVA become_VA (ComparA yellow_A (PredetNP all_Predet (PredetNP most_Predet somebody_NP)))))) (VocNP (DetNP many_Det)) 
+PhrUtt but_PConj yes_Utt (VocNP everybody_NP) 
+PhrUtt NoPConj (UttVP (ComplSlash (SlashVV can8know_VV (Slash3V3 send_V3 (UsePN paris_PN))) (DetCN every_Det (UseN2 mother_N2)))) please_Voc 
+PhrUtt (PConjConj and_Conj) (UttImpSg PPos (ImpVP (PassV2 push_V2))) please_Voc 
+PhrUtt therefore_PConj (UttIP whoSg_IP) please_Voc 
+PhrUtt but_PConj (UttNP (RelNP (AdvNP everybody_NP far_Adv) (UseRCl TCond AAnter PNeg (RelVP IdRP (UseComp (CompAP (ComparA beautiful_A (UsePN john_PN)))))))) please_Voc 
+PhrUtt but_PConj (UttVP (ProgrVP (ProgrVP (ReflVP (Slash3V3 give_V3 something_NP))))) please_Voc 
+PhrUtt NoPConj no_Utt NoVoc 
+PhrUtt but_PConj (UttAdv there_Adv) please_Voc 
+PhrUtt but_PConj yes_Utt please_Voc 
+PhrUtt NoPConj (UttVP (UseComp (CompAdv today_Adv))) (VocNP (DetCN (DetArtOrd IndefArt (NumCard (AdNum (AdnCAdv less_CAdv) (NumDigits (IIDig D_2 (IDig D_4))))) (OrdDigits (IIDig D_5 (IDig D_6)))) (ComplN2 (Use2N3 distance_N3) (PredetNP all_Predet everybody_NP)))) 
+PhrUtt NoPConj (UttAdv there7from_Adv) NoVoc 
+PhrUtt but_PConj (UttImpSg PPos (ImpVP (ComplVV must_VV (ComplVQ wonder_VQ (UseQCl TCond AAnter PPos (QuestCl (ExistNP something_NP))))))) NoVoc 
+PhrUtt (PConjConj both7and_DConj) (UttS (UseCl TCond AAnter PNeg (ExistNP something_NP))) (VocNP (RelNP (UsePN john_PN) (UseRCl TCond ASimul PNeg (RelVP IdRP (ReflVP (Slash2V3 sell_V3 (DetCN (DetArtOrd IndefArt NumPl (OrdNumeral (num (pot2as3 (pot2plus (pot0 n2) (pot1 n7)))))) (UseN mountain_N)))))))) 
+PhrUtt but_PConj (UttVP (ComplVV can_VV (UseComp (CompAP (ReflA2 married_A2))))) NoVoc 
+PhrUtt therefore_PConj (ImpPl1 (ComplVV must_VV (UseV fall_V))) please_Voc 
+PhrUtt NoPConj yes_Utt (VocNP (DetArtPl IndefArt (ApposCN (UseN2 mother_N2) (MassNP (UseN blood_N))))) 
+PhrUtt NoPConj (UttAdv there7to_Adv) NoVoc 
+PhrUtt therefore_PConj (UttNP (UsePN john_PN)) (VocNP (PPartNP (PPartNP (DetNP someSg_Det) rub_V2) teach_V2)) 
+PhrUtt NoPConj (ImpPl1 (ComplVV must_VV (ComplVV want_VV (ComplVV can_VV (UseComp (CompAdv somewhere_Adv)))))) NoVoc 
+PhrUtt but_PConj (UttVP (UseComp (CompAP (AdAP too_AdA (ComparA brown_A (UsePN paris_PN)))))) NoVoc 
+PhrUtt NoPConj (UttImpSg PNeg (ImpVP (ProgrVP (ComplVV can_VV (ComplVA become_VA (ReflA2 married_A2)))))) please_Voc 
+PhrUtt (PConjConj either7or_DConj) (UttImpSg PNeg (ImpVP (PassV2 break_V2))) please_Voc 
+PhrUtt NoPConj yes_Utt (VocNP (DetArtSg DefArt (ComplN2 (ComplN3 distance_N3 everything_NP) (DetNP somePl_Det)))) 
+PhrUtt NoPConj (UttAdv (ConjAdv both7and_DConj (BaseAdv (ComparAdvAdjS more_CAdv short_A (UseCl TPast ASimul PPos (ExistNP (PPartNP everybody_NP understand_V2)))) (ComparAdvAdj more_CAdv clean_A (PredetNP most_Predet (AdvNP (UsePron youPl_Pron) (PrepNP without_Prep something_NP))))))) please_Voc 
+PhrUtt otherwise_PConj (UttIAdv (PrepIP from_Prep whatPl_IP)) NoVoc 
+PhrUtt but_PConj (UttIP whoPl_IP) NoVoc 
+PhrUtt (PConjConj either7or_DConj) (UttAdv everywhere_Adv) (VocNP (UsePN john_PN)) 
+PhrUtt otherwise_PConj (UttVP (PassV2 have_V2)) NoVoc 
+PhrUtt (PConjConj either7or_DConj) (UttVP (ProgrVP (ComplSlash (SlashV2VNP beg_V2V (UsePN john_PN) (Slash2V3 talk_V3 (MassNP (UseN2 (Use3N3 distance_N3))))) everything_NP))) NoVoc 
+PhrUtt therefore_PConj (UttIP whatPl_IP) (VocNP (DetArtPl DefArt (AdvCN (UseN sand_N) somewhere_Adv))) 
+PhrUtt (PConjConj or_Conj) no_Utt NoVoc 
+PhrUtt but_PConj (UttAdv (PrepNP between_Prep (DetCN someSg_Det (AdjCN (ReflA2 married_A2) (AdjCN (ComparA probable_AS (PredetNP most_Predet (UsePN john_PN))) (ComplN2 father_N2 (UsePN paris_PN))))))) NoVoc 
+PhrUtt NoPConj (UttVP (PassV2 read_V2)) please_Voc 
+PhrUtt NoPConj (UttIP whoSg_IP) NoVoc 
+PhrUtt NoPConj (UttIP (AdvIP whatPl_IP here7from_Adv)) NoVoc 
+PhrUtt NoPConj no_Utt please_Voc 
+PhrUtt but_PConj (UttIP whatSg_IP) (VocNP (DetArtPl DefArt (AdvCN (UseN table_N) there_Adv))) 
+PhrUtt therefore_PConj (UttImpSg PPos (ImpVP (ComplSlash (Slash2V3 send_V3 (MassNP (ComplN2 mother_N2 something_NP))) (DetCN many_Det (UseN2 (Use2N3 distance_N3)))))) please_Voc 
+PhrUtt therefore_PConj (UttIAdv (PrepIP through_Prep (IdetCN (IdetQuant which_IQuant NumSg) (ComplN2 mother_N2 (UsePron he_Pron))))) please_Voc 
+PhrUtt NoPConj (UttNP somebody_NP) please_Voc 
+PhrUtt but_PConj (UttAdv here_Adv) NoVoc 
+PhrUtt otherwise_PConj yes_Utt (VocNP (DetNP (DetArtOrd IndefArt NumSg (OrdSuperl thin_A)))) 
+PhrUtt otherwise_PConj (UttIP whatSg_IP) (VocNP somebody_NP) 
+PhrUtt otherwise_PConj (UttAdv there7from_Adv) (VocNP (UsePron youPol_Pron)) 
+PhrUtt otherwise_PConj (UttQS (UseQCl TPast AAnter PPos (QuestIAdv when_IAdv (GenericCl (UseComp (CompAP (ComparA white_A (DetArtSg IndefArt (UseN rubber_N))))))))) (VocNP (UsePN paris_PN)) 
+PhrUtt therefore_PConj no_Utt NoVoc 
+PhrUtt but_PConj (UttAdv (SubjS although_Subj (UseCl TPast ASimul PNeg (ImpersCl (ProgrVP (PassV2 stab_V2)))))) please_Voc 
+PhrUtt NoPConj (UttIAdv where_IAdv) please_Voc 
+PhrUtt (PConjConj or_Conj) no_Utt please_Voc 
+PhrUtt otherwise_PConj (UttNP (DetNP few_Det)) please_Voc 
+PhrUtt but_PConj (UttIP (AdvIP whatPl_IP today_Adv)) please_Voc 
+PhrUtt otherwise_PConj (UttQS (UseQCl TPast ASimul PPos (QuestVP whatPl_IP (AdVVP always_AdV (ComplVQ wonder_VQ (UseQCl TFut ASimul PNeg (QuestIAdv when_IAdv (ExistNP everything_NP)))))))) (VocNP (AdvNP (DetCN every_Det (AdvCN (UseN2 father_N2) here_Adv)) there7from_Adv)) 
+PhrUtt NoPConj (UttImpPol PPos (ImpVP (AdvVP (PassV2 watch_V2) here7to_Adv))) NoVoc 
+PhrUtt therefore_PConj no_Utt NoVoc 
+PhrUtt NoPConj (UttImpSg PNeg (ImpVP (ProgrVP (UseV swell_V)))) NoVoc 
+PhrUtt (PConjConj and_Conj) (UttAdv (AdAdv quite_Adv today_Adv)) (VocNP (UsePron youPl_Pron)) 
+PhrUtt but_PConj (UttAdv (ConjAdv both7and_DConj (ConsAdv now_Adv (ConsAdv here_Adv (ConsAdv today_Adv (ConsAdv (ConjAdv either7or_DConj (BaseAdv far_Adv here_Adv)) (BaseAdv here_Adv everywhere_Adv))))))) (VocNP (PPartNP somebody_NP hold_V2)) 
+PhrUtt therefore_PConj (UttVP (ProgrVP (AdVVP always_AdV (UseV go_V)))) please_Voc 
+PhrUtt (PConjConj both7and_DConj) (UttIP (AdvIP whatSg_IP here7from_Adv)) NoVoc 
+PhrUtt NoPConj (UttQS (UseQCl TFut ASimul PPos (ExistIP whatSg_IP))) please_Voc 
+PhrUtt otherwise_PConj (UttQS (UseQCl TPres AAnter PNeg (QuestIComp (CompIP (IdetCN (IdetQuant which_IQuant NumPl) (UseN2 (ComplN3 distance_N3 (UsePN paris_PN))))) (AdvNP (DetArtPl IndefArt (UseN2 brother_N2)) now_Adv)))) (VocNP (UsePN john_PN)) 
+PhrUtt otherwise_PConj (UttNP (UsePN paris_PN)) NoVoc 
+PhrUtt NoPConj yes_Utt please_Voc 
+PhrUtt but_PConj (UttIP whoPl_IP) NoVoc 
+PhrUtt therefore_PConj (UttImpPl PNeg (ImpVP (AdVVP always_AdV (UseComp (CompAP (PositA probable_AS)))))) please_Voc 
+PhrUtt (PConjConj and_Conj) yes_Utt (VocNP (UsePN john_PN)) 
+PhrUtt but_PConj (UttVP (AdvVP (ReflVP (SlashV2a fight_V2)) far_Adv)) please_Voc 
+PhrUtt but_PConj (UttImpPol PNeg (ImpVP (ReflVP (SlashVV want_VV (SlashV2V beg_V2V (UseV sew_V)))))) (VocNP everything_NP) 
+PhrUtt NoPConj (UttImpPol PNeg (ImpVP (UseComp (CompAP (ReflA2 married_A2))))) NoVoc 
+PhrUtt NoPConj (UttAdv (SubjS when_Subj (UseCl TPast AAnter PNeg (ImpersCl (ComplVQ wonder_VQ (UseQCl TFut ASimul PPos (QuestIComp (CompIP whoSg_IP) (DetArtPl IndefArt (AdjCN (AdAP too_AdA (AdAP too_AdA (ComplA2 easy_A2V (PPartNP everything_NP wash_V2)))) (UseN2 (Use2N3 distance_N3))))))))))) NoVoc 
+PhrUtt therefore_PConj no_Utt please_Voc 
+PhrUtt but_PConj (ImpPl1 (ProgrVP (UseV breathe_V))) (VocNP (DetArtPl DefArt (SentCN (ComplN2 (Use2N3 distance_N3) something_NP) (EmbedVP (ReflVP (SlashV2S answer_V2S (AdvS here7from_Adv (AdvS (ConjAdv both7and_DConj (BaseAdv already_Adv already_Adv)) (RelS (AdvS here_Adv (UseCl TCond AAnter PNeg (GenericCl (AdvVP (UseV sing_V) there7to_Adv)))) (UseRCl TFut ASimul PPos (RelVP IdRP (PassV2 scratch_V2)))))))))))) 
+PhrUtt (PConjConj either7or_DConj) (ImpPl1 (PassV2 open_V2)) please_Voc 
+PhrUtt therefore_PConj (UttVP (ComplVQ wonder_VQ (UseQCl TPres AAnter PPos (ExistIP whoSg_IP)))) NoVoc 
+PhrUtt (PConjConj and_Conj) (UttAdv everywhere_Adv) please_Voc 
+PhrUtt but_PConj (UttImpSg PNeg (ImpVP (AdVVP always_AdV (UseComp (CompAP (ReflA2 married_A2)))))) NoVoc 
+PhrUtt otherwise_PConj (UttQS (UseQCl TPast AAnter PNeg (QuestVP whatSg_IP (PassV2 suck_V2)))) please_Voc 
+PhrUtt (PConjConj or_Conj) (UttImpPl PNeg (ImpVP (ComplSlash (SlashV2Q ask_V2Q (UseQCl TPast ASimul PPos (ExistIP whoPl_IP))) (PPartNP (PredetNP only_Predet (DetArtPl DefArt (ComplN2 father_N2 something_NP))) throw_V2)))) please_Voc 
+PhrUtt but_PConj (ImpPl1 (UseComp (CompAdv here_Adv))) (VocNP (DetArtPl DefArt (UseN2 (ComplN3 distance_N3 (PPartNP somebody_NP rub_V2))))) 
+PhrUtt NoPConj (ImpPl1 (ComplVV can8know_VV (ComplVA become_VA (PositA rotten_A)))) (VocNP somebody_NP) 
+PhrUtt (PConjConj either7or_DConj) (UttAdv already_Adv) NoVoc 
+PhrUtt NoPConj (UttIAdv when_IAdv) (VocNP (UsePN paris_PN)) 
+PhrUtt otherwise_PConj (UttIP (AdvIP whoSg_IP (SubjS although_Subj (UseCl TCond ASimul PNeg (PredVP (PPartNP (DetArtSg IndefArt (UseN belly_N)) understand_V2) (ProgrVP (ProgrVP (ComplVV can_VV (ComplVV want_VV (ComplVQ wonder_VQ (UseQCl TCond ASimul PNeg (QuestIAdv why_IAdv (GenericCl (AdvVP (PassV2 write_V2) here_Adv)))))))))))))) (VocNP (UsePron youPl_Pron)) 
+PhrUtt NoPConj (UttImpPol PPos (ImpVP (UseComp (CompAP (ReflA2 married_A2))))) NoVoc 
+PhrUtt but_PConj no_Utt NoVoc 
+PhrUtt therefore_PConj (UttImpPl PNeg (ImpVP (AdVVP always_AdV (PassV2 put_V2)))) NoVoc 
+PhrUtt NoPConj (UttNP (UsePron he_Pron)) NoVoc 
+PhrUtt but_PConj (UttIP whatSg_IP) please_Voc 
+PhrUtt otherwise_PConj (UttImpPl PNeg (ImpVP (PassV2 squeeze_V2))) (VocNP something_NP) 
+PhrUtt NoPConj (UttAdv now_Adv) please_Voc 
+PhrUtt therefore_PConj (UttIAdv why_IAdv) NoVoc 
+PhrUtt therefore_PConj (UttQS (UseQCl TCond AAnter PNeg (QuestIAdv when_IAdv (GenericCl (ReflVP (SlashV2S answer_V2S (UseCl TFut ASimul PPos (PredSCVP (EmbedVP (ComplVQ wonder_VQ (UseQCl TCond ASimul PPos (ExistIP (AdvIP whoSg_IP everywhere_Adv))))) (ComplVV can_VV (UseV breathe_V)))))))))) NoVoc 
+PhrUtt but_PConj no_Utt please_Voc 
+PhrUtt otherwise_PConj no_Utt please_Voc 
+PhrUtt NoPConj (UttImpPl PNeg (ImpVP (ReflVP (SlashV2Q ask_V2Q (UseQCl TPast ASimul PPos (QuestVP whatSg_IP (ComplVV can8know_VV (ComplSlash (Slash3V3 give_V3 (UsePron youPol_Pron)) (PPartNP (UsePN john_PN) cut_V2))))))))) (VocNP somebody_NP) 
+PhrUtt otherwise_PConj no_Utt (VocNP everybody_NP) 
+PhrUtt but_PConj (UttVP (AdvVP (ComplVQ wonder_VQ (UseQCl TPres AAnter PNeg (ExistIP whoSg_IP))) there7from_Adv)) NoVoc 
+PhrUtt (PConjConj or_Conj) (UttIAdv why_IAdv) NoVoc 
+PhrUtt (PConjConj either7or_DConj) yes_Utt please_Voc 
+PhrUtt (PConjConj or_Conj) (ImpPl1 (ComplVA become_VA (ComparA broad_A (AdvNP everybody_NP here7from_Adv)))) (VocNP (PPartNP somebody_NP squeeze_V2)) 
+PhrUtt (PConjConj or_Conj) (UttImpSg PPos (ImpVP (ReflVP (Slash3V3 sell_V3 (PPartNP (PPartNP something_NP tie_V2) kill_V2))))) please_Voc 
+PhrUtt otherwise_PConj yes_Utt NoVoc 
+PhrUtt therefore_PConj (UttVP (UseComp (CompNP everything_NP))) (VocNP (MassNP (UseN2 (Use2N3 distance_N3)))) 
+PhrUtt otherwise_PConj (UttIAdv where_IAdv) please_Voc 
+PhrUtt otherwise_PConj no_Utt NoVoc 
+PhrUtt therefore_PConj (UttAdv here_Adv) NoVoc 
+PhrUtt otherwise_PConj (UttIAdv (PrepIP part_Prep whatSg_IP)) NoVoc 
+PhrUtt but_PConj (UttImpSg PPos (ImpVP (ComplVV can8know_VV (UseComp (CompAP (ReflA2 easy_A2V)))))) (VocNP (DetArtSg IndefArt (AdjCN (AdAP quite_Adv (PositA narrow_A)) (UseN2 (ComplN3 distance_N3 somebody_NP))))) 
+PhrUtt NoPConj (UttNP (DetArtSg IndefArt (UseN moon_N))) NoVoc 
+PhrUtt otherwise_PConj yes_Utt please_Voc 
+PhrUtt but_PConj (UttIAdv where_IAdv) please_Voc 
+PhrUtt but_PConj (ImpPl1 (UseComp (CompNP somebody_NP))) please_Voc 
+PhrUtt but_PConj yes_Utt please_Voc 
+PhrUtt otherwise_PConj (UttAdv (PrepNP during_Prep somebody_NP)) NoVoc 
+PhrUtt otherwise_PConj (UttQS (UseQCl TCond ASimul PPos (QuestIAdv why_IAdv (PredSCVP (EmbedQS (UseQCl TCond ASimul PNeg (QuestIComp (CompIAdv why_IAdv) (AdvNP something_NP (SubjS although_Subj (UseCl TPast AAnter PPos (CleftAdv today_Adv (UseCl TPast AAnter PPos (GenericCl (PassV2 hear_V2)))))))))) (ComplVA become_VA (AdAP too_AdA (PositA ready_A))))))) please_Voc 
+PhrUtt but_PConj (ImpPl1 (UseV sleep_V)) (VocNP something_NP) 
+PhrUtt but_PConj (UttImpPol PPos (ImpVP (AdvVP (ComplVV want_VV (AdVVP always_AdV (UseV spit_V))) somewhere_Adv))) (VocNP everything_NP) 
+PhrUtt (PConjConj both7and_DConj) no_Utt NoVoc 
+PhrUtt NoPConj (UttAdv (PrepNP to_Prep something_NP)) NoVoc 
+PhrUtt but_PConj yes_Utt NoVoc 
+PhrUtt otherwise_PConj (UttIAdv when_IAdv) NoVoc 
+PhrUtt NoPConj (UttAdv (PositAdvAdj hot_A)) (VocNP something_NP) 
+PhrUtt otherwise_PConj (UttImpSg PNeg (ImpVP (UseV spit_V))) (VocNP everything_NP) 
+PhrUtt therefore_PConj (ImpPl1 (PassV2 switch8on_V2)) NoVoc 
+PhrUtt (PConjConj either7or_DConj) (ImpPl1 (AdVVP always_AdV (ComplVQ wonder_VQ (UseQCl TCond AAnter PPos (QuestVP whoPl_IP (ComplVA become_VA (PositA dull_A))))))) NoVoc 
+PhrUtt NoPConj (ImpPl1 (UseV sing_V)) please_Voc 
+PhrUtt NoPConj (UttAdv far_Adv) (VocNP (PredetNP most_Predet (DetArtSg IndefArt (ComplN2 (Use2N3 distance_N3) (DetCN (DetArtCard IndefArt (NumNumeral (num (pot3 (pot2 (pot0 n2)))))) (AdjCN (SentAP (ComparA warm_A (PredetNP all_Predet everybody_NP)) (EmbedVP (UseV spit_V))) (AdvCN (ApposCN (ComplN2 brother_N2 (MassNP (UseN paper_N))) (UsePN john_PN)) far_Adv))))))) 
+PhrUtt but_PConj (UttNP (UsePN john_PN)) (VocNP (PredetNP only_Predet (DetNP (DetQuant (PossPron we_Pron) NumPl)))) 
+PhrUtt otherwise_PConj (UttIAdv (PrepIP possess_Prep whoPl_IP)) NoVoc 
+PhrUtt therefore_PConj (UttImpSg PPos (ImpVP (UseV stand_V))) please_Voc 
+PhrUtt (PConjConj both7and_DConj) (UttIAdv how_IAdv) (VocNP (UsePron we_Pron)) 
+PhrUtt (PConjConj both7and_DConj) yes_Utt NoVoc 
+PhrUtt otherwise_PConj (ImpPl1 (ComplVQ wonder_VQ (UseQCl TFut ASimul PNeg (QuestCl (CleftAdv here_Adv (UseCl TFut ASimul PPos (GenericCl (PassV2 wipe_V2)))))))) (VocNP (UsePron we_Pron)) 
+PhrUtt NoPConj (UttNP (UsePron they_Pron)) (VocNP (ConjNP and_Conj (BaseNP (PredetNP only_Predet (ConjNP either7or_DConj (BaseNP something_NP everybody_NP))) (ConjNP either7or_DConj (BaseNP (UsePron youSg_Pron) (DetNP few_Det)))))) 
+PhrUtt therefore_PConj (UttIAdv when_IAdv) please_Voc 
+PhrUtt otherwise_PConj (UttAdv here7to_Adv) NoVoc 
+PhrUtt (PConjConj and_Conj) yes_Utt please_Voc 
+PhrUtt therefore_PConj (ImpPl1 (AdvVP (ComplVV can8know_VV (UseComp (CompNP somebody_NP))) (PositAdvAdj (UseA2 married_A2)))) NoVoc 
+PhrUtt therefore_PConj (UttImpPl PPos (ImpVP (UseComp (CompAP (ReflA2 married_A2))))) NoVoc 
+PhrUtt NoPConj (UttImpSg PNeg (ImpVP (AdvVP (UseV swim_V) now_Adv))) (VocNP (PredetNP all_Predet somebody_NP)) 
+PhrUtt (PConjConj either7or_DConj) no_Utt NoVoc 
+PhrUtt therefore_PConj (ImpPl1 (ProgrVP (UseComp (CompAdv (ComparAdvAdj less_CAdv brown_A (UsePron we_Pron)))))) please_Voc 
+PhrUtt NoPConj yes_Utt please_Voc 
+PhrUtt (PConjConj both7and_DConj) (UttImpSg PNeg (ImpVP (AdvVP (PassV2 learn_V2) (ComparAdvAdj more_CAdv narrow_A everybody_NP)))) NoVoc 
+PhrUtt otherwise_PConj (ImpPl1 (UseComp (CompAdv there7to_Adv))) please_Voc 
+PhrUtt but_PConj (UttAdv here_Adv) NoVoc 
+PhrUtt (PConjConj or_Conj) (UttImpPl PNeg (ImpVP (AdVVP always_AdV (ReflVP (Slash3V3 talk_V3 (DetCN few_Det (ComplN2 (Use2N3 distance_N3) (DetNP (DetQuantOrd this_Quant (NumCard (AdNum (AdnCAdv less_CAdv) (NumNumeral (num (pot2as3 (pot1as2 (pot0as1 pot01))))))) (OrdDigits (IIDig D_6 (IIDig D_4 (IDig D_6))))))))))))) please_Voc 
+PhrUtt otherwise_PConj (UttNP (DetCN somePl_Det (ComplN2 (Use3N3 distance_N3) (DetArtSg DefArt (UseN2 father_N2))))) please_Voc 
+PhrUtt therefore_PConj (UttImpPl PNeg (ImpVP (ComplVA become_VA (ComplA2 married_A2 (UsePron we_Pron))))) please_Voc 
+PhrUtt (PConjConj and_Conj) (UttAdv there_Adv) please_Voc 
+PhrUtt therefore_PConj yes_Utt please_Voc 
+PhrUtt otherwise_PConj (UttImpPol PNeg (ImpVP (ComplVA become_VA (ReflA2 married_A2)))) NoVoc 
+PhrUtt but_PConj (UttIP (AdvIP whoPl_IP here7to_Adv)) NoVoc 
+PhrUtt but_PConj (UttIAdv when_IAdv) please_Voc 
+PhrUtt but_PConj no_Utt (VocNP (DetArtSg IndefArt (UseN2 brother_N2))) 
+PhrUtt otherwise_PConj (UttAdv there7to_Adv) NoVoc 
+PhrUtt NoPConj no_Utt NoVoc 
+PhrUtt but_PConj (UttIAdv why_IAdv) please_Voc 
+PhrUtt therefore_PConj (UttS (AdvS today_Adv (UseCl TFut AAnter PNeg (PredSCVP (EmbedVP (ComplVV can_VV (UseV play_V))) (ComplSlash (Slash2V3 add_V3 (DetArtPl IndefArt (UseN2 (Use3N3 distance_N3)))) (DetCN few_Det (AdjCN (ReflA2 married_A2) (AdjCN (ComplA2 easy_A2V somebody_NP) (ComplN2 brother_N2 something_NP))))))))) please_Voc 
+PhrUtt (PConjConj both7and_DConj) (UttImpPol PNeg (ImpVP (UseComp (CompNP (MassNP (UseN husband_N)))))) (VocNP somebody_NP) 
+PhrUtt but_PConj no_Utt please_Voc 
+PhrUtt therefore_PConj yes_Utt (VocNP something_NP) 
+PhrUtt NoPConj no_Utt please_Voc 
+PhrUtt (PConjConj both7and_DConj) (UttIAdv where_IAdv) please_Voc 
+PhrUtt therefore_PConj (UttIP (IdetIP (IdetQuant which_IQuant NumPl))) NoVoc 
+PhrUtt therefore_PConj no_Utt NoVoc 
+PhrUtt NoPConj (ImpPl1 (ComplVV must_VV (ProgrVP (AdvVP (ComplVA become_VA (ConjAP either7or_DConj (BaseAP (PositA cold_A) (AdAP quite_Adv (ReflA2 easy_A2V))))) there7to_Adv)))) (VocNP somebody_NP) 
+PhrUtt but_PConj (UttIAdv when_IAdv) NoVoc 
+PhrUtt otherwise_PConj (UttAdv today_Adv) please_Voc 
+PhrUtt but_PConj yes_Utt please_Voc 
+PhrUtt (PConjConj either7or_DConj) (UttQS (UseQCl TFut AAnter PPos (QuestCl (ImpersCl (ComplVQ wonder_VQ (UseQCl TPres AAnter PPos (QuestCl (ExistNP (PPartNP (DetArtPl DefArt (SentCN (ComplN2 mother_N2 something_NP) (EmbedVP (ProgrVP (UseV fly_V))))) see_V2))))))))) (VocNP everything_NP) 
+PhrUtt therefore_PConj (UttIAdv how_IAdv) (VocNP (UsePN john_PN)) 
+PhrUtt but_PConj (UttImpSg PNeg (ImpVP (ComplSlash (SlashVV must_VV (SlashV2S answer_V2S (UseCl TPres ASimul PPos (GenericCl (ProgrVP (AdvVP (ReflVP (Slash2V3 talk_V3 (DetCN few_Det (SentCN (UseN2 (Use3N3 distance_N3)) (EmbedS (UseCl TPast AAnter PNeg (GenericCl (AdVVP always_AdV (UseV lie_V))))))))) already_Adv)))))) something_NP))) NoVoc 
+PhrUtt NoPConj yes_Utt please_Voc 
+PhrUtt (PConjConj and_Conj) no_Utt please_Voc 
+PhrUtt (PConjConj both7and_DConj) (UttS (UseCl TCond ASimul PNeg (ExistNP everything_NP))) (VocNP (DetArtSg DefArt (AdjCN (PositA rotten_A) (UseN enemy_N)))) 
+PhrUtt but_PConj no_Utt NoVoc 
+PhrUtt otherwise_PConj (UttNP (DetNP many_Det)) NoVoc 
+PhrUtt but_PConj (UttImpSg PPos (ImpVP (ComplVV want_VV (ComplVA become_VA (ComparA new_A (MassNP (AdjCN (ConjAP either7or_DConj (BaseAP (PositA beautiful_A) (ComplA2 easy_A2V (PPartNP (UsePron she_Pron) wash_V2)))) (ComplN2 mother_N2 somebody_NP)))))))) NoVoc 
+PhrUtt NoPConj yes_Utt (VocNP (UsePron youSg_Pron)) 
+PhrUtt NoPConj (UttVP (ComplVA become_VA (ComparA correct_A (DetCN (DetArtOrd DefArt NumPl (OrdDigits (IDig D_2))) (ApposCN (UseN2 (Use3N3 distance_N3)) something_NP))))) NoVoc 
+PhrUtt NoPConj (ImpPl1 (ComplVA become_VA (ComplA2 married_A2 (MassNP (UseN2 (ComplN3 distance_N3 somebody_NP)))))) (VocNP (DetNP (DetArtOrd IndefArt NumSg right_Ord))) 
+PhrUtt (PConjConj or_Conj) (UttNP (UsePron she_Pron)) NoVoc 
+PhrUtt (PConjConj both7and_DConj) (ImpPl1 (ComplVV want_VV (UseComp (CompAdv here7from_Adv)))) NoVoc 
+PhrUtt but_PConj (UttImpPl PNeg (ImpVP (AdvVP (ProgrVP (UseComp (CompAP (ComplA2 married_A2 (DetCN somePl_Det (ApposCN (UseN2 father_N2) (PredetNP all_Predet something_NP))))))) (ComparAdvAdj more_CAdv dry_A (AdvNP everybody_NP somewhere_Adv))))) NoVoc 
+PhrUtt otherwise_PConj (ImpPl1 (UseV run_V)) NoVoc 
+PhrUtt NoPConj (UttNP everybody_NP) NoVoc 
+PhrUtt but_PConj yes_Utt (VocNP something_NP) 
+PhrUtt but_PConj (UttIAdv how_IAdv) (VocNP (PredetNP most_Predet (PredetNP only_Predet something_NP))) 
+PhrUtt (PConjConj both7and_DConj) (UttIAdv how_IAdv) NoVoc 
+PhrUtt otherwise_PConj (UttImpPol PNeg (ImpVP (UseV vomit_V))) NoVoc 
+PhrUtt NoPConj (UttAdv (PositAdvAdj good_A)) please_Voc 
+PhrUtt otherwise_PConj (UttNP somebody_NP) please_Voc 
+PhrUtt otherwise_PConj no_Utt please_Voc 
+PhrUtt otherwise_PConj no_Utt (VocNP (PredetNP most_Predet (DetArtSg IndefArt (UseN pen_N)))) 
+PhrUtt therefore_PConj (UttAdv far_Adv) please_Voc 
+PhrUtt but_PConj (UttNP (DetNP someSg_Det)) NoVoc 
+PhrUtt (PConjConj both7and_DConj) (UttImpSg PNeg (ImpVP (ComplVV must_VV (ProgrVP (ComplVQ wonder_VQ (UseQCl TCond ASimul PPos (QuestIComp (CompIAdv when_IAdv) somebody_NP))))))) NoVoc 
+PhrUtt (PConjConj or_Conj) (UttAdv everywhere_Adv) NoVoc 
+PhrUtt otherwise_PConj (UttIP whoSg_IP) NoVoc 
+PhrUtt NoPConj (UttImpPl PPos (ImpVP (UseComp (CompNP somebody_NP)))) please_Voc 
+PhrUtt therefore_PConj (ImpPl1 (UseV go_V)) please_Voc 
+PhrUtt therefore_PConj (UttImpSg PPos (ImpVP (PassV2 fight_V2))) please_Voc 
+PhrUtt but_PConj (UttIAdv how_IAdv) please_Voc 
+PhrUtt therefore_PConj (UttImpPol PPos (ImpVP (UseV go_V))) please_Voc 
+PhrUtt but_PConj (UttQS (UseQCl TFut AAnter PNeg (QuestSlash whoSg_IP (SlashVP (ConjNP both7and_DConj (BaseNP something_NP something_NP)) (SlashV2A paint_V2A (ConjAP and_Conj (BaseAP (ComparA correct_A everybody_NP) (ComparA dirty_A (UsePN john_PN))))))))) please_Voc 
+PhrUtt therefore_PConj (UttIP (AdvIP whoPl_IP here7from_Adv)) (VocNP (DetNP (DetArtOrd DefArt NumSg right_Ord))) 
+PhrUtt but_PConj no_Utt NoVoc 
+PhrUtt but_PConj (UttIAdv how_IAdv) NoVoc 
+PhrUtt therefore_PConj (UttImpPl PNeg (ImpVP (ComplVQ wonder_VQ (UseQCl TCond AAnter PPos (QuestIAdv how_IAdv (PredSCVP (EmbedVP (UseV float_V)) (ComplVA become_VA (SentAP (PositA straight_A) (EmbedQS (UseQCl TPres ASimul PPos (QuestCl (ExistNP something_NP)))))))))))) please_Voc 
+PhrUtt (PConjConj both7and_DConj) (UttImpPol PPos (ImpVP (ReflVP (Slash2V3 sell_V3 (DetArtPl DefArt (UseN leaf_N)))))) NoVoc 
+PhrUtt therefore_PConj no_Utt NoVoc 
+PhrUtt (PConjConj or_Conj) (UttImpPol PNeg (ImpVP (AdvVP (ComplVV can8know_VV (UseV come_V)) everywhere_Adv))) NoVoc 
+PhrUtt but_PConj (UttVP (ProgrVP (UseComp (CompAdv (ComparAdvAdj less_CAdv small_A (UsePN john_PN)))))) NoVoc 
+PhrUtt but_PConj (UttIAdv when_IAdv) NoVoc 
+PhrUtt NoPConj (UttImpSg PNeg (ImpVP (UseV rain_V0))) NoVoc 
+PhrUtt NoPConj (UttNP (ConjNP or_Conj (ConsNP (MassNP (SentCN (ApposCN (UseN2 (Use3N3 distance_N3)) everybody_NP) (EmbedS (UseCl TFut ASimul PNeg (CleftAdv already_Adv (UseCl TPres ASimul PNeg (PredVP (DetNP few_Det) (ReflVP (SlashVV can_VV (Slash2V3 sell_V3 everything_NP)))))))))) (ConsNP (PredetNP most_Predet something_NP) (BaseNP (UsePron she_Pron) something_NP))))) please_Voc 
+PhrUtt but_PConj (UttIP whoSg_IP) please_Voc 
+PhrUtt therefore_PConj (ImpPl1 (ReflVP (Slash2V3 give_V3 everybody_NP))) please_Voc 
+PhrUtt therefore_PConj (UttIAdv where_IAdv) (VocNP everything_NP) 
+PhrUtt but_PConj (UttAdv (ComparAdvAdj more_CAdv ready_A (AdvNP (UsePron youPl_Pron) there7from_Adv))) NoVoc 
+PhrUtt but_PConj (UttImpPl PPos (ImpVP (UseComp (CompNP (DetArtSg DefArt (AdvCN (ComplN2 mother_N2 somebody_NP) now_Adv)))))) please_Voc 
+PhrUtt but_PConj (UttNP (DetNP (DetArtOrd IndefArt NumPl (OrdNumeral (num (pot2as3 (pot1as2 (pot0as1 (pot0 n9))))))))) (VocNP everything_NP) 
+PhrUtt otherwise_PConj (UttVP (UseV burn_V)) please_Voc 
+PhrUtt therefore_PConj (UttIP whatPl_IP) please_Voc 
+PhrUtt (PConjConj either7or_DConj) (ImpPl1 (AdVVP always_AdV (PassV2 love_V2))) please_Voc 
+PhrUtt otherwise_PConj (UttIP whatSg_IP) (VocNP (DetNP every_Det)) 
+PhrUtt otherwise_PConj (UttAdv (PositAdvAdj blue_A)) NoVoc 
+PhrUtt (PConjConj and_Conj) (ImpPl1 (PassV2 play_V2)) NoVoc 
+PhrUtt NoPConj (UttImpPol PPos (ImpVP (PassV2 eat_V2))) (VocNP everybody_NP) 
+PhrUtt but_PConj (UttImpPl PNeg (ImpVP (ProgrVP (AdVVP always_AdV (UseV spit_V))))) NoVoc 
+PhrUtt but_PConj (UttIP whatSg_IP) please_Voc 
+PhrUtt but_PConj (UttVP (ComplVA become_VA (ReflA2 easy_A2V))) please_Voc 
+PhrUtt (PConjConj and_Conj) (UttIP (IdetCN how8many_IDet (ComplN2 (Use2N3 distance_N3) (DetNP few_Det)))) please_Voc 
+PhrUtt but_PConj (UttIP whoSg_IP) (VocNP something_NP) 
+PhrUtt but_PConj no_Utt NoVoc 
+PhrUtt (PConjConj or_Conj) no_Utt (VocNP (AdvNP something_NP (PrepNP on_Prep (DetCN (DetArtCard IndefArt (NumNumeral (num (pot3plus (pot2 pot01) (pot2 pot01))))) (ApposCN (UseN2 (ComplN3 distance_N3 (MassNP (ApposCN (AdjCN (PositA bad_A) (UseN2 brother_N2)) (PPartNP (PPartNP somebody_NP stab_V2) bite_V2))))) (PPartNP (UsePN paris_PN) teach_V2)))))) 
+PhrUtt therefore_PConj (UttS (AdvS somewhere_Adv (UseCl TCond AAnter PPos (PredVP (UsePN paris_PN) (ComplVA become_VA (ConjAP either7or_DConj (ConsAP (PositA wet_A) (BaseAP (PositA dull_A) (ConjAP both7and_DConj (BaseAP (PositA dull_A) (ReflA2 married_A2))))))))))) NoVoc 
+PhrUtt but_PConj (UttIAdv how_IAdv) NoVoc 
+PhrUtt therefore_PConj no_Utt (VocNP (MassNP (ApposCN (AdjCN (PositA stupid_A) (AdvCN (UseN2 brother_N2) (ConjAdv either7or_DConj (BaseAdv far_Adv (AdAdv so_AdA here7from_Adv))))) everything_NP))) 
+PhrUtt NoPConj (UttImpSg PPos (ImpVP (UseComp (CompAP (ReflA2 married_A2))))) (VocNP (UsePron it_Pron)) 
+PhrUtt but_PConj (UttIAdv where_IAdv) please_Voc 
+PhrUtt otherwise_PConj (UttImpPol PPos (ImpVP (AdVVP always_AdV (ComplVA become_VA (ComplA2 married_A2 (UsePN john_PN)))))) (VocNP (AdvNP somebody_NP (ConjAdv and_Conj (BaseAdv (ConjAdv and_Conj (ConsAdv everywhere_Adv (BaseAdv now_Adv there_Adv))) far_Adv)))) 
+PhrUtt NoPConj no_Utt please_Voc 
+PhrUtt NoPConj (ImpPl1 (ComplVV can8know_VV (UseV run_V))) NoVoc 
+PhrUtt therefore_PConj (UttImpPol PNeg (ImpVP (ProgrVP (AdVVP always_AdV (UseV jump_V))))) please_Voc 
+PhrUtt NoPConj (UttIP (AdvIP (AdvIP whoSg_IP there_Adv) now_Adv)) NoVoc 
+PhrUtt (PConjConj and_Conj) (UttImpPl PNeg (ImpVP (UseV smell_V))) (VocNP (PPartNP everybody_NP forget_V2)) 
+PhrUtt but_PConj (UttS (UseCl TFut AAnter PNeg (PredVP (UsePron they_Pron) (ProgrVP (ReflVP (SlashV2V beg_V2V (UseV think_V))))))) please_Voc 
+PhrUtt but_PConj (UttS (UseCl TFut AAnter PNeg (ExistNP everything_NP))) please_Voc 
+PhrUtt therefore_PConj (UttAdv (SubjS if_Subj (UseCl TCond AAnter PNeg (PredVP something_NP (ComplVV want_VV (UseComp (CompAP (ReflA2 easy_A2V)))))))) (VocNP (DetArtSg IndefArt (UseN night_N))) 
+PhrUtt (PConjConj or_Conj) (UttIP whatSg_IP) please_Voc 
+PhrUtt otherwise_PConj (UttImpPol PNeg (ImpVP (ComplSlash (Slash3V3 give_V3 (UsePN john_PN)) (DetNP somePl_Det)))) (VocNP (UsePN paris_PN)) 
+PhrUtt (PConjConj either7or_DConj) (UttAdv everywhere_Adv) (VocNP (DetCN much_Det (UseN2 (Use3N3 distance_N3)))) 
+PhrUtt otherwise_PConj no_Utt NoVoc 
+PhrUtt (PConjConj either7or_DConj) (ImpPl1 (UseComp (CompAdv here7from_Adv))) please_Voc 
+PhrUtt (PConjConj both7and_DConj) (UttImpPl PPos (ImpVP (UseComp (CompAdv here7from_Adv)))) NoVoc 
+PhrUtt otherwise_PConj (UttIP whoSg_IP) (VocNP everything_NP) 
+PhrUtt (PConjConj both7and_DConj) (UttIAdv where_IAdv) (VocNP everybody_NP) 
+PhrUtt otherwise_PConj yes_Utt (VocNP (DetNP (DetQuant (PossPron i_Pron) NumSg))) 
+PhrUtt otherwise_PConj (UttIP whatSg_IP) please_Voc 
+PhrUtt otherwise_PConj (UttAdv today_Adv) (VocNP (DetCN much_Det (UseN2 (ComplN3 distance_N3 (AdvNP (PPartNP something_NP eat_V2) (AdAdv almost_AdA far_Adv)))))) 
+PhrUtt therefore_PConj (UttAdv today_Adv) NoVoc 
+PhrUtt (PConjConj and_Conj) (UttIP whoPl_IP) please_Voc 
+PhrUtt otherwise_PConj no_Utt please_Voc 
+PhrUtt therefore_PConj (UttImpPol PNeg (ImpVP (UseComp (CompAdv there7from_Adv)))) NoVoc 
+PhrUtt NoPConj no_Utt NoVoc 
+PhrUtt NoPConj (UttImpPl PPos (ImpVP (ReflVP (SlashV2a stab_V2)))) please_Voc 
+PhrUtt otherwise_PConj (UttImpPol PNeg (ImpVP (ComplVA become_VA (ComparA white_A everything_NP)))) please_Voc 
+PhrUtt NoPConj yes_Utt NoVoc 
+PhrUtt but_PConj (UttAdv (ComparAdvAdj less_CAdv hot_A somebody_NP)) (VocNP (PPartNP somebody_NP seek_V2)) 
+PhrUtt otherwise_PConj (UttImpPol PNeg (ImpVP (PassV2 throw_V2))) (VocNP (RelNP (MassNP (UseN2 (Use3N3 distance_N3))) (UseRCl TPast AAnter PNeg (RelCl (PredSCVP (EmbedS (AdvS somewhere_Adv (AdvS (PrepNP without_Prep (DetNP someSg_Det)) (UseCl TPres ASimul PNeg (ExistNP (DetNP (DetArtOrd DefArt NumPl right_Ord))))))) (UseV swell_V)))))) 
+PhrUtt NoPConj (UttIP (AdvIP (AdvIP (AdvIP whatSg_IP far_Adv) far_Adv) there7from_Adv)) (VocNP (DetArtPl DefArt (UseN2 (Use3N3 distance_N3)))) 
+PhrUtt otherwise_PConj (UttIP whoSg_IP) NoVoc 
+PhrUtt but_PConj (ImpPl1 (ComplVV must_VV (ComplSlash (SlashVV must_VV (SlashV2A paint_V2A (ComplA2 married_A2 (PPartNP (DetArtPl DefArt (AdvCN (ComplN2 father_N2 (DetNP (DetArtOrd DefArt NumPl (OrdDigits (IDig D_6))))) there7to_Adv)) count_V2)))) (MassNP (AdjCN (ComparA probable_AS (DetNP every_Det)) (UseN2 father_N2)))))) please_Voc 
+PhrUtt (PConjConj or_Conj) (UttIAdv (PrepIP without_Prep whoPl_IP)) (VocNP (DetArtSg IndefArt (ApposCN (SentCN (AdjCN (AdAP so_AdA (ComplA2 easy_A2V everybody_NP)) (UseN salt_N)) (EmbedVP (ComplSlash (SlashV2Q ask_V2Q (UseQCl TPast ASimul PPos (ExistIP whoSg_IP))) (DetArtSg IndefArt (UseN2 brother_N2))))) (DetNP few_Det)))) 
+PhrUtt therefore_PConj (ImpPl1 (ComplVA become_VA (AdAP very_AdA (AdAP very_AdA (ReflA2 married_A2))))) please_Voc 
+PhrUtt otherwise_PConj no_Utt (VocNP (PPartNP something_NP love_V2)) 
+PhrUtt (PConjConj either7or_DConj) (UttIP (IdetIP (IdetQuant which_IQuant NumSg))) please_Voc 
+PhrUtt NoPConj (UttImpPl PPos (ImpVP (ProgrVP (UseComp (CompAdv there_Adv))))) (VocNP (DetArtSg IndefArt (UseN breast_N))) 
+PhrUtt (PConjConj and_Conj) (UttQS (UseQCl TFut AAnter PNeg (ExistIP (IdetIP (IdetQuant which_IQuant NumPl))))) (VocNP everybody_NP) 
+PhrUtt but_PConj (UttAdv there7to_Adv) (VocNP (UsePN paris_PN)) 
+PhrUtt but_PConj (UttImpSg PPos (ImpVP (PassV2 forget_V2))) NoVoc 
+PhrUtt NoPConj (UttNP (UsePN john_PN)) NoVoc 
+PhrUtt NoPConj (UttIP (AdvIP whoPl_IP there7from_Adv)) please_Voc 
+PhrUtt therefore_PConj (ImpPl1 (UseV travel_V)) NoVoc 
+PhrUtt therefore_PConj (UttAdv now_Adv) NoVoc 
+PhrUtt therefore_PConj (UttQS (UseQCl TPast AAnter PPos (QuestVP whatSg_IP (ProgrVP (UseComp (CompAdv here7from_Adv)))))) NoVoc 
+PhrUtt but_PConj (UttIP (IdetIP (IdetQuant which_IQuant NumSg))) (VocNP (AdvNP everything_NP here7from_Adv)) 
+PhrUtt but_PConj yes_Utt please_Voc 
+PhrUtt therefore_PConj (UttIAdv when_IAdv) (VocNP (DetNP many_Det)) 
+PhrUtt NoPConj (UttS (AdvS now_Adv (AdvS here_Adv (AdvS already_Adv (UseCl TPast ASimul PNeg (GenericCl (UseV turn_V))))))) NoVoc 
+PhrUtt otherwise_PConj (UttAdv there7from_Adv) NoVoc 
+PhrUtt NoPConj (ImpPl1 (ComplVV must_VV (ComplSlash (Slash2V3 send_V3 (DetArtPl DefArt (AdvCN (UseN2 (Use3N3 distance_N3)) somewhere_Adv))) (MassNP (UseN2 father_N2))))) NoVoc 
+PhrUtt otherwise_PConj (UttIAdv (PrepIP under_Prep (AdvIP (AdvIP (IdetIP how8many_IDet) far_Adv) there_Adv))) (VocNP everything_NP) 
+PhrUtt (PConjConj and_Conj) no_Utt NoVoc 
+PhrUtt otherwise_PConj (UttImpPol PNeg (ImpVP (AdvVP (AdvVP (UseV blow_V) already_Adv) here7from_Adv))) NoVoc 
+PhrUtt therefore_PConj (UttAdv already_Adv) please_Voc 
+PhrUtt otherwise_PConj (UttIP (IdetCN (IdetQuant which_IQuant NumSg) (UseN fog_N))) please_Voc 
+PhrUtt NoPConj (UttImpPol PPos (ImpVP (PassV2 love_V2))) (VocNP (DetArtSg IndefArt (UseN2 mother_N2))) 
+PhrUtt otherwise_PConj (UttIAdv when_IAdv) (VocNP everybody_NP) 
+PhrUtt but_PConj (UttAdv here7to_Adv) please_Voc 
+PhrUtt otherwise_PConj (UttIP whatSg_IP) NoVoc 
+PhrUtt therefore_PConj yes_Utt NoVoc 
+PhrUtt but_PConj (UttIAdv where_IAdv) NoVoc 
+PhrUtt therefore_PConj (UttNP (DetArtPl DefArt (UseN2 brother_N2))) (VocNP (UsePron youPl_Pron)) 
+PhrUtt (PConjConj and_Conj) (UttQS (UseQCl TPres AAnter PPos (QuestVP (IdetCN (IdetQuant which_IQuant (NumCard (NumDigits (IDig D_6)))) (UseN2 (Use3N3 distance_N3))) (AdvVP (PassV2 fight_V2) far_Adv)))) NoVoc 
+PhrUtt otherwise_PConj (UttIAdv when_IAdv) please_Voc 
+PhrUtt but_PConj (UttAdv (ConjAdv either7or_DConj (BaseAdv there7from_Adv somewhere_Adv))) please_Voc 
+PhrUtt (PConjConj either7or_DConj) (UttIAdv why_IAdv) NoVoc 
+PhrUtt therefore_PConj (UttIP whatSg_IP) please_Voc 
+PhrUtt NoPConj yes_Utt please_Voc 
+PhrUtt but_PConj yes_Utt please_Voc 
+PhrUtt NoPConj (UttAdv (ComparAdvAdj less_CAdv short_A (UsePN paris_PN))) (VocNP everything_NP) 
+PhrUtt therefore_PConj (UttImpSg PPos (ImpVP (UseComp (CompAdv here7from_Adv)))) (VocNP (DetNP few_Det)) 
+PhrUtt otherwise_PConj (UttIAdv why_IAdv) please_Voc 
+PhrUtt NoPConj (UttAdv here_Adv) (VocNP (UsePN john_PN)) 
+PhrUtt (PConjConj and_Conj) (UttIP whatSg_IP) (VocNP (UsePN john_PN)) 
+PhrUtt NoPConj (UttImpSg PNeg (ImpVP (UseComp (CompAP (ComparA bad_A somebody_NP))))) please_Voc 
+PhrUtt NoPConj (UttNP (DetArtPl DefArt (AdjCN (ComparA good_A (UsePron it_Pron)) (ComplN2 brother_N2 everybody_NP)))) please_Voc 
+PhrUtt therefore_PConj (UttImpSg PNeg (ImpVP (ComplVA become_VA (ConjAP both7and_DConj (BaseAP (PositA round_A) (ComparA warm_A (PredetNP all_Predet (UsePN john_PN)))))))) (VocNP everybody_NP) 
+PhrUtt NoPConj (UttIP whatSg_IP) please_Voc 
+PhrUtt (PConjConj and_Conj) (UttS (UseCl TFut ASimul PPos (GenericCl (AdvVP (UseComp (CompAdv (PrepNP by8means_Prep (DetNP somePl_Det)))) there7to_Adv)))) NoVoc 
+PhrUtt therefore_PConj (UttIP whoSg_IP) NoVoc 
+PhrUtt therefore_PConj (ImpPl1 (ComplVA become_VA (SentAP (AdAP so_AdA (SentAP (AdAP almost_AdA (ComparA new_A (PredetNP all_Predet (DetCN many_Det (ComplN2 brother_N2 (DetArtSg DefArt (UseN2 brother_N2))))))) (EmbedQS (UseQCl TFut ASimul PPos (QuestCl (ExistNP (PPartNP something_NP love_V2))))))) (EmbedVP (ComplVA become_VA (ComparA ugly_A somebody_NP)))))) (VocNP something_NP) 
+PhrUtt but_PConj (UttAdv there_Adv) please_Voc 
+PhrUtt (PConjConj or_Conj) (UttIP (IdetIP (IdetQuant which_IQuant NumSg))) please_Voc 
+PhrUtt but_PConj (UttImpPl PNeg (ImpVP (UseV stand_V))) (VocNP everything_NP) 
+PhrUtt NoPConj (UttIAdv where_IAdv) please_Voc 
+PhrUtt but_PConj (UttIAdv why_IAdv) (VocNP (DetCN many_Det (AdvCN (UseN language_N) there7from_Adv))) 
+PhrUtt but_PConj no_Utt (VocNP (DetNP much_Det)) 
+PhrUtt but_PConj no_Utt (VocNP somebody_NP) 
+PhrUtt NoPConj (ImpPl1 (ComplVA become_VA (ComparA correct_A something_NP))) NoVoc 
+PhrUtt otherwise_PConj no_Utt NoVoc 
+PhrUtt (PConjConj either7or_DConj) (UttIP whoSg_IP) (VocNP something_NP) 
+PhrUtt therefore_PConj (UttVP (ComplVV can8know_VV (ComplVS hope_VS (AdvS (ConjAdv both7and_DConj (BaseAdv here7to_Adv (PositAdvAdj thin_A))) (UseCl TPres ASimul PPos (ImpersCl (ComplVA become_VA (ComplA2 easy_A2V (ConjNP or_Conj (BaseNP (UsePN paris_PN) something_NP)))))))))) NoVoc 
+PhrUtt NoPConj no_Utt (VocNP somebody_NP) 
+PhrUtt but_PConj (UttImpSg PNeg (ImpVP (PassV2 hear_V2))) (VocNP everybody_NP) 
+PhrUtt NoPConj (UttAdv today_Adv) NoVoc 
+PhrUtt otherwise_PConj (UttNP (PredetNP most_Predet (RelNP everybody_NP (UseRCl TPres AAnter PNeg (RelSlash (FunRP from_Prep (UsePron he_Pron) (FunRP above_Prep everything_NP IdRP)) (AdvSlash (AdvSlash (SlashVS (MassNP (UseN tree_N)) hope_VS (UseSlash TCond ASimul PPos (AdvSlash (SlashPrep (ExistNP (UsePN paris_PN)) under_Prep) here_Adv))) somewhere_Adv) (ComparAdvAdj less_CAdv round_A somebody_NP))))))) please_Voc 
+PhrUtt otherwise_PConj (UttQS (UseQCl TPast ASimul PNeg (QuestSlash whoPl_IP (AdvSlash (SlashVP something_NP (SlashV2A paint_V2A (ReflA2 married_A2))) (AdAdv very_AdA (ComparAdvAdj less_CAdv thick_A something_NP)))))) NoVoc 
+PhrUtt therefore_PConj (UttAdv everywhere_Adv) please_Voc 
+PhrUtt therefore_PConj no_Utt NoVoc 
+PhrUtt (PConjConj and_Conj) (UttNP (DetCN (DetArtCard IndefArt (NumNumeral (num (pot3plus (pot2 pot01) (pot1as2 (pot1 n2)))))) (ComplN2 brother_N2 (PredetNP all_Predet something_NP)))) NoVoc 
+PhrUtt (PConjConj or_Conj) (UttIP (AdvIP whoSg_IP there7to_Adv)) (VocNP (DetArtSg DefArt (UseN liver_N))) 
+PhrUtt NoPConj (ImpPl1 (ComplVQ wonder_VQ (UseQCl TFut ASimul PNeg (ExistIP whoPl_IP)))) please_Voc 
+PhrUtt NoPConj (ImpPl1 (ComplVQ wonder_VQ (UseQCl TPast AAnter PNeg (ExistIP (IdetCN how8many_IDet (UseN2 (Use3N3 distance_N3))))))) (VocNP everything_NP) 
+PhrUtt NoPConj (UttImpPol PNeg (ImpVP (PassV2 wash_V2))) NoVoc 
+PhrUtt otherwise_PConj (UttVP (ComplSlash (SlashV2a kill_V2) (UsePron youPl_Pron))) please_Voc 
+PhrUtt but_PConj (UttIAdv (PrepIP to_Prep (IdetIP (IdetQuant which_IQuant NumPl)))) (VocNP (UsePN paris_PN)) 
+PhrUtt therefore_PConj no_Utt (VocNP (UsePron youPol_Pron)) 
+PhrUtt (PConjConj or_Conj) (UttQS (UseQCl TCond ASimul PNeg (ExistIP whoPl_IP))) NoVoc 
+PhrUtt NoPConj (UttIP (AdvIP whatSg_IP somewhere_Adv)) please_Voc 
+PhrUtt therefore_PConj (UttIP whoSg_IP) NoVoc 
+PhrUtt otherwise_PConj (UttAdv today_Adv) NoVoc 
+PhrUtt NoPConj no_Utt NoVoc 
+PhrUtt but_PConj (UttVP (ReflVP (SlashVV can_VV (Slash3V3 give_V3 something_NP)))) please_Voc 
+PhrUtt NoPConj (UttImpPol PPos (ImpVP (UseComp (CompAdv there_Adv)))) (VocNP (DetNP every_Det)) 
+PhrUtt otherwise_PConj (UttImpSg PPos (ImpVP (ProgrVP (ProgrVP (ReflVP (SlashV2V beg_V2V (ProgrVP (UseV turn_V)))))))) (VocNP (DetNP many_Det)) 
+PhrUtt NoPConj (UttNP somebody_NP) please_Voc 
+PhrUtt NoPConj no_Utt please_Voc 
+PhrUtt otherwise_PConj yes_Utt (VocNP something_NP) 
+PhrUtt NoPConj (UttImpPol PPos (ImpVP (UseV sleep_V))) (VocNP (UsePN john_PN)) 
+PhrUtt therefore_PConj (UttIAdv (PrepIP after_Prep (IdetIP how8many_IDet))) NoVoc 
+PhrUtt otherwise_PConj (ImpPl1 (PassV2 understand_V2)) (VocNP (UsePN paris_PN)) 
+PhrUtt otherwise_PConj no_Utt (VocNP somebody_NP) 
+PhrUtt but_PConj (UttAdv now_Adv) NoVoc 
+PhrUtt otherwise_PConj (UttVP (PassV2 squeeze_V2)) NoVoc 
+PhrUtt therefore_PConj (UttIP whoSg_IP) NoVoc 
+PhrUtt otherwise_PConj (UttNP something_NP) (VocNP (DetArtPl IndefArt (UseN airplane_N))) 
+PhrUtt NoPConj (UttNP everybody_NP) please_Voc 
+PhrUtt otherwise_PConj (UttIP whoSg_IP) please_Voc 
+PhrUtt (PConjConj both7and_DConj) (UttVP (ComplVV must_VV (AdVVP always_AdV (PassV2 hold_V2)))) please_Voc 
+PhrUtt NoPConj (UttNP everything_NP) please_Voc 
+PhrUtt therefore_PConj (UttIAdv when_IAdv) NoVoc 
+PhrUtt but_PConj yes_Utt NoVoc 
+PhrUtt otherwise_PConj (UttImpPl PNeg (ImpVP (ComplVV must_VV (ReflVP (SlashV2Q ask_V2Q (UseQCl TCond ASimul PNeg (QuestIComp (CompIAdv where_IAdv) (PPartNP somebody_NP drink_V2)))))))) NoVoc 
+PhrUtt (PConjConj either7or_DConj) (UttImpSg PPos (ImpVP (AdvVP (UseV swim_V) (AdAdv quite_Adv now_Adv)))) (VocNP everybody_NP) 
+PhrUtt but_PConj (UttIAdv where_IAdv) (VocNP (ConjNP or_Conj (ConsNP (PredetNP only_Predet (DetArtPl DefArt (UseN back_N))) (ConsNP (PPartNP (PPartNP (MassNP (UseN2 (Use2N3 distance_N3))) listen_V2) drink_V2) (ConsNP everybody_NP (BaseNP everybody_NP (DetArtPl IndefArt (ApposCN (UseN snake_N) (UsePron youPl_Pron))))))))) 
+PhrUtt but_PConj (UttIAdv when_IAdv) NoVoc 
+PhrUtt (PConjConj either7or_DConj) (UttVP (UseV lie_V)) please_Voc 
+PhrUtt therefore_PConj (UttImpPol PNeg (ImpVP (AdVVP always_AdV (PassV2 speak_V2)))) NoVoc 
+PhrUtt but_PConj (UttVP (ProgrVP (ComplSlash (SlashV2S answer_V2S (UseCl TCond AAnter PPos (ExistNP (DetNP (DetArtOrd IndefArt NumSg left_Ord))))) (PPartNP (UsePN john_PN) stab_V2)))) NoVoc 
+PhrUtt but_PConj (UttNP (UsePN john_PN)) please_Voc 
+PhrUtt therefore_PConj yes_Utt please_Voc 
+PhrUtt (PConjConj either7or_DConj) (UttImpSg PNeg (ImpVP (UseComp (CompAP (ComparA wet_A (PPartNP everything_NP eat_V2)))))) (VocNP something_NP) 
+PhrUtt therefore_PConj (UttIP whoSg_IP) please_Voc 
+PhrUtt therefore_PConj (UttAdv there_Adv) (VocNP (DetNP (DetQuant this_Quant NumPl))) 
+PhrUtt (PConjConj or_Conj) no_Utt please_Voc 
+PhrUtt otherwise_PConj (UttAdv here7from_Adv) NoVoc 
+PhrUtt otherwise_PConj yes_Utt NoVoc 
+PhrUtt (PConjConj both7and_DConj) (UttIAdv how_IAdv) NoVoc 
+PhrUtt NoPConj (UttAdv already_Adv) please_Voc 
+PhrUtt NoPConj no_Utt (VocNP (DetArtSg DefArt (RelCN (UseN boat_N) (UseRCl TPres ASimul PPos (RelCl (ImpersCl (ComplSlash (SlashV2V beg_V2V (ComplVV can8know_VV (PassV2 suck_V2))) (DetNP many_Det)))))))) 
+PhrUtt but_PConj (UttAdv today_Adv) (VocNP (MassNP (ComplN2 (ComplN3 distance_N3 (DetArtPl IndefArt (ComplN2 (Use3N3 distance_N3) (UsePN paris_PN)))) everything_NP))) 
+PhrUtt but_PConj yes_Utt NoVoc 
+PhrUtt (PConjConj both7and_DConj) yes_Utt please_Voc 
+PhrUtt (PConjConj both7and_DConj) (UttImpPl PPos (ImpVP (ComplVV want_VV (ComplVQ wonder_VQ (UseQCl TFut ASimul PNeg (ExistIP whatPl_IP)))))) please_Voc 
+PhrUtt therefore_PConj (ImpPl1 (ReflVP (SlashV2A paint_V2A (SentAP (ComparA stupid_A everything_NP) (EmbedS (RelS (UseCl TFut AAnter PPos (GenericCl (ComplVA become_VA (ComparA hot_A something_NP)))) (UseRCl TCond AAnter PNeg (RelCl (ImpersCl (AdVVP always_AdV (UseComp (CompNP (PPartNP (ConjNP or_Conj (BaseNP (UsePN paris_PN) (MassNP (AdjCN (ComplA2 easy_A2V somebody_NP) (UseN2 brother_N2))))) stab_V2))))))))))))) NoVoc 
+PhrUtt therefore_PConj (ImpPl1 (ComplVV can8know_VV (ReflVP (SlashV2VNP beg_V2V (UsePron they_Pron) (SlashV2A paint_V2A (PositA green_A)))))) (VocNP (UsePron youSg_Pron)) 
+PhrUtt therefore_PConj (UttQS (UseQCl TPres ASimul PNeg (ExistIP whoSg_IP))) please_Voc 
+PhrUtt NoPConj (UttImpPl PPos (ImpVP (ComplVA become_VA (PositA bad_A)))) NoVoc 
+PhrUtt NoPConj no_Utt please_Voc 
+PhrUtt (PConjConj and_Conj) (UttNP everything_NP) NoVoc 
+PhrUtt NoPConj (UttQS (UseQCl TCond ASimul PNeg (QuestIAdv why_IAdv (ImpersCl (ReflVP (SlashV2a fear_V2)))))) NoVoc 
+PhrUtt but_PConj (ImpPl1 (ComplVA become_VA (ConjAP either7or_DConj (BaseAP (ComparA important_A (PredetNP only_Predet (PredetNP all_Predet (PPartNP somebody_NP push_V2)))) (ComparA black_A (UsePN john_PN)))))) (VocNP (DetArtSg DefArt (ComplN2 brother_N2 (DetArtPl IndefArt (UseN2 mother_N2))))) 
+PhrUtt NoPConj (UttAdv (AdAdv so_AdA now_Adv)) please_Voc 
+PhrUtt (PConjConj both7and_DConj) (UttIAdv (PrepIP by8agent_Prep whoSg_IP)) please_Voc 
+PhrUtt otherwise_PConj (UttImpPol PPos (ImpVP (ComplVS say_VS (UseCl TCond AAnter PPos (GenericCl (PassV2 pull_V2)))))) NoVoc 
+PhrUtt otherwise_PConj (UttIAdv why_IAdv) NoVoc 
+PhrUtt NoPConj (UttAdv there7from_Adv) (VocNP (UsePN john_PN)) 
+PhrUtt NoPConj (UttImpSg PPos (ImpVP (ComplVS say_VS (UseCl TCond AAnter PNeg (CleftAdv there7from_Adv (UseCl TPast AAnter PNeg (PredSCVP (EmbedQS (UseQCl TPres ASimul PNeg (ExistIP (IdetCN how8many_IDet (ApposCN (UseN wing_N) (PPartNP everybody_NP learn_V2)))))) (UseComp (CompAdv there_Adv))))))))) NoVoc 
+PhrUtt (PConjConj and_Conj) no_Utt NoVoc 
+PhrUtt otherwise_PConj yes_Utt please_Voc 
+PhrUtt (PConjConj both7and_DConj) no_Utt NoVoc 
+PhrUtt otherwise_PConj (UttAdv there7to_Adv) please_Voc 
+PhrUtt (PConjConj or_Conj) (UttImpSg PPos (ImpVP (UseComp (CompAdv (AdAdv very_AdA (ComparAdvAdj more_CAdv yellow_A (UsePron we_Pron))))))) (VocNP (DetArtSg DefArt (UseN2 (ComplN3 distance_N3 everybody_NP)))) 
+PhrUtt therefore_PConj (UttImpPol PPos (ImpVP (AdVVP always_AdV (ComplVS hope_VS (AdvS now_Adv (AdvS (ConjAdv both7and_DConj (BaseAdv (AdAdv very_AdA here7to_Adv) now_Adv)) (AdvS (AdAdv almost_AdA (AdAdv almost_AdA far_Adv)) (UseCl TCond AAnter PNeg (ImpersCl (ComplVV can8know_VV (UseComp (CompAdv there7to_Adv)))))))))))) please_Voc 
+PhrUtt (PConjConj and_Conj) (UttIAdv how_IAdv) NoVoc 
+PhrUtt otherwise_PConj (UttImpPl PPos (ImpVP (UseComp (CompAdv today_Adv)))) NoVoc 
+PhrUtt therefore_PConj (UttQS (UseQCl TFut ASimul PPos (QuestVP whatPl_IP (ComplVV can_VV (ComplVV must_VV (UseComp (CompNP (DetNP somePl_Det)))))))) please_Voc 
+PhrUtt otherwise_PConj yes_Utt please_Voc 
+PhrUtt otherwise_PConj (UttImpPol PPos (ImpVP (AdvVP (UseComp (CompAdv here_Adv)) everywhere_Adv))) please_Voc 
+PhrUtt NoPConj yes_Utt NoVoc 
+PhrUtt NoPConj (UttIAdv when_IAdv) (VocNP everything_NP) 
+PhrUtt but_PConj (UttVP (PassV2 hear_V2)) please_Voc 
+PhrUtt (PConjConj and_Conj) (UttVP (PassV2 kill_V2)) (VocNP (UsePN john_PN)) 
+PhrUtt NoPConj no_Utt please_Voc 
+PhrUtt otherwise_PConj (UttNP (DetNP every_Det)) please_Voc 
+PhrUtt but_PConj (UttAdv somewhere_Adv) NoVoc 
+PhrUtt NoPConj (UttVP (ComplVV can_VV (UseComp (CompNP (UsePron she_Pron))))) NoVoc 
+PhrUtt but_PConj (UttImpSg PPos (ImpVP (ReflVP (SlashV2VNP beg_V2V (AdvNP (DetNP somePl_Det) (ConjAdv either7or_DConj (ConsAdv here_Adv (ConsAdv there7from_Adv (ConsAdv today_Adv (BaseAdv (PrepNP in_Prep (DetNP (DetQuant this_Quant NumSg))) here7to_Adv)))))) (SlashV2Q ask_V2Q (UseQCl TPast ASimul PNeg (QuestVP whatSg_IP (AdVVP always_AdV (PassV2 buy_V2))))))))) please_Voc 
+PhrUtt NoPConj (UttIAdv (PrepIP through_Prep whatSg_IP)) (VocNP (PPartNP (DetCN somePl_Det (ComplN2 mother_N2 (PPartNP something_NP hold_V2))) see_V2)) 
+PhrUtt (PConjConj either7or_DConj) (UttIAdv why_IAdv) (VocNP everybody_NP) 
+PhrUtt but_PConj (UttIP whoPl_IP) please_Voc 
+PhrUtt (PConjConj or_Conj) (UttVP (UseComp (CompAdv everywhere_Adv))) please_Voc 
+PhrUtt therefore_PConj (UttIP whoSg_IP) please_Voc 
+PhrUtt otherwise_PConj yes_Utt (VocNP everything_NP) 
+PhrUtt but_PConj (UttIAdv (PrepIP possess_Prep whatPl_IP)) NoVoc 
+PhrUtt otherwise_PConj (UttVP (AdvVP (PassV2 love_V2) already_Adv)) NoVoc 
+PhrUtt NoPConj (UttImpSg PPos (ImpVP (AdVVP always_AdV (UseV burn_V)))) NoVoc 
+PhrUtt (PConjConj or_Conj) (UttImpPl PPos (ImpVP (ComplVV can_VV (AdVVP always_AdV (ComplSlash (Slash3V3 talk_V3 (UsePN paris_PN)) (PredetNP most_Predet (UsePron youPl_Pron))))))) (VocNP (UsePN paris_PN)) 
+PhrUtt otherwise_PConj yes_Utt (VocNP something_NP) 
+PhrUtt otherwise_PConj yes_Utt please_Voc 
+PhrUtt otherwise_PConj (UttImpSg PPos (ImpVP (ComplVV must_VV (PassV2 put_V2)))) please_Voc 
+PhrUtt NoPConj (UttImpPl PNeg (ImpVP (ComplSlash (Slash3V3 add_V3 (UsePN paris_PN)) (PredetNP all_Predet (UsePron i_Pron))))) please_Voc 
+PhrUtt (PConjConj and_Conj) no_Utt NoVoc 
+PhrUtt (PConjConj both7and_DConj) no_Utt please_Voc 
+PhrUtt but_PConj (UttVP (UseComp (CompNP (PPartNP (MassNP (UseN year_N)) switch8on_V2)))) (VocNP everybody_NP) 
+PhrUtt NoPConj (UttIAdv why_IAdv) please_Voc 
+PhrUtt otherwise_PConj (UttIAdv (PrepIP in8front_Prep whoPl_IP)) please_Voc 
+PhrUtt NoPConj (UttImpPl PNeg (ImpVP (PassV2 rub_V2))) NoVoc 
+PhrUtt otherwise_PConj (UttImpSg PNeg (ImpVP (ComplSlash (SlashVV can_VV (SlashV2Q ask_V2Q (UseQCl TPres ASimul PPos (QuestVP (AdvIP whatPl_IP there7to_Adv) (UseComp (CompAdv now_Adv)))))) (RelNP somebody_NP (UseRCl TPast ASimul PPos (RelCl (PredVP (DetArtSg DefArt (UseN2 (Use2N3 distance_N3))) (PassV2 love_V2)))))))) NoVoc 
+PhrUtt therefore_PConj (UttAdv there7from_Adv) (VocNP (DetArtSg IndefArt (ComplN2 (Use3N3 distance_N3) (RelNP everything_NP (UseRCl TFut AAnter PNeg (RelSlash IdRP (SlashVP (UsePron it_Pron) (SlashV2VNP beg_V2V something_NP (SlashV2a hold_V2))))))))) 
+PhrUtt therefore_PConj (UttVP (ProgrVP (ProgrVP (PassV2 find_V2)))) (VocNP (DetArtPl DefArt (UseN2 (ComplN3 distance_N3 somebody_NP)))) 
+PhrUtt NoPConj no_Utt please_Voc 
+PhrUtt but_PConj (UttImpPl PPos (ImpVP (UseComp (CompAP (PositA (UseA2 easy_A2V)))))) please_Voc 
+PhrUtt (PConjConj both7and_DConj) (UttS (UseCl TPres AAnter PPos (ExistNP (UsePN john_PN)))) NoVoc 
+PhrUtt otherwise_PConj yes_Utt (VocNP everything_NP) 
+PhrUtt but_PConj yes_Utt (VocNP everything_NP) 
+PhrUtt otherwise_PConj (UttIP whoPl_IP) NoVoc 
+PhrUtt but_PConj (ImpPl1 (ComplVA become_VA (SentAP (ComparA straight_A (UsePron youSg_Pron)) (EmbedVP (ProgrVP (AdvVP (PassV2 do_V2) everywhere_Adv)))))) (VocNP somebody_NP) 
+PhrUtt (PConjConj both7and_DConj) (UttImpPol PPos (ImpVP (UseV float_V))) NoVoc 
+PhrUtt otherwise_PConj (UttImpSg PNeg (ImpVP (ComplVA become_VA (ComparA clean_A (DetCN much_Det (SentCN (SentCN (ComplN2 mother_N2 everybody_NP) (EmbedVP (PassV2 switch8on_V2))) (EmbedVP (UseV burn_V)))))))) (VocNP (DetNP somePl_Det)) 
+PhrUtt NoPConj (UttVP (AdVVP always_AdV (UseV stop_V))) (VocNP somebody_NP) 
+PhrUtt (PConjConj or_Conj) (UttIAdv where_IAdv) NoVoc 
+PhrUtt but_PConj no_Utt (VocNP (MassNP (AdjCN (PositA beautiful_A) (ComplN2 father_N2 (UsePron i_Pron))))) 
+PhrUtt NoPConj yes_Utt (VocNP everybody_NP) 
+PhrUtt NoPConj (UttImpSg PPos (ImpVP (AdVVP always_AdV (PassV2 switch8on_V2)))) NoVoc 
+PhrUtt (PConjConj and_Conj) (UttVP (UseV float_V)) please_Voc 
+PhrUtt otherwise_PConj no_Utt please_Voc 
+PhrUtt otherwise_PConj (UttImpPl PNeg (ImpVP (PassV2 win_V2))) (VocNP (DetArtSg DefArt (ComplN2 (Use3N3 distance_N3) (UsePN paris_PN)))) 
+PhrUtt therefore_PConj (UttAdv today_Adv) NoVoc 
+PhrUtt NoPConj no_Utt please_Voc 
+PhrUtt therefore_PConj (UttImpPl PPos (ImpVP (AdVVP always_AdV (AdvVP (ProgrVP (UseV sleep_V)) (PositAdvAdj long_A))))) please_Voc 
+PhrUtt NoPConj (UttIP whoPl_IP) NoVoc 
+PhrUtt but_PConj (UttIAdv why_IAdv) please_Voc 
+PhrUtt otherwise_PConj (UttIAdv why_IAdv) (VocNP (MassNP (UseN table_N))) 
+PhrUtt otherwise_PConj (UttIAdv (PrepIP above_Prep (IdetIP (IdetQuant which_IQuant NumSg)))) NoVoc 
+PhrUtt NoPConj (UttNP (ConjNP or_Conj (BaseNP (PPartNP somebody_NP bite_V2) everybody_NP))) please_Voc 
+PhrUtt NoPConj (UttImpSg PPos (ImpVP (AdvVP (ComplVA become_VA (SentAP (ReflA2 married_A2) (EmbedS (AdvS everywhere_Adv (UseCl TPres ASimul PNeg (ExistNP (PredetNP most_Predet (UsePN john_PN)))))))) here7to_Adv))) please_Voc 
+PhrUtt therefore_PConj (UttIAdv where_IAdv) NoVoc 
+PhrUtt NoPConj (UttIAdv why_IAdv) (VocNP somebody_NP) 
+PhrUtt but_PConj (UttImpPl PPos (ImpVP (ProgrVP (PassV2 forget_V2)))) please_Voc 
+PhrUtt otherwise_PConj (UttIP whoSg_IP) NoVoc 
+PhrUtt (PConjConj or_Conj) yes_Utt please_Voc 
+PhrUtt (PConjConj either7or_DConj) (UttNP (DetArtSg IndefArt (AdjCN (ComplA2 easy_A2V somebody_NP) (ComplN2 (Use3N3 distance_N3) (DetArtPl IndefArt (UseN2 father_N2)))))) please_Voc 
+PhrUtt therefore_PConj (ImpPl1 (PassV2 wash_V2)) (VocNP (UsePron youPl_Pron)) 
+PhrUtt NoPConj (UttQS (UseQCl TCond ASimul PPos (QuestIAdv how_IAdv (ImpersCl (ComplVA become_VA (ComparA dry_A somebody_NP)))))) please_Voc 
+PhrUtt therefore_PConj no_Utt please_Voc 
+PhrUtt otherwise_PConj (UttAdv far_Adv) (VocNP everybody_NP) 
+PhrUtt therefore_PConj (UttImpPl PPos (ImpVP (UseV flow_V))) please_Voc 
+PhrUtt NoPConj no_Utt (VocNP (ConjNP both7and_DConj (ConsNP somebody_NP (BaseNP (DetArtSg DefArt (UseN2 father_N2)) (UsePN paris_PN))))) 
+PhrUtt otherwise_PConj (ImpPl1 (UseV swim_V)) (VocNP somebody_NP) 
+PhrUtt otherwise_PConj (UttS (UseCl TPast ASimul PPos (GenericCl (AdvVP (UseV sew_V) (ComparAdvAdj less_CAdv correct_A something_NP))))) (VocNP (MassNP (SentCN (UseN2 mother_N2) (EmbedQS (UseQCl TFut AAnter PPos (QuestIComp (CompIAdv how_IAdv) somebody_NP)))))) 
+PhrUtt therefore_PConj yes_Utt (VocNP (DetNP somePl_Det)) 
+PhrUtt NoPConj (UttImpPl PNeg (ImpVP (AdVVP always_AdV (ReflVP (Slash3V3 sell_V3 (UsePN john_PN)))))) NoVoc 
+PhrUtt therefore_PConj (UttImpSg PNeg (ImpVP (ComplVV can_VV (UseV vomit_V)))) NoVoc 
+PhrUtt (PConjConj either7or_DConj) no_Utt (VocNP (UsePN paris_PN)) 
+PhrUtt but_PConj (UttNP (MassNP (UseN day_N))) NoVoc 
+PhrUtt but_PConj (UttVP (AdVVP always_AdV (UseV rain_V0))) NoVoc 
+PhrUtt NoPConj yes_Utt NoVoc 
+PhrUtt therefore_PConj no_Utt (VocNP (DetNP many_Det)) 
+PhrUtt therefore_PConj (UttIP (IdetCN (IdetQuant which_IQuant (NumCard (NumDigits (IIDig D_6 (IDig D_3))))) (ApposCN (UseN2 (Use3N3 distance_N3)) somebody_NP))) (VocNP everything_NP) 
+PhrUtt otherwise_PConj (UttQS (UseQCl TFut ASimul PPos (QuestIAdv when_IAdv (ExistNP (DetNP (DetArtCard IndefArt (NumDigits (IIDig D_2 (IIDig D_1 (IIDig D_8 (IDig D_5))))))))))) NoVoc 
+PhrUtt therefore_PConj (UttImpSg PPos (ImpVP (PassV2 stab_V2))) NoVoc 
+PhrUtt but_PConj (UttImpPl PNeg (ImpVP (UseComp (CompAP (SentAP (PositA small_A) (EmbedS (UseCl TCond AAnter PNeg (ImpersCl (ReflVP (SlashV2V beg_V2V (AdvVP (ProgrVP (UseComp (CompAdv here7from_Adv))) (ComparAdvAdj more_CAdv black_A (PPartNP everything_NP speak_V2))))))))))))) please_Voc 
+PhrUtt but_PConj (UttImpPol PPos (ImpVP (AdvVP (PassV2 see_V2) somewhere_Adv))) NoVoc 
+PhrUtt but_PConj no_Utt please_Voc 
+PhrUtt but_PConj (UttImpSg PNeg (ImpVP (AdvVP (UseComp (CompNP (UsePN john_PN))) already_Adv))) NoVoc 
+PhrUtt therefore_PConj (UttImpPl PPos (ImpVP (ComplSlash (SlashV2A paint_V2A (AdAP very_AdA (ComparA blue_A (DetArtPl IndefArt (UseN2 (Use2N3 distance_N3)))))) somebody_NP))) please_Voc 
+PhrUtt (PConjConj or_Conj) no_Utt NoVoc 
+PhrUtt therefore_PConj (UttS (AdvS there7from_Adv (UseCl TCond ASimul PPos (PredVP everybody_NP (AdvVP (AdVVP always_AdV (ComplSlash (SlashVV can8know_VV (SlashVV must_VV (SlashV2V beg_V2V (UseComp (CompAP (ComplA2 easy_A2V somebody_NP)))))) (ConjNP or_Conj (ConsNP (UsePron they_Pron) (BaseNP (UsePN john_PN) (AdvNP everybody_NP somewhere_Adv)))))) there7from_Adv))))) NoVoc 
+PhrUtt (PConjConj both7and_DConj) (UttImpPol PNeg (ImpVP (AdVVP always_AdV (UseComp (CompNP (DetCN (DetQuantOrd (PossPron she_Pron) NumPl right_Ord) (ComplN2 father_N2 (PPartNP somebody_NP buy_V2)))))))) please_Voc 
+PhrUtt NoPConj (UttVP (PassV2 pull_V2)) NoVoc 
+PhrUtt but_PConj (UttImpPol PPos (ImpVP (ComplSlash (Slash3V3 add_V3 (PPartNP (UsePron we_Pron) teach_V2)) (DetCN many_Det (AdjCN (ReflA2 married_A2) (ApposCN (UseN factory_N) somebody_NP)))))) NoVoc 
+PhrUtt (PConjConj or_Conj) (UttNP (MassNP (AdjCN (SentAP (ComplA2 married_A2 (UsePron they_Pron)) (EmbedQS (UseQCl TPast AAnter PNeg (ExistIP whoSg_IP)))) (UseN2 brother_N2)))) please_Voc 
+PhrUtt (PConjConj and_Conj) (UttNP (UsePron they_Pron)) please_Voc 
+PhrUtt therefore_PConj (UttAdv today_Adv) NoVoc 
+PhrUtt therefore_PConj (UttIAdv how_IAdv) (VocNP something_NP) 
+PhrUtt (PConjConj either7or_DConj) no_Utt (VocNP (MassNP (AdvCN (UseN2 (Use2N3 distance_N3)) (AdAdv almost_AdA there7to_Adv)))) 
+PhrUtt therefore_PConj (UttImpPol PNeg (ImpVP (ProgrVP (ComplSlash (SlashV2VNP beg_V2V (PredetNP most_Predet (PPartNP (PredetNP only_Predet (PPartNP (PPartNP (MassNP (UseN steel_N)) cut_V2) cut_V2)) hold_V2)) (Slash3V3 sell_V3 (DetArtSg DefArt (AdvCN (UseN year_N) here_Adv)))) (DetNP every_Det))))) please_Voc 
+PhrUtt NoPConj (UttImpPol PPos (ImpVP (PassV2 count_V2))) NoVoc 
+PhrUtt (PConjConj both7and_DConj) (UttIAdv how_IAdv) (VocNP everybody_NP) 
+PhrUtt but_PConj (UttImpPl PNeg (ImpVP (AdVVP always_AdV (PassV2 see_V2)))) please_Voc 
+PhrUtt (PConjConj and_Conj) (UttQS (UseQCl TPres AAnter PPos (QuestVP (AdvIP whoPl_IP (ComparAdvAdj less_CAdv straight_A something_NP)) (ProgrVP (ComplSlash (Slash2V3 add_V3 everybody_NP) (RelNP (UsePN paris_PN) (UseRCl TFut ASimul PPos (RelCl (GenericCl (UseComp (CompAdv here7to_Adv))))))))))) please_Voc 
+PhrUtt (PConjConj or_Conj) no_Utt please_Voc 
+PhrUtt but_PConj no_Utt (VocNP (PredetNP all_Predet (PredetNP most_Predet something_NP))) 
+PhrUtt but_PConj no_Utt please_Voc 
+PhrUtt NoPConj (UttIP whatPl_IP) NoVoc 
+PhrUtt (PConjConj either7or_DConj) yes_Utt NoVoc 
+PhrUtt otherwise_PConj (UttNP (AdvNP everything_NP here7to_Adv)) NoVoc 
+PhrUtt (PConjConj either7or_DConj) (UttImpSg PPos (ImpVP (PassV2 close_V2))) please_Voc 
+PhrUtt otherwise_PConj (UttIAdv how_IAdv) NoVoc 
+PhrUtt therefore_PConj (UttAdv here7from_Adv) NoVoc 
+PhrUtt NoPConj (UttQS (UseQCl TCond AAnter PPos (QuestIAdv where_IAdv (ImpersCl (AdvVP (AdvVP (UseV smell_V) (PrepNP above_Prep (PredetNP all_Predet (MassNP (ApposCN (ComplN2 (Use2N3 distance_N3) (ConjNP or_Conj (ConsNP somebody_NP (BaseNP everybody_NP (UsePN paris_PN))))) (DetArtSg DefArt (UseN2 mother_N2))))))) here7from_Adv))))) NoVoc 
+PhrUtt therefore_PConj (UttS (UseCl TPres ASimul PNeg (PredVP (DetNP much_Det) (ComplVQ wonder_VQ (UseQCl TPres AAnter PPos (QuestIAdv why_IAdv (GenericCl (ComplVQ wonder_VQ (UseQCl TFut ASimul PPos (QuestIAdv why_IAdv (GenericCl (UseV sew_V)))))))))))) please_Voc 
+PhrUtt but_PConj (UttNP (RelNP everybody_NP (UseRCl TPres AAnter PNeg (RelVP (FunRP on_Prep (DetNP much_Det) (FunRP during_Prep (UsePron they_Pron) IdRP)) (AdVVP always_AdV (ReflVP (SlashV2a eat_V2))))))) please_Voc 
+PhrUtt NoPConj (UttQS (UseQCl TFut ASimul PNeg (QuestSlash whatSg_IP (SlashPrep (ExistNP everybody_NP) with_Prep)))) please_Voc 
+PhrUtt otherwise_PConj (UttImpPl PNeg (ImpVP (AdvVP (UseComp (CompNP (ConjNP and_Conj (BaseNP somebody_NP (DetCN (DetQuant that_Quant NumSg) (ComplN2 (Use2N3 distance_N3) (DetNP (DetQuant that_Quant NumSg)))))))) here7to_Adv))) (VocNP (UsePN john_PN)) 
+PhrUtt but_PConj (UttVP (ComplSlash (SlashV2V beg_V2V (ComplVA become_VA (ReflA2 married_A2))) something_NP)) NoVoc 
+PhrUtt otherwise_PConj (UttNP (DetNP few_Det)) please_Voc 
+PhrUtt therefore_PConj (UttImpPol PPos (ImpVP (ProgrVP (AdvVP (UseComp (CompAP (PositA short_A))) (PrepNP before_Prep (AdvNP somebody_NP here7from_Adv)))))) NoVoc 
+PhrUtt therefore_PConj no_Utt (VocNP something_NP) 
+PhrUtt (PConjConj and_Conj) no_Utt please_Voc 
+PhrUtt therefore_PConj yes_Utt NoVoc 
+PhrUtt (PConjConj both7and_DConj) (UttAdv (ComparAdvAdj less_CAdv (UseA2 easy_A2V) (UsePron it_Pron))) NoVoc 
+PhrUtt but_PConj (UttIAdv where_IAdv) please_Voc 
+PhrUtt therefore_PConj (UttImpPl PNeg (ImpVP (ComplVQ wonder_VQ (UseQCl TPres ASimul PNeg (QuestVP whoSg_IP (ComplVA become_VA (ComparA broad_A (UsePN paris_PN)))))))) NoVoc 
+PhrUtt NoPConj (UttIAdv why_IAdv) NoVoc 
+PhrUtt but_PConj no_Utt (VocNP (DetNP (DetArtCard IndefArt (NumDigits (IDig D_6))))) 
+PhrUtt NoPConj no_Utt (VocNP (RelNP somebody_NP (UseRCl TCond ASimul PNeg (RelSlash IdRP (SlashPrep (PredVP somebody_NP (PassV2 count_V2)) from_Prep))))) 
+PhrUtt otherwise_PConj (UttIAdv (PrepIP possess_Prep whoPl_IP)) please_Voc 
+PhrUtt NoPConj (UttQS (UseQCl TPast AAnter PNeg (QuestIAdv where_IAdv (PredSCVP (EmbedS (UseCl TFut ASimul PPos (PredVP everybody_NP (AdVVP always_AdV (ReflVP (Slash2V3 talk_V3 everybody_NP)))))) (UseV travel_V))))) please_Voc 
+PhrUtt NoPConj (UttImpPl PNeg (ImpVP (UseV sing_V))) NoVoc 
+PhrUtt (PConjConj both7and_DConj) (UttImpPl PPos (ImpVP (AdvVP (UseComp (CompNP (DetArtPl DefArt (RelCN (ApposCN (AdvCN (ApposCN (UseN2 mother_N2) (DetNP (DetQuantOrd that_Quant NumSg (OrdDigits (IIDig D_8 (IDig D_5)))))) now_Adv) (DetNP few_Det)) (UseRCl TPast AAnter PNeg (RelCl (ExistNP (MassNP (ComplN2 brother_N2 (DetNP every_Det)))))))))) here7to_Adv))) (VocNP (UsePN john_PN)) 
+PhrUtt NoPConj (UttAdv somewhere_Adv) please_Voc 
+PhrUtt but_PConj (UttNP (DetNP (DetArtCard IndefArt (AdNum (AdnCAdv less_CAdv) (NumNumeral (num (pot3 (pot2 (pot0 n7))))))))) please_Voc 
+PhrUtt NoPConj (ImpPl1 (AdVVP always_AdV (PassV2 like_V2))) NoVoc 
+PhrUtt NoPConj (UttQS (UseQCl TPast ASimul PPos (QuestIAdv where_IAdv (CleftNP (DetArtSg DefArt (UseN2 mother_N2)) (UseRCl TFut ASimul PPos (RelCl (PredSCVP (EmbedQS (UseQCl TCond AAnter PNeg (ExistIP whoPl_IP))) (ComplVV can8know_VV (UseV swell_V))))))))) NoVoc 
+PhrUtt (PConjConj or_Conj) (UttIAdv why_IAdv) please_Voc 
+PhrUtt therefore_PConj (UttImpPol PPos (ImpVP (AdVVP always_AdV (ProgrVP (PassV2 rub_V2))))) (VocNP (DetNP somePl_Det)) 
+PhrUtt otherwise_PConj yes_Utt NoVoc 
+PhrUtt (PConjConj both7and_DConj) yes_Utt (VocNP everybody_NP) 
+PhrUtt but_PConj (UttVP (AdVVP always_AdV (ComplVQ wonder_VQ (UseQCl TFut ASimul PNeg (QuestIComp (CompIP (IdetIP (IdetQuant which_IQuant NumPl))) (DetNP someSg_Det)))))) please_Voc 
+PhrUtt NoPConj (UttNP (DetArtSg IndefArt (UseN garden_N))) please_Voc 
+PhrUtt therefore_PConj (UttQS (UseQCl TPast ASimul PNeg (ExistIP (AdvIP (IdetIP (IdetQuant which_IQuant (NumCard (AdNum (AdnCAdv less_CAdv) (NumDigits (IDig D_2)))))) (ComparAdvAdj less_CAdv dull_A (DetArtSg IndefArt (UseN teacher_N))))))) please_Voc 
+PhrUtt therefore_PConj (UttImpPl PNeg (ImpVP (PassV2 close_V2))) please_Voc 
+PhrUtt otherwise_PConj (UttIP (IdetCN (IdetQuant which_IQuant NumSg) (UseN2 (Use2N3 distance_N3)))) (VocNP everybody_NP) 
+PhrUtt NoPConj (UttAdv there7to_Adv) (VocNP (PredetNP most_Predet everything_NP)) 
+PhrUtt (PConjConj either7or_DConj) (UttIP whatPl_IP) (VocNP (MassNP (UseN hair_N))) 
+PhrUtt (PConjConj either7or_DConj) (UttIAdv where_IAdv) (VocNP everything_NP) 
+PhrUtt therefore_PConj no_Utt NoVoc 
+PhrUtt (PConjConj both7and_DConj) yes_Utt please_Voc 
+PhrUtt otherwise_PConj (UttS (UseCl TPast AAnter PNeg (GenericCl (AdvVP (ReflVP (SlashV2Q ask_V2Q (UseQCl TPres ASimul PPos (QuestVP whatSg_IP (ComplSlash (SlashV2V beg_V2V (ComplVV can_VV (PassV2 wash_V2))) (UsePron youPol_Pron)))))) here7from_Adv)))) please_Voc 
+PhrUtt (PConjConj or_Conj) no_Utt (VocNP something_NP) 
+PhrUtt (PConjConj both7and_DConj) (UttAdv there_Adv) please_Voc 
+PhrUtt NoPConj (UttAdv far_Adv) NoVoc 
+PhrUtt (PConjConj both7and_DConj) (UttIAdv how_IAdv) please_Voc 
+PhrUtt therefore_PConj (UttIP whoSg_IP) please_Voc 
+PhrUtt therefore_PConj (UttIAdv when_IAdv) (VocNP (DetNP someSg_Det)) 
+PhrUtt otherwise_PConj (ImpPl1 (UseComp (CompAdv everywhere_Adv))) please_Voc 
+PhrUtt (PConjConj or_Conj) (UttImpSg PNeg (ImpVP (ProgrVP (ComplVS say_VS (RelS (UseCl TFut AAnter PNeg (PredSCVP (EmbedVP (PassV2 pull_V2)) (UseV sit_V))) (UseRCl TCond ASimul PNeg (RelVP (FunRP under_Prep something_NP IdRP) (PassV2 tie_V2)))))))) NoVoc 
+PhrUtt NoPConj (UttImpSg PPos (ImpVP (ComplVQ wonder_VQ (UseQCl TCond AAnter PPos (QuestVP whatPl_IP (UseV fall_V)))))) (VocNP (DetArtSg DefArt (ComplN2 mother_N2 somebody_NP))) 
+PhrUtt (PConjConj or_Conj) (UttS (UseCl TPast AAnter PNeg (ExistNP (ConjNP both7and_DConj (ConsNP (UsePron she_Pron) (BaseNP (PPartNP (MassNP (UseN skin_N)) wait_V2) (DetArtSg DefArt (ComplN2 (Use3N3 distance_N3) (DetArtSg DefArt (UseN2 (Use2N3 distance_N3))))))))))) please_Voc 
+PhrUtt (PConjConj and_Conj) (UttIP whoSg_IP) please_Voc 
+PhrUtt but_PConj yes_Utt please_Voc 
+PhrUtt NoPConj (ImpPl1 (ComplVQ wonder_VQ (UseQCl TPres ASimul PNeg (QuestSlash whoPl_IP (SlashPrep (PredVP (DetArtSg IndefArt (UseN2 (Use3N3 distance_N3))) (ComplVA become_VA (PositA thick_A))) part_Prep))))) (VocNP (UsePron youPol_Pron)) 
+PhrUtt otherwise_PConj no_Utt please_Voc 
+PhrUtt otherwise_PConj (UttVP (UseV burn_V)) (VocNP (UsePron youSg_Pron)) 
+PhrUtt (PConjConj either7or_DConj) (UttImpSg PNeg (ImpVP (ComplSlash (SlashVV can_VV (SlashV2a win_V2)) (UsePN paris_PN)))) NoVoc 
+PhrUtt (PConjConj either7or_DConj) (UttImpSg PNeg (ImpVP (PassV2 scratch_V2))) NoVoc 
+PhrUtt (PConjConj or_Conj) no_Utt NoVoc 
+PhrUtt otherwise_PConj (UttVP (UseV live_V)) NoVoc 
+PhrUtt NoPConj (UttIP whoSg_IP) NoVoc 
+PhrUtt NoPConj (UttNP (DetNP someSg_Det)) (VocNP (MassNP (AdjCN (ComparA thin_A (UsePN john_PN)) (RelCN (UseN husband_N) (UseRCl TPres ASimul PPos (RelCl (PredVP something_NP (UseV freeze_V)))))))) 
+PhrUtt but_PConj (UttIAdv how_IAdv) (VocNP (UsePN john_PN)) 
+PhrUtt therefore_PConj (UttQS (UseQCl TCond AAnter PNeg (ExistIP whoPl_IP))) NoVoc 
+PhrUtt therefore_PConj (UttQS (UseQCl TPast AAnter PNeg (QuestIComp (CompIAdv where_IAdv) (MassNP (ComplN2 (Use3N3 distance_N3) (UsePN paris_PN)))))) (VocNP (PPartNP (UsePron i_Pron) bite_V2)) 
+PhrUtt otherwise_PConj no_Utt please_Voc 
+PhrUtt NoPConj (UttNP somebody_NP) NoVoc 
+PhrUtt therefore_PConj (ImpPl1 (UseV think_V)) (VocNP (PredetNP only_Predet (RelNP (DetNP (DetQuantOrd (PossPron she_Pron) (NumCard (NumDigits (IDig D_8))) (OrdSuperl big_A))) (UseRCl TFut AAnter PNeg (RelVP (FunRP on_Prep everything_NP (FunRP to_Prep (UsePron i_Pron) IdRP)) (AdvVP (PassV2 fight_V2) there_Adv)))))) 
+PhrUtt otherwise_PConj (UttImpSg PPos (ImpVP (PassV2 wipe_V2))) please_Voc 
+PhrUtt but_PConj (UttIP whatSg_IP) NoVoc 
+PhrUtt therefore_PConj (UttAdv (PrepNP by8means_Prep (MassNP (SentCN (UseN2 brother_N2) (EmbedVP (UseComp (CompNP (PredetNP only_Predet (AdvNP (ConjNP both7and_DConj (BaseNP (PPartNP (PredetNP all_Predet (AdvNP (AdvNP somebody_NP there_Adv) (PositAdvAdj old_A))) seek_V2) everything_NP)) here_Adv))))))))) NoVoc 
+PhrUtt therefore_PConj (ImpPl1 (ComplVQ wonder_VQ (UseQCl TFut ASimul PPos (ExistIP (AdvIP whoPl_IP there_Adv))))) please_Voc 
+PhrUtt therefore_PConj no_Utt NoVoc 
+PhrUtt (PConjConj or_Conj) (UttIAdv when_IAdv) please_Voc 
+PhrUtt (PConjConj or_Conj) yes_Utt please_Voc 
+PhrUtt otherwise_PConj (UttQS (UseQCl TFut AAnter PNeg (ExistIP whoPl_IP))) NoVoc 
+PhrUtt therefore_PConj (UttImpPol PNeg (ImpVP (UseComp (CompNP somebody_NP)))) (VocNP everything_NP) 
+PhrUtt NoPConj (UttVP (ReflVP (SlashV2VNP beg_V2V (DetArtPl IndefArt (ComplN2 (Use3N3 distance_N3) (DetNP somePl_Det))) (SlashV2V beg_V2V (PassV2 drink_V2))))) please_Voc 
+PhrUtt (PConjConj and_Conj) (UttIAdv where_IAdv) NoVoc 
+PhrUtt therefore_PConj no_Utt please_Voc 
+PhrUtt otherwise_PConj (UttIAdv where_IAdv) please_Voc 
+PhrUtt therefore_PConj (UttIAdv (PrepIP by8agent_Prep (AdvIP whoSg_IP here_Adv))) NoVoc 
+PhrUtt but_PConj (UttImpPol PPos (ImpVP (UseComp (CompAP (PositA wet_A))))) (VocNP (PPartNP somebody_NP teach_V2)) 
+PhrUtt (PConjConj or_Conj) (UttImpPol PPos (ImpVP (AdVVP always_AdV (AdVVP always_AdV (ProgrVP (ReflVP (SlashV2Q ask_V2Q (UseQCl TCond ASimul PPos (ExistIP (IdetIP (IdetQuant which_IQuant NumSg))))))))))) (VocNP (UsePron youPl_Pron)) 
+PhrUtt NoPConj (UttAdv (AdAdv too_AdA today_Adv)) (VocNP everything_NP) 
+PhrUtt (PConjConj either7or_DConj) (UttIP whatPl_IP) (VocNP (DetArtSg IndefArt (UseN bike_N))) 
+PhrUtt (PConjConj both7and_DConj) (UttVP (UseV dig_V)) NoVoc 
+PhrUtt but_PConj (UttImpPol PPos (ImpVP (ComplVV can_VV (AdVVP always_AdV (UseV turn_V))))) NoVoc 
+PhrUtt therefore_PConj (UttIP whoSg_IP) NoVoc 
+PhrUtt (PConjConj or_Conj) (UttIAdv how_IAdv) NoVoc 
+PhrUtt (PConjConj both7and_DConj) no_Utt (VocNP (RelNP something_NP (UseRCl TPres AAnter PPos (RelCl (ExistNP something_NP))))) 
+PhrUtt (PConjConj or_Conj) (UttIP whoPl_IP) please_Voc 
+PhrUtt (PConjConj or_Conj) (ImpPl1 (PassV2 switch8on_V2)) (VocNP (DetNP few_Det)) 
+PhrUtt but_PConj (UttImpPl PPos (ImpVP (ComplVV must_VV (AdVVP always_AdV (UseV burn_V))))) (VocNP something_NP) 
+PhrUtt otherwise_PConj (UttVP (UseComp (CompAP (ReflA2 easy_A2V)))) please_Voc 
+PhrUtt (PConjConj or_Conj) (UttNP somebody_NP) please_Voc 
+PhrUtt otherwise_PConj (UttImpPol PPos (ImpVP (AdVVP always_AdV (ComplVA become_VA (SentAP (ComparA dull_A (ConjNP or_Conj (BaseNP everybody_NP (PPartNP (UsePron we_Pron) read_V2)))) (EmbedVP (UseV turn_V))))))) NoVoc 
+PhrUtt therefore_PConj (UttIP whatPl_IP) (VocNP (DetArtPl DefArt (AdvCN (ComplN2 (Use2N3 distance_N3) (MassNP (AdjCN (ReflA2 married_A2) (UseN fish_N)))) (PrepNP part_Prep (UsePN paris_PN))))) 
+PhrUtt therefore_PConj (UttImpPol PPos (ImpVP (ComplVS say_VS (UseCl TFut AAnter PNeg (PredVP (UsePN paris_PN) (ReflVP (SlashV2V beg_V2V (AdvVP (PassV2 see_V2) today_Adv)))))))) please_Voc 
+PhrUtt but_PConj (UttNP something_NP) (VocNP everybody_NP) 
+PhrUtt (PConjConj and_Conj) (UttNP everything_NP) (VocNP (PredetNP most_Predet everybody_NP)) 
+PhrUtt otherwise_PConj (UttImpPol PPos (ImpVP (ProgrVP (AdvVP (ComplVS say_VS (UseCl TCond AAnter PPos (ExistNP everything_NP))) (PrepNP after_Prep everything_NP))))) please_Voc 
+PhrUtt otherwise_PConj (UttImpSg PNeg (ImpVP (ProgrVP (UseV rain_V0)))) please_Voc 
+PhrUtt (PConjConj or_Conj) (UttIP whatPl_IP) (VocNP (PredetNP most_Predet (UsePN john_PN))) 
+PhrUtt otherwise_PConj (UttVP (ReflVP (SlashVV must_VV (Slash2V3 talk_V3 something_NP)))) NoVoc 
+PhrUtt therefore_PConj (UttVP (UseComp (CompAP (ConjAP or_Conj (BaseAP (ReflA2 married_A2) (SentAP (AdAP very_AdA (ComparA important_A something_NP)) (EmbedVP (PassV2 scratch_V2)))))))) NoVoc 
+PhrUtt otherwise_PConj (ImpPl1 (AdvVP (ReflVP (SlashV2A paint_V2A (ComplA2 easy_A2V (PredetNP most_Predet something_NP)))) (ComparAdvAdj more_CAdv red_A somebody_NP))) NoVoc 
+PhrUtt therefore_PConj (UttNP (MassNP (UseN2 (Use2N3 distance_N3)))) please_Voc 
+PhrUtt otherwise_PConj (UttVP (ComplVA become_VA (PositA sharp_A))) please_Voc
