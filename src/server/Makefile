@@ -3,15 +3,14 @@ GFCFLAGS = +RTS -K100M -RTS --cpu
 .PHONY: pgf.fcgi run
 
 pgf.fcgi: 
-	cabal configure
-	cabal build
+	cabal install
 	cp dist/build/pgf.fcgi/pgf.fcgi .
 
 gwt:
 	gwt-client/Translate-compile
 
 food.pgf:
-	gfc --make --name=grammar ../../examples/tutorial/food/Food{Eng,Ita}.gf
+	gfc --make --name=food ../../examples/tutorial/food/Food{Eng,Ita}.gf
 
 Demo%-parse.pgf: ../../lib/resource/demo/Demo%.gf
 	gfc $(GFCFLAGS) --make --erasing=on --name=Demo$*-parse $^

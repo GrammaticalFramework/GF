@@ -1,5 +1,6 @@
 var gf = new Object();
-var pgf_base_url = "pgf"
+var pgf_base_url = "pgf";
+var pgf_grammar = "grammar.pgf";
 
 gf.translate = function (input,from,to,cat,callback) {
   var args = [];
@@ -28,7 +29,7 @@ gf.callFunction = function (fun, args, callback) {
     query += (query == "") ? "?" : "&";
     query += i + "=" + encodeURIComponent(args[i]);
   }
-  var url = pgf_base_url + "/" + fun + query;
+  var url = pgf_base_url + "/" + pgf_grammar +"/" + fun + query;
 
   // FIXME: if same domain, use gf.httpGetText
   gf.httpGetJSONP(url, callback);
