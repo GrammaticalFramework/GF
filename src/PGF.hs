@@ -77,7 +77,7 @@ import qualified PGF.Parsing.FCFG.Incremental as Incremental
 import GF.Text.UTF8
 
 import GF.Data.ErrM
-import GF.Data.Utilities
+import GF.Data.Utilities (replace)
 
 import Data.Char
 import qualified Data.Map as Map
@@ -98,7 +98,7 @@ import Control.Monad
 -- > concrete LangEng of Lang = ...
 type Language     = CId
 
-readLanguage :: String -> Language
+readLanguage :: String -> Maybe Language
 
 showLanguage :: Language -> String
 
@@ -207,7 +207,7 @@ complete :: PGF -> Language -> Type -> String
 -- Implementation
 ---------------------------------------------------
 
-readLanguage = mkCId
+readLanguage = readCId
 
 showLanguage = prCId
 

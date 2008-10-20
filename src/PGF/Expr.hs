@@ -10,7 +10,7 @@ module PGF.Expr(Tree(..), Literal(..),
                 Value(..), Env, eval, apply,
 
                 -- helpers
-                pIdent,pStr,pFactor
+                pStr,pFactor
                ) where
 
 import PGF.CId
@@ -144,13 +144,6 @@ pNum = do x <- RP.munch1 isDigit
 pStr = RP.char '"' >> (RP.manyTill (pEsc RP.<++ RP.get) (RP.char '"'))
        where
          pEsc = RP.char '\\' >> RP.get    
-
-pCId = fmap mkCId pIdent
-
-pIdent = liftM2 (:) (RP.satisfy isIdentFirst) (RP.munch isIdentRest)
-  where
-    isIdentFirst c = c == '_' || isLetter c
-    isIdentRest c = c == '_' || c == '\'' || isAlphaNum c
 
 
 -----------------------------------------------------
