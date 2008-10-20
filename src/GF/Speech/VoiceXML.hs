@@ -32,7 +32,7 @@ grammar2vxml pgf cnc = showsXMLDoc (skel2vxml name language start skel qs) ""
           name = prCId cnc
           qs = catQuestions pgf cnc (map fst skel)
           language = getSpeechLanguage pgf cnc
-          start = mkCId (lookStartCat pgf)
+          start = lookStartCat pgf
 
 --
 -- * VSkeleton: a simple description of the abstract syntax.
