@@ -1,0 +1,38 @@
+/** Add css rules here for your application. */
+
+.gwt-SuggestBox {
+    width: 70%;
+    font-size: 150%;
+    margin: 1em 0 0.5em 0;
+}
+
+.my-settingsPanel * {
+    margin: 0 0.4em;
+}
+
+.my-translations {
+    margin-top: 1em;
+}
+    
+.my-translation {
+    margin: 0.2em;
+    padding-left: 25px;
+    font-size: 150%;
+    background-repeat: no-repeat;
+    background-position: 0% 50%;
+}
+
+/*
+* [LANG=bg] { background-image: url("flags/bg.png"); }
+* [LANG=ca] { background-image: url("flags/catalonia.png"); }
+* [LANG=da] { background-image: url("flags/dk.png"); }
+* [LANG=de] { background-image: url("flags/de.png"); }
+* [LANG=en] { background-image: url("flags/gb.png"); }
+* [LANG=fi] { background-image: url("flags/fi.png"); }
+* [LANG=fr] { background-image: url("flags/fr.png"); }
+* [LANG=it] { background-image: url("flags/it.png"); }
+* [LANG=no] { background-image: url("flags/no.png"); }
+* [LANG=ru] { background-image: url("flags/ru.png"); }
+* [LANG=es] { background-image: url("flags/es.png"); }
+* [LANG=sv] { background-image: url("flags/se.png"); }
+*/
