@@ -26,6 +26,10 @@ module PGF(
            
            -- ** Category
            Category, categories, startCat,
+           
+           -- * Types
+           Type(..),
+           showType, readType,
 
            -- * Expressions
            -- ** Tree
@@ -64,6 +68,7 @@ import PGF.Paraphrase
 import PGF.Macros
 import PGF.Data
 import PGF.Expr
+import PGF.Type
 import PGF.Raw.Convert
 import PGF.Raw.Parse
 import PGF.Raw.Print (printTree)
