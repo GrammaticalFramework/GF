@@ -73,7 +73,7 @@ canon2gfcc opts pars cgr@(M.MGrammar ((a,M.ModMod abm):cms)) =
   cns = map (i2i . fst) cms
   abs = D.Abstr aflags funs cats catfuns
   gflags = Map.empty
-  aflags = Map.fromList [(mkCId f,x) | (f,x) <- moduleOptionsGFO (M.flags abm)]
+  aflags = Map.fromList [(mkCId f,x) | (f,x) <- optionsPGF (M.flags abm)]
   mkDef pty = case pty of
     Yes t -> mkExp t
     _ -> CM.primNotion
@@ -93,7 +93,7 @@ canon2gfcc opts pars cgr@(M.MGrammar ((a,M.ModMod abm):cms)) =
       (lang,D.Concr flags lins opers lincats lindefs printnames params fcfg)
     where
       js = tree2list (M.jments mo)
-      flags   = Map.fromList [(mkCId f,x) | (f,x) <- moduleOptionsGFO (M.flags mo)]
+      flags   = Map.fromList [(mkCId f,x) | (f,x) <- optionsPGF (M.flags mo)]
       opers   = Map.fromAscList [] -- opers will be created as optimization
       utf     = id -- trace (show lang0 +++ show flags) $ 
                 -- if moduleFlag optEncoding (moduleOptions (M.flags mo)) == UTF_8

@@ -214,12 +214,12 @@ readPGF f = do
   g <- parseGrammar s
   return $! addParsers $ toPGF g
 
--- Adds parsers for all concretes that don't have a parser.
+-- Adds parsers for all concretes that don't have a parser and that have parser=ondemand.
 addParsers :: PGF -> PGF
-addParsers pgf = pgf { concretes = Map.map conv (concretes pgf) }
-  where
-    conv cnc | isJust (parser cnc) = cnc
-             | otherwise = cnc { parser = Just (PMCFG.convertConcrete (abstract pgf) cnc) }
+addParsers pgf = mapConcretes (\cnc -> if wantsParser cnc then addParser cnc else cnc) pgf
+    where
+      wantsParser cnc = isNothing (parser cnc) && Map.lookup (mkCId "parser") (cflags cnc) == Just "ondemand"
+      addParser cnc = cnc { parser = Just (PMCFG.convertConcrete (abstract pgf) cnc) }
 
 linearize pgf lang = concat . take 1 . PGF.Linearize.linearizes pgf lang
 
