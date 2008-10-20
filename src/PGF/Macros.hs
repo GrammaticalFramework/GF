@@ -10,6 +10,9 @@ import Data.List
 
 -- operations for manipulating PGF grammars and objects
 
+mapConcretes :: (Concr -> Concr) -> PGF -> PGF
+mapConcretes f pgf = pgf { concretes = Map.map f (concretes pgf) }
+
 lookLin :: PGF -> CId -> CId -> Term
 lookLin pgf lang fun = 
   lookMap tm0 fun $ lins $ lookMap (error "no lang") lang $ concretes pgf

@@ -51,7 +51,7 @@ mkCanon2gfcc opts cnc gr =
 
 -- Adds parsers for all concretes
 addParsers :: Options -> D.PGF -> D.PGF
-addParsers opts pgf = pgf { D.concretes = Map.map conv (D.concretes pgf) }
+addParsers opts pgf = CM.mapConcretes conv pgf
   where
     conv cnc = cnc { D.parser = Just pinfo }
       where

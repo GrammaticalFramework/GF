@@ -2,6 +2,7 @@ module GF.Compile.OptimizeGFCC where
 
 import PGF.CId
 import PGF.Data
+import PGF.Macros
 
 import GF.Data.Operations
 
@@ -16,9 +17,7 @@ optPGF :: PGF -> PGF
 optPGF = cseOptimize . suffixOptimize
 
 suffixOptimize :: PGF -> PGF
-suffixOptimize pgf = pgf {
-  concretes = Map.map opt (concretes pgf)
-  }
+suffixOptimize = mapConcretes opt
  where 
   opt cnc = cnc {
     lins = Map.map optTerm (lins cnc),
@@ -27,9 +26,7 @@ suffixOptimize pgf = pgf {
   }
 
 cseOptimize :: PGF -> PGF
-cseOptimize pgf = pgf {
-  concretes = Map.map subex (concretes pgf)
-  }
+cseOptimize = mapConcretes subex
 
 -- analyse word form lists into prefix + suffixes
 -- suffix sets can later be shared by subex elim
