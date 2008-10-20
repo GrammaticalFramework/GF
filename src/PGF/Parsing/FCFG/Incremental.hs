@@ -152,9 +152,14 @@ process fn !seqs !funs (item@(Active j ppos funid seqid args key0):items) acc ch
                            items2 = case lookupPC (mkPK key k) (passive chart) of
                                       Nothing -> items
                                       Just id -> (Active j (ppos+1) funid seqid (updateAt d id args) key0) : items
-                           (acc2,items3) = foldForest (\funid args (lits,items) -> (lits,(Active k 0 funid (rhs funid r) args key) : items))
-                                                      (\lit s (acc,items) -> (fn (KS s) (Active j (ppos+1) funid seqid args key0) acc,items))
-                                                      (acc,items2) fid (forest chart)
+                           items3 = foldForest (\funid args items -> Active k 0 funid (rhs funid r) args key : items)
+                                               (\_ _ items -> items)
+                                               items2 fid (forest chart)
+                           acc2   = if fid < 0            -- literal category
+                                      then foldForest (\funid args acc -> acc)
+                                                      (\lit s acc -> fn (KS s) (Active j (ppos+1) funid seqid args key0) acc)
+                                                      acc fid (forest chart)
+                                      else acc
                        in case lookupAC key (active chart) of
                             Nothing                        -> process fn seqs funs items3 acc2 chart{active=insertAC key (Set.singleton item) (active chart)}
                             Just set | Set.member item set -> process fn seqs funs items  acc  chart
