@@ -15,33 +15,32 @@ import Control.Monad
 import Data.Char
 import qualified Data.Map as Map
 import Data.Maybe
-import System.Environment
 
-
-defaultGrammarFile :: IO FilePath
-defaultGrammarFile = 
-    do env <- getEnvironment
-       return $ fromMaybe "grammar.pgf" $ lookup "PGF_FILE" env
 
 main :: IO ()
 main = do initFastCGI
           cache <- newCache PGF.readPGF
-          runFastCGIConcurrent' forkIO 100 (handleErrors (handleCGIErrors (fcgiMain cache)))
+          runFastCGIConcurrent' forkIO 100 (handleErrors (handleCGIErrors (cgiMain cache)))
 
-fcgiMain :: Cache PGF -> CGI CGIResult
-fcgiMain cache = liftIO (defaultGrammarFile >>= readCache cache) >>= cgiMain
-
-cgiMain :: PGF -> CGI CGIResult
-cgiMain pgf =
+cgiMain :: Cache PGF -> CGI CGIResult
+cgiMain cache =
     do path <- pathInfo
-       json <- case path of
-         "/parse"          -> return (doParse pgf) `ap` getText `ap` getCat `ap` getFrom
-         "/complete"       -> return (doComplete pgf) `ap` getText `ap` getCat `ap` getFrom `ap` getLimit
-         "/linearize"      -> return (doLinearize pgf) `ap` getTree `ap` getTo
-         "/translate"      -> return (doTranslate pgf) `ap` getText `ap` getCat `ap` getFrom `ap` getTo
-         "/grammar"        -> return (doGrammar pgf) `ap` requestAcceptLanguage
-         _                 -> throwCGIError 404 "Not Found" ["Resource not found: " ++ path]
-       outputJSONP json
+       case filter (not . null) $ splitBy (=='/') path of
+         [file,command] -> do pgf  <- liftIO $ readCache cache file
+                              json <- pgfMain pgf command
+                              outputJSONP json
+         _ -> throwCGIError 400 "Unknown resource" ["Unknown resource: " ++ show path,
+                                                    "Use /grammar.pgf/command"]
+
+pgfMain :: PGF -> String -> CGI JSValue
+pgfMain pgf command = 
+       case command of
+         "parse"          -> return (doParse pgf) `ap` getText `ap` getCat `ap` getFrom
+         "complete"       -> return (doComplete pgf) `ap` getText `ap` getCat `ap` getFrom `ap` getLimit
+         "linearize"      -> return (doLinearize pgf) `ap` getTree `ap` getTo
+         "translate"      -> return (doTranslate pgf) `ap` getText `ap` getCat `ap` getFrom `ap` getTo
+         "grammar"        -> return (doGrammar pgf) `ap` requestAcceptLanguage
+         _                -> throwCGIError 400 "Unknown command" ["Unknown command: " ++ show command]
   where
     getText :: CGI String
     getText = liftM (maybe "" (urlDecodeUnicode . UTF8.decodeString)) $ getInput "input"
@@ -162,3 +161,11 @@ outputJSONP x =
 outputStrict :: String -> CGI CGIResult
 outputStrict x | x == x = output x
                | otherwise = fail "I am the pope."
+
+-- * General utilities
+
+splitBy :: (a -> Bool) -> [a] -> [[a]]
+splitBy _ [] = [[]]
+splitBy f list = case break f list of
+                   (first,[]) -> [first]
+                   (first,_:rest) -> first : splitBy f rest
