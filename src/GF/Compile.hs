@@ -41,7 +41,9 @@ import qualified Data.Set as Set
 import Data.List(nub)
 
 import PGF.Check
+import PGF.CId
 import PGF.Data
+import PGF.Macros
 
 
 -- | Compiles a number of source files and builds a 'PGF' structure for them.
