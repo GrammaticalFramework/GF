@@ -18,9 +18,11 @@ import java.util.ArrayList;
 public class GF {
 
     private String baseURL;
+    private String pgfName;
 
-    public GF (String baseURL) {
+    public GF (String baseURL, String pgfName) {
 	this.baseURL = baseURL;
+	this.pgfName = pgfName;
     }
 
     public static interface GFCallback<T extends JavaScriptObject> {
@@ -155,7 +157,7 @@ public class GF {
     /* Utilities */
 
     private <T extends JavaScriptObject> GFRequest sendRequest (String resource, List<Arg> vars, final GFCallback<T> callback) {
-	String url = baseURL + "/" + resource + "?" + buildQueryString(vars);
+	String url = baseURL + "/" + pgfName + "/" + resource + "?" + buildQueryString(vars);
 	RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, url);
 	builder.setTimeoutMillis(30000);
 	builder.setHeader("Accept","text/plain, text/html;q=0.5, */*;q=0.1");

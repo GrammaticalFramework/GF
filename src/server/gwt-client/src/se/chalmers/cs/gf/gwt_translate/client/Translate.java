@@ -31,6 +31,7 @@ import java.util.Set;
 public class Translate implements EntryPoint {
 
     private static final String gfBaseURL = "/pgf";
+    private static final String pgfName = "grammar.pgf";
 
     private GF gf;
 
@@ -195,7 +196,7 @@ public class Translate implements EntryPoint {
 	statusPopup.add(statusLabel);
 	statusPopup.center();
 
-	gf = new GF(gfBaseURL);
+	gf = new GF(gfBaseURL, pgfName);
 
 	createTranslationUI();
 
