@@ -1,7 +1,8 @@
-module PGF.Type ( readType, showType, pType, ppType ) where
+module PGF.Type ( Type(..), Hypo(..),
+                  readType, showType,
+                  pType, ppType ) where
 
 import PGF.CId
-import PGF.Data
 import PGF.Expr
 import Data.Char
 import qualified Text.PrettyPrint as PP
@@ -9,16 +10,32 @@ import qualified Text.ParserCombinators.ReadP as RP
 import Control.Monad
 import Debug.Trace
 
--- | parses 'String' as an expression
+-- | To read a type from a 'String', use 'read' or 'readType'.
+data Type =
+   DTyp [Hypo] CId [Expr]
+  deriving (Eq,Ord)
+
+data Hypo =
+   Hyp CId Type
+  deriving (Eq,Ord,Show)
+
+-- | Reads a 'Type' from a 'String'.
 readType :: String -> Maybe Type
 readType s = case [x | (x,cs) <- RP.readP_to_S pType s, all isSpace cs] of
                [x] -> Just x
                _   -> Nothing
 
+instance Show Type where
+    showsPrec i x = showString (PP.render (ppType i x))
+
+instance Read Type where
+    readsPrec _ = RP.readP_to_S pType
+
 -- | renders type as 'String'
 showType :: Type -> String
 showType = PP.render . ppType 0
 
+pType :: RP.ReadP Type
 pType = do
   RP.skipSpaces
   hyps <- RP.sepBy (pHypo >>= \h -> RP.string "->" >> return h) RP.skipSpaces
@@ -45,7 +62,7 @@ pType = do
       args <- RP.sepBy pFactor RP.skipSpaces
       return (mkCId cat, args)
 
-
+ppType :: Int -> Type -> PP.Doc
 ppType d (DTyp ctxt cat args)
   | null ctxt = ppRes cat args
   | otherwise = ppParens (d > 0) (foldr ppCtxt (ppRes cat args) ctxt)
@@ -56,5 +73,6 @@ ppType d (DTyp ctxt cat args)
 
     ppRes cat es = PP.text (prCId cat) PP.<+> PP.hsep (map (ppExpr 2) es)
 
+ppParens :: Bool -> PP.Doc -> PP.Doc
 ppParens True  = PP.parens
 ppParens False = id

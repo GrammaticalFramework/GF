@@ -1,6 +1,8 @@
-module PGF.Data where
+module PGF.Data (module PGF.Data, module PGF.Expr, module PGF.Type) where
 
 import PGF.CId
+import PGF.Expr hiding (Value, Env)
+import PGF.Type
 import GF.Text.UTF8
 
 import qualified Data.Map as Map
@@ -40,42 +42,6 @@ data Concr = Concr {
   parser  :: Maybe ParserInfo       -- parser
   }
 
-data Type =
-   DTyp [Hypo] CId [Expr]
-  deriving (Eq,Ord,Show)
-
-data Literal = 
-   LStr String                      -- ^ string constant
- | LInt Integer                     -- ^ integer constant
- | LFlt Double                      -- ^ floating point constant
- deriving (Eq,Ord,Show)
-
--- | The tree is an evaluated expression in the abstract syntax
--- of the grammar. The type is especially restricted to not
--- allow unapplied lambda abstractions. The tree is used directly 
--- from the linearizer and is produced directly from the parser.
-data Tree = 
-   Abs [CId] Tree                   -- ^ lambda abstraction. The list of variables is non-empty
- | Var CId                          -- ^ variable
- | Fun CId [Tree]                   -- ^ function application
- | Lit Literal                      -- ^ literal
- | Meta Int                         -- ^ meta variable
-  deriving (Show, Eq, Ord)
-
--- | An expression represents a potentially unevaluated expression
--- in the abstract syntax of the grammar. It can be evaluated with
--- the 'expr2tree' function and then linearized or it can be used
--- directly in the dependent types.
-data Expr =
-   EAbs CId Expr                    -- ^ lambda abstraction
- | EApp Expr Expr                   -- ^ application
- | ELit Literal                     -- ^ literal
- | EMeta  Int                       -- ^ meta variable
- | EVar   CId                       -- ^ variable or function reference
- | EEq [Equation]                   -- ^ lambda function defined as a set of equations with pattern matching
- | EPi CId Expr Expr                -- ^ dependent function type
-  deriving (Eq,Ord,Show)
-
 data Term =
    R [Term]
  | P Term Term
@@ -96,18 +62,6 @@ data Tokn =
 
 data Alternative =
    Alt [String] [String]
-  deriving (Eq,Ord,Show)
-
-data Hypo =
-   Hyp CId Type
-  deriving (Eq,Ord,Show)
-
--- | The equation is used to define lambda function as a sequence
--- of equations with pattern matching. The list of 'Expr' represents
--- the patterns and the second 'Expr' is the function body for this
--- equation.
-data Equation =
-   Equ [Expr] Expr
   deriving (Eq,Ord,Show)
 
 
