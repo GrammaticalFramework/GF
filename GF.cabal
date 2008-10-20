@@ -588,6 +588,10 @@ library
     GF.Data.Assoc
     GF.Data.ErrM
     GF.Text.UTF8
+-- needed only for the on demand generation of PMCFG
+    GF.Data.BacktrackM
+    GF.Compile.GenerateFCFG
+    GF.Compile.GeneratePMCFG
 
 executable gf
   build-depends: base,
