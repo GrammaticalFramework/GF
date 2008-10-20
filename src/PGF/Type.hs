@@ -49,18 +49,18 @@ pType = do
       RP.<++
       (RP.between (RP.char '(') (RP.char ')') $ do
          var <- RP.option wildCId $ do
-                     v <- pIdent
+                     v <- pCId
                      RP.skipSpaces
                      RP.string ":"
-                     return (mkCId v)
+                     return v
          ty <- pType
          return (Hyp var ty))
 
     pAtom = do
-      cat <- pIdent
+      cat <- pCId
       RP.skipSpaces
       args <- RP.sepBy pFactor RP.skipSpaces
-      return (mkCId cat, args)
+      return (cat, args)
 
 ppType :: Int -> Type -> PP.Doc
 ppType d (DTyp ctxt cat args)
