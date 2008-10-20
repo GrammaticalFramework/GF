@@ -19,7 +19,7 @@ module PGF(
 
            -- * Identifiers
            -- ** CId
-           CId, mkCId, prCId,
+           CId, mkCId, prCId, wildCId,
            
            -- ** Language
            Language, languages, abstractName, languageCode,
