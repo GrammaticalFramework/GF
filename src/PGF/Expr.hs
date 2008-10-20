@@ -7,7 +7,7 @@ module PGF.Expr(readTree, showTree, pTree, ppTree,
                 Value(..), Env, eval, apply,
 
                 -- helpers
-                pIdent,pStr
+                pIdent,pStr,pFactor
                ) where
 
 import PGF.CId
@@ -68,18 +68,9 @@ pExpr = RP.skipSpaces >> (pAbs RP.<++ pTerm RP.<++ pEqs)
   where
     pTerm   =       fmap (foldl1 EApp) (RP.sepBy1 pFactor RP.skipSpaces)
 
-    pFactor =       fmap EVar pCId
-            RP.<++  fmap ELit pLit
-            RP.<++  pMeta
-            RP.<++  RP.between (RP.char '(') (RP.char ')') pExpr
-
     pAbs = do xs <- RP.between (RP.char '\\') (RP.skipSpaces >> RP.string "->") (RP.sepBy1 (RP.skipSpaces >> pCId) (RP.skipSpaces >> RP.char ','))
               e  <- pExpr
               return (foldr EAbs e xs)
-
-    pMeta = do RP.char '?'
-               n <- fmap read (RP.munch1 isDigit)
-               return (EMeta n)
                
     pEqs = fmap EEq $
            RP.between (RP.skipSpaces >> RP.char '{')
@@ -91,6 +82,15 @@ pExpr = RP.skipSpaces >> (pAbs RP.<++ pTerm RP.<++ pEqs)
              RP.skipSpaces >> RP.string "=>"
              e <- pExpr
              return (Equ pats e)
+
+pFactor =       fmap EVar pCId
+        RP.<++  fmap ELit pLit
+        RP.<++  pMeta
+        RP.<++  RP.between (RP.char '(') (RP.char ')') pExpr
+  where
+    pMeta = do RP.char '?'
+               n <- fmap read (RP.munch1 isDigit)
+               return (EMeta n)
 
 pLit :: RP.ReadP Literal
 pLit = pNum RP.<++ liftM LStr pStr
