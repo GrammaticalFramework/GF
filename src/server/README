@@ -1,48 +1,54 @@
 == Requirements ==
 
-- cabal
+- cabal-install
   * See quick installation instructions at the bottom of 
      http://hackage.haskell.org/trac/hackage/wiki/CabalInstall
 
 - FastCGI development kit
-  * MacPorts: sudo port install fcgi
-
-- Haskell packages: fastcgi, json, utf8-string
-  * cabal install fastcgi json utf8-string
+    (MacPorts)   $ sudo port install fcgi
 
 - GF installed as a Cabal package
-   * (cd ../.. && cabal install)
-   * Maybe need to remove "-beta" from the Version field in ../../GF.cabal
+   $ (cd ../.. && cabal install)
+
 
 == Building ==
 
-- Build gf.fcgi
-
-$ make
+- Build pgf.fcgi. This will use cabal to install the dependencies (cgi, fastcgi, json, utf8-string).
+  $ make
 
 - Build small example grammar:
-
-$ make food
-
+  $ make food.pgf
+  $ cp food.pgf grammar.pgf
 
 
 == Running (lighttpd) ==
 
 - Install lighttpd
-  - MacPorts:
-  $ sudo port install lighttpd
+  (MacPorts)   $ sudo port install lighttpd
 
 - Run lighttpd:
-  $ lighttpd -f lighttpd.conf -D
+  $ make run
+
+
+== Testing ==
 
 - First test from the command-line, since debugging is harder from the AJAX UI:
-  $ curl 'http://localhost:41296/gf/translate?input=this+fish&cat=Item&from=FoodEng'
+  $ curl 'http://localhost:41296/pgf/grammar.pgf/translate?input=this+fish&cat=Item&from=FoodEng'
+
+- Non-GWT AJAX UI: 
+   See http://localhost:41296/simple-client.html
+
+- GWT AJAX UI:
+   See http://localhost:41296/gwt-client/www/se.chalmers.cs.gf.gwt_translate.Translate/Translate.html
 
 
-- Go to http://localhost:41296/simple-client.html in your web browser.
+
+
 
 
 == Running (Apache) ==
+
+Note: This is more complicated, and the instructions may not be up to date.
 
 - Make sure that your web server supports FastCGI. For Apache on OS X,
   do this:
