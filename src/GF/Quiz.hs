@@ -39,19 +39,19 @@ mkQuiz cod msg tts = do
   teachDialogue qas msg
 
 translationList :: 
-  PGF -> Language -> Language -> Category -> Int -> IO [(String,[String])]
-translationList pgf ig og cat number = do
-  ts <- generateRandom pgf cat >>= return . take number
+  PGF -> Language -> Language -> Type -> Int -> IO [(String,[String])]
+translationList pgf ig og typ number = do
+  ts <- generateRandom pgf typ >>= return . take number
   return $ map mkOne $ ts
  where
    mkOne t = (norml (linearize pgf ig t), map (norml . linearize pgf og) (homonyms t))
-   homonyms = nub . parse pgf ig cat . linearize pgf ig
+   homonyms = nub . parse pgf ig typ . linearize pgf ig
 
-morphologyList :: PGF -> Language -> Category -> Int -> IO [(String,[String])]
-morphologyList pgf ig cat number = do
-  ts  <- generateRandom pgf cat >>= return . take (max 1 number)
+morphologyList :: PGF -> Language -> Type -> Int -> IO [(String,[String])]
+morphologyList pgf ig typ number = do
+  ts  <- generateRandom pgf typ >>= return . take (max 1 number)
   gen <- newStdGen
-  let ss    = map (tabularLinearize pgf (mkCId ig)) ts
+  let ss    = map (tabularLinearize pgf ig) ts
   let size  = length (head ss)
   let forms = take number $ randomRs (0,size-1) gen
   return [(head (snd (head pws)) +++ par, ws) | 

@@ -8,8 +8,8 @@ import qualified Data.Map as M
 import System.Random
 
 -- generate an infinite list of trees exhaustively
-generate :: PGF -> CId -> Maybe Int -> [Tree]
-generate pgf cat dp = concatMap (\i -> gener i cat) depths
+generate :: PGF -> Type -> Maybe Int -> [Tree]
+generate pgf (DTyp _ cat _) dp = concatMap (\i -> gener i cat) depths
  where
   gener 0 c = [Fun f [] | (f, ([],_)) <- fns c]
   gener i c = [
@@ -24,8 +24,8 @@ generate pgf cat dp = concatMap (\i -> gener i cat) depths
   depths = maybe [0 ..] (\d -> [0..d]) dp
 
 -- generate an infinite list of trees randomly
-genRandom :: StdGen -> PGF -> CId -> [Tree]
-genRandom gen pgf cat = genTrees (randomRs (0.0, 1.0 :: Double) gen) cat where
+genRandom :: StdGen -> PGF -> Type -> [Tree]
+genRandom gen pgf (DTyp _ cat _) = genTrees (randomRs (0.0, 1.0 :: Double) gen) cat where
 
   timeout = 47 -- give up
 

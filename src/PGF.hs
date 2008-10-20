@@ -89,19 +89,19 @@ import Control.Monad
 -- Interface
 ---------------------------------------------------
 
--- | This is just a string with the language name.
+-- | This is just a 'CId' with the language name.
 -- A language name is the identifier that you write in the 
 -- top concrete or abstract module in GF after the 
 -- concrete/abstract keyword. Example:
 -- 
 -- > abstract Lang = ...
 -- > concrete LangEng of Lang = ...
-type Language     = String
+type Language     = CId
 
--- | This is just a string with the category name.
+-- | This is just a 'CId' with the category name.
 -- The categories are defined in the abstract syntax
 -- with the \'cat\' keyword.
-type Category     = String
+type Category     = CId
 
 -- | Reads file in Portable Grammar Format and produces
 -- 'PGF' structure. The file is usually produced with:
@@ -118,7 +118,7 @@ linearize    :: PGF -> Language -> Tree -> String
 -- contain more than one element if the grammar is ambiguous.
 -- Throws an exception if the given language cannot be used
 -- for parsing, see 'canParse'.
-parse        :: PGF -> Language -> Category -> String -> [Tree]
+parse        :: PGF -> Language -> Type -> String -> [Tree]
 
 -- | Checks whether the given language can be used for parsing.
 canParse     :: PGF -> Language -> Bool
@@ -133,7 +133,7 @@ linearizeAllLang :: PGF -> Tree -> [(Language,String)]
 
 -- | The same as 'parseAllLang' but does not return
 -- the language.
-parseAll     :: PGF -> Category -> String -> [[Tree]]
+parseAll     :: PGF -> Type -> String -> [[Tree]]
 
 -- | Tries to parse the given string with all available languages.
 -- Languages which cannot be used for parsing (see 'canParse')
@@ -143,31 +143,31 @@ parseAll     :: PGF -> Category -> String -> [[Tree]]
 -- (this is a list, since grammars can be ambiguous). 
 -- Only those languages
 -- for which at least one parsing is possible are listed.
-parseAllLang :: PGF -> Category -> String -> [(Language,[Tree])]
+parseAllLang :: PGF -> Type -> String -> [(Language,[Tree])]
 
 -- | Creates an initial parsing state for a given language and
 -- startup category.
-initState :: PGF -> Language -> Category -> Incremental.ParseState
+initState :: PGF -> Language -> Type -> Incremental.ParseState
 
 -- | This function extracts the list of all completed parse trees
 -- that spans the whole input consumed so far. The trees are also
 -- limited by the category specified, which is usually
 -- the same as the startup category.
-extractExps :: Incremental.ParseState -> Category -> [Tree]
+extractExps :: Incremental.ParseState -> Type -> [Tree]
 
 -- | The same as 'generateAllDepth' but does not limit
 -- the depth in the generation.
-generateAll      :: PGF -> Category -> [Tree]
+generateAll      :: PGF -> Type -> [Tree]
 
 -- | Generates an infinite list of random abstract syntax expressions.
 -- This is usefull for tree bank generation which after that can be used
 -- for grammar testing.
-generateRandom   :: PGF -> Category -> IO [Tree]
+generateRandom   :: PGF -> Type -> IO [Tree]
 
 -- | Generates an exhaustive possibly infinite list of
 -- abstract syntax expressions. A depth can be specified
 -- to limit the search space.
-generateAllDepth :: PGF -> Category -> Maybe Int -> [Tree]
+generateAllDepth :: PGF -> Type -> Maybe Int -> [Tree]
 
 -- | List of all languages available in the given grammar.
 languages    :: PGF -> [Language]
@@ -197,7 +197,7 @@ startCat   :: PGF -> Category
 -- is empty or ends in whitespace, the last word is considred
 -- to be the empty string. This means that the completions
 -- will be all possible next words.
-complete :: PGF -> Language -> Category -> String 
+complete :: PGF -> Language -> Type -> String 
          -> [String] -- ^ Possible word completions of, 
                      -- including the given input.
 
@@ -211,61 +211,58 @@ readPGF f = do
   g <- parseGrammar s
   return $! toPGF g
 
-linearize pgf lang = concat . take 1 . PGF.Linearize.linearizes pgf (mkCId lang)
+linearize pgf lang = concat . take 1 . PGF.Linearize.linearizes pgf lang
 
-parse pgf lang cat s = 
-  case Map.lookup (mkCId lang) (concretes pgf) of
+parse pgf lang typ s = 
+  case Map.lookup lang (concretes pgf) of
     Just cnc -> case parser cnc of
                   Just pinfo -> if Map.lookup (mkCId "erasing") (cflags cnc) == Just "on"
-                                  then Incremental.parse pinfo (mkCId cat) (words s)
-                                  else case parseFCFG "topdown" pinfo (mkCId cat) (words s) of
+                                  then Incremental.parse pinfo typ (words s)
+                                  else case parseFCFG "topdown" pinfo typ (words s) of
                                          Ok x  -> x
                                          Bad s -> error s
-                  Nothing    -> error ("No parser built for language: " ++ lang)
-    Nothing  -> error ("Unknown language: " ++ lang)
+                  Nothing    -> error ("No parser built for language: " ++ prCId lang)
+    Nothing  -> error ("Unknown language: " ++ prCId lang)
 
-canParse pgf cnc = isJust (lookParser pgf (mkCId cnc))
+canParse pgf cnc = isJust (lookParser pgf cnc)
 
 linearizeAll mgr = map snd . linearizeAllLang mgr
 linearizeAllLang mgr t = 
   [(lang,PGF.linearize mgr lang t) | lang <- languages mgr]
 
-parseAll mgr cat = map snd . parseAllLang mgr cat
+parseAll mgr typ = map snd . parseAllLang mgr typ
 
-parseAllLang mgr cat s = 
-  [(lang,ts) | lang <- languages mgr, canParse mgr lang, let ts = parse mgr lang cat s, not (null ts)]
+parseAllLang mgr typ s = 
+  [(lang,ts) | lang <- languages mgr, canParse mgr lang, let ts = parse mgr lang typ s, not (null ts)]
 
-initState pgf lang cat =
-  case lookParser pgf langCId of
-    Just pinfo -> Incremental.initState pinfo catCId
-    _          -> error ("Unknown language: " ++ lang)
-  where
-    langCId = mkCId lang
-    catCId  = mkCId cat
+initState pgf lang typ =
+  case lookParser pgf lang of
+    Just pinfo -> Incremental.initState pinfo typ
+    _          -> error ("Unknown language: " ++ prCId lang)
 
-extractExps state cat = Incremental.extractExps state (mkCId cat)
+extractExps state typ = Incremental.extractExps state typ
 
 generateRandom pgf cat = do
   gen <- newStdGen
-  return $ genRandom gen pgf (mkCId cat)
+  return $ genRandom gen pgf cat
 
-generateAll pgf cat = generate pgf (mkCId cat) Nothing
-generateAllDepth pgf cat = generate pgf (mkCId cat)
+generateAll pgf cat = generate pgf cat Nothing
+generateAllDepth pgf cat = generate pgf cat
 
-abstractName pgf = prCId (absname pgf)
+abstractName pgf = absname pgf
 
-languages pgf = [prCId l | l <- cncnames pgf]
+languages pgf = cncnames pgf
 
 languageCode pgf lang = 
-    fmap (replace '_' '-') $ lookConcrFlag pgf (mkCId lang) (mkCId "language")
+    fmap (replace '_' '-') $ lookConcrFlag pgf lang (mkCId "language")
 
-categories pgf = [prCId c | c <- Map.keys (cats (abstract pgf))]
+categories pgf = Map.keys (cats (abstract pgf))
 
-startCat pgf = lookStartCat pgf
+startCat pgf = mkCId (lookStartCat pgf)
 
-complete pgf from cat input = 
+complete pgf from typ input = 
          let (ws,prefix) = tokensAndPrefix input
-             state0 = initState pgf from cat
+             state0 = initState pgf from typ
          in case foldM Incremental.nextState state0 ws of
               Nothing -> []
               Just state -> let compls = Incremental.getCompletions state prefix

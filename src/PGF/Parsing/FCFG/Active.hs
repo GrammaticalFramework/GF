@@ -37,8 +37,8 @@ makeFinalEdge cat 0 0 = (cat, [EmptyRange])
 makeFinalEdge cat i j = (cat, [makeRange i j])
 
 -- | the list of categories = possible starting categories
-parse :: String -> ParserInfo -> CId -> [FToken] -> [Tree]
-parse strategy pinfo start toks = nubsort $ filteredForests >>= forest2trees
+parse :: String -> ParserInfo -> Type -> [FToken] -> [Tree]
+parse strategy pinfo (DTyp _ start _) toks = nubsort $ filteredForests >>= forest2trees
   where
     inTokens = input toks
     starts = Map.findWithDefault [] start (startCats pinfo)

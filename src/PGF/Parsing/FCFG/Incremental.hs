@@ -22,11 +22,11 @@ import PGF.CId
 import PGF.Data
 import Debug.Trace
 
-parse :: ParserInfo -> CId -> [String] -> [Tree]
-parse pinfo start toks = maybe [] (\ps -> extractExps ps start) (foldM nextState (initState pinfo start) toks)
+parse :: ParserInfo -> Type -> [String] -> [Tree]
+parse pinfo typ toks = maybe [] (\ps -> extractExps ps typ) (foldM nextState (initState pinfo typ) toks)
 
-initState :: ParserInfo -> CId -> ParseState
-initState pinfo start = 
+initState :: ParserInfo -> Type -> ParseState
+initState pinfo (DTyp _ start _) = 
   let items = do
         cat <- fromMaybe [] (Map.lookup start (startCats pinfo))
         (funid,args) <- foldForest (\funid args -> (:) (funid,args)) (\_ _ args -> args)
@@ -97,8 +97,8 @@ getCompletions (State pinfo chart items) w =
       | isPrefixOf w tok = Map.insertWith Set.union tok (Set.singleton item) map
       | otherwise        = map
 
-extractExps :: ParseState -> CId -> [Tree]
-extractExps (State pinfo chart items) start = exps
+extractExps :: ParseState -> Type -> [Tree]
+extractExps (State pinfo chart items) (DTyp _ start _) = exps
   where
     (_,st) = process (\_ _ -> id) (sequences pinfo) (functions pinfo) (Set.toList items) () chart
 
