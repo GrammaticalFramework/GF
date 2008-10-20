@@ -1,6 +1,6 @@
 GFCFLAGS = +RTS -K100M -RTS --cpu
 
-.PHONY: pgf.fcgi food demo
+.PHONY: pgf.fcgi run
 
 pgf.fcgi: 
 	cabal configure
@@ -10,7 +10,7 @@ pgf.fcgi:
 gwt:
 	gwt-client/Translate-compile
 
-food:
+food.pgf:
 	gfc --make --name=grammar ../../examples/tutorial/food/Food{Eng,Ita}.gf
 
 Demo%-parse.pgf: ../../lib/resource/demo/Demo%.gf
@@ -33,6 +33,12 @@ lang.pgf: LangBul-noparse.pgf LangCat-noparse.pgf LangDan-parse.pgf LangEng-pars
 
 test.pgf: LangEng-parse.pgf LangGer-parse.pgf
 	gfc $(GFCFLAGS) --name=test $^
+
+run: pgf.fcgi
+	@echo '*********************************************'
+	@echo 'See http://localhost:41296/gwt-client/www/se.chalmers.cs.gf.gwt_translate.Translate/Translate.html'
+	@echo '*********************************************'
+	lighttpd -f lighttpd.conf -D
 
 gwt-installball: pgf.fcgi gwt
 	rm -rf tmp/gwt-client
