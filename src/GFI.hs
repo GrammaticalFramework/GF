@@ -148,7 +148,7 @@ importInEnv gfenv opts files
                pgf0 = multigrammar (commandenv gfenv)
            pgf1 <- importGrammar pgf0 opts' files
            if (verbAtLeast opts Normal)
-             then putStrLnFlush $ unwords $ "\nLanguages:" : languages pgf1
+             then putStrLnFlush $ unwords $ "\nLanguages:" : map prCId (languages pgf1)
              else return ()
            return $ gfenv { commandenv = mkCommandEnv (coding gfenv) pgf1 }
 
@@ -177,10 +177,11 @@ welcome = unlines [
   "Bug reports: http://trac.haskell.org/gf/"
   ]
 
-prompt env = absname ++ "> " where
-  absname = case abstractName (multigrammar env) of
-    "_" -> ""  --- created by new Ident handling 22/5/2008
-    n   -> n
+prompt env 
+  | abs == wildCId = "> "
+  | otherwise      = prCId abs ++ "> "
+  where
+    abs = abstractName (multigrammar env)
 
 data GFEnv = GFEnv {
   sourcegrammar :: Grammar, -- gfo grammar -retain
@@ -201,7 +202,7 @@ wordCompletion gfenv line0 prefix0 p =
     CmplCmd pref
       -> ret ' ' [name | name <- Map.keys (commands cmdEnv), isPrefixOf pref name]
     CmplStr (Just (Command _ opts _)) s
-      -> do mb_state0 <- try (evaluate (initState pgf (optLang opts) (optCat  opts)))
+      -> do mb_state0 <- try (evaluate (initState pgf (optLang opts) (optType opts)))
             case mb_state0 of
               Right state0 -> let ws     = words (take (length s - length prefix) s)
                               in case foldM nextState state0 ws of
@@ -230,8 +231,8 @@ wordCompletion gfenv line0 prefix0 p =
 
     pgf    = multigrammar cmdEnv
     cmdEnv = commandenv gfenv
-    optLang opts = valIdOpts "lang" (head (languages pgf)) opts
-    optCat  opts = valIdOpts "cat"  (lookStartCat pgf)     opts
+    optLang opts = valCIdOpts "lang" (head (languages pgf)) opts
+    optType opts = DTyp [] (mkCId (valStrOpts "type" (lookStartCat pgf) opts)) []
     
     ret c [x] = return [x++[c]]
     ret _ xs  = return xs

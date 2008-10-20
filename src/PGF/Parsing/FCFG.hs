@@ -30,10 +30,10 @@ import qualified Data.Map as Map
 
 parseFCFG :: String           -- ^ parsing strategy
          -> ParserInfo        -- ^ compiled grammar (fcfg) 
-         -> CId               -- ^ starting category
+         -> Type              -- ^ start type
          -> [String]          -- ^ input tokens
          -> Err [Tree]        -- ^ resulting GF terms
-parseFCFG "bottomup"    pinfo start toks = return $ Active.parse "b"  pinfo start toks 
-parseFCFG "topdown"     pinfo start toks = return $ Active.parse "t"  pinfo start toks 
-parseFCFG "incremental" pinfo start toks = return $ Incremental.parse pinfo start toks 
-parseFCFG strat         pinfo start toks = fail   $ "FCFG parsing strategy not defined: " ++ strat
+parseFCFG "bottomup"    pinfo typ toks = return $ Active.parse "b"  pinfo typ toks 
+parseFCFG "topdown"     pinfo typ toks = return $ Active.parse "t"  pinfo typ toks 
+parseFCFG "incremental" pinfo typ toks = return $ Incremental.parse pinfo typ toks 
+parseFCFG strat         pinfo typ toks = fail   $ "FCFG parsing strategy not defined: " ++ strat

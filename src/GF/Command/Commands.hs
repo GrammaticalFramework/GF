@@ -164,7 +164,7 @@ allCommands cod pgf = Map.fromList [
        ],
      exec = \opts _ -> do
        let pgfr = optRestricted opts
-       ts <- generateRandom pgfr (optCat opts)
+       ts <- generateRandom pgfr (optType opts)
        return $ fromTrees $ take (optNum opts) ts
      }),
   ("gt", emptyCommandInfo {
@@ -185,7 +185,7 @@ allCommands cod pgf = Map.fromList [
      exec = \opts _ -> do
        let pgfr = optRestricted opts
        let dp = return $ valIntOpts "depth" 4 opts
-       let ts = generateAllDepth pgfr (optCat opts) dp
+       let ts = generateAllDepth pgfr (optType opts) dp
        return $ fromTrees $ take (optNumInf opts) ts
      }),
   ("h", emptyCommandInfo {
@@ -285,8 +285,8 @@ allCommands cod pgf = Map.fromList [
      synopsis = "start a morphology quiz",
      exec = \opts _ -> do
          let lang = optLang opts
-         let cat  = optCat opts
-         morphologyQuiz cod pgf lang cat
+         let typ  = optType opts
+         morphologyQuiz cod pgf lang typ
          return void,
      flags = [
        ("lang","language of the quiz"),
@@ -405,7 +405,7 @@ allCommands cod pgf = Map.fromList [
        ("tree","convert strings into trees")
        ],
      exec = \opts arg -> do 
-       let file = valIdOpts "file" "_gftmp" opts
+       let file = valStrOpts "file" "_gftmp" opts
        s <- readFile file
        return $ case opts of
          _ | isOpt "lines" opts && isOpt "tree" opts -> 
@@ -420,10 +420,10 @@ allCommands cod pgf = Map.fromList [
      longname = "translation_quiz",
      synopsis = "start a translation quiz",
      exec = \opts _ -> do
-         let from = valIdOpts "from" (optLang opts) opts
-         let to   = valIdOpts "to"   (optLang opts) opts
-         let cat  = optCat opts
-         translationQuiz cod pgf from to cat
+         let from = valCIdOpts "from" (optLang opts) opts
+         let to   = valCIdOpts "to"   (optLang opts) opts
+         let typ  = optType opts
+         translationQuiz cod pgf from to typ
          return void,
      flags = [
        ("from","translate from this language"),
@@ -516,7 +516,7 @@ allCommands cod pgf = Map.fromList [
      longname = "write_file",
      synopsis = "send string or tree to a file",
      exec = \opts arg -> do
-         let file = valIdOpts "file" "_gftmp" opts
+         let file = valStrOpts "file" "_gftmp" opts
          if isOpt "append" opts 
            then appendFile file (enc (toString arg))
            else writeFile file (enc (toString arg))
@@ -530,7 +530,7 @@ allCommands cod pgf = Map.fromList [
  where
    enc = encodeUnicode cod
    lin opts t = unlines [linearize pgf lang t    | lang <- optLangs opts]
-   par opts s = concat  [parse pgf lang (optCat opts) s | lang <- optLangs opts, canParse pgf lang]
+   par opts s = concat  [parse pgf lang (optType opts) s | lang <- optLangs opts, canParse pgf lang]
  
    void = ([],[])
 
@@ -539,21 +539,21 @@ allCommands cod pgf = Map.fromList [
      _ -> unlines [linear opts lang t | lang <- optLangs opts] 
     
    linear opts lang = let unl = unlex opts lang in case opts of
-       _ | isOpt "all"    opts -> allLinearize unl pgf (mkCId lang)
-       _ | isOpt "table"  opts -> tableLinearize unl pgf (mkCId lang)
-       _ | isOpt "term"   opts -> termLinearize pgf (mkCId lang)
-       _ | isOpt "record" opts -> recordLinearize pgf (mkCId lang)
+       _ | isOpt "all"    opts -> allLinearize unl pgf lang
+       _ | isOpt "table"  opts -> tableLinearize unl pgf lang
+       _ | isOpt "term"   opts -> termLinearize pgf lang
+       _ | isOpt "record" opts -> recordLinearize pgf lang
        _  -> unl . linearize pgf lang
 
    treebank opts t = unlines $ 
-     (abstractName pgf ++ ": " ++ showTree t) :
-     [lang ++ ": " ++ linear opts lang t | lang <- optLangs opts]
+     (prCId (abstractName pgf) ++ ": " ++ showTree t) :
+     [prCId lang ++ ": " ++ linear opts lang t | lang <- optLangs opts]
 
    unlex opts lang = stringOps (getUnlex opts lang ++ map prOpt opts)
 
    getUnlex opts lang = case words (valStrOpts "unlexer" "" opts) of
      lexs -> case lookup lang 
-               [(la,tail le) | lex <- lexs, let (la,le) = span (/='=') lex, not (null le)] of
+               [(mkCId la,tail le) | lex <- lexs, let (la,le) = span (/='=') lex, not (null le)] of
        Just le -> chunks ',' le
        _ -> []
 
@@ -571,13 +571,17 @@ allCommands cod pgf = Map.fromList [
        _ -> map prOpt opts
 
    optRestricted opts = 
-     restrictPGF (\f -> and [hasLin pgf (mkCId la) f | la <- optLangs opts]) pgf
+     restrictPGF (\f -> and [hasLin pgf la f | la <- optLangs opts]) pgf
 
-   optLangs opts = case valIdOpts "lang" "" opts of
+   optLangs opts = case valStrOpts "lang" "" opts of
      "" -> languages pgf
-     lang -> chunks ',' lang
-   optLang opts = head $ optLangs opts ++ ["#NOLANG"] 
-   optCat opts = valIdOpts "cat" (lookStartCat pgf) opts
+     lang -> map mkCId (chunks ',' lang)
+   optLang opts = head $ optLangs opts ++ [wildCId]
+   optType opts = 
+     let str = valStrOpts "cat" (lookStartCat pgf) opts
+     in case readType str of
+          Just ty -> ty
+          Nothing -> error ("Can't parse '"++str++"' as type")
    optComm opts = valStrOpts "command" "" opts
    optViewFormat opts = valStrOpts "format" "ps" opts
    optViewGraph opts = valStrOpts "view" "gv" opts
@@ -591,17 +595,17 @@ allCommands cod pgf = Map.fromList [
    toString = unwords . toStrings
 
    prGrammar opts = case opts of
-     _ | isOpt "cats" opts -> unwords $ categories pgf
+     _ | isOpt "cats" opts -> unwords $ map prCId $ categories pgf
      _ | isOpt "fullform" opts -> concatMap 
-          (prFullFormLexicon . buildMorpho pgf . mkCId) $ optLangs opts
+          (prFullFormLexicon . buildMorpho pgf) $ optLangs opts
      _ | isOpt "missing" opts -> 
-           unlines $ [unwords (la:":": map prCId cs) | 
-                       la <- optLangs opts, let cs = missingLins pgf (mkCId la)]
-     _ -> case valIdOpts "printer" "pgf" opts of
+           unlines $ [unwords (prCId la:":": map prCId cs) | 
+                       la <- optLangs opts, let cs = missingLins pgf la]
+     _ -> case valStrOpts "printer" "pgf" opts of
        v -> concatMap snd $ exportPGF noOptions (read v) pgf
 
    morphos opts s = 
-     [lookupMorpho (buildMorpho pgf (mkCId la)) s | la <- optLangs opts]
+     [lookupMorpho (buildMorpho pgf la) s | la <- optLangs opts]
 
    -- ps -f -g s returns g (f s)
    stringOps opts s = foldr app s (reverse opts) where
@@ -643,14 +647,14 @@ stringOpOptions = [
 
 treeOpOptions pgf = [(op,expl) | (op,(expl,_)) <- allTreeOps pgf]
 
-translationQuiz :: String -> PGF -> Language -> Language -> Category -> IO ()
-translationQuiz cod pgf ig og cat = do
-  tts <- translationList pgf ig og cat infinity
+translationQuiz :: String -> PGF -> Language -> Language -> Type -> IO ()
+translationQuiz cod pgf ig og typ = do
+  tts <- translationList pgf ig og typ infinity
   mkQuiz cod "Welcome to GF Translation Quiz." tts
 
-morphologyQuiz :: String -> PGF -> Language -> Category -> IO ()
-morphologyQuiz cod pgf ig cat = do
-  tts <- morphologyList pgf ig cat infinity
+morphologyQuiz :: String -> PGF -> Language -> Type -> IO ()
+morphologyQuiz cod pgf ig typ = do
+  tts <- morphologyList pgf ig typ infinity
   mkQuiz cod "Welcome to GF Morphology Quiz." tts
 
 -- | the maximal number of precompiled quiz problems

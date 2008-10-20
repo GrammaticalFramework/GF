@@ -1,5 +1,6 @@
 module GF.Command.Abstract where
 
+import PGF.CId
 import PGF.Data
 
 type Ident = String
@@ -19,7 +20,7 @@ data Option
 
 data Value
   = VId  Ident
-  | VInt Integer
+  | VInt Int
   | VStr String
   deriving (Eq,Ord,Show)
 
@@ -29,27 +30,25 @@ data Argument
   | AMacro Ident
   deriving (Eq,Ord,Show)
 
-valIdOpts :: String -> String -> [Option] -> String
-valIdOpts flag def opts = case valOpts flag (VId def) opts of
-  VId v -> v
-  _     -> def
+valCIdOpts :: String -> CId -> [Option] -> CId
+valCIdOpts flag def opts =
+  case [v | OFlag f (VId v) <- opts, f == flag] of
+    (v:_) -> mkCId v
+    _     -> def
 
-valIntOpts :: String -> Integer -> [Option] -> Int
-valIntOpts flag def opts = fromInteger $ case valOpts flag (VInt def) opts of
-  VInt v -> v
-  _      -> def
+valIntOpts :: String -> Int -> [Option] -> Int
+valIntOpts flag def opts =
+  case [v | OFlag f (VInt v) <- opts, f == flag] of
+    (v:_) -> v
+    _     -> def
 
 valStrOpts :: String -> String -> [Option] -> String
-valStrOpts flag def opts = case valOpts flag (VStr def) opts of
-  VStr v -> v
-  _      -> def
-
-valOpts :: String -> Value -> [Option] -> Value
-valOpts flag def opts = case lookup flag flags of
-  Just v -> v
-  _ -> def
- where
-   flags = [(f,v) | OFlag f v <- opts]
+valStrOpts flag def opts =
+  case [v | OFlag f v <- opts, f == flag] of
+    (VStr v:_) -> v
+    (VId  v:_) -> v
+    (VInt v:_) -> show v
+    _          -> def
 
 isOpt :: String -> [Option] -> Bool
 isOpt o opts = elem o [x | OOpt x <- opts]
