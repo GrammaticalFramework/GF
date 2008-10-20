@@ -56,9 +56,10 @@ pgfMain pgf command =
           case mcat of
             Nothing -> return Nothing
             Just "" -> return Nothing
-            Just cat | cat `notElem` PGF.categories pgf ->
-                         throwCGIError 400 "Unknown category" ["Unknown category: " ++ cat]
-            _ -> return mcat
+            Just cat -> case PGF.readType cat of
+                          Nothing -> throwCGIError 400 "Bad category" ["Bad category: " ++ cat]
+                          Just typ | typ `elem` PGF.categories pgf -> return $ Just typ
+                                   | otherwise -> throwCGIError 400 "Unknown category" ["Unknown category: " ++ show typ]
 
     getFrom :: CGI (Maybe PGF.Language)
     getFrom = getLang "from"
@@ -73,27 +74,29 @@ pgfMain pgf command =
     getLang i = 
        do mlang <- getInput i
           case mlang of
+            Nothing -> return Nothing
             Just "" -> return Nothing
-            Just lang | lang `notElem` PGF.languages pgf ->
-                          throwCGIError 400 "Unknown language" ["Unknown language: " ++ lang]
-            _ -> return mlang
+            Just l  -> case PGF.readLanguage l of
+                         Nothing -> throwCGIError 400 "Bad language" ["Bad language: " ++ l]
+                         Just lang | lang `elem` PGF.languages pgf -> return $ Just lang
+                                   | otherwise -> throwCGIError 400 "Unknown language" ["Unknown language: " ++ l]
 
-doTranslate :: PGF -> String -> Maybe PGF.Category -> Maybe PGF.Language -> Maybe PGF.Language -> JSValue
+doTranslate :: PGF -> String -> Maybe PGF.Type -> Maybe PGF.Language -> Maybe PGF.Language -> JSValue
 doTranslate pgf input mcat mfrom mto = showJSON $ map toJSObject
-     [[("from",from),("to",to),("text",output)]
+     [[("from", PGF.showLanguage from),("to", PGF.showLanguage to),("text",output)]
            | (from,trees) <- parse' pgf input mcat mfrom,
              tree <- trees,
              (to,output) <- linearize' pgf mto tree]
 
-doParse :: PGF -> String -> Maybe PGF.Category -> Maybe PGF.Language -> JSValue
+doParse :: PGF -> String -> Maybe PGF.Type -> Maybe PGF.Language -> JSValue
 doParse pgf input mcat mfrom = showJSON $ map toJSObject
-     [[("from",from),("tree",PGF.showTree tree)]
+     [[("from", PGF.showLanguage from),("tree",PGF.showTree tree)]
          | (from,trees) <- parse' pgf input mcat mfrom,
            tree <- trees ]
 
-doComplete :: PGF -> String -> Maybe PGF.Category -> Maybe PGF.Language -> Maybe Int -> JSValue
+doComplete :: PGF -> String -> Maybe PGF.Type -> Maybe PGF.Language -> Maybe Int -> JSValue
 doComplete pgf input mcat mfrom mlimit = showJSON $ map toJSObject $ limit
-     [[("from",from),("text",text)]
+     [[("from", PGF.showLanguage from),("text",text)]
           | (from,compls) <- complete' pgf input mcat mfrom,
             text <- compls]
   where
@@ -101,7 +104,7 @@ doComplete pgf input mcat mfrom mlimit = showJSON $ map toJSObject $ limit
 
 doLinearize :: PGF -> PGF.Tree -> Maybe PGF.Language -> JSValue
 doLinearize pgf tree mto = showJSON $ map toJSObject
-     [[("to",to),("text",text)] | (to,text) <- linearize' pgf mto tree]
+     [[("to", PGF.showLanguage to),("text",text)] | (to,text) <- linearize' pgf mto tree]
 
 doGrammar :: PGF -> Maybe (Accept Language) -> JSValue
 doGrammar pgf macc = showJSON $ toJSObject 
@@ -114,17 +117,21 @@ doGrammar pgf macc = showJSON $ toJSObject
                       ("languageCode", showJSON $ fromMaybe "" (PGF.languageCode pgf l)),
                       ("canParse",     showJSON $ PGF.canParse pgf l)]
                      | l <- PGF.languages pgf]
-        categories = map toJSObject [[("cat", cat)] | cat <- PGF.categories pgf]
+        categories = map toJSObject [[("cat", PGF.showType cat)] | cat <- PGF.categories pgf]
+
+instance JSON PGF.CId where
+    readJSON x = readJSON x >>= maybe (fail "Bad language.") return . PGF.readLanguage
+    showJSON = showJSON . PGF.showLanguage
 
 -- * PGF utilities
 
-parse' :: PGF -> String -> Maybe PGF.Category -> Maybe PGF.Language -> [(PGF.Language,[PGF.Tree])]
+parse' :: PGF -> String -> Maybe PGF.Type -> Maybe PGF.Language -> [(PGF.Language,[PGF.Tree])]
 parse' pgf input mcat mfrom = 
    [(from,ts) | from <- froms, PGF.canParse pgf from, let ts = PGF.parse pgf from cat input, not (null ts)]
   where froms = maybe (PGF.languages pgf) (:[]) mfrom
         cat = fromMaybe (PGF.startCat pgf) mcat
 
-complete' :: PGF -> String -> Maybe PGF.Category -> Maybe PGF.Language -> [(PGF.Language,[String])]
+complete' :: PGF -> String -> Maybe PGF.Type -> Maybe PGF.Language -> [(PGF.Language,[String])]
 complete' pgf input mcat mfrom = 
    [(from,ss) | from <- froms, PGF.canParse pgf from, let ss = PGF.complete pgf from cat input, not (null ss)]
   where froms = maybe (PGF.languages pgf) (:[]) mfrom
@@ -139,7 +146,7 @@ linearize' pgf mto tree =
 selectLanguage :: PGF -> Maybe (Accept Language) -> PGF.Language
 selectLanguage pgf macc = case acceptable of
                             []  -> case PGF.languages pgf of
-                                     []  -> "" -- FIXME: error?
+                                     []  -> error "No concrete syntaxes in PGF grammar."
                                      l:_ -> l
                             Language c:_ -> fromJust (langCodeLanguage pgf c)
   where langCodes = mapMaybe (PGF.languageCode pgf) (PGF.languages pgf)
