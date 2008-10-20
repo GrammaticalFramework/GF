@@ -1,6 +1,6 @@
 module Cache (Cache,newCache,readCache) where
 
-import Control.Concurrent
+import Control.Concurrent.MVar
 import Data.Map (Map)
 import qualified Data.Map as Map 
 import System.Directory (getModificationTime)
@@ -8,7 +8,7 @@ import System.Time (ClockTime)
 
 data Cache a = Cache {
       cacheLoad :: FilePath -> IO a,
-      cacheObjects :: MVar (Map FilePath (MVar (ClockTime, a)))
+      cacheObjects :: MVar (Map FilePath (MVar (Maybe (ClockTime, a))))
     }
 
 newCache :: (FilePath -> IO a) -> IO (Cache a)
@@ -18,19 +18,17 @@ newCache load =
 
 readCache :: Cache a -> FilePath -> IO a
 readCache c file = 
-    do t' <- getModificationTime file
-       objs <- takeMVar (cacheObjects c)
-       case Map.lookup file objs of
-         -- object is in cache
-         Just v  -> do (t,x) <- takeMVar v
-                       putMVar (cacheObjects c) objs
-                       -- check timestamp
-                       x' <- if t == t' then return x else cacheLoad c file
-                       putMVar v (t',x')
-                       return x'
-         -- first time this object is requested
-         Nothing -> do v <- newEmptyMVar
-                       putMVar (cacheObjects c) (Map.insert file v objs)
-                       x' <- cacheLoad c file
-                       putMVar v (t',x')
-                       return x'
+    do v <- modifyMVar (cacheObjects c) findEntry
+       modifyMVar v readObject
+  where
+    -- Find the cache entry, inserting a new one if neccessary.
+    findEntry objs = case Map.lookup file objs of
+                       Just v -> return (objs,v)
+                       Nothing -> do v <- newMVar Nothing
+                                     return (Map.insert file v objs, v)
+    -- Check time stamp, and reload if different than the cache entry
+    readObject m = do t' <- getModificationTime file
+                      x' <- case m of
+                        Just (t,x) | t' == t -> return x
+                        _                    -> cacheLoad c file
+                      return (Just (t',x'), x')
