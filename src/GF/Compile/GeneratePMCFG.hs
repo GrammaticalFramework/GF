@@ -162,7 +162,10 @@ convertArg (C max) nr path lbl_path lin lins = do
 convertArg (S _) nr path lbl_path lin lins = do
   (_, args) <- readState
   let PFCat _ cat rcs tcs = args !! nr
-  return ((lbl_path, FSymCat nr (index path rcs 0) : lin) : lins)
+      l = index path rcs 0
+      sym | isLiteralCat cat = FSymLit nr l
+          | otherwise        = FSymCat nr l
+  return ((lbl_path, sym : lin) : lins)
   where
     index lbl' (lbl:lbls) idx
       | lbl' == lbl = idx
@@ -257,7 +260,7 @@ expandHOAS abs_defs cnc_defs lincats env =
     add_hoFun env (n,cat) =
       let linRec = reverse $
                    [(l ,[FSymCat 0 i]) | (l,i) <- case arg of {PFCat _ _ rcs _ -> zip rcs [0..]}] ++
-                   [([],[FSymCat i 0]) | i <- [1..n]]
+                   [([],[FSymLit i 0]) | i <- [1..n]]
           (env1,lins) = List.mapAccumL addFSeq env linRec
           newLinRec = mkArray lins
 	  
@@ -274,7 +277,7 @@ expandHOAS abs_defs cnc_defs lincats env =
 
     -- add one PMCFG function for each high-order category: _V : Var -> Cat
     add_varFun env cat =
-      let (env1,seqid) = addFSeq env ([],[FSymCat 0 0])
+      let (env1,seqid) = addFSeq env ([],[FSymLit 0 0])
           lins         = replicate (case res of {PFCat _ _ rcs _ -> length rcs}) seqid
           (env2,funid) = addFFun env1 (FFun _V [[0]] (mkArray lins))
           env3         = foldl (\env res -> addProduction env2 res (FApply funid [fcatVar]))
