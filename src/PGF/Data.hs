@@ -70,6 +70,7 @@ type FIndex    = Int
 type FPointPos = Int
 data FSymbol
   = FSymCat {-# UNPACK #-} !Int {-# UNPACK #-} !FIndex
+  | FSymLit {-# UNPACK #-} !Int {-# UNPACK #-} !FIndex
   | FSymTok Tokn
   deriving (Eq,Ord,Show)
 type Profile = [Int]

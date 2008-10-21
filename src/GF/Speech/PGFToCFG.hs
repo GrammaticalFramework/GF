@@ -85,17 +85,24 @@ pgfToCFG pgf lang = mkCFG (prCId (lookStartCat pgf)) extCats (startRules ++ conc
         mkRhs = map fsymbolToSymbol . Array.elems
 
         containsLiterals :: Array FPointPos FSymbol -> Bool
-        containsLiterals row = any isLiteralFCat [args!!n | FSymCat n _ <- Array.elems row]
+        containsLiterals row = any isLiteralFCat [args!!n | FSymCat n _ <- Array.elems row] ||
+                               not (null [n | FSymLit n _ <- Array.elems row])   -- only this is needed for PMCFG.
+                                                                                 -- The first line is for backward compat.
 
         fsymbolToSymbol :: FSymbol -> CFSymbol
         fsymbolToSymbol (FSymCat n l)    = NonTerminal (fcatToCat (args!!n) l)
+        fsymbolToSymbol (FSymLit n l)    = NonTerminal (fcatToCat (args!!n) l)
         fsymbolToSymbol (FSymTok (KS t)) = Terminal t
 
         fixProfile :: Array FPointPos FSymbol -> Profile -> Profile
         fixProfile row = concatMap positions
             where
-              nts = zip [0..] [nt | nt@(FSymCat _ _) <- Array.elems row]
-              positions i = [k | (k,FSymCat j _) <- nts, j == i]
+              nts = zip [0..] [j | nt <- Array.elems row, j <- getPos nt]
+              positions i = [k | (k,j) <- nts, j == i]
+              
+              getPos (FSymCat j _) = [j]
+              getPos (FSymLit j _) = [j]
+              getPos _             = []
 
         profilesToTerm :: [Profile] -> CFTerm
         profilesToTerm ps = CFObj f (zipWith profileToTerm argTypes ps)

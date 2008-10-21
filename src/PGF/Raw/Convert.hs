@@ -102,7 +102,8 @@ toPInfo [App "functions" fs, App "sequences" ss, App "productions" ps,App "categ
         toProduction (App "C" [fcat])        = FCoerce (expToInt fcat)
 
 toSymbol :: RExp -> FSymbol
-toSymbol (App "P" [n,l]) = FSymCat (expToInt n) (expToInt l)
+toSymbol (App "P"  [n,l]) = FSymCat (expToInt n) (expToInt l)
+toSymbol (App "PL" [n,l]) = FSymLit (expToInt n) (expToInt l)
 toSymbol (App "KP" (d:alts)) = FSymTok (toKP d alts)
 toSymbol (AStr t) = FSymTok (KS t)
 
@@ -239,7 +240,8 @@ fromFFun (FFun fun prof lins) = App (prCId fun) [App "P" (map fromProfile prof),
     daughter n = App "_A" [intToExp n]
 
 fromSymbol :: FSymbol -> RExp
-fromSymbol (FSymCat n l) = App "P" [intToExp n, intToExp l]
+fromSymbol (FSymCat n l) = App "P"  [intToExp n, intToExp l]
+fromSymbol (FSymLit n l) = App "PL" [intToExp n, intToExp l]
 fromSymbol (FSymTok t)   = fromTokn t
 
 fromFSeq :: FSeq -> RExp

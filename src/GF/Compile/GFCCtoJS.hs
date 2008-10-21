@@ -128,6 +128,7 @@ lins2js p ls = JS.EArray [JS.EArray [sym2js s | s <- Array.elems (sequences p Ar
 
 sym2js :: FSymbol -> JS.Expr
 sym2js (FSymCat n l) = new "ArgProj" [JS.EInt n, JS.EInt l]
+sym2js (FSymLit n l) = new "ArgProj" [JS.EInt n, JS.EInt l]
 sym2js (FSymTok (KS t)) = new "Terminal" [JS.EStr t]
 
 new :: String -> [JS.Expr] -> JS.Expr
