@@ -3,7 +3,7 @@
       <!-- Inherit the core Web Toolkit stuff.                        -->
       <inherits name="com.google.gwt.user.User" />
 
-      <inherits name="se.chalmers.cs.gf.gwt.Translate" />
+      <inherits name="se.chalmers.cs.gf.gwt.PGF" />
 
       <!-- Inherit the default GWT style sheet.  You can change       -->
       <!-- the theme of your GWT application by uncommenting          -->

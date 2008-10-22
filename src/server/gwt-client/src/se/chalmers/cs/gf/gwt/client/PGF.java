@@ -15,12 +15,12 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.ArrayList;
 
-public class GF {
+public class PGF {
 
     private String baseURL;
     private String pgfName;
 
-    public GF (String baseURL, String pgfName) {
+    public PGF (String baseURL, String pgfName) {
 	this.baseURL = baseURL;
 	this.pgfName = pgfName;
     }
@@ -58,7 +58,7 @@ public class GF {
 
     /* Grammar */
 
-    public GFRequest grammar (final GrammarCallback callback) {
+    public PGFRequest grammar (final GrammarCallback callback) {
 	return sendRequest("grammar", null, callback);
     }
 
@@ -94,7 +94,7 @@ public class GF {
 
     /* Translation */
 
-    public GFRequest translate (String input, List<String> fromLangs, String cat, List<String> toLangs, 
+    public PGFRequest translate (String input, List<String> fromLangs, String cat, List<String> toLangs, 
 			   final TranslateCallback callback) {
 	List<Arg> args = new ArrayList<Arg>();
 	args.add(new Arg("input", input));
@@ -128,7 +128,7 @@ public class GF {
 
     /* Completion */
     
-    public GFRequest complete (String input, List<String> fromLangs, String cat, int limit, final CompleteCallback callback) {
+    public PGFRequest complete (String input, List<String> fromLangs, String cat, int limit, final CompleteCallback callback) {
 	List<Arg> args = new ArrayList<Arg>();
 	args.add(new Arg("input", input));
 	if (fromLangs != null) {
@@ -156,7 +156,7 @@ public class GF {
 
     /* Utilities */
 
-    private <T extends JavaScriptObject> GFRequest sendRequest (String resource, List<Arg> vars, final GFCallback<T> callback) {
+    private <T extends JavaScriptObject> PGFRequest sendRequest (String resource, List<Arg> vars, final GFCallback<T> callback) {
 	String url = baseURL + "/" + pgfName + "/" + resource + "?" + buildQueryString(vars);
 	RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, url);
 	builder.setTimeoutMillis(30000);
@@ -182,7 +182,7 @@ public class GF {
 	    callback.onError(e);
 	}
 
-	return new GFRequest(request);
+	return new PGFRequest(request);
     }
 
     private static native JavaScriptObject eval(String json) /*-{ 

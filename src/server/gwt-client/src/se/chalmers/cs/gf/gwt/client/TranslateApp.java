@@ -30,14 +30,14 @@ import java.util.Set;
 
 public class TranslateApp implements EntryPoint {
 
-    private static final String gfBaseURL = "/pgf";
+    private static final String pgfBaseURL = "/pgf";
     private static final String pgfName = "grammar.pgf";
 
-    private GF gf;
+    private PGF pgf;
 
     private CompletionOracle oracle;
     private SuggestBox suggest;
-    private GF.Grammar grammar;
+    private PGF.Grammar grammar;
     private ListBox fromLangBox;
     private ListBox toLangBox;
     private Button translateButton;
@@ -48,7 +48,7 @@ public class TranslateApp implements EntryPoint {
     private void addTranslation(String text, String toLang) {
 	Label l = new Label(text);
 	l.addStyleName("my-translation");
-	GF.Language lang = grammar.getLanguage(toLang);
+	PGF.Language lang = grammar.getLanguage(toLang);
 	if (lang != null) {
 	    l.getElement().setLang(lang.getLanguageCode());
 	}
@@ -58,10 +58,10 @@ public class TranslateApp implements EntryPoint {
     private void translate() {
 	outputPanel.clear();
 	setStatus("Translating...");
-	gf.translate(suggest.getText(), listBoxSelection(fromLangBox), null, 
-		     listBoxSelection(toLangBox), new GF.TranslateCallback() {
-		public void onResult (GF.Translations translations) {
-		    for (GF.Translation t : translations.iterable()) {
+	pgf.translate(suggest.getText(), listBoxSelection(fromLangBox), null, 
+		     listBoxSelection(toLangBox), new PGF.TranslateCallback() {
+		public void onResult (PGF.Translations translations) {
+		    for (PGF.Translation t : translations.iterable()) {
 			addTranslation(t.getText(), t.getTo());
 		    }
 		    clearStatus();
@@ -101,10 +101,10 @@ public class TranslateApp implements EntryPoint {
 	statusPopup.hide();
     }
 
-    private void setGrammar(GF.Grammar grammar) {
+    private void setGrammar(PGF.Grammar grammar) {
 	this.grammar = grammar;
 
-	for (GF.Language l : grammar.getLanguages().iterable()) {
+	for (PGF.Language l : grammar.getLanguages().iterable()) {
 	    String name = l.getName();
 	    if (l.canParse()) {
 		fromLangBox.addItem(name);
@@ -124,7 +124,7 @@ public class TranslateApp implements EntryPoint {
 
     private void createTranslationUI() {
 
-	oracle = new CompletionOracle(gf, new CompletionOracle.ErrorHandler() {
+	oracle = new CompletionOracle(pgf, new CompletionOracle.ErrorHandler() {
 		public void onError(Throwable e) {
 		    showError("Completion failed", e);
 		}
@@ -196,12 +196,12 @@ public class TranslateApp implements EntryPoint {
 	statusPopup.add(statusLabel);
 	statusPopup.center();
 
-	gf = new GF(gfBaseURL, pgfName);
+	pgf = new PGF(pgfBaseURL, pgfName);
 
 	createTranslationUI();
 
-	gf.grammar(new GF.GrammarCallback() {
-		public void onResult(GF.Grammar grammar) {
+	pgf.grammar(new PGF.GrammarCallback() {
+		public void onResult(PGF.Grammar grammar) {
 		    setGrammar(grammar);
 		}
 

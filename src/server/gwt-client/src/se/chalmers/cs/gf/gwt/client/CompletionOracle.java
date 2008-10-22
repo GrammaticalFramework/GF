@@ -8,21 +8,21 @@ import java.util.*;
 
 public class CompletionOracle extends SuggestOracle {
 
-    private GF gf;
+    private PGF pgf;
 
     private ErrorHandler errorHandler;
 
     private List<String> inputLangs = null;
 
-    private GFRequest gfRequest = null;
+    private PGFRequest pgfRequest = null;
 
 
-    public CompletionOracle (GF gf) {
-	this(gf, null);
+    public CompletionOracle (PGF pgf) {
+	this(pgf, null);
     }
 
-    public CompletionOracle (GF gf, ErrorHandler errorHandler) {
-	this.gf = gf;
+    public CompletionOracle (PGF pgf, ErrorHandler errorHandler) {
+	this.pgf = pgf;
 	this.errorHandler = errorHandler;
     }
 
@@ -60,12 +60,12 @@ public class CompletionOracle extends SuggestOracle {
     public void requestSuggestions(final SuggestOracle.Request request, final SuggestOracle.Callback callback) {
 
 	// only allow a single completion request at a time
-	if (gfRequest != null)
-	    gfRequest.cancel();
+	if (pgfRequest != null)
+	    pgfRequest.cancel();
 
-	gfRequest = gf.complete(request.getQuery(), getInputLangs(), null, request.getLimit(), 
-		    new GF.CompleteCallback() {
-			public void onResult(GF.Completions completions) {
+	pgfRequest = pgf.complete(request.getQuery(), getInputLangs(), null, request.getLimit(), 
+		    new PGF.CompleteCallback() {
+			public void onResult(PGF.Completions completions) {
 			    Collection<CompletionSuggestion> suggestions = new ArrayList<CompletionSuggestion>();
 			    for (int i = 0; i < completions.length(); i++) {
 				String text = completions.get(i).getText();
