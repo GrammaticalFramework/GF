@@ -1,4 +1,4 @@
-package se.chalmers.cs.gf.gwt_translate.client;
+package se.chalmers.cs.gf.gwt.client;
 
 import com.google.gwt.http.client.*;
 import com.google.gwt.core.client.GWT;
