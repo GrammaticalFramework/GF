@@ -232,7 +232,12 @@ wordCompletion gfenv line0 prefix0 p =
     pgf    = multigrammar cmdEnv
     cmdEnv = commandenv gfenv
     optLang opts = valCIdOpts "lang" (head (languages pgf)) opts
-    optType opts = DTyp [] (mkCId (valStrOpts "type" (prCId $ lookStartCat pgf) opts)) []
+    optType opts = 
+      let str = valStrOpts "cat" (prCId $ lookStartCat pgf) opts
+      in case readType str of
+           Just ty -> ty
+           Nothing -> error ("Can't parse '"++str++"' as type")
+
     
     ret c [x] = return [x++[c]]
     ret _ xs  = return xs
