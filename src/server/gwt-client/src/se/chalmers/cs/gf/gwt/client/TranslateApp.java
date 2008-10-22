@@ -1,4 +1,4 @@
-package se.chalmers.cs.gf.gwt_translate.client;
+package se.chalmers.cs.gf.gwt.client;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.ui.Button;
@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public class Translate implements EntryPoint {
+public class TranslateApp implements EntryPoint {
 
     private static final String gfBaseURL = "/pgf";
     private static final String pgfName = "grammar.pgf";

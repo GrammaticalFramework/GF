@@ -1,6 +1,6 @@
 GFCFLAGS = +RTS -K100M -RTS --cpu
 
-.PHONY: pgf.fcgi run
+.PHONY: pgf.fcgi run gf-gwt.jar
 
 pgf.fcgi: 
 	cabal install
@@ -35,7 +35,7 @@ test.pgf: LangEng-parse.pgf LangGer-parse.pgf
 
 run: pgf.fcgi
 	@echo '*********************************************'
-	@echo 'See http://localhost:41296/gwt-client/www/se.chalmers.cs.gf.gwt_translate.Translate/Translate.html'
+	@echo 'See http://localhost:41296/gwt-client/www/se.chalmers.cs.gf.gwt.TranslateApp/Translate.html'
 	@echo '*********************************************'
 	lighttpd -f lighttpd.conf -D
 
@@ -46,6 +46,9 @@ gwt-installball: pgf.fcgi gwt
 	cp -pr gwt-client/www/se.chalmers.cs.gf.gwt_translate.Translate/* tmp/gwt-client
 	mv tmp/gwt-client/Translate.html tmp/gwt-client/index.html
 	(cd tmp && tar -zcf ../gwt-client-installball.tar.gz gwt-client)
+
+gf-gwt.jar:
+	jar -cf $@ -C gwt-client/src se
 
 clean:
 	cabal clean
