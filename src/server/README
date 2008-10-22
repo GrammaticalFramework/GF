@@ -6,6 +6,7 @@
 
 - FastCGI development kit
     (MacPorts)   $ sudo port install fcgi
+    (Ubuntu)      $ sudo apt-get install libfcgi-dev
 
 - GF installed as a Cabal package
    $ (cd ../.. && cabal install)
@@ -25,6 +26,7 @@
 
 - Install lighttpd
   (MacPorts)   $ sudo port install lighttpd
+  (Ubuntu)      $ sudo apt-get install lighttpd
 
 - Run lighttpd:
   $ make run
