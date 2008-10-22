@@ -1,13 +1,17 @@
 GFCFLAGS = +RTS -K100M -RTS --cpu
 
-.PHONY: pgf.fcgi run gf-gwt.jar
+.PHONY: pgf.fcgi run gwt gf-gwt.jar
 
 pgf.fcgi: 
 	cabal install
 	cp dist/build/pgf.fcgi/pgf.fcgi .
 
 gwt:
-	gwt-client/Translate-compile
+	gwt/Translate-compile
+
+gf-gwt.jar: gwt
+	jar -cf $@ -C gwt/src se
+	cp $@ ../../lib/java
 
 food.pgf:
 	gfc --make --name=food ../../examples/tutorial/food/Food{Eng,Ita}.gf
@@ -35,20 +39,9 @@ test.pgf: LangEng-parse.pgf LangGer-parse.pgf
 
 run: pgf.fcgi
 	@echo '*********************************************'
-	@echo 'See http://localhost:41296/gwt-client/www/se.chalmers.cs.gf.gwt.TranslateApp/Translate.html'
+	@echo 'See http://localhost:41296/gwt/www/se.chalmers.cs.gf.gwt.TranslateApp/Translate.html'
 	@echo '*********************************************'
 	lighttpd -f lighttpd.conf -D
-
-gwt-installball: pgf.fcgi gwt
-	rm -rf tmp/gwt-client
-	rm -f gf-server-installball.tar.gz
-	mkdir -p tmp/gwt-client
-	cp -pr gwt-client/www/se.chalmers.cs.gf.gwt_translate.Translate/* tmp/gwt-client
-	mv tmp/gwt-client/Translate.html tmp/gwt-client/index.html
-	(cd tmp && tar -zcf ../gwt-client-installball.tar.gz gwt-client)
-
-gf-gwt.jar:
-	jar -cf $@ -C gwt-client/src se
 
 clean:
 	cabal clean

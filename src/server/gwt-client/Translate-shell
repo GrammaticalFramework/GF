@@ -1,4 +1,0 @@
-#!/bin/sh
-APPDIR=`dirname $0`;
-GWT_DIR="/Users/bringert/src/gwt-mac-1.5.2";
-java -XstartOnFirstThread -Xmx256M -cp "$APPDIR/src:$APPDIR/bin:$GWT_DIR/gwt-user.jar:$GWT_DIR/gwt-dev-mac.jar" com.google.gwt.dev.GWTShell -out "$APPDIR/www" "$@" se.chalmers.cs.gf.gwt.TranslateApp/Translate.html;
