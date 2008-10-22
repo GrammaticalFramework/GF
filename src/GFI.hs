@@ -271,10 +271,14 @@ wc_type = cmd_name
       | isIdent c  = ident x (c:cs) cs
       | otherwise  = cmd x cs
 
-    option x y []     = ret CmplOpt x y 1
-    option x y (c:cs)
-      | isIdent c     = option x y cs
-      | otherwise     = cmd x cs
+    option x y []       = ret CmplOpt x y 1
+    option x y ('=':cs) = optValue x y cs
+    option x y (c  :cs)
+      | isIdent c       = option x y cs
+      | otherwise       = cmd x cs
+      
+    optValue x y ('"':cs) = str x y cs
+    optValue x y cs       = cmd x cs
 
     ident x y []     = ret CmplIdent x y 0
     ident x y (c:cs)
@@ -289,7 +293,7 @@ wc_type = cmd_name
     ret f x y d = f cmd y
       where
         x1 = take (length x - length y - d) x
-        x2 = takeWhile (\c -> isIdent c || isSpace c || c == '-' || c == '=') x1
+        x2 = takeWhile (\c -> isIdent c || isSpace c || c == '-' || c == '=' || c == '"') x1
         
         cmd = case [x | (x,cs) <- RP.readP_to_S pCommand x2, all isSpace cs] of
 	        [x] -> Just x
