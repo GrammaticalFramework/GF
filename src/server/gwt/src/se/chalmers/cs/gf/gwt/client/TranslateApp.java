@@ -38,8 +38,8 @@ public class TranslateApp implements EntryPoint {
     private CompletionOracle oracle;
     private SuggestBox suggest;
     private PGF.Grammar grammar;
-    private ListBox fromLangBox;
-    private ListBox toLangBox;
+    private InputLanguageBox fromLangBox;
+    private OutputLanguageBox toLangBox;
     private Button translateButton;
     private VerticalPanel outputPanel;
     private PopupPanel statusPopup;
@@ -58,8 +58,8 @@ public class TranslateApp implements EntryPoint {
     private void translate() {
 	outputPanel.clear();
 	setStatus("Translating...");
-	pgf.translate(suggest.getText(), listBoxSelection(fromLangBox), null, 
-		     listBoxSelection(toLangBox), new PGF.TranslateCallback() {
+	pgf.translate(suggest.getText(), fromLangBox.getSelectedValues(), null, 
+		     fromLangBox.getSelectedValues(), new PGF.TranslateCallback() {
 		public void onResult (PGF.Translations translations) {
 		    for (PGF.Translation t : translations.iterable()) {
 			addTranslation(t.getText(), t.getTo());
@@ -73,18 +73,7 @@ public class TranslateApp implements EntryPoint {
     }
 
     private void updateLangs() {
-	oracle.setInputLangs(listBoxSelection(fromLangBox));
-    }
-
-    private List<String> listBoxSelection(ListBox box) {
-	int c = box.getItemCount();
-	List<String> l = new ArrayList<String>();
-	for (int i = 0; i < c; i++) {
-	    if (box.isItemSelected(i)) {
-		l.add(box.getValue(i));
-	    }
-	}
-	return l;
+	oracle.setInputLangs(fromLangBox.getSelectedValues());
     }
 
     private void setStatus(String msg) {
@@ -104,21 +93,11 @@ public class TranslateApp implements EntryPoint {
     private void setGrammar(PGF.Grammar grammar) {
 	this.grammar = grammar;
 
-	for (PGF.Language l : grammar.getLanguages().iterable()) {
-	    String name = l.getName();
-	    if (l.canParse()) {
-		fromLangBox.addItem(name);
-		if (name.equals(grammar.getUserLanguage())) {
-		    fromLangBox.setSelectedIndex(fromLangBox.getItemCount()-1);
-		}
-	    }
-	    toLangBox.addItem(name);
-	}
+	fromLangBox.setGrammar(grammar);
+	toLangBox.setGrammar(grammar);
 
 	updateLangs();
 	clearStatus();
-	fromLangBox.setEnabled(true);
-	toLangBox.setEnabled(true);
 	translateButton.setEnabled(true);
     }
 
@@ -139,8 +118,7 @@ public class TranslateApp implements EntryPoint {
 		}
 	    });
 
-	fromLangBox = new ListBox();
-	fromLangBox.setEnabled(false);
+	fromLangBox = new InputLanguageBox();
 	fromLangBox.addItem("Any language", "");
 	fromLangBox.addChangeListener(new ChangeListener() {
 		public void onChange(Widget sender) {
@@ -149,8 +127,7 @@ public class TranslateApp implements EntryPoint {
 		}
 	    });
 
-	toLangBox = new ListBox();
-	toLangBox.setEnabled(false);
+	toLangBox = new OutputLanguageBox();
 	toLangBox.addItem("All languages", "");
 	toLangBox.addChangeListener(new ChangeListener() {
 		public void onChange(Widget sender) {
