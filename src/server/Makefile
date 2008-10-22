@@ -9,7 +9,7 @@ pgf.fcgi:
 gwt:
 	gwt/Translate-compile
 
-gf-gwt.jar: gwt
+gf-gwt.jar:
 	jar -cf $@ -C gwt/src se
 	cp $@ ../../lib/java
 
