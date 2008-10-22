@@ -154,6 +154,33 @@ public class PGF {
         public final native String getText() /*-{ return this.text; }-*/;
     }
 
+    /* Parsing */
+    
+    public PGFRequest parse (String input, List<String> fromLangs, String cat, final ParseCallback callback) {
+	List<Arg> args = new ArrayList<Arg>();
+	args.add(new Arg("input", input));
+	if (fromLangs != null) {
+	    for (String from : fromLangs) {
+		args.add(new Arg("from", from));
+	    }
+	}
+	args.add(new Arg("cat", cat));
+        return sendRequest("parse", args, callback);
+    }
+
+    public interface ParseCallback extends GFCallback<ParseResults> { }
+
+    public static class ParseResults extends IterableJsArray<ParseResult> {
+	protected ParseResults() { }
+    }
+
+    public static class ParseResult extends JavaScriptObject {
+	protected ParseResult() { }
+
+        public final native String getFrom() /*-{ return this.from; }-*/;
+        public final native String getTree() /*-{ return this.tree; }-*/;
+    }
+
     /* Utilities */
 
     private <T extends JavaScriptObject> PGFRequest sendRequest (String resource, List<Arg> vars, final GFCallback<T> callback) {
