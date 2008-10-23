@@ -1,248 +1,149 @@
 package se.chalmers.cs.gf.gwt.client;
 
-import com.google.gwt.http.client.*;
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.core.client.JsArray;
 import com.google.gwt.core.client.JavaScriptObject;
 
-import com.google.gwt.json.client.JSONValue;
-import com.google.gwt.json.client.JSONObject;
-import com.google.gwt.json.client.JSONParser;
-
-import java.util.Set;
-import java.util.Iterator;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.ArrayList;
 
 public class PGF {
 
-    private String baseURL;
-    private String pgfName;
+	private String baseURL;
+	private String pgfName;
 
-    public PGF (String baseURL, String pgfName) {
-	this.baseURL = baseURL;
-	this.pgfName = pgfName;
-    }
+	public PGF (String baseURL, String pgfName) {
+		this.baseURL = baseURL;
+		this.pgfName = pgfName;
+	}
 
-    public static interface GFCallback<T extends JavaScriptObject> {
-	public void onResult (T result) ;
-	public void onError (Throwable e) ;
-    }
+	/* Grammar */
 
-    public static class IterableJsArray<T extends JavaScriptObject> extends JsArray<T> {
-	protected IterableJsArray() {}
+	public JSONRequest grammar (final GrammarCallback callback) {
+		return sendRequest("grammar", null, callback);
+	}
 
-	public final Iterable<T> iterable() {
-	    return new Iterable<T>() {
-		public Iterator<T> iterator() {
-		    return new Iterator<T>() {
-			private int i = 0;
-			public boolean hasNext() { 
-			    return i < length(); 
+	public interface GrammarCallback extends JSONCallback<Grammar> { }
+
+	public static class Grammar extends JavaScriptObject {
+		protected Grammar() { }
+
+		public final native String getName() /*-{ return this.name; }-*/;
+
+		public final native String getUserLanguage() /*-{ return this.userLanguage; }-*/;
+
+		public final native IterableJsArray<Language> getLanguages() /*-{ return this.languages; }-*/;
+
+		public final Language getLanguage(String name) {
+			int c = getLanguages().length();
+			for (int i = 0; i < c; i++) {
+				Language l = getLanguages().get(i);
+				if (l.getName().equals(name))
+					return l;
 			}
-			public T next() { 
-			    if (!hasNext()) { 
-				throw new NoSuchElementException(); 
-			    }
-			    return get(i++); 
-			}
-			public void remove() { 
-			    throw new UnsupportedOperationException(); 
-			}
-		    };
+			return null;
 		}
-	    };
 	}
-    }
 
-    /* Grammar */
+	public static class Language extends JavaScriptObject {
+		protected Language() { }
 
-    public PGFRequest grammar (final GrammarCallback callback) {
-	return sendRequest("grammar", null, callback);
-    }
-
-    public interface GrammarCallback extends GFCallback<Grammar> { }
-
-    public static class Grammar extends JavaScriptObject {
-	protected Grammar() { }
-
-	public final native String getName() /*-{ return this.name; }-*/;
-
-	public final native String getUserLanguage() /*-{ return this.userLanguage; }-*/;
-
-	public final native IterableJsArray<Language> getLanguages() /*-{ return this.languages; }-*/;
-
-	public final Language getLanguage(String name) {
-	    int c = getLanguages().length();
-	    for (int i = 0; i < c; i++) {
-		Language l = getLanguages().get(i);
-		if (l.getName().equals(name))
-		    return l;
-	    }
-	    return null;
+		public final native String getName() /*-{ return this.name; }-*/;
+		public final native String getLanguageCode() /*-{ return this.languageCode; }-*/;
+		public final native boolean canParse() /*-{ return this.canParse; }-*/;
 	}
-    }
 
-    public static class Language extends JavaScriptObject {
-	protected Language() { }
+	/* Translation */
 
-        public final native String getName() /*-{ return this.name; }-*/;
-        public final native String getLanguageCode() /*-{ return this.languageCode; }-*/;
-        public final native boolean canParse() /*-{ return this.canParse; }-*/;
-    }
-
-    /* Translation */
-
-    public PGFRequest translate (String input, List<String> fromLangs, String cat, List<String> toLangs, 
-			   final TranslateCallback callback) {
-	List<Arg> args = new ArrayList<Arg>();
-	args.add(new Arg("input", input));
-	if (fromLangs != null) {
-	    for (String from : fromLangs) {
-		args.add(new Arg("from", from));
-	    }
-	}
-	args.add(new Arg("cat", cat));
-	if (toLangs != null) {
-	    for (String to : toLangs) {
-		args.add(new Arg("to", to));
-	    }
-	}
-	return sendRequest("translate", args, callback);
-    }
-
-    public interface TranslateCallback extends GFCallback<Translations> {  }
-
-    public static class Translations extends IterableJsArray<Translation> {
-	protected Translations() { }
-    }
-
-    public static class Translation extends JavaScriptObject {
-	protected Translation() { }
-
-        public final native String getFrom() /*-{ return this.from; }-*/;
-        public final native String getTo() /*-{ return this.to; }-*/;
-        public final native String getText() /*-{ return this.text; }-*/;
-    }
-
-    /* Completion */
-    
-    public PGFRequest complete (String input, List<String> fromLangs, String cat, int limit, final CompleteCallback callback) {
-	List<Arg> args = new ArrayList<Arg>();
-	args.add(new Arg("input", input));
-	if (fromLangs != null) {
-	    for (String from : fromLangs) {
-		args.add(new Arg("from", from));
-	    }
-	}
-	args.add(new Arg("cat", cat));
-	args.add(new Arg("limit", limit));
-        return sendRequest("complete", args, callback);
-    }
-
-    public interface CompleteCallback extends GFCallback<Completions> { }
-
-    public static class Completions extends IterableJsArray<Translation> {
-	protected Completions() { }
-    }
-
-    public static class Completion extends JavaScriptObject {
-	protected Completion() { }
-
-        public final native String getFrom() /*-{ return this.from; }-*/;
-        public final native String getText() /*-{ return this.text; }-*/;
-    }
-
-    /* Parsing */
-    
-    public PGFRequest parse (String input, List<String> fromLangs, String cat, final ParseCallback callback) {
-	List<Arg> args = new ArrayList<Arg>();
-	args.add(new Arg("input", input));
-	if (fromLangs != null) {
-	    for (String from : fromLangs) {
-		args.add(new Arg("from", from));
-	    }
-	}
-	args.add(new Arg("cat", cat));
-        return sendRequest("parse", args, callback);
-    }
-
-    public interface ParseCallback extends GFCallback<ParseResults> { }
-
-    public static class ParseResults extends IterableJsArray<ParseResult> {
-	protected ParseResults() { }
-    }
-
-    public static class ParseResult extends JavaScriptObject {
-	protected ParseResult() { }
-
-        public final native String getFrom() /*-{ return this.from; }-*/;
-        public final native String getTree() /*-{ return this.tree; }-*/;
-    }
-
-    /* Utilities */
-
-    private <T extends JavaScriptObject> PGFRequest sendRequest (String resource, List<Arg> vars, final GFCallback<T> callback) {
-	String url = baseURL + "/" + pgfName + "/" + resource + "?" + buildQueryString(vars);
-	RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, url);
-	builder.setTimeoutMillis(30000);
-	builder.setHeader("Accept","text/plain, text/html;q=0.5, */*;q=0.1");
-	Request request = null;
-
-	try {
-	    request = builder.sendRequest(null, new RequestCallback() {
-		    public void onError(Request request, Throwable e) {
-			callback.onError(e);
-		    }
-		    
-		    public void onResponseReceived(Request request, Response response) {
-			if (200 == response.getStatusCode()) {
-			    callback.onResult((T)eval(response.getText()).cast());
-			} else {
-			    RequestException e = new RequestException("Response not OK: " + response.getStatusCode() + ". " + response.getText());
-			    callback.onError(e);
+	public JSONRequest translate (String input, List<String> fromLangs, String cat, List<String> toLangs, 
+			final TranslateCallback callback) {
+		List<Arg> args = new ArrayList<Arg>();
+		args.add(new Arg("input", input));
+		if (fromLangs != null) {
+			for (String from : fromLangs) {
+				args.add(new Arg("from", from));
 			}
-		    }
-		});
-	} catch (RequestException e) {
-	    callback.onError(e);
-	}
-
-	return new PGFRequest(request);
-    }
-
-    private static native JavaScriptObject eval(String json) /*-{ 
-        return eval('(' + json + ')');
-    }-*/;
-
-    private static class Arg {
-	public final String name;
-	public final String value;
-	public Arg (String name, String value) {
-	    this.name = name;
-	    this.value = value;
-	}
-	public Arg (String name, int value) {
-	    this(name, Integer.toString(value));
-	}
-    }
-
-    private static String buildQueryString(List<Arg> args) {
-	StringBuffer sb = new StringBuffer();
-	if (args != null) {
-	    for (Arg arg : args) {
-		if (arg.value != null) {
-		    if (sb.length() > 0) {
-			sb.append("&");
-		    }
-		    sb.append(URL.encodeComponent(arg.name));
-		    sb.append("=");
-		    sb.append(URL.encodeComponent(arg.value));
 		}
-	    }
+		args.add(new Arg("cat", cat));
+		if (toLangs != null) {
+			for (String to : toLangs) {
+				args.add(new Arg("to", to));
+			}
+		}
+		return sendRequest("translate", args, callback);
 	}
-	return sb.toString();
-    }
+
+	public interface TranslateCallback extends JSONCallback<Translations> {  }
+
+	public static class Translations extends IterableJsArray<Translation> {
+		protected Translations() { }
+	}
+
+	public static class Translation extends JavaScriptObject {
+		protected Translation() { }
+
+		public final native String getFrom() /*-{ return this.from; }-*/;
+		public final native String getTo() /*-{ return this.to; }-*/;
+		public final native String getText() /*-{ return this.text; }-*/;
+	}
+
+	/* Completion */
+
+	public JSONRequest complete (String input, List<String> fromLangs, String cat, int limit, final CompleteCallback callback) {
+		List<Arg> args = new ArrayList<Arg>();
+		args.add(new Arg("input", input));
+		if (fromLangs != null) {
+			for (String from : fromLangs) {
+				args.add(new Arg("from", from));
+			}
+		}
+		args.add(new Arg("cat", cat));
+		args.add(new Arg("limit", limit));
+		return sendRequest("complete", args, callback);
+	}
+
+	public interface CompleteCallback extends JSONCallback<Completions> { }
+
+	public static class Completions extends IterableJsArray<Translation> {
+		protected Completions() { }
+	}
+
+	public static class Completion extends JavaScriptObject {
+		protected Completion() { }
+
+		public final native String getFrom() /*-{ return this.from; }-*/;
+		public final native String getText() /*-{ return this.text; }-*/;
+	}
+
+	/* Parsing */
+
+	public JSONRequest parse (String input, List<String> fromLangs, String cat, final ParseCallback callback) {
+		List<Arg> args = new ArrayList<Arg>();
+		args.add(new Arg("input", input));
+		if (fromLangs != null) {
+			for (String from : fromLangs) {
+				args.add(new Arg("from", from));
+			}
+		}
+		args.add(new Arg("cat", cat));
+		return sendRequest("parse", args, callback);
+	}
+
+	public interface ParseCallback extends JSONCallback<ParseResults> { }
+
+	public static class ParseResults extends IterableJsArray<ParseResult> {
+		protected ParseResults() { }
+	}
+
+	public static class ParseResult extends JavaScriptObject {
+		protected ParseResult() { }
+
+		public final native String getFrom() /*-{ return this.from; }-*/;
+		public final native String getTree() /*-{ return this.tree; }-*/;
+	}
+
+	/* Common */
+
+	public <T extends JavaScriptObject> JSONRequest sendRequest(String resource, List<Arg> args, final JSONCallback<T> callback) {
+		return JSONRequestBuilder.sendRequest(baseURL + "/" + pgfName + "/" + resource, args, callback);
+	}
 
 }

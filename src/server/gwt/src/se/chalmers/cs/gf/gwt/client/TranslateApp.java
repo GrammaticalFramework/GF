@@ -4,13 +4,8 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.ClickListener;
-import com.google.gwt.user.client.ui.DockPanel;
-import com.google.gwt.user.client.ui.DialogBox;
-import com.google.gwt.user.client.ui.Grid;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SuggestBox;
@@ -20,13 +15,6 @@ import com.google.gwt.user.client.ui.KeyboardListenerAdapter;
 
 import com.google.gwt.core.client.GWT;
 
-import com.google.gwt.user.client.Window;
-
-import com.google.gwt.i18n.client.LocaleInfo;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
 
 public class TranslateApp implements EntryPoint {
 
