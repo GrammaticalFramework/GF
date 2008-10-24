@@ -12,6 +12,18 @@ import java.util.List;
 
 public class JSONRequestBuilder {
 
+	public static class Arg {
+		public final String name;
+		public final String value;
+		public Arg (String name, String value) {
+			this.name = name;
+			this.value = value;
+		}
+		public Arg (String name, int value) {
+			this(name, Integer.toString(value));
+		}
+	}
+	
 	public static <T extends JavaScriptObject> JSONRequest sendRequest (String base, List<Arg> vars, final JSONCallback<T> callback) {
 		String url = base + "?" + buildQueryString(vars);
 		RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, url);
@@ -27,7 +39,7 @@ public class JSONRequestBuilder {
 
 				public void onResponseReceived(Request request, Response response) {
 					if (200 == response.getStatusCode()) {
-						callback.onResult((T)eval(response.getText()).cast());
+						callback.onResult(JSONRequestBuilder.<T>eval(response.getText()));
 					} else {
 						RequestException e = new RequestException("Response not OK: " + response.getStatusCode() + ". " + response.getText());
 						callback.onError(e);
@@ -41,7 +53,7 @@ public class JSONRequestBuilder {
 		return new JSONRequest(request);
 	}
 
-	private static native JavaScriptObject eval(String json) /*-{ 
+	private static native <T extends JavaScriptObject> T eval(String json) /*-{ 
         return eval('(' + json + ')');
     }-*/;
 

@@ -1,5 +1,7 @@
 package se.chalmers.cs.gf.gwt.client;
 
+import static se.chalmers.cs.gf.gwt.client.JSONRequestBuilder.Arg;
+
 import com.google.gwt.core.client.JavaScriptObject;
 
 import java.util.List;
