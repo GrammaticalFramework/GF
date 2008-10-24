@@ -60,6 +60,9 @@ public class CompletionOracle extends SuggestOracle {
 		// only allow a single completion request at a time
 		if (JSONRequest != null)
 			JSONRequest.cancel();
+		
+		// hack: first report no completions, to hide suggestions until we get the new completions
+		callback.onSuggestionsReady(request, new SuggestOracle.Response(new ArrayList<CompletionSuggestion>()));
 
 		JSONRequest = pgf.complete(request.getQuery(), getInputLangs(), null, request.getLimit(), 
 				new PGF.CompleteCallback() {
