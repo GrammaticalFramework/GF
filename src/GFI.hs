@@ -1,3 +1,4 @@
+{-# OPTIONS -cpp #-}
 module GFI (mainGFI,mainRunGFI) where
 
 import GF.Command.Interpreter
@@ -29,20 +30,26 @@ import Control.Monad
 import Data.Version
 import GF.System.Signal
 --import System.IO.Error (try)
+#ifdef mingw32_HOST_OS
+import System.Win32.Console
+import System.Win32.NLS
+#endif
 
 import Paths_gf
 
 mainRunGFI :: Options -> [FilePath] -> IO ()
 mainRunGFI opts files = do
   let opts1 = addOptions (modifyFlags (\f -> f{optVerbosity=Quiet})) opts
-  gfenv <- importInEnv emptyGFEnv opts1 files
+  gfenv <- emptyGFEnv
+  gfenv <- importInEnv gfenv opts1 files
   loop opts1 gfenv
   return ()
 
 mainGFI :: Options -> [FilePath] -> IO ()
 mainGFI opts files = do
   putStrLn welcome
-  gfenv <- importInEnv emptyGFEnv opts files
+  gfenv <- emptyGFEnv
+  gfenv <- importInEnv gfenv opts files
   loop opts gfenv
   return ()
 
@@ -128,7 +135,15 @@ loop opts gfenv0 = do
 
           "ph":_ -> 
             mapM_ (putStrLn . enc) (reverse (history gfenv0)) >> loopNewCPU gfenv
-          "se":c:_ -> loopNewCPU $ gfenv {coding = c}
+          "se":c:_ -> do
+#ifdef mingw32_HOST_OS
+             case c of
+               'c':'p':c -> case reads c of
+                              [(cp,"")] -> setConsoleCP cp >> setConsoleOutputCP cp
+                              _         -> return ()
+               _         -> return ()
+#endif
+             loopNewCPU $ gfenv {coding = c}
 
   -- ordinary commands, working on CommandEnv
           _ -> do
@@ -191,8 +206,15 @@ data GFEnv = GFEnv {
   coding     :: String
   }
 
-emptyGFEnv :: GFEnv
-emptyGFEnv = GFEnv emptyGrammar (mkCommandEnv "utf8" emptyPGF) [] 0 "utf8"
+emptyGFEnv :: IO GFEnv
+emptyGFEnv = do
+#ifdef mingw32_HOST_OS
+  codepage <- getACP
+  let coding = "cp"++show codepage
+#else
+  let coding = "utf8"
+#endif
+  return $ GFEnv emptyGrammar (mkCommandEnv coding emptyPGF) [] 0 coding
 
 encode = encodeUnicode . coding 
 decode = decodeUnicode . coding
