@@ -7,7 +7,7 @@ import GF.Text.CP1252
 encodeUnicode e = case e of
   "utf8"   -> encodeUTF8
   "cp1251" -> encodeCP1251
-  "cp1252" -> decodeCP1252
+  "cp1252" -> encodeCP1252
   _        -> id
 
 decodeUnicode e = case e of
