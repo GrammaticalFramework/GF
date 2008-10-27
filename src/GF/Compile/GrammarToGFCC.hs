@@ -194,6 +194,8 @@ mkCType t = case t of
   Table pt vt -> case pt of
     EInt i -> C.R $ replicate (1 + fromInteger i) $ mkCType vt
     RecType rs -> mkCType $ foldr Table vt (map snd rs) 
+    _ | Just i <- GM.isTypeInts pt -> C.R $ replicate (fromInteger i) $ mkCType vt
+
   Sort s | s == cStr -> C.S [] --- Str only
   _ | Just i <- GM.isTypeInts t -> C.C $ fromInteger i
   _ -> error  $ "mkCType " ++ show t
