@@ -104,7 +104,7 @@ public class PGF {
 
 	public interface CompleteCallback extends JSONCallback<Completions> { }
 
-	public static class Completions extends IterableJsArray<Translation> {
+	public static class Completions extends IterableJsArray<Completion> {
 		protected Completions() { }
 	}
 
