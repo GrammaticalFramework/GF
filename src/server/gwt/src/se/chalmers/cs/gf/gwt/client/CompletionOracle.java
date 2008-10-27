@@ -1,18 +1,26 @@
 package se.chalmers.cs.gf.gwt.client;
 
-import com.google.gwt.user.client.ui.SuggestOracle;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
-import java.util.*;
+import com.google.gwt.user.client.ui.SuggestOracle;
 
 public class CompletionOracle extends SuggestOracle {
 
+	private static final int LIMIT_SCALE_FACTOR = 10;
+	
 	private PGF pgf;
 
 	private ErrorHandler errorHandler;
 
 	private List<String> inputLangs = null;
 
-	private JSONRequest JSONRequest = null;
+	private JSONRequest jsonRequest = null;
+	
+	private String oldQuery = null;
+	
+	private List<CompletionSuggestion> oldSuggestions = Collections.emptyList();
 
 
 	public CompletionOracle (PGF pgf) {
@@ -26,6 +34,8 @@ public class CompletionOracle extends SuggestOracle {
 
 	public void setInputLangs(List<String> inputLangs) {
 		this.inputLangs = inputLangs;
+		this.oldQuery = null;
+		this.oldSuggestions = Collections.emptyList();
 	}
 
 	public List<String> getInputLangs() {
@@ -55,24 +65,50 @@ public class CompletionOracle extends SuggestOracle {
 		}
 	}
 
-	public void requestSuggestions(final SuggestOracle.Request request, final SuggestOracle.Callback callback) {
+	public void requestSuggestions(SuggestOracle.Request request, SuggestOracle.Callback callback) {
 
-		// only allow a single completion request at a time
-		if (JSONRequest != null)
-			JSONRequest.cancel();
-		
+		// Only allow a single completion request at a time
+		if (jsonRequest != null)
+			jsonRequest.cancel();
+
+		List<CompletionSuggestion> suggestions = filterOldSuggestions(request);
+		if (suggestions != null) {
+			suggestionsReady(request, callback, suggestions);
+		} else {
+			retrieveSuggestions(request, callback);
+		}
+	}
+	
+	/** Filters old suggestions and checks if we still have enough suggestions. */
+	private List<CompletionSuggestion> filterOldSuggestions(SuggestOracle.Request request) {
+		List<CompletionSuggestion> suggestions = new ArrayList<CompletionSuggestion>();
+		if (oldQuery != null && request.getQuery().startsWith(oldQuery)) {
+			for (CompletionSuggestion c : oldSuggestions) {
+				if (c.getReplacementString().startsWith(request.getQuery())) {
+					suggestions.add(c);
+				}
+			}			
+			// Use filtered old suggestions, if there are enough of them,
+			// or if the old ones were already fewer than the limit.
+			if (suggestions.size() > 0 && (suggestions.size() >= request.getLimit() || oldSuggestions.size() < request.getLimit())) {
+				return suggestions;
+			}
+		}
+		return null;
+	}
+	
+	private void retrieveSuggestions(final SuggestOracle.Request request, final SuggestOracle.Callback callback) {
 		// hack: first report no completions, to hide suggestions until we get the new completions
-		callback.onSuggestionsReady(request, new SuggestOracle.Response(new ArrayList<CompletionSuggestion>()));
+		callback.onSuggestionsReady(request, new SuggestOracle.Response(Collections.<CompletionSuggestion>emptyList()));
 
-		JSONRequest = pgf.complete(request.getQuery(), getInputLangs(), null, request.getLimit(), 
+		jsonRequest = pgf.complete(request.getQuery(), getInputLangs(), null, LIMIT_SCALE_FACTOR * request.getLimit(), 
 				new PGF.CompleteCallback() {
 			public void onResult(PGF.Completions completions) {
-				Collection<CompletionSuggestion> suggestions = new ArrayList<CompletionSuggestion>();
-				for (int i = 0; i < completions.length(); i++) {
-					String text = completions.get(i).getText();
-					suggestions.add(new CompletionSuggestion(text));
+				List<CompletionSuggestion> suggestions = new ArrayList<CompletionSuggestion>();
+				for (PGF.Completion completion : completions.iterable()) {
+					suggestions.add(new CompletionSuggestion(completion.getText()));
 				}
-				callback.onSuggestionsReady(request, new SuggestOracle.Response(suggestions));
+				suggestionsReady(request, callback, suggestions);
 			}
 
 			public void onError(Throwable e) {
@@ -80,6 +116,12 @@ public class CompletionOracle extends SuggestOracle {
 			}
 
 		});
-	}    
+	}
+	
+	private void suggestionsReady(SuggestOracle.Request request, SuggestOracle.Callback callback, List<CompletionSuggestion> suggestions) {
+		this.oldQuery = request.getQuery();
+		this.oldSuggestions = suggestions;
+		callback.onSuggestionsReady(request, new SuggestOracle.Response(suggestions));
+	}
 
 }
