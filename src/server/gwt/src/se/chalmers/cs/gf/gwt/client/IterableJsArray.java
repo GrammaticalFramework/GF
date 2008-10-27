@@ -9,6 +9,10 @@ import com.google.gwt.core.client.JsArray;
 public class IterableJsArray<T extends JavaScriptObject> extends JsArray<T> {
 
 	protected IterableJsArray() {}
+	
+	public final boolean isEmpty() {
+		return length() == 0;
+	}
 
 	public final Iterable<T> iterable() {
 		return new Iterable<T>() {
