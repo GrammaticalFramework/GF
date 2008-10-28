@@ -4,7 +4,7 @@ fun
   card_N : CN ;
   water_MCN : MCN ;
   john_PN : PN ;
-  apple_PN : PN ;
+  apple_N : CN ;
   sleep_V : V ;
   young_A : A ;
   dog_N : CN ;
