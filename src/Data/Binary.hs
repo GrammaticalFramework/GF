@@ -699,7 +699,7 @@ instance (Binary a, Binary b) => Binary (Either a b) where
 instance Binary B.ByteString where
     put bs = do put (B.length bs)
                 putByteString bs
-    get    = get >>= getByteString
+    get    = liftM B.copy (get >>= getByteString)
 
 --
 -- Using old versions of fps, this is a type synonym, and non portable
