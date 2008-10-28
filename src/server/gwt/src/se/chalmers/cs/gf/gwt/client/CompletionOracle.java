@@ -8,7 +8,7 @@ import com.google.gwt.user.client.ui.SuggestOracle;
 
 public class CompletionOracle extends SuggestOracle {
 
-	private static final int LIMIT_SCALE_FACTOR = 10;
+	private static final int LIMIT_SCALE_FACTOR = 4;
 
 	private PGF pgf;
 
@@ -81,14 +81,24 @@ public class CompletionOracle extends SuggestOracle {
 
 	/** Filters old suggestions and checks if we still have enough suggestions. */
 	private List<CompletionSuggestion> filterOldSuggestions(SuggestOracle.Request request) {
-		List<CompletionSuggestion> suggestions = new ArrayList<CompletionSuggestion>();
-		if (oldQuery != null && request.getQuery().startsWith(oldQuery)) {
+		String query = request.getQuery();		
+		if (query.length() > 0 && oldQuery != null && query.startsWith(oldQuery)) {
+			// If the prefix had no completions, so there is no way that the current input will.
+			if (oldSuggestions.isEmpty()) {
+				return Collections.emptyList();
+			}
+			// If the input ends in whitespace, always get completions from the server,
+			// since the old suggestions won't include the next word.
+			if (query.charAt(query.length() - 1) == ' ') {
+				return null;
+			}
+			List<CompletionSuggestion> suggestions = new ArrayList<CompletionSuggestion>();
 			for (CompletionSuggestion c : oldSuggestions) {
-				if (c.getReplacementString().startsWith(request.getQuery())) {
+				if (c.getReplacementString().startsWith(query)) {
 					suggestions.add(c);
 				}
-			}
-			if (suggestions.size() > 1 && (suggestions.size() >= request.getLimit() || oldSuggestions.size() < request.getLimit())) {
+			}			
+			if (suggestions.size() >= request.getLimit() || oldSuggestions.size() < request.getLimit()) {
 				return suggestions;
 			}
 		}
