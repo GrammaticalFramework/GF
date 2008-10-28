@@ -2,8 +2,6 @@ module GF.Compile.Export where
 
 import PGF.CId
 import PGF.Data (PGF(..))
-import PGF.Raw.Print (printTree)
-import PGF.Raw.Convert (fromPGF)
 import GF.Compile.GFCCtoHaskell
 import GF.Compile.GFCCtoProlog
 import GF.Compile.GFCCtoJS
@@ -32,7 +30,6 @@ exportPGF :: Options
           -> [(FilePath,String)] -- ^ List of recommended file names and contents.
 exportPGF opts fmt pgf = 
     case fmt of
-      FmtPGF          -> multi "pgf" printPGF
       FmtPGFPretty    -> multi "txt" prPGFPretty
       FmtJavaScript   -> multi "js"  pgf2js
       FmtHaskell      -> multi "hs"  (grammar2haskell opts name)
@@ -65,7 +62,3 @@ outputConcr :: PGF -> CId
 outputConcr pgf = case cncnames pgf of
                     []     -> error "No concrete syntax."
                     cnc:_  -> cnc
-
-printPGF :: PGF -> String
-printPGF = encodeUTF8 . printTree . fromPGF
-

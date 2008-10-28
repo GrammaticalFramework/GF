@@ -66,9 +66,7 @@ import PGF.TypeCheck
 import PGF.Paraphrase
 import PGF.Macros
 import PGF.Data
-import PGF.Raw.Convert
-import PGF.Raw.Parse
-import PGF.Raw.Print (printTree)
+import PGF.Binary
 import PGF.Parsing.FCFG
 import qualified PGF.Parsing.FCFG.Incremental as Incremental
 import qualified GF.Compile.GeneratePMCFG as PMCFG
@@ -80,6 +78,7 @@ import GF.Data.Utilities (replace)
 import Data.Char
 import qualified Data.Map as Map
 import Data.Maybe
+import Data.Binary
 import System.Random (newStdGen)
 import Control.Monad
 
@@ -210,9 +209,8 @@ readLanguage = readCId
 showLanguage = prCId
 
 readPGF f = do
-  s <- readFile f >>= return . decodeUTF8 -- pgf is in UTF8, internal in unicode
-  g <- parseGrammar s
-  return $! addParsers $ toPGF g
+  g <- decodeFile f
+  return $! addParsers g
 
 -- Adds parsers for all concretes that don't have a parser and that have parser=ondemand.
 addParsers :: PGF -> PGF

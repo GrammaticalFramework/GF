@@ -575,23 +575,25 @@ library
     PGF.Parsing.FCFG
     PGF.Expr
     PGF.Type
-    PGF.Raw.Parse
-    PGF.Raw.Print
-    PGF.Raw.Convert
-    PGF.Raw.Abstract
     PGF.AbsCompute
     PGF.Paraphrase
     PGF.TypeCheck
+    PGF.Binary
     GF.Data.MultiMap
     GF.Data.Utilities
     GF.Data.SortedList
     GF.Data.Assoc
     GF.Data.ErrM
-    GF.Text.UTF8
 -- needed only for the on demand generation of PMCFG
     GF.Data.BacktrackM
     GF.Compile.GenerateFCFG
     GF.Compile.GeneratePMCFG
+-- not really part of GF but I have changed the original binary library
+-- and we have to keep the copy for now.
+    Data.Binary
+    Data.Binary.Put
+    Data.Binary.Get
+    Data.Binary.Builder
 
 executable gf
   build-depends: base,
@@ -701,6 +703,7 @@ executable gf
     PGF.AbsCompute
     PGF.Paraphrase
     PGF.TypeCheck
+    PGF.Binary
     GFC
     GFI
   
