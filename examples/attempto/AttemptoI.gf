@@ -105,7 +105,7 @@ lin varNP = symb ;
 
 lin adjCN = mkCN ;
 lin positAP = mkAP ;
-lin comparAP = comparAP ;
+lin comparAP = Syntax.comparAP ;
 lin superlAP a = mkAP (mkOrd a) ;
 
 
