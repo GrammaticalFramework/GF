@@ -9,7 +9,7 @@ import com.google.gwt.user.client.ui.SuggestOracle;
 public class CompletionOracle extends SuggestOracle {
 
 	private static final int LIMIT_SCALE_FACTOR = 10;
-	
+
 	private PGF pgf;
 
 	private ErrorHandler errorHandler;
@@ -17,9 +17,9 @@ public class CompletionOracle extends SuggestOracle {
 	private List<String> inputLangs = null;
 
 	private JSONRequest jsonRequest = null;
-	
+
 	private String oldQuery = null;
-	
+
 	private List<CompletionSuggestion> oldSuggestions = Collections.emptyList();
 
 
@@ -78,7 +78,7 @@ public class CompletionOracle extends SuggestOracle {
 			retrieveSuggestions(request, callback);
 		}
 	}
-	
+
 	/** Filters old suggestions and checks if we still have enough suggestions. */
 	private List<CompletionSuggestion> filterOldSuggestions(SuggestOracle.Request request) {
 		List<CompletionSuggestion> suggestions = new ArrayList<CompletionSuggestion>();
@@ -87,16 +87,14 @@ public class CompletionOracle extends SuggestOracle {
 				if (c.getReplacementString().startsWith(request.getQuery())) {
 					suggestions.add(c);
 				}
-			}			
-			// Use filtered old suggestions, if there are enough of them,
-			// or if the old ones were already fewer than the limit.
-			if (suggestions.size() > 0 && (suggestions.size() >= request.getLimit() || oldSuggestions.size() < request.getLimit())) {
+			}
+			if (suggestions.size() > 1 && (suggestions.size() >= request.getLimit() || oldSuggestions.size() < request.getLimit())) {
 				return suggestions;
 			}
 		}
 		return null;
 	}
-	
+
 	private void retrieveSuggestions(final SuggestOracle.Request request, final SuggestOracle.Callback callback) {
 		// hack: first report no completions, to hide suggestions until we get the new completions
 		callback.onSuggestionsReady(request, new SuggestOracle.Response(Collections.<CompletionSuggestion>emptyList()));
@@ -117,10 +115,11 @@ public class CompletionOracle extends SuggestOracle {
 
 		});
 	}
-	
+
 	private void suggestionsReady(SuggestOracle.Request request, SuggestOracle.Callback callback, List<CompletionSuggestion> suggestions) {
 		this.oldQuery = request.getQuery();
 		this.oldSuggestions = suggestions;
+		suggestions = suggestions.size() <= request.getLimit() ? suggestions : SubList.makeSubList(suggestions, 0, request.getLimit());
 		callback.onSuggestionsReady(request, new SuggestOracle.Response(suggestions));
 	}
 
