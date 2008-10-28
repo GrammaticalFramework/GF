@@ -38,7 +38,7 @@ data Tree =
  | Fun CId [Tree]                   -- ^ function application
  | Lit Literal                      -- ^ literal
  | Meta Int                         -- ^ meta variable
-  deriving (Show, Eq, Ord)
+  deriving (Eq, Ord)
 
 -- | An expression represents a potentially unevaluated expression
 -- in the abstract syntax of the grammar. It can be evaluated with
@@ -52,7 +52,7 @@ data Expr =
  | EVar   CId                       -- ^ variable or function reference
  | EEq [Equation]                   -- ^ lambda function defined as a set of equations with pattern matching
  | EPi CId Expr Expr                -- ^ dependent function type
-  deriving (Eq,Ord,Show)
+  deriving (Eq,Ord)
 
 -- | The equation is used to define lambda function as a sequence
 -- of equations with pattern matching. The list of 'Expr' represents
@@ -72,6 +72,12 @@ readTree s = case [x | (x,cs) <- RP.readP_to_S (pTree False) s, all isSpace cs] 
 showTree :: Tree -> String
 showTree = PP.render . ppTree 0
 
+instance Show Tree where
+    showsPrec i x = showString (PP.render (ppTree i x))
+
+instance Read Tree where
+    readsPrec _ = RP.readP_to_S (pTree False)
+
 -- | parses 'String' as an expression
 readExpr :: String -> Maybe Expr
 readExpr s = case [x | (x,cs) <- RP.readP_to_S pExpr s, all isSpace cs] of
@@ -81,6 +87,12 @@ readExpr s = case [x | (x,cs) <- RP.readP_to_S pExpr s, all isSpace cs] of
 -- | renders expression as 'String'
 showExpr :: Expr -> String
 showExpr = PP.render . ppExpr 0
+
+instance Show Expr where
+    showsPrec i x = showString (PP.render (ppExpr i x))
+
+instance Read Expr where
+    readsPrec _ = RP.readP_to_S pExpr
 
 
 -----------------------------------------------------
