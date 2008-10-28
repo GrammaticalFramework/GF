@@ -67,14 +67,6 @@ instance Binary Concr where
                         , parser=parser
                         })
 
-instance Binary Tokn where
-  put (KS s)    = putWord8 0 >> put s
-  put (KP d vs) = putWord8 1 >> put (d,vs)
-  get = do tag <- getWord8
-           case tag of
-             0 -> liftM  KS get
-             1 -> liftM2 KP get get
-
 instance Binary Alternative where
   put (Alt v x) = put v >> put x
   get = liftM2 Alt get get
@@ -89,7 +81,9 @@ instance Binary Term where
   put (TM i ) = putWord8 6 >> put i
   put (F f)   = putWord8 7 >> put f
   put (V i)   = putWord8 8 >> put i
-  put (K t)   = putWord8 9 >> put t
+  put (K (KS s))    = putWord8 9  >> put s
+  put (K (KP d vs)) = putWord8 10 >> put (d,vs)
+
   get = do tag <- getWord8
            case tag of
              0 -> liftM  R  get
@@ -101,7 +95,8 @@ instance Binary Term where
              6 -> liftM  TM get
              7 -> liftM  F  get
              8 -> liftM  V  get
-             9 -> liftM  K  get
+             9  -> liftM  (K . KS) get
+             10 -> liftM2 (\d vs -> K (KP d vs)) get get
 
 instance Binary Expr where
   put (EAbs x exp)    = putWord8 0 >> put (x,exp)
@@ -140,14 +135,16 @@ instance Binary FFun where
   get = liftM3 FFun get get get
 
 instance Binary FSymbol where
-  put (FSymCat n l) = putWord8 0 >> put (n,l)
-  put (FSymLit n l) = putWord8 1 >> put (n,l)
-  put (FSymTok t)   = putWord8 2 >> put t
+  put (FSymCat n l)       = putWord8 0 >> put (n,l)
+  put (FSymLit n l)       = putWord8 1 >> put (n,l)
+  put (FSymTok (KS s))    = putWord8 2 >> put s
+  put (FSymTok (KP d vs)) = putWord8 3 >> put (d,vs)
   get = do tag <- getWord8
            case tag of
              0 -> liftM2 FSymCat get get
              1 -> liftM2 FSymLit get get
-             2 -> liftM  FSymTok get
+             2 -> liftM  (FSymTok . KS) get
+             3 -> liftM2 (\d vs -> FSymTok (KP d vs)) get get
 
 instance Binary Production where
   put (FApply ruleid args) = putWord8 0 >> put (ruleid,args)
