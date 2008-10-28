@@ -1,5 +1,5 @@
 {-# LANGUAGE PatternGuards #-}
-module GF.Compile.GrammarToGFCC (prGrammar2gfcc,mkCanon2gfcc,addParsers) where
+module GF.Compile.GrammarToGFCC (mkCanon2gfcc,addParsers) where
 
 import GF.Compile.Export
 import GF.Compile.OptimizeGF (unshareModule)
@@ -37,11 +37,6 @@ traceD s t = t
 
 
 -- the main function: generate PGF from GF.
-
-prGrammar2gfcc :: Options -> String -> SourceGrammar -> (String,String)
-prGrammar2gfcc opts cnc gr = (abs,printPGF gc) where
-  (abs,gc) = mkCanon2gfcc opts cnc gr 
-
 mkCanon2gfcc :: Options -> String -> SourceGrammar -> (String,D.PGF)
 mkCanon2gfcc opts cnc gr = 
   (prIdent abs, (canon2gfcc opts pars . reorder abs . canon2canon abs) gr)

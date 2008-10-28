@@ -80,8 +80,7 @@ data Phase = Preproc | Convert | Compile | Link
 data Encoding = UTF_8 | ISO_8859_1 | CP_1251
   deriving (Eq,Ord)
 
-data OutputFormat = FmtPGF 
-                  | FmtPGFPretty
+data OutputFormat = FmtPGFPretty
                   | FmtJavaScript 
                   | FmtHaskell 
                   | FmtProlog
@@ -239,7 +238,7 @@ defaultFlags = Flags {
       optShowCPUTime     = False,
       optEmitGFO         = True,
       optGFODir          = ".",
-      optOutputFormats   = [FmtPGF],
+      optOutputFormats   = [],
       optSISR            = Nothing,
       optHaskellOptions  = Set.empty,
       optLexicalCats     = Set.empty,
@@ -427,8 +426,7 @@ optDescr =
 
 outputFormats :: [(String,OutputFormat)]
 outputFormats = 
-    [("pgf",          FmtPGF),
-     ("pgf-pretty",   FmtPGFPretty),
+    [("pgf-pretty",   FmtPGFPretty),
      ("js",           FmtJavaScript),
      ("haskell",      FmtHaskell),
      ("prolog",       FmtProlog),

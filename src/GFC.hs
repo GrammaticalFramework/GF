@@ -4,8 +4,6 @@ module GFC (mainGFC) where
 import PGF
 import PGF.CId
 import PGF.Data
-import PGF.Raw.Parse
-import PGF.Raw.Convert
 import GF.Compile
 import GF.Compile.Export
 
@@ -16,6 +14,7 @@ import GF.Infra.Option
 import GF.Data.ErrM
 
 import Data.Maybe
+import Data.Binary
 import System.FilePath
 
 
@@ -57,10 +56,17 @@ unionPGFFiles opts fs =
   where readPGFVerbose f = putPointE Normal opts ("Reading " ++ f ++ "...") $ ioeIO $ readPGF f
 
 writeOutputs :: Options -> PGF -> IOE ()
-writeOutputs opts pgf =
-    sequence_ [writeOutput opts name str 
-                   | fmt <- flag optOutputFormats opts, 
-                     (name,str) <- exportPGF opts fmt pgf]
+writeOutputs opts pgf = do
+  writePGF opts pgf
+  sequence_ [writeOutput opts name str 
+                 | fmt <- flag optOutputFormats opts, 
+                   (name,str) <- exportPGF opts fmt pgf]
+
+writePGF :: Options -> PGF -> IOE ()
+writePGF opts pgf = do
+  let name = fromMaybe (prCId (absname pgf)) (flag optName opts)
+      outfile = name <.> "pgf"
+  putPointE Normal opts ("Writing " ++ outfile ++ "...") $ ioeIO $ encodeFile outfile pgf
 
 writeOutput :: Options -> FilePath-> String -> IOE ()
 writeOutput opts file str =
