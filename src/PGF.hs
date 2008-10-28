@@ -197,7 +197,7 @@ startCat   :: PGF -> Type
 -- to be the empty string. This means that the completions
 -- will be all possible next words.
 complete :: PGF -> Language -> Type -> String 
-         -> [String] -- ^ Possible word completions of, 
+         -> [String] -- ^ Possible completions, 
                      -- including the given input.
 
 
@@ -275,11 +275,12 @@ complete pgf from typ input =
              state0 = initState pgf from typ
          in case foldM Incremental.nextState state0 ws of
               Nothing -> []
-              Just state -> let compls = Incremental.getCompletions state prefix
-                            in [unwords (ws++[c]) ++ " " | c <- Map.keys compls]
+              Just state -> 
+                (if null prefix && not (null (extractExps state typ)) then [unwords ws ++ " "] else [])
+                ++ [unwords (ws++[c]) ++ " " | c <- Map.keys (Incremental.getCompletions state prefix)]
   where
     tokensAndPrefix :: String -> ([String],String)
-    tokensAndPrefix s | not (null s) && isSpace (last s) = (words s, "")
+    tokensAndPrefix s | not (null s) && isSpace (last s) = (ws, "")
                       | null ws = ([],"")
                       | otherwise = (init ws, last ws)
         where ws = words s
