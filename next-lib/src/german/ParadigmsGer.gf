@@ -215,13 +215,17 @@ mkV : overload {
 
 mkV2 : overload {
 
+-- Two-place regular verbs with direct object (accusative, transitive verbs).
+
+  mkV2 : Str -> V2 ;
+
+-- Two-place verbs with direct object.
+
+  mkV2 : V -> V2 ;
+
 -- Two-place verbs with a preposition.
 
   mkV2 : V -> Prep -> V2 ;
-
--- Two-place verbs with direct object (accusative, transitive verbs).
-
-  mkV2 : V -> V2 ;
 
 -- Two-place verbs with object in the given case.
 
@@ -498,8 +502,9 @@ mkV2 : overload {
   datV2 : V -> V2 ;
 
   mkV2 = overload {
-    mkV2 : V -> Prep -> V2 = prepV2;
+    mkV2 : Str -> V2 = \s -> dirV2 (regV s) ;
     mkV2 : V -> V2 = dirV2 ;
+    mkV2 : V -> Prep -> V2 = prepV2;
     mkV2 : V -> Case -> V2 = \v,c -> prepV2 v (mkPrep [] c)
     };
 
