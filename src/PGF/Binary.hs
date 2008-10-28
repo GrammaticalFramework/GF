@@ -8,7 +8,6 @@ import Data.Binary.Get
 import qualified Data.ByteString as BS
 import qualified Data.Map as Map
 import Control.Monad
-import Debug.Trace
 
 pgfMajorVersion, pgfMinorVersion :: Word16
 (pgfMajorVersion, pgfMinorVersion) = (1,0)
@@ -69,12 +68,11 @@ instance Binary Concr where
                         })
 
 instance Binary Tokn where
-  put (KS s)    = putWord8 0 >> trace (show s) (put s)
+  put (KS s)    = putWord8 0 >> put s
   put (KP d vs) = putWord8 1 >> put (d,vs)
   get = do tag <- getWord8
            case tag of
-             0 -> do s <- get
-                     trace (show s) $ return (KS s)
+             0 -> liftM  KS get
              1 -> liftM2 KP get get
 
 instance Binary Alternative where
