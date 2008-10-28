@@ -237,6 +237,7 @@ oper
 -- (transitive verbs). 
 
   mkV2 = overload {
+    mkV2 : Str -> V2 = \s -> dirV2 (regV s) ;
     mkV2 : V -> V2 = dirV2 ;  
     mkV2 : V -> Prep -> V2 = mmkV2
   } ;
