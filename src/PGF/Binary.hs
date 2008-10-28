@@ -1,0 +1,170 @@
+module PGF.Binary where
+
+import PGF.CId
+import PGF.Data
+import Data.Binary
+import Data.Binary.Put
+import Data.Binary.Get
+import qualified Data.ByteString as BS
+import qualified Data.Map as Map
+import Control.Monad
+import Debug.Trace
+
+pgfMajorVersion, pgfMinorVersion :: Word16
+(pgfMajorVersion, pgfMinorVersion) = (1,0)
+
+instance Binary PGF where
+  put pgf = putWord16be pgfMajorVersion >>
+            putWord16be pgfMinorVersion >>
+            put ( absname pgf, cncnames pgf
+                , gflags pgf
+                , abstract pgf, concretes pgf
+                )
+  get = do v1 <- getWord16be
+           v2 <- getWord16be
+           absname <- get
+           cncnames <- get
+           gflags <- get
+           abstract <- get
+           concretes <- get
+           return (PGF{ absname=absname, cncnames=cncnames
+                      , gflags=gflags
+                      , abstract=abstract, concretes=concretes
+                      })
+
+instance Binary CId where
+  put (CId bs) = put bs
+  get    = liftM CId get
+
+instance Binary Abstr where
+  put abs = put (aflags abs, funs abs, cats abs)
+  get = do aflags <- get
+           funs <- get
+           cats <- get
+           let catfuns = Map.mapWithKey (\cat _ -> [f | (f, (DTyp _ c _,_)) <- Map.toList funs, c==cat]) cats
+           return (Abstr{ aflags=aflags
+                        , funs=funs, cats=cats
+                        , catfuns=catfuns
+                        })
+  
+instance Binary Concr where
+  put cnc = put ( cflags cnc, lins cnc, opers cnc
+                , lincats cnc, lindefs cnc
+                , printnames cnc, paramlincats cnc
+                , parser cnc
+                )
+  get = do cflags <- get
+           lins <- get
+           opers <- get
+           lincats <- get
+           lindefs <- get
+           printnames <- get
+           paramlincats <- get
+           parser <- get
+           return (Concr{ cflags=cflags, lins=lins, opers=opers
+                        , lincats=lincats, lindefs=lindefs
+                        , printnames=printnames
+                        , paramlincats=paramlincats
+                        , parser=parser
+                        })
+
+instance Binary Tokn where
+  put (KS s)    = putWord8 0 >> trace (show s) (put s)
+  put (KP d vs) = putWord8 1 >> put (d,vs)
+  get = do tag <- getWord8
+           case tag of
+             0 -> do s <- get
+                     trace (show s) $ return (KS s)
+             1 -> liftM2 KP get get
+
+instance Binary Alternative where
+  put (Alt v x) = put v >> put x
+  get = liftM2 Alt get get
+
+instance Binary Term where
+  put (R  es) = putWord8 0 >> put es
+  put (S  es) = putWord8 1 >> put es
+  put (FV es) = putWord8 2 >> put es
+  put (P e v) = putWord8 3 >> put (e,v)
+  put (W e v) = putWord8 4 >> put (e,v)
+  put (C i  ) = putWord8 5 >> put i
+  put (TM i ) = putWord8 6 >> put i
+  put (F f)   = putWord8 7 >> put f
+  put (V i)   = putWord8 8 >> put i
+  put (K t)   = putWord8 9 >> put t
+  get = do tag <- getWord8
+           case tag of
+             0 -> liftM  R  get
+             1 -> liftM  S  get
+             2 -> liftM  FV get
+             3 -> liftM2 P  get get
+             4 -> liftM2 W  get get
+             5 -> liftM  C  get
+             6 -> liftM  TM get
+             7 -> liftM  F  get
+             8 -> liftM  V  get
+             9 -> liftM  K  get
+
+instance Binary Expr where
+  put (EAbs x exp)    = putWord8 0 >> put (x,exp)
+  put (EApp e1 e2)    = putWord8 1 >> put (e1,e2)
+  put (EVar   x)      = putWord8 2 >> put x
+  put (ELit (LStr s)) = putWord8 3 >> put s
+  put (ELit (LFlt d)) = putWord8 4 >> put d
+  put (ELit (LInt i)) = putWord8 5 >> put i
+  put (EMeta i)       = putWord8 6 >> put i
+  put (EEq eqs)       = putWord8 7 >> put eqs
+  get = do tag <- getWord8
+           case tag of
+             0 -> liftM2 EAbs get get
+             1 -> liftM2 EApp get get
+             2 -> liftM  EVar get
+             3 -> liftM  (ELit . LStr) get
+             4 -> liftM  (ELit . LFlt) get
+             5 -> liftM  (ELit . LInt) get
+             6 -> liftM  EMeta get
+             7 -> liftM  EEq get
+             
+instance Binary Equation where
+  put (Equ ps e) = put (ps,e)
+  get = liftM2 Equ get get
+
+instance Binary Type where
+  put (DTyp hypos cat exps) = put (hypos,cat,exps)
+  get = liftM3 DTyp get get get
+
+instance Binary Hypo where
+  put (Hyp v t) = put (v,t)
+  get = liftM2 Hyp get get
+
+instance Binary FFun where
+  put (FFun fun prof lins) = put (fun,prof,lins)
+  get = liftM3 FFun get get get
+
+instance Binary FSymbol where
+  put (FSymCat n l) = putWord8 0 >> put (n,l)
+  put (FSymLit n l) = putWord8 1 >> put (n,l)
+  put (FSymTok t)   = putWord8 2 >> put t
+  get = do tag <- getWord8
+           case tag of
+             0 -> liftM2 FSymCat get get
+             1 -> liftM2 FSymLit get get
+             2 -> liftM  FSymTok get
+
+instance Binary Production where
+  put (FApply ruleid args) = putWord8 0 >> put (ruleid,args)
+  put (FCoerce fcat)       = putWord8 1 >> put fcat
+  get = do tag <- getWord8
+           case tag of
+             0 -> liftM2 FApply  get get
+             1 -> liftM  FCoerce get
+
+instance Binary ParserInfo where
+  put p = put (functions p, sequences p, productions p, totalCats p, startCats p)
+  get = do functions   <- get
+           sequences   <- get
+           productions <- get
+           totalCats   <- get
+           startCats   <- get
+           return (ParserInfo{functions=functions,sequences=sequences,productions=productions
+                             ,totalCats=totalCats,startCats=startCats})
