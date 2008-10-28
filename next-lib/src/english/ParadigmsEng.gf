@@ -149,11 +149,12 @@ oper
     mkA : (good,better,best,well : Str) -> A 
     } ;
 
--- To force comparison to be formed by "more - most", 
--- the following function is used:
+-- Regular comparison is formed by "more - most" for words with two vowels separated
+-- and terminated by some other letters. To force this or the opposite, 
+-- the following can be used:  
 
-    compoundA : A -> A ; -- -/more/most ridiculous
-
+    compoundA : A -> A ; -- -/more/most ditto
+    simpleA   : A -> A ; -- young,younger,youngest
 
 
 --3 Two-place adjectives
@@ -240,8 +241,9 @@ oper
 -- (transitive verbs). Notice that a particle comes from the $V$.
 
   mkV2 : overload {
-    mkV2  : V -> Prep -> V2 ; -- believe in
-    mkV2  : V -> V2           -- kill
+    mkV2  : Str -> V2 ;       -- kill
+    mkV2  : V -> V2 ;         -- hit
+    mkV2  : V -> Prep -> V2   -- believe in
   };
 
 --3 Three-place verbs
@@ -355,7 +357,11 @@ oper
   nounPN n = {s = n.s ! singular ; g = n.g ; lock_PN = <>} ;
 
   mk2A a b = mkAdjective a a a b ** {lock_A = <>} ;
-  regA a = regADeg a ** {lock_A = <>} ;
+  regA a = case a of {
+    _ + ("a" | "e" | "i" | "o" | "u" | "y") + ? + _ + 
+        ("a" | "e" | "i" | "o" | "u" | "y") + ? + _  => compoundADeg (regADeg a) ;
+    _ => regADeg a
+    }  ** {lock_A = <>} ;
 
   mkA2 a p = a ** {c2 = p.s ; lock_A2 = <>} ;
 
@@ -506,7 +512,9 @@ oper
     } ;
 
   compoundA = compoundADeg ;
-
+  simpleA a = 
+    let ad = (a.s ! AAdj Posit) 
+    in regADeg ad ;
 
   mk5V : (go, goes, went, gone, going : Str) -> V ;
   regV : (cry : Str) -> V ;
@@ -531,6 +539,7 @@ oper
   dirV2 : V -> V2 ;
 
   mkV2 = overload {
+    mkV2  : Str -> V2 = \s -> dirV2 (regV s) ;
     mkV2  : V -> Prep -> V2 = prepV2;
     mkV2  : V -> V2 = dirV2
   }; 
