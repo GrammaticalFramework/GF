@@ -17,7 +17,6 @@ import GF.Speech.SRG
 import GF.Speech.VoiceXML
 import GF.Speech.SLF
 import GF.Speech.PrRegExp
-import GF.Text.UTF8
 
 import Data.Maybe
 import System.FilePath

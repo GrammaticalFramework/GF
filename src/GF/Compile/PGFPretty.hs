@@ -7,7 +7,6 @@ import PGF.Data
 import PGF.Macros
 
 import GF.Data.Operations
-import GF.Text.UTF8
 
 import Data.Map (Map)
 import qualified Data.Map as Map

@@ -23,7 +23,6 @@ import qualified GF.Infra.Option as O
 import GF.Infra.Ident
 import GF.Infra.Option
 import GF.Data.Operations
-import GF.Text.UTF8
 
 import Data.List
 import Data.Char (isDigit,isSpace)

@@ -70,7 +70,6 @@ import PGF.Binary
 import PGF.Parsing.FCFG
 import qualified PGF.Parsing.FCFG.Incremental as Incremental
 import qualified GF.Compile.GeneratePMCFG as PMCFG
-import GF.Text.UTF8
 
 import GF.Data.ErrM
 import GF.Data.Utilities (replace)
