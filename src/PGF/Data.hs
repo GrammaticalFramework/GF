@@ -3,7 +3,6 @@ module PGF.Data (module PGF.Data, module PGF.Expr, module PGF.Type) where
 import PGF.CId
 import PGF.Expr hiding (Value, Env)
 import PGF.Type
-import GF.Text.UTF8
 
 import qualified Data.Map as Map
 import qualified Data.Set as Set

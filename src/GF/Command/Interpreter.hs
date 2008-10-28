@@ -17,7 +17,6 @@ import GF.System.Signal
 import GF.Infra.UseIO
 
 import GF.Data.ErrM ----
-import GF.Text.UTF8
 
 import qualified Data.Map as Map
 
