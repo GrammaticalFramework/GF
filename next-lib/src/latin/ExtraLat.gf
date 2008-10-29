@@ -10,7 +10,7 @@
 --        rp.s ! RC (fromAgr ag).g Acc ++ slash.s ! t ! a ! p ! ODir ++ slash.c2 ;
 --      c = Acc
 --      } ;
---    EmptyRelSlash rp slash = {
+--    EmptyRelSlash slash = {
 --      s = \\t,a,p,_ => slash.s ! t ! a ! p ! ODir ++ slash.c2 ;
 --      c = Acc
 --      } ;
