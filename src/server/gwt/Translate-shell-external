@@ -10,4 +10,8 @@ if [ -z "$GWT_CLASSPATH" ]; then
   exit 1
 fi
 
-java -XstartOnFirstThread -Xmx256M -cp "$APPDIR/src:$APPDIR/bin:$GWT_CLASSPATH" com.google.gwt.dev.GWTShell -out "$APPDIR/www" -noserver "$@" http://localhost:41296/gwt/www/se.chalmers.cs.gf.gwt.TranslateApp/Translate.html;
+if [ `uname` = "Darwin" ]; then
+  GWT_JAVA_OPTS=-XstartOnFirstThread
+fi
+
+java $GWT_JAVA_OPTS -Xmx256M -cp "$APPDIR/src:$APPDIR/bin:$GWT_CLASSPATH" com.google.gwt.dev.GWTShell -out "$APPDIR/www" -noserver "$@" http://localhost:41296/gwt/www/se.chalmers.cs.gf.gwt.TranslateApp/Translate.html;
