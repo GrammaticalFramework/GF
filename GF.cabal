@@ -696,10 +696,7 @@ executable gf
     PGF.Parsing.FCFG.Utilities
     PGF.Parsing.FCFG.Active
     PGF.Parsing.FCFG
-    PGF.Raw.Parse
-    PGF.Raw.Print
-    PGF.Raw.Convert
-    PGF.Raw.Abstract
+    PGF.Binary
     PGF.AbsCompute
     PGF.Paraphrase
     PGF.TypeCheck
