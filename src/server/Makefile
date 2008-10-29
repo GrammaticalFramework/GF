@@ -42,7 +42,7 @@ test.pgf: LangEng-parse.pgf LangGer-parse.pgf
 
 run: pgf.fcgi
 	@echo '*********************************************'
-	@echo 'See http://localhost:41296/gwt/www/se.chalmers.cs.gf.gwt.TranslateApp/Translate.html'
+	@echo 'See http://localhost:41296/'
 	@echo '*********************************************'
 	lighttpd -f lighttpd.conf -D
 
