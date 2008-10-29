@@ -13,7 +13,7 @@ incomplete concrete ExtraScand of ExtraScandAbs = CatScand **
           rp.s ! ag.gn ! RNom ++ slash.s ! t ! a ! p ! Sub ++ slash.c2.s ;
       c = NPAcc
       } ;
-    EmptyRelSlash rp slash = {
+    EmptyRelSlash slash = {
       s = \\t,a,p,ag => 
           slash.s ! t ! a ! p ! Sub ++ slash.c2.s ;
       c = NPAcc

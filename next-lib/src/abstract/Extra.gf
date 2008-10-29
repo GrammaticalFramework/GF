@@ -11,7 +11,7 @@ abstract Extra = Cat ** {
     ComplBareVS : VS -> S -> VP ;     -- know you go
 
     StrandRelSlash   : RP -> ClSlash -> RCl ;   -- that he lives in
-    EmptyRelSlash    : RP -> ClSlash -> RCl ;   -- he lives in
+    EmptyRelSlash    : ClSlash -> RCl ;   -- he lives in
     StrandQuestSlash : IP -> ClSlash -> QCl ;   -- whom does John live with
 
 -- $VP$ conjunction, which has different fragments implemented in
