@@ -47,7 +47,7 @@ public class TranslateApp implements EntryPoint {
 	outputPanel.clear();
 	setStatus("Translating...");
 	pgf.translate(suggest.getText(), fromLangBox.getSelectedValues(), null, 
-		     fromLangBox.getSelectedValues(), new PGF.TranslateCallback() {
+		     toLangBox.getSelectedValues(), new PGF.TranslateCallback() {
 		public void onResult (PGF.Translations translations) {
 		    for (PGF.Translation t : translations.iterable()) {
 			addTranslation(t.getText(), t.getTo());
