@@ -315,6 +315,13 @@ oper
     _                                  => w + "s"     -- car
     } ;
 
+  duplFinal : Str -> Str = \w -> case w of {
+    _ + ("a" | "e" | "o") + ("a" | "e" | "i" | "o" | "u") + ? => w ; -- waited, needed
+    _ + ("a" | "e" | "i" | "o" | "u") + 
+      c@("b"|"d"|"g"|"m"|"n"|"p"|"r"|"t") => w + c ; -- omitted, manned
+    _ => w
+    } ;
+
   mk2N = \man,men -> 
     let mens = case last men of {
       "s" => men + "'" ;
@@ -376,7 +383,7 @@ oper
       happie = case y of {
         "y" => happ + "ie" ;
         "e" => happy ;
-        _   => happy + "e"
+        _   => duplFinal happy + "e"
         } ;
       happily : Str = case happy of {
         _ + "y" => happ + "ily" ;
@@ -406,20 +413,16 @@ oper
 
   regV cry = 
     let
-      cr = init cry ;
-      y  = last cry ;
       cries = (regN cry).s ! Pl ! Nom ; -- !
-      crie  = init cries ;
-      cried = case last crie of {
-        "e" => crie + "d" ;
-        _   => crie + "ed"
+      cried : Str = case cries of {
+        _ + "es" => init cries + "d" ;
+        _        => duplFinal cry + "ed"
         } ;
-      crying = case y of {
-        "e" => case last cr of {
-           "e" => cry + "ing" ; 
-           _ => cr + "ing" 
-           } ;
-        _   => cry + "ing"
+      crying : Str = case cry of {
+        _  + "ee" => cry + "ing" ;
+        d  + "ie" => d  + "ying" ;
+        us + "e"  => us + "ing" ; 
+        _         => duplFinal cry + "ing"
         }
     in mk5V cry cries cried cried crying ;
 
