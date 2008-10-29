@@ -17,7 +17,7 @@ executable pgf.fcgi
                  fastcgi >= 3001.0.2.1,
                  json >= 0.3.3,
                  utf8-string >= 0.3.1.1
-  main-is: MainFastCGI.hs
+  main-is: PGFService.hs
   other-modules:
     FastCGIUtils
     Cache
