@@ -11,6 +11,7 @@ executable pgf.fcgi
                  old-time,
                  unix,
                  directory,
+                 filepath,
                  containers,
                  gf >= 3.0,
                  cgi >= 3001.1.7.0,

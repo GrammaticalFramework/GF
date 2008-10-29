@@ -15,6 +15,8 @@ import Control.Monad
 import Data.Char
 import qualified Data.Map as Map
 import Data.Maybe
+import System.Directory
+import System.FilePath
 
 
 main :: IO ()
@@ -25,12 +27,17 @@ main = do initFastCGI
 cgiMain :: Cache PGF -> CGI CGIResult
 cgiMain cache =
     do path <- pathInfo
-       case filter (not . null) $ splitBy (=='/') path of
-         [file,command] -> do pgf  <- liftIO $ readCache cache file
-                              json <- pgfMain pgf command
-                              outputJSONP json
-         _ -> throwCGIError 400 "Unknown resource" ["Unknown resource: " ++ show path,
-                                                    "Use /grammar.pgf/command"]
+       jsonp <- serveResource cache $ filter (not . null) $ splitBy (=='/') path
+       outputJSONP jsonp
+
+serveResource :: Cache PGF -> [String] -> CGI JSValue
+serveResource cache resource =
+    case resource of
+      []             -> liftIO doListGrammars
+      [file]         -> serveResource cache [file,"grammar"]
+      [file,command] -> do pgf <- liftIO $ readCache cache $ cleanFilePath file
+                           pgfMain pgf command
+      _              -> throwCGIError 400 "Unknown resource" ["Unknown resource: " ++ show resource]
 
 pgfMain :: PGF -> String -> CGI JSValue
 pgfMain pgf command = 
@@ -80,6 +87,13 @@ pgfMain pgf command =
                          Nothing -> throwCGIError 400 "Bad language" ["Bad language: " ++ l]
                          Just lang | lang `elem` PGF.languages pgf -> return $ Just lang
                                    | otherwise -> throwCGIError 400 "Unknown language" ["Unknown language: " ++ l]
+
+doListGrammars :: IO JSValue
+doListGrammars = 
+    do cwd <- getCurrentDirectory
+       ps <- getDirectoryContents cwd
+       let fs = filter ((== ".pgf") . map toLower . takeExtension) $ map takeFileName ps
+       return $ showJSON $ map toJSObject [[("name", f)] | f <- fs]
 
 doTranslate :: PGF -> String -> Maybe PGF.Type -> Maybe PGF.Language -> Maybe PGF.Language -> JSValue
 doTranslate pgf input mcat mfrom mto = showJSON $ map toJSObject
@@ -154,3 +168,8 @@ selectLanguage pgf macc = case acceptable of
 
 langCodeLanguage :: PGF -> String -> Maybe PGF.Language
 langCodeLanguage pgf code = listToMaybe [l | l <- PGF.languages pgf, PGF.languageCode pgf l == Just code]
+
+-- * General utilities
+
+cleanFilePath :: FilePath -> FilePath
+cleanFilePath = takeFileName
