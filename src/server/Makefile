@@ -7,6 +7,7 @@ pgf.fcgi:
 	cp dist/build/pgf.fcgi/pgf.fcgi .
 
 gwt:
+	chmod a+x gwt/Translate-compile
 	gwt/Translate-compile
 
 gf-gwt.jar:
