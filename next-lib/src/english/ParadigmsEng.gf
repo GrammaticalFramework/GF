@@ -28,6 +28,7 @@ resource ParadigmsEng = open
   (Predef=Predef), 
   Prelude, 
   MorphoEng,
+  ResEng,
   CatEng
   in {
 --2 Parameters 
@@ -177,6 +178,10 @@ oper
 
   mkAdA : Str -> AdA ;
 
+-- Adverbs modifying numerals
+
+  mkAdN : Str -> AdN ;
+
 --2 Prepositions
 --
 -- A preposition as used for rection in the lexicon, as well as to
@@ -287,9 +292,9 @@ oper
 -- The definitions should not bother the user of the API. So they are
 -- hidden from the document.
 
-  Gender = MorphoEng.Gender ; 
-  Number = MorphoEng.Number ;
-  Case = MorphoEng.Case ;
+  Gender = ResEng.Gender ; 
+  Number = ResEng.Number ;
+  Case = ResEng.Case ;
   human = Masc ; 
   nonhuman = Neutr ;
   masculine = Masc ;
@@ -405,6 +410,7 @@ oper
   mkAdv x = ss x ** {lock_Adv = <>} ;
   mkAdV x = ss x ** {lock_AdV = <>} ;
   mkAdA x = ss x ** {lock_AdA = <>} ;
+  mkAdN x = ss x ** {lock_AdN = <>} ;
 
   mkPrep p = ss p ** {lock_Prep = <>} ;
   noPrep = mkPrep [] ;

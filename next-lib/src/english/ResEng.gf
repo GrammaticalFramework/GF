@@ -158,18 +158,6 @@ resource ResEng = ParamX ** open Prelude in {
      a = toAgr n p g ;
    };
 
--- These functions cover many cases; full coverage inflectional patterns are
--- in $MorphoEng$.
-
-    regN : Str -> {s : Number => Case => Str} = \car ->
-      mkNoun car (car + "'s") (car + "s") (car + "s'") ;
-
-    regA : Str -> {s : AForm => Str} = \warm ->
-      mkAdjective warm (warm + "er") (warm + "est") (warm + "ly") ;
-
-    regV : Str -> Verb = \walk ->
-      mkVerb walk (walk + "s") (walk + "ed") (walk + "ed") (walk + "ing") ;
-
     regNP : Str -> Number -> {s : Case => Str ; a : Agr} = \that,n ->
       mkNP that that (that + "'s") n P3 Neutr ;
 

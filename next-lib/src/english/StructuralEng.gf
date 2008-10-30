@@ -1,25 +1,26 @@
 concrete StructuralEng of Structural = CatEng ** 
-  open MorphoEng, (P = ParadigmsEng), Prelude in {
+  open MorphoEng, ResEng, ParadigmsEng, Prelude in {
 
   flags optimize=all ;
 
   lin
-  above_Prep = P.mkPrep "above" ;
-  after_Prep = P.mkPrep "after" ;
+  above_Prep = mkPrep "above" ;
+  after_Prep = mkPrep "after" ;
   all_Predet = ss "all" ;
-  almost_AdA, almost_AdN = ss "almost" ;
+  almost_AdA = mkAdA "almost" ;
+  almost_AdN = mkAdN "almost" ;
   although_Subj = ss "although" ;
-  always_AdV = ss "always" ;
-  and_Conj = sd2 [] "and" ** {n = Pl} ;
----b  and_Conj = ss "and" ** {n = Pl} ;
+  always_AdV = mkAdV "always" ;
+  and_Conj = sd2 [] "and" ** {n = plural} ;
+---b  and_Conj = ss "and" ** {n = plural} ;
   because_Subj = ss "because" ;
-  before_Prep = P.mkPrep "before" ;
-  behind_Prep = P.mkPrep "behind" ;
-  between_Prep = P.mkPrep "between" ;
-  both7and_DConj = sd2 "both" "and" ** {n = Pl} ;
+  before_Prep = mkPrep "before" ;
+  behind_Prep = mkPrep "behind" ;
+  between_Prep = mkPrep "between" ;
+  both7and_DConj = sd2 "both" "and" ** {n = plural} ;
   but_PConj = ss "but" ;
-  by8agent_Prep = P.mkPrep "by" ;
-  by8means_Prep = P.mkPrep "by" ;
+  by8agent_Prep = mkPrep "by" ;
+  by8means_Prep = mkPrep "by" ;
   can8know_VV, can_VV = {
     s = table { 
       VVF VInf => ["be able to"] ;
@@ -32,32 +33,32 @@ concrete StructuralEng of Structural = CatEng **
       } ;
     isAux = True
     } ;
-  during_Prep = P.mkPrep "during" ;
-  either7or_DConj = sd2 "either" "or" ** {n = Sg} ;
-  everybody_NP = regNP "everybody" Sg ;
-  every_Det = mkDeterminer Sg "every" ;
-  everything_NP = regNP "everything" Sg ;
-  everywhere_Adv = ss "everywhere" ;
-  few_Det = mkDeterminer Pl "few" ;
+  during_Prep = mkPrep "during" ;
+  either7or_DConj = sd2 "either" "or" ** {n = singular} ;
+  everybody_NP = regNP "everybody" singular ;
+  every_Det = mkDeterminer singular "every" ;
+  everything_NP = regNP "everything" singular ;
+  everywhere_Adv = mkAdv "everywhere" ;
+  few_Det = mkDeterminer plural "few" ;
 ---  first_Ord = ss "first" ; DEPRECATED
-  for_Prep = P.mkPrep "for" ;
-  from_Prep = P.mkPrep "from" ;
-  he_Pron = mkPron "he" "him" "his" "his" Sg P3 Masc ;
-  here_Adv = ss "here" ;
-  here7to_Adv = ss ["to here"] ;
-  here7from_Adv = ss ["from here"] ;
+  for_Prep = mkPrep "for" ;
+  from_Prep = mkPrep "from" ;
+  he_Pron = mkPron "he" "him" "his" "his" singular P3 masculine ;
+  here_Adv = mkAdv "here" ;
+  here7to_Adv = mkAdv ["to here"] ;
+  here7from_Adv = mkAdv ["from here"] ;
   how_IAdv = ss "how" ;
-  how8many_IDet = mkDeterminer Pl ["how many"] ;
+  how8many_IDet = mkDeterminer plural ["how many"] ;
   if_Subj = ss "if" ;
-  in8front_Prep = P.mkPrep ["in front of"] ;
-  i_Pron  = mkPron "I" "me" "my" "mine" Sg P1 Masc ;
-  in_Prep = P.mkPrep "in" ;
-  it_Pron  = mkPron "it" "it" "its" "its" Sg P3 Neutr ;
+  in8front_Prep = mkPrep ["in front of"] ;
+  i_Pron  = mkPron "I" "me" "my" "mine" singular P1 human ;
+  in_Prep = mkPrep "in" ;
+  it_Pron  = mkPron "it" "it" "its" "its" singular P3 nonhuman ;
   less_CAdv = ss "less" ;
-  many_Det = mkDeterminer Pl "many" ;
+  many_Det = mkDeterminer plural "many" ;
   more_CAdv = ss "more" ;
   most_Predet = ss "most" ;
-  much_Det = mkDeterminer Sg "much" ;
+  much_Det = mkDeterminer singular "much" ;
   must_VV = {
     s = table {
       VVF VInf => ["have to"] ;
@@ -72,54 +73,54 @@ concrete StructuralEng of Structural = CatEng **
     } ;
 ---b  no_Phr = ss "no" ;
   no_Utt = ss "no" ;
-  on_Prep = P.mkPrep "on" ;
-----  one_Quant = mkDeterminer Sg "one" ; -- DEPRECATED
+  on_Prep = mkPrep "on" ;
+----  one_Quant = mkDeterminer singular "one" ; -- DEPRECATED
   only_Predet = ss "only" ;
-  or_Conj = sd2 [] "or" ** {n = Sg} ;
+  or_Conj = sd2 [] "or" ** {n = singular} ;
   otherwise_PConj = ss "otherwise" ;
-  part_Prep = P.mkPrep "of" ;
+  part_Prep = mkPrep "of" ;
   please_Voc = ss "please" ;
-  possess_Prep = P.mkPrep "of" ;
-  quite_Adv = ss "quite" ;
-  she_Pron = mkPron "she" "her" "her" "hers" Sg P3 Fem ;
-  so_AdA = ss "so" ;
-  somebody_NP = regNP "somebody" Sg ;
-  someSg_Det = mkDeterminer Sg "some" ;
-  somePl_Det = mkDeterminer Pl "some" ;
-  something_NP = regNP "something" Sg ;
-  somewhere_Adv = ss "somewhere" ;
+  possess_Prep = mkPrep "of" ;
+  quite_Adv = mkAdv "quite" ;
+  she_Pron = mkPron "she" "her" "her" "hers" singular P3 feminine ;
+  so_AdA = mkAdA "so" ;
+  somebody_NP = regNP "somebody" singular ;
+  someSg_Det = mkDeterminer singular "some" ;
+  somePl_Det = mkDeterminer plural "some" ;
+  something_NP = regNP "something" singular ;
+  somewhere_Adv = mkAdv "somewhere" ;
   that_Quant = mkQuant "that" "those" ;
-  there_Adv = ss "there" ;
-  there7to_Adv = ss "there" ;
-  there7from_Adv = ss ["from there"] ;
+  there_Adv = mkAdv "there" ;
+  there7to_Adv = mkAdv "there" ;
+  there7from_Adv = mkAdv ["from there"] ;
   therefore_PConj = ss "therefore" ;
-  they_Pron = mkPron "they" "them" "their" "theirs" Pl P3 Masc ; ---- 
+  they_Pron = mkPron "they" "them" "their" "theirs" plural P3 human ;
   this_Quant = mkQuant "this" "these" ;
-  through_Prep = P.mkPrep "through" ;
-  too_AdA = ss "too" ;
-  to_Prep = P.mkPrep "to" ;
-  under_Prep = P.mkPrep "under" ;
-  very_AdA = ss "very" ;
-  want_VV = P.mkVV (P.regV "want") ;
-  we_Pron = mkPron "we" "us" "our" "ours" Pl P1 Masc ;
-  whatPl_IP = mkIP "what" "what" "what's" Pl ;
-  whatSg_IP = mkIP "what" "what" "what's" Sg ;
+  through_Prep = mkPrep "through" ;
+  too_AdA = mkAdA "too" ;
+  to_Prep = mkPrep "to" ;
+  under_Prep = mkPrep "under" ;
+  very_AdA = mkAdA "very" ;
+  want_VV = mkVV (regV "want") ;
+  we_Pron = mkPron "we" "us" "our" "ours" plural P1 human ;
+  whatPl_IP = mkIP "what" "what" "what's" plural ;
+  whatSg_IP = mkIP "what" "what" "what's" singular ;
   when_IAdv = ss "when" ;
   when_Subj = ss "when" ;
   where_IAdv = ss "where" ;
   which_IQuant = {s = \\_ => "which"} ;
----b  whichPl_IDet = mkDeterminer Pl ["which"] ;
----b  whichSg_IDet = mkDeterminer Sg ["which"] ;
-  whoPl_IP = mkIP "who" "whom" "whose" Pl ;
-  whoSg_IP = mkIP "who" "whom" "whose" Sg ;
+---b  whichPl_IDet = mkDeterminer plural ["which"] ;
+---b  whichSg_IDet = mkDeterminer singular ["which"] ;
+  whoPl_IP = mkIP "who" "whom" "whose" plural ;
+  whoSg_IP = mkIP "who" "whom" "whose" singular ;
   why_IAdv = ss "why" ;
-  without_Prep = P.mkPrep "without" ;
-  with_Prep = P.mkPrep "with" ;
+  without_Prep = mkPrep "without" ;
+  with_Prep = mkPrep "with" ;
 ---b  yes_Phr = ss "yes" ;
   yes_Utt = ss "yes" ;
-  youSg_Pron = mkPron "you" "you" "your" "yours" Sg P2 Masc ;
-  youPl_Pron = mkPron "you" "you" "your" "yours" Pl P2 Masc ;
-  youPol_Pron = mkPron "you" "you" "your" "yours" Sg P2 Masc ;
+  youSg_Pron = mkPron "you" "you" "your" "yours" singular P2 human ;
+  youPl_Pron = mkPron "you" "you" "your" "yours" plural P2 human ;
+  youPol_Pron = mkPron "you" "you" "your" "yours" singular P2 human ;
 
 }
 
