@@ -50,4 +50,17 @@ concrete ExtraEng of ExtraEngAbs = CatEng **
   oper
     neg = CNeg False ; 
 
+
+  lin
+    that_RP = 
+    { s = table {
+        RC _ Gen    => "whose" ; 
+        RC _ _      => "that" ;
+        RPrep Neutr => "which" ;
+        RPrep _     => "whom"
+        } ;
+      a = RNoAg
+      } ;
+
+
 } 
