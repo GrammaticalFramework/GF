@@ -37,22 +37,6 @@ oper
 oper
   CommonNoun : Type = {s : Number => Case => Str} ;
 
-  nounGen : Str -> CommonNoun = \dog -> case last dog of {
-    "y" => nounY "dog" ;
-    "s" => nounS (init "dog") ;
-    _   => nounReg "dog"
-    } ;
-
--- These are auxiliaries to $nounGen$.
-
-  nounReg : Str -> CommonNoun = \dog -> 
-    mkNoun dog (dog + "s") (dog + "'s") (dog + "s'");
-  nounS   : Str -> CommonNoun = \kiss -> 
-    mkNoun kiss (kiss + "es") (kiss + "'s") (kiss + "es'") ;
-  nounY   : Str -> CommonNoun = \fl -> 
-    mkNoun (fl + "y") (fl + "ies") (fl + "y's") (fl + "ies'") ;
-
-
 --3 Proper names
 --
 -- Regular proper names are inflected with "'s" in the genitive.
