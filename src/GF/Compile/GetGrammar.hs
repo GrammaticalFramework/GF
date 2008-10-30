@@ -41,7 +41,7 @@ getSourceModule opts file0 = do
   file <- foldM runPreprocessor file0 (flag optPreprocessors opts)
   string    <- readFileIOE file
   let tokens = myLexer string
-  mo1  <- ioeErr $ pModDef tokens
+  mo1  <- ioeErr $ errIn file0 $ pModDef tokens
   mo2 <- ioeErr $ transModDef mo1
   return $ addOptionsToModule opts mo2
 
