@@ -8,7 +8,7 @@
 -- syntax. To build a lexicon, it is better to use $ParadigmsEng$, which
 -- gives a higher-level access to this module.
 
-resource MorphoEng = ResEng ** open Prelude, (Predef=Predef) in {
+resource MorphoEng = open Prelude, (Predef=Predef), ResEng in {
 
   flags optimize=all ;
 
