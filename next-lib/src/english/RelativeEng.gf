@@ -38,13 +38,11 @@ concrete RelativeEng of Relative = CatEng ** open ResEng in {
       } ;
 
     IdRP = 
-      let varr : Str -> Str = \x -> variants {x ; "that"} --- for bwc
-      in {
-      s = table {
+     { s = table {
         RC _ Gen => "whose" ; 
-        RC Neutr _  => varr "which" ;
-        RC _ Acc    => varr "whom" ;
-        RC _ Nom    => varr "who" ;
+        RC Neutr _  => "which" ;
+        RC _ Acc    => "whom" ;
+        RC _ Nom    => "who" ;
         RPrep Neutr => "which" ;
         RPrep _     => "whom"
         } ;

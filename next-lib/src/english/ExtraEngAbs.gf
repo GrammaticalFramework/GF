@@ -13,4 +13,6 @@ abstract ExtraEngAbs = Extra ** {
 
     CompoundCN : CN -> CN -> CN ;       -- rock album
 
+    that_RP : RP ; -- "that" as a relational pronoun (IdRP is "which" / "who")
+
 }
