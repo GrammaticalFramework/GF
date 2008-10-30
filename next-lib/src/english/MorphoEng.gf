@@ -46,36 +46,39 @@ oper
 
 --2 Determiners
 
-  mkDeterminer : Number -> Str -> {s,sp : Str ; n : Number} = \n,s ->
-    {s,sp = s ; n = n} ;
+  mkDeterminer : Number -> Str -> {s : Str ; sp : Case => Str; n : Number} = \n,s ->
+    {s = s; 
+     sp = regGenitiveS s ;
+     n = n} ;
 
---2 Pronouns
---
--- Here we define personal pronouns. 
---
--- We record the form "mine" and the gender for later use.
-
-  Pronoun : Type = 
-    {s : Case => Str ; a : Agr} ;
-
-  mkPronoun : (_,_,_,_ : Str) -> Number -> Person -> Gender -> Pronoun = 
-   \I,me,my,mine,n,p,g -> 
-    {s = table {Nom => I ; Acc => me ; Gen => my} ; 
-     a = toAgr n p g
+  mkQuant : Str -> Str -> {s : Bool => Number => Str; sp : Bool => Number => Case => Str } = \x,y -> {
+    s = \\_  => table { Sg => x ; Pl => y } ;
+    sp = \\_ => table { Sg => regGenitiveS x ; Pl => regGenitiveS y }
     } ;
 
-  human : Gender = Masc ; --- doesn't matter
+  regGenitiveS : Str -> Case => Str = \s -> 
+    table { Gen => genitiveS s; _ => s } ;
 
-  pronI = mkPronoun "I" "me" "my" "mine" Sg P1 human ;
-  pronYouSg = mkPronoun "you" "you" "your" "yours" Sg P2 human ; -- verb agr OK
-  pronHe = mkPronoun "he" "him" "his" "his" Sg P3 Masc ;
-  pronShe = mkPronoun "she" "her" "her" "hers" Sg P3 Fem ;
-  pronIt = mkPronoun "it" "it" "its" "it" Sg P3 Neutr ;
+  genitiveS : Str -> Str = \dog ->
+    case last dog of {
+        "s" => dog + "'" ;
+        _   => dog + "'s"
+        };
 
-  pronWe = mkPronoun "we" "us" "our" "ours" Pl P1 human ;
-  pronYouPl = mkPronoun "you" "you" "your" "yours" Pl P2 human ;
-  pronThey = mkPronoun "they" "them" "their" "theirs" Pl P3 human ; ---
+--2 Pronouns
 
+
+  mkPron : (i,me,my,mine : Str) -> Number -> Person -> Gender -> 
+    {s : Case => Str ; sp : Case => Str ; a : Agr} =
+     \i,me,my,mine,n,p,g -> {
+     s = table {
+       Nom => i ;
+       Acc => me ;
+       Gen => my
+       } ;
+     a = toAgr n p g ;
+     sp = regGenitiveS mine
+   } ;
 
 --2 Adjectives
 --
