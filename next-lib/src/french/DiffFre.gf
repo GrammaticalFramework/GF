@@ -124,8 +124,8 @@ instance DiffFre of DiffRomance = open CommonRomance, PhonoFre, Prelude in {
           agr   = {g = aag.g ; n = num ; p = p} ;
           verb  = (vp.s ! VPImperat).fin ! agr ;
           neg   = vp.neg ! pol ;
-          hascl = (pronArg agr.n agr.p vp.clAcc vp.clDat).p3 ;
-          clpr  = pronArgGen pol agr.n agr.p vp.clAcc vp.clDat ;
+          hascl = False ; ----e(pronArg agr.n agr.p vp.clAcc vp.clDat).p3 ;
+          clpr  = <[],[]> ; ----e pronArgGen pol agr.n agr.p vp.clAcc vp.clDat ;
           compl = neg.p2 ++ clpr.p2 ++ vp.comp ! agr ++ vp.ext ! pol
         in
         case pol of {

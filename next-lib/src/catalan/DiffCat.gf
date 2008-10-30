@@ -86,22 +86,24 @@ oper
     --    <_,_,CPron {n = Sg ; p = P2},CPron {n = Sg ; p = P1}> => <"te" ++ "me", []> ;
 
    infForm _ _ _ _  = True ;
-
-   mkImperative _ p vp = { --- politeness
+ 
+   mkImperative b p vp = {
       s = \\pol,aag => 
         let 
-          agr   = aag ** {p = p} ;
-          verb  = case <aag.n, pol> of {
-            <Sg,Neg> => (vp.s ! VPFinite (VPres Conjunct) Simul).fin ! agr ;
-            _ => (vp.s ! VPImperat).fin ! agr
-            } ;
+          pe    = case b of {True => P3 ; _ => p} ;
+          agr   = aag ** {p = pe} ;
+          clpr  = <[],[],False> ; ----e pronArg agr.n agr.p vp.clAcc vp.clDat ;
+----e          verb  = case <aag.n, pol,pe> of {
+----e            <Sg,Neg,P2> => (vp.s ! VPInfinit Simul clpr.p3).inf ! aag ;
+----e            _ => (vp.s ! VPImperat).fin ! agr
+----e            } ;
+          verb  = (vp.s ! VPImperat).fin ! agr ; ----e
           neg   = vp.neg ! pol ;
-          clpr  = pronArg agr.n agr.p vp.clAcc vp.clDat ;
           compl = neg.p2 ++ clpr.p2 ++ vp.comp ! agr ++ vp.ext ! pol
         in
         neg.p1 ++ verb ++ bindIf clpr.p3 ++ clpr.p1 ++ compl ;
       } ;
-      
+
     negation : Polarity => (Str * Str) = table {
       Pos => <[],[]> ;
       Neg => <"no",[]>

@@ -5,38 +5,14 @@ incomplete concrete ConjunctionRomance of Conjunction =
 
   lin
 
-{---b
-    ConjS conj ss =  conjunctTable Mood conj ss ;
-    DConjS conj ss = conjunctDistrTable Mood conj ss ;
-
-    ConjAdv conj ss = conjunctSS conj ss ;
-    DConjAdv conj ss = conjunctDistrSS conj ss ;
-
-    ConjNP conj ss = conjunctTable NPForm conj ss ** {
-      a = {g = ss.a.g ; n = conjNumber conj.n ss.a.n ; p = ss.a.p} ; 
-      hasClit = False
-      } ;
-    DConjNP conj ss = conjunctDistrTable NPForm conj ss ** {
-      a = {g = ss.a.g ; n = conjNumber conj.n ss.a.n ; p = ss.a.p} ;
-      hasClit = False
-      } ;
-
-    ConjAP conj ss = conjunctTable AForm conj ss ** {
-      isPre = ss.isPre
-      } ;
-    DConjAP conj ss = conjunctDistrTable AForm conj ss ** {
-      isPre = ss.isPre
-      } ;
----}
-
     ConjS conj ss = conjunctDistrTable Mood conj ss ;
 
     ConjAdv conj ss = conjunctDistrSS conj ss ;
 
-    ConjNP conj ss = conjunctDistrTable NPForm conj ss ** {
+    ConjNP conj ss = heavyNP (conjunctDistrTable Case conj ss ** {
       a = {g = ss.a.g ; n = conjNumber conj.n ss.a.n ; p = ss.a.p} ;
       hasClit = False
-      } ;
+      }) ;
     ConjAP conj ss = conjunctDistrTable AForm conj ss ** {
       isPre = ss.isPre
       } ;
@@ -49,13 +25,13 @@ incomplete concrete ConjunctionRomance of Conjunction =
     BaseAdv = twoSS ;
     ConsAdv = consrSS comma ;
     BaseNP x y = {
-      s1 = \\c => x.s ! stressedCase c ; 
-      s2 = \\c => y.s ! (conjunctCase c) ; 
+      s1 = \\c => (x.s ! c).ton ; 
+      s2 = \\c => (y.s ! c).ton ; ----e (conjunctCase c) ; 
       a = conjAgr x.a y.a
       } ;
     ConsNP x xs = {
-      s1 = \\c => x.s ! stressedCase c ++ comma ++ xs.s1 ! (conjunctCase c) ; 
-      s2 = \\c => xs.s2 ! (conjunctCase c) ; 
+      s1 = \\c => (x.s ! c).ton ++ comma ++ xs.s1 ! c ; ----e (conjunctCase c) ; 
+      s2 = \\c => xs.s2 ! c ; ----e (conjunctCase c) ; 
       a = conjAgr x.a xs.a
       } ;
     BaseAP x y = twoTable AForm x y ** {isPre = andB x.isPre y.isPre} ;
@@ -64,7 +40,7 @@ incomplete concrete ConjunctionRomance of Conjunction =
   lincat
     [S] = {s1,s2 : Mood => Str} ;
     [Adv] = {s1,s2 : Str} ;
-    [NP] = {s1,s2 : NPForm => Str ; a : Agr} ;
+    [NP] = {s1,s2 : Case => Str ; a : Agr} ;
     [AP] = {s1,s2 : AForm  => Str ; isPre : Bool} ;
 
 }

@@ -50,7 +50,7 @@ langsCoding = [
 langs = map fst langsCoding
 
 -- languagues for which to compile Lang
-langsLang = langs `except` ["Ara","Bul","Ina","Rus"]
+langsLang = langs `except` ["Ara","Bul","Ina","Rus","Hin","Tha"]
 
 -- languages for which to compile Try 
 langsAPI  = langsLang `except` ["Ara","Bul","Hin","Ina","Rus","Tha"]

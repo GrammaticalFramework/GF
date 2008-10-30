@@ -50,7 +50,7 @@ incomplete concrete QuestionRomance of Question =
       s = \\t,a,p,_ => 
             let 
               vp  = predV copula ;
-              cls = (mkClause (np.s ! Aton Nom) np.hasClit np.a vp).s ! 
+              cls = (mkClause (np.s ! Nom).comp np.hasClit np.a vp).s ! 
                        DInv ! t ! a ! p ! Indic ;
               why = icomp.s ! {g = np.a.g ; n = np.a.n}
             in why ++ cls

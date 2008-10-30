@@ -9,19 +9,19 @@ concrete IdiomFre of Idiom = CatFre **
 
     ExistNP np = 
       mkClause "il" True (agrP3 Masc Sg)
-        (insertClit2 "y" (insertComplement (\\_ => np.s ! Ton Acc) (predV avoir_V))) ;
+        (insertClit3 "y" (insertComplement (\\_ => (np.s ! Acc).ton) (predV avoir_V))) ;
 
     ExistIP ip = {
       s = \\t,a,p,_ => 
         ip.s ! Nom ++ 
         (mkClause "il" True (agrP3 Masc Sg)
-              (insertClit2 "y" (predV avoir_V))).s 
+              (insertClit3 "y" (predV avoir_V))).s 
            ! DDir ! t ! a ! p ! Indic ---- DInv
       } ;
 
     CleftNP np rs = mkClause elisCe True (agrP3 Masc Sg) 
       (insertComplement (\\_ => rs.s ! Indic ! np.a)
-        (insertComplement (\\_ => np.s ! Ton rs.c) (predV copula))) ;
+        (insertComplement (\\_ => (np.s ! rs.c).ton) (predV copula))) ;
 
     CleftAdv ad s = mkClause elisCe True (agrP3 Masc Sg) 
       (insertComplement (\\_ => conjThat ++ s.s ! Indic)

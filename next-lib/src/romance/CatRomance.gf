@@ -55,7 +55,8 @@ incomplete concrete CatRomance of Cat =
 -- Noun
 
     CN      = {s : Number => Str ; g : Gender} ;
-    NP,Pron = Pronoun ;
+    Pron    = Pronoun ;
+    NP      = NounPhrase ;
     Det     = {
       s : Gender => Case => Str ; 
       n : Number ; 

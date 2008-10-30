@@ -95,12 +95,13 @@ instance DiffSpa of DiffRomance = open CommonRomance, PhonoSpa, BeschSpa, Prelud
         let 
           pe    = case b of {True => P3 ; _ => p} ;
           agr   = aag ** {p = pe} ;
-          verb  = case <aag.n, pol, pe> of {
-            <Sg,Neg,P2> => (vp.s ! VPFinite (VPres Conjunct) Simul).fin ! agr ;
-            _ => (vp.s ! VPImperat).fin ! agr
-            } ;
+          clpr  = <[],[],False> ; ----e pronArg agr.n agr.p vp.clAcc vp.clDat ;
+----e          verb  = case <aag.n, pol,pe> of {
+----e            <Sg,Neg,P2> => (vp.s ! VPInfinit Simul clpr.p3).inf ! aag ;
+----e            _ => (vp.s ! VPImperat).fin ! agr
+----e            } ;
+          verb  = (vp.s ! VPImperat).fin ! agr ; ----e
           neg   = vp.neg ! pol ;
-          clpr  = pronArg agr.n agr.p vp.clAcc vp.clDat ;
           compl = neg.p2 ++ clpr.p2 ++ vp.comp ! agr ++ vp.ext ! pol
         in
         neg.p1 ++ verb ++ bindIf clpr.p3 ++ clpr.p1 ++ compl ;

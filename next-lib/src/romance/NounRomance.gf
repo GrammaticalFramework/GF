@@ -8,9 +8,8 @@ incomplete concrete NounRomance of Noun =
       let 
         g = cn.g ;
         n = det.n
-      in {
-        s = \\c => let cs = npform2case c in 
-              det.s ! g ! cs ++ cn.s ! n ++ det.s2 ;
+      in heavyNP {
+        s = \\c => det.s ! g ! c ++ cn.s ! n ++ det.s2 ;
         a = agrP3 g n ;
         hasClit = False
         } ;
@@ -19,27 +18,26 @@ incomplete concrete NounRomance of Noun =
 
     UsePron p = p ;
 
-    PredetNP pred np = {
-      s = \\c => pred.s ! aagr (np.a.g) (np.a.n) ! npform2case c ++  --- subtype
-                 np.s ! case2npform pred.c ;
+    PredetNP pred np = heavyNP {
+      s = \\c => pred.s ! aagr (np.a.g) (np.a.n) ! c ++ (np.s ! pred.c).ton ;
       a = np.a ;
       hasClit = False
       } ;
 
-    PPartNP np v2 = {
-      s = \\c => np.s ! c ++ v2.s ! VPart np.a.g np.a.n ;
+    PPartNP np v2 = heavyNP {
+      s = \\c => (np.s ! c).ton ++ v2.s ! VPart np.a.g np.a.n ;
       a = np.a ;
       hasClit = False
       } ;
 
-    RelNP np rs = {
-      s = \\c => np.s ! c ++ rs.s ! Indic ! np.a ;
+    RelNP np rs = heavyNP {
+      s = \\c => (np.s ! c).ton ++ rs.s ! Indic ! np.a ;
       a = np.a ;
       hasClit = False
       } ;
 
-    AdvNP np adv = {
-      s = \\c => np.s ! c ++ adv.s ;
+    AdvNP np adv = heavyNP {
+      s = \\c => (np.s ! c).ton ++ adv.s ;
       a = np.a ;
       hasClit = False
       } ;
@@ -65,16 +63,15 @@ incomplete concrete NounRomance of Noun =
       let 
         g = Masc ;  ---- Fem in Extra
         n = det.n
-      in {
-        s = \\c => let cs = npform2case c in 
-              det.sp ! g ! cs ;
+      in heavyNP {
+        s = det.sp ! g ;
         a = agrP3 g n ;
         hasClit = False
         } ;
 
     PossPron p = {
-      s = \\_,n,g,c => possCase g n c ++ p.s ! Poss (aagr g n) ; ---- il mio!
-      sp = \\ n,g,c => possCase g n c ++ p.s ! Poss (aagr g n) ; ---- not for Fre
+      s = \\_,n,g,c => possCase g n c ++ p.poss ! n ! g ; ---- il mio!
+      sp = \\ n,g,c => possCase g n c ++ p.poss ! n ! g ; ---- not for Fre
       s2 = []
       } ;
 
@@ -108,8 +105,8 @@ incomplete concrete NounRomance of Noun =
     MassNP cn = let 
         g = cn.g ;
         n = Sg
-      in {
-        s = \\c => partitive g (npform2case c) ++ cn.s ! n ;
+      in heavyNP {
+        s = \\c => partitive g c ++ cn.s ! n ;
         a = agrP3 g n ;
         hasClit = False
         } ;
@@ -117,19 +114,18 @@ incomplete concrete NounRomance of Noun =
 -- This is based on record subtyping.
 
     UseN, UseN2 = \noun -> noun ;
----b    UseN3 = \noun -> noun ;
 
     Use2N3 f = f ;
 
     Use3N3 f = f ** {c2 = f.c3} ;
 
     ComplN2 f x = {
-      s = \\n => f.s ! n ++ appCompl f.c2 x.s ;
+      s = \\n => f.s ! n ++ appCompl f.c2 x ;
       g = f.g ;
       } ;
 
     ComplN3 f x = {
-      s = \\n => f.s ! n ++ appCompl f.c2 x.s ;
+      s = \\n => f.s ! n ++ appCompl f.c2 x ;
       g = f.g ;
       c2 = f.c3
       } ;
@@ -156,7 +152,7 @@ incomplete concrete NounRomance of Noun =
       } ;
 
     ApposCN  cn np = let g = cn.g in {
-      s = \\n => cn.s ! n ++ np.s ! Ton Nom ;
+      s = \\n => cn.s ! n ++ (np.s ! Nom).ton ;
       g = g
       } ;
 

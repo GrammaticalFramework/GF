@@ -12,7 +12,22 @@ oper
   nominative : Case = Nom ;
   accusative : Case = Acc ;
 
-  Pronoun = {s : NPForm => Str ; a : Agr ; hasClit : Bool} ;
+--e  Pronoun = {s : NPForm => Str ; a : Agr ; hasClit : Bool} ;
+  NounPhrase : Type = {
+    s : Case => {c1,c2,comp,ton : Str} ;
+    a : Agr ;
+    hasClit : Bool
+    } ;
+  Pronoun : Type = NounPhrase ** {
+    poss : Number => Gender => Str ---- also: substantival
+    } ;
+
+  heavyNP : {s : Case => Str ; a : Agr} -> NounPhrase = \np -> {
+    s = \\c => {comp,ton = np.s ! c ; c1,c2 = []} ;
+    a = np.a ;
+    hasClit = False
+    } ;
+--e
 
   Compl : Type = {s : Str ; c : Case ; isDir : Bool} ;
 
@@ -20,11 +35,11 @@ oper
   complGen : Compl = {s = [] ; c = genitive ; isDir = False} ;
   complDat : Compl = {s = [] ; c = dative ; isDir = True} ;
 
-  pn2np : {s : Str ; g : Gender} -> Pronoun = \pn -> {
-      s = \\c => prepCase (npform2case c) ++ pn.s ; 
-      a = agrP3 pn.g Sg ;
-      hasClit = False
-      } ;
+--e
+  pn2np : {s : Str ; g : Gender} -> NounPhrase = \pn -> heavyNP {
+    s = \\c => prepCase c ++ pn.s ; 
+    a = agrP3 pn.g Sg
+    } ;
 
   npform2case : NPForm -> Case = \p -> case p of {
     Ton  x => x ;
@@ -45,21 +60,23 @@ oper
     _ => c
     } ;
 
-  appCompl : Compl -> (NPForm => Str) -> Str = \comp,np ->
-    comp.s ++ np ! Ton comp.c ;
+  appCompl : Compl -> NounPhrase -> Str = \comp,np ->
+    comp.s ++ (np.s ! comp.c).ton ;
+--e  appCompl : Compl -> (NPForm => Str) -> Str = \comp,np ->
+--e    comp.s ++ np ! Ton comp.c ;
 
   oper
 
   VP : Type = {
-      s : Verb ;
-      agr    : VPAgr ;                   -- dit/dite dep. on verb, subj, and clitic
-      neg    : Polarity => (Str * Str) ; -- ne-pas
-      clAcc  : CAgr ;                    -- le/se
-      clDat  : CAgr ;                    -- lui
-      clit2  : Str ;                     -- y en
-      comp   : Agr => Str ;              -- content(e) ; à ma mère ; hier
-      ext    : Polarity => Str ;         -- que je dors / que je dorme
-      } ;
+    s : Verb ;
+    agr    : VPAgr ;                   -- dit/dite dep. on verb, subj, and clitic
+    neg    : Polarity => (Str * Str) ; -- ne-pas
+    clit1  : Str ;                     -- le/se
+    clit2  : Str ;                     -- lui
+    clit3  : Str ;                     -- y en
+    comp   : Agr => Str ;              -- content(e) ; à ma mère ; hier
+    ext    : Polarity => Str ;         -- que je dors / que je dorme
+    } ;
 
 
   useVP : VP -> VPC = \vp -> 
@@ -101,16 +118,13 @@ oper
       VPGerund         => vf (\_ -> []) (\_ -> vger) ;
       VPInfinit Simul b=> vf (\_ -> []) (\_ -> vinf b)
       } ;
-    agr    = vp.agr ; -- partAgr typ ;
-    neg    = vp.neg ; -- negation ;
-    clAcc  = vp.clAcc ; -- case isVRefl typ of {
-         -- True => CRefl ;
-         -- _    => CNone
-         -- } ;
-    clDat  = vp.clDat ; -- CNone ; --- no dative refls
-    clit2  = vp.clit2 ; -- [] ;
-    comp   = vp.comp ; -- \\a => [] ;
-    ext    = vp.ext -- \\p => []
+    agr    = vp.agr ;
+    neg    = vp.neg ;
+    clit1  = vp.clit1 ;
+    clit2  = vp.clit2 ;
+    clit3  = vp.clit3 ;
+    comp   = vp.comp ;
+    ext    = vp.ext
     } ;
 
   predV : Verb -> VP = \verb -> 
@@ -120,18 +134,24 @@ oper
     s = {s = verb.s ; vtyp = typ} ;
     agr    = partAgr typ ;
     neg    = negation ;
+{- ----e
     clAcc  = case isVRefl typ of {
           True => CRefl ;
           _    => CNone
           } ;
-    clDat  = CNone ; --- no dative refls
+-}
+    clit1  = [] ;
     clit2  = [] ;
+    clit3  = [] ;
     comp   = \\a => [] ;
     ext    = \\p => []
     } ;
 
-  insertObject : Compl -> Pronoun -> VP -> VP = \c,np,vp -> 
+  insertObject : Compl -> NounPhrase -> VP -> VP = \c,np,vp -> 
     let
+      obj = np.s ! c.c ;
+
+{- ----e
       vpacc = vp.clAcc ; 
       vpdat = vp.clDat ;
       vpagr = vp.agr ;
@@ -146,24 +166,29 @@ oper
           } ;
         _   => noNewClit
         } ;
+-} ----e
 
     in {
-      s     = vp.s ;
-      agr   = cc.p4 ;
-      clAcc = cc.p1 ;
-      clDat = cc.p2 ;
-      clit2 = vp.clit2 ;
+      s   = vp.s ;
+      agr = vp.agr ; ----e
+      clit1 = vp.clit1 ++ obj.c1 ;
+      clit2 = vp.clit2 ++ obj.c2 ;
+      clit3 = vp.clit3 ;
+      comp  = \\a => vp.comp ! a ++ c.s ++ obj.comp ;
+----e      agr   = cc.p4 ;
+----      clAcc = cc.p1 ;
+----      clDat = cc.p2 ;
+----e      comp  = \\a => cc.p3 ++ vp.comp ! a ;
       neg   = vp.neg ;
-      comp  = \\a => cc.p3 ++ vp.comp ! a ;
       ext   = vp.ext ;
     } ;
 
   insertComplement : (Agr => Str) -> VP -> VP = \co,vp -> { 
     s     = vp.s ;
     agr   = vp.agr ;
-    clAcc = vp.clAcc ; 
-    clDat = vp.clDat ; 
+    clit1 = vp.clit1 ; 
     clit2 = vp.clit2 ; 
+    clit3 = vp.clit3 ; 
     neg   = vp.neg ;
     comp  = \\a => vp.comp ! a ++ co ! a ;
     ext   = vp.ext ;
@@ -176,20 +201,21 @@ oper
   insertAgr : AAgr -> VP -> VP = \ag,vp -> { 
     s     = vp.s ;
     agr   = vpAgrClit (agrP3 ag.g ag.n) ;
-    clAcc = vp.clAcc ; 
-    clDat = vp.clDat ; 
+    clit1 = vp.clit1 ; 
     clit2 = vp.clit2 ; 
+    clit3 = vp.clit3 ; 
     neg   = vp.neg ;
     comp  = vp.comp ;
     ext   = vp.ext ;
     } ;
 
+----e
   insertRefl : VP -> VP = \vp -> { 
     s     = {s = vp.s.s ; vtyp = vRefl} ;
     agr   = vp.agr ;
-    clAcc = CRefl ; 
-    clDat = vp.clDat ; 
+    clit1 = vp.clit1 ; 
     clit2 = vp.clit2 ; 
+    clit3 = vp.clit3 ; 
     neg   = vp.neg ;
     comp  = vp.comp ;
     ext   = vp.ext ;
@@ -198,9 +224,9 @@ oper
   insertAdv : Str -> VP -> VP = \co,vp -> { 
     s     = vp.s ;
     agr   = vp.agr ;
-    clAcc = vp.clAcc ; 
-    clDat = vp.clDat ; 
+    clit1 = vp.clit1 ; 
     clit2 = vp.clit2 ; 
+    clit3 = vp.clit3 ; 
     neg   = vp.neg ;
     comp  = \\a => vp.comp ! a ++ co ;
     ext   = vp.ext ;
@@ -209,20 +235,20 @@ oper
   insertAdV : Str -> VP -> VP = \co,vp -> { 
     s     = vp.s ;
     agr   = vp.agr ;
-    clAcc = vp.clAcc ; 
-    clDat = vp.clDat ; 
+    clit1 = vp.clit1 ; 
     clit2 = vp.clit2 ; 
+    clit3 = vp.clit3 ; 
     neg   = \\b => let vpn = vp.neg ! b in {p1 = vpn.p1 ; p2 = vpn.p2 ++ co} ;
     comp  = vp.comp ;
     ext   = vp.ext ;
     } ;
 
-  insertClit2 : Str -> VP -> VP = \co,vp -> { 
+  insertClit3 : Str -> VP -> VP = \co,vp -> { 
     s     = vp.s ;
     agr   = vp.agr ;
-    clAcc = vp.clAcc ; 
-    clDat = vp.clDat ; 
-    clit2 = vp.clit2 ++ co ; ---- y en 
+    clit1 = vp.clit1 ; 
+    clit2 = vp.clit2 ; 
+    clit3 = vp.clit3 ++ co ; 
     neg   = vp.neg ;
     comp  = vp.comp ;
     ext   = vp.ext ;
@@ -231,9 +257,9 @@ oper
   insertExtrapos : (Polarity => Str) -> VP -> VP = \co,vp -> { 
     s     = vp.s ;
     agr   = vp.agr ;
-    clAcc = vp.clAcc ; 
-    clDat = vp.clDat ; 
+    clit1 = vp.clit1 ; 
     clit2 = vp.clit2 ; 
+    clit3 = vp.clit3 ; 
     neg   = vp.neg ;
     comp  = vp.comp ;
     ext   = \\p => vp.ext ! p ++ co ! p ;
@@ -258,15 +284,16 @@ oper
           verb  = vps.fin ! agr ;
           inf   = vps.inf ! (appVPAgr vp.agr (aagr agr.g agr.n)) ; --- subtype bug
           neg   = vp.neg ! b ;
-          clpr  = pronArg agr.n agr.p vp.clAcc vp.clDat ;
-          compl = clpr.p2 ++ vp.comp ! agr ++ vp.ext ! b
+--e          clpr  = pronArg agr.n agr.p vp.clAcc vp.clDat ;
+--e          compl = clpr.p2 ++ vp.comp ! agr ++ vp.ext ! b
+          clit  = vp.clit1 ++ vp.clit2 ++ vp.clit3 ;
+          compl = vp.comp ! agr ++ vp.ext ! b
         in
         case d of {
           DDir => 
-            subj ++ neg.p1 ++ clpr.p1 ++ vp.clit2 ++ verb ++ neg.p2 ++ inf ;
+            subj ++ neg.p1 ++ clit ++ verb ++ neg.p2 ++ inf ;
           DInv => 
-            neg.p1 ++ clpr.p1 ++ vp.clit2 ++ verb ++ 
-            preOrPost hasClit subj (neg.p2 ++ inf)
+            neg.p1 ++ clit ++ verb ++ preOrPost hasClit subj (neg.p2 ++ inf)
           }
         ++ compl
     } ;
@@ -277,14 +304,15 @@ oper
   infVP : VP -> Agr -> Str = \vpr,agr ->
       let
         vp   = useVP vpr ;
-        clpr = pronArg agr.n agr.p vp.clAcc vp.clDat ;
-        iform = infForm agr.n agr.p vp.clAcc vp.clDat ;
+----e        clpr = pronArg agr.n agr.p vp.clAcc vp.clDat ;
+--        iform = infForm agr.n agr.p vp.clAcc vp.clDat ;
+        iform = False ;
         inf  = (vp.s ! VPInfinit Simul iform).inf ! (aagr agr.g agr.n) ;
-        neg  = vp.neg ! Pos ; --- Neg not in API
-        obj  = neg.p2 ++ clpr.p2 ++ vp.comp ! agr ++ vp.ext ! Pos ---- pol
+--        neg  = vp.neg ! Pos ; --- Neg not in API
+--        obj  = neg.p2 ++ clpr.p2 ++ vp.comp ! agr ++ vp.ext ! Pos ---- pol
       in
-      clitInf clpr.p3 (clpr.p1 ++ vp.clit2) inf ++ obj ;
-
+----e clitInf clpr.p3 (clpr.p1 ++ vp.clit2) inf ++ obj ;
+      inf ; 
 }
 
 -- insertObject:

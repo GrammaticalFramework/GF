@@ -37,7 +37,7 @@ incomplete concrete RelativeRomance of Relative =
       } ;
 
     FunRP p np rp = {
-      s = \\_,a,c => np.s ! Ton Nom ++ p.s ++ rp.s ! True ! a ! p.c ;
+      s = \\_,a,c => (np.s ! Nom).ton ++ p.s ++ rp.s ! True ! a ! p.c ;
       a = {g = np.a.g ; n = np.a.n} ; 
       hasAgr = True
       } ;
