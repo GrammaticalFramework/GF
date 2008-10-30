@@ -3,9 +3,9 @@ RUNMAKE=$(RUNGHC) Make.hs
 
 GF_LIB_PATH=..
 
-.PHONY: all present alltenses lang api math prelude test demo synopsis link compiled clean
+.PHONY: all present alltenses lang api math prelude test demo synopsis link compiled constructX clean
 
-all: link prelude present alltenses compat
+all: link prelude constructX present alltenses compat
 
 present:
 	$(RUNMAKE) present lang
@@ -27,6 +27,10 @@ compat:
 prelude:
 	gfc prelude/*.gf
 	cp -p prelude/*.gfo ../prelude
+
+constructX:
+	gfc common/ConstructX.gf
+	cp -p common/ConstructX.gfo ../prelude
 
 test:
 	$(RUNMAKE) test

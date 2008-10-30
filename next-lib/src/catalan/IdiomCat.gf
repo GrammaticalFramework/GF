@@ -5,7 +5,7 @@ concrete IdiomCat of Idiom = CatCat **
 
   lin
     ExistNP np = mkClause [] True (agrP3 Masc Sg) 
-        (insertClit2 "hi" (insertComplement (\\_ => np.s ! Ton Acc) (predV haver_V))) ;
+        (insertClit3 "hi" (insertComplement (\\_ => (np.s ! Acc).ton) (predV haver_V))) ;
     GenericCl vp = mkClause "hom" True (agrP3 Masc Sg) vp ;
     ImpersCl vp = mkClause [] True (agrP3 Masc Sg) vp ;
 
@@ -14,7 +14,7 @@ concrete IdiomCat of Idiom = CatCat **
       insertComplement 
         (\\agr => 
            let 
-             clpr = pronArg agr.n agr.p vp.clAcc vp.clDat ;
+             clpr = <vp.clit1,vp.clit2> ; ----e pronArg agr.n agr.p vp.clAcc vp.clDat ;
              obj  = clpr.p2 ++ vp.comp ! agr ++ vp.ext ! Pos ---- pol
            in
            (vp.s ! VPGerund).inf ! (aagr agr.g agr.n) ++ clpr.p1 ++ obj
@@ -25,7 +25,7 @@ concrete IdiomCat of Idiom = CatCat **
 
     CleftNP np rs = mkClause [] True (agrP3 Masc Sg) 
       (insertComplement (\\_ => rs.s ! Indic ! np.a)
-        (insertComplement (\\_ => np.s ! Ton rs.c) (predV copula))) ;
+        (insertComplement (\\_ => (np.s ! rs.c).ton) (predV copula))) ;
 
 
     ExistIP ip = {
@@ -33,7 +33,7 @@ concrete IdiomCat of Idiom = CatCat **
         ip.s ! Nom ++ 
         (mkClause [] True 
           (agrP3 Masc Sg) 
-          (insertClit2 "hi" (insertComplement (\\_ => ip.s ! Acc) (predV haver_V))))
+          (insertClit3 "hi" (insertComplement (\\_ => ip.s ! Acc) (predV haver_V))))
           .s ! DDir ! t ! a ! p ! Indic
       } ;
 

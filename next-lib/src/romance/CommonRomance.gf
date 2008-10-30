@@ -203,9 +203,9 @@ oper
         } ;
       agr    : VPAgr ;                   -- dit/dite dep. on verb, subj, and clitic
       neg    : Polarity => (Str * Str) ; -- ne-pas
-      clAcc  : CAgr ;                    -- le/se
-      clDat  : CAgr ;                    -- lui
-      clit2  : Str ;                     -- y en
+      clit1  : Str ;                     -- le/se
+      clit2  : Str ;                     -- lui
+      clit3  : Str ;                     -- y en
       comp   : Agr => Str ;              -- content(e) ; à ma mère ; hier
       ext    : Polarity => Str ;         -- que je dors / que je dorme
       } ;

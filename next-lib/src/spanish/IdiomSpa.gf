@@ -11,7 +11,7 @@ concrete IdiomSpa of Idiom = CatSpa **
 
     CleftNP np rs = mkClause [] True (agrP3 Masc Sg) 
       (insertComplement (\\_ => rs.s ! Indic ! np.a)
-        (insertComplement (\\_ => np.s ! Ton rs.c) (predV copula))) ;
+        (insertComplement (\\_ => (np.s ! rs.c).ton) (predV copula))) ;
 
     CleftAdv ad s = mkClause [] True (agrP3 Masc Sg) 
       (insertComplement (\\_ => conjThat ++ s.s ! Indic)
@@ -20,7 +20,7 @@ concrete IdiomSpa of Idiom = CatSpa **
 
     ExistNP np = 
       mkClause [] True (agrP3 Masc Sg)
-        (insertComplement (\\_ => np.s ! Ton Acc) (predV (verboV (hay_3 "haber")))) ;
+        (insertComplement (\\_ => (np.s ! Acc).ton) (predV (verboV (hay_3 "haber")))) ;
     ExistIP ip = {
       s = \\t,a,p,_ =>
         ip.s ! Nom ++ 
@@ -31,7 +31,7 @@ concrete IdiomSpa of Idiom = CatSpa **
       insertComplement 
         (\\agr => 
            let 
-             clpr = pronArg agr.n agr.p vp.clAcc vp.clDat ;
+             clpr = <vp.clit1,vp.clit2> ; ----e pronArg agr.n agr.p vp.clAcc vp.clDat ;
              obj  = clpr.p2 ++ vp.comp ! agr ++ vp.ext ! Pos ---- pol
            in
            (vp.s ! VPGerund).inf ! (aagr agr.g agr.n) ++ clpr.p1 ++ obj

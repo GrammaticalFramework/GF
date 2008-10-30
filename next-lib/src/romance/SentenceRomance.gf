@@ -4,7 +4,7 @@ incomplete concrete SentenceRomance of Sentence =
   flags optimize=all_subs ;
 
   lin
-    PredVP np vp = mkClause (np.s ! Aton Nom) np.hasClit np.a vp ;
+    PredVP np vp = mkClause (np.s ! Nom).comp np.hasClit np.a vp ;
 
     PredSCVP sc vp = mkClause sc.s False (agrP3 Masc Sg) vp ;
 
@@ -17,34 +17,16 @@ incomplete concrete SentenceRomance of Sentence =
     SlashVP np v2 = 
       -- agreement decided afterwards: la fille qu'il a trouvée
       {s = \\ag => 
-          let vp = case <v2.c2.c, v2.c2.isDir> of {
-            <Acc,True> => insertAgr ag v2 ;
-            _ => v2
-            }
-          in (mkClause (np.s ! Aton Nom) np.hasClit np.a vp).s ;
+          let 
+            vp = v2
+----e            vp = case <v2.c2.c, v2.c2.isDir> of {
+----              <Acc,True> => insertAgr ag v2 ;
+----              _ => v2
+----e              }
+          in (mkClause (np.s ! Nom).comp np.hasClit np.a vp).s ;
        c2 = v2.c2
       } ;
 
-{---b
-    SlashV2 np v2 = 
-      {s = \\d,ag =>case <v2.c2.c,v2.c2.isDir> of {
-          <Acc,True> => 
-               (mkClause (np.s ! Aton Nom) np.hasClit np.a 
-                                 (insertAgr ag (predV v2))).s ! d ;
-          _ => (mkClause (np.s ! Aton Nom) np.hasClit np.a (predV v2)).s ! d
-          } ;
-       c2 = v2.c2
-      } ;
-
-    SlashVVV2 np vv v2 = 
-      {s = \\d,_ =>
-        (mkClause
-         (np.s ! Aton Nom) np.hasClit np.a
-         (insertComplement 
-           (\\a => prepCase vv.c2.c ++ v2.s ! VInfin False) (predV vv))).s ! d;
-       c2 = v2.c2
-      } ;
--}
     AdvSlash slash adv = {
       s  = \\ag,d,t,a,b,m => slash.s ! ag ! d ! t ! a ! b ! m ++ adv.s ;
       c2 = slash.c2
@@ -58,7 +40,7 @@ incomplete concrete SentenceRomance of Sentence =
     SlashVS np vs slash = 
       {s = \\ag =>
         (mkClause
-          (np.s ! Aton Nom) np.hasClit np.a
+          (np.s ! Nom).comp np.hasClit np.a
           (insertExtrapos (\\b => conjThat ++ slash.s ! ag ! (vs.m ! b))
             (predV vs))
         ).s ;

@@ -8,7 +8,7 @@ incomplete concrete AdjectiveRomance of Adjective =
       isPre = a.isPre
       } ;
     ComparA a np = {
-      s = \\af => a.s ! Compar ! af ++ conjThan ++ np.s ! Ton Nom ; 
+      s = \\af => a.s ! Compar ! af ++ conjThan ++ (np.s ! Nom).ton ; 
       isPre = False
       } ;
     UseComparA a = {
@@ -26,7 +26,7 @@ incomplete concrete AdjectiveRomance of Adjective =
 -- $SuperlA$ belongs to determiner syntax in $Noun$.
 
     ComplA2 adj np = {
-      s = \\af => adj.s ! Posit ! af ++ appCompl adj.c2 np.s ; 
+      s = \\af => adj.s ! Posit ! af ++ appCompl adj.c2 np ; 
       isPre = False
       } ;
 

@@ -100,24 +100,31 @@ oper
 ---- The use of "ne" as atonic genitive is debatable.
 ---- We follow the rule that the atonic nominative is empty.
 --
+
   mkPronoun : (_,_,_,_,_,_,_,_ : Str) -> 
               Gender -> Number -> Person -> Pronoun =
     \il,le,lui,Lui,son,sa,ses,see,g,n,p ->
-    {s = table {
-       Ton Nom => il ;
-       Ton x => prepCase x ++ Lui ;
-       Aton Nom => strOpt il ; ---- [] ;
-       Aton Acc => le ;
-       Aton (CPrep P_a) => lui ;
-       Aton q       => prepCase q ++ Lui ; ---- GF bug with c or p! 
-       Poss {n = Sg ; g = Masc} => son ;
-       Poss {n = Sg ; g = Fem}  => sa ;
-       Poss {n = Pl ; g = Masc} => ses ;
-       Poss {n = Pl ; g = Fem}  => see
+    let
+      alui : Case -> Str = \x -> prepCase x ++ Lui ;
+    in {
+    s = table {
+      Nom        => {c1 = [] ; c2 = []  ; comp = il ; ton = Lui} ;
+      Acc        => {c1 = le ; c2 = []  ; comp = [] ; ton = Lui} ;
+      CPrep P_a  => {c1 = [] ; c2 = lui ; comp = [] ; ton = alui (CPrep P_a)} ;
+      c          => {c1 = [] ; c2 = []  ; comp, ton = alui c}
+      } ;
+    poss = \\n,g => case <n,g> of {
+       <Sg,Masc> => son ;
+       <Sg,Fem>  => sa ;
+       <Pl,Masc> => ses ;
+       <Pl,Fem>  => see 
        } ;
-     a = {g = g ; n = n ; p = p} ;
-     hasClit = True
+
+    a = {g = g ; n = n ; p = p} ;
+    hasClit = True
     } ;
+
+
 --
 --
 ----2 Determiners

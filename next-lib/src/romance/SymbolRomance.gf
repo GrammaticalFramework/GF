@@ -7,18 +7,18 @@ lin
   FloatPN i  = {s = i.s ; g = Masc} ;
   NumPN i  = {s = i.s!Masc ; g = Masc} ;
 
-  CNIntNP cn i = {
-    s = \\c => cn.s ! Sg ++ i.s ;
+  CNIntNP cn i = heavyNP {
+    s = \\c => prepCase c ++ cn.s ! Sg ++ i.s ;
     a = agrP3 cn.g Sg ;
     hasClit = False
     } ;
-  CNSymbNP det cn xs = let g = cn.g in {
-    s = \\c => det.s ! g ! npform2case c ++ cn.s ! det.n ++ xs.s ; 
+  CNSymbNP det cn xs = let g = cn.g in heavyNP {
+    s = \\c => det.s ! g ! c ++ cn.s ! det.n ++ xs.s ; 
     a = agrP3 g det.n ;
     hasClit = False
     } ;
-  CNNumNP cn i = {
-    s = \\c => artDef cn.g Sg (npform2case c) ++ cn.s ! Sg ++ i.s ! Masc ;
+  CNNumNP cn i = heavyNP {
+    s = \\c => artDef cn.g Sg c ++ cn.s ! Sg ++ i.s ! Masc ;
     a = agrP3 cn.g Sg ;
     hasClit = False
     } ;

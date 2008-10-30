@@ -163,18 +163,22 @@ oper
   mkPronoun : (_,_,_,_,_,_,_ : Str) -> 
               Gender -> Number -> Person -> Pronoun =
     \il,le,lui,Lui,son,sa,ses,g,n,p ->
-    {s = table {
-       Ton x => prepCase x ++ Lui ;
-       Aton Nom => il ;
-       Aton Acc => le ; 
-       Aton (CPrep P_de) => "en" ; --- hmm
-       Aton (CPrep _) => lui ; 
-       Poss {n = Sg ; g = Masc} => son ;
-       Poss {n = Sg ; g = Fem}  => sa ;
-       Poss {n = Pl}    => ses
-       } ;
-     a = {g = g ; n = n ; p = p} ;
-     hasClit = True
+    let
+      alui : Case -> Str = \x -> prepCase x ++ Lui ;
+    in {
+    s = table {
+      Nom        => {c1 = [] ; c2 = []  ; comp = il ; ton = Lui} ;
+      Acc        => {c1 = le ; c2 = []  ; comp = [] ; ton = Lui} ;
+      CPrep P_a  => {c1 = [] ; c2 = lui ; comp = [] ; ton = alui (CPrep P_a)} ;
+      c          => {c1 = [] ; c2 = []  ; comp, ton = alui c}
+      } ;
+    poss = \\n,g => case <n,g> of {
+      <Sg,Masc> => son ;
+      <Sg,Fem>  => sa ;
+      _         => ses
+      } ;
+    a = {g = g ; n = n ; p = p} ;
+    hasClit = True
     } ;
 
   elisPoss : Str -> Str = \s ->
