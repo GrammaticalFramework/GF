@@ -342,7 +342,6 @@ oper
     mkPN : N -> PN = nounPN
   } ;
 
-
   mkN2 = \n,p -> n ** {lock_N2 = <> ; c2 = p.s} ;
   regN2 n = mkN2 (regN n) (mkPrep "of") ;
   mkN3 = \n,p,q -> n ** {lock_N3 = <> ; c2 = p.s ; c3 = q.s} ;

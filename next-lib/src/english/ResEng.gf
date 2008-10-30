@@ -148,21 +148,15 @@ resource ResEng = ParamX ** open Prelude in {
         n = n
         } ;
 
-    mkPron : (i,me,my,mine : Str) -> Number -> Person -> Gender -> 
-     {s : Case => Str ; sp : Str ; a : Agr} =
-     \i,me,my,mine,n,p,g -> {
-     s = table {
+    mkNP : (i,me,my : Str) -> Number -> Person -> Gender -> 
+     {s : Case => Str ; a : Agr} = \i,me,my,n,p,g -> 
+   { s = table {
        Nom => i ;
        Acc => me ;
        Gen => my
        } ;
      a = toAgr n p g ;
-     sp = mine
-     } ;
-
-    mkNP : (i,me,my : Str) -> Number -> Person -> Gender -> 
-     {s : Case => Str ; a : Agr} =
-     \i,me,my,n,p,g -> mkPron i me my me n p g ;
+   };
 
 -- These functions cover many cases; full coverage inflectional patterns are
 -- in $MorphoEng$.

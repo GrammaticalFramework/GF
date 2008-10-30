@@ -1,4 +1,4 @@
-concrete NounEng of Noun = CatEng ** open ResEng, Prelude in {
+concrete NounEng of Noun = CatEng ** open MorphoEng, ResEng, Prelude in {
 
   flags optimize=all_subs ;
 
@@ -33,18 +33,18 @@ concrete NounEng of Noun = CatEng ** open ResEng, Prelude in {
 
     DetQuant quant num = {
       s  = quant.s ! num.hasCard ! num.n ++ num.s ;
-      sp = quant.sp ! num.hasCard ! num.n ++ num.s ;
+      sp = \\c => quant.sp ! num.hasCard ! num.n ! c ++ num.s ;
       n  = num.n
       } ;
 
     DetQuantOrd quant num ord = {
       s  = quant.s ! num.hasCard ! num.n ++ num.s ++ ord.s ; 
-      sp = quant.sp ! num.hasCard ! num.n ++ num.s ++ ord.s ; 
+      sp = \\c => quant.sp ! num.hasCard ! num.n ! c ++ num.s ++ ord.s ; 
       n  = num.n
       } ;
 
     DetNP det = {
-      s = \\c => det.sp ; ---- case
+      s = det.sp ;
       a = agrP3 det.n
       } ;
 
@@ -70,23 +70,23 @@ concrete NounEng of Noun = CatEng ** open ResEng, Prelude in {
     OrdSuperl a = {s = a.s ! AAdj Superl} ;
 
     DefArt = {
-      s = \\c,n => artDef ;
-      sp = \\c,n => case <n,c> of {
-        <Sg,False> => "it" ;
-        <Pl,False> => "they" ;
-        _ => artDef
+      s  = \\hasCard,n => artDef ;
+      sp = \\hasCard,n => case <n,hasCard> of {
+        <Sg,False> => table { Gen => "its"; _ => "it" } ;
+        <Pl,False> => table { Nom => "they"; Acc => "them"; Gen => "theirs" } ;
+        _          => \\c => artDef
         }
       } ;
 
     IndefArt = {
-      s = \\c,n => case <n,c> of {
+      s = \\hasCard,n => case <n,hasCard> of {
         <Sg,False> => artIndef ;
-        _ => []
+        _          => []
         } ;
-      sp = \\c,n => case <n,c> of {
-        <Sg,False> => "one" ;
-        <Pl,False> => "ones" ;
-        _ => []
+      sp = \\hasCard,n => case <n,hasCard> of {
+        <Sg,False> => table { Gen => "one's"; _ => "one" };
+        <Pl,False> => table { Gen => "ones'"; _ => "ones" } ;
+        _          => \\c => []
         }
       } ;
 

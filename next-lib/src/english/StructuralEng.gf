@@ -121,11 +121,5 @@ concrete StructuralEng of Structural = CatEng **
   youPl_Pron = mkPron "you" "you" "your" "yours" Pl P2 Masc ;
   youPol_Pron = mkPron "you" "you" "your" "yours" Sg P2 Masc ;
 
-
-oper
-  mkQuant : Str -> Str -> {s,sp : Bool => Number => Str} = \x,y -> {
-    s,sp = \\_ => table Number [x ; y]
-    } ;
-
 }
 
