@@ -10,17 +10,33 @@ import java.util.ArrayList;
 public class PGF {
 
 	private String baseURL;
-	private String pgfName;
 
-	public PGF (String baseURL, String pgfName) {
+	public PGF (String baseURL) {
 		this.baseURL = baseURL;
-		this.pgfName = pgfName;
+	}
+	
+	/* List grammars */
+	
+	public JSONRequest listGrammars (final GrammarNamesCallback callback) {
+		return JSONRequestBuilder.sendRequest(baseURL + "/", null, callback);
+	}
+	
+	public interface GrammarNamesCallback extends JSONCallback<GrammarNames> { }
+	
+	public static class GrammarNames extends IterableJsArray<GrammarName> {
+		protected GrammarNames() { }
 	}
 
+	public static class GrammarName extends JavaScriptObject {
+		protected GrammarName() { }
+		
+		public final native String getName() /*-{ return this.name; }-*/;
+	}
+		
 	/* Grammar */
 
-	public JSONRequest grammar (final GrammarCallback callback) {
-		return sendRequest("grammar", null, callback);
+	public JSONRequest grammar (String pgfName, final GrammarCallback callback) {
+		return sendGrammarRequest(pgfName, "grammar", null, callback);
 	}
 
 	public interface GrammarCallback extends JSONCallback<Grammar> { }
@@ -55,7 +71,7 @@ public class PGF {
 
 	/* Translation */
 
-	public JSONRequest translate (String input, List<String> fromLangs, String cat, List<String> toLangs, 
+	public JSONRequest translate (String pgfName, String input, List<String> fromLangs, String cat, List<String> toLangs, 
 			final TranslateCallback callback) {
 		List<Arg> args = new ArrayList<Arg>();
 		args.add(new Arg("input", input));
@@ -70,7 +86,7 @@ public class PGF {
 				args.add(new Arg("to", to));
 			}
 		}
-		return sendRequest("translate", args, callback);
+		return sendGrammarRequest(pgfName, "translate", args, callback);
 	}
 
 	public interface TranslateCallback extends JSONCallback<Translations> {  }
@@ -89,7 +105,7 @@ public class PGF {
 
 	/* Completion */
 
-	public JSONRequest complete (String input, List<String> fromLangs, String cat, int limit, final CompleteCallback callback) {
+	public JSONRequest complete (String pgfName, String input, List<String> fromLangs, String cat, int limit, final CompleteCallback callback) {
 		List<Arg> args = new ArrayList<Arg>();
 		args.add(new Arg("input", input));
 		if (fromLangs != null) {
@@ -99,7 +115,7 @@ public class PGF {
 		}
 		args.add(new Arg("cat", cat));
 		args.add(new Arg("limit", limit));
-		return sendRequest("complete", args, callback);
+		return sendGrammarRequest(pgfName, "complete", args, callback);
 	}
 
 	public interface CompleteCallback extends JSONCallback<Completions> { }
@@ -117,7 +133,7 @@ public class PGF {
 
 	/* Parsing */
 
-	public JSONRequest parse (String input, List<String> fromLangs, String cat, final ParseCallback callback) {
+	public JSONRequest parse (String pgfName, String input, List<String> fromLangs, String cat, final ParseCallback callback) {
 		List<Arg> args = new ArrayList<Arg>();
 		args.add(new Arg("input", input));
 		if (fromLangs != null) {
@@ -126,7 +142,7 @@ public class PGF {
 			}
 		}
 		args.add(new Arg("cat", cat));
-		return sendRequest("parse", args, callback);
+		return sendGrammarRequest(pgfName, "parse", args, callback);
 	}
 
 	public interface ParseCallback extends JSONCallback<ParseResults> { }
@@ -144,7 +160,7 @@ public class PGF {
 
 	/* Common */
 
-	public <T extends JavaScriptObject> JSONRequest sendRequest(String resource, List<Arg> args, final JSONCallback<T> callback) {
+	public <T extends JavaScriptObject> JSONRequest sendGrammarRequest(String pgfName, String resource, List<Arg> args, final JSONCallback<T> callback) {
 		return JSONRequestBuilder.sendRequest(baseURL + "/" + pgfName + "/" + resource, args, callback);
 	}
 
