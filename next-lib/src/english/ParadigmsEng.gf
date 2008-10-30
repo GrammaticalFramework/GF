@@ -359,7 +359,8 @@ oper
   cnN3 = \n,p,q -> n ** {lock_N3 = <> ; c2 = p.s ; c3 = q.s} ;
 
   regPN n = regGenPN n human ;
-  regGenPN n g = nameReg n g ** {g = g ; lock_PN = <>} ;
+  regGenPN n g = {s = table {Gen => n + "'s" ; _ => n} ; 
+		  g = g ; lock_PN = <>} ;
   nounPN n = {s = n.s ! singular ; g = n.g ; lock_PN = <>} ;
 
   mk2A a b = mkAdjective a a a b ** {lock_A = <>} ;
@@ -450,7 +451,7 @@ oper
     in
     mk5V fit (fit + "s") y z fitting ;
 
-  partV v p = verbPart v p ** {lock_V = <>} ;
+  partV v p = {s = \\f => v.s ! f ++ p ; isRefl = v.isRefl ; lock_V = <>} ;
   reflV v = {s = v.s ; part = v.part ; lock_V = v.lock_V ; isRefl = True} ;
 
   prepV2 v p = v ** {s = v.s ; s1 = v.s1 ; c2 = p.s ; lock_V2 = <>} ;
