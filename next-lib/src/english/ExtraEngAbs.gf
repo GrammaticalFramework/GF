@@ -2,12 +2,12 @@ abstract ExtraEngAbs = Extra ** {
 
 -- uncontracted negations; contracted are the default
   fun
-    UncNegCl  : Temp -> Cl  -> S ;
-    UncNegQCl : Temp -> QCl -> QS ;
-    UncNegRCl : Temp -> RCl -> RS ;
+    UncNegCl  : Temp -> Pol -> Cl  -> S ;
+    UncNegQCl : Temp -> Pol -> QCl -> QS ;
+    UncNegRCl : Temp -> Pol -> RCl -> RS ;
 
-    UncNegImpSg : Imp -> Utt;           -- do not help yourself
-    UncNegImpPl : Imp -> Utt;           -- do not help yourselves
+    UncNegImpSg : Pol -> Imp -> Utt;           -- do not help yourself
+    UncNegImpPl : Pol -> Imp -> Utt;           -- do not help yourselves
 
 -- freely compounded nouns
 
