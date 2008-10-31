@@ -35,20 +35,24 @@ concrete ExtraEng of ExtraEngAbs = CatEng **
     ComplVPIVV vv vpi = 
       insertObj (\\a => (if_then_Str vv.isAux [] "to") ++ vpi.s ! VPIInf ! a) (predVV vv) ;
 
-    UncNegCl  t cl = {s = t.s ++ cl.s ! t.t ! t.a ! neg ! ODir} ;
-    UncNegQCl t cl = {s = \\q => t.s ++ cl.s ! t.t ! t.a ! neg !q} ;
-    UncNegRCl t cl = {
-      s = \\r => t.s ++ cl.s ! t.t ! t.a ! neg ! r ;
+    UncNegCl t p cl = {
+      s = t.s ++ p.s ++ cl.s ! t.t ! t.a ! unc p.p ! ODir
+    } ;
+    UncNegQCl t p cl = {
+      s = \\q => t.s ++ p.s ++ cl.s ! t.t ! t.a ! unc p.p ! q
+    } ;
+    UncNegRCl t p cl = {
+      s = \\r => t.s ++ p.s ++ cl.s ! t.t ! t.a ! unc p.p ! r ;
       c = cl.c
-      } ;
-    UncNegImpSg imp = {s = imp.s ! neg ! ImpF Sg False} ;
-    UncNegImpPl imp = {s = imp.s ! neg ! ImpF Pl False} ;
+    } ;
+
+    UncNegImpSg p imp = {s = p.s ++ imp.s ! unc p.p ! ImpF Sg False} ;
+    UncNegImpPl p imp = {s = p.s ++ imp.s ! unc p.p ! ImpF Pl False} ;
 
     CompoundCN a b = {s = \\n,c => a.s ! Sg ! Nom ++ b.s ! n ! c ; g = b.g} ;
 
-
   oper
-    neg = CNeg False ; 
+    unc = contrNeg False ; 
 
 
   lin

@@ -38,33 +38,31 @@ lin ComplVS v s = variants { VerbEng.ComplVS v s; insertObj (\\_ => s.s) (predV 
 lin UseCl t p cl = 
       case p.p of {
 	Pos => SentenceEng.UseCl t p cl;
-	Neg => variants { SentenceEng.UseCl t p cl; { s = p.s ++ (UncNegCl t cl).s } }
+	Neg => variants { SentenceEng.UseCl t p cl; UncNegCl t p cl }
       } ;
 
 lin UseQCl t p cl = 
       case p.p of {
 	Pos => SentenceEng.UseQCl t p cl;
-	Neg => variants { SentenceEng.UseQCl t p cl; { s = \\qf => p.s ++ (UncNegQCl t cl).s!qf } }
+	Neg => variants { SentenceEng.UseQCl t p cl; UncNegQCl t p cl }
       } ;
 
 lin UseRCl t p cl = 
       case p.p of {
 	Pos => SentenceEng.UseRCl t p cl;
-	Neg => variants { SentenceEng.UseRCl t p cl; 
-                          let s = UncNegRCl t cl
-			   in { s = \\agr => p.s ++ s.s!agr; c = s.c } }
+	Neg => variants { SentenceEng.UseRCl t p cl; UncNegRCl t p cl }
       } ;
 
 lin UttImpSg p i = 
       case p.p of {
 	Pos => PhraseEng.UttImpSg p i;
-	Neg => variants { PhraseEng.UttImpSg p i ; { s = p.s ++ (UncNegImpSg i).s } }
+	Neg => variants { PhraseEng.UttImpSg p i ; UncNegImpSg p i }
       } ;
 
 lin UttImpPl p i = 
       case p.p of {
 	Pos => PhraseEng.UttImpPl p i;
-	Neg => variants { PhraseEng.UttImpPl p i ; { s = p.s ++ (UncNegImpPl i).s } }
+	Neg => variants { PhraseEng.UttImpPl p i ; UncNegImpPl p i }
       } ;
 
 -- Allow both "who"/"which" and "that"
