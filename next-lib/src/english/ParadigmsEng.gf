@@ -251,7 +251,9 @@ oper
     mkV2  : Str -> V2 ;       -- kill
     mkV2  : V -> V2 ;         -- hit
     mkV2  : V -> Prep -> V2 ; -- believe in
-    mkV2  : V -> Str -> V2    -- believe in
+    mkV2  : V -> Str -> V2 ;  -- believe in
+    mkV2  : Str -> Prep -> V2 ; -- believe in
+    mkV2  : Str -> Str -> V2  -- believe in
   };
 
 --3 Three-place verbs
@@ -262,8 +264,10 @@ oper
   mkV3 : overload {
     mkV3  : V -> Prep -> Prep -> V3 ;   -- speak, with, about
     mkV3  : V -> Prep -> V3 ;           -- give,_,to
-    mkV3  : V -> Str -> V3 ;           -- give,_,to
+    mkV3  : V -> Str -> V3 ;            -- give,_,to
+    mkV3  : Str -> Str -> V3 ;          -- give,_,to
     mkV3  : V -> V3 ;                   -- give,_,_
+    mkV3  : Str -> V3 ;                 -- give,_,_
   };
 
 --3 Other complement patterns
@@ -587,7 +591,9 @@ mkSubj : Str -> Subj = \s -> {s = s ; lock_Subj = <>} ;
     mkV2  : V -> V2 = dirV2 ;
     mkV2  : Str -> V2 = \s -> dirV2 (regV s) ;
     mkV2  : V -> Prep -> V2 = prepV2 ;
-    mkV2  : V -> Str -> V2 = \v,p -> prepV2 v (mkPrep p)
+    mkV2  : V -> Str -> V2 = \v,p -> prepV2 v (mkPrep p) ;
+    mkV2  : Str -> Prep -> V2 = \v,p -> prepV2 (regV v) p ;
+    mkV2  : Str -> Str -> V2 = \v,p -> prepV2 (regV v) (mkPrep p)
   }; 
 
   prepPrepV3 : V -> Prep -> Prep -> V3 ;
@@ -598,7 +604,9 @@ mkSubj : Str -> Subj = \s -> {s = s ; lock_Subj = <>} ;
     mkV3 : V -> Prep -> Prep -> V3 = prepPrepV3 ;
     mkV3 : V -> Prep -> V3 = dirV3 ;
     mkV3 : V -> Str -> V3 = \v,s -> dirV3 v (mkPrep s);
-    mkV3 : V -> V3 = dirdirV3
+    mkV3 : Str -> Str -> V3 = \v,s -> dirV3 (regV v) (mkPrep s);
+    mkV3 : V -> V3 = dirdirV3 ;
+    mkV3 : Str -> V3 = \v -> dirdirV3 (regV v) ;
   } ;
 
 ---- obsolete
