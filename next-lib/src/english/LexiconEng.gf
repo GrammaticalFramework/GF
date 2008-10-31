@@ -166,7 +166,7 @@ lin
   shop_N = regN "shop" ;
   short_A = regADeg "short" ;
   silver_N = regN "silver" ;
-  sister_N = mkN2 (mkN feminine (mkN "sister")) (mkPrep "of") ;
+  sister_N = mkN feminine (mkN "sister") ;
   sleep_V = (irregV "sleep" "slept" "slept") ;
   small_A = regADeg "small" ;
   snake_N = regN "snake" ;
