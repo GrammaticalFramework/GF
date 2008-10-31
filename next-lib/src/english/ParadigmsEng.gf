@@ -97,15 +97,14 @@ oper
 
 
 --3 Relational nouns 
--- 
--- Relational nouns ("daughter of x") need a preposition. 
 
-  mkN2 : N -> Prep -> N2 ;
-
--- The most common preposition is "of", and the following is a
--- shortcut for regular relational nouns with "of".
-
-  regN2 : Str -> N2 ;
+  mkN2 : overload {
+    mkN2 : N -> Prep -> N2 ; -- access to
+    mkN2 : N -> Str -> N2 ; -- access to
+    mkN2 : Str -> Str -> N2 ; -- access to
+    mkN2 : N -> N2 ; -- wife of
+    mkN2 : Str -> N2 -- daughter of
+  } ;
 
 -- Use the function $mkPrep$ or see the section on prepositions below to  
 -- form other prepositions.
@@ -159,11 +158,14 @@ oper
 
 
 --3 Two-place adjectives
---
--- Two-place adjectives need a preposition for their second argument.
 
-  mkA2 : A -> Prep -> A2 ;
+  mkA2 : overload {
+    mkA2 : A -> Prep -> A2 ; -- absent from
+    mkA2 : A -> Str -> A2 ; -- absent from
+    mkA2 : Str -> Prep -> A2 ; -- absent from
+    mkA2 : Str -> Str -> A2 -- absent from
 
+  } ;
 
 
 --2 Adverbs
@@ -248,7 +250,8 @@ oper
   mkV2 : overload {
     mkV2  : Str -> V2 ;       -- kill
     mkV2  : V -> V2 ;         -- hit
-    mkV2  : V -> Prep -> V2   -- believe in
+    mkV2  : V -> Prep -> V2 ; -- believe in
+    mkV2  : V -> Str -> V2    -- believe in
   };
 
 --3 Three-place verbs
@@ -256,9 +259,12 @@ oper
 -- Three-place (ditransitive) verbs need two prepositions, of which
 -- the first one or both can be absent.
 
-  mkV3     : V -> Prep -> Prep -> V3 ;   -- speak, with, about
-  dirV3    : V -> Prep -> V3 ;           -- give,_,to
-  dirdirV3 : V -> V3 ;                   -- give,_,_
+  mkV3 : overload {
+    mkV3  : V -> Prep -> Prep -> V3 ;   -- speak, with, about
+    mkV3  : V -> Prep -> V3 ;           -- give,_,to
+    mkV3  : V -> Str -> V3 ;           -- give,_,to
+    mkV3  : V -> V3 ;                   -- give,_,_
+  };
 
 --3 Other complement patterns
 --
@@ -285,6 +291,10 @@ oper
 
   V0 : Type ;
   AS, A2S, AV, A2V : Type ;
+
+--2 Other categories
+
+mkSubj : Str -> Subj = \s -> {s = s ; lock_Subj = <>} ;
 
 --.
 --2 Definitions of paradigms
@@ -347,8 +357,17 @@ oper
     mkPN : N -> PN = nounPN
   } ;
 
-  mkN2 = \n,p -> n ** {lock_N2 = <> ; c2 = p.s} ;
-  regN2 n = mkN2 (regN n) (mkPrep "of") ;
+  mkN2 = overload {
+    mkN2 : N -> Prep -> N2 = prepN2 ;
+    mkN2 : N -> Str -> N2 = \n,s -> prepN2 n (mkPrep s);
+    mkN2 : Str -> Str -> N2 = \n,s -> prepN2 (regN n) (mkPrep s);
+    mkN2 : N -> N2         = \n -> prepN2 n (mkPrep "of") ;
+    mkN2 : Str -> N2       = \s -> prepN2 (regN s) (mkPrep "of") 
+  } ;
+
+  prepN2 = \n,p -> n ** {lock_N2 = <> ; c2 = p.s} ;
+  regN2 n = prepN2 (regN n) (mkPrep "of") ;
+
   mkN3 = \n,p,q -> n ** {lock_N3 = <> ; c2 = p.s ; c3 = q.s} ;
 
 --3 Relational common noun phrases
@@ -375,7 +394,7 @@ oper
     _ => regADeg a
     }  ** {lock_A = <>} ;
 
-  mkA2 a p = a ** {c2 = p.s ; lock_A2 = <>} ;
+  prepA2 a p = a ** {c2 = p.s ; lock_A2 = <>} ;
 
   ADeg = A ; ----
 
@@ -463,8 +482,8 @@ oper
   prepV2 v p = v ** {s = v.s ; s1 = v.s1 ; c2 = p.s ; lock_V2 = <>} ;
   dirV2 v = prepV2 v noPrep ;
 
-  mkV3 v p q = v ** {s = v.s ; s1 = v.s1 ; c2 = p.s ; c3 = q.s ; lock_V3 = <>} ;
-  dirV3 v p = mkV3 v noPrep p ;
+  prepPrepV3 v p q = v ** {s = v.s ; s1 = v.s1 ; c2 = p.s ; c3 = q.s ; lock_V3 = <>} ;
+  dirV3 v p = prepPrepV3 v noPrep p ;
   dirdirV3 v = dirV3 v noPrep ;
 
   mkVS  v = v ** {lock_VS = <>} ;
@@ -487,9 +506,9 @@ oper
   mkV2Q v p = prepV2 v p ** {lock_V2Q = <>} ;
 
   mkAS  v = v ** {lock_A = <>} ;
-  mkA2S v p = mkA2 v p ** {lock_A = <>} ;
+  mkA2S v p = prepA2 v p ** {lock_A = <>} ;
   mkAV  v = v ** {lock_A = <>} ;
-  mkA2V v p = mkA2 v p ** {lock_A2 = <>} ;
+  mkA2V v p = prepA2 v p ** {lock_A2 = <>} ;
 
 
 -- pre-overload API and overload definitions
@@ -508,6 +527,14 @@ oper
     mkN : Str -> N -> N = compoundN
     } ;
 
+-- Relational nouns ("daughter of x") need a preposition. 
+
+  prepN2 : N -> Prep -> N2 ;
+
+-- The most common preposition is "of", and the following is a
+-- shortcut for regular relational nouns with "of".
+
+  regN2 : Str -> N2 ;
 
   mk2A : (free,freely : Str) -> A ;
   regA : Str -> A ;
@@ -524,6 +551,15 @@ oper
   simpleA a = 
     let ad = (a.s ! AAdj Posit) 
     in regADeg ad ;
+
+  prepA2 : A -> Prep -> A2 ;
+
+  mkA2 = overload {
+    mkA2 : A -> Prep -> A2   = prepA2 ;
+    mkA2 : A -> Str -> A2    = \a,p -> prepA2 a (mkPrep p) ;
+    mkA2 : Str -> Prep -> A2 = \a,p -> prepA2 (regA a) p;
+    mkA2 : Str -> Str -> A2  = \a,p -> prepA2 (regA a) (mkPrep p);
+  } ;
 
   mk5V : (go, goes, went, gone, going : Str) -> V ;
   regV : (cry : Str) -> V ;
@@ -548,11 +584,22 @@ oper
   dirV2 : V -> V2 ;
 
   mkV2 = overload {
+    mkV2  : V -> V2 = dirV2 ;
     mkV2  : Str -> V2 = \s -> dirV2 (regV s) ;
-    mkV2  : V -> Prep -> V2 = prepV2;
-    mkV2  : V -> V2 = dirV2
+    mkV2  : V -> Prep -> V2 = prepV2 ;
+    mkV2  : V -> Str -> V2 = \v,p -> prepV2 v (mkPrep p)
   }; 
 
+  prepPrepV3 : V -> Prep -> Prep -> V3 ;
+  dirV3 : V -> Prep -> V3 ;
+  dirdirV3 : V -> V3 ;
+
+  mkV3 = overload {
+    mkV3 : V -> Prep -> Prep -> V3 = prepPrepV3 ;
+    mkV3 : V -> Prep -> V3 = dirV3 ;
+    mkV3 : V -> Str -> V3 = \v,s -> dirV3 v (mkPrep s);
+    mkV3 : V -> V3 = dirdirV3
+  } ;
 
 ---- obsolete
 
