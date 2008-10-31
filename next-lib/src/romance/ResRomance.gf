@@ -305,14 +305,15 @@ oper
       let
         vp   = useVP vpr ;
 ----e        clpr = pronArg agr.n agr.p vp.clAcc vp.clDat ;
---        iform = infForm agr.n agr.p vp.clAcc vp.clDat ;
-        iform = False ;
+----e        iform = infForm agr.n agr.p vp.clAcc vp.clDat ;
+        clpr = <vp.clit1, vp.clit2, False> ; ----e
+        iform = False ; ----e
         inf  = (vp.s ! VPInfinit Simul iform).inf ! (aagr agr.g agr.n) ;
---        neg  = vp.neg ! Pos ; --- Neg not in API
---        obj  = neg.p2 ++ clpr.p2 ++ vp.comp ! agr ++ vp.ext ! Pos ---- pol
+        neg  = vp.neg ! Pos ; --- Neg not in API
+        obj  = neg.p2 ++ clpr.p2 ++ vp.comp ! agr ++ vp.ext ! Pos ---- pol
       in
-----e clitInf clpr.p3 (clpr.p1 ++ vp.clit2) inf ++ obj ;
-      inf ; 
+      clitInf clpr.p3 (clpr.p1 ++ vp.clit3) inf ++ obj ;
+      
 }
 
 -- insertObject:

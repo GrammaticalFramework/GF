@@ -27,8 +27,6 @@ resource ParadigmsSpa =
   open 
     (Predef=Predef), 
     Prelude, 
-    CommonRomance, 
-    ResSpa, 
     MorphoSpa, 
     BeschSpa,
     CatSpa in {

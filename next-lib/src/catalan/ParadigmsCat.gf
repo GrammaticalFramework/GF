@@ -28,8 +28,6 @@ resource ParadigmsCat =
   open 
     (Predef=Predef), 
     Prelude, 
-    CommonRomance, 
-    ResCat, 
     MorphoCat, 
     BeschCat,
     CatCat in {

@@ -358,4 +358,8 @@ lin
   question_N = regN "domanda" ;
   today_Adv = mkAdv "oggi" ;
 
+  ready_A = mkA "pronto" ;
+  reason_N = mkN "raggione" feminine ;
+  uncertain_A = mkA "insicuro" ;
+
 } ;

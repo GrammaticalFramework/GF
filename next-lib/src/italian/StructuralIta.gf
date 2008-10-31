@@ -1,5 +1,7 @@
 concrete StructuralIta of Structural = CatIta ** 
-  open PhonoIta, MorphoIta, ParadigmsIta, BeschIta, Prelude in {
+  open 
+  PhonoIta, MorphoIta, 
+  ParadigmsIta, BeschIta, Prelude in {
 
   flags optimize=all ; coding=utf8 ;
 
@@ -82,7 +84,7 @@ lin
   something_NP = pn2np (mkPN ["qualche cosa"] Masc) ;
   somewhere_Adv = ss ["qualche parte"] ;
   that_Quant = let
-    quello : Str -> Str -> Number => Gender => Case => Str = 
+    quello : Str -> Str -> ParadigmsIta.Number => ParadigmsIta.Gender => Case => Str = 
      \quel, quelli -> table {
       Sg => \\g,c => prepCase c ++ genForms quel "quella" ! g ;
       Pl => \\g,c => prepCase c ++ genForms quelli "quelle" ! g ---- quegli
@@ -104,7 +106,7 @@ lin
     Masc Pl P3 ;
 
   this_Quant = let
-    questo : Number => Gender => Case => Str = table {
+    questo : ParadigmsIta.Number => ParadigmsIta.Gender => Case => Str = table {
       Sg => \\g,c => prepCase c ++ genForms "questo" "questa" ! g ;
       Pl => \\g,c => prepCase c ++ genForms "questi" "queste" ! g
       }

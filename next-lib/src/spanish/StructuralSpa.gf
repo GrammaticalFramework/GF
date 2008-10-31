@@ -92,7 +92,7 @@ lin
   something_NP = pn2np (mkPN ["algo"] Masc) ;
   somewhere_Adv = ss ["en ninguna parte"] ;
   that_Quant =
-    let ese : Number => Gender => Case => Str = table {
+    let ese : ParadigmsSpa.Number => ParadigmsSpa.Gender => Case => Str = table {
       Sg => \\g,c => prepCase c ++ genForms "ese" "esa" ! g ;
       Pl => \\g,c => prepCase c ++ genForms "esos" "esas" ! g
       }
@@ -110,7 +110,7 @@ lin
     "su" "su" "sus" "sus"
     Masc Pl P3 ;
   this_Quant = 
-    let este : Number => Gender => Case => Str = table {
+    let este : ParadigmsSpa.Number => ParadigmsSpa.Gender => Case => Str = table {
       Sg => \\g,c => prepCase c ++ genForms "este" "esta" ! g ;
       Pl => \\g,c => prepCase c ++ genForms "estos" "estas" ! g
       }
