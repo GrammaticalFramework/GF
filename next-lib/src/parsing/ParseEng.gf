@@ -39,7 +39,7 @@ flags startcat = Phr ; unlexer = text ; lexer = text ;
 --
 
 -- Allow both "hope that he runs" and "hope he runs".
-lin ComplVS v s = variants { VerbEng.ComplVS v s; insertObj (\\_ => s.s) (predV v) } ;
+lin ComplVS v s = variants { VerbEng.ComplVS v s; ComplBareVS v s } ;
 
 -- Allow both contracted and uncontracted negated clauses.
 lin UseCl t p cl = 
