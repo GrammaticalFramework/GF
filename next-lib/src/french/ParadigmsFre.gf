@@ -28,8 +28,6 @@ resource ParadigmsFre =
   open 
     (Predef=Predef), 
     Prelude, 
-    CommonRomance, 
-    ResFre, 
     MorphoFre, 
     CatFre in {
 

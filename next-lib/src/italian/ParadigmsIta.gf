@@ -28,8 +28,6 @@ resource ParadigmsIta =
   open 
     (Predef=Predef), 
     Prelude, 
-    CommonRomance, 
-    ResIta, 
     MorphoIta, 
     BeschIta,
     CatIta in {
