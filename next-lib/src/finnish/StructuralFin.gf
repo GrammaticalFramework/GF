@@ -292,6 +292,33 @@ oper
     lock_NP = <>
     } ;
 
+lin
+  not_Predet = {s = \\_,_ => "vain"} ;
+  nothing_but_Predet = 
+    {s = \\n,c => "ei" ++ mikaanPron ! n ! npform2case n c ++ "paitsi"} ;
+  nobody_but_Predet = 
+    {s = \\n,c => "ei" ++ kukaanPron ! n ! npform2case n c ++ "paitsi"} ;
+
+  no_Quant = {
+    s1 = \\n,c => "ei" ++ mikaanPron ! n ! c ;
+    s2 = [] ; isNum,isPoss = False ; isDef = True ; 
+    } ;
+
+  if_then_Conj = {s1 = "jos" ; s2 = "niin" ; n = Sg} ;
+  nobody_NP = {
+    s = \\c => "ei" ++ kukaanPron ! Sg ! npform2case Sg c ;
+    a = agrP3 Sg ; 
+    isPron = False
+    } ;
+
+  nothing_NP = {
+    s = \\c => "ei" ++ mikaanPron ! Sg ! npform2case Sg c ;
+    a = agrP3 Sg ; 
+    isPron = False
+    } ;
+
+  at_least_AdN = ss "v‰hint‰‰n" ;
+  at_most_AdN = ss "enint‰‰n" ;
 
 
 }
