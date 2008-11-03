@@ -13,6 +13,8 @@ import qualified Codec.Binary.UTF8.String as UTF8 (encodeString, decodeString)
 import Control.Concurrent
 import Control.Monad
 import Data.Char
+import Data.Function (on)
+import Data.List (sortBy)
 import qualified Data.Map as Map
 import Data.Maybe
 import System.Directory
@@ -147,9 +149,10 @@ parse' pgf input mcat mfrom =
 
 complete' :: PGF -> String -> Maybe PGF.Type -> Maybe PGF.Language -> [(PGF.Language,[String])]
 complete' pgf input mcat mfrom = 
-   [(from,ss) | from <- froms, PGF.canParse pgf from, let ss = PGF.complete pgf from cat input, not (null ss)]
+   [(from,order ss) | from <- froms, PGF.canParse pgf from, let ss = PGF.complete pgf from cat input, not (null ss)]
   where froms = maybe (PGF.languages pgf) (:[]) mfrom
         cat = fromMaybe (PGF.startCat pgf) mcat
+        order = sortBy (compare `on` map toLower)
 
 linearize' :: PGF -> Maybe PGF.Language -> PGF.Tree -> [(PGF.Language,String)]
 linearize' pgf mto tree = 
