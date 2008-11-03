@@ -1,12 +1,22 @@
 /** Add css rules here for your application. */
 
-.gwt-SuggestBox {
-    width: 70%;
-    font-size: 150%;
+.my-SuggestPanel {
     margin: 1em 0 0.5em 0;
 }
 
-.my-settingsPanel * {
+.my-SuggestPanel .gwt-SuggestBox {
+    width: 400px;
+    font-size: 150%;
+    margin: 0;
+}
+
+.my-SuggestPanel .gwt-Button {
+    font-size: 150%;
+    margin: 0;
+    margin-left: 2px;
+}
+
+.my-SettingsPanel * {
     margin: 0 0.4em;
 }
 

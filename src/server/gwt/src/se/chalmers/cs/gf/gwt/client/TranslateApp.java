@@ -1,16 +1,11 @@
 package se.chalmers.cs.gf.gwt.client;
 
+import java.util.List;
+
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.ChangeListener;
-import com.google.gwt.user.client.ui.ClickListener;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.KeyboardListenerAdapter;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 
 public class TranslateApp implements EntryPoint {
@@ -19,13 +14,8 @@ public class TranslateApp implements EntryPoint {
 
 	private PGF pgf;
 
-	private CompletionOracle oracle;
-	private SuggestBox suggest;
-	private PGF.Grammar grammar;
-	private GrammarBox grammarBox;
-	private InputLanguageBox fromLangBox;
-	private OutputLanguageBox toLangBox;
-	private Button translateButton;
+	private SuggestPanel suggestPanel;
+	private SettingsPanel settingsPanel;
 	private VerticalPanel outputPanel;
 	private StatusPopup statusPopup;
 
@@ -36,13 +26,16 @@ public class TranslateApp implements EntryPoint {
 	private void translate() {
 		outputPanel.clear();
 		setStatus("Translating...");
-		pgf.translate(getGrammarName(), suggest.getText(), fromLangBox.getSelectedValues(), null, 
-				toLangBox.getSelectedValues(), new PGF.TranslateCallback() {
+		pgf.translate(settingsPanel.getGrammarName(), 
+					  suggestPanel.getText(), 
+					  settingsPanel.getInputLanguages(), null, 
+				      settingsPanel.getOutputLanguages(), 
+				      new PGF.TranslateCallback() {
 			public void onResult (PGF.Translations translations) {
 				for (PGF.Translation t : translations.iterable()) {
 					Label l = new Label(t.getText());
 					l.addStyleName("my-translation");
-					PGF.Language lang = grammar.getLanguage(t.getTo());
+					PGF.Language lang = settingsPanel.getGrammar().getLanguage(t.getTo());
 					if (lang != null) {
 						l.getElement().setLang(lang.getLanguageCode());
 					}
@@ -71,59 +64,19 @@ public class TranslateApp implements EntryPoint {
 	private void clearStatus() {
 		statusPopup.clearStatus();
 	}
-
+	
 	//
-	// Grammars
+	// Grammars and languages
 	//
-
-	private String getGrammarName() {
-		return grammarBox.getSelectedGrammar();
-	}
-
-	private void updateAvailableGrammars() {
-		pgf.listGrammars(new PGF.GrammarNamesCallback() {
-			public void onResult(PGF.GrammarNames grammarNames) {
-				grammarBox.setGrammarNames(grammarNames);
-				// setGrammarNames() picks the first grammar automatically
-				updateSelectedGrammar();
-			}
-
-			public void onError (Throwable e) {
-				showError("Error getting grammar list", e);
-			}
-		});
-	}
 
 	private void updateSelectedGrammar() {
-		oracle.setGrammarName(getGrammarName());
-		updateAvailableLanguages();
-	}
-
-	//
-	// Languages
-	//
-
-	private void updateAvailableLanguages() {
-		pgf.grammar(getGrammarName(), new PGF.GrammarCallback() {
-			public void onResult(PGF.Grammar grammar) {
-				TranslateApp.this.grammar = grammar;
-
-				fromLangBox.setGrammar(grammar);
-				toLangBox.setGrammar(grammar);
-
-				updateSelectedLanguages();
-				clearStatus();
-				translateButton.setEnabled(true);
-			}
-
-			public void onError (Throwable e) {
-				showError("Error getting language information", e);
-			}
-		});	
+		suggestPanel.setGrammarName(settingsPanel.getGrammarName());
 	}
 
 	private void updateSelectedLanguages() {
-		oracle.setInputLangs(fromLangBox.getSelectedValues());
+		suggestPanel.setInputLangs(settingsPanel.getInputLanguages());
+		suggestPanel.setEnabled(true);
+		clearStatus();
 		translate();
 	}
 
@@ -136,58 +89,26 @@ public class TranslateApp implements EntryPoint {
 		statusPopup = new StatusPopup();
 		setStatus("Loading...");
 
-		oracle = new CompletionOracle(pgf, new CompletionOracle.ErrorHandler() {
-			public void onError(Throwable e) {
-				showError("Completion failed", e);
-			}
-		});
-
-		suggest = new SuggestBox(oracle);
-		suggest.addKeyboardListener(new KeyboardListenerAdapter() {
-			public void onKeyUp (Widget sender, char keyCode, int modifiers) {
-				if (keyCode == KEY_ENTER) {
-					translate();
-				}
-			}
-		});
-
-		grammarBox = new GrammarBox();
-		grammarBox.addChangeListener(new ChangeListener() {
-			public void onChange(Widget sender) {
-				updateSelectedGrammar();
-			}
-		});
-
-		ChangeListener languageChangeListener = new ChangeListener() {
-			public void onChange(Widget sender) {
-				updateSelectedLanguages();
-			}
-		};
-
-		fromLangBox = new InputLanguageBox();
-		fromLangBox.addChangeListener(languageChangeListener);
-
-		toLangBox = new OutputLanguageBox();
-		toLangBox.addChangeListener(languageChangeListener);
-
-		translateButton = new Button("Translate");
-		translateButton.setEnabled(false);
-		translateButton.addClickListener(new ClickListener() {
-			public void onClick(Widget sender) {
+		suggestPanel = new SuggestPanel(pgf);
+		suggestPanel.setButtonText("Translate");
+		suggestPanel.addSubmitListener(new SuggestPanel.SubmitListener() {
+			public void onSubmit(String text) {
 				translate();
 			}
 		});
 
-		HorizontalPanel settingsPanel = new HorizontalPanel();
-		settingsPanel.addStyleName("my-settingsPanel");
-		settingsPanel.setVerticalAlignment(HorizontalPanel.ALIGN_MIDDLE);
-		settingsPanel.add(new Label("Grammar:"));
-		settingsPanel.add(grammarBox);
-		settingsPanel.add(new Label("From:"));
-		settingsPanel.add(fromLangBox);
-		settingsPanel.add(new Label("To:"));
-		settingsPanel.add(toLangBox);
-		settingsPanel.add(translateButton);
+		settingsPanel = new SettingsPanel(pgf);
+		settingsPanel.addSettingsListener(new SettingsPanel.SettingsListener() {
+			public void grammarChanged(String pgfName) {
+				updateSelectedGrammar();
+			}
+			public void languagesChanged(List<String> inputLangs, List<String> outputLangs) {
+				updateSelectedLanguages();
+			}
+			public void settingsError(String msg, Throwable e) {
+				showError(msg,e);
+			}
+		});
 
 		outputPanel = new VerticalPanel();
 		outputPanel.addStyleName("my-translations");
@@ -195,7 +116,7 @@ public class TranslateApp implements EntryPoint {
 		VerticalPanel vPanel = new VerticalPanel();
 		vPanel.setWidth("100%");
 		vPanel.setHorizontalAlignment(VerticalPanel.ALIGN_CENTER);
-		vPanel.add(suggest);
+		vPanel.add(suggestPanel);
 		vPanel.add(settingsPanel);
 		vPanel.add(outputPanel);
 
@@ -210,7 +131,7 @@ public class TranslateApp implements EntryPoint {
 	public void onModuleLoad() {
 		pgf = new PGF(pgfBaseURL);
 		createTranslationUI();
-		updateAvailableGrammars();
+		settingsPanel.updateAvailableGrammars();
 	}
 
 }
