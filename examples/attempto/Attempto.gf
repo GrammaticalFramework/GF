@@ -1,10 +1,11 @@
-abstract Attempto = {
+abstract Attempto = Symbols ** {
 
 flags startcat = ACEText ;
 
 cat CN ;
 cat NP ;
 cat Card ;
+cat Numeral ;
 cat PN ;
 cat A ;
 cat A2 ;
@@ -50,6 +51,11 @@ fun someMassNP : MCN -> NP ;
 fun noMassNP : MCN -> NP ;
 fun allMassNP : MCN -> NP ;
 fun notAllMassNP : MCN -> NP ;
+
+fun one_Card : Card ;
+fun two_Card : Card ;
+fun five_Card : Card ;
+fun ten_Card : Card ;
 
 
 fun pnNP : PN -> NP ;
@@ -97,7 +103,6 @@ fun nobody_butNP : PN -> NP ; -- nobody but John
 fun no_butNP : CN -> PN -> NP ; -- no man but John
 
 cat Unit ; -- SI measurement units
-cat Var ;
 
 fun unitNP : Card -> Unit -> NP ;
 fun unit_ofNP : Card -> Unit -> CN -> NP ;      -- 3 kg of apples
@@ -123,6 +128,8 @@ fun relNP : NP -> RS -> NP ;
 fun andRS : RS -> RS -> RS ;
 fun orRS : RS -> RS -> RS ;
 fun eachRS : RS -> RS ; -- each of who
+
+fun suchCN : CN -> S -> CN ;
 
 -- 2.2.4
 
