@@ -40,12 +40,21 @@ public class CompletionOracle extends SuggestOracle {
 
 	public void setGrammarName(String pgfName) {
 		this.pgfName = pgfName;
+		clearState();
 	}
 
 	public void setInputLangs(List<String> inputLangs) {
 		this.inputLangs = inputLangs;
+		clearState();
+	}
+
+	private void clearState () {
 		this.oldQuery = null;
 		this.oldSuggestions = Collections.emptyList();
+		if (jsonRequest != null) {
+			jsonRequest.cancel();
+			jsonRequest = null;
+		}
 	}
 
 	public List<String> getInputLangs() {
@@ -76,10 +85,11 @@ public class CompletionOracle extends SuggestOracle {
 	}
 
 	public void requestSuggestions(SuggestOracle.Request request, SuggestOracle.Callback callback) {
-
 		// Only allow a single completion request at a time
-		if (jsonRequest != null)
+		if (jsonRequest != null) {
 			jsonRequest.cancel();
+			jsonRequest = null;
+		}
 
 		List<CompletionSuggestion> suggestions = filterOldSuggestions(request);
 		if (suggestions != null) {
@@ -93,13 +103,14 @@ public class CompletionOracle extends SuggestOracle {
 	private List<CompletionSuggestion> filterOldSuggestions(SuggestOracle.Request request) {
 		String query = request.getQuery();		
 		if (query.length() > 0 && oldQuery != null && query.startsWith(oldQuery)) {
-			// If the prefix had no completions, so there is no way that the current input will.
+			// If the prefix had no completions, there is no way that the current input will.
 			if (oldSuggestions.isEmpty()) {
 				return Collections.emptyList();
 			}
-			// If the input ends in whitespace, always get completions from the server,
+			// If the new input since the previous query ends in whitespace,
+			// always get completions from the server,
 			// since the old suggestions won't include the next word.
-			if (query.charAt(query.length() - 1) == ' ') {
+			if (query.indexOf(' ', oldQuery.length()) != -1) {
 				return null;
 			}
 			List<CompletionSuggestion> suggestions = new ArrayList<CompletionSuggestion>();
@@ -122,6 +133,7 @@ public class CompletionOracle extends SuggestOracle {
 		jsonRequest = pgf.complete(getGrammarName(), request.getQuery(), getInputLangs(), null, LIMIT_SCALE_FACTOR * request.getLimit(), 
 				new PGF.CompleteCallback() {
 			public void onResult(PGF.Completions completions) {
+				jsonRequest = null;
 				List<CompletionSuggestion> suggestions = new ArrayList<CompletionSuggestion>();
 				for (PGF.Completion completion : completions.iterable()) {
 					suggestions.add(new CompletionSuggestion(completion.getText()));
