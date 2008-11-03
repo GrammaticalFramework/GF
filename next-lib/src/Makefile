@@ -3,7 +3,7 @@ RUNMAKE=$(RUNGHC) Make.hs
 
 GF_LIB_PATH=..
 
-.PHONY: all present alltenses lang api math prelude test demo synopsis link compiled constructX clean
+.PHONY: all present alltenses lang api math prelude test demo parse synopsis link compiled constructX clean
 
 all: link prelude constructX present alltenses compat
 
@@ -37,6 +37,9 @@ test:
 
 demo:
 	$(RUNMAKE) demo
+
+parse:
+	$(RUNMAKE) parse
 
 synopsis:
 	cd doc ; $(RUNGHC) MkSynopsis ; cd ..
