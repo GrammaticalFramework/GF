@@ -152,6 +152,27 @@ lin
     mkPronoun
       "Lei" "La" "Le" "Glie" "Lei" "Suo" "Sua" "Suoi" "Sue"
       Masc Sg P3 ;
+  not_Predet = {s = \\a,c => prepCase c ++ "pas" ; c = Nom} ;
+  nothing_but_Predet = {s = \\a,c => prepCase c ++ "rien excepté" ; c = Nom} ;
+  nobody_but_Predet = {s = \\a,c => prepCase c ++ "personne excepté" ; c = Nom} ;
+
+
+  no_Quant = 
+    let aucun : ParadigmsIta.Number => ParadigmsIta.Gender => Case => Str = table {
+      Sg => \\g,c => prepCase c ++ genForms "nessuno" "nessuna" ! g ;
+      Pl => \\g,c => prepCase c ++ genForms "nessuni" "nessune" ! g ---- 
+      }
+    in {
+    s = \\_ => aucun ;
+    sp = aucun ;
+    s2 = []
+    } ;
+  if_then_Conj = {s1 = "si" ; s2 = "allora" ; n = Sg ; lock_Conj = <>} ;
+  nobody_NP = pn2np (mkPN ["nessuno"] Masc) ;
+ 
+  nothing_NP = pn2np (mkPN "niente" Masc) ;
+  at_least_AdN = ss "almeno" ;
+  at_most_AdN = ss "al massimo" ;
 
 }
 

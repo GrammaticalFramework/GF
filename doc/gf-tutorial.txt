@@ -662,7 +662,7 @@ The GF system is an implementation
 of the GF programming language, which in turn is built on the ideas of the
 GF theory. 
 
-The main focus of this tutorial is on using the GF programming language.
+The focus of this tutorial is on using the GF programming language.
 
 At the same time, we learn the way of thinking in the GF theory. 
 
@@ -676,7 +676,7 @@ using the GF system.
 
 A GF program is called a **grammar**. 
 
-A grammar defines of a language. 
+A grammar defines a language. 
 
 From this definition, language processing components can be derived:
 - **parsing**: to analyse the language
@@ -875,8 +875,8 @@ into an internal representation and show the CPU time was consumed, followed
 by a new prompt:
 ```
   > i HelloEng.gf
-  - compiling Hello.gf...   wrote file Hello.gfc 8 msec
-  - compiling HelloEng.gf...   wrote file HelloEng.gfc 12 msec
+  - compiling Hello.gf...   wrote file Hello.gfo 8 msec
+  - compiling HelloEng.gf...   wrote file HelloEng.gfo 12 msec
 
   12 msec
   >
@@ -1031,8 +1031,8 @@ Application programs, using techniques from #Rchapeight:
   - spoken language translators
   - dialogue systems
   - user interfaces
-  - localization: parametrize the messages printed by a program
-    to support different languages
+  - localization: render the messages printed by a program
+    in different languages
 
 
 
@@ -1386,12 +1386,12 @@ after having worked out #Rchapfour.
 
 Semantically indistinguishable ways of expressing a thing.
 
-The ``variants`` construct of GF expresses free variation. For example,
+The **variants** construct of GF expresses free variation. For example,
 ```
-  lin Delicious = {s = variants {"delicious" ; "exquisit" ; "tasty"}} ;
+  lin Delicious = {s = "delicious" | "exquisit" | "tasty"} ;
 ```
 By default, the ``linearize`` command
-shows only the first variant from each ``variants`` list; to see them
+shows only the first variant from such lists; to see them
 all, use the option ``-all``:
 ```
   > p "this exquisit wine is delicious" | l -all
@@ -1399,14 +1399,21 @@ all, use the option ``-all``:
   this delicious wine is exquisit
   ...
 ```
-Limiting case: an empty variant list
+
+#NEW
+
+An equivalent notation for variants is
+```
+  lin Delicious = {s = variants {"delicious" ; "exquisit" ; "tasty"}} ;
+```
+This notation also allows the limiting case: an empty variant list,
 ```
   variants {}
 ```
 It can be used e.g. if a word lacks a certain inflection form. 
 
 Free variation works for all types in concrete syntax; all terms in
-a ``variants`` list must be of the same type.
+a variant list must be of the same type.
 
 
 #NEW
@@ -1420,7 +1427,7 @@ a ``variants`` list must be of the same type.
 **Multilingual treebank**: a set of trees with their
 linearizations in different languages:
 ```
-  > gr -number=2 | tree_bank
+  > gr -number=2 | l -treebank
 
   Is (That Cheese) (Very Boring)
   quel formaggio è molto noioso
@@ -1430,8 +1437,6 @@ linearizations in different languages:
   quel formaggio è fresco
   that cheese is fresh
 ```
-There is also an XML format for treebanks and a set of commands
-suitable for regression testing; see ``help tb`` for more details.
 
 
 
@@ -1472,7 +1477,7 @@ answer given in another language.
 
 ===The "cf" grammar format===
 
-The grammar ``FoodEng`` could be written in a BNF format as follows:
+The grammar ``FoodEng`` can be written in a BNF format as follows:
 ```
   Is.        Phrase  ::= Item "is" Quality ;
   That.      Item    ::= "that" Kind ;
@@ -1489,12 +1494,12 @@ The grammar ``FoodEng`` could be written in a BNF format as follows:
   Very.      Quality ::= "very" Quality ;
   Warm.      Quality ::= "warm" ;
 ```
-The GF system v 2.9 can be used for converting BNF grammars into GF. 
-BNF files are recognized by the file name suffix ``.cf``: 
+GF can convert BNF grammars into GF. 
+BNF files are recognized by the file name suffix ``.cf`` (for **context-free**): 
 ```
   > import food.cf
 ```
-It creates separate abstract and concrete modules.
+The compiler creates separate abstract and concrete modules internally.
 
 
 #NEW
@@ -1520,7 +1525,7 @@ copy language ``{x x | x <- (a|b)*}`` in GF.
 
 GF uses suffixes to recognize different file formats:
 - Source files: //Modulename//``.gf``
-- Target files: //Modulename//``.gfc``
+- Target files: //Modulename//``.gfo``
 
 
 Importing generates target from source:
@@ -1708,8 +1713,7 @@ A new module can **extend** an old one:
       Question ;
     fun
       QIs : Item -> Quality -> Question ;
-      Pizza : Kind ;
-      
+      Pizza : Kind ;      
   }
 ```
 Parallel to the abstract syntax, extensions can
@@ -1875,6 +1879,8 @@ argument. For instance,
 ```
   case e of {...} ===  table {...} ! e
 ```
+Since they are familiar to Haskell and ML programmers, they can come out handy
+when writing GF programs.
 
 
 #NEW
@@ -1916,7 +1922,7 @@ A morphological **paradigm** is a formula telling how a class of
 words is inflected.
 
 From the GF point of view, a paradigm is a function that takes 
-a **lemma** (**dictionary form**, **citation form**) and 
+a **lemma** (also known as a **dictionary form**, or a **citation form**) and 
 returns an inflection table. 
 
 The following operation defines the regular noun paradigm of English:
@@ -2740,8 +2746,6 @@ Thus
   artIndef ++ "cheese"  --->  "a" ++ "cheese"
   artIndef ++ "apple"   --->  "an" ++ "apple"
 ```
-
-//Prefix-dependent choice may be deprecated in GF version 3.//
 
 
 
