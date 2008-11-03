@@ -1,0 +1,32 @@
+.my-TextPanel, .my-BagPanel, .my-translations, .my-SettingsPanel {
+  margin: 1em;
+}
+
+.my-TextPanel {
+  font-size: 150%;
+  min-height: 2em;
+  border: 3px dashed silver;
+  overflow: auto;
+}
+
+.my-BagPanel {
+  border: 1px solid silver;
+  overflow: auto;
+}
+
+.my-Magnet {
+  float: left;
+  margin: 0.3em;
+  padding: 0.3em;
+}
+
+.my-translations {
+  border: 1px solid silver;
+}
+    
+.my-translation {
+    margin: 0.2em;    
+}
+
+.my-SettingsPanel {
+}

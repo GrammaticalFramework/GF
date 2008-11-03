@@ -1,0 +1,17 @@
+#!/bin/sh
+
+APPDIR=`dirname $0`;
+
+if [ -z "$GWT_CLASSPATH" ]; then
+  echo 'ERROR: $GWT_CLASSPATH is not set'
+  echo 'Set $GWT_CLASSPATH to point to the GWT JAR files. For example:'
+  echo 'export GWT_DIR="/Users/bringert/src/gwt-mac-1.5.2"'
+  echo 'export GWT_CLASSPATH="$GWT_DIR/gwt-user.jar:$GWT_DIR/gwt-dev-mac.jar"'
+  exit 1
+fi
+
+if [ `uname` = "Darwin" ]; then 
+  GWT_JAVA_OPTS=-XstartOnFirstThread
+fi
+
+java $GWT_JAVA_OPTS -Xmx256M -cp "$APPDIR/src:$APPDIR/bin:$GWT_CLASSPATH" com.google.gwt.dev.GWTCompiler -out "$APPDIR/www" "$@" se.chalmers.cs.gf.gwt.FridgeApp;
