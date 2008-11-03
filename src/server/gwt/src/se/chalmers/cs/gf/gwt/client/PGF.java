@@ -105,6 +105,11 @@ public class PGF {
 
 	/* Completion */
 
+	/**
+	 * Get suggestions for completing the input.
+	 * @param limit The number of suggestions to get. 
+	 * If -1 is passed, all available suggestions are retrieved.
+	 */
 	public JSONRequest complete (String pgfName, String input, List<String> fromLangs, String cat, int limit, final CompleteCallback callback) {
 		List<Arg> args = new ArrayList<Arg>();
 		args.add(new Arg("input", input));
@@ -114,7 +119,9 @@ public class PGF {
 			}
 		}
 		args.add(new Arg("cat", cat));
-		args.add(new Arg("limit", limit));
+		if (limit != -1) {
+			args.add(new Arg("limit", limit));
+		}
 		return sendGrammarRequest(pgfName, "complete", args, callback);
 	}
 

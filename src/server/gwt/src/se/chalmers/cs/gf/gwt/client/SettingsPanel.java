@@ -121,12 +121,16 @@ public class SettingsPanel extends Composite {
 
 	public List<String> getInputLanguages() {
 		return fromLangBox.getSelectedValues();
-	}
-
+	}	
+	
 	public List<String> getOutputLanguages() {
 		return toLangBox.getSelectedValues();
 	}
 
+	public void setInputLanguages(List<String> langs) {
+		fromLangBox.setSelectedValues(langs);
+	}
+	
 	private void updateAvailableLanguages() {
 		pgf.grammar(getGrammarName(), new PGF.GrammarCallback() {
 			public void onResult(PGF.Grammar grammar) {
