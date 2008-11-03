@@ -74,6 +74,8 @@ fun
   machine_N : CN ;
   correct_A : A ;
 
+  kilogram_Unit : Unit ;
+
   in_Prep : Prep ;
   at_Prep : Prep ;
   into_Prep : Prep ;

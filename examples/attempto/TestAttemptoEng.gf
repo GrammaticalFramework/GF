@@ -76,6 +76,8 @@ lin mary_PN = mkPN "mary" ;
 lin machine_N = mkkN "machine" ;
 lin correct_A = mkA "correct" ;
 
+lin kilogram_Unit = mkkN "kilogram" ;
+
 oper mkkN : Str -> CN = \n -> mkCN (ParadigmsEng.mkN n) ;
 
 lin

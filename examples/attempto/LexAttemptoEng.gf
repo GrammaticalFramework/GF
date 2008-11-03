@@ -1,5 +1,10 @@
 instance LexAttemptoEng of LexAttempto = 
-  open ExtraEng, SyntaxEng, ParadigmsEng, ConstructX, IrregEng in {
+  open 
+   ExtraEng,  
+   SyntaxEng, 
+   ParadigmsEng, 
+   ConstructX, 
+   IrregEng in {
 
 oper
   possible_A = mkA "possible" ;
@@ -9,7 +14,12 @@ oper
   provably_Adv = mkAdv "provably" ;
   provable_A = mkA "provable" ;
   false_A = mkA "false" ;
-
+  such_A = mkA "such" ;
+ 
   genitiveNP np = mkNP (GenNP np) ;
+
+  kilogram_CN = mkCN (mkN "kilogram") ;
+
+  each_Det = ExtraEng.each_Det ;
 
 }

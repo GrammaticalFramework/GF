@@ -1,4 +1,4 @@
-incomplete concrete AttemptoI of Attempto = open 
+incomplete concrete AttemptoI of Attempto = SymbolsC ** open 
   Syntax, 
   Symbolic,
   LexAttempto 
@@ -7,6 +7,7 @@ in {
 lincat CN = Syntax.CN ;
 lincat NP = Syntax.NP ;
 lincat Card = Syntax.Card ;
+lincat Numeral = Syntax.Numeral ;
 lincat PN = Syntax.PN ;
 lincat A = Syntax.A ;
 lincat A2 = Syntax.A2 ;
@@ -28,31 +29,35 @@ lincat Text = Syntax.Text ;
 lincat ACEText = Syntax.Text ;
 
 lincat MCN = Syntax.CN ;
---lincat Var = Symb ;
 lincat PP = Adv ;
 
 lin aNP = mkNP a_Art ;
 lin theNP = mkNP the_Art ;
 lin cardNP d = mkNP d ;
---lin noNP : CN -> NP ;
+lin noNP = mkNP no_Quant ;
 lin everyNP = mkNP every_Det ;
---lin eachNP : CN -> NP ;
---lin notEveryNP : CN -> NP ;
---lin notEachNP : CN -> NP ;
+lin eachNP = mkNP each_Det ;
+lin notEveryNP cn = mkNP not_Predet (mkNP every_Det cn) ;
+lin notEachNP cn = mkNP not_Predet (mkNP each_Det cn) ;
 lin theCollNP = mkNP the_Art plNum ;
 lin someCollNP = mkNP somePl_Det ;
 lin allCollNP cn = mkNP all_Predet (mkNP a_Art plNum cn) ;
 
---lin noCollNP : CN -> NP ;
---lin eachTheNP : CN -> NP ;
---lin eachSomeNP : CN -> NP ;
---lin eachNumNP : Card -> CN -> NP ;
+lin noCollNP = mkNP no_Quant plNum ;
+lin eachTheNP cn = mkNP (mkNP each_Det) (mkAdv part_Prep (mkNP the_Art plNum cn)) ;
+lin eachSomeNP cn = mkNP (mkNP each_Det) (mkAdv part_Prep (mkNP somePl_Det cn)) ;
+lin eachNumNP ca cn = mkNP (mkNP each_Det) (mkAdv part_Prep (mkNP ca cn)) ;
 
 lin someMassNP = mkNP someSg_Det ;
 lin allMassNP cn = mkNP all_Predet (mkNP cn) ;
 
---lin noMassNP : MCN -> NP ;
---lin notAllMassNP : MCN -> NP ;
+lin noMassNP = mkNP no_Quant ;
+lin notAllMassNP cn = mkNP not_Predet (mkNP all_Predet (mkNP cn)) ; 
+
+lin one_Card = mkCard n1_Numeral ;
+lin two_Card = mkCard n2_Numeral ;
+lin five_Card = mkCard n5_Numeral ;
+lin ten_Card = mkCard n10_Numeral ;
 
 lin pnNP = mkNP ;
 lin intNP = symb ;
@@ -67,38 +72,37 @@ lin they_NP = mkNP they_Pron ;
 lin conjNP = mkNP and_Conj ;
 lin adjCN = mkCN ;
 
-{-
-lin someone_NP : NP ;
-lin somebody_NP : NP ;
-lin something_NP : NP ;
-lin noone_NP : NP ;
-lin nothing_NP : NP ;
-lin not_everyoneNP : NP ;
-lin not_everybodyNP : NP ;
-lin not_everythingNP : NP ;
+--lin someone_NP : NP ;
+lin somebody_NP = Syntax.somebody_NP ;
+lin something_NP = Syntax.something_NP ;
+--lin noone_NP : NP ;
+lin nobody_NP = Syntax.nobody_NP ;
+lin nothing_NP = Syntax.nothing_NP ;
+--lin not_everyoneNP : NP ;
+lin not_everybodyNP = mkNP not_Predet Syntax.everybody_NP ;
+lin not_everythingNP = mkNP not_Predet Syntax.everything_NP ;
 
-lin at_leastNP : Card -> CN -> NP ;
-lin not_at_leastNP : Card -> CN -> NP ;
-lin at_mostNP : Card -> CN -> NP ;
-lin not_at_mostNP : Card -> CN -> NP ;
-lin more_thanNP : Card -> CN -> NP ;
-lin not_more_thanNP : Card -> CN -> NP ;
+lin at_leastNP ca = mkNP (mkCard at_least_AdN ca) ;
+lin not_at_leastNP ca cn = mkNP not_Predet (mkNP (mkCard at_least_AdN ca) cn) ;
+lin at_mostNP ca = mkNP (mkCard at_most_AdN ca) ;
+lin not_at_mostNP ca cn = mkNP not_Predet (mkNP (mkCard at_most_AdN ca) cn) ;
+lin more_thanNP ca = mkNP (mkCard (mkAdN more_CAdv) ca) ;
+lin not_more_thanNP ca cn = mkNP not_Predet (mkNP (mkCard (mkAdN more_CAdv) ca) cn) ;
 
-lin nothing_butNP : CN -> NP ; -- nothing but apples
-lin nothing_butMassNP : MCN -> NP ; -- nothing but water
-lin nobody_butNP : PN -> NP ; -- nobody but John
-lin no_butNP : CN -> PN -> NP ; -- no man but John
+lin nothing_butNP cn = mkNP nothing_but_Predet (mkNP a_Art plNum cn) ;
+lin nothing_butMassNP cn = mkNP nothing_but_Predet (mkNP cn) ;
+--lin nobody_butNP : PN -> NP ; -- nobody but John
+--lin no_butNP : CN -> PN -> NP ; -- no man but John
 
-cat Unit ; -- SI measurement units
-cat Var ;
+lincat Unit = CN ;
 
-lin unitNP : Card -> Unit -> NP ;
-lin unit_ofNP : Card -> Unit -> CN -> NP ;      -- 3 kg of apples
-lin unit_ofMassNP : Card -> Unit -> MCN -> NP ; -- 3 l of water
--}
+lin unitNP = mkNP ;
+lin unit_ofNP ca u cn = mkNP (mkNP ca u) (mkAdv part_Prep (mkNP a_Art plNum cn)) ;
+lin unit_ofMassNP ca u cn = mkNP (mkNP ca u) (mkAdv part_Prep (mkNP cn)) ;
+
 lin apposVarCN cn v = mkCN cn (symb v) ;
 
-lin varNP = symb ;
+lin varNP x = symb x ;
 
 -- 2.2.1
 
@@ -119,6 +123,8 @@ lin andRS : RS -> RS -> RS ;
 lin orRS : RS -> RS -> RS ;
 lin eachRS : RS -> RS ; -- each of who
 -}
+
+lin suchCN cn s = mkCN (mkAP (mkAP such_A) s) cn ;
 
 -- 2.2.4
 
@@ -174,10 +180,10 @@ lin modVP = mkVP ;
 
 lin thereNP np = mkS (mkCl np) ;
 
-{-
+
 -- 3.3
 -- Boolean formulas = \= < > <= >= 
--}
+
 
 -- 3.4.1
 
@@ -189,16 +195,16 @@ lin or_Conj = Syntax.or_Conj ;
 --lin comma_or_Conj : Conj ;
 
 -- 3.4.3
-{-
-lin for_everyS : CN -> S -> S ;
-lin for_eachS : CN -> S -> S ;
-lin for_each_ofS : Card -> CN -> S -> S ; -- for each of 3 men
-lin for_allMassS : MCN -> S -> S ; -- for all water
+
+lin for_everyS cn = mkS (mkAdv for_Prep (mkNP every_Det cn)) ;
+lin for_eachS cn = mkS (mkAdv for_Prep (mkNP each_Det cn)) ;
+--lin for_each_ofS : Card -> CN -> S -> S ; -- for each of 3 men
+--lin for_allMassS : MCN -> S -> S ; -- for all water
 
 -- 3.4.4
 
-lin if_thenS : S -> S -> S ;
--}
+lin if_thenS = mkS if_then_Conj ;
+
 
 oper adj_thatCl : A -> S -> Cl = \a,s -> mkCl (mkVP (mkAP (mkAP a) s)) ;
 
@@ -223,11 +229,10 @@ lin when_IAdv = Syntax.when_IAdv ;
 lin whoSg_IP = Syntax.whoSg_IP ;
 lin whoPl_IP = Syntax.whoPl_IP ;
 
-{-
-lin there_ipQS : IP -> QS ; -- there is who
 
-lin whoseIP : CN -> IP ;  -- whose dog
--}
+--lin there_ipQS : IP -> QS ; -- there is who
+--lin whoseIP : CN -> IP ;  -- whose dog
+
 -- 3.6
 
 lin impVP np vp = mkText (mkPhr (mkUtt (mkImp vp)) (mkVoc np)) exclMarkPunct ; 
