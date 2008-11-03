@@ -8,7 +8,7 @@ concrete ParseEng of ParseEngAbs =
   NumeralEng,
   SentenceEng - [UseCl, UseQCl, UseRCl],
   QuestionEng,
-  RelativeEng - [IdRP],
+  RelativeEng - [IdRP, RelSlash],
   ConjunctionEng,
   PhraseEng - [UttImpSg, UttImpPl],
   TextX,
@@ -16,9 +16,9 @@ concrete ParseEng of ParseEngAbs =
   IdiomEng,
 
   ExtraEng - [
-   -- Don't include the uncontracted clauses. Instead
-   -- use them as variants of the contracted ones.
-   UncNegCl, UncNegQCl, UncNegRCl, UncNegImpSg, UncNegImpPl
+   UncNegCl, UncNegQCl, UncNegRCl, UncNegImpSg, UncNegImpPl,
+   StrandRelSlash,
+   that_RP
   ],
 
   LexiconEng [N3, distance_N3, 
@@ -71,6 +71,15 @@ lin UttImpPl p i =
 	Pos => PhraseEng.UttImpPl p i;
 	Neg => variants { PhraseEng.UttImpPl p i ; UncNegImpPl p i }
       } ;
+
+-- Two different forms of relative clauses:
+-- Pied piping: "at which we are looking". 
+-- Stranding: "that he looks at"
+-- EmptyRelSlash is not used here, since it would give 
+-- a meta-variable for the RP.
+
+lin RelSlash rp slash = variants { RelativeEng.RelSlash rp slash; StrandRelSlash rp slash } ;
+
 
 -- Allow both "who"/"which" and "that"
 -- FIXME: allow both "who" and "which" for all genders
