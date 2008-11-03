@@ -57,7 +57,7 @@ concrete CatGer of Cat =
       a  : Adjf
       } ;
     Art = {s : Bool => Number => Gender => Case => Str ; a : Adjf} ;
-    Predet = {s : Number => Gender => Case => Str} ;
+    Predet = {s : Number => Gender => Case => Str ; c : PredetCase} ;
     Num = {s : Gender => Case => Str ; n : Number ; isNum : Bool} ;
     Card = {s : Gender => Case => Str ; n : Number} ;
     Ord = {s : AForm => Str} ;

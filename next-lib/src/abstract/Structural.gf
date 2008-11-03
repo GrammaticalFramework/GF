@@ -108,4 +108,14 @@ abstract Structural = Cat ** {
   youPl_Pron : Pron ; -- you (plural)
   youPol_Pron : Pron ; -- you (polite)
 
+  no_Quant : Quant ; 
+  nobody_but_Predet : Predet ;
+  nothing_but_Predet : Predet ;
+  not_Predet : Predet ;
+  if_then_Conj : Conj ;
+  at_least_AdN : AdN ;
+  at_most_AdN : AdN ;
+  nobody_NP : NP ;
+  nothing_NP : NP ;
+
 }

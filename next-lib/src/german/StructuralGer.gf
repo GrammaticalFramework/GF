@@ -8,7 +8,7 @@ concrete StructuralGer of Structural = CatGer **
 
   above_Prep = mkPrep "über" Dat ;
   after_Prep = mkPrep "nach" Dat ;
-  all_Predet = {s = appAdj (regA "all")} ;
+  all_Predet = {s = appAdj (regA "all") ; c = NoCase} ;
   almost_AdA, almost_AdN = ss "fast" ;
   although_Subj = ss "obwohl" ;
   always_AdV = ss "immer" ;
@@ -51,7 +51,7 @@ concrete StructuralGer of Structural = CatGer **
   less_CAdv = ss "weniger" ;
   many_Det = detLikeAdj Pl "viel" ;
   more_CAdv = ss "mehr" ;
-  most_Predet = {s = appAdj (regA "meist")} ;
+  most_Predet = {s = appAdj (regA "meist") ; c = NoCase} ;
   much_Det = detLikeAdj Sg "viel" ;
   must_VV = auxVV 
       (mkV 
@@ -60,7 +60,7 @@ concrete StructuralGer of Structural = CatGer **
         "müßte" "gemußt" [] 
         VHaben) ;
 ---  one_Quant = DEPREC
-  only_Predet = {s = \\_,_,_ => "nur"} ;
+  only_Predet = {s = \\_,_,_ => "nur" ; c = NoCase} ;
   no_Utt = ss "nein" ;
 ---b  no_Phr = ss "nein" ;
   on_Prep = mkPrep "auf" Dat ;
@@ -117,8 +117,6 @@ concrete StructuralGer of Structural = CatGer **
   where_IAdv = ss "wo" ;
   which_IQuant = {s = \\n => (detLikeAdj n "welch").s} ;
 
----b  whichPl_IDet = detLikeAdj Pl "welch" ;
----b  whichSg_IDet = detLikeAdj Sg "welch" ;
   whoSg_IP = {s = caselist "wer" "wen" "wem" "wessen" ; n = Sg} ;
   whoPl_IP = {s = caselist "wer" "wen" "wem" "wessen" ; n = Pl} ;
   why_IAdv = ss "warum" ;
@@ -128,6 +126,27 @@ concrete StructuralGer of Structural = CatGer **
   youPl_Pron = mkPronPers "ihr" "euch" "euch" "eurer" "euer" Fem Pl P2 ; ---- poss
   youPol_Pron = mkPronPers "Sie" "Sie" "Ihnen" "Ihrer" "Ihr" Fem Pl P3 ;
   yes_Utt = ss "ja" ;
----b  yes_Phr = ss "ja" ;
+
+  not_Predet = {s = \\_,_,_ => "nicht" ; c = NoCase} ;
+  nothing_but_Predet = {s = \\_,_,_ => "nichts ausser" ; c = PredCase Dat} ;
+  nobody_but_Predet = {
+    s = \\_,_,c => 
+      caselist "niemand" "niemanden" "niemandem" "niemands" ! c ++ "ausser" ; 
+    c = PredCase Dat
+    } ;
+  no_Quant = let 
+     keiner : Number => Gender => Case => Str = table {
+       Sg => \\g,c => "kein" + pronEnding ! GSg g ! c ;
+       Pl => (detLikeAdj Pl "kein").s
+       }
+     in 
+     {s = \\_ => keiner ; sp = keiner ; a = Strong} ;   ---- sp
+  if_then_Conj = {s1 = "wenn" ; s2 = "dann" ; n = Sg ; lock_Conj = <>} ;
+  nobody_NP = 
+    nameNounPhrase {s = caselist "niemand" "niemanden" "niemandem" "niemands"} ;
+  nothing_NP = 
+    nameNounPhrase {s = \\_ => "nichts"} ;
+  at_least_AdN = ss "wenigstens" ;
+  at_most_AdN = ss "höchstens" ;
 
 }
