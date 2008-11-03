@@ -38,6 +38,10 @@ resource ResGer = ParamX ** open Prelude in {
 
   param NPForm = NPCase Case | NPPoss GenNum Case ;
 
+-- Predeterminers sometimes require a case ("ausser mir"), sometimes not ("nur ich").
+
+  param PredetCase = NoCase | PredCase Case ;
+
 --2 For $Adjective$
 
 -- The predicative form of adjectives is not inflected further.

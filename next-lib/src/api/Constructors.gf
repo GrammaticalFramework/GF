@@ -1122,8 +1122,10 @@ incomplete resource Constructors = open Grammar in {
     mkCard = overload {
       mkCard : Numeral -> Card 
         = NumNumeral ;
-      mkNum : Digits -> Card         -- 51
+      mkCard : Digits -> Card         -- 51
         = NumDigits ;
+      mkCard : AdN -> Card -> Card
+        = AdNum
       } ;
 
     mkNum = overload {

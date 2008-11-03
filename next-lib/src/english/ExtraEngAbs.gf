@@ -15,4 +15,5 @@ abstract ExtraEngAbs = Extra ** {
 
     that_RP : RP ; -- "that" as a relational pronoun (IdRP is "which" / "who")
 
+    each_Det : Det ;
 }

@@ -123,5 +123,23 @@ concrete StructuralSwe of Structural = CatSwe **
   oper
     vem = MorphoSwe.mkNP "vem" "vem" "vems" "vems" "vems" SgUtr P3 ;
 
+lin
+  not_Predet = {s = \\_ => "inte"} ;
+  nothing_but_Predet = {s = \\_ => "inget förutom"} ;
+  nobody_but_Predet = {s = \\_ => "ingen förutom"} ;
+  no_Quant = 
+    {s = table {
+       Sg => \\_,_ => genderForms "ingen" "inget" ; 
+       Pl => \\_,_,_ => "inga"
+       } ;
+     det = DDef Def
+    } ;
+
+  if_then_Conj = {s1 = "om" ; s2 = "så" ; n = singular} ;
+  nobody_NP = regNP "ingen" "ingens" SgUtr ;
+  nothing_NP = regNP "inget" "ingets" SgNeutr ;
+
+  at_least_AdN = ss "minst" ;
+  at_most_AdN = ss "högst" ;
 }
 

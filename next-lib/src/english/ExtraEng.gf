@@ -1,5 +1,5 @@
 concrete ExtraEng of ExtraEngAbs = CatEng ** 
-  open ResEng, Coordination, Prelude in {
+  open ResEng, Coordination, Prelude, MorphoEng in {
 
   lin
     GenNP np = {s = \\_,_ => np.s ! Gen ; sp = \\_,_,_ => np.s ! Gen} ;
@@ -66,5 +66,6 @@ concrete ExtraEng of ExtraEngAbs = CatEng **
       a = RNoAg
       } ;
 
+    each_Det = mkDeterminer Sg "each" ;
 
 } 

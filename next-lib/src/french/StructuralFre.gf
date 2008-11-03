@@ -146,15 +146,14 @@ lin
     s = \\n,g,c => 
         prepCase c ++ aagrForms "quel" "quelle" "quels" "quelles" ! aagr g n
     } ;
----b  whichSg_IDet = {s = \\g,c => prepCase c ++ genForms "quel" "quelle" ! g ; n = Sg} ;
----b  whichPl_IDet = {s = \\g,c => prepCase c ++ genForms "quels" "quelles" ! g; n = Pl} ;
+
   whoPl_IP = {s = \\c => prepCase c ++ "qui" ; a = aagr Masc Pl} ;
   whoSg_IP = {s = \\c => prepCase c ++ "qui" ; a = aagr Masc Sg} ;
   why_IAdv = ss "pourquoi" ;
   without_Prep = mkPreposition "sans" ;
   with_Prep = mkPreposition "avec" ;
   yes_Utt = ss "oui" ; --- si
----b  yes_Phr = ss "oui" ; --- si
+
   youSg_Pron = mkPronoun 
     "tu" (elision "t") (elision "t") "toi" "ton" (elisPoss "t") "tes"
     Masc Sg P2 ;
@@ -162,6 +161,28 @@ lin
     mkPronoun
       "vous" "vous" "vous" "vous" "votre" "votre" "vos"
        Masc Pl P2 ;
+
+  not_Predet = {s = \\a,c => prepCase c ++ "pas" ; c = Nom} ;
+  nothing_but_Predet = {s = \\a,c => prepCase c ++ "rien excepté" ; c = Nom} ;
+  nobody_but_Predet = {s = \\a,c => prepCase c ++ "personne excepté" ; c = Nom} ;
+
+
+  no_Quant = 
+    let aucun : ParadigmsFre.Number => ParadigmsFre.Gender => Case => Str = table {
+      Sg => \\g,c => prepCase c ++ genForms "aucun" "aucune" ! g ;
+      Pl => \\g,c => prepCase c ++ genForms "aucuns" "aucunes" ! g ---- 
+      }
+    in {
+    s = \\_ => aucun ;
+    sp = aucun ;
+    s2 = []
+    } ;
+  if_then_Conj = {s1 = "si" ; s2 = "alors" ; n = Sg ; lock_Conj = <>} ;
+  nobody_NP = pn2np (mkPN ["personne"] Fem) ;
+ 
+  nothing_NP = pn2np (mkPN "rien" Masc) ;
+  at_least_AdN = ss "au moins" ;
+  at_most_AdN = ss "au plus" ;
 
 }
 
