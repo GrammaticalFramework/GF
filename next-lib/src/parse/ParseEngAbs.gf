@@ -1,9 +1,9 @@
 abstract ParseEngAbs = 
   Parse, 
   ExtraEngAbs - [
-   -- Don't include the uncontracted clauses. Instead
-   -- use them as variants of the contracted ones.
-   UncNegCl, UncNegQCl, UncNegRCl, UncNegImpSg, UncNegImpPl
+   UncNegCl, UncNegQCl, UncNegRCl, UncNegImpSg, UncNegImpPl,
+   StrandRelSlash,
+   that_RP
   ],
 
   Lexicon [N3, distance_N3, 

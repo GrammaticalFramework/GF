@@ -82,8 +82,16 @@ lin RelSlash rp slash = variants { RelativeEng.RelSlash rp slash; StrandRelSlash
 
 
 -- Allow both "who"/"which" and "that"
--- FIXME: allow both "who" and "which" for all genders
-lin IdRP = variants { RelativeEng.IdRP; that_RP } ;
+lin IdRP = 
+     { s = table {
+        RC _ Gen    => "whose" ; 
+        RC Neutr _  => variants { "which"; "that"; {- for dictionary entries with the wrong gender -} "who" } ;
+        RC _ Acc    => variants { "whom"; "that"; {- incorrect but common -} "who" } ;
+        RC _ Nom    => variants { "who" ; "that" } ;
+        RPrep _     => variants { "which"; "whom"; {- incorrect but common -}  "who" }
+        } ;
+      a = RNoAg
+      } ;
 
 lin everybody_NP = variants { regNP "everybody" singular; regNP "everyone" singular } ;
 lin somebody_NP = variants { regNP "somebody" singular; regNP "someone" singular } ;
