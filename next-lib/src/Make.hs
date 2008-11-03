@@ -10,7 +10,7 @@ import System.Exit
 -- Make commands for compiling and testing resource grammars.
 -- usage: runghc Make ((present? OPT?) | (clone FILE))? LANGS? 
 -- where 
--- - OPT = (lang | api | math | pgf | test | demo | clean)
+-- - OPT = (lang | api | math | pgf | test | demo | parse | clean)
 -- - LANGS has the form e.g. langs=Eng,Fin,Rus
 -- - clone with a flag file=FILENAME clones the file to the specified languages,
 --   by replacing the 3-letter language name of the original in both 
@@ -61,6 +61,9 @@ langsTest = langsLang `except` ["Ara","Bul","Cat","Hin","Rus","Spa","Tha"]
 -- languages for which to run demo test
 langsDemo = langsLang `except` ["Ara","Hin","Ina","Tha"]
 
+-- languages for which to compile parsing grammars
+langsParse = langs `only` ["Eng"]
+
 -- languages for which langs.pgf is built
 langsPGF = langsTest `only` ["Eng","Fre","Swe"]
 
@@ -104,6 +107,9 @@ make xx = do
   ifxx "demo" $ do
     let ls = optl langsDemo
     gf (demos "Demo" ls) $ unwords ["demo/Demo" ++ la ++ ".gf" | (_,la) <- ls]
+  ifxx "parse" $ do
+    mapM_ (gfc pres [] . parse) (optl langsParse)
+    copy "parse/*.gfo" dir
   ifxx "clean" $ do
     system "rm -f */*.gfo ../alltenses/*.gfo ../present/*.gfo"
   ifxx "clone" $ do
@@ -137,6 +143,7 @@ compat (lla,la) = lla ++ "/Compatibility" ++ la ++ ".gf"
 symbol (lla,la) = lla ++ "/Symbol" ++ la ++ ".gf"
 try  (lla,la) = "api/Try"  ++ la ++ ".gf"
 symbolic (lla,la) = "api/Symbolic"  ++ la ++ ".gf"
+parse (lla,la) = "parse/Parse" ++ la ++ ".gf"
 
 except ls es = filter (flip notElem es . snd) ls
 only   ls es = filter (flip elem es . snd) ls
