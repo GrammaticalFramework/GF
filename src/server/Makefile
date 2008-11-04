@@ -6,9 +6,13 @@ pgf.fcgi:
 	cabal install
 	cp dist/build/pgf.fcgi/pgf.fcgi .
 
-gwt:
+gwt-translate:
 	chmod a+x gwt/Translate-compile
 	gwt/Translate-compile
+
+gwt-fridge:
+	chmod a+x gwt/Fridge-compile
+	gwt/Fridge-compile
 
 gf-gwt.jar:
 	mkdir -p gwt/bin/se/chalmers/cs/gf/gwt/client
