@@ -47,6 +47,7 @@ pgfMain pgf command =
          "parse"          -> return (doParse pgf) `ap` getText `ap` getCat `ap` getFrom
          "complete"       -> return (doComplete pgf) `ap` getText `ap` getCat `ap` getFrom `ap` getLimit
          "linearize"      -> return (doLinearize pgf) `ap` getTree `ap` getTo
+         "random"         -> getCat >>= \c -> getLimit >>= liftIO . doRandom pgf c
          "translate"      -> return (doTranslate pgf) `ap` getText `ap` getCat `ap` getFrom `ap` getTo
          "grammar"        -> return (doGrammar pgf) `ap` requestAcceptLanguage
          _                -> throwCGIError 400 "Unknown command" ["Unknown command: " ++ show command]
@@ -122,6 +123,13 @@ doLinearize :: PGF -> PGF.Tree -> Maybe PGF.Language -> JSValue
 doLinearize pgf tree mto = showJSON $ map toJSObject
      [[("to", PGF.showLanguage to),("text",text)] | (to,text) <- linearize' pgf mto tree]
 
+doRandom :: PGF -> Maybe PGF.Type -> Maybe Int -> IO JSValue
+doRandom pgf mcat mlimit = 
+    do trees <- random' pgf mcat
+       return $ showJSON $ map toJSObject [[("tree", PGF.showTree tree)] | tree <- limit trees]
+  where limit = take (fromMaybe maxLimit mlimit)
+        maxLimit = 1000
+
 doGrammar :: PGF -> Maybe (Accept Language) -> JSValue
 doGrammar pgf macc = showJSON $ toJSObject 
              [("name", showJSON (PGF.abstractName pgf)),
@@ -141,6 +149,9 @@ instance JSON PGF.CId where
 
 -- * PGF utilities
 
+cat :: PGF -> Maybe PGF.Type -> PGF.Type
+cat pgf mcat = fromMaybe (PGF.startCat pgf) mcat
+
 parse' :: PGF -> String -> Maybe PGF.Type -> Maybe PGF.Language -> [(PGF.Language,[PGF.Tree])]
 parse' pgf input mcat mfrom = 
    [(from,ts) | from <- froms, PGF.canParse pgf from, let ts = PGF.parse pgf from cat input, not (null ts)]
@@ -159,6 +170,9 @@ linearize' pgf mto tree =
     case mto of
       Nothing -> PGF.linearizeAllLang pgf tree
       Just to -> [(to,PGF.linearize pgf to tree)]
+
+random' :: PGF -> Maybe PGF.Type -> IO [PGF.Tree]
+random' pgf mcat = PGF.generateRandom pgf (fromMaybe (PGF.startCat pgf) mcat)
 
 selectLanguage :: PGF -> Maybe (Accept Language) -> PGF.Language
 selectLanguage pgf macc = case acceptable of
