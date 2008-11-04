@@ -4,12 +4,19 @@
   * See quick installation instructions at the bottom of 
      http://hackage.haskell.org/trac/hackage/wiki/CabalInstall
 
-- FastCGI development kit
-    (MacPorts)   $ sudo port install fcgi
-    (Ubuntu)      $ sudo apt-get install libfcgi-dev
-
 - GF installed as a Cabal package
    $ (cd ../.. && cabal install)
+
+- FastCGI development kit
+  (MacPorts)   $ sudo port install fcgi
+  (Ubuntu)     $ sudo apt-get install libfcgi-dev
+
+- Google Web Toolkit
+  - Download from http://code.google.com/webtoolkit/
+  - Unpack somewhere.
+  - Set $GWT_CLASSPATH to point to the GWT JAR files. For example:
+    $ export GWT_DIR="/Users/bringert/src/gwt-mac-1.5.3"
+    $ export GWT_CLASSPATH="$GWT_DIR/gwt-user.jar:$GWT_DIR/gwt-dev-mac.jar"
 
 
 == Building ==
@@ -26,9 +33,9 @@
 
 - Install lighttpd
   (MacPorts)   $ sudo port install lighttpd
-  (Ubuntu)      $ sudo apt-get install lighttpd
+  (Ubuntu)     $ sudo apt-get install lighttpd
 
-- Run lighttpd:
+- Run pgf.fcgi with lighttpd:
   $ make run
 
 
@@ -40,10 +47,13 @@
 - Non-GWT AJAX UI: 
    See http://localhost:41296/simple-client.html
 
-- GWT AJAX UI:
-   See http://localhost:41296/gwt-client/www/se.chalmers.cs.gf.gwt_translate.Translate/Translate.html
+- GWT translator:
+  $ make gwt-translate
+  Then see http://localhost:41296/gwt-client/www/se.chalmers.cs.gf.gwt.TranslateApp/Translate.html
 
-
+- GWT fridge poetry:
+  $ make gwt-fridge
+  Then see http://localhost:41296/gwt-client/www/se.chalmers.cs.gf.gwt.FridgeApp/Fridge.html
 
 
 
