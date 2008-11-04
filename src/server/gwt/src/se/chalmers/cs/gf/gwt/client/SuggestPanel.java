@@ -85,8 +85,8 @@ public class SuggestPanel extends Composite {
 		oracle.setGrammarName(pgfName);
 	}
 
-	public void setInputLangs(List<String> inputLangs) {
-		oracle.setInputLangs(inputLangs);
+	public void setInputLanguage(String inputLang) {
+		oracle.setInputLanguage(inputLang);
 	}
 
 	public void setLimit(int limit) {
