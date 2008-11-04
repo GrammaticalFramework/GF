@@ -1,7 +1,5 @@
 package se.chalmers.cs.gf.gwt.client;
 
-import java.util.List;
-
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -28,8 +26,8 @@ public class TranslateApp implements EntryPoint {
 		setStatus("Translating...");
 		pgf.translate(settingsPanel.getGrammarName(), 
 					  suggestPanel.getText(), 
-					  settingsPanel.getInputLanguages(), null, 
-				      settingsPanel.getOutputLanguages(), 
+					  settingsPanel.getInputLanguage(), null, 
+				      settingsPanel.getOutputLanguage(), 
 				      new PGF.TranslateCallback() {
 			public void onResult (PGF.Translations translations) {
 				for (PGF.Translation t : translations.iterable()) {
@@ -74,7 +72,7 @@ public class TranslateApp implements EntryPoint {
 	}
 
 	private void updateSelectedLanguages() {
-		suggestPanel.setInputLangs(settingsPanel.getInputLanguages());
+		suggestPanel.setInputLanguage(settingsPanel.getInputLanguage());
 		suggestPanel.setEnabled(true);
 		clearStatus();
 		translate();
@@ -102,7 +100,7 @@ public class TranslateApp implements EntryPoint {
 			public void grammarChanged(String pgfName) {
 				updateSelectedGrammar();
 			}
-			public void languagesChanged(List<String> inputLangs, List<String> outputLangs) {
+			public void languagesChanged(String inputLang, String outputLang) {
 				updateSelectedLanguages();
 			}
 			public void settingsError(String msg, Throwable e) {

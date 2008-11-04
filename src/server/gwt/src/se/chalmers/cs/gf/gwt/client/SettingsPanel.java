@@ -57,7 +57,7 @@ public class SettingsPanel extends Composite {
 
 	public interface SettingsListener {
 		public void grammarChanged(String pgfName);
-		public void languagesChanged(List<String> inputLangs, List<String> outputLangs);
+		public void languagesChanged(String inputLang, String outputLang);
 		public void settingsError(String msg, Throwable e);
 	}
 
@@ -73,7 +73,7 @@ public class SettingsPanel extends Composite {
 
 	void fireLanguagesChanged() {
 		for (SettingsListener listener : listeners) {
-			listener.languagesChanged(getInputLanguages(), getOutputLanguages());
+			listener.languagesChanged(getInputLanguage(), getOutputLanguage());
 		}
 	}
 
@@ -119,16 +119,16 @@ public class SettingsPanel extends Composite {
 	// Languages
 	//
 
-	public List<String> getInputLanguages() {
-		return fromLangBox.getSelectedValues();
+	public String getInputLanguage() {
+		return fromLangBox.getLanguage();
 	}	
 	
-	public List<String> getOutputLanguages() {
-		return toLangBox.getSelectedValues();
+	public String getOutputLanguage() {
+		return toLangBox.getLanguage();
 	}
 
-	public void setInputLanguages(List<String> langs) {
-		fromLangBox.setSelectedValues(langs);
+	public void setInputLanguage(String lang) {
+		fromLangBox.setLanguage(lang);
 	}
 	
 	private void updateAvailableLanguages() {

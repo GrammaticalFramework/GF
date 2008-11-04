@@ -71,21 +71,13 @@ public class PGF {
 
 	/* Translation */
 
-	public JSONRequest translate (String pgfName, String input, List<String> fromLangs, String cat, List<String> toLangs, 
+	public JSONRequest translate (String pgfName, String input, String fromLang, String cat, String toLang, 
 			final TranslateCallback callback) {
 		List<Arg> args = new ArrayList<Arg>();
 		args.add(new Arg("input", input));
-		if (fromLangs != null) {
-			for (String from : fromLangs) {
-				args.add(new Arg("from", from));
-			}
-		}
+		args.add(new Arg("from", fromLang));
 		args.add(new Arg("cat", cat));
-		if (toLangs != null) {
-			for (String to : toLangs) {
-				args.add(new Arg("to", to));
-			}
-		}
+		args.add(new Arg("to", toLang));
 		return sendGrammarRequest(pgfName, "translate", args, callback);
 	}
 
@@ -110,14 +102,10 @@ public class PGF {
 	 * @param limit The number of suggestions to get. 
 	 * If -1 is passed, all available suggestions are retrieved.
 	 */
-	public JSONRequest complete (String pgfName, String input, List<String> fromLangs, String cat, int limit, final CompleteCallback callback) {
+	public JSONRequest complete (String pgfName, String input, String fromLang, String cat, int limit, final CompleteCallback callback) {
 		List<Arg> args = new ArrayList<Arg>();
 		args.add(new Arg("input", input));
-		if (fromLangs != null) {
-			for (String from : fromLangs) {
-				args.add(new Arg("from", from));
-			}
-		}
+		args.add(new Arg("from", fromLang));
 		args.add(new Arg("cat", cat));
 		if (limit != -1) {
 			args.add(new Arg("limit", limit));
@@ -140,14 +128,10 @@ public class PGF {
 
 	/* Parsing */
 
-	public JSONRequest parse (String pgfName, String input, List<String> fromLangs, String cat, final ParseCallback callback) {
+	public JSONRequest parse (String pgfName, String input, String fromLang, String cat, final ParseCallback callback) {
 		List<Arg> args = new ArrayList<Arg>();
 		args.add(new Arg("input", input));
-		if (fromLangs != null) {
-			for (String from : fromLangs) {
-				args.add(new Arg("from", from));
-			}
-		}
+		args.add(new Arg("from", fromLang));
 		args.add(new Arg("cat", cat));
 		return sendGrammarRequest(pgfName, "parse", args, callback);
 	}

@@ -16,7 +16,7 @@ public class CompletionOracle extends SuggestOracle {
 
 	private ErrorHandler errorHandler;
 
-	private List<String> inputLangs = null;
+	private String inputLang = null;
 
 	private JSONRequest jsonRequest = null;
 
@@ -43,8 +43,8 @@ public class CompletionOracle extends SuggestOracle {
 		clearState();
 	}
 
-	public void setInputLangs(List<String> inputLangs) {
-		this.inputLangs = inputLangs;
+	public void setInputLanguage(String inputLang) {
+		this.inputLang = inputLang;
 		clearState();
 	}
 
@@ -57,8 +57,8 @@ public class CompletionOracle extends SuggestOracle {
 		}
 	}
 
-	public List<String> getInputLangs() {
-		return inputLangs;
+	public String getInputLanguage() {
+		return inputLang;
 	}
 
 	public void setErrorHandler(ErrorHandler errorHandler) {
@@ -130,7 +130,7 @@ public class CompletionOracle extends SuggestOracle {
 		// hack: first report no completions, to hide suggestions until we get the new completions
 		callback.onSuggestionsReady(request, new SuggestOracle.Response(Collections.<CompletionSuggestion>emptyList()));
 
-		jsonRequest = pgf.complete(getGrammarName(), request.getQuery(), getInputLangs(), null, LIMIT_SCALE_FACTOR * request.getLimit(), 
+		jsonRequest = pgf.complete(getGrammarName(), request.getQuery(), getInputLanguage(), null, LIMIT_SCALE_FACTOR * request.getLimit(), 
 				new PGF.CompleteCallback() {
 			public void onResult(PGF.Completions completions) {
 				jsonRequest = null;
