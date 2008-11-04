@@ -19,16 +19,16 @@ gf-gwt.jar:
 food.pgf:
 	gfc --make --name=food ../../examples/tutorial/food/Food{Eng,Ita}.gf
 
-Demo%-parse.pgf: ../../lib/resource/demo/Demo%.gf
+Demo%-parse.pgf: ../../next-lib/src/demo/Demo%.gf
 	gfc $(GFCFLAGS) --make --erasing=on --name=Demo$*-parse $^
 
-Demo%-noparse.pgf: ../../lib/resource/demo/Demo%.gf
+Demo%-noparse.pgf: ../../next-lib/src/demo/Demo%.gf
 	gfc $(GFCFLAGS) --make --parser=off --name=Demo$*-noparse $^
 
-Lang%-parse.pgf: ../../lib/alltenses/Lang%.gfo
+Lang%-parse.pgf: ../../next-lib/alltenses/Lang%.gfo
 	gfc $(GFCFLAGS) --make --erasing=on --name=Lang$*-parse $^
 
-Lang%-noparse.pgf: ../../lib/alltenses/Lang%.gfo
+Lang%-noparse.pgf: ../../next-lib/alltenses/Lang%.gfo
 	gfc $(GFCFLAGS) --make --parser=off --name=Lang$*-noparse $^
 
 demo.pgf: DemoBul-noparse.pgf DemoCat-noparse.pgf DemoDan-noparse.pgf DemoEng-parse.pgf DemoFin-noparse.pgf DemoFre-noparse.pgf DemoGer-noparse.pgf DemoIta-noparse.pgf DemoNor-noparse.pgf DemoRus-noparse.pgf DemoSpa-noparse.pgf DemoSwe-parse.pgf
