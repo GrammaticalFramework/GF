@@ -1,17 +1,16 @@
 package se.chalmers.cs.gf.gwt.client;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.History;
+import com.google.gwt.user.client.HistoryListener;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
-import com.google.gwt.user.client.ui.PushButton;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -24,7 +23,7 @@ public class FridgeApp implements EntryPoint {
 	private PGF pgf;
 
 	private FlowPanel textPanel;	
-	private Panel bagPanel;
+	private FlowPanel bagPanel;
 	private SettingsPanel settingsPanel;
 	private VerticalPanel outputPanel;
 	private StatusPopup statusPopup;
@@ -37,19 +36,14 @@ public class FridgeApp implements EntryPoint {
 		outputPanel.clear();
 		setStatus("Translating...");
 		pgf.translate(settingsPanel.getGrammarName(), 
-					  getText(), 
-					  settingsPanel.getInputLanguages(), null, 
-				      settingsPanel.getOutputLanguages(), 
-				      new PGF.TranslateCallback() {
+				getText(), 
+				settingsPanel.getInputLanguage(), null, 
+				settingsPanel.getOutputLanguage(), 
+				new PGF.TranslateCallback() {
 			public void onResult (PGF.Translations translations) {
 				for (final PGF.Translation t : translations.iterable()) {
-					PushButton l = new PushButton(t.getText());					
+					Hyperlink l = new Hyperlink(t.getText(), t.getTo() + "/" + t.getText());
 					l.addStyleName("my-translation");
-					l.addClickListener(new ClickListener() {
-						public void onClick(Widget sender) {
-							setText(t.getTo(), t.getText());
-						}
-					});
 					PGF.Language lang = settingsPanel.getGrammar().getLanguage(t.getTo());
 					if (lang != null) {
 						l.getElement().setLang(lang.getLanguageCode());
@@ -63,66 +57,35 @@ public class FridgeApp implements EntryPoint {
 			}
 		});
 	}
-	
+
 	//
-	// Magnets
+	// Available words
 	//
-	
-	private List<String> getWords() {
-		List<String> l = new ArrayList<String>();
-		for (Widget w : textPanel) {
-			l.add(((Magnet)w).getText());			
-		}
-		return l;
-	}
-	
-	private String getText () {
-		StringBuilder sb = new StringBuilder();
-		for (String word : getWords()) {
-			if (sb.length() > 0) {
-				sb.append(' ');
-			}
-			sb.append(word);			
-		}
-		return sb.toString();
-	}
-	
-	private void setText (String language, String text) {
-		settingsPanel.setInputLanguages(Collections.singletonList(language));
-		textPanel.clear();
-		for (String word : text.split("\\s+")) {
-			textPanel.add(new Magnet(language, word));
-		}
-		updateBag();
+
+	private void updateBag () {
+		updateBag("");
 	}
 
-	private ClickListener magnetClickListener = new ClickListener () {
-		public void onClick(Widget sender) {
-			Magnet magnet = (Magnet)sender;
-			textPanel.add(new Magnet(magnet));
-			update();
-		}
-	};
-	
-	private void updateBag () {
+	private void updateBag (String prefix) {
 		bagPanel.clear();
 		int limit = 100;
 		pgf.complete(settingsPanel.getGrammarName(), 
-				     getText() + " ", 
-				     settingsPanel.getInputLanguages(), null, 
-			         limit, new PGF.CompleteCallback() {
+				getText() + " " + prefix, 
+				settingsPanel.getInputLanguage(), null, 
+				limit, new PGF.CompleteCallback() {
 			public void onResult(PGF.Completions completions) {
-				boolean empty = true;
-				List<String> oldWords = getWords();				
 				for (PGF.Completion completion : completions.iterable()) {
-					String[] newWords = completion.getText().split("\\s+");
-					if (newWords.length == oldWords.size()+1) {
-						String word = newWords[newWords.length-1];
-						bagPanel.add(new Magnet(completion.getFrom(), word, magnetClickListener));
-						empty = false;
+					String text = completion.getText();
+					if (!completion.getText().equals(getText() + " ")) {
+						String[] words = text.split("\\s+");
+						String word = (words.length > 0) ? words[words.length - 1] : "";
+						String token = /* settingsPanel.getGrammarName() + "/" + */ completion.getFrom() + "/" + text;
+						Hyperlink magnet = new Hyperlink(word, token);
+						magnet.addStyleName("my-Magnet");
+						bagPanel.add(magnet);
 					}
 				}
-				if (empty) {
+				if (bagPanel.getWidgetCount() == 0) {
 					bagPanel.add(new Label("<empty>"));
 				}
 			}
@@ -131,25 +94,91 @@ public class FridgeApp implements EntryPoint {
 			}
 		});
 	}
+
+	//
+	// Current text
+	//
+
+	private String getText () {
+		StringBuilder sb = new StringBuilder();
+		for (Widget w : textPanel) {
+			String word = ((UsedMagnet)w).getText();	
+			if (sb.length() > 0) {
+				sb.append(' ');
+			}
+			sb.append(word);			
+		}
+		return sb.toString();
+	}
+
+	private void clear() {
+		String token = settingsPanel.getInputLanguage() + "/" + "";
+		if (History.getToken().equals(token)) {
+			History.fireCurrentHistoryState();
+		} else {
+			History.newItem(token);
+		}
+	}
+
+	private HistoryListener historyListener = new HistoryListener() {
+		public void onHistoryChanged(String historyToken) {
+			GWT.log("History changed:" + historyToken, null);
+			String[] parts = historyToken.split("/");
+			GWT.log(parts.length + " parts", null);
+			if (parts.length == 0) {
+				setState("", "");				
+			} else if (parts.length == 1) {
+				setState(parts[0], "");
+			} else if (parts.length == 2) {
+				setState(parts[0], parts[1]);
+			}
+		}
+	};
 	
-	public void update() {
+	/*
+	
+	private static class State {
+		public String grammarName = "";
+		public String inputLanguage = "";
+		public String text = "";
+				
+		public State (String token) {
+			String[] parts = token.split("/");
+			if (parts.length >= 1) {
+				this.grammarName = parts[0];
+				if (parts.length >= 2) {
+					this.inputLanguage = parts[1];	
+					if (parts.length >= 3) {
+						this.text = parts[2];
+					}
+				}
+			} 
+		}
+	}
+	
+	private void setState(State state) {
+		settingsPanel.setInputLanguage(state.inputLanguage);
+		textPanel.clear();
+		for (String word : state.text.split("\\s+")) {
+			textPanel.add(new UsedMagnet(state.inputLanguage, word));
+		}
+		updateBag();
+		translate();
+	}
+	
+	*/
+
+	private void setState(String inputLang, String text) {
+		GWT.log("New text: \"" + text + "\"", null);
+		settingsPanel.setInputLanguage(inputLang);
+		textPanel.clear();
+		for (String word : text.split("\\s+")) {
+			textPanel.add(new UsedMagnet(inputLang, word));
+		}
 		updateBag();
 		translate();
 	}
 
-	public void clear() {
-		textPanel.clear();
-		update();
-	}
-	
-	public void deleteLastMagnet() {
-		int c = textPanel.getWidgetCount();
-		if (c > 0) {
-			textPanel.remove(c-1);
-			update();
-		}
-	}
-	
 	//
 	// Status stuff
 	//
@@ -165,7 +194,7 @@ public class FridgeApp implements EntryPoint {
 	private void clearStatus() {
 		statusPopup.clearStatus();
 	}
-	
+
 	//
 	// GUI
 	//
@@ -179,33 +208,27 @@ public class FridgeApp implements EntryPoint {
 		settingsPanel.addSettingsListener(new SettingsPanel.SettingsListener() {
 			public void grammarChanged(String pgfName) {
 			}
-			public void languagesChanged(List<String> inputLangs, List<String> outputLangs) {
-				update();
+			public void languagesChanged(String inputLang, String outputLang) {
+				clear();
 			}
 			public void settingsError(String msg, Throwable e) {
 				showError(msg,e);
 			}
 		});
-		
+
 		Panel buttons = new HorizontalPanel();
 		buttons.add(new Button("Clear", new ClickListener () {
 			public void onClick(Widget sender) {
 				clear();
 			}
 		}));
-		buttons.add(new Button("Delete last", new ClickListener () {
-			public void onClick(Widget sender) {
-				deleteLastMagnet();
-			}
-		}));
 
-		
 		outputPanel = new VerticalPanel();
 		outputPanel.addStyleName("my-translations");
-		
+
 		textPanel = new FlowPanel();
 		textPanel.setStylePrimaryName("my-TextPanel");
-		
+
 		bagPanel = new FlowPanel();
 		bagPanel.setStylePrimaryName("my-BagPanel");
 
@@ -229,6 +252,7 @@ public class FridgeApp implements EntryPoint {
 	public void onModuleLoad() {
 		pgf = new PGF(pgfBaseURL);
 		createTranslationUI();
+		History.addHistoryListener(historyListener);
 		settingsPanel.updateAvailableGrammars();
 	}
 
