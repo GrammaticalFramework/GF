@@ -20,9 +20,12 @@ import Data.Maybe
 import System.Directory
 import System.FilePath
 
+logFile :: FilePath
+logFile = "pgf-error.log"
 
 main :: IO ()
-main = do initFastCGI
+main = do stderrToFile logFile
+          initFastCGI
           cache <- newCache PGF.readPGF
           runFastCGIConcurrent' forkIO 100 (handleErrors (handleCGIErrors (cgiMain cache)))
 

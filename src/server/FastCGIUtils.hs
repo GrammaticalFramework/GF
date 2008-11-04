@@ -1,6 +1,7 @@
 {-# LANGUAGE DeriveDataTypeable #-}
 module FastCGIUtils (initFastCGI, loopFastCGI,
                      throwCGIError, handleCGIErrors,
+                     stderrToFile,
                      outputJSONP, 
                      splitBy) where
 
@@ -109,6 +110,13 @@ restartIfModified =
 
 logError :: String -> IO ()
 logError s = hPutStrLn stderr s
+
+stderrToFile :: FilePath -> IO ()
+stderrToFile file =
+    do let mode = ownerModes `unionFileModes` groupReadMode `unionFileModes` otherReadMode
+       fileFd <- openFd file WriteOnly (Just mode) (defaultFileFlags { append = True })
+       dupTo fileFd stdError
+       return ()
 
 -- * General CGI Error exception mechanism
 
