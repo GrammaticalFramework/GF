@@ -49,11 +49,11 @@
 
 - GWT translator:
   $ make gwt-translate
-  Then see http://localhost:41296/gwt-client/www/se.chalmers.cs.gf.gwt.TranslateApp/Translate.html
+  Then see http://localhost:41296/gwt/www/se.chalmers.cs.gf.gwt.TranslateApp/Translate.html
 
 - GWT fridge poetry:
   $ make gwt-fridge
-  Then see http://localhost:41296/gwt-client/www/se.chalmers.cs.gf.gwt.FridgeApp/Fridge.html
+  Then see http://localhost:41296/gwt/www/se.chalmers.cs.gf.gwt.FridgeApp/Fridge.html
 
 
 
