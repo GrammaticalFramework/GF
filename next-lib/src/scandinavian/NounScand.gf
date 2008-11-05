@@ -52,8 +52,14 @@ incomplete concrete NounScand of Noun =
       det = quant.det
       } ;
 
-    DetQuant quant num = {
-      s = \\b,g => quant.s ! num.n ! b ! (orB b num.isDet) ! g ++ 
+    DetQuant quant num = 
+      let 
+        md : Bool -> Bool = \b -> case quant.det of {
+         DDef _ => orB b num.isDet ;
+         _ => False
+         }
+      in {
+      s = \\b,g => quant.s ! num.n ! b ! md b ! g ++ 
                    num.s ! g ;
       n = num.n ;
       det = quant.det
