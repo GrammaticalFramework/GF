@@ -1,18 +1,34 @@
-abstract Swadesh = Cat ** {
+abstract Swadesh = {
 
   cat
+    V ;
+    V2 ;
+    V3 ;
+    A ;
+    N ;
+    Pron ;
+    Det ;
+    Card ;
+    Prep ;
+    IAdv ;
+    IP ;
+    NP ;
+    Adv ; 
+    Conj ;
+    Ord ;
+
     MassN ;
 
   fun
 
     -- Pronouns
 
-    i_NP : Pron ;
-    youSg_NP : Pron ;
-    he_NP : Pron ;
-    we_NP : Pron ;
-    youPl_NP : Pron ;
-    they_NP : Pron ;
+    i_NP : NP ;
+    youSg_NP : NP ;
+    he_NP : NP ;
+    we_NP : NP ;
+    youPl_NP : NP ;
+    they_NP : NP ;
     whoPl_IP : IP ; -- only one who in Swadesh 207
     whoSg_IP : IP ;
     whatPl_IP : IP ; -- only one what in Swadesh 207

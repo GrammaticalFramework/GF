@@ -1,5 +1,7 @@
---# -path=.:present:prelude
+--# -path=.:present
 
-concrete SwadeshSwe of Swadesh = CatSwe ** SwadeshI with
-  (Lang = LangSwe) ;
+concrete SwadeshSwe of Swadesh = SwadeshI with
+  (L = LexiconSwe),
+  (Lexicon = LexiconSwe),
+  (Syntax = SyntaxSwe) ;
 

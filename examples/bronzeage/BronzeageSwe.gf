@@ -1,7 +1,7 @@
---# -path=.:present:prelude
+--# -path=.:present
 
-concrete BronzeageSwe of Bronzeage = CatSwe, SwadeshSwe **  BronzeageI with
-  (Lang = LangSwe) ** {
+concrete BronzeageSwe of Bronzeage = SwadeshSwe **  BronzeageI with
+  (Syntax = SyntaxSwe) ** open ResSwe in {
   flags language = sv_SE;
 }
 
