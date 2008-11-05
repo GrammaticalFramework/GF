@@ -102,7 +102,9 @@ public class FridgeApp extends TranslateApp {
 			String inputLanguage = pgf.getInputLanguage();
 			clear();
 			for (String word : text.split("\\s+")) {
-				add(new UsedMagnet(inputLanguage, word));
+				if (word.length() > 0) {
+					add(new UsedMagnet(inputLanguage, word));
+				}
 			}
 		}
 
