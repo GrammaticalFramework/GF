@@ -17,7 +17,17 @@
 .my-Magnet, .my-UsedMagnet {
   float: left;
   margin: 0.3em;
+  border-width: 1px 3px 3px 1px;
+  border-style: solid;
+  border-color: black;
   padding: 0.3em;
+  color: black;
+  background-color: white;
+}
+
+.my-Magnet a, .my-UsedMagnet a {
+  color: black;
+  text-decoration: none;
 }
 
 .my-translations {
