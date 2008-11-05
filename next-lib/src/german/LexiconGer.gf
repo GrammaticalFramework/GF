@@ -108,7 +108,8 @@ lin
   iron_N = reg2N "Eisen" "Eisen" neuter ;
   jump_V = seinV (irregV "springen" "springt" "sprang" "spränge" "gesprungen") ;
   king_N = regN "König" ;
-  know_V2 = dirV2 (irregV "wissen" "weiß" "wußte" "wüßte" "gewußt") ; ---- infl
+  know_V2 = dirV2 (irregV "kennen" "kennt" "kannte" "kännte" "gekannt") ; ---- infl
+  know_VS = mkVS (irregV "wissen" "weiß" "wußte" "wüßte" "gewußt") ; ---- infl
   lake_N = reg2N "See" "Seen" masculine ; --- infl
   lamp_N = regN "Lampe";
   learn_V2 = dirV2 (regV "lernen") ;
