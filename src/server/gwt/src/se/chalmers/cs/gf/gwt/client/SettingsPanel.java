@@ -1,8 +1,5 @@
 package se.chalmers.cs.gf.gwt.client;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -11,143 +8,101 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class SettingsPanel extends Composite {
 
-	private PGF pgf;
-	private PGF.Grammar grammar;
+	private PGFWrapper pgf;
 
-	private GrammarBox grammarBox;
-	private InputLanguageBox fromLangBox;
-	private OutputLanguageBox toLangBox;
+	private MyListBox grammarBox;
+	private MyListBox fromLangBox;
+	private MyListBox toLangBox;
 
-	private List<SettingsListener> listeners = new LinkedList<SettingsListener>();
+	public SettingsPanel (PGFWrapper pgf) {
+		this(pgf, true, true);
+	}
 
-	public SettingsPanel (PGF pgf) {
+	public SettingsPanel (PGFWrapper pgf, boolean showPGFName, boolean showOutputLanguage) {
 		this.pgf = pgf;
-
-		grammarBox = new GrammarBox();
-		grammarBox.addChangeListener(new ChangeListener() {
-			public void onChange(Widget sender) {
-				updateSelectedGrammar();
-			}
-		});
-
-		ChangeListener languageChangeListener = new ChangeListener() {
-			public void onChange(Widget sender) {
-				updateSelectedLanguages();
-			}
-		};
-
-		fromLangBox = new InputLanguageBox();
-		fromLangBox.addChangeListener(languageChangeListener);
-
-		toLangBox = new OutputLanguageBox();
-		toLangBox.addChangeListener(languageChangeListener);
-
+		
 		HorizontalPanel settingsPanel = new HorizontalPanel();
 		settingsPanel.setVerticalAlignment(HorizontalPanel.ALIGN_MIDDLE);
-		settingsPanel.add(new Label("Grammar:"));
-		settingsPanel.add(grammarBox);
+
+		if (showPGFName) {
+			grammarBox = new MyListBox();
+			grammarBox.addChangeListener(new ChangeListener() {
+				public void onChange(Widget sender) {
+					SettingsPanel.this.pgf.setPGFName(grammarBox.getSelectedValue());
+				}
+			});
+			settingsPanel.add(new Label("Grammar:"));
+			settingsPanel.add(grammarBox);
+		}
+
+		fromLangBox = new MyListBox();
+		fromLangBox.addChangeListener(new ChangeListener() {
+			public void onChange(Widget sender) {
+				SettingsPanel.this.pgf.setInputLanguage(fromLangBox.getSelectedValue());
+			}
+		});
 		settingsPanel.add(new Label("From:"));
 		settingsPanel.add(fromLangBox);
-		settingsPanel.add(new Label("To:"));
-		settingsPanel.add(toLangBox);
+
+		if (showOutputLanguage) {
+			toLangBox = new MyListBox();
+			toLangBox.addChangeListener(new ChangeListener() {
+				public void onChange(Widget sender) {
+					SettingsPanel.this.pgf.setOutputLanguage(toLangBox.getSelectedValue());
+				}
+			});
+			settingsPanel.add(new Label("To:"));
+			settingsPanel.add(toLangBox);
+		}
 
 		initWidget(settingsPanel);
 		setStylePrimaryName("my-SettingsPanel");
+
+		pgf.addSettingsListener(new MySettingsListener());
 	}
 
-	public interface SettingsListener {
-		public void grammarChanged(String pgfName);
-		public void languagesChanged(String inputLang, String outputLang);
-		public void settingsError(String msg, Throwable e);
-	}
-
-	public void addSettingsListener(SettingsListener listener) {
-		listeners.add(listener);
-	}
-
-	void fireGrammarChanged() {
-		for (SettingsListener listener : listeners) {
-			listener.grammarChanged(getGrammarName());
+	private class MySettingsListener implements PGFWrapper.SettingsListener {
+		public void onAvailableGrammarsChanged() {
+			if (grammarBox != null) {
+				grammarBox.clear();
+				grammarBox.addItems(pgf.getGrammars());
+			}
 		}
-	}
-
-	void fireLanguagesChanged() {
-		for (SettingsListener listener : listeners) {
-			listener.languagesChanged(getInputLanguage(), getOutputLanguage());
+		public void onAvailableLanguagesChanged() {
+			if (grammarBox != null) {
+				grammarBox.setSelectedValue(pgf.getPGFName());
+			}
+			if (fromLangBox != null) {
+				fromLangBox.clear();
+				fromLangBox.addItem("Any language", "");
+				fromLangBox.addItems(pgf.getParseableLanguages());
+				String inputLanguage = pgf.getInputLanguage();
+				if (inputLanguage != null) {
+					fromLangBox.setSelectedValue(inputLanguage);
+				}
+			}
+			if (toLangBox != null) {
+				toLangBox.clear();
+				toLangBox.addItem("All languages", "");		
+				toLangBox.addItems(pgf.getAllLanguages());
+				String outputLanguage = pgf.getOutputLanguage();
+				if (outputLanguage != null) {
+					fromLangBox.setSelectedValue(outputLanguage);
+				}
+			}
 		}
-	}
-
-	void fireSettingsError(String msg, Throwable e) {
-		for (SettingsListener listener : listeners) {
-			listener.settingsError(msg, e);
+		public void onInputLanguageChanged() {
+			if (fromLangBox != null) {
+				fromLangBox.setSelectedValue(pgf.getInputLanguage());
+			}
 		}
-	}
-
-	//
-	// Grammars
-	//
-
-	public void updateAvailableGrammars() {
-		pgf.listGrammars(new PGF.GrammarNamesCallback() {
-			public void onResult(PGF.GrammarNames grammarNames) {
-				grammarBox.setGrammarNames(grammarNames);
-				// setGrammarNames() picks the first grammar automatically
-				updateSelectedGrammar();
+		public void onOutputLanguageChanged() {
+			if (toLangBox != null) {
+				toLangBox.setSelectedValue(pgf.getOutputLanguage());
 			}
-
-			public void onError (Throwable e) {
-				fireSettingsError("Error getting grammar list", e);
-			}
-		});
-	}
-
-	private void updateSelectedGrammar() {
-		fireGrammarChanged();
-		updateAvailableLanguages();
-	}
-
-	public PGF.Grammar getGrammar() {
-		return grammar;
-	}
-
-	public String getGrammarName() {
-		return grammarBox.getSelectedGrammar();
-	}
-
-
-	//
-	// Languages
-	//
-
-	public String getInputLanguage() {
-		return fromLangBox.getLanguage();
-	}	
-	
-	public String getOutputLanguage() {
-		return toLangBox.getLanguage();
-	}
-
-	public void setInputLanguage(String lang) {
-		fromLangBox.setLanguage(lang);
-	}
-	
-	private void updateAvailableLanguages() {
-		pgf.grammar(getGrammarName(), new PGF.GrammarCallback() {
-			public void onResult(PGF.Grammar grammar) {
-				SettingsPanel.this.grammar = grammar;
-				fromLangBox.setGrammar(grammar);
-				toLangBox.setGrammar(grammar);
-				updateSelectedLanguages();
-			}
-
-			public void onError (Throwable e) {
-				fireSettingsError("Error getting language information", e);
-			}
-		});	
-	}
-
-	private void updateSelectedLanguages() {
-		fireLanguagesChanged();
+		}
+		public void onCatChanged() { }
+		public void onSettingsError(String msg, Throwable e) { }
 	}
 
 }

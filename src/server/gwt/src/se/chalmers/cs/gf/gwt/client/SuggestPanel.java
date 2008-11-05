@@ -8,22 +8,22 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DockPanel;
+import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.KeyboardListenerAdapter;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.Widget;
 
-public class SuggestPanel extends Composite {
+public class SuggestPanel extends Composite implements HasText {
 
-	private CompletionOracle oracle;
 	private SuggestBox suggest;
 	private Button submitButton;
 
 	private List<SubmitListener> listeners = new LinkedList<SubmitListener>();
 
-	public SuggestPanel (PGF pgf) {
+	public SuggestPanel (PGFWrapper pgf) {
 
-		oracle = new CompletionOracle(pgf, new CompletionOracle.ErrorHandler() {
+		CompletionOracle oracle = new CompletionOracle(pgf, new CompletionOracle.ErrorHandler() {
 			public void onError(Throwable e) {
 				GWT.log("Completion failed", e);
 			}
@@ -40,7 +40,6 @@ public class SuggestPanel extends Composite {
 		});
 
 		submitButton = new Button("Submit");
-		submitButton.setEnabled(false);
 		submitButton.addClickListener(new ClickListener() {
 			public void onClick(Widget sender) {
 				submit();
@@ -79,14 +78,6 @@ public class SuggestPanel extends Composite {
 
 	public void setEnabled(boolean enabled) {
 		submitButton.setEnabled(enabled);
-	}
-
-	public void setGrammarName(String pgfName) {
-		oracle.setGrammarName(pgfName);
-	}
-
-	public void setInputLanguage(String inputLang) {
-		oracle.setInputLanguage(inputLang);
 	}
 
 	public void setLimit(int limit) {
