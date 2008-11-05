@@ -1,3 +1,7 @@
+body {
+  background: url("brushed-metal.png");
+}
+
 .my-TextPanel, .my-BagPanel, .my-translations, .my-SettingsPanel {
   margin: 1em;
 }
@@ -5,19 +9,19 @@
 .my-TextPanel {
   font-size: 150%;
   min-height: 2em;
-  border: 3px dashed silver;
+  border: 3px dashed #dddddd;
   overflow: auto;
 }
 
 .my-BagPanel {
-  border: 1px solid silver;
+  border: 3px solid #dddddd;
   overflow: auto;
 }
 
 .my-Magnet, .my-UsedMagnet {
   float: left;
   margin: 0.3em;
-  border-width: 1px 3px 3px 1px;
+  border-width: 1px;
   border-style: solid;
   border-color: black;
   padding: 0.3em;
@@ -38,5 +42,6 @@
     margin: 0.2em;    
 }
 
-.my-SettingsPanel {
+.my-SettingsPanel * {
+  margin: 0.2em;
 }
