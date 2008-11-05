@@ -1,5 +1,8 @@
 --# -path=.:present:prelude
 
-concrete SwadeshFin of Swadesh = CatFin ** SwadeshI with
-  (Lang = LangFin) ;
+concrete SwadeshFin of Swadesh = SwadeshI with
+  (L = LexiconFin),
+  (Lexicon = LexiconFin),
+  (Syntax = SyntaxFin) ;
+
 

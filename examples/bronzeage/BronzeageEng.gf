@@ -1,7 +1,7 @@
---# -path=.:present:prelude
+--# -path=.:present
 
-concrete BronzeageEng of Bronzeage = CatEng, SwadeshEng ** BronzeageI with
-  (Lang = LangEng) ** {
+concrete BronzeageEng of Bronzeage = SwadeshEng ** BronzeageI with
+  (Syntax = SyntaxEng) ** open ResEng in {
   flags language = en_US;
 }
 

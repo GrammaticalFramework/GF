@@ -1,7 +1,7 @@
---# -path=.:present:prelude
+--# -path=.:present
 
-concrete BronzeageRus of Bronzeage = CatRus, SwadeshRus ** BronzeageI with
-  (Lang = LangRus) ** {
+concrete BronzeageRus of Bronzeage = SwadeshRus ** BronzeageI with
+  (Syntax = SyntaxRus) ** open ResRus in {
   flags language = ru_RU;
 }
 
