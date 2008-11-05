@@ -49,16 +49,6 @@ public class PGF {
 		public final native String getUserLanguage() /*-{ return this.userLanguage; }-*/;
 
 		public final native IterableJsArray<Language> getLanguages() /*-{ return this.languages; }-*/;
-
-		public final Language getLanguage(String name) {
-			int c = getLanguages().length();
-			for (int i = 0; i < c; i++) {
-				Language l = getLanguages().get(i);
-				if (l.getName().equals(name))
-					return l;
-			}
-			return null;
-		}
 	}
 
 	public static class Language extends JavaScriptObject {

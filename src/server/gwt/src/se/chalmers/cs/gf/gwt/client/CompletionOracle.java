@@ -10,13 +10,9 @@ public class CompletionOracle extends SuggestOracle {
 
 	private static final int LIMIT_SCALE_FACTOR = 4;
 
-	private PGF pgf;
-
-	private String pgfName;
+	private PGFWrapper pgf;
 
 	private ErrorHandler errorHandler;
-
-	private String inputLang = null;
 
 	private JSONRequest jsonRequest = null;
 
@@ -25,27 +21,21 @@ public class CompletionOracle extends SuggestOracle {
 	private List<CompletionSuggestion> oldSuggestions = Collections.emptyList();
 
 
-	public CompletionOracle (PGF pgf) {
+	public CompletionOracle (PGFWrapper pgf) {
 		this(pgf, null);
 	}
 
-	public CompletionOracle (PGF pgf, ErrorHandler errorHandler) {
+	public CompletionOracle (PGFWrapper pgf, ErrorHandler errorHandler) {
 		this.pgf = pgf;
 		this.errorHandler = errorHandler;
-	}
-
-	public String getGrammarName() {
-		return pgfName;
-	}
-
-	public void setGrammarName(String pgfName) {
-		this.pgfName = pgfName;
-		clearState();
-	}
-
-	public void setInputLanguage(String inputLang) {
-		this.inputLang = inputLang;
-		clearState();
+		pgf.addSettingsListener(new PGFWrapper.SettingsListener() {
+			public void onAvailableGrammarsChanged() { clearState(); }
+			public void onAvailableLanguagesChanged() { clearState(); }
+			public void onInputLanguageChanged() { clearState(); }
+			public void onOutputLanguageChanged() { clearState(); }
+			public void onCatChanged() { clearState(); }
+			public void onSettingsError(String msg, Throwable e) { clearState(); }
+		});
 	}
 
 	private void clearState () {
@@ -55,10 +45,6 @@ public class CompletionOracle extends SuggestOracle {
 			jsonRequest.cancel();
 			jsonRequest = null;
 		}
-	}
-
-	public String getInputLanguage() {
-		return inputLang;
 	}
 
 	public void setErrorHandler(ErrorHandler errorHandler) {
@@ -130,7 +116,7 @@ public class CompletionOracle extends SuggestOracle {
 		// hack: first report no completions, to hide suggestions until we get the new completions
 		callback.onSuggestionsReady(request, new SuggestOracle.Response(Collections.<CompletionSuggestion>emptyList()));
 
-		jsonRequest = pgf.complete(getGrammarName(), request.getQuery(), getInputLanguage(), null, LIMIT_SCALE_FACTOR * request.getLimit(), 
+		jsonRequest = pgf.complete(request.getQuery(), LIMIT_SCALE_FACTOR * request.getLimit(), 
 				new PGF.CompleteCallback() {
 			public void onResult(PGF.Completions completions) {
 				jsonRequest = null;
