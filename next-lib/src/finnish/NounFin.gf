@@ -1,4 +1,4 @@
-concrete NounFin of Noun = CatFin ** open ResFin, Prelude in {
+concrete NounFin of Noun = CatFin ** open ResFin, MorphoFin, Prelude in {
 
   flags optimize=all_subs ;
 
@@ -43,7 +43,7 @@ concrete NounFin of Noun = CatFin ** open ResFin, Prelude in {
           } ;
       in {
         s = \\c => let k = npform2case n c in
-                 det.s1 ! k ; -- det.s2 is possessive suffix 
+                 det.sp ! k ; -- det.s2 is possessive suffix 
         a = agrP3 (case det.isDef of {
             False => Sg ;  -- autoja menee; kolme autoa menee
             _ => det.n
@@ -78,24 +78,26 @@ concrete NounFin of Noun = CatFin ** open ResFin, Prelude in {
 
     DetQuantOrd quant num ord = {
       s1 = \\c => quant.s1 ! num.n ! c ++ num.s ! Sg ! c ++ ord.s ! NCase Pl c ; 
+      sp = \\c => quant.sp ! num.n ! c ++ num.s ! Sg ! c ++ ord.s ! NCase Pl c ; 
       s2 = quant.s2 ;
       n = num.n ;
       isNum = num.isNum ;
       isPoss = quant.isPoss ;
-      isDef = True
+      isDef = quant.isDef
       } ;
 
     DetQuant quant num = {
       s1 = \\c => quant.s1 ! num.n ! c ++ num.s ! Sg ! c ;
+      sp = \\c => quant.sp ! num.n ! c ++ num.s ! Sg ! c ;
       s2 = quant.s2 ;
       n = num.n ;
       isNum = case num.n of {Sg => False ; _ => True} ;
       isPoss = quant.isPoss ;
-      isDef = True
+      isDef = quant.isDef
       } ;
 
     PossPron p = {
-      s1 = \\_,_ => p.s ! NPCase Gen ;
+      s1,sp = \\_,_ => p.s ! NPCase Gen ;
       s2 = BIND ++ possSuffix p.a ;
       isNum = False ;
       isPoss = True ;
@@ -128,6 +130,7 @@ concrete NounFin of Noun = CatFin ** open ResFin, Prelude in {
 
     DefArt = {
       s1 = \\_,_ => [] ; 
+      sp = table {Sg => pronSe.s ; Pl => pronNe.s} ;
       s2 = [] ; 
       isNum,isPoss = False ;
       isDef = True   -- autot ovat
@@ -135,6 +138,9 @@ concrete NounFin of Noun = CatFin ** open ResFin, Prelude in {
 
     IndefArt = {
       s1 = \\_,_ => [] ; -- Nom is Part in Pl: use isDef in DetCN
+      sp = \\n,c => 
+         (nhn (mkSubst "ä" "yksi" "yhde" "yhte" "yhtä" "yhteen" "yksi" "yksi" 
+         "yksien" "yksiä" "yksiin")).s ! NCase n c ;
       s2 = [] ; 
       isNum,isPoss,isDef = False -- autoja on
       } ;
@@ -200,5 +206,6 @@ concrete NounFin of Noun = CatFin ** open ResFin, Prelude in {
       NCase n _ => n ;
       _ => Sg ---
       } ;
+
 
 }

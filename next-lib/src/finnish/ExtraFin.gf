@@ -5,7 +5,7 @@ concrete ExtraFin of ExtraFinAbs = CatFin **
 
   lin
     GenNP np = {
-      s1 = \\_,_ => np.s ! NPCase Gen ;
+      s1,sp = \\_,_ => np.s ! NPCase Gen ;
       s2 = [] ;
       isNum  = False ;
       isPoss = False ;

@@ -828,13 +828,13 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
   \\c => cn.s ! NCase n c ;
 
   mkDet : Number -> CommonNoun -> {
-      s1 : Case => Str ;       -- minun kolme
+      s1,sp : Case => Str ;       -- minun kolme
       s2 : Str ;               -- -ni
       n : Number ;             -- Pl   (agreement feature for verb)
       isNum : Bool ;           -- True (a numeral is present)
       isPoss : Bool ;          -- True (a possessive suffix is present)
       isDef : Bool             -- True (verb agrees in Pl, Nom is not Part)
-      } = \n, noun -> {
+      } = \n, noun -> heavyDet {
     s1 = \\c => noun.s ! NCase n c ;
     s2 = [] ;
     n = n ;
@@ -901,5 +901,40 @@ oper
       } ;
 
   ProperName = {s : Case => Str} ;
+
+  pronSe : ProperName  = {
+    s = table {
+      Nom    => "se" ;
+      Gen    => "sen" ;
+      Part   => "sitä" ;
+      Transl => "siksi" ;
+      Ess    => "sinä" ;
+      Iness  => "siinä" ;
+      Elat   => "siitä" ;
+      Illat  => "siihen" ;
+      Adess  => "sillä" ;
+      Ablat  => "siltä" ;
+      Allat  => "sille" ;
+      Abess  => "sittä"
+      } ;
+    } ;
+
+  pronNe : ProperName  = {
+    s = table {
+      Nom    => "ne" ;
+      Gen    => "niiden" ;
+      Part   => "niitä" ;
+      Transl => "niiksi" ;
+      Ess    => "niinä" ;
+      Iness  => "niissä" ;
+      Elat   => "niitä" ;
+      Illat  => "niihin" ;
+      Adess  => "niillä" ;
+      Ablat  => "niiltä" ;
+      Allat  => "niille" ;
+      Abess  => "niittä"
+      } ;
+    } ;
+
 
 }
