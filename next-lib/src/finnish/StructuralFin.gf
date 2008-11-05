@@ -80,12 +80,12 @@ concrete StructuralFin of Structural = CatFin **
     a = agrP3 Sg ; 
     isPron = False
     } ;
-  someSg_Det = {
+  someSg_Det = heavyDet {
     s1 = jokuPron ! Sg ;
     s2 = [] ;
     isNum,isPoss = False ; isDef = True ; n = Sg
     } ;
-  somePl_Det = {
+  somePl_Det = heavyDet {
     s1 = jokuPron ! Pl ;
     s2 = [] ; isNum,isPoss = False ; isDef = True ; 
     n = Pl
@@ -96,7 +96,7 @@ concrete StructuralFin of Structural = CatFin **
     isPron = False
     } ;
   somewhere_Adv = ss "jossain" ;
-  that_Quant = {
+  that_Quant = heavyQuant {
     s1 = table (MorphoFin.Number) {
           Sg => table (MorphoFin.Case) {
             c => (mkPronoun "tuo" "tuon" "tuota" "tuona" "tuohon" Sg P3).s ! NPCase c
@@ -112,7 +112,7 @@ concrete StructuralFin of Structural = CatFin **
   there7from_Adv = ss "sieltä" ;
   therefore_PConj = ss "siksi" ;
   they_Pron = mkPronoun "he" "heidän" "heitä" "heinä" "heihin"  Pl P3 ; --- ne
-  this_Quant = {
+  this_Quant = heavyQuant {
     s1 = table (MorphoFin.Number) {
           Sg => table (MorphoFin.Case) {
             c => (mkPronoun "tämä" "tämän" "tätä" "tänä" "tähän" Sg P3).s ! NPCase c
@@ -164,14 +164,13 @@ concrete StructuralFin of Structural = CatFin **
 oper
   jokuPron : MorphoFin.Number => (MorphoFin.Case) => Str =
     let 
-      ku = mkN "ku" ;
       kui = mkN "kuu" 
     in
     table {
       Sg => table {
         Nom => "joku" ;
         Gen => "jonkun" ;
-        c => relPron ! Sg ! c + ku.s ! NCase Sg c
+        c => relPron ! Sg ! c + "ku" + Predef.drop 3 (kui.s ! NCase Sg c)
        } ; 
       Pl => table {
         Nom => "jotkut" ;
@@ -265,23 +264,6 @@ oper
         }
       } ;
 
-  pronSe : ProperName  = {
-    s = table {
-      Nom    => "se" ;
-      Gen    => "sen" ;
-      Part   => "sitä" ;
-      Transl => "siksi" ;
-      Ess    => "sinä" ;
-      Iness  => "siinä" ;
-      Elat   => "siitä" ;
-      Illat  => "siihen" ;
-      Adess  => "sillä" ;
-      Ablat  => "siltä" ;
-      Allat  => "sille" ;
-      Abess  => "sittä"
-      } ;
-    } ;
-
 
 oper
   makeNP  : N -> MorphoFin.Number -> CatFin.NP ; 
@@ -299,7 +281,7 @@ lin
   nobody_but_Predet = 
     {s = \\n,c => "ei" ++ kukaanPron ! n ! npform2case n c ++ "paitsi"} ;
 
-  no_Quant = {
+  no_Quant = heavyQuant {
     s1 = \\n,c => "ei" ++ mikaanPron ! n ! c ;
     s2 = [] ; isNum,isPoss = False ; isDef = True ; 
     } ;

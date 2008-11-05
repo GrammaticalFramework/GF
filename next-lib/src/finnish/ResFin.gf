@@ -586,4 +586,20 @@ oper
     } ;
 
   etta_Conj : Str = "että" ;
+
+    heavyDet : PDet -> PDet ** {sp : Case => Str} = \d -> d ** {sp = d.s1} ;
+    PDet : Type = {
+      s1 : Case => Str ;
+      s2 : Str ;
+      n : Number ;
+      isNum : Bool ;
+      isPoss : Bool ;
+      isDef : Bool
+      } ;
+
+    heavyQuant : PQuant -> PQuant ** {sp : Number => Case => Str} = \d -> 
+      d ** {sp = d.s1} ; 
+    PQuant : Type =  
+      {s1 : Number => Case => Str ; s2 : Str ; isPoss : Bool ; isDef : Bool} ; 
+
 }

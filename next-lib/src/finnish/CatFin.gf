@@ -53,6 +53,7 @@ concrete CatFin of Cat = CommonX ** open ResFin, Prelude in {
     Det  = {
       s1 : Case => Str ;       -- minun kolme
       s2 : Str ;               -- -ni
+      sp : Case => Str ;       -- se   (substantival form)
       n : Number ;             -- Pl   (agreement feature for verb)
       isNum : Bool ;           -- True (a numeral is present)
       isPoss : Bool ;          -- True (a possessive suffix is present)
@@ -61,7 +62,7 @@ concrete CatFin of Cat = CommonX ** open ResFin, Prelude in {
 ----    QuantSg, QuantPl = {s1 : Case => Str ; s2 : Str ; isPoss, isDef : Bool} ;
     Ord    = {s : NForm => Str} ;
     Predet = {s : Number => NPForm => Str} ;
-    Quant  = {s1 : Number => Case => Str ; s2 : Str ; isPoss : Bool ; isDef : Bool} ;
+    Quant  = {s1,sp : Number => Case => Str ; s2 : Str ; isPoss : Bool ; isDef : Bool} ;
     Card   = {s : Number => Case => Str ; n : Number} ;
     Num    = {s : Number => Case => Str ; isNum : Bool ; n : Number} ;
 
