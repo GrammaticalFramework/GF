@@ -102,7 +102,8 @@ lin
   industry_N = mk2N "industri" "industrier" ; ---- "ien" ??
   iron_N = regGenN "järn" neutrum ;
   king_N = (regGenN "kung" utrum) ;
-  know_V2 = dirV2 (mkV "veta" "vet" "vet" "visste" "vetat" "visst") ;
+  know_V2 = mkV2 (mkV "känner") ;
+  know_VS = mkVS (mkV "veta" "vet" "vet" "visste" "vetat" "visst") ;
   lake_N = mkN "sjö" "sjön" "sjöar" "sjöarna" ;
   lamp_N = regGenN "lampa" utrum;
   learn_V2 = dirV2 (reflV (mkV "lära" "lär" "lär" "lärde" "lärt" "lärd")) ;

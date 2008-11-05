@@ -306,7 +306,7 @@ oper
         vp   = useVP vpr ;
 ----e        clpr = pronArg agr.n agr.p vp.clAcc vp.clDat ;
 ----e        iform = infForm agr.n agr.p vp.clAcc vp.clDat ;
-        clpr = <vp.clit1, vp.clit2, False> ; ----e
+        clpr = <vp.clit1,vp.clit2, False> ; ----e
         iform = False ; ----e
         inf  = (vp.s ! VPInfinit Simul iform).inf ! (aagr agr.g agr.n) ;
         neg  = vp.neg ! Pos ; --- Neg not in API

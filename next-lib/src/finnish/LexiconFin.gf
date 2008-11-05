@@ -105,7 +105,8 @@ lin
   industry_N = mkN "teollisuus" ;
   iron_N = mkN "rauta" ;
   king_N = mkN "kuningas" ;
-  know_V2 = mkV2 (mk2V "tiet‰‰" "tiesi") ; --- tuntea; gives tiet‰nyt
+  know_VS = mkVS (mkV "tiet‰‰" "tiesi") ;
+  know_V2 = mkV2 (mkV "tuntea" "tunsi") ;
   lake_N = mkN "j‰rvi" "j‰rvi‰" ;
   lamp_N = mkN "lamppu" ;
   learn_V2 = 
@@ -348,7 +349,7 @@ lin
   sew_V = mkV "kylv‰‰" ;
   sing_V = mkV "laulaa" ;
   sit_V = mkV "istua" ;
-  smell_V = mk2V "haistaa" "haistoi" ;
+  smell_V = mk2V "haista" "haisi" ;
   spit_V = mkV "sylke‰" ;
   split_V2 = mkV2 (mk2V "halkaista" "halkaisi") ;
   squeeze_V2 = mkV2 (mkV "puristaa") cpartitive ;

@@ -102,6 +102,7 @@ lin
   iron_N = regN "iron" ;
   king_N = mkN masculine (regN "king") ;
   know_V2 = dirV2 (irregV "know" "knew" "known") ;
+  know_VS = mkVS (irregV "know" "knew" "known") ;
   lake_N = regN "lake" ;
   lamp_N = regN "lamp" ;
   learn_V2 = dirV2 (regV "learn") ;
