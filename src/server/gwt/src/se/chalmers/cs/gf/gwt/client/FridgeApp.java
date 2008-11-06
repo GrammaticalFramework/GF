@@ -170,6 +170,11 @@ public class FridgeApp implements EntryPoint {
 
 	protected Widget createButtonPanel () {
 		Panel buttons = new HorizontalPanel();
+		buttons.add(new Button("Delete last", new ClickListener () {
+			public void onClick(Widget sender) {
+				textPanel.deleteLast();
+			}
+		}));
 		buttons.add(new Button("Clear", new ClickListener () {
 			public void onClick(Widget sender) {
 				clear();
