@@ -1,19 +1,24 @@
 package se.chalmers.cs.gf.gwt.client;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 
-public class FridgeBagPanel extends FlowPanel {
+public class FridgeBagPanel extends Composite {
 
 	private PGFWrapper pgf;
 
 	private MagnetFactory magnetFactory;
 	
-	protected JSONRequest completeRequest = null;
+	private JSONRequest completeRequest = null;
 
+	private FlowPanel mainPanel; 
+	
 	public FridgeBagPanel (PGFWrapper pgf, MagnetFactory magnetFactory) {
 		this.pgf = pgf;
 		this.magnetFactory = magnetFactory;
+		mainPanel = new FlowPanel();
+		initWidget(mainPanel);
 		setStylePrimaryName("my-FridgeBagPanel");
 	}
 
@@ -22,7 +27,7 @@ public class FridgeBagPanel extends FlowPanel {
 	}
 
 	public void updateBag (final String text, String prefix) {
-		clear();
+		mainPanel.clear();
 		int limit = 100;
 		if (completeRequest != null) {
 			completeRequest.cancel();
@@ -30,7 +35,6 @@ public class FridgeBagPanel extends FlowPanel {
 		completeRequest = pgf.complete(text + " " + prefix, 
 				limit, new PGF.CompleteCallback() {
 			public void onResult(PGF.Completions completions) {
-				clear();
 				for (PGF.Completion completion : completions.iterable()) {					
 					String newText = completion.getText();
 					if (!newText.equals(text + " ")) {
@@ -38,7 +42,7 @@ public class FridgeBagPanel extends FlowPanel {
 						if (words.length > 0) {
 							String word = words[words.length - 1];
 							Magnet magnet = magnetFactory.createMagnet(word, completion.getFrom());
-							add(magnet);
+							mainPanel.add(magnet);
 						}
 					}
 				}
