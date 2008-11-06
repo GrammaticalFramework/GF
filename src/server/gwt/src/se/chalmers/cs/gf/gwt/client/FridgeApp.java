@@ -5,7 +5,6 @@ import java.util.List;
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
 import com.allen_sauer.gwt.dnd.client.drop.DropController;
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.HistoryListener;
 import com.google.gwt.user.client.ui.Button;
@@ -245,7 +244,6 @@ public class FridgeApp implements EntryPoint {
 		}
 		public void onAvailableLanguagesChanged() {
 			if (pgf.getInputLanguage() == null) {
-				GWT.log("Setting input language to user language: " + pgf.getUserLanguage(), null);
 				pgf.setInputLanguage(pgf.getUserLanguage());
 			}
 		}
