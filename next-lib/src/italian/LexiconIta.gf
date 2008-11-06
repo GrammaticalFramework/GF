@@ -73,7 +73,7 @@ lin
   father_N2 = diN2 (regN "padre") ;
   fear_VS = mkVS (verboV (temere_20 "temere")) ;
   find_V2 = dirV2 (regV "trovare") ;
-  fish_N = regN "pesca" ;
+  fish_N = regN "pesce" ;
   floor_N = regN "pavimento" ;
   forget_V2 = dirV2 (regV "dimenticare") ;
   fridge_N = regN "frigorifero" ;
