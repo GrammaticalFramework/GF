@@ -7,7 +7,7 @@ body {
 }
 
 .my-FridgeTextPanel, .my-FridgeBagPanel {
-  min-height: 2em;
+  min-height: 2.4em;
   padding: 0.2em;
   overflow: auto;
 }
@@ -18,8 +18,8 @@ body {
 }
 
 .my-FridgeTextPanel-engage {
-  border-color: #aaaaaa;
-  background-color: #ccff99;
+  border-color: #666666;
+  background-color: #dddddd;
 }
 
 .my-FridgeBagPanel {
@@ -38,7 +38,9 @@ body {
 }
 
 .my-translations {
-  border: 1px solid silver;
+  min-height: 2.4em;
+  padding: 0.2em;
+  border: 3px solid silver;
 }
     
 .my-translation {

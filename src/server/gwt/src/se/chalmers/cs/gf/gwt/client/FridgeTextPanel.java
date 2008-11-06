@@ -4,15 +4,13 @@ import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.ChangeListenerCollection;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HasText;
-import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class FridgeTextPanel extends Composite implements HasText {
+public class FridgeTextPanel extends Composite {
 
 	private MagnetFactory magnetFactory;
-	
-	private Panel mainPanel;
+
+	private FlowPanel mainPanel;
 
 	private ChangeListenerCollection listeners = null;
 
@@ -30,7 +28,7 @@ public class FridgeTextPanel extends Composite implements HasText {
 			removeStyleDependentName("engage");
 		}
 	}
-	
+
 	public String getText () {
 		StringBuilder sb = new StringBuilder();
 		for (Widget w : mainPanel) {
@@ -43,12 +41,15 @@ public class FridgeTextPanel extends Composite implements HasText {
 		return sb.toString();
 	}
 
-	public void setText (String text) {
-		clear();
-		for (String word : text.split("\\s+")) {
-			if (word.length() > 0) {
-				addMagnet(magnetFactory.createMagnet(word));
+	public void setText (String text, String language) {
+		if (!text.equals(getText())) {
+			mainPanel.clear();
+			for (String word : text.split("\\s+")) {
+				if (word.length() > 0) {
+					mainPanel.add(magnetFactory.createUsedMagnet(word, language));
+				}
 			}
+			fireChange();
 		}
 	}
 
@@ -56,16 +57,16 @@ public class FridgeTextPanel extends Composite implements HasText {
 		mainPanel.clear();
 		fireChange();
 	}
-
+	
 	public void addMagnet (Magnet magnet) {
-		mainPanel.add(magnet);
+		mainPanel.add(magnetFactory.createUsedMagnet(magnet));
 		fireChange();
 	}
 
 	protected void fireChange() {
 		listeners.fireChange(this);
 	}
-	
+
 	public void addChangeListener(ChangeListener listener) {
 		if (listeners == null) {
 			listeners = new ChangeListenerCollection();

@@ -1,12 +1,19 @@
 package se.chalmers.cs.gf.gwt.client;
 
-import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.HTML;
 
-public class Magnet extends Label {
+public class Magnet extends HTML {
 	
-	public Magnet (String text) {
-		setText(text);
+	private String language;
+	
+	public Magnet (String text, String language) {
+		this.language = language;
+		setHTML(text);
 		setStylePrimaryName("my-Magnet");
+	}
+	
+	public String getLanguage() {
+		return language;
 	}
 
 }
