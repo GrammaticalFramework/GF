@@ -14,4 +14,6 @@ if [ `uname` = "Darwin" ]; then
   GWT_JAVA_OPTS=-XstartOnFirstThread
 fi
 
-java $GWT_JAVA_OPTS -Xmx256M -cp "$APPDIR/src:$APPDIR/bin:$GWT_CLASSPATH" com.google.gwt.dev.GWTCompiler -out "$APPDIR/www" "$@" se.chalmers.cs.gf.gwt.FridgeApp;
+LIBS=$APPDIR/lib/gwt-dnd-2.5.6.jar
+
+java $GWT_JAVA_OPTS -Xmx256M -cp "$APPDIR/src:$APPDIR/bin:$LIBS:$GWT_CLASSPATH" com.google.gwt.dev.GWTCompiler -out "$APPDIR/www" "$@" se.chalmers.cs.gf.gwt.FridgeApp;

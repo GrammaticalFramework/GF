@@ -15,11 +15,9 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class TranslateApp implements EntryPoint {
 
-	private static final String pgfBaseURL = "/pgf";
+	protected static final String pgfBaseURL = "/pgf";
 
 	protected PGFWrapper pgf;
-
-	protected Widget translationUI;
 
 	protected HasText textSource;
 	protected VerticalPanel outputPanel;
@@ -92,8 +90,8 @@ public class TranslateApp implements EntryPoint {
 	//
 	// GUI
 	//
-
-	protected Widget createTranslationUI() {
+	
+	protected Widget createUI() {
 		VerticalPanel vPanel = new VerticalPanel();
 		vPanel.setWidth("100%");
 		vPanel.setHorizontalAlignment(VerticalPanel.ALIGN_CENTER);
@@ -138,7 +136,7 @@ public class TranslateApp implements EntryPoint {
 	// History stuff
 	//
 	
-	private HistoryListener historyListener = new HistoryListener() {
+	protected class MyHistoryListener implements HistoryListener {
 		public void onHistoryChanged(String historyToken) {
 			updateSettingsFromHistoryToken();
 		}
@@ -182,8 +180,6 @@ public class TranslateApp implements EntryPoint {
 					pgf.setPGFName(grammars.get(0));
 				}
 			}			
-			RootPanel.get().clear();
-			RootPanel.get().add(translationUI);
 		}
 		public void onAvailableLanguagesChanged() {
 			if (pgf.getInputLanguage() == null) {
@@ -209,13 +205,11 @@ public class TranslateApp implements EntryPoint {
 	public void onModuleLoad() {
 		statusPopup = new StatusPopup();
 
-		RootPanel.get().add(createLoadingWidget());
-
 		pgf = new PGFWrapper(new PGF(pgfBaseURL), new MySettingsListener());
+		
+		RootPanel.get().add(createUI());
 
-		translationUI = createTranslationUI();
-
-		History.addHistoryListener(historyListener);
+		History.addHistoryListener(new MyHistoryListener());
 
 		updateSettingsFromHistoryToken();
 	}

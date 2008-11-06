@@ -2,23 +2,31 @@ body {
   background: url("brushed-metal.png");
 }
 
-.my-TextPanel, .my-BagPanel, .my-translations, .my-SettingsPanel {
+.my-FridgeTextPanel, .my-FridgeBagPanel, .my-translations, .my-SettingsPanel {
   margin: 1em;
 }
 
-.my-TextPanel {
-  font-size: 150%;
+.my-FridgeTextPanel, .my-FridgeBagPanel {
   min-height: 2em;
+  padding: 0.2em;
+  overflow: auto;
+}
+
+.my-FridgeTextPanel {
+  font-size: 150%;
   border: 3px dashed #dddddd;
-  overflow: auto;
 }
 
-.my-BagPanel {
+.my-FridgeTextPanel-engage {
+  border-color: #aaaaaa;
+  background-color: #ccff99;
+}
+
+.my-FridgeBagPanel {
   border: 3px solid #dddddd;
-  overflow: auto;
 }
 
-.my-Magnet, .my-UsedMagnet {
+.my-Magnet {
   float: left;
   margin: 0.3em;
   border-width: 1px;
@@ -27,11 +35,6 @@ body {
   padding: 0.3em;
   color: black;
   background-color: white;
-}
-
-.my-Magnet a, .my-UsedMagnet a {
-  color: black;
-  text-decoration: none;
 }
 
 .my-translations {
