@@ -26,6 +26,10 @@ body {
   border: 3px solid #dddddd;
 }
 
+.my-PrefixPanel {
+  margin-bottom: 1em;
+}
+
 .my-Magnet {
   float: left;
   margin: 0.3em;
