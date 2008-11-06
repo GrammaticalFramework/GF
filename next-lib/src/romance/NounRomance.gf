@@ -97,7 +97,7 @@ incomplete concrete NounRomance of Noun =
       } ;
 
     IndefArt = {
-      s = \\b,n,g,c => if_then_Str b [] (artIndef g n c) ;
+      s = \\b,n,g,c => if_then_Str b (prepCase c) (artIndef g n c) ;
       sp = \\n,g,c => artIndef g n c ; ---- not for Fre
       s2 = []
       } ;
