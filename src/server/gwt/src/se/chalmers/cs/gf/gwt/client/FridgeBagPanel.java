@@ -31,6 +31,7 @@ public class FridgeBagPanel extends Composite {
 		this.pgf = pgf;
 		this.magnetFactory = magnetFactory;
 		prefixPanel = new FlowPanel();
+		prefixPanel.setStylePrimaryName("my-PrefixPanel");
 		mainPanel = new FlowPanel();
 		VerticalPanel vPanel = new VerticalPanel();
 		vPanel.setHorizontalAlignment(VerticalPanel.ALIGN_CENTER);
