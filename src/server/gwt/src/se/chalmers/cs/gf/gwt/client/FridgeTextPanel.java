@@ -63,6 +63,14 @@ public class FridgeTextPanel extends Composite {
 		fireChange();
 	}
 
+	public void deleteLast() {
+		int c = mainPanel.getWidgetCount();
+		if (c > 0) {
+			mainPanel.remove(c-1);
+			fireChange();
+		}
+	}
+	
 	protected void fireChange() {
 		listeners.fireChange(this);
 	}
