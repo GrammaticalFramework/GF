@@ -1,22 +1,19 @@
 package se.chalmers.cs.gf.gwt.client;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 
-public class FridgeBagPanel extends Composite {
+public class FridgeBagPanel extends FlowPanel {
 
 	private PGFWrapper pgf;
 
 	private MagnetFactory magnetFactory;
 	
-	private FlowPanel mainPanel;
+	protected JSONRequest completeRequest = null;
 
 	public FridgeBagPanel (PGFWrapper pgf, MagnetFactory magnetFactory) {
 		this.pgf = pgf;
 		this.magnetFactory = magnetFactory;
-		mainPanel = new FlowPanel();
-		initWidget(mainPanel);
 		setStylePrimaryName("my-FridgeBagPanel");
 	}
 
@@ -24,21 +21,24 @@ public class FridgeBagPanel extends Composite {
 		updateBag(text, "");
 	}
 
-	public void updateBag (String text, String prefix) {
-		mainPanel.clear();
+	public void updateBag (final String text, String prefix) {
+		clear();
 		int limit = 100;
-		pgf.complete(text + " " + prefix, 
+		if (completeRequest != null) {
+			completeRequest.cancel();
+		}
+		completeRequest = pgf.complete(text + " " + prefix, 
 				limit, new PGF.CompleteCallback() {
 			public void onResult(PGF.Completions completions) {
-				mainPanel.clear();
-				for (PGF.Completion completion : completions.iterable()) {
-					String text = completion.getText();
-					if (!completion.getText().equals(text + " ")) {
-						String[] words = text.split("\\s+");
+				clear();
+				for (PGF.Completion completion : completions.iterable()) {					
+					String newText = completion.getText();
+					if (!newText.equals(text + " ")) {
+						String[] words = newText.split("\\s+");
 						if (words.length > 0) {
 							String word = words[words.length - 1];
-							Magnet magnet = magnetFactory.createMagnet(word);
-							mainPanel.add(magnet);
+							Magnet magnet = magnetFactory.createMagnet(word, completion.getFrom());
+							add(magnet);
 						}
 					}
 				}
@@ -49,5 +49,16 @@ public class FridgeBagPanel extends Composite {
 			}
 		});
 	}
+	
+/*
+	public void cloneMagnet (Magnet magnet) {
+		int i = getWidgetIndex(magnet);
+		GWT.log("cloneMagnet: " + magnet.getParent(), null);
+		if (i != -1) {
+			GWT.log("cloning", null);
+			insert(magnetFactory.createMagnet(magnet), i);
+		}
+	}
+*/
 
 }

@@ -6,7 +6,6 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.HistoryListener;
-import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -19,7 +18,7 @@ public class TranslateApp implements EntryPoint {
 
 	protected PGFWrapper pgf;
 
-	protected HasText textSource;
+	protected SuggestPanel suggestPanel;
 	protected VerticalPanel outputPanel;
 	protected StatusPopup statusPopup;
 
@@ -28,12 +27,7 @@ public class TranslateApp implements EntryPoint {
 	//
 	
 	public String getText () {
-		return textSource.getText();
-	}
-	
-	public void setText(String text) {
-		textSource.setText(text);
-		update();
+		return suggestPanel.getText();
 	}
 	
 	protected void update () {
@@ -47,9 +41,10 @@ public class TranslateApp implements EntryPoint {
 	protected void translate() {
 		outputPanel.clear();
 		outputPanel.addStyleDependentName("working");
-		pgf.translate(textSource.getText(), 
+		pgf.translate(getText(), 
 				new PGF.TranslateCallback() {
 			public void onResult (PGF.Translations translations) {
+				outputPanel.clear();
 				outputPanel.removeStyleDependentName("working");
 				for (PGF.Translation t : translations.iterable()) {
 					outputPanel.add(createTranslation(t.getTo(), t.getText()));
@@ -102,16 +97,13 @@ public class TranslateApp implements EntryPoint {
 	}
 
 	protected Widget createSuggestPanel () {
-		SuggestPanel suggestPanel = new SuggestPanel(pgf);
+		suggestPanel = new SuggestPanel(pgf);
 		suggestPanel.setButtonText("Translate");
 		suggestPanel.addSubmitListener(new SuggestPanel.SubmitListener() {
 			public void onSubmit(String text) {
 				translate();
 			}
-		});
-		
-		textSource = suggestPanel;
-		
+		});		
 		return suggestPanel;
 	}
 
