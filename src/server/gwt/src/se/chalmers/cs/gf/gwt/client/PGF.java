@@ -97,7 +97,7 @@ public class PGF {
 		args.add(new Arg("input", input));
 		args.add(new Arg("from", fromLang));
 		args.add(new Arg("cat", cat));
-		if (limit != -1) {
+		if (limit > 0) {
 			args.add(new Arg("limit", limit));
 		}
 		return sendGrammarRequest(pgfName, "complete", args, callback);
