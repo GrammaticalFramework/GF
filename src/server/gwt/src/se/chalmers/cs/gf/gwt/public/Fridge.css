@@ -2,6 +2,10 @@ body {
   background: url("brushed-metal.png");
 }
 
+.my-FridgeApp {
+  
+}
+
 .my-FridgeTextPanel, .my-FridgeBagPanel, .my-translations, .my-SettingsPanel {
   margin: 1em;
 }
@@ -9,7 +13,6 @@ body {
 .my-FridgeTextPanel, .my-FridgeBagPanel {
   min-height: 2.4em;
   padding: 0.2em;
-  overflow: auto;
 }
 
 .my-FridgeTextPanel {
@@ -20,6 +23,20 @@ body {
 .my-FridgeTextPanel-engage {
   border-color: #666666;
   background-color: #dddddd;
+}
+
+/* IE min-height hack */
+.my-FridgeTextPanel .prop {
+    height: 2.4em;
+    float: right;
+    width: 1px;
+}
+
+/* Used for clearing floats to ensure that float container is tall enough  */
+.my-FridgeTextPanel .clear {
+    clear: both;
+    height: 1px;
+    overflow: hidden;
 }
 
 .my-FridgeBagPanel {
