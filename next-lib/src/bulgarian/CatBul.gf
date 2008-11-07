@@ -115,6 +115,8 @@ concrete CatBul of Cat = open ResBul, Prelude, (R = ParamX) in {
 -- Tense, Anteriority and Polarity functions
 
   lin
+    TTAnt t a = {s = t.s ++ a.s ; t = t.t ; a = a.a} ;
+
     PPos  = {s = []} ** {p = R.Pos} ;
     PNeg  = {s = []} ** {p = R.Neg} ;
     TPres = {s = []} ** {t = R.Pres} ;
