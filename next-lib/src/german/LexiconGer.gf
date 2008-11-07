@@ -271,7 +271,7 @@ lin
   hand_N = mkN "Hand" "Hände" feminine ;
   head_N = mkN "Kopf" "Köpfe" masculine ;
   heart_N = mkN "Herz" "Herzen" neuter ;
-  horn_N = mkN "Horn" "Härner" neuter ;
+  horn_N = mkN "Horn" "Hörner" neuter ;
   husband_N = mkN "Ehemann" "Ehemänner" masculine ;
   ice_N = mkN "Eis" "Eise" neuter ;
   knee_N = mkN "Knie" "Knien" neuter ;
