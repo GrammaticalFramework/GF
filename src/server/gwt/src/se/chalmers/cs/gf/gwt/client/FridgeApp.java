@@ -143,7 +143,7 @@ public class FridgeApp implements EntryPoint {
 		magnetFactory = new MagnetFactory(dragController, magnetClickListener);
 
 		VerticalPanel vPanel = new VerticalPanel();
-		vPanel.setWidth("100%");
+		vPanel.setStyleName("my-FridgeApp");
 		vPanel.setHorizontalAlignment(VerticalPanel.ALIGN_CENTER);
 		vPanel.add(createTextPanel());
 		vPanel.add(createButtonPanel());

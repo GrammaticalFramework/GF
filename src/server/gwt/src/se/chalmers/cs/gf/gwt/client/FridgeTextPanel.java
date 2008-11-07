@@ -17,8 +17,24 @@ public class FridgeTextPanel extends Composite {
 	public FridgeTextPanel (MagnetFactory magnetFactory) { 
 		this.magnetFactory = magnetFactory;
 		mainPanel = new FlowPanel();
-		initWidget(mainPanel);
+		FlowPanel wrapper = new FlowPanel();
+		wrapper.add(createMinHeightProp());
+		wrapper.add(mainPanel);
+		wrapper.add(createFloatClearer());
+		initWidget(wrapper);
 		setStylePrimaryName("my-FridgeTextPanel");
+	}
+	
+	private Widget createMinHeightProp() {
+		Widget prop = new FlowPanel();
+		prop.setStylePrimaryName("prop");
+		return prop;
+	}
+	
+	private Widget createFloatClearer() {
+		Widget clear = new FlowPanel();
+		clear.setStylePrimaryName("clear");
+		return clear;
 	}
 
 	public void setEngaged(boolean engaged) {
@@ -32,11 +48,13 @@ public class FridgeTextPanel extends Composite {
 	public String getText () {
 		StringBuilder sb = new StringBuilder();
 		for (Widget w : mainPanel) {
-			String word = ((Magnet)w).getText();	
-			if (sb.length() > 0) {
-				sb.append(' ');
+			if (w instanceof Magnet) {
+				String word = ((Magnet)w).getText();	
+				if (sb.length() > 0) {
+					sb.append(' ');
+				}
+				sb.append(word);
 			}
-			sb.append(word);			
 		}
 		return sb.toString();
 	}
@@ -52,12 +70,12 @@ public class FridgeTextPanel extends Composite {
 			fireChange();
 		}
 	}
-
+	
 	public void clear () {
 		mainPanel.clear();
 		fireChange();
 	}
-	
+
 	public void addMagnet (Magnet magnet) {
 		mainPanel.add(magnetFactory.createUsedMagnet(magnet));
 		fireChange();
@@ -70,7 +88,7 @@ public class FridgeTextPanel extends Composite {
 			fireChange();
 		}
 	}
-	
+
 	protected void fireChange() {
 		listeners.fireChange(this);
 	}
