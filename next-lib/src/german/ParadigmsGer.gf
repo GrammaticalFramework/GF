@@ -513,7 +513,6 @@ mkV2 : overload {
     mkV2 : V -> V2 = dirV2 ;
     mkV2 : V -> Prep -> V2 = prepV2;
     mkV2 : V -> Case -> V2 = \v,c -> prepV2 v (mkPrep [] c)
-    };
+    } ;
 
-
-} ;
+}
