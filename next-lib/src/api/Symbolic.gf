@@ -8,10 +8,14 @@ incomplete resource Symbolic = open Symbol, Grammar, PredefCnc in {
       symb : Int -> NP ;                       -- 23
       symb : Float -> NP ;                     -- 0.99
       symb : N  -> Digits -> NP ;              -- level 4
-      symb : N  -> Card -> NP ;                -- level four
-      symb : CN -> Card -> NP ;                -- advanced level four
-      symb : Det -> N  -> Card -> NP ;         -- the number four
-      symb : Det -> CN -> Card -> NP ;         -- the even number four
+      symb : N  -> Card -> NP ;                -- level at least four
+      symb : CN -> Card -> NP ;                -- advanced level at least four
+      symb : Det -> N  -> Card -> NP ;         -- the number at least four
+      symb : Det -> CN -> Card -> NP ;         -- the even number at least four
+      symb : N  -> Numeral -> NP ;             -- level four
+      symb : CN -> Numeral -> NP ;             -- advanced level four
+      symb : Det -> N  -> Numeral -> NP ;      -- the number four
+      symb : Det -> CN -> Numeral -> NP ;      -- the even number four
       symb : Det -> N  -> Str -> Str -> NP ;   -- the levels i and j
       symb : Det -> CN -> [Symb] -> NP ;       -- the basic levels i, j, and k
       symb : Symb -> S ;                       -- A
@@ -42,6 +46,14 @@ incomplete resource Symbolic = open Symbol, Grammar, PredefCnc in {
                           = \d,n,x -> DetCN d (ApposCN (UseN n) (UsePN (NumPN x))) ;
       symb : Det -> CN -> Card -> NP
                           = \d,n,x -> DetCN d (ApposCN n (UsePN (NumPN x))) ;
+      symb : N -> Numeral -> NP 
+                          = \c,n -> CNNumNP (UseN c) (NumNumeral n) ;
+      symb : CN -> Numeral -> NP 
+                          = \c,n -> CNNumNP c (NumNumeral n) ;
+      symb : Det -> N  -> Numeral -> NP
+                          = \d,n,x -> DetCN d (ApposCN (UseN n) (UsePN (NumPN (NumNumeral x)))) ;
+      symb : Det -> CN -> Numeral -> NP
+                          = \d,n,x -> DetCN d (ApposCN n (UsePN (NumPN (NumNumeral x)))) ;
       symb : Det -> N  -> Str -> Str -> NP 
                           = \c,n,x,y -> CNSymbNP c (UseN n) (BaseSymb (mkSymb x) (mkSymb y)) ;
       symb : Det -> CN -> [Symb] -> NP 
