@@ -127,11 +127,15 @@ mkN : overload {
 
     mkA : Str -> A ;
 
--- In the worst case, adjectives need three forms - one for each degree.
+-- Irregular adjectives need three forms - one for each degree.
 
-    mkA : (gut,besser,beste : Str) -> A -- gut,besser,beste 
+    mkA : (gut,besser,beste : Str) -> A ;
 
-    };
+-- Sometimes an extra form is needed for positive forms.
+
+    mkA : (gut,gute,besser,beste : Str) -> A
+
+    } ;
 
 -- Invariable adjective are a special case. 
 
@@ -358,6 +362,8 @@ mkV2 : overload {
       _ => a
     } in 
     MorphoGer.mkA a aa b (init c) ** {lock_A = <>} ;
+  mk4A : (gut,gute,besser,beste : Str) -> A = \a,aa,b,c ->
+    MorphoGer.mkA a aa b (init c) ** {lock_A = <>} ;
 
   regA : Str -> A = \a -> case a of {
     teu + "er" => mk3A a (teu + "rer") (teu + "reste") ;
@@ -476,7 +482,8 @@ mkV2 : overload {
 
   mkA = overload {
     mkA : Str -> A = regA ;
-    mkA : (gut,besser,beste : Str) -> A = mk3A
+    mkA : (gut,besser,beste : Str) -> A = mk3A ;
+    mkA : (gut,gute,besser,beste : Str) -> A = mk4A
     };
 
 
