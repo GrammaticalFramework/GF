@@ -36,13 +36,11 @@ public class PGFWrapper {
 	private List<SettingsListener> listeners = new LinkedList<SettingsListener>();
 	
 
-	public PGFWrapper(PGF pgf, SettingsListener listener) {
+	public PGFWrapper(PGF pgf) {
 		this.pgf = pgf;
-		addSettingsListener(listener);
-		updateAvailableGrammars();
 	}
 
-	protected void updateAvailableGrammars() {
+	public void updateAvailableGrammars() {
 		pgf.listGrammars(new PGF.GrammarNamesCallback() {
 			public void onResult(PGF.GrammarNames grammarNames) {
 				grammars = new ArrayList<String>();

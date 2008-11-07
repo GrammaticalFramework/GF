@@ -22,7 +22,7 @@ public class FridgeApp implements EntryPoint {
 	protected static final String pgfBaseURL = "/pgf";
 
 	protected PGFWrapper pgf;
-	
+
 	protected JSONRequest translateRequest = null;
 
 	private FridgeBagPanel bagPanel;
@@ -132,7 +132,7 @@ public class FridgeApp implements EntryPoint {
 				}
 			}
 		});
-		*/
+		 */
 
 		ClickListener magnetClickListener = new ClickListener () {
 			public void onClick(Widget widget) {
@@ -269,13 +269,12 @@ public class FridgeApp implements EntryPoint {
 	public void onModuleLoad() {
 		statusPopup = new StatusPopup();
 
-		pgf = new PGFWrapper(new PGF(pgfBaseURL), new MySettingsListener());
-
+		pgf = new PGFWrapper(new PGF(pgfBaseURL));
 		RootPanel.get().add(createUI());
-
+		pgf.addSettingsListener(new MySettingsListener());
 		History.addHistoryListener(new MyHistoryListener());
-
 		updateSettingsFromHistoryToken();
+		pgf.updateAvailableGrammars();
 	}
 
 }
