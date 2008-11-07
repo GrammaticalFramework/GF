@@ -14,10 +14,14 @@ incomplete resource Symbolic = open Symbol, Grammar, PredefCnc in {
       symb : Det -> CN -> Card -> NP ;         -- the even number at least four
       symb : N  -> Numeral -> NP ;             -- level four
       symb : CN -> Numeral -> NP ;             -- advanced level four
-      symb : Det -> N  -> Numeral -> NP ;      -- the number four
-      symb : Det -> CN -> Numeral -> NP ;      -- the even number four
-      symb : Det -> N  -> Str -> Str -> NP ;   -- the levels i and j
-      symb : Det -> CN -> [Symb] -> NP ;       -- the basic levels i, j, and k
+      symb : Det -> N  -> Numeral -> NP ;      -- the largest number four
+      symb : Det -> CN -> Numeral -> NP ;      -- the largest even number four
+      symb : Det -> N  -> Str -> Str -> NP ;   -- the largest levels i and j
+      symb : Det -> CN -> [Symb] -> NP ;       -- the largest basic levels i, j, and k
+      symb : Quant -> N  -> Numeral -> NP ;      -- the number four
+      symb : Quant -> CN -> Numeral -> NP ;      -- the even number four
+      symb : Quant -> N  -> Str -> Str -> NP ;   -- the levels i and j
+      symb : Quant -> CN -> [Symb] -> NP ;       -- the basic levels i, j, and k
       symb : Symb -> S ;                       -- A
       symb : Symb -> Card ;                    -- n
       symb : Symb -> Ord                       -- n'th
@@ -58,6 +62,14 @@ incomplete resource Symbolic = open Symbol, Grammar, PredefCnc in {
                           = \c,n,x,y -> CNSymbNP c (UseN n) (BaseSymb (mkSymb x) (mkSymb y)) ;
       symb : Det -> CN -> [Symb] -> NP 
                           = CNSymbNP ;
+      symb : Quant -> N  -> Numeral -> NP
+                          = \d,n,x -> DetCN (DetQuant d NumSg) (ApposCN (UseN n) (UsePN (NumPN (NumNumeral x)))) ;
+      symb : Quant -> CN -> Numeral -> NP
+                          = \d,n,x -> DetCN (DetQuant d NumSg) (ApposCN n (UsePN (NumPN (NumNumeral x)))) ;
+      symb : Quant -> N  -> Str -> Str -> NP 
+                          = \d,n,x,y -> CNSymbNP (DetQuant d NumSg) (UseN n) (BaseSymb (mkSymb x) (mkSymb y)) ;
+      symb : Quant -> CN -> [Symb] -> NP 
+                          = \d -> CNSymbNP (DetQuant d NumSg);
       symb : Symb -> S = SymbS ;
       symb : Symb -> Card = SymbNum ;
       symb : Symb -> Ord = SymbOrd
