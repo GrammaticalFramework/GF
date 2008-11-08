@@ -131,6 +131,10 @@ fun eachRS : RS -> RS ; -- each of who
 
 fun suchCN : CN -> S -> CN ;
 
+fun predRS : VP -> RS ;
+fun slashRS : NP -> V2 -> RS ;
+
+
 -- 2.2.4
 
 fun genNP : NP -> CN -> NP ; -- everybody's customer

@@ -42,9 +42,9 @@ lin burger_N = mkkN "hamburger" ;
 lin earn_V2 = mkV2 "gagner" ;
 lin income_N = mkkN "revenu" ;
 lin england_PN = mkPN "Angleterre" ;
-lin beginning_N = mkkN "debut" ;
+lin beginning_N = mkkN "début" ;
 lin office_N = mkkN "bureau" ;
-lin interested_A2 = mkA2 (mkA "interessé") dative ;
+lin interested_A2 = mkA2 (mkA "interessé") (mkPrep "par") ;
 lin classroom_N = mkkN "classe" ;
 lin manually_Adv = mkAdv "manuellement" ;
 lin slot_N = mkkN "trou" ;
@@ -74,6 +74,8 @@ lin brother_N = mkgN "frère" masculine ;
 lin mary_PN = mkPN "Mary" ;
 lin machine_N = mkkN "machine" ;
 lin correct_A = mkA "correct" ;
+
+lin kilogram_Unit = mkkN "kilo" ;
 
 oper 
   mkkN : Str -> CN = \n -> mkCN (ParadigmsFre.mkN n) ;

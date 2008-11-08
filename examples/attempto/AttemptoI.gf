@@ -126,6 +126,9 @@ lin eachRS : RS -> RS ; -- each of who
 
 lin suchCN cn s = mkCN (mkAP (mkAP such_A) s) cn ;
 
+lin predRS vp = mkRS (mkRCl which_RP vp) ;
+lin slashRS np v2 = mkRS (mkRCl which_RP np v2) ;
+
 -- 2.2.4
 
 lin genNP = genitiveNP ;

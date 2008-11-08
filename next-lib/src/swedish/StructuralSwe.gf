@@ -132,7 +132,7 @@ lin
        Sg => \\_,_ => genderForms "ingen" "inget" ; 
        Pl => \\_,_,_ => "inga"
        } ;
-     det = DDef Def
+     det = DIndef
     } ;
 
   if_then_Conj = {s1 = "om" ; s2 = "så" ; n = singular} ;
