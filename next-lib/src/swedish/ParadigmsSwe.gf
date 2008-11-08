@@ -331,8 +331,9 @@ oper
     } ;
 
   regGenN : Str -> Gender -> N = \bil, g -> case g of {
-    Utr => case last bil of {
-      "a" => decl1Noun bil ;
+    Utr => case bil of {
+      _ + "are" => decl5Noun bil ;
+      _ + "a" => decl1Noun bil ;
       _   => decl2Noun bil
       } ;
     Neutr => case last bil of {

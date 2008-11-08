@@ -4,7 +4,7 @@ instance LexAttemptoSwe of LexAttempto =
 oper
   possible_A = mkA "möjlig" ;
   necessary_A = mkA "nödvändig" ;
-  own_A = mkA "egen" ;
+  own_A = mkA "egen" "eget" "egna" "egnare" "egnast" ;
   have_VV = must_VV ;
   provably_Adv = mkAdv "bevisbart" ;
   provable_A = mkA "bevisbar" ;
