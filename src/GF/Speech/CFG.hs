@@ -237,6 +237,13 @@ allRulesGrouped = Map.toList . Map.map Set.toList . cfgRules
 allCats :: CFG -> [Cat]
 allCats = Map.keys . cfgRules
 
+-- | Gets all categories which have rules or occur in a RHS.
+allCats' :: CFG -> [Cat]
+allCats' cfg = Set.toList (Map.keysSet (cfgRules cfg) `Set.union` 
+                           Set.fromList [c | rs <- Map.elems (cfgRules cfg), 
+                                             r  <- Set.toList rs, 
+                                             NonTerminal c <- ruleRhs r])
+
 -- | Gets all rules for the given category.
 catRules :: CFG -> Cat -> [CFRule]
 catRules gr c = Set.toList $ Map.findWithDefault Set.empty c (cfgRules gr)
