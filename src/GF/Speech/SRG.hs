@@ -128,7 +128,7 @@ renameCats prefix cfg = mapCFGCats renameCat cfg
   where renameCat c | isExternal c = c ++ "_cat"
                     | otherwise = Map.findWithDefault (badCat c) c names
         isExternal c = c `Set.member` cfgExternalCats cfg        
-        catsByPrefix = buildMultiMap [(takeWhile (/='_') cat, cat) | cat <- allCats cfg, not (isExternal cat)]
+        catsByPrefix = buildMultiMap [(takeWhile (/='_') cat, cat) | cat <- allCats' cfg, not (isExternal cat)]
         names = Map.fromList [(c,pref++"_"++show i) | (pref,cs) <- catsByPrefix, (c,i) <- zip cs [1..]]
         badCat c = error ("GF.Speech.SRG.renameCats: " ++ c ++ "\n" ++ prCFG cfg)
 
