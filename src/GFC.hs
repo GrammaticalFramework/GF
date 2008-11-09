@@ -16,6 +16,7 @@ import GF.Data.ErrM
 import Data.Maybe
 import Data.Binary
 import System.FilePath
+import System.IO
 
 
 mainGFC :: Options -> [FilePath] -> IOE ()
@@ -35,6 +36,7 @@ compileSourceFiles opts fs =
        if flag optStopAfterPhase opts == Compile 
          then return ()
          else do pgf <- link opts cnc gr
+                 writePGF opts pgf
                  writeOutputs opts pgf
 
 compileCFFiles :: Options -> [FilePath] -> IOE ()
@@ -46,27 +48,33 @@ compileCFFiles opts fs =
        if flag optStopAfterPhase opts == Compile 
          then return ()
          else do pgf <- link opts cnc gr
+                 writePGF opts pgf
                  writeOutputs opts pgf
 
 unionPGFFiles :: Options -> [FilePath] -> IOE ()
 unionPGFFiles opts fs = 
     do pgfs <- mapM readPGFVerbose fs
        let pgf = foldl1 unionPGF pgfs
+           pgfFile = grammarName opts pgf <.> "pgf"
+       if pgfFile `elem` fs 
+         then putStrLnE $ "Refusing to overwrite " ++ pgfFile
+         else writePGF opts pgf
        writeOutputs opts pgf
   where readPGFVerbose f = putPointE Normal opts ("Reading " ++ f ++ "...") $ ioeIO $ readPGF f
 
 writeOutputs :: Options -> PGF -> IOE ()
 writeOutputs opts pgf = do
-  writePGF opts pgf
   sequence_ [writeOutput opts name str 
                  | fmt <- flag optOutputFormats opts, 
                    (name,str) <- exportPGF opts fmt pgf]
 
 writePGF :: Options -> PGF -> IOE ()
 writePGF opts pgf = do
-  let name = fromMaybe (prCId (absname pgf)) (flag optName opts)
-      outfile = name <.> "pgf"
+  let outfile = grammarName opts pgf <.> "pgf"
   putPointE Normal opts ("Writing " ++ outfile ++ "...") $ ioeIO $ encodeFile outfile pgf
+
+grammarName :: Options -> PGF -> String
+grammarName opts pgf = fromMaybe (prCId (absname pgf)) (flag optName opts)
 
 writeOutput :: Options -> FilePath-> String -> IOE ()
 writeOutput opts file str =
