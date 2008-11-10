@@ -4277,24 +4277,12 @@ In linearization, we use a corresponding **unlexer**:
 
 ===Most common lexers and unlexers===
 
-  || lexer       | description ||
-  | ``words``    | (default) tokens are separated by spaces or newlines
-  | ``literals`` | like words, but integer and string literals recognized
-  | ``chars``    | each character is a token
-  | ``code``     | program code conventions (uses Haskell's lex)
-  | ``text``     | with conventions on punctuation and capital letters
-  | ``codelit``  | like code, but recognize literals (unknown words as strings)
-  | ``textlit``  | like text, but recognize literals (unknown words as strings)
-
-  || unlexer     | description ||
-  | ``unwords``  | (default) space-separated token list 
-  | ``text``     | format as text: punctuation, capitals, paragraph <p>
-  | ``code``     | format as code (spacing, indentation)
-  | ``textlit``  | like text, but remove string literal quotes
-  | ``codelit``  | like code, but remove string literal quotes
-  | ``concat``   | remove all spaces
-
-%TODO: update the names
+  || lexer       | unlexer        | description ||
+  | ``chars``    | ``unchars``    | each character is a token
+  | ``lexcode``  | ``unlexcode``  | program code conventions (uses Haskell's lex)
+  | ``lexmixed`` | ``unlexmixed`` | like text, but between $ signs like code
+  | ``lextext``  | ``unlextext``  | with conventions on punctuation and capitals
+  | ``words``    | ``unwords``    | (default) tokens separated by space characters 
 
 %TODO: also on alphabet encodings - although somewhere else
 

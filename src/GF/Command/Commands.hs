@@ -360,11 +360,10 @@ allCommands cod pgf = Map.fromList [
        "To see transliteration tables, use command ut." 
        ], 
      examples = [
-       "l (EAdd 3 4) | ps -code              -- linearize code-like output",
-       "ps -lexer=code | p -cat=Exp          -- parse code-like input",
-       "gr -cat=QCl | l | ps -bind -to_utf8  -- linearization output from LangFin", 
-       "ps -from_utf8 \"jag ?r h?r\" | p       -- parser in LangSwe in UTF8 terminal",
-       "ps -to_devanagari -to_utf8 \"A-p\"     -- show Devanagari in UTF8 terminal"
+       "l (EAdd 3 4) | ps -code         -- linearize code-like output",
+       "ps -lexer=code | p -cat=Exp     -- parse code-like input",
+       "gr -cat=QCl | l | ps -bind      -- linearization output from LangFin", 
+       "ps -to_devanagari \"A-p\"     -- show Devanagari in UTF8 terminal"
        ],
      exec = \opts -> return . fromString . stringOps (map prOpt opts) . toString,
      options = stringOpOptions
@@ -626,7 +625,7 @@ stringOpOptions = [
        ("from_devanagari","from unicode to GF Devanagari transliteration"),
        ("from_thai","from unicode to GF Telugu transliteration"),
        ("from_thai","from unicode to GF Thai transliteration"),
-       ("from_utf8","decode from utf8"),
+       ("from_utf8","decode from utf8 (default)"),
        ("lextext","text-like lexer"),
        ("lexcode","code-like lexer"),
        ("lexmixed","mixture of text and code (code between $...$)"), 
@@ -636,7 +635,7 @@ stringOpOptions = [
        ("to_html","wrap in a html file with linebreaks"),
        ("to_telugu","from GF Telugu transliteration to unicode"),
        ("to_thai","from GF Thai transliteration to unicode"),
-       ("to_utf8","encode to utf8"),
+       ("to_utf8","encode to utf8 (default)"),
        ("unlextext","text-like unlexer"),
        ("unlexcode","code-like unlexer"),
        ("unlexmixed","mixture of text and code (code between $...$)"), 
