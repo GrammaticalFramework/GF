@@ -186,7 +186,7 @@ allCommands cod pgf = Map.fromList [
        let pgfr = optRestricted opts
        let dp = return $ valIntOpts "depth" 4 opts
        let ts = generateAllDepth pgfr (optType opts) dp
-       return $ fromTrees $ take (optNumInf opts) ts
+       returnFromTrees $ take (optNumInf opts) ts
      }),
   ("h", emptyCommandInfo {
      longname = "help",
@@ -304,7 +304,7 @@ allCommands cod pgf = Map.fromList [
        "The default start category can be overridden by the -cat flag.",
        "See also the ps command for lexing and character encoding."
        ],
-     exec = \opts -> return . fromTrees . concatMap (par opts) . toStrings,
+     exec = \opts -> returnFromTrees . concatMap (par opts) . toStrings,
      flags = [
        ("cat","target category of parsing"),
        ("lang","the languages of parsing (comma-separated, no spaces)")
@@ -382,7 +382,7 @@ allCommands cod pgf = Map.fromList [
        "pt -compute (plus one two)   -- compute value",
        "p \"foo\" | pt -typecheck      -- type check parse results"
        ],
-     exec = \opts -> return . fromTrees . treeOps (map prOpt opts),
+     exec = \opts -> returnFromTrees . treeOps (map prOpt opts),
      options = treeOpOptions pgf
      }),
   ("q",  emptyCommandInfo {
@@ -592,6 +592,10 @@ allCommands cod pgf = Map.fromList [
    fromString  s  = ([Lit (LStr s)], s)
    toStrings = map showAsString 
    toString = unwords . toStrings
+
+   returnFromTrees ts = return $ case ts of
+     [] -> (ts, "no trees found")
+     _ -> fromTrees ts
 
    prGrammar opts = case opts of
      _ | isOpt "cats" opts -> unwords $ map showType $ categories pgf
