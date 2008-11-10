@@ -13,7 +13,7 @@ stringOp :: String -> Maybe (String -> String)
 stringOp name = case name of
   "chars"      -> Just $ appLexer (filter (not . all isSpace) . map return)
   "lextext"    -> Just $ appLexer lexText
-  "lexcode"    -> Just $ appLexer lexText
+  "lexcode"    -> Just $ appLexer lexCode
   "lexmixed"   -> Just $ appLexer lexMixed
   "words"      -> Just $ appLexer words
   "bind"       -> Just $ appUnlexer bindTok

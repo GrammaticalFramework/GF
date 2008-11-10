@@ -3601,12 +3601,7 @@ tenses and moods, e.g. the Romance languages.
 
 =Lesson 5: Refining semantics in abstract syntax=
 
-
-**NOTICE**: The methods described in this lesson are not yet fully supported
-in GF 3.0 beta. Use GF 2.9 to get all functionalities.
-
 #Lchapsix
-
 
 Goals:
 - include semantic conditions in grammars, by using
@@ -3730,16 +3725,21 @@ to mark incomplete parts of trees in the syntax editor.
 
 ===Solving metavariables===
 
-Use the command ``put_tree = pt`` with the flag ``-transform=solve``:
+Use the command ``put_tree = pt`` with the option ``-typecheck``:
 ```
-  > parse "dim the light" | put_tree -transform=solve
+  > parse "dim the light" | put_tree -typecheck
   CAction light dim (DKindOne light)
 ```
-The ``solve`` process may fail, in which case no tree is returned:
+The ``typecheck`` process may fail, in which case an error message
+is shown and no tree is returned:
 ```
-  > parse "dim the fan" | put_tree -transform=solve
-  no tree found
+  > parse "dim the fan" | put_tree -typecheck
+
+  Error in tree UCommand (CAction ? 0 dim (DKindOne fan)) :
+    (? 0 <> fan) (? 0 <> light)
 ```
+
+
 
 
 #NEW
@@ -4016,14 +4016,17 @@ The linearization of the variable ``x`` is,
 
 ===Parsing variable bindings===
 
-GF needs to know what strings are parsed as variable symbols.
-
-This is defined in a special lexer,
+GF can treat any one-word string as a variable symbol.
 ```
-  > p -cat=Prop -lexer=codevars "(All x)(x = x)"
+  > p -cat=Prop "( All x ) ( x = x )"
   All (\x -> Eq x x)
 ```
-More details on lexers #Rseclexing. 
+Variables must be bound if they are used:
+```
+  > p -cat=Prop "( All x ) ( x = y )"
+  no tree found
+```
+
 
 
 
@@ -4161,9 +4164,6 @@ Type checking can be invoked with ``put_term -transform=solve``.
 
 ==Lesson 6: Grammars of formal languages==
 
-**NOTICE**: The methods described in this lesson are not yet fully supported
-in GF 3.0 beta. Use GF 2.9 to get all functionalities.
-
 
 #Lchapseven
 
@@ -4253,20 +4253,25 @@ The proper way would be
 Moreover, the tokens ``"12"``, ``"3"``, and ``"4"`` should be recognized as
 integer literals - they cannot be found in the grammar.
 
-We choose a proper with a flag:
+
+#NEW
+
+Lexers are invoked by flags to the command ``put_string = ps``.
 ```
-  > parse -cat=Exp -lexer=codelit "(2 + (3 * 4))"
+  > put_string -lexcode "(2 + (3 * 4))"
+  ( 2 + ( 3 * 4 ) )
+```
+This can be piped into a parser, as usual:
+```
+  > ps -lexcode "(2 + (3 * 4))" | parse
   EPlus (EInt 2) (ETimes (EInt 3) (EInt 4))
-```
-We could also put the flag into the grammar (concrete syntax):
-```
-  flags lexer = codelit ;
 ```
 In linearization, we use a corresponding **unlexer**:
 ```
-  > l -unlexer=code EPlus (EInt 2) (ETimes (EInt 3) (EInt 4))
+  > linearize EPlus (EInt 2) (ETimes (EInt 3) (EInt 4)) | ps -unlexcode
   (2 + (3 * 4))
 ```
+
 
 #NEW
 
@@ -4288,6 +4293,10 @@ In linearization, we use a corresponding **unlexer**:
   | ``textlit``  | like text, but remove string literal quotes
   | ``codelit``  | like code, but remove string literal quotes
   | ``concat``   | remove all spaces
+
+%TODO: update the names
+
+%TODO: also on alphabet encodings - although somewhere else
 
 
 #NEW
@@ -4501,7 +4510,7 @@ the prefix is ``f`` instead of ``i``, and that ``fconst`` takes floating
 point literals as arguments.
 
 
-
+%TODO: fix embedded grammars lesson
 
 #NEW
 
