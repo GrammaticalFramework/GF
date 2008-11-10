@@ -8,7 +8,7 @@
 <P ALIGN="center"><CENTER><H1>Grammatical Framework Tutorial</H1>
 <FONT SIZE="4">
 <I>Aarne Ranta</I><BR>
-Version 3.1, October 2008
+Version 3.1.2, November 2008
 </FONT></CENTER>
 
 <P></P>
@@ -373,7 +373,7 @@ of the GF programming language, which in turn is built on the ideas of the
 GF theory. 
 </P>
 <P>
-The main focus of this tutorial is on using the GF programming language.
+The focus of this tutorial is on using the GF programming language.
 </P>
 <P>
 At the same time, we learn the way of thinking in the GF theory. 
@@ -391,7 +391,7 @@ using the GF system.
 A GF program is called a <B>grammar</B>. 
 </P>
 <P>
-A grammar defines of a language. 
+A grammar defines a language. 
 </P>
 <P>
 From this definition, language processing components can be derived:
@@ -647,8 +647,8 @@ by a new prompt:
 </P>
 <PRE>
     &gt; i HelloEng.gf
-    - compiling Hello.gf...   wrote file Hello.gfc 8 msec
-    - compiling HelloEng.gf...   wrote file HelloEng.gfc 12 msec
+    - compiling Hello.gf...   wrote file Hello.gfo 8 msec
+    - compiling HelloEng.gf...   wrote file HelloEng.gfo 12 msec
   
     12 msec
     &gt;
@@ -841,8 +841,8 @@ Application programs, using techniques from <a href="#chapeight">Lesson 7</a>:
   <LI>spoken language translators
   <LI>dialogue systems
   <LI>user interfaces
-  <LI>localization: parametrize the messages printed by a program
-    to support different languages
+  <LI>localization: render the messages printed by a program
+    in different languages
   </UL>
 </UL>
 
@@ -1258,14 +1258,14 @@ after having worked out <a href="#chaptwo">Lesson 3</a>.
 Semantically indistinguishable ways of expressing a thing.
 </P>
 <P>
-The <CODE>variants</CODE> construct of GF expresses free variation. For example,
+The <B>variants</B> construct of GF expresses free variation. For example,
 </P>
 <PRE>
-    lin Delicious = {s = variants {"delicious" ; "exquisit" ; "tasty"}} ;
+    lin Delicious = {s = "delicious" | "exquisit" | "tasty"} ;
 </PRE>
 <P>
 By default, the <CODE>linearize</CODE> command
-shows only the first variant from each <CODE>variants</CODE> list; to see them
+shows only the first variant from such lists; to see them
 all, use the option <CODE>-all</CODE>:
 </P>
 <PRE>
@@ -1274,8 +1274,18 @@ all, use the option <CODE>-all</CODE>:
     this delicious wine is exquisit
     ...
 </PRE>
+<P></P>
 <P>
-Limiting case: an empty variant list
+<!-- NEW -->
+</P>
+<P>
+An equivalent notation for variants is
+</P>
+<PRE>
+    lin Delicious = {s = variants {"delicious" ; "exquisit" ; "tasty"}} ;
+</PRE>
+<P>
+This notation also allows the limiting case: an empty variant list,
 </P>
 <PRE>
     variants {}
@@ -1285,7 +1295,7 @@ It can be used e.g. if a word lacks a certain inflection form.
 </P>
 <P>
 Free variation works for all types in concrete syntax; all terms in
-a <CODE>variants</CODE> list must be of the same type.
+a variant list must be of the same type.
 </P>
 <P>
 <!-- NEW -->
@@ -1302,7 +1312,7 @@ a <CODE>variants</CODE> list must be of the same type.
 linearizations in different languages:
 </P>
 <PRE>
-    &gt; gr -number=2 | tree_bank
+    &gt; gr -number=2 | l -treebank
   
     Is (That Cheese) (Very Boring)
     quel formaggio è molto noioso
@@ -1312,10 +1322,7 @@ linearizations in different languages:
     quel formaggio è fresco
     that cheese is fresh
 </PRE>
-<P>
-There is also an XML format for treebanks and a set of commands
-suitable for regression testing; see <CODE>help tb</CODE> for more details.
-</P>
+<P></P>
 <P>
 <!-- NEW -->
 </P>
@@ -1356,7 +1363,7 @@ answer given in another language.
 <A NAME="toc35"></A>
 <H3>The "cf" grammar format</H3>
 <P>
-The grammar <CODE>FoodEng</CODE> could be written in a BNF format as follows:
+The grammar <CODE>FoodEng</CODE> can be written in a BNF format as follows:
 </P>
 <PRE>
     Is.        Phrase  ::= Item "is" Quality ;
@@ -1375,14 +1382,14 @@ The grammar <CODE>FoodEng</CODE> could be written in a BNF format as follows:
     Warm.      Quality ::= "warm" ;
 </PRE>
 <P>
-The GF system v 2.9 can be used for converting BNF grammars into GF. 
-BNF files are recognized by the file name suffix <CODE>.cf</CODE>: 
+GF can convert BNF grammars into GF. 
+BNF files are recognized by the file name suffix <CODE>.cf</CODE> (for <B>context-free</B>): 
 </P>
 <PRE>
     &gt; import food.cf
 </PRE>
 <P>
-It creates separate abstract and concrete modules.
+The compiler creates separate abstract and concrete modules internally.
 </P>
 <P>
 <!-- NEW -->
@@ -1413,7 +1420,7 @@ GF uses suffixes to recognize different file formats:
 </P>
 <UL>
 <LI>Source files: <I>Modulename</I><CODE>.gf</CODE>
-<LI>Target files: <I>Modulename</I><CODE>.gfc</CODE>
+<LI>Target files: <I>Modulename</I><CODE>.gfo</CODE>
 </UL>
 
 <P>
@@ -1641,8 +1648,7 @@ A new module can <B>extend</B> an old one:
         Question ;
       fun
         QIs : Item -&gt; Quality -&gt; Question ;
-        Pizza : Kind ;
-        
+        Pizza : Kind ;      
     }
 </PRE>
 <P>
@@ -1851,7 +1857,10 @@ argument. For instance,
 <PRE>
     case e of {...} ===  table {...} ! e
 </PRE>
-<P></P>
+<P>
+Since they are familiar to Haskell and ML programmers, they can come out handy
+when writing GF programs.
+</P>
 <P>
 <!-- NEW -->
 </P>
@@ -1899,7 +1908,7 @@ words is inflected.
 </P>
 <P>
 From the GF point of view, a paradigm is a function that takes 
-a <B>lemma</B> (<B>dictionary form</B>, <B>citation form</B>) and 
+a <B>lemma</B> (also known as a <B>dictionary form</B>, or a <B>citation form</B>) and 
 returns an inflection table. 
 </P>
 <P>
@@ -2891,9 +2900,6 @@ Thus
     artIndef ++ "apple"   ---&gt;  "an" ++ "apple"
 </PRE>
 <P></P>
-<P>
-<I>Prefix-dependent choice may be deprecated in GF version 3.</I>
-</P>
 <P>
 <!-- NEW -->
 </P>
@@ -4076,10 +4082,6 @@ tenses and moods, e.g. the Romance languages.
 <A NAME="toc109"></A>
 <H1>Lesson 5: Refining semantics in abstract syntax</H1>
 <P>
-<B>NOTICE</B>: The methods described in this lesson are not yet fully supported
-in GF 3.0 beta. Use GF 2.9 to get all functionalities.
-</P>
-<P>
 <a name="chapsix"></a>
 </P>
 <P>
@@ -4241,18 +4243,21 @@ to mark incomplete parts of trees in the syntax editor.
 <A NAME="toc114"></A>
 <H3>Solving metavariables</H3>
 <P>
-Use the command <CODE>put_tree = pt</CODE> with the flag <CODE>-transform=solve</CODE>:
+Use the command <CODE>put_tree = pt</CODE> with the option <CODE>-typecheck</CODE>:
 </P>
 <PRE>
-    &gt; parse "dim the light" | put_tree -transform=solve
+    &gt; parse "dim the light" | put_tree -typecheck
     CAction light dim (DKindOne light)
 </PRE>
 <P>
-The <CODE>solve</CODE> process may fail, in which case no tree is returned:
+The <CODE>typecheck</CODE> process may fail, in which case an error message
+is shown and no tree is returned:
 </P>
 <PRE>
-    &gt; parse "dim the fan" | put_tree -transform=solve
-    no tree found
+    &gt; parse "dim the fan" | put_tree -typecheck
+  
+    Error in tree UCommand (CAction ? 0 dim (DKindOne fan)) :
+      (? 0 &lt;&gt; fan) (? 0 &lt;&gt; light)
 </PRE>
 <P></P>
 <P>
@@ -4603,18 +4608,20 @@ The linearization of the variable <CODE>x</CODE> is,
 <A NAME="toc125"></A>
 <H3>Parsing variable bindings</H3>
 <P>
-GF needs to know what strings are parsed as variable symbols.
-</P>
-<P>
-This is defined in a special lexer,
+GF can treat any one-word string as a variable symbol.
 </P>
 <PRE>
-    &gt; p -cat=Prop -lexer=codevars "(All x)(x = x)"
+    &gt; p -cat=Prop "( All x ) ( x = x )"
     All (\x -&gt; Eq x x)
 </PRE>
 <P>
-More details on lexers <a href="#seclexing">here</a>. 
+Variables must be bound if they are used:
 </P>
+<PRE>
+    &gt; p -cat=Prop "( All x ) ( x = y )"
+    no tree found
+</PRE>
+<P></P>
 <P>
 <!-- NEW -->
 </P>
@@ -4779,10 +4786,6 @@ Type checking can be invoked with <CODE>put_term -transform=solve</CODE>.
 <A NAME="toc132"></A>
 <H2>Lesson 6: Grammars of formal languages</H2>
 <P>
-<B>NOTICE</B>: The methods described in this lesson are not yet fully supported
-in GF 3.0 beta. Use GF 2.9 to get all functionalities.
-</P>
-<P>
 <a name="chapseven"></a>
 </P>
 <P>
@@ -4896,23 +4899,27 @@ Moreover, the tokens <CODE>"12"</CODE>, <CODE>"3"</CODE>, and <CODE>"4"</CODE> s
 integer literals - they cannot be found in the grammar.
 </P>
 <P>
-We choose a proper with a flag:
+<!-- NEW -->
+</P>
+<P>
+Lexers are invoked by flags to the command <CODE>put_string = ps</CODE>.
 </P>
 <PRE>
-    &gt; parse -cat=Exp -lexer=codelit "(2 + (3 * 4))"
-    EPlus (EInt 2) (ETimes (EInt 3) (EInt 4))
+    &gt; put_string -lexcode "(2 + (3 * 4))"
+    ( 2 + ( 3 * 4 ) )
 </PRE>
 <P>
-We could also put the flag into the grammar (concrete syntax):
+This can be piped into a parser, as usual:
 </P>
 <PRE>
-    flags lexer = codelit ;
+    &gt; ps -lexcode "(2 + (3 * 4))" | parse
+    EPlus (EInt 2) (ETimes (EInt 3) (EInt 4))
 </PRE>
 <P>
 In linearization, we use a corresponding <B>unlexer</B>:
 </P>
 <PRE>
-    &gt; l -unlexer=code EPlus (EInt 2) (ETimes (EInt 3) (EInt 4))
+    &gt; linearize EPlus (EInt 2) (ETimes (EInt 3) (EInt 4)) | ps -unlexcode
     (2 + (3 * 4))
 </PRE>
 <P></P>
@@ -4924,66 +4931,33 @@ In linearization, we use a corresponding <B>unlexer</B>:
 <TABLE ALIGN="center" CELLPADDING="4" BORDER="1">
 <TR>
 <TH>lexer</TH>
-<TH COLSPAN="2">description</TH>
-</TR>
-<TR>
-<TD><CODE>words</CODE></TD>
-<TD>(default) tokens are separated by spaces or newlines</TD>
-</TR>
-<TR>
-<TD><CODE>literals</CODE></TD>
-<TD>like words, but integer and string literals recognized</TD>
-</TR>
-<TR>
-<TD><CODE>chars</CODE></TD>
-<TD>each character is a token</TD>
-</TR>
-<TR>
-<TD><CODE>code</CODE></TD>
-<TD>program code conventions (uses Haskell's lex)</TD>
-</TR>
-<TR>
-<TD><CODE>text</CODE></TD>
-<TD>with conventions on punctuation and capital letters</TD>
-</TR>
-<TR>
-<TD><CODE>codelit</CODE></TD>
-<TD>like code, but recognize literals (unknown words as strings)</TD>
-</TR>
-<TR>
-<TD><CODE>textlit</CODE></TD>
-<TD>like text, but recognize literals (unknown words as strings)</TD>
-</TR>
-</TABLE>
-
-<TABLE ALIGN="center" CELLPADDING="4" BORDER="1">
-<TR>
 <TH>unlexer</TH>
 <TH COLSPAN="2">description</TH>
 </TR>
 <TR>
+<TD><CODE>chars</CODE></TD>
+<TD><CODE>unchars</CODE></TD>
+<TD>each character is a token</TD>
+</TR>
+<TR>
+<TD><CODE>lexcode</CODE></TD>
+<TD><CODE>unlexcode</CODE></TD>
+<TD>program code conventions (uses Haskell's lex)</TD>
+</TR>
+<TR>
+<TD><CODE>lexmixed</CODE></TD>
+<TD><CODE>unlexmixed</CODE></TD>
+<TD>like text, but between $ signs like code</TD>
+</TR>
+<TR>
+<TD><CODE>lextext</CODE></TD>
+<TD><CODE>unlextext</CODE></TD>
+<TD>with conventions on punctuation and capitals</TD>
+</TR>
+<TR>
+<TD><CODE>words</CODE></TD>
 <TD><CODE>unwords</CODE></TD>
-<TD>(default) space-separated token list</TD>
-</TR>
-<TR>
-<TD><CODE>text</CODE></TD>
-<TD>format as text: punctuation, capitals, paragraph &lt;p&gt;</TD>
-</TR>
-<TR>
-<TD><CODE>code</CODE></TD>
-<TD>format as code (spacing, indentation)</TD>
-</TR>
-<TR>
-<TD><CODE>textlit</CODE></TD>
-<TD>like text, but remove string literal quotes</TD>
-</TR>
-<TR>
-<TD><CODE>codelit</CODE></TD>
-<TD>like code, but remove string literal quotes</TD>
-</TR>
-<TR>
-<TD><CODE>concat</CODE></TD>
-<TD>remove all spaces</TD>
+<TD>(default) tokens separated by space characters</TD>
 </TR>
 </TABLE>
 
