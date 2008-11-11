@@ -2,8 +2,14 @@ package se.chalmers.cs.gf.gwt.client;
 
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.ChangeListenerCollection;
+import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.PushButton;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class FridgeTextPanel extends Composite {
@@ -17,24 +23,39 @@ public class FridgeTextPanel extends Composite {
 	public FridgeTextPanel (MagnetFactory magnetFactory) { 
 		this.magnetFactory = magnetFactory;
 		mainPanel = new FlowPanel();
-		FlowPanel wrapper = new FlowPanel();
-		wrapper.add(createMinHeightProp());
-		wrapper.add(mainPanel);
-		wrapper.add(createFloatClearer());
+		mainPanel.setStylePrimaryName("magnets");
+		DockPanel wrapper = new DockPanel();		
+		wrapper.add(mainPanel, DockPanel.CENTER);
+		Widget buttons = createButtonPanel();
+		wrapper.add(buttons, DockPanel.EAST);
+		wrapper.setCellWidth(mainPanel, "100%");
+		wrapper.setCellWidth(buttons, "6em");
+		wrapper.setHorizontalAlignment(DockPanel.ALIGN_RIGHT);
 		initWidget(wrapper);
 		setStylePrimaryName("my-FridgeTextPanel");
 	}
 	
-	private Widget createMinHeightProp() {
-		Widget prop = new FlowPanel();
-		prop.setStylePrimaryName("prop");
-		return prop;
-	}
-	
-	private Widget createFloatClearer() {
-		Widget clear = new FlowPanel();
-		clear.setStylePrimaryName("clear");
-		return clear;
+
+	protected Widget createButtonPanel () {
+		Panel buttons = new VerticalPanel();
+		buttons.setStylePrimaryName("buttons");
+		PushButton deleteLastButton = new PushButton(new Image("delete-last.png"));
+		deleteLastButton.setTitle("Removes the last magnet.");
+		deleteLastButton.addClickListener(new ClickListener () {
+			public void onClick(Widget sender) {
+				deleteLast();
+			}
+		});
+		buttons.add(deleteLastButton);
+		PushButton clearButton = new PushButton("Clear");
+		clearButton.addClickListener(new ClickListener () {
+			public void onClick(Widget sender) {
+				clear();
+			}
+		});
+		clearButton.setTitle("Removes all magnets.");
+		buttons.add(clearButton);
+		return buttons;
 	}
 
 	public void setEngaged(boolean engaged) {

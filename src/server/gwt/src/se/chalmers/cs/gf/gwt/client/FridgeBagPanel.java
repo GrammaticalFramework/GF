@@ -7,6 +7,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -37,8 +38,9 @@ public class FridgeBagPanel extends Composite {
 		vPanel.setHorizontalAlignment(VerticalPanel.ALIGN_CENTER);
 		vPanel.add(prefixPanel);
 		vPanel.add(mainPanel);
-		initWidget(vPanel);
+		initWidget(new ScrollPanel(vPanel));
 		setStylePrimaryName("my-FridgeBagPanel");
+		addStyleDependentName("empty");
 	}
 
 	public void updateBag (String text) {
@@ -51,6 +53,7 @@ public class FridgeBagPanel extends Composite {
 		}
 		final boolean updatePrefixes = prefix.equals("");
 		mainPanel.clear();
+		addStyleDependentName("empty");
 		if (updatePrefixes) { clearPrefixes(); }
 	    int limit = updatePrefixes ? 0 : maxMagnets; 
 		completeRequest = pgf.complete(text + " " + prefix, 
@@ -69,6 +72,7 @@ public class FridgeBagPanel extends Composite {
 								if (mainPanel.getWidgetCount() < maxMagnets) {
 									Magnet magnet = magnetFactory.createMagnet(word, completion.getFrom());
 									mainPanel.add(magnet);
+									removeStyleDependentName("empty");
 								} else {
 									prefixPanel.setVisible(true);
 								}
@@ -97,6 +101,7 @@ public class FridgeBagPanel extends Composite {
 					updateBag(text, prefix);
 				}
 			});
+			prefixButton.setTitle("Show only magnets stating with '" + prefix + "'");
 			prefixPanel.add(prefixButton);
 		}
 	}
