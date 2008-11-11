@@ -22,6 +22,7 @@ public class SettingsPanel extends Composite {
 		this.pgf = pgf;
 		
 		HorizontalPanel settingsPanel = new HorizontalPanel();
+		settingsPanel.setHorizontalAlignment(HorizontalPanel.ALIGN_CENTER);
 		settingsPanel.setVerticalAlignment(HorizontalPanel.ALIGN_MIDDLE);
 
 		if (showPGFName) {
@@ -30,9 +31,8 @@ public class SettingsPanel extends Composite {
 				public void onChange(Widget sender) {
 					SettingsPanel.this.pgf.setPGFName(grammarBox.getSelectedValue());
 				}
-			});
-			settingsPanel.add(new Label("Grammar:"));
-			settingsPanel.add(grammarBox);
+			});			
+			settingsPanel.add(new FormWidget("Grammar:", grammarBox));
 		}
 
 		fromLangBox = new MyListBox();
@@ -41,8 +41,7 @@ public class SettingsPanel extends Composite {
 				SettingsPanel.this.pgf.setInputLanguage(fromLangBox.getSelectedValue());
 			}
 		});
-		settingsPanel.add(new Label("From:"));
-		settingsPanel.add(fromLangBox);
+		settingsPanel.add(new FormWidget("From:", fromLangBox));
 
 		if (showOutputLanguage) {
 			toLangBox = new MyListBox();
@@ -51,8 +50,7 @@ public class SettingsPanel extends Composite {
 					SettingsPanel.this.pgf.setOutputLanguage(toLangBox.getSelectedValue());
 				}
 			});
-			settingsPanel.add(new Label("To:"));
-			settingsPanel.add(toLangBox);
+			settingsPanel.add(new FormWidget("To:", toLangBox));
 		}
 
 		initWidget(settingsPanel);
@@ -61,6 +59,15 @@ public class SettingsPanel extends Composite {
 		pgf.addSettingsListener(new MySettingsListener());
 	}
 
+	private static class FormWidget extends HorizontalPanel {
+		public FormWidget(String label, Widget w) {
+			setStylePrimaryName(".my-FormWidget");
+			setVerticalAlignment(HorizontalPanel.ALIGN_MIDDLE);
+			add(new Label(label));
+			add(w);
+		}
+	}
+	
 	private class MySettingsListener implements PGFWrapper.SettingsListener {
 		public void onAvailableGrammarsChanged() {
 			if (grammarBox != null) {

@@ -6,18 +6,22 @@ body {
   
 }
 
-.my-FridgeTextPanel, .my-FridgeBagPanel, .my-translations, .my-SettingsPanel {
-  margin: 1em;
-}
-
-.my-FridgeTextPanel, .my-FridgeBagPanel {
-  min-height: 2.4em;
-  padding: 0.2em;
-}
-
 .my-FridgeTextPanel {
-  font-size: 150%;
+  padding: 0.2em;
+  width: 100%;
   border: 3px dashed #dddddd;
+}
+
+.my-FridgeTextPanel .magnets {
+  width: 100%;
+}
+
+.my-FridgeTextPanel .buttons {
+  width: 100%;
+}
+
+.my-FridgeTextPanel .buttons button {
+  width: 100%;
 }
 
 .my-FridgeTextPanel-engage {
@@ -25,26 +29,17 @@ body {
   background-color: #dddddd;
 }
 
-/* IE min-height hack */
-.my-FridgeTextPanel .prop {
-    height: 2.4em;
-    float: right;
-    width: 1px;
-}
-
-/* Used for clearing floats to ensure that float container is tall enough  */
-.my-FridgeTextPanel .clear {
-    clear: both;
-    height: 1px;
-    overflow: hidden;
-}
-
 .my-FridgeBagPanel {
+  padding: 0.2em;
   border: 3px solid #dddddd;
 }
 
 .my-PrefixPanel {
   margin-bottom: 1em;
+}
+
+.my-FridgeTextPanel .my-Magnet {
+  font-size: 150%;
 }
 
 .my-Magnet {
@@ -58,16 +53,26 @@ body {
   background-color: white;
 }
 
-.my-translations {
-  min-height: 2.4em;
+.my-TranslationsPanel {
   padding: 0.2em;
-  border: 3px solid silver;
+  border: 3px solid #dddddd;
+  width: 100%;
+}
+
+.my-TranslationsPanel-empty {
+  visibility: hidden; 
 }
     
 .my-translation {
     margin: 0.2em;    
 }
 
-.my-SettingsPanel * {
+.my-SettingsPanel {
+  width: 100%;
+  padding: 0.5em 0; 
+  border-top: 1px solid #dddddd;
+}
+
+.my-SettingsPanel .my-FormWidget {
   margin: 0.2em;
 }

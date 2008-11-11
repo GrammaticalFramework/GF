@@ -7,11 +7,13 @@ import com.allen_sauer.gwt.dnd.client.drop.DropController;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.HistoryListener;
-import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.WindowResizeListener;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.ClickListener;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.DockPanel;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -142,61 +144,64 @@ public class FridgeApp implements EntryPoint {
 		};
 		magnetFactory = new MagnetFactory(dragController, magnetClickListener);
 
-		VerticalPanel vPanel = new VerticalPanel();
-		vPanel.setStyleName("my-FridgeApp");
-		vPanel.setHorizontalAlignment(VerticalPanel.ALIGN_CENTER);
-		vPanel.add(createTextPanel());
-		vPanel.add(createButtonPanel());
-		vPanel.add(createBagPanel());
-		vPanel.add(createSettingsPanel());
-		vPanel.add(createTranslationsPanel());
-
-		DropController dropController = new FridgeTextPanelDropController(textPanel);
-		dragController.registerDropController(dropController);
-
-		return vPanel;
-	}
-
-	protected Widget createTextPanel () {
-		textPanel = new FridgeTextPanel(magnetFactory);		
+		textPanel = new FridgeTextPanel(magnetFactory);
 		textPanel.addChangeListener(new ChangeListener() {
 			public void onChange(Widget widget) {
 				update();
 			}
 		});
-
-		return textPanel;
-	}
-
-	protected Widget createButtonPanel () {
-		Panel buttons = new HorizontalPanel();
-		buttons.add(new Button("Delete last", new ClickListener () {
-			public void onClick(Widget sender) {
-				textPanel.deleteLast();
-			}
-		}));
-		buttons.add(new Button("Clear", new ClickListener () {
-			public void onClick(Widget sender) {
-				clear();
-			}
-		}));
-		return buttons;
-	}
-
-	protected Widget createBagPanel () {
 		bagPanel = new FridgeBagPanel(pgf, magnetFactory);
-		return bagPanel;
+		outputPanel = new TranslationsPanel();
+		SettingsPanel settingsPanel = new SettingsPanel(pgf, true, false);
+		
+		final DockPanel mainPanel = new DockPanel();
+		mainPanel.setStyleName("my-FridgeApp");
+		mainPanel.add(textPanel, DockPanel.NORTH);
+		mainPanel.add(settingsPanel, DockPanel.SOUTH);
+		mainPanel.add(bagPanel, DockPanel.CENTER);
+		mainPanel.add(outputPanel, DockPanel.EAST);
+		
+		mainPanel.setCellHeight(bagPanel, "100%");
+		mainPanel.setCellWidth(bagPanel, "80%");
+		mainPanel.setCellHeight(outputPanel, "100%");
+		mainPanel.setCellWidth(outputPanel, "20%");
+		mainPanel.setCellVerticalAlignment(bagPanel, HasVerticalAlignment.ALIGN_TOP);
+		mainPanel.setCellHorizontalAlignment(outputPanel, HasHorizontalAlignment.ALIGN_RIGHT);
+		mainPanel.setCellWidth(settingsPanel, "100%");
+		
+		DropController dropController = new FridgeTextPanelDropController(textPanel);
+		dragController.registerDropController(dropController);
+
+		Window.addWindowResizeListener(new WindowResizeListener() {
+			public void onWindowResized(int w, int h) {
+				mainPanel.setPixelSize(w, h);
+			}
+		});
+		int w = Window.getClientWidth();
+		int h = Window.getClientHeight();
+		mainPanel.setPixelSize(w, h);
+		
+		return mainPanel;
+	}
+	
+	private static class TranslationsPanel extends VerticalPanel {
+		public TranslationsPanel () {
+			setStylePrimaryName("my-TranslationsPanel");
+			addStyleDependentName("empty");
+		}
+		
+		public void clear () {
+			super.clear();
+			addStyleDependentName("empty");
+		}
+
+		public void add(Widget w) {
+			removeStyleDependentName("empty");
+			super.add(w);
+		}
+		
 	}
 
-	protected Widget createSettingsPanel () {
-		return new SettingsPanel(pgf, true, false);
-	}
-
-	protected Widget createTranslationsPanel () {
-		outputPanel = new VerticalPanel();
-		outputPanel.addStyleName("my-translations");
-		return outputPanel;
-	}
 
 	//
 	// History stuff
