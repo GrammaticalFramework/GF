@@ -238,19 +238,23 @@ Version 3.1.2, November 2008
       <LI><A HREF="#toc149">Producing GFCC for the translator</A>
       <LI><A HREF="#toc150">A translator loop</A>
       <LI><A HREF="#toc151">A question-answer system</A>
-      <LI><A HREF="#toc152">Exporting GF datatypes to Haskell</A>
-      <LI><A HREF="#toc153">Example of exporting GF datatypes</A>
+      <LI><A HREF="#toc152">Abstract syntax of the query system</A>
+      <LI><A HREF="#toc153">Exporting GF datatypes to Haskell</A>
       <LI><A HREF="#toc154">The question-answer function</A>
       <LI><A HREF="#toc155">Converting between Haskell and GF trees</A>
       <LI><A HREF="#toc156">Putting it all together: the transfer definition</A>
       <LI><A HREF="#toc157">Putting it all together: the Main module</A>
       <LI><A HREF="#toc158">Putting it all together: the Makefile</A>
-      <LI><A HREF="#toc159">Translets: embedded translators in Java</A>
-      <LI><A HREF="#toc160">Dialogue systems in Java</A>
       </UL>
-    <LI><A HREF="#toc161">Language models for speech recognition</A>
+    <LI><A HREF="#toc159">Web server applications</A>
+    <LI><A HREF="#toc160">JavaScript applications</A>
       <UL>
-      <LI><A HREF="#toc162">More speech recognition grammar formats</A>
+      <LI><A HREF="#toc161">Compiling to JavaScript</A>
+      <LI><A HREF="#toc162">Using the JavaScript grammar</A>
+      </UL>
+    <LI><A HREF="#toc163">Language models for speech recognition</A>
+      <UL>
+      <LI><A HREF="#toc164">More speech recognition grammar formats</A>
       </UL>
     </UL>
   </UL>
@@ -5232,10 +5236,10 @@ point literals as arguments.
 Goals:
 </P>
 <UL>
-<LI>use as parts of programs written in other programming Haskell and Java
+<LI>use grammars as parts of programs written in Haskell and JavaScript
 <LI>implement stand-alone question-answering systems and translators based on
   GF grammars
-<LI>generate language models for speech recognition from grammars
+<LI>generate language models for speech recognition from GF grammars
 </UL>
 
 <P>
@@ -5245,13 +5249,13 @@ Goals:
 <H2>Functionalities of an embedded grammar format</H2>
 <P>
 GF grammars can be used as parts of programs written in other programming
-languages. Haskell and Java.
+languages, to be called <B>host languages</B>.
 This facility is based on several components:
 </P>
 <UL>
-<LI>a portable format for multilingual GF grammars
-<LI>an interpreter for this format written in the host language
-<LI>an API that enables reading grammar files and calling the interpreter
+<LI>PGF: a portable format for multilingual GF grammars
+<LI>a PGF interpreter written in the host language
+<LI>a library in the host language that enables calling the interpreter
 <LI>a way to manipulate abstract syntax trees in the host language
 </UL>
 
@@ -5264,22 +5268,12 @@ This facility is based on several components:
 The portable format is called PGF, "Portable Grammar Format".
 </P>
 <P>
-A  file can be produced in GF by the command
-</P>
-<PRE>
-    &gt; print_grammar | write_file FILE.pgf
-</PRE>
-<P>
-There is also a batch compiler, executable from the operative system shell:
+This format is produced by the GF batch compiler <CODE>gfc</CODE>, 
+executable from the operative system shell:
 </P>
 <PRE>
     % gfc --make SOURCE.gf
 </PRE>
-<P>
-<I>This applies to GF version 3 and upwards. Older GF used a format suffixed</I> 
-<CODE>.gfcm</CODE>.
-<I>At the moment of writing, also the Java interpreter still uses the GFCM format.</I>
-</P>
 <P>
 PGF is the recommended format in 
 which final grammar products are distributed, because they
@@ -5456,33 +5450,15 @@ To reply in the <I>same</I> language as the question:
 <!-- NEW -->
 </P>
 <A NAME="toc152"></A>
-<H3>Exporting GF datatypes to Haskell</H3>
-<P>
-To make it easy to define a transfer function, we export the
-abstract syntax to a system of Haskell datatypes:
-</P>
-<PRE>
-    % gfc --output-format=haskell Food.gfcc
-</PRE>
-<P>
-It is also possible to produce the Haskell file together with GFCC, by
-</P>
-<PRE>
-    % gfc --make --output-format=haskell FoodEng.gf FoodIta.gf
-</PRE>
-<P>
-The result is a file named <CODE>Food.hs</CODE>, containing a 
-module named <CODE>Food</CODE>. 
-</P>
-<P>
-<!-- NEW -->
-</P>
-<A NAME="toc153"></A>
-<H3>Example of exporting GF datatypes</H3>
+<H3>Abstract syntax of the query system</H3>
 <P>
 Input: abstract syntax judgements
 </P>
 <PRE>
+  abstract Query = {
+  
+    flags startcat=Question ;
+  
     cat 
       Answer ; Question ; Object ;
   
@@ -5494,12 +5470,40 @@ Input: abstract syntax judgements
   
       Yes : Answer ;
       No  : Answer ;
+  }
 </PRE>
+<P></P>
+<P>
+<!-- NEW -->
+</P>
+<A NAME="toc153"></A>
+<H3>Exporting GF datatypes to Haskell</H3>
+<P>
+To make it easy to define a transfer function, we export the
+abstract syntax to a system of Haskell datatypes:
+</P>
+<PRE>
+    % gfc --output-format=haskell Query.pgf
+</PRE>
+<P>
+It is also possible to produce the Haskell file together with GFCC, by
+</P>
+<PRE>
+    % gfc --make --output-format=haskell QueryEng.gf
+</PRE>
+<P>
+The result is a file named <CODE>Query.hs</CODE>, containing a 
+module named <CODE>Query</CODE>. 
+</P>
+<P>
+<!-- NEW -->
+</P>
 <P>
 Output: Haskell definitions
 </P>
 <PRE>
-  newtype GInt = GInt Integer
+  module Query where
+  import PGF
   
   data GAnswer =
      GYes 
@@ -5511,6 +5515,8 @@ Output: Haskell definitions
      GPrime GObject 
    | GOdd GObject 
    | GEven GObject 
+  
+  newtype GInt = GInt Integer
 </PRE>
 <P>
 All type and constructor names are prefixed with a <CODE>G</CODE> to prevent clashes.
@@ -5571,8 +5577,8 @@ For the programmer, it is enougo to know:
 </P>
 <UL>
 <LI>all GF names are in Haskell prefixed with <CODE>G</CODE>
-<LI><CODE>gf</CODE> translates from Haskell to GF
-<LI><CODE>fg</CODE> translates from GF to Haskell
+<LI><CODE>gf</CODE> translates from Haskell objects to GF trees
+<LI><CODE>fg</CODE> translates from GF trees to Haskell objects
 </UL>
 
 <P>
@@ -5584,7 +5590,7 @@ For the programmer, it is enougo to know:
   module TransferDef where
   
   import PGF (Tree)
-  import Math   -- generated from GF
+  import Query   -- generated from GF
   
   transfer :: Tree -&gt; Tree
   transfer = gf . answer . fg
@@ -5625,7 +5631,7 @@ Here is the complete code in the Haskell file <CODE>TransferLoop.hs</CODE>.
   
   main :: IO () 
   main = do
-    gr &lt;- file2grammar "Math.pgf"
+    gr &lt;- readPGF "Query.pgf"
     loop (translate transfer gr)
   
   loop :: (String -&gt; String) -&gt; IO ()
@@ -5636,7 +5642,7 @@ Here is the complete code in the Haskell file <CODE>TransferLoop.hs</CODE>.
       loop trans
   
   translate :: (Tree -&gt; Tree) -&gt; PGF -&gt; String -&gt; String
-  translate tr gr = case parseAllLang gr (startCat gr) s of
+  translate tr gr s = case parseAllLang gr (startCat gr) s of
     (lg,t:_):_ -&gt; linearize gr lg (tr t)
     _ -&gt; "NO PARSE"
 </PRE>
@@ -5651,7 +5657,7 @@ To automate the production of the system, we write a <CODE>Makefile</CODE> as fo
 </P>
 <PRE>
   all:
-          gfc --make -haskell MathEng.gf MathFre.gf
+          gfc --make --output-format=haskell QueryEng
           ghc --make -o ./math TransferLoop.hs
           strip math
 </PRE>
@@ -5683,91 +5689,81 @@ Just to summarize, the source of the application consists of the following files
 <!-- NEW -->
 </P>
 <A NAME="toc159"></A>
-<H3>Translets: embedded translators in Java</H3>
+<H2>Web server applications</H2>
 <P>
-<B>NOTICE</B>. Only for GF 2.9 and older at the moment.
+PGF files can be used in web servers, for which there is a Haskell library included
+in <CODE>src/server/</CODE>. How to build a server for tasks like translators is explained 
+in the <A HREF="../src/server/README"><CODE>README</CODE></A> file in that directory. 
 </P>
 <P>
-A Java system needs many more files than a Haskell system.
-To get started, fetch the package <CODE>gfc2java</CODE> from
+One of the servers that can be readily built with the library (without any
+programming required) is <B>fridge poetry magnets</B>. It is an application that
+uses an incremental parser to suggest grammatically correct next words. Here
+is an example of its application to the <CODE>Foods</CODE> grammars.
 </P>
 <P>
-<A HREF="http://www.cs.chalmers.se/~bringert/darcs/gfc2java/"><CODE>www.cs.chalmers.se/~bringert/darcs/gfc2java/</CODE></A>
-</P>
-<P>
-by using the Darcs version control system as described in this page.
-</P>
-<P>
-The <CODE>gfc2java</CODE> package contains a script <CODE>build-translet</CODE>, which 
-can be applied
-to any <CODE>.gfcm</CODE> file to create a <B>translet</B>, a small translation GUI. 
-</P>
-<P>
-For the <CODE>Food</CODE>
-grammars of <a href="#chapthree">Lesson 2</a>, we first create a file <CODE>food.gfcm</CODE> by
-</P>
-<PRE>
-    % echo "pm | wf food.gfcm" | gf FoodEng.gf FoodIta.gf
-</PRE>
-<P>
-and then run
-</P>
-<PRE>
-    % build_translet food.gfcm
-</PRE>
-<P>
-The resulting file <CODE>translate-food.jar</CODE> can be run with
-</P>
-<PRE>
-    % java -jar translate-food.jar
-</PRE>
-<P>
-The translet looks like this:
-</P>
-<P>
-<IMG ALIGN="middle" SRC="food-translet.png" BORDER="0" ALT="">
+<IMG ALIGN="middle" SRC="food-magnet.png" BORDER="0" ALT="">
 </P>
 <P>
 <!-- NEW -->
 </P>
 <A NAME="toc160"></A>
-<H3>Dialogue systems in Java</H3>
+<H2>JavaScript applications</H2>
 <P>
-<B>NOTICE</B>. Only for GF 2.9 and older at the moment.
+JavaScript is a programming language that has interpreters built in in most
+web browsers. It is therefore usable for client side web programs, which can even
+be run without access to the internet. The following figure shows a JavaScript
+program compiled from GF grammars as run on an iPhone.
 </P>
 <P>
-A question-answer system is a special case of a <B>dialogue system</B>, 
-where the user and
-the computer communicate by writing or, even more properly, by speech. 
-The <CODE>gf-java</CODE>
-homepage provides an example of a most simple dialogue system imaginable, 
-where two
-the conversation has just two rules:
-</P>
-<UL>
-<LI>if the user says <I>here you go</I>, the system says <I>thanks</I>
-<LI>if the user says <I>thanks</I>, the system says <I>you are welcome</I>
-</UL>
-
-<P>
-The conversation can be made in both English and Swedish; the user's initiative
-decides which language the system replies in. Thus the structure is very similar
-to the <CODE>math</CODE> program <a href="#secmathprogram">here</a>. 
-</P>
-<P>
-The GF and Java sources of the program can be
-found in 
-</P>
-<P>
-[<CODE>www.cs.chalmers.se/~bringert/darcs/simpledemo http://www.cs.chalmers.se/~bringert/darcs/simpledemo</CODE>]
-</P>
-<P>
-again accessible with the Darcs version control system.
+<IMG ALIGN="middle" SRC="iphone.jpg" BORDER="0" ALT="">
 </P>
 <P>
 <!-- NEW -->
 </P>
 <A NAME="toc161"></A>
+<H3>Compiling to JavaScript</H3>
+<P>
+JavaScript is one of the output formats of the GF batch compiler. Thus the following
+command generates a JavaScript file from two <CODE>Food</CODE> grammars.
+</P>
+<PRE>
+    % gfc --make --output-format=js FoodEng.gf FoodIta.gf
+</PRE>
+<P>
+The name of the generated file is <CODE>Food.js</CODE>, derived from the top-most abstract
+syntax name. This file contains the multilingual grammar as a JavaScript object.
+</P>
+<P>
+<!-- NEW -->
+</P>
+<A NAME="toc162"></A>
+<H3>Using the JavaScript grammar</H3>
+<P>
+To perform parsing and linearization, the run-time library
+<CODE>gflib.js</CODE> is used. It is included in <CODE>GF/lib/javascript/</CODE>, together with
+some other JavaScript and HTML files; these files can be used 
+as templates for building applications.
+</P>
+<P>
+An example of usage is 
+<A HREF="../lib/javascript/translator.html"><CODE>translator.html</CODE></A>, 
+which is in fact initialized with
+a pointer to the Food grammar, so that it provides translation between the English
+and Italian grammars:
+</P>
+<P>
+<IMG ALIGN="middle" SRC="food-js.png" BORDER="0" ALT="">
+</P>
+<P>
+The grammar must have the name <CODE>grammar.js</CODE>. The abstract syntax and start 
+category names in <CODE>translator.html</CODE> must match the ones in the grammar.
+With these changes, the translator works for any multilingual GF grammar.
+</P>
+<P>
+<!-- NEW -->
+</P>
+<A NAME="toc163"></A>
 <H2>Language models for speech recognition</H2>
 <P>
 The standard way of using GF in speech recognition is by building
@@ -5814,7 +5810,7 @@ Example: GSL  generated from <CODE>FoodsEng.gf</CODE>.
 <P>
 <!-- NEW -->
 </P>
-<A NAME="toc162"></A>
+<A NAME="toc164"></A>
 <H3>More speech recognition grammar formats</H3>
 <P>
 Other formats available via the <CODE>--output-format</CODE> flag include:
