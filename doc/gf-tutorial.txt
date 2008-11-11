@@ -4899,12 +4899,68 @@ Just to summarize, the source of the application consists of the following files
 
 #NEW
 
-TODO: web server applications
+==Web server applications==
+
+PGF files can be used in web servers, for which there is a Haskell library included
+in ``src/server/``. How to build a server for tasks like translators is explained 
+in the [``README`` ../src/server/README] file in that directory. 
+
+One of the servers that can be readily built with the library (without any
+programming required) is **fridge poetry magnets**. It is an application that
+uses an incremental parser to suggest grammatically correct next words. Here
+is an example of its application to the ``Foods`` grammars.
+
+[food-magnet.png]
 
 
 #NEW
 
-TODO: JavaScript applications
+==JavaScript applications==
+
+JavaScript is a programming language that has interpreters built in in most
+web browsers. It is therefore usable for client side web programs, which can even
+be run without access to the internet. The following figure shows a JavaScript
+program compiled from GF grammars as run on an iPhone.
+
+[iphone.jpg]
+
+
+#NEW
+
+===Compiling to JavaScript===
+
+JavaScript is one of the output formats of the GF batch compiler. Thus the following
+command generates a JavaScript file from two ``Food`` grammars.
+```
+  % gfc --make --output-format=js FoodEng.gf FoodIta.gf
+```
+The name of the generated file is ``Food.js``, derived from the top-most abstract
+syntax name. This file contains the multilingual grammar as a JavaScript object.
+
+
+#NEW
+
+===Using the JavaScript grammar===
+
+To perform parsing and linearization, the run-time library
+``gflib.js`` is used. It is included in ``GF/lib/javascript/``, together with
+some other JavaScript and HTML files; these files can be used 
+as templates for building applications.
+
+An example of usage is 
+[``translator.html`` ../lib/javascript/translator.html], 
+which is in fact initialized with
+a pointer to the Food grammar, so that it provides translation between the English
+and Italian grammars:
+
+[food-js.png]
+
+The grammar must have the name ``grammar.js``. The abstract syntax and start 
+category names in ``translator.html`` must match the ones in the grammar.
+With these changes, the translator works for any multilingual GF grammar.
+
+
+
 
 
 #NEW
