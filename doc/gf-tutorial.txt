@@ -4498,7 +4498,6 @@ the prefix is ``f`` instead of ``i``, and that ``fconst`` takes floating
 point literals as arguments.
 
 
-%TODO: fix embedded grammars lesson
 
 #NEW
 
@@ -4507,10 +4506,10 @@ point literals as arguments.
 #Lchapeight
 
 Goals:
-- use as parts of programs written in other programming Haskell and Java
+- use grammars as parts of programs written in Haskell and JavaScript
 - implement stand-alone question-answering systems and translators based on
   GF grammars
-- generate language models for speech recognition from grammars
+- generate language models for speech recognition from GF grammars
 
 
  
@@ -4519,11 +4518,11 @@ Goals:
 ==Functionalities of an embedded grammar format==
 
 GF grammars can be used as parts of programs written in other programming
-languages. Haskell and Java.
+languages, to be called **host languages**.
 This facility is based on several components:
-- a portable format for multilingual GF grammars
-- an interpreter for this format written in the host language
-- an API that enables reading grammar files and calling the interpreter
+- PGF: a portable format for multilingual GF grammars
+- a PGF interpreter written in the host language
+- a library in the host language that enables calling the interpreter
 - a way to manipulate abstract syntax trees in the host language
 
 
@@ -4535,18 +4534,11 @@ This facility is based on several components:
 
 The portable format is called PGF, "Portable Grammar Format".
 
-A  file can be produced in GF by the command
-```
-  > print_grammar | write_file FILE.pgf
-```
-There is also a batch compiler, executable from the operative system shell:
+This format is produced by the GF batch compiler ``gfc``, 
+executable from the operative system shell:
 ```
   % gfc --make SOURCE.gf
 ```
-//This applies to GF version 3 and upwards. Older GF used a format suffixed// 
-``.gfcm``.
-//At the moment of writing, also the Java interpreter still uses the GFCM format.//
-
 PGF is the recommended format in 
 which final grammar products are distributed, because they
 are stripped from superfluous information and can be started and applied
@@ -4636,6 +4628,8 @@ The simplest way to translate is to ``echo`` input to the program:
 ```
 The result is given in all languages except the input language.
 
+%TODO convert the output to UTF8
+
 
 #NEW
 
@@ -4694,27 +4688,14 @@ To reply in the //same// language as the question:
 
 #NEW
 
-===Exporting GF datatypes to Haskell===
-
-To make it easy to define a transfer function, we export the
-abstract syntax to a system of Haskell datatypes:
-```
-  % gfc --output-format=haskell Food.gfcc
-```
-It is also possible to produce the Haskell file together with GFCC, by
-```
-  % gfc --make --output-format=haskell FoodEng.gf FoodIta.gf
-```
-The result is a file named ``Food.hs``, containing a 
-module named ``Food``. 
-
-
-#NEW
-
-===Example of exporting GF datatypes===
+===Abstract syntax of the query system===
 
 Input: abstract syntax judgements
 ```
+abstract Query = {
+
+  flags startcat=Question ;
+
   cat 
     Answer ; Question ; Object ;
 
@@ -4726,10 +4707,33 @@ Input: abstract syntax judgements
 
     Yes : Answer ;
     No  : Answer ;
+}
 ```
+
+
+#NEW
+
+===Exporting GF datatypes to Haskell===
+
+To make it easy to define a transfer function, we export the
+abstract syntax to a system of Haskell datatypes:
+```
+  % gfc --output-format=haskell Query.pgf
+```
+It is also possible to produce the Haskell file together with GFCC, by
+```
+  % gfc --make --output-format=haskell QueryEng.gf
+```
+The result is a file named ``Query.hs``, containing a 
+module named ``Query``. 
+
+
+#NEW
+
 Output: Haskell definitions
 ```
-newtype GInt = GInt Integer
+module Query where
+import PGF
 
 data GAnswer =
    GYes 
@@ -4741,6 +4745,8 @@ data GQuestion =
    GPrime GObject 
  | GOdd GObject 
  | GEven GObject 
+
+newtype GInt = GInt Integer
 ```
 All type and constructor names are prefixed with a ``G`` to prevent clashes.
 
@@ -4792,8 +4798,8 @@ instance Gf GQuestion where
 ```
 For the programmer, it is enougo to know:
 - all GF names are in Haskell prefixed with ``G``
-- ``gf`` translates from Haskell to GF
-- ``fg`` translates from GF to Haskell
+- ``gf`` translates from Haskell objects to GF trees
+- ``fg`` translates from GF trees to Haskell objects
 
 
 
@@ -4805,7 +4811,7 @@ For the programmer, it is enougo to know:
 module TransferDef where
 
 import PGF (Tree)
-import Math   -- generated from GF
+import Query   -- generated from GF
 
 transfer :: Tree -> Tree
 transfer = gf . answer . fg
@@ -4844,7 +4850,7 @@ import TransferDef (transfer)
 
 main :: IO () 
 main = do
-  gr <- file2grammar "Math.pgf"
+  gr <- readPGF "Query.pgf"
   loop (translate transfer gr)
 
 loop :: (String -> String) -> IO ()
@@ -4855,7 +4861,7 @@ loop trans = do
     loop trans
 
 translate :: (Tree -> Tree) -> PGF -> String -> String
-translate tr gr = case parseAllLang gr (startCat gr) s of
+translate tr gr s = case parseAllLang gr (startCat gr) s of
   (lg,t:_):_ -> linearize gr lg (tr t)
   _ -> "NO PARSE"
 ```
@@ -4869,7 +4875,7 @@ translate tr gr = case parseAllLang gr (startCat gr) s of
 To automate the production of the system, we write a ``Makefile`` as follows:
 ```
 all:
-        gfc --make -haskell MathEng.gf MathFre.gf
+        gfc --make --output-format=haskell QueryEng
         ghc --make -o ./math TransferLoop.hs
         strip math
 ```
@@ -4891,70 +4897,14 @@ Just to summarize, the source of the application consists of the following files
   TransferLoop.hs  -- Haskell Main module
 ```
 
-
 #NEW
 
-===Translets: embedded translators in Java===
-
-**NOTICE**. Only for GF 2.9 and older at the moment.
-
-A Java system needs many more files than a Haskell system.
-To get started, fetch the package ``gfc2java`` from
-
-[``www.cs.chalmers.se/~bringert/darcs/gfc2java/`` http://www.cs.chalmers.se/~bringert/darcs/gfc2java/]
-
-by using the Darcs version control system as described in this page.
-
-The ``gfc2java`` package contains a script ``build-translet``, which 
-can be applied
-to any ``.gfcm`` file to create a **translet**, a small translation GUI. 
-
-For the ``Food``
-grammars of #Rchapthree, we first create a file ``food.gfcm`` by
-```
-  % echo "pm | wf food.gfcm" | gf FoodEng.gf FoodIta.gf
-```
-and then run
-```
-  % build_translet food.gfcm
-```
-The resulting file ``translate-food.jar`` can be run with
-```
-  % java -jar translate-food.jar
-```
-The translet looks like this:
-
-[food-translet.png]
+TODO: web server applications
 
 
 #NEW
 
-===Dialogue systems in Java===
-
-**NOTICE**. Only for GF 2.9 and older at the moment.
-
-A question-answer system is a special case of a **dialogue system**, 
-where the user and
-the computer communicate by writing or, even more properly, by speech. 
-The ``gf-java``
-homepage provides an example of a most simple dialogue system imaginable, 
-where two
-the conversation has just two rules:
-- if the user says //here you go//, the system says //thanks//
-- if the user says //thanks//, the system says //you are welcome//
-
-
-The conversation can be made in both English and Swedish; the user's initiative
-decides which language the system replies in. Thus the structure is very similar
-to the ``math`` program #Rsecmathprogram. 
-
-
-The GF and Java sources of the program can be
-found in 
-
-[``www.cs.chalmers.se/~bringert/darcs/simpledemo http://www.cs.chalmers.se/~bringert/darcs/simpledemo``]
-
-again accessible with the Darcs version control system.
+TODO: JavaScript applications
 
 
 #NEW
