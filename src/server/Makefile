@@ -21,7 +21,7 @@ gf-gwt.jar:
 	cp $@ ../../lib/java
 
 food.pgf:
-	gfc --make --name=food ../../examples/tutorial/food/Food{Eng,Ita}.gf
+	gfc --make --name=food ../../examples/tutorial/resource-foods/Foods{Eng,Fin,Fre,Ger,Ita,Swe}.gf
 
 Demo%-parse.pgf: ../../next-lib/src/demo/Demo%.gf
 	gfc $(GFCFLAGS) --make --erasing=on --name=Demo$*-parse $^
