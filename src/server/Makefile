@@ -16,7 +16,7 @@ gwt-fridge:
 
 gf-gwt.jar:
 	mkdir -p gwt/bin/se/chalmers/cs/gf/gwt/client
-	javac -classpath "$(GWT_CLASSPATH)" -sourcepath gwt/src gwt/src/se/chalmers/cs/gf/gwt/client/*.java
+	javac -classpath "$(GWT_CLASSPATH):gwt/lib/gwt-dnd-2.5.6.jar" -sourcepath gwt/src gwt/src/se/chalmers/cs/gf/gwt/client/*.java
 	jar -cf $@ -C gwt/src se
 	cp $@ ../../lib/java
 
