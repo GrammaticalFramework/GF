@@ -17,5 +17,9 @@ oper
 --  kg_Unit : Unit ;
 
   each_Det : Det ;
+  that_Subj : Subj ;
+
+  comma_and_Conj : Conj ;
+  comma_or_Conj : Conj ;
 
 }
