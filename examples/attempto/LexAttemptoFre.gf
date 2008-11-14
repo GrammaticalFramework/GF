@@ -1,5 +1,7 @@
 instance LexAttemptoFre of LexAttempto = 
-  open ExtraFre, SyntaxFre, ParadigmsFre, ConstructX, IrregFre in {
+  open ExtraFre, SyntaxFre, ParadigmsFre, ConstructX, 
+    MakeStructuralFre,
+    IrregFre in {
 
 oper
   possible_A = mkA "possible" ;
@@ -14,5 +16,12 @@ oper
   genitiveNP np cn = mkNP (mkNP the_Art cn) (SyntaxFre.mkAdv possess_Prep np) ;
 
   each_Det = every_Det ; ----
+
+  that_Subj = mkSubj "que" ; ---- qu'
+
+  comma_and_Conj = mkConj [] ", et" plural ;
+  comma_or_Conj = mkConj [] ", ou" singular ;
+  slash_Conj = mkConj [] "/" singular ;
+
 
 }

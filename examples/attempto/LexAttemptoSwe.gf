@@ -1,5 +1,6 @@
 instance LexAttemptoSwe of LexAttempto = 
-  open ExtraSwe, SyntaxSwe, ParadigmsSwe, ConstructX, IrregSwe in {
+  open ExtraSwe, SyntaxSwe, ParadigmsSwe, ConstructX, 
+    MakeStructuralSwe, IrregSwe in {
 
 oper
   possible_A = mkA "möjlig" ;
@@ -14,4 +15,12 @@ oper
   genitiveNP np = mkNP (GenNP np) ;
 
   each_Det = every_Det ; ----
+
+  that_Subj = mkSubj "att" ;
+
+  comma_and_Conj = mkConj [] ", och" plural ;
+  comma_or_Conj = mkConj [] ", eller" singular ;
+  slash_Conj = mkConj [] "/" singular ;
+
+
 }

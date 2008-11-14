@@ -24,6 +24,7 @@ cat IP ;
 cat IAdv ;
 cat QS ;
 cat Text ;
+cat RP ;
 
 fun aNP : CN -> NP ;
 fun theNP : CN -> NP ;
@@ -81,12 +82,12 @@ fun they_NP : NP ;
 
 -- reflexive pronouns: itself, himself, herself, himself/herself, themselves
 
-fun someone_NP : NP ;
+--fun someone_NP : NP ;
 fun somebody_NP : NP ;
 fun something_NP : NP ;
-fun noone_NP : NP ;
+--fun noone_NP : NP ;
 fun nothing_NP : NP ;
-fun not_everyoneNP : NP ;
+--fun not_everyoneNP : NP ;
 fun not_everybodyNP : NP ;
 fun not_everythingNP : NP ;
 
@@ -127,13 +128,14 @@ fun relCN : CN -> RS -> CN ;
 fun relNP : NP -> RS -> NP ;
 fun andRS : RS -> RS -> RS ;
 fun orRS : RS -> RS -> RS ;
-fun eachRS : RS -> RS ; -- each of who
 
 fun suchCN : CN -> S -> CN ;
 
-fun predRS : VP -> RS ;
-fun slashRS : NP -> V2 -> RS ;
+fun predRS : RP -> VP -> RS ;
+fun slashRS : RP -> NP -> V2 -> RS ;
 
+fun which_RP : RP ;
+fun eachRP : RP ;
 
 -- 2.2.4
 
@@ -191,8 +193,8 @@ fun coordS : Conj -> S -> S -> S ;
 
 fun and_Conj : Conj ;
 fun or_Conj : Conj ;
-fun comma_and_Conj : Conj ; -- lower precedence
-fun comma_or_Conj : Conj ;
+fun commaAnd_Conj : Conj ; -- lower precedence
+fun commaOr_Conj : Conj ;
 
 -- 3.4.3
 

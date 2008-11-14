@@ -1,5 +1,7 @@
 instance LexAttemptoGer of LexAttempto = 
-  open ExtraGer, SyntaxGer, ParadigmsGer, ConstructX, IrregGer in {
+  open ExtraGer, SyntaxGer, ParadigmsGer, ConstructX,
+    MakeStructuralGer, 
+    IrregGer in {
 
 oper
   possible_A = mkA "möglich" ;
@@ -14,5 +16,12 @@ oper
   genitiveNP np cn = mkNP (mkNP the_Art cn) (SyntaxGer.mkAdv possess_Prep np) ;
 
   each_Det = every_Det ;
+
+  that_Subj = mkSubj "daß" ;
+
+  comma_and_Conj = mkConj [] ", und" plural ;
+  comma_or_Conj = mkConj [] ", oder" singular ;
+  slash_Conj = mkConj [] "/" singular ;
+
 
 }

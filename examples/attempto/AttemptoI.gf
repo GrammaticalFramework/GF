@@ -27,6 +27,7 @@ lincat IAdv = Syntax.IAdv ;
 lincat QS = Syntax.QS ;
 lincat Text = Syntax.Text ;
 lincat ACEText = Syntax.Text ;
+lincat RP = Syntax.RP ;
 
 lincat MCN = Syntax.CN ;
 lincat PP = Adv ;
@@ -67,6 +68,7 @@ lin floatNP = symb ;
 lin it_NP = mkNP it_Pron ;
 lin he_NP = mkNP he_Pron ;
 lin she_NP = mkNP she_Pron ;
+lin he_she_NP = mkNP slash_Conj (mkNP he_Pron) (mkNP she_Pron) ;
 lin they_NP = mkNP they_Pron ;
 
 lin conjNP = mkNP and_Conj ;
@@ -89,10 +91,10 @@ lin not_at_mostNP ca cn = mkNP not_Predet (mkNP (mkCard at_most_AdN ca) cn) ;
 lin more_thanNP ca = mkNP (mkCard (mkAdN more_CAdv) ca) ;
 lin not_more_thanNP ca cn = mkNP not_Predet (mkNP (mkCard (mkAdN more_CAdv) ca) cn) ;
 
-lin nothing_butNP cn = mkNP nothing_but_Predet (mkNP a_Art plNum cn) ;
-lin nothing_butMassNP cn = mkNP nothing_but_Predet (mkNP cn) ;
---lin nobody_butNP : PN -> NP ; -- nobody but John
---lin no_butNP : CN -> PN -> NP ; -- no man but John
+lin nothing_butNP cn = mkNP nothing_NP (mkAdv except_Prep (mkNP a_Art plNum cn)) ;
+lin nothing_butMassNP cn = mkNP nothing_NP (mkAdv except_Prep (mkNP cn)) ;
+lin nobody_butNP pn = mkNP nobody_NP (mkAdv except_Prep (mkNP pn)) ;
+lin no_butNP cn pn = mkNP (mkNP no_Quant plNum cn) (mkAdv except_Prep (mkNP pn)) ;
 
 lincat Unit = CN ;
 
@@ -118,16 +120,16 @@ lin superlAP a = mkAP (mkOrd a) ;
 lin relCN = mkCN ;
 --lin relNP = mkNP ;
 
-{-
-lin andRS : RS -> RS -> RS ;
-lin orRS : RS -> RS -> RS ;
-lin eachRS : RS -> RS ; -- each of who
--}
+
+lin andRS = mkRS and_Conj ;
+lin orRS = mkRS or_Conj ;
+lin eachRP = mkRP part_Prep (mkNP each_Det) Syntax.which_RP ;
 
 lin suchCN cn s = mkCN (mkAP (mkAP such_A) s) cn ;
 
-lin predRS vp = mkRS (mkRCl which_RP vp) ;
-lin slashRS np v2 = mkRS (mkRCl which_RP np v2) ;
+lin predRS rp vp = mkRS (mkRCl rp vp) ;
+lin slashRS rp np v2 = mkRS (mkRCl rp np v2) ;
+lin which_RP = Syntax.which_RP ;
 
 -- 2.2.4
 
@@ -140,8 +142,7 @@ lin genOwnNP np cn = genitiveNP np (mkCN own_A cn) ;
 lin vpS np vp = mkS (mkCl np vp) ;
 lin neg_vpS np vp = mkS negativePol (mkCl np vp) ;
 
-
---lin not_provably_vpS : NP -> VP -> S ;
+lin not_provably_vpS np vp = mkS negativePol (mkCl np (mkVP vp provably_Adv)) ;
 
 lin vVP  = mkVP ;
 lin v2VP = mkVP ;
@@ -194,15 +195,17 @@ lin coordS = mkS ;
 
 lin and_Conj = Syntax.and_Conj ;
 lin or_Conj = Syntax.or_Conj ;
---lin comma_and_Conj : Conj ; -- lower precedence
---lin comma_or_Conj : Conj ;
+lin commaAnd_Conj = comma_and_Conj ;
+lin commaOr_Conj = comma_or_Conj ;
 
 -- 3.4.3
 
 lin for_everyS cn = mkS (mkAdv for_Prep (mkNP every_Det cn)) ;
 lin for_eachS cn = mkS (mkAdv for_Prep (mkNP each_Det cn)) ;
---lin for_each_ofS : Card -> CN -> S -> S ; -- for each of 3 men
---lin for_allMassS : MCN -> S -> S ; -- for all water
+lin for_each_ofS card cn = 
+  mkS (mkAdv for_Prep (mkNP (mkNP each_Det) (mkAdv part_Prep (mkNP card cn)))) ;
+lin for_allMassS cn =
+  mkS (mkAdv for_Prep (mkNP all_Predet (mkNP cn))) ;
 
 -- 3.4.4
 
@@ -219,7 +222,7 @@ lin necessaryS s = mkS (adj_thatCl necessary_A s) ;
 lin not_necessaryS s = mkS negativePol (adj_thatCl necessary_A s) ;
 
 
---lin thatS s t = mkS ;
+--lin thatS s t = mkS s (mkAdv that_Subj t) ;
 
 -- 3.5
 
