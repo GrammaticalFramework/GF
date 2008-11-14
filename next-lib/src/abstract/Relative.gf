@@ -17,7 +17,7 @@ abstract Relative = Cat ** {
     RelSlash : RP -> ClSlash -> RCl ; -- whom John loves
 
 -- Relative pronouns are formed from an 'identity element' by prefixing
--- or suffixing (depending on language) prepositional phrases.
+-- or suffixing (depending on language) prepositional phrases or genitives.
 
     IdRP  : RP ;                      -- which
     FunRP : Prep -> NP -> RP -> RP ;  -- the mother of whom

@@ -32,6 +32,11 @@ constructX:
 	gfc common/ConstructX.gf
 	cp -p common/ConstructX.gfo ../prelude
 
+MakeStructural:
+	gfc */MakeStructural*.gf
+	cp -p */MakeStructural*.gfo ../present
+	cp -p */MakeStructural*.gfo ../alltenses
+
 test:
 	$(RUNMAKE) test
 

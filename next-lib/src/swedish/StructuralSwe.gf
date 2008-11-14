@@ -125,8 +125,6 @@ concrete StructuralSwe of Structural = CatSwe **
 
 lin
   not_Predet = {s = \\_ => "inte"} ;
-  nothing_but_Predet = {s = \\_ => "inget förutom"} ;
-  nobody_but_Predet = {s = \\_ => "ingen förutom"} ;
   no_Quant = 
     {s = table {
        Sg => \\_,_ => genderForms "ingen" "inget" ; 
@@ -141,5 +139,7 @@ lin
 
   at_least_AdN = ss "minst" ;
   at_most_AdN = ss "högst" ;
+
+  except_Prep = ss "utom" ;
 }
 

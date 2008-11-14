@@ -163,9 +163,6 @@ lin
        Masc Pl P2 ;
 
   not_Predet = {s = \\a,c => prepCase c ++ "pas" ; c = Nom} ;
-  nothing_but_Predet = {s = \\a,c => prepCase c ++ "rien excepté" ; c = Nom} ;
-  nobody_but_Predet = {s = \\a,c => prepCase c ++ "personne excepté" ; c = Nom} ;
-
 
   no_Quant = 
     let aucun : ParadigmsFre.Number => ParadigmsFre.Gender => Case => Str = table {
@@ -183,6 +180,8 @@ lin
   nothing_NP = pn2np (mkPN "rien" Masc) ;
   at_least_AdN = ss "au moins" ;
   at_most_AdN = ss "au plus" ;
+
+  except_Prep = mkPreposition "excepté" ;
 
 }
 
