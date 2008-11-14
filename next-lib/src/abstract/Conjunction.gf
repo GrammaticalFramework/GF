@@ -17,15 +17,11 @@ abstract Conjunction = Cat ** {
 --2 Rules
 
   fun
-    ConjS    : Conj -> [S] -> S ;     -- "he walks and she runs"
-    ConjAP   : Conj -> [AP] -> AP ;   -- "cold and warm"
-    ConjNP   : Conj -> [NP] -> NP ;   -- "she or we"
-    ConjAdv  : Conj -> [Adv] -> Adv ; -- "here or there"
-
----b    DConjS   : DConj -> [S] -> S ;    -- "either he walks or she runs"
----b    DConjAP  : DConj -> [AP] -> AP ;  -- "both warm and cold"
----b    DConjNP  : DConj -> [NP] -> NP ;  -- "either he or she"
----b    DConjAdv : DConj -> [Adv] -> Adv; -- "both here and there"
+    ConjS   : Conj -> [S] -> S ;     -- "he walks and she runs"
+    ConjRS  : Conj -> [RS] -> RS ;   -- "who walks and whose mother runs"
+    ConjAP  : Conj -> [AP] -> AP ;   -- "cold and warm"
+    ConjNP  : Conj -> [NP] -> NP ;   -- "she or we"
+    ConjAdv : Conj -> [Adv] -> Adv ; -- "here or there"
 
 --2 Categories
 
@@ -33,6 +29,7 @@ abstract Conjunction = Cat ** {
 
   cat
     [S]{2} ; 
+    [RS]{2} ; 
     [Adv]{2} ; 
     [NP]{2} ; 
     [AP]{2} ;
@@ -46,7 +43,3 @@ abstract Conjunction = Cat ** {
   --  ConsC : C -> [C] -> [C] ;
 }
 
---.
--- *Note*. This module uses right-recursive lists. If backward
--- compatibility with API 0.9 is needed, use
--- [SeqConjunction SeqConjunction.html].
