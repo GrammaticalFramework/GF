@@ -128,12 +128,6 @@ concrete StructuralGer of Structural = CatGer **
   yes_Utt = ss "ja" ;
 
   not_Predet = {s = \\_,_,_ => "nicht" ; c = NoCase} ;
-  nothing_but_Predet = {s = \\_,_,_ => "nichts ausser" ; c = PredCase Dat} ;
-  nobody_but_Predet = {
-    s = \\_,_,c => 
-      caselist "niemand" "niemanden" "niemandem" "niemands" ! c ++ "ausser" ; 
-    c = PredCase Dat
-    } ;
   no_Quant = let 
      keiner : Number => Gender => Case => Str = table {
        Sg => \\g,c => "kein" + pronEnding ! GSg g ! c ;
@@ -148,5 +142,5 @@ concrete StructuralGer of Structural = CatGer **
     nameNounPhrase {s = \\_ => "nichts"} ;
   at_least_AdN = ss "wenigstens" ;
   at_most_AdN = ss "höchstens" ;
-
+  except_Prep = mkPrep "außer" Dat ;
 }

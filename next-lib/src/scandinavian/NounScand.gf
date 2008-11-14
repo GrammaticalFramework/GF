@@ -189,5 +189,4 @@ incomplete concrete NounScand of Noun =
       g = g ;
       isMod = cn.isMod
       } ;
-
 }

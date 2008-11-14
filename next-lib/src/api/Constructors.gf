@@ -749,7 +749,9 @@ incomplete resource Constructors = open Grammar in {
 
     mkRS : overload {
       mkRS : RCl ->                              RS ; -- 1. that walk
-      mkRS : (Tense) -> (Ant) -> (Pol) -> RCl -> RS   -- 2. that wouldn't have walked
+      mkRS : (Tense) -> (Ant) -> (Pol) -> RCl -> RS ; -- 2. that wouldn't have walked
+      mkRS : Conj -> RS -> RS -> RS ;  -- 3. who walks and whom I know   
+      mkRS : Conj -> ListRS  -> RS ; -- 4. who walks, whose son runs, and whom I know   
       } ;
 
 --3 RCl, relative clauses
@@ -857,6 +859,12 @@ incomplete resource Constructors = open Grammar in {
      mkListNP : NP -> ListNP -> ListNP    -- 2. John, I, that
      } ;
 
+--3 ListRS, relative clause lists
+
+    mkListRS : overload {
+     mkListRS : RS -> RS ->     ListRS ;  -- 1. who walks, who runs
+     mkListRS : RS -> ListRS -> ListRS    -- 2. who walks, who runs, who sleeps
+     } ;
 
 --. 
 -- Definitions
@@ -1473,7 +1481,12 @@ incomplete resource Constructors = open Grammar in {
       mkRS : Ant -> Pol -> RCl -> RS
                                          =    \a,p -> TUseRCl TPres a p ;
       mkRS : Tense -> Ant -> Pol -> RCl -> RS
-                                         =    TUseRCl  
+                                         =    TUseRCl ;
+      mkRS : Conj -> RS -> RS -> RS
+                                        = \c,x,y -> ConjRS c (BaseRS x y) ;
+      mkRS : Conj -> ListRS -> RS
+                                        = \c,xy -> ConjRS c xy ;
+
       } ;
 
   param Punct = PFullStop | PExclMark | PQuestMark ;
@@ -1616,6 +1629,11 @@ incomplete resource Constructors = open Grammar in {
   mkListNP = overload {
    mkListNP : NP -> NP -> ListNP = BaseNP ;
    mkListNP : NP -> ListNP -> ListNP = ConsNP
+   } ;
+
+  mkListRS = overload {
+   mkListRS : RS -> RS -> ListRS = BaseRS ;
+   mkListRS : RS -> ListRS -> ListRS = ConsRS
    } ;
 
 
