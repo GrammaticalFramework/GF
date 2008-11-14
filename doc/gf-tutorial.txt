@@ -4957,7 +4957,7 @@ and Italian grammars:
 
 The grammar must have the name ``grammar.js``. The abstract syntax and start 
 category names in ``translator.html`` must match the ones in the grammar.
-With these changes, the translator works for any multilingual GF grammar.
+With these changes, the translator works for any multilingual grammar.
 
 
 
