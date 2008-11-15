@@ -167,10 +167,12 @@ fun more_thanVP : AP -> NP -> VP ; -- John is as rich as Mary
 -- John is more fond-of Mary than of Sue
 
 cat PP ;
-cat [PP] {1} ;
-fun ppVP : [PP] -> VP ; -- John is in the garden in the morning
+--cat [PP] {1} ;
+--fun ppVP : [PP] -> VP ; -- John is in the garden in the morning
+fun ppVP : PP -> VP ; -- iteration is done by advPP and modVP
 
 fun prepPP : Prep -> NP -> PP ;
+fun advPP : PP -> Adv ;
 
 -- 2.3.5
 

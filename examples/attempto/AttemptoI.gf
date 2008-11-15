@@ -160,13 +160,14 @@ lin more_thanVP ap np = mkVP (mkAP more_CAdv ap np) ;
 ---- John is more fond-of Mary than of Sue
 
 lincat PP = Adv ;
-lincat [PP] = Adv ;
+--lincat [PP] = Adv ;
 
-lin BasePP p = p ;
+--lin BasePP p = p ;
 
 lin ppVP = mkVP ;
 
 lin prepPP = mkAdv ;
+lin advPP p = p ;
 
 -- 2.3.5
 
