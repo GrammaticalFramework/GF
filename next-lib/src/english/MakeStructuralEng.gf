@@ -9,5 +9,7 @@ oper
     {s = x ; lock_Subj = <>} ;
   mkNP : Str -> Number -> NP = \s,n ->
     regNP s n ** {lock_NP = <>} ;
+  mkIDet : Str -> Number -> IDet = \s,n ->
+    {s = s ; n = n ; lock_IDet = <>} ;
 
 }

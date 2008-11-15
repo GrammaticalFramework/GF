@@ -1378,6 +1378,13 @@ incomplete resource Constructors = open Grammar in {
                                          =    AdvIP
       } ;
 
+    mkIDet = overload {
+      mkIDet : IQuant -> Num -> IDet          -- which (songs)
+                     =  \i,nu -> IdetQuant i nu ;
+      mkIDet : IQuant -> IDet      -- which (song)
+                     =  \i -> IdetQuant i NumSg ;
+      } ;
+
     whichSg_IDet : IDet = IdetQuant which_IQuant NumSg ;
     whichPl_IDet : IDet = IdetQuant which_IQuant NumPl ;
 
