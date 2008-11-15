@@ -20,6 +20,10 @@ concrete AdjectiveEng of Adjective = CatEng ** open ResEng, Prelude in {
       isPre = True
       } ;
 
+    CAdvAP ad ap np = {
+      s = \\a => ad.s ++ ap.s ! a ++ ad.p ++ np.s ! Nom ; 
+      isPre = False
+      } ;
 
     ComplA2 a np = {
       s = \\_ => a.s ! AAdj Posit ++ a.c2 ++ np.s ! Acc ; 

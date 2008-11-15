@@ -11,6 +11,10 @@ incomplete concrete AdjectiveRomance of Adjective =
       s = \\af => a.s ! Compar ! af ++ conjThan ++ (np.s ! Nom).ton ; 
       isPre = False
       } ;
+    CAdvAP ad ap np = {
+      s = \\af => ad.s ++ ap.s ! af ++ ad.p ++ (np.s ! Nom).ton ; 
+      isPre = False
+      } ;
     UseComparA a = {
       s = \\af => a.s ! Compar ! af ;
       isPre = a.isPre

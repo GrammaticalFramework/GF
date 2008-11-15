@@ -1,7 +1,7 @@
 concrete StructuralIta of Structural = CatIta ** 
   open 
   PhonoIta, MorphoIta, 
-  ParadigmsIta, BeschIta, Prelude in {
+  ParadigmsIta, BeschIta, (X = ConstructX), Prelude in {
 
   flags optimize=all ; coding=utf8 ;
 
@@ -57,9 +57,9 @@ lin
     mkPronoun
       "lui" "lo" "gli" "glie" "lui" "suo" "sua" "suoi" "sue"
       Masc Sg P3 ;
-  less_CAdv = ss "meno" ;
+  less_CAdv = X.mkCAdv "meno" conjThan ;
   many_Det = {s,sp = \\g,c => prepCase c ++ genForms "molti" "molte" ! g ; n = Pl ; s2 = []} ;
-  more_CAdv = ss "piÃ¹" ;
+  more_CAdv = X.mkCAdv "più" conjThan ;
   most_Predet = {s = \\_,c => prepCase c ++ ["la maggior parte"] ; c = CPrep P_di} ;
   much_Det = {s,sp = \\g,c => prepCase c ++ genForms "molto" "molta" ! g ; n = Sg ; s2 = []} ;
   must_VV = mkVV (verboV (dovere_47 "dovere")) ;
@@ -174,5 +174,6 @@ lin
   at_least_AdN = ss "almeno" ;
   at_most_AdN = ss "al massimo" ;
 
+  as_CAdv = X.mkCAdv "così" conjThan ;
 }
 

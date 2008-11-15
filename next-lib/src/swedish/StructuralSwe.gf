@@ -1,5 +1,5 @@
 concrete StructuralSwe of Structural = CatSwe ** 
-  open MorphoSwe, ParadigmsSwe, Prelude in {
+  open MorphoSwe, ParadigmsSwe, (X = ConstructX), Prelude in {
 
   flags optimize=all ;
 
@@ -43,9 +43,9 @@ concrete StructuralSwe of Structural = CatSwe **
   i_Pron = MorphoSwe.mkNP "jag"  "mig"  "min" "mitt" "mina"  SgUtr P1 ;
   in_Prep = ss "i" ;
   it_Pron = MorphoSwe.regNP "det" "dess" SgNeutr ;
-  less_CAdv = ss "mindre" ;
+  less_CAdv = X.mkCAdv "mindre" "än" ;
   many_Det = {s = \\_,_ => "många" ; n = Pl ; det = DDef Indef} ;
-  more_CAdv = ss "mer" ;
+  more_CAdv = X.mkCAdv "mer" "än" ;
   most_Predet = {s = gennumForms ["den mesta"] ["det mesta"] ["de flesta"]} ;
   much_Det = {s = \\_,_ => "mycket" ; n = Pl ; det = DDef Indef} ;
   must_VV = 
@@ -141,5 +141,8 @@ lin
   at_most_AdN = ss "högst" ;
 
   except_Prep = ss "utom" ;
+
+  as_CAdv = X.mkCAdv "lika" "som" ;
+
 }
 

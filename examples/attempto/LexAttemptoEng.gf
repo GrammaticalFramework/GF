@@ -4,7 +4,7 @@ instance LexAttemptoEng of LexAttempto =
    SyntaxEng, 
    ParadigmsEng, 
    ConstructX, 
-   MakeStructuralEng,
+   (M = MakeStructuralEng),
    IrregEng in {
 
 oper
@@ -23,11 +23,11 @@ oper
 
   each_Det = ExtraEng.each_Det ;
 
-  that_Subj = mkSubj "that" ;
+  that_Subj = M.mkSubj "that" ;
 
-  comma_and_Conj = mkConj [] ", and" plural ;
-  comma_or_Conj = mkConj [] ", or" singular ;
-  slash_Conj = mkConj [] "/" singular ;
+  comma_and_Conj = M.mkConj [] ", and" plural ;
+  comma_or_Conj = M.mkConj [] ", or" singular ;
+  slash_Conj = M.mkConj [] "/" singular ;
 
 
 }

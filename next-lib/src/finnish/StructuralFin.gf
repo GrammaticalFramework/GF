@@ -1,5 +1,5 @@
 concrete StructuralFin of Structural = CatFin ** 
-  open MorphoFin, ParadigmsFin, Prelude in {
+  open MorphoFin, ParadigmsFin, (X = ConstructX), Prelude in {
 
   flags optimize=all ;
 
@@ -57,9 +57,9 @@ concrete StructuralFin of Structural = CatFin **
     a = agrP3 Sg ; 
     isPron = False
     } ;
-  less_CAdv = ss "v‰hemm‰n" ;
+  less_CAdv = X.mkCAdv "v‰hemm‰n" "kuin" ;
   many_Det = mkDet Sg (mkN "moni" "monia") ;
-  more_CAdv = ss "enemm‰n" ;
+  more_CAdv = X.mkCAdv "enemm‰n" "kuin" ;
   most_Predet = {s = \\n,c => (nForms2N (dSuurin "useinta")).s ! NCase n (npform2case n c)} ;
   much_Det = mkDet Sg {s = \\_ => "paljon"} ;
   must_VV = mkVV (caseV genitive (mkV "t‰yty‰")) ;
@@ -302,6 +302,7 @@ lin
   at_least_AdN = ss "v‰hint‰‰n" ;
   at_most_AdN = ss "enint‰‰n" ;
 
+  as_CAdv = X.mkCAdv "yht‰" "kuin" ;
 
 }
 

@@ -70,6 +70,11 @@ abstract Sentence = Cat ** {
 
     RelS     : S -> RS -> S ;              -- she sleeps, which is good
 
+---- A sentence can also be post-modified by a subjunct sentence.
+
+----    ModSubjS : S -> Subj -> S -> S ;       -- she sleeps, because she is old 
+---- cf. Adverb.SubjS
+
 }
 
 --.

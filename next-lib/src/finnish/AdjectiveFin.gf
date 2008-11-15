@@ -13,6 +13,9 @@ concrete AdjectiveFin of Adjective = CatFin ** open ResFin, Prelude in {
         _    => a.s ! Compar ! AN af ++ "kuin" ++ np.s ! NPCase Nom -- isompi kuin minä
         } 
       } ;
+    CAdvAP ad ap np = {
+      s = \\m,af => ad.s ++ ap.s ! m ! af ++ ad.p ++ np.s ! NPCase Nom 
+      } ;
     UseComparA a = {
       s = \\_,nf => a.s ! Compar ! AN nf ;
       } ;

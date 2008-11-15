@@ -1,5 +1,5 @@
 concrete StructuralSpa of Structural = CatSpa ** 
-  open PhonoSpa, MorphoSpa, ParadigmsSpa, BeschSpa, Prelude in {
+  open PhonoSpa, MorphoSpa, ParadigmsSpa, BeschSpa, (X = ConstructX), Prelude in {
 
   flags optimize=all ;
 
@@ -60,10 +60,10 @@ lin
       "el" "lo" "le" "él"
       "su" "su" "sus" "sus"
       Masc Sg P3 ;
-  less_CAdv = ss "meno" ; ----
+  less_CAdv = X.mkCAdv "menos" conjThan ; ----
   many_Det = {
     s,sp = \\g,c => prepCase c ++ genForms "muchos" "muchas" ! g ; n = Pl ; s2 = []} ;
-  more_CAdv = ss "mas" ;
+  more_CAdv = X.mkCAdv "más" conjThan ;
   most_Predet = {s = \\_,c => prepCase c ++ ["la mayor parte"] ; c = CPrep P_de} ;
   much_Det = {
     s,sp = \\g,c => prepCase c ++ genForms "mucho" "mucha" ! g ; n = Sg ; s2 = []} ;
@@ -168,6 +168,8 @@ oper
     "y" / strs {"ya" ; "ye" ; "yo" ; "yu"} ;
     "e" / strs {"i" ; "hi" ; "y"}
     }} ** {n = Pl} ;
+lin
+  as_CAdv = X.mkCAdv "si" conjThan ; ----
 
 }
 

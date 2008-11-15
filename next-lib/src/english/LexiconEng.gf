@@ -178,7 +178,7 @@ lin
   stone_N = regN "stone" ;
   stove_N = regN "stove" ;
   student_N = mkN human (regN "student") ;
-  stupid_A = regADeg "stupid" ;
+  stupid_A = mkA "stupid" ;
   sun_N = regN "sun" ;
   switch8off_V2 = dirV2 (partV (regV "switch") "off") ;
   switch8on_V2 = dirV2 (partV (regV "switch") "on") ;
@@ -193,7 +193,7 @@ lin
   travel_V = (regDuplV "travel") ;
   tree_N = regN "tree" ;
  ---- trousers_N = regN "trousers" ;
-  ugly_A = regADeg "ugly" ;
+  ugly_A = mkA "ugly" ;
   understand_V2 = dirV2 (irregV "understand" "understood" "understood") ;
   university_N = regN "university" ;
   village_N = regN "village" ;
@@ -203,7 +203,7 @@ lin
   war_N = regN "war" ;
   watch_V2 = dirV2 (regV "watch") ;
   water_N = regN "water" ;
-  white_A = regADeg "white" ;
+  white_A = mkA "white" ;
   window_N = regN "window" ;
   wine_N = regN "wine" ;
   win_V2 = dirV2 (irregDuplV "win" "won" "won") ;
@@ -211,7 +211,7 @@ lin
   wonder_VQ = mkVQ (regV "wonder") ;
   wood_N = regN "wood" ;
   write_V2 = dirV2 (irregV "write" "wrote" "written") ;
-  yellow_A = regADeg "yellow" ;
+  yellow_A = mkA "yellow" ;
   young_A = regADeg "young" ;
 
   do_V2 = dirV2 (mk5V "do" "does" "did" "done" "doing") ;

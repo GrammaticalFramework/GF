@@ -389,12 +389,13 @@ incomplete resource Constructors = open Grammar in {
       mkNP : Predet -> NP -> NP ;  -- 21. only John
       mkNP : NP ->    V2  -> NP ;  -- 22. John killed
       mkNP : NP ->    Adv -> NP ;  -- 23. John in Paris
+      mkNP : NP ->    RS  -> NP ;  -- 24. John, who lives in Paris
 
 -- A conjunction can be formed both from two noun phrases and a longer
 -- list of them.
 
-      mkNP : Conj  -> NP -> NP -> NP ; -- 22. John and I
-      mkNP : Conj  -> ListNP   -> NP ; -- 23. John, I, and that
+      mkNP : Conj  -> NP -> NP -> NP ; -- 25. John and I
+      mkNP : Conj  -> ListNP   -> NP ; -- 26. John, I, and that
 
       } ;
 
@@ -614,6 +615,7 @@ incomplete resource Constructors = open Grammar in {
       mkAP : Conj  -> ListAP   -> AP ; -- 11. old, big, and warm
 
       mkAP : Ord   -> AP ;             -- 12. oldest
+      mkAP : CAdv -> AP -> NP -> AP ;  -- 13. as old as John
       } ;
 
       reflAP   : A2 -> AP ;            -- married to himself
@@ -894,7 +896,8 @@ incomplete resource Constructors = open Grammar in {
                                         = \c,xy -> ConjAP c xy ;
       mkAP : Ord   -> AP
         = AdjOrd ;
-
+      mkAP : CAdv -> AP -> NP -> AP 
+        = CAdvAP ;
       } ;
 
       reflAP = ReflA2 ;
@@ -1055,6 +1058,8 @@ incomplete resource Constructors = open Grammar in {
                                          =    PPartNP  ;
       mkNP : NP -> Adv -> NP      -- Paris at midnight
                                          =    AdvNP ;
+      mkNP : NP -> RS -> NP
+            = RelNP ;
       mkNP : Conj -> NP -> NP -> NP
                                         = \c,x,y -> ConjNP c (BaseNP x y) ;
       mkNP : Conj -> ListNP -> NP

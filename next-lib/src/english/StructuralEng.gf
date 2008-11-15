@@ -1,5 +1,5 @@
 concrete StructuralEng of Structural = CatEng ** 
-  open MorphoEng, ResEng, ParadigmsEng, Prelude in {
+  open MorphoEng, ResEng, ParadigmsEng, (C = ConstructX), Prelude in {
 
   flags optimize=all ;
 
@@ -54,9 +54,9 @@ concrete StructuralEng of Structural = CatEng **
   i_Pron  = mkPron "I" "me" "my" "mine" singular P1 human ;
   in_Prep = mkPrep "in" ;
   it_Pron  = mkPron "it" "it" "its" "its" singular P3 nonhuman ;
-  less_CAdv = ss "less" ;
+  less_CAdv = C.mkCAdv "less" "than" ;
   many_Det = mkDeterminer plural "many" ;
-  more_CAdv = ss "more" ;
+  more_CAdv = C.mkCAdv "more" "than" ;
   most_Predet = ss "most" ;
   much_Det = mkDeterminer singular "much" ;
   must_VV = {
@@ -132,5 +132,8 @@ concrete StructuralEng of Structural = CatEng **
   at_most_AdN = mkAdN "at most" ;
 
   except_Prep = mkPrep "except" ;
+
+  as_CAdv = C.mkCAdv "as" "as" ;
+
 }
 

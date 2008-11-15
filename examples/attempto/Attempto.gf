@@ -16,6 +16,7 @@ cat Prep ;
 cat S ;
 cat VP ;
 cat V ;
+cat VS ;
 cat V2 ;
 cat V3 ;
 cat Adv ;
@@ -86,6 +87,7 @@ fun they_NP : NP ;
 fun somebody_NP : NP ;
 fun something_NP : NP ;
 --fun noone_NP : NP ;
+fun nobody_NP : NP ;
 fun nothing_NP : NP ;
 --fun not_everyoneNP : NP ;
 fun not_everybodyNP : NP ;
@@ -150,17 +152,17 @@ fun neg_vpS : NP -> VP -> S ;
 fun not_provably_vpS : NP -> VP -> S ;
 
 fun vVP  : V -> VP ;
+fun vsVP : VS -> S  -> VP ;
 fun v2VP : V2 -> NP -> VP ;
 fun v3VP : V3 -> NP -> NP -> VP ;
 
 -- 2.3.2
 
-fun apVP : AP -> VP ;
-fun compVP : A -> NP -> VP ; -- John is richer than Mary
-fun as_asVP : A -> NP -> VP ; -- John is as rich as Mary
+fun apVP    : AP -> VP ;
+fun compVP  : A -> NP -> VP ;  -- John is richer than Mary
+fun as_asVP : AP -> NP -> VP ; -- John is as rich as Mary
+fun more_thanVP : AP -> NP -> VP ; -- John is as rich as Mary
 
--- John is as fond-of Mary as Bill
--- John is more fond-of Mary than Bill
 -- John is as fond-of Mary as of Sue
 -- John is more fond-of Mary than of Sue
 
@@ -212,8 +214,6 @@ fun possibleS : S -> S ; -- it is possible that
 fun not_possibleS : S -> S ; 
 fun necessaryS : S -> S ; 
 fun not_necessaryS : S -> S ; 
-
-fun thatS : S -> S -> S ;
 
 -- 3.5
 

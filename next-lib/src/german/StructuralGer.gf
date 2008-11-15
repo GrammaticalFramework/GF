@@ -1,6 +1,6 @@
 concrete StructuralGer of Structural = CatGer ** 
 
-  open MorphoGer, Prelude in {
+  open MorphoGer, (X = ConstructX), Prelude in {
 
   flags optimize=all ;
 
@@ -48,9 +48,9 @@ concrete StructuralGer of Structural = CatGer **
   i_Pron = mkPronPers "ich" "mich" "mir" "meiner" "mein" Masc Sg P1 ;
   in_Prep = mkPrep "in" Dat ;
   it_Pron = mkPronPers "es" "es" "ihm" "seiner" "sein"  Neutr Sg P3 ;
-  less_CAdv = ss "weniger" ;
+  less_CAdv = X.mkCAdv "weniger" "als" ;
   many_Det = detLikeAdj Pl "viel" ;
-  more_CAdv = ss "mehr" ;
+  more_CAdv = X.mkCAdv "mehr" "als" ;
   most_Predet = {s = appAdj (regA "meist") ; c = NoCase} ;
   much_Det = detLikeAdj Sg "viel" ;
   must_VV = auxVV 
@@ -143,4 +143,7 @@ concrete StructuralGer of Structural = CatGer **
   at_least_AdN = ss "wenigstens" ;
   at_most_AdN = ss "höchstens" ;
   except_Prep = mkPrep "außer" Dat ;
+
+  as_CAdv = X.mkCAdv "ebenso" "wie" ;
+
 }

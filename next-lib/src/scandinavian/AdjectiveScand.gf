@@ -23,6 +23,11 @@ incomplete concrete AdjectiveScand of Adjective =
       isPre = False
       } ;
 
+    CAdvAP ad ap np = {
+      s = \\a => ad.s ++ ap.s ! a ++ ad.p ++ np.s ! nominative ; 
+      isPre = False
+      } ;
+
     AdjOrd ord = {
       s = \\_ => ord.s ;
       isPre = True
