@@ -23,5 +23,6 @@ oper
   comma_or_Conj = mkConj [] ", ou" singular ;
   slash_Conj = mkConj [] "/" singular ;
 
+  whose_IDet = mkIDet (mkIQuant "de qui") ; ----
 
 }

@@ -10,4 +10,7 @@ oper
   mkSubjSubj : Str -> Subj = \x -> 
     {s = x ; m = Conjunct ; lock_Subj = <>} ;
 
+  mkIQuant : Str -> IQuant = \s ->
+    {s = \\_,_,c => prepCase c ++ s ; lock_IQuant = <>} ;
+
 }

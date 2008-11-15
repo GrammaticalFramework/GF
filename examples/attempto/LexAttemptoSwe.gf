@@ -21,6 +21,7 @@ oper
   comma_and_Conj = mkConj [] ", och" plural ;
   comma_or_Conj = mkConj [] ", eller" singular ;
   slash_Conj = mkConj [] "/" singular ;
+  whose_IDet = mkIDet (mkIQuant "vems" "vems" "vems" dDefIndef) ;
 
 
 }

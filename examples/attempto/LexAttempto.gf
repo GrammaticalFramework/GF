@@ -22,4 +22,5 @@ oper
   comma_and_Conj : Conj ;
   comma_or_Conj : Conj ;
 
+  whose_IDet : IDet ;
 }

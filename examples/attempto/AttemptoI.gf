@@ -1,6 +1,7 @@
 incomplete concrete AttemptoI of Attempto = SymbolsC ** open 
   Syntax, 
   Symbolic,
+  Prelude,
   LexAttempto 
 in {
 
@@ -64,7 +65,6 @@ lin ten_Card = mkCard n10_Numeral ;
 lin pnNP = mkNP ;
 lin intNP = symb ;
 lin floatNP = symb ;
---lin intNegNP : Int -> NP ;
 
 lin it_NP = mkNP it_Pron ;
 lin he_NP = mkNP he_Pron ;
@@ -105,7 +105,7 @@ lin unit_ofMassNP ca u cn = mkNP (mkNP ca u) (mkAdv part_Prep (mkNP cn)) ;
 
 lin apposVarCN cn v = mkCN cn (symb v) ;
 
-lin varNP x = symb x ;
+lin termNP x = symb (ss x.s) ;
 
 -- 2.2.1
 
@@ -186,8 +186,8 @@ lin thereNP np = mkS (mkCl np) ;
 
 
 -- 3.3
--- Boolean formulas = \= < > <= >= 
 
+lin formulaS f = symb (ss f.s) ;
 
 -- 3.4.1
 
@@ -233,9 +233,8 @@ lin when_IAdv = Syntax.when_IAdv ;
 lin whoSg_IP = Syntax.whoSg_IP ;
 lin whoPl_IP = Syntax.whoPl_IP ;
 
-
---lin there_ipQS : IP -> QS ; -- there is who
---lin whoseIP : CN -> IP ;  -- whose dog
+lin there_ipQS ip = mkQS (mkQCl ip) ; ---- who is there, not there is who
+lin whoseIP = mkIP whose_IDet ; 
 
 -- 3.6
 

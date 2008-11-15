@@ -62,7 +62,6 @@ fun ten_Card : Card ;
 
 fun pnNP : PN -> NP ;
 fun intNP : Int -> NP ;
-fun intNegNP : Int -> NP ;
 fun floatNP : Float -> NP ;
 
 
@@ -112,7 +111,7 @@ fun unit_ofNP : Card -> Unit -> CN -> NP ;      -- 3 kg of apples
 fun unit_ofMassNP : Card -> Unit -> MCN -> NP ; -- 3 l of water
 
 fun apposVarCN : CN -> Var -> CN ;  -- a man X
-fun varNP : Var -> NP ;
+fun termNP : Term -> NP ;
 
 fun conjNP : NP -> NP -> NP ;
 
@@ -189,7 +188,8 @@ fun modVP : VP -> Adv -> VP ;
 fun thereNP : NP -> S ;  -- there is/are
 
 -- 3.3
--- Boolean formulas = \= < > <= >= 
+
+fun formulaS : Formula -> S ;
 
 -- 3.4.1
 

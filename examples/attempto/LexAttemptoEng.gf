@@ -29,5 +29,6 @@ oper
   comma_or_Conj = M.mkConj [] ", or" singular ;
   slash_Conj = M.mkConj [] "/" singular ;
 
+  whose_IDet = M.mkIDet "whose" singular ;
 
 }
