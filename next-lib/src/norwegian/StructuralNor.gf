@@ -1,5 +1,5 @@
 concrete StructuralNor of Structural = CatNor ** 
-  open MorphoNor, ParadigmsNor, Prelude in {
+  open MorphoNor, ParadigmsNor, (X = ConstructX), Prelude in {
 
   flags optimize=all ;
 
@@ -44,9 +44,9 @@ concrete StructuralNor of Structural = CatNor **
     MorphoNor.mkNP "jeg" "meg" (variants {"min" ; "mi"}) "mit" "mine"  SgUtr P1 ; --- mi
   in_Prep = ss "i" ;
   it_Pron = MorphoNor.regNP "det" "dets" SgNeutr ;
-  less_CAdv = ss "mindre" ;
+  less_CAdv = X.mkCAdv "mindre" conjThan ;
   many_Det = {s = \\_,_ => "mange" ; n = Pl ; det = DDef Indef} ;
-  more_CAdv = ss "mer" ;
+  more_CAdv = X.mkCAdv "mer" conjThan ;
   most_Predet = {s = gennumForms ["den meste"] ["det meste"] ["de fleste"]} ;
   much_Det = {s = \\_,_ => "mye" ; n = Pl ; det = DDef Indef} ;
   must_VV = 
