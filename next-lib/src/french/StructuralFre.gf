@@ -1,7 +1,7 @@
 --# -path=.:../abstract:../romance:../common:prelude
 
 concrete StructuralFre of Structural = CatFre ** 
-  open PhonoFre, MorphoFre, ParadigmsFre, IrregFre, Prelude in {
+  open PhonoFre, MorphoFre, ParadigmsFre, IrregFre, (X = ConstructX), Prelude in {
 
   flags optimize=all ; coding=utf8 ;
 
@@ -57,9 +57,9 @@ lin
     mkPronoun
       "il" (elision "l") "lui" "lui" "son" (elisPoss "s") "ses"
       Masc Sg P3 ;
-  less_CAdv = ss "moins" ;
+  less_CAdv = X.mkCAdv "moins" conjThan ;
   many_Det = {s,sp = \\_,c => prepCase c ++ "plusieurs" ; n = Pl ; s2 = []} ;
-  more_CAdv = ss "plus" ;
+  more_CAdv = X.mkCAdv "plus" conjThan ;
   most_Predet = {s = \\_,c => prepCase c ++ ["la plupart"] ; c = CPrep P_de} ;
   much_Det = {s,sp = \\_,c => prepCase c ++ "beaucoup" ++ elisDe ; n = Pl ; s2 = []} ;
   must_VV = mkVV (devoir_V2 ** {lock_V = <>}) ;
@@ -182,6 +182,8 @@ lin
   at_most_AdN = ss "au plus" ;
 
   except_Prep = mkPreposition "excepté" ;
+
+  as_CAdv = X.mkCAdv "aussi" conjThan ;
 
 }
 

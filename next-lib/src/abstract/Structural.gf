@@ -117,4 +117,6 @@ abstract Structural = Cat ** {
   nothing_NP : NP ;
   except_Prep : Prep ;
 
+  as_CAdv : CAdv ;
+
 }

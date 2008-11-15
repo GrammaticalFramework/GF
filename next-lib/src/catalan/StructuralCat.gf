@@ -1,5 +1,5 @@
 concrete StructuralCat of Structural = CatCat ** 
-  open PhonoCat, MorphoCat, ParadigmsCat, BeschCat, Prelude in {
+  open PhonoCat, MorphoCat, ParadigmsCat, BeschCat, (X = ConstructX), Prelude in {
 
   flags optimize=all ; coding=utf8 ;
 
@@ -60,10 +60,10 @@ lin
      "ell" "lo" "el" "ell"
      ["el seu"] ["la seva"] ["els seus"] ["les seves"]
      Masc Sg P3 ;
-  less_CAdv = ss "menys" ; ----
+  less_CAdv = X.mkCAdv "menys" conjThan ; ----
   many_Det = {
     s,sp = \\g,c => prepCase c ++ genForms "molts" "moltes" ! g ; n = Pl ; s2 = []} ;
-  more_CAdv = ss "més" ;
+  more_CAdv = X.mkCAdv "més" conjThan ;
   most_Predet = {s = \\_,c => prepCase c ++ ["la majoria"] ; c = CPrep P_de} ;
   much_Det = {
     s,sp = \\g,c => prepCase c ++ genForms "molt" "molta" ! g ; n = Sg ; s2 = []} ;

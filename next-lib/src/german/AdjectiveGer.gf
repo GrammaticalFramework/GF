@@ -12,6 +12,10 @@ concrete AdjectiveGer of Adjective = CatGer ** open ResGer, Prelude in {
       s = \\af => a.s ! Compar ! af ++ conjThan ++ np.s ! Nom ;
       isPre = True
       } ;
+    CAdvAP ad ap np = {
+      s = \\af => ad.s ++ ap.s ! af ++ ad.p ++ np.s ! Nom ;
+      isPre = False
+      } ;
     UseComparA a = {
       s = \\af => a.s ! Compar ! af ;
       isPre = True

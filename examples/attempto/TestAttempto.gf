@@ -51,7 +51,7 @@ fun
   course_N : CN ;
   carefully_Adv : Adv ;
   time_N : CN ;
-  believe_V : V ;
+  believe_VS : VS ;
   seriously_Adv : Adv ;
   clerk_N : CN ;
   screen_N : CN ;
@@ -62,7 +62,7 @@ fun
   reject_V2 : V2 ;
   accept_V2 : V2 ;
   type_V2 : V2 ;
-  know_V : V ;
+  know_VS : VS ;
   manager_N : CN ;
   oversleep_V : V ;
   valid_A : A ;

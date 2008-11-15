@@ -13,7 +13,7 @@ resource ConstructX = open CommonX in {
     mkAdA : Str -> AdA  = \s -> {s = s ; lock_AdA = <>} ;
     mkAdN : Str -> AdN  = \s -> {s = s ; lock_AdN = <>} ;
     mkIAdv : Str -> IAdv  = \s -> {s = s ; lock_IAdv = <>} ;
-    mkCAdv : Str -> CAdv  = \s -> {s = s ; lock_CAdv = <>} ;
+    mkCAdv : Str -> Str -> CAdv  = \s,p -> {s = s ; p = p ; lock_CAdv = <>} ;
     mkPConj : Str -> PConj  = \s -> {s = s ; lock_PConj = <>} ;
 
 }

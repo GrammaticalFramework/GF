@@ -18,6 +18,7 @@ lincat Prep = Syntax.Prep ;
 lincat S = Syntax.S ;
 lincat VP = Syntax.VP ;
 lincat V = Syntax.V ;
+lincat VS = Syntax.VS ;
 lincat V2 = Syntax.V2 ;
 lincat V3 = Syntax.V3 ;
 lincat Adv = Syntax.Adv ;
@@ -118,8 +119,7 @@ lin superlAP a = mkAP (mkOrd a) ;
 -- 2.2.2
 
 lin relCN = mkCN ;
---lin relNP = mkNP ;
-
+lin relNP = mkNP ;
 
 lin andRS = mkRS and_Conj ;
 lin orRS = mkRS or_Conj ;
@@ -145,6 +145,7 @@ lin neg_vpS np vp = mkS negativePol (mkCl np vp) ;
 lin not_provably_vpS np vp = mkS negativePol (mkCl np (mkVP vp provably_Adv)) ;
 
 lin vVP  = mkVP ;
+lin vsVP = mkVP ;
 lin v2VP = mkVP ;
 lin v3VP = mkVP ;
 
@@ -152,13 +153,11 @@ lin v3VP = mkVP ;
 
 lin apVP = mkVP ;
 lin compVP a np = mkVP (mkAP a np) ;
---lin as_asVP : A -> NP -> S ; -- John is as rich as Mary
+lin as_asVP ap np = mkVP (mkAP as_CAdv ap np) ; -- John is as rich as Mary
+lin more_thanVP ap np = mkVP (mkAP more_CAdv ap np) ;
 
--- John is as fond-of Mary as Bill
--- John is more fond-of Mary than Bill
--- John is as fond-of Mary as of Sue
--- John is more fond-of Mary than of Sue
-
+---- John is as fond-of Mary as of Sue
+---- John is more fond-of Mary than of Sue
 
 lincat PP = Adv ;
 lincat [PP] = Adv ;
@@ -221,8 +220,6 @@ lin not_possibleS s = mkS negativePol (adj_thatCl possible_A s) ;
 lin necessaryS s = mkS (adj_thatCl necessary_A s) ;
 lin not_necessaryS s = mkS negativePol (adj_thatCl necessary_A s) ;
 
-
---lin thatS s t = mkS s (mkAdv that_Subj t) ;
 
 -- 3.5
 
