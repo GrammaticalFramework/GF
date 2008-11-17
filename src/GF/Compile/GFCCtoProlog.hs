@@ -207,7 +207,7 @@ plVar = varPrefix  . concatMap changeNonAlphaNum
 plAtom :: String -> String
 plAtom "" = "''"
 plAtom atom@(c:cs) | isAsciiLower c && all isAlphaNumUnderscore cs 
-                     || c == '\'' && last cs == '\''               = atom
+                     || c == '\'' && cs /= "" && last cs == '\''   = atom
                    | otherwise = "'" ++ concatMap changeQuote atom ++ "'"
     where changeQuote '\'' = "\\'"
           changeQuote c = [c]
