@@ -1,10 +1,12 @@
 European Resource Grammar Summer School
-Gothenburg, August 2009
+Gothenburg, 17-28 August 2009
 Aarne Ranta (aarne at chalmers.se)
 
 %!Encoding : iso-8859-1
 
 %!target:html
+
+//preliminary version, 17 November 2008//
 
 [eu-langs.png]
 
@@ -13,17 +15,20 @@ Aarne Ranta (aarne at chalmers.se)
 
 We plan to organize a summer school with the goal of implementing the GF
 resource grammar library for 15 new languages, so that the library will
-cover all the 23 official EU languages of year 2009. 
-As a test application of the grammars, also an extension of
-the WebALT mathematical exercise translator will be built for each
-language.
+cover all the 23 official EU languages of year 2009. Also other languages
+chosen by the participants can be covered. The current library comprises 12
+languages.
 
-2 students per language are selected to the summer school, after a phase of 
-self-studies and on the basis of assignments that consist of parts of the resource
-grammars. Travel and accommodation are paid to these participants.
-If funding gets arranged, the call of participation for the summer school will
-be announced in February 2009, and the summer school itself will take place
-in August 2009, in Gothenburg.
+The library is a linguistic resource that covers the inflectional morphology
+and basic syntax of each language. It can be used in GF applications
+and also ported to other formats. The library is licensed under LGPL.
+
+Each language is implemented by one or two students working together.
+Travel grants will be available for students selected on the basis of
+pre-conference assignments. 
+
+The official announcement will be in January 2009, and the summer school
+itself on 17-28 August 2009, in Gothenburg.
 
 
 
@@ -69,7 +74,7 @@ number of languages increases, this part grows while the interlingua remains
 constant.
 
 GF (Grammatical Framework, 
-[``gf.digitalgrammars.com`` http://gf.digitalgrammars.com])
+[``digitalgrammars.com/gf`` http://digitalgrammars.com/gf])
 is a programming language designed to support interlingua-based translation.
 A "program" in GF is a **multilingual grammar**, which consists of an 
 **abstract syntax** and a set of **concrete syntaxes**. A concrete
@@ -79,7 +84,8 @@ translating in both directions. This means that creating an interlingua-based
 translator for 23 languages just requires 1 + 23 = 24 grammar modules (the abstract
 syntax and the concrete syntaxes).
 
-The diagram first in this document shows a system covering the 23 EU languages. 
+The diagram first in this document shows an interlingua 
+system covering the 23 EU languages. 
 Languages marked in
 red are of particular interest for the summer school, since they are those 
 on which the effort will be concentrated.
@@ -135,12 +141,12 @@ interlingua-based translation or localization of systems to new languages:
 
 
 The library is also a generic linguistic resource, which can be used for tasks
-such as language teaching and information retrieval. The liberal license (GPL)
+such as language teaching and information retrieval. The liberal license (LGPL)
 makes it usable for anyone and for any task. GF also has tools supporting the
 use of grammars in programs written in other programming languages: C, C++, Haskell,
 Java, JavaScript, and Prolog. In connection with the TALK project, support has also been
 developed for translating GF grammars to language models used in speech
-recognition.
+recognition (GSL/Nuance, HTK/ATK, SRGS, JSGF).
 
 
 
@@ -166,17 +172,18 @@ the first three components. The latter three are more open-ended in character.
 
 The goal of the summer school is to extend the GF resource grammar library
 to covering all 23 EU languages, which means we need 15 new languages.
+We also welcome other languages, if there are interested participants.
 
 The amount of work and skill is between a Master's thesis and a PhD thesis.
 The Russian implementation was made by Janna Khegai as a part of her
 PhD thesis; the thesis contains other material, too.
 The Arabic implementation was started by Ali El Dada in his Master's thesis,
 but the thesis does not cover the whole API. The realistic amount of work is
-somewhere around 8 person months, but this is very much language-dependent.
+somewhere between 3 and 8 person months, but this is very much language-dependent.
 Dutch, for instance, can profit from previous implementations of German and
 Scandinavian languages, and will probably require less work.
 Latvian and Lithuanian are the first languages of the Baltic family and
-will probably require much more work.
+will probably require more work.
 
 In any case, the proposed allocation of work power is 2 participants per
 language. They will have 6 months to work at home, followed
@@ -187,26 +194,26 @@ by 2 weeks of summer school. Who are these participants?
 
 After the call has been published, persons interested to participate in
 the project are expected to learn GF by self-study from the 
-[tutorial http://www.cs.chalmers.se/Cs/Research/Language-technology/GF/doc/gf-tutorial.html]. 
+[tutorial http://digitalgrammars.com/gf/doc/gf-tutorial.html]. 
 This should take a couple of weeks.
 
-After and perhapts in parallel with
-working out the tutorial, the participants should continue to 
+Participants should continue to 
 implement selected parts of the resource grammar, following the advice from
 the 
-[Resource-HOWTO document http://www.cs.chalmers.se/Cs/Research/Language-technology/GF/doc/Resource-HOWTO.html].
-%[``http://www.cs.chalmers.se/~aarne/GF/lib/resource-1.0/doc/Resource-HOWTO.html`` http://www.cs.chalmers.se/~aarne/GF/lib/resource-1.0/doc/Resource-HOWTO.html].
+[Resource-HOWTO document http://digitalgrammars.com/gf/doc/Resource-HOWTO.html].
 What parts exactly are selected will be announced later. 
 This work will take another couple of weeks.
 
-This sample resource grammar fragment 
-will be submitted to the Summer School Committee in the beginning of May.
+Those who are interested in getting a travel grant will submit
+their sample resource grammar fragment 
+to the Summer School Committee in the beginning of May.
 The Committee then decides who is invited to represent which language
 in the summer school.
 
 After the Committee decision, the  participants have around three months
-to work on their languages. The work is completed in the summer school itself. It is also
-thoroughly tested by using it to add a new language to the WebALT mathematical
+to work on their languages. The work is completed in the summer school 
+itself. It is also thoroughly tested by using it to add new languages 
+to applications - in particular, to the WebALT mathematical
 exercise translator.
 
 Depending on the quality of submitted work, and on the demands of different
@@ -214,11 +221,8 @@ languages, the Committee may decide to select another number than 2 participants
 for a language. We will also consider accepting participants who want to
 pay their own expenses.
 
-Also good proposals from non-EU languages will be considered. Proponents of
-such languages should contact the summer school organizers as early as possible.
-
-To keep track on who is working on which language, we will establish a web page
-(Wiki or similar) soon after the call is published. The participants are encourage
+To keep track on who is working on which language, we will establish a Wiki page
+soon after the call is published. The participants are encouraged
 to contact each other and even work in groups.
 
 
@@ -248,65 +252,55 @@ who are selected on the basis of their assignments. And not only that:
 we plan to cover their travel and accommodation costs, up to 1000 EUR
 per person.
 
-We want to get the funding question settled by mid-February 2009, and make
-the final decision on the summer school then.
+We try to get the funding question settled by mid-February 2009.
+
 
 
 ===Teachers===
 
-Krasimir Angelov
+A list of teachers will be published here later. Some of the local teachers 
+probably involved are the following:
+- Krasimir Angelov
+- Robin Cooper
+- Håkan Burden
+- Markus Forsberg
+- Peter Ljunglöf
+- Aarne Ranta
 
-?Olga Caprotti
 
-?Lauri Carlson
+More teachers are welcome! If you are interested, please contact us so that
+we can discuss your involvement and travel arrangements.
 
-?Robin Cooper
+In addition to teachers, we will look for consultants who can help to assess 
+the results for each language. Please contact us!
 
-?Björn Bringert
-
-Håkan Burden
-
-?Elisabet Engdahl
-
-?Markus Forsberg
-
-?Janna Khegai
-
-?Peter Ljunglöf
-
-?Wanjiku Ng'ang'a
-
-Aarne Ranta
-
-?Jordi Saludes
-
-In addition, we will look for consultants who can help to assess the results
-for each language
 
 
 ===The Summer School Committee===
 
 This committee consists of a number of teachers and consultants, 
-who will select the participants.
+who will select the participants. It will be selected by February 2009.
 
 
 ===Time and Place===
 
 The summer school will
-be organized in Gothenburg in the latter half of August 2009.
+be organized at the campus of Chalmers University of Technology in Gothenburg,
+Sweden, on 17-28 August 2009.
 
-Time schedule (2009):
+Time schedule:
 - February: announcement of summer school and the grammar
   writing contest to get participants
 - March-April: work on the contest assignment (ca 1 month)
 - May: submission deadline and notification of acceptance
 - June-July: more work on the grammars
 - August: summer school
+- September-December: more homework if necessary
 
 
 ===Dissemination and intellectual property===
 
-The new resource grammars will be released under the GPL just like 
+The new resource grammars will be released under the LGPL just like 
 the current resource grammars,
 with the copyright held by respective authors.
 
@@ -319,14 +313,15 @@ authors and WebALT Inc.
 ==Why I should participate==
 
 Seven reasons:
-+ free trip and stay in Gothenburg (to be confirmed)
++ free trip and stay in Gothenburg (for travel grant students)
 + participation in a pioneering language technology work in an enthusiastic atmosphere
-+ work and fun with people from all over Europe
++ work and fun with people from all over Europe and the world
 + job opportunities and business ideas
-+ credits: the school project will be established as a course worth
++ credits: the school project will be established as a course at Chalmers worth
   15 ETCS points per person, but extensions to Master's thesis will
   also be considered
 + merits: the resulting grammar can easily lead to a published paper
-+ contribution to the multilingual and multicultural development of Europe
++ contribution to the multilingual and multicultural development of Europe and the
+  world
 
 
