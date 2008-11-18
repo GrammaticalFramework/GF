@@ -130,9 +130,6 @@ lin
     exactly_AdN = ss "exactly" ;
     most_Det = mkDeterminer plural "most";
     neither_Det = mkDeterminer singular "neither" ;
-    no_Det = variants { mkDeterminer singular "no"; mkDeterminer plural "no" } ;
-    nobody_NP = variants { regNP "nobody" singular; regNP "noone" singular; regNP ["no one"] singular };
-    nothing_NP = regNP "nothing" singular;
     only_AdV = mkAdV "only" ;
     should_VV = {
       s = table {
