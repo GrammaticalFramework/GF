@@ -28,7 +28,8 @@ Travel grants will be available for students selected on the basis of
 pre-conference assignments. 
 
 The official announcement will be in January 2009, and the summer school
-itself on 17-28 August 2009, in Gothenburg.
+itself on 17-28 August 2009, at the campus of Chalmers University of
+Technology in Gothenburg, Sweden.
 
 
 
@@ -195,7 +196,8 @@ by 2 weeks of summer school. Who are these participants?
 After the call has been published, persons interested to participate in
 the project are expected to learn GF by self-study from the 
 [tutorial http://digitalgrammars.com/gf/doc/gf-tutorial.html]. 
-This should take a couple of weeks.
+This should take a couple of weeks. Also an on-line course will be
+arranged to help in getting started with GF.
 
 Participants should continue to 
 implement selected parts of the resource grammar, following the advice from
@@ -264,6 +266,7 @@ probably involved are the following:
 - Robin Cooper
 - Håkan Burden
 - Markus Forsberg
+- Harald Hammarström
 - Peter Ljunglöf
 - Aarne Ranta
 
@@ -291,7 +294,7 @@ Sweden, on 17-28 August 2009.
 Time schedule:
 - February: announcement of summer school and the grammar
   writing contest to get participants
-- March-April: work on the contest assignment (ca 1 month)
+- March-April: on-line course, work on the contest assignment (ca 1 month)
 - May: submission deadline and notification of acceptance
 - June-July: more work on the grammars
 - August: summer school
@@ -313,7 +316,6 @@ authors and WebALT Inc.
 ==Why I should participate==
 
 Seven reasons:
-+ free trip and stay in Gothenburg (for travel grant students)
 + participation in a pioneering language technology work in an enthusiastic atmosphere
 + work and fun with people from all over Europe and the world
 + job opportunities and business ideas
@@ -323,5 +325,6 @@ Seven reasons:
 + merits: the resulting grammar can easily lead to a published paper
 + contribution to the multilingual and multicultural development of Europe and the
   world
++ free trip and stay in Gothenburg (for travel grant students)
 
 

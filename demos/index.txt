@@ -2,29 +2,31 @@ Grammatical Framework Demos
 
 
 
+**NEW** [Fridge poetry http://tournesol.cs.chalmers.se:41296/gwt/www/se.chalmers.cs.gf.gwt.FridgeApp/Fridge.html]
+
+**NEW** [Word-completing translator http://tournesol.cs.chalmers.se:41296/gwt/www/se.chalmers.cs.gf.gwt.TranslateApp/Translate.html]
+
+**NEW** [Tramdemo on YouTube http://www.youtube.com/watch?v=1bfaYHWS6zU]: 
+find your way in Gothenburg public transport system, in six languages (film).
+
+**NEW** [Multilingual Wiki http://csmisc14.cs.chalmers.se/~meza/restWiki/wiki.cgi].
+
+[Numeral translator for the iPhone index-numbers.html]: number words in 15 languages.
+
+[Numeral translator http://www.cs.chalmers.se/~bringert/gf/translate/]:
+number words in 88 languages.
 
 [Letter editor http://www.cs.chalmers.se/~markus/gramlets/letter-applet.html]: compose
 a letter in a language you don't know.
 
-[Numeral translator http://www.cs.chalmers.se/~bringert/gf/translate/]: see 
-number words in 88 languages.
-
-**NEW** [Numeral translator for the iPhone index-numbers.html].
-
 [Pizza http://www.cs.chalmers.se/~bringert/xv/pizza/]: order a pizza by speaking
 to your web browser.
-
-%[Restauranggajden http://www.restauranggajden.se/tomas/]: write and read
-%restaurant reviews in a multilingual Wiki.
 
 [WebALT Math Editor  http://webalt.math.helsinki.fi/PublicFiles/CD/Screencast/TextMathEditor%20Demo.swf]:
 create mathematical exercises in six languages simultaneously (film).
 
-**NEW** [WebALT Math translator http://www.jem-thematic.net/en/node/846#comment-209]:
+[WebALT Math translator http://www.jem-thematic.net/en/node/846#comment-209]:
 translate mathematical exercises in a web service using incremental parsing.
-
-[Tramdemo http://www.cs.chalmers.se/~bringert/demos/gotgodis/]: find your way in
-Gothenburg public transport system, in six languages (film).
 
 [GF Language Trainer http://csmisc14.cs.chalmers.se/~bjorn/langtrain.cgi]:
 translation quizzes in Arabic, English, Russian, Swedish.
