@@ -123,7 +123,7 @@ concrete StructuralEng of Structural = CatEng **
   youPol_Pron = mkPron "you" "you" "your" "yours" singular P2 human ;
 
   not_Predet = {s = "not" ; lock_Predet = <>} ;
-  no_Quant = mkQuant4 "no" "no" "none" "none" ;
+  no_Quant = mkQuant "no" "no" "none" "none" ;
   if_then_Conj = {s1 = "if" ; s2 = "then" ; n = singular ; lock_Conj = <>} ;
   nobody_NP = regNP "nobody" singular ;
   nothing_NP = regNP "nothing" singular ;

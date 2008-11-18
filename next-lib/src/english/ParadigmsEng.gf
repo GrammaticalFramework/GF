@@ -128,6 +128,12 @@ oper
     mkPN : N -> PN
   } ;
 
+--3 Determiners and quantifiers
+
+  mkQuant : overload {
+    mkQuant : (this, these : Str) -> Quant ;
+    mkQuant : (no_sg, no_pl, none_sg, non_pl : Str) -> Quant ;
+  } ;
 
 --2 Adjectives
 
@@ -390,6 +396,17 @@ mkSubj : Str -> Subj = \s -> {s = s ; lock_Subj = <>} ;
   regGenPN n g = {s = table {Gen => n + "'s" ; _ => n} ; 
 		  g = g ; lock_PN = <>} ;
   nounPN n = {s = n.s ! singular ; g = n.g ; lock_PN = <>} ;
+
+  mkQuant = overload {
+    mkQuant : (this, these : Str) -> Quant = \sg,pl -> mkQuantifier sg pl sg pl;
+    mkQuant : (no_sg, no_pl, none_sg, non_pl : Str) -> Quant = mkQuantifier;
+  } ;
+
+  mkQuantifier : Str -> Str -> Str -> Str -> Quant = \sg,pl,sg',pl' -> {
+    s = \\_  => table { Sg => sg ; Pl => pl } ;
+    sp = \\_ => table { Sg => regGenitiveS sg' ; Pl => regGenitiveS pl' } ;
+    lock_Quant = <>
+    } ;
 
   mk2A a b = mkAdjective a a a b ** {lock_A = <>} ;
   regA a = case a of {
