@@ -30,8 +30,6 @@ fun another_Predet : Predet ;
 fun any_Predet : Predet ;
 fun anybody_NP : NP ;
 fun anything_NP : NP ;
-fun at8least_AdN : AdN ;
-fun at8most_AdN : AdN ;
 fun both_Det : Det ;
 fun either_Det : Det ;
 fun exactly_AdN : AdN ;

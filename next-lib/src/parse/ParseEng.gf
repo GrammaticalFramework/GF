@@ -123,8 +123,6 @@ lin
     any_Predet = ss "any" ;
     anybody_NP = variants { regNP "anybody" singular; regNP "anyone" singular };
     anything_NP = regNP "anything" singular;
-    at8least_AdN = ss ["at least"] ;
-    at8most_AdN = ss ["at most"] ;
     both_Det = mkDeterminer plural "both";
     either_Det = mkDeterminer singular "either" ;
     exactly_AdN = ss "exactly" ;
