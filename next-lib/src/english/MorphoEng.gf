@@ -21,13 +21,6 @@ resource MorphoEng = open Prelude, (Predef=Predef), ResEng in {
      sp = regGenitiveS s ;
      n = n} ;
 
-  mkQuant : Str -> Str -> {s : Bool => Number => Str; sp : Bool => Number => Case => Str } = \sg,pl -> mkQuant4 sg pl sg pl ;
-
-  mkQuant4 : Str -> Str -> Str -> Str -> {s : Bool => Number => Str; sp : Bool => Number => Case => Str } = \sg,pl,sg',pl' -> {
-    s = \\_  => table { Sg => sg ; Pl => pl } ;
-    sp = \\_ => table { Sg => regGenitiveS sg' ; Pl => regGenitiveS pl' }
-    } ;
-
   regGenitiveS : Str -> Case => Str = \s -> 
     table { Gen => genitiveS s; _ => s } ;
 
