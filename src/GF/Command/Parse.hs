@@ -20,12 +20,18 @@ pCommandLine = RP.sepBy (RP.skipSpaces >> pPipe) (RP.skipSpaces >> RP.char ';')
 
 pPipe = RP.sepBy1 (RP.skipSpaces >> pCommand) (RP.skipSpaces >> RP.char '|')
 
-pCommand = do
+pCommand = (do
   cmd  <- pIdent RP.<++ (RP.char '%' >> pIdent >>= return . ('%':))
   RP.skipSpaces
   opts <- RP.sepBy pOption RP.skipSpaces
   arg  <- pArgument
   return (Command cmd opts arg)
+  )
+    RP.<++ (do
+  RP.char '?' 
+  c <- pSystemCommand 
+  return (Command "sp" [OFlag "command" (VStr c)] ANoArg)
+  ) 
 
 pOption = do
   RP.char '-'
@@ -47,3 +53,12 @@ pArgument =
     (fmap ATree (pTree False)
               RP.<++ 
     (RP.munch isSpace >> RP.char '%' >> fmap AMacro pIdent))
+
+pSystemCommand = 
+  RP.munch isSpace >> (
+    (RP.char '"' >> (RP.manyTill (pEsc RP.<++ RP.get) (RP.char '"')))
+      RP.<++
+    RP.many RP.get
+    )
+       where
+         pEsc = RP.char '\\' >> RP.get 
