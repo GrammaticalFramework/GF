@@ -185,6 +185,7 @@ val2expP safe v = case v of
   VGen i x  -> if safe 
                then prtBad "unsafe val2exp" v
                else return $ Vr $ x  --- in editing, no alpha conversions presentv
+  VType     -> return typeType
  where 
    substVal g e = mapPairsM (val2expP safe) g >>= return . (\s -> substTerm [] s e)
 
