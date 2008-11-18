@@ -87,6 +87,20 @@ commandHelp full (co,info) = unlines $ [
 -- this list must no more be kept sorted by the command name
 allCommands :: String -> PGF -> Map.Map String CommandInfo
 allCommands cod pgf = Map.fromList [
+  ("!", emptyCommandInfo {
+     synopsis = "system command: escape to system shell",
+     syntax   = "! SYSTEMCOMMAND",
+     examples = [
+       "! ls *.gf   -- list all GF files in the working directory"
+       ]
+     }),
+  ("?", emptyCommandInfo {
+     synopsis = "system pipe: send value from previous command to a system command",
+     syntax   = "? SYSTEMCOMMAND",
+     examples = [
+       "gt | l | ? wc  -- generate, linearize, word-count"
+       ]
+     }),
   ("cc", emptyCommandInfo {
      longname = "compute_concrete",
      syntax = "cc (-all | -table | -unqual)? TERM",
@@ -443,7 +457,7 @@ allCommands cod pgf = Map.fromList [
   ("sp", emptyCommandInfo {
      longname = "system_pipe",
      synopsis = "send argument to a system command",
-     syntax   = "sp -command=\"SYSTEMCOMMAND\" STRING",
+     syntax   = "sp -command=\"SYSTEMCOMMAND\", alt. ? SYSTEMCOMMAND",
      exec = \opts arg -> do
        let tmpi = "_tmpi" ---
        let tmpo = "_tmpo"
@@ -456,7 +470,7 @@ allCommands cod pgf = Map.fromList [
        ("command","the system command applied to the argument")
        ],
      examples = [
-       "ps -command=\"wc\" \"foo\"",
+       "sp -command=\"wc\" \"foo\"",
        "gt | l | sp -command=\"grep \\\"who\\\"\" | sp -command=\"wc\""
        ]
      }),
