@@ -59,7 +59,7 @@ resource ResEng = ParamX ** open Prelude in {
 
 --2 For $Adjective$
 
-    AForm = AAdj Degree | AAdv ;
+    AForm = AAdj Degree Case | AAdv ;
 
 --2 For $Relative$
  
@@ -123,10 +123,10 @@ resource ResEng = ParamX ** open Prelude in {
     mkAdjective : (_,_,_,_ : Str) -> {s : AForm => Str} = 
       \good,better,best,well -> {
       s = table {
-        AAdj Posit  => good ;
-        AAdj Compar => better ;
-        AAdj Superl => best ;
-        AAdv        => well
+        AAdj Posit  c => (regGenitiveS good) ! c ;
+        AAdj Compar c => (regGenitiveS better) ! c ;
+        AAdj Superl c => (regGenitiveS best) ! c ;
+        AAdv          => well
         }
       } ;
 
@@ -160,6 +160,15 @@ resource ResEng = ParamX ** open Prelude in {
 
     regNP : Str -> Number -> {s : Case => Str ; a : Agr} = \that,n ->
       mkNP that that (that + "'s") n P3 Neutr ;
+
+    regGenitiveS : Str -> Case => Str = \s -> 
+      table { Gen => genitiveS s; _ => s } ;
+
+    genitiveS : Str -> Str = \dog ->
+      case last dog of {
+          "s" => dog + "'" ;
+          _   => dog + "'s"
+          };
 
 -- We have just a heuristic definition of the indefinite article.
 -- There are lots of exceptions: consonantic "e" ("euphemism"), consonantic
@@ -420,23 +429,24 @@ resource ResEng = ParamX ** open Prelude in {
 
 -- For $Numeral$.
 
-  mkNum : Str -> Str -> Str -> Str -> {s : DForm => CardOrd => Str} = 
+  mkNum : Str -> Str -> Str -> Str -> {s : DForm => CardOrd => Case => Str} = 
     \two, twelve, twenty, second ->
     {s = table {
-       unit => table {NCard => two ; NOrd => second} ; 
+       unit => table {NCard => regGenitiveS two ; NOrd => regGenitiveS second} ; 
        teen => \\c => mkCard c twelve ; 
        ten  => \\c => mkCard c twenty
        }
     } ;
 
-  regNum : Str -> {s : DForm => CardOrd => Str} = 
+  regNum : Str -> {s : DForm => CardOrd => Case => Str} = 
     \six -> mkNum six (six + "teen") (six + "ty") (regOrd six) ;
 
-  regCardOrd : Str -> {s : CardOrd => Str} = \ten ->
-    {s = table {NCard => ten ; NOrd => regOrd ten}} ;
+  regCardOrd : Str -> {s : CardOrd => Case => Str} = \ten ->
+    {s = table {NCard => regGenitiveS ten ; 
+		NOrd => regGenitiveS (regOrd ten)} } ;
 
-  mkCard : CardOrd -> Str -> Str = \c,ten -> 
-    (regCardOrd ten).s ! c ; 
+  mkCard : CardOrd -> Str -> Case => Str = \o,ten -> 
+    (regCardOrd ten).s ! o ; 
 
   regOrd : Str -> Str = \ten -> 
     case last ten of {

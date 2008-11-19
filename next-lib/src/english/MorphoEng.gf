@@ -21,15 +21,6 @@ resource MorphoEng = open Prelude, (Predef=Predef), ResEng in {
      sp = regGenitiveS s ;
      n = n} ;
 
-  regGenitiveS : Str -> Case => Str = \s -> 
-    table { Gen => genitiveS s; _ => s } ;
-
-  genitiveS : Str -> Str = \dog ->
-    case last dog of {
-        "s" => dog + "'" ;
-        _   => dog + "'s"
-        };
-
 --2 Pronouns
 
 

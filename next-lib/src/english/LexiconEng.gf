@@ -224,8 +224,8 @@ lin
   stop_V = regDuplV "stop" ;
   jump_V = regV "jump" ;
 
-  left_Ord = ss "left" ;
-  right_Ord = ss "right" ;
+  left_Ord = mkOrd "left" ;
+  right_Ord = mkOrd "right" ;
   far_Adv = mkAdv "far" ;
   correct_A = (regA "correct") ;
   dry_A = regA "dry" ;

@@ -135,6 +135,8 @@ oper
     mkQuant : (no_sg, no_pl, none_sg, non_pl : Str) -> Quant ;
   } ;
 
+  mkOrd : Str -> Ord ;
+
 --2 Adjectives
 
   mkA : overload {
@@ -408,6 +410,8 @@ mkSubj : Str -> Subj = \s -> {s = s ; lock_Subj = <>} ;
     lock_Quant = <>
     } ;
 
+  mkOrd : Str -> Ord = \x -> { s = regGenitiveS x; lock_Ord = <> };
+
   mk2A a b = mkAdjective a a a b ** {lock_A = <>} ;
   regA a = case a of {
     _ + ("a" | "e" | "i" | "o" | "u" | "y") + ? + _ + 
@@ -442,7 +446,7 @@ mkSubj : Str -> Subj = \s -> {s = s ; lock_Subj = <>} ;
     (fat + last fat + "er") (fat + last fat + "est") (fat + "ly") ;
 
   compoundADeg a =
-    let ad = (a.s ! AAdj Posit) 
+    let ad = (a.s ! AAdj Posit Nom) 
     in mkADeg ad ("more" ++ ad) ("most" ++ ad) (a.s ! AAdv) ;
 
   adegA a = a ;
@@ -570,7 +574,7 @@ mkSubj : Str -> Subj = \s -> {s = s ; lock_Subj = <>} ;
 
   compoundA = compoundADeg ;
   simpleA a = 
-    let ad = (a.s ! AAdj Posit) 
+    let ad = (a.s ! AAdj Posit Nom) 
     in regADeg ad ;
 
   prepA2 : A -> Prep -> A2 ;

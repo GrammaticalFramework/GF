@@ -52,15 +52,16 @@ concrete CatEng of Cat = CommonX ** open ResEng, Prelude in {
     NP = {s : Case => Str ; a : Agr} ;
     Pron = {s : Case => Str ; sp : Case => Str ; a : Agr} ;
     Det = {s : Str ; sp : Case => Str ; n : Number} ;
-    Predet, Ord = {s : Str} ;
-    Num  = {s : Str ; n : Number ; hasCard : Bool} ;
-    Card = {s : Str ; n : Number} ;
+    Predet = {s : Str} ;
+    Ord = { s : Case => Str } ;
+    Num  = {s : Case => Str ; n : Number ; hasCard : Bool} ;
+    Card = {s : Case => Str ; n : Number} ;
     Quant = {s : Bool => Number => Str ; sp : Bool => Number => Case => Str} ;
 
 -- Numeral
 
-    Numeral = {s : CardOrd => Str ; n : Number} ;
-    Digits  = {s : CardOrd => Str ; n : Number ; tail : DTail} ;
+    Numeral = {s : CardOrd => Case => Str ; n : Number} ;
+    Digits  = {s : CardOrd => Case => Str ; n : Number ; tail : DTail} ;
 
 -- Structural
 
