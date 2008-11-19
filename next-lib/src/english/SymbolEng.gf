@@ -23,7 +23,7 @@ lin
   SymbS sy = sy ; 
 
   SymbNum sy = { s = addGenitiveS sy.s ; n = Pl ; hasCard = True } ;
-  SymbOrd sy = { s = addGenitiveS (sy.s ++ "th")} ;
+  SymbOrd sy = { s = \\c => sy.s ++ (regGenitiveS "th")!c} ;
 
 lincat 
 
