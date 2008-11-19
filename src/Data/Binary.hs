@@ -56,6 +56,8 @@ module Data.Binary (
 
     ) where
 
+#include "MachDeps.h"
+
 import Data.Word
 
 import Data.Binary.Put
