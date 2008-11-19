@@ -32,14 +32,17 @@ concrete NounEng of Noun = CatEng ** open MorphoEng, ResEng, Prelude in {
       } ;
 
     DetQuant quant num = {
-      s  = quant.s ! num.hasCard ! num.n ++ num.s ;
-      sp = \\c => quant.sp ! num.hasCard ! num.n ! c ++ num.s ;
+      s  = quant.s ! num.hasCard ! num.n ++ num.s ! Nom;
+      sp = \\c => case num.hasCard of {
+                     False => quant.sp ! num.hasCard ! num.n ! c ++ num.s ! Nom ;
+                     True  => quant.sp ! num.hasCard ! num.n ! Nom ++ num.s ! c
+                  } ;
       n  = num.n
       } ;
 
     DetQuantOrd quant num ord = {
-      s  = quant.s ! num.hasCard ! num.n ++ num.s ++ ord.s ; 
-      sp = \\c => quant.sp ! num.hasCard ! num.n ! c ++ num.s ++ ord.s ; 
+      s  = quant.s ! num.hasCard ! num.n ++ num.s ! Nom ++ ord.s ! Nom; 
+      sp = \\c => quant.sp ! num.hasCard ! num.n ! Nom ++ num.s ! Nom ++ ord.s ! c ; 
       n  = num.n
       } ;
 
@@ -53,8 +56,8 @@ concrete NounEng of Noun = CatEng ** open MorphoEng, ResEng, Prelude in {
       sp = \\_,_ => p.sp 
       } ;
 
-    NumSg = {s = []; n = Sg ; hasCard = False} ;
-    NumPl = {s = []; n = Pl ; hasCard = False} ;
+    NumSg = {s = \\c => []; n = Sg ; hasCard = False} ;
+    NumPl = {s = \\c => []; n = Pl ; hasCard = False} ;
 ---b    NoOrd = {s = []} ;
 
     NumCard n = n ** {hasCard = True} ;
@@ -65,9 +68,9 @@ concrete NounEng of Noun = CatEng ** open MorphoEng, ResEng, Prelude in {
     NumNumeral numeral = {s = numeral.s ! NCard; n = numeral.n} ;
     OrdNumeral numeral = {s = numeral.s ! NOrd} ;
 
-    AdNum adn num = {s = adn.s ++ num.s ; n = num.n} ;
+    AdNum adn num = {s = \\c => adn.s ++ num.s!c ; n = num.n} ;
 
-    OrdSuperl a = {s = a.s ! AAdj Superl} ;
+    OrdSuperl a = {s = \\c => a.s ! AAdj Superl c } ;
 
     DefArt = {
       s  = \\hasCard,n => artDef ;

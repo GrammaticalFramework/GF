@@ -3,20 +3,20 @@ concrete AdjectiveEng of Adjective = CatEng ** open ResEng, Prelude in {
   lin
 
     PositA  a = {
-      s = \\_ => a.s ! AAdj Posit ;
+      s = \\_ => a.s ! AAdj Posit Nom ;
       isPre = True
       } ;
     ComparA a np = {
-      s = \\_ => a.s ! AAdj Compar ++ "than" ++ np.s ! Nom ; 
+      s = \\_ => a.s ! AAdj Compar Nom ++ "than" ++ np.s ! Nom ; 
       isPre = False
       } ;
     UseComparA a = {
-      s = \\_ => a.s ! AAdj Compar ; 
+      s = \\_ => a.s ! AAdj Compar Nom ; 
       isPre = True
       } ;
 
     AdjOrd ord = {
-      s = \\_ => ord.s ;
+      s = \\_ => ord.s ! Nom ;
       isPre = True
       } ;
 
@@ -26,12 +26,12 @@ concrete AdjectiveEng of Adjective = CatEng ** open ResEng, Prelude in {
       } ;
 
     ComplA2 a np = {
-      s = \\_ => a.s ! AAdj Posit ++ a.c2 ++ np.s ! Acc ; 
+      s = \\_ => a.s ! AAdj Posit Nom ++ a.c2 ++ np.s ! Acc ; 
       isPre = False
       } ;
 
     ReflA2 a = {
-      s = \\ag => a.s ! AAdj Posit ++ a.c2 ++ reflPron ! ag ; 
+      s = \\ag => a.s ! AAdj Posit Nom ++ a.c2 ++ reflPron ! ag ; 
       isPre = False
       } ;
 
@@ -46,7 +46,7 @@ concrete AdjectiveEng of Adjective = CatEng ** open ResEng, Prelude in {
       } ;
 
     UseA2 a = {
-      s = \\_ => a.s ! AAdj Posit ;
+      s = \\_ => a.s ! AAdj Posit Nom ;
       isPre = True
       } ;
 

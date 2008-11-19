@@ -1,17 +1,17 @@
 concrete NumeralEng of Numeral = CatEng ** open ResEng in {
 
 lincat 
-  Digit = {s : DForm => CardOrd => Str} ;
-  Sub10 = {s : DForm => CardOrd => Str ; n : Number} ;
-  Sub100     = {s : CardOrd => Str ; n : Number} ;
-  Sub1000    = {s : CardOrd => Str ; n : Number} ;
-  Sub1000000 = {s : CardOrd => Str ; n : Number} ;
+  Digit = {s : DForm => CardOrd => Case => Str} ;
+  Sub10 = {s : DForm => CardOrd => Case => Str ; n : Number} ;
+  Sub100     = {s : CardOrd => Case => Str ; n : Number} ;
+  Sub1000    = {s : CardOrd => Case => Str ; n : Number} ;
+  Sub1000000 = {s : CardOrd => Case => Str ; n : Number} ;
 
 lin num x = x ;
 lin n2 = let two = mkNum "two"   "twelve"   "twenty" "second" in
-         {s = \\f,c => case <f,c> of {
-             <teen,NOrd> => "twelfth" ;
-             _ => two.s ! f ! c
+         {s = \\f,o => case <f,o> of {
+             <teen,NOrd> => regGenitiveS "twelfth" ;
+             _ => two.s ! f ! o
              }
          } ;
 
@@ -31,16 +31,16 @@ lin pot1to19 d = {s = d.s ! teen} ** {n = Pl} ;
 lin pot0as1 n = {s = n.s ! unit}  ** {n = n.n} ;
 lin pot1 d = {s = d.s ! ten} ** {n = Pl} ;
 lin pot1plus d e = {
-   s = \\c => d.s ! ten ! NCard ++ "-" ++ e.s ! unit ! c ; n = Pl} ;
+   s = \\o,c => d.s ! ten ! NCard ! Nom ++ "-" ++ e.s ! unit ! o ! c ; n = Pl} ;
 lin pot1as2 n = n ;
-lin pot2 d = {s = \\c => d.s ! unit ! NCard ++ mkCard c "hundred"}  ** {n = Pl} ;
+lin pot2 d = {s = \\o,c => d.s ! unit ! NCard ! Nom ++ mkCard o "hundred" ! c}  ** {n = Pl} ;
 lin pot2plus d e = {
-  s = \\c => d.s ! unit ! NCard ++ "hundred" ++ "and" ++ e.s ! c ; n = Pl} ;
+  s = \\o,c => d.s ! unit ! NCard ! Nom ++ "hundred" ++ "and" ++ e.s ! o ! c ; n = Pl} ;
 lin pot2as3 n = n ;
 lin pot3 n = {
-  s = \\c => n.s ! NCard ++ mkCard c "thousand" ; n = Pl} ;
+  s = \\o,c => n.s ! NCard ! Nom ++ mkCard o "thousand" ! c ; n = Pl} ;
 lin pot3plus n m = {
-  s = \\c => n.s ! NCard ++ "thousand" ++ m.s ! c ; n = Pl} ;
+  s = \\o,c => n.s ! NCard ! Nom ++ "thousand" ++ m.s ! o ! c; n = Pl} ;
 
 -- numerals as sequences of digits
 
@@ -51,7 +51,7 @@ lin pot3plus n m = {
     IDig d = d ** {tail = T1} ;
 
     IIDig d i = {
-      s = \\o => d.s ! NCard ++ commaIf i.tail ++ i.s ! o ;
+      s = \\o,c => d.s ! NCard ! Nom ++ commaIf i.tail ++ i.s ! o ! c ;
       n = Pl ;
       tail = inc i.tail
     } ;
@@ -83,13 +83,13 @@ lin pot3plus n m = {
     mkDig : Str -> TDigit = \c -> mk2Dig c (c + "th") ;
 
     mk3Dig : Str -> Str -> Number -> TDigit = \c,o,n -> {
-      s = table {NCard => c ; NOrd => o} ;
+      s = table {NCard => regGenitiveS c ; NOrd => regGenitiveS o} ;
       n = n
       } ;
 
     TDigit = {
       n : Number ;
-      s : CardOrd => Str
+      s : CardOrd => Case => Str
     } ;
 
 }
