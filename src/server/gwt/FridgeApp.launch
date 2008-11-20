@@ -15,7 +15,7 @@
 </listAttribute>
 <booleanAttribute key="org.eclipse.jdt.launching.DEFAULT_CLASSPATH" value="false"/>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="com.google.gwt.dev.GWTShell"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-out www -noserver http://localhost:41296/gwt/www/se.chalmers.cs.gf.gwt.FridgeApp/Fridge.html"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-out www -noserver http://localhost:41296/fridge/"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="GF-GWT"/>
 <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-XstartOnFirstThread -Xmx256M"/>
 </launchConfiguration>

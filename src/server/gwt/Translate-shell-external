@@ -16,4 +16,4 @@ fi
 
 LIBS=$APPDIR/lib/gwt-dnd-2.5.6.jar
 
-java $GWT_JAVA_OPTS -Xmx256M -cp "$APPDIR/src:$APPDIR/bin:$LIBS:$GWT_CLASSPATH" com.google.gwt.dev.GWTShell -out "$APPDIR/www" -noserver "$@" http://localhost:41296/gwt/www/se.chalmers.cs.gf.gwt.TranslateApp/Translate.html;
+java $GWT_JAVA_OPTS -Xmx256M -cp "$APPDIR/src:$APPDIR/bin:$LIBS:$GWT_CLASSPATH" com.google.gwt.dev.GWTShell -out "$APPDIR/www" -noserver "$@" http://localhost:41296/translate/;
