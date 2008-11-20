@@ -113,7 +113,7 @@ logError s = hPutStrLn stderr s
 
 stderrToFile :: FilePath -> IO ()
 stderrToFile file =
-    do let mode = ownerModes `unionFileModes` groupReadMode `unionFileModes` otherReadMode
+    do let mode = ownerReadMode `unionFileModes` ownerWriteMode `unionFileModes` groupReadMode `unionFileModes` otherReadMode
        fileFd <- openFd file WriteOnly (Just mode) (defaultFileFlags { append = True })
        dupTo fileFd stdError
        return ()
