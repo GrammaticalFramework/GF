@@ -115,6 +115,16 @@ lin
       a = agrP3 num.n
       } ;
 
+    CAdvNP ad cn np = {
+      s = \\c => ad.s ++ cn.s ! Sg ! c ++ ad.p ++ np.s ! Nom ; 
+      a = agrP3 Sg
+      } ;
+
+    CAdvSSlash ad cn slash = {
+      s = \\c => ad.s ++ cn.s ! Sg ! c ++ ad.p ++ slash.s ++ slash.c2;
+      a = agrP3 Sg
+      } ;
+
 -- Lexical additions
 
 lin
