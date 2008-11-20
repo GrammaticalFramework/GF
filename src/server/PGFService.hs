@@ -25,7 +25,6 @@ logFile = "pgf-error.log"
 
 main :: IO ()
 main = do stderrToFile logFile
-          initFastCGI
           cache <- newCache PGF.readPGF
           runFastCGIConcurrent' forkIO 100 (handleErrors (handleCGIErrors (cgiMain cache)))
 
