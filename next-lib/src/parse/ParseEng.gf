@@ -30,7 +30,7 @@ concrete ParseEng of ParseEngAbs =
 	      VA, become_VA],
   BigLexEng
 
-  ** open ParadigmsEng, ResEng, MorphoEng, ParamX, Prelude in {
+  ** open ParadigmsEng, ResEng, MorphoEng, NounEng, ParamX, Prelude in {
 
 flags startcat = Phr ; unlexer = text ; lexer = text ;
 
@@ -124,6 +124,9 @@ lin
       s = \\c => ad.s ++ cn.s ! Sg ! c ++ ad.p ++ slash.s ++ slash.c2;
       a = agrP3 Sg
       } ;
+
+    CompCN cn = { s = \\a => let n = (fromAgr a).n
+		              in IndefArt.s ! False ! n ++ cn.s ! n ! Acc} ;
 
 -- Lexical additions
 
