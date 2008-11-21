@@ -2,9 +2,9 @@ Grammatical Framework Demos
 
 
 
-**NEW** [Fridge poetry http://tournesol.cs.chalmers.se:41296/gwt/www/se.chalmers.cs.gf.gwt.FridgeApp/Fridge.html]
+**NEW** [Fridge poetry http://tournesol.cs.chalmers.se:41296/fridge]
 
-**NEW** [Word-completing translator http://tournesol.cs.chalmers.se:41296/gwt/www/se.chalmers.cs.gf.gwt.TranslateApp/Translate.html]
+**NEW** [Word-completing translator http://tournesol.cs.chalmers.se:41296/translate]
 
 **NEW** [Tramdemo on YouTube http://www.youtube.com/watch?v=1bfaYHWS6zU]: 
 find your way in Gothenburg public transport system, in six languages (film).
