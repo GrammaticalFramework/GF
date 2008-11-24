@@ -21,7 +21,7 @@ concrete QuestionBul of Question = CatBul ** open ResBul, Prelude in {
       } ;
 
     QuestSlash ip slash = 
-      mkQuestion {s = \\spec => slash.c2.s ++ ip.s ! (RObj slash.c2.c) ! spec}
+      mkQuestion {s = \\qform => slash.c2.s ++ ip.s ! (RObj slash.c2.c) ! qform}
                  {s = slash.s ! (agrP3 ip.gn) } ;
 
     QuestIAdv iadv cl = mkQuestion iadv cl ;
@@ -29,21 +29,21 @@ concrete QuestionBul of Question = CatBul ** open ResBul, Prelude in {
     QuestIComp icomp np = 
       mkQuestion icomp (mkClause (np.s ! RSubj) np.a (predV verbBe)) ;
 
-    PrepIP p ip = {s = \\spec => p.s ++ ip.s ! RSubj ! spec} ;
+    PrepIP p ip = {s = \\qform => p.s ++ ip.s ! RSubj ! qform} ;
 
     AdvIP ip adv = {
-      s = \\role,spec => ip.s ! role ! spec ++ adv.s ;
+      s = \\role,qform => ip.s ! role ! qform ++ adv.s ;
       gn = ip.gn
       } ;
 
     CompIAdv a = a ;
 
     IdetCN idet cn = {
-      s = \\_,spec => let nf = case <idet.n, idet.nonEmpty> of {
-                                 <Pl,True> => NFPlCount ;
-                                 _         => NF idet.n Indef
-                               }
-                      in idet.s ! cn.g ! spec ++ cn.s ! nf ;
+      s = \\_,qform => let nf = case <idet.n, idet.nonEmpty> of {
+                                  <Pl,True> => NFPlCount ;
+                                   _         => NF idet.n Indef
+                                }
+                       in idet.s ! cn.g ! qform ++ cn.s ! nf ;
       gn = gennum cn.g idet.n
       } ;
 
@@ -53,8 +53,8 @@ concrete QuestionBul of Question = CatBul ** open ResBul, Prelude in {
       } ;
 
     IdetQuant iquant num = {
-      s = \\g,spec => iquant.s ! gennum g num.n ! spec ++
-                      num.s ! dgenderSpecies g Indef RSubj ;
+      s = \\g,qform => iquant.s ! gennum g num.n ! qform ++
+                       num.s ! dgenderSpecies g Indef RSubj ;
       n = num.n ;
       nonEmpty = num.nonEmpty
       } ;
