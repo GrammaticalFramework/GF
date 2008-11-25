@@ -28,8 +28,12 @@ while ( $line = <STDIN> ) {
 	    s/\s*$//;
 	}
 
-	# make word lower-case atomic string
-	$word =~ s/\"/\\\"/g;   # " -> \"
+	if ( $word =~ /^'/ ) {
+	  print STDERR "Ignoring: \"$word\"\n";
+	  next;
+        }
+
+	# make word lower-case
 	$word =~ tr/A-Z/a-z/;   # lower case
 
 	# move diacritics to the following letter
@@ -38,6 +42,7 @@ while ( $line = <STDIN> ) {
 	$word =~ s/"a/ä/g;
 	$word =~ s/"o/ö/g;
 	$word =~ s/"u/ü/g;
+	$word =~ s/"i/ï/g;
 	$word =~ s/\^a/â/g;
 	$word =~ s/\^e/ê/g;
 	$word =~ s/\^o/ô/g;
@@ -45,9 +50,11 @@ while ( $line = <STDIN> ) {
 	$word =~ s/`e/è/g;
 	$word =~ s/_e/é/g;
 
+	# make legal identifier
 	$name = $word;
-	$name =~ s/ /_/g; # space -> _
+	$name =~ s/ /_/g;   # space -> _
 	$name =~ s/-/_/g;   # - -> _
+	$name =~ s/\./_/g;  # . -> _
 
 
 	# get PoS & subcat info
@@ -99,13 +106,13 @@ while ( $line = <STDIN> ) {
 		    $lin = "mkV \"$word\" \"$vbz\" \"$vbd\" \"$vbd\" \"$vbg\"";		    
 
 		    if ($pcode eq 'G') {
-		      $words{"${name}_VX"} = "mkVX ($lin)";
+		      add_word("${name}_VX", "mkVX ($lin)");
 		    } 
 		    if ($pcode eq 'I' || $pcode eq 'J') {
-		      $words{"${name}_V"} = "$lin";
+		      add_word("${name}_V", "$lin");
 		    }
 		    if ($pcode eq 'H' || $pcode eq 'J') {
-		      $words{"${name}_V2"} = "mkV2 ($lin)";
+		      add_word("${name}_V2", "mkV2 ($lin)");
 		    }
 		}
 		# if this is an inflected form, save for guessing irregulars later
@@ -177,7 +184,7 @@ while ( $line = <STDIN> ) {
 			$word = '-';
 		    }
 		    ( $infl =~ s/^[:l]/per/ ) or ( $infl =~ s/^[mn]/loc/ ) or ( $infl = '_' );
-		    $words{"${name}_N"} = "mkN \"$word\" \"$pl\"";
+		    add_word("${name}_N", "mkN \"$word\" \"$pl\"");
 		}
 	    }
 	    # for adjectives, get comparative & superlative forms
@@ -211,7 +218,7 @@ while ( $line = <STDIN> ) {
 		    $infl =~ s/^q/attr/;
 		    $infl =~ s/^t/affix/;
 
-		    $words{"${name}_A"} = "mkA \"$word\" \"$comp\"";
+		    add_word("${name}_A", "mkA \"$word\" \"$comp\"");
 		}
 	    }
 	    # for adverbs, just add all info to @adv array
@@ -220,7 +227,7 @@ while ( $line = <STDIN> ) {
 		$infl =~ s/^[u\+]/normal/;
 		$infl =~ s/^w/whrel/;
 		$infl =~ s/^v/whq/;
-		$words{"${name}_Adv"} = "mkAdv \"$word\"";
+		add_word("${name}_Adv", "mkAdv \"$word\"");
 	    }
 	    # for pronouns, work out some case/person info
 	    elsif( $pcode =~ s/^Q/_/ ) {
@@ -313,15 +320,15 @@ $header = "-- GF lexicon, from OALD machine-readable dictionary\n"
 print ABS $header;
 print CNC $header;
 
-print ABS "abstract Oald = {\n";
-print CNC "concrete OaldEng of Oald = {\n";
+print ABS "abstract Oald = Cat ** {\n";
+print CNC "--# -path=.:alltenses\n";
+print CNC "concrete OaldEng of Oald = CatEng ** open ParadigmsEng in {\n";
 
 foreach $name (sort (keys %words)) {
   ($cat = $name) =~ s/.*_([A-Z\d])$/$1/;
   $lin = $words{$name};
   print ABS "fun $name : $cat;\n";
   print CNC "lin $name = $lin;\n";
-  print "$name\n";
 }
 
 print ABS "}";
@@ -335,6 +342,14 @@ print "\nWrote lexicon to $absfile and $cncfile\n";
 exit 0;
 
 
+sub add_word {
+  my ($name,$lin) = @_;
+  if (exists $words{$name}) {
+    print STDERR "Duplicate word: $name\n";
+  } else {
+    $words{$name} = $lin;
+  }
+}
 
 
 
