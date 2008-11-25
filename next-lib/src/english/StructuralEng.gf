@@ -11,13 +11,12 @@ concrete StructuralEng of Structural = CatEng **
   almost_AdN = mkAdN "almost" ;
   although_Subj = ss "although" ;
   always_AdV = mkAdV "always" ;
-  and_Conj = sd2 [] "and" ** {n = plural} ;
----b  and_Conj = ss "and" ** {n = plural} ;
+  and_Conj = mkConj "and" ;
   because_Subj = ss "because" ;
   before_Prep = mkPrep "before" ;
   behind_Prep = mkPrep "behind" ;
   between_Prep = mkPrep "between" ;
-  both7and_DConj = sd2 "both" "and" ** {n = plural} ;
+  both7and_DConj = mkConj "both" "and";
   but_PConj = ss "but" ;
   by8agent_Prep = mkPrep "by" ;
   by8means_Prep = mkPrep "by" ;
@@ -34,7 +33,7 @@ concrete StructuralEng of Structural = CatEng **
     isAux = True
     } ;
   during_Prep = mkPrep "during" ;
-  either7or_DConj = sd2 "either" "or" ** {n = singular} ;
+  either7or_DConj = mkConj "either" "or" singular ;
   everybody_NP = regNP "everybody" singular ;
   every_Det = mkDeterminer singular "every" ;
   everything_NP = regNP "everything" singular ;
@@ -76,7 +75,7 @@ concrete StructuralEng of Structural = CatEng **
   on_Prep = mkPrep "on" ;
 ----  one_Quant = mkDeterminer singular "one" ; -- DEPRECATED
   only_Predet = ss "only" ;
-  or_Conj = sd2 [] "or" ** {n = singular} ;
+  or_Conj = mkConj "or" singular ;
   otherwise_PConj = ss "otherwise" ;
   part_Prep = mkPrep "of" ;
   please_Voc = ss "please" ;
@@ -124,7 +123,7 @@ concrete StructuralEng of Structural = CatEng **
 
   not_Predet = {s = "not" ; lock_Predet = <>} ;
   no_Quant = mkQuant "no" "no" "none" "none" ;
-  if_then_Conj = {s1 = "if" ; s2 = "then" ; n = singular ; lock_Conj = <>} ;
+  if_then_Conj = mkConj "if" "then" singular ;
   nobody_NP = regNP "nobody" singular ;
   nothing_NP = regNP "nothing" singular ;
 
