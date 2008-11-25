@@ -202,6 +202,16 @@ oper
 
 -- (These two functions are synonyms.)
 
+--2 Conjunctions
+--
+
+  mkConj : overload {
+    mkConj : Str -> Conj ;                  -- and (plural agreement)
+    mkConj : Str -> Number -> Conj ;        -- or (agrement number given as argument)
+    mkConj : Str -> Str -> Conj ;           -- both ... and (plural)
+    mkConj : Str -> Str -> Number -> Conj ; -- either ... or (agrement number given as argument)
+  } ;
+
 --2 Verbs
 --
 
@@ -629,6 +639,15 @@ mkSubj : Str -> Subj = \s -> {s = s ; lock_Subj = <>} ;
     mkV3 : V -> V3 = dirdirV3 ;
     mkV3 : Str -> V3 = \v -> dirdirV3 (regV v) ;
   } ;
+
+  mkConj = overload {
+    mkConj : Str -> Conj = \y -> mk2Conj [] y plural ;
+    mkConj : Str -> Number -> Conj = \y,n -> mk2Conj [] y n ;
+    mkConj : Str -> Str -> Conj = \x,y -> mk2Conj x y plural ;
+    mkConj : Str -> Str -> Number -> Conj = mk2Conj ;
+  } ;
+
+  mk2Conj : Str -> Str -> Number -> Conj = \x,y,n -> sd2 x y ** { n = n; lock_Conj = <> } ;
 
 ---- obsolete
 
