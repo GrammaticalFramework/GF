@@ -28,15 +28,10 @@ while ( $line = <STDIN> ) {
 	    s/\s*$//;
 	}
 
-	if ( $word =~ /^'/ ) {
-	  print STDERR "Ignoring: \"$word\"\n";
-	  next;
-        }
-
 	# make word lower-case
 	$word =~ tr/A-Z/a-z/;   # lower case
 
-	# move diacritics to the following letter
+	# translate OALD diacritics
 	$word =~ s/~n/ñ/g;
 	$word =~ s/<c/ç/g;
 	$word =~ s/"a/ä/g;
@@ -51,10 +46,13 @@ while ( $line = <STDIN> ) {
 	$word =~ s/_e/é/g;
 
 	# make legal identifier
+	# Note: in theory this could cause clashes, but I don't think it does
+	# with the OALD.
 	$name = $word;
 	$name =~ s/ /_/g;   # space -> _
 	$name =~ s/-/_/g;   # - -> _
 	$name =~ s/\./_/g;  # . -> _
+	$name =~ s/^'//;    # drop initial '
 
 
 	# get PoS & subcat info
@@ -62,7 +60,6 @@ while ( $line = <STDIN> ) {
 	$cat =~ s/,/\',\'/g;
 	( $cat = "\'$cat\'" ) unless ( $cat eq '' );
 
-	# set up Prolog-style string & put into array
 	foreach ( @pos ) {
 	    ( $pcode, $infl, $freq )=split(//);
 
@@ -106,7 +103,8 @@ while ( $line = <STDIN> ) {
 		    $lin = "mkV \"$word\" \"$vbz\" \"$vbd\" \"$vbd\" \"$vbg\"";		    
 
 		    if ($pcode eq 'G') {
-		      add_word("${name}_VX", "mkVX ($lin)");
+		      #add_word("${name}_VX", "mkVX ($lin)");
+		      print STDERR "Ignoring anomalous verb: $name\n";
 		    } 
 		    if ($pcode eq 'I' || $pcode eq 'J') {
 		      add_word("${name}_V", "$lin");
@@ -184,7 +182,16 @@ while ( $line = <STDIN> ) {
 			$word = '-';
 		    }
 		    ( $infl =~ s/^[:l]/per/ ) or ( $infl =~ s/^[mn]/loc/ ) or ( $infl = '_' );
-		    add_word("${name}_N", "mkN \"$word\" \"$pl\"");
+
+		    if ( $pcode eq 'proper' ) {
+		      add_word("${name}_PN", "mkPN \"$word\"");
+		    } elsif ( $word eq '-' ) {
+		      add_word("${name}_N", "mkN \"$word\" \"$pl\" {- FIXME: no singular form -}");
+		    } elsif ( $pl eq '-' ) {
+		      add_word("${name}_N", "mkN \"$word\" {- FIXME: no plural form -}");
+		    } else {
+		      add_word("${name}_N", "mkN \"$word\" \"$pl\"");
+		    }
 		}
 	    }
 	    # for adjectives, get comparative & superlative forms
@@ -218,10 +225,14 @@ while ( $line = <STDIN> ) {
 		    $infl =~ s/^q/attr/;
 		    $infl =~ s/^t/affix/;
 
-		    add_word("${name}_A", "mkA \"$word\" \"$comp\"");
+		    if ( $comp eq '-' ) {
+		      add_word("${name}_A", "compoundA (mkA \"$word\")");
+		    } else {
+		      add_word("${name}_A", "mkA \"$word\" \"$comp\"");
+		    }
 		}
 	    }
-	    # for adverbs, just add all info to @adv array
+	    # adverb
 	    elsif( $pcode =~ /^P/ ) {
 		$pos = 'adv';
 		$infl =~ s/^[u\+]/normal/;
@@ -229,7 +240,7 @@ while ( $line = <STDIN> ) {
 		$infl =~ s/^v/whq/;
 		add_word("${name}_Adv", "mkAdv \"$word\"");
 	    }
-	    # for pronouns, work out some case/person info
+	    # pronoun
 	    elsif( $pcode =~ s/^Q/_/ ) {
 		$pos = 'pron';
 		$infl =~ s/^x/normal/;
@@ -282,17 +293,17 @@ while ( $line = <STDIN> ) {
 		$pos = 'det';
 		$pcode =~ s/^R/def/;
 		$pcode =~ s/^S/indef/;
-		#push( @det, "$pos( \'$word\', $pcode, _ ).\n" );
+		#add_word("${name}_Det","mkDeterminer \"$word\"");
 	    }
 	    # for prepositions - nothing to say
 	    elsif( $pcode =~ s/^T/prep/ ) {
 		$pos = 'prep';
-		#push( @prep, "$pos( \'$word\', $pcode ).\n" );
+		add_word("${name}_Prep","mkPrep \"$word\"");
 	    }
 	    # for conjunctions - nothing to say
 	    elsif( $pcode =~ s/^V/conj/ ) {
 		$pos = 'conj';
-		#push( @conj, "$pos( \'$word\', $pcode ).\n" );
+		add_word("${name}_Conj","mkConj \"$word\"");
 	    }
 	    # for miscellaneous, leave '-' as placeholder for illocutionary info
 	    elsif( $pcode =~ /^[UWXZ]/ ) {
@@ -325,7 +336,7 @@ print CNC "--# -path=.:alltenses\n";
 print CNC "concrete OaldEng of Oald = CatEng ** open ParadigmsEng in {\n";
 
 foreach $name (sort (keys %words)) {
-  ($cat = $name) =~ s/.*_([A-Z\d])$/$1/;
+  ($cat = $name) =~ s/.*_([A-Z][A-Za-z\d]*)$/$1/;
   $lin = $words{$name};
   print ABS "fun $name : $cat;\n";
   print CNC "lin $name = $lin;\n";
