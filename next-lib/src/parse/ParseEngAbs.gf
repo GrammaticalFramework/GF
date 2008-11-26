@@ -13,7 +13,7 @@ abstract ParseEngAbs =
 	      V2V, beg_V2V,
 	      V2S, answer_V2S,
 	      VA, become_VA],
-  BigLexEngAbs
+  Oald - [everywhere_Adv, here_Adv, quite_Adv, somewhere_Adv, there_Adv]
 
   ** {
 
