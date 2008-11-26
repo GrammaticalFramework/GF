@@ -352,11 +352,11 @@ foreign = Foreign; -- +++ MG_UR: added +++
     mkN2 : N -> Prep -> N2 = mkFun;
   } ;
 
-  mkFun : N -> Prep -> N2 = \f,p -> (UseN f) ** {s2 = p.s ; c = p.c}** {lock_N2 = <>}  ;
+  mkFun : N -> Prep -> N2 = \f,p -> UseN f ** {c2 = p ; lock_N2 = <>} ;
 
   nullPrep : Prep = {s = []; c= Gen; lock_Prep=<>} ;  
 
-  mkN3 f p r = (UseN f) ** {s2 = p.s ; c=p.c; s3=r.s ; c2=r.c; lock_N3 = <>} ; 
+  mkN3 f p2 p3 = (UseN f) ** {c2 = p2; c3 = p3; lock_N3 = <>} ; 
 
 
   mkPN = \ivan, g, anim -> 

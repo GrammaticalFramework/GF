@@ -21,10 +21,10 @@ resource MorphoBul = ResBul ** open
 oper
 --2 Determiners
 
-  mkDeterminerSg : Str -> Str -> Str -> {s : Bool => DGender => Role => Str; n : Number; countable : Bool ; spec : Species} = \vseki,vsiaka,vsiako ->
-    {s = \\_,g,_ => table DGender [vseki;vseki;vsiaka;vsiako] ! g; n = Sg; countable = False; spec = Indef} ;
-  mkDeterminerPl : Str -> {s : Bool => DGender => Role => Str ; n : Number; countable : Bool ; spec : Species} = \vsicki ->
-    {s = \\_,_,_ => vsicki; sp = \\_,_ => vsicki; n = Pl; countable = False; spec = Indef} ;
+  mkDeterminerSg : Str -> Str -> Str -> {s : Bool => Gender => Animacy => Role => Str; n : Number; countable : Bool ; spec : Species} = \vseki,vsiaka,vsiako ->
+    {s = \\_,g,_,_ => table Gender [vseki;vsiaka;vsiako] ! g; n = Sg; countable = False; spec = Indef} ;
+  mkDeterminerPl : Str -> {s : Bool => Gender => Animacy => Role => Str ; n : Number; countable : Bool ; spec : Species} = \vsicki ->
+    {s = \\_,_,_,_ => vsicki; sp = \\_,_ => vsicki; n = Pl; countable = False; spec = Indef} ;
 
   mkQuant : Str -> Str -> Str -> Str -> {s : Bool => AForm => Str; nonEmpty : Bool; spec : Species} = \tozi,tazi,towa,tezi -> 
     { s = \\_ => table {
@@ -105,7 +105,7 @@ oper
 
 --2 Nouns
 
-  mkNoun : Str -> Str -> Str -> Str -> DGender -> N = \sg,pl,count,voc,g -> {
+  mkNoun : Str -> Str -> Str -> Str -> Gender -> Animacy -> N = \sg,pl,count,voc,g,anim -> {
     s = table {
           NF Sg Indef => sg ;
           NF Sg Def   => case sg of {
@@ -154,6 +154,7 @@ oper
           NFVocative  => voc
         } ;
     g = g ;
+    anim = anim ;
     lock_N = <>
     } ;
 

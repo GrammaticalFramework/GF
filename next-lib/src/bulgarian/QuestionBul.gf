@@ -41,20 +41,20 @@ concrete QuestionBul of Question = CatBul ** open ResBul, Prelude in {
     IdetCN idet cn = {
       s = \\_,qform => let nf = case <idet.n, idet.nonEmpty> of {
                                   <Pl,True> => NFPlCount ;
-                                   _         => NF idet.n Indef
+                                  _         => NF idet.n Indef
                                 }
-                       in idet.s ! cn.g ! qform ++ cn.s ! nf ;
+                       in idet.s ! cn.g ! cn.anim ! qform ++ cn.s ! nf ;
       gn = gennum cn.g idet.n
       } ;
 
     IdetIP idet = {
-      s  = \\_ => idet.s ! DNeut ;
-      gn = gennum DNeut idet.n
+      s  = \\_ => idet.s ! Neut ! Inanimate ;
+      gn = gennum Neut idet.n
       } ;
 
     IdetQuant iquant num = {
-      s = \\g,qform => iquant.s ! gennum g num.n ! qform ++
-                       num.s ! dgenderSpecies g Indef RSubj ;
+      s = \\g,anim,qform => iquant.s ! gennum g num.n ! qform ++
+                            num.s ! dgenderSpecies g anim Indef RSubj ;
       n = num.n ;
       nonEmpty = num.nonEmpty
       } ;
