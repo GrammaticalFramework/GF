@@ -283,9 +283,9 @@ canon2canon abs cg0 =
   j2j cg (f,j) = 
     let debug = traceD ("+ " ++ prt f) in
     case j of
-      CncFun x (Yes tr) z -> (f,CncFun x (Yes (debug (t2t tr))) z)
-      CncCat (Yes ty) (Yes x) y -> (f,CncCat (Yes (ty2ty ty)) (Yes (t2t x)) y)
-      _ -> (f,j)
+      CncFun x (Yes tr) z -> CncFun x (Yes (debug (t2t tr))) z
+      CncCat (Yes ty) (Yes x) y -> CncCat (Yes (ty2ty ty)) (Yes (t2t x)) y
+      _ -> j
    where
       cg1 = cg
       t2t = term2term f cg1 pv
@@ -295,8 +295,8 @@ canon2canon abs cg0 =
     -- flatten record arguments of param constructors
   p2p (f,j) = case j of
       ResParam (Yes (ps,v)) -> 
-        (f,ResParam (Yes ([(c,concatMap unRec cont) | (c,cont) <- ps],Nothing)))
-      _ -> (f,j)
+        ResParam (Yes ([(c,concatMap unRec cont) | (c,cont) <- ps],Nothing))
+      _ -> j
   unRec (x,ty) = case ty of
       RecType fs -> [ity | (_,typ) <- fs, ity <- unRec (identW,typ)] 
       _ -> [(x,ty)]

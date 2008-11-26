@@ -107,7 +107,7 @@ evalResInfo oopts gr (c,info) = case info of
 
 
 evalCncInfo :: 
-  Options -> SourceGrammar -> Ident -> Ident -> (Ident,Info) -> Err (Ident,Info)
+  Options -> SourceGrammar -> Ident -> Ident -> (Ident,Info) -> Err Info
 evalCncInfo opts gr cnc abs (c,info) = do
 
  seq (prtIf (verbAtLeast opts Verbose) c) $ return ()
@@ -126,7 +126,7 @@ evalCncInfo opts gr cnc abs (c,info) = do
 
     ppr' <- liftM yes $ evalPrintname gr c ppr (yes $ K $ prt c)
 
-    return (c, CncCat ptyp pde' ppr')
+    return (CncCat ptyp pde' ppr')
 
   CncFun (mt@(Just (_,ty@(cont,val)))) pde ppr -> --trace (prt c) $
        eIn ("linearization in type" +++ prt (mkProd (cont,val,[])) ++++ "of function") $ do
@@ -136,9 +136,9 @@ evalCncInfo opts gr cnc abs (c,info) = do
 
       _ -> return pde
     ppr' <-  liftM yes $ evalPrintname gr c ppr pde'
-    return $ (c, CncFun mt pde' ppr') -- only cat in type actually needed
+    return $ CncFun mt pde' ppr' -- only cat in type actually needed
 
-  _ ->  return (c,info)
+  _ ->  return info
  where
    pEval = partEval opts gr
    eIn cat = errIn ("Error optimizing" +++ cat +++ prt c +++ ":")

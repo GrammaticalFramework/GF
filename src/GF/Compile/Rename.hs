@@ -115,15 +115,14 @@ renameIdentPatt env p = do
   t' <- renameIdentTerm env t
   term2patt t'
 
-info2status :: Maybe Ident -> (Ident,Info) -> (Ident,StatusInfo)
-info2status mq (c,i) = (c, case i of
+info2status :: Maybe Ident -> (Ident,Info) -> StatusInfo
+info2status mq (c,i) = case i of
   AbsFun _ (Yes EData) -> maybe Con QC mq
   ResValue _  -> maybe Con QC mq
   ResParam _  -> maybe Con QC mq
   AnyInd True m -> maybe Con (const (QC m)) mq
   AnyInd False m -> maybe Cn (const (Q m)) mq
   _           -> maybe Cn  Q mq
-  )
 
 tree2status :: OpenSpec Ident -> BinTree Ident Info -> BinTree Ident StatusInfo
 tree2status o = case o of

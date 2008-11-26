@@ -40,12 +40,12 @@ remlModule gr mi@(name,mod) = case mod of
     return $ (name,mod2)
   _ -> return mi
 
-remlResInfo :: SourceGrammar -> (Ident,Info) -> Err (Ident,Info)
-remlResInfo gr mi@(i,info) = case info of
-  ResOper pty ptr    -> liftM ((,) i) $ liftM2 ResOper (ren pty) (ren ptr)
-  CncCat pty ptr ppr -> liftM ((,) i) $ liftM3 CncCat (ren pty) (ren ptr) (ren ppr)
-  CncFun mt  ptr ppr -> liftM ((,) i) $ liftM2 (CncFun mt)      (ren ptr) (ren ppr)
-  _ -> return mi
+remlResInfo :: SourceGrammar -> (Ident,Info) -> Err Info
+remlResInfo gr (i,info) = case info of
+  ResOper pty ptr    -> liftM2 ResOper (ren pty) (ren ptr)
+  CncCat pty ptr ppr -> liftM3 CncCat (ren pty) (ren ptr) (ren ppr)
+  CncFun mt  ptr ppr -> liftM2 (CncFun mt)      (ren ptr) (ren ppr)
+  _ -> return info
  where 
    ren = remlPerh gr
 

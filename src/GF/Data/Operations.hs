@@ -77,7 +77,8 @@ module GF.Data.Operations (-- * misc functions
 
 import Data.Char (isSpace, toUpper, isSpace, isDigit)
 import Data.List (nub, sortBy, sort, deleteBy, nubBy)
---import Data.FiniteMap
+import qualified Data.Map as Map
+import Data.Map (Map)
 import Control.Monad (liftM,liftM2, MonadPlus, mzero, mplus)
 
 import GF.Data.ErrM
@@ -267,32 +268,22 @@ updatePerhapsHard old p1 p2 = case (p1,p2) of
   _ -> unifPerhaps p1 p2
 
 -- binary search trees
---- FiniteMap implementation is slower in crucial tests
 
-data BinTree a b = NT | BT (a,b) !(BinTree a b) !(BinTree a b) deriving (Show)
--- type BinTree a b = FiniteMap a b
+type BinTree a b = Map a b
 
 emptyBinTree :: BinTree a b
-emptyBinTree = NT
--- emptyBinTree = emptyFM
+emptyBinTree = Map.empty
 
 isInBinTree :: (Ord a) => a -> BinTree a b -> Bool
-isInBinTree x = err (const False) (const True) .  justLookupTree x
--- isInBinTree = elemFM
+isInBinTree = Map.member
 
 justLookupTree :: (Monad m,Ord a) => a -> BinTree a b -> m b
 justLookupTree = lookupTree (const [])
 
 lookupTree :: (Monad m,Ord a) => (a -> String) -> a -> BinTree a b -> m b
-lookupTree pr x tree = case tree of
- NT -> fail ("no occurrence of element" +++ pr x)
- BT (a,b) left right 
-   | x < a  -> lookupTree pr x left
-   | x > a  -> lookupTree pr x right
-   | x == a -> return b
---lookupTree pr x tree = case lookupFM tree x of
---  Just y -> return y
---  _ -> fail ("no occurrence of element" +++ pr x)
+lookupTree pr x tree = case Map.lookup x tree of
+  Just y -> return y
+  _ -> fail ("no occurrence of element" +++ pr x)
 
 lookupTreeMany :: Ord a => (a -> String) -> [BinTree a b] -> a -> Err b
 lookupTreeMany pr (t:ts) x = case lookupTree pr x t of
@@ -306,60 +297,26 @@ lookupTreeManyAll pr (t:ts) x = case lookupTree pr x t of
   _ -> lookupTreeManyAll pr ts x
 lookupTreeManyAll pr [] x = []
 
--- | destructive update
 updateTree :: (Ord a) => (a,b) -> BinTree a b -> BinTree a b
--- updateTree (a,b) tr = addToFM tr a b
-updateTree = updateTreeGen True
-
--- | destructive or not
-updateTreeGen :: (Ord a) => Bool -> (a,b) -> BinTree a b -> BinTree a b
-updateTreeGen destr z@(x,y) tree = case tree of
- NT -> BT z NT NT
- BT c@(a,b) left right 
-   | x < a  -> let left' = updateTree z left in   BT c left' right 
-   | x > a  -> let right' = updateTree z right in BT c left right' 
-   | otherwise -> if destr
-                    then BT z left right -- removing the old value of a
-                    else tree            -- retaining the old value if one exists
+updateTree (a,b) = Map.insert a b
 
 buildTree :: (Ord a) => [(a,b)] -> BinTree a b
-buildTree = sorted2tree . sortBy fs where
-  fs (x,_) (y,_) 
-    | x < y = LT
-    | x > y = GT
-    | True  = EQ 
--- buildTree = listToFM
+buildTree = Map.fromList
 
 sorted2tree :: Ord a => [(a,b)] -> BinTree a b
-sorted2tree [] = NT
-sorted2tree xs = BT x (sorted2tree t1) (sorted2tree t2) where
-  (t1,(x:t2)) = splitAt (length xs `div` 2) xs
---sorted2tree = listToFM
+sorted2tree = Map.fromAscList
 
---- dm less general than orig
-mapTree :: ((a,b) -> (a,c)) -> BinTree a b -> BinTree a c
-mapTree f NT = NT
-mapTree f (BT a left right) = BT (f a) (mapTree f left) (mapTree f right)
---mapTree f = mapFM (\k v -> snd (f (k,v)))
+mapTree :: ((a,b) -> c) -> BinTree a b -> BinTree a c
+mapTree f = Map.mapWithKey (\k v -> f (k,v))
 
---- fm less efficient than orig?
-mapMTree :: (Ord a,Monad m) => ((a,b) -> m (a,c)) -> BinTree a b -> m (BinTree a c)
-mapMTree f NT = return NT
-mapMTree f (BT a left right) = do
-  a'     <- f a
-  left'  <- mapMTree f left 
-  right' <- mapMTree f right
-  return $ BT a' left' right'
---mapMTree f t = liftM listToFM $ mapM f $ fmToList t
+mapMTree :: (Ord a,Monad m) => ((a,b) -> m c) -> BinTree a b -> m (BinTree a c)
+mapMTree f t = liftM Map.fromList $ sequence [liftM ((,) k) (f (k,x)) | (k,x) <- Map.toList t]
 
 filterBinTree :: Ord a => (a -> b -> Bool) -> BinTree a b -> BinTree a b
--- filterFM f t
-filterBinTree f = sorted2tree . filter (uncurry f) . tree2list
+filterBinTree = Map.filterWithKey
 
 tree2list :: BinTree a b -> [(a,b)] -- inorder
-tree2list NT = []
-tree2list (BT z left right) = tree2list left ++ [z] ++ tree2list right
---tree2list = fmToList
+tree2list = Map.toList
 
 -- parsing
 
