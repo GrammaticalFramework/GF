@@ -1,0 +1,320 @@
+#! /usr/bin/perl
+#
+# Perl script to process OALD machine-readable ASCII file
+# into a Prolog-readable lexicon usable by SHARDS
+#
+# Usage: ./asc2lex < ascii_0710-1.txt [> OUTPUT.PL]
+#
+# Matthew Purver, 11/2001
+
+# print a nice comment at the top
+print "% Prolog lexicon for SHARDS, from OALD machine-readable dictionary\n";
+print "% Produced by asc2lex, Matthew Purver 11/2001\n\n";
+
+# skip header section
+while ( <STDIN> ) {
+    last if /<\/TEIHEADER>/;
+}
+
+# read a line from stdin
+while ( $line = <STDIN> ) {
+
+    # remove SGML tags
+    $line =~ s/<[^<>]+>//g;
+
+    # split line into fields according to spec (line may be empty now)
+    if ( $line =~ /^(.{23}).{23}(.{23}).{1}(.{58})$/ ) {
+
+  	# trim white space
+	for ( ( $word, $pos, $cat ) = ( $1, $2, $3 ) ) {
+	    s/\s*$//;
+	}
+
+	# make word lower-case atomic string
+	$word =~ s/\'/\\\'/g;   # ' -> \'
+	$word =~ s/\"/\\\"/g;   # " -> \"
+	$word =~ tr/A-Z/a-z/;   # lower case
+
+	# get PoS & subcat info
+	@pos = split( /,/, $pos );
+	$cat =~ s/,/\',\'/g;
+	( $cat = "\'$cat\'" ) unless ( $cat eq '' );
+
+	# set up Prolog-style string & put into array
+	foreach ( @pos ) {
+	    ( $pcode, $infl, $freq )=split(//);
+	    # for verbs, get inflected forms
+	    if ( $pcode =~ /^[GHIJ]/ ) {
+		$pos = 'verb';
+		$pcode =~ s/^G/unknown/;
+		$pcode =~ s/^H/tran/;
+		$pcode =~ s/^I/intran/;
+		$pcode =~ s/^J/_/;
+		# if this is a root form, work out the inflected forms
+		if ( $infl =~ /^\d/ ) {
+		    if ( $infl == 0 ) {
+			( $vbz = $word ) =~ s/$/s/;
+			( $vbg = $word ) =~ s/$/ing/;
+			( $vbd = $word ) =~ s/$/ed/;
+		    }
+		    elsif ( $infl == 1 ) {
+			( $vbz = $word ) =~ s/$/es/;
+			( $vbg = $word ) =~ s/$/ing/;
+			( $vbd = $word ) =~ s/$/ed/;
+		    }
+		    elsif ( $infl == 2 ) {
+			( $vbz = $word ) =~ s/e$/es/;
+			( $vbg = $word ) =~ s/e$/ing/;
+			( $vbd = $word ) =~ s/e$/ed/;
+		    }
+		    elsif ( $infl == 3 ) {
+			( $vbz = $word ) =~ s/y$/ies/;
+			( $vbg = $word ) =~ s/y$/ying/;
+			( $vbd = $word ) =~ s/y$/ied/;
+		    }
+		    elsif ( $infl == 4 ) {
+			( $vbz = $word ) =~ s/$/s/;
+			( $vbg = $word ) =~ s/(\w)$/$1$1ing/;
+			( $vbd = $word ) =~ s/(\w)$/$1$1ed/;
+		    }
+		    elsif ( $infl == 5 ) {
+			# for irregulars, just mark as such for now, we'll guess later
+			$vbz = 'IRREG';
+			$vbg = 'IRREG';
+			$vbd = 'IRREG';
+		    }
+		    # add the full spec to @verb array
+		    push( @verb, 
+	  "$pos( \'$word\', \'$vbz\', \'$vbg\', \'$vbd\', \'$vbd\', $pcode, [$cat] ).\n" );
+		}
+		# if this is an inflected form, save for guessing irregulars later
+		elsif ( $infl =~ /^a/ ) {
+		    push( @vbz, $word );
+		}
+		elsif ( $infl =~ /^b/ ) {
+		    push( @vbg, $word );
+		}
+		elsif ( $infl =~ /^c/ ) {
+		    push( @vbd, $word );
+		}
+		elsif ( $infl =~ /^d/ ) {
+		    push( @vbn, $word );
+		}
+	    }
+	    # for nouns, get plural form
+	    elsif( $pcode =~ /^[KLMNY]/ ) {
+		$pos = 'noun';
+		$pcode =~ s/^K/count/;
+		$pcode =~ s/^L/mass/;
+		$pcode =~ s/^M/both/;
+		$pcode =~ s/^N/proper/;
+		if ( $pcode =~ /^Y/ ) {
+		    $pcode = 'count' if $infl =~ /^[>\)\]]/;
+		    $pcode = 'mass' if $infl =~ /^\}/;
+		    $pcode = 'proper' if $infl =~ /^[:=~]/;
+		}
+		# if this is a singular form, work out plural form
+		unless ( $infl =~ /^j/ ) {
+		    $pl = '-';
+		    if ( $infl == 6 ) {
+			( $pl = $word ) =~ s/$/s/;
+		    }
+		    elsif ( $infl == 7 ) {
+			( $pl = $word ) =~ s/$/es/;
+		    }
+		    elsif ( $infl == 8 ) {
+			( $pl = $word ) =~ s/y$/ies/;
+		    }
+		    elsif ( $infl =~ /^[9k\]]/ ) {
+			$pl = $word;
+		    }
+		    elsif ( $infl =~ /^i/ ) {
+			# for irregulars, let's just make a guess and mark with '*'
+			# this could be done better, as for verbs, but I can't be bothered now
+			$pl = $word;
+  			( $pl =~ s/^((wo)?m)an/$1en\*/ ) or
+  			    ( $pl =~ s/man(-|$)/men$1\*/ ) or
+  			      ( $pl =~ s/-in-law/s-in-law\*/ ) or
+  			      ( $pl =~ s/um$/a\*/ ) or
+  			      ( $pl =~ s/us$/i\*/ ) or
+  			      ( $pl =~ s/a$/ae\*/ ) or
+  			      ( $pl =~ s/on$/a\*/ ) or
+  			      ( $pl =~ s/is$/es\*/ ) or
+  			      ( $pl =~ s/o$/i\*/ ) or
+  			      ( $pl =~ s/child$/children\*/ ) or
+  			      ( $pl =~ s/oot$/eet\*/ ) or
+  			      ( $pl =~ s/ooth$/eeth\*/ ) or
+  			      ( $pl =~ s/([lm])ouse$/$1ice\*/ ) or
+  			      ( $pl =~ s/f(e)?$/ves\*/ ) or
+  			      ( $pl =~ s/[ei]x$/ices\*/ ) or
+  			      ( $pl =~ s/eau$/eaux\*/ ) or
+  			      ( $pl = 'IRREG' );
+		    }
+		    # if plural-only, swap root form & plural
+		    elsif ( $infl =~ /^\)/ ) {
+			$pl = $word;
+			$word = '-';
+		    }
+		    # and add full spec to @noun array
+		    ( $infl =~ s/^[:l]/per/ ) or ( $infl =~ s/^[mn]/loc/ ) or ( $infl = '_' );
+		    push( @noun, "$pos( \'$word\', \'$pl\', $pcode, $infl ).\n" )
+		}
+	    }
+	    # for adjectives, get comparative & superlative forms
+	    elsif( $pcode =~ /^O/ ) {
+		$pos = 'adj';
+		# if this is root form, work out inflected forms
+		unless ( $infl =~ /^[rs]/ ) {
+		    if ( $infl =~ /^[Apqt]/ ) {
+			$comp = $sup = '-';
+		    }
+		    elsif ( $infl =~ /^B/ ) {
+			( $comp = $word ) =~ s/$/r/;
+			( $sup = $word ) =~ s/$/st/;
+		    }
+		    elsif ( $infl =~ /^C/ ) {
+			( $comp = $word ) =~ s/$/er/;
+			( $sup = $word ) =~ s/$/est/;
+		    }
+		    elsif ( $infl =~ /^D/ ) {
+			( $comp = $word ) =~ s/y$/ier/;
+			( $sup = $word ) =~ s/y$/iest/;
+		    }
+		    elsif ( $infl =~ /^E/ ) {
+			# for irregulars, let's just have a guess and mark with '*'
+			# (there aren't very many of these)
+			( $comp = $word ) =~ s/(\w)$/$1$1er\*/;
+			( $sup = $word ) =~ s/(\w)$/$1$1est\*/;
+		    }
+		    $infl =~ s/^[ABCDE]/normal/;
+		    $infl =~ s/^p/pred/;
+		    $infl =~ s/^q/attr/;
+		    $infl =~ s/^t/affix/;
+		    # and add full spec to @adj array
+		    push( @adj, "$pos( \'$word\', \'$comp\', \'$sup\', $infl ).\n" );
+		}
+	    }
+	    # for adverbs, just add all info to @adv array
+	    elsif( $pcode =~ /^P/ ) {
+		$pos = 'adv';
+		$infl =~ s/^[u\+]/normal/;
+		$infl =~ s/^w/whrel/;
+		$infl =~ s/^v/whq/;
+		push( @adv, "$pos( \'$word\', $infl ).\n" );
+	    }
+	    # for pronouns, work out some case/person info
+	    elsif( $pcode =~ s/^Q/_/ ) {
+		$pos = 'pron';
+		$infl =~ s/^x/normal/;
+		$infl =~ s/^y/whq/;
+		$infl =~ s/^z/whrel/;
+		$class = '_';
+		# reflexive pronouns
+		if ( ( $word =~ /self$/ ) or 
+		     ( $word =~ /selves$/ ) ) {
+		    $pcode = 'acc';
+		}
+		# accusative personal pronouns
+		if ( ( $word =~ /^him/ ) or
+		     ( $word =~ /^her/ ) or
+		     ( $word =~ /^them/ ) or
+		     ( $word eq 'us' ) or
+		     ( $word eq 'thee' ) or
+		     ( $word eq 'me' ) ) {
+		    $pcode = 'acc';
+		    $class = 'per';
+		}
+		# nominative personal pronouns
+		if ( ( $word eq 'he' ) or
+		     ( $word eq 'she' ) or
+		     ( $word eq 'they' ) or
+		     ( $word eq 'we' ) or
+		     ( $word eq 'thou' ) or
+		     ( $word eq 'i' ) ) {
+		    $pcode = 'nom';
+		    $class = 'per';
+		}
+		# other personal pronouns
+		if ( ( $word =~ /.+one/ ) or
+		     ( $word =~ /one.+/ ) or
+		     ( $word =~ /body/ ) or
+		     ( $word =~ /^you/ ) or
+		     ( $word =~ /^who/ ) ) {
+		    $class = 'per';
+		}
+		# non-personal pronouns
+		if ( $word =~ /thing/ ) {
+		    $class = 'nper';
+		}
+		# otherwise case/person info will be '_' (anon variable)
+		# add full spec to @pron array
+		push( @pron, "$pos( \'$word\', $pcode, $infl, $class ).\n" );
+	    }
+	    # for determiners, leave anon variable as placeholder for semantics
+	    elsif( $pcode =~ /^[RS]/ ) {
+		$pos = 'det';
+		$pcode =~ s/^R/def/;
+		$pcode =~ s/^S/indef/;
+		push( @det, "$pos( \'$word\', $pcode, _ ).\n" );
+	    }
+	    # for prepositions - nothing to say
+	    elsif( $pcode =~ s/^T/prep/ ) {
+		$pos = 'prep';
+		push( @prep, "$pos( \'$word\', $pcode ).\n" );
+	    }
+	    # for conjunctions - nothing to say
+	    elsif( $pcode =~ s/^V/conj/ ) {
+		$pos = 'conj';
+		push( @conj, "$pos( \'$word\', $pcode ).\n" );
+	    }
+	    # for miscellaneous, leave '-' as placeholder for illocutionary info
+	    elsif( $pcode =~ /^[UWXZ]/ ) {
+		$pos = 'misc';
+		push( @prefix, "$pos( \'$word\', $pcode, '-' ).\n" ) if ( $pcode =~ s/^U/prefix/ );
+		push( @interj, "$pos( \'$word\', $pcode, '-' ).\n" ) if ( $pcode =~ s/^W/interj/ );
+		push( @partcl, "$pos( \'$word\', $pcode, '-' ).\n" ) if ( $pcode =~ s/^X/partcl/ );
+		push( @unknown, "$pos( \'$word\', $pcode, '-' ).\n" ) if ( $pcode =~ s/^Z/unknown/ );
+	    }
+	}
+    }
+}
+
+# now have a guess at irregular verb forms (marking the best guess with '*')
+foreach $verb ( @verb ) {
+    if ( $verb =~ /verb\( \'([^\']+)\', \'IRREG/ ) {
+	$word = $1;
+	$vbz = findbest( $word, @vbz );
+	$vbg = findbest( $word, @vbg );
+	$vbd = findbest( $word, @vbd );
+	$vbn = findbest( $word, @vbn );
+	$verb =~ s/($word\', \')IRREG(\', \')IRREG(\', \')IRREG(\', \')IRREG/\*$1$vbz$2$vbg$3$vbd$4$vbn/;
+    }
+}
+
+# now print everything out (so we can group PoSs together)
+print @verb, "\n", @noun, "\n", @adj, "\n", @adv;
+print "\n", @pron, "\n", @det, "\n", @prep, "\n", @conj;
+print "\n", @prefix, "\n", @interj, "\n", @partcl, "\n", @unknown;
+
+
+# find closest string match
+# similarity measure is just the length of identical prefix
+# prefer shorter strings in the case of equal similarity
+sub findbest 
+{
+    my ( $word, @array ) = @_;
+
+    $bestlen = 0;
+    foreach $test ( @array ) {
+	if ( ( substr( $word, 0, $bestlen-1 ) eq substr( $test, 0, $bestlen-1 ) ) &&
+	     ( length( $test ) < length( $best ) ) ) {
+	    $best = $test;
+	}
+	while ( ( substr( $word, 0, $bestlen ) eq substr( $test, 0, $bestlen ) ) &&
+		( $bestlen <= length( $test ) ) ) {
+	    $bestlen++;
+	    $best = $test;
+	}
+    }
+    return $best;
+}
