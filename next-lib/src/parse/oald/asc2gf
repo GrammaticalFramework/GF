@@ -206,14 +206,21 @@ while ( $line = <STDIN> ) {
 		    }
 		    ( $infl =~ s/^[:l]/per/ ) or ( $infl =~ s/^[mn]/loc/ ) or ( $infl = '_' );
 
+		    my $comment = "";
+		    if ( $word eq '-' ) {
+		      $comment .= " {- FIXME: no singular form -}";
+		    } 
+		    if ( $pl eq '-' ) {
+		      $comment .= " {- FIXME: no plural form -}";
+		    }
+		    if ( $pl =~ s/\*$// ) {
+		      $comment .= " {- FIXME: guessed plural form -}";
+		    }
+
 		    if ( $pcode eq 'proper' ) {
 		      add_word("${name}_PN", "mkPN \"$word\"");
-		    } elsif ( $word eq '-' ) {
-		      add_word("${name}_N", "mkN \"$word\" \"$pl\" {- FIXME: no singular form -}");
-		    } elsif ( $pl eq '-' ) {
-		      add_word("${name}_N", "mkN \"$word\" {- FIXME: no plural form -}");
 		    } else {
-		      add_word("${name}_N", "mkN \"$word\" \"$pl\"");
+		      add_word("${name}_N", "mkN \"$word\" \"$pl\"$comment");
 		    }
 		}
 	    }
