@@ -1,4 +1,4 @@
---# -path=.:alltenses
+--# -path=.:oald:alltenses
 
 concrete ParseEng of ParseEngAbs = 
   NounEng, 
@@ -28,7 +28,7 @@ concrete ParseEng of ParseEngAbs =
 	      V2V, beg_V2V,
 	      V2S, answer_V2S,
 	      VA, become_VA],
-  BigLexEng
+  OaldEng - [everywhere_Adv, here_Adv, quite_Adv, somewhere_Adv, there_Adv]
 
   ** open ParadigmsEng, ResEng, MorphoEng, NounEng, ParamX, Prelude in {
 
