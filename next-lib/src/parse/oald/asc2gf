@@ -9,6 +9,13 @@
 # based on asc2lex by
 # Matthew Purver, 11/2001
 
+# The list of known irregular verbs is generated with this command
+# $ perl -e 'while (<>) { if (s/\s*([a-z\d]+)_V\s*=.*/"$1" => 1/) { chomp; push(@verbs,$_); } }; print "(" . join(",", @verbs) . ")\n";' english/IrregEng.gf
+
+my %irregular_verbs = ("awake" => 1,"bear" => 1,"beat" => 1,"become" => 1,"begin" => 1,"bend" => 1,"beset" => 1,"bet" => 1,"bid" => 1,"bind" => 1,"bite" => 1,"bleed" => 1,"blow" => 1,"break" => 1,"breed" => 1,"bring" => 1,"broadcast" => 1,"build" => 1,"burn" => 1,"burst" => 1,"buy" => 1,"cast" => 1,"catch" => 1,"choose" => 1,"cling" => 1,"come" => 1,"cost" => 1,"creep" => 1,"cut" => 1,"deal" => 1,"dig" => 1,"dive" => 1,"do" => 1,"draw" => 1,"dream" => 1,"drive" => 1,"drink" => 1,"eat" => 1,"fall" => 1,"feed" => 1,"feel" => 1,"fight" => 1,"find" => 1,"fit" => 1,"flee" => 1,"fling" => 1,"fly" => 1,"forbid" => 1,"forget" => 1,"forgive" => 1,"forsake" => 1,"freeze" => 1,"get" => 1,"give" => 1,"go" => 1,"grind" => 1,"grow" => 1,"hang" => 1,"have" => 1,"hear" => 1,"hide" => 1,"hit" => 1,"hold" => 1,"hurt" => 1,"keep" => 1,"kneel" => 1,"knit" => 1,"know" => 1,"lay" => 1,"lead" => 1,"leap" => 1,"learn" => 1,"leave" => 1,"lend" => 1,"let" => 1,"lie" => 1,"light" => 1,"lose" => 1,"make" => 1,"mean" => 1,"meet" => 1,"misspell" => 1,"mistake" => 1,"mow" => 1,"overcome" => 1,"overdo" => 1,"overtake" => 1,"overthrow" => 1,"pay" => 1,"plead" => 1,"prove" => 1,"put" => 1,"quit" => 1,"read" => 1,"rid" => 1,"ride" => 1,"ring" => 1,"rise" => 1,"run" => 1,"saw" => 1,"say" => 1,"see" => 1,"seek" => 1,"sell" => 1,"send" => 1,"set" => 1,"sew" => 1,"shake" => 1,"shave" => 1,"shear" => 1,"shed" => 1,"shine" => 1,"shoe" => 1,"shoot" => 1,"show" => 1,"shrink" => 1,"shut" => 1,"sing" => 1,"sink" => 1,"sit" => 1,"sleep" => 1,"slay" => 1,"slide" => 1,"sling" => 1,"slit" => 1,"smite" => 1,"sow" => 1,"speak" => 1,"speed" => 1,"spend" => 1,"spill" => 1,"spin" => 1,"spit" => 1,"split" => 1,"spread" => 1,"spring" => 1,"stand" => 1,"steal" => 1,"stick" => 1,"sting" => 1,"stink" => 1,"stride" => 1,"strike" => 1,"string" => 1,"strive" => 1,"swear" => 1,"sweep" => 1,"swell" => 1,"swim" => 1,"swing" => 1,"take" => 1,"teach" => 1,"tear" => 1,"tell" => 1,"think" => 1,"thrive" => 1,"throw" => 1,"thrust" => 1,"tread" => 1,"understand" => 1,"uphold" => 1,"upset" => 1,"wake" => 1,"wear" => 1,"weave" => 1,"wed" => 1,"weep" => 1,"wind" => 1,"win" => 1,"withhold" => 1,"withstand" => 1,"wring" => 1,"write" => 1);
+
+
+
 # skip header section
 while ( <STDIN> ) {
     last if /<\/TEIHEADER>/;
@@ -101,6 +108,22 @@ while ( $line = <STDIN> ) {
 		    }
 
 		    $lin = "mkV \"$word\" \"$vbz\" \"$vbd\" \"$vbd\" \"$vbg\"";		    
+
+		    # try to use a verb from IrregEng
+		    if ( $infl == 5 ) {
+		      for (my $i = 0; $i < length($word) - 1; $i++) {
+			my $suffix = substr($word, $i);
+			if ($irregular_verbs{$suffix}) {
+			  if ($i == 0) {
+			    $lin = "IrregEng.${name}_V";
+			  } else {
+			    my $prefix = substr($word, 0, $i);
+			    $lin = "mkV \"$prefix\" IrregEng.${suffix}_V";
+			  }
+			  last;
+			}
+		      }
+		    }
 
 		    if ($pcode eq 'G') {
 		      #add_word("${name}_VX", "mkVX ($lin)");
@@ -333,7 +356,7 @@ print CNC $header;
 
 print ABS "abstract Oald = Cat ** {\n";
 print CNC "--# -path=.:alltenses\n";
-print CNC "concrete OaldEng of Oald = CatEng ** open ParadigmsEng in {\n";
+print CNC "concrete OaldEng of Oald = CatEng ** open ParadigmsEng, IrregEng in {\n";
 
 foreach $name (sort (keys %words)) {
   ($cat = $name) =~ s/.*_([A-Z][A-Za-z\d]*)$/$1/;
