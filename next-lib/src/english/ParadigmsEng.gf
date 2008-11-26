@@ -247,7 +247,12 @@ oper
 -- the third person singular present, the past indicative, and the
 -- past and present participles.
 
-    mkV : (go, goes, went, gone, going : Str) -> V
+    mkV : (go, goes, went, gone, going : Str) -> V ;
+
+-- Adds a prefix to an exisiting verb. This is most useful to create
+-- prefix-variants of irregular verbs from $IrregEng$, e.g. "undertake".
+
+    mkV : Str -> V -> V ;
   };
 
 -- Verbs with a particle.
@@ -612,11 +617,13 @@ mkSubj : Str -> Subj = \s -> {s = s ; lock_Subj = <>} ;
     mkV : (stop, stopped : Str) -> V = reg2V ;
     mkV : (drink, drank, drunk  : Str) -> V = irregV ;
     mkV : (run, ran, run, running  : Str) -> V = irreg4V ;
-    mkV : (go, goes, went, gone, going : Str) -> V = mk5V
+    mkV : (go, goes, went, gone, going : Str) -> V = mk5V ;
+    mkV : Str -> V -> V = prefixV
   };
 
   prepV2 : V -> Prep -> V2 ;
   dirV2 : V -> V2 ;
+  prefixV : Str -> V -> V = \p,v -> v ** { s = p + v.s } ;
 
   mkV2 = overload {
     mkV2  : V -> V2 = dirV2 ;
