@@ -4,7 +4,7 @@
 {-# OPTIONS -fno-warn-incomplete-patterns #-}
 module GF.Source.LexGF where
 
-import GF.Source.SharedString
+
 import qualified Data.ByteString.Char8 as BS
 }
 
@@ -39,7 +39,7 @@ $d+ \. $d+ (e (\-)? $d+)? { tok (\p s -> PT p (TD $ share s)) }
 tok f p s = f p s
 
 share :: BS.ByteString -> BS.ByteString
-share = shareString
+share = id
 
 data Tok =
    TS !BS.ByteString !Int    -- reserved words and symbols

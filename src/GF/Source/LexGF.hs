@@ -4,7 +4,7 @@
 {-# OPTIONS -fno-warn-incomplete-patterns #-}
 module GF.Source.LexGF where
 
-import GF.Source.SharedString
+
 import qualified Data.ByteString.Char8 as BS
 
 #if __GLASGOW_HASKELL__ >= 603
@@ -44,7 +44,7 @@ alex_accept = listArray (0::Int,34) [[],[],[(AlexAccSkip)],[(AlexAccSkip)],[],[(
 tok f p s = f p s
 
 share :: BS.ByteString -> BS.ByteString
-share = shareString
+share = id
 
 data Tok =
    TS !BS.ByteString !Int    -- reserved words and symbols
