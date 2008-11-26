@@ -9,10 +9,10 @@ concrete NounRus of Noun = CatRus ** open ResRus, Prelude, MorphoRus in {
       s = \\c => case kazhduj.c of {
        Nom => 
         kazhduj.s ! AF (extCase c) okhotnik.anim (gNum okhotnik.g kazhduj.n) ++ 
-         okhotnik.s ! kazhduj.n ! (extCase c) ; 
+         okhotnik.s ! NF kazhduj.n (extCase c) ; 
        _ => 
         kazhduj.s ! AF (extCase c) okhotnik.anim (gNum okhotnik.g kazhduj.n) ++ 
-         okhotnik.s ! kazhduj.n ! kazhduj.c };
+         okhotnik.s ! NF kazhduj.n kazhduj.c };
       n = kazhduj.n ; 
       p = P3 ;
       pron = False;
@@ -101,7 +101,7 @@ concrete NounRus of Noun = CatRus ** open ResRus, Prelude, MorphoRus in {
 --    MassDet = {s = \\_=>[] ; c=Nom; g = PNoGen; n = Sg} ;
 
     MassNP okhotnik = {
-      s = \\c => okhotnik.s ! Sg ! (extCase c) ; 
+      s = \\c => okhotnik.s ! NF Sg (extCase c) ; 
       n = Sg ; 
       p = P3 ;
       pron = False;
@@ -152,15 +152,8 @@ concrete NounRus of Noun = CatRus ** open ResRus, Prelude, MorphoRus in {
     DefArt = {s = \\_=>[] ; c=Nom; g = PNoGen };
     IndefArt = { s = \\_=>[] ; c=Nom; g = PNoGen };
 
-  UseN  sb =
-    {s = \\n,c => sb.s ! SF n c ; 
-     g = sb.g ; 
-     anim = sb.anim
-    } ;
-
--- It is possible to use a function word as a common noun; the semantics is
--- often existential or indexical.
-  UseN2 x = x ;
+  UseN noun = noun ;
+  UseN2 noun = noun ;
 
 -- The application of a function gives, in the first place, a common noun:
 -- "ключ от дома". From this, other rules of the resource grammar 
@@ -170,23 +163,25 @@ concrete NounRus of Noun = CatRus ** open ResRus, Prelude, MorphoRus in {
 -- respectively). Semantics will eventually tell when each
 -- of the readings is meaningful.
 
-  ComplN2 mama ivan =
-     {s = \\n, cas =>  case ivan.pron of 
-       { True => ivan.s ! (mkPronForm cas No (Poss (gNum mama.g n))) ++ mama.s ! n ! cas;
-         False => mama.s ! n ! cas ++ mama.s2 ++ 
-         ivan.s ! (mkPronForm mama.c Yes (Poss (gNum mama.g n)))
-       };
-       g = mama.g ;
-       anim = mama.anim
-      } ;
+  ComplN2 f x = {
+    s = \\nf => case x.pron of {
+                  True => x.s ! (case nf of {NF n c => mkPronForm c No (Poss (gNum f.g n))}) ++ f.s ! nf ;
+                  False => f.s ! nf ++ f.s2 ++ 
+                           x.s ! (case nf of {NF n c => mkPronForm f.c Yes (Poss (gNum f.g n))})
+                };
+    g = f.g ;
+    anim = f.anim
+    } ;
 
 -- Two-place functions add one argument place.
 -- There application starts by filling the first place.
 
-  ComplN3 poezd paris =
-    {s  = \\n,c => poezd.s ! n ! c ++ poezd.s2 ++ paris.s ! (PF poezd.c Yes NonPoss) ;
-     g  = poezd.g ; anim = poezd.anim;
-     s2 = poezd.s3; c = poezd.c2 
+  ComplN3 f x = {
+    s  = \\nf => f.s ! nf ++ f.s2 ++ x.s ! (PF f.c Yes NonPoss) ;
+    g  = f.g ;
+    anim = f.anim ;
+    s2 = f.s3 ;
+    c  = f.c2 
     } ;
 
 
@@ -194,43 +189,42 @@ concrete NounRus of Noun = CatRus ** open ResRus, Prelude, MorphoRus in {
 -- and in modification ("молодой человек"). Predication will be defined
 -- later, in the chapter on verbs.
 
-  AdjCN khoroshij novayaMashina =
-    {s = \\n, c => 
-         khoroshij.s ! AF c novayaMashina.anim (gNum novayaMashina.g n) ++ 
-         novayaMashina.s ! n ! c ;
-         g = novayaMashina.g ; 
-         anim = novayaMashina.anim
-     } ;                          
+  AdjCN ap cn = {
+    s = \\nf => ap.s ! case nf of {NF n c => AF c cn.anim (gNum cn.g n)} ++ 
+                cn.s ! nf ;
+    g = cn.g ;
+    anim = cn.anim
+    } ;
 
 -- This is a source of the "man with a telescope" ambiguity, and may produce
 -- strange things, like "машины всегда".
 -- Semantics will have to make finer distinctions among adverbials.
 
-  AdvCN chelovek uTelevizora =
-    {s = \\n,c => chelovek.s ! n ! c ++ uTelevizora.s ;
-     g = chelovek.g ;
-     anim = chelovek.anim 
+  AdvCN cn adv = {
+    s = \\nf => cn.s ! nf ++ adv.s ;
+    g = cn.g ;
+    anim = cn.anim 
     } ;
 
 -- Constructions like "the idea that two is even" are formed at the
 -- first place as common nouns, so that one can also have "a suggestion that...".
 
-  SentCN idea x =
-    {s = \\n,c => idea.s ! n ! c ++ x.s ; 
-     g = idea.g; anim = idea.anim
+  SentCN idea x = {
+    s = \\nf => idea.s ! nf ++ x.s ; 
+    g = idea.g ;
+    anim = idea.anim
     } ;
 
-  RelCN idea x =
-    {s = \\n,c => idea.s ! n ! c ++ x.s !(gNum idea.g n)!c!idea.anim ; 
-     g = idea.g; anim = idea.anim
+  RelCN idea x = {
+    s = \\nf => idea.s ! nf ++ case nf of {NF n c => x.s ! (gNum idea.g n)!c!idea.anim} ; 
+    g = idea.g ;
+    anim = idea.anim
     } ;
 
-  ApposCN cn s =
-    {s = \\n,c => cn.s ! n ! c ++ s.s! PF c No NonPoss ; 
-     g = cn.g ;
-     anim = cn.anim
+  ApposCN cn s = {
+    s = \\nf => cn.s ! nf ++ s.s ! (case nf of {NF n c => PF c No NonPoss}) ; 
+    g = cn.g ;
+    anim = cn.anim
     } ;
-
-  
 }
 

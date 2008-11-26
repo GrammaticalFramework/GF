@@ -74,7 +74,7 @@ oper
 -- For the sake of shorter description these parameters are 
 -- combined in the type SubstForm.
 param
-  SubstForm = SF Number Case ;
+  NForm = NF Number Case ;
 
 
 -- Real parameter types (i.e. ones on which words and phrases depend) 
@@ -114,14 +114,14 @@ oper
 
   mkPronForm: Case -> AfterPrep -> Possessive -> PronForm = 
     \c,n,p -> PF c n p ;
-
-  CommNounPhrase: Type = {s : Number => Case => Str; g : Gender; anim : Animacy} ;  
   
+  CommNoun = {s : NForm => Str ; g : Gender ; anim : Animacy } ;
+
   NounPhrase : Type = { s : PronForm => Str ; n : Number ; 
    p : Person ; g: PronGen ; anim : Animacy ;  pron: Bool} ;
 
-  mkNP : Number -> CommNounPhrase -> NounPhrase = \n,chelovek -> 
-    {s = \\cas => chelovek.s ! n ! (extCase cas) ;
+  mkNP : Number -> CommNoun -> NounPhrase = \n,chelovek -> 
+    {s = \\cas => chelovek.s ! NF n (extCase cas) ;
      n = n ; g = PGen chelovek.g ; p = P3 ; pron =False ;
      anim = chelovek.anim 
     } ;
@@ -387,14 +387,4 @@ oper mille : Size => Str = table {
 oper gg : Str -> Gender => Str = \s -> table {_ => s} ;
 
 --    CardOrd = NCard | NOrd ;
-
-----2 Transformations between parameter types
---
-
-oper 
-
-   numSF: SubstForm -> Number = \sf -> case sf of { SF n _ => n } ;
-   
-   caseSF: SubstForm -> Case = \sf -> case sf of { SF _ c => c } ;
-
 }
