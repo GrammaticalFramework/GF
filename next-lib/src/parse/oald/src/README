@@ -1,0 +1,12 @@
+This directory contains the Oxford Advanced Learner's Dictionary of Current English 
+(expanded computer-usable version), available from the Oxford Text Archive (http://ota.ahds.ac.uk).
+
+It has a flat structure but contains part-of-speech, verb subcategorisation & pronunciation info.
+
+Files:
+ascii_0710-1.txt	the original plain ASCII version of the OALD
+ascii_0710-2.txt	the information to go with it
+asc2lex			a Perl script to process ASCII -> Prolog
+lexicon2.pl		the resulting Prolog version, hand-corrected for irregulars etc.
+
+Matthew Purver, Jan 2001
