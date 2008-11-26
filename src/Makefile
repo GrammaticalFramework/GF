@@ -132,8 +132,8 @@ ghci-trace: ghci
 #	touch GF/System/Tracing.hs
 
 # profiling
-prof: GHCOPTFLAGS += -prof -auto-all -auto-dicts
-prof: all
+prof: GHCOPTFLAGS += -prof -auto-all
+prof: unix
 
 tags:
 	find GF Transfer -name '*.hs' | xargs hasktags
