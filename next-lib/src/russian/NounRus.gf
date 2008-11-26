@@ -166,8 +166,8 @@ concrete NounRus of Noun = CatRus ** open ResRus, Prelude, MorphoRus in {
   ComplN2 f x = {
     s = \\nf => case x.pron of {
                   True => x.s ! (case nf of {NF n c => mkPronForm c No (Poss (gNum f.g n))}) ++ f.s ! nf ;
-                  False => f.s ! nf ++ f.s2 ++ 
-                           x.s ! (case nf of {NF n c => mkPronForm f.c Yes (Poss (gNum f.g n))})
+                  False => f.s ! nf ++ f.c2.s ++ 
+                           x.s ! (case nf of {NF n c => mkPronForm f.c2.c Yes (Poss (gNum f.g n))})
                 };
     g = f.g ;
     anim = f.anim
@@ -177,11 +177,10 @@ concrete NounRus of Noun = CatRus ** open ResRus, Prelude, MorphoRus in {
 -- There application starts by filling the first place.
 
   ComplN3 f x = {
-    s  = \\nf => f.s ! nf ++ f.s2 ++ x.s ! (PF f.c Yes NonPoss) ;
+    s  = \\nf => f.s ! nf ++ f.c2.s ++ x.s ! (PF f.c2.c Yes NonPoss) ;
     g  = f.g ;
     anim = f.anim ;
-    s2 = f.s3 ;
-    c  = f.c2 
+    c2 = f.c3 ;
     } ;
 
 

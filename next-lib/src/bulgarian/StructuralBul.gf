@@ -28,7 +28,7 @@ concrete StructuralBul of Structural = CatBul **
   every_Det = mkDeterminerSg "всеки" "вс€ка" "вс€ко";
   everything_NP = mkNP "всичко" (GSg Neut) P3 ;
   everywhere_Adv = ss "навс€къде" ;
-  few_Det = {s = \\_,_,_ => "н€колко"; n = Pl; countable = True; spec = Indef} ;
+  few_Det = {s = \\_,_,_,_ => "н€колко"; n = Pl; countable = True; spec = Indef} ;
 ---  first_Ord = ss "first" ; DEPRECATED
   for_Prep = mkPrep "за" Acc ;
   from_Prep = mkPrep "от" Acc ;
@@ -37,7 +37,7 @@ concrete StructuralBul of Structural = CatBul **
   here7to_Adv = ss ["до тук"] ;
   here7from_Adv = ss ["от тук"] ;
   how_IAdv = mkIAdv "как" ;
-  how8many_IDet = {s = \\_ => table QForm ["колко";"колкото"]; n = Pl; nonEmpty = False} ;
+  how8many_IDet = {s = \\_,_ => table QForm ["колко";"колкото"]; n = Pl; nonEmpty = False} ;
   if_Subj = ss "ако" ;
   in8front_Prep = mkPrep "пред" Acc ;
   i_Pron  = mkPron "аз" "мен" "ми" "мой" "мо€" "мо€т" "мо€" "мо€та" "мое" "моето" "мои" "моите" (GSg Masc) P1 ;

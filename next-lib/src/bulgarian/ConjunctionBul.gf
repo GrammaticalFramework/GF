@@ -16,7 +16,7 @@ concrete ConjunctionBul of Conjunction =
 
     ConjNP conj ss = {
       s = \\role => (linCoordSep [])!conj.distr!conj.conj++ss.s!conj.distr!conj.conj!role;
-      a = {gn = conjGenNum (gennum DMasc conj.n) ss.a.gn; p = ss.a.p}
+      a = {gn = conjGenNum (gennum Masc conj.n) ss.a.gn; p = ss.a.p}
       } ;
 
     ConjAP conj ss = {
