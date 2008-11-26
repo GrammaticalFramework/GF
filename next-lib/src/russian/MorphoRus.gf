@@ -346,18 +346,18 @@ Paradigms:
 	 let i = iAfter stem in
 	 let o = oAfter stem in
   { s = table {
-	SF Sg Nom        => stem ;
-	SF Sg Gen        => stem+"а" ;
-	SF Sg Dat        => stem+"у" ;
-	SF Sg Acc        => stem ;
-	SF Sg Inst       => stem+o+"м" ;
-	SF Sg (Prepos _) => stem+"е" ;
-	SF Pl Nom        => stem+i ;
-	SF Pl Gen        => stem+case stem of { _+("ш"|"ж"|"ч"|"щ") => "ей"; _ => "ов" } ;
-	SF Pl Dat        => stem+"ам" ;
-	SF Pl Acc        => stem+i ;
-	SF Pl Inst       => stem+"ами" ;
-	SF Pl (Prepos _) => stem+"ах" };
+	NF Sg Nom        => stem ;
+	NF Sg Gen        => stem+"а" ;
+	NF Sg Dat        => stem+"у" ;
+	NF Sg Acc        => stem ;
+	NF Sg Inst       => stem+o+"м" ;
+	NF Sg (Prepos _) => stem+"е" ;
+	NF Pl Nom        => stem+i ;
+	NF Pl Gen        => stem+case stem of { _+("ш"|"ж"|"ч"|"щ") => "ей"; _ => "ов" } ;
+	NF Pl Dat        => stem+"ам" ;
+	NF Pl Acc        => stem+i ;
+	NF Pl Inst       => stem+"ами" ;
+	NF Pl (Prepos _) => stem+"ах" };
       g = Masc; anim = Inanimate };
 
   -- 1. Hard regular neuter inanimate, e.g. pravilo.
@@ -367,18 +367,18 @@ Paradigms:
   oper nRegHardNeut : Str ->CommNoun= \stem -> 
 	 let o = oAfter stem in
     { s = table {
-	SF Sg Nom        => stem+o ;
-	SF Sg Gen        => stem+"а" ;
-	SF Sg Dat        => stem+"у" ;
-	SF Sg Acc        => stem+o ;
-	SF Sg Inst       => stem+o+"м" ;
-	SF Sg (Prepos _) => stem+"е" ;
-	SF Pl Nom        => stem+case stem of { _+"к" => "и" ; _ => "а" } ;
-	SF Pl Gen        => stem ;
-	SF Pl Dat        => stem+"ам" ;
-	SF Pl Acc        => stem+"а" ;
-	SF Pl Inst       => stem+"ами" ;
-	SF Pl (Prepos _) => stem+"ах" };
+	NF Sg Nom        => stem+o ;
+	NF Sg Gen        => stem+"а" ;
+	NF Sg Dat        => stem+"у" ;
+	NF Sg Acc        => stem+o ;
+	NF Sg Inst       => stem+o+"м" ;
+	NF Sg (Prepos _) => stem+"е" ;
+	NF Pl Nom        => stem+case stem of { _+"к" => "и" ; _ => "а" } ;
+	NF Pl Gen        => stem ;
+	NF Pl Dat        => stem+"ам" ;
+	NF Pl Acc        => stem+"а" ;
+	NF Pl Inst       => stem+"ами" ;
+	NF Pl (Prepos _) => stem+"ах" };
       g = Neut; anim = Inanimate };
 
   -- 1. Hard regular feminine inanimate, e.g. karta.
@@ -389,77 +389,77 @@ Paradigms:
 	 let i = iAfter stem in
 	 let o = oAfter stem in
     { s = table {
-	SF Sg Nom        => stem+"а" ;
-	SF Sg Gen        => stem+i ;
-	SF Sg Dat        => stem+"е" ;
-	SF Sg Acc        => stem+"у" ;
-	SF Sg Inst       => stem+o+"й" ;
-	SF Sg (Prepos _) => stem+"е" ;
-	SF Pl Nom        => stem+i ;
-	SF Pl Gen        => stem ;
-	SF Pl Dat        => stem+"ам" ;
-	SF Pl Acc        => stem+i ;
-	SF Pl Inst       => stem+"ами" ;
-	SF Pl (Prepos _) => stem+"ах" };
+	NF Sg Nom        => stem+"а" ;
+	NF Sg Gen        => stem+i ;
+	NF Sg Dat        => stem+"е" ;
+	NF Sg Acc        => stem+"у" ;
+	NF Sg Inst       => stem+o+"й" ;
+	NF Sg (Prepos _) => stem+"е" ;
+	NF Pl Nom        => stem+i ;
+	NF Pl Gen        => stem ;
+	NF Pl Dat        => stem+"ам" ;
+	NF Pl Acc        => stem+i ;
+	NF Pl Inst       => stem+"ами" ;
+	NF Pl (Prepos _) => stem+"ах" };
       g = Fem; anim = Inanimate };
 
   -- 2. Soft regular masculine inanimate, e.g. vichr'
   oper nRegSoftMasc : Str ->CommNoun= \stem -> 
     { s = table {
-	SF Sg Nom        => stem+"ь";
-	SF Sg Gen        => stem+"я" ;
-	SF Sg Dat        => stem+"ю" ;
-	SF Sg Acc        => stem+"ь" ;
-	SF Sg Inst       => stem+"ем" ;
-	SF Sg (Prepos _) => stem+"е" ;
-	SF Pl Nom        => stem+"и" ;
-	SF Pl Gen        => stem+"ей" ;
-	SF Pl Dat        => stem+"ям" ;
-	SF Pl Acc        => stem+"и" ;
-	SF Pl Inst       => stem+"ями" ;
-	SF Pl (Prepos _) => stem+"ях" };
+	NF Sg Nom        => stem+"ь";
+	NF Sg Gen        => stem+"я" ;
+	NF Sg Dat        => stem+"ю" ;
+	NF Sg Acc        => stem+"ь" ;
+	NF Sg Inst       => stem+"ем" ;
+	NF Sg (Prepos _) => stem+"е" ;
+	NF Pl Nom        => stem+"и" ;
+	NF Pl Gen        => stem+"ей" ;
+	NF Pl Dat        => stem+"ям" ;
+	NF Pl Acc        => stem+"и" ;
+	NF Pl Inst       => stem+"ями" ;
+	NF Pl (Prepos _) => stem+"ях" };
       g = Masc; anim = Inanimate };
 
   -- 2. Soft regular neuter inanimate, e.g. more
   oper nRegSoftNeut : Str ->CommNoun= \stem -> 
     { s = table {
-	SF Sg Nom        => stem+"е";
-	SF Sg Gen        => stem+"я" ;
-	SF Sg Dat        => stem+"ю" ;
-	SF Sg Acc        => stem+"е" ;
-	SF Sg Inst       => stem+"ем" ;
-	SF Sg (Prepos _) => stem+"е" ;
-	SF Pl Nom        => stem+"я" ;
-	SF Pl Gen        => stem+"ей" ;
-	SF Pl Dat        => stem+"ям" ;
-	SF Pl Acc        => stem+"я" ;
-	SF Pl Inst       => stem+"ями" ;
-	SF Pl (Prepos _) => stem+"ях" };
+	NF Sg Nom        => stem+"е";
+	NF Sg Gen        => stem+"я" ;
+	NF Sg Dat        => stem+"ю" ;
+	NF Sg Acc        => stem+"е" ;
+	NF Sg Inst       => stem+"ем" ;
+	NF Sg (Prepos _) => stem+"е" ;
+	NF Pl Nom        => stem+"я" ;
+	NF Pl Gen        => stem+"ей" ;
+	NF Pl Dat        => stem+"ям" ;
+	NF Pl Acc        => stem+"я" ;
+	NF Pl Inst       => stem+"ями" ;
+	NF Pl (Prepos _) => stem+"ях" };
       g = Neut; anim = Inanimate };
 
   -- 2. Soft regular feminine inanimate, e.g. burya
   oper nRegSoftFem : Str ->CommNoun= \stem -> 
     { s = table {
-	SF Sg Nom        => stem+"я";
-	SF Sg Gen        => stem+"и" ;
-	SF Sg Dat        => stem+"е" ;
-	SF Sg Acc        => stem+"ю" ;
-	SF Sg Inst       => stem+"ей" ;
-	SF Sg (Prepos _) => stem+"е" ;
-	SF Pl Nom        => stem+"и" ;
-	SF Pl Gen        => stem+"ь" ;
-	SF Pl Dat        => stem+"ям" ;
-	SF Pl Acc        => stem+"и" ;
-	SF Pl Inst       => stem+"ями" ;
-	SF Pl (Prepos _) => stem+"ях" };
+	NF Sg Nom        => stem+"я";
+	NF Sg Gen        => stem+"и" ;
+	NF Sg Dat        => stem+"е" ;
+	NF Sg Acc        => stem+"ю" ;
+	NF Sg Inst       => stem+"ей" ;
+	NF Sg (Prepos _) => stem+"е" ;
+	NF Pl Nom        => stem+"и" ;
+	NF Pl Gen        => stem+"ь" ;
+	NF Pl Dat        => stem+"ям" ;
+	NF Pl Acc        => stem+"и" ;
+	NF Pl Inst       => stem+"ями" ;
+	NF Pl (Prepos _) => stem+"ях" };
       g = Fem; anim = Inanimate };
 
   -- 6.  Masc ending in -Vй (V = vowel)
   oper nDecl6Masc : Str ->CommNoun= \stem -> 
      let n = nRegSoftMasc stem in
     { s = table {
-	SF Sg (Nom|Acc)  => stem+"й";
-	SF Pl Gen        => stem+"ев" ;
+	NF Sg (Nom|Acc)  => stem+"й";
+	NF Pl Gen        => stem+"ев" ;
         sf               => n.s!sf };
       g = n.g; anim = n.anim };
 
@@ -467,7 +467,7 @@ Paradigms:
   oper nDecl6Neut : Str ->CommNoun= \stem -> 
      let n = nRegSoftNeut stem in
     { s = table {
-	SF Pl Gen        => stem+"й" ;
+	NF Pl Gen        => stem+"й" ;
         sf               => n.s!sf };
       g = n.g; anim = n.anim };
 
@@ -475,7 +475,7 @@ Paradigms:
   oper nDecl6Fem : Str ->CommNoun= \stem -> 
      let n = nRegSoftFem stem in
     { s = table {
-	SF Pl Gen        => stem+"й" ;
+	NF Pl Gen        => stem+"й" ;
         sf               => n.s!sf };
       g = n.g; anim = n.anim };
 
@@ -483,7 +483,7 @@ Paradigms:
   oper nDecl7Masc : Str ->CommNoun= \stem -> 
     let n = nDecl6Masc stem in
     { s = table {
-	SF Sg (Prepos _) => stem+"и" ;
+	NF Sg (Prepos _) => stem+"и" ;
 	sf               => n.s!sf };
       g = n.g; anim = n.anim };
 
@@ -491,7 +491,7 @@ Paradigms:
   oper nDecl7Neut : Str ->CommNoun= \stem -> 
     let n = nDecl6Neut stem in
     { s = table {
-	SF Sg (Prepos _) => stem+"и" ;
+	NF Sg (Prepos _) => stem+"и" ;
 	sf               => n.s!sf };
       g = n.g; anim = n.anim };
 
@@ -499,7 +499,7 @@ Paradigms:
   oper nDecl7Fem : Str ->CommNoun= \stem -> 
     let n = nDecl6Fem stem in
     { s = table {
-	SF Sg (Dat|Prepos _) => stem+"и" ;
+	NF Sg (Dat|Prepos _) => stem+"и" ;
 	sf                   => n.s!sf };
       g = n.g; anim = n.anim };
 
@@ -508,35 +508,35 @@ Paradigms:
   oper nDecl8 : Str ->CommNoun= \stem -> 
       let a : Str = case stem of { _+("ч"|"щ"|"ш"|"ж") => "а"; _ => "я" } in
     { s = table {
-	SF Sg Nom        => stem+"ь";
-	SF Sg Gen        => stem+"и" ;
-	SF Sg Dat        => stem+"и" ;
-	SF Sg Acc        => stem+"ь" ;
-	SF Sg Inst       => stem+"ью" ;
-	SF Sg (Prepos _) => stem+"и" ;
-	SF Pl Nom        => stem+"и" ;
-	SF Pl Gen        => stem+"ей" ;
-	SF Pl Dat        => stem+a+"м" ;
-	SF Pl Acc        => stem+"и" ;
-	SF Pl Inst       => stem+a+"ми" ;
-	SF Pl (Prepos _) => stem+a+"х" };
+	NF Sg Nom        => stem+"ь";
+	NF Sg Gen        => stem+"и" ;
+	NF Sg Dat        => stem+"и" ;
+	NF Sg Acc        => stem+"ь" ;
+	NF Sg Inst       => stem+"ью" ;
+	NF Sg (Prepos _) => stem+"и" ;
+	NF Pl Nom        => stem+"и" ;
+	NF Pl Gen        => stem+"ей" ;
+	NF Pl Dat        => stem+a+"м" ;
+	NF Pl Acc        => stem+"и" ;
+	NF Pl Inst       => stem+a+"ми" ;
+	NF Pl (Prepos _) => stem+a+"х" };
       g = Fem; anim = Inanimate };
 
   -- 9.  Neut ending in -мя
   oper nDecl9 : Str ->CommNoun= \stem ->
     { s = table {
-	SF Sg Nom        => stem+"мя";
-	SF Sg Gen        => stem+"мени" ;
-	SF Sg Dat        => stem+"мени" ;
-	SF Sg Acc        => stem+"мя" ;
-	SF Sg Inst       => stem+"менем" ;
-	SF Sg (Prepos _) => stem+"мени" ;
-	SF Pl Nom        => stem+"мена" ;
-	SF Pl Gen        => stem+"мён" ;
-	SF Pl Dat        => stem+"менам" ;
-	SF Pl Acc        => stem+"мена" ;
-	SF Pl Inst       => stem+"менами" ;
-	SF Pl (Prepos _) => stem+"менах" };
+	NF Sg Nom        => stem+"мя";
+	NF Sg Gen        => stem+"мени" ;
+	NF Sg Dat        => stem+"мени" ;
+	NF Sg Acc        => stem+"мя" ;
+	NF Sg Inst       => stem+"менем" ;
+	NF Sg (Prepos _) => stem+"мени" ;
+	NF Pl Nom        => stem+"мена" ;
+	NF Pl Gen        => stem+"мён" ;
+	NF Pl Dat        => stem+"менам" ;
+	NF Pl Acc        => stem+"мена" ;
+	NF Pl Inst       => stem+"менами" ;
+	NF Pl (Prepos _) => stem+"менах" };
       g = Fem; anim = Inanimate };
 
    -- 10. Masc in -oнoк
@@ -551,8 +551,8 @@ Paradigms:
 
   oper nSplitSgPl : CommNoun -> CommNoun -> CommNoun = \x, y -> 
   {s  = table {
-        SF Sg c => x.s!(SF Sg c) ;
-        SF Pl c => y.s!(SF Pl c)
+        NF Sg c => x.s!(NF Sg c) ;
+        NF Pl c => y.s!(NF Pl c)
     } ;
     g = x.g ; anim = y.anim
    } ;
@@ -560,113 +560,112 @@ Paradigms:
   -- Nouns inflected as adjectives.
   oper nAdj : Adjective -> Gender ->CommNoun= \a,g -> 
     { s = table {
-	SF Sg c           => a.s!AF c Inanimate (ASg g) ;
-	SF Pl c           => a.s!AF c Inanimate APl };
+	NF Sg c           => a.s!AF c Inanimate (ASg g) ;
+	NF Pl c           => a.s!AF c Inanimate APl };
       g = g; anim = Inanimate } ;
 
 -- Makes a noun animate.
   oper nAnimate : CommNoun -> CommNoun = \n -> 
    { s = table { 
-       SF Sg Acc => case n.g of {
-                       Masc => n.s!(SF Sg Gen);
-		       _    => n.s!(SF Sg Acc)
+       NF Sg Acc => case n.g of {
+                       Masc => n.s!(NF Sg Gen);
+		       _    => n.s!(NF Sg Acc)
 	            };
-       SF Pl Acc => n.s!(SF Pl Gen);
+       NF Pl Acc => n.s!(NF Pl Gen);
        sf        => n.s!sf } ;
      g = n.g ;
      anim = Animate 
    } ;
 
 oper
-    CommNoun = {s : SubstForm => Str ; g : Gender ; anim : Animacy } ;
-    SubstFormDecl = SS1 SubstForm ;
+    SubstFormDecl = SS1 NForm ;
 
 oper nullEndInAnimateDeclStul: Str -> CommNoun =  \brat ->
   {s  =  table
-      { SF Sg Nom =>  brat ;
-        SF Sg Gen => brat+"а" ;
-        SF Sg Dat => brat+"у" ;
-        SF Sg Acc => brat +"а";
-        SF Sg Inst => brat+"ом" ;
-        SF Sg (Prepos _) => brat+"е" ;
-        SF Pl Nom => brat+"ья" ;
-        SF Pl Gen => brat+"ьев" ;
-        SF Pl Dat => brat+"ьям" ;
-        SF Pl Acc => brat +"ьев";
-        SF Pl Inst => brat+"ьями" ;
-        SF Pl (Prepos _) => brat+"ьяах"
+      { NF Sg Nom =>  brat ;
+        NF Sg Gen => brat+"а" ;
+        NF Sg Dat => brat+"у" ;
+        NF Sg Acc => brat +"а";
+        NF Sg Inst => brat+"ом" ;
+        NF Sg (Prepos _) => brat+"е" ;
+        NF Pl Nom => brat+"ья" ;
+        NF Pl Gen => brat+"ьев" ;
+        NF Pl Dat => brat+"ьям" ;
+        NF Pl Acc => brat +"ьев";
+        NF Pl Inst => brat+"ьями" ;
+        NF Pl (Prepos _) => brat+"ьяах"
     } ;
     g = Masc   ; anim = Inanimate
   } ;
 
 oper nullEndAnimateDeclBrat: Str -> CommNoun =  \brat ->
   {s  =  table
-      { SF Sg Nom =>  brat ;
-        SF Sg Gen => brat+"а" ;
-        SF Sg Dat => brat+"у" ;
-        SF Sg Acc => brat +"а";
-        SF Sg Inst => brat+"ом" ;
-       SF Sg (Prepos _) => brat+"е" ;
-        SF Pl Nom => brat+"ья" ;
-        SF Pl Gen => brat+"ьев" ;
-        SF Pl Dat => brat+"ьям" ;
-        SF Pl Acc => brat +"ьев";
-        SF Pl Inst => brat+"ьями" ;
-        SF Pl (Prepos _) => brat+"ьяах"
+      { NF Sg Nom =>  brat ;
+        NF Sg Gen => brat+"а" ;
+        NF Sg Dat => brat+"у" ;
+        NF Sg Acc => brat +"а";
+        NF Sg Inst => brat+"ом" ;
+       NF Sg (Prepos _) => brat+"е" ;
+        NF Pl Nom => brat+"ья" ;
+        NF Pl Gen => brat+"ьев" ;
+        NF Pl Dat => brat+"ьям" ;
+        NF Pl Acc => brat +"ьев";
+        NF Pl Inst => brat+"ьями" ;
+        NF Pl (Prepos _) => brat+"ьяах"
     } ;
     g = Masc   ; anim = Animate
   } ;
 
 oper irregPl_StemInAnimateDecl: Str -> CommNoun =  \derev ->
   { s  =  table
-      { SF Sg Nom =>  derev+"о" ;
-        SF Sg Gen => derev+"а" ;
-        SF Sg Dat => derev+"у" ;
-        SF Sg Acc => derev +"о";
-        SF Sg Inst => derev+"ом" ;
-        SF Sg (Prepos _) => derev+"е" ;
-        SF Pl Nom => derev+"ья" ;
-        SF Pl Gen => derev+"ьев" ;
-        SF Pl Dat => derev+"ьям" ;
-        SF Pl Acc => derev +"ья" ;
-        SF Pl Inst => derev+"ьями" ;
-        SF Pl (Prepos _) => derev+"ьяах"
+      { NF Sg Nom =>  derev+"о" ;
+        NF Sg Gen => derev+"а" ;
+        NF Sg Dat => derev+"у" ;
+        NF Sg Acc => derev +"о";
+        NF Sg Inst => derev+"ом" ;
+        NF Sg (Prepos _) => derev+"е" ;
+        NF Pl Nom => derev+"ья" ;
+        NF Pl Gen => derev+"ьев" ;
+        NF Pl Dat => derev+"ьям" ;
+        NF Pl Acc => derev +"ья" ;
+        NF Pl Inst => derev+"ьями" ;
+        NF Pl (Prepos _) => derev+"ьяах"
     } ;
     g = Masc   ; anim = Inanimate
   } ;
 
 oper kg_oEnd_SgDecl: Str -> CommNoun =  \mnog ->
 { s  =  table  {
-      SF _ Nom =>  mnog+"о" ;
-      SF _ Gen => mnog +"их";
-      SF _ Dat => mnog+"им" ;
-      SF _ Acc => mnog+"о" ;
-      SF _ Inst => mnog+"ими" ;
-      SF _ (Prepos _) => mnog+"их"
+      NF _ Nom =>  mnog+"о" ;
+      NF _ Gen => mnog +"их";
+      NF _ Dat => mnog+"им" ;
+      NF _ Acc => mnog+"о" ;
+      NF _ Inst => mnog+"ими" ;
+      NF _ (Prepos _) => mnog+"их"
     } ;
     g = Neut   ; anim = Inanimate
 } ;
 
 oper oEnd_PlDecl: Str -> CommNoun =  \menshinstv ->
   { s  =  table  {
-      SF _ Nom =>  menshinstv+"а" ;
-      SF _ Gen => menshinstv;
-      SF _ Dat => menshinstv+"ам" ;
-      SF _ Acc => menshinstv+"ва" ;
-      SF _ Inst => menshinstv+"ами" ;
-      SF _ (Prepos _) => menshinstv+"вах"
+      NF _ Nom =>  menshinstv+"а" ;
+      NF _ Gen => menshinstv;
+      NF _ Dat => menshinstv+"ам" ;
+      NF _ Acc => menshinstv+"ва" ;
+      NF _ Inst => menshinstv+"ами" ;
+      NF _ (Prepos _) => menshinstv+"вах"
     } ;
     g = Neut   ; anim = Inanimate
 } ;
 
 oper oEnd_SgDecl: Str -> CommNoun =  \bolshinstv ->
  {s  =  table  {
-      SF _ Nom =>  bolshinstv+"о" ;
-      SF _ Gen => bolshinstv+"а" ;
-      SF _ Dat => bolshinstv+"у" ;
-      SF _ Acc => bolshinstv+"о" ;
-      SF _ Inst => bolshinstv+"ом" ;
-      SF _ (Prepos _) => bolshinstv+"е"
+      NF _ Nom =>  bolshinstv+"о" ;
+      NF _ Gen => bolshinstv+"а" ;
+      NF _ Dat => bolshinstv+"у" ;
+      NF _ Acc => bolshinstv+"о" ;
+      NF _ Inst => bolshinstv+"ом" ;
+      NF _ (Prepos _) => bolshinstv+"е"
     } ;
     g = Neut   ; anim = Inanimate
 } ;
@@ -678,18 +677,18 @@ oper oEnd_SgDecl: Str -> CommNoun =  \bolshinstv ->
 
 oper eEnd_Decl: Str -> CommNoun =  \vs ->
 { s  =  table  {
-      SF Sg Nom =>  vs+"е" ;
-      SF Sg Gen => vs+"ех" ;
-      SF Sg Dat => vs+"ем" ;
-      SF Sg Acc => vs+"ех" ;
-      SF Sg Inst => vs+"еми" ;
-      SF Sg (Prepos _) => vs+"ех" ;
-      SF Pl Nom => vs+"е" ;
-      SF Pl Gen => vs +"ех";
-      SF Pl Dat => vs+"ем" ;
-      SF Pl  Acc => vs+ "ех" ;
-      SF Pl Inst => vs+"еми" ;
-      SF Pl (Prepos _) => vs+"ех"
+      NF Sg Nom =>  vs+"е" ;
+      NF Sg Gen => vs+"ех" ;
+      NF Sg Dat => vs+"ем" ;
+      NF Sg Acc => vs+"ех" ;
+      NF Sg Inst => vs+"еми" ;
+      NF Sg (Prepos _) => vs+"ех" ;
+      NF Pl Nom => vs+"е" ;
+      NF Pl Gen => vs +"ех";
+      NF Pl Dat => vs+"ем" ;
+      NF Pl  Acc => vs+ "ех" ;
+      NF Pl Inst => vs+"еми" ;
+      NF Pl (Prepos _) => vs+"ех"
     } ;
     g = Neut  ; anim = Inanimate
 } ;
@@ -804,7 +803,7 @@ oper eEnd_Decl: Str -> CommNoun =  \vs ->
 
    vseDetPl: Adjective   =  extAdjFromSubst (eEnd_Decl "вс") ;
    extAdjFromSubst: CommNoun -> Adjective = \ vse ->
-    {s = \\af => vse.s ! SF (numAF af) (caseAF af) } ;
+    {s = \\af => vse.s ! NF (numAF af) (caseAF af) } ;
 
 
 oper totDet: Adjective = {s = table {
@@ -1289,7 +1288,7 @@ oper mkVerbPerfective: Str -> Str -> PresentVerb -> PastVerb -> Verbum =
 oper ProperName : Type = {s :  Case => Str ; g : Gender ; anim : Animacy} ;
 --
 --  mkCNProperName : CommNoun -> ProperName = \cn ->
---{s = \\c => cn.s! (SF Sg c); g=cn.g; anim = cn.anim };
+--{s = \\c => cn.s! (NF Sg c); g=cn.g; anim = cn.anim };
 --
   mkProperNameMasc : Str -> Animacy -> ProperName = \ivan, anim ->
        { s =  table { Nom => ivan ;

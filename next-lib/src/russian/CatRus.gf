@@ -44,7 +44,7 @@ concrete CatRus of Cat = CommonX ** open ResRus, Prelude in {
 
 -- Noun
 
-    CN = {s : Number => Case => Str; g : Gender; anim : Animacy} ;  
+    CN = {s : NForm => Str; g : Gender; anim : Animacy} ;  
     NP = { s : PronForm => Str ; n : Number ; p : Person ;
            g: PronGen ; anim : Animacy ;  pron: Bool} ;     
     Pron = { s : PronForm => Str ; n : Number ; p : Person ;
@@ -89,9 +89,9 @@ concrete CatRus of Cat = CommonX ** open ResRus, Prelude in {
     A2 = A ** Complement ;
 
  -- Substantives moreover have an inherent gender. 
-    N = {s : SubstForm => Str ; g : Gender ; anim : Animacy } ;   
-    N2 = {s : Number => Case => Str; g : Gender; anim : Animacy} ** Complement ;
-    N3 = {s : Number => Case => Str; g : Gender; anim : Animacy} ** Complement ** {s3 : Str; c2: Case} ;
+    N  = {s : NForm => Str; g : Gender; anim : Animacy} ;   
+    N2 = {s : NForm => Str; g : Gender; anim : Animacy} ** Complement ;
+    N3 = {s : NForm => Str; g : Gender; anim : Animacy} ** Complement ** {s3 : Str; c2: Case} ;
     PN = {s :  Case => Str ; g : Gender ; anim : Animacy} ;
 
 

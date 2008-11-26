@@ -9,18 +9,18 @@ lin
 ---  citizen_N = nGrazhdanin "господ" ; -- +++ MG_UR: added +++
   daughter_N = 
   {s = table {
-      SF Sg Nom => "дочь" ;
-      SF Sg Gen => "дочери" ;
-      SF Sg Dat => "дочери" ;
-      SF Sg Acc => "дочь" ;
-      SF Sg Inst => "дочерью" ;
-      SF Sg (Prepos _) => "дочери" ;
-      SF Pl Nom => "дочери" ;
-      SF Pl Gen => "дочерей" ;
-      SF Pl Dat => "дочерям" ;
-      SF Pl Acc => "дочерей" ;
-      SF Pl Inst => "дочерьми" ;
-      SF Pl (Prepos _) => "дочерях"
+      NF Sg Nom => "дочь" ;
+      NF Sg Gen => "дочери" ;
+      NF Sg Dat => "дочери" ;
+      NF Sg Acc => "дочь" ;
+      NF Sg Inst => "дочерью" ;
+      NF Sg (Prepos _) => "дочери" ;
+      NF Pl Nom => "дочери" ;
+      NF Pl Gen => "дочерей" ;
+      NF Pl Dat => "дочерям" ;
+      NF Pl Acc => "дочерей" ;
+      NF Pl Inst => "дочерьми" ;
+      NF Pl (Prepos _) => "дочерях"
     } ;
      g = Fem    ; anim = Animate
   } ;
@@ -35,18 +35,18 @@ lin
 ---  ocean_N = nMorje "мор" ; -- +++ MG_UR: added +++
  son_N = 
   {s  =  table
-      { SF Sg Nom =>  syn ;
-        SF Sg Gen => syn+"а" ;
-        SF Sg Dat => syn+"у" ;
-        SF Sg Acc => syn +"а";
-        SF Sg Inst => syn+"ом" ;
-        SF Sg (Prepos _) => syn+"е" ;
-        SF Pl Nom => syn+"ья" ;
-        SF Pl Gen => syn+"ьев" ;
-        SF Pl Dat => syn+"ьям" ;
-        SF Pl Acc => syn +"ьев";
-        SF Pl Inst => syn+"ьями" ;
-        SF Pl (Prepos _) => syn+"ьяах"
+      { NF Sg Nom =>  syn ;
+        NF Sg Gen => syn+"а" ;
+        NF Sg Dat => syn+"у" ;
+        NF Sg Acc => syn +"а";
+        NF Sg Inst => syn+"ом" ;
+        NF Sg (Prepos _) => syn+"е" ;
+        NF Pl Nom => syn+"ья" ;
+        NF Pl Gen => syn+"ьев" ;
+        NF Pl Dat => syn+"ьям" ;
+        NF Pl Acc => syn +"ьев";
+        NF Pl Inst => syn+"ьями" ;
+        NF Pl (Prepos _) => syn+"ьяах"
     } ;
     g = Masc   ; anim = Animate
   } ;
@@ -54,18 +54,18 @@ lin
 ---  vocationalschool_N = nUchilishe "училищ" ; -- +++ MG_UR: added +++
   way_N = 
   {s  =  table
-      { SF Sg  Nom =>  put+"ь" ;
-        SF Sg Gen => put+"и" ;
-        SF Sg Dat => put+"и" ;
-        SF Sg Acc => put+"ь" ;
-        SF Sg Inst => put+"ём" ;
-        SF Sg (Prepos _) => put+"и" ;
-        SF Pl  Nom => put+"и" ;
-        SF Pl Gen => put+"ей" ;
-        SF Pl Dat => put+"ям" ;
-        SF Pl Acc => put+"и" ;
-        SF Pl Inst => put+"ями" ;
-        SF Pl (Prepos _) => put+"ях"
+      { NF Sg  Nom =>  put+"ь" ;
+        NF Sg Gen => put+"и" ;
+        NF Sg Dat => put+"и" ;
+        NF Sg Acc => put+"ь" ;
+        NF Sg Inst => put+"ём" ;
+        NF Sg (Prepos _) => put+"и" ;
+        NF Pl  Nom => put+"и" ;
+        NF Pl Gen => put+"ей" ;
+        NF Pl Dat => put+"ям" ;
+        NF Pl Acc => put+"и" ;
+        NF Pl Inst => put+"ями" ;
+        NF Pl (Prepos _) => put+"ях"
        } ;
     g = Masc ; anim = Inanimate
   } ;
