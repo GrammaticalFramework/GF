@@ -51,10 +51,11 @@ processModule opt (i,m) = case m of
     (i,M.ModMod (M.replaceJudgements mo (mapTree (shareInfo opt) (M.jments mo))))
   _ -> (i,m)
 
-shareInfo opt (c, CncCat ty (Yes t) m) = (c,CncCat ty (Yes (opt c t)) m)
-shareInfo opt (c, CncFun kxs (Yes t) m) = (c,CncFun kxs (Yes (opt c t)) m)
-shareInfo opt (c, ResOper ty (Yes t)) = (c,ResOper ty (Yes (opt c t)))
-shareInfo _ i = i
+shareInfo :: (Ident -> Term -> Term) -> (Ident,Info) -> Info
+shareInfo opt (c, CncCat ty (Yes t) m) = CncCat ty (Yes (opt c t)) m
+shareInfo opt (c, CncFun kxs (Yes t) m) = CncFun kxs (Yes (opt c t)) m
+shareInfo opt (c, ResOper ty (Yes t)) = ResOper ty (Yes (opt c t))
+shareInfo _ (_,i) = i
 
 -- the function putting together optimizations
 optim :: Ident -> Term -> Term

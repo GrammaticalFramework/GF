@@ -38,10 +38,11 @@ shareModule opt (i,m) = case m of
     (i,M.ModMod (M.replaceJudgements mo (mapTree (shareInfo opt) (M.jments mo))))
   _ -> (i,m)
 
-shareInfo opt (c, CncCat ty (Yes t) m) = (c,CncCat ty (Yes (shareOptim opt c t)) m)
-shareInfo opt (c, CncFun kxs (Yes t) m) = (c,CncFun kxs (Yes (shareOptim opt c t)) m)
-shareInfo opt (c, ResOper ty (Yes t)) = (c,ResOper ty (Yes (shareOptim opt c t)))
-shareInfo _ i = i
+shareInfo :: OptSpec -> (Ident, Info) -> Info
+shareInfo opt (c, CncCat ty (Yes t) m) = CncCat ty (Yes (shareOptim opt c t)) m
+shareInfo opt (c, CncFun kxs (Yes t) m) = CncFun kxs (Yes (shareOptim opt c t)) m
+shareInfo opt (c, ResOper ty (Yes t)) = ResOper ty (Yes (shareOptim opt c t))
+shareInfo _ (_,i) = i
 
 -- the function putting together optimizations
 shareOptim :: OptSpec -> Ident -> Term -> Term
