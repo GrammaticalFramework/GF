@@ -367,9 +367,14 @@ while ( my $line = <STDIN> ) {
 
 my $absfile = "Oald.gf";
 my $cncfile = "OaldEng.gf";
+my $abs_structfile = "OaldStructural.gf";
+my $cnc_structfile = "OaldStructuralEng.gf";
 
 open (ABS, '>', $absfile);
 open (CNC, '>', $cncfile);
+
+open (ABS_STRUCTURAL, '>', $abs_structfile);
+open (CNC_STRUCTURAL, '>', $cnc_structfile);
 
 
 
@@ -396,26 +401,45 @@ my $header = "-- English lexicon for GF, produced from:\n"
            . "--    http://www.stanford.edu/~mpurver/software.html\n"
            . "\n";
 print ABS $header;
-print CNC $header;
-
 print ABS "abstract Oald = Cat ** {\n";
+
+print CNC $header;
 print CNC "--# -path=.:alltenses\n";
 print CNC "concrete OaldEng of Oald = CatEng ** open ParadigmsEng, IrregEng in {\n";
+
+print ABS_STRUCTURAL $header;
+print ABS_STRUCTURAL "abstract OaldStructural = Cat ** {\n";
+
+print CNC_STRUCTURAL $header;
+print CNC_STRUCTURAL "--# -path=.:alltenses\n";
+print CNC_STRUCTURAL "concrete OaldStructuralEng of OaldStructural = CatEng ** open ParadigmsEng in {\n";
 
 foreach my $name (sort (keys %words)) {
   (my $cat = $name) =~ s/.*_([A-Z][A-Za-z\d]*)$/$1/;
   my $lin = $words{$name};
-  print ABS "fun $name : $cat;\n";
-  print CNC "lin $name = $lin;\n";
+  if ( $cat =~ /^(A)|(N)|(V)|(V2)$/ ) {
+    print ABS "fun $name : $cat;\n";
+    print CNC "lin $name = $lin;\n";
+  } else {
+    print ABS_STRUCTURAL "fun $name : $cat;\n";
+    print CNC_STRUCTURAL "lin $name = $lin;\n";
+  }
 }
 
 print ABS "}";
 print CNC "}";
 
+print ABS_STRUCTURAL "}";
+print CNC_STRUCTURAL "}";
+
+close(ABS_STRUCTURAL);
+close(CNC_STRUCTURAL);
+
 close(ABS);
 close(CNC);
 
-print "\nWrote lexicon to $absfile and $cncfile\n";
+print "\nWrote open lexicon to $absfile and $cncfile\n";
+print "Wrote closed lexicon to $abs_structfile and $cnc_structfile\n";
 
 
 
