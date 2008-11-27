@@ -25,7 +25,7 @@ import GF.Infra.Option
 import GF.Infra.PrintClass
 import GF.Speech.CFG
 import GF.Speech.PGFToCFG
-import GF.Speech.Relation
+import GF.Data.Relation
 import GF.Speech.FiniteState
 import GF.Speech.RegExp
 import GF.Speech.CFGToFA

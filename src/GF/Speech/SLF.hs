@@ -18,7 +18,7 @@ import GF.Speech.FiniteState
 import GF.Speech.CFG
 import GF.Speech.CFGToFA
 import GF.Speech.PGFToCFG
-import qualified GF.Speech.Graphviz as Dot
+import qualified GF.Data.Graphviz as Dot
 import PGF
 import PGF.CId
 

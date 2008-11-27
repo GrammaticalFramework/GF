@@ -11,7 +11,7 @@
 --
 -- A simple graph module.
 -----------------------------------------------------------------------------
-module GF.Speech.Graph ( Graph(..), Node, Edge, NodeInfo
+module GF.Data.Graph ( Graph(..), Node, Edge, NodeInfo
                         , newGraph, nodes, edges
                         , nmap, emap, newNode, newNodes, newEdge, newEdges
                         , insertEdgeWith

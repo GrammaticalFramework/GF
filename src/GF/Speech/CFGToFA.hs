@@ -21,9 +21,9 @@ import GF.Speech.CFG
 import GF.Speech.PGFToCFG
 import GF.Infra.Ident (Ident)
 
+import GF.Data.Graph
+import GF.Data.Relation
 import GF.Speech.FiniteState
-import GF.Speech.Graph
-import GF.Speech.Relation
 import GF.Speech.CFG
 
 data Recursivity = RightR | LeftR | NotR
