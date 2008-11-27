@@ -113,7 +113,7 @@ oper
                 in mkNoun (v0+"ú"+v1)
                           (v0+v1+"è")
                           (v0+"ú"+v1+"à")
-                          (v0+"-")
+                          (v0+v1+"å")
                           Masc
                           Inanimate ;
   mkN009a : Str -> N ;
