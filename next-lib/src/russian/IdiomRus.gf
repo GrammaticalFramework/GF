@@ -7,9 +7,9 @@ concrete IdiomRus of Idiom = CatRus ** open Prelude, ResRus, MorphoRus in {
   lin
     ExistNP = \bar ->
     {s =\\b,clf => case b of 
-        {Pos =>  verbSuchestvovat.s ! (getActVerbForm clf (pgen2gen bar.g) Sg P3) 
+        {Pos =>  verbSuchestvovat.s ! (getActVerbForm clf (pgen2gen bar.a.g) Sg P3) 
            ++ bar.s ! PF Nom No NonPoss;
-        Neg => "не" ++ verbSuchestvovat.s ! (getActVerbForm clf (pgen2gen bar.g) Sg P3) 
+        Neg => "не" ++ verbSuchestvovat.s ! (getActVerbForm clf (pgen2gen bar.a.g) Sg P3) 
            ++ bar.s ! PF Nom No NonPoss
        }
 } ;
@@ -17,8 +17,8 @@ concrete IdiomRus of Idiom = CatRus ** open Prelude, ResRus, MorphoRus in {
     ExistIP Kto =
     let {  kto = Kto.s ! (PF Nom No NonPoss) } in 
        {s =  \\b,clf,_ => case b of 
-        {Pos =>  kto ++ verbSuchestvovat.s ! (getActVerbForm clf (pgen2gen Kto.g) Sg P3) ;
-        Neg => kto ++ "не" ++ verbSuchestvovat.s ! (getActVerbForm clf (pgen2gen Kto.g) Sg P3) 
+        {Pos =>  kto ++ verbSuchestvovat.s ! (getActVerbForm clf (pgen2gen Kto.a.g) Sg P3) ;
+        Neg => kto ++ "не" ++ verbSuchestvovat.s ! (getActVerbForm clf (pgen2gen Kto.a.g) Sg P3) 
        }
     } ;
 
@@ -29,16 +29,16 @@ concrete IdiomRus of Idiom = CatRus ** open Prelude, ResRus, MorphoRus in {
     CleftNP np rs = {s= \\ b, clf =>  
        let 
          ne= case b of {Pos =>[]; Neg =>"не"};
-         gn = case np.n of {Pl => APl; _=> ASg (pgen2gen np.g)}
+         gn = case np.a.n of {Pl => GPl; _=> GSg (pgen2gen np.a.g)}
       in 
       "это" ++ ne ++ np.s ! (PF Nom No NonPoss)  ++ 
         rs.s ! gn !Nom!Animate  }; 
 
-    ImpPl1 vp = {s= "давайте" ++ vp.s! (ClIndic Future Simul)! APl ! P1}; 
+    ImpPl1 vp = {s= "давайте" ++ vp.s! (ClIndic Future Simul)! GPl ! P1}; 
 
     ImpersCl vp = {s= \\ b, clf =>  let ne= case b of {Pos =>[]; Neg =>"не"}
       in 
-      ne ++ vp.s! clf! (ASg Neut) ! P3  }; 
+      ne ++ vp.s! clf! (GSg Neut) ! P3  }; 
 
 -- No direct correspondance in Russian. Usually expressed by infinitive:
 -- "Если очень захотеть, можно в космос улететь" 
@@ -50,7 +50,7 @@ concrete IdiomRus of Idiom = CatRus ** open Prelude, ResRus, MorphoRus in {
 
     GenericCl vp = {s= \\ b, clf =>  let ne= case b of {Pos =>[]; Neg =>"не"}
       in 
-      "ты" ++ ne ++ vp.s! clf! (ASg Masc) ! P2  }; 
+      "ты" ++ ne ++ vp.s! clf! (GSg Masc) ! P2  }; 
 
     ProgrVP vp = vp ;
 

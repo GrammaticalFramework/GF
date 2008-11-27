@@ -22,8 +22,7 @@ concrete CatRus of Cat = CommonX ** CatSlavic with (ResSlavic = ResRus) ** open 
 -- Question
 
     QCl = {s :Polarity => ClForm => QForm => Str};  
-    IP = { s : PronForm => Str ; n : Number ; p : Person ;
-           g: PronGen ; anim : Animacy ;  pron: Bool} ;     
+    IP  = {s : PronForm => Str; a : Agr; anim : Animacy} ;
     IComp = {s : Str} ;    
     IDet = Adjective ** {n: Number; g: PronGen; c: Case} ; 
     IQuant = {s : Number => AdjForm => Str; g: PronGen; c: Case} ;  -- AR 16/6/2008
@@ -44,10 +43,8 @@ concrete CatRus of Cat = CommonX ** CatSlavic with (ResSlavic = ResRus) ** open 
 
 -- Noun
 
-    NP = { s : PronForm => Str ; n : Number ; p : Person ;
-           g: PronGen ; anim : Animacy ;  pron: Bool} ;     
-    Pron = { s : PronForm => Str ; n : Number ; p : Person ;
-           g: PronGen ;  pron: Bool} ;     
+    NP   = {s : PronForm => Str; a : Agr; anim : Animacy} ;
+    Pron = {s : PronForm => Str; a : Agr} ;
 
 -- Determiners (only determinative pronouns 
 -- (or even indefinite numerals: "много" (many)) in Russian) are inflected 

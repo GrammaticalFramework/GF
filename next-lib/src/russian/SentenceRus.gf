@@ -15,9 +15,9 @@ concrete SentenceRus of Sentence = CatRus ** open Prelude, ResRus in {
                _ => (mkPronForm Nom No NonPoss)
                });
          ne = case b of {Pos=>""; Neg=>"не"};
-         vizhu = tebyaNeVizhu.s ! clf ! (pgNum Ya.g Ya.n)! Ya.p;
+         vizhu = tebyaNeVizhu.s ! clf ! (pgNum Ya.a.g Ya.a.n)! Ya.a.p;
          khorosho = tebyaNeVizhu.s2 ;
-         tebya = tebyaNeVizhu.s3 ! (pgen2gen Ya.g) ! Ya.n 
+         tebya = tebyaNeVizhu.s3 ! (pgen2gen Ya.a.g) ! Ya.a.n 
        }
        in
        if_then_else Str tebyaNeVizhu.negBefore  
@@ -29,7 +29,7 @@ concrete SentenceRus of Sentence = CatRus ** open Prelude, ResRus in {
     PredSCVP sc vp = { s = \\b,clf => 
        let  { 
          ne = case b of {Pos=>""; Neg=>"не"};
-         vizhu = vp.s ! clf ! (ASg Neut)! P3;
+         vizhu = vp.s ! clf ! (GSg Neut)! P3;
          tebya = vp.s3 ! Neut ! Sg 
        }
        in
@@ -58,7 +58,7 @@ concrete SentenceRus of Sentence = CatRus ** open Prelude, ResRus in {
     --- AR 3/11/2007
     SlashVS ivan vidit tuUlubaeshsya = { 
       s=\\b,clf => ivan.s ! PF Nom No NonPoss ++ 
-         vidit.s! (getActVerbForm clf (pgen2gen ivan.g) ivan.n ivan.p) ++
+         vidit.s! (getActVerbForm clf (pgen2gen ivan.a.g) ivan.a.n ivan.a.p) ++
          [", что"] ++ tuUlubaeshsya.s ;
       s2=tuUlubaeshsya.s2; 
       c=tuUlubaeshsya.c 
@@ -73,14 +73,14 @@ concrete SentenceRus of Sentence = CatRus ** open Prelude, ResRus in {
             _ => []
             }
         in
-        dont ++ inf.s ! ClImper ! (gNum g n )!P2 ++ 
+        dont ++ inf.s ! ClImper ! gennum g n ! P2 ++ 
         inf.s2++inf.s3!g!n
     } ;
 
     EmbedS  s  = {s = "что" ++ s.s} ;
  -- In Russian "Whether you go" transformed in "go whether you":
     EmbedQS qs = {s = qs.s ! QIndir} ;
-    EmbedVP vp = {s = vp.s2  ++ vp.s!ClInfinit!(ASg Masc) !P3 ++ vp.s3!Masc!Sg} ;
+    EmbedVP vp = {s = vp.s2  ++ vp.s!ClInfinit!(GSg Masc) !P3 ++ vp.s3!Masc!Sg} ;
 
     UseCl t p cl = {s = case t.t of { 
       Cond => cl.s! p.p ! ClCondit ; --# notpresent

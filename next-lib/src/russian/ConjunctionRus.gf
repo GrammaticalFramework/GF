@@ -11,11 +11,13 @@ concrete ConjunctionRus of Conjunction =
 
     ConjAdv = conjunctDistrSS ;
                                                     
-    ConjNP c xs =
-    conjunctDistrTable PronForm c xs ** {n = conjNumber c.n xs.n ; 
-      p = xs.p ; pron = xs.pron ; anim = xs.anim ; 
-       g = xs.g } ;
-
+    ConjNP c xs = conjunctDistrTable PronForm c xs ** {
+       a = {n = conjNumber c.n xs.a.n;
+            p = xs.a.p;
+            g = xs.a.g
+           };
+       anim = xs.anim
+       } ;
 
     ConjAP c xs = conjunctDistrTable AdjForm c xs ** {p = xs.p} ;
 
@@ -27,20 +29,26 @@ concrete ConjunctionRus of Conjunction =
     ConsAdv = consrSS comma ;
 
 
-    ConsNP  x xs =
-    consTable PronForm comma xs x ** 
-       {n = conjNumber xs.n x.n ; g = conjPGender x.g xs.g ;
-          anim = conjAnim x.anim xs.anim ;
-          p = conjPerson xs.p x.p; pron = conjPron xs.pron x.pron} ;
+    ConsNP  x xs = consTable PronForm comma xs x ** {
+       a = {n = conjNumber xs.a.n x.a.n;
+            g = conjPGender x.a.g xs.a.g;
+            p = conjPerson xs.a.p x.a.p
+           };
+       anim = conjAnim x.anim xs.anim
+       } ;
       
     ConsAP x xs = consTable AdjForm comma xs x ** {p = andB xs.p x.p} ;
 
 
     BaseAP x y = twoTable AdjForm x y ** {p = andB x.p y.p} ;
 
-    BaseNP x y = twoTable PronForm x y ** {n = conjNumber x.n y.n ; 
-       g = conjPGender x.g y.g ; p = conjPerson x.p y.p ;
-       pron = conjPron x.pron y.pron ; anim = conjAnim x.anim y.anim } ;
+    BaseNP x y = twoTable PronForm x y ** {
+       a = {n = conjNumber x.a.n y.a.n; 
+            g = conjPGender x.a.g y.a.g;
+            p = conjPerson x.a.p y.a.p
+           };
+       anim = conjAnim x.anim y.anim
+       } ;
 
 
 
@@ -50,8 +58,7 @@ concrete ConjunctionRus of Conjunction =
     [Adv] = {s1,s2 : Str} ;
  -- The structure is the same as for sentences. The result is either always plural
  -- or plural if any of the components is, depending on the conjunction.
-    [NP] = { s1,s2 : PronForm => Str ; g: PronGen ; 
-             anim : Animacy ; n : Number ; p : Person ;  pron : Bool } ;
+    [NP] = {s1,s2 : PronForm => Str; a : Agr; anim : Animacy} ;
  -- The structure is the same as for sentences. The result is a prefix adjective
  -- if and only if all elements are prefix.
     [AP] =  {s1,s2 : AdjForm => Str ; p : Bool} ;
@@ -75,14 +82,6 @@ oper
 
 --  conjPerson : Person -> Person -> Person = \_,p -> 
 --    p ;
-
--- For pron, we let the latter argument win - "Маша или моя мама" (Nominative case)
--- but - "моей или Машина мама" (Genetive case) both corresponds to 
--- "Masha's or my mother"), which is actually not exactly correct, since
--- different cases should be used - "Машина или моя мама".
-
-  conjPron : Bool -> Bool -> Bool = \_,p -> 
-    p ;
 
 -- For gender in a similar manner as for person:
 -- Needed for adjective predicates like:

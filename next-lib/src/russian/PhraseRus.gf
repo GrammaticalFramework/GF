@@ -15,7 +15,7 @@ concrete PhraseRus of Phrase = CatRus ** open Prelude, ResRus in {
     UttIP ip = {s = ip.s ! PF Nom No NonPoss} ; --- Acc also
     UttIAdv iadv = iadv ;
     UttNP np = {s = np.s ! PF Acc No NonPoss} ;
-    UttVP vp = {s = vp.s ! ClInfinit ! ASg Masc! P3} ;
+    UttVP vp = {s = vp.s ! ClInfinit ! GSg Masc ! P3} ;
     UttAdv adv = adv ;
 
     NoPConj = {s = []} ;
