@@ -56,7 +56,7 @@ module GF.Data.Operations (-- * misc functions
 		   sortByLongest, combinations, mkTextFile, initFilePath,
 
 		   -- * topological sorting with test of cyclicity
-		   topoTest, topoSort, cyclesIn,
+		   topoTest, 
 
 		   -- * the generic fix point iterator
 		   iterFix,
@@ -82,6 +82,7 @@ import Data.Map (Map)
 import Control.Monad (liftM,liftM2, MonadPlus, mzero, mplus)
 
 import GF.Data.ErrM
+import GF.Data.Relation
 
 infixr 5 +++
 infixr 5 ++-
@@ -477,36 +478,8 @@ initFilePath :: FilePath -> FilePath
 initFilePath f = reverse (dropWhile (/='/') (reverse f))
 
 -- | topological sorting with test of cyclicity
-topoTest :: Eq a => [(a,[a])] -> Either [a] [[a]]
-topoTest g = if length g' == length g then Left g' else Right (cyclesIn g ++[[]]) 
-  where
-    g' = topoSort g
-  
-cyclesIn :: Eq a => [(a,[a])] -> [[a]]
-cyclesIn deps = nubb $ clean $ filt $ iterFix findDep immediate where
-  immediate = [[y,x] | (x,xs) <- deps, y <- xs] 
-  findDep chains = [y:x:chain | 
-                      x:chain <- chains, (x',xs) <- deps, x' == x, y <- xs, 
-                      notElem y (init chain)]
-
-  clean = map remdup
-  nubb = nubBy (\x y -> y == reverse x) 
-  filt = filter (\xs -> last xs == head xs)
-  remdup (x:xs) = x : remdup xs' where xs' = dropWhile (==x) xs
-  remdup [] = []
-
-
--- | topological sorting 
-topoSort :: Eq a => [(a,[a])] -> [a]
-topoSort g = reverse $ tsort 0 [ffs | ffs@(f,_) <- g, inDeg f == 0] [] where
-  tsort _ []     r = r
-  tsort k (ffs@(f,fs) : cs) r
-    | elem f r  = tsort k cs r
-    | k > lx    = r  
-    | otherwise = tsort (k+1) cs (f : tsort (k+1) (info fs) r)
-  info hs = [(f,fs) | (f,fs) <- g, elem f hs]
-  inDeg f = length [t | (h,hs) <- g, t <- hs, t == f]
-  lx = length g
+topoTest :: Ord a => [(a,[a])] -> Either [a] [[a]]
+topoTest = topologicalSort . mkRel'
 
 -- | the generic fix point iterator
 iterFix :: Eq a => ([a] -> [a]) -> [a] -> [a]
