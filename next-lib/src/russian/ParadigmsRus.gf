@@ -433,9 +433,9 @@ foreign = Foreign; -- +++ MG_UR: added +++
    oper presentConj: (_,_,_,_,_,_: Str) -> PresentVerb = 
      \sgP1, sgP2, sgP3, plP1, plP2, plP3 ->
      table {
-       PRF (ASg _) P1 => sgP1 ;
-       PRF (ASg _) P2 => sgP2 ;
-       PRF (ASg _) P3 => sgP3 ;
+       PRF (GSg _) P1 => sgP1 ;
+       PRF (GSg _) P2 => sgP2 ;
+       PRF (GSg _) P3 => sgP3 ;
        PRF APl P1 => plP1 ;
        PRF APl P2 => plP2 ;
        PRF APl P3 => plP3   

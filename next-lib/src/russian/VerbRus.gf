@@ -12,18 +12,18 @@ concrete VerbRus of Verb = CatRus ** open ResRus, Prelude in {
    {
         (ClIndic Present _) =>  masha.s ! (mkPronForm Nom No NonPoss) ;
         (ClIndic PastRus _) => case  gn of 
-    {   (ASg Fem)  =>"была"++masha.s ! (mkPronForm Inst No NonPoss);
-      (ASg Masc)  =>"был" ++ masha.s!(mkPronForm Inst No NonPoss);
-     (ASg Neut)  =>"было" ++ masha.s!(mkPronForm Inst No NonPoss);
-      APl => "были" ++ masha.s ! (mkPronForm Inst No NonPoss)
+    {   (GSg Fem)  =>"была"++masha.s ! (mkPronForm Inst No NonPoss);
+      (GSg Masc)  =>"был" ++ masha.s!(mkPronForm Inst No NonPoss);
+     (GSg Neut)  =>"было" ++ masha.s!(mkPronForm Inst No NonPoss);
+      GPl => "были" ++ masha.s ! (mkPronForm Inst No NonPoss)
    };
     (ClIndic Future _) => case gn of 
-   {    APl => case p of
+   {    GPl => case p of
       { P3 => "будут"++masha.s ! (mkPronForm Inst No NonPoss);
         P2 => "будете"++masha.s !(mkPronForm Inst No NonPoss);
         P1 => "будем"++masha.s ! (mkPronForm Inst No NonPoss)
       };
-      (ASg _) => case p of
+      (GSg _) => case p of
       {  P3=>"будет"++masha.s!(mkPronForm Inst No NonPoss) ;
          P2 => "будешь"++ masha.s ! (mkPronForm Inst No NonPoss) ;
          P1=> "буду"++ masha.s ! (mkPronForm Inst No NonPoss)      
@@ -46,30 +46,30 @@ concrete VerbRus of Verb = CatRus ** open ResRus, Prelude in {
   CompAP zloj ={
  s= \\clf,gn,p => case clf of { 
 -- person is ignored !
-       ClInfinit => "быть" ++ zloj.s ! AF Inst Animate (ASg Masc) ; 
+       ClInfinit => "быть" ++ zloj.s ! AF Inst Animate (GSg Masc) ; 
         ClImper => case gn of 
-          {  (ASg _) => "будь" ++ zloj.s ! AF Inst Animate (ASg Masc);
-             APl => "будьте" ++ zloj.s ! AF Inst Animate APl  
+          {  (GSg _) => "будь" ++ zloj.s ! AF Inst Animate (GSg Masc);
+             GPl => "будьте" ++ zloj.s ! AF Inst Animate GPl  
           };  
 -- infinitive does not save GenNum, 
 -- but indicative does for the sake of adjectival predication !
         ClIndic Present _ =>  zloj.s ! AF Nom Animate gn ;
         ClIndic PastRus _ => case gn of
-       { (ASg Fem)   => "была" ++ zloj.s! AF Nom Animate (ASg Fem);
-          (ASg Masc)  => "был" ++ zloj.s! AF Nom Animate (ASg Masc);
-          (ASg Neut)   => "был" ++ zloj.s! AF Nom Animate (ASg Neut);
-           APl => "были" ++ zloj.s! AF Nom Animate APl
+       { (GSg Fem)   => "была" ++ zloj.s! AF Nom Animate (GSg Fem);
+          (GSg Masc)  => "был" ++ zloj.s! AF Nom Animate (GSg Masc);
+          (GSg Neut)   => "был" ++ zloj.s! AF Nom Animate (GSg Neut);
+           GPl => "были" ++ zloj.s! AF Nom Animate GPl
        };
        ClIndic Future _ => case gn of 
-       { APl => case p of 
-          { P3 => "будут" ++ zloj.s! AF Nom Animate APl;
-            P2 => "будете" ++ zloj.s! AF Nom Animate APl;
-            P1 => "будем" ++ zloj.s! AF Nom Animate APl
+       { GPl => case p of 
+          { P3 => "будут" ++ zloj.s! AF Nom Animate GPl;
+            P2 => "будете" ++ zloj.s! AF Nom Animate GPl;
+            P1 => "будем" ++ zloj.s! AF Nom Animate GPl
           } ;
-         (ASg _) => case p of 
-         {P3 => "будет" ++ zloj.s! AF Nom Animate (ASg (genGNum gn));
-          P2 => "будешь"++ zloj.s! AF Nom Animate (ASg (genGNum gn));
-          P1=> "буду" ++ zloj.s! AF Nom Animate (ASg (genGNum gn))
+         (GSg _) => case p of 
+         {P3 => "будет" ++ zloj.s! AF Nom Animate (GSg (genGNum gn));
+          P2 => "будешь"++ zloj.s! AF Nom Animate (GSg (genGNum gn));
+          P1=> "буду" ++ zloj.s! AF Nom Animate (GSg (genGNum gn))
         }
       };
        ClCondit => ""
@@ -94,20 +94,20 @@ concrete VerbRus of Verb = CatRus ** open ResRus, Prelude in {
   CompAdv zloj =
     { s= \\clf,gn,p => case clf of {
         ClImper => case gn of 
-     { ASg _ => "будь" ++ zloj.s;    -- person is ignored !
-       APl => "будьте" ++ zloj.s
+     { GSg _ => "будь" ++ zloj.s;    -- person is ignored !
+       GPl => "будьте" ++ zloj.s
      };
      ClInfinit => "быть" ++ zloj.s;
         ClIndic Present  _ => zloj.s ;
         ClIndic PastRus _ => case gn of 
-       { (ASg Fem)  => "была" ++ zloj.s;
-         (ASg Masc) => "был" ++ zloj.s;
-          (ASg Neut) => "было" ++ zloj.s;
-         APl => "были" ++ zloj.s
+       { (GSg Fem)  => "была" ++ zloj.s;
+         (GSg Masc) => "был" ++ zloj.s;
+          (GSg Neut) => "было" ++ zloj.s;
+         GPl => "были" ++ zloj.s
        };
         ClIndic Future _ => case gn of 
-       { (ASg _) => "будет" ++ zloj.s;
-         APl => "будут" ++ zloj.s
+       { (GSg _) => "будет" ++ zloj.s;
+         GPl => "будут" ++ zloj.s
         };
         ClCondit => ""
         } ;        
@@ -253,13 +253,13 @@ concrete VerbRus of Verb = CatRus ** open ResRus, Prelude in {
       w = Act;
       negBefore = True;
       s2 = "";
-      s3 = \\g,n => molodoj.s!(AF Inst Animate (gNum g n))  
+      s3 = \\g,n => molodoj.s!(AF Inst Animate (gennum g n))  
     } ;
 
   SlashV2A  obechat molodoj =
     {s  = \\clf,gn,p => 
           obechat.s ! (getActVerbForm clf (genGNum gn) (numGNum gn) p) ++  
-          molodoj.s ! AF Inst Inanimate (ASg Neut) ;
+          molodoj.s ! AF Inst Inanimate (GSg Neut) ;
                       ---- AR 17/6; AF Inst tu.anim (pgNum tu.g tu.n) ; 
       asp = obechat.asp ;
       w = Act;

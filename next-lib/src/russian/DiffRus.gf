@@ -6,4 +6,12 @@ instance DiffRus of DiffSlavic = open CommonSlavic, Prelude in {
 
     NForm = NF Number Case ;
 
+    PronGen = PGen Gender | PNoGen ;
+
+  oper
+    Agr = {n : Number; p : Person; g : PronGen} ;
+
+    agrP3 : Number -> PronGen -> Agr = \n,g -> 
+      {n = n; p = P3; g = g} ;
+
 }

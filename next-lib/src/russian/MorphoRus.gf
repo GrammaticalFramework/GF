@@ -40,31 +40,31 @@ oper pronYaTu : { s : Case => Str } -> Str -> Person -> Pronoun =
   { s = table {
     PF c _ NonPoss   => nonPoss.s!c ;
     PF c _ (Poss gn) => case <c, gn> of {
-        <Nom,      ASg Neut         > => mo + "ё" ;
-        <Nom,      ASg Masc         > => mo + "й" ;
-        <Gen,      ASg (Masc | Neut)> => mo + "его" ;
-        <Dat,      ASg (Masc | Neut)> => mo + "ему" ;
-        <Acc,      ASg (Masc | Neut)> => mo + "его" ;
-        <Inst,     ASg (Masc | Neut)> => mo + "им" ;
-        <Prepos _, ASg (Masc | Neut)> => mo + "ём" ;
+        <Nom,      GSg Neut         > => mo + "ё" ;
+        <Nom,      GSg Masc         > => mo + "й" ;
+        <Gen,      GSg (Masc | Neut)> => mo + "его" ;
+        <Dat,      GSg (Masc | Neut)> => mo + "ему" ;
+        <Acc,      GSg (Masc | Neut)> => mo + "его" ;
+        <Inst,     GSg (Masc | Neut)> => mo + "им" ;
+        <Prepos _, GSg (Masc | Neut)> => mo + "ём" ;
 
-        <Nom,      ASg Fem> => mo + "я" ;
-        <Gen,      ASg Fem> => mo + "ей" ;
-        <Dat,      ASg Fem> => mo + "ей" ;
-        <Acc,      ASg Fem> => mo + "ю" ;
-        <Inst,     ASg Fem> => mo + "ей" ;
-        <Prepos _, ASg Fem> => mo + "ей" ;
+        <Nom,      GSg Fem> => mo + "я" ;
+        <Gen,      GSg Fem> => mo + "ей" ;
+        <Dat,      GSg Fem> => mo + "ей" ;
+        <Acc,      GSg Fem> => mo + "ю" ;
+        <Inst,     GSg Fem> => mo + "ей" ;
+        <Prepos _, GSg Fem> => mo + "ей" ;
 
-        <Nom,      APl> => mo + "и" ;
-        <Gen,      APl> => mo + "их" ;
-        <Dat,      APl> => mo + "им" ;
-        <Acc,      APl> => mo + "их" ;
-        <Inst,     APl> => mo + "им" ;
-        <Prepos _, APl> => mo + "их" 
+        <Nom,      GPl> => mo + "и" ;
+        <Gen,      GPl> => mo + "их" ;
+        <Dat,      GPl> => mo + "им" ;
+        <Acc,      GPl> => mo + "их" ;
+        <Inst,     GPl> => mo + "им" ;
+        <Prepos _, GPl> => mo + "их" 
 	
       }
     } ;
-    g = PNoGen ; n = Sg ; p = pers ; pron = True
+    a = {g = PNoGen; n = Sg; p = pers};
   } ;
 
 oper pronNAfterPrep : Pronoun -> Pronoun = \p ->
@@ -73,7 +73,7 @@ oper pronNAfterPrep : Pronoun -> Pronoun = \p ->
                         x@(("е"|"ё"|"и")+_) => "н"+x;
                         x => x };
     pf => p.s!pf };
-    g = p.g ; n = p.n ; p = p.p ; pron = p.pron
+    a = p.a;
   } ;
 
 oper pronOn : Pronoun = pronNAfterPrep
@@ -85,7 +85,7 @@ oper pronOn : Pronoun = pronNAfterPrep
     PF Inst       _ _ => "им" ;
     PF (Prepos _) _ _ => "ём"
     } ;
-    g = PGen Masc ; n = Sg ; p = P3 ; pron = True
+    a = agrP3 Sg (PGen Masc)
   } ;
 
 oper pronOna : Pronoun = pronNAfterPrep
@@ -95,7 +95,7 @@ oper pronOna : Pronoun = pronNAfterPrep
     PF (Gen|Acc) _ _           => "её" ;
     PF (Dat|Inst|Prepos _) _ _ => "ей"
     } ;
-    g = PGen Fem ; n = Sg ; p = P3 ; pron = True
+    a = agrP3 Sg (PGen Fem)
   } ;
 
 oper pronOno: Pronoun =
@@ -103,7 +103,7 @@ oper pronOno: Pronoun =
     PF Nom _ NonPoss => "оно" ;
     pf => pronOn.s!pf
     } ;
-    g = PGen Neut ; n = Sg ; p = P3 ; pron = True
+    a = agrP3 Sg (PGen Neut)
   } ;
 
 oper pronMuVu : Str -> Str -> Person -> Pronoun =
@@ -116,29 +116,29 @@ oper pronMuVu : Str -> Str -> Person -> Pronoun =
     PF Inst       _ NonPoss => na + "ми" ;
     PF (Prepos _) _ NonPoss => na + "с" ;
 
-    PF Nom        _ (Poss (ASg Masc))          => na + "ш" ;
-    PF Nom        _ (Poss (ASg Neut))          => na + "ше" ;
-    PF Gen        _ (Poss (ASg (Masc | Neut))) => na + "шего" ;
-    PF Dat        _ (Poss (ASg (Masc | Neut))) => na + "шему" ;
-    PF Acc        _ (Poss (ASg (Masc | Neut))) => na + "шего" ;
-    PF Inst       _ (Poss (ASg (Masc | Neut))) => na + "шим" ;
-    PF (Prepos _) _ (Poss (ASg (Masc | Neut))) => na + "шем" ;
+    PF Nom        _ (Poss (GSg Masc))          => na + "ш" ;
+    PF Nom        _ (Poss (GSg Neut))          => na + "ше" ;
+    PF Gen        _ (Poss (GSg (Masc | Neut))) => na + "шего" ;
+    PF Dat        _ (Poss (GSg (Masc | Neut))) => na + "шему" ;
+    PF Acc        _ (Poss (GSg (Masc | Neut))) => na + "шего" ;
+    PF Inst       _ (Poss (GSg (Masc | Neut))) => na + "шим" ;
+    PF (Prepos _) _ (Poss (GSg (Masc | Neut))) => na + "шем" ;
 
-    PF Nom        _ (Poss (ASg Fem)) => na + "ша" ;
-    PF Gen        _ (Poss (ASg Fem)) => na + "шей" ;
-    PF Dat        _ (Poss (ASg Fem)) => na + "шей" ;
-    PF Acc        _ (Poss (ASg Fem)) => na + "шу" ;
-    PF Inst       _ (Poss (ASg Fem)) => na + "шею" ;
-    PF (Prepos _) _ (Poss (ASg Fem)) => na + "шей" ;
+    PF Nom        _ (Poss (GSg Fem)) => na + "ша" ;
+    PF Gen        _ (Poss (GSg Fem)) => na + "шей" ;
+    PF Dat        _ (Poss (GSg Fem)) => na + "шей" ;
+    PF Acc        _ (Poss (GSg Fem)) => na + "шу" ;
+    PF Inst       _ (Poss (GSg Fem)) => na + "шею" ;
+    PF (Prepos _) _ (Poss (GSg Fem)) => na + "шей" ;
 
-    PF Nom        _ (Poss APl) => na + "ши" ;
-    PF Gen        _ (Poss APl) => na + "ших" ;
-    PF Dat        _ (Poss APl) => na + "шим" ;
-    PF Acc        _ (Poss APl) => na + "ших" ;
-    PF Inst       _ (Poss APl) => na + "шими" ;
-    PF (Prepos _) _ (Poss APl) => na + "ших"
+    PF Nom        _ (Poss GPl) => na + "ши" ;
+    PF Gen        _ (Poss GPl) => na + "ших" ;
+    PF Dat        _ (Poss GPl) => na + "шим" ;
+    PF Acc        _ (Poss GPl) => na + "ших" ;
+    PF Inst       _ (Poss GPl) => na + "шими" ;
+    PF (Prepos _) _ (Poss GPl) => na + "ших"
     };
-    g = PNoGen ; n = Pl ; p = pers ; pron = True
+    a = {g = PNoGen; n = Pl; p = pers}
   } ;
 
 oper pronMu: Pronoun = pronMuVu "мы" "на" P1;
@@ -153,7 +153,7 @@ oper pronOni: Pronoun = pronNAfterPrep
     PF (Gen|Acc|Prepos _) _ _ => "их" ;
     PF Inst _ _               => "ими"
     } ;
-    g = PNoGen ; n = Pl ; p = P3 ; pron = True
+    a = agrP3 Pl PNoGen
   } ;
 
 oper pronKto: Pronoun =
@@ -165,10 +165,7 @@ oper pronKto: Pronoun =
     PF Inst _ _ => "кем" ;
     PF (Prepos _) _ _ => "ком"
     } ;
-    g = PGen  Masc;
-    n = Sg ;
-    p = P3 ;
-    pron = False
+    a = agrP3 Sg (PGen Masc)
   } ;
 
 oper pronChto: Pronoun =
@@ -180,18 +177,12 @@ oper pronChto: Pronoun =
     PF Inst _ _ => "чем" ;
     PF (Prepos _) _ _ => "чём"
     } ;
-    g = PGen  Masc;
-    n = Sg ;
-    p = P3 ;
-    pron = False
+    a = agrP3 Sg (PGen Masc)
   } ;
 
 oper pron_add_to : Pronoun -> Pronoun = \p -> 
   { s = \\pf => (p.s!pf) + "-то" ;
-    g = p.g ;
-    n = p.n ;
-    p = p.p ;
-    pron = p.pron
+    a = p.a
   } ;
 
 oper pronKtoTo : Pronoun = pron_add_to pronKto ;
@@ -207,11 +198,8 @@ oper pronEti: Pronoun =
     PF Inst _ _ => "этими" ;
     PF (Prepos _) _ _ => "этих"
     } ;
-    n = Pl;
-    p = P3;
-    g= PGen Fem ;
-    anim = Animate ;
-    pron = False
+    a = agrP3 Pl (PGen Fem) ;
+    anim = Animate
   } ;
 
 oper pronTe: Pronoun =
@@ -223,11 +211,8 @@ oper pronTe: Pronoun =
     PF Inst _ _ => "теми" ;
     PF (Prepos _) _ _ => "тех"
     } ;
-     n = Pl;
-     p = P3;
-     g=PGen Fem ;
-     anim = Animate ;
-     pron = False
+     a = agrP3 Pl (PGen Fem) ;
+     anim = Animate
   } ;
 
 
@@ -242,8 +227,7 @@ oper pronTe: Pronoun =
 --    } ;
 --    g = PGen  Masc;
 --    n = Sg ;
---    p = P3 ;
---    pron = False
+--    p = P3
 --  } ;
 --
 --oper pronNichto: Pronoun =
@@ -257,8 +241,7 @@ oper pronTe: Pronoun =
 --    } ;
 --    g = PGen  Masc;
 --    n = Sg ;
---    p = P3 ;
---    pron = False
+--    p = P3
 --  } ;
 --
 
@@ -271,10 +254,7 @@ oper pronVseInanimate: Pronoun =
     PF Inst _ _ => "всем" ;
     PF (Prepos _) _ _ => "всём"
     } ;
-    g = PGen  Neut;
-    n = Sg ;
-    p = P3 ;
-    pron = False
+    a = agrP3 Sg (PGen  Neut)
   } ;
 
 
@@ -560,8 +540,8 @@ Paradigms:
   -- Nouns inflected as adjectives.
   oper nAdj : Adjective -> Gender ->CommNoun= \a,g -> 
     { s = table {
-	NF Sg c           => a.s!AF c Inanimate (ASg g) ;
-	NF Pl c           => a.s!AF c Inanimate APl };
+	NF Sg c           => a.s!AF c Inanimate (GSg g) ;
+	NF Pl c           => a.s!AF c Inanimate GPl };
       g = g; anim = Inanimate } ;
 
 -- Makes a noun animate.
@@ -734,66 +714,66 @@ oper eEnd_Decl: Str -> CommNoun =  \vs ->
 	       True  => "о" ;
 	       False => oAfter stem } in
     { s = table {
-	 AF Nom _ (ASg Masc)               => stem + case endStress of {
+	 AF Nom _ (GSg Masc)               => stem + case endStress of {
                                                         True => "ой";
 							False => iAfter stem + "й" } ;
-	 AF Nom _ (ASg Neut)               => stem + o+"е";
-	 AF Gen _ (ASg (Masc|Neut))        => stem + o+"го";
-	 AF Dat _ (ASg (Masc|Neut))        => stem + o+"му";
-	 AF Acc Inanimate (ASg Masc)       => stem + i+"й";
-	 AF Acc Animate (ASg Masc)         => stem + o+"го";
-	 AF Acc _ (ASg Neut)               => stem + o+"е";
-	 AF Inst _ (ASg (Masc|Neut))       => stem + i+"м";
-	 AF (Prepos _) _ (ASg (Masc|Neut)) => stem + o+"м";
+	 AF Nom _ (GSg Neut)               => stem + o+"е";
+	 AF Gen _ (GSg (Masc|Neut))        => stem + o+"го";
+	 AF Dat _ (GSg (Masc|Neut))        => stem + o+"му";
+	 AF Acc Inanimate (GSg Masc)       => stem + i+"й";
+	 AF Acc Animate (GSg Masc)         => stem + o+"го";
+	 AF Acc _ (GSg Neut)               => stem + o+"е";
+	 AF Inst _ (GSg (Masc|Neut))       => stem + i+"м";
+	 AF (Prepos _) _ (GSg (Masc|Neut)) => stem + o+"м";
 
-	 AF Nom  _ (ASg Fem) => stem + "ая";
-	 AF Acc  _ (ASg Fem) => stem + "ую";
-	 AF _    _ (ASg Fem) => stem + o+"й";
+	 AF Nom  _ (GSg Fem) => stem + "ая";
+	 AF Acc  _ (GSg Fem) => stem + "ую";
+	 AF _    _ (GSg Fem) => stem + o+"й";
 
-	 AF Nom _ APl          => stem + i+"е";
-	 AF Acc  Inanimate APl => stem + i+"е";
-	 AF Acc  Animate APl   => stem + i+"х";
-	 AF Gen  _ APl         => stem + i+"х";
-	 AF Inst _ APl         => stem + i+"ми";
-	 AF Dat  _ APl         => stem + i+"м";
-	 AF (Prepos _) _ APl   => stem + i+"х";
+	 AF Nom _ GPl          => stem + i+"е";
+	 AF Acc  Inanimate GPl => stem + i+"е";
+	 AF Acc  Animate GPl   => stem + i+"х";
+	 AF Gen  _ GPl         => stem + i+"х";
+	 AF Inst _ GPl         => stem + i+"ми";
+	 AF Dat  _ GPl         => stem + i+"м";
+	 AF (Prepos _) _ GPl   => stem + i+"х";
 
-	 AFShort (ASg Masc) => stem;
-	 AFShort (ASg Fem)  => stem + "а";
-	 AFShort (ASg Neut) => stem + o ;
-	 AFShort APl        => stem + i;
+	 AFShort (GSg Masc) => stem;
+	 AFShort (GSg Fem)  => stem + "а";
+	 AFShort (GSg Neut) => stem + o ;
+	 AFShort GPl        => stem + i;
 
 	 AdvF => stem + o
      } } ;
 
   oper aRegSoft : Str -> Adjective = \stem ->
     { s = table {
-	 AF Nom _ (ASg Masc)               => stem + "ий" ;
-	 AF Nom _ (ASg Neut)               => stem + "ее";
-	 AF Gen _ (ASg (Masc|Neut))        => stem + "его";
-	 AF Dat _ (ASg (Masc|Neut))        => stem + "ему";
-	 AF Acc Inanimate (ASg Masc)       => stem + "ий";
-	 AF Acc Animate (ASg Masc)         => stem + "его";
-	 AF Acc _ (ASg Neut)               => stem + "ее";
-	 AF Inst _ (ASg (Masc|Neut))       => stem + "им";
-	 AF (Prepos _) _ (ASg (Masc|Neut)) => stem + "ем";
+	 AF Nom _ (GSg Masc)               => stem + "ий" ;
+	 AF Nom _ (GSg Neut)               => stem + "ее";
+	 AF Gen _ (GSg (Masc|Neut))        => stem + "его";
+	 AF Dat _ (GSg (Masc|Neut))        => stem + "ему";
+	 AF Acc Inanimate (GSg Masc)       => stem + "ий";
+	 AF Acc Animate (GSg Masc)         => stem + "его";
+	 AF Acc _ (GSg Neut)               => stem + "ее";
+	 AF Inst _ (GSg (Masc|Neut))       => stem + "им";
+	 AF (Prepos _) _ (GSg (Masc|Neut)) => stem + "ем";
 
-	 AF Nom  _ (ASg Fem) => stem + "яя";
-	 AF Acc  _ (ASg Fem) => stem + "юю";
-	 AF _    _ (ASg Fem) => stem + "ей";
+	 AF Nom  _ (GSg Fem) => stem + "яя";
+	 AF Acc  _ (GSg Fem) => stem + "юю";
+	 AF _    _ (GSg Fem) => stem + "ей";
 
-	 AF Nom _ APl          => stem + "ие";
-	 AF Acc  Inanimate APl => stem + "ие";
-	 AF Acc  Animate APl   => stem + "их";
-	 AF Gen  _ APl         => stem + "их";
-	 AF Inst _ APl         => stem + "ими";
-	 AF Dat  _ APl         => stem + "им";
-	 AF (Prepos _) _ APl   => stem + "их";
+	 AF Nom _ GPl          => stem + "ие";
+	 AF Acc  Inanimate GPl => stem + "ие";
+	 AF Acc  Animate GPl   => stem + "их";
+	 AF Gen  _ GPl         => stem + "их";
+	 AF Inst _ GPl         => stem + "ими";
+	 AF Dat  _ GPl         => stem + "им";
+	 AF (Prepos _) _ GPl   => stem + "их";
 
-	 AFShort (ASg Masc) => stem; -- FIXME: add e if stem ends in consonant + n
-	 AFShort (ASg Fem)  => stem + "я";
-	 AFShort (ASg Neut) => stem + "е" ;
-	 AFShort APl        => stem + "и" ;
+	 AFShort (GSg Masc) => stem; -- FIXME: add e if stem ends in consonant + n
+	 AFShort (GSg Fem)  => stem + "я";
+	 AFShort (GSg Neut) => stem + "е" ;
+	 AFShort GPl        => stem + "и" ;
 
 	 AdvF => stem + "е"
      } } ;
@@ -807,176 +787,176 @@ oper eEnd_Decl: Str -> CommNoun =  \vs ->
 
 
 oper totDet: Adjective = {s = table {
-      AF Nom _ (ASg Masc) => "тот";
-      AF Nom _ (ASg Fem) => "та";
-      AF Nom _ (ASg Neut) => "то";
-      AF Nom _ APl => "те";
-      AF Acc Inanimate (ASg Masc) => "тот";
-      AF Acc Animate (ASg Masc) => "того";
-      AF Acc  _ (ASg Fem) => "ту";
-      AF Acc  _ (ASg Neut) => "то";
-      AF Acc  Inanimate APl => "те";
-      AF Acc  Animate APl => "тех";
-      AF Gen  _ (ASg Masc) => "того";
-      AF Gen  _ (ASg Fem) => "той";
-      AF Gen  _ (ASg Neut) => "того";
-      AF Gen  _ APl => "тех";
-      AF Inst _ (ASg Masc) => "тем";
-      AF Inst _ (ASg Fem) => "той";
-      AF Inst _ (ASg Neut) => "тем";
-      AF Inst _ APl => "теми";
-      AF Dat  _ (ASg Masc) => "тому";
-      AF Dat  _ (ASg Fem) => "той";
-      AF Dat  _ (ASg Neut) => "тому";
-      AF Dat  _ APl => "тем";
-      AF (Prepos _) _ (ASg Masc) => "том";
-      AF (Prepos _) _ (ASg Fem) => "той";
-      AF (Prepos _) _ (ASg Neut) => "том";
-      AF (Prepos _) _ APl => "тех" ;
-      AFShort (ASg Masc) => "тот";
-      AFShort (ASg Fem) => "та";
-      AFShort (ASg Neut) => "то";
-      AFShort APl => "те";
+      AF Nom _ (GSg Masc) => "тот";
+      AF Nom _ (GSg Fem) => "та";
+      AF Nom _ (GSg Neut) => "то";
+      AF Nom _ GPl => "те";
+      AF Acc Inanimate (GSg Masc) => "тот";
+      AF Acc Animate (GSg Masc) => "того";
+      AF Acc  _ (GSg Fem) => "ту";
+      AF Acc  _ (GSg Neut) => "то";
+      AF Acc  Inanimate GPl => "те";
+      AF Acc  Animate GPl => "тех";
+      AF Gen  _ (GSg Masc) => "того";
+      AF Gen  _ (GSg Fem) => "той";
+      AF Gen  _ (GSg Neut) => "того";
+      AF Gen  _ GPl => "тех";
+      AF Inst _ (GSg Masc) => "тем";
+      AF Inst _ (GSg Fem) => "той";
+      AF Inst _ (GSg Neut) => "тем";
+      AF Inst _ GPl => "теми";
+      AF Dat  _ (GSg Masc) => "тому";
+      AF Dat  _ (GSg Fem) => "той";
+      AF Dat  _ (GSg Neut) => "тому";
+      AF Dat  _ GPl => "тем";
+      AF (Prepos _) _ (GSg Masc) => "том";
+      AF (Prepos _) _ (GSg Fem) => "той";
+      AF (Prepos _) _ (GSg Neut) => "том";
+      AF (Prepos _) _ GPl => "тех" ;
+      AFShort (GSg Masc) => "тот";
+      AFShort (GSg Fem) => "та";
+      AFShort (GSg Neut) => "то";
+      AFShort GPl => "те";
       AdvF => "то" 
       }
   } ;
 
 oper odinDet: Adjective = {s = table {
-      AF Nom _ (ASg Masc) => "один";
-      AF Nom _ (ASg Fem) => "одна";
-      AF Nom _ (ASg Neut) => "одно";
-      AF Nom _ APl => "одни";
-      AF Acc Inanimate (ASg Masc) => "один";
-      AF Acc Animate (ASg Masc) => "одного";
-      AF Acc  _ (ASg Fem) => "одну";
-      AF Acc  _ (ASg Neut) => "одно";
-      AF Acc  Inanimate APl => "одни";
-      AF Acc  Animate APl => "одних";
-      AF Gen  _ (ASg Masc) => "одного";
-      AF Gen  _ (ASg Fem) => "одной";
-      AF Gen  _ (ASg Neut) => "одного";
-      AF Gen  _ APl => "одних";
-      AF Inst _ (ASg Masc) => "одним";
-      AF Inst _ (ASg Fem) => "одной";
-      AF Inst _ (ASg Neut) => "одним";
-      AF Inst _ APl => "одними";
-      AF Dat  _ (ASg Masc) => "одному";
-      AF Dat  _ (ASg Fem) => "одной";
-      AF Dat  _ (ASg Neut) => "одному";
-      AF Dat  _ APl => "одним";
-      AF (Prepos _) _ (ASg Masc) => "одном";
-      AF (Prepos _) _ (ASg Fem) => "одной";
-      AF (Prepos _) _ (ASg Neut) => "одном";
-      AF (Prepos _) _ APl => "одних";
-      AFShort (ASg Masc) => "один";
-      AFShort (ASg Fem) => "одна";
-      AFShort (ASg Neut) => "одно";
-      AFShort APl => "одни";
+      AF Nom _ (GSg Masc) => "один";
+      AF Nom _ (GSg Fem) => "одна";
+      AF Nom _ (GSg Neut) => "одно";
+      AF Nom _ GPl => "одни";
+      AF Acc Inanimate (GSg Masc) => "один";
+      AF Acc Animate (GSg Masc) => "одного";
+      AF Acc  _ (GSg Fem) => "одну";
+      AF Acc  _ (GSg Neut) => "одно";
+      AF Acc  Inanimate GPl => "одни";
+      AF Acc  Animate GPl => "одних";
+      AF Gen  _ (GSg Masc) => "одного";
+      AF Gen  _ (GSg Fem) => "одной";
+      AF Gen  _ (GSg Neut) => "одного";
+      AF Gen  _ GPl => "одних";
+      AF Inst _ (GSg Masc) => "одним";
+      AF Inst _ (GSg Fem) => "одной";
+      AF Inst _ (GSg Neut) => "одним";
+      AF Inst _ GPl => "одними";
+      AF Dat  _ (GSg Masc) => "одному";
+      AF Dat  _ (GSg Fem) => "одной";
+      AF Dat  _ (GSg Neut) => "одному";
+      AF Dat  _ GPl => "одним";
+      AF (Prepos _) _ (GSg Masc) => "одном";
+      AF (Prepos _) _ (GSg Fem) => "одной";
+      AF (Prepos _) _ (GSg Neut) => "одном";
+      AF (Prepos _) _ GPl => "одних";
+      AFShort (GSg Masc) => "один";
+      AFShort (GSg Fem) => "одна";
+      AFShort (GSg Neut) => "одно";
+      AFShort GPl => "одни";
       AdvF =>  "одно"
        }
   } ;
 
 oper etotDet: Adjective = {s = table {
-      AF Nom _ (ASg Masc) => "этот";
-      AF Nom _ (ASg Fem) => "эта";
-      AF Nom _ (ASg Neut) => "это";
-      AF Nom _ APl => "эти";
-      AF Acc Inanimate (ASg Masc) => "этот";
-      AF Acc Animate (ASg Masc) => "этого";
-      AF Acc  _ (ASg Fem) => "эту";
-      AF Acc  _ (ASg Neut) => "это";
-      AF Acc  Inanimate APl => "эти";
-      AF Acc  Animate APl => "этих";
-      AF Gen  _ (ASg Masc) => "этого";
-      AF Gen  _ (ASg Fem) => "этой";
-      AF Gen  _ (ASg Neut) => "этого";
-      AF Gen  _ APl => "этих";
-      AF Inst _ (ASg Masc) => "этим";
-      AF Inst _ (ASg Fem) => "этой";
-      AF Inst _ (ASg Neut) => "этим";
-      AF Inst _ APl => "этими";
-      AF Dat  _ (ASg Masc) => "этому";
-      AF Dat  _ (ASg Fem) => "этой";
-      AF Dat  _ (ASg Neut) => "этому";
-      AF Dat  _ APl => "этим";
-      AF (Prepos _) _ (ASg Masc) => "этом";
-      AF (Prepos _) _ (ASg Fem) => "этой";
-      AF (Prepos _) _ (ASg Neut) => "этом";
-      AF (Prepos _) _ APl => "этих";
-      AFShort (ASg Masc) => "этот";
-      AFShort (ASg Fem) => "эта";
-      AFShort (ASg Neut) => "это";
-      AFShort APl => "эти";
+      AF Nom _ (GSg Masc) => "этот";
+      AF Nom _ (GSg Fem) => "эта";
+      AF Nom _ (GSg Neut) => "это";
+      AF Nom _ GPl => "эти";
+      AF Acc Inanimate (GSg Masc) => "этот";
+      AF Acc Animate (GSg Masc) => "этого";
+      AF Acc  _ (GSg Fem) => "эту";
+      AF Acc  _ (GSg Neut) => "это";
+      AF Acc  Inanimate GPl => "эти";
+      AF Acc  Animate GPl => "этих";
+      AF Gen  _ (GSg Masc) => "этого";
+      AF Gen  _ (GSg Fem) => "этой";
+      AF Gen  _ (GSg Neut) => "этого";
+      AF Gen  _ GPl => "этих";
+      AF Inst _ (GSg Masc) => "этим";
+      AF Inst _ (GSg Fem) => "этой";
+      AF Inst _ (GSg Neut) => "этим";
+      AF Inst _ GPl => "этими";
+      AF Dat  _ (GSg Masc) => "этому";
+      AF Dat  _ (GSg Fem) => "этой";
+      AF Dat  _ (GSg Neut) => "этому";
+      AF Dat  _ GPl => "этим";
+      AF (Prepos _) _ (GSg Masc) => "этом";
+      AF (Prepos _) _ (GSg Fem) => "этой";
+      AF (Prepos _) _ (GSg Neut) => "этом";
+      AF (Prepos _) _ GPl => "этих";
+      AFShort (GSg Masc) => "этот";
+      AFShort (GSg Fem) => "эта";
+      AFShort (GSg Neut) => "это";
+      AFShort GPl => "эти";
       AdvF =>   "это"
        }
   } ;
 
 oper vesDet: Adjective = {s = table {
-      AF Nom _ (ASg Masc) => "весь";
-      AF Nom _ (ASg Fem) => "вся";
-      AF Nom _ (ASg Neut) => "всё";
-      AF Nom _ APl => "все";
-      AF Acc  Animate (ASg Masc) => "весь";
-      AF Acc  Inanimate (ASg Masc) => "всего";
-      AF Acc  _ (ASg Fem) => "всю";
-      AF Acc  _ (ASg Neut) => "всё";
-      AF Acc  Inanimate APl => "все";
-      AF Acc  Animate APl => "всех";
-      AF Gen  _ (ASg Masc) => "всего";
-      AF Gen  _ (ASg Fem) => "всей";
-      AF Gen  _ (ASg Neut) => "всего";
-      AF Gen  _ APl => "всех";
-      AF Inst _ (ASg Masc) => "всем";
-      AF Inst _ (ASg Fem) => "всей";
-      AF Inst _ (ASg Neut) => "всем";
-      AF Inst _ APl => "всеми";
-      AF Dat  _ (ASg Masc) => "ему";
-      AF Dat  _ (ASg Fem) => "ей";
-      AF Dat  _ (ASg Neut) => "ему";
-      AF Dat  _ APl => "всем";
-      AF (Prepos _) _ (ASg Masc) => "всём";
-      AF (Prepos _) _ (ASg Fem) => "всей";
-      AF (Prepos _) _ (ASg Neut) => "всём";
-      AF (Prepos _) _ APl => "всех" ;
-      AFShort (ASg Masc) => "весь";
-      AFShort (ASg Fem) => "вся";
-      AFShort (ASg Neut) => "всё";
-      AFShort APl => "все";
+      AF Nom _ (GSg Masc) => "весь";
+      AF Nom _ (GSg Fem) => "вся";
+      AF Nom _ (GSg Neut) => "всё";
+      AF Nom _ GPl => "все";
+      AF Acc  Animate (GSg Masc) => "весь";
+      AF Acc  Inanimate (GSg Masc) => "всего";
+      AF Acc  _ (GSg Fem) => "всю";
+      AF Acc  _ (GSg Neut) => "всё";
+      AF Acc  Inanimate GPl => "все";
+      AF Acc  Animate GPl => "всех";
+      AF Gen  _ (GSg Masc) => "всего";
+      AF Gen  _ (GSg Fem) => "всей";
+      AF Gen  _ (GSg Neut) => "всего";
+      AF Gen  _ GPl => "всех";
+      AF Inst _ (GSg Masc) => "всем";
+      AF Inst _ (GSg Fem) => "всей";
+      AF Inst _ (GSg Neut) => "всем";
+      AF Inst _ GPl => "всеми";
+      AF Dat  _ (GSg Masc) => "ему";
+      AF Dat  _ (GSg Fem) => "ей";
+      AF Dat  _ (GSg Neut) => "ему";
+      AF Dat  _ GPl => "всем";
+      AF (Prepos _) _ (GSg Masc) => "всём";
+      AF (Prepos _) _ (GSg Fem) => "всей";
+      AF (Prepos _) _ (GSg Neut) => "всём";
+      AF (Prepos _) _ GPl => "всех" ;
+      AFShort (GSg Masc) => "весь";
+      AFShort (GSg Fem) => "вся";
+      AFShort (GSg Neut) => "всё";
+      AFShort GPl => "все";
       AdvF =>  "полностью"
       }
   } ;
 
 oper uy_j_EndDecl : Str -> Adjective = \s ->{s = table {
-      AF Nom _ (ASg Masc) => s+ "ый";
-      AF Nom _ (ASg Fem) =>  s + "ая";
-      AF Nom _ (ASg Neut) => s + "ое";
-      AF Nom _ APl => s + "ые";
-      AF Acc  Inanimate (ASg Masc) => s + "ый";
-      AF Acc  Animate (ASg Masc) => s + "ого";
-      AF Acc  _ (ASg Fem) => s + "ую";
-      AF Acc  _ (ASg Neut) => s + "ое";
-      AF Acc  Inanimate APl => s + "ые";
-      AF Acc  Animate APl => s + "ых";
-      AF Gen  _ (ASg Masc) => s + "ого";
-      AF Gen  _ (ASg Fem) => s + "ой";
-      AF Gen  _ (ASg Neut) => s + "ого";
-      AF Gen  _ APl => s + "ых";
-      AF Inst _ (ASg Masc) => s + "ым";
-      AF Inst _ (ASg Fem) => s + "ой";
-      AF Inst _ (ASg Neut) => s + "ым";
-      AF Inst _ APl => s + "ыми";
-      AF Dat  _ (ASg Masc) => s + "ому";
-      AF Dat  _ (ASg Fem) => s + "ой";
-      AF Dat  _ (ASg Neut) => s + "ому";
-      AF Dat  _ APl => s + "ым";
-      AF (Prepos _) _ (ASg Masc) => s + "ом";
-      AF (Prepos _) _ (ASg Fem) => s + "ой";
-      AF (Prepos _) _ (ASg Neut) => s + "ом";
-      AF (Prepos _) _ APl => s + "ых";
-      AFShort (ASg Masc) => s;
-      AFShort (ASg Fem)  => s + "а";
-      AFShort (ASg Neut) => s + "о" ;
-      AFShort APl        => s + "ы";
+      AF Nom _ (GSg Masc) => s+ "ый";
+      AF Nom _ (GSg Fem) =>  s + "ая";
+      AF Nom _ (GSg Neut) => s + "ое";
+      AF Nom _ GPl => s + "ые";
+      AF Acc  Inanimate (GSg Masc) => s + "ый";
+      AF Acc  Animate (GSg Masc) => s + "ого";
+      AF Acc  _ (GSg Fem) => s + "ую";
+      AF Acc  _ (GSg Neut) => s + "ое";
+      AF Acc  Inanimate GPl => s + "ые";
+      AF Acc  Animate GPl => s + "ых";
+      AF Gen  _ (GSg Masc) => s + "ого";
+      AF Gen  _ (GSg Fem) => s + "ой";
+      AF Gen  _ (GSg Neut) => s + "ого";
+      AF Gen  _ GPl => s + "ых";
+      AF Inst _ (GSg Masc) => s + "ым";
+      AF Inst _ (GSg Fem) => s + "ой";
+      AF Inst _ (GSg Neut) => s + "ым";
+      AF Inst _ GPl => s + "ыми";
+      AF Dat  _ (GSg Masc) => s + "ому";
+      AF Dat  _ (GSg Fem) => s + "ой";
+      AF Dat  _ (GSg Neut) => s + "ому";
+      AF Dat  _ GPl => s + "ым";
+      AF (Prepos _) _ (GSg Masc) => s + "ом";
+      AF (Prepos _) _ (GSg Fem) => s + "ой";
+      AF (Prepos _) _ (GSg Neut) => s + "ом";
+      AF (Prepos _) _ GPl => s + "ых";
+      AFShort (GSg Masc) => s;
+      AFShort (GSg Fem)  => s + "а";
+      AFShort (GSg Neut) => s + "о" ;
+      AFShort GPl        => s + "ы";
       AdvF => s +"о"
       }
   } ;
@@ -984,32 +964,32 @@ oper uy_j_EndDecl : Str -> Adjective = \s ->{s = table {
 {-
 -- Commented out since I don't know what the short forms are
 oper ti_j_EndDecl : Str -> Adjective = \s ->{s = table {
-      AF Nom _ (ASg Masc) => s+"ий";
-      AF Nom _ (ASg Fem) => s+"ья";
-      AF Nom _ (ASg Neut) => s+"ье";
-      AF Nom _ APl => s+"ьи";
-      AF Acc  Inanimate (ASg Masc) => s+"ий";
-      AF Acc  Animate (ASg Masc) => s+"ьего";
-      AF Acc  _ (ASg Fem) => s+"ью";
-      AF Acc  _ (ASg Neut) => s+"ье";
-      AF Acc  Inanimate APl => s+"ьи";
-      AF Acc  Animate APl => s+"ьих";
-      AF Gen  _ (ASg Masc) => s+"ьего";
-      AF Gen  _ (ASg Fem) => s+"ьей";
-      AF Gen  _ (ASg Neut) => s+"ьего";
-      AF Gen  _ APl => s+"ьих";
-      AF Inst _ (ASg Masc) => s+"ьим";
-      AF Inst _ (ASg Fem) => s+"ьей";
-      AF Inst _ (ASg Neut) => s+"ьим";
-      AF Inst _ APl => s+"ьими";
-      AF Dat  _ (ASg Masc) => s+"ьему";
-      AF Dat  _ (ASg Fem) => s+"ьей";
-      AF Dat  _ (ASg Neut) => s+"ьему";
-      AF Dat  _ APl => s+"ьим";
-      AF (Prepos _) _ (ASg Masc) => s+"ьем";
-      AF (Prepos _) _ (ASg Fem) => s+"ьей";
-      AF (Prepos _) _ (ASg Neut) => s+"ьем";
-      AF (Prepos _) _ APl => s+"ьих";
+      AF Nom _ (GSg Masc) => s+"ий";
+      AF Nom _ (GSg Fem) => s+"ья";
+      AF Nom _ (GSg Neut) => s+"ье";
+      AF Nom _ GPl => s+"ьи";
+      AF Acc  Inanimate (GSg Masc) => s+"ий";
+      AF Acc  Animate (GSg Masc) => s+"ьего";
+      AF Acc  _ (GSg Fem) => s+"ью";
+      AF Acc  _ (GSg Neut) => s+"ье";
+      AF Acc  Inanimate GPl => s+"ьи";
+      AF Acc  Animate GPl => s+"ьих";
+      AF Gen  _ (GSg Masc) => s+"ьего";
+      AF Gen  _ (GSg Fem) => s+"ьей";
+      AF Gen  _ (GSg Neut) => s+"ьего";
+      AF Gen  _ GPl => s+"ьих";
+      AF Inst _ (GSg Masc) => s+"ьим";
+      AF Inst _ (GSg Fem) => s+"ьей";
+      AF Inst _ (GSg Neut) => s+"ьим";
+      AF Inst _ GPl => s+"ьими";
+      AF Dat  _ (GSg Masc) => s+"ьему";
+      AF Dat  _ (GSg Fem) => s+"ьей";
+      AF Dat  _ (GSg Neut) => s+"ьему";
+      AF Dat  _ GPl => s+"ьим";
+      AF (Prepos _) _ (GSg Masc) => s+"ьем";
+      AF (Prepos _) _ (GSg Fem) => s+"ьей";
+      AF (Prepos _) _ (GSg Neut) => s+"ьем";
+      AF (Prepos _) _ GPl => s+"ьих";
       AdvF => s +  "ье"
       }
   } ;
@@ -1094,72 +1074,72 @@ oper PresentVerb : Type = PresentVF => Str ;
 
 oper presentConjDolzhen: Str -> Str -> PresentVerb = \del, sgP1End ->
   table {
-    PRF APl _        => del + "ны" ;
-    PRF (ASg Masc) _ => del + sgP1End ;
-    PRF (ASg Fem)  _ => del + "на" ;
-    PRF (ASg Neut) _ => del + "но"
+    PRF GPl _        => del + "ны" ;
+    PRF (GSg Masc) _ => del + sgP1End ;
+    PRF (GSg Fem)  _ => del + "на" ;
+    PRF (GSg Neut) _ => del + "но"
   };
 
 -- +++ MG_UR: changed! +++
 oper presentConjMixed: Str -> Str -> PresentVerb = \del, sgP1End ->
   table {
-    PRF (ASg _) P1 => del+ sgP1End ; -- sgP1End "чу"
-    PRF (ASg _) P2 => del+ "чешь" ;
-    PRF (ASg _) P3 => del+ "чет" ;
-    PRF APl P1 => del+ "тим" ;
-    PRF APl P2  => del+ "тите" ;
-    PRF APl P3  => del+ "тят"
+    PRF (GSg _) P1 => del+ sgP1End ; -- sgP1End "чу"
+    PRF (GSg _) P2 => del+ "чешь" ;
+    PRF (GSg _) P3 => del+ "чет" ;
+    PRF GPl P1 => del+ "тим" ;
+    PRF GPl P2  => del+ "тите" ;
+    PRF GPl P3  => del+ "тят"
   };
   
 -- +++ MG_UR: changed! (+ д) +++ 
 oper presentConj2: Str -> Str -> PresentVerb = \del, sgP1End ->
 table {
-    PRF (ASg _) P1 => del+ sgP1End ; -- sgP1End "жу"
-    PRF (ASg _) P2 => del+ "дишь" ;
-    PRF (ASg _) P3  => del+ "дит" ;
-    PRF APl P1 => del+ "дим" ;
-    PRF APl P2 => del+ "дите" ;
-    PRF APl P3 => del+ "дят"
+    PRF (GSg _) P1 => del+ sgP1End ; -- sgP1End "жу"
+    PRF (GSg _) P2 => del+ "дишь" ;
+    PRF (GSg _) P3  => del+ "дит" ;
+    PRF GPl P1 => del+ "дим" ;
+    PRF GPl P2 => del+ "дите" ;
+    PRF GPl P3 => del+ "дят"
   };
 
 oper presentConj2a: Str -> Str -> PresentVerb = \del, sgP1End ->
 table {
-    PRF (ASg _) P1 => del+ sgP1End ; -- sgP1End "жу"
-    PRF (ASg _) P2 => del+ "ишь" ;
-    PRF (ASg _) P3  => del+ "ит" ;
-    PRF APl P1 => del+ "им" ;
-    PRF APl P2 => del+ "ите" ;
-    PRF APl P3 => del+ "ят"
+    PRF (GSg _) P1 => del+ sgP1End ; -- sgP1End "жу"
+    PRF (GSg _) P2 => del+ "ишь" ;
+    PRF (GSg _) P3  => del+ "ит" ;
+    PRF GPl P1 => del+ "им" ;
+    PRF GPl P2 => del+ "ите" ;
+    PRF GPl P3 => del+ "ят"
   };
 
 oper presentConj1E: Str -> Str -> PresentVerb = \del, sgP1End ->
   table {
-    PRF (ASg _) P1 => del+ sgP1End ;
-    PRF (ASg _) P2 => del+ "ёшь" ;
-    PRF (ASg _) P3  => del+ "ёт" ;
-    PRF APl P1 => del+ "ём" ;
-    PRF APl P2 => del+ "ёте" ;
-    PRF APl P3 => del+ sgP1End + "т"
+    PRF (GSg _) P1 => del+ sgP1End ;
+    PRF (GSg _) P2 => del+ "ёшь" ;
+    PRF (GSg _) P3  => del+ "ёт" ;
+    PRF GPl P1 => del+ "ём" ;
+    PRF GPl P2 => del+ "ёте" ;
+    PRF GPl P3 => del+ sgP1End + "т"
   };
   
 oper presentConj1: Str -> Str -> PresentVerb = \del, sgP1End ->
   table {
-    PRF (ASg _) P1 => del+ sgP1End ;
-    PRF (ASg _) P2 => del+ "ешь" ;
-    PRF (ASg _) P3 => del+ "ет" ;
-    PRF APl P1 => del+ "ем" ;
-    PRF APl P2 => del+ "ете" ;
-    PRF APl P3 => del+ sgP1End + "т"
+    PRF (GSg _) P1 => del+ sgP1End ;
+    PRF (GSg _) P2 => del+ "ешь" ;
+    PRF (GSg _) P3 => del+ "ет" ;
+    PRF GPl P1 => del+ "ем" ;
+    PRF GPl P2 => del+ "ете" ;
+    PRF GPl P3 => del+ sgP1End + "т"
   };
   
 oper presentConj1Moch: Str -> Str -> Str -> PresentVerb = \del, sgP1End, altRoot ->
  table {
-    PRF (ASg _) P1 => del + sgP1End ;
-    PRF (ASg _) P2 => altRoot + "ешь" ;
-    PRF (ASg _) P3 => altRoot + "ет" ;
-    PRF APl P1 => altRoot + "ем" ;
-    PRF APl P2 => altRoot + "ете" ;
-    PRF APl P3 => del+ sgP1End + "т"
+    PRF (GSg _) P1 => del + sgP1End ;
+    PRF (GSg _) P2 => altRoot + "ешь" ;
+    PRF (GSg _) P3 => altRoot + "ет" ;
+    PRF GPl P1 => altRoot + "ем" ;
+    PRF GPl P2 => altRoot + "ете" ;
+    PRF GPl P3 => del+ sgP1End + "т"
   };
 
 -- "PastVerb" takes care of the past tense conjugation.
@@ -1168,29 +1148,29 @@ param PastVF = PSF GenNum ;
 oper PastVerb : Type = PastVF => Str ;
 oper pastConj: Str -> PastVerb = \del ->
   table {
-    PSF  (ASg Masc) => del ;
-    PSF  (ASg Fem)  => del +"а" ;
-    PSF  (ASg Neut)  => del+"о" ;
-    PSF  APl => del+ "и"
+    PSF  (GSg Masc) => del ;
+    PSF  (GSg Fem)  => del +"а" ;
+    PSF  (GSg Neut)  => del+"о" ;
+    PSF  GPl => del+ "и"
   };
 
 oper pastConjDolzhen: Str -> PastVerb = \del ->
   table {
-    PSF  (ASg Masc) => ["был "] + del + "ен" ;
-    PSF  (ASg Fem)  => ["была "] + del + "на" ;
-    PSF  (ASg Neut)  => ["было "] + del + "но" ;
-    PSF  APl => ["были "] + del + "ны"
+    PSF  (GSg Masc) => ["был "] + del + "ен" ;
+    PSF  (GSg Fem)  => ["была "] + del + "на" ;
+    PSF  (GSg Neut)  => ["было "] + del + "но" ;
+    PSF  GPl => ["были "] + del + "ны"
   };
 
 -- further class added by Magda Gerritsen and Ulrich Real
 oper presentConjForeign: Str -> Str -> PresentVerb = \del, sgP1End ->
   table {
-  PRF (ASg _) P1 => del+ sgP1End ; -- sgP1End "ю"
-  PRF (ASg _) P2 => del+ "ешь" ;
-  PRF (ASg _) P3 => del+ "ет" ;
-  PRF APl P1 => del+ "ем" ;
-  PRF APl P2  => del+ "ете" ;
-  PRF APl P3  => del+ "ют"
+  PRF (GSg _) P1 => del+ sgP1End ; -- sgP1End "ю"
+  PRF (GSg _) P2 => del+ "ешь" ;
+  PRF (GSg _) P3 => del+ "ет" ;
+  PRF GPl P1 => del+ "ем" ;
+  PRF GPl P2  => del+ "ете" ;
+  PRF GPl P3  => del+ "ют"
 };
 
 -- "verbDecl" sorts out verbs according to the aspect and voice parameters.
@@ -1242,19 +1222,19 @@ oper mkVerbImperfective : Str -> Str -> PresentVerb -> PastVerb -> Verbum =
 	 VIMP _  P1 => "давайте" ++ add_sya vox inf ;
 	 VIMP Sg P2 => add_sya vox imper ;
 	 VIMP Pl P2 => add_sya vox (imper+"те") ;
-	 VIMP Sg P3 => "пусть" ++ add_sya vox (presentFuture ! (PRF (ASg Masc) P3)) ;
-	 VIMP Pl P3 => "пусть" ++ add_sya vox (presentFuture ! (PRF APl P3)) ;
+	 VIMP Sg P3 => "пусть" ++ add_sya vox (presentFuture ! (PRF (GSg Masc) P3)) ;
+	 VIMP Pl P3 => "пусть" ++ add_sya vox (presentFuture ! (PRF GPl P3)) ;
 
 	 VSUB gn => add_sya vox (past ! (PSF gn)) ++ "бы";
 
-	 VIND (ASg _) (VPresent p) => add_sya vox (presentFuture ! (PRF (ASg Masc) p));
-	 VIND APl (VPresent p)     => add_sya vox (presentFuture ! (PRF APl p));
-	 VIND (ASg _) (VFuture P1) => "буду"   ++ add_sya vox inf ;
-	 VIND (ASg _) (VFuture P2) => "будешь" ++ add_sya vox  inf ;
-	 VIND (ASg _) (VFuture P3) => "будет"  ++ add_sya vox inf ;
-	 VIND APl     (VFuture P1) => "будем"  ++ add_sya vox inf ;
-	 VIND APl     (VFuture P2) => "будете" ++ add_sya vox inf ;
-	 VIND APl     (VFuture P3) => "будут"  ++ add_sya vox inf ;
+	 VIND (GSg _) (VPresent p) => add_sya vox (presentFuture ! (PRF (GSg Masc) p));
+	 VIND GPl (VPresent p)     => add_sya vox (presentFuture ! (PRF GPl p));
+	 VIND (GSg _) (VFuture P1) => "буду"   ++ add_sya vox inf ;
+	 VIND (GSg _) (VFuture P2) => "будешь" ++ add_sya vox  inf ;
+	 VIND (GSg _) (VFuture P3) => "будет"  ++ add_sya vox inf ;
+	 VIND GPl     (VFuture P1) => "будем"  ++ add_sya vox inf ;
+	 VIND GPl     (VFuture P2) => "будете" ++ add_sya vox inf ;
+	 VIND GPl     (VFuture P3) => "будут"  ++ add_sya vox inf ;
 	 VIND gn      VPast        => add_sya vox (past ! (PSF gn))
      } } ;
      asp = Imperfective
@@ -1264,19 +1244,19 @@ oper mkVerbPerfective: Str -> Str -> PresentVerb -> PastVerb -> Verbum =
      \inf, imper, presentFuture, past -> { s = table { VFORM vox vf => 
        case vf of {
 	 VINF  =>  add_sya vox inf ;
-	 VIMP Sg P1 => "давайте" ++ add_sya vox (presentFuture ! (PRF (ASg Masc) P1));
-	 VIMP Pl P1 => "давайте" ++ add_sya vox (presentFuture ! (PRF APl P1));
+	 VIMP Sg P1 => "давайте" ++ add_sya vox (presentFuture ! (PRF (GSg Masc) P1));
+	 VIMP Pl P1 => "давайте" ++ add_sya vox (presentFuture ! (PRF GPl P1));
 	 VIMP Sg P2 => add_sya vox imper ;
 	 VIMP Pl P2 => add_sya vox (imper+"те") ;
-	 VIMP Sg P3 => "пусть" ++ add_sya vox (presentFuture ! (PRF (ASg Masc) P3)) ;
-	 VIMP Pl P3 => "пусть" ++ add_sya vox (presentFuture ! (PRF APl P3)) ;
+	 VIMP Sg P3 => "пусть" ++ add_sya vox (presentFuture ! (PRF (GSg Masc) P3)) ;
+	 VIMP Pl P3 => "пусть" ++ add_sya vox (presentFuture ! (PRF GPl P3)) ;
 
 	 VSUB gn => add_sya vox (past ! (PSF gn)) ++ "бы" ;
 
-	 VIND (ASg _) (VPresent _)  => nonExist ;
-	 VIND APl     (VPresent P1) => nonExist ;
-	 VIND APl     (VPresent P2) => nonExist ;
-	 VIND APl     (VPresent P3) => nonExist ;
+	 VIND (GSg _) (VPresent _)  => nonExist ;
+	 VIND GPl     (VPresent P1) => nonExist ;
+	 VIND GPl     (VPresent P2) => nonExist ;
+	 VIND GPl     (VPresent P3) => nonExist ;
 	 VIND gn      (VFuture p)   => add_sya vox (presentFuture ! (PRF gn p)) ;
 	 VIND gn      VPast         => add_sya vox (past ! (PSF gn))
      } } ;

@@ -22,13 +22,6 @@ instance ResBul of ResSlavic = ParamX, DiffBul, CommonSlavic ** open Prelude in 
   param
     Role = RSubj | RObj Case | RVoc ;
 
-    GenNum = GSg Gender | GPl ;
-
--- Agreement of $NP$ is a record. We'll add $Gender$ later.
-
-  oper
-    Agr = {gn : GenNum ; p : Person} ;
-
   param 
 -- The plural never makes a gender distinction.
 
@@ -87,9 +80,6 @@ instance ResBul of ResSlavic = ParamX, DiffBul, CommonSlavic ** open Prelude in 
 --2 Transformations between parameter types
 
   oper
-    agrP3 : GenNum -> Agr = \gn -> 
-      {gn = gn; p = P3} ;
-
     conjGenNum : GenNum -> GenNum -> GenNum = \a,b ->
       case <a,b> of {
         <GSg _,GSg g> => GSg g ;
@@ -99,18 +89,6 @@ instance ResBul of ResSlavic = ParamX, DiffBul, CommonSlavic ** open Prelude in 
     conjAgr : Agr -> Agr -> Agr = \a,b -> {
       gn = conjGenNum a.gn b.gn ;
       p  = conjPerson a.p b.p
-      } ;
-
-    gennum : Gender -> Number -> GenNum = \g,n ->
-      case n of {
-        Sg => GSg g ;
-        Pl => GPl
-        } ;
-
-    numGenNum : GenNum -> Number = \gn -> 
-      case gn of {
-        GSg _  => Sg ;
-        GPl    => Pl
       } ;
 
     aform : GenNum -> Species -> Role -> AForm = \gn,spec,role -> 

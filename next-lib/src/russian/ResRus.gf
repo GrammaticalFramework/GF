@@ -46,19 +46,6 @@ param
 -- (a big house - big houses).
 -- The plural never makes a gender distinction.
 
-  GenNum = ASg Gender | APl ;
-
-  -- Coercions between the compound gen-num type and gender and number:
-oper
-  gNum : Gender -> Number -> GenNum = \g,n -> 
-    case n of 
-   {   Sg => case g of 
-                 { Fem => ASg Fem ;
-                   Masc => ASg Masc ;
-                   Neut => ASg Neut  } ;
-       Pl => APl
-   } ;
-
 
 -- The Possessive parameter is introduced in order to describe
 -- the possessives of personal pronouns, which are used in the 
@@ -88,13 +75,10 @@ param
 
 param  PronForm = PF Case AfterPrep Possessive;
 
-oper Pronoun = { s : PronForm => Str ; n : Number ; p : Person ;
-           g: PronGen ;  pron: Bool} ;     
+oper Pronoun = {s : PronForm => Str; a : Agr} ;     
 
 -- Gender is not morphologically determined for first
 --  and second person pronouns.
-
-param  PronGen = PGen Gender | PNoGen ;
 
 -- The following coercion is useful:
 
@@ -113,24 +97,25 @@ oper
   
   CommNoun = {s : NForm => Str ; g : Gender ; anim : Animacy } ;
 
-  NounPhrase : Type = { s : PronForm => Str ; n : Number ; 
-   p : Person ; g: PronGen ; anim : Animacy ;  pron: Bool} ;
+  NounPhrase : Type = {s : PronForm => Str; a : Agr; anim : Animacy} ;
 
   mkNP : Number -> CommNoun -> NounPhrase = \n,chelovek -> 
     {s = \\cas => chelovek.s ! NF n (extCase cas) ;
-     n = n ; g = PGen chelovek.g ; p = P3 ; pron =False ;
+     a = agrP3 n (PGen chelovek.g);
      anim = chelovek.anim 
     } ;
 
   det2NounPhrase : Adjective -> NounPhrase = \eto -> 
-    {s = \\pf => eto.s ! (AF (extCase pf) Inanimate (ASg Neut)); n = Sg ; g = PGen Neut ; pron = False ; p = P3 ; anim = Inanimate } ;
+    {s = \\pf => eto.s ! AF (extCase pf) Inanimate (GSg Neut); a = agrP3 Sg (PGen Neut); anim = Inanimate} ;
 
 
  
- pron2NounPhraseNum : Pronoun -> Animacy -> Number -> NounPhrase = \ona, anim, num -> 
-    {s = ona.s ; n = num ; g =  ona.g ; 
-     pron = ona.pron; p = ona.p ; anim = anim } ;
-
+ pron2NounPhraseNum : Pronoun -> Animacy -> Number -> NounPhrase = 
+   \ona, anim, num -> {
+     s = ona.s;
+     a = {n = num; p = ona.a.p; g = ona.a.g};
+     anim = anim
+     } ;
 
 -- Agreement of $NP$ is a record. We'll add $Gender$ later.
 --  oper  Agr = {n : Number ; p : Person} ;
@@ -232,8 +217,8 @@ Prep =>"себе"};
        let 
        { ya = Ya.s ! (mkPronForm Nom No NonPoss);
          khorosho = tebyaNeVizhu.s2;
-         vizhu = tebyaNeVizhu.s ! clf !(gNum (pgen2gen Ya.g) Ya.n)! Ya.p;
-         tebya = tebyaNeVizhu.s3 ! (pgen2gen Ya.g) ! Ya.n 
+         vizhu = tebyaNeVizhu.s ! clf !(gennum (pgen2gen Ya.a.g) Ya.a.n)! Ya.a.p;
+         tebya = tebyaNeVizhu.s3 ! (pgen2gen Ya.a.g) ! Ya.a.n 
        }
        in
         ya ++  khorosho ++ vizhu ++ tebya;
@@ -253,19 +238,19 @@ param
 
 oper
    getActVerbForm : ClForm -> Gender -> Number -> Person -> VerbForm = \clf,g,n, p -> case clf of
-   { ClIndic Future _ => VFORM Act (VIND (gNum g n) (VFuture p));
-     ClIndic PastRus _ => VFORM Act (VIND (gNum g n) VPast);
-      ClIndic Present _ => VFORM Act (VIND (gNum g n) (VPresent p));
-      ClCondit => VFORM Act (VSUB (gNum g n));
+   { ClIndic Future _ => VFORM Act (VIND (gennum g n) (VFuture p));
+     ClIndic PastRus _ => VFORM Act (VIND (gennum g n) VPast);
+      ClIndic Present _ => VFORM Act (VIND (gennum g n) (VPresent p));
+      ClCondit => VFORM Act (VSUB (gennum g n));
       ClInfinit => VFORM Act VINF ;
       ClImper => VFORM Act (VIMP n p) 
    };
 
    getPassVerbForm : ClForm -> Gender -> Number -> Person -> VerbForm = \clf,g,n, p -> case clf of
-   { ClIndic Future _ => VFORM Pass (VIND (gNum g n) (VFuture p));
-     ClIndic PastRus _ => VFORM Pass (VIND (gNum g n) VPast);
-      ClIndic Present _ => VFORM Pass (VIND (gNum g n) (VPresent p));
-      ClCondit => VFORM Pass (VSUB (gNum g n));
+   { ClIndic Future _ => VFORM Pass (VIND (gennum g n) (VFuture p));
+     ClIndic PastRus _ => VFORM Pass (VIND (gennum g n) VPast);
+      ClIndic Present _ => VFORM Pass (VIND (gennum g n) (VPresent p));
+      ClCondit => VFORM Pass (VSUB (gennum g n));
       ClInfinit => VFORM Pass VINF ;
       ClImper => VFORM Pass (VIMP n p) 
    };
@@ -295,19 +280,19 @@ oper sam: Refl=
 
   pgNum : PronGen -> Number -> GenNum = \g,n -> 
     case n of 
-   {   Sg => ASg (pgen2gen g) ; -- assuming pronoun "I" is a male
-        Pl => APl
+   {   Sg => GSg (pgen2gen g) ; -- assuming pronoun "I" is a male
+        Pl => GPl
    } ;
-              --    _  => variants {ASg Masc ; ASg Fem}  } ; 
+              --    _  => variants {GSg Masc ; GSg Fem}  } ; 
               --  "variants" version cause "no term variants" error during linearization
 
 
 
 oper numGNum : GenNum -> Number = \gn ->
-   case gn of { APl => Pl ; _ => Sg } ;
+   case gn of { GPl => Pl ; _ => Sg } ;
 
 oper genGNum : GenNum -> Gender = \gn ->
-   case gn of { ASg Fem => Fem; ASg Masc => Masc; _ => Neut } ;
+   case gn of { GSg Fem => Fem; GSg Masc => Masc; _ => Neut } ;
 
 oper numAF: AdjForm -> Number = \af ->
    case af of { AdvF => Sg; AFShort gn => numGNum gn; AF _ _  gn => (numGNum gn) } ;
