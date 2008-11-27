@@ -12,7 +12,7 @@
 -- A simple module for relations.
 -----------------------------------------------------------------------------
 
-module GF.Speech.Relation (Rel, mkRel, mkRel'
+module GF.Data.Relation (Rel, mkRel, mkRel'
                            , allRelated , isRelatedTo
                            , transitiveClosure
                            , reflexiveClosure, reflexiveClosure_

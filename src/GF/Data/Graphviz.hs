@@ -12,7 +12,7 @@
 -- Graphviz DOT format representation and printing.
 -----------------------------------------------------------------------------
 
-module GF.Speech.Graphviz (
+module GF.Data.Graphviz (
 				  Graph(..), GraphType(..), 
 				  Node(..), Edge(..),
 				  Attr,

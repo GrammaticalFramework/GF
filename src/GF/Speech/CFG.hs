@@ -10,7 +10,7 @@ import GF.Data.Utilities
 import PGF.CId
 import GF.Infra.Option
 import GF.Infra.PrintClass
-import GF.Speech.Relation
+import GF.Data.Relation
 
 import Control.Monad
 import Control.Monad.State (State, get, put, evalState)

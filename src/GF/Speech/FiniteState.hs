@@ -42,8 +42,8 @@ import Data.Set (Set)
 import qualified Data.Set as Set
 
 import GF.Data.Utilities
-import GF.Speech.Graph
-import qualified GF.Speech.Graphviz as Dot
+import GF.Data.Graph
+import qualified GF.Data.Graphviz as Dot
 
 type State = Int
 
