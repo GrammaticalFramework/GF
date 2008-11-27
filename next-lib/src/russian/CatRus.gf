@@ -56,7 +56,7 @@ concrete CatRus of Cat = CommonX ** CatSlavic with (ResSlavic = ResRus) ** open 
 -- The determined noun has the case parameter specific for the determiner
 
     Det = {s : AdjForm => Str; n: Number; g: PronGen; c: Case} ; 
-    Predet, Quant, Art = {s : AdjForm => Str; g: PronGen; c: Case} ; 
+    Predet, Quant = {s : AdjForm => Str; g: PronGen; c: Case} ; 
 
 -- Numeral
 
