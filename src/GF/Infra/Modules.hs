@@ -87,13 +87,13 @@ data ModuleType i =
   | MTInstance i 
   | MTReuse (MReuseType i)
   | MTUnion (ModuleType i) [(i,[i])] -- ^ not meant to be recursive
-  deriving (Eq,Show)
+  deriving (Eq,Ord,Show)
 
 data MReuseType i = MRInterface i | MRInstance i i | MRResource i
-  deriving (Show,Eq)
+  deriving (Eq,Ord,Show)
 
 data MInclude i = MIAll | MIOnly [i] | MIExcept [i]
-  deriving (Show,Eq)
+  deriving (Eq,Ord,Show)
 
 extends :: Module i a -> [i]
 extends = map fst . extend
@@ -165,13 +165,13 @@ data MainConcreteSpec i = MainConcreteSpec {
 data OpenSpec i = 
    OSimple OpenQualif i 
  | OQualif OpenQualif i i
-  deriving (Eq,Show)
+  deriving (Eq,Ord,Show)
 
 data OpenQualif =
    OQNormal
  | OQInterface
  | OQIncomplete
-  deriving (Eq,Show)
+  deriving (Eq,Ord,Show)
 
 oSimple :: i -> OpenSpec i
 oSimple = OSimple OQNormal
@@ -182,7 +182,7 @@ oQualif = OQualif OQNormal
 data ModuleStatus = 
    MSComplete 
  | MSIncomplete 
-  deriving (Eq,Show)
+  deriving (Eq,Ord,Show)
 
 openedModule :: OpenSpec i -> i
 openedModule o = case o of
@@ -280,7 +280,7 @@ data IdentM i = IdentM {
   identM :: i ,
   typeM  :: ModuleType i
   }
-  deriving (Eq,Show)
+  deriving (Eq,Ord,Show)
 
 typeOfModule :: ModInfo i a -> ModuleType i
 typeOfModule mi = case mi of
@@ -402,12 +402,14 @@ isCompleteModule m = mstatus m == MSComplete && mtype m /= MTInterface
 
 
 -- | all abstract modules sorted from least to most dependent
-allAbstracts :: Eq i => MGrammar i a -> [i]
-allAbstracts gr = topoSort 
-  [(i,extends m) | (i,ModMod m) <- modules gr, mtype m == MTAbstract]
+allAbstracts :: (Ord i, Show i) => MGrammar i a -> [i]
+allAbstracts gr = 
+ case topoTest [(i,extends m) | (i,ModMod m) <- modules gr, mtype m == MTAbstract] of
+   Left is -> is
+   Right cycles -> error $ "Cyclic abstract modules: " ++ show cycles
 
 -- | the last abstract in dependency order (head of list)
-greatestAbstract :: Eq i => MGrammar i a -> Maybe i
+greatestAbstract :: (Ord i, Show i) => MGrammar i a -> Maybe i
 greatestAbstract gr = case allAbstracts gr of
   [] -> Nothing
   as -> return $ last as
