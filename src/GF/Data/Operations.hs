@@ -18,14 +18,13 @@ module GF.Data.Operations (-- * misc functions
 		   ifNull, onSnd,
 
 		   -- * the Error monad
-		   Err(..), err, maybeErr, testErr, errVal, errIn, derrIn,
-		   performOps, repeatUntilErr, repeatUntil, okError, isNotError,
-		   showBad, lookupErr, lookupErrMsg, lookupDefault, updateLookupList,
-		   mapPairListM, mapPairsM, pairM, mapErr, mapErrN, foldErr,
-		   (!?), errList, singleton, mapsErr, mapsErrTree,
+		   Err(..), err, maybeErr, testErr, errVal, errIn, 
+		   lookupErr,
+		   mapPairListM, mapPairsM, pairM,
+		   (!?), singleton, mapsErr, mapsErrTree,
 		   
 		   -- ** checking
-		   checkUnique, titleIfNeeded, errMsg, errAndMsg,
+		   checkUnique,
 
 		   -- * a three-valued maybe type to express indirections
 		   Perhaps(..), yes, may, nope,
@@ -53,7 +52,7 @@ module GF.Data.Operations (-- * misc functions
 		   begindocument, enddocument,
 
 		   -- * extra
-		   sortByLongest, combinations, mkTextFile, initFilePath,
+		   combinations,
 
 		   -- * topological sorting with test of cyclicity
 		   topoTest, 
@@ -61,11 +60,8 @@ module GF.Data.Operations (-- * misc functions
 		   -- * the generic fix point iterator
 		   iterFix,
 
-		   -- * association lists
-		   updateAssoc, removeAssoc,
-
 		   -- * chop into separator-separated parts
-		   chunks, readIntArg, subSequences,
+		   chunks, readIntArg, 
 
 		   -- * state monad with error; from Agda 6\/11\/2001
 		   STM(..), appSTM, stm, stmr, readSTM, updateSTM, writeSTM, done,
@@ -117,46 +113,8 @@ errVal a = err (const a) id
 errIn :: String -> Err a -> Err a
 errIn msg = err (\s -> Bad (s ++++ "OCCURRED IN" ++++ msg)) return
 
--- | used for extra error reports when developing GF
-derrIn :: String -> Err a -> Err a
-derrIn m = errIn m -- id
-
-performOps :: [a -> Err a] -> a -> Err a
-performOps ops a = case ops of
-  f:fs -> f a >>= performOps fs
-  [] -> return a
-
-repeatUntilErr :: (a -> Bool) -> (a -> Err a) -> a -> Err a
-repeatUntilErr cond f a = if cond a then return a else f a >>= repeatUntilErr cond f
-
-repeatUntil :: (a -> Bool) -> (a -> a) -> a -> a
-repeatUntil cond f a = if cond a then a else repeatUntil cond f (f a)
-
-okError :: Err a -> a
--- okError = err (error "no result Ok") id
-okError = err (error . ("Bad result occurred" ++++)) id
-
-isNotError :: Err a -> Bool
-isNotError = err (const False) (const True)
-
-showBad :: Show a => String -> a -> Err b
-showBad s a = Bad (s +++ show a)
-
 lookupErr :: (Eq a,Show a) => a -> [(a,b)] -> Err b
 lookupErr a abs = maybeErr ("Unknown" +++ show a) (lookup a abs)
-
-lookupErrMsg :: (Eq a,Show a) => String -> a -> [(a,b)] -> Err b
-lookupErrMsg m a abs = maybeErr (m +++ "gave unknown" +++ show a) (lookup a abs)
-
-lookupDefault :: Eq a => b -> a -> [(a,b)] -> b
-lookupDefault d x l = maybe d id $  lookup x l 
-
-updateLookupList ::  Eq a => (a,b) -> [(a,b)] -> [(a,b)]
-updateLookupList ab abs = insert ab [] abs where
- insert c cc [] = cc ++ [c]
- insert (a,b) cc ((a',b'):cc') = if   a == a' 
-                                 then cc ++ [(a,b)] ++ cc'
-                                 else insert (a,b) (cc ++ [(a',b')]) cc'
 
 mapPairListM :: Monad m => ((a,b) -> m c) -> [(a,b)] -> m [(a,c)]
 mapPairListM f xys = mapM (\ p@(x,_) -> liftM ((,) x) (f p)) xys
@@ -167,39 +125,9 @@ mapPairsM f xys = mapM (\ (x,y) -> liftM ((,) x) (f y)) xys
 pairM :: Monad a => (b -> a c) -> (b,b) -> a (c,c)
 pairM op (t1,t2) = liftM2 (,) (op t1) (op t2)
 
--- | like @mapM@, but continue instead of halting with 'Err'
-mapErr :: (a -> Err b) -> [a] -> Err ([b], String) 
-mapErr f xs = Ok (ys, unlines ss) 
-  where
-    (ys,ss) = ([y | Ok y <- fxs], [s | Bad s <- fxs])
-    fxs = map f xs
-
--- | alternative variant, peb 9\/6-04
-mapErrN :: Int -> (a -> Err b) -> [a] -> Err ([b], String)
-mapErrN maxN f xs = Ok (ys, unlines (errHdr : ss2)) 
-  where
-    (ys, ss) = ([y | Ok y <- fxs], [s | Bad s <- fxs])
-    errHdr = show nss ++ " errors occured" ++ 
-	     if nss > maxN then ", showing the first " ++ show maxN else ""
-    ss2 = map ("* "++) $ take maxN ss 
-    nss = length ss
-    fxs = map f xs
-
-
--- | like @foldM@, but also return the latest value if fails
-foldErr :: (a -> b -> Err a) -> a -> [b] -> Err (a, Maybe String)
-foldErr f s xs = case xs of
-  [] -> return (s,Nothing)
-  x:xx -> case f s x of
-    Ok v  -> foldErr f v xx
-    Bad m -> return $ (s, Just m)
-
 -- @!!@ with the error monad
 (!?) :: [a] -> Int -> Err a
 xs !? i = foldr (const . return) (Bad "too few elements in list") $ drop i xs
-
-errList :: Err [a] -> [a]
-errList = errVal []
 
 singleton :: a -> [a]
 singleton = (:[])
@@ -210,18 +138,6 @@ checkUnique :: (Show a, Eq a) => [a] -> [String]
 checkUnique ss = ["overloaded" +++ show s | s <- nub overloads] where
   overloads = filter overloaded ss
   overloaded s = length (filter (==s) ss) > 1
-
-titleIfNeeded :: a -> [a] -> [a]
-titleIfNeeded a [] = []
-titleIfNeeded a as = a:as
-
-errMsg :: Err a -> [String]
-errMsg (Bad m) = [m]
-errMsg _ = []
-
-errAndMsg :: Err a -> Err (a,[String])
-errAndMsg (Bad m) = Bad m
-errAndMsg (Ok a) = return (a,[])
 
 -- | a three-valued maybe type to express indirections
 data Perhaps a b = Yes a | May b | Nope deriving (Show,Read,Eq,Ord)
@@ -441,41 +357,12 @@ enddocument =
  "\n\\end{document}\n"
 
 
-sortByLongest :: [[a]] -> [[a]]
-sortByLongest = sortBy longer where
- longer x y 
-  | x' > y' = LT
-  | x' < y' = GT
-  | True    = EQ
-  where
-   x' = length x
-   y' = length y
-
 -- | 'combinations' is the same as @sequence@!!!
 -- peb 30\/5-04
 combinations :: [[a]] -> [[a]]
 combinations t = case t of 
   []    -> [[]]
   aa:uu -> [a:u | a <- aa, u <- combinations uu]
-
-
-mkTextFile :: String -> IO ()
-mkTextFile name = do
-  s <- readFile name
-  let s' = prelude name ++ "\n\n" ++ heading name  ++ "\n" ++ object s
-  writeFile (name ++ ".hs") s'
- where
-   prelude name = "module " ++ name ++ " where" 
-   heading name = "txt" ++ name ++ " ="
-   object s = mk s ++ " \"\""
-   mk s = unlines ["  \"" ++ escs line ++ "\" ++ \"\\n\" ++" | line <- lines s]
-   escs s = case s of
-     c:cs | elem c "\"\\" -> '\\' : c : escs cs
-     c:cs -> c : escs cs
-     _ -> s
-
-initFilePath :: FilePath -> FilePath
-initFilePath f = reverse (dropWhile (/='/') (reverse f))
 
 -- | topological sorting with test of cyclicity
 topoTest :: Ord a => [(a,[a])] -> Either [a] [[a]]
@@ -490,17 +377,6 @@ iterFix more start = iter start start
                       else iter (new' ++ old) new'
       where
         new' = filter (`notElem` old) (more new)
-
--- association lists
-
-updateAssoc :: Eq a => (a,b) -> [(a,b)] -> [(a,b)]
-updateAssoc ab@(a,b) as = case as of
-  (x,y): xs | x == a -> (a,b):xs
-  xy   : xs          -> xy : updateAssoc ab xs
-  []                 -> [ab]
-
-removeAssoc :: Eq a => a -> [(a,b)] -> [(a,b)]
-removeAssoc a = filter ((/=a) . fst)
 
 -- | chop into separator-separated parts
 chunks :: Eq a => a -> [a] -> [[a]]
@@ -597,10 +473,3 @@ doUntil cond ms = case ms of
     v <- a
     if cond v then return v else doUntil cond as
   _ -> raise "no result"
-
--- subsequences sorted from longest to shortest ; their number is 2^n
-subSequences :: [a] -> [[a]]
-subSequences = sortBy (\x y -> compare (length y) (length x)) . subs where
-  subs xs = case xs of
-    [] -> [[]]
-    x:xs -> let xss = subs xs in [x:y | y <- xss] ++ xss
