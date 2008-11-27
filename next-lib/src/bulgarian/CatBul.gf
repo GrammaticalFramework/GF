@@ -89,8 +89,6 @@ concrete CatBul of Cat = CatSlavic with (ResSlavic = ResBul) ** open Prelude, (R
 -- Structural
 
     Conj = {s : Str; distr : Bool; conj : Bool; n : Number} ;
-    Subj = {s : Str} ;
-    Prep = {s : Str; c : Case} ;
 
 -- Open lexical classes, e.g. Lexicon
 
