@@ -72,8 +72,6 @@ concrete CatRus of Cat = CommonX ** CatSlavic with (ResSlavic = ResRus) ** open 
 -- case of "или", the result is however plural if any of the disjuncts is.
 
     Conj = {s1,s2 : Str ; n : Number} ; 
-    Subj = {s : Str} ;
-    Prep = {s : Str ; c: Case } ;
 
 -- Open lexical classes, e.g. Lexicon
 
