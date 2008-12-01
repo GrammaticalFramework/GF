@@ -1234,9 +1234,5 @@ oper
       t                  => s + tavoir ! t
       } ;
 
---- for Numerals
-
-param DForm = unit  | teen  | jten  | ten  | tenplus  ;
-param Place = indep  | attr  ;
 
 }
