@@ -323,7 +323,7 @@ mkV2 : overload {
         mk6N hund hund hund hund hunde hunden g ;
       <_,_ + ("n" | "s"), Fem> =>                                   -- IX,X 
         mk6N hund hund hund hund hunde hunde g ;
-      _ => regN hund
+      _ => {s = (regN hund).s ; g = g ; lock_N = <>}
     } ;
    
   mkN2 = overload {

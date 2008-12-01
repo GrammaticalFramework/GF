@@ -23,7 +23,10 @@ lin pot01 =
   let uno = (mkTal "uno" "undici" "dieci" "primo").s in
   {s =\\f,g => case f of {
      ental pred => [] ;
-     _ => uno ! f ! g
+     _ => case g of {
+       NCard Fem => "una" ;
+       _ => uno ! f ! g
+       }
      } ; 
    n = Sg} ;
 
