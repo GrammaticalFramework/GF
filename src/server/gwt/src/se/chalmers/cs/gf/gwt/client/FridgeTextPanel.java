@@ -39,7 +39,7 @@ public class FridgeTextPanel extends Composite {
 	protected Widget createButtonPanel () {
 		Panel buttons = new VerticalPanel();
 		buttons.setStylePrimaryName("buttons");
-		PushButton deleteLastButton = new PushButton(new Image("delete-last.png"));
+		PushButton deleteLastButton = new PushButton(new Image("se.chalmers.cs.gf.gwt.FridgeApp/delete-last.png"));
 		deleteLastButton.setTitle("Removes the last magnet.");
 		deleteLastButton.addClickListener(new ClickListener () {
 			public void onClick(Widget sender) {
