@@ -7,6 +7,7 @@ abstract ParseEngAbs =
   ],
 
   Lexicon [N3, distance_N3, 
+	   A2, married_A2,
 	      VQ, wonder_VQ, 
 	      V2A, paint_V2A, 
 	      V2Q, ask_V2Q,
