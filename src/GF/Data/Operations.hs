@@ -38,18 +38,11 @@ module GF.Data.Operations (-- * misc functions
 		   sorted2tree, mapTree, mapMTree, tree2list,
  
 
-		   -- * parsing
-		   WParser, wParseResults, paragraphs,
-
 		   -- * printing
 		   indent, (+++), (++-), (++++), (+++++),
 		   prUpper, prReplicate, prTList, prQuotedString, prParenth, prCurly, 
 		   prBracket, prArgList, prSemicList, prCurlyList, restoreEscapes,
 		   numberedParagraphs, prConjList, prIfEmpty, wrapLines,
-
-		   -- ** LaTeX code producing functions
-		   dollar, mbox, ital, boldf, verbat, mkLatexFile, 
-		   begindocument, enddocument,
 
 		   -- * extra
 		   combinations,
@@ -235,19 +228,6 @@ filterBinTree = Map.filterWithKey
 tree2list :: BinTree a b -> [(a,b)] -- inorder
 tree2list = Map.toList
 
--- parsing
-
-type WParser a b = [a] -> [(b,[a])] -- old Wadler style parser
-
-wParseResults :: WParser a b -> [a] -> [b]
-wParseResults p aa = [b | (b,[]) <- p aa]
-
-paragraphs :: String -> [String]
-paragraphs = map unlines . chop . lines where
-  chop [] = []
-  chop ss = let (ps,rest) = break empty ss in ps : chop (dropWhile empty rest)
-  empty = all isSpace
-
 -- printing
 
 indent :: Int -> String -> String
@@ -330,32 +310,6 @@ wrapLines n s@(c:cs) =
             _ -> s -- give up!!
 
 --- optWrapLines = if argFlag "wraplines" True then wrapLines 0 else id
-
--- LaTeX code producing functions
-dollar, mbox, ital, boldf, verbat :: String -> String
-dollar s = '$' : s ++ "$"
-mbox s   = "\\mbox{" ++ s ++ "}"
-ital s   = "{\\em" +++ s ++ "}"
-boldf s  = "{\\bf" +++ s ++ "}"
-verbat s = "\\verbat!" ++ s ++ "!"
-
-mkLatexFile :: String -> String
-mkLatexFile s = begindocument +++++ s +++++ enddocument
-
-begindocument, enddocument :: String
-begindocument =
- "\\documentclass[a4paper,11pt]{article}" ++++ -- M.F. 25/01-02
- "\\setlength{\\parskip}{2mm}" ++++
- "\\setlength{\\parindent}{0mm}" ++++
- "\\setlength{\\oddsidemargin}{0mm}" ++++
- ("\\setlength{\\evensidemargin}{"++"-2mm}") ++++ -- peb 27/5-04: to prevent hugs-mode 
- ("\\setlength{\\topmargin}{"++"-8mm}") ++++      -- from treating the rest as comments
- "\\setlength{\\textheight}{240mm}" ++++
- "\\setlength{\\textwidth}{158mm}" ++++
- "\\begin{document}\n"
-enddocument =
- "\n\\end{document}\n"
-
 
 -- | 'combinations' is the same as @sequence@!!!
 -- peb 30\/5-04
