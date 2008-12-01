@@ -109,7 +109,7 @@ make xx = do
     gf (demos "Demo" ls) $ unwords ["demo/Demo" ++ la ++ ".gf" | (_,la) <- ls]
   ifxx "parse" $ do
     mapM_ (gfc pres [] . parse) (optl langsParse)
-    copy "parse/*.gfo" dir
+    copy "parse/*.gfo parse/oald/*.gfo" dir
   ifxx "clean" $ do
     system "rm -f */*.gfo ../alltenses/*.gfo ../present/*.gfo"
   ifxx "clone" $ do
