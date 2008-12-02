@@ -1,5 +1,8 @@
---# -path=.:present:prelude
+--# -path=.:present
 
-concrete SwadeshSpa of Swadesh = CatSpa ** SwadeshI with
-  (Lang = LangSpa) ;
+concrete SwadeshSpa of Swadesh = SwadeshI with
+  (L = LexiconSpa),
+  (Lexicon = LexiconSpa),
+  (Syntax = SyntaxSpa) ;
+
 
