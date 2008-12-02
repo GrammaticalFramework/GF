@@ -52,6 +52,7 @@ instance DiffSwe of DiffScand = open CommonScand, Prelude in {
       Utr => "en" ;
       Neutr => "ett"
       } ;
+    detIndefPl = "några" ;
 
     verbHave = 
       mkVerb "ha" "har" "ha" "hade" "haft" "havd" "havt" "havda" ** noPart ;

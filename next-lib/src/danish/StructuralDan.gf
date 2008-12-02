@@ -25,10 +25,10 @@ concrete StructuralDan of Structural = CatDan **
   during_Prep = ss "under" ;
   either7or_DConj = sd2 "enten" "eller" ** {n = Sg} ;
   everybody_NP = regNP "alle" "alles" Plg ;
-  every_Det = {s = \\_,_ => "hver" ; n = Sg ; det = DDef Indef} ;
+  every_Det = {s = \\_,_ => "hver" ; sp = \\_,_ => "enhver" ; n = Sg ; det = DDef Indef} ;
   everything_NP = regNP "alt" "alts" SgNeutr ;
   everywhere_Adv = ss "overalt" ;
-  few_Det  = {s = \\_,_ => "få" ; n = Pl ; det = DDef Indef} ;
+  few_Det  = {s,sp = \\_,_ => "få" ; n = Pl ; det = DDef Indef} ;
 ---  first_Ord = {s = "første" ; isDet = True} ;
   for_Prep = ss "for" ;
   from_Prep = ss "fra" ;
@@ -45,16 +45,15 @@ concrete StructuralDan of Structural = CatDan **
   in_Prep = ss "i" ;
   it_Pron = MorphoDan.regNP "det" "dets" SgNeutr ;
   less_CAdv = X.mkCAdv "mindre" conjThan ;
-  many_Det = {s = \\_,_ => "mange" ; n = Pl ; det = DDef Indef} ;
+  many_Det = {s,sp = \\_,_ => "mange" ; n = Pl ; det = DDef Indef} ;
   more_CAdv = X.mkCAdv "mer" conjThan ;
   most_Predet = {s = gennumForms ["den meste"] ["det meste"] ["de fleste"]} ;
-  much_Det = {s = \\_,_ => "meget" ; n = Pl ; det = DDef Indef} ;
+  much_Det = {s,sp = \\_,_ => "meget" ; n = Pl ; det = DDef Indef} ;
   must_VV = 
     mkV "måtte" "må" "må" "måtte" "måttet" "mått" ** 
     {c2 = mkComplement [] ; lock_VV = <>} ;
   no_Utt = ss ["nej"] ;
   on_Prep = ss "på" ;
----  one_Quant = {s = \\_ => genderForms ["en"] ["et"] ; n = Sg ; det = DIndef} ; --- ei
   only_Predet = {s = \\_ => "kun"} ;
   or_Conj = {s1 = [] ; s2 = "eller" ; n = Pl} ;
   otherwise_PConj = ss "anderledes" ;
@@ -64,13 +63,13 @@ concrete StructuralDan of Structural = CatDan **
   quite_Adv = ss "temmelig" ;
   she_Pron = MorphoDan.mkNP "hun" "hende" "hendes" "hendes" "hendes"  SgUtr P3 ;
   so_AdA = ss "så" ;
-  someSg_Det = {s = \\_ => genderForms "nogen" "noget" ; n = Sg ; det = DIndef} ;
-  somePl_Det = {s = \\_,_ => "nogle" ; n = Pl ; det = DIndef} ;
+  someSg_Det = {s,sp = \\_ => genderForms "nogen" "noget" ; n = Sg ; det = DIndef} ;
+  somePl_Det = {s,sp = \\_,_ => "nogle" ; n = Pl ; det = DIndef} ;
   somebody_NP = regNP "nogen" "nogens" SgUtr ;
   something_NP = regNP "noget" "nogets" SgNeutr ;
   somewhere_Adv = ss ["et eller annet sted"] ; ---- ?
   that_Quant = 
-    {s = table {
+    {s,sp = table {
        Sg => \\_,_ => genderForms ["den der"] ["det der"] ; 
        Pl => \\_,_,_ => ["de der"]
        } ;
@@ -82,7 +81,7 @@ concrete StructuralDan of Structural = CatDan **
   therefore_PConj = ss "derfor" ;
   they_Pron = MorphoDan.mkNP "de" "dem" "deres" "deres" "deres" Plg P1 ;
   this_Quant = 
-    {s = table {
+    {s,sp = table {
        Sg => \\_,_ => genderForms ["denne"] ["dette"] ; 
        Pl => \\_,_,_ => ["disse"]
        } ;

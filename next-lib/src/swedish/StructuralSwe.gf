@@ -25,10 +25,15 @@ concrete StructuralSwe of Structural = CatSwe **
   during_Prep = ss "under" ;
   either7or_DConj = sd2 "antingen" "eller" ** {n = Sg} ;
   everybody_NP = regNP "alla" "allas" Plg ;
-  every_Det = {s = \\_,_ => "varje" ; n = Sg ; det = DIndef} ;
+  every_Det = {
+    s = \\_,_ => "varje" ; 
+    sp = \\_,_ => "var och en" ; ----
+    n = Sg ; 
+    det = DIndef
+    } ;
   everything_NP = regNP "allting" "alltings" SgNeutr ;
   everywhere_Adv = ss "överallt" ;
-  few_Det  = {s = \\_,_ => "få" ; n = Pl ; det = DDef Indef} ;
+  few_Det  = {s,sp = \\_,_ => "få" ; n = Pl ; det = DDef Indef} ;
 ---  first_Ord = {s = "första" ; isDet = True} ;
   for_Prep = ss "för" ;
   from_Prep = ss "från" ;
@@ -44,10 +49,10 @@ concrete StructuralSwe of Structural = CatSwe **
   in_Prep = ss "i" ;
   it_Pron = MorphoSwe.regNP "det" "dess" SgNeutr ;
   less_CAdv = X.mkCAdv "mindre" "än" ;
-  many_Det = {s = \\_,_ => "många" ; n = Pl ; det = DDef Indef} ;
+  many_Det = {s,sp = \\_,_ => "många" ; n = Pl ; det = DDef Indef} ;
   more_CAdv = X.mkCAdv "mer" "än" ;
   most_Predet = {s = gennumForms ["den mesta"] ["det mesta"] ["de flesta"]} ;
-  much_Det = {s = \\_,_ => "mycket" ; n = Pl ; det = DDef Indef} ;
+  much_Det = {s,sp = \\_,_ => "mycket" ; n = Pl ; det = DDef Indef} ;
   must_VV = 
     mkV "få" "måste" "få" "fick" "måst" "måst" ** 
     {c2 = mkComplement [] ; lock_VV = <>} ;
@@ -63,13 +68,13 @@ concrete StructuralSwe of Structural = CatSwe **
   quite_Adv = ss "ganska" ;
   she_Pron = MorphoSwe.mkNP "hon" "henne" "hennes" "hennes" "hennes"  SgUtr P3 ;
   so_AdA = ss "så" ;
-  someSg_Det = {s = \\_ => genderForms "någon" "något" ; n = Sg ; det = DIndef} ;
-  somePl_Det = {s = \\_,_ => "några" ; n = Pl ; det = DIndef} ;
+  someSg_Det = {s,sp = \\_ => genderForms "någon" "något" ; n = Sg ; det = DIndef} ;
+  somePl_Det = {s,sp = \\_,_ => "några" ; n = Pl ; det = DIndef} ;
   somebody_NP = regNP "någon" "någons" SgUtr ;
   something_NP = regNP "något" "någots" SgNeutr ;
   somewhere_Adv = ss "någonstans" ;
   that_Quant = 
-    {s = table {
+    {s,sp = table {
        Sg => \\_,_ => genderForms ["den där"] ["det där"] ; 
        Pl => \\_,_,_ => ["de där"]
        } ;
@@ -81,7 +86,7 @@ concrete StructuralSwe of Structural = CatSwe **
   therefore_PConj = ss "därför" ;
   they_Pron = MorphoSwe.mkNP "de" "dem" "deras" "deras" "deras" Plg P1 ;
   this_Quant = 
-    {s = table {
+    {s,sp = table {
        Sg => \\_,_ => genderForms ["den här"] ["det här"] ; 
        Pl => \\_,_,_ => ["de här"]
        } ;
@@ -126,7 +131,7 @@ concrete StructuralSwe of Structural = CatSwe **
 lin
   not_Predet = {s = \\_ => "inte"} ;
   no_Quant = 
-    {s = table {
+    {s,sp = table {
        Sg => \\_,_ => genderForms "ingen" "inget" ; 
        Pl => \\_,_,_ => "inga"
        } ;

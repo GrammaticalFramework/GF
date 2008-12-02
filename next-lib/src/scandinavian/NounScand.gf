@@ -48,6 +48,8 @@ incomplete concrete NounScand of Noun =
     DetQuantOrd quant num ord = {
       s = \\b,g => quant.s ! num.n ! b ! (orB b num.isDet) ! g ++ 
                    num.s ! g ++ ord.s ;
+      sp = \\b,g => quant.s ! num.n ! b ! (orB b num.isDet) ! g ++ 
+                    num.s ! g ++ ord.s ;
       n = num.n ;
       det = quant.det
       } ;
@@ -56,11 +58,14 @@ incomplete concrete NounScand of Noun =
       let 
         md : Bool -> Bool = \b -> case quant.det of {
          DDef _ => orB b num.isDet ;
+         DIndef => num.isDet ;
          _ => False
          }
       in {
       s = \\b,g => quant.s ! num.n ! b ! md b ! g ++ 
                    num.s ! g ;
+      sp = \\b,g => quant.sp ! num.n ! b ! md b ! g ++ 
+                    num.s ! g ;
       n = num.n ;
       det = quant.det
       } ;
@@ -70,12 +75,12 @@ incomplete concrete NounScand of Noun =
         g = Neutr ; ----
         m = True ;  ---- is this needed for other than Art?
       in {
-        s = \\c => det.s ! m ! g ;
+        s = \\c => det.sp ! m ! g ;
         a = agrP3 g det.n
       } ;
 
     PossPron p = {
-      s = \\n,_,_,g => p.s ! NPPoss (gennum g n) ; 
+      s,sp = \\n,_,_,g => p.s ! NPPoss (gennum g n) ; 
       det = DDef Indef
       } ;
 
@@ -101,7 +106,8 @@ incomplete concrete NounScand of Noun =
       } ;
 
     DefArt = {
-      s = \\n,bm,bn,g => if_then_Str (orB bm bn) (artDef (gennum g n)) [] ; 
+      s  = \\n,bm,bn,g => if_then_Str (orB bm bn) (artDef (gennum g n)) [] ; 
+      sp = \\n,bm,bn,g => artDef (gennum g n) ;
       det = DDef Def
       } ;
 
@@ -109,6 +115,10 @@ incomplete concrete NounScand of Noun =
       s = table {
         Sg => \\_,bn,g => if_then_Str bn [] (artIndef ! g) ; 
         Pl => \\_,bn,_ => []
+        } ; 
+      sp = table {
+        Sg => \\_,bn,g => artIndef ! g ; 
+        Pl => \\_,bn,_ => detIndefPl
         } ; 
       det = DIndef
       } ;
