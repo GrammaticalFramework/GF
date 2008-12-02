@@ -1,4 +1,4 @@
---# -path=.:../abstract:../common:prelude
+--# -path=.:../abstract:../common:../slavic
 
 concrete AllRus of AllRusAbs = 
   LangRus,

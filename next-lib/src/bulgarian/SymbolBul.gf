@@ -1,4 +1,4 @@
---# -path=.:abstract:common
+--# -path=.:../abstract:../common:../slavic
 
 concrete SymbolBul of Symbol = CatBul ** open Prelude, ResBul in {
 
@@ -15,7 +15,9 @@ lin
     a = agrP3 (gennum cn.g Sg)
     } ;
   CNSymbNP det cn xs = {
-    s = \\c => det.s ! False ! cn.g ! RSubj ++ cn.s ! NF det.n Indef ++ xs.s ; 
+    s = \\c => 
+        det.s ! False ! cn.g ! Inanimate ! RSubj ++  ---- AR 2/12: Inanimate
+        cn.s ! NF det.n Indef ++ xs.s ; 
     a = agrP3 (gennum cn.g det.n)
     } ;
   CNNumNP cn i = {
