@@ -34,6 +34,7 @@ interface DiffScand = open CommonScand, Prelude in {
     subjIf : Str ;
 
     artIndef : Gender => Str ;
+    detIndefPl : Str ;
 
     verbHave : Verb ;
     verbBe   : Verb ;

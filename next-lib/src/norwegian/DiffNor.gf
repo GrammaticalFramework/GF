@@ -43,6 +43,7 @@ instance DiffNor of DiffScand = open CommonScand, Prelude in {
       Utr Fem  => "ei" ;
       Neutr    => "et"
       } ;
+    detIndefPl = "noen" ;
 
     verbHave = 
       mkVerb "ha" "har" "ha" "hadde" "hatt" "haven" "havet" "havne"
