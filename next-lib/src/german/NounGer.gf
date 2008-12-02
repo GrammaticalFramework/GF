@@ -10,7 +10,7 @@ concrete NounGer of Noun = CatGer ** open ResGer, Prelude in {
       } ;
 
     DetNP det = {
-      s = \\c => det.s ! Neutr ! c ; ---- genders
+      s = \\c => det.sp ! Neutr ! c ; ---- genders
       a = agrP3 det.n ;
       isPron = False
       } ;
@@ -99,7 +99,10 @@ concrete NounGer of Noun = CatGer ** open ResGer, Prelude in {
           Pl =>  \\_,_ => []
           }
         } ; 
-      sp = \\_,g,c => "ein" + pronEnding ! GSg g ! c ; ---- plural ; einer  
+      sp = table {
+        Sg => \\g,c => "ein" + pronEnding ! GSg g ! c ;
+        Pl => \\_ => caselist "einige" "einige" "einigen" "einiger"
+        } ;
       a = Strong
       } ;
 
