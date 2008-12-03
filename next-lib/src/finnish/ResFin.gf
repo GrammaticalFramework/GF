@@ -129,12 +129,11 @@ param
 
   appCompl : Bool -> Polarity -> Compl -> NP -> Str = \isFin,b,co,np ->
     let
-      c = case <isFin, b, co.c, np.isPron,np.a.n> of {
-        <_,    Neg, NPAcc,_,_>      => NPCase Part ; -- en näe taloa/sinua
-        <_,    Pos, NPAcc,True,_>   => NPAcc ;       -- näen/täytyy sinut
-        <True, Pos, NPAcc,False,Sg> => NPCase Gen ;  -- näen talon
-        <False,Pos, NPAcc,_,_>      => NPCase Nom ;  -- täytyy talo/sinut; näen talot
-        <_,_,coc,_,_>               => coc
+      c = case <isFin, b, co.c, np.isPron> of {
+        <_,    Neg, NPAcc,_>      => NPCase Part ; -- en näe taloa/sinua
+        <_,    Pos, NPAcc,True>   => NPAcc ;       -- näen/täytyy sinut
+        <False,Pos, NPAcc,False>  => NPCase Nom ;  -- täytyy nähdä talo
+        <_,_,coc,_>               => coc
         } ;
       nps = np.s ! c
     in
