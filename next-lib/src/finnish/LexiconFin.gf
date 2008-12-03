@@ -210,8 +210,8 @@ lin
   wait_V2 = mkV2 (mkV "odottaa") partitive ;
   walk_V = mkV "k‰vell‰" "k‰veli" ;
   warm_A = mkA 
-    (mkN "l‰mmin" "l‰mpim‰n" "l‰mpim‰n‰" "l‰mmint‰" "l‰mpim‰‰n" 
-         "l‰mpimin‰" "l‰mpimiss‰" "l‰mpimien" "l‰mpimi‰" "l‰mpimiin"
+    (mkN "l‰mmin" "l‰mpim‰n" "l‰mmint‰" "l‰mpim‰n‰" "l‰mpim‰‰n" 
+         "l‰mpimin‰" "l‰mpimi‰" "l‰mpimien" "l‰mpimiss‰" "l‰mpimiin"
 	 ) 
     "l‰mpim‰mpi" "l‰mpimin" ;
   war_N = mkN "sota" ;

@@ -13,21 +13,26 @@ concrete NounFin of Noun = CatFin ** open ResFin, MorphoFin, Prelude in {
           True => Sg ;
           _ => det.n
           } ;
-        ncase : Case -> NForm = \c -> 
+        ncase : NPForm -> Case * NForm = \c ->
+          let k = npform2case n c 
+          in 
           case <n, c, det.isNum, det.isPoss, det.isDef> of {
-            <_, Nom,  True,_,_>  => NCase Sg Part ; -- kolme kytkintä(ni)
-            <_, _, True,False,_> => NCase Sg c ;    -- kolmeksi kytkimeksi
-            <Pl,Nom,  _,_,False> => NCase Pl Part ; -- kytkimiä
-            <_, Nom,_,True,_>    => NPossNom n ;    -- kytkime+ni on/ovat...
-            <_, Gen,_,True,_>    => NPossNom n ;    -- kytkime+ni vika
-            <_, Transl,_,True,_> => NPossTransl n ; -- kytkim(e|i)kse+ni
-            <_, Illat,_,True,_>  => NPossIllat n ;  -- kytkim(ee|ii)+ni
+            <_, NPAcc,       True,_,_>  => <Nom,NCase Sg Part> ; -- kolme kytkintä(ni)
+            <_, NPCase Nom,  True,_,_>  => <Nom,NCase Sg Part> ; -- kolme kytkintä(ni)
+            <_, _, True,False,_>        => <k,  NCase Sg k> ;    -- kolmeksi kytkimeksi
+            <Pl,NPCase Nom,  _,_,False> => <k,  NCase Pl Part> ; -- kytkimiä
+            <_, NPCase Nom,_,True,_>    => <k,  NPossNom n> ;    -- kytkime+ni on/ovat...
+            <_, NPCase Gen,_,True,_>    => <k,  NPossNom n> ;    -- kytkime+ni vika
+            <_, NPCase Transl,_,True,_> => <k,  NPossTransl n> ; -- kytkim(e|i)kse+ni
+            <_, NPCase Illat,_,True,_>  => <k,  NPossIllat n> ;  -- kytkim(ee|ii)+ni
  
-            _ => NCase n c                          -- kytkin, kytkimen,...
+            _                           => <k,  NCase n k>       -- kytkin, kytkimen,...
             }
       in {
-      s = \\c => let k = npform2case n c in
-                 det.s1 ! k ++ cn.s ! ncase k ++ det.s2 ; 
+      s = \\c => let 
+                   k = ncase c ;
+                 in
+                 det.s1 ! k.p1 ++ cn.s ! k.p2 ++ det.s2 ; 
       a = agrP3 (case det.isDef of {
             False => Sg ;  -- autoja menee; kolme autoa menee
             _ => det.n
@@ -91,7 +96,7 @@ concrete NounFin of Noun = CatFin ** open ResFin, MorphoFin, Prelude in {
       sp = \\c => quant.sp ! num.n ! c ++ num.s ! Sg ! c ;
       s2 = quant.s2 ;
       n = num.n ;
-      isNum = case num.n of {Sg => False ; _ => True} ;
+      isNum = num.isNum ; -- case num.n of {Sg => False ; _ => True} ;
       isPoss = quant.isPoss ;
       isDef = quant.isDef
       } ;
