@@ -38,7 +38,7 @@ traceD s t = t
 -- the main function: generate PGF from GF.
 mkCanon2gfcc :: Options -> String -> SourceGrammar -> (String,D.PGF)
 mkCanon2gfcc opts cnc gr = 
-  (prIdent abs, (canon2gfcc opts pars . reorder abs . canon2canon abs) gr)
+  (prIdent abs, (canon2gfcc opts pars . reorder abs . canon2canon opts abs) gr)
   where
     abs = err (const c) id $ M.abstractOfConcrete gr c where c = identC (BS.pack cnc)
     pars = mkParamLincat gr
@@ -267,8 +267,8 @@ repartition abs cg =
 
 -- translate tables and records to arrays, parameters and labels to indices
 
-canon2canon :: Ident -> SourceGrammar -> SourceGrammar
-canon2canon abs cg0 = 
+canon2canon :: Options -> Ident -> SourceGrammar -> SourceGrammar
+canon2canon opts abs cg0 = 
    (recollect . map cl2cl . repartition abs . purgeGrammar abs) cg0 
  where
   recollect = M.MGrammar . nubBy (\ (i,_) (j,_) -> i==j) . concatMap M.modules
@@ -281,7 +281,7 @@ canon2canon abs cg0 =
         (c, M.ModMod $ M.replaceJudgements mo $ mapTree f2 (M.jments mo))
       _ -> (c,m)    
   j2j cg (f,j) = 
-    let debug = traceD ("+ " ++ prt f) in
+    let debug = if verbAtLeast opts Verbose then trace ("+ " ++ prt f) else id in
     case j of
       CncFun x (Yes tr) z -> CncFun x (Yes (debug (t2t tr))) z
       CncCat (Yes ty) (Yes x) y -> CncCat (Yes (ty2ty ty)) (Yes (t2t x)) y
