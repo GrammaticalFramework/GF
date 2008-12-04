@@ -33,6 +33,8 @@ import GF.Grammar.AppPredefined
 import Data.List (nub,intersperse)
 import Control.Monad (liftM2, liftM)
 
+----import Debug.Trace ----
+
 -- | computation of concrete syntax terms into normal form
 -- used mainly for partial evaluation
 computeConcrete :: SourceGrammar -> Term -> Err Term
@@ -309,7 +311,7 @@ computeTermOpt rec gr = comput True where
          -- course-of-values table: look up by index, no pattern matching needed
          V ptyp ts -> do
            vs <- allParamValues gr ptyp
-           case lookup v' (zip vs [0 .. length vs - 1]) of
+           case lookupR v' (zip vs [0 .. length vs - 1]) of
              Just i -> comp g $ ts !! i
              _ -> return $ S t' v' -- if v' is not canonical
          T _ cc -> case matchPattern cc v' of
@@ -320,6 +322,13 @@ computeTermOpt rec gr = comput True where
          S (T i cs) e -> prawitz g i (flip S v') cs e
          S (V i cs) e -> prawitzV g i (flip S v') cs e
          _    -> returnC $ S t' v'
+
+     --- needed to match records with and without type information
+     ---- todo: eliminate linear search in a list of records!
+     lookupR v vs = case v of
+       R rs -> lookup ([(x,y) | (x,(_,y)) <- rs]) 
+                                [([(x,y) | (x,(_,y)) <- rs],v) | (R rs,v) <- vs]
+       _ -> lookup v vs
 
      -- case-expand tables
      -- if already expanded, don't expand again
