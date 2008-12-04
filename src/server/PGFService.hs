@@ -129,8 +129,7 @@ doRandom :: PGF -> Maybe PGF.Type -> Maybe Int -> IO JSValue
 doRandom pgf mcat mlimit = 
     do trees <- random' pgf mcat
        return $ showJSON $ map toJSObject [[("tree", PGF.showTree tree)] | tree <- limit trees]
-  where limit = take (fromMaybe maxLimit mlimit)
-        maxLimit = 1000
+  where limit = take (fromMaybe 1 mlimit)
 
 doGrammar :: PGF -> Maybe (Accept Language) -> JSValue
 doGrammar pgf macc = showJSON $ toJSObject 
