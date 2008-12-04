@@ -69,6 +69,7 @@ oper
     cgen cg => cg
     } ;
 
+  RET = "" ; -- &-
 
 lincat
 Letter     = SS ;
@@ -84,8 +85,8 @@ Position   = SSDep ;
 
 lin
 MkLetter head mess end = 
-  ss (head.s ++ "," ++ "&-" ++ 
-      mess.s ! end.n ! end.g ! head.n ! head.g ++ "." ++ "&-" ++ 
+  ss (head.s ++ "," ++ RET ++ 
+      mess.s ! end.n ! end.g ! head.n ! head.g ++ "." ++ RET ++ 
       end.s ! head.n ! head.g) ;
 
 DearRec rec   = {s = cher ! rec.n ! rec.g ++ rec.s ; n = rec.n ; g = rec.g} ;
@@ -101,10 +102,10 @@ ModeSent mode sent =
 PlainSent sent = sent ;
 
 FormalEnding auth = 
-  {s = table {n => table {g => ["parhain terveisin &-"] ++ auth.s ! n ! g}} ; 
+  {s = table {n => table {g => ["parhain terveisin"] ++ RET ++ auth.s ! n ! g}} ; 
    n = auth.n ; g = auth.g} ;
 InformalEnding auth = 
-  {s = table {n => table {g => ["terveisin &-"] ++ auth.s ! n ! g}} ; 
+  {s = table {n => table {g => ["terveisin"] ++ RET ++ auth.s ! n ! g}} ; 
    n = auth.n ; g = auth.g} ;
 
 ColleaguesHe  = {s = regNom "kollega" ! pl  ; n = pl ; g = masc} ;

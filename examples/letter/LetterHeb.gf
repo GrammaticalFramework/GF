@@ -72,6 +72,9 @@ dep2gen : DepGen -> Gen -> Gen = \dg,g -> case dg of {
     cgen cg => cg
     } ;
 
+  RET = "" ; -- &-
+
+
 lincat
 Letter     = SS ;
 Recipient  = SSSrc ;
@@ -86,8 +89,8 @@ Position   = SSDep ;
 
 lin
 MkLetter head mess end = 
-  ss ("," ++ head.s ++ "&-" ++ 
-       mess.s ! end.n ! end.g ! head.n ! head.g  ++ "&-" ++
+  ss ("," ++ head.s ++ RET ++ 
+       mess.s ! end.n ! end.g ! head.n ! head.g  ++ RET ++
        end.s ! head.n ! head.g) ;
 
 DearRec rec   = {s = rec.s ++ regAdj "יקר" ! rec.n ! rec.g; 
@@ -107,13 +110,13 @@ PlainSent sent = sent ;
 FormalEnding auth = 
   {s = 
      table {n => table {g => 
-	[",בכבוד רב &-"] ++
+	[", בכבוד רב"] ++ RET ++
         auth.s ! n ! g 	 
          }} ; 
    n = auth.n ; g = auth.g} ;
 
 InformalEnding auth = 
-  {s = table {n => table {g => [",בברכה &-"] ++ auth.s ! n ! g}} ; 
+  {s = table {n => table {g => [", בברכה"] ++ RET ++ auth.s ! n ! g}} ; 
    n = auth.n ; g = auth.g} ;
 
 ColleagueHe  = {s =  "עמית"  ; n = sg ; g = masc} ;

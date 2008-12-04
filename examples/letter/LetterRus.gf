@@ -70,6 +70,7 @@ oper
     cgen cg => cg
     } ;
 
+  RET = "" ; -- &-
 
 lincat
 Letter     = SS ;
@@ -85,8 +86,8 @@ Position   = SSDep ;
 
 lin
 MkLetter head mess end = 
-  ss (head.s ++ "," ++ "&-" ++ 
-      mess.s ! end.n ! end.g ! head.n ! head.g ++ "." ++ "&-" ++ 
+  ss (head.s ++ "," ++ RET ++ 
+      mess.s ! end.n ! end.g ! head.n ! head.g ++ "." ++ RET ++ 
       end.s ! head.n ! head.g) ;
 
 DearRec rec   = {s = regAdj "Дорог"
@@ -106,10 +107,10 @@ FormalEnding auth =
   {s = 
      table {n => table {g => 
         "С" ++  
-        ["наилучшими пожеланиями, &-"] ++ auth.s ! n ! g}} ; 
+        ["наилучшими пожеланиями ,"] ++ RET ++ auth.s ! n ! g}} ; 
    n = auth.n ; g = auth.g} ;
 InformalEnding auth = 
-  {s = table {n => table {g => ["С дружеским приветом, &-"] ++ auth.s ! n ! g}} ; 
+  {s = table {n => table {g => ["С дружеским приветом , "] ++ RET ++ auth.s ! n ! g}} ; 
    n = auth.n ; g = auth.g} ;
 
 ColleaguesHe  = {s = "коллеги"   ; n = pl ; g = masc} ;
