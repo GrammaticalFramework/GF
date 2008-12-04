@@ -264,7 +264,7 @@ lin
   egg_N = mkN066 "яйце" ;
   eye_N = mkN063 "око" ;
   fat_N = mkN041 "мазнина" ;
-  feather_N = mkN038 "баща" ;
+  feather_N = mkN054 "перо" ;
   fingernail_N = mkN034 "нокът" ;
   fire_N = mkN030 "огън" ;
   flower_N = mkN068 "цвете" ;
