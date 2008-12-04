@@ -1,0 +1,35 @@
+GF challenges Microsoft Works! Here you find templates for
+multilingual authoring of business and love letters!
+
+Another point of these grammars is to illustrate how
+local updates are propagated everywhere in the document.
+Form, in the editor
+
+  Dear Colleague,
+
+  I love you.
+
+  With best regards,
+
+    your wife
+
+and change between ColleagueHe, ColleagueShe, ColleaguesHe, ColleaguesShe.
+
+The grammars are somewhat ad hoc and messy, and could be improved
+with better abstractions.
+
+(AR 2001)
+
+To use the grammars in an editor, first compile them to javascript:
+
+  gfc --make --output-format=js Letter???.gf
+
+Then open the file ./editor/editor.html in a web browser. You also need the javascript
+libraries from
+
+  GF/lib/javascript/
+
+Copyright (c) 2001-2008 Janna Khegai, Alex Kutsela, Aarne Ranta
+under GNU General Public License (GPL).
+
+Document last updated December 4, 2008, by Aarne Ranta.
