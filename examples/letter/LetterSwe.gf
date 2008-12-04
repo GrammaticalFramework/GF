@@ -36,6 +36,8 @@ oper
     cnum cn => cn
     } ;
 
+  RET = "" ; -- &-
+
 lincat
 Letter     = SS ;
 Recipient  = SSSrc ;
@@ -50,8 +52,8 @@ Position   = SSDep ;
 
 lin
 MkLetter head mess end = 
-  ss (head.s ++ "," ++ "&-" ++ 
-      mess.s ! end.n ! end.x ! head.n ! head.x ++ "." ++ "&-" ++ 
+  ss (head.s ++ "," ++ RET ++ 
+      mess.s ! end.n ! end.x ! head.n ! head.x ++ "." ++ RET ++ 
       end.s ! head.n ! head.x) ;
 
 DearRec rec   = {s = kaer ! rec.n ! rec.x ++ rec.s ; n = rec.n ; x = rec.x} ;
@@ -68,11 +70,11 @@ PlainSent sent = sent ;
 
 FormalEnding auth = 
   {s = table {n => table {x => 
-     ["Med vänlig hälsning &-"] ++ auth.s ! n ! x}} ; n = auth.n ; x = auth.x} ;
+     ["Med vänlig hälsning"] ++ RET ++ auth.s ! n ! x}} ; n = auth.n ; x = auth.x} ;
 
 InformalEnding auth = 
   {s = table {n => table {x => 
-     ["Med hälsningar &-"] ++ auth.s ! n ! x}} ; n = auth.n ; x = auth.x} ;
+     ["Med hälsningar"] ++ RET ++ auth.s ! n ! x}} ; n = auth.n ; x = auth.x} ;
 
 ColleaguesHe  = {s = kollega ! pl ; n = pl ; x = masc} ;
 ColleaguesShe = {s = kollega ! pl ; n = pl ; x = fem} ;
