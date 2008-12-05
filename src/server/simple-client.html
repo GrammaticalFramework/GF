@@ -9,6 +9,10 @@
     <script type="text/javascript" src="gf-server-jsapi.js"></script>
     <script type="text/javascript" src="translator.js"></script>
     <script type="text/javascript">
+     function getGrammar () {
+        return document.getElementById('grammar').value;
+     }
+
      function updateTranslation () {
         var input = document.getElementById('inputText').value;
         var fromLang = document.getElementById('fromLang').value;
@@ -19,7 +23,24 @@
                           clearTranslation();
                           output.appendChild(formatTranslation(translation));
                        };
-        gf.translate(input, fromLang, toLang, '', callback);
+        gf.translate(getGrammar(), input, fromLang, toLang, '', callback);
+      }
+
+      function updateGrammars () {
+        gf.grammars(populateGrammars);
+      }
+
+      function populateGrammars (grammars) {
+        var l = document.getElementById('grammar');
+        var langs = grammar.languages;
+        for (var i in grammars) {
+          addOption(l, grammars[i].name, grammars[i].name);
+        }
+        updateLanguages();
+      }
+
+      function updateLanguages () {
+        gf.grammar(getGrammar(), populateLangs);
       }
 
       function populateLangs (grammar) {
@@ -44,7 +65,7 @@
             clearCompletion();
             completions.appendChild(formatCompletions(output));
           };
-          gf.complete(input, fromLang, '', callback);
+          gf.complete(getGrammar(), input, fromLang, '', callback);
 //        }
       }
 
@@ -64,7 +85,7 @@
       }
 
       function initialize() {
-        gf.grammar(populateLangs);
+        updateGrammars();
       }
     </script>
     <title>AJAX GF Translator</title>
@@ -76,6 +97,7 @@
           <input type="text" id="inputText" value="" size="50" />
         </p>
         <p>
+          <label>Grammar: <select id="grammar" onchange="updateLanguages()"></select></label>
           <label>From: <select id="fromLang" onchange="update()"><option value="" selected="selected">Any language</option></select></label>
           <label>To: <select id="toLang"  onchange="update()"><option value="" selected="selected">All languages</option></select></label>
           <input type="button" value="Completions" onclick="updateCompletion()" />

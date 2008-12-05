@@ -1,35 +1,38 @@
 var gf = new Object();
 var pgf_base_url = "pgf";
-var pgf_grammar = "grammar.pgf";
 
-gf.translate = function (input,from,to,cat,callback) {
+gf.translate = function (grammar,input,from,to,cat,callback) {
   var args = [];
   args["input"] = input;
   args["from"] = from;
   args["to"] = to;
   args["cat"] = cat;
-  gf.callFunction("translate", args, callback);
+  gf.callFunction(grammar, "translate", args, callback);
 };
 
-gf.complete = function (input,from,cat,callback) {
+gf.complete = function (grammar,input,from,cat,callback) {
   var args = [];
   args["input"] = input;
   args["from"] = from;
   args["cat"] = cat;
-  gf.callFunction("complete", args, callback);
+  gf.callFunction(grammar, "complete", args, callback);
 };
 
-gf.grammar = function (callback) {
-  gf.callFunction("grammar", [], callback);
+gf.grammar = function (grammar, callback) {
+  gf.callFunction(grammar, "", [], callback);
 };
 
-gf.callFunction = function (fun, args, callback) {
+gf.grammars = function (callback) {
+  gf.httpGetJSONP(pgf_base_url, callback);
+};
+
+gf.callFunction = function (grammar, fun, args, callback) {
   var query = "";
   for (var i in args) {
     query += (query == "") ? "?" : "&";
     query += i + "=" + encodeURIComponent(args[i]);
   }
-  var url = pgf_base_url + "/" + pgf_grammar +"/" + fun + query;
+  var url = pgf_base_url + "/" + grammar +"/" + fun + query;
 
   // FIXME: if same domain, use gf.httpGetText
   gf.httpGetJSONP(url, callback);
