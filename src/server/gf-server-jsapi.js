@@ -1,13 +1,20 @@
 var gf = new Object();
 var pgf_base_url = "pgf";
 
-gf.translate = function (grammar,input,from,to,cat,callback) {
+gf.grammars = function (callback) {
+  gf.httpGetJSONP(pgf_base_url, callback);
+};
+
+gf.grammar = function (grammar, callback) {
+  gf.callFunction(grammar, "", [], callback);
+};
+
+gf.parse = function (grammar,input,from,cat,callback) {
   var args = [];
   args["input"] = input;
   args["from"] = from;
-  args["to"] = to;
   args["cat"] = cat;
-  gf.callFunction(grammar, "translate", args, callback);
+  gf.callFunction(grammar, "parse", args, callback);
 };
 
 gf.complete = function (grammar,input,from,cat,callback) {
@@ -18,12 +25,27 @@ gf.complete = function (grammar,input,from,cat,callback) {
   gf.callFunction(grammar, "complete", args, callback);
 };
 
-gf.grammar = function (grammar, callback) {
-  gf.callFunction(grammar, "", [], callback);
+gf.linearize = function (grammar,tree,to,callback) {
+  var args = [];
+  args["tree"] = tree;
+  args["to"] = to;
+  gf.callFunction(grammar, "linearize", args, callback);
 };
 
-gf.grammars = function (callback) {
-  gf.httpGetJSONP(pgf_base_url, callback);
+gf.random = function (grammar,cat,limit,callback) {
+  var args = [];
+  args["cat"] = cat;
+  args["limit"] = limit;
+  gf.callFunction(grammar, "random", args, callback);
+};
+
+gf.translate = function (grammar,input,from,to,cat,callback) {
+  var args = [];
+  args["input"] = input;
+  args["from"] = from;
+  args["to"] = to;
+  args["cat"] = cat;
+  gf.callFunction(grammar, "translate", args, callback);
 };
 
 gf.callFunction = function (grammar, fun, args, callback) {
