@@ -1,4 +1,4 @@
-name: gf-server
+name: pgf-server
 version: 1.0
 cabal-version: >= 1.2
 build-type: Simple
