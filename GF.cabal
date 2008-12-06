@@ -618,7 +618,6 @@ executable gf
   other-modules:
     GF.Grammar.ReservedWords
     GF.Data.BacktrackM
-    GF.Source.SharedString
     GF.Source.LexGF
     GF.Source.AbsGF
     GF.Source.PrintGF
