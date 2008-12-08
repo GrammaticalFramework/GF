@@ -455,7 +455,7 @@ inferLType gr trm = case trm of
        prtFail "cannot infer type of canonical constant" trm
        ]
 
-   Val ty i -> termWith trm $ return ty
+   Val _ ty i -> termWith trm $ return ty
 
    Vr ident -> termWith trm $ checkLookup ident
 

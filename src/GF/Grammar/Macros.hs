@@ -437,7 +437,9 @@ linAsStr s = mkRecord linLabel [K s] -- default linearization {s = s}
 term2patt :: Term -> Err Patt
 term2patt trm = case termForm trm of
   Ok ([], Vr x, []) -> return (PV x)
-  Ok ([], Val ty x, []) -> return (PVal ty x)
+  Ok ([], Val te ty x, []) -> do
+    te' <- term2patt te
+    return (PVal te' ty x)
   Ok ([], Con c, aa) -> do
     aa' <- mapM term2patt aa
     return (PC c aa')
@@ -488,7 +490,7 @@ patt2term :: Patt -> Term
 patt2term pt = case pt of
   PV x      -> Vr x
   PW        -> Vr identW             --- not parsable, should not occur
-  PVal t i  -> Val t i
+  PVal v t i -> Val (patt2term v) t i
   PMacro c  -> Cn c
   PM p c    -> Q p c
 
@@ -623,9 +625,10 @@ composOp co trm =
         vs' <- mapM co vs
         return (V ty' vs')
 
-   Val ty i ->
-     do ty' <- co ty
-        return (Val ty' i)
+   Val te ty i ->
+     do te' <- co te
+        ty' <- co ty
+        return (Val te' ty' i)
 
    Let (x,(mt,a)) b -> 
      do a'  <- co a

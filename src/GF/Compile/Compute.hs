@@ -309,14 +309,21 @@ computeTermOpt rec gr = comput True where
          T _ [(PT _ (PV z),c)] -> comp (ext z v' g) c
 
          -- course-of-values table: look up by index, no pattern matching needed
-         V ptyp ts -> do
-           vs <- allParamValues gr ptyp
-           case lookupR v' (zip vs [0 .. length vs - 1]) of
-             Just i -> comp g $ ts !! i
-             _ -> return $ S t' v' -- if v' is not canonical
-         T _ cc -> case matchPattern cc v' of
+
+         V ptyp ts -> case v' of
+           Val _ _ i -> comp g $ ts !! i
+           _ -> do
+             vs <- allParamValues gr ptyp
+             case lookupR v' (zip vs [0 .. length vs - 1]) of
+               Just i -> comp g $ ts !! i
+               _ -> return $ S t' v' -- if v' is not canonical
+         T _ cc -> do
+           let v2 = case v' of
+                 Val te _ _ -> te
+                 _ -> v'
+           case matchPattern cc v2 of
              Ok (c,g') -> comp (g' ++ g) c
-             _ | isCan v' -> prtBad ("missing case" +++ prt v' +++ "in") t 
+             _ | isCan v2 -> prtBad ("missing case" +++ prt v2 +++ "in") t 
              _ -> return $ S t' v' -- if v' is not canonical
 
          S (T i cs) e -> prawitz g i (flip S v') cs e
@@ -348,8 +355,8 @@ computeTermOpt rec gr = comput True where
            pty0 <- getTableType i
            ptyp <- comp g pty0
            case allParamValues gr ptyp of
-             Ok vs -> do
-
+             Ok vs0 -> do
+               let vs = [Val v ptyp i | (v,i) <- zip vs0 [0..]]
                ps0  <- mapM (compPatternMacro . fst) cs
                cs'  <- mapM (compBranchOpt g) (zip ps0 (map snd cs))
                sts  <- mapM (matchPattern cs') vs 

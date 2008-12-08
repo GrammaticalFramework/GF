@@ -75,9 +75,11 @@ tryMatch (p,t) = do
   isInConstantFormt = True -- tested already in matchPattern
   trym p t' =
     case (p,t') of
-      (PVal _ i, (_,Val _ j,_)) 
+      (PVal _ _ i, (_,Val _ _ j,_)) 
           | i == j -> return []
           | otherwise -> Bad $ "no match of values"
+      (PVal pa _ _,_) -> trym pa t'
+      (_, (_,Val te _ _,_)) -> tryMatch (p, te)
       (_,(x,Empty,y)) -> trym p (x,K [],y)   -- because "" = [""] = []
       (PV IW, _) | isInConstantFormt -> return [] -- optimization with wildcard
       (PV x,  _) | isInConstantFormt -> return [(x,t)]
@@ -151,6 +153,7 @@ isInConstantForm trm = case trm of
     Empty    -> True
     Alias _ _ t -> isInConstantForm t
     EInt _   -> True
+    Val _ _ _ -> True
     _       -> False ---- isInArgVarForm trm
 
 varsOfPatt :: Patt -> [Ident]

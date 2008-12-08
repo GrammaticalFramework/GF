@@ -201,6 +201,7 @@ trt trm = case trm of
     FV ts -> P.EVariants $ map trt ts
     Strs tt -> P.EStrs $ map trt tt
     EData -> P.EData
+    Val te _ _ -> trt te ----
     _ -> error $ "not yet" +++ show trm ----
 
 trp :: Patt -> P.Patt
@@ -228,6 +229,7 @@ trp p = case p of
     PChars s -> P.PChars s
     PM m c   -> P.PM (tri m) (tri c)
 
+    PVal p _ _ -> trp p ----
 
 trAssign (lab, (mty, t)) = maybe (P.LDDef x t') (\ty -> P.LDFull x (trt ty) t') mty
   where 
