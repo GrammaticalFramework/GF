@@ -492,7 +492,7 @@ term2term fun cgr env@(labels,untyps,typs) tr = case tr of
      _ | tr == x -> t
      _ -> GM.composSafeOp (mkBranch x t) tr     
 
-   valNum (Val _ _ i) = EInt $ toInteger i
+   valNum (Val _ _ i) = traceD (show i) $ EInt $ toInteger i  ----Val
    valNum tr = maybe (valNumFV $ tryFV tr) EInt $ Map.lookup tr untyps
     where
       tryFV tr = case GM.appForm tr of
