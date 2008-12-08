@@ -15,7 +15,7 @@
 module GF.Grammar.MMacros where
 
 import GF.Data.Operations
-import GF.Data.Zipper
+--import GF.Data.Zipper
 
 import GF.Grammar.Grammar
 import GF.Grammar.PrGrammar
@@ -27,7 +27,7 @@ import GF.Grammar.Macros
 
 import Control.Monad
 import qualified Data.ByteString.Char8 as BS
-
+{-
 nodeTree :: Tree -> TrNode
 argsTree :: Tree -> [Tree]
 
@@ -56,9 +56,6 @@ valTree  = valNode  . nodeTree
 
 mkNode :: Binds -> Atom -> Val -> (Constraints, MetaSubst) -> TrNode
 mkNode binds atom vtyp cs = N (binds,atom,vtyp,cs,False)
-
-type Var = Ident
-type Meta = MetaSymb
 
 metasTree :: Tree ->  [Meta]
 metasTree = concatMap metasNode . scanTree where
@@ -96,6 +93,10 @@ uAtom = AtM meta0
 
 mAtom :: Atom
 mAtom = AtM meta0
+-}
+
+type Var = Ident
+type Meta = MetaSymb
 
 uVal :: Val
 uVal = vClos uExp
@@ -112,7 +113,7 @@ mExp0 = mExp
 
 meta2exp :: MetaSymb -> Exp
 meta2exp = Meta
-
+{-
 atomC :: Fun -> Atom
 atomC = AtC
 
@@ -130,7 +131,7 @@ getMetaAtom :: Atom -> Err Meta
 getMetaAtom a = case a of
   AtM m -> return m
   _ -> Bad "the active node is not meta"
-
+-}
 cat2val :: Context -> Cat -> Val
 cat2val cont cat = vClos $ mkApp (qq cat) [mkMeta i | i <- [1..length cont]]
 
@@ -212,7 +213,7 @@ freeVarsExp e = case e of
 
 ident2string :: Ident -> String
 ident2string = prIdent
-
+{-
 tree :: (TrNode,[Tree]) -> Tree
 tree = Tr
 
@@ -224,7 +225,7 @@ addBinds b (Tr (N (b0,at,t,c,x),ts)) = Tr (N (b ++ b0,at,t,c,x),ts)
 
 bodyTree :: Tree -> Tree
 bodyTree (Tr (N (_,a,t,c,x),ts)) = Tr (N ([],a,t,c,x),ts)
-
+-}
 refreshMetas :: [Meta] -> Exp -> Exp
 refreshMetas metas = fst . rms minMeta where
   rms meta trm = case trm of
@@ -318,7 +319,7 @@ reindexTerm = qualif (0,[]) where
   look x  = maybe x id . lookup x --- if x is not in scope it is unchanged
   ind x d = identC $ ident2bs x `BS.append` BS.singleton '_' `BS.append` BS.pack (show d)
 
-
+{-
 -- this method works for context-free abstract syntax
 -- and is meant to be used in simple embedded GF applications
 
@@ -338,3 +339,4 @@ exp2tree e = do
     _ -> prtBad "cannot convert to atom" f
   ts <- mapM exp2tree xs
   return $ Tr (N (cont,at,uVal,([],[]),True),ts)
+-}

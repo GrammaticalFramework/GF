@@ -25,17 +25,17 @@ module GF.Grammar.PrGrammar (Print(..),
 		  prContext, prParam,
 		  prQIdent, prQIdent_,
 		  prRefinement, prTermOpt,
-		  prt_Tree, prMarkedTree, prTree,
-		  tree2string, prprTree,
+--		  prt_Tree, prMarkedTree, prTree,
+--		  tree2string, prprTree,
 		  prConstrs, prConstraints, 
-		  prMetaSubst, prEnv, prMSubst, 
+--		  prMetaSubst, prEnv, prMSubst, 
 		  prExp, prOperSignature,
                   lookupIdent, lookupIdentInfo, lookupIdentInfoIn,
                   prTermTabular
 		 ) where
 
 import GF.Data.Operations
-import GF.Data.Zipper
+--import GF.Data.Zipper
 import GF.Grammar.Grammar
 import GF.Infra.Modules
 import qualified GF.Source.PrintGF as P
@@ -110,7 +110,7 @@ prContext :: Context -> String
 prContext co = unwords $ map prParenth [prt x +++ ":" +++ prt t | (x,t) <- co]
 
 -- some GFC notions
-
+{-
 instance Print a => Print (Tr a) where
   prt (Tr (n, trees)) = prt n +++ unwords (map prt2 trees)
   prt2 t@(Tr (_,args)) = if null args then prt t else prParenth (prt t)
@@ -157,7 +157,7 @@ prprTree = prf False where
                             else s:ss
   ifPar (Tr (N ([],_,_,_,_), [])) = False
   ifPar _ = True
-
+-}
 
 -- auxiliaries
 
@@ -167,10 +167,6 @@ prConstraints = concat . prConstrs
 prMetaSubst :: MetaSubst -> String
 prMetaSubst = concat . prMSubst
   
-prEnv :: Env -> String
----- prEnv [] = prCurly "" ---- for debugging
-prEnv e = concatMap (\ (x,t) -> prCurly (prt x ++ ":=" ++ prt t)) e
-
 prConstrs :: Constraints -> [String]
 prConstrs = map (\ (v,w) -> prCurly (prt v ++ "<>" ++ prt w))
 
@@ -182,6 +178,21 @@ prBinds bi = if null bi
                 else "\\" ++ concat (intersperse "," (map prValDecl bi)) +++ "-> "
  where
    prValDecl (x,t) = prParenth (prt_ x +++ ":" +++ prt_ t)
+{-
+instance Print Atom where
+  prt (AtC f) = prQIdent f
+  prt (AtM i) = prt i
+  prt (AtV i) = prt i
+  prt (AtL s) = prQuotedString s
+  prt (AtI i) = show i
+  prt (AtF i) = show i
+  prt_ (AtC (_,f)) = prt f 
+  prt_ a = prt a
+-}
+prEnv :: Env -> String
+---- prEnv [] = prCurly "" ---- for debugging
+prEnv e = concatMap (\ (x,t) -> prCurly (prt x ++ ":=" ++ prt t)) e
+
 
 instance Print Val where
   prt (VGen i x) = prt x ++ "{-" ++ show i ++ "-}" ---- latter part for debugging
@@ -197,15 +208,6 @@ prv1 v = case v of
   VClos _ _ -> prParenth $ prt v
   _ -> prt v
 
-instance Print Atom where
-  prt (AtC f) = prQIdent f
-  prt (AtM i) = prt i
-  prt (AtV i) = prt i
-  prt (AtL s) = prQuotedString s
-  prt (AtI i) = show i
-  prt (AtF i) = show i
-  prt_ (AtC (_,f)) = prt f 
-  prt_ a = prt a
 
 prQIdent :: QIdent -> String
 prQIdent (m,f) = prt m ++ "." ++ prt f
