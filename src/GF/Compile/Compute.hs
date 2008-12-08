@@ -356,7 +356,7 @@ computeTermOpt rec gr = comput True where
            ptyp <- comp g pty0
            case allParamValues gr ptyp of
              Ok vs0 -> do
-               let vs = [Val v ptyp i | (v,i) <- zip vs0 [0..]]
+               let vs = vs0 ---- [Val v ptyp i | (v,i) <- zip vs0 [0..]]
                ps0  <- mapM (compPatternMacro . fst) cs
                cs'  <- mapM (compBranchOpt g) (zip ps0 (map snd cs))
                sts  <- mapM (matchPattern cs') vs 
