@@ -156,7 +156,7 @@ data Term =
  | TSh TInfo [Cases]    -- ^ table with disjunctive patters (only back end opt)
  | V Type [Term]        -- ^ table given as course of values: @table T [c1 ; ... ; cn]@
  | S Term Term          -- ^ selection:   @t ! p@
- | Val Type Int         -- ^ parameter value number: @T # i#
+ | Val Term Type Int    -- ^ parameter value number: @T # i#
 
  | Let LocalDef Term    -- ^ local definition: @let {t : T = a} in b@
 
@@ -194,7 +194,7 @@ data Patt =
  | PFloat Double          -- ^ float literal pattern: @1.2@    -- only abstract
  | PT Type Patt           -- ^ type-annotated pattern
 
- | PVal Type Int          -- ^ parameter value number: @T # i#
+ | PVal Patt Type Int     -- ^ parameter value number: @T # i#
 
  | PAs Ident Patt         -- ^ as-pattern: x@p
 

@@ -445,25 +445,6 @@ term2term fun cgr env@(labels,untyps,typs) tr = case tr of
    --- this is mainly needed for parameter record projections
    ---- was: 
    comp t = errVal t $ Compute.computeConcreteRec cgr t
-   compt t = case t of
-     T (TComp typ) ts  -> comp $ V typ (map (comp . snd) ts)  ---- should...
-     T (TTyped typ) ts -> comp $ V typ (map (comp . snd) ts)  ---- should
-     V typ ts -> V typ (map comp ts)
-     S tb (FV ts) -> FV $ map (comp . S tb) ts
-     S tb@(V typ ts) v0 -> err error id $ do
-       let v = comp v0 
-       let mv1 = Map.lookup v untyps
-       case mv1 of 
-         Just v0 -> 
-           let v1 = fromInteger v0
-               v2 = v1 --if length ts > v1 then v1 
-                       --else trace ("DEBUG" +++ show v1 +++ "of" +++ show ts) 0
-           in return $ (comp . (ts !!)) v2 
-         _ -> return (S (comp tb) v) 
-                  
-     R r -> R [(l,(ty,comp t)) | (l,(ty,t)) <- r]
-     P (R r) l -> maybe t (comp . snd) $ lookup l r
-     _ -> GM.composSafeOp comp t
 
    doVar :: Term -> STM [((Type,[Term]),(Term,Term))] Term
    doVar tr = case getLab tr of
@@ -511,6 +492,7 @@ term2term fun cgr env@(labels,untyps,typs) tr = case tr of
      _ | tr == x -> t
      _ -> GM.composSafeOp (mkBranch x t) tr     
 
+   valNum (Val _ _ i) = EInt $ toInteger i
    valNum tr = maybe (valNumFV $ tryFV tr) EInt $ Map.lookup tr untyps
     where
       tryFV tr = case GM.appForm tr of

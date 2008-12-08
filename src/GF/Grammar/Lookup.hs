@@ -178,7 +178,7 @@ lookupValueIndex :: SourceGrammar -> Type -> Term -> Err Term
 lookupValueIndex gr ty tr = do
   ts <- allParamValues gr ty
   case lookup tr $ zip ts [0..] of
-    Just i -> return $ Val ty i
+    Just i -> return $ Val tr ty i
     _ -> Bad $ "no index for" +++ prt tr +++ "in" +++ prt ty
 
 lookupIndexValue :: SourceGrammar -> Type -> Int -> Err Term
