@@ -20,7 +20,7 @@ module GF.Compile.TypeCheck (-- * top-level type checking functions; TC should n
 		 ) where
 
 import GF.Data.Operations
-import GF.Data.Zipper
+--import GF.Data.Zipper
 
 import GF.Grammar.Abstract
 import GF.Compile.Refresh
@@ -42,7 +42,7 @@ initTCEnv gamma =
 
 type2val :: Type -> Val
 type2val = VClos []
-
+{-
 aexp2tree :: (AExp,[(Val,Val)]) -> Err Tree
 aexp2tree (aexp,cs) = do
   (bi,at,vt,ts) <- treeForm aexp
@@ -74,7 +74,7 @@ aexp2tree (aexp,cs) = do
        v' <- whnf v ---- 
        return ([],AtM m,v',[])
      _ -> Bad "illegal tree" -- AProd
-
+-}
 cont2exp :: Context -> Exp
 cont2exp c = mkProd (c, eType, []) -- to check a context
 

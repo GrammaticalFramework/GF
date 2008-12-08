@@ -15,15 +15,17 @@
 module GF.Grammar.Values (-- * values used in TC type checking
 	       Exp, Val(..), Env,
 	       -- * annotated tree used in editing
-	       Tree, TrNode(..), Atom(..), Binds, Constraints, MetaSubst,
+--Z	       Tree, TrNode(..), Atom(..), 
+               Binds, Constraints, MetaSubst,
 	       -- * for TC
 	       valAbsInt, valAbsFloat, valAbsString, vType,
 	       isPredefCat,
-	       eType, tree2exp, loc2treeFocus
+	       eType, 
+--Z tree2exp, loc2treeFocus
 	      ) where
 
 import GF.Data.Operations
-import GF.Data.Zipper
+---Z import GF.Data.Zipper
 
 import GF.Infra.Ident
 import GF.Grammar.Grammar
@@ -38,6 +40,7 @@ data Val = VGen Int Ident | VApp Val Val | VCn QIdent | VType | VClos Env Exp
 
 type Env = [(Ident,Val)]
 
+{-
 -- annotated tree used in editing
 
 type Tree = Tr TrNode
@@ -48,10 +51,11 @@ newtype TrNode = N (Binds,Atom,Val,(Constraints,MetaSubst),Bool)
 data Atom = 
   AtC Fun | AtM MetaSymb | AtV Ident | AtL String | AtI Integer | AtF Double
   deriving (Eq,Show)
-
+-}
 type Binds = [(Ident,Val)]
 type Constraints = [(Val,Val)]
 type MetaSubst = [(MetaSymb,Val)]
+
 
 -- for TC
 
@@ -70,6 +74,7 @@ vType = VType
 eType :: Exp
 eType = Sort cType
 
+{-
 tree2exp :: Tree -> Exp
 tree2exp (Tr (N (bi,at,_,_,_),ts)) = foldr Abs (foldl App at' ts') bi' where
   at' = case at of
@@ -88,4 +93,4 @@ loc2treeFocus (Loc (Tr (a,ts),p)) =
  where 
    (mark, nomark) = (\(N (a,b,c,d,_)) -> N(a,b,c,d,True), 
                      \(N (a,b,c,d,_)) -> N(a,b,c,d,False))
-
+-}
