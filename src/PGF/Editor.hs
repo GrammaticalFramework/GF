@@ -1,8 +1,23 @@
-module PGF.Editor where
+module PGF.Editor (
+  State,       -- type-annotated possibly open tree with a position
+  Dict,        -- abstract syntax in different views
+  new,         -- :: Type  -> State
+  refine,      -- :: Dict  -> CId -> State -> State
+  replace,     -- :: Dict  -> Tree  -> State -> State
+  delete,      -- :: State -> State
+  goNextMeta,  -- :: State -> State
+  goNext,      -- :: State -> State
+  goTop,       -- :: State -> State
+  focusType,   -- :: State -> Type
+  stateTree,   -- :: State -> Tree
+  refineMenu,  -- :: Dict  -> State -> [CId]
+  pgf2dict     -- :: PGF   -> Dict
+  ) where
 
 import PGF.Data
 import PGF.CId
 import qualified Data.Map as M
+import Debug.Trace ----
 
 -- API
 
@@ -10,22 +25,37 @@ new :: Type -> State
 new (DTyp _ t _) = etree2state (uETree t)
 
 refine :: Dict -> CId -> State -> State
-refine dict f = replace (mkRefinement dict f)
+refine dict f = replaceInState (mkRefinement dict f)
 
-replace :: ETree -> State -> State
-replace t = doInState (const t)
+replace :: Dict -> Tree -> State -> State
+replace dict t = replaceInState (tree2etree dict t)
 
 delete :: State -> State
-delete s = replace (uETree (typ (tree s))) s
+delete s = replaceInState (uETree (typ (tree s))) s
 
 goNextMeta :: State -> State
-goNextMeta = untilPosition isMetaFocus goNext 
+goNextMeta s = 
+  if isComplete s then s
+  else let s1 = goNext s in if isMetaFocus s1 
+    then s1 else goNextMeta s1
+
+isComplete :: State -> Bool
+isComplete s = isc (tree s) where
+  isc t = case atom t of
+    AMeta _ -> False
+    ACon  _ -> all isc (children t)
 
 goTop :: State -> State
 goTop = navigate (const top)
 
-refineMenu :: Dict -> State -> [(CId,FType)]
-refineMenu dict s = maybe [] id $ M.lookup (focusType s) (refines dict)
+refineMenu :: Dict -> State -> [CId]
+refineMenu dict s = maybe [] (map fst) $ M.lookup (focusBType s) (refines dict)
+
+focusType :: State -> Type
+focusType s = DTyp [] (focusBType s) []
+
+stateTree :: State -> Tree
+stateTree = etree2tree . tree
 
 pgf2dict :: PGF -> Dict
 pgf2dict pgf = Dict (M.fromAscList fus) refs where
@@ -40,8 +70,17 @@ etree2tree t = case atom t of
   ACon f  -> Fun f (map etree2tree (children t))
   AMeta i -> Meta i
 
---tree2etree :: Tree -> ETree
-
+tree2etree :: Dict -> Tree -> ETree
+tree2etree dict t = case t of
+  Fun f _ -> annot (look f) t
+ where
+  annot (tys,ty) tr = case tr of 
+    Fun f trs -> ETree (ACon f)  ty [annt t tr | (t,tr) <- zip tys trs]
+    Meta i    -> ETree (AMeta i) ty []
+  annt ty tr = case tr of
+    Fun _ _ -> tree2etree dict tr
+    Meta _  -> annot ([],ty) tr
+  look f = maybe undefined id $ M.lookup f (functs dict)
 
 ---- TODO
 -- getPosition :: Language -> Int -> ETree -> Position
@@ -75,10 +114,12 @@ top :: Position
 top = []
 
 up :: Position -> Position
-up = tail
+up p = case p of
+  _:_ -> init p
+  _ -> p
 
 down :: Position -> Position
-down = (0:)
+down = (++[0])
 
 left :: Position -> Position
 left p = case p of
@@ -103,13 +144,13 @@ doInState f s = s{tree = change (position s) (tree s)} where
 subtree :: Position -> ETree -> ETree
 subtree p t = case p of
   [] -> t
-  n:ns -> subtree ns (children t !! n) 
+  n:ns -> subtree ns (children t !! n)
 
 focus :: State -> ETree
 focus s = subtree (position s) (tree s)
 
-focusType :: State -> BType
-focusType s = typ (focus s)
+focusBType :: State -> BType
+focusBType s = typ (focus s)
 
 navigate :: (Position -> Position) -> State -> State
 navigate p s = s{position = p (position s)}
@@ -128,22 +169,30 @@ untilPosition = untilFix position
 
 goNext :: State -> State
 goNext s = case focus s of
-  st | not (null (children st)) -> navigate down s 
-  _ -> navigate right (untilPosition hasYoungerSisters (navigate up) s)
+  st | not (null (children st)) -> navigate down s
+  _ -> findSister s
  where
+  findSister s = trace (show (position s)) $ case s of
+    s' | null (position s') -> s'
+    s' | hasYoungerSisters s' -> navigate right s'
+    s' -> findSister (navigate up s')
   hasYoungerSisters s = case position s of
-    n:ns -> length (children (subtree ns (tree s))) > n + 1
+    p@(_:_) -> length (children (focus (navigate up s))) > last p + 1
+    _ -> False
 
 isMetaFocus :: State -> Bool
 isMetaFocus s = case atom (focus s) of
   AMeta _ -> True
   _ -> False
 
+replaceInState :: ETree -> State -> State
+replaceInState t = doInState (const t)
+
 
 -------
 
-type BType = CId ----
-type FType = ([BType],BType) ----
+type BType = CId ----dep types
+type FType = ([BType],BType) ----dep types
 
 data Dict = Dict {
   functs  :: M.Map CId FType,
