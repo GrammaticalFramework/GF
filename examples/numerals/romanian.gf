@@ -31,13 +31,13 @@ oper regNum : Str -> LinDigit =
 oper ss : Str -> {s : MidForm => Str ; size : Size} = \st -> {s = table {_ => st} ; size = less20} ;
 
 lin num x = {s = [] ++ x.s ++ [] }; -- Latin A Supplement chars
-lin n2 = mkNumSpc "doi" (variants { "doisprezece" ; "douăsprezece" }) "douăzeci" "două" ;
+lin n2 = mkNumSpc "doi" (variants { "doisprezece" ; "doişpe"}) "douăzeci" "două" ;
 lin n3 = regNum "trei" ;
 lin n4 = mkNum "patru" (variants{"paisprezece" ; "paişpe"}) "patruzeci" ;
-lin n5 = mkNumSpc "cinci" (variants{"cinsprezece" ; "cinşpe"}) "cinzeci" (variants { "cinci" ; "cin" });
-lin n6 = mkNum "şase" (variants{"şaisprezece" ; "şaispe"}) "şaizeci" ;
-lin n7 = mkNum "şapte" (variants{"şaptesprezece" ; "şapspe"}) "şaptezeci" ; 
-lin n8 = mkNum "opt" (variants{"optsprezece" ; "opspe"}) "optzeci" ;
+lin n5 = mkNum "cinci" (variants{"cinsprezece" ; "cinşpe"}) "cincizeci";
+lin n6 = mkNum "şase" (variants{"şaisprezece" ; "şaişpe"}) "şaizeci" ;
+lin n7 = mkNum "şapte" (variants{"şaptesprezece" ; "şaptişpe"}) "şaptezeci" ; 
+lin n8 = mkNum "opt" (variants{"optsprezece" ; "optişpe"}) "optzeci" ;
 lin n9 = regNum "nouă" ;
 
 lin pot01 = {s = table {attr => "o" ; f => "unu"} ; size = sg} ;
