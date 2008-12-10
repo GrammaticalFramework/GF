@@ -123,12 +123,12 @@ down = (++[0])
 
 left :: Position -> Position
 left p = case p of
-  (n:ns) | n > 0 -> n-1 : ns
+  _:_ | last p > 0 -> init p ++ [last p - 1]
   _ -> top
 
 right :: Position -> Position
 right p = case p of
-  (n:ns) -> n+1 : ns
+  _:_ -> init p ++ [last p + 1]
   _ -> top
 
 etree2state :: ETree -> State
