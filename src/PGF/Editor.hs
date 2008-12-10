@@ -10,10 +10,12 @@ module PGF.Editor (
   goNext,      -- :: State -> State                    -- move to next node
   goTop,       -- :: State -> State                    -- move focus to the top (=root)
   goPosition,  -- :: Position -> State -> State        -- move focus to given position
-  mkPosition,  -- :: [Int] -> Position                 -- list of choices (top = []) 
+  mkPosition,  -- :: [Int] -> Position                 -- list of choices (top = [])
+  showPosition,-- :: Position -> [Int]                 -- readable position 
   focusType,   -- :: State -> Type                     -- get the type of focus
   stateTree,   -- :: State -> Tree                     -- get the current tree
   isMetaFocus, -- :: State -> Bool                     -- whether focus is ?
+  allMetas,    -- :: State -> [(Position,Type)]        -- all ?s and their positions
   prState,     -- :: State -> String                   -- print state, focus marked *
   refineMenu,  -- :: Dict  -> State -> [CId]           -- get refinement menu
   pgf2dict     -- :: PGF   -> Dict                     -- create editing Dict from PGF
@@ -63,7 +65,7 @@ refineMenu :: Dict -> State -> [CId]
 refineMenu dict s = maybe [] (map fst) $ M.lookup (focusBType s) (refines dict)
 
 focusType :: State -> Type
-focusType s = DTyp [] (focusBType s) []
+focusType s = btype2type (focusBType s)
 
 stateTree :: State -> Tree
 stateTree = etree2tree . tree
@@ -104,8 +106,14 @@ prState s = unlines [replicate i ' ' ++ f | (i,f) <- pr [] (tree s)] where
   ind i = 2 * length i
   sub j i = i ++ [j]
 
----- TODO
--- getPosition :: Language -> Int -> ETree -> Position
+showPosition :: Position -> [Int]
+showPosition = id
+
+allMetas :: State -> [(Position,Type)]
+allMetas s = [(reverse p, btype2type ty) | (p,ty) <- metas [] (tree s)] where
+  metas p t = 
+    (if isMetaAtom (atom t) then [(p,typ t)] else []) ++ 
+      concat [metas (i:p) u | (i,u) <- zip [0..] (children t)]
 
 ---- Trees and navigation
 
@@ -120,6 +128,9 @@ data Atom =
     ACon CId
   | AMeta Int
   deriving Show
+
+btype2type :: BType -> Type
+btype2type t = DTyp [] t []
 
 uETree :: BType -> ETree
 uETree ty = ETree (AMeta 0) ty []
@@ -194,7 +205,7 @@ goNext s = case focus s of
   st | not (null (children st)) -> navigate down s
   _ -> findSister s
  where
-  findSister s = trace (show (position s)) $ case s of
+  findSister s = case s of
     s' | null (position s') -> s'
     s' | hasYoungerSisters s' -> navigate right s'
     s' -> findSister (navigate up s')
@@ -203,7 +214,10 @@ goNext s = case focus s of
     _ -> False
 
 isMetaFocus :: State -> Bool
-isMetaFocus s = case atom (focus s) of
+isMetaFocus s = isMetaAtom (atom (focus s))
+
+isMetaAtom :: Atom -> Bool
+isMetaAtom a = case a of
   AMeta _ -> True
   _ -> False
 

@@ -66,6 +66,9 @@ interpret pgf dict st c = case words c of
     let st' = goNext st
     prLState pgf st'
     return st'
+  "x":_ -> do
+    mapM_ putStrLn [show (showPosition p) ++ showType t  | (p,t) <- allMetas st]
+    return st
   "h":_ -> putStrLn commandHelp >> return st
   _ -> do
     putStrLn "command not understood"
@@ -96,7 +99,8 @@ commandHelp = unlines [
   "h           -- display this help message",
   "m           -- show refinement menu",
   "p Anything  -- parse Anything and refine with it",
-  "r Function  -- refine with Function", 
+  "r Function  -- refine with Function",
+  "x           -- show all unknown positions and their types", 
   "4           -- refine with 4th item from menu (see m)", 
   "[1,2,3]     -- go to position 1,2,3",
   ">           -- go to next node"
