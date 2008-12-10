@@ -19,7 +19,7 @@
 --    based on asc2lex, Matthew Purver Nov 2001
 --    http://www.stanford.edu/~mpurver/software.html
 
-abstract Oald = Cat ** {
+abstract DictEngAbs = Cat ** {
 fun a_N : N;
 fun a_bomb_N : N;
 fun a_fortiori_Adv : Adv;

@@ -19,8 +19,9 @@
 --    based on asc2lex, Matthew Purver Nov 2001
 --    http://www.stanford.edu/~mpurver/software.html
 
---# -path=.:alltenses
-concrete OaldEng of Oald = CatEng ** open ParadigmsEng, IrregEng in {
+--# -path=.:src/prelude:src/abstract:src/common:src/english
+
+concrete DictEng of DictEngAbs = CatEng ** open ParadigmsEng, IrregEng in {
 lin a_N = mkN "a" "ae" {- FIXME: guessed plural form -};
 lin a_bomb_N = mkN "a-bomb" "a-bombs";
 lin a_fortiori_Adv = mkAdv "a fortiori";
