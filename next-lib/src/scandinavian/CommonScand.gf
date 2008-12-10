@@ -168,7 +168,7 @@ oper
   mkCase : Case -> Str -> Str = \c,f -> case c of {
       Nom => f ;
       Gen => f + case last f of {
-        "s" | "x" => [] ;
+        "s" | "z" | "x" => [] ;
         _ => "s"
         }
       } ;
