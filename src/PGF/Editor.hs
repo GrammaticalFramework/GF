@@ -1,17 +1,22 @@
 module PGF.Editor (
-  State,       -- type-annotated possibly open tree with a position
-  Dict,        -- abstract syntax in different views
-  new,         -- :: Type  -> State
-  refine,      -- :: Dict  -> CId -> State -> State
-  replace,     -- :: Dict  -> Tree  -> State -> State
-  delete,      -- :: State -> State
-  goNextMeta,  -- :: State -> State
-  goNext,      -- :: State -> State
-  goTop,       -- :: State -> State
-  focusType,   -- :: State -> Type
-  stateTree,   -- :: State -> Tree
-  refineMenu,  -- :: Dict  -> State -> [CId]
-  pgf2dict     -- :: PGF   -> Dict
+  State,       -- datatype  -- type-annotated possibly open tree with a focus
+  Dict,        -- datatype  -- abstract syntax information optimized for editing
+  Position,    -- datatype  -- path from top to focus 
+  new,         -- :: Type  -> State                    -- create new State
+  refine,      -- :: Dict  -> CId -> State -> State    -- refine focus with CId
+  replace,     -- :: Dict  -> Tree -> State -> State   -- replace focus with Tree
+  delete,      -- :: State -> State                    -- replace focus with ?
+  goNextMeta,  -- :: State -> State                    -- move focus to next ? node
+  goNext,      -- :: State -> State                    -- move to next node
+  goTop,       -- :: State -> State                    -- move focus to the top (=root)
+  goPosition,  -- :: Position -> State -> State        -- move focus to given position
+  mkPosition,  -- :: [Int] -> Position                 -- list of choices (top = []) 
+  focusType,   -- :: State -> Type                     -- get the type of focus
+  stateTree,   -- :: State -> Tree                     -- get the current tree
+  isMetaFocus, -- :: State -> Bool                     -- whether focus is ?
+  prState,     -- :: State -> String                   -- print state, focus marked *
+  refineMenu,  -- :: Dict  -> State -> [CId]           -- get refinement menu
+  pgf2dict     -- :: PGF   -> Dict                     -- create editing Dict from PGF
   ) where
 
 import PGF.Data
@@ -48,6 +53,12 @@ isComplete s = isc (tree s) where
 goTop :: State -> State
 goTop = navigate (const top)
 
+goPosition :: [Int] -> State -> State
+goPosition p s = s{position = p}
+
+mkPosition :: [Int] -> Position
+mkPosition = id
+
 refineMenu :: Dict -> State -> [CId]
 refineMenu dict s = maybe [] (map fst) $ M.lookup (focusBType s) (refines dict)
 
@@ -82,14 +93,25 @@ tree2etree dict t = case t of
     Meta _  -> annot ([],ty) tr
   look f = maybe undefined id $ M.lookup f (functs dict)
 
+prState :: State -> String
+prState s = unlines [replicate i ' ' ++ f | (i,f) <- pr [] (tree s)] where
+  pr i t = 
+    (ind i,prAtom i (atom t)) : concat [pr (sub j i) c | (j,c) <- zip [0..] (children t)]
+  prAtom i a = prFocus i ++ case a of
+    ACon f -> prCId f
+    AMeta i -> "?" ++ show i
+  prFocus i = if i == position s then "*" else ""
+  ind i = 2 * length i
+  sub j i = i ++ [j]
+
 ---- TODO
 -- getPosition :: Language -> Int -> ETree -> Position
 
 ---- Trees and navigation
 
 data ETree = ETree {
-  atom :: Atom,
-  typ  :: BType,
+  atom  :: Atom,
+  typ   :: BType,
   children :: [ETree]
   }
   deriving Show
