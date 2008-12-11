@@ -1,5 +1,17 @@
--- This dictionary is derived from SALDO (Lars Borin, Markus Forsberg and Lennart Lonngren)
--- The import is done by Krasimir Angelov
+-- This dictionary is derived from SALDO, see:
+--
+--   Borin, Lars, Markus Forsberg and Lennart LÃ¶nngren 2008.
+--   The hunting of the BLARK - SALDO, a freely available lexical database for 
+--   Swedish language technology. Resourceful language technology.
+--   Festschrift in honor of Anna SÃ¥gvall Hein, ed. by Joakim Nivre, 
+--   Mats DahllÃ¶f and BeÃ¡ta Megyesi. 
+--   Acta Universitatis Upsaliensis: Studia Linguistica Upsaliensia 7. 21-32.
+--   <http://spraakbanken.gu.se/personal/lars/pblctns/ash-fs-080605.pdf>
+--
+-- Imported in GF by Krasimir Angelov
+--
+-- This resource is distributed under the free software license LGPL 3.0 or 
+-- Creative Commons Attribution-Share Alike 2.5 Generic. 
 
 abstract DictSweAbs = Cat ** {
 
@@ -11984,7 +11996,7 @@ fun
   garveri_nn_1 : N ;
   garvmedel_nn_1 : N ;
   garvning_nn_1 : N ;
-  garçon_nn_1 : N ;
+  garson_nn_1 : N ;
   gas_nn_1 : N ;
   gas_nn_2 : N ;
   gasackumulator_nn_1 : N ;
@@ -24208,8 +24220,8 @@ fun
   motvillig_av_1 : A ;
   motvind_nn_1 : N ;
   mousse_nn_1 : N ;
-  moçambikier_nn_1 : N ;
-  moçambikisk_av_1 : A ;
+  mosambikier_nn_1 : N ;
+  mosambikisk_av_1 : A ;
   muckare_nn_1 : N ;
   mudd_nn_1 : N ;
   mudderverk_nn_1 : N ;
