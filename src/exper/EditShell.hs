@@ -18,22 +18,28 @@ main = do
   pgf <- readPGF file
   let dict = pgf2dict pgf
   let st0 = new (startCat pgf)
-  editLoop pgf dict st0
+  let lang = head (languages pgf) ---- for printnames; enable choosing lang
+  editLoop pgf dict lang st0        -- alt 1: all editing commands
+--  dialogueLoop pgf dict lang st0  -- alt 2: just refinement by parsing (see bottom)
 
-editLoop :: PGF -> Dict -> State -> IO State
-editLoop pgf dict st = do
-  putStrLn $ if isMetaFocus st 
-    then "I want something of type " ++ showType (focusType st) ++
+editLoop :: PGF -> Dict -> Language -> State -> IO State
+editLoop pgf dict lang st = do
+  putStrLn $ 
+    if null (allMetas st) 
+      then unlines 
+             (["The tree is complete:",prState st] ++ linearizeAll pgf (stateTree st))
+    else if isMetaFocus st 
+      then "I want something of type " ++ showType (focusType st) ++
          " (0 - " ++ show (length (refineMenu dict st)-1) ++ ")"
     else "Do you want to change this node?" 
   c   <- getLine
   st' <- interpret pgf dict st c
-  editLoop pgf dict st'
+  editLoop pgf dict lang st'
 
 interpret :: PGF -> Dict -> State -> String -> IO State
 interpret pgf dict st c = case words c of
   "r":f:_ -> do
-    let st' = goNext (refine dict (mkCId f) st)
+    let st' = goNextMeta (refine dict (mkCId f) st)
     prLState pgf st'
     return st'
   "p":ws -> do
@@ -43,7 +49,7 @@ interpret pgf dict st c = case words c of
     return st'
   "a":_ -> do
     t:_  <- generateRandom pgf (focusType st)
-    let st' = goNext (replace dict t st)
+    let st' = goNextMeta (replace dict t st)
     prLState pgf st'
     return st'
   "d":_ -> do
@@ -85,13 +91,13 @@ prLState pgf st = do
 selectReplace :: Dict -> [Tree] -> State -> IO State
 selectReplace dict ts st = case ts of
   []  -> putStrLn "no results" >> return st
-  [t] -> return $ goNext $ replace dict t st 
+  [t] -> return $ goNextMeta $ replace dict t st 
   _   -> do
     mapM_ putStrLn $ "choose tree by entering its number:" : 
       [show i ++ " : " ++ showTree t | (i,t) <- zip [0..] ts]
     d <- getLine
     let t = ts !! read d
-    return $ goNext $ replace dict t st
+    return $ goNextMeta $ replace dict t st
 
 commandHelp = unlines [
   "a           -- refine with a random subtree",
@@ -106,3 +112,25 @@ commandHelp = unlines [
   ">           -- go to next node"
   ]    
 
+----------------
+-- for a dialogue system, working just by parsing; questions are cat printnames
+----------------
+
+dialogueLoop :: PGF -> Dict -> Language -> State -> IO State
+dialogueLoop pgf dict lang st = do
+  putStrLn $ 
+    if null (allMetas st) 
+    then "Ready!\n  " ++ unlines (linearizeAll pgf (stateTree st))
+    else if isMetaFocus st 
+      then showPrintName pgf lang (focusType st)
+    else "Do you want to change this node?" 
+  c   <- getLine
+  st' <- interpretD pgf dict st c
+  dialogueLoop pgf dict lang st'
+
+interpretD :: PGF -> Dict -> State -> String -> IO State
+interpretD pgf dict st c = do
+  let tts = parseAll pgf (focusType st) c
+  st' <- selectReplace dict (concat tts) st
+--  prLState pgf st'
+  return st'
