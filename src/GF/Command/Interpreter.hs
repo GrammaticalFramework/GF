@@ -13,6 +13,7 @@ import GF.Command.Parse
 import PGF
 import PGF.Data
 import PGF.Macros
+import PGF.Morphology
 import GF.System.Signal
 import GF.Infra.UseIO
 
@@ -22,13 +23,16 @@ import qualified Data.Map as Map
 
 data CommandEnv = CommandEnv {
   multigrammar  :: PGF,
+  morphos       :: Map.Map Language Morpho,
   commands      :: Map.Map String CommandInfo,
   commandmacros :: Map.Map String CommandLine,
   expmacros     :: Map.Map String Tree
   }
 
 mkCommandEnv :: String -> PGF -> CommandEnv
-mkCommandEnv enc pgf = CommandEnv pgf (allCommands enc pgf) Map.empty Map.empty
+mkCommandEnv enc pgf = 
+  let mos = Map.fromList [(la,buildMorpho pgf la) | la <- languages pgf] in
+    CommandEnv pgf mos (allCommands enc (pgf, mos)) Map.empty Map.empty
 
 emptyCommandEnv :: CommandEnv
 emptyCommandEnv = mkCommandEnv "utf8" emptyPGF
