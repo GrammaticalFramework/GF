@@ -66,7 +66,7 @@ emptyCommandInfo = CommandInfo {
 lookCommand :: String -> Map.Map String CommandInfo -> Maybe CommandInfo
 lookCommand = Map.lookup
 
-commandHelpAll :: String -> PGF -> [Option] -> String
+commandHelpAll :: String -> PGFEnv -> [Option] -> String
 commandHelpAll cod pgf opts = unlines
   [commandHelp (isOpt "full" opts) (co,info)
     | (co,info) <- Map.assocs (allCommands cod pgf)]
@@ -84,9 +84,12 @@ commandHelp full (co,info) = unlines $ [
   "examples:" ++++ unlines ["  " ++ s | s <- examples info]
   ] else []
 
+
+type PGFEnv = (PGF, Map.Map Language Morpho)
+
 -- this list must no more be kept sorted by the command name
-allCommands :: String -> PGF -> Map.Map String CommandInfo
-allCommands cod pgf = Map.fromList [
+allCommands :: String -> PGFEnv -> Map.Map String CommandInfo
+allCommands cod env@(pgf, mos) = Map.fromList [
   ("!", emptyCommandInfo {
      synopsis = "system command: escape to system shell",
      syntax   = "! SYSTEMCOMMAND",
@@ -223,10 +226,10 @@ allCommands cod pgf = Map.fromList [
           _ | isOpt "coding" opts -> codingMsg
           _ | isOpt "license" opts -> licenseMsg
           [t] -> let co = getCommandOp (showTree t) in 
-                 case lookCommand co (allCommands cod pgf) of   ---- new map ??!!
+                 case lookCommand co (allCommands cod env) of   ---- new map ??!!
                    Just info -> commandHelp True (co,info)
                    _ -> "command not found"
-          _ -> commandHelpAll cod pgf opts
+          _ -> commandHelpAll cod env opts
        in return (fromString msg) 
      }),
   ("i", emptyCommandInfo {
@@ -614,7 +617,7 @@ allCommands cod pgf = Map.fromList [
    prGrammar opts = case opts of
      _ | isOpt "cats" opts -> unwords $ map showType $ categories pgf
      _ | isOpt "fullform" opts -> concatMap 
-          (prFullFormLexicon . buildMorpho pgf) $ optLangs opts
+          (prFullFormLexicon . morpho) $ optLangs opts
      _ | isOpt "missing" opts -> 
            unlines $ [unwords (prCId la:":": map prCId cs) | 
                        la <- optLangs opts, let cs = missingLins pgf la]
@@ -622,7 +625,9 @@ allCommands cod pgf = Map.fromList [
        v -> concatMap snd $ exportPGF noOptions (read v) pgf
 
    morphos opts s = 
-     [lookupMorpho (buildMorpho pgf la) s | la <- optLangs opts]
+     [lookupMorpho (morpho la) s | la <- optLangs opts]
+
+   morpho la = maybe Map.empty id $ Map.lookup la mos
 
    -- ps -f -g s returns g (f s)
    stringOps opts s = foldr app s (reverse opts) where
