@@ -4,7 +4,8 @@ module PGF.ShowLinearize (
   recordLinearize,
   termLinearize,
   tabularLinearize,
-  allLinearize
+  allLinearize,
+  markLinearize
   ) where
 
 import PGF.CId
@@ -88,6 +89,10 @@ recLinearize pgf lang tree = mkRecord typ $ linTree pgf lang tree where
 -- show PGF term
 termLinearize :: PGF -> CId -> Tree -> String
 termLinearize pgf lang = show . linTree pgf lang
+
+-- show bracketed markup with references to tree structure
+markLinearize :: PGF -> CId -> Tree -> String
+markLinearize pgf lang t = concat $ take 1 $ linearizesMark pgf lang t
 
 
 -- for Morphology: word, lemma, tags
