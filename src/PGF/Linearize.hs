@@ -1,4 +1,5 @@
-module PGF.Linearize (linearizes,realize,realizes,linTree) where
+module PGF.Linearize 
+  (linearizes,realize,realizes,linTree, linTreeMark,linearizesMark) where
 
 import PGF.CId
 import PGF.Data
@@ -118,3 +119,37 @@ compute pgf lang args = comp where
     TM s   -> TM s
     _ -> error ("ERROR in grammar compiler: field from " ++ show t) t
 
+---------
+-- markup with tree positions
+
+linearizesMark :: PGF -> CId -> Tree -> [String]
+linearizesMark pgf lang = realizes . linTreeMark pgf lang
+
+linTreeMark :: PGF -> CId -> Tree -> Term
+linTreeMark pgf lang = lin []
+  where
+    lin p (Abs xs  e )   = case lin p e of
+                             R ts -> R $ ts     ++ (Data.List.map (kks . prCId) xs)
+                             TM s -> R $ (TM s)  : (Data.List.map (kks . prCId) xs)
+    lin p (Fun fun es)   = let argVariants = 
+                                mapM (\ (i,e) -> liftVariants $ lin (sub p i) e) (zip [0..] es)
+                          in variants [mark p $ compute pgf lang args $ look fun | args <- argVariants]
+    lin p (Lit (LStr s)) = mark p $ R [kks (show s)] -- quoted
+    lin p (Lit (LInt i)) = mark p $ R [kks (show i)] 
+    lin p (Lit (LFlt d)) = mark p $ R [kks (show d)]
+    lin p (Var x)        = mark p $ TM (prCId x)
+    lin p (Meta i)       = mark p $ TM (show i)
+ 
+    look = lookLin pgf lang
+
+    mark p t = case t of
+      R  ts -> R $ map (mark p) ts
+      FV ts -> R $ map (mark p) ts
+      S  ts -> S $ bracket p ts
+      K  s  -> S $ bracket p [t]
+      W s (R ts) -> R [mark p $ kks (s ++ u) | K (KS u) <- ts]
+      _     -> t
+      -- otherwise in normal form
+
+    bracket p ts = [kks ("["++show p)] ++ ts ++ [kks "]"]
+    sub p i = p ++ [i]

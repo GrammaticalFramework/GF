@@ -273,6 +273,7 @@ allCommands cod env@(pgf, mos) = Map.fromList [
      exec = \opts -> return . fromStrings . map (optLin opts),
      options = [
        ("all","show all forms and variants"),
+       ("bracket","show tree structure with brackets and paths to nodes"),
        ("multi","linearize to all languages (default)"),
        ("record","show source-code-like record"),
        ("table","show all forms labelled by parameters"),
@@ -555,10 +556,11 @@ allCommands cod env@(pgf, mos) = Map.fromList [
      _ -> unlines [linear opts lang t | lang <- optLangs opts] 
     
    linear opts lang = let unl = unlex opts lang in case opts of
-       _ | isOpt "all"    opts -> allLinearize unl pgf lang
-       _ | isOpt "table"  opts -> tableLinearize unl pgf lang
-       _ | isOpt "term"   opts -> termLinearize pgf lang
-       _ | isOpt "record" opts -> recordLinearize pgf lang
+       _ | isOpt "all"     opts -> allLinearize unl pgf lang
+       _ | isOpt "table"   opts -> tableLinearize unl pgf lang
+       _ | isOpt "term"    opts -> termLinearize pgf lang
+       _ | isOpt "record"  opts -> recordLinearize pgf lang
+       _ | isOpt "bracket" opts -> markLinearize pgf lang
        _  -> unl . linearize pgf lang
 
    treebank opts t = unlines $ 
