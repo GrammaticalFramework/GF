@@ -104,6 +104,41 @@ allCommands cod env@(pgf, mos) = Map.fromList [
        "gt | l | ? wc  -- generate, linearize, word-count"
        ]
      }),
+
+  ("aw", emptyCommandInfo {
+     longname = "align_words",
+     synopsis = "show word alignments between languages graphically",
+     explanation = unlines [
+       "Prints a set of strings in the .dot format (the graphviz format).",
+       "The graph can be saved in a file by the wf command as usual.",
+       "If the -view flag is defined, the graph is saved in a temporary file",
+       "which is processed by graphviz and displayed by the program indicated",
+       "by the flag. The target format is postscript, unless overridden by the",
+       "flag -format."
+       ],
+     exec = \opts ts -> do
+         let grph = if null ts then [] else alignLinearize pgf (head ts)
+         if isFlag "view" opts || isFlag "format" opts then do
+           let file s = "_grph." ++ s
+           let view = optViewGraph opts ++ " "
+           let format = optViewFormat opts 
+           writeFile (file "dot") (enc grph)
+           system $ "dot -T" ++ format ++ " " ++ file "dot" ++ " > " ++ file format ++ 
+                    " ; " ++ view ++ file format
+           return void
+          else return $ fromString grph,
+     examples = [
+       "gr | aw              -- generate a tree and show word alignment as graph script",
+       "gr | vt -view=\"open\" -- generate a tree and display alignment on a Mac"
+       ],
+     options = [
+       ],
+     flags = [
+       ("format","format of the visualization file (default \"ps\")"),
+       ("view","program to open the resulting file (default \"gv\")")
+       ] 
+    }),
+
   ("cc", emptyCommandInfo {
      longname = "compute_concrete",
      syntax = "cc (-all | -table | -unqual)? TERM",
