@@ -65,7 +65,10 @@ lin2graph ss = prelude ++ nodes ++ links
 
   prelude = ["rankdir=LR ;", "node [shape = record] ;"]
 
-  -- find all words
+  -- the plain string, with syncategorematic words included
+  strings = filter (flip notElem "{[()]}" . head) . words
+
+  -- find all lexicalized words
   lins :: String -> [(String,String)]
   lins [] = []
   lins s = let (s1, s2)  = if null s  then ([],[]) else span (/='{') s in 
@@ -75,11 +78,18 @@ lin2graph ss = prelude ++ nodes ++ links
   -- separate a word to the link (1,2,3) and the word itself
   wlink :: String -> (String,String)
   wlink s = let (s1, s2)  = span (/=']') s in 
-            (tail s1, init (drop 1 s2))
+            (tail s1, unwords (words (init (drop 1 s2))))
+
+  -- to merge in syncat words
+  slins i s = merge (strings s) (lins s) where
+    merge ws cs = case (ws,cs) of
+      (w:ws2,(m,c):cs2) | w==c -> (m,c) : merge ws2 cs2
+      (w:ws2,_        )        -> ("w" ++ show i,w) : merge ws2 cs
+      _                        -> []
 
   -- make all marks unique to deal with discontinuities
   nlins :: [(Int,[((Int,String),String)])]
-  nlins = [(i, [((j,m),w) | (j,(m,w)) <- zip [0..] (lins s)]) | (i,s) <- zip [0..] ss]
+  nlins = [(i, [((j,m),w) | (j,(m,w)) <- zip [0..] (slins i s)]) | (i,s) <- zip [0..] ss]
 
   nodes = map mkStruct nlins
 
