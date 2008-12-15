@@ -146,10 +146,11 @@ linTreeMark pgf lang = lin []
       R  ts -> R $ map (mark p) ts
       FV ts -> R $ map (mark p) ts
       S  ts -> S $ bracket p ts
-      K  s  -> S $ bracket p [t]
+      K  s  -> S $ bracketw p [t]
       W s (R ts) -> R [mark p $ kks (s ++ u) | K (KS u) <- ts]
       _     -> t
       -- otherwise in normal form
 
-    bracket p ts = [kks ("["++show p)] ++ ts ++ [kks "]"]
+    bracket  p ts = [kks ("("++show p)] ++ ts ++ [kks ")"]
+    bracketw p ts = [kks ("{"++show p)] ++ ts ++ [kks "}"] -- for easy word alignment
     sub p i = p ++ [i]
