@@ -69,7 +69,7 @@ lin2graph ss = prelude ++ nodes ++ links
   prelude = ["rankdir=LR ;", "node [shape = record] ;"]
 
   nlins :: [(Int,[((Int,String),String)])]
-  nlins = [(i, [((0,showp p),unw ws) | (p,ws) <- ws]) | 
+  nlins = [(i, [((j,showp p),unw ws) | (j,(p,ws)) <- zip [0..] ws]) | 
                                   (i,ws) <- zip [0..] (map (wlins . readPosText) ss)]
 
   unw = concat . intersperse "\\ "  -- space escape in graphviz
