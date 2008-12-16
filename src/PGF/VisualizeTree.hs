@@ -111,7 +111,7 @@ lin2graph ss = prelude ++ nodes ++ links
     [edge i v w | (v@(_,p),_) <- lin, (w@(_,q),_) <- lin', p == q]
 
   edge i v w = 
-    struct i ++ ":" ++ mark v ++ " -> " ++ struct (i+1) ++ ":" ++ mark w ++ " ;"
+    struct i ++ ":" ++ mark v ++ ":e -> " ++ struct (i+1) ++ ":" ++ mark w ++ ":w ;"
 
 {-
 digraph{
