@@ -191,30 +191,82 @@ concrete VerbRus of Verb = CatRus ** open ResRus, Prelude in {
       c = dat.c
     } ;
 
-{-
-  ComplV3 dat tu pivo =
-      let
-        tebepivo = dat.s2 ++
-         tu.s ! PF dat.c No NonPoss ++ dat.s4 ++ pivo.s ! PF dat.c2 Yes NonPoss 
-      in
-      {s  = \\clf,gn,p => dat.s ! (getActVerbForm clf (genGNum gn) (numGNum gn) p) ++ tebepivo ; 
+  ---- AR 17/12/2008
+  SlashV2Q dat esliOnPridet =
+       {s  = \\clf,gn,p => dat.s ! (getActVerbForm clf (genGNum gn) (numGNum gn) p) ++ esliOnPridet.s ! QDir ; 
       asp = dat.asp ;
       w = Act;
       negBefore = True;
       s2 = "";
-      s3 = \\g,n=> ""
+      s3 = \\g,n=> "" ;
+      sc = dat.s2 ;
+      c = dat.c
     } ;
 
+  ---- AR 17/12/2008
+  SlashV2S   vidit tuUlubaeshsya =
+    {s = \\clf,gn,p => vidit.s ! (getActVerbForm clf (genGNum gn) (numGNum gn) p)
+     ++ [", что"] ++ tuUlubaeshsya.s ;
+     asp = vidit.asp;
+     w = Act;
+     s2="";
+      negBefore = True;
+      s3 = \\g,n => "" ;
+      sc = vidit.s2 ;
+      c = vidit.c
+   } ;
 
-  ReflV2 v = 
-    { s  = \\clf,gn,p => v.s ! (getActVerbForm clf (genGNum gn) (numGNum gn) p) ++ v.s2 ++ sebya!v.c; 
-      asp = v.asp ;
+  ---- AR 17/12/2008
+  SlashV2V putatsya bezhat =
+  { s =  \\clf,gn,p => putatsya.s ! (getActVerbForm clf (genGNum gn) 
+       (numGNum gn) p) ++ bezhat.s!ClInfinit !gn!p ; 
+      asp = putatsya.asp ;
       w = Act;
+      negBefore = True;
+      s2 = "";
+      s3 =\\g,n => "" ;
+      sc = putatsya.s2 ;
+      c = putatsya.c
+  } ;
+
+  ---- AR 17/12/2008
+  ReflVP vp = 
+    { s  = \\clf,gn,p => vp.s ! clf ! gn ! p ++ vp.s2 ++ sebya ! vp.c; 
+      asp = vp.asp ;
+      w = Act ;
       negBefore = True;
       s2 = "";
       s3 = \\g,n=> ""
  } ;
--}
+
+  ---- AR 17/12/2008
+  SlashVV putatsya bezhat =
+  { s =  \\clf,gn,p => putatsya.s ! (getActVerbForm clf (genGNum gn) 
+       (numGNum gn) p) ++ bezhat.s!ClInfinit !gn!p ; 
+      asp = putatsya.asp ;
+      w = Act;
+      negBefore = True;
+      s2 = "";
+      s3 =\\g,n => "" ;
+      sc = bezhat.s2 ;
+      c = bezhat.c
+  } ;
+
+  ---- AR 17/12/2008
+  SlashV2VNP putatsya np bezhat =
+  { s =  \\clf,gn,p => 
+        putatsya.s ! (getActVerbForm clf (genGNum gn) (numGNum gn) p) ++ 
+        np.s ! (mkPronForm putatsya.c No NonPoss) ++ ---- ? 
+        bezhat.s!ClInfinit !gn!p ;
+      asp = putatsya.asp ;
+      w = Act;
+      negBefore = True;
+      s2 = "";
+      s3 =\\g,n => "" ;
+      sc = bezhat.s2 ; ---- ?
+      c = bezhat.c
+  } ;
+
 
 -- To generate "сказал, что Иван гуляет" / "не сказал, что Иван гуляет":
   ComplVS   vidit tuUlubaeshsya =
@@ -226,6 +278,8 @@ concrete VerbRus of Verb = CatRus ** open ResRus, Prelude in {
       negBefore = True;
       s3 = \\g,n => ""
  } ;
+
+
 -- To generate "can walk"/"can't walk"; "tries to walk"/"does not try to walk":
 -- The contraction of "not" is not provided, since it would require changing
 -- the verb parameter type.

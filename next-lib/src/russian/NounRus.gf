@@ -70,7 +70,7 @@ concrete NounRus of Noun = CatRus ** open ResRus, Prelude, MorphoRus in {
       g = quant.g;
       c = quant.c
       } ;
-
+{-
     DetArtOrd quant num ord = {
       s =  \\af => quant.s !af ++ num.s! (caseAF af) ! (genAF af)  ++ ord.s!af ; 
       n = num.n ;
@@ -84,7 +84,7 @@ concrete NounRus of Noun = CatRus ** open ResRus, Prelude, MorphoRus in {
       g = quant.g;
       c = quant.c
       } ;
-
+-}
 --    MassDet = {s = \\_=>[] ; c=Nom; g = PNoGen; n = Sg} ;
 
     MassNP okhotnik = {
@@ -92,7 +92,7 @@ concrete NounRus of Noun = CatRus ** open ResRus, Prelude, MorphoRus in {
       a = agrP3 Sg (PGen okhotnik.g) ; 
       anim = okhotnik.anim 
     } ;
-
+{-
     DetArtSg kazhduj okhotnik = {
       s = \\c =>  -- art case always Nom (AR 17/6/2008) 
           kazhduj.s ! AF (extCase c) okhotnik.anim (gennum okhotnik.g Sg) ++ 
@@ -108,7 +108,7 @@ concrete NounRus of Noun = CatRus ** open ResRus, Prelude, MorphoRus in {
       n = agrP3 Pl (case kazhduj.g of {PNoGen => PGen okhotnik.g; _ => kazhduj.g}) ; 
       anim = okhotnik.anim 
     } ;
-
+-}
     PossPron p = {s = \\af => p.s ! mkPronForm (caseAF af) No (Poss (gennum (genAF af) (numAF af) )); c=Nom; g = PNoGen} ;
 
    NumCard c = c ;
@@ -158,6 +158,22 @@ concrete NounRus of Noun = CatRus ** open ResRus, Prelude, MorphoRus in {
     c2 = f.c3 ;
     } ;
 
+  ---- AR 17/12/2008
+  Use2N3 f = {
+      s = f.s ;
+      g = f.g ; 
+      anim = f.anim ;
+      c2 = f.c2
+      } ;
+
+  ---- AR 17/12/2008
+  Use3N3 f = {
+      s = f.s ;
+      g = f.g ; 
+      anim = f.anim ;
+      c2 = f.c3
+      } ;
+
 
 -- The two main functions of adjective are in predication ("Иван - молод")
 -- and in modification ("молодой человек"). Predication will be defined
@@ -195,10 +211,20 @@ concrete NounRus of Noun = CatRus ** open ResRus, Prelude, MorphoRus in {
     anim = idea.anim
     } ;
 
+  ---- AR 17/12/2008
   ApposCN cn s = {
     s = \\nf => cn.s ! nf ++ s.s ! (case nf of {NF n c => PF c No NonPoss}) ; 
     g = cn.g ;
     anim = cn.anim
     } ;
+
+  RelNP np rel = {
+      s = \\c => np.s ! c ++ rel.s ! (gennum (pgen2gen np.a.g) np.a.n) ! extCase c ! np.anim ; 
+      a = np.a ;
+      anim = np.anim ;
+      nComp = np.nComp
+      } ;
+
+
 }
 
