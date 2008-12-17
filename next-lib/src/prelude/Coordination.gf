@@ -125,5 +125,14 @@ oper
      s2 = xs.s2
     } ; 
 
+  consrTable3 : (P,Q,R : Type) -> Str -> {s : P => Q => R => Str} -> 
+    ListTable3 P Q R -> ListTable3 P Q R = 
+    \P,Q,R,c,x,xs ->
+    {s1 = table P {p => table Q {q => table R {
+       r => x.s ! p ! q ! r ++ c ++ xs.s1 ! p ! q ! r
+       }}} ; 
+     s2 = xs.s2
+    } ; 
+
 
 } ;

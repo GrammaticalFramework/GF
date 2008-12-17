@@ -21,6 +21,9 @@ concrete ConjunctionRus of Conjunction =
 
     ConjAP c xs = conjunctDistrTable AdjForm c xs ** {p = xs.p} ;
 
+  ---- AR 17/12/2008
+    ConjRS c xs = conjunctDistrTable3 GenNum Case Animacy c xs ** {p = xs.p} ;
+
 -- These fun's are generated from the list cat's.
 
     BaseS = twoSS ;
@@ -50,6 +53,9 @@ concrete ConjunctionRus of Conjunction =
        anim = conjAnim x.anim y.anim
        } ;
 
+  ---- AR 17/12/2008
+    BaseRS x y = twoTable3 GenNum Case Animacy x y ** {c = y.c} ;
+    ConsRS xs x = consrTable3 GenNum Case Animacy comma xs x ** {c = xs.c} ;
 
 
 
@@ -63,7 +69,8 @@ concrete ConjunctionRus of Conjunction =
  -- if and only if all elements are prefix.
     [AP] =  {s1,s2 : AdjForm => Str ; p : Bool} ;
 
-
+  ---- AR 17/12/2008
+   [RS] = {s1,s2 : GenNum => Case => Animacy => Str} ;
 
 oper
 

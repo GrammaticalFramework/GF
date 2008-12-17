@@ -16,6 +16,24 @@ flags  coding=utf8 ;
             p = True
            } ;
 
+  ---- AR 17/12/2008
+    UseComparA bolshoj =
+          {s = \\af => bolshoj.s ! Compar ! af ;
+            p = True
+           } ;
+
+  ---- AR 17/12/2008
+    CAdvAP ad ap np = let adp = ad.s in  {  ---- should be ad.p
+      s = \\af => ad.s ++ ap.s ! af ++ adp ++ np.s  ! (mkPronForm Gen Yes NonPoss) ; 
+      p = True ----?
+      } ;
+
+  ---- AR 17/12/2008
+    AdjOrd  a = {
+      s = a.s ;
+      p = True ---- ?
+      } ;
+
 -- $SuperlA$ belongs to determiner syntax in $Noun$.
 
     ComplA2 vlublen tu =
