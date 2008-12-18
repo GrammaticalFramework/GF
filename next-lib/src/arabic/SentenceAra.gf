@@ -54,11 +54,12 @@ concrete SentenceAra of Sentence = CatAra ** open
               <True, ResAra.Pres, Pos> => vp.pred.s ! gn ! Nom; --xabar marfooc
               _ => vp.pred.s ! gn ! Acc --xabar kaana wa laysa manSoob
               };
+            
           } in
           case o of { 
             Verbal => 
               case <False, np.a.isPron> of {
-----AR              case <vp.obj.a.isPron, np.a.isPron> of {
+---- AR workaround 18/12/2008              case <vp.obj.a.isPron, np.a.isPron> of {
                 -- ya2kuluhu
                 <False,True> => (vStr t p) ++ vp.obj.s  ++ vp.s2 ++ (pred t p);
                 -- ya2kuluhu al-waladu, yakuluhu al-2awlaadu 
