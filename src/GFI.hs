@@ -8,6 +8,7 @@ import GF.Command.Abstract
 import GF.Command.Parse
 import GF.Data.ErrM
 import GF.Grammar.API  -- for cc command
+import GF.Infra.Dependencies
 import GF.Infra.UseIO
 import GF.Infra.Option
 import GF.System.Readline
@@ -100,6 +101,10 @@ loop opts gfenv0 = do
              case pTerm (unwords term) >>= checkTerm sgr >>= computeTerm sgr of
                Ok  x -> putStrLn $ enc (showTerm style x)
                Bad s -> putStrLn $ enc s
+             loopNewCPU gfenv
+          "dg":ws -> do
+             writeFile "_gfdepgraph.dot" (depGraph sgr)
+             putStrLn "wrote graph in file _gfdepgraph.dot"
              loopNewCPU gfenv
           "i":args -> do
               gfenv' <- case parseOptions args of
