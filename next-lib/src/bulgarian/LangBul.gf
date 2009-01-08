@@ -1,4 +1,4 @@
---# -path=.:../abstract:../common:../slavic
+--# -path=.:../abstract:../common:src/prelude
 
 concrete LangBul of Lang = 
   GrammarBul,

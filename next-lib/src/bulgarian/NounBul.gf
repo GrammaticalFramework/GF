@@ -22,7 +22,7 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
                                                                   }
                                                }
                                } ;
-                          s = det.s ! True ! cn.g ! cn.anim ! role ++ cn.s ! nf
+                          s = det.s ! True ! cn.g ! role ++ cn.s ! nf
                       in case role of {
                            RObj Dat => "на" ++ s; 
                            _        => s
@@ -31,12 +31,12 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
       } ;
 
     DetNP det =
-      { s = \\role => let s = det.s ! False ! Neut ! Inanimate ! role
+      { s = \\role => let s = det.s ! False ! DNeut ! role
                       in case role of {
                            RObj Dat => "на" ++ s;
                            _        => s
                          } ;
-        a = {gn = gennum Neut det.n; p = P3} ;
+        a = {gn = gennum DNeut det.n; p = P3} ;
       } ;
     
     UsePN pn = { s = table {
@@ -63,19 +63,19 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
       } ;
 
     DetQuant quant num = {
-      s  = \\sp,g,anim,c => let sp' = case num.nonEmpty of { True  => True ;
-                                                             False => sp   }
-                            in quant.s ! sp' ! aform (gennum g num.n) (case c of {RVoc=>Indef; _=>Def}) c ++
-                               num.s ! dgenderSpecies g anim quant.spec c ;
+      s  = \\sp,g,c => let sp' = case num.nonEmpty of { True  => True ;
+                                                        False => sp   }
+                       in quant.s ! sp' ! aform (gennum g num.n) (case c of {RVoc=>Indef; _=>Def}) c ++
+                          num.s ! dgenderSpecies g quant.spec c ;
       n = num.n ;
       countable = num.nonEmpty ;
       spec = case num.nonEmpty of {True=>Indef; _=>quant.spec}
       } ;
 
     DetQuantOrd = \quant, num, ord -> {
-      s  = \\_,g,anim,c => quant.s ! True ! aform (gennum g num.n) (case c of {RVoc=>Indef; _=>Def}) c ++
-                           num.s ! dgenderSpecies g anim quant.spec c ++
-                           ord.s ! aform (gennum g num.n) (case num.nonEmpty of {True=>Indef; _=>quant.spec}) c ; 
+      s  = \\_,g,c => quant.s ! True ! aform (gennum g num.n) (case c of {RVoc=>Indef; _=>Def}) c ++
+                      num.s ! dgenderSpecies g quant.spec c ++
+                      ord.s ! aform (gennum g num.n) (case num.nonEmpty of {True=>Indef; _=>quant.spec}) c ; 
       n = num.n ;
       countable = num.nonEmpty ;
       spec=Indef
@@ -144,21 +144,11 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
     UseN noun = noun ;
     UseN2 noun = noun ;
 
-    ComplN2 f x = {
-      s = \\nf => f.s ! nf ++ f.c2.s ++ x.s ! RObj f.c2.c ;
-      g=f.g ;
-      anim = f.anim
-    } ;
+    ComplN2 f x = {s = \\nf => f.s ! nf ++ f.c2.s ++ x.s ! RObj f.c2.c; g=f.g} ;
+    ComplN3 f x = {s = \\nf => f.s ! nf ++ f.c2.s ++ x.s ! RObj f.c2.c; c2 = f.c3; g=f.g} ;
 
-    ComplN3 f x = {
-      s = \\nf => f.s ! nf ++ f.c2.s ++ x.s ! RObj f.c2.c ;
-      c2 = f.c3 ;
-      g=f.g ;
-      anim = f.anim
-    } ;
-
-    Use2N3 f = {s = f.s ; g=f.g ; anim=f.anim ; c2 = f.c2} ;
-    Use3N3 f = {s = f.s ; g=f.g ; anim=f.anim ; c2 = f.c3} ;
+    Use2N3 f = {s = f.s ; g=f.g ; c2 = f.c2} ;
+    Use3N3 f = {s = f.s ; g=f.g ; c2 = f.c3} ;
 
 
     AdjCN ap cn = {
@@ -166,27 +156,20 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
                     True  => (ap.s ! nform2aform nf cn.g) ++ (cn.s ! (indefNForm nf)) ;
                     False => (cn.s ! nf) ++ (ap.s ! nform2aform (indefNForm nf) cn.g)
                   } ;
-      g = cn.g ;
-      anim = cn.anim
+      g = cn.g
       } ;
     RelCN cn rs = {
       s = \\nf => cn.s ! nf ++ rs.s ! {gn=gennum cn.g (numNForm nf); p=P3} ;
-      g = cn.g ;
-      anim = cn.anim
+      g = cn.g
       } ;
     AdvCN cn ad = {
       s = \\nf => cn.s ! nf ++ ad.s ;
-      g = cn.g ;
-      anim = cn.anim
+      g = cn.g
     } ;
 
-    SentCN cn sc = {s = \\nf => cn.s ! nf ++ sc.s; g=Neut; anim=Inanimate} ;
+    SentCN cn sc = {s = \\nf => cn.s ! nf ++ sc.s; g=DNeut} ;
 
-    ApposCN cn np = {
-      s = \\nf => cn.s ! nf ++ np.s ! RSubj;
-      g=cn.g ;
-      anim = cn.anim
-    } ;
+    ApposCN cn np = {s = \\nf => cn.s ! nf ++ np.s ! RSubj; g=cn.g} ;
 
     RelNP np rs = {
       s = \\r => np.s ! r ++ rs.s ! np.a ;

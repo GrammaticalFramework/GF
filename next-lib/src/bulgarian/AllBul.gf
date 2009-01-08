@@ -1,4 +1,4 @@
---# -path=.:../abstract:../common:../slavic
+--# -path=.:../abstract:../common:prelude
 
 concrete AllBul of AllBulAbs = 
   LangBul,

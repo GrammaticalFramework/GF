@@ -10,7 +10,7 @@ concrete RelativeRus of Relative = CatRus ** open ResRus, MorphoRus in {
      takoj.s ! AF c anim gn ++ "что" ++ A.s !b!clf};
 
     RelVP kotoruj gulyaet =
-    { s = \\b,clf,gn, c, anim =>  let { nu = numGNum gn } in
+    { s = \\b,clf,gn, c, anim =>  let { nu = numGenNum gn } in
       kotoruj.s ! gn ! c ! anim ++ gulyaet.s2 ++ gulyaet.s ! clf ! gn !P3 ++ 
        gulyaet.s3 ! genGNum gn ! nu
     } ;
@@ -26,7 +26,7 @@ concrete RelativeRus of Relative = CatRus ** open ResRus, MorphoRus in {
     } ;
 
     FunRP p mama kotoruj =
-    {s = \\gn,c, anim => let {nu = numGNum gn} in
+    {s = \\gn,c, anim => let {nu = numGenNum gn} in
            mama.s ! PF c No NonPoss ++  
            p.s ++ kotoruj.s !  gn ! p.c ! anim
     } ;

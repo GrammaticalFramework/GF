@@ -64,7 +64,7 @@ oper pronYaTu : { s : Case => Str } -> Str -> Person -> Pronoun =
 	
       }
     } ;
-    a = {g = PNoGen; n = Sg; p = pers};
+    g = PNoGen ; n = Sg ; p = pers ; pron = True
   } ;
 
 oper pronNAfterPrep : Pronoun -> Pronoun = \p ->
@@ -73,7 +73,7 @@ oper pronNAfterPrep : Pronoun -> Pronoun = \p ->
                         x@(("е"|"ё"|"и")+_) => "н"+x;
                         x => x };
     pf => p.s!pf };
-    a = p.a;
+    g = p.g ; n = p.n ; p = p.p ; pron = p.pron
   } ;
 
 oper pronOn : Pronoun = pronNAfterPrep
@@ -85,7 +85,7 @@ oper pronOn : Pronoun = pronNAfterPrep
     PF Inst       _ _ => "им" ;
     PF (Prepos _) _ _ => "ём"
     } ;
-    a = agrP3 Sg (PGen Masc)
+    g = PGen Masc ; n = Sg ; p = P3 ; pron = True
   } ;
 
 oper pronOna : Pronoun = pronNAfterPrep
@@ -95,7 +95,7 @@ oper pronOna : Pronoun = pronNAfterPrep
     PF (Gen|Acc) _ _           => "её" ;
     PF (Dat|Inst|Prepos _) _ _ => "ей"
     } ;
-    a = agrP3 Sg (PGen Fem)
+    g = PGen Fem ; n = Sg ; p = P3 ; pron = True
   } ;
 
 oper pronOno: Pronoun =
@@ -103,7 +103,7 @@ oper pronOno: Pronoun =
     PF Nom _ NonPoss => "оно" ;
     pf => pronOn.s!pf
     } ;
-    a = agrP3 Sg (PGen Neut)
+    g = PGen Neut ; n = Sg ; p = P3 ; pron = True
   } ;
 
 oper pronMuVu : Str -> Str -> Person -> Pronoun =
@@ -138,7 +138,7 @@ oper pronMuVu : Str -> Str -> Person -> Pronoun =
     PF Inst       _ (Poss GPl) => na + "шими" ;
     PF (Prepos _) _ (Poss GPl) => na + "ших"
     };
-    a = {g = PNoGen; n = Pl; p = pers}
+    g = PNoGen ; n = Pl ; p = pers ; pron = True
   } ;
 
 oper pronMu: Pronoun = pronMuVu "мы" "на" P1;
@@ -153,7 +153,7 @@ oper pronOni: Pronoun = pronNAfterPrep
     PF (Gen|Acc|Prepos _) _ _ => "их" ;
     PF Inst _ _               => "ими"
     } ;
-    a = agrP3 Pl PNoGen
+    g = PNoGen ; n = Pl ; p = P3 ; pron = True
   } ;
 
 oper pronKto: Pronoun =
@@ -165,7 +165,10 @@ oper pronKto: Pronoun =
     PF Inst _ _ => "кем" ;
     PF (Prepos _) _ _ => "ком"
     } ;
-    a = agrP3 Sg (PGen Masc)
+    g = PGen  Masc;
+    n = Sg ;
+    p = P3 ;
+    pron = False
   } ;
 
 oper pronChto: Pronoun =
@@ -177,12 +180,18 @@ oper pronChto: Pronoun =
     PF Inst _ _ => "чем" ;
     PF (Prepos _) _ _ => "чём"
     } ;
-    a = agrP3 Sg (PGen Masc)
+    g = PGen  Masc;
+    n = Sg ;
+    p = P3 ;
+    pron = False
   } ;
 
 oper pron_add_to : Pronoun -> Pronoun = \p -> 
   { s = \\pf => (p.s!pf) + "-то" ;
-    a = p.a
+    g = p.g ;
+    n = p.n ;
+    p = p.p ;
+    pron = p.pron
   } ;
 
 oper pronKtoTo : Pronoun = pron_add_to pronKto ;
@@ -198,8 +207,11 @@ oper pronEti: Pronoun =
     PF Inst _ _ => "этими" ;
     PF (Prepos _) _ _ => "этих"
     } ;
-    a = agrP3 Pl (PGen Fem) ;
-    anim = Animate
+    n = Pl;
+    p = P3;
+    g= PGen Fem ;
+    anim = Animate ;
+    pron = False
   } ;
 
 oper pronTe: Pronoun =
@@ -211,8 +223,11 @@ oper pronTe: Pronoun =
     PF Inst _ _ => "теми" ;
     PF (Prepos _) _ _ => "тех"
     } ;
-     a = agrP3 Pl (PGen Fem) ;
-     anim = Animate
+     n = Pl;
+     p = P3;
+     g=PGen Fem ;
+     anim = Animate ;
+     pron = False
   } ;
 
 
@@ -227,7 +242,8 @@ oper pronTe: Pronoun =
 --    } ;
 --    g = PGen  Masc;
 --    n = Sg ;
---    p = P3
+--    p = P3 ;
+--    pron = False
 --  } ;
 --
 --oper pronNichto: Pronoun =
@@ -241,7 +257,8 @@ oper pronTe: Pronoun =
 --    } ;
 --    g = PGen  Masc;
 --    n = Sg ;
---    p = P3
+--    p = P3 ;
+--    pron = False
 --  } ;
 --
 
@@ -254,7 +271,10 @@ oper pronVseInanimate: Pronoun =
     PF Inst _ _ => "всем" ;
     PF (Prepos _) _ _ => "всём"
     } ;
-    a = agrP3 Sg (PGen  Neut)
+    g = PGen  Neut;
+    n = Sg ;
+    p = P3 ;
+    pron = False
   } ;
 
 

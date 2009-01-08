@@ -7,7 +7,7 @@
 -- implement $Test$, it moreover contains regular lexical
 -- patterns needed for $Lex$.
 
-instance ResBul of ResSlavic = ParamX, DiffBul, CommonSlavic ** open Prelude in {
+resource ResBul = ParamX ** open Prelude in {
 
   flags
     coding=cp1251 ;  optimize=all ;
@@ -21,8 +21,27 @@ instance ResBul of ResSlavic = ParamX, DiffBul, CommonSlavic ** open Prelude in 
 
   param
     Role = RSubj | RObj Case | RVoc ;
+    Case = Acc | Dat;
 
-  param 
+    NForm = 
+        NF Number Species
+      | NFSgDefNom
+      | NFPlCount
+      | NFVocative
+      ;
+
+    GenNum = GSg Gender | GPl ;
+
+-- Agreement of $NP$ is a record. We'll add $Gender$ later.
+
+  oper
+    Agr = {gn : GenNum ; p : Person} ;
+
+  param
+    Gender = Masc | Fem | Neut ;
+    
+    Species = Indef | Def ;
+ 
 -- The plural never makes a gender distinction.
 
 --2 For $Verb$
@@ -60,6 +79,13 @@ instance ResBul of ResSlavic = ParamX, DiffBul, CommonSlavic ** open Prelude in 
      ;
 
 --2 For $Numeral$
+
+    DGender =
+       DMasc
+     | DMascPersonal
+     | DFem
+     | DNeut
+     ;
     
     DGenderSpecies = 
        DMascIndef
@@ -80,6 +106,9 @@ instance ResBul of ResSlavic = ParamX, DiffBul, CommonSlavic ** open Prelude in 
 --2 Transformations between parameter types
 
   oper
+    agrP3 : GenNum -> Agr = \gn -> 
+      {gn = gn; p = P3} ;
+
     conjGenNum : GenNum -> GenNum -> GenNum = \a,b ->
       case <a,b> of {
         <GSg _,GSg g> => GSg g ;
@@ -91,6 +120,23 @@ instance ResBul of ResSlavic = ParamX, DiffBul, CommonSlavic ** open Prelude in 
       p  = conjPerson a.p b.p
       } ;
 
+    gennum : DGender -> Number -> GenNum = \g,n ->
+      case n of {
+        Sg => GSg (case g of {
+                     DMasc         => Masc ;
+                     DMascPersonal => Masc ;
+                     DFem          => Fem ;
+                     DNeut         => Neut
+                   }) ;
+        Pl => GPl
+        } ;
+
+    numGenNum : GenNum -> Number = \gn -> 
+      case gn of {
+        GSg _  => Sg ;
+        GPl    => Pl
+      } ;
+
     aform : GenNum -> Species -> Role -> AForm = \gn,spec,role -> 
       case gn of {
         GSg g  => case <g,spec,role> of {
@@ -100,30 +146,25 @@ instance ResBul of ResSlavic = ParamX, DiffBul, CommonSlavic ** open Prelude in 
         GPl    => APl spec
       } ;
 
-    dgenderSpecies : Gender -> Animacy -> Species -> Role -> DGenderSpecies =
-      \g,anim,spec,role ->
-                      case <g,spec> of {
-                        <Masc,Indef> => case anim of {
-                                          Inanimate => DMascIndef ;
-                                          Animate   => DMascPersonalIndef
-                                        } ;
-                        <Masc,Def>   => case anim of {
-                                          Inanimate => case role of {
-                                                         RSubj => DMascDefNom ;
-                                                         _     => DMascDef
-                                                       } ;
-                                          Animate   => case role of {
-                                                         RSubj => DMascPersonalDefNom ;
-                                                         _     => DMascPersonalDef
-                                                       }
-                                        } ;
-                        <Fem ,Indef> => DFemIndef ;
-                        <Fem ,Def>   => DFemDef ;
-                        <Neut,Indef> => DNeutIndef ;
-                        <Neut,Def>   => DNeutDef
+    dgenderSpecies : DGender -> Species -> Role -> DGenderSpecies =
+      \g,spec,role -> case <g,spec> of {
+                        <DMasc,Indef> => DMascIndef ;
+                        <DMasc,Def>   => case role of {
+                                           RSubj => DMascDefNom ;
+                                           _     => DMascDef
+                                         } ;
+                        <DMascPersonal,Indef> => DMascPersonalIndef ;
+                        <DMascPersonal,Def>   => case role of {
+                                                   RSubj => DMascPersonalDefNom ;
+                                                   _     => DMascPersonalDef
+                                                 } ;
+                        <DFem ,Indef> => DFemIndef ;
+                        <DFem ,Def>   => DFemDef ;
+                        <DNeut,Indef> => DNeutIndef ;
+                        <DNeut,Def>   => DNeutDef
                       } ;
 
-    nform2aform : NForm -> Gender -> AForm
+    nform2aform : NForm -> DGender -> AForm
       = \nf,g -> case nf of {
                    NF n spec  => aform (gennum g n) spec (RObj Acc) ;
                    NFSgDefNom => aform (gennum g Sg) Def RSubj ;

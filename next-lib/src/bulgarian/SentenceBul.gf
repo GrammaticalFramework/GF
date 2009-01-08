@@ -68,5 +68,5 @@ concrete SentenceBul of Sentence = CatBul ** open Prelude, ResBul in {
 
     AdvS a s = {s = a.s ++ "," ++ s.s} ;
 
-    RelS s r = {s = s.s ++ "," ++ r.s ! {gn=gennum Neut Sg; p=P3}} ;
+    RelS s r = {s = s.s ++ "," ++ r.s ! {gn=gennum DNeut Sg; p=P3}} ;
 }
