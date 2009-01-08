@@ -30,7 +30,7 @@ concrete VerbRus of Verb = CatRus ** open ResRus, Prelude in {
       } --case p
     }; --case gn
       ClCondit => "" ;        
-      ClImper  => case (numGNum gn) of 
+      ClImper  => case (numGenNum gn) of 
         {Sg  => "будь" ++ masha.s ! (mkPronForm Inst No NonPoss);
          Pl => "будьте" ++  masha.s ! (mkPronForm Inst No NonPoss) 
        };
@@ -133,7 +133,7 @@ concrete VerbRus of Verb = CatRus ** open ResRus, Prelude in {
 -- double negations with "inte" are not grammatical.
 
     UseV se = 
-    {s=\\clf,gn,p =>  se.s ! (getActVerbForm clf (genGNum gn) (numGNum gn) p) ; 
+    {s=\\clf,gn,p =>  se.s ! (getActVerbForm clf (genGNum gn) (numGenNum gn) p) ; 
       asp = se.asp ;
      w=Act;      
     s2 = "";
@@ -143,14 +143,14 @@ concrete VerbRus of Verb = CatRus ** open ResRus, Prelude in {
 
 -- The rule for using transitive verbs is the complementization rule:
   SlashV2a se =
-    {s = \\clf,gn,p =>  se.s ! (getActVerbForm clf (genGNum gn) (numGNum gn) p) ;
+    {s = \\clf,gn,p =>  se.s ! (getActVerbForm clf (genGNum gn) (numGenNum gn) p) ;
       asp = se.asp ; 
       w = Act;
       s2 = "";
       s3 = \\g,n => ""; 
       negBefore = True ;
-      sc = se.s2 ;
-      c = se.c
+      sc = se.c2.s ;
+      c = se.c2.c
     } ;
 
   ComplSlash se tu =
@@ -165,68 +165,68 @@ concrete VerbRus of Verb = CatRus ** open ResRus, Prelude in {
 
   Slash2V3 dat tu =
       let
-        tebepivo = dat.s2 ++ tu.s ! PF dat.c No NonPoss ++ dat.s4 ;
+        tebepivo = dat.c2.s ++ tu.s ! PF dat.c2.c No NonPoss ++ dat.c3.s ;
       in
-      {s  = \\clf,gn,p => dat.s ! (getActVerbForm clf (genGNum gn) (numGNum gn) p) ++ tebepivo ; 
+      {s  = \\clf,gn,p => dat.s ! (getActVerbForm clf (genGNum gn) (numGenNum gn) p) ++ tebepivo ; 
       asp = dat.asp ;
       w = Act;
       negBefore = True;
       s2 = "";
       s3 = \\g,n=> "" ;
-      sc = dat.s4 ;
-      c = dat.c2
+      sc = dat.c3.s ;
+      c = dat.c3.c
     } ;
 
   Slash3V3 dat pivo =
       let
-        tebepivo = dat.s4 ++ pivo.s ! PF dat.c2 Yes NonPoss 
+        tebepivo = dat.c3.s ++ pivo.s ! PF dat.c3.c Yes NonPoss 
       in
-      {s  = \\clf,gn,p => dat.s ! (getActVerbForm clf (genGNum gn) (numGNum gn) p) ++ tebepivo ; 
+      {s  = \\clf,gn,p => dat.s ! (getActVerbForm clf (genGNum gn) (numGenNum gn) p) ++ tebepivo ; 
       asp = dat.asp ;
       w = Act;
       negBefore = True;
       s2 = "";
       s3 = \\g,n=> "" ;
-      sc = dat.s2 ;
-      c = dat.c
+      sc = dat.c2.s ;
+      c = dat.c2.c
     } ;
 
   ---- AR 17/12/2008
   SlashV2Q dat esliOnPridet =
-       {s  = \\clf,gn,p => dat.s ! (getActVerbForm clf (genGNum gn) (numGNum gn) p) ++ esliOnPridet.s ! QDir ; 
+       {s  = \\clf,gn,p => dat.s ! (getActVerbForm clf (genGNum gn) (numGenNum gn) p) ++ esliOnPridet.s ! QDir ; 
       asp = dat.asp ;
       w = Act;
       negBefore = True;
       s2 = "";
       s3 = \\g,n=> "" ;
-      sc = dat.s2 ;
-      c = dat.c
+      sc = dat.c2.s ;
+      c = dat.c2.c
     } ;
 
   ---- AR 17/12/2008
   SlashV2S   vidit tuUlubaeshsya =
-    {s = \\clf,gn,p => vidit.s ! (getActVerbForm clf (genGNum gn) (numGNum gn) p)
+    {s = \\clf,gn,p => vidit.s ! (getActVerbForm clf (genGNum gn) (numGenNum gn) p)
      ++ [", что"] ++ tuUlubaeshsya.s ;
      asp = vidit.asp;
      w = Act;
      s2="";
       negBefore = True;
       s3 = \\g,n => "" ;
-      sc = vidit.s2 ;
-      c = vidit.c
+      sc = vidit.c2.s ;
+      c = vidit.c2.c
    } ;
 
   ---- AR 17/12/2008
   SlashV2V putatsya bezhat =
   { s =  \\clf,gn,p => putatsya.s ! (getActVerbForm clf (genGNum gn) 
-       (numGNum gn) p) ++ bezhat.s!ClInfinit !gn!p ; 
+       (numGenNum gn) p) ++ bezhat.s!ClInfinit !gn!p ; 
       asp = putatsya.asp ;
       w = Act;
       negBefore = True;
       s2 = "";
       s3 =\\g,n => "" ;
-      sc = putatsya.s2 ;
-      c = putatsya.c
+      sc = putatsya.c2.s ;
+      c = putatsya.c2.c
   } ;
 
   ---- AR 17/12/2008
@@ -242,7 +242,7 @@ concrete VerbRus of Verb = CatRus ** open ResRus, Prelude in {
   ---- AR 17/12/2008
   SlashVV putatsya bezhat =
   { s =  \\clf,gn,p => putatsya.s ! (getActVerbForm clf (genGNum gn) 
-       (numGNum gn) p) ++ bezhat.s!ClInfinit !gn!p ; 
+       (numGenNum gn) p) ++ bezhat.s!ClInfinit !gn!p ; 
       asp = putatsya.asp ;
       w = Act;
       negBefore = True;
@@ -255,8 +255,8 @@ concrete VerbRus of Verb = CatRus ** open ResRus, Prelude in {
   ---- AR 17/12/2008
   SlashV2VNP putatsya np bezhat =
   { s =  \\clf,gn,p => 
-        putatsya.s ! (getActVerbForm clf (genGNum gn) (numGNum gn) p) ++ 
-        np.s ! (mkPronForm putatsya.c No NonPoss) ++ ---- ? 
+        putatsya.s ! (getActVerbForm clf (genGNum gn) (numGenNum gn) p) ++ 
+        np.s ! (mkPronForm putatsya.c2.c No NonPoss) ++ ---- ? 
         bezhat.s!ClInfinit !gn!p ;
       asp = putatsya.asp ;
       w = Act;
@@ -270,7 +270,7 @@ concrete VerbRus of Verb = CatRus ** open ResRus, Prelude in {
 
 -- To generate "сказал, что Иван гуляет" / "не сказал, что Иван гуляет":
   ComplVS   vidit tuUlubaeshsya =
-    {s = \\clf,gn,p => vidit.s ! (getActVerbForm clf (genGNum gn) (numGNum gn) p)
+    {s = \\clf,gn,p => vidit.s ! (getActVerbForm clf (genGNum gn) (numGenNum gn) p)
      ++ [", что"] ++ tuUlubaeshsya.s ;
      asp = vidit.asp;
      w = Act;
@@ -286,7 +286,7 @@ concrete VerbRus of Verb = CatRus ** open ResRus, Prelude in {
 
   ComplVV putatsya bezhat =
   { s =  \\clf,gn,p => putatsya.s ! (getActVerbForm clf (genGNum gn) 
-       (numGNum gn) p) ++ bezhat.s!ClInfinit !gn!p ; 
+       (numGenNum gn) p) ++ bezhat.s!ClInfinit !gn!p ; 
       asp = putatsya.asp ;
       w = Act;
       negBefore = True;
@@ -294,7 +294,7 @@ concrete VerbRus of Verb = CatRus ** open ResRus, Prelude in {
       s3 =\\g,n => ""
   } ;
   ComplVQ dat esliOnPridet =
-       {s  = \\clf,gn,p => dat.s ! (getActVerbForm clf (genGNum gn) (numGNum gn) p) ++ esliOnPridet.s ! QDir ; 
+       {s  = \\clf,gn,p => dat.s ! (getActVerbForm clf (genGNum gn) (numGenNum gn) p) ++ esliOnPridet.s ! QDir ; 
       asp = dat.asp ;
       w = Act;
       negBefore = True;
@@ -302,7 +302,7 @@ concrete VerbRus of Verb = CatRus ** open ResRus, Prelude in {
       s3 = \\g,n=> ""
     } ;
   ComplVA vuglyadet molodoj =
-      {s  = \\clf,gn,p => vuglyadet.s ! (getActVerbForm clf (genGNum gn) (numGNum gn) p) ; 
+      {s  = \\clf,gn,p => vuglyadet.s ! (getActVerbForm clf (genGNum gn) (numGenNum gn) p) ; 
       asp = vuglyadet.asp ;
       w = Act;
       negBefore = True;
@@ -312,7 +312,7 @@ concrete VerbRus of Verb = CatRus ** open ResRus, Prelude in {
 
   SlashV2A  obechat molodoj =
     {s  = \\clf,gn,p => 
-          obechat.s ! (getActVerbForm clf (genGNum gn) (numGNum gn) p) ++  
+          obechat.s ! (getActVerbForm clf (genGNum gn) (numGenNum gn) p) ++  
           molodoj.s ! AF Inst Inanimate (GSg Neut) ;
                       ---- AR 17/6; AF Inst tu.anim (pgNum tu.g tu.n) ; 
       asp = obechat.asp ;
@@ -320,8 +320,8 @@ concrete VerbRus of Verb = CatRus ** open ResRus, Prelude in {
       negBefore = True;
       s2 = "";
       s3 = \\g,n =>"" ;
-      sc = obechat.s2 ;
-      c = obechat.c
+      sc = obechat.c2.s ;
+      c = obechat.c2.c
     } ;
 
   AdvVP poet khorosho =
@@ -333,8 +333,8 @@ concrete VerbRus of Verb = CatRus ** open ResRus, Prelude in {
      asp = poet.asp; w = poet.w; t = poet.t ; negBefore = poet.negBefore } ;
 
 PassV2  se =
-    {s=\\clf,gn,p =>  se.s ! (getPassVerbForm clf (genGNum gn) (numGNum gn) p) ; 
-    asp=se.asp; w=Pass;      s2 = se.s2;
+    {s=\\clf,gn,p =>  se.s ! (getPassVerbForm clf (genGNum gn) (numGenNum gn) p) ; 
+    asp=se.asp; w=Pass;      s2 = se.c2.s;
       negBefore = True;
       s3 = table{_=> table{_ => ""}}
 };

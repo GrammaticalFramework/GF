@@ -142,7 +142,7 @@ oper
 --
 
   prepN2 : N -> Prep -> N2 ;
-  prepN2 n p = {s = n.s; g = n.g; anim=n.anim ; c2 = p; lock_N2 = <>} ;
+  prepN2 n p = {s = n.s; g = n.g; c2 = p; lock_N2 = <>} ;
   
   dirN2 : N -> N2 ;
   dirN2 n = prepN2 n noPrep ;
@@ -152,7 +152,7 @@ oper
 --
 
   prepN3 : N -> Prep -> Prep -> N3 ;
-  prepN3 n p q = {s = n.s; g = n.g; anim=n.anim ; c2 = p; c3 = q; lock_N3 = <>} ;
+  prepN3 n p q = {s = n.s; g = n.g; c2 = p; c3 = q; lock_N3 = <>} ;
   
   dirN3 : N -> Prep -> N3 ;
   dirN3 n p = prepN3 n noPrep p ;

@@ -1,4 +1,4 @@
-concrete CatBul of Cat = CatSlavic with (ResSlavic = ResBul) ** open Prelude, (R = ParamX) in {
+concrete CatBul of Cat = open ResBul, Prelude, (R = ParamX) in {
 
   flags 
     coding=cp1251; optimize=all_subs;
@@ -42,7 +42,7 @@ concrete CatBul of Cat = CatSlavic with (ResSlavic = ResBul) ** open Prelude, (R
     QCl = {s : ResBul.Tense => Anteriority => Polarity => QForm => Str} ;
     IP = {s : Role => QForm => Str; gn : GenNum} ;
     IComp = {s : QForm => Str} ;
-    IDet = {s : Gender => Animacy => QForm => Str; n : Number ; nonEmpty : Bool} ;
+    IDet = {s : DGender => QForm => Str; n : Number ; nonEmpty : Bool} ;
     IQuant = {s : GenNum => QForm => Str} ;
 
 -- Relative
@@ -71,9 +71,10 @@ concrete CatBul of Cat = CatSlavic with (ResSlavic = ResBul) ** open Prelude, (R
 
 -- Noun
 
+    CN = {s : NForm => Str; g : DGender} ;
     NP = {s : Role => Str; a : Agr} ;
     Pron = {s : Role => Str; gen : AForm => Str; a : Agr} ;
-    Det = {s : Bool => Gender => Animacy => Role => Str; n : Number; countable : Bool; spec : Species} ;
+    Det = {s : Bool => DGender => Role => Str; n : Number; countable : Bool; spec : Species} ;
     Predet = {s : GenNum => Str} ;
     Ord = {s : AForm => Str} ;
     Num = {s : DGenderSpecies => Str; n : Number; nonEmpty : Bool} ;
@@ -89,6 +90,8 @@ concrete CatBul of Cat = CatSlavic with (ResSlavic = ResBul) ** open Prelude, (R
 -- Structural
 
     Conj = {s : Str; distr : Bool; conj : Bool; n : Number} ;
+    Subj = {s : Str} ;
+    Prep = {s : Str; c : Case} ;
 
 -- Open lexical classes, e.g. Lexicon
 
@@ -101,6 +104,9 @@ concrete CatBul of Cat = CatSlavic with (ResSlavic = ResBul) ** open Prelude, (R
     A = {s : AForm => Str; adv : Str} ;
     A2 = {s : AForm => Str; adv : Str; c2 : Str} ;
     
+    N = {s : NForm => Str; g : DGender} ;
+    N2 = {s : NForm => Str; g : DGender} ** {c2 : Preposition} ;
+    N3 = {s : NForm => Str; g : DGender} ** {c2,c3 : Preposition} ;
     PN = {s : Str; g : Gender} ;
 
 

@@ -29,7 +29,7 @@ concrete QuestionRus of Question = CatRus ** open ResRus, Prelude in {
 
     AdvIP ip adv = {
       s = \\c => ip.s ! c ++ adv.s ;
-       a = ip.a; anim=ip.anim
+       n = ip.n; p=ip.p; g=ip.g; anim=ip.anim; pron=ip.pron 
       } ;
 
     IdetCN kakoj okhotnik =
@@ -40,7 +40,10 @@ concrete QuestionRus of Question = CatRus ** open ResRus, Prelude in {
        _ => 
         kakoj.s ! AF (extCase pf) okhotnik.anim (gennum okhotnik.g kakoj.n) ++ 
         okhotnik.s ! NF kakoj.n kakoj.c };
-     a = agrP3 kakoj.n kakoj.g ; 
+     n = kakoj.n ; 
+     p = P3 ;
+     pron = False;
+     g = kakoj.g ;
      anim = okhotnik.anim 
     } ;
 
@@ -48,7 +51,10 @@ concrete QuestionRus of Question = CatRus ** open ResRus, Prelude in {
 
     IdetIP kakoj = let anim = Inanimate in
     {s = \\pf => kakoj.s ! AF (extCase pf) anim (pgNum kakoj.g kakoj.n) ;
-     a = agrP3 kakoj.n kakoj.g ; 
+     n = kakoj.n ; 
+     p = P3 ;
+     pron = False;
+     g = kakoj.g ; 
      anim = anim 
     } ;
  

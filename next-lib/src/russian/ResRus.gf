@@ -7,7 +7,7 @@
 -- implement $Test$, it moreover contains regular lexical
 -- patterns needed for $Lex$.
 
-instance ResRus of ResSlavic = ParamX, DiffRus, CommonSlavic ** open Prelude in {
+resource ResRus = ParamX ** open Prelude in {
 
 flags  coding=utf8 ; optimize=all ;
 
@@ -18,6 +18,10 @@ flags  coding=utf8 ; optimize=all ;
 
 -- Some parameters, such as $Number$, are inherited from $ParamX$.
 param
+  Gender     = Masc | Fem | Neut ;
+  Case       = Nom | Gen | Dat | Acc | Inst | Prepos PrepKind ;
+  PrepKind   = PrepOther | PrepVNa;
+  Animacy    = Animate | Inanimate ;
   Voice        = Act | Pass ;
   Aspect     = Imperfective | Perfective ;
   RusTense      = Present | PastRus | Future ;
@@ -45,6 +49,22 @@ param
 -- and on Number: "большой дом - "большие дома"
 -- (a big house - big houses).
 -- The plural never makes a gender distinction.
+
+  GenNum = GSg Gender | GPl ;
+
+  -- Coercions between the compound gen-num type and gender and number:
+oper
+  gennum : Gender -> Number -> GenNum = \g,n ->
+    case n of {
+      Sg => GSg g ;
+      Pl => GPl
+      } ;
+
+  numGenNum : GenNum -> Number = \gn -> 
+    case gn of {
+      GSg _  => Sg ;
+      GPl    => Pl
+    } ;
 
 
 -- The Possessive parameter is introduced in order to describe
@@ -75,10 +95,13 @@ param
 
 param  PronForm = PF Case AfterPrep Possessive;
 
-oper Pronoun = {s : PronForm => Str; a : Agr} ;     
+oper Pronoun = { s : PronForm => Str ; n : Number ; p : Person ;
+           g: PronGen ;  pron: Bool} ;     
 
 -- Gender is not morphologically determined for first
 --  and second person pronouns.
+
+param  PronGen = PGen Gender | PNoGen ;
 
 -- The following coercion is useful:
 
@@ -97,25 +120,24 @@ oper
   
   CommNoun = {s : NForm => Str ; g : Gender ; anim : Animacy } ;
 
-  NounPhrase : Type = {s : PronForm => Str; a : Agr; anim : Animacy} ;
+  NounPhrase : Type = { s : PronForm => Str ; n : Number ; 
+   p : Person ; g: PronGen ; anim : Animacy ;  pron: Bool} ;
 
   mkNP : Number -> CommNoun -> NounPhrase = \n,chelovek -> 
     {s = \\cas => chelovek.s ! NF n (extCase cas) ;
-     a = agrP3 n (PGen chelovek.g);
+     n = n ; g = PGen chelovek.g ; p = P3 ; pron =False ;
      anim = chelovek.anim 
     } ;
 
   det2NounPhrase : Adjective -> NounPhrase = \eto -> 
-    {s = \\pf => eto.s ! AF (extCase pf) Inanimate (GSg Neut); a = agrP3 Sg (PGen Neut); anim = Inanimate} ;
+    {s = \\pf => eto.s ! (AF (extCase pf) Inanimate (GSg Neut)); n = Sg ; g = PGen Neut ; pron = False ; p = P3 ; anim = Inanimate } ;
 
 
  
- pron2NounPhraseNum : Pronoun -> Animacy -> Number -> NounPhrase = 
-   \ona, anim, num -> {
-     s = ona.s;
-     a = {n = num; p = ona.a.p; g = ona.a.g};
-     anim = anim
-     } ;
+ pron2NounPhraseNum : Pronoun -> Animacy -> Number -> NounPhrase = \ona, anim, num -> 
+    {s = ona.s ; n = num ; g =  ona.g ; 
+     pron = ona.pron; p = ona.p ; anim = anim } ;
+
 
 -- Agreement of $NP$ is a record. We'll add $Gender$ later.
 --  oper  Agr = {n : Number ; p : Person} ;
@@ -207,24 +229,21 @@ Prep =>"себе"};
 -- Notice that the slash category has the same relation to sentences as
 -- transitive verbs have to verbs: it's like a *sentence taking a complement*.
 
-  SlashNounPhrase = Clause ** Complement ;
+  SlashNounPhrase = Clause ** {c2 : Complement} ;
   Clause = {s : Polarity => ClForm => Str} ;
 
 -- This is the traditional $S -> NP VP$ rule. 
 
     predVerbPhrase : NounPhrase -> VerbPhrase -> SlashNounPhrase = 
-    \Ya, tebyaNeVizhu -> { s = \\b,clf =>
-       let 
-       { ya = Ya.s ! (mkPronForm Nom No NonPoss);
-         khorosho = tebyaNeVizhu.s2;
-         vizhu = tebyaNeVizhu.s ! clf !(gennum (pgen2gen Ya.a.g) Ya.a.n)! Ya.a.p;
-         tebya = tebyaNeVizhu.s3 ! (pgen2gen Ya.a.g) ! Ya.a.n 
-       }
-       in
-        ya ++  khorosho ++ vizhu ++ tebya;
-        s2= "";
-       c = Nom
-} ;
+    \Ya, tebyaNeVizhu -> {
+       s = \\b,clf => let { ya = Ya.s ! (mkPronForm Nom No NonPoss);
+                            khorosho = tebyaNeVizhu.s2;
+                            vizhu = tebyaNeVizhu.s ! clf !(gennum (pgen2gen Ya.g) Ya.n)! Ya.p;
+                            tebya = tebyaNeVizhu.s3 ! (pgen2gen Ya.g) ! Ya.n 
+                          }
+                      in ya ++  khorosho ++ vizhu ++ tebya;
+       c2 = {s = ""; c = Nom}
+       } ;
 
 -- Questions are either direct ("Ты счастлив?") 
 -- or indirect ("Потом он спросил счастлив ли ты").
@@ -264,7 +283,7 @@ param
   AdjForm = AF Case Animacy GenNum | AFShort GenNum | AdvF;
 
 oper
-  Complement =  {s2 : Str ; c : Case} ;
+  Complement = {s : Str ; c : Case} ;
 
 oper Refl ={s: Case => Str};
 oper sam: Refl=
@@ -281,21 +300,16 @@ oper sam: Refl=
   pgNum : PronGen -> Number -> GenNum = \g,n -> 
     case n of 
    {   Sg => GSg (pgen2gen g) ; -- assuming pronoun "I" is a male
-        Pl => GPl
+       Pl => GPl
    } ;
               --    _  => variants {GSg Masc ; GSg Fem}  } ; 
               --  "variants" version cause "no term variants" error during linearization
-
-
-
-oper numGNum : GenNum -> Number = \gn ->
-   case gn of { GPl => Pl ; _ => Sg } ;
 
 oper genGNum : GenNum -> Gender = \gn ->
    case gn of { GSg Fem => Fem; GSg Masc => Masc; _ => Neut } ;
 
 oper numAF: AdjForm -> Number = \af ->
-   case af of { AdvF => Sg; AFShort gn => numGNum gn; AF _ _  gn => (numGNum gn) } ;
+   case af of { AdvF => Sg; AFShort gn => numGenNum gn; AF _ _  gn => (numGenNum gn) } ;
 
 oper genAF: AdjForm -> Gender = \af ->
    case af of { AdvF => Neut; AFShort gn => genGNum gn; AF _ _  gn => (genGNum gn) } ;

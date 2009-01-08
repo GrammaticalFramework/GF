@@ -408,7 +408,7 @@ foreign = Foreign; -- +++ MG_UR: added +++
   } ** {lock_A = <>};
 
 
-  mkA2 a p c=  a ** {s2 = p ; c = c; lock_A2 = <>};
+  mkA2 a p c=  a ** {c2 = {s=p; c=c}; lock_A2 = <>};
 --  mkADeg a s = mkAdjDeg a s ** {lock_ADeg = <>}; -- defined in morpho.RusU
 
 --  ap a p = mkAdjPhrase a p ** {lock_AP = <>};  -- defined in syntax module
@@ -454,7 +454,7 @@ foreign = Foreign; -- +++ MG_UR: added +++
        VSubj gn => aller.s ! VFORM vox (VSUB gn)
        }; t = Present ; a = aller.asp ; w = vox ; lock_V = <>} ;
 -}
-   mkV2 v p cas = v ** {s2 = p ; c = cas; lock_V2 = <>}; 
+   mkV2 v p cas = v ** {c2 = {s=p; c=cas}; lock_V2 = <>}; 
    dirV2 v = mkV2 v [] Acc;
 
 
@@ -464,7 +464,7 @@ foreign = Foreign; -- +++ MG_UR: added +++
 -- We treat so far only the rule in which the ditransitive
 -- verb takes both complements to form a verb phrase.
 
-   mkV3 v s1 s2 c1 c2 = v ** {s2 = s1; c = c1; s4 = s2; c2=c2; lock_V3 = <>};  
+   mkV3 v s1 s2 c1 c2 = v ** {c2 = {s=s1; c=c1}; c3={s=s2; c=c2}; lock_V3 = <>};  
 
 } ;
 

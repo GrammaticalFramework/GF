@@ -37,13 +37,13 @@ flags  coding=utf8 ;
 -- $SuperlA$ belongs to determiner syntax in $Noun$.
 
     ComplA2 vlublen tu =
-    {s = \\af => vlublen.s !Posit! af ++ vlublen.s2 ++ 
-          tu.s ! (mkPronForm vlublen.c No NonPoss) ;
+    {s = \\af => vlublen.s !Posit! af ++ vlublen.c2.s ++ 
+          tu.s ! (mkPronForm vlublen.c2.c No NonPoss) ;
      p = True
     } ;
 
     ReflA2 vlublen = 
-    {s = \\af => vlublen.s !Posit! af ++ vlublen.s2 ++ sam.s ! vlublen.c;
+    {s = \\af => vlublen.s !Posit! af ++ vlublen.c2.s ++ sam.s ! vlublen.c2.c;
      p = True
     } ;
 

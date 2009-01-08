@@ -1,6 +1,6 @@
 --# -path=.:../abstract:../common:../../prelude
 
-concrete CatRus of Cat = CommonX ** CatSlavic with (ResSlavic = ResRus) ** open ResRus, Prelude, (R = ParamX) in {
+concrete CatRus of Cat = CommonX ** open ResRus, Prelude in {
 
   flags optimize=all_subs ; coding=utf8 ;
 
@@ -22,7 +22,8 @@ concrete CatRus of Cat = CommonX ** CatSlavic with (ResSlavic = ResRus) ** open 
 -- Question
 
     QCl = {s :Polarity => ClForm => QForm => Str};  
-    IP  = {s : PronForm => Str; a : Agr; anim : Animacy} ;
+    IP = { s : PronForm => Str ; n : Number ; p : Person ;
+           g: PronGen ; anim : Animacy ;  pron: Bool} ;     
     IComp = {s : Str} ;    
     IDet = Adjective ** {n: Number; g: PronGen; c: Case} ; 
     IQuant = {s : Number => AdjForm => Str; g: PronGen; c: Case} ;  -- AR 16/6/2008
@@ -43,8 +44,11 @@ concrete CatRus of Cat = CommonX ** CatSlavic with (ResSlavic = ResRus) ** open 
 
 -- Noun
 
-    NP   = {s : PronForm => Str; a : Agr; anim : Animacy} ;
-    Pron = {s : PronForm => Str; a : Agr} ;
+    CN = {s : NForm => Str; g : Gender; anim : Animacy} ;  
+    NP = { s : PronForm => Str ; n : Number ; p : Person ;
+           g: PronGen ; anim : Animacy ;  pron: Bool} ;     
+    Pron = { s : PronForm => Str ; n : Number ; p : Person ;
+           g: PronGen ;  pron: Bool} ;     
 
 -- Determiners (only determinative pronouns 
 -- (or even indefinite numerals: "много" (many)) in Russian) are inflected 
@@ -69,20 +73,25 @@ concrete CatRus of Cat = CommonX ** CatSlavic with (ResSlavic = ResRus) ** open 
 -- case of "или", the result is however plural if any of the disjuncts is.
 
     Conj = {s1,s2 : Str ; n : Number} ; 
+    Subj = {s : Str} ;
+    Prep = Complement ;
 
 -- Open lexical classes, e.g. Lexicon
 
     V, VS, VV, VQ, VA = Verbum ; -- = {s : VerbForm => Str ; asp : Aspect } ;
-    V2, V2A = Verbum ** Complement ; 
-    V2V, V2S, V2Q = Verbum ** Complement ; --- AR 
-    V3 = Verbum ** Complement** {s4 : Str; c2: Case} ; 
+    V2, V2A = Verbum ** {c2 : Complement} ; 
+    V2V, V2S, V2Q = Verbum ** {c2 : Complement} ; --- AR 
+    V3 = Verbum ** {c2,c3 : Complement} ; 
 --    VV = {s : VVForm => Str ; isAux : Bool} ;
 
     Ord =  {s : AdjForm => Str} ;
     A =  {s : Degree => AdjForm => Str} ;
-    A2 = A ** Complement ;
+    A2 = A ** {c2 : Complement} ;
 
  -- Substantives moreover have an inherent gender. 
+    N  = {s : NForm => Str; g : Gender; anim : Animacy} ;   
+    N2 = {s : NForm => Str; g : Gender; anim : Animacy} ** {c2 : Complement} ;
+    N3 = {s : NForm => Str; g : Gender; anim : Animacy} ** {c2,c3 : Complement} ;
     PN = {s :  Case => Str ; g : Gender ; anim : Animacy} ;
 
 

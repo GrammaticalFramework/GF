@@ -13,8 +13,7 @@ oper
                           (v0+"ове")
                           (v0+"а")
                           (v0+"-")
-                          Masc
-                          Inanimate ;
+                          DMasc ;
   mkN002 : Str -> N ;
   mkN002 base = let v0 = tk 2 base;
                     v1 = last (base)
@@ -22,8 +21,7 @@ oper
                           (v0+"е"+v1+"ове")
                           (v0+"я"+v1+"а")
                           (v0+"-")
-                          Masc
-                          Inanimate ;
+                          DMasc ;
   mkN002a : Str -> N ;
   mkN002a base = let v0 = tk 2 base;
                      v1 = last (base)
@@ -31,8 +29,7 @@ oper
                            (v0+"е"+v1+"ове")
                            (v0+"я"+v1+"а")
                            (v0+"-")
-                           Masc
-                           Inanimate ;
+                           DMasc ;
   mkN003 : Str -> N ;
   mkN003 base = let v0 = tk 3 base;
                     v1 = last (base)
@@ -40,56 +37,49 @@ oper
                           (v0+"ър"+v1+"ове")
                           (v0+"ър"+v1+"а")
                           (v0+"-")
-                          Masc
-                          Inanimate ;
+                          DMasc ;
   mkN004 : Str -> N ;
   mkN004 base = let v0 = tk 4 base
                 in mkNoun (v0+"ятър")
                           (v0+"етрове")
                           (v0+"ятъра")
                           (v0+"-")
-                          Masc
-                          Inanimate ;
+                          DMasc ;
   mkN005 : Str -> N ;
   mkN005 base = let v0 = base
                 in mkNoun (v0)
                           (v0+"ове")
                           (v0+"а")
                           (v0+"-")
-                          Masc
-                          Inanimate ;
+                          DMasc ;
   mkN006 : Str -> N ;
   mkN006 base = let v0 = base
                 in mkNoun (v0)
                           (v0+"ове")
                           (v0+"а")
                           (v0+"-")
-                          Masc
-                          Inanimate ;
+                          DMasc ;
   mkN007 : Str -> N ;
   mkN007 base = let v0 = base
                 in mkNoun (v0)
                           (v0+"и")
                           (v0+"а")
                           (v0+"-")
-                          Masc
-                          Inanimate ;
+                          DMasc ;
   mkN007b : Str -> N ;
   mkN007b base = let v0 = base
                  in mkNoun (v0)
                            (v0+"и")
                            (v0+"а")
                            (v0+"о")
-                           Masc
-                           Inanimate ;
+                           DMasc ;
   mkN007a : Str -> N ;
   mkN007a base = let v0 = base
                  in mkNoun (v0)
                            (v0+"и")
                            (v0+"а")
                            (v0+"е")
-                           Masc
-                           Animate ;
+                           DMascPersonal ;
   mkN008 : Str -> N ;
   mkN008 base = let v0 = tk 2 base;
                     v1 = last (base)
@@ -97,16 +87,14 @@ oper
                           (v0+v1+"и")
                           (v0+"е"+v1+"а")
                           (v0+"-")
-                          Masc
-                          Inanimate ;
+                          DMasc ;
   mkN008a : Str -> N ;
   mkN008a base = let v0 = tk 2 base
                  in mkNoun (v0+"ец")
                            (v0+"ци")
                            (v0+"-")
                            (v0+"ецо")
-                           Masc
-                           Inanimate ;
+                           DMasc ;
   mkN009 : Str -> N ;
   mkN009 base = let v0 = tk 2 base;
                     v1 = last (base)
@@ -114,96 +102,84 @@ oper
                           (v0+v1+"и")
                           (v0+"ъ"+v1+"а")
                           (v0+v1+"е")
-                          Masc
-                          Inanimate ;
+                          DMasc ;
   mkN009a : Str -> N ;
   mkN009a base = let v0 = tk 2 base
                  in mkNoun (v0+"ър")
                            (v0+"рове")
                            (v0+"ъра")
                            (v0+"-")
-                           Masc
-                           Inanimate ;
+                           DMasc ;
   mkN010 : Str -> N ;
   mkN010 base = let v0 = tk 2 base
                 in mkNoun (v0+"ър")
                           (v0+"ри")
                           (v0+"ра")
                           (v0+"-")
-                          Masc
-                          Inanimate ;
+                          DMasc ;
   mkN011 : Str -> N ;
   mkN011 base = let v0 = tk 2 base
                 in mkNoun (v0+"ъм")
                           (v0+"ми")
                           (v0+"ъма")
                           (v0+"-")
-                          Masc
-                          Inanimate ;
+                          DMasc ;
   mkN012 : Str -> N ;
   mkN012 base = let v0 = tk 3 base
                 in mkNoun (v0+"рък")
                           (v0+"ърци")
                           (v0+"-")
                           (v0+"ърко")
-                          Masc
-                          Inanimate ;
+                          DMasc ;
   mkN013 : Str -> N ;
   mkN013 base = let v0 = tk 2 base
                 in mkNoun (v0+"ец")
                           (v0+"йци")
                           (v0+"-")
                           (v0+"ецо")
-                          Masc
-                          Inanimate ;
+                          DMasc ;
   mkN014 : Str -> N ;
   mkN014 base = let v0 = tk 1 base
                 in mkNoun (v0+"к")
                           (v0+"ци")
                           (v0+"ка")
                           (v0+"-")
-                          Masc
-                          Inanimate ;
+                          DMasc ;
   mkN014a : Str -> N ;
   mkN014a base = let v0 = tk 1 base
                  in mkNoun (v0+"к")
                            (v0+"ци")
                            (v0+"ка")
                            (v0+"ко")
-                           Masc
-                           Inanimate ;
+                           DMasc ;
   mkN015 : Str -> N ;
   mkN015 base = let v0 = tk 1 base
                 in mkNoun (v0+"г")
                           (v0+"зи")
                           (v0+"га")
                           (v0+"-")
-                          Masc
-                          Inanimate ;
+                          DMasc ;
   mkN016 : Str -> N ;
   mkN016 base = let v0 = tk 1 base
                 in mkNoun (v0+"х")
                           (v0+"си")
                           (v0+"ха")
                           (v0+"-")
-                          Masc
-                          Inanimate ;
+                          DMasc ;
   mkN017 : Str -> N ;
   mkN017 base = let v0 = tk 1 base
                 in mkNoun (v0+"к")
                           (v0+"ни")
                           (v0+"ка")
                           (v0+"-")
-                          Masc
-                          Inanimate ;
+                          DMasc ;
   mkN018 : Str -> N ;
   mkN018 base = let v0 = tk 2 base
                 in mkNoun (v0+"ин")
                           (v0+"и")
                           (v0+"-")
                           (v0+"ино")
-                          Masc
-                          Inanimate ;
+                          DMasc ;
   mkN018a : Str -> N ;
   mkN018a base = let v0 = tk 2 base;
                      v1 = last (base)
@@ -211,24 +187,21 @@ oper
                            (v0+"и")
                            (v0+"-")
                            (v0+"-")
-                           Masc
-                           Inanimate ;
+                           DMasc ;
   mkN019 : Str -> N ;
   mkN019 base = let v0 = tk 2 base
                 in mkNoun (v0+"ък")
                           (v0+"ци")
                           (v0+"-")
                           (v0+"ко")
-                          Masc
-                          Inanimate ;
+                          DMasc ;
   mkN019a : Str -> N ;
   mkN019a base = let v0 = tk 2 base
                  in mkNoun (v0+"ек")
                            (v0+"йци")
                            (v0+"ека")
                            (v0+"-")
-                           Masc
-                           Inanimate ;
+                           DMasc ;
   mkN020 : Str -> N ;
   mkN020 base = let v0 = tk 3 base;
                     v1 = last (tk 2 base)
@@ -236,248 +209,217 @@ oper
                           (v0+"ъ"+v1+"ци")
                           (v0+"-")
                           (v0+v1+"ецо")
-                          Masc
-                          Inanimate ;
+                          DMasc ;
   mkN021 : Str -> N ;
   mkN021 base = let v0 = tk 3 base
                 in mkNoun (v0+"чин")
                           (v0+"ци")
                           (v0+"-")
                           (v0+"чино")
-                          Masc
-                          Inanimate ;
+                          DMasc ;
   mkN022 : Str -> N ;
   mkN022 base = let v0 = base
                 in mkNoun (v0)
                           (v0+"а")
                           (v0+"а")
                           (v0+"-")
-                          Masc
-                          Inanimate ;
+                          DMasc ;
   mkN023 : Str -> N ;
   mkN023 base = let v0 = tk 2 base
                 in mkNoun (v0+"ин")
                           (v0+"а")
                           (v0+"-")
                           (v0+"ине")
-                          Masc
-                          Inanimate ;
+                          DMasc ;
   mkN024a : Str -> N ;
   mkN024a base = let v0 = tk 1 base
                  in mkNoun (v0+"з")
                            (v0+"зе")
                            (v0+"-")
                            (v0+"же")
-                           Masc
-                           Inanimate ;
+                           DMasc ;
   mkN024 : Str -> N ;
   mkN024 base = let v0 = base
                 in mkNoun (v0)
                           (v0+"е")
                           (v0+"е")
                           (v0+"о")
-                          Masc
-                          Animate ;
+                          DMascPersonal ;
   mkN025 : Str -> N ;
   mkN025 base = let v0 = base
                 in mkNoun (v0)
                           (v0+"я")
                           (v0+"-")
                           (v0+"е")
-                          Masc
-                          Animate ;
+                          DMascPersonal ;
   mkN026 : Str -> N ;
   mkN026 base = let v0 = base
                 in mkNoun (v0)
                           (v0+"илища")
                           (v0+"а")
                           (v0+"-")
-                          Masc
-                          Inanimate ;
+                          DMasc ;
   mkN027 : Str -> N ;
   mkN027 base = let v0 = tk 2 base
                 in mkNoun (v0+"ец")
                           (v0+"овце")
                           (v0+"еца")
                           (v0+"-")
-                          Masc
-                          Inanimate ;
+                          DMasc ;
   mkN028 : Str -> N ;
   mkN028 base = let v0 = tk 1 base
                 in mkNoun (v0+"й")
                           (v0+"еве")
                           (v0+"я")
                           (v0+"-")
-                          Masc
-                          Inanimate ;
+                          DMasc ;
   mkN028a : Str -> N ;
   mkN028a base = let v0 = tk 1 base
                  in mkNoun (v0+"й")
                            (v0+"йове")
                            (v0+"я")
                            (v0+"-")
-                           Masc
-                           Inanimate ;
+                           DMasc ;
   mkN029 : Str -> N ;
   mkN029 base = let v0 = base
                 in mkNoun (v0)
                           (v0+"ьове")
                           (v0+"-")
                           (v0+"ко")
-                          Masc
-                          Inanimate ;
+                          DMasc ;
   mkN030 : Str -> N ;
   mkN030 base = let v0 = tk 2 base
                 in mkNoun (v0+"ън")
                           (v0+"ньове")
                           (v0+"ъня")
                           (v0+"-")
-                          Masc
-                          Inanimate ;
+                          DMasc ;
   mkN031 : Str -> N ;
   mkN031 base = let v0 = base
                 in mkNoun (v0)
                           (v0+"и")
                           (v0+"я")
                           (v0+"-")
-                          Masc
-                          Inanimate ;
+                          DMasc ;
   mkN031a : Str -> N ;
   mkN031a base = let v0 = base
                  in mkNoun (v0)
                            (v0+"и")
                            (v0+"я")
                            (v0+"ю")
-                           Masc
-                           Animate ;
+                           DMascPersonal ;
   mkN032 : Str -> N ;
   mkN032 base = let v0 = tk 1 base
                 in mkNoun (v0+"й")
                           (v0+"и")
                           (v0+"я")
                           (v0+"-")
-                          Masc
-                          Inanimate ;
+                          DMasc ;
   mkN032a : Str -> N ;
   mkN032a base = let v0 = tk 1 base
                  in mkNoun (v0+"й")
                            (v0+"и")
                            (v0+"я")
                            (v0+"ю")
-                           Masc
-                           Animate ;
+                           DMascPersonal ;
   mkN033 : Str -> N ;
   mkN033 base = let v0 = tk 2 base
                 in mkNoun (v0+"ен")
                           (v0+"ни")
                           (v0+"ена")
                           (v0+"-")
-                          Masc
-                          Inanimate ;
+                          DMasc ;
   mkN034 : Str -> N ;
   mkN034 base = let v0 = tk 2 base
                 in mkNoun (v0+"ът")
                           (v0+"ти")
                           (v0+"ътя")
                           (v0+"-")
-                          Masc
-                          Inanimate ;
+                          DMasc ;
   mkN035 : Str -> N ;
   mkN035 base = let v0 = base
                 in mkNoun (v0)
                           (v0+"е")
                           (v0+"я")
                           (v0+"-")
-                          Masc
-                          Inanimate ;
+                          DMasc ;
   mkN035a : Str -> N ;
   mkN035a base = let v0 = base
                  in mkNoun (v0)
                            (v0+"е")
                            (v0+"я")
                            (v0+"ю")
-                           Masc
-                           Animate ;
+                           DMascPersonal ;
   mkN036 : Str -> N ;
   mkN036 base = let v0 = tk 1 base
                 in mkNoun (v0+"й")
                           (v0+"ища")
                           (v0+"я")
                           (v0+"-")
-                          Masc
-                          Inanimate ;
+                          DMasc ;
   mkN037 : Str -> N ;
   mkN037 base = let v0 = base
                 in mkNoun (v0)
                           (v0+"ища")
                           (v0+"я")
                           (v0+"-")
-                          Masc
-                          Inanimate ;
+                          DMasc ;
   mkN038 : Str -> N ;
   mkN038 base = let v0 = tk 1 base
                 in mkNoun (v0+"а")
                           (v0+"и")
                           (v0+"-")
                           (v0+"а")
-                          Masc
-                          Animate ;
+                          DMascPersonal ;
   mkN039 : Str -> N ;
   mkN039 base = let v0 = tk 1 base
                 in mkNoun (v0+"я")
                           (v0+"и")
                           (v0+"-")
                           (v0+"-")
-                          Masc
-                          Inanimate ;
+                          DMasc ;
   mkN040 : Str -> N ;
   mkN040 base = let v0 = tk 1 base
                 in mkNoun (v0+"о")
                           (v0+"овци")
                           (v0+"-")
                           (v0+"о")
-                          Masc
-                          Inanimate ;
+                          DMasc ;
   mkN040a : Str -> N ;
   mkN040a base = let v0 = base
                  in mkNoun (v0)
                            (v0+"-")
                            (v0+"-")
                            (v0+"-")
-                           Masc
-                           Inanimate ;
+                           DMasc ;
   mkN041 : Str -> N ;
   mkN041 base = let v0 = tk 1 base
                 in mkNoun (v0+"а")
                           (v0+"и")
                           (v0+"и")
                           (v0+"-")
-                          Fem
-                          Inanimate ;
+                          DFem ;
   mkN041a : Str -> N ;
   mkN041a base = let v0 = tk 1 base
                  in mkNoun (v0+"а")
                            (v0+"и")
                            (v0+"и")
                            (v0+"о")
-                           Fem
-                           Inanimate ;
+                           DFem ;
   mkN041b : Str -> N ;
   mkN041b base = let v0 = tk 1 base
                  in mkNoun (v0+"а")
                            (v0+"и")
                            (v0+"и")
                            (v0+"е")
-                           Fem
-                           Inanimate ;
+                           DFem ;
   mkN042 : Str -> N ;
   mkN042 base = let v0 = base
                 in mkNoun (v0)
                           (v0)
                           (v0)
                           (v0+"-")
-                          Fem
-                          Inanimate ;
+                          DFem ;
   mkN043 : Str -> N ;
   mkN043 base = let v0 = tk 3 base;
                     v1 = last (tk 1 base)
@@ -485,8 +427,7 @@ oper
                           (v0+"е"+v1+"и")
                           (v0+"е"+v1+"и")
                           (v0+"-")
-                          Fem
-                          Inanimate ;
+                          DFem ;
   mkN043a : Str -> N ;
   mkN043a base = let v0 = tk 4 base;
                      v1 = last (tk 2 base)
@@ -494,64 +435,56 @@ oper
                            (v0+"е"+v1+"ки")
                            (v0+"е"+v1+"ки")
                            (v0+"-")
-                           Fem
-                           Inanimate ;
+                           DFem ;
   mkN044 : Str -> N ;
   mkN044 base = let v0 = tk 1 base
                 in mkNoun (v0+"а")
                           (v0+"е")
                           (v0+"е")
                           (v0+"-")
-                          Fem
-                          Inanimate ;
+                          DFem ;
   mkN045 : Str -> N ;
   mkN045 base = let v0 = tk 2 base
                 in mkNoun (v0+"ка")
                           (v0+"це")
                           (v0+"це")
                           (v0+"-")
-                          Fem
-                          Inanimate ;
+                          DFem ;
   mkN046 : Str -> N ;
   mkN046 base = let v0 = tk 2 base
                 in mkNoun (v0+"га")
                           (v0+"зе")
                           (v0+"зе")
                           (v0+"-")
-                          Fem
-                          Inanimate ;
+                          DFem ;
   mkN047 : Str -> N ;
   mkN047 base = let v0 = tk 1 base
                 in mkNoun (v0+"я")
                           (v0+"и")
                           (v0+"и")
                           (v0+"-")
-                          Fem
-                          Inanimate ;
+                          DFem ;
   mkN048 : Str -> N ;
   mkN048 base = let v0 = tk 1 base
                 in mkNoun (v0+"я")
                           (v0+"е")
                           (v0+"е")
                           (v0+"ьо")
-                          Fem
-                          Inanimate ;
+                          DFem ;
   mkN049 : Str -> N ;
   mkN049 base = let v0 = base
                 in mkNoun (v0)
                           (v0+"и")
                           (v0+"и")
                           (v0+"-")
-                          Fem
-                          Inanimate ;
+                          DFem ;
   mkN050 : Str -> N ;
   mkN050 base = let v0 = tk 2 base
                 in mkNoun (v0+"ен")
                           (v0+"ни")
                           (v0+"ни")
                           (v0+"-")
-                          Fem
-                          Inanimate ;
+                          DFem ;
   mkN051 : Str -> N ;
   mkN051 base = let v0 = tk 2 base;
                     v1 = last (base)
@@ -559,24 +492,21 @@ oper
                           (v0+v1+"и")
                           (v0+v1+"и")
                           (v0+"-")
-                          Fem
-                          Inanimate ;
+                          DFem ;
   mkN052 : Str -> N ;
   mkN052 base = let v0 = tk 5 base
                 in mkNoun (v0+"ялост")
                           (v0+"ялости")
                           (v0+"ялости")
                           (v0+"-")
-                          Fem
-                          Inanimate ;
+                          DFem ;
   mkN052a : Str -> N ;
   mkN052a base = let v0 = tk 6 base
                  in mkNoun (v0+"ярност")
                            (v0+"ярности")
                            (v0+"ярности")
                            (v0+"-")
-                           Fem
-                           Inanimate ;
+                           DFem ;
   mkN053 : Str -> N ;
   mkN053 base = let v0 = tk 3 base;
                     v1 = last (base)
@@ -584,32 +514,28 @@ oper
                           (v0+"ър"+v1+"и")
                           (v0+"ър"+v1+"и")
                           (v0+"-")
-                          Fem
-                          Inanimate ;
+                          DFem ;
   mkN054 : Str -> N ;
   mkN054 base = let v0 = tk 1 base
                 in mkNoun (v0+"о")
                           (v0+"а")
                           (v0+"а")
                           (v0+"о")
-                          Neut
-                          Inanimate ;
+                          DNeut ;
   mkN055 : Str -> N ;
   mkN055 base = let v0 = tk 1 base
                 in mkNoun (v0+"о")
                           (v0+"а")
                           (v0+"а")
                           (v0+"о")
-                          Neut
-                          Inanimate ;
+                          DNeut ;
   mkN056 : Str -> N ;
   mkN056 base = let v0 = tk 1 base
                 in mkNoun (v0+"о")
                           (v0+"а")
                           (v0+"а")
                           (v0+"о")
-                          Neut
-                          Inanimate ;
+                          DNeut ;
   mkN057 : Str -> N ;
   mkN057 base = let v0 = tk 3 base;
                     v1 = last (tk 1 base)
@@ -617,160 +543,140 @@ oper
                           (v0+"е"+v1+"а")
                           (v0+"е"+v1+"а")
                           (v0+"я"+v1+"о")
-                          Neut
-                          Inanimate ;
+                          DNeut ;
   mkN057a : Str -> N ;
   mkN057a base = let v0 = tk 4 base
                  in mkNoun (v0+"ясто")
                            (v0+"еста")
                            (v0+"еста")
                            (v0+"ясто")
-                           Neut
-                           Inanimate ;
+                           DNeut ;
   mkN058 : Str -> N ;
   mkN058 base = let v0 = tk 3 base
                 in mkNoun (v0+"яно")
                           (v0+"ена")
                           (v0+"ена")
                           (v0+"яно")
-                          Neut
-                          Inanimate ;
+                          DNeut ;
   mkN059 : Str -> N ;
   mkN059 base = let v0 = tk 1 base
                 in mkNoun (v0+"о")
                           (v0+"ене")
                           (v0+"ене")
                           (v0+"о")
-                          Neut
-                          Inanimate ;
+                          DNeut ;
   mkN060 : Str -> N ;
   mkN060 base = let v0 = tk 1 base
                 in mkNoun (v0+"о")
                           (v0+"еса")
                           (v0+"еса")
                           (v0+"о")
-                          Neut
-                          Inanimate ;
+                          DNeut ;
   mkN061 : Str -> N ;
   mkN061 base = let v0 = tk 1 base
                 in mkNoun (v0+"о")
                           (v0+"а")
                           (v0+"а")
                           (v0+"о")
-                          Neut
-                          Inanimate ;
+                          DNeut ;
   mkN062 : Str -> N ;
   mkN062 base = let v0 = tk 1 base
                 in mkNoun (v0+"о")
                           (v0+"и")
                           (v0+"и")
                           (v0+"о")
-                          Neut
-                          Inanimate ;
+                          DNeut ;
   mkN063 : Str -> N ;
   mkN063 base = let v0 = tk 2 base
                 in mkNoun (v0+"ко")
                           (v0+"чи")
                           (v0+"чи")
                           (v0+"ко")
-                          Neut
-                          Inanimate ;
+                          DNeut ;
   mkN064 : Str -> N ;
   mkN064 base = let v0 = tk 2 base
                 in mkNoun (v0+"хо")
                           (v0+"ши")
                           (v0+"ши")
                           (v0+"хо")
-                          Neut
-                          Inanimate ;
+                          DNeut ;
   mkN065 : Str -> N ;
   mkN065 base = let v0 = base
                 in mkNoun (v0)
                           (v0+"та")
                           (v0+"та")
                           (v0)
-                          Neut
-                          Inanimate ;
+                          DNeut ;
   mkN066 : Str -> N ;
   mkN066 base = let v0 = tk 1 base
                 in mkNoun (v0+"е")
                           (v0+"а")
                           (v0+"а")
                           (v0+"е")
-                          Neut
-                          Inanimate ;
+                          DNeut ;
   mkN067 : Str -> N ;
   mkN067 base = let v0 = tk 2 base
                 in mkNoun (v0+"те")
                           (v0+"ца")
                           (v0+"ца")
                           (v0+"те")
-                          Neut
-                          Inanimate ;
+                          DNeut ;
   mkN068 : Str -> N ;
   mkN068 base = let v0 = tk 1 base
                 in mkNoun (v0+"е")
                           (v0+"я")
                           (v0+"я")
                           (v0+"е")
-                          Neut
-                          Inanimate ;
+                          DNeut ;
   mkN069 : Str -> N ;
   mkN069 base = let v0 = base
                 in mkNoun (v0)
                           (v0+"на")
                           (v0+"на")
                           (v0)
-                          Neut
-                          Inanimate ;
+                          DNeut ;
   mkN070 : Str -> N ;
   mkN070 base = let v0 = base
                 in mkNoun (v0)
                           (v0+"са")
                           (v0+"са")
                           (v0)
-                          Neut
-                          Inanimate ;
+                          DNeut ;
   mkN071 : Str -> N ;
   mkN071 base = let v0 = tk 1 base
                 in mkNoun (v0+"е")
                           (v0+"ия")
                           (v0+"ия")
                           (v0+"е")
-                          Neut
-                          Inanimate ;
+                          DNeut ;
   mkN072 : Str -> N ;
   mkN072 base = let v0 = tk 1 base
                 in mkNoun (v0+"е")
                           (v0+"я")
                           (v0+"я")
                           (v0+"е")
-                          Neut
-                          Inanimate ;
+                          DNeut ;
   mkN073 : Str -> N ;
   mkN073 base = let v0 = base
                 in mkNoun (v0)
                           (v0+"та")
                           (v0+"та")
                           (v0)
-                          Neut
-                          Inanimate ;
+                          DNeut ;
   mkN074 : Str -> N ;
   mkN074 base = let v0 = tk 1 base
                 in mkNoun (v0+"-")
                           (v0)
                           (v0)
                           (v0+"-")
-                          Neut
-                          Inanimate ;
+                          DNeut ;
   mkN075 : Str -> N ;
   mkN075 base = let v0 = tk 1 base
                 in mkNoun (v0+"-")
                           (v0)
                           (v0)
                           (v0+"-")
-                          Neut
-                          Inanimate ;
+                          DNeut ;
   mkA076 : Str -> A ;
   mkA076 base = let v0 = base
                 in mkAdjective (v0)

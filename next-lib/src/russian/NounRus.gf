@@ -13,36 +13,46 @@ concrete NounRus of Noun = CatRus ** open ResRus, Prelude, MorphoRus in {
        _ => 
         kazhduj.s ! AF (extCase c) okhotnik.anim (gennum okhotnik.g kazhduj.n) ++ 
          okhotnik.s ! NF kazhduj.n kazhduj.c };
-      a = agrP3 kazhduj.n (case kazhduj.g of {PNoGen => PGen okhotnik.g; _ => kazhduj.g});
+      n = kazhduj.n ; 
+      p = P3 ;
+      pron = False;
+      g = case kazhduj.g of { PNoGen => (PGen okhotnik.g); _ => kazhduj.g };
       anim = okhotnik.anim 
     } ;
 
     UsePN masha = {
-      s = \\c => masha.s ! (extCase c);
-      a = agrP3 Sg (PGen masha.g);
-      anim = masha.anim;
-      nComp = Sg
-      } ;
+      s = \\c => masha.s ! (extCase c) ; 
+      p = P3; g = PGen masha.g ; anim = masha.anim ; 
+      n = Sg; nComp = Sg; pron = False} ;
 
     UsePron p = p ** {anim = Inanimate};
 
     PredetNP pred np = {
-      s = \\pf => pred.s! (AF (extCase pf) np.anim (gennum (pgen2gen np.a.g) np.a.n))++ np.s ! pf ;
-      a = np.a;
-      anim = np.anim
+      s = \\pf => pred.s! (AF (extCase pf) np.anim (gennum (pgen2gen np.g) np.n))++ np.s ! pf ;
+      n = np.n;
+      p = np.p;
+      g = np.g;
+      anim = np.anim;
+      pron = np.pron
       } ;
 
     PPartNP np v2 = {
       s = \\pf => np.s ! pf ++ v2.s ! VFORM Act VINF ; 
       -- no participles in the Verbum type as they behave as adjectives
-      a = np.a;
-      anim = np.anim
+      n = np.n;
+      p = np.p;
+      g = np.g;
+      anim = np.anim;
+      pron = np.pron
       } ;
 
     AdvNP np adv = {
       s = \\pf => np.s ! pf ++ adv.s ;
-      a = np.a;
-      anim = np.anim
+      n = np.n;
+      p = np.p;
+      g = np.g;
+      anim = np.anim;
+      pron = np.pron
       } ;
 
 -- 1.4 additions AR 17/6/2008
@@ -53,7 +63,10 @@ concrete NounRus of Noun = CatRus ** open ResRus, Prelude, MorphoRus in {
        anim = Inanimate ;
      in {
       s = \\c => kazhduj.s ! AF (extCase c) anim (gennum g kazhduj.n) ;
-      a = agrP3 kazhduj.n (case kazhduj.g of {PNoGen => (PGen g); _ => kazhduj.g}) ; 
+      n = kazhduj.n ; 
+      p = P3 ;
+      pron = False;
+      g = case kazhduj.g of { PNoGen => (PGen g); _ => kazhduj.g };
       anim = anim 
     } ;
 
@@ -89,7 +102,10 @@ concrete NounRus of Noun = CatRus ** open ResRus, Prelude, MorphoRus in {
 
     MassNP okhotnik = {
       s = \\c => okhotnik.s ! NF Sg (extCase c) ; 
-      a = agrP3 Sg (PGen okhotnik.g) ; 
+      n = Sg ; 
+      p = P3 ;
+      pron = False;
+      g = PGen okhotnik.g ;
       anim = okhotnik.anim 
     } ;
 {-
@@ -97,7 +113,10 @@ concrete NounRus of Noun = CatRus ** open ResRus, Prelude, MorphoRus in {
       s = \\c =>  -- art case always Nom (AR 17/6/2008) 
           kazhduj.s ! AF (extCase c) okhotnik.anim (gennum okhotnik.g Sg) ++ 
           okhotnik.s ! Sg ! (extCase c) ; 
-      a = agrP3 Sg (case kazhduj.g of {PNoGen => PGen okhotnik.g; _ => kazhduj.g}) ; 
+      n = Sg ; 
+      p = P3 ;
+      pron = False;
+      g = case kazhduj.g of { PNoGen => (PGen okhotnik.g); _ => kazhduj.g };
       anim = okhotnik.anim 
     } ;
 
@@ -105,7 +124,10 @@ concrete NounRus of Noun = CatRus ** open ResRus, Prelude, MorphoRus in {
       s = \\c =>  -- art case always Nom (AR 17/6/2008) 
           kazhduj.s ! AF (extCase c) okhotnik.anim (gennum okhotnik.g Pl) ++ 
           okhotnik.s ! Pl ! (extCase c) ; 
-      n = agrP3 Pl (case kazhduj.g of {PNoGen => PGen okhotnik.g; _ => kazhduj.g}) ; 
+      n = Pl ; 
+      p = P3 ;
+      pron = False;
+      g = case kazhduj.g of { PNoGen => (PGen okhotnik.g); _ => kazhduj.g };
       anim = okhotnik.anim 
     } ;
 -}
@@ -142,8 +164,11 @@ concrete NounRus of Noun = CatRus ** open ResRus, Prelude, MorphoRus in {
 -- of the readings is meaningful.
 
   ComplN2 f x = {
-    s = \\nf => f.s ! nf ++ f.c2.s ++ 
-                x.s ! (case nf of {NF n c => mkPronForm f.c2.c Yes (Poss (gennum f.g n))}) ;
+    s = \\nf => case x.pron of {
+                  True => x.s ! (case nf of {NF n c => mkPronForm c No (Poss (gennum f.g n))}) ++ f.s ! nf ;
+                  False => f.s ! nf ++ f.c2.s ++ 
+                           x.s ! (case nf of {NF n c => mkPronForm f.c2.c Yes (Poss (gennum f.g n))})
+                };
     g = f.g ;
     anim = f.anim
     } ;
@@ -219,8 +244,11 @@ concrete NounRus of Noun = CatRus ** open ResRus, Prelude, MorphoRus in {
     } ;
 
   RelNP np rel = {
-      s = \\c => np.s ! c ++ rel.s ! (gennum (pgen2gen np.a.g) np.a.n) ! extCase c ! np.anim ; 
-      a = np.a ;
+      s = \\c => np.s ! c ++ rel.s ! (gennum (pgen2gen np.g) np.n) ! extCase c ! np.anim ; 
+      n = np.n ;
+      p = np.p ;
+      pron = np.pron ;
+      g = np.g ;
       anim = np.anim ;
       nComp = np.nComp
       } ;

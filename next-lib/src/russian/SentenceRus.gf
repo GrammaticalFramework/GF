@@ -15,9 +15,9 @@ concrete SentenceRus of Sentence = CatRus ** open Prelude, ResRus in {
                _ => (mkPronForm Nom No NonPoss)
                });
          ne = case b of {Pos=>""; Neg=>"не"};
-         vizhu = tebyaNeVizhu.s ! clf ! (pgNum Ya.a.g Ya.a.n)! Ya.a.p;
+         vizhu = tebyaNeVizhu.s ! clf ! (pgNum Ya.g Ya.n)! Ya.p;
          khorosho = tebyaNeVizhu.s2 ;
-         tebya = tebyaNeVizhu.s3 ! (pgen2gen Ya.a.g) ! Ya.a.n 
+         tebya = tebyaNeVizhu.s3 ! (pgen2gen Ya.g) ! Ya.n 
        }
        in
        if_then_else Str tebyaNeVizhu.negBefore  
@@ -48,9 +48,9 @@ concrete SentenceRus of Sentence = CatRus ** open Prelude, ResRus in {
                _ => (mkPronForm Nom No NonPoss)
                });
          ne = case b of {Pos=>""; Neg=>"не"};
-         vizhu = tebyaNeVizhu.s ! clf ! (pgNum Ya.a.g Ya.a.n)! Ya.a.p;
+         vizhu = tebyaNeVizhu.s ! clf ! (pgNum Ya.g Ya.n)! Ya.p;
          khorosho = tebyaNeVizhu.s2 ;
-         tebya = tebyaNeVizhu.s3 ! (pgen2gen Ya.a.g) ! Ya.a.n 
+         tebya = tebyaNeVizhu.s3 ! (pgen2gen Ya.g) ! Ya.n 
        }
        in
        if_then_else Str tebyaNeVizhu.negBefore  
@@ -71,7 +71,7 @@ concrete SentenceRus of Sentence = CatRus ** open Prelude, ResRus in {
     --- AR 3/11/2007
     SlashVS ivan vidit tuUlubaeshsya = { 
       s=\\b,clf => ivan.s ! PF Nom No NonPoss ++ 
-         vidit.s! (getActVerbForm clf (pgen2gen ivan.a.g) ivan.a.n ivan.a.p) ++
+         vidit.s! (getActVerbForm clf (pgen2gen ivan.g) ivan.n ivan.p) ++
          [", что"] ++ tuUlubaeshsya.s ;
       s2=tuUlubaeshsya.s2; 
       c=tuUlubaeshsya.c 
