@@ -528,7 +528,8 @@ mkSubj : Str -> Subj = \s -> {s = s ; lock_Subj = <>} ;
 
   mkVS  v = v ** {lock_VS = <>} ;
   mkVV  v = {
-    s = table {VVF vf => v.s ! vf ; _ => variants {}} ; 
+    s = table {VVF vf => v.s ! vf ; _ => v.s ! VInf} ;
+                                          --- variants {}} ; not used 
     isAux = False ; lock_VV = <>
     } ;
   mkVQ  v = v ** {lock_VQ = <>} ;
