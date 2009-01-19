@@ -29,20 +29,17 @@ import GF.Data.Operations
 import Control.Monad
 
 extendModule :: [SourceModule] -> SourceModule -> Err SourceModule
-extendModule ms (name,mod) = case mod of
-
+extendModule ms (name,m)
   ---- Just to allow inheritance in incomplete concrete (which are not
   ---- compiled anyway), extensions are not built for them.
   ---- Should be replaced by real control. AR 4/2/2005
-  ModMod m | mstatus m == MSIncomplete && isModCnc m -> return (name,mod)
-
-  ModMod m -> do
-    mod' <- foldM extOne m (extend m) 
-    return (name,ModMod mod') 
+  | mstatus m == MSIncomplete && isModCnc m = return (name,m)
+  | otherwise                               = do m' <- foldM extOne m (extend m) 
+                                                 return (name,m')
  where
    extOne mo (n,cond) = do
         (m0,isCompl) <- do
-          m <- lookupModMod  (MGrammar ms) n
+          m <- lookupModule (MGrammar ms) n
 
           -- test that the module types match, and find out if the old is complete
           testErr (sameMType (mtype m) (mtype mo)) 

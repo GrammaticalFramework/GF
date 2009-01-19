@@ -49,40 +49,38 @@ prtIf b t = if b then trace (" " ++ prt t) t else t
 type EEnv = () --- not used
 
 -- only do this for resource: concrete is optimized in gfc form
-optimizeModule :: Options -> ([(Ident,SourceModInfo)],EEnv) -> 
-                  (Ident,SourceModInfo) -> Err ((Ident,SourceModInfo),EEnv)
-optimizeModule opts mse@(ms,eenv) mo@(_,mi) = case mi of
-  ModMod m0 | mstatus m0 == MSComplete && isModRes m0 -> do
+optimizeModule :: Options -> ([SourceModule],EEnv) -> SourceModule -> Err (SourceModule,EEnv)
+optimizeModule opts mse@(ms,eenv) mo@(_,mi)
+  | mstatus mi == MSComplete && isModRes mi = do
       (mo1,_) <- evalModule oopts mse mo
       let mo2 = shareModule optim mo1
       return (mo2,eenv)
-  _ -> evalModule oopts mse mo
+  | otherwise = evalModule oopts mse mo
  where
    oopts = opts `addOptions` flagsModule mo
    optim = flag optOptimizations oopts
 
-evalModule :: Options -> ([(Ident,SourceModInfo)],EEnv) -> (Ident,SourceModInfo) -> 
-               Err ((Ident,SourceModInfo),EEnv)
-evalModule oopts (ms,eenv) mo@(name,mod) = case mod of
+evalModule :: Options -> ([SourceModule],EEnv) -> SourceModule -> Err (SourceModule,EEnv)
+evalModule oopts (ms,eenv) mo@(name,m0)
+  | mstatus m0 == MSComplete =
+      case mtype m0 of
+         _ | isModRes m0 -> do
+               let deps = allOperDependencies name (jments m0)
+               ids <- topoSortOpers deps
+               MGrammar (mod' : _) <- foldM evalOp gr ids
+               return $ (mod',eenv)
 
-  ModMod m0 | mstatus m0 == MSComplete -> case mtype m0 of
-    _ | isModRes m0 -> do
-      let deps = allOperDependencies name (jments m0)
-      ids <- topoSortOpers deps
-      MGrammar (mod' : _) <- foldM evalOp gr ids
-      return $ (mod',eenv)
+         MTConcrete a -> do
+               js' <- mapMTree (evalCncInfo oopts gr name a) (jments m0)
+               return $ ((name,replaceJudgements m0 js'),eenv)
 
-    MTConcrete a -> do
-      js' <- mapMTree (evalCncInfo oopts gr name a) (jments m0)
-      return $ ((name, ModMod (replaceJudgements m0 js')),eenv)
-
-    _ -> return $ ((name,mod),eenv)
-  _ -> return $ ((name,mod),eenv)
+         _ -> return $ (mo,eenv)
+  | otherwise = return $ (mo,eenv)
  where
    gr0 = MGrammar $ ms
-   gr  = MGrammar $ (name,mod) : ms
+   gr  = MGrammar $ mo : ms
 
-   evalOp g@(MGrammar ((_, ModMod m) : _)) i = do
+   evalOp g@(MGrammar ((_,m) : _)) i = do
      info  <- lookupTree prt i $ jments m
      info' <- evalResInfo oopts gr (i,info)
      return $ updateRes g name i info'

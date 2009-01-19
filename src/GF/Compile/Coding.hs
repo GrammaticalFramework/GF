@@ -14,17 +14,14 @@ encodeStringsInModule :: SourceModule -> SourceModule
 encodeStringsInModule = codeSourceModule encodeUTF8
 
 decodeStringsInModule :: SourceModule -> SourceModule
-decodeStringsInModule mo = case mo of
-  (_,ModMod m) -> case flag optEncoding (flags m) of
-    UTF_8   -> codeSourceModule decodeUTF8 mo
+decodeStringsInModule mo =
+  case flag optEncoding (flagsModule mo) of
+    UTF_8   -> codeSourceModule decodeUTF8   mo
     CP_1251 -> codeSourceModule decodeCP1251 mo
-    _ -> mo
-  _ -> mo
+    _       -> mo
 
-codeSourceModule :: (String -> String) -> SourceModule ->  SourceModule
-codeSourceModule co (id,moi) = case moi of
-  ModMod mo -> (id, ModMod $ replaceJudgements mo (mapTree codj (jments mo)))
-  _ -> (id,moi)
+codeSourceModule :: (String -> String) -> SourceModule -> SourceModule
+codeSourceModule co (id,mo) = (id,replaceJudgements mo (mapTree codj (jments mo)))
  where
     codj (c,info) = case info of
       ResOper     pty pt  -> ResOper (mapP codt pty) (mapP codt pt) 

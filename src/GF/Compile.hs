@@ -39,6 +39,7 @@ import System.Time
 import qualified Data.Map as Map
 import qualified Data.Set as Set
 import Data.List(nub)
+import Data.Maybe (isNothing)
 
 import PGF.Check
 import PGF.CId
@@ -172,12 +173,9 @@ compileOne opts env@(_,srcgr,_) file = do
           -- sm is optimized before generation, but not in the env
        extendCompileEnvInt env k' (Just gfo) sm1
   where
-   isConcr (_,mi) = case mi of
-     ModMod m -> isModCnc m && mstatus m /= MSIncomplete 
-     _ -> False
+   isConcr (_,m) = isModCnc m && mstatus m /= MSIncomplete && isNothing (mwith m)
 
-compileSourceModule :: Options -> CompileEnv -> 
-                       SourceModule -> IOE (Int,SourceModule)
+compileSourceModule :: Options -> CompileEnv -> SourceModule -> IOE (Int,SourceModule)
 compileSourceModule opts env@(k,gr,_) mo@(i,mi) = do
 
   let putp  = putPointE Normal opts
@@ -191,7 +189,7 @@ compileSourceModule opts env@(k,gr,_) mo@(i,mi) = do
   intermOut opts DumpExtend (prModule mo1b)
 
   case mo1b of
-    (_,ModMod n) | not (isCompleteModule n) -> do
+    (_,n) | not (isCompleteModule n) -> do
       return (k,mo1b)   -- refresh would fail, since not renamed
     _ -> do
       mo2:_ <- putpp "  renaming " $ ioeErr $ renameModule mos mo1b

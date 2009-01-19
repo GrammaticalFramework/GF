@@ -63,9 +63,7 @@ mapsCheckTree f = checkErr . mapsErrTree (\t -> checkStart (f t) >>= return . fs
 
 -- | checking is performed in the dependency order of modules
 checkModule :: [SourceModule] -> SourceModule -> Check [SourceModule]
-checkModule ms (name,mod) = checkIn ("checking module" +++ prt name) $ case mod of
-
-  ModMod mo -> do
+checkModule ms (name,mo) = checkIn ("checking module" +++ prt name) $ do
     let js = jments mo
     checkRestrictedInheritance ms (name, mo)
     js' <- case mtype mo of
@@ -77,29 +75,25 @@ checkModule ms (name,mod) = checkIn ("checking module" +++ prt name) $ case mod 
 
       MTConcrete a -> do
         checkErr $ topoSortOpers $ allOperDependencies name js
-        ModMod abs <- checkErr $ lookupModule gr a
+        abs <- checkErr $ lookupModule gr a
         js1 <- checkCompleteGrammar abs mo
         mapsCheckTree (checkCncInfo gr name mo (a,abs)) js1
 
       MTInterface -> mapsCheckTree (checkResInfo gr name mo) js
 
       MTInstance a -> do
-        -- ModMod abs <- checkErr $ lookupModule gr a
-        -- checkCompleteInstance abs mo -- this is done in Rebuild
         mapsCheckTree (checkResInfo gr name mo) js
 
-    return $ (name, ModMod (replaceJudgements mo js')) : ms
-
-  _ -> return $ (name,mod) : ms
+    return $ (name, replaceJudgements mo js') : ms
  where
-   gr  = MGrammar $ (name,mod):ms
+   gr  = MGrammar $ (name,mo):ms
 
 -- check if restricted inheritance modules are still coherent
 -- i.e. that the defs of remaining names don't depend on omitted names
----checkRestrictedInheritance :: [SourceModule] -> SourceModule -> Check ()
+checkRestrictedInheritance :: [SourceModule] -> SourceModule -> Check ()
 checkRestrictedInheritance mos (name,mo) = do
   let irs = [ii | ii@(_,mi) <- extend mo, mi /= MIAll]  -- names with restr. inh.
-  let mrs = [((i,m),mi) | (i,ModMod m) <- mos, Just mi <- [lookup i irs]] 
+  let mrs = [((i,m),mi) | (i,m) <- mos, Just mi <- [lookup i irs]] 
                              -- the restr. modules themself, with restr. infos
   mapM_ checkRem mrs
  where
@@ -115,10 +109,7 @@ checkRestrictedInheritance mos (name,mo) = do
                ", dependence of excluded constants:" ++++
                unlines ["  " ++ prt f +++ "on" +++ unwords (map prt is) | 
                               (f,is) <- cs]
-   allDeps = ---- transClosure $ Map.fromList $ 
-             concatMap (allDependencies (const True)) 
-                              [jments m | (_,ModMod m) <- mos]
-   transClosure ds = ds ---- TODO: check in deeper modules
+   allDeps = concatMap (allDependencies (const True) . jments . snd) mos
 
 -- | check if a term is typable
 justCheckLTerm :: SourceGrammar -> Term -> Err Term
@@ -127,7 +118,7 @@ justCheckLTerm src t = do
   return t'
 
 checkAbsInfo :: 
-  SourceGrammar -> Ident -> Module Ident Info -> (Ident,Info) -> Check (Ident,Info)
+  SourceGrammar -> Ident -> SourceModInfo -> (Ident,Info) -> Check (Ident,Info)
 checkAbsInfo st m mo (c,info) = do
 ---- checkReservedId c
  case info of
@@ -183,7 +174,7 @@ checkAbsInfo st m mo (c,info) = do
      R fs -> mkApp t (map (snd . snd) fs)
      _ -> mkApp t [a]
 
-checkCompleteGrammar :: SourceAbs -> SourceCnc -> Check (BinTree Ident Info)
+checkCompleteGrammar :: SourceModInfo -> SourceModInfo -> Check (BinTree Ident Info)
 checkCompleteGrammar abs cnc = do
   let jsa = jments abs
   let fsa = tree2list jsa
@@ -227,8 +218,7 @@ checkCompleteGrammar abs cnc = do
 
 -- | General Principle: only Yes-values are checked. 
 -- A May-value has always been checked in its origin module.
-checkResInfo :: 
-  SourceGrammar -> Ident -> Module Ident Info -> (Ident,Info) -> Check (Ident,Info)
+checkResInfo :: SourceGrammar -> Ident -> SourceModInfo -> (Ident,Info) -> Check (Ident,Info)
 checkResInfo gr mo mm (c,info) = do
   checkReservedId c
   case info of
@@ -281,8 +271,8 @@ checkResInfo gr mo mm (c,info) = do
      _ -> return ()
 
 
-checkCncInfo :: SourceGrammar -> Ident -> Module Ident Info -> 
-                (Ident,SourceAbs) -> 
+checkCncInfo :: SourceGrammar -> Ident -> SourceModInfo -> 
+                (Ident,SourceModInfo) -> 
                 (Ident,Info) -> Check (Ident,Info)
 checkCncInfo gr m mo (a,abs) (c,info) = do
   checkReservedId c

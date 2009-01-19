@@ -46,7 +46,7 @@ data ModDeps = ModDeps {
 noModDeps = ModDeps MTAbstract [] [] [] [] [] []
 
 grammar2moddeps :: SourceGrammar -> [(Ident,ModDeps)]
-grammar2moddeps gr = [(i,depMod m) | (i,ModMod m) <- modules gr] where
+grammar2moddeps gr = [(i,depMod m) | (i,m) <- modules gr] where
   depMod m = noModDeps{
     modtype = mtype m,
     ofs     = case mtype m of 

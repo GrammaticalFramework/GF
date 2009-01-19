@@ -32,11 +32,8 @@ import qualified Data.Set as Set
 
 type OptSpec = Set Optimization
 
-shareModule :: OptSpec -> (Ident, SourceModInfo) -> (Ident, SourceModInfo)
-shareModule opt (i,m) = case m of
-  M.ModMod mo -> 
-    (i,M.ModMod (M.replaceJudgements mo (mapTree (shareInfo opt) (M.jments mo))))
-  _ -> (i,m)
+shareModule :: OptSpec -> SourceModule -> SourceModule
+shareModule opt (i,mo) = (i,M.replaceJudgements mo (mapTree (shareInfo opt) (M.jments mo)))
 
 shareInfo :: OptSpec -> (Ident, Info) -> Info
 shareInfo opt (c, CncCat ty (Yes t) m) = CncCat ty (Yes (shareOptim opt c t)) m

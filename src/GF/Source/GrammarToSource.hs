@@ -35,13 +35,13 @@ trGrammar :: SourceGrammar -> P.Grammar
 trGrammar (MGrammar ms) = P.Gr (map trModule ms) -- no includes
 
 trModule :: (Ident,SourceModInfo) -> P.ModDef
-trModule (i,mo) = case mo of
-  ModMod m -> P.MModule compl typ body where
+trModule (i,m) = P.MModule compl typ body
+  where
     compl = case mstatus m of
       MSIncomplete -> P.CMIncompl
       _ -> P.CMCompl
     i' = tri i
-    typ = case typeOfModule mo of
+    typ = case mtype m of
       MTResource -> P.MTResource i'
       MTAbstract -> P.MTAbstract i'
       MTConcrete a -> P.MTConcrete i' (tri a)
@@ -66,15 +66,8 @@ forName (MTConcrete a) = tri a
 
 trOpen :: OpenSpec Ident -> P.Open
 trOpen o = case o of
-  OSimple OQNormal i -> P.OName (tri i)
-  OSimple q i -> P.OQualQO (trQualOpen q) (tri i)
-  OQualif q i j -> P.OQual (trQualOpen q) (tri i) (tri j)
-
-trQualOpen q = case q of
-  OQNormal -> P.QOCompl
-  OQIncomplete -> P.QOIncompl
-  OQInterface -> P.QOInterface
-
+  OSimple i   -> P.OName (tri i)
+  OQualif i j -> P.OQual P.QOCompl (tri i) (tri j)
 
 mkOpens ds = if null ds then P.NoOpens else P.OpenIn ds
 mkTopDefs ds = ds
@@ -87,8 +80,6 @@ trAnyDef (i,info) = let i' = tri i in case info of
     Yes t -> [P.DefDef [P.DDef [mkName i'] (trt t)]]
     _ -> []
   AbsFun (May b)  _ -> [P.DefFun [P.FunDef [i'] (P.EIndir (tri b))]]
-  ---- don't destroy definitions!
-  AbsTrans f -> [P.DefTrans [P.DDef [mkName i'] (trt f)]]
 
   ResOper pty ptr -> [P.DefOper [trDef i' pty ptr]]
   ResParam pp -> [P.DefPar [case pp of

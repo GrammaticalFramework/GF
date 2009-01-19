@@ -81,8 +81,8 @@ type CFFun = String
 
 cf2gf :: String -> CF -> SourceGrammar
 cf2gf name cf = MGrammar [
-  (aname, ModMod (emptyModule {mtype = MTAbstract,       jments = abs})),
-  (cname, ModMod (emptyModule {mtype = MTConcrete aname, jments = cnc}))
+  (aname, emptyModInfo{mtype = MTAbstract,       jments = abs}),
+  (cname, emptyModInfo{mtype = MTConcrete aname, jments = cnc})
   ]
  where
    (abs,cnc) = cf2grammar cf

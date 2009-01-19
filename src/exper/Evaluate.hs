@@ -386,7 +386,7 @@ evalConcrete gr mo = mapMTree evaldef mo where
     Bad s -> raise s
 
   noExpand p = errVal False $ do
-    mo <- lookupModMod gr p
+    mo <- lookupModule gr p
     return $ case getOptVal (iOpts (flags mo)) useOptimizer of
       Just "noexpand" -> True
       _ -> False

@@ -29,25 +29,19 @@ import Control.Monad
 -- | this is needed at compile time
 lookupFunType :: Grammar -> Ident -> Ident -> Err Type
 lookupFunType gr m c = do
-  mi   <- lookupModule gr m
-  case mi of
-    ModMod mo -> do
-      info <- lookupIdentInfo mo c
-      case info of
-        AbsFun (Yes t) _  -> return t
-        AnyInd _ n  -> lookupFunType gr n c
-        _ -> prtBad "cannot find type of" c
-    _ -> Bad $ prt m +++ "is not an abstract module"
+  mo <- lookupModule gr m
+  info <- lookupIdentInfo mo c
+  case info of
+    AbsFun (Yes t) _  -> return t
+    AnyInd _ n  -> lookupFunType gr n c
+    _ -> prtBad "cannot find type of" c
 
 -- | this is needed at compile time
 lookupCatContext :: Grammar -> Ident -> Ident -> Err Context
 lookupCatContext gr m c = do
-  mi   <- lookupModule gr m
-  case mi of
-    ModMod mo -> do
-      info <- lookupIdentInfo mo c
-      case info of
-        AbsCat (Yes co) _ -> return co
-        AnyInd _ n  -> lookupCatContext gr n c
-        _ -> prtBad "unknown category" c
-    _ -> Bad $ prt m +++ "is not an abstract module"
+  mo <- lookupModule gr m
+  info <- lookupIdentInfo mo c
+  case info of
+    AbsCat (Yes co) _ -> return co
+    AnyInd _ n        -> lookupCatContext gr n c
+    _                 -> prtBad "unknown category" c

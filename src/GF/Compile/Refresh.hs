@@ -109,11 +109,11 @@ refreshGrammar :: SourceGrammar -> Err SourceGrammar
 refreshGrammar = liftM (MGrammar . snd) . foldM refreshModule (0,[]) . modules
 
 refreshModule :: (Int,[SourceModule]) -> SourceModule -> Err (Int,[SourceModule])
-refreshModule (k,ms) mi@(i,m) = case m of
-    ModMod mo | (isModCnc mo || isModRes mo) -> do
+refreshModule (k,ms) mi@(i,mo)
+  | isModCnc mo || isModRes mo = do
       (k',js') <- foldM refreshRes (k,[]) $ tree2list $ jments mo
-      return (k', (i, ModMod(replaceJudgements mo (buildTree js'))) : ms)
-    _ -> return (k, mi:ms)
+      return (k', (i, replaceJudgements mo (buildTree js')) : ms)
+  | otherwise = return (k, mi:ms)
  where
   refreshRes (k,cs) ci@(c,info) = case info of
     ResOper ptyp (Yes trm) -> do   ---- refresh ptyp

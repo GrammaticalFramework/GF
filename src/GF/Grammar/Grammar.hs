@@ -18,9 +18,6 @@ module GF.Grammar.Grammar (SourceGrammar,
                 emptySourceGrammar,                
 		SourceModInfo,
 		SourceModule,
-		SourceAbs,
-		SourceRes,
-		SourceCnc,
                 mapSourceModule,
 		Info(..),
                 PValues,
@@ -72,12 +69,8 @@ type SourceModInfo = ModInfo Ident Info
 
 type SourceModule = (Ident, SourceModInfo)
 
-type SourceAbs = Module Ident Info
-type SourceRes = Module Ident Info
-type SourceCnc = Module Ident Info
-
-mapSourceModule :: (Module Ident Info -> Module Ident Info) -> SourceModule -> SourceModule
-mapSourceModule f (i,mi) = (i, mapModules' f mi)
+mapSourceModule :: (SourceModInfo -> SourceModInfo) -> (SourceModule -> SourceModule)
+mapSourceModule f (i,mi) = (i, f mi)
 
 -- this is created in CheckGrammar, and so are Val and PVal
 type PValues = [Term]
@@ -95,7 +88,6 @@ data Info =
 -- judgements in abstract syntax
    AbsCat   (Perh Context) (Perh [Term])   -- ^ (/ABS/) constructors; must be 'Id' or 'QId'
  | AbsFun   (Perh Type) (Perh Term)        -- ^ (/ABS/) 'Yes f' = canonical
- | AbsTrans Term                           -- ^ (/ABS/)
 
 -- judgements in resource
  | ResParam (Perh ([Param],Maybe PValues)) -- ^ (/RES/)
