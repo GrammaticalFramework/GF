@@ -33,23 +33,19 @@ import qualified Data.Map as Map
 import qualified Data.ByteString.Char8 as BS
 import Data.List
 
-optModule :: (Ident, SourceModInfo) -> (Ident, SourceModInfo)
+optModule :: SourceModule -> SourceModule
 optModule = subexpModule . shareModule
 
 shareModule = processModule optim
 
-unoptModule :: SourceGrammar -> (Ident, SourceModInfo) -> (Ident, SourceModInfo)
+unoptModule :: SourceGrammar -> SourceModule -> SourceModule
 unoptModule gr = unshareModule gr . unsubexpModule
 
-unshareModule :: SourceGrammar -> (Ident, SourceModInfo) -> (Ident, SourceModInfo)
+unshareModule :: SourceGrammar -> SourceModule -> SourceModule
 unshareModule gr = processModule (const (unoptim gr))
 
-processModule :: 
-  (Ident -> Term -> Term) -> (Ident, SourceModInfo) -> (Ident, SourceModInfo)
-processModule opt (i,m) = case m of
-  M.ModMod mo -> 
-    (i,M.ModMod (M.replaceJudgements mo (mapTree (shareInfo opt) (M.jments mo))))
-  _ -> (i,m)
+processModule :: (Ident -> Term -> Term) -> SourceModule -> SourceModule
+processModule opt (i,mo) = (i,M.replaceJudgements mo (mapTree (shareInfo opt) (M.jments mo)))
 
 shareInfo :: (Ident -> Term -> Term) -> (Ident,Info) -> Info
 shareInfo opt (c, CncCat ty (Yes t) m) = CncCat ty (Yes (opt c t)) m
@@ -169,22 +165,19 @@ cse is possible in the grammar. It is used by the flag pg -printer=subs.
 -}
 
 subexpModule :: SourceModule -> SourceModule
-subexpModule (n,m) = errVal (n,m) $ case m of
-  M.ModMod mo -> do
-    let ljs = tree2list (M.jments mo)
-    (tree,_) <- appSTM (getSubtermsMod n ljs) (Map.empty,0)
-    js2 <- liftM buildTree $ addSubexpConsts n tree $ ljs
-    return (n,M.ModMod (M.replaceJudgements mo js2))
-  _ -> return (n,m)
+subexpModule (n,mo) = errVal (n,mo) $ do
+  let ljs = tree2list (M.jments mo)
+  (tree,_) <- appSTM (getSubtermsMod n ljs) (Map.empty,0)
+  js2 <- liftM buildTree $ addSubexpConsts n tree $ ljs
+  return (n,M.replaceJudgements mo js2)
 
 unsubexpModule :: SourceModule -> SourceModule
-unsubexpModule sm@(i,m) = case m of
-    M.ModMod mo | hasSub ljs ->
-      (i, M.ModMod (M.replaceJudgements mo
-                     (rebuild (map unparInfo ljs)))) 
-                        where ljs = tree2list (M.jments mo)
-    _ -> (i,m)
+unsubexpModule sm@(i,mo)
+  | hasSub ljs = (i,M.replaceJudgements mo (rebuild (map unparInfo ljs)))
+  | otherwise  = sm
   where
+    ljs = tree2list (M.jments mo) 
+
     -- perform this iff the module has opers
     hasSub ljs = not $ null [c | (c,ResOper _ _) <- ljs]
     unparInfo (c,info) = case info of

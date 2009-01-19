@@ -32,11 +32,9 @@ import Control.Monad
 -- | update a resource module by adding a new or changing an old definition
 updateRes :: SourceGrammar -> Ident -> Ident -> Info -> SourceGrammar
 updateRes gr@(MGrammar ms) m i info = MGrammar $ map upd ms where
-  upd (n,mod) 
-    | n /= m = (n,mod)
-    | n == m = case mod of
-       ModMod r -> (m,ModMod $ updateModule r i info)
-       _ -> (n,mod) --- no error msg
+  upd (n,mo)
+    | n /= m = (n,mo)
+    | n == m = (n,updateModule mo i info)
 
 -- | combine a list of definitions into a balanced binary search tree
 buildAnyTree :: [(Ident,Info)] -> Err (BinTree Ident Info)

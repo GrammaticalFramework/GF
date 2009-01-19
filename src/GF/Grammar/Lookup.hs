@@ -56,56 +56,50 @@ lookupResDefKind gr m c
    ---- was PredefAbs till 3/9/2008, with explanation: need this in gf3 12/6/2008 
  | otherwise = look True m c where 
   look isTop m c = do
-    mi   <- lookupModule gr m
-    case mi of
-      ModMod mo -> do
-        info <- lookupIdentInfoIn mo m c
-        case info of
-          ResOper _ (Yes t) -> return (qualifAnnot m t, 0) 
-          ResOper _ Nope    -> return (Q m c, 0) ---- if isTop then lookExt m c 
+    mo <- lookupModule gr m
+    info <- lookupIdentInfoIn mo m c
+    case info of
+      ResOper _ (Yes t) -> return (qualifAnnot m t, 0) 
+      ResOper _ Nope    -> return (Q m c, 0) ---- if isTop then lookExt m c 
                                  ---- else prtBad "cannot find in exts" c 
 
-          CncCat (Yes ty) _ _ -> liftM (flip (,) 1) $ lock c ty
-          CncCat _ _ _        -> liftM (flip (,) 1) $ lock c defLinType
-          CncFun (Just (cat,_)) (Yes tr) _ -> liftM (flip (,) 1) $ unlock cat tr
+      CncCat (Yes ty) _ _ -> liftM (flip (,) 1) $ lock c ty
+      CncCat _ _ _        -> liftM (flip (,) 1) $ lock c defLinType
+      CncFun (Just (cat,_)) (Yes tr) _ -> liftM (flip (,) 1) $ unlock cat tr
 
-          CncFun _ (Yes tr) _ -> liftM (flip (,) 1) (return tr) ---- $ unlock c tr
+      CncFun _ (Yes tr) _ -> liftM (flip (,) 1) (return tr) ---- $ unlock c tr
 
-          AnyInd _ n        -> look False n c
-          ResParam _        -> return (QC m c,2)
-          ResValue _        -> return (QC m c,2)
-          _   -> Bad $ prt c +++ "is not defined in resource" +++ prt m
-      _ -> Bad $ prt m +++ "is not a resource"
+      AnyInd _ n        -> look False n c
+      ResParam _        -> return (QC m c,2)
+      ResValue _        -> return (QC m c,2)
+      _   -> Bad $ prt c +++ "is not defined in resource" +++ prt m
   lookExt m c =
     checks ([look False n c | n <- allExtensions gr m] ++ [return (Q m c,3)])
 
 lookupResType :: SourceGrammar -> Ident -> Ident -> Err Type
 lookupResType gr m c = do
-  mi   <- lookupModule gr m
-  case mi of
-    ModMod mo -> do
-      info <- lookupIdentInfo mo c
-      case info of
-        ResOper (Yes t) _ -> return $ qualifAnnot m t
-        ResOper (May n) _ -> lookupResType gr n c
+  mo <- lookupModule gr m
+  info <- lookupIdentInfo mo c
+  case info of
+    ResOper (Yes t) _ -> return $ qualifAnnot m t
+    ResOper (May n) _ -> lookupResType gr n c
 
-        -- used in reused concrete
-        CncCat _ _ _ -> return typeType
-        CncFun (Just (cat,(cont@(_:_),val))) _ _ -> do
+    -- used in reused concrete
+    CncCat _ _ _ -> return typeType
+    CncFun (Just (cat,(cont@(_:_),val))) _ _ -> do
           val' <- lock cat val 
           return $ mkProd (cont, val', [])
-        CncFun _ _ _      -> lookFunType m m c
-        AnyInd _ n        -> lookupResType gr n c
-        ResParam _        -> return $ typePType
-        ResValue (Yes (t,_))  -> return $ qualifAnnotPar m t
-        _   -> Bad $ prt c +++ "has no type defined in resource" +++ prt m
-    _ -> Bad $ prt m +++ "is not a resource"
+    CncFun _ _ _      -> lookFunType m m c
+    AnyInd _ n        -> lookupResType gr n c
+    ResParam _        -> return $ typePType
+    ResValue (Yes (t,_))  -> return $ qualifAnnotPar m t
+    _   -> Bad $ prt c +++ "has no type defined in resource" +++ prt m
   where
     lookFunType e m c = do
           a  <- abstractOfConcrete gr m
           lookFun e m c a
     lookFun e m c a = do
-          mu <- lookupModMod gr a
+          mu <- lookupModule gr a
           info <- lookupIdentInfo mu c
           case info of
             AbsFun (Yes ty) _ -> return $ redirectTerm e ty 
@@ -115,44 +109,35 @@ lookupResType gr m c = do
 
 lookupOverload :: SourceGrammar -> Ident -> Ident -> Err [([Type],(Type,Term))]
 lookupOverload gr m c = do
-    mi   <- lookupModule gr m
-    case mi of
-      ModMod mo -> do
-        info <- lookupIdentInfo mo c
-        case info of
-          ResOverload os tysts -> do
+    mo <- lookupModule gr m
+    info <- lookupIdentInfo mo c
+    case info of
+      ResOverload os tysts -> do
             tss <- mapM (\x -> lookupOverload gr x c) os
             return $ [(map snd args,(val,tr)) | 
                       (ty,tr) <- tysts, Ok (args,val) <- [typeFormCnc ty]] ++ 
                      concat tss
 
-          AnyInd _ n  -> lookupOverload gr n c
-          _   -> Bad $ prt c +++ "is not an overloaded operation"
-      _ -> Bad $ prt m +++ "is not a resource"
+      AnyInd _ n  -> lookupOverload gr n c
+      _   -> Bad $ prt c +++ "is not an overloaded operation"
 
 lookupOrigInfo :: SourceGrammar -> Ident -> Ident -> Err Info
 lookupOrigInfo gr m c = do
-    mi   <- lookupModule gr m
-    case mi of
-      ModMod mo -> do
-        info <- lookupIdentInfo mo c
-        case info of
-          AnyInd _ n  -> lookupOrigInfo gr n c
-          i   -> return i
-      _ -> Bad $ prt m +++ "is not run-time module"
+    mo <- lookupModule gr m
+    info <- lookupIdentInfo mo c
+    case info of
+      AnyInd _ n  -> lookupOrigInfo gr n c
+      i           -> return i
 
 lookupParams :: SourceGrammar -> Ident -> Ident -> Err ([Param],Maybe PValues)
 lookupParams gr = look True where 
   look isTop m c = do
-    mi   <- lookupModule gr m
-    case mi of
-      ModMod mo -> do
-        info <- lookupIdentInfo mo c
-        case info of
-          ResParam (Yes psm) -> return psm
-          AnyInd _ n        -> look False n c
-          _   -> Bad $ prt c +++ "has no parameters defined in resource" +++ prt m
-      _ -> Bad $ prt m +++ "is not a resource"
+    mo <- lookupModule gr m
+    info <- lookupIdentInfo mo c
+    case info of
+      ResParam (Yes psm) -> return psm
+      AnyInd _ n         -> look False n c
+      _                  -> Bad $ prt c +++ "has no parameters defined in resource" +++ prt m
   lookExt m c =
     checks [look False n c | n <- allExtensions gr m]
 
@@ -190,11 +175,10 @@ lookupIndexValue gr ty i = do
 
 allOrigInfos :: SourceGrammar -> Ident -> [(Ident,Info)]
 allOrigInfos gr m = errVal [] $ do
-  mi <- lookupModule gr m
-  case mi of
-    ModMod mo -> return [(c,i) | (c,_) <- tree2list (jments mo), Ok i <- [look c]]
- where
-   look = lookupOrigInfo gr m
+  mo <- lookupModule gr m
+  return [(c,i) | (c,_) <- tree2list (jments mo), Ok i <- [look c]]
+  where
+    look = lookupOrigInfo gr m
 
 allParamValues :: SourceGrammar -> Type -> Err [Term]
 allParamValues cnc ptyp = case ptyp of
@@ -225,36 +209,29 @@ qualifAnnotPar m t = case t of
 
 lookupAbsDef :: SourceGrammar -> Ident -> Ident -> Err (Maybe Term)
 lookupAbsDef gr m c = errIn ("looking up absdef of" +++ prt c) $ do
-  mi   <- lookupModule gr m
-  case mi of
-    ModMod mo -> do
-      info <- lookupIdentInfo mo c
-      case info of
-        AbsFun _ (Yes t)  -> return $ return t
-        AnyInd _ n  -> lookupAbsDef gr n c
-        _ -> return Nothing
-    _ -> Bad $ prt m +++ "is not an abstract module"
+  mo <- lookupModule gr m
+  info <- lookupIdentInfo mo c
+  case info of
+    AbsFun _ (Yes t) -> return (Just t)
+    AnyInd _ n       -> lookupAbsDef gr n c
+    _                -> return Nothing
 
 lookupLincat :: SourceGrammar -> Ident -> Ident -> Err Type
 lookupLincat gr m c | isPredefCat c = return defLinType --- ad hoc; not needed?
 lookupLincat gr m c = do
-  mi <- lookupModule gr m
-  case mi of
-    ModMod mo -> do
-      info <- lookupIdentInfo mo c
-      case info of
-        CncCat (Yes t) _ _ -> return t
-        AnyInd _ n         -> lookupLincat gr n c
-        _   -> Bad $ prt c +++ "has no linearization type in" +++ prt m
-    _ -> Bad $ prt m +++ "is not concrete"
-
+  mo <- lookupModule gr m
+  info <- lookupIdentInfo mo c
+  case info of
+    CncCat (Yes t) _ _ -> return t
+    AnyInd _ n         -> lookupLincat gr n c
+    _                  -> Bad $ prt c +++ "has no linearization type in" +++ prt m
 
 -- The first type argument is uncomputed, usually a category symbol.
 -- This is a hack to find implicit (= reused) opers.
 
 opersForType :: SourceGrammar -> Type -> Type -> [(QIdent,Term)]
 opersForType gr orig val = 
-  [((i,f),ty) | (i,m) <- allModMod gr, (f,ty) <- opers i m val] where
+  [((i,f),ty) | (i,m) <- modules gr, (f,ty) <- opers i m val] where
     opers i m val = 
       [(f,ty) |
         (f,ResOper (Yes ty) _) <- tree2list $ jments m,
@@ -263,7 +240,7 @@ opersForType gr orig val =
         ] ++
       let cat = err error snd (valCat orig) in --- ignore module
       [(f,ty) |
-        Ok a <- [abstractOfConcrete gr i >>= lookupModMod gr],
+        Ok a <- [abstractOfConcrete gr i >>= lookupModule gr],
         (f, AbsFun (Yes ty0) _) <- tree2list $ jments a,
         let ty = redirectTerm i ty0,
         Ok valt  <- [valCat ty],

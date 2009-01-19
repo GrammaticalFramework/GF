@@ -32,13 +32,10 @@ import Control.Monad
 removeLiT :: SourceGrammar -> Err SourceGrammar
 removeLiT gr = liftM MGrammar $ mapM (remlModule gr) (modules gr)
 
-remlModule :: SourceGrammar -> (Ident,SourceModInfo) -> Err (Ident,SourceModInfo)
-remlModule gr mi@(name,mod) = case mod of
-  ModMod mo -> do
-    js1 <- mapMTree (remlResInfo gr) (jments mo)
-    let mod2 = ModMod $ mo {jments = js1}
-    return $ (name,mod2)
-  _ -> return mi
+remlModule :: SourceGrammar -> SourceModule -> Err SourceModule
+remlModule gr mi@(name,mo) = do
+  js1 <- mapMTree (remlResInfo gr) (jments mo)
+  return (name,mo{jments = js1})
 
 remlResInfo :: SourceGrammar -> (Ident,Info) -> Err Info
 remlResInfo gr (i,info) = case info of
@@ -59,6 +56,6 @@ remlTerm gr trm = case trm of
   _ -> composOp (remlTerm gr) trm
  where
    look c = err (const $ return defLinType) return $ lookupLincat gr m c
-   m = case [cnc | (cnc,ModMod m) <- modules gr, isModCnc m] of
+   m = case [cnc | (cnc,m) <- modules gr, isModCnc m] of
      cnc:_ -> cnc   -- actually there is always exactly one
-     _ -> cCNC
+     _     -> cCNC

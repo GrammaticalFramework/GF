@@ -36,7 +36,7 @@ import Data.List
 -- | to check uniqueness of module names and import names, the
 -- appropriateness of import and extend types,
 -- to build a dependency graph of modules, and to sort them topologically
-mkSourceGrammar :: [(Ident,SourceModInfo)] -> Err SourceGrammar
+mkSourceGrammar :: [SourceModule] -> Err SourceGrammar
 mkSourceGrammar ms = do
   let ns = map fst ms
   checkUniqueErr ns
@@ -55,23 +55,18 @@ checkUniqueErr ms = do
 
 -- | check that import names don't clash with module names
 checkUniqueImportNames :: [Ident] -> SourceModInfo -> Err ()
-checkUniqueImportNames ns mo = case mo of
-  ModMod m -> test [n | OQualif _ n v <- opens m, n /= v]
-  _ -> return () --- Bad $ "bug: ModDeps does not treat" +++ show mo
+checkUniqueImportNames ns mo = test [n | OQualif n v <- opens mo, n /= v]
  where
-
-  test ms = testErr (all (`notElem` ns) ms)
-                    ("import names clashing with module names among" +++ 
-                       unwords (map prt ms))
+   test ms = testErr (all (`notElem` ns) ms)
+                     ("import names clashing with module names among" +++ unwords (map prt ms))
 
 type Dependencies = [(IdentM Ident,[IdentM Ident])]
 
 -- | to decide what modules immediately depend on what, and check if the
 -- dependencies are appropriate
-moduleDeps :: [(Ident,SourceModInfo)] -> Err Dependencies
+moduleDeps :: [SourceModule] -> Err Dependencies
 moduleDeps ms = mapM deps ms where
-  deps (c,mi) = errIn ("checking dependencies of module" +++ prt c) $ case mi of
-    ModMod m -> case mtype m of
+  deps (c,m) = errIn ("checking dependencies of module" +++ prt c) $ case mtype m of
       MTConcrete a -> do
         aty <- lookupModuleType gr a
         testErr (aty == MTAbstract) "the of-module is not an abstract syntax" 
@@ -98,7 +93,6 @@ moduleDeps ms = mapM deps ms where
     (MTInterface,  MTAbstract)   -> True
     (MTConcrete _, MTConcrete _) -> True
     (MTInstance _, MTInstance _) -> True
-    (MTReuse _, MTReuse _) -> True
     (MTInstance _, MTResource) -> True
     (MTResource, MTInstance _) -> True
     ---- some more?
@@ -109,7 +103,6 @@ moduleDeps ms = mapM deps ms where
     MTTransfer _ _ -> mt == MTAbstract
     _ -> case mt of
       MTResource -> True
-      MTReuse _ -> True
       MTInterface -> True
       MTInstance _ -> True
       _ -> False      
@@ -129,13 +122,13 @@ requiredCanModules :: (Ord i, Show i) => Bool -> MGrammar i a -> i -> [i]
 requiredCanModules isSingle gr c = nub $ filter notReuse ops ++ exts where
   exts = allExtends gr c
   ops  = if isSingle 
-         then map fst (modules gr) 
+         then map fst (modules gr)
          else iterFix (concatMap more) $ exts
   more i = errVal [] $ do
-    m <- lookupModMod gr i
+    m <- lookupModule gr i
     return $ extends m ++ [o | o <- map openedModule (opens m)]
   notReuse i = errVal True $ do
-    m <- lookupModMod gr i
+    m <- lookupModule gr i
     return $ isModRes m -- to exclude reused Cnc and Abs from required
 
 

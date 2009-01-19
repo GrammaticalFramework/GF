@@ -37,10 +37,10 @@ import Data.List
 
 -- | partial evaluation of concrete syntax. AR 6\/2001 -- 16\/5\/2003 -- 5\/2\/2005.
 -- only do this for resource: concrete is optimized in gfc form
-optimizeModule :: Options -> [(Ident,SourceModInfo)] -> (Ident,SourceModInfo) -> 
-                  Err (Ident,SourceModInfo)
+optimizeModule :: Options -> [(Ident,SourceModule)] -> (Ident,SourceModule) -> 
+                  Err (Ident,SourceModule)
 optimizeModule opts ms mo@(_,mi) = case mi of
-  ModMod m0@(Module mt st fs me ops js) | st == MSComplete && isModRes m0 -> do
+  m0@(Module mt st fs me ops js) | st == MSComplete && isModRes m0 -> do
       mo1 <- evalModule oopts ms mo
       return $ case optim of
         "parametrize" -> shareModule paramOpt mo1  -- parametrization and sharing
@@ -54,11 +54,10 @@ optimizeModule opts ms mo@(_,mi) = case mi of
    oopts = addOptions opts (iOpts (flagsModule mo))
    optim = maybe "all" id $ getOptVal oopts useOptimizer
 
-evalModule :: Options -> [(Ident,SourceModInfo)] -> (Ident,SourceModInfo) -> 
-               Err (Ident,SourceModInfo)
+evalModule :: Options -> [(Ident,SourceModule)] -> (Ident,SourceModule) -> Err (Ident,SourceModule)
 evalModule oopts ms mo@(name,mod) = case mod of
 
-  ModMod m0@(Module mt st fs me ops js) | st == MSComplete -> case mt of
+  m0@(Module mt st fs me ops js) | st == MSComplete -> case mt of
 {-
     -- now: don't optimize resource
 
@@ -72,7 +71,7 @@ evalModule oopts ms mo@(name,mod) = case mod of
 -----      
       js0 <- appEvalConcrete gr js
       js' <- mapMTree (evalCncInfo oopts gr name a) js0 ---- <- gr0 6/12/2005 
-      return $ (name, ModMod (Module mt st fs me ops js'))
+      return $ (name, Module mt st fs me ops js')
 
     _ -> return $ (name,mod)
   _ -> return $ (name,mod)
@@ -80,7 +79,7 @@ evalModule oopts ms mo@(name,mod) = case mod of
    gr0 = MGrammar $ ms
    gr  = MGrammar $ (name,mod) : ms
 
-   evalOp g@(MGrammar ((_, ModMod m) : _)) i = do
+   evalOp g@(MGrammar ((_, m) : _)) i = do
      info  <- lookupTree prt i $ jments m
      info' <- evalResInfo oopts gr (i,info)
      return $ updateRes g name i info'

@@ -70,14 +70,8 @@ transGrammar x = case x of
     moddefs' <- mapM transModDef moddefs
     GD.mkSourceGrammar moddefs'
 
-transModDef :: ModDef -> Err (Ident, G.SourceModInfo)
+transModDef :: ModDef -> Err G.SourceModule
 transModDef x = case x of
-
-  MMain id0 id concspecs  -> do
-    id0' <- transIdent id0
-    id'  <- transIdent id
-    concspecs' <- mapM transConcSpec concspecs
-    return $ (id0', GM.ModMainGrammar (GM.MainGrammar id' concspecs'))
 
   MModule compl mtyp body -> do
 
@@ -117,14 +111,7 @@ transModDef x = case x of
         defs'    <- U.buildAnyTree [(i,d) | Left  ds <- defs0, (i,_,d) <- ds]
         flags'   <- return $ concatOptions [o | Right o <- defs0]
         let poss1 = buildPosTree id' poss0
-        return (id',
-          GM.ModMod (GM.Module mtyp' mstat' flags' extends' opens' defs' poss1))
-       MReuse _ -> do
-        return (id', GM.ModMod (GM.Module mtyp' mstat' noOptions [] [] emptyBinTree poss))
-       MUnion imps -> do
-        imps' <- mapM transIncluded imps        
-        return (id', 
-          GM.ModMod (GM.Module (GM.MTUnion mtyp' imps') mstat' noOptions [] [] emptyBinTree poss))
+        return (id', GM.ModInfo mtyp' mstat' flags' extends' Nothing opens' defs' poss1)
 
        MWith m insts -> mkBody xx $ MWithEBody [] m insts NoOpens []
        MWithBody m insts opens defs -> mkBody xx $ MWithEBody [] m insts opens defs
@@ -139,21 +126,11 @@ transModDef x = case x of
         defs'    <- U.buildAnyTree [(i,d) | Left  ds <- defs0, (i,_,d) <- ds]
         flags'   <- return $ concatOptions [o | Right o <- defs0]
         let poss1 = buildPosTree id' poss0
-        return (id',
-          GM.ModWith (GM.Module mtyp' mstat' flags' extends' opens' defs' poss1) m' insts')
+        return (id', GM.ModInfo mtyp' mstat' flags' extends' (Just (fst m',snd m',insts')) opens' defs' poss1)
 
       mkModRes id mtyp body = do
          id' <- transIdent id
-         case body of
-           MReuse c -> do
-             c' <- transIdent c
-             mtyp' <- trMReuseType mtyp c'
-             return (transResDef, GM.MTReuse mtyp', id')
-           _ -> return (transResDef, mtyp, id')
-      trMReuseType mtyp c = case mtyp of
-         GM.MTInterface -> return $ GM.MRInterface c
-         GM.MTInstance op -> return $ GM.MRInstance c op
-         GM.MTResource -> return $ GM.MRResource c
+         return (transResDef, mtyp, id')
 
 
 transComplMod :: ComplMod -> GM.ModuleStatus
@@ -163,13 +140,6 @@ transComplMod x = case x of
 
 getTopDefs :: [TopDef] -> [TopDef]
 getTopDefs x = x
-
-transConcSpec :: ConcSpec -> Err (GM.MainConcreteSpec Ident)
-transConcSpec x = case x of
-  ConcSpec id concexp  -> do
-    id' <- transIdent id
-    (m,mi,mo) <- transConcExp concexp
-    return $ GM.MainConcreteSpec id' m mi mo
 
 transConcExp :: ConcExp -> 
        Err (Ident, Maybe (GM.OpenSpec Ident),Maybe (GM.OpenSpec Ident))
@@ -205,15 +175,9 @@ transOpens x = case x of
 
 transOpen :: Open -> Err (GM.OpenSpec Ident)
 transOpen x = case x of
-  OName id     -> liftM   (GM.OSimple GM.OQNormal) $ transIdent id
-  OQualQO q id -> liftM2  GM.OSimple (transQualOpen q) (transIdent id)
-  OQual q id m -> liftM3  GM.OQualif  (transQualOpen q) (transIdent id) (transIdent m)
-
-transQualOpen :: QualOpen -> Err GM.OpenQualif
-transQualOpen x = case x of
-  QOCompl  -> return GM.OQNormal
-  QOInterface  -> return GM.OQInterface
-  QOIncompl  -> return GM.OQIncomplete
+  OName id     -> liftM  GM.OSimple (transIdent id)
+  OQualQO q id -> liftM  GM.OSimple (transIdent id)
+  OQual q id m -> liftM2 GM.OQualif (transIdent id) (transIdent m)
 
 transIncluded :: Included -> Err (Ident,[Ident])
 transIncluded x = case x of
@@ -261,9 +225,6 @@ transAbsDef x = case x of
     returnl $ 
       [(c, nopos, G.AbsCat nope (yes ps)) | (c,ps) <- ds'] ++
       [(f, nopos, G.AbsFun nope (yes G.EData))  | (_,fs) <- ds', tf <- fs, f <- funs tf]
-  DefTrans defs  -> do
-    defs' <- liftM concat $ mapM getDefsGen defs
-    returnl [(c, nopos, G.AbsTrans f) | ((c,p),(_,Yes f)) <- defs']
   DefFlag defs -> liftM (Right . concatOptions) $ mapM transFlagDef defs
   _ -> Bad $ "illegal definition in abstract module:" ++++ printTree x
  where

@@ -78,7 +78,7 @@ pprintTree = compactPrint . P.printTree
 prGrammar :: SourceGrammar -> String
 prGrammar = pprintTree . trGrammar
 
-prModule :: (Ident, SourceModInfo) -> String
+prModule :: SourceModule -> String
 prModule  = pprintTree . trModule
 
 instance Print Term where
@@ -254,10 +254,10 @@ lookupIdent c t = case lookupTree prt c t of
   Ok v -> return v
   _ -> prtBad "unknown identifier" c
 
-lookupIdentInfo :: Module Ident a -> Ident -> Err a
+lookupIdentInfo :: ModInfo Ident a -> Ident -> Err a
 lookupIdentInfo mo i = lookupIdent i (jments mo)
 
-lookupIdentInfoIn :: Module Ident a -> Ident -> Ident -> Err a
+lookupIdentInfoIn :: ModInfo Ident a -> Ident -> Ident -> Err a
 lookupIdentInfoIn mo m i = 
   err (\s -> Bad (s +++ "in module" +++ prt m)) return $ lookupIdentInfo mo i
 

@@ -58,7 +58,7 @@ addParsers opts pgf = CM.mapConcretes conv pgf
 -- this assumes a grammar translated by canon2canon
 
 canon2gfcc :: Options -> (Ident -> Ident -> C.Term) -> SourceGrammar -> D.PGF
-canon2gfcc opts pars cgr@(M.MGrammar ((a,M.ModMod abm):cms)) = 
+canon2gfcc opts pars cgr@(M.MGrammar ((a,abm):cms)) = 
   (if dump opts DumpCanon then trace (prGrammar cgr) else id) $
      D.PGF an cns gflags abs cncs 
  where
@@ -82,7 +82,7 @@ canon2gfcc opts pars cgr@(M.MGrammar ((a,M.ModMod abm):cms)) =
   catfuns = Map.fromList 
     [(cat,[f | (f, (C.DTyp _ c _,_)) <- lfuns, c==cat]) | (cat,_) <- lcats]
 
-  cncs  = Map.fromList [mkConcr lang (i2i lang) mo | (lang,M.ModMod mo) <- cms]
+  cncs  = Map.fromList [mkConcr lang (i2i lang) mo | (lang,mo) <- cms]
   mkConcr lang0 lang mo = 
       (lang,D.Concr flags lins opers lincats lindefs printnames params fcfg)
     where
@@ -223,20 +223,18 @@ mkParamLincat sgr lang cat = errVal (C.R [C.S []]) $ do
 
 reorder :: Ident -> SourceGrammar -> SourceGrammar
 reorder abs cg = M.MGrammar $ 
-    (abs, M.ModMod $ 
-          M.Module M.MTAbstract M.MSComplete aflags [] [] adefs poss):
-      [(c, M.ModMod $ 
-          M.Module (M.MTConcrete abs) M.MSComplete fs [] [] (sorted2tree js) poss) 
+    (abs, M.ModInfo M.MTAbstract M.MSComplete aflags [] Nothing [] adefs poss):
+      [(c, M.ModInfo (M.MTConcrete abs) M.MSComplete fs [] Nothing [] (sorted2tree js) poss)
             | (c,(fs,js)) <- cncs] 
      where
        poss = emptyBinTree -- positions no longer needed
-       mos = M.allModMod cg
+       mos = M.modules cg
        adefs = sorted2tree $ sortIds $
                  predefADefs ++ Look.allOrigInfos cg abs
        predefADefs = 
          [(c, AbsCat (Yes []) Nope) | c <- [cFloat,cInt,cString]]
        aflags = 
-         concatOptions [M.flags mo | (_,mo) <- M.allModMod cg, M.isModAbs mo]
+         concatOptions [M.flags mo | (_,mo) <- M.modules cg, M.isModAbs mo]
 
        cncs = sortIds [(lang, concr lang) | lang <- M.allConcretes cg abs]
        concr la = (flags, 
@@ -257,7 +255,7 @@ reorder abs cg = M.MGrammar $
 repartition :: Ident -> SourceGrammar -> [SourceGrammar]
 repartition abs cg = 
   [M.partOfGrammar cg (lang,mo) | 
-    let mos = M.allModMod cg,
+    let mos = M.modules cg,
     lang <- case M.allConcretes cg abs of
       [] -> [abs]  -- to make pgf nonempty even when there are no concretes
       cncs -> cncs,
@@ -276,10 +274,8 @@ canon2canon opts abs cg0 =
     
   js2js ms = map (c2c (j2j (M.MGrammar ms))) ms
 
-  c2c f2 (c,m) = case m of
-      M.ModMod mo ->
-        (c, M.ModMod $ M.replaceJudgements mo $ mapTree f2 (M.jments mo))
-      _ -> (c,m)    
+  c2c f2 (c,mo) = (c, M.replaceJudgements mo $ mapTree f2 (M.jments mo))
+
   j2j cg (f,j) = 
     let debug = if verbAtLeast opts Verbose then trace ("+ " ++ prt f) else id in
     case j of
@@ -323,7 +319,7 @@ purgeGrammar abstr gr =
   needed = nub $ concatMap (requiredCanModules isSingle gr) acncs
   acncs = abstr : M.allConcretes gr abstr
   isSingle = True
-  complete (i,M.ModMod m) = M.isCompleteModule m --- not . isIncompleteCanon
+  complete (i,m) = M.isCompleteModule m --- not . isIncompleteCanon
   unopt = unshareModule gr -- subexp elim undone when compiled
 
 type ParamEnv =
@@ -373,7 +369,7 @@ paramValues cgr = (labels,untyps,typs) where
       updateSTM (ty:) >> mapM_ typsFromTrm [t | (_, t) <- cs] >> return tr
     _ -> GM.composOp typsFromTrm tr
 
-  mods = traceD (unwords (map (prt . fst) ms)) ms where ms = M.allModMod cgr
+  mods = traceD (unwords (map (prt . fst) ms)) ms where ms = M.modules cgr
 
   jments = 
     [(m,j) | (m,mo) <- mods, j <- tree2list $ M.jments mo]
@@ -555,8 +551,8 @@ requiredCanModules isSingle gr c = nub $ filter notReuse ops ++ exts where
          then map fst (M.modules gr) 
          else iterFix (concatMap more) $ exts
   more i = errVal [] $ do
-    m <- M.lookupModMod gr i
+    m <- M.lookupModule gr i
     return $ M.extends m ++ [o | o <- map M.openedModule (M.opens m)]
   notReuse i = errVal True $ do
-    m <- M.lookupModMod gr i
+    m <- M.lookupModule gr i
     return $ M.isModRes m -- to exclude reused Cnc and Abs from required

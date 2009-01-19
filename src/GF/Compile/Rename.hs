@@ -49,18 +49,16 @@ renameGrammar g = liftM (MGrammar . reverse) $ foldM renameModule [] (modules g)
 -- | this gives top-level access to renaming term input in the cc command
 renameSourceTerm :: SourceGrammar -> Ident -> Term -> Err Term
 renameSourceTerm g m t = do
-  mo     <- lookupErr m (modules g)
+  mo     <- lookupModule g m
   status <- buildStatus g m mo
   renameTerm status [] t
 
 renameModule :: [SourceModule] -> SourceModule -> Err [SourceModule]
-renameModule ms (name,mod) = errIn ("renaming module" +++ prt name) $ case mod of
-  ModMod mo -> do
-    let js1 = jments mo
-    status <- buildStatus (MGrammar ms) name mod
-    js2    <- mapsErrTree (renameInfo mo status) js1
-    let mod2 = ModMod $ mo {opens = map forceQualif (opens mo), jments = js2}
-    return $ (name,mod2) : ms
+renameModule ms (name,mo) = errIn ("renaming module" +++ prt name) $ do
+  let js1 = jments mo
+  status <- buildStatus (MGrammar ms) name mo
+  js2    <- mapsErrTree (renameInfo mo status) js1
+  return $ (name, mo {opens = map forceQualif (opens mo), jments = js2}) : ms
 
 type Status = (StatusTree, [(OpenSpec Ident, StatusTree)])
 
@@ -86,9 +84,9 @@ renameIdentTerm env@(act,imps) t =
     return $ f c
   _ -> return t
  where
-   opens  = [st  | (OSimple _ _,st) <- imps]
-   qualifs = [(m, st) | (OQualif _ m _, st) <- imps] ++ 
-             [(m, st) | (OSimple _ m, st) <- imps] -- qualif is always possible
+   opens  = [st  | (OSimple _,st) <- imps]
+   qualifs = [(m, st) | (OQualif m _, st) <- imps] ++ 
+             [(m, st) | (OSimple m, st) <- imps] -- qualif is always possible
 
    -- this facility is mainly for BWC with GF1: you need not import PredefAbs
    predefAbs c s
@@ -126,47 +124,38 @@ info2status mq (c,i) = case i of
 
 tree2status :: OpenSpec Ident -> BinTree Ident Info -> BinTree Ident StatusInfo
 tree2status o = case o of
-  OSimple _ i   -> mapTree (info2status (Just i))
-  OQualif _ i j -> mapTree (info2status (Just j))
+  OSimple i   -> mapTree (info2status (Just i))
+  OQualif i j -> mapTree (info2status (Just j))
 
 buildStatus :: SourceGrammar -> Ident -> SourceModInfo -> Err Status
-buildStatus gr c mo = let mo' = self2status c mo in case mo of
-  ModMod m -> do
-    let gr1 = MGrammar $ (c,mo) : modules gr 
-        ops = [OSimple OQNormal e | e <- allExtends gr1 c] ++ allOpens m
+buildStatus gr c mo = let mo' = self2status c mo in do
+    let gr1 = MGrammar ((c,mo) : modules gr)
+        ops = [OSimple e | e <- allExtends gr1 c] ++ allOpens mo
     mods <- mapM (lookupModule gr1 . openedModule) ops
     let sts = map modInfo2status $ zip ops mods    
-    return $ if isModCnc m
+    return $ if isModCnc mo
       then (emptyBinTree, reverse sts) -- the module itself does not define any names
       else (mo',reverse sts) -- so the empty ident is not needed
 
 modInfo2status :: (OpenSpec Ident,SourceModInfo) -> (OpenSpec Ident, StatusTree)
-modInfo2status (o,i) = (o,case i of
-  ModMod m -> tree2status o (jments m)
-  )
+modInfo2status (o,mo) = (o,tree2status o (jments mo))
 
 self2status :: Ident -> SourceModInfo -> StatusTree
-self2status c i = mapTree (info2status (Just c)) js where   -- qualify internal
-  js = case i of
-    ModMod m 
-      | isModTrans m -> sorted2tree $ filter noTrans $ tree2list $ jments m 
-      | otherwise -> jments m
-  noTrans (_,d) = case d of  -- to enable other than transfer js in transfer module 
-    AbsTrans _ -> False
-    _ -> True
+self2status c m = mapTree (info2status (Just c)) js where   -- qualify internal
+  js | isModTrans m = sorted2tree $ tree2list $ jments m 
+     | otherwise    = jments m
 
 forceQualif o = case o of
-  OSimple q i   -> OQualif q i i
-  OQualif q _ i -> OQualif q i i
+  OSimple i   -> OQualif i i
+  OQualif _ i -> OQualif i i
   
-renameInfo :: Module Ident Info -> Status -> (Ident,Info) -> Err (Ident,Info)
+renameInfo :: SourceModInfo -> Status -> (Ident,Info) -> Err (Ident,Info)
 renameInfo mo status (i,info) = errIn 
     ("renaming definition of" +++ prt i +++ showPosition mo i) $ 
                                 liftM ((,) i) $ case info of
   AbsCat pco pfs -> liftM2 AbsCat (renPerh (renameContext status) pco)
                                   (renPerh (mapM rent) pfs)
   AbsFun pty ptr -> liftM2 AbsFun (ren pty) (ren ptr)
-  AbsTrans f -> liftM AbsTrans (rent f)
 
   ResOper pty ptr -> liftM2 ResOper (ren pty) (ren ptr)
   ResOverload os tysts -> 
