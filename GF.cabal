@@ -661,6 +661,7 @@ executable gf
     GF.Grammar.AppPredefined 
     GF.Grammar.PatternMatch
     GF.Grammar.Printer
+    GF.Grammar.Binary
     GF.Infra.CheckM
     GF.Compile.TC
     GF.Compile.TypeCheck
