@@ -91,7 +91,11 @@ ppJudgement (id, ResOper  ptype pexp) =
   text "oper" <+> ppIdent id <+>
   (case ptype of {Yes t -> colon  <+> ppTerm 0 t; _ -> empty} $$
    case pexp  of {Yes e -> equals <+> ppTerm 0 e; _ -> empty}) <+> semi
-ppJudgement (id, ResOverload ids pdefs) = text "oper over" <+> ppIdent id
+ppJudgement (id, ResOverload ids defs) =
+  text "oper" <+> ppIdent id <+> equals <+> 
+  (text "overload" <+> lbrace $$
+   nest 2 (vcat [ppIdent id <+> (colon <+> ppTerm 0 ty $$ equals <+> ppTerm 0 e) | (ty,e) <- defs]) $$
+   rbrace) <+> semi
 ppJudgement (id, CncCat  ptype pexp pprn) =
   (case ptype of
      Yes typ -> text "lincat" <+> ppIdent id <+> equals <+> ppTerm 0 typ <+> semi
@@ -115,9 +119,13 @@ ppJudgement (id, AnyInd cann mid) = text "ind" <+> ppIdent id <+> equals <+> (if
 ppTerm d (Abs v e)   = let (vs,e') = getAbs e
                        in prec d 0 (char '\\' <> commaPunct ppIdent (v:vs) <+> text "->" <+> ppTerm 0 e')
 ppTerm d (T TRaw xs) = case getCTable (T TRaw xs) of
-                         ([],_) -> text "table" <+> lbrace <> fsep (map (\x -> ppCase x <> semi) xs) <> rbrace
+                         ([],_) -> text "table" <+> lbrace $$
+			           nest 2 (vcat (punctuate semi (map ppCase xs))) $$
+			           rbrace
                          (vs,e) -> prec d 0 (text "\\\\" <> commaPunct ppIdent vs <+> text "=>" <+> ppTerm 0 e)
-ppTerm d (T (TTyped t) xs) = text "table" <+> ppTerm 0 t <+> lbrace <> fsep (map (\x -> ppCase x <> semi) xs) <> rbrace
+ppTerm d (T (TTyped t) xs) = text "table" <+> ppTerm 0 t <+> lbrace $$
+			           nest 2 (vcat (punctuate semi (map ppCase xs))) $$
+			           rbrace
 ppTerm d (Prod x a b)= if x == identW
                          then prec d 0 (ppTerm 4 a <+> text "->" <+> ppTerm 0 b)
                          else prec d 0 (parens (ppIdent x <+> colon <+> ppTerm 0 a) <+> text "->" <+> ppTerm 0 b)
@@ -135,12 +143,14 @@ ppTerm d (S x y)     = case x of
 			                         TTyped t -> Typed y t
 			                         TRaw     -> y
 			               in text "case" <+> ppTerm 0 e <+> text "of" <+> lbrace $$
-			                  nest 2 (fsep (punctuate semi (map ppCase xs))) $$
+			                  nest 2 (vcat (punctuate semi (map ppCase xs))) $$
 			                  rbrace
 			 _          -> prec d 3 (ppTerm 3 x <+> text "!" <+> ppTerm 4 y)
 ppTerm d (ExtR x y)  = prec d 3 (ppTerm 3 x <+> text "**" <+> ppTerm 4 y)
 ppTerm d (App x y)   = prec d 4 (ppTerm 4 x <+> ppTerm 5 y)
-ppTerm d (V e es)    = text "table" <+> ppTerm 6 e <+> brackets (fsep (punctuate semi (map (ppTerm 0) es)))
+ppTerm d (V e es)    = text "table" <+> ppTerm 6 e <+> lbrace $$
+                       nest 2 (fsep (punctuate semi (map (ppTerm 0) es))) $$
+                       rbrace
 ppTerm d (FV es)     = text "variants" <+> braces (fsep (punctuate semi (map (ppTerm 0) es)))
 ppTerm d (Alts (e,xs))=text "pre" <+> braces (ppTerm 0 e <> semi <+> fsep (punctuate semi (map ppAltern xs)))
 ppTerm d (Strs es)   = text "strs" <+> braces (fsep (punctuate semi (map (ppTerm 0) es)))
