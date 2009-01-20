@@ -656,15 +656,16 @@ executable gf
     GF.Grammar.MMacros
     GF.Grammar.Abstract
     GF.Grammar.Lookup
-    GF.Compile.RemoveLiT
     GF.Grammar.LookAbs
-    GF.Compile.TC
     GF.Grammar.Unify
-    GF.Compile.TypeCheck
-    GF.Compile.Update
-    GF.Infra.CheckM
     GF.Grammar.AppPredefined 
     GF.Grammar.PatternMatch
+    GF.Grammar.Printer
+    GF.Infra.CheckM
+    GF.Compile.TC
+    GF.Compile.TypeCheck
+    GF.Compile.Update
+    GF.Compile.RemoveLiT
     GF.Compile.CheckGrammar
     GF.Compile.Refresh
     GF.Compile.BackOpt
