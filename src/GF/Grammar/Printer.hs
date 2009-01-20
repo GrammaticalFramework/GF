@@ -16,6 +16,7 @@ module GF.Grammar.Printer
 
 import GF.Infra.Ident
 import GF.Infra.Modules
+import GF.Infra.Option
 import GF.Grammar.Grammar
 import GF.Data.Operations
 import Text.PrettyPrint
@@ -28,7 +29,7 @@ ppModule (mn, ModInfo mtype mstat opts exts with opens jments _) =
     (let defs = tree2list jments
      in if null defs
           then hdr
-          else hdr <+> lbrace $$ nest 2 (vcat (map ppJudgement defs)) $$ rbrace)
+          else hdr <+> lbrace $$ nest 2 (ppOptions opts $$ vcat (map ppJudgement defs)) $$ rbrace)
     where
       hdr = complModDoc <+> modTypeDoc <+> equals <+> 
             hsep (intersperse (text "**") $
@@ -58,6 +59,10 @@ ppModule (mn, ModInfo mtype mstat opts exts with opens jments _) =
       ppExtends (id,MIExcept incs) = ppIdent id <+> char '-' <+> brackets (commaPunct ppIdent incs)
       
       ppWith (id,ext,opens) = ppExtends (id,ext) <+> text "with" <+> commaPunct ppOpenSpec opens
+
+ppOptions opts = 
+  text "flags" $$
+  nest 2 (vcat [text option <+> equals <+> text (show value) <+> semi | (option,value) <- optionsGFO opts])
 
 ppJudgement (id, AbsCat pcont pconstrs) =
   text "cat" <+> ppIdent id <+>
