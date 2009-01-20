@@ -43,9 +43,6 @@ module GF.Grammar.Grammar (SourceGrammar,
 		Param,
 		Altern,
 		Substitution,
-		Branch(..),
-		Con,
-		Trm,
 		wildPatt,
 		varLabel, tupleLabel, linLabel, theLinLabel,
 		ident2label, label2ident
@@ -233,10 +230,6 @@ type Altern = (Term, [(Term, Term)])
 
 type Substitution =  [(Ident, Term)]
 
--- | branches à la Alfa
-newtype Branch = Branch (Con,([Ident],Term)) deriving (Eq, Ord,Show,Read)
-type Con = Ident ---
-
 varLabel :: Int -> Label
 varLabel = LVar
 
@@ -256,5 +249,3 @@ label2ident (LVar i)   = identC (BS.pack ('$':show i))
 
 wildPatt :: Patt
 wildPatt = PV identW
-
-type Trm = Term

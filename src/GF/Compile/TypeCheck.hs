@@ -106,7 +106,7 @@ checkContext st = checkTyp st . cont2exp
 checkTyp :: Grammar -> Type -> [String]
 checkTyp gr typ = err singleton prConstrs $ justTypeCheck gr typ vType
 
-checkEquation :: Grammar -> Fun -> Trm -> [String]
+checkEquation :: Grammar -> Fun -> Term -> [String]
 checkEquation gr (m,fun) def = err singleton id $ do
   typ  <- lookupFunType gr m fun
   cs   <- justTypeCheck gr def (vClos typ)

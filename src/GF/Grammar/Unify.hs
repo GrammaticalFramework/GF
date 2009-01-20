@@ -38,8 +38,8 @@ unifyVal cs0 = do
      (_,VClos (_:_) _) -> True
      _ -> False
 
-type Unifier = [(MetaSymb, Trm)]
-type Constrs = [(Trm, Trm)]
+type Unifier = [(MetaSymb, Term)]
+type Constrs = [(Term, Term)]
 
 unifyAll :: Constrs -> Unifier -> (Unifier,Constrs)
 unifyAll [] g = (g, [])
@@ -49,7 +49,7 @@ unifyAll ((a@(s, t)) : l) g =
        Ok g2  -> (g2, c)
        _      -> (g1, a : c)
 
-unify :: Trm -> Trm -> Unifier -> Err Unifier
+unify :: Term -> Term -> Unifier -> Err Unifier
 unify e1 e2 g = 
  case (e1, e2) of 
   (Meta s, t) -> do
@@ -67,12 +67,12 @@ unify e1 e2 g =
                                      _       -> prtBad "fail unify" e1
   _                             -> prtBad "fail unify" e1
 
-extend :: Unifier -> MetaSymb -> Trm -> Err Unifier
+extend :: Unifier -> MetaSymb -> Term -> Err Unifier
 extend g s t | (t == Meta s) = return g  
              | occCheck s t  = prtBad "occurs check" t
              | True          = return ((s, t) : g) 
 
-subst_all :: Unifier -> Trm -> Err Trm
+subst_all :: Unifier -> Term -> Err Term
 subst_all s u =
  case (s,u) of
   ([], t)  -> return t
@@ -80,14 +80,14 @@ subst_all s u =
      t' <- (subst_all l t) --- successive substs - why ?
      return $ substMetas [a] t'
 
-substMetas :: [(MetaSymb,Trm)] -> Trm -> Trm
+substMetas :: [(MetaSymb,Term)] -> Term -> Term
 substMetas subst trm = case trm of
    Meta x -> case lookup x subst of
      Just t -> t
      _ -> trm
    _ -> composSafeOp (substMetas subst) trm
 
-occCheck :: MetaSymb -> Trm -> Bool
+occCheck :: MetaSymb -> Term -> Bool
 occCheck s u = case u of
     Meta v  -> s == v
     App c a -> occCheck s c || occCheck s a
