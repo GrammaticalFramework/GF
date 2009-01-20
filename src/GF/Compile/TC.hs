@@ -164,7 +164,7 @@ inferExp th tenv@(k,rho,gamma) e = case e of
       _ -> prtBad ("Prod expected for function" +++ prt f +++ "instead of") typ
    _ -> prtBad "cannot infer type of expression" e
 
-checkEqs :: Theory -> TCEnv -> (Fun,Trm) -> Val -> Err [(Val,Val)]
+checkEqs :: Theory -> TCEnv -> (Fun,Term) -> Val -> Err [(Val,Val)]
 checkEqs th tenv@(k,rho,gamma) (fun@(m,f),def) val = case def of
   Eqs es -> liftM concat $ mapM checkBranch es
   _      -> liftM snd $ checkExp th tenv def val

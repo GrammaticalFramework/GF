@@ -405,7 +405,7 @@ freshMeta :: [MetaSymb] -> MetaSymb
 freshMeta ms = MetaSymb (minimum [n | n <- [0..length ms], 
                                       notElem n (map metaSymbInt ms)])
 
-mkFreshMetasInTrm :: [MetaSymb] -> Trm -> Trm
+mkFreshMetasInTrm :: [MetaSymb] -> Term -> Term
 mkFreshMetasInTrm metas = fst . rms minMeta where
   rms meta trm = case trm of
     Meta m  -> (Meta (MetaSymb meta), meta + 1)
