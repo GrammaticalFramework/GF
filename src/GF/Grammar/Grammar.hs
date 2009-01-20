@@ -81,7 +81,7 @@ type PValues = [Term]
 --   - concrete syntax (/CNC/)
 --
 -- and indirection to module (/INDIR/)
-data Info =                  
+data Info =
 -- judgements in abstract syntax
    AbsCat   (Perh Context) (Perh [Term])   -- ^ (/ABS/) constructors; must be 'Id' or 'QId'
  | AbsFun   (Perh Type) (Perh Term)        -- ^ (/ABS/) 'Yes f' = canonical
