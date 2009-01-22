@@ -26,7 +26,7 @@ mainGFC opts fs =
       _ | all (extensionIs ".cf")  fs -> compileCFFiles opts fs
       _ | all (\f -> extensionIs ".gf" f || extensionIs ".gfo" f)  fs -> compileSourceFiles opts fs
       _ | all (extensionIs ".pgf") fs -> unionPGFFiles opts fs
-      _ -> fail $ "Don't know what to do with these input files: " ++ show fs
+      _ -> fail $ "Don't know what to do with these input files: " ++ unwords fs
  where extensionIs ext = (== ext) .  takeExtension
 
 compileSourceFiles :: Options -> [FilePath] -> IOE ()
