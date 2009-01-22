@@ -416,7 +416,15 @@ getPtr n = do
 
 -- | Read a Word8 from the monad state
 getWord8 :: Get Word8
-getWord8 = getPtr (sizeOf (undefined :: Word8))
+getWord8 = do
+    S s ss bytes <- get
+    case B.uncons s of
+      Just (w,rest) -> do put $! S rest ss (bytes + 1)
+                          return $! w
+      Nothing       -> case L.uncons ss of
+                         Just (w,rest) -> do put $! mkState rest (bytes + 1)
+                                             return $! w
+                         Nothing       -> fail "too few bytes"
 {-# INLINE getWord8 #-}
 
 -- | Read a Word16 in big endian format
