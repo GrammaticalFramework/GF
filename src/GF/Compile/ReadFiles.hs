@@ -25,10 +25,15 @@ module GF.Compile.ReadFiles
 
 import GF.Infra.UseIO
 import GF.Infra.Option
+import GF.Infra.Ident
+import GF.Infra.Modules
 import GF.Data.Operations
-import GF.Source.AbsGF hiding (FileName)
+import qualified GF.Source.AbsGF as S
 import GF.Source.LexGF
 import GF.Source.ParGF
+import GF.Source.SourceToGrammar(transModDef)
+import GF.Grammar.Grammar
+import GF.Grammar.Binary
 
 import Control.Monad
 import Data.Char
@@ -100,32 +105,32 @@ getAllFiles opts ps env file = do
       let mb_envmod = Map.lookup name env
           (st,t) = selectFormat opts (fmap fst mb_envmod) gfTime gfoTime
 
-      imps <- if st == CSEnv
-                then return (maybe [] snd mb_envmod)
-                else do s <- ioeIO $ BS.readFile file
-                        (mname,imps) <- ioeErr ((liftM (importsOfModule . modHeaderToModDef) . pModHeader . myLexer) s)
-                        ioeErr $ testErr  (mname == name)
-                                          ("module name" +++ mname +++ "differs from file name" +++ name)
-                        return imps
-
+      (mname,imps) <- case st of
+                        CSEnv  -> return (name, maybe [] snd mb_envmod)
+                        CSRead -> ioeIO $ fmap importsOfModule (decodeModHeader (replaceExtension file "gfo"))
+                        CSComp -> do s <- ioeIO $ BS.readFile file
+                                     ioeErr ((liftM (importsOfModule . modHeaderToModDef) . pModHeader . myLexer) s)
+      ioeErr $ testErr (mname == name)
+                       ("module name" +++ mname +++ "differs from file name" +++ name)
       return (name,st,t,imps,dropFileName file)
 
 -- FIXME: this is pretty ugly, it's just to get around the difference
 -- between ModHeader as returned when parsing just the module header 
 -- when looking for imports, and ModDef, which includes the whole module.
-modHeaderToModDef :: ModHeader -> ModDef
-modHeaderToModDef (MModule2 x y z) = MModule x y (modHeaderBodyToModBody z)
+modHeaderToModDef :: S.ModHeader -> SourceModule
+modHeaderToModDef (S.MModule2 x y z) = 
+  errVal (error "error in modHeaderToModDef") $ transModDef $ S.MModule x y (modHeaderBodyToModBody z)
   where
-    modHeaderBodyToModBody :: ModHeaderBody -> ModBody
+    modHeaderBodyToModBody :: S.ModHeaderBody -> S.ModBody
     modHeaderBodyToModBody b = case b of
-                                 MBody2 x y -> MBody x y []
-                                 MNoBody2 x -> MNoBody x
-                                 MWith2 x y -> MWith x y
-                                 MWithBody2 x y z -> MWithBody x y z []
-                                 MWithE2 x y z -> MWithE x y z
-                                 MWithEBody2 x y z w -> MWithEBody x y z w []
-                                 MReuse2 x -> MReuse x
-                                 MUnion2 x -> MUnion x
+                                 S.MBody2 x y -> S.MBody x y []
+                                 S.MNoBody2 x -> S.MNoBody x
+                                 S.MWith2 x y -> S.MWith x y
+                                 S.MWithBody2 x y z -> S.MWithBody x y z []
+                                 S.MWithE2 x y z -> S.MWithE x y z
+                                 S.MWithEBody2 x y z w -> S.MWithEBody x y z w []
+                                 S.MReuse2 x -> S.MReuse x
+                                 S.MUnion2 x -> S.MUnion x
 
 isGFO :: FilePath -> Bool
 isGFO = (== ".gfo") . takeExtensions
@@ -167,42 +172,35 @@ data CompStatus =
 
 type ModuleInfo = (ModName,CompStatus,Maybe ClockTime,[ModName],InitPath)
 
- 
-importsOfModule :: ModDef -> (ModName,[ModName])
-importsOfModule (MModule _ typ body) = modType typ (modBody body [])
+importsOfModule :: SourceModule -> (ModName,[ModName])
+importsOfModule (m,mi) = (modName m,depModInfo mi [])
   where
-    modType (MTAbstract  m)      xs = (modName m,xs)
-    modType (MTResource m)       xs = (modName m,xs)
-    modType (MTInterface m)      xs = (modName m,xs)
-    modType (MTConcrete m m2)    xs = (modName m,modName m2:xs)
-    modType (MTInstance m m2)    xs = (modName m,modName m2:xs)
-    modType (MTTransfer m o1 o2) xs = (modName m,open o1 (open o2 xs))
+    depModInfo mi =
+      depModType (mtype mi)  .
+      depExtends (extend mi) .
+      depWith    (mwith mi)  .
+      depOpens   (opens mi)
 
-    modBody (MBody e o _)            xs = extend e (opens o xs)
-    modBody (MNoBody is)             xs = foldr include xs is
-    modBody (MWith i os)             xs = include i (foldr open xs os)
-    modBody (MWithBody i os o _)     xs = include i (foldr open (opens o xs) os)
-    modBody (MWithE is i os)         xs = foldr include (include i (foldr open xs os)) is
-    modBody (MWithEBody is i os o _) xs = foldr include (include i (foldr open (opens o xs) os)) is
-    modBody (MReuse m)               xs = modName m:xs
-    modBody (MUnion is)              xs = foldr include xs is
+    depModType (MTAbstract)       xs = xs
+    depModType (MTResource)       xs = xs
+    depModType (MTInterface)      xs = xs
+    depModType (MTConcrete m2)    xs = modName m2:xs
+    depModType (MTInstance m2)    xs = modName m2:xs
+    depModType (MTTransfer o1 o2) xs = depOpen o1 (depOpen o2 xs)
 
-    include (IAll   m)   xs = modName m:xs
-    include (ISome  m _) xs = modName m:xs
-    include (IMinus m _) xs = modName m:xs
+    depExtends es xs = foldr depInclude xs es
 
-    open (OName n)     xs = modName n:xs
-    open (OQualQO _ n) xs = modName n:xs
-    open (OQual _ _ n) xs = modName n:xs
+    depWith (Just (m,_,os)) xs = modName m : depOpens os xs
+    depWith Nothing         xs = xs
 
-    extend NoExt    xs = xs
-    extend (Ext is) xs = foldr include xs is
+    depOpens os xs = foldr depOpen xs os
 
-    opens NoOpens     xs = xs
-    opens (OpenIn os) xs = foldr open xs os
+    depInclude (m,_) xs = modName m:xs
 
-    modName (PIdent (_,s)) = BS.unpack s
+    depOpen (OSimple n  ) xs = modName n:xs
+    depOpen (OQualif _ n) xs = modName n:xs
 
+    modName = prIdent
 
 -- | options can be passed to the compiler by comments in @--#@, in the main file
 getOptionsFromFile :: FilePath -> IOE Options

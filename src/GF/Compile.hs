@@ -20,6 +20,7 @@ import GF.Text.UTF8 ----
 import GF.Grammar.Grammar
 import GF.Grammar.Lookup
 import GF.Grammar.PrGrammar
+import GF.Grammar.Binary
 
 import GF.Infra.Ident
 import GF.Infra.Option
@@ -39,6 +40,7 @@ import qualified Data.Map as Map
 import qualified Data.Set as Set
 import Data.List(nub)
 import Data.Maybe (isNothing)
+import Data.Binary
 
 import PGF.Check
 import PGF.CId
@@ -147,8 +149,7 @@ compileOne opts env@(_,srcgr,_) file = do
     -- for compiled gf, read the file and update environment
     -- also undo common subexp optimization, to enable normal computations
     ".gfo" -> do
-       sm00 <- putPointE Normal opts ("+ reading" +++ file) $ getSourceModule opts file
-       let sm0 = codeSourceModule decodeUTF8 sm00 -- always UTF8 in gfo
+       sm0 <- putPointE Normal opts ("+ reading" +++ file) $ ioeIO (decodeFile file)
        let sm1 = unsubexpModule sm0
        sm <- {- putPointE Normal opts "creating indirections" $ -} ioeErr $ extendModule mos sm1
        
@@ -213,8 +214,10 @@ compileSourceModule opts env@(k,gr,_) mo@(i,mi) = do
 generateModuleCode :: Options -> FilePath -> SourceModule -> IOE SourceModule
 generateModuleCode opts file minfo = do
   let minfo1 = subexpModule minfo
-      out    = codeStringLiterals encodeUTF8 $ prGrammar (MGrammar [minfo1])
-  putPointE Normal opts ("  wrote file" +++ file) $ ioeIO $ writeFile file $ out
+      minfo2 = case minfo1 of
+                 (m,mi) -> (m,mi{jments=Map.filter (\x -> case x of {AnyInd _ _ -> False; _ -> True}) (jments mi)
+                                , positions=Map.empty})
+  putPointE Normal opts ("  wrote file" +++ file) $ ioeIO $ encodeFile file minfo2
   return minfo1
 
 -- auxiliaries
@@ -225,7 +228,7 @@ emptyCompileEnv :: CompileEnv
 emptyCompileEnv = (0,emptyMGrammar,Map.empty)
 
 extendCompileEnvInt (_,MGrammar ss,menv) k mfile sm = do
-  let (mod,imps) = importsOfModule (trModule sm)
+  let (mod,imps) = importsOfModule sm
   menv2 <- case mfile of
     Just file -> do
       t <- ioeIO $ getModificationTime file
