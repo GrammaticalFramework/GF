@@ -35,7 +35,6 @@ import GF.Data.Operations
 import Control.Monad
 import System.Directory
 import System.FilePath
-import System.Time
 import qualified Data.Map as Map
 import qualified Data.Set as Set
 import Data.List(nub)
