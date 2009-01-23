@@ -284,7 +284,7 @@ optDescr =
      Option ['E'] [] (NoArg (phase Preproc)) "Stop after preprocessing (with --preproc).",
      Option ['C'] [] (NoArg (phase Convert)) "Stop after conversion to .gf.",
      Option ['c'] [] (NoArg (phase Compile)) "Stop after compiling to .gfo (default) .",
-     Option [] ["make"] (NoArg (phase Link)) "Build .pgf file and other output files.",
+     Option [] ["make"] (NoArg (liftM2 addOptions (mode ModeCompiler) (phase Link))) "Build .pgf file and other output files and exit.",
      Option [] ["cpu"] (NoArg (cpu True)) "Show compilation CPU time statistics.",
      Option [] ["no-cpu"] (NoArg (cpu False)) "Don't show compilation CPU time statistics (default).",
      Option [] ["emit-gfo"] (NoArg (emitGFO True)) "Create .gfo files (default).",
