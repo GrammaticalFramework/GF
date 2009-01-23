@@ -31,7 +31,6 @@ import GF.Grammar.Predef
 import GF.Infra.Ident
 import GF.Source.AbsGF
 import GF.Source.PrintGF
-import GF.Compile.RemoveLiT --- for bw compat
 import GF.Data.Operations
 import GF.Infra.Option
 
@@ -494,7 +493,6 @@ transExp x = case x of
   EPatt patt -> liftM G.EPatt (transPatt patt)
 
   ELString (LString str) -> return $ G.K (BS.unpack str)  -- use the grammar encoding here
-  ELin id -> liftM G.LiT $ transIdent id
 
   EEqs eqs -> liftM G.Eqs $ mapM transEquation eqs
 
@@ -656,8 +654,7 @@ transOldGrammar :: Options -> FilePath -> OldGrammar -> Err G.SourceGrammar
 transOldGrammar opts name0 x = case x of
   OldGr includes topdefs  -> do --- includes must be collected separately
     let moddefs = sortTopDefs topdefs
-    g1 <- transGrammar $ Gr moddefs
-    removeLiT g1 --- needed for bw compatibility with an obsolete feature
+    transGrammar $ Gr moddefs
  where
    sortTopDefs ds = [mkAbs a, mkCnc ops (c ++ r)]
      where 

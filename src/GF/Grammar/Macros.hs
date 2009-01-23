@@ -136,28 +136,6 @@ contextOfType typ = case typ of
   Prod x a b -> liftM ((x,a):) $ contextOfType b
   _ -> return [] 
 
-unComputed :: Term -> Term
-unComputed t = case t of
-  Computed v -> unComputed v
-  _ -> t --- composSafeOp unComputed t
-
-
-{- 
---- defined (better) in compile/PrOld
-
-stripTerm :: Term -> Term
-stripTerm t = case t of
-  Q _ c  -> Cn c
-  QC _ c -> Cn c
-  T ti psts -> T ti [(stripPatt p, stripTerm v) | (p,v) <- psts]
-  _ -> composSafeOp stripTerm t
- where
-   stripPatt p = errVal p $ term2patt $ stripTerm $ patt2term p
--}
-
-computed :: Term -> Term
-computed = Computed
-
 termForm :: Term -> Err ([(Ident)], Term, [Term])
 termForm t = case t of
    Abs x b  ->
@@ -322,7 +300,7 @@ mkFunType :: [Type] -> Type -> Type
 mkFunType tt t = mkProd ([(identW, ty) | ty <- tt], t, []) -- nondep prod
 
 plusRecType :: Type -> Type -> Err Type
-plusRecType t1 t2 = case (unComputed t1, unComputed t2) of
+plusRecType t1 t2 = case (t1, t2) of
   (RecType r1, RecType r2) -> case
     filter (`elem` (map fst r1)) (map fst r2) of
       [] -> return (RecType (r1 ++ r2))
@@ -520,13 +498,13 @@ redirectTerm n t = case t of
 
 -- | to gather ultimate cases in a table; preserves pattern list
 allCaseValues :: Term -> [([Patt],Term)]
-allCaseValues trm = case unComputed trm of
+allCaseValues trm = case trm of
   T _ cs -> [(p:ps, t) | (p,t0) <- cs, (ps,t) <- allCaseValues t0]
   _      -> [([],trm)]
 
 -- | to get a string from a term that represents a sequence of terminals
 strsFromTerm :: Term -> Err [Str]
-strsFromTerm t = case unComputed t of
+strsFromTerm t = case t of
   K s   -> return [str s]
   Empty -> return [str []]
   C s t -> do
@@ -549,7 +527,6 @@ strsFromTerm t = case unComputed t of
            ]
   FV ts -> mapM strsFromTerm ts >>= return . concat
   Strs ts -> mapM strsFromTerm ts >>= return . concat  
-  Ready ss -> return [ss]
   Alias _ _ d -> strsFromTerm d --- should not be needed...
   _ -> prtBad "cannot get Str from term" t
 
@@ -696,7 +673,7 @@ collectOp co trm = case trm of
   Alts (t,aa) -> let (x,y) = unzip aa in co t ++ concatMap co (x ++ y)
   FV ts      -> concatMap co ts
   Strs tt    -> concatMap co tt
-  _ -> [] -- covers K, Vr, Cn, Sort, Ready
+  _ -> [] -- covers K, Vr, Cn, Sort
 
 -- | to find the word items in a term
 wordsInTerm :: Term -> [String]
@@ -704,7 +681,6 @@ wordsInTerm trm = filter (not . null) $ case trm of
    K s     -> [s]
    S c _   -> wo c
    Alts (t,aa) -> wo t ++ concatMap (wo . fst) aa
-   Ready s -> allItems s
    _       -> collectOp wo trm
  where wo = wordsInTerm
 
