@@ -10,6 +10,7 @@
 module GF.Grammar.Binary where
 
 import Data.Binary
+import qualified Data.Map as Map
 import qualified Data.ByteString.Char8 as BS
 
 import GF.Data.Operations
@@ -260,3 +261,8 @@ instance Binary Label where
 instance Binary MetaSymb where
   put (MetaSymb m) = put m
   get = fmap MetaSymb get
+
+decodeModHeader :: FilePath -> IO SourceModule
+decodeModHeader fpath = do
+  (m,mtype,mstatus,flags,extend,mwith,opens) <- decodeFile fpath
+  return (m,ModInfo mtype mstatus flags extend mwith opens Map.empty Map.empty)
