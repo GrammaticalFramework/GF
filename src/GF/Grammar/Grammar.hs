@@ -48,7 +48,6 @@ module GF.Grammar.Grammar (SourceGrammar,
 		ident2label, label2ident
 	       ) where
 
-import GF.Data.Str
 import GF.Infra.Ident
 import GF.Infra.Option ---
 import GF.Infra.Modules
@@ -164,11 +163,6 @@ data Term =
 
  | Alts (Term, [(Term, Term)]) -- ^ alternatives by prefix: @pre {t ; s\/c ; ...}@
  | Strs [Term]                 -- ^ conditioning prefix strings: @strs {s ; ...}@
--- 
--- /below this, the last three constructors are obsolete/
- | LiT Ident      -- ^ linearization type
- | Ready Str      -- ^ result of compiling; not to be parsed ...
- | Computed Term  -- ^ result of computing: not to be reopened nor parsed
 
   deriving (Read, Show, Eq, Ord)
 

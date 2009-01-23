@@ -168,7 +168,7 @@ partEval opts gr (context, val) trm = errIn ("parteval" +++ prt_ trm) $ do
 --   {s  = variants {"Auto" ; "Wagen"} ; g  = variants {N ; M}} ;
 
 recordExpand :: Type -> Term -> Err Term
-recordExpand typ trm = case unComputed typ of
+recordExpand typ trm = case typ of
   RecType tys -> case trm of
     FV rs -> return $ FV [R [assign lab (P r lab) | (lab,_) <- tys] | r <- rs]
     _ -> return $ R [assign lab (P trm lab) | (lab,_) <- tys]
@@ -179,12 +179,12 @@ recordExpand typ trm = case unComputed typ of
 
 mkLinDefault :: SourceGrammar -> Type -> Err Term
 mkLinDefault gr typ = do
-  case unComputed typ of
+  case typ of
     RecType lts -> mapPairsM mkDefField lts >>= (return . Abs varStr . R . mkAssign)
     _ -> liftM (Abs varStr) $ mkDefField typ
 ----    _ -> prtBad "linearization type must be a record type, not" typ
  where
-   mkDefField typ = case unComputed typ of
+   mkDefField typ = case typ of
      Table p t  -> do
        t' <- mkDefField t
        let T _ cs = mkWildCases t'

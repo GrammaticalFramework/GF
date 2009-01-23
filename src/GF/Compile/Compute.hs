@@ -56,9 +56,6 @@ computeTermOpt rec gr = comput True where
      Q p c | p == cPredef -> return t
            | otherwise    -> look p c 
 
-     -- if computed do nothing
-     Computed t' -> return $ unComputed t'
-
      Vr x -> do
        t' <- maybe (prtBad ("no value given to variable") x) return $ lookup x g
        case t' of 

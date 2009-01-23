@@ -45,7 +45,6 @@ import GF.Source.GrammarToSource
 
 import GF.Infra.Option
 import GF.Infra.Ident
-import GF.Data.Str
 
 import GF.Infra.CompactPrint
 

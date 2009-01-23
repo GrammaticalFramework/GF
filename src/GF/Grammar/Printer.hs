@@ -156,7 +156,6 @@ ppTerm d (Alts (e,xs))=text "pre" <+> braces (ppTerm 0 e <> semi <+> fsep (punct
 ppTerm d (Strs es)   = text "strs" <+> braces (fsep (punctuate semi (map (ppTerm 0) es)))
 ppTerm d (EPatt p)   = prec d 4 (char '#' <+> ppPatt 2 p)
 ppTerm d (EPattType t)=prec d 4 (text "pattern" <+> ppTerm 0 t)
-ppTerm d (LiT id)    = text "Lin" <+> ppIdent id
 ppTerm d (P t l)     = prec d 5 (ppTerm 5 t <> char '.' <> ppLabel l)
 ppTerm d (Cn id)     = ppIdent id
 ppTerm d (Vr id)     = ppIdent id
