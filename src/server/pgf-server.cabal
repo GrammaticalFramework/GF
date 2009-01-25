@@ -9,7 +9,6 @@ synopsis: FastCGI Server for Grammatical Framework
 executable pgf.fcgi
   build-depends: base,
                  old-time,
-                 unix,
                  directory,
                  filepath,
                  containers,
@@ -18,9 +17,13 @@ executable pgf.fcgi
                  fastcgi >= 3001.0.2.1,
                  json >= 0.3.3,
                  utf8-string >= 0.3.1.1
+  if !os(windows)
+    build-depends: unix
   main-is: PGFService.hs
   other-modules:
     FastCGIUtils
     Cache
     URLEncoding
   ghc-options: -threaded
+  if os(windows)
+    ghc-options: -optl-mwindows
