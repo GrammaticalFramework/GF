@@ -1,4 +1,4 @@
-{-# LANGUAGE DeriveDataTypeable #-}
+{-# LANGUAGE DeriveDataTypeable, CPP #-}
 
 import PGF (PGF)
 import qualified PGF
@@ -26,7 +26,11 @@ logFile = "pgf-error.log"
 main :: IO ()
 main = do stderrToFile logFile
           cache <- newCache PGF.readPGF
+#ifndef mingw32_HOST_OS
           runFastCGIConcurrent' forkIO 100 (handleErrors (handleCGIErrors (cgiMain cache)))
+#else
+          runFastCGI (handleErrors (handleCGIErrors (cgiMain cache)))
+#endif
 
 cgiMain :: Cache PGF -> CGI CGIResult
 cgiMain cache =
