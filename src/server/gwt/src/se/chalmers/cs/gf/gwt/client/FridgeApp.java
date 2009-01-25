@@ -21,7 +21,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class FridgeApp implements EntryPoint {
 
-	protected static final String pgfBaseURL = "/pgf";
+	protected static final String pgfBaseURL = "/grammars";
 
 	protected PGFWrapper pgf;
 
@@ -274,7 +274,7 @@ public class FridgeApp implements EntryPoint {
 	public void onModuleLoad() {
 		statusPopup = new StatusPopup();
 
-		pgf = new PGFWrapper(new PGF(pgfBaseURL));
+		pgf = new PGFWrapper(pgfBaseURL);
 		RootPanel.get().add(createUI());
 		pgf.addSettingsListener(new MySettingsListener());
 		History.addHistoryListener(new MyHistoryListener());

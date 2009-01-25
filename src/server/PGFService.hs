@@ -34,18 +34,11 @@ main = do stderrToFile logFile
 
 cgiMain :: Cache PGF -> CGI CGIResult
 cgiMain cache =
-    do path <- pathInfo
-       jsonp <- serveResource cache $ filter (not . null) $ splitBy (=='/') path
+    do path <- getVarWithDefault "SCRIPT_FILENAME" ""
+       pgf <- liftIO $ readCache cache path
+       command <- liftM (maybe "grammar" (urlDecodeUnicode . UTF8.decodeString)) (getInput "command")
+       jsonp <- pgfMain pgf command
        outputJSONP jsonp
-
-serveResource :: Cache PGF -> [String] -> CGI JSValue
-serveResource cache resource =
-    case resource of
-      []             -> liftIO doListGrammars
-      [file]         -> serveResource cache [file,"grammar"]
-      [file,command] -> do pgf <- liftIO $ readCache cache $ cleanFilePath file
-                           pgfMain pgf command
-      _              -> throwCGIError 400 "Unknown resource" ["Unknown resource: " ++ show resource]
 
 pgfMain :: PGF -> String -> CGI JSValue
 pgfMain pgf command = 

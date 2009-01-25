@@ -5,9 +5,12 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
-
+import com.google.gwt.http.client.*;
+import com.google.gwt.xml.client.*;
 
 public class PGFWrapper {
+
+	private String baseURL;
 
 	private PGF pgf;
 
@@ -36,28 +39,61 @@ public class PGFWrapper {
 	private List<SettingsListener> listeners = new LinkedList<SettingsListener>();
 	
 
-	public PGFWrapper(PGF pgf) {
-		this.pgf = pgf;
+
+	public PGFWrapper(String baseURL) {
+		this.baseURL = baseURL;
+		this.pgf = new PGF();
 	}
 
 	public void updateAvailableGrammars() {
-		pgf.listGrammars(new PGF.GrammarNamesCallback() {
-			public void onResult(PGF.GrammarNames grammarNames) {
-				grammars = new ArrayList<String>();
-				for (PGF.GrammarName grammarName : grammarNames.iterable()) {
-					grammars.add(grammarName.getName());
+		String url = baseURL+"/grammars.xml";
+		RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, URL.encode(url));
+		try
+		{
+			Request request = builder.sendRequest(null, new RequestCallback() {
+				public void onResponseReceived(Request request, Response response)
+				{
+					if (200 == response.getStatusCode())
+					{
+						grammars = new ArrayList<String>();
+						try
+						{
+							Document grammarsDoc = XMLParser.parse(response.getText());
+
+							NodeList grammarsList = grammarsDoc.getElementsByTagName("grammar");
+							for (int i = 0; i < grammarsList.getLength(); i++)
+							{
+								Node grammarNode = grammarsList.item(i);
+								grammars.add(((Element)grammarNode).getAttribute("name"));
+							}
+						}
+						catch (DOMException e)
+						{
+							fireSettingsError("Could not parse XML document.", e);
+						}
+						fireAvailableGrammarsChanged();
+					}
+					else
+					{
+						fireSettingsError("Error getting grammar list", null);
+					}
 				}
-				fireAvailableGrammarsChanged();
-			}
-			public void onError (Throwable e) {
-				fireSettingsError("Error getting grammar list", e);
-			}
-		});
+
+				public void onError(Request request, Throwable e)
+				{
+					fireSettingsError("Error getting grammar list", e);
+				}
+			});
+		}
+		catch (RequestException e)
+		{
+			fireSettingsError("Couldn't connect to server", e);
+		}
 	}
 	
 	protected void updateSelectedGrammar () {
 		clearCachedInfo();
-		pgf.grammar(pgfName, new PGF.GrammarCallback() {
+		pgf.grammar(baseURL+"/"+pgfName, new PGF.GrammarCallback() {
 			public void onResult(PGF.Grammar grammar) {
 				userLanguage = grammar.getUserLanguage();
 				languages = new LinkedHashMap<String,PGF.Language>();
@@ -83,15 +119,15 @@ public class PGFWrapper {
 	//
 	
 	public JSONRequest translate (String input, final PGF.TranslateCallback callback) {
-		return pgf.translate(pgfName, input, inputLanguage, cat, outputLanguage, callback);
+		return pgf.translate(baseURL+"/"+pgfName, input, inputLanguage, cat, outputLanguage, callback);
 	}
 
 	public JSONRequest complete (String input, int limit, final PGF.CompleteCallback callback) {
-		return pgf.complete(pgfName, input, inputLanguage, cat, limit, callback);
+		return pgf.complete(baseURL+"/"+pgfName, input, inputLanguage, cat, limit, callback);
 	}
 
 	public JSONRequest parse (String input, final PGF.ParseCallback callback) {
-		return pgf.parse(pgfName, input, inputLanguage, cat, callback);
+		return pgf.parse(baseURL+"/"+pgfName, input, inputLanguage, cat, callback);
 	}
 
 	//
