@@ -1,4 +1,4 @@
-{-# LANGUAGE DeriveDataTypeable #-}
+{-# LANGUAGE DeriveDataTypeable, CPP #-}
 module FastCGIUtils (initFastCGI, loopFastCGI,
                      throwCGIError, handleCGIErrors,
                      stderrToFile,
@@ -16,7 +16,9 @@ import System.Environment
 import System.Exit
 import System.IO
 import System.IO.Unsafe
+#ifndef mingw32_HOST_OS
 import System.Posix
+#endif
 import System.Time
 
 import Network.FastCGI
@@ -40,6 +42,7 @@ loopFastCGI f =
 -- Signal handling for FastCGI programs.
 
 
+#ifndef mingw32_HOST_OS
 installSignalHandlers :: IO ()
 installSignalHandlers =
     do t <- myThreadId
@@ -47,15 +50,6 @@ installSignalHandlers =
        installHandler sigTERM (Catch gracelessExit) Nothing
        installHandler sigPIPE (Catch (requestAborted t)) Nothing
        return ()
-
-{-# NOINLINE shouldExit #-}
-shouldExit :: IORef Bool
-shouldExit = unsafePerformIO $ newIORef False
-
-catchAborted ::  IO a -> IO a -> IO a
-catchAborted x y = x `catch` \e -> case e of
-                                     ErrorCall "**aborted**" -> y
-                                     _ -> throw e
 
 requestAborted :: ThreadId -> IO ()
 requestAborted t = throwTo t (ErrorCall "**aborted**")
@@ -68,6 +62,10 @@ gracefulExit :: IO ()
 gracefulExit = 
     do logError "Graceful exit"
        writeIORef shouldExit True
+#else
+installSignalHandlers :: IO ()
+installSignalHandlers = return ()
+#endif
 
 exitIfToldTo :: IO ()
 exitIfToldTo = 
@@ -75,9 +73,18 @@ exitIfToldTo =
        when b $ do logError "Exiting..."
                    exitWith ExitSuccess
 
+{-# NOINLINE shouldExit #-}
+shouldExit :: IORef Bool
+shouldExit = unsafePerformIO $ newIORef False
+
+catchAborted ::  IO a -> IO a -> IO a
+catchAborted x y = x `catch` \e -> case e of
+                                     ErrorCall "**aborted**" -> y
+                                     _ -> throw e
 
 -- Restart handling for FastCGI programs.
 
+#ifndef mingw32_HOST_OS
 {-# NOINLINE myModTimeRef #-}
 myModTimeRef :: IORef EpochTime
 myModTimeRef = unsafePerformIO (getProgModTime >>= newIORef)
@@ -106,8 +113,14 @@ restartIfModified =
                          -- FIXME: setCurrentDirectory?
                          executeFile prog False args Nothing
 
+#else
+restartIfModified :: IO ()
+restartIfModified = return ()
+#endif
+
 -- Logging
 
+#ifndef mingw32_HOST_OS
 logError :: String -> IO ()
 logError s = hPutStrLn stderr s
 
@@ -117,6 +130,13 @@ stderrToFile file =
        fileFd <- openFd file WriteOnly (Just mode) (defaultFileFlags { append = True })
        dupTo fileFd stdError
        return ()
+#else
+logError :: String -> IO ()
+logError s = return ()
+
+stderrToFile :: FilePath -> IO ()
+stderrToFile s = return ()
+#endif
 
 -- * General CGI Error exception mechanism
 
