@@ -211,7 +211,7 @@ pp. 115-131,
 //A philosophical study of the medieval thesis that//
 //grammar is the same in all languages and the difference is only in words.//
 
-J Khegai. 
+J. Khegai. 
 GF parallel resource grammars and Russian.
 In proceedings of ACL2006 
   (The joint conference of the International Committee on Computational 

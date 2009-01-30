@@ -28,7 +28,7 @@ import Data.List (partition,sort,groupBy)
 import Debug.Trace
 
 typecheck :: PGF -> Tree -> [Tree]
-typecheck pgf t = case inferExpr pgf (tree2expr t) of
+typecheck pgf t = case inferExpr pgf (newMetas (tree2expr t)) of
   Ok t  -> [expr2tree t]
   Bad s -> trace s []
 

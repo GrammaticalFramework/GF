@@ -10,7 +10,10 @@ module PGF.Expr(Tree(..), Literal(..),
                 Value(..), Env, eval, apply,
 
                 -- helpers
-                pStr,pFactor
+                pStr,pFactor,
+
+                -- refresh metavariables
+                newMetas
                ) where
 
 import PGF.CId
@@ -250,4 +253,11 @@ apply :: Value -> Value -> Value
 apply (VClosure env (EAbs x e)) v = eval (Map.insert x v env) e
 apply v0                        v = VApp v0 v
 
-
+--- use composOp and state monad...
+newMetas :: Expr -> Expr
+newMetas = fst . metas 0 where
+  metas i exp = case exp of
+    EAbs x e -> let (f,j) = metas i e in (EAbs x f, j)
+    EApp f a -> let (g,j) = metas i f ; (b,k) = metas j a in (EApp g b,k)
+    EMeta _  -> (EMeta i, i+1)
+    _        -> (exp,i)
