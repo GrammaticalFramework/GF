@@ -21,7 +21,7 @@ module GF.Data.Operations (-- * misc functions
 		   Err(..), err, maybeErr, testErr, errVal, errIn, 
 		   lookupErr,
 		   mapPairListM, mapPairsM, pairM,
-		   (!?), singleton, mapsErr, mapsErrTree,
+		   singleton, mapsErr, mapsErrTree,
 		   
 		   -- ** checking
 		   checkUnique,
@@ -77,7 +77,6 @@ infixr 5 +++
 infixr 5 ++-
 infixr 5 ++++
 infixr 5 +++++
-infixl 9 !?
 
 ifNull :: b -> ([a] -> b) -> [a] -> b
 ifNull b f xs = if null xs then b else f xs
@@ -117,10 +116,6 @@ mapPairsM f xys = mapM (\ (x,y) -> liftM ((,) x) (f y)) xys
 
 pairM :: Monad a => (b -> a c) -> (b,b) -> a (c,c)
 pairM op (t1,t2) = liftM2 (,) (op t1) (op t2)
-
--- @!!@ with the error monad
-(!?) :: [a] -> Int -> Err a
-xs !? i = foldr (const . return) (Bad "too few elements in list") $ drop i xs
 
 singleton :: a -> [a]
 singleton = (:[])
