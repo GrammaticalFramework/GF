@@ -16,6 +16,9 @@
 -----------------------------------------------------------------------------
 
 module GF.Grammar.Lookup (
+               lookupIdent,
+               lookupIdentInfo,
+               lookupIdentInfoIn,
                lookupResDef,
                lookupResDefKind,
 	       lookupResType, 
@@ -29,6 +32,8 @@ module GF.Grammar.Lookup (
 	       allParamValues, 
 	       lookupAbsDef, 
 	       lookupLincat, 
+	       lookupFunType,
+	       lookupCatContext,
 	       opersForType
 	      ) where
 
@@ -44,6 +49,20 @@ import Control.Monad
 -- whether lock fields are added in reuse
 lock c = lockRecType c -- return
 unlock c = unlockRecord c -- return
+
+-- to look up a constant etc in a search tree --- why here? AR 29/5/2008
+lookupIdent :: Ident -> BinTree Ident b -> Err b
+lookupIdent c t =
+  case lookupTree prIdent c t of
+    Ok v  -> return v
+    Bad _ -> Bad ("unknown identifier" +++ prIdent c)
+
+lookupIdentInfo :: ModInfo Ident a -> Ident -> Err a
+lookupIdentInfo mo i = lookupIdent i (jments mo)
+
+lookupIdentInfoIn :: ModInfo Ident a -> Ident -> Ident -> Err a
+lookupIdentInfoIn mo m i = 
+  err (\s -> Bad (s +++ "in module" +++ prIdent m)) return $ lookupIdentInfo mo i
 
 lookupResDef :: SourceGrammar -> Ident -> Ident -> Err Term
 lookupResDef gr m c = liftM fst $ lookupResDefKind gr m c
@@ -225,6 +244,26 @@ lookupLincat gr m c = do
     CncCat (Yes t) _ _ -> return t
     AnyInd _ n         -> lookupLincat gr n c
     _                  -> Bad $ prt c +++ "has no linearization type in" +++ prt m
+
+-- | this is needed at compile time
+lookupFunType :: SourceGrammar -> Ident -> Ident -> Err Type
+lookupFunType gr m c = do
+  mo <- lookupModule gr m
+  info <- lookupIdentInfo mo c
+  case info of
+    AbsFun (Yes t) _  -> return t
+    AnyInd _ n  -> lookupFunType gr n c
+    _ -> prtBad "cannot find type of" c
+
+-- | this is needed at compile time
+lookupCatContext :: SourceGrammar -> Ident -> Ident -> Err Context
+lookupCatContext gr m c = do
+  mo <- lookupModule gr m
+  info <- lookupIdentInfo mo c
+  case info of
+    AbsCat (Yes co) _ -> return co
+    AnyInd _ n        -> lookupCatContext gr n c
+    _                 -> prtBad "unknown category" c
 
 -- The first type argument is uncomputed, usually a category symbol.
 -- This is a hack to find implicit (= reused) opers.

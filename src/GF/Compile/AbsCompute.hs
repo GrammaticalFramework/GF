@@ -24,7 +24,6 @@ module GF.Compile.AbsCompute (LookDef,
 import GF.Data.Operations
 
 import GF.Grammar.Abstract
-import GF.Grammar.PrGrammar
 import GF.Grammar.Lookup
 import GF.Compile.Compute
 

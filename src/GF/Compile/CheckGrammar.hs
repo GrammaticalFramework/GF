@@ -33,7 +33,6 @@ import GF.Compile.Refresh
 import GF.Grammar.Grammar
 import GF.Grammar.PrGrammar
 import GF.Grammar.Lookup
-import GF.Grammar.LookAbs
 import GF.Grammar.Predef
 import GF.Grammar.Macros
 import GF.Grammar.ReservedWords
