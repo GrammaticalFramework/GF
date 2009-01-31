@@ -32,7 +32,6 @@ import GF.Grammar.Unify ---
 import GF.Compile.TC
 
 import Control.Monad (foldM, liftM, liftM2)
-import Data.List (nub) ---
 
 -- | invariant way of creating TCEnv from context
 initTCEnv gamma = 

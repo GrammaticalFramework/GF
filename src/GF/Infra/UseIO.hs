@@ -49,47 +49,9 @@ errOptIO os e m = case m of
     putIfVerb os k
     return e
 
-readFileIf f = catch (readFile f) (\_ -> reportOn f) where
- reportOn f = do
-   putStrLnFlush ("File " ++ f ++ " does not exist. Returned empty string")
-   return ""
-
-readFileIfStrict f = catch (BS.readFile f) (\_ -> reportOn f) where
- reportOn f = do
-   putStrLnFlush ("File " ++ f ++ " does not exist. Returned empty string")
-   return BS.empty
-
 type FileName = String
 type InitPath = String
 type FullPath = String
-
-getFilePath :: [FilePath] -> String -> IO (Maybe FilePath)
-getFilePath ps file = getFilePathMsg ("file" +++ file +++ "not found\n") ps file
-
-getFilePathMsg :: String -> [FilePath] -> String -> IO (Maybe FilePath)
-getFilePathMsg msg paths file = get paths where
-  get []     = putStrFlush msg >> return Nothing
-  get (p:ps) = do
-    let pfile = p </> file
-    exist <- doesFileExist pfile
-    if not exist
-      then get ps
-      else do pfile <- canonicalizePath pfile
-              return (Just pfile)
-
-readFileIfPath :: [FilePath] -> String -> IOE (FilePath,BS.ByteString)
-readFileIfPath paths file = do
-  mpfile <- ioeIO $ getFilePath paths file
-  case mpfile of
-    Just pfile -> do
-      s <- ioeIO $ BS.readFile pfile
-      return (dropFileName pfile,s)
-    _ -> ioeErr $ Bad ("File " ++ file ++ " does not exist.")
-
-doesFileExistPath :: [FilePath] -> String -> IOE Bool
-doesFileExistPath paths file = do
-  mpfile <- ioeIO $ getFilePathMsg "" paths file
-  return $ maybe False (const True) mpfile
 
 gfLibraryPath    = "GF_LIB_PATH"
 gfGrammarPathVar = "GF_GRAMMAR_PATH"
@@ -142,10 +104,6 @@ splitInModuleSearchPath s = case break isPathSep s of
     isPathSep c = c == ':' || c == ';'
 
 --
-
-getLineWell :: IO String -> IO String
-getLineWell ios = 
-  catch getLine (\e -> if (isEOFError e) then ios else ioError e)
 
 putStrFlush :: String -> IO ()
 putStrFlush s = putStr s >> hFlush stdout
@@ -223,29 +181,3 @@ putPointE v opts msg act = do
 readFileIOE :: FilePath -> IOE BS.ByteString
 readFileIOE f = ioe $ catch (BS.readFile f >>= return . return)
                             (\e -> return (Bad (show e)))
-
--- | like readFileIOE but look also in the GF library if file not found
---
--- intended semantics: if file is not found, try @\$GF_LIB_PATH\/file@
--- (even if file is an absolute path, but this should always fail)
--- it returns not only contents of the file, but also the path used
-readFileLibraryIOE :: String -> FilePath -> IOE (FilePath, BS.ByteString)
-readFileLibraryIOE ini f = ioe $ do
-  lp <- getLibraryPath
-  tryRead ini $ \_ ->
-    tryRead lp  $ \e ->
-      return (Bad (show e))
-  where
-    tryRead path onError =
-      catch (BS.readFile fpath >>= \s -> return (return (fpath,s)))
-            onError
-      where
-        fpath = path </> f
-
--- | example
-koeIOE :: IO ()
-koeIOE = useIOE () $ do
-  s  <- ioeIO  $ getLine
-  s2 <- ioeErr $ mapM (!? 2) $ words s
-  ioeIO $ putStrLn s2
-

@@ -88,13 +88,13 @@ getAllFiles opts ps env file = do
     findModule :: ModName -> IOE ModuleInfo
     findModule name = do
       (file,gfTime,gfoTime) <- do
-          mb_gfFile <- ioeIO $ getFilePathMsg "" ps (gfFile name)
+          mb_gfFile <- ioeIO $ getFilePath ps (gfFile name)
           case mb_gfFile of
             Just gfFile -> do gfTime  <- ioeIO $ getModificationTime gfFile
                               mb_gfoTime <- ioeIO $ catch (liftM Just $ getModificationTime (replaceExtension gfFile "gfo"))
                                                         (\_->return Nothing)
                               return (gfFile, Just gfTime, mb_gfoTime)
-            Nothing     -> do mb_gfoFile <- ioeIO $ getFilePathMsg "" ps (gfoFile name)
+            Nothing     -> do mb_gfoFile <- ioeIO $ getFilePath ps (gfoFile name)
                               case mb_gfoFile of
                                 Just gfoFile -> do gfoTime <- ioeIO $ getModificationTime gfoFile
                                                    return (gfoFile, Nothing, Just gfoTime)
@@ -212,7 +212,20 @@ importsOfModule (m,mi) = (modName m,depModInfo mi [])
 -- | options can be passed to the compiler by comments in @--#@, in the main file
 getOptionsFromFile :: FilePath -> IOE Options
 getOptionsFromFile file = do
-  s <- ioeIO $ readFileIfStrict file
+  s <- ioe $ catch (fmap Ok $ BS.readFile file)
+                   (\_ -> return (Bad $ "File " ++ file ++ " does not exist"))
   let ls = filter (BS.isPrefixOf (BS.pack "--#")) $ BS.lines s
       fs = map (BS.unpack . BS.unwords . BS.words . BS.drop 3) ls
   ioeErr $ parseModuleOptions fs
+
+getFilePath :: [FilePath] -> String -> IO (Maybe FilePath)
+getFilePath paths file = get paths
+  where
+    get []     = return Nothing
+    get (p:ps) = do
+      let pfile = p </> file
+      exist <- doesFileExist pfile
+      if not exist
+        then get ps
+        else do pfile <- canonicalizePath pfile
+                return (Just pfile)
