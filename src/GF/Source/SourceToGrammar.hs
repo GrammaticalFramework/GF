@@ -110,7 +110,7 @@ transModDef x = case x of
         defs'    <- U.buildAnyTree [(i,d) | Left  ds <- defs0, (i,_,d) <- ds]
         flags'   <- return $ concatOptions [o | Right o <- defs0]
         let poss1 = buildPosTree id' poss0
-        return (id', GM.ModInfo mtyp' mstat' flags' extends' Nothing opens' defs' poss1)
+        return (id', GM.ModInfo mtyp' mstat' flags' extends' Nothing opens' [] defs' poss1)
 
        MWith m insts -> mkBody xx $ MWithEBody [] m insts NoOpens []
        MWithBody m insts opens defs -> mkBody xx $ MWithEBody [] m insts opens defs
@@ -118,14 +118,14 @@ transModDef x = case x of
        MWithEBody extends m insts opens defs -> do
         extends' <- mapM transIncludedExt extends
         m'       <- transIncludedExt m
-        insts'   <- mapM transOpen insts 
+        insts'   <- mapM transInst insts 
         opens'   <- transOpens opens
         defs0    <- mapM trDef $ getTopDefs defs
         poss0    <- return [(i,p) | Left  ds <- defs0, (i,p,_) <- ds]
         defs'    <- U.buildAnyTree [(i,d) | Left  ds <- defs0, (i,_,d) <- ds]
         flags'   <- return $ concatOptions [o | Right o <- defs0]
         let poss1 = buildPosTree id' poss0
-        return (id', GM.ModInfo mtyp' mstat' flags' extends' (Just (fst m',snd m',insts')) opens' defs' poss1)
+        return (id', GM.ModInfo mtyp' mstat' flags' extends' (Just (fst m',snd m',insts')) opens' [] defs' poss1)
 
       mkModRes id mtyp body = do
          id' <- transIdent id
@@ -177,6 +177,11 @@ transOpen x = case x of
   OName id     -> liftM  GM.OSimple (transIdent id)
   OQualQO q id -> liftM  GM.OSimple (transIdent id)
   OQual q id m -> liftM2 GM.OQualif (transIdent id) (transIdent m)
+
+transInst :: Open -> Err (Ident,Ident)
+transInst x = case x of
+  OQual q id m -> liftM2 (,) (transIdent id) (transIdent m)
+  _            -> Bad "qualified open expected"
 
 transIncluded :: Included -> Err (Ident,[Ident])
 transIncluded x = case x of

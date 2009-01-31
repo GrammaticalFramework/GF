@@ -31,9 +31,9 @@ instance (Ord i, Binary i, Binary a) => Binary (MGrammar i a) where
   get               = fmap MGrammar get
 
 instance (Ord i, Binary i, Binary a) => Binary (ModInfo i a) where
-  put mi = do put (mtype mi,mstatus mi,flags mi,extend mi,mwith mi,opens mi,jments mi,positions mi)
-  get    = do (mtype,mstatus,flags,extend,mwith,opens,jments,positions) <- get
-              return (ModInfo mtype mstatus flags extend mwith opens jments positions)
+  put mi = do put (mtype mi,mstatus mi,flags mi,extend mi,mwith mi,opens mi,mexdeps mi,jments mi,positions mi)
+  get    = do (mtype,mstatus,flags,extend,mwith,opens,med,jments,positions) <- get
+              return (ModInfo mtype mstatus flags extend mwith opens med jments positions)
 
 instance (Binary i) => Binary (ModuleType i) where
   put MTAbstract       = putWord8 0
@@ -264,5 +264,5 @@ instance Binary MetaSymb where
 
 decodeModHeader :: FilePath -> IO SourceModule
 decodeModHeader fpath = do
-  (m,mtype,mstatus,flags,extend,mwith,opens) <- decodeFile fpath
-  return (m,ModInfo mtype mstatus flags extend mwith opens Map.empty Map.empty)
+  (m,mtype,mstatus,flags,extend,mwith,opens,med) <- decodeFile fpath
+  return (m,ModInfo mtype mstatus flags extend mwith opens med Map.empty Map.empty)

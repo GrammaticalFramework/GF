@@ -61,14 +61,13 @@ data ModInfo i a = ModInfo {
     mstatus :: ModuleStatus ,
     flags   :: Options,
     extend  :: [(i,MInclude i)],
-    mwith   :: Maybe (i,MInclude i,[OpenSpec i]),
+    mwith   :: Maybe (i,MInclude i,[(i,i)]),
     opens   :: [OpenSpec i] ,
+    mexdeps :: [i] ,
     jments  :: BinTree i a ,
     positions :: BinTree i (String,(Int,Int)) -- file, first line, last line
   }
----  deriving Show
-instance Show (ModInfo i a) where
-  show _ = "cannot show ModInfo with FiniteMap"
+  deriving Show
 
 -- | encoding the type of the module
 data ModuleType i = 
@@ -107,13 +106,13 @@ updateMGrammar old new = MGrammar $
    ns = modules new
 
 updateModule :: Ord i => ModInfo i t -> i -> t -> ModInfo i t
-updateModule (ModInfo mt ms fs me mw ops js ps) i t = ModInfo mt ms fs me mw ops (updateTree (i,t) js) ps
+updateModule (ModInfo mt ms fs me mw ops med js ps) i t = ModInfo mt ms fs me mw ops med (updateTree (i,t) js) ps
 
 replaceJudgements :: ModInfo i t -> BinTree i t -> ModInfo i t
-replaceJudgements (ModInfo mt ms fs me mw ops _ ps) js = ModInfo mt ms fs me mw ops js ps
+replaceJudgements (ModInfo mt ms fs me mw ops med _ ps) js = ModInfo mt ms fs me mw ops med js ps
 
 addOpenQualif :: i -> i -> ModInfo i t -> ModInfo i t
-addOpenQualif i j (ModInfo mt ms fs me mw ops js ps) = ModInfo mt ms fs me mw (OQualif i j : ops) js ps
+addOpenQualif i j (ModInfo mt ms fs me mw ops med js ps) = ModInfo mt ms fs me mw (OQualif i j : ops) med js ps
 
 addFlag :: Options -> ModInfo i t -> ModInfo i t
 addFlag f mo = mo {flags = flags mo `addOptions` f} 
@@ -225,7 +224,7 @@ emptyMGrammar :: MGrammar i a
 emptyMGrammar = MGrammar []
 
 emptyModInfo :: ModInfo i a
-emptyModInfo = ModInfo MTResource MSComplete noOptions [] Nothing [] emptyBinTree emptyBinTree
+emptyModInfo = ModInfo MTResource MSComplete noOptions [] Nothing [] [] emptyBinTree emptyBinTree
 
 -- | we store the module type with the identifier
 data IdentM i = IdentM {

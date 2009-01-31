@@ -27,6 +27,7 @@ import GF.Grammar.Macros
 import GF.Data.Operations
 
 import Control.Monad
+import Data.List(nub)
 
 extendModule :: [SourceModule] -> SourceModule -> Err SourceModule
 extendModule ms (name,m)
@@ -38,21 +39,25 @@ extendModule ms (name,m)
                                                  return (name,m')
  where
    extOne mo (n,cond) = do
-        (m0,isCompl) <- do
-          m <- lookupModule (MGrammar ms) n
+     m0 <- lookupModule (MGrammar ms) n
 
-          -- test that the module types match, and find out if the old is complete
-          testErr (sameMType (mtype m) (mtype mo)) 
-                    ("illegal extension type to module" +++ prt name)
-          return (m, isCompleteModule m)
+     -- test that the module types match, and find out if the old is complete
+     testErr (sameMType (mtype m) (mtype mo)) 
+             ("illegal extension type to module" +++ prt name)
 
-        -- build extension in a way depending on whether the old module is complete
-        js1 <- extendMod isCompl (n, isInherited cond) name (jments m0) (jments mo)
+     let isCompl = isCompleteModule m0
 
-        -- if incomplete, throw away extension information
-        let es  = extend mo
-        let es' = if isCompl then es else (filter ((/=n) . fst) es) 
-        return $ mo {extend = es', jments = js1}
+     -- build extension in a way depending on whether the old module is complete
+     js1 <- extendMod isCompl (n, isInherited cond) name (jments m0) (jments mo)
+
+     -- if incomplete, throw away extension information
+     return $ 
+          if isCompl
+            then mo {jments = js1}
+            else mo {extend = filter ((/=n) . fst) (extend mo)
+                    ,mexdeps= nub (n : mexdeps mo)
+                    ,jments = js1
+                    }
 
 -- | When extending a complete module: new information is inserted,
 -- and the process is interrupted if unification fails.

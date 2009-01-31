@@ -223,8 +223,8 @@ mkParamLincat sgr lang cat = errVal (C.R [C.S []]) $ do
 
 reorder :: Ident -> SourceGrammar -> SourceGrammar
 reorder abs cg = M.MGrammar $ 
-    (abs, M.ModInfo M.MTAbstract M.MSComplete aflags [] Nothing [] adefs poss):
-      [(c, M.ModInfo (M.MTConcrete abs) M.MSComplete fs [] Nothing [] (sorted2tree js) poss)
+    (abs, M.ModInfo M.MTAbstract M.MSComplete aflags [] Nothing [] [] adefs poss):
+      [(c, M.ModInfo (M.MTConcrete abs) M.MSComplete fs [] Nothing [] [] (sorted2tree js) poss)
             | (c,(fs,js)) <- cncs] 
      where
        poss = emptyBinTree -- positions no longer needed
