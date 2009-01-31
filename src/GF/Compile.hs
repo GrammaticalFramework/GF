@@ -149,7 +149,8 @@ compileOne opts env@(_,srcgr,_) file = do
     -- for compiled gf, read the file and update environment
     -- also undo common subexp optimization, to enable normal computations
     ".gfo" -> do
-       sm0 <- putPointE Normal opts ("+ reading" +++ file) $ ioeIO (decodeFile file)
+       sm00 <- putPointE Normal opts ("+ reading" +++ file) $ ioeIO (decodeFile file)
+       let sm0 = addOptionsToModule opts sm00
        let sm1 = unsubexpModule sm0
        sm <- {- putPointE Normal opts "creating indirections" $ -} ioeErr $ extendModule mos sm1
        
