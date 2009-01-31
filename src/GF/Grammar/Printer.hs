@@ -25,7 +25,7 @@ import Data.Maybe (maybe)
 import Data.List  (intersperse)
 
 ppModule :: SourceModule -> Doc
-ppModule (mn, ModInfo mtype mstat opts exts with opens jments _) =
+ppModule (mn, ModInfo mtype mstat opts exts with opens _ jments _) =
     (let defs = tree2list jments
      in if null defs
           then hdr
@@ -58,7 +58,7 @@ ppModule (mn, ModInfo mtype mstat opts exts with opens jments _) =
       ppExtends (id,MIOnly   incs) = ppIdent id              <+> brackets (commaPunct ppIdent incs)
       ppExtends (id,MIExcept incs) = ppIdent id <+> char '-' <+> brackets (commaPunct ppIdent incs)
       
-      ppWith (id,ext,opens) = ppExtends (id,ext) <+> text "with" <+> commaPunct ppOpenSpec opens
+      ppWith (id,ext,opens) = ppExtends (id,ext) <+> text "with" <+> commaPunct ppInstSpec opens
 
 ppOptions opts = 
   text "flags" $$
@@ -209,6 +209,8 @@ ppLabel = ppIdent . label2ident
 
 ppOpenSpec (OSimple id)   = ppIdent id
 ppOpenSpec (OQualif id n) = parens (ppIdent id <+> equals <+> ppIdent n)
+
+ppInstSpec (id,n) = parens (ppIdent id <+> equals <+> ppIdent n)
 
 ppLocDef (id, (mbt, e)) =
   ppIdent id <+>

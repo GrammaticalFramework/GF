@@ -179,6 +179,7 @@ importsOfModule (m,mi) = (modName m,depModInfo mi [])
       depModType (mtype mi)  .
       depExtends (extend mi) .
       depWith    (mwith mi)  .
+      depExDeps  (mexdeps mi).
       depOpens   (opens mi)
 
     depModType (MTAbstract)       xs = xs
@@ -190,15 +191,21 @@ importsOfModule (m,mi) = (modName m,depModInfo mi [])
 
     depExtends es xs = foldr depInclude xs es
 
-    depWith (Just (m,_,os)) xs = modName m : depOpens os xs
+    depWith (Just (m,_,is)) xs = modName m : depInsts is xs
     depWith Nothing         xs = xs
 
+    depExDeps eds xs = map modName eds ++ xs
+
     depOpens os xs = foldr depOpen xs os
+
+    depInsts is xs = foldr depInst xs is
 
     depInclude (m,_) xs = modName m:xs
 
     depOpen (OSimple n  ) xs = modName n:xs
     depOpen (OQualif _ n) xs = modName n:xs
+
+    depInst (m,n) xs = modName m:modName n:xs
 
     modName = prIdent
 

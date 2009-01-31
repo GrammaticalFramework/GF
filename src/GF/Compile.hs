@@ -173,7 +173,7 @@ compileOne opts env@(_,srcgr,_) file = do
           -- sm is optimized before generation, but not in the env
        extendCompileEnvInt env k' (Just gfo) sm1
   where
-   isConcr (_,m) = isModCnc m && mstatus m /= MSIncomplete && isNothing (mwith m)
+   isConcr (_,m) = isModCnc m && mstatus m /= MSIncomplete
 
 compileSourceModule :: Options -> CompileEnv -> SourceModule -> IOE (Int,SourceModule)
 compileSourceModule opts env@(k,gr,_) mo@(i,mi) = do
