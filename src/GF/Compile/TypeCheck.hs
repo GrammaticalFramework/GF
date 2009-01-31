@@ -25,7 +25,7 @@ import GF.Data.Operations
 import GF.Grammar.Abstract
 import GF.Compile.Refresh
 import GF.Compile.AbsCompute
-import GF.Grammar.LookAbs
+import GF.Grammar.Lookup
 import qualified GF.Grammar.Lookup as Lookup ---
 import GF.Grammar.Unify ---
 
