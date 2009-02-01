@@ -78,7 +78,7 @@ getAllFiles opts ps env file = do
       | otherwise       = do
            (name,st0,t0,imps,p) <- findModule name
            ds <- foldM (get (name:trc)) ds imps
-           let (st,t) | (not . null) [f | (f,CSComp,_,_,_) <- ds, elem f imps]
+           let (st,t) | (not . null) [f | (f,_,t1,_,_) <- ds, elem f imps && liftM2 (>=) t0 t1 /= Just True]
                                   = (CSComp,Nothing)
                       | otherwise = (st0,t0)
            return ((name,st,t,imps,p):ds)
@@ -154,7 +154,7 @@ selectFormat opts mtenv mtgf mtgfo =
     (Just tenv,_,Just tgf) | tenv > tgf -> (CSEnv, Just tenv)
     (_,Just tgfo,Just tgf) | tgfo > tgf -> (CSRead,Just tgfo)
     (Just tenv,_,Nothing) -> (CSEnv,Just tenv) -- source does not exist
-    (_,_,        Nothing) -> (CSRead,Nothing)  -- source does not exist
+    (_,Just tgfo,Nothing) -> (CSRead,Just tgfo)  -- source does not exist
     _ -> (CSComp,Nothing)
   where
     fromComp = flag optRecomp opts == NeverRecomp
