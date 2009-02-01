@@ -126,7 +126,7 @@ data HaskellOption = HaskellNoPrefix | HaskellGADT | HaskellLexical
 data Warning = WarnMissingLincat
   deriving (Show,Eq,Ord)
 
-data Dump = DumpRebuild | DumpExtend | DumpRename | DumpTypeCheck | DumpRefresh | DumpOptimize | DumpCanon
+data Dump = DumpSource | DumpRebuild | DumpExtend | DumpRename | DumpTypeCheck | DumpRefresh | DumpOptimize | DumpCanon
   deriving (Show,Eq,Ord)
 
 -- | Pretty-printing options
@@ -349,6 +349,7 @@ optDescr =
      Option [] ["stem"] (onOff (toggleOptimize OptStem) True) "Perform stem-suffix analysis (default on).",
      Option [] ["cse"] (onOff (toggleOptimize OptCSE) True) "Perform common sub-expression elimination (default on).",
      Option [] ["cfg"] (ReqArg cfgTransform "TRANS") "Enable or disable specific CFG transformations. TRANS = merge, no-merge, bottomup, no-bottomup, ...",
+     dumpOption "source" DumpSource,
      dumpOption "rebuild" DumpRebuild,
      dumpOption "extend" DumpExtend,
      dumpOption "rename" DumpRename,
