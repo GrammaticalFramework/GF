@@ -19,7 +19,7 @@ import GF.Text.UTF8 ----
 
 import GF.Grammar.Grammar
 import GF.Grammar.Lookup
-import GF.Grammar.PrGrammar
+import GF.Grammar.Printer
 import GF.Grammar.Binary
 
 import GF.Infra.Ident
@@ -34,6 +34,7 @@ import qualified GF.Source.PrintGF as P
 import GF.Data.Operations
 
 import Control.Monad
+import System.IO
 import System.Directory
 import System.FilePath
 import qualified Data.Map as Map
@@ -41,6 +42,7 @@ import qualified Data.Set as Set
 import Data.List(nub)
 import Data.Maybe (isNothing)
 import Data.Binary
+import Text.PrettyPrint
 
 import PGF.Check
 import PGF.CId
@@ -99,11 +101,10 @@ compileSourceGrammar opts gr@(MGrammar ms) = do
     extendCompileEnvInt env k Nothing mo'    --- file for the same of modif time...
 
 -- to output an intermediate stage
-intermOut :: Options -> Dump -> String -> IOE ()
-intermOut opts d s = if dump opts d then 
-  ioeIO (putStrLn ("\n\n--#" +++ show d) >> putStrLn s) 
-  else return ()
-
+intermOut :: Options -> Dump -> Doc -> IOE ()
+intermOut opts d doc
+  | dump opts d = ioeIO (hPutStrLn stderr (render (text "\n\n--#" <+> text (show d) $$ doc)))
+  | otherwise   = return ()
 
 -- | the environment
 type CompileEnv = (Int,SourceGrammar,ModEnv)
@@ -151,6 +152,9 @@ compileOne opts env@(_,srcgr,_) file = do
     ".gfo" -> do
        sm00 <- putPointE Normal opts ("+ reading" +++ file) $ ioeIO (decodeFile file)
        let sm0 = addOptionsToModule opts sm00
+
+       intermOut opts DumpSource (ppModule sm0)
+
        let sm1 = unsubexpModule sm0
        sm <- {- putPointE Normal opts "creating indirections" $ -} ioeErr $ extendModule mos sm1
        
@@ -168,6 +172,9 @@ compileOne opts env@(_,srcgr,_) file = do
        sm00 <- putpOpt ("- parsing" +++ file) ("- compiling" +++ file ++ "... ") $ 
                                            getSourceModule opts file
        let sm0 = decodeStringsInModule sm00
+
+       intermOut opts DumpSource (ppModule sm0)
+
        (k',sm)  <- compileSourceModule opts env sm0
        let sm1 = if isConcr sm then shareModule sm else sm -- cannot expand Str
        cm  <- putPointE Verbose opts "  generating code... " $ generateModuleCode opts gfo sm1
@@ -184,33 +191,30 @@ compileSourceModule opts env@(k,gr,_) mo@(i,mi) = do
       mos   = modules gr
 
   mo1   <- ioeErr $ rebuildModule mos mo
-  intermOut opts DumpRebuild (prModule mo1)
+  intermOut opts DumpRebuild (ppModule mo1)
 
   mo1b  <- ioeErr $ extendModule mos mo1
-  intermOut opts DumpExtend (prModule mo1b)
+  intermOut opts DumpExtend (ppModule mo1b)
 
   case mo1b of
     (_,n) | not (isCompleteModule n) -> do
       return (k,mo1b)   -- refresh would fail, since not renamed
     _ -> do
       mo2:_ <- putpp "  renaming " $ ioeErr $ renameModule mos mo1b
-      intermOut opts DumpRename (prModule mo2)
+      intermOut opts DumpRename (ppModule mo2)
 
       (mo3:_,warnings) <- putpp "  type checking" $ ioeErr $ showCheckModule mos mo2
       if null warnings then return () else putp warnings $ return ()
-      intermOut opts DumpTypeCheck (prModule mo3)
+      intermOut opts DumpTypeCheck (ppModule mo3)
 
       (k',mo3r:_) <- putpp "  refreshing " $ ioeErr $ refreshModule (k,mos) mo3
-      intermOut opts DumpRefresh (prModule mo3r)
+      intermOut opts DumpRefresh (ppModule mo3r)
 
       let eenv = () --- emptyEEnv
-      (mo4,eenv') <- 
-        ---- if oElem "check_only" opts 
-          putpp "  optimizing " $ ioeErr $ optimizeModule opts (mos,eenv) mo3r
+      (mo4,eenv') <- putpp "  optimizing " $ ioeErr $ optimizeModule opts (mos,eenv) mo3r
+      intermOut opts DumpOptimize (ppModule mo4)
+
       return (k',mo4)
- where
-   ----   prDebug mo = ioeIO $ putStrLn $ prGrammar $ MGrammar [mo] ---- debug
-   prDebug mo = ioeIO $ print $ length $ lines $ prGrammar $ MGrammar [mo]
 
 generateModuleCode :: Options -> FilePath -> SourceModule -> IOE SourceModule
 generateModuleCode opts file minfo = do
