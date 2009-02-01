@@ -8,7 +8,8 @@
 -----------------------------------------------------------------------------
 
 module GF.Grammar.Printer
-           ( ppModule
+           ( ppIdent
+           , ppModule
            , ppJudgement
            , ppTerm
            , ppPatt
@@ -26,19 +27,20 @@ import Data.List  (intersperse)
 
 ppModule :: SourceModule -> Doc
 ppModule (mn, ModInfo mtype mstat opts exts with opens _ jments _) =
-    (let defs = tree2list jments
-     in if null defs
-          then hdr
-          else hdr <+> lbrace $$ nest 2 (ppOptions opts $$ vcat (map ppJudgement defs)) $$ rbrace)
+    hdr $$ nest 2 (ppOptions opts $$ vcat (map ppJudgement defs)) $$ ftr
     where
+      defs = tree2list jments
+
       hdr = complModDoc <+> modTypeDoc <+> equals <+> 
             hsep (intersperse (text "**") $
                   filter (not . isEmpty)  $ [ commaPunct ppExtends exts
                                             , maybe empty ppWith with
                                             , if null opens
-                                                then empty
-                                                else text "open" <+> commaPunct ppOpenSpec opens <+> text "in"
+                                                then lbrace
+                                                else text "open" <+> commaPunct ppOpenSpec opens <+> text "in" <+> lbrace
                                             ])
+
+      ftr = rbrace
 
       complModDoc =
         case mstat of
@@ -169,8 +171,8 @@ ppTerm d (Meta _)    = char '?'
 ppTerm d (Empty)     = text "[]"
 ppTerm d (EData)     = text "data"
 ppTerm d (R xs)      = braces (fsep (punctuate semi [ppLabel l <+> 
-                                                     case mb_t of {Just t -> colon <+> ppTerm 0 t; Nothing -> empty} <+>
-                                                     equals <+> ppTerm 0 e | (l,(mb_t,e)) <- xs]))
+                                                     fsep [case mb_t of {Just t -> colon <+> ppTerm 0 t; Nothing -> empty},
+                                                           equals <+> ppTerm 0 e] | (l,(mb_t,e)) <- xs]))
 ppTerm d (RecType xs)= braces (fsep (punctuate semi [ppLabel l <+> colon <+> ppTerm 0 t | (l,t) <- xs]))
 ppTerm d (Typed e t) = char '<' <> ppTerm 0 e <+> colon <+> ppTerm 0 t <> char '>'
 
