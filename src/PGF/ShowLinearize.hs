@@ -70,9 +70,9 @@ tableLinearize unlex pgf lang = unlines . map pr . tabularLinearize pgf lang whe
 tabularLinearize :: PGF -> CId -> Tree -> [(String,[String])]
 tabularLinearize pgf lang = branches . recLinearize pgf lang where
   branches r = case r of
-    RR  fs -> [(        b,s) | (lab,t) <- fs, (b,s) <- branches t]
+    RR  fs -> [(lab +++ b,s) | (lab,t) <- fs, (b,s) <- branches t]
     RT  fs -> [(lab +++ b,s) | (lab,t) <- fs, (b,s) <- branches t]
-    RFV rs -> [([], ss) | (_,ss) <- concatMap branches rs]
+    RFV rs -> concatMap branches rs
     RS  s  -> [([], [s])]
     RCon _ -> []
 
