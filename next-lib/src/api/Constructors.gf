@@ -139,7 +139,8 @@ incomplete resource Constructors = open Grammar in {
       mkUtt : S   -> Utt ;  -- 1. John walked
       mkUtt : Cl  -> Utt ;  -- 2. John walks
       mkUtt : QS  -> Utt ;  -- 3. did John walk
-      mkUtt : Imp -> Utt ;  -- 4. love yourself
+      mkUtt : QCl -> Utt ;  -- 4. does John walk
+      mkUtt : Imp -> Utt ;  -- 5. love yourself
 
 -- Imperatives can also vary in $ImpForm$ (number/politeness) and 
 -- polarity.
@@ -1320,6 +1321,8 @@ incomplete resource Constructors = open Grammar in {
 	                                 =    \c -> UttS (TUseCl TPres ASimul PPos c);
       mkUtt : QS -> Utt                    -- is it good
                                          =    UttQS     ;
+      mkUtt : QCl -> Utt                   -- does John walk
+	                                 =    \c -> UttQS (TUseQCl TPres ASimul PPos c);
       mkUtt : ImpForm -> Pol -> Imp -> Utt -- don't help yourselves
                                          =    mkUttImp  ;
       mkUtt : ImpForm ->        Imp -> Utt -- help yourselves
@@ -1387,6 +1390,10 @@ incomplete resource Constructors = open Grammar in {
 
     whichSg_IDet : IDet = IdetQuant which_IQuant NumSg ;
     whichPl_IDet : IDet = IdetQuant which_IQuant NumPl ;
+
+    what_IP : IP = whatSg_IP ;
+    who_IP : IP = whoSg_IP ;
+    which_IDet : IDet = whichSg_IDet ;
 
     mkIAdv : Prep -> IP -> IAdv = PrepIP ;
 
