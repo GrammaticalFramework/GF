@@ -101,7 +101,8 @@ resource ResBul = ParamX ** open Prelude in {
      ;
 
     CardOrd = NCard DGenderSpecies | NOrd AForm ;
-    DForm = unit | teen | ten | hundred ;
+    NumF  = Formal | Informal ;
+    DForm = unit | teen NumF | ten NumF | hundred ;
 
 --2 Transformations between parameter types
 
@@ -475,18 +476,24 @@ resource ResBul = ParamX ** open Prelude in {
 
 -- For $Numeral$.
 
-    mkDigit : Str -> Str -> Str -> Str -> Str -> {s : DForm => CardOrd => Str} =
-      \dva, dvama, dve, vtori, dvesta ->
+    mkDigit : Str -> Str -> Str -> Str -> Str -> Str -> {s : DForm => CardOrd => Str} =
+      \dva, dvama, dve, vtori, dvaiset, dvesta ->
       {s = table {
              unit                  => mkCardOrd dva dvama dve vtori ;
-             teen                  => mkCardOrd (dva+"надесет") (dva+"надесетима") (dva+"надесет") (dva+"надесети") ;
-             ten                   => mkCardOrd (dva+"десет")   (dva+"десетима")   (dva+"десет")   (dva+"десети") ;
+             teen nf               => case nf of {
+                                        Formal   => mkCardOrd (dva+"надесет") (dva+"надесетима") (dva+"надесет") (dva+"надесети") ;
+                                        Informal => mkCardOrd (dva+"найсет")  (dva+"найсет")     (dva+"найсет")  (dva+"найсти")
+                                      } ;
+             ten  nf               => case nf of {
+                                        Formal   => mkCardOrd (dva+"десет")   (dva+"десетима")   (dva+"десет")   (dva+"десети") ;
+                                        Informal => mkCardOrd dvaiset         dvaiset            dvaiset         (dvaiset+"и")
+                                      } ;
              hundred               => let dvesten : Str
                                                   = case dvesta of {
                                                       dvest+"а"        => dvest+"ен" ;
                                                       chetiristot+"ин" => chetiristot+"ен"
                                                     }
-                                      in mkCardOrd dvesta dvesta dvesta dvesten
+                                      in mkCardOrd100 dvesta dvesten
            }
       } ;
 
@@ -506,6 +513,24 @@ resource ResBul = ParamX ** open Prelude in {
                                     ASg Neut Def   => vtoro+"то" ;
                                     APl Indef      => vtori ;
                                     APl Def        => vtori+"те"
+                                  }
+               } ;
+
+    mkCardOrd100 : Str -> Str -> CardOrd => Str =
+      \sto, stoten ->
+               table {
+                 NCard dg   => sto ;
+                 NOrd aform => let stotn = init (init stoten) + last stoten ;
+                               in case aform of {
+                                    ASg Masc Indef => stoten ;
+                                    ASg Masc Def   => stotn+"ия" ;
+                                    ASgMascDefNom  => stotn+"ият" ;
+                                    ASg Fem  Indef => stotn+"а" ;
+                                    ASg Fem  Def   => stotn+"ата" ;
+                                    ASg Neut Indef => stotn+"о" ;
+                                    ASg Neut Def   => stotn+"ото" ;
+                                    APl Indef      => stotn+"и" ;
+                                    APl Def        => stotn+"ите"
                                   }
                } ;
 

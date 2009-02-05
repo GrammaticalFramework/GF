@@ -5,19 +5,19 @@ concrete NumeralBul of Numeral = CatBul ** open Prelude, ResBul in {
 lincat 
   Digit      = {s : DForm => CardOrd => Str} ;
   Sub10      = {s : DForm => CardOrd => Str; n : Number} ;
-  Sub100     = {s : CardOrd => Str; n : Number; i : Bool} ;
-  Sub1000    = {s : CardOrd => Str; n : Number; i : Bool} ;
-  Sub1000000 = {s : CardOrd => Str; n : Number} ;
+  Sub100     = {s : CardOrd => NumF => Str; n : Number; i : Bool} ;
+  Sub1000    = {s : CardOrd => NumF => Str; n : Number; i : Bool} ;
+  Sub1000000 = {s : CardOrd => NumF => Str; n : Number} ;
 
-lin num x = x ;
-lin n2 = mkDigit "два"    "двама"    "две"    "втори"    "двеста" ;
-lin n3 = mkDigit "три"    "трима"    "три"    "трети"    "триста" ;
-lin n4 = mkDigit "четири" "четирима" "четири" "четвърти" "четиристотин" ;
-lin n5 = mkDigit "пет"    "петима"   "пет"    "пети"     "петстотин" ;
-lin n6 = mkDigit "шест"   "шестима"  "шест"   "шести"    "шестстотин" ;
-lin n7 = mkDigit "седем"  "седмина"  "седем"  "седми"    "седемстотин" ;
-lin n8 = mkDigit "осем"   "осмина"   "осем"   "осми"     "осемстотин" ;
-lin n9 = mkDigit "девет"  "деветима" "девет"  "девети"   "деветстотин" ;
+lin num x = {s = \\c => x.s ! c ! Formal; n=x.n} ;
+lin n2 = mkDigit "два"    "двама"    "две"    "втори"    "двайсет"    "двеста" ;
+lin n3 = mkDigit "три"    "трима"    "три"    "трети"    "трийсет"    "триста" ;
+lin n4 = mkDigit "четири" "четирима" "четири" "четвърти" "четирийсет" "четиристотин" ;
+lin n5 = mkDigit "пет"    "петима"   "пет"    "пети"     "петдесет"   "петстотин" ;
+lin n6 = mkDigit "шест"   "шестима"  "шест"   "шести"    "шейсет"     "шестстотин" ;
+lin n7 = mkDigit "седем"  "седмина"  "седем"  "седми"    "седемдесет" "седемстотин" ;
+lin n8 = mkDigit "осем"   "осмина"   "осем"   "осми"     "осемдесет"  "осемстотин" ;
+lin n9 = mkDigit "девет"  "деветима" "девет"  "девети"   "деветдесет" "деветстотин" ;
 
 lin pot01 =
       {s = table {
@@ -44,40 +44,43 @@ lin pot01 =
                                                          APl Def        => "първите"
                                                        }
                         } ;
-             teen    => mkCardOrd "единадесет" "единадесетима" "единадесет" "единадесети" ;
-             ten     => mkCardOrd "десет"      "десетима"      "десет"      "десети" ;
-             hundred => mkCardOrd "сто"        "стотина"       "сто"        "стотен"
+             teen nf => case nf of {
+                          Formal   => mkCardOrd "единадесет" "единадесетима" "единадесет" "единадесети" ;
+                          Informal => mkCardOrd "единайсет"  "единайсет"     "единайсет"  "единайсти"
+                        } ;
+             ten  nf => mkCardOrd "десет" "десетима" "десет" "десети" ;
+             hundred => mkCardOrd100 "сто" "стотен"
            }
       ;n = Sg
       } ;
 lin pot0 d = d ** {n = Pl} ;
 
-lin pot110 = {s=pot01.s ! ten;  n = Pl; i = True} ;
-lin pot111 = {s=pot01.s ! teen; n = Pl; i = True} ;
-lin pot1to19 d = {s = d.s ! teen; n = Pl; i = True} ;
-lin pot0as1 n = {s = n.s ! unit; n = n.n; i = True} ;
-lin pot1 d = {s = d.s ! ten; n = Pl; i = True} ;
+lin pot110 = {s=\\c,nf => pot01.s ! ten nf ! c;  n = Pl; i = True} ;
+lin pot111 = {s=\\c,nf => pot01.s ! teen nf ! c; n = Pl; i = True} ;
+lin pot1to19 d = {s = \\c,nf => d.s ! teen nf ! c; n = Pl; i = True} ;
+lin pot0as1 n = {s = \\c,nf => n.s ! unit ! c; n = n.n; i = True} ;
+lin pot1 d = {s = \\c,nf => d.s ! ten nf ! c; n = Pl; i = True} ;
 lin pot1plus d e = {
-   s = \\c => d.s ! ten ! NCard DMascIndef ++ "и" ++ e.s ! unit ! c ; n = Pl; i = False} ;
+   s = \\c,nf => d.s ! ten nf ! NCard DMascIndef ++ "и" ++ e.s ! unit ! c ; n = Pl; i = False} ;
 
 lin pot1as2 n = n ;
-lin pot2 n = {s = \\c => n.s ! hundred ! c; n = Pl; i = True} ;
+lin pot2 n = {s = \\c,nf => n.s ! hundred ! c; n = Pl; i = True} ;
 lin pot2plus d e = {
-  s = \\c => d.s ! hundred ! NCard DMascIndef ++ case e.i of {False => []; True  => "и"} ++ e.s ! c ;
+  s = \\c,nf => d.s ! hundred ! NCard DMascIndef ++ case e.i of {False => []; True  => "и"} ++ e.s ! c ! nf ;
   n = Pl ;
   i = False
   } ;
 
 lin pot2as3 n = n ;
 lin pot3 n = {
-  s = \\c => case n.n of {
-               Sg => mkCardOrd "хиляда" "хиляда" "хиляда" "хиляден" ! c ;
-               Pl => n.s ! NCard DFemIndef ++ mkCardOrd "хиляди" "хиляди" "хиляди" "хиляден" ! c
-             } ;
+  s = \\c,nf => case n.n of {
+                  Sg => mkCardOrd100 "хиляда" "хиляден" ! c ;
+                  Pl => n.s ! NCard DFemIndef ! nf ++ mkCardOrd100 "хиляди" "хиляден" ! c
+                } ;
   n = Pl
   } ;
 lin pot3plus n m = {
-  s = \\c => (pot3 (n ** {lock_Sub1000=<>})).s ! NCard DMascIndef ++ case m.i of {False => []; True  => "и"} ++ m.s ! c ;
+  s = \\c,nf => (pot3 (n ** {lock_Sub1000=<>})).s ! NCard DMascIndef ! nf ++ case m.i of {False => []; True  => "и"} ++ m.s ! c ! nf ;
   n = Pl
   } ;
 
