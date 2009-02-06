@@ -890,17 +890,6 @@ oper
                                (v0+"ето")
                                (v0+"и")
                                (v0+"ите") ;
-  mkA089 : Str -> A ;
-  mkA089 base = let v0 = tk 1 base
-                in mkAdjective (v0+"-")
-                               (v0+"ия")
-                               (v0+"ият")
-                               (v0+"-")
-                               (v0+"ата")
-                               (v0+"-")
-                               (v0+"ото")
-                               (v0+"-")
-                               (v0+"ите") ;
   mkA089a : Str -> A ;
   mkA089a base = let v0 = base
                  in mkAdjective (v0)
