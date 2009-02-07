@@ -30,6 +30,7 @@ exportPGF :: Options
 exportPGF opts fmt pgf = 
     case fmt of
       FmtPGFPretty    -> multi "txt" prPGFPretty
+      FmtPMCFGPretty  -> single "pmcfg" prPMCFGPretty
       FmtJavaScript   -> multi "js"  pgf2js
       FmtHaskell      -> multi "hs"  (grammar2haskell opts name)
       FmtProlog       -> multi "pl"  grammar2prolog 

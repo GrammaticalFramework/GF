@@ -1,15 +1,14 @@
-module PGF.Data (module PGF.Data, module PGF.Expr, module PGF.Type) where
+module PGF.Data (module PGF.Data, module PGF.Expr, module PGF.Type, module PGF.PMCFG) where
 
 import PGF.CId
 import PGF.Expr hiding (Value, Env)
 import PGF.Type
+import PGF.PMCFG
 
 import qualified Data.Map as Map
 import qualified Data.Set as Set
 import qualified Data.IntMap as IntMap
 import Data.List
-import Data.Array
-import Data.Array.Unboxed
 
 -- internal datatypes for PGF
 
@@ -54,59 +53,8 @@ data Term =
  | TM String
   deriving (Eq,Ord,Show)
 
-data Tokn =
-   KS String
- | KP [String] [Alternative]
-  deriving (Eq,Ord,Show)
-
-data Alternative =
-   Alt [String] [String]
-  deriving (Eq,Ord,Show)
 
 
-type FCat      = Int
-type FIndex    = Int
-type FPointPos = Int
-data FSymbol
-  = FSymCat {-# UNPACK #-} !Int {-# UNPACK #-} !FIndex
-  | FSymLit {-# UNPACK #-} !Int {-# UNPACK #-} !FIndex
-  | FSymTok Tokn
-  deriving (Eq,Ord,Show)
-type Profile = [Int]
-data Production
-  = FApply  {-# UNPACK #-} !FunId [FCat]
-  | FCoerce {-# UNPACK #-} !FCat
-  | FConst  Tree String
-  deriving (Eq,Ord,Show)
-data FFun  = FFun CId [Profile] {-# UNPACK #-} !(UArray FIndex SeqId) deriving (Eq,Ord,Show)
-type FSeq  = Array FPointPos FSymbol
-type FunId = Int
-type SeqId = Int
-
-data ParserInfo
-    = ParserInfo { functions   :: Array FunId FFun
-                 , sequences   :: Array SeqId FSeq
-	         , productions :: IntMap.IntMap (Set.Set Production)
-	         , startCats   :: Map.Map CId [FCat]
-	         , totalCats   :: {-# UNPACK #-} !FCat
-	         }
-
-
-fcatString, fcatInt, fcatFloat, fcatVar :: Int
-fcatString = (-1)
-fcatInt    = (-2)
-fcatFloat  = (-3)
-fcatVar    = (-4)
-
-
--- print statistics
-
-statGFCC :: PGF -> String
-statGFCC pgf = unlines [
-  "Abstract\t" ++ prCId (absname pgf), 
-  "Concretes\t" ++ unwords (map prCId (cncnames pgf)), 
-  "Categories\t" ++ unwords (map prCId (Map.keys (cats (abstract pgf)))) 
-  ]
 
 -- merge two GFCCs; fails is differens absnames; priority to second arg
 
