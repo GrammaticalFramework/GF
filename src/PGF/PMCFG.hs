@@ -73,18 +73,17 @@ ppProduction (fcat,FConst _ s) =
   ppFCat fcat <+> text "->" <+> text (show s)
 
 ppFun (funid,FFun fun _ arr) =
-  ppFunId funid <+> text ":=" <+> parens (hcat (punctuate comma (map ppSeqId (elems arr))))
+  ppFunId funid <+> text ":=" <+> parens (hcat (punctuate comma (map ppSeqId (elems arr)))) <+> brackets (text (prCId fun))
 
 ppSeq (seqid,seq) = 
-  ppSeqId seqid <+> text ":=" <+> parens (hsep (map ppSymbol (elems seq)))
+  ppSeqId seqid <+> text ":=" <+> hsep (map ppSymbol (elems seq))
 
 ppStartCat (id,fcats) =
   text (prCId id) <+> text ":=" <+> brackets (hcat (punctuate comma (map ppFCat fcats)))
 
 ppSymbol (FSymCat d r) = char '<' <> int d <> comma <> int r <> char '>'
 ppSymbol (FSymLit d r) = char '<' <> int d <> comma <> int r <> char '>'
-ppSymbol (FSymTok t)   = text (show t)
-
+ppSymbol (FSymTok (KS t))   = text (show t)
 
 ppFCat  fcat  = char 'C' <> int fcat
 ppFunId funid = char 'F' <> int funid
