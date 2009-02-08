@@ -575,6 +575,7 @@ library
     PGF.Parsing.FCFG
     PGF.Expr
     PGF.Type
+    PGF.PMCFG
     PGF.AbsCompute
     PGF.Paraphrase
     PGF.TypeCheck
@@ -689,6 +690,7 @@ executable gf
     PGF.Data
     PGF.Expr
     PGF.Type
+    PGF.PMCFG
     PGF.Macros
     PGF.Generate
     PGF.Linearize

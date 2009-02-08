@@ -16,7 +16,7 @@ module GF.Infra.Option
      modifyFlags,
      helpMessage,
      -- * Checking specific options
-     flag, cfgTransform, haskellOption,
+     flag, cfgTransform, haskellOption, readOutputFormat,
      isLexicalCat,
      -- * Setting specific options
      setOptimization, setCFGTransform,
@@ -81,6 +81,7 @@ data Encoding = UTF_8 | ISO_8859_1 | CP_1251
   deriving (Eq,Ord)
 
 data OutputFormat = FmtPGFPretty
+                  | FmtPMCFGPretty
                   | FmtJavaScript 
                   | FmtHaskell 
                   | FmtProlog
@@ -427,7 +428,8 @@ optDescr =
 
 outputFormats :: [(String,OutputFormat)]
 outputFormats = 
-    [("pgf-pretty",   FmtPGFPretty),
+    [("pgf_pretty",   FmtPGFPretty),
+     ("pmcfg_pretty", FmtPMCFGPretty),
      ("js",           FmtJavaScript),
      ("haskell",      FmtHaskell),
      ("prolog",       FmtProlog),

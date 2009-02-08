@@ -1,10 +1,11 @@
 -- | Print a part of a PGF grammar on the human-readable format used in 
 -- the paper "PGF: A Portable Run-Time Format for Type-Theoretical Grammars".
-module GF.Compile.PGFPretty (prPGFPretty) where
+module GF.Compile.PGFPretty (prPGFPretty, prPMCFGPretty) where
 
 import PGF.CId
 import PGF.Data
 import PGF.Macros
+import PGF.PMCFG
 
 import GF.Data.Operations
 
@@ -15,6 +16,13 @@ import Text.PrettyPrint.HughesPJ
 
 prPGFPretty :: PGF -> String
 prPGFPretty pgf = render $ prAbs (abstract pgf) $$ prAll (prCnc (abstract pgf)) (concretes pgf)
+
+prPMCFGPretty :: PGF -> CId -> String
+prPMCFGPretty pgf lang = render $
+  case lookParser pgf lang of
+    Nothing    -> empty
+    Just pinfo -> text "language" <+> text (prCId lang) $$ ppPMCFG pinfo
+                                                   
 
 prAbs :: Abstr -> Doc
 prAbs a = prAll prCat (cats a) $$ prAll prFun (funs a)

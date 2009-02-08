@@ -17,7 +17,7 @@ import PGF.Data ----
 import PGF.Morphology
 import PGF.VisualizeTree
 import GF.Compile.Export
-import GF.Infra.Option (noOptions)
+import GF.Infra.Option (noOptions, readOutputFormat)
 import GF.Infra.UseIO
 import GF.Data.ErrM ----
 import PGF.Expr (readTree)
@@ -376,7 +376,7 @@ allCommands cod env@(pgf, mos) = Map.fromList [
        "N.B.2 This command is slightly obsolete: to produce different formats",
        "the batch compiler gfc is recommended, and has many more options."
        ],
-     exec  = \opts _ -> return $ fromString $ prGrammar opts,
+     exec  = \opts _ -> prGrammar opts,
      flags = [
        --"cat",
        ("lang",   "select languages for the some options (default all languages)"),
@@ -651,15 +651,13 @@ allCommands cod env@(pgf, mos) = Map.fromList [
      [] -> (ts, "no trees found")
      _ -> fromTrees ts
 
-   prGrammar opts = case opts of
-     _ | isOpt "cats" opts -> unwords $ map showType $ categories pgf
-     _ | isOpt "fullform" opts -> concatMap 
-          (prFullFormLexicon . morpho) $ optLangs opts
-     _ | isOpt "missing" opts -> 
-           unlines $ [unwords (prCId la:":": map prCId cs) | 
-                       la <- optLangs opts, let cs = missingLins pgf la]
-     _ -> case valStrOpts "printer" "pgf" opts of
-       v -> concatMap snd $ exportPGF noOptions (read v) pgf
+   prGrammar opts
+     | isOpt "cats"     opts = return $ fromString $ unwords $ map showType $ categories pgf
+     | isOpt "fullform" opts = return $ fromString $ concatMap (prFullFormLexicon . morpho) $ optLangs opts
+     | isOpt "missing"  opts = return $ fromString $ unlines $ [unwords (prCId la:":": map prCId cs) | 
+                                                                  la <- optLangs opts, let cs = missingLins pgf la]
+     | otherwise             = do fmt <- readOutputFormat (valStrOpts "printer" "pgf_pretty" opts)
+                                  return $ fromString $ concatMap snd $ exportPGF noOptions fmt pgf
 
    morphos opts s = 
      [lookupMorpho (morpho la) s | la <- optLangs opts]
