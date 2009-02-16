@@ -187,17 +187,29 @@ resource ParadigmsAra = open
 -- The definitions should not bother the user of the API. So they are
 -- hidden from the document.
 
-{-
--- AED's original definition of regV
 
-  regV = \word ->
-    case word of {
+----AR AED's original definition of regV
+  regV_orig : Str -> V = \wo ->
+    case wo of {
       "يَ" + f@_ + c@_ + "ُ" + l@_ => v1 (f+c+l) a u ;
       "يَ" + f@_ + c@_ + "ِ" + l@_ => v1 (f+c+l) a i ;
       "يَ" + f@_ + c@_ + "َ" + l@_ => v1 (f+c+l) a a ;
-      f@_ + "َ" + c@_ + "ِ" + l@_   => v1 (f+c+l) i a 
+      f@_ + "َ" + c@_ + "ِ" + l@_  => v1 (f+c+l) i a ;
+      _ => Predef.error "regV not applicable"
     };
--}
+
+
+  regV_o : Str -> Str = \word ->
+    case word of {
+      "يَ" + f@_ + c@_ + "ُ" + l@_ => "a" ;
+      "يَ" + f@_ + c@_ + "ِ" + l@_ => "b" ;
+      "يَ" + f@_ + c@_ + "َ" + l@_ => "c" ; 
+      f@_ + "َ" + c@_ + "ِ" + l@_  => "d" ;
+      _ => "q"
+    };
+  aa = a ; uu = u ; ii = i ; 
+  ----AR for debug end
+
 
 ---- begin workaround for a problem with pattern matching, AR 27/6/2008
 

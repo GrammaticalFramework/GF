@@ -1,17 +1,22 @@
-European Resource Grammar Summer School
+GF Resource Grammar Summer School
 Gothenburg, 17-28 August 2009
 Aarne Ranta (aarne at chalmers.se)
 
 %!Encoding : iso-8859-1
 
 %!target:html
+%!postproc(html): #BECE <center>
+%!postproc(html): #ENCE </center>
 
-//preliminary version, 17 November 2008//
+#BECE
+[school-langs.png]
+#ENCE
 
-[eu-langs.png]
+
+//red=wanted, green=exists, yellow=in-progress, solid=official-eu, dotted=non-eu//
 
 
-===Executive summary===
+==Executive summary==
 
 We plan to organize a summer school with the goal of implementing the GF
 resource grammar library for 15 new languages, so that the library will
@@ -24,89 +29,71 @@ and basic syntax of each language. It can be used in GF applications
 and also ported to other formats. The library is licensed under LGPL.
 
 Each language is implemented by one or two students working together.
-Travel grants will be available for students selected on the basis of
+Travel grants will be available for some students selected on the basis of
 pre-conference assignments. 
 
-The official announcement will be in January 2009, and the summer school
-itself on 17-28 August 2009, at the campus of Chalmers University of
-Technology in Gothenburg, Sweden.
+The summer school will be held on 17-28 August 2009, at the campus of 
+Chalmers University of Technology in Gothenburg, Sweden.
 
 
 
 ==Introduction==
 
 Since 2007, EU-27 has 23 official languages, listed in the diagram on top of this
-document.
-%[``http://ec.europa.eu/education/policies/lang/languages/index_en.html`` 
-%http://ec.europa.eu/education/policies/lang/languages/index_en.html]. 
-There is a growing need of translation between
-these languages. The traditional language-to-language method requires 23*22 = 506
-translators (humans or computer programs) to cover all possible translation needs.
-
-An alternative to language-to-language translation is the use of an **interlingua**:
-a language-independent representation such that all translation problems can
-be reduced to translating to and from the interlingua. With 23 languages,
-only 2*23 = 46 translators are needed.
-
-Interlingua sounds too good to be true. In a sense, it is. All attempts to
-create an interlingua that would solve all translation problems have failed.
-However, interlinguas for restricted applications have shown more
-success. For instance, mathematical texts and weather reports can be translated
-by using interlinguas tailor-made for the domains of mathematics and weather reports,
-respectively.
-
-What is required of an interlingua is
-- semantic accuracy: correspondence to what you want to say in the application
-- language-independence: abstraction from individual languages
-
-
-Thus, for instance, an interlingua for mathematical texts may be based on
-mathematical logic, which at the same time gives semantic accuracy and
-language independence. In other domains, something else than mathematical
-logic may be needed; the **ontologies** defined within the semantic
-web technology are often good starting points for interlinguas.
-
-
-==GF: a framework for multilingual grammars==
-
-The interlingua is just one part of a translation system. We also need
-the mappings between the interlingua and the involved languages. As the
-number of languages increases, this part grows while the interlingua remains
-constant.
+document. There is a growing need of linguistic resources for these 
+languages, to help in tasks such as translation and information retrieval. 
+These resources should be **portable** and **freely accessible**.
+Languages marked in red in the diagram are of particular interest for 
+the summer school, since they are those on which the effort will be concentrated.
 
 GF (Grammatical Framework, 
 [``digitalgrammars.com/gf`` http://digitalgrammars.com/gf])
-is a programming language designed to support interlingua-based translation.
-A "program" in GF is a **multilingual grammar**, which consists of an 
-**abstract syntax** and a set of **concrete syntaxes**. A concrete
-syntaxes is a mapping from the abstract syntax to a particular language.
-These mappings are **reversible**, which means that they can be used for
-translating in both directions. This means that creating an interlingua-based
-translator for 23 languages just requires 1 + 23 = 24 grammar modules (the abstract
-syntax and the concrete syntaxes).
+is a **functional programming language** designed for writing natural
+language grammars. It provides an efficient platform for this task, due to
+its modern characteristics:
+- It is a functional programming language, similar to Haskell and ML.
+- It has a static type system and type checker.
+- It has a powerful module system supporting separate compilation 
+  and data abstraction.
+- It has an optimizing compiler to **Portable Grammar Format** (PGF).
+- PGF can be further compiled to other formats, such as JavaScript and
+  speech recognition language models.
+- GF has a **resource grammar library** giving access to the morphology and
+  basic syntax of 12 languages.
 
-The diagram first in this document shows an interlingua 
-system covering the 23 EU languages. 
-Languages marked in
-red are of particular interest for the summer school, since they are those 
-on which the effort will be concentrated.
 
+In addition to "ordinary" grammars for single languages, GF
+supports **multilingual grammars**. A multilingual GF grammar consists of an 
+**abstract syntax** and a set of **concrete syntaxes**. 
+An abstract syntax is system of **trees**, serving as a semantic
+model or an ontology. A concrete syntax is a mapping from abstract syntax 
+trees to strings of a particular language.
+
+These mappings defined in concrete syntax are **reversible**: they
+can be used both for **generating** strings from trees, and for
+**parsing** strings into trees. Combinations of generation and
+parsing can be used for **translation**, where the abstract
+syntax works as an **interlingua**. Thus GF has been used as a
+framework for building translation systems in several areas
+of application and large sets of languages.
 
 
 
 ==The GF resource grammar library==
 
-The GF resource grammar library is a set of grammars used as libraries when
-building interlingua-based translation systems. The library currently covers
+The GF resource grammar library is a set of grammars usable as libraries when
+building translation systems and other applications. 
+The library currently covers
 the 9 languages coloured in green in the diagram above; in addition, 
 Catalan, Norwegian, and Russian are covered, and there is ongoing work on
-Arabic, Hindi/Urdu, and Thai.
+Arabic, Hindi/Urdu, Polish, Romanian, and Thai.
 
 The purpose of the resource grammar library is to define the "low-level" structure
 of a language: inflection, word order, agreement. This structure belongs to what
 linguists call morphology and syntax. It can be very complex and requires
-a lot of knowledge. Yet, when translating from one language to another, knowing 
-morphology and syntax is but a part of what is needed. The translator (whether human
+a lot of knowledge. Yet, when translating from one language to 
+another, knowing morphology and syntax is but a part of what is needed. 
+The translator (whether human
 or machine) must understand the meaning of what is translated, and must also know
 the idiomatic way to express the meaning in the target language. This knowledge
 can be very domain-dependent and requires in general an expert in the field to
@@ -116,8 +103,9 @@ in the field of weather reports, etc.
 The problem is to find a person who is an expert in both the domain of translation
 and in the low-level linguistic details. It is the rareness of this combination
 that has made it difficult to build interlingua-based translation systems.
-The GF resource grammar library has the mission of helping in this task. It encapsulates
-the low-level linguistics in program modules accessed through easy-to-use interfaces.
+The GF resource grammar library has the mission of helping in this task. 
+It encapsulates the low-level linguistics in program modules 
+accessed through easy-to-use interfaces.
 Experts on different domains can build translation systems by using the library, 
 without knowing low-level linguistics. The idea is much the same as when a 
 programmer builds a graphical user interface (GUI) from high-level elements such as
@@ -138,14 +126,17 @@ interlingua-based translation or localization of systems to new languages:
   [``http://webalt.math.helsinki.fi/content/index_eng.html`` http://webalt.math.helsinki.fi/content/index_eng.html],
   for translating mathematical exercises to 7 languages
 - in TALK [``http://www.talk-project.org`` http://www.talk-project.org],
-  where the library was used for localizing spoken dialogue systems to six languages
+  where the library was used for localizing spoken dialogue systems 
+  to six languages
 
 
 The library is also a generic linguistic resource, which can be used for tasks
 such as language teaching and information retrieval. The liberal license (LGPL)
 makes it usable for anyone and for any task. GF also has tools supporting the
-use of grammars in programs written in other programming languages: C, C++, Haskell,
-Java, JavaScript, and Prolog. In connection with the TALK project, support has also been
+use of grammars in programs written in other 
+programming languages: C, C++, Haskell,
+Java, JavaScript, and Prolog. In connection with the TALK project, 
+support has also been
 developed for translating GF grammars to language models used in speech
 recognition (GSL/Nuance, HTK/ATK, SRGS, JSGF).
 
@@ -155,7 +146,7 @@ recognition (GSL/Nuance, HTK/ATK, SRGS, JSGF).
 
 The library has the following main parts:
 - **Inflection paradigms**, covering the inflection of each language.
-- **Common Syntax API**, covering a large set of syntax rule that
+- **Core Syntax**, covering a large set of syntax rule that
   can be implemented for all languages involved.
 - **Common Test Lexicon**, giving ca. 500 common words that can be used for
   testing the library.
@@ -173,7 +164,8 @@ the first three components. The latter three are more open-ended in character.
 
 The goal of the summer school is to extend the GF resource grammar library
 to covering all 23 EU languages, which means we need 15 new languages.
-We also welcome other languages, if there are interested participants.
+We also welcome other languages than these 23, 
+if there are interested participants.
 
 The amount of work and skill is between a Master's thesis and a PhD thesis.
 The Russian implementation was made by Janna Khegai as a part of her
@@ -187,45 +179,43 @@ Latvian and Lithuanian are the first languages of the Baltic family and
 will probably require more work.
 
 In any case, the proposed allocation of work power is 2 participants per
-language. They will have 6 months to work at home, followed
-by 2 weeks of summer school. Who are these participants?
+language. They will do 2 months' worth of home work, followed
+by 2 weeks of summer school, followed by 4 months work at home. 
+Who are these participants?
 
 
 ===Selecting participants===
 
-After the call has been published, persons interested to participate in
-the project are expected to learn GF by self-study from the 
-[tutorial http://digitalgrammars.com/gf/doc/gf-tutorial.html]. 
-This should take a couple of weeks. Also an on-line course will be
-arranged to help in getting started with GF.
+Persons interested to participate in the Summer School should sign up in
+the **Google Group** of the course,
 
-Participants should continue to 
-implement selected parts of the resource grammar, following the advice from
-the 
-[Resource-HOWTO document http://digitalgrammars.com/gf/doc/Resource-HOWTO.html].
-What parts exactly are selected will be announced later. 
-This work will take another couple of weeks.
+[``groups.google.com/group/gf-resource-school-2009/`` http://groups.google.com/group/gf-resource-school-2009/]
+
+The participants are expected to learn GF by self-study from the 
+[tutorial http://digitalgrammars.com/gf/doc/gf-tutorial.html]. 
+This should take a couple of weeks. An **on-line course** will be
+arranged in April to help in getting started with GF.
+
+After the on-line course, a **programming assignment** will be published.
+This assignment will test skills required in resource grammar programming.
+Work on the assignment will take a couple of weeks.
 
 Those who are interested in getting a travel grant will submit
 their sample resource grammar fragment 
-to the Summer School Committee in the beginning of May.
+to the Summer School Committee by 12 May.
 The Committee then decides who is invited to represent which language
 in the summer school.
 
-After the Committee decision, the  participants have around three months
-to work on their languages. The work is completed in the summer school 
-itself. It is also thoroughly tested by using it to add new languages 
-to applications - in particular, to the WebALT mathematical
+The summer school itself is devoted for working on resource grammars.
+In addition to grammar writing itself, testing and evaluation is
+performed. One way to do this is via adding new languages 
+to resource grammar applications - in particular, to the WebALT mathematical
 exercise translator.
 
-Depending on the quality of submitted work, and on the demands of different
-languages, the Committee may decide to select another number than 2 participants
-for a language. We will also consider accepting participants who want to
-pay their own expenses.
+The resource grammars are expected to be completed by December 2009. They will 
+be published at GF website and licensed under LGPL.
 
-To keep track on who is working on which language, we will establish a Wiki page
-soon after the call is published. The participants are encouraged
-to contact each other and even work in groups.
+The participants are encouraged to contact each other and even work in groups.
 
 
 
@@ -254,7 +244,14 @@ who are selected on the basis of their assignments. And not only that:
 we plan to cover their travel and accommodation costs, up to 1000 EUR
 per person.
 
-We try to get the funding question settled by mid-February 2009.
+The number of grants will be decided during Spring 2009, so that grand
+holders can be notified before the beginning of June.
+
+Special terms will apply to students in
+[GSLT http://www.gslt.hum.gu.se/] and
+[NGSLT http://ngslt.org/].
+
+
 
 
 
@@ -281,8 +278,8 @@ the results for each language. Please contact us!
 
 ===The Summer School Committee===
 
-This committee consists of a number of teachers and consultants, 
-who will select the participants. It will be selected by February 2009.
+This committee consists of a number of teachers and informants, 
+who will select the participants. It will be selected by April 2009.
 
 
 ===Time and Place===
@@ -292,13 +289,13 @@ be organized at the campus of Chalmers University of Technology in Gothenburg,
 Sweden, on 17-28 August 2009.
 
 Time schedule:
-- February: announcement of summer school and the grammar
-  writing contest to get participants
-- March-April: on-line course, work on the contest assignment (ca 1 month)
-- May: submission deadline and notification of acceptance
-- June-July: more work on the grammars
-- August: summer school
-- September-December: more homework if necessary
+- February: announcement of summer school
+- April: on-line course, work on the contest assignment
+- 12 May: submission deadline for assignment work
+- 31 May: review of assignments, notifications of acceptance
+- 17-28 August: Summer School
+- September-December: homework on resource grammars
+- December: release of the extended Resource Grammar Library
 
 
 ===Dissemination and intellectual property===
@@ -309,22 +306,115 @@ with the copyright held by respective authors.
 
 The grammars will be distributed via the GF web site.
 
-The WebALT-specific grammars will have special licenses agreed between the
-authors and WebALT Inc.
 
 
 ==Why I should participate==
 
 Seven reasons:
-+ participation in a pioneering language technology work in an enthusiastic atmosphere
++ participation in a pioneering language technology work in an 
+  enthusiastic atmosphere
 + work and fun with people from all over Europe and the world
 + job opportunities and business ideas
 + credits: the school project will be established as a course at Chalmers worth
-  15 ETCS points per person, but extensions to Master's thesis will
-  also be considered
-+ merits: the resulting grammar can easily lead to a published paper
+  7.5 or 15 ETCS points per person, depending on the work accompliched; also 
+  extensions to Master's thesis will be considered (special credit arrangements
+  for [GSLT http://www.gslt.hum.gu.se/] and [NGSLT http://ngslt.org/])
++ merits: the resulting grammar can easily lead to a published paper (see below)
 + contribution to the multilingual and multicultural development of Europe and the
   world
 + free trip and stay in Gothenburg (for travel grant students)
 
+
+==More information==
+
+[Course Google Group http://groups.google.com/group/gf-resource-school-2009/]
+
+[GF web page http://digitalgrammars.com/gf/]
+
+[GF tutorial http://digitalgrammars.com/gf/doc/gf-tutorial.html]
+
+[Resource-HOWTO document http://digitalgrammars.com/gf/doc/Resource-HOWTO.html]
+
+Forthcoming: survey article "The GF Resource Grammar Library"
+
+Forthcoming: book about GF
+
+===Contaxt===
+
+Håkan Burden: burden at chalmers se
+
+Aarne Ranta: aarne at chalmers se
+
+
+
+===Selected publications from earlier resource grammar projects===
+
+K. Angelov.
+Type-Theoretical Bulgarian Grammar.
+In B. Nordström and A. Ranta (eds), 
+//Advances in Natural Language Processing (GoTAL 2008)//, 
+LNCS/LNAI 5221, Springer,
+2008.
+
+A. El Dada and A. Ranta.
+Implementing an Open Source Arabic Resource Grammar in GF.
+In M. Mughazy (ed),
+//Perspectives on Arabic Linguistics XX. Papers from the Twentieth Annual Symposium on Arabic Linguistics, Kalamazoo, March 26//
+John Benjamins Publishing Company.
+2007.
+
+A. El Dada.
+Implementation of the Arabic Numerals and their Syntax in GF.
+Computational Approaches to Semitic Languages: Common Issues and Resources, 
+  ACL-2007 Workshop,
+June 28, 2007, Prague.
+2007.
+
+H. Hammarström and A. Ranta.
+Cardinal Numerals Revisited in GF.
+//Workshop on Numerals in the World's Languages//. 
+Dept. of Linguistics Max Planck Institute for Evolutionary Anthropology, Leipzig,
+2004.
+
+M. Humayoun, H. Hammarström, and A. Ranta.
+Urdu Morphology, Orthography and Lexicon Extraction.
+//CAASL-2: The Second Workshop on Computational Approaches to Arabic Script-based Languages//,
+July 21-22, 2007, LSA 2007 Linguistic Institute, Stanford University.
+2007.
+
+J Khegai. 
+GF parallel resource grammars and Russian.
+In proceedings of ACL2006 
+  (The joint conference of the International Committee on Computational 
+  Linguistics and the Association for Computational Linguistics) (pp. 475-482),
+  Sydney, Australia, July 2006.
+
+J. Khegai. 
+Language engineering in Grammatical Framework (GF).
+Phd thesis, Computer Science, Chalmers University of Technology,
+2006.
+
+W. Ng'ang'a. 
+Multilingual content development for eLearning in Africa. 
+eLearning Africa: 1st Pan-African Conference on ICT for Development, 
+  Education and Training. 24-26 May 2006, Addis Ababa, Ethiopia.
+2006.
+
+N. Perera and A. Ranta.
+Dialogue System Localization with the GF Resource Grammar Library.
+//SPEECHGRAM 2007: ACL Workshop on Grammar-Based Approaches to Spoken Language Processing//,
+June 29, 2007, Prague.
+2007.
+
+A. Ranta.
+Modular Grammar Engineering in GF.
+//Research on Language and Computation//, 
+5:133-158, 2007.
+
+A. Ranta.
+How predictable is Finnish morphology? An experiment on lexicon construction.
+In J. Nivre, M. Dahllöf and B. Megyesi (eds),
+//Resourceful Language Technology: Festschrift in Honor of Anna Sågvall Hein//,
+University of Uppsala,
+2008.
 
