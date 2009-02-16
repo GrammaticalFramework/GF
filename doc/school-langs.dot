@@ -1,0 +1,100 @@
+graph{
+
+size = "8,8" ;
+
+overlap = scale ;
+
+"Abs" [label = "Abstract Syntax", style = "solid", shape = "rectangle"] ;
+
+"1"   [label = "Bulgarian", style = "solid", shape = "ellipse", color = "green"] ;
+"1" -- "Abs" [style = "solid"];
+
+"2"   [label = "Czech", style = "solid", shape = "ellipse", color = "red"] ;
+"2" -- "Abs" [style = "solid"];
+
+"3"   [label = "Danish", style = "solid", shape = "ellipse", color = "green"] ;
+"3" -- "Abs" [style = "solid"];
+
+"4"   [label = "German", style = "solid", shape = "ellipse", color = "green"] ;
+"4" -- "Abs" [style = "solid"];
+
+"5"   [label = "Estonian", style = "solid", shape = "ellipse", color = "red"] ;
+"5" -- "Abs" [style = "solid"];
+
+"6"   [label = "Greek", style = "solid", shape = "ellipse", color = "red"] ;
+"6" -- "Abs" [style = "solid"];
+
+"7"   [label = "English", style = "solid", shape = "ellipse", color = "green"] ;
+"7" -- "Abs" [style = "solid"];
+
+"8"   [label = "Spanish", style = "solid", shape = "ellipse", color = "green"] ;
+"8" -- "Abs" [style = "solid"];
+
+"9"   [label = "French", style = "solid", shape = "ellipse", color = "green"] ;
+"9" -- "Abs" [style = "solid"];
+
+"10"   [label = "Italian", style = "solid", shape = "ellipse", color = "green"] ;
+"10" -- "Abs" [style = "solid"];
+
+"11"   [label = "Latvian", style = "solid", shape = "ellipse", color = "red"] ;
+"11" -- "Abs" [style = "solid"];
+
+"12"   [label = "Lithuanian", style = "solid", shape = "ellipse", color = "red"] ;
+"Abs" -- "12" [style = "solid"];
+
+"13"   [label = "Irish", style = "solid", shape = "ellipse", color = "red"] ;
+"Abs" -- "13" [style = "solid"];
+
+"14"   [label = "Hungarian", style = "solid", shape = "ellipse", color = "red"] ;
+"Abs" -- "14" [style = "solid"];
+
+"15"   [label = "Maltese", style = "solid", shape = "ellipse", color = "red"] ;
+"Abs" -- "15" [style = "solid"];
+
+"16"   [label = "Dutch", style = "solid", shape = "ellipse", color = "red"] ;
+"Abs" -- "16" [style = "solid"];
+
+"17"   [label = "Polish", style = "solid", shape = "ellipse", color = "yellow"] ;
+"Abs" -- "17" [style = "solid"];
+
+"18"   [label = "Portuguese", style = "solid", shape = "ellipse", color = "red"] ;
+"Abs" -- "18" [style = "solid"];
+
+"19"   [label = "Slovak", style = "solid", shape = "ellipse", color = "red"] ;
+"Abs" -- "19" [style = "solid"];
+
+"20"   [label = "Slovene", style = "solid", shape = "ellipse", color = "red"] ;
+"Abs" -- "20" [style = "solid"];
+
+"21"   [label = "Romanian", style = "solid", shape = "ellipse", color = "yellow"] ;
+"Abs" -- "21" [style = "solid"];
+
+"22"   [label = "Finnish", style = "solid", shape = "ellipse", color = "green"] ;
+"Abs" -- "22" [style = "solid"];
+
+"23"   [label = "Swedish", style = "solid", shape = "ellipse", color = "green"] ;
+"Abs" -- "23" [style = "solid"];
+
+"24"   [label = "Catalan", style = "dotted", shape = "ellipse", color = "green"] ;
+"Abs" -- "24" [style = "solid"];
+
+"25"   [label = "Norwegian", style = "dotted", shape = "ellipse", color = "green"] ;
+"Abs" -- "25" [style = "solid"];
+
+"26"   [label = "Russian", style = "dotted", shape = "ellipse", color = "green"] ;
+"Abs" -- "26" [style = "solid"];
+
+"27"   [label = "Interlingua", style = "dotted", shape = "ellipse", color = "green"] ;
+"Abs" -- "27" [style = "solid"];
+
+"28"   [label = "Latin", style = "dotted", shape = "ellipse", color = "yellow"] ;
+"Abs" -- "28" [style = "solid"];
+"29"   [label = "Turkish", style = "dotted", shape = "ellipse", color = "yellow"] ;
+"Abs" -- "29" [style = "solid"];
+"30"   [label = "Hindi", style = "dotted", shape = "ellipse", color = "yellow"] ;
+"Abs" -- "30" [style = "solid"];
+"31"   [label = "Thai", style = "dotted", shape = "ellipse", color = "yellow"] ;
+"Abs" -- "31" [style = "solid"];
+
+
+}
