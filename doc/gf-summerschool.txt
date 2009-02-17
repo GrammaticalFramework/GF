@@ -36,6 +36,9 @@ The summer school will be held on 17-28 August 2009, at the campus of
 Chalmers University of Technology in Gothenburg, Sweden.
 
 
+[align6.png]
+
+//word alignment produced by GF from the resource grammar in English, Italian, Swedish, Finnish, French, and German//
 
 ==Introduction==
 
@@ -333,13 +336,12 @@ Seven reasons:
 
 [GF tutorial http://digitalgrammars.com/gf/doc/gf-tutorial.html]
 
+[GF resource synopsis http://digitalgrammars.com/gf/lib/resource/doc/synopsis.html]
+
 [Resource-HOWTO document http://digitalgrammars.com/gf/doc/Resource-HOWTO.html]
 
-Forthcoming: survey article "The GF Resource Grammar Library"
 
-Forthcoming: book about GF
-
-===Contaxt===
+===Contact===
 
 Håkan Burden: burden at chalmers se
 
