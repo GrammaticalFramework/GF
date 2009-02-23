@@ -2,8 +2,7 @@ module GF.Compile.Coding where
 
 import GF.Grammar.Grammar
 import GF.Grammar.Macros
-import GF.Text.UTF8
-import GF.Text.CP1251
+import GF.Text.Coding
 import GF.Infra.Modules
 import GF.Infra.Option
 import GF.Data.Operations
@@ -11,14 +10,10 @@ import GF.Data.Operations
 import Data.Char
 
 encodeStringsInModule :: SourceModule -> SourceModule
-encodeStringsInModule = codeSourceModule encodeUTF8
+encodeStringsInModule = codeSourceModule (encodeUnicode UTF_8)
 
 decodeStringsInModule :: SourceModule -> SourceModule
-decodeStringsInModule mo =
-  case flag optEncoding (flagsModule mo) of
-    UTF_8   -> codeSourceModule decodeUTF8   mo
-    CP_1251 -> codeSourceModule decodeCP1251 mo
-    _       -> mo
+decodeStringsInModule mo = codeSourceModule (decodeUnicode (flag optEncoding (flagsModule mo))) mo
 
 codeSourceModule :: (String -> String) -> SourceModule -> SourceModule
 codeSourceModule co (id,mo) = (id,replaceJudgements mo (mapTree codj (jments mo)))
