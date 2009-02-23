@@ -1,6 +1,9 @@
 concrete NumeralRon of Numeral = CatRon ** 
   open  MorphoRon, CatRon, Prelude in {
 
+flags
+  coding=cp1250;
+
 param DForm = unit | teen | ten | teen_inf | attr;
 
 lincat Digit = {s : CardOrd => DForm => Str ; size : Size} ;

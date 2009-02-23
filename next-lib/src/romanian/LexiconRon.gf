@@ -4,7 +4,7 @@ concrete LexiconRon of Lexicon = CatRon **
   open ParadigmsRon,BeschRon,MorphoRon in {
 
 flags 
-  optimize=values ; 
+  optimize=values; coding=cp1250;
 
 lin
  airplane_N = mkN "avion" ;
