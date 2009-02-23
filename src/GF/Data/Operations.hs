@@ -26,11 +26,6 @@ module GF.Data.Operations (-- * misc functions
 		   -- ** checking
 		   checkUnique,
 
-		   -- * a three-valued maybe type to express indirections
-		   Perhaps(..), yes, may, nope,
-		   mapP,
-		   unifPerhaps, updatePerhaps, updatePerhapsHard,
-
 		   -- * binary search trees; now with FiniteMap
 		   BinTree, emptyBinTree, isInBinTree, justLookupTree,
 		   lookupTree, lookupTreeMany, lookupTreeManyAll, updateTree,
@@ -126,51 +121,6 @@ checkUnique :: (Show a, Eq a) => [a] -> [String]
 checkUnique ss = ["overloaded" +++ show s | s <- nub overloads] where
   overloads = filter overloaded ss
   overloaded s = length (filter (==s) ss) > 1
-
--- | a three-valued maybe type to express indirections
-data Perhaps a b = Yes a | May b | Nope deriving (Show,Read,Eq,Ord)
-
-yes :: a -> Perhaps a b
-yes = Yes
-
-may :: b -> Perhaps a b
-may = May
-
-nope :: Perhaps a b
-nope = Nope
-
-mapP :: (a -> c) -> Perhaps a b -> Perhaps c b
-mapP f p = case p of
-  Yes a -> Yes (f a)
-  May b -> May b
-  Nope  -> Nope
-
--- | this is what happens when matching two values in the same module
-unifPerhaps :: (Eq a, Eq b, Show a, Show b) => 
-               Perhaps a b -> Perhaps a b -> Err (Perhaps a b)
-unifPerhaps p1 p2 = case (p1,p2) of
-  (Nope, _)  -> return p2
-  (_, Nope)  -> return p1
-  _ -> if p1==p2 then return p1 
-                 else Bad ("update conflict between" ++++ show p1 ++++ show p2)
-
--- | this is what happens when updating a module extension
-updatePerhaps :: (Eq a,Eq b, Show a, Show b) => 
-                 b -> Perhaps a b -> Perhaps a b -> Err (Perhaps a b)
-updatePerhaps old p1 p2 = case (p1,p2) of
-  (Yes a,    Nope)  -> return $ may old
-  (May older,Nope)  -> return $ may older
-  (_, May a)        -> Bad "strange indirection"
-  _ -> unifPerhaps p1 p2
-
--- | here the value is copied instead of referred to; used for oper types
-updatePerhapsHard :: (Eq a, Eq b, Show a, Show b) => b -> 
-                     Perhaps a b -> Perhaps a b -> Err (Perhaps a b)
-updatePerhapsHard old p1 p2 = case (p1,p2) of
-  (Yes a,    Nope)  -> return $ yes a
-  (May older,Nope)  -> return $ may older
-  (_, May a)        -> Bad "strange indirection"
-  _ -> unifPerhaps p1 p2
 
 -- binary search trees
 

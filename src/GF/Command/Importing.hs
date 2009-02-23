@@ -33,7 +33,7 @@ importGrammar pgf0 opts files =
       res <- appIOE $ compileToPGF opts files
       case res of
         Ok pgf2 -> do return $ unionPGF pgf0 pgf2
-        Bad msg -> do putStrLn msg
+        Bad msg -> do putStrLn ('\n':'\n':msg)
                       return pgf0
     ".pgf" -> do
       pgf2 <- mapM readPGF files >>= return . foldl1 unionPGF

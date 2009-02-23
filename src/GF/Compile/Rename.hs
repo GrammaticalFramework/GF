@@ -36,7 +36,6 @@ import GF.Grammar.Macros
 import GF.Grammar.PrGrammar
 import GF.Grammar.AppPredefined
 import GF.Grammar.Lookup
-import GF.Compile.Extend
 import GF.Data.Operations
 
 import Control.Monad
@@ -115,7 +114,7 @@ renameIdentPatt env p = do
 
 info2status :: Maybe Ident -> (Ident,Info) -> StatusInfo
 info2status mq (c,i) = case i of
-  AbsFun _ (Yes EData) -> maybe Con QC mq
+  AbsFun _ (Just EData) -> maybe Con QC mq
   ResValue _  -> maybe Con QC mq
   ResParam _  -> maybe Con QC mq
   AnyInd True m -> maybe Con (const (QC m)) mq
@@ -161,12 +160,12 @@ renameInfo mo status (i,info) = errIn
   ResOverload os tysts -> 
     liftM (ResOverload os) (mapM (pairM rent) tysts)
 
-  ResParam (Yes (pp,m)) -> do
+  ResParam (Just (pp,m)) -> do
     pp' <- mapM (renameParam status) pp
-    return $ ResParam $ Yes (pp',m)
-  ResValue (Yes (t,m)) -> do
+    return $ ResParam $ Just (pp',m)
+  ResValue (Just (t,m)) -> do
     t' <- rent t
-    return $ ResValue $ Yes (t',m)
+    return $ ResValue $ Just (t',m)
   CncCat pty ptr ppr -> liftM3 CncCat (ren pty) (ren ptr) (ren ppr)
   CncFun mt  ptr ppr -> liftM2 (CncFun mt)      (ren ptr) (ren ppr)
   _ -> return info
@@ -174,9 +173,8 @@ renameInfo mo status (i,info) = errIn
    ren = renPerh rent
    rent = renameTerm status []
 
-renPerh ren pt = case pt of
-  Yes t -> liftM Yes $ ren t
-  _ -> return pt
+renPerh ren (Just t) = liftM Just $ ren t
+renPerh ren Nothing  = return Nothing
 
 renameTerm :: Status -> [Ident] -> Term -> Err Term
 renameTerm env vars = ren vars where

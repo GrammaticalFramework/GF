@@ -228,16 +228,6 @@ instance Binary Patt where
              17 -> get >>= \x       -> return (PMacro x)
              18 -> get >>= \(x,y)   -> return (PM x y)
 
-instance (Binary a, Binary b) => Binary (Perhaps a b) where
-  put (Yes x) = putWord8 0 >> put x
-  put (May y) = putWord8 1 >> put y
-  put Nope    = putWord8 2
-  get = do tag <- getWord8
-           case tag of
-             0 -> fmap Yes get
-             1 -> fmap May get
-             2 -> return Nope
-
 instance Binary TInfo where
   put TRaw       = putWord8 0
   put (TTyped t) = putWord8 1 >> put t

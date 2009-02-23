@@ -12,122 +12,200 @@
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
-module GF.Compile.Update (updateRes, buildAnyTree, combineAnyInfos, unifyAnyInfo,
-	       -- * these auxiliaries should be somewhere else 
-	       -- since they don't use the info types
-	       groupInfos, sortInfos, combineInfos, unifyInfos,
-	       tryInsert, unifAbsDefs, unifConstrs
-	      ) where
+module GF.Compile.Update (buildAnyTree, extendModule, rebuildModule) where
 
 import GF.Infra.Ident
 import GF.Grammar.Grammar
-import GF.Grammar.PrGrammar
+import GF.Grammar.Printer
 import GF.Infra.Modules
+import GF.Infra.Option
 
 import GF.Data.Operations
 
 import Data.List
+import qualified Data.Map as Map
 import Control.Monad
-
--- | update a resource module by adding a new or changing an old definition
-updateRes :: SourceGrammar -> Ident -> Ident -> Info -> SourceGrammar
-updateRes gr@(MGrammar ms) m i info = MGrammar $ map upd ms where
-  upd (n,mo)
-    | n /= m = (n,mo)
-    | n == m = (n,updateModule mo i info)
+import Text.PrettyPrint
 
 -- | combine a list of definitions into a balanced binary search tree
-buildAnyTree :: [(Ident,Info)] -> Err (BinTree Ident Info)
-buildAnyTree ias = do
-  ias' <- combineAnyInfos ias
-  return $ buildTree ias'
+buildAnyTree :: Ident -> [(Ident,Info)] -> Err (BinTree Ident Info)
+buildAnyTree m = go Map.empty
+  where
+    go map []         = return map
+    go map ((c,j):is) = do
+      case Map.lookup c map of
+        Just i  -> case unifyAnyInfo c i j of
+		     Ok k  -> go (Map.insert c k map) is
+		     Bad _ -> fail $ render (text "cannot unify the informations" $$ 
+		                             nest 4 (ppJudgement (c,i)) $$
+		                             text "and" $+$
+		                             nest 4 (ppJudgement (c,j)) $$
+		                             text "in module" <+> ppIdent m)
+        Nothing -> go (Map.insert c j map) is
 
+extendModule :: [SourceModule] -> SourceModule -> Err SourceModule
+extendModule ms (name,m)
+  ---- Just to allow inheritance in incomplete concrete (which are not
+  ---- compiled anyway), extensions are not built for them.
+  ---- Should be replaced by real control. AR 4/2/2005
+  | mstatus m == MSIncomplete && isModCnc m = return (name,m)
+  | otherwise                               = do m' <- foldM extOne m (extend m) 
+                                                 return (name,m')
+ where
+   extOne mo (n,cond) = do
+     m0 <- lookupModule (MGrammar ms) n
 
--- | unifying information for abstract, resource, and concrete
-combineAnyInfos :: [(Ident,Info)] -> Err [(Ident,Info)]
-combineAnyInfos = combineInfos unifyAnyInfo
+     -- test that the module types match, and find out if the old is complete
+     testErr (sameMType (mtype m) (mtype mo)) 
+             ("illegal extension type to module" +++ prIdent name)
+
+     let isCompl = isCompleteModule m0
+
+     -- build extension in a way depending on whether the old module is complete
+     js1 <- extendMod isCompl (n, isInherited cond) name (jments m0) (jments mo)
+
+     -- if incomplete, throw away extension information
+     return $ 
+          if isCompl
+            then mo {jments = js1}
+            else mo {extend = filter ((/=n) . fst) (extend mo)
+                    ,mexdeps= nub (n : mexdeps mo)
+                    ,jments = js1
+                    }
+
+-- | rebuilding instance + interface, and "with" modules, prior to renaming. 
+-- AR 24/10/2003
+rebuildModule :: [SourceModule] -> SourceModule -> Err SourceModule
+rebuildModule ms mo@(i,mi@(ModInfo mt stat fs_ me mw ops_ med_ js_ ps_)) = do
+  let gr = MGrammar ms
+----  deps <- moduleDeps ms
+----  is   <- openInterfaces deps i
+  let is = [] ---- the method above is buggy: try "i -src" for two grs. AR 8/3/2005
+  mi'  <- case mw of
+
+    -- add the information given in interface into an instance module
+    Nothing -> do
+      testErr (null is || mstatus mi == MSIncomplete) 
+              ("module" +++ prIdent i +++ 
+               "has open interfaces and must therefore be declared incomplete") 
+      case mt of
+        MTInstance i0 -> do
+          m1 <- lookupModule gr i0
+          testErr (isModRes m1) ("interface expected instead of" +++ prIdent i0)
+          js' <- extendMod False (i0,const True) i (jments m1) (jments mi)
+          --- to avoid double inclusions, in instance I of I0 = J0 ** ...
+          case extends mi of
+            []  -> return $ replaceJudgements mi js'
+            j0s -> do
+                m0s <- mapM (lookupModule gr) j0s
+                let notInM0 c _  = all (not . isInBinTree c . jments) m0s
+                let js2 = filterBinTree notInM0 js'
+                return $ (replaceJudgements mi js2) 
+                  {positions = Map.union (positions m1) (positions mi)}
+        _ -> return mi
+
+    -- add the instance opens to an incomplete module "with" instances
+    Just (ext,incl,ops) -> do
+      let (infs,insts) = unzip ops
+      let stat' = ifNull MSComplete (const MSIncomplete)
+                    [i | i <- is, notElem i infs]
+      testErr (stat' == MSComplete || stat == MSIncomplete) 
+              ("module" +++ prIdent i +++ "remains incomplete")
+      ModInfo mt0 _ fs me' _ ops0 _ js ps0 <- lookupModule gr ext
+      let ops1 = nub $
+                   ops_ ++ -- N.B. js has been name-resolved already
+                   [OQualif i j | (i,j) <- ops] ++
+                   [o | o <- ops0, notElem (openedModule o) infs] ++
+                   [OQualif i i | i <- insts] ++
+                   [OSimple i   | i <- insts]
+
+      --- check if me is incomplete
+      let fs1 = fs `addOptions` fs_                           -- new flags have priority
+      let js0 = [ci | ci@(c,_) <- tree2list js, isInherited incl c]
+      let js1 = buildTree (tree2list js_ ++ js0)
+      let ps1 = Map.union ps_ ps0
+      let med1= nub (ext : infs ++ insts ++ med_)
+      return $ ModInfo mt0 stat' fs1 me Nothing ops1 med1 js1 ps1
+
+  return (i,mi')
+
+-- | When extending a complete module: new information is inserted,
+-- and the process is interrupted if unification fails.
+-- If the extended module is incomplete, its judgements are just copied.
+extendMod :: Bool -> (Ident,Ident -> Bool) -> Ident -> 
+             BinTree Ident Info -> BinTree Ident Info -> 
+             Err (BinTree Ident Info)
+extendMod isCompl (name,cond) base old new = foldM try new $ Map.toList old 
+  where
+    try new (c,i)
+      | not (cond c) = return new
+      | otherwise    = case Map.lookup c new of
+                         Just j -> case unifyAnyInfo c i j of
+		                     Ok k  -> return $ updateTree (c,k) new
+		                     Bad _ -> fail $ render (text "cannot unify the information" $$ 
+		                                             nest 4 (ppJudgement (c,i)) $$
+		                                             text "in module" <+> ppIdent name <+> text "with" $$
+		                                             nest 4 (ppJudgement (c,j)) $$
+		                                             text "in module" <+> ppIdent base)
+                         Nothing    -> if isCompl
+                                         then return $ updateTree (c,indirInfo name i) new
+                                         else return $ updateTree (c,i) new
+
+    indirInfo :: Ident -> Info -> Info
+    indirInfo n info = AnyInd b n' where 
+      (b,n') = case info of
+        ResValue _ -> (True,n)
+        ResParam _ -> (True,n)
+        AbsFun _ (Just EData) -> (True,n) 
+        AnyInd b k -> (b,k)
+        _ -> (False,n) ---- canonical in Abs
 
 unifyAnyInfo :: Ident -> Info -> Info -> Err Info
-unifyAnyInfo c i j = errIn ("combining information for" +++ prt c) $ case (i,j) of
+unifyAnyInfo c i j = case (i,j) of
   (AbsCat mc1 mf1, AbsCat mc2 mf2) -> 
-    liftM2 AbsCat (unifPerhaps mc1 mc2) (unifConstrs mf1 mf2) -- adding constrs
+    liftM2 AbsCat (unifMaybe mc1 mc2) (unifConstrs mf1 mf2) -- adding constrs
   (AbsFun mt1 md1, AbsFun mt2 md2) -> 
-    liftM2 AbsFun (unifPerhaps mt1 mt2) (unifAbsDefs md1 md2) -- adding defs
+    liftM2 AbsFun (unifMaybe mt1 mt2) (unifAbsDefs md1 md2) -- adding defs
 
-  (ResParam mt1, ResParam mt2) -> liftM ResParam $ unifPerhaps mt1 mt2
+  (ResParam mt1, ResParam mt2) -> liftM ResParam $ unifMaybe mt1 mt2
+  (ResValue mt1, ResValue mt2) -> 
+    liftM ResValue $ unifMaybe mt1 mt2
+  (_, ResOverload ms t) | elem c ms ->
+    return $ ResOverload ms t
   (ResOper mt1 m1, ResOper mt2 m2) -> 
-    liftM2 ResOper (unifPerhaps mt1 mt2) (unifPerhaps m1 m2)
+    liftM2 ResOper (unifMaybe mt1 mt2) (unifMaybe m1 m2)
 
   (CncCat mc1 mf1 mp1, CncCat mc2 mf2 mp2) -> 
-    liftM3 CncCat (unifPerhaps mc1 mc2) (unifPerhaps mf1 mf2) (unifPerhaps mp1 mp2)
+    liftM3 CncCat (unifMaybe mc1 mc2) (unifMaybe mf1 mf2) (unifMaybe mp1 mp2)
   (CncFun m mt1 md1, CncFun _ mt2 md2) -> 
-    liftM2 (CncFun m) (unifPerhaps mt1 mt2) (unifPerhaps md1 md2) ---- adding defs
--- for bw compatibility with unspecified printnames in old GF
-  (CncFun Nothing Nope (Yes pr),_) -> 
-    unifyAnyInfo c (CncCat Nope Nope (Yes pr)) j 
-  (_,CncFun Nothing Nope (Yes pr)) -> 
-    unifyAnyInfo c i (CncCat Nope Nope (Yes pr)) 
+    liftM2 (CncFun m) (unifMaybe mt1 mt2) (unifMaybe md1 md2) ---- adding defs
 
-  _ -> Bad $ "cannot unify informations in" ++++ show i ++++ "and" ++++ show j
+  (AnyInd b1 m1, AnyInd b2 m2) -> do
+    testErr (b1 == b2) $ "indirection status"
+    testErr (m1 == m2) $ "different sources of indirection"
+    return i
 
---- these auxiliaries should be somewhere else since they don't use the info types
+  _ -> fail "informations"
 
-groupInfos :: Eq a => [(a,b)] -> [[(a,b)]]
-groupInfos = groupBy (\i j -> fst i == fst j)
+-- | this is what happens when matching two values in the same module
+unifMaybe :: Eq a => Maybe a -> Maybe a -> Err (Maybe a)
+unifMaybe Nothing   Nothing   = return Nothing
+unifMaybe (Just p1) Nothing   = return (Just p1)
+unifMaybe Nothing   (Just p2) = return (Just p2)
+unifMaybe (Just p1) (Just p2)
+  | p1==p2                    = return (Just p1)
+  | otherwise                 = fail ""
 
-sortInfos :: Ord a => [(a,b)] -> [(a,b)]
-sortInfos = sortBy (\i j -> compare (fst i) (fst j))
-
-combineInfos :: Ord a => (a -> b -> b -> Err b) -> [(a,b)] -> Err [(a,b)]
-combineInfos f ris = do
-  let riss = groupInfos $ sortInfos ris
-  mapM (unifyInfos f) riss
-
-unifyInfos :: (a -> b -> b -> Err b) -> [(a,b)] -> Err (a,b)
-unifyInfos _ [] = Bad "empty info list"
-unifyInfos unif ris = do
-  let c = fst $ head ris
-  let infos = map snd ris
-  let ([i],is) = splitAt 1 infos 
-  info <- foldM (unif c) i is
-  return (c,info)
-
-
-tryInsert :: Ord a => (b -> b -> Err b) -> (b -> b) ->
-             BinTree a b -> (a,b) -> Err (BinTree a b)
-tryInsert unif indir tree z@(x, info) = case justLookupTree x tree of
-  Ok info0 -> do
-    info1 <- unif info info0
-    return $ updateTree (x,info1) tree 
-  _ -> return $ updateTree (x,indir info) tree
-
-{- ----
-case tree of
- NT -> return $ BT (x, indir info) NT NT
- BT c@(a,info0) left right 
-   | x < a  -> do
-       left' <- tryInsert unif indir left z    
-       return $ BT c left' right 
-   | x > a  -> do
-       right' <- tryInsert unif indir right z    
-       return $ BT c left right' 
-   | x == a -> do
-       info' <- unif info info0
-       return $ BT (x,info') left right
--}
-
---- addToMaybeList m c = maybe (return c) (\old -> return (c ++ old)) m
-
-unifAbsDefs :: Perh Term -> Perh Term -> Err (Perh Term)
+unifAbsDefs :: Maybe Term -> Maybe Term -> Err (Maybe Term)
 unifAbsDefs p1 p2 = case (p1,p2) of
-  (Nope, _)  -> return p2
-  (_, Nope)  -> return p1
-  (Yes (Eqs bs), Yes (Eqs ds)) -> return $ yes $ Eqs $ bs ++ ds --- order!
-  _ -> Bad "update conflict for definitions"
+  (Nothing, _)  -> return p2
+  (_, Nothing)  -> return p1
+  (Just (Eqs bs), Just (Eqs ds))
+                -> return $ Just $ Eqs $ bs ++ ds --- order!
+  _             -> fail "definitions"
 
-unifConstrs :: Perh [Term] -> Perh [Term] -> Err (Perh [Term])
+unifConstrs :: Maybe [Term] -> Maybe [Term] -> Err (Maybe [Term])
 unifConstrs p1 p2 = case (p1,p2) of
-  (Nope, _)  -> return p2
-  (_, Nope)  -> return p1
-  (Yes bs, Yes ds) -> return $ yes $ bs ++ ds
-  _ -> Bad "update conflict for constructors"
+  (Nothing, _)  -> return p2
+  (_, Nothing)  -> return p1
+  (Just bs, Just ds) -> return $ Just $ bs ++ ds

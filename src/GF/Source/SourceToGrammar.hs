@@ -107,7 +107,7 @@ transModDef x = case x of
         opens'   <- transOpens opens
         defs0    <- mapM trDef $ getTopDefs defs
         poss0    <- return [(i,p) | Left  ds <- defs0, (i,p,_) <- ds]
-        defs'    <- U.buildAnyTree [(i,d) | Left  ds <- defs0, (i,_,d) <- ds]
+        defs'    <- U.buildAnyTree id' [(i,d) | Left  ds <- defs0, (i,_,d) <- ds]
         flags'   <- return $ concatOptions [o | Right o <- defs0]
         let poss1 = buildPosTree id' poss0
         return (id', GM.ModInfo mtyp' mstat' flags' extends' Nothing opens' [] defs' poss1)
@@ -122,7 +122,7 @@ transModDef x = case x of
         opens'   <- transOpens opens
         defs0    <- mapM trDef $ getTopDefs defs
         poss0    <- return [(i,p) | Left  ds <- defs0, (i,p,_) <- ds]
-        defs'    <- U.buildAnyTree [(i,d) | Left  ds <- defs0, (i,_,d) <- ds]
+        defs'    <- U.buildAnyTree id' [(i,d) | Left  ds <- defs0, (i,_,d) <- ds]
         flags'   <- return $ concatOptions [o | Right o <- defs0]
         let poss1 = buildPosTree id' poss0
         return (id', GM.ModInfo mtyp' mstat' flags' extends' (Just (fst m',snd m',insts')) opens' [] defs' poss1)
@@ -212,23 +212,23 @@ transAbsDef x = case x of
   DefCat catdefs -> liftM (Left . concat) $ mapM transCatDef catdefs
   DefFun fundefs -> do
     fundefs' <- mapM transFunDef fundefs
-    returnl [(fun, nopos, G.AbsFun (yes typ) nope) | (funs,typ) <- fundefs', fun <- funs]
+    returnl [(fun, nopos, G.AbsFun (Just typ) Nothing) | (funs,typ) <- fundefs', fun <- funs]
   DefFunData fundefs -> do
     fundefs' <- mapM transFunDef fundefs
     returnl $
-      [(cat, nopos, G.AbsCat nope (yes [G.Cn fun])) | (funs,typ) <- fundefs', 
+      [(cat, nopos, G.AbsCat Nothing (Just [G.Cn fun])) | (funs,typ) <- fundefs', 
                                        fun <- funs, 
                                        Ok (_,cat) <- [M.valCat typ]
       ] ++
-      [(fun, nopos, G.AbsFun (yes typ) (yes G.EData)) | (funs,typ) <- fundefs', fun <- funs]
+      [(fun, nopos, G.AbsFun (Just typ) (Just G.EData)) | (funs,typ) <- fundefs', fun <- funs]
   DefDef defs  -> do
     defs' <- liftM concat $ mapM getDefsGen defs
-    returnl [(c, nopos, G.AbsFun nope pe) | ((c,p),(_,pe)) <- defs']
+    returnl [(c, nopos, G.AbsFun Nothing pe) | ((c,p),(_,pe)) <- defs']
   DefData ds -> do
     ds' <- mapM transDataDef ds
     returnl $ 
-      [(c, nopos, G.AbsCat nope (yes ps)) | (c,ps) <- ds'] ++
-      [(f, nopos, G.AbsFun nope (yes G.EData))  | (_,fs) <- ds', tf <- fs, f <- funs tf]
+      [(c, nopos, G.AbsCat Nothing (Just ps)) | (c,ps) <- ds'] ++
+      [(f, nopos, G.AbsFun Nothing (Just G.EData))  | (_,fs) <- ds', tf <- fs, f <- funs tf]
   DefFlag defs -> liftM (Right . concatOptions) $ mapM transFlagDef defs
   _ -> Bad $ "illegal definition in abstract module:" ++++ printTree x
  where
@@ -262,24 +262,24 @@ transCatDef x = case x of
    cat i pos ddecls = do
 		       -- i <- transIdent id
 		       cont <- liftM concat $ mapM transDDecl ddecls
-		       return (i, pos, G.AbsCat (yes cont) nope)
+		       return (i, pos, G.AbsCat (Just cont) Nothing)
    listCat id ddecls size = do
          (id',pos) <- getIdentPos id
 	 let 
            li = mkListId id'
            baseId = mkBaseId id'
            consId = mkConsId id'
-	 catd0@(c,p,G.AbsCat (Yes cont0) _) <- cat li pos ddecls
+	 catd0@(c,p,G.AbsCat (Just cont0) _) <- cat li pos ddecls
 	 let
-  	   catd = (c,pos,G.AbsCat (Yes cont0) (Yes [G.Cn baseId,G.Cn consId]))
+  	   catd = (c,pos,G.AbsCat (Just cont0) (Just [G.Cn baseId,G.Cn consId]))
            cont = [(mkId x i,ty) | (i,(x,ty)) <- zip [0..] cont0]
            xs = map (G.Vr . fst) cont 
            cd = M.mkDecl (M.mkApp (G.Vr id') xs)
 	   lc = M.mkApp (G.Vr li) xs
 	   niltyp = M.mkProdSimple (cont ++ genericReplicate size cd) lc
-	   nilfund = (baseId, nopos, G.AbsFun (yes niltyp) (yes G.EData))
+	   nilfund = (baseId, nopos, G.AbsFun (Just niltyp) (Just G.EData))
 	   constyp = M.mkProdSimple (cont ++ [cd, M.mkDecl lc]) lc
-	   consfund = (consId, nopos, G.AbsFun (yes constyp) (yes G.EData))
+	   consfund = (consId, nopos, G.AbsFun (Just constyp) (Just G.EData))
 	 return [catd,nilfund,consfund]
    mkId x i = if isWildIdent x then (varX i) else x
 
@@ -300,10 +300,10 @@ transResDef x = case x of
   DefPar pardefs -> do
     pardefs' <- mapM transParDef pardefs
     returnl $ [(p, nopos, G.ResParam (if null pars 
-                                  then nope -- abstract param type 
-                                  else (yes (pars,Nothing)))) 
+                                  then Nothing -- abstract param type 
+                                  else (Just (pars,Nothing)))) 
                                      | (p,pars) <- pardefs']
-           ++ [(f, nopos, G.ResValue (yes (M.mkProdSimple co (G.Cn p),Nothing))) |
+           ++ [(f, nopos, G.ResValue (Just (M.mkProdSimple co (G.Cn p),Nothing))) |
                      (p,pars) <- pardefs', (f,co) <- pars]
 
   DefOper defs -> do
@@ -319,7 +319,7 @@ transResDef x = case x of
   _ -> Bad $ "illegal definition form in resource" +++ printTree x
  where
    mkOverload op@(c,p,j) = case j of
-     G.ResOper _ (Yes df) -> case M.appForm df of
+     G.ResOper _ (Just df) -> case M.appForm df of
        (keyw, ts@(_:_)) | isOverloading keyw -> case last ts of
          G.R fs -> 
            [(c,p,G.ResOverload [m | G.Vr m <- ts] [(ty,fu) | (_,(Just ty,fu)) <- fs])]
@@ -327,7 +327,7 @@ transResDef x = case x of
        _ -> [op]
 
      -- to enable separare type signature --- not type-checked
-     G.ResOper (Yes df) _ -> case M.appForm df of
+     G.ResOper (Just df) _ -> case M.appForm df of
        (keyw, ts@(_:_)) | isOverloading keyw -> case last ts of
          G.RecType _ -> [] 
          _ -> [op]
@@ -349,27 +349,27 @@ transCncDef :: TopDef -> Err (Either [(Ident, Int, G.Info)] GO.Options)
 transCncDef x = case x of
   DefLincat defs  -> do
     defs' <- liftM concat $ mapM transPrintDef defs
-    returnl [(f, nopos, G.CncCat (yes t) nope nope) | (f,t) <- defs']
+    returnl [(f, nopos, G.CncCat (Just t) Nothing Nothing) | (f,t) <- defs']
   DefLindef defs  -> do
     defs' <- liftM concat $ mapM getDefs defs
-    returnl [(f, p, G.CncCat pt pe nope) | ((f,p),(pt,pe)) <- defs']
+    returnl [(f, p, G.CncCat pt pe Nothing) | ((f,p),(pt,pe)) <- defs']
   DefLin defs  -> do
     defs' <- liftM concat $ mapM getDefs defs
-    returnl [(f, p, G.CncFun Nothing pe nope) | ((f,p),(_,pe)) <- defs']
+    returnl [(f, p, G.CncFun Nothing pe Nothing) | ((f,p),(_,pe)) <- defs']
   DefPrintCat defs -> do
     defs' <- liftM concat $ mapM transPrintDef defs
-    returnl [(f, nopos, G.CncCat nope nope (yes e)) | (f,e) <- defs']    
+    returnl [(f, nopos, G.CncCat Nothing Nothing (Just e)) | (f,e) <- defs']    
   DefPrintFun defs -> do
     defs' <- liftM concat $ mapM transPrintDef defs
-    returnl [(f, nopos, G.CncFun Nothing nope (yes e)) | (f,e) <- defs']
+    returnl [(f, nopos, G.CncFun Nothing Nothing (Just e)) | (f,e) <- defs']
   DefPrintOld defs -> do  --- a guess, for backward compatibility
     defs' <- liftM concat $ mapM transPrintDef defs
-    returnl [(f, nopos, G.CncFun Nothing nope (yes e)) | (f,e) <- defs']    
+    returnl [(f, nopos, G.CncFun Nothing Nothing (Just e)) | (f,e) <- defs']    
   DefFlag defs -> liftM (Right . concatOptions) $ mapM transFlagDef defs
   DefPattern defs  -> do
     defs' <- liftM concat $ mapM getDefs defs
-    let defs2 = [(f, termInPattern t) | (f,(_,Yes t)) <- defs']
-    returnl [(f, p, G.CncFun Nothing (yes t) nope) | ((f,p),t) <- defs2]
+    let defs2 = [(f, termInPattern t) | (f,(_,Just t)) <- defs']
+    returnl [(f, p, G.CncFun Nothing (Just t) Nothing) | ((f,p),t) <- defs2]
 
   _ -> errIn ("illegal definition in concrete syntax:") $ transResDef x
 
@@ -379,35 +379,35 @@ transPrintDef x = case x of
     (ids,e) <- liftM2 (,) (mapM transName ids) (transExp exp)
     return $ [(i,e) | i <- ids]
 
-getDefsGen :: Def -> Err [((Ident, Int),(G.Perh G.Type, G.Perh G.Term))]
+getDefsGen :: Def -> Err [((Ident, Int),(Maybe G.Type, Maybe G.Term))]
 getDefsGen d = case d of
   DDecl ids t -> do
     ids' <- mapM transNamePos ids
     t'   <- transExp t
-    return [(i,(yes t', nope)) | i <- ids']
+    return [(i,(Just t', Nothing)) | i <- ids']
   DDef ids e -> do
     ids' <- mapM transNamePos ids
     e'   <- transExp e
-    return [(i,(nope, yes e')) | i <- ids']
+    return [(i,(Nothing, Just e')) | i <- ids']
   DFull ids t e -> do
     ids' <- mapM transNamePos ids
     t'   <- transExp t
     e'   <- transExp e
-    return [(i,(yes t', yes e')) | i <- ids']
+    return [(i,(Just t', Just e')) | i <- ids']
   DPatt id patts e  -> do
     id' <- transNamePos id
     ps' <- mapM transPatt patts
     e'  <- transExp e
-    return [(id',(nope, yes (G.Eqs [(ps',e')])))]
+    return [(id',(Nothing, Just (G.Eqs [(ps',e')])))]
 
 -- | sometimes you need this special case, e.g. in linearization rules
-getDefs :: Def -> Err [((Ident,Int), (G.Perh G.Type, G.Perh G.Term))]
+getDefs :: Def -> Err [((Ident,Int), (Maybe G.Type, Maybe G.Term))]
 getDefs d = case d of
   DPatt id patts e  -> do
     id' <- transNamePos id
     xs  <- mapM tryMakeVar patts
     e'  <- transExp e
-    return [(id',(nope, yes (M.mkAbs xs e')))]
+    return [(id',(Nothing, Just (M.mkAbs xs e')))]
   _ -> getDefsGen d
 
 -- | accepts a pattern that is either a variable or a wild card

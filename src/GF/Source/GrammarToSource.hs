@@ -74,18 +74,16 @@ mkTopDefs ds = ds
 
 trAnyDef :: (Ident,Info) -> [P.TopDef]
 trAnyDef (i,info) = let i' = tri i in case info of
-  AbsCat (Yes co) pd -> [P.DefCat [P.SimpleCatDef i' (map trDecl co)]]
-  AbsFun (Yes ty) (Yes EData) -> [P.DefFunData [P.FunDef [i'] (trt ty)]]
-  AbsFun (Yes ty) pt -> [P.DefFun [P.FunDef [i'] (trt ty)]] ++ case pt of
-    Yes t -> [P.DefDef [P.DDef [mkName i'] (trt t)]]
-    _ -> []
-  AbsFun (May b)  _ -> [P.DefFun [P.FunDef [i'] (P.EIndir (tri b))]]
+  AbsCat (Just co) pd -> [P.DefCat [P.SimpleCatDef i' (map trDecl co)]]
+  AbsFun (Just ty) (Just EData) -> [P.DefFunData [P.FunDef [i'] (trt ty)]]
+  AbsFun (Just ty) pt -> [P.DefFun [P.FunDef [i'] (trt ty)]] ++ case pt of
+    Just t  -> [P.DefDef [P.DDef [mkName i'] (trt t)]]
+    Nothing -> []
 
   ResOper pty ptr -> [P.DefOper [trDef i' pty ptr]]
   ResParam pp -> [P.DefPar [case pp of
-    Yes (ps,_) -> P.ParDefDir i' [P.ParConstr (tri c) (map trDecl co) | (c,co) <- ps]
-    May b  -> P.ParDefIndir i' $ tri b
-    _      -> P.ParDefAbs i']]
+    Just (ps,_) -> P.ParDefDir i' [P.ParConstr (tri c) (map trDecl co) | (c,co) <- ps]
+    Nothing     -> P.ParDefAbs i']]
 
   ResOverload os tysts -> 
     [P.DefOper [P.DDef [mkName i'] (
@@ -94,34 +92,23 @@ trAnyDef (i,info) = let i' = tri i in case info of
           (map (P.EIdent . tri) os ++ 
            [P.ERecord [P.LDFull [i'] (trt ty) (trt fu) | (ty,fu) <- tysts]]))]]
 
-  CncCat (Yes ty) Nope _ -> 
+  CncCat (Just ty) Nothing _ -> 
     [P.DefLincat [P.PrintDef [mkName i'] (trt ty)]] 
   CncCat pty ptr ppr -> 
     [P.DefLindef [trDef i' pty ptr]] ++
-    [P.DefPrintCat [P.PrintDef [mkName i'] (trt pr)] | Yes pr <- [ppr]]
+    [P.DefPrintCat [P.PrintDef [mkName i'] (trt pr)] | Just pr <- [ppr]]
   CncFun _ ptr ppr -> 
-    [P.DefLin [trDef i' nope ptr]] ++ 
-    [P.DefPrintFun [P.PrintDef [mkName i'] (trt pr)] | Yes pr <- [ppr]]
-{-
-  ---- encoding of AnyInd without changing syntax. AR 20/9/2007
-  AnyInd s b -> 
-    [P.DefOper [P.DDef [mkName i] 
-      (P.EApp (P.EInt (if s then 1 else 0)) (P.EIdent (tri b)))]]
--}
+    [P.DefLin [trDef i' Nothing ptr]] ++ 
+    [P.DefPrintFun [P.PrintDef [mkName i'] (trt pr)] | Just pr <- [ppr]]
   _ -> [] 
 
 
-trDef :: P.PIdent -> Perh Type -> Perh Term -> P.Def
+trDef :: P.PIdent -> Maybe Type -> Maybe Term -> P.Def
 trDef i pty ptr = case (pty,ptr) of
-  (Nope,     Nope) -> P.DDef  [mkName i] (P.EMeta) ---
-  (_,        Nope) -> P.DDecl [mkName i] (trPerh pty)
-  (Nope,     _   ) -> P.DDef  [mkName i] (trPerh ptr)
-  (_,        _   ) -> P.DFull [mkName i] (trPerh pty) (trPerh ptr)
-
-trPerh p = case p of
-  Yes t -> trt t
-  May b -> P.EIndir $ tri b
-  _ -> P.EMeta ---
+  (Nothing,     Nothing) -> P.DDef  [mkName i] (P.EMeta) ---
+  (_,           Nothing) -> P.DDecl [mkName i] (maybe P.EMeta trt pty)
+  (Nothing,     _      ) -> P.DDef  [mkName i] (maybe P.EMeta trt ptr)
+  (_,           _      ) -> P.DFull [mkName i] (maybe P.EMeta trt pty) (maybe P.EMeta trt ptr)
 
 trFlags :: Options -> [P.TopDef]
 trFlags = map trFlag . optionsGFO

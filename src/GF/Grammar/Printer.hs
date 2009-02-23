@@ -69,30 +69,30 @@ ppOptions opts =
 ppJudgement (id, AbsCat pcont pconstrs) =
   text "cat" <+> ppIdent id <+>
   (case pcont of
-     Yes cont -> hsep (map ppDecl cont)
-     _        -> empty) <+> semi $$
+     Just cont -> hsep (map ppDecl cont)
+     Nothing   -> empty) <+> semi $$
   case pconstrs of
-    Yes costrs -> text "data" <+> ppIdent id <+> equals <+> fsep (intersperse (char '|') (map (ppTerm 0) costrs)) <+> semi
-    _          -> empty
+    Just costrs -> text "data" <+> ppIdent id <+> equals <+> fsep (intersperse (char '|') (map (ppTerm 0) costrs)) <+> semi
+    Nothing     -> empty
 ppJudgement (id, AbsFun ptype pexp) =
   (case ptype of
-     Yes typ   -> text "fun" <+> ppIdent id <+> colon <+> ppTerm 0 typ <+> semi
-     _         -> empty) $$
+     Just typ   -> text "fun" <+> ppIdent id <+> colon <+> ppTerm 0 typ <+> semi
+     Nothing    -> empty) $$
   (case pexp of
-     Yes EData -> empty
-     Yes (Eqs [(ps,e)]) -> text "def" <+> ppIdent id <+> hcat (map (ppPatt 2) ps) <+> equals <+> ppTerm 0 e <+> semi
-     Yes exp   -> text "def" <+> ppIdent id <+> equals <+> ppTerm 0 exp <+> semi
-     _         -> empty)
+     Just EData -> empty
+     Just (Eqs [(ps,e)]) -> text "def" <+> ppIdent id <+> hcat (map (ppPatt 2) ps) <+> equals <+> ppTerm 0 e <+> semi
+     Just exp   -> text "def" <+> ppIdent id <+> equals <+> ppTerm 0 exp <+> semi
+     Nothing    -> empty)
 ppJudgement (id, ResParam pparams) = 
   text "param" <+> ppIdent id <+>
   (case pparams of
-     Yes (ps,_) -> equals <+> fsep (intersperse (char '|') (map ppParam ps))
-     _          -> empty) <+> semi
+     Just (ps,_) -> equals <+> fsep (intersperse (char '|') (map ppParam ps))
+     _           -> empty) <+> semi
 ppJudgement (id, ResValue pvalue) = empty
 ppJudgement (id, ResOper  ptype pexp) =
   text "oper" <+> ppIdent id <+>
-  (case ptype of {Yes t -> colon  <+> ppTerm 0 t; _ -> empty} $$
-   case pexp  of {Yes e -> equals <+> ppTerm 0 e; _ -> empty}) <+> semi
+  (case ptype of {Just t -> colon  <+> ppTerm 0 t; Nothing -> empty} $$
+   case pexp  of {Just e -> equals <+> ppTerm 0 e; Nothing -> empty}) <+> semi
 ppJudgement (id, ResOverload ids defs) =
   text "oper" <+> ppIdent id <+> equals <+> 
   (text "overload" <+> lbrace $$
@@ -100,22 +100,22 @@ ppJudgement (id, ResOverload ids defs) =
    rbrace) <+> semi
 ppJudgement (id, CncCat  ptype pexp pprn) =
   (case ptype of
-     Yes typ -> text "lincat" <+> ppIdent id <+> equals <+> ppTerm 0 typ <+> semi
-     _       -> empty) $$
+     Just typ -> text "lincat" <+> ppIdent id <+> equals <+> ppTerm 0 typ <+> semi
+     Nothing  -> empty) $$
   (case pexp of
-     Yes exp -> text "lindef" <+> ppIdent id <+> equals <+> ppTerm 0 exp <+> semi
-     _       -> empty) $$
+     Just exp -> text "lindef" <+> ppIdent id <+> equals <+> ppTerm 0 exp <+> semi
+     Nothing  -> empty) $$
   (case pprn of
-     Yes prn -> text "printname" <+> text "cat" <+> ppIdent id <+> equals <+> ppTerm 0 prn <+> semi
-     _       -> empty)
+     Just prn -> text "printname" <+> text "cat" <+> ppIdent id <+> equals <+> ppTerm 0 prn <+> semi
+     Nothing  -> empty)
 ppJudgement (id, CncFun  ptype pdef pprn) =
   (case pdef of
-     Yes e -> let (vs,e') = getAbs e
+     Just e  -> let (vs,e') = getAbs e
               in text "lin" <+> ppIdent id <+> hsep (map ppIdent vs) <+> equals <+> ppTerm 0 e' <+> semi
-     _     -> empty) $$
+     Nothing -> empty) $$
   (case pprn of
-     Yes prn -> text "printname" <+> text "fun" <+> ppIdent id <+> equals <+> ppTerm 0 prn <+> semi
-     _       -> empty)
+     Just prn -> text "printname" <+> text "fun" <+> ppIdent id <+> equals <+> ppTerm 0 prn <+> semi
+     Nothing  -> empty)
 ppJudgement (id, AnyInd cann mid) = text "ind" <+> ppIdent id <+> equals <+> (if cann then text "canonical" else empty) <+> ppIdent mid
 
 ppTerm d (Abs v e)   = let (vs,e') = getAbs e

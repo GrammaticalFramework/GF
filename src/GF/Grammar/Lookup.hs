@@ -78,15 +78,15 @@ lookupResDefKind gr m c
     mo <- lookupModule gr m
     info <- lookupIdentInfoIn mo m c
     case info of
-      ResOper _ (Yes t) -> return (qualifAnnot m t, 0) 
-      ResOper _ Nope    -> return (Q m c, 0) ---- if isTop then lookExt m c 
+      ResOper _ (Just t) -> return (qualifAnnot m t, 0) 
+      ResOper _ Nothing  -> return (Q m c, 0) ---- if isTop then lookExt m c 
                                  ---- else prtBad "cannot find in exts" c 
 
-      CncCat (Yes ty) _ _ -> liftM (flip (,) 1) $ lock c ty
-      CncCat _ _ _        -> liftM (flip (,) 1) $ lock c defLinType
-      CncFun (Just (cat,_)) (Yes tr) _ -> liftM (flip (,) 1) $ unlock cat tr
-
-      CncFun _ (Yes tr) _ -> liftM (flip (,) 1) (return tr) ---- $ unlock c tr
+      CncCat (Just ty) _ _ -> liftM (flip (,) 1) $ lock c ty
+      CncCat _ _ _         -> liftM (flip (,) 1) $ lock c defLinType
+      
+      CncFun (Just (cat,_)) (Just tr) _ -> liftM (flip (,) 1) $ unlock cat tr
+      CncFun _              (Just tr) _ -> liftM (flip (,) 1) (return tr) ---- $ unlock c tr
 
       AnyInd _ n        -> look False n c
       ResParam _        -> return (QC m c,2)
@@ -100,8 +100,7 @@ lookupResType gr m c = do
   mo <- lookupModule gr m
   info <- lookupIdentInfo mo c
   case info of
-    ResOper (Yes t) _ -> return $ qualifAnnot m t
-    ResOper (May n) _ -> lookupResType gr n c
+    ResOper (Just t) _ -> return $ qualifAnnot m t
 
     -- used in reused concrete
     CncCat _ _ _ -> return typeType
@@ -111,7 +110,7 @@ lookupResType gr m c = do
     CncFun _ _ _      -> lookFunType m m c
     AnyInd _ n        -> lookupResType gr n c
     ResParam _        -> return $ typePType
-    ResValue (Yes (t,_))  -> return $ qualifAnnotPar m t
+    ResValue (Just (t,_))  -> return $ qualifAnnotPar m t
     _   -> Bad $ prt c +++ "has no type defined in resource" +++ prt m
   where
     lookFunType e m c = do
@@ -121,7 +120,7 @@ lookupResType gr m c = do
           mu <- lookupModule gr a
           info <- lookupIdentInfo mu c
           case info of
-            AbsFun (Yes ty) _ -> return $ redirectTerm e ty 
+            AbsFun (Just ty) _ -> return $ redirectTerm e ty 
             AbsCat _ _ -> return typeType
             AnyInd _ n -> lookFun e m c n
             _ -> prtBad "cannot find type of reused function" c
@@ -154,9 +153,9 @@ lookupParams gr = look True where
     mo <- lookupModule gr m
     info <- lookupIdentInfo mo c
     case info of
-      ResParam (Yes psm) -> return psm
-      AnyInd _ n         -> look False n c
-      _                  -> Bad $ prt c +++ "has no parameters defined in resource" +++ prt m
+      ResParam (Just psm) -> return psm
+      AnyInd _ n          -> look False n c
+      _                   -> Bad $ prt c +++ "has no parameters defined in resource" +++ prt m
   lookExt m c =
     checks [look False n c | n <- allExtensions gr m]
 
@@ -231,9 +230,9 @@ lookupAbsDef gr m c = errIn ("looking up absdef of" +++ prt c) $ do
   mo <- lookupModule gr m
   info <- lookupIdentInfo mo c
   case info of
-    AbsFun _ (Yes t) -> return (Just t)
-    AnyInd _ n       -> lookupAbsDef gr n c
-    _                -> return Nothing
+    AbsFun _ (Just t) -> return (Just t)
+    AnyInd _ n        -> lookupAbsDef gr n c
+    _                 -> return Nothing
 
 lookupLincat :: SourceGrammar -> Ident -> Ident -> Err Type
 lookupLincat gr m c | isPredefCat c = return defLinType --- ad hoc; not needed?
@@ -241,9 +240,9 @@ lookupLincat gr m c = do
   mo <- lookupModule gr m
   info <- lookupIdentInfo mo c
   case info of
-    CncCat (Yes t) _ _ -> return t
-    AnyInd _ n         -> lookupLincat gr n c
-    _                  -> Bad $ prt c +++ "has no linearization type in" +++ prt m
+    CncCat (Just t) _ _ -> return t
+    AnyInd _ n          -> lookupLincat gr n c
+    _                   -> Bad $ prt c +++ "has no linearization type in" +++ prt m
 
 -- | this is needed at compile time
 lookupFunType :: SourceGrammar -> Ident -> Ident -> Err Type
@@ -251,9 +250,9 @@ lookupFunType gr m c = do
   mo <- lookupModule gr m
   info <- lookupIdentInfo mo c
   case info of
-    AbsFun (Yes t) _  -> return t
-    AnyInd _ n  -> lookupFunType gr n c
-    _ -> prtBad "cannot find type of" c
+    AbsFun (Just t) _  -> return t
+    AnyInd _ n         -> lookupFunType gr n c
+    _                  -> prtBad "cannot find type of" c
 
 -- | this is needed at compile time
 lookupCatContext :: SourceGrammar -> Ident -> Ident -> Err Context
@@ -261,9 +260,9 @@ lookupCatContext gr m c = do
   mo <- lookupModule gr m
   info <- lookupIdentInfo mo c
   case info of
-    AbsCat (Yes co) _ -> return co
-    AnyInd _ n        -> lookupCatContext gr n c
-    _                 -> prtBad "unknown category" c
+    AbsCat (Just co) _ -> return co
+    AnyInd _ n         -> lookupCatContext gr n c
+    _                  -> prtBad "unknown category" c
 
 -- The first type argument is uncomputed, usually a category symbol.
 -- This is a hack to find implicit (= reused) opers.
@@ -273,14 +272,14 @@ opersForType gr orig val =
   [((i,f),ty) | (i,m) <- modules gr, (f,ty) <- opers i m val] where
     opers i m val = 
       [(f,ty) |
-        (f,ResOper (Yes ty) _) <- tree2list $ jments m,
+        (f,ResOper (Just ty) _) <- tree2list $ jments m,
         Ok valt <- [valTypeCnc ty],
         elem valt [val,orig]
         ] ++
       let cat = err error snd (valCat orig) in --- ignore module
       [(f,ty) |
         Ok a <- [abstractOfConcrete gr i >>= lookupModule gr],
-        (f, AbsFun (Yes ty0) _) <- tree2list $ jments a,
+        (f, AbsFun (Just ty0) _) <- tree2list $ jments a,
         let ty = redirectTerm i ty0,
         Ok valt  <- [valCat ty],
         cat == snd valt ---

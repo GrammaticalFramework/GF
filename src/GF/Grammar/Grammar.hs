@@ -21,8 +21,6 @@ module GF.Grammar.Grammar (SourceGrammar,
                 mapSourceModule,
 		Info(..),
                 PValues,
-		Perh,
-		MPr,
 		Type,
 		Cat,
 		Fun,
@@ -82,29 +80,23 @@ type PValues = [Term]
 -- and indirection to module (/INDIR/)
 data Info =
 -- judgements in abstract syntax
-   AbsCat   (Perh Context) (Perh [Term])   -- ^ (/ABS/) constructors; must be 'Id' or 'QId'
- | AbsFun   (Perh Type) (Perh Term)        -- ^ (/ABS/) 'Yes f' = canonical
+   AbsCat   (Maybe Context) (Maybe [Term])   -- ^ (/ABS/) constructors; must be 'Id' or 'QId'
+ | AbsFun   (Maybe Type) (Maybe Term)        -- ^ (/ABS/) 'Yes f' = canonical
 
 -- judgements in resource
- | ResParam (Perh ([Param],Maybe PValues)) -- ^ (/RES/)
- | ResValue (Perh (Type,Maybe Int))        -- ^ (/RES/) to mark parameter constructors for lookup
- | ResOper  (Perh Type) (Perh Term)        -- ^ (/RES/)
+ | ResParam (Maybe ([Param],Maybe PValues))  -- ^ (/RES/)
+ | ResValue (Maybe (Type,Maybe Int))         -- ^ (/RES/) to mark parameter constructors for lookup
+ | ResOper  (Maybe Type) (Maybe Term)        -- ^ (/RES/)
 
- | ResOverload [Ident] [(Type,Term)]       -- ^ (/RES/) idents: modules inherited
+ | ResOverload [Ident] [(Type,Term)]         -- ^ (/RES/) idents: modules inherited
 
 -- judgements in concrete syntax
- | CncCat  (Perh Type) (Perh Term) MPr     -- ^ (/CNC/) lindef ini'zed, 
- | CncFun  (Maybe (Ident,(Context,Type))) (Perh Term) MPr  -- (/CNC/) type info added at 'TC'
+ | CncCat  (Maybe Type)                   (Maybe Term) (Maybe Term)  -- ^ (/CNC/) lindef ini'zed, 
+ | CncFun  (Maybe (Ident,(Context,Type))) (Maybe Term) (Maybe Term)  -- ^ (/CNC/) type info added at 'TC'
 
 -- indirection to module Ident
- | AnyInd Bool Ident                       -- ^ (/INDIR/) the 'Bool' says if canonical
+ | AnyInd Bool Ident                         -- ^ (/INDIR/) the 'Bool' says if canonical
   deriving (Read, Show)
-
--- | to express indirection to other module
-type Perh a = Perhaps a Ident
-
--- | printname
-type MPr = Perhaps Term Ident
 
 type Type = Term
 type Cat  = QIdent

@@ -85,6 +85,13 @@ evalModule oopts (ms,eenv) mo@(name,m0)
      info' <- evalResInfo oopts gr (i,info)
      return $ updateRes g name i info'
 
+-- | update a resource module by adding a new or changing an old definition
+updateRes :: SourceGrammar -> Ident -> Ident -> Info -> SourceGrammar
+updateRes gr@(MGrammar ms) m i info = MGrammar $ map upd ms where
+  upd (n,mo)
+    | n /= m = (n,mo)
+    | n == m = (n,updateModule mo i info)
+
 -- | only operations need be compiled in a resource, and this is local to each
 -- definition since the module is traversed in topological order
 evalResInfo :: Options -> SourceGrammar -> (Ident,Info) -> Err Info
@@ -92,8 +99,8 @@ evalResInfo oopts gr (c,info) = case info of
 
   ResOper pty pde -> eIn "operation" $ do
     pde' <- case pde of
-       Yes de | optres -> liftM yes $ comp de 
-       _ -> return pde
+              Just de | optres -> liftM Just $ comp de 
+              _                -> return pde
     return $ ResOper pty pde'
 
   _ ->  return info
@@ -114,26 +121,22 @@ evalCncInfo opts gr cnc abs (c,info) = do
 
   CncCat ptyp pde ppr -> do
     pde' <- case (ptyp,pde) of
-      (Yes typ, Yes de) -> 
-        liftM yes $ pEval ([(varStr, typeStr)], typ) de
-      (Yes typ, Nope)   -> 
-        liftM yes $ mkLinDefault gr typ >>= partEval noOptions gr ([(varStr, typeStr)],typ)
-      (May b, Nope) ->
-        return $ May b
+      (Just typ, Just de) -> 
+        liftM Just $ pEval ([(varStr, typeStr)], typ) de
+      (Just typ, Nothing) -> 
+        liftM Just $ mkLinDefault gr typ >>= partEval noOptions gr ([(varStr, typeStr)],typ)
       _ -> return pde   -- indirection
 
-    ppr' <- liftM yes $ evalPrintname gr c ppr (yes $ K $ prt c)
+    ppr' <- liftM Just $ evalPrintname gr c ppr (Just $ K $ prt c)
 
     return (CncCat ptyp pde' ppr')
 
   CncFun (mt@(Just (_,ty@(cont,val)))) pde ppr -> --trace (prt c) $
        eIn ("linearization in type" +++ prt (mkProd (cont,val,[])) ++++ "of function") $ do
     pde' <- case pde of
-      Yes de -> do
-        liftM yes $ pEval ty de
-
-      _ -> return pde
-    ppr' <-  liftM yes $ evalPrintname gr c ppr pde'
+      Just de -> liftM Just $ pEval ty de
+      Nothing -> return pde
+    ppr' <-  liftM Just $ evalPrintname gr c ppr pde'
     return $ CncFun mt pde' ppr' -- only cat in type actually needed
 
   _ ->  return info
@@ -202,13 +205,13 @@ mkLinDefault gr typ = do
 -- lin for functions, cat name for cats (dispatch made in evalCncDef above).
 --- We cannot use linearization at this stage, since we do not know the
 --- defaults we would need for question marks - and we're not yet in canon.
-evalPrintname :: SourceGrammar -> Ident -> MPr -> Perh Term -> Err Term
+evalPrintname :: SourceGrammar -> Ident -> Maybe Term -> Maybe Term -> Err Term
 evalPrintname gr c ppr lin =
   case ppr of
-    Yes pr -> comp pr
-    _ -> case lin of
-      Yes t -> return $ K $ clean $ prt $ oneBranch t ---- stringFromTerm
-      _ -> return $ K $ prt c ----
+    Just pr -> comp pr
+    Nothing -> case lin of
+                 Just t  -> return $ K $ clean $ prt $ oneBranch t ---- stringFromTerm
+                 Nothing -> return $ K $ prt c ----
  where
    comp = computeConcrete gr
 
