@@ -21,6 +21,7 @@ import PGF.Macros
 import PGF.Expr (readTree)
 
 import Data.Char
+import Data.Maybe
 import Data.List(isPrefixOf)
 import qualified Data.Map as Map
 import qualified Text.ParserCombinators.ReadP as RP
@@ -140,15 +141,19 @@ loop opts gfenv0 = do
 
           "ph":_ -> 
             mapM_ (putStrLn . enc) (reverse (history gfenv0)) >> loopNewCPU gfenv
-          "se":c:_ -> do
+          "se":c:_ -> 
+             case lookup c encodings of
+               Just cod -> do
 #ifdef mingw32_HOST_OS
-             case c of
-               'c':'p':c -> case reads c of
-                              [(cp,"")] -> setConsoleCP cp >> setConsoleOutputCP cp
-                              _         -> return ()
-               _         -> return ()
+                              case c of
+                                'c':'p':c -> case reads c of
+                                               [(cp,"")] -> setConsoleCP cp >> setConsoleOutputCP cp
+                                               _         -> return ()
+                                _         -> return ()
 #endif
-             loopNewCPU $ gfenv {coding = c}
+                              loopNewCPU $ gfenv {coding = cod}
+               Nothing  -> do putStrLn "unknown encoding"
+                              loopNewCPU gfenv
 
   -- ordinary commands, working on CommandEnv
           _ -> do
@@ -208,16 +213,16 @@ data GFEnv = GFEnv {
   commandenv :: CommandEnv,
   history    :: [String],
   cputime    :: Integer,
-  coding     :: String
+  coding     :: Encoding
   }
 
 emptyGFEnv :: IO GFEnv
 emptyGFEnv = do
 #ifdef mingw32_HOST_OS
   codepage <- getACP
-  let coding = "cp"++show codepage
+  let coding = fromMaybe UTF_8 (lookup ("cp"++show codepage) encodings)
 #else
-  let coding = "utf8"
+  let coding = UTF_8
 #endif
   return $ GFEnv emptyGrammar (mkCommandEnv coding emptyPGF) [] 0 coding
 

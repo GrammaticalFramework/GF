@@ -17,7 +17,7 @@ module GF.Infra.Option
      helpMessage,
      -- * Checking specific options
      flag, cfgTransform, haskellOption, readOutputFormat,
-     isLexicalCat,
+     isLexicalCat, encodings,
      -- * Setting specific options
      setOptimization, setCFGTransform,
      -- * Convenience methods for checking options    
@@ -77,7 +77,7 @@ data Verbosity = Quiet | Normal | Verbose | Debug
 data Phase = Preproc | Convert | Compile | Link
   deriving (Show,Eq,Ord)
 
-data Encoding = UTF_8 | ISO_8859_1 | CP_1251
+data Encoding = UTF_8 | ISO_8859_1 | CP_1250 | CP_1251 | CP_1252
   deriving (Eq,Ord)
 
 data OutputFormat = FmtPGFPretty
@@ -483,7 +483,9 @@ haskellOptionNames =
 encodings :: [(String,Encoding)]
 encodings = 
     [("utf8",   UTF_8),
+     ("cp1250", CP_1250),
      ("cp1251", CP_1251),
+     ("cp1252", CP_1252),
      ("latin1", ISO_8859_1)
     ]
 

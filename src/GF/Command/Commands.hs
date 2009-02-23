@@ -17,7 +17,7 @@ import PGF.Data ----
 import PGF.Morphology
 import PGF.VisualizeTree
 import GF.Compile.Export
-import GF.Infra.Option (noOptions, readOutputFormat)
+import GF.Infra.Option (noOptions, readOutputFormat, Encoding(..))
 import GF.Infra.UseIO
 import GF.Data.ErrM ----
 import PGF.Expr (readTree)
@@ -66,7 +66,7 @@ emptyCommandInfo = CommandInfo {
 lookCommand :: String -> Map.Map String CommandInfo -> Maybe CommandInfo
 lookCommand = Map.lookup
 
-commandHelpAll :: String -> PGFEnv -> [Option] -> String
+commandHelpAll :: Encoding -> PGFEnv -> [Option] -> String
 commandHelpAll cod pgf opts = unlines
   [commandHelp (isOpt "full" opts) (co,info)
     | (co,info) <- Map.assocs (allCommands cod pgf)]
@@ -88,7 +88,7 @@ commandHelp full (co,info) = unlines $ [
 type PGFEnv = (PGF, Map.Map Language Morpho)
 
 -- this list must no more be kept sorted by the command name
-allCommands :: String -> PGFEnv -> Map.Map String CommandInfo
+allCommands :: Encoding -> PGFEnv -> Map.Map String CommandInfo
 allCommands cod env@(pgf, mos) = Map.fromList [
   ("!", emptyCommandInfo {
      synopsis = "system command: escape to system shell",
@@ -704,12 +704,12 @@ stringOpOptions = [
 
 treeOpOptions pgf = [(op,expl) | (op,(expl,_)) <- allTreeOps pgf]
 
-translationQuiz :: String -> PGF -> Language -> Language -> Type -> IO ()
+translationQuiz :: Encoding -> PGF -> Language -> Language -> Type -> IO ()
 translationQuiz cod pgf ig og typ = do
   tts <- translationList pgf ig og typ infinity
   mkQuiz cod "Welcome to GF Translation Quiz." tts
 
-morphologyQuiz :: String -> PGF -> Language -> Type -> IO ()
+morphologyQuiz :: Encoding -> PGF -> Language -> Type -> IO ()
 morphologyQuiz cod pgf ig typ = do
   tts <- morphologyList pgf ig typ infinity
   mkQuiz cod "Welcome to GF Morphology Quiz." tts

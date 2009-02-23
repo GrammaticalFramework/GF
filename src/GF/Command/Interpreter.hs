@@ -16,6 +16,7 @@ import PGF.Macros
 import PGF.Morphology
 import GF.System.Signal
 import GF.Infra.UseIO
+import GF.Infra.Option
 
 import GF.Data.ErrM ----
 
@@ -29,13 +30,13 @@ data CommandEnv = CommandEnv {
   expmacros     :: Map.Map String Tree
   }
 
-mkCommandEnv :: String -> PGF -> CommandEnv
+mkCommandEnv :: Encoding -> PGF -> CommandEnv
 mkCommandEnv enc pgf = 
   let mos = Map.fromList [(la,buildMorpho pgf la) | la <- languages pgf] in
     CommandEnv pgf mos (allCommands enc (pgf, mos)) Map.empty Map.empty
 
 emptyCommandEnv :: CommandEnv
-emptyCommandEnv = mkCommandEnv "utf8" emptyPGF
+emptyCommandEnv = mkCommandEnv UTF_8 emptyPGF
 
 interpretCommandLine :: (String -> String) -> CommandEnv -> String -> IO ()
 interpretCommandLine enc env line =

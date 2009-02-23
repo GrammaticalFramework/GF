@@ -23,6 +23,7 @@ import PGF.ShowLinearize
 
 import GF.Data.Operations
 import GF.Infra.UseIO
+import GF.Infra.Option
 import GF.Text.Coding
 
 import System.Random
@@ -33,7 +34,7 @@ import Data.List (nub)
 
 -- generic quiz function
 
-mkQuiz :: String -> String -> [(String,[String])] -> IO ()
+mkQuiz :: Encoding -> String -> [(String,[String])] -> IO ()
 mkQuiz cod msg tts = do
   let qas = [ (q, mkAnswer cod as) | (q,as) <- tts]
   teachDialogue qas msg
@@ -58,7 +59,7 @@ morphologyList pgf ig typ number = do
            (pws,i) <- zip ss forms, let (par,ws) = pws !! i]
 
 -- | compare answer to the list of right answers, increase score and give feedback 
-mkAnswer :: String -> [String] -> String -> (Integer, String) 
+mkAnswer :: Encoding -> [String] -> String -> (Integer, String) 
 mkAnswer cod as s = 
   if (elem (norm s) as) 
      then (1,"Yes.") 
