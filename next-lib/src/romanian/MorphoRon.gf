@@ -3,7 +3,8 @@
 resource MorphoRon = ResRon ** 
   open  Prelude, Predef in {
 
-flags optimize=noexpand ;
+flags
+  optimize=noexpand; coding=cp1250;
 
 ---------------------------------------------------------------------------------
 ------------------------------ARTICLES-------------------------------------------
