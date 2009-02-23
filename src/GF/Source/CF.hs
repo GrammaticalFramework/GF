@@ -94,9 +94,9 @@ cf2grammar :: CF -> (BinTree Ident Info, BinTree Ident Info)
 cf2grammar rules = (buildTree abs, buildTree conc) where
   abs   = cats ++ funs
   conc  = lincats ++ lins
-  cats  = [(cat, AbsCat (yes []) (yes [])) | 
+  cats  = [(cat, AbsCat (Just []) (Just [])) | 
              cat <- nub (concat (map cf2cat rules))] ----notPredef cat
-  lincats = [(cat, CncCat (yes defLinType) nope nope) | (cat,AbsCat _ _) <- cats]
+  lincats = [(cat, CncCat (Just defLinType) Nothing Nothing) | (cat,AbsCat _ _) <- cats]
   (funs,lins) = unzip (map cf2rule rules)
 
 cf2cat :: CFRule -> [Ident]
@@ -105,15 +105,15 @@ cf2cat (_,(cat, items)) = map identS $ cat : [c | Left c <- items]
 cf2rule :: CFRule -> ((Ident,Info),(Ident,Info))
 cf2rule (fun, (cat, items)) = (def,ldef) where
   f     = identS fun
-  def   = (f, AbsFun (yes (mkProd (args', Cn (identS cat), []))) nope)
+  def   = (f, AbsFun (Just (mkProd (args', Cn (identS cat), []))) Nothing)
   args0 = zip (map (identS . ("x" ++) . show) [0..]) items
   args  = [(v, Cn (identS c)) | (v, Left c) <- args0]
   args' = [(identS "_", Cn (identS c)) | (_, Left c) <- args0]
   ldef  = (f, CncFun 
                Nothing 
-               (yes (mkAbs (map fst args) 
+               (Just (mkAbs (map fst args) 
                       (mkRecord (const theLinLabel) [foldconcat (map mkIt args0)])))
-               nope)
+               Nothing)
   mkIt (v, Left _) = P (Vr v) theLinLabel
   mkIt (_, Right a) = K a
   foldconcat [] = K ""

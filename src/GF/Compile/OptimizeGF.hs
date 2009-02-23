@@ -48,9 +48,9 @@ processModule :: (Ident -> Term -> Term) -> SourceModule -> SourceModule
 processModule opt (i,mo) = (i,M.replaceJudgements mo (mapTree (shareInfo opt) (M.jments mo)))
 
 shareInfo :: (Ident -> Term -> Term) -> (Ident,Info) -> Info
-shareInfo opt (c, CncCat ty (Yes t) m) = CncCat ty (Yes (opt c t)) m
-shareInfo opt (c, CncFun kxs (Yes t) m) = CncFun kxs (Yes (opt c t)) m
-shareInfo opt (c, ResOper ty (Yes t)) = ResOper ty (Yes (opt c t))
+shareInfo opt (c, CncCat ty (Just t) m) = CncCat ty (Just (opt c t)) m
+shareInfo opt (c, CncFun kxs (Just t) m) = CncFun kxs (Just (opt c t)) m
+shareInfo opt (c, ResOper ty (Just t)) = ResOper ty (Just (opt c t))
 shareInfo _ (_,i) = i
 
 -- the function putting together optimizations
@@ -181,9 +181,9 @@ unsubexpModule sm@(i,mo)
     -- perform this iff the module has opers
     hasSub ljs = not $ null [c | (c,ResOper _ _) <- ljs]
     unparInfo (c,info) = case info of
-      CncFun xs (Yes t) m -> [(c, CncFun xs (Yes (unparTerm t)) m)]
-      ResOper (Yes (EInt 8)) _ -> [] -- subexp-generated opers
-      ResOper pty (Yes t) -> [(c, ResOper pty (Yes (unparTerm t)))]
+      CncFun xs (Just t) m -> [(c, CncFun xs (Just (unparTerm t)) m)]
+      ResOper (Just (EInt 8)) _ -> [] -- subexp-generated opers
+      ResOper pty (Just t) -> [(c, ResOper pty (Just (unparTerm t)))]
       _ -> [(c,info)]
     unparTerm t = case t of
       Q m c | isOperIdent c -> --- name convention of subexp opers
@@ -205,12 +205,12 @@ addSubexpConsts mo tree lins = do
  where
 
    mkOne (f,def) = case def of
-     CncFun xs (Yes trm) pn -> do
+     CncFun xs (Just trm) pn -> do
        trm' <- recomp f trm
-       return (f,CncFun xs (Yes trm') pn)
-     ResOper ty (Yes trm) -> do
+       return (f,CncFun xs (Just trm') pn)
+     ResOper ty (Just trm) -> do
        trm' <- recomp f trm
-       return (f,ResOper ty (Yes trm'))
+       return (f,ResOper ty (Just trm'))
      _ -> return (f,def)
    recomp f t = case Map.lookup t tree of
      Just (_,id) | operIdent id /= f -> return $ Q mo (operIdent id)
@@ -218,7 +218,7 @@ addSubexpConsts mo tree lins = do
 
    list = Map.toList tree
 
-   oper id trm = (operIdent id, ResOper (Yes (EInt 8)) (Yes trm)) 
+   oper id trm = (operIdent id, ResOper (Just (EInt 8)) (Just trm)) 
    --- impossible type encoding generated opers
 
 getSubtermsMod :: Ident -> [(Ident,Info)] -> TermM (Map Term (Int,Int))
@@ -228,10 +228,10 @@ getSubtermsMod mo js = do
   return $ Map.filter (\ (nu,_) -> nu > 1) tree0
  where
    getInfo get fi@(f,i) = case i of
-     CncFun xs (Yes trm) pn -> do
+     CncFun xs (Just trm) pn -> do
        get trm
        return $ fi
-     ResOper ty (Yes trm) -> do
+     ResOper ty (Just trm) -> do
        get trm
        return $ fi
      _ -> return fi

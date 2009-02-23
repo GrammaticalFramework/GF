@@ -2,8 +2,6 @@ module GF.Compile (batchCompile, link, compileToPGF, compileSourceGrammar) where
 
 -- the main compiler passes
 import GF.Compile.GetGrammar
-import GF.Compile.Extend
-import GF.Compile.Rebuild
 import GF.Compile.Rename
 import GF.Compile.CheckGrammar
 import GF.Compile.Optimize

@@ -670,7 +670,6 @@ executable gf
     GF.Compile.CheckGrammar
     GF.Compile.Refresh
     GF.Compile.BackOpt
-    GF.Compile.Extend
     GF.Compile.Rename
     GF.Compile.ReadFiles
     GF.Compile.GrammarToGFCC
@@ -679,7 +678,6 @@ executable gf
     GF.Compile.OptimizeGF
     GF.Compile.OptimizeGFCC
     GF.Compile.ModDeps
-    GF.Compile.Rebuild
     GF.Source.SourceToGrammar
     GF.Compile.GetGrammar
     GF.Compile

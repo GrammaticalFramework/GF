@@ -36,9 +36,9 @@ shareModule :: OptSpec -> SourceModule -> SourceModule
 shareModule opt (i,mo) = (i,M.replaceJudgements mo (mapTree (shareInfo opt) (M.jments mo)))
 
 shareInfo :: OptSpec -> (Ident, Info) -> Info
-shareInfo opt (c, CncCat ty (Yes t) m) = CncCat ty (Yes (shareOptim opt c t)) m
-shareInfo opt (c, CncFun kxs (Yes t) m) = CncFun kxs (Yes (shareOptim opt c t)) m
-shareInfo opt (c, ResOper ty (Yes t)) = ResOper ty (Yes (shareOptim opt c t))
+shareInfo opt (c, CncCat ty (Just t) m) = CncCat ty (Just (shareOptim opt c t)) m
+shareInfo opt (c, CncFun kxs (Just t) m) = CncFun kxs (Just (shareOptim opt c t)) m
+shareInfo opt (c, ResOper ty (Just t)) = ResOper ty (Just (shareOptim opt c t))
 shareInfo _ (_,i) = i
 
 -- the function putting together optimizations

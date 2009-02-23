@@ -21,15 +21,8 @@
 
 module GF.Grammar.PrGrammar (Print(..),
 		  prtBad,
-		  prGrammar, prModule,
-		  prContext, prParam,
-		  prQIdent, prQIdent_,
-		  prRefinement, prTermOpt,
---		  prt_Tree, prMarkedTree, prTree,
---		  tree2string, prprTree,
+		  prGrammar,
 		  prConstrs, prConstraints, 
---		  prMetaSubst, prEnv, prMSubst, 
-		  prExp, prOperSignature,
                   prTermTabular
 		 ) where
 

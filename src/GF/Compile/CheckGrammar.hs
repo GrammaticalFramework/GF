@@ -121,19 +121,19 @@ checkAbsInfo ::
 checkAbsInfo st m mo (c,info) = do
 ---- checkReservedId c
  case info of
-   AbsCat (Yes cont) _ -> mkCheck "category" $ 
+   AbsCat (Just cont) _ -> mkCheck "category" $ 
      checkContext st cont ---- also cstrs
-   AbsFun (Yes typ0) md -> do
+   AbsFun (Just typ0) md -> do
     typ <- compAbsTyp [] typ0   -- to calculate let definitions
     mkCheck "type of function" $ checkTyp st typ 
     md' <- case md of
-       Yes d -> do
+       Just d -> do
          let d' = elimTables d
 ----         mkCheckWarn "definition of function" $ checkEquation st (m,c) d'
          mkCheck "definition of function" $ checkEquation st (m,c) d'
-         return $ Yes d'
+         return $ Just d'
        _ -> return md
-    return $ (c,AbsFun (Yes typ) md')
+    return $ (c,AbsFun (Just typ) md')
    _ -> return (c,info)
  where
    mkCheck cat ss = case ss of
@@ -195,27 +195,27 @@ checkCompleteGrammar abs cnc = do
      CncCat _ _ _ -> True
      _ -> False
    checkOne js i@(c,info) = case info of
-     AbsFun (Yes _) _ -> case lookupIdent c js of
+     AbsFun (Just _) _ -> case lookupIdent c js of
        Ok _ -> return js
        _ -> do
          checkWarn $ "WARNING: no linearization of" +++ prt c
          return js
-     AbsCat (Yes _) _ -> case lookupIdent c js of
+     AbsCat (Just _) _ -> case lookupIdent c js of
        Ok (AnyInd _ _) -> return js
-       Ok (CncCat (Yes _) _ _) -> return js
+       Ok (CncCat (Just _) _ _) -> return js
        Ok (CncCat _ mt mp) -> do
          checkWarn $ 
            "Warning: no linearization type for" +++ prt c ++ 
            ", inserting default {s : Str}" 
-         return $ updateTree (c,CncCat (Yes defLinType) mt mp) js
+         return $ updateTree (c,CncCat (Just defLinType) mt mp) js
        _ -> do
          checkWarn $ 
            "Warning: no linearization type for" +++ prt c ++ 
            ", inserting default {s : Str}" 
-         return $ updateTree (c,CncCat (Yes defLinType) nope nope) js
+         return $ updateTree (c,CncCat (Just defLinType) Nothing Nothing) js
      _ -> return js
 
--- | General Principle: only Yes-values are checked. 
+-- | General Principle: only Just-values are checked. 
 -- A May-value has always been checked in its origin module.
 checkResInfo :: SourceGrammar -> Ident -> SourceModInfo -> (Ident,Info) -> Check (Ident,Info)
 checkResInfo gr mo mm (c,info) = do
@@ -223,17 +223,15 @@ checkResInfo gr mo mm (c,info) = do
   case info of
     ResOper pty pde -> chIn "operation" $ do
       (pty', pde') <- case (pty,pde) of
-         (Yes ty, Yes de) -> do
+         (Just ty, Just de) -> do
            ty'     <- check ty typeType >>= comp . fst
            (de',_) <- check de ty'
-           return (Yes ty', Yes de')
-         (_, Yes de) -> do
+           return (Just ty', Just de')
+         (_      , Just de) -> do
            (de',ty') <- infer de
-           return (Yes ty', Yes de')
-         (_,Nope) -> do
+           return (Just ty', Just de')
+         (_      , Nothing) -> do
            raise "No definition given to oper"
-           --return (pty,pde)
-         _ -> return (pty, pde) --- other cases are uninteresting
       return (c, ResOper pty' pde')
 
     ResOverload os tysts -> chIn "overloading" $ do
@@ -248,11 +246,11 @@ checkResInfo gr mo mm (c,info) = do
         sort [t : map snd xs | (x,_) <- tysts2, Ok (xs,t) <- [typeFormCnc x]]
       return (c,ResOverload os [(y,x) | (x,y) <- tysts'])
 
-    ResParam (Yes (pcs,_)) -> chIn "parameter type" $ do
+    ResParam (Just (pcs,_)) -> chIn "parameter type" $ do
 ----      mapM ((mapM (computeLType gr . snd)) . snd) pcs
       mapM_ ((mapM_ (checkIfParType gr . snd)) . snd) pcs
       ts <- checkErr $ lookupParamValues gr mo c
-      return (c,ResParam (Yes (pcs, Just ts)))
+      return (c,ResParam (Just (pcs, Just ts)))
 
     _ ->  return (c,info)
  where
@@ -277,26 +275,26 @@ checkCncInfo gr m mo (a,abs) (c,info) = do
   checkReservedId c
   case info of
 
-    CncFun _ (Yes trm) mpr -> chIn "linearization of" $ do
+    CncFun _ (Just trm) mpr -> chIn "linearization of" $ do
       typ        <- checkErr $ lookupFunType gr a c
       cat0       <- checkErr $ valCat typ
       (cont,val) <- linTypeOfType gr m typ         -- creates arg vars
       (trm',_)   <- check trm (mkFunType (map snd cont) val)  -- erases arg vars
       checkPrintname gr mpr
       cat        <- return $ snd cat0
-      return (c, CncFun (Just (cat,(cont,val))) (Yes trm') mpr)
+      return (c, CncFun (Just (cat,(cont,val))) (Just trm') mpr)
                                                    -- cat for cf, typ for pe
 
-    CncCat (Yes typ) mdef mpr -> chIn "linearization type of" $ do
+    CncCat (Just typ) mdef mpr -> chIn "linearization type of" $ do
       checkErr $ lookupCatContext gr a c
       typ'  <- checkIfLinType gr typ
       mdef' <- case mdef of
-        Yes def -> do
+        Just def -> do
           (def',_) <- checkLType gr def (mkFunType [typeStr] typ)
-          return $ Yes def'
+          return $ Just def'
         _ -> return mdef
       checkPrintname gr mpr
-      return (c,CncCat (Yes typ') mdef' mpr)
+      return (c,CncCat (Just typ') mdef' mpr)
 
     _ -> checkResInfo gr m mo (c,info)
 
@@ -400,9 +398,9 @@ computeLType gr t = do
 
     _ -> composOp comp ty
 
-checkPrintname :: SourceGrammar -> Perh Term -> Check ()
-checkPrintname st (Yes t) = checkLType st t typeStr >> return ()
-checkPrintname _ _ = return ()
+checkPrintname :: SourceGrammar -> Maybe Term -> Check ()
+checkPrintname st (Just t) = checkLType st t typeStr >> return ()
+checkPrintname _  _        = return ()
 
 -- | for grammars obtained otherwise than by parsing ---- update!!
 checkReservedId :: Ident -> Check ()
@@ -1105,15 +1103,15 @@ allDependencies ism b =
       Q n c | ism n -> [c]
       QC n c | ism n -> [c]
       _ -> collectOp opersIn t
-    opty (Yes ty) = opersIn ty
+    opty (Just ty) = opersIn ty
     opty _ = []
     pts i = case i of
       ResOper pty pt -> [pty,pt]
-      ResParam (Yes (ps,_)) -> [Yes t | (_,cont) <- ps, (_,t) <- cont]
+      ResParam (Just (ps,_)) -> [Just t | (_,cont) <- ps, (_,t) <- cont]
       CncCat pty _ _ -> [pty]
       CncFun _   pt _ -> [pt]  ---- (Maybe (Ident,(Context,Type))
       AbsFun pty ptr -> [pty] --- ptr is def, which can be mutual
-      AbsCat (Yes co) _ -> [Yes ty | (_,ty) <- co]
+      AbsCat (Just co) _ -> [Just ty | (_,ty) <- co]
       _              -> []
 
 topoSortOpers :: [(Ident,[Ident])] -> Err [Ident]
