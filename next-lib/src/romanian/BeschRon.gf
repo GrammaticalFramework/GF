@@ -20,23 +20,6 @@ oper mkRV : Verbe -> V = \ve -> {s = ve ; lock_V = <>} ;
 -- the smart paradigm covers (60-70% cases for a reasonably big database)
 --          (statistical tests also needed)                    
 
-oper regV : Str -> Verbe = \s ->
-case s of 
-{ x + ("chea"|"ghea") => mkV61 s ;
-  x + "ea" => mkV69 s ;
-  x + "ca" => mkV8 s ;
-  x + "ga" => mkV9 s ;
-  x + "eia" => mkV11 s;
-  x + "ia"  => mkV10 s;
-  x + "a"   => mkV6 s ;
-  x + "e"   => mkV79 s ;
-  x + "ui"  => mkV121 s ;
-  x + "ii"  => mkV120 s ;
-  x + "i"   => mkV119 s ;
-  x + "î"   => mkV141 s
-};
-
-oper mkV : Str -> V = \s -> mkNV (regV s) ; 
 
 
 oper conj : Str -> Verbe = mkV6 ;  

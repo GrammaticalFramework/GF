@@ -11,7 +11,8 @@ resource ParadigmsRon =
     (Predef=Predef), 
     Prelude, 
     MorphoRon, 
-    CatRon in {
+    CatRon,
+    BeschRon in {
 
   flags optimize=all ;
 
@@ -306,6 +307,28 @@ prefA a = {s = a.s ; isPre = True ; lock_A = <>} ;
   mkAdv x = ss x ** {lock_Adv = <>} ;
   mkAdV x = ss x ** {lock_AdV = <>} ;
   mkAdA x = ss x ** {lock_AdA = <>} ;
+
+
+--Verbs :
+
+oper regV : Str -> Verbe = \s ->
+case s of 
+{ x + ("chea"|"ghea") => mkV61 s ;
+  x + "ea" => mkV69 s ;
+  x + "ca" => mkV8 s ;
+  x + "ga" => mkV9 s ;
+  x + "eia" => mkV11 s;
+  x + "ia"  => mkV10 s;
+  x + "a"   => mkV6 s ;
+  x + "e"   => mkV79 s ;
+  x + "ui"  => mkV121 s ;
+  x + "ii"  => mkV120 s ;
+  x + "i"   => mkV119 s ;
+  x + "î"   => mkV141 s
+};
+
+oper mkV : Str -> V = \s -> mkNV (regV s) ; 
+
 
 
   mkV2S : V -> Prep -> V2S ;
