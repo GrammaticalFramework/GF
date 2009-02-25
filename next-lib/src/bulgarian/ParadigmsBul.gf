@@ -86,7 +86,7 @@ oper
                 in mkNoun (v0+"е"+v1)
                           (v0+v1+"и")
                           (v0+"е"+v1+"а")
-                          (v0+"о")
+                          (v0+"е"+v1+"о")
                           DMasc ;
   mkN008b : Str -> N ;
   mkN008b base = let v0 = tk 2 base;
@@ -153,7 +153,7 @@ oper
                           (v0+"йци")
                           (v0+"йци")
                           (v0+"ецо")
-                          DMasc ;
+                          DMascPersonal ;
   mkN014 : Str -> N ;
   mkN014 base = let v0 = tk 1 base
                 in mkNoun (v0+"к")
@@ -173,7 +173,7 @@ oper
                 in mkNoun (v0+"г")
                           (v0+"зи")
                           (v0+"га")
-                          (v0+"о")
+                          (v0+"зе")
                           DMasc ;
   mkN015a : Str -> N ;
   mkN015a base = let v0 = tk 1 base
@@ -208,7 +208,7 @@ oper
                 in mkNoun (v0+"ин")
                           (v0+"и")
                           (v0+"и")
-                          (v0+"ино")
+                          (v0+"ине")
                           DMasc ;
   mkN018a : Str -> N ;
   mkN018a base = let v0 = tk 2 base;
@@ -265,7 +265,7 @@ oper
   mkN024a base = let v0 = tk 1 base
                  in mkNoun (v0+"з")
                            (v0+"зе")
-                           (v0+"-")
+                           (v0+"зе")
                            (v0+"же")
                            DMascPersonal ;
   mkN024 : Str -> N ;
@@ -358,7 +358,7 @@ oper
                 in mkNoun (v0+"ен")
                           (v0+"ни")
                           (v0+"ена")
-                          (v0+"е")
+                          (v0+"ене")
                           DMasc ;
   mkN034 : Str -> N ;
   mkN034 base = let v0 = tk 2 base
@@ -419,9 +419,9 @@ oper
   mkN040a : Str -> N ;
   mkN040a base = let v0 = base
                  in mkNoun (v0)
-                           (v0+"-")
-                           (v0+"-")
-                           (v0+"-")
+                           (v0+"и")
+                           (v0+"а")
+                           (v0+"е")
                            DMasc ;
   mkN041 : Str -> N ;
   mkN041 base = let v0 = tk 1 base
@@ -634,7 +634,7 @@ oper
   mkN065 : Str -> N ;
   mkN065 base = let v0 = base
                 in mkNoun (v0)
-                          (v0+"то")
+                          (v0+"та")
                           (v0+"та")
                           (v0)
                           DNeut ;
