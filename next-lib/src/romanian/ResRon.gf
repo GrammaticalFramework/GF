@@ -28,10 +28,10 @@ param
  
   param Size = sg | less20 | pl ;
  
-  Case = Acc | Dat | Gen ;
+ -- Case = Acc | Dat | Gen ;
  
 -- Adjectives are inflected in number, gender, have specific form for enclitic determined
---article, and specific forms for Nom-Accusative/Dative-Genitive/Voccative
+--article, and specific forms for Nominative-Accusative/Dative-Genitive/Voccative
 
   AForm = AF Gender Number Species ACase | AA ;
 
@@ -47,6 +47,11 @@ param
   
    
   CardOrd = NCard Gender | NOrd Gender;
+
+
+
+
+
 
 
 --3 Verbs 
