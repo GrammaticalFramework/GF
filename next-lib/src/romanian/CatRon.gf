@@ -22,7 +22,7 @@ concrete CatRon of Cat =
     AP = {s : AForm => Str ; isPre : Bool} ; 
 
 -- Noun
-
+ lincat 
     CN      = {s : Number => Str ; g : Gender} ;
  --   Pron    = Pronoun ;
  --   NP      = NounPhrase ;
