@@ -391,8 +391,7 @@ case s of
 
 mkFemSg : Str -> Str = \s ->
 case s of
-{x + "hi" => x + "he";
- x + "i"  => s + "e";
+{x + "i"  => s + "e";
  x + "iu" => x + "ie";
  x + "u"  => x + "ã";
  _        => s + "ã"
