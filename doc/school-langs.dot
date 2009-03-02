@@ -54,7 +54,7 @@ overlap = scale ;
 "16"   [label = "Dutch", style = "solid", shape = "ellipse", color = "red"] ;
 "Abs" -- "16" [style = "solid"];
 
-"17"   [label = "Polish", style = "solid", shape = "ellipse", color = "yellow"] ;
+"17"   [label = "Polish", style = "solid", shape = "ellipse", color = "orange"] ;
 "Abs" -- "17" [style = "solid"];
 
 "18"   [label = "Portuguese", style = "solid", shape = "ellipse", color = "red"] ;
@@ -66,7 +66,7 @@ overlap = scale ;
 "20"   [label = "Slovene", style = "solid", shape = "ellipse", color = "red"] ;
 "Abs" -- "20" [style = "solid"];
 
-"21"   [label = "Romanian", style = "solid", shape = "ellipse", color = "yellow"] ;
+"21"   [label = "Romanian", style = "solid", shape = "ellipse", color = "orange"] ;
 "Abs" -- "21" [style = "solid"];
 
 "22"   [label = "Finnish", style = "solid", shape = "ellipse", color = "green"] ;
@@ -87,14 +87,18 @@ overlap = scale ;
 "27"   [label = "Interlingua", style = "dotted", shape = "ellipse", color = "green"] ;
 "Abs" -- "27" [style = "solid"];
 
-"28"   [label = "Latin", style = "dotted", shape = "ellipse", color = "yellow"] ;
+"28"   [label = "Latin", style = "dotted", shape = "ellipse", color = "orange"] ;
 "Abs" -- "28" [style = "solid"];
-"29"   [label = "Turkish", style = "dotted", shape = "ellipse", color = "yellow"] ;
+"29"   [label = "Turkish", style = "dotted", shape = "ellipse", color = "orange"] ;
 "Abs" -- "29" [style = "solid"];
-"30"   [label = "Hindi", style = "dotted", shape = "ellipse", color = "yellow"] ;
+"30"   [label = "Hindi", style = "dotted", shape = "ellipse", color = "orange"] ;
 "Abs" -- "30" [style = "solid"];
-"31"   [label = "Thai", style = "dotted", shape = "ellipse", color = "yellow"] ;
+"31"   [label = "Thai", style = "dotted", shape = "ellipse", color = "orange"] ;
 "Abs" -- "31" [style = "solid"];
+"32"   [label = "Urdu", style = "dotted", shape = "ellipse", color = "orange"] ;
+"Abs" -- "32" [style = "solid"];
+"33"   [label = "Telugu", style = "dotted", shape = "ellipse", color = "red"] ;
+"Abs" -- "33" [style = "solid"];
 
 
 }
