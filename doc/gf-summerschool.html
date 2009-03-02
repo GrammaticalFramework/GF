@@ -19,24 +19,25 @@ Aarne Ranta (aarne at chalmers.se)
     <LI><A HREF="#toc2">Introduction</A>
     <LI><A HREF="#toc3">The GF resource grammar library</A>
       <UL>
-      <LI><A HREF="#toc4">Applications of the library</A>
-      <LI><A HREF="#toc5">The structure of the library</A>
+      <LI><A HREF="#toc4">Missing EU languages, by the family</A>
+      <LI><A HREF="#toc5">Applications of the library</A>
+      <LI><A HREF="#toc6">The structure of the library</A>
       </UL>
-    <LI><A HREF="#toc6">The summer school</A>
+    <LI><A HREF="#toc7">The summer school</A>
       <UL>
-      <LI><A HREF="#toc7">Selecting participants</A>
-      <LI><A HREF="#toc8">Who is qualified</A>
-      <LI><A HREF="#toc9">Costs</A>
-      <LI><A HREF="#toc10">Teachers</A>
-      <LI><A HREF="#toc11">The Summer School Committee</A>
-      <LI><A HREF="#toc12">Time and Place</A>
-      <LI><A HREF="#toc13">Dissemination and intellectual property</A>
+      <LI><A HREF="#toc8">Selecting participants</A>
+      <LI><A HREF="#toc9">Who is qualified</A>
+      <LI><A HREF="#toc10">Costs</A>
+      <LI><A HREF="#toc11">Teachers</A>
+      <LI><A HREF="#toc12">The Summer School Committee</A>
+      <LI><A HREF="#toc13">Time and Place</A>
+      <LI><A HREF="#toc14">Dissemination and intellectual property</A>
       </UL>
-    <LI><A HREF="#toc14">Why I should participate</A>
-    <LI><A HREF="#toc15">More information</A>
+    <LI><A HREF="#toc15">Why I should participate</A>
+    <LI><A HREF="#toc16">More information</A>
       <UL>
-      <LI><A HREF="#toc16">Contact</A>
-      <LI><A HREF="#toc17">Selected publications from earlier resource grammar projects</A>
+      <LI><A HREF="#toc17">Contact</A>
+      <LI><A HREF="#toc18">Selected publications from earlier resource grammar projects</A>
       </UL>
     </UL>
 
@@ -49,7 +50,7 @@ Aarne Ranta (aarne at chalmers.se)
 </center>
 </P>
 <P>
-<I>red=wanted, green=exists, yellow=in-progress, solid=official-eu, dotted=non-eu</I>
+<I>red=wanted, green=exists, orange=in-progress, solid=official-eu, dotted=non-eu</I>
 </P>
 <A NAME="toc1"></A>
 <H2>Executive summary</H2>
@@ -58,7 +59,13 @@ GF Resource Grammar Library is an open-source computational grammar resource
 that currently covers 12 languages.
 The Summer School is a part of a collaborative effort to extend the library 
 to all of the 23 official EU languages. Also other languages
-chosen by the participants can be covered. 
+chosen by the participants are welcome.
+</P>
+<P>
+The missing EU languages are: 
+Czech, Dutch, Estonian, Greek, Hungarian, Irish, Latvian, Lithuanian,
+Maltese, Portuguese, Slovak, and Slovenian. There is also more work to
+be done on Polish and Romanian.
 </P>
 <P>
 The linguistic coverage of the library includes the inflectional morphology
@@ -90,7 +97,7 @@ Chalmers University of Technology in Gothenburg, Sweden.
 <IMG ALIGN="middle" SRC="align6.png" BORDER="0" ALT="">
 </P>
 <P>
-<I>word alignment produced by GF from the resource grammar in English, Italian, Swedish, Finnish, French, and German</I>
+<I>Word alignment produced by GF from the resource grammar in English, Italian, Swedish, Finnish, French, and German.</I>
 </P>
 <A NAME="toc2"></A>
 <H2>Introduction</H2>
@@ -174,6 +181,60 @@ programmer builds a graphical user interface (GUI) from high-level elements such
 buttons and menus, without having to care about pixels or geometrical forms.
 </P>
 <A NAME="toc4"></A>
+<H3>Missing EU languages, by the family</H3>
+<P>
+Writing a grammar for a language is usually easier if other languages
+from the same family already have grammars. The colours have the same
+meaning as in the diagram above.
+</P>
+<P>
+Baltic:
+<font color="red"> Latvian </font>
+<font color="red"> Lithuanian </font>
+</P>
+<P>
+Celtic: 
+<font color="red"> Irish </font>
+</P>
+<P>
+Fenno-Ugric: 
+<font color="red"> Estonian </font> 
+<font color="green" size="-1"> Finnish </font> 
+<font color="red"> Hungarian </font>
+</P>
+<P>
+Germanic: 
+<font color="green" size="-1"> Danish </font>
+<font color="red"> Dutch </font>
+<font color="green" size="-1"> English </font>
+<font color="green" size="-1"> German </font>
+<font color="green" size="-1"> Swedish </font>
+</P>
+<P>
+Hellenic:
+<font color="red"> Greek </font>
+</P>
+<P>
+Romance:
+<font color="green" size="-1"> French </font>
+<font color="green" size="-1"> Italian </font>
+<font color="red"> Portuguese </font>
+<font color="orange"> Romanian </font>
+<font color="green" size="-1"> Spanish </font>
+</P>
+<P>
+Semitic:
+<font color="red"> Maltese </font>
+</P>
+<P>
+Slavonic:
+<font color="green" size="-1"> Bulgarian </font>
+<font color="red"> Czech </font>
+<font color="orange"> Polish </font>
+<font color="red"> Slovak </font>
+<font color="red"> Slovenian </font>
+</P>
+<A NAME="toc5"></A>
 <H3>Applications of the library</H3>
 <P>
 In addition to translation, the library is also useful in <B>localization</B>,
@@ -194,7 +255,8 @@ interlingua-based translation or localization of systems to new languages:
 </UL>
 
 <P>
-The library is also a generic linguistic resource, which can be used for tasks
+The library is also a generic <B>linguistic resource</B>, 
+which can be used for tasks
 such as language teaching and information retrieval. The liberal license (LGPL)
 makes it usable for anyone and for any task. GF also has tools supporting the
 use of grammars in programs written in other 
@@ -204,7 +266,7 @@ support has also been
 developed for translating GF grammars to language models used in speech
 recognition (GSL/Nuance, HTK/ATK, SRGS, JSGF).
 </P>
-<A NAME="toc5"></A>
+<A NAME="toc6"></A>
 <H3>The structure of the library</H3>
 <P>
 The library has the following main parts:
@@ -225,7 +287,7 @@ The library has the following main parts:
 The goal of the summer school is to implement, for each language, at least
 the first three components. The latter three are more open-ended in character.
 </P>
-<A NAME="toc6"></A>
+<A NAME="toc7"></A>
 <H2>The summer school</H2>
 <P>
 The goal of the summer school is to extend the GF resource grammar library
@@ -239,7 +301,8 @@ The Russian implementation was made by Janna Khegai as a part of her
 PhD thesis; the thesis contains other material, too.
 The Arabic implementation was started by Ali El Dada in his Master's thesis,
 but the thesis does not cover the whole API. The realistic amount of work is
-somewhere between 3 and 8 person months, but this is very much language-dependent.
+somewhere between 3 and 8 person months, 
+but this is very much language-dependent.
 Dutch, for instance, can profit from previous implementations of German and
 Scandinavian languages, and will probably require less work.
 Latvian and Lithuanian are the first languages of the Baltic family and
@@ -247,11 +310,11 @@ will probably require more work.
 </P>
 <P>
 In any case, the proposed allocation of work power is 2 participants per
-language. They will do 2 months' worth of home work, followed
+language. They will do 1 months' worth of home work, followed
 by 2 weeks of summer school, followed by 4 months work at home. 
 Who are these participants?
 </P>
-<A NAME="toc7"></A>
+<A NAME="toc8"></A>
 <H3>Selecting participants</H3>
 <P>
 Persons interested to participate in the Summer School should sign up in
@@ -261,7 +324,13 @@ the <B>Google Group</B> of the course,
 <A HREF="http://groups.google.com/group/gf-resource-school-2009/"><CODE>groups.google.com/group/gf-resource-school-2009/</CODE></A>
 </P>
 <P>
-The registration deadline is 15 June 2009.
+The registration deadline is 15 June 2009. 
+</P>
+<P>
+Notice: you can sign up in the Google 
+group even if you are not planning to attend the summer school, but are
+just interested in the topic. There will be a separate registration to the
+school itself later.
 </P>
 <P>
 The participants are recommended to learn GF in advance, by self-study from the 
@@ -279,6 +348,11 @@ to the Summer School Committee by 12 May.
 The Committee then decides who is given a travel grant of up to 1000 EUR.
 </P>
 <P>
+Notice: you can participate in the summer school without following the on-line
+course or participating in the contest. These things are required only if you
+want a travel grant.
+</P>
+<P>
 The summer school itself is devoted for working on resource grammars.
 In addition to grammar writing itself, testing and evaluation is
 performed. One way to do this is via adding new languages 
@@ -292,7 +366,7 @@ be published at GF website and licensed under LGPL.
 <P>
 The participants are encouraged to contact each other and even work in groups.
 </P>
-<A NAME="toc8"></A>
+<A NAME="toc9"></A>
 <H3>Who is qualified</H3>
 <P>
 Writing a resource grammar implementation requires good general programming
@@ -313,7 +387,7 @@ But it is the quality of the assignment that is assessed, not any formal
 requirements. The "typical participant" was described to give an idea of
 who is likely to succeed in this.
 </P>
-<A NAME="toc9"></A>
+<A NAME="toc10"></A>
 <H3>Costs</H3>
 <P>
 The summer school is free of charge. 
@@ -332,7 +406,7 @@ Special terms will apply to students in
 <A HREF="http://www.gslt.hum.gu.se/">GSLT</A> and
 <A HREF="http://ngslt.org/">NGSLT</A>.
 </P>
-<A NAME="toc10"></A>
+<A NAME="toc11"></A>
 <H3>Teachers</H3>
 <P>
 A list of teachers will be published here later. Some of the local teachers 
@@ -356,13 +430,13 @@ we can discuss your involvement and travel arrangements.
 In addition to teachers, we will look for consultants who can help to assess 
 the results for each language. Please contact us!
 </P>
-<A NAME="toc11"></A>
+<A NAME="toc12"></A>
 <H3>The Summer School Committee</H3>
 <P>
 This committee consists of a number of teachers and informants, 
 who will select the participants. It will be selected by April 2009.
 </P>
-<A NAME="toc12"></A>
+<A NAME="toc13"></A>
 <H3>Time and Place</H3>
 <P>
 The summer school will
@@ -383,7 +457,7 @@ Time schedule:
 <LI>December: release of the extended Resource Grammar Library
 </UL>
 
-<A NAME="toc13"></A>
+<A NAME="toc14"></A>
 <H3>Dissemination and intellectual property</H3>
 <P>
 The new resource grammars will be released under the LGPL just like 
@@ -393,7 +467,7 @@ with the copyright held by respective authors.
 <P>
 The grammars will be distributed via the GF web site.
 </P>
-<A NAME="toc14"></A>
+<A NAME="toc15"></A>
 <H2>Why I should participate</H2>
 <P>
 Seven reasons:
@@ -413,7 +487,7 @@ Seven reasons:
 <LI>free trip and stay in Gothenburg (for travel grant students)
 </OL>
 
-<A NAME="toc15"></A>
+<A NAME="toc16"></A>
 <H2>More information</H2>
 <P>
 <A HREF="http://groups.google.com/group/gf-resource-school-2009/">Course Google Group</A>
@@ -430,7 +504,7 @@ Seven reasons:
 <P>
 <A HREF="http://digitalgrammars.com/gf/doc/Resource-HOWTO.html">Resource-HOWTO document</A>
 </P>
-<A NAME="toc16"></A>
+<A NAME="toc17"></A>
 <H3>Contact</H3>
 <P>
 Håkan Burden: burden at chalmers se
@@ -438,7 +512,7 @@ Håkan Burden: burden at chalmers se
 <P>
 Aarne Ranta: aarne at chalmers se
 </P>
-<A NAME="toc17"></A>
+<A NAME="toc18"></A>
 <H3>Selected publications from earlier resource grammar projects</H3>
 <P>
 K. Angelov.
@@ -446,6 +520,12 @@ Type-Theoretical Bulgarian Grammar.
 In B. Nordström and A. Ranta (eds), 
 <I>Advances in Natural Language Processing (GoTAL 2008)</I>, 
 LNCS/LNAI 5221, Springer,
+2008.
+</P>
+<P>
+B. Bringert. 
+<I>Programming Language Techniques for Natural Language Applications</I>.
+Phd thesis, Computer Science, University of Gothenburg,
 2008.
 </P>
 <P>
@@ -479,7 +559,13 @@ July 21-22, 2007, LSA 2007 Linguistic Institute, Stanford University.
 2007.
 </P>
 <P>
-J Khegai. 
+K. Johannisson.
+<I>Formal and Informal Software Specifications.</I>
+Phd thesis, Computer Science, University of Gothenburg,
+2005.
+</P>
+<P>
+J. Khegai. 
 GF parallel resource grammars and Russian.
 In proceedings of ACL2006 
   (The joint conference of the International Committee on Computational 
@@ -488,7 +574,7 @@ In proceedings of ACL2006
 </P>
 <P>
 J. Khegai. 
-Language engineering in Grammatical Framework (GF).
+<I>Language engineering in Grammatical Framework (GF)</I>.
 Phd thesis, Computer Science, Chalmers University of Technology,
 2006.
 </P>
@@ -519,6 +605,18 @@ In J. Nivre, M. Dahllöf and B. Megyesi (eds),
 <I>Resourceful Language Technology: Festschrift in Honor of Anna Sågvall Hein</I>,
 University of Uppsala,
 2008.
+</P>
+<P>
+A. Ranta. Grammars as Software Libraries.
+To appear in
+Y. Bertot, G. Huet, J-J. Lévy, and G. Plotkin (eds.),
+<I>From Semantics to Computer Science</I>,
+Cambridge University Press, Cambridge, 2009.
+</P>
+<P>
+A. Ranta and K. Angelov.
+Implementing Controlled Languages in GF.
+To appear in the proceedings of <I>CNL 2009</I>.
 </P>
 
 <!-- html code generated by txt2tags 2.4 (http://txt2tags.sf.net) -->

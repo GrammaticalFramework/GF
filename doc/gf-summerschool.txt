@@ -7,13 +7,18 @@ Aarne Ranta (aarne at chalmers.se)
 %!target:html
 %!postproc(html): #BECE <center>
 %!postproc(html): #ENCE </center>
+%!postproc(html): #GRAY <font color="green" size="-1">
+%!postproc(html): #EGRAY </font>
+%!postproc(html): #RED <font color="red">
+%!postproc(html): #YELLOW <font color="orange">
+%!postproc(html): #ERED </font>
 
 #BECE
 [school-langs.png]
 #ENCE
 
 
-//red=wanted, green=exists, yellow=in-progress, solid=official-eu, dotted=non-eu//
+//red=wanted, green=exists, orange=in-progress, solid=official-eu, dotted=non-eu//
 
 
 ==Executive summary==
@@ -22,7 +27,12 @@ GF Resource Grammar Library is an open-source computational grammar resource
 that currently covers 12 languages.
 The Summer School is a part of a collaborative effort to extend the library 
 to all of the 23 official EU languages. Also other languages
-chosen by the participants can be covered. 
+chosen by the participants are welcome.
+
+The missing EU languages are: 
+Czech, Dutch, Estonian, Greek, Hungarian, Irish, Latvian, Lithuanian,
+Maltese, Portuguese, Slovak, and Slovenian. There is also more work to
+be done on Polish and Romanian.
 
 The linguistic coverage of the library includes the inflectional morphology
 and basic syntax of each language. It can be used in GF applications
@@ -48,7 +58,7 @@ Chalmers University of Technology in Gothenburg, Sweden.
 
 [align6.png]
 
-//word alignment produced by GF from the resource grammar in English, Italian, Swedish, Finnish, French, and German//
+//Word alignment produced by GF from the resource grammar in English, Italian, Swedish, Finnish, French, and German.//
 
 ==Introduction==
 
@@ -125,6 +135,55 @@ programmer builds a graphical user interface (GUI) from high-level elements such
 buttons and menus, without having to care about pixels or geometrical forms.
 
 
+===Missing EU languages, by the family===
+
+Writing a grammar for a language is usually easier if other languages
+from the same family already have grammars. The colours have the same
+meaning as in the diagram above.
+
+Baltic:
+#RED Latvian #ERED
+#RED Lithuanian #ERED
+
+Celtic: 
+#RED Irish #ERED
+
+Fenno-Ugric: 
+#RED Estonian #ERED 
+#GRAY Finnish #EGRAY 
+#RED Hungarian #ERED
+
+Germanic: 
+#GRAY Danish #EGRAY
+#RED Dutch #ERED
+#GRAY English #EGRAY
+#GRAY German #EGRAY
+#GRAY Swedish #EGRAY
+
+Hellenic:
+#RED Greek #ERED
+
+Romance:
+#GRAY French #EGRAY
+#GRAY Italian #EGRAY
+#RED Portuguese #ERED
+#YELLOW Romanian #ERED
+#GRAY Spanish #EGRAY
+
+Semitic:
+#RED Maltese #ERED
+
+Slavonic:
+#GRAY Bulgarian #EGRAY
+#RED Czech #ERED
+#YELLOW Polish #ERED
+#RED Slovak #ERED
+#RED Slovenian #ERED
+
+
+
+
+
 
 ===Applications of the library===
 
@@ -143,7 +202,8 @@ interlingua-based translation or localization of systems to new languages:
   to six languages
 
 
-The library is also a generic linguistic resource, which can be used for tasks
+The library is also a generic **linguistic resource**, 
+which can be used for tasks
 such as language teaching and information retrieval. The liberal license (LGPL)
 makes it usable for anyone and for any task. GF also has tools supporting the
 use of grammars in programs written in other 
@@ -185,14 +245,15 @@ The Russian implementation was made by Janna Khegai as a part of her
 PhD thesis; the thesis contains other material, too.
 The Arabic implementation was started by Ali El Dada in his Master's thesis,
 but the thesis does not cover the whole API. The realistic amount of work is
-somewhere between 3 and 8 person months, but this is very much language-dependent.
+somewhere between 3 and 8 person months, 
+but this is very much language-dependent.
 Dutch, for instance, can profit from previous implementations of German and
 Scandinavian languages, and will probably require less work.
 Latvian and Lithuanian are the first languages of the Baltic family and
 will probably require more work.
 
 In any case, the proposed allocation of work power is 2 participants per
-language. They will do 2 months' worth of home work, followed
+language. They will do 1 months' worth of home work, followed
 by 2 weeks of summer school, followed by 4 months work at home. 
 Who are these participants?
 
@@ -204,7 +265,12 @@ the **Google Group** of the course,
 
 [``groups.google.com/group/gf-resource-school-2009/`` http://groups.google.com/group/gf-resource-school-2009/]
 
-The registration deadline is 15 June 2009.
+The registration deadline is 15 June 2009. 
+
+Notice: you can sign up in the Google 
+group even if you are not planning to attend the summer school, but are
+just interested in the topic. There will be a separate registration to the
+school itself later.
 
 The participants are recommended to learn GF in advance, by self-study from the 
 [tutorial http://digitalgrammars.com/gf/doc/gf-tutorial.html]. 
@@ -218,6 +284,10 @@ Those who are interested in getting a travel grant will submit
 their sample resource grammar fragment 
 to the Summer School Committee by 12 May.
 The Committee then decides who is given a travel grant of up to 1000 EUR.
+
+Notice: you can participate in the summer school without following the on-line
+course or participating in the contest. These things are required only if you
+want a travel grant.
 
 The summer school itself is devoted for working on resource grammars.
 In addition to grammar writing itself, testing and evaluation is
@@ -370,6 +440,11 @@ In B. Nordström and A. Ranta (eds),
 LNCS/LNAI 5221, Springer,
 2008.
 
+B. Bringert. 
+//Programming Language Techniques for Natural Language Applications//.
+Phd thesis, Computer Science, University of Gothenburg,
+2008.
+
 A. El Dada and A. Ranta.
 Implementing an Open Source Arabic Resource Grammar in GF.
 In M. Mughazy (ed),
@@ -396,7 +471,12 @@ Urdu Morphology, Orthography and Lexicon Extraction.
 July 21-22, 2007, LSA 2007 Linguistic Institute, Stanford University.
 2007.
 
-J Khegai. 
+K. Johannisson.
+//Formal and Informal Software Specifications.//
+Phd thesis, Computer Science, University of Gothenburg,
+2005.
+
+J. Khegai. 
 GF parallel resource grammars and Russian.
 In proceedings of ACL2006 
   (The joint conference of the International Committee on Computational 
@@ -404,7 +484,7 @@ In proceedings of ACL2006
   Sydney, Australia, July 2006.
 
 J. Khegai. 
-Language engineering in Grammatical Framework (GF).
+//Language engineering in Grammatical Framework (GF)//.
 Phd thesis, Computer Science, Chalmers University of Technology,
 2006.
 
@@ -431,4 +511,14 @@ In J. Nivre, M. Dahllöf and B. Megyesi (eds),
 //Resourceful Language Technology: Festschrift in Honor of Anna Sågvall Hein//,
 University of Uppsala,
 2008.
+
+A. Ranta. Grammars as Software Libraries.
+To appear in
+Y. Bertot, G. Huet, J-J. Lévy, and G. Plotkin (eds.),
+//From Semantics to Computer Science//,
+Cambridge University Press, Cambridge, 2009.
+
+A. Ranta and K. Angelov.
+Implementing Controlled Languages in GF.
+To appear in the proceedings of //CNL 2009//.
 
