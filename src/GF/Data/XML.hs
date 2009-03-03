@@ -25,14 +25,18 @@ showsXMLDoc xml = encodeUTF8 . showString header . showsXML xml
   where header = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>"
 
 showsXML :: XML -> ShowS
-showsXML (Data s) = showString s
-showsXML (CData s) = showString "<![CDATA[" . showString s .showString "]]>"
-showsXML (ETag t as) = showChar '<' . showString t . showsAttrs as . showString "/>"
-showsXML (Tag t as cs) = 
-    showChar '<' . showString t . showsAttrs as . showChar '>' 
-		 . concatS (map showsXML cs) . showString "</" . showString t . showChar '>'
-showsXML (Comment c) = showString "<!-- " . showString c . showString " -->"
-showsXML (Empty) = id
+showsXML = showsX 0 where
+  showsX i x = ind i . case x of
+    (Data s) -> showString s
+    (CData s) -> showString "<![CDATA[" . showString s .showString "]]>"
+    (ETag t as) -> showChar '<' . showString t . showsAttrs as . showString "/>"
+    (Tag t as cs) -> 
+      showChar '<' . showString t . showsAttrs as . showChar '>' . 
+      concatS (map (showsX (i+1)) cs) . ind i . 
+      showString "</" . showString t . showChar '>'
+    (Comment c) -> showString "<!-- " . showString c . showString " -->"
+    (Empty) -> id
+  ind i = showString ("\n" ++ replicate (2*i) ' ')
 
 showsAttrs :: [Attr] -> ShowS
 showsAttrs = concatS . map (showChar ' ' .) . map showsAttr
