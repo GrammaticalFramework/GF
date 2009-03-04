@@ -126,8 +126,14 @@ ppTerm d (T TRaw xs) = case getCTable (T TRaw xs) of
 			           rbrace
                          (vs,e) -> prec d 0 (text "\\\\" <> commaPunct ppIdent vs <+> text "=>" <+> ppTerm 0 e)
 ppTerm d (T (TTyped t) xs) = text "table" <+> ppTerm 0 t <+> lbrace $$
-			           nest 2 (vcat (punctuate semi (map ppCase xs))) $$
-			           rbrace
+			     nest 2 (vcat (punctuate semi (map ppCase xs))) $$
+			     rbrace
+ppTerm d (T (TComp  t) xs) = text "table" <+> ppTerm 0 t <+> lbrace $$
+		 	     nest 2 (vcat (punctuate semi (map ppCase xs))) $$
+			     rbrace
+ppTerm d (T (TWild  t) xs) = text "table" <+> ppTerm 0 t <+> lbrace $$
+			     nest 2 (vcat (punctuate semi (map ppCase xs))) $$
+			     rbrace
 ppTerm d (Prod x a b)= if x == identW
                          then prec d 0 (ppTerm 4 a <+> text "->" <+> ppTerm 0 b)
                          else prec d 0 (parens (ppIdent x <+> colon <+> ppTerm 0 a) <+> text "->" <+> ppTerm 0 b)
