@@ -58,7 +58,7 @@ Chalmers University of Technology in Gothenburg, Sweden.
 
 [align6.png]
 
-//Word alignment produced by GF from the resource grammar in English, Italian, Swedish, Finnish, French, and German.//
+//Word alignment produced by GF from the resource grammar in Bulgarian, English, Italian, German, Finnish, French, and Swedish.//
 
 ==Introduction==
 
