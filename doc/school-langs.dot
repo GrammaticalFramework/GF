@@ -99,6 +99,8 @@ overlap = scale ;
 "Abs" -- "32" [style = "solid"];
 "33"   [label = "Telugu", style = "dotted", shape = "ellipse", color = "red"] ;
 "Abs" -- "33" [style = "solid"];
+"34"   [label = "Arabic", style = "dotted", shape = "ellipse", color = "orange"] ;
+"Abs" -- "34" [style = "solid"];
 
 
 }
