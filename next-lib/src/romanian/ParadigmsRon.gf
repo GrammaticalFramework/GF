@@ -222,6 +222,12 @@ mkNR s = mkIn (mkNomNeut s) ** {lock_N = <>} ;
 
 --------------------------------------------------------------------
 
+mkA = overload {
+   mkA : Str -> Str -> Str -> Str -> Str -> A = mk5A ;--worst case -- all 4 forms are needed + form for adverb
+   mkA : Str -> Str -> Str -> Str -> A = mk4A; -- 4 forms are needed
+   mkA : Str -> A = regA; -- regular adjectives
+};
+
 mk4A : Str -> Str -> Str -> Str -> A;
 mk4A a b c d =  
 let adj = mkAdjSpec a b c d in
