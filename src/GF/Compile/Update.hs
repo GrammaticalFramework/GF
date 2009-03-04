@@ -37,9 +37,9 @@ buildAnyTree m = go Map.empty
         Just i  -> case unifyAnyInfo c i j of
 		     Ok k  -> go (Map.insert c k map) is
 		     Bad _ -> fail $ render (text "cannot unify the informations" $$ 
-		                             nest 4 (ppJudgement (c,i)) $$
+		                             nest 4 (ppJudgement Qualified (c,i)) $$
 		                             text "and" $+$
-		                             nest 4 (ppJudgement (c,j)) $$
+		                             nest 4 (ppJudgement Qualified (c,j)) $$
 		                             text "in module" <+> ppIdent m)
         Nothing -> go (Map.insert c j map) is
 
@@ -143,9 +143,9 @@ extendMod isCompl (name,cond) base old new = foldM try new $ Map.toList old
                          Just j -> case unifyAnyInfo c i j of
 		                     Ok k  -> return $ updateTree (c,k) new
 		                     Bad _ -> fail $ render (text "cannot unify the information" $$ 
-		                                             nest 4 (ppJudgement (c,i)) $$
+		                                             nest 4 (ppJudgement Qualified (c,i)) $$
 		                                             text "in module" <+> ppIdent name <+> text "with" $$
-		                                             nest 4 (ppJudgement (c,j)) $$
+		                                             nest 4 (ppJudgement Qualified (c,j)) $$
 		                                             text "in module" <+> ppIdent base)
                          Nothing    -> if isCompl
                                          then return $ updateTree (c,indirInfo name i) new
