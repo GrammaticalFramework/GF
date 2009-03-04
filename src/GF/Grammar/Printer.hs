@@ -152,8 +152,10 @@ ppTerm q d (C e1 e2)    =prec d 1 (ppTerm q 2 e1 <+> text "++" <+> ppTerm q 1 e2
 ppTerm q d (Glue e1 e2) =prec d 2 (ppTerm q 3 e1 <+> char '+'  <+> ppTerm q 2 e2)
 ppTerm q d (S x y)     = case x of
                            T annot xs -> let e = case annot of
-			                           TTyped t -> Typed y t
 			                           TRaw     -> y
+			                           TTyped t -> Typed y t
+			                           TComp  t -> Typed y t
+			                           TWild  t -> Typed y t
 			                 in text "case" <+> ppTerm q 0 e <+> text "of" <+> lbrace $$
 			                    nest 2 (vcat (punctuate semi (map (ppCase q) xs))) $$
 			                   rbrace
