@@ -2,12 +2,11 @@ module GF.Grammar.API (
   Grammar,
   emptyGrammar,
   pTerm,
-  prTerm,
+  ppTerm,
   checkTerm,
   computeTerm,
   showTerm,
-  TermPrintStyle(..),
-  pTermPrintStyle
+  TermPrintStyle(..), TermPrintQual(..),
   ) where
 
 import GF.Source.ParGF
@@ -17,7 +16,7 @@ import GF.Infra.Ident
 import GF.Infra.Modules (greatestResource)
 import GF.Compile.GetGrammar
 import GF.Grammar.Macros
-import GF.Grammar.PrGrammar
+import GF.Grammar.Printer
 
 import GF.Compile.Rename (renameSourceTerm)
 import GF.Compile.CheckGrammar (justCheckLTerm)
@@ -27,6 +26,7 @@ import GF.Data.Operations
 import GF.Infra.Option
 
 import qualified Data.ByteString.Char8 as BS
+import Text.PrettyPrint
 
 type Grammar = SourceGrammar
 
@@ -37,9 +37,6 @@ pTerm :: String -> Err Term
 pTerm s = do
   e <- pExp $ myLexer (BS.pack s)
   transExp e
-
-prTerm :: Term -> String
-prTerm = prt
 
 checkTerm :: Grammar -> Term -> Err Term
 checkTerm gr t = do
@@ -54,22 +51,14 @@ checkTermAny gr m t = do
 computeTerm :: Grammar -> Term -> Err Term
 computeTerm = computeConcrete
 
-showTerm :: TermPrintStyle -> Term -> String
-showTerm style t = 
-    case style of
-      TermPrintTable   -> unlines [p +++ s | (p,s) <- prTermTabular t]
-      TermPrintAll     -> unlines [      s | (p,s) <- prTermTabular t]
-      TermPrintUnqual  -> prt_ t
-      TermPrintDefault -> prt t
+showTerm :: TermPrintStyle -> TermPrintQual -> Term -> String
+showTerm style q t = render $
+  case style of
+    TermPrintTable   -> vcat [p <+> s | (p,s) <- ppTermTabular q t]
+    TermPrintAll     -> vcat [      s | (p,s) <- ppTermTabular q t]
+    TermPrintDefault -> ppTerm q 0 t
 
-
-data TermPrintStyle = TermPrintTable | TermPrintAll | TermPrintUnqual | TermPrintDefault
-  deriving (Show,Eq)
-
-pTermPrintStyle s = case s of
-  "table"  -> TermPrintTable
-  "all"    -> TermPrintAll
-  "unqual" -> TermPrintUnqual
-  _        -> TermPrintDefault
-
-
+data TermPrintStyle
+  = TermPrintTable
+  | TermPrintAll
+  | TermPrintDefault

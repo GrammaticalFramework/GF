@@ -95,12 +95,17 @@ loop opts gfenv0 = do
              system $ unwords ws
              loopNewCPU gfenv
           "cc":ws -> do
-             let 
-               (style,term) = case ws of 
-                 ('-':w):ws2 -> (pTermPrintStyle w, ws2)
-                 _ -> (TermPrintDefault, ws)
-             case pTerm (unwords term) >>= checkTerm sgr >>= computeTerm sgr of
-               Ok  x -> putStrLn $ enc (showTerm style x)
+             let
+               pOpts style q ("-table"  :ws) = pOpts TermPrintTable   q           ws
+               pOpts style q ("-all"    :ws) = pOpts TermPrintAll     q           ws
+               pOpts style q ("-default":ws) = pOpts TermPrintDefault q           ws
+               pOpts style q ("-unqual" :ws) = pOpts style            Unqualified ws
+               pOpts style q ("-qual"   :ws) = pOpts style            Qualified   ws
+               pOpts style q             ws  = (style,q,unwords ws)
+               
+               (style,q,s) = pOpts TermPrintDefault Qualified ws
+             case pTerm s >>= checkTerm sgr >>= computeTerm sgr of
+               Ok  x -> putStrLn $ enc (showTerm style q x)
                Bad s -> putStrLn $ enc s
              loopNewCPU gfenv
           "dg":ws -> do

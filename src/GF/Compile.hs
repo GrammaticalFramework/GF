@@ -151,7 +151,7 @@ compileOne opts env@(_,srcgr,_) file = do
        sm00 <- putPointE Normal opts ("+ reading" +++ file) $ ioeIO (decodeFile file)
        let sm0 = addOptionsToModule opts sm00
 
-       intermOut opts DumpSource (ppModule sm0)
+       intermOut opts DumpSource (ppModule Qualified sm0)
 
        let sm1 = unsubexpModule sm0
        sm <- {- putPointE Normal opts "creating indirections" $ -} ioeErr $ extendModule mos sm1
@@ -171,7 +171,7 @@ compileOne opts env@(_,srcgr,_) file = do
                                            getSourceModule opts file
        let sm0 = decodeStringsInModule sm00
 
-       intermOut opts DumpSource (ppModule sm0)
+       intermOut opts DumpSource (ppModule Qualified sm0)
 
        (k',sm)  <- compileSourceModule opts env sm0
        let sm1 = if isConcr sm then shareModule sm else sm -- cannot expand Str
@@ -189,28 +189,28 @@ compileSourceModule opts env@(k,gr,_) mo@(i,mi) = do
       mos   = modules gr
 
   mo1   <- ioeErr $ rebuildModule mos mo
-  intermOut opts DumpRebuild (ppModule mo1)
+  intermOut opts DumpRebuild (ppModule Qualified mo1)
 
   mo1b  <- ioeErr $ extendModule mos mo1
-  intermOut opts DumpExtend (ppModule mo1b)
+  intermOut opts DumpExtend (ppModule Qualified mo1b)
 
   case mo1b of
     (_,n) | not (isCompleteModule n) -> do
       return (k,mo1b)   -- refresh would fail, since not renamed
     _ -> do
       mo2:_ <- putpp "  renaming " $ ioeErr $ renameModule mos mo1b
-      intermOut opts DumpRename (ppModule mo2)
+      intermOut opts DumpRename (ppModule Qualified mo2)
 
       (mo3:_,warnings) <- putpp "  type checking" $ ioeErr $ showCheckModule mos mo2
       if null warnings then return () else putp warnings $ return ()
-      intermOut opts DumpTypeCheck (ppModule mo3)
+      intermOut opts DumpTypeCheck (ppModule Qualified mo3)
 
       (k',mo3r:_) <- putpp "  refreshing " $ ioeErr $ refreshModule (k,mos) mo3
-      intermOut opts DumpRefresh (ppModule mo3r)
+      intermOut opts DumpRefresh (ppModule Qualified mo3r)
 
       let eenv = () --- emptyEEnv
       (mo4,eenv') <- putpp "  optimizing " $ ioeErr $ optimizeModule opts (mos,eenv) mo3r
-      intermOut opts DumpOptimize (ppModule mo4)
+      intermOut opts DumpOptimize (ppModule Qualified mo4)
 
       return (k',mo4)
 
