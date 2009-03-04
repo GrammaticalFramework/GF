@@ -210,8 +210,12 @@ ppCase q (p,e) = ppPatt q 0 p <+> text "=>" <+> ppTerm q 0 e
 
 ppPatt q d (PAlt p1 p2) = prec d 0 (ppPatt q 0 p1 <+> char '|' <+> ppPatt q 1 p2)
 ppPatt q d (PSeq p1 p2) = prec d 0 (ppPatt q 0 p1 <+> char '+' <+> ppPatt q 1 p2)
-ppPatt q d (PC f ps)    = prec d 1 (ppIdent f <+> hsep (map (ppPatt q 2) ps))
-ppPatt q d (PP f g ps)  = prec d 1 (ppQIdent q f g <+> hsep (map (ppPatt q 2) ps))
+ppPatt q d (PC f ps)    = if null ps
+                            then ppIdent f
+                            else prec d 1 (ppIdent f <+> hsep (map (ppPatt q 2) ps))
+ppPatt q d (PP f g ps)  = if null ps
+                            then ppQIdent q f g
+                            else prec d 1 (ppQIdent q f g <+> hsep (map (ppPatt q 2) ps))
 ppPatt q d (PRep p)     = prec d 1 (ppPatt q 2 p <> char '*')
 ppPatt q d (PAs f p)    = prec d 1 (ppIdent f <> char '@' <> ppPatt q 2 p)
 ppPatt q d (PNeg p)     = prec d 1 (char '-' <> ppPatt q 2 p)
