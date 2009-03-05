@@ -44383,7 +44383,6 @@ lin  aba_N = mkN041 "аба" ;
   sledene_N = mkN071 "следене" ;
   sledinfarkten_A = mkA079 "слединфарктен" ;
   sledkoleden_A = mkA079 "следколеден" ;
-  sledni_ja__A = mkA089 "следния" ;
   sledobed_N = mkN007 "следобед" ;
   sledobeden_A = mkA079 "следобеден" ;
   sledovatel_N = mkN031a "следовател" ;

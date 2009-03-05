@@ -44369,7 +44369,6 @@ fun  aba_N : N ;
   sledene_N : N ;
   sledinfarkten_A : A ;
   sledkoleden_A : A ;
-  sledni_ja__A : A ;
   sledobed_N : N ;
   sledobeden_A : A ;
   sledovatel_N : N ;
