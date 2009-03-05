@@ -120,7 +120,7 @@ ppJudgement q (id, CncFun  ptype pdef pprn) =
   (case pprn of
      Just prn -> text "printname" <+> text "fun" <+> ppIdent id <+> equals <+> ppTerm q 0 prn <+> semi
      Nothing  -> empty)
-ppJudgement q (id, AnyInd cann mid) = text "ind" <+> ppIdent id <+> equals <+> (if cann then text "canonical" else empty) <+> ppIdent mid
+ppJudgement q (id, AnyInd cann mid) = text "ind" <+> ppIdent id <+> equals <+> (if cann then text "canonical" else empty) <+> ppIdent mid <+> semi
 
 ppTerm q d (Abs v e)   = let (vs,e') = getAbs e
                          in prec d 0 (char '\\' <> commaPunct ppIdent (v:vs) <+> text "->" <+> ppTerm q 0 e')
