@@ -5,17 +5,20 @@ concrete ExtraBul of ExtraBulAbs = CatBul **
 
   lin
     PossIndefPron p = {
-      s = \\aform => p.gen ! (indefAForm ! aform) ;
+      s = \\_,aform => p.gen ! (indefAForm ! aform) ;
+      nonEmpty = True;
       spec = Indef
       } ;
       
     ReflQuant = {
-      s = \\aform => reflPron ! aform ;
+      s = \\_,aform => reflPron ! aform ;
+      nonEmpty = True;
       spec = Indef
     } ;
 
     ReflIndefQuant = {
-      s = \\aform => reflPron ! (indefAForm ! aform) ;
+      s = \\_,aform => reflPron ! (indefAForm ! aform) ;
+      nonEmpty = True;
       spec = Indef
     } ;
 
