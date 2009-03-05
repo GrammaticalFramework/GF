@@ -19,6 +19,7 @@ module GF.Grammar.Lookup (
                lookupIdent,
                lookupIdentInfo,
                lookupIdentInfoIn,
+               lookupOrigInfo,
                lookupResDef,
                lookupResDefKind,
 	       lookupResType, 
@@ -139,13 +140,14 @@ lookupOverload gr m c = do
       AnyInd _ n  -> lookupOverload gr n c
       _   -> Bad $ prt c +++ "is not an overloaded operation"
 
-lookupOrigInfo :: SourceGrammar -> Ident -> Ident -> Err Info
+-- | returns the original 'Info' and the module where it was found
+lookupOrigInfo :: SourceGrammar -> Ident -> Ident -> Err (Ident,Info)
 lookupOrigInfo gr m c = do
     mo <- lookupModule gr m
     info <- lookupIdentInfo mo c
     case info of
       AnyInd _ n  -> lookupOrigInfo gr n c
-      i           -> return i
+      i           -> return (m,i)
 
 lookupParams :: SourceGrammar -> Ident -> Ident -> Err ([Param],Maybe PValues)
 lookupParams gr = look True where 
@@ -194,7 +196,7 @@ lookupIndexValue gr ty i = do
 allOrigInfos :: SourceGrammar -> Ident -> [(Ident,Info)]
 allOrigInfos gr m = errVal [] $ do
   mo <- lookupModule gr m
-  return [(c,i) | (c,_) <- tree2list (jments mo), Ok i <- [look c]]
+  return [(c,i) | (c,_) <- tree2list (jments mo), Ok (_,i) <- [look c]]
   where
     look = lookupOrigInfo gr m
 

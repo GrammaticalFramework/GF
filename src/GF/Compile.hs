@@ -141,7 +141,6 @@ compileOne opts env@(_,srcgr,_) file = do
   let gf   = takeExtensions file
   let path = dropFileName file
   let name = dropExtension file
-  let mos  = modules srcgr
 
   case gf of
 
@@ -154,7 +153,7 @@ compileOne opts env@(_,srcgr,_) file = do
        intermOut opts DumpSource (ppModule Qualified sm0)
 
        let sm1 = unsubexpModule sm0
-       sm <- {- putPointE Normal opts "creating indirections" $ -} ioeErr $ extendModule mos sm1
+       sm <- {- putPointE Normal opts "creating indirections" $ -} ioeErr $ extendModule srcgr sm1
        
        extendCompileEnv env file sm
 
@@ -186,18 +185,19 @@ compileSourceModule opts env@(k,gr,_) mo@(i,mi) = do
 
   let putp  = putPointE Normal opts
       putpp = putPointE Verbose opts
-      mos   = modules gr
 
-  mo1   <- ioeErr $ rebuildModule mos mo
+  mo1   <- ioeErr $ rebuildModule gr mo
   intermOut opts DumpRebuild (ppModule Qualified mo1)
 
-  mo1b  <- ioeErr $ extendModule mos mo1
+  mo1b  <- ioeErr $ extendModule gr mo1
   intermOut opts DumpExtend (ppModule Qualified mo1b)
 
   case mo1b of
     (_,n) | not (isCompleteModule n) -> do
       return (k,mo1b)   -- refresh would fail, since not renamed
     _ -> do
+      let mos = modules gr
+
       mo2:_ <- putpp "  renaming " $ ioeErr $ renameModule mos mo1b
       intermOut opts DumpRename (ppModule Qualified mo2)
 
