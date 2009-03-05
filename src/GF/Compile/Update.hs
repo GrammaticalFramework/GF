@@ -35,7 +35,7 @@ buildAnyTree m = go Map.empty
     go map []         = return map
     go map ((c,j):is) = do
       case Map.lookup c map of
-        Just i  -> case unifyAnyInfo c i j of
+        Just i  -> case unifyAnyInfo m i j of
 		     Ok k  -> go (Map.insert c k map) is
 		     Bad _ -> fail $ render (text "cannot unify the informations" $$ 
 		                             nest 4 (ppJudgement Qualified (c,i)) $$
@@ -141,7 +141,7 @@ extendMod gr isCompl (name,cond) base old new = foldM try new $ Map.toList old
     try new (c,i)
       | not (cond c) = return new
       | otherwise    = case Map.lookup c new of
-                         Just j -> case unifyAnyInfo c i j of
+                         Just j -> case unifyAnyInfo name i j of
 		                     Ok k  -> return $ updateTree (c,k) new
 		                     Bad _ -> do (base,j) <- case j of 
 		                                               AnyInd _ m -> lookupOrigInfo gr m c
@@ -168,7 +168,7 @@ extendMod gr isCompl (name,cond) base old new = foldM try new $ Map.toList old
         _ -> (False,n) ---- canonical in Abs
 
 unifyAnyInfo :: Ident -> Info -> Info -> Err Info
-unifyAnyInfo c i j = case (i,j) of
+unifyAnyInfo m i j = case (i,j) of
   (AbsCat mc1 mf1, AbsCat mc2 mf2) -> 
     liftM2 AbsCat (unifMaybe mc1 mc2) (unifConstrs mf1 mf2) -- adding constrs
   (AbsFun mt1 md1, AbsFun mt2 md2) -> 
@@ -177,7 +177,7 @@ unifyAnyInfo c i j = case (i,j) of
   (ResParam mt1, ResParam mt2) -> liftM ResParam $ unifMaybe mt1 mt2
   (ResValue mt1, ResValue mt2) -> 
     liftM ResValue $ unifMaybe mt1 mt2
-  (_, ResOverload ms t) | elem c ms ->
+  (_, ResOverload ms t) | elem m ms ->
     return $ ResOverload ms t
   (ResOper mt1 m1, ResOper mt2 m2) -> 
     liftM2 ResOper (unifMaybe mt1 mt2) (unifMaybe m1 m2)
