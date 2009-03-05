@@ -17,6 +17,7 @@ module GF.Compile.Update (buildAnyTree, extendModule, rebuildModule) where
 import GF.Infra.Ident
 import GF.Grammar.Grammar
 import GF.Grammar.Printer
+import GF.Grammar.Lookup
 import GF.Infra.Modules
 import GF.Infra.Option
 
@@ -43,8 +44,8 @@ buildAnyTree m = go Map.empty
 		                             text "in module" <+> ppIdent m)
         Nothing -> go (Map.insert c j map) is
 
-extendModule :: [SourceModule] -> SourceModule -> Err SourceModule
-extendModule ms (name,m)
+extendModule :: SourceGrammar -> SourceModule -> Err SourceModule
+extendModule gr (name,m)
   ---- Just to allow inheritance in incomplete concrete (which are not
   ---- compiled anyway), extensions are not built for them.
   ---- Should be replaced by real control. AR 4/2/2005
@@ -53,7 +54,7 @@ extendModule ms (name,m)
                                                  return (name,m')
  where
    extOne mo (n,cond) = do
-     m0 <- lookupModule (MGrammar ms) n
+     m0 <- lookupModule gr n
 
      -- test that the module types match, and find out if the old is complete
      testErr (sameMType (mtype m) (mtype mo)) 
@@ -62,7 +63,7 @@ extendModule ms (name,m)
      let isCompl = isCompleteModule m0
 
      -- build extension in a way depending on whether the old module is complete
-     js1 <- extendMod isCompl (n, isInherited cond) name (jments m0) (jments mo)
+     js1 <- extendMod gr isCompl (n, isInherited cond) name (jments m0) (jments mo)
 
      -- if incomplete, throw away extension information
      return $ 
@@ -75,9 +76,8 @@ extendModule ms (name,m)
 
 -- | rebuilding instance + interface, and "with" modules, prior to renaming. 
 -- AR 24/10/2003
-rebuildModule :: [SourceModule] -> SourceModule -> Err SourceModule
-rebuildModule ms mo@(i,mi@(ModInfo mt stat fs_ me mw ops_ med_ js_ ps_)) = do
-  let gr = MGrammar ms
+rebuildModule :: SourceGrammar -> SourceModule -> Err SourceModule
+rebuildModule gr mo@(i,mi@(ModInfo mt stat fs_ me mw ops_ med_ js_ ps_)) = do
 ----  deps <- moduleDeps ms
 ----  is   <- openInterfaces deps i
   let is = [] ---- the method above is buggy: try "i -src" for two grs. AR 8/3/2005
@@ -92,7 +92,7 @@ rebuildModule ms mo@(i,mi@(ModInfo mt stat fs_ me mw ops_ med_ js_ ps_)) = do
         MTInstance i0 -> do
           m1 <- lookupModule gr i0
           testErr (isModRes m1) ("interface expected instead of" +++ prIdent i0)
-          js' <- extendMod False (i0,const True) i (jments m1) (jments mi)
+          js' <- extendMod gr False (i0,const True) i (jments m1) (jments mi)
           --- to avoid double inclusions, in instance I of I0 = J0 ** ...
           case extends mi of
             []  -> return $ replaceJudgements mi js'
@@ -132,24 +132,31 @@ rebuildModule ms mo@(i,mi@(ModInfo mt stat fs_ me mw ops_ med_ js_ ps_)) = do
 -- | When extending a complete module: new information is inserted,
 -- and the process is interrupted if unification fails.
 -- If the extended module is incomplete, its judgements are just copied.
-extendMod :: Bool -> (Ident,Ident -> Bool) -> Ident -> 
+extendMod :: SourceGrammar ->
+             Bool -> (Ident,Ident -> Bool) -> Ident -> 
              BinTree Ident Info -> BinTree Ident Info -> 
              Err (BinTree Ident Info)
-extendMod isCompl (name,cond) base old new = foldM try new $ Map.toList old 
+extendMod gr isCompl (name,cond) base old new = foldM try new $ Map.toList old 
   where
     try new (c,i)
       | not (cond c) = return new
       | otherwise    = case Map.lookup c new of
                          Just j -> case unifyAnyInfo c i j of
 		                     Ok k  -> return $ updateTree (c,k) new
-		                     Bad _ -> fail $ render (text "cannot unify the information" $$ 
-		                                             nest 4 (ppJudgement Qualified (c,i)) $$
-		                                             text "in module" <+> ppIdent name <+> text "with" $$
-		                                             nest 4 (ppJudgement Qualified (c,j)) $$
-		                                             text "in module" <+> ppIdent base)
-                         Nothing    -> if isCompl
-                                         then return $ updateTree (c,indirInfo name i) new
-                                         else return $ updateTree (c,i) new
+		                     Bad _ -> do (base,j) <- case j of 
+		                                               AnyInd _ m -> lookupOrigInfo gr m c
+		                                               _          -> return (base,j)
+		                                 (name,i) <- case i of 
+                                                               AnyInd _ m -> lookupOrigInfo gr m c
+                                                               _          -> return (name,i)
+		                                 fail $ render (text "cannot unify the information" $$ 
+		                                                nest 4 (ppJudgement Qualified (c,i)) $$
+		                                                text "in module" <+> ppIdent name <+> text "with" $$
+		                                                nest 4 (ppJudgement Qualified (c,j)) $$
+		                                                text "in module" <+> ppIdent base)
+                         Nothing-> if isCompl
+                                     then return $ updateTree (c,indirInfo name i) new
+                                     else return $ updateTree (c,i) new
 
     indirInfo :: Ident -> Info -> Info
     indirInfo n info = AnyInd b n' where 
