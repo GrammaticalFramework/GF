@@ -89,24 +89,24 @@ incomplete resource Combinators = open Cat, Structural, Constructors in {
            = \v,np,ob -> mkCl np v ob ;
       pred : V3 -> NP -> NP -> NP -> Cl 
            = \v,np,ob,ob2 -> mkCl np v ob ob2 ;
-      pred : V  -> NP -> NP -> Cl
-           = \v,x,y -> mkCl (mkNP and_Conj x y) v ;
+      pred : V  -> NP -> NP -> Cl  --# notminimal
+           = \v,x,y -> mkCl (mkNP and_Conj x y) v ;  --# notminimal
       pred : A  -> NP -> Cl 
            = \a,np -> mkCl np a ;
-      pred : A2 -> NP -> NP -> Cl
-           = \a,x,y -> mkCl x a y ;
-      pred : A  -> NP -> NP -> Cl      
-           = \a,x,y -> mkCl (mkNP and_Conj x y) a ;
+      pred : A2 -> NP -> NP -> Cl  --# notminimal
+           = \a,x,y -> mkCl x a y ;  --# notminimal
+      pred : A  -> NP -> NP -> Cl        --# notminimal
+           = \a,x,y -> mkCl (mkNP and_Conj x y) a ;  --# notminimal
       pred : N -> NP -> Cl
            = \n,x -> mkCl x (mkNP a_Art n) ;
       pred : CN -> NP -> Cl
            = \n,x -> mkCl x (mkNP a_Art n) ;
       pred : NP -> NP -> Cl
            = \n,x -> mkCl x n ;
-      pred : N2 -> NP -> NP -> Cl 
-           = \n,x,y -> mkCl x (mkNP a_Art (mkCN n y)) ;
-      pred : N -> NP -> NP -> Cl 
-           = \n,x,y -> mkCl (mkNP and_Conj x y) (mkNP a_Art plNum n) ;
+      pred : N2 -> NP -> NP -> Cl   --# notminimal
+           = \n,x,y -> mkCl x (mkNP a_Art (mkCN n y)) ;  --# notminimal
+      pred : N -> NP -> NP -> Cl   --# notminimal
+           = \n,x,y -> mkCl (mkNP and_Conj x y) (mkNP a_Art plNum n) ;  --# notminimal
       pred : Adv -> NP -> Cl 
            = \a,x -> mkCl x a ;
       pred : Prep -> NP -> NP -> Cl        
@@ -116,40 +116,40 @@ incomplete resource Combinators = open Cat, Structural, Constructors in {
     app = overload {
       app : N  -> NP
            = \n -> mkNP the_Art n ;
-      app : N2 -> NP -> NP 
-           = \n,x -> mkNP the_Art (mkCN n x) ;
-      app : N3 -> NP -> NP -> NP
-           = \n,x,y -> mkNP the_Art (mkCN n x y) ;
-      app : N2 -> NP -> NP -> NP
-           = \n,x,y -> mkNP the_Art (mkCN n (mkNP and_Conj x y)) ;
-      app : N2 -> N -> CN
-           = \f,n -> mkCN f (mkNP a_Art plNum n) ;
-      app : N2 -> NP -> CN 
-           = mkCN ;
-      app : N3 -> NP -> NP -> CN 
-           = mkCN ;
-      app : N2 -> NP -> NP -> CN 
-           = \n,x,y -> mkCN n (mkNP and_Conj x y) ;
+      app : N2 -> NP -> NP   --# notminimal
+           = \n,x -> mkNP the_Art (mkCN n x) ;  --# notminimal
+      app : N3 -> NP -> NP -> NP  --# notminimal
+           = \n,x,y -> mkNP the_Art (mkCN n x y) ;  --# notminimal
+      app : N2 -> NP -> NP -> NP  --# notminimal
+           = \n,x,y -> mkNP the_Art (mkCN n (mkNP and_Conj x y)) ;  --# notminimal
+      app : N2 -> N -> CN  --# notminimal
+           = \f,n -> mkCN f (mkNP a_Art plNum n) ;  --# notminimal
+      app : N2 -> NP -> CN   --# notminimal
+           = mkCN ;  --# notminimal
+      app : N3 -> NP -> NP -> CN   --# notminimal
+           = mkCN ;  --# notminimal
+      app : N2 -> NP -> NP -> CN   --# notminimal
+           = \n,x,y -> mkCN n (mkNP and_Conj x y) ;  --# notminimal
       } ;
 
-    coord = overload {
-      coord : Conj -> Adv -> Adv -> Adv
-           = mkAdv ;
-      coord : Conj -> AP -> AP -> AP
-           = mkAP ;
-      coord : Conj -> NP -> NP -> NP
-           = mkNP ;
-      coord : Conj -> S  -> S  -> S  
-           = mkS ;
-      coord : Conj -> ListAdv -> Adv
-           = mkAdv ;
-      coord : Conj -> ListAP -> AP
-           = mkAP ;
-      coord : Conj -> ListNP -> NP
-           = mkNP ;
-      coord : Conj -> ListS  -> S  
-           = mkS ;
-      } ;
+    coord = overload {  --# notminimal
+      coord : Conj -> Adv -> Adv -> Adv  --# notminimal
+           = mkAdv ;  --# notminimal
+      coord : Conj -> AP -> AP -> AP  --# notminimal
+           = mkAP ;  --# notminimal
+      coord : Conj -> NP -> NP -> NP  --# notminimal
+           = mkNP ;  --# notminimal
+      coord : Conj -> S  -> S  -> S  --# notminimal  
+           = mkS ;  --# notminimal
+      coord : Conj -> ListAdv -> Adv  --# notminimal
+           = mkAdv ;  --# notminimal
+      coord : Conj -> ListAP -> AP  --# notminimal
+           = mkAP ;  --# notminimal
+      coord : Conj -> ListNP -> NP  --# notminimal
+           = mkNP ;  --# notminimal
+      coord : Conj -> ListS  -> S    --# notminimal
+           = mkS ;  --# notminimal
+      } ;  --# notminimal
 
     mod = overload {
       mod : A -> N -> CN
@@ -179,8 +179,8 @@ incomplete resource Combinators = open Cat, Structural, Constructors in {
 	   = mkS negativePol ;
       neg : QCl -> QS 
            = mkQS negativePol ;
-      neg : RCl -> RS 
-           = mkRS negativePol ;
+      neg : RCl -> RS   --# notminimal
+           = mkRS negativePol ;  --# notminimal
     };
 
 

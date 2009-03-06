@@ -1,0 +1,1 @@
+grep -v "\-\-\# notminimal" $1
