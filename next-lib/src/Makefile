@@ -50,7 +50,7 @@ synopsis:
 	cd doc ; $(RUNGHC) MkSynopsis ; cd ..
 
 link:
-	chmod a+x mkPresent
+	chmod a+x mkPresent mkMinimal
 
 compiled:
 	(cd .. && tar -zcf resource-compiled.tar.gz prelude alltenses present)
