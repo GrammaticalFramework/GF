@@ -50,10 +50,10 @@ langsCoding = [
 langs = map fst langsCoding
 
 -- languagues for which to compile Lang
-langsLang = langs `except` ["Ara","Bul","Ina","Rus","Hin","Tha"]
+langsLang = langs `except` ["Ara","Ina"]
 
 -- languages for which to compile Try 
-langsAPI  = langsLang `except` ["Ara","Bul","Hin","Ina","Rus","Tha"]
+langsAPI  = langsLang `except` ["Ara","Hin","Ina","Tha"]
 
 -- languages for which to run treebank test
 langsTest = langsLang `except` ["Ara","Bul","Cat","Hin","Rus","Spa","Tha"]

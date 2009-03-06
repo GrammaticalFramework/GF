@@ -1,5 +1,6 @@
---# -path=.:present:prelude
+--# -path=.:present
 
-concrete SwadeshDan of Swadesh = CatDan ** SwadeshI with
-  (Lang = LangDan) ;
+concrete SwadeshDan of Swadesh = SwadeshI with
+  (Lexicon = LexiconDan),
+  (Syntax = SyntaxDan) ;
 
