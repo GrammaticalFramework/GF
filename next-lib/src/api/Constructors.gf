@@ -962,8 +962,8 @@ incomplete resource Constructors = open Grammar in {
                                          =    \y -> ExistNP (DetArtSg IndefArt y) ; --# notminimal
       mkCl : NP -> Cl          -- there is a house --# notminimal
                                          =    ExistNP    ; --# notminimal
-      mkCl : NP -> AP -> Cl    -- John is nice and warm  --# notminimal 
-	                      =     \x,y -> PredVP x (UseComp (CompAP y)) ; --# notminimal
+      mkCl : NP -> AP -> Cl    -- John is nice and warm 
+	                      =     \x,y -> PredVP x (UseComp (CompAP y)) ; 
       mkCl : NP -> A  -> Cl    -- John is warm   
                       =     \x,y -> PredVP x (UseComp (CompAP (PositA y))) ;   
       mkCl : NP -> A -> NP -> Cl -- John is warmer than Mary   
@@ -1124,8 +1124,8 @@ incomplete resource Constructors = open Grammar in {
     mkCard = overload {  
       mkCard : Numeral -> Card  
         = NumNumeral ;  
-      mkCard : Digits -> Card         -- 51  
-        = NumDigits ;  
+      mkCard : Digits -> Card         -- 51  --# notminimal
+        = NumDigits ;  --# notminimal
       mkCard : AdN -> Card -> Card --# notminimal
         = AdNum --# notminimal
       } ;
@@ -1539,11 +1539,11 @@ incomplete resource Constructors = open Grammar in {
         = \t,u -> {s = t.s ++ u.s ; lock_Text = <>} ; --# notminimal
       } ;  
 
-    mkVP = overload { --# notminimal
-      mkVP : V   -> VP                -- sleep --# notminimal
-                                         =    UseV      ; --# notminimal
-      mkVP : V2  -> NP -> VP          -- use it --# notminimal
-                                         =    ComplV2   ; --# notminimal
+    mkVP = overload { 
+      mkVP : V   -> VP                -- sleep 
+                                         =    UseV      ; 
+      mkVP : V2  -> NP -> VP          -- use it 
+                                         =    ComplV2   ; 
       mkVP : V3  -> NP -> NP -> VP    -- send a message to her --# notminimal
                                          =    ComplV3   ; --# notminimal
       mkVP : VV  -> VP -> VP          -- want to run --# notminimal
@@ -1580,15 +1580,15 @@ incomplete resource Constructors = open Grammar in {
                              = \y -> (UseComp (CompNP (DetArtSg IndefArt (UseN y)))) ; --# notminimal
       mkVP : Adv -> VP               -- be here --# notminimal
                                          =    \a -> UseComp (CompAdv a)   ; --# notminimal
-      mkVP : VP -> Adv -> VP          -- sleep here --# notminimal
-                                         =    AdvVP     ; --# notminimal
+      mkVP : VP -> Adv -> VP          -- sleep here 
+                                         =    AdvVP     ; 
       mkVP : AdV -> VP -> VP          -- always sleep --# notminimal
                                          =    AdVVP ; --# notminimal
       mkVP : VPSlash -> NP -> VP          -- always sleep --# notminimal
                                          =    ComplSlash ; --# notminimal
       mkVP : VPSlash -> VP --# notminimal
         = ReflVP --# notminimal
-      } ; --# notminimal
+      } ; 
 
   reflexiveVP   : V2 -> VP = \v -> ReflVP (SlashV2a v) ; --# notminimal
 
