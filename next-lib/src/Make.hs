@@ -55,6 +55,9 @@ langsLang = langs `except` ["Ara","Ina"]
 -- languages for which to compile Try 
 langsAPI  = langsLang `except` ["Ara","Hin","Ina","Tha"]
 
+-- languages for which to compile minimal Syntax
+langsMinimal = langs `only` ["Eng","Bul","Ita"]
+
 -- languages for which to run treebank test
 langsTest = langsLang `except` ["Ara","Bul","Cat","Hin","Rus","Spa","Tha"]
 
@@ -97,6 +100,9 @@ make xx = do
     mapM_ (gfc pres presApiPath . try) (optl langsAPI)
     mapM_ (gfc pres presApiPath . symbolic) (optl langsAPI)
     copy "*/*.gfo" dir
+  ifx "minimal" $ do
+    mapM_ (gfcmin presApiPath . syntax) (optl langsMinimal)
+    copy "api/*.gfo" "../minimal"
   ifxx "pgf" $ do
     run_gfc $ ["-s","--make","--name=langs","--parser=off",
                "--output-dir=" ++ dir]
@@ -126,6 +132,11 @@ gfc pres ppath file = do
   putStrLn $ "Compiling " ++ file
   run_gfc ["-s","-src", preproc, path, file]
 
+gfcmin path file = do
+  let preproc = "-preproc=./mkMinimal"
+  putStrLn $ "Compiling minimal " ++ file
+  run_gfc ["-s","-src", preproc, path, file]
+
 gf comm file = do
   putStrLn $ "Reading " ++ file
   let cmd = "echo \"" ++ comm ++ "\" | gf -s " ++ file
@@ -142,6 +153,7 @@ lang (lla,la) = lla ++ "/All" ++ la ++ ".gf"
 compat (lla,la) = lla ++ "/Compatibility" ++ la ++ ".gf"
 symbol (lla,la) = lla ++ "/Symbol" ++ la ++ ".gf"
 try  (lla,la) = "api/Try"  ++ la ++ ".gf"
+syntax (lla,la) = "api/Syntax"  ++ la ++ ".gf"
 symbolic (lla,la) = "api/Symbolic"  ++ la ++ ".gf"
 parse (lla,la) = "parse/Parse" ++ la ++ ".gf"
 
