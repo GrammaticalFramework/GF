@@ -85,6 +85,12 @@ ppSymbol (FSymCat d r) = char '<' <> int d <> comma <> int r <> char '>'
 ppSymbol (FSymLit d r) = char '<' <> int d <> comma <> int r <> char '>'
 ppSymbol (FSymTok (KS t))   = text (show t)
 
-ppFCat  fcat  = char 'C' <> int fcat
+ppFCat  fcat
+  | fcat == fcatString = text "String"
+  | fcat == fcatInt    = text "Int"
+  | fcat == fcatFloat  = text "Float"
+  | fcat == fcatVar    = text "Var"
+  | otherwise          = char 'C' <> int fcat
+
 ppFunId funid = char 'F' <> int funid
 ppSeqId seqid = char 'S' <> int seqid
