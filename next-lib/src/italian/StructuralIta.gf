@@ -1,6 +1,6 @@
 concrete StructuralIta of Structural = CatIta ** 
   open 
-  PhonoIta, MorphoIta, 
+  PhonoIta, MorphoIta, MakeStructuralIta,
   ParadigmsIta, BeschIta, (X = ConstructX), Prelude in {
 
   flags optimize=all ; coding=utf8 ;
@@ -152,9 +152,9 @@ lin
     mkPronoun
       "Lei" "La" "Le" "Glie" "Lei" "Suo" "Sua" "Suoi" "Sue"
       Masc Sg P3 ;
-  not_Predet = {s = \\a,c => prepCase c ++ "pas" ; c = Nom} ;
-  nothing_but_Predet = {s = \\a,c => prepCase c ++ "rien excepté" ; c = Nom} ;
-  nobody_but_Predet = {s = \\a,c => prepCase c ++ "personne excepté" ; c = Nom} ;
+  not_Predet = {s = \\a,c => prepCase c ++ "non" ; c = Nom} ;
+  nothing_but_Predet = {s = \\a,c => prepCase c ++ "niente eccetto" ; c = Nom} ;
+  nobody_but_Predet = {s = \\a,c => prepCase c ++ "nessun eccetto" ; c = Nom} ;
 
 
   no_Quant = 
@@ -175,5 +175,6 @@ lin
   at_most_AdN = ss "al massimo" ;
 
   as_CAdv = X.mkCAdv "così" conjThan ;
+  except_Prep = mkPrep "eccetto" ;
 }
 

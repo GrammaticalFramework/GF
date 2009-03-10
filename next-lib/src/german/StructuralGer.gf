@@ -1,6 +1,6 @@
 concrete StructuralGer of Structural = CatGer ** 
 
-  open MorphoGer, (X = ConstructX), Prelude in {
+  open MorphoGer, MakeStructuralGer, (X = ConstructX), Prelude in {
 
   flags optimize=all ;
 
