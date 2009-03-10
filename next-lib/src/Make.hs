@@ -56,7 +56,7 @@ langsLang = langs `except` ["Ara","Ina"]
 langsAPI  = langsLang `except` ["Ara","Hin","Ina","Tha"]
 
 -- languages for which to compile minimal Syntax
-langsMinimal = langs `only` ["Eng","Bul","Ita"]
+langsMinimal = langs `only` ["Eng","Bul","Ger","Ita"]
 
 -- languages for which to run treebank test
 langsTest = langsLang `except` ["Ara","Bul","Cat","Hin","Rus","Spa","Tha"]
