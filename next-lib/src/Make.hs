@@ -152,12 +152,10 @@ demos abstr ls = "gr -number=100 | l -treebank " ++ unlexer abstr ls ++
 lang (lla,la) = lla ++ "/All" ++ la ++ ".gf"
 compat (lla,la) = lla ++ "/Compatibility" ++ la ++ ".gf"
 symbol (lla,la) = lla ++ "/Symbol" ++ la ++ ".gf"
-v v v v v v v
-try  (lla,la) = "api/Syntax"  ++ la ++ ".gf"
-*************
+
 try  (lla,la) = "api/Try"  ++ la ++ ".gf"
 syntax (lla,la) = "api/Syntax"  ++ la ++ ".gf"
-^ ^ ^ ^ ^ ^ ^
+
 symbolic (lla,la) = "api/Symbolic"  ++ la ++ ".gf"
 parse (lla,la) = "parse/Parse" ++ la ++ ".gf"
 
