@@ -1,5 +1,5 @@
 concrete StructuralFin of Structural = CatFin ** 
-  open MorphoFin, ParadigmsFin, (X = ConstructX), Prelude in {
+  open MorphoFin, ParadigmsFin, (X = ConstructX), MakeStructuralFin, Prelude in {
 
   flags optimize=all ;
 
@@ -304,5 +304,6 @@ lin
 
   as_CAdv = X.mkCAdv "yhtä" "kuin" ;
 
+  except_Prep = postPrep partitive "lukuunottamatta" ;
 }
 
