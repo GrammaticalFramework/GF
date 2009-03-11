@@ -98,6 +98,7 @@ incomplete concrete SwadeshI of Swadesh = open Syntax, Lexicon in {
     white_A = Lexicon.white_A ;
    wide_A = Lexicon.wide_A ;
     yellow_A = Lexicon.yellow_A ;
+
     -- Nouns
    animal_N = Lexicon.animal_N ;
    ashes_N = Lexicon.ashes_N ;
