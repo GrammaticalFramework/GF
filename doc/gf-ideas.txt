@@ -9,9 +9,10 @@ contact: Aarne Ranta (aarne at chalmers dot se)
 %!postproc(html): #ENCE </center>
 %!postproc(html): #GRAY <font color="green" size="-1">
 %!postproc(html): #EGRAY </font>
-%!postproc(html): #RED <font color="red">
-%!postproc(html): #YELLOW <font color="orange">
-%!postproc(html): #ERED </font>
+%!postproc(html): #RED <font color="red"><b>
+%!postproc(html): #YELLOW <font color="orange"><i>
+%!postproc(html): #ERED </b></font>
+%!postproc(html): #EYELLOW </i></font>
 
 #BECE
 [gf-logo.png]
@@ -46,7 +47,9 @@ The library is licensed under LGPL.
 
 Writing a grammar for a language is usually easier if other languages
 from the same family already have grammars. The colours have the same
-meaning as in the diagram above. Thus, in particular, each of the languages
+meaning as in the diagram above; in addition, we use boldface for the
+red, still unimplemented languages and italics for the
+orange languages in progress. Thus, in particular, each of the languages
 coloured red below are possible programming projects.
 
 Baltic:
@@ -77,28 +80,40 @@ Hellenic:
 - #RED Greek #ERED
 
 
+Indo-Iranian:
+- #YELLOW Hindi #EYELLOW
+- #YELLOW Urdu #EYELLOW
+
+
 Romance:
 - #GRAY Catalan #EGRAY
 - #GRAY French #EGRAY
 - #GRAY Italian #EGRAY
 - #RED Portuguese #ERED
-- #YELLOW Romanian #ERED
+- #YELLOW Romanian #EYELLOW
 - #GRAY Spanish #EGRAY
 
 
 Semitic:
-- #YELLOW Arabic #ERED
+- #YELLOW Arabic #EYELLOW
 - #RED Maltese #ERED
 
 
 Slavonic:
 - #GRAY Bulgarian #EGRAY
 - #RED Czech #ERED
-- #YELLOW Polish #ERED
+- #YELLOW Polish #EYELLOW
 - #GRAY Russian #EGRAY
 - #RED Slovak #ERED
 - #RED Slovenian #ERED
 
+
+Tai:
+- #YELLOW Thai #EYELLOW
+
+
+Turkic:
+- #YELLOW Turkish #EYELLOW
 
 
 ===Who is qualified===
@@ -185,9 +200,9 @@ Requirements: GF, JavaScript, some phone application development tools
 
 This project is rather open: find some cool applications of 
 the technology that are useful or entertaining on the web. Examples include
-- translators: see  [demo http://tournesol.cs.chalmers.se:41296/translate]
+- translators: see  [demo http://129.16.250.57:41296/translate]
 - multilingual wikis: see [demo http://csmisc14.cs.chalmers.se/~meza/restWiki/wiki.cgi]
-- fridge magnets: see  [demo http://tournesol.cs.chalmers.se:41296/fridge]
+- fridge magnets: see  [demo http://129.16.250.57:41296/fridge]
 
 
 Requirements: GF, JavaScript or Java and Google Web Toolkit, CGI
