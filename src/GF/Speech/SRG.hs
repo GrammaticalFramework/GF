@@ -15,14 +15,13 @@ module GF.Speech.SRG (SRG(..), SRGRule(..), SRGAlt(..), SRGItem, SRGSymbol
                      , makeNonRecursiveSRG
                      , getSpeechLanguage
                      , isExternalCat
-                     , lookupFM_, prtS
+                     , lookupFM_
                      ) where
 
 import GF.Data.Operations
 import GF.Data.Utilities
 import GF.Infra.Ident
 import GF.Infra.Option
-import GF.Infra.PrintClass
 import GF.Speech.CFG
 import GF.Speech.PGFToCFG
 import GF.Data.Relation
@@ -204,6 +203,3 @@ lookupFM_ :: (Ord key, Show key) => Map key elt -> key -> elt
 lookupFM_ fm k = Map.findWithDefault err k fm
   where err = error $ "Key not found: " ++ show k
                       ++ "\namong " ++ show (Map.keys fm)
-
-prtS :: Print a => a -> ShowS
-prtS = showString . prt

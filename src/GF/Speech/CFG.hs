@@ -9,7 +9,6 @@ module GF.Speech.CFG where
 import GF.Data.Utilities
 import PGF.CId
 import GF.Infra.Option
-import GF.Infra.PrintClass
 import GF.Data.Relation
 
 import Control.Monad
