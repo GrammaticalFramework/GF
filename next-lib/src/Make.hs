@@ -40,17 +40,21 @@ langsCoding = [
   (("german",   "Ger"),""),
   (("interlingua","Ina"),""),
   (("italian",  "Ita"),""),
+  (("latin",    "Lat"),""),
   (("norwegian","Nor"),""),
+  (("polish",   "Pol"),""),
+  (("romanian", "Ron"),""),
   (("russian",  "Rus"),""),
   (("spanish",  "Spa"),""),
   (("swedish",  "Swe"),""), 
-  (("thai",     "Tha"),"to_thai")
+  (("thai",     "Tha"),"to_thai"),
+  (("turkish",  "Tur"),"")
   ]
 
 langs = map fst langsCoding
 
 -- languagues for which to compile Lang
-langsLang = langs `except` ["Ara","Ina"]
+langsLang = langs `except` ["Ara"]
 
 -- languages for which to compile Try 
 langsAPI  = langsLang `except` ["Ara","Hin","Ina","Tha"]
