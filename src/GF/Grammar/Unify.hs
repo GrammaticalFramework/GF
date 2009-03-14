@@ -26,7 +26,7 @@ import Data.List (partition)
 unifyVal :: Constraints -> Err (Constraints,MetaSubst)
 unifyVal cs0 = do
   let (cs1,cs2) = partition notSolvable cs0 
-  let (us,vs) = unzip cs1
+  let (us,vs) = unzip cs2
   us' <- mapM val2exp us
   vs' <- mapM val2exp vs
   let (ms,cs) = unifyAll (zip us' vs') []
