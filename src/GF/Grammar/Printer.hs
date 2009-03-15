@@ -10,6 +10,7 @@
 module GF.Grammar.Printer
            ( TermPrintQual(..)
            , ppIdent
+           , ppLabel
            , ppModule
            , ppJudgement
            , ppTerm
