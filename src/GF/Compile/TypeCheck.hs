@@ -20,15 +20,13 @@ module GF.Compile.TypeCheck (-- * top-level type checking functions; TC should n
 		 ) where
 
 import GF.Data.Operations
---import GF.Data.Zipper
 
 import GF.Grammar.Abstract
+import GF.Grammar.Lookup
+import GF.Grammar.Unify
+import GF.Grammar.Printer
 import GF.Compile.Refresh
 import GF.Compile.AbsCompute
-import GF.Grammar.Lookup
-import qualified GF.Grammar.Lookup as Lookup ---
-import GF.Grammar.Unify ---
-
 import GF.Compile.TC
 
 import Control.Monad (foldM, liftM, liftM2)
@@ -41,39 +39,7 @@ initTCEnv gamma =
 
 type2val :: Type -> Val
 type2val = VClos []
-{-
-aexp2tree :: (AExp,[(Val,Val)]) -> Err Tree
-aexp2tree (aexp,cs) = do
-  (bi,at,vt,ts) <- treeForm aexp
-  ts' <- mapM aexp2tree [(t,[]) | t <- ts]
-  return $ Tr (N (bi,at,vt,(cs,[]),False),ts')
- where
-  treeForm a = case a of
-     AAbs x v b  -> do
-       (bi, at, vt, args) <- treeForm b
-       v' <- whnf v ---- should not be needed...
-       return ((x,v') : bi, at, vt, args)
-     AApp c a v -> do
-       (_,at,_,args) <- treeForm c
-       v' <- whnf v ---- 
-       return ([],at,v',args ++ [a]) 
-     AVr x v -> do
-       v' <- whnf v ---- 
-       return ([],AtV x,v',[])
-     ACn c v -> do
-       v' <- whnf v ---- 
-       return ([],AtC c,v',[])
-     AInt i -> do
-       return ([],AtI i,valAbsInt,[])
-     AFloat i -> do
-       return ([],AtF i,valAbsFloat,[])
-     AStr s -> do
-       return ([],AtL s,valAbsString,[])
-     AMeta m v -> do
-       v' <- whnf v ---- 
-       return ([],AtM m,v',[])
-     _ -> Bad "illegal tree" -- AProd
--}
+
 cont2exp :: Context -> Exp
 cont2exp c = mkProd (c, eType, []) -- to check a context
 
@@ -106,11 +72,10 @@ checkTyp :: Grammar -> Type -> [String]
 checkTyp gr typ = err singleton prConstrs $ justTypeCheck gr typ vType
 
 checkEquation :: Grammar -> Fun -> Term -> [String]
-checkEquation gr (m,fun) def = err singleton id $ do
+checkEquation gr (m,fun) def = err singleton prConstrs $ do
   typ  <- lookupFunType gr m fun
   cs   <- justTypeCheck gr def (vClos typ)
-  let cs1 = filter notJustMeta cs
-  return $ ifNull [] (singleton . prConstraints) cs1
+  return $ filter notJustMeta cs
 
 checkConstrs :: Grammar -> Cat -> [Ident] -> [String]
 checkConstrs gr cat _ = [] ---- check constructors!
