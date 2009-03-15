@@ -138,7 +138,6 @@ checkAbsInfo st m mo (c,info) = do
  where
    mkCheck cat ss = case ss of
      [] -> return (c,info)
-     ["[]"] -> return (c,info) ----
      _  -> checkErr $ Bad (unlines ss ++++ "in" +++ cat +++ prt c +++ pos c)
    ---- temporary solution when tc of defs is incomplete
    mkCheckWarn cat ss = case ss of

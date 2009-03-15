@@ -22,7 +22,7 @@
 module GF.Grammar.PrGrammar (Print(..),
 		  prtBad,
 		  prGrammar,
-		  prConstrs, prConstraints, 
+		  prConstrs, 
                   prTermTabular
 		 ) where
 
@@ -151,9 +151,6 @@ prprTree = prf False where
 -}
 
 -- auxiliaries
-
-prConstraints :: Constraints -> String
-prConstraints = concat . prConstrs
 
 prMetaSubst :: MetaSubst -> String
 prMetaSubst = concat . prMSubst
