@@ -630,7 +630,6 @@ executable gf
     GF.Data.Utilities
     GF.Data.SortedList
     GF.Data.Assoc
-    GF.Infra.PrintClass
     GF.Compile.GenerateFCFG
     GF.Data.ErrM
     GF.Source.ParGF
@@ -666,7 +665,6 @@ executable gf
     GF.Compile.TC
     GF.Compile.TypeCheck
     GF.Compile.Update
-    GF.Compile.RemoveLiT
     GF.Compile.CheckGrammar
     GF.Compile.Refresh
     GF.Compile.BackOpt
