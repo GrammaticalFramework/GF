@@ -12,7 +12,7 @@ concrete GrammarTha of Grammar =
 --  ConjunctionTha,
   PhraseTha,
 --  TextX,
-  StructuralTha,
+  StructuralTha
 --  IdiomTha
   ** {
 

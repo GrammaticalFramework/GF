@@ -1,22 +1,19 @@
 module GF.Grammar.API (
   Grammar,
   emptyGrammar,
-  pTerm,
-  ppTerm,
   checkTerm,
   computeTerm,
   showTerm,
   TermPrintStyle(..), TermPrintQual(..),
   ) where
 
-import GF.Source.ParGF
-import GF.Source.SourceToGrammar (transExp)
-import GF.Grammar.Grammar
 import GF.Infra.Ident
 import GF.Infra.Modules (greatestResource)
 import GF.Compile.GetGrammar
 import GF.Grammar.Macros
+import GF.Grammar.Parser
 import GF.Grammar.Printer
+import GF.Grammar.Grammar
 
 import GF.Compile.Rename (renameSourceTerm)
 import GF.Compile.CheckGrammar (justCheckLTerm)
@@ -32,11 +29,6 @@ type Grammar = SourceGrammar
 
 emptyGrammar :: Grammar
 emptyGrammar = emptySourceGrammar
-
-pTerm :: String -> Err Term
-pTerm s = do
-  e <- pExp $ myLexer (BS.pack s)
-  transExp e
 
 checkTerm :: Grammar -> Term -> Err Term
 checkTerm gr t = do

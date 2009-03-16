@@ -30,12 +30,12 @@ import GF.Infra.Modules
 import GF.Compile.TypeCheck
 
 import GF.Compile.Refresh
+import GF.Grammar.Lexer
 import GF.Grammar.Grammar
 import GF.Grammar.PrGrammar
 import GF.Grammar.Lookup
 import GF.Grammar.Predef
 import GF.Grammar.Macros
-import GF.Grammar.ReservedWords
 import GF.Grammar.PatternMatch
 import GF.Grammar.AppPredefined
 import GF.Grammar.Lockfield (isLockLabel)
@@ -403,10 +403,9 @@ checkPrintname _  _        = return ()
 
 -- | for grammars obtained otherwise than by parsing ---- update!!
 checkReservedId :: Ident -> Check ()
-checkReservedId x = let c = prt x in
-         if isResWord c 
-            then checkWarn ("Warning: reserved word used as identifier:" +++ c)
-            else return ()
+checkReservedId x
+  | isReservedWord (ident2bs x) = checkWarn ("Warning: reserved word used as identifier:" +++ prt x)
+  | otherwise                   = return ()
 
 -- to normalize records and record types
 labelIndex :: Type -> Label -> Int

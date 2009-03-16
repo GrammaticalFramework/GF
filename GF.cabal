@@ -617,9 +617,7 @@ executable gf
   extensions:
   main-is: GF.hs
   other-modules:
-    GF.Grammar.ReservedWords
     GF.Data.BacktrackM
-    GF.Source.LexGF
     GF.Source.AbsGF
     GF.Source.PrintGF
     GF.JavaScript.AbsJS
@@ -632,7 +630,6 @@ executable gf
     GF.Data.Assoc
     GF.Compile.GenerateFCFG
     GF.Data.ErrM
-    GF.Source.ParGF
     GF.Data.Operations
     GF.Infra.Ident
     GF.Grammar.Predef
@@ -647,6 +644,8 @@ executable gf
     GF.Command.Parse
     GF.Command.Importing
     GF.Infra.Modules
+    GF.Grammar.Lexer
+    GF.Grammar.Parser
     GF.Grammar.Grammar
     GF.Source.GrammarToSource
     GF.Grammar.Values
