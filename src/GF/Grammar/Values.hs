@@ -35,7 +35,7 @@ import GF.Grammar.Predef
 
 type Exp = Term
 
-data Val = VGen Int Ident | VApp Val Val | VCn QIdent | VType | VClos Env Exp 
+data Val = VGen Int Ident | VApp Val Val | VCn QIdent | VRecType [(Label,Val)] | VType | VClos Env Exp 
   deriving (Eq,Show)
 
 type Env = [(Ident,Val)]
