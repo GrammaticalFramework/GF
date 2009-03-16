@@ -29,9 +29,8 @@ import GF.Infra.Ident
 import GF.Infra.Modules
 import GF.Data.Operations
 import qualified GF.Source.AbsGF as S
-import GF.Source.LexGF
-import GF.Source.ParGF
-import GF.Source.SourceToGrammar(transModDef)
+import GF.Grammar.Lexer
+import GF.Grammar.Parser
 import GF.Grammar.Grammar
 import GF.Grammar.Binary
 
@@ -109,28 +108,12 @@ getAllFiles opts ps env file = do
                         CSEnv  -> return (name, maybe [] snd mb_envmod)
                         CSRead -> ioeIO $ fmap importsOfModule (decodeModHeader (replaceExtension file "gfo"))
                         CSComp -> do s <- ioeIO $ BS.readFile file
-                                     ioeErr ((liftM (importsOfModule . modHeaderToModDef) . pModHeader . myLexer) s)
+                                     case runP pModHeader s of
+                                       Left (Pn l c,msg) -> ioeBad (file ++ ":" ++ show l ++ ":" ++ show c ++ ": " ++ msg)
+                                       Right mo          -> return (importsOfModule mo)
       ioeErr $ testErr (mname == name)
                        ("module name" +++ mname +++ "differs from file name" +++ name)
       return (name,st,t,imps,dropFileName file)
-
--- FIXME: this is pretty ugly, it's just to get around the difference
--- between ModHeader as returned when parsing just the module header 
--- when looking for imports, and ModDef, which includes the whole module.
-modHeaderToModDef :: S.ModHeader -> SourceModule
-modHeaderToModDef (S.MModule2 x y z) = 
-  errVal (error "error in modHeaderToModDef") $ transModDef $ S.MModule x y (modHeaderBodyToModBody z)
-  where
-    modHeaderBodyToModBody :: S.ModHeaderBody -> S.ModBody
-    modHeaderBodyToModBody b = case b of
-                                 S.MBody2 x y -> S.MBody x y []
-                                 S.MNoBody2 x -> S.MNoBody x
-                                 S.MWith2 x y -> S.MWith x y
-                                 S.MWithBody2 x y z -> S.MWithBody x y z []
-                                 S.MWithE2 x y z -> S.MWithE x y z
-                                 S.MWithEBody2 x y z w -> S.MWithEBody x y z w []
-                                 S.MReuse2 x -> S.MReuse x
-                                 S.MUnion2 x -> S.MUnion x
 
 isGFO :: FilePath -> Bool
 isGFO = (== ".gfo") . takeExtensions

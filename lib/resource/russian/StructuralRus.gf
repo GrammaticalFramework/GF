@@ -1,7 +1,7 @@
 --# -path=.:../abstract:../common:../../prelude
 
 concrete StructuralRus of Structural = CatRus ** 
-  open ResRus, MorphoRus, (P = ParadigmsRus), Prelude, NounRus, in {
+  open ResRus, MorphoRus, (P = ParadigmsRus), Prelude, NounRus in {
 
   flags optimize=all ; coding=utf8 ;
 

@@ -18,15 +18,10 @@ import GF.Data.Operations
 
 import GF.Infra.UseIO
 import GF.Infra.Modules
-import GF.Grammar.Grammar
-import qualified GF.Source.AbsGF as A
-import GF.Source.SourceToGrammar
----- import Macros
----- import Rename
 import GF.Infra.Option
---- import Custom
-import GF.Source.ParGF
-import qualified GF.Source.LexGF as L
+import GF.Grammar.Lexer
+import GF.Grammar.Parser
+import GF.Grammar.Grammar
 
 import GF.Compile.ReadFiles
 
@@ -37,22 +32,21 @@ import Control.Monad (foldM)
 import System.Cmd (system)
 
 getSourceModule :: Options -> FilePath -> IOE SourceModule
-getSourceModule opts file0 = do
-  file <- foldM runPreprocessor file0 (flag optPreprocessors opts)
-  string    <- readFileIOE file
-  let tokens = myLexer string
-  mo1  <- ioeErr $ errIn file0 $ pModDef tokens
-  mo2 <- ioeErr $ transModDef mo1
-  return $ addOptionsToModule opts mo2
+getSourceModule opts file0 = ioe $
+  catch (do file <- foldM runPreprocessor file0 (flag optPreprocessors opts)
+            content <- BS.readFile file
+            case runP pModDef content of
+              Left (Pn l c,msg) -> return (Bad (file++":"++show l++":"++show c++": "++msg))
+              Right mo          -> return (Ok (addOptionsToModule opts mo)))
+        (\e -> return (Bad (show e)))
 
 addOptionsToModule :: Options -> SourceModule -> SourceModule
 addOptionsToModule opts = mapSourceModule (\m -> m { flags = flags m `addOptions` opts })
 
 -- FIXME: should use System.IO.openTempFile
-runPreprocessor :: FilePath -> String -> IOE FilePath
-runPreprocessor file0 p =
-    do let tmp = "_gf_preproc.tmp"
-           cmd = p +++ file0 ++ ">" ++ tmp
-       ioeIO $ system cmd
-       -- ioeIO $ putStrLn $ "preproc" +++ cmd
-       return tmp
+runPreprocessor :: FilePath -> String -> IO FilePath
+runPreprocessor file0 p = do
+  let tmp = "_gf_preproc.tmp"
+      cmd = p +++ file0 ++ ">" ++ tmp
+  system cmd
+  return tmp

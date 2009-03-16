@@ -175,9 +175,3 @@ putPointE v opts msg act = do
       else when (verbAtLeast opts v) $ putStrLnE ""
 
   return a
-
-
--- ((do {s <- readFile f; return (return s)}) ) 
-readFileIOE :: FilePath -> IOE BS.ByteString
-readFileIOE f = ioe $ catch (BS.readFile f >>= return . return)
-                            (\e -> return (Bad (show e)))

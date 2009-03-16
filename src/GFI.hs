@@ -7,7 +7,9 @@ import GF.Command.Commands
 import GF.Command.Abstract
 import GF.Command.Parse
 import GF.Data.ErrM
-import GF.Grammar.API  -- for cc command
+import GF.Grammar.API
+import GF.Grammar.Lexer
+import GF.Grammar.Parser
 import GF.Infra.Dependencies
 import GF.Infra.UseIO
 import GF.Infra.Option
@@ -24,6 +26,7 @@ import Data.Char
 import Data.Maybe
 import Data.List(isPrefixOf)
 import qualified Data.Map as Map
+import qualified Data.ByteString.Char8 as BS
 import qualified Text.ParserCombinators.ReadP as RP
 import System.Cmd
 import System.CPUTime
@@ -104,9 +107,11 @@ loop opts gfenv0 = do
                pOpts style q             ws  = (style,q,unwords ws)
                
                (style,q,s) = pOpts TermPrintDefault Qualified ws
-             case pTerm s >>= checkTerm sgr >>= computeTerm sgr of
-               Ok  x -> putStrLn $ enc (showTerm style q x)
-               Bad s -> putStrLn $ enc s
+             case runP pExp (BS.pack s) of
+               Left (_,msg) -> putStrLn msg
+               Right t      -> case checkTerm sgr t >>= computeTerm sgr of
+                                 Ok  x -> putStrLn $ enc (showTerm style q x)
+                                 Bad s -> putStrLn $ enc s
              loopNewCPU gfenv
           "dg":ws -> do
              writeFile "_gfdepgraph.dot" (depGraph sgr)
