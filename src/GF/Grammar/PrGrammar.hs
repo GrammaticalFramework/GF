@@ -189,6 +189,7 @@ instance Print Val where
   prt (VClos env e) = case e of
     Meta _ -> prt_ e ++ prEnv env
     _      -> prt_ e ---- ++ prEnv env ---- for debugging
+  prt (VRecType xs) = prCurly (concat (intersperse "," [prt l ++ "=" ++ prt v | (l,v) <- xs]))
   prt VType = "Type"
  
 prv1 v = case v of

@@ -65,6 +65,7 @@ unify e1 e2 g =
   (App c a, App d b)            -> case unify c d g of 
                                      Ok g1 -> unify a b g1 
                                      _       -> prtBad "fail unify" e1
+  (RecType xs,RecType ys) | xs == ys -> return g
   _                             -> prtBad "fail unify" e1
 
 extend :: Unifier -> MetaSymb -> Term -> Err Unifier

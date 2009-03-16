@@ -23,9 +23,12 @@ module GF.Compile.TC (AExp(..),
 import GF.Data.Operations
 import GF.Grammar.Predef
 import GF.Grammar.Abstract
+import GF.Grammar.Printer
 
 import Control.Monad
 import Data.List (sortBy)
+import Data.Maybe
+import Text.PrettyPrint
 
 data AExp =
      AVr   Ident Val 
@@ -39,8 +42,14 @@ data AExp =
    | AAbs  Ident Val AExp 
    | AProd Ident AExp AExp 
    | AEqs  [([Exp],AExp)] --- not used
+   | ARecType [ALabelling]
+   | AR    [AAssign]
+   | AP    AExp Label Val
    | AData Val
   deriving (Eq,Show)
+
+type ALabelling = (Label, AExp) 
+type AAssign = (Label, (Val, AExp))
 
 type Theory = QIdent -> Err Val
 
@@ -79,6 +88,8 @@ eval env e = ---- errIn ("eval" +++ prt e +++ "in" +++ prEnv env) $
   QC m c  -> return $ VCn (m,c) ---- == Q ?
   Sort c  -> return $ VType --- the only sort is Type
   App f a -> join $ liftM2 app (eval env f) (eval env a)
+  RecType xs -> do xs <- mapM (\(l,e) -> eval env e >>= \e -> return (l,e)) xs
+                   return (VRecType xs)
   _ -> return $ VClos env e
 
 eqVal :: Int -> Val -> Val -> Err [(Val,Val)]
@@ -93,7 +104,7 @@ eqVal k u1 u2 = ---- errIn (prt u1 +++ "<>" +++ prBracket (show k) +++ prt u2) $
       eqVal (k+1) (VClos ((x1,v x1):env1) e1) (VClos ((x2,v x1):env2) e2)
     (VClos env1 (Prod x1 a1 e1), VClos env2 (Prod x2 a2 e2)) ->
       liftM2 (++) 
-        (eqVal k     (VClos env1          a1) (VClos env2          a2))
+        (eqVal k     (VClos            env1  a1) (VClos            env2  a2))
         (eqVal (k+1) (VClos ((x1,v x1):env1) e1) (VClos ((x2,v x1):env2) e2))
     (VGen i _, VGen j _) -> return [(w1,w2) | i /= j]
     (VCn (_, i), VCn (_,j)) -> return [(w1,w2) | i /= j] 
@@ -132,6 +143,19 @@ checkExp th tenv@(k,rho,gamma) e ty = do
       (b',csb) <- checkType th (k+1, (x,v x):rho, (x,VClos rho a):gamma) b
       return (AProd x a' b', csa ++ csb)
 
+    R xs -> 
+      case typ of
+        VRecType ys -> do case [l | (l,_) <- ys, isNothing (lookup l xs)] of
+                            [] -> return ()
+                            ls -> fail (render (text "no value given for label:" <+> fsep (punctuate comma (map ppLabel ls))))
+                          r <- mapM (checkAssign th tenv ys) xs
+                          let (xs,css) = unzip r
+                          return (AR xs, concat css)
+        _           -> prtBad ("record type expected for" +++ prt e +++ "instead of") typ
+
+    P r l -> do (r',cs) <- checkExp th tenv r (VRecType [(l,typ)])
+                return (AP r' l typ,cs)
+
     _ -> checkInferExp th tenv e typ
 
 checkInferExp :: Theory -> TCEnv -> Exp -> Val -> Err (AExp, [(Val,Val)])
@@ -151,6 +175,9 @@ inferExp th tenv@(k,rho,gamma) e = case e of
    EFloat i -> return (AFloat i, valAbsFloat, [])
    K i -> return (AStr i, valAbsString, [])
    Sort _ -> return (AType, vType, [])
+   RecType xs -> do r <- mapM (checkLabelling th tenv) xs
+                    let (xs,css) = unzip r
+                    return (ARecType xs, vType, concat css)
    App f t -> do
     (f',w,csf) <- inferExp th tenv f 
     typ <- whnf w
@@ -161,6 +188,27 @@ inferExp th tenv@(k,rho,gamma) e = case e of
 	return $ (AApp f' a' b', b', csf ++ csa)
       _ -> prtBad ("Prod expected for function" +++ prt f +++ "instead of") typ
    _ -> prtBad "cannot infer type of expression" e
+
+checkLabelling :: Theory -> TCEnv -> Labelling -> Err (ALabelling, [(Val,Val)])
+checkLabelling th tenv (lbl,typ) = do
+  (atyp,cs) <- checkType th tenv typ
+  return ((lbl,atyp),cs)
+
+checkAssign :: Theory -> TCEnv -> [(Label,Val)] -> Assign -> Err (AAssign, [(Val,Val)])
+checkAssign th tenv@(k,rho,gamma) typs (lbl,(Just typ,exp)) = do
+  (atyp,cs1) <- checkType th tenv typ
+  val <- eval rho typ
+  cs2 <- case lookup lbl typs of
+           Nothing   -> return []
+           Just val0 -> eqVal k val val0
+  (aexp,cs3) <- checkExp th tenv exp val
+  return ((lbl,(val,aexp)),cs1++cs2++cs3)
+checkAssign th tenv@(k,rho,gamma) typs (lbl,(Nothing,exp)) = do
+  case lookup lbl typs of
+    Nothing  -> do (aexp,val,cs) <- inferExp th tenv exp
+                   return ((lbl,(val,aexp)),cs)
+    Just val -> do (aexp,cs) <- checkExp th tenv exp val
+                   return ((lbl,(val,aexp)),cs)
 
 checkBranch :: Theory -> TCEnv -> Equation -> Val -> Err (([Exp],AExp),[(Val,Val)])
 checkBranch th tenv b@(ps,t) ty = errIn ("branch" +++ show b) $ 
