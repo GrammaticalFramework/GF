@@ -28,6 +28,7 @@ transliteration :: String -> Maybe Transliteration
 transliteration s = case s of
   "arabic" -> Just transArabic
   "devanagari" -> Just transDevanagari
+  "greek" -> Just transGreek
   "telugu" -> Just transTelugu
   "thai" -> Just transThai
 ----  "urdu" -> Just transUrdu
@@ -127,4 +128,14 @@ transTelugu = mkTransliteration allTrans allCodes where
     "-  -  -  -  -  c7 c8 z  Z  -  -  -  -  -  -  -  " ++
     "R+ L+ l+ l* -  -  n0 n1 n2 n3 n4 n5 n6 n7 n8 n9 "
   allCodes = [0x0c00 .. 0x0c7f]
+
+transGreek :: Transliteration
+transGreek = mkTransliteration allTrans allCodes where
+  allTrans = words $
+    "-  -  -  -  -  -  A' -  E' H' I' -  O' -  Y' W' " ++
+    "i= A  B  G  D  E  Z  H  V  I  K  L  M  N  X  O  " ++
+    "P  R  -  S  T  Y  F  C  Q  W  I- Y- a' e' h' i' " ++
+    "y= a  b  g  d  e  z  h  v  i  k  l  m  n  x  o  " ++
+    "p  r  s* s  t  y  f  c  q  w  i- y- o' y' w' -  "    
+  allCodes = [0x0380 .. 0x03cf]
 
