@@ -29,6 +29,8 @@ stringOp name = case name of
   "from_cp1251" -> Just decodeCP1251
   _ -> transliterate name
 
+-- perform op in environments beg--end, t.ex. between "--"
+--- suboptimal implementation
 opInEnv :: String -> String -> (String -> String) -> (String -> String)
 opInEnv beg end op = concat . altern False . chop (lbeg, beg) [] where
   chop mk@(lg, mark) s0 s = 

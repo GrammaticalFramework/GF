@@ -416,10 +416,15 @@ allCommands cod env@(pgf, mos) = Map.fromList [
        "l (EAdd 3 4) | ps -code         -- linearize code-like output",
        "ps -lexer=code | p -cat=Exp     -- parse code-like input",
        "gr -cat=QCl | l | ps -bind      -- linearization output from LangFin", 
-       "ps -to_devanagari \"A-p\"     -- show Devanagari in UTF8 terminal"
+       "ps -to_devanagari \"A-p\"         -- show Devanagari in UTF8 terminal"
        ],
-     exec = \opts -> return . fromString . stringOps (map prOpt opts) . toString,
-     options = stringOpOptions
+     exec = \opts -> 
+               let (os,fs) = optsAndFlags opts in
+               return . fromString . stringOps (envFlag fs) (map prOpt os) . toString,
+     options = stringOpOptions,
+     flags = [
+       ("env","apply in this environment only")
+       ]
      }),
   ("pt", emptyCommandInfo {
      longname = "put_tree",
@@ -603,7 +608,7 @@ allCommands cod env@(pgf, mos) = Map.fromList [
      (prCId (abstractName pgf) ++ ": " ++ showTree t) :
      [prCId lang ++ ": " ++ linear opts lang t | lang <- optLangs opts]
 
-   unlex opts lang = stringOps (getUnlex opts lang ++ map prOpt opts)
+   unlex opts lang = stringOps Nothing (getUnlex opts lang ++ map prOpt opts) ----
 
    getUnlex opts lang = case words (valStrOpts "unlexer" "" opts) of
      lexs -> case lookup lang 
@@ -616,7 +621,7 @@ allCommands cod env@(pgf, mos) = Map.fromList [
 --   - If lang has flag coding=utf8, -to_utf8 is ignored.
 --   - If lang has coding=other, and -to_utf8 is in opts, from_other is applied first.
 -- THIS DOES NOT WORK UNFORTUNATELY - can't use the grammar flag properly
-   unlexx opts lang = {- trace (unwords optsC) $ -} stringOps optsC where
+   unlexx opts lang = {- trace (unwords optsC) $ -} stringOps Nothing optsC where ----
      optsC = case lookFlag pgf lang "coding" of
        Just "utf8" -> filter (/="to_utf8") $ map prOpt opts
        Just other | isOpt "to_utf8" opts -> 
@@ -666,8 +671,13 @@ allCommands cod env@(pgf, mos) = Map.fromList [
    morpho la = maybe Map.empty id $ Map.lookup la mos
 
    -- ps -f -g s returns g (f s)
-   stringOps opts s = foldr app s (reverse opts) where
+   stringOps menv opts s = foldr (menvop . app) s (reverse opts) where
      app f = maybe id id (stringOp f) 
+     menvop op = maybe op (\ (b,e) -> opInEnv b e op) menv
+
+   envFlag fs = case valStrOpts "env" "global" fs of
+     "quotes" -> Just ("\"","\"")
+     _ -> Nothing
 
    treeOps opts s = foldr app s (reverse opts) where
      app f = maybe id id (treeOp pgf f) 
