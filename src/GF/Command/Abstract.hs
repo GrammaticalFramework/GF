@@ -56,6 +56,12 @@ isOpt o opts = elem o [x | OOpt x <- opts]
 isFlag :: String -> [Option] -> Bool
 isFlag o opts = elem o [x | OFlag x _ <- opts]
 
+optsAndFlags :: [Option] -> ([Option],[Option])
+optsAndFlags = foldr add ([],[]) where
+  add o (os,fs) = case o of
+    OOpt _    -> (o:os,fs)
+    OFlag _ _ -> (os,o:fs)
+
 prOpt :: Option -> String
 prOpt o = case o of
   OOpt i    -> i
