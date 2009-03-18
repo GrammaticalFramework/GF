@@ -1,4 +1,4 @@
-module GF.Text.Lexing (stringOp) where
+module GF.Text.Lexing (stringOp,opInEnv) where
 
 import GF.Text.Transliterations
 import GF.Text.UTF8
@@ -28,6 +28,22 @@ stringOp name = case name of
   "to_cp1251"  -> Just encodeCP1251
   "from_cp1251" -> Just decodeCP1251
   _ -> transliterate name
+
+opInEnv :: String -> String -> (String -> String) -> (String -> String)
+opInEnv beg end op = concat . altern False . chop (lbeg, beg) [] where
+  chop mk@(lg, mark) s0 s = 
+    let (tag,rest) = splitAt lg s in
+    if tag==mark then (reverse s0) : mark : chop (switch mk) [] rest 
+      else case s of
+        c:cs -> chop mk (c:s0) cs
+        [] -> [reverse s0]
+  switch (lg,mark) = if mark==beg then (lend,end) else (lbeg,beg)
+  (lbeg,lend) = (length beg, length end)
+  altern m ts = case ts of
+    t:ws | not m && t==beg -> t : altern True ws
+    t:ws | m     && t==end -> t : altern False ws
+    t:ws -> (if m then op t else t) : altern m ws
+    [] -> []
 
 appLexer :: (String -> [String]) -> String -> String
 appLexer f = unwords . filter (not . null) . f
