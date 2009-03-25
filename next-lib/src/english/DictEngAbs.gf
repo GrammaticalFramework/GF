@@ -2908,7 +2908,6 @@ fun bazaar_N : N;
 fun bazooka_N : N;
 fun bbc_N : N;
 fun bc_PN : PN;
-fun be_V : V;
 fun beach_N : N;
 fun beach_V2 : V2;
 fun beachcomber_N : N;
