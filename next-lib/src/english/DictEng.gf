@@ -2914,7 +2914,6 @@ lin bazaar_N = mkN "bazaar" "bazaars";
 lin bazooka_N = mkN "bazooka" "bazookas";
 lin bbc_N = mkN "bbc" "-" {- FIXME: no plural form -};
 lin bc_PN = mkPN "bc";
-lin be_V = mkV "be" "IRREG" "IRREG" "IRREG" "IRREG";
 lin beach_N = mkN "beach" "beaches";
 lin beach_V2 = mkV2 (mkV "beach" "beaches" "beached" "beached" "beaching");
 lin beachcomber_N = mkN "beachcomber" "beachcombers";
