@@ -457,15 +457,20 @@ oper
 
   mk7A a b c d e f g = mkAdjective a b c d e f g ** {isComp = False ; lock_A = <>} ;
   regA fin = 
-    let fint : Str = case fin of {
-      ru  + "nd" => ru  + "nt" ; 
-      se  + "dd" => se  + "tt" ; 
-      pla + "tt" => pla + "tt" ; 
-      gla + "d"  => gla + "tt" ;
-      _          => fin + "t" 
-    } 
+    let 
+      fint : Str = case fin of {
+        ru  + "nd" => ru  + "nt" ; 
+        se  + "dd" => se  + "tt" ; 
+        pla + "tt" => pla + "tt" ; 
+        gla + "d"  => gla + "tt" ;
+        _          => fin + "t" 
+      } ;
+      fina : Str = case fin of {
+        unk@(? + ? + ? + _) + "e" + n@("l" | "n" | "r") => unk + n + "a" ;
+        _ => fin + "a"
+      }
     in
-    mk3A fin fint (fin + "a") ;
+    mk3A fin fint fina ;
   irregA ung yngre yngst = 
     mk7A ung (ung + "t") (ung + "a") (ung + "a") yngre yngst (yngst+"a") ;
 
