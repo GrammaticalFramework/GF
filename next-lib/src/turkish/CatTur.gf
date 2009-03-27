@@ -5,9 +5,11 @@ concrete CatTur of Cat = CommonX ** open ResTur, Prelude in {
   lincat
 
 -- Noun
-    NP, Pron = {s : Case => Str ; a : Agr} ;
+    NP = {s : Case => Str ; a : Agr} ;
+    Pron = ResTur.Pron ;
 
 -- Open lexical classes, e.g. Lexicon
     V, VS, VQ, VA = Verb ;
-    N = {s : Number => Case => Str} ;
+    N  = Noun ;
+    N2 = Noun ;
 }

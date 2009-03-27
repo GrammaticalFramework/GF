@@ -40,4 +40,30 @@ oper
                VInfinitive => inf
              }
        } ;  
+       
+  add_number : Number -> Str -> Str = \n,base ->
+    case n of {
+      Sg => base ;
+      Pl => harmony2 base "ler"
+    } ;
+
+  regN : Str -> Noun = \base -> {
+    s   = \\n => table {
+                   Nom   => add_number n base ;
+                   Acc   => harmony4 (add_number n base) "i" ;
+                   Dat   => harmony2 (add_number n base) "e" ;
+                   Gen   => harmony4 (add_number n base) "in" ;
+                   Loc   => harmony2 (add_number n base) "de" ;
+                   Ablat => add_number n base ;
+                   Abess => add_number n base
+                 } ;
+    gen = \\n => table {
+                   {n=Sg; p=P1} => harmony4 (add_number n base) "im" ;
+                   {n=Sg; p=P2} => harmony4 (add_number n base) "in" ;
+                   {n=Sg; p=P3} => harmony4 (add_number n base) "i" ;
+                   {n=Pl; p=P1} => harmony4 (add_number n base) "imiz" ;
+                   {n=Pl; p=P2} => harmony4 (add_number n base) "iniz" ;
+                   {n=Pl; p=P3} => harmony4 (add_number n base) "i"
+                 }
+    } ;
 }

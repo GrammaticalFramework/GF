@@ -9,6 +9,14 @@ resource ResTur = ParamX ** open Prelude, Predef in {
 
     Species = Indef | Def ;
 
+  oper
+    Agr = {n : Number ; p : Person} ;
+    Noun = {s : Number => Case => Str; gen : Number => Agr => Str} ;
+    Pron = {s : Case => Str; a : Agr} ;
+
+-- For $Verb$.
+
+  param
     VForm = 
        VPres      Number Person
      | VPast      Number Person
@@ -19,10 +27,6 @@ resource ResTur = ParamX ** open Prelude, Predef in {
      ;
 
   oper
-    Agr = {n : Number ; p : Person} ;
-
--- For $Verb$.
-
     Verb : Type = {
       s : VForm => Str
       } ;
@@ -41,14 +45,13 @@ resource ResTur = ParamX ** open Prelude, Predef in {
          }
       } ;
       
-    mkNP : (ben,beni,bana,banin,bende,benden:Str) -> Number -> Person ->
-     {s : Case => Str ; a : Agr} =
-     \ben,beni,bana,banin,bende,benden,n,p -> {
+    mkPron : (ben,beni,bana,banin,bende,benden:Str) -> Number -> Person -> Pron =
+     \ben,beni,bana,benim,bende,benden,n,p -> {
      s = table {
        Nom => ben ;
        Acc => beni ;
        Dat => bana ;
-       Gen => banin ;
+       Gen => benim ;
        Loc => bende ;
        Abl => benden
        } ;
@@ -86,14 +89,12 @@ resource ResTur = ParamX ** open Prelude, Predef in {
                case base of {
                  _+c@("ı"|"a"|"i"|"e"|"u"|"o"|"ü"|"ö")+
                  ("b"|"v"|"d"|"z"|"j"|"c"|"g"|"ğ"|"l"|"r"|"m"|"n"|"y"|"p"|"f"|"t"|"s"|"ş"|"ç"|"k"|"h")* => c ;
-                 _ => error "harmony4"
+                 _ => error "harmony2"
                } ;
               h : Str =
                case c of {
-                 ("ı"|"a") => "ı" ;
-                 ("i"|"e") => "i" ;
-                 ("u"|"o") => "u" ;
-                 ("ü"|"ö") => "ü"
+                 ("a"|"ı"|"u"|"o") => "a" ;
+                 ("e"|"i"|"ü"|"ö") => "e"
                } ;
               suffix : Str = 
                case suffix0 of {
