@@ -416,7 +416,9 @@ allCommands cod env@(pgf, mos) = Map.fromList [
        "l (EAdd 3 4) | ps -code         -- linearize code-like output",
        "ps -lexer=code | p -cat=Exp     -- parse code-like input",
        "gr -cat=QCl | l | ps -bind      -- linearization output from LangFin", 
-       "ps -to_devanagari \"A-p\"         -- show Devanagari in UTF8 terminal"
+       "ps -to_devanagari \"A-p\"         -- show Devanagari in UTF8 terminal",
+       "rf -file=Hin.gf | ps -env=quotes -to_devanagari -- convert translit to UTF8",
+       "rf -file=Ara.gf | ps -from_utf8 -env=quotes -from_arabic -- convert UTF8 to transliteration"
        ],
      exec = \opts -> 
                let (os,fs) = optsAndFlags opts in
