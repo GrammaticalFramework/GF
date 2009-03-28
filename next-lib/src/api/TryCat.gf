@@ -1,7 +1,7 @@
 --# -path=.:alltenses:prelude
 
 resource TryCat = SyntaxCat, LexiconCat, ParadigmsCat - [mkAdv] ** 
-  open (P = ParadigmsCat), in {
+  open (P = ParadigmsCat) in {
 
 oper
 

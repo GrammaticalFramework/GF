@@ -1,7 +1,7 @@
 --# -path=.:alltenses:prelude
 
 resource TrySwe = SyntaxSwe, LexiconSwe, ParadigmsSwe - [mkAdv] ** 
-  open (P = ParadigmsSwe), in {
+  open (P = ParadigmsSwe) in {
 
 oper
 

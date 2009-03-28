@@ -96,7 +96,7 @@ lin
       Sg => \\g,c => prepCase c ++ genForms "celui-là" "celle-là" ! g ;
       Pl => \\g,c => prepCase c ++ genForms "celui-là" "celle-là" ! g
       } ;
-    s2 = "-là"
+    s2 = [] ---- "-là"
     } ;
 
 ---b  that_NP = makeNP ["cela"] Masc Sg ;
@@ -119,7 +119,7 @@ lin
       Sg => \\g,c => prepCase c ++ genForms "celui-ci" "celle-ci" ! g ;
       Pl => \\g,c => prepCase c ++ genForms "celui-ci" "celle-ci" ! g
       } ;
-    s2 = "-ci"
+    s2 = [] ---- "-ci"
     } ;
 
 ---b  this_NP = pn2np (mkPN ["ceci"] Masc) ;

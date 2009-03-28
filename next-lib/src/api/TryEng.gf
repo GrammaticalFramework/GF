@@ -1,7 +1,7 @@
 --# -path=.:alltenses:prelude
 
 resource TryEng = SyntaxEng-[mkAdN], LexiconEng, ParadigmsEng - [mkAdv,mkAdN,mkOrd] ** 
-  open (P = ParadigmsEng), in {
+  open (P = ParadigmsEng) in {
 
 oper
 

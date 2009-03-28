@@ -1,0 +1,149 @@
+
+digraph categories {
+
+size = "11,11" ;
+node [href="#\N"];
+
+Text [style = "solid", shape = "ellipse"];
+Text -> Punct  [style = "solid"];
+Text -> Phr [style = "solid"];
+
+Punct [style = "solid", shape = "ellipse"];
+
+Phr [style = "solid", shape = "ellipse"];
+Phr -> PConj [style = "solid"];
+Phr -> Utt [style = "solid"];
+Phr -> Voc [style = "solid"];
+
+PConj [style = "solid", shape = "ellipse"];
+Voc [style = "solid", shape = "ellipse"];
+
+Utt [style = "solid", shape = "ellipse"];
+Utt -> Imp [style = "solid"];
+Utt -> S [style = "solid"];
+Utt -> QS [style = "solid"];
+
+Imp [style = "solid", shape = "ellipse"];
+
+S [style = "solid", shape = "ellipse"];
+S -> Tense [style = "solid"];
+S -> Ant [style = "solid"];
+S -> Pol [style = "solid"];
+S -> Cl [style = "solid"];
+S -> ListS [style = "solid"];
+S -> Conjs [style = "solid"];
+
+Conjs [label = "Conj", href="#Conj", style = "solid", shape = "ellipse"];
+
+Tense [style = "solid", shape = "ellipse"];
+Ant [style = "solid", shape = "ellipse"];
+Pol [style = "solid", shape = "ellipse"];
+
+Cl [style = "solid", shape = "ellipse"];
+Cl -> NP [style = "solid"];
+Cl -> VP [style = "solid"];
+Cl -> Adv [style = "solid"];
+
+Adv [style = "solid", shape = "rectangle"];
+Adv -> Subj [style = "solid"];
+Adv -> ListAdj [style = "solid"];
+
+
+NP [style = "solid", shape = "ellipse"];
+NP -> Predet [style = "solid"];
+NP -> Pron [style = "solid"];
+NP -> PN [style = "solid"];
+NP -> Det [style = "solid"];
+NP -> CN [style = "solid"];
+NP -> ListNP [style = "solid"];
+
+Predet [style = "solid", shape = "ellipse"];
+
+Pron [style = "solid", shape = "ellipse"];
+PN [style = "solid", shape = "rectangle"];
+
+Det [style = "solid", shape = "ellipse"];
+Det -> Art [style = "solid"];
+Det -> Quant [style = "solid"];
+Det -> Num [style = "solid"];
+Det -> Ord [style = "solid"];
+
+
+Art   [label = "Art", style = "solid", shape = "ellipse"];
+Quant [label = "Quant", style = "solid", shape = "ellipse"];
+
+
+Num [style = "solid", shape = "ellipse"];
+Num -> Card [style = "solid"];
+
+Card [style = "solid", shape = "ellipse"];
+Card -> Numerals [style = "solid"];
+Card -> AdN [style = "solid"];
+
+AdN [style = "solid", shape = "ellipse"];
+AdN -> CAdv [style = "solid"];
+
+Numerals [label = "Numeral,Digits", href="#Numeral", style = "solid", shape = "ellipse"];
+
+
+Ord [style = "solid", shape = "ellipse"];
+
+CN [style = "solid", shape = "ellipse"];
+CN -> Ns [style = "solid"];
+CN -> RS [style = "solid"];
+
+Ns [label = "N,N2,N3", href="#N", style = "solid", shape = "rectangle"];
+
+
+VP [style = "solid", shape = "ellipse"];
+VP -> AdV [style = "solid"];
+VP -> Vs [style = "solid"];
+VP -> AP [style = "solid"];
+
+AdV [style = "solid", shape = "ellipse"];
+
+Vs [label = "V,V2,V3,V*,V2*", href="#V", style = "solid", shape = "rectangle"];
+
+AP [style = "solid", shape = "ellipse"];
+AP -> AdA [style = "solid"];
+AP -> As [style = "solid"];
+AP -> ListAP [style = "solid"];
+
+As [label = "A, A2", href="#A", style = "solid", shape = "rectangle"];
+
+
+
+
+QS [style = "solid", shape = "ellipse"];
+QS -> QCl [style = "solid"];
+
+QCl [style = "solid", shape = "ellipse"];
+QCl -> IP [style = "solid"];
+QCl -> IAdv [style = "solid"];
+QCl -> ClSlash [style = "solid"];
+
+IP [style = "solid", shape = "ellipse"];
+IP -> IDet [style = "solid"];
+
+IDet [style = "solid", shape = "ellipse"];
+IDet -> IQuant [style = "solid"];
+
+IQuant [style = "solid", shape = "ellipse"];
+
+IAdv [style = "solid", shape = "ellipse"];
+
+ClSlash [style = "solid", shape = "ellipse"];
+ClSlash -> VPSlash [style = "solid"];
+
+VPSlash [style = "solid", shape = "ellipse"];
+
+RS [style = "solid", shape = "ellipse"];
+RS -> RCl [style = "solid"];
+
+RCl [style = "solid", shape = "ellipse"];
+RCl -> RP [style = "solid"];
+
+RP [style = "solid", shape = "ellipse"];
+
+
+}
