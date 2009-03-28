@@ -187,58 +187,16 @@ resource ParadigmsAra = open
 -- The definitions should not bother the user of the API. So they are
 -- hidden from the document.
 
-
-----AR AED's original definition of regV
-  regV_orig : Str -> V = \wo ->
+  regV : Str -> V = \wo ->
+    let rau : Str * Vowel * Vowel = 
     case wo of {
-      "يَ" + f@_ + c@_ + "ُ" + l@_ => v1 (f+c+l) a u ;
-      "يَ" + f@_ + c@_ + "ِ" + l@_ => v1 (f+c+l) a i ;
-      "يَ" + f@_ + c@_ + "َ" + l@_ => v1 (f+c+l) a a ;
-      f@_ + "َ" + c@_ + "ِ" + l@_  => v1 (f+c+l) i a ;
-      _ => Predef.error "regV not applicable"
-    };
-
-
-  regV_o : Str -> Str = \word ->
-    case word of {
-      "يَ" + f@_ + c@_ + "ُ" + l@_ => "a" ;
-      "يَ" + f@_ + c@_ + "ِ" + l@_ => "b" ;
-      "يَ" + f@_ + c@_ + "َ" + l@_ => "c" ; 
-      f@_ + "َ" + c@_ + "ِ" + l@_  => "d" ;
-      _ => "q"
-    };
-  aa = a ; uu = u ; ii = i ; 
-  ----AR for debug end
-
-
----- begin workaround for a problem with pattern matching, AR 27/6/2008
-
-  regV = \word ->
-    case Predef.eqStr (Predef.take 2 word) "يَ" of {
-      Predef.PTrue => vYa (Predef.drop 2 word) ; 
-      _ => vCo word
-    };
-
-  vYa : Str -> V = \word ->
-    let
-      fcl = Predef.take 2 word + Predef.drop 3 word ;
-      voc = case Predef.take 1 (Predef.drop 2 word) of {
-        "ُ" => u ;
-        "ِ" => i ;
-        _ => a 
-        }
-    in
-    v1 fcl a voc ;
-    
-  vCo : Str -> V = \word -> 
-    let 
-      f = Predef.take 1 word ;
-      c = Predef.take 1 (Predef.drop 2 word) ;
-      l = Predef.drop 4 word
-    in
-    v1 (f + c + l) i a ;
-
----- end workaround definition
+      "يَ" + fc + "ُ" + l => <fc+l, a, u> ;
+      "يَ" + fc + "ِ" + l => <fc+l, a, i> ;
+      "يَ" + fc + "َ" + l => <fc+l, a, a> ;
+      f@? + "َ" + c@? + "ِ" + l  => <f+c+l, i, a> ;
+      _ => Predef.error ("regV not applicable to" ++ wo)
+    }
+    in v1 rau.p1 rau.p2 rau.p3 ;
 
   v1 = \rootStr,vPerf,vImpf -> 
     let { raw = v1' rootStr vPerf vImpf } in
