@@ -26,6 +26,7 @@ import GF.Grammar.PrGrammar
 import Data.List
 import Control.Monad
 
+import Debug.Trace
 
 matchPattern :: [(Patt,Term)] -> Term -> Err (Term, Substitution)
 matchPattern pts term = 
