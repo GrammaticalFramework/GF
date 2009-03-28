@@ -1657,7 +1657,7 @@ incomplete resource Constructors = open Grammar in {
   DetPl : Quant -> Num -> Ord -> Det = DetQuantOrd ; --# notminimal
 
   ComplV2 : V2 -> NP -> VP = \v,np -> ComplSlash (SlashV2a v) np ;
-  ComplV2A : V2A -> NP -> AP -> VP = \v,np,ap -> ComplSlash (SlashV2A v ap) np ; 
+  ComplV2A : V2A -> NP -> AP -> VP = \v,np,ap -> ComplSlash (SlashV2A v ap) np ; --# notminimal
   ComplV3 : V3 -> NP -> NP -> VP = \v,o,d -> ComplSlash (Slash3V3 v o) d ; 
 
     that_NP : NP = DetNP (DetQuant that_Quant sgNum) ; --# notminimal

@@ -1,5 +1,5 @@
---# -path=.:present:prelude
+--# -path=.:present
 
-concrete SwadeshAra of Swadesh = CatAra ** SwadeshI with
-  (Lang = LangAra) ;
-
+concrete SwadeshAra of Swadesh = SwadeshI with
+  (Lexicon = LexiconAra),
+  (Syntax = SyntaxAra) ;
