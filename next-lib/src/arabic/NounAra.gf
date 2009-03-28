@@ -128,7 +128,9 @@ lin
     s = numeral.s ! NCard ;
     n = numeral.n
     };
-  
+
+  NumCard n = n ;
+
   AdNum adn num = {
     s = \\g,d,c => adn.s ++ num.s ! g ! d ! c ;
     n = num.n } ;
@@ -164,6 +166,9 @@ lin
     isNum,isPron = False
     } ;
   
+  MassNP cn = ---- AR
+    {s = cn.s ! Sg ! Indef ; a = {pgn = Per3 cn.g Sg ; isPron = False}} ;
+
 --  MassDet = {s = \\_,_,_,_ => [] ; d = Indef; 
 --             isNum = False; isPron = False} ;
   

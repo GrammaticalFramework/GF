@@ -6,6 +6,7 @@ concrete VerbAra of Verb = CatAra ** open Prelude, ResAra in {
     UseV = predV ;
 
     SlashV2a v = predV v ** {c2 = v.c2};
+    Slash3V3 v np = insertObj np (predV v) ** {c2 = v.c2};
 
     ComplSlash vp np = insertObj np vp ;
 
@@ -38,7 +39,7 @@ concrete VerbAra of Verb = CatAra ** open Prelude, ResAra in {
 --
     CompAP ap = {s = \\agr,c => ap.s ! Hum ! agr.g ! agr.n ! Indef ! c} ; --FIXME
     CompNP np = {s = \\_,c => np.s ! c};
---    CompAdv a = {s = \\_ => a.s} ;
+    CompAdv a = {s = \\_,_ => a.s} ;
 --
 --
 }
