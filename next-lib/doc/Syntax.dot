@@ -1,0 +1,111 @@
+digraph {
+
+size = "12,8" ;
+
+German   [style = "solid", shape = "ellipse"];
+ExtraGer [style = "solid", shape = "ellipse"];
+IrregGer [style = "solid", shape = "ellipse"];
+
+German -> IrregGer [style = "solid"];
+German -> ExtraGer [style = "solid"];
+German -> LangGer [style = "solid"];
+IrregGer -> ParadigmsGer [style = "solid"];
+ExtraGer -> Grammar [style = "solid"];
+
+TryGer [style = "solid", shape = "rectangle"];
+
+LangGer [style = "solid", shape = "ellipse"];
+
+TryGer -> SyntaxGer [style = "solid"];
+
+TryGer -> ParadigmsGer [style = "solid"];
+
+TryGer -> Lexicon [style = "solid"];
+
+LangGer -> Grammar [style = "solid"];
+LangGer -> Lexicon [style = "solid"];
+
+Lexicon [style = "dashed", shape = "ellipse", URL = "Lang.gf"];
+
+SyntaxGer [style = "solid", shape = "rectangle"];
+
+SyntaxGer -> Syntax [style = "solid"];
+
+ParadigmsGer [style = "solid", shape = "rectangle"];
+
+Syntax [style = "solid", shape = "diamond"];
+
+Syntax -> Grammar [style = "solid"];
+Syntax -> Constructors [style = "solid"];
+ParadigmsGer -> Grammar [style = "solid"];
+
+Constructors [style = "dashed", shape = "ellipse", URL = "Lang.gf"];
+
+Constructors -> Grammar [style = "solid"];
+
+Grammar [style = "dashed", shape = "ellipse", URL = "Lang.gf"];
+
+
+Grammar -> Noun [style = "solid"];
+Grammar -> Verb [style = "solid"];
+Grammar -> Adjective [style = "solid"];
+Grammar -> Adverb [style = "solid"];
+Grammar -> Numeral [style = "solid"];
+Grammar -> Sentence [style = "solid"];
+Grammar -> Question [style = "solid"];
+Grammar -> Relative [style = "solid"];
+Grammar -> Conjunction [style = "solid"];
+Grammar -> Phrase [style = "solid"];
+Grammar -> Text [style = "solid"];
+Grammar -> Idiom [style = "solid"];
+Grammar -> Structural [style = "solid"];
+
+
+Noun [style = "dashed", shape = "ellipse", URL = "Noun.gf"];
+Noun -> Cat [style = "solid"];
+
+Verb [style = "dashed", shape = "ellipse", URL = "Verb.gf"];
+Verb -> Cat [style = "solid"];
+
+Adjective [style = "dashed", shape = "ellipse", URL = "Adjective.gf"];
+Adjective -> Cat [style = "solid"];
+
+Adverb [style = "dashed", shape = "ellipse", URL = "Adverb.gf"];
+Adverb -> Cat [style = "solid"];
+
+Numeral [style = "dashed", shape = "ellipse", URL = "Numeral.gf"];
+Numeral -> Cat [style = "solid"];
+
+Sentence [style = "dashed", shape = "ellipse", URL = "Sentence.gf"];
+Sentence -> Cat [style = "solid"];
+
+Question [style = "dashed", shape = "ellipse", URL = "Question.gf"];
+Question -> Cat [style = "solid"];
+
+Relative [style = "dashed", shape = "ellipse", URL = "Relative.gf"];
+Relative -> Cat [style = "solid"];
+
+Conjunction [style = "dashed", shape = "ellipse", URL = "Conjunction.gf"];
+Conjunction -> Cat [style = "solid"];
+
+Phrase [style = "dashed", shape = "ellipse", URL = "Phrase.gf"];
+Phrase -> Cat [style = "solid"];
+
+Text [style = "dashed", shape = "ellipse", URL = "Phrase.gf"];
+Text -> Cat [style = "solid"];
+
+Idiom [style = "dashed", shape = "ellipse", URL = "Phrase.gf"];
+Idiom -> Cat [style = "solid"];
+
+Structural [style = "dashed", shape = "ellipse", URL = "Structural.gf"];
+Structural -> Cat [style = "solid"];
+
+#Lexicon [style = "dashed", shape = "ellipse", URL = "Lexicon.gf"];
+#Lexicon -> Cat [style = "solid"];
+
+Cat [style = "dashed", shape = "ellipse", URL = "Cat.gf"];
+Cat -> Common [style = "solid"];
+
+Common [style = "dashed", shape = "ellipse", URL = "Tense.gf"];
+
+}
