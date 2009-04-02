@@ -50,6 +50,7 @@ instance (Binary i) => Binary (ModuleType i) where
              3 -> get >>= return . MTConcrete
              4 -> return MTInterface
              5 -> get >>= return . MTInstance
+             _ -> decodingError
 
 instance (Binary i) => Binary (MInclude i) where
   put MIAll         = putWord8 0
@@ -60,6 +61,7 @@ instance (Binary i) => Binary (MInclude i) where
              0 -> return MIAll
              1 -> fmap MIOnly get
              2 -> fmap MIExcept get
+             _ -> decodingError
 
 instance Binary i => Binary (OpenSpec i) where
   put (OSimple i)   = putWord8 0 >> put i
@@ -68,6 +70,7 @@ instance Binary i => Binary (OpenSpec i) where
            case tag of
              0 -> get >>= return . OSimple
              1 -> get >>= \(i,j) -> return (OQualif i j)
+             _ -> decodingError
 
 instance Binary ModuleStatus where
   put MSComplete   = putWord8 0
@@ -76,6 +79,7 @@ instance Binary ModuleStatus where
            case tag of
              0 -> return MSComplete
              1 -> return MSIncomplete
+             _ -> decodingError
 
 instance Binary Options where
   put = put . optionsGFO
@@ -105,6 +109,7 @@ instance Binary Info where
              6 -> get >>= \(x,y,z) -> return (CncCat x y z)
              7 -> get >>= \(x,y,z) -> return (CncFun x y z)
              8 -> get >>= \(x,y)   -> return (AnyInd x y)
+             _ -> decodingError
 
 instance Binary Term where
   put (Vr x)        = putWord8 0  >> put x
@@ -185,6 +190,7 @@ instance Binary Term where
              35 -> get >>= \x       -> return (FV x)
              36 -> get >>= \x       -> return (Alts x)
              37 -> get >>= \x       -> return (Strs x)
+             _  -> decodingError
 
 instance Binary Patt where
   put (PC x y)     = putWord8  0 >> put (x,y)
@@ -227,6 +233,7 @@ instance Binary Patt where
              16 -> get >>= \x       -> return (PChars x)
              17 -> get >>= \x       -> return (PMacro x)
              18 -> get >>= \(x,y)   -> return (PM x y)
+             _  -> decodingError
 
 instance Binary TInfo where
   put TRaw       = putWord8 0
@@ -239,6 +246,7 @@ instance Binary TInfo where
              1 -> fmap TTyped get
              2 -> fmap TComp  get
              3 -> fmap TWild  get
+             _ -> decodingError
 
 instance Binary Label where
   put (LIdent bs) = putWord8 0 >> put bs
@@ -247,6 +255,7 @@ instance Binary Label where
            case tag of
              0 -> fmap LIdent get
              1 -> fmap LVar   get
+             _ -> decodingError
 
 instance Binary MetaSymb where
   put (MetaSymb m) = put m
@@ -256,3 +265,5 @@ decodeModHeader :: FilePath -> IO SourceModule
 decodeModHeader fpath = do
   (m,mtype,mstatus,flags,extend,mwith,opens,med) <- decodeFile fpath
   return (m,ModInfo mtype mstatus flags extend mwith opens med Map.empty Map.empty)
+
+decodingError = fail "This GFO file was compiled with different version of GF"
