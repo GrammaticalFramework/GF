@@ -1,5 +1,6 @@
 concrete StructuralEng of Structural = CatEng ** 
-  open MorphoEng, ResEng, ParadigmsEng, (C = ConstructX), Prelude in {
+  open MorphoEng, ResEng, ParadigmsEng, MakeStructuralEng, 
+  (C = ConstructX), Prelude in {
 
   flags optimize=all ;
 

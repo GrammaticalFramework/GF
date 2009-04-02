@@ -7,6 +7,19 @@ Grammatical Framework Download and Installation
 
 ==Latest release==
 
+- GF 3.0 beta3 MacOS X binary package (Intel Mac with MacOS X Leopard) 
+  [GF-3.0-beta2-i386-apple-leopard.tgz]
+
+- [GF 3.0 beta2 Windows package  gf-3.0-beta2.zip] (includes libraries)
+
+- [GF 3.0 beta2 sources         GF-3.0-beta2.tgz] (both system and library)
+
+- [GF libraries v 1.4          gf-lib-1.4.tgz] (compiled resource grammar libraries)
+
+
+
+==Previous release==
+
 - [GF 3.0 beta2 Linux binary package GF-3.0-beta2-i686-pc-linux-gnu.tgz] (Intel, Ubuntu)
 
 - GF 3.0 beta2 MacOS X binary package: 

@@ -25,9 +25,9 @@ oper
 
   that_Subj = M.mkSubj "that" ;
 
-  comma_and_Conj = M.mkConj [] ", and" plural ;
-  comma_or_Conj = M.mkConj [] ", or" singular ;
-  slash_Conj = M.mkConj [] "/" singular ;
+  comma_and_Conj = mkConj [] ", and" plural ;
+  comma_or_Conj = mkConj [] ", or" singular ;
+  slash_Conj = mkConj [] "/" singular ;
 
   whose_IDet = M.mkIDet "whose" singular ;
 
