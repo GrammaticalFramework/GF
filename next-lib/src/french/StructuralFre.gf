@@ -1,7 +1,9 @@
 --# -path=.:../abstract:../romance:../common:prelude
 
 concrete StructuralFre of Structural = CatFre ** 
-  open PhonoFre, MorphoFre, ParadigmsFre, IrregFre, (X = ConstructX), Prelude in {
+  open PhonoFre, MorphoFre, ParadigmsFre, IrregFre, (X = ConstructX), 
+  MakeStructuralFre,
+  Prelude in {
 
   flags optimize=all ; coding=utf8 ;
 

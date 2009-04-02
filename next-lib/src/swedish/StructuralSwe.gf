@@ -1,5 +1,6 @@
 concrete StructuralSwe of Structural = CatSwe ** 
-  open MorphoSwe, ParadigmsSwe, (X = ConstructX), Prelude in {
+  open MorphoSwe, ParadigmsSwe, MakeStructuralSwe,
+  (X = ConstructX), Prelude in {
 
   flags optimize=all ;
 
