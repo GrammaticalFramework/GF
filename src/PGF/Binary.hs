@@ -97,6 +97,7 @@ instance Binary Term where
              8 -> liftM  V  get
              9  -> liftM  (K . KS) get
              10 -> liftM2 (\d vs -> K (KP d vs)) get get
+             _  -> decodingError
 
 instance Binary Expr where
   put (EAbs x exp)    = putWord8 0 >> put (x,exp)
@@ -117,6 +118,7 @@ instance Binary Expr where
              5 -> liftM  (ELit . LInt) get
              6 -> liftM  EMeta get
              7 -> liftM  EEq get
+             _ -> decodingError
              
 instance Binary Equation where
   put (Equ ps e) = put (ps,e)
@@ -145,6 +147,7 @@ instance Binary FSymbol where
              1 -> liftM2 FSymLit get get
              2 -> liftM  (FSymTok . KS) get
              3 -> liftM2 (\d vs -> FSymTok (KP d vs)) get get
+             _ -> decodingError
 
 instance Binary Production where
   put (FApply ruleid args) = putWord8 0 >> put (ruleid,args)
@@ -153,6 +156,7 @@ instance Binary Production where
            case tag of
              0 -> liftM2 FApply  get get
              1 -> liftM  FCoerce get
+             _ -> decodingError
 
 instance Binary ParserInfo where
   put p = put (functions p, sequences p, productions p, totalCats p, startCats p)
@@ -163,3 +167,5 @@ instance Binary ParserInfo where
            startCats   <- get
            return (ParserInfo{functions=functions,sequences=sequences,productions=productions
                              ,totalCats=totalCats,startCats=startCats})
+
+decodingError = fail "This PGF file was compiled with different version of GF"
