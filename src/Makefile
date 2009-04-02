@@ -113,7 +113,7 @@ today:
 	echo 'import Data.Version' >> Paths_gf.hs
 	echo '{-# NOINLINE version #-}' >> Paths_gf.hs
 	echo 'version :: Version' >> Paths_gf.hs
-	echo 'version = Version {versionBranch = [3,0], versionTags = ["beta2"]}' >> Paths_gf.hs
+	echo 'version = Version {versionBranch = [3,0], versionTags = ["beta3"]}' >> Paths_gf.hs
 	echo 'getDataDir = return "$(GF_DATA_DIR)" :: IO FilePath' >> Paths_gf.hs
 
 
