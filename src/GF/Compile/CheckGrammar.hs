@@ -774,8 +774,11 @@ checkLType env trm typ0 = do
             ps <- checkErr $ testOvershadow ps0 vs
             if null ps 
               then return () 
-              else checkWarn $ "WARNING: patterns never reached:" +++ 
-                               concat (intersperse ", " (map prt ps))
+----              else checkWarn $ "WARNING: patterns never reached:" +++ 
+----                               concat (intersperse ", " (map prt ps))
+              else trace ("WARNING: patterns never reached:" +++ 
+                               concat (intersperse ", " (map prt ps))) (return ())
+---- AR 6/4/2009: checkWarn doesn't show because of laziness (?)
 
           _ -> return () -- happens with variable types
         cs' <- mapM (checkCase arg val) cs
