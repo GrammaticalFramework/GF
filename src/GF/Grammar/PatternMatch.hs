@@ -55,7 +55,7 @@ testOvershadow pts vs = do
   let numpts = zip pts [0..]
   let cases  = [(p,EInt i) | (p,i) <- numpts]
   ts <- mapM (liftM fst . matchPattern cases) vs
-  return $ [p | (p,i) <- numpts, notElem i [i | EInt i <- ts] ]
+  return [p | (p,i) <- numpts, notElem i [i | EInt i <- ts] ]
 
 findMatch :: [([Patt],Term)] -> [Term] -> Err (Term, Substitution)
 findMatch cases terms = case cases of
