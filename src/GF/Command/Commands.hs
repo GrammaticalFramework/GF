@@ -529,6 +529,7 @@ allCommands cod env@(pgf, mos) = Map.fromList [
          return $ fromString out,
      options = [
        ("arabic",    "Arabic"),
+       ("hebrew",    "Hebrew (unvocalized)"),
        ("greek",     "Greek (modern)"),
        ("devanagari","Devanagari"),
        ("telugu",    "Telugu"),
@@ -694,6 +695,7 @@ stringOpOptions = [
        ("from_cp1251","decode from cp1251 (Cyrillic used in Bulgarian resource)"),
        ("from_arabic","from unicode to GF Arabic transliteration"),
        ("from_devanagari","from unicode to GF Devanagari transliteration"),
+       ("from_hebrew","from unicode to GF unvocalized Hebrew transliteration"),
        ("from_greek","from unicode to GF modern Greek transliteration"),
        ("from_telugu","from unicode to GF Telugu transliteration"),
        ("from_thai","from unicode to GF Thai transliteration"),
@@ -705,6 +707,7 @@ stringOpOptions = [
        ("to_arabic","from GF Arabic transliteration to unicode"),
        ("to_devanagari","from GF Devanagari transliteration to unicode"),
        ("to_greek","from GF modern Greek transliteration to unicode"),
+       ("to_hebrew","from GF unvocalized Hebrew transliteration to unicode"),
        ("to_html","wrap in a html file with linebreaks"),
        ("to_telugu","from GF Telugu transliteration to unicode"),
        ("to_thai","from GF Thai transliteration to unicode"),
