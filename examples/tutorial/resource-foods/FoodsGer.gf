@@ -1,4 +1,4 @@
---# -path=.:../foods:present:prelude
+--# -path=.:present
 
 concrete FoodsGer of Foods = FoodsI with 
     (Syntax = SyntaxGer),
