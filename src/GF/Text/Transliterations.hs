@@ -29,6 +29,7 @@ transliteration s = case s of
   "arabic" -> Just transArabic
   "devanagari" -> Just transDevanagari
   "greek" -> Just transGreek
+  "hebrew" -> Just transHebrew
   "telugu" -> Just transTelugu
   "thai" -> Just transThai
 ----  "urdu" -> Just transUrdu
@@ -111,11 +112,19 @@ transArabic :: Transliteration
 transArabic = mkTransliteration allTrans allCodes where
   allTrans = words $
     "   V  A: A? w? A- y? A  b  t. t  v  g  H  K  d " ++  -- 0621 - 062f
-    "W  r  z  s  C S  D  T  Z  c  G "                ++  -- 0630 - 063a
-    "   f  q  k  l  m  n  h  w  y. y a. u. i. a  u " ++  -- 0641 - 064f
+    "W  r  z  s  C S  D  T  Z  c  G "                 ++  -- 0630 - 063a
+    "   f  q  k  l  m  n  h  w  y. y a. u. i. a  u "  ++  -- 0641 - 064f
     "i  v2 o  a: V+ V- i: a+"                             -- 0650 - 0657 
   allCodes = [0x0621..0x062f] ++ [0x0630..0x063a] ++ 
              [0x0641..0x064f] ++ [0x0650..0x0657]
+
+transHebrew :: Transliteration
+transHebrew = mkTransliteration allTrans allCodes where
+  allTrans = words $
+    "A  b  g  d  h  w  z  H  T  y  K  k  l  M  m  N " ++
+    "n  S  O  P  p  Z. Z  q  r  s  t  -  -  -  -  - " ++
+    "w2 w3 y2 g1 g2"
+  allCodes = [0x05d0..0x05f4]
 
 transTelugu :: Transliteration
 transTelugu = mkTransliteration allTrans allCodes where
