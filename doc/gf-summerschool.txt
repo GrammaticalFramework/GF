@@ -21,6 +21,14 @@ Aarne Ranta (aarne at chalmers.se)
 //red=wanted, green=exists, orange=in-progress, solid=official-eu, dotted=non-eu//
 
 
+==News==
+
+An on-line course //GF for Resource Grammar Writers// will start on
+Monday 20 April at 15.30 CEST. The slides and recordings of the five
+45-minute lectures will be made available via this web page. If requested,
+the course may be repeated in the beginning of the summer school.
+
+
 ==Executive summary==
 
 GF Resource Grammar Library is an open-source computational grammar resource
@@ -275,9 +283,9 @@ school itself later.
 The participants are recommended to learn GF in advance, by self-study from the 
 [tutorial http://digitalgrammars.com/gf/doc/gf-tutorial.html]. 
 This should take a couple of weeks. An **on-line course** will be
-arranged in April to help in getting started with GF.
+arranged on 20-29 April to help in getting started with GF.
 
-After the on-line course, a **programming assignment** will be published.
+At the end of the on-line course, a **programming assignment** will be published.
 This assignment will test skills required in resource grammar programming.
 Work on the assignment will take a couple of weeks.
 Those who are interested in getting a travel grant will submit
@@ -287,7 +295,8 @@ The Committee then decides who is given a travel grant of up to 1000 EUR.
 
 Notice: you can participate in the summer school without following the on-line
 course or participating in the contest. These things are required only if you
-want a travel grant.
+want a travel grant. If requested by enough many participants, the lectures of
+the on-line course will be repeated in the beginning of the summer school.
 
 The summer school itself is devoted for working on resource grammars.
 In addition to grammar writing itself, testing and evaluation is
@@ -374,7 +383,7 @@ Sweden, on 17-28 August 2009.
 
 Time schedule:
 - February: announcement of summer school
-- April: on-line course, work on the contest assignment
+- 20-29 April: on-line course
 - 12 May: submission deadline for assignment work
 - 31 May: review of assignments, notifications of acceptance
 - 15 June: **registration deadline**
