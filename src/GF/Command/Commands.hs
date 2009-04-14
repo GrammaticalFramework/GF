@@ -134,8 +134,8 @@ allCommands cod env@(pgf, mos) = Map.fromList [
      options = [
        ],
      flags = [
-       ("format","format of the visualization file (default \"ps\")"),
-       ("view","program to open the resulting file (default \"gv\")")
+       ("format","format of the visualization file (default \"png\")"),
+       ("view","program to open the resulting file (default \"open\")")
        ] 
     }),
 
@@ -569,8 +569,8 @@ allCommands cod env@(pgf, mos) = Map.fromList [
        ("nocat","don't show categories but only functions")
        ],
      flags = [
-       ("format","format of the visualization file (default \"ps\")"),
-       ("view","program to open the resulting file (default \"gv\")")
+       ("format","format of the visualization file (default \"png\")"),
+       ("view","program to open the resulting file (default \"open\")")
        ] 
      }),
   ("wf", emptyCommandInfo {
@@ -645,8 +645,8 @@ allCommands cod env@(pgf, mos) = Map.fromList [
           Just ty -> ty
           Nothing -> error ("Can't parse '"++str++"' as type")
    optComm opts = valStrOpts "command" "" opts
-   optViewFormat opts = valStrOpts "format" "ps" opts
-   optViewGraph opts = valStrOpts "view" "gv" opts
+   optViewFormat opts = valStrOpts "format" "png" opts
+   optViewGraph opts = valStrOpts "view" "open" opts
    optNum opts = valIntOpts "number" 1 opts
    optNumInf opts = valIntOpts "number" 1000000000 opts ---- 10^9
 
