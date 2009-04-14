@@ -261,7 +261,7 @@ evalTerm cnc_defs path x = error ("evalTerm ("++show x++")")
 
 unifyPType :: FIndex -> FPath -> Term -> CnvMonad FIndex
 unifyPType nr path (C max_index) =
-    do (_, args, _, _) <- readState
+    do (_, args, _, _) <- get
        let (PFCat _ _ tcs,_) = args !! nr
        case lookup path tcs of
          Just index -> return index
@@ -390,7 +390,7 @@ genFCatArg cnc_defs ctype env@(GrammarEnv last_id catSet seqSet funSet prodSet) 
     gen_tcs (C max_index) path acc =
       case List.lookup path tcs of
         Just index -> return $! addConstraint path index acc
-        Nothing    -> do writeState True
+        Nothing    -> do put True
                          index <- member [0..max_index]
                          return $! addConstraint path index acc
       where
@@ -498,21 +498,21 @@ mkSelector rcs tcss =
 -- updating the MCF rule
 
 readArgCType :: FIndex -> CnvMonad Term
-readArgCType nr = do (_, _, _, ctypes) <- readState
+readArgCType nr = do (_, _, _, ctypes) <- get
 		     return (ctypes !! nr)
 
 restrictArg :: FIndex -> FPath -> FIndex -> CnvMonad ()
 restrictArg nr path index = do
-  (head, args, ctype, ctypes) <- readState 
+  (head, args, ctype, ctypes) <- get 
   args' <- updateNthM (\(xcat,xs) -> do xcat <- restrictProtoFCat path index xcat
                                         return (xcat,xs)                         ) nr args
-  writeState (head, args', ctype, ctypes)
+  put (head, args', ctype, ctypes)
 
 projectArg :: FIndex -> FPath -> CnvMonad Int
 projectArg nr path = do
-  (head, args, ctype, ctypes) <- readState
+  (head, args, ctype, ctypes) <- get
   (xnr,args') <- updateArgs nr args
-  writeState (head, args', ctype, ctypes)
+  put (head, args', ctype, ctypes)
   return xnr
   where
     updateArgs :: FIndex -> [(ProtoFCat,[FPath])] -> CnvMonad (Int,[(ProtoFCat,[FPath])])
@@ -525,20 +525,20 @@ projectArg nr path = do
       return (xnr,a:as)
 
 readHeadCType :: CnvMonad Term
-readHeadCType = do (_, _, ctype, _) <- readState
+readHeadCType = do (_, _, ctype, _) <- get
 		   return ctype
 
 restrictHead :: FPath -> FIndex -> CnvMonad ()
 restrictHead path term
-    = do (head, args, ctype, ctypes) <- readState
+    = do (head, args, ctype, ctypes) <- get
 	 head' <- restrictProtoFCat path term head
-	 writeState (head', args, ctype, ctypes)
+	 put (head', args, ctype, ctypes)
 
 projectHead :: FPath -> CnvMonad ()
 projectHead path
-    = do (head, args, ctype, ctypes) <- readState
+    = do (head, args, ctype, ctypes) <- get
 	 head' <- projectProtoFCat path head
-	 writeState (head', args, ctype, ctypes)
+	 put (head', args, ctype, ctypes)
 
 restrictProtoFCat :: FPath -> FIndex -> ProtoFCat -> CnvMonad ProtoFCat
 restrictProtoFCat path0 index0 (PFCat cat rcs tcs) = do

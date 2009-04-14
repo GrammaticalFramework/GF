@@ -160,7 +160,7 @@ convertArg (C max) nr path lbl_path lin lins = do
   restrictArg nr path index
   return lins
 convertArg (S _) nr path lbl_path lin lins = do
-  (_, args) <- readState
+  (_, args) <- get
   let PFCat _ cat rcs tcs = args !! nr
       l = index path rcs 0
       sym | isLiteralCat cat = FSymLit nr l
@@ -190,7 +190,7 @@ convertRec cnc_defs (index:sub_sel) ctype record lbl_path lin lins = do
 -- eval a term to ground terms
 
 evalTerm :: TermMap -> FPath -> Term -> CnvMonad FIndex
-evalTerm cnc_defs path (V nr)       = do (_, args) <- readState
+evalTerm cnc_defs path (V nr)       = do (_, args) <- get
 		                         let PFCat _ _ _ tcs = args !! nr
 		                             rpath = reverse path
                                          index <- member (fromMaybe (error "evalTerm: wrong path") (lookup rpath tcs))
@@ -349,15 +349,15 @@ getFCats (GrammarEnv last_id catSet seqSet funSet crcSet prodSet) (PFCat n cat r
 
 restrictArg :: FIndex -> FPath -> FIndex -> CnvMonad ()
 restrictArg nr path index = do
-  (head, args) <- readState 
+  (head, args) <- get
   args' <- updateNthM (restrictProtoFCat path index) nr args
-  writeState (head, args')
+  put (head, args')
 
 restrictHead :: FPath -> FIndex -> CnvMonad ()
 restrictHead path term
-    = do (head, args) <- readState
+    = do (head, args) <- get
 	 head' <- restrictProtoFCat path term head
-	 writeState (head', args)
+	 put (head', args)
 
 restrictProtoFCat :: FPath -> FIndex -> ProtoFCat -> CnvMonad ProtoFCat
 restrictProtoFCat path0 index0 (PFCat n cat rcs tcs) = do
