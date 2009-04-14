@@ -13,24 +13,24 @@
 -----------------------------------------------------------------------------
 
 {-# OPTIONS_GHC -fglasgow-exts #-}
-module GF.Data.BacktrackM ( -- * the backtracking state monad
+module GF.Data.BacktrackM (
+                    -- * the backtracking state monad
 		    BacktrackM,
-		    -- * controlling the monad
-		    failure,
-		    (|||),
-		    -- * handling the state & environment
-		    readState,
-		    writeState,
 		    -- * monad specific utilities
 		    member,
+		    cut,
 		    -- * running the monad
 		    foldBM,          runBM,
 		    foldSolutions,   solutions,
-		    foldFinalStates, finalStates
+		    foldFinalStates, finalStates,
+		    
+		    -- * reexport the 'MonadState' class
+		    module Control.Monad.State.Class,
 		  ) where
 
 import Data.List
 import Control.Monad
+import Control.Monad.State.Class
 
 ----------------------------------------------------------------------
 -- Combining endomorphisms and continuations
@@ -60,34 +60,27 @@ foldFinalStates f b (BM m) s = m (\x s b -> f s b) s b
 finalStates :: BacktrackM s () -> s -> [s]
 finalStates bm = map fst . runBM bm
 
-
--- * handling the state & environment
-
-readState :: BacktrackM s s
-readState    = BM (\c s b -> c s s b)
-
-writeState :: s -> BacktrackM s ()
-writeState s = BM (\c _ b -> c () s b)
-
 instance Monad (BacktrackM s) where
     return a   = BM (\c s b -> c a s b)
     BM m >>= k = BM (\c s b -> m (\a s b -> unBM (k a) c s b) s b)
 	where unBM (BM m) = m
-    fail _ = failure
+    fail _ = mzero
 
--- * controlling the monad
-
-failure :: BacktrackM s a
-failure = BM (\c s b -> b)
-
-(|||) :: BacktrackM s a -> BacktrackM s a -> BacktrackM s a
-(BM f) ||| (BM g) = BM (\c s b -> g c s $! f c s b)
+instance Functor (BacktrackM s) where
+    fmap f (BM m) = BM (\c s b -> m (\a s b -> c (f a) s b) s b)
 
 instance MonadPlus (BacktrackM s) where
-    mzero = failure
-    mplus = (|||)
+    mzero                 = BM (\c s b -> b)
+    (BM f) `mplus` (BM g) = BM (\c s b -> g c s $! f c s b)
+
+instance MonadState s (BacktrackM s) where
+  get = BM (\c s b -> c s s b)
+  put s = BM (\c _ b -> c () s b)
 
 -- * specific functions on the backtracking monad
 
 member :: [a] -> BacktrackM s a
 member xs = BM (\c s b -> foldl' (\b x -> c x s b) b xs)
+
+cut :: BacktrackM s a -> BacktrackM s [(s,a)]
+cut f = BM (\c s b -> c (runBM f s) s b)
