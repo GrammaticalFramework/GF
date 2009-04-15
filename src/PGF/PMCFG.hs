@@ -70,7 +70,7 @@ ppProduction (fcat,FApply funid args) =
 ppProduction (fcat,FCoerce arg) =
   ppFCat fcat <+> text "->" <+> char '_' <> brackets (ppFCat arg)
 ppProduction (fcat,FConst _ s) =
-  ppFCat fcat <+> text "->" <+> text (show s)
+  ppFCat fcat <+> text "->" <+> ppStr s
 
 ppFun (funid,FFun fun _ arr) =
   ppFunId funid <+> text ":=" <+> parens (hcat (punctuate comma (map ppSeqId (elems arr)))) <+> brackets (text (prCId fun))
@@ -83,7 +83,14 @@ ppStartCat (id,fcats) =
 
 ppSymbol (FSymCat d r) = char '<' <> int d <> comma <> int r <> char '>'
 ppSymbol (FSymLit d r) = char '<' <> int d <> comma <> int r <> char '>'
-ppSymbol (FSymTok (KS t))   = text (show t)
+ppSymbol (FSymTok t)   = ppTokn t
+
+ppTokn (KS t)       = ppStr t
+ppTokn (KP ts alts) = text "pre" <+> braces (hsep (punctuate semi (hsep (map ppStr ts) : map ppAlt alts)))
+
+ppAlt (Alt ts ps) = hsep (map ppStr ts) <+> char '/' <+> hsep (map ppStr ps)
+
+ppStr s = doubleQuotes (text s)
 
 ppFCat  fcat
   | fcat == fcatString = text "String"
