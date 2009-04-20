@@ -6,8 +6,8 @@ To make and install GF (Updated for version 2.4 and 3.0beta).
      tar xvfz GF-2.4.tgz
      cd GF-2.4/src
 
-3. Make sure you have GHC (Glasgow Haskell Compiler), version 6.4 or later.
-   In Windows, you also need Cygwin.
+3. Make sure you have GHC (Glasgow Haskell Compiler), preferably version 6.8. 
+   NOTICE: GHC 6.10 does not work with GF source yet.
 
      ghc --version
 

@@ -50,6 +50,23 @@ June 2008
 
 ==News==
 
+20 April 2009:
+On-line course "GF for Resource Grammar Writers" starting today at 15.30. See the
+[Summer School Google Group http://groups.google.com/group/gf-resource-school-2009]
+for instructions how to start.
+
+3 April 2009: 
+Two demos and one talk on GF at [EACL http://www.eacl2009.gr/conference/] in Athens.
+
+20 February 2009: 
+[GF Resource Grammar Summer School doc/gf-summerschool.html] 
+in Gothenburg, 17-28 August 2009.
+
+4 November 2008: 
+GHC 6.10 released, but it doesn't work with GF sources yet.
+If compiling GF from source, use e.g.
+[GHC 6.8.3 http://haskell.org/ghc/download_ghc_683.html].
+
 15 August 2008:
 [Numeral translator for the iPhone demos/index-numbers.html]
 
