@@ -28,7 +28,6 @@ GF particularly addresses four aspects of grammars:
     * embeddability in programs written in other languages (C,C++,
       Haskell, Java, JavaScript)
 
-INSTALLATION of binary distribution: see INSTALL
 
-INSTALLATION of source distribution:
+COMPILATION and INSTALLATION of source distribution:
 See src/INSTALL for installation instructions.
