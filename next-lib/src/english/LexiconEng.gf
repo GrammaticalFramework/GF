@@ -90,7 +90,6 @@ lin
   harbour_N = regN "harbour" ;
   hate_V2 = dirV2 (regV "hate") ;
   hat_N = regN "hat" ;
-  have_V2 = dirV2 (mk5V "have" "has" "had" "had" "having") ;
   hear_V2 = dirV2 (irregV "hear" "heard" "heard") ;
   hill_N = regN "hill" ;
   hope_VS = mkVS (regV "hope") ;

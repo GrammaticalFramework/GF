@@ -91,7 +91,6 @@ lin
   harbour_N = regN "porto" ;
   hate_V2 = dirV2 (regV "odiare") ;
   hat_N = regN "capello" ;
-  have_V2 = dirV2 (verboV (avere_2 "avere")) ;
   hear_V2 = dirV2 (verboV (sentire_99 "sentire")) ;
   hill_N = regN "collina" ;
   hope_VS = mkVS (regV "sperare") ;
