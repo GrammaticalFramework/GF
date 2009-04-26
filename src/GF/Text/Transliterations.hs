@@ -93,20 +93,20 @@ transThai = mkTransliteration allTrans allCodes where
 transDevanagari :: Transliteration
 transDevanagari = 
   (mkTransliteration allTransUrduHindi allCodes){invisible_chars = ["a"]} where
-    allCodes = [0x0901 .. 0x094c]
+    allCodes = [0x0900 .. 0x095f]
 
 allTransUrduHindi = words $
-    "M  N  -  - " ++
-    "a- A- i- I- u- U- R- -  -  -  e- E- -  -  o- O- " ++
-    "k  K  g  G  N: c  C  j  J  n: t. T. d. D. n. t  " ++
-    "T  d  D  n  -  p  P  b  B  m  y  r  -  l  -  -  v  " ++
-    "S  s. s  h  -  -  r. -  A  i  I  u  U  R  -  -  " ++
-    "-  e  E  o  O "
+    "-  M  N  -  -  a- A- i- I- u- U- R- -  -  -  e- " ++
+    "E- -  -  o- O- k  K  g  G  N: c  C  j  J  n: t. " ++
+    "T. d. D. n. t  T  d  D  n  -  p  P  b  B  m  y  " ++
+    "r  -  l  -  -  v  S  s. s  h  -  -  r: -  A  i  " ++
+    "I  u  U  R  -  -  -  e  E  o  O  -  -  -  -  -  " ++
+    "-  -  -  -  -  -  -  -  -  -  -  z  r. -  -  -  "
 
 transUrdu :: Transliteration
 transUrdu = 
   (mkTransliteration allTransUrduHindi allCodes){invisible_chars = ["a"]} where
-    allCodes = [0x0901 .. 0x094c] ---- TODO: this is devanagari
+    allCodes = [0x0900 .. 0x095f] ---- TODO: this is devanagari
 
 transArabic :: Transliteration
 transArabic = mkTransliteration allTrans allCodes where

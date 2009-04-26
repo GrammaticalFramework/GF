@@ -94,7 +94,6 @@ lin
   harbour_N = mkN "satama" "sataman" "satamia" ;
   hate_V2 = mkV2 (mkV "vihata") cpartitive ;
   hat_N = mkN "hattu" ;
-  have_V2 = mkV2 (caseV adessive vOlla) ;
   hear_V2 = mkV2 (mkV "kuulla") ;
   hill_N = mkN "kukkula" ;
   hope_VS = mkVS (mkV "toivoa") ;

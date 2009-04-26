@@ -135,5 +135,7 @@ concrete StructuralEng of Structural = CatEng **
 
   as_CAdv = C.mkCAdv "as" "as" ;
 
+  have_V2 = dirV2 (mk5V "have" "has" "had" "had" "having") ;
+
 }
 

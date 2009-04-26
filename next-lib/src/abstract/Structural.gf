@@ -119,4 +119,5 @@ abstract Structural = Cat ** {
 
   as_CAdv : CAdv ;
 
+  have_V2 : V2 ;
 }

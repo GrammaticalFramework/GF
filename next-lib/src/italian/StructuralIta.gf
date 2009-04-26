@@ -176,5 +176,8 @@ lin
 
   as_CAdv = X.mkCAdv "così" conjThan ;
   except_Prep = mkPrep "eccetto" ;
+
+  have_V2 = dirV2 (verboV (avere_2 "avere")) ;
+
 }
 

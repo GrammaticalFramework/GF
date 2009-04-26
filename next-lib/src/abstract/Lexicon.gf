@@ -137,7 +137,6 @@ fun
   harbour_N : N ;
   hate_V2 : V2 ;
   hat_N : N ;
-  have_V2 : V2 ;
   head_N : N ;
   heart_N : N ;
   hear_V2 : V2 ;

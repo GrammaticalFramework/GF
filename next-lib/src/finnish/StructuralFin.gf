@@ -305,5 +305,8 @@ lin
   as_CAdv = X.mkCAdv "yhtä" "kuin" ;
 
   except_Prep = postPrep partitive "lukuunottamatta" ;
+
+  have_V2 = mkV2 (caseV adessive vOlla) ;
+
 }
 
