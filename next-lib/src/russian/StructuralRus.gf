@@ -112,6 +112,8 @@ lin
   youSg_Pron   = pronTu;
   youPol_Pron =  pronVu;
 
+  have_V2= P.dirV2 (P.regV P.imperfective P.first "име" "ю" "имел" "имей" "иметь" );
+
 ---  NoDet    = nikakojDet ** {n = Sg; g = PNoGen; c= Nom} ;
 ---  AnyDet   = lubojDet ** {n = Sg; g = PNoGen; c= Nom} ;
 ---  AnyNumDet  = mkDeterminerNum (lubojDet ** {n = Pl; g = PNoGen; c= Nom} );  

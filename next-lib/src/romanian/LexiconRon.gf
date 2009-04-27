@@ -91,7 +91,6 @@ green_A = mkA "verde" ;
 harbour_N = mkNR "port" ;
 hate_V2 = dirV2 (mkV "urî") ;
 hat_N = mkN "pãlãrie" ;
-have_V2 = dirV2 (v_have) ;
 hear_V2 = dirV2 (v_besch127 "auzi") ;
 hill_N = mkNR "deal" ;
 hope_VS = mkVS (v_besch17 "spera") ;

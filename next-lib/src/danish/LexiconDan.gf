@@ -92,7 +92,6 @@ lin
   harbour_N = mk2N "havn" "havnen" ;
   hate_V2 = dirV2 (regV "hade") ;
   hat_N = mk3N "hat" "hatten" "hatte" ;
-  have_V2 = dirV2 have_V ;
   hear_V2 = dirV2 (mk2V "høre" "hørte") ;
   hill_N = mk2N "høj" "højen" ;
   hope_VS = mkVS (regV "håbe") ;

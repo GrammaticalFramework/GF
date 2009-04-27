@@ -1,6 +1,7 @@
 concrete StructuralGer of Structural = CatGer ** 
 
-  open MorphoGer, MakeStructuralGer, (X = ConstructX), Prelude in {
+  open MorphoGer, MakeStructuralGer, (X = ConstructX), 
+       (P = ParadigmsGer), IrregGer, Prelude in {
 
   flags optimize=all ;
 
@@ -145,5 +146,6 @@ concrete StructuralGer of Structural = CatGer **
   except_Prep = mkPrep "auﬂer" Dat ;
 
   as_CAdv = X.mkCAdv "ebenso" "wie" ;
+  have_V2 = P.dirV2 IrregGer.haben_V ;
 
 }

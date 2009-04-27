@@ -90,7 +90,6 @@ lin
   harbour_N = regGenN "havn" feminine;
   hate_V2 = dirV2 (regV "hate") ;
   hat_N = regGenN "hatt" masculine ;
-  have_V2 = dirV2 IrregNor.ha_V ;
   hear_V2 = dirV2 (mk2V "høre" "hørte") ;
   hill_N = regGenN "haug" masculine ;
   hope_VS = mkVS (regV "håpe") ;

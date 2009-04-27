@@ -1,5 +1,5 @@
 concrete StructuralDan of Structural = CatDan ** 
-  open MorphoDan, ParadigmsDan, (X = ConstructX), Prelude in {
+  open MorphoDan, ParadigmsDan, (X = ConstructX), IrregDan, Prelude in {
 
   flags optimize=all ;
 
@@ -118,6 +118,7 @@ concrete StructuralDan of Structural = CatDan **
     MorphoDan.mkNP "du" "dig" "din" "dit" "dine" SgUtr P2 ; ----
   youPl_Pron = MorphoDan.mkNP "i" "jer" "jeres" "jeres" "jeres"  Plg P2 ;
   youPol_Pron = MorphoDan.mkNP "Dere" "Dere" "Deres" "Deres" "Deres"  SgUtr P2 ; --- wrong in refl
+  have_V2 = dirV2 have_V ;
 
 -- Auxiliaries that are used repeatedly.
 

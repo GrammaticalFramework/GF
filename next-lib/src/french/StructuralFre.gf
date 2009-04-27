@@ -187,5 +187,7 @@ lin
 
   as_CAdv = X.mkCAdv "aussi" conjThan ;
 
+  have_V2 = avoir_V2 ;
+
 }
 

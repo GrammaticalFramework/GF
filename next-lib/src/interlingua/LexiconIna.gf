@@ -90,7 +90,6 @@ concrete LexiconIna of Lexicon = CatIna **
     harbour_N = regN "porto" ;
     hate_V2 = dirV2 (regV "detestar0") ;
     hat_N = regN "cappello" ;
-    have_V2 = dirV2 (R.haberV ** {lock_V = <>});
     hear_V2 = dirV2 (regV "audir");
     hill_N = regN "monticulo" ;
     hope_VS = mkVS (regV "sperar") ;

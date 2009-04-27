@@ -99,7 +99,6 @@ flags
   harbour_N    = brkN "رف؟" "مَفعَل" "مَفاعِل" Masc NoHum ; --mInA', marsaY
   hate_V2      = dirV2 (regV "كَرِه") ;
   hat_N        = sdfN "قبع" "فُعَّلة" Fem NoHum ;
-  have_V2      = dirV2 (regV "يَملِك") ; 
 --  have_V2      = dirV2 (v1 "ملك" a i) ; 
   hear_V2      = dirV2 (regV "سَمِع") ;
 --  hear_V2      = dirV2 (v1 "سمع" i a) ;

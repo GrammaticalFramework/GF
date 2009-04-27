@@ -96,7 +96,6 @@ lin
   harbour_N = reg2N "Hafen" "Häfen" masculine ;
   hate_V2 = dirV2 (regV "hassen") ;
   hat_N = reg2N "Hut" "Hüte" masculine ;
-  have_V2 = dirV2 IrregGer.haben_V ;
   hear_V2 = dirV2 (regV "hören") ;
   hill_N = mkN "Hügel" ;
   hope_VS = mkVS (regV "hoffen") ;

@@ -104,6 +104,7 @@ concrete StructuralIna of Structural = CatIna **
     youPl_Pron = mkPron "vos" "vos" "vostre" Pp2;
     youPol_Pron = mkPron "vos" "vos" "vostre" Pp2;
 
+    have_V2 = dirV2 (R.haberV ** {lock_V = <>});
 
 oper
   mkQuant : Str -> Str -> {s : Number => Case => Str} = \x,y -> {

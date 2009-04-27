@@ -24,12 +24,12 @@
 -- separate module [``BeschIta`` ../../italian/BeschIta.gf],
 -- which covers the "Bescherelle" verb conjugations.
 
-resource ParadigmsIta = 
+resource ParadigmsIta = BeschIta **
   open 
     (Predef=Predef), 
     Prelude, 
     MorphoIta, 
-    BeschIta,
+--    BeschIta,
     CatIta in {
 
   flags optimize=all ;
