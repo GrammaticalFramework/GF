@@ -96,7 +96,6 @@ lin
    harbour_N = regMN "port" ;
    hate_V2 = dirV2 (verbV (canviar_16 "odiar")) ;
    hat_N = regMN "barret" ;
-   have_V2 = dirV2 (verbV (tenir_108 "tenir")) ;
    hear_V2 = mkV2 (regV "escoltar") dative ; -- Must be "oir". Add it to Besch
    hill_N = regMN "turó" ;
    hope_VS = mkVS (regV "esperar") ;
@@ -361,5 +360,6 @@ lin
   ready_A = regA "preparat" ;
   reason_N = regFN "raó" ;
   uncertain_A = regA "incert" ;
+   have_V2 = dirV2 (verbV (tenir_108 "tenir")) ;
 
 } ;

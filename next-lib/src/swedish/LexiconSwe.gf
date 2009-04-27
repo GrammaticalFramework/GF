@@ -90,7 +90,6 @@ lin
   harbour_N = regGenN "hamn" utrum;
   hate_V2 = dirV2 (regV "hatar") ;
   hat_N = regGenN "hatt" utrum ;
-  have_V2 = dirV2 (mkV "ha" "har" "ha" "hade" "haft" "haft") ; ---- pp
   hear_V2 = dirV2 (mkV "höra" "hör" "hör" "hörde" "hört" "hörd") ;
   hill_N = regGenN "kulle" utrum ;
 --  hope_VS = mkVS ((regV "önskar")) ;

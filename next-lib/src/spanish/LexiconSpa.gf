@@ -90,7 +90,6 @@ lin
    harbour_N = regN "puerto" ;
    hate_V2 = dirV2 (regV "odiar") ;
    hat_N = regN "sombrero" ;
-   have_V2 = dirV2 (verboV (tener_4 "tener")) ;
    hear_V2 = mkV2 (regV "escuchar") dative ; -- oír_51 
    hill_N = regN "colina" ;
    hope_VS = mkVS (regV "esperar") ;

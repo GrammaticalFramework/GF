@@ -92,7 +92,6 @@ lin
   harbour_N = regGenN "port" masculine ;
   hate_V2 = haïr_V2 ;
   hat_N = regGenN "chapeau" masculine ;
-  have_V2 = avoir_V2 ;
   hear_V2 = entendre_V2 ;
   hill_N = regGenN "colline" feminine ;
   hope_VS = mkVS (reg3V "espérer" "espère" "espérera") ;

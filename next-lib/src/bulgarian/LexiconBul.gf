@@ -95,7 +95,6 @@ lin
   harbour_N = mkN066 "пристанище" ;
   hate_V2 = dirV2 (stateV (mkV173 "мразя")) ;
   hat_N = mkN041 "шапка" ;
-  have_V2 = dirV2 (stateV (mkV186 "имам")) ;
   hear_V2 = dirV2 (actionV (mkV186 "чувам") (mkV163 "чуя")) ;
   hill_N = mkN001 "хълм" ;
   hope_VS = mkVS (medialV (stateV (mkV186 "надявам")) Acc) ;

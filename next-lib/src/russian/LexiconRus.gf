@@ -139,7 +139,6 @@ lin
   harbour_N = mkN "порт" ; -- prepos -u
   hat_N = mkN "шляпа" ;
   hate_V2= dirV2 (regV imperfective second "ненави" "жу" "ненавидел" "ненавидь" "ненавидеть" );
-  have_V2= dirV2 (regV imperfective first "име" "ю" "имел" "имей" "иметь" );
   head_N = mkN "голова" ;
   hear_V2= dirV2 (regV imperfective first "слуша" "ю" "слушал" "слушай" "слушать" );
   heart_N = mkN "сердце" "сердца" "сердцу" "сердца" "сердцем" "сердце" "сердце" "сердца" "сердец" "сердцам" "сердец" "сердцами" "сердцах"  neuter inanimate ;

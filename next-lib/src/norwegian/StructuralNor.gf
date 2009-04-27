@@ -1,5 +1,5 @@
 concrete StructuralNor of Structural = CatNor ** 
-  open MorphoNor, ParadigmsNor, (X = ConstructX), Prelude in {
+  open MorphoNor, ParadigmsNor, (X = ConstructX), IrregNor, Prelude in {
 
   flags optimize=all ;
 
@@ -119,6 +119,7 @@ concrete StructuralNor of Structural = CatNor **
     MorphoNor.mkNP "du" "deg" (variants {"din" ; "di"}) "dit" "dine" SgUtr P2 ; ----
   youPl_Pron = MorphoNor.mkNP "dere" "dere" "deres" "deres" "deres"  Plg P2 ;
   youPol_Pron = MorphoNor.mkNP "Dere" "Dere" "Deres" "Deres" "Deres"  SgUtr P2 ; --- wrong in refl
+  have_V2 = dirV2 IrregNor.ha_V ;
 
 -- Auxiliaries that are used repeatedly.
 

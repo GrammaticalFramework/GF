@@ -107,4 +107,6 @@ concrete StructuralAra of Structural = CatAra **
   youPl_Pron = mkPron "أَنتُمْ" "كُمْ" "كُمْ" (Per2 Masc Sg) ;
   youPol_Pron = mkPron "أَنتِ" "كِ" "كِ" (Per2 Fem Sg) ;
 
+  have_V2      = dirV2 (regV "يَملِك") ; 
+
 }
