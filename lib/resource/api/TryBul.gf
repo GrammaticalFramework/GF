@@ -1,7 +1,7 @@
 --# -path=.:alltenses:prelude
 
 resource TryBul = SyntaxBul, LexiconBul, ParadigmsBul - [mkAdv] ** 
-  open (P = ParadigmsBul), in {
+  open (P = ParadigmsBul) in {
 
 oper
 
