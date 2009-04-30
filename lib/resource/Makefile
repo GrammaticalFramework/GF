@@ -23,7 +23,7 @@ math:
 	$(RUNMAKE) math
 
 compat:
-	gfc */Compatibility*.gf
+	gf -batch */Compatibility*.gf
 	cp -p */Compatibility*.gfo ../alltenses/
 	cp -p */Compatibility*.gfo ../present/
 #	$(RUNMAKE) present compat
