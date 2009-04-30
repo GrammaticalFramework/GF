@@ -153,6 +153,7 @@ data Flags = Flags {
       optLexicalCats     :: Set String,
       optOutputFile      :: Maybe FilePath,
       optOutputDir       :: Maybe FilePath,
+      optGFLibPath       :: Maybe FilePath,
       optRecomp          :: Recomp,
       optPrinter         :: [Printer],
       optProb            :: Bool,
@@ -245,6 +246,7 @@ defaultFlags = Flags {
       optLexicalCats     = Set.empty,
       optOutputFile      = Nothing,
       optOutputDir       = Nothing,
+      optGFLibPath       = Nothing,
       optRecomp          = RecompIfNewer,
       optPrinter         = [],
       optProb            = False,
@@ -307,7 +309,9 @@ optDescr =
      Option ['o'] ["output-file"] (ReqArg outFile "FILE") 
            "Save output in FILE (default is out.X, where X depends on output format.",
      Option ['D'] ["output-dir"] (ReqArg outDir "DIR") 
-           "Save output files (other than .gfc files) in DIR.",
+           "Save output files (other than .gfo files) in DIR.",
+     Option [] ["gf-lib-path"] (ReqArg gfLibPath "DIR") 
+           "Overides the value of GF_LIB_PATH.",
      Option [] ["src","force-recomp"] (NoArg (recomp AlwaysRecomp)) 
                  "Always recompile from source.",
      Option [] ["gfo","recomp-if-newer"] (NoArg (recomp RecompIfNewer)) 
@@ -383,6 +387,7 @@ optDescr =
        lexicalCat  x = set $ \o -> o { optLexicalCats = foldr Set.insert (optLexicalCats o) (splitBy (==',') x) }
        outFile     x = set $ \o -> o { optOutputFile = Just x }
        outDir      x = set $ \o -> o { optOutputDir = Just x }
+       gfLibPath   x = set $ \o -> o { optGFLibPath = Just x }
        recomp      x = set $ \o -> o { optRecomp = x }
        printer     x = set $ \o -> o { optPrinter = x : optPrinter o }
        prob        x = set $ \o -> o { optProb = x }
