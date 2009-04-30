@@ -16,9 +16,17 @@
 
 module GF.System.Readline (fetchCommand, setCompletionFunction, filenameCompletionFunction) where
 
-#ifdef USE_READLINE
+#ifdef USE_HASKELINE
+
+import GF.System.UseHaskeline
+
+#elif USE_READLINE
 
 import GF.System.UseReadline
+
+#elif USE_EDITLINE
+
+import GF.System.UseEditline
 
 #else
 
