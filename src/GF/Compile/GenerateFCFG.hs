@@ -104,7 +104,7 @@ convert abs_defs cnc_defs cat_defs = getParserInfo (loop grammarEnv)
         srules = [
           (XRule id args res (map findLinType args) (findLinType res) term) | 
             (id, (ty,_)) <- abs_defs, let (args,res) = catSkeleton ty, 
-            term <- Map.lookup id cnc_defs]
+            term <- maybeToList (Map.lookup id cnc_defs)]
         
         findLinType id = fromMaybe (error $ "No lincat for " ++ show id) (Map.lookup id cat_defs)
 
@@ -198,15 +198,15 @@ convertTerm cnc_defs selector (K (KP strs vars))((lbl_path,lin) : lins) =
   do projectHead lbl_path
      toks <- member (strs:[strs' | Alt strs' _ <- vars])
      return ((lbl_path, map (Right . KS) toks ++ lin) : lins)
-convertTerm cnc_defs selector (F id)                         lins  = do term <- Map.lookup id cnc_defs
-                                                                        convertTerm cnc_defs selector term lins
-convertTerm cnc_defs selector (W s t)     ((lbl_path,lin) : lins) = do
+convertTerm cnc_defs selector (F id)                         lins  = case Map.lookup id cnc_defs of
+                                                                       Just term -> convertTerm cnc_defs selector term lins
+                                                                       Nothing   -> mzero
+convertTerm cnc_defs selector (W s t)      ((lbl_path,lin) : lins) = do
   ss <- case t of
     R ss -> return ss
-    F f -> do
-      t <- Map.lookup f cnc_defs 
-      case t of
-        R ss -> return ss
+    F f -> case Map.lookup f cnc_defs of
+             Just (R ss) -> return ss
+             _           -> mzero
   convertRec cnc_defs selector 0 [K (KS (s ++ s1)) | K (KS s1) <- ss] lbl_path lin lins
 convertTerm cnc_defs selector x lins  = error ("convertTerm ("++show x++")")
 
@@ -255,8 +255,9 @@ evalTerm cnc_defs path (R record)   = case path of
 evalTerm cnc_defs path (P term sel) = do index <- evalTerm cnc_defs [] sel
                                          evalTerm cnc_defs (index:path) term
 evalTerm cnc_defs path (FV terms)   = member terms >>= evalTerm cnc_defs path
-evalTerm cnc_defs path (F id)       = do term <- Map.lookup id cnc_defs
-                                         evalTerm cnc_defs path term
+evalTerm cnc_defs path (F id)       = case Map.lookup id cnc_defs of
+                                        Just term -> evalTerm cnc_defs path term
+                                        Nothing   -> mzero
 evalTerm cnc_defs path x = error ("evalTerm ("++show x++")")
 
 unifyPType :: FIndex -> FPath -> Term -> CnvMonad FIndex

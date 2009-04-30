@@ -16,7 +16,7 @@
 module GF.System.UseSignal where
 
 import Control.Concurrent (myThreadId, killThread)
-import Control.Exception (Exception,catch)
+import Control.Exception (SomeException,catch)
 import Prelude hiding (catch)
 import System.IO
 
@@ -48,10 +48,10 @@ myIgnore = Ignore
 --     unsafeInterleaveIO etc.) the lazy computation will
 --     not be interruptible, as it will be performed
 --     after the signal handler has been removed.
-runInterruptibly :: IO a -> IO (Either Exception a)
+runInterruptibly :: IO a -> IO (Either SomeException a)
 runInterruptibly a = 
     do t <- myThreadId
-       oldH <- myInstallHandler (myCatch (print "Seek and Destroy" >> killThread t))
+       oldH <- myInstallHandler (myCatch (killThread t))
        x <- p `catch` h
        myInstallHandler oldH
        return x
@@ -66,7 +66,7 @@ runInterruptibly_ = fmap (either (const ()) id) . runInterruptibly
 -- | Run an action with SIGINT blocked.
 blockInterrupt :: IO a -> IO a
 blockInterrupt a = 
-    do oldH <- myInstallHandler Ignore
+    do oldH <- myInstallHandler myIgnore
        x <- a
        myInstallHandler oldH
        return x

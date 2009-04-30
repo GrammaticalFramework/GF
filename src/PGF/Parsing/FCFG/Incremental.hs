@@ -141,7 +141,7 @@ process mbt fn !seqs !funs (item@(Active j ppos funid seqid args key0):items) ac
       	FSymTok tok -> let !acc' = fn tok (Active j (ppos+1) funid seqid args key0) acc
                        in process mbt fn seqs funs items acc' chart
         FSymLit d r -> let !fid = args !! d
-                       in case [t | set <- IntMap.lookup fid (forest chart), FConst _ t <- Set.toList set] of
+                       in case [t | FConst _ t <- maybe [] Set.toList (IntMap.lookup fid (forest chart))] of
                             (tok:_) -> let !acc' = fn (KS tok) (Active j (ppos+1) funid seqid args key0) acc
                                        in process mbt fn seqs funs items acc' chart
                             []      -> case litCatMatch fid mbt of

@@ -1,4 +1,4 @@
-{-# OPTIONS -cpp #-}
+{-# LANGUAGE ScopedTypeVariables, CPP #-}
 module GFI (mainGFI,mainRunGFI) where
 
 import GF.Command.Interpreter
@@ -190,7 +190,7 @@ importInEnv gfenv opts files
 tryGetLine = do
   res <- try getLine
   case res of
-   Left e -> return "q"
+   Left (e :: SomeException) -> return "q"
    Right l -> return l
 
 welcome = unlines [
@@ -251,7 +251,7 @@ wordCompletion gfenv line0 prefix0 p =
                                    Nothing    -> ret ' ' []
                                    Just state -> let compls = getCompletions state prefix
                                                  in ret ' ' (map (encode gfenv) (Map.keys compls))
-              Left  _      -> ret ' ' []
+              Left (_ :: SomeException) -> ret ' ' []
     CmplOpt (Just (Command n _ _)) pref
       -> case Map.lookup n (commands cmdEnv) of
            Just inf -> do let flg_compls = ['-':flg | (flg,_) <- flags   inf, isPrefixOf pref flg]
@@ -265,7 +265,7 @@ wordCompletion gfenv line0 prefix0 p =
       -> do mb_abs <- try (evaluate (abstract pgf))
             case mb_abs of
               Right abs -> ret ' ' [name | cid <- Map.keys (funs abs), let name = prCId cid, isPrefixOf pref name]
-              Left  _   -> ret ' ' []
+              Left (_ :: SomeException) -> ret ' ' []
     _ -> ret ' ' []
   where
     line   = decode gfenv line0
