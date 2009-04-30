@@ -19,7 +19,7 @@ import System.Exit
 -- With no argument, lang and api are done, in this order.
 -- See 'make' below for what is done by which command.
 
-default_gfc = "../../bin/gfc"
+default_gf = "../../dist/build/gf/gf"
 
 presApiPath = "-path=api:present"
 presSymbolPath = "-path=.:abstract:present:common:romance:scandinavian" ----
@@ -195,21 +195,15 @@ unlexer abstr ls =
     where
       unlex lla = maybe "" id $ lookup lla langsCoding
 
--- | Runs the gfc executable with the given arguments.
+-- | Runs the gf executable in compile mode with the given arguments.
 run_gfc :: [String] -> IO ()
 run_gfc args = 
-    do p <- liftM (fromMaybe default_gfc) $ findExecutable "gfc"
-       env <- getEnvironment
-       case lookup "GF_LIB_PATH" env of
-            Nothing -> putStrLn "$GF_LIB_PATH is not set."
-            Just _  -> 
-                do let args' = filter (not . null) args ++ ["+RTS"] ++ rts_flags ++ ["-RTS"]
-                       cmd = p ++ " " ++ unwords (map showArg args')
-                   putStrLn $ "Running: " ++ cmd
-                   e <- system cmd
-                   case e of
-                     ExitSuccess -> return ()
-                     ExitFailure i -> putStrLn $ "gfc exited with exit code: " ++ show i
+    do let args' = ["-batch","-gf-lib-path=."] ++ filter (not . null) args ++ ["+RTS"] ++ rts_flags ++ ["-RTS"]
+       putStrLn $ "Running: " ++ default_gf ++ " " ++ unwords (map showArg args')
+       e <- rawSystem default_gf args'
+       case e of
+         ExitSuccess -> return ()
+         ExitFailure i -> putStrLn $ "gf exited with exit code: " ++ show i
   where rts_flags = ["-K100M"]
         showArg arg = "'" ++ arg ++ "'"
 

@@ -25,15 +25,15 @@ compat:
 	$(RUNMAKE) present compat
 
 prelude:
-	gfc prelude/*.gf
+	gf -batch prelude/*.gf
 	cp -p prelude/*.gfo ../prelude
 
 constructX:
-	gfc common/ConstructX.gf
+	gf -batch common/ConstructX.gf
 	cp -p common/ConstructX.gfo ../prelude
 
 MakeStructural:
-	gfc */MakeStructural*.gf
+	gf -batch */MakeStructural*.gf
 	cp -p */MakeStructural*.gfo ../present
 	cp -p */MakeStructural*.gfo ../alltenses
 
