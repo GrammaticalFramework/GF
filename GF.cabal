@@ -709,7 +709,7 @@ executable gf
     other-modules: GF.System.NoReadline
   
   if flag(interrupt)
-    ghc-options: -DUSE_INTERRUPT
+    cpp-options: -DUSE_INTERRUPT
     other-modules: GF.System.UseSignal
   else
     other-modules: GF.System.NoSignal

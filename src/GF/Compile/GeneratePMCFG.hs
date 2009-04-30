@@ -1,4 +1,4 @@
-{-# OPTIONS -fbang-patterns -cpp #-}
+{-# LANGUAGE BangPatterns, CPP #-}
 ----------------------------------------------------------------------
 -- |
 -- Maintainer  : Krasimir Angelov
@@ -50,7 +50,7 @@ convert abs_defs cnc_defs cat_defs =
     xrules = [
       (XRule id args (0,res) (map findLinType args) (findLinType (0,res)) term) | 
         (id, (ty,_)) <- abs_defs, let (args,res) = typeSkeleton ty, 
-        term <- Map.lookup id cnc_defs]
+        term <- maybeToList (Map.lookup id cnc_defs)]
         
     findLinType (_,id) = fromMaybe (error $ "No lincat for " ++ show id) (Map.lookup id cat_defs)
 
@@ -139,15 +139,15 @@ convertTerm cnc_defs sel ctype (K (KS t))   ((lbl_path,lin) : lins) = return ((l
 convertTerm cnc_defs sel ctype (K (KP strs vars))((lbl_path,lin) : lins) = 
   do toks <- member (strs:[strs' | Alt strs' _ <- vars])
      return ((lbl_path, map (FSymTok . KS) toks ++ lin) : lins)
-convertTerm cnc_defs sel ctype (F id)                         lins  = do term <- Map.lookup id cnc_defs
-                                                                         convertTerm cnc_defs sel ctype term lins
-convertTerm cnc_defs sel ctype (W s t)     ((lbl_path,lin) : lins) = do
+convertTerm cnc_defs sel ctype (F id)                         lins  = case Map.lookup id cnc_defs of
+                                                                        Just term -> convertTerm cnc_defs sel ctype term lins
+                                                                        Nothing   -> mzero
+convertTerm cnc_defs sel ctype (W s t)      ((lbl_path,lin) : lins) = do
   ss <- case t of
     R ss -> return ss
-    F f -> do
-      t <- Map.lookup f cnc_defs 
-      case t of
-        R ss -> return ss
+    F f -> case Map.lookup f cnc_defs of
+             Just (R ss) -> return ss
+             _           -> mzero
   convertRec cnc_defs sel ctype [K (KS (s ++ s1)) | K (KS s1) <- ss] lbl_path lin lins
 convertTerm cnc_defs sel ctype x lins  = error ("convertTerm ("++show x++")")
 
@@ -202,8 +202,9 @@ evalTerm cnc_defs path (R record)   = case path of
 evalTerm cnc_defs path (P term sel) = do index <- evalTerm cnc_defs [] sel
                                          evalTerm cnc_defs (index:path) term
 evalTerm cnc_defs path (FV terms)   = member terms >>= evalTerm cnc_defs path
-evalTerm cnc_defs path (F id)       = do term <- Map.lookup id cnc_defs
-                                         evalTerm cnc_defs path term
+evalTerm cnc_defs path (F id)       = case Map.lookup id cnc_defs of
+                                        Just term -> evalTerm cnc_defs path term
+                                        Nothing   -> mzero
 evalTerm cnc_defs path x = error ("evalTerm ("++show x++")")
 
 
