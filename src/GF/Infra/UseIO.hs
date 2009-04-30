@@ -56,18 +56,20 @@ type FullPath = String
 gfLibraryPath    = "GF_LIB_PATH"
 gfGrammarPathVar = "GF_GRAMMAR_PATH"
 
-getLibraryPath :: IO FilePath
-getLibraryPath =
-  catch
-    (getEnv gfLibraryPath)
-    (\ex -> getDataDir >>= \path -> return (path </> "lib"))
+getLibraryPath :: Options -> IO FilePath
+getLibraryPath opts =
+  case flag optGFLibPath opts of
+    Just path -> return path
+    Nothing   -> catch
+                   (getEnv gfLibraryPath)
+                   (\ex -> getDataDir >>= \path -> return (path </> "lib"))
 
 -- | extends the search path with the
 -- 'gfLibraryPath' and 'gfGrammarPathVar'
 -- environment variables. Returns only existing paths.
-extendPathEnv :: [FilePath] -> IO [FilePath]
-extendPathEnv ps = do
-  b <- getLibraryPath                             -- e.g. GF_LIB_PATH
+extendPathEnv :: Options -> [FilePath] -> IO [FilePath]
+extendPathEnv opts ps = do
+  b <- getLibraryPath opts                         -- e.g. GF_LIB_PATH
   s <- catch (getEnv gfGrammarPathVar) (const (return ""))     -- e.g. GF_GRAMMAR_PATH
   let ss = ps ++ splitSearchPath s
   liftM concat $ mapM allSubdirs $ ss ++ [b </> s | s <- ss ++ ["prelude"]]
