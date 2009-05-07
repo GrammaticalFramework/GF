@@ -17,6 +17,9 @@ resource ResTur = ParamX ** open Prelude, Predef in {
     Noun = {s : Number => Case => Str; gen : Number => Agr => Str} ;
     Pron = {s : Case => Str; a : Agr} ;
 
+    agrP3 : Number -> Agr ;
+    agrP3 n = {n = n; p = P3} ;
+
 -- For $Verb$.
 
   param
