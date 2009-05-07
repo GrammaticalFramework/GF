@@ -49,13 +49,16 @@ oper
 
   regN : Str -> Noun = \base -> {
     s   = \\n => table {
-                   Nom   => add_number n base ;
-                   Acc   => harmony4 (add_number n base) "i" ;
-                   Dat   => harmony2 (add_number n base) "e" ;
-                   Gen   => harmony4 (add_number n base) "in" ;
-                   Loc   => harmony2 (add_number n base) "de" ;
-                   Ablat => add_number n base ;
-                   Abess => add_number n base
+                   Nom     => add_number n base ;
+                   Acc     => harmony4 (add_number n base) "i" ;
+                   Dat     => harmony2 (add_number n base) "e" ;
+                   Gen     => harmony4 (add_number n base) "in" ;
+                   Loc     => harmony2 (add_number n base) "de" ;
+                   Ablat   => harmony2 (add_number n base) "den" ;
+                   Abess p => case p of {
+                                Pos => harmony4 (add_number n base) "li" ;
+                                Neg => harmony4 (add_number n base) "siz"
+                              }
                  } ;
     gen = \\n => table {
                    {n=Sg; p=P1} => harmony4 (add_number n base) "im" ;
