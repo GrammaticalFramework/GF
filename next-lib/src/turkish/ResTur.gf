@@ -65,14 +65,9 @@ resource ResTur = ParamX ** open Prelude, Predef in {
      } ;
 
   oper
-    harmony4 : Str -> Str -> Str
-      = \base0,suffix0 ->
-          let buffer : Str =
-                case dp 1 base0 + take 1 suffix0 of {
-                  ("ı"|"a"|"i"|"e"|"u"|"o"|"ü"|"ö")+("ı"|"a"|"i"|"e"|"u"|"o"|"ü"|"ö") => "y" ;
-                  _                                                                   => ""
-                } ;
-              h : Str =
+    harmony4 : Str -> Str -> Str -> Str
+      = \base0,suffixC,suffixV ->
+          let h : Str =
                case base0 of {
                  _+c@("ı"|"a"|"i"|"e"|"u"|"o"|"ü"|"ö")+
                  ("b"|"v"|"d"|"z"|"j"|"c"|"g"|"ğ"|"l"|"r"|"m"|"n"|"y"|"p"|"f"|"t"|"s"|"ş"|"ç"|"k"|"h")* => 
@@ -82,31 +77,34 @@ resource ResTur = ParamX ** open Prelude, Predef in {
                       ("u"|"o") => "u" ;
                       ("ü"|"ö") => "ü"
                     } ;
-                 _ => error ("harmony4")
+                 _ => error "harmony4"
                } ;
               base : Str =
-                case dp 1 base0 + take 1 suffix0 of {
+                case dp 1 base0 + take 1 suffixC of {
                   ("k")+("ı"|"a"|"i"|"e"|"u"|"o"|"ü"|"ö") => tk 1 base0 + "ğ" ;
                   _                                       => base0
                 } ;
-              suffix : Str = 
-               case suffix0 of {
-                  s1@(("b"|"v"|"d"|"z"|"j"|"c"|"g"|"ğ"|"l"|"r"|"m"|"n"|"y"|"p"|"f"|"t"|"s"|"ş"|"ç"|"k"|"h")*)
-                 +   ("ı"|"i"|"u"|"ü")
-                 +s2 => s1+h+s2 ;
-                 s => s
-               }
-          in base + buffer + suffix ;
+              suffix : Str =
+                case dp 1 base0 of {
+                  ("ı"|"a"|"i"|"e"|"u"|"o"|"ü"|"ö") => case suffixV of {
+                                                         s1@("b"|"v"|"d"|"z"|"j"|"c"|"g"|"ğ"|"l"|"r"|"m"|"n"|"y"|"p"|"f"|"t"|"s"|"ş"|"ç"|"k"|"h")
+                                                         +   ("ı"|"i"|"u"|"ü")
+                                                         +s2 => s1+h+s2 ;
+                                                         _   => error "harmony4"
+                                                       } ;
+                  _                                 => case suffixC of {
+                                                         s1@(("b"|"v"|"d"|"z"|"j"|"c"|"g"|"ğ"|"l"|"r"|"m"|"n"|"y"|"p"|"f"|"t"|"s"|"ş"|"ç"|"k"|"h")*)
+                                                         +   ("ı"|"i"|"u"|"ü")
+                                                         +s2 => s1+h+s2 ;
+                                                         s   => error "harmony4"
+                                                       }
+                }
+          in base + suffix ;
 
-    harmony2 : Str -> Str -> Str
-      = \base,suffix0 ->
-          let buffer : Str =
-                case dp 1 base + take 1 suffix0 of {
-                  ("ı"|"a"|"i"|"e"|"u"|"o"|"ü"|"ö")+("ı"|"a"|"i"|"e"|"u"|"o"|"ü"|"ö") => "n" ;
-                  _                                                                   => ""
-                } ;
-              h : Str =
-               case base of {
+    harmony2 : Str -> Str -> Str -> Str
+      = \base0,suffixC,suffixV ->
+          let h : Str =
+               case base0 of {
                  _+c@("ı"|"a"|"i"|"e"|"u"|"o"|"ü"|"ö")+
                  ("b"|"v"|"d"|"z"|"j"|"c"|"g"|"ğ"|"l"|"r"|"m"|"n"|"y"|"p"|"f"|"t"|"s"|"ş"|"ç"|"k"|"h")* =>
                     case c of {
@@ -115,17 +113,38 @@ resource ResTur = ParamX ** open Prelude, Predef in {
                     } ;
                  _ => error "harmony2"
                } ;
-              suffix1 : Str = 
-               case suffix0 of {
-                  s1@(("b"|"v"|"d"|"z"|"j"|"c"|"g"|"ğ"|"l"|"r"|"m"|"n"|"y"|"p"|"f"|"t"|"s"|"ş"|"ç"|"k"|"h")*)
-                 +   ("a"|"e")
-                 +s2 => s1+h+s2 ;
-                 s => s
-               } ;
-              suffix : Str =
-                case dp 1 base + take 1 suffix1 of {
-                  ("ç"|"p"|"ş"|"k"|"f")+("d") => "t"+drop 1 suffix1 ;
-                  _                           => suffix1
+              base : Str =
+                case dp 1 base0 + take 1 suffixC of {
+                  ("k")+("ı"|"a"|"i"|"e"|"u"|"o"|"ü"|"ö") => tk 1 base0 + "ğ" ;
+                  _                                       => base0
                 } ;
-          in base + buffer + suffix ;
+              suffix : Str =
+                case dp 1 base0 of {
+                  ("ı"|"a"|"i"|"e"|"u"|"o"|"ü"|"ö") => case suffixV of {
+                                                         s1@("b"|"v"|"d"|"z"|"j"|"c"|"g"|"ğ"|"l"|"r"|"m"|"n"|"y"|"p"|"f"|"t"|"s"|"ş"|"ç"|"k"|"h")
+                                                         +  ("a"|"e")
+                                                         +s2 => s1+h+s2 ;
+                                                         _   => error "harmony2"
+                                                       } ;
+                  ("p"|"f"|"t"|"s"|"ş"|"ç"|"k"|"h") => case suffixC of {
+                                                         s1@(("b"|"v"|"z"|"j"|"c"|"g"|"ğ"|"l"|"r"|"m"|"n"|"y"|"p"|"f"|"t"|"s"|"ş"|"ç"|"k"|"h")*)
+                                                         +  ("a"|"e")
+                                                         +s2 => s1+h+s2 ;
+                                                         ("da"|"de")+s => "t"+h+s ;
+                                                         _ => error "harmony2"
+                                                       } ;
+                  _                                 => case suffixC of {
+                                                         s1@(("b"|"v"|"d"|"z"|"j"|"c"|"g"|"ğ"|"l"|"r"|"m"|"n"|"y"|"p"|"f"|"t"|"s"|"ş"|"ç"|"k"|"h")*)
+                                                         +  ("a"|"e")
+                                                         +s2 => s1+h+s2 ;
+                                                         _   => error "harmony2"
+                                                       }
+                }
+          in base + suffix ;
+
+    add_number : Number -> Str -> Str = \n,base ->
+      case n of {
+        Sg => base ;
+        Pl => harmony2 base "ler" "ler"
+      } ;
 }

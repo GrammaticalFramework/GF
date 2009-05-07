@@ -12,61 +12,55 @@ oper
                  base+"mek" => base
                }
     in { s = table {
-               VPres   Sg P1 => harmony4 (harmony4 base "iyor") "im" ;
-               VPres   Sg P2 => harmony4 (harmony4 base "iyor") "sin" ;
-               VPres   Sg P3 => harmony4 base "iyor" ;
-               VPres   Pl P1 => harmony4 (harmony4 base "iyor") "iz" ;
-               VPres   Pl P2 => harmony4 (harmony4 (harmony4 base "iyor") "sin") "iz" ;
-               VPres   Pl P3 => harmony4 (harmony4 base "iyor") "ler" ;
-               VPast   Sg P1 => harmony4 base "dim" ;
-               VPast   Sg P2 => harmony4 base "din" ;
-               VPast   Sg P3 => harmony4 base "di" ;
-               VPast   Pl P1 => harmony4 base "dik" ;
-               VPast   Pl P2 => harmony4 (harmony4 base "din") "iz" ;
-               VPast   Pl P3 => harmony4 base "diler" ;
-               VFuture Sg P1 => harmony4 (harmony2 base "ecek") "im" ;
-               VFuture Sg P2 => harmony4 (harmony2 base "ecek") "sin" ;
-               VFuture Sg P3 => harmony2 base "ecek" ;
-               VFuture Pl P1 => harmony4 (harmony2 base "ecek") "iz" ;
-               VFuture Pl P2 => harmony4 (harmony2 base "ecek") "siniz" ;
-               VFuture Pl P3 => harmony4 (harmony2 base "ecek") "ler" ;
-               VAorist Sg P1 => harmony4 base "im" ;
-               VAorist Sg P2 => harmony4 base "sin" ;
+               VPres   Sg P1 => harmony4 (harmony4 base "iyor" "yiyor") "im" "yim" ;
+               VPres   Sg P2 => harmony4 (harmony4 base "iyor" "yiyor") "sin" "sin" ;
+               VPres   Sg P3 => harmony4 base "iyor" "yiyor" ;
+               VPres   Pl P1 => harmony4 (harmony4 base "iyor" "yiyor") "iz" "yiz" ;
+               VPres   Pl P2 => harmony4 (harmony4 (harmony4 base "iyor" "yiyor") "sin" "sin") "iz" "yiz" ;
+               VPres   Pl P3 => harmony2 (harmony4 base "iyor" "yiyor") "ler" "ler" ;
+               VPast   Sg P1 => harmony4 base "dim" "dim" ;
+               VPast   Sg P2 => harmony4 base "din" "din" ;
+               VPast   Sg P3 => harmony4 base "di" "di" ;
+               VPast   Pl P1 => harmony4 base "dik" "dik" ;
+               VPast   Pl P2 => harmony4 (harmony4 base "din" "din") "iz" "yiz" ;
+               VPast   Pl P3 => harmony4 base "diler" "diler" ;
+               VFuture Sg P1 => harmony4 (harmony2 base "ecek" "yecek") "im" "yim" ;
+               VFuture Sg P2 => harmony4 (harmony2 base "ecek" "yecek") "sin" "sin" ;
+               VFuture Sg P3 => harmony2 base "ecek" "yecek";
+               VFuture Pl P1 => harmony4 (harmony2 base "ecek" "yecek") "iz" "yiz" ;
+               VFuture Pl P2 => harmony4 (harmony2 base "ecek" "yecek") "siniz" "siniz" ;
+               VFuture Pl P3 => harmony2 (harmony2 base "ecek" "yecek") "ler" "ler" ;
+               VAorist Sg P1 => harmony4 base "im" "yim" ;
+               VAorist Sg P2 => harmony4 base "sin" "sin" ;
                VAorist Sg P3 => base ;
-               VAorist Pl P1 => harmony4 base "iz" ;
-               VAorist Pl P2 => harmony4 (harmony4 base "sin") "iz" ;
-               VAorist Pl P3 => harmony4 base "ler" ;
+               VAorist Pl P1 => harmony4 base "iz" "yiz" ;
+               VAorist Pl P2 => harmony4 (harmony4 base "sin" "sin") "iz" "yiz" ;
+               VAorist Pl P3 => harmony2 base "ler" "ler" ;
                VImperative => base ;
                VInfinitive => inf
              }
        } ;  
-       
-  add_number : Number -> Str -> Str = \n,base ->
-    case n of {
-      Sg => base ;
-      Pl => harmony2 base "ler"
-    } ;
 
   regN : Str -> Noun = \base -> {
     s   = \\n => table {
                    Nom     => add_number n base ;
-                   Acc     => harmony4 (add_number n base) "i" ;
-                   Dat     => harmony2 (add_number n base) "e" ;
-                   Gen     => harmony4 (add_number n base) "in" ;
-                   Loc     => harmony2 (add_number n base) "de" ;
-                   Ablat   => harmony2 (add_number n base) "den" ;
+                   Acc     => harmony4 (add_number n base) "i" "yi" ;
+                   Dat     => harmony2 (add_number n base) "e" "ye" ;
+                   Gen     => harmony4 (add_number n base) "in" "nin" ;
+                   Loc     => harmony2 (add_number n base) "de" "de" ;
+                   Ablat   => harmony2 (add_number n base) "den" "den" ;
                    Abess p => case p of {
-                                Pos => harmony4 (add_number n base) "li" ;
-                                Neg => harmony4 (add_number n base) "siz"
+                                Pos => harmony4 (add_number n base) "li" "li" ;
+                                Neg => harmony4 (add_number n base) "siz" "siz"
                               }
                  } ;
     gen = \\n => table {
-                   {n=Sg; p=P1} => harmony4 (add_number n base) "im" ;
-                   {n=Sg; p=P2} => harmony4 (add_number n base) "in" ;
-                   {n=Sg; p=P3} => harmony4 (add_number n base) "i" ;
-                   {n=Pl; p=P1} => harmony4 (add_number n base) "imiz" ;
-                   {n=Pl; p=P2} => harmony4 (add_number n base) "iniz" ;
-                   {n=Pl; p=P3} => harmony4 (add_number n base) "i"
+                   {n=Sg; p=P1} => harmony4 (add_number n base) "im" "yim" ;
+                   {n=Sg; p=P2} => harmony4 (add_number n base) "in" "yin" ;
+                   {n=Sg; p=P3} => harmony4 (add_number n base) "i" "yi" ;
+                   {n=Pl; p=P1} => harmony4 (add_number n base) "imiz" "yimiz" ;
+                   {n=Pl; p=P2} => harmony4 (add_number n base) "iniz" "yiniz" ;
+                   {n=Pl; p=P3} => harmony4 (add_number n base) "i" "yi"
                  }
     } ;
 }
