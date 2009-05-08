@@ -8,6 +8,8 @@ concrete NounTur of Noun = CatTur ** open ResTur, Prelude in {
       a = agrP3 det.n
       } ;
 
+    UsePron p = p ;
+
     DetQuant quant num = {
       s  = quant.s ++ num.s ;
       n  = num.n
