@@ -18,6 +18,10 @@ concrete NounTur of Noun = CatTur ** open ResTur, Prelude in {
     NumSg = {s = []; n = Sg} ;
     NumPl = {s = []; n = Pl} ;
 
+    NumCard n = n ** {n = Sg} ;
+
+    NumNumeral numeral = {s = numeral.s} ;
+
     DefArt = {
       s = []
       } ;

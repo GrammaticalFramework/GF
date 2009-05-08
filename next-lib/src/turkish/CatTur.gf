@@ -10,6 +10,7 @@ concrete CatTur of Cat = CommonX ** open ResTur, Prelude in {
     Pron = ResTur.Pron ;
     Det = {s : Str; n : Number} ;
     Num  = {s : Str; n : Number} ;
+    Card = {s : Str} ;
     Quant = {s : Str} ;
 
 -- Open lexical classes, e.g. Lexicon
