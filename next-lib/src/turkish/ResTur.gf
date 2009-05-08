@@ -90,13 +90,13 @@ resource ResTur = ParamX ** open Prelude, Predef in {
                                                          s1@("b"|"v"|"d"|"z"|"j"|"c"|"g"|"ğ"|"l"|"r"|"m"|"n"|"y"|"p"|"f"|"t"|"s"|"ş"|"ç"|"k"|"h")
                                                          +   ("ı"|"i"|"u"|"ü")
                                                          +s2 => s1+h+s2 ;
-                                                         _   => error "harmony4"
+                                                         s   => s
                                                        } ;
                   _                                 => case suffixC of {
                                                          s1@(("b"|"v"|"d"|"z"|"j"|"c"|"g"|"ğ"|"l"|"r"|"m"|"n"|"y"|"p"|"f"|"t"|"s"|"ş"|"ç"|"k"|"h")*)
                                                          +   ("ı"|"i"|"u"|"ü")
                                                          +s2 => s1+h+s2 ;
-                                                         s   => error "harmony4"
+                                                         s   => s
                                                        }
                 }
           in base + suffix ;
@@ -124,20 +124,20 @@ resource ResTur = ParamX ** open Prelude, Predef in {
                                                          s1@("b"|"v"|"d"|"z"|"j"|"c"|"g"|"ğ"|"l"|"r"|"m"|"n"|"y"|"p"|"f"|"t"|"s"|"ş"|"ç"|"k"|"h")
                                                          +  ("a"|"e")
                                                          +s2 => s1+h+s2 ;
-                                                         _   => error "harmony2"
+                                                         s   => s
                                                        } ;
                   ("p"|"f"|"t"|"s"|"ş"|"ç"|"k"|"h") => case suffixC of {
                                                          s1@(("b"|"v"|"z"|"j"|"c"|"g"|"ğ"|"l"|"r"|"m"|"n"|"y"|"p"|"f"|"t"|"s"|"ş"|"ç"|"k"|"h")*)
                                                          +  ("a"|"e")
                                                          +s2 => s1+h+s2 ;
                                                          ("da"|"de")+s => "t"+h+s ;
-                                                         _ => error "harmony2"
+                                                         s => s
                                                        } ;
                   _                                 => case suffixC of {
                                                          s1@(("b"|"v"|"d"|"z"|"j"|"c"|"g"|"ğ"|"l"|"r"|"m"|"n"|"y"|"p"|"f"|"t"|"s"|"ş"|"ç"|"k"|"h")*)
                                                          +  ("a"|"e")
                                                          +s2 => s1+h+s2 ;
-                                                         _   => error "harmony2"
+                                                         s   => s
                                                        }
                 }
           in base + suffix ;
