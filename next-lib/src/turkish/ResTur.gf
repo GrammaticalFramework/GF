@@ -50,16 +50,18 @@ resource ResTur = ParamX ** open Prelude, Predef in {
          ten  => twenty
          }
       } ;
-      
-    mkPron : (ben,beni,bana,banin,bende,benden:Str) -> Number -> Person -> Pron =
-     \ben,beni,bana,benim,bende,benden,n,p -> {
+
+    mkPron : (ben,beni,bana,banin,bende,benden,benli,bensiz:Str) -> Number -> Person -> Pron =
+     \ben,beni,bana,benim,bende,benden,benli,bensiz,n,p -> {
      s = table {
        Nom => ben ;
        Acc => beni ;
        Dat => bana ;
        Gen => benim ;
        Loc => bende ;
-       Abl => benden
+       Ablat => benden ;
+       Abess Pos => benli ;
+       Abess Neg => bensiz
        } ;
      a = {n=n; p=p} ;
      } ;
