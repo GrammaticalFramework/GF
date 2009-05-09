@@ -160,7 +160,9 @@ compileOne opts env@(_,srcgr,_) file = do
     -- for gf source, do full compilation and generate code
     _ -> do
 
-      let gfo = gfoFile (dropExtension file)
+      let gfo = maybe (gfoFile (dropExtension file))
+                      (\dir -> dir </> gfoFile (dropExtension (takeFileName file)))
+                      (flag optGFODir opts)
       b1 <- ioeIO $ doesFileExist file
       if not b1
         then compileOne opts env $ gfo
