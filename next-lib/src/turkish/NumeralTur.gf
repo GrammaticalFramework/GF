@@ -1,5 +1,8 @@
 concrete NumeralTur of Numeral = CatTur ** open ResTur in {
 
+flags
+  coding = utf8 ;
+
 lincat 
   Digit = {s : DForm => Str} ;
   Sub10 = {s : DForm => Str ; n : Number} ;
