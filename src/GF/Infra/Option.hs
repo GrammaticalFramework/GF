@@ -146,11 +146,11 @@ data Flags = Flags {
       optVerbosity       :: Verbosity,
       optShowCPUTime     :: Bool,
       optEmitGFO         :: Bool,
-      optGFODir          :: FilePath,
       optOutputFormats   :: [OutputFormat],
       optSISR            :: Maybe SISRFormat,
       optHaskellOptions  :: Set HaskellOption,
       optLexicalCats     :: Set String,
+      optGFODir          :: Maybe FilePath,
       optOutputFile      :: Maybe FilePath,
       optOutputDir       :: Maybe FilePath,
       optGFLibPath       :: Maybe FilePath,
@@ -239,11 +239,11 @@ defaultFlags = Flags {
       optVerbosity       = Normal,
       optShowCPUTime     = False,
       optEmitGFO         = True,
-      optGFODir          = ".",
       optOutputFormats   = [],
       optSISR            = Nothing,
       optHaskellOptions  = Set.empty,
       optLexicalCats     = Set.empty,
+      optGFODir          = Nothing,
       optOutputFile      = Nothing,
       optOutputDir       = Nothing,
       optGFLibPath       = Nothing,
@@ -373,7 +373,7 @@ optDescr =
                                         Nothing -> fail $ "Bad verbosity: " ++ show v
        cpu         x = set $ \o -> o { optShowCPUTime = x }
        emitGFO     x = set $ \o -> o { optEmitGFO = x }
-       gfoDir      x = set $ \o -> o { optGFODir = x }
+       gfoDir      x = set $ \o -> o { optGFODir = Just x }
        outFmt      x = readOutputFormat x >>= \f ->
                          set $ \o -> o { optOutputFormats = optOutputFormats o ++ [f] }
        sisrFmt     x = case x of
