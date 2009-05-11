@@ -20,7 +20,7 @@
 
 module GF.Compile.ReadFiles 
            ( getAllFiles,ModName,ModEnv,importsOfModule,
-             gfoFile,gfFile,isGFO,
+             gfoFile,gfFile,isGFO,gf2gfo,
              getOptionsFromFile) where
 
 import GF.Infra.UseIO
@@ -37,6 +37,7 @@ import GF.Grammar.Binary
 import Control.Monad
 import Data.Char
 import Data.List
+import Data.Maybe(isJust)
 import qualified Data.ByteString.Char8 as BS
 import qualified Data.Map as Map
 import System.Time
@@ -58,11 +59,14 @@ getAllFiles opts ps env file = do
   return $ paths ds
   where
     -- construct list of paths to read
-    paths cs = [mk (p </> f) | (f,st,_,_,p) <- cs, mk <- mkFile st]
+    paths ds = concatMap mkFile ds
       where
-        mkFile CSComp = [gfFile ]
-        mkFile CSRead = [gfoFile]
-        mkFile _      = []
+        mkFile (f,st,gfTime,gfoTime,p) =
+          case st of 
+            CSComp                 -> [p </> gfFile f]
+            CSRead | isJust gfTime -> [gf2gfo opts (p </> gfFile f)]
+                   | otherwise     -> [p </> gfoFile f]
+            CSEnv                  -> []
 
     -- | traverses the dependency graph and returns a topologicaly sorted
     -- list of ModuleInfo. An error is raised if there is circular dependency
@@ -90,10 +94,10 @@ getAllFiles opts ps env file = do
           mb_gfFile <- ioeIO $ getFilePath ps (gfFile name)
           case mb_gfFile of
             Just gfFile -> do gfTime  <- ioeIO $ getModificationTime gfFile
-                              mb_gfoTime <- ioeIO $ catch (liftM Just $ getModificationTime (replaceExtension gfFile "gfo"))
-                                                        (\_->return Nothing)
+                              mb_gfoTime <- ioeIO $ catch (liftM Just $ getModificationTime (gf2gfo opts gfFile))
+                                                          (\_->return Nothing)
                               return (gfFile, Just gfTime, mb_gfoTime)
-            Nothing     -> do mb_gfoFile <- ioeIO $ getFilePath ps (gfoFile name)
+            Nothing     -> do mb_gfoFile <- ioeIO $ getFilePath (maybe id (:) (flag optGFODir opts) ps) (gfoFile name)
                               case mb_gfoFile of
                                 Just gfoFile -> do gfoTime <- ioeIO $ getModificationTime gfoFile
                                                    return (gfoFile, Nothing, Just gfoTime)
@@ -106,7 +110,7 @@ getAllFiles opts ps env file = do
 
       (mname,imps) <- case st of
                         CSEnv  -> return (name, maybe [] snd mb_envmod)
-                        CSRead -> ioeIO $ fmap importsOfModule (decodeModHeader (replaceExtension file "gfo"))
+                        CSRead -> ioeIO $ fmap importsOfModule (decodeModHeader ((if isGFO file then id else gf2gfo opts) file))
                         CSComp -> do s <- ioeIO $ BS.readFile file
                                      case runP pModHeader s of
                                        Left (Pn l c,msg) -> ioeBad (file ++ ":" ++ show l ++ ":" ++ show c ++ ": " ++ msg)
@@ -124,6 +128,10 @@ gfoFile f = addExtension f "gfo"
 gfFile :: FilePath -> FilePath
 gfFile f = addExtension f "gf"
 
+gf2gfo :: Options -> FilePath -> FilePath
+gf2gfo opts file = maybe (gfoFile (dropExtension file))
+                         (\dir -> dir </> gfoFile (dropExtension (takeFileName file)))
+                         (flag optGFODir opts)
 
 -- From the given Options and the time stamps computes
 -- whether the module have to be computed, read from .gfo or
