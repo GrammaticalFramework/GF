@@ -1,24 +1,23 @@
-.PHONY: all gf install doc clean sdist lib
+.PHONY: all build install doc clean sdist
 
-all: gf lib
+all: build
 
-dist/setup-config:
-	runghc Setup.lhs configure
+dist/setup-config: GF.cabal
+	chmod u+x next-lib/src/mkPresent
+	chmod u+x next-lib/src/mkMinimal
+	runghc Setup.hs configure
 
-gf: dist/setup-config
-	runghc Setup.lhs build
+build: dist/setup-config
+	runghc Setup.hs build
 
 install:
-	runghc Setup.lhs install
+	runghc Setup.hs install
 
 doc:
-	runghc Setup.lhs haddock
+	runghc Setup.hs haddock
 
 clean:
-	runghc Setup.lhs clean
+	runghc Setup.hs clean
 
 sdist:
-	runghc Setup.lhs sdist
-
-lib:
-	$(MAKE) -C lib/resource clean all
+	runghc Setup.hs sdist
