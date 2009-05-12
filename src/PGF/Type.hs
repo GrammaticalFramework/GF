@@ -1,6 +1,6 @@
 module PGF.Type ( Type(..), Hypo(..),
                   readType, showType,
-                  pType, ppType ) where
+                  pType, ppType, ppHypo ) where
 
 import PGF.CId
 import PGF.Expr
@@ -67,11 +67,12 @@ ppType d (DTyp ctxt cat args)
   | null ctxt = ppRes cat args
   | otherwise = ppParens (d > 0) (foldr ppCtxt (ppRes cat args) ctxt)
   where
-    ppCtxt (Hyp x typ) doc
-      | x == wildCId = ppType 1 typ PP.<+> PP.text "->" PP.<+> doc
-      | otherwise    = PP.parens (PP.text (prCId x) PP.<+> PP.char ':' PP.<+> ppType 0 typ) PP.<+> PP.text "->" PP.<+> doc
-
+    ppCtxt hyp doc = ppHypo hyp PP.<+> PP.text "->" PP.<+> doc
     ppRes cat es = PP.text (prCId cat) PP.<+> PP.hsep (map (ppExpr 2) es)
+
+ppHypo (Hyp x typ)
+  | x == wildCId = ppType 1 typ
+  | otherwise    = PP.parens (PP.text (prCId x) PP.<+> PP.char ':' PP.<+> ppType 0 typ)
 
 ppParens :: Bool -> PP.Doc -> PP.Doc
 ppParens True  = PP.parens
