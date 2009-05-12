@@ -35,6 +35,7 @@ import GF.Text.Coding
 import Data.Maybe
 import qualified Data.Map as Map
 import System.Cmd
+import Text.PrettyPrint
 
 import Debug.Trace
 
@@ -586,6 +587,30 @@ allCommands cod env@(pgf, mos) = Map.fromList [
        ("append","append to file, instead of overwriting it")
        ],
      flags = [("file","the output filename")] 
+     }),
+  ("ai", emptyCommandInfo {
+     longname = "abstract_info",
+     syntax = "ai IDENTIFIER",
+     synopsis = "provides an information about a function or a category from the abstract syntax",
+     explanation = unlines [
+       "The command has one argument which is either function or a category defined in",
+       "the abstract syntax of the current grammar. If the argument is a function then",
+       "its type is printed out. If it is a category then the category definition is printed"
+       ],
+     exec = \opts arg -> do
+       case arg of
+         [Fun id []] -> case Map.lookup id (funs (abstract pgf)) of
+                          Just (ty,def) -> putStrLn (render (text "fun" <+> text (prCId id) <+> colon    <+> ppType 0 ty $$
+                                                             if def == EEq []
+                                                               then empty
+                                                               else text "def" <+> text (prCId id) <+> char '=' <+> ppExpr 0 def))
+                          Nothing       -> case Map.lookup id (cats (abstract pgf)) of
+                                             Just hyps -> putStrLn (render (text "cat" <+>
+                                                                            text (prCId id) <+>
+                                                                            hsep (map ppHypo hyps)))
+                                             Nothing   -> putStrLn "unknown identifier"
+         _           -> putStrLn "a single identifier is expected from the command"
+       return void
      })
   ]
  where
