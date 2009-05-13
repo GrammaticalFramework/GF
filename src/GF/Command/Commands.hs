@@ -600,14 +600,15 @@ allCommands cod env@(pgf, mos) = Map.fromList [
      exec = \opts arg -> do
        case arg of
          [Fun id []] -> case Map.lookup id (funs (abstract pgf)) of
-                          Just (ty,def) -> putStrLn (render (text "fun" <+> text (prCId id) <+> colon    <+> ppType 0 ty $$
+                          Just (ty,def) -> putStrLn (render (text "fun" <+> text (prCId id) <+> colon <+> ppType 0 ty $$
                                                              if def == EEq []
                                                                then empty
                                                                else text "def" <+> text (prCId id) <+> char '=' <+> ppExpr 0 def))
                           Nothing       -> case Map.lookup id (cats (abstract pgf)) of
-                                             Just hyps -> putStrLn (render (text "cat" <+>
-                                                                            text (prCId id) <+>
-                                                                            hsep (map ppHypo hyps)))
+                                             Just hyps -> putStrLn (render (text "cat" <+> text (prCId id) <+> hsep (map ppHypo hyps) $$
+                                                                            space $$
+                                                                            text "fun" <+> vcat [text (prCId fid) <+> colon <+> ppType 0 ty 
+                                                                                                   | (fid,ty) <- functionsToCat pgf id]))
                                              Nothing   -> putStrLn "unknown identifier"
          _           -> putStrLn "a single identifier is expected from the command"
        return void
