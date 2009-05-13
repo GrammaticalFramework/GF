@@ -12,6 +12,7 @@ import System.Cmd
 import System.FilePath
 import System.Directory
 import System.Environment
+import System.Process
 import System.Exit
 
 main :: IO ()
@@ -20,6 +21,7 @@ main = defaultMainWithHooks simpleUserHooks{ preBuild =checkRGLArgs
                                            , preInst  =checkRGLArgs
                                            , postInst =installRGL
                                            , sDistHook=sdistRGL
+                                           , runTests =testRGL
                                            }
 
 --------------------------------------------------------
@@ -48,23 +50,15 @@ rglCommands =
   , RGLCommand "api"     True  $ \mode args pkg lbi -> do
        mapM_ (gfc mode pkg lbi . try) (optl langsAPI args)
        mapM_ (gfc mode pkg lbi . symbolic) (optl langsAPI args)
---  , RGLCommand "minimal" True  $ \pres args lbi -> do
---       mapM_ (gfcmin lbi . syntax) (optl langsMinimal args)
   , RGLCommand "pgf"     False $ \mode args pkg lbi -> do
        let dir = getRGLBuildDir lbi mode
        createDirectoryIfMissing True dir
        run_gfc pkg lbi $ ["-s","--make","--name=langs","--parser=off",
                           "--output-dir=" ++ dir]
                          ++ [dir ++ "/Lang" ++ la ++ ".gfo" | (_,la) <- optl langsPGF args]
-  , RGLCommand "test"    False $ \mode args pkg lbi -> do
-       let dir = getRGLBuildDir lbi mode
-       let ls = optl langsTest args
-       createDirectoryIfMissing True dir
-       gf (treeb "Lang" ls) $ unwords [dir ++ "/Lang" ++ la ++ ".gfo" | (_,la) <- ls]
-       return ()
   , RGLCommand "demo"    False $ \mode args pkg lbi -> do
        let ls = optl langsDemo args
-       gf (demos "Demo" ls) $ unwords ["demo/Demo" ++ la ++ ".gf" | (_,la) <- ls]
+       gf (demos "Demo" ls) ["demo/Demo" ++ la ++ ".gf" | (_,la) <- ls] pkg lbi
        return ()
   , RGLCommand "parse"   False $ \mode args pkg lbi -> do
        mapM_ (gfc mode pkg lbi . parse) (optl langsParse args)
@@ -120,6 +114,15 @@ sdistRGL pkg mb_lbi hooks flags = do
                else return paths
         else getRGLFiles path paths
 
+testRGL args _ pkg lbi = do
+  let mode = getOptMode args
+      dir = getRGLBuildDir lbi mode
+      ls = fromMaybe langsTest $ getOptLangs args
+  createDirectoryIfMissing True dir
+  gf (treeb "Lang" ls) [dir ++ "/Lang" ++ la ++ ".gfo" | (_,la) <- ls] pkg lbi
+  return ()
+
+
 rgl_dir    = "next-lib" </> "src"
 
 -- the languages have long directory names and short ISO codes (3 letters)
@@ -172,8 +175,8 @@ langsPGF = langsTest `only` ["Eng","Fre","Swe"]
 -- languages for which Compatibility exists (to be extended)
 langsCompat = langsLang `only` ["Cat","Eng","Fin","Fre","Ita","Spa","Swe"]
 
-treebankExx = "exx-resource.gft"
-treebankResults = "exx-resource.gftb"
+treebankExx = rgl_dir </> "exx-resource.gft"
+treebankResults = rgl_dir </> "exx-resource.gftb"
 
 gfc mode pkg lbi file = do
   let dir = getRGLBuildDir lbi mode
@@ -185,11 +188,13 @@ gfc mode pkg lbi file = do
   putStrLn $ "Compiling [" ++ show mode ++ "] " ++ file
   run_gfc pkg lbi ["-s", preproc, "--gfo-dir="++dir, file]
 
-gf comm file = do
-  putStrLn $ "Reading " ++ file
-  let cmd = "echo \"" ++ comm ++ "\" | gf -s " ++ file
-  putStrLn cmd
-  system cmd
+gf comm files pkg lbi = do
+  putStrLn $ "Reading " ++ unwords files
+  let gf = default_gf pkg lbi
+  putStrLn ("executing: " ++ comm ++ "\n" ++
+            "in " ++ gf)
+  out <- readProcess gf ("-s":files) comm
+  putStrLn out
 
 treeb abstr ls = "rf -lines -tree -file=" ++ treebankExx ++ 
         " | l -treebank " ++ unlexer abstr ls ++ " | wf -file=" ++ treebankResults
@@ -256,14 +261,16 @@ unlexer abstr ls =
 run_gfc :: PackageDescription -> LocalBuildInfo -> [String] -> IO ()
 run_gfc pkg lbi args = 
     do let args' = ["-batch","-gf-lib-path="++rgl_dir] ++ filter (not . null) args ++ ["+RTS"] ++ rts_flags ++ ["-RTS"]
-       let exeName' = (exeName . head . executables) pkg
-           exeNameReal = exeName' <.> (if null $ takeExtension exeName' then exeExtension else "")
-           default_gf = buildDir lbi </> exeName' </> exeNameReal
-       putStrLn $ "Running: " ++ default_gf ++ " " ++ unwords (map showArg args')
-       e <- rawSystem default_gf args'
+           gf = default_gf pkg lbi
+       putStrLn $ "Running: " ++ gf ++ " " ++ unwords (map showArg args')
+       e <- rawSystem gf args'
        case e of
          ExitSuccess   -> return ()
          ExitFailure i -> die $ "gf exited with exit code: " ++ show i
   where rts_flags = ["-K100M"]
         showArg arg = "'" ++ arg ++ "'"
 
+default_gf pkg lbi = buildDir lbi </> exeName' </> exeNameReal
+  where
+    exeName' = (exeName . head . executables) pkg
+    exeNameReal = exeName' <.> (if null $ takeExtension exeName' then exeExtension else "")
