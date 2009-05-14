@@ -68,6 +68,8 @@ rglCommands =
        return ()
   , RGLCommand "parse"   False $ \mode args pkg lbi -> do
        mapM_ (gfc mode pkg lbi . parse) (optl langsParse args)
+  , RGLCommand "none"    False $ \mode args pkg lbi -> do
+       return ()
   ]
   where
     optl ls args = fromMaybe ls $ getOptLangs args
