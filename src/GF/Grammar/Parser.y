@@ -419,7 +419,9 @@ Exp4
                                              _         -> TRaw
                                        in S (T annot $5) $2         }
   | 'variants' '{' ListExp '}'       { FV $3         }
-  | 'pre' '{' Exp ';' ListAltern '}' { Alts ($3, $5) }
+  | 'pre' '{' ListCase '}'           {% mkAlts $3     }
+  | 'pre' '{' String ';' ListAltern '}' { Alts (K $3, $5) }
+  | 'pre' '{' Ident ';' ListAltern '}' { Alts (Vr $3, $5) }
   | 'strs' '{' ListExp '}'           { Strs $3       }
   | '#' Patt2                        { EPatt $2      }
   | 'pattern' Exp5                   { EPattType $2  }
@@ -714,6 +716,27 @@ checkInfoType (MTTransfer _ _) (id,pos,info) =
     AbsCat _ _   -> return ()
     AbsFun _ _   -> return ()
     _            -> failLoc (fst pos) "illegal definition in transfer module" 
+
+
+mkAlts cs = case cs of
+  _:_ -> do
+    def  <- mkDef (last cs)
+    alts <- mapM mkAlt (init cs)
+    return (Alts (def,alts))
+  _ -> fail "empty alts"
+ where
+   mkDef (_,t) = return t
+   mkAlt (p,t) = do
+     ss <- mkStrs p
+     return (t,ss)
+   mkStrs p = case p of
+     PAlt a b -> do
+       Strs as <- mkStrs a
+       Strs bs <- mkStrs b
+       return $ Strs $ as ++ bs
+     PString s -> return $ Strs [K s]
+     PV x -> return (Vr x) --- for macros; not yet complete
+     _ -> fail "no strs from pattern"
 
 }
 
