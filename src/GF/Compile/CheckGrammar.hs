@@ -194,28 +194,28 @@ checkCompleteGrammar gr abs cnc = do
      CncCat _ _ _ -> True
      _ -> False
    checkOne js i@(c,info) = case info of
-     AbsFun (Just ty) _ -> do mb_def <- checkErr $ do
-                                          (cxt,(_,i),_) <- typeForm ty
-                                          info <- lookupIdent i js
-                                          info <- case info of
-                                                    (AnyInd _ m) -> do (m,info) <- lookupOrigInfo gr m i
-                                                                       return info
-                                                    _            -> return info
-                                          case info of
-                                            CncCat (Just (RecType [])) _ _ -> return (Just (foldr (\_ -> Abs identW) (R []) cxt))
-                                            _                              -> return Nothing
+     AbsFun (Just ty) _ -> do let mb_def = do
+                                    (cxt,(_,i),_) <- typeForm ty
+                                    info <- lookupIdent i js
+                                    info <- case info of
+                                              (AnyInd _ m) -> do (m,info) <- lookupOrigInfo gr m i
+                                                                 return info
+                                              _            -> return info
+                                    case info of
+                                      CncCat (Just (RecType [])) _ _ -> return (foldr (\_ -> Abs identW) (R []) cxt)
+                                      _                              -> Bad "no def lin"
                               case lookupIdent c js of
                                 Ok (CncFun _   (Just _) _ ) -> return js
                                 Ok (CncFun cty Nothing  pn) ->
                                   case mb_def of
-                                    Just def -> return $ updateTree (c,CncFun cty (Just def) pn) js
-                                    Nothing  -> do checkWarn $ "WARNING: no linearization of" +++ prt c
-                                                   return js
+                                    Ok def -> return $ updateTree (c,CncFun cty (Just def) pn) js
+                                    Bad _  -> do checkWarn $ "WARNING: no linearization of" +++ prt c
+                                                 return js
                                 _ -> do
                                   case mb_def of
-                                    Just def -> return $ updateTree (c,CncFun Nothing (Just def) Nothing) js
-                                    Nothing  -> do checkWarn $ "WARNING: no linearization of" +++ prt c
-                                                   return js
+                                    Ok def -> return $ updateTree (c,CncFun Nothing (Just def) Nothing) js
+                                    Bad _  -> do checkWarn $ "WARNING: no linearization of" +++ prt c
+                                                 return js
      AbsCat (Just _) _ -> case lookupIdent c js of
        Ok (AnyInd _ _) -> return js
        Ok (CncCat (Just _) _ _) -> return js
