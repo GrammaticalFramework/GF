@@ -178,6 +178,10 @@ resource ResEng = ParamX ** open Prelude in {
       "a" ; 
       "an" / strs {"a" ; "e" ; "i" ; "o" ; "A" ; "E" ; "I" ; "O" }
       } ;
+---    artIndef = pre {
+---      "a" | "e" | "i" | "o" | "A" | "E" | "I" | "O" => "an" ;
+---      _ => "a"
+---      } ;
 
     artDef = "the" ;
 
