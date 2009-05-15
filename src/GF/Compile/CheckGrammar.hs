@@ -75,7 +75,7 @@ checkModule ms (name,mo) = checkIn ("checking module" +++ prt name) $ do
       MTConcrete a -> do
         checkErr $ topoSortOpers $ allOperDependencies name js
         abs <- checkErr $ lookupModule gr a
-        js1 <- checkCompleteGrammar abs mo
+        js1 <- checkCompleteGrammar gr abs mo
         mapsCheckTree (checkCncInfo gr name mo (a,abs)) js1
 
       MTInterface -> mapsCheckTree (checkResInfo gr name mo) js
@@ -172,8 +172,8 @@ checkAbsInfo st m mo (c,info) = do
      R fs -> mkApp t (map (snd . snd) fs)
      _ -> mkApp t [a]
 
-checkCompleteGrammar :: SourceModInfo -> SourceModInfo -> Check (BinTree Ident Info)
-checkCompleteGrammar abs cnc = do
+checkCompleteGrammar :: SourceGrammar -> SourceModInfo -> SourceModInfo -> Check (BinTree Ident Info)
+checkCompleteGrammar gr abs cnc = do
   let jsa = jments abs
   let fsa = tree2list jsa
   let jsc = jments cnc
@@ -194,11 +194,28 @@ checkCompleteGrammar abs cnc = do
      CncCat _ _ _ -> True
      _ -> False
    checkOne js i@(c,info) = case info of
-     AbsFun (Just _) _ -> case lookupIdent c js of
-       Ok _ -> return js
-       _ -> do
-         checkWarn $ "WARNING: no linearization of" +++ prt c
-         return js
+     AbsFun (Just ty) _ -> do mb_def <- checkErr $ do
+                                          (cxt,(_,i),_) <- typeForm ty
+                                          info <- lookupIdent i js
+                                          info <- case info of
+                                                    (AnyInd _ m) -> do (m,info) <- lookupOrigInfo gr m i
+                                                                       return info
+                                                    _            -> return info
+                                          case info of
+                                            CncCat (Just (RecType [])) _ _ -> return (Just (foldr (\_ -> Abs identW) (R []) cxt))
+                                            _                              -> return Nothing
+                              case lookupIdent c js of
+                                Ok (CncFun _   (Just _) _ ) -> return js
+                                Ok (CncFun cty Nothing  pn) ->
+                                  case mb_def of
+                                    Just def -> return $ updateTree (c,CncFun cty (Just def) pn) js
+                                    Nothing  -> do checkWarn $ "WARNING: no linearization of" +++ prt c
+                                                   return js
+                                _ -> do
+                                  case mb_def of
+                                    Just def -> return $ updateTree (c,CncFun Nothing (Just def) Nothing) js
+                                    Nothing  -> do checkWarn $ "WARNING: no linearization of" +++ prt c
+                                                   return js
      AbsCat (Just _) _ -> case lookupIdent c js of
        Ok (AnyInd _ _) -> return js
        Ok (CncCat (Just _) _ _) -> return js
