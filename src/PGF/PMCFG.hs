@@ -41,7 +41,8 @@ data Alternative =
 data ParserInfo
     = ParserInfo { functions   :: Array FunId FFun
                  , sequences   :: Array SeqId FSeq
-	         , productions :: IntMap.IntMap (Set.Set Production)
+	         , productions0:: IntMap.IntMap (Set.Set Production)    -- this are the original productions as they are loaded from the PGF file
+	         , productions :: IntMap.IntMap (Set.Set Production)    -- this are the productions after the filtering for useless productions
 	         , startCats   :: Map.Map CId [FCat]
 	         , totalCats   :: {-# UNPACK #-} !FCat
 	         }
@@ -57,7 +58,7 @@ fcatVar    = (-4)
 ppPMCFG :: ParserInfo -> Doc
 ppPMCFG pinfo =
   text "productions" $$
-  nest 2 (vcat [ppProduction (fcat,prod) | (fcat,set) <- IntMap.toList (productions pinfo), prod <- Set.toList set]) $$
+  nest 2 (vcat [ppProduction (fcat,prod) | (fcat,set) <- IntMap.toList (productions0 pinfo), prod <- Set.toList set]) $$
   text "functions" $$
   nest 2 (vcat (map ppFun (assocs (functions pinfo)))) $$
   text "sequences" $$
@@ -101,3 +102,11 @@ ppFCat  fcat
 
 ppFunId funid = char 'F' <> int funid
 ppSeqId seqid = char 'S' <> int seqid
+
+
+filterProductions prods =
+  fmap (Set.filter filterRule) prods
+  where
+    filterRule (FApply funid args) = all (\fcat -> IntMap.member fcat prods) args
+    filterRule (FCoerce _)         = True
+    filterRule _                   = True
