@@ -33,7 +33,7 @@ import Debug.Trace
 -- main conversion function
 
 convertConcrete :: Abstr -> Concr -> ParserInfo
-convertConcrete abs cnc = trace "convertConcrete" $ convert abs_defs conc cats
+convertConcrete abs cnc = convert abs_defs conc cats
        where abs_defs = Map.assocs (funs abs)
              conc = Map.union (opers cnc) (lins cnc) -- "union big+small most efficient"
              cats = lincats cnc
@@ -68,7 +68,7 @@ brk f (GrammarEnv last_id catSet seqSet funSet crcSet prodSet) =
             ys    = foldr (zipWith Set.insert) (repeat Set.empty) xs
 
 convertRule :: TermMap -> GrammarEnv -> ProtoFRule -> GrammarEnv
-convertRule cnc_defs grammarEnv (PFRule fun args res ctypes ctype term) = trace (show fun) $
+convertRule cnc_defs grammarEnv (PFRule fun args res ctypes ctype term) =
   let pres  = protoFCat cnc_defs res ctype
       pargs = zipWith (protoFCat cnc_defs) args ctypes
 
