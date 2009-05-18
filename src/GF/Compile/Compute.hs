@@ -33,7 +33,7 @@ import GF.Grammar.AppPredefined
 import Data.List (nub,intersperse)
 import Control.Monad (liftM2, liftM)
 
-----import Debug.Trace ----
+---- import Debug.Trace ----
 
 -- | computation of concrete syntax terms into normal form
 -- used mainly for partial evaluation
@@ -186,9 +186,10 @@ computeTermOpt rec gr = comput True where
            r <- composOp (comp g) t
            returnC r
 
-     Alts _ -> do
-       r <- composOp (comp g) t
-       returnC r
+     Alts (d,aa) -> do
+       d' <- comp g d
+       aa' <- mapM (compInAlts g) aa
+       returnC (Alts (d',aa'))
 
      -- remove empty
      C a b    -> do
@@ -363,7 +364,10 @@ computeTermOpt rec gr = comput True where
 ----               return $ V ptyp ts -- to save space, just course of values
                return $ T (TComp ptyp) (zip ps' ts)
              _ -> do
-               cs' <- mapM (compBranch g) cs
+               ps0  <- mapM (compPatternMacro . fst) cs
+               cs'  <- mapM (compBranch g) (zip ps0 (map snd cs))
+
+----               cs' <- mapM (compBranch g) cs
                return $ T i cs'  -- happens with variable types
          _ -> comp g t
 
@@ -398,6 +402,19 @@ computeTermOpt rec gr = comput True where
      prawitzV g i f cs e = do
        cs' <- mapM (comp g) [(f v) | v <- cs]
        return $ S (V i cs') e
+
+     compInAlts g (v,c) = do
+       v' <- comp g v
+       c' <- comp g c
+       c2 <- case c' of
+         EPatt p -> liftM Strs $ getPatts p
+         _ -> return c'
+       return (v',c2)
+      where
+       getPatts p = case p of
+         PAlt a b  -> liftM2 (++) (getPatts a) (getPatts b)
+         PString s -> return [K s]
+         _ -> fail $ "not valid pattern in pre expression" +++ prt p
 
 {- ----
      uncurrySelect g fs t v = do

@@ -736,6 +736,8 @@ mkAlts cs = case cs of
        return $ Strs $ as ++ bs
      PString s -> return $ Strs [K s]
      PV x -> return (Vr x) --- for macros; not yet complete
+     PMacro x -> return (Vr x) --- for macros; not yet complete
+     PM m c -> return (Q m c) --- for macros; not yet complete
      _ -> fail "no strs from pattern"
 
 }

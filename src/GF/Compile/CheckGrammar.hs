@@ -563,7 +563,7 @@ inferLType gr trm = case trm of
      t'  <- justCheck t typeStr
      aa' <- flip mapM aa (\ (c,v) -> do
         c' <- justCheck c typeStr 
-        v' <- justCheck v typeStrs
+        v' <- checks $ map (justCheck v) [typeStrs, EPattType typeStr]
         return (c',v'))
      return (Alts (t',aa'), typeStr)
 
@@ -607,7 +607,7 @@ inferLType gr trm = case trm of
 
    EPattType ty -> do
      ty' <- justCheck ty typeType
-     return (ty',typeType)
+     return (EPattType ty',typeType)
    EPatt p -> do
      ty <- inferPatt p
      return (trm, EPattType ty)
