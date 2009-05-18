@@ -24,4 +24,4 @@ sdist:
 gf:
 	runghc Setup.hs build rgl-none
 	strip dist/build/gf/gf
-	mv dist/build/gf/gf bin
+
