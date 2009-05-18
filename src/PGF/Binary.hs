@@ -7,6 +7,8 @@ import Data.Binary.Put
 import Data.Binary.Get
 import qualified Data.ByteString as BS
 import qualified Data.Map as Map
+import qualified Data.IntMap as IntMap
+import qualified Data.Set as Set
 import Control.Monad
 
 pgfMajorVersion, pgfMinorVersion :: Word16
@@ -159,13 +161,15 @@ instance Binary Production where
              _ -> decodingError
 
 instance Binary ParserInfo where
-  put p = put (functions p, sequences p, productions p, totalCats p, startCats p)
+  put p = put (functions p, sequences p, productions0 p, totalCats p, startCats p)
   get = do functions   <- get
            sequences   <- get
-           productions <- get
+           productions0<- get
            totalCats   <- get
            startCats   <- get
-           return (ParserInfo{functions=functions,sequences=sequences,productions=productions
+           return (ParserInfo{functions=functions,sequences=sequences
+                             ,productions0=productions0
+                             ,productions =filterProductions productions0
                              ,totalCats=totalCats,startCats=startCats})
 
 decodingError = fail "This PGF file was compiled with different version of GF"

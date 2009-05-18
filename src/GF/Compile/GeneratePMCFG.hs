@@ -405,13 +405,15 @@ getParserInfo :: GrammarEnv -> ParserInfo
 getParserInfo (GrammarEnv last_id catSet seqSet funSet crcSet prodSet) =
   ParserInfo { functions   = mkArray funSet
              , sequences   = mkArray seqSet
-	     , productions = IntMap.union prodSet coercions
+	     , productions0= productions0
+	     , productions = filterProductions productions0
 	     , startCats   = maybe Map.empty (Map.map (\(start,end,_) -> range (start,end))) (IntMap.lookup 0 catSet)
 	     , totalCats   = last_id+1
 	     }
   where
     mkArray map = array (0,Map.size map-1) [(v,k) | (k,v) <- Map.toList map]
     
+    productions0 = IntMap.union prodSet coercions
     coercions = IntMap.fromList [(fcat,Set.fromList (map FCoerce sub_fcats)) | (sub_fcats,fcat) <- Map.toList crcSet]
 
 getFCats :: GrammarEnv -> ProtoFCat -> [FCat]

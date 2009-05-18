@@ -329,6 +329,7 @@ getParserInfo :: GrammarEnv -> ParserInfo
 getParserInfo (GrammarEnv last_id catSet seqSet funSet prodSet) =
   ParserInfo { functions   = mkArray funSet
              , sequences   = mkArray seqSet
+	     , productions0= prodSet
 	     , productions = prodSet
 	     , startCats   = Map.map getFCatList catSet
 	     , totalCats   = last_id+1
