@@ -182,7 +182,7 @@ checkCompleteGrammar gr abs cnc = do
   -- remove those lincat and lin in concrete that are not in abstract
   let unkn = filter (not . flip isInBinTree jsa) fsc
   jsc1 <- if (null unkn) then return jsc else do
-    checkWarn $ "WARNING: ignoring constants not in abstract:" +++ 
+    checkWarn $ "ignoring constants not in abstract:" +++ 
                 unwords (map prt unkn)
     return $ filterBinTree (\f _ -> notElem f unkn) jsc 
 
@@ -209,24 +209,24 @@ checkCompleteGrammar gr abs cnc = do
                                 Ok (CncFun cty Nothing  pn) ->
                                   case mb_def of
                                     Ok def -> return $ updateTree (c,CncFun cty (Just def) pn) js
-                                    Bad _  -> do checkWarn $ "WARNING: no linearization of" +++ prt c
+                                    Bad _  -> do checkWarn $ "no linearization of" +++ prt c
                                                  return js
                                 _ -> do
                                   case mb_def of
                                     Ok def -> return $ updateTree (c,CncFun Nothing (Just def) Nothing) js
-                                    Bad _  -> do checkWarn $ "WARNING: no linearization of" +++ prt c
+                                    Bad _  -> do checkWarn $ "no linearization of" +++ prt c
                                                  return js
      AbsCat (Just _) _ -> case lookupIdent c js of
        Ok (AnyInd _ _) -> return js
        Ok (CncCat (Just _) _ _) -> return js
        Ok (CncCat _ mt mp) -> do
          checkWarn $ 
-           "Warning: no linearization type for" +++ prt c ++ 
+           "no linearization type for" +++ prt c ++ 
            ", inserting default {s : Str}" 
          return $ updateTree (c,CncCat (Just defLinType) mt mp) js
        _ -> do
          checkWarn $ 
-           "Warning: no linearization type for" +++ prt c ++ 
+           "no linearization type for" +++ prt c ++ 
            ", inserting default {s : Str}" 
          return $ updateTree (c,CncCat (Just defLinType) Nothing Nothing) js
      _ -> return js
@@ -421,7 +421,7 @@ checkPrintname _  _        = return ()
 -- | for grammars obtained otherwise than by parsing ---- update!!
 checkReservedId :: Ident -> Check ()
 checkReservedId x
-  | isReservedWord (ident2bs x) = checkWarn ("Warning: reserved word used as identifier:" +++ prt x)
+  | isReservedWord (ident2bs x) = checkWarn ("reserved word used as identifier:" +++ prt x)
   | otherwise                   = return ()
 
 -- to normalize records and record types
@@ -532,7 +532,7 @@ inferLType gr trm = case trm of
         then do
           let ss = foldr C Empty (map K (words s))  
           ----- removed irritating warning AR 24/5/2008
-          ----- checkWarn ("WARNING: token \"" ++ s ++ 
+          ----- checkWarn ("token \"" ++ s ++ 
           -----              "\" converted to token list" ++ prt ss)
           return (ss, typeStr)
         else return (trm, typeStr)
@@ -552,7 +552,7 @@ inferLType gr trm = case trm of
 ---- hack from Rename.identRenameTerm, to live with files with naming conflicts 18/6/2007
    Strs (Cn c : ts) | c == cConflict -> do
      trace ("WARNING: unresolved constant, could be any of" +++ unwords (map prt ts)) (infer $ head ts)
---     checkWarn ("WARNING: unresolved constant, could be any of" +++ unwords (map prt ts))
+--     checkWarn ("unresolved constant, could be any of" +++ unwords (map prt ts))
 --     infer $ head ts
 
    Strs ts -> do
@@ -714,7 +714,7 @@ getOverload env@gr mt ot = case appForm ot of
            return (mkApp fun tts, val)
 
 ----- unsafely exclude irritating warning AR 24/5/2008
------           checkWarn $ "WARNING: overloading of" +++ prt f +++ 
+-----           checkWarn $ "overloading of" +++ prt f +++ 
 -----             "resolved by excluding partial applications:" ++++
 -----             unlines [prtType env ty | (ty,_) <- vfs', not (noProd ty)]
 
@@ -791,7 +791,7 @@ checkLType env trm typ0 = do
             ps <- checkErr $ testOvershadow ps0 vs
             if null ps 
               then return () 
-----              else checkWarn $ "WARNING: patterns never reached:" +++ 
+----              else checkWarn $ "patterns never reached:" +++ 
 ----                               concat (intersperse ", " (map prt ps))
               else trace ("WARNING: patterns never reached:" +++ 
                                concat (intersperse ", " (map prt ps))) (return ())
@@ -1002,7 +1002,7 @@ checkIfEqLType env t u trm = do
     --- better: use a flag to forgive? (AR 31/1/2006)
     _ -> case missingLock [] t' u' of
       Ok lo -> do
-        checkWarn $ "WARNING: missing lock field" +++ unwords (map prt lo)
+        checkWarn $ "missing lock field" +++ unwords (map prt lo)
         return (True,t',u',[])
       Bad s -> return (False,t',u',s)
 

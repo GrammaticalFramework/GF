@@ -1,3 +1,8 @@
+checking module linsCnc
+Warning: no linearization type for C, inserting default {s : Str}
+checking module linsCnc
+Warning: no linearization of test
+
 language linsCnc
 productions
   C1 -> F0[]
