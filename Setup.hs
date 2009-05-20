@@ -8,6 +8,7 @@ import Distribution.Simple.Setup
 import Distribution.PackageDescription	
 import Control.Monad
 import Data.Maybe
+import System.IO
 import System.Cmd
 import System.FilePath
 import System.Directory
@@ -115,12 +116,38 @@ sdistRGL pkg mb_lbi hooks flags = do
         else getRGLFiles path paths
 
 testRGL args _ pkg lbi = do
-  let mode = getOptMode args
-      dir = getRGLBuildDir lbi mode
-      ls = fromMaybe langsTest $ getOptLangs args
-  createDirectoryIfMissing True dir
-  gf (treeb "Lang" ls) [dir ++ "/Lang" ++ la ++ ".gfo" | (_,la) <- ls] pkg lbi
-  return ()
+  let paths = case args of
+                []    -> ["testsuite"]
+                paths -> paths
+  sequence_ [walk path | path <- paths]
+  where
+    walk path = do
+      files <- getDirectoryContents path
+      sequence_ [walkFile (path </> file) | file <- files, file /= "." && file /= ".."]
+
+    walkFile fpath = do
+      exists <- doesFileExist fpath
+      if exists
+        then if takeExtension fpath == ".gfs"
+               then do let in_file   = fpath
+                           gold_file = addExtension fpath ".gold"
+                           out_file  = addExtension fpath ".out"
+                       putStr (in_file++" ... ")
+                       hFlush stdout
+                       res <- runTest in_file out_file gold_file
+                       putStrLn (if res then "OK" else "FAIL")
+               else return ()
+        else walk fpath
+
+    runTest in_file out_file gold_file = do
+      inp <- readFile in_file
+      out <- readProcess (default_gf pkg lbi) ["-run"] inp
+      writeFile out_file out
+      exists <- doesFileExist gold_file
+      if exists
+        then do gold <- readFile gold_file
+                return $! (out == gold)
+        else return False
 
 
 rgl_dir    = "next-lib" </> "src"
@@ -160,9 +187,6 @@ langsLang = langs `except` ["Ara","Lat","Pol","Ron","Tur"]
 -- languages for which to compile Try 
 langsAPI  = langsLang `except` ["Bul","Hin","Ina","Rus","Tha"]
 
--- languages for which to run treebank test
-langsTest = langsLang `except` ["Ara","Bul","Cat","Hin","Rus","Spa","Tha"]
-
 -- languages for which to run demo test
 langsDemo = langsLang `except` ["Ara","Hin","Ina","Tha"]
 
@@ -170,7 +194,7 @@ langsDemo = langsLang `except` ["Ara","Hin","Ina","Tha"]
 langsParse = langs `only` ["Eng"]
 
 -- languages for which langs.pgf is built
-langsPGF = langsTest `only` ["Eng","Fre","Swe"]
+langsPGF = langsLang `only` ["Eng","Swe","Bul","Ger"]
 
 -- languages for which Compatibility exists (to be extended)
 langsCompat = langsLang `only` ["Cat","Eng","Fin","Fre","Ita","Spa","Swe"]
@@ -195,9 +219,6 @@ gf comm files pkg lbi = do
             "in " ++ gf)
   out <- readProcess gf ("-s":files) comm
   putStrLn out
-
-treeb abstr ls = "rf -lines -tree -file=" ++ treebankExx ++ 
-        " | l -treebank " ++ unlexer abstr ls ++ " | wf -file=" ++ treebankResults
 
 demos abstr ls = "gr -number=100 | l -treebank " ++ unlexer abstr ls ++ 
            " | ps -to_html | wf -file=resdemo.html"
