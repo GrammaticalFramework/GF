@@ -194,7 +194,7 @@ compileOne opts env@(_,srcgr,_) file = do
 compileSourceModule :: Options -> CompileEnv -> SourceModule -> IOE (Int,SourceModule)
 compileSourceModule opts env@(k,gr,_) mo@(i,mi) = do
 
-  let putp  = putPointE Normal opts
+  let puts  = putPointE Quiet opts
       putpp = putPointE Verbose opts
 
   mo1   <- ioeErr $ rebuildModule gr mo
@@ -213,7 +213,7 @@ compileSourceModule opts env@(k,gr,_) mo@(i,mi) = do
       intermOut opts DumpRename (ppModule Qualified mo2)
 
       (mo3:_,warnings) <- putpp "  type checking" $ ioeErr $ showCheckModule mos mo2
-      if null warnings then return () else putp warnings $ return ()
+      if null warnings then return () else puts warnings $ return ()
       intermOut opts DumpTypeCheck (ppModule Qualified mo3)
 
       (k',mo3r:_) <- putpp "  refreshing " $ ioeErr $ refreshModule (k,mos) mo3

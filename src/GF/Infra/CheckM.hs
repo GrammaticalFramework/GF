@@ -35,7 +35,7 @@ checkCond s b = if b then return () else checkError s
 
 -- | warnings should be reversed in the end
 checkWarn :: String -> Check ()
-checkWarn s = updateSTM (\ (cont,msg) -> (cont, s:msg))
+checkWarn s = updateSTM (\ (cont,msg) -> (cont, ("Warning: "++s):msg))
 
 checkUpdate :: Decl -> Check ()
 checkUpdate d = updateSTM (\ (cont,msg) -> (d:cont, msg))
