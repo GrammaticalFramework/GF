@@ -118,10 +118,7 @@ compileModule opts1 env file = do
   opts0 <- getOptionsFromFile file
   let opts = addOptions opts0 opts1
   let fdir = dropFileName file
-  let ps0 = flag optLibraryPath opts
-  ps1 <- ioeIO $ extendPathEnv opts $ fdir : ps0
-  let ps2 = ps1 ++ map (fdir </>) ps0
-  ps <- ioeIO $ fmap nub $ mapM canonicalizePath ps2
+  ps <- ioeIO $ extendPathEnv opts fdir
   ioeIO $ putIfVerb opts $ "module search path:" +++ show ps ----
   let (_,sgr,rfs) = env
   files <- getAllFiles opts ps rfs file

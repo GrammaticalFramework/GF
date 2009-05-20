@@ -30,6 +30,7 @@ import Text.Printf
 import Control.Monad
 import Control.Exception(evaluate)
 import qualified Data.ByteString.Char8 as BS
+import Data.List(nub)
 
 putShow' :: Show a => (c -> a) -> c -> IO ()
 putShow' f = putStrLn . show . length . show . f
@@ -64,15 +65,21 @@ getLibraryPath opts =
                    (getEnv gfLibraryPath)
                    (\ex -> getDataDir >>= \path -> return (path </> "lib"))
 
+getGrammarPath :: Options -> IO [FilePath]
+getGrammarPath opts = do
+  let ss1 = flag optLibraryPath opts
+  ss2 <- catch (fmap splitSearchPath $ getEnv gfGrammarPathVar) (\_ -> return ["prelude","."])     -- e.g. GF_GRAMMAR_PATH
+  return (ss1 ++ ss2)
+
 -- | extends the search path with the
 -- 'gfLibraryPath' and 'gfGrammarPathVar'
 -- environment variables. Returns only existing paths.
-extendPathEnv :: Options -> [FilePath] -> IO [FilePath]
-extendPathEnv opts ps = do
-  b <- getLibraryPath opts                         -- e.g. GF_LIB_PATH
-  s <- catch (getEnv gfGrammarPathVar) (const (return ""))     -- e.g. GF_GRAMMAR_PATH
-  let ss = ps ++ splitSearchPath s
-  liftM concat $ mapM allSubdirs $ ss ++ [b </> s | s <- ss ++ ["prelude"]]
+extendPathEnv :: Options -> FilePath -> IO [FilePath]
+extendPathEnv opts fdir = do
+  b <- getLibraryPath opts                                     -- e.g. GF_LIB_PATH
+  ss <- getGrammarPath opts                                    -- e.g. GF_GRAMMAR_PATH
+  ps <- liftM (nub . concat) $ mapM allSubdirs $ ss ++ [b </> s | s <- ss] ++ [fdir </> s | s <- ss]
+  mapM canonicalizePath ps
   where
     allSubdirs :: FilePath -> IO [FilePath]
     allSubdirs [] = return [[]]
