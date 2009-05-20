@@ -14,9 +14,10 @@ readCommandLine s = case [x | (x,cs) <- RP.readP_to_S pCommandLine s, all isSpac
                       [x] -> Just x
                       _   -> Nothing
 
-test s = RP.readP_to_S pCommandLine s 
-
-pCommandLine = RP.sepBy (RP.skipSpaces >> pPipe) (RP.skipSpaces >> RP.char ';')
+pCommandLine =
+  (RP.skipSpaces >> RP.char '-' >> RP.char '-' >> RP.skipMany (RP.satisfy (const True)) >> return [])   -- comment
+  RP.<++
+  (RP.sepBy (RP.skipSpaces >> pPipe) (RP.skipSpaces >> RP.char ';'))
 
 pPipe = RP.sepBy1 (RP.skipSpaces >> pCommand) (RP.skipSpaces >> RP.char '|')
 
