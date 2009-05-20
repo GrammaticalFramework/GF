@@ -1,0 +1,12 @@
+language linsCnc
+productions
+  C1 -> F0[]
+functions
+  F0 := () [zero]
+sequences
+startcats
+  C := [C0]
+  Float := [Float]
+  Int := [Int]
+  Nat := [C1]
+  String := [String]
