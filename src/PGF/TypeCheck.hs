@@ -17,7 +17,6 @@ module PGF.TypeCheck (
 import PGF.Data
 import PGF.Macros (lookDef,isData)
 import PGF.Expr
-import PGF.AbsCompute
 import PGF.CId
 
 import GF.Data.ErrM
@@ -29,7 +28,7 @@ import Debug.Trace
 
 typecheck :: PGF -> Tree -> [Tree]
 typecheck pgf t = case inferExpr pgf (newMetas (tree2expr t)) of
-  Ok t  -> [expr2tree t]
+  Ok t  -> [expr2tree (funs (abstract pgf)) t]
   Bad s -> trace s []
 
 inferExpr :: PGF -> Expr -> Err Expr
@@ -50,26 +49,24 @@ infer pgf tenv@(k,rho,gamma) e = case e of
 --   K i -> return (AStr i, valAbsString, [])
 
    EApp f t -> do
-    (f',w,csf) <- infer pgf tenv f 
-    typ <- whnf w
+    (f',typ,csf) <- infer pgf tenv f 
     case typ of
       VClosure env (EPi x a b) -> do
         (a',csa) <- checkExp pgf tenv t (VClosure env a)
-	b' <- whnf $ VClosure (eins x (VClosure rho t) env) b
+	let b' = eval (funs (abstract pgf)) (eins x (VClosure rho t) env) b
 	return $ (EApp f' a', b', csf ++ csa)
       _ -> Bad ("function type expected for function " ++ show f)
    _ -> Bad ("cannot infer type of expression" ++ show e)
 
 
 checkExp :: PGF -> TCEnv -> Expr -> Value -> Err (Expr, [(Value,Value)])
-checkExp pgf tenv@(k,rho,gamma) e ty = do
-  typ <- whnf ty
+checkExp pgf tenv@(k,rho,gamma) e typ = do
   let v = VGen k
   case e of
     EMeta m -> return $ (e,[])
     EAbs x t -> case typ of
       VClosure env (EPi y a b) -> do
-	a' <- whnf $ VClosure env a
+	let a' = eval (funs (abstract pgf)) env a
 	(t',cs) <- checkExp pgf (k+1,eins x v rho, eins x a' gamma) t 
                             (VClosure (eins y v env) b)
 	return (EAbs x t', cs)
@@ -79,7 +76,7 @@ checkExp pgf tenv@(k,rho,gamma) e ty = do
 checkInferExp :: PGF -> TCEnv -> Expr -> Value -> Err (Expr, [(Value,Value)])
 checkInferExp pgf tenv@(k,_,_) e typ = do
   (e',w,cs1) <- infer pgf tenv e
-  cs2 <- eqValue k w typ
+  let cs2 = eqValue k w typ
   return (e',cs1 ++ cs2)
       
 lookupEVar :: PGF -> TCEnv -> CId -> Err Value
@@ -100,40 +97,12 @@ eins = Map.insert
 emptyTCEnv :: TCEnv
 emptyTCEnv = (0,eempty,eempty)
 
-whnf :: Value -> Err Value
-whnf v = case v of
-  VApp u w -> do
-    u' <- whnf u 
-    w' <- whnf w
-    return $ apply u' w'
-  VClosure env e -> return $ eval env e
-  _ -> return v
-
-eqValue :: Int -> Value -> Value -> Err [(Value,Value)]
-eqValue k u1 u2 = do
-  w1 <- whnf u1
-  w2 <- whnf u2 
-  let v = VGen k
-  case (w1,w2) of
-    (VApp f1 a1, VApp f2 a2) -> liftM2 (++) (eqValue k f1 f2) (eqValue k a1 a2)
-    (VClosure env1 (EAbs x1 e1), VClosure env2 (EAbs x2 e2)) ->
-      eqValue (k+1) (VClosure (eins x1 v env1) e1) (VClosure (eins x2 v env2) e2)
-    (VClosure env1 (EPi x1 a1 b1), VClosure env2 (EPi x2 a2 b2)) ->
-      liftM2 (++) 
-        (eqValue k     (VClosure env1 a1) (VClosure env2 a2))
-        (eqValue (k+1) (VClosure (eins x1 v env1) b1) (VClosure (eins x2 v env2) b2))
-    (VGen i, VGen j) -> return [(w1,w2) | i /= j]
-    (VVar i, VVar j) -> return [(w1,w2) | i /= j] 
-    _ -> return [(w1,w2) | w1 /= w2]
--- invariant: constraints are in whnf
-
 
 -- this is not given in Expr
 prValue = showExpr . value2expr
 
 value2expr v = case v of
-  VApp v u -> EApp (value2expr v) (value2expr u)
-  VVar x -> EVar x
+  VApp f vs -> foldl EApp (EVar f) (map value2expr vs)
   VMeta i -> EMeta i
   VClosure g e -> e ----
   VLit l -> ELit l

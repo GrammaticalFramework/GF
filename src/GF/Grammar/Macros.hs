@@ -593,10 +593,6 @@ composOp co trm =
         i'  <- changeTableType co i
         return (TSh i' cc')
 
-   Eqs cc -> 
-     do cc' <- mapPairListM (co . snd) cc
-        return (Eqs cc')
-
    V ty vs ->
      do ty' <- co ty
         vs' <- mapM co vs

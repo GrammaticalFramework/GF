@@ -31,7 +31,7 @@ prCat :: CId -> [Hypo] -> Doc
 prCat c h | isLiteralCat c = empty
           | otherwise = text "cat" <+> text (prCId c)
 
-prFun :: CId -> (Type,Expr) -> Doc
+prFun :: CId -> (Type,[Equation]) -> Doc
 prFun f (t,_) = text "fun" <+> text (prCId f) <+> text ":" <+> prType t
 
 prType :: Type -> Doc

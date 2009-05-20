@@ -116,7 +116,7 @@ renameIdentPatt env p = do
 
 info2status :: Maybe Ident -> (Ident,Info) -> StatusInfo
 info2status mq (c,i) = case i of
-  AbsFun _ (Just EData) -> maybe Con QC mq
+  AbsFun _ Nothing -> maybe Con QC mq
   ResValue _  -> maybe Con QC mq
   ResParam _  -> maybe Con QC mq
   AnyInd True m -> maybe Con (const (QC m)) mq
@@ -156,8 +156,7 @@ renameInfo mo status (i,info) = errIn
                                 liftM ((,) i) $ case info of
   AbsCat pco pfs -> liftM2 AbsCat (renPerh (renameContext status) pco)
                                   (renPerh (mapM rent) pfs)
-  AbsFun pty ptr -> liftM2 AbsFun (ren pty) (ren ptr)
-
+  AbsFun  pty ptr -> liftM2 AbsFun (ren pty) (renPerh (mapM (renameEquation status [])) ptr)
   ResOper pty ptr -> liftM2 ResOper (ren pty) (ren ptr)
   ResOverload os tysts -> 
     liftM (ResOverload os) (mapM (pairM rent) tysts)
@@ -191,7 +190,6 @@ renameTerm env vars = ren vars where
     Con _  -> renid trm
     Q _ _  -> renid trm
     QC _ _ -> renid trm
-    Eqs eqs -> liftM Eqs $ mapM (renameEquation env vars) eqs
     T i cs -> do
       i' <- case i of
         TTyped ty -> liftM TTyped $ ren vs ty -- the only annotation in source

@@ -109,7 +109,6 @@ instance Binary Expr where
   put (ELit (LFlt d)) = putWord8 4 >> put d
   put (ELit (LInt i)) = putWord8 5 >> put i
   put (EMeta i)       = putWord8 6 >> put i
-  put (EEq eqs)       = putWord8 7 >> put eqs
   get = do tag <- getWord8
            case tag of
              0 -> liftM2 EAbs get get
@@ -119,9 +118,25 @@ instance Binary Expr where
              4 -> liftM  (ELit . LFlt) get
              5 -> liftM  (ELit . LInt) get
              6 -> liftM  EMeta get
-             7 -> liftM  EEq get
              _ -> decodingError
-             
+
+instance Binary Patt where
+  put (PApp f ps)     = putWord8 0 >> put (f,ps)
+  put (PVar   x)      = putWord8 1 >> put x
+  put PWild           = putWord8 2
+  put (PLit (LStr s)) = putWord8 3 >> put s
+  put (PLit (LFlt d)) = putWord8 4 >> put d
+  put (PLit (LInt i)) = putWord8 5 >> put i
+  get = do tag <- getWord8
+           case tag of
+             0 -> liftM2 PApp get get
+             1 -> liftM  PVar get
+             2 -> return PWild
+             3 -> liftM  (PLit . LStr) get
+             4 -> liftM  (PLit . LFlt) get
+             5 -> liftM  (PLit . LInt) get
+             _ -> decodingError
+
 instance Binary Equation where
   put (Equ ps e) = put (ps,e)
   get = liftM2 Equ get get

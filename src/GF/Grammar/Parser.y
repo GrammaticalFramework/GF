@@ -72,7 +72,6 @@ import GF.Compile.Update (buildAnyTree)
  'data'       { T_data      }
  'def'        { T_def       }
  'flags'      { T_flags     }
- 'fn'         { T_fn        }
  'fun'        { T_fun       }
  'in'         { T_in        }
  'incomplete' { T_incomplete}
@@ -241,19 +240,19 @@ CatDef
 
 FunDef :: { [(Ident,SrcSpan,Info)] }
 FunDef
-  : Posn ListIdent ':' Exp Posn { [(fun, ($1,$5), AbsFun (Just $4) Nothing) | fun <- $2] } 
+  : Posn ListIdent ':' Exp Posn { [(fun, ($1,$5), AbsFun (Just $4) (Just [])) | fun <- $2] } 
 
 DefDef :: { [(Ident,SrcSpan,Info)] }
 DefDef
-  : Posn ListName '=' Exp         Posn { [(f, ($1,$5),AbsFun Nothing (Just $4)) | f <- $2] }
-  | Posn Name ListPatt '=' Exp    Posn { [($2,($1,$6),AbsFun Nothing (Just (Eqs [($3,$5)])))] }
+  : Posn ListName '=' Exp         Posn { [(f, ($1,$5),AbsFun Nothing (Just [([],$4)])) | f <- $2] }
+  | Posn Name ListPatt '=' Exp    Posn { [($2,($1,$6),AbsFun Nothing (Just [($3,$5)]))] }
 
 DataDef :: { [(Ident,SrcSpan,Info)] }
 DataDef
-  : Posn Ident '=' ListDataConstr Posn { ($2,   ($1,$5), AbsCat Nothing     (Just (map Cn $4))) :
-                                         [(fun, ($1,$5), AbsFun Nothing     (Just EData)) | fun <- $4] }
-  | Posn ListIdent ':' Exp Posn        { [(cat, ($1,$5), AbsCat Nothing     (Just (map Cn $2))) | Ok (_,cat) <- [valCat $4]] ++
-                                         [(fun, ($1,$5), AbsFun (Just $4) (Just EData)) | fun <- $2] }                                         
+  : Posn Ident '=' ListDataConstr Posn { ($2,   ($1,$5), AbsCat Nothing   (Just (map Cn $4))) :
+                                         [(fun, ($1,$5), AbsFun Nothing   Nothing) | fun <- $4] }
+  | Posn ListIdent ':' Exp Posn        { [(cat, ($1,$5), AbsCat Nothing   (Just (map Cn $2))) | Ok (_,cat) <- [valCat $4]] ++
+                                         [(fun, ($1,$5), AbsFun (Just $4) Nothing) | fun <- $2] }                                         
 
 ParamDef :: { [(Ident,SrcSpan,Info)] }
 ParamDef
@@ -385,7 +384,6 @@ Exp
   | Exp3 'where' '{' ListLocDef '}'   {%
                                         do defs <- mapM tryLoc $4
                                            return $ mkLet defs $1 }
-  | 'fn' '{' ListEquation '}'         { Eqs $3 }
   | 'in' Exp5 String                  { Example $2 $3 }
   | Exp1                              { $1 }
 
@@ -441,7 +439,6 @@ Exp6
   | Double                { EFloat $1 }
   | '?'                   { Meta (int2meta 0) }
   | '[' ']'               { Empty }
-  | 'data'                { EData }
   | '[' Ident Exps ']'    { foldl App (Vr (mkListId $2)) $3 }
   | '[' String ']'        { case $2 of
                               []   -> Empty
@@ -486,7 +483,6 @@ Patt2
   | '#' Ident '.' Ident       { PM $2 $4 }
   | '_'                       { wildPatt }
   | Ident                     { PV $1 }
-  | '{' Ident '}'             { PC $2 [] }
   | Ident '.' Ident           { PP $1 $3 [] }
   | Integer                   { PInt $1 }
   | Double                    { PFloat  $1 }
@@ -569,15 +565,6 @@ ListCase
   : Case              { [$1]    } 
   | Case ';' ListCase { $1 : $3 }
 
-Equation :: { Equation }
-Equation
-  : ListPatt '->' Exp         { ($1,$3) } 
-
-ListEquation :: { [Equation] }
-ListEquation
-  : Equation                  { (:[]) $1  }
-  | Equation ';' ListEquation { (:) $1 $3 }
-
 Altern :: { (Term,Term) }
 Altern
   : Exp '/' Exp { ($1,$3) } 
@@ -621,9 +608,9 @@ listCatDef id pos cont size = [catd,nilfund,consfund]
     baseId = mkBaseId id
     consId = mkConsId id
 
-    catd     = (listId, pos,   AbsCat (Just cont')   (Just [Cn baseId,Cn consId]))
-    nilfund  = (baseId, pos, AbsFun (Just niltyp)  (Just EData))
-    consfund = (consId, pos, AbsFun (Just constyp) (Just EData))
+    catd     = (listId, pos, AbsCat (Just cont')   (Just [Cn baseId,Cn consId]))
+    nilfund  = (baseId, pos, AbsFun (Just niltyp)  Nothing)
+    consfund = (consId, pos, AbsFun (Just constyp) Nothing)
 
     cont' = [(mkId x i,ty) | (i,(x,ty)) <- zip [0..] cont]
     xs = map (Vr . fst) cont'

@@ -1,13 +1,13 @@
 module PGF.Expr(Tree(..), Literal(..),                
                 readTree, showTree, pTree, ppTree,
 
-                Expr(..), Equation(..),
-                readExpr, showExpr, pExpr, ppExpr,
+                Expr(..), Patt(..), Equation(..),
+                readExpr, showExpr, pExpr, ppExpr, ppPatt,
 
                 tree2expr, expr2tree,
 
                 -- needed in the typechecker
-                Value(..), Env, eval, apply,
+                Value(..), Env, eval, apply, eqValue,
 
                 -- helpers
                 pStr,pFactor,
@@ -17,6 +17,7 @@ module PGF.Expr(Tree(..), Literal(..),
                ) where
 
 import PGF.CId
+import PGF.Type
 
 import Data.Char
 import Data.Maybe
@@ -29,7 +30,7 @@ data Literal =
    LStr String                      -- ^ string constant
  | LInt Integer                     -- ^ integer constant
  | LFlt Double                      -- ^ floating point constant
- deriving (Eq,Ord,Show)
+ deriving (Eq,Ord)
 
 -- | The tree is an evaluated expression in the abstract syntax
 -- of the grammar. The type is especially restricted to not
@@ -53,8 +54,15 @@ data Expr =
  | ELit Literal                     -- ^ literal
  | EMeta  Int                       -- ^ meta variable
  | EVar   CId                       -- ^ variable or function reference
- | EEq [Equation]                   -- ^ lambda function defined as a set of equations with pattern matching
  | EPi CId Expr Expr                -- ^ dependent function type
+  deriving (Eq,Ord)
+
+-- | The pattern is used to define equations in the abstract syntax of the grammar.
+data Patt =
+   PApp CId [Patt]                  -- ^ application. The identifier should be constructor i.e. defined with 'data'
+ | PLit Literal                     -- ^ literal
+ | PVar CId                         -- ^ variable
+ | PWild                            -- ^ wildcard
   deriving (Eq,Ord)
 
 -- | The equation is used to define lambda function as a sequence
@@ -62,8 +70,8 @@ data Expr =
 -- the patterns and the second 'Expr' is the function body for this
 -- equation.
 data Equation =
-   Equ [Expr] Expr
-  deriving (Eq,Ord,Show)
+   Equ [Patt] Expr
+  deriving (Eq,Ord)
 
 -- | parses 'String' as an expression
 readTree :: String -> Maybe Tree
@@ -120,24 +128,13 @@ pTree isNested = RP.skipSpaces >> (pParen RP.<++ pAbs RP.<++ pApp RP.<++ fmap Li
                    return (Meta n)
 
 pExpr :: RP.ReadP Expr
-pExpr = RP.skipSpaces >> (pAbs RP.<++ pTerm RP.<++ pEqs)
+pExpr = RP.skipSpaces >> (pAbs RP.<++ pTerm)
   where
     pTerm   =       fmap (foldl1 EApp) (RP.sepBy1 pFactor RP.skipSpaces)
 
     pAbs = do xs <- RP.between (RP.char '\\') (RP.skipSpaces >> RP.string "->") (RP.sepBy1 (RP.skipSpaces >> pCId) (RP.skipSpaces >> RP.char ','))
               e  <- pExpr
               return (foldr EAbs e xs)
-               
-    pEqs = fmap EEq $
-           RP.between (RP.skipSpaces >> RP.char '{')
-                      (RP.skipSpaces >> RP.char '}')
-                      (RP.sepBy1 (RP.skipSpaces >> pEq) 
-                                 (RP.skipSpaces >> RP.string ";"))
-
-    pEq = do pats <- (RP.sepBy1 pExpr RP.skipSpaces)
-             RP.skipSpaces >> RP.string "=>"
-             e <- pExpr
-             return (Equ pats e)
 
 pFactor =       fmap EVar pCId
         RP.<++  fmap ELit pLit
@@ -176,6 +173,7 @@ ppTree d (Meta n)   = PP.char '?' PP.<> PP.int n
 ppTree d (Var id)   = PP.text (prCId id)
 
 
+ppExpr :: Int -> Expr -> PP.Doc
 ppExpr d (EAbs x e)   = let (xs,e1) = getVars (EAbs x e)
                         in ppParens (d > 0) (PP.char '\\' PP.<>
                                              PP.hsep (PP.punctuate PP.comma (map (PP.text . prCId) xs)) PP.<+>
@@ -188,9 +186,11 @@ ppExpr d (EApp e1 e2) = ppParens (d > 1) ((ppExpr 1 e1) PP.<+> (ppExpr 2 e2))
 ppExpr d (ELit l)     = ppLit l
 ppExpr d (EMeta n)    = PP.char '?' PP.<+> PP.int n
 ppExpr d (EVar f)     = PP.text (prCId f)
-ppExpr d (EEq eqs)    = PP.braces (PP.sep (PP.punctuate PP.semi (map ppEquation eqs)))
 
-ppEquation (Equ pats e) = PP.hsep (map (ppExpr 2) pats) PP.<+> PP.text "=>" PP.<+> ppExpr 0 e
+ppPatt d (PApp f ps) = ppParens (d > 1) (PP.text (prCId f) PP.<+> PP.hsep (map (ppPatt 2) ps))
+ppPatt d (PLit l)    = ppLit l
+ppPatt d (PVar f)    = PP.text (prCId f)
+ppPatt d PWild       = PP.char '_'
 
 ppLit (LStr s) = PP.text (show s)
 ppLit (LInt n) = PP.integer n
@@ -212,46 +212,97 @@ tree2expr (Meta n)   = EMeta n
 tree2expr (Abs xs t) = foldr EAbs (tree2expr t) xs
 tree2expr (Var x)    = EVar x
 
--- | Converts an expression to tree. If the expression
--- contains unevaluated applications they will be applied.
-expr2tree :: Expr -> Tree
-expr2tree e = value2tree (eval Map.empty e) [] []
+-- | Converts an expression to tree. The expression
+-- is first reduced to beta-eta-alfa normal form and
+-- after that converted to tree.
+expr2tree :: Funs -> Expr -> Tree
+expr2tree funs e = value2tree [] (eval funs Map.empty e)
   where
-    value2tree (VApp v1 v2)              xs ts = value2tree v1 xs (value2tree v2 [] []:ts)
-    value2tree (VVar x)                  xs ts = ret xs (fun xs x ts)
-    value2tree (VMeta n)                 xs [] = ret xs (Meta n)
-    value2tree (VLit l)                  xs [] = ret xs (Lit l)
-    value2tree (VClosure env (EAbs x e)) xs [] = value2tree (eval (Map.insert x (VVar x) env) e) (x:xs) []
-    
-    fun xs x ts
-      | x `elem` xs = Var x
-      | otherwise   = Fun x ts
+    value2tree xs (VApp f vs)               = case Map.lookup f funs of
+                                                Just (DTyp hyps _ _,_) -> -- eta conversion
+                                                                          let a1  = length hyps    
+                                                                              a2  = length vs
+                                                                              a   = a1 - a2
+                                                                              i   = length xs
+                                                                              xs' = [var i | i <- [i..i+a-1]]
+                                                                          in ret (reverse xs'++xs)
+                                                                                 (Fun f (map (value2tree []) vs++map Var xs'))
+                                                Nothing                -> error ("unknown variable "++prCId f)
+    value2tree xs (VGen i)                  = ret xs (Var (var i))
+    value2tree xs (VMeta n)                 = ret xs (Meta n)
+    value2tree xs (VLit l)                  = ret xs (Lit l)
+    value2tree xs (VClosure env (EAbs x e)) = let i = length xs
+                                              in value2tree (var i:xs) (eval funs (Map.insert x (VGen i) env) e)
+
+    var i = mkCId ('v':show i)
 
     ret [] t = t
     ret xs t = Abs (reverse xs) t
 
 data Value
-  = VGen Int
-  | VApp Value Value
-  | VVar CId
-  | VMeta Int 
+  = VApp CId [Value]
   | VLit Literal
+  | VMeta Int
+  | VGen Int
   | VClosure Env Expr
- deriving (Show,Eq,Ord)
+ deriving (Eq,Ord)
 
-type Env = Map.Map CId Value
+type Funs = Map.Map CId (Type,[Equation]) -- type and def of a fun
+type Env  = Map.Map CId Value
 
-eval :: Env -> Expr -> Value
-eval env (EVar x)     = fromMaybe (VVar x) (Map.lookup x env)
-eval env (EApp e1 e2) = apply (eval env e1) (eval env e2)
-eval env (EAbs x e)   = VClosure env (EAbs x e)
-eval env (EMeta k)    = VMeta k
-eval env (ELit l)     = VLit l
-eval env e            = VClosure env e
+eval :: Funs -> Env -> Expr -> Value
+eval funs env (EVar x)     = case Map.lookup x env of
+                               Just v  -> v
+                               Nothing -> case Map.lookup x funs of
+                                            Just (_,eqs) -> case eqs of
+                                                              Equ [] e : _ -> eval funs env e
+                                                              []           -> VApp x []                                                              
+                                            Nothing               -> error ("unknown variable "++prCId x)
+eval funs env (EApp e1 e2) = apply funs env e1 [eval funs env e2]
+eval funs env (EAbs x e)   = VClosure env (EAbs x e)
+eval funs env (EMeta k)    = VMeta k
+eval funs env (ELit l)     = VLit l
 
-apply :: Value -> Value -> Value
-apply (VClosure env (EAbs x e)) v = eval (Map.insert x v env) e
-apply v0                        v = VApp v0 v
+apply :: Funs -> Env -> Expr -> [Value] -> Value
+apply funs env e            []     = eval funs env e
+apply funs env (EVar x)     vs     = case Map.lookup x env of
+                                       Just v  -> case (v,vs) of
+                                                    (VClosure env (EAbs x e),v:vs) -> apply funs (Map.insert x v env) e vs
+                                       Nothing -> case Map.lookup x funs of
+                                                    Just (_,eqs) -> case match eqs vs of
+                                                                      Just (e,vs,env) -> apply funs env e vs
+                                                                      Nothing         -> VApp x vs
+                                                    Nothing      -> error ("unknown variable "++prCId x)
+apply funs env (EAbs x e)   (v:vs) = apply funs (Map.insert x v env) e vs
+apply funs env (EApp e1 e2) vs     = apply funs env e1 (eval funs env e2 : vs)
+
+match :: [Equation] -> [Value] -> Maybe (Expr, [Value], Env)
+match eqs vs =
+  case eqs of
+    []               -> Nothing
+    (Equ ps res):eqs -> let (as,vs') = splitAt (length ps) vs
+                        in case zipWithM tryMatch ps as of
+                             Just envs -> Just (res, vs', Map.unions envs)
+                             Nothing   -> match eqs vs
+  where
+    tryMatch p v = case (p, v) of
+      (PVar x,    _         )           -> Just (Map.singleton x v)
+      (PApp f ps, VApp fe vs) | f == fe -> do envs <- zipWithM tryMatch ps vs
+                                              return (Map.unions envs)
+      (PLit l,    VLit le   ) | l == le -> Just Map.empty
+      _                                 -> Nothing
+
+eqValue :: Int -> Value -> Value -> [(Value,Value)]
+eqValue k v1 v2 =
+  case (v1,v2) of
+    (VApp f1 vs1, VApp f2 vs2) | f1 == f2  -> concat (zipWith (eqValue k) vs1 vs2)
+    (VLit l1,     VLit l2    ) | l1 == l2  -> []
+    (VMeta i,     VMeta j    ) | i  == j   -> []
+    (VGen  i,     VGen  j    ) | i  == j   -> []
+    (VClosure env1 (EAbs x1 e1), VClosure env2 (EAbs x2 e2)) ->
+      let v = VGen k
+      in eqValue (k+1) (VClosure (Map.insert x1 v env1) e1) (VClosure (Map.insert x2 v env2) e2)
+    _                                      -> [(v1,v2)]
 
 --- use composOp and state monad...
 newMetas :: Expr -> Expr

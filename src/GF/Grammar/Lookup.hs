@@ -227,7 +227,7 @@ qualifAnnotPar m t = case t of
   Con c -> QC m c
   _ -> composSafeOp (qualifAnnotPar m) t
 
-lookupAbsDef :: SourceGrammar -> Ident -> Ident -> Err (Maybe Term)
+lookupAbsDef :: SourceGrammar -> Ident -> Ident -> Err (Maybe [Equation])
 lookupAbsDef gr m c = errIn ("looking up absdef of" +++ prt c) $ do
   mo <- lookupModule gr m
   info <- lookupIdentInfo mo c

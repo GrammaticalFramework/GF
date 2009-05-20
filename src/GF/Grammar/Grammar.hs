@@ -81,7 +81,7 @@ type PValues = [Term]
 data Info =
 -- judgements in abstract syntax
    AbsCat   (Maybe Context) (Maybe [Term])   -- ^ (/ABS/) constructors; must be 'Id' or 'QId'
- | AbsFun   (Maybe Type) (Maybe Term)        -- ^ (/ABS/) 'Yes f' = canonical
+ | AbsFun   (Maybe Type) (Maybe [Equation])  -- ^ (/ABS/)
 
 -- judgements in resource
  | ResParam (Maybe ([Param],Maybe PValues))  -- ^ (/RES/)
@@ -108,7 +108,6 @@ data Term =
    Vr Ident             -- ^ variable
  | Cn Ident             -- ^ constant
  | Con Ident            -- ^ constructor
- | EData                -- ^ to mark in definition that a fun is a constructor
  | Sort Ident           -- ^ basic type
  | EInt Integer         -- ^ integer literal
  | EFloat Double        -- ^ floating point literal
@@ -119,8 +118,6 @@ data Term =
  | Abs Ident Term       -- ^ abstraction: @\x -> b@
  | Meta MetaSymb        -- ^ metavariable: @?i@ (only parsable: ? = ?0)
  | Prod Ident Term Term -- ^ function type: @(x : A) -> B@
- | Eqs [Equation]       -- ^ abstraction by cases: @fn {x y -> b ; z u -> c}@
-                        -- only used in internal representation
  | Typed Term Term      -- ^ type-annotated term
 --
 -- /below this, the constructors are only for concrete syntax/

@@ -68,9 +68,9 @@ canon2gfcc opts pars cgr@(M.MGrammar ((a,abm):cms)) =
   abs = D.Abstr aflags funs cats catfuns
   gflags = Map.empty
   aflags = Map.fromList [(mkCId f,x) | (f,x) <- optionsPGF (M.flags abm)]
-  mkDef pty = case pty of
-    Just t -> mkExp t
-    _      -> CM.primNotion
+
+  mkDef (Just eqs) = [C.Equ (map mkPatt ps) (mkExp e) | (ps,e) <- eqs]
+  mkDef Nothing    = []
 
   -- concretes
   lfuns = [(f', (mkType ty, mkDef pty)) | 
@@ -119,9 +119,7 @@ mkType t = case GM.typeForm t of
   Ok (hyps,(_,cat),args) -> C.DTyp (mkContext hyps) (i2i cat) (map mkExp args)
 
 mkExp :: A.Term -> C.Expr
-mkExp t = case t of
-  A.Eqs eqs -> C.EEq [C.Equ (map mkPatt ps) (mkExp e) | (ps,e) <- eqs]
-  _ -> case GM.termForm t of
+mkExp t = case GM.termForm t of
     Ok (xs,c,args) -> mkAbs xs (mkApp c (map mkExp args))
   where
     mkAbs xs t = foldr (C.EAbs . i2i) t xs
@@ -134,11 +132,15 @@ mkExp t = case t of
       K s      -> C.ELit (C.LStr s)
       Meta (MetaSymb i) -> C.EMeta i
       _        -> C.EMeta 0
-    mkPatt p = case p of
-      A.PP _ c ps -> foldl C.EApp (C.EVar (i2i c)) (map mkPatt ps)
-      A.PV x      -> C.EVar (i2i x)
-      A.PW        -> C.EVar wildCId
-      A.PInt i    -> C.ELit (C.LInt i)
+
+mkPatt p = case p of
+  A.PP _ c ps -> C.PApp (i2i c) (map mkPatt ps)
+  A.PV x      -> C.PVar (i2i x)
+  A.PW        -> C.PWild
+  A.PInt i    -> C.PLit (C.LInt i)
+  A.PFloat f  -> C.PLit (C.LFlt f)
+  A.PString s -> C.PLit (C.LStr s)
+
 
 mkContext :: A.Context -> [C.Hypo]
 mkContext hyps = [C.Hyp (i2i x) (mkType ty) | (x,ty) <- hyps]

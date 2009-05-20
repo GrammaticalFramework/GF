@@ -43,7 +43,7 @@ convertConcrete abs cnc = fixHoasFuns $ convert abs_defs' conc' cats'
              cats = lincats cnc
              (abs_defs',conc',cats') = expandHOAS abs_defs conc cats
 
-expandHOAS :: [(CId,(Type,Expr))] -> TermMap -> TermMap -> ([(CId,(Type,Expr))],TermMap,TermMap)
+expandHOAS :: [(CId,(Type,[Equation]))] -> TermMap -> TermMap -> ([(CId,(Type,[Equation]))],TermMap,TermMap)
 expandHOAS funs lins lincats = (funs' ++ hoFuns ++ varFuns, 
                                 Map.unions [lins, hoLins, varLins], 
                                 Map.unions [lincats, hoLincats, varLincat])
@@ -59,14 +59,14 @@ expandHOAS funs lins lincats = (funs' ++ hoFuns ++ varFuns,
       hoCats = sortNub (map snd hoTypes)
       -- for each Cat with N bindings, we add a new category _NCat
       -- each new category contains a single function __NCat : Cat -> _Var -> ... -> _Var -> _NCat
-      hoFuns = [(funName ty,(cftype (c : replicate n varCat) (catName ty),EEq [])) | ty@(n,c) <- hoTypes]
+      hoFuns = [(funName ty,(cftype (c : replicate n varCat) (catName ty),[])) | ty@(n,c) <- hoTypes]
       -- lincats for the new categories
       hoLincats = Map.fromList [(catName ty, modifyRec (++ replicate n (S [])) (lincatOf c)) | ty@(n,c) <- hoTypes]
       -- linearizations of the new functions, lin __NCat v_0 ... v_n-1 x = { s1 = x.s1; ...; sk = x.sk; $0 = v_0.s ...
       hoLins = Map.fromList [ (funName ty, mkLin c n) | ty@(n,c) <- hoTypes]
           where mkLin c n = modifyRec (\fs -> [P (V 0) (C j) | j <- [0..length fs-1]] ++ [P (V i) (C 0) | i <- [1..n]]) (lincatOf c)
       -- for each Cat, we a add a fun _Var_Cat : _Var -> Cat
-      varFuns = [(varFunName cat, (cftype [varCat] cat,EEq [])) | cat <- hoCats]
+      varFuns = [(varFunName cat, (cftype [varCat] cat,[])) | cat <- hoCats]
       -- linearizations of the _Var_Cat functions
       varLins = Map.fromList [(varFunName cat, R [P (V 0) (C 0)]) | cat <- hoCats]
       -- lincat for the _Var category
@@ -98,7 +98,7 @@ fixHoasFuns pinfo = pinfo{functions=mkArray [FFun (fixName n) prof lins | FFun n
                         | BS.pack "_Var_" `BS.isPrefixOf` n = wildCId
         fixName n = n
 
-convert :: [(CId,(Type,Expr))] -> TermMap -> TermMap -> ParserInfo
+convert :: [(CId,(Type,[Equation]))] -> TermMap -> TermMap -> ParserInfo
 convert abs_defs cnc_defs cat_defs = getParserInfo (loop grammarEnv)
       where
         srules = [
