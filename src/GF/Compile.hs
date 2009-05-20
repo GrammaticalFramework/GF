@@ -115,6 +115,7 @@ type CompileEnv = (Int,SourceGrammar,ModEnv)
 compileModule :: Options -- ^ Options from program command line and shell command.
               -> CompileEnv -> FilePath -> IOE CompileEnv
 compileModule opts1 env file = do
+  file <- getRealFile file
   opts0 <- getOptionsFromFile file
   let opts = addOptions opts0 opts1
   let fdir = dropFileName file
@@ -126,6 +127,19 @@ compileModule opts1 env file = do
   let names = map justModuleName files
   ioeIO $ putIfVerb opts $ "modules to include:" +++ show names ----
   foldM (compileOne opts) (0,sgr,rfs) files
+  where
+    getRealFile file1 = do
+      exists <- ioeIO $ doesFileExist file1
+      if exists
+        then return file
+        else if isRelative file
+               then do libpath <- ioeIO $ getLibraryPath opts1
+                       let file1 = libpath </> file
+                       exists <- ioeIO $ doesFileExist file1
+                       if exists
+                         then return file1
+                         else ioeErr $ Bad (render (text "None of this files exist:" $$ nest 2 (text file $$ text file1)))
+               else ioeErr $ Bad (render (text "File" <+> text file <+> text "does not exist."))
 
 compileOne :: Options -> CompileEnv -> FullPath -> IOE CompileEnv
 compileOne opts env@(_,srcgr,_) file = do
