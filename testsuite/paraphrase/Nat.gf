@@ -26,4 +26,9 @@ def four = twice (twice one) ;
 fun exp : Nat -> Nat ;
 def exp Zero = one ;
 def exp (Succ x) = twice (exp x) ;
+
+fun plus' : Nat -> Nat -> Nat ;
+def plus' Zero     = \y -> y ;
+def plus' (Succ x) = \y -> Succ (plus x y) ;
+
 }
