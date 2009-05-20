@@ -15,7 +15,7 @@
 module GF.Compile.TypeCheck (-- * top-level type checking functions; TC should not be called directly.
 		  checkContext,
 		  checkTyp,
-		  checkEquation,
+		  checkDef,
 		  checkConstrs,
 		 ) where
 
@@ -71,11 +71,12 @@ checkContext st = checkTyp st . cont2exp
 checkTyp :: Grammar -> Type -> [String]
 checkTyp gr typ = err singleton prConstrs $ justTypeCheck gr typ vType
 
-checkEquation :: Grammar -> Fun -> Term -> [String]
-checkEquation gr (m,fun) def = err singleton prConstrs $ do
-  typ  <- lookupFunType gr m fun
-  cs   <- justTypeCheck gr def (vClos typ)
-  return $ filter notJustMeta cs
+checkDef :: Grammar -> Fun -> Type -> [Equation] -> [String]
+checkDef gr (m,fun) typ eqs = err singleton prConstrs $ do
+  bcs <- mapM (\b -> checkBranch (grammar2theory gr) (initTCEnv []) b (type2val typ)) eqs
+  let (bs,css) = unzip bcs
+  (constrs,_) <- unifyVal (concat css)
+  return $ filter notJustMeta constrs
 
 checkConstrs :: Grammar -> Cat -> [Ident] -> [String]
 checkConstrs gr cat _ = [] ---- check constructors!

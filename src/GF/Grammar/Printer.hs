@@ -84,10 +84,8 @@ ppJudgement q (id, AbsFun ptype pexp) =
      Just typ   -> text "fun" <+> ppIdent id <+> colon <+> ppTerm q 0 typ <+> semi
      Nothing    -> empty) $$
   (case pexp of
-     Just EData -> empty
-     Just (Eqs [(ps,e)]) -> text "def" <+> ppIdent id <+> hcat (map (ppPatt q 2) ps) <+> equals <+> ppTerm q 0 e <+> semi
-     Just exp   -> text "def" <+> ppIdent id <+> equals <+> ppTerm q 0 exp <+> semi
-     Nothing    -> empty)
+     Just eqs -> text "def" <+> vcat [ppIdent id <+> hsep (map (ppPatt q 2) ps) <+> equals <+> ppTerm q 0 e <+> semi | (ps,e) <- eqs]
+     Nothing  -> empty)
 ppJudgement q (id, ResParam pparams) = 
   text "param" <+> ppIdent id <+>
   (case pparams of
@@ -145,9 +143,6 @@ ppTerm q d (Prod x a b)= if x == identW
 ppTerm q d (Table kt vt)=prec d 0 (ppTerm q 3 kt <+> text "=>" <+> ppTerm q 0 vt)
 ppTerm q d (Let l e)    = let (ls,e') = getLet e
                           in prec d 0 (text "let" <+> vcat (map (ppLocDef q) (l:ls)) $$ text "in" <+> ppTerm q 0 e')
-ppTerm q d (Eqs es)     = text "fn" <+> lbrace $$
-                          nest 2 (vcat (map (\e -> ppEquation q e <+> semi) es)) $$
-                          rbrace
 ppTerm q d (Example e s)=prec d 0 (text "in" <+> ppTerm q 5 e <+> text (show s))
 ppTerm q d (C e1 e2)    =prec d 1 (ppTerm q 2 e1 <+> text "++" <+> ppTerm q 1 e2)
 ppTerm q d (Glue e1 e2) =prec d 2 (ppTerm q 3 e1 <+> char '+'  <+> ppTerm q 2 e2)
@@ -182,7 +177,6 @@ ppTerm q d (EInt n)    = integer n
 ppTerm q d (EFloat f)  = double f
 ppTerm q d (Meta _)    = char '?'
 ppTerm q d (Empty)     = text "[]"
-ppTerm q d (EData)     = text "data"
 ppTerm q d (R xs)      = braces (fsep (punctuate semi [ppLabel l <+> 
                                                        fsep [case mb_t of {Just t -> colon <+> ppTerm q 0 t; Nothing -> empty},
                                                              equals <+> ppTerm q 0 e] | (l,(mb_t,e)) <- xs]))

@@ -115,7 +115,6 @@ instance Binary Term where
   put (Vr x)        = putWord8 0  >> put x
   put (Cn x)        = putWord8 1  >> put x
   put (Con x)       = putWord8 2  >> put x
-  put (EData)       = putWord8 3
   put (Sort x)      = putWord8 4  >> put x
   put (EInt x)      = putWord8 5  >> put x
   put (EFloat x)    = putWord8 6  >> put x
@@ -125,7 +124,6 @@ instance Binary Term where
   put (Abs x y)     = putWord8 10 >> put (x,y)
   put (Meta x)      = putWord8 11 >> put x
   put (Prod x y z)  = putWord8 12 >> put (x,y,z)
-  put (Eqs x)       = putWord8 13 >> put x
   put (Typed x y)   = putWord8 14 >> put (x,y)
   put (Example x y) = putWord8 15 >> put (x,y)
   put (RecType x)   = putWord8 16 >> put x
@@ -155,7 +153,6 @@ instance Binary Term where
              0  -> get >>= \x       -> return (Vr x)
              1  -> get >>= \x       -> return (Cn x)
              2  -> get >>= \x       -> return (Con x)
-             3  ->                     return (EData)
              4  -> get >>= \x       -> return (Sort x)
              5  -> get >>= \x       -> return (EInt x)
              6  -> get >>= \x       -> return (EFloat x)
@@ -165,7 +162,6 @@ instance Binary Term where
              10 -> get >>= \(x,y)   -> return (Abs x y)
              11 -> get >>= \x       -> return (Meta x)
              12 -> get >>= \(x,y,z) -> return (Prod x y z)
-             13 -> get >>= \x       -> return (Eqs x)
              14 -> get >>= \(x,y)   -> return (Typed x y)
              15 -> get >>= \(x,y)   -> return (Example x y)
              16 -> get >>= \x       -> return (RecType x)

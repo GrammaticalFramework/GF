@@ -4,10 +4,8 @@ module GF.Command.TreeOperations (
   ) where
 
 import GF.Compile.TypeCheck
-import PGF (compute,paraphrase,typecheck)
+import PGF
 
--- for conversions
-import PGF.Data
 --import GF.Compile.GrammarToGFCC (mkType,mkExp)
 import qualified GF.Grammar.Grammar as G
 import qualified GF.Grammar.Macros as M
@@ -22,7 +20,7 @@ treeOp pgf f = fmap snd $ lookup f $ allTreeOps pgf
 allTreeOps :: PGF -> [(String,(String,TreeOp))]
 allTreeOps pgf = [
    ("compute",("compute by using semantic definitions (def)",
-      map (compute pgf))),
+      map (expr2tree pgf . tree2expr))),
    ("paraphrase",("paraphrase by using semantic definitions (def)",
       nub . concatMap (paraphrase pgf))),
    ("smallest",("sort trees from smallest to largest, in number of nodes",

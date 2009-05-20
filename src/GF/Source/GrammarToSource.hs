@@ -75,10 +75,9 @@ mkTopDefs ds = ds
 trAnyDef :: (Ident,Info) -> [P.TopDef]
 trAnyDef (i,info) = let i' = tri i in case info of
   AbsCat (Just co) pd -> [P.DefCat [P.SimpleCatDef i' (map trDecl co)]]
-  AbsFun (Just ty) (Just EData) -> [P.DefFunData [P.FunDef [i'] (trt ty)]]
-  AbsFun (Just ty) pt -> [P.DefFun [P.FunDef [i'] (trt ty)]] ++ case pt of
-    Just t  -> [P.DefDef [P.DDef [mkName i'] (trt t)]]
-    Nothing -> []
+  AbsFun (Just ty) Nothing    -> [P.DefFunData [P.FunDef [i'] (trt ty)]]
+  AbsFun (Just ty) (Just eqs) -> [P.DefFun [P.FunDef [i'] (trt ty)]] ++
+                                 [P.DefDef [P.DPatt (mkName i') (map trp patts) (trt res)] | (patts,res) <- eqs]
 
   ResOper pty ptr -> [P.DefOper [trDef i' pty ptr]]
   ResParam pp -> [P.DefPar [case pp of
@@ -129,7 +128,6 @@ trt trm = case trm of
                            error $ "not yet sort " +++ show trm
     App c a -> P.EApp (trt c) (trt a)
     Abs x b -> P.EAbstr [trb x] (trt b)
-    Eqs pts -> P.EEqs [P.Equ (map trp ps) (trt t) | (ps,t) <- pts]
     Meta m  -> P.EMeta
     Prod x a b | isWildIdent x -> P.EProd (P.DExp (trt a)) (trt b)
     Prod x a b -> P.EProd (P.DDec [trb x] (trt a)) (trt b)
@@ -178,7 +176,6 @@ trt trm = case trm of
     Alts (t, tt) -> P.EPre (trt t) [P.Alt (trt v) (trt c) | (v,c) <- tt]
     FV ts -> P.EVariants $ map trt ts
     Strs tt -> P.EStrs $ map trt tt
-    EData -> P.EData
     Val te _ _ -> trt te ----
     _ -> error $ "not yet" +++ show trm ----
 

@@ -47,7 +47,6 @@ library
     PGF.Expr
     PGF.Type
     PGF.PMCFG
-    PGF.AbsCompute
     PGF.Paraphrase
     PGF.TypeCheck
     PGF.Binary
@@ -165,7 +164,6 @@ executable gf
     PGF.Parsing.FCFG.Active
     PGF.Parsing.FCFG
     PGF.Binary
-    PGF.AbsCompute
     PGF.Paraphrase
     PGF.TypeCheck
     PGF.Binary

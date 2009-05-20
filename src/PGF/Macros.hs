@@ -37,14 +37,15 @@ lookType :: PGF -> CId -> Type
 lookType pgf f = 
   fst $ lookMap (error $ "lookType " ++ show f) f (funs (abstract pgf))
 
-lookDef :: PGF -> CId -> Expr
+lookDef :: PGF -> CId -> [Equation]
 lookDef pgf f = 
   snd $ lookMap (error $ "lookDef " ++ show f) f (funs (abstract pgf))
 
 isData :: PGF -> CId -> Bool
-isData pgf f = case Map.lookup f (funs (abstract pgf)) of
-  Just (_,EMeta 0) -> True ---- the encoding of data constrs
-  _ -> False
+isData pgf f =
+  case Map.lookup f (funs (abstract pgf)) of
+    Just (_,[]) -> True             -- the encoding of data constrs
+    _           -> False
 
 lookValCat :: PGF -> CId -> CId
 lookValCat pgf = valCat . lookType pgf
@@ -119,9 +120,6 @@ valCat ty = case ty of
 contextLength :: Type -> Int
 contextLength ty = case ty of
   DTyp hyps _ _ -> length hyps
-
-primNotion :: Expr
-primNotion = EEq []
 
 term0 :: CId -> Term
 term0 = TM . prCId

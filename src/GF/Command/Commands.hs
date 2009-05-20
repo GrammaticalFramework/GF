@@ -600,11 +600,11 @@ allCommands cod env@(pgf, mos) = Map.fromList [
      exec = \opts arg -> do
        case arg of
          [Fun id []] -> case Map.lookup id (funs (abstract pgf)) of
-                          Just (ty,def) -> return $ fromString $
+                          Just (ty,eqs) -> return $ fromString $
                                               render (text "fun" <+> text (prCId id) <+> colon <+> ppType 0 ty $$
-                                                      if def == EEq []
+                                                      if null eqs
                                                         then empty
-                                                        else text "def" <+> text (prCId id) <+> char '=' <+> ppExpr 0 def)
+                                                        else text "def" <+> vcat [text (prCId id) <+> hsep (map (ppPatt 9) patts) <+> char '=' <+> ppExpr 0 res | Equ patts res <- eqs])
                           Nothing       -> case Map.lookup id (cats (abstract pgf)) of
                                              Just hyps -> do return $ fromString $
                                                                 render (text "cat" <+> text (prCId id) <+> hsep (map ppHypo hyps) $$

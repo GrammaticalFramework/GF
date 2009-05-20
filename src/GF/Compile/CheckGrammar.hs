@@ -124,16 +124,14 @@ checkAbsInfo st m mo (c,info) = do
    AbsCat (Just cont) _ -> mkCheck "category" $ 
      checkContext st cont ---- also cstrs
    AbsFun (Just typ0) md -> do
-    typ <- compAbsTyp [] typ0   -- to calculate let definitions
-    mkCheck "type of function" $ checkTyp st typ 
-    md' <- case md of
-       Just d -> do
-         let d' = elimTables d
-----         mkCheckWarn "definition of function" $ checkEquation st (m,c) d'
-         mkCheck "definition of function" $ checkEquation st (m,c) d'
-         return $ Just d'
-       _ -> return md
-    return $ (c,AbsFun (Just typ) md')
+     typ <- compAbsTyp [] typ0   -- to calculate let definitions
+     mkCheck "type of function" $
+       checkTyp st typ
+     case md of
+       Just eqs -> mkCheck "definition of function" $
+	             checkDef st (m,c) typ eqs
+       Nothing  -> return (c,info)
+     return $ (c,AbsFun (Just typ) md)
    _ -> return (c,info)
  where
    mkCheck cat ss = case ss of
@@ -160,17 +158,6 @@ checkAbsInfo st m mo (c,info) = do
        return $ Prod x a' b'
      Abs _ _ -> return t
      _ -> composOp (compAbsTyp g) t
-
-   elimTables e = case e of
-     S t a  -> elimSel (elimTables t) (elimTables a)
-     T _ cs -> Eqs [(elimPatt p, elimTables t) | (p,t) <- cs]
-     _ -> composSafeOp elimTables e
-   elimPatt p = case p of
-     PR lps -> map snd lps
-     _ -> [p]
-   elimSel t a = case a of
-     R fs -> mkApp t (map (snd . snd) fs)
-     _ -> mkApp t [a]
 
 checkCompleteGrammar :: SourceGrammar -> SourceModInfo -> SourceModInfo -> Check (BinTree Ident Info)
 checkCompleteGrammar gr abs cnc = do

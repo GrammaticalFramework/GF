@@ -49,13 +49,8 @@ fromDef pgf t@(Fun f ts) = defDown t ++ defUp t where
     [(ps,p) | (p,d@(Fun g ps)) <- equs, g==f, 
               isClosed d || (length equs == 1 && isLinear d)]
 
-  equss = [(f,[(Fun f (map expr2tree ps), expr2tree d) | (Equ ps d) <- eqs]) | 
-                       (f,(_,d)) <- Map.assocs (funs (abstract pgf)), eqs <- defs d]
-
-  defs d = case d of
-    EEq eqs -> [eqs]
-    EMeta _ -> []
-    _      -> [[Equ [] d]]
+  equss = [(f,[(Fun f (map patt2tree ps), expr2tree (funs (abstract pgf)) d) | (Equ ps d) <- eqs]) | 
+                       (f,(_,eqs)) <- Map.assocs (funs (abstract pgf)), not (null eqs)]
 
   trequ s f e = True ----trace (s ++ ": " ++ show f ++ "  " ++ show e) True
 
@@ -86,8 +81,6 @@ isLinear = nodup . vars where
   nodup = all ((<2) . length) . group . sort
 
 
--- special version of AbsCompute.findMatch, working on Tree
-
 match :: [([Tree],Tree)] -> [Tree] -> [(Tree, Subst)]
 match cases terms = case cases of
   [] -> []
@@ -108,3 +101,9 @@ match cases terms = case cases of
     Fun f ts -> all notMeta ts  
     _ -> True
 
+-- | Converts a pattern to tree.
+patt2tree :: Patt -> Tree
+patt2tree (PApp f ps) = Fun f (map patt2tree ps)
+patt2tree (PLit l)    = Lit l
+patt2tree (PVar x)    = Var x
+patt2tree PWild       = Meta 0

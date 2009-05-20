@@ -42,7 +42,7 @@ computeAbsTerm :: Grammar -> Exp -> Err Exp
 computeAbsTerm gr = computeAbsTermIn (lookupAbsDef gr) []
 
 -- | a hack to make compute work on source grammar as well
-type LookDef = Ident -> Ident -> Err (Maybe Term)
+type LookDef = Ident -> Ident -> Err (Maybe [Equation])
 
 computeAbsTermIn :: LookDef -> [Ident] -> Exp -> Err Exp
 computeAbsTermIn lookd xs e = errIn ("computing" +++ prt e) $ compt xs e where
@@ -55,7 +55,7 @@ computeAbsTermIn lookd xs e = errIn ("computing" +++ prt e) $ compt xs e where
       let vv' = yy ++ vv
       aa'    <- mapM (compt vv') aa
       case look f of
-        Just (Eqs eqs) -> tracd ("\nmatching" +++ prt f) $ 
+        Just eqs -> tracd ("\nmatching" +++ prt f) $ 
                           case findMatch eqs aa' of
           Ok (d,g) -> do
             --- let (xs,ts) = unzip g
@@ -67,19 +67,14 @@ computeAbsTermIn lookd xs e = errIn ("computing" +++ prt e) $ compt xs e where
                do
             let v = mkApp f aa'
             return $ mkAbs yy $ v
-        Just d -> tracd ("define" +++ prt t') $ do
-          da <- compt vv' $ mkApp d aa' 
-          return $ mkAbs yy $ da
         _ -> do
           let t2 = mkAbs yy $ mkApp f aa'
           tracd ("not defined" +++ prt_ t2) $ return t2
 
   look t = case t of
      (Q m f) -> case lookd m f of
-       Ok (Just EData) -> Nothing  -- canonical --- should always be QC
        Ok md -> md
        _ -> Nothing
-     Eqs _ -> return t ---- for nested fn
      _ -> Nothing
 
 beta :: [Ident] -> Exp -> Exp

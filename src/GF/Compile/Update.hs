@@ -163,7 +163,7 @@ extendMod gr isCompl (name,cond) base old new = foldM try new $ Map.toList old
       (b,n') = case info of
         ResValue _ -> (True,n)
         ResParam _ -> (True,n)
-        AbsFun _ (Just EData) -> (True,n) 
+        AbsFun _ Nothing -> (True,n) 
         AnyInd b k -> (b,k)
         _ -> (False,n) ---- canonical in Abs
 
@@ -203,13 +203,11 @@ unifMaybe (Just p1) (Just p2)
   | p1==p2                    = return (Just p1)
   | otherwise                 = fail ""
 
-unifAbsDefs :: Maybe Term -> Maybe Term -> Err (Maybe Term)
-unifAbsDefs p1 p2 = case (p1,p2) of
-  (Nothing, _)  -> return p2
-  (_, Nothing)  -> return p1
-  (Just (Eqs bs), Just (Eqs ds))
-                -> return $ Just $ Eqs $ bs ++ ds --- order!
-  _             -> fail "definitions"
+unifAbsDefs :: Maybe [Equation] -> Maybe [Equation] -> Err (Maybe [Equation])
+unifAbsDefs Nothing   Nothing   = return Nothing
+unifAbsDefs (Just _ ) Nothing   = fail ""
+unifAbsDefs Nothing   (Just _ ) = fail ""
+unifAbsDefs (Just xs) (Just ys) = return (Just (xs ++ ys))
 
 unifConstrs :: Maybe [Term] -> Maybe [Term] -> Err (Maybe [Term])
 unifConstrs p1 p2 = case (p1,p2) of

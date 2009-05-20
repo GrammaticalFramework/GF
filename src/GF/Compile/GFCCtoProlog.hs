@@ -71,17 +71,17 @@ plCat (cat, hypos) = plFact "cat" (plTypeWithHypos typ)
           args = reverse [EVar x | (_,x) <- subst]
           typ = wildcardUnusedVars $ DTyp hypos' cat args
 
-plFun :: (CId, (Type, Expr)) -> String
+plFun :: (CId, (Type, [Equation])) -> String
 plFun (fun, (typ, _)) = plFact "fun" (plp fun : plTypeWithHypos typ')
     where typ' = wildcardUnusedVars $ snd $ alphaConvert emptyEnv typ
 
 plTypeWithHypos :: Type -> [String]
 plTypeWithHypos (DTyp hypos cat args) = [plTerm (plp cat) (map plp args), plp hypos]
 
-plFundef :: (CId, (Type, Expr)) -> [String]
-plFundef (fun, (_, EEq [])) = []
-plFundef (fun, (_, fundef)) = [plFact "def" [plp fun, plp fundef']]
-    where fundef' = snd $ alphaConvert emptyEnv fundef
+plFundef :: (CId, (Type, [Equation])) -> [String]
+plFundef (fun, (_, [])) = []
+plFundef (fun, (_, eqs)) = [plFact "def" [plp fun, plp fundef']]
+    where fundef' = snd $ alphaConvert emptyEnv eqs
 
 
 ----------------------------------------------------------------------
@@ -122,8 +122,14 @@ instance PLPrint Expr where
     plp (EApp e e') = plOper " * " (plp e) (plp e')
     plp (ELit lit)  = plp lit
     plp (EMeta n)   = "Meta_" ++ show n
-    plp (EEq eqs)   = plList [plOper ":" (plp patterns) (plp result) | 
-                              Equ patterns result <- eqs]
+
+instance PLPrint Patt where
+    plp (PVar x)    = plp x
+    plp (PApp f ps) = plOper " * " (plp f) (plp ps)
+    plp (PLit lit)  = plp lit
+
+instance PLPrint Equation where
+    plp (Equ patterns result)   = plOper ":" (plp patterns) (plp result)
 
 instance PLPrint Term where
     plp (S terms) = plTerm "s"  [plp terms]
@@ -267,17 +273,14 @@ instance AlphaConvert Expr where
         where (env',  e1') = alphaConvert env  e1
               (env'', e2') = alphaConvert env' e2
     alphaConvert env expr@(EVar i) = (env, maybe expr EVar (lookup i (snd env)))
-    alphaConvert env (EEq eqs) = (env', EEq eqs')
-        where (env', eqs') = alphaConvert env eqs
     alphaConvert env expr = (env, expr)
 
 -- pattern variables are not alpha converted
 -- (but they probably should be...)
 instance AlphaConvert Equation where
     alphaConvert env@(_,subst) (Equ patterns result)
-        = ((ctr,subst), Equ patterns' result')
-        where (env',  patterns') = alphaConvert env patterns
-              ((ctr,_), result') = alphaConvert env' result
+        = ((ctr,subst), Equ patterns result')
+        where ((ctr,_), result') = alphaConvert env result
 
 ----------------------------------------------------------------------
 -- translate unused variables to wildcards
@@ -295,6 +298,4 @@ wildcardUnusedVars typ@(DTyp hypos cat args) = DTyp hypos' cat args
           unusedInExpr x (EAbs y e)  = unusedInExpr x e
           unusedInExpr x (EApp e e') = unusedInExpr x e && unusedInExpr x e'
           unusedInExpr x (EVar y)    = x/=y
-          unusedInExpr x (EEq eqs)   = and [all (unusedInExpr x) (result:patterns) |
-                                            Equ patterns result <- eqs]
           unusedInExpr x expr        = True

@@ -38,7 +38,7 @@ convertConcrete abs cnc = convert abs_defs conc cats
              conc = Map.union (opers cnc) (lins cnc) -- "union big+small most efficient"
              cats = lincats cnc
 
-convert :: [(CId,(Type,Expr))] -> TermMap -> TermMap -> ParserInfo
+convert :: [(CId,(Type,[Equation]))] -> TermMap -> TermMap -> ParserInfo
 convert abs_defs cnc_defs cat_defs =
   let env = expandHOAS abs_defs cnc_defs cat_defs (emptyGrammarEnv cnc_defs cat_defs)
   in getParserInfo (List.foldl' (convertRule cnc_defs) env pfrules)

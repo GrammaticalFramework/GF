@@ -16,6 +16,7 @@ module GF.Compile.TC (AExp(..),
 	   Theory,
 	   checkExp,
 	   inferExp,
+	   checkBranch,
 	   eqVal,
 	   whnf
 	  ) where
@@ -122,7 +123,6 @@ checkExp th tenv@(k,rho,gamma) e ty = do
   let v = VGen k
   case e of
     Meta m -> return $ (AMeta m typ,[])
-    EData -> return $ (AData typ,[])
 
     Abs x t -> case typ of
       VClos env (Prod y a b) -> do
@@ -131,11 +131,6 @@ checkExp th tenv@(k,rho,gamma) e ty = do
                            (k+1,(x,v x):rho, (x,a'):gamma) t (VClos ((y,v x):env) b)
 	return (AAbs x a' t', cs)
       _ -> prtBad ("function type expected for" +++ prt e +++ "instead of") typ
-
-    Eqs es -> do
-      bcs <- mapM (\b -> checkBranch th tenv b typ) es
-      let (bs,css) = unzip bcs
-      return (AEqs bs, concat css) 
 
     Prod x a b -> do
       testErr (typ == vType) "expected Type"

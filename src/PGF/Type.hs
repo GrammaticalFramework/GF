@@ -3,7 +3,7 @@ module PGF.Type ( Type(..), Hypo(..),
                   pType, ppType, ppHypo ) where
 
 import PGF.CId
-import PGF.Expr
+import {-# SOURCE #-} PGF.Expr
 import Data.Char
 import qualified Text.PrettyPrint as PP
 import qualified Text.ParserCombinators.ReadP as RP
