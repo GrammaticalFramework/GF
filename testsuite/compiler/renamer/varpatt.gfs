@@ -1,0 +1,4 @@
+i -src testsuite/compiler/renamer/varpatt.gf
+
+pt -compute d D1
+pt -compute d D2

@@ -36,11 +36,13 @@ import GF.Grammar.Macros
 import GF.Grammar.PrGrammar
 import GF.Grammar.AppPredefined
 import GF.Grammar.Lookup
+import GF.Grammar.Printer
 import GF.Data.Operations
 
 import Control.Monad
 import Data.List (nub)
 import Debug.Trace (trace)
+import Text.PrettyPrint
 
 renameGrammar :: SourceGrammar -> Err SourceGrammar
 renameGrammar g = liftM (MGrammar . reverse) $ foldM renameModule [] (modules g)
@@ -236,15 +238,15 @@ renamePattern env patt = case patt of
       _ -> prtBad "unresolved pattern" patt
 
   PC c ps -> do
-    c' <- renameIdentTerm env $ Cn c
+    c' <- renid $ Cn c
     case c' of
-      QC p d -> renp $ PP p d ps
---      Q  p d -> renp $ PP p d ps --- why this? AR 15/3/2008
-      _ -> prtBad "unresolved pattern" c' ---- (PC c ps', concat vs)
+      QC m c -> renp $ PP m c ps
+      Q  _ _ -> Bad $ render (text "data constructor expected but" <+> ppTerm Qualified 0 c' <+> text "is found instead")
+      _      -> Bad $ render (text "unresolved data constructor" <+> ppTerm Qualified 0 c')
 
   PP p c ps -> do
 
-    (p', c') <- case renameIdentTerm env (QC p c) of
+    (p', c') <- case renid (QC p c) of
       Ok (QC p' c') -> return (p',c')
       _ -> return (p,c) --- temporarily, for bw compat
     psvss <- mapM renp ps
@@ -252,14 +254,15 @@ renamePattern env patt = case patt of
     return (PP p' c' ps', concat vs)
 
   PM p c -> do
-    (p', c') <- case renameIdentTerm env (Q p c) of
+    (p', c') <- case renid (Q p c) of
       Ok (Q p' c') -> return (p',c')
       _ -> prtBad "not a pattern macro" patt
     return (PM p' c', [])
 
-  PV x -> case renid (Vr x) of
-    Ok (QC m c) -> return (PP m c [],[])
-    _    -> return (patt, [x])
+  PV x -> do case renid (Vr x) of
+               Ok (QC m c) -> return (PP m c [],[])
+               Ok (Q  m c) -> Bad $ render (text "data constructor expected but" <+> ppTerm Qualified 0 (Q  m c) <+> text "is found instead")
+               _           -> return (patt, [x])
 
   PR r -> do
     let (ls,ps) = unzip r
