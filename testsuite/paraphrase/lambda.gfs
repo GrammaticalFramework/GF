@@ -1,0 +1,9 @@
+i testsuite/paraphrase/lambda.gf
+
+pt -compute f1
+pt -compute f2
+
+pt -compute d D1
+pt -compute d D2
+pt -compute d D1 1
+pt -compute d D2 1
