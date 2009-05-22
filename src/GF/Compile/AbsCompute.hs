@@ -109,7 +109,7 @@ tryMatch (p,t) = do
 
   trym p t' = err (\s -> tracd s (Bad s)) (\t -> tracd (prtm p t) (return t)) $ ---- 
               case (p,t') of
-    (PV IW, _) | notMeta t -> return [] -- optimization with wildcard
+    (PW,    _) | notMeta t -> return [] -- optimization with wildcard
     (PV x,  _) | notMeta t -> return [(x,t)]
     (PString s, ([],K i,[])) | s==i -> return []
     (PInt s, ([],EInt i,[])) | s==i -> return []

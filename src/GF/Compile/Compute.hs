@@ -300,8 +300,8 @@ computeTermOpt rec gr = comput True where
        _ -> case t' of
          FV ccs -> mapM (\c -> comp g (S c v')) ccs >>= returnC . variants
 
-         T _ [(PV IW,c)] -> comp g c           --- an optimization
-         T _ [(PT _ (PV IW),c)] -> comp g c
+         T _ [(PW,c)] -> comp g c           --- an optimization
+         T _ [(PT _ PW,c)] -> comp g c
 
          T _ [(PV z,c)] -> comp (ext z v' g) c --- another optimization
          T _ [(PT _ (PV z),c)] -> comp (ext z v' g) c

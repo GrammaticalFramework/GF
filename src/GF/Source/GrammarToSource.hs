@@ -182,7 +182,6 @@ trt trm = case trm of
 trp :: Patt -> P.Patt
 trp p = case p of
     PW -> P.PW
-    PV s | isWildIdent s -> P.PW
     PV s -> P.PV $ tri s
     PC c [] -> P.PCon $ tri c
     PC c a -> P.PC (tri c) (map trp a)
