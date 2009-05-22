@@ -82,7 +82,7 @@ tryMatch (p,t) = do
       (PVal pa _ _,_) -> trym pa t'
       (_, (_,Val te _ _,_)) -> tryMatch (p, te)
       (_,(x,Empty,y)) -> trym p (x,K [],y)   -- because "" = [""] = []
-      (PV IW, _) | isInConstantFormt -> return [] -- optimization with wildcard
+      (PW, _) | isInConstantFormt -> return [] -- optimization with wildcard
       (PV x,  _) | isInConstantFormt -> return [(x,t)]
       (PString s, ([],K i,[])) | s==i -> return []
       (PInt s, ([],EInt i,[])) | s==i -> return []
@@ -159,7 +159,7 @@ isInConstantForm trm = case trm of
 
 varsOfPatt :: Patt -> [Ident]
 varsOfPatt p = case p of
-  PV x -> [x | not (isWildIdent x)]
+  PV x -> [x]
   PC _ ps -> concat $ map varsOfPatt ps
   PP _ _ ps -> concat $ map varsOfPatt ps
   PR r    -> concat $ map (varsOfPatt . snd) r

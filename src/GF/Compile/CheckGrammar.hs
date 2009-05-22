@@ -897,7 +897,7 @@ checkLType env trm typ0 = do
 
 pattContext :: LTEnv -> Type -> Patt -> Check Context
 pattContext env typ p = case p of
-  PV x | not (isWildIdent x) -> return [(x,typ)]
+  PV x -> return [(x,typ)]
   PP q c ps | q /= cPredef -> do ---- why this /=? AR 6/1/2006
     t <- checkErr $ lookupResType cnc q c
     (cont,v) <- checkErr $ typeFormCnc t
