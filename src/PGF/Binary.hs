@@ -42,7 +42,7 @@ instance Binary Abstr where
   get = do aflags <- get
            funs <- get
            cats <- get
-           let catfuns = Map.mapWithKey (\cat _ -> [f | (f, (DTyp _ c _,_)) <- Map.toList funs, c==cat]) cats
+           let catfuns = Map.mapWithKey (\cat _ -> [f | (f, (DTyp _ c _,_,_)) <- Map.toList funs, c==cat]) cats
            return (Abstr{ aflags=aflags
                         , funs=funs, cats=cats
                         , catfuns=catfuns

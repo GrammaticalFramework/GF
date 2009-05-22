@@ -42,7 +42,7 @@ computeAbsTerm :: Grammar -> Exp -> Err Exp
 computeAbsTerm gr = computeAbsTermIn (lookupAbsDef gr) []
 
 -- | a hack to make compute work on source grammar as well
-type LookDef = Ident -> Ident -> Err (Maybe [Equation])
+type LookDef = Ident -> Ident -> Err (Maybe Int,Maybe [Equation])
 
 computeAbsTermIn :: LookDef -> [Ident] -> Exp -> Err Exp
 computeAbsTermIn lookd xs e = errIn ("computing" +++ prt e) $ compt xs e where
@@ -73,7 +73,7 @@ computeAbsTermIn lookd xs e = errIn ("computing" +++ prt e) $ compt xs e where
 
   look t = case t of
      (Q m f) -> case lookd m f of
-       Ok md -> md
+       Ok (_,md) -> md
        _ -> Nothing
      _ -> Nothing
 

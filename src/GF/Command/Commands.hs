@@ -600,7 +600,7 @@ allCommands cod env@(pgf, mos) = Map.fromList [
      exec = \opts arg -> do
        case arg of
          [Fun id []] -> case Map.lookup id (funs (abstract pgf)) of
-                          Just (ty,eqs) -> return $ fromString $
+                          Just (ty,_,eqs) -> return $ fromString $
                                               render (text "fun" <+> text (prCId id) <+> colon <+> ppType 0 ty $$
                                                       if null eqs
                                                         then empty

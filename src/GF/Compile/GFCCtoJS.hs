@@ -34,8 +34,8 @@ pgf2js pgf =
 abstract2js :: String -> Abstr -> JS.Expr
 abstract2js start ds = new "GFAbstract" [JS.EStr start, JS.EObj $ map absdef2js (Map.assocs (funs ds))]
 
-absdef2js :: (CId,(Type,[Equation])) -> JS.Property
-absdef2js (f,(typ,_)) =
+absdef2js :: (CId,(Type,Int,[Equation])) -> JS.Property
+absdef2js (f,(typ,_,_)) =
   let (args,cat) = M.catSkeleton typ in 
     JS.Prop (JS.IdentPropName (JS.Ident (prCId f))) (new "Type" [JS.EArray [JS.EStr (prCId x) | x <- args], JS.EStr (prCId cat)])
 

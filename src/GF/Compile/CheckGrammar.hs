@@ -123,7 +123,7 @@ checkAbsInfo st m mo (c,info) = do
  case info of
    AbsCat (Just cont) _ -> mkCheck "category" $ 
      checkContext st cont ---- also cstrs
-   AbsFun (Just typ0) md -> do
+   AbsFun (Just typ0) ma md -> do
      typ <- compAbsTyp [] typ0   -- to calculate let definitions
      mkCheck "type of function" $
        checkTyp st typ
@@ -131,7 +131,7 @@ checkAbsInfo st m mo (c,info) = do
        Just eqs -> mkCheck "definition of function" $
 	             checkDef st (m,c) typ eqs
        Nothing  -> return (c,info)
-     return $ (c,AbsFun (Just typ) md)
+     return $ (c,AbsFun (Just typ) ma md)
    _ -> return (c,info)
  where
    mkCheck cat ss = case ss of
@@ -181,28 +181,28 @@ checkCompleteGrammar gr abs cnc = do
      CncCat _ _ _ -> True
      _ -> False
    checkOne js i@(c,info) = case info of
-     AbsFun (Just ty) _ -> do let mb_def = do
-                                    (cxt,(_,i),_) <- typeForm ty
-                                    info <- lookupIdent i js
-                                    info <- case info of
-                                              (AnyInd _ m) -> do (m,info) <- lookupOrigInfo gr m i
-                                                                 return info
-                                              _            -> return info
-                                    case info of
-                                      CncCat (Just (RecType [])) _ _ -> return (foldr (\_ -> Abs identW) (R []) cxt)
-                                      _                              -> Bad "no def lin"
-                              case lookupIdent c js of
-                                Ok (CncFun _   (Just _) _ ) -> return js
-                                Ok (CncFun cty Nothing  pn) ->
-                                  case mb_def of
-                                    Ok def -> return $ updateTree (c,CncFun cty (Just def) pn) js
-                                    Bad _  -> do checkWarn $ "no linearization of" +++ prt c
-                                                 return js
-                                _ -> do
-                                  case mb_def of
-                                    Ok def -> return $ updateTree (c,CncFun Nothing (Just def) Nothing) js
-                                    Bad _  -> do checkWarn $ "no linearization of" +++ prt c
-                                                 return js
+     AbsFun (Just ty) _ _ -> do let mb_def = do
+                                      (cxt,(_,i),_) <- typeForm ty
+                                      info <- lookupIdent i js
+                                      info <- case info of
+                                                (AnyInd _ m) -> do (m,info) <- lookupOrigInfo gr m i
+                                                                   return info
+                                                _            -> return info
+                                      case info of
+                                        CncCat (Just (RecType [])) _ _ -> return (foldr (\_ -> Abs identW) (R []) cxt)
+                                        _                              -> Bad "no def lin"
+                                case lookupIdent c js of
+                                  Ok (CncFun _   (Just _) _ ) -> return js
+                                  Ok (CncFun cty Nothing  pn) ->
+                                    case mb_def of
+                                      Ok def -> return $ updateTree (c,CncFun cty (Just def) pn) js
+                                      Bad _  -> do checkWarn $ "no linearization of" +++ prt c
+                                                   return js
+                                  _ -> do
+                                    case mb_def of
+                                      Ok def -> return $ updateTree (c,CncFun Nothing (Just def) Nothing) js
+                                      Bad _  -> do checkWarn $ "no linearization of" +++ prt c
+                                                   return js
      AbsCat (Just _) _ -> case lookupIdent c js of
        Ok (AnyInd _ _) -> return js
        Ok (CncCat (Just _) _ _) -> return js
@@ -1115,7 +1115,7 @@ allDependencies ism b =
       ResParam (Just (ps,_)) -> [Just t | (_,cont) <- ps, (_,t) <- cont]
       CncCat pty _ _ -> [pty]
       CncFun _   pt _ -> [pt]  ---- (Maybe (Ident,(Context,Type))
-      AbsFun pty ptr -> [pty] --- ptr is def, which can be mutual
+      AbsFun pty _ ptr -> [pty] --- ptr is def, which can be mutual
       AbsCat (Just co) _ -> [Just ty | (_,ty) <- co]
       _              -> []
 

@@ -585,7 +585,7 @@ transPatts p = case p of
 
 transPatt :: Patt -> Err G.Patt
 transPatt x = case x of
-  PW  -> return G.wildPatt
+  PW  -> return G.PW
   PV id  -> liftM G.PV $ transIdent id
   PC id patts  -> liftM2 G.PC (transIdent id) (mapM transPatt patts)
   PCon id  -> liftM2 G.PC (transIdent id) (return [])

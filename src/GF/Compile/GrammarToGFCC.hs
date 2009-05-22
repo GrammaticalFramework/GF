@@ -71,16 +71,19 @@ canon2gfcc opts pars cgr@(M.MGrammar ((a,abm):cms)) =
 
   mkDef (Just eqs) = [C.Equ (map mkPatt ps) (mkExp e) | (ps,e) <- eqs]
   mkDef Nothing    = []
+  
+  mkArrity (Just a) = a
+  mkArrity Nothing  = 0
 
   -- concretes
-  lfuns = [(f', (mkType ty, mkDef pty)) | 
-             (f,AbsFun (Just ty) pty) <- tree2list (M.jments abm), let f' = i2i f]
+  lfuns = [(f', (mkType ty, mkArrity ma, mkDef pty)) | 
+             (f,AbsFun (Just ty) ma pty) <- tree2list (M.jments abm), let f' = i2i f]
   funs = Map.fromAscList lfuns
   lcats = [(i2i c, mkContext cont) |
                 (c,AbsCat (Just cont) _) <- tree2list (M.jments abm)]
   cats = Map.fromAscList lcats
   catfuns = Map.fromList 
-    [(cat,[f | (f, (C.DTyp _ c _,_)) <- lfuns, c==cat]) | (cat,_) <- lcats]
+    [(cat,[f | (f, (C.DTyp _ c _,_,_)) <- lfuns, c==cat]) | (cat,_) <- lcats]
 
   cncs  = Map.fromList [mkConcr lang (i2i lang) mo | (lang,mo) <- cms]
   mkConcr lang0 lang mo = 

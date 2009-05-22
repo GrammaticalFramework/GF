@@ -79,7 +79,7 @@ ppJudgement q (id, AbsCat pcont pconstrs) =
   case pconstrs of
     Just costrs -> text "data" <+> ppIdent id <+> equals <+> fsep (intersperse (char '|') (map (ppTerm q 0) costrs)) <+> semi
     Nothing     -> empty
-ppJudgement q (id, AbsFun ptype pexp) =
+ppJudgement q (id, AbsFun ptype _ pexp) =
   (case ptype of
      Just typ   -> text "fun" <+> ppIdent id <+> colon <+> ppTerm q 0 typ <+> semi
      Nothing    -> empty) $$

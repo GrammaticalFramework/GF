@@ -75,9 +75,9 @@ mkTopDefs ds = ds
 trAnyDef :: (Ident,Info) -> [P.TopDef]
 trAnyDef (i,info) = let i' = tri i in case info of
   AbsCat (Just co) pd -> [P.DefCat [P.SimpleCatDef i' (map trDecl co)]]
-  AbsFun (Just ty) Nothing    -> [P.DefFunData [P.FunDef [i'] (trt ty)]]
-  AbsFun (Just ty) (Just eqs) -> [P.DefFun [P.FunDef [i'] (trt ty)]] ++
-                                 [P.DefDef [P.DPatt (mkName i') (map trp patts) (trt res)] | (patts,res) <- eqs]
+  AbsFun (Just ty) _ Nothing    -> [P.DefFunData [P.FunDef [i'] (trt ty)]]
+  AbsFun (Just ty) _ (Just eqs) -> [P.DefFun [P.FunDef [i'] (trt ty)]] ++
+                                   [P.DefDef [P.DPatt (mkName i') (map trp patts) (trt res)] | (patts,res) <- eqs]
 
   ResOper pty ptr -> [P.DefOper [trDef i' pty ptr]]
   ResParam pp -> [P.DefPar [case pp of

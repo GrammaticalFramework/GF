@@ -414,7 +414,8 @@ linAsStr s = mkRecord linLabel [K s] -- default linearization {s = s}
 
 term2patt :: Term -> Err Patt
 term2patt trm = case termForm trm of
-  Ok ([], Vr x, []) -> return (PV x)
+  Ok ([], Vr x, []) | x == identW -> return PW
+                    | otherwise   -> return (PV x)
   Ok ([], Val te ty x, []) -> do
     te' <- term2patt te
     return (PVal te' ty x)

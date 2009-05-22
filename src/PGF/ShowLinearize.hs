@@ -99,7 +99,7 @@ markLinearize pgf lang t = concat $ take 1 $ linearizesMark pgf lang t
 collectWords :: PGF -> CId -> [(String, [(String,String)])]
 collectWords pgf lang = 
     concatMap collOne 
-      [(f,c,0) | (f,(DTyp [] c _,_)) <- Map.toList $ funs $ abstract pgf] 
+      [(f,c,0) | (f,(DTyp [] c _,_,_)) <- Map.toList $ funs $ abstract pgf] 
   where
     collOne (f,c,i) = 
       fromRec f [prCId c] (recLinearize pgf lang (Fun f (replicate i (Meta 888))))

@@ -240,19 +240,19 @@ CatDef
 
 FunDef :: { [(Ident,SrcSpan,Info)] }
 FunDef
-  : Posn ListIdent ':' Exp Posn { [(fun, ($1,$5), AbsFun (Just $4) (Just [])) | fun <- $2] } 
+  : Posn ListIdent ':' Exp Posn { [(fun, ($1,$5), AbsFun (Just $4) Nothing (Just [])) | fun <- $2] } 
 
 DefDef :: { [(Ident,SrcSpan,Info)] }
 DefDef
-  : Posn ListName '=' Exp         Posn { [(f, ($1,$5),AbsFun Nothing (Just [([],$4)])) | f <- $2] }
-  | Posn Name ListPatt '=' Exp    Posn { [($2,($1,$6),AbsFun Nothing (Just [($3,$5)]))] }
+  : Posn ListName '=' Exp         Posn { [(f, ($1,$5),AbsFun Nothing (Just 0) (Just [([],$4)])) | f <- $2] }
+  | Posn Name ListPatt '=' Exp    Posn { [($2,($1,$6),AbsFun Nothing (Just (length $3)) (Just [($3,$5)]))] }
 
 DataDef :: { [(Ident,SrcSpan,Info)] }
 DataDef
   : Posn Ident '=' ListDataConstr Posn { ($2,   ($1,$5), AbsCat Nothing   (Just (map Cn $4))) :
-                                         [(fun, ($1,$5), AbsFun Nothing   Nothing) | fun <- $4] }
+                                         [(fun, ($1,$5), AbsFun Nothing   Nothing Nothing) | fun <- $4] }
   | Posn ListIdent ':' Exp Posn        { [(cat, ($1,$5), AbsCat Nothing   (Just (map Cn $2))) | Ok (_,cat) <- [valCat $4]] ++
-                                         [(fun, ($1,$5), AbsFun (Just $4) Nothing) | fun <- $2] }                                         
+                                         [(fun, ($1,$5), AbsFun (Just $4) Nothing Nothing) | fun <- $2] }                                         
 
 ParamDef :: { [(Ident,SrcSpan,Info)] }
 ParamDef
@@ -481,7 +481,7 @@ Patt2
   | '[' String ']'            { PChars $2 }
   | '#' Ident                 { PMacro $2 }
   | '#' Ident '.' Ident       { PM $2 $4 }
-  | '_'                       { wildPatt }
+  | '_'                       { PW }
   | Ident                     { PV $1 }
   | Ident '.' Ident           { PP $1 $3 [] }
   | Integer                   { PInt $1 }
@@ -609,8 +609,8 @@ listCatDef id pos cont size = [catd,nilfund,consfund]
     consId = mkConsId id
 
     catd     = (listId, pos, AbsCat (Just cont')   (Just [Cn baseId,Cn consId]))
-    nilfund  = (baseId, pos, AbsFun (Just niltyp)  Nothing)
-    consfund = (consId, pos, AbsFun (Just constyp) Nothing)
+    nilfund  = (baseId, pos, AbsFun (Just niltyp)  Nothing Nothing)
+    consfund = (consId, pos, AbsFun (Just constyp) Nothing Nothing)
 
     cont' = [(mkId x i,ty) | (i,(x,ty)) <- zip [0..] cont]
     xs = map (Vr . fst) cont'
@@ -667,7 +667,7 @@ type SrcSpan = (Posn,Posn)
 checkInfoType MTAbstract       (id,pos,info) =
   case info of
     AbsCat _ _   -> return ()
-    AbsFun _ _   -> return ()
+    AbsFun _ _ _ -> return ()
     _            -> failLoc (fst pos) "illegal definition in abstract module" 
 checkInfoType MTResource       (id,pos,info) =
   case info of
@@ -701,7 +701,7 @@ checkInfoType (MTInstance _)   (id,pos,info) =
 checkInfoType (MTTransfer _ _) (id,pos,info) =
   case info of
     AbsCat _ _   -> return ()
-    AbsFun _ _   -> return ()
+    AbsFun _ _ _ -> return ()
     _            -> failLoc (fst pos) "illegal definition in transfer module" 
 
 

@@ -38,14 +38,14 @@ convertConcrete abs cnc = convert abs_defs conc cats
              conc = Map.union (opers cnc) (lins cnc) -- "union big+small most efficient"
              cats = lincats cnc
 
-convert :: [(CId,(Type,[Equation]))] -> TermMap -> TermMap -> ParserInfo
+convert :: [(CId,(Type,Int,[Equation]))] -> TermMap -> TermMap -> ParserInfo
 convert abs_defs cnc_defs cat_defs =
   let env = expandHOAS abs_defs cnc_defs cat_defs (emptyGrammarEnv cnc_defs cat_defs)
   in getParserInfo (List.foldl' (convertRule cnc_defs) env pfrules)
   where
     pfrules = [
       (PFRule id args (0,res) (map findLinType args) (findLinType (0,res)) term) | 
-        (id, (ty,_)) <- abs_defs, let (args,res) = typeSkeleton ty, 
+        (id, (ty,_,_)) <- abs_defs, let (args,res) = typeSkeleton ty, 
         term <- maybeToList (Map.lookup id cnc_defs)]
         
     findLinType (_,id) = fromMaybe (error $ "No lincat for " ++ show id) (Map.lookup id cat_defs)
@@ -320,11 +320,11 @@ expandHOAS abs_defs cnc_defs lincats env =
   foldl add_varFun (foldl (\env ncat -> add_hoFun (add_hoCat env ncat) ncat) env hoTypes) hoCats
   where
     hoTypes :: [(Int,CId)]
-    hoTypes = sortNub [(n,c) | (_,(ty,_)) <- abs_defs
+    hoTypes = sortNub [(n,c) | (_,(ty,_,_)) <- abs_defs
                              , (n,c) <- fst (typeSkeleton ty), n > 0]
 
     hoCats :: [CId]
-    hoCats = sortNub [c | (_,(ty,_)) <- abs_defs
+    hoCats = sortNub [c | (_,(ty,_,_)) <- abs_defs
                         , Hyp _ ty <- case ty of {DTyp hyps val _ -> hyps}
                         , c   <- fst (catSkeleton ty)]
   

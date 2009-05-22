@@ -35,17 +35,19 @@ lookPrintName pgf lang fun =
 
 lookType :: PGF -> CId -> Type
 lookType pgf f = 
-  fst $ lookMap (error $ "lookType " ++ show f) f (funs (abstract pgf))
+  case lookMap (error $ "lookType " ++ show f) f (funs (abstract pgf)) of
+    (ty,_,_) -> ty
 
 lookDef :: PGF -> CId -> [Equation]
 lookDef pgf f = 
-  snd $ lookMap (error $ "lookDef " ++ show f) f (funs (abstract pgf))
+  case lookMap (error $ "lookDef " ++ show f) f (funs (abstract pgf)) of
+    (_,a,eqs) -> eqs
 
 isData :: PGF -> CId -> Bool
 isData pgf f =
   case Map.lookup f (funs (abstract pgf)) of
-    Just (_,[]) -> True             -- the encoding of data constrs
-    _           -> False
+    Just (_,_,[]) -> True             -- the encoding of data constrs
+    _             -> False
 
 lookValCat :: PGF -> CId -> CId
 lookValCat pgf = valCat . lookType pgf
@@ -74,7 +76,7 @@ lookConcrFlag pgf lang f = Map.lookup f $ cflags $ lookConcr pgf lang
 
 functionsToCat :: PGF -> CId -> [(CId,Type)]
 functionsToCat pgf cat =
-  [(f,ty) | f <- fs, Just (ty,_) <- [Map.lookup f $ funs $ abstract pgf]]
+  [(f,ty) | f <- fs, Just (ty,_,_) <- [Map.lookup f $ funs $ abstract pgf]]
  where 
    fs = lookMap [] cat $ catfuns $ abstract pgf
 
