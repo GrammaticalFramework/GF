@@ -259,7 +259,6 @@ renamePattern env patt = case patt of
 
   PV x -> do case renid (Vr x) of
                Ok (QC m c) -> return (PP m c [],[])
-               Ok (Q  m c) -> Bad $ render (text "data constructor expected but" <+> ppTerm Qualified 0 (Q  m c) <+> text "is found instead")
                _           -> return (patt, [x])
 
   PR r -> do
