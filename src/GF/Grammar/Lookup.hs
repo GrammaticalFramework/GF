@@ -121,7 +121,7 @@ lookupResType gr m c = do
           mu <- lookupModule gr a
           info <- lookupIdentInfo mu c
           case info of
-            AbsFun (Just ty) _ -> return $ redirectTerm e ty 
+            AbsFun (Just ty) _ _ -> return $ redirectTerm e ty 
             AbsCat _ _ -> return typeType
             AnyInd _ n -> lookFun e m c n
             _ -> prtBad "cannot find type of reused function" c
@@ -227,14 +227,14 @@ qualifAnnotPar m t = case t of
   Con c -> QC m c
   _ -> composSafeOp (qualifAnnotPar m) t
 
-lookupAbsDef :: SourceGrammar -> Ident -> Ident -> Err (Maybe [Equation])
+lookupAbsDef :: SourceGrammar -> Ident -> Ident -> Err (Maybe Int,Maybe [Equation])
 lookupAbsDef gr m c = errIn ("looking up absdef of" +++ prt c) $ do
   mo <- lookupModule gr m
   info <- lookupIdentInfo mo c
   case info of
-    AbsFun _ (Just t) -> return (Just t)
-    AnyInd _ n        -> lookupAbsDef gr n c
-    _                 -> return Nothing
+    AbsFun _ a d -> return (a,d)
+    AnyInd _ n   -> lookupAbsDef gr n c
+    _            -> return (Nothing,Nothing)
 
 lookupLincat :: SourceGrammar -> Ident -> Ident -> Err Type
 lookupLincat gr m c | isPredefCat c = return defLinType --- ad hoc; not needed?
@@ -252,9 +252,9 @@ lookupFunType gr m c = do
   mo <- lookupModule gr m
   info <- lookupIdentInfo mo c
   case info of
-    AbsFun (Just t) _  -> return t
-    AnyInd _ n         -> lookupFunType gr n c
-    _                  -> prtBad "cannot find type of" c
+    AbsFun (Just t) _ _  -> return t
+    AnyInd _ n           -> lookupFunType gr n c
+    _                    -> prtBad "cannot find type of" c
 
 -- | this is needed at compile time
 lookupCatContext :: SourceGrammar -> Ident -> Ident -> Err Context
@@ -281,7 +281,7 @@ opersForType gr orig val =
       let cat = err error snd (valCat orig) in --- ignore module
       [(f,ty) |
         Ok a <- [abstractOfConcrete gr i >>= lookupModule gr],
-        (f, AbsFun (Just ty0) _) <- tree2list $ jments a,
+        (f, AbsFun (Just ty0) _ _) <- tree2list $ jments a,
         let ty = redirectTerm i ty0,
         Ok valt  <- [valCat ty],
         cat == snd valt ---

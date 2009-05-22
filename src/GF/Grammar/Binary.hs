@@ -90,7 +90,7 @@ instance Binary Options where
 
 instance Binary Info where
   put (AbsCat x y)     = putWord8 0 >> put (x,y)
-  put (AbsFun x y)     = putWord8 1 >> put (x,y)
+  put (AbsFun x y z)   = putWord8 1 >> put (x,y,z)
   put (ResParam x)     = putWord8 2 >> put x
   put (ResValue x)     = putWord8 3 >> put x
   put (ResOper x y)    = putWord8 4 >> put (x,y)
@@ -101,7 +101,7 @@ instance Binary Info where
   get = do tag <- getWord8
            case tag of
              0 -> get >>= \(x,y)   -> return (AbsCat x y)
-             1 -> get >>= \(x,y)   -> return (AbsFun x y)
+             1 -> get >>= \(x,y,z) -> return (AbsFun x y z)
              2 -> get >>= \x       -> return (ResParam x)
              3 -> get >>= \x       -> return (ResValue x)
              4 -> get >>= \(x,y)   -> return (ResOper x y)

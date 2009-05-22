@@ -41,7 +41,6 @@ module GF.Grammar.Grammar (SourceGrammar,
 		Param,
 		Altern,
 		Substitution,
-		wildPatt,
 		varLabel, tupleLabel, linLabel, theLinLabel,
 		ident2label, label2ident
 	       ) where
@@ -80,8 +79,8 @@ type PValues = [Term]
 -- and indirection to module (/INDIR/)
 data Info =
 -- judgements in abstract syntax
-   AbsCat   (Maybe Context) (Maybe [Term])   -- ^ (/ABS/) constructors; must be 'Id' or 'QId'
- | AbsFun   (Maybe Type) (Maybe [Equation])  -- ^ (/ABS/)
+   AbsCat   (Maybe Context) (Maybe [Term])               -- ^ (/ABS/) the second parameter is list of constructors - must be 'Id' or 'QId'
+ | AbsFun   (Maybe Type) (Maybe Int) (Maybe [Equation])  -- ^ (/ABS/) type, arrity and definition of function
 
 -- judgements in resource
  | ResParam (Maybe ([Param],Maybe PValues))  -- ^ (/RES/)
@@ -229,6 +228,3 @@ ident2label c = LIdent (ident2bs c)
 label2ident :: Label -> Ident
 label2ident (LIdent s) = identC s
 label2ident (LVar i)   = identC (BS.pack ('$':show i))
-
-wildPatt :: Patt
-wildPatt = PV identW

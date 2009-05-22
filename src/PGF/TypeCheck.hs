@@ -61,7 +61,7 @@ infer pgf tenv@(k,rho,gamma) e = case e of
 
 checkExp :: PGF -> TCEnv -> Expr -> Value -> Err (Expr, [(Value,Value)])
 checkExp pgf tenv@(k,rho,gamma) e typ = do
-  let v = VGen k
+  let v = VGen k []
   case e of
     EMeta m -> return $ (e,[])
     EAbs x t -> case typ of
@@ -82,7 +82,7 @@ checkInferExp pgf tenv@(k,_,_) e typ = do
 lookupEVar :: PGF -> TCEnv -> CId -> Err Value
 lookupEVar pgf (_,g,_) x = case Map.lookup x g of
   Just v -> return v
-  _ -> maybe (Bad "var not found") (return . VClosure eempty . type2expr . fst) $ 
+  _ -> maybe (Bad "var not found") (return . VClosure eempty . type2expr . (\(a,b,c) -> a)) $ 
          Map.lookup x (funs (abstract pgf))
 
 type2expr :: Type -> Expr
@@ -103,7 +103,7 @@ prValue = showExpr . value2expr
 
 value2expr v = case v of
   VApp f vs -> foldl EApp (EVar f) (map value2expr vs)
-  VMeta i -> EMeta i
+  VMeta i vs -> foldl EApp (EMeta i) (map value2expr vs)
   VClosure g e -> e ----
   VLit l -> ELit l
 
@@ -116,15 +116,15 @@ prConstraints cs = unwords
 splitConstraints :: [(Value,Value)] -> ([(Int,Expr)],[(Value,Value)])
 splitConstraints = mkSplit . partition isSubst . regroup . map reorder where
   reorder (v,w) = case w of
-    VMeta _ -> (w,v)
+    VMeta _ _ -> (w,v)
     _ -> (v,w)
 
   regroup = groupBy (\x y -> fst x == fst y) . sort
 
   isSubst cs@((v,u):_) = case v of
-    VMeta _ -> all ((==u) . snd) cs
+    VMeta _ _ -> all ((==u) . snd) cs
     _ -> False
-  mkSplit (ms,cs) = ([(i,value2expr v) | (VMeta i,v):_ <- ms], concat cs)
+  mkSplit (ms,cs) = ([(i,value2expr v) | (VMeta i _,v):_ <- ms], concat cs)
 
 metaSubst :: [(Int,Expr)] -> Expr -> Expr
 metaSubst vs exp = case exp of
@@ -136,3 +136,11 @@ metaSubst vs exp = case exp of
  where
   subst = metaSubst vs
 
+--- use composOp and state monad...
+newMetas :: Expr -> Expr
+newMetas = fst . metas 0 where
+  metas i exp = case exp of
+    EAbs x e -> let (f,j) = metas i e in (EAbs x f, j)
+    EApp f a -> let (g,j) = metas i f ; (b,k) = metas j a in (EApp g b,k)
+    EMeta _  -> (EMeta i, i+1)
+    _        -> (exp,i)

@@ -24,7 +24,7 @@ data PGF = PGF {
 
 data Abstr = Abstr {
   aflags  :: Map.Map CId String,      -- value of a flag
-  funs    :: Map.Map CId (Type,[Equation]), -- type and def of a fun
+  funs    :: Map.Map CId (Type,Int,[Equation]), -- type, arrity and definition of function
   cats    :: Map.Map CId [Hypo],      -- context of a cat
   catfuns :: Map.Map CId [CId]        -- funs to a cat (redundant, for fast lookup)
   }

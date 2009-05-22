@@ -163,7 +163,7 @@ extendMod gr isCompl (name,cond) base old new = foldM try new $ Map.toList old
       (b,n') = case info of
         ResValue _ -> (True,n)
         ResParam _ -> (True,n)
-        AbsFun _ Nothing -> (True,n) 
+        AbsFun _ _ Nothing -> (True,n) 
         AnyInd b k -> (b,k)
         _ -> (False,n) ---- canonical in Abs
 
@@ -171,8 +171,8 @@ unifyAnyInfo :: Ident -> Info -> Info -> Err Info
 unifyAnyInfo m i j = case (i,j) of
   (AbsCat mc1 mf1, AbsCat mc2 mf2) -> 
     liftM2 AbsCat (unifMaybe mc1 mc2) (unifConstrs mf1 mf2) -- adding constrs
-  (AbsFun mt1 md1, AbsFun mt2 md2) -> 
-    liftM2 AbsFun (unifMaybe mt1 mt2) (unifAbsDefs md1 md2) -- adding defs
+  (AbsFun mt1 ma1 md1, AbsFun mt2 ma2 md2) -> 
+    liftM3 AbsFun (unifMaybe mt1 mt2) (unifAbsArrity ma1 ma2) (unifAbsDefs md1 md2) -- adding defs
 
   (ResParam mt1, ResParam mt2) -> liftM ResParam $ unifMaybe mt1 mt2
   (ResValue mt1, ResValue mt2) -> 
@@ -202,6 +202,14 @@ unifMaybe Nothing   (Just p2) = return (Just p2)
 unifMaybe (Just p1) (Just p2)
   | p1==p2                    = return (Just p1)
   | otherwise                 = fail ""
+
+unifAbsArrity :: Maybe Int -> Maybe Int -> Err (Maybe Int)
+unifAbsArrity Nothing   Nothing   = return Nothing
+unifAbsArrity (Just a ) Nothing   = return (Just a )
+unifAbsArrity Nothing   (Just a ) = return (Just a )
+unifAbsArrity (Just a1) (Just a2)
+  | a1==a2                        = return (Just a1)
+  | otherwise                     = fail ""
 
 unifAbsDefs :: Maybe [Equation] -> Maybe [Equation] -> Err (Maybe [Equation])
 unifAbsDefs Nothing   Nothing   = return Nothing

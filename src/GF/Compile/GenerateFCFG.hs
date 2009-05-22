@@ -43,30 +43,30 @@ convertConcrete abs cnc = fixHoasFuns $ convert abs_defs' conc' cats'
              cats = lincats cnc
              (abs_defs',conc',cats') = expandHOAS abs_defs conc cats
 
-expandHOAS :: [(CId,(Type,[Equation]))] -> TermMap -> TermMap -> ([(CId,(Type,[Equation]))],TermMap,TermMap)
+expandHOAS :: [(CId,(Type,Int,[Equation]))] -> TermMap -> TermMap -> ([(CId,(Type,Int,[Equation]))],TermMap,TermMap)
 expandHOAS funs lins lincats = (funs' ++ hoFuns ++ varFuns, 
                                 Map.unions [lins, hoLins, varLins], 
                                 Map.unions [lincats, hoLincats, varLincat])
     where
       -- replace higher-order fun argument types with new categories
-      funs' = [(f,(fixType ty,e)) | (f,(ty,e)) <- funs]
+      funs' = [(f,(fixType ty,a,e)) | (f,(ty,a,e)) <- funs]
           where
             fixType :: Type -> Type
             fixType ty = let (ats,rt) = typeSkeleton ty in cftype (map catName ats) rt
 
       hoTypes :: [(Int,CId)]
-      hoTypes = sortNub [(n,c) | (_,(ty,_)) <- funs, (n,c) <- fst (typeSkeleton ty), n > 0]
+      hoTypes = sortNub [(n,c) | (_,(ty,_,_)) <- funs, (n,c) <- fst (typeSkeleton ty), n > 0]
       hoCats = sortNub (map snd hoTypes)
       -- for each Cat with N bindings, we add a new category _NCat
       -- each new category contains a single function __NCat : Cat -> _Var -> ... -> _Var -> _NCat
-      hoFuns = [(funName ty,(cftype (c : replicate n varCat) (catName ty),[])) | ty@(n,c) <- hoTypes]
+      hoFuns = [(funName ty,(cftype (c : replicate n varCat) (catName ty),0,[])) | ty@(n,c) <- hoTypes]
       -- lincats for the new categories
       hoLincats = Map.fromList [(catName ty, modifyRec (++ replicate n (S [])) (lincatOf c)) | ty@(n,c) <- hoTypes]
       -- linearizations of the new functions, lin __NCat v_0 ... v_n-1 x = { s1 = x.s1; ...; sk = x.sk; $0 = v_0.s ...
       hoLins = Map.fromList [ (funName ty, mkLin c n) | ty@(n,c) <- hoTypes]
           where mkLin c n = modifyRec (\fs -> [P (V 0) (C j) | j <- [0..length fs-1]] ++ [P (V i) (C 0) | i <- [1..n]]) (lincatOf c)
       -- for each Cat, we a add a fun _Var_Cat : _Var -> Cat
-      varFuns = [(varFunName cat, (cftype [varCat] cat,[])) | cat <- hoCats]
+      varFuns = [(varFunName cat, (cftype [varCat] cat,0,[])) | cat <- hoCats]
       -- linearizations of the _Var_Cat functions
       varLins = Map.fromList [(varFunName cat, R [P (V 0) (C 0)]) | cat <- hoCats]
       -- lincat for the _Var category
@@ -98,12 +98,12 @@ fixHoasFuns pinfo = pinfo{functions=mkArray [FFun (fixName n) prof lins | FFun n
                         | BS.pack "_Var_" `BS.isPrefixOf` n = wildCId
         fixName n = n
 
-convert :: [(CId,(Type,[Equation]))] -> TermMap -> TermMap -> ParserInfo
+convert :: [(CId,(Type,Int,[Equation]))] -> TermMap -> TermMap -> ParserInfo
 convert abs_defs cnc_defs cat_defs = getParserInfo (loop grammarEnv)
       where
         srules = [
           (XRule id args res (map findLinType args) (findLinType res) term) | 
-            (id, (ty,_)) <- abs_defs, let (args,res) = catSkeleton ty, 
+            (id, (ty,_,_)) <- abs_defs, let (args,res) = catSkeleton ty, 
             term <- maybeToList (Map.lookup id cnc_defs)]
         
         findLinType id = fromMaybe (error $ "No lincat for " ++ show id) (Map.lookup id cat_defs)

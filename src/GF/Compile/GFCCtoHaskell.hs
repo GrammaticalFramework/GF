@@ -201,7 +201,7 @@ hSkeleton gr =
    fns = groupBy valtypg (sortBy valtyps (map jty (Map.assocs (funs (abstract gr)))))
    valtyps (_, (_,x)) (_, (_,y)) = compare x y
    valtypg (_, (_,x)) (_, (_,y)) = x == y
-   jty (f,(ty,_)) = (f,catSkeleton ty)
+   jty (f,(ty,_,_)) = (f,catSkeleton ty)
 
 updateSkeleton :: OIdent -> HSkeleton -> (OIdent, [OIdent]) -> HSkeleton
 updateSkeleton cat skel rule =

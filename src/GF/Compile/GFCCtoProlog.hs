@@ -71,16 +71,16 @@ plCat (cat, hypos) = plFact "cat" (plTypeWithHypos typ)
           args = reverse [EVar x | (_,x) <- subst]
           typ = wildcardUnusedVars $ DTyp hypos' cat args
 
-plFun :: (CId, (Type, [Equation])) -> String
-plFun (fun, (typ, _)) = plFact "fun" (plp fun : plTypeWithHypos typ')
+plFun :: (CId, (Type, Int, [Equation])) -> String
+plFun (fun, (typ,_,_)) = plFact "fun" (plp fun : plTypeWithHypos typ')
     where typ' = wildcardUnusedVars $ snd $ alphaConvert emptyEnv typ
 
 plTypeWithHypos :: Type -> [String]
 plTypeWithHypos (DTyp hypos cat args) = [plTerm (plp cat) (map plp args), plp hypos]
 
-plFundef :: (CId, (Type, [Equation])) -> [String]
-plFundef (fun, (_, [])) = []
-plFundef (fun, (_, eqs)) = [plFact "def" [plp fun, plp fundef']]
+plFundef :: (CId, (Type,Int,[Equation])) -> [String]
+plFundef (fun, (_,_,[])) = []
+plFundef (fun, (_,_,eqs)) = [plFact "def" [plp fun, plp fundef']]
     where fundef' = snd $ alphaConvert emptyEnv eqs
 
 

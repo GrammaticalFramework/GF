@@ -11,9 +11,6 @@ module PGF.Expr(Tree(..), Literal(..),
 
                 -- helpers
                 pStr,pFactor,
-
-                -- refresh metavariables
-                newMetas
                ) where
 
 import PGF.CId
@@ -41,7 +38,7 @@ data Tree =
  | Var CId                          -- ^ variable
  | Fun CId [Tree]                   -- ^ function application
  | Lit Literal                      -- ^ literal
- | Meta Int                         -- ^ meta variable
+ | Meta {-# UNPACK #-} !Int         -- ^ meta variable
   deriving (Eq, Ord)
 
 -- | An expression represents a potentially unevaluated expression
@@ -52,7 +49,7 @@ data Expr =
    EAbs CId Expr                    -- ^ lambda abstraction
  | EApp Expr Expr                   -- ^ application
  | ELit Literal                     -- ^ literal
- | EMeta  Int                       -- ^ meta variable
+ | EMeta  {-# UNPACK #-} !Int       -- ^ meta variable
  | EVar   CId                       -- ^ variable or function reference
  | EPi CId Expr Expr                -- ^ dependent function type
   deriving (Eq,Ord)
@@ -219,7 +216,7 @@ expr2tree :: Funs -> Expr -> Tree
 expr2tree funs e = value2tree [] (eval funs Map.empty e)
   where
     value2tree xs (VApp f vs)               = case Map.lookup f funs of
-                                                Just (DTyp hyps _ _,_) -> -- eta conversion
+                                                Just (DTyp hyps _ _,_,_) -> -- eta conversion
                                                                           let a1  = length hyps    
                                                                               a2  = length vs
                                                                               a   = a1 - a2
@@ -228,11 +225,13 @@ expr2tree funs e = value2tree [] (eval funs Map.empty e)
                                                                           in ret (reverse xs'++xs)
                                                                                  (Fun f (map (value2tree []) vs++map Var xs'))
                                                 Nothing                -> error ("unknown variable "++prCId f)
-    value2tree xs (VGen i)                  = ret xs (Var (var i))
-    value2tree xs (VMeta n)                 = ret xs (Meta n)
+    value2tree xs (VGen i vs)   | null vs   = ret xs (Var (var i))
+                                | otherwise = error "variable of function type"
+    value2tree xs (VMeta n vs)  | null vs   = ret xs (Meta n)
+                                | otherwise = error "meta variable of function type"
     value2tree xs (VLit l)                  = ret xs (Lit l)
     value2tree xs (VClosure env (EAbs x e)) = let i = length xs
-                                              in value2tree (var i:xs) (eval funs (Map.insert x (VGen i) env) e)
+                                              in value2tree (var i:xs) (eval funs (Map.insert x (VGen i []) env) e)
 
     var i = mkCId ('v':show i)
 
@@ -242,73 +241,96 @@ expr2tree funs e = value2tree [] (eval funs Map.empty e)
 data Value
   = VApp CId [Value]
   | VLit Literal
-  | VMeta Int
-  | VGen Int
+  | VMeta {-# UNPACK #-} !Int [Value]
+  | VGen  {-# UNPACK #-} !Int [Value]
   | VClosure Env Expr
  deriving (Eq,Ord)
 
-type Funs = Map.Map CId (Type,[Equation]) -- type and def of a fun
+type Funs = Map.Map CId (Type,Int,[Equation]) -- type and def of a fun
 type Env  = Map.Map CId Value
 
 eval :: Funs -> Env -> Expr -> Value
 eval funs env (EVar x)     = case Map.lookup x env of
                                Just v  -> v
                                Nothing -> case Map.lookup x funs of
-                                            Just (_,eqs) -> case eqs of
-                                                              Equ [] e : _ -> eval funs env e
-                                                              []           -> VApp x []                                                              
-                                            Nothing               -> error ("unknown variable "++prCId x)
+                                            Just (_,a,eqs) -> if a == 0
+                                                                then case eqs of
+                                                                       Equ [] e : _ -> eval funs env e
+                                                                       _            -> VApp x []
+                                                                else VApp x []
+                                            Nothing        -> error ("unknown variable "++prCId x)
 eval funs env (EApp e1 e2) = apply funs env e1 [eval funs env e2]
 eval funs env (EAbs x e)   = VClosure env (EAbs x e)
-eval funs env (EMeta k)    = VMeta k
+eval funs env (EMeta k)    = VMeta k []
 eval funs env (ELit l)     = VLit l
 
 apply :: Funs -> Env -> Expr -> [Value] -> Value
 apply funs env e            []     = eval funs env e
 apply funs env (EVar x)     vs     = case Map.lookup x env of
                                        Just v  -> case (v,vs) of
+                                                    (VApp f  vs0            ,  vs) -> apply funs env (EVar f) (vs0++vs)
+                                                    (VLit _                 ,  vs) -> error "literal of function type"
+                                                    (VMeta i vs0            ,  vs) -> VMeta i (vs0++vs)
+                                                    (VGen  i vs0            ,  vs) -> VGen  i (vs0++vs)
                                                     (VClosure env (EAbs x e),v:vs) -> apply funs (Map.insert x v env) e vs
                                        Nothing -> case Map.lookup x funs of
-                                                    Just (_,eqs) -> case match eqs vs of
-                                                                      Just (e,vs,env) -> apply funs env e vs
-                                                                      Nothing         -> VApp x vs
-                                                    Nothing      -> error ("unknown variable "++prCId x)
-apply funs env (EAbs x e)   (v:vs) = apply funs (Map.insert x v env) e vs
+                                                    Just (_,a,eqs) -> if a <= length vs
+                                                                        then let (as,vs') = splitAt a vs
+                                                                             in case match eqs as of
+                                                                                  Match e env -> apply funs env e vs'
+                                                                                  Fail        -> VApp x vs
+                                                                                  Susp        -> VApp x vs
+                                                                        else VApp x vs
+                                                    Nothing        -> error ("unknown variable "++prCId x)
 apply funs env (EApp e1 e2) vs     = apply funs env e1 (eval funs env e2 : vs)
+apply funs env (EAbs x e)   (v:vs) = apply funs (Map.insert x v env) e vs
+apply funs env (EMeta k)    vs     = VMeta k vs
+apply funs env (ELit l)     vs     = error "literal of function type"
 
-match :: [Equation] -> [Value] -> Maybe (Expr, [Value], Env)
-match eqs vs =
+
+-----------------------------------------------------
+-- Pattern matching
+-----------------------------------------------------
+
+data MatchRes
+  = Match Expr Env
+  | Susp
+  | Fail
+
+match :: [Equation] -> [Value] -> MatchRes
+match eqs as =
   case eqs of
-    []               -> Nothing
-    (Equ ps res):eqs -> let (as,vs') = splitAt (length ps) vs
-                        in case zipWithM tryMatch ps as of
-                             Just envs -> Just (res, vs', Map.unions envs)
-                             Nothing   -> match eqs vs
+    []               -> Fail
+    (Equ ps res):eqs -> case tryMatches ps as res Map.empty of
+                          Fail -> match eqs as
+                          res  -> res
   where
-    tryMatch p v = case (p, v) of
-      (PVar x,    _         )           -> Just (Map.singleton x v)
-      (PApp f ps, VApp fe vs) | f == fe -> do envs <- zipWithM tryMatch ps vs
-                                              return (Map.unions envs)
-      (PLit l,    VLit le   ) | l == le -> Just Map.empty
-      _                                 -> Nothing
+    tryMatches []     []     res env = Match res env
+    tryMatches (p:ps) (a:as) res env = tryMatch p a env
+      where
+        tryMatch (PApp f1 ps1) (VApp f2 vs2) env | f1 == f2 = tryMatches (ps1++ps) (vs2++as) res env
+        tryMatch (PApp f1 ps1) (VMeta _ _  ) env            = Susp
+        tryMatch (PApp f1 ps1) (VGen  _ _  ) env            = Susp
+        tryMatch (PLit l1    ) (VLit l2    ) env | l1 == l2 = tryMatches       ps        as  res env
+        tryMatch (PLit l1    ) (VMeta _ _  ) env            = Susp
+        tryMatch (PLit l1    ) (VGen  _ _  ) env            = Susp
+        tryMatch (PVar x     ) (v          ) env            = tryMatches       ps        as  res (Map.insert x v env)
+        tryMatch (PWild      ) (_          ) env            = tryMatches       ps        as  res env
+        tryMatch _             _             env            = Fail
+
+
+-----------------------------------------------------
+-- Equality checking
+-----------------------------------------------------
 
 eqValue :: Int -> Value -> Value -> [(Value,Value)]
 eqValue k v1 v2 =
   case (v1,v2) of
     (VApp f1 vs1, VApp f2 vs2) | f1 == f2  -> concat (zipWith (eqValue k) vs1 vs2)
     (VLit l1,     VLit l2    ) | l1 == l2  -> []
-    (VMeta i,     VMeta j    ) | i  == j   -> []
-    (VGen  i,     VGen  j    ) | i  == j   -> []
+    (VMeta i vs1, VMeta j vs2) | i  == j   -> concat (zipWith (eqValue k) vs1 vs2)
+    (VGen  i vs1, VGen  j vs2) | i  == j   -> concat (zipWith (eqValue k) vs1 vs2)
     (VClosure env1 (EAbs x1 e1), VClosure env2 (EAbs x2 e2)) ->
-      let v = VGen k
+      let v = VGen k []
       in eqValue (k+1) (VClosure (Map.insert x1 v env1) e1) (VClosure (Map.insert x2 v env2) e2)
     _                                      -> [(v1,v2)]
-
---- use composOp and state monad...
-newMetas :: Expr -> Expr
-newMetas = fst . metas 0 where
-  metas i exp = case exp of
-    EAbs x e -> let (f,j) = metas i e in (EAbs x f, j)
-    EApp f a -> let (g,j) = metas i f ; (b,k) = metas j a in (EApp g b,k)
-    EMeta _  -> (EMeta i, i+1)
-    _        -> (exp,i)
