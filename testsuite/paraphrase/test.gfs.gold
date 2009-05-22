@@ -5,7 +5,3 @@ Succ (Succ (Succ Zero))
 Succ (Succ Zero)
 
 unknown variable two
-Succ Zero
-
-Succ (Succ (Succ Zero))
-
