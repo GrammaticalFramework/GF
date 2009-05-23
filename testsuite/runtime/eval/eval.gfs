@@ -1,0 +1,29 @@
+i testsuite/runtime/eval/Test.gf
+
+pt -compute \x -> x 1
+pt -compute ? 1
+pt -compute (\x -> x 1) ?
+pt -compute unknown_var
+pt -compute unknown_var 1
+pt -compute 1 2
+pt -compute f 1 2
+pt -compute \x -> x
+pt -compute ?666
+pt -compute f
+pt -compute (\x -> x 2) (f 1)
+pt -compute (\x -> x 2) 1
+pt -compute g 1
+pt -compute g 0
+pt -compute \x -> g x
+pt -compute g ?
+pt -compute (\x -> x 5) (g2 1)
+pt -compute (\x -> x 3) (\x -> x)
+pt -compute g0
+pt -compute (\x -> x 3.2) (\x -> f x)
+pt -compute g0 2.3
+pt -compute g0 ((\x -> f x) 0) 1
+pt -compute const 3.14 "pi"
+pt -compute dec (succ (succ zero))
+pt -compute dec (succ ?)
+pt -compute \x -> dec x
+pt -compute dec ?
