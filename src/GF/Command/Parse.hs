@@ -51,7 +51,7 @@ pFilename = liftM2 (:) (RP.satisfy isFileFirst) (RP.munch (not . isSpace)) where
 
 pArgument =          
   RP.option ANoArg 
-    (fmap ATree (pTree False)
+    (fmap AExpr pExpr
               RP.<++ 
     (RP.munch isSpace >> RP.char '%' >> fmap AMacro pIdent))
 

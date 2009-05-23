@@ -49,7 +49,7 @@ fromDef pgf t@(Fun f ts) = defDown t ++ defUp t where
     [(ps,p) | (p,d@(Fun g ps)) <- equs, g==f, 
               isClosed d || (length equs == 1 && isLinear d)]
 
-  equss = [(f,[(Fun f (map patt2tree ps), expr2tree (funs (abstract pgf)) d) | (Equ ps d) <- eqs]) | 
+  equss = [(f,[(Fun f (map patt2tree ps), expr2tree d) | (Equ ps d) <- eqs]) | 
                        (f,(_,_,eqs)) <- Map.assocs (funs (abstract pgf)), not (null eqs)]
 
   trequ s f e = True ----trace (s ++ ": " ++ show f ++ "  " ++ show e) True

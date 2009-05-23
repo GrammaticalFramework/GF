@@ -6,13 +6,9 @@ module GF.Command.TreeOperations (
 import GF.Compile.TypeCheck
 import PGF
 
---import GF.Compile.GrammarToGFCC (mkType,mkExp)
-import qualified GF.Grammar.Grammar as G
-import qualified GF.Grammar.Macros as M
-
 import Data.List
 
-type TreeOp = [Tree] -> [Tree]
+type TreeOp = [Expr] -> [Expr]
 
 treeOp :: PGF -> String -> Maybe TreeOp
 treeOp pgf f = fmap snd $ lookup f $ allTreeOps pgf
@@ -20,20 +16,20 @@ treeOp pgf f = fmap snd $ lookup f $ allTreeOps pgf
 allTreeOps :: PGF -> [(String,(String,TreeOp))]
 allTreeOps pgf = [
    ("compute",("compute by using semantic definitions (def)",
-      map (expr2tree pgf . tree2expr))),
+      map (compute pgf))),
    ("paraphrase",("paraphrase by using semantic definitions (def)",
-      nub . concatMap (paraphrase pgf))),
+      map tree2expr . nub . concatMap (paraphrase pgf . expr2tree))),
    ("smallest",("sort trees from smallest to largest, in number of nodes",
       smallest)),
    ("typecheck",("type check and solve metavariables; reject if incorrect",
       concatMap (typecheck pgf)))
   ]
 
-smallest :: [Tree] -> [Tree]
+smallest :: [Expr] -> [Expr]
 smallest = sortBy (\t u -> compare (size t) (size u)) where
   size t = case t of
-    Abs _ b -> size b + 1
-    Fun f ts -> sum (map size ts) + 1
+    EAbs _ e -> size e + 1
+    EApp e1 e2 -> size e1 + size e2 + 1
     _ -> 1
 
 {-

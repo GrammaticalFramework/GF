@@ -141,7 +141,7 @@ loop opts gfenv0 = do
                _ -> putStrLn "command definition not parsed" >> loopNewCPU gfenv
 
           "dt":f:ws -> do
-             case readTree (unwords ws) of
+             case readExpr (unwords ws) of
                Just exp -> loopNewCPU $ gfenv {
                  commandenv = env {
                    expmacros = Map.insert f exp (expmacros env)

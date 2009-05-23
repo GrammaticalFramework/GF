@@ -48,7 +48,7 @@ module PGF(
            parse, canParse, parseAllLang, parseAll,
            
            -- ** Evaluation
-           tree2expr, PGF.expr2tree, paraphrase, typecheck,
+           tree2expr, expr2tree, PGF.compute, paraphrase, typecheck,
            
            -- ** Word Completion (Incremental Parsing)
            complete,
@@ -287,9 +287,6 @@ complete pgf from typ input =
                       | otherwise = (init ws, last ws)
         where ws = words s
 
--- | Converts an expression to tree. The expression
--- is first reduced to beta-eta-alfa normal form and
--- after that converted to tree. The function definitions
--- are used in the computation.
-expr2tree :: PGF -> Expr -> Tree
-expr2tree pgf = PGF.Data.expr2tree (funs (abstract pgf))
+-- | Converts an expression to normal form
+compute :: PGF -> Expr -> Expr
+compute pgf = PGF.Data.normalForm (funs (abstract pgf))
