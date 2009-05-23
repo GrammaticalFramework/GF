@@ -25,7 +25,7 @@ data Value
   deriving (Eq,Ord,Show)
 
 data Argument
-  = ATree Tree
+  = AExpr Expr
   | ANoArg
   | AMacro Ident
   deriving (Eq,Ord,Show)

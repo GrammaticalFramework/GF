@@ -4,7 +4,7 @@ module PGF.Expr(Tree(..), Literal(..),
                 Expr(..), Patt(..), Equation(..),
                 readExpr, showExpr, pExpr, ppExpr, ppPatt,
 
-                tree2expr, expr2tree,
+                tree2expr, expr2tree, normalForm,
 
                 -- needed in the typechecker
                 Value(..), Env, eval, apply, eqValue,
@@ -42,9 +42,7 @@ data Tree =
   deriving (Eq, Ord)
 
 -- | An expression represents a potentially unevaluated expression
--- in the abstract syntax of the grammar. It can be evaluated with
--- the 'expr2tree' function and then linearized or it can be used
--- directly in the dependent types.
+-- in the abstract syntax of the grammar.
 data Expr =
    EAbs CId Expr                    -- ^ lambda abstraction
  | EApp Expr Expr                   -- ^ application
@@ -111,7 +109,7 @@ pTrees :: RP.ReadP [Tree]
 pTrees = liftM2 (:) (pTree True) pTrees RP.<++ (RP.skipSpaces >> return [])
 
 pTree :: Bool -> RP.ReadP Tree
-pTree isNested = RP.skipSpaces >> (pParen RP.<++ pAbs RP.<++ pApp RP.<++ fmap Lit pLit RP.<++ pMeta)
+pTree isNested = RP.skipSpaces >> (pParen RP.<++ pAbs RP.<++ pApp RP.<++ fmap Lit pLit RP.<++ fmap Meta pMeta)
   where 
         pParen = RP.between (RP.char '(') (RP.char ')') (pTree False)
         pAbs = do xs <- RP.between (RP.char '\\') (RP.skipSpaces >> RP.string "->") (RP.sepBy1 (RP.skipSpaces >> pCId) (RP.skipSpaces >> RP.char ','))
@@ -120,9 +118,6 @@ pTree isNested = RP.skipSpaces >> (pParen RP.<++ pAbs RP.<++ pApp RP.<++ fmap Li
         pApp = do f  <- pCId
                   ts <- (if isNested then return [] else pTrees)
                   return (Fun f ts)
-        pMeta = do RP.char '?'
-                   n <- fmap read (RP.munch1 isDigit)
-                   return (Meta n)
 
 pExpr :: RP.ReadP Expr
 pExpr = RP.skipSpaces >> (pAbs RP.<++ pTerm)
@@ -133,14 +128,16 @@ pExpr = RP.skipSpaces >> (pAbs RP.<++ pTerm)
               e  <- pExpr
               return (foldr EAbs e xs)
 
-pFactor =       fmap EVar pCId
-        RP.<++  fmap ELit pLit
-        RP.<++  pMeta
+pFactor =       fmap EVar  pCId
+        RP.<++  fmap ELit  pLit
+        RP.<++  fmap EMeta pMeta
         RP.<++  RP.between (RP.char '(') (RP.char ')') pExpr
-  where
-    pMeta = do RP.char '?'
-               n <- fmap read (RP.munch1 isDigit)
-               return (EMeta n)
+
+pMeta = do RP.char '?'
+           cs <- RP.look
+           case cs of
+             (c:_) | isDigit c -> fmap read (RP.munch1 isDigit)
+             _                 -> return 0
 
 pLit :: RP.ReadP Literal
 pLit = pNum RP.<++ liftM LStr pStr
@@ -166,7 +163,7 @@ ppTree d (Abs xs t) = ppParens (d > 0) (PP.char '\\' PP.<>
 ppTree d (Fun f []) = PP.text (prCId f)
 ppTree d (Fun f ts) = ppParens (d > 0) (PP.text (prCId f) PP.<+> PP.hsep (map (ppTree 1) ts))
 ppTree d (Lit l)    = ppLit l
-ppTree d (Meta n)   = PP.char '?' PP.<> PP.int n
+ppTree d (Meta n)   = ppMeta n
 ppTree d (Var id)   = PP.text (prCId id)
 
 
@@ -181,7 +178,7 @@ ppExpr d (EAbs x e)   = let (xs,e1) = getVars (EAbs x e)
                           getVars e          = ([],e)
 ppExpr d (EApp e1 e2) = ppParens (d > 1) ((ppExpr 1 e1) PP.<+> (ppExpr 2 e2))
 ppExpr d (ELit l)     = ppLit l
-ppExpr d (EMeta n)    = PP.char '?' PP.<+> PP.int n
+ppExpr d (EMeta n)    = ppMeta n
 ppExpr d (EVar f)     = PP.text (prCId f)
 
 ppPatt d (PApp f ps) = ppParens (d > 1) (PP.text (prCId f) PP.<+> PP.hsep (map (ppPatt 2) ps))
@@ -193,15 +190,20 @@ ppLit (LStr s) = PP.text (show s)
 ppLit (LInt n) = PP.integer n
 ppLit (LFlt d) = PP.double d
 
+ppMeta n
+  | n == 0    = PP.char '?'
+  | otherwise = PP.char '?' PP.<> PP.int n
+
 ppParens True  = PP.parens
 ppParens False = id
 
 
 -----------------------------------------------------
--- Evaluation
+-- Conversion Expr <-> Tree
 -----------------------------------------------------
 
--- | Converts a tree to expression.
+-- | Converts a tree to expression. The conversion
+-- is always total, every tree is a valid expression.
 tree2expr :: Tree -> Expr
 tree2expr (Fun x ts) = foldl EApp (EVar x) (map tree2expr ts) 
 tree2expr (Lit l)    = ELit l
@@ -209,29 +211,40 @@ tree2expr (Meta n)   = EMeta n
 tree2expr (Abs xs t) = foldr EAbs (tree2expr t) xs
 tree2expr (Var x)    = EVar x
 
--- | Converts an expression to tree. The expression
--- is first reduced to beta-eta-alfa normal form and
--- after that converted to tree.
-expr2tree :: Funs -> Expr -> Tree
-expr2tree funs e = value2tree [] (eval funs Map.empty e)
+-- | Converts an expression to tree. The conversion is only partial.
+-- Variables and meta variables of function type and beta redexes are not allowed.
+expr2tree :: Expr -> Tree
+expr2tree e = abs [] e
   where
-    value2tree xs (VApp f vs)               = case Map.lookup f funs of
-                                                Just (DTyp hyps _ _,_,_) -> -- eta conversion
-                                                                          let a1  = length hyps    
-                                                                              a2  = length vs
-                                                                              a   = a1 - a2
-                                                                              i   = length xs
-                                                                              xs' = [var i | i <- [i..i+a-1]]
-                                                                          in ret (reverse xs'++xs)
-                                                                                 (Fun f (map (value2tree []) vs++map Var xs'))
-                                                Nothing                -> error ("unknown variable "++prCId f)
-    value2tree xs (VGen i vs)   | null vs   = ret xs (Var (var i))
-                                | otherwise = error "variable of function type"
-    value2tree xs (VMeta n vs)  | null vs   = ret xs (Meta n)
-                                | otherwise = error "meta variable of function type"
-    value2tree xs (VLit l)                  = ret xs (Lit l)
-    value2tree xs (VClosure env (EAbs x e)) = let i = length xs
-                                              in value2tree (var i:xs) (eval funs (Map.insert x (VGen i []) env) e)
+    abs xs (EAbs x e) = abs (x:xs) e
+    abs xs e          = case xs of
+                          [] -> app [] e
+                          xs -> Abs (reverse xs) (app [] e)
+
+    app as (EApp e1 e2)   = app ((abs [] e2) : as) e1
+    app as (ELit l)
+              | null as   = Lit l
+              | otherwise = error "literal of function type encountered"
+    app as (EMeta n)
+              | null as   = Meta n
+              | otherwise = error "meta variables of function type are not allowed in trees"
+    app as (EAbs x e)     = error "beta redexes are not allowed in trees"
+    app as (EVar x)       = Fun x as
+
+
+-----------------------------------------------------
+-- Computation
+-----------------------------------------------------
+
+-- | Compute an expression to normal form
+normalForm :: Funs -> Expr -> Expr
+normalForm funs e = value2expr 0 (eval funs Map.empty e)
+  where
+    value2expr i (VApp f vs)               = foldl EApp (EVar f)       (map (value2expr i) vs)
+    value2expr i (VGen j vs)               = foldl EApp (EVar (var j)) (map (value2expr i) vs)
+    value2expr i (VMeta n vs)              = foldl EApp (EMeta n)      (map (value2expr i) vs)
+    value2expr i (VLit l)                  = ELit l
+    value2expr i (VClosure env (EAbs x e)) = EAbs (var i) (value2expr (i+1) (eval funs (Map.insert x (VGen i []) env) e))
 
     var i = mkCId ('v':show i)
 

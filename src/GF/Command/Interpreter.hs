@@ -27,7 +27,7 @@ data CommandEnv = CommandEnv {
   morphos       :: Map.Map Language Morpho,
   commands      :: Map.Map String CommandInfo,
   commandmacros :: Map.Map String CommandLine,
-  expmacros     :: Map.Map String Tree
+  expmacros     :: Map.Map String Expr
   }
 
 mkCommandEnv :: Encoding -> PGF -> CommandEnv
@@ -72,18 +72,20 @@ interpretPipe enc env cs = do
    appLine es = map (map (appCommand es))
 
 -- macro definition applications: replace ?i by (exps !! i)
-appCommand :: [Tree] -> Command -> Command
+appCommand :: [Expr] -> Command -> Command
 appCommand xs c@(Command i os arg) = case arg of
-  ATree e -> Command i os (ATree (app e))
+  AExpr e -> Command i os (AExpr (app e))
   _       -> c
  where
   app e = case e of
-    Meta i   -> xs !! i
-    Fun f as -> Fun f (map app as)
-    Abs x b  -> Abs x (app b)
+    EAbs x e   -> EAbs x (app e)
+    EApp e1 e2 -> EApp (app e1) (app e2)
+    ELit l     -> ELit l
+    EMeta i    -> xs !! i
+    EVar x     -> EVar x
 
 -- return the trees to be sent in pipe, and the output possibly printed
-interpret :: (String -> String) -> CommandEnv -> [Tree] -> Command -> IO CommandOutput
+interpret :: (String -> String) -> CommandEnv -> [Expr] -> Command -> IO CommandOutput
 interpret enc env trees0 comm = case lookCommand co comms of
     Just info -> do
       checkOpts info
@@ -108,15 +110,15 @@ interpret enc env trees0 comm = case lookCommand co comms of
 
 -- analyse command parse tree to a uniform datastructure, normalizing comm name
 --- the env is needed for macro lookup
-getCommand :: CommandEnv -> Command -> [Tree] -> (String,[Option],[Tree])
+getCommand :: CommandEnv -> Command -> [Expr] -> (String,[Option],[Expr])
 getCommand env co@(Command c opts arg) ts = 
   (getCommandOp c,opts,getCommandArg env arg ts) 
 
-getCommandArg :: CommandEnv -> Argument -> [Tree] -> [Tree]
+getCommandArg :: CommandEnv -> Argument -> [Expr] -> [Expr]
 getCommandArg env a ts = case a of
   AMacro m -> case Map.lookup m (expmacros env) of
     Just t -> [t]
     _ -> [] 
-  ATree t -> [t] -- ignore piped
+  AExpr t -> [t] -- ignore piped
   ANoArg  -> ts  -- use piped
 

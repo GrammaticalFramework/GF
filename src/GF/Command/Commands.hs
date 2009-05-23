@@ -39,10 +39,10 @@ import Text.PrettyPrint
 
 import Debug.Trace
 
-type CommandOutput = ([Tree],String) ---- errors, etc
+type CommandOutput = ([Expr],String) ---- errors, etc
 
 data CommandInfo = CommandInfo {
-  exec     :: [Option] -> [Tree] -> IO CommandOutput,
+  exec     :: [Option] -> [Expr] -> IO CommandOutput,
   synopsis :: String,
   syntax   :: String,
   explanation :: String,
@@ -117,8 +117,9 @@ allCommands cod env@(pgf, mos) = Map.fromList [
        "by the flag. The target format is postscript, unless overridden by the",
        "flag -format."
        ],
-     exec = \opts ts -> do
-         let grph = if null ts then [] else alignLinearize pgf (head ts)
+     exec = \opts es -> do
+         let ts = toTrees es
+             grph = if null ts then [] else alignLinearize pgf (head ts)
          if isFlag "view" opts || isFlag "format" opts then do
            let file s = "_grph." ++ s
            let view = optViewGraph opts ++ " "
@@ -261,7 +262,7 @@ allCommands cod env@(pgf, mos) = Map.fromList [
           _ | isOpt "changes" opts -> changesMsg
           _ | isOpt "coding" opts -> codingMsg
           _ | isOpt "license" opts -> licenseMsg
-          [t] -> let co = getCommandOp (showTree t) in 
+          [t] -> let co = getCommandOp (showExpr t) in 
                  case lookCommand co (allCommands cod env) of   ---- new map ??!!
                    Just info -> commandHelp True (co,info)
                    _ -> "command not found"
@@ -306,7 +307,7 @@ allCommands cod env@(pgf, mos) = Map.fromList [
        "gr -lang=LangHin -cat=Cl | l -table -to_devanagari -to_utf8 -- hindi table",
        "l -unlexer=\"LangSwe=to_utf8 LangHin=to_devanagari,to_utf8\" -- different lexers"
        ],
-     exec = \opts -> return . fromStrings . map (optLin opts),
+     exec = \opts -> return . fromStrings . map (optLin opts) . toTrees,
      options = [
        ("all","show all forms and variants"),
        ("bracket","show tree structure with brackets and paths to nodes"),
@@ -443,7 +444,7 @@ allCommands cod env@(pgf, mos) = Map.fromList [
        "pt -compute (plus one two)   -- compute value",
        "p \"foo\" | pt -typecheck      -- type check parse results"
        ],
-     exec = \opts -> returnFromTrees . treeOps (map prOpt opts),
+     exec = \opts -> returnFromExprs . treeOps (map prOpt opts),
      options = treeOpOptions pgf
      }),
   ("q",  emptyCommandInfo {
@@ -464,7 +465,7 @@ allCommands cod env@(pgf, mos) = Map.fromList [
        ("lines","return the list of lines, instead of the singleton of all contents"),
        ("tree","convert strings into trees")
        ],
-     exec = \opts arg -> do 
+     exec = \opts _ -> do 
        let file = valStrOpts "file" "_gftmp" opts
        s <- readFile file
        return $ case opts of
@@ -524,7 +525,7 @@ allCommands cod env@(pgf, mos) = Map.fromList [
   ("ut", emptyCommandInfo {
      longname = "unicode_table",
      synopsis = "show a transliteration table for a unicode character set",
-     exec = \opts arg -> do
+     exec = \opts _ -> do
          let t = concatMap prOpt (take 1 opts)
          let out = maybe "no such transliteration" characterTable $ transliteration t
          return $ fromString out,
@@ -548,8 +549,9 @@ allCommands cod env@(pgf, mos) = Map.fromList [
        "by the flag. The target format is postscript, unless overridden by the",
        "flag -format."
        ],
-     exec = \opts ts -> do
-         let funs = not (isOpt "nofun" opts)
+     exec = \opts es -> do
+         let ts = toTrees es
+             funs = not (isOpt "nofun" opts)
          let cats = not (isOpt "nocat" opts)
          let grph = visualizeTrees pgf (funs,cats) ts -- True=digraph
          if isFlag "view" opts || isFlag "format" opts then do
@@ -599,13 +601,13 @@ allCommands cod env@(pgf, mos) = Map.fromList [
        ],
      exec = \opts arg -> do
        case arg of
-         [Fun id []] -> case Map.lookup id (funs (abstract pgf)) of
-                          Just (ty,_,eqs) -> return $ fromString $
+         [EVar id] -> case Map.lookup id (funs (abstract pgf)) of
+                        Just (ty,_,eqs) -> return $ fromString $
                                               render (text "fun" <+> text (prCId id) <+> colon <+> ppType 0 ty $$
                                                       if null eqs
                                                         then empty
                                                         else text "def" <+> vcat [text (prCId id) <+> hsep (map (ppPatt 9) patts) <+> char '=' <+> ppExpr 0 res | Equ patts res <- eqs])
-                          Nothing       -> case Map.lookup id (cats (abstract pgf)) of
+                        Nothing         -> case Map.lookup id (cats (abstract pgf)) of
                                              Just hyps -> do return $ fromString $
                                                                 render (text "cat" <+> text (prCId id) <+> hsep (map ppHypo hyps) $$
                                                                         space $$
@@ -679,15 +681,20 @@ allCommands cod env@(pgf, mos) = Map.fromList [
    optNum opts = valIntOpts "number" 1 opts
    optNumInf opts = valIntOpts "number" 1000000000 opts ---- 10^9
 
-   fromTrees ts = (ts,unlines (map showTree ts))
-   fromStrings ss = (map (Lit . LStr) ss, unlines ss)
-   fromString  s  = ([Lit (LStr s)], s)
+   fromTrees ts = (map tree2expr ts,unlines (map showTree ts))
+   fromStrings ss = (map (ELit . LStr) ss, unlines ss)
+   fromString  s  = ([ELit (LStr s)], s)
+   toTrees = map expr2tree
    toStrings = map showAsString 
    toString = unwords . toStrings
 
    returnFromTrees ts = return $ case ts of
-     [] -> (ts, "no trees found")
+     [] -> ([], "no trees found")
      _ -> fromTrees ts
+
+   returnFromExprs es = return $ case es of
+     [] -> ([], "no trees found")
+     _  -> (es,unlines (map showExpr es))
 
    prGrammar opts
      | isOpt "cats"     opts = return $ fromString $ unwords $ map showType $ categories pgf
@@ -715,8 +722,8 @@ allCommands cod env@(pgf, mos) = Map.fromList [
      app f = maybe id id (treeOp pgf f) 
 
    showAsString t = case t of
-     Lit (LStr s) -> s
-     _ -> "\n" ++ showTree t  --- newline needed in other cases than the first
+     ELit (LStr s) -> s
+     _ -> "\n" ++ showExpr t  --- newline needed in other cases than the first
 
 stringOpOptions = [
        ("bind","bind tokens separated by Prelude.BIND, i.e. &+"),
