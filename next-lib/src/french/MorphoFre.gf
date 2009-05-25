@@ -182,7 +182,10 @@ oper
     } ;
 
   elisPoss : Str -> Str = \s ->
-   pre {s + "a" ; s + "on" / voyelle} ;
+   pre {
+     voyelle => s + "on" ;
+     _ => s + "a"
+     } ;
 
 
 --2 Determiners

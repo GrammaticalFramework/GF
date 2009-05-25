@@ -483,6 +483,7 @@ Patt2
   | '#' Ident '.' Ident       { PM $2 $4 }
   | '_'                       { PW }
   | Ident                     { PV $1 }
+  | '{' Ident '}'             { PC $2 [] }
   | Ident '.' Ident           { PP $1 $3 [] }
   | Integer                   { PInt $1 }
   | Double                    { PFloat  $1 }

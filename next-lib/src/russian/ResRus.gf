@@ -375,8 +375,8 @@ param Place = attr  | indep  ;
 param Size  = nom | sgg | plg ;
 --param Gend = masc | fem | neut ;
 oper mille : Size => Str = table {
-  {nom} => "тысяча" ;
-  {sgg} => "тысячи" ;
+  nom => "тысяча" ;
+  sgg => "тысячи" ;
   _     => "тысяч"} ;
 
 oper gg : Str -> Gender => Str = \s -> table {_ => s} ;
