@@ -34,8 +34,16 @@ elisEl = pre { "el" ; "l'" / vocal } ;
 elisLa = pre { "la" ; "l'" / vocalForta } ;
 elisEm = pre { "em" ; "m'" / vocal } ;
 elisEt = pre { "et" ; "t'" / vocal } ;
+
+-- AR after pre syntax change 25/5/2009
 elisEs = pre {
-			pre { "es" ; "s'" / vocal} ;
-			"se" / strs { "s" } } ;
+  vocal => "s'" ;
+  "s"   => "se" ;
+  _     => "es"
+  } ;
+
+--elisEs = pre {
+--			pre { "es" ; "s'" / vocal} ;
+--			"se" / strs { "s" } } ;
 
 }

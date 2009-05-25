@@ -198,7 +198,8 @@ unlexer abstr ls =
 -- | Runs the gf executable in compile mode with the given arguments.
 run_gfc :: [String] -> IO ()
 run_gfc args = 
-    do let args' = ["-batch","-gf-lib-path=."] ++ filter (not . null) args ++ ["+RTS"] ++ rts_flags ++ ["-RTS"]
+    do let args' = ["-batch"] ++ filter (not . null) args ++ ["+RTS"] ++ rts_flags ++ ["-RTS"]
+--- do let args' = ["-batch","-gf-lib-path=."] ++ filter (not . null) args ++ ["+RTS"] ++ rts_flags ++ ["-RTS"] --- why path? AR 
        putStrLn $ "Running: " ++ default_gf ++ " " ++ unwords (map showArg args')
        e <- rawSystem default_gf args'
        case e of
