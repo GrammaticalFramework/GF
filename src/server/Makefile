@@ -14,6 +14,10 @@ gwt-fridge:
 	chmod a+x gwt/Fridge-compile
 	gwt/Fridge-compile
 
+gwt-morpho:
+	chmod a+x gwt/Morpho-compile
+	gwt/Morpho-compile
+
 gf-gwt.jar:
 	mkdir -p gwt/bin/se/chalmers/cs/gf/gwt/client
 	javac -classpath "$(GWT_CLASSPATH):gwt/lib/gwt-dnd-2.5.6.jar" -sourcepath gwt/src gwt/src/se/chalmers/cs/gf/gwt/client/*.java

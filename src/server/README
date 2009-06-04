@@ -55,8 +55,12 @@
   $ make gwt-fridge
   Then see http://localhost:41296/fridge/
 
+- GWT morphology:
+  $ make gwt-morpho
+  Then see http://localhost:41296/morpho/
 
-
+  The MorphoService.hs module has build-in paths to the grammar that will be loaded.
+  This have to be fixed by hand
 
 == Running (Apache) ==
 
