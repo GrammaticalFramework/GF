@@ -6,7 +6,7 @@ module FastCGIUtils (initFastCGI, loopFastCGI,
                      splitBy) where
 
 import Control.Concurrent
-import Control.Exception
+import Control.OldException
 import Control.Monad
 import Data.Dynamic
 import Data.IORef
