@@ -52,6 +52,7 @@ executable morpho-server
     FastCGIUtils
     Cache
     URLEncoding
+    GF.Grammar.Parser
   hs-source-dirs: .. . ../../dist/build/autogen
   if os(windows)
     ghc-options: -optl-mwindows
