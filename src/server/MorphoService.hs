@@ -10,7 +10,7 @@ import GF.Text.UTF8
 
 import Network.FastCGI
 import Text.JSON
-import qualified Codec.Binary.UTF8.String as UTF8 (encodeString)
+import qualified Codec.Binary.UTF8.String as UTF8 (decodeString, encodeString)
 import Data.ByteString.Char8 as BS
 
 import Control.Monad
@@ -54,7 +54,7 @@ cgiMain sgr =
   where
     getTerm :: CGI String
     getTerm = do mt <- getInput "term"
-                 maybe (throwCGIError 400 "No term given" ["No term given"]) (return . urlDecodeUnicode) mt
+                 maybe (throwCGIError 400 "No term given" ["No term given"]) (return . urlDecodeUnicode . UTF8.decodeString) mt
 
 doEval :: Grammar -> String -> Err JSValue
 doEval sgr t = liftM termToJSValue $ eval sgr t 
