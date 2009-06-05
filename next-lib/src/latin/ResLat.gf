@@ -40,7 +40,7 @@ oper
 
   noun1 : Str -> Noun = \mensa ->
     let 
-      mensae = mensa + "a" ;
+      mensae = mensa + "e" ;
       mensis = init mensa + "is" ;
     in
     mkNoun 
