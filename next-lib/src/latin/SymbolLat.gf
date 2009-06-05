@@ -1,4 +1,6 @@
---concrete SymbolLat of Symbol = CatLat ** open Prelude, ResLat in {
+--# -path=.:abstract:common
+
+concrete SymbolLat of Symbol = CatLat ** open Prelude, ResLat in {
 --
 --lin
 --  SymbPN i = {s = \\c => i.s ; g = Neutr} ; --- c
@@ -34,4 +36,4 @@
 --  BaseSymb = infixSS "and" ;
 --  ConsSymb = infixSS "," ;
 --
---}
+}

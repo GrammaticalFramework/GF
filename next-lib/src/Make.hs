@@ -54,10 +54,10 @@ langsCoding = [
 langs = map fst langsCoding
 
 -- languagues for which to compile Lang
-langsLang = langs `except` ["Ara","Lat","Pol","Ron","Tur"]
+langsLang = langs `except` ["Ara","Pol","Ron","Tur"]
 
 -- languages for which to compile Try 
-langsAPI  = langsLang `except` ["Bul","Hin","Ina","Rus","Tha"]
+langsAPI  = langsLang `except` ["Bul","Hin","Ina","Lat","Rus","Tha"]
 
 -- languages for which to compile minimal Syntax
 langsMinimal = langs `only` ["Eng","Bul","Ger","Ita"]
