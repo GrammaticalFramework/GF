@@ -87,7 +87,7 @@ public class AbstractSyntaxController {
 
 	private Panel addPanel(TreeItem item, Panel parentPanel)
 	{
-		HorizontalPanel wordsPanel = new HorizontalPanel();
+		FlowPanel wordsPanel = new FlowPanel();
 		wordsPanel.setStylePrimaryName("my-WordsPanel");
 		panels.put(wordsPanel,item);
 
