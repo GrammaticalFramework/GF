@@ -17,6 +17,7 @@ body {
 }
 
 .my-WordLabel {
+  float: left;
   padding: 2px;
 }
 
