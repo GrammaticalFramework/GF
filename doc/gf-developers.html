@@ -1,0 +1,451 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+<META NAME="generator" CONTENT="http://txt2tags.sf.net">
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+<TITLE>GF Developers Guide</TITLE>
+</HEAD><BODY BGCOLOR="white" TEXT="black">
+<P ALIGN="center"><CENTER><H1>GF Developers Guide</H1>
+<FONT SIZE="4">
+<I>Authors: Björn Bringert  and  Krasimir Angelov</I><BR>
+Last update: Sat Jun 13 20:00:21 2009
+</FONT></CENTER>
+
+<P></P>
+<HR NOSHADE SIZE=1>
+<P></P>
+  <UL>
+  <LI><A HREF="#toc1">Setting up your system for building GF</A>
+  <LI><A HREF="#toc2">Getting the sources</A>
+    <UL>
+    <LI><A HREF="#toc3">Read-only access</A>
+      <UL>
+      <LI><A HREF="#toc4">Getting a fresh copy for read-only access</A>
+      <LI><A HREF="#toc5">Updating your copy</A>
+      <LI><A HREF="#toc6">Recording local changes</A>
+      <LI><A HREF="#toc7">Submitting patches</A>
+      </UL>
+    <LI><A HREF="#toc8">Read-write access</A>
+      <UL>
+      <LI><A HREF="#toc9">Getting a fresh copy</A>
+      <LI><A HREF="#toc10">Getting other people's changes?</A>
+      <LI><A HREF="#toc11">Commit your changes</A>
+      <LI><A HREF="#toc12">Apply a patch from someone else</A>
+      </UL>
+    <LI><A HREF="#toc13">Further information about Darcs</A>
+    </UL>
+  <LI><A HREF="#toc14">Compilation from sources</A>
+    <UL>
+    <LI><A HREF="#toc15">Configure</A>
+    <LI><A HREF="#toc16">Build</A>
+    <LI><A HREF="#toc17">Install</A>
+    <LI><A HREF="#toc18">Clean</A>
+    <LI><A HREF="#toc19">SDist</A>
+    </UL>
+  <LI><A HREF="#toc20">Compilation with make</A>
+  <LI><A HREF="#toc21">Running the testsuite</A>
+  </UL>
+
+<P></P>
+<HR NOSHADE SIZE=1>
+<P></P>
+<A NAME="toc1"></A>
+<H1>Setting up your system for building GF</H1>
+<P>
+Before to build GF from sources you need to install some tools on your system.
+GF is written in Haskell, so first of all you need recent version of the Haskell compiler GHC.
+Currently we use GHC 6.10.3 and we recommend that you should use the same version
+as well. This version is not backward compatible with the previous major releases
+so you cannot use previous versions. GHC is available from here:
+</P>
+<P>
+<A HREF="http://www.haskell.org/ghc/">http://www.haskell.org/ghc/</A>
+</P>
+<P>
+Once you have installed GHC, open a terminal (Command Prompt on Windows) and try
+to execute the following command:
+</P>
+<PRE>
+  $ ghc --version
+</PRE>
+<P>
+This command should show you which version of GHC you have. If the installation
+of GHC was successful you should see message like:
+</P>
+<PRE>
+  The Glorious Glasgow Haskell Compilation System, version 6.10.3
+</PRE>
+<P>
+The other two tools that we use are the lexer generator for Haskell - Alex:
+<A HREF="http://www.haskell.org/alex/">http://www.haskell.org/alex/</A>
+and the parser generator - Happy:
+<A HREF="http://www.haskell.org/happy/">http://www.haskell.org/happy/</A>.
+Again after the installation check that the tools are available from the terminal.
+If they are not then probably you have to update the current search path in your system.
+</P>
+<P>
+Before to get the GF sources you also need Darcs. Darcs is a decentralized revision control system, 
+see: <A HREF="http://darcs.net/">http://darcs.net/</A> for more information. There are precompiled packages for many platforms available at
+<A HREF="http://darcs.net/DarcsWiki/CategoryBinaries">http://darcs.net/DarcsWiki/CategoryBinaries</A>. There is also source code if you want to compile it yourself. Darcs is
+also written in Haskell and so you can GHC to compile it.
+</P>
+<A NAME="toc2"></A>
+<H1>Getting the sources</H1>
+<P>
+Once you have all tools in place you can get the GF sources. If you just want to compile and use GF
+then it is enough to have read-only access. It is also possible to make changes in the sources but if
+you want these changes to be applied back to the main sources you will have to send the changes to us.
+If you plan to work continuously on GF then you should consider to get read-write access.
+</P>
+<A NAME="toc3"></A>
+<H2>Read-only access</H2>
+<A NAME="toc4"></A>
+<H3>Getting a fresh copy for read-only access</H3>
+<P>
+Anyone can get the latest development version of GF by running (all on one line):
+</P>
+<PRE>
+  $ darcs get --partial --set-scripts-executable http://code.haskell.org/gf/
+</PRE>
+<P></P>
+<P>
+This will create a directory called <CODE>gf</CODE> in the current
+directory.
+</P>
+<A NAME="toc5"></A>
+<H3>Updating your copy</H3>
+<P>
+To get all new patches from the main repo:
+</P>
+<PRE>
+  $ darcs pull -a
+</PRE>
+<P>
+This can be done anywhere in your local repository, i.e. in the <CODE>gf</CODE>
+directory, or any of its subdirectories.
+Without <CODE>-a</CODE>, you can choose which patches you want to get.
+</P>
+<A NAME="toc6"></A>
+<H3>Recording local changes</H3>
+<P>
+Since every copy is a repository, you can have local version control
+of your changes.
+</P>
+<P>
+If you have added files, you first need to tell your local repository to 
+keep them under revision control:
+</P>
+<PRE>
+  $ darcs add file1 file2 ...
+</PRE>
+<P></P>
+<P>
+To record changes, use:
+</P>
+<PRE>
+  $ darcs record
+</PRE>
+<P></P>
+<P>
+This creates a patch against the previous version and stores it in your
+local repository. You can record any number of changes before
+pushing them to the main repo. In fact, you don't have to push them at
+all if you want to keep the changes only in your local repo.
+</P>
+<P>
+If you think there are too many questions about what to record, you
+can use the <CODE>-a</CODE> flag to <CODE>record</CODE>. Or answer <CODE>a</CODE> to the first
+question. Both of these record all the changes you have in your local
+repository.
+</P>
+<A NAME="toc7"></A>
+<H3>Submitting patches</H3>
+<P>
+If you are using read-only access, send your patches by email to
+someone with write-access. First record your changes in your local 
+repository, as described above. You can send any number of recorded
+patches as one patch bundle. You create the patch bundle with:
+</P>
+<PRE>
+  $ darcs send -o mypatch.patch
+  $ gzip mypatch.patch
+</PRE>
+<P></P>
+<P>
+(where <CODE>mypatch</CODE> is hopefully replaced by a slightly more
+descriptive name). Since some e-mail setups change text attachments
+(most likely by changing the newline characters) you need to send
+the patch in some compressed format, such as GZIP, BZIP2 or ZIP.
+</P>
+<P>
+Send it as an e-mail attachment. If you have
+sendmail or something equivalent installed, it is possible to send the
+patch directly from darcs. If so, replace <CODE>-o mypatch.patch</CODE> with
+<CODE>--to=EMAIL</CODE> where <CODE>EMAIL</CODE> is the address to send it to.
+</P>
+<A NAME="toc8"></A>
+<H2>Read-write access</H2>
+<P>
+If you have a user account on code.haskell.org, you can get read-write access over SSH
+to the GF repository. 
+To get an account, <A HREF="http://community.haskell.org/admin/account_request.html">fill out this form</A>.
+Once you have an account, ask &lt;<A HREF="mailto:aarne@chalmers.se">aarne@chalmers.se</A>&gt; to add you to the <CODE>GF</CODE> project.
+</P>
+<A NAME="toc9"></A>
+<H3>Getting a fresh copy</H3>
+<P>
+Get your copy with (all on one line),
+replacing <CODE>bringert</CODE> with your own username on code.haskell.org:
+</P>
+<PRE>
+  $ darcs get --partial --set-scripts-executable bringert@code.haskell.org:/srv/code/gf
+</PRE>
+<P></P>
+<P>
+The option <CODE>--partial</CODE> means that you do not download all of the
+history for the repository. This saves space, bandwidth and CPU time,
+and most people don't need the full history of all changes in the
+past.
+</P>
+<A NAME="toc10"></A>
+<H3>Getting other people's changes?</H3>
+<P>
+Get all new patches from the main repo:
+</P>
+<PRE>
+  $ darcs pull -a
+</PRE>
+<P></P>
+<P>
+Without <CODE>-a</CODE>, you can choose which patches you want to get.
+</P>
+<A NAME="toc11"></A>
+<H3>Commit your changes</H3>
+<P>
+There are two steps to commiting a change to the main repo. First you
+have to record the changes that you want to commit, then you push them
+to the main repo. For instructions on recording your changes locally,
+see "Recording local changes" above. Then you can push the patch(es) to 
+the main repo. If you are using ssh-access, all you need to do is:
+</P>
+<PRE>
+  $ darcs push
+</PRE>
+<P></P>
+<P>
+If you use the <CODE>-a</CODE> flag to push, all local patches which are not in
+the main repo are pushed.
+</P>
+<A NAME="toc12"></A>
+<H3>Apply a patch from someone else</H3>
+<P>
+Use:
+</P>
+<PRE>
+  $ darcs apply &lt; mypatch.patch
+</PRE>
+<P></P>
+<P>
+This applies the patch to your local repository. To commit it to the
+main repo, use <CODE>darcs push</CODE>.
+</P>
+<A NAME="toc13"></A>
+<H2>Further information about Darcs</H2>
+<P>
+For more info about what you can do with darcs, see <A HREF="http://darcs.net/manual/">http://darcs.net/manual/</A>
+</P>
+<A NAME="toc14"></A>
+<H1>Compilation from sources</H1>
+<P>
+The build system of GF is based on Cabal (see <A HREF="http://www.haskell.org/cabal/">http://www.haskell.org/cabal/</A> for more information).
+Cabal is installed by default together with the GHC compiler. This is actually a library which could
+be used from Haskell to compile projects written in Haskell. The entry point is a script
+called Setup.hs which is placed in the top directory of every project managed with Cabal.
+The three main steps that are needed for compilation are much like what you do in a project
+written in C, you have: configure, build and install.
+</P>
+<A NAME="toc15"></A>
+<H2>Configure</H2>
+<P>
+During the configuration phase Cabal will check that you have all necessary tools and libraries
+needed for GF. The configuration is started by the command:
+</P>
+<PRE>
+  $ runghc Setup.hs configure
+</PRE>
+<P>
+The command <CODE>`runghc`</CODE> comes with the GHC compiler and is batch interpreter which executes
+the specified script without the need to compile it advance. Setup.hs is our compilation driver
+which is based on Cabal. If you don't see any error message from the above command then
+you have everything that is needed for GF. You can also add the option <CODE>`-v`</CODE> to see
+more details about the configuration.
+</P>
+<A NAME="toc16"></A>
+<H2>Build</H2>
+<P>
+The build phase does two things. First it builds the GF compiler from the Haskell sources
+and after that it builds the GF Resource Grammar Library using the already build compiler.
+The simplest command is:
+</P>
+<PRE>
+  $ runghc Setup.hs build
+</PRE>
+<P>
+Again you can add the option <CODE>`-v`</CODE> if you want to see more details.
+</P>
+<P>
+Sometimes you just want to work on the GF compiler and don't want to recompile the resource
+library after each change. In this case use this extended command:
+</P>
+<PRE>
+  $ runghc Setup.hs build rgl-none
+</PRE>
+<P>
+The resource library could also be compiled in two modes: with present tense only and 
+with all tenses. By default it is compiled with all tenses. If you want to use
+the library with only present tense you can compile it in this special mode with
+the command:
+</P>
+<PRE>
+  $ runghc Setup.hs build present
+</PRE>
+<P>
+Before to use this command make sure that the script lib/src/mkPresent has executable
+permissions on Linux.
+</P>
+<P>
+You could also control which languages you want to be recompiled by adding the option
+<CODE>`langs=list`</CODE>. For example the following command will compile only the English and the Swedish
+language:
+</P>
+<PRE>
+  $ runghc Setup.hs build langs=Eng,Swe
+</PRE>
+<P></P>
+<A NAME="toc17"></A>
+<H2>Install</H2>
+<P>
+After you have compiled GF you can install the binaries to make the system usable.
+On Linux you will need root privileges to do this. Use the command:
+</P>
+<PRE>
+  $ su
+</PRE>
+<P>
+and enter the root password. This step should be skipped on Windows.
+</P>
+<P>
+The installation itself is started with the command:
+</P>
+<PRE>
+  $ runghc Setup.hs install
+</PRE>
+<P>
+This command installs the GF compiler in the default place for executable
+files in your system. For example on Linux this is usualy /usr/local/bin and on
+Windows this is c:\Program Files\Haskell\bin. If you want to install in some
+other place then use the <CODE>`--prefix`</CODE> option during the configuration phase.
+</P>
+<P>
+The compiled GF Resource Grammar Library will be installed in /usr/local/share/gf-3.0/lib
+on Linux and in c:\Program Files\Haskell\gf-3.0\lib on Windows. Again the location could
+be changed using the <CODE>`--prefix`</CODE> option.
+</P>
+<A NAME="toc18"></A>
+<H2>Clean</H2>
+<P>
+Sometimes you want to clean up the compilation and start again from clean
+sources. Use the clean command for this purpose:
+</P>
+<PRE>
+  $ runghc Setup.hs clean
+</PRE>
+<P></P>
+<A NAME="toc19"></A>
+<H2>SDist</H2>
+<P>
+You can use the command:
+</P>
+<PRE>
+  $ runghc Setup.hs sdist
+</PRE>
+<P>
+to prepare archive with all source codes needed to compile GF.
+</P>
+<A NAME="toc20"></A>
+<H1>Compilation with make</H1>
+<P>
+If you feel more comfortable with Makefiles then there is a thin Makefile
+wrapper arround Cabal for you. If you just type:
+</P>
+<PRE>
+  $ make
+</PRE>
+<P>
+the configuration phase will be run automatically if needed and after that
+the sources will be compiled. If you don't want to compile the resource library
+every time then you can use:
+</P>
+<PRE>
+  $ make gf
+</PRE>
+<P>
+For installation use:
+</P>
+<PRE>
+  $ make install
+</PRE>
+<P>
+For cleaning:
+</P>
+<PRE>
+  $ make clean
+</PRE>
+<P>
+and to build source distribution archive run:
+</P>
+<PRE>
+  $ make sdist
+</PRE>
+<P></P>
+<A NAME="toc21"></A>
+<H1>Running the testsuite</H1>
+<P>
+GF has testsuite. It is run with the following command:
+</P>
+<PRE>
+  $ runghc Setup.hs test
+</PRE>
+<P>
+The testsuite architecture for GF is very simple but still very flexible.
+GF by itself is an interpreter and could execute commands in batch mode.
+This is everything that we need to organize a testsuite. The root of the 
+testsuite is the testsuite/ directory. It contains subdirectories which
+themself contain GF batch files (with extension .gfs). The above command
+searches the subdirectories of the testsuite/ directory for files with extension
+.gfs and when it finds one it is executed with the GF interpreter.
+The output of the script is stored in file with extension .out and is compared
+with the content of the corresponding file with extension .gold, if there is one.
+If the contents are identical the command reports that the test was passed successfully.
+Otherwise the test had failed.
+</P>
+<P>
+Every time when you make some changes to GF that have to be tested, instead of
+writing the commands by hand in the GF shell, add them to one .gfs file in the testsuite
+and run the test. In this way you can use the same test later and we will be sure
+that we will not incidentaly break your code later.
+</P>
+<P>
+If you don't want to run the whole testsuite you can write the path to the subdirectory
+in which you are interested. For example:
+</P>
+<PRE>
+  $ runghc Setup.hs test testsuite/compiler
+</PRE>
+<P>
+will run only the testsuite for the compiler.
+</P>
+
+<!-- html code generated by txt2tags 2.5 (http://txt2tags.sf.net) -->
+<!-- cmdline: txt2tags gf-developers.txt -->
+</BODY></HTML>
