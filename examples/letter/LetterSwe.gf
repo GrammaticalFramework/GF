@@ -8,8 +8,8 @@ concrete LetterSwe of Letter = {
 
 flags lexer=textlit ; unlexer=textlit ;
 
-printname Letter = "Brev" ;
-printname MkLetter = "brevmall" ;
+printname cat Letter = "Brev" ;
+printname fun MkLetter = "brevmall" ;
 
 param Sex = masc | fem ;
 param Gen = en | ett ;
@@ -17,12 +17,12 @@ param Num = sg | pl ;
 param Kas = nom | acc ;
 param DepNum = depnum | cnum Num ;
 
-lintype SS     = {s : Str} ;
-lintype SSDep  = {s : Num => Sex => Str} ;      -- needs Num and Sex
-lintype SSSrc  = {s : Str ; n : Num ; x : Sex} ; -- gives Num and Sex
-lintype SSSrc2 = {s : Num => Sex => Str ; n : DepNum ; x : Sex} ; -- gives and needs
-lintype SSDep2 = {s : DepNum => Sex => Num => Sex => Str} ; -- needs Auth's & Recp's
-lintype SSSrcGen  = {s : Str ; n : Num ; g : Gen} ; -- gives Num and Gen
+oper SS     = {s : Str} ;
+oper SSDep  = {s : Num => Sex => Str} ;      -- needs Num and Sex
+oper SSSrc  = {s : Str ; n : Num ; x : Sex} ; -- gives Num and Sex
+oper SSSrc2 = {s : Num => Sex => Str ; n : DepNum ; x : Sex} ; -- gives and needs
+oper SSDep2 = {s : DepNum => Sex => Num => Sex => Str} ; -- needs Auth's & Recp's
+oper SSSrcGen  = {s : Str ; n : Num ; g : Gen} ; -- gives Num and Gen
 
 
 oper 

@@ -8,12 +8,12 @@ param Kas = nom | acc ;
 param DepNum = depnum | cnum Num ;
 param DepGen = depgen | cgen Gen ;
 
-lintype SS     = {s : Str} ;
-lintype SSDep  = {s : Num => Gen => Str} ;      -- needs Num and Gen
-lintype SSSrc  = {s : Str ; n : Num ; g : Gen} ; -- gives Num and Gen
-lintype SSSrc2 = {s : Num => Gen => Str ; n : DepNum ; g : DepGen} ; -- gives&needs
-lintype SSDep2 = {s : DepNum => DepGen => Num => Gen => Str} ; -- needs Auth's&Rec's
-lintype SSSrcGen = {s : Str ; n : Num ; g : Gen} ; -- gives Num and Gen
+oper SS     = {s : Str} ;
+oper SSDep  = {s : Num => Gen => Str} ;      -- needs Num and Gen
+oper SSSrc  = {s : Str ; n : Num ; g : Gen} ; -- gives Num and Gen
+oper SSSrc2 = {s : Num => Gen => Str ; n : DepNum ; g : DepGen} ; -- gives&needs
+oper SSDep2 = {s : DepNum => DepGen => Num => Gen => Str} ; -- needs Auth's&Rec's
+oper SSSrcGen = {s : Str ; n : Num ; g : Gen} ; -- gives Num and Gen
 
 oper 
   ss : Str -> SS = \s -> {s = s} ;

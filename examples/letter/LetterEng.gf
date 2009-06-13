@@ -12,12 +12,12 @@ param Num = sg | pl ;
 param Kas = nom | acc ;
 param DepNum = depnum | cnum Num ;
 
-lintype SS     = {s : Str} ;
-lintype SSDep  = {s : Num => Sex => Str} ;      -- needs Num and Sex
-lintype SSSrc  = {s : Str ; n : Num ; x : Sex} ; -- gives Num and Sex
-lintype SSSrc2 = {s : Num => Sex => Str ; n : DepNum ; x : Sex} ; -- gives and needs
-lintype SSDep2 = {s : DepNum => Sex => Num => Sex => Str} ; -- needs Auth's & Recp's
-lintype SSSrcNum  = {s : Str ; n : Num} ; -- gives Num only
+oper SS     = {s : Str} ;
+oper SSDep  = {s : Num => Sex => Str} ;      -- needs Num and Sex
+oper SSSrc  = {s : Str ; n : Num ; x : Sex} ; -- gives Num and Sex
+oper SSSrc2 = {s : Num => Sex => Str ; n : DepNum ; x : Sex} ; -- gives and needs
+oper SSDep2 = {s : DepNum => Sex => Num => Sex => Str} ; -- needs Auth's & Recp's
+oper SSSrcNum  = {s : Str ; n : Num} ; -- gives Num only
 
 
 oper 
