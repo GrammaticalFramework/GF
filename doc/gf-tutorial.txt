@@ -712,12 +712,8 @@ Many examples in this tutorial are
 [online http://digitalgrammars.com/gf/examples/tutorial].
 
 Normally you don't have to compile GF yourself.
-
-But, if you do want to compile GF from source, you need the Haskell compiler
-[GHC http://www.haskell.org/ghc].
- 
-We assume a Unix shell: Bash in Linux, "terminal" in Mac OS X, or
-Cygwin in Windows. But you can do most things even without Cygwin in Windows.
+But, if you do want to compile GF from source follow the
+instructions in the [Developers Guide gf-developers.html].
 
 
 #NEW
