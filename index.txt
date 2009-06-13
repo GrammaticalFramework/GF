@@ -32,7 +32,7 @@ June 2008
 
 ``[`` [Demos demos/index.html]
 ``|`` [Download download/index.html]
-``|`` [Developers doc/darcs.html]
+``|`` [Developers doc/gf-developers.html]
 % ``|`` [Events doc/events.html]
 ``|`` [Libraries lib/resource/doc/synopsis.html]
 ``|`` [People doc/gf-people.html]
@@ -195,7 +195,7 @@ support for an increasing number of languages, currently including
 + Hindi/Urdu (fragments)
 + [Interlingua http://www.interlingua.com/]
 + Italian
-+ Norwegian bokmål
++ Norwegian bokmï¿½l
 + Russian
 + Spanish
 + Swedish
