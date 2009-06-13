@@ -7,7 +7,7 @@ resource Precedence = open Prelude in {
 param 
 Prec = p4 | p3 | p2 | p1 | p0 ;
 
-lintype 
+oper
 PrecTerm = Prec => Str ;
 
 oper 
@@ -75,7 +75,7 @@ mkInfixR : Str -> Prec -> PrecTerm -> PrecTerm -> PrecTerm =
 -- alternative:
 -- precedence as inherent feature
 
-lintype TermWithPrec = {s : Str ; p : Prec} ;
+oper TermWithPrec = {s : Str ; p : Prec} ;
 
 oper 
 mkpPrec : Str -> Prec -> TermWithPrec =
