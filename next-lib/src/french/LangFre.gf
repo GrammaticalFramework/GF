@@ -1,4 +1,4 @@
---# -path=.:../romance:../abstract:../common
+--# -path=.:../romance:../abstract:../common:../prelude
 
 concrete LangFre of Lang = 
   GrammarFre,
