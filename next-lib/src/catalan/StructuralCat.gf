@@ -67,7 +67,7 @@ lin
   most_Predet = {s = \\_,c => prepCase c ++ ["la majoria"] ; c = CPrep P_de} ;
   much_Det = {
     s,sp = \\g,c => prepCase c ++ genForms "molt" "molta" ! g ; n = Sg ; s2 = []} ;
-  must_VV = mkVV (verbV (haver_59 "haver")) ;   -- + of_Prep
+  must_VV = mkVV (verbV (haver_59 "haver" True)) ;   -- + of_Prep
   no_Utt = ss "no" ;
   on_Prep = mkPrep "sobre" ;
 ---  one_Quant = {s = \\g,c => prepCase c ++ genForms "un" "una" ! g} ;

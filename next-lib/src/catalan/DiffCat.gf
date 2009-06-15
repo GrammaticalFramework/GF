@@ -174,7 +174,7 @@ oper
 
     copula = verbBeschH (ser_52 "ser") ;
 
-    haver_V : Verb = verbBeschH (haver_59 "haver") ;
+    haver_V : Verb = verbBeschH (haver_59 "haver" True) ;
 
     verbBeschH : Verbum -> Verb = \v -> verbBesch v ** {vtyp = VHabere} ;
 
