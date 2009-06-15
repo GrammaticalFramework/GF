@@ -53,28 +53,6 @@ concrete NounIna of Noun = CatIna ** open ResIna, Prelude in {
       n = num.n
       } ;
 
-    DetArtOrd art num ord = {
-      s = \\c=>(art.s ! num.n !c) ++ num.s ++ ord.s ; 
-      n = num.n
-      } ;
-
-    DetArtCard art num = {
-      s = \\c=>(art.s ! num.n !c) ++ num.s ; 
-      n = num.n
-      } ;
-
-    DetArtSg art cn = {
-      s = \\c => art.s ! Sg ! c ++ cn.s ! Sg ; 
-      a = agrP3 Sg ;
-      isPronoun = False
-      };  -- iste pizza
-
-    DetArtPl art cn = {
-      s = \\c => art.s ! Pl ! c ++ cn.s ! Pl ; 
-      a = agrP3 Pl ;
-      isPronoun = False
-      };  -- iste pizza
-
     PossPron p = {s = \\_,c => casePrep [] c ++ p.possForm} ;
 
     NumPl = {s = []; n = Pl } ;
