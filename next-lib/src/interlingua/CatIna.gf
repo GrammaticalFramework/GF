@@ -50,7 +50,6 @@ concrete CatIna of Cat = CommonX ** open ResIna, Prelude in {
     Card = {s : Str; n : Number } ;
     Num = {s : Str; n : Number } ;
     Quant = {s : Number => Case => Str} ;
-    Art = {s : Number => Case => Str} ;
 
 -- Numeral
     
