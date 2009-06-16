@@ -54,8 +54,8 @@ rglCommands =
   , RGLCommand "pgf"     False $ \mode args pkg lbi -> do
        let dir = getRGLBuildDir lbi mode
        createDirectoryIfMissing True dir
-       sequence_ [run_gfc pkg lbi ["-s","-make","-name=Lang"++la,"-erasing=on",dir ++ "/Lang" ++ la ++ ".gfo"] | (_,la) <- optl langsPGF args]
-       run_gfc pkg lbi (["-s","-make","-name=Lang","-erasing=on"]++["Lang" ++ la ++ ".pgf" | (_,la) <- optl langsPGF args])
+       sequence_ [run_gfc pkg lbi ["-s","-make","-name=Lang"++la,dir ++ "/Lang" ++ la ++ ".gfo"] | (_,la) <- optl langsPGF args]
+       run_gfc pkg lbi (["-s","-make","-name=Lang"]++["Lang" ++ la ++ ".pgf" | (_,la) <- optl langsPGF args])
   , RGLCommand "demo"    False $ \mode args pkg lbi -> do
        let ls = optl langsDemo args
        gf (demos "Demo" ls) ["demo/Demo" ++ la ++ ".gf" | (_,la) <- ls] pkg lbi
@@ -287,7 +287,7 @@ run_gfc pkg lbi args =
        case e of
          ExitSuccess   -> return ()
          ExitFailure i -> die $ "gf exited with exit code: " ++ show i
-  where rts_flags = ["-K100M"]
+  where rts_flags = ["-K64M"]
         showArg arg = "'" ++ arg ++ "'"
 
 default_gf pkg lbi = buildDir lbi </> exeName' </> exeNameReal
