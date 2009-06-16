@@ -53,7 +53,10 @@ data Term =
  | TM String
   deriving (Eq,Ord,Show)
 
-
+data Tokn =
+   KS String
+ | KP [String] [Alternative]
+  deriving (Eq,Ord,Show)
 
 
 -- merge two GFCCs; fails is differens absnames; priority to second arg

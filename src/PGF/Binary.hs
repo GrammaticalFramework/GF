@@ -156,14 +156,14 @@ instance Binary FFun where
 instance Binary FSymbol where
   put (FSymCat n l)       = putWord8 0 >> put (n,l)
   put (FSymLit n l)       = putWord8 1 >> put (n,l)
-  put (FSymTok (KS s))    = putWord8 2 >> put s
-  put (FSymTok (KP d vs)) = putWord8 3 >> put (d,vs)
+  put (FSymKS ts)         = putWord8 2 >> put ts
+  put (FSymKP d vs)       = putWord8 3 >> put (d,vs)
   get = do tag <- getWord8
            case tag of
              0 -> liftM2 FSymCat get get
              1 -> liftM2 FSymLit get get
-             2 -> liftM  (FSymTok . KS) get
-             3 -> liftM2 (\d vs -> FSymTok (KP d vs)) get get
+             2 -> liftM  FSymKS  get
+             3 -> liftM2 (\d vs -> FSymKP d vs) get get
              _ -> decodingError
 
 instance Binary Production where

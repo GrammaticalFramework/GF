@@ -84,7 +84,7 @@ process strategy pinfo pinfoex toks (item:items) chart = process strategy pinfo 
 	     			found' -> let items = do rng  <- concatRange rng (found' !! r)
 	     			                         return (Active found rng lbl (ppos+1) node args cat)
 	     			          in process strategy pinfo pinfoex toks items chart
-	     FSymTok (KS tok)
+	     FSymKS [tok]
 	                 -> let items = do t_rng <- inputToken toks ? tok
 	                                   rng' <- concatRange rng t_rng
 	                                   return (Active found rng' lbl (ppos+1) node args cat)
