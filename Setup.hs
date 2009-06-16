@@ -54,9 +54,8 @@ rglCommands =
   , RGLCommand "pgf"     False $ \mode args pkg lbi -> do
        let dir = getRGLBuildDir lbi mode
        createDirectoryIfMissing True dir
-       run_gfc pkg lbi $ ["-s","--make","--name=langs","--parser=off",
-                          "--output-dir=" ++ dir]
-                         ++ [dir ++ "/Lang" ++ la ++ ".gfo" | (_,la) <- optl langsPGF args]
+       sequence_ [run_gfc pkg lbi ["-s","-make","-name=Lang"++la,"-erasing=on",dir ++ "/Lang" ++ la ++ ".gfo"] | (_,la) <- optl langsPGF args]
+       run_gfc pkg lbi (["-s","-make","-name=Lang","-erasing=on"]++["Lang" ++ la ++ ".pgf" | (_,la) <- optl langsPGF args])
   , RGLCommand "demo"    False $ \mode args pkg lbi -> do
        let ls = optl langsDemo args
        gf (demos "Demo" ls) ["demo/Demo" ++ la ++ ".gf" | (_,la) <- ls] pkg lbi
@@ -166,7 +165,7 @@ langsCoding = [
   (("french",   "Fre"),""),
   (("hindi",    "Hin"),"to_devanagari"),
   (("german",   "Ger"),""),
---  (("interlingua","Ina"),""),
+  (("interlingua","Ina"),""),
   (("italian",  "Ita"),""),
   (("latin",    "Lat"),""),
   (("norwegian","Nor"),""),
@@ -194,7 +193,7 @@ langsDemo = langsLang `except` ["Ara","Hin","Ina","Tha"]
 langsParse = langs `only` ["Eng"]
 
 -- languages for which langs.pgf is built
-langsPGF = langsLang `only` ["Eng","Swe","Bul","Ger"]
+langsPGF = langsLang `except` ["Ara","Hin","Tha"]
 
 -- languages for which Compatibility exists (to be extended)
 langsCompat = langsLang `only` ["Cat","Eng","Fin","Fre","Ita","Spa","Swe"]
