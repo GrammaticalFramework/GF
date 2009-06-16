@@ -5,14 +5,14 @@ concrete RelativeIna of Relative = CatIna ** open ResIna in {
   lin
 
     RelCl cl = {
-      s = \\t,a,p,agr => 
+      s = \\use_irreg,t,a,p,agr => 
 	(case agr.n of {Sg => "tal"; Pl => "tales"}) ++ 
-	"que" ++ cl.s ! t ! a ! p ! ODir ; 
+	"que" ++ cl.s ! use_irreg ! t ! a ! p ! ODir ; 
       c = Nom
       } ;
 
     RelVP rp vp = {
-      s = \\t,a,p,agr => (mkClause (rp.s!Nom) agr vp).s ! t ! a ! p ! ODir;
+      s = \\use_irreg,t,a,p,agr => (mkClause (rp.s!Nom) agr vp).s ! use_irreg ! t ! a ! p ! ODir;
       c = Nom
       } ; 
     -- !!! person agreement is probably bad here; see below.
@@ -20,7 +20,7 @@ concrete RelativeIna of Relative = CatIna ** open ResIna in {
 ---- Pied piping: "a que tu invia flores"
 
     RelSlash rp slash = {
-      s = \\t,a,p,agr => slash.p2 ++ rp.s ! slash.c2 ++ slash.s ! t ! a ! p ! ODir ;
+      s = \\use_irreg,t,a,p,agr => slash.p2 ++ rp.s ! slash.c2 ++ slash.s ! use_irreg ! t ! a ! p ! ODir ;
       c = slash.c2; 
       } ; 
     -- !!! In the above The agreement feature of the RP does not match

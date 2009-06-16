@@ -27,7 +27,7 @@ concrete CatIna of Cat = CommonX ** open ResIna, Prelude in {
 
 -- Relative
 
-    RCl = {s : ResIna.Tense => Anteriority => Polarity => Agr => Str ; c : Case} ;
+    RCl = {s : Bool => ResIna.Tense => Anteriority => Polarity => Agr => Str ; c : Case} ;
     RP = {s : Case => Str; a : Agr} ; -- number for "tal que / tales que"; person for reflexives
 
 -- Verb

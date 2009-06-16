@@ -8,7 +8,7 @@ lin
 
   PredSCVP sc vp = mkClause sc.s Sp3 vp ;
 
-  ImpVP vp = {s = \\pol,n=> (mkClause [] {n = n; p = P2} vp).s!Pres!Simul!pol!ODir};
+  ImpVP vp = {s = \\pol,n=> (mkClause [] {n = n; p = P2} vp).s!variants {True;False}!Pres!Simul!pol!ODir};
 
   SlashVP np vp = mkClause (np.s ! Nom) np.a vp ** {c2 = vp.c2; p2 = vp.p2} ;
 
@@ -18,7 +18,7 @@ lin
         {c2 = slash.c2; p2 = slash.p2} ;
   
   AdvSlash slash adv = {
-    s  = \\t,a,b,o => slash.s ! t ! a ! b ! o ++ adv.s ;
+    s  = \\use_irreg,t,a,b,o => slash.s ! use_irreg ! t ! a ! b ! o ++ adv.s ;
     c2 = slash.c2;
     p2 = slash.p2
     } ;
@@ -31,10 +31,10 @@ lin
     EmbedQS qs = {s = qs.s ! ODir} ;
     EmbedVP vp = {s = infVP vp} ;
 
-    UseCl  t p cl = {s = t.s ++ p.s ++ cl.s ! t.t ! t.a ! p.p ! ODir} ;
-    UseQCl t p cl = {s = \\o => t.s ++ p.s ++ cl.s ! t.t ! t.a ! p.p ! o} ;
-    UseRCl t p cl = {s = \\agr => t.s ++ p.s ++ cl.s ! t.t ! t.a ! p.p ! agr};
-    UseSlash t p cl = {s = t.s ++ p.s ++ cl.s ! t.t ! t.a ! p.p ! ODir;
+    UseCl  t p cl = {s = t.s ++ p.s ++ cl.s ! variants {True;False} ! t.t ! t.a ! p.p ! ODir} ;
+    UseQCl t p cl = {s = \\o => t.s ++ p.s ++ cl.s ! variants {True;False} ! t.t ! t.a ! p.p ! o} ;
+    UseRCl t p cl = {s = \\agr => t.s ++ p.s ++ cl.s ! variants {True;False} ! t.t ! t.a ! p.p ! agr};
+    UseSlash t p cl = {s = t.s ++ p.s ++ cl.s ! variants {True;False} ! t.t ! t.a ! p.p ! ODir;
 		       c2 = cl.c2;
 		       p2 = cl.p2} ;
 

@@ -4,8 +4,8 @@ concrete QuestionIna of Question = CatIna ** open ResIna, Prelude in {
 
   lin
     QuestCl cl = {
-      s = \\t,a,p => 
-        let cls = cl.s ! t ! a ! p 
+      s = \\use_irreg,t,a,p => 
+        let cls = cl.s ! use_irreg ! t ! a ! p 
         in table {
           OQuest   => cls ! OQuest ;
           ODir => "an" ++ cls ! ODir
@@ -14,7 +14,7 @@ concrete QuestionIna of Question = CatIna ** open ResIna, Prelude in {
 
     QuestVP qp vp = 
       let cl = mkClause (qp.s ! Nom) Sp3 vp
-      in {s = \\t,a,b,_ => cl.s ! t ! a ! b ! ODir} ;
+      in {s = \\use_irreg,t,a,b,_ => cl.s ! use_irreg ! t ! a ! b ! ODir} ;
 
     QuestSlash ip slash = 
       mkQuestion (ss (slash.p2 ++ ip.s ! slash.c2)) slash ;
@@ -22,7 +22,7 @@ concrete QuestionIna of Question = CatIna ** open ResIna, Prelude in {
     QuestIAdv iadv cl = mkQuestion iadv cl ;
 
     QuestIComp icomp np = 
-      mkQuestion icomp (mkClause (np.s ! Nom) np.a (predV esserV)) ;
+      mkQuestion icomp (mkClause (np.s ! Nom) np.a (predV_ esserV)) ;
 
 
     PrepIP p ip = {s = p.s ++ ip.s ! Nom} ;
