@@ -51,6 +51,7 @@ library
     PGF.TypeCheck
     PGF.Binary
     GF.Data.MultiMap
+    GF.Data.TrieMap
     GF.Data.Utilities
     GF.Data.SortedList
     GF.Data.Assoc
@@ -95,6 +96,7 @@ executable gf
     GF.Infra.CompactPrint
     GF.Text.UTF8
     GF.Data.MultiMap
+    GF.Data.TrieMap
     GF.Data.Utilities
     GF.Data.SortedList
     GF.Data.Assoc

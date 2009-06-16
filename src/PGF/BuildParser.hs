@@ -35,8 +35,8 @@ data ParserInfoEx
 
 getLeftCornerTok pinfo (FFun _ _ lins)
   | inRange (bounds syms) 0 = case syms ! 0 of
-                                FSymTok (KS tok) -> [tok]
-                                _                -> []
+                                FSymKS [tok] -> [tok]
+                                _            -> []
   | otherwise               = []
   where
     syms = (sequences pinfo) ! (lins ! 0)
@@ -73,4 +73,4 @@ buildParserInfo pinfo =
 	                                                | (cat,set) <- IntMap.toList (productions pinfo)
 	                                                , (FApply ruleid args) <- Set.toList set
 	                                                , tok <- getLeftCornerTok pinfo ((functions pinfo) ! ruleid) ]
-	  grammartoks   = nubsort [t | lin <- elems (sequences pinfo), FSymTok (KS t) <- elems lin]
+	  grammartoks   = nubsort [t | lin <- elems (sequences pinfo), FSymKS [t] <- elems lin]

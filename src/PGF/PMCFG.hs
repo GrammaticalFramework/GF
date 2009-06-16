@@ -16,23 +16,19 @@ type FPointPos = Int
 data FSymbol
   = FSymCat {-# UNPACK #-} !Int {-# UNPACK #-} !FIndex
   | FSymLit {-# UNPACK #-} !Int {-# UNPACK #-} !FIndex
-  | FSymTok Tokn
+  | FSymKS [String]
+  | FSymKP [String] [Alternative]
   deriving (Eq,Ord,Show)
 type Profile = [Int]
 data Production
   = FApply  {-# UNPACK #-} !FunId [FCat]
   | FCoerce {-# UNPACK #-} !FCat
-  | FConst  Tree String
+  | FConst  Tree [String]
   deriving (Eq,Ord,Show)
 data FFun  = FFun CId [Profile] {-# UNPACK #-} !(UArray FIndex SeqId) deriving (Eq,Ord,Show)
 type FSeq  = Array FPointPos FSymbol
 type FunId = Int
 type SeqId = Int
-
-data Tokn =
-   KS String
- | KP [String] [Alternative]
-  deriving (Eq,Ord,Show)
 
 data Alternative =
    Alt [String] [String]
@@ -70,8 +66,8 @@ ppProduction (fcat,FApply funid args) =
   ppFCat fcat <+> text "->" <+> ppFunId funid <> brackets (hcat (punctuate comma (map ppFCat args)))
 ppProduction (fcat,FCoerce arg) =
   ppFCat fcat <+> text "->" <+> char '_' <> brackets (ppFCat arg)
-ppProduction (fcat,FConst _ s) =
-  ppFCat fcat <+> text "->" <+> ppStr s
+ppProduction (fcat,FConst _ ss) =
+  ppFCat fcat <+> text "->" <+> ppStrs ss
 
 ppFun (funid,FFun fun _ arr) =
   ppFunId funid <+> text ":=" <+> parens (hcat (punctuate comma (map ppSeqId (elems arr)))) <+> brackets (text (prCId fun))
@@ -84,14 +80,12 @@ ppStartCat (id,fcats) =
 
 ppSymbol (FSymCat d r) = char '<' <> int d <> comma <> int r <> char '>'
 ppSymbol (FSymLit d r) = char '<' <> int d <> comma <> int r <> char '>'
-ppSymbol (FSymTok t)   = ppTokn t
+ppSymbol (FSymKS ts)   = ppStrs ts
+ppSymbol (FSymKP ts alts) = text "pre" <+> braces (hsep (punctuate semi (ppStrs ts : map ppAlt alts)))
 
-ppTokn (KS t)       = ppStr t
-ppTokn (KP ts alts) = text "pre" <+> braces (hsep (punctuate semi (hsep (map ppStr ts) : map ppAlt alts)))
+ppAlt (Alt ts ps) = ppStrs ts <+> char '/' <+> hsep (map (doubleQuotes . text) ps)
 
-ppAlt (Alt ts ps) = hsep (map ppStr ts) <+> char '/' <+> hsep (map ppStr ps)
-
-ppStr s = doubleQuotes (text s)
+ppStrs ss = doubleQuotes (hsep (map text ss))
 
 ppFCat  fcat
   | fcat == fcatString = text "String"

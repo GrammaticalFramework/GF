@@ -82,17 +82,17 @@ pgfToCFG pgf lang = mkCFG (prCId (lookStartCat pgf)) extCats (startRules ++ conc
         FFun f ps rhs = functions pinfo ! funid
 
         mkRhs :: Array FPointPos FSymbol -> [CFSymbol]
-        mkRhs = map fsymbolToSymbol . Array.elems
+        mkRhs = concatMap fsymbolToSymbol . Array.elems
 
         containsLiterals :: Array FPointPos FSymbol -> Bool
         containsLiterals row = any isLiteralFCat [args!!n | FSymCat n _ <- Array.elems row] ||
                                not (null [n | FSymLit n _ <- Array.elems row])   -- only this is needed for PMCFG.
                                                                                  -- The first line is for backward compat.
 
-        fsymbolToSymbol :: FSymbol -> CFSymbol
-        fsymbolToSymbol (FSymCat n l)    = NonTerminal (fcatToCat (args!!n) l)
-        fsymbolToSymbol (FSymLit n l)    = NonTerminal (fcatToCat (args!!n) l)
-        fsymbolToSymbol (FSymTok (KS t)) = Terminal t
+        fsymbolToSymbol :: FSymbol -> [CFSymbol]
+        fsymbolToSymbol (FSymCat n l)    = [NonTerminal (fcatToCat (args!!n) l)]
+        fsymbolToSymbol (FSymLit n l)    = [NonTerminal (fcatToCat (args!!n) l)]
+        fsymbolToSymbol (FSymKS ts)      = map Terminal ts
 
         fixProfile :: Array FPointPos FSymbol -> Profile -> Profile
         fixProfile row = concatMap positions

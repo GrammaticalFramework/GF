@@ -158,7 +158,10 @@ translateLin idxArgs ((lbl,syms) : lins) grammarEnv lbl'
   | lbl' == lbl = addFSeq grammarEnv (lbl,map instSym syms)
   | otherwise   = translateLin idxArgs lins grammarEnv lbl'
   where
-    instSym = either (\(lbl, nr, xnr) -> instCat lbl nr xnr 0 idxArgs) FSymTok
+    instSym = either (\(lbl, nr, xnr) -> instCat lbl nr xnr 0 idxArgs) 
+                     (\t -> case t of
+                              KS s -> FSymKS [s]
+                              KP strs vars -> FSymKP strs vars)
     instCat lbl nr xnr nr' ((idx,xargs):idxArgs)
       | nr == idx = let (fcat, PFCat _ rcs _) = xargs !! xnr
                     in FSymCat (nr'+xnr) (index lbl rcs 0)

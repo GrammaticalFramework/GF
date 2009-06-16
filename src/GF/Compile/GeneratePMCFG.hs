@@ -213,9 +213,21 @@ addSequences' env (Return  v)       = let (env1,v1) = addSequences env v
 addSequences :: GrammarEnv -> Value [FSymbol] -> (GrammarEnv, Value SeqId)
 addSequences env (Rec vs)  = let (env1,vs1) = List.mapAccumL addSequences' env vs
                              in (env1,Rec vs1)
-addSequences env (Str lin) = let (env1,seqid) = addFSeq env lin
+addSequences env (Str lin) = let (env1,seqid) = addFSeq env (optimizeLin lin)
                              in (env1,Str seqid)
 addSequences env (Con i)   = (env,Con i)
+
+
+optimizeLin [] = []
+optimizeLin lin@(FSymKS _ : _) = 
+  let (ts,lin') = getRest lin
+  in FSymKS ts : optimizeLin lin'
+  where
+    getRest (FSymKS ts : lin) = let (ts1,lin') = getRest lin
+                                in (ts++ts1,lin')
+    getRest              lin  = ([],lin)
+optimizeLin (sym : lin) = sym : optimizeLin lin
+
 
 convertTerm :: TermMap -> FPath -> Term -> Term -> CnvMonad (Value [FSymbol])
 convertTerm cnc_defs sel ctype (V nr)     = convertArg ctype nr (reverse sel)
@@ -227,11 +239,8 @@ convertTerm cnc_defs sel ctype (FV vars)  = do term <- variants vars
                                                convertTerm cnc_defs sel ctype term
 convertTerm cnc_defs sel ctype (S ts)     = do vs <- mapM (convertTerm cnc_defs sel ctype) ts
                                                return (Str (concat [s | Str s <- vs]))
---convertTerm cnc_defs sel ctype (K t)      = return (Str [FSymTok t])
-convertTerm cnc_defs sel ctype (K (KS t)) = return (Str [FSymTok (KS t)])
-convertTerm cnc_defs sel ctype (K (KP strs vars)) =
-  do toks <- variants (strs:[strs' | Alt strs' _ <- vars])
-     return (Str (map (FSymTok . KS) toks))
+convertTerm cnc_defs sel ctype (K (KS t)) = return (Str [FSymKS [t]])
+convertTerm cnc_defs sel ctype (K (KP s v))=return (Str [FSymKP s v])
 convertTerm cnc_defs sel ctype (F id)     = case Map.lookup id cnc_defs of
                                               Just term -> convertTerm cnc_defs sel ctype term
                                               Nothing   -> error ("unknown id " ++ prCId id)

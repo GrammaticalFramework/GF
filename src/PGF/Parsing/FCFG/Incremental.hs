@@ -13,6 +13,7 @@ import Data.Array.Base (unsafeAt)
 import Data.List (isPrefixOf, foldl')
 import Data.Maybe (fromMaybe, maybe)
 import qualified Data.Map as Map
+import qualified GF.Data.TrieMap as TMap
 import qualified Data.IntMap as IntMap
 import qualified Data.Set as Set
 import Control.Monad
@@ -37,26 +38,29 @@ initState pinfo (DTyp _ start _) =
         
   in State pinfo
            (Chart emptyAC [] emptyPC (productions pinfo) (totalCats pinfo) 0)
-           (Set.fromList items)
+           (TMap.singleton [] (Set.fromList items))
 
 -- | From the current state and the next token
 -- 'nextState' computes a new state where the token
 -- is consumed and the current position shifted by one.
 nextState :: ParseState -> String -> Maybe ParseState
 nextState (State pinfo chart items) t =
-  let (items1,chart1) = process (Just t) add (sequences pinfo) (functions pinfo) (Set.toList items) Set.empty chart
+  let (mb_agenda,map_items) = TMap.decompose items
+      agenda = maybe [] Set.toList mb_agenda
+      acc    = fromMaybe TMap.empty (Map.lookup t map_items)
+      (acc1,chart1) = process (Just t) add (sequences pinfo) (functions pinfo) agenda acc chart
       chart2 = chart1{ active =emptyAC
                      , actives=active chart1 : actives chart1
                      , passive=emptyPC
                      , offset =offset chart1+1
                      }
-  in if Set.null items1
+  in if TMap.null acc1
        then Nothing
-       else Just (State pinfo chart2 items1)
+       else Just (State pinfo chart2 acc1)
   where
-    add (KS tok) item set
-      | tok == t  = Set.insert item set
-      | otherwise = set
+    add (tok:toks) item acc
+      | tok == t            = TMap.insertWith Set.union toks (Set.singleton item) acc
+    add _          item acc = acc
 
 -- | If the next token is not known but only its prefix (possible empty prefix)
 -- then the 'getCompletions' function can be used to calculate the possible
@@ -64,22 +68,27 @@ nextState (State pinfo chart items) t =
 -- the GF interpreter.
 getCompletions :: ParseState -> String -> Map.Map String ParseState
 getCompletions (State pinfo chart items) w =
-  let (map',chart1) = process Nothing add (sequences pinfo) (functions pinfo) (Set.toList items) Map.empty chart
+  let (mb_agenda,map_items) = TMap.decompose items
+      agenda = maybe [] Set.toList mb_agenda
+      acc    = Map.filterWithKey (\tok _ -> isPrefixOf w tok) map_items
+      (acc',chart1) = process Nothing add (sequences pinfo) (functions pinfo) agenda acc chart
       chart2 = chart1{ active =emptyAC
                      , actives=active chart1 : actives chart1
                      , passive=emptyPC
                      , offset =offset chart1+1
                      }
-  in fmap (State pinfo chart2) map'
+  in fmap (State pinfo chart2) acc'
   where
-    add (KS tok) item map
-      | isPrefixOf w tok = Map.insertWith Set.union tok (Set.singleton item) map
-      | otherwise        = map
+    add (tok:toks) item acc
+      | isPrefixOf w tok    = Map.insertWith (TMap.unionWith Set.union) tok (TMap.singleton toks (Set.singleton item)) acc
+    add _          item acc = acc
 
 extractExps :: ParseState -> Type -> [Tree]
 extractExps (State pinfo chart items) (DTyp _ start _) = exps
   where
-    (_,st) = process Nothing (\_ _ -> id) (sequences pinfo) (functions pinfo) (Set.toList items) () chart
+    (mb_agenda,acc) = TMap.decompose items
+    agenda = maybe [] Set.toList mb_agenda
+    (_,st) = process Nothing (\_ _ -> id) (sequences pinfo) (functions pinfo) agenda () chart
 
     exps = nubsort $ do
       cat <- fromMaybe [] (Map.lookup start (startCats pinfo))
@@ -138,19 +147,23 @@ process mbt fn !seqs !funs (item@(Active j ppos funid seqid args key0):items) ac
                             Nothing                        -> process mbt fn seqs funs items3 acc chart{active=insertAC key (Set.singleton item) (active chart)}
                             Just set | Set.member item set -> process mbt fn seqs funs items  acc chart
                                      | otherwise           -> process mbt fn seqs funs items2 acc chart{active=insertAC key (Set.insert item set) (active chart)}
-      	FSymTok tok -> let !acc' = fn tok (Active j (ppos+1) funid seqid args key0) acc
+      	FSymKS toks -> let !acc' = fn toks (Active j (ppos+1) funid seqid args key0) acc
+                       in process mbt fn seqs funs items acc' chart
+      	FSymKP strs vars
+      	            -> let !acc' = foldl (\acc toks -> fn toks (Active j (ppos+1) funid seqid args key0) acc) acc
+      	                             (strs:[strs' | Alt strs' _ <- vars])
                        in process mbt fn seqs funs items acc' chart
         FSymLit d r -> let !fid = args !! d
-                       in case [t | FConst _ t <- maybe [] Set.toList (IntMap.lookup fid (forest chart))] of
-                            (tok:_) -> let !acc' = fn (KS tok) (Active j (ppos+1) funid seqid args key0) acc
-                                       in process mbt fn seqs funs items acc' chart
-                            []      -> case litCatMatch fid mbt of
-                                         Just (t,lit) -> let fid'  = nextId chart
-                                                             !acc' = fn (KS t) (Active j (ppos+1) funid seqid (updateAt d fid' args) key0) acc
-                                                         in process mbt fn seqs funs items acc' chart{forest=IntMap.insert fid' (Set.singleton (FConst lit t)) (forest chart)
-                                                                                                     ,nextId=nextId chart+1
-                                                                                                     }
-                                         Nothing      -> process mbt fn seqs funs items acc chart
+                       in case [ts | FConst _ ts <- maybe [] Set.toList (IntMap.lookup fid (forest chart))] of
+                            (toks:_) -> let !acc' = fn toks (Active j (ppos+1) funid seqid args key0) acc
+                                        in process mbt fn seqs funs items acc' chart
+                            []       -> case litCatMatch fid mbt of
+                                          Just (toks,lit) -> let fid'  = nextId chart
+                                                                 !acc' = fn toks (Active j (ppos+1) funid seqid (updateAt d fid' args) key0) acc
+                                                             in process mbt fn seqs funs items acc' chart{forest=IntMap.insert fid' (Set.singleton (FConst lit toks)) (forest chart)
+                                                                                                         ,nextId=nextId chart+1
+                                                                                                         }
+                                          Nothing         -> process mbt fn seqs funs items acc chart
   | otherwise =
       case lookupPC (mkPK key0 j) (passive chart) of
         Nothing -> let fid = nextId chart
@@ -181,12 +194,12 @@ updateAt :: Int -> a -> [a] -> [a]
 updateAt nr x xs = [if i == nr then x else y | (i,y) <- zip [0..] xs]
 
 litCatMatch fcat (Just t)
-  | fcat == fcatString = Just (t,Lit (LStr t))
-  | fcat == fcatInt    = case reads t of {[(n,"")] -> Just (t,Lit (LInt n));
+  | fcat == fcatString = Just ([t],Lit (LStr t))
+  | fcat == fcatInt    = case reads t of {[(n,"")] -> Just ([t],Lit (LInt n));
                                          _         -> Nothing }
-  | fcat == fcatFloat  = case reads t of {[(d,"")] -> Just (t,Lit (LFlt d));
+  | fcat == fcatFloat  = case reads t of {[(d,"")] -> Just ([t],Lit (LFlt d));
                                          _         -> Nothing }
-  | fcat == fcatVar    = Just (t,Var (mkCId t))
+  | fcat == fcatVar    = Just ([t],Var (mkCId t))
 litCatMatch _    _     = Nothing
 
 
@@ -250,7 +263,7 @@ insertPC key fcat chart = Map.insert key fcat chart
 -- Forest
 ----------------------------------------------------------------
 
-foldForest :: (FunId -> [FCat] -> b -> b) -> (Tree -> String -> b -> b) -> b -> FCat -> IntMap.IntMap (Set.Set Production) -> b
+foldForest :: (FunId -> [FCat] -> b -> b) -> (Tree -> [String] -> b -> b) -> b -> FCat -> IntMap.IntMap (Set.Set Production) -> b
 foldForest f g b fcat forest =
   case IntMap.lookup fcat forest of
     Nothing  -> b
@@ -258,7 +271,7 @@ foldForest f g b fcat forest =
   where
     foldProd (FCoerce fcat)      b = foldForest f g b fcat forest
     foldProd (FApply funid args) b = f funid args b
-    foldProd (FConst const s)    b = g const s b
+    foldProd (FConst const toks) b = g const toks b
 
 
 ----------------------------------------------------------------
@@ -267,7 +280,7 @@ foldForest f g b fcat forest =
 
 -- | An abstract data type whose values represent
 -- the current state in an incremental parser.
-data ParseState = State ParserInfo Chart (Set.Set Active)
+data ParseState = State ParserInfo Chart (TMap.TrieMap String (Set.Set Active))
 
 data Chart
   = Chart
