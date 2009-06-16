@@ -39,7 +39,7 @@ concrete VerbIna of Verb = CatIna ** open ResIna, Prelude in {
 
     ComplSlash vp np = insertObj vp.p2 vp.c2 np vp ;
 
-    UseComp comp = insertInvarObj (comp.s ! Sp3) (predV esserV) ;
+    UseComp comp = insertInvarObj (comp.s ! Sp3) (predV_ esserV) ;
     -- !!! as above
 
     SlashVV v vp = 
@@ -57,7 +57,7 @@ concrete VerbIna of Verb = CatIna ** open ResIna, Prelude in {
     ReflVP vp = insertReflObj vp.p2 vp.c2 
       {isPronoun = True; s = \\agr,c => reflPron!agr} vp ;
 
-    PassV2 v = insertInvarObj (v.s ! VPPart) (predV esserV);
+    PassV2 v = insertInvarObj (v.s ! VPPart) (predV_ esserV);
 
     CompAP ap = ap ;
     CompNP np = {s = \\_ => np.s ! Acc} ;

@@ -1,4 +1,4 @@
---# -path=.:../abstract:../common:../../prelude
+--# -path=.:../abstract:../common:../prelude
 
 --1 Interlingua auxiliary operations.
 
@@ -128,29 +128,45 @@ resource ResIna = ParamX ** open Prelude in {
  	      }}};
 
     -- + The 3 (optionally) irregular verbs. (we only need haberV in this module)
-    esserV : Verb = 
+    esserV : Bool => Verb = \\use_irreg =>
       let reg = mkVerb "esser" 
       in {isRefl = False;
-          s = \\form=> case form of {
-	    VPres => variants {"es"; "esse"};
-	    VFut => variants  {"sera"; "essera"};
-	    VCond => variants  {"serea"; "esserea"};
-	    VPast => variants  {"era"; "esseva"};
-	    _ => reg.s!form}};
+          s = case use_irreg of {
+                True  => table {
+	                   VPres => "es";
+	                   VFut  => "sera";
+	                   VCond => "serea";
+	                   VPast => "era";
+	                   form  => reg.s!form
+	                 };
+	        False => reg.s
+	      }
+	 };
 
-    haberV : Verb = 
+    haberV : Bool => Verb = \\use_irreg =>
       let reg = mkVerb "haber" 
       in {isRefl = False;
-          s = \\form=> case form of {
-	    VPres => variants {"ha"; "habe"};
-	    _ => reg.s!form}};
+          s = case use_irreg of {
+	        True  => table {
+		           VPres => "ha";
+		           form  => reg.s!form
+		         };
+                False => reg.s
+	      }
+	 };
 
-    vaderV : Verb = 
+    vaderV : Bool => Verb = \\use_irreg =>
       let reg = mkVerb "vader" 
       in {isRefl = False;
-          s = \\form=> case form of {
-	    VPres => variants {"va"; "vade"};
-	    _ => reg.s!form}};
+          s = case use_irreg of {
+	        True  => table {
+	                   VPres => "va";
+	                   form  => reg.s!form
+	                 };
+
+                False => reg.s
+	      }
+	 };
 
 
     mkIP : Str -> Number -> {s : Case => Str ; n : Number} = \qui,n -> {s = \\c=>casePrep [] c ++ qui; n = n};
@@ -196,7 +212,7 @@ resource ResIna = ParamX ** open Prelude in {
 
     -- Dependency on Agr is there only because of reflexive pronouns!
     VP : Type = {
-      s : Anteriority => Tense => {fin, inf : Str} ;
+      s : Anteriority => Tense => Bool => {fin, inf : Str} ;
       rest : Agr => Str;          -- comes after the infinite part
       clitics : Agr => Str;       -- can be placed just before the finite or right after the infinite
       prp : Str ;          -- present participle (unused at the moment ???)
@@ -213,17 +229,19 @@ resource ResIna = ParamX ** open Prelude in {
       s : Agr => Case => Str;
       };
 
-    predV : Verb -> VP = \verb -> {
+    predV_ : (Bool => Verb) -> VP = \verb -> {
       clitics = \\_ => [];
       rest = \\_ => [];
       s = table
-	{Simul => \\t=> {fin = verb.s   ! (tenseToVFrom!t); inf = []};
-	 Anter => \\t=> {fin = haberV.s ! (tenseToVFrom!t); inf = verb.s!VPPart}
+	{Simul => \\t,use_irreg => {fin = (verb!use_irreg).s   ! (tenseToVFrom!t); inf = []};
+	 Anter => \\t,use_irreg => {fin = (haberV!use_irreg).s ! (tenseToVFrom!t); inf = (verb!use_irreg).s!VPPart}
 	};
-      prp = verb.s ! VPresPart;
-      inf = verb.s ! VInf;
+      prp = (verb!False).s ! VPresPart;
+      inf = (verb!False).s ! VInf;
       };
-    
+
+    predV : Verb -> VP = \verb -> predV_ (\\_ => verb) ;
+
     tenseToVFrom = table {
       Pres => VPres
       ;Past => VPast; --# notpresent
@@ -277,28 +295,29 @@ resource ResIna = ParamX ** open Prelude in {
 
   ---- For $Sentence$.
     --
-    Clause = {s : Tense => Anteriority => Polarity => Order => Str} ;
+    Clause = {s : Bool => Tense => Anteriority => Polarity => Order => Str} ;
     
     mkClause : Str -> Agr -> VP -> Clause =
       \subj,agr,vp -> 
       {
-	s = \\t,anter,b =>let v = vp.s!anter!t
-	  in table {
-	    ODir => variants {
-	      subj ++ posneg b ++ v.fin ++ v.inf ++ vp.clitics!agr ++ vp.rest!agr;
-	      subj ++ posneg b ++ vp.clitics!agr ++ v.fin ++ v.inf ++ vp.rest!agr
-	      };
-	    OQuest => variants {
-	      posneg b ++ v.fin ++ subj ++ v.inf ++ vp.clitics!agr ++ vp.rest!agr;
-	      posneg b ++ vp.clitics!agr ++ v.fin ++ subj ++ v.inf ++ vp.rest!agr;
-	      }
-	  }
+	s = \\use_irreg,t,anter,b =>
+	        let v = vp.s!anter!t!use_irreg
+	        in case use_irreg of {
+	             True  => table {
+	                        ODir   => subj ++ posneg b ++ v.fin ++ v.inf ++ vp.clitics!agr ++ vp.rest!agr;
+	                        OQuest => posneg b ++ v.fin ++ subj ++ v.inf ++ vp.clitics!agr ++ vp.rest!agr
+                              } ;
+                     False => table {
+	                        ODir   => subj ++ posneg b ++ vp.clitics!agr ++ v.fin ++ v.inf ++ vp.rest!agr;
+	                        OQuest => posneg b ++ vp.clitics!agr ++ v.fin ++ subj ++ v.inf ++ vp.rest!agr
+	                      }
+                   }
       };
 
 
     mkQuestion : 
       {s : Str} -> Clause -> Clause = \qu,cl ->
-      {s=\\t,a,p,o => qu.s ++ cl.s ! t ! a ! p ! o};
+      {s=\\use_irreg,t,a,p,o => qu.s ++ cl.s ! use_irreg ! t ! a ! p ! o};
     
 
 
