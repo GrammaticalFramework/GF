@@ -114,7 +114,3 @@ pgfToCFG pgf lang = mkCFG (prCId (lookStartCat pgf)) extCats (startRules ++ conc
     fruleToCFRule (c,FCoerce c') =
         [CFRule (fcatToCat c l) [NonTerminal (fcatToCat c' l)] (CFRes 0)
            | l <- [0..catLinArity c-1]]
-
-
-isLiteralFCat :: FCat -> Bool
-isLiteralFCat = (`elem` [fcatString, fcatInt, fcatFloat, fcatVar])

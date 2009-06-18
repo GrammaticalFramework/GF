@@ -50,6 +50,8 @@ fcatInt    = (-2)
 fcatFloat  = (-3)
 fcatVar    = (-4)
 
+isLiteralFCat :: FCat -> Bool
+isLiteralFCat = (`elem` [fcatString, fcatInt, fcatFloat, fcatVar])
 
 ppPMCFG :: ParserInfo -> Doc
 ppPMCFG pinfo =
@@ -101,6 +103,6 @@ ppSeqId seqid = char 'S' <> int seqid
 filterProductions prods =
   fmap (Set.filter filterRule) prods
   where
-    filterRule (FApply funid args) = all (\fcat -> IntMap.member fcat prods) args
+    filterRule (FApply funid args) = all (\fcat -> isLiteralFCat fcat || IntMap.member fcat prods) args
     filterRule (FCoerce _)         = True
     filterRule _                   = True
