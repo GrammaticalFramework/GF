@@ -610,9 +610,11 @@ allCommands cod env@(pgf, mos) = Map.fromList [
                         Nothing         -> case Map.lookup id (cats (abstract pgf)) of
                                              Just hyps -> do return $ fromString $
                                                                 render (text "cat" <+> text (prCId id) <+> hsep (map ppHypo hyps) $$
-                                                                        space $$
-                                                                        text "fun" <+> vcat [text (prCId fid) <+> colon <+> ppType 0 ty 
-                                                                                                | (fid,ty) <- functionsToCat pgf id])
+                                                                        if null (functionsToCat pgf id)
+                                                                          then empty
+                                                                          else space $$
+                                                                               text "fun" <+> vcat [text (prCId fid) <+> colon <+> ppType 0 ty 
+                                                                                                       | (fid,ty) <- functionsToCat pgf id])
                                              Nothing   -> do putStrLn "unknown identifier"
                                                              return void
          _           -> do putStrLn "a single identifier is expected from the command"
