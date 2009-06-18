@@ -90,10 +90,10 @@ ppAlt (Alt ts ps) = ppStrs ts <+> char '/' <+> hsep (map (doubleQuotes . text) p
 ppStrs ss = doubleQuotes (hsep (map text ss))
 
 ppFCat  fcat
-  | fcat == fcatString = text "String"
-  | fcat == fcatInt    = text "Int"
-  | fcat == fcatFloat  = text "Float"
-  | fcat == fcatVar    = text "Var"
+  | fcat == fcatString = text "CString"
+  | fcat == fcatInt    = text "CInt"
+  | fcat == fcatFloat  = text "CFloat"
+  | fcat == fcatVar    = text "CVar"
   | otherwise          = char 'C' <> int fcat
 
 ppFunId funid = char 'F' <> int funid
