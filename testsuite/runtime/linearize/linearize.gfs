@@ -1,0 +1,3 @@
+i testsuite/runtime/linearize/TestCnc.gf
+
+l Exist (\x -> Even x)
