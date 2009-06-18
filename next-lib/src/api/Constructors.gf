@@ -1665,6 +1665,11 @@ incomplete resource Constructors = open Grammar in {
     those_NP : NP = DetNP (DetQuant that_Quant plNum) ; --# notminimal
     these_NP : NP = DetNP (DetQuant this_Quant plNum) ; --# notminimal
 
+    that_Det : Det = (DetQuant that_Quant sgNum) ;
+    this_Det : Det = (DetQuant this_Quant sgNum) ;
+    those_Det : Det = (DetQuant that_Quant plNum) ;
+    these_Det : Det = (DetQuant this_Quant plNum) ;
+
 
 {- --# notminimal
 -- The definite and indefinite articles are commonly used determiners.
