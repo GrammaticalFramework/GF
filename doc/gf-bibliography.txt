@@ -13,6 +13,58 @@ Aarne Ranta
 
 In reverse temporal order:
 
+A. Ranta.
+The GF Resource Grammar Library,
+to appear in the on-line journal //Linguistics in Language Technology//,
+2009.
+#BR
+//A systematic presentation of the library from the linguistic point of view.//
+
+A. Ranta.
+Grammatical Framework: A Multilingual Grammar Formalism, 
+to appear in the on-line journal //Compass, Special issue on computational linguistics//,
+2009.
+#BR
+//An overview of GF for readers with a general academic brackground.//
+
+A. Ranta. Grammars as Software Libraries.
+To appear in
+Y. Bertot, G. Huet, J-J. Lévy, and G. Plotkin (eds.),
+//From Semantics to Computer Science//,
+Cambridge University Press, Cambridge, 2009.
+#BR
+//Grammar-libraries from the software engineering point of view, with an example application to mathematical language.//
+
+A. Ranta, B. Bringert, and K. Angelov. 
+The GF Grammar Development Environment. 
+System demo. To appear in the proceedings of //EACL-2009//,
+2009.
+#BR
+//An overview of GF from the grammarian's point of view.//
+ 
+B. Bringert, K. Angelov, and A. Ranta. 
+Grammatical Framework Web Service,
+System demo. To appear in the proceedings of //EACL-2009//,
+2009.
+#BR
+//An overview of how to build web services on top of PGF using the Google Web Toolkit.//
+
+
+A. Ranta and K. Angelov. 
+Implementing Controlled Languages in GF,
+To appear in the proceedings of //CNL-2009//, LNCS, Springer,
+2009.
+#BR
+//On the use of GF for controlled languages, exemplified by an implementation of Attempto Controlled English then ported to three other language.//
+
+R. Cooper and A. Ranta. 
+Natural Languages as Collections of Resources. 
+In //Language in Flux: Dialogue Coordination, Language Variation, Change//, 
+ed. by R. Cooper and R. Kempson, pp. 109-120. London: College Publications,
+2008.
+#BR
+//The resource grammar idea applied to language learning and evolution.//
+
 Moisés Salvador Meza Moreno and B. Bringert.
 Interactive Multilingual Web Applications with Grammatical Framework.
 In B. Nordström and A. Ranta (eds), 
