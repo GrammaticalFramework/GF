@@ -53,7 +53,7 @@ infer pgf tenv@(k,rho,gamma) e = case e of
     case typ of
       VClosure env (EPi x a b) -> do
         (a',csa) <- checkExp pgf tenv t (VClosure env a)
-	let b' = eval (funs (abstract pgf)) (eins x (VClosure rho t) env) b
+	let b' = eval (getFunEnv (abstract pgf)) (eins x (VClosure rho t) env) b
 	return $ (EApp f' a', b', csf ++ csa)
       _ -> Bad ("function type expected for function " ++ show f)
    _ -> Bad ("cannot infer type of expression" ++ show e)
@@ -66,17 +66,21 @@ checkExp pgf tenv@(k,rho,gamma) e typ = do
     EMeta m -> return $ (e,[])
     EAbs x t -> case typ of
       VClosure env (EPi y a b) -> do
-	let a' = eval (funs (abstract pgf)) env a
+	let a' = eval (getFunEnv (abstract pgf)) env a
 	(t',cs) <- checkExp pgf (k+1,eins x v rho, eins x a' gamma) t 
                             (VClosure (eins y v env) b)
 	return (EAbs x t', cs)
       _ -> Bad ("function type expected for " ++ show e)
     _ -> checkInferExp pgf tenv e typ
 
+getFunEnv abs = Map.union (funs abs) (Map.map (\hypos -> (DTyp hypos cidType [],0,[])) (cats abs))
+  where
+    cidType = mkCId "Type"
+
 checkInferExp :: PGF -> TCEnv -> Expr -> Value -> Err (Expr, [(Value,Value)])
 checkInferExp pgf tenv@(k,_,_) e typ = do
   (e',w,cs1) <- infer pgf tenv e
-  let cs2 = eqValue k w typ
+  let cs2 = eqValue (getFunEnv (abstract pgf)) k w typ
   return (e',cs1 ++ cs2)
       
 lookupEVar :: PGF -> TCEnv -> CId -> Err Value
