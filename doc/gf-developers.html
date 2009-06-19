@@ -8,7 +8,7 @@
 <P ALIGN="center"><CENTER><H1>GF Developers Guide</H1>
 <FONT SIZE="4">
 <I>Authors: Björn Bringert  and  Krasimir Angelov</I><BR>
-Last update: Sat Jun 13 20:00:21 2009
+Last update: Fri Jun 19 15:27:27 2009
 </FONT></CENTER>
 
 <P></P>
@@ -84,10 +84,46 @@ Again after the installation check that the tools are available from the termina
 If they are not then probably you have to update the current search path in your system.
 </P>
 <P>
-Before to get the GF sources you also need Darcs. Darcs is a decentralized revision control system, 
+It is also a good idea to have either readline, editline or haskeline installed.
+This are libraries for user friendly command line editing. On Linux, without some of this
+libraries, the command line editor is very basic. Actually the only key for editing
+that you can use is backspace. On Windows you get much more user friendly editor
+by default but with it you cannot use the GF specific tab completion. In any case if you
+plan to use GF for continuous development then it is recomended to install
+some of these libraries. The GF configuration script checks the libraries
+in the following order:
+</P>
+<UL>
+<LI>haskeline
+<LI>readline
+<LI>editline
+</UL>
+
+<P>
+the first that is found will be used in the compilation. The libraries are also written
+in Haskell and could be found on Hackage: <A HREF="http://hackage.haskell.org/">http://hackage.haskell.org/packages/archive/pkg-list.html</A>. If you want to check whether,
+you already have some of these you can use the following command:
+</P>
+<PRE>
+  $ ghc-pkg list
+</PRE>
+<P>
+which shows the list of all installed libraries.
+</P>
+<P>
+Haskeline is the easiest to install because it is a pure Haskell library but currently
+with this editor GF doesn't provide word completion. With editline we provide word completion
+but the library is harder to install because it is a Haskell binding to a
+library with the same name written in C. If you do not have the C library you will have to install
+it first. Unfortunately editline does not have good support for Unicode. This will be a problem
+if you tend to work on non-Latin language. Finaly readline supports both word completion
+and Unicode. Currently this is the best supported library.
+</P>
+<P>
+Before to get the GF sources you also need Darcs. Darcs is a decentralized revision control system,
 see: <A HREF="http://darcs.net/">http://darcs.net/</A> for more information. There are precompiled packages for many platforms available at
 <A HREF="http://darcs.net/DarcsWiki/CategoryBinaries">http://darcs.net/DarcsWiki/CategoryBinaries</A>. There is also source code if you want to compile it yourself. Darcs is
-also written in Haskell and so you can GHC to compile it.
+also written in Haskell and so you can use GHC to compile it.
 </P>
 <A NAME="toc2"></A>
 <H1>Getting the sources</H1>
@@ -132,7 +168,7 @@ Since every copy is a repository, you can have local version control
 of your changes.
 </P>
 <P>
-If you have added files, you first need to tell your local repository to 
+If you have added files, you first need to tell your local repository to
 keep them under revision control:
 </P>
 <PRE>
@@ -162,7 +198,7 @@ repository.
 <H3>Submitting patches</H3>
 <P>
 If you are using read-only access, send your patches by email to
-someone with write-access. First record your changes in your local 
+someone with write-access. First record your changes in your local
 repository, as described above. You can send any number of recorded
 patches as one patch bundle. You create the patch bundle with:
 </P>
@@ -187,7 +223,7 @@ patch directly from darcs. If so, replace <CODE>-o mypatch.patch</CODE> with
 <H2>Read-write access</H2>
 <P>
 If you have a user account on code.haskell.org, you can get read-write access over SSH
-to the GF repository. 
+to the GF repository.
 To get an account, <A HREF="http://community.haskell.org/admin/account_request.html">fill out this form</A>.
 Once you have an account, ask &lt;<A HREF="mailto:aarne@chalmers.se">aarne@chalmers.se</A>&gt; to add you to the <CODE>GF</CODE> project.
 </P>
@@ -225,7 +261,7 @@ Without <CODE>-a</CODE>, you can choose which patches you want to get.
 There are two steps to commiting a change to the main repo. First you
 have to record the changes that you want to commit, then you push them
 to the main repo. For instructions on recording your changes locally,
-see "Recording local changes" above. Then you can push the patch(es) to 
+see "Recording local changes" above. Then you can push the patch(es) to
 the main repo. If you are using ssh-access, all you need to do is:
 </P>
 <PRE>
@@ -301,7 +337,7 @@ library after each change. In this case use this extended command:
   $ runghc Setup.hs build rgl-none
 </PRE>
 <P>
-The resource library could also be compiled in two modes: with present tense only and 
+The resource library could also be compiled in two modes: with present tense only and
 with all tenses. By default it is compiled with all tenses. If you want to use
 the library with only present tense you can compile it in this special mode with
 the command:
@@ -419,7 +455,7 @@ GF has testsuite. It is run with the following command:
 <P>
 The testsuite architecture for GF is very simple but still very flexible.
 GF by itself is an interpreter and could execute commands in batch mode.
-This is everything that we need to organize a testsuite. The root of the 
+This is everything that we need to organize a testsuite. The root of the
 testsuite is the testsuite/ directory. It contains subdirectories which
 themself contain GF batch files (with extension .gfs). The above command
 searches the subdirectories of the testsuite/ directory for files with extension

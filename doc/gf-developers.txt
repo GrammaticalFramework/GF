@@ -37,10 +37,41 @@ http://www.haskell.org/happy/.
 Again after the installation check that the tools are available from the terminal.
 If they are not then probably you have to update the current search path in your system.
 
+It is also a good idea to have either readline, editline or haskeline installed.
+This are libraries for user friendly command line editing. On Linux, without some of this
+libraries, the command line editor is very basic. Actually the only key for editing
+that you can use is backspace. On Windows you get much more user friendly editor
+by default but with it you cannot use the GF specific tab completion. In any case if you
+plan to use GF for continuous development then it is recomended to install
+some of these libraries. The GF configuration script checks the libraries
+in the following order:
+
+- haskeline
+- readline
+- editline
+
+
+the first that is found will be used in the compilation. The libraries are also written
+in Haskell and could be found on Hackage: http://hackage.haskell.org/packages/archive/pkg-list.html. If you want to check whether,
+you already have some of these you can use the following command:
+```
+$ ghc-pkg list
+```
+which shows the list of all installed libraries. 
+
+Haskeline is the easiest to install because it is a pure Haskell library but currently
+with this editor GF doesn't provide word completion. With editline we provide word completion
+but the library is harder to install because it is a Haskell binding to a
+library with the same name written in C. If you do not have the C library you will have to install
+it first. Unfortunately editline does not have good support for Unicode. This will be a problem
+if you tend to work on non-Latin language. Finaly readline supports both word completion
+and Unicode. Currently this is the best supported library.
+
 Before to get the GF sources you also need Darcs. Darcs is a decentralized revision control system, 
 see: http://darcs.net/ for more information. There are precompiled packages for many platforms available at
 http://darcs.net/DarcsWiki/CategoryBinaries. There is also source code if you want to compile it yourself. Darcs is
-also written in Haskell and so you can GHC to compile it.
+also written in Haskell and so you can use GHC to compile it.
+
 
 = Getting the sources =
 
