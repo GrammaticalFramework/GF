@@ -180,6 +180,7 @@ ppExpr d (EApp e1 e2) = ppParens (d > 1) ((ppExpr 1 e1) PP.<+> (ppExpr 2 e2))
 ppExpr d (ELit l)     = ppLit l
 ppExpr d (EMeta n)    = ppMeta n
 ppExpr d (EVar f)     = PP.text (prCId f)
+ppExpr d (EPi x e1 e2)= PP.parens (PP.text (prCId x) PP.<+> PP.colon PP.<+> ppExpr 0 e1) PP.<+> PP.text "->" PP.<+> ppExpr 0 e2
 
 ppPatt d (PApp f ps) = ppParens (d > 1) (PP.text (prCId f) PP.<+> PP.hsep (map (ppPatt 2) ps))
 ppPatt d (PLit l)    = ppLit l
@@ -278,6 +279,7 @@ eval funs env (EApp e1 e2) = apply funs env e1 [eval funs env e2]
 eval funs env (EAbs x e)   = VClosure env (EAbs x e)
 eval funs env (EMeta k)    = VMeta k []
 eval funs env (ELit l)     = VLit l
+eval funs env (EPi x e1 e2)= VClosure env (EPi x e1 e2)
 
 apply :: Funs -> Env -> Expr -> [Value] -> Value
 apply funs env e            []     = eval funs env e
@@ -338,14 +340,18 @@ match eqs as =
 -- Equality checking
 -----------------------------------------------------
 
-eqValue :: Int -> Value -> Value -> [(Value,Value)]
-eqValue k v1 v2 =
-  case (v1,v2) of
-    (VApp f1 vs1, VApp f2 vs2) | f1 == f2  -> concat (zipWith (eqValue k) vs1 vs2)
+eqValue :: Funs -> Int -> Value -> Value -> [(Value,Value)]
+eqValue funs k v1 v2 =
+  case (whnf v1,whnf v2) of
+    (VApp f1 vs1, VApp f2 vs2) | f1 == f2  -> concat (zipWith (eqValue funs k) vs1 vs2)
     (VLit l1,     VLit l2    ) | l1 == l2  -> []
-    (VMeta i vs1, VMeta j vs2) | i  == j   -> concat (zipWith (eqValue k) vs1 vs2)
-    (VGen  i vs1, VGen  j vs2) | i  == j   -> concat (zipWith (eqValue k) vs1 vs2)
+    (VMeta i vs1, VMeta j vs2) | i  == j   -> concat (zipWith (eqValue funs k) vs1 vs2)
+    (VGen  i vs1, VGen  j vs2) | i  == j   -> concat (zipWith (eqValue funs k) vs1 vs2)
     (VClosure env1 (EAbs x1 e1), VClosure env2 (EAbs x2 e2)) ->
       let v = VGen k []
-      in eqValue (k+1) (VClosure (Map.insert x1 v env1) e1) (VClosure (Map.insert x2 v env2) e2)
+      in eqValue funs (k+1) (VClosure (Map.insert x1 v env1) e1) (VClosure (Map.insert x2 v env2) e2)
     _                                      -> [(v1,v2)]
+  where
+    whnf (VClosure env e) = eval funs env e   -- should be removed when the typechecker is improved
+    whnf v                = v
+
