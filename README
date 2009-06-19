@@ -30,4 +30,4 @@ GF particularly addresses four aspects of grammars:
 
 
 COMPILATION and INSTALLATION of source distribution:
-See src/INSTALL for installation instructions.
+See doc/gf-developers.html for installation instructions.
