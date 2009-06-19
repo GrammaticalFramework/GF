@@ -33,7 +33,7 @@ typecheck pgf e = case inferExpr pgf (newMetas e) of
 
 inferExpr :: PGF -> Expr -> Err Expr
 inferExpr pgf e = case infer pgf emptyTCEnv e of
-  Ok (e,_,cs) -> let (ms,cs2) = splitConstraints cs in case cs2 of
+  Ok (e,_,cs) -> let (ms,cs2) = splitConstraints pgf cs in case cs2 of
     [] -> Ok (metaSubst ms e)
     _  -> Bad ("Error in tree " ++ showExpr e ++ " :\n  " ++ prConstraints cs2)
   Bad s -> Bad s
@@ -117,11 +117,16 @@ prConstraints cs = unwords
 
 -- work more on this: unification, compute,...
 
-splitConstraints :: [(Value,Value)] -> ([(Int,Expr)],[(Value,Value)])
-splitConstraints = mkSplit . partition isSubst . regroup . map reorder where
+splitConstraints :: PGF -> [(Value,Value)] -> ([(Int,Expr)],[(Value,Value)])
+splitConstraints pgf = mkSplit . partition isSubst . regroup . map reorder . map reduce where
   reorder (v,w) = case w of
     VMeta _ _ -> (w,v)
     _ -> (v,w)
+
+  reduce (v,w) = (whnf v,whnf w)
+
+  whnf (VClosure env e) = eval (getFunEnv (abstract pgf)) env e   -- should be removed when the typechecker is improved
+  whnf v                = v
 
   regroup = groupBy (\x y -> fst x == fst y) . sort
 
