@@ -214,22 +214,24 @@ tree2expr (Var x)    = EVar x
 -- | Converts an expression to tree. The conversion is only partial.
 -- Variables and meta variables of function type and beta redexes are not allowed.
 expr2tree :: Expr -> Tree
-expr2tree e = abs [] e
+expr2tree e = abs [] [] e
   where
-    abs xs (EAbs x e) = abs (x:xs) e
-    abs xs e          = case xs of
-                          [] -> app [] e
-                          xs -> Abs (reverse xs) (app [] e)
+    abs ys xs (EAbs x e) = abs ys (x:xs) e
+    abs ys xs e          = case xs of
+                             [] -> app ys [] e
+                             xs -> Abs (reverse xs) (app (xs++ys) [] e)
 
-    app as (EApp e1 e2)   = app ((abs [] e2) : as) e1
-    app as (ELit l)
-              | null as   = Lit l
-              | otherwise = error "literal of function type encountered"
-    app as (EMeta n)
-              | null as   = Meta n
-              | otherwise = error "meta variables of function type are not allowed in trees"
-    app as (EAbs x e)     = error "beta redexes are not allowed in trees"
-    app as (EVar x)       = Fun x as
+    app xs as (EApp e1 e2)   = app xs ((abs xs [] e2) : as) e1
+    app xs as (ELit l)
+               | null as     = Lit l
+               | otherwise   = error "literal of function type encountered"
+    app xs as (EMeta n)
+               | null as     = Meta n
+               | otherwise   = error "meta variables of function type are not allowed in trees"
+    app xs as (EAbs x e)     = error "beta redexes are not allowed in trees"
+    app xs as (EVar x)
+               | x `elem` xs = Var x
+               | otherwise   = Fun x as
 
 
 -----------------------------------------------------
