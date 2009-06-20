@@ -414,6 +414,10 @@ computeTermOpt rec gr = comput True where
        getPatts p = case p of
          PAlt a b  -> liftM2 (++) (getPatts a) (getPatts b)
          PString s -> return [K s]
+         PSeq a b  -> do
+           as <- getPatts a
+           bs <- getPatts b
+           return [K (s ++ t) | K s <- as, K t <- bs]
          _ -> fail $ "not valid pattern in pre expression" +++ prt p
 
 {- ----

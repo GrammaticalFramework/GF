@@ -175,13 +175,11 @@ resource ResEng = ParamX ** open Prelude in {
 -- "o" ("one-sided"), vocalic "u" ("umbrella").
 
     artIndef = pre {
-      "a" ; 
-      "an" / strs {"a" ; "e" ; "i" ; "o" ; "A" ; "E" ; "I" ; "O" }
+      "eu" | "Eu" | "uni" | "up" => "a" ;
+      "un" => "an" ; 
+      "a" | "e" | "i" | "o" | "A" | "E" | "I" | "O" => "an" ;
+      _ => "a"
       } ;
----    artIndef = pre {
----      "a" | "e" | "i" | "o" | "A" | "E" | "I" | "O" => "an" ;
----      _ => "a"
----      } ;
 
     artDef = "the" ;
 
