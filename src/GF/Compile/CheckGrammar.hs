@@ -38,7 +38,7 @@ import GF.Grammar.Predef
 import GF.Grammar.Macros
 import GF.Grammar.PatternMatch
 import GF.Grammar.AppPredefined
-import GF.Grammar.Lockfield (isLockLabel)
+import GF.Grammar.Lockfield (isLockLabel, lockRecType, unlockRecord)
 
 import GF.Data.Operations
 import GF.Infra.CheckM
@@ -396,6 +396,10 @@ computeLType gr t = do
       let fs' = sortRec fs
       liftM RecType $ mapPairsM comp fs'
 
+    ELincat c t -> do
+      t' <- comp t
+      checkErr $ lockRecType c t' ---- locking to be removed AR 20/6/2009
+
     _ | ty == typeTok -> return typeStr
     _ | isPredefConstant ty -> return ty
 
@@ -598,6 +602,11 @@ inferLType gr trm = case trm of
    EPatt p -> do
      ty <- inferPatt p
      return (trm, EPattType ty)
+
+   ELin c trm -> do
+     (trm',ty) <- infer trm
+     ty' <- checkErr $ lockRecType c ty ---- lookup c; remove lock AR 20/6/2009
+     return $ (ELin c trm', ty') 
 
    _ -> prtFail "cannot infer lintype of" trm
 
@@ -861,6 +870,10 @@ checkLType env trm typ0 = do
         (def',ty) <- infer def  -- tries to infer type of local constant
         check (Let (x,(Just ty,def')) body) typ
 
+    ELin c tr -> do
+      tr1 <- checkErr $ unlockRecord c tr
+      check tr1 typ
+
     _ -> do
       (trm',ty') <- infer trm
       termWith trm' $ checkEq typ ty' trm'
@@ -886,7 +899,14 @@ checkLType env trm typ0 = do
      Just (_,t) -> do
        (t',ty') <- check t ty
        return (l,(Just ty',t'))
-     _ -> raise $ "cannot find value for label" +++ prt l +++ "in" +++ prt_ (R rms)
+     _ -> raise $ 
+       if isLockLabel l 
+       then
+         let cat = drop 5 (prt l) in
+         prt_ (R rms) +++ "is not in the lincat of" +++ cat ++ 
+         "; try wrapping it with lin " ++ cat
+       else
+         "cannot find value for label" +++ prt l +++ "in" +++ prt_ (R rms)
 
    checkCase arg val (p,t) = do
      cont <- pattContext env arg p

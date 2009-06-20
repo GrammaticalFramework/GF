@@ -36,8 +36,10 @@ lockRecType c t = plusRecType t $ RecType [(lockLabel c,  RecType [])]
 unlockRecord :: Ident -> Term -> Err Term
 unlockRecord c ft = do
   let (xs,t) = termFormCnc ft
-  t' <- plusRecord t $ R [(lockLabel c,  (Just (RecType []),R []))]
-  return $ mkAbs xs t'
+  let lock = R [(lockLabel c,  (Just (RecType []),R []))]
+  case plusRecord t lock of
+    Ok t' -> return $ mkAbs xs t'
+    _ -> return $ mkAbs xs (ExtR t lock)
 
 lockLabel :: Ident -> Label
 lockLabel c = LIdent $! BS.append lockPrefix (ident2bs c)

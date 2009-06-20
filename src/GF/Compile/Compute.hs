@@ -26,7 +26,7 @@ import GF.Grammar.Macros
 import GF.Grammar.Lookup
 import GF.Compile.Refresh
 import GF.Grammar.PatternMatch
-import GF.Grammar.Lockfield (isLockLabel) ----
+import GF.Grammar.Lockfield (isLockLabel,unlockRecord) ----
 
 import GF.Grammar.AppPredefined
 
@@ -218,6 +218,10 @@ computeTermOpt rec gr = comput True where
          (R rs, R ss) -> plusRecord r' s'
          (RecType rs, RecType ss) -> plusRecType r' s'
          _ -> return $ ExtR r' s'
+
+     ELin c r -> do
+       r' <- comp g r
+       unlockRecord c r'
 
      T _ _ -> compTable g t
      V _ _ -> compTable g t

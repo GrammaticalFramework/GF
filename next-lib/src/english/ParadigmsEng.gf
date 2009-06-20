@@ -321,7 +321,7 @@ oper
 
 --2 Other categories
 
-mkSubj : Str -> Subj = \s -> {s = s ; lock_Subj = <>} ;
+mkSubj : Str -> Subj = \s -> lin Subj {s = s} ;
 
 --.
 --2 Definitions of paradigms
@@ -373,11 +373,11 @@ mkSubj : Str -> Subj = \s -> {s = s ; lock_Subj = <>} ;
     mk4N man men (man + "'s") mens ;
 
   mk4N = \man,men,man's,men's -> 
-    mkNoun man man's men men's ** {g = Neutr ; lock_N = <>} ;
+    lin N (mkNoun man man's men men's ** {g = Neutr}) ;
 
-  genderN g man = {s = man.s ; g = g ; lock_N = <>} ;
+  genderN g man = lin N {s = man.s ; g = g} ;
 
-  compoundN s n = {s = \\x,y => s ++ n.s ! x ! y ; g=n.g ; lock_N = <>} ;
+  compoundN s n = lin N {s = \\x,y => s ++ n.s ! x ! y ; g=n.g} ;
 
   mkPN = overload {
     mkPN : Str -> PN = regPN ;
@@ -392,10 +392,10 @@ mkSubj : Str -> Subj = \s -> {s = s ; lock_Subj = <>} ;
     mkN2 : Str -> N2       = \s -> prepN2 (regN s) (mkPrep "of") 
   } ;
 
-  prepN2 = \n,p -> n ** {lock_N2 = <> ; c2 = p.s} ;
+  prepN2 = \n,p -> lin N2 (n ** {c2 = p.s}) ;
   regN2 n = prepN2 (regN n) (mkPrep "of") ;
 
-  mkN3 = \n,p,q -> n ** {lock_N3 = <> ; c2 = p.s ; c3 = q.s} ;
+  mkN3 = \n,p,q -> lin N3 (n ** {c2 = p.s ; c3 = q.s}) ;
 
 --3 Relational common noun phrases
 --
@@ -406,39 +406,39 @@ mkSubj : Str -> Subj = \s -> {s = s ; lock_Subj = <>} ;
   cnN3 : CN -> Prep -> Prep -> N3 ;
 
 -- This is obsolete.
-  cnN2 = \n,p -> n ** {lock_N2 = <> ; c2 = p.s} ;
-  cnN3 = \n,p,q -> n ** {lock_N3 = <> ; c2 = p.s ; c3 = q.s} ;
+  cnN2 = \n,p -> lin N2 (n ** {c2 = p.s}) ;
+  cnN3 = \n,p,q -> lin N3 (n ** {c2 = p.s ; c3 = q.s}) ;
 
   regPN n = regGenPN n human ;
-  regGenPN n g = {s = table {Gen => n + "'s" ; _ => n} ; 
-		  g = g ; lock_PN = <>} ;
-  nounPN n = {s = n.s ! singular ; g = n.g ; lock_PN = <>} ;
+  regGenPN n g = lin PN {s = table {Gen => n + "'s" ; _ => n} ; g = g} ;
+  nounPN n = lin PN {s = n.s ! singular ; g = n.g} ;
 
   mkQuant = overload {
     mkQuant : (this, these : Str) -> Quant = \sg,pl -> mkQuantifier sg pl sg pl;
     mkQuant : (no_sg, no_pl, none_sg, non_pl : Str) -> Quant = mkQuantifier;
   } ;
 
-  mkQuantifier : Str -> Str -> Str -> Str -> Quant = \sg,pl,sg',pl' -> {
+  mkQuantifier : Str -> Str -> Str -> Str -> Quant = 
+   \sg,pl,sg',pl' -> lin Quant {
     s = \\_  => table { Sg => sg ; Pl => pl } ;
-    sp = \\_ => table { Sg => regGenitiveS sg' ; Pl => regGenitiveS pl' } ;
-    lock_Quant = <>
+    sp = \\_ => table { Sg => regGenitiveS sg' ; Pl => regGenitiveS pl'}
     } ;
 
-  mkOrd : Str -> Ord = \x -> { s = regGenitiveS x; lock_Ord = <> };
+  mkOrd : Str -> Ord = \x -> lin Ord { s = regGenitiveS x};
 
-  mk2A a b = mkAdjective a a a b ** {lock_A = <>} ;
+  mk2A a b = lin A (mkAdjective a a a b) ;
   regA a = case a of {
     _ + ("a" | "e" | "i" | "o" | "u" | "y") + ? + _ + 
-        ("a" | "e" | "i" | "o" | "u" | "y") + ? + _  => compoundADeg (regADeg a) ;
-    _ => regADeg a
-    }  ** {lock_A = <>} ;
+        ("a" | "e" | "i" | "o" | "u" | "y") + ? + _  => 
+         lin A (compoundADeg (regADeg a)) ;
+    _ => lin A (regADeg a)
+    } ;
 
-  prepA2 a p = a ** {c2 = p.s ; lock_A2 = <>} ;
+  prepA2 a p = lin A2 (a ** {c2 = p.s}) ;
 
   ADeg = A ; ----
 
-  mkADeg a b c d = mkAdjective a b c d ** {lock_A = <>} ;
+  mkADeg a b c d = lin A (mkAdjective a b c d) ;
 
   regADeg happy = 
     let
@@ -466,15 +466,15 @@ mkSubj : Str -> Subj = \s -> {s = s ; lock_Subj = <>} ;
 
   adegA a = a ;
 
-  mkAdv x = ss x ** {lock_Adv = <>} ;
-  mkAdV x = ss x ** {lock_AdV = <>} ;
-  mkAdA x = ss x ** {lock_AdA = <>} ;
-  mkAdN x = ss x ** {lock_AdN = <>} ;
+  mkAdv x = lin Adv (ss x) ;
+  mkAdV x = lin AdV (ss x) ;
+  mkAdA x = lin AdA (ss x) ;
+  mkAdN x = lin AdN (ss x) ;
 
-  mkPrep p = ss p ** {lock_Prep = <>} ;
+  mkPrep p = lin Prep (ss p) ;
   noPrep = mkPrep [] ;
 
-  mk5V a b c d e = mkVerb a b c d e ** {s1 = [] ; lock_V = <>} ;
+  mk5V a b c d e = lin V (mkVerb a b c d e ** {s1 = []}) ;
 
   regV cry = 
     let
@@ -505,10 +505,10 @@ mkSubj : Str -> Subj = \s -> {s = s ; lock_Subj = <>} ;
       } ;
 
   irregV x y z = let reg = (regV x).s in
-    mk5V x (reg ! VPres) y z (reg ! VPresPart) ** {s1 = [] ; lock_V = <>} ;
+    mk5V x (reg ! VPres) y z (reg ! VPresPart) ** {s1 = []} ;
 
   irreg4V x y z w = let reg = (regV x).s in
-    mk5V x (reg ! VPres) y z w ** {s1 = [] ; lock_V = <>} ;
+    mk5V x (reg ! VPres) y z w ** {s1 = []} ;
 
   irregDuplV fit y z = 
     let 
@@ -516,40 +516,41 @@ mkSubj : Str -> Subj = \s -> {s = s ; lock_Subj = <>} ;
     in
     mk5V fit (fit + "s") y z fitting ;
 
-  partV v p = {s = \\f => v.s ! f ++ p ; isRefl = v.isRefl ; lock_V = <>} ;
-  reflV v = {s = v.s ; part = v.part ; lock_V = v.lock_V ; isRefl = True} ;
+  partV v p = lin V {s = \\f => v.s ! f ++ p ; isRefl = v.isRefl} ;
+  reflV v = lin V {s = v.s ; part = v.part ; isRefl = True} ;
 
-  prepV2 v p = v ** {s = v.s ; s1 = v.s1 ; c2 = p.s ; lock_V2 = <>} ;
+  prepV2 v p = lin V2 {s = v.s ; s1 = v.s1 ; c2 = p.s ; isRefl = v.isRefl} ;
   dirV2 v = prepV2 v noPrep ;
 
-  prepPrepV3 v p q = v ** {s = v.s ; s1 = v.s1 ; c2 = p.s ; c3 = q.s ; lock_V3 = <>} ;
+  prepPrepV3 v p q = 
+    lin V3 {s = v.s ; s1 = v.s1 ; c2 = p.s ; c3 = q.s ; isRefl = v.isRefl} ;
   dirV3 v p = prepPrepV3 v noPrep p ;
   dirdirV3 v = dirV3 v noPrep ;
 
-  mkVS  v = v ** {lock_VS = <>} ;
-  mkVV  v = {
+  mkVS  v = lin VS v ;
+  mkVV  v = lin VV {
     s = table {VVF vf => v.s ! vf ; _ => v.s ! VInf} ;
                                           --- variants {}} ; not used 
-    isAux = False ; lock_VV = <>
+    isAux = False
     } ;
-  mkVQ  v = v ** {lock_VQ = <>} ;
+  mkVQ  v = v ;
 
   V0 : Type = V ;
 --  V2S, V2V, V2Q : Type = V2 ;
   AS, A2S, AV : Type = A ;
   A2V : Type = A2 ;
 
-  mkV0  v = v ** {lock_V = <>} ;
-  mkV2S v p = prepV2 v p ** {lock_V2S = <>} ;
-  mkV2V v p t = prepV2 v p ** {isAux = False ; lock_V2V = <>} ;
-  mkVA  v = v ** {lock_VA = <>} ;
-  mkV2A v p = prepV2 v p ** {lock_V2A = <>} ;
-  mkV2Q v p = prepV2 v p ** {lock_V2Q = <>} ;
+  mkV0  v = v ;
+  mkV2S v p = prepV2 v p ;
+  mkV2V v p t = lin V2V (prepV2 v p ** {isAux = False}) ;
+  mkVA  v = v ;
+  mkV2A v p = prepV2 v p ;
+  mkV2Q v p = prepV2 v p ;
 
-  mkAS  v = v ** {lock_A = <>} ;
-  mkA2S v p = prepA2 v p ** {lock_A = <>} ;
-  mkAV  v = v ** {lock_A = <>} ;
-  mkA2V v p = prepA2 v p ** {lock_A2 = <>} ;
+  mkAS  v = v ;
+  mkA2S v p = prepA2 v p ;
+  mkAV  v = v ;
+  mkA2V v p = prepA2 v p ;
 
 
 -- pre-overload API and overload definitions
@@ -583,9 +584,9 @@ mkSubj : Str -> Subj = \s -> {s = s ; lock_Subj = <>} ;
   mkA = overload {
     mkA : Str -> A = regA ;
     mkA : (fat,fatter : Str) -> A = \fat,fatter -> 
-      mkAdjective fat fatter (init fatter + "st") (fat + "ly") ** {lock_A = <>} ;
+      mkAdjective fat fatter (init fatter + "st") (fat + "ly") ;
     mkA : (good,better,best,well : Str) -> A = \a,b,c,d ->
-      mkAdjective a b c d  ** {lock_A = <>}
+      mkAdjective a b c d
     } ;
 
   compoundA = compoundADeg ;
@@ -655,7 +656,8 @@ mkSubj : Str -> Subj = \s -> {s = s ; lock_Subj = <>} ;
     mkConj : Str -> Str -> Number -> Conj = mk2Conj ;
   } ;
 
-  mk2Conj : Str -> Str -> Number -> Conj = \x,y,n -> sd2 x y ** { n = n; lock_Conj = <> } ;
+  mk2Conj : Str -> Str -> Number -> Conj = \x,y,n -> 
+    lin Conj (sd2 x y ** {n = n}) ;
 
 ---- obsolete
 

@@ -634,6 +634,14 @@ composOp co trm =
      do ty' <- co ty
         return (EPattType ty')
 
+   ELincat c ty -> 
+     do ty' <- co ty
+        return (ELincat c ty')
+
+   ELin c ty -> 
+     do ty' <- co ty
+        return (ELin c ty')
+
    _ -> return trm -- covers K, Vr, Cn, Sort, EPatt
 
 getTableType :: TInfo -> Err Type

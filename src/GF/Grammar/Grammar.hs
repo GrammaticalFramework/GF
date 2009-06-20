@@ -147,6 +147,9 @@ data Term =
  | EPatt Patt     -- ^ pattern (in macro definition): # p
  | EPattType Term -- ^ pattern type: pattern T
 
+ | ELincat Ident Term -- ^ boxed linearization type of Ident
+ | ELin Ident Term    -- ^ boxed linearization of type Ident
+
  | FV [Term]      -- ^ alternatives in free variation: @variants { s ; ... }@
 
  | Alts (Term, [(Term, Term)]) -- ^ alternatives by prefix: @pre {t ; s\/c ; ...}@

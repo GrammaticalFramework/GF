@@ -148,6 +148,8 @@ instance Binary Term where
   put (FV x)        = putWord8 35 >> put x
   put (Alts x)      = putWord8 36 >> put x
   put (Strs x)      = putWord8 37 >> put x
+  put (ELin x y)    = putWord8 38 >> put (x,y)
+
   get = do tag <- getWord8
            case tag of
              0  -> get >>= \x       -> return (Vr x)
@@ -186,6 +188,7 @@ instance Binary Term where
              35 -> get >>= \x       -> return (FV x)
              36 -> get >>= \x       -> return (Alts x)
              37 -> get >>= \x       -> return (Strs x)
+             38 -> get >>= \(x,y)   -> return (ELin x y)
              _  -> decodingError
 
 instance Binary Patt where
