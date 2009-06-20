@@ -423,6 +423,8 @@ Exp4
   | 'strs' '{' ListExp '}'           { Strs $3       }
   | '#' Patt2                        { EPatt $2      }
   | 'pattern' Exp5                   { EPattType $2  }
+  | 'lincat' Ident Exp5              { ELincat $2 $3 }
+  | 'lin' Ident Exp5                 { ELin $2 $3 }
   | Exp5                             { $1            }
 
 Exp5 :: { Term }
