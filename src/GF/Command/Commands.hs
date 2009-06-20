@@ -85,6 +85,27 @@ commandHelp full (co,info) = unlines $ [
   "examples:" ++++ unlines ["  " ++ s | s <- examples info]
   ] else []
 
+-- for printing with txt2tags formatting
+
+commandHelpTags :: Bool -> (String,CommandInfo) -> String
+commandHelpTags full (co,info) = unlines $ [
+  "#VSPACE","","#NOINDENT",
+  lit co ++ " = " ++ lit (longname info) ++ ": " ++
+  "//" ++ synopsis info ++ ".//"] ++ if full then [
+  "","#TINY","",
+  explanation info,
+  "- Syntax: ``" ++ syntax info ++ "``",
+  "- Options:\n" ++++ 
+   unlines [" | ``-" ++ o ++ "`` | " ++ e | (o,e) <- options info],
+  "- Flags:\n" ++++ 
+   unlines [" | ``-" ++ o ++ "`` | " ++ e | (o,e) <- flags info],
+  "- Examples:\n```" ++++ 
+   unlines ["  " ++ s | s <- examples info],
+  "```",
+  "", "#NORMAL", ""
+  ] else []
+ where
+   lit s = "``" ++ s ++ "``"
 
 type PGFEnv = (PGF, Map.Map Language Morpho)
 
