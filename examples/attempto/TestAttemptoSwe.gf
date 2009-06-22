@@ -1,4 +1,4 @@
---# -path=.:/Users/aarne/GF/next-lib/present
+--# -path=.:present
 
 concrete TestAttemptoSwe of TestAttempto = AttemptoSwe ** 
   open SyntaxSwe, ParadigmsSwe, IrregSwe, (C = ConstructX) in {

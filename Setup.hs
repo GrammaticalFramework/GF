@@ -149,7 +149,7 @@ testRGL args _ pkg lbi = do
         else return False
 
 
-rgl_dir    = "next-lib" </> "src"
+rgl_dir    = "lib" </> "src"
 
 -- the languages have long directory names and short ISO codes (3 letters)
 -- we also give the decodings for postprocessing linearizations, as long as grammars

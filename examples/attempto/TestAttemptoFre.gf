@@ -1,4 +1,4 @@
---# -path=.:/Users/aarne/GF/next-lib/present
+--# -path=.:present
 
 concrete TestAttemptoFre of TestAttempto = AttemptoFre ** 
   open SyntaxFre, ParadigmsFre, IrregFre, (C = ConstructX) in {

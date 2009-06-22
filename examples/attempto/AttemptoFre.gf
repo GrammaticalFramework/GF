@@ -1,4 +1,4 @@
---# -path=.:/Users/aarne/GF/next-lib/present
+--# -path=.:present
 
 concrete AttemptoFre of Attempto = SymbolsC ** AttemptoI with
   (Syntax = SyntaxFre),
