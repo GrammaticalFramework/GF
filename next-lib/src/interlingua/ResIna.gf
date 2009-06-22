@@ -115,9 +115,9 @@ resource ResIna = ParamX ** open Prelude in {
 	  s = table {
     	    VInf    => crear;
 	    VPres   => crea;
-	    VPast   => crea + "va"; 
-	    VFut    => crear + "a"; 
-	    VCond   => crear + "ea";
+	    VPast   => crea + "va"; --# notpresent 
+	    VFut    => crear + "a"; --# notpresent
+	    VCond   => crear + "ea"; --# notpresent
  	    VPPart  => case crear of {
  	      rid + "er" => rid + "ite";
  	      _         => crea + "te" 
@@ -134,9 +134,9 @@ resource ResIna = ParamX ** open Prelude in {
           s = case use_irreg of {
                 True  => table {
 	                   VPres => "es";
-	                   VFut  => "sera";
-	                   VCond => "serea";
-	                   VPast => "era";
+	                   VFut  => "sera"; --# notpresent
+	                   VCond => "serea"; --# notpresent
+	                   VPast => "era"; --# notpresent
 	                   form  => reg.s!form
 	                 };
 	        False => reg.s
@@ -233,8 +233,9 @@ resource ResIna = ParamX ** open Prelude in {
       clitics = \\_ => [];
       rest = \\_ => [];
       s = table
-	{Simul => \\t,use_irreg => {fin = (verb!use_irreg).s   ! (tenseToVFrom!t); inf = []};
-	 Anter => \\t,use_irreg => {fin = (haberV!use_irreg).s ! (tenseToVFrom!t); inf = (verb!use_irreg).s!VPPart}
+	{Simul => \\t,use_irreg => {fin = (verb!use_irreg).s   ! (tenseToVFrom!t); inf = []}
+   ; --# notpresent
+	 Anter => \\t,use_irreg => {fin = (haberV!use_irreg).s ! (tenseToVFrom!t); inf = (verb!use_irreg).s!VPPart} --# notpresent
 	};
       prp = (verb!False).s ! VPresPart;
       inf = (verb!False).s ! VInf;

@@ -161,7 +161,7 @@ lin
       "vosté" "li" "li" "vosté"
       ["el seu"] ["la seva"] ["els seus"] ["les seves"]
       Fem Pl P2 ;
-
+   have_V2 = dirV2 (verbV (tenir_108 "tenir")) ;
 oper
   etConj : {s : Str ; n : MorphoCat.Number} = {s = "i" } ** {n = Pl} ;
 

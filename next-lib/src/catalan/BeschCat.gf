@@ -2026,6 +2026,9 @@ let x_ = Predef.tk 5 deure in
  VP (Pass Sg  Fem) => x_ + "guda" ;
  VP (Pass Pl  Masc) => x_ + "guts" ;
  VP (Pass Sg  Masc) => x_ + "gut" ;
+
+
+{- -- AR removed these duplicates
  VI Infn => x_ + "ure" ;
  VI Ger => x_ + "vent" ;
  VI Part =>  x_ + "gut" ;
@@ -2075,6 +2078,7 @@ let x_ = Predef.tk 5 deure in
  VP (Pass Sg  Fem) => x_ + "guda" ;
  VP (Pass Pl  Masc) => x_ + "guts" ;
  VP (Pass Sg  Masc) => x_ + "gut" ;
+-}
 VP (Imp Sg P1) => variants {} 
 }
 } ;
@@ -4912,14 +4916,14 @@ let s_ = Predef.tk 4 seure in
  VP (Pres Ind Sg  P3) => s_ + "eu" ;
  VP (Pres Sub Pl  P1) => s_ + "eguem" ;
  VP (Pres Sub Sg  P1) => s_ + "ega" ;
- VP (Pres Sub Sg  P1) => s_ + "egui" ;
+-- VP (Pres Sub Sg  P1) => s_ + "egui" ;
  VP (Pres Sub Pl  P2) => s_ + "egueu" ;
  VP (Pres Sub Sg  P2) => s_ + "egues" ;
- VP (Pres Sub Sg  P2) => s_ + "eguis" ;
+-- VP (Pres Sub Sg  P2) => s_ + "eguis" ;
  VP (Pres Sub Pl  P3) => s_ + "eguen" ;
- VP (Pres Sub Pl  P3) => s_ + "eguin" ;
+-- VP (Pres Sub Pl  P3) => s_ + "eguin" ;
  VP (Pres Sub Sg  P3) => s_ + "ega" ;
- VP (Pres Sub Sg  P3) => s_ + "egui" ;
+-- VP (Pres Sub Sg  P3) => s_ + "egui" ;  -- AR: why duplicated forms?
  VP (Impf Ind Sg  P1) => s_ + "eia" ;--# notpresent
  VP (Impf Ind Sg  P2) => s_ + "eies" ;--# notpresent
  VP (Impf Ind Pl  P3) => s_ + "eien" ;--# notpresent
@@ -4958,9 +4962,9 @@ let s_ = Predef.tk 4 seure in
  VP (Imp Pl  P2) => s_ + "eieu" ;
  VP (Imp Sg  P2) => s_ + "eu" ;
  VP (Imp Pl  P3) => s_ + "eguen" ;
- VP (Imp Pl  P3) => s_ + "eguin" ;
+-- VP (Imp Pl  P3) => s_ + "eguin" ;
  VP (Imp Sg  P3) => s_ + "ega" ;
- VP (Imp Sg  P3) => s_ + "egui" ;
+-- VP (Imp Sg  P3) => s_ + "egui" ;
  VP (Pass Pl  Fem) => s_ + "egudes" ;
  VP (Pass Sg  Fem) => s_ + "eguda" ;
  VP (Pass Pl  Masc) => s_ + "eguts" ;
@@ -5345,7 +5349,7 @@ let t_ = Predef.tk 5 tòrcer in
 {s = table { 
  VI Ger => t_ + "orcent" ;
  VI Part =>  t_ + "ort" ;
- VI Part =>  t_ + "orçut" ;
+-- VI Part =>  t_ + "orçut" ;  -- AR why duplicate?
  VP (Pres Ind Pl  P1) => t_ + "orcem" ;
  VP (Pres Ind Sg  P1) => t_ + "orcem" ;
  VP (Pres Ind Pl  P2) => t_ + "orceu" ;
@@ -5398,17 +5402,17 @@ let t_ = Predef.tk 5 tòrcer in
  VP (Imp Pl  P2) => t_ + "orceu" ;
  VP (Imp Sg  P2) => t_ + "orç" ;
  VP (Imp Pl  P3) => t_ + "orcen" ;
- VP (Imp Pl  P3) => t_ + "orcin" ;
+-- VP (Imp Pl  P3) => t_ + "orcin" ;
  VP (Imp Sg  P3) => t_ + "orci" ;
- VP (Imp Sg  P3) => t_ + "orça" ;
+-- VP (Imp Sg  P3) => t_ + "orça" ;
  VP (Pass Pl  Fem) => t_ + "ortes" ;
- VP (Pass Pl  Fem) => t_ + "orçudes" ;
+-- VP (Pass Pl  Fem) => t_ + "orçudes" ;
  VP (Pass Sg  Fem) => t_ + "orta" ;
- VP (Pass Sg  Fem) => t_ + "orçuda" ;
+-- VP (Pass Sg  Fem) => t_ + "orçuda" ;
  VP (Pass Pl  Masc) => t_ + "orts" ;
- VP (Pass Pl  Masc) => t_ + "orçuts" ;
+-- VP (Pass Pl  Masc) => t_ + "orçuts" ;
  VP (Pass Sg  Masc) => t_ + "ort" ;
- VP (Pass Sg  Masc) => t_ + "orçut" ;
+-- VP (Pass Sg  Masc) => t_ + "orçut" ;
  VI Infn => t_ + "òrcer" ;
 VP (Imp Sg P1) => variants {} 
 }
@@ -5960,6 +5964,7 @@ let x_ = Predef.tk 5 voler in
  VP (Pass Sg  Fem) => x_ + "olguda" ;
  VP (Pass Pl  Masc) => x_ + "olguts" ;
  VP (Pass Sg  Masc) => x_ + "olgut" ;
+{- AR commented out duplicates 22/6/2009
  VI Infn => x_ + "oler" ;
  VI Ger => x_ + "olent" ;
  VI Part =>  x_ + "olgut" ;
@@ -6014,6 +6019,7 @@ let x_ = Predef.tk 5 voler in
  VP (Pass Sg  Fem) => x_ + "olguda" ;
  VP (Pass Pl  Masc) => x_ + "olguts" ;
  VP (Pass Sg  Masc) => x_ + "olgut" ;
+-}
 VP (Imp Sg P1) => variants {} 
 }
 } ;

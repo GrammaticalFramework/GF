@@ -454,13 +454,14 @@ resource ResBul = ParamX ** open Prelude in {
 
           verbs : {aux:{s1:Str; s2:Str}; main:Str} =
             case <t,a> of {
-              <Pres,Simul> => {aux=vf2 clitic.s;  main=presentImperf} ;
-              <Pres,Anter> => {aux=vf1 clitic.s;  main=perfect} ;
-              <Past,Simul> => {aux=vf2 clitic.s;  main=aorist} ;
-              <Past,Anter> => {aux=vf4 auxAorist; main=perfect} ;
-              <Fut, Simul> => {aux=vf3 clitic.s;  main=present} ;
-              <Fut, Anter> => {aux=vf3 (apc []);  main=perfect} ;
-              <Cond,_    > => {aux=vf4 auxCond ;  main=perfect}
+              <Pres,Simul> => {aux=vf2 clitic.s;  main=presentImperf}
+              ;                                                    --# notpresent
+              <Pres,Anter> => {aux=vf1 clitic.s;  main=perfect} ; --# notpresent
+              <Past,Simul> => {aux=vf2 clitic.s;  main=aorist} ; --# notpresent
+              <Past,Anter> => {aux=vf4 auxAorist; main=perfect} ; --# notpresent
+              <Fut, Simul> => {aux=vf3 clitic.s;  main=present} ; --# notpresent
+              <Fut, Anter> => {aux=vf3 (apc []);  main=perfect} ; --# notpresent
+              <Cond,_    > => {aux=vf4 auxCond ;  main=perfect} --# notpresent
             }
 
       in verb.ad.s ++ li0 ++ verbs.aux.s1 ++ verbs.main ++ verbs.aux.s2 ;

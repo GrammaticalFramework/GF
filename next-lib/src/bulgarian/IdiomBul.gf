@@ -33,13 +33,14 @@ concrete IdiomBul of Idiom = CatBul ** open Prelude, ParadigmsBul, ResBul in {
 
                       v : {aux1:Str; aux2:Str; main:Str}
                         = case <t,a> of {
-                            <Pres,Simul> => {aux1=[]; aux2=[]; main=present} ;
-                            <Pres,Anter> => {aux1=[]; aux2=auxPres;   main=perfect} ;
-                            <Past,Simul> => {aux1=[]; aux2=[]; main=aorist} ;
-                            <Past,Anter> => {aux1=[]; aux2=auxAorist; main=perfect} ;
-                            <Fut, Simul> => {aux1="ще"; aux2=[]; main=present} ;
-                            <Fut, Anter> => {aux1="ще"++auxPres; aux2=[]; main=perfect} ;
-                            <Cond,_>     => {aux1=auxCondS; aux2=[]; main=perfect}
+                            <Pres,Simul> => {aux1=[]; aux2=[]; main=present} 
+               ;  --# notpresent
+                            <Pres,Anter> => {aux1=[]; aux2=auxPres;   main=perfect} ;  --# notpresent
+                            <Past,Simul> => {aux1=[]; aux2=[]; main=aorist} ;  --# notpresent
+                            <Past,Anter> => {aux1=[]; aux2=auxAorist; main=perfect} ;  --# notpresent
+                            <Fut, Simul> => {aux1="ще"; aux2=[]; main=present} ;  --# notpresent
+                            <Fut, Anter> => {aux1="ще"++auxPres; aux2=[]; main=perfect} ;  --# notpresent
+                            <Cond,_>     => {aux1=auxCondS; aux2=[]; main=perfect}  --# notpresent
                           } ;
 
 	          in case o of {

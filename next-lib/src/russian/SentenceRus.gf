@@ -97,24 +97,32 @@ concrete SentenceRus of Sentence = CatRus ** open Prelude, ResRus in {
 
     UseCl t p cl = {s = case t.t of { 
       Cond => cl.s! p.p ! ClCondit ; --# notpresent
-      Pres => cl.s! p.p ! ClIndic Present t.a ;  ---- AR work-around 13/12/2007
-      _ => cl.s! p.p ! ClIndic (getTense t.t) t.a}};
+      Pres => cl.s! p.p ! ClIndic Present t.a   ---- AR work-around 13/12/2007
+        ; --# notpresent
+      _ => cl.s! p.p ! ClIndic (getTense t.t) t.a --# notpresent
+      }
+    };
 
     UseQCl t p qcl= {s = case t.t of { 
       Cond => qcl.s! p.p ! ClCondit ; --# notpresent
-      Pres => qcl.s! p.p ! ClIndic Present t.a ;
-      _ => qcl.s!p.p! ClIndic (getTense t.t) t.a }};
+      Pres => qcl.s! p.p ! ClIndic Present t.a 
+       ; --# notpresent
+      _ => qcl.s!p.p! ClIndic (getTense t.t) t.a --# notpresent
+      }};
 
     UseRCl t p rcl ={s = \\gn,c,anim => case t.t of { 
       Cond => [", "] ++ rcl.s! p.p ! ClCondit ! gn !c !anim ; --# notpresent
-      Pres => [", "] ++ rcl.s! p.p ! ClIndic Present t.a !gn !c !anim;
-      _ => [", "] ++ rcl.s! p.p ! ClIndic (getTense t.t) t.a !gn !c !anim}};
+      Pres => [", "] ++ rcl.s! p.p ! ClIndic Present t.a !gn !c !anim
+      ; --# notpresent
+      _ => [", "] ++ rcl.s! p.p ! ClIndic (getTense t.t) t.a !gn !c !anim --# notpresent
+      }};
 
     UseSlash  t p cl = {
       s = case t.t of { 
         Cond => cl.s! p.p ! ClCondit ; --# notpresent
-        Pres => cl.s! p.p ! ClIndic Present t.a ;
-        _ => cl.s! p.p ! ClIndic (getTense t.t) t.a
+        Pres => cl.s! p.p ! ClIndic Present t.a 
+        ; --# notpresent
+        _ => cl.s! p.p ! ClIndic (getTense t.t) t.a --# notpresent
         } ;
       s2 = cl.s2 ;
       c = cl.c

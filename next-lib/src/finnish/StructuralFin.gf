@@ -276,10 +276,6 @@ oper
 
 lin
   not_Predet = {s = \\_,_ => "vain"} ;
-  nothing_but_Predet = 
-    {s = \\n,c => "ei" ++ mikaanPron ! n ! npform2case n c ++ "paitsi"} ;
-  nobody_but_Predet = 
-    {s = \\n,c => "ei" ++ kukaanPron ! n ! npform2case n c ++ "paitsi"} ;
 
   no_Quant = heavyQuant {
     s1 = \\n,c => "ei" ++ mikaanPron ! n ! c ;
