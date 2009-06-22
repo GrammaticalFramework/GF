@@ -360,6 +360,6 @@ lin
   ready_A = regA "preparat" ;
   reason_N = regFN "raó" ;
   uncertain_A = regA "incert" ;
-   have_V2 = dirV2 (verbV (tenir_108 "tenir")) ;
+
 
 } ;

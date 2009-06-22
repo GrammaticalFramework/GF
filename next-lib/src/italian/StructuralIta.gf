@@ -153,9 +153,6 @@ lin
       "Lei" "La" "Le" "Glie" "Lei" "Suo" "Sua" "Suoi" "Sue"
       Masc Sg P3 ;
   not_Predet = {s = \\a,c => prepCase c ++ "non" ; c = Nom} ;
-  nothing_but_Predet = {s = \\a,c => prepCase c ++ "niente eccetto" ; c = Nom} ;
-  nobody_but_Predet = {s = \\a,c => prepCase c ++ "nessun eccetto" ; c = Nom} ;
-
 
   no_Quant = 
     let aucun : ParadigmsIta.Number => ParadigmsIta.Gender => Case => Str = table {

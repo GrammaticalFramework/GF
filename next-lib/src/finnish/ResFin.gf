@@ -273,7 +273,7 @@ oper
     case p of {
       Neg => "kö" ;  -- eikö tule
       _ => case a of {
-        Anter => "ko" ; -- onko mennyt
+        Anter => "ko" ; -- onko mennyt --# notpresent
         _ => vp.qp  -- tuleeko, meneekö
         }
       } ;

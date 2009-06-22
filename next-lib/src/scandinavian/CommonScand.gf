@@ -101,9 +101,9 @@ oper
 -- Used in $DiffScand.predV$.
 
   vFin : Tense -> Voice -> VForm = \t,v -> case t of {
-    Pres => VF (VPres v) ;
-    Past => VF (VPret v) ;  --# notpresent
-    _ => VI (VInfin v) --- not to be used?
+    Pres => VF (VPres v) 
+                       ;   --# notpresent
+    Past => VF (VPret v)   --# notpresent
     } ;
     
 -- Used in $ConjunctionScand$.
