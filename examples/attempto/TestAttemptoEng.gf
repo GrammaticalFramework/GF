@@ -1,4 +1,4 @@
---# -path=.:/Users/aarne/GF/next-lib/present
+--# -path=.:present
 
 concrete TestAttemptoEng of TestAttempto = AttemptoEng ** 
   open SyntaxEng, ParadigmsEng, IrregEng, (C = ConstructX) in {

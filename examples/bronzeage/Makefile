@@ -1,4 +1,4 @@
-# notice: GF_LIB_PATH has to point to GF/next-lib
+# notice: GF_LIB_PATH has to point to GF/lib
 
 all: magnet
 
