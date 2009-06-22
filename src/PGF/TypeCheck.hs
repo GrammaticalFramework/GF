@@ -21,7 +21,7 @@ import PGF.CId
 
 import GF.Data.ErrM
 import qualified Data.Map as Map
-import Control.Monad (liftM2)
+import Control.Monad (liftM2,foldM)
 import Data.List (partition,sort,groupBy)
 
 import Debug.Trace
@@ -34,7 +34,7 @@ typecheck pgf e = case inferExpr pgf (newMetas e) of
 inferExpr :: PGF -> Expr -> Err Expr
 inferExpr pgf e = case infer pgf emptyTCEnv e of
   Ok (e,_,cs) -> let (ms,cs2) = splitConstraints pgf cs in case cs2 of
-    [] -> Ok (metaSubst ms e)
+    [] -> trace (prConstraints cs ++"\n"++ show ms) $ Ok (metaSubst ms e)
     _  -> Bad ("Error in tree " ++ showExpr e ++ " :\n  " ++ prConstraints cs2)
   Bad s -> Bad s
 
@@ -117,6 +117,7 @@ prConstraints cs = unwords
 
 -- work more on this: unification, compute,...
 
+{-
 splitConstraints :: PGF -> [(Value,Value)] -> ([(Int,Expr)],[(Value,Value)])
 splitConstraints pgf = mkSplit . partition isSubst . regroup . map reorder . map reduce where
   reorder (v,w) = case w of
@@ -134,6 +135,48 @@ splitConstraints pgf = mkSplit . partition isSubst . regroup . map reorder . map
     VMeta _ _ -> all ((==u) . snd) cs
     _ -> False
   mkSplit (ms,cs) = ([(i,value2expr v) | (VMeta i _,v):_ <- ms], concat cs)
+-}
+
+splitConstraints :: PGF -> [(Value,Value)] -> ([(Int,Expr)],[(Value,Value)])
+splitConstraints pgf = mkSplit . unifyAll [] . map reduce where
+  reduce (v,w) = (whnf v,whnf w)
+
+  whnf (VClosure env e) = eval (getFunEnv (abstract pgf)) env e -- should be removed when the typechecker is improved
+  whnf v                = v
+  mkSplit (ms,cs) = ([(i,value2expr v) | (i,v) <- ms], cs)
+
+  unifyAll g [] = (g, [])
+  unifyAll g ((a@(s, t)) : l) =
+    let (g1, c) = unifyAll g l
+    in case unify s t g1 of
+         Just g2  -> (g2, c)
+         _        -> (g1, a : c)
+
+  unify e1 e2 g = case (e1, e2) of 
+    (VMeta s _, t) -> do
+      let tg = substMetas g t
+      let sg = maybe e1 id (lookup s g)
+      if (sg == e1) then extend s tg g else unify sg tg g 
+    (t, VMeta _ _) -> unify e2 e1 g
+    (VApp c as, VApp d bs) | c == d -> 
+       foldM (\ h (a,b) -> unify a b h) g (zip as bs)
+    _ -> Nothing
+
+  extend s t g = case t of
+    VMeta u _ | u == s -> return g  
+    _ | occCheck s t   -> Nothing
+    _                  -> return ((s, t) : g) 
+
+  substMetas subst trm = case trm of
+    VMeta s _ -> maybe trm id (lookup s subst)
+    VApp c vs -> VApp c (map (substMetas subst) vs)
+    _ -> trm
+
+  occCheck s u = case u of
+    VMeta t _ -> s == t
+    VApp c as -> any (occCheck s) as
+    _         -> False
+
 
 metaSubst :: [(Int,Expr)] -> Expr -> Expr
 metaSubst vs exp = case exp of
