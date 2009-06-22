@@ -143,10 +143,12 @@ resource ResGer = ParamX ** open Prelude in {
 
     vFin : Bool -> Mood -> Tense -> Agr -> VForm = \b,m,t,a ->
       case <t,m> of {
-        <Past,MIndic>    => VFin b (VImpfInd   a.n a.p) ;  --# notpresent
-        <Past,MConjunct> => VFin b (VImpfSubj  a.n a.p) ;   --# notpresent
         <Pres,MIndic>    => VFin b (VPresInd   a.n a.p) ;
         <Pres,MConjunct> => VFin b (VPresSubj  a.n a.p) 
+                                                        ;  --# notpresent
+        <Past,MIndic>    => VFin b (VImpfInd   a.n a.p) ;  --# notpresent
+        <Past,MConjunct> => VFin b (VImpfSubj  a.n a.p) ;  --# notpresent
+        _ => VInf False --# notpresent
         } ;
 
     conjAgr : Agr -> Agr -> Agr = \a,b -> {

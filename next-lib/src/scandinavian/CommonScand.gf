@@ -102,8 +102,9 @@ oper
 
   vFin : Tense -> Voice -> VForm = \t,v -> case t of {
     Pres => VF (VPres v) 
-                       ;   --# notpresent
-    Past => VF (VPret v)   --# notpresent
+      ; --# notpresent
+    Past => VF (VPret v) ;  --# notpresent
+    _ => VI (VInfin v) --# notpresent
     } ;
     
 -- Used in $ConjunctionScand$.
