@@ -272,9 +272,9 @@ encodeFile f v = L.writeFile f (encode v)
 decodeFile :: Binary a => FilePath -> IO a
 decodeFile f = do
     s <- L.readFile f
-    return $ runGet (do v <- get
-                        m <- isEmpty
-                        m `seq` return v) s
+    return $! runGet (do v <- get
+                         m <- isEmpty
+                         m `seq` return v) s
 
 -- needs bytestring 0.9.1.x to work 
 
