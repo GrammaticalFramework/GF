@@ -120,5 +120,9 @@ concrete StructuralLat of Structural = CatLat **
   youSg_Pron = personalPronoun Masc Sg P2 ;
   youPl_Pron = personalPronoun Masc Pl P2 ;
   youPol_Pron = personalPronoun Masc Sg P2 ;
+
+  lin language_title_Utt = ss "latina" ;
+
+
 }
 

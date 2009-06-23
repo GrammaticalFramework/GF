@@ -1,0 +1,13 @@
+i LangBul.gfo
+i LangCat.gfo
+i LangDan.gfo
+i LangEng.gfo
+i LangFin.gfo
+i LangFre.gfo
+i LangGer.gfo
+i LangIta.gfo
+i LangNor.gfo
+i LangRus.gfo
+i LangSpa.gfo
+i LangSwe.gfo
+p -cat=S -lang=LangEng "this grammar wants to speak twenty - three new languages" | aw -view=open

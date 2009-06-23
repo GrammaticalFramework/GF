@@ -127,4 +127,6 @@ lin
 ---  NeitherNor = sd2 "ни" [", ни"]  ** {n = Sg} ;
 ---  NowhereNP = ss "нигде" ;
 ---  AgentPrep = { s = "" ; c = Nom}; -- missing in Russian
+
+  lin language_title_Utt = ss "Русский" ;
 }

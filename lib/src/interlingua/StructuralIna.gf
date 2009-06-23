@@ -113,5 +113,7 @@ oper
       Pl => y
       }} ;
 
+  lin language_title_Utt = ss "interlingua" ;
+
 }
 

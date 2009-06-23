@@ -109,4 +109,6 @@ concrete StructuralAra of Structural = CatAra **
 
   have_V2      = dirV2 (regV "يَملِك") ; 
 
+  lin language_title_Utt = ss "العربية" ;
+
 }

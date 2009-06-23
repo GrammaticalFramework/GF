@@ -120,4 +120,7 @@ abstract Structural = Cat ** {
   as_CAdv : CAdv ;
 
   have_V2 : V2 ;
+
+  fun language_title_Utt : Utt ;
+
 }

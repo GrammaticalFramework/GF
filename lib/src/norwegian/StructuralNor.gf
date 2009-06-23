@@ -126,5 +126,7 @@ concrete StructuralNor of Structural = CatNor **
   oper
     vem = MorphoNor.mkNP "hvem" "hvem" "hvis" "hvis" "hvis" SgUtr P3 ;
 
+  lin language_title_Utt = ss "norsk" ;
+
 }
 

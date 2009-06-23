@@ -148,4 +148,6 @@ concrete StructuralGer of Structural = CatGer **
   as_CAdv = X.mkCAdv "ebenso" "wie" ;
   have_V2 = P.dirV2 IrregGer.haben_V ;
 
+  lin language_title_Utt = ss "Deutsch" ;
+
 }

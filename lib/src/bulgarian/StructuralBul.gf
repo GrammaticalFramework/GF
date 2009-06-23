@@ -121,5 +121,7 @@ concrete StructuralBul of Structural = CatBul **
 
   have_V2 = dirV2 (stateV (mkV186 "имам")) ;
 
+  lin language_title_Utt = ss "Български" ;
+
 }
 
