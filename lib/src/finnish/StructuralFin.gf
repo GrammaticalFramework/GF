@@ -304,5 +304,7 @@ lin
 
   have_V2 = mkV2 (caseV adessive vOlla) ;
 
+  lin language_title_Utt = ss "suomi" ;
+
 }
 

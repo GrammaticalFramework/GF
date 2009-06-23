@@ -125,5 +125,7 @@ concrete StructuralDan of Structural = CatDan **
   oper
     vem = MorphoDan.mkNP "hvem" "hvem" "hvis" "hvis" "hvis" SgUtr P3 ;
 
+  lin language_title_Utt = ss "dansk" ;
+
 }
 

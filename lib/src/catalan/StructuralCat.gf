@@ -165,4 +165,6 @@ lin
 oper
   etConj : {s : Str ; n : MorphoCat.Number} = {s = "i" } ** {n = Pl} ;
 
+  lin language_title_Utt = ss "català" ;
+
 }

@@ -189,5 +189,7 @@ lin
 
   have_V2 = avoir_V2 ;
 
+  lin language_title_Utt = ss "français" ;
+
 }
 

@@ -172,5 +172,6 @@ lin
   as_CAdv = X.mkCAdv "si" conjThan ; ----
    have_V2 = dirV2 (verboV (tener_4 "tener")) ;
 
+  lin language_title_Utt = ss "español" ;
 }
 

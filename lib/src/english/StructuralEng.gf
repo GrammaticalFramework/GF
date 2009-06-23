@@ -137,5 +137,7 @@ concrete StructuralEng of Structural = CatEng **
 
   have_V2 = dirV2 (mk5V "have" "has" "had" "had" "having") ;
 
+  lin language_title_Utt = ss "English" ;
+
 }
 
