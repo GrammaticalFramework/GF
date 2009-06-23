@@ -9,7 +9,7 @@
 -- > CVS $Author: aarne $
 -- > CVS $Revision: 1.13 $
 --
--- parsing CF grammars and conversing them to GF
+-- parsing CF grammars and converting them to GF
 -----------------------------------------------------------------------------
 
 module GF.Source.CF (getCF) where
@@ -18,6 +18,7 @@ import GF.Grammar.Grammar
 import GF.Grammar.Macros
 import GF.Infra.Ident
 import GF.Infra.Modules
+import GF.Infra.Option
 
 import GF.Data.Operations
 
@@ -81,19 +82,23 @@ type CFFun = String
 
 cf2gf :: String -> CF -> SourceGrammar
 cf2gf name cf = MGrammar [
-  (aname, emptyModInfo{mtype = MTAbstract,       jments = abs}),
+  (aname, addFlag (modifyFlags (\fs -> fs{optStartCat = Just cat}))
+          (emptyModInfo{mtype = MTAbstract,       jments = abs})),
   (cname, emptyModInfo{mtype = MTConcrete aname, jments = cnc})
   ]
  where
-   (abs,cnc) = cf2grammar cf
+   (abs,cnc,cat) = cf2grammar cf
    aname = identS $ name ++ "Abs"
    cname = identS name
 
 
-cf2grammar :: CF -> (BinTree Ident Info, BinTree Ident Info)
-cf2grammar rules = (buildTree abs, buildTree conc) where
+cf2grammar :: CF -> (BinTree Ident Info, BinTree Ident Info, String)
+cf2grammar rules = (buildTree abs, buildTree conc, cat) where
   abs   = cats ++ funs
   conc  = lincats ++ lins
+  cat   = case rules of
+            (_,(c,_)):_ -> c  -- the value category of the first rule
+            _ -> error "empty CF" 
   cats  = [(cat, AbsCat (Just []) (Just [])) | 
              cat <- nub (concat (map cf2cat rules))] ----notPredef cat
   lincats = [(cat, CncCat (Just defLinType) Nothing Nothing) | (cat,AbsCat _ _) <- cats]
