@@ -5,7 +5,7 @@ import Distribution.Simple.LocalBuildInfo
 import Distribution.Simple.BuildPaths
 import Distribution.Simple.Utils
 import Distribution.Simple.Setup
-import Distribution.PackageDescription	
+import Distribution.PackageDescription hiding (Flag)
 import Control.Monad
 import Data.Maybe
 import System.IO
@@ -21,6 +21,8 @@ main = defaultMainWithHooks simpleUserHooks{ preBuild =checkRGLArgs
                                            , postBuild=buildRGL
                                            , preInst  =checkRGLArgs
                                            , postInst =installRGL
+                                           , preCopy  =checkRGLArgs
+                                           , postCopy =copyRGL
                                            , sDistHook=sdistRGL
                                            , runTests =testRGL
                                            }
@@ -88,12 +90,20 @@ installRGL args flags pkg lbi = do
   let mode = getOptMode args
   let inst_gf_lib_dir = datadir (absoluteInstallDirs pkg lbi NoCopyDest) </> "lib"
   copyAll mode (getRGLBuildDir lbi mode) (inst_gf_lib_dir </> getRGLBuildSubDir lbi mode)
-  where
-    copyAll mode from to = do
-      putStrLn $ "Installing [" ++ show mode ++ "] " ++ to
-      createDirectoryIfMissing True to
-      files <- fmap (drop 2) $ getDirectoryContents from
-      mapM_ (\file -> copyFile (from </> file) (to </> file)) files
+
+copyRGL args flags pkg lbi = do
+  let mode = getOptMode args
+      dest = case copyDest flags of
+               NoFlag -> NoCopyDest
+               Flag d -> d
+  let inst_gf_lib_dir = datadir (absoluteInstallDirs pkg lbi dest) </> "lib"
+  copyAll mode (getRGLBuildDir lbi mode) (inst_gf_lib_dir </> getRGLBuildSubDir lbi mode)
+
+copyAll mode from to = do
+  putStrLn $ "Installing [" ++ show mode ++ "] " ++ to
+  createDirectoryIfMissing True to
+  files <- fmap (drop 2) $ getDirectoryContents from
+  mapM_ (\file -> copyFile (from </> file) (to </> file)) files
 
 sdistRGL pkg mb_lbi hooks flags = do
   paths <- getRGLFiles rgl_dir []
