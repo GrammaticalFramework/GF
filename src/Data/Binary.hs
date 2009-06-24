@@ -64,6 +64,7 @@ import Data.Binary.Put
 import Data.Binary.Get
 
 import Control.Monad
+import Control.Exception
 import Foreign
 import System.IO
 
@@ -270,11 +271,11 @@ encodeFile f v = L.writeFile f (encode v)
 -- or otherwise finalise the resource.
 --
 decodeFile :: Binary a => FilePath -> IO a
-decodeFile f = do
-    s <- L.readFile f
-    return $! runGet (do v <- get
-                         m <- isEmpty
-                         m `seq` return v) s
+decodeFile f = bracket (openFile f ReadMode) hClose $ \h -> do
+    s <- L.hGetContents h
+    evaluate $ runGet (do v <- get
+                          m <- isEmpty
+                          m `seq` return v) s
 
 -- needs bytestring 0.9.1.x to work 
 
