@@ -108,8 +108,8 @@ data S = S {-# UNPACK #-} !B.ByteString  -- current chunk
 newtype Get a = Get { unGet :: S -> (a, S) }
 
 instance Functor Get where
-    fmap f m = Get (\s -> let (a, s') = unGet m s
-                          in (f a, s'))
+    fmap f m = Get (\s -> case unGet m s of
+                            (a, s') -> (f a, s'))
     {-# INLINE fmap #-}
 
 #ifdef APPLICATIVE_IN_BASE
