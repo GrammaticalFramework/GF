@@ -264,18 +264,10 @@ encodeFile f v = L.writeFile f (encode v)
 --
 -- > return . decode . decompress =<< B.readFile f
 --
--- After contructing the data from the input file, 'decodeFile' checks
--- if the file is empty, and in doing so will force the associated file
--- handle closed, if it is indeed empty. If the file is not empty, 
--- it is up to the decoding instance to consume the rest of the data,
--- or otherwise finalise the resource.
---
 decodeFile :: Binary a => FilePath -> IO a
 decodeFile f = bracket (openBinaryFile f ReadMode) hClose $ \h -> do
     s <- L.hGetContents h
-    evaluate $ runGet (do v <- get
-                          m <- isEmpty
-                          m `seq` return v) s
+    evaluate $ runGet get s
 
 -- needs bytestring 0.9.1.x to work 
 
