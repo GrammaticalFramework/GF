@@ -271,7 +271,7 @@ encodeFile f v = L.writeFile f (encode v)
 -- or otherwise finalise the resource.
 --
 decodeFile :: Binary a => FilePath -> IO a
-decodeFile f = bracket (openFile f ReadMode) hClose $ \h -> do
+decodeFile f = bracket (openBinaryFile f ReadMode) hClose $ \h -> do
     s <- L.hGetContents h
     evaluate $ runGet (do v <- get
                           m <- isEmpty
