@@ -5908,7 +5908,7 @@ VP (Imp Sg P1) => variants {}
 } ;
 
 oper voler_120 : Str -> Verbum = \voler ->
-let x_ = Predef.tk 5 voler in
+let x_ = Predef.tk 4 voler in
 {s = table { 
  VI Infn => x_ + "oler" ;
  VI Ger => x_ + "olent" ;
