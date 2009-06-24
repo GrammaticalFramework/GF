@@ -128,7 +128,7 @@ lin
    mountain_N = regFN "muntanya" ;
    music_N = regFN "música" ;
    narrow_A = regADeg "estret" ;
-   new_A = compADeg (mkA "nou" "nova" "nous" "noves" "novament") ;
+   new_A = prefixA (compADeg (mkA "nou" "nova" "nous" "noves" "novament")) ;
    newspaper_N = regMN "diari" ;        -- periòdic  
    oil_N = regMN "oli" ;
    old_A =  regADeg "vell" ;
