@@ -35,6 +35,12 @@ Cambridge University Press, Cambridge, 2009.
 #BR
 //Grammar-libraries from the software engineering point of view, with an example application to mathematical language.//
 
+K. Angelov.
+Incremental Parsing in Parallel Multiple Context-Free Grammars.
+EACL 2009.
+#BR
+//Describes the algorithm used in parsing with GF.//
+
 A. Ranta, B. Bringert, and K. Angelov. 
 The GF Grammar Development Environment. 
 System demo. To appear in the proceedings of //EACL-2009//,
