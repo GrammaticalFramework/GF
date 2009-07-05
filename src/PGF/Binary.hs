@@ -146,8 +146,14 @@ instance Binary Type where
   get = liftM3 DTyp get get get
 
 instance Binary Hypo where
-  put (Hyp v t) = put (v,t)
-  get = liftM2 Hyp get get
+  put (Hyp    t) = putWord8 0 >> put t
+  put (HypV v t) = putWord8 1 >> put (v,t)
+  put (HypI v t) = putWord8 2 >> put (v,t)
+  get = do tag <- getWord8
+           case tag of
+             0 -> liftM  Hyp  get 
+             1 -> liftM2 HypV get get
+             2 -> liftM2 HypI get get
 
 instance Binary FFun where
   put (FFun fun prof lins) = put (fun,prof,lins)

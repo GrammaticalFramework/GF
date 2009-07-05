@@ -69,11 +69,11 @@ plCat :: (CId, [Hypo]) -> String
 plCat (cat, hypos) = plFact "cat" (plTypeWithHypos typ) 
     where ((_,subst), hypos') = alphaConvert emptyEnv hypos
           args = reverse [EVar x | (_,x) <- subst]
-          typ = wildcardUnusedVars $ DTyp hypos' cat args
+          typ = DTyp hypos' cat args
 
 plFun :: (CId, (Type, Int, [Equation])) -> String
 plFun (fun, (typ,_,_)) = plFact "fun" (plp fun : plTypeWithHypos typ')
-    where typ' = wildcardUnusedVars $ snd $ alphaConvert emptyEnv typ
+    where typ' = snd $ alphaConvert emptyEnv typ
 
 plTypeWithHypos :: Type -> [String]
 plTypeWithHypos (DTyp hypos cat args) = [plTerm (plp cat) (map plp args), plp hypos]
@@ -114,7 +114,9 @@ instance PLPrint Type where
         where result = plTerm (plp cat) (map plp args)
 
 instance PLPrint Hypo where
-    plp (Hyp var typ) = plOper ":" (plp var) (plp typ)
+    plp (Hyp      typ) = plOper ":" (plp wildCId) (plp typ)
+    plp (HypI var typ) = plOper ":" (plp var) (plp typ)
+    plp (HypV var typ) = plOper ":" (plp var) (plp typ)
 
 instance PLPrint Expr where
     plp (EVar x)    = plp x
@@ -261,7 +263,12 @@ instance AlphaConvert Type where
               ((ctr,_), args') = alphaConvert env' args
 
 instance AlphaConvert Hypo where
-    alphaConvert env (Hyp x typ) = ((ctr+1,(x,x'):subst), Hyp x' typ')
+    alphaConvert env (Hyp typ) = ((ctr+1,subst), Hyp typ')
+        where ((ctr,subst), typ') = alphaConvert env typ
+    alphaConvert env (HypI x typ) = ((ctr+1,(x,x'):subst), HypI x' typ')
+        where ((ctr,subst), typ') = alphaConvert env typ
+              x' = createLogicalVariable ctr
+    alphaConvert env (HypV x typ) = ((ctr+1,(x,x'):subst), HypV x' typ')
         where ((ctr,subst), typ') = alphaConvert env typ
               x' = createLogicalVariable ctr
 
@@ -281,21 +288,3 @@ instance AlphaConvert Equation where
     alphaConvert env@(_,subst) (Equ patterns result)
         = ((ctr,subst), Equ patterns result')
         where ((ctr,_), result') = alphaConvert env result
-
-----------------------------------------------------------------------
--- translate unused variables to wildcards
-
-wildcardUnusedVars :: Type -> Type
-wildcardUnusedVars typ@(DTyp hypos cat args) = DTyp hypos' cat args
-    where hypos' = [Hyp x' (wildcardUnusedVars typ') | 
-                    Hyp x typ' <- hypos,
-                    let x' = if unusedInType x typ then wildCId else x]
-
-          unusedInType x (DTyp hypos _cat args) 
-              = and [unusedInType x typ | Hyp _ typ <- hypos] &&
-                and [unusedInExpr x exp | exp <- args]
-
-          unusedInExpr x (EAbs y e)  = unusedInExpr x e
-          unusedInExpr x (EApp e e') = unusedInExpr x e && unusedInExpr x e'
-          unusedInExpr x (EVar y)    = x/=y
-          unusedInExpr x expr        = True
