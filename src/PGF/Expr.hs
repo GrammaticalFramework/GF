@@ -9,6 +9,8 @@ module PGF.Expr(Tree(..), Literal(..),
                 -- needed in the typechecker
                 Value(..), Env, eval, apply, eqValue,
 
+                MetaId,
+
                 -- helpers
                 pStr,pFactor,
                ) where
@@ -29,6 +31,8 @@ data Literal =
  | LFlt Double                      -- ^ floating point constant
  deriving (Eq,Ord)
 
+type MetaId = Int
+
 -- | The tree is an evaluated expression in the abstract syntax
 -- of the grammar. The type is especially restricted to not
 -- allow unapplied lambda abstractions. The tree is used directly 
@@ -38,7 +42,7 @@ data Tree =
  | Var CId                          -- ^ variable
  | Fun CId [Tree]                   -- ^ function application
  | Lit Literal                      -- ^ literal
- | Meta {-# UNPACK #-} !Int         -- ^ meta variable
+ | Meta {-# UNPACK #-} !MetaId      -- ^ meta variable
   deriving (Eq, Ord)
 
 -- | An expression represents a potentially unevaluated expression
@@ -47,7 +51,7 @@ data Expr =
    EAbs CId Expr                    -- ^ lambda abstraction
  | EApp Expr Expr                   -- ^ application
  | ELit Literal                     -- ^ literal
- | EMeta  {-# UNPACK #-} !Int       -- ^ meta variable
+ | EMeta  {-# UNPACK #-} !MetaId    -- ^ meta variable
  | EVar   CId                       -- ^ variable or function reference
  | EPi CId Expr Expr                -- ^ dependent function type
   deriving (Eq,Ord)
@@ -191,6 +195,7 @@ ppLit (LStr s) = PP.text (show s)
 ppLit (LInt n) = PP.integer n
 ppLit (LFlt d) = PP.double d
 
+ppMeta :: MetaId -> PP.Doc
 ppMeta n
   | n == 0    = PP.char '?'
   | otherwise = PP.char '?' PP.<> PP.int n
@@ -245,7 +250,8 @@ normalForm funs e = value2expr 0 (eval funs Map.empty e)
   where
     value2expr i (VApp f vs)               = foldl EApp (EVar f)       (map (value2expr i) vs)
     value2expr i (VGen j vs)               = foldl EApp (EVar (var j)) (map (value2expr i) vs)
-    value2expr i (VMeta n vs)              = foldl EApp (EMeta n)      (map (value2expr i) vs)
+    value2expr i (VMeta j vs)              = foldl EApp (EMeta j)      (map (value2expr i) vs)
+    value2expr i (VSusp j vs k)            = value2expr i (k (VGen j vs))
     value2expr i (VLit l)                  = ELit l
     value2expr i (VClosure env (EAbs x e)) = EAbs (var i) (value2expr (i+1) (eval funs (Map.insert x (VGen i []) env) e))
 
@@ -257,10 +263,10 @@ normalForm funs e = value2expr 0 (eval funs Map.empty e)
 data Value
   = VApp CId [Value]
   | VLit Literal
-  | VMeta {-# UNPACK #-} !Int [Value]
-  | VGen  {-# UNPACK #-} !Int [Value]
+  | VMeta {-# UNPACK #-} !MetaId [Value]
+  | VGen  {-# UNPACK #-} !MetaId [Value]
+  | VSusp {-# UNPACK #-} !MetaId [Value] (Value -> Value)
   | VClosure Env Expr
- deriving (Eq,Ord)
 
 type Funs = Map.Map CId (Type,Int,[Equation]) -- type and def of a fun
 type Env  = Map.Map CId Value
@@ -271,7 +277,7 @@ eval funs env (EVar x)     = case Map.lookup x env of
                                Nothing -> case Map.lookup x funs of
                                             Just (_,a,eqs) -> if a == 0
                                                                 then case eqs of
-                                                                       Equ [] e : _ -> eval funs env e
+                                                                       Equ [] e : _ -> eval funs Map.empty e
                                                                        _            -> VApp x []
                                                                 else VApp x []
                                             Nothing        -> error ("unknown variable "++prCId x)
@@ -289,14 +295,12 @@ apply funs env (EVar x)     vs     = case Map.lookup x env of
                                                     (VLit _                 ,  vs) -> error "literal of function type"
                                                     (VMeta i vs0            ,  vs) -> VMeta i (vs0++vs)
                                                     (VGen  i vs0            ,  vs) -> VGen  i (vs0++vs)
+                                                    (VSusp i vs0 k          ,  vs) -> VSusp i (vs0++vs) k
                                                     (VClosure env (EAbs x e),v:vs) -> apply funs (Map.insert x v env) e vs
                                        Nothing -> case Map.lookup x funs of
                                                     Just (_,a,eqs) -> if a <= length vs
                                                                         then let (as,vs') = splitAt a vs
-                                                                             in case match eqs as of
-                                                                                  Match e env -> apply funs env e vs'
-                                                                                  Fail        -> VApp x vs
-                                                                                  Susp        -> VApp x vs
+                                                                             in match funs x eqs as vs'
                                                                         else VApp x vs
                                                     Nothing        -> error ("unknown variable "++prCId x)
 apply funs env (EApp e1 e2) vs     = apply funs env e1 (eval funs env e2 : vs)
@@ -309,31 +313,23 @@ apply funs env (ELit l)     vs     = error "literal of function type"
 -- Pattern matching
 -----------------------------------------------------
 
-data MatchRes
-  = Match Expr Env
-  | Susp
-  | Fail
-
-match :: [Equation] -> [Value] -> MatchRes
-match eqs as =
+match :: Funs -> CId -> [Equation] -> [Value] -> [Value] -> Value
+match funs f eqs as0 vs0 =
   case eqs of
-    []               -> Fail
-    (Equ ps res):eqs -> case tryMatches ps as res Map.empty of
-                          Fail -> match eqs as
-                          res  -> res
+    []               -> VApp f (as0++vs0)
+    (Equ ps res):eqs -> tryMatches eqs ps as0 res Map.empty
   where
-    tryMatches []     []     res env = Match res env
-    tryMatches (p:ps) (a:as) res env = tryMatch p a env
+    tryMatches eqs []     []     res env = apply funs env res vs0
+    tryMatches eqs (p:ps) (a:as) res env = tryMatch p a env
       where
-        tryMatch (PApp f1 ps1) (VApp f2 vs2) env | f1 == f2 = tryMatches (ps1++ps) (vs2++as) res env
-        tryMatch (PApp f1 ps1) (VMeta _ _  ) env            = Susp
-        tryMatch (PApp f1 ps1) (VGen  _ _  ) env            = Susp
-        tryMatch (PLit l1    ) (VLit l2    ) env | l1 == l2 = tryMatches       ps        as  res env
-        tryMatch (PLit l1    ) (VMeta _ _  ) env            = Susp
-        tryMatch (PLit l1    ) (VGen  _ _  ) env            = Susp
-        tryMatch (PVar x     ) (v          ) env            = tryMatches       ps        as  res (Map.insert x v env)
-        tryMatch (PWild      ) (_          ) env            = tryMatches       ps        as  res env
-        tryMatch _             _             env            = Fail
+        tryMatch (PVar x     ) (v           ) env            = tryMatches eqs  ps        as  res (Map.insert x v env)
+        tryMatch (PWild      ) (_           ) env            = tryMatches eqs  ps        as  res env
+        tryMatch (p          ) (VMeta i vs  ) env            = VSusp i vs (\v -> tryMatch p v env)
+        tryMatch (p          ) (VGen  i vs  ) env            = VApp f (as0++vs0)
+        tryMatch (p          ) (VSusp i vs k) env            = VSusp i vs (\v -> tryMatch p (k v) env)
+        tryMatch (PApp f1 ps1) (VApp f2 vs2 ) env | f1 == f2 = tryMatches eqs (ps1++ps) (vs2++as) res env
+        tryMatch (PLit l1    ) (VLit l2     ) env | l1 == l2 = tryMatches eqs  ps        as  res env
+        tryMatch _             _              env            = match funs f eqs as0 vs0
 
 
 -----------------------------------------------------
