@@ -290,13 +290,7 @@ eval funs env (EPi x e1 e2)= VClosure env (EPi x e1 e2)
 apply :: Funs -> Env -> Expr -> [Value] -> Value
 apply funs env e            []     = eval funs env e
 apply funs env (EVar x)     vs     = case Map.lookup x env of
-                                       Just v  -> case (v,vs) of
-                                                    (VApp f  vs0            ,  vs) -> apply funs env (EVar f) (vs0++vs)
-                                                    (VLit _                 ,  vs) -> error "literal of function type"
-                                                    (VMeta i vs0            ,  vs) -> VMeta i (vs0++vs)
-                                                    (VGen  i vs0            ,  vs) -> VGen  i (vs0++vs)
-                                                    (VSusp i vs0 k          ,  vs) -> VSusp i (vs0++vs) k
-                                                    (VClosure env (EAbs x e),v:vs) -> apply funs (Map.insert x v env) e vs
+                                       Just v  -> applyValue funs env v vs
                                        Nothing -> case Map.lookup x funs of
                                                     Just (_,a,eqs) -> if a <= length vs
                                                                         then let (as,vs') = splitAt a vs
@@ -308,6 +302,12 @@ apply funs env (EAbs x e)   (v:vs) = apply funs (Map.insert x v env) e vs
 apply funs env (EMeta k)    vs     = VMeta k vs
 apply funs env (ELit l)     vs     = error "literal of function type"
 
+applyValue funs env (VApp f  vs0)             vs     = apply funs env (EVar f) (vs0++vs)
+applyValue funs env (VLit _)                  vs     = error "literal of function type"
+applyValue funs env (VMeta i vs0)             vs     = VMeta i (vs0++vs)
+applyValue funs env (VGen  i vs0)             vs     = VGen  i (vs0++vs)
+applyValue funs env (VSusp i vs0 k)           vs     = VSusp i vs0 (\v -> applyValue funs env (k v) vs)
+applyValue funs _   (VClosure env (EAbs x e)) (v:vs) = apply funs (Map.insert x v env) e vs
 
 -----------------------------------------------------
 -- Pattern matching
