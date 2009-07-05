@@ -15,9 +15,12 @@ data Type =
    DTyp [Hypo] CId [Expr]
   deriving (Eq,Ord)
 
+-- | 'Hypo' represents a hypothesis in a type i.e. in the type A -> B, A is the hypothesis
 data Hypo =
-   Hyp CId Type
-  deriving (Eq,Ord,Show)
+    Hyp      Type      -- ^ hypothesis without bound variable like in A -> B
+  | HypV CId Type      -- ^ hypothesis with bound variable like in (x : A) -> B x
+  | HypI CId Type      -- ^ hypothesis with bound implicit variable like in {x : A} -> B x
+  deriving (Eq,Ord)
 
 -- | Reads a 'Type' from a 'String'.
 readType :: String -> Maybe Type
@@ -45,7 +48,7 @@ pType = do
   where
     pHypo =
       do (cat,args) <- pAtom
-         return (Hyp wildCId (DTyp [] cat args))
+         return (Hyp (DTyp [] cat args))
       RP.<++
       (RP.between (RP.char '(') (RP.char ')') $ do
          var <- RP.option wildCId $ do
@@ -54,7 +57,16 @@ pType = do
                      RP.string ":"
                      return v
          ty <- pType
-         return (Hyp var ty))
+         return (HypV var ty))
+      RP.<++
+      (RP.between (RP.char '{') (RP.char '}') $ do
+         var <- RP.option wildCId $ do
+                     v <- pCId
+                     RP.skipSpaces
+                     RP.string ":"
+                     return v
+         ty <- pType
+         return (HypI var ty))
 
     pAtom = do
       cat <- pCId
@@ -70,9 +82,9 @@ ppType d (DTyp ctxt cat args)
     ppCtxt hyp doc = ppHypo hyp PP.<+> PP.text "->" PP.<+> doc
     ppRes cat es = PP.text (prCId cat) PP.<+> PP.hsep (map (ppExpr 2) es)
 
-ppHypo (Hyp x typ)
-  | x == wildCId = ppType 1 typ
-  | otherwise    = PP.parens (PP.text (prCId x) PP.<+> PP.char ':' PP.<+> ppType 0 typ)
+ppHypo (Hyp    typ) = ppType 1 typ
+ppHypo (HypV x typ) = PP.parens (PP.text (prCId x) PP.<+> PP.char ':' PP.<+> ppType 0 typ)
+ppHypo (HypI x typ) = PP.braces (PP.text (prCId x) PP.<+> PP.char ':' PP.<+> ppType 0 typ)
 
 ppParens :: Bool -> PP.Doc -> PP.Doc
 ppParens True  = PP.parens

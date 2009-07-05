@@ -105,15 +105,20 @@ depth (Fun _ ts) = maximum (0:map depth ts) + 1
 depth _          = 1
 
 cftype :: [CId] -> CId -> Type
-cftype args val = DTyp [Hyp wildCId (cftype [] arg) | arg <- args] val []
+cftype args val = DTyp [Hyp (cftype [] arg) | arg <- args] val []
+
+typeOfHypo :: Hypo -> Type
+typeOfHypo (Hyp    ty) = ty
+typeOfHypo (HypV _ ty) = ty
+typeOfHypo (HypI _ ty) = ty
 
 catSkeleton :: Type -> ([CId],CId)
 catSkeleton ty = case ty of
-  DTyp hyps val _ -> ([valCat ty | Hyp _ ty <- hyps],val)
+  DTyp hyps val _ -> ([valCat (typeOfHypo h) | h <- hyps],val)
 
 typeSkeleton :: Type -> ([(Int,CId)],CId)
 typeSkeleton ty = case ty of
-  DTyp hyps val _ -> ([(contextLength ty, valCat ty) | Hyp _ ty <- hyps],val)
+  DTyp hyps val _ -> ([(contextLength ty, valCat ty) | h <- hyps, let ty = typeOfHypo h],val)
 
 valCat :: Type -> CId
 valCat ty = case ty of

@@ -371,8 +371,9 @@ expandHOAS abs_defs cnc_defs lincats env =
 
     hoCats :: [CId]
     hoCats = sortNub [c | (_,(ty,_,_)) <- abs_defs
-                        , Hyp _ ty <- case ty of {DTyp hyps val _ -> hyps}
-                        , c   <- fst (catSkeleton ty)]
+                        , h <- case ty of {DTyp hyps val _ -> hyps}
+                        , let ty = typeOfHypo h
+                        , c <- fst (catSkeleton ty)]
   
     -- add a range of PMCFG categories for each GF high-order category
     add_hoCat env@(GrammarEnv last_id catSet seqSet funSet crcSet prodSet) (n,cat) =

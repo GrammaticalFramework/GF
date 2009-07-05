@@ -147,7 +147,7 @@ mkPatt p = case p of
 
 
 mkContext :: A.Context -> [C.Hypo]
-mkContext hyps = [C.Hyp (i2i x) (mkType ty) | (x,ty) <- hyps]
+mkContext hyps = [(if x == identW then C.Hyp else C.HypV (i2i x)) (mkType ty) | (x,ty) <- hyps]
 
 mkTerm :: Term -> C.Term
 mkTerm tr = case tr of

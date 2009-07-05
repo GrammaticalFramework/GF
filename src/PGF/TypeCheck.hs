@@ -91,7 +91,10 @@ lookupEVar pgf (_,g,_) x = case Map.lookup x g of
 
 type2expr :: Type -> Expr
 type2expr (DTyp hyps cat es) = 
-  foldr (uncurry EPi) (foldl EApp (EVar cat) es) [(x, type2expr t) | Hyp x t <- hyps]
+  foldr (uncurry EPi) (foldl EApp (EVar cat) es) [toPair h | h <- hyps]
+  where
+    toPair (Hyp    t) = (wildCId, type2expr t)
+    toPair (HypV x t) = (x,       type2expr t)
 
 type TCEnv = (Int,Env,Env)
 
@@ -156,7 +159,7 @@ splitConstraints pgf = mkSplit . unifyAll [] . map reduce where
     (VMeta s _, t) -> do
       let tg = substMetas g t
       let sg = maybe e1 id (lookup s g)
-      if (sg == e1) then extend s tg g else unify sg tg g 
+      if null (eqValue (funs (abstract pgf)) 0 sg e1) then extend s tg g else unify sg tg g 
     (t, VMeta _ _) -> unify e2 e1 g
     (VApp c as, VApp d bs) | c == d -> 
        foldM (\ h (a,b) -> unify a b h) g (zip as bs)

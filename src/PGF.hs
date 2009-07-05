@@ -279,7 +279,7 @@ languages pgf = cncnames pgf
 languageCode pgf lang = 
     fmap (replace '_' '-') $ lookConcrFlag pgf lang (mkCId "language")
 
-categories pgf = [DTyp [] c [EMeta i | (Hyp _ _,i) <- zip hs [0..]] | (c,hs) <- Map.toList (cats (abstract pgf))]
+categories pgf = [DTyp [] c (map EMeta [0..length hs]) | (c,hs) <- Map.toList (cats (abstract pgf))]
 
 startCat pgf = DTyp [] (lookStartCat pgf) []
 
