@@ -48,3 +48,13 @@ succ zero
 
 dec ?
 
+g3 ? 0
+
+g (g2 ? 0)
+
+succ (succ zero)
+
+zero
+
+succ err
+
