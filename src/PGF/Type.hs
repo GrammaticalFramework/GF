@@ -41,32 +41,30 @@ showType = PP.render . ppType 0
 pType :: RP.ReadP Type
 pType = do
   RP.skipSpaces
-  hyps <- RP.sepBy (pHypo >>= \h -> RP.string "->" >> return h) RP.skipSpaces
+  hyps <- RP.sepBy (pHypo >>= \h -> RP.skipSpaces >> RP.string "->" >> return h) RP.skipSpaces
   RP.skipSpaces
   (cat,args) <- pAtom
-  return (DTyp hyps cat args)
+  return (DTyp (concat hyps) cat args)
   where
     pHypo =
       do (cat,args) <- pAtom
-         return (Hyp (DTyp [] cat args))
+         return [Hyp (DTyp [] cat args)]
       RP.<++
       (RP.between (RP.char '(') (RP.char ')') $ do
-         var <- RP.option wildCId $ do
-                     v <- pCId
+         hyp <- RP.option (\ty -> [Hyp ty]) $ do
+                     vs <- RP.sepBy (RP.skipSpaces >> pCId) (RP.skipSpaces >> RP.char ',')
                      RP.skipSpaces
-                     RP.string ":"
-                     return v
+                     RP.char ':'
+                     return (\ty -> [HypV v ty | v <- vs])
          ty <- pType
-         return (HypV var ty))
+         return (hyp ty))
       RP.<++
       (RP.between (RP.char '{') (RP.char '}') $ do
-         var <- RP.option wildCId $ do
-                     v <- pCId
-                     RP.skipSpaces
-                     RP.string ":"
-                     return v
+         vs <- RP.sepBy1 (RP.skipSpaces >> pCId) (RP.skipSpaces >> RP.char ',')
+         RP.skipSpaces
+         RP.char ':'
          ty <- pType
-         return (HypI var ty))
+         return [HypI v ty | v <- vs])
 
     pAtom = do
       cat <- pCId
