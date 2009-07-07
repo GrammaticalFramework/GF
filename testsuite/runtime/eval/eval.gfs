@@ -27,3 +27,8 @@ pt -compute dec (succ (succ zero))
 pt -compute dec (succ ?)
 pt -compute \x -> dec x
 pt -compute dec ?
+pt -compute (\f -> f 0) (g3 ?)
+pt -compute g (g2 ? 0)
+pt -compute plus (succ zero) (succ zero)
+pt -compute dec2 0 (succ zero)
+pt -compute plus err (succ zero)
