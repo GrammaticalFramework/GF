@@ -36,7 +36,10 @@ instance Read CId where
     readsPrec _ = RP.readP_to_S pCId
 
 pCId :: RP.ReadP CId
-pCId = fmap mkCId pIdent
+pCId = do s <- pIdent
+          if s == "_"
+            then RP.pfail
+            else return (mkCId s)
 
 pIdent :: RP.ReadP String
 pIdent = liftM2 (:) (RP.satisfy isIdentFirst) (RP.munch isIdentRest)
