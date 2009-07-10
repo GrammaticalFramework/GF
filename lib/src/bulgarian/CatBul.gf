@@ -1,25 +1,9 @@
-concrete CatBul of Cat = open ResBul, Prelude, (R = ParamX) in {
+concrete CatBul of Cat = CommonX - [AAnter,ASimul,IAdv,CAdv] ** open ResBul, Prelude, (R = ParamX) in {
 
   flags 
     coding=cp1251; optimize=all_subs;
 
   lincat
-
--- Text, Phrase, Utterance
-
-    Text = {s : Str} ;
-    Phr = {s : Str} ;
-    Utt = {s : Str} ;
-    Voc = {s : Str} ;
-    PConj = {s : Str} ;
-
--- Tense, Anteriority, Polarity
-
-    Temp = {s : Str ; t : R.Tense ; a : R.Anteriority} ;
-    Tense = {s : Str ; t : R.Tense} ;
-    Ant   = {s : Str ; a : R.Anteriority} ;
-    Pol   = {s : Str ; p : R.Polarity} ;
-    
 -- Tensed/Untensed
 
     S  = {s : Str} ;
@@ -56,7 +40,6 @@ concrete CatBul of Cat = open ResBul, Prelude, (R = ParamX) in {
     VPSlash = ResBul.VPSlash ;
 
     Comp = {s : Agr => Str} ; 
-    AdV = {s : Str} ; --lock_AdV : {}} ;
 
 -- Adjective
 
@@ -64,10 +47,8 @@ concrete CatBul of Cat = open ResBul, Prelude, (R = ParamX) in {
 
 -- Adjective
 
-    Adv = {s : Str} ;
     CAdv = {s : Str; sn : Str} ;
     IAdv = {s : QForm => Str} ;
-    AdA = {s : Str} ;
 
 -- Noun
 
@@ -85,7 +66,6 @@ concrete CatBul of Cat = open ResBul, Prelude, (R = ParamX) in {
 
     Numeral = {s : CardOrd => Str; n : Number} ;
     Digits  = {s : CardOrd => Str; n : Number; tail : DTail} ;
-    AdN = {s : Str} ;
 
 -- Structural
 
@@ -113,14 +93,6 @@ concrete CatBul of Cat = open ResBul, Prelude, (R = ParamX) in {
 -- Tense, Anteriority and Polarity functions
 
   lin
-    TTAnt t a = {s = t.s ++ a.s ; t = t.t ; a = a.a} ;
-
-    PPos  = {s = []} ** {p = R.Pos} ;
-    PNeg  = {s = []} ** {p = R.Neg} ;
-    TPres = {s = []} ** {t = R.Pres} ;
-    TPast = {s = []} ** {t = R.Past} ;   --# notpresent
-    TFut  = {s = []} ** {t = R.Fut} ;    --# notpresent
-    TCond = {s = []} ** {t = R.Cond} ;   --# notpresent
     ASimul = {s = []} ** {a = R.Simul} ;
     AAnter = {s = []} ** {a = R.Anter} ; --# notpresent
 }
