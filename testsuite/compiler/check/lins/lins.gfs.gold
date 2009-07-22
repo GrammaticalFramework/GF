@@ -11,7 +11,7 @@ functions
 sequences
 startcats
   C := [C0]
-  Float := [Float]
-  Int := [Int]
+  Float := [CFloat]
+  Int := [CInt]
   Nat := [C1]
-  String := [String]
+  String := [CString]
