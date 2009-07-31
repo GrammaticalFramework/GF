@@ -566,5 +566,8 @@ oper
 
   mkPrep : Str -> Case -> {s : Str ; c : Case} = \s,c -> {s = s ; c = c} ;
 
+param
+  Unit = one | ten | hundred | thousand | ten_thousand | hundred_thousand ;
+
 }
 
