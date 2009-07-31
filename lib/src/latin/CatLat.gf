@@ -59,7 +59,7 @@ concrete CatLat of Cat = CommonX ** open ResLat, Prelude in {
 ---- Numeral
 --
 --    Numeral = {s : CardOrd => Str ; n : Number} ;
---    Digits  = {s : CardOrd => Str ; n : Number ; tail : DTail} ;
+    Digits  = {s : Str ; unit : Unit} ;
 --
 ---- Structural
 --

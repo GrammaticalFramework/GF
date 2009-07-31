@@ -1,4 +1,4 @@
---concrete NumeralLat of Numeral = CatLat ** open ResLat in {
+concrete NumeralLat of Numeral = CatLat ** open ResLat in {
 --
 --lincat 
 --  Digit = {s : DForm => CardOrd => Str} ;
@@ -42,54 +42,47 @@
 --lin pot3plus n m = {
 --  s = \\c => n.s ! NCard ++ "thousand" ++ m.s ! c ; n = Pl} ;
 --
----- numerals as sequences of digits
---
---  lincat 
---    Dig = TDigit ;
---
---  lin
---    IDig d = d ** {tail = T1} ;
---
---    IIDig d i = {
---      s = \\o => d.s ! NCard ++ commaIf i.tail ++ i.s ! o ;
---      n = Pl ;
---      tail = inc i.tail
---    } ;
---
---    D_0 = mkDig "0" ;
---    D_1 = mk3Dig "1" "1st" Sg ;
---    D_2 = mk2Dig "2" "2nd" ;
---    D_3 = mk2Dig "3" "3rd" ;
---    D_4 = mkDig "4" ;
---    D_5 = mkDig "5" ;
---    D_6 = mkDig "6" ;
---    D_7 = mkDig "7" ;
---    D_8 = mkDig "8" ;
---    D_9 = mkDig "9" ;
---
---  oper
---    commaIf : DTail -> Str = \t -> case t of {
---      T3 => "," ;
---      _ => []
---      } ;
---
---    inc : DTail -> DTail = \t -> case t of {
---      T1 => T2 ;
---      T2 => T3 ;
---      T3 => T1
---      } ;
---
---    mk2Dig : Str -> Str -> TDigit = \c,o -> mk3Dig c o Pl ;
---    mkDig : Str -> TDigit = \c -> mk2Dig c (c + "th") ;
---
---    mk3Dig : Str -> Str -> Number -> TDigit = \c,o,n -> {
---      s = table {NCard => c ; NOrd => o} ;
---      n = n
---      } ;
---
---    TDigit = {
---      n : Number ;
---      s : CardOrd => Str
---    } ;
---
---}
+-- numerals as sequences of digits
+
+  lincat 
+    Dig = TDigit ;
+
+  lin
+    IDig d = {s = d.s ! one; unit = ten} ;
+
+    IIDig d i = {
+      s = d.s ! i.unit ++ i.s ;
+      unit = inc i.unit
+    } ;
+
+    D_0 = mkDig ""     ""     ""     ""       ""       "" ;
+    D_1 = mkDig "I"    "X"    "C"    "M"      "(X)"    "(C)" ;
+    D_2 = mkDig "II"   "XX"   "CC"   "MM"     "(XX)"   "(CC)" ;
+    D_3 = mkDig "III"  "XXX"  "CCC"  "MMM"    "(XXX)"  "(CCC)" ;
+    D_4 = mkDig "IV"   "XL"   "CD"   "(IV)"   "(XL)"   "(CD)" ;
+    D_5 = mkDig "V"    "L"    "D"    "(V)"    "(L)"    "(D)" ;
+    D_6 = mkDig "VI"   "LX"   "DC"   "(VI)"   "(LX)"   "(DC)" ;
+    D_7 = mkDig "VII"  "LXX"  "DCC"  "(VII)"  "(LXX)"  "(DCC)" ;
+    D_8 = mkDig "VIII" "LXXX" "DCCC" "(VIII)" "(LXXX)" "(DCCC)" ;
+    D_9 = mkDig "IX"   "XC"   "CM"   "(IX)"   "(XC)"   "(CM)" ;
+
+  oper
+    TDigit = {
+      s : Unit => Str
+    } ;
+
+    mkDig : Str -> Str -> Str -> Str -> Str -> Str -> TDigit = 
+      \one,ten,hundred,thousand,ten_thousand,hundred_thousand -> {
+          s = table Unit [one;ten;hundred;thousand;ten_thousand;hundred_thousand]
+        } ;
+        
+    inc : Unit -> Unit = \u ->
+      case u of {
+        one              => ten ;
+        ten              => hundred ;
+        hundred          => thousand ;
+        thousand         => ten_thousand ;
+        ten_thousand     => hundred_thousand ;
+        hundred_thousand => hundred_thousand
+      } ;
+}
