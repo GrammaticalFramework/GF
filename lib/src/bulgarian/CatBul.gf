@@ -9,7 +9,6 @@ concrete CatBul of Cat = CommonX - [AAnter,ASimul,IAdv,CAdv] ** open ResBul, Pre
     S  = {s : Str} ;
     QS = {s : QForm => Str} ;
     RS = {s : Agr => Str} ;
-    SC  = {s : Str} ;
     SSlash = {s : Agr => Str ; c2 : Preposition} ;
 
 -- Sentence
