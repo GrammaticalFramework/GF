@@ -19,6 +19,9 @@ module Data.Binary.Put (
       Put
     , PutM(..)
     , runPut
+    , runPutM
+    , putBuilder
+    , execPut
 
     -- * Flushing the implicit parse state
     , flush
@@ -107,10 +110,24 @@ tell :: Builder -> Put
 tell b = Put $ PairS () b
 {-# INLINE tell #-}
 
+putBuilder :: Builder -> Put
+putBuilder = tell
+{-# INLINE putBuilder #-}
+
+-- | Run the 'Put' monad
+execPut :: PutM a -> Builder
+execPut = sndS . unPut
+{-# INLINE execPut #-}
+
 -- | Run the 'Put' monad with a serialiser
 runPut :: Put -> L.ByteString
 runPut = toLazyByteString . sndS . unPut
 {-# INLINE runPut #-}
+
+-- | Run the 'Put' monad with a serialiser and get its result
+runPutM :: PutM a -> (a, L.ByteString)
+runPutM (Put (PairS f s)) = (f, toLazyByteString s)
+{-# INLINE runPutM #-}
 
 ------------------------------------------------------------------------
 

@@ -734,9 +734,13 @@ instance (Binary e) => Binary (IntMap.IntMap e) where
 --
 
 instance (Binary e) => Binary (Seq.Seq e) where
-    -- any better way to do this?
-    put = put . Fold.toList
-    get = fmap Seq.fromList get
+    put s = put (Seq.length s) >> Fold.mapM_ put s
+    get = do n <- get :: Get Int
+             rep Seq.empty n get
+      where rep xs 0 _ = return $! xs
+            rep xs n g = xs `seq` n `seq` do
+                           x <- g
+                           rep (xs Seq.|> x) (n-1) g
 
 #endif
 
