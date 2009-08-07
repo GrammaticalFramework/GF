@@ -1,4 +1,9 @@
-module GF.Text.Transliterations (transliterate,transliteration,characterTable) where
+module GF.Text.Transliterations (
+  transliterate,
+  transliteration,
+  characterTable,
+  transliterationPrintNames
+  ) where
 
 import GF.Text.UTF8
 
@@ -11,10 +16,10 @@ import qualified Data.Map as Map
 -- current transliterations: devanagari, thai
 
 -- to add a new one: define the Unicode range and the corresponding ASCII strings,
--- which may be one or two characters long
+-- which may be one or more characters long
 
 -- conventions to be followed: 
---   each character is either [letter] or [letter+nonletter]
+--   each character is either [letter] or [letter+nonletters]
 --   when using a sparse range of unicodes, mark missing codes as "-" in transliterations
 --   characters can be invisible: ignored in translation to unicode
 
@@ -25,15 +30,21 @@ transliterate s = case s of
   _ -> Nothing
 
 transliteration :: String -> Maybe Transliteration
-transliteration s = case s of
-  "arabic" -> Just transArabic
-  "devanagari" -> Just transDevanagari
-  "greek" -> Just transGreek
-  "hebrew" -> Just transHebrew
-  "telugu" -> Just transTelugu
-  "thai" -> Just transThai
-----  "urdu" -> Just transUrdu
-  _ -> Nothing
+transliteration s = Map.lookup s allTransliterations 
+
+allTransliterations = Map.fromAscList [
+  ("ancientgreek", transAncientGreek),
+  ("arabic", transArabic),
+  ("devanagari", transDevanagari),
+  ("greek", transGreek),
+  ("hebrew", transHebrew),
+  ("telugu", transTelugu),
+  ("thai", transThai)
+  ----  "urdu", transUrdu
+  ]
+
+-- used in command options and help
+transliterationPrintNames = [(t,printname p) | (t,p) <- Map.toList allTransliterations]
 
 characterTable :: Transliteration -> String
 characterTable = unlines . map prOne . Map.assocs . trans_from_unicode where
@@ -42,7 +53,8 @@ characterTable = unlines . map prOne . Map.assocs . trans_from_unicode where
 data Transliteration = Trans {
   trans_to_unicode   :: Map.Map String Int,
   trans_from_unicode :: Map.Map Int String,
-  invisible_chars    :: [String]
+  invisible_chars    :: [String],
+  printname          :: String
   }
 
 appTransToUnicode :: Transliteration -> String -> String
@@ -63,8 +75,9 @@ appTransFromUnicode trans =
   map fromEnum
 
 
-mkTransliteration :: [String] -> [Int] -> Transliteration
-mkTransliteration ts us = Trans (Map.fromList (tzip ts us)) (Map.fromList (uzip us ts)) []
+mkTransliteration :: String -> [String] -> [Int] -> Transliteration
+mkTransliteration name ts us = 
+ Trans (Map.fromList (tzip ts us)) (Map.fromList (uzip us ts)) [] name
   where
     tzip ts us = [(t,u) | (t,u) <- zip ts us, t /= "-"]
     uzip us ts = [(u,t) | (u,t) <- zip us ts, t /= "-"]
@@ -75,12 +88,13 @@ unchar s = case s of
   c:d:cs 
    | isAlpha d -> [c]    : unchar (d:cs)
    | isSpace d -> [c]:[d]: unchar cs
-   | otherwise -> [c,d]  : unchar cs
+   | otherwise -> let (ds,cs2) = break (\x -> isAlpha x || isSpace x) cs in
+                  (c:d:ds) : unchar cs2
   [_]          -> [s]
   _            -> []
 
 transThai :: Transliteration
-transThai = mkTransliteration allTrans allCodes where
+transThai = mkTransliteration "Thai" allTrans allCodes where
   allTrans = words $
     "-  k  k1 -  k2 -  k3 g  c  c1 c2 s' c3 y' d' t' " ++
     "t1 t2 t3 n' d  t  t4 t5 t6 n  b  p  p1 f  p2 f' " ++
@@ -92,8 +106,9 @@ transThai = mkTransliteration allTrans allCodes where
 
 transDevanagari :: Transliteration
 transDevanagari = 
-  (mkTransliteration allTransUrduHindi allCodes){invisible_chars = ["a"]} where
-    allCodes = [0x0900 .. 0x095f]
+  (mkTransliteration "Devanagari" 
+    allTransUrduHindi allCodes){invisible_chars = ["a"]} where
+      allCodes = [0x0900 .. 0x095f]
 
 allTransUrduHindi = words $
     "-  M  N  -  -  a- A- i- I- u- U- R- -  -  -  e- " ++
@@ -105,11 +120,11 @@ allTransUrduHindi = words $
 
 transUrdu :: Transliteration
 transUrdu = 
-  (mkTransliteration allTransUrduHindi allCodes){invisible_chars = ["a"]} where
+  (mkTransliteration "Urdu" allTransUrduHindi allCodes){invisible_chars = ["a"]} where
     allCodes = [0x0900 .. 0x095f] ---- TODO: this is devanagari
 
 transArabic :: Transliteration
-transArabic = mkTransliteration allTrans allCodes where
+transArabic = mkTransliteration "Arabic" allTrans allCodes where
   allTrans = words $
     "   V  A: A? w? A- y? A  b  t. t  v  g  H  K  d " ++  -- 0621 - 062f
     "W  r  z  s  C S  D  T  Z  c  G "                 ++  -- 0630 - 063a
@@ -119,7 +134,7 @@ transArabic = mkTransliteration allTrans allCodes where
              [0x0641..0x064f] ++ [0x0650..0x0657]
 
 transHebrew :: Transliteration
-transHebrew = mkTransliteration allTrans allCodes where
+transHebrew = mkTransliteration "unvocalized Hebrew" allTrans allCodes where
   allTrans = words $
     "A  b  g  d  h  w  z  H  T  y  K  k  l  M  m  N " ++
     "n  S  O  P  p  Z. Z  q  r  s  t  -  -  -  -  - " ++
@@ -127,7 +142,7 @@ transHebrew = mkTransliteration allTrans allCodes where
   allCodes = [0x05d0..0x05f4]
 
 transTelugu :: Transliteration
-transTelugu = mkTransliteration allTrans allCodes where
+transTelugu = mkTransliteration "Telugu" allTrans allCodes where
   allTrans = words $
     "-  c1 c2 c3 -  A  A: I  I: U  U: R_ L_ -  E  E: " ++
     "A' -  O  O: A_ k  k. g  g. n. c  c. j  j. n' T  " ++
@@ -139,7 +154,7 @@ transTelugu = mkTransliteration allTrans allCodes where
   allCodes = [0x0c00 .. 0x0c7f]
 
 transGreek :: Transliteration
-transGreek = mkTransliteration allTrans allCodes where
+transGreek = mkTransliteration "modern Greek" allTrans allCodes where
   allTrans = words $
     "-  -  -  -  -  -  A' -  E' H' I' -  O' -  Y' W' " ++
     "i= A  B  G  D  E  Z  H  V  I  K  L  M  N  X  O  " ++
@@ -147,4 +162,30 @@ transGreek = mkTransliteration allTrans allCodes where
     "y= a  b  g  d  e  z  h  v  i  k  l  m  n  x  o  " ++
     "p  r  s* s  t  y  f  c  q  w  i- y- o' y' w' -  "    
   allCodes = [0x0380 .. 0x03cf]
+
+transAncientGreek :: Transliteration
+transAncientGreek = mkTransliteration "ancient Greek" allTrans allCodes where
+  allTrans = words $
+    "-  -  -  -  -  -  -  -  -  -  -  -  -  -  -  - " ++
+    "i= A  B  G  D  E  Z  H  V  I  K  L  M  N  X  O  " ++
+    "P  R  -  S  T  Y  F  C  Q  W  I- Y- -  -  -  -  " ++
+    "y= a  b  g  d  e  z  h  v  i  k  l  m  n  x  o  " ++
+    "p  r  s* s  t  y  f  c  q  w  i- y- -  -  -  -  " ++   
+    "a)  a(  a)` a(` a)' a(' a)~ a(~ A)  A(  A)` A(` A)' A(' A)~ A(~ " ++
+    "e)  e(  e)` e(` e)' e(' -   -   E)  E(  E)` E(` E)' E(' -   -   " ++
+    "h)  h(  h)` h(` h)' h(' h)~ h(~ H)  H(  H)` H(` H)' H(' H)~ H(~ " ++
+    "i)  i(  i)` i(` i)' i(' i)~ i(~ I)  I(  I)` I(` I)' I(' I)~ I(~ " ++
+    "o)  o(  o)` o(` o)' o(' -   -   O)  O(  O)` O(` O)' O(' -   -   " ++
+    "y)  y(  y)` y(` y)' y(' y)~ y(~ -   Y(  -   Y(` -   Y(' -   Y(~ " ++
+    "w)  w(  w)` w(` w)' w(' w)~ w(~ W)  W(  W)` W(` W)' W(' W)~ W(~ " ++
+    "a`  a'  e`  e'  h`  h'  i`  i'  o`  o'  y`  y'  w`  w'  -   -   " ++
+    "- - - - - - - - - - - - - - - - " ++ -- 1f80-
+    "- - - - - - - - - - - - - - - - " ++ -- 1f90-   -- TODO some combinations
+    "- - - - - - - - - - - - - - - - " ++ -- 1fa0-
+    "- - - - - - a~ a|~ - - - - - - - - " ++ -- 1fb0-
+    "- - - - - - h~ h|~ - - - - - - - - " ++ -- 1fc0-
+    "- - - - - - i~ i=~ - - - - - - - - " ++ -- 1fd0-
+    "- - - - - - y~ y|~ - - - - - - - - " ++ -- 1fe0-
+    "- - - - - - w~ w|~ - - - - - - - - "    -- 1ff0-
+  allCodes = [0x0380 .. 0x03cf] ++ [0x1f00 .. 0x1fff]
 

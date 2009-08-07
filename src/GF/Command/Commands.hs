@@ -36,7 +36,7 @@ import Data.Maybe
 import qualified Data.Map as Map
 import System.Cmd
 import Text.PrettyPrint
-
+import Data.List (sort)
 import Debug.Trace
 
 type CommandOutput = ([Expr],String) ---- errors, etc
@@ -550,14 +550,7 @@ allCommands cod env@(pgf, mos) = Map.fromList [
          let t = concatMap prOpt (take 1 opts)
          let out = maybe "no such transliteration" characterTable $ transliteration t
          return $ fromString out,
-     options = [
-       ("arabic",    "Arabic"),
-       ("hebrew",    "Hebrew (unvocalized)"),
-       ("greek",     "Greek (modern)"),
-       ("devanagari","Devanagari"),
-       ("telugu",    "Telugu"),
-       ("thai",      "Thai")
-       ] 
+     options = transliterationPrintNames
      }),
   ("vt", emptyCommandInfo {
      longname = "visualize_tree",
@@ -748,28 +741,16 @@ allCommands cod env@(pgf, mos) = Map.fromList [
      ELit (LStr s) -> s
      _ -> "\n" ++ showExpr t  --- newline needed in other cases than the first
 
-stringOpOptions = [
+stringOpOptions = sort $ [
        ("bind","bind tokens separated by Prelude.BIND, i.e. &+"),
        ("chars","lexer that makes every non-space character a token"),
        ("from_cp1251","decode from cp1251 (Cyrillic used in Bulgarian resource)"),
-       ("from_arabic","from unicode to GF Arabic transliteration"),
-       ("from_devanagari","from unicode to GF Devanagari transliteration"),
-       ("from_hebrew","from unicode to GF unvocalized Hebrew transliteration"),
-       ("from_greek","from unicode to GF modern Greek transliteration"),
-       ("from_telugu","from unicode to GF Telugu transliteration"),
-       ("from_thai","from unicode to GF Thai transliteration"),
        ("from_utf8","decode from utf8 (default)"),
        ("lextext","text-like lexer"),
        ("lexcode","code-like lexer"),
        ("lexmixed","mixture of text and code (code between $...$)"), 
        ("to_cp1251","encode to cp1251 (Cyrillic used in Bulgarian resource)"),
-       ("to_arabic","from GF Arabic transliteration to unicode"),
-       ("to_devanagari","from GF Devanagari transliteration to unicode"),
-       ("to_greek","from GF modern Greek transliteration to unicode"),
-       ("to_hebrew","from GF unvocalized Hebrew transliteration to unicode"),
        ("to_html","wrap in a html file with linebreaks"),
-       ("to_telugu","from GF Telugu transliteration to unicode"),
-       ("to_thai","from GF Thai transliteration to unicode"),
        ("to_utf8","encode to utf8 (default)"),
        ("unlextext","text-like unlexer"),
        ("unlexcode","code-like unlexer"),
@@ -777,7 +758,11 @@ stringOpOptions = [
        ("unchars","unlexer that puts no spaces between tokens"),
        ("unwords","unlexer that puts a single space between tokens (default)"),
        ("words","lexer that assumes tokens separated by spaces (default)")
-       ]
+       ] ++
+      concat [
+       [("from_" ++ p, "from unicode to GF " ++ n ++ " transliteration"),
+        ("to_"   ++ p, "from GF " ++ n ++ " transliteration to unicode")] |
+                                    (p,n) <- transliterationPrintNames]
 
 treeOpOptions pgf = [(op,expl) | (op,(expl,_)) <- allTreeOps pgf]
 
