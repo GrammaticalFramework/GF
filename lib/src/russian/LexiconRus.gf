@@ -130,7 +130,7 @@ lin
   go_V= regV imperfective second "хо" "жу" "ходил" "ходи" "ходить" ;
   gold_N = mkN "золото" ;
   good_A = mkA "хороший" "лучше" ; 
-  grammar_N = mkN "грамматикa";
+  grammar_N = mkN "грамматика";
   grass_N = mkN "трава";
   green_A = mkA "зелёный" ;
   guts_N = mkN "внутренность" ;
