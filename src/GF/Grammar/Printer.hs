@@ -69,7 +69,7 @@ ppModule q (mn, ModInfo mtype mstat opts exts with opens _ jments _) =
 
 ppOptions opts = 
   text "flags" $$
-  nest 2 (vcat [text option <+> equals <+> text (show value) <+> semi | (option,value) <- optionsGFO opts])
+  nest 2 (vcat [text option <+> equals <+> str value <+> semi | (option,value) <- optionsGFO opts])
 
 ppJudgement q (id, AbsCat pcont pconstrs) =
   text "cat" <+> ppIdent id <+>
@@ -143,7 +143,7 @@ ppTerm q d (Prod x a b)= if x == identW
 ppTerm q d (Table kt vt)=prec d 0 (ppTerm q 3 kt <+> text "=>" <+> ppTerm q 0 vt)
 ppTerm q d (Let l e)    = let (ls,e') = getLet e
                           in prec d 0 (text "let" <+> vcat (map (ppLocDef q) (l:ls)) $$ text "in" <+> ppTerm q 0 e')
-ppTerm q d (Example e s)=prec d 0 (text "in" <+> ppTerm q 5 e <+> text (show s))
+ppTerm q d (Example e s)=prec d 0 (text "in" <+> ppTerm q 5 e <+> str s)
 ppTerm q d (C e1 e2)    =prec d 1 (ppTerm q 2 e1 <+> text "++" <+> ppTerm q 1 e2)
 ppTerm q d (Glue e1 e2) =prec d 2 (ppTerm q 3 e1 <+> char '+'  <+> ppTerm q 2 e2)
 ppTerm q d (S x y)     = case x of
@@ -172,7 +172,7 @@ ppTerm q d (Vr id)     = ppIdent id
 ppTerm q d (Q  m id)   = ppQIdent q m id
 ppTerm q d (QC m id)   = ppQIdent q m id
 ppTerm q d (Sort id)   = ppIdent id
-ppTerm q d (K s)       = text (show s)
+ppTerm q d (K s)       = str s
 ppTerm q d (EInt n)    = integer n
 ppTerm q d (EFloat f)  = double f
 ppTerm q d (Meta _)    = char '?'
@@ -215,15 +215,17 @@ ppPatt q d (PRep p)     = prec d 1 (ppPatt q 2 p <> char '*')
 ppPatt q d (PAs f p)    = prec d 1 (ppIdent f <> char '@' <> ppPatt q 2 p)
 ppPatt q d (PNeg p)     = prec d 1 (char '-' <> ppPatt q 2 p)
 ppPatt q d (PChar)      = char '?'
-ppPatt q d (PChars s)   = brackets (text (show s))
+ppPatt q d (PChars s)   = brackets (str s)
 ppPatt q d (PMacro id)  = char '#' <> ppIdent id
 ppPatt q d (PM m id)    = char '#' <> ppIdent m <> char '.' <> ppIdent id
 ppPatt q d PW           = char '_'
 ppPatt q d (PV id)      = ppIdent id
 ppPatt q d (PInt n)     = integer n
 ppPatt q d (PFloat f)   = double f
-ppPatt q d (PString s)  = text (show s)
+ppPatt q d (PString s)  = str s
 ppPatt q d (PR xs)      = braces (hsep (punctuate semi [ppLabel l <+> equals <+> ppPatt q 0 e | (l,e) <- xs]))
+
+str s = doubleQuotes (text s)
 
 ppDecl q (id,typ)
   | id == identW = ppTerm q 4 typ
