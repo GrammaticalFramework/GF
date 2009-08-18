@@ -16,6 +16,7 @@ import GF.Infra.Option
 import GF.System.Readline
 
 import GF.Text.Coding
+import GF.Compile.Coding
 
 import PGF
 import PGF.Data
@@ -106,10 +107,10 @@ loop opts gfenv0 = do
                pOpts style q ("-qual"   :ws) = pOpts style            Qualified   ws
                pOpts style q             ws  = (style,q,unwords ws)
                
-               (style,q,s) = pOpts TermPrintDefault Qualified ws
+               (style,q,s) = pOpts TermPrintDefault Qualified (tail (words s0))
              case runP pExp (BS.pack s) of
                Left (_,msg) -> putStrLn msg
-               Right t      -> case checkTerm sgr t >>= computeTerm sgr of
+               Right t      -> case checkTerm sgr (codeTerm (decode gfenv) t) >>= computeTerm sgr of
                                  Ok  x -> putStrLn $ enc (showTerm style q x)
                                  Bad s -> putStrLn $ enc s
              loopNewCPU gfenv

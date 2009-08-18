@@ -19,15 +19,18 @@ codeSourceModule :: (String -> String) -> SourceModule -> SourceModule
 codeSourceModule co (id,mo) = (id,replaceJudgements mo (mapTree codj (jments mo)))
  where
     codj (c,info) = case info of
-      ResOper     pty pt  -> ResOper (fmap codt pty) (fmap codt pt) 
-      ResOverload es tyts -> ResOverload es [(codt ty,codt t) | (ty,t) <- tyts]
-      CncCat pty pt mpr   -> CncCat pty (fmap codt pt) (fmap codt mpr)
-      CncFun mty pt mpr   -> CncFun mty (fmap codt pt) (fmap codt mpr)
+      ResOper     pty pt  -> ResOper (fmap (codeTerm co) pty) (fmap (codeTerm co) pt) 
+      ResOverload es tyts -> ResOverload es [(codeTerm co ty,codeTerm co t) | (ty,t) <- tyts]
+      CncCat pty pt mpr   -> CncCat pty (fmap (codeTerm co) pt) (fmap (codeTerm co) mpr)
+      CncFun mty pt mpr   -> CncFun mty (fmap (codeTerm co) pt) (fmap (codeTerm co) mpr)
       _ -> info
-    codt t = case t of
+
+codeTerm :: (String -> String) -> Term -> Term
+codeTerm co t = case t of
       K s -> K (co s)
-      T ty cs -> T ty [(codp p,codt v) | (p,v) <- cs]
-      _ -> composSafeOp codt t
+      T ty cs -> T ty [(codp p,codeTerm co v) | (p,v) <- cs]
+      _ -> composSafeOp (codeTerm co) t
+  where
     codp p = case p of  --- really: composOpPatt
       PR rs -> PR [(l,codp p) | (l,p) <- rs]
       PString s -> PString (co s)
