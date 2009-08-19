@@ -1,4 +1,4 @@
---# -path=.:../abstract:../common:prelude
+--# -path=.:../abstract:../common:../prelude
 
 concrete LangTur of Lang = 
   GrammarTur,
