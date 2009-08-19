@@ -27,6 +27,9 @@ module PGF(
            showType, readType,
            categories, startCat,
 
+           -- * Functions
+           functions, functionType,
+
            -- * Expressions
            -- ** Identifiers
            CId, mkCId, prCId, wildCId,
@@ -65,7 +68,7 @@ import PGF.Generate
 import PGF.TypeCheck
 import PGF.Paraphrase
 import PGF.Macros
-import PGF.Data
+import PGF.Data hiding (functions)
 import PGF.Binary
 import PGF.Parsing.FCFG
 import qualified PGF.Parsing.FCFG.Incremental as Incremental
@@ -193,6 +196,12 @@ categories :: PGF -> [Type]
 -- definition is just for convenience.
 startCat   :: PGF -> Type
 
+-- | List of all functions defined in the abstract syntax
+functions :: PGF -> [CId]
+
+-- | The type of a given function
+functionType :: PGF -> CId -> Maybe Type
+
 -- | Complete the last word in the given string. If the input
 -- is empty or ends in whitespace, the last word is considred
 -- to be the empty string. This means that the completions
@@ -271,6 +280,13 @@ languageCode pgf lang =
 categories pgf = [DTyp [] c [EMeta i | (Hyp _ _,i) <- zip hs [0..]] | (c,hs) <- Map.toList (cats (abstract pgf))]
 
 startCat pgf = DTyp [] (lookStartCat pgf) []
+
+functions pgf = Map.keys (funs (abstract pgf))
+
+functionType pgf fun =
+  case Map.lookup fun (funs (abstract pgf)) of
+    Just (ty,_,_) -> Just ty
+    Nothing       -> Nothing
 
 complete pgf from typ input = 
          let (ws,prefix) = tokensAndPrefix input
