@@ -7,7 +7,11 @@ import Control.Monad
 main = do
   pgf <- readPGF "grammar.pgf"
   ts <- fmap (map (fromJust . readTree) . lines) $ readFile "trees.txt"
-  ss <- foldM (doTest pgf (mkCId "LangGer") (fromJust (readType "Phr"))) [] ts
+  mapM_ (\l -> doTestLang pgf l ts) (languages pgf)
+
+doTestLang pgf l ts = do
+  hPutStrLn stderr (show l)
+  ss <- foldM (doTest pgf l (fromJust (readType "Phr"))) [] ts
   mapM_ (hPutStrLn stderr . show) [(fromIntegral s / fromIntegral n)/1000000000 | (s,n) <- ss]
   putStrLn "Done."
   
