@@ -68,7 +68,7 @@ oper
   oper
 
   VP : Type = {
-    s : Verb ;
+    s      : Verb ;
     agr    : VPAgr ;                   -- dit/dite dep. on verb, subj, and clitic
     neg    : Polarity => (Str * Str) ; -- ne-pas
     clit1  : Str ;                     -- le/se
@@ -131,54 +131,29 @@ oper
     let
       typ = verb.vtyp ;
     in {
-    s = {s = verb.s ; vtyp = typ} ;
-    agr    = partAgr typ ;
-    neg    = negation ;
-{- ----e
-    clAcc  = case isVRefl typ of {
-          True => CRefl ;
-          _    => CNone
-          } ;
--}
-    clit1  = [] ;
-    clit2  = [] ;
-    clit3  = [] ;
-    comp   = \\a => [] ;
-    ext    = \\p => []
-    } ;
+      s = {s = verb.s ; vtyp = typ} ;
+      agr    = partAgr typ ;
+      neg    = negation ;
+      clit1  = [] ;
+      clit2  = [] ;
+      clit3  = [] ;
+      comp   = \\a => [] ;
+      ext    = \\p => []
+      } ;
 
   insertObject : Compl -> NounPhrase -> VP -> VP = \c,np,vp -> 
     let
       obj = np.s ! c.c ;
-
-{- ----e
-      vpacc = vp.clAcc ; 
-      vpdat = vp.clDat ;
-      vpagr = vp.agr ;
-      npa   = np.a ;
-      cpron = CPron npa.g npa.n npa.p ; 
-      noNewClit = <vpacc, vpdat, appCompl c np.s, vpagr> ;
-
-      cc : CAgr * CAgr * Str * VPAgr = case <np.hasClit,c.isDir> of {
-        <True,True> => case c.c of {
-          Acc => <cpron, vpdat, [], vpAgrClit npa> ;
-          _   => <vpacc, cpron, [], vpagr> -- must be dat
-          } ;
-        _   => noNewClit
-        } ;
--} ----e
-
     in {
       s   = vp.s ;
-      agr = vp.agr ; ----e
+      agr = case <np.hasClit, c.isDir, c.c> of {
+        <True,True,Acc> => vpAgrClit np.a ;
+        _   => vp.agr -- must be dat
+        } ;
       clit1 = vp.clit1 ++ obj.c1 ;
       clit2 = vp.clit2 ++ obj.c2 ;
       clit3 = vp.clit3 ;
       comp  = \\a => vp.comp ! a ++ c.s ++ obj.comp ;
-----e      agr   = cc.p4 ;
-----      clAcc = cc.p1 ;
-----      clDat = cc.p2 ;
-----e      comp  = \\a => cc.p3 ++ vp.comp ! a ;
       neg   = vp.neg ;
       ext   = vp.ext ;
     } ;
@@ -267,36 +242,62 @@ oper
 
   mkVPSlash : Compl -> VP -> VP ** {c2 : Compl} = \c,vp -> vp ** {c2 = c} ;
 
+  tmpVP : Type = {
+    s      : Verb ;
+    agr    : VPAgr ;                   -- dit/dite dep. on verb, subj, and clitic
+    neg    : Polarity => (Str * Str) ; -- ne-pas
+    clit1  : Str ;                     -- le/se
+    clit2  : Str ;                     -- lui
+    clit3  : Str ;                     -- y en
+    comp   : Agr => Str ;              -- content(e) ; à ma mère ; hier
+    ext    : Polarity => Str ;         -- que je dors / que je dorme
+    } ;
+
   mkClause : Str -> Bool -> Agr -> VP -> 
-    {s : Direct => RTense => Anteriority => Polarity => Mood => Str} =
-    \subj,hasClit,agr,vpr -> {
-      s = \\d,t,a,b,m => 
-        let 
-          tm = case t of {
-            RPast  => VImperf m ;   --# notpresent
-            RFut   => VFut ;        --# notpresent
-            RCond  => VCondit ;     --# notpresent
-            RPasse => VPasse ;      --# notpresent
-            RPres  => VPres m
-            } ;
-          vp    = useVP vpr ;
-          vps   = vp.s ! VPFinite tm a ;
-          verb  = vps.fin ! agr ;
-          inf   = vps.inf ! (appVPAgr vp.agr (aagr agr.g agr.n)) ; --- subtype bug
+      {s : Direct => RTense => Anteriority => Polarity => Mood => Str} =
+    \subj, hasClit, agr, vp -> {
+      s = \\d,te,a,b,m => 
+        let
           neg   = vp.neg ! b ;
---e          clpr  = pronArg agr.n agr.p vp.clAcc vp.clDat ;
---e          compl = clpr.p2 ++ vp.comp ! agr ++ vp.ext ! b
           clit  = vp.clit1 ++ vp.clit2 ++ vp.clit3 ;
-          compl = vp.comp ! agr ++ vp.ext ! b
+          compl = vp.comp ! agr ++ vp.ext ! b ;
+
+          gen = agr.g ;
+          num = agr.n ;
+          per = agr.p ;
+
+          verb = vp.s.s ;
+          vaux = auxVerb vp.s.vtyp ;
+
+          vagr = appVPAgr vp.agr (aagr gen num) ; --- subtype bug
+          part = verb ! VPart vagr.g vagr.n ;
+
+          vps : Str * Str = case <te,a> of {
+            <RPast,Simul> => <verb ! VFin (VImperf m) num per, []> ; --# notpresent
+            <RPast,Anter> => <vaux ! VFin (VImperf m) num per, part> ; --# notpresent
+            <RFut,Simul>  => <verb ! VFin (VFut) num per, []> ; --# notpresent
+            <RFut,Anter>  => <vaux ! VFin (VFut) num per, part> ; --# notpresent
+            <RCond,Simul> => <verb ! VFin (VCondit) num per, []> ; --# notpresent
+            <RCond,Anter> => <vaux ! VFin (VCondit) num per, part> ; --# notpresent
+            <RPasse,Simul> => <verb ! VFin (VPasse) num per, []> ; --# notpresent
+            <RPasse,Anter> => <vaux ! VFin (VPasse) num per, part> ; --# notpresent
+            <RPres,Anter> => <vaux ! VFin (VPres m) num per, part> ; --# notpresent
+            <RPres,Simul> => <verb ! VFin (VPres m) num per, []> 
+            } ;
+
+          fin = vps.p1 ;
+          inf = vps.p2 ;
         in
         case d of {
           DDir => 
-            subj ++ neg.p1 ++ clit ++ verb ++ neg.p2 ++ inf ;
+            subj ++ neg.p1 ++ clit ++ fin ++ neg.p2 ++ inf ;
           DInv => 
-            neg.p1 ++ clit ++ verb ++ preOrPost hasClit subj (neg.p2 ++ inf)
+            neg.p1 ++ clit ++ fin ++ preOrPost hasClit subj (neg.p2 ++ inf)
           }
         ++ compl
     } ;
+
+
 --- in French, pronouns should 
 --- have a "-" with possibly a special verb form with "t":
 --- "comment fera-t-il" vs. "comment fera Pierre"
