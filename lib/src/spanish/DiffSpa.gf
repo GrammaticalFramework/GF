@@ -100,7 +100,7 @@ instance DiffSpa of DiffRomance = open CommonRomance, PhonoSpa, BeschSpa, Prelud
 ----e            <Sg,Neg,P2> => (vp.s ! VPInfinit Simul clpr.p3).inf ! aag ;
 ----e            _ => (vp.s ! VPImperat).fin ! agr
 ----e            } ;
-          verb  = (vp.s ! VPImperat).fin ! agr ; ----e
+          verb  = vp.s.s ! vImperForm agr ;
           neg   = vp.neg ! pol ;
           compl = neg.p2 ++ clpr.p2 ++ vp.comp ! agr ++ vp.ext ! pol
         in

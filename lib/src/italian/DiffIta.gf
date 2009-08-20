@@ -114,8 +114,8 @@ instance DiffIta of DiffRomance = open CommonRomance, PhonoIta, BeschIta, Prelud
           agr   = aag ** {p = pe} ;
           clpr  = <vp.clit1 ++ vp.clit2,[],False> ; ----e pronArg agr.n agr.p vp.clAcc vp.clDat ;
           verb  = case <aag.n, pol,pe> of {
-            <Sg,Neg,P2> => (vp.s ! VPInfinit Simul clpr.p3).inf ! aag ;
-            _ => (vp.s ! VPImperat).fin ! agr
+            <Sg,Neg,P2> => vp.s.s ! VInfin clpr.p3 ; ----  ! aag ;
+            _ => vp.s.s ! vImperForm agr
             } ;
           neg   = vp.neg ! pol ;
           compl = neg.p2 ++ clpr.p2 ++ vp.comp ! agr ++ vp.ext ! pol

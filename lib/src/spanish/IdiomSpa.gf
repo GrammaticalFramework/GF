@@ -27,18 +27,18 @@ concrete IdiomSpa of Idiom = CatSpa **
         (mkClause [] True (agrP3 Masc Sg) (predV (verboV (hay_3 "haber")))).s ! DDir ! t ! a ! p ! Indic
       } ;
 
-    ProgrVP vpr = let vp = useVP vpr in
+    ProgrVP vp = 
       insertComplement 
         (\\agr => 
            let 
              clpr = <vp.clit1,vp.clit2> ; ----e pronArg agr.n agr.p vp.clAcc vp.clDat ;
              obj  = clpr.p2 ++ vp.comp ! agr ++ vp.ext ! Pos ---- pol
            in
-           (vp.s ! VPGerund).inf ! (aagr agr.g agr.n) ++ clpr.p1 ++ obj
+           vp.s.s ! VGer ++ clpr.p1 ++ obj
         )
         (predV (verboV (estar_2 "estar"))) ;
 
-    ImpPl1 vpr = let vp = useVP vpr in {s =
+    ImpPl1 vp = {s =
       (mkImperative False P1 vp).s ! Pos ! {n = Pl ; g = Masc} --- fem
       } ;
 
