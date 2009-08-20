@@ -31,19 +31,18 @@ concrete IdiomIta of Idiom = CatIta **
               (predV copula))).s ! DDir ! t ! a ! p ! Indic
       } ;
 
-    ProgrVP vpr =
-      let vp = useVP vpr in 
+    ProgrVP vp =
       insertComplement 
         (\\agr => 
            let 
              clpr = <[],[],False> ; ----e pronArg agr.n agr.p vp.clAcc vp.clDat ;
              obj  = clpr.p2 ++ vp.comp ! agr ++ vp.ext ! Pos ---- pol
            in
-           (vp.s ! VPGerund).inf ! (aagr agr.g agr.n) ++ clpr.p1 ++ obj
+           vp.s.s ! VGer ++ clpr.p1 ++ obj
         )
         (predV (essereV (verboV (stare_16 "stare")))) ;
 
-    ImpPl1 vpr = let vp = useVP vpr in {s =
+    ImpPl1 vp = {s =
       (mkImperative False P1 vp).s ! Pos ! {n = Pl ; g = Masc} --- fem
       } ;
 

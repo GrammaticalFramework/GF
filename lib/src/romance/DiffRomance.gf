@@ -49,7 +49,7 @@ interface DiffRomance = open CommonRomance, Prelude in {
 
 -- To render imperatives (with their clitics etc).
 
-  oper mkImperative : Bool -> Person -> VPC -> {s : Polarity => AAgr => Str} ;
+  oper mkImperative : Bool -> Person -> VP -> {s : Polarity => AAgr => Str} ;
 
 --2 Constants that must derivatively depend on language
 
@@ -102,6 +102,17 @@ param
 
 oper
   Verb = {s : VF => Str ; vtyp : VType} ;
+
+  VP : Type = {
+    s      : Verb ;
+    agr    : VPAgr ;                   -- dit/dite dep. on verb, subj, and clitic
+    neg    : Polarity => (Str * Str) ; -- ne-pas
+    clit1  : Str ;                     -- le/se
+    clit2  : Str ;                     -- lui
+    clit3  : Str ;                     -- y en
+    comp   : Agr => Str ;              -- content(e) ; à ma mère ; hier
+    ext    : Polarity => Str ;         -- que je dors / que je dorme
+    } ;
 
 --2 Workarounds, to be eliminated
 

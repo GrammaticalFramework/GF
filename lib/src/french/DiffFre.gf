@@ -122,7 +122,7 @@ instance DiffFre of DiffRomance = open CommonRomance, PhonoFre, Prelude in {
         let 
           num   = if_then_else Number b Pl aag.n ;
           agr   = {g = aag.g ; n = num ; p = p} ;
-          verb  = (vp.s ! VPImperat).fin ! agr ;
+          verb  = vp.s.s ! vImperForm agr ;
           neg   = vp.neg ! pol ;
           hascl = False ; ----e(pronArg agr.n agr.p vp.clAcc vp.clDat).p3 ;
           clpr  = <[],[]> ; ----e pronArgGen pol agr.n agr.p vp.clAcc vp.clDat ;

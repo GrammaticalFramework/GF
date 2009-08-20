@@ -10,14 +10,14 @@ concrete IdiomCat of Idiom = CatCat **
     ImpersCl vp = mkClause [] True (agrP3 Masc Sg) vp ;
 
 
-    ProgrVP vpr = let vp = useVP vpr in 
+    ProgrVP vp = 
       insertComplement 
         (\\agr => 
            let 
              clpr = <vp.clit1,vp.clit2> ; ----e pronArg agr.n agr.p vp.clAcc vp.clDat ;
              obj  = clpr.p2 ++ vp.comp ! agr ++ vp.ext ! Pos ---- pol
            in
-           (vp.s ! VPGerund).inf ! (aagr agr.g agr.n) ++ clpr.p1 ++ obj
+           vp.s.s ! VGer ++ clpr.p1 ++ obj
         )
         (predV (verbV (estar_54 "estar"))) ;
 
@@ -37,7 +37,7 @@ concrete IdiomCat of Idiom = CatCat **
           .s ! DDir ! t ! a ! p ! Indic
       } ;
 
-    ImpPl1 vpr = let vp = useVP vpr in {s =
+    ImpPl1 vp = {s =
       (mkImperative False P1 vp).s ! Pos ! {n = Pl ; g = Masc} --- fem
       } ;
 

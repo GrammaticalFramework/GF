@@ -12,7 +12,6 @@ oper
   nominative : Case = Nom ;
   accusative : Case = Acc ;
 
---e  Pronoun = {s : NPForm => Str ; a : Agr ; hasClit : Bool} ;
   NounPhrase : Type = {
     s : Case => {c1,c2,comp,ton : Str} ;
     a : Agr ;
@@ -27,7 +26,6 @@ oper
     a = np.a ;
     hasClit = False
     } ;
---e
 
   Compl : Type = {s : Str ; c : Case ; isDir : Bool} ;
 
@@ -35,7 +33,6 @@ oper
   complGen : Compl = {s = [] ; c = genitive ; isDir = False} ;
   complDat : Compl = {s = [] ; c = dative ; isDir = True} ;
 
---e
   pn2np : {s : Str ; g : Gender} -> NounPhrase = \pn -> heavyNP {
     s = \\c => prepCase c ++ pn.s ; 
     a = agrP3 pn.g Sg
@@ -62,70 +59,9 @@ oper
 
   appCompl : Compl -> NounPhrase -> Str = \comp,np ->
     comp.s ++ (np.s ! comp.c).ton ;
---e  appCompl : Compl -> (NPForm => Str) -> Str = \comp,np ->
---e    comp.s ++ np ! Ton comp.c ;
 
   oper
 
-  VP : Type = {
-    s      : Verb ;
-    agr    : VPAgr ;                   -- dit/dite dep. on verb, subj, and clitic
-    neg    : Polarity => (Str * Str) ; -- ne-pas
-    clit1  : Str ;                     -- le/se
-    clit2  : Str ;                     -- lui
-    clit3  : Str ;                     -- y en
-    comp   : Agr => Str ;              -- content(e) ; à ma mère ; hier
-    ext    : Polarity => Str ;         -- que je dors / que je dorme
-    } ;
-
-
-  useVP : VP -> VPC = \vp -> 
-    let
-      verb = vp.s ;
-      vfin  : TMood -> Agr -> Str = \tm,a -> verb.s ! VFin tm a.n a.p ;
-      vpart : AAgr -> Str = \a -> verb.s ! VPart a.g a.n ;
-      vinf  : Bool -> Str = \b -> verb.s ! VInfin b ;
-      vger  = verb.s ! VGer ;
-
-      typ = verb.vtyp ;
-      aux = auxVerb typ ;
-
-      habet  : TMood -> Agr -> Str = \tm,a -> aux ! VFin tm a.n a.p ;
-      habere : Str = aux ! VInfin False ;
-
-      vimp : Agr -> Str = \a -> case <a.n,a.p> of {
-        <Pl,P1> => verb.s ! VImper PlP1 ;
-        <_, P3> => verb.s ! VFin (VPres Conjunct) a.n P3 ;
-        <Sg,_>  => verb.s ! VImper SgP2 ;
-        <Pl,_>  => verb.s ! VImper PlP2
-        } ;
-
-      vf : (Agr -> Str) -> (AAgr -> Str) -> {
-          fin : Agr => Str ; 
-          inf : AAgr => Str
-        } = 
-        \fin,inf -> {
-          fin = \\a => fin a ; 
-          inf = \\a => inf a
-        } ;
-
-    in {
-    s = table {
-      VPFinite t Simul => vf (vfin t)   (\_ -> []) ;
-      VPFinite t Anter => vf (habet t)  vpart ;   --# notpresent
-      VPInfinit Anter b=> vf (\_ -> []) (\a -> habere ++ vpart a) ;  --# notpresent
-      VPImperat        => vf vimp       (\_ -> []) ;
-      VPGerund         => vf (\_ -> []) (\_ -> vger) ;
-      VPInfinit Simul b=> vf (\_ -> []) (\_ -> vinf b)
-      } ;
-    agr    = vp.agr ;
-    neg    = vp.neg ;
-    clit1  = vp.clit1 ;
-    clit2  = vp.clit2 ;
-    clit3  = vp.clit3 ;
-    comp   = vp.comp ;
-    ext    = vp.ext
-    } ;
 
   predV : Verb -> VP = \verb -> 
     let
@@ -184,10 +120,9 @@ oper
     ext   = vp.ext ;
     } ;
 
-----e
   insertRefl : VP -> VP = \vp -> { 
     s     = {s = vp.s.s ; vtyp = vRefl} ;
-    agr   = vp.agr ;
+    agr   = VPAgrSubj ;
     clit1 = vp.clit1 ; 
     clit2 = vp.clit2 ; 
     clit3 = vp.clit3 ; 
@@ -259,12 +194,18 @@ oper
       s = \\d,te,a,b,m => 
         let
           neg   = vp.neg ! b ;
-          clit  = vp.clit1 ++ vp.clit2 ++ vp.clit3 ;
           compl = vp.comp ! agr ++ vp.ext ! b ;
 
           gen = agr.g ;
           num = agr.n ;
           per = agr.p ;
+
+          vtyp  = vp.s.vtyp ;
+          refl  = case vtyp of {
+            VRefl => reflPron num per Acc ; ---- case ?
+            _ => [] 
+            } ;
+          clit  = refl ++ vp.clit1 ++ vp.clit2 ++ vp.clit3 ; ---- refl first?
 
           verb = vp.s.s ;
           vaux = auxVerb vp.s.vtyp ;
@@ -297,19 +238,17 @@ oper
         ++ compl
     } ;
 
-
 --- in French, pronouns should 
 --- have a "-" with possibly a special verb form with "t":
 --- "comment fera-t-il" vs. "comment fera Pierre"
 
-  infVP : VP -> Agr -> Str = \vpr,agr ->
+  infVP : VP -> Agr -> Str = \vp,agr ->
       let
-        vp   = useVP vpr ;
 ----e        clpr = pronArg agr.n agr.p vp.clAcc vp.clDat ;
 ----e        iform = infForm agr.n agr.p vp.clAcc vp.clDat ;
         clpr = <vp.clit1,vp.clit2, False> ; ----e
         iform = False ; ----e
-        inf  = (vp.s ! VPInfinit Simul iform).inf ! (aagr agr.g agr.n) ;
+        inf  = vp.s.s ! VInfin False ; ---- ! (aagr agr.g agr.n) ;
         neg  = vp.neg ! Pos ; --- Neg not in API
         obj  = neg.p2 ++ clpr.p2 ++ vp.comp ! agr ++ vp.ext ! Pos ---- pol
       in

@@ -155,6 +155,15 @@ oper
     _       => VInfin False
     } ; 
 
+   vImperForm : Agr -> VF = \a -> case <a.n,a.p> of {
+        <Pl,P1> => VImper PlP1 ;
+        <_, P3> => VFin (VPres Conjunct) a.n P3 ;
+        <Sg,_>  => VImper SgP2 ;
+        <Pl,_>  => VImper PlP2
+        } ;
+
+
+
 ---
 
   oper

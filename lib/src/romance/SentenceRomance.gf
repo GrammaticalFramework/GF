@@ -8,7 +8,7 @@ incomplete concrete SentenceRomance of Sentence =
 
     PredSCVP sc vp = mkClause sc.s False (agrP3 Masc Sg) vp ;
 
-    ImpVP vpr = let vp = useVP vpr in {
+    ImpVP vp = {
       s = \\p,i,g => case i of {
         ImpF n b => (mkImperative b P2 vp).s ! p ! (aagr g n)
         }
