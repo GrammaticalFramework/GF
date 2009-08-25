@@ -160,6 +160,7 @@ loop opts gfenv0 = do
                                 'c':'p':c -> case reads c of
                                                [(cp,"")] -> setConsoleCP cp >> setConsoleOutputCP cp
                                                _         -> return ()
+                                "utf8"    -> setConsoleCP 65001 >> setConsoleOutputCP 65001
                                 _         -> return ()
 #endif
                               loopNewCPU $ gfenv {coding = cod}
