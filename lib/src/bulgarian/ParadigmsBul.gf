@@ -1,3 +1,5 @@
+--# -path=.:../abstract:../common:../prelude
+
 resource ParadigmsBul = MorphoFunsBul ** open
   Predef,
   Prelude,
