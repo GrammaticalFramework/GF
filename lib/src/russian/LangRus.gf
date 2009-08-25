@@ -1,4 +1,4 @@
---# -path=.:../abstract:../common:src/prelude
+--# -path=.:../abstract:../common:../prelude
 
 concrete LangRus of Lang = 
   GrammarRus,

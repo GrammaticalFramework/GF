@@ -1,4 +1,4 @@
---# -path=.:../scandinavian:../abstract:../common:prelude
+--# -path=.:../scandinavian:../abstract:../common:../prelude
 
 concrete LangSwe of Lang = 
   GrammarSwe,
