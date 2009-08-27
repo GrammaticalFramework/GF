@@ -38,6 +38,7 @@ allTransliterations = Map.fromAscList [
   ("devanagari", transDevanagari),
   ("greek", transGreek),
   ("hebrew", transHebrew),
+  ("persian", transPersian),
   ("telugu", transTelugu),
   ("thai", transThai)
   ----  "urdu", transUrdu
@@ -132,6 +133,19 @@ transArabic = mkTransliteration "Arabic" allTrans allCodes where
     "i  v2 o  a: V+ V- i: a+"                             -- 0650 - 0657 
   allCodes = [0x0621..0x062f] ++ [0x0630..0x063a] ++ 
              [0x0641..0x064f] ++ [0x0650..0x0657]
+
+transPersian :: Transliteration
+transPersian = (mkTransliteration "Persian/Farsi" allTrans allCodes)
+    {invisible_chars = ["a","u","i"]} where
+  allTrans = words $
+    "   V  A: A? w? A- y? A  b  t. t  t-  j  H  K  d " ++  -- 0621 - 062f
+    "W  r  z  s  C  S  D  T  Z  c  G "                 ++  -- 0630 - 063a
+    "   f  q  k  l  m  n  h  v  y. y a. u. i. a  u "   ++  -- 0641 - 064f
+    "i  v2 o  a: V+ V- i: a+ " ++                          -- 0650 - 0657 
+    "p  c^ J  g "
+  allCodes = [0x0621..0x062f] ++ [0x0630..0x063a] ++ 
+             [0x0641..0x064f] ++ [0x0650..0x0657] ++ 
+             [0x067e,0x0686,0x0698,0x06af]
 
 transHebrew :: Transliteration
 transHebrew = mkTransliteration "unvocalized Hebrew" allTrans allCodes where
