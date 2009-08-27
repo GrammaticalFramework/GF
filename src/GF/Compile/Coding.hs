@@ -29,6 +29,7 @@ codeTerm :: (String -> String) -> Term -> Term
 codeTerm co t = case t of
       K s -> K (co s)
       T ty cs -> T ty [(codp p,codeTerm co v) | (p,v) <- cs]
+      EPatt p -> EPatt (codp p)
       _ -> composSafeOp (codeTerm co) t
   where
     codp p = case p of  --- really: composOpPatt
