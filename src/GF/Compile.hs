@@ -101,7 +101,7 @@ compileSourceGrammar opts gr@(MGrammar ms) = do
 -- to output an intermediate stage
 intermOut :: Options -> Dump -> Doc -> IOE ()
 intermOut opts d doc
-  | dump opts d = ioeIO (hPutStrLn stderr (render (text "\n\n--#" <+> text (show d) $$ doc)))
+  | dump opts d = ioeIO (hPutStrLn stderr (encodeUTF8 (render (text "\n\n--#" <+> text (show d) $$ doc))))
   | otherwise   = return ()
 
 -- | the environment
