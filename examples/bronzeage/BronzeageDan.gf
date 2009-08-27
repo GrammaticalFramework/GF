@@ -1,7 +1,6 @@
---# -path=.:present:prelude
+--# -path=.:present
 
-concrete BronzeageDan of Bronzeage = CatDan, SwadeshDan ** BronzeageI with
-  (Lang = LangDan) ** {
-  flags language = da_DK;
+concrete BronzeageDan of Bronzeage = SwadeshDan **  BronzeageI with
+  (Syntax = SyntaxDan) ** open ResDan in {
+  flags language = sv_DK;
 }
-
