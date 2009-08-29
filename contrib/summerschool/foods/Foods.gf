@@ -1,3 +1,5 @@
+-- (c) 2009 Aarne Ranta under LGPL
+
 abstract Foods = {
   flags startcat = Comment ;
   cat
