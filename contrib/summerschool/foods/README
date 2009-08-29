@@ -1,0 +1,8 @@
+Foods grammars from GF Summer School 2009. To build:
+
+  $ gf -make -s Foods???.gf                        -- to create Foods.pgf
+
+  $ mv Foods.pgf ~/GF/src/server/gwt/www/grammars/ -- to use in web applications
+
+
+
