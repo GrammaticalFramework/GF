@@ -13,7 +13,7 @@ lin
     } ;
   almost_AdA, almost_AdN = ss (variants {"quasi"; "gairebé"}) ;
   always_AdV = ss "sempre" ;
-  although_Subj = ss "benché" ** {m = Conjunct} ;
+  although_Subj = ss ["encara que"] ** {m = Conjunct} ;
   and_Conj = {s1 = [] ; s2 = etConj.s ; n = Pl} ;
   because_Subj = ss "perque" ** {m = Indic} ;
   before_Prep = {s = "abans" ; c = MorphoCat.genitive ; isDir = False} ;
@@ -29,7 +29,7 @@ lin
   either7or_DConj = {s1,s2 = "o" ; n = Sg} ;
   everybody_NP = makeNP ["tothom"] Masc Sg ;
   every_Det = {s,sp = \\_,_ => "cada" ; n = Sg ; s2 = []} ;
-  everything_NP = pn2np (mkPN ["tot"] Masc) ;
+  everything_NP = pn2np (mkPN "tot" Masc) ;
   everywhere_Adv = ss ["a tot arreu"] ;
   few_Det = {
     s,sp = \\g,c => prepCase c ++ genForms "pocs" "poques" ! g ; n = Pl ; s2 = []} ;
@@ -38,8 +38,7 @@ lin
   from_Prep = complGen ; ---
   he_Pron = 
     mkPronoun 
-     "ell" "lo" "el" "ell"
-     ["el seu"] ["la seva"] ["els seus"] ["les seves"]
+     "ell" "el" "li" "ell" ("son"|["el seu"]) ("sa"|["la seva"]) "ses"
       Masc Sg P3 ;
   here_Adv = mkAdv "aquí" ;		-- acÌ
   here7to_Adv = mkAdv ["cap aquí"] ;
@@ -52,14 +51,14 @@ lin
   i_Pron = 
     mkPronoun
       "jo" "em" "em" "mi"
-      ["el meu"] ["la meva"] ["els meus"] ["les meves"]
+      ("mon"|["el meu"]) ("ma"|["la meva"]) "mes"
       Fem Sg P1 ;
   in_Prep = mkPrep "en" ;
-  it_Pron = 
-	mkPronoun 
-     "ell" "lo" "el" "ell"
-     ["el seu"] ["la seva"] ["els seus"] ["les seves"]
+  it_Pron = mkPronoun 
+     "ell" "ho" "li" "ell"
+     ["el seu"] ["la seva"] ["els seus"]
      Masc Sg P3 ;
+
   less_CAdv = X.mkCAdv "menys" conjThan ; ----
   many_Det = {
     s,sp = \\g,c => prepCase c ++ genForms "molts" "moltes" ! g ; n = Pl ; s2 = []} ;
@@ -80,8 +79,8 @@ lin
   quite_Adv = ss "bastant" ;
   she_Pron = 
     mkPronoun
-      "ella" "la" "la" "ella"
-      ["el seu"] ["la seva"] ["els seus"] ["les seves"]
+      "ella" "la" "li" "ella"
+      ("son"|["el seu"]) ("sa"|["la seva"]) "ses"
       Fem Sg P3 ;
   so_AdA = ss "tan" ;
   somebody_NP = pn2np (mkPN ["alg˙"] Masc) ;
@@ -107,7 +106,7 @@ lin
   therefore_PConj = ss ["per tant"] ;
   they_Pron = mkPronoun
     "elles" "les" "les" "elles"
-    ["el seu"] ["la seva"] ["llurs"] ["llurs"]
+    "llur" "llur" "llurs"
     Fem Pl P3 ;
 
   this_Quant =
@@ -128,8 +127,8 @@ lin
   want_VV = mkVV (verbV (voler_120 "voler")) ;
   we_Pron = 
     mkPronoun 
-      "nosaltres" "nos" "nos" "nosaltres"
-      ["el nostre"] ["la nostra"] ["els nostres"] ["les nostres"]
+      "nosaltres" "ens" "ens" "nosaltres"
+      ["el nostre"] ["la nostra"] ["els nostres"]
       Fem Pl P1 ;
    whatSg_IP = {s = \\c => prepCase c ++ ["què"] ; a = aagr Masc Sg} ;
    whatPl_IP = {s = \\c => prepCase c ++ ["què"] ; a = aagr Masc Pl} ; ---
@@ -149,21 +148,46 @@ lin
   yes_Utt = ss "sí" ;  
   youSg_Pron = mkPronoun 
     "tu" "et" "et" "tu"
-    ["el teu"] ["la teva"] ["els teus"] ["les teves"]
+    ("ton"|["el teu"]) ("ta"|["la teva"]) ("tes"|["les teves"])
     Fem Sg P2 ;
   youPl_Pron =
     mkPronoun
       "vosaltres" "us" "us" "vosaltres"
-      ["el vostre"] ["la vostra"] ["els vostres"] ["les vostres"]
+      ["el vostre"] ["la vostra"] ["els vostres"]
       Fem Pl P2 ;
-  youPol_Pron =
-    mkPronoun
-      "vosté" "li" "li" "vosté"
+  youPol_Pron = he_Pron ;
+{-    mkPronoun
+      "vosté" "el" "li" "vosté"
       ["el seu"] ["la seva"] ["els seus"] ["les seves"]
       Fem Pl P2 ;
+-}	  
+   not_Predet = {s = \\a,c => prepCase c ++ "no pas" ; c = Nom} ;
    have_V2 = dirV2 (verbV (tenir_108 "tenir")) ;
+   
 oper
   etConj : {s : Str ; n : MorphoCat.Number} = {s = "i" } ** {n = Pl} ;
+  
+lin
+  if_then_Conj = {s1 = "si" ; s2 = "llavors" ; n = Sg ; lock_Conj = <>} ;
+  
+  no_Quant =
+	let
+	capS : Str = "cap" ;
+	cap : ParadigmsCat.Number => ParadigmsCat.Gender => Case => Str = table {
+      Sg => \\g,c => prepCase c ++ genForms capS capS ! g ;
+      Pl => \\g,c => prepCase c ++ genForms capS capS ! g
+      }
+    in {
+      s = \\_ => cap ;
+      sp = cap ;
+      s2 = []
+    } ;
+  nobody_NP = pn2np (mkPN "ningú") ;
+  nothing_NP = pn2np (mkPN "res") ;
+  at_least_AdN = X.mkAdN "almenys" ;
+  at_most_AdN = X.mkAdN "com a màxim" ;
+  except_Prep = mkPrep "excepte" ;
+  as_CAdv = X.mkCAdv "tan" "com" ;
 
   lin language_title_Utt = ss "català" ;
 
