@@ -10,6 +10,7 @@ oper
     regFN : Str -> N = \s -> femN (regN s) ;
     regMN : Str -> N = \s -> regN s ; 
 	irregMN : Str -> Str -> N = \pa,pans ->  M.mkNounIrreg pa pans masculine ;
+	saberV : V = verbV (saber_99 "saber") ;
 
 lin
    airplane_N = regMN "avió" ;  
@@ -106,7 +107,8 @@ lin
    industry_N = regFN "indústria" ;
    iron_N = regMN "ferro" ;
    king_N = regMN "rei" ;
-   know_V2 = dirV2 (verbV (saber_99 "saber")) ;
+   know_V2 = dirV2 saberV ;
+   know_VS = mkVS saberV;
    lake_N = regMN "llac" ;
    lamp_N = regFN "làmpada" ;
    learn_V2 = dirV2 (verbV (aprendre_6 "aprendre")) ;

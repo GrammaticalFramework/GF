@@ -6,11 +6,11 @@ concrete ExtraCat of ExtraCatAbs = ExtraRomanceCat **
 --      "yo" "me" "me" "mí"
 --      "mi" "mi" "mis" "mis"
 --      Fem Sg P1 ;
---    these8fem_NP = mkNP ["estas"] Fem Pl ;
---    they8fem_Pron = mkPronoun
---      "ellas" "las" "les" "ellas"
---      "su" "su" "sus" "sus"
---      Fem Pl P3 ;
+      these8fem_NP = mkNP "aquestes" Fem Pl ;
+      they8fem_Pron = mkPronoun
+      "elles" "les" "les" "elles"
+      "llur" "llur" "llurs"
+      Fem Pl P3 ;
 --    this8fem_NP = pn2np (mkPN ["esta"] Fem) ;
 --    those8fem_NP = mkNP ["esas"] Fem Pl ;
 

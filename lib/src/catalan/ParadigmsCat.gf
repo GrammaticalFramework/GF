@@ -32,7 +32,9 @@ resource ParadigmsCat =
     BeschCat,
     CatCat in {
 
-  flags optimize=all ;
+flags
+	optimize=all ;
+	-- coding = utf8 ;
 
 --2 Parameters 
 --
@@ -158,7 +160,7 @@ oper
 -- them to prefix ones (i.e. ones placed before the noun in
 -- modification, as in "gran casa"), the following function is
 -- provided.
--- JS: What about vi bó -> bon vi ?
+-- JS: What about vi bÛ -> bon vi ?
 
   prefixA : A -> A ;
 
@@ -191,7 +193,7 @@ oper
 
   mkV : overload {
 
--- Regular verbs are ones inflected like "cantar", "perdre", "témer", "perdre", "servir", "dormir"
+-- Regular verbs are ones inflected like "cantar", "perdre", "tÈmer", "perdre", "servir", "dormir"
 -- The regular verb function works for models I, IIa, IIb and IIa
 -- The module $BeschCat$ gives the complete set of "Bescherelle" conjugations.
 
@@ -306,7 +308,7 @@ oper
   aN2 n = mkN2 n dative ;
   mkN3 = \n,p,q -> n ** {lock_N3 = <> ; c2 = p ; c3 = q} ;
 
-  mk2PN x g = {s = x ; g = g} ** {lock_PN = <>} ;
+  mk2PN x g = {s = x ; g = g; isPersonal = True ; lock_PN = <>} ;
   regPN x = mk2PN x g where {
     g = case last x of {
       "a" => feminine ;
@@ -327,7 +329,7 @@ oper
    {s = table {Posit => a.s ! Posit ; _ => b.s ! Posit} ; 
     isPre = a.isPre ; lock_A = <>} ;
   compADeg a = 
-    {s = table {Posit => a.s ! Posit ; _ => \\f => "más" ++ a.s ! Posit ! f} ; 
+    {s = table {Posit => a.s ! Posit ; _ => \\f => "més" ++ a.s ! Posit ! f} ; 
      isPre = a.isPre ;
      lock_A = <>} ;
   regADeg a = compADeg (regA a) ;
@@ -336,7 +338,7 @@ oper
   mkAdV x = ss x ** {lock_AdV = <>} ;
   mkAdA x = ss x ** {lock_AdA = <>} ;
 
-  regV x = -- cantar, perdre, témer, dormir, (servir)
+  regV x = -- cantar, perdre, tÈmer, dormir, (servir)
     let 
       verb = case (Predef.dp 2 x) of {
         "re" =>  perdre_83 x ;
@@ -354,7 +356,7 @@ oper
 
   special_ppV ve pa = {
     s = table {
-      VPart g n => (adjFort pa).s ! AF g n ;
+      VPart g n => (regA pa).s ! Posit ! AF g n ;
       p => ve.s ! p
       } ;
     lock_V = <> ;
