@@ -25,7 +25,7 @@ concrete CatBul of Cat = CommonX - [AAnter,ASimul,IAdv,CAdv] ** open ResBul, Pre
     QCl = {s : ResBul.Tense => Anteriority => Polarity => QForm => Str} ;
     IP = {s : Role => QForm => Str; gn : GenNum} ;
     IComp = {s : QForm => Str} ;
-    IDet = {s : DGender => QForm => Str; n : Number ; nonEmpty : Bool} ;
+    IDet = {s : AGender => QForm => Str; n : Number ; nonEmpty : Bool} ;
     IQuant = {s : GenNum => QForm => Str} ;
 
 -- Relative
@@ -51,14 +51,14 @@ concrete CatBul of Cat = CommonX - [AAnter,ASimul,IAdv,CAdv] ** open ResBul, Pre
 
 -- Noun
 
-    CN = {s : NForm => Str; g : DGender} ;
+    CN = {s : NForm => Str; g : AGender} ;
     NP = {s : Role => Str; a : Agr} ;
     Pron = {s : Role => Str; gen : AForm => Str; a : Agr} ;
-    Det = {s : Bool => DGender => Role => Str; n : Number; countable : Bool; spec : Species} ;
+    Det = {s : Bool => AGender => Role => Str; n : Number; countable : Bool; spec : Species} ;
     Predet = {s : GenNum => Str} ;
     Ord = {s : AForm => Str} ;
-    Num = {s : DGenderSpecies => Str; n : Number; nonEmpty : Bool} ;
-    Card = {s : DGenderSpecies => Str; n : Number} ;
+    Num = {s : CardForm => Str; n : Number; nonEmpty : Bool} ;
+    Card = {s : CardForm => Str; n : Number} ;
     Quant = {s : Bool => AForm => Str; nonEmpty : Bool; spec : Species} ;
 
 -- Numeral
@@ -83,9 +83,9 @@ concrete CatBul of Cat = CommonX - [AAnter,ASimul,IAdv,CAdv] ** open ResBul, Pre
     A = {s : AForm => Str; adv : Str} ;
     A2 = {s : AForm => Str; adv : Str; c2 : Str} ;
     
-    N = {s : NForm => Str; g : DGender} ;
-    N2 = {s : NForm => Str; g : DGender} ** {c2 : Preposition} ;
-    N3 = {s : NForm => Str; g : DGender} ** {c2,c3 : Preposition} ;
+    N = {s : NForm => Str; g : AGender} ;
+    N2 = {s : NForm => Str; g : AGender} ** {c2 : Preposition} ;
+    N3 = {s : NForm => Str; g : AGender} ** {c2,c3 : Preposition} ;
     PN = {s : Str; g : Gender} ;
 
 

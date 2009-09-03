@@ -21,9 +21,9 @@ resource MorphoBul = ResBul ** open
 oper
 --2 Determiners
 
-  mkDeterminerSg : Str -> Str -> Str -> {s : Bool => DGender => Role => Str; n : Number; countable : Bool ; spec : Species} = \vseki,vsiaka,vsiako ->
-    {s = \\_,g,_ => table DGender [vseki;vseki;vsiaka;vsiako] ! g; n = Sg; countable = False; spec = Indef} ;
-  mkDeterminerPl : Str -> {s : Bool => DGender => Role => Str ; n : Number; countable : Bool ; spec : Species} = \vsicki ->
+  mkDeterminerSg : Str -> Str -> Str -> {s : Bool => AGender => Role => Str; n : Number; countable : Bool ; spec : Species} = \vseki,vsiaka,vsiako ->
+    {s = \\_,g,_ => table AGender [vseki;vseki;vsiaka;vsiako] ! g; n = Sg; countable = False; spec = Indef} ;
+  mkDeterminerPl : Str -> {s : Bool => AGender => Role => Str ; n : Number; countable : Bool ; spec : Species} = \vsicki ->
     {s = \\_,_,_ => vsicki; sp = \\_,_ => vsicki; n = Pl; countable = False; spec = Indef} ;
 
   mkQuant : Str -> Str -> Str -> Str -> {s : Bool => AForm => Str; nonEmpty : Bool; spec : Species} = \tozi,tazi,towa,tezi -> 
@@ -105,7 +105,7 @@ oper
 
 --2 Nouns
 
-  mkNoun : Str -> Str -> Str -> Str -> DGender -> N = \sg,pl,count,voc,g -> {
+  mkNoun : Str -> Str -> Str -> Str -> AGender -> N = \sg,pl,count,voc,g -> {
     s = table {
           NF Sg Indef => sg ;
           NF Sg Def   => case sg of {
@@ -124,7 +124,7 @@ oper
                              |"зет"|"лакът"|"нокът")
                                 =>sg +"я" ;
                            _    =>case g of {
-                                    DFem => sg+"та" ;
+                                    AFem => sg+"та" ;
                                     _    => sg+"а"
                                   }
                          } ;
@@ -152,7 +152,7 @@ oper
                              |"зет"|"лакът"|"нокът")
                                 =>sg+"ят" ;
                            _    =>case g of {
-                                    DFem => sg+"та" ;
+                                    AFem => sg+"та" ;
                                     _    => sg+"ът"
                                   }
                          } ;

@@ -38,8 +38,8 @@ concrete ExtraBul of ExtraBulAbs = CatBul **
     youPol8neut_Pron = mkPron "вие" "вас" "ви" "ваш" "вашия" "вашият" "ваша" "вашата" "ваше" "вашето" "ваши" "вашите" (GSg Neut) P2 ;
 
     onePl_Num = {s = table {
-                       DMascIndef | DMascPersonalIndef | DFemIndef | DNeutIndef                             => "едни" ;
-                       DMascDef | DMascDefNom | DMascPersonalDef | DMascPersonalDefNom | DFemDef | DNeutDef => "едните"
+                       CFMasc Indef _ | CFFem Indef | CFNeut Indef            => "едни" ;
+                       CFMasc Def _ | CFMascDefNom _ | CFFem Def | CFNeut Def => "едните"
                      } ;
                  n = Pl;
                  nonEmpty = True

@@ -22,16 +22,13 @@ lin n9 = mkDigit "девет"  "деветима" "девет"  "девети"   "деветдесет" "деветстот
 lin pot01 =
       {s = table {
              unit    => table {
-                          NCard DMascIndef          => "един" ;
-                          NCard DMascDef            => "единия" ;
-                          NCard DMascDefNom         => "единият" ;
-                          NCard DMascPersonalIndef  => "един" ;
-                          NCard DMascPersonalDef    => "единия" ;
-                          NCard DMascPersonalDefNom => "единият" ;
-                          NCard DFemIndef           => "една" ;
-                          NCard DFemDef             => "едната" ;
-                          NCard DNeutIndef          => "едно" ;
-                          NCard DNeutDef            => "едното" ;
+                          NCard (CFMasc Indef _)    => "един" ;
+                          NCard (CFMasc Def _)      => "единия" ;
+                          NCard (CFMascDefNom _)    => "единият" ;
+                          NCard (CFFem  Indef)      => "една" ;
+                          NCard (CFFem  Def)        => "едната" ;
+                          NCard (CFNeut Indef)      => "едно" ;
+                          NCard (CFNeut Def)        => "едното" ;
                           NOrd  aform               => case aform of {
                                                          ASg Masc Indef => "първи" ;
                                                          ASg Masc Def   => "първия" ;
@@ -61,12 +58,12 @@ lin pot1to19 d = {s = \\c,nf => d.s ! teen nf ! c; n = Pl; i = True} ;
 lin pot0as1 n = {s = \\c,nf => n.s ! unit ! c; n = n.n; i = True} ;
 lin pot1 d = {s = \\c,nf => d.s ! ten nf ! c; n = Pl; i = True} ;
 lin pot1plus d e = {
-   s = \\c,nf => d.s ! ten nf ! NCard DMascIndef ++ "и" ++ e.s ! unit ! c ; n = Pl; i = False} ;
+   s = \\c,nf => d.s ! ten nf ! NCard (CFMasc Indef NonHuman) ++ "и" ++ e.s ! unit ! c ; n = Pl; i = False} ;
 
 lin pot1as2 n = n ;
 lin pot2 n = {s = \\c,nf => n.s ! hundred ! c; n = Pl; i = True} ;
 lin pot2plus d e = {
-  s = \\c,nf => d.s ! hundred ! NCard DMascIndef ++ case e.i of {False => []; True  => "и"} ++ e.s ! c ! nf ;
+  s = \\c,nf => d.s ! hundred ! NCard (CFMasc Indef NonHuman) ++ case e.i of {False => []; True  => "и"} ++ e.s ! c ! nf ;
   n = Pl ;
   i = False
   } ;
@@ -75,12 +72,12 @@ lin pot2as3 n = n ;
 lin pot3 n = {
   s = \\c,nf => case n.n of {
                   Sg => mkCardOrd100 "хиляда" "хиляден" ! c ;
-                  Pl => n.s ! NCard DFemIndef ! nf ++ mkCardOrd100 "хиляди" "хиляден" ! c
+                  Pl => n.s ! NCard (CFFem Indef) ! nf ++ mkCardOrd100 "хиляди" "хиляден" ! c
                 } ;
   n = Pl
   } ;
 lin pot3plus n m = {
-  s = \\c,nf => (pot3 (n ** {lock_Sub1000=<>})).s ! NCard DMascIndef ! nf ++ case m.i of {False => []; True  => "и"} ++ m.s ! c ! nf ;
+  s = \\c,nf => (pot3 (n ** {lock_Sub1000=<>})).s ! NCard (CFMasc Indef NonHuman) ! nf ++ case m.i of {False => []; True  => "и"} ++ m.s ! c ! nf ;
   n = Pl
   } ;
 
@@ -94,7 +91,7 @@ lin pot3plus n m = {
     IDig d = d ** {tail = T1} ;
 
     IIDig d i = {
-      s = \\o => d.s ! NCard DMascIndef ++ commaIf i.tail ++ i.s ! o ;
+      s = \\o => d.s ! NCard (CFMasc Indef NonHuman) ++ commaIf i.tail ++ i.s ! o ;
       n = Pl ;
       tail = inc i.tail
     } ;

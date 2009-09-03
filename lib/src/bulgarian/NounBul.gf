@@ -15,11 +15,11 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
                                                } ;
                                  <Pl,Def>   => NF det.n det.spec ;
                                  <Pl,Indef> => case cn.g of {
-                                                 DMascPersonal => NF Pl Indef;
-                                                 _             => case det.countable of {
-                                                                    True  => NFPlCount ;
-                                                                    False => NF Pl Indef
-                                                                  }
+                                                 AMasc Human => NF Pl Indef;
+                                                 _           => case det.countable of {
+                                                                  True  => NFPlCount ;
+                                                                  False => NF Pl Indef
+                                                                }
                                                }
                                } ;
                           s = det.s ! True ! cn.g ! role ++ cn.s ! nf
@@ -31,12 +31,12 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
       } ;
 
     DetNP det =
-      { s = \\role => let s = det.s ! False ! DNeut ! role
+      { s = \\role => let s = det.s ! False ! ANeut ! role
                       in case role of {
                            RObj Dat => "на" ++ s;
                            _        => s
                          } ;
-        a = {gn = gennum DNeut det.n; p = P3} ;
+        a = {gn = gennum ANeut det.n; p = P3} ;
       } ;
     
     UsePN pn = { s = table {
@@ -167,7 +167,7 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
       g = cn.g
     } ;
 
-    SentCN cn sc = {s = \\nf => cn.s ! nf ++ sc.s; g=DNeut} ;
+    SentCN cn sc = {s = \\nf => cn.s ! nf ++ sc.s; g=ANeut} ;
 
     ApposCN cn np = {s = \\nf => cn.s ! nf ++ np.s ! RSubj; g=cn.g} ;
 
