@@ -9,7 +9,7 @@ lin
   SymbPN i = {s = i.s ; g = Neut} ;
   IntPN i  = {s = i.s ; g = Neut} ;
   FloatPN i = {s = i.s ; g = Neut} ;
-  NumPN i = {s = i.s ! DNeutIndef ; g = Neut} ;
+  NumPN i = {s = i.s ! CFNeut Indef ; g = Neut} ;
   CNIntNP cn i = {
     s = \\c => cn.s ! NF Sg Indef ++ i.s ;
     a = agrP3 (gennum cn.g Sg)
@@ -19,7 +19,7 @@ lin
     a = agrP3 (gennum cn.g det.n)
     } ;
   CNNumNP cn i = {
-    s = \\c => (cn.s ! NF Sg Indef ++ i.s ! DNeutIndef) ;
+    s = \\c => (cn.s ! NF Sg Indef ++ i.s ! CFNeut Indef) ;
     a = agrP3 (gennum cn.g Sg)
     } ;
 

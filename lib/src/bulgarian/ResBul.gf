@@ -80,27 +80,22 @@ resource ResBul = ParamX ** open Prelude in {
 
 --2 For $Numeral$
 
-    DGender =
-       DMasc
-     | DMascPersonal
-     | DFem
-     | DNeut
+    Animacy = Human | NonHuman ;
+
+    AGender =
+       AMasc Animacy
+     | AFem
+     | ANeut
      ;
     
-    DGenderSpecies = 
-       DMascIndef
-     | DMascDef
-     | DMascDefNom
-     | DMascPersonalIndef
-     | DMascPersonalDef
-     | DMascPersonalDefNom
-     | DFemIndef
-     | DFemDef
-     | DNeutIndef
-     | DNeutDef
+    CardForm =
+       CFMasc Species Animacy
+     | CFMascDefNom   Animacy
+     | CFFem  Species
+     | CFNeut Species
      ;
 
-    CardOrd = NCard DGenderSpecies | NOrd AForm ;
+    CardOrd = NCard CardForm | NOrd AForm ;
     NumF  = Formal | Informal ;
     DForm = unit | teen NumF | ten NumF | hundred ;
 
@@ -121,13 +116,12 @@ resource ResBul = ParamX ** open Prelude in {
       p  = conjPerson a.p b.p
       } ;
 
-    gennum : DGender -> Number -> GenNum = \g,n ->
+    gennum : AGender -> Number -> GenNum = \g,n ->
       case n of {
         Sg => GSg (case g of {
-                     DMasc         => Masc ;
-                     DMascPersonal => Masc ;
-                     DFem          => Fem ;
-                     DNeut         => Neut
+                     AMasc _       => Masc ;
+                     AFem          => Fem ;
+                     ANeut         => Neut
                    }) ;
         Pl => GPl
         } ;
@@ -147,25 +141,20 @@ resource ResBul = ParamX ** open Prelude in {
         GPl    => APl spec
       } ;
 
-    dgenderSpecies : DGender -> Species -> Role -> DGenderSpecies =
+    dgenderSpecies : AGender -> Species -> Role -> CardForm =
       \g,spec,role -> case <g,spec> of {
-                        <DMasc,Indef> => DMascIndef ;
-                        <DMasc,Def>   => case role of {
-                                           RSubj => DMascDefNom ;
-                                           _     => DMascDef
-                                         } ;
-                        <DMascPersonal,Indef> => DMascPersonalIndef ;
-                        <DMascPersonal,Def>   => case role of {
-                                                   RSubj => DMascPersonalDefNom ;
-                                                   _     => DMascPersonalDef
-                                                 } ;
-                        <DFem ,Indef> => DFemIndef ;
-                        <DFem ,Def>   => DFemDef ;
-                        <DNeut,Indef> => DNeutIndef ;
-                        <DNeut,Def>   => DNeutDef
+                        <AMasc a,Indef> => CFMasc Indef a ;
+                        <AMasc a,Def>   => case role of {
+                                             RSubj => CFMascDefNom a ;
+                                             _     => CFMasc Def a
+                                           } ;
+                        <AFem   ,Indef> => CFFem Indef ;
+                        <AFem   ,Def>   => CFFem Def ;
+                        <ANeut  ,Indef> => CFNeut Indef ;
+                        <ANeut  ,Def>   => CFNeut Def
                       } ;
 
-    nform2aform : NForm -> DGender -> AForm
+    nform2aform : NForm -> AGender -> AForm
       = \nf,g -> case nf of {
                    NF n spec  => aform (gennum g n) spec (RObj Acc) ;
                    NFSgDefNom => aform (gennum g Sg) Def RSubj ;
@@ -535,7 +524,7 @@ resource ResBul = ParamX ** open Prelude in {
                                   }
                } ;
 
-    digitGenderSpecies : Str -> Str -> Str -> DGenderSpecies => Str =
+    digitGenderSpecies : Str -> Str -> Str -> CardForm => Str =
       \dva, dvama, dve
             -> let addDef : Str -> Str =
                      \s -> case s of {
@@ -544,16 +533,16 @@ resource ResBul = ParamX ** open Prelude in {
 		             x         => x+"те"
                            }
                in table {
-                    DMascIndef          => dva ;
-                    DMascDef            => addDef dva ;
-                    DMascDefNom         => addDef dva ;
-                    DMascPersonalIndef  => dvama ;
-                    DMascPersonalDef    => addDef dvama ;
-                    DMascPersonalDefNom => addDef dvama ;
-                    DFemIndef           => dve ;
-                    DFemDef             => addDef dve ;
-                    DNeutIndef          => dve ;
-                    DNeutDef            => addDef dve
+                    CFMasc Indef  NonHuman => dva ;
+                    CFMasc Def    NonHuman => addDef dva ;
+                    CFMascDefNom  NonHuman => addDef dva ;
+                    CFMasc Indef  Human    => dvama ;
+                    CFMasc Def    Human    => addDef dvama ;
+                    CFMascDefNom  Human    => addDef dvama ;
+                    CFFem  Indef           => dve ;
+                    CFFem  Def             => addDef dve ;
+                    CFNeut Indef           => dve ;
+                    CFNeut Def             => addDef dve
                   } ;
 
     mkIP : Str -> Str -> GenNum -> {s : Role => QForm => Str ; gn : GenNum} =

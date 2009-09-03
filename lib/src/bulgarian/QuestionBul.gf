@@ -48,8 +48,8 @@ concrete QuestionBul of Question = CatBul ** open ResBul, Prelude in {
       } ;
 
     IdetIP idet = {
-      s  = \\_ => idet.s ! DNeut ;
-      gn = gennum DNeut idet.n
+      s  = \\_ => idet.s ! ANeut ;
+      gn = gennum ANeut idet.n
       } ;
 
     IdetQuant iquant num = {
