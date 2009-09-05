@@ -69,7 +69,7 @@ oper
     case last noi of {
       "a" 						=> mkNoun (nomCasa "es" noi) Fem ;
 	  "s"|"x"|"ç" 				=> mkNounMas nomCas ;
-	  "i"|"e"					=> mkNounMas nomFre ;
+	  "i"						=> mkNounMas nomFre ;
 	  "í"						=> mkNounMas (nomCasa "ins") ;
 	  "à"						=> mkNounMas (nomCasa "ans") ;
 	  "ó"						=> mkNounMas (nomCasa "ons") ;
