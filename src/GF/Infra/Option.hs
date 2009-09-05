@@ -144,6 +144,7 @@ data Flags = Flags {
       optMode            :: Mode,
       optStopAfterPhase  :: Phase,
       optVerbosity       :: Verbosity,
+      optProf            :: Bool,
       optShowCPUTime     :: Bool,
       optEmitGFO         :: Bool,
       optOutputFormats   :: [OutputFormat],
@@ -237,6 +238,7 @@ defaultFlags = Flags {
       optMode            = ModeInteractive,
       optStopAfterPhase  = Compile,
       optVerbosity       = Normal,
+      optProf            = False,
       optShowCPUTime     = False,
       optEmitGFO         = True,
       optOutputFormats   = [],
@@ -288,6 +290,7 @@ optDescr =
      Option ['C'] [] (NoArg (phase Convert)) "Stop after conversion to .gf.",
      Option ['c'] [] (NoArg (phase Compile)) "Stop after compiling to .gfo (default) .",
      Option [] ["make"] (NoArg (liftM2 addOptions (mode ModeCompiler) (phase Link))) "Build .pgf file and other output files and exit.",
+     Option [] ["prof"] (NoArg (prof True)) "Dump profiling information when compiling to PMCFG",
      Option [] ["cpu"] (NoArg (cpu True)) "Show compilation CPU time statistics.",
      Option [] ["no-cpu"] (NoArg (cpu False)) "Don't show compilation CPU time statistics (default).",
      Option [] ["emit-gfo"] (NoArg (emitGFO True)) "Create .gfo files (default).",
@@ -371,6 +374,7 @@ optDescr =
                            Just v  -> case readMaybe v >>= toEnumBounded of
                                         Just i  -> set $ \o -> o { optVerbosity = i }
                                         Nothing -> fail $ "Bad verbosity: " ++ show v
+       prof        x = set $ \o -> o { optProf = x }
        cpu         x = set $ \o -> o { optShowCPUTime = x }
        emitGFO     x = set $ \o -> o { optEmitGFO = x }
        gfoDir      x = set $ \o -> o { optGFODir = Just x }

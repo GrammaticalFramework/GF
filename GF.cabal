@@ -57,6 +57,9 @@ library
     GF.Data.Assoc
     GF.Data.ErrM
 -- needed only for the on demand generation of PMCFG
+    GF.Infra.GetOpt
+    GF.Infra.Option
+    GF.Data.ErrM
     GF.Data.BacktrackM
     GF.Compile.GenerateFCFG
     GF.Compile.GeneratePMCFG

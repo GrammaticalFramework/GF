@@ -68,7 +68,7 @@ link opts cnc gr = do
                          _            -> ioeIO $ putStrLn $ "Corrupted PGF"
 		       return gc
 		     Bad s -> fail s
-       return $ buildParser opts $ optimize opts gc1
+       ioeIO $ buildParser opts $ optimize opts gc1
 
 optimize :: Options -> PGF -> PGF
 optimize opts = cse . suf
@@ -76,12 +76,12 @@ optimize opts = cse . suf
         cse = if OptCSE  `Set.member` os then cseOptimize    else id
         suf = if OptStem `Set.member` os then suffixOptimize else id
 
-buildParser :: Options -> PGF -> PGF
+buildParser :: Options -> PGF -> IO PGF
 buildParser opts = 
     case flag optBuildParser opts of
       BuildParser         -> addParsers opts
-      DontBuildParser     -> id
-      BuildParserOnDemand -> mapConcretes (\cnc -> cnc { cflags = Map.insert (mkCId "parser") "ondemand" (cflags cnc) })
+      DontBuildParser     -> return
+      BuildParserOnDemand -> return . mapConcretes (\cnc -> cnc { cflags = Map.insert (mkCId "parser") "ondemand" (cflags cnc) })
 
 batchCompile :: Options -> [FilePath] -> IOE SourceGrammar
 batchCompile opts files = do
