@@ -74,6 +74,7 @@ import PGF.Parsing.FCFG
 import qualified PGF.Parsing.FCFG.Incremental as Incremental
 import qualified GF.Compile.GeneratePMCFG as PMCFG
 
+import GF.Infra.Option
 import GF.Data.ErrM
 import GF.Data.Utilities (replace)
 
@@ -219,16 +220,17 @@ readLanguage = readCId
 
 showLanguage = prCId
 
-readPGF f = do
-  g <- decodeFile f
-  return $! addParsers g
+readPGF f = decodeFile f >>= addParsers
 
 -- Adds parsers for all concretes that don't have a parser and that have parser=ondemand.
-addParsers :: PGF -> PGF
-addParsers pgf = mapConcretes (\cnc -> if wantsParser cnc then addParser cnc else cnc) pgf
+addParsers :: PGF -> IO PGF
+addParsers pgf = do cncs <- sequence [if wantsParser cnc then addParser lang cnc else return (lang,cnc)
+                                           | (lang,cnc) <- Map.toList (concretes pgf)]
+                    return pgf { concretes = Map.fromList cncs }
     where
       wantsParser cnc = isNothing (parser cnc) && Map.lookup (mkCId "parser") (cflags cnc) == Just "ondemand"
-      addParser cnc = cnc { parser = Just (PMCFG.convertConcrete (abstract pgf) cnc) }
+      addParser lang cnc = do pinfo <- PMCFG.convertConcrete noOptions (abstract pgf) lang cnc
+                              return (lang,cnc { parser = Just pinfo })
 
 linearize pgf lang = concat . take 1 . PGF.Linearize.linearizes pgf lang
 
