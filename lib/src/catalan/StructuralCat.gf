@@ -149,18 +149,16 @@ lin
   youSg_Pron = mkPronoun 
     "tu" "et" "et" "tu"
     ("ton"|["el teu"]) ("ta"|["la teva"]) ("tes"|["les teves"])
-    Fem Sg P2 ;
+    Masc Sg P2 ;
   youPl_Pron =
     mkPronoun
       "vosaltres" "us" "us" "vosaltres"
       ["el vostre"] ["la vostra"] ["els vostres"]
-      Fem Pl P2 ;
-  youPol_Pron = he_Pron ;
-{-    mkPronoun
+      Masc Pl P2 ;
+  youPol_Pron = mkPronoun
       "vosté" "el" "li" "vosté"
-      ["el seu"] ["la seva"] ["els seus"] ["les seves"]
-      Fem Pl P2 ;
--}	  
+      ["el seu"] ["la seva"] ["els seus"]
+      Masc Pl P2 ;
    not_Predet = {s = \\a,c => prepCase c ++ "no pas" ; c = Nom} ;
    have_V2 = dirV2 (verbV (tenir_108 "tenir")) ;
    
