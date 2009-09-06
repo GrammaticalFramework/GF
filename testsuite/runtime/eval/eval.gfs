@@ -1,34 +1,30 @@
 i testsuite/runtime/eval/Test.gf
 
-pt -compute \x -> x 1
-pt -compute ? 1
-pt -compute (\x -> x 1) ?
-pt -compute unknown_var
-pt -compute unknown_var 1
-pt -compute 1 2
+pt -compute \x -> x 1 : (Int->Int)->Int
+pt -compute (? : Int -> Int) 1
+pt -compute (\x -> x 1 : (Int->Int)->Int) ?
 pt -compute f 1 2
-pt -compute \x -> x
-pt -compute ?666
+pt -compute \x -> x : Nat -> Nat
+pt -compute ? : String
 pt -compute f
-pt -compute (\x -> x 2) (f 1)
-pt -compute (\x -> x 2) 1
+pt -compute (\x -> x 2 : (Int->Int)->Int) (f 1)
 pt -compute g 1
 pt -compute g 0
-pt -compute \x -> g x
+pt -compute \x -> g x : Int -> Int
 pt -compute g ?
-pt -compute (\x -> x 5) (g2 1)
-pt -compute (\x -> x 3) (\x -> x)
+pt -compute (\x -> x 5 : (Int->Int)->Int) (g2 1)
+pt -compute (\x -> x 3 : (Int->Int)->Int) (\x -> x)
 pt -compute g0
-pt -compute (\x -> x 3.2) (\x -> f x)
-pt -compute g0 2.3
-pt -compute g0 ((\x -> f x) 0) 1
+pt -compute (\x -> x 32 : (Int -> Int -> Int) -> Int -> Int) (\x -> f x : Int -> Int -> Int)
+pt -compute g0 23
 pt -compute const 3.14 "pi"
 pt -compute dec (succ (succ zero))
 pt -compute dec (succ ?)
-pt -compute \x -> dec x
+pt -compute \x -> dec x : Nat -> Nat
 pt -compute dec ?
-pt -compute (\f -> f 0) (g3 ?)
+pt -compute (\f -> f 0 : (Int -> Int) -> Int) (g3 ?)
 pt -compute g (g2 ? 0)
 pt -compute plus (succ zero) (succ zero)
 pt -compute dec2 0 (succ zero)
+pt -compute dec2 0 err
 pt -compute plus err (succ zero)

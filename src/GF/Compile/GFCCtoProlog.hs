@@ -68,7 +68,7 @@ plAbstract (name, Abstr aflags funs cats _catfuns) =
 plCat :: (CId, [Hypo]) -> String
 plCat (cat, hypos) = plFact "cat" (plTypeWithHypos typ) 
     where ((_,subst), hypos') = alphaConvert emptyEnv hypos
-          args = reverse [EVar x | (_,x) <- subst]
+          args = reverse [EFun x | (_,x) <- subst]
           typ = DTyp hypos' cat args
 
 plFun :: (CId, (Type, Int, [Equation])) -> String
@@ -119,7 +119,7 @@ instance PLPrint Hypo where
     plp (HypV var typ) = plOper ":" (plp var) (plp typ)
 
 instance PLPrint Expr where
-    plp (EVar x)    = plp x
+    plp (EFun x)    = plp x
     plp (EAbs x e)  = plOper "^" (plp x) (plp e)
     plp (EApp e e') = plOper " * " (plp e) (plp e')
     plp (ELit lit)  = plp lit
@@ -279,7 +279,7 @@ instance AlphaConvert Expr where
     alphaConvert env (EApp e1 e2) = (env'', EApp e1' e2')
         where (env',  e1') = alphaConvert env  e1
               (env'', e2') = alphaConvert env' e2
-    alphaConvert env expr@(EVar i) = (env, maybe expr EVar (lookup i (snd env)))
+    alphaConvert env expr@(EFun i) = (env, maybe expr EFun (lookup i (snd env)))
     alphaConvert env expr = (env, expr)
 
 -- pattern variables are not alpha converted

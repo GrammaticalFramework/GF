@@ -1,0 +1,102 @@
+
+Couldn't match expected type Nat
+       against inferred type String
+In the expression: "0"
+
+
+Category Int should have 0 argument(s), but has been given 1
+In the type: Int 0
+
+
+A function type is expected for the expression 1 instead of type Int
+
+
+Couldn't match expected type Int -> Int
+       against inferred type Int
+In the expression: 1
+
+
+Function unknown_fun is not in scope
+
+
+Category unknown_cat is not in scope
+
+
+Cannot infer the type of expression \x -> x
+
+
+A function type is expected for the expression \x -> x instead of type Int
+
+Expression: append (succ (succ zero)) (succ zero) (vector (succ (succ zero))) (vector (succ zero))
+Type:       Vector (plus (succ (succ zero)) (succ zero))
+
+Expression: \m, n -> vector (plus m n) : (m : Nat) -> (n : Nat) -> Vector (plus m n)
+Type:       (m : Nat) -> (n : Nat) -> Vector (plus m n)
+
+Expression: mkMorph (\x -> succ zero)
+Type:       Morph (\x -> succ zero)
+
+Expression: idMorph (mkMorph (\x -> x))
+Type:       Nat
+
+
+Couldn't match expected type Morph (\x -> x)
+       against inferred type Morph (\x -> succ zero)
+In the expression: mkMorph (\x -> succ zero)
+
+Expression: append zero (succ zero) : Vector zero -> Vector (succ zero) -> Vector (succ zero)
+Type:       Vector zero -> Vector (succ zero) -> Vector (succ zero)
+
+Expression: \n, v1, n'1, v2 -> append n n'1 v1 v2 : (n : Nat) -> Vector n -> (m : Nat) -> Vector m -> Vector (plus n m)
+Type:       (n : Nat) -> Vector n -> (m : Nat) -> Vector m -> Vector (plus n m)
+
+
+Category EQ is not in scope
+
+Expression: (\v1, v2 -> cmpVector ?7 v1 v2 : Vector ?7 -> Vector ?7 -> Int) (vector ?7)
+Type:       Vector ?7 -> Int
+
+
+Couldn't match expected type (m : Nat) -> Vector ?1
+       against inferred type (n : Nat) -> Vector n
+In the expression: vector
+
+Expression: f1 (\v -> v) vector
+Type:       Int
+
+Expression: f1 (\v -> succ v) (\x -> vector (succ x))
+Type:       Int
+
+
+Couldn't match expected type Vector x
+       against inferred type Vector (succ x)
+In the expression: vector (succ x)
+
+
+Couldn't match expected type Vector n
+       against inferred type Vector (succ n)
+In the expression: vector (succ n)
+
+Expression: h ?2 (u0 ?2)
+Type:       Int
+
+
+Couldn't match expected type U ?2 ?2
+       against inferred type U ?2 (succ ?2)
+In the expression: u1 ?2
+
+
+Meta variable(s) ?11 should be resolved
+in the expression: cmpVector (succ (succ zero)) (vector (succ (succ zero))) (append ?11 (succ zero) (vector ?11) (vector (succ zero)))
+
+Expression: diff (succ (succ (succ zero))) (succ (succ zero)) (vector (succ (succ (succ (succ (succ zero)))))) (vector (succ (succ (succ zero))))
+Type:       Vector (succ (succ zero))
+
+Couldn't match expected type Vector (plus (succ (succ (succ zero))) (succ (succ zero)))
+       against inferred type Vector (succ (succ (succ (succ zero))))
+In the expression: vector (succ (succ (succ (succ zero))))
+
+Couldn't match expected type Vector ?1
+       against inferred type Vector zero
+In the expression: vector zero
+

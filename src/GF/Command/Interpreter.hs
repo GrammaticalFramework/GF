@@ -12,14 +12,13 @@ import GF.Command.Abstract
 import GF.Command.Parse
 import PGF
 import PGF.Data
-import PGF.Macros
 import PGF.Morphology
 import GF.System.Signal
 import GF.Infra.UseIO
 import GF.Infra.Option
 
-import GF.Data.ErrM ----
-
+import Text.PrettyPrint
+import Control.Monad.Error
 import qualified Data.Map as Map
 
 data CommandEnv = CommandEnv {
@@ -43,12 +42,6 @@ interpretCommandLine enc env line =
   case readCommandLine line of
     Just []    -> return ()
     Just pipes -> mapM_ (interpretPipe enc env) pipes
-{-
-    Just pipes -> do res <- runInterruptibly (mapM_ (interpretPipe enc env) pipes)
-                     case res of
-                       Left ex -> putStrLnFlush $ enc (show ex)
-                       Right x -> return x
--}
     Nothing    -> putStrLnFlush "command not parsed"
 
 interpretPipe enc env cs = do
@@ -60,12 +53,15 @@ interpretPipe enc env cs = do
    intercs (trees,_) (c:cs) = do
      treess2 <- interc trees c
      intercs treess2 cs
-   interc es comm@(Command co _ arg) = case co of
+   interc es comm@(Command co opts arg) = case co of
      '%':f -> case Map.lookup f (commandmacros env) of
-       Just css -> do
-         mapM_ (interpretPipe enc env) (appLine (getCommandArg env arg es) css) 
-         return ([],[]) ---- return ?
-       _ -> do
+       Just css ->
+         case getCommandTrees env arg es of
+           Right es -> do mapM_ (interpretPipe enc env) (appLine es css) 
+                          return ([],[])
+           Left msg -> do putStrLn ('\n':msg)
+                          return ([],[])
+       Nothing  -> do
          putStrLn $ "command macro " ++ co ++ " not interpreted"
          return ([],[])
      _ -> interpret enc env es comm
@@ -82,43 +78,53 @@ appCommand xs c@(Command i os arg) = case arg of
     EApp e1 e2 -> EApp (app e1) (app e2)
     ELit l     -> ELit l
     EMeta i    -> xs !! i
-    EVar x     -> EVar x
+    EFun x     -> EFun x
 
 -- return the trees to be sent in pipe, and the output possibly printed
 interpret :: (String -> String) -> CommandEnv -> [Expr] -> Command -> IO CommandOutput
-interpret enc env trees0 comm = case lookCommand co comms of
-    Just info -> do
-      checkOpts info
-      tss@(_,s) <- exec info opts trees
-      optTrace $ enc s
-      return tss
-    _ -> do
-      putStrLn $ "command " ++ co ++ " not interpreted"
-      return ([],[])
- where
-   optTrace = if isOpt "tr" opts then putStrLn else const (return ()) 
-   (co,opts,trees) = getCommand env comm trees0
-   comms = commands env
-   checkOpts info = 
-     case
-       [o | OOpt  o   <- opts, notElem o ("tr" : map fst (options info))] ++
-       [o | OFlag o _ <- opts, notElem o (map fst (flags info))]
-      of
-        []  -> return () 
-        [o] -> putStrLn $ "option not interpreted: " ++ o
-        os  -> putStrLn $ "options not interpreted: " ++ unwords os
+interpret enc env trees comm = 
+  case getCommand env trees comm of
+    Left  msg               -> do putStrLn ('\n':msg)
+                                  return ([],[])
+    Right (info,opts,trees) -> do tss@(_,s) <- exec info opts trees
+                                  if isOpt "tr" opts
+                                    then putStrLn (enc s)
+                                    else return ()
+                                  return tss
 
 -- analyse command parse tree to a uniform datastructure, normalizing comm name
 --- the env is needed for macro lookup
-getCommand :: CommandEnv -> Command -> [Expr] -> (String,[Option],[Expr])
-getCommand env co@(Command c opts arg) ts = 
-  (getCommandOp c,opts,getCommandArg env arg ts) 
+getCommand :: CommandEnv -> [Expr] -> Command -> Either String (CommandInfo,[Option],[Expr])
+getCommand env es co@(Command c opts arg) = do
+  info <- getCommandInfo  env c
+  checkOpts info opts
+  es   <- getCommandTrees env arg es
+  return (info,opts,es)
 
-getCommandArg :: CommandEnv -> Argument -> [Expr] -> [Expr]
-getCommandArg env a ts = case a of
-  AMacro m -> case Map.lookup m (expmacros env) of
-    Just t -> [t]
-    _ -> [] 
-  AExpr t -> [t] -- ignore piped
-  ANoArg  -> ts  -- use piped
+getCommandInfo :: CommandEnv -> String -> Either String CommandInfo
+getCommandInfo env cmd = 
+  case lookCommand (getCommandOp cmd) (commands env) of
+    Just info -> return info
+    Nothing   -> fail $ "command " ++ cmd ++ " not interpreted"
 
+checkOpts :: CommandInfo -> [Option] -> Either String ()
+checkOpts info opts = 
+  case
+    [o | OOpt  o   <- opts, notElem o ("tr" : map fst (options info))] ++
+    [o | OFlag o _ <- opts, notElem o (map fst (flags info))]
+  of
+    []  -> return () 
+    [o] -> fail $ "option not interpreted: " ++ o
+    os  -> fail $ "options not interpreted: " ++ unwords os
+
+getCommandTrees :: CommandEnv -> Argument -> [Expr] -> Either String [Expr]
+getCommandTrees env a es =
+  case a of
+    AMacro m -> case Map.lookup m (expmacros env) of
+                  Just e -> return [e]
+                  _      -> return [] 
+    AExpr e -> case inferExpr (multigrammar env) e of
+                 Left tcErr   -> fail $ render (ppTcError tcErr)
+                 Right (e,ty) -> return [e] -- ignore piped
+    ANoArg  -> return es  -- use piped
+  

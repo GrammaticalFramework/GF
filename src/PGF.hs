@@ -9,7 +9,7 @@
 -- load and interpret grammars compiled in Portable Grammar Format (PGF).
 -- The PGF format is produced as a final output from the GF compiler.
 -- The API is meant to be used for embedding GF grammars in Haskell 
--- programs.
+-- programs
 -------------------------------------------------
 
 module PGF(
@@ -51,7 +51,11 @@ module PGF(
            parse, canParse, parseAllLang, parseAll,
            
            -- ** Evaluation
-           tree2expr, expr2tree, PGF.compute, paraphrase, typecheck,
+           tree2expr, expr2tree, PGF.compute, paraphrase,
+           
+           -- ** Type Checking
+           checkType, checkExpr, inferExpr,
+           ppTcError, TcError(..),
            
            -- ** Word Completion (Incremental Parsing)
            complete,
@@ -80,6 +84,7 @@ import GF.Data.Utilities (replace)
 
 import Data.Char
 import qualified Data.Map as Map
+import qualified Data.IntMap as IntMap
 import Data.Maybe
 import Data.Binary
 import System.Random (newStdGen)
@@ -307,4 +312,4 @@ complete pgf from typ input =
 
 -- | Converts an expression to normal form
 compute :: PGF -> Expr -> Expr
-compute pgf = PGF.Data.normalForm (funs (abstract pgf))
+compute pgf = PGF.Data.normalForm (funs (abstract pgf)) 0 []

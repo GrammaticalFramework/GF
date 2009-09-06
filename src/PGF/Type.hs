@@ -5,22 +5,22 @@ module PGF.Type ( Type(..), Hypo(..),
 import PGF.CId
 import {-# SOURCE #-} PGF.Expr
 import Data.Char
+import Data.List
 import qualified Text.PrettyPrint as PP
 import qualified Text.ParserCombinators.ReadP as RP
 import Control.Monad
-import Debug.Trace
 
 -- | To read a type from a 'String', use 'read' or 'readType'.
 data Type =
    DTyp [Hypo] CId [Expr]
-  deriving (Eq,Ord)
+  deriving (Eq,Ord,Show)
 
 -- | 'Hypo' represents a hypothesis in a type i.e. in the type A -> B, A is the hypothesis
 data Hypo =
     Hyp      Type      -- ^ hypothesis without bound variable like in A -> B
   | HypV CId Type      -- ^ hypothesis with bound variable like in (x : A) -> B x
   | HypI CId Type      -- ^ hypothesis with bound implicit variable like in {x : A} -> B x
-  deriving (Eq,Ord)
+  deriving (Eq,Ord,Show)
 
 -- | Reads a 'Type' from a 'String'.
 readType :: String -> Maybe Type
@@ -28,15 +28,12 @@ readType s = case [x | (x,cs) <- RP.readP_to_S pType s, all isSpace cs] of
                [x] -> Just x
                _   -> Nothing
 
-instance Show Type where
-    showsPrec i x = showString (PP.render (ppType i x))
-
-instance Read Type where
-    readsPrec _ = RP.readP_to_S pType
-
--- | renders type as 'String'
-showType :: Type -> String
-showType = PP.render . ppType 0
+-- | renders type as 'String'. The list
+-- of identifiers is the list of all free variables
+-- in the expression in order reverse to the order
+-- of binding.
+showType :: [CId] -> Type -> String
+showType vars = PP.render . ppType 0 vars
 
 pType :: RP.ReadP Type
 pType = do
@@ -72,17 +69,19 @@ pType = do
       args <- RP.sepBy pFactor RP.skipSpaces
       return (cat, args)
 
-ppType :: Int -> Type -> PP.Doc
-ppType d (DTyp ctxt cat args)
-  | null ctxt = ppRes cat args
-  | otherwise = ppParens (d > 0) (foldr ppCtxt (ppRes cat args) ctxt)
+ppType :: Int -> [CId] -> Type -> PP.Doc
+ppType d scope (DTyp hyps cat args)
+  | null hyps = ppRes scope cat args
+  | otherwise = let (scope',hdocs) = mapAccumL ppHypo scope hyps
+                in ppParens (d > 0) (foldr (\hdoc doc -> hdoc PP.<+> PP.text "->" PP.<+> doc) (ppRes scope' cat args) hdocs)
   where
-    ppCtxt hyp doc = ppHypo hyp PP.<+> PP.text "->" PP.<+> doc
-    ppRes cat es = PP.text (prCId cat) PP.<+> PP.hsep (map (ppExpr 2) es)
+    ppRes scope cat es = PP.text (prCId cat) PP.<+> PP.hsep (map (ppExpr 4 scope) es)
 
-ppHypo (Hyp    typ) = ppType 1 typ
-ppHypo (HypV x typ) = PP.parens (PP.text (prCId x) PP.<+> PP.char ':' PP.<+> ppType 0 typ)
-ppHypo (HypI x typ) = PP.braces (PP.text (prCId x) PP.<+> PP.char ':' PP.<+> ppType 0 typ)
+ppHypo scope (Hyp    typ) = (  scope,ppType 1 scope typ)
+ppHypo scope (HypV x typ) = let y = freshName x scope
+                            in (y:scope,PP.parens (PP.text (prCId y) PP.<+> PP.char ':' PP.<+> ppType 0 scope typ))
+ppHypo scope (HypI x typ) = let y = freshName x scope
+                            in (y:scope,PP.braces (PP.text (prCId y) PP.<+> PP.char ':' PP.<+> ppType 0 scope typ))
 
 ppParens :: Bool -> PP.Doc -> PP.Doc
 ppParens True  = PP.parens
