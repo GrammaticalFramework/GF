@@ -104,20 +104,24 @@ instance Binary Term where
 instance Binary Expr where
   put (EAbs x exp)    = putWord8 0 >> put (x,exp)
   put (EApp e1 e2)    = putWord8 1 >> put (e1,e2)
-  put (EVar   x)      = putWord8 2 >> put x
-  put (ELit (LStr s)) = putWord8 3 >> put s
-  put (ELit (LFlt d)) = putWord8 4 >> put d
-  put (ELit (LInt i)) = putWord8 5 >> put i
-  put (EMeta i)       = putWord8 6 >> put i
+  put (ELit (LStr s)) = putWord8 2 >> put s
+  put (ELit (LFlt d)) = putWord8 3 >> put d
+  put (ELit (LInt i)) = putWord8 4 >> put i
+  put (EMeta i)       = putWord8 5 >> put i
+  put (EFun  f)       = putWord8 6 >> put f
+  put (EVar  i)       = putWord8 7 >> put i
+  put (ETyped e ty)   = putWord8 8 >> put (e,ty)
   get = do tag <- getWord8
            case tag of
              0 -> liftM2 EAbs get get
              1 -> liftM2 EApp get get
-             2 -> liftM  EVar get
-             3 -> liftM  (ELit . LStr) get
-             4 -> liftM  (ELit . LFlt) get
-             5 -> liftM  (ELit . LInt) get
-             6 -> liftM  EMeta get
+             2 -> liftM  (ELit . LStr) get
+             3 -> liftM  (ELit . LFlt) get
+             4 -> liftM  (ELit . LInt) get
+             5 -> liftM  EMeta get
+             6 -> liftM  EFun get
+             7 -> liftM  EVar get
+             8 -> liftM2 ETyped get get
              _ -> decodingError
 
 instance Binary Patt where

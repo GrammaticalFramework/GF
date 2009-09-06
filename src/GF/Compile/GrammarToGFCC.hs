@@ -70,17 +70,17 @@ canon2gfcc opts pars cgr@(M.MGrammar ((a,abm):cms)) =
   gflags = Map.empty
   aflags = Map.fromList [(mkCId f,x) | (f,x) <- optionsPGF (M.flags abm)]
 
-  mkDef (Just eqs) = [C.Equ (map mkPatt ps) (mkExp e) | (ps,e) <- eqs]
+  mkDef (Just eqs) = [C.Equ ps' (mkExp scope' e) | (ps,e) <- eqs, let (scope',ps') = mapAccumL mkPatt [] ps]
   mkDef Nothing    = []
   
   mkArrity (Just a) = a
   mkArrity Nothing  = 0
 
   -- concretes
-  lfuns = [(f', (mkType ty, mkArrity ma, mkDef pty)) | 
+  lfuns = [(f', (mkType [] ty, mkArrity ma, mkDef pty)) | 
              (f,AbsFun (Just ty) ma pty) <- tree2list (M.jments abm), let f' = i2i f]
   funs = Map.fromAscList lfuns
-  lcats = [(i2i c, mkContext cont) |
+  lcats = [(i2i c, snd (mkContext [] cont)) |
                 (c,AbsCat (Just cont) _) <- tree2list (M.jments abm)]
   cats = Map.fromAscList lcats
   catfuns = Map.fromList 
@@ -118,36 +118,45 @@ canon2gfcc opts pars cgr@(M.MGrammar ((a,abm):cms)) =
 i2i :: Ident -> CId
 i2i = CId . ident2bs
 
-mkType :: A.Type -> C.Type
-mkType t = case GM.typeForm t of
-  Ok (hyps,(_,cat),args) -> C.DTyp (mkContext hyps) (i2i cat) (map mkExp args)
+mkType :: [Ident] -> A.Type -> C.Type
+mkType scope t =
+  case GM.typeForm t of
+    Ok (hyps,(_,cat),args) -> let (scope',hyps') = mkContext scope hyps
+                              in C.DTyp hyps' (i2i cat) (map (mkExp scope') args)
 
-mkExp :: A.Term -> C.Expr
-mkExp t = case GM.termForm t of
-    Ok (xs,c,args) -> mkAbs xs (mkApp c (map mkExp args))
+mkExp :: [Ident] -> A.Term -> C.Expr
+mkExp scope t = case GM.termForm t of
+    Ok (xs,c,args) -> mkAbs xs (mkApp (reverse xs++scope) c (map (mkExp scope) args))
   where
     mkAbs xs t = foldr (C.EAbs . i2i) t xs
-    mkApp c args = case c of
-      Q _ c    -> foldl C.EApp (C.EVar (i2i c)) args
-      QC _ c   -> foldl C.EApp (C.EVar (i2i c)) args
-      Vr x     -> C.EVar (i2i x)
+    mkApp scope c args = case c of
+      Q _ c    -> foldl C.EApp (C.EFun (i2i c)) args
+      QC _ c   -> foldl C.EApp (C.EFun (i2i c)) args
+      Vr x     -> case lookup x (zip scope [0..]) of
+                    Just i  -> foldl C.EApp (C.EVar  i) args
+                    Nothing -> foldl C.EApp (C.EMeta 0) args
       EInt i   -> C.ELit (C.LInt i)
       EFloat f -> C.ELit (C.LFlt f)
       K s      -> C.ELit (C.LStr s)
       Meta (MetaSymb i) -> C.EMeta i
       _        -> C.EMeta 0
 
-mkPatt p = case p of
-  A.PP _ c ps -> C.PApp (i2i c) (map mkPatt ps)
-  A.PV x      -> C.PVar (i2i x)
-  A.PW        -> C.PWild
-  A.PInt i    -> C.PLit (C.LInt i)
-  A.PFloat f  -> C.PLit (C.LFlt f)
-  A.PString s -> C.PLit (C.LStr s)
+mkPatt scope p = 
+  case p of
+    A.PP _ c ps -> let (scope',ps') = mapAccumL mkPatt scope ps
+                   in (scope',C.PApp (i2i c) ps')
+    A.PV x      -> (x:scope,C.PVar (i2i x))
+    A.PW        -> (  scope,C.PWild)
+    A.PInt i    -> (  scope,C.PLit (C.LInt i))
+    A.PFloat f  -> (  scope,C.PLit (C.LFlt f))
+    A.PString s -> (  scope,C.PLit (C.LStr s))
 
 
-mkContext :: A.Context -> [C.Hypo]
-mkContext hyps = [(if x == identW then C.Hyp else C.HypV (i2i x)) (mkType ty) | (x,ty) <- hyps]
+mkContext :: [Ident] -> A.Context -> ([Ident],[C.Hypo])
+mkContext scope hyps = mapAccumL (\scope (x,ty) -> let ty' = mkType scope ty
+                                                   in if x == identW
+                                                        then (  scope,C.Hyp          ty')
+                                                        else (x:scope,C.HypV (i2i x) ty')) scope hyps 
 
 mkTerm :: Term -> C.Term
 mkTerm tr = case tr of

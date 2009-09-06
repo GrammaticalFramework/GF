@@ -32,6 +32,7 @@ import GF.Command.TreeOperations ---- temporary place for typecheck and compute
 import GF.Data.Operations
 import GF.Text.Coding
 
+import Data.List
 import Data.Maybe
 import qualified Data.Map as Map
 import System.Cmd
@@ -283,7 +284,7 @@ allCommands cod env@(pgf, mos) = Map.fromList [
           _ | isOpt "changes" opts -> changesMsg
           _ | isOpt "coding" opts -> codingMsg
           _ | isOpt "license" opts -> licenseMsg
-          [t] -> let co = getCommandOp (showExpr t) in 
+          [t] -> let co = getCommandOp (showExpr [] t) in 
                  case lookCommand co (allCommands cod env) of   ---- new map ??!!
                    Just info -> commandHelp True (co,info)
                    _ -> "command not found"
@@ -615,23 +616,29 @@ allCommands cod env@(pgf, mos) = Map.fromList [
        ],
      exec = \opts arg -> do
        case arg of
-         [EVar id] -> case Map.lookup id (funs (abstract pgf)) of
+         [EFun id] -> case Map.lookup id (funs (abstract pgf)) of
                         Just (ty,_,eqs) -> return $ fromString $
-                                              render (text "fun" <+> text (prCId id) <+> colon <+> ppType 0 ty $$
+                                              render (text "fun" <+> text (prCId id) <+> colon <+> ppType 0 [] ty $$
                                                       if null eqs
                                                         then empty
-                                                        else text "def" <+> vcat [text (prCId id) <+> hsep (map (ppPatt 9) patts) <+> char '=' <+> ppExpr 0 res | Equ patts res <- eqs])
+                                                        else text "def" <+> vcat [let (scope,ds) = mapAccumL (ppPatt 9) [] patts
+                                                                                  in text (prCId id) <+> hsep ds <+> char '=' <+> ppExpr 0 scope res | Equ patts res <- eqs])
                         Nothing         -> case Map.lookup id (cats (abstract pgf)) of
                                              Just hyps -> do return $ fromString $
-                                                                render (text "cat" <+> text (prCId id) <+> hsep (map ppHypo hyps) $$
+                                                                render (text "cat" <+> text (prCId id) <+> hsep (snd (mapAccumL ppHypo [] hyps)) $$
                                                                         if null (functionsToCat pgf id)
                                                                           then empty
                                                                           else space $$
-                                                                               text "fun" <+> vcat [text (prCId fid) <+> colon <+> ppType 0 ty 
+                                                                               text "fun" <+> vcat [text (prCId fid) <+> colon <+> ppType 0 [] ty 
                                                                                                        | (fid,ty) <- functionsToCat pgf id])
                                              Nothing   -> do putStrLn "unknown identifier"
                                                              return void
-         _           -> do putStrLn "a single identifier is expected from the command"
+         [e]         -> case inferExpr pgf e of
+                          Left tcErr   -> error $ render (ppTcError tcErr)
+                          Right (e,ty) -> do putStrLn ("Expression: "++showExpr [] e)
+                                             putStrLn ("Type:       "++showType [] ty)
+                                             return void
+         _           -> do putStrLn "a single identifier or expression is expected from the command"
                            return void
      })
   ]
@@ -689,7 +696,9 @@ allCommands cod env@(pgf, mos) = Map.fromList [
    optType opts = 
      let str = valStrOpts "cat" (prCId $ lookStartCat pgf) opts
      in case readType str of
-          Just ty -> ty
+          Just ty -> case checkType pgf ty of
+                       Left tcErr -> error $ render (ppTcError tcErr)
+                       Right ty   -> ty
           Nothing -> error ("Can't parse '"++str++"' as type")
    optComm opts = valStrOpts "command" "" opts
    optViewFormat opts = valStrOpts "format" "png" opts
@@ -710,10 +719,10 @@ allCommands cod env@(pgf, mos) = Map.fromList [
 
    returnFromExprs es = return $ case es of
      [] -> ([], "no trees found")
-     _  -> (es,unlines (map showExpr es))
+     _  -> (es,unlines (map (showExpr []) es))
 
    prGrammar opts
-     | isOpt "cats"     opts = return $ fromString $ unwords $ map showType $ categories pgf
+     | isOpt "cats"     opts = return $ fromString $ unwords $ map (showType []) $ categories pgf
      | isOpt "fullform" opts = return $ fromString $ concatMap (prFullFormLexicon . morpho) $ optLangs opts
      | isOpt "missing"  opts = return $ fromString $ unlines $ [unwords (prCId la:":": map prCId cs) | 
                                                                   la <- optLangs opts, let cs = missingLins pgf la]
@@ -739,7 +748,7 @@ allCommands cod env@(pgf, mos) = Map.fromList [
 
    showAsString t = case t of
      ELit (LStr s) -> s
-     _ -> "\n" ++ showExpr t  --- newline needed in other cases than the first
+     _ -> "\n" ++ showExpr [] t  --- newline needed in other cases than the first
 
 stringOpOptions = sort $ [
        ("bind","bind tokens separated by Prelude.BIND, i.e. &+"),

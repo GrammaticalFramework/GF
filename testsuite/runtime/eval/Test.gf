@@ -14,7 +14,7 @@ def g0 = g2 ;
 fun g3 : Int -> (Int -> Int) ;
 def g3 3 = g ;
 
-fun const : Int -> Int -> Int ;
+fun const : Float -> String -> Float ;
 def const x _ = x ;
 
 cat Nat ;
