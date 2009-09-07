@@ -39,26 +39,10 @@ convertConcrete :: Options -> Abstr -> CId -> Concr -> IO ParserInfo
 convertConcrete opts abs lang cnc = do
   let env0 = emptyGrammarEnv cnc_defs cat_defs
   when (flag optProf opts) $ do
-    let (GrammarEnv last_id catSet seqSet funSet crcSet prodSet) = env0
-    hPutStrLn stderr ""
-    hPutStrLn stderr ("Language: " ++ show lang)
-    hPutStrLn stderr ""
-    hPutStrLn stderr "Categories                 Count"
-    hPutStrLn stderr "--------------------------------"
-    case IntMap.lookup 0 catSet of
-      Just cats -> sequence_ [hPutStrLn stderr (lformat 23 cid ++ rformat 9 (fcat2-fcat1+1))
-                                    | (cid,(fcat1,fcat2,_)) <- Map.toList cats]
-      Nothing   -> return ()
-    hPutStrLn stderr "--------------------------------"
+    profileGrammar lang cnc_defs env0 pfrules
   let env1 = expandHOAS abs_defs cnc_defs cat_defs env0
-  when (flag optProf opts) $ do
-    hPutStrLn stderr ""
-    hPutStrLn stderr "Rules                      Count"
-    hPutStrLn stderr "--------------------------------"
-  env2 <- foldM (convertRule opts cnc_defs) env1 pfrules
-  when (flag optProf opts) $ do
-    hPutStrLn stderr "--------------------------------"
-  return $! getParserInfo env2
+      env2 = List.foldl' (convertRule cnc_defs) env1 pfrules
+  return $ getParserInfo env2
   where
     abs_defs = Map.assocs (funs abs)
     cnc_defs = Map.union (opers cnc) (lins cnc) -- "union big+small most efficient"
@@ -71,15 +55,38 @@ convertConcrete opts abs lang cnc = do
         
     findLinType (_,id) = fromMaybe (error $ "No lincat for " ++ show id) (Map.lookup id cat_defs)
 
-lformat :: Show a => Int -> a -> String
-lformat n x = s ++ replicate (n-length s) ' '
+profileGrammar lang cnc_defs (GrammarEnv last_id catSet seqSet funSet crcSet prodSet) pfrules = do
+  hPutStrLn stderr ""
+  hPutStrLn stderr ("Language: " ++ show lang)
+  hPutStrLn stderr ""
+  hPutStrLn stderr "Categories                 Count"
+  hPutStrLn stderr "--------------------------------"
+  case IntMap.lookup 0 catSet of
+    Just cats -> mapM_ profileCat (Map.toList cats)
+    Nothing   -> return ()
+  hPutStrLn stderr "--------------------------------"
+  hPutStrLn stderr ""
+  hPutStrLn stderr "Rules                      Count"
+  hPutStrLn stderr "--------------------------------"
+  mapM_ profileRule pfrules
+  hPutStrLn stderr "--------------------------------"
   where
-    s = show x
+    profileCat (cid,(fcat1,fcat2,_)) = do
+      hPutStrLn stderr (lformat 23 cid ++ rformat 9 (fcat2-fcat1+1))
 
-rformat :: Show a => Int -> a -> String
-rformat n x = replicate (n-length s) ' ' ++ s
-  where
-    s = show x
+    profileRule (PFRule fun args res ctypes ctype term) = do
+      let pargs = zipWith (protoFCat cnc_defs) args ctypes
+      hPutStrLn stderr (lformat 23 fun ++ rformat 9 (product [length xs | PFCat _ _ _ tcs <- pargs, (_,xs) <- tcs]))
+
+    lformat :: Show a => Int -> a -> String
+    lformat n x = s ++ replicate (n-length s) ' '
+      where
+        s = show x
+
+    rformat :: Show a => Int -> a -> String
+    rformat n x = replicate (n-length s) ' ' ++ s
+      where
+        s = show x
 
 brk :: (GrammarEnv -> GrammarEnv) -> (GrammarEnv -> GrammarEnv)
 brk f (GrammarEnv last_id catSet seqSet funSet crcSet prodSet) =
@@ -98,24 +105,18 @@ brk f (GrammarEnv last_id catSet seqSet funSet crcSet prodSet) =
             count = length xs
             ys    = foldr (zipWith Set.insert) (repeat Set.empty) xs
 
-convertRule :: Options -> TermMap -> GrammarEnv -> ProtoFRule -> IO GrammarEnv
-convertRule opts cnc_defs grammarEnv (PFRule fun args res ctypes ctype term) = do
+convertRule :: TermMap -> GrammarEnv -> ProtoFRule -> GrammarEnv
+convertRule cnc_defs grammarEnv (PFRule fun args res ctypes ctype term) =
   let pres  = protoFCat cnc_defs res ctype
       pargs = zipWith (protoFCat cnc_defs) args ctypes
 
       b     = runBranchM (convertTerm cnc_defs [] ctype term) (pargs,[])
       (grammarEnv1,b1) = addSequences' grammarEnv b
       grammarEnv2 = brk (\grammarEnv -> foldBM addRule
-                                               grammarEnv
-                                               (go' b1 [] [])
-                                               (pres,pargs)  ) grammarEnv1
-  when (flag optProf opts) $ do
-    hPutStr stderr (lformat 23 fun ++ rformat 9 (product [length xs | PFCat _ _ _ tcs <- pargs, (_,xs) <- tcs]))
-    hFlush  stderr
-  grammarEnv3 <- evaluate grammarEnv2
-  when (flag optProf opts) $ do
-    hPutStrLn stderr ""
-  return grammarEnv3
+                                grammarEnv
+                                (go' b1 [] [])
+                                (pres,pargs)  ) grammarEnv1
+  in grammarEnv2
   where
     addRule lins (newCat', newArgs') env0 =
       let [newCat]        = getFCats env0 newCat'
