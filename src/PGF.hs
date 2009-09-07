@@ -23,7 +23,7 @@ module PGF(
            languages, abstractName, languageCode,
            
            -- * Types
-           Type(..),
+           Type(..), Hypo(..),
            showType, readType,
            categories, startCat,
 
