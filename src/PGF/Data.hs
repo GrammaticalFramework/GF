@@ -78,3 +78,18 @@ emptyPGF = PGF {
   abstract  = error "empty grammar, no abstract",
   concretes = Map.empty
   }
+
+-- | This is just a 'CId' with the language name.
+-- A language name is the identifier that you write in the 
+-- top concrete or abstract module in GF after the 
+-- concrete/abstract keyword. Example:
+-- 
+-- > abstract Lang = ...
+-- > concrete LangEng of Lang = ...
+type Language     = CId
+
+readLanguage :: String -> Maybe Language
+readLanguage = readCId
+
+showLanguage :: Language -> String
+showLanguage = prCId

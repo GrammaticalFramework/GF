@@ -99,10 +99,10 @@ restrictPGF cond pgf = pgf {
   restrict = Map.filterWithKey (\c _ -> cond c)
   abstr = abstract pgf
 
-depth :: Tree -> Int
-depth (Abs _  t) = depth t
-depth (Fun _ ts) = maximum (0:map depth ts) + 1
-depth _          = 1
+depth :: Expr -> Int
+depth (EAbs _  t)  = depth t
+depth (EApp e1 e2) = max (depth e1) (depth e2) + 1
+depth _            = 1
 
 cftype :: [CId] -> CId -> Type
 cftype args val = DTyp [Hyp (cftype [] arg) | arg <- args] val []

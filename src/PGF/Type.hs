@@ -82,7 +82,3 @@ ppHypo scope (HypV x typ) = let y = freshName x scope
                             in (y:scope,PP.parens (PP.text (prCId y) PP.<+> PP.char ':' PP.<+> ppType 0 scope typ))
 ppHypo scope (HypI x typ) = let y = freshName x scope
                             in (y:scope,PP.braces (PP.text (prCId y) PP.<+> PP.char ':' PP.<+> ppType 0 scope typ))
-
-ppParens :: Bool -> PP.Doc -> PP.Doc
-ppParens True  = PP.parens
-ppParens False = id

@@ -20,7 +20,6 @@ import GF.Compile.Export
 import GF.Infra.Option (noOptions, readOutputFormat, Encoding(..))
 import GF.Infra.UseIO
 import GF.Data.ErrM ----
-import PGF.Expr (readTree)
 import GF.Command.Abstract
 import GF.Command.Messages
 import GF.Text.Lexing
@@ -140,8 +139,7 @@ allCommands cod env@(pgf, mos) = Map.fromList [
        "flag -format."
        ],
      exec = \opts es -> do
-         let ts = toTrees es
-             grph = if null ts then [] else alignLinearize pgf (head ts)
+         let grph = if null es then [] else alignLinearize pgf (head es)
          if isFlag "view" opts || isFlag "format" opts then do
            let file s = "_grph." ++ s
            let view = optViewGraph opts ++ " "
@@ -241,7 +239,7 @@ allCommands cod env@(pgf, mos) = Map.fromList [
      exec = \opts _ -> do
        let pgfr = optRestricted opts
        ts <- generateRandom pgfr (optType opts)
-       return $ fromTrees $ take (optNum opts) ts
+       returnFromExprs $ take (optNum opts) ts
      }),
   ("gt", emptyCommandInfo {
      longname = "generate_trees",
@@ -262,7 +260,7 @@ allCommands cod env@(pgf, mos) = Map.fromList [
        let pgfr = optRestricted opts
        let dp = return $ valIntOpts "depth" 4 opts
        let ts = generateAllDepth pgfr (optType opts) dp
-       returnFromTrees $ take (optNumInf opts) ts
+       returnFromExprs $ take (optNumInf opts) ts
      }),
   ("h", emptyCommandInfo {
      longname = "help",
@@ -329,7 +327,7 @@ allCommands cod env@(pgf, mos) = Map.fromList [
        "gr -lang=LangHin -cat=Cl | l -table -to_devanagari -to_utf8 -- hindi table",
        "l -unlexer=\"LangSwe=to_utf8 LangHin=to_devanagari,to_utf8\" -- different lexers"
        ],
-     exec = \opts -> return . fromStrings . map (optLin opts) . toTrees,
+     exec = \opts -> return . fromStrings . map (optLin opts),
      options = [
        ("all","show all forms and variants"),
        ("bracket","show tree structure with brackets and paths to nodes"),
@@ -381,7 +379,7 @@ allCommands cod env@(pgf, mos) = Map.fromList [
        "The default start category can be overridden by the -cat flag.",
        "See also the ps command for lexing and character encoding."
        ],
-     exec = \opts -> returnFromTrees . concatMap (par opts) . toStrings,
+     exec = \opts -> returnFromExprs . concatMap (par opts) . toStrings,
      flags = [
        ("cat","target category of parsing"),
        ("lang","the languages of parsing (comma-separated, no spaces)")
@@ -490,13 +488,13 @@ allCommands cod env@(pgf, mos) = Map.fromList [
      exec = \opts _ -> do 
        let file = valStrOpts "file" "_gftmp" opts
        s <- readFile file
-       return $ case opts of
-         _ | isOpt "lines" opts && isOpt "tree" opts -> 
-               fromTrees [t | l <- lines s, Just t <- [readTree l]] 
+       case opts of
+         _ | isOpt "lines" opts && isOpt "tree" opts ->
+               returnFromExprs [e | l <- lines s, Just e0 <- [readExpr l], Right (e,t) <- [inferExpr pgf e0]]
          _ | isOpt "tree" opts -> 
-               fromTrees [t | Just t <- [readTree s]] 
-         _ | isOpt "lines" opts -> fromStrings $ lines s 
-         _ -> fromString s,
+               returnFromExprs [e | Just e0 <- [readExpr s], Right (e,t) <- [inferExpr pgf e0]] 
+         _ | isOpt "lines" opts -> return (fromStrings $ lines s)
+         _ -> return (fromString s),
      flags = [("file","the input file name")] 
      }),
   ("tq", emptyCommandInfo {
@@ -565,10 +563,9 @@ allCommands cod env@(pgf, mos) = Map.fromList [
        "flag -format."
        ],
      exec = \opts es -> do
-         let ts = toTrees es
-             funs = not (isOpt "nofun" opts)
+         let funs = not (isOpt "nofun" opts)
          let cats = not (isOpt "nocat" opts)
-         let grph = visualizeTrees pgf (funs,cats) ts -- True=digraph
+         let grph = visualizeTrees pgf (funs,cats) es -- True=digraph
          if isFlag "view" opts || isFlag "format" opts then do
            let file s = "_grph." ++ s
            let view = optViewGraph opts ++ " "
@@ -644,26 +641,24 @@ allCommands cod env@(pgf, mos) = Map.fromList [
   ]
  where
    enc = encodeUnicode cod
-   lin opts t = unlines [linearize pgf lang t    | lang <- optLangs opts]
    par opts s = concat  [parse pgf lang (optType opts) s | lang <- optLangs opts, canParse pgf lang]
  
    void = ([],[])
 
-   optLin opts t = case opts of 
-     _ | isOpt "treebank" opts -> treebank opts t
-     _ -> unlines [linear opts lang t | lang <- optLangs opts] 
+   optLin opts t = unlines $ 
+     case opts of 
+       _ | isOpt "treebank" opts -> (prCId (abstractName pgf) ++ ": " ++ showExpr [] t) :
+                                    [prCId lang ++ ": " ++ linear opts lang t | lang <- optLangs opts]
+       _                         -> [linear opts lang t | lang <- optLangs opts] 
     
+   linear :: [Option] -> CId -> Expr -> String
    linear opts lang = let unl = unlex opts lang in case opts of
        _ | isOpt "all"     opts -> allLinearize unl pgf lang
        _ | isOpt "table"   opts -> tableLinearize unl pgf lang
        _ | isOpt "term"    opts -> termLinearize pgf lang
        _ | isOpt "record"  opts -> recordLinearize pgf lang
        _ | isOpt "bracket" opts -> markLinearize pgf lang
-       _  -> unl . linearize pgf lang
-
-   treebank opts t = unlines $ 
-     (prCId (abstractName pgf) ++ ": " ++ showTree t) :
-     [prCId lang ++ ": " ++ linear opts lang t | lang <- optLangs opts]
+       _                        -> unl . linearize pgf lang
 
    unlex opts lang = stringOps Nothing (getUnlex opts lang ++ map prOpt opts) ----
 
@@ -705,21 +700,16 @@ allCommands cod env@(pgf, mos) = Map.fromList [
    optViewGraph opts = valStrOpts "view" "open" opts
    optNum opts = valIntOpts "number" 1 opts
    optNumInf opts = valIntOpts "number" 1000000000 opts ---- 10^9
-
-   fromTrees ts = (map tree2expr ts,unlines (map showTree ts))
+   
+   fromExprs   es = (es,unlines (map (showExpr []) es))
    fromStrings ss = (map (ELit . LStr) ss, unlines ss)
    fromString  s  = ([ELit (LStr s)], s)
-   toTrees = map expr2tree
    toStrings = map showAsString 
    toString = unwords . toStrings
 
-   returnFromTrees ts = return $ case ts of
-     [] -> ([], "no trees found")
-     _ -> fromTrees ts
-
    returnFromExprs es = return $ case es of
      [] -> ([], "no trees found")
-     _  -> (es,unlines (map (showExpr []) es))
+     _  -> fromExprs es
 
    prGrammar opts
      | isOpt "cats"     opts = return $ fromString $ unwords $ map (showType []) $ categories pgf

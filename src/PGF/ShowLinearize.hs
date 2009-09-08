@@ -10,6 +10,7 @@ module PGF.ShowLinearize (
 
 import PGF.CId
 import PGF.Data
+import PGF.Tree
 import PGF.Macros
 import PGF.Linearize
 
@@ -57,17 +58,17 @@ mkRecord typ trm = case (typ,trm) of
    str = realize
 
 -- show all branches, without labels and params
-allLinearize :: (String -> String) -> PGF -> CId -> Tree -> String
+allLinearize :: (String -> String) -> PGF -> CId -> Expr -> String
 allLinearize unlex pgf lang = concat . map (unlex . pr) . tabularLinearize pgf lang where
   pr (p,vs) = unlines vs
 
 -- show all branches, with labels and params
-tableLinearize :: (String -> String) -> PGF -> CId -> Tree -> String
+tableLinearize :: (String -> String) -> PGF -> CId -> Expr -> String
 tableLinearize unlex pgf lang = unlines . map pr . tabularLinearize pgf lang where
   pr (p,vs) = p +++ ":" +++ unwords (intersperse "|" (map unlex vs))
 
 -- create a table from labels+params to variants
-tabularLinearize :: PGF -> CId -> Tree -> [(String,[String])]
+tabularLinearize :: PGF -> CId -> Expr -> [(String,[String])]
 tabularLinearize pgf lang = branches . recLinearize pgf lang where
   branches r = case r of
     RR  fs -> [(lab +++ b,s) | (lab,t) <- fs, (b,s) <- branches t]
@@ -77,22 +78,22 @@ tabularLinearize pgf lang = branches . recLinearize pgf lang where
     RCon _ -> []
 
 -- show record in GF-source-like syntax
-recordLinearize :: PGF -> CId -> Tree -> String
+recordLinearize :: PGF -> CId -> Expr -> String
 recordLinearize pgf lang = prRecord . recLinearize pgf lang
 
 -- create a GF-like record, forming the basis of all functions above
-recLinearize :: PGF -> CId -> Tree -> Record
+recLinearize :: PGF -> CId -> Expr -> Record
 recLinearize pgf lang tree = mkRecord typ $ linTree pgf lang tree where
-  typ = case tree of
+  typ = case expr2tree tree of
           Fun f _ -> lookParamLincat pgf lang $ valCat $ lookType pgf f
 
 -- show PGF term
-termLinearize :: PGF -> CId -> Tree -> String
+termLinearize :: PGF -> CId -> Expr -> String
 termLinearize pgf lang = show . linTree pgf lang
 
 -- show bracketed markup with references to tree structure
-markLinearize :: PGF -> CId -> Tree -> String
-markLinearize pgf lang t = concat $ take 1 $ linearizesMark pgf lang t
+markLinearize :: PGF -> CId -> Expr -> String
+markLinearize pgf lang = concat . take 1 . linearizesMark pgf lang
 
 
 -- for Morphology: word, lemma, tags
@@ -102,7 +103,7 @@ collectWords pgf lang =
       [(f,c,0) | (f,(DTyp [] c _,_,_)) <- Map.toList $ funs $ abstract pgf] 
   where
     collOne (f,c,i) = 
-      fromRec f [prCId c] (recLinearize pgf lang (Fun f (replicate i (Meta 888))))
+      fromRec f [prCId c] (recLinearize pgf lang (foldl EApp (EFun f) (replicate i (EMeta 888))))
     fromRec f v r = case r of
       RR  rs -> concat [fromRec f v t | (_,t) <- rs] 
       RT  rs -> concat [fromRec f (p:v) t | (p,t) <- rs]

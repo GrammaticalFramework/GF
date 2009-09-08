@@ -20,6 +20,7 @@ import Data.List (groupBy)
 
 import PGF.CId
 import PGF.Data
+import PGF.Tree
 import GF.Data.Assoc
 import GF.Data.Utilities (sameLength, foldMerge, splitBy)
 

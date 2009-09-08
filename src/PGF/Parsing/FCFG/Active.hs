@@ -16,6 +16,7 @@ import qualified GF.Data.MultiMap as MM
 
 import PGF.CId
 import PGF.Data
+import PGF.Tree
 import PGF.Parsing.FCFG.Utilities
 import PGF.BuildParser
 
@@ -37,8 +38,8 @@ makeFinalEdge cat 0 0 = (cat, [EmptyRange])
 makeFinalEdge cat i j = (cat, [makeRange i j])
 
 -- | the list of categories = possible starting categories
-parse :: String -> ParserInfo -> Type -> [FToken] -> [Tree]
-parse strategy pinfo (DTyp _ start _) toks = nubsort $ filteredForests >>= forest2trees
+parse :: String -> ParserInfo -> Type -> [FToken] -> [Expr]
+parse strategy pinfo (DTyp _ start _) toks = map (tree2expr) . nubsort $ filteredForests >>= forest2trees
   where
     inTokens = input toks
     starts = Map.findWithDefault [] start (startCats pinfo)

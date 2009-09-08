@@ -15,3 +15,5 @@ pFactor :: RP.ReadP Expr
 ppExpr :: Int -> [CId] -> Expr -> PP.Doc
 
 freshName :: CId -> [CId] -> CId
+
+ppParens :: Bool -> PP.Doc -> PP.Doc

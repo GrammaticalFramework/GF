@@ -21,6 +21,7 @@ module PGF.VisualizeTree ( visualizeTrees, alignLinearize
 
 import PGF.CId (prCId)
 import PGF.Data
+import PGF.Tree
 import PGF.Linearize
 import PGF.Macros (lookValCat)
 
@@ -28,8 +29,8 @@ import Data.List (intersperse,nub)
 import Data.Char (isDigit)
 import qualified Text.ParserCombinators.ReadP as RP
 
-visualizeTrees :: PGF -> (Bool,Bool) -> [Tree] -> String
-visualizeTrees pgf funscats = unlines . map (prGraph False . tree2graph pgf funscats)
+visualizeTrees :: PGF -> (Bool,Bool) -> [Expr] -> String
+visualizeTrees pgf funscats = unlines . map (prGraph False . tree2graph pgf funscats . expr2tree)
 
 tree2graph :: PGF -> (Bool,Bool) -> Tree -> [String]
 tree2graph pgf (funs,cats) = prf [] where
@@ -57,7 +58,7 @@ prGraph digr ns = concat $ map (++"\n") $ [graph ++ "{\n"] ++ ns ++ ["}"] where
 -- word alignments from Linearize.linearizesMark
 -- words are chunks like {[0,1,1,0] old}
 
-alignLinearize :: PGF -> Tree -> String
+alignLinearize :: PGF -> Expr -> String
 alignLinearize pgf = prGraph True . lin2graph . linsMark  where
   linsMark t = [s | la <- cncnames pgf, s <- take 1 (linearizesMark pgf la t)]
 

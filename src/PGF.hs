@@ -33,13 +33,9 @@ module PGF(
            -- * Expressions
            -- ** Identifiers
            CId, mkCId, prCId, wildCId,
-
-           -- ** Tree
-           Tree(..), Literal(..),
-           showTree, readTree,
            
            -- ** Expr
-           Expr(..), Equation(..),
+           Literal(..), Expr(..),
            showExpr, readExpr,
 
            -- * Operations
@@ -51,7 +47,7 @@ module PGF(
            parse, canParse, parseAllLang, parseAll,
            
            -- ** Evaluation
-           tree2expr, expr2tree, PGF.compute, paraphrase,
+           PGF.compute, paraphrase,
            
            -- ** Type Checking
            checkType, checkExpr, inferExpr,
@@ -60,7 +56,7 @@ module PGF(
            -- ** Word Completion (Incremental Parsing)
            complete,
            Incremental.ParseState,
-	   initState, Incremental.nextState, Incremental.getCompletions, extractExps,
+           Incremental.initState, Incremental.nextState, Incremental.getCompletions, Incremental.extractExps,
 
            -- ** Generation
            generateRandom, generateAll, generateAllDepth
@@ -74,12 +70,11 @@ import PGF.Paraphrase
 import PGF.Macros
 import PGF.Data hiding (functions)
 import PGF.Binary
-import PGF.Parsing.FCFG
+import qualified PGF.Parsing.FCFG.Active as Active
 import qualified PGF.Parsing.FCFG.Incremental as Incremental
 import qualified GF.Compile.GeneratePMCFG as PMCFG
 
 import GF.Infra.Option
-import GF.Data.ErrM
 import GF.Data.Utilities (replace)
 
 import Data.Char
@@ -94,19 +89,6 @@ import Control.Monad
 -- Interface
 ---------------------------------------------------
 
--- | This is just a 'CId' with the language name.
--- A language name is the identifier that you write in the 
--- top concrete or abstract module in GF after the 
--- concrete/abstract keyword. Example:
--- 
--- > abstract Lang = ...
--- > concrete LangEng of Lang = ...
-type Language     = CId
-
-readLanguage :: String -> Maybe Language
-
-showLanguage :: Language -> String
-
 -- | Reads file in Portable Grammar Format and produces
 -- 'PGF' structure. The file is usually produced with:
 --
@@ -114,7 +96,7 @@ showLanguage :: Language -> String
 readPGF  :: FilePath -> IO PGF
 
 -- | Linearizes given expression as string in the language
-linearize    :: PGF -> Language -> Tree -> String
+linearize    :: PGF -> Language -> Expr -> String
 
 -- | Tries to parse the given string in the specified language
 -- and to produce abstract syntax expression. An empty
@@ -122,25 +104,25 @@ linearize    :: PGF -> Language -> Tree -> String
 -- contain more than one element if the grammar is ambiguous.
 -- Throws an exception if the given language cannot be used
 -- for parsing, see 'canParse'.
-parse        :: PGF -> Language -> Type -> String -> [Tree]
+parse        :: PGF -> Language -> Type -> String -> [Expr]
 
 -- | Checks whether the given language can be used for parsing.
 canParse     :: PGF -> Language -> Bool
 
 -- | The same as 'linearizeAllLang' but does not return
 -- the language.
-linearizeAll     :: PGF -> Tree -> [String]
+linearizeAll     :: PGF -> Expr -> [String]
 
 -- | Linearizes given expression as string in all languages
 -- available in the grammar.
-linearizeAllLang :: PGF -> Tree -> [(Language,String)]
+linearizeAllLang :: PGF -> Expr -> [(Language,String)]
 
 -- | Show the printname of a type
 showPrintName :: PGF -> Language -> Type -> String
 
 -- | The same as 'parseAllLang' but does not return
 -- the language.
-parseAll     :: PGF -> Type -> String -> [[Tree]]
+parseAll     :: PGF -> Type -> String -> [[Expr]]
 
 -- | Tries to parse the given string with all available languages.
 -- Languages which cannot be used for parsing (see 'canParse')
@@ -150,31 +132,21 @@ parseAll     :: PGF -> Type -> String -> [[Tree]]
 -- (this is a list, since grammars can be ambiguous). 
 -- Only those languages
 -- for which at least one parsing is possible are listed.
-parseAllLang :: PGF -> Type -> String -> [(Language,[Tree])]
-
--- | Creates an initial parsing state for a given language and
--- startup category.
-initState :: PGF -> Language -> Type -> Incremental.ParseState
-
--- | This function extracts the list of all completed parse trees
--- that spans the whole input consumed so far. The trees are also
--- limited by the category specified, which is usually
--- the same as the startup category.
-extractExps :: Incremental.ParseState -> Type -> [Tree]
+parseAllLang :: PGF -> Type -> String -> [(Language,[Expr])]
 
 -- | The same as 'generateAllDepth' but does not limit
 -- the depth in the generation.
-generateAll      :: PGF -> Type -> [Tree]
+generateAll      :: PGF -> Type -> [Expr]
 
 -- | Generates an infinite list of random abstract syntax expressions.
 -- This is usefull for tree bank generation which after that can be used
 -- for grammar testing.
-generateRandom   :: PGF -> Type -> IO [Tree]
+generateRandom   :: PGF -> Type -> IO [Expr]
 
 -- | Generates an exhaustive possibly infinite list of
 -- abstract syntax expressions. A depth can be specified
 -- to limit the search space.
-generateAllDepth :: PGF -> Type -> Maybe Int -> [Tree]
+generateAllDepth :: PGF -> Type -> Maybe Int -> [Expr]
 
 -- | List of all languages available in the given grammar.
 languages    :: PGF -> [Language]
@@ -221,10 +193,6 @@ complete :: PGF -> Language -> Type -> String
 -- Implementation
 ---------------------------------------------------
 
-readLanguage = readCId
-
-showLanguage = prCId
-
 readPGF f = decodeFile f >>= addParsers
 
 -- Adds parsers for all concretes that don't have a parser and that have parser=ondemand.
@@ -243,10 +211,8 @@ parse pgf lang typ s =
   case Map.lookup lang (concretes pgf) of
     Just cnc -> case parser cnc of
                   Just pinfo -> if Map.lookup (mkCId "erasing") (cflags cnc) == Just "on"
-                                  then Incremental.parse pinfo typ (words s)
-                                  else case parseFCFG "topdown" pinfo typ (words s) of
-                                         Ok x  -> x
-                                         Bad s -> error s
+                                  then Incremental.parse pgf lang typ (words s)
+                                  else Active.parse "t"  pinfo typ (words s)
                   Nothing    -> error ("No parser built for language: " ++ prCId lang)
     Nothing  -> error ("Unknown language: " ++ prCId lang)
 
@@ -262,13 +228,6 @@ parseAll mgr typ = map snd . parseAllLang mgr typ
 
 parseAllLang mgr typ s = 
   [(lang,ts) | lang <- languages mgr, canParse mgr lang, let ts = parse mgr lang typ s, not (null ts)]
-
-initState pgf lang typ =
-  case lookParser pgf lang of
-    Just pinfo -> Incremental.initState pinfo typ
-    _          -> error ("Unknown language: " ++ prCId lang)
-
-extractExps state typ = Incremental.extractExps state typ
 
 generateRandom pgf cat = do
   gen <- newStdGen
@@ -297,11 +256,11 @@ functionType pgf fun =
 
 complete pgf from typ input = 
          let (ws,prefix) = tokensAndPrefix input
-             state0 = initState pgf from typ
+             state0 = Incremental.initState pgf from typ
          in case foldM Incremental.nextState state0 ws of
               Nothing -> []
               Just state -> 
-                (if null prefix && not (null (extractExps state typ)) then [unwords ws ++ " "] else [])
+                (if null prefix && not (null (Incremental.extractExps state typ)) then [unwords ws ++ " "] else [])
                 ++ [unwords (ws++[c]) ++ " " | c <- Map.keys (Incremental.getCompletions state prefix)]
   where
     tokensAndPrefix :: String -> ([String],String)

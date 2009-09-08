@@ -21,7 +21,6 @@ import GF.Compile.Coding
 import PGF
 import PGF.Data
 import PGF.Macros
-import PGF.Expr (readTree)
 
 import Data.Char
 import Data.Maybe
