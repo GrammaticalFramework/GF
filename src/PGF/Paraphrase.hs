@@ -14,6 +14,7 @@ module PGF.Paraphrase (
   ) where
 
 import PGF.Data
+import PGF.Tree
 import PGF.Macros (lookDef,isData)
 import PGF.Expr
 import PGF.CId
@@ -23,15 +24,18 @@ import qualified Data.Map as Map
 
 import Debug.Trace ----
 
-paraphrase :: PGF -> Tree -> [Tree]
+paraphrase :: PGF -> Expr -> [Expr]
 paraphrase pgf = nub . paraphraseN 2 pgf
 
-paraphraseN :: Int -> PGF -> Tree -> [Tree]
-paraphraseN 0 _ t = [t]
-paraphraseN i pgf t = 
+paraphraseN :: Int -> PGF -> Expr -> [Expr]
+paraphraseN i pgf = map tree2expr . paraphraseN' i pgf . expr2tree
+
+paraphraseN' :: Int -> PGF -> Tree -> [Tree]
+paraphraseN' 0 _ t = [t]
+paraphraseN' i pgf t = 
   step i t ++ [Fun g ts' | Fun g ts <- step (i-1) t, ts' <- sequence (map par ts)]
  where
-  par = paraphraseN (i-1) pgf 
+  par = paraphraseN' (i-1) pgf 
   step 0 t = [t]
   step i t = let stept = step (i-1) t in stept ++ concat [def u | u <- stept]
   def = fromDef pgf

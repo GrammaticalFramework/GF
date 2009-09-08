@@ -18,7 +18,7 @@ allTreeOps pgf = [
    ("compute",("compute by using semantic definitions (def)",
       map (compute pgf))),
    ("paraphrase",("paraphrase by using semantic definitions (def)",
-      map tree2expr . nub . concatMap (paraphrase pgf . expr2tree))),
+      nub . concatMap (paraphrase pgf))),
    ("smallest",("sort trees from smallest to largest, in number of nodes",
       smallest))
   ]

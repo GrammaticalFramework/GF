@@ -43,9 +43,9 @@ library
     PGF.Parsing.FCFG.Utilities
     PGF.Parsing.FCFG.Active
     PGF.Parsing.FCFG.Incremental
-    PGF.Parsing.FCFG
     PGF.Expr
     PGF.Type
+    PGF.Tree
     PGF.PMCFG
     PGF.Paraphrase
     PGF.TypeCheck
@@ -160,6 +160,7 @@ executable gf
     PGF.Data
     PGF.Expr
     PGF.Type
+    PGF.Tree
     PGF.PMCFG
     PGF.Macros
     PGF.Generate
@@ -167,7 +168,6 @@ executable gf
     PGF.BuildParser
     PGF.Parsing.FCFG.Utilities
     PGF.Parsing.FCFG.Active
-    PGF.Parsing.FCFG
     PGF.Binary
     PGF.Paraphrase
     PGF.TypeCheck

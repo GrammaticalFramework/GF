@@ -21,13 +21,17 @@ import Control.Monad
 import GF.Data.SortedList
 import PGF.CId
 import PGF.Data
+import PGF.Macros
+import PGF.TypeCheck
 import Debug.Trace
 
-parse :: ParserInfo -> Type -> [String] -> [Tree]
-parse pinfo typ toks = maybe [] (\ps -> extractExps ps typ) (foldM nextState (initState pinfo typ) toks)
+parse :: PGF -> Language -> Type -> [String] -> [Expr]
+parse pgf lang typ toks = maybe [] (\ps -> extractExps ps typ) (foldM nextState (initState pgf lang typ) toks)
 
-initState :: ParserInfo -> Type -> ParseState
-initState pinfo (DTyp _ start _) = 
+-- | Creates an initial parsing state for a given language and
+-- startup category.
+initState :: PGF -> Language -> Type -> ParseState
+initState pgf lang (DTyp _ start _) = 
   let items = do
         cat <- fromMaybe [] (Map.lookup start (startCats pinfo))
         (funid,args) <- foldForest (\funid args -> (:) (funid,args)) (\_ _ args -> args)
@@ -35,8 +39,14 @@ initState pinfo (DTyp _ start _) =
         let FFun fn _ lins = functions pinfo ! funid
         (lbl,seqid) <- assocs lins
         return (Active 0 0 funid seqid args (AK cat lbl))
-        
-  in State pinfo
+     
+      pinfo =
+        case lookParser pgf lang of
+          Just pinfo -> pinfo
+          _          -> error ("Unknown language: " ++ prCId lang)
+
+  in State pgf
+           pinfo
            (Chart emptyAC [] emptyPC (productions pinfo) (totalCats pinfo) 0)
            (TMap.singleton [] (Set.fromList items))
 
@@ -44,7 +54,7 @@ initState pinfo (DTyp _ start _) =
 -- 'nextState' computes a new state where the token
 -- is consumed and the current position shifted by one.
 nextState :: ParseState -> String -> Maybe ParseState
-nextState (State pinfo chart items) t =
+nextState (State pgf pinfo chart items) t =
   let (mb_agenda,map_items) = TMap.decompose items
       agenda = maybe [] Set.toList mb_agenda
       acc    = fromMaybe TMap.empty (Map.lookup t map_items)
@@ -56,7 +66,7 @@ nextState (State pinfo chart items) t =
                      }
   in if TMap.null acc1
        then Nothing
-       else Just (State pinfo chart2 acc1)
+       else Just (State pgf pinfo chart2 acc1)
   where
     add (tok:toks) item acc
       | tok == t            = TMap.insertWith Set.union toks (Set.singleton item) acc
@@ -67,7 +77,7 @@ nextState (State pinfo chart items) t =
 -- next words and the consequent states. This is used for word completions in
 -- the GF interpreter.
 getCompletions :: ParseState -> String -> Map.Map String ParseState
-getCompletions (State pinfo chart items) w =
+getCompletions (State pgf pinfo chart items) w =
   let (mb_agenda,map_items) = TMap.decompose items
       agenda = maybe [] Set.toList mb_agenda
       acc    = Map.filterWithKey (\tok _ -> isPrefixOf w tok) map_items
@@ -77,20 +87,25 @@ getCompletions (State pinfo chart items) w =
                      , passive=emptyPC
                      , offset =offset chart1+1
                      }
-  in fmap (State pinfo chart2) acc'
+  in fmap (State pgf pinfo chart2) acc'
   where
     add (tok:toks) item acc
       | isPrefixOf w tok    = Map.insertWith (TMap.unionWith Set.union) tok (TMap.singleton toks (Set.singleton item)) acc
     add _          item acc = acc
 
-extractExps :: ParseState -> Type -> [Tree]
-extractExps (State pinfo chart items) (DTyp _ start _) = exps
+-- | This function extracts the list of all completed parse trees
+-- that spans the whole input consumed so far. The trees are also
+-- limited by the category specified, which is usually
+-- the same as the startup category.
+extractExps :: ParseState -> Type -> [Expr]
+extractExps (State pgf pinfo chart items) ty@(DTyp _ start _) = 
+  nubsort [e1 | e <- exps, Right e1 <- [checkExpr pgf e ty]]
   where
     (mb_agenda,acc) = TMap.decompose items
     agenda = maybe [] Set.toList mb_agenda
     (_,st) = process Nothing (\_ _ -> id) (sequences pinfo) (functions pinfo) agenda () chart
 
-    exps = nubsort $ do
+    exps = do
       cat <- fromMaybe [] (Map.lookup start (startCats pinfo))
       (funid,args) <- foldForest (\funid args -> (:) (funid,args)) (\_ _ args -> args)
                                  [] cat (productions pinfo)
@@ -102,7 +117,7 @@ extractExps (State pinfo chart items) (DTyp _ start _) = exps
       return tree
 
     go rec fcat' (d,fcat)
-      | fcat < totalCats pinfo = return (Set.empty,Meta (fcat'*10+d))   -- FIXME: here we assume that every rule has at most 10 arguments
+      | fcat < totalCats pinfo = return (Set.empty,EMeta (fcat'*10+d))   -- FIXME: here we assume that every rule has at most 10 arguments
       | Set.member fcat rec    = mzero
       | otherwise              = foldForest (\funid args trees -> 
                                                   do let FFun fn _ lins = functions pinfo ! funid
@@ -118,14 +133,14 @@ extractExps (State pinfo chart items) (DTyp _ start _) = exps
 
     check_ho_fun fun args
       | fun == _V = return (head args)
-      | fun == _B = return (foldl1 Set.difference (map fst args),Abs [mkVar (snd e) | e <- tail args] (snd (head args)))
-      | otherwise = return (Set.unions (map fst args),Fun fun (map snd args))
+      | fun == _B = return (foldl1 Set.difference (map fst args), foldr (\x e -> EAbs (mkVar (snd x)) e) (snd (head args)) (tail args))
+      | otherwise = return (Set.unions (map fst args),foldl (\e x -> EApp e (snd x)) (EFun fun) args)
     
-    mkVar (Var  v) = v
-    mkVar (Meta _) = wildCId
+    mkVar (EFun  v) = v
+    mkVar (EMeta _) = wildCId
     
-    freeVar (Var v) = Set.singleton v
-    freeVar _       = Set.empty
+    freeVar (EFun v) = Set.singleton v
+    freeVar _        = Set.empty
 
 _B = mkCId "_B"
 _V = mkCId "_V"
@@ -194,12 +209,12 @@ updateAt :: Int -> a -> [a] -> [a]
 updateAt nr x xs = [if i == nr then x else y | (i,y) <- zip [0..] xs]
 
 litCatMatch fcat (Just t)
-  | fcat == fcatString = Just ([t],Lit (LStr t))
-  | fcat == fcatInt    = case reads t of {[(n,"")] -> Just ([t],Lit (LInt n));
+  | fcat == fcatString = Just ([t],ELit (LStr t))
+  | fcat == fcatInt    = case reads t of {[(n,"")] -> Just ([t],ELit (LInt n));
                                          _         -> Nothing }
-  | fcat == fcatFloat  = case reads t of {[(d,"")] -> Just ([t],Lit (LFlt d));
+  | fcat == fcatFloat  = case reads t of {[(d,"")] -> Just ([t],ELit (LFlt d));
                                          _         -> Nothing }
-  | fcat == fcatVar    = Just ([t],Var (mkCId t))
+  | fcat == fcatVar    = Just ([t],EFun (mkCId t))
 litCatMatch _    _     = Nothing
 
 
@@ -263,7 +278,7 @@ insertPC key fcat chart = Map.insert key fcat chart
 -- Forest
 ----------------------------------------------------------------
 
-foldForest :: (FunId -> [FCat] -> b -> b) -> (Tree -> [String] -> b -> b) -> b -> FCat -> IntMap.IntMap (Set.Set Production) -> b
+foldForest :: (FunId -> [FCat] -> b -> b) -> (Expr -> [String] -> b -> b) -> b -> FCat -> IntMap.IntMap (Set.Set Production) -> b
 foldForest f g b fcat forest =
   case IntMap.lookup fcat forest of
     Nothing  -> b
@@ -280,7 +295,7 @@ foldForest f g b fcat forest =
 
 -- | An abstract data type whose values represent
 -- the current state in an incremental parser.
-data ParseState = State ParserInfo Chart (TMap.TrieMap String (Set.Set Active))
+data ParseState = State PGF ParserInfo Chart (TMap.TrieMap String (Set.Set Active))
 
 data Chart
   = Chart

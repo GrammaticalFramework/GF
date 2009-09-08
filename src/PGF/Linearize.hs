@@ -4,6 +4,7 @@ module PGF.Linearize
 import PGF.CId
 import PGF.Data
 import PGF.Macros
+import PGF.Tree
 
 import Control.Monad
 import qualified Data.Map as Map
@@ -13,7 +14,7 @@ import Debug.Trace
 
 -- linearization and computation of concrete PGF Terms
 
-linearizes :: PGF -> CId -> Tree -> [String]
+linearizes :: PGF -> CId -> Expr -> [String]
 linearizes pgf lang = realizes . linTree pgf lang
 
 realize :: Term -> String
@@ -54,8 +55,8 @@ liftVariants = f
     f (W s t)   = liftM (W s) $ f t
     f t         = return t
 
-linTree :: PGF -> CId -> Tree -> Term
-linTree pgf lang = lin
+linTree :: PGF -> CId -> Expr -> Term
+linTree pgf lang = lin . expr2tree
   where
     lin (Abs xs  e )   = case lin e of
                              R ts -> R $ ts     ++ (Data.List.map (kks . prCId) xs)
@@ -122,11 +123,11 @@ compute pgf lang args = comp where
 ---------
 -- markup with tree positions
 
-linearizesMark :: PGF -> CId -> Tree -> [String]
+linearizesMark :: PGF -> CId -> Expr -> [String]
 linearizesMark pgf lang = realizes . linTreeMark pgf lang
 
-linTreeMark :: PGF -> CId -> Tree -> Term
-linTreeMark pgf lang = lin []
+linTreeMark :: PGF -> CId -> Expr -> Term
+linTreeMark pgf lang = lin [] . expr2tree
   where
     lin p (Abs xs  e )   = case lin p e of
                              R ts -> R $ ts     ++ (Data.List.map (kks . prCId) xs)

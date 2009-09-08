@@ -20,7 +20,6 @@ module GF.Quiz (
 
 import PGF
 import PGF.ShowLinearize
-
 import GF.Data.Operations
 import GF.Infra.UseIO
 import GF.Infra.Option
