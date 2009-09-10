@@ -1,10 +1,10 @@
 --# -path=.:../romance:../common:../abstract:../../prelude
 
 concrete LexiconRon of Lexicon = CatRon ** 
-  open ParadigmsRon,BeschRon,MorphoRon in {
+  open ParadigmsRon,MorphoRon,BeschRon in {
 
 flags 
-  optimize=values; coding=cp1250;
+  optimize=values ; 
 
 lin
  airplane_N = mkN "avion" ;
@@ -72,7 +72,7 @@ lin
  factory_N = mkN "fabricã" ;
  father_N2 = mkN2 (mkN "tatã" "taþi" masculine) (noPrep Ge);
  fear_VS = mkVS (v_besch100 "teme") ;
- fear_V2 = mmkV2 (mkRV (mkV100 "teme")) (mkPrep "de" Ac) ;
+ fear_V2 = mmkV2 (mkRVAcc (mkV100 "teme")) (mkPrep "de" Ac) ;
  find_V2 = dirV2 (mkV "gãsi") ;
  fish_N = mkN "peºte" masculine ;
  floor_N = mkN "podea" ;
@@ -91,6 +91,7 @@ green_A = mkA "verde" ;
 harbour_N = mkNR "port" ;
 hate_V2 = dirV2 (mkV "urî") ;
 hat_N = mkN "pãlãrie" ;
+have_V2 = dirV2 (v_have) ;
 hear_V2 = dirV2 (v_besch127 "auzi") ;
 hill_N = mkNR "deal" ;
 hope_VS = mkVS (v_besch17 "spera") ;
@@ -129,9 +130,9 @@ newspaper_N = mkN "ziar" ;
 oil_N = mkNR "ulei" ;
 old_A = mkA "vechi" "veche" "vechi" "vechi" ; 
 open_V2 = dirV2 (mkV "deshide") ;
-paint_V2A = mkV2A (mkV "picta") (noPrep Ac) (mkPrep "cu" Ac) ; 
+paint_V2A = mkV2A (mkV "picta") (noPrep Ac) (noPrep Ac) ; 
 paper_N = mkN "hârtie" ;
-paris_PN = mkPN "Paris" ;
+paris_PN = mkInAn(mkPN "Paris") ;
 peace_N = mkN "pace" "pãci" ;
 pen_N = mkNR "stilou" ;
 planet_N = mkN "planetã" ;
@@ -142,7 +143,7 @@ priest_N = mkAnim (mkN "preot" masculine) ;
 probable_AS = mkAS (mkA "probabil") ;
 queen_N = mkAnim (mkN "reginã" "regine") ;
 radio_N = mkNR "radio";
---rain_V0 = mkV0 (v_besch54 "ploua") ;
+rain_V0 = mkV0 (v_besch54 "ploua") ;
 read_V2 = dirV2 (mkV "citi") ;
 red_A = mkA "roºu" "roºie" "roºii" "roºii" ;
 religion_N = mkN "religie" ;
@@ -183,7 +184,7 @@ rubber_N = mkNR "cauciuc";
  switch8off_V2 = dirV2 (v_besch77 "stinge") ;
  switch8on_V2 = dirV2 (mkV "aprinde") ;
  table_N = mkN "masã" "mese" ;
- talk_V3 = mmkV3 (mkV "vorbi") (noPrep Ac) (mkPrep "cu" Ac) ; 
+ talk_V3 = mmkV3 (mkV "vorbi") (mkPrep "cu" Ac) (mkPrep "despre" Ac); 
  teacher_N = mkAnim (mkN "profesor") ;
  teach_V2 = dirV2 (v_besch57 "preda") ;
  television_N = mkN "televiziune" ;
@@ -199,7 +200,7 @@ rubber_N = mkNR "cauciuc";
  village_N = mkN "sat" neuter ;
  wait_V2 = dirV2 (v_besch30 "aºtepta") ;
  walk_V = v_besch90 "merge" ;
- warm_A = mkA "calduþ" ;
+ warm_A = mkA "cãlduþ" "cãlduþã" "cãlduþi" "cãlduþe" "cãlduros";
  war_N = mkN "rãzboi" neuter ;
  watch_V2 = dirV2 (mkV "privi") ;
  water_N = mkN "apã" ;
@@ -208,7 +209,7 @@ rubber_N = mkNR "cauciuc";
  wine_N = mkNR "vin" ;
  win_V2 = dirV2 (v_besch17 "câºtiga") ;
  woman_N = chV "femeie" (mkAnim (mkN "femeie")) ;
- wonder_VQ = mkVQ (mkRV (regV "minuna")) ;
+ wonder_VQ = mkVQ (mkRVAcc (regV "minuna")) ;
  wood_N = mkN "lemn" ;
  write_V2 = dirV2 (v_besch117 "scrie") ;
  yellow_A = mkA "galben" ;
@@ -221,11 +222,11 @@ rubber_N = mkNR "cauciuc";
   add_V3 = dirV3 (v_besch23 "adãuga") ;
   number_N = mkN "numãr" ;
   put_V2 = dirV2 (v_besch76 "pune") ;
-  stop_V = mkRV (regV "opri") ;
+  stop_V = mkRVAcc (regV "opri") ;
  jump_V = v_besch118 "sãri" ;
 
-  left_Ord = mkOrd (regA "stâng") ;
-  right_Ord = mkOrd (mkRMut "drept") ;
+ --left_Ord = mkOrd (regA "stâng") ;
+ --right_Ord = mkOrd (mkRMut "drept") ;
 far_Adv = mkAdv "departe" ;
 correct_A = mkA "corect" ;
 dry_A = mkA "uscat" ;
@@ -321,7 +322,7 @@ wide_A = mkA "adânc" ;
   hunt_V2 = dirV2 (mkV "vâna") ;
   kill_V2 = dirV2 (v_besch81 "ucide") ;
   laugh_V =  v_besch91 "râde" ;
-  lie_V = mkRV (regV "întinde") ;
+  lie_V = mkRVAcc (regV "întinde") ;
   play_V = mkNV (mkV48 "juca") ;
   pull_V2 = dirV2 (v_besch78 "trage") ;
   push_V2 = dirV2 (v_besch77 "împinge") ;
@@ -329,7 +330,7 @@ wide_A = mkA "adânc" ;
   scratch_V2 = dirV2 (v_besch23 "scãrpina") ;
   sew_V = v_besch110 "coase" ;
   sing_V = v_besch18  "cânta" ;
-  sit_V = mkRV (mkV41 "aºeza") ;
+  sit_V = mkRVAcc (mkV41 "aºeza") ;
   smell_V = v_besch133 "mirosi" ;
   spit_V = v_besch17 "scuipa" ;
   squeeze_V2 = dirV2 (v_besch88 "stoarce") ;

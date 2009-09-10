@@ -54,9 +54,11 @@ oper
   Acc : NCase ;
   Dat : NCase ;
   Gen : NCase ;
-    
-  mkPrep : Str -> NCase -> Prep ;
-  noPrep : NCase -> Prep ;
+ mkPrep : overload {   
+  mkPrep : Str -> NCase-> Bool -> Prep ;
+  mkPrep : Str -> NCase -> Prep; 
+ };
+noPrep : NCase -> Prep ;
 
 --2 Nouns
 
@@ -83,11 +85,30 @@ mkN3 n p q = n ** {lock_N3 = <> ; c2 = p ; c3 = q };
 
   mkPN  = overload {
     mkPN : Str -> PN = mkPropN ;
+    mkPN : Str -> Str -> Gender -> Number -> PN = mkPropNI ;
     mkPN : Str -> Gender -> PN = mkPropNoun ;
-    mkPN : Str -> Gender -> Number -> PN = mkProperNoun; 
-    } ;
+    mkPN : Str -> Gender -> Number -> PN = mkProperNoun;  
+   } ;
 
+mkInAn : PN -> PN = \romania ->
+   {s = table {No | Ac | Vo => romania.s ! No ;
+               _ => case romania.g of
+                       { Fem => romania.s ! Ge ;
+                         Masc => romania.s ! No + "ului" }
+              };
+    g = romania.g; n = romania.n;
+    a = Inanimate;
+    lock_PN = <>
+    };
 
+mkPropNI : Str -> Str -> Gender -> Number -> PN =
+\romania, romaniei,g,n ->
+{s = table {Ge | Da => romaniei;
+            _       => romania  };
+g = g; n = n;
+a = Inanimate;
+lock_PN = <>
+};
 mkPropN : Str -> PN = \Ion ->
 case last Ion of
 { "a" => mkPropNoun Ion Feminine ;
@@ -98,15 +119,20 @@ mkPropNoun : Str -> Gender -> PN = \Ion, gen ->
  mkProperNoun Ion gen singular ;
 
 mkProperNoun : Str -> Gender -> Number -> PN = \Ion, gen, num ->
-{s = table {ANomAcc => Ion;
-            AGenDat => case <last Ion,gen> of
+{s = table {No => Ion;
+            Ac => Ion;
+            Ge => case <last Ion,gen> of
                       { <"a",Fem> => init Ion + "ei" ;
                         _         => "lui" ++ Ion
                       };
-            AVoc => Ion            
+            Da => case <last Ion,gen> of
+                      { <"a",Fem> => init Ion + "ei" ;
+                        _         => "lui" ++ Ion
+                      };
+            Vo => Ion            
             };
 g = gen ;
-n = num ;
+n = num ; a = Animate;
 lock_PN = <>
 };
 
@@ -152,9 +178,22 @@ lock_PN = <>
   
   
   Preposition = Compl ;
-  mkPrep ss cc = {s = ss ; c = cc; isDir = True; lock_Prep = <>} ;
-  noPrep cc = mkPrep [] cc  ;
 
+mkPrep = overload {
+mkPrep : Str -> NCase-> Bool -> Prep = mkPreposition;
+mkPrep : Str -> NCase -> Prep = mkPrepos; 
+};
+  mkPreposition : Str -> NCase-> Bool -> Prep ;
+  mkPreposition ss cc b = {s = ss ; c = cc; isDir = NoDir; needIndef = b; prepDir = ""; lock_Prep = <>} ;
+  
+  mkPrepos : Str -> NCase -> Prep ;
+  mkPrepos ss cc = mkPreposition ss cc False;
+
+  noPrep cc = case cc of 
+                      {Ac  => {s = []; c = Ac ; isDir = Dir PAcc; needIndef = True; prepDir = "pe"; lock_Prep = <>};
+                       Da  => {s = []; c = Da ; isDir = Dir PDat; needIndef = False; prepDir = "" ; lock_Prep = <>};
+                       _  => mkPreposition [] cc False 
+                       } ;
   
 compN : N -> Str -> N ;
 compN x y = composeN x y ** {lock_N = <>} ;
@@ -231,62 +270,33 @@ mkA = overload {
 mk4A : Str -> Str -> Str -> Str -> A;
 mk4A a b c d =  
 let adj = mkAdjSpec a b c d in
-{s = table { Posit  => adj.s ;
-             Compar => \\f => "mai" ++ (adj.s ! f) ++ "decât";
-             Superl => table {AF g n a c => artDem g n c ++ "mai" ++ adj.s ! (AF g n Indef c) ;
-                              AA         => artDem Masc Sg ANomAcc ++ "mai" ++ adj.s ! AA 
-                                                          
-                              }
-            }; isPre = False ; lock_A = <>} ;
+{s =  adj.s ;
+ isPre = False ; lock_A = <>} ;
 
 mk5A : Str -> Str -> Str -> Str -> Str -> A ;
 mk5A a b c d e = 
 let adj = mkAdjSSpec a b c d e in
-{s = table { Posit  => adj.s ;
-             Compar => \\f => "mai" ++ (adj.s ! f) ++ "decât";
-             Superl => table {AF g n a c => artDem g n c ++ "mai" ++ adj.s ! (AF g n Indef c);
-                              AA         => artDem Masc Sg ANomAcc ++ "mai" ++ adj.s ! AA 
-                                                          
-                              }
-            }; isPre = False ; lock_A = <>} ;
+{s =  adj.s ;
+ isPre = False ; lock_A = <>} ;
 
 regA : Str -> A = \auriu ->  let adj = mkAdjReg auriu in
-                             {s = table {Posit  => adj.s ;
-                                         Compar => \\f => "mai" ++  (adj.s ! f) ++ "decât";
-                                         Superl => table {AF g n a c => artDem g n c ++ "mai" ++ adj.s ! (AF g n Indef c);
-                                                          AA         => artDem Masc Sg ANomAcc ++ "mai" ++ adj.s ! AA 
-                                                          } 
-                             }; isPre = False ; lock_A = <> } ;
+                             {s = adj.s ;
+                              isPre = False ; lock_A = <> } ;
                              
 invarA : Str -> A = \auriu -> 
 let adj =mkAdjInvar auriu in
-{s = table { Posit  => adj.s ;
-             Compar => \\f => "mai" ++ (adj.s ! f) ++ "decât";
-             Superl => table {AF g n a c => artDem g n c ++ "mai" ++ adj.s ! (AF g n Indef c);
-                              AA         => artDem Masc Sg ANomAcc ++ "mai" ++ adj.s ! AA 
-                                                          
-                              }
-            }; isPre = False ; lock_A = <>} ;
+{s = adj.s ;
+ isPre = False ; lock_A = <>} ;
 
 mkRMut : Str -> A = \auriu ->
 let adj = mkRegMut auriu in
-{s = table { Posit  => adj.s ;
-             Compar => \\f => "mai" ++ (adj.s ! f) ++ "decât";
-             Superl => table {AF g n a c => artDem g n c ++ "mai" ++ adj.s ! (AF g n Indef c);
-                              AA         => artDem Masc Sg ANomAcc ++ "mai" ++ adj.s ! AA 
-                                                          
-                              }
-            }; isPre = False ; lock_A = <>} ;
+{s = adj.s ;
+ isPre = False ; lock_A = <>} ;
        
 mkSMut : Str -> A = \auriu ->
 let adj = mkSpecMut auriu in
-{s = table { Posit  => adj.s ;
-             Compar => \\f => "mai" ++ (adj.s ! f) ++ "decât";
-             Superl => table {AF g n a c => artDem g n c ++ "mai" ++ adj.s ! (AF g n Indef c);
-                              AA         => artDem Masc Sg ANomAcc ++ "mai" ++ adj.s ! AA 
-                                                          
-                              }
-            }; isPre = False ; lock_A = <>} ;    
+{s = adj.s ;
+ isPre = False ; lock_A = <>} ;    
             
  mkADeg : A -> A -> A ;
  noComp : A -> A ;
@@ -295,10 +305,10 @@ let adj = mkSpecMut auriu in
   prefA : A -> A ;
 
 mkADeg a b = 
-    {s = table {Posit => a.s ! Posit ; _ => b.s ! Posit} ; isPre = a.isPre ; lock_A = <>} ;
+    {s = a.s ; isPre = a.isPre ; lock_A = <>} ;
 
 noComp a = 
-    {s = \\_ => a.s ! Posit ;
+    {s =  a.s ;
      isPre = a.isPre ;
      lock_A = <>} ;
   
@@ -359,7 +369,7 @@ oper mkV : Str -> V = \s -> mkNV (regV s) ;
 
   mkV3 = overload {
     mkV3 : V -> V3 = dirV3 ;          
-    mkV3 : V -> Prep -> Prep -> V3 = mmkV3    
+    mkV3 : V -> Prep -> Prep ->  V3 = mmkV3    
     } ;
 
   V0 : Type = V ;
@@ -371,25 +381,25 @@ oper mkV : Str -> V = \s -> mkNV (regV s) ;
   mmkV2 : V -> Prep -> V2 ;
   mmkV2 v p = v ** {c2 = p ; lock_V2 = <>} ;
 
+  
   dirV2 : V -> V2 ;
   dirV2 v = mmkV2 v (noPrep Ac) ;
    
-  mmkV3 : V -> Prep -> Prep -> V3 ;
-  mmkV3 v p q = v ** {c2 = p ; c3 = q ; lock_V3 = <>} ;
+  --mmkV3 : V -> Prep -> Prep -> Bool -> V3 ;
+  --mmkV3 v p q = v ** {c2 = p ; c3 = q ; lock_V3 = <>} ;
   
   mkVS : V -> VS ;
   mkVS  v = v ** {m = \\_ => Indic ; lock_VS = <>} ;  
-  mkV2S v p = mmkV2 v p ** {mn,mp = Indic ; lock_V2S = <>} ;
---  mkVV  v = v ** {c2 = complAcc ; lock_VV = <>} ;
---  deVV  v = v ** {c2 = complGen ; lock_VV = <>} ;
---aVV  v = v ** {c2 = complDat ; lock_VV = <>} ;
-  mkV2V v p q = mmkV3 v p q ** {lock_V2V = <>} ;
+  mkV2S v p = v ** {c2 = p ; mn,mp = Indic ; lock_V2S = <>} ;
+  mkVV : V -> VV ;
+  mkVV  v = v ** {c2 = \\_ => "" ;  lock_VV = <>} ;
+  mkV2V v p q = v ** {c2 = p; c3 = q; lock_V2V = <>} ;
   mkVA  v = v ** {lock_VA = <>} ;
-  mkV2A v p q = mmkV3 v p q ** {lock_V2A = <>} ;
+  mkV2A v p q = v ** {c2 = p; c3 = q; lock_V2A = <>} ;
    mkVQ : V -> VQ ;
    mkVQ  v = v ** {lock_VQ = <>} ;
    mkV2Q : V -> Prep -> V2Q ;
-   mkV2Q v p = mmkV2 v p ** {lock_V2Q = <>} ;
+   mkV2Q v p =  v ** {c2 = p ; lock_V2Q = <>} ;
 
   mkAS  v = v ** {lock_AS = <>} ; ---- more moods
   mkA2S v p = mkA2 v p ** {lock_A2S = <>} ;
@@ -400,7 +410,7 @@ oper mkV : Str -> V = \s -> mkNV (regV s) ;
 
  
 mkOrd : A -> Ord ;
-mkOrd a = {s = a.s ! Posit ; isPre = a.isPre ; lock_Ord = <>} ;
+mkOrd a = {s = \\n,g,c => a.s ! AF g n Indef (convCase c)  ; isPre = a.isPre ; lock_Ord = <>} ;
 
 
 
@@ -418,7 +428,128 @@ mkOrd a = {s = a.s ! Posit ; isPre = a.isPre ; lock_Ord = <>} ;
  
      
   
+----
+
+mkDet = overload {
+    mkDet : (_,_,_,_ : Str) -> Number -> Det = mkDetS ;          
+    mkDet : (_,_,_,_,_,_,_,_ : Str) -> Number -> Det = mkD    
+    } ;
+
+mkDetS : (_,_,_,_ : Str) -> Number -> Det =
+ \orice, oricare,oricarui, oricarei,n ->
+ {s,sp = table { Masc => table {Da | Ge => oricarui ;
+                                _       => orice } ;
+                 Fem  => table {Da | Ge => oricarei ;
+                                _       => oricare }
+               };
+ post = \\g,c => ""; size = "";
+ n = n; isDef = False ; hasRef = False;
+lock_Det = <>
+};
+
+mkD : (_,_,_,_,_,_,_,_ : Str) -> Number -> Det =
+\multi, multe, multor, multorf,multiS,multeS, multora, multoraF, n ->
+ { s = table { Masc => table {Da | Ge => multor ;
+                                _     => multi } ;
+               Fem  => table {Da | Ge => multorf ;
+                                _     => multe }
+               };
+   sp = table  { Masc => table {Da | Ge => multora ;
+                                _       => multiS } ;
+                 Fem  => table {Da | Ge => multoraF ;
+                                _       => multeS }
+               };
+post = \\g,c => ""; size = "";
+  n = n; isDef = False ; hasRef = False;
+lock_Det = <> 
+};
+
+mkNP = overload {
+    mkNP : (_,_ : Str) -> Number -> Gender -> Bool -> NP = mkNPs ;          
+    mkNP : (_,_,_ : Str) -> Number -> Gender -> Bool -> NP = mkNPa ;    
+    mkNP : (_,_,_ : Str) -> Number -> Gender -> NP = mkNPspec
+    } ;
+
+mkNPspec : Str -> Str -> Str -> Number -> Gender -> NP = 
+\cineva,cuiva,cinev, n, g -> let ag = agrP3 g n in
+{ s = \\c => case c of
+        {Da => {clit = \\cs => ((genCliticsCase ag Da).s ! cs) ;
+                comp = cuiva
+                };
+         Ge => {clit = \\cs => [] ;
+                comp = cuiva};
+         Vo => {clit = \\cs => [] ;
+                comp = cinev 
+                };
+         _  => {clit = \\cs => ((genCliticsCase ag c).s ! cs) ;
+                comp = cineva
+                }      
+         };
+a = ag ;
+indForm = cineva ;
+hasClit = True;
+isPronoun = False ;
+hasRef = True ;
+lock_NP = <>
+} ;
+
+mkNPs : Str -> Str -> Number -> Gender -> Bool -> NP = 
+\cineva, cuiva, n, g, b -> let ag = agrP3 g n in
+{s = \\c => case c of
+           {Da | Ge => {clit = \\cs => [] ;
+                   comp = cuiva
+                  };   
+            _  => {clit = \\cs => [];
+                   comp = cineva}
+            };
+ a = ag ;
+ indForm = cineva ;
+ hasClit = False;
+ isPronoun = False ;
+ hasRef = b ;
+lock_NP = <>
+};
+
+mkNPa : Str -> Str -> Str -> Number -> Gender -> Bool -> NP =
+\om,omului,omule, n, g, b -> let ag = agrP3 g n 
+ in
+{s = \\c => case c of 
+           {Da | Ge => {clit = \\cs => [] ;
+                   comp = omului
+                   }; 
+            Vo => {clit = \\_ => [];
+                   comp = omule};
+            _  => {clit = \\cs => [] ;
+                   comp = om}
+            };
+ a = ag;
+ hasClit = False;
+ hasRef = b;
+ isPronoun = False ;
+ indForm = om ;
+lock_NP = <>
+};
+mkPronoun :(_,_,_,_,_,_,_,_,_ : Str) -> Gender -> Number -> Person -> Pron =\eu, mine, mie, meu, euV, meuP, mea, mei, mele,g, n, p -> 
+        {s = table
+              {No => eu ; 
+               Ac =>  mine ;  
+               Da =>  mie ; 
+               Ge =>  meu;  
+               Vo =>  euV  
+               } ; 
+         c1 = \\c => (cliticsAc g n p).s ! c ; c2 = \\c => (cliticsDa g n p).s ! c ;
+         a = {g = g ; n = n ; p = p} ;
+         poss = table {Sg => table {Masc => meuP ; Fem => mea};
+                       Pl => table {Masc => mei ; Fem => mele}
+                      }; 
+         lock_Pron = <>};
 
 
+
+
+-- fix for Genitive, person 1 - 2
+-- only problem is for genitive case demanded by prepositions (ex : beyond me), otherwise the possesive adjective is used. 
+-- in this case we add a case to the complement, so that the right gender is chosen.
+ 
 
 } ;
