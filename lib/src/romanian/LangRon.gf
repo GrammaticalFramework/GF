@@ -1,4 +1,4 @@
---# -path=.:../romance:../abstract:../common
+--# -path=.:../abstract:../common:../prelude
 
 concrete LangRon of Lang = 
   GrammarRon,

@@ -1,10 +1,9 @@
 --# -path=.:../Romance:../common:../../prelude
 
 resource MorphoRon = ResRon ** 
-  open  Prelude, Predef in {
+  open   Prelude, Predef in {
 
-flags
-  optimize=noexpand; coding=cp1250;
+flags optimize=noexpand ;
 
 ---------------------------------------------------------------------------------
 ------------------------------ARTICLES-------------------------------------------
@@ -20,12 +19,12 @@ case <g,n,a> of
 { <Masc,Sg,ANomAcc>  => case last bun of
                         { "u" => bun + "l";
                           "e" => bun + "le"; 
-                          "ã" => bun + "a";
+                          "ã" => init bun + "a";
                            _   => bun + "ul"
                         };
   <Masc,Sg,AGenDat>  => case last bun of
-                        {("u"|"e" ) => bun + "lui" ;
-                         _          => bun + "ului"
+                        {("u"|"e"|"ã" ) => bun + "lui" ;    
+                          _          => bun + "ului"
                          };              
   <Masc,Sg,AVoc>  => case bun of
 					    { x+"u"           => bun + "le";
@@ -68,15 +67,16 @@ case <g,n,a> of
  <Fem,Sg,No> => "o"; <Fem,Sg,Ac> => "o"; <Fem,Sg,Da> => "unei"; <Fem,Sg,Ge> => "unei"
 };
 
+--Articles 
 --possesive article 
 -- used for Cardinals and for Genitive case		  				    	
 
-oper artPos : Gender -> Number -> Str = \g,n ->
- case <g,n> of
-{ <Masc,Sg> => "al";
-  <Masc,Pl> => "ai";
-  <Fem,Sg>  => "a";
-  <Fem,Pl>  => "ale"
+oper artPos : Gender -> Number -> ACase -> Str = \g,n,c ->
+ case <g,n,c> of
+{ <Masc,Sg,AGenDat> => "alui"; <Masc,Sg,_> => "al";
+  <Masc,Pl,AGenDat> => "alor"; <Masc,Pl,_> => "ai";
+  <Fem,Sg,AGenDat>  => "alei"; <Fem,Sg,_>  => "a";
+  <Fem,Pl,AGenDat>  => "ale";  <Fem,Pl,_>  => "ale"
 };
 
 	     		  
@@ -92,6 +92,7 @@ oper artDem : Gender -> Number -> ACase -> Str = \g,n,c ->
 <Masc,Pl,AVoc> => "cei"; <Fem,Sg,AVoc> => "cea"; <Fem,Pl,AVoc> => "cele"
   
 };
+
 
 --flexion forms of a noun without article
 
@@ -222,7 +223,7 @@ mkVocc : Noun -> Str -> Noun  = \n -> \vo ->
  
  mkInanimate : Noun -> Noun = \n ->
  {s = table { Sg => \\p,c => case c of 
-                       {AVoc => n.s ! Sg ! Indef ! ANomAcc ;
+                       {AVoc => n.s ! Sg ! p ! ANomAcc ;
                         _    => n.s ! Sg ! p ! c
                        };
               Pl => \\p, c => n.s ! Pl ! p ! c         
@@ -540,12 +541,12 @@ mkSpecMut : Str -> Adj = \s ->
 -- Gerund - 1 form 
 -- 2nd person Singular form for Imperative - 1 form
 
-  Verbe : Type = VForm => Str ;
+  Verbe : Type = { s : VForm => Str};
   
    verbAffixes :
      Str-> (a,b,c,d: Number => Person => Str) ->  Str -> Adj -> Str -> Str -> Verbe =
     \fi,pres, imperf, pSimple, pPerf, subj, adj, ger, imp  ->
-    table {
+    let t = table {
       Inf                     => fi  ;
       Indi  Presn n p         => pres ! n ! p ;
       Indi  Imparf  n p       => imperf ! n ! p;
@@ -558,7 +559,8 @@ mkSpecMut : Str -> Adj = \s ->
       Imper        PlP1       => pres ! Pl ! P1 ;
       Ger                     => ger ;
       PPasse g n a d          => adj. s ! (AF g  n  a  d) 
-      } ;
+      }  in
+     {s = t};
 
 
 -- syntactical verb : 
@@ -568,22 +570,40 @@ SVerbe : Type = VerbForm => Str ;
 
   mkVerb : Verbe -> SVerbe = \vb -> 
     table {   
-      TInf                    => "a" ++ vb ! Inf  ;
-      TIndi  TPresn n p       => vb ! (Indi Presn n p) ;
-      TIndi  TImparf  n p     => vb ! (Indi Imparf n p);
-      TIndi  TPComp n  p      => pComp ! n ! p ++ vb ! (PPasse Masc Sg Indef ANomAcc) ;
-      TIndi  TPSimple n p     => vb ! (Indi PSimple n p) ;
-      TIndi  TPPerfect n p    => vb ! (Indi PPerfect n p) ;
-      TIndi  TFutur   n p     => pFut ! n ! p ++ vb ! Inf ;
-      TSubjo TSPres   n p     => "sã" ++ vb ! (Subjo SPres n p) ;
-      TSubjo TSPast   n p     => "sã" ++ "fi" ++ vb ! (PPasse Masc Sg Indef ANomAcc) ;
-      TCondi n p              => pCond ! n ! p ++ vb ! Inf ;
-      TImper        PlP1      => "sã" ++ vb ! (Imper PlP1) ;
-      TImper        p         => vb ! (Imper p) ;
-      TGer                    => vb ! Ger ;
-      TPPasse g n a d         => vb ! (PPasse g n a d)
+      TInf                    => "a" ++ vb.s ! Inf  ;
+      TIndi  TPresn n p       => vb.s ! (Indi Presn n p) ;
+      TIndi  TImparf  n p     => vb.s ! (Indi Imparf n p);
+      TIndi  TPComp n  p      => pComp ! n ! p ++ vb.s ! (PPasse Masc Sg Indef ANomAcc) ;
+      TIndi  TPSimple n p     => vb.s ! (Indi PSimple n p) ;
+      TIndi  TPPerfect n p    => vb.s ! (Indi PPerfect n p) ;
+      TIndi  TFutur   n p     => pFut ! n ! p ++ vb.s ! Inf ;
+      TSubjo TSPres   n p     => "sã" ++ vb.s ! (Subjo SPres n p) ;
+      TSubjo TSPast   n p     => "sã" ++ "fi" ++ vb.s ! (PPasse Masc Sg Indef ANomAcc) ;
+      TCondi n p              => pCond ! n ! p ++ vb.s ! Inf ;
+      TImper        PlP1      => "sã" ++ vb.s ! (Imper PlP1) ;
+      TImper        p         => vb.s ! (Imper p) ;
+      TGer                    => vb.s ! Ger ;
+      TPPasse g n a d         => vb.s ! (PPasse g n a d)
            }; 
 
+mkVerbRefl : Verbe -> SVerbe = \vb ->
+table {   
+      TInf                    => "a" ++ "se" ++ vb.s ! Inf  ;
+      TIndi  TPresn n p       => pronRefl ! n ! p ++ vb.s ! (Indi Presn n p) ;
+      TIndi  TImparf  n p     => pronRefl !n ! p ++ vb.s ! (Indi Imparf n p);
+      TIndi  TPComp n  p      => pronReflClit ! n ! p + "-" + pComp ! n ! p ++ vb.s ! (PPasse Masc Sg Indef ANomAcc) ;
+      TIndi  TPSimple n p     => pronRefl ! n ! p ++ vb.s ! (Indi PSimple n p) ;
+      TIndi  TPPerfect n p    => pronRefl ! n ! p ++ vb.s ! (Indi PPerfect n p) ;
+      TIndi  TFutur   n p     => pronRefl ! n ! p ++ pFut ! n ! p ++ vb.s ! Inf ;
+      TSubjo TSPres   n p     => "sã" ++ pronRefl ! n ! p ++ vb.s ! (Subjo SPres n p) ;
+      TSubjo TSPast   n p     => "sã" ++ pronRefl ! n ! p ++ "fi" ++ vb.s ! (PPasse Masc Sg Indef ANomAcc) ;
+      TCondi n p              => pronReflClit ! n ! p + "-" + pCond ! n ! p ++ vb.s ! Inf ;
+      TImper        PlP1      => "sã" ++ pronRefl ! Pl ! P1 ++ vb.s ! (Imper PlP1) ;
+      TImper        PlP2      => vb.s ! (Imper PlP2) + "-"+ pronRefl ! Pl ! P2  ;
+      TImper        SgP2      => vb.s ! (Imper SgP2) + "-"+ pronRefl ! Sg ! P2  ;
+      TGer                    => vb.s ! Ger + "u" + "-" + pronRefl ! Sg ! P3 ;
+      TPPasse g n a d         => vb.s ! (PPasse g n a d)
+           };                                 
 -- auxiliary for Past Composite (to have - as auxiliary) :
 
 pComp : Number => Person => Str = table {Sg => table {P1 => "am" ; P2 => "ai" ; P3 => "a"} ;
@@ -605,24 +625,6 @@ pCond : Number => Person => Str = table {Sg => table {P1 => "aº" ; P2 => "ai" ; 
 -- make Reflexive verbe :  ? with variants ?
 -- syntactical category of reflexive verbs based on the primitive forms in Verbe                                   
                                          
-mkVerbRefl : Verbe -> SVerbe = \vb ->
-table {   
-      TInf                    => "a" ++ "se" ++ vb ! Inf  ;
-      TIndi  TPresn n p       => pronRefl ! n ! p ++ vb ! (Indi Presn n p) ;
-      TIndi  TImparf  n p     => pronRefl !n ! p ++ vb ! (Indi Imparf n p);
-      TIndi  TPComp n  p      => pronReflClit ! n ! p + "-" + pComp ! n ! p ++ vb ! (PPasse Masc Sg Indef ANomAcc) ;
-      TIndi  TPSimple n p     => pronRefl ! n ! p ++ vb ! (Indi PSimple n p) ;
-      TIndi  TPPerfect n p    => pronRefl ! n ! p ++ vb ! (Indi PPerfect n p) ;
-      TIndi  TFutur   n p     => pronRefl ! n ! p ++ pFut ! n ! p ++ vb ! Inf ;
-      TSubjo TSPres   n p     => "sã" ++ pronRefl ! n ! p ++ vb ! (Subjo SPres n p) ;
-      TSubjo TSPast   n p     => "sã" ++ pronRefl ! n ! p ++ "fi" ++ vb ! (PPasse Masc Sg Indef ANomAcc) ;
-      TCondi n p              => pronReflClit ! n ! p + "-" + pCond ! n ! p ++ vb ! Inf ;
-      TImper        PlP1      => "sã" ++ pronRefl ! Pl ! P1 ++ vb ! (Imper PlP1) ;
-      TImper        PlP2      => vb ! (Imper PlP2) + "-"+ pronRefl ! Pl ! P2  ;
-      TImper        SgP2      => vb ! (Imper SgP2) + "-"+ pronRefl ! Sg ! P2  ;
-      TGer                    => vb ! Ger + "u" + "-" + pronRefl ! Sg ! P3 ;
-      TPPasse g n a d         => vb ! (PPasse g n a d)
-           };                                 
 
 -- reflexive pronouns - full form
 
@@ -664,7 +666,7 @@ table {Sg => table {P1 => "m" ; P2 => "te" ; P3 => "s"};
 -}
 
 -- This is a conversion to the type in $CommonRomance$.
-
+{-
 oper
   vvf : (VerbForm => Str) -> (VF => Str) = \aller -> table { 
     VInfin _       => aller ! TInf ;
@@ -679,7 +681,7 @@ oper
     VPart g n a d    => aller ! TPPasse g n a d ;
     VGer             => aller ! TGer 
     } ;
-
+-}
 
 
 -- vowells in Romanian - used for clitics
@@ -1568,8 +1570,8 @@ mkV68 : Str -> Verbe = \putea ->
          r    = root + "o"
       in
        verbAffixes vrea (mkTab root (root+"eau") (root+"ei")(root +"ea") (init root + "or")  affixPlGr24) 
-        (mkFromAffix r affixSgII affixPlII) (mkFromAffix root affixSgPS3 affixPlPS3)
-             (mkFromAffix root affixSgPP4 affixPlPP4) (root +"ea") (mkAdjReg (r + "ut"))
+        (mkFromAffix r affixSgI2 affixPlI2) (mkFromAffix root affixSgPS3 affixPlPS3)
+             (mkFromAffix root affixSgPP4 affixPlPP4) (root +"ea") (mkAdjReg (root + "ut"))
                     (root + "ând") (root + "ei") ;
                     
   ----------------------------------------------------------------------
@@ -2424,5 +2426,31 @@ let root = init fi ;
     in
     verbAffixes fi pres (mkFromAffix "er" affixSgI affixPlI) ps pp
                                                
--}    
-} ;
+-}   
+
+
+
+--------------Reflexive pronouns
+
+oper reflPron : Number -> Person -> ACase -> Str =
+\n,p,c -> case <n,p,c> of
+{<Sg,P1,AGenDat> => "mie" ; <Sg,P1,_> => "mine";
+ <Sg,P2,AGenDat> => "þie" ; <Sg,P2,_> => "tine";
+ <_,P3,AGenDat> => "sieºi" ; <_,P3,_> => "sine" ;
+ <Pl,P1,AGenDat> => "nouã" ; <Pl,P1,_> => "noi" ;
+ <Pl,P2,AGenDat> => "vouã" ; <Pl,P2,_> => "voi"   
+};
+
+oper reflPronHard : Gender -> Number -> Person -> Str =
+\g,n,p -> case <g,n,p> of
+{<Masc,Sg,P1> => "însumi" ; <Fem,Sg,P1> => "însãmi";
+ <Masc,Sg,P2> => "însuþi" ; <Fem,Sg,P2> => "însãþi";
+ <Masc,Sg,P3> => "însuºi" ; <Fem,Sg,P3> => "însãºi";
+ <Masc,Pl,P1> => "înºine" ; <Fem,Pl,P1> => "însene";  
+ <Masc,Pl,P2> => "înºivã";  <Fem,Pl,P2> => "înseva";
+ <Masc,Pl,P3> => "înºiºi";  <Fem,Pl,P3> => "înseºi"   
+
+};
+ 
+
+};

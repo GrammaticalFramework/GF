@@ -2,10 +2,10 @@ resource BeschRon = open Prelude, MorphoRon,CatRon in {
 
 flags optimize=noexpand ; -- faster and smaller than =all
 
-oper VerbeN = {s: VForm => Str } ;
-oper mkNV : Verbe -> V = \ve -> {s = ve ; lock_V = <> } ;
-oper mkRV : Verbe -> V = \ve -> {s = ve ; lock_V = <>} ;
-
+oper VerbeN = {s: VForm => Str ; isRefl : Agr => RAgr; nrClit : VClit} ;
+oper mkNV : Verbe -> V = \ve -> {s = ve.s ; isRefl = \\_ => RNoAg ; nrClit = VNone ;lock_V = <> } ;
+oper mkRVAcc : Verbe -> V = \ve -> {s = ve.s ; isRefl = \\a => aRefl a; nrClit = VRefl ;lock_V = <>} ;
+oper mkRVDat : Verbe -> V = \ve -> {s = ve.s ; isRefl = \\a => dRefl a; nrClit = VRefl ;lock_V = <>};
 
 -- for Group 1 - verbs ending in a (last sylablle) - the default behaviour is conjugation with "ez"
 --        with small mutation, depending on the second last letter (80 % verbs - especially neological)
