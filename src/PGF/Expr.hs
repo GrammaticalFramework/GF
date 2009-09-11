@@ -1,6 +1,11 @@
 module PGF.Expr(Tree, Expr(..), Literal(..), Patt(..), Equation(..),
                 readExpr, showExpr, pExpr, ppExpr, ppPatt,
 
+                mkApp,    unApp,
+                mkStr,    unStr,
+                mkInt,    unInt,
+                mkDouble, unDouble,
+
                 normalForm,
 
                 -- needed in the typechecker
@@ -81,6 +86,41 @@ showExpr vars = PP.render . ppExpr 0 vars
 instance Read Expr where
     readsPrec _ = RP.readP_to_S pExpr
 
+-- | Constructs an expression by applying a function to a list of expressions
+mkApp :: CId -> [Expr] -> Expr
+mkApp f es = foldl EApp (EFun f) es
+
+-- | Decomposes an expression into application of function
+unApp :: Expr -> Maybe (CId,[Expr])
+unApp = extract []
+  where
+    extract es (EFun f)     = Just (f,es)
+    extract es (EApp e1 e2) = extract (e2:es) e1
+    extract es _            = Nothing
+
+-- | Constructs an expression from string literal
+mkStr :: String -> Expr
+mkStr s = ELit (LStr s)
+
+-- | Decomposes an expression into string literal
+unStr :: Expr -> Maybe String
+unStr (ELit (LStr s)) = Just s
+
+-- | Constructs an expression from integer literal
+mkInt :: Integer -> Expr
+mkInt i = ELit (LInt i)
+
+-- | Decomposes an expression into integer literal
+unInt :: Expr -> Maybe Integer
+unInt (ELit (LInt i)) = Just i
+
+-- | Constructs an expression from real number literal
+mkDouble :: Double -> Expr
+mkDouble f = ELit (LFlt f)
+
+-- | Decomposes an expression into real number literal
+unDouble :: Expr -> Maybe Double
+unDouble (ELit (LFlt f)) = Just f
 
 -----------------------------------------------------
 -- Parsing

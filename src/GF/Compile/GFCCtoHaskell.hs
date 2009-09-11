@@ -59,11 +59,11 @@ haskPreamble name =
   "  gf :: a -> Tree",
   "  fg :: Tree -> a",
   "",
-  predefInst "GString" "String"  "Lit (LStr s)",
+  predefInst "GString" "String"  "unStr"    "mkStr",
   "",
-  predefInst "GInt"    "Integer" "Lit (LInt s)",
+  predefInst "GInt"    "Integer" "unInt"    "mkInt",
   "",
-  predefInst "GFloat"  "Double"  "Lit (LFlt s)",
+  predefInst "GFloat"  "Double"  "unDouble" "mkDouble",
   "",
   "----------------------------------------------------",
   "-- below this line machine-generated",
@@ -71,14 +71,14 @@ haskPreamble name =
   ""
  ]
 
-predefInst gtyp typ patt = 
+predefInst gtyp typ destr consr = 
   "newtype" +++ gtyp +++ "=" +++ gtyp +++ typ +++ " deriving Show" +++++
   "instance Gf" +++ gtyp +++ "where" ++++
-  "  gf (" ++ gtyp +++ "s) =" +++ patt ++++
+  "  gf (" ++ gtyp +++ "x) =" +++ consr +++ "x" ++++
   "  fg t =" ++++
-  "    case t of" ++++
-  "     " +++ patt +++ " ->" +++ gtyp +++ "s" ++++
-  "      _ -> error (\"no" +++ gtyp +++ "\" ++ show t)"
+  "    case "++destr++" t of" ++++
+  "      Just x  -> " +++ gtyp +++ "x" ++++
+  "      Nothing -> error (\"no" +++ gtyp +++ "\" ++ show t)"
 
 type OIdent = String
 
@@ -151,7 +151,7 @@ hInstance gId lexical m (cat,rules)
  | otherwise =
   "instance Gf" +++ gId cat +++ "where\n" ++
   unlines ([mkInst f xx | (f,xx) <- nonLexicalRules (lexical cat) rules]
-            ++ if lexical cat then ["  gf (" ++ lexicalConstructor cat +++ "x) = Fun (mkCId x) []"] else [])
+            ++ if lexical cat then ["  gf (" ++ lexicalConstructor cat +++ "x) = mkApp (mkCId x) []"] else [])
  where
    ec = elemCat cat
    baseVars = mkVars (baseSize (cat,rules))
@@ -159,7 +159,7 @@ hInstance gId lexical m (cat,rules)
      (if length xx == 0 then gId f else prParenth (gId f +++ foldr1 (+++) xx')) +++
      "=" +++ mkRHS f xx'
    mkVars n = ["x" ++ show i | i <- [1..n]]
-   mkRHS f vars = "Fun (mkCId \"" ++ f ++ "\")" +++ 
+   mkRHS f vars = "mkApp (mkCId \"" ++ f ++ "\")" +++ 
 		   "[" ++ prTList ", " ["gf" +++ x | x <- vars] ++ "]"
 
 
@@ -167,14 +167,14 @@ hInstance gId lexical m (cat,rules)
 fInstance _ _ m (cat,[]) = ""
 fInstance gId lexical m (cat,rules) =
   "  fg t =" ++++
-  "    case t of" ++++
+  "    case unApp t of" ++++
   unlines [mkInst f xx | (f,xx) <- nonLexicalRules (lexical cat) rules] ++++
-  (if lexical cat then "      Fun i [] -> " ++ lexicalConstructor cat +++ "(prCId i)" else "") ++++
+  (if lexical cat then "      (i,[]) -> " ++ lexicalConstructor cat +++ "(prCId i)" else "") ++++
   "      _ -> error (\"no" +++ cat ++ " \" ++ show t)"
    where
     mkInst f xx =
-     "      Fun i " ++
-     "[" ++ prTList "," xx' ++ "]" +++
+     "      Just (i," ++
+     "[" ++ prTList "," xx' ++ "])" +++
      "| i == mkCId \"" ++ f ++ "\" ->" +++ mkRHS f xx'
        where xx' = ["x" ++ show i | (_,i) <- zip xx [1..]]
 	     mkRHS f vars 
