@@ -41,6 +41,11 @@ module PGF(
            -- ** Expr
            Expr,
            showExpr, readExpr,
+           mkApp,    unApp,
+           mkStr,    unStr,
+           mkInt,    unInt,
+           mkDouble, unDouble,
+
 
            -- * Operations
            -- ** Linearization
@@ -106,7 +111,7 @@ import Control.Monad
 -- | Reads file in Portable Grammar Format and produces
 -- 'PGF' structure. The file is usually produced with:
 --
--- > $ gfc --make <grammar file name>
+-- > $ gf -make <grammar file name>
 readPGF  :: FilePath -> IO PGF
 
 -- | Linearizes given expression as string in the language
