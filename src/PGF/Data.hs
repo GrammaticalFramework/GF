@@ -1,7 +1,7 @@
 module PGF.Data (module PGF.Data, module PGF.Expr, module PGF.Type, module PGF.PMCFG) where
 
 import PGF.CId
-import PGF.Expr hiding (Value, Env)
+import PGF.Expr hiding (Value, Env, Tree)
 import PGF.Type
 import PGF.PMCFG
 
@@ -92,4 +92,4 @@ readLanguage :: String -> Maybe Language
 readLanguage = readCId
 
 showLanguage :: Language -> String
-showLanguage = prCId
+showLanguage = showCId

@@ -184,7 +184,7 @@ importInEnv gfenv opts files
                pgf0 = multigrammar (commandenv gfenv)
            pgf1 <- importGrammar pgf0 opts' files
            if (verbAtLeast opts Normal)
-             then putStrLnFlush $ unwords $ "\nLanguages:" : map prCId (languages pgf1)
+             then putStrLnFlush $ unwords $ "\nLanguages:" : map showCId (languages pgf1)
              else return ()
            return $ gfenv { commandenv = mkCommandEnv (coding gfenv) pgf1 }
 
@@ -215,7 +215,7 @@ welcome = unlines [
 
 prompt env 
   | abs == wildCId = "> "
-  | otherwise      = prCId abs ++ "> "
+  | otherwise      = showCId abs ++ "> "
   where
     abs = abstractName (multigrammar env)
 
@@ -265,7 +265,7 @@ wordCompletion gfenv line0 prefix0 p =
     CmplIdent _ pref
       -> do mb_abs <- try (evaluate (abstract pgf))
             case mb_abs of
-              Right abs -> ret ' ' [name | cid <- Map.keys (funs abs), let name = prCId cid, isPrefixOf pref name]
+              Right abs -> ret ' ' [name | cid <- Map.keys (funs abs), let name = showCId cid, isPrefixOf pref name]
               Left (_ :: SomeException) -> ret ' ' []
     _ -> ret ' ' []
   where
@@ -276,7 +276,7 @@ wordCompletion gfenv line0 prefix0 p =
     cmdEnv = commandenv gfenv
     optLang opts = valCIdOpts "lang" (head (languages pgf)) opts
     optType opts = 
-      let str = valStrOpts "cat" (prCId $ lookStartCat pgf) opts
+      let str = valStrOpts "cat" (showCId $ lookStartCat pgf) opts
       in case readType str of
            Just ty -> ty
            Nothing -> error ("Can't parse '"++str++"' as type")

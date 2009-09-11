@@ -193,8 +193,8 @@ fInstance gId lexical m (cat,rules) =
 --type HSkeleton = [(OIdent, [(OIdent, [OIdent])])]
 hSkeleton :: PGF -> (String,HSkeleton)
 hSkeleton gr = 
-  (prCId (absname gr), 
-   [(prCId c, [(prCId f, map prCId cs) | (f, (cs,_)) <- fs]) | 
+  (showCId (absname gr), 
+   [(showCId c, [(showCId f, map showCId cs) | (f, (cs,_)) <- fs]) | 
                                         fs@((_, (_,c)):_) <- fns]
   )
  where

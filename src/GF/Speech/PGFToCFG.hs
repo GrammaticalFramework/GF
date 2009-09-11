@@ -31,7 +31,7 @@ toBNF f pgf cnc = prCFG $ f $ pgfToCFG pgf cnc
 pgfToCFG :: PGF 
           -> CId   -- ^ Concrete syntax name
           -> CFG
-pgfToCFG pgf lang = mkCFG (prCId (lookStartCat pgf)) extCats (startRules ++ concatMap fruleToCFRule rules)
+pgfToCFG pgf lang = mkCFG (showCId (lookStartCat pgf)) extCats (startRules ++ concatMap fruleToCFRule rules)
   where
     pinfo = fromMaybe (error "pgfToCFG: No parser.") (lookParser pgf lang)
 
@@ -40,7 +40,7 @@ pgfToCFG pgf lang = mkCFG (prCId (lookStartCat pgf)) extCats (startRules ++ conc
                          , prod <- Set.toList set]
 
     fcatCats :: Map FCat Cat
-    fcatCats = Map.fromList [(fc, prCId c ++ "_" ++ show i) 
+    fcatCats = Map.fromList [(fc, showCId c ++ "_" ++ show i) 
                                  | (c,fcs) <- Map.toList (startCats pinfo), 
                                    (fc,i) <- zip fcs [1..]]
 
@@ -67,7 +67,7 @@ pgfToCFG pgf lang = mkCFG (prCId (lookStartCat pgf)) extCats (startRules ++ conc
     extCats = Set.fromList $ map lhsCat startRules
 
     startRules :: [CFRule]
-    startRules = [CFRule (prCId c) [NonTerminal (fcatToCat fc r)] (CFRes 0) 
+    startRules = [CFRule (showCId c) [NonTerminal (fcatToCat fc r)] (CFRes 0) 
                       | (c,fcs) <- Map.toList (startCats pinfo), 
                         fc <- fcs, not (isLiteralFCat fc),
                         r <- [0..catLinArity fc-1]]

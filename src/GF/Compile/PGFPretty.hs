@@ -21,7 +21,7 @@ prPMCFGPretty :: PGF -> CId -> String
 prPMCFGPretty pgf lang = render $
   case lookParser pgf lang of
     Nothing    -> empty
-    Just pinfo -> text "language" <+> text (prCId lang) $$ ppPMCFG pinfo
+    Just pinfo -> text "language" <+> ppCId lang $$ ppPMCFG pinfo
                                                    
 
 prAbs :: Abstr -> Doc
@@ -29,13 +29,13 @@ prAbs a = prAll prCat (cats a) $$ prAll prFun (funs a)
 
 prCat :: CId -> [Hypo] -> Doc
 prCat c h | isLiteralCat c = empty
-          | otherwise = text "cat" <+> text (prCId c)
+          | otherwise = text "cat" <+> ppCId c
 
 prFun :: CId -> (Type,Int,[Equation]) -> Doc
-prFun f (t,_,_) = text "fun" <+> text (prCId f) <+> text ":" <+> prType t
+prFun f (t,_,_) = text "fun" <+> ppCId f <+> text ":" <+> prType t
 
 prType :: Type -> Doc
-prType t = parens (hsep (punctuate (text ",") (map (text . prCId) cs))) <+> text "->" <+> text (prCId c)
+prType t = parens (hsep (punctuate (text ",") (map ppCId cs))) <+> text "->" <+> ppCId c
   where (cs,c) = catSkeleton t
 
 
@@ -46,14 +46,14 @@ prCnc abstr name c = prAll prLinCat (lincats c) $$ prAll prLin (lins (expand c))
   where
     prLinCat :: CId -> Term -> Doc
     prLinCat c t | isLiteralCat c = empty
-                 | otherwise = text "lincat" <+> text (prCId c) <+> text "=" <+> pr 0 t
+                 | otherwise = text "lincat" <+> ppCId c <+> text "=" <+> pr 0 t
         where
           pr p (R ts) = prec p 1 (hsep (punctuate (text " *") (map (pr 1) ts)))
           pr _ (S []) = text "Str"
           pr _ (C n) = text "Int_" <> text (show (n+1))
 
     prLin :: CId -> Term -> Doc
-    prLin f t = text "lin" <+> text (prCId f) <+> text "=" <+> pr 0 t
+    prLin f t = text "lin" <+> ppCId f <+> text "=" <+> pr 0 t
         where
           pr :: Int -> Term -> Doc
           pr p (R ts) = text "<" <+> hsep (punctuate (text ",") (map (pr 0) ts)) <+> text ">"
@@ -66,7 +66,7 @@ prCnc abstr name c = prAll prLinCat (lincats c) $$ prAll prLin (lins (expand c))
           pr _ t = error $ "PGFPretty.prLin " ++ show t
 
 linCat :: Concr -> CId -> Term
-linCat cnc c = Map.findWithDefault (error $ "lincat: " ++ prCId c) c (lincats cnc)
+linCat cnc c = Map.findWithDefault (error $ "lincat: " ++ showCId c) c (lincats cnc)
 
 prec :: Int -> Int -> Doc -> Doc
 prec p m | p >= m = parens
@@ -84,7 +84,7 @@ expand cnc = cnc { lins = Map.map (f "") (lins cnc) }
     f w (FV ts) = FV (map (f w) ts)
     f w (W s t) = f (w++s) t
     f w (K (KS t)) = K (KS (w++t))
-    f w (F o) = f w (Map.findWithDefault (error $ "Bad oper: " ++ prCId o) o (opers cnc))
+    f w (F o) = f w (Map.findWithDefault (error $ "Bad oper: " ++ showCId o) o (opers cnc))
     f w t = t
 
 -- Utilities

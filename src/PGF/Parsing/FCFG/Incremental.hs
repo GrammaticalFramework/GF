@@ -4,7 +4,7 @@ module PGF.Parsing.FCFG.Incremental
           , initState
           , nextState
           , getCompletions
-          , extractExps
+          , extractTrees
           , parse
           ) where
 
@@ -21,12 +21,13 @@ import Control.Monad
 import GF.Data.SortedList
 import PGF.CId
 import PGF.Data
+import PGF.Expr(Tree)
 import PGF.Macros
 import PGF.TypeCheck
 import Debug.Trace
 
 parse :: PGF -> Language -> Type -> [String] -> [Expr]
-parse pgf lang typ toks = maybe [] (\ps -> extractExps ps typ) (foldM nextState (initState pgf lang typ) toks)
+parse pgf lang typ toks = maybe [] (\ps -> extractTrees ps typ) (foldM nextState (initState pgf lang typ) toks)
 
 -- | Creates an initial parsing state for a given language and
 -- startup category.
@@ -43,7 +44,7 @@ initState pgf lang (DTyp _ start _) =
       pinfo =
         case lookParser pgf lang of
           Just pinfo -> pinfo
-          _          -> error ("Unknown language: " ++ prCId lang)
+          _          -> error ("Unknown language: " ++ showCId lang)
 
   in State pgf
            pinfo
@@ -97,8 +98,8 @@ getCompletions (State pgf pinfo chart items) w =
 -- that spans the whole input consumed so far. The trees are also
 -- limited by the category specified, which is usually
 -- the same as the startup category.
-extractExps :: ParseState -> Type -> [Expr]
-extractExps (State pgf pinfo chart items) ty@(DTyp _ start _) = 
+extractTrees :: ParseState -> Type -> [Tree]
+extractTrees (State pgf pinfo chart items) ty@(DTyp _ start _) = 
   nubsort [e1 | e <- exps, Right e1 <- [checkExpr pgf e ty]]
   where
     (mb_agenda,acc) = TMap.decompose items

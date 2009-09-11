@@ -135,33 +135,46 @@ addConstraint i j env vs c = do
 -- Type errors
 -----------------------------------------------------
 
+-- | If an error occurs in the typechecking phase
+-- the type checker returns not a plain text error message
+-- but a 'TcError' structure which describes the error.
 data TcError
-  = UnknownCat      CId
-  | UnknownFun      CId
-  | WrongCatArgs    Scope Type CId  Int Int
-  | TypeMismatch    Scope Expr Type Type
-  | NotFunType      Scope Expr Type
-  | CannotInferType Scope Expr
-  | UnresolvedMetaVars Scope Expr [MetaId]
+  = UnknownCat      CId                            -- ^ Unknown category name was found.
+  | UnknownFun      CId                            -- ^ Unknown function name was found.
+  | WrongCatArgs    [CId] Type CId  Int Int        -- ^ A category was applied to wrong number of arguments.
+                                                   -- The first integer is the number of expected arguments and
+                                                   -- the second the number of given arguments.
+                                                   -- The @[CId]@ argument is the list of free variables
+                                                   -- in the type. It should be used for the 'showType' function.
+  | TypeMismatch    [CId] Expr Type Type           -- ^ The expression is not of the expected type.
+                                                   -- The first type is the expected type, while
+                                                   -- the second is the inferred. The @[CId]@ argument is the list
+                                                   -- of free variables in both the expression and the type. 
+                                                   -- It should be used for the 'showType' and 'showExpr' functions.
+  | NotFunType      [CId] Expr Type                -- ^ Something that is not of function type was applied to an argument.
+  | CannotInferType [CId] Expr                     -- ^ It is not possible to infer the type of an expression.
+  | UnresolvedMetaVars [CId] Expr [MetaId]         -- ^ Some metavariables have to be instantiated in order to complete the typechecking.
 
+-- | Renders the type checking error to a document. See 'Text.PrettyPrint'.
 ppTcError :: TcError -> Doc
-ppTcError (UnknownCat cat)                = text "Category" <+> text (prCId cat) <+> text "is not in scope"
-ppTcError (UnknownFun fun)                = text "Function" <+> text (prCId fun) <+> text "is not in scope"
-ppTcError (WrongCatArgs scope ty cat m n) =
-   text "Category" <+> text (prCId cat) <+> text "should have" <+> int m <+> text "argument(s), but has been given" <+> int n $$
-   text "In the type:" <+> ppType 0 (scopeVars scope) ty
-ppTcError (TypeMismatch scope e ty1 ty2)  = text "Couldn't match expected type" <+> ppType 0 (scopeVars scope) ty1 $$
-                                            text "       against inferred type" <+> ppType 0 (scopeVars scope) ty2 $$
-                                            text "In the expression:" <+> ppExpr 0 (scopeVars scope) e
-ppTcError (NotFunType scope e ty)         = text "A function type is expected for the expression" <+> ppExpr 0 (scopeVars scope) e <+> text "instead of type" <+> ppType 0 (scopeVars scope) ty
-ppTcError (CannotInferType scope e)       = text "Cannot infer the type of expression" <+> ppExpr 0 (scopeVars scope) e
-ppTcError (UnresolvedMetaVars scope e xs) = text "Meta variable(s)" <+> fsep (List.map ppMeta xs) <+> text "should be resolved" $$
-                                            text "in the expression:" <+> ppExpr 0 (scopeVars scope) e
+ppTcError (UnknownCat cat)             = text "Category" <+> ppCId cat <+> text "is not in scope"
+ppTcError (UnknownFun fun)             = text "Function" <+> ppCId fun <+> text "is not in scope"
+ppTcError (WrongCatArgs xs ty cat m n) = text "Category" <+> ppCId cat <+> text "should have" <+> int m <+> text "argument(s), but has been given" <+> int n $$
+                                         text "In the type:" <+> ppType 0 xs ty
+ppTcError (TypeMismatch xs e ty1 ty2)  = text "Couldn't match expected type" <+> ppType 0 xs ty1 $$
+                                         text "       against inferred type" <+> ppType 0 xs ty2 $$
+                                         text "In the expression:" <+> ppExpr 0 xs e
+ppTcError (NotFunType xs e ty)         = text "A function type is expected for the expression" <+> ppExpr 0 xs e <+> text "instead of type" <+> ppType 0 xs ty
+ppTcError (CannotInferType xs e)       = text "Cannot infer the type of expression" <+> ppExpr 0 xs e
+ppTcError (UnresolvedMetaVars xs e ms) = text "Meta variable(s)" <+> fsep (List.map ppMeta ms) <+> text "should be resolved" $$
+                                         text "in the expression:" <+> ppExpr 0 xs e
 
 -----------------------------------------------------
 -- checkType
 -----------------------------------------------------
 
+-- | Check whether a given type is consistent with the abstract
+-- syntax of the grammar.
 checkType :: PGF -> Type -> Either TcError Type
 checkType pgf ty = 
   case unTcM (tcType emptyScope ty >>= refineType) (abstract pgf) 0 IntMap.empty of
@@ -177,7 +190,7 @@ tcType scope ty@(DTyp hyps cat es) = do
   if m == n
     then do (delta,es) <- tcHypoExprs scope [] (zip es c_hyps)
             return (DTyp hyps cat es)
-    else tcError (WrongCatArgs scope ty cat n m)
+    else tcError (WrongCatArgs (scopeVars scope) ty cat n m)
 
 tcHypos :: Scope -> [Hypo] -> TcM (Scope,[Hypo])
 tcHypos scope []     = return (scope,[])
@@ -215,6 +228,7 @@ tcHypoExpr scope delta e (HypV x ty) = do
 -- checkExpr
 -----------------------------------------------------
 
+-- | Checks an expression against a specified type.
 checkExpr :: PGF -> Expr -> Type -> Either TcError Expr
 checkExpr pgf e ty =
   case unTcM (do e <- tcExpr emptyScope e (TTyp [] ty)
@@ -234,7 +248,7 @@ tcExpr scope e0@(EAbs x e) tty =
                                                                    e (TTyp ((VGen (scopeSize scope) []):delta) (DTyp hs c es))
                                         return (EAbs x e)
     _                             -> do ty <- evalType (scopeSize scope) tty
-                                        tcError (NotFunType scope e0 ty)
+                                        tcError (NotFunType (scopeVars scope) e0 ty)
 tcExpr scope (EMeta _) tty = do
   i <- newMeta scope
   return (EMeta i)
@@ -249,6 +263,10 @@ tcExpr scope e0        tty = do
 -- inferExpr
 -----------------------------------------------------
 
+-- | Tries to infer the type of a given expression. Note that
+-- even if the expression is type correct it is not always
+-- possible to infer its type in the GF type system.
+-- In this case the function returns the 'CannotInferType' error.
 inferExpr :: PGF -> Expr -> Either TcError (Expr,Type)
 inferExpr pgf e =
   case unTcM (do (e,tty) <- infExpr emptyScope e
@@ -266,7 +284,7 @@ infExpr scope e0@(EApp e1 e2) = do
     (TTyp delta1 (DTyp (h:hs) c es)) -> do (delta1,e2) <- tcHypoExpr scope delta1 e2 h
                                            return (EApp e1 e2,TTyp delta1 (DTyp hs c es))
     _                                -> do ty1 <- evalType (scopeSize scope) tty1
-                                           tcError (NotFunType scope e1 ty1)
+                                           tcError (NotFunType (scopeVars scope) e1 ty1)
 infExpr scope e0@(EFun x) = do
   case lookupVar x scope of
     Just (i,tty) -> return (EVar i,tty)
@@ -284,7 +302,7 @@ infExpr scope (ETyped e ty) = do
   ty <- tcType scope ty
   e  <- tcExpr scope e (TTyp (scopeEnv scope) ty)
   return (ETyped e ty,TTyp (scopeEnv scope) ty)
-infExpr scope e = tcError (CannotInferType scope e)
+infExpr scope e = tcError (CannotInferType (scopeVars scope) e)
 
 -----------------------------------------------------
 -- eqType
@@ -299,7 +317,7 @@ eqType scope k i0 tty1@(TTyp delta1 ty1@(DTyp hyps1 cat1 es1)) tty2@(TTyp delta2
     raiseTypeMatchError = do ty1 <- evalType k tty1
                              ty2 <- evalType k tty2
                              e   <- refineExpr (EMeta i0)
-                             tcError (TypeMismatch scope e ty1 ty2)
+                             tcError (TypeMismatch (scopeVars scope) e ty1 ty2)
 
     eqHyps :: Int -> Env -> [Hypo] -> Env -> [Hypo] -> TcM (Int,Env,Env)
     eqHyps k delta1 []                 delta2 []                 =
@@ -402,7 +420,7 @@ checkResolvedMetaStore scope e = TcM (\abstr metaid ms ->
   let xs = [i | (i,mv) <- IntMap.toList ms, not (isResolved mv)]
   in if List.null xs
        then Ok metaid ms ()
-       else Fail (UnresolvedMetaVars scope e xs))
+       else Fail (UnresolvedMetaVars (scopeVars scope) e xs))
   where
     isResolved (MUnbound _ [])   = True
     isResolved (MGuarded  _ _ _) = True

@@ -29,7 +29,7 @@ import Debug.Trace
 grammar2vxml :: PGF -> CId -> String
 grammar2vxml pgf cnc = showsXMLDoc (skel2vxml name language start skel qs) ""
     where skel = pgfSkeleton pgf
-          name = prCId cnc
+          name = showCId cnc
           qs = catQuestions pgf cnc (map fst skel)
           language = getSpeechLanguage pgf cnc
           start = lookStartCat pgf
@@ -73,7 +73,7 @@ lin gr fun = do
 
 getCatQuestion :: CId -> CatQuestions -> String
 getCatQuestion c qs = 
-    fromMaybe (error "No question for category " ++ prCId c) (lookup c qs)
+    fromMaybe (error "No question for category " ++ showCId c) (lookup c qs)
 
 --
 -- * Generate VoiceXML
@@ -93,7 +93,7 @@ grammarURI name = name ++ ".grxml"
 
 catForms :: String -> CatQuestions -> CId -> [(CId, [CId])] -> [XML]
 catForms gr qs cat fs = 
-    comments [prCId cat ++ " category."]
+    comments [showCId cat ++ " category."]
     ++ [cat2form gr qs cat fs] 
 
 cat2form :: String -> CatQuestions -> CId -> [(CId, [CId])] -> XML
@@ -111,20 +111,20 @@ cat2form gr qs cat fs =
 
 fun2sub :: String -> CId -> CId -> [CId] -> [XML]
 fun2sub gr cat fun args = 
-    comments [prCId fun ++ " : (" 
-              ++ concat (intersperse ", " (map prCId args))
-              ++ ") " ++ prCId cat] ++ ss
+    comments [showCId fun ++ " : (" 
+              ++ concat (intersperse ", " (map showCId args))
+              ++ ") " ++ showCId cat] ++ ss
   where 
   ss = zipWith mkSub [0..] args
   mkSub n t = subdialog s [("src","#"++catFormId t),
-                           ("cond","term.name == "++string (prCId fun))] 
+                           ("cond","term.name == "++string (showCId fun))] 
               [param "old" v,
                filled [] [assign v (s++".term")]]
-    where s = prCId fun ++ "_" ++ show n
+    where s = showCId fun ++ "_" ++ show n
           v = "term.args["++show n++"]"
 
 catFormId :: CId -> String
-catFormId c = prCId c ++ "_cat"
+catFormId c = showCId c ++ "_cat"
 
 
 --

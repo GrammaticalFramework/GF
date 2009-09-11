@@ -615,18 +615,18 @@ allCommands cod env@(pgf, mos) = Map.fromList [
        case arg of
          [EFun id] -> case Map.lookup id (funs (abstract pgf)) of
                         Just (ty,_,eqs) -> return $ fromString $
-                                              render (text "fun" <+> text (prCId id) <+> colon <+> ppType 0 [] ty $$
+                                              render (text "fun" <+> ppCId id <+> colon <+> ppType 0 [] ty $$
                                                       if null eqs
                                                         then empty
                                                         else text "def" <+> vcat [let (scope,ds) = mapAccumL (ppPatt 9) [] patts
-                                                                                  in text (prCId id) <+> hsep ds <+> char '=' <+> ppExpr 0 scope res | Equ patts res <- eqs])
+                                                                                  in ppCId id <+> hsep ds <+> char '=' <+> ppExpr 0 scope res | Equ patts res <- eqs])
                         Nothing         -> case Map.lookup id (cats (abstract pgf)) of
                                              Just hyps -> do return $ fromString $
-                                                                render (text "cat" <+> text (prCId id) <+> hsep (snd (mapAccumL ppHypo [] hyps)) $$
+                                                                render (text "cat" <+> ppCId id <+> hsep (snd (mapAccumL ppHypo [] hyps)) $$
                                                                         if null (functionsToCat pgf id)
                                                                           then empty
                                                                           else space $$
-                                                                               text "fun" <+> vcat [text (prCId fid) <+> colon <+> ppType 0 [] ty 
+                                                                               text "fun" <+> vcat [ppCId fid <+> colon <+> ppType 0 [] ty 
                                                                                                        | (fid,ty) <- functionsToCat pgf id])
                                              Nothing   -> do putStrLn "unknown identifier"
                                                              return void
@@ -647,8 +647,8 @@ allCommands cod env@(pgf, mos) = Map.fromList [
 
    optLin opts t = unlines $ 
      case opts of 
-       _ | isOpt "treebank" opts -> (prCId (abstractName pgf) ++ ": " ++ showExpr [] t) :
-                                    [prCId lang ++ ": " ++ linear opts lang t | lang <- optLangs opts]
+       _ | isOpt "treebank" opts -> (showCId (abstractName pgf) ++ ": " ++ showExpr [] t) :
+                                    [showCId lang ++ ": " ++ linear opts lang t | lang <- optLangs opts]
        _                         -> [linear opts lang t | lang <- optLangs opts] 
     
    linear :: [Option] -> CId -> Expr -> String
@@ -689,7 +689,7 @@ allCommands cod env@(pgf, mos) = Map.fromList [
      lang -> map mkCId (chunks ',' lang)
    optLang opts = head $ optLangs opts ++ [wildCId]
    optType opts = 
-     let str = valStrOpts "cat" (prCId $ lookStartCat pgf) opts
+     let str = valStrOpts "cat" (showCId $ lookStartCat pgf) opts
      in case readType str of
           Just ty -> case checkType pgf ty of
                        Left tcErr -> error $ render (ppTcError tcErr)
@@ -714,7 +714,7 @@ allCommands cod env@(pgf, mos) = Map.fromList [
    prGrammar opts
      | isOpt "cats"     opts = return $ fromString $ unwords $ map (showType []) $ categories pgf
      | isOpt "fullform" opts = return $ fromString $ concatMap (prFullFormLexicon . morpho) $ optLangs opts
-     | isOpt "missing"  opts = return $ fromString $ unlines $ [unwords (prCId la:":": map prCId cs) | 
+     | isOpt "missing"  opts = return $ fromString $ unlines $ [unwords (showCId la:":": map showCId cs) | 
                                                                   la <- optLangs opts, let cs = missingLins pgf la]
      | otherwise             = do fmt <- readOutputFormat (valStrOpts "printer" "pgf_pretty" opts)
                                   return $ fromString $ concatMap snd $ exportPGF noOptions fmt pgf

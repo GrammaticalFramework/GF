@@ -72,7 +72,7 @@ expandHOAS funs lins lincats = (funs' ++ hoFuns ++ varFuns,
       -- lincat for the _Var category
       varLincat = Map.singleton varCat (R [S []])
 
-      lincatOf c = fromMaybe (error $ "No lincat for " ++ prCId c) $ Map.lookup c lincats
+      lincatOf c = fromMaybe (error $ "No lincat for " ++ showCId c) $ Map.lookup c lincats
 
       modifyRec :: ([Term] -> [Term]) -> Term -> Term
       modifyRec f (R xs) = R (f xs)
@@ -82,13 +82,13 @@ expandHOAS funs lins lincats = (funs' ++ hoFuns ++ varFuns,
 
       catName :: (Int,CId) -> CId
       catName (0,c) = c
-      catName (n,c) = mkCId ("_" ++ show n ++ prCId c)
+      catName (n,c) = mkCId ("_" ++ show n ++ showCId c)
 
       funName :: (Int,CId) -> CId
-      funName (n,c) = mkCId ("__" ++ show n ++ prCId c)
+      funName (n,c) = mkCId ("__" ++ show n ++ showCId c)
 
       varFunName :: CId -> CId
-      varFunName c = mkCId ("_Var_" ++ prCId c)
+      varFunName c = mkCId ("_Var_" ++ showCId c)
 
 -- replaces __NCat with _B and _Var_Cat with _.
 -- the temporary names are just there to avoid name collisions.
@@ -404,7 +404,7 @@ genFCatArg cnc_defs ctype env@(GrammarEnv last_id catSet seqSet funSet prodSet) 
         addConstraint path0 index0 cs  = (path0,index0) : cs
     gen_tcs (F id)        path acc = case Map.lookup id cnc_defs of
                                         Just term -> gen_tcs term path acc
-                                        Nothing   -> error ("unknown identifier: "++prCId id)
+                                        Nothing   -> error ("unknown identifier: "++showCId id)
 
 
 
@@ -463,7 +463,7 @@ mkSingletonSelectors cnc_defs term = sels0
     loop path (sels,tcss) (S _)      = (mkSelector [path] tcss0 : sels,                        tcss)
     loop path (sels,tcss) (F id)     = case Map.lookup id cnc_defs of
                                          Just term -> loop path (sels,tcss) term
-                                         Nothing   -> error ("unknown identifier: "++prCId id)
+                                         Nothing   -> error ("unknown identifier: "++showCId id)
 
 mkSelector :: [FPath] -> [[(FPath,FIndex)]] -> TermSelector
 mkSelector rcs tcss =

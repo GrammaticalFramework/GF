@@ -75,10 +75,10 @@ ppType d scope (DTyp hyps cat args)
   | otherwise = let (scope',hdocs) = mapAccumL ppHypo scope hyps
                 in ppParens (d > 0) (foldr (\hdoc doc -> hdoc PP.<+> PP.text "->" PP.<+> doc) (ppRes scope' cat args) hdocs)
   where
-    ppRes scope cat es = PP.text (prCId cat) PP.<+> PP.hsep (map (ppExpr 4 scope) es)
+    ppRes scope cat es = ppCId cat PP.<+> PP.hsep (map (ppExpr 4 scope) es)
 
 ppHypo scope (Hyp    typ) = (  scope,ppType 1 scope typ)
 ppHypo scope (HypV x typ) = let y = freshName x scope
-                            in (y:scope,PP.parens (PP.text (prCId y) PP.<+> PP.char ':' PP.<+> ppType 0 scope typ))
+                            in (y:scope,PP.parens (ppCId y PP.<+> PP.char ':' PP.<+> ppType 0 scope typ))
 ppHypo scope (HypI x typ) = let y = freshName x scope
-                            in (y:scope,PP.braces (PP.text (prCId y) PP.<+> PP.char ':' PP.<+> ppType 0 scope typ))
+                            in (y:scope,PP.braces (ppCId y PP.<+> PP.char ':' PP.<+> ppType 0 scope typ))

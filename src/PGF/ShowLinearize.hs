@@ -103,11 +103,11 @@ collectWords pgf lang =
       [(f,c,0) | (f,(DTyp [] c _,_,_)) <- Map.toList $ funs $ abstract pgf] 
   where
     collOne (f,c,i) = 
-      fromRec f [prCId c] (recLinearize pgf lang (foldl EApp (EFun f) (replicate i (EMeta 888))))
+      fromRec f [showCId c] (recLinearize pgf lang (foldl EApp (EFun f) (replicate i (EMeta 888))))
     fromRec f v r = case r of
       RR  rs -> concat [fromRec f v t | (_,t) <- rs] 
       RT  rs -> concat [fromRec f (p:v) t | (p,t) <- rs]
       RFV rs -> concatMap (fromRec f v) rs
-      RS  s  -> [(s,[(prCId f,unwords (reverse v))])]
+      RS  s  -> [(s,[(showCId f,unwords (reverse v))])]
       RCon c -> [] ---- inherent
 

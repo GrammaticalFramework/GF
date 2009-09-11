@@ -48,13 +48,13 @@ exportPGF opts fmt pgf =
       FmtRegExp       -> single "rexp" regexpPrinter
       FmtFA           -> single "dot"  slfGraphvizPrinter
  where
-   name = fromMaybe (prCId (absname pgf)) (flag optName opts)
+   name = fromMaybe (showCId (absname pgf)) (flag optName opts)
 
    multi :: String -> (PGF -> String) -> [(FilePath,String)]
    multi ext pr = [(name <.> ext, pr pgf)]
 
    single :: String -> (PGF -> CId -> String) -> [(FilePath,String)]
-   single ext pr = [(prCId cnc <.> ext, pr pgf cnc) | cnc <- cncnames pgf]
+   single ext pr = [(showCId cnc <.> ext, pr pgf cnc) | cnc <- cncnames pgf]
 
 -- | Get the name of the concrete syntax to generate output from.
 -- FIXME: there should be an option to change this.

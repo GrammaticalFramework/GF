@@ -16,6 +16,10 @@ module PGF(
            -- * PGF
            PGF,
            readPGF,
+
+           -- * Identifiers
+           CId, mkCId, wildCId,
+           showCId, readCId,
            
            -- * Languages
            Language, 
@@ -23,19 +27,19 @@ module PGF(
            languages, abstractName, languageCode,
            
            -- * Types
-           Type(..), Hypo(..),
+           Type,
            showType, readType,
            categories, startCat,
 
            -- * Functions
            functions, functionType,
 
-           -- * Expressions
-           -- ** Identifiers
-           CId, mkCId, prCId, wildCId,
-           
+           -- * Expressions & Trees
+           -- ** Tree
+           Tree,
+
            -- ** Expr
-           Literal(..), Expr(..),
+           Expr,
            showExpr, readExpr,
 
            -- * Operations
@@ -50,13 +54,22 @@ module PGF(
            PGF.compute, paraphrase,
            
            -- ** Type Checking
+           -- | The type checker in PGF does both type checking and renaming
+           -- i.e. it verifies that all identifiers are declared and it
+           -- distinguishes between global function or type indentifiers and
+           -- variable names. The type checker should always be applied on
+           -- expressions entered by the user i.e. those produced via functions
+           -- like 'readType' and 'readExpr' because otherwise unexpected results
+           -- could appear. All typechecking functions returns updated versions
+           -- of the input types or expressions because the typechecking could
+           -- also lead to metavariables instantiations.
            checkType, checkExpr, inferExpr,
-           ppTcError, TcError(..),
+           TcError(..), ppTcError,
            
            -- ** Word Completion (Incremental Parsing)
            complete,
            Incremental.ParseState,
-           Incremental.initState, Incremental.nextState, Incremental.getCompletions, Incremental.extractExps,
+           Incremental.initState, Incremental.nextState, Incremental.getCompletions, Incremental.extractTrees,
 
            -- ** Generation
            generateRandom, generateAll, generateAllDepth
@@ -68,6 +81,7 @@ import PGF.Generate
 import PGF.TypeCheck
 import PGF.Paraphrase
 import PGF.Macros
+import PGF.Expr (Tree)
 import PGF.Data hiding (functions)
 import PGF.Binary
 import qualified PGF.Parsing.FCFG.Active as Active
@@ -96,7 +110,7 @@ import Control.Monad
 readPGF  :: FilePath -> IO PGF
 
 -- | Linearizes given expression as string in the language
-linearize    :: PGF -> Language -> Expr -> String
+linearize    :: PGF -> Language -> Tree -> String
 
 -- | Tries to parse the given string in the specified language
 -- and to produce abstract syntax expression. An empty
@@ -104,25 +118,25 @@ linearize    :: PGF -> Language -> Expr -> String
 -- contain more than one element if the grammar is ambiguous.
 -- Throws an exception if the given language cannot be used
 -- for parsing, see 'canParse'.
-parse        :: PGF -> Language -> Type -> String -> [Expr]
+parse        :: PGF -> Language -> Type -> String -> [Tree]
 
 -- | Checks whether the given language can be used for parsing.
 canParse     :: PGF -> Language -> Bool
 
 -- | The same as 'linearizeAllLang' but does not return
 -- the language.
-linearizeAll     :: PGF -> Expr -> [String]
+linearizeAll     :: PGF -> Tree -> [String]
 
 -- | Linearizes given expression as string in all languages
 -- available in the grammar.
-linearizeAllLang :: PGF -> Expr -> [(Language,String)]
+linearizeAllLang :: PGF -> Tree -> [(Language,String)]
 
 -- | Show the printname of a type
 showPrintName :: PGF -> Language -> Type -> String
 
 -- | The same as 'parseAllLang' but does not return
 -- the language.
-parseAll     :: PGF -> Type -> String -> [[Expr]]
+parseAll     :: PGF -> Type -> String -> [[Tree]]
 
 -- | Tries to parse the given string with all available languages.
 -- Languages which cannot be used for parsing (see 'canParse')
@@ -132,7 +146,7 @@ parseAll     :: PGF -> Type -> String -> [[Expr]]
 -- (this is a list, since grammars can be ambiguous). 
 -- Only those languages
 -- for which at least one parsing is possible are listed.
-parseAllLang :: PGF -> Type -> String -> [(Language,[Expr])]
+parseAllLang :: PGF -> Type -> String -> [(Language,[Tree])]
 
 -- | The same as 'generateAllDepth' but does not limit
 -- the depth in the generation.
@@ -213,8 +227,8 @@ parse pgf lang typ s =
                   Just pinfo -> if Map.lookup (mkCId "erasing") (cflags cnc) == Just "on"
                                   then Incremental.parse pgf lang typ (words s)
                                   else Active.parse "t"  pinfo typ (words s)
-                  Nothing    -> error ("No parser built for language: " ++ prCId lang)
-    Nothing  -> error ("Unknown language: " ++ prCId lang)
+                  Nothing    -> error ("No parser built for language: " ++ showCId lang)
+    Nothing  -> error ("Unknown language: " ++ showCId lang)
 
 canParse pgf cnc = isJust (lookParser pgf cnc)
 
@@ -260,7 +274,7 @@ complete pgf from typ input =
          in case foldM Incremental.nextState state0 ws of
               Nothing -> []
               Just state -> 
-                (if null prefix && not (null (Incremental.extractExps state typ)) then [unwords ws ++ " "] else [])
+                (if null prefix && not (null (Incremental.extractTrees state typ)) then [unwords ws ++ " "] else [])
                 ++ [unwords (ws++[c]) ++ " " | c <- Map.keys (Incremental.getCompletions state prefix)]
   where
     tokensAndPrefix :: String -> ([String],String)
