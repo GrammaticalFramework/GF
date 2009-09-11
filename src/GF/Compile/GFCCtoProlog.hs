@@ -163,7 +163,7 @@ instance PLPrint CId where
     plp cid | isLogicalVariable str || 
               cid == wildCId = plVar str
             | otherwise      = plAtom str
-        where str = prCId cid
+        where str = showCId cid
 
 instance PLPrint Literal where
     plp (LStr s) = plp s

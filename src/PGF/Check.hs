@@ -30,7 +30,7 @@ labelBoolErr ms iob = do
 
 checkConcrete :: PGF -> (CId,Concr) -> Err ((CId,Concr),Bool)
 checkConcrete pgf (lang,cnc) = 
-  labelBoolErr ("happened in language " ++ prCId lang) $ do
+  labelBoolErr ("happened in language " ++ showCId lang) $ do
     (rs,bs) <- mapM checkl (Map.assocs (lins cnc)) >>= return . unzip
     return ((lang,cnc{lins = Map.fromAscList rs}),and bs)
  where
@@ -38,7 +38,7 @@ checkConcrete pgf (lang,cnc) =
 
 checkLin :: PGF -> CId -> (CId,Term) -> Err ((CId,Term),Bool)
 checkLin pgf lang (f,t) = 
-  labelBoolErr ("happened in function " ++ prCId f) $ do
+  labelBoolErr ("happened in function " ++ showCId f) $ do
     (t',b) <- checkTerm (lintype pgf lang f) t --- $ inline pgf lang t
     return ((f,t'),b)
 

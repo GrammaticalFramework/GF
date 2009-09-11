@@ -5,7 +5,7 @@ module PGF.Tree
          ) where
 
 import PGF.CId
-import PGF.Expr
+import PGF.Expr hiding (Tree)
 
 import Data.Char
 import Data.List as List
@@ -56,14 +56,14 @@ pTree isNested = RP.skipSpaces >> (pParen RP.<++ pAbs RP.<++ pApp RP.<++ fmap Li
                   return (Fun f ts)
 
 ppTree d (Abs xs t) = ppParens (d > 0) (PP.char '\\' PP.<>
-                                        PP.hsep (PP.punctuate PP.comma (List.map (PP.text . prCId) xs)) PP.<+>
+                                        PP.hsep (PP.punctuate PP.comma (List.map ppCId xs)) PP.<+>
                                         PP.text "->" PP.<+>
                                         ppTree 0 t)
-ppTree d (Fun f []) = PP.text (prCId f)
-ppTree d (Fun f ts) = ppParens (d > 0) (PP.text (prCId f) PP.<+> PP.hsep (List.map (ppTree 1) ts))
+ppTree d (Fun f []) = ppCId f
+ppTree d (Fun f ts) = ppParens (d > 0) (ppCId f PP.<+> PP.hsep (List.map (ppTree 1) ts))
 ppTree d (Lit l)    = ppLit l
 ppTree d (Meta n)   = ppMeta n
-ppTree d (Var id)   = PP.text (prCId id)
+ppTree d (Var id)   = ppCId id
 
 
 -----------------------------------------------------

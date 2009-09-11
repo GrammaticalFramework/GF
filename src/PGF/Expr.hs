@@ -1,4 +1,4 @@
-module PGF.Expr(Expr(..), Literal(..), Patt(..), Equation(..),
+module PGF.Expr(Tree, Expr(..), Literal(..), Patt(..), Equation(..),
                 readExpr, showExpr, pExpr, ppExpr, ppPatt,
 
                 normalForm,
@@ -31,8 +31,14 @@ data Literal =
 
 type MetaId = Int
 
--- | An expression represents a potentially unevaluated expression
--- in the abstract syntax of the grammar.
+-- | Tree is the abstract syntax representation of a given sentence
+-- in some concrete syntax. Technically 'Tree' is a type synonym
+-- of 'Expr'.
+type Tree = Expr
+
+-- | An expression in the abstract syntax of the grammar. It could be
+-- both parameter of a dependent type or an abstract syntax tree for
+-- for some sentence.
 data Expr =
    EAbs CId Expr                    -- ^ lambda abstraction
  | EApp Expr Expr                   -- ^ application
@@ -127,7 +133,7 @@ pStr = RP.char '"' >> (RP.manyTill (pEsc RP.<++ RP.get) (RP.char '"'))
 ppExpr :: Int -> [CId] -> Expr -> PP.Doc
 ppExpr d scope (EAbs x e)   = let (xs,e1) = getVars [x] e
                               in ppParens (d > 1) (PP.char '\\' PP.<>
-                                                   PP.hsep (PP.punctuate PP.comma (List.map (PP.text . prCId) (reverse xs))) PP.<+>
+                                                   PP.hsep (PP.punctuate PP.comma (List.map ppCId (reverse xs))) PP.<+>
                                                    PP.text "->" PP.<+>
                                                    ppExpr 1 (xs++scope) e1)
                               where
@@ -136,14 +142,14 @@ ppExpr d scope (EAbs x e)   = let (xs,e1) = getVars [x] e
 ppExpr d scope (EApp e1 e2) = ppParens (d > 3) ((ppExpr 3 scope e1) PP.<+> (ppExpr 4 scope e2))
 ppExpr d scope (ELit l)     = ppLit l
 ppExpr d scope (EMeta n)    = ppMeta n
-ppExpr d scope (EFun f)     = PP.text (prCId f)
-ppExpr d scope (EVar i)     = PP.text (prCId (scope !! i))
+ppExpr d scope (EFun f)     = ppCId f
+ppExpr d scope (EVar i)     = ppCId (scope !! i)
 ppExpr d scope (ETyped e ty)= ppParens (d > 0) (ppExpr 0 scope e PP.<+> PP.colon PP.<+> ppType 0 scope ty)
 
 ppPatt d scope (PApp f ps) = let (scope',ds) = mapAccumL (ppPatt 2) scope ps
-                             in (scope',ppParens (not (List.null ps) && d > 1) (PP.text (prCId f) PP.<+> PP.hsep ds))
+                             in (scope',ppParens (not (List.null ps) && d > 1) (ppCId f PP.<+> PP.hsep ds))
 ppPatt d scope (PLit l)    = (scope,ppLit l)
-ppPatt d scope (PVar f)    = (scope,PP.text (prCId f))
+ppPatt d scope (PVar f)    = (scope,ppCId f)
 ppPatt d scope PWild       = (scope,PP.char '_')
 
 ppLit (LStr s) = PP.text (show s)
@@ -200,7 +206,7 @@ eval funs env (EFun f)     = case Map.lookup f funs of
                                                          Equ [] e : _ -> eval funs [] e
                                                          _            -> VApp f []
                                                   else VApp f []
-                              Nothing        -> error ("unknown function "++prCId f)
+                              Nothing        -> error ("unknown function "++showCId f)
 eval funs env (EApp e1 e2) = apply funs env e1 [eval funs env e2]
 eval funs env (EAbs x e)   = VClosure env (EAbs x e)
 eval funs env (EMeta i)    = VMeta i env []
@@ -215,7 +221,7 @@ apply funs env (EFun f)     vs     = case Map.lookup f funs of
                                                            then let (as,vs') = splitAt a vs
                                                                 in match funs f eqs as vs'
                                                            else VApp f vs
-                                       Nothing      -> error ("unknown function "++prCId f)
+                                       Nothing      -> error ("unknown function "++showCId f)
 apply funs env (EApp e1 e2) vs     = apply funs env e1 (eval funs env e2 : vs)
 apply funs env (EAbs x e)   (v:vs) = apply funs (v:env) e vs
 apply funs env (EMeta i)    vs     = VMeta i env vs

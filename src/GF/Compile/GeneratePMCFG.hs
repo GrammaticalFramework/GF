@@ -281,13 +281,13 @@ convertTerm cnc_defs sel ctype (K (KS t)) = return (Str [FSymKS [t]])
 convertTerm cnc_defs sel ctype (K (KP s v))=return (Str [FSymKP s v])
 convertTerm cnc_defs sel ctype (F id)     = case Map.lookup id cnc_defs of
                                               Just term -> convertTerm cnc_defs sel ctype term
-                                              Nothing   -> error ("unknown id " ++ prCId id)
+                                              Nothing   -> error ("unknown id " ++ showCId id)
 convertTerm cnc_defs sel ctype (W s t)    = do
   ss <- case t of
     R ss -> return ss
     F f -> case Map.lookup f cnc_defs of
              Just (R ss) -> return ss
-             _           -> error ("unknown id " ++ prCId f)
+             _           -> error ("unknown id " ++ showCId f)
   convertRec cnc_defs sel ctype [K (KS (s ++ s1)) | K (KS s1) <- ss]
 convertTerm cnc_defs sel ctype x          = error ("convertTerm ("++show x++")")
 
@@ -331,7 +331,7 @@ evalTerm cnc_defs path (P term sel) = do index <- evalTerm cnc_defs [] sel
 evalTerm cnc_defs path (FV terms)   = variants terms >>= evalTerm cnc_defs path
 evalTerm cnc_defs path (F id)       = case Map.lookup id cnc_defs of
                                         Just term -> evalTerm cnc_defs path term
-                                        Nothing   -> error ("unknown id " ++ prCId id)
+                                        Nothing   -> error ("unknown id " ++ showCId id)
 evalTerm cnc_defs path x = error ("evalTerm ("++show x++")")
 
 
@@ -361,7 +361,7 @@ emptyGrammarEnv cnc_defs lincats =
     getMultipliers m ms (C max_index) = (m*(max_index+1),m : ms)
     getMultipliers m ms (F id)        = case Map.lookup id cnc_defs of
                                           Just term -> getMultipliers m ms term
-                                          Nothing   -> error ("unknown identifier: "++prCId id)
+                                          Nothing   -> error ("unknown identifier: "++showCId id)
 
 expandHOAS abs_defs cnc_defs lincats env = 
   foldl add_varFun (foldl (\env ncat -> add_hoFun (add_hoCat env ncat) ncat) env hoTypes) hoCats
@@ -400,7 +400,7 @@ expandHOAS abs_defs cnc_defs lincats env =
       in env3
       where
         (arg,res) = case Map.lookup cat lincats of
-	              Nothing    -> error $ "No lincat for " ++ prCId cat
+	              Nothing    -> error $ "No lincat for " ++ showCId cat
                       Just ctype -> (protoFCat cnc_defs (0,cat) ctype, protoFCat cnc_defs (n,cat) ctype)
 
     -- add one PMCFG function for each high-order category: _V : Var -> Cat
@@ -414,7 +414,7 @@ expandHOAS abs_defs cnc_defs lincats env =
       in env3
       where
         res = case Map.lookup cat lincats of
-	        Nothing    -> error $ "No lincat for " ++ prCId cat
+	        Nothing    -> error $ "No lincat for " ++ showCId cat
                 Just ctype -> protoFCat cnc_defs (0,cat) ctype
 
     _B = mkCId "_B"

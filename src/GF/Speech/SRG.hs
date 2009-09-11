@@ -113,12 +113,12 @@ makeNonRecursiveSRG opts = mkSRG cfgToSRG id
 
 mkSRG :: (CFG -> [SRGRule]) -> (CFG -> CFG) -> PGF -> CId -> SRG
 mkSRG mkRules preprocess pgf cnc =
-    SRG { srgName = prCId cnc,
+    SRG { srgName = showCId cnc,
 	  srgStartCat = cfgStartCat cfg,
           srgExternalCats = cfgExternalCats cfg,
           srgLanguage = getSpeechLanguage pgf cnc,
 	  srgRules = mkRules cfg }
-    where cfg = renameCats (prCId cnc) $ preprocess $ pgfToCFG pgf cnc
+    where cfg = renameCats (showCId cnc) $ preprocess $ pgfToCFG pgf cnc
 
 -- | Renames all external cats C to C_cat, and all internal cats C_X (where X is any string), 
 --   to C_N where N is an integer.

@@ -5,6 +5,7 @@ module GF.Command.TreeOperations (
 
 import GF.Compile.TypeCheck
 import PGF
+import PGF.Data
 
 import Data.List
 

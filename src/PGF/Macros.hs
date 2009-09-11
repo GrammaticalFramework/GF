@@ -69,7 +69,7 @@ lookAbsFlag pgf f =
 
 lookConcr :: PGF -> CId -> Concr
 lookConcr pgf cnc = 
-    lookMap (error $ "Missing concrete syntax: " ++ prCId cnc) cnc $ concretes pgf
+    lookMap (error $ "Missing concrete syntax: " ++ showCId cnc) cnc $ concretes pgf
 
 lookConcrFlag :: PGF -> CId -> CId -> Maybe String
 lookConcrFlag pgf lang f = Map.lookup f $ cflags $ lookConcr pgf lang
@@ -129,7 +129,7 @@ contextLength ty = case ty of
   DTyp hyps _ _ -> length hyps
 
 term0 :: CId -> Term
-term0 = TM . prCId
+term0 = TM . showCId
 
 tm0 :: Term
 tm0 = TM "?"

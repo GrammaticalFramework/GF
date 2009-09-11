@@ -50,12 +50,12 @@ catSISR t (c,i) fmt
 profileFinalSISR :: CFTerm -> SISRFormat -> SISRTag
 profileFinalSISR term fmt = [JS.DExpr $ fmtOut fmt `ass` f term]
   where 
-        f (CFObj n ts) = tree (prCId n) (map f ts)
+        f (CFObj n ts) = tree (showCId n) (map f ts)
         f (CFAbs v x) = JS.EFun [var v] [JS.SReturn (f x)]
         f (CFApp x y) = JS.ECall (f x) [f y]
         f (CFRes i) = JS.EIndex (JS.EVar args) (JS.EInt (fromIntegral i))
         f (CFVar v) = JS.EVar (var v)
-        f (CFMeta typ) = obj [("name",JS.EStr "?"), ("type",JS.EStr (prCId typ))]
+        f (CFMeta typ) = obj [("name",JS.EStr "?"), ("type",JS.EStr (showCId typ))]
 
 fmtOut SISR_WD20030401 = JS.EVar (JS.Ident "$")
 fmtOut SISR_1_0 = JS.EVar (JS.Ident "out")

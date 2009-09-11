@@ -74,7 +74,7 @@ writePGF opts pgf = do
   putPointE Normal opts ("Writing " ++ outfile ++ "...") $ ioeIO $ encodeFile outfile pgf
 
 grammarName :: Options -> PGF -> String
-grammarName opts pgf = fromMaybe (prCId (absname pgf)) (flag optName opts)
+grammarName opts pgf = fromMaybe (showCId (absname pgf)) (flag optName opts)
 
 writeOutput :: Options -> FilePath-> String -> IOE ()
 writeOutput opts file str =

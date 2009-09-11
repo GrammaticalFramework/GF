@@ -16,7 +16,6 @@ module PGF.Paraphrase (
 import PGF.Data
 import PGF.Tree
 import PGF.Macros (lookDef,isData)
-import PGF.Expr
 import PGF.CId
 
 import Data.List (nub,sort,group)

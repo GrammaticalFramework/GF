@@ -59,14 +59,14 @@ linTree :: PGF -> CId -> Expr -> Term
 linTree pgf lang = lin . expr2tree
   where
     lin (Abs xs  e )   = case lin e of
-                             R ts -> R $ ts     ++ (Data.List.map (kks . prCId) xs)
-                             TM s -> R $ (TM s)  : (Data.List.map (kks . prCId) xs)
+                             R ts -> R $ ts     ++ (Data.List.map (kks . showCId) xs)
+                             TM s -> R $ (TM s)  : (Data.List.map (kks . showCId) xs)
     lin (Fun fun es)   = let argVariants = mapM (liftVariants . lin) es
                           in variants [compute pgf lang args $ look fun | args <- argVariants]
     lin (Lit (LStr s)) = R [kks (show s)] -- quoted
     lin (Lit (LInt i)) = R [kks (show i)] 
     lin (Lit (LFlt d)) = R [kks (show d)]
-    lin (Var x)        = TM (prCId x)
+    lin (Var x)        = TM (showCId x)
     lin (Meta i)       = TM (show i)
  
     look = lookLin pgf lang
@@ -130,15 +130,15 @@ linTreeMark :: PGF -> CId -> Expr -> Term
 linTreeMark pgf lang = lin [] . expr2tree
   where
     lin p (Abs xs  e )   = case lin p e of
-                             R ts -> R $ ts     ++ (Data.List.map (kks . prCId) xs)
-                             TM s -> R $ (TM s)  : (Data.List.map (kks . prCId) xs)
+                             R ts -> R $ ts     ++ (Data.List.map (kks . showCId) xs)
+                             TM s -> R $ (TM s)  : (Data.List.map (kks . showCId) xs)
     lin p (Fun fun es)   = let argVariants = 
                                 mapM (\ (i,e) -> liftVariants $ lin (sub p i) e) (zip [0..] es)
                           in variants [mark p $ compute pgf lang args $ look fun | args <- argVariants]
     lin p (Lit (LStr s)) = mark p $ R [kks (show s)] -- quoted
     lin p (Lit (LInt i)) = mark p $ R [kks (show i)] 
     lin p (Lit (LFlt d)) = mark p $ R [kks (show d)]
-    lin p (Var x)        = mark p $ TM (prCId x)
+    lin p (Var x)        = mark p $ TM (showCId x)
     lin p (Meta i)       = mark p $ TM (show i)
  
     look = lookLin pgf lang

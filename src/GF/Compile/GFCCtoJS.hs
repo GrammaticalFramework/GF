@@ -23,10 +23,10 @@ pgf2js :: PGF -> String
 pgf2js pgf =
   encodeUTF8 $ JS.printTree $ JS.Program [JS.ElStmt $ JS.SDeclOrExpr $ JS.Decl [JS.DInit (JS.Ident n) grammar]]
  where
-   n  = prCId $ absname pgf
+   n  = showCId $ absname pgf
    as = abstract pgf
    cs = Map.assocs (concretes pgf)
-   start = prCId $ M.lookStartCat pgf
+   start = showCId $ M.lookStartCat pgf
    grammar = new "GFGrammar" [js_abstract, js_concrete]
    js_abstract = abstract2js start as
    js_concrete = JS.EObj $ map (concrete2js start n) cs
@@ -37,15 +37,15 @@ abstract2js start ds = new "GFAbstract" [JS.EStr start, JS.EObj $ map absdef2js 
 absdef2js :: (CId,(Type,Int,[Equation])) -> JS.Property
 absdef2js (f,(typ,_,_)) =
   let (args,cat) = M.catSkeleton typ in 
-    JS.Prop (JS.IdentPropName (JS.Ident (prCId f))) (new "Type" [JS.EArray [JS.EStr (prCId x) | x <- args], JS.EStr (prCId cat)])
+    JS.Prop (JS.IdentPropName (JS.Ident (showCId f))) (new "Type" [JS.EArray [JS.EStr (showCId x) | x <- args], JS.EStr (showCId cat)])
 
 concrete2js :: String -> String -> (CId,Concr) -> JS.Property
 concrete2js start n (c, cnc) =
-    JS.Prop l (new "GFConcrete" ([flags,(JS.EObj $ ((map (cncdef2js n (prCId c)) ds) ++ litslins))] ++
+    JS.Prop l (new "GFConcrete" ([flags,(JS.EObj $ ((map (cncdef2js n (showCId c)) ds) ++ litslins))] ++
                                  maybe [] (parser2js start) (parser cnc)))
   where 
    flags = mapToJSObj JS.EStr $ cflags cnc
-   l  = JS.IdentPropName (JS.Ident (prCId c))
+   l  = JS.IdentPropName (JS.Ident (showCId c))
    ds = concatMap Map.assocs [lins cnc, opers cnc, lindefs cnc]
    litslins = [JS.Prop (JS.StringPropName    "Int") (JS.EFun [children] [JS.SReturn $ new "Arr" [JS.EIndex (JS.EVar children) (JS.EInt 0)]]), 
                JS.Prop (JS.StringPropName  "Float") (JS.EFun [children] [JS.SReturn $ new "Arr" [JS.EIndex (JS.EVar children) (JS.EInt 0)]]),
@@ -53,7 +53,7 @@ concrete2js start n (c, cnc) =
 
 
 cncdef2js :: String -> String -> (CId,Term) -> JS.Property
-cncdef2js n l (f, t) = JS.Prop (JS.IdentPropName (JS.Ident (prCId f))) (JS.EFun [children] [JS.SReturn (term2js n l t)])
+cncdef2js n l (f, t) = JS.Prop (JS.IdentPropName (JS.Ident (showCId f))) (JS.EFun [children] [JS.SReturn (term2js n l t)])
 
 term2js :: String -> String -> Term -> JS.Expr
 term2js n l t = f t
@@ -66,7 +66,7 @@ term2js n l t = f t
       K t            -> tokn2js t
       V i            -> JS.EIndex (JS.EVar children) (JS.EInt i)
       C i            -> new "Int" [JS.EInt i]
-      F f            -> JS.ECall (JS.EMember (JS.EIndex (JS.EMember (JS.EVar $ JS.Ident n) (JS.Ident "concretes")) (JS.EStr l)) (JS.Ident "rule")) [JS.EStr (prCId f), JS.EVar children]
+      F f            -> JS.ECall (JS.EMember (JS.EIndex (JS.EMember (JS.EVar $ JS.Ident n) (JS.Ident "concretes")) (JS.EStr l)) (JS.Ident "rule")) [JS.EStr (showCId f), JS.EVar children]
       FV xs          -> new "Variants" (map f xs)
       W str x        -> new "Suffix" [JS.EStr str, f x]
       TM _           -> new "Meta" []
@@ -94,7 +94,7 @@ parser2js start p  = [new "Parser" [JS.EStr start,
                                     JS.EArray $ [frule2js p cat prod | (cat,set) <- IntMap.toList (productions p), prod <- Set.toList set],
                                     JS.EObj $ map cats (Map.assocs (startCats p))]]
   where 
-    cats (c,is) = JS.Prop (JS.IdentPropName (JS.Ident (prCId c))) (JS.EArray (map JS.EInt is))
+    cats (c,is) = JS.Prop (JS.IdentPropName (JS.Ident (showCId c))) (JS.EArray (map JS.EInt is))
 
 frule2js :: ParserInfo -> FCat -> Production -> JS.Expr
 frule2js p res (FApply funid args) = new "Rule" [JS.EInt res, name2js (f,ps), JS.EArray (map JS.EInt args), lins2js p lins]
@@ -114,7 +114,7 @@ frule2js p res (FCoerce arg) = new "Rule" [JS.EInt res, daughter 0, JS.EArray [J
 
 
 name2js :: (CId,[Profile]) -> JS.Expr
-name2js (f,ps) = new "FunApp" $ [JS.EStr $ prCId f, JS.EArray (map fromProfile ps)]
+name2js (f,ps) = new "FunApp" $ [JS.EStr $ showCId f, JS.EArray (map fromProfile ps)]
   where
     fromProfile :: Profile -> JS.Expr
     fromProfile []   = new "MetaVar" []
@@ -135,4 +135,4 @@ new :: String -> [JS.Expr] -> JS.Expr
 new f xs = JS.ENew (JS.Ident f) xs
 
 mapToJSObj :: (a -> JS.Expr) -> Map CId a -> JS.Expr
-mapToJSObj f m = JS.EObj [ JS.Prop (JS.IdentPropName (JS.Ident (prCId k))) (f v) | (k,v) <- Map.toList m ]
+mapToJSObj f m = JS.EObj [ JS.Prop (JS.IdentPropName (JS.Ident (showCId k))) (f v) | (k,v) <- Map.toList m ]

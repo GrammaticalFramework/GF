@@ -19,7 +19,7 @@ module PGF.VisualizeTree ( visualizeTrees, alignLinearize
   ,PosText(..),readPosText
 			) where
 
-import PGF.CId (prCId)
+import PGF.CId (showCId)
 import PGF.Data
 import PGF.Tree
 import PGF.Linearize
@@ -42,14 +42,14 @@ tree2graph pgf (funs,cats) = prf [] where
         concat [prf (j:ps) t     | (j,t) <- zip [0..] trees]
   prn ps cid = 
     let
-      fun = if funs then prCId cid else ""
+      fun = if funs then showCId cid else ""
       cat = if cats then prCat cid else ""
       colon = if funs && cats then " : " else ""
       lab = "\"" ++ fun ++ colon ++ cat ++ "\""
     in (show(show (ps :: [Int])),lab)
   pra i nod t@(Fun cid _) =  nod ++ arr ++ fst (prn i cid) ++ " [style = \"solid\"];"
   arr = " -- " -- if digr then " -> " else " -- "
-  prCat = prCId . lookValCat pgf
+  prCat = showCId . lookValCat pgf
 
 prGraph digr ns = concat $ map (++"\n") $ [graph ++ "{\n"] ++ ns ++ ["}"] where
   graph = if digr then "digraph" else "graph"
