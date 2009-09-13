@@ -359,7 +359,7 @@ resource MorphoFin = ResFin ** open Prelude in {
       9 => ukkoihin
       } ;
 
-    Noun = {s : NForm => Str} ;
+    Noun = {s : NForm => Str; lock_N : {}} ;
 
     nForms2N : NForms -> Noun = \f -> 
       let

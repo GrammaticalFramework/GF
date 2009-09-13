@@ -43,7 +43,7 @@ param
   AForm = AN NForm | AAdv ;
 
 oper
-  Adjective : Type = {s : Degree => AForm => Str} ;
+  Adjective : Type = {s : Degree => AForm => Str; lock_A : {}} ;
 
 --2 Noun phrases
 --

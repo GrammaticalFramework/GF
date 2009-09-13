@@ -274,7 +274,7 @@ foreign = Foreign; -- +++ MG_UR: added +++
 
  mkN = overload {
     mkN : (karta : Str) -> N = mk1N ;
-    mkN : (tigr : Str) -> Animacy -> N = \nom, anim -> case anim of { Animate   => nAnimate (mk1N nom) ;
+    mkN : (tigr : Str) -> Animacy -> N = \nom, anim -> case anim of { Animate   => lin N (nAnimate (mk1N nom)) ;
 								      Inanimate => mk1N nom } ;
     mkN : (nomSg, genSg, datSg, accSg, instSg, preposSg, prepos2Sg,
           nomPl, genPl, datPl, accPl, instPl, preposPl : Str) -> Gender -> Animacy -> N = mkWorstN
