@@ -1,4 +1,4 @@
---# -path=.:../romance:../abstract:../common:prelude
+--# -path=.:../romance:../abstract:../common:../prelude
 
 concrete AllCat of AllCatAbs = 
   LangCat,
