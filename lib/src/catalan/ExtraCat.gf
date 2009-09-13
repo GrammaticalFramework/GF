@@ -37,10 +37,10 @@ lin
       Fem Sg P3 ;
 
 oper
-	vostePl : ParadigmsCat.Gender -> Pron = \g -> mkPronoun
+	vostePl : ParadigmsCat.Gender -> Pron = \g -> lin Pron (mkPronoun
       "vostés" "els" "li" "vostés"
       "llur" "llur" "llurs"
-      g Pl P3 ;
+      g Pl P3) ;
 lin
     youPolPl_Pron = vostePl Masc;
     youPolPl8fem_Pron = vostePl Fem;

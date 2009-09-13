@@ -1088,7 +1088,7 @@ incomplete resource Constructors = open Grammar in {
         = DetQuantOrd  ; --# notminimal
       mkDet : Quant -> Num -> Det       -- these five man  
         = DetQuant ;  
-      mkDet : Num ->  Det       -- forty-five men  
+      mkDet : Card ->  Det       -- forty-five men  
 	= DetArtCard IndefArt ;  
       mkDet : Digits -> Det          -- 51 (men) --# notminimal
 	= \d -> DetArtCard IndefArt (NumDigits d) ; --# notminimal
