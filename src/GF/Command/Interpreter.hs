@@ -56,7 +56,7 @@ interpretPipe enc env cs = do
    interc es comm@(Command co opts arg) = case co of
      '%':f -> case Map.lookup f (commandmacros env) of
        Just css ->
-         case getCommandTrees env arg es of
+         case getCommandTrees env False arg es of
            Right es -> do mapM_ (interpretPipe enc env) (appLine es css) 
                           return ([],[])
            Left msg -> do putStrLn ('\n':msg)
@@ -98,7 +98,7 @@ getCommand :: CommandEnv -> [Expr] -> Command -> Either String (CommandInfo,[Opt
 getCommand env es co@(Command c opts arg) = do
   info <- getCommandInfo  env c
   checkOpts info opts
-  es   <- getCommandTrees env arg es
+  es   <- getCommandTrees env (needsTypeCheck info) arg es
   return (info,opts,es)
 
 getCommandInfo :: CommandEnv -> String -> Either String CommandInfo
@@ -117,14 +117,16 @@ checkOpts info opts =
     [o] -> fail $ "option not interpreted: " ++ o
     os  -> fail $ "options not interpreted: " ++ unwords os
 
-getCommandTrees :: CommandEnv -> Argument -> [Expr] -> Either String [Expr]
-getCommandTrees env a es =
+getCommandTrees :: CommandEnv -> Bool -> Argument -> [Expr] -> Either String [Expr]
+getCommandTrees env needsTypeCheck a es =
   case a of
     AMacro m -> case Map.lookup m (expmacros env) of
                   Just e -> return [e]
                   _      -> return [] 
-    AExpr e -> case inferExpr (multigrammar env) e of
-                 Left tcErr   -> fail $ render (ppTcError tcErr)
-                 Right (e,ty) -> return [e] -- ignore piped
+    AExpr e -> if needsTypeCheck
+                 then case inferExpr (multigrammar env) e of
+                        Left tcErr   -> fail $ render (ppTcError tcErr)
+                        Right (e,ty) -> return [e] -- ignore piped
+                 else return [e]
     ANoArg  -> return es  -- use piped
-  
+
