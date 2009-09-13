@@ -3,11 +3,16 @@ import Data.Maybe
 import System.IO
 import System.CPUTime
 import Control.Monad
+import Data.Set as Set (fromList,toList)
+
+start_cat = fromJust (readType "Phr")
 
 main = do
-  pgf <- readPGF "grammar.pgf"
-  ts <- fmap (map (fromJust . readTree) . lines) $ readFile "trees.txt"
-  mapM_ (\l -> doTestLang pgf l ts) (languages pgf)
+  pgf <- readPGF "Lang.pgf"
+  trees0 <- generateRandom pgf start_cat
+  let trees = Set.toList (Set.fromList (take 5000 trees0))
+  hPutStrLn stderr ("Number of trees: "++show (length trees))
+  mapM_ (\l -> doTestLang pgf l trees) (languages pgf)
 
 doTestLang pgf l ts = do
   hPutStrLn stderr (show l)
@@ -18,6 +23,7 @@ doTestLang pgf l ts = do
 doTest pgf lang cat ss t = do
   let s = linearize pgf lang t
   putStr (s ++ " ... ")
+  hFlush stdout
   let st = initState pgf lang cat
   t1 <- getCPUTime
   res <- doParse st t1 [] (words s)
