@@ -5,6 +5,7 @@ module GF.Command.Commands (
   isOpt,
   options,
   flags,
+  needsTypeCheck,
   CommandInfo,
   CommandOutput
   ) where
@@ -49,7 +50,8 @@ data CommandInfo = CommandInfo {
   longname :: String,
   options  :: [(String,String)],
   flags    :: [(String,String)],
-  examples :: [String]
+  examples :: [String],
+  needsTypeCheck :: Bool
   }
 
 emptyCommandInfo :: CommandInfo
@@ -61,7 +63,8 @@ emptyCommandInfo = CommandInfo {
   longname = "",
   options = [],
   flags = [],
-  examples = []
+  examples = [],
+  needsTypeCheck = True
   }
 
 lookCommand :: String -> Map.Map String CommandInfo -> Maybe CommandInfo
@@ -117,14 +120,16 @@ allCommands cod env@(pgf, mos) = Map.fromList [
      syntax   = "! SYSTEMCOMMAND",
      examples = [
        "! ls *.gf   -- list all GF files in the working directory"
-       ]
+       ],
+     needsTypeCheck = False
      }),
   ("?", emptyCommandInfo {
      synopsis = "system pipe: send value from previous command to a system command",
      syntax   = "? SYSTEMCOMMAND",
      examples = [
        "gt | l | ? wc  -- generate, linearize, word-count"
-       ]
+       ],
+     needsTypeCheck = False
      }),
 
   ("aw", emptyCommandInfo {
@@ -179,7 +184,8 @@ allCommands cod env@(pgf, mos) = Map.fromList [
        ("all","pick all strings (forms and variants) from records and tables"),
        ("table","show all strings labelled by parameters"),
        ("unqual","hide qualifying module names")
-       ]
+       ],
+     needsTypeCheck = False
      }),
   ("dc",  emptyCommandInfo {
      longname = "define_command",
@@ -192,7 +198,8 @@ allCommands cod env@(pgf, mos) = Map.fromList [
        "trees can be arguments. Currently at most one argument is possible.",
        "This command must be a line of its own, and thus cannot be a part",
        "of a pipe."
-       ] 
+       ],
+     needsTypeCheck = False
      }),
   ("dt",  emptyCommandInfo {
      longname = "define_tree",
@@ -211,7 +218,8 @@ allCommands cod env@(pgf, mos) = Map.fromList [
        ("dt ex UseN man_N                         -- define ex as string"),
        ("dt ex < p -cat=NP \"the man in the car\" -- define ex as parse result"),
        ("l -lang=LangSwe %ex | ps -to_utf8        -- linearize the tree ex")
-       ] 
+       ],
+     needsTypeCheck = False
      }),
   ("e",  emptyCommandInfo {
      longname = "empty",
@@ -287,7 +295,8 @@ allCommands cod env@(pgf, mos) = Map.fromList [
                    Just info -> commandHelp True (co,info)
                    _ -> "command not found"
           _ -> commandHelpAll cod env opts
-       in return (fromString msg) 
+       in return (fromString msg),
+     needsTypeCheck = False
      }),
   ("i", emptyCommandInfo {
      longname = "import",
@@ -306,7 +315,8 @@ allCommands cod env@(pgf, mos) = Map.fromList [
        ("retain","retain operations (used for cc command)"),
        ("src",   "force compilation from source"),
        ("v",     "be verbose - show intermediate status information")
-       ]
+       ],
+     needsTypeCheck = False
      }),
   ("l", emptyCommandInfo {
      longname = "linearize",
@@ -367,7 +377,7 @@ allCommands cod env@(pgf, mos) = Map.fromList [
        ("lang","language of the quiz"),
        ("cat","category of the quiz"),
        ("number","maximum number of questions")
-       ] 
+       ]
      }),
 
   ("p", emptyCommandInfo {
@@ -520,7 +530,8 @@ allCommands cod env@(pgf, mos) = Map.fromList [
      examples = [
       "se cp1251 -- set encoding to cp1521",
       "se utf8   -- set encoding to utf8 (default)"
-      ]
+      ],
+     needsTypeCheck = False
     }),
   ("sp", emptyCommandInfo {
      longname = "system_pipe",
