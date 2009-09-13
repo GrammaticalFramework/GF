@@ -290,10 +290,10 @@ oper
   plural = Pl ;
 
   --Prep = Compl ;
-  accusative = complAcc ;
-  genitive = complGen ;
-  dative = complDat ;
-  mkPrep p = {s = p ; c = Acc ; isDir = False ; lock_Prep = <>} ;
+  accusative = lin Prep complAcc ;
+  genitive = lin Prep complGen ;
+  dative = lin Prep complDat ;
+  mkPrep p = lin Prep {s = p ; c = Acc ; isDir = False ; lock_Prep = <>} ;
 
   con_Prep = {s = [] ; c = CPrep P_con ; isDir = False ; lock_Prep = <>} ;
   da_Prep = {s = [] ; c = CPrep P_da ; isDir = False ; lock_Prep = <>} ;

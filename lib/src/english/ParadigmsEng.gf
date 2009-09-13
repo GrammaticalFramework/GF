@@ -426,7 +426,7 @@ mkSubj : Str -> Subj = \s -> lin Subj {s = s} ;
 
   mkOrd : Str -> Ord = \x -> lin Ord { s = regGenitiveS x};
 
-  mk2A a b = lin A (mkAdjective a a a b) ;
+  mk2A a b = mkAdjective a a a b ;
   regA a = case a of {
     _ + ("a" | "e" | "i" | "o" | "u" | "y") + ? + _ + 
         ("a" | "e" | "i" | "o" | "u" | "y") + ? + _  => 
@@ -438,7 +438,7 @@ mkSubj : Str -> Subj = \s -> lin Subj {s = s} ;
 
   ADeg = A ; ----
 
-  mkADeg a b c d = lin A (mkAdjective a b c d) ;
+  mkADeg a b c d = mkAdjective a b c d ;
 
   regADeg happy = 
     let
@@ -533,7 +533,7 @@ mkSubj : Str -> Subj = \s -> lin Subj {s = s} ;
                                           --- variants {}} ; not used 
     isAux = False
     } ;
-  mkVQ  v = v ;
+  mkVQ  v = lin VQ v ;
 
   V0 : Type = V ;
 --  V2S, V2V, V2Q : Type = V2 ;
@@ -541,14 +541,14 @@ mkSubj : Str -> Subj = \s -> lin Subj {s = s} ;
   A2V : Type = A2 ;
 
   mkV0  v = v ;
-  mkV2S v p = prepV2 v p ;
+  mkV2S v p = lin V2S (prepV2 v p) ;
   mkV2V v p t = lin V2V (prepV2 v p ** {isAux = False}) ;
-  mkVA  v = v ;
-  mkV2A v p = prepV2 v p ;
-  mkV2Q v p = prepV2 v p ;
+  mkVA  v = lin VA v ;
+  mkV2A v p = lin V2A (prepV2 v p) ;
+  mkV2Q v p = lin V2Q (prepV2 v p) ;
 
   mkAS  v = v ;
-  mkA2S v p = prepA2 v p ;
+  mkA2S v p = lin A (prepA2 v p) ;
   mkAV  v = v ;
   mkA2V v p = prepA2 v p ;
 

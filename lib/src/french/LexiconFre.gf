@@ -103,7 +103,7 @@ lin
   iron_N = regGenN "fer" masculine ;
   king_N = regGenN "roi" masculine ;
   know_V2 = connaître_V2 ; 
-  know_VS = mkVS savoir_V2 ;
+  know_VS = mkVS (lin V savoir_V2) ;
   lake_N = regGenN "lac" masculine ;
   lamp_N = regGenN "lampe" feminine ;
   learn_V2 = apprendre_V2 ;

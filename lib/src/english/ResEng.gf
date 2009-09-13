@@ -120,8 +120,8 @@ resource ResEng = ParamX ** open Prelude in {
         }
       } ;
 
-    mkAdjective : (_,_,_,_ : Str) -> {s : AForm => Str} = 
-      \good,better,best,well -> {
+    mkAdjective : (_,_,_,_ : Str) -> {s : AForm => Str; lock_A : {}} = 
+      \good,better,best,well -> lin A {
       s = table {
         AAdj Posit  c => (regGenitiveS good) ! c ;
         AAdj Compar c => (regGenitiveS better) ! c ;
