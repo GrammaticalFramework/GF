@@ -25,10 +25,6 @@ import GF.Infra.Option
 import GF.Infra.Modules
 import GF.Infra.UseIO
 
-import GF.Source.GrammarToSource
-import qualified GF.Source.AbsGF as A
-import qualified GF.Source.PrintGF as P
-
 import GF.Data.Operations
 
 import Control.Monad

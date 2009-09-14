@@ -5,10 +5,10 @@ import PGF.Data
 
 import GF.Compile
 import GF.Grammar.Grammar (SourceGrammar) -- for cc command
+import GF.Grammar.CF
 import GF.Infra.UseIO
 import GF.Infra.Option
 import GF.Data.ErrM
-import GF.Source.CF
 
 import Data.List (nubBy)
 import System.FilePath

@@ -7,7 +7,7 @@ import PGF.Data
 import GF.Compile
 import GF.Compile.Export
 
-import GF.Source.CF ---- should this be on a deeper level? AR 15/10/2008
+import GF.Grammar.CF ---- should this be on a deeper level? AR 15/10/2008
 
 import GF.Infra.UseIO
 import GF.Infra.Option

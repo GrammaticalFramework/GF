@@ -14,7 +14,7 @@ import GF.Grammar.Predef
 import GF.Grammar.Printer
 import GF.Grammar.Grammar
 import qualified GF.Grammar.Lookup as Look
-import qualified GF.Grammar.Abstract as A
+import qualified GF.Grammar as A
 import qualified GF.Grammar.Macros as GM
 import qualified GF.Compile.Compute as Compute ---- 
 import qualified GF.Infra.Modules as M
