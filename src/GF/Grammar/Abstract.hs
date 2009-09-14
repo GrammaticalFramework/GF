@@ -19,7 +19,7 @@ module GF.Grammar.Values,
 module GF.Grammar.Macros,
 module GF.Infra.Ident,
 module GF.Grammar.MMacros,
-module GF.Grammar.PrGrammar,
+module GF.Grammar.Printer,
 
 Grammar
 
@@ -30,7 +30,7 @@ import GF.Grammar.Values
 import GF.Grammar.Macros
 import GF.Infra.Ident
 import GF.Grammar.MMacros
-import GF.Grammar.PrGrammar
+import GF.Grammar.Printer
 
 type Grammar = SourceGrammar ---
 

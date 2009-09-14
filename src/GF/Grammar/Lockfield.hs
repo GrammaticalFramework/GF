@@ -21,14 +21,13 @@ import qualified Data.ByteString.Char8 as BS
 import GF.Infra.Ident
 import GF.Grammar.Grammar
 import GF.Grammar.Macros
-import GF.Grammar.PrGrammar
 
 import GF.Data.Operations
 
 lockRecType :: Ident -> Type -> Err Type
 lockRecType c t@(RecType rs) = 
   let lab = lockLabel c in
-  return $ if elem lab (map fst rs) || elem (prt c) ["String","Int"]
+  return $ if elem lab (map fst rs) || elem (showIdent c) ["String","Int"]
     then t --- don't add an extra copy of lock field, nor predef cats
     else RecType (rs ++ [(lockLabel c,  RecType [])])
 lockRecType c t = plusRecType t $ RecType [(lockLabel c,  RecType [])]

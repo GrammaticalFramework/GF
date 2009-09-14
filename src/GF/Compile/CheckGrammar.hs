@@ -129,7 +129,7 @@ checkAbsInfo st m mo c info = do
  where
    mkCheck cat ss = case ss of
      [] -> return info
-     _  -> checkError (vcat (map text ss) $$ text "in" <+> text cat <+> ppIdent c <+> ppPosition mo c)
+     _  -> checkError (vcat ss $$ text "in" <+> text cat <+> ppIdent c <+> ppPosition mo c)
 
    compAbsTyp g t = case t of
      Vr x -> maybe (checkError (text "no value given to variable" <+> ppIdent x)) return $ lookup x g

@@ -18,9 +18,9 @@ import GF.Data.Operations
 import GF.Grammar.Grammar
 import GF.Infra.Ident
 import GF.Infra.Option
-import GF.Data.Str
-import GF.Grammar.PrGrammar
 import GF.Infra.Modules
+import GF.Data.Str
+import GF.Grammar.Printer
 import GF.Grammar.Predef
 import GF.Grammar.Macros
 import GF.Grammar.Lookup
@@ -32,8 +32,7 @@ import GF.Grammar.AppPredefined
 
 import Data.List (nub,intersperse)
 import Control.Monad (liftM2, liftM)
-
----- import Debug.Trace ----
+import Text.PrettyPrint
 
 -- | computation of concrete syntax terms into normal form
 -- used mainly for partial evaluation
@@ -57,7 +56,7 @@ computeTermOpt rec gr = comput True where
            | otherwise    -> look p c 
 
      Vr x -> do
-       t' <- maybe (prtBad ("no value given to variable") x) return $ lookup x g
+       t' <- maybe (Bad (render (text "no value given to variable" <+> ppIdent x))) return $ lookup x g
        case t' of 
          _ | t == t' -> return t
          _ -> comp g t'
@@ -113,7 +112,7 @@ computeTermOpt rec gr = comput True where
        t' <- comp g t
        case t' of
          FV rs -> mapM (\c -> comp g (P c l)) rs >>= returnC . variants
-         R r   -> maybe (prtBad "no value for label" l) (comp g . snd) $ 
+         R r   -> maybe (Bad (render (text "no value for label" <+> ppLabel l))) (comp g . snd) $ 
                     lookup l $ reverse r 
 
          ExtR a (R b) ->                 
@@ -275,7 +274,7 @@ computeTermOpt rec gr = comput True where
      compPatternMacro p = case p of
        PM m c -> case look m c of
          Ok (EPatt p') -> compPatternMacro p'
-         _ -> prtBad "pattern expected as value of" p ---- should be in CheckGr
+         _ -> Bad (render (text "pattern expected as value of" $$ nest 2 (ppPatt Unqualified 0 p)))
        PAs x p -> do
          p' <- compPatternMacro p
          return $ PAs x p'
@@ -325,7 +324,7 @@ computeTermOpt rec gr = comput True where
                  _ -> v'
            case matchPattern cc v2 of
              Ok (c,g') -> comp (g' ++ g) c
-             _ | isCan v2 -> prtBad ("missing case" +++ prt v2 +++ "in") t 
+             _ | isCan v2 -> Bad (render (text "missing case" <+> ppTerm Unqualified 0 v2 <+> text "in" <+> ppTerm Unqualified 0 t))
              _ -> return $ S t' v' -- if v' is not canonical
 
          S (T i cs) e -> prawitz g i (flip S v') cs e
@@ -422,7 +421,7 @@ computeTermOpt rec gr = comput True where
            as <- getPatts a
            bs <- getPatts b
            return [K (s ++ t) | K s <- as, K t <- bs]
-         _ -> fail $ "not valid pattern in pre expression" +++ prt p
+         _ -> fail (render (text "not valid pattern in pre expression" <+> ppPatt Unqualified 0 p))
 
 {- ----
      uncurrySelect g fs t v = do
@@ -450,18 +449,15 @@ computeTermOpt rec gr = comput True where
 -- | argument variables cannot be glued
 checkNoArgVars :: Term -> Err Term
 checkNoArgVars t = case t of
-  Vr (IA _ _)    -> Bad $ glueErrorMsg $ prt t 
-  Vr (IAV _ _ _) -> Bad $ glueErrorMsg $ prt t 
+  Vr (IA _ _)    -> Bad $ glueErrorMsg $ ppTerm Unqualified 0 t 
+  Vr (IAV _ _ _) -> Bad $ glueErrorMsg $ ppTerm Unqualified 0 t 
   _ -> composOp checkNoArgVars t
 
 glueErrorMsg s = 
-  "Cannot glue (+) term with run-time variable" +++ s ++ "." ++++
-  "Use Prelude.bind instead."
+  render (text "Cannot glue (+) term with run-time variable" <+> s <> char '.' $$
+          text "Use Prelude.bind instead.")
 
 getArgType t = case t of
   V ty _ -> return ty
   T (TComp ty) _ -> return ty
-  _ -> prtBad "cannot get argument type of table" t
-
-
-
+  _ -> Bad (render (text "cannot get argument type of table" $$ nest 2 (ppTerm Unqualified 0 t)))

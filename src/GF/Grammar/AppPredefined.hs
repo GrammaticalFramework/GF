@@ -20,8 +20,9 @@ import GF.Data.Operations
 import GF.Grammar.Predef
 import GF.Grammar.Grammar
 import GF.Grammar.Macros
-import GF.Grammar.PrGrammar (prt,prt_,prtBad)
+import GF.Grammar.Printer
 import qualified Data.ByteString.Char8 as BS
+import Text.PrettyPrint
 
 -- predefined function type signatures and definitions. AR 12/3/2003.
 
@@ -56,7 +57,7 @@ typPredefined f
     ([(varL,typeType),(identW,mkFunType [typeStr] typeStr),(identW,Vr varL)],Vr varL,[])
   | f == cTake      = return $ mkFunType [typeInt,typeTok] typeTok
   | f == cTk        = return $ mkFunType [typeInt,typeTok] typeTok
-  | otherwise       = prtBad "unknown in Predef:" f
+  | otherwise       = Bad (render (text "unknown in Predef:" <+> ppIdent f))
 
 varL :: Ident
 varL = identC (BS.pack "L")
@@ -89,7 +90,7 @@ appPredefined t = case t of
       (EInt i, EInt j) | f == cEqInt   -> retb $ if i==j then predefTrue else predefFalse
       (EInt i, EInt j) | f == cLessInt -> retb $ if i<j  then predefTrue else predefFalse
       (EInt i, EInt j) | f == cPlus    -> retb $ EInt $ i+j
-      (_,      t)      | f == cShow    -> retb $ foldr C Empty $ map K $ words $ prt t
+      (_,      t)      | f == cShow    -> retb $ foldr C Empty $ map K $ words $ render (ppTerm Unqualified 0 t)
       (_,      K s)    | f == cRead    -> retb $ Cn (identC (BS.pack s)) --- because of K, only works for atomic tags
       (_,      t)      | f == cToStr   -> trm2str t >>= retb
       _ -> retb t ---- prtBad "cannot compute predefined" t
@@ -137,11 +138,11 @@ trm2str t = case t of
   T _ ((_,s):_)   -> trm2str s
   TSh _ ((_,s):_) -> trm2str s
   V _ (s:_)       -> trm2str s
-  C _ _         -> return $ t
-  K _           -> return $ t
-  S c _         -> trm2str c
-  Empty         -> return $ t
-  _ -> prtBad "cannot get Str from term" t
+  C _ _           -> return $ t
+  K _             -> return $ t
+  S c _           -> trm2str c
+  Empty           -> return $ t
+  _               -> Bad (render (text "cannot get Str from term" <+> ppTerm Unqualified 0 t))
 
 -- simultaneous recursion on type and term: type arg is essential!
 -- But simplify the task by assuming records are type-annotated

@@ -16,11 +16,14 @@ module GF.Grammar.Printer
            , ppTerm
            , ppTermTabular
            , ppPatt
+           , ppValue
+           , ppConstrs
            ) where
 
 import GF.Infra.Ident
 import GF.Infra.Modules
 import GF.Infra.Option
+import GF.Grammar.Values
 import GF.Grammar.Grammar
 import GF.Data.Operations
 import Text.PrettyPrint
@@ -224,6 +227,22 @@ ppPatt q d (PInt n)     = integer n
 ppPatt q d (PFloat f)   = double f
 ppPatt q d (PString s)  = str s
 ppPatt q d (PR xs)      = braces (hsep (punctuate semi [ppLabel l <+> equals <+> ppPatt q 0 e | (l,e) <- xs]))
+
+ppValue :: TermPrintQual -> Int -> Val -> Doc
+ppValue q d (VGen i x)    = ppIdent x <> text "{-" <> int i <> text "-}" ---- latter part for debugging
+ppValue q d (VApp u v)    = prec d 4 (ppValue q 4 u <+> ppValue q 5 v)
+ppValue q d (VCn (_,c))   = ppIdent c
+ppValue q d (VClos env e) = case e of
+                              Meta _ -> ppTerm q d e <> ppEnv env
+                              _      -> ppTerm q d e ---- ++ prEnv env ---- for debugging
+ppValue q d (VRecType xs) = braces (hsep (punctuate comma [ppLabel l <> char '=' <> ppValue q 0 v | (l,v) <- xs]))
+ppValue q d VType         = text "Type"
+
+ppConstrs :: Constraints -> [Doc]
+ppConstrs = map (\(v,w) -> braces (ppValue Unqualified 0 v <+> text "<>" <+> ppValue Unqualified 0 w))
+
+ppEnv :: Env -> Doc
+ppEnv e = hcat (map (\(x,t) -> braces (ppIdent x <> text ":=" <> ppValue Unqualified 0 t)) e)
 
 str s = doubleQuotes (text s)
 

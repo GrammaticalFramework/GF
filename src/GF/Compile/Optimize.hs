@@ -18,7 +18,7 @@ module GF.Compile.Optimize (optimizeModule) where
 import GF.Grammar.Grammar
 import GF.Infra.Ident
 import GF.Infra.Modules
-import GF.Grammar.PrGrammar
+import GF.Grammar.Printer
 import GF.Grammar.Macros
 import GF.Grammar.Lookup
 import GF.Grammar.Predef
@@ -35,14 +35,9 @@ import GF.Infra.Option
 import Control.Monad
 import Data.List
 import qualified Data.Set as Set
-
+import Text.PrettyPrint
 import Debug.Trace
 
-
--- conditional trace
-
-prtIf :: (Print a) => Bool -> a -> a
-prtIf b t = if b then trace (" " ++ prt t) t else t
 
 -- | partial evaluation of concrete syntax. AR 6\/2001 -- 16\/5\/2003 -- 5\/2\/2005.
 
@@ -81,7 +76,7 @@ evalModule oopts (ms,eenv) mo@(name,m0)
    gr  = MGrammar $ mo : ms
 
    evalOp g@(MGrammar ((_,m) : _)) i = do
-     info  <- lookupTree prt i $ jments m
+     info  <- lookupTree showIdent i $ jments m
      info' <- evalResInfo oopts gr (i,info)
      return $ updateRes g name i info'
 
@@ -97,7 +92,7 @@ updateRes gr@(MGrammar ms) m i info = MGrammar $ map upd ms where
 evalResInfo :: Options -> SourceGrammar -> (Ident,Info) -> Err Info
 evalResInfo oopts gr (c,info) = case info of
 
-  ResOper pty pde -> eIn "operation" $ do
+  ResOper pty pde -> eIn (text "operation") $ do
     pde' <- case pde of
               Just de | optres -> liftM Just $ comp de 
               _                -> return pde
@@ -106,7 +101,7 @@ evalResInfo oopts gr (c,info) = case info of
   _ ->  return info
  where
    comp = if optres then computeConcrete gr else computeConcreteRec gr
-   eIn cat = errIn ("Error optimizing" +++ cat +++ prt c +++ ":")
+   eIn cat = errIn (render (text "Error optimizing" <+> cat <+> ppIdent c <+> colon))
    optim = flag optOptimizations oopts
    optres = OptExpand `Set.member` optim
 
@@ -115,9 +110,9 @@ evalCncInfo ::
   Options -> SourceGrammar -> Ident -> Ident -> (Ident,Info) -> Err Info
 evalCncInfo opts gr cnc abs (c,info) = do
 
- seq (prtIf (verbAtLeast opts Verbose) c) $ return ()
+ (if verbAtLeast opts Verbose then trace (" " ++ showIdent c) else id) return ()
 
- errIn ("optimizing" +++ prt c) $ case info of
+ errIn ("optimizing " ++ showIdent c) $ case info of
 
   CncCat ptyp pde ppr -> do
     pde' <- case (ptyp,pde) of
@@ -127,12 +122,12 @@ evalCncInfo opts gr cnc abs (c,info) = do
         liftM Just $ mkLinDefault gr typ >>= partEval noOptions gr ([(varStr, typeStr)],typ)
       _ -> return pde   -- indirection
 
-    ppr' <- liftM Just $ evalPrintname gr c ppr (Just $ K $ prt c)
+    ppr' <- liftM Just $ evalPrintname gr c ppr (Just $ K $ showIdent c)
 
     return (CncCat ptyp pde' ppr')
 
   CncFun (mt@(Just (_,ty@(cont,val)))) pde ppr -> --trace (prt c) $
-       eIn ("linearization in type" +++ prt (mkProd (cont,val,[])) ++++ "of function") $ do
+       eIn (text "linearization in type" <+> ppTerm Unqualified 0 (mkProd (cont,val,[])) $$ text "of function") $ do
     pde' <- case pde of
       Just de -> liftM Just $ pEval ty de
       Nothing -> return pde
@@ -142,11 +137,11 @@ evalCncInfo opts gr cnc abs (c,info) = do
   _ ->  return info
  where
    pEval = partEval opts gr
-   eIn cat = errIn ("Error optimizing" +++ cat +++ prt c +++ ":")
+   eIn cat = errIn (render (text "Error optimizing" <+> cat <+> ppIdent c <+> colon))
 
 -- | the main function for compiling linearizations
 partEval :: Options -> SourceGrammar -> (Context,Type) -> Term -> Err Term
-partEval opts gr (context, val) trm = errIn ("parteval" +++ prt_ trm) $ do
+partEval opts gr (context, val) trm = errIn (render (text "parteval" <+> ppTerm Qualified 0 trm)) $ do
   let vars  = map fst context
       args  = map Vr vars
       subst = [(v, Vr v) | v <- vars]
@@ -199,7 +194,7 @@ mkLinDefault gr typ = do
        ts' <- mapM mkDefField ts
        return $ R $ [assign l t | (l,t) <- zip ls ts']
      _ | Just _ <- isTypeInts typ -> return $ EInt 0 -- exists in all as first val
-     _ -> prtBad "linearization type field cannot be" typ
+     _ -> Bad (render (text "linearization type field cannot be" <+> ppTerm Unqualified 0 typ))
 
 -- | Form the printname: if given, compute. If not, use the computed
 -- lin for functions, cat name for cats (dispatch made in evalCncDef above).
@@ -210,8 +205,8 @@ evalPrintname gr c ppr lin =
   case ppr of
     Just pr -> comp pr
     Nothing -> case lin of
-                 Just t  -> return $ K $ clean $ prt $ oneBranch t ---- stringFromTerm
-                 Nothing -> return $ K $ prt c ----
+                 Just t  -> return $ K $ clean $ render (ppTerm Unqualified 0 (oneBranch t))
+                 Nothing -> return $ K $ showIdent c ----
  where
    comp = computeConcrete gr
 

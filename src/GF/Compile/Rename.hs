@@ -33,7 +33,7 @@ import GF.Grammar.Predef
 import GF.Infra.Modules
 import GF.Infra.Ident
 import GF.Grammar.Macros
-import GF.Grammar.PrGrammar
+import GF.Grammar.Printer
 import GF.Grammar.AppPredefined
 import GF.Grammar.Lookup
 import GF.Grammar.Printer
@@ -55,7 +55,7 @@ renameSourceTerm g m t = do
   renameTerm status [] t
 
 renameModule :: [SourceModule] -> SourceModule -> Err [SourceModule]
-renameModule ms (name,mo) = errIn ("renaming module" +++ prt name) $ do
+renameModule ms (name,mo) = errIn ("renaming module" +++ showIdent name) $ do
   let js1 = jments mo
   status <- buildStatus (MGrammar ms) name mo
   js2    <- mapsErrTree (renameInfo mo status) js1
@@ -69,19 +69,19 @@ type StatusInfo = Ident -> Term
 
 renameIdentTerm :: Status -> Term -> Err Term
 renameIdentTerm env@(act,imps) t = 
- errIn ("atomic term" +++ prt t +++ "given" +++ unwords (map (prt . fst) qualifs)) $
+ errIn (render (text "atomic term" <+> ppTerm Unqualified 0 t $$ text "given" <+> hsep (punctuate comma (map (ppIdent . fst) qualifs)))) $
    case t of
   Vr c -> ident predefAbs c
   Cn c -> ident (\_ s -> Bad s) c
   Q m' c | m' == cPredef {- && isInPredefined c -} -> return t
   Q m' c -> do
     m <- lookupErr m' qualifs
-    f <- lookupTree prt c m
+    f <- lookupTree showIdent c m
     return $ f c
   QC m' c | m' == cPredef {- && isInPredefined c -} -> return t
   QC m' c -> do
     m <- lookupErr m' qualifs
-    f <- lookupTree prt c m
+    f <- lookupTree showIdent c m
     return $ f c
   _ -> return t
  where
@@ -94,14 +94,14 @@ renameIdentTerm env@(act,imps) t =
      | isPredefCat c = return $ Q cPredefAbs c
      | otherwise     = Bad s
 
-   ident alt c = case lookupTree prt c act of
+   ident alt c = case lookupTree showIdent c act of
       Ok f -> return $ f c
-      _ -> case lookupTreeManyAll prt opens c of
+      _ -> case lookupTreeManyAll showIdent opens c of
         [f] -> return $ f c
-        []  -> alt c ("constant not found:" +++ prt c) 
+        []  -> alt c (render (text "constant not found:" <+> ppIdent c))
         fs -> case nub [f c | f <- fs]  of
           [tr] -> return tr
-          ts@(t:_) -> trace ("WARNING: conflict" +++ unwords (map prt ts)) (return t)
+          ts@(t:_) -> trace (render (text "Warning: conflict" <+> hsep (punctuate comma (map (ppTerm Qualified 0) ts)))) (return t)
             -- a warning will be generated in CheckGrammar, and the head returned
             -- in next V: 
             -- Bad $ "conflicting imports:" +++ unwords (map prt ts) 
@@ -152,7 +152,7 @@ forceQualif o = case o of
   
 renameInfo :: SourceModInfo -> Status -> (Ident,Info) -> Err (Ident,Info)
 renameInfo mo status (i,info) = errIn 
-    ("renaming definition of" +++ prt i +++ showPosition mo i) $ 
+    (render (text "renaming definition of" <+> ppIdent i <+> ppPosition mo i)) $ 
                                 liftM ((,) i) $ case info of
   AbsCat pco pfs -> liftM2 AbsCat (renPerh (renameContext status) pco)
                                   (renPerh (mapM rent) pfs)
@@ -210,7 +210,7 @@ renameTerm env vars = ren vars where
           Ok t -> return t
           _ -> case liftM (flip P l) $ renid t of
             Ok t -> return t                              -- const proj last
-            _ -> prtBad "unknown qualified constant" trm
+            _ -> Bad (render (text "unknown qualified constant" <+> ppTerm Qualified 0 trm))
 
     EPatt p -> do
       (p',_) <- renpatt p
@@ -233,7 +233,7 @@ renamePattern env patt = case patt of
     c' <- renid $ Vr c
     case c' of
       Q p d -> renp $ PM p d
-      _ -> prtBad "unresolved pattern" patt
+      _ -> Bad (render (text "unresolved pattern" <+> ppPatt Unqualified 0 patt))
 
   PC c ps -> do
     c' <- renid $ Cn c
@@ -254,7 +254,7 @@ renamePattern env patt = case patt of
   PM p c -> do
     (p', c') <- case renid (Q p c) of
       Ok (Q p' c') -> return (p',c')
-      _ -> prtBad "not a pattern macro" patt
+      _ -> Bad (render (text "not a pattern macro" <+> ppPatt Unqualified 0 patt))
     return (PM p' c', [])
 
   PV x -> do case renid (Vr x) of

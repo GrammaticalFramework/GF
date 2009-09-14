@@ -16,20 +16,20 @@
 -----------------------------------------------------------------------------
 
 module GF.Grammar.Lookup (
-               lookupIdent,
-               lookupIdentInfo,
-               lookupIdentInfoIn,
-               lookupOrigInfo,
-               lookupResDef,
-               lookupResDefKind,
+           lookupIdent,
+           lookupIdentInfo,
+           lookupIdentInfoIn,
+           lookupOrigInfo,
+           lookupResDef,
+           lookupResDefKind,
 	       lookupResType, 
-               lookupOverload,
+           lookupOverload,
 	       lookupParams, 
 	       lookupParamValues, 
 	       lookupFirstTag, 
-               lookupValueIndex,
-               lookupIndexValue,
-               allOrigInfos,
+           lookupValueIndex,
+           lookupIndexValue,
+           allOrigInfos,
 	       allParamValues, 
 	       lookupAbsDef, 
 	       lookupLincat, 
@@ -39,13 +39,17 @@ module GF.Grammar.Lookup (
 	      ) where
 
 import GF.Data.Operations
-import GF.Grammar.Abstract
+import GF.Infra.Ident
 import GF.Infra.Modules
+import GF.Grammar.Macros
+import GF.Grammar.Grammar
+import GF.Grammar.Printer
 import GF.Grammar.Predef
 import GF.Grammar.Lockfield
 
 import Data.List (nub,sortBy)
 import Control.Monad
+import Text.PrettyPrint
 
 -- whether lock fields are added in reuse
 lock c = lockRecType c -- return
@@ -92,7 +96,7 @@ lookupResDefKind gr m c
       AnyInd _ n        -> look False n c
       ResParam _        -> return (QC m c,2)
       ResValue _        -> return (QC m c,2)
-      _   -> Bad $ prt c +++ "is not defined in resource" +++ prt m
+      _   -> Bad $ render (ppIdent c <+> text "is not defined in resource" <+> ppIdent m)
   lookExt m c =
     checks ([look False n c | n <- allExtensions gr m] ++ [return (Q m c,3)])
 
@@ -112,7 +116,7 @@ lookupResType gr m c = do
     AnyInd _ n        -> lookupResType gr n c
     ResParam _        -> return $ typePType
     ResValue (Just (t,_))  -> return $ qualifAnnotPar m t
-    _   -> Bad $ prt c +++ "has no type defined in resource" +++ prt m
+    _   -> Bad $ render (ppIdent c <+> text "has no type defined in resource" <+> ppIdent m)
   where
     lookFunType e m c = do
           a  <- abstractOfConcrete gr m
@@ -124,7 +128,7 @@ lookupResType gr m c = do
             AbsFun (Just ty) _ _ -> return $ redirectTerm e ty 
             AbsCat _ _ -> return typeType
             AnyInd _ n -> lookFun e m c n
-            _ -> prtBad "cannot find type of reused function" c
+            _ -> Bad (render (text "cannot find type of reused function" <+> ppIdent c))
 
 lookupOverload :: SourceGrammar -> Ident -> Ident -> Err [([Type],(Type,Term))]
 lookupOverload gr m c = do
@@ -138,7 +142,7 @@ lookupOverload gr m c = do
                      concat tss
 
       AnyInd _ n  -> lookupOverload gr n c
-      _   -> Bad $ prt c +++ "is not an overloaded operation"
+      _   -> Bad $ render (ppIdent c <+> text "is not an overloaded operation")
 
 -- | returns the original 'Info' and the module where it was found
 lookupOrigInfo :: SourceGrammar -> Ident -> Ident -> Err (Ident,Info)
@@ -157,7 +161,7 @@ lookupParams gr = look True where
     case info of
       ResParam (Just psm) -> return psm
       AnyInd _ n          -> look False n c
-      _                   -> Bad $ prt c +++ "has no parameters defined in resource" +++ prt m
+      _                   -> Bad $ render (ppIdent c <+> text "has no parameters defined in resource" <+> ppIdent m)
   lookExt m c =
     checks [look False n c | n <- allExtensions gr m]
 
@@ -177,21 +181,21 @@ lookupFirstTag gr m c = do
   vs <- lookupParamValues gr m c
   case vs of
     v:_ -> return v
-    _ -> prtBad "no parameter values given to type" c
+    _ -> Bad (render (text "no parameter values given to type" <+> ppIdent c))
 
 lookupValueIndex :: SourceGrammar -> Type -> Term -> Err Term
 lookupValueIndex gr ty tr = do
   ts <- allParamValues gr ty
   case lookup tr $ zip ts [0..] of
     Just i -> return $ Val tr ty i
-    _ -> Bad $ "no index for" +++ prt tr +++ "in" +++ prt ty
+    _ -> Bad $ render (text "no index for" <+> ppTerm Unqualified 0 tr <+> text "in" <+> ppTerm Unqualified 0 ty)
 
 lookupIndexValue :: SourceGrammar -> Type -> Int -> Err Term
 lookupIndexValue gr ty i = do
   ts <- allParamValues gr ty
   if i < length ts
     then return $ ts !! i
-    else Bad $ "no value for index" +++ show i +++ "in" +++ prt ty
+    else Bad $ render (text "no value for index" <+> int i <+> text "in" <+> ppTerm Unqualified 0 ty)
 
 allOrigInfos :: SourceGrammar -> Ident -> [(Ident,Info)]
 allOrigInfos gr m = errVal [] $ do
@@ -209,7 +213,7 @@ allParamValues cnc ptyp = case ptyp of
        let (ls,tys) = unzip $ sortByFst r
        tss <- mapM allPV tys
        return [R (zipAssign ls ts) | ts <- combinations tss]
-     _ -> prtBad "cannot find parameter values for" ptyp
+     _ -> Bad (render (text "cannot find parameter values for" <+> ppTerm Unqualified 0 ptyp))
   where
     allPV = allParamValues cnc
     -- to normalize records and record types
@@ -228,7 +232,7 @@ qualifAnnotPar m t = case t of
   _ -> composSafeOp (qualifAnnotPar m) t
 
 lookupAbsDef :: SourceGrammar -> Ident -> Ident -> Err (Maybe Int,Maybe [Equation])
-lookupAbsDef gr m c = errIn ("looking up absdef of" +++ prt c) $ do
+lookupAbsDef gr m c = errIn (render (text "looking up absdef of" <+> ppIdent c)) $ do
   mo <- lookupModule gr m
   info <- lookupIdentInfo mo c
   case info of
@@ -244,7 +248,7 @@ lookupLincat gr m c = do
   case info of
     CncCat (Just t) _ _ -> return t
     AnyInd _ n          -> lookupLincat gr n c
-    _                   -> Bad $ prt c +++ "has no linearization type in" +++ prt m
+    _                   -> Bad (render (ppIdent c <+> text "has no linearization type in" <+> ppIdent m))
 
 -- | this is needed at compile time
 lookupFunType :: SourceGrammar -> Ident -> Ident -> Err Type
@@ -254,7 +258,7 @@ lookupFunType gr m c = do
   case info of
     AbsFun (Just t) _ _  -> return t
     AnyInd _ n           -> lookupFunType gr n c
-    _                    -> prtBad "cannot find type of" c
+    _                    -> Bad (render (text "cannot find type of" <+> ppIdent c))
 
 -- | this is needed at compile time
 lookupCatContext :: SourceGrammar -> Ident -> Ident -> Err Context
@@ -264,7 +268,7 @@ lookupCatContext gr m c = do
   case info of
     AbsCat (Just co) _ -> return co
     AnyInd _ n         -> lookupCatContext gr n c
-    _                  -> prtBad "unknown category" c
+    _                  -> Bad (render (text "unknown category" <+> ppIdent c))
 
 -- The first type argument is uncomputed, usually a category symbol.
 -- This is a hack to find implicit (= reused) opers.

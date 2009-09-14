@@ -21,20 +21,20 @@ import GF.Data.Operations
 import GF.Grammar.Grammar
 import GF.Infra.Ident
 import GF.Grammar.Macros
-import GF.Grammar.PrGrammar
+import GF.Grammar.Printer
 
 import Data.List
 import Control.Monad
-
+import Text.PrettyPrint
 import Debug.Trace
 
 matchPattern :: [(Patt,Term)] -> Term -> Err (Term, Substitution)
 matchPattern pts term = 
   if not (isInConstantForm term)
-    then prtBad "variables occur in" term
+    then Bad (render (text "variables occur in" <+> ppTerm Unqualified 0 term))
   else do
     term' <- mkK term
-    errIn ("trying patterns" +++ unwords (intersperse "," (map (prt . fst) pts))) $
+    errIn (render (text "trying patterns" <+> hsep (punctuate comma (map (ppPatt Unqualified 0 . fst) pts)))) $
       findMatch [([p],t) | (p,t) <- pts] [term']
  where
   -- to capture all Str with string pattern matching
@@ -48,7 +48,7 @@ matchPattern pts term =
     K w -> return [w]
     C v w -> liftM2 (++) (getS v) (getS w)
     Empty -> return []
-    _ -> prtBad "cannot get string from" s
+    _ -> Bad (render (text "cannot get string from" <+> ppTerm Unqualified 0 s))
 
 testOvershadow :: [Patt] -> [Term] -> Err [Patt]
 testOvershadow pts vs = do
@@ -59,10 +59,10 @@ testOvershadow pts vs = do
 
 findMatch :: [([Patt],Term)] -> [Term] -> Err (Term, Substitution)
 findMatch cases terms = case cases of
-   [] -> Bad $"no applicable case for" +++ unwords (intersperse "," (map prt terms))
+   [] -> Bad (render (text "no applicable case for" <+> hsep (punctuate comma (map (ppTerm Unqualified 0) terms))))
    (patts,_):_ | length patts /= length terms -> 
-       Bad ("wrong number of args for patterns :" +++ 
-            unwords (map prt patts) +++ "cannot take" +++ unwords (map prt terms))
+       Bad (render (text "wrong number of args for patterns :" <+> hsep (map (ppPatt Unqualified 0) patts) <+> 
+                    text "cannot take" <+> hsep (map (ppTerm Unqualified 0) terms)))
    (patts,val):cc -> case mapM tryMatch (zip patts terms) of
        Ok substs -> return (val, concat substs)
        _         -> findMatch cc terms
@@ -122,7 +122,7 @@ tryMatch (p,t) = do
 
       (PNeg p',_) -> case tryMatch (p',t) of
         Bad _ -> return []
-        _ -> prtBad "no match with negative pattern" p
+        _ -> Bad (render (text "no match with negative pattern" <+> ppPatt Unqualified 0 p))
 
       (PSeq p1 p2, ([],K s, [])) -> do
          let cuts = [splitAt n s | n <- [0 .. length s]] 
@@ -138,7 +138,7 @@ tryMatch (p,t) = do
       (PChar,  ([],K [_], [])) -> return []
       (PChars cs, ([],K [c], [])) | elem c cs -> return []
 
-      _ -> prtBad "no match in case expr for" t
+      _ -> Bad (render (text "no match in case expr for" <+> ppTerm Unqualified 0 t))
   
 isInConstantForm :: Term -> Bool
 isInConstantForm trm = case trm of

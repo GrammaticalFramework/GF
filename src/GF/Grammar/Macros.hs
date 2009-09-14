@@ -24,11 +24,12 @@ import GF.Infra.Ident
 import GF.Grammar.Grammar
 import GF.Grammar.Values
 import GF.Grammar.Predef
-import GF.Grammar.PrGrammar
+import GF.Grammar.Printer
 
 import Control.Monad (liftM, liftM2)
 import Data.Char (isDigit)
 import Data.List (sortBy)
+import Text.PrettyPrint
 
 firstTypeForm :: Type -> Err (Context, Type)
 firstTypeForm t = case t of
@@ -50,7 +51,7 @@ qTypeForm t = case t of
   QC m c ->
     return ([],(m,c),[]) 
   _       -> 
-    prtBad "no normal form of type" t
+    Bad (render (text "no normal form of type" <+> ppTerm Unqualified 0 t))
 
 qq :: QIdent -> Term
 qq (m,c) = Q m c
@@ -94,7 +95,7 @@ getMCat t = case t of
   QC m c -> return (m,c)
   Sort c -> return (identW, c)
   App f _ -> getMCat f
-  _ -> prtBad "no qualified constant" t
+  _ -> Bad (render (text "no qualified constant" <+> ppTerm Unqualified 0 t))
 
 typeSkeleton :: Type -> Err ([(Int,MCat)],MCat)
 typeSkeleton typ = do
@@ -231,7 +232,7 @@ mkRecType = mkRecTypeN 0
 record2subst :: Term -> Err Substitution
 record2subst t = case t of
   R fs -> return [(identC x, t) | (LIdent x,(_,t)) <- fs]
-  _ -> prtBad "record expected, found" t
+  _    -> Bad (render (text "record expected, found" <+> ppTerm Unqualified 0 t))
 
 typeType, typePType, typeStr, typeTok, typeStrs :: Term
 
@@ -304,8 +305,8 @@ plusRecType t1 t2 = case (t1, t2) of
   (RecType r1, RecType r2) -> case
     filter (`elem` (map fst r1)) (map fst r2) of
       [] -> return (RecType (r1 ++ r2))
-      ls -> Bad $ "clashing labels" +++ unwords (map prt ls)
-  _ -> Bad ("cannot add record types" +++ prt t1 +++ "and" +++ prt t2) 
+      ls -> Bad $ render (text "clashing labels" <+> hsep (map ppLabel ls))
+  _ -> Bad $ render (text "cannot add record types" <+> ppTerm Unqualified 0 t1 <+> text "and" <+> ppTerm Unqualified 0 t2) 
 
 plusRecord :: Term -> Term -> Err Term
 plusRecord t1 t2 =
@@ -314,7 +315,7 @@ plusRecord t1 t2 =
                               (l,v) <- r1, not (elem l (map fst r2)) ] ++ r2))
    (_,    FV rs) -> mapM (plusRecord t1) rs >>= return . FV
    (FV rs,_    ) -> mapM (`plusRecord` t2) rs >>= return . FV
-   _ -> Bad ("cannot add records" +++ prt t1 +++ "and" +++ prt t2)
+   _ -> Bad $ render (text "cannot add records" <+> ppTerm Unqualified 0 t1 <+> text "and" <+> ppTerm Unqualified 0 t2)
 
 -- | default linearization type
 defLinType :: Type
@@ -463,7 +464,7 @@ term2patt trm = case termForm trm of
   Ok ([], Cn c, []) -> do
     return (PMacro c)
 
-  _ -> prtBad "no pattern corresponds to term" trm
+  _ -> Bad $ render (text "no pattern corresponds to term" <+> ppTerm Unqualified 0 trm)
 
 patt2term :: Patt -> Term
 patt2term pt = case pt of
@@ -529,7 +530,7 @@ strsFromTerm t = case t of
   FV ts -> mapM strsFromTerm ts >>= return . concat
   Strs ts -> mapM strsFromTerm ts >>= return . concat  
   Alias _ _ d -> strsFromTerm d --- should not be needed...
-  _ -> prtBad "cannot get Str from term" t
+  _ -> Bad (render (text "cannot get Str from term" <+> ppTerm Unqualified 0 t))
 
 -- | to print an Str-denoting term as a string; if the term is of wrong type, the error msg
 stringFromTerm :: Term -> String
@@ -708,10 +709,11 @@ isInOneType t = case t of
 
 sortRec :: [(Label,a)] -> [(Label,a)]
 sortRec = sortBy ordLabel where
-  ordLabel (r1,_) (r2,_) = case (prt r1, prt r2) of
-    ("s",_) -> LT
-    (_,"s") -> GT
-    (s1,s2) -> compare s1 s2
+  ordLabel (r1,_) (r2,_) = 
+    case (showIdent (label2ident r1), showIdent (label2ident r2)) of
+      ("s",_) -> LT
+      (_,"s") -> GT
+      (s1,s2) -> compare s1 s2
 
 
 
