@@ -1,11 +1,11 @@
---# -path=.:../romance:../abstract:../common:prelude
+--# -path=.:../abstract:../common:../prelude
 
 concrete GrammarRon of Grammar = 
   NounRon, 
   VerbRon, 
   AdjectiveRon,
   AdverbRon,
-  NumeralRonn,
+  NumeralRon,
   SentenceRon,
   IdiomRon,
   QuestionRon,
