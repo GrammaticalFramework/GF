@@ -21,6 +21,7 @@ module GF.Compile.TypeCheck (-- * top-level type checking functions; TC should n
 
 import GF.Data.Operations
 
+import GF.Infra.CheckM
 import GF.Grammar.Abstract
 import GF.Grammar.Lookup
 import GF.Grammar.Unify
@@ -29,6 +30,7 @@ import GF.Compile.Refresh
 import GF.Compile.AbsCompute
 import GF.Compile.TC
 
+import Text.PrettyPrint
 import Control.Monad (foldM, liftM, liftM2)
 
 -- | invariant way of creating TCEnv from context
@@ -65,14 +67,14 @@ grammar2theory gr (m,f) = case lookupFunType gr m f of
     Ok cont -> return $ cont2val cont
     _ -> Bad s
 
-checkContext :: Grammar -> Context -> [String]
+checkContext :: Grammar -> Context -> [Message]
 checkContext st = checkTyp st . cont2exp
 
-checkTyp :: Grammar -> Type -> [String]
-checkTyp gr typ = err singleton prConstrs $ justTypeCheck gr typ vType
+checkTyp :: Grammar -> Type -> [Message]
+checkTyp gr typ = err (\x -> [text x]) ppConstrs $ justTypeCheck gr typ vType
 
-checkDef :: Grammar -> Fun -> Type -> [Equation] -> [String]
-checkDef gr (m,fun) typ eqs = err singleton prConstrs $ do
+checkDef :: Grammar -> Fun -> Type -> [Equation] -> [Message]
+checkDef gr (m,fun) typ eqs = err (\x -> [text x]) ppConstrs $ do
   bcs <- mapM (\b -> checkBranch (grammar2theory gr) (initTCEnv []) b (type2val typ)) eqs
   let (bs,css) = unzip bcs
   (constrs,_) <- unifyVal (concat css)

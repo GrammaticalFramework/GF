@@ -23,7 +23,7 @@ module GF.Compile.ModDeps (mkSourceGrammar,
 import GF.Grammar.Grammar
 import GF.Infra.Ident
 import GF.Infra.Option
-import GF.Grammar.PrGrammar
+import GF.Grammar.Printer
 import GF.Compile.Update
 import GF.Grammar.Lookup
 import GF.Infra.Modules

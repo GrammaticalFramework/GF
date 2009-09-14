@@ -11,7 +11,7 @@ import qualified PGF.Macros as CM
 import qualified PGF.Data as C
 import qualified PGF.Data as D
 import GF.Grammar.Predef
-import GF.Grammar.PrGrammar
+import GF.Grammar.Printer
 import GF.Grammar.Grammar
 import qualified GF.Grammar.Lookup as Look
 import qualified GF.Grammar.Abstract as A
@@ -28,6 +28,7 @@ import Data.List
 import Data.Char (isDigit,isSpace)
 import qualified Data.Map as Map
 import qualified Data.ByteString.Char8 as BS
+import Text.PrettyPrint
 import Debug.Trace ----
 
 -- when developing, swap commenting
@@ -60,7 +61,7 @@ addParsers opts pgf = do cncs <- sequence [conv lang cnc | (lang,cnc) <- Map.toL
 
 canon2gfcc :: Options -> (Ident -> Ident -> C.Term) -> SourceGrammar -> D.PGF
 canon2gfcc opts pars cgr@(M.MGrammar ((a,abm):cms)) = 
-  (if dump opts DumpCanon then trace (prGrammar cgr) else id) $
+  (if dump opts DumpCanon then trace (render (vcat (map (ppModule Qualified) (M.modules cgr)))) else id) $
      D.PGF an cns gflags abs cncs 
  where
   -- abstract
@@ -181,7 +182,7 @@ mkTerm tr = case tr of
   Abs _ t  -> mkTerm t ---- only on toplevel
   Alts (td,tvs) -> 
     C.K (C.KP (strings td) [C.Alt (strings u) (strings v) | (u,v) <- tvs])
-  _ -> prtTrace tr $ C.S [C.K (C.KS (A.prt tr +++ "66662"))] ---- for debugging
+  _ -> prtTrace tr $ C.S [C.K (C.KS (render (A.ppTerm Unqualified 0 tr <+> int 66662)))] ---- for debugging
  where
    mkLab (LIdent l) = case BS.unpack l of
      '_':ds -> (read ds) :: Int
@@ -218,7 +219,7 @@ mkParamLincat sgr lang cat = errVal (C.R [C.S []]) $ do
   mkPType typ = case typ of
     RecType lts -> do
       ts <- mapM (mkPType . snd) lts
-      return $ C.R [ C.P (kks $ prt_ l) t | ((l,_),t) <- zip lts ts]
+      return $ C.R [ C.P (kks $ showIdent (label2ident l)) t | ((l,_),t) <- zip lts ts]
     Table (RecType lts) v -> do
       ps <- mapM (mkPType . snd) lts
       v' <- mkPType v
@@ -229,7 +230,7 @@ mkParamLincat sgr lang cat = errVal (C.R [C.S []]) $ do
       return $ C.S [p',v']
     Sort s | s == cStr -> return $ C.S []
     _ -> return $ 
-      C.FV $ map (kks . filter showable . prt_) $ 
+      C.FV $ map (kks . filter showable . render . ppTerm Qualified 0) $ 
              errVal [] $ Look.allParamValues sgr typ
   showable c = not (isSpace c) ---- || (c == ' ')  -- to eliminate \n in records
   kks = C.K . C.KS
@@ -275,7 +276,7 @@ repartition abs cg =
       [] -> [abs]  -- to make pgf nonempty even when there are no concretes
       cncs -> cncs,
     let mo = errVal 
-         (error ("no module found for " ++ A.prt lang)) $ M.lookupModule cg lang
+         (error (render (text "no module found for" <+> A.ppIdent lang))) $ M.lookupModule cg lang
     ]
 
 -- translate tables and records to arrays, parameters and labels to indices
@@ -292,7 +293,7 @@ canon2canon opts abs cg0 =
   c2c f2 (c,mo) = (c, M.replaceJudgements mo $ mapTree f2 (M.jments mo))
 
   j2j cg (f,j) = 
-    let debug = if verbAtLeast opts Verbose then trace ("+ " ++ prt f) else id in
+    let debug = if verbAtLeast opts Verbose then trace ("+ " ++ showIdent f) else id in
     case j of
       CncFun x (Just tr) z -> CncFun x (Just (debug (t2t tr))) z
       CncCat (Just ty) (Just x) y -> CncCat (Just (ty2ty ty)) (Just (t2t x)) y
@@ -313,23 +314,22 @@ canon2canon opts abs cg0 =
       _ -> [(x,ty)]
 
 ----
-  trs v = traceD (tr v) v
+  trs v = traceD (render (tr v)) v
 
   tr (labels,untyps,typs) =
-     ("LABELS:" ++++
-       unlines [A.prt c ++ "." ++ unwords (map A.prt l) +++ "=" +++ show i  | 
-       ((c,l),i) <- Map.toList labels]) ++++
-     ("UNTYPS:" ++++ unlines [A.prt t +++ "=" +++ show i | 
-       (t,i) <- Map.toList untyps]) ++++
-     ("TYPS:" ++++ unlines [A.prt t +++ "=" +++ show (Map.assocs i) | 
-       (t,i) <- Map.toList typs])
+     (text "LABELS:" <+>
+        vcat [A.ppIdent c <> char '.' <> hsep (map A.ppLabel l) <+> char '=' <+> text (show i)  | ((c,l),i) <- Map.toList labels]) $$
+     (text "UNTYPS:" <+>
+        vcat [A.ppTerm Unqualified 0 t <+> char '=' <+> text (show i) | (t,i) <- Map.toList untyps]) $$
+     (text "TYPS:  " <+>
+        vcat [A.ppTerm Unqualified 0 t <+> char '=' <+> text (show (Map.assocs i)) | (t,i) <- Map.toList typs])
 ----
 
 purgeGrammar :: Ident -> SourceGrammar -> SourceGrammar
 purgeGrammar abstr gr = 
   (M.MGrammar . list . map unopt . filter complete . purge . M.modules) gr 
  where
-  list ms = traceD ("MODULES" +++ unwords (map (prt . fst) ms)) ms
+  list ms = traceD (render (text "MODULES" <+> hsep (punctuate comma (map (ppIdent . fst) ms)))) ms
   purge = nubBy (\x y -> fst x == fst y) . filter (flip elem needed . fst)
   needed = nub $ concatMap (requiredCanModules isSingle gr) acncs
   acncs = abstr : M.allConcretes gr abstr
@@ -384,7 +384,7 @@ paramValues cgr = (labels,untyps,typs) where
       updateSTM (ty:) >> mapM_ typsFromTrm [t | (_, t) <- cs] >> return tr
     _ -> GM.composOp typsFromTrm tr
 
-  mods = traceD (unwords (map (prt . fst) ms)) ms where ms = M.modules cgr
+  mods = traceD (render (hsep (map (ppIdent . fst) ms))) ms where ms = M.modules cgr
 
   jments = 
     [(m,j) | (m,mo) <- mods, j <- tree2list $ M.jments mo]
@@ -435,7 +435,7 @@ term2term fun cgr env@(labels,untyps,typs) tr = case tr of
   P  t l   -> r2r tr
   PI t l i -> EInt $ toInteger i
 
-  T (TWild _) _ -> error $ "wild" +++ prt tr
+  T (TWild _) _ -> error $ (render (text "wild" <+> ppTerm Qualified 0 tr))
   T (TComp  ty) cs  -> t2t $ V ty $ map snd cs ---- should be elim'ed in tc
   T (TTyped ty) cs  -> t2t $ V ty $ map snd cs ---- should be elim'ed in tc
   V ty ts  -> mkCurry $ V ty [t2t t | t <- ts]
@@ -468,8 +468,8 @@ term2term fun cgr env@(labels,untyps,typs) tr = case tr of
                Just vs -> (ty,[t | 
                             (t,_) <- sortBy (\x y -> compare (snd x) (snd y)) 
                                             (Map.assocs vs)])
-               _ -> error $ "doVar1" +++ A.prt ty
-             _ -> error $ "doVar2" +++ A.prt tr +++ show (cat,lab) ---- debug
+               _ -> error $ render (text "doVar1" <+> A.ppTerm Unqualified 0 ty)
+             _ -> error $ render (text "doVar2" <+> A.ppTerm Unqualified 0 tr <+> text (show (cat,lab))) ---- debug
        updateSTM ((tyvs, (tr', tr)):) 
        return tr'
      _ -> GM.composOp doVar tr
@@ -480,7 +480,7 @@ term2term fun cgr env@(labels,untyps,typs) tr = case tr of
      Ok (cat,labs) -> P (t2t p) . mkLab $ 
           maybe (prtTrace tr $ 66664) snd $ 
             Map.lookup (cat,labs) labels
-     _ -> K ((A.prt tr +++ prtTrace tr "66665"))
+     _ -> K (render (A.ppTerm Unqualified 0 tr <+> prtTrace tr (int 66665)))
 
    -- this goes recursively into tables (ignored) and records (accumulated)
    getLab tr = case tr of
@@ -511,8 +511,8 @@ term2term fun cgr env@(labels,untyps,typs) tr = case tr of
         (FV ts,_) -> ts
         _ -> [tr]
       valNumFV ts = case ts of
-        [tr] -> let msg = ("DEBUG" +++ prt fun ++ ": error in valNum" +++ prt tr) in 
-                trace msg $ error (prt fun)
+        [tr] -> let msg = render (text "DEBUG" <+> ppIdent fun <> text ": error in valNum" <+> ppTerm Qualified 0 tr) in 
+                trace msg $ error (showIdent fun)
         _ -> FV $ map valNum ts
 
    mkCurry trm = case trm of
@@ -553,8 +553,8 @@ unlockTy ty = case ty of
 
 
 prtTrace tr n = 
-  trace ("-- INTERNAL COMPILER ERROR" +++ A.prt tr ++++ show n) n
-prTrace  tr n = trace ("-- OBSERVE" +++ A.prt tr +++ show n +++ show tr) n
+  trace (render (text "-- INTERNAL COMPILER ERROR" <+> A.ppTerm Unqualified 0 tr $$ text (show n))) n
+prTrace  tr n = trace (render (text "-- OBSERVE" <+> A.ppTerm Unqualified 0 tr <+> text (show n) <+> text (show tr))) n
 
 
 -- | this function finds out what modules are really needed in the canonical gr.

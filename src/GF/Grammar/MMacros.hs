@@ -18,7 +18,7 @@ import GF.Data.Operations
 --import GF.Data.Zipper
 
 import GF.Grammar.Grammar
-import GF.Grammar.PrGrammar
+import GF.Grammar.Printer
 import GF.Infra.Ident
 import GF.Compile.Refresh
 import GF.Grammar.Values
@@ -27,6 +27,8 @@ import GF.Grammar.Macros
 
 import Control.Monad
 import qualified Data.ByteString.Char8 as BS
+import Text.PrettyPrint
+
 {-
 nodeTree :: Tree -> TrNode
 argsTree :: Tree -> [Tree]
@@ -178,13 +180,13 @@ val2expP :: Bool -> Val -> Err Exp
 val2expP safe v = case v of
 
   VClos g@(_:_) e@(Meta _) -> if safe 
-                              then prtBad "unsafe value substitution" v
+                              then Bad (render (text "unsafe value substitution" <+> ppValue Unqualified 0 v))
                               else substVal g e
   VClos g e -> substVal g e
   VApp f c  -> liftM2 App (val2expP safe f) (val2expP safe c)
   VCn c     -> return $ qq c
   VGen i x  -> if safe 
-               then prtBad "unsafe val2exp" v
+               then Bad (render (text "unsafe val2exp" <+> ppValue Unqualified 0 v))
                else return $ Vr $ x  --- in editing, no alpha conversions presentv
   VRecType xs->do xs <- mapM (\(l,v) -> val2expP safe v >>= \e -> return (l,e)) xs
                   return (RecType xs)

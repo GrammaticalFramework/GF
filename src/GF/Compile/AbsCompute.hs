@@ -30,6 +30,7 @@ import GF.Compile.Compute
 import Debug.Trace
 import Data.List(intersperse)
 import Control.Monad (liftM, liftM2)
+import Text.PrettyPrint
 
 -- for debugging
 tracd m t = t 
@@ -45,7 +46,7 @@ computeAbsTerm gr = computeAbsTermIn (lookupAbsDef gr) []
 type LookDef = Ident -> Ident -> Err (Maybe Int,Maybe [Equation])
 
 computeAbsTermIn :: LookDef -> [Ident] -> Exp -> Err Exp
-computeAbsTermIn lookd xs e = errIn ("computing" +++ prt e) $ compt xs e where
+computeAbsTermIn lookd xs e = errIn (render (text "computing" <+> ppTerm Unqualified 0 e)) $ compt xs e where
   compt vv t = case t of
 --    Prod x a b  -> liftM2 (Prod x) (compt vv a) (compt (x:vv) b)
 --    Abs x b     -> liftM  (Abs  x)              (compt (x:vv) b)
@@ -55,21 +56,21 @@ computeAbsTermIn lookd xs e = errIn ("computing" +++ prt e) $ compt xs e where
       let vv' = yy ++ vv
       aa'    <- mapM (compt vv') aa
       case look f of
-        Just eqs -> tracd ("\nmatching" +++ prt f) $ 
+        Just eqs -> tracd (text "\nmatching" <+> ppTerm Unqualified 0 f) $ 
                           case findMatch eqs aa' of
           Ok (d,g) -> do
             --- let (xs,ts) = unzip g
             --- ts' <- alphaFreshAll vv' ts
             let g' = g --- zip xs ts'
             d' <- compt vv' $ substTerm vv' g' d
-            tracd ("by Egs:" +++ prt d') $ return $ mkAbs yy $ d'
-          _ -> tracd ("no match" +++ prt t') $ 
+            tracd (text "by Egs:" <+> ppTerm Unqualified 0 d') $ return $ mkAbs yy $ d'
+          _ -> tracd (text "no match" <+> ppTerm Unqualified 0 t') $ 
                do
             let v = mkApp f aa'
             return $ mkAbs yy $ v
         _ -> do
           let t2 = mkAbs yy $ mkApp f aa'
-          tracd ("not defined" +++ prt_ t2) $ return t2
+          tracd (text "not defined" <+> ppTerm Unqualified 0 t2) $ return t2
 
   look t = case t of
      (Q m f) -> case lookd m f of
@@ -93,12 +94,12 @@ beta vv c = case c of
 
 findMatch :: [([Patt],Term)] -> [Term] -> Err (Term, Substitution)
 findMatch cases terms = case cases of
-  [] -> Bad $"no applicable case for" +++ unwords (intersperse "," (map prt terms))
+  [] -> Bad $ render (text "no applicable case for" <+> hcat (punctuate comma (map (ppTerm Unqualified 0) terms)))
   (patts,_):_ | length patts /= length terms -> 
-       Bad ("wrong number of args for patterns :" +++ 
-            unwords (map prt patts) +++ "cannot take" +++ unwords (map prt terms))
+       Bad (render (text "wrong number of args for patterns :" <+> 
+                    hsep (map (ppPatt Unqualified 0) patts) <+> text "cannot take" <+> hsep (map (ppTerm Unqualified 0) terms)))
   (patts,val):cc -> case mapM tryMatch (zip patts terms) of
-     Ok substs -> return (tracd ("value" +++ prt_ val) val, concat substs)
+     Ok substs -> return (tracd (text "value" <+> ppTerm Unqualified 0 val) val, concat substs)
      _         -> findMatch cc terms
 
 tryMatch :: (Patt, Term) -> Err [(Ident, Term)]
@@ -127,7 +128,7 @@ tryMatch (p,t) = do
     (PAs x p',_) -> do
        subst <- trym p' t'
        return $ (x,t) : subst
-    _ -> Bad ("no match in pattern" +++ prt p +++ "for" +++ prt t)
+    _ -> Bad (render (text "no match in pattern" <+> ppPatt Unqualified 0 p <+> text "for" <+> ppTerm Unqualified 0 t))
 
   notMeta e = case e of
     Meta _  -> False
@@ -136,4 +137,4 @@ tryMatch (p,t) = do
     _ -> True
 
   prtm p g = 
-    prt p +++ ":" ++++ unwords ["  " ++ prt_ x +++ "=" +++ prt_ y +++ ";" | (x,y) <- g]
+    ppPatt Unqualified 0 p <+> colon $$ hsep (punctuate semi [ppIdent x <+> char '=' <+> ppTerm Unqualified 0 y | (x,y) <- g])
