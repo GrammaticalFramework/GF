@@ -974,7 +974,7 @@ checkIfEqLType env t u trm = do
                    not (any (\ (k,b) -> alpha g a b && l == k) ts)]
          (locks,others) = partition isLockLabel ls
        in case others of
-         _:_ -> Bad $ render (text "missing record fields:" <+> fsep (punctuate comma (map ppLabel others))
+         _:_ -> Bad $ render (text "missing record fields:" <+> fsep (punctuate comma (map ppLabel others)))
          _ -> return locks
      -- contravariance
      (Prod x a b, Prod y c d) -> do
