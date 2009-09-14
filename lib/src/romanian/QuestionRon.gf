@@ -1,4 +1,4 @@
-incomplete concrete QuestionRon of Question = 
+concrete QuestionRon of Question = 
   CatRon ** open ResRon, Prelude in {
 
   flags optimize=all_subs ;
@@ -18,7 +18,7 @@ incomplete concrete QuestionRon of Question =
     QuestVP qp vp = {
       s = \\t,a,b,_ => 
         let
-          cl = mkClause (qp.s ! No) False (agrP3 qp.a.g qp.a.n) vp  
+          cl = mkClause (qp.s ! No) (agrP3 qp.a.g qp.a.n) vp  
         in
         cl.s ! DDir ! t ! a ! b ! Indic
       } ;   
@@ -27,7 +27,7 @@ incomplete concrete QuestionRon of Question =
       s = \\t,a,p => 
             let 
               cls : Direct -> Str = 
-                    \d -> slash.s ! ip.a ! d ! t ! a ! p ! Indic ;
+                    \d -> slash.s ! False ! ip.a ! d ! t ! a ! p ! Indic ;
                           prep = if_then_Str ip.hasRef slash.c2.prepDir "" ;
                           who  = prep ++ slash.c2.s ++ ip.s ! slash.c2.c
             in table {
@@ -52,7 +52,7 @@ incomplete concrete QuestionRon of Question =
       s = \\t,a,p,_ => 
             let 
               vp  = predV copula ;
-              cls = (mkClause (np.s ! No).comp np.hasClit np.a vp).s ! 
+              cls = (mkClause (np.s ! No).comp np.a vp).s ! 
                        DInv ! t ! a ! p ! Indic ;
               why = icomp.s ! {g = np.a.g ; n = np.a.n}
             in why ++ cls

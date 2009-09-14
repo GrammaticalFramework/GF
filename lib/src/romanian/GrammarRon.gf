@@ -5,15 +5,15 @@ concrete GrammarRon of Grammar =
   VerbRon, 
   AdjectiveRon,
   AdverbRon,
-  NumeralRon,
+  NumeralRonn,
   SentenceRon,
   IdiomRon,
   QuestionRon,
   RelativeRon,
   ConjunctionRon,
   PhraseRon,
-  TextX - [Temp,TTAnt,Tense,TPres,TPast,TFut,TCond], Coordination,
-   Prelude, MorphoRon, BeschRon,
+  TextX - [Temp,TTAnt,Tense,TPres,TPast,TFut,TCond],
+  Prelude, MorphoRon, Coordination,
   StructuralRon
   ** {
 

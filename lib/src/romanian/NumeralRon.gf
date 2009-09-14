@@ -1,14 +1,14 @@
 concrete NumeralRon of Numeral = CatRon ** 
   open  MorphoRon, CatRon, Prelude in {
 
-param DForm = unit | teen | ten | teen_inf ;
-param Place = indep | attr ;
+param DForm = unit | teen | ten | attr ;
 
-lincat Digit = {s : CardOrd => DForm => Str ; size : Size} ;
-lincat Sub10 = {s : CardOrd => DForm => Place => Str ; size : Size} ;
-lincat Sub100 = {s : CardOrd => NumF => Place => Str ; size : Size} ;
-lincat Sub1000 = {s : CardOrd => NumF => Place => Str ; size : Size} ;
-lincat Sub1000000 = { s : CardOrd => NumF => Place => Str; size : Size } ;
+
+lincat Digit = {s : NumF => CardOrd => DForm => Str ; size : Size} ;
+lincat Sub10 = {s : NumF => CardOrd => DForm => Str ; size : Size} ;
+lincat Sub100 = {s : NumF => CardOrd  => Str ; size : Size} ;
+lincat Sub1000 = {s : NumF => CardOrd => Str ; size : Size} ;
+lincat Sub1000000 = { s : NumF => CardOrd => Str; size : Size } ;
 
 
 
@@ -21,9 +21,9 @@ oper mkOrdinalForm : Str -> Gender ->  Str =
                             };      
                     Fem => case two of
                             { x + ("ã"|"u")   => x +"a"; 
-                              x + "ei"        => two + "a";
-                              x + "ii"        => x + "ia" ;
-                              x + "i"         => x + "ea";
+                              x + "ie"        => x +"ia";
+                              x + ("ii"|"îi") => x + "a" ;
+                              x + "i"         => two + "a";
                               x + "ie"         => x +"a" ;
                               _               => two +"a" 
                             }
@@ -34,8 +34,9 @@ oper mkOrdinal : Str -> Gender -> ACase -> Str =
 \two, g, fl ->  mkOrd (mkOrdinalForm two g) g fl;  
 
 oper mkOrd : Str -> Gender -> ACase -> Str =
-\two, g, fl -> let cc = (artPos g Sg ANomAcc) ++ two  
-                        in
+\two, g, fl -> let cc = variants{(artPos g Sg ANomAcc)++ two ; 
+                                   (artDem g Sg ANomAcc) ++ "de-"+(artPos g Sg ANomAcc) ++ two
+                                   } in
          case fl of
                 { ANomAcc => cc ;             
                   AGenDat => (artDem g Sg AGenDat)++"de-"+(artPos g Sg ANomAcc)++ two ;
@@ -44,29 +45,49 @@ oper mkOrd : Str -> Gender -> ACase -> Str =
 
 
 oper mkNum : Str -> Str -> Str -> Str -> Digit = 
- \two -> \twelve -> \twenty -> \doispe -> mkNumVSpc two twelve twelve twenty two doispe doispe (mkOrdinalForm two Masc) (mkOrdinalForm two Fem);
+ \two -> \twelve -> \twenty -> \doispe -> mkNumVSpc two twelve twelve twenty two doispe doispe two (mkOrdinalForm two Fem);
 
 
 oper mkNumVSpc : Str -> Str -> Str -> Str -> Str -> Str -> Str -> Str -> Str -> Digit = 
-  \two -> \twelve -> \douasprezece -> \twenty -> \dou -> \doispe -> \douaspe -> \doilea -> \doua ->  
-  {s = table { 
-               NCard Masc  => table {unit => two ; teen => twelve ;
-                                     ten => twenty ; teen_inf => doispe
-                                    } ;
-               NCard Fem  => table {unit => dou ; teen => douasprezece ;
-                                    ten  => twenty ; teen_inf => douaspe 
-                                   } ;                      
-               NOrd Masc  => table {unit     => doilea ; 
-                                    teen     => mkOrdinalForm twelve Masc ;   
-                                    ten      => mkOrdinalForm twenty Masc ;   
-                                    teen_inf => mkOrdinalForm doispe Masc       
-                                   } ;
-               NOrd Fem   => table {unit     => doua  ;
-                                    teen     => mkOrdinalForm douasprezece Fem ;   
-                                    ten      => mkOrdinalForm twenty Fem ;   
-                                    teen_inf => mkOrdinalForm douaspe Fem        
-                                   }                      
-              } ;      
+  \two -> \twelve -> \douasprezece -> \twenty -> \doua -> \doispe -> \douaspe -> \o -> \una-> 
+  {s = table { Formal => table {
+                                 NCard Masc  => table {unit => two ; teen => twelve ; 
+                                                       ten => twenty ; attr => two 
+                                                       } ;
+                                 NCard Fem  => table {unit => doua ; teen => douasprezece ;
+                                                      ten  => twenty ; attr => o
+                                                      } ;                      
+                                 NOrd Masc  => table {unit => mkOrdinalForm two Masc ; 
+                                                      teen => mkOrdinalForm twelve Masc ;   
+                                                      ten  => mkOrdinalForm twenty Masc ;   
+                                                      attr => mkOrdinalForm two Masc       
+                                                       } ;
+                                 NOrd Fem   => table {unit => mkOrdinalForm doua Fem  ;
+                                                      teen => mkOrdinalForm douasprezece Fem ;   
+                                                      ten  => mkOrdinalForm twenty Fem ;   
+                                                      attr => una       
+                                                      }                      
+                                 } ;
+                Informal => table {
+                                 NCard Masc  => table {unit => two ; teen => doispe ; 
+                                                       ten => twenty ; attr => two
+                                                       } ;
+                                 NCard Fem   => table {unit => doua ; teen => douaspe ;
+                                                       ten => twenty ; attr => o
+                                                       } ; 
+                                 NOrd Masc   => table {unit => mkOrdinalForm two Masc ;
+                                                       teen => mkOrdinalForm doispe Masc ;   
+                                                       ten  => mkOrdinalForm twenty Masc ;   
+                                                       attr => mkOrdinalForm two Masc      
+                                                        } ;                                 
+                                 NOrd Fem    => table {unit => mkOrdinalForm doua Fem ;
+                                                       teen => mkOrdinalForm douaspe Fem ;   
+                                                       ten  => mkOrdinalForm twenty Fem ;   
+                                                       attr => una      
+                                                        }
+                                } 
+       
+       };
    size = less20 ;
    lock_Digit = <>
   } ;
@@ -77,41 +98,35 @@ oper regNum : Str -> Digit =
 
 oper mkMidF : Str -> Str -> Sub100 =
 \unsprezece, unspe -> 
-{ s = table {NCard g => table { Formal   => \\_ => unsprezece  ;
-                                Informal => \\_ => unspe  
-                               };
-             NOrd g  => table {Formal    => \\_ =>  mkOrdinalForm unsprezece g;
-                               Informal  => \\_ => mkOrdinalForm unspe g 
-                              }                 
-            };
-            
- size = less20 ;
- lock_Sub100 = <>
- };
+{ s = table { Formal =>table {
+                              NCard g => unsprezece ;
+                              NOrd g  => mkOrdinalForm unsprezece g
+                              };       
+              Informal => table{
+                               NCard g => unspe;
+                               NOrd g  => mkOrdinalForm unspe g                            
+                               }                 
+            } ;
+size = less20 ;
+lock_Sub100 = <>
+};
 
 
+ 
 lin num = \d ->
- { s = \\cse => table { NCard g => \\f => d.s ! (NCard g) ! f ! indep  ;
-                        NOrd g => \\f =>  let ss = d.s ! (NOrd g) ! f ! indep
-                                                 in 
-                                       case d.size of 
-                                              { sg => (artDem g Sg cse) ++ ss ;
-                                                _  => mkOrd ss g cse
-                                               }
-                       };
-   sp =  \\cse => table { NCard g => \\f => d.s ! (NCard g) ! f ! attr  ;
-                        NOrd g => \\f =>  let ss = d.s ! (NOrd g) ! f ! indep
-                                                 in 
-                                       case d.size of 
-                                              { sg => (artDem g Sg cse) ++ ss ;
-                                                _  => mkOrd ss g cse
-                                               }
-                       };
+ { s = \\o => \\c => table { NCard g => d.s ! o ! (NCard g) ;
+                             NOrd g => let ss = d.s ! o ! (NOrd g)
+                                               in 
+                                   case d.size of 
+                                          { sg => (artDem g Sg c) ++ ss ;
+                                            _  => mkOrd ss g c
+                                            }
+                            }; 
    size = d.size
  } ; 
 -- Latin A Supplement chars
 
-lin n2 = mkNumVSpc "doi" "doispreze" "douãsprezece" "douãzeci" "douã" "doiºpe" "douãºpe" "doilea" "doua";
+lin n2 = mkNumVSpc "doi" "doispreze" "douãsprezece" "douãzeci" "douã" "doiºpe" "douãºpe" "douã" "doua";
 lin n3 = regNum "trei";
 lin n4 = mkNum "patru" "paisprezece" "patruzeci" "paiºpe";
 lin n5 = mkNum "cinci" "cinsprezece" "cincizeci" "cinºpe";
@@ -120,78 +135,70 @@ lin n7 = mkNum "ºapte" "ºaptesprezece" "ºaptezeci" "ºaptispe";
 lin n8 = mkNum "opt" "optsprezece" "optzeci" "optiºpe";
 lin n9 = regNum "nouã";
 
-lin pot01 = let num = mkNumVSpc "un" "unsprezece" "unsprezece" "zece" "o" "unºpe" "unºpe" "dintâi" "dintâi" ;
-                dep = mkNumVSpc "unu" "unsprezece" "unsprezece" "zece" "una" "unºpe" "unºpe" "unulea" "una" 
-                        
+lin pot01 = let num = mkNumVSpc "unu" "unsprezece" "unsprezece" "zece" "o" "unºpe" "unºpe" "una" "una"
               in 
-         { s = \\o,c => table {indep => num.s ! o ! c ;
-                               attr  => dep.s ! o ! c
-                                } ;
+         { s = num.s ;
            size = sg 
           };            
 
-lin pot0 d = { s = \\o, c => \\_ => d.s ! o ! c ;
-               size = less20
-              };
+lin pot0 d = d ;
 
 lin pot110 = mkMidF "zece" "zece" ;           
 
-lin pot111 = mkMidF "unsprezece" "unºpe" ; 
+lin pot111 = mkMidF "unsprezece"  "unºpe" ; 
                                        
+
 lin pot1to19 = \d -> 
-  {s = \\c => table { Formal   => \\_ => d.s ! c ! teen ;
-                      Informal => \\_ => d.s ! c ! teen_inf 
-                  };                        
-   size = less20
-  };
+  {s = \\o,c  => d.s ! o ! c ! teen ;                      
+  size = less20} ;
                
 lin pot0as1  = \d -> 
-  {s = \\c,_,p => d.s ! c ! unit ! p ;                                  
-   size = d.size
-  };
+  {s = \\o,c => d.s ! o ! c ! unit;                                  
+  size = d.size} ;
                    
 lin pot1  = \d -> 
-  {s = \\c => \\_,_ => d.s ! c ! ten ;                                        
-   size = pl
-  };
-
+  {s = \\o,c => d.s ! o ! c ! ten ;                                        
+  size = pl} ;
 
                  
 lin pot1plus d e = 
-  {s = table { 
-          NCard g => \\_,_ => d.s ! (NCard g) ! ten ++ "ºi" ++ e.s ! (NCard g) ! unit ! attr  ;
-          NOrd g  => \\_,_ => d.s ! (NCard g) ! ten ++ "ºi" ++ e.s ! (NOrd g) ! unit ! attr 
-             };
-   size = pl 
-   };          
+  {s = \\o => table {               
+                NCard g => d.s ! o ! (NCard g) ! ten ++ "ºi" ++ e.s ! o ! (NCard g) ! attr ;
+                NOrd g  => d.s ! o ! (NCard g) ! ten ++ "ºi" ++e.s ! o ! (NOrd g) ! attr                  
+                    };
+          
+   size = pl} ;
      
 lin pot1as2 n = n ;
 
 lin pot2 d = 
-  {s = table {
-              NCard g => \\_,_ => d.s ! (NCard Fem) ! unit ! indep ++ (mksute d.size) ; 
-              NOrd g  => \\_,_ => d.s ! (NCard Fem) ! unit ! indep ++ (mkSute d.size g)       
-             };
+  {s = \\o => table {
+                NCard g => d.s ! o ! (NCard Fem) ! unit ++ (mksute d.size) ; 
+                NOrd g  => d.s ! o ! (NCard Fem)! unit ++ (mkSute d.size g)       
+                   };
                      
   size = pl} ;
-             
+              
 lin pot2plus d e = 
-  {s = \\c,f,_ => d.s ! (NCard Fem) ! unit ! indep ++ (mksute d.size) ++ e.s ! c ! f ! attr ;    
+  {s = \\o, c => d.s ! o ! (NCard Fem) ! unit ++ (mksute d.size) ++ e.s ! o ! c ;    
    size = pl} ;
 
-lin pot2as3 n = n ;
- 
+lin pot2as3 n = 
+ {s = \\o, c => n.s ! o ! c ;
+  size = n.size                     
+  };          
+  
 lin pot3 n = 
-  {s =  table {  
-              NCard g => \\f,p => mkmie n.size (n.s ! (NCard Fem) ! f ! indep)  ;
-              NOrd g  => \\f,p => mkMie n.size g (n.s ! (NCard Fem) ! f ! indep)   
-              };
-  size = pl                     
+  {s = \\o => table {  
+                   NCard g => mkmie n.size (n.s ! o ! (NCard Fem)) (n.s ! o ! (NCard Fem)) ;
+                   NOrd g  => mkMie n.size g (n.s ! o ! (NCard Fem)) (n.s ! o ! (NCard Fem))  
+                        };
+  size = n.size                       
   } ;
 
 
 lin pot3plus n m = 
- {s = \\c, f, p => mkmie n.size (n.s ! (NCard Fem) ! f ! indep)  ++ m.s ! c ! f ! attr;                   
+ {s = \\o, c => (mkmie n.size (n.s ! o ! (NCard Fem)) (n.s ! o ! (NCard Fem))) ++ m.s ! Formal ! c;                   
   size = pl                              
    };
 
@@ -200,38 +207,34 @@ oper mkSute : Size -> Gender -> Str = \sz, g ->
 table {sg => mkOrdinalForm "sutã" g  ;
        _  => mkOrdinalForm "sute" g  } ! sz ;
 
-oper mkmie : Size -> Str -> Str = \sz, attr -> 
-  table {sg     => "o" ++ "mie" ;
+oper mkmie : Size -> Str -> Str -> Str = \sz, attr, indep -> 
+  table {sg => "o" ++ "mie" ;
          less20 => attr ++ "mii" ;
-         pl     => attr ++ "de" ++ "mii"} ! sz ;
+         pl => indep ++ "de" ++ "mii"} ! sz ;
 
 
-oper mkMie : Size -> Gender -> Str -> Str = \sz, g, attr ->
+oper mkMie : Size -> Gender -> Str -> Str -> Str = \sz, g, attr, indep ->
 table { sg      => "o" ++ mkOrdinalForm "mie" g  ;
         less20  => attr ++ mkOrdinalForm "mii" g ;
-        pl      => attr ++ "de" ++ mkOrdinalForm "mii" g  } ! sz ; 
+        pl      => indep ++ "de" ++ mkOrdinalForm "mii" g  } ! sz ; 
 
 
 
 --numerals as sequences of digits :
 
 lincat 
-    Dig = {s : CardOrd => Str; n : Size ; isDig : Bool} ;
+    Dig = {s : CardOrd => Str; n : Number} ;
 
 lin 
    IDig d = d ;
 
    IIDig d i = {
      s = \\o => d.s ! NCard Masc ++ i.s ! o ;
-      n = case d.n of
-              { sg => if_then_else Size (i.isDig) less20 pl ;
-                _  => pl           
-              };
-      isDig = False
+      n = Pl
     } ;
 lin
     D_0 = mkDig "0" ;
-    D_1 = mk3Dig "1" "1ul" "1a" sg ; ---- gender
+    D_1 = mk3Dig "1" "1ul" "1a" Sg ; ---- gender
     D_2 = mkDig "2";
     D_3 = mkDig "3" ;
     D_4 = mkDig "4" ;
@@ -242,16 +245,15 @@ lin
     D_9 = mkDig "9" ;
 
 
-oper mkDig : Str -> Dig = \c -> mk3Dig c (c + "lea") (c + "a") less20 ;
+oper mkDig : Str -> Dig = \c -> mk3Dig c (c + "lea") (c + "a") Pl ;
 
-oper  mk3Dig : Str -> Str -> Str-> Size -> Dig = \c,u,o,n -> {
+oper  mk3Dig : Str -> Str -> Str-> Number -> Dig = \c,u,o,n -> {
       s = table {NCard g => c ; NOrd Masc => u ; NOrd Fem => o } ; 
       n = n;
-      isDig = True ;
       lock_Dig = <> 
       } ;
 
-    TDigit = {s : CardOrd => Str; n : Size ; isDig : Bool} ;
+    TDigit = {s : CardOrd => Str; n : Number} ;
 
 
 }

@@ -1,4 +1,4 @@
-incomplete concrete PhraseRon of Phrase = 
+ concrete PhraseRon of Phrase = 
   CatRon ** open ResRon, Prelude in {
 
   flags optimize = all_subs ;
@@ -12,10 +12,11 @@ incomplete concrete PhraseRon of Phrase =
     UttImpPl pol imp  = {s = pol.s ++ imp.s ! pol.p ! ImpF Pl False ! Fem} ;
     UttImpPol pol imp = {s = pol.s ++ imp.s ! pol.p ! ImpF Sg True  ! Fem} ;
 
-    UttIP ip = {s = ip.s ! No} ; --- Acc also
+    UttIP ip = {s = ip.s ! No} ; 
     UttIAdv iadv = iadv ;
     UttNP np = {s = (np.s ! No).comp} ;
- --   UttVP vp = {s = infVP vp (agrP3 Fem Sg)} ; --- Agr
+    UttVP vp = let a = agrP3 Masc Sg in 
+          {s = "sã"  ++ (flattenSimpleClitics vp.nrClit vp.clAcc vp.clDat (vp.isRefl ! a)) ++ conjVP vp a ++vp.comp ! a ++ vp.ext ! Pos} ; 
     UttAdv adv = adv ;
 
     NoPConj = {s = []} ;
