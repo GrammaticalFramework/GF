@@ -1,4 +1,4 @@
-incomplete concrete AdverbRon of Adverb = 
+concrete AdverbRon of Adverb = 
   CatRon ** open ResRon, Prelude in {
 
   lin

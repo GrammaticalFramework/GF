@@ -1,4 +1,4 @@
-incomplete concrete AdjectiveRon of Adjective = 
+concrete AdjectiveRon of Adjective = 
   CatRon ** open ResRon, Prelude in {
 
   lin
@@ -8,7 +8,7 @@ incomplete concrete AdjectiveRon of Adjective =
       isPre = a.isPre
       } ;
     ComparA a np = {
-      s = \\af => more_CAdv.s ++ a.s ! af  ++ conjThan ++ (np.s ! Ac).comp ; 
+      s = \\af => "mai" ++ a.s ! af  ++ conjThan ++ (np.s ! Ac).comp ; 
       isPre = False
       } ;
   
@@ -21,7 +21,7 @@ incomplete concrete AdjectiveRon of Adjective =
       } ;
 
    UseComparA a = {
-      s = \\af => more_CAdv.s ++ a.s ! af ;
+      s = \\af => "mai" ++ a.s ! af ;
       isPre = False
       } ;
   

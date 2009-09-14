@@ -1,4 +1,4 @@
-incomplete concrete ConjunctionRon of Conjunction = 
+concrete ConjunctionRon of Conjunction = 
   CatRon ** open ResRon, Coordination, Prelude in {
 
   flags optimize=all_subs ;
