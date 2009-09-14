@@ -148,9 +148,7 @@ lock_PN = <>
 
 --.
 --2 Definitions of the paradigms
---
--- The definitions should not bother the user of the API. So they are
--- hidden from the document.
+
 
 
   NGender = MorphoRon.NGender ; 
@@ -347,8 +345,7 @@ oper mkV : Str -> V = \s -> mkNV (regV s) ;
 
 
 
-  mkV2S : V -> Prep -> V2S ;
---  mkVV  : V -> VV ;  
+  mkV2S : V -> Prep -> V2S ;  
   mkV2V : V -> Prep -> Prep -> V2V ;
   mkVA  : V -> VA ;
   mkV2A : V -> Prep -> Prep -> V2A ;
@@ -384,9 +381,6 @@ oper mkV : Str -> V = \s -> mkNV (regV s) ;
   
   dirV2 : V -> V2 ;
   dirV2 v = mmkV2 v (noPrep Ac) ;
-   
-  --mmkV3 : V -> Prep -> Prep -> Bool -> V3 ;
-  --mmkV3 v p q = v ** {c2 = p ; c3 = q ; lock_V3 = <>} ;
   
   mkVS : V -> VS ;
   mkVS  v = v ** {m = \\_ => Indic ; lock_VS = <>} ;  
@@ -413,22 +407,6 @@ mkOrd : A -> Ord ;
 mkOrd a = {s = \\n,g,c => a.s ! AF g n Indef (convCase c)  ; isPre = a.isPre ; lock_Ord = <>} ;
 
 
-
---mkComp a = 
---let adj = a.s ! Posit in
---{ s = table {Posit  => adj ;
---             Compar => \\f => "mai" ++ adj ! f ++ "decât";
---             Superl => table {AF g n a c => (artDem g n c) ++ "mai" ++ adj ! (AF g n a c);
---                              AA         => "cel"++"mai" ++ adj ! AA
---                              }  
---            };
---              isPre = a.isPre ;
---              lock_A = <>
--- };          
- 
-     
-  
-----
 
 mkDet = overload {
     mkDet : (_,_,_,_ : Str) -> Number -> Det = mkDetS ;          
@@ -551,5 +529,7 @@ mkPronoun :(_,_,_,_,_,_,_,_,_ : Str) -> Gender -> Number -> Person -> Pron =\eu,
 -- only problem is for genitive case demanded by prepositions (ex : beyond me), otherwise the possesive adjective is used. 
 -- in this case we add a case to the complement, so that the right gender is chosen.
  
+
+
 
 } ;

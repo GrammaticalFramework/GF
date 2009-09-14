@@ -1,4 +1,4 @@
-incomplete concrete NounRon of Noun =
+concrete NounRon of Noun =
    CatRon ** open ResRon,Prelude in {
 
   flags optimize=all_subs ;
@@ -182,7 +182,7 @@ in {
                      sp = \\a => adn.s ++ num.sp ! a ;
                      isNum = num.isNum ; n = num.n; size = num.size} ;
 
-    OrdSuperl adj = {s = \\n,g,c => artDem g n (convCase c) ++ more_CAdv.s ++ adj.s ! AF g n Indef (convCase c);
+    OrdSuperl adj = {s = \\n,g,c => artDem g n (convCase c) ++ "mai" ++ adj.s ! AF g n Indef (convCase c);
                      isPre = True;
                      };
 
@@ -298,25 +298,7 @@ in {
       } ;
 
 
-oper 
-agrGender : NGender -> Number -> Gender =
-\ng,n ->
-case <ng,n> of
-{<NMasc,_>   => Masc ;
- <NFem,_>    => Fem ;
- <NNeut, Sg> => Masc ;
- _           => Fem
-};
+}; 
 
-oper getNumber : Size -> Number =
-\n -> case n of
-{sg => Sg;
- _  => Pl };
-
-oper getClit : Animacy -> Bool =
-\a -> case a of
- {Animate => True;
-  _       => False};
-};
 
 

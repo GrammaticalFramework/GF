@@ -19,7 +19,7 @@ case <g,n,a> of
 { <Masc,Sg,ANomAcc>  => case last bun of
                         { "u" => bun + "l";
                           "e" => bun + "le"; 
-                          "ã" => init bun + "a";
+                          "ã" => bun + "l";
                            _   => bun + "ul"
                         };
   <Masc,Sg,AGenDat>  => case last bun of
@@ -57,41 +57,11 @@ case <g,n,a> of
  <Fem,Pl,_>   => buni + "lor"
                             };
  
---Undefined article (proclitical) -- 
---we keep the non-articled form of the noun and glue it with the article on syntactical level
 
-oper artUndef : Gender -> Number -> NCase -> Str = \g,n,a ->
-case <g,n,a> of
-{<Masc,Sg,No> => "un"; <Masc,Sg,Ac> => "un" ; <Masc,Sg,Ge> => "unui"; <Masc,Sg,Da> => "unui" ;<_,_,Vo> => "" ;
- <_,Pl,No> => "niºte"; <_,Pl,Ac> => "niºte"; <_,Pl,Da> => "unor"; <_,Pl,Ge> => "unor" ; 
- <Fem,Sg,No> => "o"; <Fem,Sg,Ac> => "o"; <Fem,Sg,Da> => "unei"; <Fem,Sg,Ge> => "unei"
-};
 
---Articles 
---possesive article 
--- used for Cardinals and for Genitive case		  				    	
-
-oper artPos : Gender -> Number -> ACase -> Str = \g,n,c ->
- case <g,n,c> of
-{ <Masc,Sg,AGenDat> => "alui"; <Masc,Sg,_> => "al";
-  <Masc,Pl,AGenDat> => "alor"; <Masc,Pl,_> => "ai";
-  <Fem,Sg,AGenDat>  => "alei"; <Fem,Sg,_>  => "a";
-  <Fem,Pl,AGenDat>  => "ale";  <Fem,Pl,_>  => "ale"
-};
 
 	     		  
---demonstrative article 
--- used as Determined article in order to emphasise on the noun/adjective, and for Dative/Genitive for of ordinals
 
-oper artDem : Gender -> Number -> ACase -> Str = \g,n,c ->
- case <g,n,c> of
-{<Masc,Sg,ANomAcc> => "cel"; <Masc,Pl,ANomAcc> => "cei"; <Masc,Sg,AGenDat> => "celui"; 
-<Fem,Sg,ANomAcc>  => "cea"; <Fem,Pl,ANomAcc>  => "cele"; <Fem,Sg,AGenDat>  => "celei";
- <_,Pl,AGenDat>    => "celor";
- <Masc,Sg,AVoc> => "cel"; 
-<Masc,Pl,AVoc> => "cei"; <Fem,Sg,AVoc> => "cea"; <Fem,Pl,AVoc> => "cele"
-  
-};
 
 
 --flexion forms of a noun without article
@@ -541,7 +511,7 @@ mkSpecMut : Str -> Adj = \s ->
 -- Gerund - 1 form 
 -- 2nd person Singular form for Imperative - 1 form
 
-  Verbe : Type = { s : VForm => Str};
+  
   
    verbAffixes :
      Str-> (a,b,c,d: Number => Person => Str) ->  Str -> Adj -> Str -> Str -> Verbe =
@@ -562,7 +532,7 @@ mkSpecMut : Str -> Adj = \s ->
       }  in
      {s = t};
 
-
+{-
 -- syntactical verb : 
 -- obtains all the verb forms present in Romanian, based on the primitive forms found in Verbe 
 
@@ -605,25 +575,8 @@ table {
       TPPasse g n a d         => vb.s ! (PPasse g n a d)
            };                                 
 -- auxiliary for Past Composite (to have - as auxiliary) :
+-}
 
-pComp : Number => Person => Str = table {Sg => table {P1 => "am" ; P2 => "ai" ; P3 => "a"} ;
-                                         Pl => table {P1 => "am" ; P2 => "aþi"; P3 => "au"}
-                                         };
-                                         
--- auxiliary for Future Simple :
-                                         
-pFut : Number => Person => Str = table  {Sg => table {P1 => "voi" ; P2 => "vei" ; P3 => "va"} ;
-                                         Pl => table {P1 => "vom" ; P2 => "veþi"; P3 => "vor"}
-                                         };                                          
-
---auxiliary for Condional Present :
-
-pCond : Number => Person => Str = table {Sg => table {P1 => "aº" ; P2 => "ai" ; P3 => "ar"} ;
-                                         Pl => table {P1 => "am" ; P2 => "aþi"; P3 => "ar"}
-                                         };
- 
--- make Reflexive verbe :  ? with variants ?
--- syntactical category of reflexive verbs based on the primitive forms in Verbe                                   
                                          
 
 -- reflexive pronouns - full form
@@ -2357,7 +2310,7 @@ in
 verbAffixes trebui (mkFromAffix root affixSgGr411 affixPlGr411) 
         (mkFromAffix root affixSgI4 affixPlI4) (mkFromAffix root affixSgPS8 affixPlPS8)
              (mkFromAffix root affixSgPP8 affixPlPP8) (root +"iascã") (mkAdjReg (root + "it"))
-                    (root + "ind") nonExist ;
+                    (root + "ind") "" ;
 
 --subGroup 12
 mkV141 : Str -> Verbe = \uri ->
@@ -2410,47 +2363,7 @@ verbAffixes avea (mkTab root "am" "ai" "are" "au" affixPlGr21)
              (mkFromAffix root affixSgPP2 affixPlPP2) "aibã" (mkAdjReg (root + "ut"))
                     (root + "ând") "ai" ;
                     
---to be :                    
-{-
-mkV2 : Str -> Verbe = \fi ->
-let root = init fi ;
-    pres : Number => Person => Str = table {Sg => table {P1 => "sunt"; P2 => "eºti"; P3 => "este"};
-                                            Pl => table {P1 => "suntem"; P2 => "sunteþi"; P3 => "sunt"} 
-                                            };
-    ps  : Number => Person => Str = table {Sg => table {P1 => "fusei"; P2 => "fuseºi"; P3 => "fuse"};
-                                           Pl => table {P1 => "fuserãm"; P2 => "fuserãþi"; P3 => "fuserã"} 
-                                           };                                        
-    pp : Number => Person => Str = table {Sg => table {P1 => "fusesem"; P2 => "fuseseºi"; P3 => "fusese"};
-                                           Pl => table {P1 => "fuseserãm"; P2 => "fuseserãþi"; P3 => "fuseserã"} 
-                                           }
-    in
-    verbAffixes fi pres (mkFromAffix "er" affixSgI affixPlI) ps pp
-                                               
--}   
 
-
-
---------------Reflexive pronouns
-
-oper reflPron : Number -> Person -> ACase -> Str =
-\n,p,c -> case <n,p,c> of
-{<Sg,P1,AGenDat> => "mie" ; <Sg,P1,_> => "mine";
- <Sg,P2,AGenDat> => "þie" ; <Sg,P2,_> => "tine";
- <_,P3,AGenDat> => "sieºi" ; <_,P3,_> => "sine" ;
- <Pl,P1,AGenDat> => "nouã" ; <Pl,P1,_> => "noi" ;
- <Pl,P2,AGenDat> => "vouã" ; <Pl,P2,_> => "voi"   
-};
-
-oper reflPronHard : Gender -> Number -> Person -> Str =
-\g,n,p -> case <g,n,p> of
-{<Masc,Sg,P1> => "însumi" ; <Fem,Sg,P1> => "însãmi";
- <Masc,Sg,P2> => "însuþi" ; <Fem,Sg,P2> => "însãþi";
- <Masc,Sg,P3> => "însuºi" ; <Fem,Sg,P3> => "însãºi";
- <Masc,Pl,P1> => "înºine" ; <Fem,Pl,P1> => "însene";  
- <Masc,Pl,P2> => "înºivã";  <Fem,Pl,P2> => "înseva";
- <Masc,Pl,P3> => "înºiºi";  <Fem,Pl,P3> => "înseºi"   
-
-};
  
 
 };
