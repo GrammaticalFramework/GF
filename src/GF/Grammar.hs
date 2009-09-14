@@ -12,12 +12,12 @@
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
-module GF.Grammar.Abstract (
+module GF.Grammar (
 
+module GF.Infra.Ident,
 module GF.Grammar.Grammar,
 module GF.Grammar.Values,
 module GF.Grammar.Macros,
-module GF.Infra.Ident,
 module GF.Grammar.MMacros,
 module GF.Grammar.Printer,
 

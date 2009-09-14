@@ -22,9 +22,8 @@ module GF.Compile.TC (AExp(..),
 	  ) where
 
 import GF.Data.Operations
+import GF.Grammar
 import GF.Grammar.Predef
-import GF.Grammar.Abstract
-import GF.Grammar.Printer
 
 import Control.Monad
 import Data.List (sortBy)

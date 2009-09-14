@@ -28,7 +28,6 @@ import GF.Infra.Option
 import GF.Infra.Ident
 import GF.Infra.Modules
 import GF.Data.Operations
-import qualified GF.Source.AbsGF as S
 import GF.Grammar.Lexer
 import GF.Grammar.Parser
 import GF.Grammar.Grammar

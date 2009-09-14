@@ -17,7 +17,7 @@
 
 module GF.Grammar.Unify (unifyVal) where
 
-import GF.Grammar.Abstract
+import GF.Grammar
 import GF.Data.Operations
 
 import Text.PrettyPrint

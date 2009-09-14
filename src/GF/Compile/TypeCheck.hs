@@ -22,10 +22,9 @@ module GF.Compile.TypeCheck (-- * top-level type checking functions; TC should n
 import GF.Data.Operations
 
 import GF.Infra.CheckM
-import GF.Grammar.Abstract
+import GF.Grammar
 import GF.Grammar.Lookup
 import GF.Grammar.Unify
-import GF.Grammar.Printer
 import GF.Compile.Refresh
 import GF.Compile.AbsCompute
 import GF.Compile.TC

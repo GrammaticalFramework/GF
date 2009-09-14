@@ -12,7 +12,7 @@
 -- parsing CF grammars and converting them to GF
 -----------------------------------------------------------------------------
 
-module GF.Source.CF (getCF) where
+module GF.Grammar.CF (getCF) where
 
 import GF.Grammar.Grammar
 import GF.Grammar.Macros

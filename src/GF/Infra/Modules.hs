@@ -33,7 +33,7 @@ module GF.Infra.Modules (
 		IdentM(..),
 		abstractOfConcrete, abstractModOfConcrete,
 		lookupModule, lookupModuleType, lookupInfo,
-                lookupPosition, showPosition, ppPosition,
+                lookupPosition, ppPosition,
 		isModAbs, isModRes, isModCnc, isModTrans,
 		sameMType, isCompilableModule, isCompleteModule,
 		allAbstracts, greatestAbstract, allResources,
@@ -267,12 +267,6 @@ lookupInfo mo i = lookupTree show i (jments mo)
 
 lookupPosition :: (Show i, Ord i) => ModInfo i a -> i -> Err (String,(Int,Int))
 lookupPosition mo i = lookupTree show i (positions mo)
-
-showPosition :: (Show i, Ord i) => ModInfo i a -> i -> String
-showPosition mo i = case lookupPosition mo i of
-  Ok (f,(b,e)) | b == e -> "in" +++ f ++ ", line" +++ show b
-  Ok (f,(b,e)) -> "in" +++ f ++ ", lines" +++ show b ++ "-" ++ show e
-  _ -> ""
 
 ppPosition :: (Show i, Ord i) => ModInfo i a -> i -> Doc
 ppPosition mo i = case lookupPosition mo i of
