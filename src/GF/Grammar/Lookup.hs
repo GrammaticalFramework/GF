@@ -54,16 +54,16 @@ unlock c = unlockRecord c -- return
 -- to look up a constant etc in a search tree --- why here? AR 29/5/2008
 lookupIdent :: Ident -> BinTree Ident b -> Err b
 lookupIdent c t =
-  case lookupTree prIdent c t of
+  case lookupTree showIdent c t of
     Ok v  -> return v
-    Bad _ -> Bad ("unknown identifier" +++ prIdent c)
+    Bad _ -> Bad ("unknown identifier" +++ showIdent c)
 
 lookupIdentInfo :: ModInfo Ident a -> Ident -> Err a
 lookupIdentInfo mo i = lookupIdent i (jments mo)
 
 lookupIdentInfoIn :: ModInfo Ident a -> Ident -> Ident -> Err a
 lookupIdentInfoIn mo m i = 
-  err (\s -> Bad (s +++ "in module" +++ prIdent m)) return $ lookupIdentInfo mo i
+  err (\s -> Bad (s +++ "in module" +++ showIdent m)) return $ lookupIdentInfo mo i
 
 lookupResDef :: SourceGrammar -> Ident -> Ident -> Err Term
 lookupResDef gr m c = liftM fst $ lookupResDefKind gr m c

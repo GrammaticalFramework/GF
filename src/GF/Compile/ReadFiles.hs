@@ -198,7 +198,7 @@ importsOfModule (m,mi) = (modName m,depModInfo mi [])
 
     depInst (m,n) xs = modName m:modName n:xs
 
-    modName = prIdent
+    modName = showIdent
 
 -- | options can be passed to the compiler by comments in @--#@, in the main file
 getOptionsFromFile :: FilePath -> IOE Options

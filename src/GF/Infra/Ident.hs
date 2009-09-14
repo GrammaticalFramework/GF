@@ -13,7 +13,7 @@
 -----------------------------------------------------------------------------
 
 module GF.Infra.Ident (-- * Identifiers
-	      Ident(..), ident2bs, prIdent,
+	      Ident(..), ident2bs, showIdent,
 	      identC, identV, identA, identAV, identW,
 	      argIdent, varStr, varX, isWildIdent, varIndex,
 	      -- * refreshing identifiers
@@ -48,8 +48,8 @@ ident2bs i = case i of
   IAV s b j -> BS.append s (BS.pack ('_':show b ++ '_':show j))
   IW -> BS.pack "_"
 
-prIdent :: Ident -> String
-prIdent i = BS.unpack $! ident2bs i
+showIdent :: Ident -> String
+showIdent i = BS.unpack $! ident2bs i
 
 identC :: BS.ByteString -> Ident
 identV :: BS.ByteString -> Int -> Ident

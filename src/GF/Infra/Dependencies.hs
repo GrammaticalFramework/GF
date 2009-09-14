@@ -18,16 +18,16 @@ prDepGraph deps = unlines $ [
   "}"
   ]
  where
-   mkNode (i,dep) = unwords [prIdent i, "[",nodeAttr (modtype dep),"]"]
+   mkNode (i,dep) = unwords [showIdent i, "[",nodeAttr (modtype dep),"]"]
    nodeAttr ty = case ty of
        MTAbstract   -> "style = \"solid\", shape = \"box\""
        MTConcrete _ -> "style = \"solid\", shape = \"ellipse\""
        _ -> "style = \"dashed\", shape = \"ellipse\""
    mkArrows (i,dep) = 
-     [unwords [prIdent i,"->",prIdent j,"[",arrowAttr "of","]"] | j <- ofs dep] ++
-     [unwords [prIdent i,"->",prIdent j,"[",arrowAttr "ex","]"] | j <- extendeds dep] ++
-     [unwords [prIdent i,"->",prIdent j,"[",arrowAttr "op","]"] | j <- openeds dep] ++
-     [unwords [prIdent i,"->",prIdent j,"[",arrowAttr "ed","]"] | j <- extrads dep]
+     [unwords [showIdent i,"->",showIdent j,"[",arrowAttr "of","]"] | j <- ofs dep] ++
+     [unwords [showIdent i,"->",showIdent j,"[",arrowAttr "ex","]"] | j <- extendeds dep] ++
+     [unwords [showIdent i,"->",showIdent j,"[",arrowAttr "op","]"] | j <- openeds dep] ++
+     [unwords [showIdent i,"->",showIdent j,"[",arrowAttr "ed","]"] | j <- extrads dep]
    arrowAttr s = case s of
      "of" -> "style = \"solid\", arrowhead = \"empty\""
      "ex" -> "style = \"solid\""

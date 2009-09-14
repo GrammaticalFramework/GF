@@ -38,7 +38,7 @@ traceD s t = t
 -- the main function: generate PGF from GF.
 mkCanon2gfcc :: Options -> String -> SourceGrammar -> (String,D.PGF)
 mkCanon2gfcc opts cnc gr = 
-  (prIdent abs, (canon2gfcc opts pars . reorder abs . canon2canon opts abs) gr)
+  (showIdent abs, (canon2gfcc opts pars . reorder abs . canon2canon opts abs) gr)
   where
     abs = err (const c) id $ M.abstractOfConcrete gr c where c = identC (BS.pack cnc)
     pars = mkParamLincat gr

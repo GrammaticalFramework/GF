@@ -33,7 +33,7 @@ module GF.Infra.Modules (
 		IdentM(..),
 		abstractOfConcrete, abstractModOfConcrete,
 		lookupModule, lookupModuleType, lookupInfo,
-                lookupPosition, showPosition,
+                lookupPosition, showPosition, ppPosition,
 		isModAbs, isModRes, isModCnc, isModTrans,
 		sameMType, isCompilableModule, isCompleteModule,
 		allAbstracts, greatestAbstract, allResources,
@@ -45,7 +45,7 @@ import GF.Infra.Option
 import GF.Data.Operations
 
 import Data.List
-
+import Text.PrettyPrint
 
 -- AR 29/4/2003
 
@@ -273,6 +273,12 @@ showPosition mo i = case lookupPosition mo i of
   Ok (f,(b,e)) | b == e -> "in" +++ f ++ ", line" +++ show b
   Ok (f,(b,e)) -> "in" +++ f ++ ", lines" +++ show b ++ "-" ++ show e
   _ -> ""
+
+ppPosition :: (Show i, Ord i) => ModInfo i a -> i -> Doc
+ppPosition mo i = case lookupPosition mo i of
+  Ok (f,(b,e)) | b == e    -> text "in" <+> text f <> text ", line" <+> int b
+               | otherwise -> text "in" <+> text f <> text ", lines" <+> int b <> text "-" <> int e
+  _ -> empty
 
 isModAbs :: ModInfo i a -> Bool
 isModAbs m = case mtype m of
