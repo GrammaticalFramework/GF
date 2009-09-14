@@ -58,7 +58,7 @@ extendModule gr (name,m)
 
      -- test that the module types match, and find out if the old is complete
      testErr (sameMType (mtype m) (mtype mo)) 
-             ("illegal extension type to module" +++ prIdent name)
+             ("illegal extension type to module" +++ showIdent name)
 
      let isCompl = isCompleteModule m0
 
@@ -86,12 +86,12 @@ rebuildModule gr mo@(i,mi@(ModInfo mt stat fs_ me mw ops_ med_ js_ ps_)) = do
     -- add the information given in interface into an instance module
     Nothing -> do
       testErr (null is || mstatus mi == MSIncomplete) 
-              ("module" +++ prIdent i +++ 
+              ("module" +++ showIdent i +++ 
                "has open interfaces and must therefore be declared incomplete") 
       case mt of
         MTInstance i0 -> do
           m1 <- lookupModule gr i0
-          testErr (isModRes m1) ("interface expected instead of" +++ prIdent i0)
+          testErr (isModRes m1) ("interface expected instead of" +++ showIdent i0)
           js' <- extendMod gr False (i0,const True) i (jments m1) (jments mi)
           --- to avoid double inclusions, in instance I of I0 = J0 ** ...
           case extends mi of
@@ -110,7 +110,7 @@ rebuildModule gr mo@(i,mi@(ModInfo mt stat fs_ me mw ops_ med_ js_ ps_)) = do
       let stat' = ifNull MSComplete (const MSIncomplete)
                     [i | i <- is, notElem i infs]
       testErr (stat' == MSComplete || stat == MSIncomplete) 
-              ("module" +++ prIdent i +++ "remains incomplete")
+              ("module" +++ showIdent i +++ "remains incomplete")
       ModInfo mt0 _ fs me' _ ops0 _ js ps0 <- lookupModule gr ext
       let ops1 = nub $
                    ops_ ++ -- N.B. js has been name-resolved already

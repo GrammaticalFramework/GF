@@ -350,10 +350,10 @@ float2term = EFloat
 
 -- | create a terminal from identifier
 ident2terminal :: Ident -> Term
-ident2terminal = K . prIdent
+ident2terminal = K . showIdent
 
 symbolOfIdent :: Ident -> String
-symbolOfIdent = prIdent
+symbolOfIdent = showIdent
 
 symid :: Ident -> String
 symid = symbolOfIdent

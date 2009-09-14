@@ -235,7 +235,7 @@ ppDDecl q (id,typ)
   | id == identW = ppTerm q 6 typ
   | otherwise    = parens (ppIdent id <+> colon <+> ppTerm q 0 typ)
 
-ppIdent = text . prIdent
+ppIdent = text . showIdent
 
 ppQIdent q m id =
   case q of

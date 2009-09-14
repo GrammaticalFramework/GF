@@ -226,16 +226,16 @@ string s = "'" ++ concatMap esc s ++ "'"
 --
 
 isListCat :: (CId, [(CId, [CId])]) -> Bool
-isListCat (cat,rules) = "List" `isPrefixOf` prIdent cat && length rules == 2
+isListCat (cat,rules) = "List" `isPrefixOf` showIdent cat && length rules == 2
 		    && ("Base"++c) `elem` fs && ("Cons"++c) `elem` fs
-    where c = drop 4 (prIdent cat)
-	  fs = map (prIdent . fst) rules
+    where c = drop 4 (showIdent cat)
+	  fs = map (showIdent . fst) rules
 
 isBaseFun :: CId -> Bool
-isBaseFun f = "Base" `isPrefixOf` prIdent f
+isBaseFun f = "Base" `isPrefixOf` showIdent f
 
 isConsFun :: CId -> Bool
-isConsFun f = "Cons" `isPrefixOf` prIdent f
+isConsFun f = "Cons" `isPrefixOf` showIdent f
 
 baseSize :: (CId, [(CId, [CId])]) -> Int
 baseSize (_,rules) = length bs

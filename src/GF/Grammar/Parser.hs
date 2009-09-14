@@ -753,7 +753,7 @@ happyReduction_3 (happy_x_4 `HappyStk`
                                                 Ok x    -> return x
                                                 Bad msg -> fail msg
                                       let poss  = buildTree [(i,(fname,mkSrcSpan p)) | (i,p,_) <- jments]
-                                          fname = prIdent id ++ ".gf"
+                                          fname = showIdent id ++ ".gf"
                                           
                                           mkSrcSpan :: (Posn, Posn) -> (Int,Int)
 					  mkSrcSpan (Pn l1 _, Pn l2 _) = (l1,l2)

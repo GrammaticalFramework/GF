@@ -214,7 +214,7 @@ freeVarsExp e = case e of
   _ -> [] --- thus applies to abstract syntax only
 
 ident2string :: Ident -> String
-ident2string = prIdent
+ident2string = showIdent
 {-
 tree :: (TrNode,[Tree]) -> Tree
 tree = Tr

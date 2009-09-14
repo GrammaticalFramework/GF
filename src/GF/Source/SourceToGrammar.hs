@@ -205,7 +205,7 @@ buildPosTree m = buildTree . mkPoss . filter ((>0) . snd) where
     (i,p):rest@((_,q):_) -> (i,(name,(p,max p (q-1)))) : mkPoss rest
     (i,p):[]             -> (i,(name,(p,p+100))) : [] --- don't know last line
     _ -> []
-  name = prIdent m ++ ".gf" ----
+  name = showIdent m ++ ".gf" ----
 
 transAbsDef :: TopDef -> Err (Either [(Ident, Int, G.Info)] GO.Options)
 transAbsDef x = case x of

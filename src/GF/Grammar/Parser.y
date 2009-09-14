@@ -117,7 +117,7 @@ ModDef
                                                 Ok x    -> return x
                                                 Bad msg -> fail msg
                                       let poss  = buildTree [(i,(fname,mkSrcSpan p)) | (i,p,_) <- jments]
-                                          fname = prIdent id ++ ".gf"
+                                          fname = showIdent id ++ ".gf"
                                           
                                           mkSrcSpan :: (Posn, Posn) -> (Int,Int)
 					  mkSrcSpan (Pn l1 _, Pn l2 _) = (l1,l2)
@@ -278,7 +278,7 @@ TermDef
 
 FlagDef :: { Options }
 FlagDef
-  : Posn Ident '=' Ident Posn  {% case parseModuleOptions ["--" ++ prIdent $2 ++ "=" ++ prIdent $4] of
+  : Posn Ident '=' Ident Posn  {% case parseModuleOptions ["--" ++ showIdent $2 ++ "=" ++ showIdent $4] of
                                     Ok  x   -> return x
                                     Bad msg -> failLoc $1 msg                                           } 
 
@@ -626,7 +626,7 @@ listCatDef id pos cont size = [catd,nilfund,consfund]
     mkId x i = if isWildIdent x then (varX i) else x
 
 tryLoc (c,mty,Just e) = return (c,(mty,e))
-tryLoc (c,_  ,_     ) = fail ("local definition of" +++ prIdent c +++ "without value")
+tryLoc (c,_  ,_     ) = fail ("local definition of" +++ showIdent c +++ "without value")
 
 mkR []       = return $ RecType [] --- empty record always interpreted as record type
 mkR fs@(f:_) =
@@ -635,10 +635,10 @@ mkR fs@(f:_) =
     _                     -> mapM tryR  fs >>= return . R
   where
     tryRT (lab,Just ty,Nothing) = return (ident2label lab,ty)
-    tryRT (lab,_      ,_      ) = fail $ "illegal record type field" +++ prIdent lab --- manifest fields ?!
+    tryRT (lab,_      ,_      ) = fail $ "illegal record type field" +++ showIdent lab --- manifest fields ?!
 
     tryR (lab,mty,Just t) = return (ident2label lab,(mty,t))
-    tryR (lab,_  ,_     ) = fail $ "illegal record field" +++ prIdent lab
+    tryR (lab,_  ,_     ) = fail $ "illegal record field" +++ showIdent lab
 
 mkOverload pdt pdf@(Just df) =
   case appForm df of
@@ -660,8 +660,8 @@ mkOverload pdt pdf = [ResOper pdt pdf]
 
 isOverloading t =
   case t of
-    Vr keyw | prIdent keyw == "overload" -> True      -- overload is a "soft keyword"
-    _                                    -> False
+    Vr keyw | showIdent keyw == "overload" -> True      -- overload is a "soft keyword"
+    _                                      -> False
 
 
 type SrcSpan = (Posn,Posn)
