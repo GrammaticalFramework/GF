@@ -1,4 +1,4 @@
---# -path=.:present
+--# -path=.:minimal:present
 
 concrete BronzeageRus of Bronzeage = SwadeshRus ** BronzeageI with
   (Syntax = SyntaxRus) ** open ResRus in {

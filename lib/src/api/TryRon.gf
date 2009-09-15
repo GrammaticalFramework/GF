@@ -1,22 +1,22 @@
 --# -path=.:alltenses:prelude
 
-resource TryRon = SyntaxRon-[mkAdN], LexiconRon, ParadigmsRon - [mkAdv,mkAdN,mkOrd] ** 
+resource TryRon = SyntaxRon-[mkAdN], LexiconRon, ParadigmsRon - [mkAdv,mkAdN,mkOrd,mkDet,mkNP] ** 
   open (P = ParadigmsRon) in {
 
 oper
 
-  mkAdv = overload SyntaxEng {
+  mkAdv = overload SyntaxRon {
     mkAdv : Str -> Adv = P.mkAdv ;
   } ;
 
   mkAdN = overload {
-    mkAdN : CAdv -> AdN = SyntaxEng.mkAdN ;
-    mkAdN : Str -> AdN = P.mkAdN ;
+    mkAdN : CAdv -> AdN = SyntaxRon.mkAdN ;
+--    mkAdN : Str -> AdN = P.mkAdN ;
   } ;
 
-  mkOrd = overload SyntaxEng {
-    mkOrd : Str -> Ord = P.mkOrd ;
-  } ;
+--  mkOrd = overload SyntaxRon {
+--    mkOrd : Str -> Ord = P.mkOrd ;
+--  } ;
 
 
 }

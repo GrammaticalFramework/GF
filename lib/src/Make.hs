@@ -54,13 +54,13 @@ langsCoding = [
 langs = map fst langsCoding
 
 -- languagues for which to compile Lang
-langsLang = langs `except` ["Ara","Pol","Ron","Tur"]
+langsLang = langs `except` ["Pol","Tur"]
 
 -- languages for which to compile Try 
-langsAPI  = langsLang `except` ["Bul","Hin","Ina","Lat","Rus","Tha"]
+langsAPI  = langsLang `except` ["Ara","Bul","Hin","Ina","Lat","Rus","Tha"]
 
 -- languages for which to compile minimal Syntax
-langsMinimal = langs `only` ["Eng","Bul","Ger","Ita"]
+langsMinimal = langs `only` ["Ara","Eng","Bul","Rus"]
 
 -- languages for which to run treebank test
 langsTest = langsLang `except` ["Ara","Bul","Cat","Hin","Rus","Spa","Tha"]

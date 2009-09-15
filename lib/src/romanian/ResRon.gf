@@ -189,13 +189,14 @@ oper
     in {
     s = table {
       VPFinite tm Simul => case tm of 
-                             {VPres Indic => vf "" (\a -> verb ! Indi Presn a.n a.p) ;
-                              VPres Conjunct => vf "sã" (\a -> verb ! Subjo SPres a.n a.p) ;
-                              VImperff  => vf "" (\a -> verb ! Indi Imparf a.n a.p)  ;
-                              VPasse  Indic => vf "" (\a -> pComp ! a.n ! a.p ++ verb ! PPasse Masc Sg Indef ANomAcc) ; 
-                              VPasse  Conjunct => vf "sã" (\a -> copula.s! Inf ++ verb ! PPasse Masc Sg Indef ANomAcc) ;
-                              VFut => vf "" (\a -> pFut ! a.n ! a.p ++ verb ! Inf) ;
-                              VCondit => vf "" (\a -> pCond ! a.n ! a.p ++ verb ! Inf) 
+                             {
+        VPres Indic => vf "" (\a -> verb ! Indi Presn a.n a.p) ;
+        VPres Conjunct => vf "sã" (\a -> verb ! Subjo SPres a.n a.p) ;
+        VImperff  => vf "" (\a -> verb ! Indi Imparf a.n a.p)  ;
+        VPasse  Indic => vf "" (\a -> pComp ! a.n ! a.p ++ verb ! PPasse Masc Sg Indef ANomAcc) ; 
+        VPasse  Conjunct => vf "sã" (\a -> copula.s! Inf ++ verb ! PPasse Masc Sg Indef ANomAcc) ;
+        VFut => vf "" (\a -> pFut ! a.n ! a.p ++ verb ! Inf) ;
+        VCondit => vf "" (\a -> pCond ! a.n ! a.p ++ verb ! Inf) 
                               } ;  
       VPFinite tm Anter => case tm of 
                               {VPres Indic => vf "" (\a -> pComp ! a.n ! a.p ++ verb ! PPasse Masc Sg Indef ANomAcc) ; 
@@ -483,9 +484,9 @@ oper
             RCond  => VCondit ;        
             RPres  => VPres m
             } ;
-          cmp = case <t,a,m> of 
-           {<RPast,Simul,Indic> | <RPres, Anter,Indic> => True ;
-            <RCond, _, _> => True;
+          cmp = case <<t,a,m> : RTense * Anteriority * Mood> of {
+            <RPast,Simul,Indic> | <RPres, Anter,Indic> => True ; --# notpresent
+            <RCond, _, _> => True;  --# notpresent
             _             => False
             } ;
           vp    = useVP vpr ;
