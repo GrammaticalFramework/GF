@@ -92,8 +92,6 @@ executable gf
   main-is: GF.hs
   other-modules:
     GF.Data.BacktrackM
-    GF.Source.AbsGF
-    GF.Source.PrintGF
     GF.JavaScript.AbsJS
     GF.JavaScript.PrintJS
     GF.Infra.CompactPrint
@@ -119,16 +117,14 @@ executable gf
     GF.Command.Parse
     GF.Command.Importing
     GF.Infra.Modules
+    GF.Grammar
     GF.Grammar.Lexer
     GF.Grammar.Parser
     GF.Grammar.Grammar
-    GF.Source.GrammarToSource
     GF.Grammar.Values
-    GF.Grammar.PrGrammar
     GF.Grammar.Macros
     GF.Grammar.Lockfield
     GF.Grammar.MMacros
-    GF.Grammar.Abstract
     GF.Grammar.Lookup
     GF.Grammar.Unify
     GF.Grammar.AppPredefined 
@@ -150,7 +146,6 @@ executable gf
     GF.Compile.OptimizeGF
     GF.Compile.OptimizeGFCC
     GF.Compile.ModDeps
-    GF.Source.SourceToGrammar
     GF.Compile.GetGrammar
     GF.Compile
     GF.System.Readline
