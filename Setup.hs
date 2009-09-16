@@ -191,7 +191,7 @@ langsCoding = [
 langs = map fst langsCoding
 
 -- languagues for which to compile Lang
-langsLang = langs `except` ["Ara","Lat","Pol","Ron","Tur"]
+langsLang = langs `except` ["Ara","Lat","Pol","Tur"]
 
 -- languages for which to compile Try 
 langsAPI  = langsLang `except` ["Bul","Hin","Ina","Rus","Tha"]
