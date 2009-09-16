@@ -1,44 +1,75 @@
---# -path=.:abstract:common
+concrete SymbolRon of Symbol = 
+  CatRon ** open Prelude, ResRon in {
 
-concrete SymbolRon of Symbol = CatRon ** open Prelude, ResRon in {
-{-
 lin
-  SymbPN i = {s = addGenitiveS i.s ; g = Neutr} ;
-  IntPN i  = {s = addGenitiveS i.s ; g = Neutr} ;
-  FloatPN i = {s = addGenitiveS i.s ; g = Neutr} ;
-  NumPN i = {s = i.s ; g = Neutr} ;
-  CNIntNP cn i = {
-    s = \\c => cn.s ! Sg ! Nom ++ (addGenitiveS i.s) ! c ;
-    a = agrgP3 Sg cn.g
-    } ;
-  CNSymbNP det cn xs = {
-    s = \\c => det.s ++ cn.s ! det.n ! Nom ++ (addGenitiveS xs.s) ! c ; 
-    a = agrgP3 det.n cn.g
-    } ;
-  CNNumNP cn i = {
-    s = \\c => cn.s ! Sg ! Nom ++ i.s ! c ;
-    a = agrgP3 Sg cn.g
-    } ;
+  SymbPN i = mkSymb i.s ;
+  IntPN i  = mkSymb i.s ;
+  FloatPN i = mkSymb i.s ;
+  NumPN i  = mkSymb (i.sp ! Masc) ;
 
-  SymbS sy = sy ; 
+  CNIntNP cn i = let gg = agrGender cn.g Sg in
+  heavyNP {
+    s = \\c => cn.s ! Sg ! Def ! (convCase c) ++ i.s ;
+    a = agrP3 gg Sg ;
+    hasClit = False ;
+    ss = cn.s ! Sg ! Def ! ANomAcc ++ i.s 
+    } ;
+   
+  CNSymbNP det cn xs = let gg = agrGender cn.g det.n;
+                           st = if_then_else Species det.isDef Def Indef;
+                           rs = if_then_else Species det.hasRef Def Indef;
+                           ag = agrP3 gg det.n ;
+                           hr = andB (getClit cn.a) det.hasRef
+                        in                               
+    {s = \\c => case c of 
+                 {Vo =>
+                   {comp = det.s ! gg ! No ++ det.size ++ cn.s ! det.n ! st ! ANomAcc ++ det.post ! gg ! No  ;
+                    clit = \\cs => if_then_Str hr ((genCliticsCase ag c).s ! cs) [] };
+                  _ => {comp = det.s ! gg ! c ++ det.size ++ cn.s ! det.n ! st ! (convCase c) ++ det.post ! gg ! c  ;
+                    clit = \\cs => if_then_Str hr ((genCliticsCase ag c).s ! cs) [] }  
+                    };
+     a = ag ;
+     hasClit = hr ;
+     hasRef = hr ;
+     isPronoun = False ;
+     indForm = det.s ! gg ! No ++ det.size ++cn.s ! det.n ! rs ! ANomAcc 
+   } ;   
+    
+  CNNumNP cn i = let gg = agrGender cn.g Sg in 
+    heavyNP {
+    s = \\c => cn.s ! Sg ! Def ! (convCase c) ++ i.sp ! gg;
+    a = agrP3 gg Sg ;
+    hasClit = False ;
+    ss = cn.s ! Sg ! Def ! ANomAcc ++ i.sp ! gg
+    } ;
+  SymbS sy = {s = \\_ => sy.s} ;
 
-  SymbNum sy = { s = addGenitiveS sy.s ; n = Pl ; hasCard = True } ;
-  SymbOrd sy = { s = \\c => sy.s ++ (regGenitiveS "th")!c} ;
+  SymbNum nn = {s,sp = \\_ => nn.s ; n = Pl; size = less20} ; -- need to know the size of the symbol to properly set it to less20 or plural
+  SymbOrd nn = {s = \\n,g,nc => case nc of
+                      {Da | Ge => artDem g n AGenDat ++ "de-" ++ artPos g n ANomAcc ++ nn.s ++ "-lea";
+                       _       => artPos g n ANomAcc ++ nn.s ++ "-lea"  
+                      };
+               isPre = True       
+                      } ;
 
 lincat 
 
   Symb, [Symb] = SS ;
 
 lin
+
   MkSymb s = s ;
 
-  BaseSymb = infixSS "and" ;
+  BaseSymb = infixSS "ºi" ; 
   ConsSymb = infixSS "," ;
 
-oper
-    -- Note: this results in a space before 's, but there's
-    -- not mauch we can do about that.
-    addGenitiveS : Str -> Case => Str = \s -> 
-      table { Gen => s ++ "'s"; _ => s } ;
--}
+oper mkSymb : Str -> PN = \ss ->
+{ s = \\c => case c of 
+      {Da | Ge => "lui" ++ ss;
+       _       => ss 
+       };
+ g = Masc; n = Sg; a = Animate ;
+ lock_PN = <>
+};
+  
 }
