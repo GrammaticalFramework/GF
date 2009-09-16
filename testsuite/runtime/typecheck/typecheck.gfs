@@ -1,4 +1,4 @@
-i testsuite/runtime/typecheck/Test.gf
+i -src testsuite/runtime/typecheck/Test.gf
 
 ai succ "0"
 ai succ : Int 0
