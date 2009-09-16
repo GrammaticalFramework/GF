@@ -124,15 +124,14 @@ instance DiffFre of DiffRomance = open CommonRomance, PhonoFre, Prelude in {
           agr   = {g = aag.g ; n = num ; p = p} ;
           verb  = vp.s.s ! vImperForm agr ;
           neg   = vp.neg ! pol ;
-          hascl = False ; ----e(pronArg agr.n agr.p vp.clAcc vp.clDat).p3 ;
-          clpr  = <[],[]> ; ----e pronArgGen pol agr.n agr.p vp.clAcc vp.clDat ;
-          compl = neg.p2 ++ clpr.p2 ++ vp.comp ! agr ++ vp.ext ! pol
+          clpr  =  <vp.clit1 ++ vp.clit2, False> ;  ---- TODO: True if clit
+          compl = vp.comp ! agr ++ vp.ext ! pol
         in
         case pol of {
-          Pos => verb ++ if_then_Str hascl "-" [] ++ clpr.p1 ++ compl ;
-          Neg => neg.p1 ++ clpr.p1 ++ verb ++ compl
+          Pos => verb ++ if_then_Str clpr.p2 "-" [] ++ clpr.p1 ++ compl ;
+          Neg => neg.p1 ++ clpr.p1 ++ verb ++ neg.p2 ++ compl
           } 
-      } ;
+      } ;  ---- TODO: vois-le vs. vois-moi vs. ne me vois pas
 
 
     negation : Polarity => (Str * Str) = table {
