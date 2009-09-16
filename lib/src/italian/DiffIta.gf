@@ -112,16 +112,16 @@ instance DiffIta of DiffRomance = open CommonRomance, PhonoIta, BeschIta, Prelud
         let 
           pe    = case b of {True => P3 ; _ => p} ;
           agr   = aag ** {p = pe} ;
-          clpr  = <vp.clit1 ++ vp.clit2,[],False> ; ----e pronArg agr.n agr.p vp.clAcc vp.clDat ;
+          clpr  = <vp.clit1 ++ vp.clit2,[],False> ;  ---- TODO: True is clit 
           verb  = case <aag.n, pol,pe> of {
             <Sg,Neg,P2> => vp.s.s ! VInfin clpr.p3 ; ----  ! aag ;
             _ => vp.s.s ! vImperForm agr
             } ;
           neg   = vp.neg ! pol ;
-          compl = neg.p2 ++ clpr.p2 ++ vp.comp ! agr ++ vp.ext ! pol
+          compl = clpr.p2 ++ vp.comp ! agr ++ vp.ext ! pol
         in
         neg.p1 ++ verb ++ bindIf clpr.p3 ++ clpr.p1 ++ compl ;
-      } ;
+      } ;  ---- TODO non mi mangi
 
     negation : Polarity => (Str * Str) = table {
       Pos => <[],[]> ;
