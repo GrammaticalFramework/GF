@@ -1,1 +1,1 @@
-i testsuite/compiler/typecheck/abstract/C.gf
+i -src testsuite/compiler/typecheck/abstract/C.gf
