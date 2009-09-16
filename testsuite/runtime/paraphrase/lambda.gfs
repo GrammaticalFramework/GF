@@ -1,4 +1,4 @@
-i testsuite/runtime/paraphrase/lambda.gf
+i -src testsuite/runtime/paraphrase/lambda.gf
 
 pt -compute f1
 pt -compute f2
