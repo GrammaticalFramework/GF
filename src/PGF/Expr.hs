@@ -186,10 +186,11 @@ ppExpr d scope (EFun f)     = ppCId f
 ppExpr d scope (EVar i)     = ppCId (scope !! i)
 ppExpr d scope (ETyped e ty)= ppParens (d > 0) (ppExpr 0 scope e PP.<+> PP.colon PP.<+> ppType 0 scope ty)
 
+ppPatt :: Int -> [CId] -> Patt -> ([CId],PP.Doc)
 ppPatt d scope (PApp f ps) = let (scope',ds) = mapAccumL (ppPatt 2) scope ps
                              in (scope',ppParens (not (List.null ps) && d > 1) (ppCId f PP.<+> PP.hsep ds))
 ppPatt d scope (PLit l)    = (scope,ppLit l)
-ppPatt d scope (PVar f)    = (scope,ppCId f)
+ppPatt d scope (PVar f)    = (f:scope,ppCId f)
 ppPatt d scope PWild       = (scope,PP.char '_')
 
 ppLit (LStr s) = PP.text (show s)
