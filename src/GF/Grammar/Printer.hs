@@ -86,6 +86,7 @@ ppJudgement q (id, AbsFun ptype _ pexp) =
      Just typ   -> text "fun" <+> ppIdent id <+> colon <+> ppTerm q 0 typ <+> semi
      Nothing    -> empty) $$
   (case pexp of
+     Just []  -> empty
      Just eqs -> text "def" <+> vcat [ppIdent id <+> hsep (map (ppPatt q 2) ps) <+> equals <+> ppTerm q 0 e <+> semi | (ps,e) <- eqs]
      Nothing  -> empty)
 ppJudgement q (id, ResParam pparams) = 
