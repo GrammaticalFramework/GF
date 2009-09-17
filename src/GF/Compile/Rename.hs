@@ -131,7 +131,7 @@ tree2status o = case o of
 buildStatus :: SourceGrammar -> Ident -> SourceModInfo -> Err Status
 buildStatus gr c mo = let mo' = self2status c mo in do
     let gr1 = MGrammar ((c,mo) : modules gr)
-        ops = [OSimple e | e <- allExtends gr1 c] ++ allOpens mo
+        ops = [OSimple e | e <- allExtends gr1 c] ++ opens mo
     mods <- mapM (lookupModule gr1 . openedModule) ops
     let sts = map modInfo2status $ zip ops mods    
     return $ if isModCnc mo
@@ -142,9 +142,7 @@ modInfo2status :: (OpenSpec Ident,SourceModInfo) -> (OpenSpec Ident, StatusTree)
 modInfo2status (o,mo) = (o,tree2status o (jments mo))
 
 self2status :: Ident -> SourceModInfo -> StatusTree
-self2status c m = mapTree (info2status (Just c)) js where   -- qualify internal
-  js | isModTrans m = sorted2tree $ tree2list $ jments m 
-     | otherwise    = jments m
+self2status c m = mapTree (info2status (Just c)) (jments m)
 
 forceQualif o = case o of
   OSimple i   -> OQualif i i

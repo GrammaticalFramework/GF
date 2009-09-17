@@ -99,8 +99,7 @@ moduleDeps ms = mapM deps ms where
     _ -> mt0 == mt
   -- in the same way; this defines what can be opened
   compatOType mt0 mt = case mt0 of
-    MTAbstract     -> mt == MTAbstract
-    MTTransfer _ _ -> mt == MTAbstract
+    MTAbstract -> mt == MTAbstract
     _ -> case mt of
       MTResource -> True
       MTInterface -> True
