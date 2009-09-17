@@ -1,3 +1,5 @@
+{-# LANGUAGE PatternGuards #-}
+
 module GF.Command.Commands (
   allCommands,
   lookCommand,
@@ -471,11 +473,11 @@ allCommands cod env@(pgf, mos) = Map.fromList [
        "are type checking and semantic computation."
        ], 
      examples = [
-       "pt -compute (plus one two)   -- compute value",
-       "p \"foo\" | pt -typecheck      -- type check parse results"
+       "pt -compute (plus one two)   -- compute value"
        ],
-     exec = \opts -> returnFromExprs . treeOps (map prOpt opts),
-     options = treeOpOptions pgf
+     exec = \opts -> returnFromExprs . treeOps opts,
+     options = treeOpOptions pgf,
+     flags = treeOpFlags pgf
      }),
   ("q",  emptyCommandInfo {
      longname = "quit",
@@ -748,7 +750,9 @@ allCommands cod env@(pgf, mos) = Map.fromList [
      _ -> Nothing
 
    treeOps opts s = foldr app s (reverse opts) where
-     app f = maybe id id (treeOp pgf f) 
+     app (OOpt  op)         | Just (Left  f) <- treeOp pgf op = f
+     app (OFlag op (VId x)) | Just (Right f) <- treeOp pgf op = f (mkCId x)
+     app _                                                    = id
 
    showAsString t = case t of
      ELit (LStr s) -> s
@@ -777,7 +781,8 @@ stringOpOptions = sort $ [
         ("to_"   ++ p, "from GF " ++ n ++ " transliteration to unicode")] |
                                     (p,n) <- transliterationPrintNames]
 
-treeOpOptions pgf = [(op,expl) | (op,(expl,_)) <- allTreeOps pgf]
+treeOpOptions pgf = [(op,expl) | (op,(expl,Left  _)) <- allTreeOps pgf]
+treeOpFlags   pgf = [(op,expl) | (op,(expl,Right _)) <- allTreeOps pgf]
 
 translationQuiz :: Encoding -> PGF -> Language -> Language -> Type -> IO ()
 translationQuiz cod pgf ig og typ = do
