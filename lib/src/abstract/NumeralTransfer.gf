@@ -58,11 +58,12 @@ def nd10 pot01     = IDig D_1 ;
     nd10 (pot0 d1) = IDig (nd d1) ;
 
 fun nd100 : Sub100 -> Digits ;
-def nd100 (pot0as1 dn10)  = nd10 dn10 ;
-    nd100 pot110       = IIDig D_1   (IDig D_0) ;
-    nd100 pot111       = IIDig D_1   (IDig D_1) ;
-    nd100 (pot1to19 dn10) = IIDig D_1   (IDig (nd dn10)) ;
-    nd100 (pot1 dn10)     = IIDig (nd dn10) (IDig D_0) ;
+def nd100 (pot0as1 d)    = nd10 d ;
+    nd100 pot110         = IIDig D_1    (IDig D_0) ;
+    nd100 pot111         = IIDig D_1    (IDig D_1) ;
+    nd100 (pot1to19 d)   = IIDig D_1    (IDig (nd d)) ;
+    nd100 (pot1 d)       = IIDig (nd d) (IDig D_0) ;
+    nd100 (pot1plus d x) = IIDig (nd d) (nd10 x) ;
 
 fun nd1000 : Sub1000 -> Digits ;
 def nd1000 (pot1as2 x)    = nd100 x ;
@@ -75,8 +76,8 @@ def nd1000000 (pot2as3 x)    = nd1000 x ;
     nd1000000 (pot3plus x y) = dconcat (nd1000 x) (nd1000 y) ;
 
 fun dconcat : Digits -> Digits -> Digits ;
-def dconcat (IDig  dn10)    ys = IIDig dn10 ys ;
-    dconcat (IIDig dn10 xs) ys = IIDig dn10 (dconcat xs ys) ;
+def dconcat (IDig  d)    ys = IIDig d ys ;
+    dconcat (IIDig d xs) ys = IIDig d (dconcat xs ys) ;
 
 fun nd : Digit -> Dig ;
 def nd n2 = D_2 ;
