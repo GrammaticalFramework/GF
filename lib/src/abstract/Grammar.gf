@@ -10,6 +10,7 @@ abstract Grammar =
   Adjective,
   Adverb,
   Numeral,
+  NumeralTransfer,
   Sentence, 
   Question,
   Relative,

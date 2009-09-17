@@ -26,7 +26,7 @@ cat
   Sub1000 ;     -- 1..999
   Sub1000000 ;  -- 1..999999
 
-fun 
+data 
   num : Sub1000000 -> Numeral ;
 
   n2, n3, n4, n5, n6, n7, n8, n9 : Digit ;
@@ -48,13 +48,13 @@ fun
 
 -- Numerals as sequences of digits have a separate, simpler grammar
 
-  cat 
-    Dig ;  -- single digit 0..9
+cat 
+  Dig ;  -- single digit 0..9
 
-  fun
-    IDig  : Dig -> Digits ;       -- 8
-    IIDig : Dig -> Digits -> Digits ; -- 876
+data
+  IDig  : Dig -> Digits ;       -- 8
+  IIDig : Dig -> Digits -> Digits ; -- 876
 
-    D_0, D_1, D_2, D_3, D_4, D_5, D_6, D_7, D_8, D_9 : Dig ;
+  D_0, D_1, D_2, D_3, D_4, D_5, D_6, D_7, D_8, D_9 : Dig ;
 
 }
