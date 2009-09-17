@@ -58,7 +58,6 @@ ppModule q (mn, ModInfo mtype mstat opts exts with opens _ jments _) =
       modTypeDoc =
         case mtype of
           MTAbstract         -> text "abstract"  <+> ppIdent mn
-          MTTransfer src dst -> text "transfer"  <+> ppIdent mn <+> colon <+> ppOpenSpec src <+> text "->" <+> ppOpenSpec dst
           MTResource         -> text "resource"  <+> ppIdent mn
           MTConcrete abs     -> text "concrete"  <+> ppIdent mn <+> text "of" <+> ppIdent abs
           MTInterface        -> text "interface" <+> ppIdent mn

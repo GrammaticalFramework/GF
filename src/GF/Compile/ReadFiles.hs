@@ -177,7 +177,6 @@ importsOfModule (m,mi) = (modName m,depModInfo mi [])
     depModType (MTInterface)      xs = xs
     depModType (MTConcrete m2)    xs = modName m2:xs
     depModType (MTInstance m2)    xs = modName m2:xs
-    depModType (MTTransfer o1 o2) xs = depOpen o1 (depOpen o2 xs)
 
     depExtends es xs = foldr depInclude xs es
 

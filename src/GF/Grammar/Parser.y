@@ -91,7 +91,6 @@ import GF.Compile.Update (buildAnyTree)
  'resource'   { T_resource  }
  'strs'       { T_strs      }
  'table'      { T_table     }
- 'transfer'   { T_transfer  }
  'variants'   { T_variants  }
  'where'      { T_where     }
  'with'       { T_with      }
@@ -143,7 +142,6 @@ ModType
   | 'interface' Ident                    { (MTInterface,     $2) }
   | 'concrete'  Ident 'of' Ident         { (MTConcrete $4,   $2) }
   | 'instance'  Ident 'of' Ident         { (MTInstance $4,   $2) }
-  | 'transfer'  Ident ':' Open '->' Open { (MTTransfer $4 $6,$2) }
 
 ModHeaderBody :: { ( [(Ident,MInclude Ident)]
                    , Maybe (Ident,MInclude Ident,[(Ident,Ident)])
@@ -701,11 +699,6 @@ checkInfoType (MTInstance _)   (id,pos,info) =
     ResValue _   -> return ()
     ResOper  _ _ -> return ()
     _            -> failLoc (fst pos) "illegal definition in instance module" 
-checkInfoType (MTTransfer _ _) (id,pos,info) =
-  case info of
-    AbsCat _ _   -> return ()
-    AbsFun _ _ _ -> return ()
-    _            -> failLoc (fst pos) "illegal definition in transfer module" 
 
 
 mkAlts cs = case cs of

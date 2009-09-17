@@ -62,8 +62,6 @@ checkModule ms (name,mo) = checkIn (text "checking module" <+> ppIdent name) $ d
     js' <- case mtype mo of
       MTAbstract -> checkMap (checkAbsInfo gr name mo) js
 
-      MTTransfer a b -> checkMap (checkAbsInfo gr name mo) js
-
       MTResource -> checkMap (checkResInfo gr name mo) js
 
       MTConcrete a -> do

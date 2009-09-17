@@ -37,7 +37,6 @@ instance (Ord i, Binary i, Binary a) => Binary (ModInfo i a) where
 
 instance (Binary i) => Binary (ModuleType i) where
   put MTAbstract       = putWord8 0
-  put (MTTransfer i j) = putWord8 1 >> put (i,j)
   put MTResource       = putWord8 2
   put (MTConcrete i)   = putWord8 3 >> put i
   put MTInterface      = putWord8 4
@@ -45,7 +44,6 @@ instance (Binary i) => Binary (ModuleType i) where
   get = do tag <- getWord8
            case tag of
              0 -> return MTAbstract
-             1 -> get >>= \(i,j) -> return (MTTransfer i j)
              2 -> return MTResource
              3 -> get >>= return . MTConcrete
              4 -> return MTInterface

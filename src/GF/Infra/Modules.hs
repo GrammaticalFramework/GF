@@ -26,7 +26,7 @@ module GF.Infra.Modules (
 		addOpenQualif, flagsModule, allFlags, mapModules,
 		OpenSpec(..),
 		ModuleStatus(..),
-		openedModule, allOpens, depPathModule, allDepsModule, partOfGrammar,
+		openedModule, depPathModule, allDepsModule, partOfGrammar,
 		allExtends, allExtendSpecs, allExtendsPlus, allExtensions, 
                 searchPathModule, addModule,
 		emptyMGrammar, emptyModInfo,
@@ -34,7 +34,7 @@ module GF.Infra.Modules (
 		abstractOfConcrete, abstractModOfConcrete,
 		lookupModule, lookupModuleType, lookupInfo,
                 lookupPosition, ppPosition,
-		isModAbs, isModRes, isModCnc, isModTrans,
+		isModAbs, isModRes, isModCnc,
 		sameMType, isCompilableModule, isCompleteModule,
 		allAbstracts, greatestAbstract, allResources,
 		greatestResource, allConcretes, allConcreteModules
@@ -72,7 +72,6 @@ data ModInfo i a = ModInfo {
 -- | encoding the type of the module
 data ModuleType i = 
     MTAbstract 
-  | MTTransfer (OpenSpec i) (OpenSpec i) 
   | MTResource
   | MTConcrete i
     -- ^ up to this, also used in GFC. Below, source only.
@@ -141,18 +140,12 @@ openedModule o = case o of
   OSimple m -> m
   OQualif _ m -> m
 
-allOpens :: ModInfo i a -> [OpenSpec i]
-allOpens m = case mtype m of
-  MTTransfer a b -> a : b : opens m
-  _ -> opens m
-
 -- | initial dependency list
 depPathModule :: Ord i => ModInfo i a -> [OpenSpec i]
 depPathModule m = fors m ++ exts m ++ opens m
   where
     fors m = 
       case mtype m of
-        MTTransfer i j -> [i,j]
         MTConcrete i   -> [OSimple i]
         MTInstance i   -> [OSimple i]
         _              -> []
@@ -290,11 +283,6 @@ isModRes m = case mtype m of
 isModCnc :: ModInfo i a -> Bool
 isModCnc m = case mtype m of
   MTConcrete _ -> True
-  _ -> False
-
-isModTrans :: ModInfo i a -> Bool
-isModTrans m = case mtype m of
-  MTTransfer _ _ -> True
   _ -> False
 
 sameMType :: Eq i => ModuleType i -> ModuleType i -> Bool
