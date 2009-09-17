@@ -3,25 +3,25 @@ module GF.Command.TreeOperations (
   allTreeOps
   ) where
 
-import GF.Compile.TypeCheck
 import PGF
 import PGF.Data
-
 import Data.List
 
 type TreeOp = [Expr] -> [Expr]
 
-treeOp :: PGF -> String -> Maybe TreeOp
+treeOp :: PGF -> String -> Maybe (Either TreeOp (CId -> TreeOp))
 treeOp pgf f = fmap snd $ lookup f $ allTreeOps pgf
 
-allTreeOps :: PGF -> [(String,(String,TreeOp))]
+allTreeOps :: PGF -> [(String,(String,Either TreeOp (CId -> TreeOp)))]
 allTreeOps pgf = [
    ("compute",("compute by using semantic definitions (def)",
-      map (compute pgf))),
+      Left  $ map (compute pgf))),
+   ("transfer",("syntactic transfer by applying function and computing",
+      Right $ \f -> map (compute pgf . EApp (EFun f)))),
    ("paraphrase",("paraphrase by using semantic definitions (def)",
-      nub . concatMap (paraphrase pgf))),
+      Left  $ nub . concatMap (paraphrase pgf))),
    ("smallest",("sort trees from smallest to largest, in number of nodes",
-      smallest))
+      Left  $ smallest))
   ]
 
 smallest :: [Expr] -> [Expr]
