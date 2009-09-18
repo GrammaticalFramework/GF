@@ -652,7 +652,8 @@ allCommands cod env@(pgf, mos) = Map.fromList [
                                              putStrLn ("Type:       "++showType [] ty)
                                              return void
          _           -> do putStrLn "a single identifier or expression is expected from the command"
-                           return void
+                           return void,
+     needsTypeCheck = False
      })
   ]
  where
