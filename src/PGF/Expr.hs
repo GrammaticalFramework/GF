@@ -282,12 +282,12 @@ applyValue funs (VClosure env (EAbs x e)) (v:vs) = apply funs (v:env) e vs
 -----------------------------------------------------
 
 match :: Funs -> CId -> [Equation] -> [Value] -> [Value] -> Value
-match sig f eqs as0 vs0 =
+match funs f eqs as0 vs0 =
   case eqs of
     []               -> VApp f (as0++vs0)
     (Equ ps res):eqs -> tryMatches eqs ps as0 res []
   where
-    tryMatches eqs []     []     res env = apply sig env res vs0
+    tryMatches eqs []     []     res env = apply funs env res vs0
     tryMatches eqs (p:ps) (a:as) res env = tryMatch p a env
       where
         tryMatch (PVar x     ) (v                ) env            = tryMatches eqs  ps        as  res (v:env)
@@ -297,5 +297,5 @@ match sig f eqs as0 vs0 =
         tryMatch (p          ) (VSusp i envi vs k) env            = VSusp i envi vs (\v -> tryMatch p (k v) env)
         tryMatch (PApp f1 ps1) (VApp f2 vs2      ) env | f1 == f2 = tryMatches eqs (ps1++ps) (vs2++as) res env
         tryMatch (PLit l1    ) (VLit l2          ) env | l1 == l2 = tryMatches eqs  ps        as  res env
-        tryMatch _             _                   env            = match sig f eqs as0 vs0
+        tryMatch _             _                   env            = match funs f eqs as0 vs0
 
