@@ -7,10 +7,7 @@ A function type is expected for the expression 1 instead of type Int
 Couldn't match expected type Int -> Int
        against inferred type Int
 In the expression: 1
-
-
-Function unknown_fun is not in scope
-
+unknown category of function identifier unknown_fun
 
 Category unknown_cat is not in scope
 Cannot infer the type of expression \x -> x
