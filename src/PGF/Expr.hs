@@ -127,28 +127,27 @@ unDouble (ELit (LFlt f)) = Just f
 -----------------------------------------------------
 
 pExpr :: RP.ReadP Expr
-pExpr = pExpr0 >>= optTyped
+pExpr = RP.skipSpaces >> (pAbs RP.<++ pTerm)
   where
-    pExpr0  = RP.skipSpaces >> (pAbs RP.<++ pTerm)
-
     pTerm   =       fmap (foldl1 EApp) (RP.sepBy1 pFactor RP.skipSpaces)
 
     pAbs = do xs <- RP.between (RP.char '\\') (RP.skipSpaces >> RP.string "->") (RP.sepBy1 (RP.skipSpaces >> pCId) (RP.skipSpaces >> RP.char ','))
-              e  <- pExpr0
+              e  <- pExpr
               return (foldr EAbs e xs)
-
-    optTyped e = do RP.skipSpaces
-                    RP.char ':'
-                    RP.skipSpaces
-                    ty <- pType
-                    return (ETyped e ty)
-                 RP.<++
-                 return e 
                  
 pFactor =       fmap EFun  pCId
         RP.<++  fmap ELit  pLit
         RP.<++  fmap EMeta pMeta
         RP.<++  RP.between (RP.char '(') (RP.char ')') pExpr
+        RP.<++  RP.between (RP.char '<') (RP.char '>') pTyped
+
+pTyped = do RP.skipSpaces
+            e <- pExpr
+            RP.skipSpaces
+            RP.char ':'
+            RP.skipSpaces
+            ty <- pType
+            return (ETyped e ty)
 
 pMeta = do RP.char '?'
            return 0
@@ -184,7 +183,7 @@ ppExpr d scope (ELit l)     = ppLit l
 ppExpr d scope (EMeta n)    = ppMeta n
 ppExpr d scope (EFun f)     = ppCId f
 ppExpr d scope (EVar i)     = ppCId (scope !! i)
-ppExpr d scope (ETyped e ty)= ppParens (d > 0) (ppExpr 0 scope e PP.<+> PP.colon PP.<+> ppType 0 scope ty)
+ppExpr d scope (ETyped e ty)= PP.char '<' PP.<> ppExpr 0 scope e PP.<+> PP.colon PP.<+> ppType 0 scope ty PP.<> PP.char '>'
 
 ppPatt :: Int -> [CId] -> Patt -> ([CId],PP.Doc)
 ppPatt d scope (PApp f ps) = let (scope',ds) = mapAccumL (ppPatt 2) scope ps
