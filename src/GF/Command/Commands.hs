@@ -644,7 +644,7 @@ allCommands cod env@(pgf, mos) = Map.fromList [
                                                                           else space $$
                                                                                text "fun" <+> vcat [ppCId fid <+> colon <+> ppType 0 [] ty 
                                                                                                        | (fid,ty) <- functionsToCat pgf id])
-                                             Nothing   -> do putStrLn "unknown identifier"
+                                             Nothing   -> do putStrLn ("unknown category of function identifier "++show id)
                                                              return void
          [e]         -> case inferExpr pgf e of
                           Left tcErr   -> error $ render (ppTcError tcErr)
