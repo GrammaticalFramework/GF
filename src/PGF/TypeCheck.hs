@@ -358,12 +358,12 @@ eqType scope k i0 tty1@(TTyp delta1 ty1@(DTyp hyps1 cat1 es1)) tty2@(TTyp delta2
     eqValue' k (VMeta i env1 vs1)           (VMeta j env2 vs2) | i  == j = zipWithM_ (eqValue k) vs1 vs2
     eqValue' k (VMeta i env1 vs1)           v2                           = do (MUnbound scopei cs) <- getMeta i
                                                                               e2 <- mkLam i scopei env1 vs1 v2
-                                                                              sequence_ [c e2 | c <- cs]
                                                                               setMeta i (MBound e2)
+                                                                              sequence_ [c e2 | c <- cs]
     eqValue' k v1                           (VMeta i env2 vs2)           = do (MUnbound scopei cs) <- getMeta i
                                                                               e1 <- mkLam i scopei env2 vs2 v1
-                                                                              sequence_ [c e1 | c <- cs]
                                                                               setMeta i (MBound e1)
+                                                                              sequence_ [c e1 | c <- cs]
     eqValue' k (VApp f1 vs1)                (VApp f2 vs2) | f1 == f2     = zipWithM_ (eqValue k) vs1 vs2
     eqValue' k (VLit l1)                    (VLit l2    ) | l1 == l2     = return ()
     eqValue' k (VGen  i vs1)                (VGen  j vs2) | i  == j      = zipWithM_ (eqValue k) vs1 vs2
