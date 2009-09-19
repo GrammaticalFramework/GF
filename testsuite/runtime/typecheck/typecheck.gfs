@@ -1,22 +1,22 @@
 i -src testsuite/runtime/typecheck/Test.gf
 
 ai succ "0"
-ai succ : Int 0
+ai <succ : Int 0>
 ai 1 2
-ai (\x -> x 2 : (Int->Int)->Int) 1
+ai <\x -> x 2 : (Int->Int)->Int> 1
 ai unknown_fun
-ai 0 : unknown_cat
+ai <0 : unknown_cat>
 ai \x -> x
-ai \x -> x : Int
+ai <\x -> x : Int>
 ai append (succ (succ zero)) (succ zero) (vector (succ (succ zero))) (vector (succ zero))
-ai \m,n -> vector (plus m n) : (m,n : Nat) -> Vector (plus m n)
+ai <\m,n -> vector (plus m n) : (m,n : Nat) -> Vector (plus m n)>
 ai mkMorph (\x -> succ zero)
 ai idMorph (mkMorph (\x -> x))
 ai idMorph (mkMorph (\x -> succ zero))
-ai append zero (succ zero) : Vector zero -> Vector (succ zero) -> Vector (succ zero)
-ai \n,v1,n,v2 -> append ? ? v1 v2 : (n : Nat) -> Vector n -> (m : Nat) -> Vector m -> Vector (plus n m)
-ai \n -> (\v1,v2 -> eqVector n v1 v2 : Vector ? -> Vector ? -> EQ) (vector ?) : (n : Nat) -> Vector n -> EQ
-ai (\v1,v2 -> cmpVector ? v1 v2 : Vector ? -> Vector ? -> Int) (vector ?) 
+ai <append zero (succ zero) : Vector zero -> Vector (succ zero) -> Vector (succ zero)>
+ai <\n,v1,n,v2 -> append ? ? v1 v2 : (n : Nat) -> Vector n -> (m : Nat) -> Vector m -> Vector (plus n m)>
+ai <\n -> <\v1,v2 -> eqVector n v1 v2 : Vector ? -> Vector ? -> EQ> (vector ?) : (n : Nat) -> Vector n -> EQ>
+ai <\v1,v2 -> cmpVector ? v1 v2 : Vector ? -> Vector ? -> Int> (vector ?) 
 ai f0 ? vector
 ai f1 ? vector
 ai f1 ? (\x -> vector (succ x))
