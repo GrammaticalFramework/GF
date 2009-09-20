@@ -59,7 +59,7 @@ valTree  = valNode  . nodeTree
 mkNode :: Binds -> Atom -> Val -> (Constraints, MetaSubst) -> TrNode
 mkNode binds atom vtyp cs = N (binds,atom,vtyp,cs,False)
 
-metasTree :: Tree ->  [Meta]
+metasTree :: Tree ->  [MetaId]
 metasTree = concatMap metasNode . scanTree where
   metasNode n = [m | AtM m <- [atomNode n]] ++ map fst (metaSubstsNode n)
 
@@ -98,7 +98,6 @@ mAtom = AtM meta0
 -}
 
 type Var = Ident
-type Meta = MetaSymb
 
 uVal :: Val
 uVal = vClos uExp
@@ -113,7 +112,7 @@ mExp, mExp0 :: Exp
 mExp  = Meta meta0
 mExp0 = mExp
 
-meta2exp :: MetaSymb -> Exp
+meta2exp :: MetaId -> Exp
 meta2exp = Meta
 {-
 atomC :: Fun -> Atom
@@ -129,13 +128,13 @@ atomIsMeta atom = case atom of
   AtM _ -> True
   _   -> False
 
-getMetaAtom :: Atom -> Err Meta
+getMetaAtom :: Atom -> Err MetaId
 getMetaAtom a = case a of
   AtM m -> return m
   _ -> Bad "the active node is not meta"
 -}
 cat2val :: Context -> Cat -> Val
-cat2val cont cat = vClos $ mkApp (qq cat) [mkMeta i | i <- [1..length cont]]
+cat2val cont cat = vClos $ mkApp (qq cat) [Meta i | i <- [1..length cont]]
 
 val2cat :: Val -> Err Cat
 val2cat v = val2exp v >>= valCat
@@ -150,7 +149,7 @@ substTerm ss g c = case c of
                    Prod y (substTerm ss g a) (substTerm (y:ss) ((x,Vr y):g) b)
   _           -> c
 
-metaSubstExp :: MetaSubst -> [(Meta,Exp)]
+metaSubstExp :: MetaSubst -> [(MetaId,Exp)]
 metaSubstExp msubst = [(m, errVal (meta2exp m) (val2expSafe v)) | (m,v) <- msubst]
 
 -- * belong here rather than to computation
@@ -230,21 +229,6 @@ addBinds b (Tr (N (b0,at,t,c,x),ts)) = Tr (N (b ++ b0,at,t,c,x),ts)
 bodyTree :: Tree -> Tree
 bodyTree (Tr (N (_,a,t,c,x),ts)) = Tr (N ([],a,t,c,x),ts)
 -}
-refreshMetas :: [Meta] -> Exp -> Exp
-refreshMetas metas = fst . rms minMeta where
-  rms meta trm = case trm of
-    Meta m  -> (Meta meta, nextMeta meta)
-    App f a -> let (f',msf) = rms meta f 
-                   (a',msa) = rms msf a
-               in (App f' a', msa)
-    Prod x a b -> 
-               let (a',msa) = rms meta a 
-                   (b',msb) = rms msa b
-               in (Prod x a' b', msb)
-    Abs x b -> let (b',msb) = rms meta b in (Abs x b', msb)
-    _       -> (trm,meta)
-  minMeta = int2meta $ 
-              if null metas then 0 else (maximum (map metaSymbInt metas) + 1)
 
 ref2exp :: [Var] -> Type -> Ref -> Err Exp
 ref2exp bounds typ ref = do
@@ -284,8 +268,8 @@ mkJustProd cont typ = mkProd (cont,typ,[])
 int2var :: Int -> Ident
 int2var = identC . BS.pack . ('$':) . show
 
-meta0 :: Meta
-meta0 = int2meta 0
+meta0 :: MetaId
+meta0 = 0
 
 termMeta0 :: Term
 termMeta0 = Meta meta0

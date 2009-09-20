@@ -29,7 +29,7 @@ module GF.Grammar.Grammar (SourceGrammar,
 		Patt(..),
 		TInfo(..),
 		Label(..),
-		MetaSymb(..),
+		MetaId,
 		Hypo,
 		Context,
 		Equation,
@@ -115,7 +115,7 @@ data Term =
 
  | App Term Term        -- ^ application: @f a@
  | Abs Ident Term       -- ^ abstraction: @\x -> b@
- | Meta MetaSymb        -- ^ metavariable: @?i@ (only parsable: ? = ?0)
+ | Meta {-# UNPACK #-} !MetaId   -- ^ metavariable: @?i@ (only parsable: ? = ?0)
  | Prod Ident Term Term -- ^ function type: @(x : A) -> B@
  | Typed Term Term      -- ^ type-annotated term
 --
@@ -198,7 +198,7 @@ data Label =
   | LVar Int
    deriving (Show, Eq, Ord)
 
-newtype MetaSymb = MetaSymb Int    deriving (Show, Eq, Ord)
+type MetaId = Int
 
 type Hypo     = (Ident,Term)  -- (x:A)  (_:A)  A
 type Context  = [Hypo]        -- (x:A)(y:B)   (x,y:A)   (_,_:A)

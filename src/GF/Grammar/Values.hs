@@ -49,12 +49,12 @@ newtype TrNode = N (Binds,Atom,Val,(Constraints,MetaSubst),Bool)
   deriving (Eq,Show)
 
 data Atom = 
-  AtC Fun | AtM MetaSymb | AtV Ident | AtL String | AtI Integer | AtF Double
+  AtC Fun | AtM MetaId | AtV Ident | AtL String | AtI Integer | AtF Double
   deriving (Eq,Show)
 -}
 type Binds = [(Ident,Val)]
 type Constraints = [(Val,Val)]
-type MetaSubst = [(MetaSymb,Val)]
+type MetaSubst = [(MetaId,Val)]
 
 
 -- for TC

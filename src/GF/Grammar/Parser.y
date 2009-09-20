@@ -437,7 +437,7 @@ Exp6
   | String                { K $1 }
   | Integer               { EInt $1 }
   | Double                { EFloat $1 }
-  | '?'                   { Meta (int2meta 0) }
+  | '?'                   { Meta 0 }
   | '[' ']'               { Empty }
   | '[' Ident Exps ']'    { foldl App (Vr (mkListId $2)) $3 }
   | '[' String ']'        { case $2 of
