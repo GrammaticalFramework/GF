@@ -55,17 +55,17 @@ checkCond s b = if b then return () else checkError s
 checkWarn :: Message -> Check ()
 checkWarn msg = Check (\ctxt msgs -> Success () ctxt ((text "Warning:" <+> msg) : msgs))
 
-checkUpdate :: Decl -> Check ()
+checkUpdate :: Hypo -> Check ()
 checkUpdate d = Check (\ctxt msgs -> Success () (d:ctxt) msgs)
 
-checkInContext :: [Decl] -> Check r -> Check r
+checkInContext :: [Hypo] -> Check r -> Check r
 checkInContext g ch = do
   i <- checkUpdates g
   r <- ch
   checkResets i
   return r
 
-checkUpdates :: [Decl] -> Check Int
+checkUpdates :: [Hypo] -> Check Int
 checkUpdates ds = mapM checkUpdate ds >> return (length ds)
 
 checkReset :: Check ()

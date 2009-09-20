@@ -276,8 +276,8 @@ mkCTable :: [Ident] -> Term -> Term
 mkCTable ids v = foldr ccase v ids where 
   ccase x t = T TRaw [(PV x,t)]
 
-mkDecl :: Term -> Decl
-mkDecl typ = (identW, typ)
+mkHypo :: Term -> Hypo
+mkHypo typ = (identW, typ)
 
 eqStrIdent :: Ident -> Ident -> Bool
 eqStrIdent = (==)
