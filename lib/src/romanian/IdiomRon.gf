@@ -1,6 +1,6 @@
 concrete IdiomRon of Idiom = 
 -- CatRon **   open (P = ParamX), MorphoRon, ParadigmsRon,Prelude 
-CatRon ** open Prelude, ResRon
+CatRon ** open Prelude, ResRon,BeschRon
 in {
 
   flags optimize=all_subs ;
@@ -10,10 +10,10 @@ in {
   lin
     ImpersCl vp = mkClause "" (agrP3 Masc Sg) vp  ;
     
-    GenericCl vp = mkClause "" (agrP3 Masc Sg) vp ; -- an exact correspondent does not exist !
+    GenericCl vp = mkClause "cineva" (agrP3 Masc Sg) vp ; -- an exact correspondent does not exist !
 
     ExistNP np = 
-      mkClause "" np.a (insertSimpObj (\\ag => (np.s ! No ).comp) copula) ;
+      mkClause "" np.a (insertSimpObj (\\ag => (np.s ! No ).comp) (useVerb (v_besch20 "existã"))) ;
 -- v_besch20 "exista"
    
     ExistIP ip = {

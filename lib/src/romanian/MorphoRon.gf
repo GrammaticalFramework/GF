@@ -2133,7 +2133,7 @@ in
 verbAffixes sti (mkFromAffix root affixSgGr44 affixPlGr44) 
         (mkFromAffix root affixSgI2 affixPlI2) (mkFromAffix root affixSgPS7 affixPlPS7)
              (mkFromAffix root affixSgPP7 affixPlPP7) (root +"ie") (mkAdjReg (root + "iut"))
-                    (root + "iind") (variants{}) ;
+                    (root + "iind") "ºtii" ;
 --subGroup 5
 mkV123 : Str -> Verbe = \sui ->
 let root = init sui

@@ -24,7 +24,7 @@ concrete AdverbRon of Adverb =
       s = subj.s ++ s.s ! Indic
       }  ;
     
-    AdnCAdv cadv = {s = cadv.s ++ conjThan} ; 
+    AdnCAdv cadv = {s = cadv.s ++ cadv.sNum ++ conjThan} ; 
 -- doesn't yield to a correct form for more_CAdv
 
 }

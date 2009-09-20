@@ -4,20 +4,9 @@ concrete VerbRon of Verb =
   flags optimize=all_subs ;
 
   lin
-    UseV = \verb -> 
-    {
-    s = verb.s ; 
-    isRefl = verb.isRefl;
-    nrClit = verb.nrClit;
-    isFemSg = False ; pReflClit = verb.pReflClit ;
-    neg    = table {Pos => ""; Neg => "nu"} ;
-    clAcc  = RNoAg ;  nrClit = verb.nrClit; 
-    clDat  = RNoAg ; 
-    comp   = \\a => [] ;
-    ext    = \\p => [] ; 
-    } ;
+    UseV = useVerb ;
 
-    ComplVV v vp =insertSimpObj (\\a => "sã"  ++ (flattenSimpleClitics vp.nrClit vp.clAcc vp.clDat (vp.isRefl ! a)) ++ conjVP vp a ++vp.comp ! a ++ vp.ext ! Pos) (UseV v) ;
+    ComplVV v vp =insertSimpObj (\\a => "sã"  ++ (flattenSimpleClitics vp.nrClit vp.clAcc vp.clDat (vp.isRefl ! a)) ++ conjVP vp a ++vp.comp ! a ++ vp.ext ! Pos) (useVerb v) ;
 
 
     ComplVS v s  = insertExtrapos (\\b => conjThat ++ s.s ! (v.m ! b)) (predV v) ;
@@ -25,7 +14,7 @@ concrete VerbRon of Verb =
  
 
     ComplVA v ap = 
-    insertSimpObj (\\a => ap.s ! AF a.g a.n Indef ANomAcc) (UseV v) ;
+    insertSimpObj (\\a => ap.s ! AF a.g a.n Indef ANomAcc) (useVerb v) ;
 
 
     SlashV2a verb = {s = verb.s ; isRefl = verb.isRefl; nrClit = verb.nrClit;     
@@ -43,36 +32,36 @@ concrete VerbRon of Verb =
     Slash2V3 v np = let  s1 = v.c2.s ++(np.s ! (v.c2.c)).comp ;
                          ss = if_then_Str np.hasRef (v.c2.prepDir ++ s1) s1; 
                          sir = if_then_Str np.isPronoun "" ss ;
-                         vcDa = if_then_else VClit np.hasRef (nextClit v.nrClit PDat) v.nrClit;
-                         vcAc = if_then_else VClit np.hasRef (nextClit v.nrClit PAcc) v.nrClit   
+                         vcDa = if_then_else VClit np.hasClit (nextClit v.nrClit PDat) v.nrClit;
+                         vcAc = if_then_else VClit np.hasClit (nextClit v.nrClit PAcc) v.nrClit   
                          in
                                case v.c2.isDir of
-                                  {Dir PAcc => (insertObje (\\_ => sir) (clitFromNoun np Ac) RNoAg (isAgrFSg np.a) vcAc (UseV v)) ** {needAgr = False ; needClit = True ; c2 = v.c3} ;
-                                   Dir PDat => (insertObje (\\_ => sir) RNoAg (clitFromNoun np Da) False vcDa (UseV v)) ** {needAgr = False ; needClit = True ; c2 = v.c3};
-                                    _ => (insertSimpObjPre (\\_ => ss) (UseV v)) ** {needAgr = False ; needClit = True ; c2 = v.c3}
+                                  {Dir PAcc => (insertObje (\\_ => sir) (clitFromNoun np Ac) RNoAg (isAgrFSg np.a) vcAc (useVerb v)) ** {needAgr = False ; needClit = True ; c2 = v.c3} ;
+                                   Dir PDat => (insertObje (\\_ => sir) RNoAg (clitFromNoun np Da) False vcDa (useVerb v)) ** {needAgr = False ; needClit = True ; c2 = v.c3};
+                                    _ => (insertSimpObjPre (\\_ => ss) (useVerb v)) ** {needAgr = False ; needClit = True ; c2 = v.c3}
                                     };
     
     Slash3V3 v np = let s1 = v.c3.s ++ (np.s ! (v.c3.c)).comp ;
                         ss = if_then_Str np.hasRef (v.c3.prepDir ++ s1) s1 ;
                         sir = if_then_Str np.isPronoun "" ss ;
-                        vcDa = if_then_else VClit np.hasRef (nextClit v.nrClit PDat) v.nrClit;
-                        vcAc = if_then_else VClit np.hasRef (nextClit v.nrClit PAcc) v.nrClit  
+                        vcDa = if_then_else VClit np.hasClit (nextClit v.nrClit PDat) v.nrClit;
+                        vcAc = if_then_else VClit np.hasClit (nextClit v.nrClit PAcc) v.nrClit  
                             in
                            case v.c3.isDir of
-                            {Dir PAcc => (insertObje (\\_ => sir) (clitFromNoun np Ac) RNoAg (isAgrFSg np.a) vcAc (UseV v)) ** {needAgr = False ; needClit = True ; c2 = v.c2}  ;
-                             Dir PDat => (insertObje (\\_ => sir) RNoAg (clitFromNoun np Da) False vcDa (UseV v)) ** {needAgr = False ; needClit = True ; c2 = v.c2}  ;
-                            _ => (insertSimpObjPre (\\_ => ss) (UseV v)) ** {needAgr = False ; needClit = True ;c2 = v.c2}
+                            {Dir PAcc => (insertObje (\\_ => sir) (clitFromNoun np Ac) RNoAg (isAgrFSg np.a) vcAc (useVerb v)) ** {needAgr = False ; needClit = True ; c2 = v.c2}  ;
+                             Dir PDat => (insertObje (\\_ => sir) RNoAg (clitFromNoun np Da) False vcDa (useVerb v)) ** {needAgr = False ; needClit = True ; c2 = v.c2}  ;
+                            _ => (insertSimpObjPre (\\_ => ss) (useVerb v)) ** {needAgr = False ; needClit = True ;c2 = v.c2}
                              };
 
 -- needs fixing - agreement for the added verb must be made accordingly to what we add in ComplSlash !!! 
 -- fixed with extra parameter !
 
-    SlashV2V v vp =  (insertSimpObj (\\a =>  "sã" ++ (flattenSimpleClitics vp.nrClit vp.clAcc vp.clDat (vp.isRefl ! a)) ++ conjVP vp a ++ vp.comp ! a ++ vp.ext ! Pos) (UseV v)) ** {needAgr = True ; needClit = True ;c2 = v.c2} ; 
+    SlashV2V v vp =  (insertSimpObj (\\a =>  "sã" ++ (flattenSimpleClitics vp.nrClit vp.clAcc vp.clDat (vp.isRefl ! a)) ++ conjVP vp a ++ vp.comp ! a ++ vp.ext ! Pos) (useVerb v)) ** {needAgr = True ; needClit = True ;c2 = v.c2} ; 
 
 
-    SlashV2S v s = (insertExtrapos (\\b => conjThat ++ s.s ! Indic) (UseV v)) ** {needAgr = False; needClit = True ;c2 = v.c2}; 
+    SlashV2S v s = (insertExtrapos (\\b => conjThat ++ s.s ! Indic) (useVerb v)) ** {needAgr = False; needClit = True ;c2 = v.c2}; 
 
-    SlashV2Q v q = (insertExtrapos (\\_ => q.s ! QIndir) (UseV v)) ** {needAgr = False ; needClit = False ;c2 = v.c2 } ; 
+    SlashV2Q v q = (insertExtrapos (\\_ => q.s ! QIndir) (useVerb v)) ** {needAgr = False ; needClit = False ;c2 = v.c2 } ; 
 
    
 
@@ -80,13 +69,13 @@ concrete VerbRon of Verb =
  
    SlashV2A v ap =  
      (insertSimpObj  (\\a => v.c3.s ++ ap.s ! (AF Masc Sg Indef (convCase v.c3.c)))  
-(UseV v)) ** {needAgr = False ; needClit = True ; c2 = v.c2} ;
+(useVerb v)) ** {needAgr = False ; needClit = True ; c2 = v.c2} ;
 
     ComplSlash vp np =  let  s1 = vp.c2.s ++(np.s ! (vp.c2.c)).comp ;
                              ss = if_then_Str np.hasRef (vp.c2.prepDir ++ s1) s1 ; 
                              sir = if_then_Str np.isPronoun "" ss  ;
-                             vcDa = if_then_else VClit np.hasRef (nextClit vp.nrClit PDat) vp.nrClit;
-                             vcAc = if_then_else VClit np.hasRef (nextClit vp.nrClit PAcc) vp.nrClit;  
+                             vcDa = if_then_else VClit np.hasClit (nextClit vp.nrClit PDat) vp.nrClit;
+                             vcAc = if_then_else VClit np.hasClit (nextClit vp.nrClit PAcc) vp.nrClit;  
                              vpp =  case vp.c2.isDir of
                           {Dir PAcc => insertObje (\\_ => sir) (clitFromNoun np Ac) RNoAg (isAgrFSg np.a) vcAc vp  ;
                            Dir PDat => insertObje (\\_ => sir) RNoAg (clitFromNoun np Da) False vcDa vp;
@@ -129,25 +118,26 @@ concrete VerbRon of Verb =
       
 
     SlashVV v vp = 
-              insertObjc (\\a => "sã" ++ (flattenSimpleClitics vp.nrClit vp.clAcc vp.clDat (vp.isRefl ! a)) ++ conjVP vp a ++ vp.comp ! a ++ vp.ext ! Pos) ((UseV v) **{c2=vp.c2; needAgr= vp.needAgr ; needClit = False; lock_VPSlash = <>}) ;
+              insertObjc (\\a => "sã" ++ (flattenSimpleClitics vp.nrClit vp.clAcc vp.clDat (vp.isRefl ! a)) ++ conjVP vp a ++ vp.comp ! a ++ vp.ext ! Pos) ((useVerb v) **{c2=vp.c2; needAgr= vp.needAgr ; needClit = False; lock_VPSlash = <>}) ;
 
     SlashV2VNP v np vp = let  s1 = v.c2.s ++(np.s ! (v.c2.c)).comp ;
                               ss = if_then_Str np.hasRef (v.c2.prepDir ++ s1) s1; 
                               sir = if_then_Str np.isPronoun "" ss ;
-                              vcDa = if_then_else VClit np.hasRef (nextClit v.nrClit PDat) v.nrClit;
-                              vcAc = if_then_else VClit np.hasRef (nextClit v.nrClit PAcc) v.nrClit ;  
-                              vcomp = (getConjComp vp np.a).s
+                              vcDa = if_then_else VClit np.hasClit (nextClit v.nrClit PDat) v.nrClit;
+                              vcAc = if_then_else VClit np.hasClit (nextClit v.nrClit PAcc) v.nrClit ;  
+                              vvp = vp ** {lock_VP = <>};
+                              vcomp = (getConjComp vvp np.a).s
                            in   
                               case v.c2.isDir  of
-                                {Dir PAcc => (insertObje (\\a => sir ++ vcomp ! a) (clitFromNoun np Ac) RNoAg (isAgrFSg np.a) vcAc (UseV v)) ** {needAgr = vp.needAgr ; needClit = False ;c2 = vp.c2} ;
+                                {Dir PAcc => (insertObje (\\a => sir ++ vcomp ! a) (clitFromNoun np Ac) RNoAg (isAgrFSg np.a) vcAc (useVerb v)) ** {needAgr = vp.needAgr ; needClit = False ;c2 = vp.c2} ;
                                 
-                                 Dir PDat =>  (insertObje (\\a => sir ++ vcomp ! a) RNoAg (clitFromNoun np Da) False vcDa (UseV v)) ** {needAgr = vp.needAgr ; needClit = False ; c2 = vp.c2};
+                                 Dir PDat =>  (insertObje (\\a => sir ++ vcomp ! a) RNoAg (clitFromNoun np Da) False vcDa (useVerb v)) ** {needAgr = vp.needAgr ; needClit = False ; c2 = vp.c2};
                                  
-                                 _        => (insertSimpObjPre (\\a => ss ++ vcomp ! a) (UseV v)) ** {needAgr = vp.needAgr ; needClit = False ; c2 = vp.c2}  
+                                 _        => (insertSimpObjPre (\\a => ss ++ vcomp ! a) (useVerb v)) ** {needAgr = vp.needAgr ; needClit = False ; c2 = vp.c2}  
                                 };
 
 
-    UseComp comp = insertSimpObj comp.s (UseV copula) ;
+    UseComp comp = insertSimpObj comp.s copula ;
 
     CompAP ap = {s = \\ag => ap.s ! AF ag.g ag.n Indef ANomAcc} ;
     CompNP np = {s = \\_  => (np.s ! No).comp} ;
@@ -157,26 +147,7 @@ concrete VerbRon of Verb =
     AdvVP vp adv = insertAdv adv.s vp ;
     AdVVP adv vp = insertAdv adv.s vp ;
 
-    PassV2 v = insertSimpObj (\\a => v.s ! PPasse a.g a.n Indef ANomAcc) (UseV auxPassive) ;
-
-
-
-oper
-insertAdv : Str -> VP -> VP = \co,vp -> { 
-    s     = vp.s ;
-    isRefl = vp.isRefl;
-    isFemSg = vp.isFemSg ; pReflClit = vp.pReflClit ;
-    clAcc = vp.clAcc ; nrClit = vp.nrClit ;
-    clDat = vp.clDat ; 
-    neg   = vp.neg ; 
-    comp  = \\a => vp.comp ! a ++ co ;
-    ext   = vp.ext ;
-    lock_VP = <>
-    } ;
-
-
-
-
+    PassV2 v = insertSimpObj (\\a => v.s ! PPasse a.g a.n Indef ANomAcc) auxPassive ** {lock_VP = <>};
 
 
 
@@ -193,9 +164,4 @@ insertObjc : (Agr => Str) -> VPSlash -> VPSlash = \obj,vp ->
 getConjComp : VP -> Agr -> {s: Agr => Str} = \vp,ag ->
  {s  = \\a => "sã" ++ (flattenSimpleClitics vp.nrClit vp.clAcc vp.clDat (vp.isRefl ! a)) ++ conjVP vp ag ++ vp.comp ! a ++ vp.ext ! Pos};
 
--- discuss example 
--- l -table (ComplSlash (Slash3V3 sell_V3 (UsePN john_PN)) (UsePN paris_PN))
--- in English the direct object always comes first, which could lead to incorrect longer examples
--- while in French it always comes last
--- ?!?
 };
