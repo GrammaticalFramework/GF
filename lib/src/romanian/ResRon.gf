@@ -189,14 +189,13 @@ oper
     in {
     s = table {
       VPFinite tm Simul => case tm of 
-                             {
-        VPres Indic => vf "" (\a -> verb ! Indi Presn a.n a.p) ;
-        VPres Conjunct => vf "sã" (\a -> verb ! Subjo SPres a.n a.p) ;
-        VImperff  => vf "" (\a -> verb ! Indi Imparf a.n a.p)  ;
-        VPasse  Indic => vf "" (\a -> pComp ! a.n ! a.p ++ verb ! PPasse Masc Sg Indef ANomAcc) ; 
-        VPasse  Conjunct => vf "sã" (\a -> copula.s! Inf ++ verb ! PPasse Masc Sg Indef ANomAcc) ;
-        VFut => vf "" (\a -> pFut ! a.n ! a.p ++ verb ! Inf) ;
-        VCondit => vf "" (\a -> pCond ! a.n ! a.p ++ verb ! Inf) 
+                             {VPres Indic => vf "" (\a -> verb ! Indi Presn a.n a.p) ;
+                              VPres Conjunct => vf "sã" (\a -> verb ! Subjo SPres a.n a.p) ;
+                              VImperff  => vf "" (\a -> verb ! Indi Imparf a.n a.p)  ;
+                              VPasse  Indic => vf "" (\a -> pComp ! a.n ! a.p ++ verb ! PPasse Masc Sg Indef ANomAcc) ; 
+                              VPasse  Conjunct => vf "sã" (\a -> copula.s! Inf ++ verb ! PPasse Masc Sg Indef ANomAcc) ;
+                              VFut => vf "" (\a -> pFut ! a.n ! a.p ++ verb ! Inf) ;
+                              VCondit => vf "" (\a -> pCond ! a.n ! a.p ++ verb ! Inf) 
                               } ;  
       VPFinite tm Anter => case tm of 
                               {VPres Indic => vf "" (\a -> pComp ! a.n ! a.p ++ verb ! PPasse Masc Sg Indef ANomAcc) ; 
@@ -237,7 +236,21 @@ oper
     } ;     
             
 -- various helper functions for VerbRon     
-           
+        
+useVerb : Verb -> VerbPhrase =\verb -> 
+    {
+    s = verb.s ; 
+    isRefl = verb.isRefl;
+    nrClit = verb.nrClit;
+    isFemSg = False ; pReflClit = verb.pReflClit ;
+    neg    = table {Pos => ""; Neg => "nu"} ;
+    clAcc  = RNoAg ;  nrClit = verb.nrClit; 
+    clDat  = RNoAg ; 
+    comp   = \\a => [] ;
+    ext    = \\p => [] ; 
+    lock_V = <>
+    } ;
+        
  insertExtrapos : (Polarity => Str) -> VerbPhrase -> VerbPhrase = \co,vp -> { 
     s     = vp.s ;
     isFemSg = vp.isFemSg ;
@@ -273,7 +286,18 @@ oper
    comp = \\a => obj ! a ++ vp.comp ! a  ;
    ext = vp.ext 
    };
-            
+  
+insertAdv : Str -> VerbPhrase -> VerbPhrase = \co,vp -> { 
+    s     = vp.s ;
+    isRefl = vp.isRefl;
+    isFemSg = vp.isFemSg ; pReflClit = vp.pReflClit ;
+    clAcc = vp.clAcc ; nrClit = vp.nrClit ;
+    clDat = vp.clDat ; 
+    neg   = vp.neg ; 
+    comp  = \\a => vp.comp ! a ++ co ;
+    ext   = vp.ext 
+    } ;
+  
 -----------------------------------------------------------------   
 ---------------3 CATEGORY DEFINITIONS ---------------------------  
 -----------------------------------------------------------------
@@ -288,8 +312,8 @@ oper
  NounPhrase : Type = {s : NCase => {comp : Str ; clit : Clitics => Str} ;
                       a : Agr ; 
                       indForm : Str ; --needed for prepositions that demand the indefinite form of a NP  
-                      hasClit : Bool ; --
-                      hasRef : Bool ; -- needed to indicate if the NP is referenced or not - for the use of clitics
+                      hasClit : Bool ; -- needed to indicate if the NP has clitics or not (and is referenced also)
+                      hasRef : Bool ; -- needed to indicate if the NP is referenced or not - for the use of the preposition for Accusative
                       isPronoun : Bool -- in the case of pronouns, just the clitics are used, and not the comp form
                      } ;   
  VerbPhrase :Type = {
@@ -484,9 +508,9 @@ oper
             RCond  => VCondit ;        
             RPres  => VPres m
             } ;
-          cmp = case <<t,a,m> : RTense * Anteriority * Mood> of {
-            <RPast,Simul,Indic> | <RPres, Anter,Indic> => True ; --# notpresent
-            <RCond, _, _> => True;  --# notpresent
+          cmp = case <t,a,m> of 
+           {<RPast,Simul,Indic> | <RPres, Anter,Indic> => True ;
+            <RCond, _, _> => True;
             _             => False
             } ;
           vp    = useVP vpr ;
@@ -515,7 +539,7 @@ oper
     indForm = np.ss ; 
     hasClit = np.hasClit ;
     isPronoun = False;
-    hasRef = False    
+    hasRef = np.hasClit    
     } ;
  
  genForms : Str -> Str -> Gender => Str = \bon,bonne ->

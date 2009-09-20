@@ -1,7 +1,7 @@
 --# -path=.:../Romance:../common:../abstract:../common:prelude
 
 concrete CatRon of Cat =
-  CommonX - [Temp,TTAnt,Tense,TPres,TPast,TFut,TCond] 
+  CommonX - [CAdv,Temp,TTAnt,Tense,TPres,TPast,TFut,TCond] 
   ** open Prelude, ResRon, MorphoRon,(R = ParamX) in {
 
   flags optimize=all_subs ;
@@ -41,6 +41,10 @@ concrete CatRon of Cat =
 
    AP = {s : AForm => Str ; isPre : Bool} ; 
 
+-- Adverb
+   
+   CAdv = {s, sNum, p : Str };   
+   
 -- Noun
  
    CN      = {s : Number => Species => ACase => Str; g : NGender; a : Animacy } ; 

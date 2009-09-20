@@ -24,7 +24,7 @@ concrete NounRon of Noun =
         hasClit = hr ;
         hasRef = hr ;
         isPronoun = False ;
-        indForm = det.s ! gg ! No ++ det.size ++cn.s ! n ! rs ! ANomAcc 
+        indForm = det.s ! gg ! No ++ det.size ++cn.s ! n ! rs ! ANomAcc ++ det.post ! gg ! No 
              
         } ;
 
@@ -60,7 +60,7 @@ concrete NounRon of Noun =
                     clit = (np.s ! c).clit };
         a = np.a ;
         hasClit = np.hasClit ;
-        hasRef = False ;
+        hasRef = np.hasRef ;
         isPronoun = False ;
         indForm = pred.s ! aagr (np.a.g) (np.a.n) ! ANomAcc ++ (np.s ! pred.c).comp
    } ;
@@ -77,42 +77,45 @@ concrete NounRon of Noun =
     RelNP np rs = heavyNP {
       s = \\c => (np.s ! c).comp ++ rs.s ! Indic ! np.a ;
       a = np.a ;
-      hasClit = False ;
+      hasClit = np.hasClit ;
       ss = (np.s ! No).comp ++ rs.s ! Indic ! np.a  
      } ;
 
     AdvNP np adv = heavyNP {
       s = \\c => (np.s ! c).comp ++ adv.s ;
       a = np.a ;
-      hasClit = False;
+      hasClit = np.hasClit;
       ss = (np.s ! No).comp ++adv.s ;
       } ;
 
     DetQuantOrd quant num ord = let n = num.n                                       
 in {
       s = \\g,c => let s1 = if_then_Str quant.isDef (ord.s ! n ! g ! c) (ord.s ! n ! g ! No);
-                       s2 = if_then_Str quant.isPost "" (quant.s ! num.isNum ! n ! g  ! (convCase c) ) 
+                       s2 = if_then_Str quant.isPost "" (quant.s ! num.isNum ! n ! g  ! (convCase c) ++ s1) 
                   
                     in 
-                    s2 ++ s1 ++ num.s ! g  ;
+                    s2 ++ num.s ! g  ;
       sp = \\g,c => let 
                         s1 = if_then_Str quant.isDef (ord.s ! n ! g ! c) (ord.s ! n ! g ! No) ;
                         s3 = if_then_Str quant.isPost (s1 ++ num.sp ! g ++ quant.sp ! n ! g ! ANomAcc) (quant.sp ! n ! g ! (convCase c) ++ s1 ++ num.sp ! g) 
                         
                       in   
                       s3 ; 
-      post = \\g,c => let s2 = if_then_Str quant.isPost (quant.s ! num.isNum ! n ! g  ! (convCase c)) ""     
+      post = \\g,c => let s1 = ord.s ! n ! g ! No;
+                          s2 = if_then_Str quant.isPost (quant.s ! num.isNum ! n ! g  ! (convCase c) ++ s1) ""     
                       in  
                       s2    ;
       n = num.n ;
-      isDef = False;
+      isDef = quant.hasRef;
       size = num.size;
       hasRef = quant.hasRef 
 
       } ;
 
     DetQuant quant num = let n = num.n ;
-                             needDem = andB quant.isDef num.isNum                                     
+                             needDem = case num.n of 
+                                        { Sg => False ; -- for the moment, since no other construction would convey the proper meaning of "the one man"
+                                           _ => andB quant.isDef num.isNum}                                      
         in {
       s  = \\g,c => let s1 = if_then_Str quant.isPost "" (quant.s ! num.isNum ! n ! g ! (convCase c)) ; 
                         s2 = if_then_Str needDem (artDem g n (convCase c)) ""   
@@ -130,7 +133,7 @@ in {
       hasRef = quant.hasRef
       } ;
 
--- consider fixing for possesive pronouns !
+
     DetNP det = 
       let 
         g = Masc ;  
@@ -159,8 +162,9 @@ in {
     NumPl = {s = \\_ => [] ; sp = \\_ => [] ; isNum = False ; n = Pl ; size = ""} ;
 
     NumCard n = {s = n.s ; sp = n.sp ; size = getSize n.size ;
-                 isNum = True;  n = getNumber n.size   
-                      } ;
+                 isNum = True;  
+                 n = getNumber n.size   
+                 } ;
 
     NumDigits nu = {s,sp = \\g => nu.s ! NCard g ;
                     size = nu.n; n = getNumber nu.n };
@@ -210,6 +214,7 @@ in {
       } ;
 
 -- since mass noun phrases are not referential, it's no point keeping track of clitics
+-- no matter if the noun is animate or not
 
     MassNP cn = let 
         g = case cn.g of
@@ -221,10 +226,9 @@ in {
         s = \\c =>   {comp = cn.s ! n ! Indef ! (convCase c); 
                       clit = \\cs => []  } ;
         a = agrP3 g n ;
-        hasClit = hc ;
+        hasClit = False ;
         hasRef = False ;
         isPronoun = False ;
-        poss = \\g,n => [] ;
         indForm = cn.s ! n ! Indef ! ANomAcc
         } ;
 
@@ -254,19 +258,10 @@ in {
         g = cn.g         
       in {
         s =  case ap.isPre of 
-                 {True => \\n => table {Def => \\c => case c of 
-                                               {Voc => ap.s ! (AF (agrGender g n) n Def ANomAcc) ++ cn.s ! n ! Indef ! ANomAcc;
-                                                _   => ap.s ! (AF (agrGender g n) n Def c) ++ cn.s ! n ! Indef ! c
-                                                };
-                                        Indef => \\c => case c of 
-                                                 {Voc => ap.s ! (AF (agrGender g n) n Indef ANomAcc) ++ cn.s ! n ! Indef ! ANomAcc;
-                                                  _   => ap.s ! (AF (agrGender g n) n Indef c) ++ cn.s ! n ! Indef ! c}};
-                  False => \\n => table {Def => \\c => case c of 
-                                                 {Voc => cn.s ! n ! Indef ! ANomAcc ++ ap.s ! (AF (agrGender g n) n Indef ANomAcc);
-                                                  _   => cn.s ! n ! Def ! c ++ ap.s ! (AF (agrGender g n) n Indef c)};
-                                         Indef => \\c => case c of 
-                                                 {Voc => cn.s ! n ! Indef ! ANomAcc ++ ap.s ! (AF (agrGender g n) n Indef ANomAcc);
-                                                  _   => cn.s ! n ! Indef ! c ++ ap.s ! (AF (agrGender g n) n Indef c) }} 
+                 {True => \\n => table {Def => \\c => ap.s ! (AF (agrGender g n) n Def c) ++ cn.s ! n ! Indef ! c;
+                                        Indef => \\c => ap.s ! (AF (agrGender g n) n Indef c) ++ cn.s ! n ! Indef ! c};
+                  False => \\n => table {Def => \\c => cn.s ! n ! Def ! c ++ ap.s ! (AF (agrGender g n) n Indef c);
+                                         Indef => \\c => cn.s ! n ! Indef ! c ++ ap.s ! (AF (agrGender g n) n Indef c) } 
                  };
         g = g ;
         a = cn.a

@@ -62,9 +62,9 @@ lin
      mkPronoun
       "" "el" "lui" "lui" [] "sãu" "sa" "sãi" "sale"  Masc Sg P3 ;
   
-  less_CAdv = X.mkCAdv "mai puþin" conjThan ;
+  less_CAdv = {s = "mai puþin" ; sNum = ""; p = conjThan ; lock_CAdv = <> } ; 
   many_Det = mkDet "mulþi" "multe" "multor" "multor" "mulþi" "multe" "multora" "multora" Pl; 
-  more_CAdv = X.mkCAdv "mai" conjThan ;
+  more_CAdv = {s = "mai" ; sNum = "mult" ; p =conjThan ; lock_CAdv = <>};
   most_Predet = {
     s = \\a => table { AGenDat => "marii parþi a" ;
                        ANomAcc => "marea parte a"; 
@@ -294,7 +294,7 @@ whatPl_IP =
 
   except_Prep = mkPrep "cu excepþia" Ge ;
 
-  as_CAdv = X.mkCAdv "la fel de" "ca" ;
+  as_CAdv = { s = "la fel de"; sNum = "mult"; p = "ca" ; lock_CAdv = <> };
 
 }
 

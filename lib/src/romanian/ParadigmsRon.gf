@@ -200,23 +200,23 @@ ccompN : N -> Str -> N ;
 ccompN x y = ccompose x y ** {lock_N = <>} ;
 
 mkNI : Str -> Str -> NGender -> N;
-mkNI s ss g = mkIn (mkNomIrreg s ss g) ** {lock_N = <>} ; 
+mkNI s ss g = mkInanimate (mkNomIrreg s ss g) ** {lock_N = <>}; 
              
 regN : Str -> NGender -> N ;
-regN s g = mkIn (mkNomReg s g) ** {lock_N = <>};
+regN s g = mkInanimate (mkNomReg s g) ** {lock_N = <>};
              
 
 mkVI : Str -> Str -> Str -> N;
-mkVI s ss sss = mkIn (mkNomVIrreg s ss sss) ** {lock_N = <>} ;
+mkVI s ss sss = mkInanimate (mkNomVIrreg s ss sss) ** {lock_N = <>};
 
 mkIn : N -> N ;
-mkIn n = mkInanimate n ** {lock_N = <> };
+mkIn n = mkInanimate n ** {lock_N = <>};
 
 mkAnim : N -> N ;
-mkAnim n = mkAnimate n ** {lock_N = <> }; 
+mkAnim n = mkAnimate n ** {lock_N = <>}; 
 
 chV : Str -> N -> N ;
-chV s n = mkVocc n s ** {lock_N = <> } ;
+chV s n = mkVocc n s ** {lock_N = <>};
 
 
 --smart paradigm for inferring the gender of the nouns
@@ -255,7 +255,7 @@ mkNN s ss = case s of
 --we treat this case separately :
    
 mkNR : Str -> N;
-mkNR s = mkIn (mkNomNeut s) ** {lock_N = <>} ;
+mkNR s = mkInanimate (mkNomNeut s) ** {lock_N = <>} ;
 
 --------------------------------------------------------------------
 

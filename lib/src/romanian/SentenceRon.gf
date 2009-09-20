@@ -36,7 +36,7 @@
     SlashVP np v2 = 
       {s = \\bb,ag=> 
           let 
-            vp = v2 ;
+            vp = v2 ** {lock_VP = <>};
             bcond = andB vp.needClit bb
             in
             case <bcond,v2.c2.isDir> of
