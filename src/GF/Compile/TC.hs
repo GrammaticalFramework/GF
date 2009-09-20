@@ -37,7 +37,7 @@ data AExp =
    | AInt  Integer 
    | AFloat Double
    | AStr  String
-   | AMeta MetaSymb Val
+   | AMeta MetaId Val
    | AApp  AExp AExp Val 
    | AAbs  Ident Val AExp 
    | AProd Ident AExp AExp 
@@ -234,7 +234,7 @@ checkBranch th tenv b@(ps,t) ty = errIn ("branch" +++ show b) $
 
   ps2ts k = foldr p2t ([],0,[],k) 
   p2t p (ps,i,g,k) = case p of
-     PW      -> (Meta (MetaSymb i) : ps, i+1,g,k) 
+     PW      -> (Meta i : ps, i+1,g,k) 
      PV x    -> (Vr x   : ps, i, upd x k g,k+1)
      PString s -> (K s : ps, i, g, k)
      PInt n -> (EInt n : ps, i, g, k)

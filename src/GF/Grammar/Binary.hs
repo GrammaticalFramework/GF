@@ -254,10 +254,6 @@ instance Binary Label where
              1 -> fmap LVar   get
              _ -> decodingError
 
-instance Binary MetaSymb where
-  put (MetaSymb m) = put m
-  get = fmap MetaSymb get
-
 decodeModHeader :: FilePath -> IO SourceModule
 decodeModHeader fpath = do
   (m,mtype,mstatus,flags,extend,mwith,opens,med) <- decodeFile fpath

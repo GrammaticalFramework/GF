@@ -364,49 +364,6 @@ justIdentOf (Vr x) = Just x
 justIdentOf (Cn x) = Just x
 justIdentOf _ = Nothing
 
-isMeta :: Term -> Bool
-isMeta (Meta _) = True
-isMeta _ = False
-
-mkMeta :: Int -> Term
-mkMeta = Meta . MetaSymb
-
-nextMeta :: MetaSymb -> MetaSymb
-nextMeta = int2meta . succ . metaSymbInt
-
-int2meta :: Int -> MetaSymb
-int2meta = MetaSymb
-
-metaSymbInt :: MetaSymb -> Int
-metaSymbInt (MetaSymb k) = k
-
-freshMeta :: [MetaSymb] -> MetaSymb
-freshMeta ms = MetaSymb (minimum [n | n <- [0..length ms], 
-                                      notElem n (map metaSymbInt ms)])
-
-mkFreshMetasInTrm :: [MetaSymb] -> Term -> Term
-mkFreshMetasInTrm metas = fst . rms minMeta where
-  rms meta trm = case trm of
-    Meta m  -> (Meta (MetaSymb meta), meta + 1)
-    App f a -> let (f',msf) = rms meta f 
-                   (a',msa) = rms msf a
-               in (App f' a', msa)
-    Prod x a b -> 
-               let (a',msa) = rms meta a 
-                   (b',msb) = rms msa b
-               in (Prod x a' b', msb)
-    Abs x b -> let (b',msb) = rms meta b in (Abs x b', msb)
-    _       -> (trm,meta)
-  minMeta = if null metas then 0 else (maximum (map metaSymbInt metas) + 1)
-
--- | decides that a term has no metavariables
-isCompleteTerm :: Term -> Bool
-isCompleteTerm t = case t of
-  Meta _  -> False
-  Abs _ b -> isCompleteTerm b
-  App f a -> isCompleteTerm f && isCompleteTerm a
-  _       -> True 
-
 linTypeStr :: Type
 linTypeStr = mkRecType linLabel [typeStr] -- default lintype {s :: Str}
 
@@ -695,9 +652,6 @@ noExist = FV []
 
 defaultLinType :: Type
 defaultLinType = mkRecType linLabel [typeStr]
-
-metaTerms :: [Term]
-metaTerms = map (Meta . MetaSymb) [0..]
 
 -- | from GF1, 20\/9\/2003
 isInOneType :: Type -> Bool

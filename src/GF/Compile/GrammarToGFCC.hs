@@ -139,7 +139,7 @@ mkExp scope t = case GM.termForm t of
       EInt i   -> C.ELit (C.LInt i)
       EFloat f -> C.ELit (C.LFlt f)
       K s      -> C.ELit (C.LStr s)
-      Meta (MetaSymb i) -> C.EMeta i
+      Meta i   -> C.EMeta i
       _        -> C.EMeta 0
 
 mkPatt scope p = 
