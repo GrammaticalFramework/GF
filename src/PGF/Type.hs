@@ -1,4 +1,4 @@
-module PGF.Type ( Type(..), Hypo(..),
+module PGF.Type ( Type(..), Hypo,
                   readType, showType,
                   pType, ppType, ppHypo ) where
 
@@ -16,11 +16,7 @@ data Type =
   deriving (Eq,Ord,Show)
 
 -- | 'Hypo' represents a hypothesis in a type i.e. in the type A -> B, A is the hypothesis
-data Hypo =
-    Hyp      Type      -- ^ hypothesis without bound variable like in A -> B
-  | HypV CId Type      -- ^ hypothesis with bound variable like in (x : A) -> B x
-  | HypI CId Type      -- ^ hypothesis with bound implicit variable like in {x : A} -> B x
-  deriving (Eq,Ord,Show)
+type Hypo = (BindType,CId,Type)
 
 -- | Reads a 'Type' from a 'String'.
 readType :: String -> Maybe Type
@@ -45,23 +41,23 @@ pType = do
   where
     pHypo =
       do (cat,args) <- pAtom
-         return [Hyp (DTyp [] cat args)]
+         return [(Explicit,wildCId,DTyp [] cat args)]
       RP.<++
       (RP.between (RP.char '(') (RP.char ')') $ do
-         hyp <- RP.option (\ty -> [Hyp ty]) $ do
-                     vs <- RP.sepBy (RP.skipSpaces >> pCId) (RP.skipSpaces >> RP.char ',')
+         xs <- RP.option [(Explicit,wildCId)] $ do
+                     xs <- pBinds
                      RP.skipSpaces
                      RP.char ':'
-                     return (\ty -> [HypV v ty | v <- vs])
+                     return xs
          ty <- pType
-         return (hyp ty))
+         return [(b,v,ty) | (b,v) <- xs])
       RP.<++
       (RP.between (RP.char '{') (RP.char '}') $ do
          vs <- RP.sepBy1 (RP.skipSpaces >> pCId) (RP.skipSpaces >> RP.char ',')
          RP.skipSpaces
          RP.char ':'
          ty <- pType
-         return [HypI v ty | v <- vs])
+         return [(Implicit,v,ty) | v <- vs])
 
     pAtom = do
       cat <- pCId
@@ -77,8 +73,11 @@ ppType d scope (DTyp hyps cat args)
   where
     ppRes scope cat es = ppCId cat PP.<+> PP.hsep (map (ppExpr 4 scope) es)
 
-ppHypo scope (Hyp    typ) = (  scope,ppType 1 scope typ)
-ppHypo scope (HypV x typ) = let y = freshName x scope
-                            in (y:scope,PP.parens (ppCId y PP.<+> PP.char ':' PP.<+> ppType 0 scope typ))
-ppHypo scope (HypI x typ) = let y = freshName x scope
-                            in (y:scope,PP.braces (ppCId y PP.<+> PP.char ':' PP.<+> ppType 0 scope typ))
+ppHypo scope (Explicit,x,typ) = if x == wildCId
+                                  then (scope,ppType 1 scope typ)
+                                  else let y = freshName x scope
+                                       in (y:scope,PP.parens (ppCId y PP.<+> PP.char ':' PP.<+> ppType 0 scope typ))
+ppHypo scope (Implicit,x,typ) = if x == wildCId
+                                  then (scope,PP.parens (PP.braces (ppCId x) PP.<+> PP.char ':' PP.<+> ppType 0 scope typ))
+                                  else let y = freshName x scope
+                                       in (y:scope,PP.parens (PP.braces (ppCId y) PP.<+> PP.char ':' PP.<+> ppType 0 scope typ))

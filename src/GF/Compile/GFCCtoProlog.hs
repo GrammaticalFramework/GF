@@ -19,7 +19,7 @@ import GF.Text.UTF8
 
 import qualified Data.Map as Map
 import Data.Char (isAlphaNum, isAsciiLower, isAsciiUpper, ord)
-import Data.List (isPrefixOf)
+import Data.List (isPrefixOf,mapAccumL)
 
 grammar2prolog, grammar2prolog_abs :: PGF -> String
 -- Most prologs have problems with UTF8 encodings, so we skip that:
@@ -67,7 +67,7 @@ plAbstract (name, Abstr aflags funs cats _catfuns) =
 
 plCat :: (CId, [Hypo]) -> String
 plCat (cat, hypos) = plFact "cat" (plTypeWithHypos typ) 
-    where ((_,subst), hypos') = alphaConvert emptyEnv hypos
+    where ((_,subst), hypos') = mapAccumL alphaConvertHypo emptyEnv hypos
           args = reverse [EFun x | (_,x) <- subst]
           typ = DTyp hypos' cat args
 
@@ -76,7 +76,7 @@ plFun (fun, (typ,_,_)) = plFact "fun" (plp fun : plTypeWithHypos typ')
     where typ' = snd $ alphaConvert emptyEnv typ
 
 plTypeWithHypos :: Type -> [String]
-plTypeWithHypos (DTyp hypos cat args) = [plTerm (plp cat) (map plp args), plp hypos]
+plTypeWithHypos (DTyp hypos cat args) = [plTerm (plp cat) (map plp args), plList (map (\(_,x,ty) -> plOper ":" (plp x) (plp ty)) hypos)]
 
 plFundef :: (CId, (Type,Int,[Equation])) -> [String]
 plFundef (fun, (_,_,[])) = []
@@ -110,17 +110,12 @@ plConcrete (cncname, Concr cflags lins opers lincats lindefs
 
 instance PLPrint Type where
     plp (DTyp hypos cat args) | null hypos = result
-                              | otherwise  = plOper " -> " (plp hypos) result
+                              | otherwise  = plOper " -> " (plList (map (\(_,x,ty) -> plOper ":" (plp x) (plp ty)) hypos)) result
         where result = plTerm (plp cat) (map plp args)
-
-instance PLPrint Hypo where
-    plp (Hyp      typ) = plOper ":" (plp wildCId) (plp typ)
-    plp (HypI var typ) = plOper ":" (plp var) (plp typ)
-    plp (HypV var typ) = plOper ":" (plp var) (plp typ)
 
 instance PLPrint Expr where
     plp (EFun x)    = plp x
-    plp (EAbs x e)  = plOper "^" (plp x) (plp e)
+    plp (EAbs _ x e)= plOper "^" (plp x) (plp e)
     plp (EApp e e') = plOper " * " (plp e) (plp e')
     plp (ELit lit)  = plp lit
     plp (EMeta n)   = "Meta_" ++ show n
@@ -259,21 +254,15 @@ instance AlphaConvert a => AlphaConvert [a] where
 instance AlphaConvert Type where
     alphaConvert env@(_,subst) (DTyp hypos cat args) 
         = ((ctr,subst), DTyp hypos' cat args')
-        where (env',   hypos') = alphaConvert env hypos
+        where (env',   hypos') = mapAccumL alphaConvertHypo env hypos
               ((ctr,_), args') = alphaConvert env' args
 
-instance AlphaConvert Hypo where
-    alphaConvert env (Hyp typ) = ((ctr+1,subst), Hyp typ')
-        where ((ctr,subst), typ') = alphaConvert env typ
-    alphaConvert env (HypI x typ) = ((ctr+1,(x,x'):subst), HypI x' typ')
-        where ((ctr,subst), typ') = alphaConvert env typ
-              x' = createLogicalVariable ctr
-    alphaConvert env (HypV x typ) = ((ctr+1,(x,x'):subst), HypV x' typ')
-        where ((ctr,subst), typ') = alphaConvert env typ
-              x' = createLogicalVariable ctr
+alphaConvertHypo env (b,x,typ) = ((ctr+1,(x,x'):subst), (b,x',typ'))
+    where ((ctr,subst), typ') = alphaConvert env typ
+          x' = createLogicalVariable ctr
 
 instance AlphaConvert Expr where
-    alphaConvert (ctr,subst) (EAbs x e) = ((ctr',subst), EAbs x' e')
+    alphaConvert (ctr,subst) (EAbs b x e) = ((ctr',subst), EAbs b x' e')
         where ((ctr',_), e') = alphaConvert (ctr+1,(x,x'):subst) e
               x' = createLogicalVariable ctr
     alphaConvert env (EApp e1 e2) = (env'', EApp e1' e2')

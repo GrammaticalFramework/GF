@@ -59,8 +59,8 @@ linTree :: PGF -> CId -> Expr -> Term
 linTree pgf lang = lin . expr2tree
   where
     lin (Abs xs  e )   = case lin e of
-                             R ts -> R $ ts     ++ (Data.List.map (kks . showCId) xs)
-                             TM s -> R $ (TM s)  : (Data.List.map (kks . showCId) xs)
+                             R ts -> R $ ts     ++ (Data.List.map (kks . showCId . snd) xs)
+                             TM s -> R $ (TM s)  : (Data.List.map (kks . showCId . snd) xs)
     lin (Fun fun es)   = let argVariants = mapM (liftVariants . lin) es
                           in variants [compute pgf lang args $ look fun | args <- argVariants]
     lin (Lit (LStr s)) = R [kks (show s)] -- quoted
@@ -130,8 +130,8 @@ linTreeMark :: PGF -> CId -> Expr -> Term
 linTreeMark pgf lang = lin [] . expr2tree
   where
     lin p (Abs xs  e )   = case lin p e of
-                             R ts -> R $ ts     ++ (Data.List.map (kks . showCId) xs)
-                             TM s -> R $ (TM s)  : (Data.List.map (kks . showCId) xs)
+                             R ts -> R $ ts     ++ (Data.List.map (kks . showCId . snd) xs)
+                             TM s -> R $ (TM s)  : (Data.List.map (kks . showCId . snd) xs)
     lin p (Fun fun es)   = let argVariants = 
                                 mapM (\ (i,e) -> liftVariants $ lin (sub p i) e) (zip [0..] es)
                           in variants [mark p $ compute pgf lang args $ look fun | args <- argVariants]

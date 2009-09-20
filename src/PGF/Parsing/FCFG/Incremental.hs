@@ -134,7 +134,7 @@ extractTrees (State pgf pinfo chart items) ty@(DTyp _ start _) =
 
     check_ho_fun fun args
       | fun == _V = return (head args)
-      | fun == _B = return (foldl1 Set.difference (map fst args), foldr (\x e -> EAbs (mkVar (snd x)) e) (snd (head args)) (tail args))
+      | fun == _B = return (foldl1 Set.difference (map fst args), foldr (\x e -> EAbs Explicit (mkVar (snd x)) e) (snd (head args)) (tail args))
       | otherwise = return (Set.unions (map fst args),foldl (\e x -> EApp e (snd x)) (EFun fun) args)
     
     mkVar (EFun  v) = v

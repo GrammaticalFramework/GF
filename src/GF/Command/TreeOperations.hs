@@ -27,6 +27,6 @@ allTreeOps pgf = [
 smallest :: [Expr] -> [Expr]
 smallest = sortBy (\t u -> compare (size t) (size u)) where
   size t = case t of
-    EAbs _ e -> size e + 1
+    EAbs _ _ e -> size e + 1
     EApp e1 e2 -> size e1 + size e2 + 1
     _ -> 1

@@ -129,7 +129,7 @@ mkExp :: [Ident] -> A.Term -> C.Expr
 mkExp scope t = case GM.termForm t of
     Ok (xs,c,args) -> mkAbs xs (mkApp (reverse xs++scope) c (map (mkExp scope) args))
   where
-    mkAbs xs t = foldr (C.EAbs . i2i) t xs
+    mkAbs xs t = foldr (C.EAbs C.Explicit . i2i) t xs
     mkApp scope c args = case c of
       Q _ c    -> foldl C.EApp (C.EFun (i2i c)) args
       QC _ c   -> foldl C.EApp (C.EFun (i2i c)) args
@@ -156,8 +156,8 @@ mkPatt scope p =
 mkContext :: [Ident] -> A.Context -> ([Ident],[C.Hypo])
 mkContext scope hyps = mapAccumL (\scope (x,ty) -> let ty' = mkType scope ty
                                                    in if x == identW
-                                                        then (  scope,C.Hyp          ty')
-                                                        else (x:scope,C.HypV (i2i x) ty')) scope hyps 
+                                                        then (  scope,(C.Explicit,i2i x,ty'))
+                                                        else (x:scope,(C.Explicit,i2i x,ty'))) scope hyps 
 
 mkTerm :: Term -> C.Term
 mkTerm tr = case tr of

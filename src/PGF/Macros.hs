@@ -100,17 +100,15 @@ restrictPGF cond pgf = pgf {
   abstr = abstract pgf
 
 depth :: Expr -> Int
-depth (EAbs _  t)  = depth t
+depth (EAbs _ _ t) = depth t
 depth (EApp e1 e2) = max (depth e1) (depth e2) + 1
 depth _            = 1
 
 cftype :: [CId] -> CId -> Type
-cftype args val = DTyp [Hyp (cftype [] arg) | arg <- args] val []
+cftype args val = DTyp [(Explicit,wildCId,cftype [] arg) | arg <- args] val []
 
 typeOfHypo :: Hypo -> Type
-typeOfHypo (Hyp    ty) = ty
-typeOfHypo (HypV _ ty) = ty
-typeOfHypo (HypI _ ty) = ty
+typeOfHypo (_,_,ty) = ty
 
 catSkeleton :: Type -> ([CId],CId)
 catSkeleton ty = case ty of

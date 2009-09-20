@@ -102,7 +102,7 @@ instance Binary Term where
              _  -> decodingError
 
 instance Binary Expr where
-  put (EAbs x exp)    = putWord8 0 >> put (x,exp)
+  put (EAbs b x exp)  = putWord8 0 >> put (b,x,exp)
   put (EApp e1 e2)    = putWord8 1 >> put (e1,e2)
   put (ELit (LStr s)) = putWord8 2 >> put s
   put (ELit (LFlt d)) = putWord8 3 >> put d
@@ -113,7 +113,7 @@ instance Binary Expr where
   put (ETyped e ty)   = putWord8 8 >> put (e,ty)
   get = do tag <- getWord8
            case tag of
-             0 -> liftM2 EAbs get get
+             0 -> liftM3 EAbs get get get
              1 -> liftM2 EApp get get
              2 -> liftM  (ELit . LStr) get
              3 -> liftM  (ELit . LFlt) get
@@ -149,15 +149,14 @@ instance Binary Type where
   put (DTyp hypos cat exps) = put (hypos,cat,exps)
   get = liftM3 DTyp get get get
 
-instance Binary Hypo where
-  put (Hyp    t) = putWord8 0 >> put t
-  put (HypV v t) = putWord8 1 >> put (v,t)
-  put (HypI v t) = putWord8 2 >> put (v,t)
+instance Binary BindType where
+  put Explicit = putWord8 0
+  put Implicit = putWord8 1
   get = do tag <- getWord8
            case tag of
-             0 -> liftM  Hyp  get 
-             1 -> liftM2 HypV get get
-             2 -> liftM2 HypI get get
+             0 -> return Explicit
+             1 -> return Implicit
+             _ -> decodingError
 
 instance Binary FFun where
   put (FFun fun prof lins) = put (fun,prof,lins)
