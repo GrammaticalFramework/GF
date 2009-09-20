@@ -30,7 +30,7 @@ module GF.Grammar.Grammar (SourceGrammar,
 		TInfo(..),
 		Label(..),
 		MetaSymb(..),
-		Decl,
+		Hypo,
 		Context,
 		Equation,
 		Labelling,
@@ -200,8 +200,8 @@ data Label =
 
 newtype MetaSymb = MetaSymb Int    deriving (Read, Show, Eq, Ord)
 
-type Decl     = (Ident,Term)  -- (x:A)  (_:A)  A
-type Context  = [Decl]        -- (x:A)(y:B)   (x,y:A)   (_,_:A)
+type Hypo     = (Ident,Term)  -- (x:A)  (_:A)  A
+type Context  = [Hypo]        -- (x:A)(y:B)   (x,y:A)   (_,_:A)
 type Equation = ([Patt],Term) 
 
 type Labelling = (Label, Term) 

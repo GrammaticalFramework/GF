@@ -540,10 +540,10 @@ ListBind
   : Bind              { [$1]    }
   | Bind ',' ListBind { $1 : $3 }
 
-Decl :: { [Decl] }
+Decl :: { [Hypo] }
 Decl
   : '(' ListBind ':' Exp ')' { [(x,$4) | x <- $2] } 
-  | Exp4                     { [mkDecl $1]        }
+  | Exp4                     { [mkHypo $1]        }
 
 ListTupleComp :: { [Term] }
 ListTupleComp
@@ -575,12 +575,12 @@ ListAltern
   : Altern                { [$1]    }
   | Altern ';' ListAltern { $1 : $3 }
 
-DDecl :: { [Decl] }
+DDecl :: { [Hypo] }
 DDecl
   : '(' ListBind ':' Exp ')' { [(x,$4) | x <- $2] } 
-  | Exp6                     { [mkDecl $1]        }
+  | Exp6                     { [mkHypo $1]        }
 
-ListDDecl :: { [Decl] }
+ListDDecl :: { [Hypo] }
 ListDDecl
   : {- empty -}     { []       } 
   | DDecl ListDDecl { $1 ++ $2 }
@@ -615,11 +615,11 @@ listCatDef id pos cont size = [catd,nilfund,consfund]
 
     cont' = [(mkId x i,ty) | (i,(x,ty)) <- zip [0..] cont]
     xs = map (Vr . fst) cont'
-    cd = mkDecl (mkApp (Vr id) xs)
+    cd = mkHypo (mkApp (Vr id) xs)
     lc = mkApp (Vr listId) xs
 
     niltyp  = mkProdSimple (cont' ++ replicate size cd) lc
-    constyp = mkProdSimple (cont' ++ [cd, mkDecl lc]) lc
+    constyp = mkProdSimple (cont' ++ [cd, mkHypo lc]) lc
 
     mkId x i = if isWildIdent x then (varX i) else x
 
