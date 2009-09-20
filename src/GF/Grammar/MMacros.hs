@@ -143,10 +143,10 @@ substTerm  :: [Ident] -> Substitution -> Term -> Term
 substTerm ss g c = case c of
   Vr x        -> maybe c id $ lookup x g
   App f a     -> App (substTerm ss g f) (substTerm ss g a)
-  Abs x b     -> let y = mkFreshVarX ss x in 
-                   Abs y (substTerm (y:ss) ((x, Vr y):g) b)
-  Prod x a b  -> let y = mkFreshVarX ss x in 
-                   Prod y (substTerm ss g a) (substTerm (y:ss) ((x,Vr y):g) b)
+  Abs b x t   -> let y = mkFreshVarX ss x in 
+                   Abs b y (substTerm (y:ss) ((x, Vr y):g) t)
+  Prod b x a t  -> let y = mkFreshVarX ss x in 
+                   Prod b y (substTerm ss g a) (substTerm (y:ss) ((x,Vr y):g) t)
   _           -> c
 
 metaSubstExp :: MetaSubst -> [(MetaId,Exp)]
@@ -204,63 +204,15 @@ mkProdVal :: Binds -> Val -> Err Val ---
 mkProdVal bs v = do 
   bs' <- mapPairsM val2exp bs
   v'  <- val2exp v
-  return $ vClos $ foldr (uncurry Prod) v' bs'
+  return $ vClos $ foldr (uncurry (Prod Explicit)) v' bs'
 
 freeVarsExp :: Exp -> [Ident]
 freeVarsExp e = case e of
   Vr x -> [x]
   App f c -> freeVarsExp f ++ freeVarsExp c
-  Abs x b -> filter (/=x) (freeVarsExp b)
-  Prod x a b -> freeVarsExp a ++ filter (/=x) (freeVarsExp b)
+  Abs _ x b -> filter (/=x) (freeVarsExp b)
+  Prod _ x a b -> freeVarsExp a ++ filter (/=x) (freeVarsExp b)
   _ -> [] --- thus applies to abstract syntax only
-
-ident2string :: Ident -> String
-ident2string = showIdent
-{-
-tree :: (TrNode,[Tree]) -> Tree
-tree = Tr
-
-eqCat :: Cat -> Cat -> Bool
-eqCat = (==)
-
-addBinds :: Binds -> Tree -> Tree
-addBinds b (Tr (N (b0,at,t,c,x),ts)) = Tr (N (b ++ b0,at,t,c,x),ts)
-
-bodyTree :: Tree -> Tree
-bodyTree (Tr (N (_,a,t,c,x),ts)) = Tr (N ([],a,t,c,x),ts)
--}
-
-ref2exp :: [Var] -> Type -> Ref -> Err Exp
-ref2exp bounds typ ref = do
-  cont <- contextOfType typ
-  xx0  <- mapM (typeSkeleton . snd) cont
-  let (xxs,cs) = unzip [(length hs, c) | (hs,c) <- xx0]
-      args     = [mkAbs xs mExp | i <- xxs, let xs = mkFreshVars i bounds]
-  return $ mkApp ref args
-  -- no refreshment of metas
-  
--- | invariant: only 'Con' or 'Var'
-type Ref = Exp 
-
-fun2wrap :: [Var] -> ((Fun,Int),Type) -> Exp -> Err Exp
-fun2wrap oldvars ((fun,i),typ) exp = do
-  cont <- contextOfType typ
-  args <- mapM mkArg (zip [0..] (map snd cont))
-  return $ mkApp (qq fun) args
- where
-  mkArg (n,c) = do
-    cont <- contextOfType c
-    let vars = mkFreshVars (length cont) oldvars
-    return $ mkAbs vars $ if n==i then exp else mExp
-
--- | weak heuristics: sameness of value category
-compatType :: Val -> Type -> Bool
-compatType v t = errVal True $ do
-  cat1 <- val2cat v
-  cat2 <- valCat t
-  return $ cat1 == cat2
-
----
 
 mkJustProd :: Context -> Term -> Term
 mkJustProd cont typ = mkProd (cont,typ,[])
@@ -283,8 +235,8 @@ identVar _ = Bad "not a variable"
 qualifTerm :: Ident -> Term -> Term
 qualifTerm m  = qualif [] where
   qualif xs t = case t of
-    Abs x b -> let x' = chV x in Abs x' $ qualif (x':xs) b
-    Prod x a b -> Prod x (qualif xs a) $ qualif (x:xs) b
+    Abs b x t -> let x' = chV x in Abs b x' $ qualif (x':xs) t
+    Prod b x a t -> Prod b x (qualif xs a) $ qualif (x:xs) t
     Vr x -> let x' = chV x in if (elem x' xs) then (Vr x') else (Q m x) 
     Cn c  -> Q m c
     Con c -> QC m c
@@ -300,8 +252,8 @@ string2var s = case BS.unpack s of
 reindexTerm :: Term -> Term
 reindexTerm = qualif (0,[]) where
   qualif dg@(d,g) t = case t of
-    Abs x b    -> let x' = ind x d in Abs x' $ qualif (d+1, (x,x'):g) b
-    Prod x a b -> let x' = ind x d in Prod x' (qualif dg a) $ qualif (d+1, (x,x'):g) b
+    Abs b x t    -> let x' = ind x d in Abs b x' $ qualif (d+1, (x,x'):g) t
+    Prod b x a t -> let x' = ind x d in Prod b x' (qualif dg a) $ qualif (d+1, (x,x'):g) t
     Vr x       -> Vr $ look x g
     _ -> composSafeOp (qualif dg) t
   look x  = maybe x id . lookup x --- if x is not in scope it is unchanged

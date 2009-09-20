@@ -117,9 +117,9 @@ evalCncInfo opts gr cnc abs (c,info) = do
   CncCat ptyp pde ppr -> do
     pde' <- case (ptyp,pde) of
       (Just typ, Just de) -> 
-        liftM Just $ pEval ([(varStr, typeStr)], typ) de
+        liftM Just $ pEval ([(Explicit, varStr, typeStr)], typ) de
       (Just typ, Nothing) -> 
-        liftM Just $ mkLinDefault gr typ >>= partEval noOptions gr ([(varStr, typeStr)],typ)
+        liftM Just $ mkLinDefault gr typ >>= partEval noOptions gr ([(Explicit, varStr, typeStr)],typ)
       _ -> return pde   -- indirection
 
     ppr' <- liftM Just $ evalPrintname gr c ppr (Just $ K $ showIdent c)
@@ -142,7 +142,7 @@ evalCncInfo opts gr cnc abs (c,info) = do
 -- | the main function for compiling linearizations
 partEval :: Options -> SourceGrammar -> (Context,Type) -> Term -> Err Term
 partEval opts gr (context, val) trm = errIn (render (text "parteval" <+> ppTerm Qualified 0 trm)) $ do
-  let vars  = map fst context
+  let vars  = map (\(bt,x,t) -> x) context
       args  = map Vr vars
       subst = [(v, Vr v) | v <- vars]
       trm1 = mkApp trm args
@@ -150,7 +150,7 @@ partEval opts gr (context, val) trm = errIn (render (text "parteval" <+> ppTerm 
   trm3 <- if rightType trm2
             then computeTerm gr subst trm2
             else recordExpand val trm2 >>= computeTerm gr subst
-  return $ mkAbs vars trm3
+  return $ mkAbs [(Explicit,v) | v <- vars] trm3
   where
     -- don't eta expand records of right length (correct by type checking)
     rightType (R rs) = case val of
@@ -178,8 +178,8 @@ recordExpand typ trm = case typ of
 mkLinDefault :: SourceGrammar -> Type -> Err Term
 mkLinDefault gr typ = do
   case typ of
-    RecType lts -> mapPairsM mkDefField lts >>= (return . Abs varStr . R . mkAssign)
-    _ -> liftM (Abs varStr) $ mkDefField typ
+    RecType lts -> mapPairsM mkDefField lts >>= (return . Abs Explicit varStr . R . mkAssign)
+    _ -> liftM (Abs Explicit varStr) $ mkDefField typ
 ----    _ -> prtBad "linearization type must be a record type, not" typ
  where
    mkDefField typ = case typ of
@@ -211,7 +211,7 @@ evalPrintname gr c ppr lin =
    comp = computeConcrete gr
 
    oneBranch t = case t of
-     Abs _ b   -> oneBranch b
+     Abs _ _ b -> oneBranch b
      R   (r:_) -> oneBranch $ snd $ snd r
      T _ (c:_) -> oneBranch $ snd c
      V _ (c:_) -> oneBranch c

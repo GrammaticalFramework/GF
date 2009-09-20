@@ -134,11 +134,11 @@ checkAbsInfo st m mo c info = do
      Let (x,(_,a)) b -> do
        a' <- compAbsTyp g a
        compAbsTyp ((x, a'):g) b
-     Prod x a b -> do
+     Prod b x a t -> do
        a' <- compAbsTyp g a
-       b' <- compAbsTyp ((x,Vr x):g) b
-       return $ Prod x a' b'
-     Abs _ _ -> return t
+       t' <- compAbsTyp ((x,Vr x):g) t
+       return $ Prod b x a' t'
+     Abs _ _ _ -> return t
      _ -> composOp (compAbsTyp g) t
 
 checkCompleteGrammar :: SourceGrammar -> SourceModInfo -> SourceModInfo -> Check (BinTree Ident Info)
@@ -170,7 +170,7 @@ checkCompleteGrammar gr abs cnc = do
                                                                    return info
                                                 _            -> return info
                                       case info of
-                                        CncCat (Just (RecType [])) _ _ -> return (foldr (\_ -> Abs identW) (R []) cxt)
+                                        CncCat (Just (RecType [])) _ _ -> return (foldr (\_ -> Abs Explicit identW) (R []) cxt)
                                         _                              -> Bad "no def lin"
                                 case lookupIdent c js of
                                   Ok (CncFun _   (Just _) _ ) -> return js
@@ -224,7 +224,7 @@ checkResInfo gr mo mm c info = do
       --- this can only be a partial guarantee, since matching
       --- with value type is only possible if expected type is given
       checkUniq $ 
-        sort [t : map snd xs | (_,x) <- tysts1, Ok (xs,t) <- [typeFormCnc x]]
+        sort [t : map (\(b,x,t) -> t) xs | (_,x) <- tysts1, Ok (xs,t) <- [typeFormCnc x]]
       return (ResOverload os [(y,x) | (x,y) <- tysts'])
 
     ResParam (Just (pcs,_)) -> chIn "parameter type" $ do
@@ -257,7 +257,7 @@ checkCncInfo gr m mo (a,abs) c info = do
       typ        <- checkErr $ lookupFunType gr a c
       cat0       <- checkErr $ valCat typ
       (cont,val) <- linTypeOfType gr m typ         -- creates arg vars
-      (trm',_)   <- check trm (mkFunType (map snd cont) val)  -- erases arg vars
+      (trm',_)   <- check trm (mkFunType (map (\(_,_,ty) -> ty) cont) val)  -- erases arg vars
       checkPrintname gr mpr
       cat        <- return $ snd cat0
       return (CncFun (Just (cat,(cont,val))) (Just trm') mpr)
@@ -286,7 +286,7 @@ checkCncInfo gr m mo (a,abs) c info = do
 computeLType :: SourceGrammar -> Type -> Check Type
 computeLType gr t = do
   g0 <- checkGetContext
-  let g = [(x, Vr x) | (x,_) <- g0]
+  let g = [(b,x, Vr x) | (b,x,_) <- g0]
   checkInContext g $ comp t
  where
   comp ty = case ty of
@@ -303,17 +303,17 @@ computeLType gr t = do
       f' <- comp f
       a' <- comp a
       case f' of
-        Abs x b -> checkInContext [(x,a')] $ comp b
+        Abs b x t -> checkInContext [(b,x,a')] $ comp t
         _ -> return $ App f' a'
 
-    Prod x a b -> do
+    Prod bt x a b -> do
       a' <- comp a
-      b' <- checkInContext [(x,Vr x)] $ comp b
-      return $ Prod x a' b'
+      b' <- checkInContext [(bt,x,Vr x)] $ comp b
+      return $ Prod bt x a' b'
 
-    Abs x b -> do
-      b' <- checkInContext [(x,Vr x)] $ comp b
-      return $ Abs x b'
+    Abs bt x b -> do
+      b' <- checkInContext [(bt,x,Vr x)] $ comp b
+      return $ Abs bt x b'
 
     ExtR r s -> do
       r' <- comp r
@@ -387,11 +387,11 @@ inferLType gr trm = case trm of
          (f',fty) <- infer f
          fty' <- comp fty
          case fty' of
-           Prod z arg val -> do 
+           Prod bt z arg val -> do 
              a' <- justCheck a arg
              ty <- if isWildIdent z 
                       then return val
-                      else substituteLType [(z,a')] val
+                      else substituteLType [(bt,z,a')] val
              return (App f' a',ty) 
            _ -> checkError (text "A function type is expected for" <+> ppTerm Unqualified 0 f <+> text "instead of type" <+> ppType env fty)
 
@@ -502,10 +502,10 @@ inferLType gr trm = case trm of
    Sort _     -> 
      termWith trm $ return typeType
 
-   Prod x a b -> do
+   Prod bt x a b -> do
      a' <- justCheck a typeType
-     b' <- checkInContext [(x,a')] $ justCheck b typeType
-     return (Prod x a' b', typeType)
+     b' <- checkInContext [(bt,x,a')] $ justCheck b typeType
+     return (Prod bt x a' b', typeType)
 
    Table p t  -> do
      p' <- justCheck p typeType --- check p partype! 
@@ -655,7 +655,7 @@ getOverload env@gr mt ot = case appForm ot of
    noProds vfs = [(v,f) | (v,f) <- vfs, noProd v]
 
    noProd ty = case ty of
-     Prod _ _ _ -> False
+     Prod _ _ _ _ -> False
      _ -> True
 
 checkLType :: SourceGrammar -> Term -> Type -> Check (Term, Type)
@@ -665,17 +665,17 @@ checkLType env trm typ0 = do
 
   case trm of
 
-    Abs x c -> do
+    Abs bt x c -> do
       case typ of
-        Prod z a b -> do 
-          checkUpdate (x,a)
+        Prod bt' z a b -> do 
+          checkUpdate (bt,x,a)
           (c',b') <- if isWildIdent z
                         then check c b
                         else do
-                          b' <- checkIn (text "abs") $ substituteLType [(z,Vr x)] b
+                          b' <- checkIn (text "abs") $ substituteLType [(bt',z,Vr x)] b
                           check c b'
           checkReset
-          return $ (Abs x c', Prod x a b')
+          return $ (Abs bt x c', Prod bt' x a b')
         _ -> checkError $ text "function type expected instead of" <+> ppType env typ
 
     App f a -> do
@@ -774,7 +774,7 @@ checkLType env trm typ0 = do
     Let (x,(mty,def)) body -> case mty of
       Just ty -> do
         (def',ty') <- check def ty
-        checkUpdate (x,ty')
+        checkUpdate (Explicit,x,ty')
         body' <- justCheck body typ
         checkReset
         return (Let (x,(Just ty',def')) body', typ)
@@ -827,14 +827,14 @@ checkLType env trm typ0 = do
 
 pattContext :: LTEnv -> Type -> Patt -> Check Context
 pattContext env typ p = case p of
-  PV x -> return [(x,typ)]
+  PV x -> return [(Explicit,x,typ)]
   PP q c ps | q /= cPredef -> do ---- why this /=? AR 6/1/2006
     t <- checkErr $ lookupResType cnc q c
     (cont,v) <- checkErr $ typeFormCnc t
     checkCond (text "wrong number of arguments for constructor in" <+> ppPatt Unqualified 0 p) 
               (length cont == length ps)
     checkEqLType env typ v (patt2term p)
-    mapM (uncurry (pattContext env)) (zip (map snd cont) ps) >>= return . concat
+    mapM (\((_,_,ty),p) -> pattContext env ty p) (zip cont ps) >>= return . concat
   PR r -> do
     typ' <- computeLType env typ
     case typ' of
@@ -849,12 +849,12 @@ pattContext env typ p = case p of
 
   PAs x p -> do
     g <- pattContext env typ p
-    return $ (x,typ):g
+    return $ (Explicit,x,typ):g
 
   PAlt p' q -> do
     g1 <- pattContext env typ p'
     g2 <- pattContext env typ q
-    let pts = nub ([fst pt | pt <- g1, notElem pt g2] ++ [fst pt | pt <- g2, notElem pt g1])
+    let pts = nub ([x | pt@(_,x,_) <- g1, notElem pt g2] ++ [x | pt@(_,x,_) <- g2, notElem pt g1])
     checkCond 
       (text "incompatible bindings of" <+>
        fsep (map ppIdent pts) <+> 
@@ -889,7 +889,7 @@ termWith t ct = do
 -- | light-weight substitution for dep. types
 substituteLType :: Context -> Type -> Check Type
 substituteLType g t = case t of
-  Vr x -> return $ maybe t id $ lookup x g
+  Vr x -> return $ maybe t id $ lookup x [(x,t) | (_,x,t) <- g]
   _ -> composOp (substituteLType g) t
 
 -- | compositional check\/infer of binary operations
@@ -933,7 +933,7 @@ checkIfEqLType env t u trm = do
      (_,u) | u == typeError -> True
 
      -- contravariance
-     (Prod x a b, Prod y c d) -> alpha g c a && alpha ((x,y):g) b d 
+     (Prod _ x a b, Prod _ y c d) -> alpha g c a && alpha ((x,y):g) b d 
                               
      -- record subtyping
      (RecType rs, RecType ts) -> all (\ (l,a) -> 
@@ -975,7 +975,7 @@ checkIfEqLType env t u trm = do
          _:_ -> Bad $ render (text "missing record fields:" <+> fsep (punctuate comma (map ppLabel others)))
          _ -> return locks
      -- contravariance
-     (Prod x a b, Prod y c d) -> do
+     (Prod _ x a b, Prod _ y c d) -> do
         ls1 <- missingLock g c a
         ls2 <- missingLock g b d
         return $ ls1 ++ ls2
@@ -989,11 +989,11 @@ checkIfEqLType env t u trm = do
 ppType :: LTEnv -> Type -> Doc
 ppType env ty =
   case ty of
-    RecType fs -> case filter isLockLabel $ map fst fs of
-                    [lock] -> text (drop 5 (showIdent (label2ident lock)))
-                    _      -> ppTerm Unqualified 0 ty
-    Prod x a b -> ppType env a <+> text "->" <+> ppType env b
-    _          -> ppTerm Unqualified 0 ty
+    RecType fs   -> case filter isLockLabel $ map fst fs of
+                      [lock] -> text (drop 5 (showIdent (label2ident lock)))
+                      _      -> ppTerm Unqualified 0 ty
+    Prod _ x a b -> ppType env a <+> text "->" <+> ppType env b
+    _            -> ppTerm Unqualified 0 ty
 
 -- | linearization types and defaults
 linTypeOfType :: SourceGrammar -> Ident -> Type -> Check (Context,Type)
@@ -1013,7 +1013,7 @@ linTypeOfType cnc m typ = do
                                       text "with" $$
                                       nest 2 (ppTerm Unqualified 0 val))) $
                              plusRecType vars val
-     return (symb,rec)
+     return (Explicit,symb,rec)
    lookLin (_,c) = checks [ --- rather: update with defLinType ?
       checkErr (lookupLincat cnc m c) >>= computeLType cnc
      ,return defLinType
@@ -1036,11 +1036,11 @@ allDependencies ism b =
     opty _ = []
     pts i = case i of
       ResOper pty pt -> [pty,pt]
-      ResParam (Just (ps,_)) -> [Just t | (_,cont) <- ps, (_,t) <- cont]
+      ResParam (Just (ps,_)) -> [Just t | (_,cont) <- ps, (_,_,t) <- cont]
       CncCat pty _ _ -> [pty]
       CncFun _   pt _ -> [pt]  ---- (Maybe (Ident,(Context,Type))
       AbsFun pty _ ptr -> [pty] --- ptr is def, which can be mutual
-      AbsCat (Just co) _ -> [Just ty | (_,ty) <- co]
+      AbsCat (Just co) _ -> [Just ty | (_,_,ty) <- co]
       _              -> []
 
 topoSortOpers :: [(Ident,[Ident])] -> Err [Ident]

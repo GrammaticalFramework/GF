@@ -178,8 +178,8 @@ renPerh ren Nothing  = return Nothing
 renameTerm :: Status -> [Ident] -> Term -> Err Term
 renameTerm env vars = ren vars where
   ren vs trm = case trm of
-    Abs x b    -> liftM  (Abs x) (ren (x:vs) b)
-    Prod x a b -> liftM2 (Prod x) (ren vs a) (ren (x:vs) b)
+    Abs b x t    -> liftM  (Abs b x) (ren (x:vs) t)
+    Prod bt x a b -> liftM2 (Prod bt x) (ren vs a) (ren (x:vs) b)
     Typed a b  -> liftM2 Typed (ren vs a) (ren vs b)
     Vr x      
       | elem x vs -> return trm
@@ -301,16 +301,16 @@ renameParam env (c,co) = do
 renameContext :: Status -> Context -> Err Context
 renameContext b = renc [] where
   renc vs cont = case cont of
-    (x,t) : xts 
+    (bt,x,t) : xts 
       | isWildIdent x -> do
           t'   <- ren vs t
           xts' <- renc vs xts
-          return $ (x,t') : xts'
+          return $ (bt,x,t') : xts'
       | otherwise -> do
           t'   <- ren vs t
           let vs' = x:vs
           xts' <- renc vs' xts
-          return $ (x,t') : xts'
+          return $ (bt,x,t') : xts'
     _ -> return cont
   ren = renameTerm b
 

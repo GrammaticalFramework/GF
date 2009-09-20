@@ -60,8 +60,8 @@ unify e1 e2 g =
   (Q _ a, Q _ b) | (a == b)      -> return g ---- qualif?
   (QC _ a, QC _ b) | (a == b)    -> return g ----
   (Vr x, Vr y) | (x == y)        -> return g 
-  (Abs x b, Abs y c)               -> do let c' = substTerm [x] [(y,Vr x)] c 
-                                         unify b c' g
+  (Abs _ x b, Abs _ y c)         -> do let c' = substTerm [x] [(y,Vr x)] c 
+                                       unify b c' g
   (App c a, App d b)            -> case unify c d g of 
                                      Ok g1 -> unify a b g1 
                                      _     -> Bad (render (text "fail unify" <+> ppTerm Unqualified 0 e1))
@@ -92,6 +92,6 @@ occCheck :: MetaId -> Term -> Bool
 occCheck s u = case u of
     Meta v  -> s == v
     App c a -> occCheck s c || occCheck s a
-    Abs x b -> occCheck s b
+    Abs _ x b -> occCheck s b
     _       -> False
 

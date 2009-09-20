@@ -137,7 +137,7 @@ lookupOverload gr m c = do
     case info of
       ResOverload os tysts -> do
             tss <- mapM (\x -> lookupOverload gr x c) os
-            return $ [(map snd args,(val,tr)) | 
+            return $ [(map (\(b,x,t) -> t) args,(val,tr)) | 
                       (ty,tr) <- tysts, Ok (args,val) <- [typeFormCnc ty]] ++ 
                      concat tss
 
@@ -173,7 +173,7 @@ lookupParamValues gr m c = do
     _ -> liftM concat $ mapM mkPar ps
  where
    mkPar (f,co) = do
-     vs <- liftM combinations $ mapM (\ (_,ty) -> allParamValues gr ty) co
+     vs <- liftM combinations $ mapM (\(_,_,ty) -> allParamValues gr ty) co
      return $ map (mkApp (QC m f)) vs
 
 lookupFirstTag :: SourceGrammar -> Ident -> Ident -> Err Term

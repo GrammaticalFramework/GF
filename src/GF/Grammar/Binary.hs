@@ -109,6 +109,15 @@ instance Binary Info where
              8 -> get >>= \(x,y)   -> return (AnyInd x y)
              _ -> decodingError
 
+instance Binary BindType where
+  put Explicit = putWord8 0
+  put Implicit = putWord8 1
+  get = do tag <- getWord8
+           case tag of
+             0 -> return Explicit
+             1 -> return Implicit
+             _ -> decodingError
+
 instance Binary Term where
   put (Vr x)        = putWord8 0  >> put x
   put (Cn x)        = putWord8 1  >> put x
@@ -119,9 +128,9 @@ instance Binary Term where
   put (K x)         = putWord8 7  >> put x
   put (Empty)       = putWord8 8
   put (App x y)     = putWord8 9  >> put (x,y)
-  put (Abs x y)     = putWord8 10 >> put (x,y)
+  put (Abs x y z)   = putWord8 10 >> put (x,y,z)
   put (Meta x)      = putWord8 11 >> put x
-  put (Prod x y z)  = putWord8 12 >> put (x,y,z)
+  put (Prod w x y z)= putWord8 12 >> put (w,x,y,z)
   put (Typed x y)   = putWord8 14 >> put (x,y)
   put (Example x y) = putWord8 15 >> put (x,y)
   put (RecType x)   = putWord8 16 >> put x
@@ -159,9 +168,9 @@ instance Binary Term where
              7  -> get >>= \x       -> return (K x)
              8  ->                     return (Empty)
              9  -> get >>= \(x,y)   -> return (App x y)
-             10 -> get >>= \(x,y)   -> return (Abs x y)
+             10 -> get >>= \(x,y,z) -> return (Abs x y z)
              11 -> get >>= \x       -> return (Meta x)
-             12 -> get >>= \(x,y,z) -> return (Prod x y z)
+             12 -> get >>= \(w,x,y,z)->return (Prod w x y z)
              14 -> get >>= \(x,y)   -> return (Typed x y)
              15 -> get >>= \(x,y)   -> return (Example x y)
              16 -> get >>= \x       -> return (RecType x)

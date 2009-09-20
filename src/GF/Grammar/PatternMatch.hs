@@ -146,7 +146,7 @@ isInConstantForm trm = case trm of
     Con _    -> True
     Q _ _    -> True
     QC _ _   -> True
-    Abs _ _  -> True
+    Abs _ _ _ -> True
     C c a    -> isInConstantForm c && isInConstantForm a
     App c a  -> isInConstantForm c && isInConstantForm a
     R r      -> all (isInConstantForm . snd . snd) r

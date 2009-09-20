@@ -344,6 +344,11 @@ ListIdent
   : Ident               { [$1]    } 
   | Ident ',' ListIdent { $1 : $3 }
 
+ListIdent2 :: { [Ident] }
+ListIdent2 
+  : Ident               { [$1]    } 
+  | Ident ListIdent2    { $1 : $2 }
+
 Name :: { Ident }
 Name
   : Ident         { $1          } 
@@ -492,11 +497,6 @@ Patt2
   | '<' ListPattTupleComp '>' { (PR . tuple2recordPatt) $2 }
   | '(' Patt ')'              { $2 }
 
-Arg :: { Ident }
-Arg 
-  : '_'                       { identW }
-  | Ident                     { $1     }
-
 PattAss :: { [(Label,Patt)] }
 PattAss
   : ListIdent '=' Patt { [(LIdent (ident2bs i),$3) | i <- $1] } 
@@ -525,25 +525,32 @@ ListPatt
   : Patt2          { [$1]    } 
   | Patt2 ListPatt { $1 : $2 }
 
-ListArg :: { [Ident] }
+Arg :: { [(BindType,Ident)] }
+Arg 
+  : Ident               { [(Explicit,$1    )]      }
+  | '_'                 { [(Explicit,identW)]      }
+  | '{' ListIdent2 '}'  { [(Implicit,v) | v <- $2] }
+  
+ListArg :: { [(BindType,Ident)] }
 ListArg
-  : Arg         { [$1]    } 
-  | Arg ListArg { $1 : $2 }
+  : Arg                 { $1       } 
+  | Arg ListArg         { $1 ++ $2 }
 
-Bind :: { Ident }
+Bind :: { [(BindType,Ident)] }
 Bind
-  : Ident  { $1     } 
-  | '_'    { identW }
+  : Ident               { [(Explicit,$1    )]      } 
+  | '_'                 { [(Explicit,identW)]      }
+  | '{' ListIdent '}'   { [(Implicit,v) | v <- $2] }
 
-ListBind :: { [Ident] }
+ListBind :: { [(BindType,Ident)] }
 ListBind
-  : Bind              { [$1]    }
-  | Bind ',' ListBind { $1 : $3 }
+  : Bind                { $1       }
+  | Bind ',' ListBind   { $1 ++ $3 }
 
 Decl :: { [Hypo] }
 Decl
-  : '(' ListBind ':' Exp ')' { [(x,$4) | x <- $2] } 
-  | Exp4                     { [mkHypo $1]        }
+  : '(' ListBind ':' Exp ')' { [(b,x,$4) | (b,x) <- $2] } 
+  | Exp4                     { [mkHypo $1]              }
 
 ListTupleComp :: { [Term] }
 ListTupleComp
@@ -577,8 +584,8 @@ ListAltern
 
 DDecl :: { [Hypo] }
 DDecl
-  : '(' ListBind ':' Exp ')' { [(x,$4) | x <- $2] } 
-  | Exp6                     { [mkHypo $1]        }
+  : '(' ListBind ':' Exp ')' { [(b,x,$4) | (b,x) <- $2] } 
+  | Exp6                     { [mkHypo $1]              }
 
 ListDDecl :: { [Hypo] }
 ListDDecl
@@ -603,6 +610,7 @@ mkBaseId = prefixId (BS.pack "Base")
 prefixId :: BS.ByteString -> Ident -> Ident
 prefixId pref id = identC (BS.append pref (ident2bs id))
 
+listCatDef :: Ident -> SrcSpan -> Context -> Int -> [(Ident,SrcSpan,Info)]
 listCatDef id pos cont size = [catd,nilfund,consfund]
   where
     listId = mkListId id
@@ -613,8 +621,8 @@ listCatDef id pos cont size = [catd,nilfund,consfund]
     nilfund  = (baseId, pos, AbsFun (Just niltyp)  Nothing Nothing)
     consfund = (consId, pos, AbsFun (Just constyp) Nothing Nothing)
 
-    cont' = [(mkId x i,ty) | (i,(x,ty)) <- zip [0..] cont]
-    xs = map (Vr . fst) cont'
+    cont' = [(b,mkId x i,ty) | (i,(b,x,ty)) <- zip [0..] cont]
+    xs = map (\(b,x,t) -> Vr x) cont'
     cd = mkHypo (mkApp (Vr id) xs)
     lc = mkApp (Vr listId) xs
 

@@ -77,7 +77,7 @@ whnf v = ---- errIn ("whnf" +++ prt v) $ ---- debug
 
 app :: Val -> Val -> Err Val
 app u v = case u of
-  VClos env (Abs x e) -> eval ((x,v):env) e
+  VClos env (Abs _ x e) -> eval ((x,v):env) e
   _ -> return $ VApp u v
   
 eval :: Env -> Exp -> Err Val
@@ -100,9 +100,9 @@ eqVal k u1 u2 = ---- errIn (prt u1 +++ "<>" +++ prBracket (show k) +++ prt u2) $
   let v = VGen k
   case (w1,w2) of
     (VApp f1 a1, VApp f2 a2) -> liftM2 (++) (eqVal k f1 f2) (eqVal k a1 a2)
-    (VClos env1 (Abs x1 e1), VClos env2 (Abs x2 e2)) ->
+    (VClos env1 (Abs _ x1 e1), VClos env2 (Abs _ x2 e2)) ->
       eqVal (k+1) (VClos ((x1,v x1):env1) e1) (VClos ((x2,v x1):env2) e2)
-    (VClos env1 (Prod x1 a1 e1), VClos env2 (Prod x2 a2 e2)) ->
+    (VClos env1 (Prod _ x1 a1 e1), VClos env2 (Prod _ x2 a2 e2)) ->
       liftM2 (++) 
         (eqVal k     (VClos            env1  a1) (VClos            env2  a2))
         (eqVal (k+1) (VClos ((x1,v x1):env1) e1) (VClos ((x2,v x1):env2) e2))
@@ -123,15 +123,15 @@ checkExp th tenv@(k,rho,gamma) e ty = do
   case e of
     Meta m -> return $ (AMeta m typ,[])
 
-    Abs x t -> case typ of
-      VClos env (Prod y a b) -> do
+    Abs _ x t -> case typ of
+      VClos env (Prod _ y a b) -> do
 	a' <- whnf $ VClos env a ---
 	(t',cs) <- checkExp th 
                            (k+1,(x,v x):rho, (x,a'):gamma) t (VClos ((y,v x):env) b)
 	return (AAbs x a' t', cs)
       _ -> Bad (render (text "function type expected for" <+> ppTerm Unqualified 0 e <+> text "instead of" <+> ppValue Unqualified 0 typ))
 
-    Prod x a b -> do
+    Prod _ x a b -> do
       testErr (typ == vType) "expected Type"
       (a',csa) <- checkType th tenv a
       (b',csb) <- checkType th (k+1, (x,v x):rho, (x,VClos rho a):gamma) b
@@ -176,7 +176,7 @@ inferExp th tenv@(k,rho,gamma) e = case e of
     (f',w,csf) <- inferExp th tenv f 
     typ <- whnf w
     case typ of
-      VClos env (Prod x a b) -> do
+      VClos env (Prod _ x a b) -> do
         (a',csa) <- checkExp th tenv t (VClos env a)
 	b' <- whnf $ VClos ((x,VClos rho t):env) b
 	return $ (AApp f' a' b', b', csf ++ csa)
@@ -217,7 +217,7 @@ checkBranch th tenv b@(ps,t) ty = errIn ("branch" +++ show b) $
     p:ps2 -> do
       typ <- whnf ty
       case typ of
-        VClos env (Prod y a b) -> do
+        VClos env (Prod _ y a b) -> do
 	  a' <- whnf $ VClos env a
           (p', sigma, binds, cs1) <- checkP tenv p y a'
           let tenv' = (length binds, sigma ++ rho, binds ++ gamma)
@@ -275,7 +275,7 @@ checkPatt th tenv exp val = do
        (f',w,csf) <- checkExpP tenv f val
        typ <- whnf w
        case typ of
-         VClos env (Prod x a b) -> do
+         VClos env (Prod _ x a b) -> do
            (a',_,csa) <- checkExpP tenv t (VClos env a)
 	   b' <- whnf $ VClos ((x,VClos rho t):env) b
 	   return $ (AApp f' a' b', b', csf ++ csa)

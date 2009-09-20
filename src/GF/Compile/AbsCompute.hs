@@ -53,7 +53,7 @@ computeAbsTermIn lookd xs e = errIn (render (text "computing" <+> ppTerm Unquali
     _ -> do
       let t' = beta vv t
       (yy,f,aa) <- termForm t'
-      let vv' = yy ++ vv
+      let vv' = map snd yy ++ vv
       aa'    <- mapM (compt vv') aa
       case look f of
         Just eqs -> tracd (text "\nmatching" <+> ppTerm Unqualified 0 f) $ 
@@ -84,10 +84,10 @@ beta vv c = case c of
   App f         a -> 
     let (a',f') = (beta vv a, beta vv f) in 
     case f' of
-      Abs x b -> beta vv $ substTerm vv [(x,a')] (beta (x:vv) b) 
+      Abs _ x b -> beta vv $ substTerm vv [(x,a')] (beta (x:vv) b) 
       _ ->               (if a'==a && f'==f then id else beta vv) $ App f' a'
-  Prod x a b      -> Prod x (beta vv a) (beta (x:vv) b)
-  Abs x b         -> Abs x (beta (x:vv) b)
+  Prod b x a t      -> Prod b x (beta vv a) (beta (x:vv) t)
+  Abs b x t       -> Abs b x (beta (x:vv) t)
   _               -> c
 
 -- special version of pattern matching, to deal with comp under lambda
@@ -133,7 +133,7 @@ tryMatch (p,t) = do
   notMeta e = case e of
     Meta _  -> False
     App f a -> notMeta f &&  notMeta a  
-    Abs _ b -> notMeta b
+    Abs _ _ b -> notMeta b
     _ -> True
 
   prtm p g = 

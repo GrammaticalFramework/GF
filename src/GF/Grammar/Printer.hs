@@ -116,16 +116,16 @@ ppJudgement q (id, CncCat  ptype pexp pprn) =
      Nothing  -> empty)
 ppJudgement q (id, CncFun  ptype pdef pprn) =
   (case pdef of
-     Just e  -> let (vs,e') = getAbs e
-              in text "lin" <+> ppIdent id <+> hsep (map ppIdent vs) <+> equals <+> ppTerm q 0 e' <+> semi
+     Just e  -> let (xs,e') = getAbs e
+              in text "lin" <+> ppIdent id <+> hsep (map ppBind xs) <+> equals <+> ppTerm q 0 e' <+> semi
      Nothing -> empty) $$
   (case pprn of
      Just prn -> text "printname" <+> text "fun" <+> ppIdent id <+> equals <+> ppTerm q 0 prn <+> semi
      Nothing  -> empty)
 ppJudgement q (id, AnyInd cann mid) = text "ind" <+> ppIdent id <+> equals <+> (if cann then text "canonical" else empty) <+> ppIdent mid <+> semi
 
-ppTerm q d (Abs v e)   = let (vs,e') = getAbs e
-                         in prec d 0 (char '\\' <> commaPunct ppIdent (v:vs) <+> text "->" <+> ppTerm q 0 e')
+ppTerm q d (Abs b v e)   = let (xs,e') = getAbs (Abs b v e)
+                           in prec d 0 (char '\\' <> commaPunct ppBind xs <+> text "->" <+> ppTerm q 0 e')
 ppTerm q d (T TRaw xs) = case getCTable (T TRaw xs) of
                            ([],_) -> text "table" <+> lbrace $$
 	  		             nest 2 (vcat (punctuate semi (map (ppCase q) xs))) $$
@@ -140,9 +140,9 @@ ppTerm q d (T (TComp  t) xs) = text "table" <+> ppTerm q 0 t <+> lbrace $$
 ppTerm q d (T (TWild  t) xs) = text "table" <+> ppTerm q 0 t <+> lbrace $$
 			       nest 2 (vcat (punctuate semi (map (ppCase q) xs))) $$
 			       rbrace
-ppTerm q d (Prod x a b)= if x == identW
-                           then prec d 0 (ppTerm q 4 a <+> text "->" <+> ppTerm q 0 b)
-                           else prec d 0 (parens (ppIdent x <+> colon <+> ppTerm q 0 a) <+> text "->" <+> ppTerm q 0 b)
+ppTerm q d (Prod bt x a b)= if x == identW && bt == Explicit
+                              then prec d 0 (ppTerm q 4 a <+> text "->" <+> ppTerm q 0 b)
+                              else prec d 0 (parens (ppBind (bt,x) <+> colon <+> ppTerm q 0 a) <+> text "->" <+> ppTerm q 0 b)
 ppTerm q d (Table kt vt)=prec d 0 (ppTerm q 3 kt <+> text "=>" <+> ppTerm q 0 vt)
 ppTerm q d (Let l e)    = let (ls,e') = getLet e
                           in prec d 0 (text "let" <+> vcat (map (ppLocDef q) (l:ls)) $$ text "in" <+> ppTerm q 0 e')
@@ -246,11 +246,11 @@ ppEnv e = hcat (map (\(x,t) -> braces (ppIdent x <> text ":=" <> ppValue Unquali
 
 str s = doubleQuotes (text s)
 
-ppDecl q (id,typ)
+ppDecl q (_,id,typ)
   | id == identW = ppTerm q 4 typ
   | otherwise    = parens (ppIdent id <+> colon <+> ppTerm q 0 typ)
 
-ppDDecl q (id,typ)
+ppDDecl q (_,id,typ)
   | id == identW = ppTerm q 6 typ
   | otherwise    = parens (ppIdent id <+> colon <+> ppTerm q 0 typ)
 
@@ -272,6 +272,8 @@ ppLocDef q (id, (mbt, e)) =
   ppIdent id <+>
   (case mbt of {Just t -> colon  <+> ppTerm q 0 t; Nothing -> empty} <+> equals <+> ppTerm q 0 e) <+> semi
 
+ppBind (Explicit,v) = ppIdent v
+ppBind (Implicit,v) = braces (ppIdent v)
 
 ppAltern q (x,y) = ppTerm q 0 x <+> char '/' <+> ppTerm q 0 y
 
@@ -283,10 +285,10 @@ prec d1 d2 doc
   | d1 > d2   = parens doc
   | otherwise = doc
 
-getAbs :: Term -> ([Ident], Term)
-getAbs (Abs v e) = let (vs,e') = getAbs e
-                   in (v:vs,e')
-getAbs e         = ([],e)
+getAbs :: Term -> ([(BindType,Ident)], Term)
+getAbs (Abs bt v e) = let (xs,e') = getAbs e
+                      in ((bt,v):xs,e')
+getAbs e            = ([],e)
 
 getCTable :: Term -> ([Ident], Term)
 getCTable (T TRaw [(PV v,e)]) = let (vs,e') = getCTable e
