@@ -30,7 +30,7 @@ In the expression: mkMorph (\x -> succ zero)
 Expression: <append zero (succ zero) : Vector zero -> Vector (succ zero) -> Vector (succ zero)>
 Type:       Vector zero -> Vector (succ zero) -> Vector (succ zero)
 
-Expression: <\n, v1, n'1, v2 -> append n n'1 v1 v2 : (n : Nat) -> Vector n -> (m : Nat) -> Vector m -> Vector (plus n m)>
+Expression: <\n, v1, n1, v2 -> append n n1 v1 v2 : (n : Nat) -> Vector n -> (m : Nat) -> Vector m -> Vector (plus n m)>
 Type:       (n : Nat) -> Vector n -> (m : Nat) -> Vector m -> Vector (plus n m)
 
 Category EQ is not in scope

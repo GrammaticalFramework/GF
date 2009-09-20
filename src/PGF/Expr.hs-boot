@@ -10,7 +10,16 @@ instance Eq   Expr
 instance Ord  Expr
 instance Show Expr
 
+
+data BindType = Explicit | Implicit
+
+instance Eq   BindType
+instance Ord  BindType
+instance Show BindType
+
+
 pFactor :: RP.ReadP Expr
+pBinds  :: RP.ReadP [(BindType,CId)]
 
 ppExpr :: Int -> [CId] -> Expr -> PP.Doc
 

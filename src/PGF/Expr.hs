@@ -1,5 +1,5 @@
-module PGF.Expr(Tree, Expr(..), Literal(..), Patt(..), Equation(..),
-                readExpr, showExpr, pExpr, ppExpr, ppPatt,
+module PGF.Expr(Tree, BindType(..), Expr(..), Literal(..), Patt(..), Equation(..),
+                readExpr, showExpr, pExpr, pBinds, ppExpr, ppPatt,
 
                 mkApp,    unApp,
                 mkStr,    unStr,
@@ -36,6 +36,11 @@ data Literal =
 
 type MetaId = Int
 
+data BindType = 
+    Explicit
+  | Implicit
+  deriving (Eq,Ord,Show)
+
 -- | Tree is the abstract syntax representation of a given sentence
 -- in some concrete syntax. Technically 'Tree' is a type synonym
 -- of 'Expr'.
@@ -45,7 +50,7 @@ type Tree = Expr
 -- both parameter of a dependent type or an abstract syntax tree for
 -- for some sentence.
 data Expr =
-   EAbs CId Expr                    -- ^ lambda abstraction
+   EAbs BindType CId Expr           -- ^ lambda abstraction
  | EApp Expr Expr                   -- ^ application
  | ELit Literal                     -- ^ literal
  | EMeta  {-# UNPACK #-} !MetaId    -- ^ meta variable
@@ -131,10 +136,24 @@ pExpr = RP.skipSpaces >> (pAbs RP.<++ pTerm)
   where
     pTerm   =       fmap (foldl1 EApp) (RP.sepBy1 pFactor RP.skipSpaces)
 
-    pAbs = do xs <- RP.between (RP.char '\\') (RP.skipSpaces >> RP.string "->") (RP.sepBy1 (RP.skipSpaces >> pCId) (RP.skipSpaces >> RP.char ','))
+    pAbs = do xs <- RP.between (RP.char '\\') (RP.skipSpaces >> RP.string "->") pBinds
               e  <- pExpr
-              return (foldr EAbs e xs)
-                 
+              return (foldr (\(b,x) e -> EAbs b x e) e xs)
+
+pBinds :: RP.ReadP [(BindType,CId)]
+pBinds = do xss <- RP.sepBy1 (RP.skipSpaces >> pBind) (RP.skipSpaces >> RP.char ',')
+            return (concat xss)
+  where
+    pCIdOrWild = pCId `mplus` (RP.char '_' >> return wildCId)
+
+    pBind = 
+      do x <- pCIdOrWild
+         return [(Explicit,x)]
+      `mplus`
+      RP.between (RP.char '{')
+                 (RP.skipSpaces >> RP.char '}')
+                 (RP.sepBy1 (RP.skipSpaces >> pCIdOrWild >>= \id -> return (Implicit,id)) (RP.skipSpaces >> RP.char ','))
+
 pFactor =       fmap EFun  pCId
         RP.<++  fmap ELit  pLit
         RP.<++  fmap EMeta pMeta
@@ -170,14 +189,14 @@ pStr = RP.char '"' >> (RP.manyTill (pEsc RP.<++ RP.get) (RP.char '"'))
 -----------------------------------------------------
 
 ppExpr :: Int -> [CId] -> Expr -> PP.Doc
-ppExpr d scope (EAbs x e)   = let (xs,e1) = getVars [x] e
+ppExpr d scope (EAbs b x e) = let (bs,xs,e1) = getVars [] [] (EAbs b x e)
                               in ppParens (d > 1) (PP.char '\\' PP.<>
-                                                   PP.hsep (PP.punctuate PP.comma (List.map ppCId (reverse xs))) PP.<+>
+                                                   PP.hsep (PP.punctuate PP.comma (reverse (List.zipWith ppBind bs xs))) PP.<+>
                                                    PP.text "->" PP.<+>
                                                    ppExpr 1 (xs++scope) e1)
                               where
-                                getVars xs (EAbs x e) = getVars (freshName x xs:xs) e
-                                getVars xs e          = (xs,e)
+                                getVars bs xs (EAbs b x e) = getVars (b:bs) ((freshName x xs):xs) e
+                                getVars bs xs e            = (bs,xs,e)
 ppExpr d scope (EApp e1 e2) = ppParens (d > 3) ((ppExpr 3 scope e1) PP.<+> (ppExpr 4 scope e2))
 ppExpr d scope (ELit l)     = ppLit l
 ppExpr d scope (EMeta n)    = ppMeta n
@@ -192,6 +211,9 @@ ppPatt d scope (PLit l)    = (scope,ppLit l)
 ppPatt d scope (PVar f)    = (f:scope,ppCId f)
 ppPatt d scope PWild       = (scope,PP.char '_')
 
+ppBind Explicit x = ppCId x
+ppBind Implicit x = PP.braces (ppCId x)
+
 ppLit (LStr s) = PP.text (show s)
 ppLit (LInt n) = PP.integer n
 ppLit (LFlt d) = PP.double d
@@ -205,10 +227,12 @@ ppParens True  = PP.parens
 ppParens False = id
 
 freshName :: CId -> [CId] -> CId
-freshName x xs = loop 1 x
+freshName x xs0 = loop 1 x
   where
+    xs = wildCId : xs0
+
     loop i y
-      | elem y xs = loop (i+1) (mkCId (show x++"'"++show i))
+      | elem y xs = loop (i+1) (mkCId (show x++show i))
       | otherwise = y
 
 
@@ -220,12 +244,12 @@ freshName x xs = loop 1 x
 normalForm :: Funs -> Int -> Env -> Expr -> Expr
 normalForm funs k env e = value2expr k (eval funs env e)
   where
-    value2expr i (VApp f vs)               = foldl EApp (EFun f)       (List.map (value2expr i) vs)
-    value2expr i (VGen j vs)               = foldl EApp (EVar (i-j-1)) (List.map (value2expr i) vs)
-    value2expr i (VMeta j env vs)          = foldl EApp (EMeta j)      (List.map (value2expr i) vs)
-    value2expr i (VSusp j env vs k)        = value2expr i (k (VGen j vs))
-    value2expr i (VLit l)                  = ELit l
-    value2expr i (VClosure env (EAbs x e)) = EAbs x (value2expr (i+1) (eval funs ((VGen i []):env) e))
+    value2expr i (VApp f vs)                 = foldl EApp (EFun f)       (List.map (value2expr i) vs)
+    value2expr i (VGen j vs)                 = foldl EApp (EVar (i-j-1)) (List.map (value2expr i) vs)
+    value2expr i (VMeta j env vs)            = foldl EApp (EMeta j)      (List.map (value2expr i) vs)
+    value2expr i (VSusp j env vs k)          = value2expr i (k (VGen j vs))
+    value2expr i (VLit l)                    = ELit l
+    value2expr i (VClosure env (EAbs b x e)) = EAbs b x (value2expr (i+1) (eval funs ((VGen i []):env) e))
 
 data Value
   = VApp CId [Value]
@@ -248,7 +272,7 @@ eval funs env (EFun f)     = case Map.lookup f funs of
                                                   else VApp f []
                               Nothing        -> error ("unknown function "++showCId f)
 eval funs env (EApp e1 e2) = apply funs env e1 [eval funs env e2]
-eval funs env (EAbs x e)   = VClosure env (EAbs x e)
+eval funs env (EAbs b x e) = VClosure env (EAbs b x e)
 eval funs env (EMeta i)    = VMeta i env []
 eval funs env (ELit l)     = VLit l
 eval funs env (ETyped e _) = eval funs env e
@@ -263,18 +287,18 @@ apply funs env (EFun f)     vs     = case Map.lookup f funs of
                                                            else VApp f vs
                                        Nothing      -> error ("unknown function "++showCId f)
 apply funs env (EApp e1 e2) vs     = apply funs env e1 (eval funs env e2 : vs)
-apply funs env (EAbs x e)   (v:vs) = apply funs (v:env) e vs
+apply funs env (EAbs _ x e) (v:vs) = apply funs (v:env) e vs
 apply funs env (EMeta i)    vs     = VMeta i env vs
 apply funs env (ELit l)     vs     = error "literal of function type"
 apply funs env (ETyped e _) vs     = apply funs env e vs
 
-applyValue funs v                         []     = v
-applyValue funs (VApp f  vs0)             vs     = apply funs [] (EFun f) (vs0++vs)
-applyValue funs (VLit _)                  vs     = error "literal of function type"
-applyValue funs (VMeta i env vs0)         vs     = VMeta i env (vs0++vs)
-applyValue funs (VGen  i vs0)             vs     = VGen  i (vs0++vs)
-applyValue funs (VSusp i env vs0 k)       vs     = VSusp i env vs0 (\v -> applyValue funs (k v) vs)
-applyValue funs (VClosure env (EAbs x e)) (v:vs) = apply funs (v:env) e vs
+applyValue funs v                         []       = v
+applyValue funs (VApp f  vs0)             vs       = apply funs [] (EFun f) (vs0++vs)
+applyValue funs (VLit _)                  vs       = error "literal of function type"
+applyValue funs (VMeta i env vs0)         vs       = VMeta i env (vs0++vs)
+applyValue funs (VGen  i vs0)             vs       = VGen  i (vs0++vs)
+applyValue funs (VSusp i env vs0 k)       vs       = VSusp i env vs0 (\v -> applyValue funs (k v) vs)
+applyValue funs (VClosure env (EAbs b x e)) (v:vs) = apply funs (v:env) e vs
 
 -----------------------------------------------------
 -- Pattern matching

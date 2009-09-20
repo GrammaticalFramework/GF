@@ -200,12 +200,11 @@ tcHypos scope (h:hs) = do
   return (scope,h:hs)
 
 tcHypo :: Scope -> Hypo -> TcM (Scope,Hypo)
-tcHypo scope (Hyp    ty) = do
+tcHypo scope (b,x,ty) = do
   ty <- tcType scope ty
-  return (scope,Hyp ty)
-tcHypo scope (HypV x ty) = do
-  ty <- tcType scope ty
-  return (addScopedVar x (TTyp (scopeEnv scope) ty) scope,HypV x ty)
+  if x == wildCId
+    then return (scope,(b,x,ty))
+    else return (addScopedVar x (TTyp (scopeEnv scope) ty) scope,(b,x,ty))
 
 tcHypoExprs :: Scope -> Env -> [(Expr,Hypo)] -> TcM (Env,[Expr])
 tcHypoExprs scope delta []         = return (delta,[])
@@ -215,13 +214,12 @@ tcHypoExprs scope delta ((e,h):xs) = do
   return (delta,e:es)
 
 tcHypoExpr :: Scope -> Env -> Expr -> Hypo -> TcM (Env,Expr)
-tcHypoExpr scope delta e (Hyp    ty) = do
-  e  <- tcExpr scope e (TTyp delta ty)
-  return (delta,e)
-tcHypoExpr scope delta e (HypV x ty) = do
-  e  <- tcExpr scope e (TTyp delta ty)
-  funs <- getFuns
-  return (eval funs (scopeEnv scope) e:delta,e)
+tcHypoExpr scope delta e (b,x,ty) = do
+     e  <- tcExpr scope e (TTyp delta ty)
+     funs <- getFuns
+     if x == wildCId
+       then return (                             delta,e)
+       else return (eval funs (scopeEnv scope) e:delta,e)
 
 
 -----------------------------------------------------
@@ -239,16 +237,16 @@ checkExpr pgf e ty =
     Fail err   -> Left err
 
 tcExpr :: Scope -> Expr -> TType -> TcM Expr
-tcExpr scope e0@(EAbs x e) tty =
+tcExpr scope e0@(EAbs b x e) tty =
   case tty of
-    TTyp delta (DTyp (h:hs) c es) -> do e <- case h of
-                                               Hyp    ty -> tcExpr (addScopedVar x (TTyp delta ty) scope)
-                                                                   e (TTyp delta (DTyp hs c es))
-                                               HypV y ty -> tcExpr (addScopedVar x (TTyp delta ty) scope)
-                                                                   e (TTyp ((VGen (scopeSize scope) []):delta) (DTyp hs c es))
-                                        return (EAbs x e)
-    _                             -> do ty <- evalType (scopeSize scope) tty
-                                        tcError (NotFunType (scopeVars scope) e0 ty)
+    TTyp delta (DTyp ((_,y,ty):hs) c es) -> do e <- if y == wildCId
+                                                      then tcExpr (addScopedVar x (TTyp delta ty) scope)
+                                                                  e (TTyp delta (DTyp hs c es))
+                                                      else tcExpr (addScopedVar x (TTyp delta ty) scope)
+                                                                  e (TTyp ((VGen (scopeSize scope) []):delta) (DTyp hs c es))
+                                               return (EAbs b x e)
+    _                                    -> do ty <- evalType (scopeSize scope) tty
+                                               tcError (NotFunType (scopeVars scope) e0 ty)
 tcExpr scope (EMeta _) tty = do
   i <- newMeta scope
   return (EMeta i)
@@ -322,14 +320,13 @@ eqType scope k i0 tty1@(TTyp delta1 ty1@(DTyp hyps1 cat1 es1)) tty2@(TTyp delta2
     eqHyps :: Int -> Env -> [Hypo] -> Env -> [Hypo] -> TcM (Int,Env,Env)
     eqHyps k delta1 []                 delta2 []                 =
       return (k,delta1,delta2)
-    eqHyps k delta1 (Hyp    ty1 : h1s) delta2 (Hyp    ty2 : h2s) = do
+    eqHyps k delta1 ((_,x,ty1) : h1s) delta2 ((_,y,ty2) : h2s) = do
       eqType scope k i0 (TTyp delta1 ty1) (TTyp delta2 ty2)
-      (k,delta1,delta2) <- eqHyps k delta1 h1s delta2 h2s
-      return (k,delta1,delta2)
-    eqHyps k delta1 (HypV x ty1 : h1s) delta2 (HypV y ty2 : h2s) = do
-      eqType scope k i0 (TTyp delta1 ty1) (TTyp delta2 ty2)
-      (k,delta1,delta2) <- eqHyps (k+1) ((VGen k []):delta1) h1s ((VGen k []):delta2) h2s
-      return (k,delta1,delta2)
+      if x == wildCId && y == wildCId
+        then eqHyps k delta1 h1s delta2 h2s
+        else if x /= wildCId && y /= wildCId
+               then eqHyps (k+1) ((VGen k []):delta1) h1s ((VGen k []):delta2) h2s
+               else raiseTypeMatchError
     eqHyps k delta1               h1s  delta2               h2s  = raiseTypeMatchError
 
     eqExpr :: Int -> Env -> Expr -> Env -> Expr -> TcM ()
@@ -353,23 +350,23 @@ eqType scope k i0 tty1@(TTyp delta1 ty1@(DTyp hyps1 cat1 es1)) tty2@(TTyp delta2
         MUnbound _ _               -> return v
     deRef v = return v
 
-    eqValue' k (VSusp i env vs1 c)          v2                           = addConstraint i0 i env vs1 (\v1 -> eqValue k (c v1) v2)
-    eqValue' k v1                           (VSusp i env vs2 c)          = addConstraint i0 i env vs2 (\v2 -> eqValue k v1 (c v2))
-    eqValue' k (VMeta i env1 vs1)           (VMeta j env2 vs2) | i  == j = zipWithM_ (eqValue k) vs1 vs2
-    eqValue' k (VMeta i env1 vs1)           v2                           = do (MUnbound scopei cs) <- getMeta i
-                                                                              e2 <- mkLam i scopei env1 vs1 v2
-                                                                              setMeta i (MBound e2)
-                                                                              sequence_ [c e2 | c <- cs]
-    eqValue' k v1                           (VMeta i env2 vs2)           = do (MUnbound scopei cs) <- getMeta i
-                                                                              e1 <- mkLam i scopei env2 vs2 v1
-                                                                              setMeta i (MBound e1)
-                                                                              sequence_ [c e1 | c <- cs]
-    eqValue' k (VApp f1 vs1)                (VApp f2 vs2) | f1 == f2     = zipWithM_ (eqValue k) vs1 vs2
-    eqValue' k (VLit l1)                    (VLit l2    ) | l1 == l2     = return ()
-    eqValue' k (VGen  i vs1)                (VGen  j vs2) | i  == j      = zipWithM_ (eqValue k) vs1 vs2
-    eqValue' k (VClosure env1 (EAbs x1 e1)) (VClosure env2 (EAbs x2 e2)) = let v = VGen k []
-                                                                           in eqExpr (k+1) (v:env1) e1 (v:env2) e2
-    eqValue' k v1                           v2                           = raiseTypeMatchError
+    eqValue' k (VSusp i env vs1 c)            v2                             = addConstraint i0 i env vs1 (\v1 -> eqValue k (c v1) v2)
+    eqValue' k v1                             (VSusp i env vs2 c)            = addConstraint i0 i env vs2 (\v2 -> eqValue k v1 (c v2))
+    eqValue' k (VMeta i env1 vs1)             (VMeta j env2 vs2) | i  == j   = zipWithM_ (eqValue k) vs1 vs2
+    eqValue' k (VMeta i env1 vs1)             v2                             = do (MUnbound scopei cs) <- getMeta i
+                                                                                  e2 <- mkLam i scopei env1 vs1 v2
+                                                                                  setMeta i (MBound e2)
+                                                                                  sequence_ [c e2 | c <- cs]
+    eqValue' k v1                             (VMeta i env2 vs2)             = do (MUnbound scopei cs) <- getMeta i
+                                                                                  e1 <- mkLam i scopei env2 vs2 v1
+                                                                                  setMeta i (MBound e1)
+                                                                                  sequence_ [c e1 | c <- cs]
+    eqValue' k (VApp f1 vs1)                  (VApp f2 vs2) | f1 == f2       = zipWithM_ (eqValue k) vs1 vs2
+    eqValue' k (VLit l1)                      (VLit l2    ) | l1 == l2       = return ()
+    eqValue' k (VGen  i vs1)                  (VGen  j vs2) | i  == j        = zipWithM_ (eqValue k) vs1 vs2
+    eqValue' k (VClosure env1 (EAbs _ x1 e1)) (VClosure env2 (EAbs _ x2 e2)) = let v = VGen k []
+                                                                               in eqExpr (k+1) (v:env1) e1 (v:env2) e2
+    eqValue' k v1                           v2                               = raiseTypeMatchError
 
     mkLam i scope env vs0 v = do
       let k  = scopeSize scope
@@ -383,7 +380,7 @@ eqType scope k i0 tty1@(TTyp delta1 ty1@(DTyp hyps1 cat1 es1)) tty2@(TTyp delta2
       return (addLam vs0 (value2expr funs (length xs) v))
       where
         addLam []     e = e
-        addLam (v:vs) e = EAbs var (addLam vs e)
+        addLam (v:vs) e = EAbs Explicit var (addLam vs e)
 
         var = mkCId "v"
 
@@ -439,9 +436,10 @@ evalType k (TTyp delta ty) = do funs <- getFuns
       let ((k1,delta1),hyps1) = mapAccumL (evalHypo sig) (k,delta) hyps
       in DTyp hyps1 cat (List.map (normalForm sig k1 delta1) es)
     
-    evalHypo sig (k,delta) (Hyp    ty) = ((k,              delta),Hyp    (evalTy sig k delta ty))
-    evalHypo sig (k,delta) (HypV x ty) = ((k+1,(VGen k []):delta),HypV x (evalTy sig k delta ty))
-    evalHypo sig (k,delta) (HypI x ty) = ((k+1,(VGen k []):delta),HypI x (evalTy sig k delta ty))
+    evalHypo sig (k,delta) (b,x,ty) =
+      if x == wildCId
+        then ((k,              delta),(b,x,evalTy sig k delta ty))
+        else ((k+1,(VGen k []):delta),(b,x,evalTy sig k delta ty))
 
 
 -----------------------------------------------------
@@ -453,7 +451,7 @@ refineExpr e = TcM (\abstr metaid ms -> Ok metaid ms (refineExpr_ ms e))
 
 refineExpr_ ms e = refine e
   where
-    refine (EAbs x e)    = EAbs x (refine e)
+    refine (EAbs b x e)  = EAbs b x (refine e)
     refine (EApp e1 e2)  = EApp (refine e1) (refine e2)
     refine (ELit l)      = ELit l
     refine (EMeta i)     = case IntMap.lookup i ms of
@@ -467,15 +465,11 @@ refineExpr_ ms e = refine e
 refineType :: Type -> TcM Type
 refineType ty = TcM (\abstr metaid ms -> Ok metaid ms (refineType_ ms ty))
 
-refineType_ ms (DTyp hyps cat es) = DTyp (List.map (refineHypo_ ms) hyps) cat (List.map (refineExpr_ ms) es)
+refineType_ ms (DTyp hyps cat es) = DTyp [(b,x,refineType_ ms ty) | (b,x,ty) <- hyps] cat (List.map (refineExpr_ ms) es)
 
-refineHypo_ ms (Hyp    ty) = Hyp    (refineType_ ms ty)
-refineHypo_ ms (HypV x ty) = HypV x (refineType_ ms ty)
-refineHypo_ ms (HypI x ty) = HypI x (refineType_ ms ty)
-
-value2expr sig i (VApp f vs)               = foldl EApp (EFun f)           (List.map (value2expr sig i) vs)
-value2expr sig i (VGen j vs)               = foldl EApp (EVar (i-j-1))     (List.map (value2expr sig i) vs)
-value2expr sig i (VMeta j env vs)          = foldl EApp (EMeta j) (List.map (value2expr sig i) vs)
-value2expr sig i (VSusp j env vs k)        = value2expr sig i (k (VGen j vs))
-value2expr sig i (VLit l)                  = ELit l
-value2expr sig i (VClosure env (EAbs x e)) = EAbs x (value2expr sig (i+1) (eval sig ((VGen i []):env) e))
+value2expr sig i (VApp f vs)                 = foldl EApp (EFun f)           (List.map (value2expr sig i) vs)
+value2expr sig i (VGen j vs)                 = foldl EApp (EVar (i-j-1))     (List.map (value2expr sig i) vs)
+value2expr sig i (VMeta j env vs)            = foldl EApp (EMeta j) (List.map (value2expr sig i) vs)
+value2expr sig i (VSusp j env vs k)          = value2expr sig i (k (VGen j vs))
+value2expr sig i (VLit l)                    = ELit l
+value2expr sig i (VClosure env (EAbs b x e)) = EAbs b x (value2expr sig (i+1) (eval sig ((VGen i []):env) e))

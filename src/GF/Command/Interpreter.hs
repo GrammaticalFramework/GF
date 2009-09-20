@@ -74,7 +74,7 @@ appCommand xs c@(Command i os arg) = case arg of
   _       -> c
  where
   app e = case e of
-    EAbs x e   -> EAbs x (app e)
+    EAbs b x e -> EAbs b x (app e)
     EApp e1 e2 -> EApp (app e1) (app e2)
     ELit l     -> ELit l
     EMeta i    -> xs !! i
