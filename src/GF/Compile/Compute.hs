@@ -62,22 +62,22 @@ computeTermOpt rec gr = comput True where
          _ -> comp g t'
 
      -- Abs x@(IA _) b -> do 
-     Abs x b | full -> do 
+     Abs _ _ _ | full -> do 
        let (xs,b1) = termFormCnc t   
-       b' <- comp ([(x,Vr x) | x <- xs] ++ g) b1
+       b' <- comp ([(x,Vr x) | (_,x) <- xs] ++ g) b1
        return $ mkAbs xs b'
      --  b' <- comp (ext x (Vr x) g) b
      --  return $ Abs x b'
-     Abs _ _ -> return t -- hnf
+     Abs _ _ _ -> return t -- hnf
 
      Let (x,(_,a)) b -> do
        a' <- comp g a
        comp (ext x a' g) b
 
-     Prod x a b -> do
+     Prod b x a t -> do
        a' <- comp g a
-       b' <- comp (ext x (Vr x) g) b
-       return $ Prod x a' b'
+       t' <- comp (ext x (Vr x) g) t
+       return $ Prod b x a' t'
 
      -- beta-convert
      App f a -> case appForm t of
@@ -92,9 +92,9 @@ computeTermOpt rec gr = comput True where
             (t',b) <- appPredefined (mkApp h' as')
             if b then return t' else comp g t'
 
-          Abs _ _ -> do
+          Abs _ _ _ -> do
             let (xs,b) = termFormCnc h'
-            let g' = (zip xs as') ++ g
+            let g' = (zip (map snd xs) as') ++ g
             let as2 = drop (length xs) as'
             let xs2 = drop (length as') xs
             b' <- comp g' (mkAbs xs2 b)
@@ -234,11 +234,11 @@ computeTermOpt rec gr = comput True where
        f' <- hnf g f
        a' <- comp g a
        case (f',a') of
-         (Abs x b, FV as) -> 
+         (Abs _ x b, FV as) -> 
            mapM (\c -> comp (ext x c g) b) as >>= return . variants
          (_, FV as)  -> mapM (\c -> comp g (App f' c)) as >>= return . variants
          (FV fs, _)  -> mapM (\c -> comp g (App c a')) fs >>= return . variants
-         (Abs x b,_) -> comp (ext x a' g) b
+         (Abs _ x b,_) -> comp (ext x a' g) b
 
          (QC _ _,_)  -> returnC $ App f' a'
 

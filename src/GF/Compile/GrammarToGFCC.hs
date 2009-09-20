@@ -119,6 +119,10 @@ canon2gfcc opts pars cgr@(M.MGrammar ((a,abm):cms)) =
 i2i :: Ident -> CId
 i2i = CId . ident2bs
 
+b2b :: A.BindType -> C.BindType
+b2b A.Explicit = C.Explicit
+b2b A.Implicit = C.Implicit
+
 mkType :: [Ident] -> A.Type -> C.Type
 mkType scope t =
   case GM.typeForm t of
@@ -127,9 +131,9 @@ mkType scope t =
 
 mkExp :: [Ident] -> A.Term -> C.Expr
 mkExp scope t = case GM.termForm t of
-    Ok (xs,c,args) -> mkAbs xs (mkApp (reverse xs++scope) c (map (mkExp scope) args))
+    Ok (xs,c,args) -> mkAbs xs (mkApp (map snd (reverse xs)++scope) c (map (mkExp scope) args))
   where
-    mkAbs xs t = foldr (C.EAbs C.Explicit . i2i) t xs
+    mkAbs xs t = foldr (\(b,v) -> C.EAbs (b2b b) (i2i v)) t xs
     mkApp scope c args = case c of
       Q _ c    -> foldl C.EApp (C.EFun (i2i c)) args
       QC _ c   -> foldl C.EApp (C.EFun (i2i c)) args
@@ -154,10 +158,10 @@ mkPatt scope p =
 
 
 mkContext :: [Ident] -> A.Context -> ([Ident],[C.Hypo])
-mkContext scope hyps = mapAccumL (\scope (x,ty) -> let ty' = mkType scope ty
-                                                   in if x == identW
-                                                        then (  scope,(C.Explicit,i2i x,ty'))
-                                                        else (x:scope,(C.Explicit,i2i x,ty'))) scope hyps 
+mkContext scope hyps = mapAccumL (\scope (bt,x,ty) -> let ty' = mkType scope ty
+                                                      in if x == identW
+                                                           then (  scope,(b2b bt,i2i x,ty'))
+                                                           else (x:scope,(b2b bt,i2i x,ty'))) scope hyps 
 
 mkTerm :: Term -> C.Term
 mkTerm tr = case tr of
@@ -179,7 +183,7 @@ mkTerm tr = case tr of
 -----  K (KP ss _) -> C.K (C.KP ss []) ---- TODO: prefix variants
   Empty    -> C.S []
   App _ _  -> prtTrace tr $ C.C 66661          ---- for debugging
-  Abs _ t  -> mkTerm t ---- only on toplevel
+  Abs _ _ t -> mkTerm t ---- only on toplevel
   Alts (td,tvs) -> 
     C.K (C.KP (strings td) [C.Alt (strings u) (strings v) | (u,v) <- tvs])
   _ -> prtTrace tr $ C.S [C.K (C.KS (render (A.ppTerm Unqualified 0 tr <+> int 66662)))] ---- for debugging
@@ -309,9 +313,9 @@ canon2canon opts abs cg0 =
       ResParam (Just (ps,v)) -> 
         ResParam (Just ([(c,concatMap unRec cont) | (c,cont) <- ps],Nothing))
       _ -> j
-  unRec (x,ty) = case ty of
-      RecType fs -> [ity | (_,typ) <- fs, ity <- unRec (identW,typ)] 
-      _ -> [(x,ty)]
+  unRec (bt,x,ty) = case ty of
+      RecType fs -> [ity | (_,typ) <- fs, ity <- unRec (Explicit,identW,typ)] 
+      _ -> [(bt,x,ty)]
 
 ----
   trs v = traceD (render (tr v)) v

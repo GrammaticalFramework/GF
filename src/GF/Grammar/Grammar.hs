@@ -15,35 +15,36 @@
 -----------------------------------------------------------------------------
 
 module GF.Grammar.Grammar (SourceGrammar,
-                emptySourceGrammar,                
-		SourceModInfo,
-		SourceModule,
-                mapSourceModule,
-		Info(..),
-                PValues,
-		Type,
-		Cat,
-		Fun,
-		QIdent,
-		Term(..),
-		Patt(..),
-		TInfo(..),
-		Label(..),
-		MetaId,
-		Hypo,
-		Context,
-		Equation,
-		Labelling,
-		Assign,
-		Case,
-		Cases,
-		LocalDef,
-		Param,
-		Altern,
-		Substitution,
-		varLabel, tupleLabel, linLabel, theLinLabel,
-		ident2label, label2ident
-	       ) where
+        emptySourceGrammar,                
+        SourceModInfo,
+        SourceModule,
+        mapSourceModule,
+        Info(..),
+        PValues,
+        Type,
+        Cat,
+        Fun,
+        QIdent,
+        BindType(..),
+        Term(..),
+        Patt(..),
+        TInfo(..),
+        Label(..),
+        MetaId,
+        Hypo,
+        Context,
+        Equation,
+        Labelling,
+        Assign,
+        Case,
+        Cases,
+        LocalDef,
+        Param,
+        Altern,
+        Substitution,
+        varLabel, tupleLabel, linLabel, theLinLabel,
+        ident2label, label2ident
+        ) where
 
 import GF.Infra.Ident
 import GF.Infra.Option ---
@@ -103,57 +104,62 @@ type Fun  = QIdent
 
 type QIdent = (Ident,Ident)
 
-data Term =
-   Vr Ident             -- ^ variable
- | Cn Ident             -- ^ constant
- | Con Ident            -- ^ constructor
- | Sort Ident           -- ^ basic type
- | EInt Integer         -- ^ integer literal
- | EFloat Double        -- ^ floating point literal
- | K String             -- ^ string literal or token: @\"foo\"@
- | Empty                -- ^ the empty string @[]@
+data BindType = 
+    Explicit
+  | Implicit
+  deriving (Eq,Ord,Show)
 
- | App Term Term        -- ^ application: @f a@
- | Abs Ident Term       -- ^ abstraction: @\x -> b@
+data Term =
+   Vr Ident                      -- ^ variable
+ | Cn Ident                      -- ^ constant
+ | Con Ident                     -- ^ constructor
+ | Sort Ident                    -- ^ basic type
+ | EInt Integer                  -- ^ integer literal
+ | EFloat Double                 -- ^ floating point literal
+ | K String                      -- ^ string literal or token: @\"foo\"@
+ | Empty                         -- ^ the empty string @[]@
+
+ | App Term Term                 -- ^ application: @f a@
+ | Abs BindType Ident Term       -- ^ abstraction: @\x -> b@
  | Meta {-# UNPACK #-} !MetaId   -- ^ metavariable: @?i@ (only parsable: ? = ?0)
- | Prod Ident Term Term -- ^ function type: @(x : A) -> B@
- | Typed Term Term      -- ^ type-annotated term
+ | Prod BindType Ident Term Term -- ^ function type: @(x : A) -> B@, @A -> B@, @({x} : A) -> B@
+ | Typed Term Term               -- ^ type-annotated term
 --
 -- /below this, the constructors are only for concrete syntax/
- | Example Term String  -- ^ example-based term: @in M.C "foo"
- | RecType [Labelling]  -- ^ record type: @{ p : A ; ...}@
- | R [Assign]           -- ^ record:      @{ p = a ; ...}@
- | P Term Label         -- ^ projection:  @r.p@
- | PI Term Label Int    -- ^ index-annotated projection
- | ExtR Term Term       -- ^ extension:   @R ** {x : A}@ (both types and terms)
+ | Example Term String           -- ^ example-based term: @in M.C "foo"
+ | RecType [Labelling]           -- ^ record type: @{ p : A ; ...}@
+ | R [Assign]                    -- ^ record:      @{ p = a ; ...}@
+ | P Term Label                  -- ^ projection:  @r.p@
+ | PI Term Label Int             -- ^ index-annotated projection
+ | ExtR Term Term                -- ^ extension:   @R ** {x : A}@ (both types and terms)
  
- | Table Term Term      -- ^ table type:  @P => A@
- | T TInfo [Case]       -- ^ table:       @table {p => c ; ...}@
- | TSh TInfo [Cases]    -- ^ table with disjunctive patters (only back end opt)
- | V Type [Term]        -- ^ table given as course of values: @table T [c1 ; ... ; cn]@
- | S Term Term          -- ^ selection:   @t ! p@
- | Val Term Type Int    -- ^ parameter value number: @T # i#
+ | Table Term Term               -- ^ table type:  @P => A@
+ | T TInfo [Case]                -- ^ table:       @table {p => c ; ...}@
+ | TSh TInfo [Cases]             -- ^ table with disjunctive patters (only back end opt)
+ | V Type [Term]                 -- ^ table given as course of values: @table T [c1 ; ... ; cn]@
+ | S Term Term                   -- ^ selection:   @t ! p@
+ | Val Term Type Int             -- ^ parameter value number: @T # i#
 
- | Let LocalDef Term    -- ^ local definition: @let {t : T = a} in b@
+ | Let LocalDef Term             -- ^ local definition: @let {t : T = a} in b@
 
- | Alias Ident Type Term  -- ^ constant and its definition, used in inlining
+ | Alias Ident Type Term         -- ^ constant and its definition, used in inlining
 
- | Q  Ident Ident        -- ^ qualified constant from a package
- | QC Ident Ident        -- ^ qualified constructor from a package
+ | Q  Ident Ident                -- ^ qualified constant from a package
+ | QC Ident Ident                -- ^ qualified constructor from a package
 
- | C Term Term    -- ^ concatenation: @s ++ t@
- | Glue Term Term -- ^ agglutination: @s + t@
+ | C Term Term                   -- ^ concatenation: @s ++ t@
+ | Glue Term Term                -- ^ agglutination: @s + t@
 
- | EPatt Patt     -- ^ pattern (in macro definition): # p
- | EPattType Term -- ^ pattern type: pattern T
+ | EPatt Patt                    -- ^ pattern (in macro definition): # p
+ | EPattType Term                -- ^ pattern type: pattern T
 
- | ELincat Ident Term -- ^ boxed linearization type of Ident
- | ELin Ident Term    -- ^ boxed linearization of type Ident
+ | ELincat Ident Term            -- ^ boxed linearization type of Ident
+ | ELin Ident Term               -- ^ boxed linearization of type Ident
 
- | FV [Term]      -- ^ alternatives in free variation: @variants { s ; ... }@
+ | FV [Term]                     -- ^ alternatives in free variation: @variants { s ; ... }@
 
- | Alts (Term, [(Term, Term)]) -- ^ alternatives by prefix: @pre {t ; s\/c ; ...}@
- | Strs [Term]                 -- ^ conditioning prefix strings: @strs {s ; ...}@
+ | Alts (Term, [(Term, Term)])   -- ^ alternatives by prefix: @pre {t ; s\/c ; ...}@
+ | Strs [Term]                   -- ^ conditioning prefix strings: @strs {s ; ...}@
 
   deriving (Show, Eq, Ord)
 
@@ -200,8 +206,8 @@ data Label =
 
 type MetaId = Int
 
-type Hypo     = (Ident,Term)  -- (x:A)  (_:A)  A
-type Context  = [Hypo]        -- (x:A)(y:B)   (x,y:A)   (_,_:A)
+type Hypo     = (BindType,Ident,Term)   -- (x:A)  (_:A)  A  ({x}:A)
+type Context  = [Hypo]                  -- (x:A)(y:B)   (x,y:A)   (_,_:A)
 type Equation = ([Patt],Term) 
 
 type Labelling = (Label, Term) 

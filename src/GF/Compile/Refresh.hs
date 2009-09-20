@@ -37,13 +37,13 @@ refresh :: Term -> STM IdState Term
 refresh e = case e of
 
   Vr x    -> liftM  Vr  (lookVar x)
-  Abs x b -> liftM2 Abs (refVarPlus x)  (refresh b)
+  Abs b x t -> liftM2 (Abs b) (refVarPlus x)  (refresh t)
 
-  Prod x a b -> do
+  Prod b x a t -> do
     a'  <- refresh a
     x'  <- refVar  x
-    b'  <- refresh b
-    return $ Prod x' a' b'
+    t'  <- refresh t
+    return $ Prod b x' a' t'
 
   Let (x,(mt,a)) b -> do
     a'  <- refresh a

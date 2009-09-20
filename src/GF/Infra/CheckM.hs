@@ -80,9 +80,9 @@ checkGetContext = Check (\ctxt msgs -> Success ctxt ctxt msgs)
 checkLookup :: Ident -> Check Type
 checkLookup x = do
   co <- checkGetContext
-  case lookup x co of
-    Nothing -> checkError (text "unknown variable" <+> ppIdent x)
-    Just ty -> return ty
+  case [ty | (b,y,ty) <- co, x == y] of
+    []     -> checkError (text "unknown variable" <+> ppIdent x)
+    (ty:_) -> return ty
 
 runCheck :: Check a -> Either [Message] (a,Context,[Message])
 runCheck c =

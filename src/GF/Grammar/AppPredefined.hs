@@ -50,11 +50,11 @@ typPredefined f
   | f == cPlus      = return $ mkFunType [typeInt,typeInt] (typeInt)
 ----  "read"   -> (P : Type) -> Tok -> P
   | f == cShow      = return $ mkProd -- (P : PType) -> P -> Tok
-    ([(varP,typePType),(identW,Vr varP)],typeStr,[]) 
+    ([(Explicit,varP,typePType),(Explicit,identW,Vr varP)],typeStr,[]) 
   | f == cToStr     = return $ mkProd -- (L : Type)  -> L -> Str
-    ([(varL,typeType),(identW,Vr varL)],typeStr,[]) 
+    ([(Explicit,varL,typeType),(Explicit,identW,Vr varL)],typeStr,[]) 
   | f == cMapStr    = return $ mkProd -- (L : Type)  -> (Str -> Str) -> L -> L
-    ([(varL,typeType),(identW,mkFunType [typeStr] typeStr),(identW,Vr varL)],Vr varL,[])
+    ([(Explicit,varL,typeType),(Explicit,identW,mkFunType [typeStr] typeStr),(Explicit,identW,Vr varL)],Vr varL,[])
   | f == cTake      = return $ mkFunType [typeInt,typeTok] typeTok
   | f == cTk        = return $ mkFunType [typeInt,typeTok] typeTok
   | otherwise       = Bad (render (text "unknown in Predef:" <+> ppIdent f))

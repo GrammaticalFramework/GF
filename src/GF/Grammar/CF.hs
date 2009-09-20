@@ -112,8 +112,8 @@ cf2rule (fun, (cat, items)) = (def,ldef) where
   f     = identS fun
   def   = (f, AbsFun (Just (mkProd (args', Cn (identS cat), []))) Nothing Nothing)
   args0 = zip (map (identS . ("x" ++) . show) [0..]) items
-  args  = [(v, Cn (identS c)) | (v, Left c) <- args0]
-  args' = [(identS "_", Cn (identS c)) | (_, Left c) <- args0]
+  args  = [((Explicit,v), Cn (identS c)) | (v, Left c) <- args0]
+  args' = [(Explicit,identS "_", Cn (identS c)) | (_, Left c) <- args0]
   ldef  = (f, CncFun 
                Nothing 
                (Just (mkAbs (map fst args) 

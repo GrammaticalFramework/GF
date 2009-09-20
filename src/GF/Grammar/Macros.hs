@@ -33,16 +33,16 @@ import Text.PrettyPrint
 
 firstTypeForm :: Type -> Err (Context, Type)
 firstTypeForm t = case t of
-  Prod x a b  -> do
-    (x', val) <- firstTypeForm b 
-    return ((x,a):x',val)
+  Prod b x a t  -> do
+    (x', val) <- firstTypeForm t
+    return ((b,x,a):x',val)
   _ -> return ([],t)
 
 qTypeForm :: Type -> Err (Context, Cat, [Term])
 qTypeForm t = case t of
-  Prod x a b  -> do
-    (x', cat, args) <- qTypeForm b 
-    return ((x,a):x', cat, args)
+  Prod b x a t  -> do
+    (x', cat, args) <- qTypeForm t
+    return ((b,x,a):x', cat, args)
   App c a -> do
     (_,cat, args) <- qTypeForm c
     return ([],cat,args ++ [a])
@@ -61,9 +61,9 @@ typeForm = qTypeForm ---- no need to distinguish any more
 
 typeFormCnc :: Type -> Err (Context, Type)
 typeFormCnc t = case t of
-  Prod x a b  -> do
-    (x', v) <- typeFormCnc b 
-    return ((x,a):x',v)
+  Prod b x a t  -> do
+    (x', v) <- typeFormCnc t
+    return ((b,x,a):x',v)
   _ -> return ([],t)
 
 valCat :: Type -> Err Cat
@@ -84,7 +84,7 @@ valTypeCnc typ =
 typeRawSkeleton :: Type -> Err ([(Int,Type)],Type)
 typeRawSkeleton typ =
   do (cont,typ) <- typeFormCnc typ
-     args <- mapM (typeRawSkeleton . snd) cont
+     args <- mapM (\(b,x,t) -> typeRawSkeleton t) cont
      return ([(length c, v) | (c,v) <- args], typ)
 
 type MCat = (Ident,Ident)
@@ -117,9 +117,9 @@ funsToAndFrom t = errVal undefined $ do ---
 
 typeFormConcrete :: Type -> Err (Context, Type)
 typeFormConcrete t = case t of
-  Prod x a b  -> do 
-    (x', typ) <- typeFormConcrete b 
-    return ((x,a):x', typ)
+  Prod b x a t  -> do 
+    (x', typ) <- typeFormConcrete t
+    return ((b,x,a):x', typ)
   _       -> return ([],t)
 
 isRecursiveType :: Type -> Bool
@@ -130,54 +130,49 @@ isRecursiveType t = errVal False $ do
 isHigherOrderType :: Type -> Bool
 isHigherOrderType t = errVal True $ do  -- pessimistic choice
   co <- contextOfType t
-  return $ not $ null [x | (x,Prod _ _ _) <- co]
+  return $ not $ null [x | (_,x,Prod _ _ _ _) <- co]
 
 contextOfType :: Type -> Err Context
 contextOfType typ = case typ of
-  Prod x a b -> liftM ((x,a):) $ contextOfType b
-  _ -> return [] 
+  Prod b x a t -> liftM ((b,x,a):) $ contextOfType t
+  _            -> return [] 
 
-termForm :: Term -> Err ([(Ident)], Term, [Term])
+termForm :: Term -> Err ([(BindType,Ident)], Term, [Term])
 termForm t = case t of
-   Abs x b  ->
-     do (x', fun, args) <- termForm b 
-        return (x:x', fun, args)
+   Abs b x t  ->
+     do (x', fun, args) <- termForm t
+        return ((b,x):x', fun, args)
    App c a ->
      do (_,fun, args) <- termForm c
         return ([],fun,args ++ [a]) 
    _       -> 
      return ([],t,[])
 
-termFormCnc :: Term -> ([(Ident)], Term)
+termFormCnc :: Term -> ([(BindType,Ident)], Term)
 termFormCnc t = case t of
-   Abs x b  -> (x:xs, t') where (xs,t') = termFormCnc b 
-   _        -> ([],t)
+   Abs b x t  -> ((b,x):xs, t') where (xs,t') = termFormCnc t
+   _          -> ([],t)
 
 appForm :: Term -> (Term, [Term])
 appForm t = case t of
   App c a -> (fun, args ++ [a]) where (fun, args) = appForm c
   _       -> (t,[])
 
-varsOfType :: Type -> [Ident]
-varsOfType t = case t of
-  Prod x _ b -> x : varsOfType b
-  _ -> []
-
 mkProdSimple :: Context -> Term -> Term
 mkProdSimple c t = mkProd (c,t,[])
 
 mkProd :: (Context, Term, [Term]) -> Term
-mkProd ([],typ,args) = mkApp typ args
-mkProd ((x,a):dd, typ, args) = Prod x a (mkProd (dd, typ, args))
+mkProd ([],         typ, args) = mkApp typ args
+mkProd ((b,x,a):dd, typ, args) = Prod b x a (mkProd (dd, typ, args))
 
-mkTerm :: ([(Ident)], Term, [Term]) -> Term
+mkTerm :: ([(BindType,Ident)], Term, [Term]) -> Term
 mkTerm (xx,t,aa) = mkAbs xx (mkApp t aa)
 
 mkApp :: Term -> [Term] -> Term
 mkApp = foldl App
 
-mkAbs :: [Ident] -> Term -> Term
-mkAbs xx t = foldr Abs t xx
+mkAbs :: [(BindType,Ident)] -> Term -> Term
+mkAbs xx t = foldr (uncurry Abs) t xx
 
 appCons :: Ident -> [Term] -> Term
 appCons = mkApp . Cn
@@ -186,7 +181,7 @@ mkLet :: [LocalDef] -> Term -> Term
 mkLet defs t = foldr Let t defs
 
 mkLetUntyped :: Context -> Term -> Term
-mkLetUntyped defs = mkLet [(x,(Nothing,t)) | (x,t) <- defs]
+mkLetUntyped defs = mkLet [(x,(Nothing,t)) | (_,x,t) <- defs]
 
 isVariable :: Term -> Bool
 isVariable (Vr _ ) = True
@@ -272,12 +267,12 @@ mkSelects t tt = foldl S t tt
 mkTable :: [Term] -> Term -> Term
 mkTable tt t = foldr Table t tt
 
-mkCTable :: [Ident] -> Term -> Term
+mkCTable :: [(BindType,Ident)] -> Term -> Term
 mkCTable ids v = foldr ccase v ids where 
-  ccase x t = T TRaw [(PV x,t)]
+  ccase (_,x) t = T TRaw [(PV x,t)]
 
 mkHypo :: Term -> Hypo
-mkHypo typ = (identW, typ)
+mkHypo typ = (Explicit,identW, typ)
 
 eqStrIdent :: Ident -> Ident -> Bool
 eqStrIdent = (==)
@@ -298,7 +293,7 @@ mkWildCases :: Term -> Term
 mkWildCases = mkCases identW
 
 mkFunType :: [Type] -> Type -> Type
-mkFunType tt t = mkProd ([(identW, ty) | ty <- tt], t, []) -- nondep prod
+mkFunType tt t = mkProd ([(Explicit,identW, ty) | ty <- tt], t, []) -- nondep prod
 
 plusRecType :: Type -> Type -> Err Type
 plusRecType t1 t2 = case (t1, t2) of
@@ -510,13 +505,13 @@ composOp co trm =
      do c' <- co c
         a' <- co a
         return (App c' a')
-   Abs x b ->
-     do b' <- co b
-        return (Abs x b')
-   Prod x a b -> 
+   Abs b x t ->
+     do t' <- co t
+        return (Abs b x t')
+   Prod b x a t -> 
      do a' <- co a
-        b' <- co b
-        return (Prod x a' b')
+        t' <- co t
+        return (Prod b x a' t')
    S c a -> 
      do c' <- co c
         a' <- co a
@@ -618,25 +613,25 @@ changeTableType co i = case i of
 
 collectOp :: (Term -> [a]) -> Term -> [a]
 collectOp co trm = case trm of
-  App c a    -> co c ++ co a 
-  Abs _ b    -> co b
-  Prod _ a b -> co a ++ co b 
-  S c a      -> co c ++ co a
-  Table a c  -> co a ++ co c
-  ExtR a c   -> co a ++ co c
-  R r        -> concatMap (\ (_,(mt,a)) -> maybe [] co mt ++ co a) r 
-  RecType r  -> concatMap (co . snd) r 
-  P t i      -> co t
-  T _ cc     -> concatMap (co . snd) cc -- not from patterns --- nor from type annot
-  TSh _ cc   -> concatMap (co . snd) cc -- not from patterns --- nor from type annot
-  V _ cc     -> concatMap co         cc --- nor from type annot
+  App c a      -> co c ++ co a 
+  Abs _ _ b    -> co b
+  Prod _ _ a b -> co a ++ co b 
+  S c a        -> co c ++ co a
+  Table a c    -> co a ++ co c
+  ExtR a c     -> co a ++ co c
+  R r          -> concatMap (\ (_,(mt,a)) -> maybe [] co mt ++ co a) r 
+  RecType r    -> concatMap (co . snd) r 
+  P t i        -> co t
+  T _ cc       -> concatMap (co . snd) cc -- not from patterns --- nor from type annot
+  TSh _ cc     -> concatMap (co . snd) cc -- not from patterns --- nor from type annot
+  V _ cc       -> concatMap co         cc --- nor from type annot
   Let (x,(mt,a)) b -> maybe [] co mt ++ co a ++ co b
-  C s1 s2    -> co s1 ++ co s2 
-  Glue s1 s2 -> co s1 ++ co s2 
-  Alts (t,aa) -> let (x,y) = unzip aa in co t ++ concatMap co (x ++ y)
-  FV ts      -> concatMap co ts
-  Strs tt    -> concatMap co tt
-  _ -> [] -- covers K, Vr, Cn, Sort
+  C s1 s2      -> co s1 ++ co s2 
+  Glue s1 s2   -> co s1 ++ co s2 
+  Alts (t,aa)  -> let (x,y) = unzip aa in co t ++ concatMap co (x ++ y)
+  FV ts        -> concatMap co ts
+  Strs tt      -> concatMap co tt
+  _            -> [] -- covers K, Vr, Cn, Sort
 
 -- | to find the word items in a term
 wordsInTerm :: Term -> [String]
@@ -652,12 +647,6 @@ noExist = FV []
 
 defaultLinType :: Type
 defaultLinType = mkRecType linLabel [typeStr]
-
--- | from GF1, 20\/9\/2003
-isInOneType :: Type -> Bool
-isInOneType t = case t of
-  Prod _ a b -> a == b
-  _ -> False
 
 -- normalize records and record types; put s first
 
