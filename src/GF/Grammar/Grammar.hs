@@ -95,7 +95,7 @@ data Info =
 
 -- indirection to module Ident
  | AnyInd Bool Ident                         -- ^ (/INDIR/) the 'Bool' says if canonical
-  deriving (Read, Show)
+  deriving Show
 
 type Type = Term
 type Cat  = QIdent
@@ -155,7 +155,7 @@ data Term =
  | Alts (Term, [(Term, Term)]) -- ^ alternatives by prefix: @pre {t ; s\/c ; ...}@
  | Strs [Term]                 -- ^ conditioning prefix strings: @strs {s ; ...}@
 
-  deriving (Read, Show, Eq, Ord)
+  deriving (Show, Eq, Ord)
 
 data Patt =
    PC Ident [Patt]        -- ^ constructor pattern: @C p1 ... pn@    @C@ 
@@ -182,7 +182,7 @@ data Patt =
  | PMacro Ident           -- #p
  | PM Ident Ident         -- #m.p
 
-  deriving (Read, Show, Eq, Ord)
+  deriving (Show, Eq, Ord)
 
 -- | to guide computation and type checking of tables
 data TInfo = 
@@ -190,15 +190,15 @@ data TInfo =
  | TTyped Type  -- ^ type annontated, but can be anything
  | TComp Type   -- ^ expanded
  | TWild Type   -- ^ just one wild card pattern, no need to expand 
-  deriving (Read, Show, Eq, Ord)
+  deriving (Show, Eq, Ord)
 
 -- | record label
 data Label = 
     LIdent BS.ByteString
   | LVar Int
-   deriving (Read, Show, Eq, Ord)
+   deriving (Show, Eq, Ord)
 
-newtype MetaSymb = MetaSymb Int    deriving (Read, Show, Eq, Ord)
+newtype MetaSymb = MetaSymb Int    deriving (Show, Eq, Ord)
 
 type Hypo     = (Ident,Term)  -- (x:A)  (_:A)  A
 type Context  = [Hypo]        -- (x:A)(y:B)   (x,y:A)   (_,_:A)
