@@ -42,7 +42,7 @@ type2val :: Type -> Val
 type2val = VClos []
 
 cont2exp :: Context -> Exp
-cont2exp c = mkProd (c, eType, []) -- to check a context
+cont2exp c = mkProd c eType [] -- to check a context
 
 cont2val :: Context -> Val
 cont2val = type2val . cont2exp

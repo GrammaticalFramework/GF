@@ -110,7 +110,7 @@ cf2cat (_,(cat, items)) = map identS $ cat : [c | Left c <- items]
 cf2rule :: CFRule -> ((Ident,Info),(Ident,Info))
 cf2rule (fun, (cat, items)) = (def,ldef) where
   f     = identS fun
-  def   = (f, AbsFun (Just (mkProd (args', Cn (identS cat), []))) Nothing Nothing)
+  def   = (f, AbsFun (Just (mkProd args' (Cn (identS cat)) [])) Nothing Nothing)
   args0 = zip (map (identS . ("x" ++) . show) [0..]) items
   args  = [((Explicit,v), Cn (identS c)) | (v, Left c) <- args0]
   args' = [(Explicit,identS "_", Cn (identS c)) | (_, Left c) <- args0]
