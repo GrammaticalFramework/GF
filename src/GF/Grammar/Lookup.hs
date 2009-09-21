@@ -111,7 +111,7 @@ lookupResType gr m c = do
     CncCat _ _ _ -> return typeType
     CncFun (Just (cat,(cont@(_:_),val))) _ _ -> do
           val' <- lock cat val 
-          return $ mkProd (cont, val', [])
+          return $ mkProd cont val' []
     CncFun _ _ _      -> lookFunType m m c
     AnyInd _ n        -> lookupResType gr n c
     ResParam _        -> return $ typePType
@@ -137,8 +137,8 @@ lookupOverload gr m c = do
     case info of
       ResOverload os tysts -> do
             tss <- mapM (\x -> lookupOverload gr x c) os
-            return $ [(map (\(b,x,t) -> t) args,(val,tr)) | 
-                      (ty,tr) <- tysts, Ok (args,val) <- [typeFormCnc ty]] ++ 
+            return $ [let (args,val) = typeFormCnc ty in (map (\(b,x,t) -> t) args,(val,tr)) | 
+                      (ty,tr) <- tysts] ++ 
                      concat tss
 
       AnyInd _ n  -> lookupOverload gr n c
@@ -279,14 +279,12 @@ opersForType gr orig val =
     opers i m val = 
       [(f,ty) |
         (f,ResOper (Just ty) _) <- tree2list $ jments m,
-        Ok valt <- [valTypeCnc ty],
-        elem valt [val,orig]
+        elem (valTypeCnc ty) [val,orig]
         ] ++
-      let cat = err error snd (valCat orig) in --- ignore module
+      let cat = snd (valCat orig) in --- ignore module
       [(f,ty) |
         Ok a <- [abstractOfConcrete gr i >>= lookupModule gr],
         (f, AbsFun (Just ty0) _ _) <- tree2list $ jments a,
         let ty = redirectTerm i ty0,
-        Ok valt  <- [valCat ty],
-        cat == snd valt ---
+        cat == snd (valCat ty) ---
         ]

@@ -249,7 +249,7 @@ DataDef :: { [(Ident,SrcSpan,Info)] }
 DataDef
   : Posn Ident '=' ListDataConstr Posn { ($2,   ($1,$5), AbsCat Nothing   (Just (map Cn $4))) :
                                          [(fun, ($1,$5), AbsFun Nothing   Nothing Nothing) | fun <- $4] }
-  | Posn ListIdent ':' Exp Posn        { [(cat, ($1,$5), AbsCat Nothing   (Just (map Cn $2))) | Ok (_,cat) <- [valCat $4]] ++
+  | Posn ListIdent ':' Exp Posn        { -- (snd (valCat $4), ($1,$5), AbsCat Nothing   (Just (map Cn $2))) :
                                          [(fun, ($1,$5), AbsFun (Just $4) Nothing Nothing) | fun <- $2] }                                         
 
 ParamDef :: { [(Ident,SrcSpan,Info)] }

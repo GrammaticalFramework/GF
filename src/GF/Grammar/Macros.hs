@@ -31,89 +31,56 @@ import Data.Char (isDigit)
 import Data.List (sortBy)
 import Text.PrettyPrint
 
-firstTypeForm :: Type -> Err (Context, Type)
-firstTypeForm t = case t of
-  Prod b x a t  -> do
-    (x', val) <- firstTypeForm t
-    return ((b,x,a):x',val)
-  _ -> return ([],t)
+typeForm :: Type -> (Context, Cat, [Term])
+typeForm t =
+  case t of
+    Prod b x a t  ->
+      let (x', cat, args) = typeForm t
+      in ((b,x,a):x', cat, args)
+    App c a ->
+      let (_,  cat, args) = typeForm c
+      in ([],cat,args ++ [a])
+    Q  m c -> ([],(m,c),[])
+    QC m c -> ([],(m,c),[])
+    Sort c -> ([],(identW, c),[])
+    _      -> error (render (text "no normal form of type" <+> ppTerm Unqualified 0 t))
 
-qTypeForm :: Type -> Err (Context, Cat, [Term])
-qTypeForm t = case t of
-  Prod b x a t  -> do
-    (x', cat, args) <- qTypeForm t
-    return ((b,x,a):x', cat, args)
-  App c a -> do
-    (_,cat, args) <- qTypeForm c
-    return ([],cat,args ++ [a])
-  Q m c ->
-    return ([],(m,c),[]) 
-  QC m c ->
-    return ([],(m,c),[]) 
-  _       -> 
-    Bad (render (text "no normal form of type" <+> ppTerm Unqualified 0 t))
+typeFormCnc :: Type -> (Context, Type)
+typeFormCnc t = 
+  case t of
+    Prod b x a t -> let (x', v) = typeFormCnc t
+                    in ((b,x,a):x',v)
+    _            -> ([],t)
 
-qq :: QIdent -> Term
-qq (m,c) = Q m c
-
-typeForm :: Type -> Err (Context, Cat, [Term])
-typeForm = qTypeForm ---- no need to distinguish any more
-
-typeFormCnc :: Type -> Err (Context, Type)
-typeFormCnc t = case t of
-  Prod b x a t  -> do
-    (x', v) <- typeFormCnc t
-    return ((b,x,a):x',v)
-  _ -> return ([],t)
-
-valCat :: Type -> Err Cat
+valCat :: Type -> Cat
 valCat typ = 
-  do (_,cat,_) <- typeForm typ
-     return cat
+  let (_,cat,_) = typeForm typ
+  in cat
 
-valType :: Type -> Err Type
-valType typ = 
-  do (_,cat,xx) <- typeForm typ --- not optimal to do in this way
-     return $ mkApp (qq cat) xx
+valType :: Type -> Type
+valType typ =
+  let (_,cat,xx) = typeForm typ --- not optimal to do in this way
+  in mkApp (uncurry Q cat) xx
 
-valTypeCnc :: Type -> Err Type
-valTypeCnc typ = 
-  do (_,ty) <- typeFormCnc typ
-     return ty
+valTypeCnc :: Type -> Type
+valTypeCnc typ = snd (typeFormCnc typ)
 
-typeRawSkeleton :: Type -> Err ([(Int,Type)],Type)
-typeRawSkeleton typ =
-  do (cont,typ) <- typeFormCnc typ
-     args <- mapM (\(b,x,t) -> typeRawSkeleton t) cont
-     return ([(length c, v) | (c,v) <- args], typ)
+typeSkeleton :: Type -> ([(Int,Cat)],Cat)
+typeSkeleton typ =
+  let (cont,cat,_) = typeForm typ
+      args = map (\(b,x,t) -> typeSkeleton t) cont
+  in ([(length c, v) | (c,v) <- args], cat)
 
-type MCat = (Ident,Ident)
-
-getMCat :: Term -> Err MCat
-getMCat t = case t of
-  Q  m c -> return (m,c)
-  QC m c -> return (m,c)
-  Sort c -> return (identW, c)
-  App f _ -> getMCat f
-  _ -> Bad (render (text "no qualified constant" <+> ppTerm Unqualified 0 t))
-
-typeSkeleton :: Type -> Err ([(Int,MCat)],MCat)
-typeSkeleton typ = do
-  (cont,val) <- typeRawSkeleton typ
-  cont' <- mapPairsM getMCat cont
-  val'  <- getMCat val
-  return (cont',val')
-
-catSkeleton :: Type -> Err ([MCat],MCat)
+catSkeleton :: Type -> ([Cat],Cat)
 catSkeleton typ =
-  do (args,val) <- typeSkeleton typ
-     return (map snd args, val)
+  let (args,val) = typeSkeleton typ
+  in (map snd args, val)
 
-funsToAndFrom :: Type -> (MCat, [(MCat,[Int])])
-funsToAndFrom t = errVal undefined $ do ---
-  (cs,v) <- catSkeleton t
-  let cis = zip cs [0..]
-  return $ (v, [(c,[i | (c',i) <- cis, c' == c]) | c <- cs])
+funsToAndFrom :: Type -> (Cat, [(Cat,[Int])])
+funsToAndFrom t =
+  let (cs,v) = catSkeleton t
+      cis = zip cs [0..]
+  in (v, [(c,[i | (c',i) <- cis, c' == c]) | c <- cs])
 
 typeFormConcrete :: Type -> Err (Context, Type)
 typeFormConcrete t = case t of
@@ -123,9 +90,9 @@ typeFormConcrete t = case t of
   _       -> return ([],t)
 
 isRecursiveType :: Type -> Bool
-isRecursiveType t = errVal False $ do
-  (cc,c) <- catSkeleton t -- thus recursivity on Cat level
-  return $ any (== c) cc
+isRecursiveType t =
+  let (cc,c) = catSkeleton t -- thus recursivity on Cat level
+  in any (== c) cc
 
 isHigherOrderType :: Type -> Bool
 isHigherOrderType t = errVal True $ do  -- pessimistic choice
@@ -159,11 +126,11 @@ appForm t = case t of
   _       -> (t,[])
 
 mkProdSimple :: Context -> Term -> Term
-mkProdSimple c t = mkProd (c,t,[])
+mkProdSimple c t = mkProd c t []
 
-mkProd :: (Context, Term, [Term]) -> Term
-mkProd ([],         typ, args) = mkApp typ args
-mkProd ((b,x,a):dd, typ, args) = Prod b x a (mkProd (dd, typ, args))
+mkProd :: Context -> Term -> [Term] -> Term
+mkProd []           typ args = mkApp typ args
+mkProd ((b,x,a):dd) typ args = Prod b x a (mkProd dd typ args)
 
 mkTerm :: ([(BindType,Ident)], Term, [Term]) -> Term
 mkTerm (xx,t,aa) = mkAbs xx (mkApp t aa)
@@ -293,7 +260,7 @@ mkWildCases :: Term -> Term
 mkWildCases = mkCases identW
 
 mkFunType :: [Type] -> Type -> Type
-mkFunType tt t = mkProd ([(Explicit,identW, ty) | ty <- tt], t, []) -- nondep prod
+mkFunType tt t = mkProd [(Explicit,identW, ty) | ty <- tt] t [] -- nondep prod
 
 plusRecType :: Type -> Type -> Err Type
 plusRecType t1 t2 = case (t1, t2) of

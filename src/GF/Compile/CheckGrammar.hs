@@ -163,7 +163,7 @@ checkCompleteGrammar gr abs cnc = do
      _ -> False
    checkOne js i@(c,info) = case info of
      AbsFun (Just ty) _ _ -> do let mb_def = do
-                                      (cxt,(_,i),_) <- typeForm ty
+                                      let (cxt,(_,i),_) = typeForm ty
                                       info <- lookupIdent i js
                                       info <- case info of
                                                 (AnyInd _ m) -> do (m,info) <- lookupOrigInfo gr m i
@@ -224,7 +224,7 @@ checkResInfo gr mo mm c info = do
       --- this can only be a partial guarantee, since matching
       --- with value type is only possible if expected type is given
       checkUniq $ 
-        sort [t : map (\(b,x,t) -> t) xs | (_,x) <- tysts1, Ok (xs,t) <- [typeFormCnc x]]
+        sort [let (xs,t) = typeFormCnc x in t : map (\(b,x,t) -> t) xs | (_,x) <- tysts1]
       return (ResOverload os [(y,x) | (x,y) <- tysts'])
 
     ResParam (Just (pcs,_)) -> chIn "parameter type" $ do
@@ -255,7 +255,7 @@ checkCncInfo gr m mo (a,abs) c info = do
 
     CncFun _ (Just trm) mpr -> chIn "linearization of" $ do
       typ        <- checkErr $ lookupFunType gr a c
-      cat0       <- checkErr $ valCat typ
+      let cat0   =  valCat typ
       (cont,val) <- linTypeOfType gr m typ         -- creates arg vars
       (trm',_)   <- check trm (mkFunType (map (\(_,_,ty) -> ty) cont) val)  -- erases arg vars
       checkPrintname gr mpr
@@ -574,7 +574,7 @@ inferLType gr trm = case trm of
      _ -> False
 
    inferPatt p = case p of
-     PP q c ps | q /= cPredef -> checkErr $ lookupResType gr q c >>= valTypeCnc
+     PP q c ps | q /= cPredef -> checkErr $ liftM valTypeCnc (lookupResType gr q c)
      PAs _ p  -> inferPatt p
      PNeg p   -> inferPatt p
      PAlt p q -> checks [inferPatt p, inferPatt q]
@@ -830,7 +830,7 @@ pattContext env typ p = case p of
   PV x -> return [(Explicit,x,typ)]
   PP q c ps | q /= cPredef -> do ---- why this /=? AR 6/1/2006
     t <- checkErr $ lookupResType cnc q c
-    (cont,v) <- checkErr $ typeFormCnc t
+    let (cont,v) = typeFormCnc t
     checkCond (text "wrong number of arguments for constructor in" <+> ppPatt Unqualified 0 p) 
               (length cont == length ps)
     checkEqLType env typ v (patt2term p)
@@ -998,7 +998,7 @@ ppType env ty =
 -- | linearization types and defaults
 linTypeOfType :: SourceGrammar -> Ident -> Type -> Check (Context,Type)
 linTypeOfType cnc m typ = do
-  (cont,cat) <- checkErr $ typeSkeleton typ
+  let (cont,cat) = typeSkeleton typ
   val  <- lookLin cat
   args <- mapM mkLinArg (zip [0..] cont)
   return (args, val)

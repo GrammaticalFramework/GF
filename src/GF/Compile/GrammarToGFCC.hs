@@ -126,8 +126,8 @@ b2b A.Implicit = C.Implicit
 mkType :: [Ident] -> A.Type -> C.Type
 mkType scope t =
   case GM.typeForm t of
-    Ok (hyps,(_,cat),args) -> let (scope',hyps') = mkContext scope hyps
-                              in C.DTyp hyps' (i2i cat) (map (mkExp scope') args)
+    (hyps,(_,cat),args) -> let (scope',hyps') = mkContext scope hyps
+                           in C.DTyp hyps' (i2i cat) (map (mkExp scope') args)
 
 mkExp :: [Ident] -> A.Term -> C.Expr
 mkExp scope t = case GM.termForm t of

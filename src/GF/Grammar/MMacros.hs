@@ -134,10 +134,10 @@ getMetaAtom a = case a of
   _ -> Bad "the active node is not meta"
 -}
 cat2val :: Context -> Cat -> Val
-cat2val cont cat = vClos $ mkApp (qq cat) [Meta i | i <- [1..length cont]]
+cat2val cont cat = vClos $ mkApp (uncurry Q cat) [Meta i | i <- [1..length cont]]
 
 val2cat :: Val -> Err Cat
-val2cat v = val2exp v >>= valCat
+val2cat v = liftM valCat (val2exp v)
 
 substTerm  :: [Ident] -> Substitution -> Term -> Term
 substTerm ss g c = case c of
@@ -183,7 +183,7 @@ val2expP safe v = case v of
                               else substVal g e
   VClos g e -> substVal g e
   VApp f c  -> liftM2 App (val2expP safe f) (val2expP safe c)
-  VCn c     -> return $ qq c
+  VCn c     -> return $ uncurry Q c
   VGen i x  -> if safe 
                then Bad (render (text "unsafe val2exp" <+> ppValue Unqualified 0 v))
                else return $ Vr $ x  --- in editing, no alpha conversions presentv
@@ -213,9 +213,6 @@ freeVarsExp e = case e of
   Abs _ x b -> filter (/=x) (freeVarsExp b)
   Prod _ x a b -> freeVarsExp a ++ filter (/=x) (freeVarsExp b)
   _ -> [] --- thus applies to abstract syntax only
-
-mkJustProd :: Context -> Term -> Term
-mkJustProd cont typ = mkProd (cont,typ,[])
 
 int2var :: Int -> Ident
 int2var = identC . BS.pack . ('$':) . show
