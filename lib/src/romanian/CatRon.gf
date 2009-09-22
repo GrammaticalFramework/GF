@@ -110,9 +110,9 @@ concrete CatRon of Cat =
 
     VQ, VA = ResRon.Verb ; 
 
-    V2,V2S, V2Q = ResRon.Verb ** {c2 : Compl} ;
+    V2,V2S,V2Q,V2V,V2A = ResRon.Verb ** {c2 : Compl} ;
 
-    V3,V2A, V2V = ResRon.Verb ** {c2,c3 : Compl} ;
+    V3 = ResRon.Verb ** {c2,c3 : Compl} ;
 
     VS = ResRon.Verb ** {m : Polarity => Mood} ;
 

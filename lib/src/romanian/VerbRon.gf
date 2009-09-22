@@ -68,8 +68,8 @@ concrete VerbRon of Verb =
  -- more usually the adverbial form is used, hence no agreement
  
    SlashV2A v ap =  
-     (insertSimpObj  (\\a => v.c3.s ++ ap.s ! (AF Masc Sg Indef (convCase v.c3.c)))  
-(useVerb v)) ** {needAgr = False ; needClit = True ; c2 = v.c2} ;
+     (insertSimpObj  (\\a => ap.s ! (AF Masc Sg Indef ANomAcc)) (useVerb v))
+       ** {needAgr = False ; needClit = True ; c2 = v.c2} ;
 
     ComplSlash vp np =  let  s1 = vp.c2.s ++(np.s ! (vp.c2.c)).comp ;
                              ss = if_then_Str np.hasRef (vp.c2.prepDir ++ s1) s1 ; 
@@ -128,14 +128,12 @@ concrete VerbRon of Verb =
                               vvp = vp ** {lock_VP = <>};
                               vcomp = (getConjComp vvp np.a).s
                            in   
-                              case v.c2.isDir  of
-                                {Dir PAcc => (insertObje (\\a => sir ++ vcomp ! a) (clitFromNoun np Ac) RNoAg (isAgrFSg np.a) vcAc (useVerb v)) ** {needAgr = vp.needAgr ; needClit = False ;c2 = vp.c2} ;
-                                
-                                 Dir PDat =>  (insertObje (\\a => sir ++ vcomp ! a) RNoAg (clitFromNoun np Da) False vcDa (useVerb v)) ** {needAgr = vp.needAgr ; needClit = False ; c2 = vp.c2};
-                                 
-                                 _        => (insertSimpObjPre (\\a => ss ++ vcomp ! a) (useVerb v)) ** {needAgr = vp.needAgr ; needClit = False ; c2 = vp.c2}  
-                                };
-
+                              case v.c2.isDir of {
+                                 Dir PAcc => insertObje (\\a => sir ++ vcomp ! a) (clitFromNoun np Ac) RNoAg (isAgrFSg np.a) vcAc (useVerb v) ;
+                                 Dir PDat => insertObje (\\a => sir ++ vcomp ! a) RNoAg (clitFromNoun np Da) False vcDa (useVerb v) ;
+                                 _        => insertSimpObjPre (\\a => ss ++ vcomp ! a) (useVerb v)
+                              }
+                               ** {needAgr = vp.needAgr ; needClit = False ;c2 = vp.c2} ;
 
     UseComp comp = insertSimpObj comp.s copula ;
 
