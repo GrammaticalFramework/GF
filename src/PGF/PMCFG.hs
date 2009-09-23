@@ -56,7 +56,7 @@ isLiteralFCat = (`elem` [fcatString, fcatInt, fcatFloat, fcatVar])
 ppPMCFG :: ParserInfo -> Doc
 ppPMCFG pinfo =
   text "productions" $$
-  nest 2 (vcat [ppProduction (fcat,prod) | (fcat,set) <- IntMap.toList (productions0 pinfo), prod <- Set.toList set]) $$
+  nest 2 (vcat [ppProduction (fcat,prod) | (fcat,set) <- IntMap.toList (productions pinfo), prod <- Set.toList set]) $$
   text "functions" $$
   nest 2 (vcat (map ppFun (assocs (functions pinfo)))) $$
   text "sequences" $$
