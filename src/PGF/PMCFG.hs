@@ -100,9 +100,20 @@ ppFunId funid = char 'F' <> int funid
 ppSeqId seqid = char 'S' <> int seqid
 
 
-filterProductions prods =
-  fmap (Set.filter filterRule) prods
+filterProductions = closure
   where
-    filterRule (FApply funid args) = all (\fcat -> isLiteralFCat fcat || IntMap.member fcat prods) args
-    filterRule (FCoerce _)         = True
-    filterRule _                   = True
+    closure prods0
+      | IntMap.size prods == IntMap.size prods0 = prods
+      | otherwise                               = closure prods
+      where
+        prods = IntMap.mapMaybe (filterProdSet prods0) prods0
+
+    filterProdSet prods set0
+      | Set.null set = Nothing
+      | otherwise    = Just set
+      where
+        set = Set.filter (filterRule prods) set0
+                             
+    filterRule prods (FApply funid args) = all (\fcat -> isLiteralFCat fcat || IntMap.member fcat prods) args
+    filterRule prods (FCoerce fcat)      = isLiteralFCat fcat || IntMap.member fcat prods
+    filterRule prods _                   = True
