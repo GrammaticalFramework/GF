@@ -230,7 +230,7 @@ mkParamLincat sgr lang cat = errVal (C.R [C.S []]) $ do
       return $ C.S [p',v']
     Sort s | s == cStr -> return $ C.S []
     _ -> return $ 
-      C.FV $ map (kks . filter showable . render . ppTerm Qualified 0) $ 
+      C.FV $ map (kks . filter showable . render . ppTerm Unqualified 0) $ 
              errVal [] $ Look.allParamValues sgr typ
   showable c = not (isSpace c) ---- || (c == ' ')  -- to eliminate \n in records
   kks = C.K . C.KS
