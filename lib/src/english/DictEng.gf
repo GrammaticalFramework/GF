@@ -19,7 +19,7 @@
 --    based on asc2lex, Matthew Purver Nov 2001
 --    http://www.stanford.edu/~mpurver/software.html
 
---# -path=.:src/prelude:src/abstract:src/common:src/english
+--# -path=.:../prelude:../abstract:../common
 
 concrete DictEng of DictEngAbs = CatEng ** open ParadigmsEng, IrregEng in {
 

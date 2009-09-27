@@ -1,4 +1,4 @@
---# -path=.:src/prelude:src/abstract:src/common:src/bulgarian:src/slavic
+--# -path=.:../prelude:../abstract:../common
 
 -- The original source of this resource is the BGOffice project:
 --   http://bgoffice.sourceforge.net
