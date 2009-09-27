@@ -21,7 +21,7 @@ incomplete concrete VerbRomance of Verb =
     SlashV2V v vp = 
       mkVPSlash v.c2
        (insertComplement 
-         (\\a => prepCase v.c2.c ++ infVP vp a) 
+         (\\a => prepCase v.c3.c ++ infVP vp a) 
          (predV v)) ; 
 
     SlashV2S v s = 
@@ -68,7 +68,7 @@ incomplete concrete VerbRomance of Verb =
     SlashV2VNP v np vp = 
       mkVPSlash vp.c2
        (insertComplement 
-         (\\a => prepCase v.c2.c ++ infVP vp a) 
+         (\\a => prepCase v.c3.c ++ infVP vp a) 
          (insertObject v.c2 np (predV v))) ; 
 
     UseComp comp = insertComplement comp.s (predV copula) ;

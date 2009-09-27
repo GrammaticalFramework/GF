@@ -128,7 +128,7 @@ instance DiffIta of DiffRomance = open CommonRomance, PhonoIta, BeschIta, Prelud
       Neg => <"non",[]>
       } ;
 
-    conjThan = "che" ; --- di
+    conjThan = "di" ; --- che
     conjThat = "che" ;
 
     subjIf = "se" ;
