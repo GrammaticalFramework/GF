@@ -1,4 +1,4 @@
---# -path=.:src/prelude:src/abstract:src/common:src/swedish:src/scandinavian
+--# -path=.:../prelude:../abstract:../common:../scandinavian
 
 -- This dictionary is derived from SALDO, see:
 --
