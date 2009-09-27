@@ -9,7 +9,7 @@ flags
 lin
   airplane_N = regN "aereo" ;
   answer_V2S = mkV2S (verboV (rispondere_76 "rispondere")) ParadigmsIta.dative ;
-  apartment_N = regN "apartamento" ;
+  apartment_N = regN "appartamento" ;
   apple_N = regN "mela" ;
   art_N = femN (regN "arte") ;
   ask_V2Q = mkV2Q (verboV (chiedere_29 "chiedere")) ParadigmsIta.dative ;
@@ -19,7 +19,7 @@ lin
   beautiful_A = prefA (regADeg "bello") ;
   become_VA = essereV (regV "diventare") ;
   beer_N = regN "birra" ;
-  beg_V2V = mkV2V (regV "pregare") ParadigmsIta.accusative ParadigmsIta.dative ;
+  beg_V2V = mkV2V (regV "pregare") ParadigmsIta.accusative ParadigmsIta.genitive ;
   big_A = prefA (regADeg "grande") ;
   bike_N = regN "bicicletta" ;
   bird_N = regN "uccello" ;
@@ -105,7 +105,7 @@ lin
   know_V2 = dirV2 (verboV (conoscere_37 "conoscere")) ;
   know_VS = mkVS (verboV (sapere_78 "sapere")) ;
   lake_N = regN "lago" ;
-  lamp_N = regN "lampa" ;
+  lamp_N = regN "lampada" ;
   learn_V2 = dirV2 (regV "imparare") ;
   leather_N = regN "cuoio" ;
   leave_V2 = dirV2 (regV "lasciare") ;
@@ -117,7 +117,7 @@ lin
   love_N = regN "amore" ;
   love_V2 = dirV2 (regV "amare") ;
   man_N = mkN "uomo" "uomini" masculine ;
-  married_A2 = mkA2 (regA "sposato") ParadigmsIta.dative ;
+  married_A2 = mkA2 (regA "sposato") (mkPrep "con");--ParadigmsIta.dative 
   meat_N = femN (regN "carne") ;
   milk_N = regN "latte" ;
   moon_N = regN "luna" ;
@@ -131,7 +131,7 @@ lin
   old_A =  prefA (regADeg "vecchio") ;
   open_V2 = dirV2 (verboV (aprire_102 "aprire")) ;
   paint_V2A = 
-    mkV2A (verboV (cingere_31 "pingere")) ParadigmsIta.accusative (mkPrep "in") ; ----
+    mkV2A (verboV (cingere_31 "dipingere")) ParadigmsIta.accusative ParadigmsIta.accusative; ---- has some other forms, but this is ok for most uses
   paper_N = regN "carta" ;
   paris_PN = mkPN "Parigi" masculine ;
   peace_N = femN (regN "pace") ;
@@ -182,8 +182,8 @@ lin
   student_N = regN "studente" ;
   stupid_A = regADeg "stupido" ;
   sun_N = regN "sole" ;
-  switch8off_V2 = dirV2 (verboV (cingere_31 "spingere")) ;
-  switch8on_V2 = dirV2 (regV "allumare") ; ----
+  switch8off_V2 = dirV2 (verboV (spegnere_86 "spegnere")) ;
+  switch8on_V2 = dirV2 (verboV (accendere_21 "accendere")) ; ----
   table_N = regN "tavola" ; --- tavolo
   talk_V3 = mkV3 (regV "parlare") ParadigmsIta.dative ParadigmsIta.genitive ;
   teacher_N = regN "professore" ;
@@ -345,7 +345,7 @@ lin
   think_V = regV "pensare" ;
   throw_V2 = dirV2 (regV "gettare") ;
   tie_V2 = dirV2 (regV "legare") ;
-  turn_V = regV "tornare" ;
+  turn_V = regV "girare" ;
   vomit_V = regV "vomitare" ;
   wash_V2 = dirV2 (regV "lavare") ;
   wipe_V2 = dirV2 (regV "asciugare") ;
@@ -359,7 +359,7 @@ lin
   today_Adv = mkAdv "oggi" ;
 
   ready_A = mkA "pronto" ;
-  reason_N = mkN "raggione" feminine ;
+  reason_N = mkN "ragione" feminine ;
   uncertain_A = mkA "insicuro" ;
 
 } ;
