@@ -35805,7 +35805,6 @@ lin  aba_N = mkN041 "аба" ;
   prabylgarin_N = mkN018 "прабългарин" ;
   prabylgarski_A = mkA078 "прабългарски" ;
   prav_A = mkA076 "прав" ;
-  prava_N = mkN041 "права" ;
   pravda_N = mkN041 "правда" ;
   pravdiv_A = mkA076 "правдив" ;
   pravdivost_N = mkN049 "правдивост" ;
