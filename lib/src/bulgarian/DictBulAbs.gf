@@ -35791,7 +35791,6 @@ fun  aba_N : N ;
   prabylgarin_N : N ;
   prabylgarski_A : A ;
   prav_A : A ;
-  prava_N : N ;
   pravda_N : N ;
   pravdiv_A : A ;
   pravdivost_N : N ;
