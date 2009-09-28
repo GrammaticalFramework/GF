@@ -50,12 +50,16 @@ library
     PGF.Paraphrase
     PGF.TypeCheck
     PGF.Binary
+    PGF.Morphology
+    PGF.ShowLinearize
     GF.Data.MultiMap
     GF.Data.TrieMap
     GF.Data.Utilities
     GF.Data.SortedList
     GF.Data.Assoc
     GF.Data.ErrM
+    GF.Data.Relation
+    GF.Data.Operations
 -- needed only for the on demand generation of PMCFG
     GF.Infra.GetOpt
     GF.Infra.Option

@@ -730,16 +730,16 @@ allCommands cod env@(pgf, mos) = Map.fromList [
 
    prGrammar opts
      | isOpt "cats"     opts = return $ fromString $ unwords $ map (showType []) $ categories pgf
-     | isOpt "fullform" opts = return $ fromString $ concatMap (prFullFormLexicon . morpho) $ optLangs opts
+     | isOpt "fullform" opts = return $ fromString $ concatMap (morpho "" prFullFormLexicon) $ optLangs opts
      | isOpt "missing"  opts = return $ fromString $ unlines $ [unwords (showCId la:":": map showCId cs) | 
                                                                   la <- optLangs opts, let cs = missingLins pgf la]
      | otherwise             = do fmt <- readOutputFormat (valStrOpts "printer" "pgf_pretty" opts)
                                   return $ fromString $ concatMap snd $ exportPGF noOptions fmt pgf
 
    morphos opts s = 
-     [lookupMorpho (morpho la) s | la <- optLangs opts]
+     [morpho [] (\mo -> lookupMorpho mo s) la | la <- optLangs opts]
 
-   morpho la = maybe Map.empty id $ Map.lookup la mos
+   morpho z f la = maybe z f $ Map.lookup la mos
 
    -- ps -f -g s returns g (f s)
    stringOps menv opts s = foldr (menvop . app) s (reverse opts) where
@@ -802,4 +802,10 @@ infinity = 256
 lookFlag :: PGF -> String -> String -> Maybe String
 lookFlag pgf lang flag = lookConcrFlag pgf (mkCId lang) (mkCId flag)
 
+prFullFormLexicon :: Morpho -> String
+prFullFormLexicon mo = 
+  unlines [w ++ " : " ++ prMorphoAnalysis ts | (w,ts) <- fullFormLexicon mo]
+
+prMorphoAnalysis :: [(Lemma,Analysis)] -> String
+prMorphoAnalysis lps = unlines [showCId l ++ " " ++ p | (l,p) <- lps]
 

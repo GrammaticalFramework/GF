@@ -77,7 +77,11 @@ module PGF(
            Incremental.initState, Incremental.nextState, Incremental.getCompletions, Incremental.extractTrees,
 
            -- ** Generation
-           generateRandom, generateAll, generateAllDepth
+           generateRandom, generateAll, generateAllDepth,
+           
+           -- ** Morphological Analysis
+           Lemma, Analysis, Morpho,
+           lookupMorpho, buildMorpho
           ) where
 
 import PGF.CId
@@ -87,6 +91,7 @@ import PGF.TypeCheck
 import PGF.Paraphrase
 import PGF.Macros
 import PGF.Expr (Tree)
+import PGF.Morphology
 import PGF.Data hiding (functions)
 import PGF.Binary
 import qualified PGF.Parsing.FCFG.Active as Active

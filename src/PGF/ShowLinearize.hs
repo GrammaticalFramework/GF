@@ -97,7 +97,7 @@ markLinearize pgf lang = concat . take 1 . linearizesMark pgf lang
 
 
 -- for Morphology: word, lemma, tags
-collectWords :: PGF -> CId -> [(String, [(String,String)])]
+collectWords :: PGF -> Language -> [(String, [(CId,String)])]
 collectWords pgf lang = 
     concatMap collOne 
       [(f,c,0) | (f,(DTyp [] c _,_,_)) <- Map.toList $ funs $ abstract pgf] 
@@ -108,6 +108,6 @@ collectWords pgf lang =
       RR  rs -> concat [fromRec f v t | (_,t) <- rs] 
       RT  rs -> concat [fromRec f (p:v) t | (p,t) <- rs]
       RFV rs -> concatMap (fromRec f v) rs
-      RS  s  -> [(s,[(showCId f,unwords (reverse v))])]
+      RS  s  -> [(s,[(f,unwords (reverse v))])]
       RCon c -> [] ---- inherent
 
