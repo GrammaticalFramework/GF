@@ -23,7 +23,7 @@ flag interrupt
   Default:     True
 
 library
-  build-depends: base,
+  build-depends: base >= 4.1,
                  array,
                  containers,
                  bytestring,
@@ -75,7 +75,7 @@ library
     Data.Binary.Builder
 
 executable gf
-  build-depends: base,
+  build-depends: base >= 4.1,
                  array,
                  containers,
                  bytestring,
