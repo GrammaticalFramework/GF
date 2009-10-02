@@ -7,12 +7,16 @@ import GF.Command.Commands
 import GF.Command.Abstract
 import GF.Command.Parse
 import GF.Data.ErrM
-import GF.Grammar.API
-import GF.Grammar.Lexer
-import GF.Grammar.Parser
+import GF.Grammar hiding (Ident)
+import GF.Grammar.Parser (runP, pExp)
+import GF.Compile.Rename
+import GF.Compile.CheckGrammar
+import GF.Compile.Compute (computeConcrete)
 import GF.Infra.Dependencies
+import GF.Infra.CheckM
 import GF.Infra.UseIO
 import GF.Infra.Option
+import GF.Infra.Modules (greatestResource)
 import GF.System.Readline
 
 import GF.Text.Coding
@@ -107,9 +111,16 @@ loop opts gfenv0 = do
                pOpts style q             ws  = (style,q,unwords ws)
                
                (style,q,s) = pOpts TermPrintDefault Qualified (tail (words s0))
+
+               checkComputeTerm gr t = do
+                 mo <- maybe (Bad "no source grammar in scope") return $ greatestResource gr
+                 ((t,_),_) <- runCheck $ do t <- renameSourceTerm gr mo t
+                                            inferLType gr [] t
+                 computeConcrete sgr t
+
              case runP pExp (BS.pack s) of
                Left (_,msg) -> putStrLn msg
-               Right t      -> case checkTerm sgr (codeTerm (decode gfenv) t) >>= computeTerm sgr of
+               Right t      -> case checkComputeTerm sgr (codeTerm (decode gfenv) t) of
                                  Ok  x -> putStrLn $ enc (showTerm style q x)
                                  Bad s -> putStrLn $ enc s
              loopNewCPU gfenv
@@ -128,7 +139,7 @@ loop opts gfenv0 = do
 
   -- other special commands, working on GFEnv
           "e":_ -> loopNewCPU $ gfenv {
-             commandenv=emptyCommandEnv, sourcegrammar = emptyGrammar
+             commandenv=emptyCommandEnv, sourcegrammar = emptySourceGrammar
              }
 
           "dc":f:ws -> do
@@ -220,7 +231,7 @@ prompt env
     abs = abstractName (multigrammar env)
 
 data GFEnv = GFEnv {
-  sourcegrammar :: Grammar, -- gfo grammar -retain
+  sourcegrammar :: SourceGrammar, -- gfo grammar -retain
   commandenv :: CommandEnv,
   history    :: [String],
   cputime    :: Integer,
@@ -235,7 +246,7 @@ emptyGFEnv = do
 #else
   let coding = UTF_8
 #endif
-  return $ GFEnv emptyGrammar (mkCommandEnv coding emptyPGF) [] 0 coding
+  return $ GFEnv emptySourceGrammar (mkCommandEnv coding emptyPGF) [] 0 coding
 
 encode = encodeUnicode . coding 
 decode = decodeUnicode . coding

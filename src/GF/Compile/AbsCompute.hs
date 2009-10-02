@@ -36,10 +36,10 @@ import Text.PrettyPrint
 tracd m t = t 
 -- tracd = trace
 
-compute :: Grammar -> Exp -> Err Exp
+compute :: SourceGrammar -> Exp -> Err Exp
 compute = computeAbsTerm
 
-computeAbsTerm :: Grammar -> Exp -> Err Exp
+computeAbsTerm :: SourceGrammar -> Exp -> Err Exp
 computeAbsTerm gr = computeAbsTermIn (lookupAbsDef gr) []
 
 -- | a hack to make compute work on source grammar as well
