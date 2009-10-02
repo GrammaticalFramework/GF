@@ -8,6 +8,7 @@ module GF.Grammar.API (
   ) where
 
 import GF.Infra.Ident
+import GF.Infra.CheckM
 import GF.Infra.Modules (greatestResource)
 import GF.Compile.GetGrammar
 import GF.Grammar.Macros
@@ -16,7 +17,7 @@ import GF.Grammar.Printer
 import GF.Grammar.Grammar
 
 import GF.Compile.Rename (renameSourceTerm)
-import GF.Compile.CheckGrammar (justCheckLTerm)
+import GF.Compile.CheckGrammar (inferLType)
 import GF.Compile.Compute (computeConcrete)
 
 import GF.Data.Operations
@@ -36,9 +37,10 @@ checkTerm gr t = do
   checkTermAny gr mo t
 
 checkTermAny :: Grammar -> Ident -> Term -> Err Term
-checkTermAny gr m t = do
-  t1 <- renameSourceTerm gr m t
-  justCheckLTerm gr t1
+checkTermAny gr m t = (fmap fst . runCheck) $ do
+  t <- renameSourceTerm gr m t
+  (t,_) <- inferLType gr [] t
+  return t
 
 computeTerm :: Grammar -> Term -> Err Term
 computeTerm = computeConcrete
