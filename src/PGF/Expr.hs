@@ -14,7 +14,7 @@ module PGF.Expr(Tree, BindType(..), Expr(..), Literal(..), Patt(..), Equation(..
                 MetaId,
 
                 -- helpers
-                pMeta,pStr,pFactor,pLit,freshName,ppMeta,ppLit,ppParens
+                pMeta,pStr,pArg,pLit,freshName,ppMeta,ppLit,ppParens
                ) where
 
 import PGF.CId
@@ -56,7 +56,8 @@ data Expr =
  | EMeta  {-# UNPACK #-} !MetaId    -- ^ meta variable
  | EFun   CId                       -- ^ function or data constructor
  | EVar   {-# UNPACK #-} !Int       -- ^ variable with de Bruijn index
- | ETyped Expr Type
+ | ETyped Expr Type                 -- ^ local type signature
+ | EImplArg Expr                    -- ^ implicit argument in expression
   deriving (Eq,Ord,Show)
 
 -- | The pattern is used to define equations in the abstract syntax of the grammar.
@@ -65,6 +66,7 @@ data Patt =
  | PLit Literal                     -- ^ literal
  | PVar CId                         -- ^ variable
  | PWild                            -- ^ wildcard
+ | PImplArg Patt                    -- ^ implicit argument in pattern
   deriving (Eq,Ord)
 
 -- | The equation is used to define lambda function as a sequence
@@ -134,7 +136,10 @@ unDouble (ELit (LFlt f)) = Just f
 pExpr :: RP.ReadP Expr
 pExpr = RP.skipSpaces >> (pAbs RP.<++ pTerm)
   where
-    pTerm   =       fmap (foldl1 EApp) (RP.sepBy1 pFactor RP.skipSpaces)
+    pTerm = do f <- pFactor
+               RP.skipSpaces
+               as <- RP.sepBy pArg RP.skipSpaces
+               return (foldl EApp f as)
 
     pAbs = do xs <- RP.between (RP.char '\\') (RP.skipSpaces >> RP.string "->") pBinds
               e  <- pExpr
@@ -153,6 +158,10 @@ pBinds = do xss <- RP.sepBy1 (RP.skipSpaces >> pBind) (RP.skipSpaces >> RP.char 
       RP.between (RP.char '{')
                  (RP.skipSpaces >> RP.char '}')
                  (RP.sepBy1 (RP.skipSpaces >> pCIdOrWild >>= \id -> return (Implicit,id)) (RP.skipSpaces >> RP.char ','))
+
+pArg = fmap EImplArg (RP.between (RP.char '{') (RP.char '}') pExpr)
+       RP.<++
+       pFactor
 
 pFactor =       fmap EFun  pCId
         RP.<++  fmap ELit  pLit
@@ -203,6 +212,7 @@ ppExpr d scope (EMeta n)    = ppMeta n
 ppExpr d scope (EFun f)     = ppCId f
 ppExpr d scope (EVar i)     = ppCId (scope !! i)
 ppExpr d scope (ETyped e ty)= PP.char '<' PP.<> ppExpr 0 scope e PP.<+> PP.colon PP.<+> ppType 0 scope ty PP.<> PP.char '>'
+ppExpr d scope (EImplArg e) = PP.braces (ppExpr 0 scope e)
 
 ppPatt :: Int -> [CId] -> Patt -> ([CId],PP.Doc)
 ppPatt d scope (PApp f ps) = let (scope',ds) = mapAccumL (ppPatt 2) scope ps
@@ -210,6 +220,8 @@ ppPatt d scope (PApp f ps) = let (scope',ds) = mapAccumL (ppPatt 2) scope ps
 ppPatt d scope (PLit l)    = (scope,ppLit l)
 ppPatt d scope (PVar f)    = (f:scope,ppCId f)
 ppPatt d scope PWild       = (scope,PP.char '_')
+ppPatt d scope (PImplArg p) = let (scope',d) = ppPatt 0 scope p
+                              in (scope',PP.braces d)
 
 ppBind Explicit x = ppCId x
 ppBind Implicit x = PP.braces (ppCId x)
@@ -250,6 +262,7 @@ normalForm funs k env e = value2expr k (eval funs env e)
     value2expr i (VSusp j env vs k)          = value2expr i (k (VGen j vs))
     value2expr i (VLit l)                    = ELit l
     value2expr i (VClosure env (EAbs b x e)) = EAbs b x (value2expr (i+1) (eval funs ((VGen i []):env) e))
+    value2expr i (VImplArg v)                = EImplArg (value2expr i v)
 
 data Value
   = VApp CId [Value]
@@ -258,6 +271,7 @@ data Value
   | VSusp {-# UNPACK #-} !MetaId Env [Value] (Value -> Value)
   | VGen  {-# UNPACK #-} !Int [Value]
   | VClosure Env Expr
+  | VImplArg Value
 
 type Funs = Map.Map CId (Type,Int,[Equation]) -- type and def of a fun
 type Env  = [Value]
@@ -276,6 +290,7 @@ eval funs env (EAbs b x e) = VClosure env (EAbs b x e)
 eval funs env (EMeta i)    = VMeta i env []
 eval funs env (ELit l)     = VLit l
 eval funs env (ETyped e _) = eval funs env e
+eval funs env (EImplArg e) = VImplArg (eval funs env e)
 
 apply :: Funs -> Env -> Expr -> [Value] -> Value
 apply funs env e            []     = eval funs env e
@@ -291,6 +306,7 @@ apply funs env (EAbs _ x e) (v:vs) = apply funs (v:env) e vs
 apply funs env (EMeta i)    vs     = VMeta i env vs
 apply funs env (ELit l)     vs     = error "literal of function type"
 apply funs env (ETyped e _) vs     = apply funs env e vs
+apply funs env (EImplArg _) vs     = error "implicit argument in function position"
 
 applyValue funs v                         []       = v
 applyValue funs (VApp f  vs0)             vs       = apply funs [] (EFun f) (vs0++vs)
@@ -299,6 +315,7 @@ applyValue funs (VMeta i env vs0)         vs       = VMeta i env (vs0++vs)
 applyValue funs (VGen  i vs0)             vs       = VGen  i (vs0++vs)
 applyValue funs (VSusp i env vs0 k)       vs       = VSusp i env vs0 (\v -> applyValue funs (k v) vs)
 applyValue funs (VClosure env (EAbs b x e)) (v:vs) = apply funs (v:env) e vs
+applyValue funs (VImplArg _)              vs       = error "implicit argument in function position"
 
 -----------------------------------------------------
 -- Pattern matching
@@ -320,5 +337,6 @@ match funs f eqs as0 vs0 =
         tryMatch (p          ) (VSusp i envi vs k) env            = VSusp i envi vs (\v -> tryMatch p (k v) env)
         tryMatch (PApp f1 ps1) (VApp f2 vs2      ) env | f1 == f2 = tryMatches eqs (ps1++ps) (vs2++as) res env
         tryMatch (PLit l1    ) (VLit l2          ) env | l1 == l2 = tryMatches eqs  ps        as  res env
+        tryMatch (PImplArg p ) (VImplArg v       ) env            = tryMatch p v env
         tryMatch _             _                   env            = match funs f eqs as0 vs0
 

@@ -154,6 +154,7 @@ data TcError
   | NotFunType      [CId] Expr Type                -- ^ Something that is not of function type was applied to an argument.
   | CannotInferType [CId] Expr                     -- ^ It is not possible to infer the type of an expression.
   | UnresolvedMetaVars [CId] Expr [MetaId]         -- ^ Some metavariables have to be instantiated in order to complete the typechecking.
+  | UnexpectedImplArg [CId] Expr                   -- ^ Implicit argument was passed where the type doesn't allow it
 
 -- | Renders the type checking error to a document. See 'Text.PrettyPrint'.
 ppTcError :: TcError -> Doc
@@ -168,6 +169,7 @@ ppTcError (NotFunType xs e ty)         = text "A function type is expected for t
 ppTcError (CannotInferType xs e)       = text "Cannot infer the type of expression" <+> ppExpr 0 xs e
 ppTcError (UnresolvedMetaVars xs e ms) = text "Meta variable(s)" <+> fsep (List.map ppMeta ms) <+> text "should be resolved" $$
                                          text "in the expression:" <+> ppExpr 0 xs e
+ppTcError (UnexpectedImplArg xs e)     = braces (ppExpr 0 xs e) <+> text "is implicit argument but not implicit argument is expected here"
 
 -----------------------------------------------------
 -- checkType
@@ -186,11 +188,9 @@ tcType scope ty@(DTyp hyps cat es) = do
   (scope,hyps) <- tcHypos scope hyps
   c_hyps <- lookupCatHyps cat
   let m = length es
-      n = length c_hyps
-  if m == n
-    then do (delta,es) <- tcHypoExprs scope [] (zip es c_hyps)
-            return (DTyp hyps cat es)
-    else tcError (WrongCatArgs (scopeVars scope) ty cat n m)
+      n = length [ty | (Explicit,x,ty) <- c_hyps]
+  (delta,es) <- tcCatArgs scope es [] c_hyps ty n m
+  return (DTyp hyps cat es)
 
 tcHypos :: Scope -> [Hypo] -> TcM (Scope,[Hypo])
 tcHypos scope []     = return (scope,[])
@@ -206,21 +206,30 @@ tcHypo scope (b,x,ty) = do
     then return (scope,(b,x,ty))
     else return (addScopedVar x (TTyp (scopeEnv scope) ty) scope,(b,x,ty))
 
-tcHypoExprs :: Scope -> Env -> [(Expr,Hypo)] -> TcM (Env,[Expr])
-tcHypoExprs scope delta []         = return (delta,[])
-tcHypoExprs scope delta ((e,h):xs) = do
-  (delta,e ) <- tcHypoExpr scope delta e h
-  (delta,es) <- tcHypoExprs scope delta xs
+tcCatArgs scope []              delta []                   ty0 n m = return (delta,[])
+tcCatArgs scope (EImplArg e:es) delta ((Explicit,x,ty):hs) ty0 n m = tcError (UnexpectedImplArg (scopeVars scope) e)
+tcCatArgs scope (EImplArg e:es) delta ((Implicit,x,ty):hs) ty0 n m = do
+  e <- tcExpr scope e (TTyp delta ty)
+  funs <- getFuns
+  (delta,es) <- if x == wildCId
+                  then tcCatArgs scope es                               delta  hs ty0 n m
+                  else tcCatArgs scope es (eval funs (scopeEnv scope) e:delta) hs ty0 n m
+  return (delta,EImplArg e:es)
+tcCatArgs scope es delta ((Implicit,x,ty):hs) ty0 n m = do
+  i <- newMeta scope
+  (delta,es) <- if x == wildCId
+                  then tcCatArgs scope es                                delta  hs ty0 n m
+                  else tcCatArgs scope es (VMeta i (scopeEnv scope) [] : delta) hs ty0 n m
+  return (delta,EImplArg (EMeta i) : es)
+tcCatArgs scope (e:es) delta ((Explicit,x,ty):hs) ty0 n m = do
+  e <- tcExpr scope e (TTyp delta ty)
+  funs <- getFuns
+  (delta,es) <- if x == wildCId
+                  then tcCatArgs scope es                               delta  hs ty0 n m
+                  else tcCatArgs scope es (eval funs (scopeEnv scope) e:delta) hs ty0 n m
   return (delta,e:es)
-
-tcHypoExpr :: Scope -> Env -> Expr -> Hypo -> TcM (Env,Expr)
-tcHypoExpr scope delta e (b,x,ty) = do
-     e  <- tcExpr scope e (TTyp delta ty)
-     funs <- getFuns
-     if x == wildCId
-       then return (                             delta,e)
-       else return (eval funs (scopeEnv scope) e:delta,e)
-
+tcCatArgs scope _ delta _ ty0@(DTyp _ cat _) n m = do
+  tcError (WrongCatArgs (scopeVars scope) ty0 cat n m)
 
 -----------------------------------------------------
 -- checkExpr
@@ -237,16 +246,33 @@ checkExpr pgf e ty =
     Fail err   -> Left err
 
 tcExpr :: Scope -> Expr -> TType -> TcM Expr
-tcExpr scope e0@(EAbs b x e) tty =
+tcExpr scope e0@(EAbs Implicit x e) tty =
   case tty of
-    TTyp delta (DTyp ((_,y,ty):hs) c es) -> do e <- if y == wildCId
-                                                      then tcExpr (addScopedVar x (TTyp delta ty) scope)
-                                                                  e (TTyp delta (DTyp hs c es))
-                                                      else tcExpr (addScopedVar x (TTyp delta ty) scope)
-                                                                  e (TTyp ((VGen (scopeSize scope) []):delta) (DTyp hs c es))
-                                               return (EAbs b x e)
-    _                                    -> do ty <- evalType (scopeSize scope) tty
-                                               tcError (NotFunType (scopeVars scope) e0 ty)
+    TTyp delta (DTyp ((Implicit,y,ty):hs) c es) -> do e <- if y == wildCId
+                                                             then tcExpr (addScopedVar x (TTyp delta ty) scope)
+                                                                         e (TTyp delta (DTyp hs c es))
+                                                             else tcExpr (addScopedVar x (TTyp delta ty) scope)
+                                                                         e (TTyp ((VGen (scopeSize scope) []):delta) (DTyp hs c es))
+                                                      return (EAbs Implicit x e)
+    _                                           -> do ty <- evalType (scopeSize scope) tty
+                                                      tcError (NotFunType (scopeVars scope) e0 ty)
+tcExpr scope e0 (TTyp delta (DTyp ((Implicit,y,ty):hs) c es)) = do
+  e0 <- if y == wildCId
+          then tcExpr (addScopedVar wildCId (TTyp delta ty) scope)
+                      e0 (TTyp delta (DTyp hs c es))
+          else tcExpr (addScopedVar wildCId (TTyp delta ty) scope)
+                      e0 (TTyp ((VGen (scopeSize scope) []):delta) (DTyp hs c es))
+  return (EAbs Implicit wildCId e0)
+tcExpr scope e0@(EAbs Explicit x e) tty =
+  case tty of
+    TTyp delta (DTyp ((Explicit,y,ty):hs) c es) -> do e <- if y == wildCId
+                                                             then tcExpr (addScopedVar x (TTyp delta ty) scope)
+                                                                         e (TTyp delta (DTyp hs c es))
+                                                             else tcExpr (addScopedVar x (TTyp delta ty) scope)
+                                                                         e (TTyp ((VGen (scopeSize scope) []):delta) (DTyp hs c es))
+                                                      return (EAbs Explicit x e)
+    _                                           -> do ty <- evalType (scopeSize scope) tty
+                                                      tcError (NotFunType (scopeVars scope) e0 ty)
 tcExpr scope (EMeta _) tty = do
   i <- newMeta scope
   return (EMeta i)
@@ -277,12 +303,9 @@ inferExpr pgf e =
 
 infExpr :: Scope -> Expr -> TcM (Expr,TType)
 infExpr scope e0@(EApp e1 e2) = do
-  (e1,tty1) <- infExpr scope e1
-  case tty1 of
-    (TTyp delta1 (DTyp (h:hs) c es)) -> do (delta1,e2) <- tcHypoExpr scope delta1 e2 h
-                                           return (EApp e1 e2,TTyp delta1 (DTyp hs c es))
-    _                                -> do ty1 <- evalType (scopeSize scope) tty1
-                                           tcError (NotFunType (scopeVars scope) e1 ty1)
+  (e1,TTyp delta ty) <- infExpr scope e1
+  (e0,delta,ty) <- tcArg scope e1 e2 delta ty
+  return (e0,TTyp delta ty)
 infExpr scope e0@(EFun x) = do
   case lookupVar x scope of
     Just (i,tty) -> return (EVar i,tty)
@@ -300,7 +323,32 @@ infExpr scope (ETyped e ty) = do
   ty <- tcType scope ty
   e  <- tcExpr scope e (TTyp (scopeEnv scope) ty)
   return (ETyped e ty,TTyp (scopeEnv scope) ty)
+infExpr scope (EImplArg e) = do
+  (e,tty)  <- infExpr scope e
+  return (EImplArg e,tty)
 infExpr scope e = tcError (CannotInferType (scopeVars scope) e)
+
+tcArg scope e1 e2 delta ty0@(DTyp [] c es) = do
+  ty1 <- evalType (scopeSize scope) (TTyp delta ty0)
+  tcError (NotFunType (scopeVars scope) e1 ty1)
+tcArg scope e1 (EImplArg e2) delta ty0@(DTyp ((Explicit,x,ty):hs) c es) = tcError (UnexpectedImplArg (scopeVars scope) e2)
+tcArg scope e1 (EImplArg e2) delta ty0@(DTyp ((Implicit,x,ty):hs) c es) = do
+  e2 <- tcExpr scope e2 (TTyp delta ty)
+  funs <- getFuns
+  if x == wildCId
+    then return (EApp e1 (EImplArg e2),                              delta,DTyp hs c es)
+    else return (EApp e1 (EImplArg e2),eval funs (scopeEnv scope) e2:delta,DTyp hs c es)
+tcArg scope e1 e2 delta ty0@(DTyp ((Explicit,x,ty):hs) c es) = do
+  e2 <- tcExpr scope e2 (TTyp delta ty)
+  funs <- getFuns
+  if x == wildCId
+    then return (EApp e1 e2,                              delta,DTyp hs c es)
+    else return (EApp e1 e2,eval funs (scopeEnv scope) e2:delta,DTyp hs c es)
+tcArg scope e1 e2 delta ty0@(DTyp ((Implicit,x,ty):hs) c es) = do
+  i <- newMeta scope
+  if x == wildCId
+    then tcArg scope (EApp e1 (EImplArg (EMeta i))) e2                                delta  (DTyp hs c es)
+    else tcArg scope (EApp e1 (EImplArg (EMeta i))) e2 (VMeta i (scopeEnv scope) [] : delta) (DTyp hs c es)
 
 -----------------------------------------------------
 -- eqType
@@ -461,6 +509,7 @@ refineExpr_ ms e = refine e
     refine (EFun f)      = EFun f
     refine (EVar i)      = EVar i
     refine (ETyped e ty) = ETyped (refine e) (refineType_ ms ty)
+    refine (EImplArg e)  = EImplArg (refine e)
 
 refineType :: Type -> TcM Type
 refineType ty = TcM (\abstr metaid ms -> Ok metaid ms (refineType_ ms ty))
