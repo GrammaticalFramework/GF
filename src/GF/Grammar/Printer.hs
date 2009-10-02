@@ -18,6 +18,8 @@ module GF.Grammar.Printer
            , ppPatt
            , ppValue
            , ppConstrs
+           
+           , showTerm, TermPrintStyle(..)
            ) where
 
 import GF.Infra.Ident
@@ -301,3 +303,15 @@ getLet :: Term -> ([LocalDef], Term)
 getLet (Let l e) = let (ls,e') = getLet e
                    in (l:ls,e')
 getLet e         = ([],e)
+
+showTerm :: TermPrintStyle -> TermPrintQual -> Term -> String
+showTerm style q t = render $
+  case style of
+    TermPrintTable   -> vcat [p <+> s | (p,s) <- ppTermTabular q t]
+    TermPrintAll     -> vcat [      s | (p,s) <- ppTermTabular q t]
+    TermPrintDefault -> ppTerm q 0 t
+
+data TermPrintStyle
+  = TermPrintTable
+  | TermPrintAll
+  | TermPrintDefault

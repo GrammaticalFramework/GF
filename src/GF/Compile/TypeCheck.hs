@@ -49,7 +49,7 @@ cont2val = type2val . cont2exp
 
 -- some top-level batch-mode checkers for the compiler
 
-justTypeCheck :: Grammar -> Exp -> Val -> Err Constraints
+justTypeCheck :: SourceGrammar -> Exp -> Val -> Err Constraints
 justTypeCheck gr e v = do
   (_,constrs0) <- checkExp (grammar2theory gr) (initTCEnv []) e v
   (constrs1,_) <- unifyVal constrs0
@@ -59,25 +59,25 @@ notJustMeta (c,k) = case (c,k) of
     (VClos g1 (Meta m1), VClos g2 (Meta m2)) -> False
     _ -> True
 
-grammar2theory :: Grammar -> Theory
+grammar2theory :: SourceGrammar -> Theory
 grammar2theory gr (m,f) = case lookupFunType gr m f of
   Ok t -> return $ type2val t
   Bad s -> case lookupCatContext gr m f of
     Ok cont -> return $ cont2val cont
     _ -> Bad s
 
-checkContext :: Grammar -> Context -> [Message]
+checkContext :: SourceGrammar -> Context -> [Message]
 checkContext st = checkTyp st . cont2exp
 
-checkTyp :: Grammar -> Type -> [Message]
+checkTyp :: SourceGrammar -> Type -> [Message]
 checkTyp gr typ = err (\x -> [text x]) ppConstrs $ justTypeCheck gr typ vType
 
-checkDef :: Grammar -> Fun -> Type -> [Equation] -> [Message]
+checkDef :: SourceGrammar -> Fun -> Type -> [Equation] -> [Message]
 checkDef gr (m,fun) typ eqs = err (\x -> [text x]) ppConstrs $ do
   bcs <- mapM (\b -> checkBranch (grammar2theory gr) (initTCEnv []) b (type2val typ)) eqs
   let (bs,css) = unzip bcs
   (constrs,_) <- unifyVal (concat css)
   return $ filter notJustMeta constrs
 
-checkConstrs :: Grammar -> Cat -> [Ident] -> [String]
+checkConstrs :: SourceGrammar -> Cat -> [Ident] -> [String]
 checkConstrs gr cat _ = [] ---- check constructors!

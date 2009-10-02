@@ -12,27 +12,18 @@
 -- (Description of the module)
 -----------------------------------------------------------------------------
 
-module GF.Grammar (
+module GF.Grammar 
+           ( module GF.Infra.Ident,
+             module GF.Grammar.Grammar,
+             module GF.Grammar.Values,
+             module GF.Grammar.Macros,
+             module GF.Grammar.MMacros,
+             module GF.Grammar.Printer
+           ) where
 
-module GF.Infra.Ident,
-module GF.Grammar.Grammar,
-module GF.Grammar.Values,
-module GF.Grammar.Macros,
-module GF.Grammar.MMacros,
-module GF.Grammar.Printer,
-
-Grammar
-
- ) where
-
+import GF.Infra.Ident
 import GF.Grammar.Grammar
 import GF.Grammar.Values
 import GF.Grammar.Macros
-import GF.Infra.Ident
 import GF.Grammar.MMacros
 import GF.Grammar.Printer
-
-type Grammar = SourceGrammar ---
-
-
-
