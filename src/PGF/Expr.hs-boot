@@ -18,8 +18,8 @@ instance Ord  BindType
 instance Show BindType
 
 
-pFactor :: RP.ReadP Expr
-pBinds  :: RP.ReadP [(BindType,CId)]
+pArg   :: RP.ReadP Expr
+pBinds :: RP.ReadP [(BindType,CId)]
 
 ppExpr :: Int -> [CId] -> Expr -> PP.Doc
 

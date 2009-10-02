@@ -122,6 +122,7 @@ data Term =
  | App Term Term                 -- ^ application: @f a@
  | Abs BindType Ident Term       -- ^ abstraction: @\x -> b@
  | Meta {-# UNPACK #-} !MetaId   -- ^ metavariable: @?i@ (only parsable: ? = ?0)
+ | ImplArg Term                  -- ^ placeholder for implicit argument @{t}@
  | Prod BindType Ident Term Term -- ^ function type: @(x : A) -> B@, @A -> B@, @({x} : A) -> B@
  | Typed Term Term               -- ^ type-annotated term
 --
@@ -177,6 +178,8 @@ data Patt =
  | PVal Patt Type Int     -- ^ parameter value number: @T # i#
 
  | PAs Ident Patt         -- ^ as-pattern: x@p
+ 
+ | PImplArg Patt          -- ^ placeholder for pattern for implicit argument @{p}@
 
  -- regular expression patterns
  | PNeg Patt              -- ^ negated pattern: -p

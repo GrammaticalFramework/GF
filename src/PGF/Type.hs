@@ -62,7 +62,7 @@ pType = do
     pAtom = do
       cat <- pCId
       RP.skipSpaces
-      args <- RP.sepBy pFactor RP.skipSpaces
+      args <- RP.sepBy pArg RP.skipSpaces
       return (cat, args)
 
 ppType :: Int -> [CId] -> Type -> PP.Doc

@@ -414,7 +414,8 @@ Exp3
 
 Exp4 :: { Term }
 Exp4
-  : Exp4 Exp5                        { App $1 $2     } 
+  : Exp4 Exp5                        { App $1 $2     }
+  | Exp4 '{' Exp '}'                 { App $1 (ImplArg $3) } 
   | 'case' Exp 'of' '{' ListCase '}' { let annot = case $2 of
                                              Typed _ t -> TTyped t
                                              _         -> TRaw
@@ -488,7 +489,6 @@ Patt2
   | '#' Ident '.' Ident       { PM $2 $4 }
   | '_'                       { PW }
   | Ident                     { PV $1 }
-  | '{' Ident '}'             { PC $2 [] }
   | Ident '.' Ident           { PP $1 $3 [] }
   | Integer                   { PInt $1 }
   | Double                    { PFloat  $1 }
@@ -522,8 +522,12 @@ ListPattAss
 
 ListPatt :: { [Patt] }
 ListPatt
-  : Patt2          { [$1]    } 
-  | Patt2 ListPatt { $1 : $2 }
+  : PattArg          { [$1]    } 
+  | PattArg ListPatt { $1 : $2 }
+
+PattArg :: { Patt }
+  : Patt2         { $1          }
+  | '{' Patt2 '}' { PImplArg $2 }
 
 Arg :: { [(BindType,Ident)] }
 Arg 

@@ -1,0 +1,9 @@
+i testsuite/runtime/typecheck/Graph.gf
+ai join l12 (link l23)
+ai join {n1} {n2} {n3} l12 (link {n2} {n3} l23)
+ai <? : Label>
+ai <? : Label {n1}>
+ai <? : Link {n1} {n2}>
+ai <\x -> x : ({m},n : Node) -> Node>
+ai <n1 : ({m} : Node) -> Node>
+ai <? : ({m} : Node) -> Node>
