@@ -24,6 +24,7 @@ import GF.Infra.Ident
 import GF.Infra.Option
 import GF.Infra.Modules
 import GF.Infra.UseIO
+import GF.Infra.CheckM
 
 import GF.Data.Operations
 
@@ -205,10 +206,11 @@ compileSourceModule opts env@(k,gr,_) mo@(i,mi) = do
     _ -> do
       let mos = modules gr
 
-      mo2:_ <- putpp "  renaming " $ ioeErr $ renameModule mos mo1b
+      (mo2,warnings) <- putpp "  renaming " $ ioeErr $ runCheck (renameModule mos mo1b)
+      if null warnings then return () else puts warnings $ return ()
       intermOut opts DumpRename (ppModule Qualified mo2)
 
-      (mo3:_,warnings) <- putpp "  type checking" $ ioeErr $ showCheckModule mos mo2
+      (mo3,warnings) <- putpp "  type checking" $ ioeErr $ runCheck (checkModule mos mo2)
       if null warnings then return () else puts warnings $ return ()
       intermOut opts DumpTypeCheck (ppModule Qualified mo3)
 
