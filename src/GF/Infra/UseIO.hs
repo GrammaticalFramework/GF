@@ -78,7 +78,7 @@ extendPathEnv :: Options -> FilePath -> IO [FilePath]
 extendPathEnv opts fdir = do
   b <- getLibraryPath opts                                     -- e.g. GF_LIB_PATH
   ss <- getGrammarPath opts                                    -- e.g. GF_GRAMMAR_PATH
-  ps <- liftM (nub . concat) $ mapM allSubdirs $ ss ++ [b </> s | s <- ss] ++ [fdir </> s | s <- ss]
+  ps <- liftM (nub . concat) $ mapM allSubdirs $ [fdir </> s | s <- ss] ++ [b </> s | s <- ss]
   mapM canonicalizePath ps
   where
     allSubdirs :: FilePath -> IO [FilePath]
