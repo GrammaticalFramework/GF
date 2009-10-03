@@ -1,7 +1,5 @@
 
 
-data constructor expected but funpatt.D1 is found instead
-OCCURRED IN
-renaming definition of d in funpatt.gf, line 12
-OCCURRED IN
 renaming module funpatt
+   renaming definition of d in funpatt.gf, line 12
+      data constructor expected but funpatt.D1 is found instead
