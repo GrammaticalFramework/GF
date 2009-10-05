@@ -9,6 +9,7 @@ import GF.Infra.UseIO
 import Paths_gf
 
 import Data.Version
+import System.Directory
 import System.Environment (getArgs)
 import System.Exit
 import System.IO
@@ -25,7 +26,8 @@ main = do
   setConsoleOutputCP codepage
 #endif
   args <- getArgs
-  case parseOptions args of
+  cdir <- getCurrentDirectory
+  case parseOptions cdir args of
     Ok (opts,files) -> mainOpts opts files
     Bad err         -> do hPutStrLn stderr err
                           hPutStrLn stderr "You may want to try --help."

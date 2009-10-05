@@ -205,7 +205,7 @@ getOptionsFromFile file = do
                    (\_ -> return (Bad $ "File " ++ file ++ " does not exist"))
   let ls = filter (BS.isPrefixOf (BS.pack "--#")) $ BS.lines s
       fs = map (BS.unpack . BS.unwords . BS.words . BS.drop 3) ls
-  ioeErr $ parseModuleOptions fs
+  ioeErr $ parseModuleOptions (dropFileName file) fs
 
 getFilePath :: [FilePath] -> String -> IO (Maybe FilePath)
 getFilePath paths file = get paths

@@ -34,6 +34,7 @@ import qualified Data.ByteString.Char8 as BS
 import qualified Text.ParserCombinators.ReadP as RP
 import System.Cmd
 import System.CPUTime
+import System.Directory
 import Control.Exception
 import Control.Monad
 import Data.Version
@@ -129,7 +130,8 @@ loop opts gfenv0 = do
              putStrLn "wrote graph in file _gfdepgraph.dot"
              loopNewCPU gfenv
           "i":args -> do
-              gfenv' <- case parseOptions args of
+              cdir <- getCurrentDirectory
+              gfenv' <- case parseOptions cdir args of
                           Ok (opts',files) -> 
                             importInEnv gfenv (addOptions opts opts') files
                           Bad err -> do 
