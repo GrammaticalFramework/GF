@@ -508,9 +508,9 @@ oper
             RCond  => VCondit ;        
             RPres  => VPres m
             } ;
-          cmp = case <t,a,m> of 
-           {<RPast,Simul,Indic> | <RPres, Anter,Indic> => True ;
-            <RCond, _, _> => True;
+          cmp = case <<t,a,m> : RTense * Anteriority * Mood> of {
+            <RPast,Simul,Indic> | <RPres, Anter,Indic> => True ; --# notpresent
+            <RCond, _, _> => True;  --# notpresent
             _             => False
             } ;
           vp    = useVP vpr ;

@@ -1,4 +1,4 @@
---# -path=.:abstract:common
+--# -path=.:../abstract:../common
 
 concrete SymbolLat of Symbol = CatLat ** open Prelude, ResLat in {
 --

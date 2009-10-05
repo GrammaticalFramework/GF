@@ -1,4 +1,4 @@
---# -path=.:abstract:common
+--# -path=.:../abstract:../common
 
 concrete SymbolRus of Symbol = CatRus ** open Prelude, ResRus in {
 

@@ -1,3 +1,5 @@
+--# -path=.:../abstract:../common
+
 concrete SymbolRon of Symbol = 
   CatRon ** open Prelude, ResRon in {
 

@@ -1,4 +1,4 @@
---# -path=.:abstract:common
+--# -path=.:../abstract:../common
 
 concrete SymbolIna of Symbol = CatIna ** open Prelude, ResIna in {
 

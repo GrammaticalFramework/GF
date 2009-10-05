@@ -1,4 +1,4 @@
---# -path=.:abstract:common
+--# -path=.:../abstract:../common
 
 concrete SymbolAra of Symbol = CatAra ** open Prelude, ResAra in {
 

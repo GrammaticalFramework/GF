@@ -1,4 +1,4 @@
---# -path=.:abstract:common
+--# -path=.:../abstract:../common
 
 concrete SymbolFin of Symbol = CatFin ** open Prelude, NounFin, ResFin in {
 
