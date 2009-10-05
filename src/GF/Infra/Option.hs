@@ -186,18 +186,28 @@ instance Show Options where
 
 -- Option parsing
 
-parseOptions :: [String] -> Err (Options, [FilePath])
-parseOptions args 
-    | not (null errs) = errors errs
-    | otherwise = do opts <- liftM concatOptions $ sequence optss
-                     return (opts, files)
-  where (optss, files, errs) = getOpt RequireOrder optDescr args
+parseOptions :: FilePath                   -- ^ if there are relative file paths they will be interpreted as relative to this path
+             -> [String]                   -- ^ list of string arguments
+             -> Err (Options, [FilePath])
+parseOptions root args 
+  | not (null errs) = errors errs
+  | otherwise       = do opts <- liftM concatOptions $ sequence optss
+                         return (fixRelativeLibPaths opts, files)
+  where
+    (optss, files, errs) = getOpt RequireOrder optDescr args
+  
+    fixRelativeLibPaths  (Options o) = Options (fixPathFlags . o)
+      where
+        fixPathFlags f@(Flags{optLibraryPath=path}) = f{optLibraryPath=map (root </>) path}
 
-parseModuleOptions :: [String] -> Err Options
-parseModuleOptions args = do (opts,nonopts) <- parseOptions args
-                             if null nonopts 
-                                then return opts
-                                else errors $ map ("Non-option among module options: " ++) nonopts
+parseModuleOptions :: FilePath                   -- ^ if there are relative file paths they will be interpreted as relative to this path
+                   -> [String]                   -- ^ list of string arguments
+                   -> Err Options
+parseModuleOptions root args = do
+  (opts,nonopts) <- parseOptions root args
+  if null nonopts 
+    then return opts
+    else errors $ map ("Non-option among module options: " ++) nonopts
 
 -- Showing options
 
