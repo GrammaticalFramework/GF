@@ -3,7 +3,7 @@ import GF.Data.Operations
 import GF.Grammar.API
 import GF.Grammar.Parser
 import GF.Grammar.Grammar (Term)
-import GF.Grammar.PrGrammar (prTermTabular)
+--import GF.Grammar.PrGrammar (prTermTabular)
 import GF.Infra.Option
 import GF.Infra.UseIO
 import GF.Text.UTF8
@@ -60,7 +60,8 @@ doEval :: Grammar -> String -> Err JSValue
 doEval sgr t = liftM termToJSValue $ eval sgr t 
 
 termToJSValue :: Term -> JSValue
-termToJSValue t = showJSON [toJSObject [("name", name), ("value",value)] | (name,value) <- prTermTabular t]
+termToJSValue t = error "prTermTabular undefined"
+---- showJSON [toJSObject [("name", name), ("value",value)] | (name,value) <- prTermTabular t]
 
 eval :: Grammar -> String -> Err Term
 eval sgr t = 

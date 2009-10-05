@@ -1,4 +1,4 @@
---# -path=.:abstract:common
+--# -path=.:../abstract:../common
 
 concrete SymbolHin of Symbol = CatHin ** open Prelude, ResHin in {
 
