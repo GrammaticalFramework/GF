@@ -57,8 +57,8 @@ type FullPath = String
 gfLibraryPath    = "GF_LIB_PATH"
 gfGrammarPathVar = "GF_GRAMMAR_PATH"
 
-getLibraryPath :: Options -> IO FilePath
-getLibraryPath opts =
+getLibraryDirectory :: Options -> IO FilePath
+getLibraryDirectory opts =
   case flag optGFLibPath opts of
     Just path -> return path
     Nothing   -> catch
@@ -66,19 +66,19 @@ getLibraryPath opts =
                    (\ex -> getDataDir >>= \path -> return (path </> "lib"))
 
 getGrammarPath :: FilePath -> IO [FilePath]
-getGrammarPath lib_path = do
-  catch (fmap splitSearchPath $ getEnv gfGrammarPathVar) (\_ -> return [lib_path </> "prelude"])     -- e.g. GF_GRAMMAR_PATH
+getGrammarPath lib_dir = do
+  catch (fmap splitSearchPath $ getEnv gfGrammarPathVar) (\_ -> return [lib_dir </> "prelude"])     -- e.g. GF_GRAMMAR_PATH
 
 -- | extends the search path with the
 -- 'gfLibraryPath' and 'gfGrammarPathVar'
 -- environment variables. Returns only existing paths.
-extendPathEnv :: Options -> FilePath -> IO [FilePath]
-extendPathEnv opts fdir = do
-  opt_paths <- return $ flag optLibraryPath opts         -- e.g. paths given as options
-  lib_path  <- getLibraryPath opts                       -- e.g. GF_LIB_PATH
-  grm_paths <- getGrammarPath lib_path                   -- e.g. GF_GRAMMAR_PATH
-  let paths = opt_paths ++ [lib_path] ++ grm_paths
-  ps <- liftM (nub . concat) $ mapM allSubdirs paths
+extendPathEnv :: Options -> IO [FilePath]
+extendPathEnv opts = do
+  opt_path <- return $ flag optLibraryPath opts         -- e.g. paths given as options
+  lib_dir  <- getLibraryDirectory opts                  -- e.g. GF_LIB_PATH
+  grm_path <- getGrammarPath lib_dir                   -- e.g. GF_GRAMMAR_PATH
+  let paths = opt_path ++ [lib_dir] ++ grm_path
+  ps <- liftM concat $ mapM allSubdirs paths
   mapM canonicalizePath ps
   where
     allSubdirs :: FilePath -> IO [FilePath]

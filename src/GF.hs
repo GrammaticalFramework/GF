@@ -26,9 +26,10 @@ main = do
   setConsoleOutputCP codepage
 #endif
   args <- getArgs
-  cdir <- getCurrentDirectory
-  case parseOptions cdir args of
-    Ok (opts,files) -> mainOpts opts files
+  case parseOptions args of
+    Ok (opts,files) -> do curr_dir <- getCurrentDirectory
+                          lib_dir  <- getLibraryDirectory opts
+                          mainOpts (fixRelativeLibPaths curr_dir lib_dir opts) files
     Bad err         -> do hPutStrLn stderr err
                           hPutStrLn stderr "You may want to try --help."
                           exitFailure

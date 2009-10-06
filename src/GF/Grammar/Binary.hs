@@ -82,7 +82,7 @@ instance Binary ModuleStatus where
 instance Binary Options where
   put = put . optionsGFO
   get = do opts <- get
-           case parseModuleOptions "." ["--" ++ flag ++ "=" ++ value | (flag,value) <- opts] of
+           case parseModuleOptions ["--" ++ flag ++ "=" ++ value | (flag,value) <- opts] of
              Ok  x   -> return x
              Bad msg -> fail msg
 

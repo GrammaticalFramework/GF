@@ -7,7 +7,7 @@ module GF.Infra.Option
      SISRFormat(..), Optimization(..), CFGTransform(..), HaskellOption(..),
      Dump(..), Printer(..), Recomp(..), BuildParser(..),
      -- * Option parsing 
-     parseOptions, parseModuleOptions,
+     parseOptions, parseModuleOptions, fixRelativeLibPaths,
      -- * Option pretty-printing
      optionsGFO,
      optionsPGF,
@@ -186,28 +186,26 @@ instance Show Options where
 
 -- Option parsing
 
-parseOptions :: FilePath                   -- ^ if there are relative file paths they will be interpreted as relative to this path
-             -> [String]                   -- ^ list of string arguments
+parseOptions :: [String]                   -- ^ list of string arguments
              -> Err (Options, [FilePath])
-parseOptions root args 
+parseOptions args 
   | not (null errs) = errors errs
   | otherwise       = do opts <- liftM concatOptions $ sequence optss
-                         return (fixRelativeLibPaths opts, files)
+                         return (opts, files)
   where
     (optss, files, errs) = getOpt RequireOrder optDescr args
-  
-    fixRelativeLibPaths  (Options o) = Options (fixPathFlags . o)
-      where
-        fixPathFlags f@(Flags{optLibraryPath=path}) = f{optLibraryPath=map (root </>) path}
 
-parseModuleOptions :: FilePath                   -- ^ if there are relative file paths they will be interpreted as relative to this path
-                   -> [String]                   -- ^ list of string arguments
+parseModuleOptions :: [String]                   -- ^ list of string arguments
                    -> Err Options
-parseModuleOptions root args = do
-  (opts,nonopts) <- parseOptions root args
+parseModuleOptions args = do
+  (opts,nonopts) <- parseOptions args
   if null nonopts 
     then return opts
     else errors $ map ("Non-option among module options: " ++) nonopts
+
+fixRelativeLibPaths curr_dir lib_dir (Options o) = Options (fixPathFlags . o)
+  where
+    fixPathFlags f@(Flags{optLibraryPath=path}) = f{optLibraryPath=concatMap (\dir -> [curr_dir </> dir, lib_dir </> dir]) path}
 
 -- Showing options
 

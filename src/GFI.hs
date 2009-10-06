@@ -130,10 +130,11 @@ loop opts gfenv0 = do
              putStrLn "wrote graph in file _gfdepgraph.dot"
              loopNewCPU gfenv
           "i":args -> do
-              cdir <- getCurrentDirectory
-              gfenv' <- case parseOptions cdir args of
-                          Ok (opts',files) -> 
-                            importInEnv gfenv (addOptions opts opts') files
+              gfenv' <- case parseOptions args of
+                          Ok (opts',files) -> do
+                            curr_dir <- getCurrentDirectory
+                            lib_dir  <- getLibraryDirectory (addOptions opts opts')
+                            importInEnv gfenv (addOptions opts (fixRelativeLibPaths curr_dir lib_dir opts')) files
                           Bad err -> do 
                             putStrLn $ "Command parse error: " ++ err
                             return gfenv
