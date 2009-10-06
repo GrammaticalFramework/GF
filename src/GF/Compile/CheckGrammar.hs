@@ -577,8 +577,7 @@ getOverload gr g mt ot = case appForm ot of
          checkWarn (text "ignoring lock fields in resolving" <+> ppTerm Unqualified 0 ot) 
          return (mkApp fun tts, val)
        ([],[]) -> do
-         ---- let prtType _ = prt  -- to debug grammars
-         let showTypes ty = vcat (map ppType ty)
+         let showTypes ty = hsep (map ppType ty)
          checkError $ text "no overload instance of" <+> ppTerm Unqualified 0 f $$
                       text "for" $$
                       nest 2 (showTypes tys) $$
