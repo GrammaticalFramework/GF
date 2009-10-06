@@ -114,9 +114,11 @@ compileModule :: Options -- ^ Options from program command line and shell comman
 compileModule opts1 env file = do
   file <- getRealFile file
   opts0 <- getOptionsFromFile file
-  let opts = addOptions opts0 opts1
-  let fdir = dropFileName file
-  ps <- ioeIO $ extendPathEnv opts fdir
+  curr_dir <- return $ dropFileName file
+  lib_dir  <- ioeIO $ getLibraryDirectory (addOptions opts0 opts1)
+  let opts = addOptions (fixRelativeLibPaths curr_dir lib_dir opts0) opts1
+  ps0 <- ioeIO $ extendPathEnv opts
+  let ps = nub (curr_dir : ps0)
   ioeIO $ putIfVerb opts $ "module search path:" +++ show ps ----
   let (_,sgr,rfs) = env
   files <- getAllFiles opts ps rfs file
@@ -125,13 +127,13 @@ compileModule opts1 env file = do
   ioeIO $ putIfVerb opts $ "modules to include:" +++ show names ----
   foldM (compileOne opts) (0,sgr,rfs) files
   where
-    getRealFile file1 = do
-      exists <- ioeIO $ doesFileExist file1
+    getRealFile file = do
+      exists <- ioeIO $ doesFileExist file
       if exists
         then return file
         else if isRelative file
-               then do libpath <- ioeIO $ getLibraryPath opts1
-                       let file1 = libpath </> file
+               then do lib_dir <- ioeIO $ getLibraryDirectory opts1
+                       let file1 = lib_dir </> file
                        exists <- ioeIO $ doesFileExist file1
                        if exists
                          then return file1
