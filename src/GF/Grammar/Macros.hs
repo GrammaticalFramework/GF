@@ -82,13 +82,6 @@ funsToAndFrom t =
       cis = zip cs [0..]
   in (v, [(c,[i | (c',i) <- cis, c' == c]) | c <- cs])
 
-typeFormConcrete :: Type -> Err (Context, Type)
-typeFormConcrete t = case t of
-  Prod b x a t  -> do 
-    (x', typ) <- typeFormConcrete t
-    return ((b,x,a):x', typ)
-  _       -> return ([],t)
-
 isRecursiveType :: Type -> Bool
 isRecursiveType t =
   let (cc,c) = catSkeleton t -- thus recursivity on Cat level
