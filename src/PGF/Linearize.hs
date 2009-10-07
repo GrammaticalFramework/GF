@@ -129,12 +129,14 @@ linearizesMark pgf lang = realizes . linTreeMark pgf lang
 linTreeMark :: PGF -> CId -> Expr -> Term
 linTreeMark pgf lang = lin [] . expr2tree
   where
-    lin p (Abs xs  e )   = case lin p e of
-                             R ts -> R $ ts     ++ (Data.List.map (kks . showCId . snd) xs)
-                             TM s -> R $ (TM s)  : (Data.List.map (kks . showCId . snd) xs)
-    lin p (Fun fun es)   = let argVariants = 
-                                mapM (\ (i,e) -> liftVariants $ lin (sub p i) e) (zip [0..] es)
-                          in variants [mark p $ compute pgf lang args $ look fun | args <- argVariants]
+    lin p (Abs xs  e ) = case lin p e of
+      R ts -> R $ ts     ++ (Data.List.map (kks . showCId . snd) xs)
+      TM s -> R $ (TM s)  : (Data.List.map (kks . showCId . snd) xs)
+    lin p (Fun fun es) = 
+      let argVariants = 
+            mapM (\ (i,e) -> liftVariants $ lin (sub p i) e) (zip [0..] es)
+      in variants [mark (fun,p) $ compute pgf lang args $ look fun | 
+                                                         args <- argVariants]
     lin p (Lit (LStr s)) = mark p $ R [kks (show s)] -- quoted
     lin p (Lit (LInt i)) = mark p $ R [kks (show i)] 
     lin p (Lit (LFlt d)) = mark p $ R [kks (show d)]
@@ -143,6 +145,7 @@ linTreeMark pgf lang = lin [] . expr2tree
  
     look = lookLin pgf lang
 
+    mark :: Show a => a -> Term -> Term
     mark p t = case t of
       R  ts -> R $ map (mark p) ts
       FV ts -> R $ map (mark p) ts
