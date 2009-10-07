@@ -15,11 +15,11 @@
 --        instead of rolling its own.
 -----------------------------------------------------------------------------
 
-module PGF.VisualizeTree ( visualizeTrees, alignLinearize
+module PGF.VisualizeTree ( visualizeTrees, parseTree, alignLinearize
   ,PosText(..),readPosText
 			) where
 
-import PGF.CId (showCId)
+import PGF.CId (CId,showCId,pCId)
 import PGF.Data
 import PGF.Tree
 import PGF.Linearize
@@ -28,6 +28,8 @@ import PGF.Macros (lookValCat)
 import Data.List (intersperse,nub)
 import Data.Char (isDigit)
 import qualified Text.ParserCombinators.ReadP as RP
+
+import Debug.Trace
 
 visualizeTrees :: PGF -> (Bool,Bool) -> [Expr] -> String
 visualizeTrees pgf funscats = unlines . map (prGraph False . tree2graph pgf funscats . expr2tree)
@@ -55,6 +57,57 @@ prGraph digr ns = concat $ map (++"\n") $ [graph ++ "{\n"] ++ ns ++ ["}"] where
   graph = if digr then "digraph" else "graph"
 
 
+-- parse trees from Linearize.linearizeMark
+---- nubrec and domins are quadratic, but could be (n log n)
+
+parseTree :: Maybe String -> PGF -> CId -> Expr -> String
+parseTree ms pgf lang = prGraph False . lin2tree pgf . linMark where
+  linMark = head . linearizesMark pgf lang
+  ---- use Just str if you have str to match against
+
+lin2tree pgf s = trace s $ prelude ++ nodes ++ links where
+
+  prelude = ["rankdir=BU ;", "node [shape = record, color = white] ;"]
+
+  nodeRecs = zip [0..] 
+    (nub (filter (not . null) (nlins [postext] ++ [leaves postext])))
+  nlins pts = 
+    nubrec [] $ [(p,cat f) | T (Just f, p) _ <- pts] : 
+                   concatMap nlins [ts | T _ ts <- pts]  
+  leaves pt = [(p++[j],s) | (j,(p,s)) <- 
+                zip [9990..] [(p,s) | (p,ss) <- wlins pt, s <- ss]]
+
+  nubrec es rs = case rs of
+    r:rr -> let r' = filter (not . flip elem es) (nub r) 
+            in r' : nubrec (r' ++ es) rr
+    _ -> rs
+
+  nodes = map mkStruct nodeRecs
+
+  mkStruct (i,cs) = struct i ++ "[label = \"" ++ fields cs ++ "\"] ;"
+  cat = showCId . lookValCat pgf
+  fields cs = concat (intersperse "|" [ mtag (showp p) ++ c | (p,c) <- cs])
+  struct i = "struct" ++ show i
+
+  links = map mkEdge domins
+  domins = nub [((i,x),(j,y)) | 
+    (i,xs) <- nodeRecs, (j,ys) <- nodeRecs, 
+    x <- xs, y <- ys, dominates x y]
+  dominates (p,x) (q,y) = not (null q) && p == init q
+  mkEdge ((i,x),(j,y)) = 
+    struct i ++ ":n" ++ uncommas (showp (fst x)) ++ ":s -- " ++ 
+    struct j ++ ":n" ++ uncommas (showp (fst y)) ++ ":n ;"
+
+  postext = readPosText s
+
+-- auxiliaries for graphviz syntax
+struct i = "struct" ++ show i
+mark (j,n) = "n" ++ show j ++ "a" ++ uncommas n
+uncommas = map (\c -> if c==',' then 'c' else c)
+tag s = "<" ++ s ++ ">"
+showp = init . tail . show
+mtag = tag . ('n':) . uncommas
+
 -- word alignments from Linearize.linearizesMark
 -- words are chunks like {[0,1,1,0] old}
 
@@ -63,7 +116,7 @@ alignLinearize pgf = prGraph True . lin2graph . linsMark  where
   linsMark t = [s | la <- cncnames pgf, s <- take 1 (linearizesMark pgf la t)]
 
 lin2graph :: [String] -> [String]
-lin2graph ss = prelude ++ nodes ++ links
+lin2graph ss = trace (show ss) $ prelude ++ nodes ++ links
 
  where
 
@@ -71,24 +124,15 @@ lin2graph ss = prelude ++ nodes ++ links
 
   nlins :: [(Int,[((Int,String),String)])]
   nlins = [(i, [((j,showp p),unw ws) | (j,(p,ws)) <- zip [0..] ws]) | 
-                                  (i,ws) <- zip [0..] (map (wlins . readPosText) ss)]
+                                (i,ws) <- zip [0..] (map (wlins . readPosText) ss)]
 
   unw = concat . intersperse "\\ "  -- space escape in graphviz
-  showp = init . tail . show
 
   nodes = map mkStruct nlins
 
   mkStruct (i, ws) = struct i ++ "[label = \"" ++ fields ws ++ "\"] ;"
 
   fields ws = concat (intersperse "|" [tag (mark m) ++ " " ++ w | (m,w) <- ws]) 
-
-  struct i = "struct" ++ show i
-
-  mark (j,n) = "n" ++ show j ++ "a" ++ uncommas n
-
-  uncommas = map (\c -> if c==',' then 'c' else c)
-
-  tag s = "<" ++ s ++ ">"
 
   links = nub $ concatMap mkEdge (init nlins)
 
@@ -100,15 +144,15 @@ lin2graph ss = prelude ++ nodes ++ links
 
 wlins :: PosText -> [([Int],[String])]
 wlins pt = case pt of
-  T p pts -> concatMap (lins p) pts
+  T (_,p) pts -> concatMap (lins p) pts
   M ws -> if null ws then [] else [([],ws)]
  where
   lins p pt = case pt of
-    T q pts -> concatMap (lins q) pts
+    T (_,q) pts -> concatMap (lins q) pts
     M ws -> if null ws then [] else [(p,ws)]
 
 data PosText = 
-   T [Int] [PosText]
+   T (Maybe CId,[Int]) [PosText]
  | M [String]
   deriving Show
 
@@ -125,10 +169,13 @@ readPosText = fst . head . (RP.readP_to_S pPosText) where
     ws <- RP.sepBy1 (RP.munch1 (flip notElem "()")) (RP.char ' ') 
     return (M ws) 
   pPos = do
+    fun <- (RP.char '(' >> pCId >>= \f -> RP.char ',' >> (return $ Just f)) 
+           RP.<++ (return Nothing)
     RP.char '[' >> RP.skipSpaces
     is <- RP.sepBy (RP.munch1 isDigit) (RP.char ',')
     RP.char ']' >> RP.skipSpaces
-    return (map read is)
+    RP.char ')' RP.<++ return ' ' 
+    return (fun,map read is)
 
 
 {-
