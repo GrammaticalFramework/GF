@@ -45,7 +45,14 @@ data RGLCommand
       }
 
 rglCommands =
-  [ RGLCommand "lang"    True  $ \mode args pkg lbi -> do
+  [ RGLCommand "prelude" True  $ \mode args pkg lbi -> do
+       putStrLn $ "Compiling [prelude]"
+       let prelude_src_dir = rgl_src_dir     </> "prelude"
+           prelude_dst_dir = rgl_dst_dir lbi </> "prelude"
+       createDirectoryIfMissing True prelude_dst_dir
+       files <- getDirectoryContents prelude_src_dir
+       run_gfc pkg lbi (["-s", "--gfo-dir="++prelude_dst_dir] ++ [prelude_src_dir </> file | file <- files, take 1 file /= "."])
+  , RGLCommand "lang"    True  $ \mode args pkg lbi -> do
        mapM_ (gfc mode pkg lbi . lang) (optl langsLang args)
        mapM_ (gfc mode pkg lbi . symbol) (optl langsAPI args)
   , RGLCommand "compat"  True  $ \mode args pkg lbi -> do
@@ -89,7 +96,8 @@ buildRGL args flags pkg lbi = do
 installRGL args flags pkg lbi = do
   let mode = getOptMode args
   let inst_gf_lib_dir = datadir (absoluteInstallDirs pkg lbi NoCopyDest) </> "lib"
-  copyAll mode (getRGLBuildDir lbi mode) (inst_gf_lib_dir </> getRGLBuildSubDir lbi mode)
+  copyAll "prelude"   (rgl_dst_dir lbi </> "prelude") (inst_gf_lib_dir </> "prelude")
+  copyAll (show mode) (getRGLBuildDir lbi mode) (inst_gf_lib_dir </> getRGLBuildSubDir lbi mode)
 
 copyRGL args flags pkg lbi = do
   let mode = getOptMode args
@@ -97,16 +105,17 @@ copyRGL args flags pkg lbi = do
                NoFlag -> NoCopyDest
                Flag d -> d
   let inst_gf_lib_dir = datadir (absoluteInstallDirs pkg lbi dest) </> "lib"
-  copyAll mode (getRGLBuildDir lbi mode) (inst_gf_lib_dir </> getRGLBuildSubDir lbi mode)
+  copyAll "prelude"   (rgl_dst_dir lbi </> "prelude") (inst_gf_lib_dir </> "prelude")
+  copyAll (show mode) (getRGLBuildDir lbi mode) (inst_gf_lib_dir </> getRGLBuildSubDir lbi mode)
 
-copyAll mode from to = do
-  putStrLn $ "Installing [" ++ show mode ++ "] " ++ to
+copyAll s from to = do
+  putStrLn $ "Installing [" ++ s ++ "] " ++ to
   createDirectoryIfMissing True to
   files <- fmap (drop 2) $ getDirectoryContents from
   mapM_ (\file -> copyFile (from </> file) (to </> file)) files
 
 sdistRGL pkg mb_lbi hooks flags = do
-  paths <- getRGLFiles rgl_dir []
+  paths <- getRGLFiles rgl_src_dir []
   let pkg' = pkg{dataFiles=paths}
   sDistHook simpleUserHooks pkg' mb_lbi hooks flags
   where
@@ -159,7 +168,8 @@ testRGL args _ pkg lbi = do
         else return False
 
 
-rgl_dir    = "lib" </> "src"
+rgl_src_dir     = "lib" </> "src"
+rgl_dst_dir lbi = buildDir lbi </> "rgl"
 
 -- the languages have long directory names and short ISO codes (3 letters)
 -- we also give the decodings for postprocessing linearizations, as long as grammars
@@ -208,15 +218,12 @@ langsPGF = langsLang `except` ["Ara","Hin","Tha"]
 -- languages for which Compatibility exists (to be extended)
 langsCompat = langsLang `only` ["Cat","Eng","Fin","Fre","Ita","Spa","Swe"]
 
-treebankExx = rgl_dir </> "exx-resource.gft"
-treebankResults = rgl_dir </> "exx-resource.gftb"
-
 gfc mode pkg lbi file = do
   let dir = getRGLBuildDir lbi mode
       preproc = case mode of
                   AllTenses -> ""
-                  Present   -> "-preproc="++(rgl_dir </> "mkPresent")
-                  Minimal   -> "-preproc="++(rgl_dir </> "mkMinimal")
+                  Present   -> "-preproc="++(rgl_src_dir </> "mkPresent")
+                  Minimal   -> "-preproc="++(rgl_src_dir </> "mkMinimal")
   createDirectoryIfMissing True dir
   putStrLn $ "Compiling [" ++ show mode ++ "] " ++ file
   run_gfc pkg lbi ["-s", preproc, "--gfo-dir="++dir, file]
@@ -232,15 +239,15 @@ gf comm files pkg lbi = do
 demos abstr ls = "gr -number=100 | l -treebank " ++ unlexer abstr ls ++ 
            " | ps -to_html | wf -file=resdemo.html"
 
-lang   (lla,la) = rgl_dir </> lla </> ("All"           ++ la ++ ".gf")
-compat (lla,la) = rgl_dir </> lla </> ("Compatibility" ++ la ++ ".gf")
-symbol (lla,la) = rgl_dir </> lla </> ("Symbol"        ++ la ++ ".gf")
+lang   (lla,la) = rgl_src_dir </> lla </> ("All"           ++ la ++ ".gf")
+compat (lla,la) = rgl_src_dir </> lla </> ("Compatibility" ++ la ++ ".gf")
+symbol (lla,la) = rgl_src_dir </> lla </> ("Symbol"        ++ la ++ ".gf")
 
-try    (lla,la) = rgl_dir </> "api" </> ("Try"    ++ la ++ ".gf")
-syntax (lla,la) = rgl_dir </> "api" </> ("Syntax" ++ la ++ ".gf")
+try    (lla,la) = rgl_src_dir </> "api" </> ("Try"    ++ la ++ ".gf")
+syntax (lla,la) = rgl_src_dir </> "api" </> ("Syntax" ++ la ++ ".gf")
 
-symbolic (lla,la) = rgl_dir </> "api"   </> ("Symbolic" ++ la ++ ".gf")
-parse    (lla,la) = rgl_dir </> "parse" </> ("Parse"    ++ la ++ ".gf")
+symbolic (lla,la) = rgl_src_dir </> "api"   </> ("Symbolic" ++ la ++ ".gf")
+parse    (lla,la) = rgl_src_dir </> "parse" </> ("Parse"    ++ la ++ ".gf")
 
 except ls es = filter (flip notElem es . snd) ls
 only   ls es = filter (flip elem es . snd) ls
@@ -264,7 +271,7 @@ getRGLBuildSubDir lbi mode =
     Present   -> "present"
     Minimal   -> "minimal"
 
-getRGLBuildDir lbi mode = buildDir lbi </> "rgl" </> getRGLBuildSubDir lbi mode
+getRGLBuildDir lbi mode = rgl_dst_dir lbi </> getRGLBuildSubDir lbi mode
 
 getRGLCommands args =
   let cmds0 = [cmd | arg <- args,
@@ -290,7 +297,7 @@ unlexer abstr ls =
 -- | Runs the gf executable in compile mode with the given arguments.
 run_gfc :: PackageDescription -> LocalBuildInfo -> [String] -> IO ()
 run_gfc pkg lbi args = 
-    do let args' = ["-batch","-gf-lib-path="++rgl_dir] ++ filter (not . null) args ++ ["+RTS"] ++ rts_flags ++ ["-RTS"]
+    do let args' = ["-batch","-gf-lib-path="++rgl_src_dir] ++ filter (not . null) args ++ ["+RTS"] ++ rts_flags ++ ["-RTS"]
            gf = default_gf pkg lbi
        putStrLn $ "Running: " ++ gf ++ " " ++ unwords (map showArg args')
        e <- rawSystem gf args'
