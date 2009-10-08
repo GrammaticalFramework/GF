@@ -15,7 +15,7 @@
 --        instead of rolling its own.
 -----------------------------------------------------------------------------
 
-module PGF.VisualizeTree ( visualizeTrees, parseTree, alignLinearize
+module PGF.VisualizeTree ( visualizeTrees, parseTree, dependencyTree, alignLinearize
   ,PosText(..),readPosText
 			) where
 
@@ -25,7 +25,7 @@ import PGF.Tree
 import PGF.Linearize
 import PGF.Macros (lookValCat)
 
-import Data.List (intersperse,nub)
+import Data.List (intersperse,nub,isPrefixOf,sort,sortBy)
 import Data.Char (isDigit)
 import qualified Text.ParserCombinators.ReadP as RP
 
@@ -55,6 +55,37 @@ tree2graph pgf (funs,cats) = prf [] where
 
 prGraph digr ns = concat $ map (++"\n") $ [graph ++ "{\n"] ++ ns ++ ["}"] where
   graph = if digr then "digraph" else "graph"
+
+
+-- dependency trees from Linearize.linearizeMark
+
+dependencyTree :: Maybe String -> PGF -> CId -> Expr -> String
+dependencyTree ms pgf lang = prGraph True . lin2dep pgf . linMark where
+  linMark = head . linearizesMark pgf lang
+  ---- use Just str if you have str to match against
+
+lin2dep pgf s = trace s $ trace (show sortedNodeWords) $ prelude ++ nodes ++ links where
+
+  prelude = ["rankdir=LR ;", "node [shape = plaintext] ;"]
+
+  nodes = map mkNode nodeWords
+  mkNode (i,(p,ss)) = 
+    show (show i) ++ " [label = \"" ++ show i ++ ". " ++ show p ++ unwords ss ++ "\"] ;"
+
+  links = map mkLink [(x,dominant x) | x <- init sortedNodeWords]
+  dominant x = head [y | y <- sortedNodeWords, y /=x, dominates (pos y) (pos x)]
+  dominates y x = y /= x && isPrefixOf y x
+  sortedNodeWords = reverse $ sortBy (\x y -> compare (length (pos x)) (length (pos y))) $ 
+                              sortBy (\x y -> compare (pos x) (pos y)) nodeWords
+  pos = fst . snd
+
+  linkss = map mkLink [(x,y) | x <- nodeWords, y <- nodeWords, x /= y, depends x y]
+  mkLink (x,y) = show (fst x) ++ " -> " ++ show (fst y) ;
+  depends (_,(p,_)) (_,(q,_)) = sister p q || daughter p q
+  daughter p q = not (null p) && init p == q && (null q || last q == 0)
+  sister p q = False -- not (null p) && not (null q) && init p == init q && last q == 0
+
+  nodeWords = (0,([],["ROOT"])) : zip [1..] [(p++[0],f)| (p,f) <- wlins (readPosText s)]
 
 
 -- parse trees from Linearize.linearizeMark

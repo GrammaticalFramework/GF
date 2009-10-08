@@ -120,7 +120,7 @@ lin
   milk_N = regGenN "melk" masculine ;
   moon_N = regGenN "måne" masculine ;
   mother_N2 = mkN2 (mkN "mor" "moren" "mødre" "mødrene") (mkPrep "til") ; ---- fem
-  mountain_N = regGenN "berg" neutrum ;
+  mountain_N = regGenN "fjell" neutrum ;
   music_N = mk2N "musikk" "musikken" ;
   narrow_A = regADeg "smal" ;
   new_A = mkADeg "ny" "nytt" "nye" "nyere" "nyest" ;
