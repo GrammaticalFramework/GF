@@ -565,6 +565,44 @@ allCommands cod env@(pgf, mos) = Map.fromList [
      options = transliterationPrintNames
      }),
 
+  ("vd", emptyCommandInfo {
+     longname = "visualize_dependency",
+     synopsis = "show word dependency tree graphically",
+     explanation = unlines [
+       "Prints a dependency tree the .dot format (the graphviz format).",
+       "By default, the last argument is the head of every abstract syntax",
+       "function; moreover, the head depends on the head of the function above.",
+       "The graph can be saved in a file by the wf command as usual.",
+       "If the -view flag is defined, the graph is saved in a temporary file",
+       "which is processed by graphviz and displayed by the program indicated",
+       "by the flag. The target format is png, unless overridden by the",
+       "flag -format."
+       ],
+     exec = \opts es -> do
+         let lang = optLang opts
+         let grph = if null es then [] else dependencyTree Nothing pgf lang (head es)
+         if isFlag "view" opts || isFlag "format" opts then do
+           let file s = "_grph." ++ s
+           let view = optViewGraph opts ++ " "
+           let format = optViewFormat opts 
+           writeFile (file "dot") (enc grph)
+           system $ "dot -T" ++ format ++ " " ++ file "dot" ++ " > " ++ file format ++ 
+                    " ; " ++ view ++ file format
+           return void
+          else return $ fromString grph,
+     examples = [
+       "gr | aw              -- generate a tree and show word alignment as graph script",
+       "gr | vt -view=\"open\" -- generate a tree and display alignment on a Mac"
+       ],
+     options = [
+       ],
+     flags = [
+       ("format","format of the visualization file (default \"png\")"),
+       ("view","program to open the resulting file (default \"open\")")
+       ] 
+    }),
+
+
   ("vp", emptyCommandInfo {
      longname = "visualize_parse",
      synopsis = "show parse tree graphically",

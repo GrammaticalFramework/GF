@@ -328,7 +328,7 @@ oper
     {s = table {NPPoss _ => x ; _ => y} ; a = agrP3 g n ;
      lock_NP = <>} ;
 
-  mk3A a b c = (mkAdject a b c [] []) ** {isComp = False ; lock_A = <>} ;
+  mk3A = mk3ADeg ; ---- (mkAdject a b c [] []) ** {isComp = False ; lock_A = <>} ;
   mk2A a b = mk3A a b (a + "e") ;
   regA a = (regADeg a) **  {isComp = False ; lock_A = <>} ;
 

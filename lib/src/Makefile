@@ -25,7 +25,7 @@ compat:
 	$(RUNMAKE) present compat
 
 prelude:
-	gf -batch prelude/*.gf
+	gf -batch -path=prelude prelude/*.gf
 	cp -p prelude/*.gfo ../prelude
 
 constructX:
