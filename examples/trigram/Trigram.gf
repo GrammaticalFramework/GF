@@ -1,6 +1,9 @@
 abstract Trigram = {
 
 cat 
+    -- A sentence
+    S ;
+
     -- A lexicon is a set of 'Word's
     Word ;
 
@@ -17,6 +20,8 @@ cat
     Prob (a,b,c : Word) ;
 
 data
+    sent : ({a,b} : Word) -> Seq a b -> S ;
+
     -- Here we construct sequence by using nil and cons. The Prob argument ensures
     -- that the sequence contains only valid N-grams and contributes with the right
     -- probability mass
