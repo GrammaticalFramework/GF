@@ -12,7 +12,7 @@ concrete ParseEng of ParseEngAbs =
   ConjunctionEng,
   PhraseEng - [UttImpSg, UttImpPl],
   TextX,
-  StructuralEng - [everybody_NP, every_Det, only_Predet, somebody_NP],
+  StructuralEng - [above_Prep, everywhere_Adv, everybody_NP, every_Det, only_Predet, somebody_NP],
   IdiomEng,
 
   ExtraEng - [
@@ -29,7 +29,7 @@ concrete ParseEng of ParseEngAbs =
 	      V2V, beg_V2V,
 	      V2S, answer_V2S,
 	      VA, become_VA],
-  OaldEng - [everywhere_Adv, here_Adv, quite_Adv, somewhere_Adv, there_Adv]
+  OaldEng - [everywhere_Adv, here_Adv, quite_Adv, somewhere_Adv, there_Adv,have_V2]
 
   ** open ParadigmsEng, ResEng, MorphoEng, NounEng, ParamX, Prelude in {
 
