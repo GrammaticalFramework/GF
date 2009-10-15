@@ -111,7 +111,7 @@ copyRGL args flags pkg lbi = do
 copyAll s from to = do
   putStrLn $ "Installing [" ++ s ++ "] " ++ to
   createDirectoryIfMissing True to
-  files <- fmap (drop 2) $ getDirectoryContents from
+  files <- fmap (filter (\f -> take 1 f /= ".")) $ getDirectoryContents from
   mapM_ (\file -> copyFile (from </> file) (to </> file)) files
 
 sdistRGL pkg mb_lbi hooks flags = do
