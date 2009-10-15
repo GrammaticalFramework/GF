@@ -57,7 +57,7 @@ pgfMain pgf command =
     getTree :: CGI PGF.Tree
     getTree = do mt <- getInput "tree"
                  t <- maybe (throwCGIError 400 "No tree given" ["No tree given"]) return mt
-                 maybe (throwCGIError 400 "Bad tree" ["Bad tree: " ++ t]) return (PGF.readTree t)
+                 maybe (throwCGIError 400 "Bad tree" ["Bad tree: " ++ t]) return (PGF.readExpr t)
 
     getCat :: CGI (Maybe PGF.Type)
     getCat = 
@@ -106,7 +106,7 @@ doTranslate pgf input mcat mfrom mto = showJSON $ map toJSObject
 
 doParse :: PGF -> String -> Maybe PGF.Type -> Maybe PGF.Language -> JSValue
 doParse pgf input mcat mfrom = showJSON $ map toJSObject
-     [[("from", PGF.showLanguage from),("tree",PGF.showTree tree)]
+     [[("from", PGF.showLanguage from),("tree",PGF.showExpr [] tree)]
          | (from,trees) <- parse' pgf input mcat mfrom,
            tree <- trees ]
 
@@ -125,7 +125,7 @@ doLinearize pgf tree mto = showJSON $ map toJSObject
 doRandom :: PGF -> Maybe PGF.Type -> Maybe Int -> IO JSValue
 doRandom pgf mcat mlimit = 
     do trees <- random' pgf mcat
-       return $ showJSON $ map toJSObject [[("tree", PGF.showTree tree)] | tree <- limit trees]
+       return $ showJSON $ map toJSObject [[("tree", PGF.showExpr [] tree)] | tree <- limit trees]
   where limit = take (fromMaybe 1 mlimit)
 
 doGrammar :: PGF -> Maybe (Accept Language) -> JSValue
@@ -139,7 +139,7 @@ doGrammar pgf macc = showJSON $ toJSObject
                       ("languageCode", showJSON $ fromMaybe "" (PGF.languageCode pgf l)),
                       ("canParse",     showJSON $ PGF.canParse pgf l)]
                      | l <- PGF.languages pgf]
-        categories = map toJSObject [[("cat", PGF.showType cat)] | cat <- PGF.categories pgf]
+        categories = map toJSObject [[("cat", PGF.showType [] cat)] | cat <- PGF.categories pgf]
 
 instance JSON PGF.CId where
     readJSON x = readJSON x >>= maybe (fail "Bad language.") return . PGF.readLanguage
