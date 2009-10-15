@@ -27,8 +27,9 @@ module PGF(
            languages, abstractName, languageCode,
            
            -- * Types
-           Type,
+           Type, Hypo,
            showType, readType,
+	   mkType, mkHypo, mkDepHypo, mkImplHypo,
            categories, startCat,
 
            -- * Functions
