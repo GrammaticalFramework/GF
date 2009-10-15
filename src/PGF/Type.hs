@@ -1,5 +1,6 @@
 module PGF.Type ( Type(..), Hypo,
                   readType, showType,
+                  mkType, mkHypo, mkDepHypo, mkImplHypo,
                   pType, ppType, ppHypo ) where
 
 import PGF.CId
@@ -10,7 +11,7 @@ import qualified Text.PrettyPrint as PP
 import qualified Text.ParserCombinators.ReadP as RP
 import Control.Monad
 
--- | To read a type from a 'String', use 'read' or 'readType'.
+-- | To read a type from a 'String', use 'readType'.
 data Type =
    DTyp [Hypo] CId [Expr]
   deriving (Eq,Ord,Show)
@@ -30,6 +31,25 @@ readType s = case [x | (x,cs) <- RP.readP_to_S pType s, all isSpace cs] of
 -- of binding.
 showType :: [CId] -> Type -> String
 showType vars = PP.render . ppType 0 vars
+
+-- | creates a type from list of hypothesises, category and 
+-- list of arguments for the category. The operation 
+-- @mkType [h_1,...,h_n] C [e_1,...,e_m]@ will create 
+-- @h_1 -> ... -> h_n -> C e_1 ... e_m@
+mkType :: [Hypo] -> CId -> [Expr] -> Type
+mkType hyps cat args = DTyp hyps cat args
+
+-- | creates hypothesis for non-dependent type i.e. A
+mkHypo :: Type -> Hypo
+mkHypo ty = (Explicit,wildCId,ty)
+
+-- | creates hypothesis for dependent type i.e. (x : A)
+mkDepHypo :: CId -> Type -> Hypo
+mkDepHypo x ty = (Explicit,x,ty)
+
+-- | creates hypothesis for dependent type with implicit argument i.e. ({x} : A)
+mkImplHypo :: CId -> Type -> Hypo
+mkImplHypo x ty = (Implicit,x,ty)
 
 pType :: RP.ReadP Type
 pType = do
