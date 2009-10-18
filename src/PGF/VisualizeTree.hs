@@ -19,7 +19,7 @@ module PGF.VisualizeTree ( visualizeTrees, parseTree, dependencyTree, alignLinea
   ,PosText(..),readPosText
 			) where
 
-import PGF.CId (CId,showCId,pCId)
+import PGF.CId (CId,showCId,pCId,mkCId)
 import PGF.Data
 import PGF.Tree
 import PGF.Linearize
@@ -60,32 +60,51 @@ prGraph digr ns = concat $ map (++"\n") $ [graph ++ "{\n"] ++ ns ++ ["}"] where
 -- dependency trees from Linearize.linearizeMark
 
 dependencyTree :: Maybe String -> PGF -> CId -> Expr -> String
-dependencyTree ms pgf lang = prGraph True . lin2dep pgf . linMark where
-  linMark = head . linearizesMark pgf lang
-  ---- use Just str if you have str to match against
+dependencyTree ms pgf lang exp = prGraph True lin2dep where
 
-lin2dep pgf s = trace s $ trace (show sortedNodeWords) $ prelude ++ nodes ++ links where
+  lin2dep = trace (show sortedNodes) $ trace (show nodeWords) $ prelude ++ nodes ++ links
+
+  pot = readPosText $ head $ linearizesMark pgf lang exp
+  ---- use Just str if you have str to match against
 
   prelude = ["rankdir=LR ;", "node [shape = plaintext] ;"]
 
   nodes = map mkNode nodeWords
-  mkNode (i,(p,ss)) = 
-    show (show i) ++ " [label = \"" ++ show i ++ ". " ++ show p ++ unwords ss ++ "\"] ;"
+  mkNode (i,((_,p),ss)) = 
+    node p ++ " [label = \"" ++ show i ++ ". " ++ show p ++ unwords ss ++ "\"] ;"
+  nodeWords = (0,((mkCId "",[]),["ROOT"])) : zip [1..] [((f,p),w)| 
+                                       ((Just f,p),w) <- wlins pot]
 
-  links = map mkLink [(x,dominant x) | x <- init sortedNodeWords]
-  dominant x = head [y | y <- sortedNodeWords, y /=x, dominates (pos y) (pos x)]
-  dominates y x = y /= x && isPrefixOf y x
-  sortedNodeWords = reverse $ sortBy (\x y -> compare (length (pos x)) (length (pos y))) $ 
-                              sortBy (\x y -> compare (pos x) (pos y)) nodeWords
-  pos = fst . snd
+  links = map mkLink [(word (dominant x), x, label f x) | (_,((f,x),_)) <- tail nodeWords]
+  mkLink (x,y,l) = node x ++ " -> " ++ node y ---- ++ " {label = \"" ++ l ++ "\"}"
+  node = show . show
 
-  linkss = map mkLink [(x,y) | x <- nodeWords, y <- nodeWords, x /= y, depends x y]
-  mkLink (x,y) = show (fst x) ++ " -> " ++ show (fst y) ;
-  depends (_,(p,_)) (_,(q,_)) = sister p q || daughter p q
-  daughter p q = not (null p) && init p == q && (null q || last q == 0)
-  sister p q = False -- not (null p) && not (null q) && init p == init q && last q == 0
+  dominant x = case x of 
+    [] -> x
+    _ | not (x == hx) -> hx
+    _  -> dominant (init x)
+   where
+    hx = headArg (init x) tr x
 
-  nodeWords = (0,([],["ROOT"])) : zip [1..] [(p++[0],f)| (p,f) <- wlins (readPosText s)]
+  headArg x0 tr x = case (tr,x) of
+    (Fun f ts,[_]) -> x0 ++ [length ts - 1]  ---- TODO: head as other than last arg
+    (Fun f ts,i:y) -> headArg x0 (ts !! i) y
+
+  label f x = showCId f ++ "#" ++ show (last x)
+
+  word x = if elem x sortedNodes then x else 
+           let x' = headArg x tr (x ++[0]) in
+           if x' == x then [] else word x'
+  -- head [y | y <- sortedNodes, isPrefixOf y x]
+
+  tr = expr2tree exp
+
+  sortedNodes = --sortBy (\x y -> compare (shortness x,pos x) (shortness y,pos y)) 
+                  [p | (_,((_,p),_)) <- nodeWords]
+  ---- TODO: sort by other head than last
+  pos x = 100 - last x 
+  shortness x = 100 - length x
+
 
 
 -- parse trees from Linearize.linearizeMark
@@ -106,7 +125,7 @@ lin2tree pgf s = trace s $ prelude ++ nodes ++ links where
     nubrec [] $ [(p,cat f) | T (Just f, p) _ <- pts] : 
                    concatMap nlins [ts | T _ ts <- pts]  
   leaves pt = [(p++[j],s) | (j,(p,s)) <- 
-                zip [9990..] [(p,s) | (p,ss) <- wlins pt, s <- ss]]
+                zip [9990..] [(p,s) | ((_,p),ss) <- wlins pt, s <- ss]]
 
   nubrec es rs = case rs of
     r:rr -> let r' = filter (not . flip elem es) (nub r) 
@@ -154,7 +173,7 @@ lin2graph ss = trace (show ss) $ prelude ++ nodes ++ links
   prelude = ["rankdir=LR ;", "node [shape = record] ;"]
 
   nlins :: [(Int,[((Int,String),String)])]
-  nlins = [(i, [((j,showp p),unw ws) | (j,(p,ws)) <- zip [0..] ws]) | 
+  nlins = [(i, [((j,showp p),unw ws) | (j,((_,p),ws)) <- zip [0..] ws]) | 
                                 (i,ws) <- zip [0..] (map (wlins . readPosText) ss)]
 
   unw = concat . intersperse "\\ "  -- space escape in graphviz
@@ -173,13 +192,13 @@ lin2graph ss = trace (show ss) $ prelude ++ nodes ++ links
   edge i v w = 
     struct i ++ ":" ++ mark v ++ ":e -> " ++ struct (i+1) ++ ":" ++ mark w ++ ":w ;"
 
-wlins :: PosText -> [([Int],[String])]
+wlins :: PosText -> [((Maybe CId,[Int]),[String])]
 wlins pt = case pt of
-  T (_,p) pts -> concatMap (lins p) pts
-  M ws -> if null ws then [] else [([],ws)]
+  T p pts -> concatMap (lins p) pts
+  M ws -> if null ws then [] else [((Nothing,[]),ws)]
  where
   lins p pt = case pt of
-    T (_,q) pts -> concatMap (lins q) pts
+    T q pts -> concatMap (lins q) pts
     M ws -> if null ws then [] else [(p,ws)]
 
 data PosText = 
