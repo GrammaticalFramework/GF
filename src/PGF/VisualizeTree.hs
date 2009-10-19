@@ -90,6 +90,7 @@ dependencyTree ms pgf lang exp = prGraph True lin2dep where
     hx = headArg (init x) tr x
 
   headArg x0 tr x = case (tr,x) of
+    (Fun f [],[_]) -> x0 ---- ??
     (Fun f ts,[_]) -> x0 ++ [length ts - 1]  ---- TODO: head as other than last arg
     (Fun f ts,i:y) -> headArg x0 (ts !! i) y
 
@@ -97,10 +98,6 @@ dependencyTree ms pgf lang exp = prGraph True lin2dep where
     (_,       [])  -> ""
     (Fun f ts,[_]) -> showCId f ++ "#" ++ show (last (0:x)) ----
     (Fun f ts,i:y) -> label (ts !! i) y x
-
-
-
-
 
   word x = if elem x sortedNodes then x else 
            let x' = headArg x tr (x ++[0]) in
