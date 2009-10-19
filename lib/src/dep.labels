@@ -1,0 +1,74 @@
+    PredVP subj head
+    PredSCVP subj head
+    SlashVP  subj head
+    AdvSlash  head adv
+    SlashPrep head prep
+    SlashVS subj embed head
+    AdvS adv head
+    RelS head rmod
+    ComplVV  head compl
+    ComplVS  head embed
+    ComplVQ  head embed
+    ComplVA  head compl
+    Slash2V3 head obj
+    Slash3V3 head indobj
+    SlashV2V head compl
+    SlashV2S head embed
+    SlashV2Q head embed
+    SlashV2A head compl
+    ComplSlash head obj
+    SlashVV  head compl
+    SlashV2VNP head obj compl
+    AdvVP head adv
+    AdVVP adv head
+    DetCN det head
+    PredetNP det head
+    PPartNP head amod
+    AdvNP head adv
+    RelNP head rmod
+    DetQuant    head num
+    DetQuantOrd head num ord
+    AdNum adv head
+    ComplN2 head compl
+    ComplN3 head compl
+    AdjCN  amod head
+    RelCN  head rmod
+    AdvCN  head adv
+    SentCN head embed
+    ApposCN appos head
+    ComparA head compl
+    ComplA2 head compl
+    CAdvAP pmod head compl
+    SentAP head embed
+    AdAP adv head
+    ConjS  head coord
+    ConjRS head coord
+    ConjAP head coord
+    ConjNP head coord
+    ConjAdv head coord
+    BaseS head tail
+    ConsS head tail
+    BaseRS head tail
+    ConsRS head tail
+    BaseAdv head tail
+    ConsAdv head tail
+    BaseNP head tail
+    ConsNP head tail
+    BaseAP head tail
+    ConsAP head tail
+    PrepNP head compl
+    ComparAdvAdj pmod head compl
+    ComparAdvAdjS pmod head embed
+    AdAdv amod head
+    SubjS conj head
+    QuestVP subj head
+    QuestSlash obj head
+    QuestIAdv adv head
+    QuestIComp adv head
+    IdetCN det head
+    AdvIP head adv
+    IdetQuant head num
+    PrepIP head compl
+    RelVP subj head
+    RelSlash obj head
+    FunRP pmod compl head

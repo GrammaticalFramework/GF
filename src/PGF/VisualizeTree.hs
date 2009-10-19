@@ -15,8 +15,8 @@
 --        instead of rolling its own.
 -----------------------------------------------------------------------------
 
-module PGF.VisualizeTree ( visualizeTrees, parseTree, dependencyTree, alignLinearize
-  ,PosText(..),readPosText
+module PGF.VisualizeTree ( visualizeTrees, parseTree, dependencyTree, getDepLabels,
+  alignLinearize, PosText(..), readPosText
 			) where
 
 import PGF.CId (CId,showCId,pCId,mkCId)
@@ -25,6 +25,7 @@ import PGF.Tree
 import PGF.Linearize
 import PGF.Macros (lookValCat)
 
+import qualified Data.Map as Map
 import Data.List (intersperse,nub,isPrefixOf,sort,sortBy)
 import Data.Char (isDigit)
 import qualified Text.ParserCombinators.ReadP as RP
@@ -59,10 +60,12 @@ prGraph digr ns = concat $ map (++"\n") $ [graph ++ "{\n"] ++ ns ++ ["}"] where
 
 -- dependency trees from Linearize.linearizeMark
 
-dependencyTree :: Maybe String -> PGF -> CId -> Expr -> String
-dependencyTree ms pgf lang exp = prGraph True lin2dep where
+dependencyTree :: Bool -> Maybe Labels -> Maybe String -> PGF -> CId -> Expr -> String
+dependencyTree debug mlab ms pgf lang exp = prGraph True lin2dep where
 
-  lin2dep = trace (show sortedNodes) $ trace (show nodeWords) $ prelude ++ nodes ++ links
+  lin2dep = trace (ifd (show sortedNodes ++ show nodeWords)) $ prelude ++ nodes ++ links
+
+  ifd s = if debug then s else []
 
   pot = readPosText $ head $ linearizesMark pgf lang exp
   ---- use Just str if you have str to match against
@@ -71,7 +74,7 @@ dependencyTree ms pgf lang exp = prGraph True lin2dep where
 
   nodes = map mkNode nodeWords
   mkNode (i,((_,p),ss)) = 
-    node p ++ " [label = \"" ++ show i ++ ". " ++ show p ++ unwords ss ++ "\"] ;"
+    node p ++ " [label = \"" ++ show i ++ ". " ++ ifd (show p) ++ unwords ss ++ "\"] ;"
   nodeWords = (0,((mkCId "",[]),["ROOT"])) : zip [1..] [((f,p),w)| 
                                        ((Just f,p),w) <- wlins pot]
 
@@ -91,26 +94,36 @@ dependencyTree ms pgf lang exp = prGraph True lin2dep where
 
   headArg x0 tr x = case (tr,x) of
     (Fun f [],[_]) -> x0 ---- ??
-    (Fun f ts,[_]) -> x0 ++ [length ts - 1]  ---- TODO: head as other than last arg
+    (Fun f ts,[_]) -> x0 ++ [getHead (length ts - 1) f]
     (Fun f ts,i:y) -> headArg x0 (ts !! i) y
 
-  label tr y x = case (tr,y) of
-    (_,       [])  -> ""
-    (Fun f ts,[_]) -> showCId f ++ "#" ++ show (last (0:x)) ----
-    (Fun f ts,i:y) -> label (ts !! i) y x
+  label tr y x = case span (uncurry (==)) (zip y x) of
+    (xys,(_,i):_) -> getLabel i (funAt tr (map fst xys))
+    _ -> "" ----
+
+  funAt tr x = case (tr,x) of
+    (Fun f _ ,[])  -> f
+    (Fun f ts,i:y) -> funAt (ts !! i) y
 
   word x = if elem x sortedNodes then x else 
            let x' = headArg x tr (x ++[0]) in
            if x' == x then [] else word x'
-  -- head [y | y <- sortedNodes, isPrefixOf y x]
 
   tr = expr2tree exp
+  sortedNodes = [p | (_,((_,p),_)) <- nodeWords]
 
-  sortedNodes = --sortBy (\x y -> compare (shortness x,pos x) (shortness y,pos y)) 
-                  [p | (_,((_,p),_)) <- nodeWords]
-  ---- TODO: sort by other head than last
-  pos x = 100 - last x 
-  shortness x = 100 - length x
+  labels = maybe Map.empty id mlab
+  getHead i f = case Map.lookup f labels of
+    Just ls -> length $ takeWhile (/= "head") ls
+    _ -> i
+  getLabel i f = case Map.lookup f labels of
+    Just ls | length ls > i -> ifd (showCId f ++ "#" ++ show i ++ "=") ++ ls !! i
+    _ -> showCId f ++ "#" ++ show i
+
+type Labels = Map.Map CId [String]
+
+getDepLabels :: [String] -> Labels
+getDepLabels ss = Map.fromList [(mkCId f,ls) | f:ls <- map words ss]
 
 
 
