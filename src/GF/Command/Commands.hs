@@ -579,8 +579,14 @@ allCommands cod env@(pgf, mos) = Map.fromList [
        "flag -format."
        ],
      exec = \opts es -> do
+         let debug = isOpt "v" opts
+         let file = valStrOpts "file" "" opts
+         mlab <- case file of
+           "" -> return Nothing
+           _  -> readFile file >>= return . Just . getDepLabels . lines
          let lang = optLang opts
-         let grph = if null es then [] else dependencyTree Nothing pgf lang (head es)
+         let grph = if null es then [] else 
+                       dependencyTree debug mlab Nothing pgf lang (head es)
          if isFlag "view" opts || isFlag "format" opts then do
            let file s = "_grph." ++ s
            let view = optViewGraph opts ++ " "
@@ -595,8 +601,10 @@ allCommands cod env@(pgf, mos) = Map.fromList [
        "gr | vt -view=\"open\" -- generate a tree and display alignment on a Mac"
        ],
      options = [
+       ("v","show extra information")
        ],
      flags = [
+       ("file","configuration file for labels per fun, format 'fun l1 ... label ... l2'"),
        ("format","format of the visualization file (default \"png\")"),
        ("view","program to open the resulting file (default \"open\")")
        ] 

@@ -1,0 +1,7 @@
+  Pred  subj head
+  Extr  subj head
+  Compl obj head
+  Mods  nmod head
+  MMods amod nmod head
+  Prepm nmod head
+  Prepp pmod head
