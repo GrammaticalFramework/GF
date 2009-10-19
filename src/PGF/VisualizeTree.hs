@@ -75,8 +75,11 @@ dependencyTree ms pgf lang exp = prGraph True lin2dep where
   nodeWords = (0,((mkCId "",[]),["ROOT"])) : zip [1..] [((f,p),w)| 
                                        ((Just f,p),w) <- wlins pot]
 
-  links = map mkLink [(word (dominant x), x, label f x) | (_,((f,x),_)) <- tail nodeWords]
-  mkLink (x,y,l) = node x ++ " -> " ++ node y ---- ++ " {label = \"" ++ l ++ "\"}"
+  links = map mkLink 
+            [(word y, x, label tr y x) | 
+                      (_,((f,x),_)) <- tail nodeWords,
+                      let y = dominant x]
+  mkLink (x,y,l) = node x ++ " -> " ++ node y ++ " [label = \"" ++ l ++ "\"] ;"
   node = show . show
 
   dominant x = case x of 
@@ -90,7 +93,14 @@ dependencyTree ms pgf lang exp = prGraph True lin2dep where
     (Fun f ts,[_]) -> x0 ++ [length ts - 1]  ---- TODO: head as other than last arg
     (Fun f ts,i:y) -> headArg x0 (ts !! i) y
 
-  label f x = showCId f ++ "#" ++ show (last x)
+  label tr y x = case (tr,y) of
+    (_,       [])  -> ""
+    (Fun f ts,[_]) -> showCId f ++ "#" ++ show (last (0:x)) ----
+    (Fun f ts,i:y) -> label (ts !! i) y x
+
+
+
+
 
   word x = if elem x sortedNodes then x else 
            let x' = headArg x tr (x ++[0]) in
