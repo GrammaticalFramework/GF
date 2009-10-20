@@ -63,12 +63,14 @@ prGraph digr ns = concat $ map (++"\n") $ [graph ++ "{\n"] ++ ns ++ ["}"] where
 dependencyTree :: String -> Bool -> Maybe Labels -> Maybe String -> PGF -> CId -> Expr -> String
 dependencyTree format debug mlab ms pgf lang exp = case format of
   "malt" -> unlines (lin2dep format)
+  "malt_input" -> unlines (lin2dep format)
   _ -> prGraph True (lin2dep format) 
 
  where
 
   lin2dep format = trace (ifd (show sortedNodes ++ show nodeWords)) $ case format of
     "malt" -> map (concat . intersperse "\t") wnodes
+    "malt_input" -> map (concat . intersperse "\t" . take 6) wnodes
     _ -> prelude ++ nodes ++ links
 
   ifd s = if debug then s else []
@@ -134,8 +136,8 @@ dependencyTree format debug mlab ms pgf lang exp = case format of
   arcMap = Map.fromList [(y,(x,l)) | (x,y,l) <- thelinks]
 
   lookDomLab p = case Map.lookup p arcMap of
-    Just (q,l) -> (maybe 0 id (Map.lookup q nodeMap), if null l then "_" else l)
-    _          -> (0,unspec)
+    Just (q,l) -> (maybe 0 id (Map.lookup q nodeMap), if null l then rootlabel else l)
+    _          -> (0,rootlabel)
 
   wnodes = [[show i, unwords ws, showCId fun, pos, pos, morph, show dom, lab, unspec, unspec] | 
               (i, ((fun,p),ws)) <- tail nodeWords,
@@ -145,6 +147,7 @@ dependencyTree format debug mlab ms pgf lang exp = case format of
            ]
 
   unspec = "_"
+  rootlabel = "ROOT"
 
 type Labels = Map.Map CId [String]
 
