@@ -139,13 +139,13 @@ dependencyTree format debug mlab ms pgf lang exp = case format of
     Just (q,l) -> (maybe 0 id (Map.lookup q nodeMap), if null l then rootlabel else l)
     _          -> (0,rootlabel)
 
-  wnodes = [[show i, unwords ws, showCId fun, pos, pos, morph, show dom, lab, unspec, unspec] | 
+  wnodes = [[show i, maltws ws, showCId fun, pos, pos, morph, show dom, lab, unspec, unspec] | 
               (i, ((fun,p),ws)) <- tail nodeWords,
               let pos = showCId $ lookValCat pgf fun,
               let morph = unspec,
               let (dom,lab) = lookDomLab p
            ]
-
+  maltws = concat . intersperse "+" . words . unwords  -- no spaces in column 2
   unspec = "_"
   rootlabel = "ROOT"
 
