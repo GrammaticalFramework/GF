@@ -60,10 +60,16 @@ prGraph digr ns = concat $ map (++"\n") $ [graph ++ "{\n"] ++ ns ++ ["}"] where
 
 -- dependency trees from Linearize.linearizeMark
 
-dependencyTree :: Bool -> Maybe Labels -> Maybe String -> PGF -> CId -> Expr -> String
-dependencyTree debug mlab ms pgf lang exp = prGraph True lin2dep where
+dependencyTree :: String -> Bool -> Maybe Labels -> Maybe String -> PGF -> CId -> Expr -> String
+dependencyTree format debug mlab ms pgf lang exp = case format of
+  "malt" -> unlines (lin2dep format)
+  _ -> prGraph True (lin2dep format) 
 
-  lin2dep = trace (ifd (show sortedNodes ++ show nodeWords)) $ prelude ++ nodes ++ links
+ where
+
+  lin2dep format = trace (ifd (show sortedNodes ++ show nodeWords)) $ case format of
+    "malt" -> map (concat . intersperse "\t") wnodes
+    _ -> prelude ++ nodes ++ links
 
   ifd s = if debug then s else []
 
@@ -78,8 +84,8 @@ dependencyTree debug mlab ms pgf lang exp = prGraph True lin2dep where
   nodeWords = (0,((mkCId "",[]),["ROOT"])) : zip [1..] [((f,p),w)| 
                                        ((Just f,p),w) <- wlins pot]
 
-  links = map mkLink 
-            [(word y, x, label tr y x) | 
+  links = map mkLink thelinks 
+  thelinks =  [(word y, x, label tr y x) | 
                       (_,((f,x),_)) <- tail nodeWords,
                       let y = dominant x]
   mkLink (x,y,l) = node x ++ " -> " ++ node y ++ " [label = \"" ++ l ++ "\"] ;"
@@ -120,11 +126,30 @@ dependencyTree debug mlab ms pgf lang exp = prGraph True lin2dep where
     Just ls | length ls > i -> ifd (showCId f ++ "#" ++ show i ++ "=") ++ ls !! i
     _ -> showCId f ++ "#" ++ show i
 
+-- to generate CoNLL format for MaltParser
+  nodeMap :: Map.Map [Int] Int
+  nodeMap = Map.fromList [(p,i) | (i,((_,p),_)) <- nodeWords]
+
+  arcMap :: Map.Map [Int] ([Int],String)
+  arcMap = Map.fromList [(y,(x,l)) | (x,y,l) <- thelinks]
+
+  lookDomLab p = case Map.lookup p arcMap of
+    Just (q,l) -> (maybe 0 id (Map.lookup q nodeMap), if null l then "_" else l)
+    _          -> (0,unspec)
+
+  wnodes = [[show i, unwords ws, showCId fun, pos, pos, morph, show dom, lab, unspec, unspec] | 
+              (i, ((fun,p),ws)) <- tail nodeWords,
+              let pos = showCId $ lookValCat pgf fun,
+              let morph = unspec,
+              let (dom,lab) = lookDomLab p
+           ]
+
+  unspec = "_"
+
 type Labels = Map.Map CId [String]
 
 getDepLabels :: [String] -> Labels
 getDepLabels ss = Map.fromList [(mkCId f,ls) | f:ls <- map words ss]
-
 
 
 -- parse trees from Linearize.linearizeMark
