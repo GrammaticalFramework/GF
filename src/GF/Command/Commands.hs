@@ -569,7 +569,8 @@ allCommands cod env@(pgf, mos) = Map.fromList [
      longname = "visualize_dependency",
      synopsis = "show word dependency tree graphically",
      explanation = unlines [
-       "Prints a dependency tree the .dot format (the graphviz format).",
+       "Prints a dependency tree in the .dot format (the graphviz format, default)",
+       "or the MaltParser/CoNLL format (flag -output=malt)",
        "By default, the last argument is the head of every abstract syntax",
        "function; moreover, the head depends on the head of the function above.",
        "The graph can be saved in a file by the wf command as usual.",
@@ -581,21 +582,21 @@ allCommands cod env@(pgf, mos) = Map.fromList [
      exec = \opts es -> do
          let debug = isOpt "v" opts
          let file = valStrOpts "file" "" opts
+         let outp = valStrOpts "output" "dot" opts
          mlab <- case file of
            "" -> return Nothing
            _  -> readFile file >>= return . Just . getDepLabels . lines
          let lang = optLang opts
-         let grph = if null es then [] else 
-                       dependencyTree debug mlab Nothing pgf lang (head es)
+         let grphs = unlines $ map (dependencyTree outp debug mlab Nothing pgf lang) es
          if isFlag "view" opts || isFlag "format" opts then do
-           let file s = "_grph." ++ s
+           let file s = "_grphd." ++ s
            let view = optViewGraph opts ++ " "
            let format = optViewFormat opts 
-           writeFile (file "dot") (enc grph)
+           writeFile (file "dot") (enc grphs)
            system $ "dot -T" ++ format ++ " " ++ file "dot" ++ " > " ++ file format ++ 
                     " ; " ++ view ++ file format
            return void
-          else return $ fromString grph,
+          else return $ fromString grphs,
      examples = [
        "gr | aw              -- generate a tree and show word alignment as graph script",
        "gr | vt -view=\"open\" -- generate a tree and display alignment on a Mac"
@@ -606,6 +607,7 @@ allCommands cod env@(pgf, mos) = Map.fromList [
      flags = [
        ("file","configuration file for labels per fun, format 'fun l1 ... label ... l2'"),
        ("format","format of the visualization file (default \"png\")"),
+       ("output","output format of graph source (default \"dot\")"),
        ("view","program to open the resulting file (default \"open\")")
        ] 
     }),
