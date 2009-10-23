@@ -3,10 +3,10 @@
 resource TryPol = SyntaxPol, LexiconPol, ParadigmsPol - [mkAdv] ** 
   open (P = ParadigmsPol) in {
 
-oper
+--oper
 
-  mkAdv = overload SyntaxPol {
-    mkAdv : Str -> Adv = P.mkAdv ;
-  } ;
+--  mkAdv = overload SyntaxPol {
+--    mkAdv : Str -> Adv = P.mkAdv ;
+--  } ;
 
 }
