@@ -146,7 +146,7 @@ recoveryStates open_types (EState pgf pinfo chart) =
 -- limited by the category specified, which is usually
 -- the same as the startup category.
 extractTrees :: ParseState -> Type -> [Tree]
-extractTrees (State pgf pinfo chart items) ty@(DTyp _ start _) = 
+extractTrees (PState pgf pinfo chart items) ty@(DTyp _ start _) = 
   nubsort [e1 | e <- exps, Right e1 <- [checkExpr pgf e ty]]
   where
     (mb_agenda,acc) = TMap.decompose items
