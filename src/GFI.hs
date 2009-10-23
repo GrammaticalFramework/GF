@@ -262,7 +262,7 @@ wordCompletion gfenv line0 prefix0 p =
       -> do mb_state0 <- try (evaluate (initState pgf (optLang opts) (optType opts)))
             case mb_state0 of
               Right state0 -> let ws     = words (take (length s - length prefix) s)
-                              in case foldM nextState state0 ws of
+                              in case loop state0 ws of
                                    Nothing    -> ret ' ' []
                                    Just state -> let compls = getCompletions state prefix
                                                  in ret ' ' (map (encode gfenv) (Map.keys compls))
@@ -295,7 +295,11 @@ wordCompletion gfenv line0 prefix0 p =
            Just ty -> ty
            Nothing -> error ("Can't parse '"++str++"' as type")
 
-    
+    loop ps []     = Just ps
+    loop ps (t:ts) = case nextState ps t of
+                       Left  es -> Nothing
+                       Right ps -> loop ps ts
+
     ret c [x] = return [x++[c]]
     ret _ xs  = return xs
 

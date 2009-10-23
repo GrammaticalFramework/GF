@@ -29,7 +29,7 @@ module PGF(
            -- * Types
            Type, Hypo,
            showType, readType,
-	   mkType, mkHypo, mkDepHypo, mkImplHypo,
+           mkType, mkHypo, mkDepHypo, mkImplHypo,
            categories, startCat,
 
            -- * Functions
@@ -54,7 +54,7 @@ module PGF(
            showPrintName,
 
            -- ** Parsing
-           parse, canParse, parseAllLang, parseAll,
+           parse, parseWithRecovery, canParse, parseAllLang, parseAll,
            
            -- ** Evaluation
            PGF.compute, paraphrase,
@@ -75,7 +75,7 @@ module PGF(
            -- ** Word Completion (Incremental Parsing)
            complete,
            Incremental.ParseState,
-           Incremental.initState, Incremental.nextState, Incremental.getCompletions, Incremental.extractTrees,
+           Incremental.initState, Incremental.nextState, Incremental.getCompletions, Incremental.recoveryStates, Incremental.extractTrees,
 
            -- ** Generation
            generateRandom, generateAll, generateAllDepth,
@@ -130,6 +130,8 @@ linearize    :: PGF -> Language -> Tree -> String
 -- Throws an exception if the given language cannot be used
 -- for parsing, see 'canParse'.
 parse        :: PGF -> Language -> Type -> String -> [Tree]
+
+parseWithRecovery :: PGF -> Language -> Type -> [Type] -> String -> [Tree]
 
 -- | Checks whether the given language can be used for parsing.
 canParse     :: PGF -> Language -> Bool
@@ -241,6 +243,8 @@ parse pgf lang typ s =
                   Nothing    -> error ("No parser built for language: " ++ showCId lang)
     Nothing  -> error ("Unknown language: " ++ showCId lang)
 
+parseWithRecovery pgf lang typ open_typs s = Incremental.parseWithRecovery pgf lang typ open_typs (words s)
+
 canParse pgf cnc = isJust (lookParser pgf cnc)
 
 linearizeAll mgr = map snd . linearizeAllLang mgr
@@ -282,7 +286,7 @@ functionType pgf fun =
 complete pgf from typ input = 
          let (ws,prefix) = tokensAndPrefix input
              state0 = Incremental.initState pgf from typ
-         in case foldM Incremental.nextState state0 ws of
+         in case loop state0 ws of
               Nothing -> []
               Just state -> 
                 (if null prefix && not (null (Incremental.extractTrees state typ)) then [unwords ws ++ " "] else [])
@@ -293,6 +297,11 @@ complete pgf from typ input =
                       | null ws = ([],"")
                       | otherwise = (init ws, last ws)
         where ws = words s
+
+    loop ps []     = Just ps
+    loop ps (t:ts) = case Incremental.nextState ps t of
+                       Left  es -> Nothing
+                       Right ps -> loop ps ts
 
 -- | Converts an expression to normal form
 compute :: PGF -> Expr -> Expr

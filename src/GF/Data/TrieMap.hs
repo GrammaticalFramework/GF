@@ -12,6 +12,9 @@ module GF.Data.TrieMap
          , insertWith
 
          , unionWith
+         , unionsWith
+         
+         , elems
          ) where
 
 import Prelude hiding (lookup, null)
@@ -53,3 +56,11 @@ unionWith f (Tr mb_v1 m1) (Tr mb_v2 m2) =
                (Just v1,Just v2) -> Just (f v1 v2)
       m    = Map.unionWith (unionWith f) m1 m2
   in Tr mb_v m
+
+unionsWith :: Ord k => (v -> v -> v) -> [TrieMap k v] -> TrieMap k v
+unionsWith f = foldl (unionWith f) empty
+
+elems :: TrieMap k v -> [v]
+elems tr = collect tr []
+  where
+    collect (Tr mb_v m) xs = maybe id (:) mb_v (Map.fold collect xs m)
