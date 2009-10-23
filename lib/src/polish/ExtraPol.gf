@@ -1,0 +1,3 @@
+--concrete ExtraPol of ExtraPolAbs = CatPol ** {
+--
+-- } 
