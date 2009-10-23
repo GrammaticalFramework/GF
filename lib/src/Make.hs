@@ -54,7 +54,7 @@ langsCoding = [
 langs = map fst langsCoding
 
 -- languagues for which to compile Lang
-langsLang = langs `except` ["Pol","Tur"]
+langsLang = langs `except` ["Tur"]
 
 -- languages for which to compile Try 
 langsAPI  = langsLang `except` ["Ara","Bul","Hin","Ina","Lat","Rus","Tha"]

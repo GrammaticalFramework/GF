@@ -13,7 +13,7 @@ concrete GrammarPol of Grammar =
   RelativePol,
   ConjunctionPol,
   PhrasePol,
-  TextPol,
+  TextX - [CAdv],
   StructuralPol,
   IdiomPol
    ** { flags  startcat = Phr ; unlexer = text ; lexer = text ;} ;
