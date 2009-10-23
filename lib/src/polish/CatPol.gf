@@ -2,7 +2,7 @@
 
 -- Adam Slaski, 2009 <adam.slaski@gmail.com>
 
-concrete CatPol of Cat = CommonPol ** open ResPol, Prelude, (R = ParamX) in {
+concrete CatPol of Cat = CommonX - [CAdv] ** open ResPol, Prelude, (R = ParamX) in {
 
   flags optimize=all_subs; coding=utf8;
 
@@ -124,5 +124,7 @@ concrete CatPol of Cat = CommonPol ** open ResPol, Prelude, (R = ParamX) in {
     N3 = {s : SubstForm => Str; g : Gender} ** { c, c2 : Complement } ;
 
     PN = NounPhrase;
+    
+    CAdv = {s,p,sn,pn : Str} ;
 };
 
