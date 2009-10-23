@@ -1,11 +1,14 @@
 {-# LANGUAGE BangPatterns #-}
 module PGF.Parsing.FCFG.Incremental
           ( ParseState
+          , ErrorState
           , initState
           , nextState
           , getCompletions
+          , recoveryStates
           , extractTrees
           , parse
+          , parseWithRecovery
           ) where
 
 import Data.Array.IArray
@@ -26,8 +29,28 @@ import PGF.Macros
 import PGF.TypeCheck
 import Debug.Trace
 
-parse :: PGF -> Language -> Type -> [String] -> [Expr]
-parse pgf lang typ toks = maybe [] (\ps -> extractTrees ps typ) (foldM nextState (initState pgf lang typ) toks)
+parse :: PGF -> Language -> Type -> [String] -> [Tree]
+parse pgf lang typ toks = loop (initState pgf lang typ) toks
+  where
+    loop ps []     = extractTrees ps typ
+    loop ps (t:ts) = case nextState ps t of
+                       Left  es -> []
+                       Right ps -> loop ps ts
+
+parseWithRecovery :: PGF -> Language -> Type -> [Type] -> [String] -> [Tree]
+parseWithRecovery pgf lang typ open_typs toks = accept (initState pgf lang typ) toks
+  where
+    accept ps []     = extractTrees ps typ
+    accept ps (t:ts) =
+      case nextState ps t of
+        Right ps -> accept ps ts
+        Left  es -> skip (recoveryStates open_typs es) ts
+
+    skip ps_map []     = extractTrees (fst ps_map) typ
+    skip ps_map (t:ts) =
+      case Map.lookup t (snd ps_map) of
+        Just ps -> accept ps ts
+        Nothing -> skip ps_map ts
 
 -- | Creates an initial parsing state for a given language and
 -- startup category.
@@ -46,16 +69,18 @@ initState pgf lang (DTyp _ start _) =
           Just pinfo -> pinfo
           _          -> error ("Unknown language: " ++ showCId lang)
 
-  in State pgf
-           pinfo
-           (Chart emptyAC [] emptyPC (productions pinfo) (totalCats pinfo) 0)
-           (TMap.singleton [] (Set.fromList items))
+  in PState pgf
+            pinfo
+            (Chart emptyAC [] emptyPC (productions pinfo) (totalCats pinfo) 0)
+            (TMap.singleton [] (Set.fromList items))
 
 -- | From the current state and the next token
--- 'nextState' computes a new state where the token
--- is consumed and the current position shifted by one.
-nextState :: ParseState -> String -> Maybe ParseState
-nextState (State pgf pinfo chart items) t =
+-- 'nextState' computes a new state, where the token
+-- is consumed and the current position is shifted by one.
+-- If the new token cannot be accepted then an error state 
+-- is returned.
+nextState :: ParseState -> String -> Either ErrorState ParseState
+nextState (PState pgf pinfo chart items) t =
   let (mb_agenda,map_items) = TMap.decompose items
       agenda = maybe [] Set.toList mb_agenda
       acc    = fromMaybe TMap.empty (Map.lookup t map_items)
@@ -66,8 +91,8 @@ nextState (State pgf pinfo chart items) t =
                      , offset =offset chart1+1
                      }
   in if TMap.null acc1
-       then Nothing
-       else Just (State pgf pinfo chart2 acc1)
+       then Left  (EState pgf pinfo chart2)
+       else Right (PState pgf pinfo chart2 acc1)
   where
     add (tok:toks) item acc
       | tok == t            = TMap.insertWith Set.union toks (Set.singleton item) acc
@@ -78,7 +103,7 @@ nextState (State pgf pinfo chart items) t =
 -- next words and the consequent states. This is used for word completions in
 -- the GF interpreter.
 getCompletions :: ParseState -> String -> Map.Map String ParseState
-getCompletions (State pgf pinfo chart items) w =
+getCompletions (PState pgf pinfo chart items) w =
   let (mb_agenda,map_items) = TMap.decompose items
       agenda = maybe [] Set.toList mb_agenda
       acc    = Map.filterWithKey (\tok _ -> isPrefixOf w tok) map_items
@@ -88,11 +113,33 @@ getCompletions (State pgf pinfo chart items) w =
                      , passive=emptyPC
                      , offset =offset chart1+1
                      }
-  in fmap (State pgf pinfo chart2) acc'
+  in fmap (PState pgf pinfo chart2) acc'
   where
     add (tok:toks) item acc
       | isPrefixOf w tok    = Map.insertWith (TMap.unionWith Set.union) tok (TMap.singleton toks (Set.singleton item)) acc
     add _          item acc = acc
+
+recoveryStates :: [Type] -> ErrorState -> (ParseState, Map.Map String ParseState)
+recoveryStates open_types (EState pgf pinfo chart) =
+  let open_fcats = concatMap type2fcats open_types
+      agenda = foldl (complete open_fcats) [] (actives chart)
+      (acc,chart1) = process Nothing add (sequences pinfo) (functions pinfo) agenda Map.empty chart
+      chart2 = chart1{ active =emptyAC
+                     , actives=active chart1 : actives chart1
+                     , passive=emptyPC
+                     , offset =offset chart1+1
+                     }
+  in (PState pgf pinfo chart (TMap.singleton [] (Set.fromList agenda)), fmap (PState pgf pinfo chart2) acc)
+  where
+    type2fcats (DTyp _ cat _) = fromMaybe [] (Map.lookup cat (startCats pinfo))
+    
+    complete open_fcats items ac = 
+      foldl (Set.fold (\(Active j' ppos funid seqid args keyc) -> 
+                           (:) (Active j' (ppos+1) funid seqid args keyc)))
+            items
+            [set | fcat <- open_fcats, set <- lookupACByFCat fcat ac]
+
+    add (tok:toks) item acc = Map.insertWith (TMap.unionWith Set.union) tok (TMap.singleton toks (Set.singleton item)) acc
 
 -- | This function extracts the list of all completed parse trees
 -- that spans the whole input consumed so far. The trees are also
@@ -189,7 +236,7 @@ process mbt fn !seqs !funs (item@(Active j ppos funid seqid args key0):items) ac
                                   Just set -> Set.fold (\(Active j' ppos funid seqid args keyc) -> 
                                                             let FSymCat d _ = unsafeAt (unsafeAt seqs seqid) ppos
                                                             in (:) (Active j' (ppos+1) funid seqid (updateAt d fid args) keyc)) items set
-	           in process mbt fn seqs funs items2 acc chart{passive=insertPC (mkPK key0 j) fid (passive chart)
+                   in process mbt fn seqs funs items2 acc chart{passive=insertPC (mkPK key0 j) fid (passive chart)
                                                                ,forest =IntMap.insert fid (Set.singleton (FApply funid args)) (forest chart)
                                                                ,nextId =nextId chart+1
                                                                }
@@ -242,6 +289,12 @@ emptyAC = IntMap.empty
 
 lookupAC :: ActiveKey -> ActiveChart -> Maybe (Set.Set Active)
 lookupAC (AK fcat l) chart = IntMap.lookup fcat chart >>= IntMap.lookup l
+
+lookupACByFCat :: FCat -> ActiveChart -> [Set.Set Active]
+lookupACByFCat fcat chart =
+  case IntMap.lookup fcat chart of
+    Nothing  -> []
+    Just map -> IntMap.elems map
 
 labelsAC :: FCat -> ActiveChart -> [FIndex]
 labelsAC fcat chart = 
@@ -296,7 +349,7 @@ foldForest f g b fcat forest =
 
 -- | An abstract data type whose values represent
 -- the current state in an incremental parser.
-data ParseState = State PGF ParserInfo Chart (TMap.TrieMap String (Set.Set Active))
+data ParseState = PState PGF ParserInfo Chart (TMap.TrieMap String (Set.Set Active))
 
 data Chart
   = Chart
@@ -308,3 +361,11 @@ data Chart
       , offset  :: {-# UNPACK #-} !Int
       }
       deriving Show
+
+----------------------------------------------------------------
+-- Error State
+----------------------------------------------------------------
+
+-- | An abstract data type whose values represent
+-- the state in an incremental parser after an error.
+data ErrorState = EState PGF ParserInfo Chart

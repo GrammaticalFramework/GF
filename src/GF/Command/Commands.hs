@@ -389,12 +389,17 @@ allCommands cod env@(pgf, mos) = Map.fromList [
        "Shows all trees returned by parsing a string in the grammars in scope.",
        "The -lang flag can be used to restrict this to fewer languages.",
        "The default start category can be overridden by the -cat flag.",
-       "See also the ps command for lexing and character encoding."
+       "See also the ps command for lexing and character encoding.",
+       "",
+       "The -openclass flag is experimental and allows some robustness in ",
+       "the parser. For example if -openclass=\"A,N,V\" is given, the parser",
+       "will accept unknown adjectives, nouns and verbs with the resource grammar."
        ],
      exec = \opts -> returnFromExprs . concatMap (par opts) . toStrings,
      flags = [
        ("cat","target category of parsing"),
-       ("lang","the languages of parsing (comma-separated, no spaces)")
+       ("lang","the languages of parsing (comma-separated, no spaces)"),
+       ("openclass","list of open-class categories for robust parsing")
        ]
      }),
   ("pg", emptyCommandInfo { -----
@@ -742,7 +747,9 @@ allCommands cod env@(pgf, mos) = Map.fromList [
   ]
  where
    enc = encodeUnicode cod
-   par opts s = concat  [parse pgf lang (optType opts) s | lang <- optLangs opts, canParse pgf lang]
+   par opts s = case optOpenTypes opts of
+                  []        -> concat  [parse pgf lang (optType opts) s | lang <- optLangs opts, canParse pgf lang]
+                  open_typs -> concat  [parseWithRecovery pgf lang (optType opts) open_typs s | lang <- optLangs opts, canParse pgf lang]
  
    void = ([],[])
 
@@ -789,6 +796,11 @@ allCommands cod env@(pgf, mos) = Map.fromList [
      "" -> languages pgf
      lang -> map mkCId (chunks ',' lang)
    optLang opts = head $ optLangs opts ++ [wildCId]
+
+   optOpenTypes opts = case valStrOpts "openclass" "" opts of
+     ""   -> []
+     cats -> mapMaybe readType (chunks ',' cats)
+
    optType opts = 
      let str = valStrOpts "cat" (showCId $ lookStartCat pgf) opts
      in case readType str of
