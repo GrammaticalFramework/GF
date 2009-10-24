@@ -41,51 +41,33 @@ import Debug.Trace
 
 -- | partial evaluation of concrete syntax. AR 6\/2001 -- 16\/5\/2003 -- 5\/2\/2005.
 
-type EEnv = () --- not used
-
--- only do this for resource: concrete is optimized in gfc form
-optimizeModule :: Options -> ([SourceModule],EEnv) -> SourceModule -> Err (SourceModule,EEnv)
-optimizeModule opts mse@(ms,eenv) mo@(_,mi)
-  | mstatus mi == MSComplete && isModRes mi = do
-      (mo1,_) <- evalModule oopts mse mo
-      let mo2 = shareModule optim mo1
-      return (mo2,eenv)
-  | otherwise = evalModule oopts mse mo
+optimizeModule :: Options -> [SourceModule] -> SourceModule -> Err SourceModule
+optimizeModule opts ms mo@(name,mi)
+  | mstatus mi == MSComplete = do
+      mo1 <- case mtype mi of
+               _ | isModRes mi -> do
+                     let deps = allOperDependencies name (jments mi)
+                     ids <- topoSortOpers deps
+                     if OptExpand `Set.member` optim
+                       then do mi <- foldM evalOp mi ids
+                               return (name,mi)
+                       else return mo
+               MTConcrete a -> do
+                     js' <- mapMTree (evalCncInfo oopts gr name a) (jments mi)
+                     return (name,replaceJudgements mi js')
+               _ -> return mo
+      return (shareModule optim mo1)
+  | otherwise = return mo
  where
    oopts = opts `addOptions` flagsModule mo
    optim = flag optOptimizations oopts
-
-evalModule :: Options -> ([SourceModule],EEnv) -> SourceModule -> Err (SourceModule,EEnv)
-evalModule oopts (ms,eenv) mo@(name,m0)
-  | mstatus m0 == MSComplete =
-      case mtype m0 of
-         _ | isModRes m0 -> do
-               let deps = allOperDependencies name (jments m0)
-               ids <- topoSortOpers deps
-               MGrammar (mod' : _) <- foldM evalOp gr ids
-               return $ (mod',eenv)
-
-         MTConcrete a -> do
-               js' <- mapMTree (evalCncInfo oopts gr name a) (jments m0)
-               return $ ((name,replaceJudgements m0 js'),eenv)
-
-         _ -> return $ (mo,eenv)
-  | otherwise = return $ (mo,eenv)
- where
-   gr0 = MGrammar $ ms
+   
    gr  = MGrammar $ mo : ms
 
-   evalOp g@(MGrammar ((_,m) : _)) i = do
-     info  <- lookupTree showIdent i $ jments m
+   evalOp mi i = do
+     info  <- lookupTree showIdent i (jments mi)
      info' <- evalResInfo oopts gr (i,info)
-     return $ updateRes g name i info'
-
--- | update a resource module by adding a new or changing an old definition
-updateRes :: SourceGrammar -> Ident -> Ident -> Info -> SourceGrammar
-updateRes gr@(MGrammar ms) m i info = MGrammar $ map upd ms where
-  upd (n,mo)
-    | n /= m = (n,mo)
-    | n == m = (n,updateModule mo i info)
+     return (updateModule mi i info')
 
 -- | only operations need be compiled in a resource, and this is local to each
 -- definition since the module is traversed in topological order
@@ -94,20 +76,16 @@ evalResInfo oopts gr (c,info) = case info of
 
   ResOper pty pde -> eIn (text "operation") $ do
     pde' <- case pde of
-              Just de | optres -> liftM Just $ comp de 
-              _                -> return pde
+              Just de -> liftM Just $ computeConcrete gr de 
+              Nothing -> return Nothing
     return $ ResOper pty pde'
 
   _ ->  return info
  where
-   comp = if optres then computeConcrete gr else computeConcreteRec gr
    eIn cat = errIn (render (text "Error optimizing" <+> cat <+> ppIdent c <+> colon))
-   optim = flag optOptimizations oopts
-   optres = OptExpand `Set.member` optim
 
 
-evalCncInfo :: 
-  Options -> SourceGrammar -> Ident -> Ident -> (Ident,Info) -> Err Info
+evalCncInfo :: Options -> SourceGrammar -> Ident -> Ident -> (Ident,Info) -> Err Info
 evalCncInfo opts gr cnc abs (c,info) = do
 
  (if verbAtLeast opts Verbose then trace (" " ++ showIdent c) else id) return ()

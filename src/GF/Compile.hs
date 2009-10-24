@@ -219,8 +219,7 @@ compileSourceModule opts env@(k,gr,_) mo@(i,mi) = do
       (k',mo3r:_) <- putpp "  refreshing " $ ioeErr $ refreshModule (k,mos) mo3
       intermOut opts DumpRefresh (ppModule Qualified mo3r)
 
-      let eenv = () --- emptyEEnv
-      (mo4,eenv') <- putpp "  optimizing " $ ioeErr $ optimizeModule opts (mos,eenv) mo3r
+      mo4 <- putpp "  optimizing " $ ioeErr $ optimizeModule opts mos mo3r
       intermOut opts DumpOptimize (ppModule Qualified mo4)
 
       return (k',mo4)
