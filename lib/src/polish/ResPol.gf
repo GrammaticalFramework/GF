@@ -1,4 +1,4 @@
---# -path=.:../abstract:../common:../../prelude
+--# -path=.:../abstract:../common:../prelude
 --# -coding=utf8
 
 -- Ilona Nowak Wintersemester 2007/08  
