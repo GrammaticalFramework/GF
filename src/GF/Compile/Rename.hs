@@ -35,7 +35,6 @@ import GF.Infra.Ident
 import GF.Infra.CheckM
 import GF.Grammar.Macros
 import GF.Grammar.Printer
-import GF.Grammar.AppPredefined
 import GF.Grammar.Lookup
 import GF.Grammar.Printer
 import GF.Data.Operations

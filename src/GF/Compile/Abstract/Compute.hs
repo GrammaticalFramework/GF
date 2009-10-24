@@ -1,6 +1,6 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : AbsCompute
+-- Module      : GF.Compile.Abstract.Compute
 -- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
@@ -14,7 +14,7 @@
 -- old GF computation; to be updated
 -----------------------------------------------------------------------------
 
-module GF.Compile.AbsCompute (LookDef,
+module GF.Compile.Abstract.Compute (LookDef,
 		   compute, 
 		   computeAbsTerm, 
 		   computeAbsTermIn, 
@@ -25,7 +25,6 @@ import GF.Data.Operations
 
 import GF.Grammar
 import GF.Grammar.Lookup
-import GF.Compile.Compute
 
 import Debug.Trace
 import Data.List(intersperse)
