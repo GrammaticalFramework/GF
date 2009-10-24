@@ -15,10 +15,10 @@ module GF.Command.Commands (
 import PGF
 import PGF.CId
 import PGF.ShowLinearize
+import PGF.VisualizeTree
 import PGF.Macros
 import PGF.Data ----
 import PGF.Morphology
-import PGF.VisualizeTree
 import GF.Compile.Export
 import GF.Infra.Option (noOptions, readOutputFormat, Encoding(..))
 import GF.Infra.UseIO
@@ -146,7 +146,7 @@ allCommands cod env@(pgf, mos) = Map.fromList [
        "flag -format."
        ],
      exec = \opts es -> do
-         let grph = if null es then [] else alignLinearize pgf (head es)
+         let grph = if null es then [] else graphvizAlignment pgf (head es)
          if isFlag "view" opts || isFlag "format" opts then do
            let file s = "_grph." ++ s
            let view = optViewGraph opts ++ " "
@@ -592,7 +592,7 @@ allCommands cod env@(pgf, mos) = Map.fromList [
            "" -> return Nothing
            _  -> readFile file >>= return . Just . getDepLabels . lines
          let lang = optLang opts
-         let grphs = unlines $ map (dependencyTree outp debug mlab Nothing pgf lang) es
+         let grphs = unlines $ map (graphvizDependencyTree outp debug mlab Nothing pgf lang) es
          if isFlag "view" opts || isFlag "format" opts then do
            let file s = "_grphd." ++ s
            let view = optViewGraph opts ++ " "
@@ -631,7 +631,7 @@ allCommands cod env@(pgf, mos) = Map.fromList [
        ],
      exec = \opts es -> do
          let lang = optLang opts
-         let grph = if null es then [] else parseTree Nothing pgf lang (head es)
+         let grph = if null es then [] else graphvizParseTree pgf lang (head es)
          if isFlag "view" opts || isFlag "format" opts then do
            let file s = "_grph." ++ s
            let view = optViewGraph opts ++ " "
@@ -667,7 +667,7 @@ allCommands cod env@(pgf, mos) = Map.fromList [
      exec = \opts es -> do
          let funs = not (isOpt "nofun" opts)
          let cats = not (isOpt "nocat" opts)
-         let grph = visualizeTrees pgf (funs,cats) es -- True=digraph
+         let grph = unlines (map (graphvizAbstractTree pgf (funs,cats)) es) -- True=digraph
          if isFlag "view" opts || isFlag "format" opts then do
            let file s = "_grph." ++ s
            let view = optViewGraph opts ++ " "

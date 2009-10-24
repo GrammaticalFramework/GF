@@ -82,7 +82,13 @@ module PGF(
            
            -- ** Morphological Analysis
            Lemma, Analysis, Morpho,
-           lookupMorpho, buildMorpho
+           lookupMorpho, buildMorpho,
+
+           -- ** Visualizations
+           graphvizAbstractTree,
+           graphvizParseTree,
+           graphvizDependencyTree,
+           graphvizAlignment
           ) where
 
 import PGF.CId
@@ -90,6 +96,7 @@ import PGF.Linearize
 import PGF.Generate
 import PGF.TypeCheck
 import PGF.Paraphrase
+import PGF.VisualizeTree
 import PGF.Macros
 import PGF.Expr (Tree)
 import PGF.Morphology
