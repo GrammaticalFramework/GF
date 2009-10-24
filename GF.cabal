@@ -52,6 +52,7 @@ library
     PGF.Binary
     PGF.Morphology
     PGF.ShowLinearize
+    PGF.VisualizeTree
     GF.Data.MultiMap
     GF.Data.TrieMap
     GF.Data.Utilities

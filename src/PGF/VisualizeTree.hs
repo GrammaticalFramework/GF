@@ -15,9 +15,14 @@
 --        instead of rolling its own.
 -----------------------------------------------------------------------------
 
-module PGF.VisualizeTree ( visualizeTrees, parseTree, dependencyTree, getDepLabels,
-  alignLinearize, PosText(..), readPosText
-			) where
+module PGF.VisualizeTree ( graphvizAbstractTree
+                         , graphvizParseTree
+                         , graphvizDependencyTree
+                         , graphvizAlignment
+
+                         , getDepLabels
+                         , PosText(..), readPosText
+			 ) where
 
 import PGF.CId (CId,showCId,pCId,mkCId)
 import PGF.Data
@@ -32,8 +37,8 @@ import qualified Text.ParserCombinators.ReadP as RP
 
 import Debug.Trace
 
-visualizeTrees :: PGF -> (Bool,Bool) -> [Expr] -> String
-visualizeTrees pgf funscats = unlines . map (prGraph False . tree2graph pgf funscats . expr2tree)
+graphvizAbstractTree :: PGF -> (Bool,Bool) -> Expr -> String
+graphvizAbstractTree pgf funscats = prGraph False . tree2graph pgf funscats . expr2tree
 
 tree2graph :: PGF -> (Bool,Bool) -> Tree -> [String]
 tree2graph pgf (funs,cats) = prf [] where
@@ -60,8 +65,8 @@ prGraph digr ns = concat $ map (++"\n") $ [graph ++ "{\n"] ++ ns ++ ["}"] where
 
 -- dependency trees from Linearize.linearizeMark
 
-dependencyTree :: String -> Bool -> Maybe Labels -> Maybe String -> PGF -> CId -> Expr -> String
-dependencyTree format debug mlab ms pgf lang exp = case format of
+graphvizDependencyTree :: String -> Bool -> Maybe Labels -> Maybe String -> PGF -> CId -> Expr -> String
+graphvizDependencyTree format debug mlab ms pgf lang exp = case format of
   "malt" -> unlines (lin2dep format)
   "malt_input" -> unlines (lin2dep format)
   _ -> prGraph True (lin2dep format) 
@@ -158,8 +163,8 @@ getDepLabels ss = Map.fromList [(mkCId f,ls) | f:ls <- map words ss]
 -- parse trees from Linearize.linearizeMark
 ---- nubrec and domins are quadratic, but could be (n log n)
 
-parseTree :: Maybe String -> PGF -> CId -> Expr -> String
-parseTree ms pgf lang = prGraph False . lin2tree pgf . linMark where
+graphvizParseTree :: PGF -> CId -> Expr -> String
+graphvizParseTree pgf lang = prGraph False . lin2tree pgf . linMark where
   linMark = head . linearizesMark pgf lang
   ---- use Just str if you have str to match against
 
@@ -209,8 +214,8 @@ mtag = tag . ('n':) . uncommas
 -- word alignments from Linearize.linearizesMark
 -- words are chunks like {[0,1,1,0] old}
 
-alignLinearize :: PGF -> Expr -> String
-alignLinearize pgf = prGraph True . lin2graph . linsMark  where
+graphvizAlignment :: PGF -> Expr -> String
+graphvizAlignment pgf = prGraph True . lin2graph . linsMark  where
   linsMark t = [s | la <- cncnames pgf, s <- take 1 (linearizesMark pgf la t)]
 
 lin2graph :: [String] -> [String]
