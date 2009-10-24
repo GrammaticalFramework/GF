@@ -2,7 +2,8 @@
 module FastCGIUtils (initFastCGI, loopFastCGI,
                      throwCGIError, handleCGIErrors,
                      stderrToFile,
-                     outputJSONP, 
+                     outputJSONP,
+                     outputPNG,
                      splitBy) where
 
 import Control.Concurrent
@@ -163,6 +164,11 @@ outputJSONP x =
                    Just c  -> c ++ "(" ++ encode x ++ ")"
        setHeader "Content-Type" "text/json; charset=utf-8"
        outputStrict $ UTF8.encodeString str
+
+outputPNG :: String -> CGI CGIResult
+outputPNG x = do
+       setHeader "Content-Type" "image/png"
+       outputStrict x
 
 outputStrict :: String -> CGI CGIResult
 outputStrict x | x == x = output x

@@ -23,13 +23,40 @@
 .my-translations {
     margin-top: 1em;
 }
-    
+
+.my-translation-frame {
+    width: 100%;
+    margin: 0.5em;
+    background: #D0E4F6;
+}
+
+.my-translation-bar {
+    padding-left: 25px;
+    padding-right: 25px;
+    width: 100%;
+}
+
 .my-translation {
     margin: 0.2em;
-    padding-left: 25px;
     font-size: 150%;
     background-repeat: no-repeat;
     background-position: 0% 50%;
+    cursor:pointer;
+}
+
+.my-translation-btns {
+    background: #DDDDDD;
+    cursor:pointer;
+}
+
+.my-treeimage {
+    width: 650px;
+    height: 520px;
+}
+
+.my-alignmentimage {
+    width: 450px;
+    height: 300px;
 }
 
 /*

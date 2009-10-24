@@ -6,10 +6,7 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.HistoryListener;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.*;
 
 
 public class TranslateApp implements EntryPoint {
@@ -47,7 +44,24 @@ public class TranslateApp implements EntryPoint {
 				outputPanel.clear();
 				outputPanel.removeStyleDependentName("working");
 				for (PGF.Translation t : translations.iterable()) {
-					outputPanel.add(createTranslation(t.getTo(), t.getText()));
+					HorizontalPanel hPanel = new HorizontalPanel();
+					hPanel.addStyleName("my-translation-frame");
+					VerticalPanel linsPanel = new VerticalPanel();
+					linsPanel.addStyleName("my-translation-bar");
+					hPanel.add(linsPanel);
+					HorizontalPanel btnPanel = new HorizontalPanel();
+					btnPanel.addStyleName("my-translation-btns");
+					btnPanel.setSpacing(4);
+					btnPanel.add(createAbsTreeButton(t.getTree()));
+					btnPanel.add(createAlignButton(t.getTree()));
+					hPanel.add(btnPanel);
+					hPanel.setCellHorizontalAlignment(btnPanel,
+						HasHorizontalAlignment.ALIGN_RIGHT);
+					outputPanel.add(hPanel);
+
+					for (PGF.Linearization l : t.getLinearizations().iterable()) {
+						linsPanel.add(createTranslation(l.getTo(), t.getTree(), l.getText()));
+					}
 				}
 			}
 			public void onError (Throwable e) {
@@ -56,13 +70,113 @@ public class TranslateApp implements EntryPoint {
 		});
 	}
 
-	protected Widget createTranslation(String language, String text) {
+	protected Widget createAbsTreeButton(final String abstractTree) {
+		Image treeBtn = new Image("se.chalmers.cs.gf.gwt.TranslateApp/tree-btn.png");
+		treeBtn.addClickListener(
+			new ClickListener() {
+				public void onClick(Widget sender) {
+					// Create a dialog box and set the caption text
+					final DialogBox dialogBox = new DialogBox();
+					dialogBox.setText("Abstract Syntax Tree");
+
+					// Create a table to layout the content
+					HorizontalPanel dialogContents = new HorizontalPanel();
+					dialogContents.setSpacing(4);
+					dialogBox.setWidget(dialogContents);
+
+					// Add an image to the dialog
+					
+					Frame image = new Frame(pgf.graphvizAbstractTree(abstractTree));
+					image.addStyleName("my-treeimage");
+					dialogContents.add(image);
+
+					// Add a close button at the bottom of the dialog
+					Button closeButton = new Button("Close",
+						new ClickListener() {
+							public void onClick(Widget sender) {
+								dialogBox.hide();
+						}
+					});
+					dialogContents.add(closeButton);
+
+					dialogBox.center();
+					dialogBox.show();
+				}
+			});
+		return treeBtn;
+	}
+
+	protected Widget createAlignButton(final String abstractTree) {
+		Image alignBtn = new Image("se.chalmers.cs.gf.gwt.TranslateApp/align-btn.png");
+		alignBtn.addClickListener(
+			new ClickListener() {
+				public void onClick(Widget sender) {
+					// Create a dialog box and set the caption text
+					final DialogBox dialogBox = new DialogBox();
+					dialogBox.setText("Word Alignment");
+
+					// Create a table to layout the content
+					HorizontalPanel dialogContents = new HorizontalPanel();
+					dialogContents.setSpacing(4);
+					dialogBox.setWidget(dialogContents);
+
+					// Add an image to the dialog
+					Frame image = new Frame(pgf.graphvizAlignment(abstractTree));
+					image.addStyleName("my-alignmentimage");
+					dialogContents.add(image);
+
+					// Add a close button at the bottom of the dialog
+					Button closeButton = new Button("Close",
+						new ClickListener() {
+							public void onClick(Widget sender) {
+								dialogBox.hide();
+						}
+					});
+					dialogContents.add(closeButton);
+
+					dialogBox.center();
+					dialogBox.show();
+				}
+			});
+		return alignBtn;
+	}
+
+	protected Widget createTranslation(final String language, final String abstractTree, String text) {
 		Label l = new Label(text);
 		l.addStyleName("my-translation");
 		String lang = pgf.getLanguageCode(language);
 		if (lang != null) {
 			l.getElement().setLang(lang);
 		}
+		l.addClickListener(new ClickListener() {
+			public void onClick(Widget sender) {
+				// Create a dialog box and set the caption text
+				final DialogBox dialogBox = new DialogBox();
+				dialogBox.setText("Parse Tree");
+
+				// Create a table to layout the content
+				HorizontalPanel dialogContents = new HorizontalPanel();
+				dialogContents.setSpacing(4);
+				dialogBox.setWidget(dialogContents);
+
+				// Add an image to the dialog
+				Frame image = new Frame(pgf.graphvizParseTree(abstractTree, language));
+				image.addStyleName("my-treeimage");
+				dialogContents.add(image);
+
+				// Add a close button at the bottom of the dialog
+				Button closeButton = new Button("Close",
+					new ClickListener() {
+						public void onClick(Widget sender) {
+							dialogBox.hide();
+					}
+				});
+				dialogContents.add(closeButton);
+
+				dialogBox.center();
+				dialogBox.show();
+			}
+		});
 		return l;
 	}
 
