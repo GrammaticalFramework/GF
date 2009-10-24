@@ -1,6 +1,6 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : Compute
+-- Module      : GF.Compile.Concrete.Compute
 -- Maintainer  : AR
 -- Stability   : (stable)
 -- Portability : (portable)
@@ -12,7 +12,7 @@
 -- Computation of source terms. Used in compilation and in @cc@ command.
 -----------------------------------------------------------------------------
 
-module GF.Compile.Compute (computeConcrete, computeTerm,computeConcreteRec) where
+module GF.Compile.Concrete.Compute (computeConcrete, computeTerm,computeConcreteRec) where
 
 import GF.Data.Operations
 import GF.Grammar.Grammar
@@ -28,7 +28,7 @@ import GF.Compile.Refresh
 import GF.Grammar.PatternMatch
 import GF.Grammar.Lockfield (isLockLabel,unlockRecord) ----
 
-import GF.Grammar.AppPredefined
+import GF.Compile.Concrete.AppPredefined
 
 import Data.List (nub,intersperse)
 import Control.Monad (liftM2, liftM)

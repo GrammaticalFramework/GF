@@ -132,13 +132,10 @@ executable gf
     GF.Grammar.MMacros
     GF.Grammar.Lookup
     GF.Grammar.Unify
-    GF.Grammar.AppPredefined 
     GF.Grammar.PatternMatch
     GF.Grammar.Printer
     GF.Grammar.Binary
     GF.Infra.CheckM
-    GF.Compile.TC
-    GF.Compile.TypeCheck
     GF.Compile.Update
     GF.Compile.CheckGrammar
     GF.Compile.Refresh
@@ -146,7 +143,11 @@ executable gf
     GF.Compile.Rename
     GF.Compile.ReadFiles
     GF.Compile.GrammarToGFCC
-    GF.Compile.Compute
+    GF.Compile.Concrete.Compute
+    GF.Compile.Concrete.AppPredefined
+    GF.Compile.Abstract.TC
+    GF.Compile.Abstract.TypeCheck
+    GF.Compile.Abstract.Compute
     GF.Compile.Optimize
     GF.Compile.OptimizeGF
     GF.Compile.OptimizeGFCC

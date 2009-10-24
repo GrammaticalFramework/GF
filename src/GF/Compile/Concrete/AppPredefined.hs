@@ -12,7 +12,7 @@
 -- Predefined function type signatures and definitions.
 -----------------------------------------------------------------------------
 
-module GF.Grammar.AppPredefined (isInPredefined, typPredefined, appPredefined
+module GF.Compile.Concrete.AppPredefined (isInPredefined, typPredefined, appPredefined
 		     ) where
 
 import GF.Infra.Ident
