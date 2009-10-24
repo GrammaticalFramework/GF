@@ -20,7 +20,7 @@ lin
 
     Slash3V3 v3 np = (setSufix (defVP (castv3 v3)) 
         (\\p,gn => 
-          v3.c2.s ++ np.dep ! (npcase !<p,v3.c.c>) )) 
+          v3.c2.s ++ np.dep ! (npcase !<p,v3.c2.c>) )) 
         ** {c=v3.c}; 
 
 --     ComplSlash : VPSlash -> NP -> VP ; -- love it

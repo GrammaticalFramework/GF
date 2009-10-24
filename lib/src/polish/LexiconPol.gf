@@ -285,7 +285,7 @@ lin
     sell_V3 = dirV3 (mkV "sprzedawać" conj57 "sprzedać" conj99);
     send_V3 = mkV3 (mkV "wysyłać" conj98 "wysłać" conj67 ) "" "do" accusative genitive ;
     talk_V3 = mkV3 (mkV "rozmawiać" conj98 "porozmawiać" conj98) "z" "о" instrumental locative; 
-    give_V3 = mkV3 (mkV "dawać" conj57 "dać" conj99) "" "" Dat Acc ;
+    give_V3 = mkV3 (mkV "dawać" conj57 "dać" conj99) "" "" Acc Dat;
                          
     fear_V2 = mkV2 (mkReflVerb (mkMonoVerb "bać" conjbac Imperfective)) "" Gen;
     hit_V2 = dirV2 (mkV "bić" conj51 "pobić" conj51); 
