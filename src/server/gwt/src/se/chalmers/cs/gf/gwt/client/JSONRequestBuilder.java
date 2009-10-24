@@ -25,7 +25,7 @@ public class JSONRequestBuilder {
 	}
 	
 	public static <T extends JavaScriptObject> JSONRequest sendRequest (String base, List<Arg> vars, final JSONCallback<T> callback) {
-		String url = base + "?" + buildQueryString(vars);
+		String url = getQueryURL(base,vars);
 		RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, url);
 		builder.setTimeoutMillis(30000);
 		builder.setHeader("Accept","text/plain, text/html;q=0.5, */*;q=0.1");
@@ -57,8 +57,10 @@ public class JSONRequestBuilder {
         return eval('(' + json + ')');
     }-*/;
 
-	private static String buildQueryString(List<Arg> args) {
+	public static String getQueryURL(String base, List<Arg> args) {
 		StringBuffer sb = new StringBuffer();
+		sb.append(base);
+		sb.append("?");
 		if (args != null) {
 			for (Arg arg : args) {
 				if (arg.value != null) {

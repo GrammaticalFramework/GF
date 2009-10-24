@@ -60,8 +60,19 @@ public class PGF {
 		protected Translation() { }
 
 		public final native String getFrom() /*-{ return this.from; }-*/;
+                public final native String getTree() /*-{ return this.tree; }-*/;
+		public final native Linearizations getLinearizations() /*-{ return this.linearizations; }-*/;
+	}
+
+	public static class Linearizations extends IterableJsArray<Linearization> {
+		protected Linearizations() { }
+	}
+	
+	public static class Linearization extends JavaScriptObject {
+		protected Linearization() { }
+
 		public final native String getTo() /*-{ return this.to; }-*/;
-		public final native String getText() /*-{ return this.text; }-*/;
+                public final native String getText() /*-{ return this.text; }-*/;
 	}
 
 	/* Completion */
@@ -116,6 +127,28 @@ public class PGF {
 
 		public final native String getFrom() /*-{ return this.from; }-*/;
 		public final native String getTree() /*-{ return this.tree; }-*/;
+	}
+
+	public String graphvizAbstractTree(String pgfURL, String abstractTree) {
+		List<Arg> args = new ArrayList<Arg>();
+		args.add(new Arg("command", "abstrtree"));
+                args.add(new Arg("tree", abstractTree));
+		return JSONRequestBuilder.getQueryURL(pgfURL,args);
+	}
+
+	public String graphvizParseTree(String pgfURL, String abstractTree, String lang) {
+		List<Arg> args = new ArrayList<Arg>();
+		args.add(new Arg("command", "parsetree"));
+                args.add(new Arg("tree", abstractTree));
+		args.add(new Arg("from", lang));
+		return JSONRequestBuilder.getQueryURL(pgfURL,args);
+	}
+
+	public String graphvizAlignment(String pgfURL, String abstractTree) {
+		List<Arg> args = new ArrayList<Arg>();
+		args.add(new Arg("command", "alignment"));
+                args.add(new Arg("tree", abstractTree));
+		return JSONRequestBuilder.getQueryURL(pgfURL,args);
 	}
 
 	/* Common */

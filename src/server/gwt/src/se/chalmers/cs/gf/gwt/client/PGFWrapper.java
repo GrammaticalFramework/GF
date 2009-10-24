@@ -12,9 +12,11 @@ public class PGFWrapper {
 
 	private String baseURL;
 
-	private PGF pgf;
+	private String grammarURL;
 
 	private String pgfName = null;
+
+	private PGF pgf;
 
 	private String inputLanguage = null;
 
@@ -39,6 +41,10 @@ public class PGFWrapper {
 	private List<SettingsListener> listeners = new LinkedList<SettingsListener>();
 	
 
+	public PGFWrapper() {
+		this.baseURL = null;
+		this.pgf = new PGF();
+	}
 
 	public PGFWrapper(String baseURL) {
 		this.baseURL = baseURL;
@@ -93,7 +99,7 @@ public class PGFWrapper {
 	
 	protected void updateSelectedGrammar () {
 		clearCachedInfo();
-		pgf.grammar(baseURL+"/"+pgfName, new PGF.GrammarCallback() {
+		pgf.grammar(grammarURL, new PGF.GrammarCallback() {
 			public void onResult(PGF.Grammar grammar) {
 				userLanguage = grammar.getUserLanguage();
 				languages = new LinkedHashMap<String,PGF.Language>();
@@ -119,15 +125,27 @@ public class PGFWrapper {
 	//
 	
 	public JSONRequest translate (String input, final PGF.TranslateCallback callback) {
-		return pgf.translate(baseURL+"/"+pgfName, input, inputLanguage, cat, outputLanguage, callback);
+		return pgf.translate(grammarURL, input, inputLanguage, cat, outputLanguage, callback);
 	}
 
 	public JSONRequest complete (String input, int limit, final PGF.CompleteCallback callback) {
-		return pgf.complete(baseURL+"/"+pgfName, input, inputLanguage, cat, limit, callback);
+		return pgf.complete(grammarURL, input, inputLanguage, cat, limit, callback);
 	}
 
 	public JSONRequest parse (String input, final PGF.ParseCallback callback) {
-		return pgf.parse(baseURL+"/"+pgfName, input, inputLanguage, cat, callback);
+		return pgf.parse(grammarURL, input, inputLanguage, cat, callback);
+	}
+
+	public String graphvizAbstractTree(String abstractTree) {
+		return pgf.graphvizAbstractTree(grammarURL,abstractTree);
+	}
+
+	public String graphvizParseTree(String abstractTree, String lang) {
+		return pgf.graphvizParseTree(grammarURL,abstractTree,lang);
+	}
+
+	public String graphvizAlignment(String abstractTree) {
+		return pgf.graphvizAlignment(grammarURL,abstractTree);
 	}
 
 	//
@@ -140,6 +158,20 @@ public class PGFWrapper {
 
 	public void setPGFName(String pgfName) {
 		this.pgfName = pgfName;
+		this.grammarURL = baseURL + "/" + pgfName;
+		this.inputLanguage = null;
+		this.outputLanguage = null;
+		this.cat = null;
+		updateSelectedGrammar();
+	}
+
+	public String getGrammarURL() {
+		return grammarURL;
+	}
+
+	public void setGrammarURL(String grammarURL) {
+		this.pgfName = null;
+		this.grammarURL = grammarURL;
 		this.inputLanguage = null;
 		this.outputLanguage = null;
 		this.cat = null;

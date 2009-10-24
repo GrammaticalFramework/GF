@@ -19,6 +19,7 @@ import qualified Data.Map as Map
 import Data.Maybe
 import System.Directory
 import System.FilePath
+import System.Process
 
 logFile :: FilePath
 logFile = "pgf-error.log"
@@ -37,18 +38,20 @@ cgiMain cache =
     do path <- getVarWithDefault "SCRIPT_FILENAME" ""
        pgf <- liftIO $ readCache cache path
        command <- liftM (maybe "grammar" (urlDecodeUnicode . UTF8.decodeString)) (getInput "command")
-       jsonp <- pgfMain pgf command
-       outputJSONP jsonp
+       pgfMain pgf command
 
-pgfMain :: PGF -> String -> CGI JSValue
+pgfMain :: PGF -> String -> CGI CGIResult
 pgfMain pgf command = 
        case command of
-         "parse"          -> return (doParse pgf) `ap` getText `ap` getCat `ap` getFrom
-         "complete"       -> return (doComplete pgf) `ap` getText `ap` getCat `ap` getFrom `ap` getLimit
-         "linearize"      -> return (doLinearize pgf) `ap` getTree `ap` getTo
-         "random"         -> getCat >>= \c -> getLimit >>= liftIO . doRandom pgf c
-         "translate"      -> return (doTranslate pgf) `ap` getText `ap` getCat `ap` getFrom `ap` getTo
-         "grammar"        -> return (doGrammar pgf) `ap` requestAcceptLanguage
+         "parse"          -> return (doParse pgf) `ap` getText `ap` getCat `ap` getFrom >>= outputJSONP
+         "complete"       -> return (doComplete pgf) `ap` getText `ap` getCat `ap` getFrom `ap` getLimit >>= outputJSONP
+         "linearize"      -> return (doLinearize pgf) `ap` getTree `ap` getTo >>= outputJSONP
+         "random"         -> getCat >>= \c -> getLimit >>= liftIO . doRandom pgf c >>= outputJSONP
+         "translate"      -> return (doTranslate pgf) `ap` getText `ap` getCat `ap` getFrom `ap` getTo >>= outputJSONP
+         "grammar"        -> return (doGrammar pgf) `ap` requestAcceptLanguage >>= outputJSONP
+         "abstrtree"      -> getTree >>= liftIO . doGraphvizAbstrTree pgf >>= outputPNG
+         "parsetree"      -> getTree >>= \t -> getFrom >>= \(Just l) -> liftIO (doGraphvizParseTree pgf l t) >>= outputPNG
+         "alignment"      -> getTree >>= liftIO . doGraphvizAlignment pgf >>= outputPNG
          _                -> throwCGIError 400 "Unknown command" ["Unknown command: " ++ show command]
   where
     getText :: CGI String
@@ -68,7 +71,7 @@ pgfMain pgf command =
             Just cat -> case PGF.readType cat of
                           Nothing -> throwCGIError 400 "Bad category" ["Bad category: " ++ cat]
                           Just typ | typ `elem` PGF.categories pgf -> return $ Just typ
-                                   | otherwise -> throwCGIError 400 "Unknown category" ["Unknown category: " ++ show typ]
+                                   | otherwise -> throwCGIError 400 "Unknown category" ["Unknown category: " ++ PGF.showType [] typ]
 
     getFrom :: CGI (Maybe PGF.Language)
     getFrom = getLang "from"
@@ -98,11 +101,15 @@ doListGrammars =
        return $ showJSON $ map toJSObject [[("name", f)] | f <- fs]
 
 doTranslate :: PGF -> String -> Maybe PGF.Type -> Maybe PGF.Language -> Maybe PGF.Language -> JSValue
-doTranslate pgf input mcat mfrom mto = showJSON $ map toJSObject
-     [[("from", PGF.showLanguage from),("to", PGF.showLanguage to),("text",output)]
+doTranslate pgf input mcat mfrom mto =
+  showJSON
+     [toJSObject [("from",          showJSON (PGF.showLanguage from)),
+                  ("tree",          showJSON tree),
+                  ("linearizations",showJSON [toJSObject [("to", PGF.showLanguage to),("text",output)]
+                                                   | (to,output) <- linearize' pgf mto tree])
+                 ]
            | (from,trees) <- parse' pgf input mcat mfrom,
-             tree <- trees,
-             (to,output) <- linearize' pgf mto tree]
+             tree <- trees]
 
 doParse :: PGF -> String -> Maybe PGF.Type -> Maybe PGF.Language -> JSValue
 doParse pgf input mcat mfrom = showJSON $ map toJSObject
@@ -141,9 +148,25 @@ doGrammar pgf macc = showJSON $ toJSObject
                      | l <- PGF.languages pgf]
         categories = map toJSObject [[("cat", PGF.showType [] cat)] | cat <- PGF.categories pgf]
 
+doGraphvizAbstrTree pgf tree = do
+  let dot = PGF.graphvizAbstractTree pgf (True,True) tree
+  readProcess "dot" ["-T","png"] dot
+
+doGraphvizParseTree pgf lang tree = do
+  let dot = PGF.graphvizParseTree pgf lang tree
+  readProcess "dot" ["-T","png"] (UTF8.encodeString dot)
+
+doGraphvizAlignment pgf tree = do
+  let dot = PGF.graphvizAlignment pgf tree
+  readProcess "dot" ["-T","png"] (UTF8.encodeString dot)
+
 instance JSON PGF.CId where
     readJSON x = readJSON x >>= maybe (fail "Bad language.") return . PGF.readLanguage
     showJSON = showJSON . PGF.showLanguage
+
+instance JSON PGF.Expr where
+    readJSON x = readJSON x >>= maybe (fail "Bad expression.") return . PGF.readExpr
+    showJSON = showJSON . PGF.showExpr []
 
 -- * PGF utilities
 

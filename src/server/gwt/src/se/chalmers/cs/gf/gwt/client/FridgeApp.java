@@ -58,7 +58,9 @@ public class FridgeApp implements EntryPoint {
 			public void onResult (PGF.Translations translations) {
 				outputPanel.removeStyleDependentName("working");
 				for (PGF.Translation t : translations.iterable()) {
-					outputPanel.add(createTranslation(t.getTo(), t.getText()));
+					for (PGF.Linearization l : t.getLinearizations().iterable()) {
+						outputPanel.add(createTranslation(l.getTo(), l.getText()));
+					}
 				}
 			}
 			public void onError (Throwable e) {
