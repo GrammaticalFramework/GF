@@ -136,7 +136,6 @@ trm2str :: Term -> Err Term
 trm2str t = case t of
   R ((_,(_,s)):_) -> trm2str s
   T _ ((_,s):_)   -> trm2str s
-  TSh _ ((_,s):_) -> trm2str s
   V _ (s:_)       -> trm2str s
   C _ _           -> return $ t
   K _             -> return $ t

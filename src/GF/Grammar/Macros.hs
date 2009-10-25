@@ -329,9 +329,6 @@ term2patt :: Term -> Err Patt
 term2patt trm = case termForm trm of
   Ok ([], Vr x, []) | x == identW -> return PW
                     | otherwise   -> return (PV x)
-  Ok ([], Val te ty x, []) -> do
-    te' <- term2patt te
-    return (PVal te' ty x)
   Ok ([], Con c, aa) -> do
     aa' <- mapM term2patt aa
     return (PC c aa')
@@ -382,7 +379,6 @@ patt2term :: Patt -> Term
 patt2term pt = case pt of
   PV x      -> Vr x
   PW        -> Vr identW             --- not parsable, should not occur
-  PVal v t i -> Val (patt2term v) t i
   PMacro c  -> Cn c
   PM p c    -> Q p c
 
@@ -441,7 +437,6 @@ strsFromTerm t = case t of
            ]
   FV ts -> mapM strsFromTerm ts >>= return . concat
   Strs ts -> mapM strsFromTerm ts >>= return . concat  
-  Alias _ _ d -> strsFromTerm d --- should not be needed...
   _ -> Bad (render (text "cannot get Str from term" <+> ppTerm Unqualified 0 t))
 
 -- | to print an Str-denoting term as a string; if the term is of wrong type, the error msg
@@ -502,20 +497,10 @@ composOp co trm =
         i'  <- changeTableType co i
         return (T i' cc')
 
-   TSh i cc -> 
-     do cc' <- mapPairListM (co . snd) cc
-        i'  <- changeTableType co i
-        return (TSh i' cc')
-
    V ty vs ->
      do ty' <- co ty
         vs' <- mapM co vs
         return (V ty' vs')
-
-   Val te ty i ->
-     do te' <- co te
-        ty' <- co ty
-        return (Val te' ty' i)
 
    Let (x,(mt,a)) b -> 
      do a'  <- co a
@@ -524,10 +509,7 @@ composOp co trm =
                  _ -> return mt
         b'  <- co b
         return (Let (x,(mt',a')) b')
-   Alias c ty d -> 
-     do v <- co d
-        ty' <- co ty
-        return $ Alias c ty' v
+
    C s1 s2 -> 
      do v1 <- co s1 
         v2 <- co s2
@@ -583,7 +565,6 @@ collectOp co trm = case trm of
   RecType r    -> concatMap (co . snd) r 
   P t i        -> co t
   T _ cc       -> concatMap (co . snd) cc -- not from patterns --- nor from type annot
-  TSh _ cc     -> concatMap (co . snd) cc -- not from patterns --- nor from type annot
   V _ cc       -> concatMap co         cc --- nor from type annot
   Let (x,(mt,a)) b -> maybe [] co mt ++ co a ++ co b
   C s1 s2      -> co s1 ++ co s2 

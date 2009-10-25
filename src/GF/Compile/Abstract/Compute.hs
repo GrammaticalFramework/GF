@@ -123,7 +123,6 @@ tryMatch (p,t) = do
          matches <- mapM tryMatch (zip pp tt)
          return (concat matches)
     (PT _ p',_) -> trym p' t'
-    (_, ([],Alias _ _ d,[])) -> tryMatch (p,d)
     (PAs x p',_) -> do
        subst <- trym p' t'
        return $ (x,t) : subst

@@ -90,8 +90,6 @@ inferLType gr g trm = case trm of
        checkError (text "cannot infer type of canonical constant" <+> ppTerm Unqualified 0 trm)
        ]
 
-   Val _ ty i -> termWith trm $ return ty
-
    Vr ident -> termWith trm $ checkLookup ident g
 
    Typed e t -> do
