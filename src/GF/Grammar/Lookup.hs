@@ -27,7 +27,6 @@ module GF.Grammar.Lookup (
 	       lookupParams, 
 	       lookupParamValues, 
 	       lookupFirstTag, 
-           lookupValueIndex,
            lookupIndexValue,
            allOrigInfos,
 	       allParamValues, 
@@ -182,13 +181,6 @@ lookupFirstTag gr m c = do
   case vs of
     v:_ -> return v
     _ -> Bad (render (text "no parameter values given to type" <+> ppIdent c))
-
-lookupValueIndex :: SourceGrammar -> Type -> Term -> Err Term
-lookupValueIndex gr ty tr = do
-  ts <- allParamValues gr ty
-  case lookup tr $ zip ts [0..] of
-    Just i -> return $ Val tr ty i
-    _ -> Bad $ render (text "no index for" <+> ppTerm Unqualified 0 tr <+> text "in" <+> ppTerm Unqualified 0 ty)
 
 lookupIndexValue :: SourceGrammar -> Type -> Int -> Err Term
 lookupIndexValue gr ty i = do

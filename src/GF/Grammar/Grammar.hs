@@ -136,14 +136,10 @@ data Term =
  
  | Table Term Term               -- ^ table type:  @P => A@
  | T TInfo [Case]                -- ^ table:       @table {p => c ; ...}@
- | TSh TInfo [Cases]             -- ^ table with disjunctive patters (only back end opt)
  | V Type [Term]                 -- ^ table given as course of values: @table T [c1 ; ... ; cn]@
  | S Term Term                   -- ^ selection:   @t ! p@
- | Val Term Type Int             -- ^ parameter value number: @T # i#
 
  | Let LocalDef Term             -- ^ local definition: @let {t : T = a} in b@
-
- | Alias Ident Type Term         -- ^ constant and its definition, used in inlining
 
  | Q  Ident Ident                -- ^ qualified constant from a package
  | QC Ident Ident                -- ^ qualified constructor from a package
@@ -174,8 +170,6 @@ data Patt =
  | PInt    Integer        -- ^ integer literal pattern: @12@    -- only abstract
  | PFloat Double          -- ^ float literal pattern: @1.2@    -- only abstract
  | PT Type Patt           -- ^ type-annotated pattern
-
- | PVal Patt Type Int     -- ^ parameter value number: @T # i#
 
  | PAs Ident Patt         -- ^ as-pattern: x@p
  

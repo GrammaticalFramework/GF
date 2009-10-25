@@ -311,20 +311,15 @@ computeTermOpt rec gr = comput True where
 
          -- course-of-values table: look up by index, no pattern matching needed
 
-         V ptyp ts -> case v' of
-           Val _ _ i -> comp g $ ts !! i
-           _ -> do
+         V ptyp ts -> do
              vs <- allParamValues gr ptyp
              case lookupR v' (zip vs [0 .. length vs - 1]) of
                Just i -> comp g $ ts !! i
                _ -> return $ S t' v' -- if v' is not canonical
          T _ cc -> do
-           let v2 = case v' of
-                 Val te _ _ -> te
-                 _ -> v'
-           case matchPattern cc v2 of
+           case matchPattern cc v' of
              Ok (c,g') -> comp (g' ++ g) c
-             _ | isCan v2 -> Bad (render (text "missing case" <+> ppTerm Unqualified 0 v2 <+> text "in" <+> ppTerm Unqualified 0 t))
+             _ | isCan v' -> Bad (render (text "missing case" <+> ppTerm Unqualified 0 v' <+> text "in" <+> ppTerm Unqualified 0 t))
              _ -> return $ S t' v' -- if v' is not canonical
 
          S (T i cs) e -> prawitz g i (flip S v') cs e

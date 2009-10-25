@@ -173,7 +173,6 @@ mkTerm tr = case tr of
   EInt i      -> C.C $ fromInteger i
   R rs     -> C.R [mkTerm t | (_, (_,t)) <- rs]
   P t l    -> C.P (mkTerm t) (C.C (mkLab l))
-  TSh _ _    -> error $ show tr
   T _ cs   -> C.R [mkTerm t | (_,t) <- cs] ------
   V _ cs   -> C.R [mkTerm t | t <- cs]
   S t p    -> C.P (mkTerm t) (mkTerm p)
@@ -507,7 +506,6 @@ term2term fun cgr env@(labels,untyps,typs) tr = case tr of
      _ | tr == x -> t
      _ -> GM.composSafeOp (mkBranch x t) tr     
 
-   valNum (Val _ _ i) = traceD (show i) $ EInt $ toInteger i  ----Val
    valNum tr = maybe (valNumFV $ tryFV tr) EInt $ Map.lookup tr untyps
     where
       tryFV tr = case GM.appForm tr of
