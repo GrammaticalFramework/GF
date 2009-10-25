@@ -91,8 +91,8 @@ data Info =
  | ResOverload [Ident] [(Type,Term)]         -- ^ (/RES/) idents: modules inherited
 
 -- judgements in concrete syntax
- | CncCat  (Maybe Type)                   (Maybe Term) (Maybe Term)  -- ^ (/CNC/) lindef ini'zed, 
- | CncFun  (Maybe (Ident,(Context,Type))) (Maybe Term) (Maybe Term)  -- ^ (/CNC/) type info added at 'TC'
+ | CncCat  (Maybe Type)                 (Maybe Term) (Maybe Term)  -- ^ (/CNC/) lindef ini'zed, 
+ | CncFun  (Maybe (Ident,Context,Type)) (Maybe Term) (Maybe Term)  -- ^ (/CNC/) type info added at 'TC'
 
 -- indirection to module Ident
  | AnyInd Bool Ident                         -- ^ (/INDIR/) the 'Bool' says if canonical
