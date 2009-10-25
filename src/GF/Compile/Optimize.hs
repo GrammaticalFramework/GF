@@ -104,10 +104,10 @@ evalCncInfo opts gr cnc abs (c,info) = do
 
     return (CncCat ptyp pde' ppr')
 
-  CncFun (mt@(Just (_,ty@(cont,val)))) pde ppr -> --trace (prt c) $
+  CncFun (mt@(Just (_,cont,val))) pde ppr -> --trace (prt c) $
        eIn (text "linearization in type" <+> ppTerm Unqualified 0 (mkProd cont val []) $$ text "of function") $ do
     pde' <- case pde of
-      Just de -> liftM Just $ pEval ty de
+      Just de -> liftM Just $ pEval (cont,val) de
       Nothing -> return pde
     ppr' <-  liftM Just $ evalPrintname gr c ppr pde'
     return $ CncFun mt pde' ppr' -- only cat in type actually needed

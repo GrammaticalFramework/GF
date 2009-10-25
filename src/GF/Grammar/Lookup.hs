@@ -90,8 +90,8 @@ lookupResDefKind gr m c
       CncCat (Just ty) _ _ -> liftM (flip (,) 1) $ lock c ty
       CncCat _ _ _         -> liftM (flip (,) 1) $ lock c defLinType
       
-      CncFun (Just (cat,_)) (Just tr) _ -> liftM (flip (,) 1) $ unlock cat tr
-      CncFun _              (Just tr) _ -> liftM (flip (,) 1) (return tr) ---- $ unlock c tr
+      CncFun (Just (cat,_,_)) (Just tr) _ -> liftM (flip (,) 1) $ unlock cat tr
+      CncFun _                (Just tr) _ -> liftM (flip (,) 1) (return tr) ---- $ unlock c tr
 
       AnyInd _ n        -> look False n c
       ResParam _        -> return (QC m c,2)
@@ -109,7 +109,7 @@ lookupResType gr m c = do
 
     -- used in reused concrete
     CncCat _ _ _ -> return typeType
-    CncFun (Just (cat,(cont@(_:_),val))) _ _ -> do
+    CncFun (Just (cat,cont@(_:_),val)) _ _ -> do
           val' <- lock cat val 
           return $ mkProd cont val' []
     CncFun _ _ _      -> lookFunType m m c
