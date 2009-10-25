@@ -143,6 +143,7 @@ executable gf
     GF.Compile.Rename
     GF.Compile.ReadFiles
     GF.Compile.GrammarToGFCC
+    GF.Compile.Concrete.TypeCheck
     GF.Compile.Concrete.Compute
     GF.Compile.Concrete.AppPredefined
     GF.Compile.Abstract.TC
