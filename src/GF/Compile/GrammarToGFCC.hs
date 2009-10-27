@@ -436,7 +436,6 @@ term2term fun cgr env@(labels,untyps,typs) tr = case tr of
   R rs    -> R [(mkLab i, (Nothing, t2t t)) | 
                  (i,(l,(_,t))) <- zip [0..] (GM.sortRec (unlock rs))]
   P  t l   -> r2r tr
-  PI t l i -> EInt $ toInteger i
 
   T (TWild _) _ -> error $ (render (text "wild" <+> ppTerm Qualified 0 tr))
   T (TComp  ty) cs  -> t2t $ V ty $ map snd cs ---- should be elim'ed in tc

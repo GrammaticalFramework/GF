@@ -131,7 +131,6 @@ data Term =
  | RecType [Labelling]           -- ^ record type: @{ p : A ; ...}@
  | R [Assign]                    -- ^ record:      @{ p = a ; ...}@
  | P Term Label                  -- ^ projection:  @r.p@
- | PI Term Label Int             -- ^ index-annotated projection
  | ExtR Term Term                -- ^ extension:   @R ** {x : A}@ (both types and terms)
  
  | Table Term Term               -- ^ table type:  @P => A@

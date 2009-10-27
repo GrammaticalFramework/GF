@@ -131,7 +131,6 @@ inferLType gr g trm = case trm of
                        Just x  -> return x
        _          -> checkError (text "record type expected for:" <+> ppTerm Unqualified 0 t $$
                                  text " instead of the inferred:" <+> ppTerm Unqualified 0 ty')
-   PI t i _ -> inferLType gr g $ P t i
 
    R r -> do
      let (ls,fs) = unzip r
