@@ -1,7 +1,7 @@
 import GF.Compile
-import GF.Compile.Compute (computeConcrete)
 import GF.Compile.Rename (renameSourceTerm)
-import GF.Compile.CheckGrammar (inferLType)
+import GF.Compile.Concrete.Compute (computeConcrete)
+import GF.Compile.Concrete.TypeCheck (inferLType)
 import GF.Data.Operations
 import GF.Grammar
 import GF.Grammar.Parser
