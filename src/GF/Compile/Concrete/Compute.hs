@@ -132,8 +132,6 @@ computeTermOpt rec gr = comput True where
 
          _   -> returnC $ P t' l
 
-     PI t l i -> comp g $ P t l -----
-
      S t v -> do
        t' <- compTable g t
        v' <- comp g v

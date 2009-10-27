@@ -136,7 +136,6 @@ instance Binary Term where
   put (RecType x)   = putWord8 16 >> put x
   put (R x)         = putWord8 17 >> put x
   put (P x y)       = putWord8 18 >> put (x,y)
-  put (PI x y z)    = putWord8 19 >> put (x,y,z)
   put (ExtR x y)    = putWord8 20 >> put (x,y)
   put (Table x y)   = putWord8 21 >> put (x,y)
   put (T x y)       = putWord8 22 >> put (x,y)
@@ -173,7 +172,6 @@ instance Binary Term where
              16 -> get >>= \x       -> return (RecType x)
              17 -> get >>= \x       -> return (R x)
              18 -> get >>= \(x,y)   -> return (P x y)
-             19 -> get >>= \(x,y,z) -> return (PI x y z)
              20 -> get >>= \(x,y)   -> return (ExtR x y)
              21 -> get >>= \(x,y)   -> return (Table x y)
              22 -> get >>= \(x,y)   -> return (T x y)
