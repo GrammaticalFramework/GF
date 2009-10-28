@@ -33,8 +33,7 @@ module GF.Grammar.Lookup (
 	       lookupAbsDef, 
 	       lookupLincat, 
 	       lookupFunType,
-	       lookupCatContext,
-	       opersForType
+	       lookupCatContext
 	      ) where
 
 import GF.Data.Operations
@@ -93,7 +92,7 @@ lookupResDefKind gr m c
       CncFun _                (Just tr) _ -> liftM (flip (,) 1) (return tr) ---- $ unlock c tr
 
       AnyInd _ n        -> look False n c
-      ResParam _        -> return (QC m c,2)
+      ResParam _ _      -> return (QC m c,2)
       ResValue _        -> return (QC m c,2)
       _   -> Bad $ render (ppIdent c <+> text "is not defined in resource" <+> ppIdent m)
   lookExt m c =
@@ -113,8 +112,8 @@ lookupResType gr m c = do
           return $ mkProd cont val' []
     CncFun _ _ _      -> lookFunType m m c
     AnyInd _ n        -> lookupResType gr n c
-    ResParam _        -> return $ typePType
-    ResValue (Just (t,_))  -> return $ qualifAnnotPar m t
+    ResParam _ _      -> return $ typePType
+    ResValue t        -> return $ qualifAnnotPar m t
     _   -> Bad $ render (ppIdent c <+> text "has no type defined in resource" <+> ppIdent m)
   where
     lookFunType e m c = do
@@ -152,15 +151,15 @@ lookupOrigInfo gr m c = do
       AnyInd _ n  -> lookupOrigInfo gr n c
       i           -> return (m,i)
 
-lookupParams :: SourceGrammar -> Ident -> Ident -> Err ([Param],Maybe PValues)
+lookupParams :: SourceGrammar -> Ident -> Ident -> Err ([Param],Maybe [Term])
 lookupParams gr = look True where 
   look isTop m c = do
     mo <- lookupModule gr m
     info <- lookupIdentInfo mo c
     case info of
-      ResParam (Just psm) -> return psm
-      AnyInd _ n          -> look False n c
-      _                   -> Bad $ render (ppIdent c <+> text "has no parameters defined in resource" <+> ppIdent m)
+      ResParam (Just psm) m -> return (psm,m)
+      AnyInd _ n            -> look False n c
+      _                     -> Bad $ render (ppIdent c <+> text "has no parameters defined in resource" <+> ppIdent m)
   lookExt m c =
     checks [look False n c | n <- allExtensions gr m]
 
@@ -261,22 +260,3 @@ lookupCatContext gr m c = do
     AbsCat (Just co) _ -> return co
     AnyInd _ n         -> lookupCatContext gr n c
     _                  -> Bad (render (text "unknown category" <+> ppIdent c))
-
--- The first type argument is uncomputed, usually a category symbol.
--- This is a hack to find implicit (= reused) opers.
-
-opersForType :: SourceGrammar -> Type -> Type -> [(QIdent,Term)]
-opersForType gr orig val = 
-  [((i,f),ty) | (i,m) <- modules gr, (f,ty) <- opers i m val] where
-    opers i m val = 
-      [(f,ty) |
-        (f,ResOper (Just ty) _) <- tree2list $ jments m,
-        elem (valTypeCnc ty) [val,orig]
-        ] ++
-      let cat = snd (valCat orig) in --- ignore module
-      [(f,ty) |
-        Ok a <- [abstractOfConcrete gr i >>= lookupModule gr],
-        (f, AbsFun (Just ty0) _ _) <- tree2list $ jments a,
-        let ty = redirectTerm i ty0,
-        cat == snd (valCat ty) ---
-        ]

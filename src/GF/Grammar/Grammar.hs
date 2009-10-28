@@ -20,7 +20,6 @@ module GF.Grammar.Grammar (SourceGrammar,
         SourceModule,
         mapSourceModule,
         Info(..),
-        PValues,
         Type,
         Cat,
         Fun,
@@ -37,7 +36,6 @@ module GF.Grammar.Grammar (SourceGrammar,
         Labelling,
         Assign,
         Case,
-        Cases,
         LocalDef,
         Param,
         Altern,
@@ -66,9 +64,6 @@ type SourceModule = (Ident, SourceModInfo)
 mapSourceModule :: (SourceModInfo -> SourceModInfo) -> (SourceModule -> SourceModule)
 mapSourceModule f (i,mi) = (i, f mi)
 
--- this is created in CheckGrammar, and so are Val and PVal
-type PValues = [Term]
-
 -- | the constructors are judgements in 
 --
 --   - abstract syntax (/ABS/)
@@ -84,8 +79,8 @@ data Info =
  | AbsFun   (Maybe Type) (Maybe Int) (Maybe [Equation])  -- ^ (/ABS/) type, arrity and definition of function
 
 -- judgements in resource
- | ResParam (Maybe ([Param],Maybe PValues))  -- ^ (/RES/)
- | ResValue (Maybe (Type,Maybe Int))         -- ^ (/RES/) to mark parameter constructors for lookup
+ | ResParam (Maybe [Param]) (Maybe [Term])   -- ^ (/RES/) the second parameter is list of all possible values
+ | ResValue Type                             -- ^ (/RES/) to mark parameter constructors for lookup
  | ResOper  (Maybe Type) (Maybe Term)        -- ^ (/RES/)
 
  | ResOverload [Ident] [(Type,Term)]         -- ^ (/RES/) idents: modules inherited

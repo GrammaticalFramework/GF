@@ -207,9 +207,9 @@ checkInfo gr (m,mo) c info = do
         sort [let (xs,t) = typeFormCnc x in t : map (\(b,x,t) -> t) xs | (_,x) <- tysts1]
       return (ResOverload os [(y,x) | (x,y) <- tysts'])
 
-    ResParam (Just (pcs,_)) -> chIn "parameter type" $ do
+    ResParam (Just pcs) _ -> chIn "parameter type" $ do
       ts <- checkErr $ lookupParamValues gr m c
-      return (ResParam (Just (pcs, Just ts)))
+      return (ResParam (Just pcs) (Just ts))
 
     _ ->  return info
  where
@@ -293,7 +293,7 @@ allDependencies ism b =
     opty _ = []
     pts i = case i of
       ResOper pty pt -> [pty,pt]
-      ResParam (Just (ps,_)) -> [Just t | (_,cont) <- ps, (_,_,t) <- cont]
+      ResParam (Just ps) _ -> [Just t | (_,cont) <- ps, (_,_,t) <- cont]
       CncCat pty _ _ -> [pty]
       CncFun _   pt _ -> [pt]  ---- (Maybe (Ident,(Context,Type))
       AbsFun pty _ ptr -> [pty] --- ptr is def, which can be mutual
