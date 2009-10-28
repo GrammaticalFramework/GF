@@ -107,7 +107,7 @@ info2status :: Maybe Ident -> (Ident,Info) -> StatusInfo
 info2status mq (c,i) = case i of
   AbsFun _ _ Nothing -> maybe Con QC mq
   ResValue _  -> maybe Con QC mq
-  ResParam _  -> maybe Con QC mq
+  ResParam _ _  -> maybe Con QC mq
   AnyInd True m -> maybe Con (const (QC m)) mq
   AnyInd False m -> maybe Cn (const (Q m)) mq
   _           -> maybe Cn  Q mq
@@ -148,12 +148,12 @@ renameInfo mo status i info = checkIn
   ResOverload os tysts -> 
     liftM (ResOverload os) (mapM (pairM rent) tysts)
 
-  ResParam (Just (pp,m)) -> do
+  ResParam (Just pp) m -> do
     pp' <- mapM (renameParam status) pp
-    return $ ResParam $ Just (pp',m)
-  ResValue (Just (t,m)) -> do
-    t' <- rent t
-    return $ ResValue $ Just (t',m)
+    return (ResParam (Just pp') m)
+  ResValue t -> do
+    t <- rent t
+    return (ResValue t)
   CncCat pty ptr ppr -> liftM3 CncCat (ren pty) (ren ptr) (ren ppr)
   CncFun mt  ptr ppr -> liftM2 (CncFun mt)      (ren ptr) (ren ppr)
   _ -> return info

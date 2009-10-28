@@ -254,9 +254,9 @@ DataDef
 
 ParamDef :: { [(Ident,SrcSpan,Info)] }
 ParamDef
-  : Posn Ident '=' ListParConstr Posn {  ($2, ($1,$5), ResParam (Just ($4,Nothing))) :
-                                        [(f,  ($1,$5), ResValue (Just (mkProdSimple co (Cn $2),Nothing))) | (f,co) <- $4] }
-  | Posn Ident                   Posn { [($2, ($1,$3), ResParam Nothing)] }
+  : Posn Ident '=' ListParConstr Posn {  ($2, ($1,$5), ResParam (Just $4) Nothing) :
+                                        [(f,  ($1,$5), ResValue (mkProdSimple co (Cn $2))) | (f,co) <- $4] }
+  | Posn Ident                   Posn { [($2, ($1,$3), ResParam Nothing   Nothing)] }
 
 OperDef :: { [(Ident,SrcSpan,Info)] }
 OperDef
@@ -684,14 +684,14 @@ checkInfoType MTAbstract       (id,pos,info) =
     _            -> failLoc (fst pos) "illegal definition in abstract module" 
 checkInfoType MTResource       (id,pos,info) =
   case info of
-    ResParam _   -> return ()
+    ResParam _ _ -> return ()
     ResValue _   -> return ()
     ResOper  _ _ -> return ()
     ResOverload _ _ -> return ()
     _            -> failLoc (fst pos) "illegal definition in resource module" 
 checkInfoType MTInterface      (id,pos,info) =
   case info of
-    ResParam _   -> return ()
+    ResParam _ _ -> return ()
     ResValue _   -> return ()
     ResOper  _ _ -> return ()
     ResOverload _ _ -> return ()
@@ -700,14 +700,14 @@ checkInfoType (MTConcrete _)   (id,pos,info) =
   case info of
     CncCat _ _ _ -> return ()
     CncFun _ _ _ -> return ()
-    ResParam _   -> return ()
+    ResParam _ _ -> return ()
     ResValue _   -> return ()
     ResOper  _ _ -> return ()
     ResOverload _ _ -> return ()
     _            -> failLoc (fst pos) "illegal definition in concrete module" 
 checkInfoType (MTInstance _)   (id,pos,info) =
   case info of
-    ResParam _   -> return ()
+    ResParam _ _ -> return ()
     ResValue _   -> return ()
     ResOper  _ _ -> return ()
     _            -> failLoc (fst pos) "illegal definition in instance module" 

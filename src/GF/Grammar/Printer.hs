@@ -91,11 +91,11 @@ ppJudgement q (id, AbsFun ptype _ pexp) =
      Just []  -> empty
      Just eqs -> text "def" <+> vcat [ppIdent id <+> hsep (map (ppPatt q 2) ps) <+> equals <+> ppTerm q 0 e <+> semi | (ps,e) <- eqs]
      Nothing  -> empty)
-ppJudgement q (id, ResParam pparams) = 
+ppJudgement q (id, ResParam pparams _) = 
   text "param" <+> ppIdent id <+>
   (case pparams of
-     Just (ps,_) -> equals <+> fsep (intersperse (char '|') (map (ppParam q) ps))
-     _           -> empty) <+> semi
+     Just ps -> equals <+> fsep (intersperse (char '|') (map (ppParam q) ps))
+     _       -> empty) <+> semi
 ppJudgement q (id, ResValue pvalue) = empty
 ppJudgement q (id, ResOper  ptype pexp) =
   text "oper" <+> ppIdent id <+>
