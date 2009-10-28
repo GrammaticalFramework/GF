@@ -20,8 +20,7 @@
 --  - tables are type-annotated
 -----------------------------------------------------------------------------
 
-module GF.Compile.CheckGrammar (
-  checkModule, inferLType, allOperDependencies, topoSortOpers) where
+module GF.Compile.CheckGrammar(checkModule) where
 
 import GF.Infra.Ident
 import GF.Infra.Modules
@@ -47,9 +46,9 @@ import Text.PrettyPrint
 checkModule :: [SourceModule] -> SourceModule -> Check SourceModule
 checkModule ms m@(name,mo) = checkIn (text "checking module" <+> ppIdent name) $ do
   checkRestrictedInheritance ms m
+  checkErr $ topoSortJments m
   js <- case mtype mo of
-          MTConcrete a -> do checkErr $ topoSortOpers $ allOperDependencies name (jments mo)
-                             abs <- checkErr $ lookupModule gr a
+          MTConcrete a -> do abs <- checkErr $ lookupModule gr a
                              checkCompleteGrammar gr (a,abs) m
           _            -> return (jments mo)
   js <- checkMap (checkInfo gr m) js
@@ -275,35 +274,3 @@ linTypeOfType cnc m typ = do
       checkErr (lookupLincat cnc m c) >>= computeLType cnc []
      ,return defLinType
      ]
-
--- | dependency check, detecting circularities and returning topo-sorted list
-
-allOperDependencies :: Ident -> BinTree Ident Info -> [(Ident,[Ident])]
-allOperDependencies m = allDependencies (==m)
-
-allDependencies :: (Ident -> Bool) -> BinTree Ident Info -> [(Ident,[Ident])]
-allDependencies ism b = 
-  [(f, nub (concatMap opty (pts i))) | (f,i) <- tree2list b]
-  where
-    opersIn t = case t of
-      Q n c | ism n -> [c]
-      QC n c | ism n -> [c]
-      _ -> collectOp opersIn t
-    opty (Just ty) = opersIn ty
-    opty _ = []
-    pts i = case i of
-      ResOper pty pt -> [pty,pt]
-      ResParam (Just ps) _ -> [Just t | (_,cont) <- ps, (_,_,t) <- cont]
-      CncCat pty _ _ -> [pty]
-      CncFun _   pt _ -> [pt]  ---- (Maybe (Ident,(Context,Type))
-      AbsFun pty _ ptr -> [pty] --- ptr is def, which can be mutual
-      AbsCat (Just co) _ -> [Just ty | (_,_,ty) <- co]
-      _              -> []
-
-topoSortOpers :: [(Ident,[Ident])] -> Err [Ident]
-topoSortOpers st = do
-  let eops = topoTest st
-  either 
-    return 
-    (\ops -> Bad (render (text "circular definitions:" <+> fsep (map ppIdent (head ops)))))
-    eops
