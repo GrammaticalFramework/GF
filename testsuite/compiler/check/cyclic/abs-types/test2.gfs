@@ -1,1 +1,1 @@
-i testsuite/compiler/check/cyclic/abs-types/Test2Abs.gf
+i -src testsuite/compiler/check/cyclic/abs-types/Test2Abs.gf
