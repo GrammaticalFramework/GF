@@ -46,8 +46,7 @@ optimizeModule opts ms mo@(name,mi)
   | mstatus mi == MSComplete = do
       mo1 <- case mtype mi of
                _ | isModRes mi -> do
-                     let deps = allOperDependencies name (jments mi)
-                     ids <- topoSortOpers deps
+                     ids <- topoSortJments mo
                      if OptExpand `Set.member` optim
                        then do mi <- foldM evalOp mi ids
                                return (name,mi)
@@ -64,8 +63,7 @@ optimizeModule opts ms mo@(name,mi)
    
    gr  = MGrammar $ mo : ms
 
-   evalOp mi i = do
-     info  <- lookupTree showIdent i (jments mi)
+   evalOp mi (i,info) = do
      info' <- evalResInfo oopts gr (i,info)
      return (updateModule mi i info')
 

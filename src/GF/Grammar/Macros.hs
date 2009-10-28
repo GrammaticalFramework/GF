@@ -21,6 +21,7 @@ module GF.Grammar.Macros where
 import GF.Data.Operations
 import GF.Data.Str
 import GF.Infra.Ident
+import GF.Infra.Modules
 import GF.Grammar.Grammar
 import GF.Grammar.Values
 import GF.Grammar.Predef
@@ -28,7 +29,7 @@ import GF.Grammar.Printer
 
 import Control.Monad (liftM, liftM2)
 import Data.Char (isDigit)
-import Data.List (sortBy)
+import Data.List (sortBy,nub)
 import Text.PrettyPrint
 
 typeForm :: Type -> (Context, Cat, [Term])
@@ -596,5 +597,31 @@ sortRec = sortBy ordLabel where
       (_,"s") -> GT
       (s1,s2) -> compare s1 s2
 
+-- | dependency check, detecting circularities and returning topo-sorted list
 
+allDependencies :: (Ident -> Bool) -> BinTree Ident Info -> [(Ident,[Ident])]
+allDependencies ism b = 
+  [(f, nub (concatMap opty (pts i))) | (f,i) <- tree2list b]
+  where
+    opersIn t = case t of
+      Q n c | ism n -> [c]
+      QC n c | ism n -> [c]
+      _ -> collectOp opersIn t
+    opty (Just ty) = opersIn ty
+    opty _ = []
+    pts i = case i of
+      ResOper pty pt -> [pty,pt]
+      ResParam (Just ps) _ -> [Just t | (_,cont) <- ps, (_,_,t) <- cont]
+      CncCat pty _ _ -> [pty]
+      CncFun _   pt _ -> [pt]  ---- (Maybe (Ident,(Context,Type))
+      AbsFun pty _ ptr -> [pty] --- ptr is def, which can be mutual
+      AbsCat (Just co) _ -> [Just ty | (_,_,ty) <- co]
+      _              -> []
 
+topoSortJments :: SourceModule -> Err [(Ident,Info)]
+topoSortJments (m,mi) = do
+  is <- either
+          return 
+          (\cyc -> Bad (render (text "circular definitions:" <+> fsep (map ppIdent (head cyc)))))
+          (topoTest (allDependencies (==m) (jments mi)))
+  return (reverse [(i,info) | i <- is, Ok info <- [lookupTree showIdent i (jments mi)]])
