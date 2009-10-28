@@ -1,0 +1,4 @@
+
+
+checking module TestParams
+   circular definitions: A B
