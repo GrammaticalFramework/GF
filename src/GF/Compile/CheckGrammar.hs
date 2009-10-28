@@ -81,63 +81,73 @@ checkRestrictedInheritance mos (name,mo) = do
 checkCompleteGrammar :: SourceGrammar -> SourceModule -> SourceModule -> Check (BinTree Ident Info)
 checkCompleteGrammar gr (am,abs) (cm,cnc) = do
   let jsa = jments abs
-  let fsa = tree2list jsa
   let jsc = jments cnc
-  let fsc = map fst $ filter (isCnc . snd) $ tree2list jsc
 
-  -- remove those lincat and lin in concrete that are not in abstract
-  let unkn = filter (not . flip isInBinTree jsa) fsc
-  jsc1 <- if (null unkn) then return jsc else do
-    checkWarn $ text "ignoring constants not in abstract:" <+> fsep (map ppIdent unkn)
-    return $ filterBinTree (\f _ -> notElem f unkn) jsc 
+  -- check that all concrete constants are in abstract; build types for all lin
+  jsc <- foldM checkCnc emptyBinTree (tree2list jsc)
 
-  -- check that all abstract constants are in concrete; build default lincats
-  foldM checkOne jsc1 fsa
- where
-   isCnc j = case j of
-     CncFun _ _ _ -> True
-     CncCat _ _ _ -> True
-     _ -> False
-   checkOne js i@(c,info) = case info of
-     AbsFun (Just ty) _ _ -> do let mb_def = do
-                                      let (cxt,(_,i),_) = typeForm ty
-                                      info <- lookupIdent i js
-                                      info <- case info of
-                                                (AnyInd _ m) -> do (m,info) <- lookupOrigInfo gr m i
-                                                                   return info
-                                                _            -> return info
-                                      case info of
-                                        CncCat (Just (RecType [])) _ _ -> return (foldr (\_ -> Abs Explicit identW) (R []) cxt)
-                                        _                              -> Bad "no def lin"
+  -- check that all abstract constants are in concrete; build default lin and lincats
+  jsc <- foldM checkAbs jsc (tree2list jsa)
+  
+  return jsc
+  where
+   checkAbs js i@(c,info) =
+     case info of
+       AbsFun (Just ty) _ _ -> do let mb_def = do
+                                        let (cxt,(_,i),_) = typeForm ty
+                                        info <- lookupIdent i js
+                                        info <- case info of
+                                                  (AnyInd _ m) -> do (m,info) <- lookupOrigInfo gr m i
+                                                                     return info
+                                                  _            -> return info
+                                        case info of
+                                          CncCat (Just (RecType [])) _ _ -> return (foldr (\_ -> Abs Explicit identW) (R []) cxt)
+                                          _                              -> Bad "no def lin"
                                              
-                                (cont,val) <- linTypeOfType gr cm ty
-                                let linty = (snd (valCat ty),cont,val)
+                                  case lookupIdent c js of
+                                    Ok (AnyInd _ _) -> return js
+                                    Ok (CncFun ty (Just def) pn) -> 
+                                                  return $ updateTree (c,CncFun ty (Just def) pn) js
+                                    Ok (CncFun ty Nothing    pn) ->
+                                      case mb_def of
+                                        Ok def -> return $ updateTree (c,CncFun ty (Just def) pn) js
+                                        Bad _  -> do checkWarn $ text "no linearization of" <+> ppIdent c
+                                                     return js
+                                    _ -> do
+                                      case mb_def of
+                                        Ok def -> do (cont,val) <- linTypeOfType gr cm ty
+                                                     let linty = (snd (valCat ty),cont,val)
+                                                     return $ updateTree (c,CncFun (Just linty) (Just def) Nothing) js
+                                        Bad _  -> do checkWarn $ text "no linearization of" <+> ppIdent c
+                                                     return js
+       AbsCat (Just _) _ -> case lookupIdent c js of
+         Ok (AnyInd _ _) -> return js
+         Ok (CncCat (Just _) _ _) -> return js
+         Ok (CncCat _ mt mp) -> do
+           checkWarn $ 
+             text "no linearization type for" <+> ppIdent c <> text ", inserting default {s : Str}"
+           return $ updateTree (c,CncCat (Just defLinType) mt mp) js
+         _ -> do
+           checkWarn $ 
+             text "no linearization type for" <+> ppIdent c <> text ", inserting default {s : Str}"
+           return $ updateTree (c,CncCat (Just defLinType) Nothing Nothing) js
+       _ -> return js
+     
+   checkCnc js i@(c,info) =
+     case info of
+       CncFun _ d pn -> case lookupOrigInfo gr am c of
+                          Ok (_,AbsFun (Just ty) _ _) -> 
+                                     do (cont,val) <- linTypeOfType gr cm ty
+                                        let linty = (snd (valCat ty),cont,val)
+                                        return $ updateTree (c,CncFun (Just linty) d pn) js
+                          _       -> do checkWarn $ text "function" <+> ppIdent c <+> text "is not in abstract"
+                                        return js
+       CncCat _ _ _  -> case lookupOrigInfo gr am c of
+                          Ok _ -> return $ updateTree i js
+                          _    -> do checkWarn $ text "category" <+> ppIdent c <+> text "is not in abstract"
+                                     return js
+       _             -> return $ updateTree i js
 
-                                case lookupIdent c js of
-                                  Ok (CncFun _ (Just def) pn) -> 
-                                                return $ updateTree (c,CncFun (Just linty) (Just def) pn) js
-                                  Ok (CncFun _ Nothing    pn) ->
-                                    case mb_def of
-                                      Ok def -> return $ updateTree (c,CncFun (Just linty) (Just def) pn) js
-                                      Bad _  -> do checkWarn $ text "no linearization of" <+> ppIdent c
-                                                   return js
-                                  _ -> do
-                                    case mb_def of
-                                      Ok def -> return $ updateTree (c,CncFun (Just linty) (Just def) Nothing) js
-                                      Bad _  -> do checkWarn $ text "no linearization of" <+> ppIdent c
-                                                   return js
-     AbsCat (Just _) _ -> case lookupIdent c js of
-       Ok (AnyInd _ _) -> return js
-       Ok (CncCat (Just _) _ _) -> return js
-       Ok (CncCat _ mt mp) -> do
-         checkWarn $ 
-           text "no linearization type for" <+> ppIdent c <> text ", inserting default {s : Str}"
-         return $ updateTree (c,CncCat (Just defLinType) mt mp) js
-       _ -> do
-         checkWarn $ 
-           text "no linearization type for" <+> ppIdent c <> text ", inserting default {s : Str}"
-         return $ updateTree (c,CncCat (Just defLinType) Nothing Nothing) js
-     _ -> return js
 
 -- | General Principle: only Just-values are checked. 
 -- A May-value has always been checked in its origin module.
