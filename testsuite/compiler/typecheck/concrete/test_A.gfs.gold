@@ -1,5 +1,5 @@
 
 
 checking module A
-   Happened in operation silly in A.gf, line 5 :
+   Happened in operation silly in A.gf, line 5:
       A function type is expected for a_Det instead of type Str
