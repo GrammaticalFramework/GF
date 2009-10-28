@@ -166,7 +166,10 @@ mkLinDefault gr typ = do
        let T _ cs = mkWildCases t'
        return $ T (TWild p) cs 
      Sort s | s == cStr -> return $ Vr varStr
-     QC q p             -> lookupFirstTag gr q p
+     QC q p             -> do vs <- lookupParamValues gr q p
+                              case vs of
+                                v:_ -> return v
+                                _   -> Bad (render (text "no parameter values given to type" <+> ppIdent p))
      RecType r  -> do
        let (ls,ts) = unzip r
        ts' <- mapM mkDefField ts

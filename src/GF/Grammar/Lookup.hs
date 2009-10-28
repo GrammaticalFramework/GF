@@ -18,18 +18,13 @@
 module GF.Grammar.Lookup (
            lookupIdent,
            lookupIdentInfo,
-           lookupIdentInfoIn,
            lookupOrigInfo,
+           allOrigInfos,
            lookupResDef,
-           lookupResDefKind,
 	       lookupResType, 
            lookupOverload,
-	       lookupParams, 
 	       lookupParamValues, 
-	       lookupFirstTag, 
-           lookupIndexValue,
-           allOrigInfos,
-	       allParamValues, 
+	       allParamValues,
 	       lookupAbsDef, 
 	       lookupLincat, 
 	       lookupFunType,
@@ -63,47 +58,34 @@ lookupIdent c t =
 lookupIdentInfo :: ModInfo Ident a -> Ident -> Err a
 lookupIdentInfo mo i = lookupIdent i (jments mo)
 
-lookupIdentInfoIn :: ModInfo Ident a -> Ident -> Ident -> Err a
-lookupIdentInfoIn mo m i = 
-  err (\s -> Bad (s +++ "in module" +++ showIdent m)) return $ lookupIdentInfo mo i
-
 lookupResDef :: SourceGrammar -> Ident -> Ident -> Err Term
-lookupResDef gr m c = liftM fst $ lookupResDefKind gr m c
-
--- 0 = oper, 1 = lin, 2 = canonical. v > 0 means: no need to be recomputed
-lookupResDefKind :: SourceGrammar -> Ident -> Ident -> Err (Term,Int)
-lookupResDefKind gr m c 
- | isPredefCat c = liftM (flip (,) 1) $ lock c defLinType 
-   ---- return (Q cPredefCnc c,2) 
-   ---- was PredefAbs till 3/9/2008, with explanation: need this in gf3 12/6/2008 
- | otherwise = look True m c where 
-  look isTop m c = do
-    mo <- lookupModule gr m
-    info <- lookupIdentInfoIn mo m c
-    case info of
-      ResOper _ (Just t) -> return (qualifAnnot m t, 0) 
-      ResOper _ Nothing  -> return (Q m c, 0) ---- if isTop then lookExt m c 
-                                 ---- else prtBad "cannot find in exts" c 
-
-      CncCat (Just ty) _ _ -> liftM (flip (,) 1) $ lock c ty
-      CncCat _ _ _         -> liftM (flip (,) 1) $ lock c defLinType
+lookupResDef gr m c
+  | isPredefCat c = lock c defLinType 
+  | otherwise     = look m c
+  where 
+    look m c = do
+      mo <- lookupModule gr m
+      info <- lookupIdentInfo mo c
+      case info of
+        ResOper _ (Just t) -> return t
+        ResOper _ Nothing  -> return (Q m c)
+        CncCat (Just ty) _ _ -> lock c ty
+        CncCat _ _ _         -> lock c defLinType
       
-      CncFun (Just (cat,_,_)) (Just tr) _ -> liftM (flip (,) 1) $ unlock cat tr
-      CncFun _                (Just tr) _ -> liftM (flip (,) 1) (return tr) ---- $ unlock c tr
+        CncFun (Just (cat,_,_)) (Just tr) _ -> unlock cat tr
+        CncFun _                (Just tr) _ -> return tr
 
-      AnyInd _ n        -> look False n c
-      ResParam _ _      -> return (QC m c,2)
-      ResValue _        -> return (QC m c,2)
-      _   -> Bad $ render (ppIdent c <+> text "is not defined in resource" <+> ppIdent m)
-  lookExt m c =
-    checks ([look False n c | n <- allExtensions gr m] ++ [return (Q m c,3)])
+        AnyInd _ n        -> look n c
+        ResParam _ _      -> return (QC m c)
+        ResValue _        -> return (QC m c)
+        _   -> Bad $ render (ppIdent c <+> text "is not defined in resource" <+> ppIdent m)
 
 lookupResType :: SourceGrammar -> Ident -> Ident -> Err Type
 lookupResType gr m c = do
   mo <- lookupModule gr m
   info <- lookupIdentInfo mo c
   case info of
-    ResOper (Just t) _ -> return $ qualifAnnot m t
+    ResOper (Just t) _ -> return t
 
     -- used in reused concrete
     CncCat _ _ _ -> return typeType
@@ -112,8 +94,8 @@ lookupResType gr m c = do
           return $ mkProd cont val' []
     CncFun _ _ _      -> lookFunType m m c
     AnyInd _ n        -> lookupResType gr n c
-    ResParam _ _      -> return $ typePType
-    ResValue t        -> return $ qualifAnnotPar m t
+    ResParam _ _      -> return typePType
+    ResValue t        -> return t
     _   -> Bad $ render (ppIdent c <+> text "has no type defined in resource" <+> ppIdent m)
   where
     lookFunType e m c = do
@@ -145,11 +127,18 @@ lookupOverload gr m c = do
 -- | returns the original 'Info' and the module where it was found
 lookupOrigInfo :: SourceGrammar -> Ident -> Ident -> Err (Ident,Info)
 lookupOrigInfo gr m c = do
-    mo <- lookupModule gr m
-    info <- lookupIdentInfo mo c
-    case info of
-      AnyInd _ n  -> lookupOrigInfo gr n c
-      i           -> return (m,i)
+  mo <- lookupModule gr m
+  info <- lookupIdentInfo mo c
+  case info of
+    AnyInd _ n  -> lookupOrigInfo gr n c
+    i           -> return (m,i)
+
+allOrigInfos :: SourceGrammar -> Ident -> [(Ident,Info)]
+allOrigInfos gr m = errVal [] $ do
+  mo <- lookupModule gr m
+  return [(c,i) | (c,_) <- tree2list (jments mo), Ok (_,i) <- [look c]]
+  where
+    look = lookupOrigInfo gr m
 
 lookupParams :: SourceGrammar -> Ident -> Ident -> Err ([Param],Maybe [Term])
 lookupParams gr = look True where 
@@ -174,27 +163,6 @@ lookupParamValues gr m c = do
      vs <- liftM combinations $ mapM (\(_,_,ty) -> allParamValues gr ty) co
      return $ map (mkApp (QC m f)) vs
 
-lookupFirstTag :: SourceGrammar -> Ident -> Ident -> Err Term
-lookupFirstTag gr m c = do
-  vs <- lookupParamValues gr m c
-  case vs of
-    v:_ -> return v
-    _ -> Bad (render (text "no parameter values given to type" <+> ppIdent c))
-
-lookupIndexValue :: SourceGrammar -> Type -> Int -> Err Term
-lookupIndexValue gr ty i = do
-  ts <- allParamValues gr ty
-  if i < length ts
-    then return $ ts !! i
-    else Bad $ render (text "no value for index" <+> int i <+> text "in" <+> ppTerm Unqualified 0 ty)
-
-allOrigInfos :: SourceGrammar -> Ident -> [(Ident,Info)]
-allOrigInfos gr m = errVal [] $ do
-  mo <- lookupModule gr m
-  return [(c,i) | (c,_) <- tree2list (jments mo), Ok (_,i) <- [look c]]
-  where
-    look = lookupOrigInfo gr m
-
 allParamValues :: SourceGrammar -> Type -> Err [Term]
 allParamValues cnc ptyp = case ptyp of
      _ | Just n <- isTypeInts ptyp -> return [EInt i | i <- [0..n]]
@@ -202,25 +170,12 @@ allParamValues cnc ptyp = case ptyp of
      Q  p c -> lookupResDef cnc p c >>= allParamValues cnc
      RecType r -> do
        let (ls,tys) = unzip $ sortByFst r
-       tss <- mapM allPV tys
+       tss <- mapM (allParamValues cnc) tys
        return [R (zipAssign ls ts) | ts <- combinations tss]
      _ -> Bad (render (text "cannot find parameter values for" <+> ppTerm Unqualified 0 ptyp))
   where
-    allPV = allParamValues cnc
     -- to normalize records and record types
     sortByFst = sortBy (\ x y -> compare (fst x) (fst y))
-
-qualifAnnot :: Ident -> Term -> Term
-qualifAnnot _ = id
--- Using this we wouldn't have to annotate constants defined in a module itself.
--- But things are simpler if we do (cf. Zinc).
--- Change Rename.self2status to change this behaviour.
-
--- we need this for lookup in ResVal
-qualifAnnotPar m t = case t of
-  Cn c  -> Q m c
-  Con c -> QC m c
-  _ -> composSafeOp (qualifAnnotPar m) t
 
 lookupAbsDef :: SourceGrammar -> Ident -> Ident -> Err (Maybe Int,Maybe [Equation])
 lookupAbsDef gr m c = errIn (render (text "looking up absdef of" <+> ppIdent c)) $ do
