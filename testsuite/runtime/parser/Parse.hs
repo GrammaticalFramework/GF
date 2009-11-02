@@ -35,9 +35,9 @@ doTest pgf lang cat ss t = do
 doParse st t1 ts []       = return (Just (st,reverse ts))
 doParse st t1 ts (tk:tks) = do
   case nextState st tk of
-    Nothing -> return Nothing
-    Just st -> do t2 <- getCPUTime
-                  doParse st t1 ((t2-t1):ts) tks
+    Left _   -> return Nothing
+    Right st -> do t2 <- getCPUTime
+                   doParse st t1 ((t2-t1):ts) tks
 
 accum []     ss         = ss
 accum (t:ts) []         = (t,1) : accum ts []
