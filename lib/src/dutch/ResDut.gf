@@ -1,0 +1,698 @@
+--# -path=.:../abstract:../common
+
+--1 Dutch auxiliary operations.
+--
+-- (c) 2009 Femke Johansson and Aarne Ranta
+
+resource ResDut = ParamX ** open Prelude in {
+
+  flags optimize=all ;
+
+--2 For $Noun$
+
+  param
+    Case = Nom | Gen ;
+    Gender = Utr | Neutr ;
+
+    NForm = NF Number Case ;
+
+    NPCase = NPNom | NPAcc ;
+
+  oper 
+    Noun = {s : NForm => Str ; g : Gender} ;
+
+    mkNoun : (_,_ : Str) -> Gender -> Noun = \sg,pl,g -> {
+      s = table {
+        NF Sg _ => sg ;
+        NF Pl _ => pl
+        } ;
+     g = g
+     } ;
+
+    regNoun : Str -> Noun = \s -> case s of {
+      _ + ("a" | "o" | "y" | "u" | "oe" | "é") => mkNoun s (s + "'s") Utr ;
+      _ + ("oir" | "ion") => mkNoun s (s + "s") Neutr ;
+      ? + ? + ? + _ + ("el" | "em" | "en" | "er" | "erd" | "aar" | "aard") => -- unstressed
+        mkNoun s (s + s) Utr ; 
+      b + v@("aa"|"ee"|"oo"|"uu") + c@? => mkNoun s (b + shortVoc v c + "en") Utr ;
+      b + v@("a" |"e" |"o" |"u" ) + c@? => mkNoun s (b + v + c + c + "en") Utr ;
+      _ => mkNoun s (endCons s + "en") Utr
+      } ;
+
+    regNounG : Str -> Gender -> Noun = \s,g -> {
+      s = (regNoun s).s ;
+      g = g
+      } ;
+
+    shortVoc : Str -> Str -> Str = \v,s -> init v + endCons s ;
+
+    endCons : Str -> Str = \s -> case s of {
+      _ + "rs" => s ;
+      b + "s" => b + "z" ;
+      b + "f" => b + "v" ;
+      _ => s
+      } ;
+
+  param 
+    AForm = APred | AAttr | AGen ;
+    
+  oper
+    Adjective = {s : Degree => AForm => Str} ;
+
+    mkAdjective : (_,_,_,_,_ : Str) -> Adjective = \ap,aa,ag,ac,as -> {
+      s = table {
+        Posit  => table {APred => ap ; AAttr => aa ; AGen => ag} ; 
+        Compar => table {APred => ac ; AAttr => ac + "e" ; AGen => ac + "es"} ; ----
+        Superl => table {APred => as ; AAttr => as + "e" ; AGen => as + "es"}   ----
+        }
+      } ;
+    regAdjective : Str -> Adjective = \s ->  ----
+      let 
+        se : Str = case s of {
+          b + v@("aa"|"ee"|"oo"|"uu") + c@? => b + shortVoc v c + "e" ;
+          b + v@("a" |"e" |"o" |"u" ) + c@? => b + v + c + c + "en" ;
+          _ => endCons s + "e"
+          } ;
+        ser : Str = case s of {
+          _ + "r" => s + "der" ;
+          _ => se + "r"
+          } ;
+        sst : Str = case s of {
+          _ + "s" => s + "t" ;
+          _ => s + "st"
+          } ;
+      in
+      mkAdjective s se (s + "s") ser sst ;
+
+  param 
+    VForm = 
+       VInf      -- zijn
+     | VPresSg1  -- ben 
+     | VPresSg2  -- bent
+     | VPresSg3  -- is
+     | VPastSg   -- was
+     | VPastPl   -- waren
+     | VImp2     -- wees
+     | VImp3     -- weest
+     | VImpPl    -- wezen
+     | VPerf     -- geweest
+     ;
+
+    VPart = VPart_aan | VPart_af | VPart_be ;
+
+  oper
+    Verb : Type = {s: VForm => Str};
+    
+  mkVerb : (_,_,_,_,_,_,_ : Str) -> 
+    	Verb = \aai, aait, aaien, aaide, _, aaiden, geaaid -> {
+    	s = table {
+    		VInf | VImpPl    => aaien; -- hij/zij/het/wij aaien
+    		VPresSg1 | VImp2 => aai; -- ik aai
+    		VPresSg2 | VPresSg3 | VImp3 => aait; -- jij aait
+    		VPastSg => aaide; -- ik aaide
+    		VPastPl => aaiden; -- hij/zij/het/wij aaiden
+    		VPerf   => geaaid -- ik heb geaaid
+    	}
+    };
+    
+  regVerb : Str -> Verb = \s -> smartVerb s (mkStem s) ;
+
+  irregVerb : (breken,brak,gebroken : Str) -> Verb = \breken,brak,gebroken ->
+    let brek = (regVerb breken).s 
+    in
+    mkVerb (brek ! VPresSg1) (brek ! VPresSg3) (brek ! VInf) brak brak (brak + "en") gebroken ; 
+
+	-- Pattern matching verbs
+    smartVerb : (_,_:Str) -> Verb = \verb,stem ->
+    	let raw = Predef.tk 2 verb;
+    	in
+    	case raw of {
+    	 _+ ("k"|"f"|"s"|"c"|"h"|"p") => t_regVerb verb stem;
+    	 _+ "v" => v_regVerb verb;
+    	 _+ "z" => z_regVerb verb;
+    	 _+ ("t" | "tt") => t_end_regVerb verb;
+    	 _+ "d" => d_end_regVerb verb;
+    	 
+    	 _ => d_regVerb verb stem
+    	 
+    	};
+
+    -- To make a stem out of a verb
+    -- If a stem ends in a 'v' then the 'v' changes into a 'f'
+    -- If a stem ends in a 'z' then the 'z' changes into an 's'
+    -- If a stem ends on a double consonant then one of them disappears
+    -- If a stem ends on a consonant but that consonant has exactly 1 vowel before it
+    -- then we have to double this vowel
+    mkStem : Str -> Str =\werken -> 
+    let stem = Predef.tk 2 werken
+    in
+    case stem of {
+    	-- Vowel doubling for verbs whose stem does not end on 'v' or 'z' 	
+    	_+ ("b"|"c"|"d"|"f"|"g"|"h"|"j"|"k"|"l"|"m"|"n"|"p"|"q"|"r"|"s"|"t"|"v"|"w"|"x"|"y"|"z") 
+    	 + ("a"|"e"|"i"|"o"|"u")
+    	 + ("b"|"c"|"d"|"f"|"g"|"h"|"j"|"k"|"l"|"m"|"n"|"p"|"q"|"r"|"s"|"t"|"w"|"x"|"y") 
+    	 => Predef.tk 2 stem + (Predef.tk 1 (Predef.dp 2 stem)) + Predef.dp 2 stem;
+    	 
+     	-- Vowel doubling for verbs whose stem end on 'v'	
+    	_+ ("b"|"c"|"d"|"f"|"g"|"h"|"j"|"k"|"l"|"m"|"n"|"p"|"q"|"r"|"s"|"t"|"v"|"w"|"x"|"y"|"z") 
+    	 + ("a"|"e"|"i"|"o"|"u")
+    	 + "v" => Predef.tk 2 stem + (Predef.tk 1 (Predef.dp 2 stem)) + 
+    	 	(Predef.tk 1 (Predef.dp 2 stem)) +"f";
+    
+        -- Vowel doubling for verbs whose stem end on 'z`'	
+    	_+ ("b"|"c"|"d"|"f"|"g"|"h"|"j"|"k"|"l"|"m"|"n"|"p"|"q"|"r"|"s"|"t"|"v"|"w"|"x"|"y"|"z") 
+    	 + ("a"|"e"|"i"|"o"|"u")
+    	 + "z" => Predef.tk 2 stem + (Predef.tk 1 (Predef.dp 2 stem)) + 
+    	 	(Predef.tk 1 (Predef.dp 2 stem)) + "s";
+    
+    	_+ "v" => (Predef.tk 1 stem) + "f";
+    	_+ "z" => (Predef.tk 1 stem) + "s";
+    	
+    	_+ ("bb" | "dd" | "ff" | "gg" | "kk" | "ll" | "mm" | "nn" | "pp" | 
+    		"rr" | "ss" | "tt") => Predef.tk 1 stem;
+
+    	 
+    	_ => stem
+    };
+    
+    
+	-- To add a particle to a verb
+    --  addPartVerb : Str -> Verb -> Verb = \aanmoedigen ->
+    --  let verbpiece = Predef.drop 3 aanmoedigen;
+    --	part = Predef.take 3 aanmoedigen;
+    --	in
+    --	mkVerb (smartVerb verbpiece) part;
+    
+    -- For regular verbs with past tense 'd'
+    d_regVerb : (_,_ :Str) -> Verb = \geeuwen,geeuw ->
+    	let stem = mkStem geeuwen
+    	in
+    	mkVerb stem (stem + "t") geeuwen 
+    	  (stem + "de") (stem + "de") (stem + "den") 
+    	  ("ge" + stem + "d");	
+
+	-- For regular verbs with past tense 't'
+   	t_regVerb : (_,_ :Str) -> Verb = \botsen,bots ->
+   		let bots = mkStem botsen
+   		in
+   		mkVerb bots (bots + "t") botsen 
+   		  (bots + "te") (bots + "te") (bots + "ten")
+   		  ("ge" + bots + "t");
+     
+ 	-- For verbs that dont need an extra 't' at the end
+    t_end_regVerb : Str -> Verb = \achten ->
+   		let acht = mkStem achten
+   		in
+      	mkVerb acht (acht) achten
+     		(acht + "te") (acht +"te") (acht+"ten") ("ge"+acht);
+    
+    -- For verbs that dont need an extra 'd' at the end
+    d_end_regVerb : Str -> Verb = \aarden ->
+   		let aard = mkStem aarden
+   		in
+      	mkVerb aard (aard+"t") aarden
+     		(aard + "de") (aard +"de") (aard+"den") ("ge"+aard);
+  
+	-- For verbs that need a vowel doubled in singular
+	 add_vowel_regVerb : Str -> Verb = \absorberen ->
+		let stem = mkStem absorberen 
+		in
+		case stem of {
+			_+ ("t"|"k"|"f"|"s"|"c"|"h"|"p") => t_regVerb absorberen stem;
+			_ => d_regVerb absorberen stem
+		};
+
+	-- For verbs that have their stem ending with a 'z'
+	z_regVerb : Str -> Verb = \omhelzen ->
+	let stem = mkStem omhelzen
+	in
+	d_regVerb omhelzen stem;
+	
+	-- For verbs that have their stem ending with a 'v'
+	v_regVerb : Str -> Verb = \hoeven ->
+	let hoef = mkStem hoeven
+	in
+	mkVerb hoef (hoef +"t") hoeven (hoef+"de") (hoef+"de") (hoef+"den")
+		("ge"+hoef+"d");
+
+  
+
+  zijn_V : VVerb = {
+    s = table {
+       VInf      => "zijn" ;
+       VPresSg1  => "ben" ; 
+       VPresSg2  => "bent" ;
+       VPresSg3  => "is" ;
+       VPastSg   => "was" ;
+       VPastPl   => "waren" ;
+       VImp2     => "wees" ;
+       VImp3     => "weest" ;
+       VImpPl    => "wezen" ;
+       VPerf     => "geweest" 
+       } ;
+    aux = VZijn
+    } ;
+
+  hebben_V : VVerb = {
+    s = table {
+       VInf      => "hebben" ;
+       VPresSg1  => "heb" ; 
+       VPresSg2  => "hebt" ;
+       VPresSg3  => "heeft" ;
+       VPastSg   => "had" ;
+       VPastPl   => "hadden" ;
+       VImp2     => "heb" ;
+       VImp3     => "heeft" ;
+       VImpPl    => "hebben" ;
+       VPerf     => "gehad" 
+       } ;
+    aux = VHebben
+    } ;
+
+  zullen_V : VVerb = {
+    s = table {
+       VInf      => "zullen" ;
+       VPresSg1  => "zal" ; 
+       VPresSg2  => "zult" ;
+       VPresSg3  => "zal" ;
+       VPastSg   => "zou" ;
+       VPastPl   => "zouden" ;
+       VImp2     => "zoud" ;  ---- not used
+       VImp3     => "zoudt" ;
+       VImpPl    => "zouden" ; ----
+       VPerf     => "gezoudt" 
+       } ;
+    aux = VHebben
+    } ;
+ 
+    Pronoun : Type = {
+      unstressed,stressed : {nom, acc, poss : Str} ;
+      substposs : Str ;
+      a : Agr
+      } ; 
+
+    mkPronoun : (x1,_,_,_,_,x6,x7 : Str) -> Gender -> Number -> Person -> Pronoun = 
+      \ik,me,mn,Ik,mij,mijn,mijne,g,n,p -> {
+         unstressed = {nom = ik ; acc = me  ; poss = mn} ;
+         stressed   = {nom = Ik ; acc = mij ; poss = mijn} ;
+         substposs  = mijne ;
+         a = {g = g ; n = n ; p = p}
+         } ;
+
+    het_Pron : Pronoun = mkPronoun "'t" "'t" "ze" "hij" "hem" "zijn" "zijne" Neutr Sg P3 ;
+
+
+
+
+-- Complex $CN$s, like adjectives, have strong and weak forms.
+--
+--    Adjf = Strong | Weak ;
+--
+---- Gender distinctions are only made in the singular. 
+--
+--    GenNum = GSg Gender | GPl ;
+--
+---- Agreement of $NP$ is a record.
+--
+  oper Agr = {g : Gender ; n : Number ; p : Person} ;
+--
+---- Pronouns are the worst-case noun phrases, which have both case
+---- and possessive forms.
+--
+--  param NPForm = NPCase Case | NPPoss GenNum Case ;
+--
+---- Predeterminers sometimes require a case ("ausser mir"), sometimes not ("nur ich").
+--
+--  param PredetCase = NoCase | PredCase Case ;
+--
+----2 For $Adjective$
+--
+---- The predicative form of adjectives is not inflected further.
+--
+--  param AForm = APred | AMod GenNum Case ;  
+--
+--
+----2 For $Verb$
+--
+--  param VForm = 
+--     VInf Bool           -- True = with the particle "zu"
+--   | VFin Bool VFormFin  -- True = prefix glued to verb
+--   | VImper    Number    -- prefix never glued
+--   | VPresPart AForm     -- prefix always glued
+--   | VPastPart AForm ;
+--
+--  param VFormFin = 
+--     VPresInd  Number Person
+--   | VPresSubj Number Person
+--   | VImpfInd  Number Person --# notpresent
+--   | VImpfSubj Number Person --# notpresent
+--   ;
+--
+--  param VPForm =
+--     VPFinite  Mood Tense Anteriority
+--   | VPImperat Bool
+--   | VPInfinit Anteriority ;
+
+  oper VVerb = Verb ** {aux : VAux} ;
+  param VAux = VHebben | VZijn ;
+
+--  param VType = VAct | VRefl Case ;
+--
+---- The order of sentence is depends on whether it is used as a main
+---- clause, inverted, or subordinate.
+
+  oper 
+    Preposition = Str ;
+    appPrep : Preposition -> (NPCase => Str) -> Str = \p,np -> p ++ np ! NPAcc ; ----
+
+  param  
+    Order = Main | Inv | Sub ;
+
+  oper
+    vForm : Tense -> Number -> Person -> Order -> VForm = \t,n,p,o -> case <t,n,p> of {
+      <Pres|Fut,Sg,P2> => case o of {
+        Inv => VPresSg1 ;
+        _   => VPresSg2
+        } ;
+      <Pres|Fut,Sg,P1> => VPresSg1 ;
+      <Pres|Fut,Sg,P3> => VPresSg3 ;
+      <Pres|Fut,Pl,_ > => VInf ;
+
+      <Past|Cond,Sg,_> => VPastSg ;   -- Fut and Cond affect zullen
+      <Past|Cond,Pl,_> => VPastPl
+      } ;
+
+--
+---- Main clause mood: "es sei, es wäre, es werde sein".
+---- Not relevant for $Fut$. ---
+--
+--    Mood = MIndic | MConjunct ;
+--
+----2 For $Relative$
+-- 
+--    RAgr = RNoAg | RAg {n : Number ; p : Person} ;
+--
+----2 For $Numeral$
+--
+--    CardOrd = NCard Gender Case | NOrd AForm ;
+--    DForm = DUnit  | DTeen  | DTen ;
+--
+----2 Transformations between parameter types
+--
+  oper
+    agrP3 : Number -> Agr = agrgP3 Neutr ;
+
+    agrgP3 : Gender -> Number -> Agr = \g,n -> 
+      {g = g ; n = n ; p = P3} ;
+
+--    gennum : Gender -> Number -> GenNum = \g,n ->
+--      case n of {
+--        Sg => GSg g ;
+--        Pl => GPl
+--        } ;
+--
+---- Needed in $RelativeDut$.
+--
+--    numGenNum : GenNum -> Number = \gn -> 
+--      case gn of {
+--        GSg _ => Sg ;
+--        GPl   => Pl
+--        } ;
+--
+---- Used in $NounDut$.
+--
+--    agrAdj : Gender -> Adjf -> Number -> Case -> AForm = \g,a,n,c ->
+--      let
+--        gn = gennum g n ;
+--        e  = AMod (GSg Fem) Nom ;
+--        en = AMod (GSg Masc) Acc ;
+--      in
+--      case a of {
+--        Strong => AMod gn c ;
+--        _ => case <gn,c> of {
+--          <GSg _,   Nom> => e ;
+--          <GSg Masc,Acc> => en ;
+--          <GSg _,   Acc> => e ;
+--          _              => en 
+--        }
+--      } ;
+--
+---- To add a prefix (like "ein") to an already existing verb.
+--
+--  prefixV : Str -> Verb -> Verb = \ein,verb ->
+--    let
+--      vs = verb.s ;
+--      geben = vs ! VInf False ;
+--      einb : Bool -> Str -> Str = \b,geb -> 
+--        if_then_Str b (ein + geb) geb ;
+--    in
+--    {s = table {
+--      VInf False => ein + geben ;
+--      VInf True  => 
+--        if_then_Str (isNil ein) ("zu" ++ geben) (ein + "zu" + geben) ;
+--      VFin b vf => einb b (vs ! VFin b vf) ;
+--      VImper n    => vs ! VImper n ;
+--      VPresPart a => ein + (regA (geben + "d")).s ! Posit ! a ;
+--      VPastPart a => ein + vs ! VPastPart a
+--      } ;
+--     prefix = ein ;
+--     aux = verb.aux ;
+--     vtype = verb.vtype
+--     } ;
+--
+--
+--
+---- Pronouns and articles
+---- Here we define personal and relative pronouns.
+---- All personal pronouns, except "ihr", conform to the simple
+---- pattern $mkPronPers$.
+--
+--  mkPronPers : (x1,_,_,_,x5 : Str) -> Gender -> Number -> Person -> 
+--               {s : NPForm => Str ; a : Agr} = 
+--    \ich,mich,mir,meiner,mein,g,n,p -> {
+--      s = table {
+--        NPCase c    => caselist ich mich mir meiner ! c ;
+--        NPPoss gn c => mein + pronEnding ! gn ! c
+--        } ;
+--      a = {g = g ; n = n ; p = p}
+--      } ;
+--
+--  pronEnding : GenNum => Case => Str = table {
+--    GSg Masc => caselist ""  "en" "em" "es" ;
+--    GSg Fem  => caselist "e" "e"  "er" "er" ;
+--    GSg Neut => caselist ""  ""   "em" "es" ;
+--    GPl      => caselist "e"  "e" "en" "er"
+--    } ;
+--
+--  artDef : GenNum => Case => Str = table {
+--    GSg Masc => caselist "der" "den" "dem" "des" ;
+--    GSg Fem  => caselist "die" "die" "der" "der" ;
+--    GSg Neut => caselist "das" "das" "dem" "des" ;
+--    GPl      => caselist "die" "die" "den" "der"
+--    } ;
+--
+---- This is used when forming determiners that are like adjectives.
+--
+--  appAdj : Adjective -> Number => Gender => Case => Str = \adj ->
+--    let
+--      ad : GenNum -> Case -> Str = \gn,c -> 
+--        adj.s ! Posit ! AMod gn c
+--    in
+--    \\n,g,c => case n of {
+--       Sg => ad (GSg g) c ;
+--       _  => ad GPl c
+--     } ;
+--
+---- This auxiliary gives the forms in each degree of adjectives. 
+--
+--  adjForms : (x1,x2 : Str) -> AForm => Str = \teuer,teur ->
+--   table {
+--    APred => teuer ;
+--    AMod (GSg Masc) c => 
+--      caselist (teur+"er") (teur+"en") (teur+"em") (teur+"es") ! c ;
+--    AMod (GSg Fem) c => 
+--      caselist (teur+"e") (teur+"e") (teur+"er") (teur+"er") ! c ;
+--    AMod (GSg Neut) c => 
+--      caselist (teur+"es") (teur+"es") (teur+"em") (teur+"es") ! c ;
+--    AMod GPl c => 
+--      caselist (teur+"e") (teur+"e") (teur+"en") (teur+"er") ! c
+--    } ;
+--
+---- For $Verb$.
+--
+--  VPC : Type = {
+--      s : Bool => Agr => VPForm => { -- True = prefix glued to verb
+--        fin : Str ;          -- hat
+--        inf : Str            -- wollen
+--        } 
+--      } ;
+--
+
+  oper VP : Type = {
+      s  : VVerb ;
+      a1 : Polarity => Str ; -- niet
+      n2 : Agr => Str ;      -- dich
+      a2 : Str ;             -- heute
+      isAux : Bool ;         -- is a double infinitive
+      inf : Str ;            -- sagen
+      ext : Str              -- dass sie kommt
+      } ;
+
+  predV : VVerb -> VP = predVGen False ;
+
+
+  predVGen : Bool -> VVerb -> VP = \isAux, verb -> {
+    s = verb ;
+    a1  : Polarity => Str = negation ;
+    n2  : Agr => Str = \\_ => [] ;
+-- case verb.vtype of {
+--      VAct => \\_ => [] ;
+--      VRefl c => \\a => reflPron ! a ! c
+--      } ;
+    a2  : Str = [] ;
+    isAux = isAux ; ----
+    inf,ext : Str = []
+    } ;
+
+  negation : Polarity => Str = table {
+      Pos => [] ;
+      Neg => "niet"
+      } ;
+
+-- Extending a verb phrase with new constituents.
+
+  insertObj : (Agr => Str) -> VP -> VP = \obj,vp -> {
+    s = vp.s ;
+    a1 = vp.a1 ;
+    n2 = \\a => obj ! a ++ vp.n2 ! a ;
+    a2 = vp.a2 ;
+    isAux = vp.isAux ;
+    inf = vp.inf ;
+    ext = vp.ext
+    } ;
+
+--  insertAdV : Str -> VP -> VP = \adv,vp -> {
+--    s = vp.s ;
+--    a1 = \\a => adv ++ vp.a1 ! a ; -- immer nicht
+--    n2 = vp.n2 ;
+--    a2 = vp.a2 ;
+--    isAux = vp.isAux ;
+--    inf = vp.inf ;
+--    ext = vp.ext
+--    } ;
+
+  insertAdv : Str -> VP -> VP = \adv,vp -> {
+    s = vp.s ;
+    a1 = vp.a1 ;
+    n2 = vp.n2 ;
+    a2 = vp.a2 ++ adv ;
+    isAux = vp.isAux ;
+    inf = vp.inf ;
+    ext = vp.ext
+    } ;
+
+--  insertExtrapos : Str -> VP -> VP = \ext,vp -> {
+--    s = vp.s ;
+--    a1 = vp.a1 ;
+--    n2 = vp.n2 ;
+--    a2 = vp.a2 ;
+--    isAux = vp.isAux ;
+--    inf = vp.inf ;
+--    ext = vp.ext ++ ext
+--    } ;
+--
+--  insertInf : Str -> VP -> VP = \inf,vp -> {
+--    s = vp.s ;
+--    a1 = vp.a1 ;
+--    n2 = vp.n2 ;
+--    a2 = vp.a2 ;
+--    isAux = vp.isAux ; ----
+--    inf = inf ++ vp.inf ;
+--    ext = vp.ext
+--    } ;
+--
+-- For $Sentence$.
+
+  Clause : Type = {
+    s : Tense => Anteriority => Polarity => Order => Str
+    } ;
+
+  mkClause : Str -> Agr -> VP -> Clause = \subj,agr,vp -> {
+      s = \\t,a,b,o =>
+        let
+          ord   = case o of {
+            Sub => True ;  -- glue prefix to verb
+            _ => False
+            } ;
+          vform = vForm t agr.n agr.p o ;
+          auxv = (auxVerb vp.s.aux).s ;
+          vperf = vp.s.s ! VPerf ;
+          verb : Str * Str = case <t,a> of {
+            <Fut|Cond,Simul>  => <zullen_V.s ! vform, vperf ++ auxv ! VInf> ;
+            <Fut|Cond,Anter>  => <zullen_V.s ! vform, vperf ++ auxv ! VInf> ;
+            <_,       Anter>  => <auxv ! vform,       vperf> ;
+            <_,       Simul>  => <vp.s.s ! vform,     []>
+            } ;
+          fin   = verb.p1 ;
+          neg   = vp.a1 ! b ;
+          obj   = vp.n2 ! agr ;
+          compl = obj ++ neg ++ vp.a2 ;
+          inf   = vp.inf ++ verb.p2 ;
+          extra = vp.ext ;
+          inffin = 
+            case <a,vp.isAux> of {                              --# notpresent
+              <Anter,True> => fin ++ inf ; -- double inf   --# notpresent
+              _ =>                                              --# notpresent
+              inf ++ fin              --- or just auxiliary vp
+            }                                                   --# notpresent
+        in
+        case o of {
+          Main => subj ++ fin ++ compl ++ inf ++ extra ;
+          Inv  => fin ++ subj ++ compl ++ inf ++ extra ;
+          Sub  => subj ++ compl ++ inffin ++ extra
+          }
+    } ;
+
+  auxVerb : VAux -> VVerb = \a -> case a of {
+    VHebben => hebben_V ;
+    VZijn   => zijn_V 
+    } ;
+
+--  infVP : Bool -> VP -> ((Agr => Str) * Str * Str) = \isAux, vp -> let vps = useVP vp in
+--    <
+--     \\agr => vp.n2 ! agr ++  vp.a2,
+--     vp.a1 ! Pos ++ (vps.s ! (notB isAux) ! agrP3 Sg ! VPInfinit Simul).inf,
+--     vp.inf ++ vp.ext
+--    > ;
+--
+--  useInfVP : Bool -> VP -> Str = \isAux,vp ->
+--    let vpi = infVP isAux vp in
+--    vpi.p1 ! agrP3 Sg ++ vpi.p3 ++ vpi.p2 ;
+--
+---- The nominative case is not used as reflexive, but defined here
+---- so that we can reuse this in personal pronouns. 
+---- The missing Sg "ihrer" shows that a dependence on gender would
+---- be needed.
+--
+--  reflPron : Agr => Case => Str = table {
+--    {n = Sg ; p = P1} => caselist "ich" "mich" "mir"  "meiner" ;
+--    {n = Sg ; p = P2} => caselist "du"  "dich" "dir"  "deiner" ;
+--    {g = Masc ; n = Sg ; p = P3} => caselist "er" "sich" "sich" "seiner" ;
+--    {g = Fem  ; n = Sg ; p = P3} => caselist "sie" "sich" "sich" "ihrer" ;
+--    {g = Neutr ; n = Sg ; p = P3} => caselist "es" "sich" "sich" "seiner" ;
+--    {n = Pl ; p = P1} => caselist "wir" "uns"  "uns"  "unser" ;
+--    {n = Pl ; p = P2} => caselist "ihr" "euch" "euch" "euer" ;
+--    {n = Pl ; p = P3} => caselist "sie" "sich" "sich" "ihrer"
+--    } ;
+--
+--  conjThat : Str = "daß" ;
+--
+--  conjThan : Str = "als" ;
+--
+---- The infinitive particle "zu" is used if and only if $vv.isAux = False$.
+-- 
+--  infPart : Bool -> Str = \b -> if_then_Str b [] "zu" ;
+--
+--}
+
+}
