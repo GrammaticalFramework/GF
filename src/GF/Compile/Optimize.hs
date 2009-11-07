@@ -42,49 +42,21 @@ import Debug.Trace
 -- | partial evaluation of concrete syntax. AR 6\/2001 -- 16\/5\/2003 -- 5\/2\/2005.
 
 optimizeModule :: Options -> [SourceModule] -> SourceModule -> Err SourceModule
-optimizeModule opts ms mo@(name,mi)
+optimizeModule opts ms m@(name,mi)
   | mstatus mi == MSComplete = do
-      mo1 <- case mtype mi of
-               _ | isModRes mi -> do
-                     ids <- topoSortJments mo
-                     if OptExpand `Set.member` optim
-                       then do mi <- foldM evalOp mi ids
-                               return (name,mi)
-                       else return mo
-               MTConcrete a -> do
-                     js' <- mapMTree (evalCncInfo oopts gr name a) (jments mi)
-                     return (name,replaceJudgements mi js')
-               _ -> return mo
-      return (shareModule optim mo1)
-  | otherwise = return mo
+      ids <- topoSortJments m
+      mi <- foldM updateEvalInfo mi ids
+      return (shareModule oopts (name,mi))
+  | otherwise = return m
  where
-   oopts = opts `addOptions` flagsModule mo
-   optim = flag optOptimizations oopts
-   
-   gr  = MGrammar $ mo : ms
+   oopts = opts `addOptions` flagsModule m
 
-   evalOp mi (i,info) = do
-     info' <- evalResInfo oopts gr (i,info)
+   updateEvalInfo mi (i,info) = do
+     info' <- evalInfo oopts ms m i info
      return (updateModule mi i info')
 
--- | only operations need be compiled in a resource, and this is local to each
--- definition since the module is traversed in topological order
-evalResInfo :: Options -> SourceGrammar -> (Ident,Info) -> Err Info
-evalResInfo oopts gr (c,info) = case info of
-
-  ResOper pty pde -> eIn (text "operation") $ do
-    pde' <- case pde of
-              Just de -> liftM Just $ computeConcrete gr de 
-              Nothing -> return Nothing
-    return $ ResOper pty pde'
-
-  _ ->  return info
- where
-   eIn cat = errIn (render (text "Error optimizing" <+> cat <+> ppIdent c <+> colon))
-
-
-evalCncInfo :: Options -> SourceGrammar -> Ident -> Ident -> (Ident,Info) -> Err Info
-evalCncInfo opts gr cnc abs (c,info) = do
+evalInfo :: Options -> [SourceModule] -> SourceModule -> Ident -> Info -> Err Info
+evalInfo opts ms m c info = do
 
  (if verbAtLeast opts Verbose then trace (" " ++ showIdent c) else id) return ()
 
@@ -93,7 +65,7 @@ evalCncInfo opts gr cnc abs (c,info) = do
   CncCat ptyp pde ppr -> do
     pde' <- case (ptyp,pde) of
       (Just typ, Just de) -> 
-        liftM Just $ pEval ([(Explicit, varStr, typeStr)], typ) de
+        liftM Just $ partEval opts gr ([(Explicit, varStr, typeStr)], typ) de
       (Just typ, Nothing) -> 
         liftM Just $ mkLinDefault gr typ >>= partEval noOptions gr ([(Explicit, varStr, typeStr)],typ)
       _ -> return pde   -- indirection
@@ -105,14 +77,22 @@ evalCncInfo opts gr cnc abs (c,info) = do
   CncFun (mt@(Just (_,cont,val))) pde ppr -> --trace (prt c) $
        eIn (text "linearization in type" <+> ppTerm Unqualified 0 (mkProd cont val []) $$ text "of function") $ do
     pde' <- case pde of
-      Just de -> liftM Just $ pEval (cont,val) de
+      Just de -> liftM Just $ partEval opts gr (cont,val) de
       Nothing -> return pde
     ppr' <-  liftM Just $ evalPrintname gr c ppr pde'
     return $ CncFun mt pde' ppr' -- only cat in type actually needed
 
+  ResOper pty pde 
+    | OptExpand `Set.member` optim -> do
+         pde' <- case pde of
+                   Just de -> liftM Just $ computeConcrete gr de 
+                   Nothing -> return Nothing
+         return $ ResOper pty pde'
+
   _ ->  return info
  where
-   pEval = partEval opts gr
+   gr = MGrammar (m : ms)
+   optim = flag optOptimizations opts
    eIn cat = errIn (render (text "Error optimizing" <+> cat <+> ppIdent c <+> colon))
 
 -- | the main function for compiling linearizations

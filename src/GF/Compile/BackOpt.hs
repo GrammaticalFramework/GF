@@ -15,7 +15,7 @@
 -- following advice of Josef Svenningsson
 -----------------------------------------------------------------------------
 
-module GF.Compile.BackOpt (shareModule, OptSpec) where
+module GF.Compile.BackOpt (shareModule) where
 
 import GF.Grammar.Grammar
 import GF.Infra.Ident
@@ -29,10 +29,12 @@ import qualified Data.ByteString.Char8 as BS
 import Data.Set (Set)
 import qualified Data.Set as Set
 
-type OptSpec = Set Optimization
+shareModule :: Options -> SourceModule -> SourceModule
+shareModule opts (i,mo) = (i,M.replaceJudgements mo (mapTree (shareInfo optim) (M.jments mo)))
+  where
+    optim = flag optOptimizations opts
 
-shareModule :: OptSpec -> SourceModule -> SourceModule
-shareModule opt (i,mo) = (i,M.replaceJudgements mo (mapTree (shareInfo opt) (M.jments mo)))
+type OptSpec = Set Optimization
 
 shareInfo :: OptSpec -> (Ident, Info) -> Info
 shareInfo opt (c, CncCat ty (Just t) m) = CncCat ty (Just (shareOptim opt c t)) m
