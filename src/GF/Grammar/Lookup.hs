@@ -140,28 +140,12 @@ allOrigInfos gr m = errVal [] $ do
   where
     look = lookupOrigInfo gr m
 
-lookupParams :: SourceGrammar -> Ident -> Ident -> Err ([Param],Maybe [Term])
-lookupParams gr = look True where 
-  look isTop m c = do
-    mo <- lookupModule gr m
-    info <- lookupIdentInfo mo c
-    case info of
-      ResParam (Just psm) m -> return (psm,m)
-      AnyInd _ n            -> look False n c
-      _                     -> Bad $ render (ppIdent c <+> text "has no parameters defined in resource" <+> ppIdent m)
-  lookExt m c =
-    checks [look False n c | n <- allExtensions gr m]
-
 lookupParamValues :: SourceGrammar -> Ident -> Ident -> Err [Term]
 lookupParamValues gr m c = do
-  (ps,mpv) <- lookupParams gr m c
-  case mpv of
-    Just ts -> return ts
-    _ -> liftM concat $ mapM mkPar ps
- where
-   mkPar (f,co) = do
-     vs <- liftM combinations $ mapM (\(_,_,ty) -> allParamValues gr ty) co
-     return $ map (mkApp (QC m f)) vs
+  (_,info) <- lookupOrigInfo gr m c
+  case info of
+    ResParam _ (Just pvs) -> return pvs
+    _                     -> Bad $ render (ppIdent c <+> text "has no parameter values defined in resource" <+> ppIdent m)
 
 allParamValues :: SourceGrammar -> Type -> Err [Term]
 allParamValues cnc ptyp = case ptyp of

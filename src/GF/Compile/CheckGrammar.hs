@@ -46,15 +46,17 @@ import Text.PrettyPrint
 checkModule :: [SourceModule] -> SourceModule -> Check SourceModule
 checkModule ms m@(name,mo) = checkIn (text "checking module" <+> ppIdent name) $ do
   checkRestrictedInheritance ms m
-  checkErr $ topoSortJments m
-  js <- case mtype mo of
-          MTConcrete a -> do abs <- checkErr $ lookupModule gr a
-                             checkCompleteGrammar gr (a,abs) m
-          _            -> return (jments mo)
-  js <- checkMap (checkInfo gr m) js
-  return (name, replaceJudgements mo js)
+  m <- case mtype mo of
+         MTConcrete a -> do let gr = MGrammar (m:ms)
+                            abs <- checkErr $ lookupModule gr a
+                            checkCompleteGrammar gr (a,abs) m
+         _            -> return m
+  infos <- checkErr $ topoSortJments m
+  foldM updateCheckInfo m infos
   where
-    gr  = MGrammar $ (name,mo):ms
+    updateCheckInfo (name,mo) (i,info) = do
+      info <- checkInfo ms (name,mo) i info
+      return (name,updateModule mo i info)
 
 -- check if restricted inheritance modules are still coherent
 -- i.e. that the defs of remaining names don't depend on omitted names
@@ -77,7 +79,7 @@ checkRestrictedInheritance mos (name,mo) = do
                          nest 2 (vcat [ppIdent f <+> text "on" <+> fsep (map ppIdent is) | (f,is) <- cs]))
    allDeps = concatMap (allDependencies (const True) . jments . snd) mos
 
-checkCompleteGrammar :: SourceGrammar -> SourceModule -> SourceModule -> Check (BinTree Ident Info)
+checkCompleteGrammar :: SourceGrammar -> SourceModule -> SourceModule -> Check SourceModule
 checkCompleteGrammar gr (am,abs) (cm,cnc) = do
   let jsa = jments abs
   let jsc = jments cnc
@@ -88,7 +90,7 @@ checkCompleteGrammar gr (am,abs) (cm,cnc) = do
   -- check that all abstract constants are in concrete; build default lin and lincats
   jsc <- foldM checkAbs jsc (tree2list jsa)
   
-  return jsc
+  return (cm,replaceJudgements cnc jsc)
   where
    checkAbs js i@(c,info) =
      case info of
@@ -150,8 +152,8 @@ checkCompleteGrammar gr (am,abs) (cm,cnc) = do
 
 -- | General Principle: only Just-values are checked. 
 -- A May-value has always been checked in its origin module.
-checkInfo :: SourceGrammar -> SourceModule -> Ident -> Info -> Check Info
-checkInfo gr (m,mo) c info = do
+checkInfo :: [SourceModule] -> SourceModule -> Ident -> Info -> Check Info
+checkInfo ms (m,mo) c info = do
   checkReservedId c
   case info of
     AbsCat (Just cont) _ -> mkCheck "category" $ 
@@ -207,12 +209,17 @@ checkInfo gr (m,mo) c info = do
       return (ResOverload os [(y,x) | (x,y) <- tysts'])
 
     ResParam (Just pcs) _ -> chIn "parameter type" $ do
-      ts <- checkErr $ lookupParamValues gr m c
+      ts <- checkErr $ liftM concat $ mapM mkPar pcs
       return (ResParam (Just pcs) (Just ts))
 
     _ ->  return info
  where
+   gr = MGrammar ((m,mo) : ms)
    chIn cat = checkIn (text "Happened in" <+> text cat <+> ppIdent c <+> ppPosition mo c <> colon)
+
+   mkPar (f,co) = do
+     vs <- liftM combinations $ mapM (\(_,_,ty) -> allParamValues gr ty) co
+     return $ map (mkApp (QC m f)) vs
 
    checkUniq xss = case xss of
      x:y:xs 
