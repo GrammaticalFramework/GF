@@ -1,4 +1,4 @@
-concrete StructuralDut of Structural = CatDut ** 
+concrete StructuralDut of Structural = CatDut, Prelude ** 
 
   open ResDut in
 {
@@ -45,7 +45,7 @@ concrete StructuralDut of Structural = CatDut **
 --  here_Adv = ss "hier" ;
 --  how_IAdv = ss "wie" ;
 --  how8many_IDet = detLikeAdj Pl "wieviel" ;
---  if_Subj = ss "wenn" ;
+  if_Subj = ss "als" ;
 --  in8front_Prep = mkPrep "vor" Dat ;
   i_Pron = mkPronoun "ik" "me" "m'n" "ik" "mij" "mijn" "mijne" Utr Sg P1 ;
 --  in_Prep = mkPrep "in" Dat ;
