@@ -59,9 +59,9 @@ concrete SentenceDut of Sentence = CatDut ** open ResDut, Prelude in {
 --      s = \\o => t.s ++ p.s ++ cl.s ! t.m ! t.t ! t.a ! p.p ! o ;
 --      c2 = cl.c2
 --      } ;
---
---    AdvS a s = {s = \\o => a.s ++ s.s ! Inv} ;
---
+
+    AdvS a s = {s = \\o => a.s ++ s.s ! Inv} ;
+
 --    RelS s r = {s = \\o => s.s ! o ++ "," ++ r.s ! gennum Neutr Sg} ; --- "welches"
 --
 --}
