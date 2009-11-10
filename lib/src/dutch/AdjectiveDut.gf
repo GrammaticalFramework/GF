@@ -10,10 +10,10 @@ concrete AdjectiveDut of Adjective = CatDut ** open ResDut, Prelude in
       s = a.s ! Posit ;
       isPre = True
       } ;
---    ComparA a np = {
---      s = \\af => a.s ! Compar ! af ++ conjThan ++ np.s ! Nom ;
---      isPre = True
---      } ;
+    ComparA a np = {
+      s = \\af => a.s ! Compar ! af ++ "dan" ++ np.s ! NPNom ;
+      isPre = True
+      } ;
 --    CAdvAP ad ap np = {
 --      s = \\af => ad.s ++ ap.s ! af ++ ad.p ++ np.s ! Nom ;
 --      isPre = False

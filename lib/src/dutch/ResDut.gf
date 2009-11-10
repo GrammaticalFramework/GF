@@ -34,6 +34,7 @@ resource ResDut = ParamX ** open Prelude in {
       _ + ("oir" | "ion") => mkNoun s (s + "s") Neutr ;
       ? + ? + ? + _ + ("el" | "em" | "en" | "er" | "erd" | "aar" | "aard") => -- unstressed
         mkNoun s (s + s) Utr ; 
+      _ + ("i"|"u") => mkNoun s (endCons s + "en") Utr ;
       b + v@("aa"|"ee"|"oo"|"uu") + c@? => mkNoun s (b + shortVoc v c + "en") Utr ;
       b + v@("a" |"e" |"o" |"u" ) + c@? => mkNoun s (b + v + c + c + "en") Utr ;
       _ => mkNoun s (endCons s + "en") Utr
@@ -47,7 +48,7 @@ resource ResDut = ParamX ** open Prelude in {
     shortVoc : Str -> Str -> Str = \v,s -> init v + endCons s ;
 
     endCons : Str -> Str = \s -> case s of {
-      _ + "rs" => s ;
+      _ + ("ts" |"rs") => s ;
       b + "s" => b + "z" ;
       b + "f" => b + "v" ;
       _ => s
@@ -69,6 +70,7 @@ resource ResDut = ParamX ** open Prelude in {
     regAdjective : Str -> Adjective = \s ->  ----
       let 
         se : Str = case s of {
+          _ + ("i"|"u") => s + "e" ;
           b + v@("aa"|"ee"|"oo"|"uu") + c@? => b + shortVoc v c + "e" ;
           b + v@("a" |"e" |"o" |"u" ) + c@? => b + v + c + c + "en" ;
           _ => endCons s + "e"
@@ -305,9 +307,10 @@ resource ResDut = ParamX ** open Prelude in {
 
 
 -- Complex $CN$s, like adjectives, have strong and weak forms.
---
---    Adjf = Strong | Weak ;
---
+
+param
+    Adjf = Strong | Weak ;
+
 ---- Gender distinctions are only made in the singular. 
 --
 --    GenNum = GSg Gender | GPl ;
@@ -418,25 +421,15 @@ resource ResDut = ParamX ** open Prelude in {
 --        GSg _ => Sg ;
 --        GPl   => Pl
 --        } ;
---
----- Used in $NounDut$.
---
---    agrAdj : Gender -> Adjf -> Number -> Case -> AForm = \g,a,n,c ->
---      let
---        gn = gennum g n ;
---        e  = AMod (GSg Fem) Nom ;
---        en = AMod (GSg Masc) Acc ;
---      in
---      case a of {
---        Strong => AMod gn c ;
---        _ => case <gn,c> of {
---          <GSg _,   Nom> => e ;
---          <GSg Masc,Acc> => en ;
---          <GSg _,   Acc> => e ;
---          _              => en 
---        }
---      } ;
---
+
+-- Used in $NounDut$.
+
+    agrAdj : Gender -> Adjf -> NForm -> AForm = \g,a,n ->
+      case <a,g,n> of {
+        <Strong,Neutr,NF Sg _> => APred ;
+        _ => AAttr
+        } ;
+
 ---- To add a prefix (like "ein") to an already existing verb.
 --
 --  prefixV : Str -> Verb -> Verb = \ein,verb ->
@@ -591,26 +584,26 @@ resource ResDut = ParamX ** open Prelude in {
     ext = vp.ext
     } ;
 
---  insertExtrapos : Str -> VP -> VP = \ext,vp -> {
---    s = vp.s ;
---    a1 = vp.a1 ;
---    n2 = vp.n2 ;
---    a2 = vp.a2 ;
---    isAux = vp.isAux ;
---    inf = vp.inf ;
---    ext = vp.ext ++ ext
---    } ;
---
---  insertInf : Str -> VP -> VP = \inf,vp -> {
---    s = vp.s ;
---    a1 = vp.a1 ;
---    n2 = vp.n2 ;
---    a2 = vp.a2 ;
---    isAux = vp.isAux ; ----
---    inf = inf ++ vp.inf ;
---    ext = vp.ext
---    } ;
---
+  insertExtrapos : Str -> VP -> VP = \ext,vp -> {
+    s = vp.s ;
+    a1 = vp.a1 ;
+    n2 = vp.n2 ;
+    a2 = vp.a2 ;
+    isAux = vp.isAux ;
+    inf = vp.inf ;
+    ext = vp.ext ++ ext
+    } ;
+
+  insertInf : Str -> VP -> VP = \inf,vp -> {
+    s = vp.s ;
+    a1 = vp.a1 ;
+    n2 = vp.n2 ;
+    a2 = vp.a2 ;
+    isAux = vp.isAux ; ----
+    inf = inf ++ vp.inf ;
+    ext = vp.ext
+    } ;
+
 -- For $Sentence$.
 
   Clause : Type = {
@@ -658,13 +651,14 @@ resource ResDut = ParamX ** open Prelude in {
     VZijn   => zijn_V 
     } ;
 
---  infVP : Bool -> VP -> ((Agr => Str) * Str * Str) = \isAux, vp -> let vps = useVP vp in
---    <
---     \\agr => vp.n2 ! agr ++  vp.a2,
---     vp.a1 ! Pos ++ (vps.s ! (notB isAux) ! agrP3 Sg ! VPInfinit Simul).inf,
---     vp.inf ++ vp.ext
---    > ;
---
+  infVP : Bool -> VP -> ((Agr => Str) * Str * Str) = \isAux, vp -> 
+    <
+     \\agr => vp.n2 ! agr ++  vp.a2,
+     vp.a1 ! Pos ++ 
+     if_then_Str isAux [] "te" ++ vp.s.s ! VInf,
+     vp.inf ++ vp.ext
+    > ;
+
 --  useInfVP : Bool -> VP -> Str = \isAux,vp ->
 --    let vpi = infVP isAux vp in
 --    vpi.p1 ! agrP3 Sg ++ vpi.p3 ++ vpi.p2 ;
@@ -694,5 +688,18 @@ resource ResDut = ParamX ** open Prelude in {
 --  infPart : Bool -> Str = \b -> if_then_Str b [] "zu" ;
 --
 --}
+
+  mkQuant : Str -> Str -> {
+    s  : Bool => Number => Gender => Str ; 
+    sp : Number => Gender => Str ; 
+    a  : Adjf
+    } = 
+    \deze,dit -> {
+      s  = \\_ ,n,g => case <n,g> of {<Sg,Neutr> => dit ; _ => deze} ;
+      sp = \\   n,g => case <n,g> of {<Sg,Neutr> => dit ; _ => deze} ;
+      a = Weak
+      } ;
+
+  auxVV : VVerb -> VVerb ** {isAux : Bool} = \v -> v ** {isAux = True} ;
 
 }

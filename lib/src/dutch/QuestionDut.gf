@@ -1,20 +1,19 @@
-concrete QuestionDut of Question = CatDut ** open ResDut in 
-{
---{
---
---  flags optimize=all_subs ;
---
---  lin
---
---    QuestCl cl = {
---      s = \\m,t,a,p => 
---            let cls = cl.s ! m ! t ! a ! p 
---            in table {
---              QDir   => cls ! Inv ;
---              QIndir => "ob" ++ cls ! Sub
---              }
---      } ;
---
+concrete QuestionDut of Question = CatDut ** open ResDut in {
+
+
+  flags optimize=all_subs ;
+
+  lin
+
+    QuestCl cl = {
+      s = \\t,a,p => 
+            let cls = cl.s ! t ! a ! p 
+            in table {
+              QDir   => cls ! Inv ;
+              QIndir => "of" ++ cls ! Sub
+              }
+      } ;
+
 --    QuestVP qp vp = {
 --      s = \\m,t,a,b,q => 
 --        let 
@@ -36,17 +35,17 @@ concrete QuestionDut of Question = CatDut ** open ResDut in
 --              QIndir => who ++ cls ! Sub
 --              }
 --      } ;
---
---    QuestIAdv iadv cl = {
---      s = \\m,t,a,p => 
---            let 
---              cls = cl.s ! m ! t ! a ! p ;
---              why = iadv.s
---            in table {
---              QDir   => why ++ cls ! Inv ;
---              QIndir => why ++ cls ! Sub
---              }
---      } ;
+
+    QuestIAdv iadv cl = {
+      s = \\t,a,p => 
+            let 
+              cls = cl.s ! t ! a ! p ;
+              why = iadv.s
+            in table {
+              QDir   => why ++ cls ! Inv ;
+              QIndir => why ++ cls ! Sub
+              }
+      } ;
 --
 --    QuestIComp icomp np = {
 --      s = \\m,t,a,p => 
@@ -98,8 +97,5 @@ concrete QuestionDut of Question = CatDut ** open ResDut in
 --    CompIAdv a = {s = \\_ => a.s} ;
 --
 --    CompIP ip = {s = \\_ => ip.s ! Nom} ;
---
---}
---
 
 }
