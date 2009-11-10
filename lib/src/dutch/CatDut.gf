@@ -47,18 +47,18 @@ concrete CatDut of Cat =
 
 -- Noun
 
-    CN = Noun ;
+    CN = {s : Adjf => NForm => Str ; g : Gender} ;
     NP = {s : NPCase => Str ; a : Agr} ;
     Pron = Pronoun ;
 
---    Det = {s,sp : Gender => Case => Str ; n : Number ; a : Adjf} ;
---    Quant = {
---      s  : Bool => Number => Gender => Case => Str ; 
---      sp : Number => Gender => Case => Str ; 
---      a  : Adjf
---      } ;
+    Det = {s,sp : Gender => Str ; n : Number ; a : Adjf} ;
+    Quant = {
+      s  : Bool => Number => Gender => Str ; 
+      sp : Number => Gender => Str ; 
+      a  : Adjf
+      } ;
 --    Predet = {s : Number => Gender => Case => Str ; c : PredetCase} ;
---    Num = {s : Gender => Case => Str ; n : Number ; isNum : Bool} ;
+    Num = {s : Str ; n : Number ; isNum : Bool} ;
 --    Card = {s : Gender => Case => Str ; n : Number} ;
 --    Ord = {s : AForm => Str} ;
 --
@@ -69,14 +69,14 @@ concrete CatDut of Cat =
 --
 ---- Structural
 --
---    Conj = {s1,s2 : Str ; n : Number} ;
---    Subj = {s : Str} ;
---    Prep = {s : Str ; c : Case} ;
+    Conj = {s1,s2 : Str ; n : Number} ;
+    Subj = {s : Str} ;
+    Prep = {s : Str} ;
 --
 ---- Open lexical classes, e.g. Lexicon
 --
     V, VS, VQ, VA = ResDut.Verb ** {aux : VAux} ; -- = {s : VForm => Str} ;
---    VV = Verb ** {isAux : Bool} ;
+    VV = VVerb ** {isAux : Bool} ;
     V2, V2A, V2S, V2Q = VVerb ** {c2 : Preposition} ;
 --    V2V = Verb ** {c2 : Preposition ; isAux : Bool} ;
 --    V3 = Verb ** {c2, c3 : Preposition} ;
@@ -85,9 +85,9 @@ concrete CatDut of Cat =
 --    A2 = {s : Degree => AForm => Str ; c2 : Preposition} ;
 --
     N  = Noun ;
---    N2 = {s : Number => Case => Str ; g : Gender} ** {c2 : Preposition} ;
+    N2 = {s : NForm => Str ; g : Gender} ** {c2 : Preposition} ;
 --    N3 = {s : Number => Case => Str ; g : Gender} ** {c2,c3 : Preposition} ;
---    PN = {s : Case => Str} ;
+    PN = {s : Case => Str} ;
 --
 ---- tense with possibility to choose conjunctive forms
 --

@@ -3,18 +3,18 @@ concrete NounDut of Noun = CatDut ** open ResDut, Prelude in {
   flags optimize=all_subs ;
 
   lin
---    DetCN det cn = {
---      s = \\c => det.s ! cn.g ! c ++ cn.s ! adjfCase det.a c ! det.n ! c ;
---      a = agrP3 det.n ;
---      isPron = False
---      } ;
---
---    DetNP det = {
---      s = \\c => det.sp ! Neutr ! c ; ---- genders
---      a = agrP3 det.n ;
---      isPron = False
---      } ;
---
+    DetCN det cn = {
+      s = \\c => det.s ! cn.g ++ cn.s ! det.a ! NF det.n Nom ;
+      a = agrP3 det.n ;
+      isPron = False
+      } ;
+
+    DetNP det = {
+      s = \\_ => det.sp ! Neutr ;
+      a = agrP3 det.n ;
+      isPron = False
+      } ;
+
 --    UsePN pn = pn ** {a = agrP3 Sg} ;
 
     UsePron pron = {
@@ -51,18 +51,18 @@ concrete NounDut of Noun = CatDut ** open ResDut, Prelude in {
 --        n = n ;
 --        a = a
 --        } ;
---
---    DetQuant quant num = 
---      let 
---        n = num.n ;
---        a = quant.a
---      in {
---        s = \\g,c => quant.s ! num.isNum ! n ! g ! c ++ num.s!g!c ;
---        sp = \\g,c => quant.sp ! n ! g ! c ++ num.s!g!c ;
---        n = n ;
---        a = a
---        } ;
---
+
+    DetQuant quant num = 
+      let 
+        n = num.n ;
+        a = quant.a
+      in {
+        s = \\g => quant.s ! num.isNum ! n ! g ++ num.s ;
+        sp = \\g => quant.sp ! n ! g ++ num.s ;
+        n = n ;
+        a = a
+        } ;
+
 --
 --    PossPron p = {
 --      s  = \\_,n,g,c => p.s ! NPPoss (gennum g n) c ;
@@ -72,8 +72,8 @@ concrete NounDut of Noun = CatDut ** open ResDut, Prelude in {
 --
 --    NumCard n = n ** {isNum = True} ;
 --
---    NumPl = {s = \\g,c => []; n = Pl ; isNum = False} ; 
---    NumSg = {s = \\g,c => []; n = Sg ; isNum = False} ; 
+    NumPl = {s = []; n = Pl ; isNum = False} ; 
+    NumSg = {s = []; n = Sg ; isNum = False} ; 
 --
 --    NumDigits numeral = {s = \\g,c => numeral.s ! NCard g c; n = numeral.n } ;
 --    OrdDigits numeral = {s = \\af => numeral.s ! NOrd af} ;
@@ -84,39 +84,39 @@ concrete NounDut of Noun = CatDut ** open ResDut, Prelude in {
 --    AdNum adn num = {s = \\g,c => adn.s ++ num.s!g!c; n = num.n } ;
 --
 --    OrdSuperl a = {s = a.s ! Superl} ;
---
---    DefArt = {
---      s = \\_,n,g,c => artDef ! gennum g n ! c ; 
---      sp = \\n,g,c   => artDef ! gennum g n ! c ;  ---- deren, denem...
---      a = Weak
---      } ;
---
---    IndefArt = {
---      s = table {
---        True => \\_,_,_ => [] ; 
---        False => table {
---          Sg => \\g,c => "ein" + pronEnding ! GSg g ! c ;  
---          Pl =>  \\_,_ => []
---          }
---        } ; 
---      sp = table {
---        Sg => \\g,c => "ein" + pronEnding ! GSg g ! c ;
---        Pl => \\_ => caselist "einige" "einige" "einigen" "einiger"
---        } ;
---      a = Strong
---      } ;
---
+
+    DefArt = {
+      s = \\_,n,g  => case <n,g> of {<Sg,Neutr> => "het" ; _ => "de"} ;
+      sp = \\n,g => "die" ;
+      a = Weak
+      } ;
+
+    IndefArt = {
+      s = table {
+        True => \\_,_ => [] ; 
+        False => table {
+          Sg => \\g => "een" ;
+          Pl =>  \\_ => []
+          }
+        } ; 
+      sp = table {
+        Sg => \\g => "een" ;
+        Pl => \\_ => "een" ----
+        } ;
+      a = Strong
+      } ;
+
 --    MassNP cn = {
 --      s = \\c => cn.s ! adjfCase Strong c ! Sg ! c ;
 --      a = agrP3 Sg ;
 --      isPron = False
 --      } ;
---
---    UseN, UseN2 = \n -> {
---      s = \\_ => n.s ;
---      g = n.g
---      } ;
---
+
+    UseN, UseN2 = \n -> {
+      s = \\_ => n.s ;
+      g = n.g
+      } ;
+
 --    ComplN2 f x = {
 --      s = \\_,n,c => f.s ! n ! c ++ appPrep f.c2 x.s ;
 --      g = f.g
@@ -140,16 +140,16 @@ concrete NounDut of Noun = CatDut ** open ResDut, Prelude in {
 --      c2 = f.c3
 --      } ;
 --
---    AdjCN ap cn = 
---      let 
---        g = cn.g 
---      in {
---        s = \\a,n,c => 
---               preOrPost ap.isPre
---                 (ap.s ! agrAdj g a n c)
---                 (cn.s ! a ! n ! c) ;
---        g = g
---        } ;
+    AdjCN ap cn = 
+      let 
+        g = cn.g 
+      in {
+        s = \\a,n => 
+               preOrPost ap.isPre
+                 (ap.s ! agrAdj g a n)
+                 (cn.s ! a ! n) ;
+        g = g
+        } ;
 --
 --    RelCN cn rs = {
 --      s = \\a,n,c => cn.s ! a ! n ! c ++ rs.s ! gennum cn.g n ;
