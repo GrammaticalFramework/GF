@@ -124,6 +124,28 @@ resource ResDut = ParamX ** open Prelude in {
     in
     mkVerb (brek ! VPresSg1) (brek ! VPresSg3) (brek ! VInf) brak brak (brak + "en") gebroken ; 
 
+  irregVerb2 : (breken,brak,braken,gebroken : Str) -> Verb = \breken,brak,braken,gebroken ->
+    let brek = (regVerb breken).s 
+    in
+    mkVerb (brek ! VPresSg1) (brek ! VPresSg3) (brek ! VInf) brak brak (braken) gebroken ; 
+
+-- To add a prefix (like "ein") to an already existing verb.
+
+  prefixV : Str -> VVerb -> VVerb = \ein,verb ->
+    let
+      vs = verb.s ;
+      einb : Bool -> Str -> Str = \b,geb -> 
+        if_then_Str b (ein + geb) geb ;
+    in
+    {s = table {
+      f@(VInf | VPerf) => ein + vs ! f ; ---- TODO: eingegeven
+      f       => vs ! f
+      } ;
+     prefix = ein ;
+     aux = verb.aux ;
+     vtype = verb.vtype 
+     } ;
+
 	-- Pattern matching verbs
     smartVerb : (_,_:Str) -> Verb = \verb,stem ->
     	let raw = Predef.tk 2 verb;
@@ -235,9 +257,7 @@ resource ResDut = ParamX ** open Prelude in {
 	let hoef = mkStem hoeven
 	in
 	mkVerb hoef (hoef +"t") hoeven (hoef+"de") (hoef+"de") (hoef+"den")
-		("ge"+hoef+"d");
-
-  
+		("ge"+hoef+"d");  
 
   zijn_V : VVerb = {
     s = table {
@@ -252,7 +272,9 @@ resource ResDut = ParamX ** open Prelude in {
        VImpPl    => "wezen" ;
        VPerf     => "geweest" 
        } ;
-    aux = VZijn
+    aux = VZijn ;
+    prefix = [] ;
+    vtype = VAct ;
     } ;
 
   hebben_V : VVerb = {
@@ -268,7 +290,9 @@ resource ResDut = ParamX ** open Prelude in {
        VImpPl    => "hebben" ;
        VPerf     => "gehad" 
        } ;
-    aux = VHebben
+    aux = VHebben ;
+    prefix = [] ;
+    vtype = VAct ;
     } ;
 
   zullen_V : VVerb = {
@@ -284,7 +308,9 @@ resource ResDut = ParamX ** open Prelude in {
        VImpPl    => "zouden" ; ----
        VPerf     => "gezoudt" 
        } ;
-    aux = VHebben
+    aux = VHebben ;
+    prefix = [] ;
+    vtype = VAct ;
     } ;
  
     Pronoun : Type = {
@@ -304,63 +330,24 @@ resource ResDut = ParamX ** open Prelude in {
     het_Pron : Pronoun = mkPronoun "'t" "'t" "ze" "hij" "hem" "zijn" "zijne" Neutr Sg P3 ;
 
 
-
-
 -- Complex $CN$s, like adjectives, have strong and weak forms.
 
 param
     Adjf = Strong | Weak ;
 
----- Gender distinctions are only made in the singular. 
---
---    GenNum = GSg Gender | GPl ;
---
----- Agreement of $NP$ is a record.
---
-  oper Agr = {g : Gender ; n : Number ; p : Person} ;
---
----- Pronouns are the worst-case noun phrases, which have both case
----- and possessive forms.
---
---  param NPForm = NPCase Case | NPPoss GenNum Case ;
---
----- Predeterminers sometimes require a case ("ausser mir"), sometimes not ("nur ich").
---
---  param PredetCase = NoCase | PredCase Case ;
---
-----2 For $Adjective$
---
----- The predicative form of adjectives is not inflected further.
---
---  param AForm = APred | AMod GenNum Case ;  
---
---
-----2 For $Verb$
---
---  param VForm = 
---     VInf Bool           -- True = with the particle "zu"
---   | VFin Bool VFormFin  -- True = prefix glued to verb
---   | VImper    Number    -- prefix never glued
---   | VPresPart AForm     -- prefix always glued
---   | VPastPart AForm ;
---
---  param VFormFin = 
---     VPresInd  Number Person
---   | VPresSubj Number Person
---   | VImpfInd  Number Person --# notpresent
---   | VImpfSubj Number Person --# notpresent
---   ;
---
---  param VPForm =
---     VPFinite  Mood Tense Anteriority
---   | VPImperat Bool
---   | VPInfinit Anteriority ;
 
-  oper VVerb = Verb ** {aux : VAux} ;
+  oper VVerb = Verb ** {prefix : Str ; aux : VAux ; vtype : VType} ;
   param VAux = VHebben | VZijn ;
 
---  param VType = VAct | VRefl Case ;
---
+  param VType = VAct | VRefl ;
+
+  oper 
+    v2vvAux : Verb -> VAux -> VVerb = \v,a -> 
+      {s = v.s ; aux = a ; prefix = [] ; vtype = VAct} ;
+    v2vv : Verb -> VVerb = \v -> v2vvAux v VHebben ;
+
+
+
 ---- The order of sentence is depends on whether it is used as a main
 ---- clause, inverted, or subordinate.
 
@@ -401,26 +388,14 @@ param
 --    DForm = DUnit  | DTeen  | DTen ;
 --
 ----2 Transformations between parameter types
---
+
+  oper Agr : Type = {g : Gender ; n : Number ; p : Person} ;
+
   oper
     agrP3 : Number -> Agr = agrgP3 Neutr ;
 
     agrgP3 : Gender -> Number -> Agr = \g,n -> 
       {g = g ; n = n ; p = P3} ;
-
---    gennum : Gender -> Number -> GenNum = \g,n ->
---      case n of {
---        Sg => GSg g ;
---        Pl => GPl
---        } ;
---
----- Needed in $RelativeDut$.
---
---    numGenNum : GenNum -> Number = \gn -> 
---      case gn of {
---        GSg _ => Sg ;
---        GPl   => Pl
---        } ;
 
 -- Used in $NounDut$.
 
@@ -430,59 +405,7 @@ param
         _ => AAttr
         } ;
 
----- To add a prefix (like "ein") to an already existing verb.
---
---  prefixV : Str -> Verb -> Verb = \ein,verb ->
---    let
---      vs = verb.s ;
---      geben = vs ! VInf False ;
---      einb : Bool -> Str -> Str = \b,geb -> 
---        if_then_Str b (ein + geb) geb ;
---    in
---    {s = table {
---      VInf False => ein + geben ;
---      VInf True  => 
---        if_then_Str (isNil ein) ("zu" ++ geben) (ein + "zu" + geben) ;
---      VFin b vf => einb b (vs ! VFin b vf) ;
---      VImper n    => vs ! VImper n ;
---      VPresPart a => ein + (regA (geben + "d")).s ! Posit ! a ;
---      VPastPart a => ein + vs ! VPastPart a
---      } ;
---     prefix = ein ;
---     aux = verb.aux ;
---     vtype = verb.vtype
---     } ;
---
---
---
----- Pronouns and articles
----- Here we define personal and relative pronouns.
----- All personal pronouns, except "ihr", conform to the simple
----- pattern $mkPronPers$.
---
---  mkPronPers : (x1,_,_,_,x5 : Str) -> Gender -> Number -> Person -> 
---               {s : NPForm => Str ; a : Agr} = 
---    \ich,mich,mir,meiner,mein,g,n,p -> {
---      s = table {
---        NPCase c    => caselist ich mich mir meiner ! c ;
---        NPPoss gn c => mein + pronEnding ! gn ! c
---        } ;
---      a = {g = g ; n = n ; p = p}
---      } ;
---
---  pronEnding : GenNum => Case => Str = table {
---    GSg Masc => caselist ""  "en" "em" "es" ;
---    GSg Fem  => caselist "e" "e"  "er" "er" ;
---    GSg Neut => caselist ""  ""   "em" "es" ;
---    GPl      => caselist "e"  "e" "en" "er"
---    } ;
---
---  artDef : GenNum => Case => Str = table {
---    GSg Masc => caselist "der" "den" "dem" "des" ;
---    GSg Fem  => caselist "die" "die" "der" "der" ;
---    GSg Neut => caselist "das" "das" "dem" "des" ;
---    GPl      => caselist "die" "die" "den" "der"
---    } ;
+
 --
 ---- This is used when forming determiners that are like adjectives.
 --
@@ -629,7 +552,7 @@ param
           fin   = verb.p1 ;
           neg   = vp.a1 ! b ;
           obj   = vp.n2 ! agr ;
-          compl = obj ++ neg ++ vp.a2 ;
+          compl = obj ++ neg ++ vp.a2 ++ vp.s.prefix ;
           inf   = vp.inf ++ verb.p2 ;
           extra = vp.ext ;
           inffin = 

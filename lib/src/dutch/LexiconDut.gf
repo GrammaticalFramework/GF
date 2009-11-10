@@ -41,7 +41,7 @@ lin
 --  brother_N2 = mkN2 (mkN "Bruder" "Brüder" masculine)  von_Prep ;
   brown_A = mkA "bruin" ;
 --  butter_N = mkN "Butter" "Butter" feminine ; ---- infl
---  buy_V2 = mkV2 (mkV "kopen") ;
+  buy_V2 = mkV2 (mkV "kopen" "kocht" "gekocht") ;
 --  camera_N = mkN "Kamera" "Kameras" feminine ;
 --  cap_N = mkN "Mütze" ;
 --  car_N = mkN "Wagen" ;

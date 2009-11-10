@@ -37,11 +37,14 @@ oper
   neuter    : Gender ;
   utrum     : Gender ;
 
+  de,het : Gender ;
+
   masculine = Utr ;
   feminine  = Utr ;
-  neuter = Neutr ;
-  utrum = Utr ;
+  het,neuter = Neutr ;
+  de,utrum = Utr ;
 
+  
 --2 Nouns
 
   mkN : overload {
@@ -137,24 +140,29 @@ oper
 
   mkV : overload {
     mkV : (aaien : Str) -> V ;
+    mkV : (breken,brak,gebroken : Str) -> V ;
+    mkV : (breken,brak,braken,gebroken : Str) -> V ;
     mkV : (aai,aait,aaien,aaide,aaide,aaiden,geaaid : Str) -> V ;
 
----- To add a movable suffix e.g. "auf(fassen)".
---
---  mkV : Str -> V -> V
+-- To add a movable suffix e.g. "auf(fassen)".
+
+    mkV : Str -> V -> V
     } ;
 
   mkV = overload {
     mkV : (aaien : Str) -> V = 
-      \s -> lin V (regVerb s ** {aux = VHebben}) ;
+      \s -> lin V (v2vv (regVerb s)) ;
     mkV : (breken,brak,gebroken : Str) -> V = 
-      \a,b,c -> lin V (irregVerb a b c ** {aux = VHebben}) ;
+      \a,b,c -> lin V (v2vv (irregVerb a b c)) ;
+    mkV : (breken,brak,braken,gebroken : Str) -> V = 
+      \a,b,c,d -> lin V (v2vv (irregVerb2 a b c d)) ;
     mkV : (aai,aait,aaien,aaide,aaiden,geaaid : Str) -> V =
-      \a,b,c,d,f,g -> lin V (mkVerb a b c d d f g ** {aux = VHebben}) ;
+      \a,b,c,d,f,g -> lin V (v2vv (mkVerb a b c d d f g)) ;
+    mkV : Str -> V -> V = \v,s ->lin V (prefixV v s) ;
     } ;
 
   zijnV  : V -> V ;
-  zijnV v = lin V {s = v.s ; aux = VZijn} ;
+  zijnV v = lin V (v2vvAux v VZijn) ;
 
 ---- Reflexive verbs can take reflexive pronouns of different cases.
 --
@@ -170,7 +178,7 @@ oper
     } ;
 
   mkV2 = overload {
-    mkV2 : Str -> V2 = \s -> lin V2 (regVerb s ** {aux = VHebben ; c2 = []}) ;
+    mkV2 : Str -> V2 = \s -> lin V2 (v2vv (regVerb s) ** {c2 = []}) ;
     mkV2 : V -> V2 = \s -> lin V2 (s ** {c2 = []}) ;
     mkV2 : V -> Prep -> V2  = \s,p -> lin V2 (s ** {c2 = p.s}) ;
     } ;

@@ -56,13 +56,9 @@ concrete StructuralDut of Structural = CatDut, Prelude **
 --  more_CAdv = X.mkCAdv "mehr" "als" ;
 --  most_Predet = {s = appAdj (regA "meist") ; c = NoCase} ;
 --  much_Det = detLikeAdj Sg "viel" ;
---  must_VV = auxVV 
---      (mkV 
---        "müssen" "muß" "mußt" "muß" "müßt" "müß" 
---        "mußte" "mußtest" "mußten" "mußtet"
---        "müßte" "gemußt" [] 
---        VHaben) ;
------  one_Quant = DEPREC
+
+  must_VV = auxVV (mkV "moeten" "moest" "gemoete") ;
+
 --  only_Predet = {s = \\_,_,_ => "nur" ; c = NoCase} ;
 --  no_Utt = ss "nein" ;
 -----b  no_Phr = ss "nein" ;

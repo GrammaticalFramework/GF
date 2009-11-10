@@ -106,11 +106,11 @@ concrete NounDut of Noun = CatDut ** open ResDut, Prelude in {
       a = Strong
       } ;
 
---    MassNP cn = {
---      s = \\c => cn.s ! adjfCase Strong c ! Sg ! c ;
---      a = agrP3 Sg ;
---      isPron = False
---      } ;
+    MassNP cn = {
+      s = \\c => cn.s ! Strong ! NF Sg Nom ;
+      a = agrP3 Sg ;
+      isPron = False
+      } ;
 
     UseN, UseN2 = \n -> {
       s = \\_ => n.s ;

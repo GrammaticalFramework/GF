@@ -12,7 +12,7 @@ concrete VerbDut of Verb = CatDut ** open Prelude, ResDut in {
       insertExtrapos vpi.p3 (
         insertInf vpi.p2 (
           insertObj vpi.p1 (
-            predVGen v.isAux {s = v.s ; aux = v.aux}))) ; ---- subtyp
+            predVGen v.isAux {s = v.s ; aux = v.aux ; prefix = v.prefix ; vtype = v.vtype}))) ; ---- subtyp
 
 --    ComplVS v s = 
 --      insertExtrapos (conjThat ++ s.s ! Sub) (predV v) ;
@@ -20,7 +20,7 @@ concrete VerbDut of Verb = CatDut ** open Prelude, ResDut in {
 --      insertExtrapos (q.s ! QIndir) (predV v) ;
 --    ComplVA  v ap = insertObj (\\ _ => ap.s ! APred) (predV v) ;
 --
-    SlashV2a v = predV {s = v.s ; aux = v.aux} ** {c2 = v.c2} ; 
+    SlashV2a v = predV {s = v.s ; aux = v.aux ; prefix = v.prefix ; vtype = v.vtype} ** {c2 = v.c2} ; 
 --      
 --    Slash2V3 v np =
 --      insertObj (\\_ => appPrep v.c2 np.s) (predV v) ** {c2 = v.c3} ;
