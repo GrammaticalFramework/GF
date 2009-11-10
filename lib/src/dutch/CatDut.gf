@@ -75,7 +75,7 @@ concrete CatDut of Cat =
 --
 ---- Open lexical classes, e.g. Lexicon
 --
-    V, VS, VQ, VA = ResDut.Verb ** {aux : VAux} ; -- = {s : VForm => Str} ;
+    V, VS, VQ, VA = ResDut.VVerb ;
     VV = VVerb ** {isAux : Bool} ;
     V2, V2A, V2S, V2Q = VVerb ** {c2 : Preposition} ;
 --    V2V = Verb ** {c2 : Preposition ; isAux : Bool} ;
