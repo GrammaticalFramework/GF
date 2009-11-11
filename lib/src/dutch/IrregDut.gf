@@ -1,232 +1,199 @@
---# -path=.:prelude:../abstract:../common
+--# -path=.:../common:../abstract
 
--- adapted from verb list in
--- http://www.iee.et.tu-dresden.de/~wernerr/grammar/verben_dt.html
+concrete IrregDut of IrregDutAbs = CatDut ** open ParadigmsDut in {
 
-concrete IrregDut of IrregDutAbs = CatDut ** open 
-  ParadigmsDut,
-  (M = MorphoDut)
-in 
-{
---{
---
---  flags optimize=values ;
---
---  lin backen_V =  irregV "backen" "bäckt" (variants {"backt" ; "buk"}) (variants {"backt" ; "buke"}) "gebacken" ;
---  lin befehlen_V =  irregV "befehlen" "befiehlt" "befahl" "beföhle" "befähle)" ;
---  lin beginnen_V =  irregV "beginnen" "beginnt" "begann" "begönne" "begänne)" ;
---  lin beißen_V =  irregV "beißen" "beißt" "biß" "biße" "gebissen" ;
---  lin bergen_V =  irregV "bergen" "birgt" "barg" "bärge" "geborgen" ;
---  lin bersten_V =  irregV "bersten" "birst" "barst" "bärste" "geborsten" ;
---  lin bewegen_V =  irregV "bewegen" "bewegt" "bewog" "bewöge" "bewogen" ;
---  lin biegen_V =  irregV "biegen" "biegt" "bog" "böge" "gebogen" ;
---  lin bieten_V =  irregV "bieten" "bietet" "bot" "böte" "geboten" ;
---  lin binden_V =  irregV "binden" "bindt" "band" "bände" "gebunden" ;
---  lin bitten_V =  irregV "bitten" "bittet" "bat" "bäte" "gebeten" ;
---  lin blasen_V =  irregV "blasen" "bläst" "blies" "bliese" "geblasen" ;
---  lin bleiben_V =  irregV "bleiben" "bleibt" "blieb" "bliebe" "geblieben" ;
---  lin braten_V =  irregV "braten" "brät" "briet" "briete" "gebraten" ;
---  lin brechen_V =  irregV "brechen" "bricht" "brach" "bräche" "gebrochen" ;
---  lin brennen_V =  irregV "brennen" "brennt" "brannte" "brennte" "gebrannt" ;
---  lin bringen_V =  irregV "bringen" "bringt" "brachte" "brachte" "gebracht" ;
---  lin denken_V =  irregV "denken" "denkt" "dachte" "dachte" "gedacht" ;
---  lin dingen_V =  irregV "dingen" "dingt" "dingte" "dang" "gedungen" ;
---  lin dreschen_V =  irregV "dreschen" "drischt" "drosch" "drösche" "gedroschen" ;
---  lin dringen_V =  irregV "dringen" "dringt" "drang" "dränge" "gedrungen" ;
---  lin dürfen_V = M.mkV 
---        "dürfen" "darf" "darfst" "darf" "dürft" "dürf" 
---        "durfte" "durftest" "durften" "durftet"
---        "dürfte" "gedurft" [] 
---        M.VHaben ** {lock_V = <>} ;
---  lin empfehlen_V =  irregV "empfehlen" "empfiehlt" "empfahl" 
---    (variants {"empföhle" ; "empfähle"}) "empfohlen" ;
---  lin erlöschen_V =  irregV "erlöschen" "erlischt" "erlosch" "erlösche" "erloschen" ;
---  lin erkennen_V =  irregV "erkennen" "erkennt" "erkannte" "erkannte" "erkannt" ;
---  lin erschrecken_V =  irregV "erschrecken" "erschrickt" "erschrak" "erschräke" "erschrocken" ;
---  lin essen_V =  irregV "essen" "ißt" "aß" "äße" "gegessen" ;
---  lin fahren_V =  irregV "fahren" "fährt" "fuhr" "führe" "gefahren" ;
---  lin fallen_V =  irregV "fallen" "fällt" "fiel" "fiele" "gefallen" ;
---  lin fangen_V =  irregV "fangen" "fängt" "fing" "finge" "gefangen" ;
---  lin fechten_V =  irregV "fechten" "fechtet" "focht" "föchte" "gefochten" ;
---  lin finden_V =  irregV "finden" "findt" "fand" "fände" "gefunden" ;
---  lin flechten_V =  irregV "flechten" "flicht" "flocht" "flöchte" "geflochten" ;
---  lin fliegen_V =  irregV "fliegen" "fliegt" "flog" "flöge" "geflogen" ;
---  lin fliehen_V =  irregV "fliehen" "flieht" "floh" "flöhe" "geflohen" ;
---  lin fließen_V =  irregV "fließen" "fließt" "floß" "flösse" "geflossen" ;
---  lin fressen_V =  irregV "fressen" "frißt" "fraß" "fräße" "gefressen" ;
---  lin frieren_V =  irregV "frieren" "friert" "fror" "fröre" "gefroren" ;
---  lin gären_V =  irregV "gären" "gärt" (variants {"gor" ; "gärte"}) "göre" "gegoren" ;
---  lin gebären_V =  irregV "gebären" "gebiert" "gebar" "gebäre" "geboren" ;
---  lin geben_V =  irregV "geben" "gibt" "gab" "gäbe" "gegeben" ;
---  lin gedeihen_V =  irregV "gedeihen" "gedeiht" "gedieh" "gediehe" "gediehen" ;
---  lin gehen_V =  irregV "gehen" "geht" "ging" "ginge" "gegangen" ;
---  lin gelingen_V =  irregV "gelingen" "gelingt" "gelang" "gelange" "gelungen" ;
---  lin gelten_V =  irregV "gelten" "gilt" "galt" (variants {"galte" ; "golte"}) "gegolten" ;
---  lin genesen_V =  irregV "genesen" "genest" "genas" "genäse" "genesen" ;
---  lin genießen_V =  irregV "genießen" "genießt" "genoß" "genösse" "genossen" ;
---  lin geschehen_V =  irregV "geschehen" "geschieht" "geschah" "geschehen" "geschähe" ;
---  lin gewinnen_V =  irregV "gewinnen" "gewinnt" "gewann" (variants {"gewönne" ; "gewänne"}) "gewonnen" ;
---  lin gießen_V =  irregV "gießen" "gießt" "goß" "gösse" "gegossen" ;
---  lin gleichen_V =  irregV "gleichen" "gleicht" "glich" "gliche" "geglichen" ;
---  lin gleiten_V =  irregV "gleiten" "gleitet" "glitt" "glitte" "geglitten" ;
---  lin glimmen_V =  irregV "glimmen" "glimmt" "glomm" "glimmte" "glömme" ;
---  lin graben_V =  irregV "graben" "gräbt" "grub" "grübe" "gegraben" ;
---  lin greifen_V =  irregV "greifen" "greift" "griff" "griffe" "gegriffen" ;
---  lin haben_V =  irregV "haben" "hat" "hatte" "hatte" "gehabt" ;
---  lin halten_V =  irregV "halten" "hält" "hielt" "hielte" "gehalten" ;
---  lin hängen_V =  irregV "hängen" "hängt" "hing" "hinge" "gehangen" ;
---  lin hauen_V =  irregV "hauen" "haut" (variants {"haute" ; "hieb"}) (variants {"haute" ; "hiebe"}) "gehauen" ;
---  lin heben_V =  irregV "heben" "hebt" "hob" "höbe" "gehoben" ;
---  lin heißen_V =  irregV "heißen" "heißt" "hieß" "hieße" "geheißen" ;
---  lin helfen_V =  irregV "helfen" "hilft" "half" "hülfe" "geholfen" ;
---  lin kennen_V =  irregV "kennen" "kennt" "kannte" "kennte" "gekannt" ;
---  lin klimmen_V =  irregV "klimmen" "klimmt" "klomm" "klömme" "geklommen" ;
---  lin klingen_V =  irregV "klingen" "klingt" "klang" "klänge" "geklungen" ;
---  lin kneifen_V =  irregV "kneifen" "kneift" "kniff" "kniffe" "gekniffen" ;
---  lin kommen_V =  irregV "kommen" "kommt" "kam" "käme" "gekommen" ;
---  lin können_V =  M.mkV 
---        "können" "kann" "kannst" "kann" "könnt" "könn" 
---        "konnte" "konntest" "konnten" "konntet"
---        "könnte" "gekonnt" [] 
---        M.VHaben  ** {lock_V = <>} ;
---  lin kriechen_V =  irregV "kriechen" "kriecht" "kroch" "kröche" "gekrochen" ;
---  lin küren_V =  irregV "küren" "kürt" "kürte" "kor" "gekürt" ;
---  lin laden_V =  irregV "laden" "lädt" "lud" "lüde" "geladen" ;
---  lin lassen_V =  irregV "lassen" "läßt" "ließ" "ließe" "gelassen" ;
---  lin laufen_V =  irregV "laufen" "läuft" "lief" "liefe" "gelaufen" ;
---  lin leiden_V =  irregV "leiden" "leidt" "litt" "litte" "gelitten" ;
---  lin leihen_V =  irregV "leihen" "leiht" "lieh" "liehe" "geliehen" ;
---  lin lesen_V =  irregV "lesen" "liest" "las" "läse" "gelesen" ;
---  lin liegen_V =  irregV "liegen" "liegt" "lag" "läge" "gelegen" ;
---  lin lügen_V =  irregV "lügen" "lügt" "log" "löge" "gelogen" ;
---  lin mahlen_V =  irregV "mahlen" "mahlt" "mahlte" "mahlte" "gemahlen" ;
---  lin meiden_V =  irregV "meiden" "meidt" "mied" "miede" "gemieden" ;
---  lin melken_V =  irregV "melken" (variants {"melkt" ; "milkt"}) (variants {"melkte" ; "molk"}) "gemolken" "gemelkt" ;
---  lin messen_V =  irregV "messen" "mißt" "maß" "mäße" "gemessen" ;
---  lin mißlingen_V =  irregV "mißlingen" "mißlingt" "mißlang" "mißlungen" "mißlänge" ;
---  lin mögen_V =  M.mkV 
---        "mögen" "mag" "magst" "mag" "mögt" "mög" 
---        "mochte" "mochtest" "mochten" "mochtet"
---        "möchte" "gemocht" [] 
---        M.VHaben ** {lock_V = <>} ;
---  lin müssen_V = M.mkV 
---        "müssen" "muß" "mußt" "muß" "müßt" "müß" 
---        "mußte" "mußtest" "mußten" "mußtet"
---        "müßte" "gemußt" [] 
---        M.VHaben ** {lock_V = <>} ;
---  lin nehmen_V = mk6V "nehmen" "nimmt" "nimm" "nahm" "nähme" "genommen" ;
---  lin nennen_V =  irregV "nennen" "nennt" "nannte" "nennte" "genannt" ;
---  lin pfeifen_V =  irregV "pfeifen" "pfeift" "pfiff" "pfiffe" "gepfiffen" ;
---  lin preisen_V =  irregV "preisen" "preist" "pries" "priese" "gepriesen" ;
---  lin quellen_V =  irregV "quellen" "quillt" "quoll" "quölle" "gequollen" ;
---  lin raten_V =  irregV "raten" "rät" "riet" "riete" "geraten" ;
---  lin reiben_V =  irregV "reiben" "reibt" "rieb" "riebe" "gerieben" ;
---  lin reißen_V =  irregV "reißen" "reißt" "riß" "riße" "gerissen" ;
---  lin reiten_V =  irregV "reiten" "reitet" "ritt" "ritte" "geritten" ;
---  lin rennen_V =  irregV "rennen" "rennt" "rannte" "rennte" "gerannt" ;
---  lin riechen_V =  irregV "riechen" "riecht" "roch" "röche" "gerochen" ;
---  lin ringen_V =  irregV "ringen" "ringt" "rang" "ränge" "gerungen" ;
---  lin rinnen_V =  irregV "rinnen" "rinnt" "rann" "ränne" "geronnen" ;
---  lin rufen_V =  irregV "rufen" "ruft" "rief" "riefe" "gerufen" ;
---  lin salzen_V =  irregV "salzen" "salzt" "salzte" "salzte" "gesalzen" ;
---  lin saufen_V =  irregV "saufen" "säuft" "soff" "söffe" "gesoffen" ;
---  lin saugen_V =  irregV "saugen" "saugt" (variants {"saugte" ; "sog"}) (variants {"saugte" ; "soge"}) (variants {"gesaugt" ; "gesogen"}) ;
---  lin schaffen_V =  irregV "schaffen" "schafft" "schuf" "schüfe" "geschaffen" ;
---  lin scheiden_V =  irregV "scheiden" "scheidt" "schied" "schiede" "geschieden" ;
---  lin scheinen_V =  irregV "scheinen" "scheint" "schien" "schiene" "geschienen" ;
---  lin scheißen_V =  irregV "scheißen" "scheißt" "schiß" "schiße" "geschissen" ;
---  lin schelten_V =  irregV "schelten" "schilt" "schalt" "schölte" "gescholten" ;
---  lin scheren_V =  irregV "scheren" "schert" "schor" "schöre" "geschoren" ;
---  lin schieben_V =  irregV "schieben" "schiebt" "schob" "schöbe" "geschoben" ;
---  lin schießen_V =  irregV "schießen" "schießt" "schoß" "schösse" "geschossen" ;
---  lin schinden_V =  irregV "schinden" "schindt" "schund" "schunde" "geschunden" ;
---  lin schlafen_V =  irregV "schlafen" "schläft" "schlief" "schliefe" "geschlafen" ;
---  lin schlagen_V =  irregV "schlagen" "schlägt" "schlug" "schlüge" "geschlagen" ;
---  lin schleichen_V =  irregV "schleichen" "schleicht" "schlich" "schliche" "geschlichen" ;
---  lin schleifen_V =  irregV "schleifen" "schleift" "schliff" "schliffe" "geschliffen" ;
---  lin schleißen_V =  irregV "schleißen" "schleißt" (variants {"schliß" ; "schleißte"}) (variants {"schliß" ; "schleißte"}) (variants {"geschlissen" ; "geschleißt"}) ;
---  lin schließen_V =  irregV "schließen" "schließt" "schloß" "schlösse" "geschlossen" ;
---  lin schlingen_V =  irregV "schlingen" "schlingt" "schlang" "schlünge" "geschlungen" ;
---  lin schmeißen_V =  irregV "schmeißen" "schmeißt" "schmiß" "schmiße" "geschmissen" ;
---  lin schmelzen_V =  irregV "schmelzen" "schmilzt" "schmolz" "schmölze" "geschmolzen" ;
---  lin schneiden_V =  irregV "schneiden" "schneidt" "schnitt" "schnitte" "geschnitten" ;
---  lin schreiben_V =  irregV "schreiben" "schreibt" "schrieb" "schriebe" "geschrieben" ;
---  lin schreien_V =  irregV "schreien" "schreit" "schrie" "schrie" "geschrien" ;
---  lin schreiten_V =  irregV "schreiten" "schreitet" "schritt" "schritte" "geschritten" ;
---  lin schweigen_V =  irregV "schweigen" "schweigt" "schwieg" "schwiege" "geschwiegen" ;
---  lin schwellen_V =  irregV "schwellen" "schwillt" "schwoll" "schwölle" "geschwollen" ;
---  lin schwimmen_V =  irregV "schwimmen" "schwimmt" "schwamm" (variants {"schwömme" ; "schwämme"}) "geschwommen" ;
---  lin schwinden_V =  irregV "schwinden" "schwindt" "schwand" "schwände" "geschwunden" ;
---  lin schwingen_V =  irregV "schwingen" "schwingt" "schwang" "schwänge" "geschwungen" ;
---  lin schwören_V =  irregV "schwören" "schwört" "schwor" "schwüre" "geschworen" ;
---  lin sehen_V =  irregV "sehen" "sieht" "sah" "sähe" "gesehen" ;
---  lin sein_V =  irregV "sein" "ist" "war" "wäre" "gewesen" ;
---  lin senden_V =  irregV "senden" "sendt" (variants {"sandte" ; "sendete"}) (variants {"sandte" ; "sendete"}) (variants {"gesandt" ; "gesendet"}) ;
---  lin sieden_V =  irregV "sieden" "siedt" (variants {"siedete" ; "sott"}) (variants {"siedete" ; "sotte"}) (variants {"gesotten" ; "gesiedet"}) ;
---  lin singen_V =  irregV "singen" "singt" "sang" "sänge" "gesungen" ;
---  lin sinken_V =  irregV "sinken" "sinkt" "sank" "sänke" "gesunken" ;
---  lin sinnen_V =  irregV "sinnen" "sinnt" "sann" "sänne" "gesonnen" ;
---  lin sitzen_V =  irregV "sitzen" "sitzt" "saß" "säße" "gesessen" ;
---  lin sollen_V =  M.mkV 
---        "sollen" "soll" "sollst" "soll" "sollt" "soll" 
---        "sollte" "solltest" "sollten" "solltet"
---        "sollte" "gesollt" [] 
---        M.VHaben ** {lock_V = <>} ;
---
---  lin speien_V =  irregV "speien" "speit" "spie" "spie" "gespien" ;
---  lin spinnen_V =  irregV "spinnen" "spinnt" "spann" (variants {"spönne" ; "spänne"}) "gesponnen" ;
---  lin spleißen_V =  irregV "spleißen" "spleißt" "spliß" "spliße" "gesplissen" ;
---  lin sprechen_V =  irregV "sprechen" "spricht" "sprach" "spräche" "gesprochen" ;
---  lin sprießen_V =  irregV "sprießen" "sprießt" "sproß" "sprösse" "gesprossen" ;
---  lin springen_V =  irregV "springen" "springt" "sprang" "spränge" "gesprungen" ;
---  lin stechen_V =  irregV "stechen" "sticht" "stach" "stäche" "gestochen" ;
---  lin stehen_V =  irregV "stehen" "steht" "stand" (variants {"stünde" ; "stände"}) "gestanden" ;
---  lin stehlen_V =  irregV "stehlen" "stiehlt" "stahl" "stähle" "gestohlen" ;
---  lin steigen_V =  irregV "steigen" "steigt" "stieg" "stiege" "gestiegen" ;
---  lin sterben_V =  irregV "sterben" "stirbt" "starb" "stürbe" "gestorben" ;
---  lin stieben_V =  irregV "stieben" "stiebt" "stob" "stöbe" "gestoben" ;
---  lin stinken_V =  irregV "stinken" "stinkt" "stank" "stänke" "gestunken" ;
---  lin stoßen_V =  irregV "stoßen" "stößt" "stieß" "stieße" "gestoßen" ;
---  lin streichen_V =  irregV "streichen" "streicht" "strich" "striche" "gestrichen" ;
---  lin streiten_V =  irregV "streiten" "streitet" "stritt" "stritte" "gestritten" ;
---  lin tragen_V =  irregV "tragen" "trägt" "trug" "trüge" "getragen" ;
---  lin treffen_V =  irregV "treffen" "trifft" "traf" "träfe" "getroffen" ;
---  lin treiben_V =  irregV "treiben" "treibt" "trieb" "triebe" "getrieben" ;
---  lin treten_V =  irregV "treten" "tritt" "trat" "träte" "getreten" ;
---  lin trinken_V =  irregV "trinken" "trinkt" "trank" "tränke" "getrunken" ;
---  lin trügen_V =  irregV "trügen" "trügt" "trog" "tröge" "getrogen" ;
---  lin tun_V =  irregV "tun" "tut" "tat" "täte" "getan" ;
---  lin verderben_V =  irregV "verderben" "verdirbt" "verdarb" "verdarbe" "verdorben" ;
---  lin verlieren_V =  irregV "verlieren" "verliert" "verlor" "verlöre" "verloren" ;
---  lin wachsen_V =  irregV "wachsen" "wächst" "wuchs" "wüchse" "gewachsen" ;
---  lin wägen_V =  irregV "wägen" "wägt" "wog" "woge" "gewogen" ;
---  lin waschen_V =  irregV "waschen" "wäscht" "wusch" "wüsche" "gewaschen" ;
---  lin weben_V =  irregV "weben" "webt" (variants {"wob" ; "webte"}) "wöbe" (variants {"gewoben" ; "gewebt"}) ;
---  lin weichen_V =  irregV "weichen" "weicht" "wich" "wiche" "gewichen" ;
---  lin weisen_V =  irregV "weisen" "weist" "wies" "wiese" "gewiesen" ;
---  lin wenden_V =  irregV "wenden" "wendt" (variants {"wandte" ; "wendete"}) (variants {"wandte" ; "wendete"}) (variants {"gewandt" ; "gewendet"}) ;
---  lin werben_V =  irregV "werben" "wirbt" "warb" "würbe" "geworben" ;
---  lin werden_V = M.mkV 
---        "werden" "werde" "wirst" "wird" "werdet" "werd" 
---        "wurde" "wurdest" "wurden" "wurdet"
---        "würde" "geworden" [] 
---        M.VHaben ** {lock_V = <>} ;
---  lin werfen_V =  irregV "werfen" "wirft" "warf" "würfe" "geworfen" ;
---  lin wiegen_V =  irregV "wiegen" "wiegt" "wog" "wöge" "gewogen" ;
---  lin winden_V =  irregV "winden" "windt" "wand" "wände" "gewunden" ;
---  lin wissen_V =  irregV "wissen" "weiß" "wußte" "wüßte" "gewußt" ;
---  lin wollen_V =  M.mkV 
---        "wollen" "will" "willst" "will" "wollt" "woll" 
---        "wollte" "wolltest" "wollten" "wolltet"
---        "wollte" "gewollt" [] 
---        M.VHaben ** {lock_V = <>} ;
---
---
---  lin wringen_V =  irregV "wringen" "wringt" "wrang" "wränge" "gewrungen" ;
---  lin zeihen_V =  irregV "zeihen" "zeiht" "zieh" "ziehe" "geziehen" ;
---  lin ziehen_V =  irregV "ziehen" "zieht" "zog" "zöge" "gezogen" ;
---  lin zwingen_V =  irregV "zwingen" "zwingt" "zwang" "zwänge" "gezwungen" ;
---
---}
+lin bakken_V = mkV "bakken" "bakte" "bakten" "gebakken" ;
+lin bannen_V = mkV "bannen" "bande" "banden" "gebannen" ;
+lin barsten_V = mkV "barsten" "barstte" "barstten" "gebarsten" ;
+lin bederven_V = mkZijnHebbenV "bederven" "bedierf" "bedierven" "bedorven" ;
+lin bedriegen_V = mkV "bedriegen" "bedroog" "bedrogen" "bedrogen" ;
+lin beginnen_V = mkZijnV "beginnen" "begon" "begonnen" "begonnen" ;
+lin behangen_V = mkV "behangen" "behangde" "behangden" "behangen" ;
+lin bergen_V = mkV "bergen" "borg" "borgen" "geborgen" ;
+lin bevelen_V = mkV "bevelen" "beval" "bevalen" "bevolen" ;
+lin bezwijken_V = mkZijnV "bezwijken" "bezweek" "bezweken" "bezweken" ;
+lin bidden_V = mkV "bidden" "bad" "baden" "gebeden" ;
+lin bieden_V = mkV "bieden" "bood" "boden" "geboden" ;
+lin bijten_V = mkV "bijten" "beet" "beten" "gebeten" ;
+lin binden_V = mkV "binden" "bond" "bonden" "gebonden" ;
+lin blazen_V = mkV "blazen" "blies" "bliezen" "geblazen" ;
+lin blijken_V = mkZijnV "blijken" "bleek" "bleken" "gebleken" ;
+lin blijven_V = mkZijnV "blijven" "bleef" "bleven" "gebleven" ;
+lin blinken_V = mkV "blinken" "blonk" "blonken" "geblonken" ;
+lin braden_V = mkV "braden" "braadde" "braadden" "gebraden" ;
+lin breken_V = mkZijnHebbenV "breken" "brak" "braken" "gebroken" ;
+lin brengen_V = mkV "brengen" "bracht" "brachten" "gebracht" ;
+lin brouwen_V = mkV "brouwen" "brouwde" "brouwden" "gebrouwen" ;
+lin buigen_V = mkV "buigen" "boog" "bogen" "gebogen" ;
+lin denken_V = mkV "denken" "dacht" "dachten" "gedacht" ;
+lin dingen_V = mkV "dingen" "naar" "dong" "naar" ;
+lin doen_V = mkV "doen" "deed" "deden" "gedaan" ;
+lin dragen_V = mkV "dragen" "droeg" "droegen" "gedragen" ;
+lin drijven_V = mkV "drijven" "dreef" "dreven" "gedreven" ;
+lin dringen_V = mkV "dringen" "drong" "drongen" "gedrongen" ;
+lin drinken_V = mkV "drinken" "dronk" "dronken" "gedronken" ;
+lin druipen_V = mkZijnHebbenV "druipen" "droop" "dropen" "gedropen" ;
+lin duiken_V = mkZijnHebbenV "duiken" "dook" "doken" "gedoken" ;
+lin dwingen_V = mkV "dwingen" "dwong" "dwongen" "gedwongen" ;
+lin eten_V = mkV "eten" "at" "aten" "gegeten" ;
+lin fluiten_V = mkV "fluiten" "floot" "floten" "gefloten" ;
+lin gelden_V = mkV "gelden" "gold" "golden" "gegolden" ;
+lin gaan_V = mkZijnV "gaan" "ging" "gingen" "gegaan" ;
+lin genezen_V = mkZijnHebbenV "genezen" "genas" "genazen" "genezen" ;
+lin genieten_V = mkV "genieten" "genoot" "genoten" "genoten" ;
+lin geven_V = mkV "geven" "gaf" "gaven" "gegeven" ;
+lin gieten_V = mkV "gieten" "goot" "goten" "gegoten" ;
+lin glijden_V = mkZijnHebbenV "glijden" "gleed" "gleden" "gegleden" ;
+lin glimmen_V = mkV "glimmen" "glom" "glommen" "geglommen" ;
+lin graven_V = mkV "graven" "groef" "groeven" "gegraven" ;
+lin grijpen_V = mkV "grijpen" "greep" "grepen" "gegrepen" ;
+lin hangen_V = mkV "hangen" "hing" "hingen" "gehangen" ;
+lin heffen_V = mkV "heffen" "hief" "hieven" "geheven" ;
+lin helpen_V = mkV "helpen" "hielp" "hielpen" "geholpen" ;
+lin heten_V = mkV "heten" "heette" "heetten" "geheten" ;
+lin hijsen_V = mkV "hijsen" "hees" "hesen" "gehesen" ;
+lin hoeven_V = mkV "hoeven" "hoefde" "hoefden" "gehoeven" ;
+lin houden_V = mkV "houden" "hield" "hielden" "gehouden" ;
+lin houwen_V = mkV "houwen" "houwde" "houwden" "gehouwen" ;
+lin jagen_V = mkV "jagen" "joeg" "joegen" "gejaagd" ;
+lin kiezen_V = mkV "kiezen" "koos" "kozen" "gekozen" ;
+lin kijken_V = mkV "kijken" "naar" "keek" "naar" ;
+lin klimmen_V = mkZijnHebbenV "klimmen" "klom" "klommen" "geklommen" ;
+lin klinken_V = mkV "klinken" "klonk" "klonken" "geklonken" ;
+lin kluiven_V = mkV "kluiven" "kloof" "kloven" "gekloven" ;
+lin knijpen_V = mkV "knijpen" "kneep" "knepen" "geknepen" ;
+lin kopen_V = mkV "kopen" "kocht" "kochten" "gekocht" ;
+lin krijgen_V = mkV "krijgen" "kreeg" "kregen" "gekregen" ;
+lin krimpen_V = mkZijnV "krimpen" "kromp" "krompen" "gekrompen" ;
+lin kruipen_V = mkZijnHebbenV "kruipen" "kroop" "kropen" "gekropen" ;
+lin zich_V = mkV "zich" "kwijten" "van" "kweet" ;
+lin lachen_V = mkV "lachen" "lachte" "lachten" "gelachen" ;
+lin laden_V = mkV "laden" "laadde" "laadden" "geladen" ;
+lin laten_V = mkV "laten" "liet" "lieten" "gelaten" ;
+lin lezen_V = mkV "lezen" "las" "lazen" "gelezen" ;
+lin liegen_V = mkV "liegen" "loog" "logen" "gelogen" ;
+lin liggen_V = mkV "liggen" "lag" "lagen" "gelegen" ;
+lin lijden_V = mkV "lijden" "leed" "leden" "geleden" ;
+lin lijken_V = mkV "lijken" "op" "leek" "op" ;
+lin lopen_V = mkZijnHebbenV "lopen" "liep" "liepen" "gelopen" ;
+lin malen_V = mkV "malen" "maalde" "maalden" "gemalen" ;
+lin melken_V = mkV "melken" "molk" "molken" "gemolken" ;
+lin meten_V = mkV "meten" "mat" "maten" "gemeten" ;
+lin mijden_V = mkV "mijden" "meed" "meden" "gemeden" ;
+lin moeten_V = mkV "moeten" "moest" "moesten" "gemoeten" ;
+lin nemen_V = mkV "nemen" "nam" "namen" "genomen" ;
+lin nijgen_V = mkV "nijgen" "neeg" "negen" "genegen" ;
+lin ontginnen_V = mkV "ontginnen" "ontgon" "ontgonnen" "ontgonnen" ;
+lin ontluiken_V = mkZijnV "ontluiken" "ontlook" "ontloken" "ontloken" ;
+lin pluizen_V = mkV "pluizen" "ploos" "plozen" "geplozen" ;
+lin prijzen_V = mkV "prijzen" "prees" "prezen" "geprezen" ;
+lin raden_V = mkV "raden" "raadde" "raadden" "geraden" ;
+lin rijden_V = mkZijnHebbenV "rijden" "reed" "reden" "gereden" ;
+lin rijgen_V = mkV "rijgen" "reeg" "regen" "geregen" ;
+lin rijten_V = mkV "rijten" "reet" "reten" "gereten" ;
+lin rijzen_V = mkZijnV "rijzen" "rees" "rezen" "gerezen" ;
+lin roepen_V = mkV "roepen" "riep" "riepen" "geroepen" ;
+lin ruiken_V = mkV "ruiken" "rook" "roken" "geroken" ;
+lin scheiden_V = mkZijnHebbenV "scheiden" "scheidde" "scheidden" "gescheiden" ;
+lin schelden_V = mkV "schelden" "schold" "scholden" "gescholden" ;
+lin schenden_V = mkV "schenden" "schond" "schonden" "geschonden" ;
+lin schenken_V = mkV "schenken" "schonk" "schonken" "geschonken" ;
+lin scheppen_V = mkV "scheppen" "shiep" "schiepen" "geschapen" ;
+lin scheren_V = mkV "scheren" "scheerde" "scheerden" "geschoren" ;
+lin schieten_V = mkV "schieten" "schoot" "schoten" "geschoten" ;
+lin schijnen_V = mkV "schijnen" "scheen" "schenen" "1." ;
+lin verschijnen_V = mkZijnV "verschijnen" "verscheen" "verschenen" "verschenen" ;
+lin schijten_V = mkV "schijten" "scheet" "scheten" "gescheten" ;
+lin schrijven_V = mkV "schrijven" "schreef" "schreven" "geschreven" ;
+lin schrikken_V = mkZijnV "schrikken" "schrok" "schrokken" "geschrokken" ;
+lin schuilen_V = mkV "schuilen" "school" "scholen" "gescholen" ;
+lin schuiven_V = mkZijnHebbenV "schuiven" "schoof" "schoven" "geschoven" ;
+lin slaan_V = mkV "slaan" "sloeg" "sloegen" "geslagen" ;
+lin slapen_V = mkV "slapen" "sliep" "sliepen" "geslapen" ;
+lin slijpen_V = mkV "slijpen" "sleep" "slepen" "geslepen" ;
+lin slijten_V = mkZijnHebbenV "slijten" "sleet" "sleten" "gesleten" ;
+lin slinken_V = mkZijnV "slinken" "slonk" "slonken" "geslonken" ;
+lin sluipen_V = mkZijnHebbenV "sluipen" "sloop" "slopen" "geslopen" ;
+lin sluiten_V = mkZijnHebbenV "sluiten" "sloot" "sloten" "gesloten" ;
+lin smelten_V = mkZijnHebbenV "smelten" "smolt" "smolten" "gesmolten" ;
+lin smijten_V = mkV "smijten" "smeet" "smeten" "gesmeten" ;
+lin snijden_V = mkV "snijden" "sneed" "sneden" "gesneden" ;
+lin snuiten_V = mkV "snuiten" "snoot" "snoten" "gesnoten" ;
+lin snuiven_V = mkV "snuiven" "snoof" "snoven" "gesnoven" ;
+lin spannen_V = mkV "spannen" "spande" "spanden" "gespannen" ;
+lin spijten_V = mkV "spijten" "speet" "speten" "gespeten" ;
+lin spinnen_V = mkV "spinnen" "spon" "sponnen" "gesponnen" ;
+lin splijten_V = mkZijnHebbenV "splijten" "spleet" "spleten" "gespleten" ;
+lin spreken_V = mkV "spreken" "sprak" "spraken" "gesproken" ;
+lin springen_V = mkZijnHebbenV "springen" "sprong" "sprongen" "gesprongen" ;
+lin spruiten_V = mkZijnV "spruiten" "sproot" "sproten" "gesproten" ;
+lin spuiten_V = mkV "spuiten" "spoot" "spoten" "gespoten" ;
+lin staan_V = mkV "staan" "stond" "stonden" "gestaan" ;
+lin steken_V = mkV "steken" "stak" "staken" "gestoken" ;
+lin stelen_V = mkV "stelen" "stal" "stalen" "gestolen" ;
+lin sterven_V = mkZijnV "sterven" "stierf" "stierven" "gestorven" ;
+lin stijgen_V = mkZijnV "stijgen" "steeg" "stegen" "gestegen" ;
+lin stijven_V = mkV "stijven" "steef" "steven" "gesteven" ;
+lin stinken_V = mkV "stinken" "stonk" "stonken" "gestonken" ;
+lin stoten_V = mkV "stoten" "stootte" "stootten" "gestoten" ;
+lin strijden_V = mkV "strijden" "streed" "streden" "gestreden" ;
+lin strijken_V = mkV "strijken" "streek" "streken" "gestreken" ;
+lin neerstrijken_V = mkV "neerstrijken" "streek" "neer" "streken" ;
+lin stuiven_V = mkV "stuiven" "stoof" "stoven" "gestoven" ;
+lin treden_V = mkZijnHebbenV "treden" "trad" "traden" "getreden" ;
+lin treffen_V = mkV "treffen" "trof" "troffen" "getroffen" ;
+lin trekken_V = mkZijnHebbenV "trekken" "trok" "trokken" "getrokken" ;
+lin vallen_V = mkZijnV "vallen" "viel" "vielen" "gevallen" ;
+lin vangen_V = mkV "vangen" "ving" "vingen" "gevangen" ;
+lin varen_V = mkZijnHebbenV "varen" "voer" "voeren" "gevaren" ;
+lin vechten_V = mkV "vechten" "vocht" "vochten" "gevochten" ;
+lin verdrieten_V = mkV "verdrieten" "verdroot" "verdroten" "verdroten" ;
+lin verdwijnen_V = mkZijnV "verdwijnen" "verdween" "verdwenen" "verdwenen" ;
+lin vergeten_V = mkV "vergeten" "+" "vergat" "vergaten" ;
+lin verliezen_V = mkV "verliezen" "verloor" "verloren" "verloren" ;
+lin vinden_V = mkV "vinden" "vond" "vonden" "gevonden" ;
+lin vlechten_V = mkV "vlechten" "vlocht" "vlochten" "gevlochten" ;
+lin vliegen_V = mkZijnHebbenV "vliegen" "vloog" "vlogen" "gevlogen" ;
+lin vouwen_V = mkV "vouwen" "vouwde" "vouwden" "gevouwen" ;
+lin vragen_V = mkV "vragen" "vroeg" "vroegen" "gevraagd" ;
+lin vreten_V = mkV "vreten" "vrat" "vraten" "gevreten" ;
+lin vriezen_V = mkV "vriezen" "vroor" "vroren" "gevroren" ;
+lin vrijen_V = mkV "vrijen" "vree" "/" "vrijde" ;
+lin wassen_V = mkV "wassen" "waste" "wasten" "gewassen" ;
+lin wegen_V = mkV "wegen" "woog" "wogen" "gewogen" ;
+lin werpen_V = mkV "werpen" "wierp" "wierpen" "geworpen" ;
+lin werven_V = mkV "werven" "wierf" "wierven" "geworven" ;
+lin weten_V = mkV "weten" "wist" "wisten" "geweten" ;
+lin weven_V = mkV "weven" "weefde" "weefden" "geweven" ;
+lin wijken_V = mkZijnV "wijken" "week" "weken" "geweken" ;
+lin wijten_V = mkV "wijten" "weet" "weten" "geweten" ;
+lin wijzen_V = mkV "wijzen" "wees" "wezen" "gewezen" ;
+lin winden_V = mkV "winden" "wond" "wonden" "gewonden" ;
+lin winnen_V = mkV "winnen" "won" "wonnen" "gewonnen" ;
+lin worden_V = mkV "worden" "werd" "werden" "geworden" ;
+lin wrijven_V = mkV "wrijven" "wreef" "wreven" "gewreven" ;
+lin wringen_V = mkV "wringen" "wrong" "wrongen" "gewrongen" ;
+lin zeggen_V = mkV "zeggen" "zei" "zeiden" "gezegd" ;
+lin zenden_V = mkV "zenden" "zond" "zonden" "gezonden" ;
+lin zien_V = mkV "zien" "zag" "zagen" "gezien" ;
+lin zijgen_V = mkZijnV "zijgen" "zeeg" "zegen" "gezegen" ;
+lin zingen_V = mkV "zingen" "zong" "zongen" "gezongen" ;
+lin zinken_V = mkZijnV "zinken" "zonk" "zonken" "gezonken" ;
+lin zinnen_V = mkV "zinnen" "zon" "zonnen" "gezonnen" ;
+lin zitten_V = mkV "zitten" "zat" "zaten" "gezeten" ;
+lin zoeken_V = mkV "zoeken" "zocht" "zochten" "gezocht" ;
+lin zuigen_V = mkV "zuigen" "zoog" "zogen" "gezogen" ;
+lin zuipen_V = mkV "zuipen" "zoop" "zopen" "gezopen" ;
+lin zwelgen_V = mkV "zwelgen" "zwolg" "zwolgen" "gezwolgen" ;
+lin zwellen_V = mkZijnV "zwellen" "zwol" "zwollen" "gezwollen" ;
+lin zwemmen_V = mkZijnHebbenV "zwemmen" "zwom" "zwommen" "gezwommen" ;
+lin zweren_V = mkV "zweren" "zwoer" "zwoeren" "gezworen" ;
+lin zwerven_V = mkV "zwerven" "zwierf" "zwierven" "gezworven" ;
+lin zwijgen_V = mkV "zwijgen" "zweeg" "zwegen" "gezwegen" ;
+
+oper 
+  mkZijnV, mkZijnHebbenV : (_,_,_,_ : Str) -> V ;
+  mkZijnV a b c d = zijnV (mkV a b c d) ;
+  mkZijnHebbenV a b c d = zijnV (mkV a b c d) ; ---- both could be
 
 }
