@@ -77,24 +77,17 @@ oper
 --
 --  mkN3 : N -> Prep -> Prep -> N3 ;
 --
---
-----3 Proper names and noun phrases
-----
----- Proper names, with an "s" genitive and other cases like the
----- nominative, are formed from a string. Final "s" ("Johannes-Johannes") is
----- taken into account.
---
---  mkPN : overload {
---    mkPN : Str -> PN ;
---
----- If only the genitive differs, two strings are needed.
---
---    mkPN : (nom,gen : Str) -> PN ;
---
----- In the worst case, all four forms are needed.
---
---    mkPN : (nom,acc,dat,gen : Str) -> PN
---    } ;
+
+--3 Proper names and noun phrases
+
+  mkPN : overload {
+    mkPN : Str -> PN ;
+    } ;
+
+  mkPN = overload {
+    mkPN : Str -> PN = \s -> lin PN {s = \\_ => s} ;
+    } ;
+
 
 --2 Adjectives
 
@@ -199,15 +192,15 @@ oper
 ----
 ---- Verbs and adjectives can take complements such as sentences,
 ---- questions, verb phrases, and adjectives.
---
---  mkV0  : V -> V0 ;
---  mkVS  : V -> VS ;
+
+  mkV0  : V -> V0 ;
+  mkVS  : V -> VS ;
 --  mkV2S : V -> Prep -> V2S ;
---  mkVV  : V -> VV ;
+  mkVV  : V -> VV ;
 --  mkV2V : V -> Prep -> V2V ;
---  mkVA  : V -> VA ;
+  mkVA  : V -> VA ;
 --  mkV2A : V -> Prep -> V2A ;
---  mkVQ  : V -> VQ ;
+  mkVQ  : V -> VQ ;
 --  mkV2Q : V -> Prep -> V2Q ;
 --
 --  mkAS  : A -> AS ;
@@ -391,19 +384,18 @@ oper
 --  dirV3 v p = mkV3 v (mkPrep [] accusative) p ;
 --  accdatV3 v = dirV3 v (mkPrep [] dative) ; 
 --
---  mkVS v = v ** {lock_VS = <>} ;
---  mkVQ v = v ** {lock_VQ = <>} ;
---  mkVV v = v ** {isAux = False ; lock_VV = <>} ;
---
---  V0 : Type = V ;
-----  V2S, V2V, V2Q : Type = V2 ;
+  mkVS v = lin VS v ;
+  mkVQ v = lin VQ v ;
+  mkVV v = lin VV (v ** {isAux = False}) ;
+
+  V0 : Type = V ;
 --  AS, A2S, AV : Type = A ;
 --  A2V : Type = A2 ;
---
---  mkV0  v = v ** {lock_V = <>} ;
+
+  mkV0 v = v ;
 --  mkV2S v p = prepV2 v p ** {lock_V2S = <>} ;
 --  mkV2V v p = prepV2 v p ** {isAux = False ; lock_V2V = <>} ;
---  mkVA  v = v ** {lock_VA = <>} ;
+  mkVA  v = lin VA v ;
 --  mkV2A v p = prepV2 v p ** {lock_V2A = <>} ;
 --  mkV2Q v p = prepV2 v p ** {lock_V2Q = <>} ;
 --

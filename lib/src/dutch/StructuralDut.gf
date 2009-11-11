@@ -10,7 +10,7 @@ concrete StructuralDut of Structural = CatDut, Prelude **
 
   above_Prep = mkPrep "boven" ;
   after_Prep = mkPrep "na" ;
---  all_Predet = {s = appAdj (regA "all") ; c = NoCase} ;
+  all_Predet = mkPredet "alle" "alle" ; ----
 --  almost_AdA, almost_AdN = ss "fast" ;
 --  although_Subj = ss "obwohl" ;
   always_AdV = ss "altijd" ;
@@ -31,9 +31,9 @@ concrete StructuralDut of Structural = CatDut, Prelude **
 --        VHaben) ;
 --  during_Prep = mkPrep "während" Gen ;
 --  either7or_DConj = sd2 "entweder" "oder" ** {n = Sg} ;
---  everybody_NP = nameNounPhrase {s = caselist "jeder" "jeden" "jedem" "jedes"} ;
---  every_Det = detLikeAdj Sg "jed" ;
---  everything_NP = nameNounPhrase {s = caselist "alles" "alles" "allem" "alles"} ;
+  everybody_NP = mkNP "alle" Utr Pl ; ----
+  every_Det = mkDet "elke" "elk" Sg ; ----
+  everything_NP = mkNP "alles" Neutr Sg ; ----
   everywhere_Adv = ss "overal" ;
 --  few_Det = detLikeAdj Pl "wenig" ;
 ------  first_Ord = {s = (regA "erst").s ! Posit} ;
@@ -59,9 +59,8 @@ concrete StructuralDut of Structural = CatDut, Prelude **
 
   must_VV = auxVV (mkV "moeten" "moest" "gemoete") ;
 
---  only_Predet = {s = \\_,_,_ => "nur" ; c = NoCase} ;
---  no_Utt = ss "nein" ;
------b  no_Phr = ss "nein" ;
+  only_Predet = {s = \\_,_ => "slechts"} ;
+  no_Utt = ss "neen" ;
   on_Prep = mkPrep "op" ;
   or_Conj = {s1 = [] ; s2 = "of" ; n = Sg} ;
 --  otherwise_PConj = ss "sonst" ;
@@ -71,7 +70,7 @@ concrete StructuralDut of Structural = CatDut, Prelude **
 --  quite_Adv = ss "ziemlich" ;
   she_Pron = mkPronoun "ze" "haar" "haar" "zij" "haar" "haar" "haare" Utr Sg P3 ;
 
---  so_AdA = ss "so" ;
+  so_AdA = ss "zo" ;
 --  somebody_NP = nameNounPhrase {s = caselist "jemand" "jemanden" "jemandem" "jemands"} ;
 --  somePl_Det = detLikeAdj Pl "einig" ;
 --  someSg_Det = {
@@ -101,20 +100,20 @@ concrete StructuralDut of Structural = CatDut, Prelude **
   want_VV = auxVV (mkV "wil" "wil" "willen" "wou" "wouden" "gewild") ;
 
   we_Pron = mkPronoun "we" "ons" "ons" "wij" "ons" "onze" "onze" Utr Sg P3 ; ----
---
---  whatSg_IP = {s = caselist "was" "was" "was" "wessen" ; n = Sg} ; ----
---  whatPl_IP = {s = caselist "was" "was" "was" "wessen" ; n = Pl} ; ----
---
+
+  whatSg_IP = {s = \\_ => "wat" ; n = Sg} ;
+  whatPl_IP = {s = \\_ => "wat" ; n = Pl} ;
+
   when_IAdv = ss "wanneer" ;
 --  when_Subj = ss "wenn" ;
   where_IAdv = ss "waar" ;
---  which_IQuant = {s = \\n => (detLikeAdj n "welch").s} ;
---
---  whoSg_IP = {s = caselist "wer" "wen" "wem" "wessen" ; n = Sg} ;
---  whoPl_IP = {s = caselist "wer" "wen" "wem" "wessen" ; n = Pl} ;
---  why_IAdv = ss "warum" ;
---  without_Prep = mkPrep "ohne" Acc ;
---  with_Prep = mkPrep "mit" Dat ;
+  which_IQuant = mkPredet "welke" "welk" ;
+
+  whoSg_IP = {s = \\_ => "wie" ; n = Sg} ;
+  whoPl_IP = {s = \\_ => "wie" ; n = Pl} ;
+  why_IAdv = ss "waarom" ;
+  without_Prep = mkPrep "zonder" ;
+  with_Prep = mkPrep "met" ;
   youSg_Pron = mkPronoun "je" "je" "je" "jij" "jou" "je" "jouwe" Utr Sg P2 ;
 --  youPl_Pron = mkPronPers "ihr" "euch" "euch" "eurer" "euer" Fem Pl P2 ; ---- poss
 --  youPol_Pron = mkPronPers "Sie" "Sie" "Ihnen" "Ihrer" "Ihr" Fem Pl P3 ;

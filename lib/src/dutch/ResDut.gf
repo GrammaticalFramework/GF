@@ -372,22 +372,18 @@ param
       <Past|Cond,Pl,_> => VPastPl
       } ;
 
---
----- Main clause mood: "es sei, es wäre, es werde sein".
----- Not relevant for $Fut$. ---
---
---    Mood = MIndic | MConjunct ;
---
-----2 For $Relative$
--- 
---    RAgr = RNoAg | RAg {n : Number ; p : Person} ;
---
-----2 For $Numeral$
---
---    CardOrd = NCard Gender Case | NOrd AForm ;
---    DForm = DUnit  | DTeen  | DTen ;
---
-----2 Transformations between parameter types
+--2 For $Relative$
+
+  param 
+    RAgr = RNoAg | RAg Number Person ;
+
+--2 For $Numeral$
+
+  param
+    CardOrd = NCard Gender Case | NOrd AForm ;
+    DForm = DUnit  | DTeen  | DTen ;
+
+--2 Transformations between parameter types
 
   oper Agr : Type = {g : Gender ; n : Number ; p : Person} ;
 
@@ -487,15 +483,15 @@ param
     ext = vp.ext
     } ;
 
---  insertAdV : Str -> VP -> VP = \adv,vp -> {
---    s = vp.s ;
---    a1 = \\a => adv ++ vp.a1 ! a ; -- immer nicht
---    n2 = vp.n2 ;
---    a2 = vp.a2 ;
---    isAux = vp.isAux ;
---    inf = vp.inf ;
---    ext = vp.ext
---    } ;
+  insertAdV : Str -> VP -> VP = \adv,vp -> {
+    s = vp.s ;
+    a1 = \\a => adv ++ vp.a1 ! a ; -- immer nicht
+    n2 = vp.n2 ;
+    a2 = vp.a2 ;
+    isAux = vp.isAux ;
+    inf = vp.inf ;
+    ext = vp.ext
+    } ;
 
   insertAdv : Str -> VP -> VP = \adv,vp -> {
     s = vp.s ;
@@ -601,16 +597,22 @@ param
 --    {n = Pl ; p = P2} => caselist "ihr" "euch" "euch" "euer" ;
 --    {n = Pl ; p = P3} => caselist "sie" "sich" "sich" "ihrer"
 --    } ;
---
---  conjThat : Str = "daß" ;
---
---  conjThan : Str = "als" ;
---
----- The infinitive particle "zu" is used if and only if $vv.isAux = False$.
--- 
---  infPart : Bool -> Str = \b -> if_then_Str b [] "zu" ;
---
---}
+
+  conjThat : Str = "dat" ;
+
+  conjThan : Str = "dan" ;
+
+-- The infinitive particle "zu" is used if and only if $vv.isAux = False$.
+ 
+  infPart : Bool -> Str = \b -> if_then_Str b [] "te" ;
+
+  mkDet : Str -> Str -> Number -> {s,sp : Gender => Str ; n : Number ; a : Adjf} =
+    \deze,dit,n -> {
+      s  = \\g => case <n,g> of {<Sg,Neutr> => dit ; _ => deze} ;
+      sp = \\g => case <n,g> of {<Sg,Neutr> => dit ; _ => deze} ;
+      n = n ;
+      a = Weak
+      } ;
 
   mkQuant : Str -> Str -> {
     s  : Bool => Number => Gender => Str ; 
@@ -622,6 +624,16 @@ param
       sp = \\   n,g => case <n,g> of {<Sg,Neutr> => dit ; _ => deze} ;
       a = Weak
       } ;
+
+  mkPredet : Str -> Str -> {s : Number => Gender => Str} = 
+    \deze,dit -> {
+      s  = \\n,g => case <n,g> of {<Sg,Neutr> => dit ; _ => deze}
+      } ;
+
+  mkNP : Str -> Gender -> Number -> {s : NPCase => Str ; a : Agr} = \s,g,n -> {
+    s = \\_ => s ;
+    a = agrgP3 g n ;
+    } ;
 
   auxVV : VVerb -> VVerb ** {isAux : Bool} = \v -> v ** {isAux = True} ;
 
