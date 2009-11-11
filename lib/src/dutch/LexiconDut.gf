@@ -1,9 +1,9 @@
 --# -path=.:../common:../abstract:../../prelude
 
--- work by Aarne Ranta, Andreas Priesnitz, and Henning Thielemann.
+-- work by Aarne Ranta
 
 concrete LexiconDut of Lexicon = CatDut ** 
-  open Prelude, ParadigmsDut in {
+  open Prelude, ParadigmsDut, IrregDut in {
 
 flags 
   optimize=all_subs ;
@@ -139,7 +139,7 @@ lin
 --  open_V2 = mkV2 (mkV "öffnen") ;
 --  paint_V2A = mkV2A (mkV "malen") accPrep ;
 --  paper_N = mkN "Papier" "Papiere" neuter ;
---  paris_PN = mkPN "Paris" "Paris" ;
+  paris_PN = mkPN "Parijs" ;
 --  peace_N = mk6N "Friede" "Frieden" "Frieden" "Friedens" "Frieden" "Frieden" masculine ;
 --  pen_N = mkN "Bleistift" ; ----
 --  planet_N = mkN "Planet" "Planeten" masculine ;
@@ -161,7 +161,7 @@ lin
 --  roof_N = mkN "Dach" "Dächer" neuter ;
 --  rubber_N = mkN "Gummi" "Gummis" neuter ;
 --  run_V = zijnV (mkV "laufen" "läuft" "lief" "liefe" "gelaufen") ;
---  say_VS = mkVS (mkV "sagen") ;
+  say_VS = mkVS zeggen_V ;
 --  school_N = mkN "Schule";
 --  science_N = mkN "Wissenschaft" "Wissenschaften" feminine ;
 --  sea_N = mkN "Meer" "Meere" neuter ;
@@ -354,8 +354,8 @@ lin
 --  grammar_N = mkN "Grammatik" "Grammatiken" feminine ;
 --  language_N = mkN "Sprache" ;
 --  rule_N = mkN "Mkel" "Mkeln" feminine ;
---
---    john_PN = mkPN "Johann" ;
+
+    john_PN = mkPN "Jan" ;
 --    question_N = mkN "Frage" ;
 --    ready_A = mkA "fertig" ;
 --    reason_N = mkN "Grund" "Gründe" masculine ;

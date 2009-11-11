@@ -15,20 +15,19 @@ concrete NounDut of Noun = CatDut ** open ResDut, Prelude in {
       isPron = False
       } ;
 
---    UsePN pn = pn ** {a = agrP3 Sg} ;
+    UsePN pn = {s = pn.s ; a = agrP3 Sg ; isPron = False} ;
 
     UsePron pron = {
       s = table {NPNom => pron.unstressed.nom ; NPAcc => pron.unstressed.acc} ;
       a = pron.a
       } ;
 
---    PredetNP pred np = {
---      s = \\c0 => 
---        let c = case pred.c of {NoCase => c0 ; PredCase k => k} in
---        pred.s ! np.a.n ! Masc ! c0 ++ np.s ! c ; ---- g
---      a = np.a
---      } ;
---
+    PredetNP pred np = {
+      s = \\c => 
+        pred.s ! np.a.n ! np.a.g ++ np.s ! c ; ---- g
+      a = np.a
+      } ;
+
 --    PPartNP np v2 = {
 --      s = \\c => np.s ! c ++ v2.s ! VPastPart APred ; --- invar part
 --      a = np.a
@@ -69,21 +68,21 @@ concrete NounDut of Noun = CatDut ** open ResDut, Prelude in {
 --      sp = \\n,g,c => p.s ! NPPoss (gennum g n) c ;
 --      a = Strong --- need separately weak for Pl ?
 --      } ;
---
---    NumCard n = n ** {isNum = True} ;
---
+
+    NumCard n = {s = n.s ! Utr ! Nom ; n = n.n ; isNum = True} ;
+
     NumPl = {s = []; n = Pl ; isNum = False} ; 
     NumSg = {s = []; n = Sg ; isNum = False} ; 
---
---    NumDigits numeral = {s = \\g,c => numeral.s ! NCard g c; n = numeral.n } ;
---    OrdDigits numeral = {s = \\af => numeral.s ! NOrd af} ;
---
---    NumNumeral numeral = {s = \\g,c => numeral.s ! NCard g c; n = numeral.n } ;
---    OrdNumeral numeral = {s = \\af => numeral.s ! NOrd af} ;
---
---    AdNum adn num = {s = \\g,c => adn.s ++ num.s!g!c; n = num.n } ;
---
---    OrdSuperl a = {s = a.s ! Superl} ;
+
+    NumDigits numeral = {s = \\g,c => numeral.s ! NCard g c; n = numeral.n } ;
+    OrdDigits numeral = {s = \\af => numeral.s ! NOrd af} ;
+
+    NumNumeral numeral = {s = \\g,c => numeral.s ! NCard g c; n = numeral.n } ;
+    OrdNumeral numeral = {s = \\af => numeral.s ! NOrd af} ;
+
+    AdNum adn num = {s = \\g,c => adn.s ++ num.s!g!c; n = num.n } ;
+
+    OrdSuperl a = {s = a.s ! Superl} ;
 
     DefArt = {
       s = \\_,n,g  => case <n,g> of {<Sg,Neutr> => "het" ; _ => "de"} ;
@@ -150,12 +149,12 @@ concrete NounDut of Noun = CatDut ** open ResDut, Prelude in {
                  (cn.s ! a ! n) ;
         g = g
         } ;
---
---    RelCN cn rs = {
---      s = \\a,n,c => cn.s ! a ! n ! c ++ rs.s ! gennum cn.g n ;
---      g = cn.g
---      } ;
---
+
+    RelCN cn rs = {
+      s = \\a,nc => cn.s ! a ! nc ++ rs.s ! cn.g ! (case nc of {NF n c => n}) ;
+      g = cn.g
+      } ;
+
 --    RelNP np rs = {
 --      s = \\c => np.s ! c ++ "," ++ rs.s ! gennum np.a.g np.a.n ;
 --      a = np.a ;

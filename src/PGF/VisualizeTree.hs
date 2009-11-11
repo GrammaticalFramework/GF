@@ -244,6 +244,36 @@ lin2graph ss = trace (show ss) $ prelude ++ nodes ++ links
 
   edge i v w = 
     struct i ++ ":" ++ mark v ++ ":e -> " ++ struct (i+1) ++ ":" ++ mark w ++ ":w ;"
+{-
+alignmentData :: PGF -> [Expr] -> Map.Map String (Map.Map String Double)
+alignmentData pgf = mkStat . concatMap (mkAlign . linsMark)  where
+  linsMark t = 
+    [s | la <- take 2 (cncnames pgf), s <- take 1 (linearizesMark pgf la t)]
+
+  mkStat :: [(String,String)] -> Map.Map String (Map.Map String Double)
+  mkStat = 
+
+  mkAlign :: [String] -> [(String,String)]
+  mkAlign ss = 
+
+  nlins :: [(Int,[((Int,String),String)])]
+  nlins = [(i, [((j,showp p),unw ws) | (j,((_,p),ws)) <- zip [0..] vs]) | 
+                                (i,vs) <- zip [0..] (map (wlins . readPosText) ss)]
+
+  nodes = map mkStruct nlins
+
+  mkStruct (i, ws) = struct i ++ "[label = \"" ++ fields ws ++ "\"] ;"
+
+  fields ws = concat (intersperse "|" [tag (mark m) ++ " " ++ w | (m,w) <- ws]) 
+
+  links = nub $ concatMap mkEdge (init nlins)
+
+  mkEdge (i,lin) = let lin' = snd (nlins !! (i+1)) in -- next lin in the list
+    [edge i v w | (v@(_,p),_) <- lin, (w@(_,q),_) <- lin', p == q]
+
+  edge i v w = 
+    struct i ++ ":" ++ mark v ++ ":e -> " ++ struct (i+1) ++ ":" ++ mark w ++ ":w ;"
+-}
 
 wlins :: PosText -> [((Maybe CId,[Int]),[String])]
 wlins pt = case pt of

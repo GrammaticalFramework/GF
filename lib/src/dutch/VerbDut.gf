@@ -14,12 +14,12 @@ concrete VerbDut of Verb = CatDut ** open Prelude, ResDut in {
           insertObj vpi.p1 (
             predVGen v.isAux {s = v.s ; aux = v.aux ; prefix = v.prefix ; vtype = v.vtype}))) ; ---- subtyp
 
---    ComplVS v s = 
---      insertExtrapos (conjThat ++ s.s ! Sub) (predV v) ;
---    ComplVQ v q = 
---      insertExtrapos (q.s ! QIndir) (predV v) ;
---    ComplVA  v ap = insertObj (\\ _ => ap.s ! APred) (predV v) ;
---
+    ComplVS v s = 
+      insertExtrapos (conjThat ++ s.s ! Sub) (predV v) ;
+    ComplVQ v q = 
+      insertExtrapos (q.s ! QIndir) (predV v) ;
+    ComplVA  v ap = insertObj (\\ _ => ap.s ! APred) (predV v) ;
+
     SlashV2a v = predV {s = v.s ; aux = v.aux ; prefix = v.prefix ; vtype = v.vtype} ** {c2 = v.c2} ; 
 --      
 --    Slash2V3 v np =
@@ -65,18 +65,14 @@ concrete VerbDut of Verb = CatDut ** open Prelude, ResDut in {
 --
     UseComp comp = insertAdv (comp.s ! agrP3 Sg) (predV zijn_V) ; -- agr not used
     CompAP ap = {s = \\_ => ap.s ! APred} ;
---    CompNP np = {s = \\_ => np.s ! Nom} ;
+    CompNP np = {s = \\_ => np.s ! NPNom} ;
     CompAdv a = {s = \\_ => a.s} ;
 
     AdvVP vp adv = insertAdv adv.s vp ;
---    AdVVP adv vp = insertAdV adv.s vp ;
+    AdVVP adv vp = insertAdV adv.s vp ;
 --
 --    ReflVP vp = insertObj (\\a => appPrep vp.c2 (reflPron ! a)) vp ;
 --
 --    PassV2 v = insertInf (v.s ! VPastPart APred) (predV werdenPass) ;
---
------b    UseVS, UseVQ = \v -> v ** {c2 = noPreposition Acc} ;
---
---}
 
 }
