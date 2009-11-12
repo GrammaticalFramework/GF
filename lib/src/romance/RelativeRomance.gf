@@ -6,7 +6,7 @@ incomplete concrete RelativeRomance of Relative =
   lin
 
     RelCl cl = {
-      s = \\ag,t,a,p,m => pronSuch ! ag ++ conjThat ++ 
+      s = \\ag,t,a,p,m => pronSuch ! {g=ag.g; n=ag.n} ++ conjThat ++ 
                           cl.s ! DDir ! t ! a ! p ! m ;
       c = Nom
       } ;
