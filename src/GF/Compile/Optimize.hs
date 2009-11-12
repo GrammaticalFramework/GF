@@ -52,7 +52,7 @@ optimizeModule opts ms m@(name,mi)
    oopts = opts `addOptions` flagsModule m
 
    updateEvalInfo mi (i,info) = do
-     info' <- evalInfo oopts ms m i info
+     info' <- evalInfo oopts ms (name,mi) i info
      return (updateModule mi i info')
 
 evalInfo :: Options -> [SourceModule] -> SourceModule -> Ident -> Info -> Err Info

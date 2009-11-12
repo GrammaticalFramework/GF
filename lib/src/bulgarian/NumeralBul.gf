@@ -77,7 +77,11 @@ lin pot3 n = {
   n = Pl
   } ;
 lin pot3plus n m = {
-  s = \\c,nf => (pot3 (n ** {lock_Sub1000=<>})).s ! NCard (CFMasc Indef NonHuman) ! nf ++ case m.i of {False => []; True  => "и"} ++ m.s ! c ! nf ;
+  s = \\c,nf => case n.n of {
+                  Sg => mkCardOrd100 "хиляда" "хиляден" ! NCard (CFMasc Indef NonHuman) ;
+                  Pl => n.s ! NCard (CFFem Indef) ! nf ++ mkCardOrd100 "хиляди" "хиляден" ! NCard (CFMasc Indef NonHuman)
+                }
+                ++ case m.i of {False => []; True  => "и"} ++ m.s ! c ! nf ;
   n = Pl
   } ;
 
