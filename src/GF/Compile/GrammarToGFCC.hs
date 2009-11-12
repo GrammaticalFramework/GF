@@ -309,12 +309,16 @@ canon2canon opts abs cg0 =
 
     -- flatten record arguments of param constructors
   p2p (f,j) = case j of
-      ResParam (Just ps) _ -> 
-        ResParam (Just [(c,concatMap unRec cont) | (c,cont) <- ps]) Nothing
+      ResParam (Just ps) (Just vs) -> 
+        ResParam (Just [(c,concatMap unRec cont) | (c,cont) <- ps]) (Just (map unrec vs))
       _ -> j
   unRec (bt,x,ty) = case ty of
       RecType fs -> [ity | (_,typ) <- fs, ity <- unRec (Explicit,identW,typ)] 
       _ -> [(bt,x,ty)]
+  unrec t = case t of
+     App f (R fs) -> GM.mkApp (unrec f) [unrec u | (_,(_,u)) <- fs]
+     _ -> GM.composSafeOp unrec t
+
 
 ----
   trs v = traceD (render (tr v)) v
