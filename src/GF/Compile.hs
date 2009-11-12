@@ -5,7 +5,7 @@ import GF.Compile.GetGrammar
 import GF.Compile.Rename
 import GF.Compile.CheckGrammar
 import GF.Compile.Optimize
-import GF.Compile.OptimizeGF
+import GF.Compile.SubExOpt
 import GF.Compile.OptimizeGFCC
 import GF.Compile.GrammarToGFCC
 import GF.Compile.ReadFiles
@@ -183,10 +183,8 @@ compileOne opts env@(_,srcgr,_) file = do
        intermOut opts DumpSource (ppModule Qualified sm0)
 
        (k',sm)  <- compileSourceModule opts env sm0
-       let sm1 = if isConcr sm then shareModule sm else sm -- cannot expand Str
-       cm  <- putPointE Verbose opts "  generating code... " $ generateModuleCode opts gfo sm1
-          -- sm is optimized before generation, but not in the env
-       extendCompileEnvInt env k' (Just gfo) sm1
+       putPointE Verbose opts "  generating code... " $ generateModuleCode opts gfo sm
+       extendCompileEnvInt env k' (Just gfo) sm
   where
    isConcr (_,m) = isModCnc m && mstatus m /= MSIncomplete
 

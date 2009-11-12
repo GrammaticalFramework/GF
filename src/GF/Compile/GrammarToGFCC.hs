@@ -2,7 +2,6 @@
 module GF.Compile.GrammarToGFCC (mkCanon2gfcc,addParsers) where
 
 import GF.Compile.Export
-import GF.Compile.OptimizeGF (unshareModule)
 import qualified GF.Compile.GenerateFCFG  as FCFG
 import qualified GF.Compile.GeneratePMCFG as PMCFG
 
@@ -298,14 +297,25 @@ canon2canon opts abs cg0 =
   j2j cg (f,j) = 
     let debug = if verbAtLeast opts Verbose then trace ("+ " ++ showIdent f) else id in
     case j of
-      CncFun x (Just tr) z -> CncFun x (Just (debug (t2t tr))) z
-      CncCat (Just ty) (Just x) y -> CncCat (Just (ty2ty ty)) (Just (t2t x)) y
+      CncFun x (Just tr) z -> CncFun x (Just (debug (t2t (unfactor cg0 tr)))) z
+      CncCat (Just ty) (Just x) y -> CncCat (Just (ty2ty ty)) (Just (t2t (unfactor cg0 x))) y
       _ -> j
    where
       cg1 = cg
       t2t = term2term f cg1 pv
       ty2ty = type2type cg1 pv
       pv@(labels,untyps,typs) = trs $ paramValues cg1
+
+      unfactor :: SourceGrammar -> Term -> Term
+      unfactor gr t = case t of
+        T (TTyped ty) [(PV x,u)] -> V ty [restore x v (unfac u) | v <- vals ty]
+        _ -> GM.composSafeOp unfac t
+       where
+         unfac = unfactor gr
+         vals  = err error id . Look.allParamValues gr
+         restore x u t = case t of
+           Vr y | y == x -> u
+           _ -> GM.composSafeOp (restore x u) t
 
     -- flatten record arguments of param constructors
   p2p (f,j) = case j of
@@ -334,7 +344,7 @@ canon2canon opts abs cg0 =
 
 purgeGrammar :: Ident -> SourceGrammar -> SourceGrammar
 purgeGrammar abstr gr = 
-  (M.MGrammar . list . map unopt . filter complete . purge . M.modules) gr 
+  (M.MGrammar . list . filter complete . purge . M.modules) gr 
  where
   list ms = traceD (render (text "MODULES" <+> hsep (punctuate comma (map (ppIdent . fst) ms)))) ms
   purge = nubBy (\x y -> fst x == fst y) . filter (flip elem needed . fst)
@@ -342,7 +352,6 @@ purgeGrammar abstr gr =
   acncs = abstr : M.allConcretes gr abstr
   isSingle = True
   complete (i,m) = M.isCompleteModule m --- not . isIncompleteCanon
-  unopt = unshareModule gr -- subexp elim undone when compiled
 
 type ParamEnv =
   (Map.Map (Ident,[Label]) (Type,Integer), -- numbered labels

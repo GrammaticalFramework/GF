@@ -24,7 +24,6 @@ import GF.Grammar.Lookup
 import GF.Grammar.Predef
 import GF.Compile.Refresh
 import GF.Compile.Concrete.Compute
-import GF.Compile.BackOpt
 import GF.Compile.CheckGrammar
 import GF.Compile.Update
 
@@ -37,6 +36,7 @@ import Data.List
 import qualified Data.Set as Set
 import Text.PrettyPrint
 import Debug.Trace
+import qualified Data.ByteString.Char8 as BS
 
 
 -- | partial evaluation of concrete syntax. AR 6\/2001 -- 16\/5\/2003 -- 5\/2\/2005.
@@ -46,7 +46,7 @@ optimizeModule opts ms m@(name,mi)
   | mstatus mi == MSComplete = do
       ids <- topoSortJments m
       mi <- foldM updateEvalInfo mi ids
-      return (shareModule oopts (name,mi))
+      return (name,mi)
   | otherwise = return m
  where
    oopts = opts `addOptions` flagsModule m
@@ -64,10 +64,13 @@ evalInfo opts ms m c info = do
 
   CncCat ptyp pde ppr -> do
     pde' <- case (ptyp,pde) of
-      (Just typ, Just de) -> 
-        liftM Just $ partEval opts gr ([(Explicit, varStr, typeStr)], typ) de
-      (Just typ, Nothing) -> 
-        liftM Just $ mkLinDefault gr typ >>= partEval noOptions gr ([(Explicit, varStr, typeStr)],typ)
+      (Just typ, Just de) -> do
+        de <- partEval opts gr ([(Explicit, varStr, typeStr)], typ) de
+        return (Just (factor param c 0 de))
+      (Just typ, Nothing) -> do
+        de <- mkLinDefault gr typ
+        de <- partEval opts gr ([(Explicit, varStr, typeStr)], typ) de
+        return (Just (factor param c 0 de))
       _ -> return pde   -- indirection
 
     ppr' <- liftM Just $ evalPrintname gr c ppr (Just $ K $ showIdent c)
@@ -77,7 +80,8 @@ evalInfo opts ms m c info = do
   CncFun (mt@(Just (_,cont,val))) pde ppr -> --trace (prt c) $
        eIn (text "linearization in type" <+> ppTerm Unqualified 0 (mkProd cont val []) $$ text "of function") $ do
     pde' <- case pde of
-      Just de -> liftM Just $ partEval opts gr (cont,val) de
+      Just de -> do de <- partEval opts gr (cont,val) de
+                    return (Just (factor param c 0 de))
       Nothing -> return pde
     ppr' <-  liftM Just $ evalPrintname gr c ppr pde'
     return $ CncFun mt pde' ppr' -- only cat in type actually needed
@@ -85,7 +89,8 @@ evalInfo opts ms m c info = do
   ResOper pty pde 
     | OptExpand `Set.member` optim -> do
          pde' <- case pde of
-                   Just de -> liftM Just $ computeConcrete gr de 
+                   Just de -> do de <- computeConcrete gr de
+                                 return (Just (factor param c 0 de))
                    Nothing -> return Nothing
          return $ ResOper pty pde'
 
@@ -93,6 +98,7 @@ evalInfo opts ms m c info = do
  where
    gr = MGrammar (m : ms)
    optim = flag optOptimizations opts
+   param = OptParametrize `Set.member` optim
    eIn cat = errIn (render (text "Error optimizing" <+> cat <+> ppIdent c <+> colon))
 
 -- | the main function for compiling linearizations
@@ -132,17 +138,13 @@ recordExpand typ trm = case typ of
 -- | auxiliaries for compiling the resource
 
 mkLinDefault :: SourceGrammar -> Type -> Err Term
-mkLinDefault gr typ = do
-  case typ of
-    RecType lts -> mapPairsM mkDefField lts >>= (return . Abs Explicit varStr . R . mkAssign)
-    _ -> liftM (Abs Explicit varStr) $ mkDefField typ
-----    _ -> prtBad "linearization type must be a record type, not" typ
+mkLinDefault gr typ = liftM (Abs Explicit varStr) $ mkDefField typ
  where
    mkDefField typ = case typ of
      Table p t  -> do
        t' <- mkDefField t
        let T _ cs = mkWildCases t'
-       return $ T (TWild p) cs 
+       return $ T (TWild p) cs
      Sort s | s == cStr -> return $ Vr varStr
      QC q p             -> do vs <- lookupParamValues gr q p
                               case vs of
@@ -150,8 +152,8 @@ mkLinDefault gr typ = do
                                 _   -> Bad (render (text "no parameter values given to type" <+> ppIdent p))
      RecType r  -> do
        let (ls,ts) = unzip r
-       ts' <- mapM mkDefField ts
-       return $ R $ [assign l t | (l,t) <- zip ls ts']
+       ts <- mapM mkDefField ts
+       return $ R (zipWith assign ls ts)
      _ | Just _ <- isTypeInts typ -> return $ EInt 0 -- exists in all as first val
      _ -> Bad (render (text "linearization type field cannot be" <+> ppTerm Unqualified 0 typ))
 
@@ -188,3 +190,39 @@ evalPrintname gr c ppr lin =
      c:cs -> c: clean cs
      _ -> s
 
+
+-- do even more: factor parametric branches
+
+factor :: Bool -> Ident -> Int -> Term -> Term
+factor param c i t =
+  case t of
+    T (TComp ty) cs -> factors ty [(p, factor param c (i+1) v) | (p, v) <- cs]
+    _               -> composSafeOp (factor param c i) t
+  where
+    factors ty pvs0  
+                 | not param = V ty (map snd pvs0)
+    factors ty []            = V ty []
+    factors ty pvs0@[(p,v)]  = V ty [v]
+    factors ty pvs0@(pv:pvs) =
+      let t  = mkFun pv
+          ts = map mkFun pvs
+      in if all (==t) ts
+           then T (TTyped ty) (mkCases t)
+           else V ty (map snd pvs0)
+
+    --- we hope this will be fresh and don't check... in GFC would be safe
+    qvar = identC (BS.pack ("q_" ++ showIdent c ++ "__" ++ show i))
+
+    mkFun (patt, val) = replace (patt2term patt) (Vr qvar) val
+    mkCases t = [(PV qvar, t)]
+
+--  we need to replace subterms
+replace :: Term -> Term -> Term -> Term
+replace old new trm =
+  case trm of
+    -- these are the important cases, since they can correspond to patterns  
+    QC _ _   | trm == old -> new
+    App _ _  | trm == old -> new
+    R _      | trm == old -> new
+    App x y               -> App (replace old new x) (replace old new y)
+    _                     -> composSafeOp (replace old new) trm

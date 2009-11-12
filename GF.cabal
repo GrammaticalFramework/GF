@@ -139,7 +139,6 @@ executable gf
     GF.Compile.Update
     GF.Compile.CheckGrammar
     GF.Compile.Refresh
-    GF.Compile.BackOpt
     GF.Compile.Rename
     GF.Compile.ReadFiles
     GF.Compile.GrammarToGFCC
@@ -150,7 +149,7 @@ executable gf
     GF.Compile.Abstract.TypeCheck
     GF.Compile.Abstract.Compute
     GF.Compile.Optimize
-    GF.Compile.OptimizeGF
+    GF.Compile.SubExOpt
     GF.Compile.OptimizeGFCC
     GF.Compile.ModDeps
     GF.Compile.GetGrammar

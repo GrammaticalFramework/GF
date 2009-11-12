@@ -109,7 +109,7 @@ data SISRFormat =
   | SISR_1_0
  deriving (Show,Eq,Ord)
 
-data Optimization = OptStem | OptCSE | OptExpand | OptParametrize | OptValues
+data Optimization = OptStem | OptCSE | OptExpand | OptParametrize
   deriving (Show,Eq,Ord)
 
 data CFGTransform = CFGNoLR 
@@ -268,7 +268,7 @@ defaultFlags = Flags {
       optResName         = Nothing,
       optPreprocessors   = [],
       optEncoding        = ISO_8859_1,
-      optOptimizations   = Set.fromList [OptStem,OptCSE,OptExpand,OptParametrize,OptValues],
+      optOptimizations   = Set.fromList [OptStem,OptCSE,OptExpand,OptParametrize],
       optCFGTransforms   = Set.fromList [CFGRemoveCycles, CFGBottomUpFilter, 
                                          CFGTopDownFilter, CFGMergeIdentical],
       optLibraryPath     = [],
@@ -474,12 +474,15 @@ instance Read OutputFormat where
 
 optimizationPackages :: [(String, Set Optimization)]
 optimizationPackages = 
-    [("all_subs",    Set.fromList [OptStem,OptCSE,OptExpand,OptParametrize,OptValues]), -- deprecated
-     ("all",         Set.fromList [OptStem,OptCSE,OptExpand,OptParametrize,OptValues]),
-     ("values",      Set.fromList [OptStem,OptCSE,OptExpand,OptValues]),
+    [("all",         Set.fromList [OptStem,OptCSE,OptExpand,OptParametrize]),
+     ("values",      Set.fromList [OptStem,OptCSE,OptExpand]),
+     ("noexpand",    Set.fromList [OptStem,OptCSE]),
+     
+     -- deprecated
+     ("all_subs",    Set.fromList [OptStem,OptCSE,OptExpand,OptParametrize]),
      ("parametrize", Set.fromList [OptStem,OptCSE,OptExpand,OptParametrize]),
-     ("none",        Set.fromList [OptStem,OptCSE,OptExpand]),
-     ("noexpand",    Set.fromList [OptStem,OptCSE])]
+     ("none",        Set.fromList [OptStem,OptCSE,OptExpand])
+    ]
 
 cfgTransformNames :: [(String, CFGTransform)]
 cfgTransformNames = 
