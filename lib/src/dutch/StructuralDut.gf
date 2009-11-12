@@ -137,7 +137,7 @@ concrete StructuralDut of Structural = CatDut, Prelude **
 --  except_Prep = mkPrep "auﬂer" Dat ;
 --
 --  as_CAdv = X.mkCAdv "ebenso" "wie" ;
---  have_V2 = P.dirV2 IrregDut.haben_V ;
+  have_V2 = mkV2 hebben_V ;
 --
 --  lin language_title_Utt = ss "Deutsch" ;
 --
