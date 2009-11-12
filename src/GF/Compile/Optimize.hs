@@ -97,7 +97,7 @@ evalInfo opts ms m c info = do
 
 -- | the main function for compiling linearizations
 partEval :: Options -> SourceGrammar -> (Context,Type) -> Term -> Err Term
-partEval opts gr (context, val) trm = errIn (render (text "parteval" <+> ppTerm Qualified 0 trm)) $ do
+partEval opts gr (context, val) trm = errIn (render (text "partial evaluation" <+> ppTerm Qualified 0 trm)) $ do
   let vars  = map (\(bt,x,t) -> x) context
       args  = map Vr vars
       subst = [(v, Vr v) | v <- vars]
