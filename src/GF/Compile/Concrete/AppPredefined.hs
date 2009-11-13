@@ -123,8 +123,8 @@ appPredefined t = case t of
 
 -- read makes variables into constants
 
-predefTrue = Q cPredef cPTrue
-predefFalse = Q cPredef cPFalse
+predefTrue = QC cPredef cPTrue
+predefFalse = QC cPredef cPFalse
 
 substring :: String -> String -> Bool
 substring s t = case (s,t) of
