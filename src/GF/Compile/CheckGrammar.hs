@@ -175,14 +175,15 @@ checkInfo ms (m,mo) c info = do
       return (CncFun linty (Just trm') mpr)
 
     CncCat (Just typ) mdef mpr -> chIn "linearization type of" $ do
-      typ'  <- computeLType gr [] typ
-      mdef' <- case mdef of
+      (typ,_) <- checkLType gr [] typ typeType
+      typ  <- computeLType gr [] typ
+      mdef <- case mdef of
         Just def -> do
-          (def',_) <- checkLType gr [] def (mkFunType [typeStr] typ)
-          return $ Just def'
+          (def,_) <- checkLType gr [] def (mkFunType [typeStr] typ)
+          return $ Just def
         _ -> return mdef
       mpr <- checkPrintname gr mpr
-      return (CncCat (Just typ') mdef' mpr)
+      return (CncCat (Just typ) mdef mpr)
 
     ResOper pty pde -> chIn "operation" $ do
       (pty', pde') <- case (pty,pde) of
