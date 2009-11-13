@@ -1,0 +1,7 @@
+
+
+checking module TestCnc
+   Happened in linearization type of S in TestCnc.gf, line 3:
+       type of PTrue
+      expected: Type
+      inferred: PBool

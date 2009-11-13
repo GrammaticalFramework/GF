@@ -1,0 +1,5 @@
+abstract Test = {
+
+cat S;
+
+}
