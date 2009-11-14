@@ -89,26 +89,13 @@ lookupResType gr m c = do
 
     -- used in reused concrete
     CncCat _ _ _ -> return typeType
-    CncFun (Just (cat,cont@(_:_),val)) _ _ -> do
+    CncFun (Just (cat,cont,val)) _ _ -> do
           val' <- lock cat val 
           return $ mkProd cont val' []
-    CncFun _ _ _      -> lookFunType m m c
     AnyInd _ n        -> lookupResType gr n c
     ResParam _ _      -> return typePType
     ResValue t        -> return t
     _   -> Bad $ render (ppIdent c <+> text "has no type defined in resource" <+> ppIdent m)
-  where
-    lookFunType e m c = do
-          a  <- abstractOfConcrete gr m
-          lookFun e m c a
-    lookFun e m c a = do
-          mu <- lookupModule gr a
-          info <- lookupIdentInfo mu c
-          case info of
-            AbsFun (Just ty) _ _ -> return $ redirectTerm e ty 
-            AbsCat _ _ -> return typeType
-            AnyInd _ n -> lookFun e m c n
-            _ -> Bad (render (text "cannot find type of reused function" <+> ppIdent c))
 
 lookupOverload :: SourceGrammar -> Ident -> Ident -> Err [([Type],(Type,Term))]
 lookupOverload gr m c = do
