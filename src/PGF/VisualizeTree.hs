@@ -19,7 +19,7 @@ module PGF.VisualizeTree ( graphvizAbstractTree
                          , graphvizParseTree
                          , graphvizDependencyTree
                          , graphvizAlignment
-
+                         , tree2mk
                          , getDepLabels
                          , PosText(..), readPosText
 			 ) where
@@ -27,6 +27,7 @@ module PGF.VisualizeTree ( graphvizAbstractTree
 import PGF.CId (CId,showCId,pCId,mkCId)
 import PGF.Data
 import PGF.Tree
+import PGF.Expr (showExpr)
 import PGF.Linearize
 import PGF.Macros (lookValCat)
 
@@ -62,6 +63,14 @@ tree2graph pgf (funs,cats) = prf [] where
 prGraph digr ns = concat $ map (++"\n") $ [graph ++ "{\n"] ++ ns ++ ["}"] where
   graph = if digr then "digraph" else "graph"
 
+
+-- replace each non-atomic constructor with mkC, where C is the val cat
+tree2mk :: PGF -> Expr -> String
+tree2mk pgf = showExpr [] . tree2expr . t2m . expr2tree where
+  t2m t = case t of
+    Fun cid [] -> t
+    Fun cid ts -> Fun (mk cid) (map t2m ts)
+  mk = mkCId . ("mk" ++) . showCId . lookValCat pgf
 
 -- dependency trees from Linearize.linearizeMark
 
