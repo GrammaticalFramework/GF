@@ -575,7 +575,8 @@ allCommands cod env@(pgf, mos) = Map.fromList [
      synopsis = "show word dependency tree graphically",
      explanation = unlines [
        "Prints a dependency tree in the .dot format (the graphviz format, default)",
-       "or the MaltParser/CoNLL format (flag -output=malt)",
+       "or the MaltParser/CoNLL format (flag -output=malt for training, malt_input)",
+       "for unanalysed input.",
        "By default, the last argument is the head of every abstract syntax",
        "function; moreover, the head depends on the head of the function above.",
        "The graph can be saved in a file by the wf command as usual.",
@@ -603,8 +604,10 @@ allCommands cod env@(pgf, mos) = Map.fromList [
            return void
           else return $ fromString grphs,
      examples = [
-       "gr | aw              -- generate a tree and show word alignment as graph script",
-       "gr | vt -view=\"open\" -- generate a tree and display alignment on a Mac"
+       "gr | vd              -- generate a tree and show dependency tree in .dot",
+       "gr | vd -view=open   -- generate a tree and display dependency tree on a Mac",
+       "gr -number=1000 | vd -file=dep.labels -output=malt      -- generate training treebank",
+       "gr -number=100 | vd -file=dep.labels -output=malt_input -- generate test sentences"
        ],
      options = [
        ("v","show extra information")
@@ -642,8 +645,8 @@ allCommands cod env@(pgf, mos) = Map.fromList [
            return void
           else return $ fromString grph,
      examples = [
-       "gr | aw              -- generate a tree and show word alignment as graph script",
-       "gr | vt -view=\"open\" -- generate a tree and display alignment on a Mac"
+       "p \"John walks\" | vp  -- generate a tree and show parse tree as .dot script",
+       "gr | vp -view=\"open\" -- generate a tree and display parse tree on a Mac"
        ],
      options = [
        ],
@@ -662,9 +665,13 @@ allCommands cod env@(pgf, mos) = Map.fromList [
        "If the -view flag is defined, the graph is saved in a temporary file",
        "which is processed by graphviz and displayed by the program indicated",
        "by the flag. The target format is postscript, unless overridden by the",
-       "flag -format."
+       "flag -format.",
+       "With option -mk, use for showing library style function names of form 'mkC'."
        ],
-     exec = \opts es -> do
+     exec = \opts es ->
+       if isOpt "mk" opts
+       then return $ fromString $ unlines $ map (tree2mk pgf) es  
+       else do
          let funs = not (isOpt "nofun" opts)
          let cats = not (isOpt "nocat" opts)
          let grph = unlines (map (graphvizAbstractTree pgf (funs,cats)) es) -- True=digraph
@@ -682,6 +689,7 @@ allCommands cod env@(pgf, mos) = Map.fromList [
        "p \"hello\" | vt -view=\"open\" -- parse a string and display trees on a Mac"
        ],
      options = [
+       ("mk", "show the tree with function names converted to 'mkC' with value cats C"),
        ("nofun","don't show functions but only categories"),
        ("nocat","don't show categories but only functions")
        ],
