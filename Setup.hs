@@ -213,7 +213,7 @@ langsDemo = langsLang `except` ["Ara","Hin","Ina","Tha"]
 langsParse = langs `only` ["Eng"]
 
 -- languages for which langs.pgf is built
-langsPGF = langsLang `except` ["Ara","Hin","Tha"]
+langsPGF = langsLang `except` ["Ara","Bul","Hin","Ron","Tha"]
 
 -- languages for which Compatibility exists (to be extended)
 langsCompat = langsLang `only` ["Cat","Eng","Fin","Fre","Ita","Spa","Swe"]

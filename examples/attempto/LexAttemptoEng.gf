@@ -12,7 +12,7 @@ oper
   necessary_A = mkA "necessary" ;
   own_A = mkA "own" ;
   have_VV = mkVV have_V ;
-  provably_Adv = mkAdv "provably" ;
+  provably_Adv = ParadigmsEng.mkAdv "provably" ;
   provable_A = mkA "provable" ;
   false_A = mkA "false" ;
   such_A = mkA "such" ;
