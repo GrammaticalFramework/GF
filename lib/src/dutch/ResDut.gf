@@ -92,8 +92,8 @@ resource ResDut = ParamX ** open Prelude in {
      | VPresSg1  -- ben 
      | VPresSg2  -- bent
      | VPresSg3  -- is
-     | VPastSg   -- was
-     | VPastPl   -- waren
+     | VPastSg   -- was  --# notpresent
+     | VPastPl   -- waren --# notpresent
      | VImp2     -- wees
      | VImp3     -- weest
      | VImpPl    -- wezen
@@ -111,9 +111,9 @@ resource ResDut = ParamX ** open Prelude in {
     		VInf | VImpPl    => aaien; -- hij/zij/het/wij aaien
     		VPresSg1 | VImp2 => aai; -- ik aai
     		VPresSg2 | VPresSg3 | VImp3 => aait; -- jij aait
-    		VPastSg => aaide; -- ik aaide
-    		VPastPl => aaiden; -- hij/zij/het/wij aaiden
-    		VPerf   => geaaid -- ik heb geaaid
+    		VPastSg => aaide; -- ik aaide  --# notpresent
+    		VPastPl => aaiden; -- hij/zij/het/wij aaiden --# notpresent
+    		VPerf   => geaaid -- ik heb geaaid 
     	}
     };
     
@@ -265,8 +265,8 @@ resource ResDut = ParamX ** open Prelude in {
        VPresSg1  => "ben" ; 
        VPresSg2  => "bent" ;
        VPresSg3  => "is" ;
-       VPastSg   => "was" ;
-       VPastPl   => "waren" ;
+       VPastSg   => "was" ; --# notpresent
+       VPastPl   => "waren" ; --# notpresent
        VImp2     => "wees" ;
        VImp3     => "weest" ;
        VImpPl    => "wezen" ;
@@ -283,8 +283,8 @@ resource ResDut = ParamX ** open Prelude in {
        VPresSg1  => "heb" ; 
        VPresSg2  => "hebt" ;
        VPresSg3  => "heeft" ;
-       VPastSg   => "had" ;
-       VPastPl   => "hadden" ;
+       VPastSg   => "had" ; --# notpresent
+       VPastPl   => "hadden" ; --# notpresent
        VImp2     => "heb" ;
        VImp3     => "heeft" ;
        VImpPl    => "hebben" ;
@@ -301,8 +301,8 @@ resource ResDut = ParamX ** open Prelude in {
        VPresSg1  => "zal" ; 
        VPresSg2  => "zult" ;
        VPresSg3  => "zal" ;
-       VPastSg   => "zou" ;
-       VPastPl   => "zouden" ;
+       VPastSg   => "zou" ; --# notpresent
+       VPastPl   => "zouden" ; --# notpresent
        VImp2     => "zoud" ;  ---- not used
        VImp3     => "zoudt" ;
        VImpPl    => "zouden" ; ----
@@ -319,8 +319,8 @@ resource ResDut = ParamX ** open Prelude in {
        VPresSg1  => "kan" ; 
        VPresSg2  => "kunt" ;
        VPresSg3  => "kan" ; ---- kun je
-       VPastSg   => "kon" ;
-       VPastPl   => "konden" ;
+       VPastSg   => "kon" ; --# notpresent
+       VPastPl   => "konden" ; --# notpresent
        VImp2     => "kan" ;  ---- not used
        VImp3     => "kant" ;
        VImpPl    => "kunnen" ; ----
@@ -381,16 +381,25 @@ param
 
   oper
     vForm : Tense -> Number -> Person -> Order -> VForm = \t,n,p,o -> case <t,n,p> of {
-      <Pres|Fut,Sg,P2> => case o of {
+      <Pres
+        |Fut --# notpresent
+       ,Sg,P2> => case o of {
         Inv => VPresSg1 ;
         _   => VPresSg2
         } ;
-      <Pres|Fut,Sg,P1> => VPresSg1 ;
-      <Pres|Fut,Sg,P3> => VPresSg3 ;
-      <Pres|Fut,Pl,_ > => VInf ;
+      <Pres
+        |Fut --# notpresent
+       ,Sg,P1> => VPresSg1 ;
+      <Pres
+        |Fut --# notpresent
+       ,Sg,P3> => VPresSg3 ;
+      <Pres 
+       |Fut --# notpresent
+       ,Pl,_ > => VInf 
+      ; --# notpresent
 
-      <Past|Cond,Sg,_> => VPastSg ;   -- Fut and Cond affect zullen
-      <Past|Cond,Pl,_> => VPastPl
+      <Past|Cond,Sg,_> => VPastSg ;   -- Fut and Cond affect zullen --# notpresent
+      <Past|Cond,Pl,_> => VPastPl --# notpresent
       } ;
 
 --2 For $Relative$
@@ -560,9 +569,9 @@ param
           auxv = (auxVerb vp.s.aux).s ;
           vperf = vp.s.s ! VPerf ;
           verb : Str * Str = case <t,a> of {
-            <Fut|Cond,Simul>  => <zullen_V.s ! vform, vperf ++ auxv ! VInf> ;
-            <Fut|Cond,Anter>  => <zullen_V.s ! vform, vperf ++ auxv ! VInf> ;
-            <_,       Anter>  => <auxv ! vform,       vperf> ;
+            <Fut|Cond,Simul>  => <zullen_V.s ! vform, vperf ++ auxv ! VInf> ; --# notpresent
+            <Fut|Cond,Anter>  => <zullen_V.s ! vform, vperf ++ auxv ! VInf> ; --# notpresent
+            <_,       Anter>  => <auxv ! vform,       vperf> ; --# notpresent
             <_,       Simul>  => <vp.s.s ! vform,     []>
             } ;
           fin   = verb.p1 ;
