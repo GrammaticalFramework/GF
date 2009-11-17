@@ -58,25 +58,26 @@ oper
     mkN : (gat,gaten : Str) -> Gender -> N = \a,b,c -> lin N (mkNoun a b c) ;
   } ;
 
---
---
----- Relational nouns need a preposition. The most common is "von" with
----- the dative, and there is a special case for regular nouns.
---
---  mkN2 : overload {
---    mkN2 : Str -> N2 ;
---    mkN2 : N ->   N2 ; 
---    mkN2 : N -> Prep -> N2
---    } ;   
---
+-- Relational nouns need a preposition. The most common is "van".
+
+  mkN2 : overload {
+    mkN2 : N -> N2 ; 
+    mkN2 : N -> Prep -> N2
+    } ;   
+
+  mkN2 = overload {
+    mkN2 : N -> N2 = \n -> lin N2 (n ** {c2 = "van"}) ; 
+    mkN2 : N -> Prep -> N2 = \n,p -> lin N2 (n ** {c2 = p.s}) ; 
+    } ;   
+
 ---- Use the function $mkPrep$ or see the section on prepositions below to  
 ---- form other prepositions.
 ---- Some prepositions are moreover constructed in [StructuralDut StructuralDut.html].
 ----
 ---- Three-place relational nouns ("die Verbindung von x nach y") need two prepositions.
 --
---  mkN3 : N -> Prep -> Prep -> N3 ;
---
+  mkN3 : N -> Prep -> Prep -> N3 ;
+  mkN3 n p q = lin N3 (n ** {c2 = p.s ; c3 = q.s}) ; 
 
 --3 Proper names and noun phrases
 
@@ -106,8 +107,8 @@ oper
 --  invarA : Str -> A ;            -- prima
 --
 ---- Two-place adjectives are formed by adding a preposition to an adjective.
---
---  mkA2 : A -> Prep -> A2 ;
+
+  mkA2 : A -> Prep -> A2 ;
 
 --2 Adverbs
 
@@ -126,8 +127,10 @@ oper
   
 ---- A couple of common prepositions (always with the dative).
 --
---  von_Prep : Prep ;
---  zu_Prep  : Prep ;
+  van_Prep : Prep ;
+  van_Prep = mkPrep "van" ;
+  te_Prep  : Prep ;
+  te_Prep = mkPrep "te" ;
 --
 --2 Verbs
 
@@ -157,12 +160,10 @@ oper
   zijnV  : V -> V ;
   zijnV v = lin V (v2vvAux v VZijn) ;
 
----- Reflexive verbs can take reflexive pronouns of different cases.
---
---  reflV  : V -> Case -> V ;
---
---
-----3 Two-place verbs
+  reflV  : V -> V ;
+  reflV v = lin V {s = v.s ; aux = v.aux ; prefix = v.prefix ; vtype = VRefl} ;
+
+--3 Two-place verbs
 
   mkV2 : overload {
     mkV2 : Str -> V2 ;
@@ -179,15 +180,24 @@ oper
 
 --
 --
-----3 Three-place verbs
-----
----- Three-place (ditransitive) verbs need two prepositions, of which
----- the first one or both can be absent.
---
---  mkV3     : V -> Prep -> Prep -> V3 ;  -- sprechen, mit, über
---  dirV3    : V -> Prep -> V3 ;          -- senden,(accusative),nach
---  accdatV3 : V -> V3 ;                  -- give,accusative,dative
---
+--3 Three-place verbs
+
+-- Three-place (ditransitive) verbs need two prepositions, of which
+-- the first one or both can be absent.
+
+  mkV3 : overload {
+    mkV3 : V -> V3 ;                  -- give,accusative,dative
+    mkV3 : V -> Prep -> V3 ;          -- senden,(accusative),nach
+    mkV3 : V -> Prep -> Prep -> V3 ;  -- sprechen, mit, über
+    } ;
+
+  mkV3 = overload {
+    mkV3 : V -> Prep -> Prep -> V3 = mkmaxV3 ;
+    mkV3 : V -> Prep -> V3 = \v,p -> mkmaxV3 v (mkPrep []) p ; 
+    mkV3 : V -> V3 = \v -> mkmaxV3 v (mkPrep []) (mkPrep []) ; 
+    } ;
+  mkmaxV3 : V -> Prep -> Prep -> V3 = \v,c,d -> lin V3 (v ** {c2 = c.s ; c3 = d.s}) ;
+
 ----3 Other complement patterns
 ----
 ---- Verbs and adjectives can take complements such as sentences,
@@ -195,13 +205,13 @@ oper
 
   mkV0  : V -> V0 ;
   mkVS  : V -> VS ;
---  mkV2S : V -> Prep -> V2S ;
+  mkV2S : V -> Prep -> V2S ;
   mkVV  : V -> VV ;
---  mkV2V : V -> Prep -> V2V ;
+  mkV2V : V -> Prep -> V2V ;
   mkVA  : V -> VA ;
---  mkV2A : V -> Prep -> V2A ;
+  mkV2A : V -> Prep -> V2A ;
   mkVQ  : V -> VQ ;
---  mkV2Q : V -> Prep -> V2Q ;
+  mkV2Q : V -> Prep -> V2Q ;
 --
 --  mkAS  : A -> AS ;
 --  mkA2S : A -> Prep -> A2S ;
@@ -315,12 +325,12 @@ oper
 --
 --  invarA = \s -> {s = \\_,_ => s ; lock_A = <>} ; ---- comparison
 --
---  mkA2 = \a,p -> a ** {c2 = p ; lock_A2 = <>} ;
---
+  mkA2 = \a,p -> lin A2 (a ** {c2 = p.s}) ;
+
   mkAdv s = {s = s ; lock_Adv = <>} ;
 --
 --  mkPrep s c = {s = s ; c = c ; lock_Prep = <>} ;
---  accPrep = mkPrep [] accusative ;
+  noPrep = mkPrep [] ;
 --  datPrep = mkPrep [] dative ;
 --  genPrep = mkPrep [] genitive ;
 --  von_Prep = mkPrep "von" dative ;
@@ -376,13 +386,11 @@ oper
 --  sein_V = MorphoDut.sein_V ** {lock_V = <>} ;
 --  werden_V = MorphoDut.werden_V ** {lock_V = <>} ;
 --
---  prepV2 v c   = v ** {c2 = c ; lock_V2 = <>} ;
+  prepV2  : V -> Prep -> V2 ;
+  prepV2 v c = lin V2 (v ** {c2 = c.s}) ;
 --  dirV2 v = prepV2 v (mkPrep [] accusative) ;
 --  datV2 v = prepV2 v (mkPrep [] dative) ;
 --
---  mkV3 v c d = v ** {c2 = c ; c3 = d ; lock_V3 = <>} ;
---  dirV3 v p = mkV3 v (mkPrep [] accusative) p ;
---  accdatV3 v = dirV3 v (mkPrep [] dative) ; 
 --
   mkVS v = lin VS v ;
   mkVQ v = lin VQ v ;
@@ -393,11 +401,11 @@ oper
 --  A2V : Type = A2 ;
 
   mkV0 v = v ;
---  mkV2S v p = prepV2 v p ** {lock_V2S = <>} ;
---  mkV2V v p = prepV2 v p ** {isAux = False ; lock_V2V = <>} ;
-  mkVA  v = lin VA v ;
---  mkV2A v p = prepV2 v p ** {lock_V2A = <>} ;
---  mkV2Q v p = prepV2 v p ** {lock_V2Q = <>} ;
+  mkV2S v p = lin V2S (prepV2 v p) ;
+  mkV2V v p = lin V2V (prepV2 v p ** {isAux = False}) ;
+  mkVA  v   = lin VA v ;
+  mkV2A v p = lin V2A (prepV2 v p) ;
+  mkV2Q v p = lin V2Q (prepV2 v p) ;
 --
 --  mkAS  v = v ** {lock_A = <>} ;
 --  mkA2S v p = mkA2 v p ** {lock_A = <>} ;
@@ -442,9 +450,8 @@ oper
 --    mkV : Str -> V -> V = prefixV
 --    };
 --
---
---  prepV2  : V -> Prep -> V2 ;
---
+
+
 --  dirV2 : V -> V2 ;
 --
 --  datV2 : V -> V2 ;

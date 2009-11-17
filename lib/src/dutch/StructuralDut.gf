@@ -11,40 +11,34 @@ concrete StructuralDut of Structural = CatDut, Prelude **
   above_Prep = mkPrep "boven" ;
   after_Prep = mkPrep "na" ;
   all_Predet = mkPredet "alle" "alle" ; ----
---  almost_AdA, almost_AdN = ss "fast" ;
---  although_Subj = ss "obwohl" ;
+  almost_AdA, almost_AdN = ss "bijna" ;
+  although_Subj = ss "hoewel" ;
   always_AdV = ss "altijd" ;
   and_Conj = {s1 = [] ; s2 = "en" ; n = Pl} ;
   because_Subj = ss "omdat" ; ---- doordat
   before_Prep = mkPrep "voor" ;
   behind_Prep = mkPrep "achter" ;
   between_Prep = mkPrep "tussen" ;
---  both7and_DConj = sd2 "sowohl" ["als auch"] ** {n = Pl} ;
+  both7and_DConj = {s1 = "zowel" ; s2 = "en" ; n = Pl} ;
   but_PConj = ss "maar" ;
   by8agent_Prep = mkPrep "door" ;
   by8means_Prep = mkPrep "met" ;
---  can8know_VV, can_VV = auxVV 
---      (mkV 
---        "können" "kann" "kannst" "kann" "könnt" "könn" 
---        "konnte" "konntest" "konnten" "konntet"
---        "könnte" "gekonnt" [] 
---        VHaben) ;
---  during_Prep = mkPrep "während" Gen ;
---  either7or_DConj = sd2 "entweder" "oder" ** {n = Sg} ;
+  can8know_VV, can_VV = auxVV kunnen_V ;
+  during_Prep = mkPrep "tijdens" ;
+  either7or_DConj = {s1 = "ofwel" ; s2 = "of" ; n = Pl} ;
   everybody_NP = mkNP "alle" Utr Pl ; ----
   every_Det = mkDet "elke" "elk" Sg ; ----
   everything_NP = mkNP "alles" Neutr Sg ; ----
   everywhere_Adv = ss "overal" ;
---  few_Det = detLikeAdj Pl "wenig" ;
-------  first_Ord = {s = (regA "erst").s ! Posit} ;
---  for_Prep = mkPrep "für" Acc ;
+  few_Det = mkDet "weinig" "weinig" Pl ;
+  for_Prep = mkPrep "voor" ;
   from_Prep = mkPrep "uit" ;
   he_Pron = mkPronoun "hij" "hem" "zijn" "hij" "hem" "zijn" "zijne" Utr Sg P3 ;
   here7to_Adv = ss ["hier"] ;
   here7from_Adv = ss ["van hier"] ; ----
   here_Adv = ss "hier" ;
   how_IAdv = ss "hoe" ;
---  how8many_IDet = detLikeAdj Pl "hoeveel" ;
+  how8many_IDet = mkDet "hoeveel" "hoeveel" Pl ;
   if_Subj = ss "als" ;
   in8front_Prep = mkPrep "voor" ;
   i_Pron = mkPronoun "ik" "me" "m'n" "ik" "mij" "mijn" "mijne" Utr Sg P1 ;

@@ -31,9 +31,9 @@ resource ResDut = ParamX ** open Prelude in {
 
     regNoun : Str -> Noun = \s -> case s of {
       _ + ("a" | "o" | "y" | "u" | "oe" | "é") => mkNoun s (s + "'s") Utr ;
-      _ + ("oir" | "ion") => mkNoun s (s + "s") Neutr ;
+      _ + ("oir" | "ion" | "je") => mkNoun s (s + "s") Neutr ;
       ? + ? + ? + _ + ("el" | "em" | "en" | "er" | "erd" | "aar" | "aard") => -- unstressed
-        mkNoun s (s + s) Utr ; 
+        mkNoun s (s + "s") Utr ; 
       _ + ("i"|"u") => mkNoun s (endCons s + "en") Utr ;
       b + v@("aa"|"ee"|"oo"|"uu") + c@? => mkNoun s (b + shortVoc v c + "en") Utr ;
       b + v@("a" |"e" |"o" |"u" ) + c@? => mkNoun s (b + v + c + c + "en") Utr ;
@@ -307,6 +307,24 @@ resource ResDut = ParamX ** open Prelude in {
        VImp3     => "zoudt" ;
        VImpPl    => "zouden" ; ----
        VPerf     => "gezoudt" 
+       } ;
+    aux = VHebben ;
+    prefix = [] ;
+    vtype = VAct ;
+    } ;
+
+  kunnen_V : VVerb = {
+    s = table {
+       VInf      => "kunnen" ;
+       VPresSg1  => "kan" ; 
+       VPresSg2  => "kunt" ;
+       VPresSg3  => "kan" ; ---- kun je
+       VPastSg   => "kon" ;
+       VPastPl   => "konden" ;
+       VImp2     => "kan" ;  ---- not used
+       VImp3     => "kant" ;
+       VImpPl    => "kunnen" ; ----
+       VPerf     => "gekund" 
        } ;
     aux = VHebben ;
     prefix = [] ;
