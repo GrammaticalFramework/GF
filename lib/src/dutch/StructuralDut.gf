@@ -1,6 +1,6 @@
 concrete StructuralDut of Structural = CatDut, Prelude ** 
 
-  open ParadigmsDut, ResDut in
+  open ParadigmsDut, ResDut, (X = ConstructX) in
 {
 
 
@@ -45,11 +45,11 @@ concrete StructuralDut of Structural = CatDut, Prelude **
   in_Prep = ss "in" ;
   it_Pron = mkPronoun "het" "het" "zijn" "het" "het" "zijn" "zijne" Neutr Sg P3 ;
 
---  less_CAdv = X.mkCAdv "weniger" "als" ;
---  many_Det = detLikeAdj Pl "viel" ;
---  more_CAdv = X.mkCAdv "mehr" "als" ;
---  most_Predet = {s = appAdj (regA "meist") ; c = NoCase} ;
---  much_Det = detLikeAdj Sg "viel" ;
+  less_CAdv = X.mkCAdv "minder" "als" ;
+  many_Det = mkDet "veel" "veel" Pl ;
+  more_CAdv = X.mkCAdv "meer" "als" ;
+  most_Predet = mkPredet "meeste" "meeste" ;
+  much_Det = mkDet "veel" "veel" Sg ;
 
   must_VV = auxVV (mkV "moeten" "moest" "gemoete") ;
 
@@ -57,38 +57,31 @@ concrete StructuralDut of Structural = CatDut, Prelude **
   no_Utt = ss "neen" ;
   on_Prep = mkPrep "op" ;
   or_Conj = {s1 = [] ; s2 = "of" ; n = Sg} ;
---  otherwise_PConj = ss "sonst" ;
+  otherwise_PConj = ss "anders" ;
   part_Prep = mkPrep "van" ;
---  please_Voc = ss "bitte" ;
+  please_Voc = ss "alsjeblieft" ;
   possess_Prep = mkPrep "van" ;
---  quite_Adv = ss "ziemlich" ;
+  quite_Adv = ss "heel" ;
   she_Pron = mkPronoun "ze" "haar" "haar" "zij" "haar" "haar" "haare" Utr Sg P3 ;
 
   so_AdA = ss "zo" ;
---  somebody_NP = nameNounPhrase {s = caselist "jemand" "jemanden" "jemandem" "jemands"} ;
---  somePl_Det = detLikeAdj Pl "einig" ;
---  someSg_Det = {
---      s,sp = \\g,c => "ein" + pronEnding ! GSg g ! c ;  ---- einer,eines
---      n = Sg ;
---      a = Strong
---      } ;
---  something_NP = nameNounPhrase {s = \\_ => "etwas"} ;
---  somewhere_Adv = ss "irgendwo" ;
+  somebody_NP = mkNP "iemand" Utr Sg ;
+  somePl_Det = mkDet "sommige" "sommige" Pl ;
+  someSg_Det = mkDet "sommige" "sommige" Sg ;
+  something_NP = mkNP "iets" Utr Sg ;
+  somewhere_Adv = ss "ergens" ;
   that_Quant = mkQuant "die" "dat" ;
---     jener : Number => Gender => Case => Str = \\n => (detLikeAdj n "jen").s in 
---     {s = \\_ => jener ; sp = jener ; a = Weak} ;
-
---  there_Adv = ss "da" ;
---  there7to_Adv = ss "dahin" ;
---  there7from_Adv = ss ["daher"] ;
---  therefore_PConj = ss "deshalb" ;
+  there_Adv = ss "daar" ;
+  there7to_Adv = ss "daar" ;
+  there7from_Adv = ss "van daar" ;
+  therefore_PConj = ss "daarom" ;
 
   they_Pron = mkPronoun "ze" "ze" "hun" "zij" "hen" "hun" "hunne" Utr Pl P3 ; ----
 
   this_Quant = mkQuant "deze" "dit" ;
   through_Prep = mkPrep "door" ;
---  too_AdA = ss "zu" ;
-  to_Prep = mkPrep "te" ;
+  too_AdA = ss "te" ;
+  to_Prep = mkPrep "naar" ;
   under_Prep = mkPrep "onder" ;
   very_AdA = ss "erg" ;
   want_VV = auxVV (mkV "wil" "wil" "willen" "wou" "wouden" "gewild") ;
@@ -99,7 +92,7 @@ concrete StructuralDut of Structural = CatDut, Prelude **
   whatPl_IP = {s = \\_ => "wat" ; n = Pl} ;
 
   when_IAdv = ss "wanneer" ;
---  when_Subj = ss "wenn" ;
+  when_Subj = ss "als" ;
   where_IAdv = ss "waar" ;
   which_IQuant = mkPredet "welke" "welk" ;
 
@@ -109,32 +102,22 @@ concrete StructuralDut of Structural = CatDut, Prelude **
   without_Prep = mkPrep "zonder" ;
   with_Prep = mkPrep "met" ;
   youSg_Pron = mkPronoun "je" "je" "je" "jij" "jou" "je" "jouwe" Utr Sg P2 ;
---  youPl_Pron = mkPronPers "ihr" "euch" "euch" "eurer" "euer" Fem Pl P2 ; ---- poss
---  youPol_Pron = mkPronPers "Sie" "Sie" "Ihnen" "Ihrer" "Ihr" Fem Pl P3 ;
---  yes_Utt = ss "ja" ;
---
---  not_Predet = {s = \\_,_,_ => "nicht" ; c = NoCase} ;
---  no_Quant = let 
---     keiner : Number => Gender => Case => Str = table {
---       Sg => \\g,c => "kein" + pronEnding ! GSg g ! c ;
---       Pl => (detLikeAdj Pl "kein").s
---       }
---     in 
---     {s = \\_ => keiner ; sp = keiner ; a = Strong} ;   ---- sp
---  if_then_Conj = {s1 = "wenn" ; s2 = "dann" ; n = Sg ; lock_Conj = <>} ;
---  nobody_NP = 
---    nameNounPhrase {s = caselist "niemand" "niemanden" "niemandem" "niemands"} ;
---  nothing_NP = 
---    nameNounPhrase {s = \\_ => "nichts"} ;
---  at_least_AdN = ss "wenigstens" ;
---  at_most_AdN = ss "höchstens" ;
---  except_Prep = mkPrep "außer" Dat ;
---
---  as_CAdv = X.mkCAdv "ebenso" "wie" ;
+  youPl_Pron = mkPronoun "jullie" "jullie" "je" "jullie" "jullie" "jullie" "uwe" Utr Sg P2 ;
+  youPol_Pron = mkPronoun "u" "u" "uw" "u" "u" "uw" "uwe" Utr Sg P3 ;
+  yes_Utt = ss "ja" ;
+
+  not_Predet = mkPredet "niet" "niet" ;
+  no_Quant = mkQuant "geen" "geen" ;
+  if_then_Conj = {s1 = "als" ; s2 = "dan" ; n = Sg ; lock_Conj = <>} ;
+  nobody_NP = mkNP "niemand" Utr Sg ;
+  nothing_NP = mkNP "niets" Neutr Sg ;
+  at_least_AdN = ss "ten minste" ;
+  at_most_AdN = ss "hooguit" ;
+  except_Prep = mkPrep "met uitzondering van" ;
+
+  as_CAdv = X.mkCAdv "zo" "als" ;
   have_V2 = mkV2 hebben_V ;
---
---  lin language_title_Utt = ss "Deutsch" ;
---
---}
+
+  lin language_title_Utt = ss "nederlands" ;
 
 }
