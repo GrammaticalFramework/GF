@@ -23,7 +23,7 @@
 resource ParadigmsDut = open 
   (Predef=Predef), 
   Prelude, 
-  MorphoDut,
+  ResDut,
   CatDut
   in 
 {
@@ -102,10 +102,11 @@ oper
     mkA : (goed,goede,goeds,beter,best : Str) -> A = \a,b,c,d,e -> lin A (mkAdjective a b c d e) ;
     } ;
 
----- Invariable adjective are a special case. 
---
---  invarA : Str -> A ;            -- prima
---
+-- Invariable adjective are a special case. 
+
+  invarA : Str -> A ;            -- prima
+
+
 ---- Two-place adjectives are formed by adding a preposition to an adjective.
 
   mkA2 : A -> Prep -> A2 ;
@@ -162,6 +163,9 @@ oper
 
   reflV  : V -> V ;
   reflV v = lin V {s = v.s ; aux = v.aux ; prefix = v.prefix ; vtype = VRefl} ;
+
+  zijn_V : V = lin V ResDut.zijn_V ;
+  hebben_V : V = lin V ResDut.hebben_V ;
 
 --3 Two-place verbs
 
@@ -226,6 +230,9 @@ oper
 --  AS, A2S, AV, A2V : Type ;
 --
 --
+
+  mkOrd : A -> Ord = \a -> lin Ord {s = a.s ! Posit} ;
+
 ----.
 ----2 Definitions of paradigms
 ----
@@ -322,9 +329,9 @@ oper
 --    _ + "e"    => mk3A a (a + "r") (a + "ste") ;
 --    _          => mk3A a (a + "er") (a + "este")
 --    } ;
---
---  invarA = \s -> {s = \\_,_ => s ; lock_A = <>} ; ---- comparison
---
+
+  invarA = \s -> lin A {s = \\_,_ => s} ; ---- comparison
+
   mkA2 = \a,p -> lin A2 (a ** {c2 = p.s}) ;
 
   mkAdv s = {s = s ; lock_Adv = <>} ;

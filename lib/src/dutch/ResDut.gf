@@ -477,11 +477,10 @@ param
   predVGen : Bool -> VVerb -> VP = \isAux, verb -> {
     s = verb ;
     a1  : Polarity => Str = negation ;
-    n2  : Agr => Str = \\_ => [] ;
--- case verb.vtype of {
---      VAct => \\_ => [] ;
---      VRefl c => \\a => reflPron ! a ! c
---      } ;
+    n2  : Agr => Str = \\a => case verb.vtype of {
+      VAct  => [] ;
+      VRefl => reflPron ! a
+      } ;
     a2  : Str = [] ;
     isAux = isAux ; ----
     inf,ext : Str = []
