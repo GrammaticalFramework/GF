@@ -58,6 +58,7 @@ lin
   john_PN = mkPN "Jan" ;
 --  left_Ord = Mo.mkOrd (mkA "link") ;
 --  right_Ord = Mo.mkOrd (mkA "recht") ;
+  today_Adv = mkAdv "vandaag" ;
   far_Adv = mkAdv "ver" ;
   give_V3 = mkV3 geven_V ;
   wonder_VQ = mkVQ (reflV (mkV "af" vragen_V)) ;
