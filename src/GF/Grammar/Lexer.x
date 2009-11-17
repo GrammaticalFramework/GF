@@ -234,23 +234,23 @@ data AlexInput = AI {-# UNPACK #-} !Posn            -- current position,
                     {-# UNPACK #-} !BS.ByteString   -- current input string
 
 data ParseResult a
-  = POk AlexInput a
+  = POk a
   | PFailed Posn	-- The position of the error
             String      -- The error message
 
 newtype P a = P { unP :: AlexInput -> ParseResult a }
 
 instance Monad P where
-  return a    = a `seq` (P $ \s -> POk s a)
+  return a    = a `seq` (P $ \s -> POk a)
   (P m) >>= k = P $ \ s -> case m s of
-                             POk s1 a         -> unP (k a) s1
+                             POk a         -> unP (k a) s
                              PFailed posn err -> PFailed posn err
   fail msg    = P $ \(AI posn _ _) -> PFailed posn msg
 
 runP :: P a -> BS.ByteString -> Either (Posn,String) a
 runP (P f) txt =
   case f (AI (Pn 1 0) ' ' txt) of
-    POk _ x         -> Right x
+    POk x           -> Right x
     PFailed pos msg -> Left  (pos,msg)
 
 failLoc :: Posn -> String -> P a
@@ -267,6 +267,6 @@ lexer cont = P go
         AlexToken inp' len act -> unP (cont (act pos (BS.take len str))) inp'
 
 getPosn :: P Posn
-getPosn = P $ \inp@(AI pos _ _) -> POk inp pos
+getPosn = P $ \inp@(AI pos _ _) -> POk pos
 
 }
