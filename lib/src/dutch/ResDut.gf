@@ -312,7 +312,10 @@ resource ResDut = ParamX ** open Prelude in {
     prefix = [] ;
     vtype = VAct ;
     } ;
- 
+
+  worden_V = irregVerb2 "worden" "werd" "werden" "geworden" ** {
+    aux = VZijn ; prefix = [] ; vtype = VAct} ; 
+
     Pronoun : Type = {
       unstressed,stressed : {nom, acc, poss : Str} ;
       substposs : Str ;
@@ -578,29 +581,28 @@ param
      vp.inf ++ vp.ext
     > ;
 
---  useInfVP : Bool -> VP -> Str = \isAux,vp ->
---    let vpi = infVP isAux vp in
---    vpi.p1 ! agrP3 Sg ++ vpi.p3 ++ vpi.p2 ;
---
----- The nominative case is not used as reflexive, but defined here
----- so that we can reuse this in personal pronouns. 
----- The missing Sg "ihrer" shows that a dependence on gender would
----- be needed.
---
---  reflPron : Agr => Case => Str = table {
---    {n = Sg ; p = P1} => caselist "ich" "mich" "mir"  "meiner" ;
---    {n = Sg ; p = P2} => caselist "du"  "dich" "dir"  "deiner" ;
---    {g = Masc ; n = Sg ; p = P3} => caselist "er" "sich" "sich" "seiner" ;
---    {g = Fem  ; n = Sg ; p = P3} => caselist "sie" "sich" "sich" "ihrer" ;
---    {g = Neutr ; n = Sg ; p = P3} => caselist "es" "sich" "sich" "seiner" ;
---    {n = Pl ; p = P1} => caselist "wir" "uns"  "uns"  "unser" ;
---    {n = Pl ; p = P2} => caselist "ihr" "euch" "euch" "euer" ;
---    {n = Pl ; p = P3} => caselist "sie" "sich" "sich" "ihrer"
---    } ;
+  useInfVP : Bool -> VP -> Str = \isAux,vp ->
+    let vpi = infVP isAux vp in
+    vpi.p1 ! agrP3 Sg ++ vpi.p3 ++ vpi.p2 ;
+
+  reflPron : Agr => Str = table {
+    {n = Sg ; p = P1} => "me" ;
+    {n = Sg ; p = P2} => "je" ;
+    {n = Sg ; p = P3} => "zich" ;
+    {n = Pl ; p = P1} => "ons" ;
+    {n = Pl ; p = P2} => "je" ;
+    {n = Pl ; p = P3} => "zich"
+    } ;
 
   conjThat : Str = "dat" ;
 
   conjThan : Str = "dan" ;
+
+  conjAgr : Agr -> Agr -> Agr = \a,b -> {
+      g = Utr ; ----
+      n = conjNumber a.n b.n ;
+      p = conjPerson a.p b.p
+      } ;
 
 -- The infinitive particle "zu" is used if and only if $vv.isAux = False$.
  

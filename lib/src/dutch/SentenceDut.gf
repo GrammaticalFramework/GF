@@ -29,21 +29,21 @@ concrete SentenceDut of Sentence = CatDut ** open ResDut, Prelude in {
         vp **
       {c2 = vp.c2} ;
 
---    AdvSlash slash adv = {
---      s  = \\m,t,a,b,o => slash.s ! m ! t ! a ! b ! o ++ adv.s ;
---      c2 = slash.c2
---    } ;
---
---    SlashPrep cl prep = cl ** {c2 = prep} ;
---
---    SlashVS np vs slash = 
---        mkClause (np.s ! Nom) np.a 
---          (insertExtrapos (conjThat ++ slash.s ! Sub) (predV vs)) **
---        {c2 = slash.c2} ;
---
---    EmbedS  s  = {s = conjThat ++ s.s ! Sub} ;
---    EmbedQS qs = {s = qs.s ! QIndir} ;
---    EmbedVP vp = {s = useInfVP False vp} ;
+    AdvSlash slash adv = {
+      s  = \\t,a,b,o => slash.s ! t ! a ! b ! o ++ adv.s ;
+      c2 = slash.c2
+    } ;
+
+    SlashPrep cl prep = cl ** {c2 = prep.s} ;
+
+    SlashVS np vs slash = 
+        mkClause (np.s ! NPNom) np.a 
+          (insertExtrapos (conjThat ++ slash.s ! Sub) (predV vs)) **
+        {c2 = slash.c2} ;
+
+    EmbedS  s  = {s = conjThat ++ s.s ! Sub} ;
+    EmbedQS qs = {s = qs.s ! QIndir} ;
+    EmbedVP vp = {s = useInfVP False vp} ;
 
     UseCl t p cl = {
       s = \\o => t.s ++ p.s ++ cl.s ! t.t ! t.a ! p.p ! o
@@ -61,8 +61,6 @@ concrete SentenceDut of Sentence = CatDut ** open ResDut, Prelude in {
 
     AdvS a s = {s = \\o => a.s ++ s.s ! Inv} ;
 
---    RelS s r = {s = \\o => s.s ! o ++ "," ++ r.s ! gennum Neutr Sg} ; --- "welches"
---
---}
+    RelS s r = {s = \\o => s.s ! o ++ "," ++ r.s ! Neutr ! Sg} ;
 
 }

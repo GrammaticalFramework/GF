@@ -28,28 +28,28 @@ concrete NounDut of Noun = CatDut ** open ResDut, Prelude in {
       a = np.a
       } ;
 
---    PPartNP np v2 = {
---      s = \\c => np.s ! c ++ v2.s ! VPastPart APred ; --- invar part
---      a = np.a
---      } ;
---
---    AdvNP np adv = {
---      s = \\c => np.s ! c ++ adv.s ;
---      a = np.a
---      } ;
---
---    DetQuantOrd quant num ord = 
---      let 
---        n = num.n ;
---        a = quant.a
---      in {
---        s  = \\g,c => quant.s ! num.isNum ! n ! g ! c ++ 
---                      num.s!g!c ++ ord.s ! agrAdj g (adjfCase a c) n c ;
---        sp = \\g,c => quant.sp ! n ! g ! c ++ 
---                      num.s!g!c ++ ord.s ! agrAdj g (adjfCase a c) n c ;
---        n = n ;
---        a = a
---        } ;
+    PPartNP np v2 = {
+      s = \\c => np.s ! c ++ v2.s ! VPerf ; -- invar part
+      a = np.a
+      } ;
+
+    AdvNP np adv = {
+      s = \\c => np.s ! c ++ adv.s ;
+      a = np.a
+      } ;
+
+    DetQuantOrd quant num ord = 
+      let 
+        n = num.n ;
+        a = quant.a
+      in {
+        s  = \\g => quant.s ! num.isNum ! n ! g ++ 
+                      num.s ++ ord.s ! agrAdj g quant.a (NF n Nom) ;
+        sp = \\g => quant.sp ! n ! g ++ 
+                      num.s ++ ord.s ! agrAdj g quant.a (NF n Nom) ;
+        n = n ;
+        a = a
+        } ;
 
     DetQuant quant num = 
       let 
@@ -62,12 +62,11 @@ concrete NounDut of Noun = CatDut ** open ResDut, Prelude in {
         a = a
         } ;
 
---
---    PossPron p = {
---      s  = \\_,n,g,c => p.s ! NPPoss (gennum g n) c ;
---      sp = \\n,g,c => p.s ! NPPoss (gennum g n) c ;
---      a = Strong --- need separately weak for Pl ?
---      } ;
+    PossPron p = {
+      s  = \\_,n,g => p.unstressed.poss ;
+      sp = \\n,g => p.substposs ;
+      a = Strong
+      } ;
 
     NumCard n = {s = n.s ! Utr ! Nom ; n = n.n ; isNum = True} ;
 
@@ -116,29 +115,29 @@ concrete NounDut of Noun = CatDut ** open ResDut, Prelude in {
       g = n.g
       } ;
 
---    ComplN2 f x = {
---      s = \\_,n,c => f.s ! n ! c ++ appPrep f.c2 x.s ;
---      g = f.g
---      } ;
---
---    ComplN3 f x = {
---      s = \\n,c => f.s ! n ! c ++ appPrep f.c2 x.s ;
---      g = f.g ; 
---      c2 = f.c3
---      } ;
---
---    Use2N3 f = {
---      s = f.s ;
---      g = f.g ; 
---      c2 = f.c2
---      } ;
---
---    Use3N3 f = {
---      s = f.s ;
---      g = f.g ; 
---      c2 = f.c3
---      } ;
---
+    ComplN2 f x = {
+      s = \\_,nc => f.s ! nc ++ appPrep f.c2 x.s ;
+      g = f.g
+      } ;
+
+    ComplN3 f x = {
+      s = \\nc => f.s ! nc ++ appPrep f.c2 x.s ;
+      g = f.g ; 
+      c2 = f.c3
+      } ;
+
+    Use2N3 f = {
+      s = f.s ;
+      g = f.g ; 
+      c2 = f.c2
+      } ;
+
+    Use3N3 f = {
+      s = f.s ;
+      g = f.g ; 
+      c2 = f.c3
+      } ;
+
     AdjCN ap cn = 
       let 
         g = cn.g 
@@ -155,28 +154,26 @@ concrete NounDut of Noun = CatDut ** open ResDut, Prelude in {
       g = cn.g
       } ;
 
---    RelNP np rs = {
---      s = \\c => np.s ! c ++ "," ++ rs.s ! gennum np.a.g np.a.n ;
---      a = np.a ;
---      isPron = False
---      } ;
---
---    SentCN cn s = {
---      s = \\a,n,c => cn.s ! a ! n ! c ++ s.s ;
---      g = cn.g
---      } ;
---
---    AdvCN cn s = {
---      s = \\a,n,c => cn.s ! a ! n ! c ++ s.s ;
---      g = cn.g
---      } ;
---
---    ApposCN  cn np = let g = cn.g in {
---      s = \\a,n,c => cn.s ! a ! n ! c ++ np.s ! c ;
---      g = g ;
---      isMod = cn.isMod
---      } ;
---
---}
+    RelNP np rs = {
+      s = \\c => np.s ! c ++ "," ++ rs.s ! np.a.g ! np.a.n ;
+      a = np.a ;
+      isPron = False
+      } ;
+
+    SentCN cn s = {
+      s = \\a,nc => cn.s ! a ! nc ++ s.s ;
+      g = cn.g
+      } ;
+
+    AdvCN cn s = {
+      s = \\a,nc => cn.s ! a ! nc ++ s.s ;
+      g = cn.g
+      } ;
+
+    ApposCN  cn np = let g = cn.g in {
+      s = \\a,nc => cn.s ! a ! nc ++ np.s ! NPNom ;
+      g = g ;
+      isMod = cn.isMod
+      } ;
 
 }

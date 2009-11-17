@@ -5,11 +5,10 @@ concrete RelativeDut of Relative = CatDut ** open ResDut in {
 
   lin
 
---    RelCl cl = {
---      s = \\m,t,a,b,_ => "derart" ++ conjThat ++ cl.s ! m ! t ! a ! b ! Sub ;
---      c = Nom
---      } ;
---
+    RelCl cl = {
+      s = \\t,a,b,_,_ => "zodat" ++ cl.s ! t ! a ! b ! Sub
+      } ;
+
     RelVP rp vp = {
       s = \\t,ant,b,g,n => 
         let 
@@ -19,8 +18,7 @@ concrete RelativeDut of Relative = CatDut ** open ResDut in {
             } ;
           cl = mkClause (rp.s ! g ! n) agr vp
         in
-        cl.s ! t ! ant ! b ! Sub ;
-      c = Nom
+        cl.s ! t ! ant ! b ! Sub
       } ;
 
     RelSlash rp slash = {
@@ -29,11 +27,11 @@ concrete RelativeDut of Relative = CatDut ** open ResDut in {
       c = slash.c2.c
       } ;
 
---    FunRP p np rp = {
---      s = \\gn,c => np.s ! c ++ appPrep p (rp.s ! gn) ;
---      a = RAg {n = np.a.n ; p = np.a.p}
---      } ;
---
+    FunRP p np rp = {
+      s = \\g,n => np.s ! NPNom ++ appPrep p.s (\\_ => rp.s ! g ! n) ;
+      a = RAg np.a.n np.a.p
+      } ;
+
     IdRP = {s = relPron ; a = RNoAg} ;
 
   oper
