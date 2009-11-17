@@ -16,15 +16,13 @@ concrete PhraseDut of Phrase = CatDut ** open Prelude, ResDut in
     UttIP ip = {s = ip.s ! NPNom} ; --- Acc also
     UttIAdv iadv = iadv ;
     UttNP np = {s = np.s ! NPNom} ;
---    UttVP vp = {s = useInfVP True vp} ;  -- without zu
+    UttVP vp = {s = useInfVP True vp} ;  -- without zu
     UttAdv adv = adv ;
 
     NoPConj = {s = []} ;
---    PConjConj conj = ss (conj.s2) ;
---
+    PConjConj conj = ss (conj.s2) ;
+
     NoVoc = {s = []} ;
---    VocNP np = {s = "," ++ np.s ! Nom} ;
---
---}
+    VocNP np = {s = "," ++ np.s ! NPNom} ;
 
 }
