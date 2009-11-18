@@ -431,52 +431,13 @@ param
         _ => AAttr
         } ;
 
-
---
----- This is used when forming determiners that are like adjectives.
---
---  appAdj : Adjective -> Number => Gender => Case => Str = \adj ->
---    let
---      ad : GenNum -> Case -> Str = \gn,c -> 
---        adj.s ! Posit ! AMod gn c
---    in
---    \\n,g,c => case n of {
---       Sg => ad (GSg g) c ;
---       _  => ad GPl c
---     } ;
---
----- This auxiliary gives the forms in each degree of adjectives. 
---
---  adjForms : (x1,x2 : Str) -> AForm => Str = \teuer,teur ->
---   table {
---    APred => teuer ;
---    AMod (GSg Masc) c => 
---      caselist (teur+"er") (teur+"en") (teur+"em") (teur+"es") ! c ;
---    AMod (GSg Fem) c => 
---      caselist (teur+"e") (teur+"e") (teur+"er") (teur+"er") ! c ;
---    AMod (GSg Neut) c => 
---      caselist (teur+"es") (teur+"es") (teur+"em") (teur+"es") ! c ;
---    AMod GPl c => 
---      caselist (teur+"e") (teur+"e") (teur+"en") (teur+"er") ! c
---    } ;
---
----- For $Verb$.
---
---  VPC : Type = {
---      s : Bool => Agr => VPForm => { -- True = prefix glued to verb
---        fin : Str ;          -- hat
---        inf : Str            -- wollen
---        } 
---      } ;
---
-
   oper VP : Type = {
       s  : VVerb ;
       a1 : Polarity => Str ; -- niet
       n2 : Agr => Str ;      -- dich
       a2 : Str ;             -- heute
       isAux : Bool ;         -- is a double infinitive
-      inf : Str ;            -- sagen
+      inf : Str * Bool ;     -- sagen (True = non-empty)
       ext : Str              -- dass sie kommt
       } ;
 
@@ -492,7 +453,8 @@ param
       } ;
     a2  : Str = [] ;
     isAux = isAux ; ----
-    inf,ext : Str = []
+    inf : Str * Bool = <[],False> ;
+    ext : Str = []
     } ;
 
   negation : Polarity => Str = table {
@@ -548,7 +510,7 @@ param
     n2 = vp.n2 ;
     a2 = vp.a2 ;
     isAux = vp.isAux ; ----
-    inf = inf ++ vp.inf ;
+    inf = <inf ++ vp.inf.p1, True> ;
     ext = vp.ext
     } ;
 
@@ -578,7 +540,13 @@ param
           neg   = vp.a1 ! b ;
           obj   = vp.n2 ! agr ;
           compl = obj ++ neg ++ vp.a2 ++ vp.s.prefix ;
-          inf   = vp.inf ++ verb.p2 ;
+          inf   = 
+            case <vp.isAux, vp.inf.p2, a> of {                  --# notpresent
+              <True,True,Anter> => vp.s.s ! VInf ++ vp.inf.p1 ; --# notpresent
+              _ =>                                              --# notpresent
+                 vp.inf.p1 ++ verb.p2
+              }                                                 --# notpresent
+              ;
           extra = vp.ext ;
           inffin = 
             case <a,vp.isAux> of {                              --# notpresent
@@ -604,7 +572,7 @@ param
      \\agr => vp.n2 ! agr ++  vp.a2,
      vp.a1 ! Pos ++ 
      if_then_Str isAux [] "te" ++ vp.s.s ! VInf,
-     vp.inf ++ vp.ext
+     vp.inf.p1 ++ vp.ext
     > ;
 
   useInfVP : Bool -> VP -> Str = \isAux,vp ->
