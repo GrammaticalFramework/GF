@@ -32,11 +32,13 @@ resource ResDut = ParamX ** open Prelude in {
     regNoun : Str -> Noun = \s -> case s of {
       _ + ("a" | "o" | "y" | "u" | "oe" | "é") => mkNoun s (s + "'s") Utr ;
       _ + ("oir" | "ion" | "je") => mkNoun s (s + "s") Neutr ;
-      ? + ? + ? + _ + ("el" | "em" | "en" | "er" | "erd" | "aar" | "aard") => -- unstressed
-        mkNoun s (s + "s") Utr ; 
-      _ + ("i"|"u") => mkNoun s (endCons s + "en") Utr ;
-      b + v@("aa"|"ee"|"oo"|"uu") + c@? => mkNoun s (b + shortVoc v c + "en") Utr ;
-      b + v@("a" |"e" |"o" |"u" ) + c@? => mkNoun s (b + v + c + c + "en") Utr ;
+      ? + ? + ? + _ + 
+        ("el" | "em" | "en" | "er" | "erd" | "aar" | "aard" | "ie") => -- unstressed
+                                            mkNoun s (s + "s") Utr ;
+      _ +                     ("i"|"u")  => mkNoun s (endCons s + "en") Utr ;
+      b + v@("aa"|"ee"|"oo"|"uu") + c@?  => mkNoun s (b + shortVoc v c + "en") Utr ; 
+      b + ("ei"|"eu"|"oe"|"ou"|"ie"|"ij"|"ui") + ? => mkNoun s (endCons s     + "en") Utr ;
+      b + v@("a"|"e"|"i"|"o"|"u" ) + c@? => mkNoun s (b + v + c + c + "en") Utr ;
       _ => mkNoun s (endCons s + "en") Utr
       } ;
 
@@ -53,6 +55,8 @@ resource ResDut = ParamX ** open Prelude in {
       b + "f" => b + "v" ;
       _ => s
       } ;
+
+    dupCons : pattern Str = #("b"|"d"|"f"|"g"|"k"|"l"|"m"|"n"|"p"|"r"|"s"|"t") ;
 
   param 
     AForm = APred | AAttr | AGen ;
