@@ -74,9 +74,10 @@ resource ResDut = ParamX ** open Prelude in {
     regAdjective : Str -> Adjective = \s ->  ----
       let 
         se : Str = case s of {
-          _ + ("i"|"u") => s + "e" ;
-          b + v@("aa"|"ee"|"oo"|"uu") + c@? => b + shortVoc v c + "e" ;
-          b + v@("a" |"e" |"o" |"u" ) + c@? => b + v + c + c + "en" ;
+          _ + ("i"|"u") => endCons s + "e" ;
+          b + v@("aa"|"ee"|"oo"|"uu") + c@?             => b + shortVoc v c + "e" ;
+          b + ("ei"|"eu"|"oe"|"ou"|"ie"|"ij"|"ui") + ?  => endCons s + "e" ;
+          b + v@("a"|"e"|"i"|"o"|"u" )            + c@? => b + v + c + c + "e" ;
           _ => endCons s + "e"
           } ;
         ser : Str = case s of {
