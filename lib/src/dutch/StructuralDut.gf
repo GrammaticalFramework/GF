@@ -86,7 +86,7 @@ concrete StructuralDut of Structural = CatDut, Prelude **
   very_AdA = ss "erg" ;
   want_VV = auxVV (mkV "wil" "wil" "willen" "wou" "wouden" "gewild") ;
 
-  we_Pron = mkPronoun "we" "ons" "ons" "wij" "ons" "onze" "onze" Utr Sg P3 ; ----
+  we_Pron = mkPronoun "we" "ons" "ons" "wij" "ons" "onze" "onze" Utr Pl P3 ; ----
 
   whatSg_IP = {s = \\_ => "wat" ; n = Sg} ;
   whatPl_IP = {s = \\_ => "wat" ; n = Pl} ;
@@ -102,7 +102,7 @@ concrete StructuralDut of Structural = CatDut, Prelude **
   without_Prep = mkPrep "zonder" ;
   with_Prep = mkPrep "met" ;
   youSg_Pron = mkPronoun "je" "je" "je" "jij" "jou" "je" "jouwe" Utr Sg P2 ;
-  youPl_Pron = mkPronoun "jullie" "jullie" "je" "jullie" "jullie" "jullie" "uwe" Utr Sg P2 ;
+  youPl_Pron = mkPronoun "jullie" "jullie" "je" "jullie" "jullie" "jullie" "uwe" Utr Pl P2 ;
   youPol_Pron = mkPronoun "u" "u" "uw" "u" "u" "uw" "uwe" Utr Sg P3 ;
   yes_Utt = ss "ja" ;
 
