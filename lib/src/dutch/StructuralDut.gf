@@ -51,7 +51,7 @@ concrete StructuralDut of Structural = CatDut, Prelude **
   most_Predet = mkPredet "meeste" "meeste" ;
   much_Det = mkDet "veel" "veel" Sg ;
 
-  must_VV = auxVV (mkV "moeten" "moest" "gemoete") ;
+  must_VV = auxVV (mkV "moeten" "moest" "gemoeten") ;
 
   only_Predet = {s = \\_,_ => "slechts"} ;
   no_Utt = ss "neen" ;

@@ -17,7 +17,7 @@ concrete SentenceDut of Sentence = CatDut ** open ResDut, Prelude in {
             } ;
           agr  = {g = Utr ; n = ps.p3 ; p = P2} ; ---- P2? -- g does not matter
           verb = vp.s.s ! ps.p1 ;
-          inf  = vp.inf ;
+          inf  = vp.inf.p1 ;
         in
         verb ++ ps.p2 ++ 
         vp.n2 ! agr ++ vp.a1 ! pol ++ vp.a2 ++ inf ++ vp.ext
