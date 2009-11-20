@@ -1349,6 +1349,8 @@ incomplete resource Constructors = open Grammar in {
                                          =    \p,ip -> QuestIAdv (PrepIP p ip)  ; --# notminimal
       mkQCl : IAdv -> NP -> QCl   -- where is John --# notminimal
                                          =    \a -> QuestIComp (CompIAdv a)   ; --# notminimal
+      mkQCl : IP -> NP -> QCl   -- who is John --# notminimal
+                                         =    \a -> QuestIComp (CompIP a)   ; --# notminimal
       mkQCl : IP -> QCl         -- which houses are there --# notminimal
                                          =    ExistIP  --# notminimal
 
