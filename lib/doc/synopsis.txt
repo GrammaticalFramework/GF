@@ -623,8 +623,8 @@ Lexical category, constructors given in
 Lexical category, constructors given in
 [lexical paradigms #RParadigms].
 ==V2 - two-place verb==[V2]
-Lexical category, constructors given in
-[lexical paradigms #RParadigms].
+|| Function  | Type  | Example  ||
+| ``have_V2`` | [V2 #V2] | //have// |
 ==V2A - verb with NP and AP complement==[V2A]
 Lexical category, constructors given in
 [lexical paradigms #RParadigms].
@@ -1106,7 +1106,7 @@ source [``http://www.cs.chalmers.se/~aarne/GF/lib/resource/src/english/Paradigms
 | ``mkAV`` | [A #A] ``->`` [AV #AV] |
 | ``mkA2V`` | [A #A] ``->`` [Prep #Prep] ``->`` [A2V #A2V] |
 | ``V0`` | [Type #Type] |
-| ``mkSubj`` | ``Str`` ``->`` [Subj #Subj] ``=`` ``\s`` ``->`` ``{s`` ``=`` ``s`` ``lock_Subj`` ``=`` ``<>}`` |
+| ``mkSubj`` | ``Str`` ``->`` [Subj #Subj] ``=`` ``\s`` ``->`` ``lin`` [Subj #Subj] ``{s`` ``=`` ``s}`` |
 
 
 ==Paradigms for Finnish==
@@ -1496,13 +1496,17 @@ source [``http://www.cs.chalmers.se/~aarne/GF/lib/resource/src/romanian/Paradigm
 | ``Acc`` | [NCase #NCase] |
 | ``Dat`` | [NCase #NCase] |
 | ``Gen`` | [NCase #NCase] |
-| ``mkPrep`` | ``Str`` ``->`` [NCase #NCase] ``->`` [Prep #Prep] |
+| ``mkPrep`` | ``Str`` ``->`` ``NCase->`` [Bool #Bool] ``->`` [Prep #Prep] |
+| ``mkPrep`` | ``Str`` ``->`` [NCase #NCase] ``->`` ``Prep;`` |
 | ``noPrep`` | [NCase #NCase] ``->`` [Prep #Prep] |
 | ``mkN2`` | [N #N] ``->`` [Prep #Prep] ``->`` [N2 #N2] |
 | ``mkN3`` | [N #N] ``->`` [Prep #Prep] ``->`` [Prep #Prep] ``->`` [N3 #N3] |
 | ``mkPN`` | ``Str`` ``->`` [PN #PN] ``=`` ``mkPropN`` |
+| ``mkPN`` | ``Str`` ``->`` ``Str`` ``->`` [Gender #Gender] ``->`` [Number #Number] ``->`` [PN #PN] ``=`` ``mkPropNI`` |
 | ``mkPN`` | ``Str`` ``->`` [Gender #Gender] ``->`` [PN #PN] ``=`` ``mkPropNoun`` |
 | ``mkPN`` | ``Str`` ``->`` [Gender #Gender] ``->`` [Number #Number] ``->`` [PN #PN] ``=`` ``mkProperNoun;`` |
+| ``mkInAn`` | [PN #PN] ``->`` [PN #PN] ``=`` ``\romania`` ``->`` |
+| ``mkPropNI`` | ``Str`` ``->`` ``Str`` ``->`` [Gender #Gender] ``->`` [Number #Number] ``->`` [PN #PN] ``=`` |
 | ``mkPropN`` | ``Str`` ``->`` [PN #PN] ``=`` ``\Ion`` ``->`` |
 | ``mkPropNoun`` | ``Str`` ``->`` [Gender #Gender] ``->`` [PN #PN] ``=`` ``\Ion,`` ``gen`` ``->`` |
 | ``mkProperNoun`` | ``Str`` ``->`` [Gender #Gender] ``->`` [Number #Number] ``->`` [PN #PN] ``=`` ``\Ion,`` ``gen,`` ``num`` ``->`` |
