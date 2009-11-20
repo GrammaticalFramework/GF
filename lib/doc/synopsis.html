@@ -2779,10 +2779,19 @@ Lexical category, constructors given in
 </P>
 <A NAME="V2"></A>
 <H2>V2 - two-place verb</H2>
-<P>
-Lexical category, constructors given in
-<A HREF="#RParadigms">lexical paradigms</A>.
-</P>
+<TABLE CELLPADDING="4" BORDER="1">
+<TR>
+<TH>Function</TH>
+<TH>Type</TH>
+<TH COLSPAN="2">Example</TH>
+</TR>
+<TR>
+<TD><CODE>have_V2</CODE></TD>
+<TD><A HREF="#V2" TITLE="V2 - two-place verb">V2</A></TD>
+<TD><I>have</I></TD>
+</TR>
+</TABLE>
+
 <A NAME="V2A"></A>
 <H2>V2A - verb with NP and AP complement</H2>
 <P>
@@ -4561,7 +4570,7 @@ source <A HREF="../src/english/ParadigmsEng.gf"><CODE>http://www.cs.chalmers.se/
 </TR>
 <TR>
 <TD><CODE>mkSubj</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#Subj" TITLE="Subj - subjunction">Subj</A> <CODE>=</CODE> <CODE>\s</CODE> <CODE>-&gt;</CODE> <CODE>{s</CODE> <CODE>=</CODE> <CODE>s</CODE> <CODE>lock_Subj</CODE> <CODE>=</CODE> <CODE>&lt;&gt;}</CODE></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#Subj" TITLE="Subj - subjunction">Subj</A> <CODE>=</CODE> <CODE>\s</CODE> <CODE>-&gt;</CODE> <CODE>lin</CODE> <A HREF="#Subj" TITLE="Subj - subjunction">Subj</A> <CODE>{s</CODE> <CODE>=</CODE> <CODE>s}</CODE></TD>
 </TR>
 </TABLE>
 
@@ -5923,7 +5932,11 @@ source <A HREF="../src/romanian/ParadigmsRon.gf"><CODE>http://www.cs.chalmers.se
 </TR>
 <TR>
 <TD><CODE>mkPrep</CODE></TD>
-<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#NCase">NCase</A> <CODE>-&gt;</CODE> <A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>NCase-&gt;</CODE> <A HREF="#Bool">Bool</A> <CODE>-&gt;</CODE> <A HREF="#Prep" TITLE="Prep - preposition, or just case">Prep</A></TD>
+</TR>
+<TR>
+<TD><CODE>mkPrep</CODE></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#NCase">NCase</A> <CODE>-&gt;</CODE> <CODE>Prep;</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>noPrep</CODE></TD>
@@ -5943,11 +5956,23 @@ source <A HREF="../src/romanian/ParadigmsRon.gf"><CODE>http://www.cs.chalmers.se
 </TR>
 <TR>
 <TD><CODE>mkPN</CODE></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#Gender">Gender</A> <CODE>-&gt;</CODE> <A HREF="#Number">Number</A> <CODE>-&gt;</CODE> <A HREF="#PN" TITLE="PN - proper name">PN</A> <CODE>=</CODE> <CODE>mkPropNI</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>mkPN</CODE></TD>
 <TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#Gender">Gender</A> <CODE>-&gt;</CODE> <A HREF="#PN" TITLE="PN - proper name">PN</A> <CODE>=</CODE> <CODE>mkPropNoun</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>mkPN</CODE></TD>
 <TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#Gender">Gender</A> <CODE>-&gt;</CODE> <A HREF="#Number">Number</A> <CODE>-&gt;</CODE> <A HREF="#PN" TITLE="PN - proper name">PN</A> <CODE>=</CODE> <CODE>mkProperNoun;</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>mkInAn</CODE></TD>
+<TD><A HREF="#PN" TITLE="PN - proper name">PN</A> <CODE>-&gt;</CODE> <A HREF="#PN" TITLE="PN - proper name">PN</A> <CODE>=</CODE> <CODE>\romania</CODE> <CODE>-&gt;</CODE></TD>
+</TR>
+<TR>
+<TD><CODE>mkPropNI</CODE></TD>
+<TD><CODE>Str</CODE> <CODE>-&gt;</CODE> <CODE>Str</CODE> <CODE>-&gt;</CODE> <A HREF="#Gender">Gender</A> <CODE>-&gt;</CODE> <A HREF="#Number">Number</A> <CODE>-&gt;</CODE> <A HREF="#PN" TITLE="PN - proper name">PN</A> <CODE>=</CODE></TD>
 </TR>
 <TR>
 <TD><CODE>mkPropN</CODE></TD>

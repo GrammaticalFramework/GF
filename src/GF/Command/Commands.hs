@@ -480,9 +480,10 @@ allCommands cod env@(pgf, mos) = Map.fromList [
      examples = [
        "pt -compute (plus one two)   -- compute value"
        ],
-     exec = \opts -> returnFromExprs . treeOps opts,
+     exec = \opts -> 
+            returnFromExprs . takeOptNum opts . treeOps opts,
      options = treeOpOptions pgf,
-     flags = treeOpFlags pgf
+     flags = [("number","take at most this many trees")] ++ treeOpFlags pgf
      }),
   ("q",  emptyCommandInfo {
      longname = "quit",
@@ -821,7 +822,8 @@ allCommands cod env@(pgf, mos) = Map.fromList [
    optViewGraph opts = valStrOpts "view" "open" opts
    optNum opts = valIntOpts "number" 1 opts
    optNumInf opts = valIntOpts "number" 1000000000 opts ---- 10^9
-   
+   takeOptNum opts = take (optNumInf opts)
+
    fromExprs   es = (es,unlines (map (showExpr []) es))
    fromStrings ss = (map (ELit . LStr) ss, unlines ss)
    fromString  s  = ([ELit (LStr s)], s)
