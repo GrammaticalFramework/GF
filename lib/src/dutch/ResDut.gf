@@ -23,8 +23,10 @@ resource ResDut = ParamX ** open Prelude in {
 
     mkNoun : (_,_ : Str) -> Gender -> Noun = \sg,pl,g -> {
       s = table {
-        NF Sg _ => sg ;
-        NF Pl _ => pl
+        NF Sg Nom => sg ;
+        NF Sg Gen => add_s sg ; 
+        NF Pl Nom => pl ;
+        NF Pl Gen => add_s pl
         } ;
      g = g
      } ;
@@ -37,7 +39,8 @@ resource ResDut = ParamX ** open Prelude in {
                                             mkNoun s (s + "s") Utr ;
       _ +                     ("i"|"u")  => mkNoun s (endCons s + "en") Utr ;
       b + v@("aa"|"ee"|"oo"|"uu") + c@?  => mkNoun s (b + shortVoc v c + "en") Utr ; 
-      b + ("ei"|"eu"|"oe"|"ou"|"ie"|"ij"|"ui") + ? => mkNoun s (endCons s     + "en") Utr ;
+      b + ("ei"|"eu"|"oe"|"ou"|"ie"|"ij"|"ui") + ? => mkNoun s (endCons s + "en") Utr ;
+      _ + "ie" => mkNoun s (s + "ën") Utr ;
       b + v@("a"|"e"|"i"|"o"|"u" ) + c@? => mkNoun s (b + v + c + c + "en") Utr ;
       _ => mkNoun s (endCons s + "en") Utr
       } ;
@@ -57,6 +60,11 @@ resource ResDut = ParamX ** open Prelude in {
       } ;
 
     dupCons : pattern Str = #("b"|"d"|"f"|"g"|"k"|"l"|"m"|"n"|"p"|"r"|"s"|"t") ;
+
+    add_s : Str -> Str = \s -> case s of {
+      _ + "s" => s ;
+      _       => s + "s"
+      } ; 
 
   param 
     AForm = APred | AAttr | AGen ;

@@ -32,7 +32,7 @@ concrete IdiomDut of Idiom = CatDut **
               }
       } ;
 
-    ProgrVP = insertAdv "even" ; ----
+    ProgrVP vp = insertAdv ("aan" ++ "het" ++ useInfVP True vp) (predV zijn_V) ;
 
     ImpPl1 vp =
       let 
