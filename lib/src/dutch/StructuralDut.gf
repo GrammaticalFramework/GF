@@ -19,7 +19,7 @@ concrete StructuralDut of Structural = CatDut, Prelude **
   before_Prep = mkPrep "voor" ;
   behind_Prep = mkPrep "achter" ;
   between_Prep = mkPrep "tussen" ;
-  both7and_DConj = {s1 = "zowel" ; s2 = "en" ; n = Pl} ;
+  both7and_DConj = {s1 = "zowel" ; s2 = "als" ; n = Pl} ;
   but_PConj = ss "maar" ;
   by8agent_Prep = mkPrep "door" ;
   by8means_Prep = mkPrep "met" ;
@@ -45,9 +45,9 @@ concrete StructuralDut of Structural = CatDut, Prelude **
   in_Prep = ss "in" ;
   it_Pron = mkPronoun "het" "het" "zijn" "het" "het" "zijn" "zijne" Neutr Sg P3 ;
 
-  less_CAdv = X.mkCAdv "minder" "als" ;
+  less_CAdv = X.mkCAdv "minder" "dan" ;
   many_Det = mkDet "veel" "veel" Pl ;
-  more_CAdv = X.mkCAdv "meer" "als" ;
+  more_CAdv = X.mkCAdv "meer" "dan" ;
   most_Predet = mkPredet "meeste" "meeste" ;
   much_Det = mkDet "veel" "veel" Sg ;
 
@@ -62,7 +62,7 @@ concrete StructuralDut of Structural = CatDut, Prelude **
   please_Voc = ss "alsjeblieft" ;
   possess_Prep = mkPrep "van" ;
   quite_Adv = ss "heel" ;
-  she_Pron = mkPronoun "ze" "haar" "haar" "zij" "haar" "haar" "haare" Utr Sg P3 ;
+  she_Pron = mkPronoun "ze" "haar" "haar" "zij" "haar" "haar" "hare" Utr Sg P3 ;
 
   so_AdA = ss "zo" ;
   somebody_NP = mkNP "iemand" Utr Sg ;

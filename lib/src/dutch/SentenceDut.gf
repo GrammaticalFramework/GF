@@ -12,8 +12,9 @@ concrete SentenceDut of Sentence = CatDut ** open ResDut, Prelude in {
       s = \\pol,im => 
         let 
           ps = case im of {
-            ImpF n True  => <VImp3,"u",n> ;
-            ImpF n False => <VImp2,[],n>   ---- also plural?
+            ImpF Pl _     => <VImpPl,[],Pl> ;
+            ImpF Sg True  => <VImp3,"u",Sg> ;
+            ImpF Sg False => <VImp2,[],Sg>
             } ;
           agr  = {g = Utr ; n = ps.p3 ; p = P2} ; ---- P2? -- g does not matter
           verb = vp.s.s ! ps.p1 ;

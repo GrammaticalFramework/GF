@@ -1,4 +1,4 @@
-concrete NumeralDut of Numeral = CatDut ** open ResDut in {
+concrete NumeralDut of Numeral = CatDut ** open ResDut, Prelude in {
 
 flags optimize = all_subs ;
 
@@ -11,11 +11,11 @@ lincat
 lin 
   num x = x ;
 
-  n2 = mkDigit  "twee"  "twaalf"  "twentig"  "tweede" ;
+  n2 = mkDigit  "twee"  "twaalf"  "twintig"  "tweede" ;
   n3 = mkDigit  "drie"  "dertien" "dertig"  "derde" ;
   n4 = mkDigit  "vier" "veertien" "veertig" "vierde" ;
-  n5 = mkDigit  "vijf" "vijftien" "vijftig" "vifjde" ;
-  n6 = mkDigit  "zes" "zestien" "zestig" "zeste" ;
+  n5 = mkDigit  "vijf" "vijftien" "vijftig" "vijfde" ;
+  n6 = mkDigit  "zes" "zestien" "zestig" "zesde" ;
   n7 = mkDigit  "zeven" "zeventien" "zeventig" "zevende" ;
   n8 = mkDigit  "acht" "achttien"   "tachtig"  "achtste" ;
   n9 = mkDigit  "negen" "negentien" "negentig" "negende" ;
@@ -36,12 +36,12 @@ lin
   pot1plus d e = {s = \\g => e.s ! DUnit ! invNum ++ "en" ++ d.s ! DTen ! g; n = Pl} ;
   pot1as2 n = n ;
   pot2 d = 
-    {s = \\g => d.s ! DUnit ! invNum ++ cardOrd "honderd" "honderde" ! g ; n = Pl} ;
+    {s = \\g => d.s ! DUnit ! invNum ++ cardOrd "honderd" "honderdste" ! g ; n = Pl} ;
   pot2plus d e = 
     {s = \\g => d.s ! DUnit ! invNum ++ "duizend" ++ e.s ! g ; n = Pl} ;
   pot2as3 n = n ;
   pot3 n = 
-    {s = \\g => n.s ! invNum ++ cardOrd "duizend" "duizende" ! g ; n = Pl} ; 
+    {s = \\g => n.s ! invNum ++ cardOrd "duizend" "duizendste" ! g ; n = Pl} ; 
   pot3plus n m = 
     {s = \\g => n.s ! invNum ++ "duizend" ++ m.s ! g ; n = Pl} ;
 
@@ -85,9 +85,10 @@ lin
   LinDigit = {s : DForm => CardOrd => Str} ;
 
   cardOrd : Str -> Str -> CardOrd => Str = \drei,dritte ->
+    let dritt = init dritte in
     table {
       NCard _ _ => drei ;
-      NOrd a => (regAdjective dritte).s ! Posit ! a
+      NOrd a => (regAdjective dritt).s ! Posit ! a
       } ;
 
   mkDigit : (x1,_,_,x4 : Str) -> LinDigit = 
