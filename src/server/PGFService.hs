@@ -92,13 +92,6 @@ pgfMain pgf command =
                          Just lang | lang `elem` PGF.languages pgf -> return $ Just lang
                                    | otherwise -> throwCGIError 400 "Unknown language" ["Unknown language: " ++ l]
 
-doListGrammars :: IO JSValue
-doListGrammars = 
-    do cwd <- getCurrentDirectory
-       ps <- getDirectoryContents cwd
-       let fs = filter ((== ".pgf") . map toLower . takeExtension) $ map takeFileName ps
-       return $ showJSON $ map toJSObject [[("name", f)] | f <- fs]
-
 doTranslate :: PGF -> String -> Maybe PGF.Type -> Maybe PGF.Language -> Maybe PGF.Language -> JSValue
 doTranslate pgf input mcat mfrom mto =
   showJSON
