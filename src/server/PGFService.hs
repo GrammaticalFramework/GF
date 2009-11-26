@@ -138,7 +138,8 @@ doGrammar :: PGF -> Maybe (Accept Language) -> JSValue
 doGrammar pgf macc = showJSON $ toJSObject 
              [("name", showJSON (PGF.abstractName pgf)),
               ("userLanguage", showJSON (selectLanguage pgf macc)),
-              ("categories", showJSON categories), 
+              ("categories", showJSON categories),
+              ("functions", showJSON functions),
               ("languages", showJSON languages)]
   where languages = map toJSObject
                     [[("name", showJSON l), 
@@ -146,6 +147,7 @@ doGrammar pgf macc = showJSON $ toJSObject
                       ("canParse",     showJSON $ PGF.canParse pgf l)]
                      | l <- PGF.languages pgf]
         categories = map toJSObject [[("name", PGF.showCId cat)] | cat <- PGF.categories pgf]
+        functions  = map toJSObject [[("name", PGF.showCId fun)] | fun <- PGF.functions pgf]
 
 doGraphvizAbstrTree pgf tree = do
   let dot = PGF.graphvizAbstractTree pgf (True,True) tree

@@ -35,7 +35,10 @@ public class PGFWrapper {
 	private LinkedHashMap<String,PGF.Language> languages;
 
 	private List<String> parseableLanguages;
-	
+
+	private List<String> categories;
+	private List<String> functions;
+
 	// Event listeners
 	
 	private List<SettingsListener> listeners = new LinkedList<SettingsListener>();
@@ -112,6 +115,18 @@ public class PGFWrapper {
 					}
 				}
 				fireAvailableLanguagesChanged();
+				
+				categories = new ArrayList<String>();
+				for (PGF.Category category : grammar.getCategories().iterable()) {
+					categories.add(category.getName());
+				}
+				fireAvailableCategoriesChanged();
+
+				functions = new ArrayList<String>();
+				for (PGF.Function function : grammar.getFunctions().iterable()) {
+					functions.add(function.getName());
+				}
+				fireAvailableFunctionsChanged();
 			}
 
 			public void onError (Throwable e) {
@@ -196,37 +211,43 @@ public class PGFWrapper {
 		fireOutputLanguageChanged();
 	}
 
-	public String getCat() {
+	public String getStartCategory() {
 		return cat;
 	}
 
-	public void setCat(String cat) {
+	public void setStartCategory(String cat) {
 		this.cat = cat;
-		fireCatChanged();
+		fireStartCategoryChanged();
+	}
+
+	public List<String> getCategories() {
+		return categories;
+	}
+
+	public List<String> getFunctions() {
+		return functions;
 	}
 	
 	
 	//
 	// Information about the available grammars
 	//
-	
 	public List<String> getGrammars() {
 		return grammars;
 	}
-	
+
 	//
 	// Information about the selected grammar
 	//
-	
 	private void clearCachedInfo () {
 		languages = null;
 		parseableLanguages = null;
 	}
-	
+
 	public String getUserLanguage () {
 		return userLanguage;
 	}
-	
+
 	public String getLanguageCode (String language) {
 		PGF.Language l = languages.get(language);
 		return l == null ? null : l.getLanguageCode();
@@ -249,7 +270,9 @@ public class PGFWrapper {
 		public void onAvailableLanguagesChanged();
 		public void onInputLanguageChanged();
 		public void onOutputLanguageChanged();
-		public void onCatChanged();
+		public void onAvailableCategoriesChanged();
+		public void onStartCategoryChanged();
+		public void onAvailableFunctionsChanged();
 		public void onSettingsError(String msg, Throwable e);
 	}
 	
@@ -258,7 +281,9 @@ public class PGFWrapper {
 		public void onAvailableLanguagesChanged() {}
 		public void onInputLanguageChanged() {}
 		public void onOutputLanguageChanged() {}
-		public void onCatChanged() {}
+		public void onAvailableCategoriesChanged() {}
+		public void onStartCategoryChanged() {}
+		public void onAvailableFunctionsChanged() {}
 		public void onSettingsError(String msg, Throwable e) {}
 	}
 
@@ -283,16 +308,28 @@ public class PGFWrapper {
 			listener.onInputLanguageChanged();
 		}
 	}
-	
+
 	protected void fireOutputLanguageChanged() {
 		for (SettingsListener listener : listeners) {
 			listener.onOutputLanguageChanged();
 		}
 	}
 	
-	protected void fireCatChanged() {
+	protected void fireAvailableCategoriesChanged() {
 		for (SettingsListener listener : listeners) {
-			listener.onCatChanged();
+			listener.onAvailableCategoriesChanged();
+		}
+	}
+
+	protected void fireStartCategoryChanged() {
+		for (SettingsListener listener : listeners) {
+			listener.onStartCategoryChanged();
+		}
+	}
+
+	protected void fireAvailableFunctionsChanged() {
+		for (SettingsListener listener : listeners) {
+			listener.onAvailableFunctionsChanged();
 		}
 	}
 	

@@ -300,8 +300,12 @@ public class TranslateApp implements EntryPoint {
 		public void onOutputLanguageChanged() {
 			update();
 		}
-		public void onCatChanged() {
+		public void onAvailableCategoriesChanged() {
+		}
+		public void onStartCategoryChanged() {
 			update();
+		}
+		public void onAvailableFunctionsChanged() {
 		}
 		public void onSettingsError(String msg, Throwable e) {
 			showError(msg,e);
