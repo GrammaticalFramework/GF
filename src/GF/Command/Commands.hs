@@ -835,7 +835,7 @@ allCommands cod env@(pgf, mos) = Map.fromList [
      _  -> fromExprs es
 
    prGrammar opts
-     | isOpt "cats"     opts = return $ fromString $ unwords $ map (showType []) $ categories pgf
+     | isOpt "cats"     opts = return $ fromString $ unwords $ map showCId $ categories pgf
      | isOpt "fullform" opts = return $ fromString $ concatMap (morpho "" prFullFormLexicon) $ optLangs opts
      | isOpt "missing"  opts = return $ fromString $ unlines $ [unwords (showCId la:":": map showCId cs) | 
                                                                   la <- optLangs opts, let cs = missingLins pgf la]

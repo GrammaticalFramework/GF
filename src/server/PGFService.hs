@@ -69,9 +69,8 @@ pgfMain pgf command =
             Nothing -> return Nothing
             Just "" -> return Nothing
             Just cat -> case PGF.readType cat of
-                          Nothing -> throwCGIError 400 "Bad category" ["Bad category: " ++ cat]
-                          Just typ | typ `elem` PGF.categories pgf -> return $ Just typ
-                                   | otherwise -> throwCGIError 400 "Unknown category" ["Unknown category: " ++ PGF.showType [] typ]
+                          Nothing  -> throwCGIError 400 "Bad category" ["Bad category: " ++ cat]
+                          Just typ -> return $ Just typ  -- typecheck the category
 
     getFrom :: CGI (Maybe PGF.Language)
     getFrom = getLang "from"
@@ -146,7 +145,7 @@ doGrammar pgf macc = showJSON $ toJSObject
                       ("languageCode", showJSON $ fromMaybe "" (PGF.languageCode pgf l)),
                       ("canParse",     showJSON $ PGF.canParse pgf l)]
                      | l <- PGF.languages pgf]
-        categories = map toJSObject [[("cat", PGF.showType [] cat)] | cat <- PGF.categories pgf]
+        categories = map toJSObject [[("name", PGF.showCId cat)] | cat <- PGF.categories pgf]
 
 doGraphvizAbstrTree pgf tree = do
   let dot = PGF.graphvizAbstractTree pgf (True,True) tree
