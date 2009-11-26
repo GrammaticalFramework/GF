@@ -33,7 +33,9 @@ public class CompletionOracle extends SuggestOracle {
 			public void onAvailableLanguagesChanged() { clearState(); }
 			public void onInputLanguageChanged() { clearState(); }
 			public void onOutputLanguageChanged() { clearState(); }
-			public void onCatChanged() { clearState(); }
+			public void onAvailableCategoriesChanged() { clearState(); }
+			public void onStartCategoryChanged() { clearState(); }
+			public void onAvailableFunctionsChanged() { clearState(); }
 			public void onSettingsError(String msg, Throwable e) { clearState(); }
 		});
 	}

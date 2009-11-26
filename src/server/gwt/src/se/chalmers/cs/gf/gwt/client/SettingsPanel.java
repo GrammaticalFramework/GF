@@ -108,7 +108,9 @@ public class SettingsPanel extends Composite {
 				toLangBox.setSelectedValue(pgf.getOutputLanguage());
 			}
 		}
-		public void onCatChanged() { }
+		public void onAvailableCategoriesChanged() { }
+		public void onStartCategoryChanged() { }
+		public void onAvailableFunctionsChanged() { }
 		public void onSettingsError(String msg, Throwable e) { }
 	}
 

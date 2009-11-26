@@ -28,6 +28,10 @@ public class PGF {
 		public final native String getUserLanguage() /*-{ return this.userLanguage; }-*/;
 
 		public final native IterableJsArray<Language> getLanguages() /*-{ return this.languages; }-*/;
+
+		public final native IterableJsArray<Category> getCategories() /*-{ return this.categories; }-*/;
+
+		public final native IterableJsArray<Function> getFunctions() /*-{ return this.functions; }-*/;
 	}
 
 	public static class Language extends JavaScriptObject {
@@ -36,6 +40,18 @@ public class PGF {
 		public final native String getName() /*-{ return this.name; }-*/;
 		public final native String getLanguageCode() /*-{ return this.languageCode; }-*/;
 		public final native boolean canParse() /*-{ return this.canParse; }-*/;
+	}
+
+	public static class Category extends JavaScriptObject {
+		protected Category() { }
+
+		public final native String getName() /*-{ return this.name; }-*/;
+	}
+
+	public static class Function extends JavaScriptObject {
+		protected Function() { }
+
+		public final native String getName() /*-{ return this.name; }-*/;
 	}
 
 	/* Translation */
