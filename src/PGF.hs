@@ -199,7 +199,7 @@ abstractName :: PGF -> Language
 -- | List of all categories defined in the given grammar.
 -- The categories are defined in the abstract syntax
 -- with the \'cat\' keyword.
-categories :: PGF -> [Type]
+categories :: PGF -> [CId]
 
 -- | The start category is defined in the grammar with
 -- the \'startcat\' flag. This is usually the sentence category
@@ -279,7 +279,7 @@ languages pgf = cncnames pgf
 languageCode pgf lang = 
     fmap (replace '_' '-') $ lookConcrFlag pgf lang (mkCId "language")
 
-categories pgf = [DTyp [] c (map EMeta [0..length hs]) | (c,hs) <- Map.toList (cats (abstract pgf))]
+categories pgf = [c | (c,hs) <- Map.toList (cats (abstract pgf))]
 
 startCat pgf = DTyp [] (lookStartCat pgf) []
 
