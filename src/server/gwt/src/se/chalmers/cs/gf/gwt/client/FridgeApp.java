@@ -254,7 +254,7 @@ public class FridgeApp implements EntryPoint {
 				}
 			}			
 		}
-		public void onAvailableLanguagesChanged() {
+		public void onSelectedGrammarChanged() {
 			if (pgf.getInputLanguage() == null) {
 				pgf.setInputLanguage(pgf.getUserLanguage());
 			}
@@ -265,12 +265,8 @@ public class FridgeApp implements EntryPoint {
 		public void onOutputLanguageChanged() {
 			update();
 		}
-		public void onAvailableCategoriesChanged() {
-		}
 		public void onStartCategoryChanged() {
 			update();
-		}
-		public void onAvailableFunctionsChanged() {
 		}
 		public void onSettingsError(String msg, Throwable e) {
 			showError(msg,e);

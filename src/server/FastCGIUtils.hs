@@ -4,6 +4,7 @@ module FastCGIUtils (initFastCGI, loopFastCGI,
                      stderrToFile,
                      outputJSONP,
                      outputPNG,
+                     outputHTML,
                      splitBy) where
 
 import Control.Concurrent
@@ -168,6 +169,11 @@ outputJSONP x =
 outputPNG :: String -> CGI CGIResult
 outputPNG x = do
        setHeader "Content-Type" "image/png"
+       outputStrict x
+
+outputHTML :: String -> CGI CGIResult
+outputHTML x = do
+       setHeader "Content-Type" "text/html"
        outputStrict x
 
 outputStrict :: String -> CGI CGIResult

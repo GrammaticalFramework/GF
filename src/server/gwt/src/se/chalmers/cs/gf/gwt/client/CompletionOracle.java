@@ -30,12 +30,10 @@ public class CompletionOracle extends SuggestOracle {
 		this.errorHandler = errorHandler;
 		pgf.addSettingsListener(new PGFWrapper.SettingsListener() {
 			public void onAvailableGrammarsChanged() { clearState(); }
-			public void onAvailableLanguagesChanged() { clearState(); }
+			public void onSelectedGrammarChanged() { clearState(); }
 			public void onInputLanguageChanged() { clearState(); }
 			public void onOutputLanguageChanged() { clearState(); }
-			public void onAvailableCategoriesChanged() { clearState(); }
 			public void onStartCategoryChanged() { clearState(); }
-			public void onAvailableFunctionsChanged() { clearState(); }
 			public void onSettingsError(String msg, Throwable e) { clearState(); }
 		});
 	}

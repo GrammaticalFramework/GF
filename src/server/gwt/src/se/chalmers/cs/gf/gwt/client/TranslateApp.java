@@ -17,6 +17,8 @@ public class TranslateApp implements EntryPoint {
 
 	protected SuggestPanel suggestPanel;
 	protected VerticalPanel outputPanel;
+	protected Widget translatePanel;
+	protected BrowsePanel browsePanel;
 	protected StatusPopup statusPopup;
 
 	//
@@ -201,12 +203,28 @@ public class TranslateApp implements EntryPoint {
 	//
 	
 	protected Widget createUI() {
+		translatePanel = createTranslatePanel();
+		browsePanel = createBrowsePanel();
+
 		VerticalPanel vPanel = new VerticalPanel();
+
+		HorizontalPanel hPanel = new HorizontalPanel();
+		hPanel.setVerticalAlignment(HorizontalPanel.ALIGN_MIDDLE);
+		hPanel.setStylePrimaryName("my-HeaderPanel");
+
+		Widget linksPanel = createLinksPanel(vPanel);
+		hPanel.add(linksPanel);
+		hPanel.setCellHorizontalAlignment(linksPanel,HorizontalPanel.ALIGN_LEFT);
+
+		Widget settingsPanel = createSettingsPanel();
+		hPanel.add(settingsPanel);
+		hPanel.setCellHorizontalAlignment(settingsPanel,HorizontalPanel.ALIGN_RIGHT);
+
 		vPanel.setWidth("100%");
 		vPanel.setHorizontalAlignment(VerticalPanel.ALIGN_CENTER);
-		vPanel.add(createSuggestPanel());
-		vPanel.add(createSettingsPanel());
-		vPanel.add(createTranslationsPanel());
+		vPanel.add(hPanel);
+		vPanel.add(translatePanel);
+
 		return vPanel;
 	}
 
@@ -229,6 +247,43 @@ public class TranslateApp implements EntryPoint {
 		outputPanel = new VerticalPanel();
 		outputPanel.addStyleName("my-translations");
 		return outputPanel;
+	}
+
+	protected Widget createTranslatePanel() {
+		VerticalPanel translatePanel = new VerticalPanel();
+		translatePanel.add(createSuggestPanel());
+		translatePanel.add(createTranslationsPanel());
+		return translatePanel;
+	}
+
+	protected BrowsePanel createBrowsePanel() {
+		return new BrowsePanel(pgf);
+	}
+
+	protected Widget createLinksPanel(final Panel parent) {
+		HorizontalPanel linksPanel = new HorizontalPanel();
+		linksPanel.setStylePrimaryName("my-LinksPanel");
+
+		Hyperlink translateLink = new Hyperlink("Translate", null);
+		translateLink.addClickListener(new ClickListener() {
+			public void onClick(Widget sender) {
+				parent.remove(browsePanel);
+				parent.add(translatePanel);
+			}
+		});
+		linksPanel.add(translateLink);
+
+		Hyperlink browseLink = new Hyperlink("Browse", null);
+		browseLink.addClickListener(new ClickListener() {
+			public void onClick(Widget sender) {
+				parent.remove(translatePanel);
+				parent.add(browsePanel);
+				browsePanel.onActivate();
+			}
+		});
+		linksPanel.add(browseLink);
+
+		return linksPanel;
 	}
 
 	protected Widget createLoadingWidget () {
@@ -287,7 +342,7 @@ public class TranslateApp implements EntryPoint {
 				}
 			}			
 		}
-		public void onAvailableLanguagesChanged() {
+		public void onSelectedGrammarChanged() {
 			if (pgf.getInputLanguage() == null) {
 				GWT.log("Setting input language to user language: " + pgf.getUserLanguage(), null);
 				pgf.setInputLanguage(pgf.getUserLanguage());
@@ -300,12 +355,8 @@ public class TranslateApp implements EntryPoint {
 		public void onOutputLanguageChanged() {
 			update();
 		}
-		public void onAvailableCategoriesChanged() {
-		}
 		public void onStartCategoryChanged() {
 			update();
-		}
-		public void onAvailableFunctionsChanged() {
 		}
 		public void onSettingsError(String msg, Throwable e) {
 			showError(msg,e);
