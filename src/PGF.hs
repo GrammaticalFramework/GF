@@ -20,12 +20,12 @@ module PGF(
            -- * Identifiers
            CId, mkCId, wildCId,
            showCId, readCId,
-           
+
            -- * Languages
            Language, 
            showLanguage, readLanguage,
            languages, abstractName, languageCode,
-           
+
            -- * Types
            Type, Hypo,
            showType, readType,
@@ -55,10 +55,10 @@ module PGF(
 
            -- ** Parsing
            parse, parseWithRecovery, canParse, parseAllLang, parseAll,
-           
+
            -- ** Evaluation
            PGF.compute, paraphrase,
-           
+
            -- ** Type Checking
            -- | The type checker in PGF does both type checking and renaming
            -- i.e. it verifies that all identifiers are declared and it
@@ -71,7 +71,7 @@ module PGF(
            -- also lead to metavariables instantiations.
            checkType, checkExpr, inferExpr,
            TcError(..), ppTcError,
-           
+
            -- ** Word Completion (Incremental Parsing)
            complete,
            Incremental.ParseState,
@@ -79,7 +79,7 @@ module PGF(
 
            -- ** Generation
            generateRandom, generateAll, generateAllDepth,
-           
+
            -- ** Morphological Analysis
            Lemma, Analysis, Morpho,
            lookupMorpho, buildMorpho,
@@ -88,7 +88,10 @@ module PGF(
            graphvizAbstractTree,
            graphvizParseTree,
            graphvizDependencyTree,
-           graphvizAlignment
+           graphvizAlignment,
+
+           -- * Browsing
+           browse
           ) where
 
 import PGF.CId
@@ -114,8 +117,10 @@ import qualified Data.Map as Map
 import qualified Data.IntMap as IntMap
 import Data.Maybe
 import Data.Binary
+import Data.List(mapAccumL)
 import System.Random (newStdGen)
 import Control.Monad
+import Text.PrettyPrint
 
 ---------------------------------------------------
 -- Interface
@@ -313,3 +318,35 @@ complete pgf from typ input =
 -- | Converts an expression to normal form
 compute :: PGF -> Expr -> Expr
 compute pgf = PGF.Data.normalForm (funs (abstract pgf)) 0 []
+
+browse :: PGF -> CId -> Maybe (String,[CId],[CId])
+browse pgf id = fmap (\def -> (def,producers,consumers)) definition
+  where
+    definition = case Map.lookup id (funs (abstract pgf)) of
+                   Just (ty,_,eqs) -> Just $ render (text "fun" <+> ppCId id <+> colon <+> ppType 0 [] ty $$
+                                                     if null eqs
+                                                       then empty
+                                                       else text "def" <+> vcat [let (scope,ds) = mapAccumL (ppPatt 9) [] patts
+                                                                                 in ppCId id <+> hsep ds <+> char '=' <+> ppExpr 0 scope res | Equ patts res <- eqs])
+                   Nothing   -> case Map.lookup id (cats (abstract pgf)) of
+                                  Just hyps -> Just $ render (text "cat" <+> ppCId id <+> hsep (snd (mapAccumL ppHypo [] hyps)))
+                                  Nothing   -> Nothing
+
+    (producers,consumers) = Map.foldWithKey accum ([],[]) (funs (abstract pgf))
+      where
+        accum f (ty,_,_) (plist,clist) = 
+          let !plist' = if id `elem` ps then f : plist else plist
+              !clist' = if id `elem` cs then f : clist else clist
+          in (plist',clist')
+          where
+            (ps,cs) = tyIds ty
+
+    tyIds (DTyp hyps cat es) = (foldr expIds (cat:concat css) es,concat pss)
+      where
+        (pss,css) = unzip [tyIds ty | (_,_,ty) <- hyps]
+
+    expIds (EAbs _ _ e) ids = expIds e ids
+    expIds (EApp e1 e2) ids = expIds e1 (expIds e2 ids)
+    expIds (EFun id)    ids = id : ids
+    expIds (ETyped e _) ids = expIds e ids
+    expIds _            ids = ids

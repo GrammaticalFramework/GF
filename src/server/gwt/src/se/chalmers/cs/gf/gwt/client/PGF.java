@@ -2,10 +2,9 @@ package se.chalmers.cs.gf.gwt.client;
 
 import se.chalmers.cs.gf.gwt.client.JSONRequestBuilder.Arg;
 
-import com.google.gwt.core.client.JavaScriptObject;
-
-import java.util.List;
-import java.util.ArrayList;
+import java.util.*;
+import com.google.gwt.core.client.*;
+import com.google.gwt.http.client.*;
 
 public class PGF {
 
@@ -29,9 +28,9 @@ public class PGF {
 
 		public final native IterableJsArray<Language> getLanguages() /*-{ return this.languages; }-*/;
 
-		public final native IterableJsArray<Category> getCategories() /*-{ return this.categories; }-*/;
+		public final native JsArrayString getCategories() /*-{ return this.categories; }-*/;
 
-		public final native IterableJsArray<Function> getFunctions() /*-{ return this.functions; }-*/;
+		public final native JsArrayString getFunctions() /*-{ return this.functions; }-*/;
 	}
 
 	public static class Language extends JavaScriptObject {
@@ -40,18 +39,6 @@ public class PGF {
 		public final native String getName() /*-{ return this.name; }-*/;
 		public final native String getLanguageCode() /*-{ return this.languageCode; }-*/;
 		public final native boolean canParse() /*-{ return this.canParse; }-*/;
-	}
-
-	public static class Category extends JavaScriptObject {
-		protected Category() { }
-
-		public final native String getName() /*-{ return this.name; }-*/;
-	}
-
-	public static class Function extends JavaScriptObject {
-		protected Function() { }
-
-		public final native String getName() /*-{ return this.name; }-*/;
 	}
 
 	/* Translation */
@@ -165,6 +152,26 @@ public class PGF {
 		args.add(new Arg("command", "alignment"));
                 args.add(new Arg("tree", abstractTree));
 		return JSONRequestBuilder.getQueryURL(pgfURL,args);
+	}
+
+	public Request browse(String pgfURL, String id, String href, String cssClass, RequestCallback callback) {
+		List<Arg> args = new ArrayList<Arg>();
+		args.add(new Arg("command", "browse"));
+		args.add(new Arg("id", id));
+		args.add(new Arg("href", href));
+		args.add(new Arg("css-class", cssClass));
+
+		Request request = null;
+		try {
+			RequestBuilder builder = new RequestBuilder(RequestBuilder.GET,
+                                                                    JSONRequestBuilder.getQueryURL(pgfURL,args));
+			builder.setCallback(callback);
+			request = builder.send();
+		} catch (RequestException ex) {
+			callback.onError(request, ex);
+		}
+
+		return request;
 	}
 
 	/* Common */

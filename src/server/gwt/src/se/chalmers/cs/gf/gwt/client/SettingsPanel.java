@@ -75,7 +75,7 @@ public class SettingsPanel extends Composite {
 				grammarBox.addItems(pgf.getGrammars());
 			}
 		}
-		public void onAvailableLanguagesChanged() {
+		public void onSelectedGrammarChanged() {
 			if (grammarBox != null) {
 				grammarBox.setSelectedValue(pgf.getPGFName());
 			}
@@ -108,9 +108,7 @@ public class SettingsPanel extends Composite {
 				toLangBox.setSelectedValue(pgf.getOutputLanguage());
 			}
 		}
-		public void onAvailableCategoriesChanged() { }
 		public void onStartCategoryChanged() { }
-		public void onAvailableFunctionsChanged() { }
 		public void onSettingsError(String msg, Throwable e) { }
 	}
 

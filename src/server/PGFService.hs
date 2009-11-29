@@ -52,6 +52,7 @@ pgfMain pgf command =
          "abstrtree"      -> getTree >>= liftIO . doGraphvizAbstrTree pgf >>= outputPNG
          "parsetree"      -> getTree >>= \t -> getFrom >>= \(Just l) -> liftIO (doGraphvizParseTree pgf l t) >>= outputPNG
          "alignment"      -> getTree >>= liftIO . doGraphvizAlignment pgf >>= outputPNG
+         "browse"         -> return (doBrowse pgf) `ap` getId `ap` getCSSClass `ap` getHRef  >>= outputHTML
          _                -> throwCGIError 400 "Unknown command" ["Unknown command: " ++ show command]
   where
     getText :: CGI String
@@ -77,6 +78,18 @@ pgfMain pgf command =
 
     getTo :: CGI (Maybe PGF.Language)
     getTo = getLang "to"
+
+    getId :: CGI PGF.CId
+    getId = do mb_id <- fmap (>>= PGF.readCId) (getInput "id")
+               case mb_id of
+                 Just id -> return id
+                 Nothing -> throwCGIError 400 "Bad identifier" []
+
+    getCSSClass :: CGI (Maybe String)
+    getCSSClass = getInput "css-class"
+
+    getHRef :: CGI (Maybe String)
+    getHRef = getInput "href"
 
     getLimit :: CGI (Maybe Int)
     getLimit = readInput "limit"
@@ -139,8 +152,8 @@ doGrammar pgf macc = showJSON $ toJSObject
                       ("languageCode", showJSON $ fromMaybe "" (PGF.languageCode pgf l)),
                       ("canParse",     showJSON $ PGF.canParse pgf l)]
                      | l <- PGF.languages pgf]
-        categories = map toJSObject [[("name", PGF.showCId cat)] | cat <- PGF.categories pgf]
-        functions  = map toJSObject [[("name", PGF.showCId fun)] | fun <- PGF.functions pgf]
+        categories = [PGF.showCId cat | cat <- PGF.categories pgf]
+        functions  = [PGF.showCId fun | fun <- PGF.functions pgf]
 
 doGraphvizAbstrTree pgf tree = do
   let dot = PGF.graphvizAbstractTree pgf (True,True) tree
@@ -153,6 +166,51 @@ doGraphvizParseTree pgf lang tree = do
 doGraphvizAlignment pgf tree = do
   let dot = PGF.graphvizAlignment pgf tree
   readProcess "dot" ["-T","png"] (UTF8.encodeString dot)
+
+doBrowse pgf id cssClass href =
+  case PGF.browse pgf id of
+    Just (def,ps,cs) -> "<PRE>"++annotate def++"</PRE>\n"++
+                        (if not (null ps)
+                           then "<BR/>"++
+                                "<H3>Producers</H3>"++
+                                "<P>"++annotateCIds ps++"</P>\n"
+                           else "")++
+                        (if not (null cs)
+                           then "<BR/>"++
+                                "<H3>Consumers</H3>"++
+                                "<P>"++annotateCIds cs++"</P>\n"
+                           else "")
+    Nothing          -> ""
+  where
+    identifiers = PGF.functions pgf ++ PGF.categories pgf
+
+    annotate []   = []
+    annotate (c:cs)
+      | isSpace c = c : annotate cs
+      | otherwise = let (id,cs') = break isSpace (c:cs)
+                    in (if PGF.mkCId id `elem` identifiers
+                          then mkLink id
+                          else if id == "fun" || id == "data" || id == "cat" || id == "def"
+                                 then "<B>"++id++"</B>"
+                                 else id) ++
+                       annotate cs'
+    annotateCIds ids = unwords (map (mkLink . PGF.showCId) ids)
+
+    hrefAttr id =
+      case href of
+        Nothing -> ""
+        Just s  -> "href=\""++substId id s++"\""
+
+    substId id [] = []
+    substId id ('$':'I':'D':cs) = id ++ cs
+    substId id (c:cs) = c : substId id cs
+
+    classAttr =
+      case cssClass of
+        Nothing -> ""
+        Just s  -> "class=\""++s++"\""
+
+    mkLink s = "<A "++hrefAttr s++" "++classAttr++">"++s++"</A>"
 
 instance JSON PGF.CId where
     readJSON x = readJSON x >>= maybe (fail "Bad language.") return . PGF.readLanguage

@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 import com.google.gwt.http.client.*;
 import com.google.gwt.xml.client.*;
+import com.google.gwt.core.client.*;
 
 public class PGFWrapper {
 
@@ -36,8 +37,8 @@ public class PGFWrapper {
 
 	private List<String> parseableLanguages;
 
-	private List<String> categories;
-	private List<String> functions;
+	private JsArrayString categories;
+	private JsArrayString functions;
 
 	// Event listeners
 	
@@ -114,19 +115,11 @@ public class PGFWrapper {
 						parseableLanguages.add(name);
 					}
 				}
-				fireAvailableLanguagesChanged();
 				
-				categories = new ArrayList<String>();
-				for (PGF.Category category : grammar.getCategories().iterable()) {
-					categories.add(category.getName());
-				}
-				fireAvailableCategoriesChanged();
+				categories = grammar.getCategories();
+				functions = grammar.getFunctions();
 
-				functions = new ArrayList<String>();
-				for (PGF.Function function : grammar.getFunctions().iterable()) {
-					functions.add(function.getName());
-				}
-				fireAvailableFunctionsChanged();
+				fireSelectedGrammarChanged();
 			}
 
 			public void onError (Throwable e) {
@@ -161,6 +154,10 @@ public class PGFWrapper {
 
 	public String graphvizAlignment(String abstractTree) {
 		return pgf.graphvizAlignment(grammarURL,abstractTree);
+	}
+
+	public Request browse(String id, String href, String cssClass, RequestCallback callback) {
+		return pgf.browse(grammarURL, id, href, cssClass, callback);
 	}
 
 	//
@@ -220,11 +217,11 @@ public class PGFWrapper {
 		fireStartCategoryChanged();
 	}
 
-	public List<String> getCategories() {
+	public JsArrayString getCategories() {
 		return categories;
 	}
 
-	public List<String> getFunctions() {
+	public JsArrayString getFunctions() {
 		return functions;
 	}
 	
@@ -267,23 +264,19 @@ public class PGFWrapper {
 	
 	public interface SettingsListener {
 		public void onAvailableGrammarsChanged();
-		public void onAvailableLanguagesChanged();
+		public void onSelectedGrammarChanged();
 		public void onInputLanguageChanged();
 		public void onOutputLanguageChanged();
-		public void onAvailableCategoriesChanged();
 		public void onStartCategoryChanged();
-		public void onAvailableFunctionsChanged();
 		public void onSettingsError(String msg, Throwable e);
 	}
 	
 	public static class SettingsAdapter implements SettingsListener {
 		public void onAvailableGrammarsChanged() {}
-		public void onAvailableLanguagesChanged() {}
+		public void onSelectedGrammarChanged() {}
 		public void onInputLanguageChanged() {}
 		public void onOutputLanguageChanged() {}
-		public void onAvailableCategoriesChanged() {}
 		public void onStartCategoryChanged() {}
-		public void onAvailableFunctionsChanged() {}
 		public void onSettingsError(String msg, Throwable e) {}
 	}
 
@@ -297,9 +290,9 @@ public class PGFWrapper {
 		}
 	}
 
-	protected void fireAvailableLanguagesChanged() {
+	protected void fireSelectedGrammarChanged() {
 		for (SettingsListener listener : listeners) {
-			listener.onAvailableLanguagesChanged();
+			listener.onSelectedGrammarChanged();
 		}
 	}
 
@@ -315,21 +308,9 @@ public class PGFWrapper {
 		}
 	}
 	
-	protected void fireAvailableCategoriesChanged() {
-		for (SettingsListener listener : listeners) {
-			listener.onAvailableCategoriesChanged();
-		}
-	}
-
 	protected void fireStartCategoryChanged() {
 		for (SettingsListener listener : listeners) {
 			listener.onStartCategoryChanged();
-		}
-	}
-
-	protected void fireAvailableFunctionsChanged() {
-		for (SettingsListener listener : listeners) {
-			listener.onAvailableFunctionsChanged();
 		}
 	}
 	
