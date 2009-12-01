@@ -43,22 +43,34 @@ graphvizAbstractTree pgf funscats = prGraph False . tree2graph pgf funscats . ex
 
 tree2graph :: PGF -> (Bool,Bool) -> Tree -> [String]
 tree2graph pgf (funs,cats) = prf [] where
-  prf ps t = case t of
-    Fun cid trees -> 
-      let (nod,lab) = prn ps cid in
-        (nod ++ " [label = " ++ lab ++ ", style = \"solid\", shape = \"plaintext\"] ;") : 
+  prf ps t = let (nod,lab) = prn ps t in 
+    (nod ++ " [label = " ++ lab ++ ", style = \"solid\", shape = \"plaintext\"] ;") : 
+    case t of
+      Fun cid trees -> 
         [       pra (j:ps) nod t | (j,t) <- zip [0..] trees] ++
         concat [prf (j:ps) t     | (j,t) <- zip [0..] trees]
-  prn ps cid = 
-    let
-      fun = if funs then showCId cid else ""
-      cat = if cats then prCat cid else ""
-      colon = if funs && cats then " : " else ""
-      lab = "\"" ++ fun ++ colon ++ cat ++ "\""
-    in (show(show (ps :: [Int])),lab)
-  pra i nod t@(Fun cid _) =  nod ++ arr ++ fst (prn i cid) ++ " [style = \"solid\"];"
+      Abs xs (Fun cid trees) -> 
+        [       pra (j:ps) nod t | (j,t) <- zip [0..] trees] ++
+        concat [prf (j:ps) t     | (j,t) <- zip [0..] trees]
+      _ -> []
+  prn ps t = case t of
+    Fun cid _ ->
+      let
+        fun = if funs then showCId cid else ""
+        cat = if cats then prCat cid else ""
+        colon = if funs && cats then " : " else ""
+        lab = "\"" ++ fun ++ colon ++ cat ++ "\""
+      in (show(show (ps :: [Int])),lab)
+    Abs bs tree -> 
+      let fun = case tree of
+            Fun cid _ -> Fun cid []
+            _ -> tree
+      in (show(show (ps :: [Int])),"\"" ++ esc (prTree (Abs bs fun)) ++ "\"")
+    _ -> (show(show (ps :: [Int])),"\"" ++ esc (prTree t) ++ "\"")
+  pra i nod t = nod ++ arr ++ fst (prn i t) ++ " [style = \"solid\"];"
   arr = " -- " -- if digr then " -> " else " -- "
   prCat = showCId . lookValCat pgf
+  esc = concatMap (\c -> if c =='\\' then [c,c] else [c]) --- escape backslash in abstracts
 
 prGraph digr ns = concat $ map (++"\n") $ [graph ++ "{\n"] ++ ns ++ ["}"] where
   graph = if digr then "digraph" else "graph"
@@ -70,6 +82,7 @@ tree2mk pgf = showExpr [] . tree2expr . t2m . expr2tree where
   t2m t = case t of
     Fun cid [] -> t
     Fun cid ts -> Fun (mk cid) (map t2m ts)
+    _ -> t
   mk = mkCId . ("mk" ++) . showCId . lookValCat pgf
 
 -- dependency trees from Linearize.linearizeMark
@@ -118,6 +131,7 @@ graphvizDependencyTree format debug mlab ms pgf lang exp = case format of
     (Fun f [],[_]) -> x0 ---- ??
     (Fun f ts,[_]) -> x0 ++ [getHead (length ts - 1) f]
     (Fun f ts,i:y) -> headArg x0 (ts !! i) y
+    _ -> x0 ----
 
   label tr y x = case span (uncurry (==)) (zip y x) of
     (xys,(_,i):_) -> getLabel i (funAt tr (map fst xys))
@@ -126,6 +140,7 @@ graphvizDependencyTree format debug mlab ms pgf lang exp = case format of
   funAt tr x = case (tr,x) of
     (Fun f _ ,[])  -> f
     (Fun f ts,i:y) -> funAt (ts !! i) y
+    _ -> mkCId (prTree tr) ----
 
   word x = if elem x sortedNodes then x else 
            let x' = headArg x tr (x ++[0]) in
