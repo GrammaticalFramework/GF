@@ -1,6 +1,7 @@
 module PGF.Tree 
          ( Tree(..),
-           tree2expr, expr2tree
+           tree2expr, expr2tree,
+           prTree
          ) where
 
 import PGF.CId
@@ -63,3 +64,8 @@ expr2tree e = abs [] [] e
     app xs as (EVar i)        = Var (xs !! i)
     app xs as (EFun f)        = Fun f as
     app xs as (ETyped e _)    = app xs as e
+
+
+prTree :: Tree -> String
+prTree = showExpr [] . tree2expr
+
