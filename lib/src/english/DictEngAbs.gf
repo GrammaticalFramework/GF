@@ -38656,8 +38656,6 @@ fun thankfully_Adv : Adv;
 fun thankfulness_N : N;
 fun thankless_A : A;
 fun thanksgiving_N : N;
-fun that_A : A;
-fun that_Adv : Adv;
 fun thatch_N : N;
 fun thatch_V2 : V2;
 fun thatcham_PN : PN;
