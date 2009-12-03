@@ -1,4 +1,10 @@
-abstract Browse = Cat, Conjunction, Numeral, Structural, Lexicon ** {
+abstract Browse = Cat, Numeral, Structural, Lexicon ** {
+
+cat ListAdv ;
+cat ListAP ;
+cat ListNP ;
+cat ListRS ;
+cat ListS ;
 
 fun mkAP_1 : A -> AP ;
 fun mkAP_2 : A -> NP -> AP ;
@@ -287,4 +293,9 @@ fun that_Det_335 : Det ;
 fun this_Det_336 : Det ;
 fun those_Det_337 : Det ;
 fun these_Det_338 : Det ;
+fun the_Det : Det ;
+fun thePl_Det : Det ;
+fun a_Det : Det ;
+fun aPl_Det : Det ;
+
 }
