@@ -11,9 +11,10 @@ concrete GrammarGer of Grammar =
   RelativeGer,
   ConjunctionGer,
   PhraseGer,
-  TextX - [Tense,TPres,TPast,TFut,TCond,TTAnt,Temp],
+  TextX - [Tense,Temp],
   IdiomGer,
-  StructuralGer
+  StructuralGer,
+  TenseGer
   ** {
 
 flags startcat = Phr ; unlexer = text ; lexer = text ;

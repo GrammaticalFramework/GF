@@ -13,7 +13,8 @@ concrete GrammarFin of Grammar =
   PhraseFin,
   TextX,
   IdiomFin,
-  StructuralFin
+  StructuralFin,
+  TenseX
   ** {
 
 flags startcat = Phr ; unlexer = finnish ; lexer = text ;

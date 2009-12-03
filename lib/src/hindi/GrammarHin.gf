@@ -13,7 +13,8 @@ concrete GrammarHin of Grammar =
   PhraseHin,
   TextX,
   StructuralHin,
-  IdiomHin
+  IdiomHin,
+  TenseX
   ** {
 
 flags startcat = Phr ; unlexer = text ; lexer = text ;

@@ -13,5 +13,6 @@ concrete GrammarRus of Grammar =
   PhraseRus,
   TextX,
   StructuralRus,
-  IdiomRus
+  IdiomRus,
+  TenseX
    ** { flags  startcat = Phr ; unlexer = text ; lexer = text ; coding=utf8 ;} ;

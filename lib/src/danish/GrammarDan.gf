@@ -13,7 +13,8 @@ concrete GrammarDan of Grammar =
   PhraseDan,
   TextX,
   IdiomDan,
-  StructuralDan
+  StructuralDan,
+  TenseX
   ** {
 
 flags startcat = Phr ; unlexer = text ; lexer = text ;

@@ -12,8 +12,9 @@ concrete GrammarTha of Grammar =
 --  ConjunctionTha,
   PhraseTha,
 --  TextX,
-  StructuralTha
+  StructuralTha,
 --  IdiomTha
+  TenseX
   ** {
 
 flags startcat = Phr ; unlexer = text ; lexer = text ;

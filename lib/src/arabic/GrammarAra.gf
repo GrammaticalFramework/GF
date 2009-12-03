@@ -13,7 +13,8 @@ concrete GrammarAra of Grammar =
   PhraseAra,
   TextX - [Utt],
   StructuralAra,
-  IdiomAra
+  IdiomAra,
+  TenseX - [Utt]
   ** {
 
 flags startcat = Phr ; unlexer = text ; lexer = text ;
