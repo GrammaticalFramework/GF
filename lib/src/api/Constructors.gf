@@ -429,6 +429,13 @@ incomplete resource Constructors = open Grammar in {
       mkDet : Pron -> Num -> Det    -- 11. my (houses) --# notminimal
       } ; --# notminimal
 
+
+      the_Det   : Det ; -- the (house)
+      a_Det     : Det ; -- a (house)
+      thePl_Det : Det ; -- the (houses)
+      aSg_Det   : Det ; -- a (house)
+      aPl_Det   : Det ; -- (houses)
+
 --3 Quant, quantifiers --# notminimal
 
 -- There are definite and indefinite articles.
@@ -1717,6 +1724,16 @@ incomplete resource Constructors = open Grammar in {
       these_QuantPl : QuantPl ; -- 4. these --# notminimal
       those_QuantPl : QuantPl ; -- 5. those --# notminimal
 -} --# notminimal
+
+-- new things
+
+      the_Det   : Det = theSg_Det ; -- the (house)
+      a_Det     : Det = aSg_Det ; -- a (house)
+      theSg_Det : Det = DetQuant DefArt NumSg ; -- the (houses)
+      thePl_Det : Det = DetQuant DefArt NumPl ; -- the (houses)
+      aSg_Det   : Det = DetQuant IndefArt NumSg ; -- a (house)
+      aPl_Det   : Det = DetQuant IndefArt NumPl ; -- (houses)
+
 
 -- export needed, since not in Cat
 

@@ -1,6 +1,12 @@
 --# -path=.:alltenses
 
-concrete BrowseEng of Browse = CatEng, ConjunctionEng, NumeralEng, LexiconEng, StructuralEng ** open LangEng in {
+concrete BrowseEng of Browse = CatEng, NumeralEng, LexiconEng, StructuralEng ** open LangEng in {
+
+lincat ListAdv = LangEng.ListAdv ;
+lincat ListAP = LangEng.ListAP ;
+lincat ListNP = LangEng.ListNP ;
+lincat ListRS = LangEng.ListRS ;
+lincat ListS = LangEng.ListS ;
 
 lin mkAP_1 = PositA ;
 lin mkAP_2 = ComparA ;
@@ -297,6 +303,11 @@ lin that_Det_335 = (DetQuant that_Quant NumSg) ;
 lin this_Det_336 = (DetQuant this_Quant NumSg) ;
 lin those_Det_337 = (DetQuant that_Quant NumPl) ;
 lin these_Det_338 = (DetQuant this_Quant NumPl) ;
+
+lin the_Det = DetQuant DefArt NumSg ;
+lin thePl_Det = DetQuant DefArt NumPl ;
+lin a_Det = DetQuant IndefArt NumSg ;
+lin aPl_Det = DetQuant IndefArt NumPl ;
 
 oper
   ComplV2 : V2 -> NP -> VP = \v,np -> ComplSlash (SlashV2a v) np ;
