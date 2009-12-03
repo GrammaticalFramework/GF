@@ -13,7 +13,8 @@ concrete GrammarNor of Grammar =
   PhraseNor,
   TextX,
   IdiomNor,
-  StructuralNor
+  StructuralNor,
+  TenseX
   ** {
 
 flags startcat = Phr ; unlexer = text ; lexer = text ;

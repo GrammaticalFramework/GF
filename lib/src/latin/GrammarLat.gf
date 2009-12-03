@@ -12,7 +12,8 @@ concrete GrammarLat of Grammar =
 --  ConjunctionLat,
 --  PhraseLat,
   TextX,
-  StructuralLat
+  StructuralLat,
 --  IdiomLat
+  TenseX
   ** {
 } ;

@@ -1,7 +1,7 @@
 --# -path=.:../Romance:../common:../abstract:../common:prelude
 
 concrete CatRon of Cat =
-  CommonX - [CAdv,Temp,TTAnt,Tense,TPres,TPast,TFut,TCond] 
+  CommonX - [CAdv,Temp,Tense] 
   ** open Prelude, ResRon, MorphoRon,(R = ParamX) in {
 
   flags optimize=all_subs ;
@@ -136,15 +136,6 @@ concrete CatRon of Cat =
 
     Tense = {s : Str ; t : RTense} ;
     
-  lin
-    TTAnt t a = {s = a.s ++ t.s ; a = a.a ; t = t.t} ;
-    TPres = {s = []} ** {t = RPres} ;
-    TPast = {s = []} ** {t = RPast} ;   --# notpresent
-    TFut  = {s = []} ** {t = RFut} ;    --# notpresent
-    TCond = {s = []} ** {t = RCond} ;   --# notpresent
-
-
-
 
 oper
   aagr : Gender -> Number -> AAgr = \g,n ->

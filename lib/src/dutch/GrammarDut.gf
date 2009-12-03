@@ -13,4 +13,5 @@ concrete GrammarDut of Grammar =
   PhraseDut,
   TextX,
   IdiomDut,
-  StructuralDut ;
+  StructuralDut,
+  TenseX ;

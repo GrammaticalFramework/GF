@@ -12,9 +12,10 @@ concrete GrammarRon of Grammar =
   RelativeRon,
   ConjunctionRon,
   PhraseRon,
-  TextX - [CAdv,Temp,TTAnt,Tense,TPres,TPast,TFut,TCond],
+  TextX - [CAdv,Temp,Tense],
   Prelude, MorphoRon, Coordination,
-  StructuralRon
+  StructuralRon,
+  TenseRon
   ** {
 
 flags startcat = Phr ; unlexer = text ; lexer = text ;

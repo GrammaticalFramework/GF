@@ -13,7 +13,8 @@ concrete GrammarEng of Grammar =
   PhraseEng,
   TextX,
   StructuralEng,
-  IdiomEng
+  IdiomEng,
+  TenseX
   ** {
 
 flags startcat = Phr ; unlexer = text ; lexer = text ;

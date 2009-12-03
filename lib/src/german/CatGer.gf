@@ -1,5 +1,5 @@
 concrete CatGer of Cat = 
-  CommonX - [Tense,TPres,TPast,TFut,TCond,TTAnt,Temp] ** 
+  CommonX - [Tense,Temp] ** 
   open ResGer, Prelude in {
 
   flags optimize=all_subs ;
@@ -93,11 +93,4 @@ concrete CatGer of Cat =
     Temp = {s : Str ; t : ResGer.Tense ; a : Anteriority ; m : Mood} ;
     Tense = {s : Str ; t : ResGer.Tense ; m : Mood} ;
 
-  lin
-    TTAnt t a = {s = t.s ++ a.s ; t = t.t ; a = a.a ; m = t.m} ;
-
-    TPres = {s = [] ; t = Pres ; m = MIndic} ;
-    TPast = {s = [] ; t = Past ; m = MIndic} ;   --# notpresent
-    TFut  = {s = [] ; t = Fut  ; m = MIndic} ;   --# notpresent
-    TCond = {s = [] ; t = Cond ; m = MIndic} ;   --# notpresent
 }

@@ -152,7 +152,7 @@ resource ResGer = ParamX ** open Prelude in {
         } ;
 
     conjAgr : Agr -> Agr -> Agr = \a,b -> {
-      g = Utr ; ----
+      g = Neutr ; ----
       n = conjNumber a.n b.n ;
       p = conjPerson a.p b.p
       } ;
