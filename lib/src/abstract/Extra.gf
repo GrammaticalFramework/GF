@@ -26,5 +26,14 @@ abstract Extra = Cat ** {
     ConjVPI : Conj -> [VPI] -> VPI ;
     ComplVPIVV : VV -> VPI -> VP ;
 
+  -- new 4/12/2009
+  cat
+    VPS ;
+    [VPS] {2} ;
+
+  fun
+    MkVPS : Temp -> Pol -> VP -> VPS ;
+    ConjVPS : Conj -> [VPS] -> VPS ;
+    PredVPS : NP -> VPS -> S ;
 
 }
