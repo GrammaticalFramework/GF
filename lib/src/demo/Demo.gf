@@ -13,7 +13,7 @@ abstract Demo =
 ----  Text,
 ----  Idiom,
   Structural - [everybody_NP,everything_NP,something_NP],
-  Lexicon ** {
+  Lexicon, Tense ** {
 
 flags startcat = S ;
 

@@ -8,7 +8,7 @@ concrete DemoDan of Demo =
   NumeralDan,
   QuestionDan,
   StructuralDan,
-  LexiconDan
+  LexiconDan, TenseX
   ** {
 
 flags language = da; unlexer = text ; lexer = text ;

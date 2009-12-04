@@ -44,4 +44,40 @@ incomplete concrete ExtraScand of ExtraScandAbs = CatScand **
     ConjVPI = conjunctDistrTable2 VPIForm Agr ;
     ComplVPIVV vv vpi = insertObj (\\a => vv.c2.s ++ vpi.s ! VPIInf ! a) (predV vv) ;
 
+  lincat
+    VPS   = {s : Order => Agr => Str} ;
+    [VPS] = {s1,s2 : Order => Agr => Str} ;
+
+  lin
+    BaseVPS = twoTable2 Order Agr ;
+    ConsVPS = consrTable2 Order Agr comma ;
+
+    PredVPS np vpi = 
+      let
+        subj = np.s ! nominative ;
+        agr  = np.a ;
+      in {
+        s = \\o => 
+          let verb = vpi.s ! o ! agr 
+          in case o of {
+            Main => subj ++ verb ;
+            Inv  => verb ++ subj ;   ---- älskar henne och sover jag
+            Sub  => subj ++ verb 
+            }
+        } ;
+
+    MkVPS t p vp = {
+      s = \\o,a => 
+            let 
+              neg = vp.a1 ! p.p ;
+              verb = vp.s ! VPFinite t.t t.a ;
+              compl = verb.inf ++ vp.n2 ! a ++ vp.a2 ++ vp.ext ;
+            in t.s ++ p.s ++ case o of {
+              Main => verb.fin ++ neg ++ compl ;
+              Inv  => verb.fin ++ neg ++ compl ; ----
+              Sub  => neg ++ verb.fin ++ compl
+              }
+      } ;
+
+    ConjVPS = conjunctDistrTable2 Order Agr ;
 } 

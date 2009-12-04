@@ -8,7 +8,7 @@ concrete DemoSwe of Demo =
   NumeralSwe,
   QuestionSwe,
   StructuralSwe,
-  LexiconSwe
+  LexiconSwe, TenseX
   ** {
 
 flags language = sv; unlexer = text ; lexer = text ;

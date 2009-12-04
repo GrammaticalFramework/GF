@@ -8,7 +8,7 @@ concrete DemoNor of Demo =
   NumeralNor,
   QuestionNor,
   StructuralNor,
-  LexiconNor
+  LexiconNor, TenseX
   ** {
 
 flags language = no; unlexer = text ; lexer = text ;

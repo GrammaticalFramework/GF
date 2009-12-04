@@ -68,4 +68,29 @@ concrete ExtraEng of ExtraEngAbs = CatEng **
 
     each_Det = mkDeterminer Sg "each" ;
 
+-- for VP conjunction
+
+  param
+    VPIForm = VPIInf | VPIPPart ;
+
+  lincat
+    VPS   = {s : Agr => Str} ;
+    [VPS] = {s1,s2 : Agr => Str} ;
+
+  lin
+    BaseVPS = twoTable Agr ;
+    ConsVPS = consrTable Agr comma ;
+
+    PredVPS np vpi = {s = np.s ! Nom ++ vpi.s ! np.a} ;
+
+    MkVPS t p vp = {
+      s = \\a => 
+            let 
+              verb = vp.s ! t.t ! t.a ! contrNeg True p.p ! ODir ! a ;
+              verbf = verb.aux ++ verb.adv ++ verb.fin ++ verb.inf ;
+            in t.s ++ p.s ++ vp.ad ++ verbf ++ vp.s2 ! a
+      } ;
+
+    ConjVPS = conjunctDistrTable Agr ;
+
 } 
