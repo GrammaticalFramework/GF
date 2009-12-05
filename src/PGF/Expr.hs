@@ -5,6 +5,7 @@ module PGF.Expr(Tree, BindType(..), Expr(..), Literal(..), Patt(..), Equation(..
                 mkStr,    unStr,
                 mkInt,    unInt,
                 mkDouble, unDouble,
+                mkMeta,   isMeta,
 
                 normalForm,
 
@@ -131,6 +132,15 @@ mkDouble f = ELit (LFlt f)
 unDouble :: Expr -> Maybe Double
 unDouble (ELit (LFlt f)) = Just f
 unDouble _               = Nothing
+
+-- | Constructs an expression which is meta variable
+mkMeta :: Expr
+mkMeta = EMeta 0
+
+-- | Checks whether an expression is a meta variable
+isMeta :: Expr -> Bool
+isMeta (EMeta _) = True
+isMeta _         = False
 
 -----------------------------------------------------
 -- Parsing
