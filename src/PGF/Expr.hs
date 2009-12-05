@@ -112,6 +112,7 @@ mkStr s = ELit (LStr s)
 -- | Decomposes an expression into string literal
 unStr :: Expr -> Maybe String
 unStr (ELit (LStr s)) = Just s
+unStr _               = Nothing
 
 -- | Constructs an expression from integer literal
 mkInt :: Integer -> Expr
@@ -120,6 +121,7 @@ mkInt i = ELit (LInt i)
 -- | Decomposes an expression into integer literal
 unInt :: Expr -> Maybe Integer
 unInt (ELit (LInt i)) = Just i
+unInt _               = Nothing
 
 -- | Constructs an expression from real number literal
 mkDouble :: Double -> Expr
@@ -128,6 +130,7 @@ mkDouble f = ELit (LFlt f)
 -- | Decomposes an expression into real number literal
 unDouble :: Expr -> Maybe Double
 unDouble (ELit (LFlt f)) = Just f
+unDouble _               = Nothing
 
 -----------------------------------------------------
 -- Parsing
