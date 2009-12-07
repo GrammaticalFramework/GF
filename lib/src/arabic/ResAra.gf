@@ -35,6 +35,11 @@ resource ResAra = PatternsAra ** open  Prelude, Predef   in {
     Root2   : Type = Root ** {c : Str} ;
     Root3   : Type = Root2 ** {l : Str} ;
 
+-- AR 7/12/2009 changed this to avoid duplication of consonants
+    mkRoot3 : Str -> Root3 = \fcl -> case fcl of {
+      f@? + c@? + l => {f = f ; c = c ; l = l}
+      } ;
+{-
     mkRoot3 : Str -> Root3 = \fcl ->
       let { cl = drop 2 fcl; --drop 1 fcl
 	        l' = dp 2 fcl; --last fcl
@@ -45,6 +50,7 @@ resource ResAra = PatternsAra ** open  Prelude, Predef   in {
 		 _	=> l'
 	     }
       };
+-}
     
     --for roots with 2 consonants (works also for assimilated strs, like fc~, 
     --because the function discards anything after the first two characters
@@ -940,8 +946,8 @@ patHollowImp : (_,_ :Str) -> Gender => Number => Str =\xaf,xAf ->
 
     -- in a NP, sometimes the common noun preceedes the determiner
     -- e.g. some determiners act as adjectives modifying the noun they count
-    -- "the three children, two children"
-    -- e.g. possesive pronouns: his book (kitaabuhu"
+    -- 'the three children, two children'
+    -- e.g. possesive pronouns: his book ('kitaabuhu'
     cnB4det : Bool -> Bool -> Size -> State -> Bool = \isPron,isNum,s,d ->
       case <isPron,isNum,s,d> of {
         <True,_,_,_> => True;
