@@ -100,8 +100,8 @@ appPredefined t = case t of
      (y,_) <- appPredefined y0
      (z,_) <- appPredefined z0
      case (z, y, x) of
-      (ty,op,t) | f == cMapStr -> retf $ mapStr ty op t
-      _ -> retb t ---- prtBad "cannot compute predefined" t
+       (ty,op,t) | f == cMapStr -> retf $ mapStr ty op t
+       _ -> retb t ---- prtBad "cannot compute predefined" t
 
     _ -> retb t ---- prtBad "cannot compute predefined" t
   _ -> retb t
