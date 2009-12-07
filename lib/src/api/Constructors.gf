@@ -23,7 +23,7 @@ incomplete resource Constructors = open Grammar in {
 -- The recommended usage of this module is via the wrapper module $Syntax$, 
 -- which also contains the $Structural$ (structural words). 
 -- Together with $Paradigms$, $Syntax$ gives everything that is needed
--- to implement the concrete syntax for a langauge.
+-- to implement the concrete syntax for a language.
 
 --2 Principles of organization --# notminimal
 
@@ -449,11 +449,22 @@ incomplete resource Constructors = open Grammar in {
 -- and from symbolic integers.
 
     mkNum : overload { --# notminimal
+      mkNum : Str     -> Num ;   -- 0. thirty-five (given by "35") --# notminimal
       mkNum : Numeral -> Num ;   -- 1. twenty --# notminimal
       mkNum : Digits  -> Num ;   -- 2. 51 --# notminimal
       mkNum : Card    -> Num ;   -- 3. almost ten --# notminimal
 
--- A numeral can be modified by an adnumeral.
+-- Cardinals are the non-dummy numerals.
+
+    mkCard : overload {  
+      mkCard : Str -> Card ;     -- 0. thirty-five (given by "35")
+      mkCard : Numeral -> Card ;  -- 0. thirty-five (given in any way)
+      mkCard : Digits -> Card ;        -- 51  --# notminimal
+      mkCard : AdN -> Card -> Card --# notminimal
+      } ;
+
+
+-- Such a numeral can be modified by an adnumeral.
 
       mkNum : AdN -> Card -> Num  -- 4. almost ten --# notminimal
       } ; --# notminimal
@@ -500,6 +511,10 @@ incomplete resource Constructors = open Grammar in {
       n20_Numeral   : Numeral ; -- 11. twenty --# notminimal
       n100_Numeral  : Numeral ; -- 12. hundred --# notminimal
       n1000_Numeral : Numeral ; -- 13. thousand --# notminimal
+
+    mkNumeral : overload {       --# notminimal
+      mkNumeral : Str -> Numeral -- 0. thirty-five (given by "35") --# notminimal
+    } ;      --# notminimal
 
 -- See $Numeral$ for the full set of constructors, and use the category 
 -- $Digits$ for other numbers from one million.
@@ -1129,6 +1144,8 @@ incomplete resource Constructors = open Grammar in {
 
 
     mkCard = overload {  
+      mkCard : Str -> Card 
+        = str2card ;
       mkCard : Numeral -> Card  
         = NumNumeral ;  
       mkCard : Digits -> Card         -- 51  --# notminimal
@@ -1138,6 +1155,8 @@ incomplete resource Constructors = open Grammar in {
       } ;
 
     mkNum = overload {  
+      mkNum : Str -> Num 
+        = \s -> NumCard (str2card s) ;
       mkNum : Numeral -> Num  
         = \d -> NumCard (NumNumeral d) ;  
       mkNum : Digits -> Num         -- 51 --# notminimal
@@ -1155,6 +1174,7 @@ incomplete resource Constructors = open Grammar in {
                                          =    NumPl       ; --# notminimal
 
     mkOrd = overload { --# notminimal
+      -- mkOrd : Str -> Ord = str2ord ; -- ambiguous in Try
       mkOrd : Numeral -> Ord = OrdNumeral ; --# notminimal
       mkOrd : Digits -> Ord         -- 51st --# notminimal
                                          =    OrdDigits      ; --# notminimal
@@ -1164,6 +1184,11 @@ incomplete resource Constructors = open Grammar in {
       mkOrd : A -> Ord           -- largest --# notminimal
                                          =    OrdSuperl --# notminimal
       } ; --# notminimal
+
+    mkNumeral = overload {      --# notminimal
+      mkNumeral : Str -> Numeral --# notminimal
+      = str2numeral ; --# notminimal
+    } ; --# notminimal
 
     n1_Numeral = num (pot2as3 (pot1as2 (pot0as1 pot01))) ;  
     n2_Numeral = num (pot2as3 (pot1as2 (pot0as1 (pot0 n2)))) ;  
@@ -1197,6 +1222,7 @@ incomplete resource Constructors = open Grammar in {
     mkAdN : CAdv -> AdN = AdnCAdv ;                  -- more (than five) --# notminimal
 
    mkDigits = overload { --# notminimal
+      mkDigits : Str -> Digits = str2digits ; --# notminimal
       mkDigits : Dig -> Digits = IDig ;  --# notminimal
       mkDigits : Dig -> Digits -> Digits = IIDig ;  --# notminimal
       } ; --# notminimal
@@ -1760,5 +1786,99 @@ incomplete resource Constructors = open Grammar in {
     TUseCl  : Tense -> Ant -> Pol ->  Cl ->  S = \t,a -> UseCl  (TTAnt t a) ; 
     TUseQCl : Tense -> Ant -> Pol -> QCl -> QS = \t,a -> UseQCl (TTAnt t a) ; 
     TUseRCl : Tense -> Ant -> Pol -> RCl -> RS = \t,a -> UseRCl (TTAnt t a) ; --# notminimal
+
+-- numerals from strings
+
+oper
+  str2ord : Str -> Ord = \s -> case Predef.lessInt (Predef.length s) 7 of {
+    Predef.PTrue  => OrdNumeral (str2numeral s) ;
+    Predef.PFalse => OrdDigits (str2digits s)
+    } ;
+
+  str2card : Str -> Card = \s -> case Predef.lessInt (Predef.length s) 7 of {
+    Predef.PTrue  => NumNumeral (str2numeral s) ;
+    Predef.PFalse => NumDigits (str2digits s)
+    } ;
+
+  str2numeral : Str -> Numeral = (\s -> case s of {
+    m@(? + _) + "000"            => num (pot3 (s2s1000 m)) ;
+    m@(? + _) + "00" + n@?       => num (pot3plus (s2s1000 m) (s2s1000 n)) ;
+    m@(? + _) + "0"  + n@(? + ?) => num (pot3plus (s2s1000 m) (s2s1000 n)) ;
+    m@(? + _) + n@(? + ? + ?)    => num (pot3plus (s2s1000 m) (s2s1000 n)) ;
+    _ => num (pot2as3 (s2s1000 s))
+    }) 
+  where {
+
+  s2d : Str -> Digit = \s -> case s of {
+    "2" => n2 ;
+    "3" => n3 ;
+    "4" => n4 ;
+    "5" => n5 ;
+    "6" => n6 ;
+    "7" => n7 ;
+    "8" => n8 ;
+    "9" => n9 ;
+    _   => Predef.error ("not a valid digit" ++ s)
+    } ;
+
+  s2s10 : Str -> Sub10 = \s -> case s of {
+    "1" => pot01 ;
+    #idigit => pot0 (s2d s) ;
+    _   => Predef.error ("not a valid digit" ++ s)
+    } ;
+
+  s2s100 : Str -> Sub100 = \s -> case s of {
+    "10"       => pot110 ;
+    "11"       => pot111 ;
+    "1" + d@#digit  => pot1to19 (s2d d) ;
+    d@#idigit + "0" => pot1 (s2d d) ;
+    d@#idigit + n@? => pot1plus (s2d d) (s2s10 n) ;
+    _               => pot0as1 (s2s10 s)
+    } ;
+
+  s2s1000 : Str -> Sub1000 = \s -> case s of {
+    d@? + "00"      => pot2 (s2s10 d) ;
+    d@? + "0" + n@? => pot2plus (s2s10 d) (s2s100 n) ;
+    d@? + n@(? + ?) => pot2plus (s2s10 d) (s2s100 n) ;
+    _ => pot1as2 (s2s100 s)
+    } ;
+  } ;
+  idigit : pattern Str = #("1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9") ;
+  digit : pattern Str = #("0" | #idigit) ;
+
+  --- it would be nice to have foldr on strings...
+  str2digits : Str -> Digits = (\s -> case s of {
+    d0@? => IDig (s2d d0) ;
+    d1@? + d0@? => IIDig (s2d d1) (IDig (s2d d0)) ;
+    d2@? + d1@? + d0@? => IIDig (s2d d2) (IIDig (s2d d1) (IDig (s2d d0))) ;
+    d3@? + d2@? + d1@? + d0@? => 
+      IIDig (s2d d3) (IIDig (s2d d2) (IIDig (s2d d1) (IDig (s2d d0)))) ;
+    d4@? + d3@? + d2@? + d1@? + d0@? => 
+      IIDig (s2d d4) (IIDig (s2d d3) (IIDig (s2d d2) (IIDig (s2d d1) (IDig (s2d d0))))) ;
+    d5@? + d4@? + d3@? + d2@? + d1@? + d0@? => 
+      IIDig (s2d d5) (IIDig (s2d d4) (IIDig (s2d d3) (IIDig (s2d d2) 
+        (IIDig (s2d d1) (IDig (s2d d0)))))) ;
+    d6@? + d5@? + d4@? + d3@? + d2@? + d1@? + d0@? => 
+      IIDig (s2d d6) (IIDig (s2d d5) (IIDig (s2d d4) (IIDig (s2d d3) 
+        (IIDig (s2d d2) (IIDig (s2d d1) (IDig (s2d d0))))))) ;
+    d7@? + d6@? + d5@? + d4@? + d3@? + d2@? + d1@? + d0@? => 
+      IIDig (s2d d7) (IIDig (s2d d6) (IIDig (s2d d5) (IIDig (s2d d4) (IIDig (s2d d3) 
+        (IIDig (s2d d2) (IIDig (s2d d1) (IDig (s2d d0)))))))) ;
+    _ => Predef.error ("cannot deal with so many digits:" ++ s)
+    }) where {
+  s2d : Str -> Dig = \s -> case s of {
+    "0" => D_0 ;
+    "1" => D_1 ;
+    "2" => D_2 ;
+    "3" => D_3 ;
+    "4" => D_4 ;
+    "5" => D_5 ;
+    "6" => D_6 ;
+    "7" => D_7 ;
+    "8" => D_8 ;
+    "9" => D_9 ;
+    _   => Predef.error ("not a valid digit" ++ s)
+    } ;
+  } ;
 
 }  
