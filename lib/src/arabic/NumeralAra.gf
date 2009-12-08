@@ -1,7 +1,7 @@
 concrete NumeralAra of Numeral = CatAra ** 
   open Predef, Prelude, ResAra, MorphoAra in {
 
-
+flags coding=utf8 ;
 
 lincat 
 

@@ -8,7 +8,7 @@ concrete SentenceAra of Sentence = CatAra ** open
   CommonX in {
 
 
-  flags optimize=all_subs ;
+  flags optimize=all_subs ; coding=utf8 ;
         
   lin
 {-

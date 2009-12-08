@@ -1,6 +1,7 @@
 resource MorphoAra = ResAra ** open Prelude in  {
 
-flags optimize = all ;--noexpand;  coding=utf8 ;
+flags optimize = all ;--noexpand;  
+  coding=utf8 ;
 
   oper
 
