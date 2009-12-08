@@ -41,9 +41,9 @@ flags optimize = all ;--noexpand;  coding=utf8 ;
     
     vowel : Case => Str = 
       table {
-        Nom => "ُ";
-        Acc => "َ";
-        Gen => "ِ"
+        Nom =>  "ُ";
+        Acc =>  "َ";
+        Gen =>  "ِ"
       };
 
 }

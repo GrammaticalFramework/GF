@@ -1789,7 +1789,7 @@ incomplete resource Constructors = open Grammar in {
 
 -- numerals from strings
 
-oper
+oper --# notminimal
   str2ord : Str -> Ord = \s -> case Predef.lessInt (Predef.length s) 7 of {
     Predef.PTrue  => OrdNumeral (str2numeral s) ;
     Predef.PFalse => OrdDigits (str2digits s)
@@ -1802,9 +1802,9 @@ oper
 
   str2numeral : Str -> Numeral = (\s -> case s of {
     m@(? + _) + "000"            => num (pot3 (s2s1000 m)) ;
-    m@(? + _) + "00" + n@?       => num (pot3plus (s2s1000 m) (s2s1000 n)) ;
-    m@(? + _) + "0"  + n@(? + ?) => num (pot3plus (s2s1000 m) (s2s1000 n)) ;
-    m@(? + _) + n@(? + ? + ?)    => num (pot3plus (s2s1000 m) (s2s1000 n)) ;
+    m@(? + _) + "00" + n@?       => num (pot3plus (s2s1000 m) (s2s1000 n)) ; --# notminimal
+    m@(? + _) + "0"  + n@(? + ?) => num (pot3plus (s2s1000 m) (s2s1000 n)) ; --# notminimal
+    m@(? + _) + n@(? + ? + ?)    => num (pot3plus (s2s1000 m) (s2s1000 n)) ; --# notminimal
     _ => num (pot2as3 (s2s1000 s))
     }) 
   where {

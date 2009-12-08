@@ -130,9 +130,10 @@ transArabic = mkTransliteration "Arabic" allTrans allCodes where
     "   V  A: A? w? A- y? A  b  t. t  v  g  H  K  d " ++  -- 0621 - 062f
     "W  r  z  s  C S  D  T  Z  c  G "                 ++  -- 0630 - 063a
     "   f  q  k  l  m  n  h  w  y. y a. u. i. a  u "  ++  -- 0641 - 064f
-    "i  v2 o  a: V+ V- i: a+"                             -- 0650 - 0657 
+    "i  v2 o  a: V+ V- i: a+ "                        ++  -- 0650 - 0657
+    "A*  "                                                -- 0671 (used by AED) 
   allCodes = [0x0621..0x062f] ++ [0x0630..0x063a] ++ 
-             [0x0641..0x064f] ++ [0x0650..0x0657]
+             [0x0641..0x064f] ++ [0x0650..0x0657] ++ [0x0671]
 
 transPersian :: Transliteration
 transPersian = (mkTransliteration "Persian/Farsi" allTrans allCodes)
