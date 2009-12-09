@@ -14,16 +14,16 @@
 
 =Grammatical Framework=
 
-Version 3.0
+Version 3.1
 
-June 2008
+December 2009
 
 
 #BELARGE
 
 ``[`` [Demos demos/index.html]
 ``|`` [Download download/index.html]
-``|`` [Libraries lib/resource/doc/synopsis.html]
+``|`` [Libraries lib/doc/synopsis.html]
 ``|`` [Reference doc/gf-refman.html]
 ``|`` [Tutorial doc/gf-tutorial.html]
 ``]`` 
@@ -33,14 +33,13 @@ June 2008
 ``[`` [Demos demos/index.html]
 ``|`` [Download download/index.html]
 ``|`` [Developers doc/gf-developers.html]
-% ``|`` [Events doc/events.html]
-``|`` [Libraries lib/resource/doc/synopsis.html]
+``|`` [Libraries lib/doc/synopsis.html]
 ``|`` [People doc/gf-people.html]
-% ``|`` [Projects doc/projects.html]
 ``|`` [Publications doc/gf-bibliography.html]
 ``|`` [QuickRefCard doc/gf-reference.html]
 ``|`` [Reference doc/gf-refman.html]
 ``|`` [Tutorial doc/gf-tutorial.html]
+``|`` [LibTutorial doc/resource-tutorial.pdf]
 ``]`` 
 
 #ENCE
@@ -50,29 +49,7 @@ June 2008
 
 ==News==
 
-20 April 2009:
-On-line course "GF for Resource Grammar Writers" starting today at 15.30. See the
-[Summer School Google Group http://groups.google.com/group/gf-resource-school-2009]
-for instructions how to start.
-
-3 April 2009: 
-Two demos and one talk on GF at [EACL http://www.eacl2009.gr/conference/] in Athens.
-
-20 February 2009: 
-[GF Resource Grammar Summer School doc/gf-summerschool.html] 
-in Gothenburg, 17-28 August 2009.
-
-4 November 2008: 
-GHC 6.10 released, but it doesn't work with GF sources yet.
-If compiling GF from source, use e.g.
-[GHC 6.8.3 http://haskell.org/ghc/download_ghc_683.html].
-
-15 August 2008:
-[Numeral translator for the iPhone demos/index-numbers.html]
-
-27 June 2008: 
-[release of GF 3.0 doc/gf3-release.html] and this new web page; the old web page is 
-[here ../GF2/index.html].
+GF users mailing list and wiki - link forthcoming here!
 
 
 #ENSMALL
@@ -101,13 +78,14 @@ least one, it may help you to get a first idea of what GF is.
 ==Applications==
 
 GF can be used for building
-- [text translators lib/resource/doc/resdemo.html]
+- [text translators http://tournesol.cs.chalmers.se:41296]
+- [multilingual web gadgets http://tournesol.cs.chalmers.se:41296/fridge]
 - [speech translators http://www.cs.chalmers.se/~bringert/gf/translatespeech.html]
 - [natural-language interfaces http://www.cs.chalmers.se/~hallgren/Alfa/Tutorial/GFplugin.html]
-- [multilingual web pages http://www.restauranggajden.se/tomas/]
+% - [multilingual web pages http://www.restauranggajden.se/tomas/]
 - [multilingual authoring systems http://www.cs.chalmers.se/~markus/gramlets/letter-applet.html]
 - [dialogue systems http://www.cs.chalmers.se/~bringert/xv/pizza/]
-- [language training systems http://csmisc14.cs.chalmers.se/~bjorn/langtrain.cgi]
+% - [language training systems http://csmisc14.cs.chalmers.se/~bjorn/langtrain.cgi]
 - [natural language resources lib/resource/doc/synopsis.html]
 
 
@@ -163,9 +141,7 @@ Grammars can be compiled to parser and translator code in many different
 formats.  These components can then be embedded in applications written 
 in other programming languages. The formats currently supported are:
 - Haskell
-- Java
 - JavaScript
-- Prolog
 - Speech recognition: HTK/ATK, Nuance, JSGF
 
 
@@ -182,12 +158,13 @@ The GF programming language is high-level and advanced, featuring
 Libraries are at the heart of modern software engineering. In natural language 
 applications, libraries are a way to cope with thousands of details involved in
 syntax, lexicon, and inflection. The 
-[GF resource grammar library lib/resource/doc/synopsis.html] has
+[GF resource grammar library lib/doc/synopsis.html] has
 support for an increasing number of languages, currently including
 + Arabic (partial)
 + Bulgarian
-+ Catalan (partial)
++ Catalan
 + Danish
++ Dutch
 + English
 + Finnish
 + French
@@ -195,7 +172,10 @@ support for an increasing number of languages, currently including
 + Hindi/Urdu (fragments)
 + [Interlingua http://www.interlingua.com/]
 + Italian
-+ Norwegian bokmï¿½l
++ Latin (fragments)
++ Norwegian bokmål
++ Polish
++ Romanian
 + Russian
 + Spanish
 + Swedish
@@ -204,7 +184,7 @@ support for an increasing number of languages, currently including
 
 Adding a language to the resource library takes 3 to 9 
 months - contributions 
-are welcome!
+are welcome! You can start with the [resource grammarian's tutorial doc/resource-tutorial.pdf].
 
 % [doc/10lang-small.png]
 
