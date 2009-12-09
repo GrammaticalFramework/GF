@@ -505,12 +505,24 @@ allCommands cod env@(pgf, mos) = Map.fromList [
        ],
      exec = \opts _ -> do 
        let file = valStrOpts "file" "_gftmp" opts
+       let exprs []         = ([],empty)
+           exprs ((n,s):ls) = case readExpr s of
+                                Just e  -> let (es,err) = exprs ls
+                                           in case inferExpr pgf e of
+                                                Right (e,t) -> (e:es,err)
+                                                Left tcerr  -> (es,text "on line" <+> int n <> colon $$ nest 2 (ppTcError tcerr) $$ err)
+                                Nothing -> let (es,err) = exprs ls
+                                           in (es,text "on line" <+> int n <> colon <+> text "parse error" $$ err)
+           returnFromLines ls = case exprs ls of
+                                  (es, err) | null es   -> return ([], render (err $$ text "no trees found"))
+                                            | otherwise -> return (es, render err)
+
        s <- readFile file
        case opts of
          _ | isOpt "lines" opts && isOpt "tree" opts ->
-               returnFromExprs [e | l <- lines s, Just e0 <- [readExpr l], Right (e,t) <- [inferExpr pgf e0]]
-         _ | isOpt "tree" opts -> 
-               returnFromExprs [e | Just e0 <- [readExpr s], Right (e,t) <- [inferExpr pgf e0]] 
+               returnFromLines (zip [1..] (lines s))
+         _ | isOpt "tree" opts ->
+               returnFromLines [(1,s)]
          _ | isOpt "lines" opts -> return (fromStrings $ lines s)
          _ -> return (fromString s),
      flags = [("file","the input file name")] 
