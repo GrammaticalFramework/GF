@@ -506,6 +506,8 @@ allCommands cod env@(pgf, mos) = Map.fromList [
      exec = \opts _ -> do 
        let file = valStrOpts "file" "_gftmp" opts
        let exprs []         = ([],empty)
+           exprs ((n,s):ls) | null s 
+                            = exprs ls
            exprs ((n,s):ls) = case readExpr s of
                                 Just e  -> let (es,err) = exprs ls
                                            in case inferExpr pgf e of
