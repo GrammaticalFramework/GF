@@ -40,14 +40,15 @@ convertConcrete opts abs lang cnc = do
   let env0 = emptyGrammarEnv cnc_defs cat_defs
   when (flag optProf opts) $ do
     profileGrammar lang cnc_defs env0 pfrules
-  let env1 = expandHOAS abs_defs cnc_defs cat_defs env0
+  let env1 = expandHOAS abs_defs cnc_defs cat_defs lin_defs env0
       env2 = List.foldl' (convertRule cnc_defs) env1 pfrules
   return $ getParserInfo env2
   where
     abs_defs = Map.assocs (funs abs)
     cnc_defs = Map.union (opers cnc) (lins cnc) -- "union big+small most efficient"
-    cat_defs = lincats cnc
-    
+    cat_defs = Map.insert cidVar (S []) (lincats cnc)
+    lin_defs = lindefs cnc
+
     pfrules = [
       (PFRule id args (0,res) (map findLinType args) (findLinType (0,res)) term) | 
         (id, (ty,_,_)) <- abs_defs, let (args,res) = typeSkeleton ty, 
@@ -352,6 +353,7 @@ emptyGrammarEnv cnc_defs lincats =
       | cat == cidString = (index,     (fcatString,fcatString,[]))
       | cat == cidInt    = (index,     (fcatInt,   fcatInt,   []))
       | cat == cidFloat  = (index,     (fcatFloat, fcatFloat, []))
+      | cat == cidVar    = (index,     (fcatVar,   fcatVar,   []))
       | otherwise        = (index+size,(index,index+size-1,poly))
       where
         (size,poly) = getMultipliers 1 [] ctype
@@ -363,7 +365,7 @@ emptyGrammarEnv cnc_defs lincats =
                                           Just term -> getMultipliers m ms term
                                           Nothing   -> error ("unknown identifier: "++showCId id)
 
-expandHOAS abs_defs cnc_defs lincats env = 
+expandHOAS abs_defs cnc_defs lincats lindefs env = 
   foldl add_varFun (foldl (\env ncat -> add_hoFun (add_hoCat env ncat) ncat) env hoTypes) hoCats
   where
     hoTypes :: [(Int,CId)]
@@ -405,17 +407,22 @@ expandHOAS abs_defs cnc_defs lincats env =
 
     -- add one PMCFG function for each high-order category: _V : Var -> Cat
     add_varFun env cat =
-      let (env1,seqid) = addFSeq env [FSymLit 0 0]
-          lins         = replicate (case res of {PFCat _ _ rcs _ -> length rcs}) seqid
-          (env2,funid) = addFFun env1 (FFun _V [[0]] (mkArray lins))
-          env3         = foldl (\env res -> addProduction env2 res (FApply funid [fcatVar]))
-                               env2
-                               (getFCats env2 res)
-      in env3
+      convertRule cnc_defs env (PFRule _V [(0,cidVar)] (0,cat) [arg] res lindef)
       where
-        res = case Map.lookup cat lincats of
-	        Nothing    -> error $ "No lincat for " ++ showCId cat
-                Just ctype -> protoFCat cnc_defs (0,cat) ctype
+        lindef =
+          case Map.lookup cat lindefs of
+            Nothing  -> error $ "No lindef for " ++ showCId cat
+            Just def -> def
+
+        arg =
+          case Map.lookup cidVar lincats of
+            Nothing    -> error $ "No lincat for " ++ showCId cat
+            Just ctype -> ctype
+
+        res =
+          case Map.lookup cat lincats of
+            Nothing    -> error $ "No lincat for " ++ showCId cat
+            Just ctype -> ctype
 
     _B = mkCId "_B"
     _V = mkCId "_V"
