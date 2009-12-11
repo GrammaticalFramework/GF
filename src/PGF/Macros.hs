@@ -146,8 +146,9 @@ combinations t = case t of
   aa:uu -> [a:u | a <- aa, u <- combinations uu]
 
 isLiteralCat :: CId -> Bool
-isLiteralCat = (`elem` [cidString, cidFloat, cidInt])
+isLiteralCat = (`elem` [cidString, cidFloat, cidInt, cidVar])
 
 cidString = mkCId "String"
 cidInt    = mkCId "Int"
 cidFloat  = mkCId "Float"
+cidVar    = mkCId "#Var"

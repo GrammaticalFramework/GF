@@ -1,3 +1,4 @@
+{-# LANGUAGE ParallelListComp #-}
 module PGF.Linearize 
   (linearizes,realize,realizes,linTree, linTreeMark,linearizesMark) where
 
@@ -56,20 +57,26 @@ liftVariants = f
     f t         = return t
 
 linTree :: PGF -> CId -> Expr -> Term
-linTree pgf lang = lin . expr2tree
+linTree pgf lang e = lin (expr2tree e) Nothing
   where
-    lin (Abs xs  e )   = case lin e of
-                             R ts -> R $ ts     ++ (Data.List.map (kks . showCId . snd) xs)
-                             TM s -> R $ (TM s)  : (Data.List.map (kks . showCId . snd) xs)
-    lin (Fun fun es)   = let argVariants = mapM (liftVariants . lin) es
-                          in variants [compute pgf lang args $ look fun | args <- argVariants]
-    lin (Lit (LStr s)) = R [kks (show s)] -- quoted
-    lin (Lit (LInt i)) = R [kks (show i)] 
-    lin (Lit (LFlt d)) = R [kks (show d)]
-    lin (Var x)        = TM (showCId x)
-    lin (Meta i)       = TM (show i)
- 
-    look = lookLin pgf lang
+    cnc = lookMap (error "no lang") lang (concretes pgf)
+
+    lin (Abs xs  e )   mty = case lin e Nothing of
+                               R ts -> R $ ts     ++ (Data.List.map (kks . showCId . snd) xs)
+                               TM s -> R $ (TM s)  : (Data.List.map (kks . showCId . snd) xs)
+    lin (Fun fun es)   mty = case Map.lookup fun (funs (abstract pgf)) of
+                               Just (DTyp hyps _ _,_,_) -> let argVariants = sequence [liftVariants (lin e (Just ty)) | e <- es | (_,_,ty) <- hyps]
+                                                           in variants [compute pgf lang args $ lookMap tm0 fun (lins cnc) | args <- argVariants]
+                               Nothing                  -> tm0
+    lin (Lit (LStr s)) mty = R [kks (show s)] -- quoted
+    lin (Lit (LInt i)) mty = R [kks (show i)] 
+    lin (Lit (LFlt d)) mty = R [kks (show d)]
+    lin (Var x)        mty = case mty of
+                               Just (DTyp _ cat _) -> compute pgf lang [K (KS (showCId x))] (lookMap tm0 cat (lindefs cnc))
+                               Nothing             -> TM (showCId x)
+    lin (Meta i)       mty = case mty of
+                               Just (DTyp _ cat _) -> compute pgf lang [K (KS (show    i))] (lookMap tm0 cat (lindefs cnc))
+                               Nothing             -> TM (show    i)
 
 variants :: [Term] -> Term
 variants ts = case ts of
