@@ -635,7 +635,7 @@ incomplete resource Constructors = open Grammar in {
 -- Conjunction can be formed from two or more adjectival phrases.
 
       mkAP : Conj  -> AP -> AP -> AP ; -- 10. old and big --# notminimal
-      mkAP : Conj  -> ListAP   -> AP ; -- 11. old, big, and warm --# notminimal
+      mkAP : Conj  -> ListAP   -> AP ; -- 11. old, big and warm --# notminimal
 
       mkAP : Ord   -> AP ;             -- 12. oldest --# notminimal
       mkAP : CAdv -> AP -> NP -> AP ;  -- 13. as old as John --# notminimal
