@@ -1,5 +1,3 @@
---# -path=.:../abstract:../common
-
 concrete SymbolRon of Symbol = 
   CatRon ** open Prelude, ResRon in {
 
@@ -13,7 +11,7 @@ lin
   heavyNP {
     s = \\c => cn.s ! Sg ! Def ! (convCase c) ++ i.s ;
     a = agrP3 gg Sg ;
-    hasClit = False ;
+    hasClit = HasRef False ;
     ss = cn.s ! Sg ! Def ! ANomAcc ++ i.s 
     } ;
    
@@ -21,7 +19,8 @@ lin
                            st = if_then_else Species det.isDef Def Indef;
                            rs = if_then_else Species det.hasRef Def Indef;
                            ag = agrP3 gg det.n ;
-                           hr = andB (getClit cn.a) det.hasRef
+                           hr = andB (getClit cn.a) det.hasRef;
+                           nf = if_then_else NForm hr HasClit (HasRef False)
                         in                               
     {s = \\c => case c of 
                  {Vo =>
@@ -31,8 +30,8 @@ lin
                     clit = \\cs => if_then_Str hr ((genCliticsCase ag c).s ! cs) [] }  
                     };
      a = ag ;
-     hasClit = hr ;
-     hasRef = hr ;
+     nForm = nf ;
+ 
      isPronoun = False ;
      indForm = det.s ! gg ! No ++ det.size ++cn.s ! det.n ! rs ! ANomAcc 
    } ;   
@@ -41,7 +40,7 @@ lin
     heavyNP {
     s = \\c => cn.s ! Sg ! Def ! (convCase c) ++ i.sp ! gg;
     a = agrP3 gg Sg ;
-    hasClit = False ;
+    hasClit = HasRef False ;
     ss = cn.s ! Sg ! Def ! ANomAcc ++ i.sp ! gg
     } ;
   SymbS sy = {s = \\_ => sy.s} ;
