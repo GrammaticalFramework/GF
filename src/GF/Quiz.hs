@@ -35,7 +35,7 @@ import Data.List (nub)
 
 mkQuiz :: Encoding -> String -> [(String,[String])] -> IO ()
 mkQuiz cod msg tts = do
-  let qas = [ (q, mkAnswer cod as) | (q,as) <- tts]
+  let qas = [ (encodeUnicode cod q, mkAnswer cod as) | (q,as) <- tts]
   teachDialogue qas msg
 
 translationList :: 
