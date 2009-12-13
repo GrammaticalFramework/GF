@@ -151,4 +151,4 @@ isLiteralCat = (`elem` [cidString, cidFloat, cidInt, cidVar])
 cidString = mkCId "String"
 cidInt    = mkCId "Int"
 cidFloat  = mkCId "Float"
-cidVar    = mkCId "#Var"
+cidVar    = mkCId "__gfVar"
