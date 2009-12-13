@@ -29,7 +29,7 @@ library
                  bytestring,
                  random
   ghc-options: -O2
-  hs-source-dirs: src
+  hs-source-dirs: src\compiler src\runtime\haskell
   extensions: 
   exposed-modules: 
     PGF
@@ -92,7 +92,7 @@ executable gf
   else
     build-depends: unix
   ghc-options: -O2
-  hs-source-dirs: src
+  hs-source-dirs: src\compiler src\runtime\haskell
   extensions:
   main-is: GF.hs
   other-modules:
