@@ -164,6 +164,4 @@ instance Print PropertyName where
   prt i e = case e of
    IdentPropName id -> prPrec i 0 (concatD [prt 0 id])
    StringPropName str -> prPrec i 0 (concatD [prt 0 str])
-
-
-
+   IntPropName n -> prPrec i 0 (concatD [prt 0 n])
