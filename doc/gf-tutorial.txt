@@ -42,8 +42,8 @@ Version 3.1.2, November 2008
 %!preproc(html): #EDITORPNG [quick-editor.png]
 %!preproc(tex):  #EDITORPNG [10lang-small.png]
 
-%!preproc(html): #LOGOPNG [../gf-logo.png]
-%!preproc(tex):  #LOGOPNG [gf-logo.png]
+%!preproc(html): #LOGOPNG [Logos/gf0.png]
+%!preproc(tex):  #LOGOPNG [Logos/gf0.png]
 
 
 %!postproc(tex): #PARTone "part{Tutorial}"

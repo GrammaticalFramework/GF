@@ -10,7 +10,7 @@ Last update: %%date(%c)
 
 %!postproc(html): #NEW <!-- NEW -->
 
-[gf-logo.gif]
+[Logos/gf0.png]
 
 //Abstract. This document gives a general description of the//
 //Grammatical Framework (GF), with comparisons to other grammar//

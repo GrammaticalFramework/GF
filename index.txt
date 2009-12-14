@@ -10,7 +10,7 @@
 
 #BECE
 
-[doc/gf-logo.png]
+[doc/Logos/gf0.png]
 
 =Grammatical Framework=
 

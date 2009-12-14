@@ -15,7 +15,7 @@ contact: Aarne Ranta (aarne at chalmers dot se)
 %!postproc(html): #EYELLOW </i></font>
 
 #BECE
-[gf-logo.png]
+[Logos/gf0.png]
 #ENCE
 
 
