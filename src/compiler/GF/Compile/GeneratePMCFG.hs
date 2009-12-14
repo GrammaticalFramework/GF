@@ -123,7 +123,7 @@ convertRule cnc_defs grammarEnv (PFRule fun args res ctypes ctype term) =
       let [newCat]        = getFCats env0 newCat'
           (env1, newArgs) = List.mapAccumL (\env -> addFCoercion env . getFCats env) env0 newArgs'
 
-          (env2,funid) = addFFun env1 (FFun fun [[n] | n <- [0..length newArgs-1]] (mkArray lins))
+          (env2,funid) = addFFun env1 (FFun fun (mkArray lins))
 
       in addProduction env2 newCat (FApply funid newArgs)
 
@@ -394,7 +394,7 @@ expandHOAS abs_defs cnc_defs lincats lindefs env =
           (env1,lins) = List.mapAccumL addFSeq env linRec
           newLinRec = mkArray lins
 	  
-	  (env2,funid) = addFFun env1 (FFun _B [[i] | i <- [0..n]] newLinRec)
+	  (env2,funid) = addFFun env1 (FFun _B newLinRec)
 
           env3 = foldl (\env (arg,res) -> addProduction env res (FApply funid (arg : replicate n fcatVar)))
                        env2
@@ -462,7 +462,7 @@ getParserInfo (GrammarEnv last_id catSet seqSet funSet crcSet prodSet) =
              , sequences   = mkArray seqSet
 	     , productions0= productions0
 	     , productions = filterProductions productions0
-	     , startCats   = maybe Map.empty (Map.map (\(start,end,_) -> range (start,end))) (IntMap.lookup 0 catSet)
+	     , startCats   = maybe Map.empty (Map.map (\(start,end,_) -> (start,end))) (IntMap.lookup 0 catSet)
 	     , totalCats   = last_id+1
 	     }
   where

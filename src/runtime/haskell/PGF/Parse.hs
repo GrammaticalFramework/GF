@@ -1,5 +1,5 @@
 {-# LANGUAGE BangPatterns #-}
-module PGF.Parsing.FCFG.Incremental
+module PGF.Parse
           ( ParseState
           , ErrorState
           , initState
@@ -57,10 +57,10 @@ parseWithRecovery pgf lang typ open_typs toks = accept (initState pgf lang typ) 
 initState :: PGF -> Language -> Type -> ParseState
 initState pgf lang (DTyp _ start _) = 
   let items = do
-        cat <- fromMaybe [] (Map.lookup start (startCats pinfo))
+        cat <- maybe [] range (Map.lookup start (startCats pinfo))
         (funid,args) <- foldForest (\funid args -> (:) (funid,args)) (\_ _ args -> args)
                                    [] cat (productions pinfo)
-        let FFun fn _ lins = functions pinfo ! funid
+        let FFun fn lins = functions pinfo ! funid
         (lbl,seqid) <- assocs lins
         return (Active 0 0 funid seqid args (AK cat lbl))
      
@@ -131,7 +131,7 @@ recoveryStates open_types (EState pgf pinfo chart) =
                      }
   in (PState pgf pinfo chart (TMap.singleton [] (Set.fromList agenda)), fmap (PState pgf pinfo chart2) acc)
   where
-    type2fcats (DTyp _ cat _) = fromMaybe [] (Map.lookup cat (startCats pinfo))
+    type2fcats (DTyp _ cat _) = maybe [] range (Map.lookup cat (startCats pinfo))
     
     complete open_fcats items ac = 
       foldl (Set.fold (\(Active j' ppos funid seqid args keyc) -> 
@@ -154,10 +154,10 @@ extractTrees (PState pgf pinfo chart items) ty@(DTyp _ start _) =
     (_,st) = process Nothing (\_ _ -> id) (sequences pinfo) (functions pinfo) agenda () chart
 
     exps = do
-      cat <- fromMaybe [] (Map.lookup start (startCats pinfo))
+      cat <- maybe [] range (Map.lookup start (startCats pinfo))
       (funid,args) <- foldForest (\funid args -> (:) (funid,args)) (\_ _ args -> args)
                                  [] cat (productions pinfo)
-      let FFun fn _ lins = functions pinfo ! funid
+      let FFun fn lins = functions pinfo ! funid
       lbl <- indices lins
       Just fid <- [lookupPC (PK cat lbl 0) (passive st)]
       (fvs,tree) <- go Set.empty 0 (0,fid)
@@ -168,7 +168,7 @@ extractTrees (PState pgf pinfo chart items) ty@(DTyp _ start _) =
       | fcat < totalCats pinfo = return (Set.empty,EMeta (fcat'*10+d))   -- FIXME: here we assume that every rule has at most 10 arguments
       | Set.member fcat rec    = mzero
       | otherwise              = foldForest (\funid args trees -> 
-                                                  do let FFun fn _ lins = functions pinfo ! funid
+                                                  do let FFun fn lins = functions pinfo ! funid
                                                      args <- mapM (go (Set.insert fcat rec) fcat) (zip [0..] args)
                                                      check_ho_fun fn args
                                                   `mplus`
@@ -250,7 +250,7 @@ process mbt fn !seqs !funs (item@(Active j ppos funid seqid args key0):items) ac
     
     rhs funid lbl = unsafeAt lins lbl
       where
-        FFun _ _ lins = unsafeAt funs funid
+        FFun _ lins = unsafeAt funs funid
 
 
 updateAt :: Int -> a -> [a] -> [a]

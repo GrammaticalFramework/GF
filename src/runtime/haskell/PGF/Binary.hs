@@ -159,8 +159,8 @@ instance Binary BindType where
              _ -> decodingError
 
 instance Binary FFun where
-  put (FFun fun prof lins) = put (fun,prof,lins)
-  get = liftM3 FFun get get get
+  put (FFun fun lins) = put (fun,lins)
+  get = liftM2 FFun get get
 
 instance Binary FSymbol where
   put (FSymCat n l)       = putWord8 0 >> put (n,l)

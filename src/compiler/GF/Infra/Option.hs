@@ -172,7 +172,6 @@ data Flags = Flags {
       optSpeechLanguage  :: Maybe String,
       optLexer           :: Maybe String,
       optUnlexer         :: Maybe String,
-      optErasing         :: Bool,
       optBuildParser     :: BuildParser,
       optWarnings        :: [Warning],
       optDump            :: [Dump]
@@ -219,7 +218,6 @@ optionsPGF :: Options -> [(String,String)]
 optionsPGF opts = 
          maybe [] (\x -> [("language",x)]) (flag optSpeechLanguage opts)
       ++ maybe [] (\x -> [("startcat",x)]) (flag optStartCat opts)
-      ++ (if flag optErasing opts then [("erasing","on")] else [])
       ++ (if flag optBuildParser opts == BuildParserOnDemand then [("parser","ondemand")] else [])
 
 -- Option manipulation
@@ -276,7 +274,6 @@ defaultFlags = Flags {
       optSpeechLanguage  = Nothing,
       optLexer           = Nothing,
       optUnlexer         = Nothing,
-      optErasing         = True,
       optBuildParser     = BuildParser,
       optWarnings        = [],
       optDump            = []
@@ -354,7 +351,6 @@ optDescr =
      Option [] ["coding"] (ReqArg coding "ENCODING") 
                 ("Character encoding of the source grammar, ENCODING = "
                  ++ concat (intersperse " | " (map fst encodings)) ++ "."),
-     Option [] ["erasing"] (onOff erasing False) "Generate erasing grammar (default off).",
      Option [] ["parser"] (ReqArg buildParser "VALUE") "Build parser (default on). VALUE = on | off | ondemand",
      Option [] ["startcat"] (ReqArg startcat "CAT") "Grammar start category.",
      Option [] ["language"] (ReqArg language "LANG") "Set the speech language flag to LANG in the generated grammar.",
@@ -414,7 +410,6 @@ optDescr =
        coding      x = case lookup x encodings of
                          Just c  -> set $ \o -> o { optEncoding = c }
                          Nothing -> fail $ "Unknown character encoding: " ++ x
-       erasing     x = set $ \o -> o { optErasing = x }
        buildParser x = do v <- case x of
                                  "on"       -> return BuildParser
                                  "off"      -> return DontBuildParser

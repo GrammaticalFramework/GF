@@ -19,13 +19,12 @@ data FSymbol
   | FSymKS [String]
   | FSymKP [String] [Alternative]
   deriving (Eq,Ord,Show)
-type Profile = [Int]
 data Production
   = FApply  {-# UNPACK #-} !FunId [FCat]
   | FCoerce {-# UNPACK #-} !FCat
   | FConst  Expr [String]
   deriving (Eq,Ord,Show)
-data FFun  = FFun CId [Profile] {-# UNPACK #-} !(UArray FIndex SeqId) deriving (Eq,Ord,Show)
+data FFun  = FFun CId {-# UNPACK #-} !(UArray FIndex SeqId) deriving (Eq,Ord,Show)
 type FSeq  = Array FPointPos FSymbol
 type FunId = Int
 type SeqId = Int
@@ -39,7 +38,7 @@ data ParserInfo
                  , sequences   :: Array SeqId FSeq
 	         , productions0:: IntMap.IntMap (Set.Set Production)    -- this are the original productions as they are loaded from the PGF file
 	         , productions :: IntMap.IntMap (Set.Set Production)    -- this are the productions after the filtering for useless productions
-	         , startCats   :: Map.Map CId [FCat]
+	         , startCats   :: Map.Map CId (FCat,FCat)
 	         , totalCats   :: {-# UNPACK #-} !FCat
 	         }
 
@@ -71,14 +70,14 @@ ppProduction (fcat,FCoerce arg) =
 ppProduction (fcat,FConst _ ss) =
   ppFCat fcat <+> text "->" <+> ppStrs ss
 
-ppFun (funid,FFun fun _ arr) =
+ppFun (funid,FFun fun arr) =
   ppFunId funid <+> text ":=" <+> parens (hcat (punctuate comma (map ppSeqId (elems arr)))) <+> brackets (ppCId fun)
 
 ppSeq (seqid,seq) = 
   ppSeqId seqid <+> text ":=" <+> hsep (map ppSymbol (elems seq))
 
-ppStartCat (id,fcats) =
-  ppCId id <+> text ":=" <+> brackets (hcat (punctuate comma (map ppFCat fcats)))
+ppStartCat (id,(start,end)) =
+  ppCId id <+> text ":=" <+> brackets (ppFCat start <+> text ".." <+> ppFCat end)
 
 ppSymbol (FSymCat d r) = char '<' <> int d <> comma <> int r <> char '>'
 ppSymbol (FSymLit d r) = char '<' <> int d <> comma <> int r <> char '>'
