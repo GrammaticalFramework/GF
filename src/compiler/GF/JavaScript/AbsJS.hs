@@ -56,5 +56,6 @@ data Property =
 data PropertyName =
    IdentPropName Ident
  | StringPropName String
+ | IntPropName Int
   deriving (Eq,Ord,Show)
 

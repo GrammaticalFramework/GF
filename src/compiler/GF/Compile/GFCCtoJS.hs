@@ -29,7 +29,7 @@ pgf2js pgf =
    start = showCId $ M.lookStartCat pgf
    grammar = new "GFGrammar" [js_abstract, js_concrete]
    js_abstract = abstract2js start as
-   js_concrete = JS.EObj $ map (concrete2js start n) cs
+   js_concrete = JS.EObj $ map (concrete2js n) cs
 
 abstract2js :: String -> Abstr -> JS.Expr
 abstract2js start ds = new "GFAbstract" [JS.EStr start, JS.EObj $ map absdef2js (Map.assocs (funs ds))]
@@ -39,10 +39,10 @@ absdef2js (f,(typ,_,_)) =
   let (args,cat) = M.catSkeleton typ in 
     JS.Prop (JS.IdentPropName (JS.Ident (showCId f))) (new "Type" [JS.EArray [JS.EStr (showCId x) | x <- args], JS.EStr (showCId cat)])
 
-concrete2js :: String -> String -> (CId,Concr) -> JS.Property
-concrete2js start n (c, cnc) =
+concrete2js :: String -> (CId,Concr) -> JS.Property
+concrete2js n (c, cnc) =
     JS.Prop l (new "GFConcrete" ([flags,(JS.EObj $ ((map (cncdef2js n (showCId c)) ds) ++ litslins))] ++
-                                 maybe [] (parser2js start) (parser cnc)))
+                                 maybe [] parser2js (parser cnc)))
   where 
    flags = mapToJSObj JS.EStr $ cflags cnc
    l  = JS.IdentPropName (JS.Ident (showCId c))
@@ -89,47 +89,31 @@ children :: JS.Ident
 children = JS.Ident "cs"
 
 -- Parser
-parser2js :: String -> ParserInfo -> [JS.Expr]
-parser2js start p  = [new "Parser" [JS.EStr start,
-                                    JS.EArray $ [frule2js p cat prod | (cat,set) <- IntMap.toList (productions p), prod <- Set.toList set],
-                                    JS.EObj $ map cats (Map.assocs (startCats p))]]
+parser2js :: ParserInfo -> [JS.Expr]
+parser2js p  = [new "Parser" [JS.EObj $ [JS.Prop (JS.IntPropName cat) (JS.EArray (map frule2js (Set.toList set))) | (cat,set) <- IntMap.toList (productions0 p)],
+                              JS.EArray $ (map ffun2js (Array.elems (functions p))),
+                              JS.EArray $ (map seq2js (Array.elems (sequences p))),
+                              JS.EObj $ map cats (Map.assocs (startCats p)),
+                              JS.EInt (totalCats p)]]
   where 
     cats (c,is) = JS.Prop (JS.IdentPropName (JS.Ident (showCId c))) (JS.EArray (map JS.EInt is))
 
-frule2js :: ParserInfo -> FCat -> Production -> JS.Expr
-frule2js p res (FApply funid args) = new "Rule" [JS.EInt res, name2js (f,ps), JS.EArray (map JS.EInt args), lins2js p lins]
-  where
-    FFun f ps lins = functions p Array.! funid
-frule2js p res (FCoerce arg) = new "Rule" [JS.EInt res, daughter 0, JS.EArray [JS.EInt arg], JS.EArray [JS.EArray [sym2js (FSymCat 0 i)] | i <- [0..catLinArity arg-1]]]
-  where
-    catLinArity :: FCat -> Int
-    catLinArity c = maximum (1:[Array.rangeSize (Array.bounds rhs) | (FFun _ _ rhs, _) <- topdownRules c])
+frule2js :: Production -> JS.Expr
+frule2js (FApply funid args) = new "Rule"   [JS.EInt funid, JS.EArray (map JS.EInt args)]
+frule2js (FCoerce arg)       = new "Coerce" [JS.EInt arg]
 
-    topdownRules cat = f cat []
-      where
-        f cat rules = maybe rules (Set.fold g rules) (IntMap.lookup cat (productions p))
-	 
-        g (FApply funid args) rules = (functions p Array.! funid,args) : rules
-        g (FCoerce cat)       rules = f cat rules
+ffun2js (FFun f _ lins) = new "FFun" [JS.EStr (showCId f), JS.EArray (map JS.EInt (Array.elems lins))]
 
-
-name2js :: (CId,[Profile]) -> JS.Expr
-name2js (f,ps) = new "FunApp" $ [JS.EStr $ showCId f, JS.EArray (map fromProfile ps)]
-  where
-    fromProfile :: Profile -> JS.Expr
-    fromProfile []   = new "MetaVar" []
-    fromProfile [x]  = daughter x
-    fromProfile args = new "Unify" [JS.EArray (map daughter args)]
-
-daughter i = new "Arg" [JS.EInt i]
-
-lins2js :: ParserInfo -> UArray FIndex SeqId -> JS.Expr
-lins2js p ls = JS.EArray [JS.EArray [sym2js s | s <- Array.elems (sequences p Array.! seqid)] | seqid <- Array.elems ls]
+seq2js :: Array.Array FIndex FSymbol -> JS.Expr
+seq2js seq = JS.EArray [sym2js s | s <- Array.elems seq]
 
 sym2js :: FSymbol -> JS.Expr
-sym2js (FSymCat n l) = new "ArgProj" [JS.EInt n, JS.EInt l]
-sym2js (FSymLit n l) = new "ArgProj" [JS.EInt n, JS.EInt l]
-sym2js (FSymKS [t])  = new "Terminal" [JS.EStr t]
+sym2js (FSymCat n l)    = new "Arg" [JS.EInt n, JS.EInt l]
+sym2js (FSymLit n l)    = new "Lit" [JS.EInt n, JS.EInt l]
+sym2js (FSymKS ts)      = new "KS"  (map JS.EStr ts)
+sym2js (FSymKP ts alts) = new "KP"  [JS.EArray (map JS.EStr ts), JS.EArray (map alt2js alts)]
+
+alt2js (Alt ps ts) = new "Alt" [JS.EArray (map JS.EStr ps), JS.EArray (map JS.EStr ts)]
 
 new :: String -> [JS.Expr] -> JS.Expr
 new f xs = JS.ENew (JS.Ident f) xs
