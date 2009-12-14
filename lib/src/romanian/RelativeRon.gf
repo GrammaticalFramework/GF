@@ -3,7 +3,7 @@ concrete RelativeRon of Relative =
 
   flags optimize=all_subs ;
 
-  lin
+   lin
 
     RelCl cl = {                          
       s = \\ag,t,a,p,m => "astfel" ++ "cã" ++ 
@@ -40,7 +40,10 @@ concrete RelativeRon of Relative =
       s = \\a,c => ss ++ p.s ++ rp.s ! a ! p.c   ;         
       a = {g = np.a.g ; n = np.a.n} ; 
       hasAgr = True;
-      hasRef = np.hasRef
+      hasRef = case np.nForm of 
+                {HasRef False => False ;
+                 _            => True
+                 }
       } ;
 
 -- Ac => if_then_Str p.isDir (ss ++ p.s ++ rp.s ! a ! p.c) (ss ++ p.s ++ rp.s ! a ! No)

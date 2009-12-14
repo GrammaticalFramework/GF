@@ -74,6 +74,10 @@ param
 
   CardOrd = NCard Gender | NOrd Gender;
 
+-- Parameter indicating the presence of clitic doubling / referential form for noun phrases
+
+  NForm = HasClit | HasRef Bool ;
+  
 -------------------------------------------------  
 --------------------2 Verbs ---------------------
 ------------------------------------------------- 
@@ -312,8 +316,7 @@ oper
  NounPhrase : Type = {s : NCase => {comp : Str ; clit : Clitics => Str} ;
                       a : Agr ; 
                       indForm : Str ; --needed for prepositions that demand the indefinite form of a NP  
-                      hasClit : Bool ; -- needed to indicate if the NP has clitics or not (and is referenced also)
-                      hasRef : Bool ; -- needed to indicate if the NP is referenced or not - for the use of the preposition for Accusative
+                      nForm : NForm ; -- indicates the presence of clitic doubling and referential form
                       isPronoun : Bool -- in the case of pronouns, just the clitics are used, and not the comp form
                      } ;   
  VerbPhrase :Type = {
@@ -532,14 +535,15 @@ oper
  
 -- various : 
 
- heavyNP : {s : NCase => Str ; a : Agr; hasClit : Bool; ss : Str} -> NounPhrase = \np -> {
+ heavyNP : {s : NCase => Str ; a : Agr; hasClit : NForm; ss : Str} -> NounPhrase = \np -> {
     s = \\c => {comp = np.s ! c ; 
-                clit = \\cs => if_then_Str np.hasClit ((genCliticsCase np.a c).s ! cs) [] };
+                clit = \\cs => case np.hasClit of
+                                 {HasClit => (genCliticsCase np.a c).s ! cs ; 
+                                  _       => [] }};
     a = np.a ;
     indForm = np.ss ; 
-    hasClit = np.hasClit ;
-    isPronoun = False;
-    hasRef = np.hasClit    
+    nForm = np.hasClit;
+    isPronoun = False  
     } ;
  
  genForms : Str -> Str -> Gender => Str = \bon,bonne ->
@@ -608,3 +612,4 @@ oper
      _       => False};
    
 }
+

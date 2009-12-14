@@ -1,5 +1,5 @@
 concrete NounRon of Noun =
-   CatRon ** open ResRon,Prelude in {
+  CatRon ** open ResRon,Prelude in {
 
   flags optimize=all_subs ;
 
@@ -9,7 +9,8 @@ concrete NounRon of Noun =
         n = det.n;
         gg = agrGender cn.g n ;
         ag = agrP3 gg n ;
-        hr = andB (getClit cn.a) det.hasRef ;
+        hr = orB (andB (getClit cn.a) det.hasRef) (andB det.isDef cn.isComp);
+        nf = if_then_else NForm hr HasClit (HasRef False);
         st= if_then_else Species det.isDef Def Indef;
         rs = if_then_else Species det.hasRef Def Indef
       in 
@@ -21,9 +22,8 @@ concrete NounRon of Noun =
                     clit = \\cs => if_then_Str hr ((genCliticsCase ag c).s ! cs) [] }
                    };
         a = ag ;
-        hasClit = hr ;
-        hasRef = hr ;
-        isPronoun = False ;
+        nForm = nf;
+        isPronoun = False;
         indForm = det.s ! gg ! No ++ det.size ++cn.s ! n ! rs ! ANomAcc ++ det.post ! gg ! No 
              
         } ;
@@ -38,16 +38,14 @@ concrete NounRon of Noun =
                       clit = \\cs => if_then_Str hc ((genCliticsCase ag c).s ! cs) [] } ;
                    
         a = ag;
-        hasClit = hc ;
-        hasRef = hc ;
+        nForm = if_then_else NForm hc HasClit (HasRef False) ;
         isPronoun = False ;
         indForm = pn.s ! No
         } ;
 
    UsePron p = {s = \\c =>{comp = p.s ! c ;
                            clit = (genCliticsCase p.a c).s } ;
-                hasClit = True;
-                hasRef = True ;
+                nForm = HasClit;
                 isPronoun = True ;
                 a = p.a;
                 indForm = p.s ! Ac
@@ -59,8 +57,7 @@ concrete NounRon of Noun =
        {s = \\c => {comp = pred.s ! aagr (np.a.g) (np.a.n) ! (convCase c) ++ (np.s ! pred.c).comp  ; 
                     clit = (np.s ! c).clit };
         a = np.a ;
-        hasClit = np.hasClit ;
-        hasRef = np.hasRef ;
+        nForm = np.nForm ;
         isPronoun = False ;
         indForm = pred.s ! aagr (np.a.g) (np.a.n) ! ANomAcc ++ (np.s ! pred.c).comp
    } ;
@@ -70,21 +67,21 @@ concrete NounRon of Noun =
      heavyNP {
       s = \\c => (np.s ! c).comp ++ v2.s ! PPasse np.a.g np.a.n Indef (convCase c);
       a = np.a ;
-      hasClit = np.hasClit;
+      hasClit = np.nForm;
       ss = (np.s ! No).comp ++ v2.s ! PPasse np.a.g np.a.n Indef ANomAcc
       } ;
 
     RelNP np rs = heavyNP {
       s = \\c => (np.s ! c).comp ++ rs.s ! Indic ! np.a ;
       a = np.a ;
-      hasClit = np.hasClit ;
+      hasClit = np.nForm ;
       ss = (np.s ! No).comp ++ rs.s ! Indic ! np.a  
      } ;
 
     AdvNP np adv = heavyNP {
       s = \\c => (np.s ! c).comp ++ adv.s ;
       a = np.a ;
-      hasClit = np.hasClit;
+      hasClit = np.nForm;
       ss = (np.s ! No).comp ++adv.s ;
       } ;
 
@@ -141,7 +138,7 @@ in {
       in heavyNP {
         s = \\c => det.sp ! g ! c ;
         a = agrP3 g n ;
-        hasClit = True ;
+        hasClit = HasClit ;
         ss = det.sp ! g ! No   
        } ;
 
@@ -226,15 +223,14 @@ in {
         s = \\c =>   {comp = cn.s ! n ! Indef ! (convCase c); 
                       clit = \\cs => []  } ;
         a = agrP3 g n ;
-        hasClit = False ;
-        hasRef = False ;
+        nForm = HasRef False ;
         isPronoun = False ;
         indForm = cn.s ! n ! Indef ! ANomAcc
         } ;
 
 -- This is based on record subtyping.
 
-    UseN, UseN2 = \noun -> noun ;
+    UseN, UseN2 = \noun -> noun ** {isComp = False};
 
     Use2N3 f = f ;
 
@@ -243,14 +239,16 @@ in {
     ComplN2 f x = {
       s = \\n,sp,c => f.s ! n ! sp ! c ++ appCompl f.c2 x ;
       g = f.g ;
-      a = f.a
+      a = f.a ;
+      isComp = getClit f.a
       } ;
 
     ComplN3 f x = {
       s = \\n,sp,c => f.s ! n ! sp ! c ++ appCompl f.c2 x ;
       g = f.g ;
       c2 = f.c3;
-      a = f.a
+      a = f.a ;
+      isComp = getClit f.a
       } ;
 
     AdjCN ap cn = 
@@ -264,36 +262,38 @@ in {
                                          Indef => \\c => cn.s ! n ! Indef ! c ++ ap.s ! (AF (agrGender g n) n Indef c) } 
                  };
         g = g ;
-        a = cn.a
+        a = cn.a ;
+        isComp = getClit cn.a  
         } ;
 
 
     RelCN cn rs = {
       s = \\n,sp,c => cn.s ! n ! sp ! c ++ rs.s ! Indic ! agrP3 (agrGender cn.g n) n ;
       g = cn.g  ;
-      a = cn.a
+      a = cn.a ;
+      isComp = False  
       } ;
 
     SentCN  cn sc = let g = cn.g in {
       s = \\n,sp,c => cn.s ! n ! sp ! c ++ sc.s ;
       g = g ;
-      a = cn.a
+      a = cn.a ;
+      isComp = False
       } ;
 
     AdvCN  cn sc = let g = cn.g in {
       s = \\n,sp,c => cn.s ! n ! sp ! c ++ sc.s ;
       g = g;
-      a = cn.a
+      a = cn.a ;
+      isComp = False
       } ;
 
     ApposCN  cn np = let g = cn.g in {
       s = \\n,sp,c => cn.s ! n ! sp ! c ++ (np.s ! No).comp ;
       g = g;
-      a = cn.a
+      a = cn.a ;
+      isComp = False
       } ;
 
 
 }; 
-
-
-

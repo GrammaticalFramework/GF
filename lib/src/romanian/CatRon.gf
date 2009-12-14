@@ -8,7 +8,7 @@ concrete CatRon of Cat =
 
 
   
-  lincat
+ lincat
 
 -- Tensed/Untensed
 
@@ -47,7 +47,7 @@ concrete CatRon of Cat =
    
 -- Noun
  
-   CN      = {s : Number => Species => ACase => Str; g : NGender; a : Animacy } ; 
+   CN      = {s : Number => Species => ACase => Str; g : NGender; a : Animacy ; isComp : Bool} ; 
    
    Pron    = {s : NCase =>  Str ;
               c1, c2 : Clitics => Str ;
@@ -162,3 +162,4 @@ conjThan  : Str  = "decât" ;
 conjThat  : Str = "cã" ;
 
 }
+

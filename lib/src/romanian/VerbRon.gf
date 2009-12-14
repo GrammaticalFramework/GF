@@ -30,10 +30,16 @@ concrete VerbRon of Verb =
 
 
     Slash2V3 v np = let  s1 = v.c2.s ++(np.s ! (v.c2.c)).comp ;
-                         ss = if_then_Str np.hasRef (v.c2.prepDir ++ s1) s1; 
+                         ss = case np.nForm of 
+                                 {HasRef False => s1 ;
+                                  _            => v.c2.prepDir ++ s1 }; 
                          sir = if_then_Str np.isPronoun "" ss ;
-                         vcDa = if_then_else VClit np.hasClit (nextClit v.nrClit PDat) v.nrClit;
-                         vcAc = if_then_else VClit np.hasClit (nextClit v.nrClit PAcc) v.nrClit   
+                         vcDa = case np.nForm of
+                                    {HasClit => nextClit v.nrClit PDat ;
+                                     _       => v.nrClit };
+                         vcAc = case np.nForm of
+                                    {HasClit => nextClit v.nrClit PAcc ;
+                                     _       => v.nrClit }  
                          in
                                case v.c2.isDir of
                                   {Dir PAcc => (insertObje (\\_ => sir) (clitFromNoun np Ac) RNoAg (isAgrFSg np.a) vcAc (useVerb v)) ** {needAgr = False ; needClit = True ; c2 = v.c3} ;
@@ -42,10 +48,16 @@ concrete VerbRon of Verb =
                                     };
     
     Slash3V3 v np = let s1 = v.c3.s ++ (np.s ! (v.c3.c)).comp ;
-                        ss = if_then_Str np.hasRef (v.c3.prepDir ++ s1) s1 ;
+                        ss = case np.nForm of 
+                               {HasRef False => s1 ;
+                                _            => v.c3.prepDir ++ s1} ;
                         sir = if_then_Str np.isPronoun "" ss ;
-                        vcDa = if_then_else VClit np.hasClit (nextClit v.nrClit PDat) v.nrClit;
-                        vcAc = if_then_else VClit np.hasClit (nextClit v.nrClit PAcc) v.nrClit  
+                        vcDa = case np.nForm of 
+                                {HasClit => nextClit v.nrClit PDat ;
+                                 _       => v.nrClit };
+                        vcAc = case np.nForm of 
+                                {HasClit => nextClit v.nrClit PAcc ;
+                                 _       => v.nrClit };  
                             in
                            case v.c3.isDir of
                             {Dir PAcc => (insertObje (\\_ => sir) (clitFromNoun np Ac) RNoAg (isAgrFSg np.a) vcAc (useVerb v)) ** {needAgr = False ; needClit = True ; c2 = v.c2}  ;
@@ -68,14 +80,24 @@ concrete VerbRon of Verb =
  -- more usually the adverbial form is used, hence no agreement
  
    SlashV2A v ap =  
-     (insertSimpObj  (\\a => ap.s ! (AF Masc Sg Indef ANomAcc)) (useVerb v))
-       ** {needAgr = False ; needClit = True ; c2 = v.c2} ;
+     (insertSimpObj  (\\a => v.c2.s ++ ap.s ! (AF Masc Sg Indef (convCase v.c2.c)))  
+(useVerb v)) ** {needAgr = False ; needClit = True ; c2 = v.c2} ;
 
     ComplSlash vp np =  let  s1 = vp.c2.s ++(np.s ! (vp.c2.c)).comp ;
-                             ss = if_then_Str np.hasRef (vp.c2.prepDir ++ s1) s1 ; 
+                             ss = case np.nForm of
+                                { HasRef False =>  s1 ;
+                                  _            => vp.c2.prepDir ++ s1 };                                
                              sir = if_then_Str np.isPronoun "" ss  ;
-                             vcDa = if_then_else VClit np.hasClit (nextClit vp.nrClit PDat) vp.nrClit;
-                             vcAc = if_then_else VClit np.hasClit (nextClit vp.nrClit PAcc) vp.nrClit;  
+                             vcDa = case np.nForm of 
+                                        {HasClit => nextClit vp.nrClit PDat ;
+                                         _       => vp.nrClit
+                                         };                             
+                             --if_then_else VClit np.hasClit (nextClit vp.nrClit PDat) vp.nrClit;
+                             vcAc = case np.nForm of 
+                                         {HasClit => nextClit vp.nrClit PAcc ;
+                                          _       => vp.nrClit
+                                         };
+                             --if_then_else VClit np.hasClit (nextClit vp.nrClit PAcc) vp.nrClit;  
                              vpp =  case vp.c2.isDir of
                           {Dir PAcc => insertObje (\\_ => sir) (clitFromNoun np Ac) RNoAg (isAgrFSg np.a) vcAc vp  ;
                            Dir PDat => insertObje (\\_ => sir) RNoAg (clitFromNoun np Da) False vcDa vp;
@@ -121,19 +143,27 @@ concrete VerbRon of Verb =
               insertObjc (\\a => "sã" ++ (flattenSimpleClitics vp.nrClit vp.clAcc vp.clDat (vp.isRefl ! a)) ++ conjVP vp a ++ vp.comp ! a ++ vp.ext ! Pos) ((useVerb v) **{c2=vp.c2; needAgr= vp.needAgr ; needClit = False; lock_VPSlash = <>}) ;
 
     SlashV2VNP v np vp = let  s1 = v.c2.s ++(np.s ! (v.c2.c)).comp ;
-                              ss = if_then_Str np.hasRef (v.c2.prepDir ++ s1) s1; 
+                              ss = case np.nForm of
+                                    {HasRef False => s1 ;
+                                     _            => v.c2.prepDir ++ s1 }; 
                               sir = if_then_Str np.isPronoun "" ss ;
-                              vcDa = if_then_else VClit np.hasClit (nextClit v.nrClit PDat) v.nrClit;
-                              vcAc = if_then_else VClit np.hasClit (nextClit v.nrClit PAcc) v.nrClit ;  
+                              vcDa = case np.nForm of
+                                    {HasClit =>  nextClit v.nrClit PDat;
+                                     _       =>  v.nrClit };
+                              vcAc = case np.nForm of
+                                    {HasClit =>  nextClit v.nrClit PAcc;
+                                     _       => v.nrClit };  
                               vvp = vp ** {lock_VP = <>};
                               vcomp = (getConjComp vvp np.a).s
                            in   
-                              case v.c2.isDir of {
-                                 Dir PAcc => insertObje (\\a => sir ++ vcomp ! a) (clitFromNoun np Ac) RNoAg (isAgrFSg np.a) vcAc (useVerb v) ;
-                                 Dir PDat => insertObje (\\a => sir ++ vcomp ! a) RNoAg (clitFromNoun np Da) False vcDa (useVerb v) ;
-                                 _        => insertSimpObjPre (\\a => ss ++ vcomp ! a) (useVerb v)
-                              }
-                               ** {needAgr = vp.needAgr ; needClit = False ;c2 = vp.c2} ;
+                              case v.c2.isDir  of
+                                {Dir PAcc => (insertObje (\\a => sir ++ vcomp ! a) (clitFromNoun np Ac) RNoAg (isAgrFSg np.a) vcAc (useVerb v)) ** {needAgr = vp.needAgr ; needClit = False ;c2 = vp.c2} ;
+                                
+                                 Dir PDat =>  (insertObje (\\a => sir ++ vcomp ! a) RNoAg (clitFromNoun np Da) False vcDa (useVerb v)) ** {needAgr = vp.needAgr ; needClit = False ; c2 = vp.c2};
+                                 
+                                 _        => (insertSimpObjPre (\\a => ss ++ vcomp ! a) (useVerb v)) ** {needAgr = vp.needAgr ; needClit = False ; c2 = vp.c2}  
+                                };
+
 
     UseComp comp = insertSimpObj comp.s copula ;
 
