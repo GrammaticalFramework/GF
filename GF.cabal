@@ -50,11 +50,9 @@ library
     PGF.Morphology
     PGF.ShowLinearize
     PGF.VisualizeTree
-    GF.Data.MultiMap
     GF.Data.TrieMap
     GF.Data.Utilities
     GF.Data.SortedList
-    GF.Data.Assoc
     GF.Data.ErrM
     GF.Data.Relation
     GF.Data.Operations
@@ -97,11 +95,9 @@ executable gf
     GF.JavaScript.PrintJS
     GF.Infra.CompactPrint
     GF.Text.UTF8
-    GF.Data.MultiMap
     GF.Data.TrieMap
     GF.Data.Utilities
     GF.Data.SortedList
-    GF.Data.Assoc
     GF.Data.ErrM
     GF.Data.Operations
     GF.Infra.Ident
