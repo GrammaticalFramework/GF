@@ -53,6 +53,6 @@ executable morpho-server
     Cache
     URLEncoding
     GF.Grammar.Parser
-  hs-source-dirs: .. . ../../dist/build/autogen
+  hs-source-dirs: ../compiler ../runtime/haskell . ../../dist/build/autogen
   if os(windows)
     ghc-options: -optl-mwindows
