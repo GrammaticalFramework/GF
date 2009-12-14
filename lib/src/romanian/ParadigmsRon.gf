@@ -465,9 +465,8 @@ mkNPspec : Str -> Str -> Str -> Number -> Gender -> NP =
          };
 a = ag ;
 indForm = cineva ;
-hasClit = True;
+nForm = HasClit ;
 isPronoun = False ;
-hasRef = True ;
 lock_NP = <>
 } ;
 
@@ -482,9 +481,8 @@ mkNPs : Str -> Str -> Number -> Gender -> Bool -> NP =
             };
  a = ag ;
  indForm = cineva ;
- hasClit = False;
  isPronoun = False ;
- hasRef = b ;
+ nForm = HasRef b ;
 lock_NP = <>
 };
 
@@ -501,8 +499,7 @@ mkNPa : Str -> Str -> Str -> Number -> Gender -> Bool -> NP =
                    comp = om}
             };
  a = ag;
- hasClit = False;
- hasRef = b;
+ nForm = HasRef b;
  isPronoun = False ;
  indForm = om ;
 lock_NP = <>

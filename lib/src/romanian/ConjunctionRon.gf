@@ -11,8 +11,8 @@ concrete ConjunctionRon of Conjunction =
 
     ConjNP conj ss = heavyNP (conjunctDistrTable NCase conj ss ** {
       a = {g = ss.a.g ; n = conjNumber conj.n ss.a.n ; p = ss.a.p} ;
-      hasClit = ss.hasClit;
-      ss = "" ---- fix this !!!! 
+      hasClit = ss.nForm;
+      ss = ""  
       }) ;
 
 
@@ -35,13 +35,17 @@ concrete ConjunctionRon of Conjunction =
       s1 = \\c => (x.s ! c).comp ; 
       s2 = \\c => (y.s ! c).comp ;  
       a = conjAgr x.a y.a;
-      hasClit = andB x.hasClit y.hasClit
+      nForm  = case x.nForm of
+                   {HasClit => y.nForm ;
+                    _       => HasRef False } 
       } ;  
  ConsNP x xs = {
       s1 = \\c => (x.s ! c).comp ++ comma ++ xs.s1 ! c ; ----e (conjunctCase c) ; 
       s2 = \\c => xs.s2 ! c ; ----e (conjunctCase c) ; 
       a = conjAgr x.a xs.a ;
-      hasClit = andB xs.hasClit x.hasClit
+      nForm = case x.nForm of 
+                  {HasClit => xs.nForm ;
+                   _       => HasRef False}
       } ;
 
     BaseAP x y = twoTable AForm x y ** {isPre = andB x.isPre y.isPre} ;
@@ -52,7 +56,7 @@ concrete ConjunctionRon of Conjunction =
   lincat
      [S] = {s1,s2 : Mood => Str} ;
     [Adv] = {s1,s2 : Str} ;
-    [NP] = {s1,s2 : NCase => Str ; a : Agr; hasClit : Bool} ;
+    [NP] = {s1,s2 : NCase => Str ; a : Agr; nForm : NForm} ;
     [AP] = {s1,s2 : AForm  => Str ; isPre : Bool} ;
     [RS] = {s1,s2 : Mood => Agr => Str ; c : NCase} ;
  
