@@ -1,4 +1,4 @@
-module GF.Compile.GFCCtoJS (pgf2js) where
+module GF.Compile.PGFtoJS (pgf2js) where
 
 import PGF.CId
 import PGF.Data hiding (mkStr)

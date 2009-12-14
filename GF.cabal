@@ -141,7 +141,7 @@ executable gf
     GF.Compile.Refresh
     GF.Compile.Rename
     GF.Compile.ReadFiles
-    GF.Compile.GrammarToGFCC
+    GF.Compile.GrammarToPGF
     GF.Compile.Concrete.TypeCheck
     GF.Compile.Concrete.Compute
     GF.Compile.Concrete.AppPredefined
@@ -150,9 +150,12 @@ executable gf
     GF.Compile.Abstract.Compute
     GF.Compile.Optimize
     GF.Compile.SubExOpt
-    GF.Compile.OptimizeGFCC
+    GF.Compile.OptimizePGF
     GF.Compile.ModDeps
     GF.Compile.GetGrammar
+    GF.Compile.PGFtoHaskell
+    GF.Compile.PGFtoProlog
+    GF.Compile.PGFtoJS
     GF.Compile
     GF.System.Readline
     GF.Quiz

@@ -1,4 +1,4 @@
-module GF.Compile.OptimizeGFCC where
+module GF.Compile.OptimizePGF where
 
 import PGF.CId
 import PGF.Data

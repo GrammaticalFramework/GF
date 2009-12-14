@@ -6,8 +6,8 @@ import GF.Compile.Rename
 import GF.Compile.CheckGrammar
 import GF.Compile.Optimize
 import GF.Compile.SubExOpt
-import GF.Compile.OptimizeGFCC
-import GF.Compile.GrammarToGFCC
+import GF.Compile.OptimizePGF
+import GF.Compile.GrammarToPGF
 import GF.Compile.ReadFiles
 import GF.Compile.Update
 import GF.Compile.Refresh

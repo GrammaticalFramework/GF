@@ -1,5 +1,5 @@
 {-# LANGUAGE PatternGuards #-}
-module GF.Compile.GrammarToGFCC (mkCanon2gfcc,addParsers) where
+module GF.Compile.GrammarToPGF (mkCanon2gfcc,addParsers) where
 
 import GF.Compile.Export
 import qualified GF.Compile.GenerateFCFG  as FCFG
