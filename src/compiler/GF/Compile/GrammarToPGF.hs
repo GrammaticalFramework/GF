@@ -2,8 +2,7 @@
 module GF.Compile.GrammarToPGF (mkCanon2gfcc,addParsers) where
 
 import GF.Compile.Export
-import qualified GF.Compile.GenerateFCFG  as FCFG
-import qualified GF.Compile.GeneratePMCFG as PMCFG
+import GF.Compile.GeneratePMCFG
 
 import PGF.CId
 import qualified PGF.Macros as CM
@@ -48,12 +47,8 @@ addParsers :: Options -> D.PGF -> IO D.PGF
 addParsers opts pgf = do cncs <- sequence [conv lang cnc | (lang,cnc) <- Map.toList (D.concretes pgf)]
                          return pgf { D.concretes = Map.fromList cncs }
   where
-    conv lang cnc = do pinfo <- if flag optErasing (erasingFromCnc `addOptions` opts)
-                                  then PMCFG.convertConcrete opts (D.abstract pgf) lang cnc
-                                  else return $ FCFG.convertConcrete  (D.abstract pgf) cnc
+    conv lang cnc = do pinfo <- convertConcrete opts (D.abstract pgf) lang cnc
                        return (lang,cnc { D.parser = Just pinfo })
-      where
-        erasingFromCnc = modifyFlags (\o -> o { optErasing = Map.lookup (mkCId "erasing") (D.cflags cnc) == Just "on"})
 
 -- Generate PGF from GFCM.
 -- this assumes a grammar translated by canon2canon

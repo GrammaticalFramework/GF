@@ -39,10 +39,7 @@ library
     PGF.Macros
     PGF.Generate
     PGF.Linearize
-    PGF.BuildParser
-    PGF.Parsing.FCFG.Utilities
-    PGF.Parsing.FCFG.Active
-    PGF.Parsing.FCFG.Incremental
+    PGF.Parse
     PGF.Expr
     PGF.Type
     PGF.Tree
@@ -66,7 +63,6 @@ library
     GF.Infra.Option
     GF.Data.ErrM
     GF.Data.BacktrackM
-    GF.Compile.GenerateFCFG
     GF.Compile.GeneratePMCFG
 -- not really part of GF but I have changed the original binary library
 -- and we have to keep the copy for now.
@@ -106,7 +102,6 @@ executable gf
     GF.Data.Utilities
     GF.Data.SortedList
     GF.Data.Assoc
-    GF.Compile.GenerateFCFG
     GF.Data.ErrM
     GF.Data.Operations
     GF.Infra.Ident
@@ -169,9 +164,6 @@ executable gf
     PGF.Macros
     PGF.Generate
     PGF.Linearize
-    PGF.BuildParser
-    PGF.Parsing.FCFG.Utilities
-    PGF.Parsing.FCFG.Active
     PGF.Binary
     PGF.Paraphrase
     PGF.TypeCheck

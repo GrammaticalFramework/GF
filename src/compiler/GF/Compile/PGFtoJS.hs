@@ -96,13 +96,14 @@ parser2js p  = [new "Parser" [JS.EObj $ [JS.Prop (JS.IntPropName cat) (JS.EArray
                               JS.EObj $ map cats (Map.assocs (startCats p)),
                               JS.EInt (totalCats p)]]
   where 
-    cats (c,is) = JS.Prop (JS.IdentPropName (JS.Ident (showCId c))) (JS.EArray (map JS.EInt is))
+    cats (c,(start,end)) = JS.Prop (JS.IdentPropName (JS.Ident (showCId c))) (JS.EObj [JS.Prop (JS.IdentPropName (JS.Ident "s")) (JS.EInt start)
+                                                                                      ,JS.Prop (JS.IdentPropName (JS.Ident "e")) (JS.EInt end)])
 
 frule2js :: Production -> JS.Expr
 frule2js (FApply funid args) = new "Rule"   [JS.EInt funid, JS.EArray (map JS.EInt args)]
 frule2js (FCoerce arg)       = new "Coerce" [JS.EInt arg]
 
-ffun2js (FFun f _ lins) = new "FFun" [JS.EStr (showCId f), JS.EArray (map JS.EInt (Array.elems lins))]
+ffun2js (FFun f lins) = new "FFun" [JS.EStr (showCId f), JS.EArray (map JS.EInt (Array.elems lins))]
 
 seq2js :: Array.Array FIndex FSymbol -> JS.Expr
 seq2js seq = JS.EArray [sym2js s | s <- Array.elems seq]

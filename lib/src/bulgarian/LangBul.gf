@@ -7,6 +7,6 @@ concrete LangBul of Lang =
   flags coding=cp1251 ;
 
 
-flags startcat = Phr ; unlexer = text ; lexer = text ; erasing = on ; coding = cp1251 ;
+flags startcat = Phr ; unlexer = text ; lexer = text ; coding = cp1251 ;
 
 } ;

@@ -74,8 +74,8 @@ module PGF(
 
            -- ** Word Completion (Incremental Parsing)
            complete,
-           Incremental.ParseState,
-           Incremental.initState, Incremental.nextState, Incremental.getCompletions, Incremental.recoveryStates, Incremental.extractTrees,
+           Parse.ParseState,
+           Parse.initState, Parse.nextState, Parse.getCompletions, Parse.recoveryStates, Parse.extractTrees,
 
            -- ** Generation
            generateRandom, generateAll, generateAllDepth,
@@ -105,8 +105,7 @@ import PGF.Expr (Tree)
 import PGF.Morphology
 import PGF.Data hiding (functions)
 import PGF.Binary
-import qualified PGF.Parsing.FCFG.Active as Active
-import qualified PGF.Parsing.FCFG.Incremental as Incremental
+import qualified PGF.Parse as Parse
 import qualified GF.Compile.GeneratePMCFG as PMCFG
 
 import GF.Infra.Option
@@ -249,13 +248,11 @@ linearize pgf lang = concat . take 1 . PGF.Linearize.linearizes pgf lang
 parse pgf lang typ s = 
   case Map.lookup lang (concretes pgf) of
     Just cnc -> case parser cnc of
-                  Just pinfo -> if Map.lookup (mkCId "erasing") (cflags cnc) == Just "on"
-                                  then Incremental.parse pgf lang typ (words s)
-                                  else Active.parse "t"  pinfo typ (words s)
+                  Just pinfo -> Parse.parse pgf lang typ (words s)
                   Nothing    -> error ("No parser built for language: " ++ showCId lang)
     Nothing  -> error ("Unknown language: " ++ showCId lang)
 
-parseWithRecovery pgf lang typ open_typs s = Incremental.parseWithRecovery pgf lang typ open_typs (words s)
+parseWithRecovery pgf lang typ open_typs s = Parse.parseWithRecovery pgf lang typ open_typs (words s)
 
 canParse pgf cnc = isJust (lookParser pgf cnc)
 
@@ -297,12 +294,12 @@ functionType pgf fun =
 
 complete pgf from typ input = 
          let (ws,prefix) = tokensAndPrefix input
-             state0 = Incremental.initState pgf from typ
+             state0 = Parse.initState pgf from typ
          in case loop state0 ws of
               Nothing -> []
               Just state -> 
-                (if null prefix && not (null (Incremental.extractTrees state typ)) then [unwords ws ++ " "] else [])
-                ++ [unwords (ws++[c]) ++ " " | c <- Map.keys (Incremental.getCompletions state prefix)]
+                (if null prefix && not (null (Parse.extractTrees state typ)) then [unwords ws ++ " "] else [])
+                ++ [unwords (ws++[c]) ++ " " | c <- Map.keys (Parse.getCompletions state prefix)]
   where
     tokensAndPrefix :: String -> ([String],String)
     tokensAndPrefix s | not (null s) && isSpace (last s) = (ws, "")
@@ -311,7 +308,7 @@ complete pgf from typ input =
         where ws = words s
 
     loop ps []     = Just ps
-    loop ps (t:ts) = case Incremental.nextState ps t of
+    loop ps (t:ts) = case Parse.nextState ps t of
                        Left  es -> Nothing
                        Right ps -> loop ps ts
 

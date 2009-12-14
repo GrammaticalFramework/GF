@@ -27,6 +27,7 @@ bnfPrinter = toBNF id
 toBNF :: (CFG -> CFG) -> PGF -> CId -> String
 toBNF f pgf cnc = prCFG $ f $ pgfToCFG pgf cnc
 
+type Profile = [Int]
 
 pgfToCFG :: PGF 
           -> CId   -- ^ Concrete syntax name
@@ -42,7 +43,7 @@ pgfToCFG pgf lang = mkCFG (showCId (lookStartCat pgf)) extCats (startRules ++ co
     fcatCats :: Map FCat Cat
     fcatCats = Map.fromList [(fc, showCId c ++ "_" ++ show i) 
                                  | (c,fcs) <- Map.toList (startCats pinfo), 
-                                   (fc,i) <- zip fcs [1..]]
+                                   (fc,i) <- zip (range fcs) [1..]]
 
     fcatCat :: FCat -> Cat
     fcatCat c = Map.findWithDefault ("Unknown_" ++ show c) c fcatCats
@@ -53,7 +54,7 @@ pgfToCFG pgf lang = mkCFG (showCId (lookStartCat pgf)) extCats (startRules ++ co
 
     -- gets the number of fields in the lincat for the given category
     catLinArity :: FCat -> Int
-    catLinArity c = maximum (1:[rangeSize (bounds rhs) | (FFun _ _ rhs, _) <- topdownRules c])
+    catLinArity c = maximum (1:[rangeSize (bounds rhs) | (FFun _ rhs, _) <- topdownRules c])
 
     topdownRules cat = f cat []
       where
@@ -69,17 +70,17 @@ pgfToCFG pgf lang = mkCFG (showCId (lookStartCat pgf)) extCats (startRules ++ co
     startRules :: [CFRule]
     startRules = [CFRule (showCId c) [NonTerminal (fcatToCat fc r)] (CFRes 0) 
                       | (c,fcs) <- Map.toList (startCats pinfo), 
-                        fc <- fcs, not (isLiteralFCat fc),
+                        fc <- range fcs, not (isLiteralFCat fc),
                         r <- [0..catLinArity fc-1]]
 
     fruleToCFRule :: (FCat,Production) -> [CFRule]
     fruleToCFRule (c,FApply funid args) = 
-        [CFRule (fcatToCat c l) (mkRhs row) (profilesToTerm (map (fixProfile row) ps))
+        [CFRule (fcatToCat c l) (mkRhs row) (profilesToTerm [fixProfile row n | n <- [0..length args-1]])
            | (l,seqid) <- Array.assocs rhs
            , let row = sequences pinfo ! seqid
            , not (containsLiterals row)]
       where
-        FFun f ps rhs = functions pinfo ! funid
+        FFun f rhs = functions pinfo ! funid
 
         mkRhs :: Array FPointPos FSymbol -> [CFSymbol]
         mkRhs = concatMap fsymbolToSymbol . Array.elems
@@ -94,11 +95,10 @@ pgfToCFG pgf lang = mkCFG (showCId (lookStartCat pgf)) extCats (startRules ++ co
         fsymbolToSymbol (FSymLit n l)    = [NonTerminal (fcatToCat (args!!n) l)]
         fsymbolToSymbol (FSymKS ts)      = map Terminal ts
 
-        fixProfile :: Array FPointPos FSymbol -> Profile -> Profile
-        fixProfile row = concatMap positions
+        fixProfile :: Array FPointPos FSymbol -> Int -> Profile
+        fixProfile row i = [k | (k,j) <- nts, j == i]
             where
               nts = zip [0..] [j | nt <- Array.elems row, j <- getPos nt]
-              positions i = [k | (k,j) <- nts, j == i]
               
               getPos (FSymCat j _) = [j]
               getPos (FSymLit j _) = [j]
