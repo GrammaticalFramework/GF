@@ -1,6 +1,6 @@
 GF Developers Guide
 Authors: Björn Bringert  and  Krasimir Angelov
-Last update: %%date(%c)
+Last update: %%mtime(%c)
 
 % NOTE: this is a txt2tags file.
 % Create an html file from this file using:
@@ -67,8 +67,9 @@ it first. Unfortunately editline does not have good support for Unicode. This wi
 if you tend to work on non-Latin language. Finaly readline supports both word completion
 and Unicode. Currently this is the best supported library.
 
-Before to get the GF sources you also need Darcs. Darcs is a decentralized revision control system, 
-see: http://darcs.net/ for more information. There are precompiled packages for many platforms available at
+Before to get the GF sources you also need Darcs, version 2 or later.
+Darcs is a decentralized revision control system, 
+see http://darcs.net/ for more information. There are precompiled packages for many platforms available at
 http://darcs.net/DarcsWiki/CategoryBinaries. There is also source code if you want to compile it yourself. Darcs is
 also written in Haskell and so you can use GHC to compile it.
 
@@ -87,7 +88,7 @@ If you plan to work continuously on GF then you should consider to get read-writ
 Anyone can get the latest development version of GF by running (all on one line):
 
 ```
-$ darcs get --partial --set-scripts-executable http://code.haskell.org/gf/
+$ darcs get --lazy --set-scripts-executable http://code.haskell.org/gf/
 ```
 
 This will create a directory called ``gf`` in the current
@@ -174,10 +175,10 @@ Get your copy with (all on one line),
 replacing ``bringert`` with your own username on code.haskell.org:
 
 ```
-$ darcs get --partial --set-scripts-executable bringert@code.haskell.org:/srv/code/gf
+$ darcs get --lazy --set-scripts-executable bringert@code.haskell.org:/srv/code/gf
 ```
 
-The option ``--partial`` means that you do not download all of the
+The option ``--lazy`` means that darcs defers downloading all the
 history for the repository. This saves space, bandwidth and CPU time,
 and most people don't need the full history of all changes in the
 past.
