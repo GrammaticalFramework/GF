@@ -2,9 +2,9 @@ module GF.Compile.Export where
 
 import PGF.CId
 import PGF.Data (PGF(..))
-import GF.Compile.GFCCtoHaskell
-import GF.Compile.GFCCtoProlog
-import GF.Compile.GFCCtoJS
+import GF.Compile.PGFtoHaskell
+import GF.Compile.PGFtoProlog
+import GF.Compile.PGFtoJS
 import GF.Compile.PGFPretty
 import GF.Infra.Option
 import GF.Speech.CFG

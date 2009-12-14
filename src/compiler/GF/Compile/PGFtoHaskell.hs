@@ -1,6 +1,6 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : GFCCtoHaskell
+-- Module      : PGFtoHaskell
 -- Maintainer  : Aarne Ranta
 -- Stability   : (stable)
 -- Portability : (portable)
@@ -14,7 +14,7 @@
 -- AR 11/11/1999 -- 7/12/2000 -- 18/5/2004
 -----------------------------------------------------------------------------
 
-module GF.Compile.GFCCtoHaskell (grammar2haskell) where
+module GF.Compile.PGFtoHaskell (grammar2haskell) where
 
 import PGF.CId
 import PGF.Data

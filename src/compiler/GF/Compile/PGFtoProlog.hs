@@ -1,6 +1,6 @@
 ----------------------------------------------------------------------
 -- |
--- Module      : GFCCtoProlog
+-- Module      : PGFtoProlog
 -- Maintainer  : Peter Ljunglöf
 -- Stability   : (stable)
 -- Portability : (portable)
@@ -8,7 +8,7 @@
 -- to write a GF grammar into a Prolog module
 -----------------------------------------------------------------------------
 
-module GF.Compile.GFCCtoProlog (grammar2prolog, grammar2prolog_abs) where
+module GF.Compile.PGFtoProlog (grammar2prolog, grammar2prolog_abs) where
 
 import PGF.CId
 import PGF.Data
