@@ -303,8 +303,8 @@ files in your system. For example on Linux this is usualy /usr/local/bin and on
 Windows this is c:\Program Files\Haskell\bin. If you want to install in some
 other place then use the ```--prefix``` option during the configuration phase.
 
-The compiled GF Resource Grammar Library will be installed in /usr/local/share/gf-3.0/lib
-on Linux and in c:\Program Files\Haskell\gf-3.0\lib on Windows. Again the location could
+The compiled GF Resource Grammar Library will be installed in /usr/local/share/gf-3.1/lib
+on Linux and in c:\Program Files\Haskell\gf-3.1\lib on Windows. Again the location could
 be changed using the ```--prefix``` option.
 
 == Clean ==
