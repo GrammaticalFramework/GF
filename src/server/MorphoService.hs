@@ -27,10 +27,10 @@ import URLEncoding
 
 -- FIXME !!!!!!
 grammarFile :: FilePath
-grammarFile = "/usr/local/share/gf-3.0/lib/alltenses/ParadigmsFin.gfo"
+grammarFile = "/usr/local/share/gf-3.1/lib/alltenses/ParadigmsFin.gfo"
 
 grammarPath :: FilePath
-grammarPath = "/usr/local/share/gf-3.0/lib/prelude"
+grammarPath = "/usr/local/share/gf-3.1/lib/prelude"
 
 main :: IO ()
 main = do initFastCGI
