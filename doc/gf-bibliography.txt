@@ -22,16 +22,29 @@ to appear in the on-line journal //Linguistics in Language Technology//,
 
 A. Ranta.
 Grammatical Framework: A Multilingual Grammar Formalism, 
-to appear in the on-line journal //Compass, Special issue on computational linguistics//,
+//Language and Linguistics Compass//, 
+Vol. 3, [on-line http://www.blackwell-compass.com/subject/linguistics/article_view?parent=section&last_results=section%3Dlnco-computational&sortby=date&section=lnco-computational&browse_id=lnco_articles_bpl155&article_id=lnco_articles_bpl155]
 2009.
 #BR
 //An overview of GF for readers with a general academic brackground.//
 
+A. Ranta and K. Angelov.
+Implementing Controlled Languages in GF.
+//CNL-2009//,
+//CEUR Workshop Proceedings//,
+vol. 448,
+[on-line http://sunsite.informatik.rwth-aachen.de/Publications/CEUR-WS/Vol-448/],
+2009.
+#BR
+//Makes a case for using GF in controlled language implementation, illustrated by Attempto Controlled English ported to French, German, and Swedish.//
+
 A. Ranta. Grammars as Software Libraries.
-To appear in
-Y. Bertot, G. Huet, J-J. Lévy, and G. Plotkin (eds.),
+In Y. Bertot, G. Huet, J-J. Lévy, and G. Plotkin (eds.),
 //From Semantics to Computer Science//,
-Cambridge University Press, Cambridge, 2009.
+Cambridge University Press, Cambridge, 
+pp. 281-308,
+2009.
+[pdf (preliminary version) http://www.cs.chalmers.se/~aarne/articles/libraries-kahn.pdf]
 #BR
 //Grammar-libraries from the software engineering point of view, with an example application to mathematical language.//
 
@@ -43,14 +56,14 @@ EACL 2009.
 
 A. Ranta, B. Bringert, and K. Angelov. 
 The GF Grammar Development Environment. 
-System demo. To appear in the proceedings of //EACL-2009//,
+System demo. Proceedings of //EACL-2009//,
 2009.
 #BR
 //An overview of GF from the grammarian's point of view.//
  
 B. Bringert, K. Angelov, and A. Ranta. 
 Grammatical Framework Web Service,
-System demo. To appear in the proceedings of //EACL-2009//,
+System demo. Proceedings of //EACL-2009//,
 2009.
 #BR
 //An overview of how to build web services on top of PGF using the Google Web Toolkit.//
@@ -117,16 +130,6 @@ University of Uppsala,
 Available from [series homepage http://publications.uu.se/abstract.xsql?dbid=8933]
 #BR
 //Presents an experiment on smart paradigms in Finnish.//
-
-A. Ranta.
-Grammars as Software Libraries.
-To appear in G. Huet, G. Plotkin, J.-J. Lévy, and Y. Bertot (eds),
-//From semantics to computer science: essays in honor of Gilles Kahn//,
-Cambridge University Press,
-2008.
-[pdf (preliminary version) http://www.cs.chalmers.se/~aarne/articles/libraries-kahn.pdf]
-#BR
-//Presents the GF Resource Grammar Library from a software engineering point of view.//
 
 A. Ranta.
 Example-based grammar writing.
