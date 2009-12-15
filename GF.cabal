@@ -81,6 +81,7 @@ executable gf
                  process,
                  pretty,
                  mtl
+  build-tools: happy, alex
   if os(windows)
     build-depends: Win32
   else
