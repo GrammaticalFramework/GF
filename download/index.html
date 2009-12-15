@@ -1,33 +1,87 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <HTML>
 <HEAD>
 <META NAME="generator" CONTENT="http://txt2tags.sf.net">
 <TITLE>Grammatical Framework Download and Installation</TITLE>
-</HEAD><BODY BGCOLOR="white" TEXT="black">
-<P ALIGN="center"><CENTER><H1>Grammatical Framework Download and Installation</H1>
-<FONT SIZE="4">
-</FONT></CENTER>
+<style>
+h1 { text-align: center; }
+h1,h2,h3 { font-family: sans-serif; }
+ul.downloads a { font-family: monospace; }
+</style>
+</HEAD>
+
+<BODY BGCOLOR="white" TEXT="black">
+<H1>Grammatical Framework<br>Download and Installation</H1>
 
 <H2>Latest developer code</H2>
 <P>
 <A HREF="../doc/gf-developers.html">GF darcs repository</A>
 </P>
 
-<H2>Latest release</H2>
+<H2>Latest release</h2>
 
-GF 3.0, 24 June 2009.
-<ul>
-<li>  <A HREF="gf-3.0-mac.gz">Mac OS X Leopard (intel) executable</A> 
-      (requires Readline from <A HREF="http://www.macports.org/">Mac Ports</A>)
-<li>  <A HREF="gf-3.0-mac-noreadline.gz">Mac OS X Leopard (Intel) executable</A> 
-      (doesn't require Readline)
-<li>  <A HREF="gf-linux.tar.gz">Linux (intel) binary package</A> 
-<li>  <A HREF="gf-win32.zip">Windows binary package</A> 
-<li> <A HREF="gf-lib-1.6.tgz">Compiled libraries, v. 1.6</A> 
-<li> <A HREF="gf-3.0-src.tgz">Source package for GF system (a dump of the darcs repo)</A> 
+<dl>
+<dt>GF 3.1, 15 December 2009
+<dd>
+<p>
+<ul class=downloads>
+  <li>For Linux (32-bit):
+    <a href="gf-3.1-bin-i486-linux.tar.gz">gf-3.1-bin-i468-linux.tar.gz</a>
+  <li>For Linux (64-bit):
+    <a href="gf-3.1-bin-x86_64-linux.tar.gz">gf-3.1-bin-x86_64-linux.tar.gz</a>
+  <li>For Mac:
+    <a href="gf-3.1-bin-intel-mac.tar.gz">gf-3.1-bin-intel-mac.tar.gz</a>
+    (Leopard &amp; Snow Leopard)
+  <li>For Windows:
+    <a href="gf-3.1-bin-win32.zip">gf-3.1-bin-win32.zip</a>
+  <li>Source package:
+    <a href="gf-3.1-src.tar.gz">gf-3.1-src.tar.gz</a>
+    (a dump of the darcs repo)
+  <li>Libraries: <a href="gf-lib-1.7.tar.gz">gf-lib-1.7.tar.gz</a>
+    (sources, compiled as alltenses/present, docs)
 </ul>
 
+<H3>Installation instructions</H3>
 
+<ul>
+<li>Linux &amp; Mac binaries: <tt>tar xvfz</tt> in /
+<li>Windows binary: unzip in c:\
+<li>Compiled library:
+  <tt>tar xvfz</tt> in some DIR and point the variable GF_LIB_PATH to DIR/lib.
+<li>
+Source package: <tt>tar xvfz</tt> somewhere and compile as follows:
+<P>
+<PRE>
+    tar xvfz gf-3.0.tgz
+    cd gf-3.0
+
+    # alternative 1:
+    runghc Setup configure
+    runghc Setup build
+    runghc Setup install
+
+    # alternative 2:
+    make
+    make install
+</PRE>
+</dl>
+
+<H2>Old releases</H2>
+
+<dl>
+<dt>GF 3.0, 24 June 2009.
+<dd>
+<P>
+<ul>
+<li><A HREF="gf-3.0-mac.gz">Mac OS X Leopard (intel) executable</A> 
+      (requires Readline from <A HREF="http://www.macports.org/">Mac Ports</A>)
+<li><A HREF="gf-3.0-mac-noreadline.gz">Mac OS X Leopard (Intel) executable</A> 
+      (doesn't require Readline)
+<li><A HREF="gf-linux.tar.gz">Linux (intel) binary package</A> 
+<li><A HREF="gf-win32.zip">Windows binary package</A> 
+<li><A HREF="gf-lib-1.6.tgz">Compiled libraries, v. 1.6</A> 
+<li><A HREF="gf-3.0-src.tgz">Source package for GF system (a dump of the darcs repo)</A> 
+</ul>
 
 <H3>Installation instructions</H3>
 
@@ -55,9 +109,8 @@ Source package: <tt>tar xvfz</tt> somewhere and compile as follows:
     make
     make install
 </PRE>
+</dl>
 
-
-<H2>Old releases</H2>
 
 GF 3.0 beta3, April 2009.
 <UL>
