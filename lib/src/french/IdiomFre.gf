@@ -37,6 +37,11 @@ concrete IdiomFre of Idiom = CatFre **
       (mkImperative False P1 vp).s ! Pos ! {n = Pl ; g = Masc} --- fem
       } ;
 
+    ImpP3 np vp = {
+      s = (mkClause (np.s ! Nom).comp np.hasClit np.a vp).s 
+             ! DInv ! RPres ! Simul ! Pos ! Conjunct
+      } ;
+
   oper
     elisCe = elision "c" ;
 
