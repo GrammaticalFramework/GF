@@ -14,7 +14,7 @@ concrete RelativeGer of Relative = CatGer ** open ResGer in {
         let 
           agr = case rp.a of {
             RNoAg => agrP3 (numGenNum gn) ;
-            RAg a => a ** {g = Neutr}
+            RAg n p => Ag Neutr n p
             } ;
           cl = mkClause (rp.s ! gn ! Nom) agr vp
         in
@@ -30,7 +30,7 @@ concrete RelativeGer of Relative = CatGer ** open ResGer in {
 
     FunRP p np rp = {
       s = \\gn,c => np.s ! c ++ appPrep p (rp.s ! gn) ;
-      a = RAg {n = np.a.n ; p = np.a.p}
+      a = RAg (numberAgr np.a) (personAgr np.a)
       } ;
 
     IdRP = {s = relPron ; a = RNoAg} ;
