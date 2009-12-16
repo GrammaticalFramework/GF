@@ -89,7 +89,7 @@ oper
       clit1 = vp.clit1 ++ obj.c1 ;
       clit2 = vp.clit2 ++ obj.c2 ;
       clit3 = vp.clit3 ;
-      comp  = \\a => vp.comp ! a ++ c.s ++ obj.comp ;
+      comp  = \\a => c.s ++ obj.comp ++ vp.comp ! a ;
       neg   = vp.neg ;
       ext   = vp.ext ;
     } ;
