@@ -19,4 +19,5 @@ abstract Idiom = Cat ** {
 
     ImpPl1    : VP -> Utt ;       -- let's go
 
+    ImpP3     : NP -> VP -> Utt ; -- let John walk
 }
