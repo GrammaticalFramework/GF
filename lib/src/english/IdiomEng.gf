@@ -26,5 +26,7 @@ concrete IdiomEng of Idiom = CatEng ** open Prelude, ResEng in {
 
     ImpPl1 vp = {s = "let's" ++ infVP True vp (AgP1 Pl)} ;
 
+    ImpP3 np vp = {s = "let" ++ np.s ! Acc ++ infVP True vp np.a} ;
+
 }
 
