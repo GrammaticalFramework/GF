@@ -40,6 +40,11 @@ concrete IdiomGer of Idiom = CatGer **
                            MConjunct ! Pres ! Simul ! Pos ! Inv 
       } ;
 
+    ImpP3 np vp = {
+      s = (mkClause (np.s ! Nom) np.a vp).s ! 
+                           MConjunct ! Pres ! Simul ! Pos ! Inv 
+      } ;
+
   oper
     geben = dirV2 (mk6V "geben" "gibt" "gib" "gab" "gäbe" "gegeben") ;
 }
