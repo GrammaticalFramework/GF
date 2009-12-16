@@ -414,10 +414,16 @@ paramValues cgr = (labels,untyps,typs) where
       [((cat,[LVar v]),(typ,toInteger (mx + v))) | v <- [0,1]] ++ ---- 1 or 2 vars 
       [((cat,[lab,lab2]),(ty,j)) | 
         rs <- getRec typ, ((lab2, ty),j) <- zip rs [0..]] 
+      ++
+      ---- one more level, but: ...
+      [((cat,[lab,lab2,lab3]),(ty,j)) | 
+        rss <- getRec typ, ((lab2, ty0),j0) <- zip rss [0..],
+        (_,ty2) <- rss,
+        rs  <- getRec ty2, ((lab3, ty),j) <- zip rs [0..]] 
       | 
         (cat,ls) <- lincats, ((lab, typ),i) <- zip ls [0..], let mx = length ls]
     -- go to tables recursively
-    ---- TODO: even go to deeper records
+    ---- ... TODO: go to deeper records
    where
      getRec typ = case typ of
        RecType rs -> [rs] ---- [unlockTyp rs]  -- (sort (unlockTyp ls))
