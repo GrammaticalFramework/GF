@@ -15,7 +15,7 @@ concrete SentenceGer of Sentence = CatGer ** open ResGer, Prelude in {
             ImpF _ True => <P3,"Sie",True> ; -- setzen Sie sich
             _ => <P2,[],False>
             } ;
-          agr  = {g = Fem ; n = numImp n ; p = ps.p1} ; --- g does not matter
+          agr  = Ag Fem (numImp n) ps.p1 ; --- g does not matter
           verb = vps.s ! False ! agr ! VPImperat ps.p3 ;
           inf  = vp.inf ++ verb.inf ;
         in

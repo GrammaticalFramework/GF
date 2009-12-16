@@ -29,9 +29,16 @@ resource ResGer = ParamX ** open Prelude in {
 
     GenNum = GSg Gender | GPl ;
 
--- Agreement of $NP$ is a record.
+-- Agreement of $NP$ has three parts.
 
-  oper Agr = {g : Gender ; n : Number ; p : Person} ;
+    Agr = Ag Gender Number Person ;
+
+  oper
+    mkAgr : {g : Gender ; n : Number ; p : Person} -> Agr = \r ->
+      Ag r.g r.n r.p ;
+    genderAgr : Agr -> Gender = \r -> case r of {Ag g _ _ => g} ;
+    numberAgr : Agr -> Number = \r -> case r of {Ag _ n _ => n} ;
+    personAgr : Agr -> Person = \r -> case r of {Ag _ _ p => p} ;
 
 -- Pronouns are the worst-case noun phrases, which have both case
 -- and possessive forms.
@@ -87,7 +94,7 @@ resource ResGer = ParamX ** open Prelude in {
 
 --2 For $Relative$
  
-    RAgr = RNoAg | RAg {n : Number ; p : Person} ;
+    RAgr = RNoAg | RAg Number Person ;
 
 --2 For $Numeral$
 
@@ -100,7 +107,7 @@ resource ResGer = ParamX ** open Prelude in {
     agrP3 : Number -> Agr = agrgP3 Neutr ;
 
     agrgP3 : Gender -> Number -> Agr = \g,n -> 
-      {g = g ; n = n ; p = P3} ;
+      Ag g n P3 ;
 
     gennum : Gender -> Number -> GenNum = \g,n ->
       case n of {
@@ -142,19 +149,23 @@ resource ResGer = ParamX ** open Prelude in {
          } ;      
 
     vFin : Bool -> Mood -> Tense -> Agr -> VForm = \b,m,t,a ->
+      let
+        an = numberAgr a ;
+        ap = personAgr a ;
+      in
       case <t,m> of {
-        <Pres,MIndic>    => VFin b (VPresInd   a.n a.p) ;
-        <Pres,MConjunct> => VFin b (VPresSubj  a.n a.p) 
+        <Pres,MIndic>    => VFin b (VPresInd   an ap) ;
+        <Pres,MConjunct> => VFin b (VPresSubj  an ap) 
                                                         ;  --# notpresent
-        <Past,MIndic>    => VFin b (VImpfInd   a.n a.p) ;  --# notpresent
-        <Past,MConjunct> => VFin b (VImpfSubj  a.n a.p) ;  --# notpresent
+        <Past,MIndic>    => VFin b (VImpfInd   an ap) ;  --# notpresent
+        <Past,MConjunct> => VFin b (VImpfSubj  an ap) ;  --# notpresent
         _ => VInf False --# notpresent
         } ;
 
-    conjAgr : Agr -> Agr -> Agr = \a,b -> {
+    conjAgr : Agr -> Agr -> Agr = \a,b -> mkAgr {
       g = Neutr ; ----
-      n = conjNumber a.n b.n ;
-      p = conjPerson a.p b.p
+      n = conjNumber (numberAgr a) (numberAgr b) ;
+      p = conjPerson (personAgr a) (personAgr b)
       } ;
 
 -- For $Lex$.
@@ -326,7 +337,7 @@ resource ResGer = ParamX ** open Prelude in {
         NPCase c    => caselist ich mich mir meiner ! c ;
         NPPoss gn c => mein + pronEnding ! gn ! c
         } ;
-      a = {g = g ; n = n ; p = p}
+      a = Ag g n p
       } ;
 
   pronEnding : GenNum => Case => Str = table {
@@ -405,12 +416,17 @@ resource ResGer = ParamX ** open Prelude in {
         vHaben ! vFin False m t a ;
       haben : Str = vHaben ! VInf False ;
 
-      wird : Mood -> Agr -> Str = \m,a -> case m of {
-        MIndic => werden_V.s ! VFin False (VPresInd a.n a.p) ;  
-        MConjunct => werden_V.s ! VFin False (VPresSubj a.n a.p)
+      wird : Mood -> Agr -> Str = \m,a -> 
+        let
+          an = numberAgr a ;
+          ap = personAgr a ;
+        in
+        case m of {
+          MIndic => werden_V.s ! VFin False (VPresInd an ap) ;  
+          MConjunct => werden_V.s ! VFin False (VPresSubj an ap)
         } ;  
-      wuerde : Agr -> Str = \a ->                      --# notpresent
-        werden_V.s ! VFin False (VImpfSubj a.n a.p) ;  --# notpresent
+      wuerde : Agr -> Str = \a ->                    --# notpresent
+        werden_V.s ! VFin False (VImpfSubj (numberAgr a) (personAgr a)) ;  --# notpresent
 
       auf = verb.prefix ;
 
@@ -433,7 +449,7 @@ resource ResGer = ParamX ** open Prelude in {
         Fut  => vf True (wird m a) (vpart ++ haben) ;   --# notpresent
         Cond => vf True (wuerde a) (vpart ++ haben)   --# notpresent
         } ;                                        --# notpresent
-      VPImperat False => vf False (verb.s ! VImper a.n) [] ;
+      VPImperat False => vf False (verb.s ! VImper (numberAgr a)) [] ;
       VPImperat True  => vf False (verb.s ! VFin False (VPresSubj Pl P3)) [] ;
       VPInfinit Anter => vf True [] (vpart ++ haben) ; --# notpresent
       VPInfinit Simul => vf True [] (verb.s ! VInf b)
@@ -617,14 +633,14 @@ resource ResGer = ParamX ** open Prelude in {
 -- be needed.
 
   reflPron : Agr => Case => Str = table {
-    {n = Sg ; p = P1} => caselist "ich" "mich" "mir"  "meiner" ;
-    {n = Sg ; p = P2} => caselist "du"  "dich" "dir"  "deiner" ;
-    {g = Masc ; n = Sg ; p = P3} => caselist "er" "sich" "sich" "seiner" ;
-    {g = Fem  ; n = Sg ; p = P3} => caselist "sie" "sich" "sich" "ihrer" ;
-    {g = Neutr ; n = Sg ; p = P3} => caselist "es" "sich" "sich" "seiner" ;
-    {n = Pl ; p = P1} => caselist "wir" "uns"  "uns"  "unser" ;
-    {n = Pl ; p = P2} => caselist "ihr" "euch" "euch" "euer" ;
-    {n = Pl ; p = P3} => caselist "sie" "sich" "sich" "ihrer"
+    Ag _ Sg P1 => caselist "ich" "mich" "mir"  "meiner" ;
+    Ag _ Sg P2 => caselist "du"  "dich" "dir"  "deiner" ;
+    Ag Masc Sg P3 => caselist "er" "sich" "sich" "seiner" ;
+    Ag Fem  Sg P3 => caselist "sie" "sich" "sich" "ihrer" ;
+    Ag Neutr Sg P3 => caselist "es" "sich" "sich" "seiner" ;
+    Ag _ Pl P1 => caselist "wir" "uns"  "uns"  "unser" ;
+    Ag _ Pl P2 => caselist "ihr" "euch" "euch" "euer" ;
+    Ag _ Pl P3 => caselist "sie" "sich" "sich" "ihrer"
     } ;
 
   conjThat : Str = "daﬂ" ;

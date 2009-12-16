@@ -8,7 +8,7 @@ concrete IdiomGer of Idiom = CatGer **
     GenericCl vp = mkClause "man" (agrP3 Sg) vp ;
 
     CleftNP np rs = mkClause "es" (agrP3 Sg) 
-      (insertExtrapos (rs.s ! gennum np.a.g np.a.n) ----
+      (insertExtrapos (rs.s ! gennum (genderAgr np.a) (numberAgr np.a)) ----
         (insertObj (\\_ => np.s ! rs.c) (predV MorphoGer.sein_V))) ;
 
     CleftAdv ad s = mkClause "es" (agrP3 Sg) 
@@ -36,7 +36,7 @@ concrete IdiomGer of Idiom = CatGer **
     ProgrVP = insertAdv "eben" ; ----
 
     ImpPl1 vp = {s = 
-      (mkClause "wir" {g = Fem ; n = Pl ; p = P1} vp).s ! 
+      (mkClause "wir" (Ag Fem Pl P1) vp).s ! 
                            MConjunct ! Pres ! Simul ! Pos ! Inv 
       } ;
 
