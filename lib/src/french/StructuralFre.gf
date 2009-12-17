@@ -188,6 +188,7 @@ lin
   as_CAdv = X.mkCAdv "aussi" conjThan ;
 
   have_V2 = avoir_V2 ;
+  that_Subj = ss elisQue ** {m = Conjunct} ;
 
   lin language_title_Utt = ss "français" ;
 
