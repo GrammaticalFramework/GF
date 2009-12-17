@@ -60,7 +60,7 @@ concrete SentenceGer of Sentence = CatGer ** open ResGer, Prelude in {
       c2 = cl.c2
       } ;
 
-    AdvS a s = {s = \\o => a.s ++ s.s ! Inv} ;
+    AdvS a s = {s = table {Sub => a.s ++ s.s ! Sub ; o => a.s ++ s.s ! Inv}} ;
 
     SSubjS a s b = {s = \\o => a.s ! o ++ "," ++ s.s ++ b.s ! Sub} ;
 
