@@ -193,7 +193,7 @@ mkV : overload {
 
   mkV : (geben, gibt, gib, gab, gäbe, gegeben : Str) -> V ; 
 
--- To add a movable suffix e.g. "auf(fassen)".
+-- To add a movable prefix e.g. "auf(fassen)".
 
   mkV : Str -> V -> V
 };
@@ -203,6 +203,10 @@ mkV : overload {
 -- prefixed by "be-, ver-".
 
   no_geV : V -> V ;
+
+-- To add a fixed prefix such as "be-, ver-"; this implies $no_geV$.
+
+  fixprefixV : Str -> V -> V ;
 
 -- To change the auxiliary from "haben" (default) to "sein" and
 -- vice-versa.
@@ -426,6 +430,14 @@ mkV2 : overload {
     s = table {
       p@(VPastPart _) => Predef.drop 2 (vs ! p) ;
       p => vs ! p
+      } ;
+    prefix = v.prefix ; lock_V = v.lock_V ; aux = v.aux ; vtype = v.vtype
+    } ;
+
+  fixprefixV s v = let vs = v.s in {
+    s = table {
+      p@(VPastPart _) => s + Predef.drop 2 (vs ! p) ;
+      p => s + vs ! p
       } ;
     prefix = v.prefix ; lock_V = v.lock_V ; aux = v.aux ; vtype = v.vtype
     } ;
