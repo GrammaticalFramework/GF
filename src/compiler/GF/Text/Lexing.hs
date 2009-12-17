@@ -18,9 +18,9 @@ stringOp name = case name of
   "words"      -> Just $ appLexer words
   "bind"       -> Just $ appUnlexer bindTok
   "unchars"    -> Just $ appUnlexer concat
-  "unlextext"  -> Just $ appUnlexer unlexText
+  "unlextext"  -> Just $ capitInit . appUnlexer (unlexText . unquote)
   "unlexcode"  -> Just $ appUnlexer unlexCode
-  "unlexmixed" -> Just $ appUnlexer unlexMixed
+  "unlexmixed" -> Just $ capitInit . appUnlexer (unlexMixed . unquote)
   "unwords"    -> Just $ appUnlexer unwords
   "to_html"    -> Just wrapHTML
   "to_utf8"    -> Just encodeUTF8
@@ -93,17 +93,25 @@ bindTok ws = case ws of
     []         -> ""
 
 unlexText :: [String] -> String
-unlexText = cap . unlext where
+unlexText = unlext where
   unlext s = case s of
     w:[] -> w
     w:[c]:[] | isPunct c -> w ++ [c]
-    w:[c]:cs | isMajorPunct c -> w ++ [c] ++ " " ++ cap (unlext cs)
+    w:[c]:cs | isMajorPunct c -> w ++ [c] ++ " " ++ capitInit (unlext cs)
     w:[c]:cs | isMinorPunct c -> w ++ [c] ++ " " ++ unlext cs
     w:ws -> w ++ " " ++ unlext ws
     _ -> []
-  cap s = case s of
-     c:cs -> toUpper c : cs
-     _ -> s
+
+-- capitalize first letter
+capitInit s = case s of
+  c:cs -> toUpper c : cs
+  _ -> s
+
+-- unquote each string of form "foo"
+unquote = map unq where 
+  unq s = case s of
+    '"':cs@(_:_) | last cs == '"' -> init cs
+    _ -> s
 
 unlexCode :: [String] -> String
 unlexCode s = case s of
