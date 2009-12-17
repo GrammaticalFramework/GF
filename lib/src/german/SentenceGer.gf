@@ -62,6 +62,8 @@ concrete SentenceGer of Sentence = CatGer ** open ResGer, Prelude in {
 
     AdvS a s = {s = \\o => a.s ++ s.s ! Inv} ;
 
+    SSubjS a s b = {s = \\o => a.s ! o ++ "," ++ s.s ++ b.s ! Sub} ;
+
     RelS s r = {s = \\o => s.s ! o ++ "," ++ r.s ! gennum Neutr Sg} ; --- "welches"
 
 }

@@ -66,6 +66,10 @@ abstract Sentence = Cat ** {
 
     AdvS     : Adv -> S  -> S ;            -- today, I will go home
 
+-- This covers subjunctive clauses, but they can also be added to the end.
+
+    SSubjS   : S -> Subj -> S -> S ;       -- I go home if she comes
+
 -- A sentence can be modified by a relative clause referring to its contents.
 
     RelS     : S -> RS -> S ;              -- she sleeps, which is good
