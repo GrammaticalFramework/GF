@@ -436,6 +436,7 @@ mkV2 : overload {
 
   fixprefixV s v = let vs = v.s in {
     s = table {
+      VInf True => "zu" ++ (s + vs ! VInf False) ;
       p@(VPastPart _) => s + Predef.drop 2 (vs ! p) ;
       p => s + vs ! p
       } ;
