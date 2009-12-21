@@ -408,10 +408,12 @@ function copy_arguments(args, start) {
 /* ------------------------------------------------------------------------- */
 
 
-function Parser(startcat, rules, cats) {
-	this.startcat = startcat;
-	this.rules = rules;
-	this.cats = cats;
+function Parser(productions, functions, sequences, startCats, totalCats) {
+	this.productions = productions;
+    this.functions = functions;
+    this.sequences = sequences;
+	this.startCats = startCats;
+    this.totalCats = totalCats;
 }
 Parser.prototype.showRules = function () {
     var ruleStr = new Array();
@@ -427,702 +429,471 @@ Parser.prototype.parseString = function (string, cat) {
 	for (var i = tokens.length - 1; i >= 0; i--) {
 		if (tokens[i] == "") { tokens.splice(i, 1); }
 	}
-	chart = new Chart(true);
-	predict(this.rules, tokens);
-	while (chart.updated) {
-		chart.updated = false;
-		completeAndConvert();
-		scan();
-		combine();
+    
+	var ps = new ParseState(this, cat);
+	for (i in tokens) {
+		if (!ps.next(tokens[i]))
+          return new Array();
 	}
-	var catToParse = this.startcat;
-	if (cat) { catToParse = cat; } 
-	var goalRange = new Range(0, tokens.length);
-	if (tokens.length == 1 && tokens[0] == "") { goalRange = new EmptyRange(); }
-	var activeEdges = filterActiveEdges();
-	var trees = new Array();
-	for (var i = 0, j = this.cats[catToParse].length; i < j; i++) {
-		if (foundTarget(this.cats[catToParse][i], new Array(new Array(goalRange)))) {
-			trees = trees.concat(extractTrees(this.cats[catToParse][i], new Array(new Array(goalRange)), activeEdges, ""));
-		}
-	}
-	for (var i = trees.length - 1; i >= 0; i--) {
-		if (trees[i] == undefined) { trees.splice(i, 1); }
-	}
-	return trees;
+	return ps.extractTrees();
 };
 
 // Rule Object Definition
 
-function Rule(cat, profile, args, linRec) {
-	this.cat = cat;
-	this.profile = profile;
+function Rule(funid, args) {
+    this.id = "Rule";
+	this.funid = funid;
 	this.args = args;
-	this.linRec = linRec;
 }
-Rule.prototype.show = function () {
+Rule.prototype.show = function (cat) {
 	var recStr = new Array();
-	recStr.push(this.cat, " -> ", this.profile.show(), " [", this.args, "] = ", showLinRec(this.linRec, ""));
+	recStr.push(cat, " -> ", funid, " [", this.args, "]");
+	return recStr.join("");
+};
+Rule.prototype.isEqual = function (obj) {
+	if (this.id != obj.id || this.funid != obj.funid || this.args.length != obj.args.length)
+      return false;
+      
+    for (i in this.args) {
+      if (this.args[i] != obj.args[i])
+        return false;
+    }
+
+    return true;
+};
+
+// Coerce Object Definition
+
+function Coerce(arg) {
+    this.id = "Coerce";
+	this.arg = arg;
+}
+Coerce.prototype.show = function (cat) {
+	var recStr = new Array();
+	recStr.push(cat, " -> _ [", this.args, "]");
 	return recStr.join("");
 };
 
-// Profile definitions
-
-// Function application
-// The function (name) is applied to its arguments (args)
-function FunApp(name, args) {
-	this.id = "FunApp";
-	this.name = name;
-	this.args = args.slice(0);
+function FFun(name,lins) {
+    this.name = name;
+    this.lins = lins;
 }
-FunApp.prototype.show = function () {
-	var funAppStr = new Array();
-	funAppStr.push("(", this.name);
-	for (var i = 0, j = this.args.length; i < j; i++) {
-		funAppStr.push(this.args[i].show());
-	}
-	funAppStr.push(")");
-	return funAppStr.join(" ");
-};
-
-// Literal
-function Lit(name) {
-	this.id = "Lit";
-	this.name = name;
-}
-Lit.prototype.show = function () { return this.name; };
-
-// Metavariable
-function MetaVar() { this.id = "MetaVar"; }
-MetaVar.prototype.show = function () { return "?"; };
-
-// Argument
-function Arg(i) {
-	this.id = "Arg";
-	this.name = "_";
-	this.i = i;
-}
-Arg.prototype.show = function () {
-	var argStr = new Array();
-	argStr.push(this.id, "(", this.i, ")");
-	return argStr.join("");
-};
-
-// Unification
-// The arguments (args) must be unified
-function Unify(args){
-	this.id = "Unify";
-	this.args = args.slice(0);
-}
-Unify.prototype.show = function () {
-	var unifyStr = new Array();
-	unifyStr.push("(", this.id);
-	for (var i = 0, j = this.args.length; i < j; i++) {
-		unifyStr.push(this.args[i].show());
-	}
-	unifyStr.push(")");
-	return unifyStr.join(" ");
-};
 
 // Definition of symbols present in linearization records
 
 // Object to represent argument projections in grammar rules
-function ArgProj(i, label) {
-	this.id = "argProj";
+function Arg(i, label) {
+	this.id = "Arg";
 	this.i = i;
 	this.label = label;
 }
-ArgProj.prototype.getId = function () { return this.id; };
-ArgProj.prototype.getArgNum = function () { return this.i };
-ArgProj.prototype.show = function () {
+Arg.prototype.getId = function () { return this.id; };
+Arg.prototype.getArgNum = function () { return this.i };
+Arg.prototype.show = function () {
 	var argStr = new Array();
 	argStr.push(this.i, this.label);
 	return argStr.join(".");
 };
-ArgProj.prototype.isEqual = function (obj) {
+Arg.prototype.isEqual = function (obj) {
 	return (this.id == obj.id && this.i == obj.i && this.label == obj.label);
 }
 
 // Object to represent terminals in grammar rules
-function Terminal (str) {
-	this.id = "terminal";
-	this.str = str;
+function KS() {
+	this.id = "KS";
+	this.tokens = arguments;
 }
-Terminal.prototype.getId = function () { return this.id; };
-Terminal.prototype.show = function () {
+KS.prototype.getId = function () { return this.id; };
+KS.prototype.show = function () {
 	var terminalStr = new Array();
-	terminalStr.push('"', this.str, '"');
+	terminalStr.push('"', this.tokens, '"');
 	return terminalStr.join("");
 };
-Terminal.prototype.isEqual = function (obj) {
+KS.prototype.isEqual = function (obj) {
 	return (this.id == obj.id && this.str == obj.str);
 }
 
-// Object to represent ranges in grammar rules
-function Range (i, j) {
-	this.id = "range";
-	this.i = i;
-	this.j = j;
+// Object to represent pre in grammar rules
+function KP(tokens,alts) {
+	this.id = "KP";
+	this.tokens = tokens;
+    this.alts   = alts;
 }
-Range.prototype.getId = function () { return this.id; };
-Range.prototype.show = function () {
+KP.prototype.getId = function () { return this.id; };
+KP.prototype.show = function () {
 	var terminalStr = new Array();
-	terminalStr.push("(", this.i, ",", this.j, ")");
+	terminalStr.push('"', this.tokens, '"');
 	return terminalStr.join("");
 };
-Range.prototype.isEqual = function (obj) {
-	return (this.id == obj.id && this.i == obj.i && this.j == obj.j);
+KP.prototype.isEqual = function (obj) {
+	return (this.id == obj.id && this.str == obj.str);
 }
 
-// Object to represent the empty range in grammar rules
-function EmptyRange () {
-	this.id = "emptyRange";
-}
-EmptyRange.prototype.getId = function () { return this.id; };
-EmptyRange.prototype.show = function () { return "emptyRange" };
-EmptyRange.prototype.isEqual = function (obj) {
-	return (this.id == obj.id);
+function Alt(tokens, prefixes) {
+  this.tokens   = tokens;
+  this.prefixes = prefixes;
 }
 
-// Chart Object Definition
-function Chart(updated) {
-	this.passive = new Array();
-	this.active  = new Array();
-	this.updated = updated;
-}
-Chart.prototype.show = function () {
-	var chartStr = new Array();
-	chartStr.push("(", this.showPassive(), ", ", this.showActive(), ")");
-	return chartStr.join("");
-};
-Chart.prototype.addPassiveEdge = function (cat, linRec) {
-	if (!this.passive[cat] || !this.passive[cat].length) {
-		this.passive[cat] = new Array();
-	}
-	this.passive[cat].push(linRec);
-};
-Chart.prototype.isPassiveElem = function (cat, linRec) {
-	if (this.passive[cat]) {
-		for (var i = 0, j = this.passive[cat].length; i < j; i++) {
-			if (linRecsAreEqual(this.passive[cat][i], linRec)) {
-				return true;
-			}
-		}
-	}
-	return false;
-};
-Chart.prototype.showPassive = function () {
-	var edgesStr = new Array();
-	edgesStr.push("[ ");
-	for (var cat in this.passive) {
-		for (var i = 0, j = this.passive[cat].length; i < j; i++) {
-			edgesStr.push("( ", cat, ", ", showLinRec(this.passive[cat][i], ""), ")");
-			if (i != j - 1) { edgesStr.push(", "); };
-		}
-		edgesStr.push(", ");
-	}
-	edgesStr.push(" ]");
-	return edgesStr.join("");
-	return edgesStr.join("") + "<br />";
-};
-Chart.prototype.addActiveEdge = function (cat, edge) {
-	if (!this.active[cat] || !this.active[cat].length) {
-		this.active[cat] = new Array();
-	}
-	this.active[cat].push(edge);
-};
-Chart.prototype.isActiveElem = function (cat, edge) {
-	if (this.active[cat]) {
-		for (var i = 0, j = this.active[cat].length; i < j; i++) {
-			var currentEdge = this.active[cat][i];
-			if (currentEdge.name == edge.name && (areArgsEqual(currentEdge.args, edge.args)) &&
-				currentEdge.currLabel == edge.currLabel && currentEdge.currLin.isEqual(edge.currLin) &&
-				linRecsAreEqual(currentEdge.linFound, edge.linFound) && linRowsAreEqual(currentEdge.remLin, edge.remLin) &&
-				linRecsAreEqual(currentEdge.remLinRows, edge.remLinRows) &&
-				arraysOfLinRecsAreEqual(currentEdge.children, edge.children)) {
-				return true;
-			}
-		}
-	}
-	return false;
-};
-Chart.prototype.showActive = function () {
-	var edgesStr = new Array()
-	edgesStr.push("[ ");
-	for (var cat in this.active) {
-		for (var i = 0, j = this.active[cat].length; i < j; i++) {
-			edgesStr.push("( ", this.active[cat][i].show(), " )");
-			if (i != j - 1) { edgesStr.push(", "); };
-		}
-		edgesStr.push(", ");
-	}
-	edgesStr.push(" ]");
-	return edgesStr.join("");
-};
 
-// Object to represent the active edges in a chart
-function ActiveEdge(profile, cat, name, args, linFound, currLabel, currLin, remLin, remLinRows, children) {
-	this.profile = profile;
-	this.cat = cat;
-	this.name = name;
-	this.args = args;
-	this.linFound = linFound;
-	this.currLabel = currLabel;
-	this.currLin = currLin;
-	this.remLin = remLin;
-	this.remLinRows = remLinRows;
-	this.children = children.slice(0);
-}
-ActiveEdge.prototype.show = function () {
-	var linRecStr = new Array();
-	linRecStr.push(this.profile.show(), ", ", this.cat, ", ", this.name, ", [ ", this.args, " ], ", showLinRec(this.linFound, ""),
-					", ", this.currLabel, ", ", this.currLin.show(), ", ", showLinRow(this.remLin, " ++ "),
-					", ", showLinRec(this.remLinRows, ""), ", [ ");
-	for (var i = 0, j = this.children.length; i < j; i++) {
-		linRecStr.push(showLinRec(this.children[i], ""));
-		if (i != j - 1) { linRecStr.push(", "); };
-	}
-	linRecStr.push(" ]");
-	return linRecStr.join("");
-};
+// Parsing
 
-function areArgsEqual(args1, args2) {
-	if (args1.length == args1.length && args1.join() == args2.join()) {
-		return true
-	}
-	return false;
+function Trie() {
+  this.value = null;
+  this.items = new Object();
+}
+Trie.prototype.insertChain = function(keys,obj) {
+  var node = this;
+  for (i in keys) {
+    var nnode = node.items[keys[i]];
+    if (nnode == null) {
+      nnode = new Trie();
+      node.items[keys[i]] = nnode;
+    }
+    node = nnode;
+  }
+  node.value = obj;
+}
+Trie.prototype.lookup = function(key,obj) {
+  return this.items[key];
+}
+Trie.prototype.isEmpty = function() {
+  if (this.value != null)
+    return false;
+    
+  for (i in this.items) {
+    return false;
+  }
+  
+  return true;
 }
 
-// Functions to manipulate linearization records
+function ParseState(parser, startCat) {
+  this.parser = parser;
+  this.startCat = startCat;
+  this.items = new Trie();
+  this.chart = new Chart(parser);
 
-// Returns a string representation of a linearization row
-function showLinRow(linRow, separator) {
-	var linRowStr = new Array();
-	linRowStr.push(" [ ");
-	for (var i = 0, j = linRow.length; i < j; i ++) {
-		linRowStr.push(linRow[i].show());
-		if (i != j - 1) { linRowStr.push(separator) };
-	}
-	linRowStr.push(" ] ");
-	return linRowStr.join("");
+  var items = new Array();
+  
+  var fids = parser.startCats[startCat];
+  if (fids != null) {
+    for (fid = fids.s; fid <= fids.e; fid++) {
+      var exProds = this.chart.expandForest(fid);
+      for (j in exProds) {
+        var rule = exProds[j];
+        var fun  = parser.functions[rule.funid];
+        for (lbl in fun.lins) {
+          var seqid = fun.lins[lbl];
+          items.push(new ActiveItem(0,0,rule.funid,seqid,rule.args,fid,lbl));
+        }
+      }
+    }
+  }
+    
+  this.items.insertChain(new Array(), items);
+}
+ParseState.prototype.next = function (token) {
+  var acc = this.items.lookup(token);
+  if (acc == null)
+    acc = new Trie();
+
+  this.process( this.items.value
+              , function (tokens, item) {
+                  if (tokens[0] == token) {
+                    var tokens1 = new Array();
+                    for (i = 1; i < tokens.length; i++) {
+                      tokens1[i-1] = tokens[i];
+                    }
+                    acc.insertChain(tokens1, [item]);
+                  }
+                });
+
+  this.items = acc;
+  this.chart.shift();
+  
+  return !this.items.isEmpty();
+}
+ParseState.prototype.extractTrees = function() {
+  this.process( this.items.value
+              , function (tokens, item) {
+                });
+  
+  var trees = new Array();
+
+  var fids = this.parser.startCats[this.startCat];
+  if (fids != null) {
+    for (fid0 = fids.s; fid0 <= fids.e; fid0++) {
+    
+      var labels = new Object();
+      var rules = this.chart.expandForest(fid0);
+      for (i in rules) {
+        var rule = rules[i];
+        var fun  = this.parser.functions[rule.funid];
+        for (lbl in fun.lins) {
+          labels[lbl] = true;
+        }
+      }
+
+      var ps = this;
+      
+      function go(fid) {
+        if (fid < ps.parser.totalCats) {
+          return [new Fun("?")];
+        } else {
+          var trees = new Array();
+
+          var rules = ps.chart.forest[fid];
+          for (j in rules) {
+            var rule = rules[j];
+            var fun  = ps.parser.functions[rule.funid];
+            
+            var arg_ix = new Array();
+            var arg_ts = new Array();
+            for (k in rule.args) {
+              arg_ix[k] = 0;
+              arg_ts[k] = go(rule.args[k]);
+            }
+            
+            while (true) {
+            
+              var t = new Fun(fun.name);
+              for (k in arg_ts) {
+                t.setArg(k,arg_ts[k][arg_ix[k]]);
+              }
+              trees.push(t);
+            
+              var i = 0;
+              while (i < arg_ts.length) {
+                arg_ix[i]++;
+                if (arg_ix[i] < arg_ts[i].length)
+                  break;
+
+                arg_ix[i] = 0;
+                i++;                
+              }
+              
+              if (i >= arg_ts.length)
+                  break;
+            }
+          }
+          
+          return trees;
+        }
+      }
+      
+      for (lbl in labels) {
+        fid = this.chart.lookupPC(fid0,lbl,0);
+        var arg_ts = go(fid);
+        for (i in arg_ts) {
+          trees.push(arg_ts[i]);
+        }
+      }
+    }
+  }    
+  
+  return trees;
+}
+ParseState.prototype.process = function (agenda,callback) {
+  if (agenda != null) {
+    while (agenda.length > 0) {
+      var item = agenda.pop();
+      var lin = this.parser.sequences[item.seqid];
+      var funName1 = this.parser.functions[item.funid].name;
+
+      if (item.dot < lin.length) {
+        var sym = lin[item.dot];
+        switch (sym.id) {
+          case "Arg": var fid   = item.args[sym.i];
+                      var label = sym.label;
+
+                      var items = this.chart.lookupAC(fid,label);
+                      if (items == null) {
+                        var fid2 = this.chart.lookupPC(fid,label,this.chart.offset);
+                        if (fid2 != null) {
+                          agenda.push(item.shiftOverArg(sym.i,fid2));
+                        }
+                        var rules = this.chart.expandForest(fid);
+                        for (j in rules) {
+                          var rule = rules[j];
+                          var funName2 = this.parser.functions[rule.funid].name;
+                          var seqid = this.parser.functions[rule.funid].lins[label];
+                          agenda.push(new ActiveItem(this.chart.offset,0,rule.funid,seqid,rule.args,fid,label));
+                        }
+                        this.chart.insertAC(fid,label,[item]);
+                      } else {
+                        var isMember = false;
+                        for (j in items) {
+                          if (items[j].isEqual(item)) {
+                            isMember = true;
+                            break;
+                          }
+                        }
+                        
+                        if (!isMember) {
+                          items.push(item);
+                          
+                          var fid2 = this.chart.lookupPC(fid,label,this.chart.offset);
+                          if (fid2 != null) {
+                            agenda.push(item.shiftOverArg(sym.i,fid2));
+                          }
+                        }
+                      }
+                      break;
+          case "KS":  callback(sym.tokens, item.shiftOverTokn());
+                      break;
+          case "KP":  var pitem = item.shiftOverTokn();
+                      callback(sym.tokens, pitem);
+                      for (i in sym.alts) {
+                        var alt = sym.alts[i];
+                        callback(alt.tokens, pitem);
+                      }
+                      break;
+          case "Lit": break;
+        }
+      } else {
+          var fid = this.chart.lookupPC(item.fid,item.lbl,item.offset);
+          if (fid == null) {
+            fid = this.chart.nextId++;
+            
+            var items = this.chart.lookupACo(item.offset,item.fid,item.lbl);
+            if (items != null) {
+              for (j in items) {
+                var pitem = items[j];
+                var funName2 = this.parser.functions[pitem.funid].name;
+                var i = this.parser.sequences[pitem.seqid][pitem.dot].i;
+                agenda.push(pitem.shiftOverArg(i,fid));
+              }
+            }
+            
+            this.chart.insertPC(item.fid,item.lbl,item.offset,fid);
+            this.chart.forest[fid] = [new Rule(item.funid,item.args)];
+          } else {
+            var labels = this.chart.labelsAC(fid);
+            if (labels != null) {
+              for (label in labels) {
+                var seqid = this.parser.functions[item.funid].lins[label];
+                agenda.push(new ActiveItem(this.chart.offset,0,item.funid,seqid,item.args,fid,label));
+              }
+              var rules = this.chart.forest[fid];
+              var rule  = new Rule(item.funid,item.args);
+              
+              var isMember = false;
+              for (j in rules) {
+                if (rules[j].isEqual(rule))
+                  isMember = true;
+              }
+              
+              if (!isMember)
+                rules.push(rule);
+            }
+          }
+      }
+    }
+  }
 }
 
-// Returns a string representation of a linearization record
-function showLinRec(linRec, separator) {
-	var linRecStr = new Array();
-	linRecStr.push(" [ ");
-	for (var i = 0, j = linRec.length; i < j; i ++) {
-		linRecStr.push(showLinRow(linRec[i], " ++ "));
-		if (i != j - 1) { linRecStr.push(separator); };
-	}
-	linRecStr.push(" ] ");
-	return linRecStr.join("");
+function Chart(parser) {
+  this.active      = new Object();
+  this.actives     = new Array();
+  this.passive     = new Object();
+  this.forest      = new Object();
+  this.nextId      = parser.totalCats;
+  this.offset      = 0;
+  
+  for (fid in parser.productions) {
+    this.forest[fid] = parser.productions[fid];
+  }
+}
+Chart.prototype.lookupAC = function (fid,label) {
+  var tmp = this.active[fid];
+  if (tmp == null)
+    return null;
+  return tmp[label];
+}
+Chart.prototype.lookupACo = function (offset,fid,label) {
+  var tmp;
+  
+  if (offset == this.offset)
+    tmp = this.active[fid];
+  else
+    tmp = this.actives[offset][fid];
+
+  if (tmp == null)
+    return null;
+
+  return tmp[label];
+}
+Chart.prototype.labelsAC = function (fid) {
+  return this.active[fid];
+}
+Chart.prototype.insertAC = function (fid,label,items) {
+  var tmp = this.active[fid];
+  if (tmp == null) {
+    tmp = new Object();
+    this.active[fid] = tmp;
+  }
+  tmp[label] = items;
+}
+Chart.prototype.lookupPC = function (fid,label,offset) {
+  var key = fid+"."+label+"-"+offset;
+  return this.passive[key];
+}
+Chart.prototype.insertPC = function (fid1,label,offset,fid2) {
+  var key = fid1+"."+label+"-"+offset;
+  this.passive[key] = fid2;
+}
+Chart.prototype.shift = function () {
+  this.actives.push(this.active);
+  this.active  = new Object();
+  
+  this.passive = new Object();
+  
+  this.offset++;
+}
+Chart.prototype.expandForest = function (fid) {
+  var rules = new Array();
+  var forest = this.forest;
+  
+  var go = function (rules0) {
+             for (i in rules0) {
+               var rule = rules0[i];
+               switch (rule.id) {
+                 case "Rule":   rules.push(rule); break;
+                 case "Coerce": go(forest[rule.arg]); break;
+               }
+             }
+           }
+
+  go(this.forest[fid]);
+  return rules;
 }
 
-// Checks if two linearization rows are equal
-function linRowsAreEqual(linRow1, linRow2) {
-	if (linRow1.length == linRow2.length) {
-		for (var i = 0, j = linRow1.length; i < j; i++) {
-			if (linRow1[i].id && linRow2[i].id && !linRow1[i].isEqual(linRow2[i])) {
-				return false;
-			}
-		}
-		return true;
-	}
-	return false;
+function ActiveItem(offset, dot, funid, seqid, args, fid, lbl) {
+    this.offset= offset;
+    this.dot   = dot;
+    this.funid = funid;
+    this.seqid = seqid;
+    this.args  = args;
+    this.fid   = fid;
+    this.lbl   = lbl;
 }
-
-// Checks if two linearization records are equal
-function linRecsAreEqual(linRec1, linRec2) {
-	if (linRec1.length == linRec2.length) {
-		for (var i = 0, j = linRec1.length; i < j; i++) {
-			if (!linRowsAreEqual(linRec1[i], linRec2[i])) { return false; }
-		}
-		return true;
-	}
-	return false;
+ActiveItem.prototype.isEqual = function (obj) {
+    return (this.offset== obj.offset &&
+            this.dot   == obj.dot &&
+            this.funid == obj.funid &&
+            this.seqid == obj.seqid &&
+            this.args  == obj.args &&
+            this.fid   == obj.fid &&
+            this.lbl   == obj.lbl);
 }
-
-// Checks if two arrays of linearization records are equal
-function arraysOfLinRecsAreEqual(array1, array2) {
-	if (array1.length == array2.length) {
-		for (var i = 0, j = array1.length; i < j; i++) {
-			if (!linRecsAreEqual(array1[i], array2[i])) { return false; }
-		}
-		return true;
-	}
-	return false;
+ActiveItem.prototype.shiftOverArg = function (i,fid) {
+    var nargs = new Array();
+    for (k in this.args) {
+      nargs[k] = this.args[k];
+    }
+    nargs[i] = fid;
+    return new ActiveItem(this.offset,this.dot+1,this.funid,this.seqid,nargs,this.fid,this.lbl);
 }
-
-// Functions to manipulate ranges (restriction and concatenation)
-
-// Concatenates two ranges
-function rangeConcatLin (lin1, lin2) {
-	if (lin1.id == "range" && lin2.id == "range") {
-		if (lin1.j == lin2.i) { return (new Range(lin1.i, lin2.j)) }
-	} else if (lin1.id == "range" && lin2.id == "emptyRange") { return lin1; }
-		   else if (lin1.id == "emptyRange" && lin2.id == "range") { return lin2; }
-		   		else if (lin1.id == "emptyRange" && lin2.id == "emptyRange") { return lin1; }
-	return undefined;
-}
-
-// Performs range concatenation on a linearization row
-function rangeConcatLins (lins) {
-	var newLins = new Array();
-	newLins.push(lins.shift());
-	while (lins.length > 0) {
-		if (!newLins[newLins.length - 1]) { return new Array(); }
-		if (newLins[newLins.length - 1].id == "range" && lins[0].id == "range") {
-			var rangeConcat = rangeConcatLin(newLins.pop(), lins[0]);
-			if (typeof rangeConcat == 'undefined') { return new Array(); }
-			newLins.push(rangeConcat);
-			lins.shift();
-		} else {
-			newLins.push(lins.shift());
-		}
-	}
-	return newLins;
-}
-
-// Performs range restriction on an element of a linearization row
-// while keeping track of the tokens that have been used
-function rangeRestLinTerm(tokens, lin, rangesNotConsumed) {
-	if (lin.id == "argProj") { return new Array(lin); }
-	else if (lin.id == "terminal") {
-		var ranges = new Array();
-		for (var i = 0, j = tokens.length; i < j; i++) {
-			if (tokens[i] == lin.str) {
-				ranges.push(new Range(i, i + 1));
-				rangesNotConsumed[i] = undefined;
-			}			
-		}
-		if (ranges.length == 0) {
-			return undefined;
-		} else {
-			return ranges;
-		}
-	}
-	else { return new Array(); }
-}
-
-// Performs range restriction on a linearization record
-// while keeping track of the tokens that have been used
-function rangeRestRecTerm(linRec, tokens, rangesNotConsumed) {
-	var ranges = new Array();
-	for (var i = 0, j = linRec.length; i < j; i++) {
-		var rangeRestLins = new Array();
-			for (var k = 0, l = linRec[i].length; k < l; k++) {
-					rangeRestLins.push(rangeRestLinTerm(tokens, linRec[i][k], rangesNotConsumed));
-			}
-		var combinedLins = combineLins(rangeRestLins);
-		if (typeof combinedLins != 'undefined') {
-			var filteredLins = new Array();
-			if (combinedLins.length == 0) {
-				filteredLins.push(new Array());
-			} else {
-				for (var m = 0, n = combinedLins.length; m < n; m++) {
-					var temp = rangeConcatLins(combinedLins[m]);
-					if (temp.length != 0) {
-						filteredLins.push(temp);
-					}
-				}
-			}
-			ranges.push(filteredLins);
-		} else { ranges.push(undefined); }
-	}
-	for (var k = 0, l = ranges.length; k < l; k++) {
-		if (ranges[k] == undefined) { return undefined; }
-	}
-	return combineLins(ranges);
-}
-
-// Returns the combinations of the elements of an array of arrays
-function combineLins(linss) {
-	if (linss.length > 0) {
-		var combinedLins = new Array();
-		var lins = linss.shift();
-		if (lins) {
-			if (lins.length != 0) {
-				var tail = combineLins(linss);
-				if (typeof tail == 'undefined') { return undefined; }
-				for (var i = 0, j = lins.length; i < j; i++) {
-					var head = new Array();
-					head.push(lins[i]);
-					if (tail.length == 0) { combinedLins.push(head); }
-					else {
-						for (var k = 0, l = tail.length; k < l; k++) {
-							combinedLins.push(head.concat(tail[k]));
-						}
-					}
-				}
-			} else { return new Array(); }
-		} else { return undefined; }
-		return combinedLins;
-	} else { return new Array(); }
-}
-
-// Inference Rules
-
-function predict(rules, tokens) {
-	var rangesNotConsumed = genRanges(tokens.length);
-	for (var i = 0, j = rules.length; i < j; i++) {
-		var currentRule = rules[i];
-		var linRec = rangeRestRecTerm(currentRule.linRec, tokens, rangesNotConsumed);
-		if (linRec) {
-			for (var k = 0, l = linRec.length; k < l; k++) {
-				var currentRow = linRec[k].shift();
-				var remlinRows = linRec[k];
-				var children = new Array();
-				for (var m = 0, n = currentRule.args.length; m < n; m++) {
-					children.push(new Array());
-				}
-				var newActive = new ActiveEdge(currentRule.profile, currentRule.cat, currentRule.profile.name, currentRule.args, new Array(), 0, new EmptyRange(), currentRow, remlinRows, children);
-				if (!chart.isActiveElem(currentRule.cat, newActive)) {
-					chart.addActiveEdge(currentRule.cat, newActive);
-					chart.updated = true;
-				}
-			}
-		}
-	}
-	for (var i = 0, j = rangesNotConsumed.length; i < j; i++) {
-		if (rangesNotConsumed[i] != undefined) {
-			var cat = undefined;
-			if (isNaN(tokens[i])) {
-				cat = "-1";
-			} else if (tokens[i].lastIndexOf(".") == -1) {
-				cat = "-2";
-			} else {
-				cat = "-3";
-			}
-			var lit = undefined;
-			if (cat == "-1") {
-				lit = "\"" + tokens[i] + "\"";
-			} else {
-				lit = tokens[i];
-			}
-			var newActive = new ActiveEdge(new Lit(lit), cat, tokens[i], new Array(), new Array(), 0, new Range(i, i + 1), new Array(), new Array(), new Array());
-			if (!chart.isActiveElem(cat, newActive)) {
-				chart.addActiveEdge(cat, newActive);
-				chart.updated = true;
-			}
-		}
-	}
-}
-
-function genRanges(inputLength) {
-	var ranges = new Array();
-	for (var i = 0; i < inputLength; i++) {
-		ranges.push(i);
-	}
-	return ranges;
-}
-
-function completeAndConvert() {
-	for (var cat in chart.active) {
-		var currentEdge = chart.active[cat];
-		for (var i = 0, j = currentEdge.length; i < j; i++) {
-			if (currentEdge[i].remLin.length == 0) {
-				if (currentEdge[i].remLinRows.length == 0) {
-					var linFound = currentEdge[i].linFound.slice(0);
-					linFound.push(new Array(currentEdge[i].currLin));
-					if (!chart.isPassiveElem(cat, linFound)) {
-						chart.addPassiveEdge(cat, linFound);
-						chart.updated = true;
-					}
-				} else {
-					var linFound = currentEdge[i].linFound.slice(0);
-					linFound.push(new Array(currentEdge[i].currLin));
-					var remLinRows = currentEdge[i].remLinRows.slice(0);
-					var currentRow = remLinRows.shift();
-					var newActive = new ActiveEdge(currentEdge[i].profile, cat, currentEdge[i].name, currentEdge[i].args, linFound, linFound.length, new EmptyRange(), currentRow, remLinRows, currentEdge[i].children);
-					if (!chart.isActiveElem(cat, newActive)) {
-						chart.active[cat].push(newActive);
-						chart.updated = true;
-					}
-				}
-			}
-		}
-	}
-}
-
-function scan() {
-	for (var cat in chart.active) {
-		var currentEdge = chart.active[cat];
-		for (var i = 0, j = currentEdge.length; i < j; i++) {
-			if (currentEdge[i].remLin.length > 0 && currentEdge[i].remLin[0].id == "range") {
-				var newRange = rangeConcatLin(currentEdge[i].currLin, currentEdge[i].remLin[0]);
-				if (typeof newRange != 'undefined') {
-					var remLin = currentEdge[i].remLin.slice(0);
-					remLin.shift();
-					var newActive = new ActiveEdge(currentEdge[i].profile, cat, currentEdge[i].name, currentEdge[i].args, currentEdge[i].linFound, currentEdge[i].currLabel, newRange, remLin, currentEdge[i].remLinRows, currentEdge[i].children);
-					if (!chart.isActiveElem(cat, newActive)) {
-						chart.active[cat].push(newActive);
-						chart.updated = true;
-					}
-				}
-			}
-		}
-	}
-}
-
-function combine() {
-	for (var cat in chart.active) {
-		for (var i = 0; i < chart.active[cat].length; i++) {
-			var currentEdge = chart.active[cat][i];
-			if (currentEdge.remLin.length && currentEdge.remLin[0].id == "argProj") {
-				var argNumber = currentEdge.remLin[0].i;
-				var catToCombine = currentEdge.args[argNumber];
-				if (chart.passive[catToCombine]) {
-					for (var k = 0, l = chart.passive[catToCombine].length; k < l; k++) {
-						var currentPassive = chart.passive[catToCombine][k];
-						var remLin = currentEdge.remLin.slice(0);
-						var linRow = currentPassive[remLin[0].label];
-						if (typeof linRow != 'undefined') {
-							var newLinRow = linRow.slice(0); 
-							if (currentEdge.children[argNumber].length == 0) {
-								var newRange = rangeConcatLin(currentEdge.currLin, newLinRow.shift());
-								if (typeof newRange != 'undefined') {
-									remLin.shift();
-									var children = currentEdge.children.slice(0);
-									children[argNumber] = currentPassive.slice(0);
-									var newActive = new ActiveEdge(currentEdge.profile, currentEdge.cat, currentEdge.name, currentEdge.args, currentEdge.linFound, currentEdge.currLabel, newRange, remLin, currentEdge.remLinRows, children);
-									if (!chart.isActiveElem(cat, newActive)) {
-										chart.active[cat].push(newActive);
-										chart.updated = true;
-									}
-								}
-							} else {
-								var child = currentEdge.children[argNumber];
-								if (linRecsAreEqual(currentPassive, child)) {
-									var newRange = rangeConcatLin(currentEdge.currLin, newLinRow.shift());
-									if (typeof newRange != 'undefined') {
-										remLin.shift();
-										var children = currentEdge.children.slice(0);
-										children[argNumber] = currentPassive.slice(0);
-										var newActive = new ActiveEdge(currentEdge.profile, currentEdge.cat, currentEdge.name, currentEdge.args, currentEdge.linFound, currentEdge.currLabel, newRange, remLin, currentEdge.remLinRows, children);
-										if (!chart.isActiveElem(cat, newActive)) {
-											chart.active[cat].push(newActive);
-											chart.updated = true;
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-}
-
-// Checks if the parsing goal is in the chart
-function foundTarget(cat, linRec) {
-	if (chart.passive[cat]) {
-		for (var i = 0, j = chart.passive[cat].length; i < j; i++) {
-			if (linRecsAreEqual(linRec, chart.passive[cat][i])) {
-				return true;
-			}
-		}
-	}
-	return false;
-}
-
-// Filters the active edges that are relevant for tree extraction
-function filterActiveEdges() {
-	var activeEdges = new Array();
-	for (var cat in chart.active) {
-		activeEdges[cat] = new Array();
-		for (var i = 0, j = chart.active[cat].length; i < j; i++) {
-			var currentEdge = chart.active[cat][i];
-			if (currentEdge.remLin.length == 0 && currentEdge.remLinRows.length == 0) {
-				var linFound = currentEdge.linFound.slice(0);
-				linFound.push(new Array(currentEdge.currLin));
-				var newActive = new ActiveEdge(currentEdge.profile, currentEdge.cat, currentEdge.name, currentEdge.args, linFound, "", "", "", "", currentEdge.children);
-				activeEdges[cat].push(newActive);
-			}
-		}
-	}
-	return activeEdges;
-}
-
-// Extracts the parse trees from the chart
-function extractTrees(cat, linRec, activeEdges, currentTree) {
-	var trees = new Array();
-	for (var i = 0, j = activeEdges[cat].length; i < j; i++) {
-		var currentEdge = activeEdges[cat][i];
-		var currentNode = "(" + cat + "-" + i + ")";
-		if (currentTree.indexOf(currentNode) == -1 && cat == currentEdge.cat && linRecsAreEqual(linRec, currentEdge.linFound)) {
-			var subTrees = new Array();
-			for (var k = 0, l = currentEdge.children.length; k < l; k++) {
-				subTrees.push(extractTrees(currentEdge.args[k], currentEdge.children[k].slice(0), activeEdges, currentTree + currentNode));
-			}
-			var combinedSubTrees = combineLins(subTrees);
-			if (combinedSubTrees) {
-				if (currentEdge.children.length == 0) { combinedSubTrees.push(new Array()); }
-				for (var m = 0, n = combinedSubTrees.length; m < n; m++) {
-					var tree = buildTree(currentEdge.profile, combinedSubTrees[m]);
-					if (tree) {
-						trees.push(tree);
-					}
-				}
-			}
-		}
-	}
-	if (trees.length == 0) {
-		return undefined;
-	} else {
-		return trees;
-	}
-}
-
-// Builds a tree according to the profile
-function buildTree(profile, args) {
-	switch(profile.id)
-	{
-		case "FunApp":
-			var tree = new Fun(profile.name);
-			for (var i = 0, j = profile.args.length; i < j; i++) {
-				var subTree = buildTree(profile.args[i], args);
-				if (subTree) {
-					tree.setArg(i, subTree);
-				} else {
-					return undefined;
-				}
-			}
-			return tree;
-		case "Lit":
-			return new Fun(profile.name);
-		case "MetaVar":
-			return new Fun("?");
-		case "Arg":
-			return args[profile.i];
-		case "Unify":
-			var subTrees = new Array();
-			for (var i = 0, j = profile.args.length; i < j; i++) {
-				subTrees.push(buildTree(profile.args[i], args))
-			}
-			return unifySubTrees(subTrees);
-	}
-}
-
-// Tree unification functions
-function unifySubTrees(subTrees) {
-	var t = subTrees[0];
-	for (var i = 1, j = subTrees.length; i < j; i++) {
-		t = unify(t, subTrees[i]);
-		if (!t) { return undefined; }
-	}
-	return t;
-}
-
-function unify(a, b) {
-	if (a.isMeta()) { return b };
-	if (b.isMeta()) { return a };
-	if (a.name == b.name && a.args.length == b.args.length) {
-		for (var i = 0, j = a.args.length; i < j; i++) {
-			if (!unify(a.args[i], b.args[i])) { return undefined; }
-		}
-		return a
-	};
-	return undefined;
+ActiveItem.prototype.shiftOverTokn = function () {
+    return new ActiveItem(this.offset,this.dot+1,this.funid,this.seqid,this.args,this.fid,this.lbl);
 }
