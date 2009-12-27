@@ -553,6 +553,21 @@ Trie.prototype.insertChain = function(keys,obj) {
   }
   node.value = obj;
 }
+Trie.prototype.insertChain1 = function(keys,obj) {
+  var node = this;
+  for (i in keys) {
+    var nnode = node.items[keys[i]];
+    if (nnode == null) {
+      nnode = new Trie();
+      node.items[keys[i]] = nnode;
+    }
+    node = nnode;
+  }
+  if (node.value == null)
+    node.value = [obj];
+  else
+    node.value.push(obj);
+}
 Trie.prototype.lookup = function(key,obj) {
   return this.items[key];
 }
@@ -604,7 +619,7 @@ ParseState.prototype.next = function (token) {
                     for (i = 1; i < tokens.length; i++) {
                       tokens1[i-1] = tokens[i];
                     }
-                    acc.insertChain(tokens1, [item]);
+                    acc.insertChain1(tokens1, item);
                   }
                 });
 
