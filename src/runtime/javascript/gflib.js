@@ -414,6 +414,20 @@ function Parser(productions, functions, sequences, startCats, totalCats) {
     this.sequences = sequences;
 	this.startCats = startCats;
     this.totalCats = totalCats;
+    
+    for (fid in productions) {
+      for (i in productions[fid]) {
+        var rule = productions[fid][i];
+        rule.fun = functions[rule.fun];
+      }
+    }
+    
+    for (i in functions) {
+      var fun = functions[i];
+      for (j in fun.lins) {
+        fun.lins[j] = sequences[fun.lins[j]];
+      }
+    }
 }
 Parser.prototype.showRules = function () {
     var ruleStr = new Array();
@@ -440,18 +454,18 @@ Parser.prototype.parseString = function (string, cat) {
 
 // Rule Object Definition
 
-function Rule(funid, args) {
+function Rule(fun, args) {
     this.id = "Rule";
-	this.funid = funid;
+	this.fun  = fun;
 	this.args = args;
 }
 Rule.prototype.show = function (cat) {
 	var recStr = new Array();
-	recStr.push(cat, " -> ", funid, " [", this.args, "]");
+	recStr.push(cat, " -> ", fun.name, " [", this.args, "]");
 	return recStr.join("");
 };
 Rule.prototype.isEqual = function (obj) {
-	if (this.id != obj.id || this.funid != obj.funid || this.args.length != obj.args.length)
+	if (this.id != obj.id || this.fun != obj.fun || this.args.length != obj.args.length)
       return false;
       
     for (i in this.args) {
@@ -596,10 +610,9 @@ function ParseState(parser, startCat) {
       var exProds = this.chart.expandForest(fid);
       for (j in exProds) {
         var rule = exProds[j];
-        var fun  = parser.functions[rule.funid];
+        var fun  = rule.fun;
         for (lbl in fun.lins) {
-          var seqid = fun.lins[lbl];
-          items.push(new ActiveItem(0,0,rule.funid,seqid,rule.args,fid,lbl));
+          items.push(new ActiveItem(0,0,rule.fun,fun.lins[lbl],rule.args,fid,lbl));
         }
       }
     }
@@ -643,7 +656,7 @@ ParseState.prototype.extractTrees = function() {
       var rules = this.chart.expandForest(fid0);
       for (i in rules) {
         var rule = rules[i];
-        var fun  = this.parser.functions[rule.funid];
+        var fun  = rule.fun;
         for (lbl in fun.lins) {
           labels[lbl] = true;
         }
@@ -660,7 +673,7 @@ ParseState.prototype.extractTrees = function() {
           var rules = ps.chart.forest[fid];
           for (j in rules) {
             var rule = rules[j];
-            var fun  = ps.parser.functions[rule.funid];
+            var fun  = rule.fun;
             
             var arg_ix = new Array();
             var arg_ts = new Array();
@@ -712,8 +725,7 @@ ParseState.prototype.process = function (agenda,callback) {
   if (agenda != null) {
     while (agenda.length > 0) {
       var item = agenda.pop();
-      var lin = this.parser.sequences[item.seqid];
-      var funName1 = this.parser.functions[item.funid].name;
+      var lin = item.seq;
 
       if (item.dot < lin.length) {
         var sym = lin[item.dot];
@@ -730,9 +742,7 @@ ParseState.prototype.process = function (agenda,callback) {
                         var rules = this.chart.expandForest(fid);
                         for (j in rules) {
                           var rule = rules[j];
-                          var funName2 = this.parser.functions[rule.funid].name;
-                          var seqid = this.parser.functions[rule.funid].lins[label];
-                          agenda.push(new ActiveItem(this.chart.offset,0,rule.funid,seqid,rule.args,fid,label));
+                          agenda.push(new ActiveItem(this.chart.offset,0,rule.fun,rule.fun.lins[label],rule.args,fid,label));
                         }
                         this.chart.insertAC(fid,label,[item]);
                       } else {
@@ -774,23 +784,21 @@ ParseState.prototype.process = function (agenda,callback) {
             if (items != null) {
               for (j in items) {
                 var pitem = items[j];
-                var funName2 = this.parser.functions[pitem.funid].name;
-                var i = this.parser.sequences[pitem.seqid][pitem.dot].i;
+                var i = pitem.seq[pitem.dot].i;
                 agenda.push(pitem.shiftOverArg(i,fid));
               }
             }
             
             this.chart.insertPC(item.fid,item.lbl,item.offset,fid);
-            this.chart.forest[fid] = [new Rule(item.funid,item.args)];
+            this.chart.forest[fid] = [new Rule(item.fun,item.args)];
           } else {
             var labels = this.chart.labelsAC(fid);
             if (labels != null) {
-              for (label in labels) {
-                var seqid = this.parser.functions[item.funid].lins[label];
-                agenda.push(new ActiveItem(this.chart.offset,0,item.funid,seqid,item.args,fid,label));
+              for (lbl in labels) {
+                agenda.push(new ActiveItem(this.chart.offset,0,item.fun,item.fun.lins[lbl],item.args,fid,lbl));
               }
               var rules = this.chart.forest[fid];
-              var rule  = new Rule(item.funid,item.args);
+              var rule  = new Rule(item.fun,item.args);
               
               var isMember = false;
               for (j in rules) {
@@ -883,11 +891,11 @@ Chart.prototype.expandForest = function (fid) {
   return rules;
 }
 
-function ActiveItem(offset, dot, funid, seqid, args, fid, lbl) {
+function ActiveItem(offset, dot, fun, seq, args, fid, lbl) {
     this.offset= offset;
     this.dot   = dot;
-    this.funid = funid;
-    this.seqid = seqid;
+    this.fun   = fun;
+    this.seq   = seq;
     this.args  = args;
     this.fid   = fid;
     this.lbl   = lbl;
@@ -895,8 +903,8 @@ function ActiveItem(offset, dot, funid, seqid, args, fid, lbl) {
 ActiveItem.prototype.isEqual = function (obj) {
     return (this.offset== obj.offset &&
             this.dot   == obj.dot &&
-            this.funid == obj.funid &&
-            this.seqid == obj.seqid &&
+            this.fun   == obj.fun &&
+            this.seq   == obj.seq &&
             this.args  == obj.args &&
             this.fid   == obj.fid &&
             this.lbl   == obj.lbl);
@@ -907,8 +915,8 @@ ActiveItem.prototype.shiftOverArg = function (i,fid) {
       nargs[k] = this.args[k];
     }
     nargs[i] = fid;
-    return new ActiveItem(this.offset,this.dot+1,this.funid,this.seqid,nargs,this.fid,this.lbl);
+    return new ActiveItem(this.offset,this.dot+1,this.fun,this.seq,nargs,this.fid,this.lbl);
 }
 ActiveItem.prototype.shiftOverTokn = function () {
-    return new ActiveItem(this.offset,this.dot+1,this.funid,this.seqid,this.args,this.fid,this.lbl);
+    return new ActiveItem(this.offset,this.dot+1,this.fun,this.seq,this.args,this.fid,this.lbl);
 }
