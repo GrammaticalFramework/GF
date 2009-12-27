@@ -735,10 +735,6 @@ ParseState.prototype.process = function (agenda,callback) {
 
                       var items = this.chart.lookupAC(fid,label);
                       if (items == null) {
-                        var fid2 = this.chart.lookupPC(fid,label,this.chart.offset);
-                        if (fid2 != null) {
-                          agenda.push(item.shiftOverArg(sym.i,fid2));
-                        }
                         var rules = this.chart.expandForest(fid);
                         for (j in rules) {
                           var rule = rules[j];
