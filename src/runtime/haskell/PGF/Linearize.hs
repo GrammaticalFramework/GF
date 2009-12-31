@@ -75,7 +75,7 @@ linTree pgf lang e = lin (expr2tree e) Nothing
                                Just (DTyp _ cat _) -> compute pgf lang [K (KS (showCId x))] (lookMap tm0 cat (lindefs cnc))
                                Nothing             -> TM (showCId x)
     lin (Meta i)       mty = case mty of
-                               Just (DTyp _ cat _) -> compute pgf lang [K (KS (show    i))] (lookMap tm0 cat (lindefs cnc))
+                               Just (DTyp _ cat _) -> compute pgf lang [K (KS ("?" ++ show    i))] (lookMap tm0 cat (lindefs cnc))
                                Nothing             -> TM (show    i)
 
 variants :: [Term] -> Term
