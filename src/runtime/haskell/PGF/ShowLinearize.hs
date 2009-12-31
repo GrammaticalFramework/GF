@@ -100,7 +100,7 @@ markLinearize pgf lang = concat . take 1 . linearizesMark pgf lang
 collectWords :: PGF -> Language -> [(String, [(CId,String)])]
 collectWords pgf lang = 
     concatMap collOne 
-      [(f,c,0) | (f,(DTyp [] c _,_,_)) <- Map.toList $ funs $ abstract pgf] 
+      [(f,c,length xs) | (f,(DTyp xs c _,_,_)) <- Map.toList $ funs $ abstract pgf] 
   where
     collOne (f,c,i) = 
       fromRec f [showCId c] (recLinearize pgf lang (foldl EApp (EFun f) (replicate i (EMeta 888))))
@@ -108,6 +108,7 @@ collectWords pgf lang =
       RR  rs -> concat [fromRec f v t | (_,t) <- rs] 
       RT  rs -> concat [fromRec f (p:v) t | (p,t) <- rs]
       RFV rs -> concatMap (fromRec f v) rs
-      RS  s  -> [(s,[(f,unwords (reverse v))])]
+      RS  s  -> [(w,[(f,unwords (reverse v))]) | w <- words s, w /= "?888"] ---
+--      RS  s  -> [(s,[(f,unwords (reverse v))])]
       RCon c -> [] ---- inherent
 

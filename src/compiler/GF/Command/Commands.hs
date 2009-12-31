@@ -359,12 +359,22 @@ allCommands cod env@(pgf, mos) = Map.fromList [
      synopsis = "print the morphological analyses of all words in the string",
      explanation = unlines [
        "Prints all the analyses of space-separated words in the input string,",
-       "using the morphological analyser of the actual grammar (see command pf)"
+       "using the morphological analyser of the actual grammar (see command pg)"
        ],
-     exec  = \opts ->  
-               return . fromString . unlines . 
-               map prMorphoAnalysis . concatMap (morphos opts) . 
-               concatMap words . toStrings
+     exec  = \opts -> case opts of
+               _ | isOpt "missing" opts ->
+                    return . fromString . unwords .
+                    morphoMissing (theMorpho opts) . 
+                    concatMap words . toStrings
+               _ -> return . fromString . unlines . 
+                    map prMorphoAnalysis . concatMap (morphos opts) . 
+                    concatMap words . toStrings ,
+     flags = [
+       ("lang","the languages of analysis (comma-separated, no spaces)")
+       ],
+     options = [
+       ("missing","show the list of unknown words in the input")
+       ]
      }),
 
   ("mq", emptyCommandInfo {
@@ -395,7 +405,8 @@ allCommands cod env@(pgf, mos) = Map.fromList [
        "the parser. For example if -openclass=\"A,N,V\" is given, the parser",
        "will accept unknown adjectives, nouns and verbs with the resource grammar."
        ],
-     exec = \opts -> returnFromExprs . concatMap (par opts) . toStrings,
+     exec = \opts ts -> 
+              returnFromExprsPar opts ts $ concatMap (par opts) $ toStrings ts,
      flags = [
        ("cat","target category of parsing"),
        ("lang","the languages of parsing (comma-separated, no spaces)"),
@@ -424,7 +435,8 @@ allCommands cod env@(pgf, mos) = Map.fromList [
      options = [
        ("cats",   "show just the names of abstract syntax categories"),
        ("fullform", "print the fullform lexicon"),
-       ("missing","show just the names of functions that have no linearization")
+       ("missing","show just the names of functions that have no linearization"),
+       ("words", "print the list of words")
        ]
      }),
   ("ph", emptyCommandInfo {
@@ -770,6 +782,7 @@ allCommands cod env@(pgf, mos) = Map.fromList [
   ]
  where
    enc = encodeUnicode cod
+
    par opts s = case optOpenTypes opts of
                   []        -> concat  [parse pgf lang (optType opts) s | lang <- optLangs opts, canParse pgf lang]
                   open_typs -> concat  [parseWithRecovery pgf lang (optType opts) open_typs s | lang <- optLangs opts, canParse pgf lang]
@@ -847,19 +860,27 @@ allCommands cod env@(pgf, mos) = Map.fromList [
    returnFromExprs es = return $ case es of
      [] -> ([], "no trees found")
      _  -> fromExprs es
+   returnFromExprsPar opts ts es = return $ case es of
+     [] -> ([], "no trees found; unknown words:" +++ 
+                unwords (morphoMissing (theMorpho opts) 
+                          (concatMap words (toStrings ts))))
+     _  -> fromExprs es
 
    prGrammar opts
      | isOpt "cats"     opts = return $ fromString $ unwords $ map showCId $ categories pgf
      | isOpt "fullform" opts = return $ fromString $ concatMap (morpho "" prFullFormLexicon) $ optLangs opts
      | isOpt "missing"  opts = return $ fromString $ unlines $ [unwords (showCId la:":": map showCId cs) | 
                                                                   la <- optLangs opts, let cs = missingLins pgf la]
+     | isOpt "words" opts = return $ fromString $ concatMap (morpho "" prAllWords) $ optLangs opts
      | otherwise             = do fmt <- readOutputFormat (valStrOpts "printer" "pgf_pretty" opts)
                                   return $ fromString $ concatMap snd $ exportPGF noOptions fmt pgf
 
    morphos opts s = 
-     [morpho [] (\mo -> lookupMorpho mo s) la | la <- optLangs opts]
+     [(s,morpho [] (\mo -> lookupMorpho mo s) la) | la <- optLangs opts]
 
    morpho z f la = maybe z f $ Map.lookup la mos
+
+   theMorpho opts = morpho (error "no morpho") id (head (optLangs opts))
 
    -- ps -f -g s returns g (f s)
    stringOps menv opts s = foldr (menvop . app) s (reverse opts) where
@@ -924,8 +945,16 @@ lookFlag pgf lang flag = lookConcrFlag pgf (mkCId lang) (mkCId flag)
 
 prFullFormLexicon :: Morpho -> String
 prFullFormLexicon mo = 
-  unlines [w ++ " : " ++ prMorphoAnalysis ts | (w,ts) <- fullFormLexicon mo]
+  unlines (map prMorphoAnalysis (fullFormLexicon mo))
 
-prMorphoAnalysis :: [(Lemma,Analysis)] -> String
-prMorphoAnalysis lps = unlines [showCId l ++ " " ++ p | (l,p) <- lps]
+prAllWords :: Morpho -> String
+prAllWords mo = 
+  unwords [w | (w,_) <- fullFormLexicon mo]
+
+prMorphoAnalysis :: (String,[(Lemma,Analysis)]) -> String
+prMorphoAnalysis (w,lps) = 
+  unlines (w:[showCId l ++ " : " ++ p | (l,p) <- lps])
+
+morphoMissing :: Morpho -> [String] -> [String]
+morphoMissing mo ws = [w | w <- ws, null (lookupMorpho mo w)]
 
