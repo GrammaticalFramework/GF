@@ -11,4 +11,5 @@ abstract Parse =
   Phrase,
   Text,
   Structural,
-  Idiom ;
+  Idiom,
+  Tense ;

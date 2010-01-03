@@ -12,6 +12,7 @@ concrete ParseEng of ParseEngAbs =
   ConjunctionEng,
   PhraseEng - [UttImpSg, UttImpPl],
   TextX,
+  TenseX,
   StructuralEng - [above_Prep, everywhere_Adv, everybody_NP, every_Det, only_Predet, somebody_NP],
   IdiomEng,
 
