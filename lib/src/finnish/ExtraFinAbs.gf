@@ -8,7 +8,7 @@ abstract ExtraFinAbs = Extra [
 
     RelExistNP : Prep -> RP -> NP -> RCl ; -- jossa on jazzia
 
-    i_implicPron : Pron ;                 -- (minÃ¤), minut, ...
+    i_implicPron : Pron ;                 -- (minä), minut, ...
     whatPart_IP : IP ;
 
     PartCN : CN -> NP ;                   -- olutta

@@ -212,7 +212,7 @@ oper
 
   kukaInt : MorphoFin.Number => (MorphoFin.Case) => Str = 
     let 
-      kuka = mkN "kuka" "kenen" "kenä" "ketä" "keneen" 
+      kuka = mkN "kuka" "kenen" "ketä" "kenä" "keneen" 
                  "keiden" "keitä" "keinä" "keissä" "keihin" ;
     in
     table {
@@ -275,7 +275,7 @@ oper
     } ;
 
 lin
-  not_Predet = {s = \\_,_ => "vain"} ;
+  not_Predet = {s = \\_,_ => "ei"} ;
 
   no_Quant = heavyQuant {
     s1 = \\n,c => "ei" ++ mikaanPron ! n ! c ;
