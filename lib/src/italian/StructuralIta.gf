@@ -11,7 +11,8 @@ lin
   after_Prep = mkPrep "dopo" ;
   all_Predet = {
     s = \\a,c => prepCase c ++ aagrForms "tutto" "tutta" "tutti" "tutte" ! a ;
-    c = Nom
+    c = Nom ;
+    a = PNoAg
     } ;
   almost_AdA, almost_AdN = ss "quasi" ;
   always_AdV = ss "sempre" ;
@@ -60,13 +61,15 @@ lin
   less_CAdv = X.mkCAdv "meno" conjThan ;
   many_Det = {s,sp = \\g,c => prepCase c ++ genForms "molti" "molte" ! g ; n = Pl ; s2 = []} ;
   more_CAdv = X.mkCAdv "più" conjThan ;
-  most_Predet = {s = \\_,c => prepCase c ++ ["la maggior parte"] ; c = CPrep P_di} ;
+  most_Predet = {s = \\_,c => prepCase c ++ ["la maggior parte"] ; c = CPrep P_di ;
+    a = PNoAg} ;
   much_Det = {s,sp = \\g,c => prepCase c ++ genForms "molto" "molta" ! g ; n = Sg ; s2 = []} ;
   must_VV = mkVV (verboV (dovere_47 "dovere")) ;
   no_Utt = ss "no" ;
   on_Prep = {s = [] ; c = CPrep P_su ; isDir = False} ;
 ----  one_Quant = {s = \\g,c => prepCase c ++ genForms "uno" "una" ! g} ;
-  only_Predet = {s = \\_,c => prepCase c ++ "soltanto" ; c = Nom} ; --- solo|a|i|e
+  only_Predet = {s = \\_,c => prepCase c ++ "soltanto" ; c = Nom ;
+    a = PNoAg} ; --- solo|a|i|e
   or_Conj = {s1 = [] ; s2 = "o" ; n = Sg} ;
   otherwise_PConj = ss "altramente" ;
   part_Prep = complGen ;
@@ -152,7 +155,8 @@ lin
     mkPronoun
       "Lei" "La" "Le" "Glie" "Lei" "Suo" "Sua" "Suoi" "Sue"
       Masc Sg P3 ;
-  not_Predet = {s = \\a,c => prepCase c ++ "non" ; c = Nom} ;
+  not_Predet = {s = \\a,c => prepCase c ++ "non" ; c = Nom ;
+    a = PNoAg} ;
 
   no_Quant = 
     let aucun : ParadigmsIta.Number => ParadigmsIta.Gender => Case => Str = table {

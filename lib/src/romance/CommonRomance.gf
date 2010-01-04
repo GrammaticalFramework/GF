@@ -118,7 +118,7 @@ param
    | RCond   --# notpresent
    ;
 
--- Agreement of adjectives, verb phrases, and relative pronouns.
+-- Agreement of adjectives, verb phrases, relative pronouns, and predeterminers.
 
 oper
   AAgr : Type = {g : Gender ; n : Number} ;
@@ -126,6 +126,7 @@ oper
 
 param
   RAgr = RAg {g : Gender ; n : Number} | RNoAg ; --- AAgr
+  PAgr = PAg Number | PNoAg ;
 
 -- Clitic slots.
 

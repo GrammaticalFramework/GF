@@ -13,4 +13,10 @@ oper
   mkIQuant : Str -> IQuant = \s ->
     {s = \\_,_,c => prepCase c ++ s ; lock_IQuant = <>} ;
 
+  mkPredet : Str -> Str -> Prep -> Bool -> Predet = \m,f,c,p -> lin Predet {
+    s = \\g,k => prepCase k ++ case g.g of {Masc => m ; Fem => f} ; 
+    c = c.c ; 
+    a = if_then_else PAgr p (PAg Sg) PNoAg ---- e,g, "chacun de"; other possibilities?
+    } ;
+
 }

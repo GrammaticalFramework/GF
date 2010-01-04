@@ -13,7 +13,8 @@ lin
   after_Prep = mkPreposition "après" ;
   all_Predet = {
     s = \\a,c => prepCase c ++ aagrForms "tout" "toute" "tous" "toutes" ! a ;
-    c = Nom
+    c = Nom ;
+    a = PNoAg
     } ;
   almost_AdA, almost_AdN = ss "presque" ;
   always_AdV = ss "toujours" ;
@@ -32,7 +33,12 @@ lin
   during_Prep = mkPreposition "pendant" ;
   either7or_DConj = {s1,s2 = "ou" ; n = Pl} ;
   everybody_NP = pn2np (mkPN ["tout le monde"] Masc) ;
-  every_Det = {s,sp = \\_,_ => "chaque" ; n = Sg ; s2 = []} ; ---- sp
+  every_Det = {
+    s  = \\_,_ => "chaque" ;
+    sp = \\g,c => prepCase c ++ genForms "chacun" "chacune" ! g ;
+    n = Sg ; 
+    s2 = []
+    } ;
   everything_NP = pn2np (mkPN ["tout"] Masc) ;
   everywhere_Adv = ss "partout" ;
   few_Det  = {s,sp = \\g,c => prepCase c ++ "peu" ++ elisDe ; n = Pl ; s2 = []} ;
@@ -62,14 +68,14 @@ lin
   less_CAdv = X.mkCAdv "moins" conjThan ;
   many_Det = {s,sp = \\_,c => prepCase c ++ "plusieurs" ; n = Pl ; s2 = []} ;
   more_CAdv = X.mkCAdv "plus" conjThan ;
-  most_Predet = {s = \\_,c => prepCase c ++ ["la plupart"] ; c = CPrep P_de} ;
+  most_Predet = {s = \\_,c => prepCase c ++ ["la plupart"] ; c = CPrep P_de ; a = PNoAg} ;
   much_Det = {s,sp = \\_,c => prepCase c ++ "beaucoup" ++ elisDe ; n = Pl ; s2 = []} ;
   must_VV = mkVV (devoir_V2 ** {lock_V = <>}) ;
 ---b  no_Phr = ss "non" ;
   no_Utt = ss "non" ;
   on_Prep = mkPreposition "sur" ;
 --- DEPREC   one_Quant = {s = \\g,c => prepCase c ++ genForms "un" "une" ! g} ;
-  only_Predet = {s = \\_,c => prepCase c ++ "seulement" ; c = Nom} ; --- seul(e)(s)
+  only_Predet = {s = \\_,c => prepCase c ++ "seulement" ; c = Nom ; a = PNoAg} ; --- seul(e)(s)
   or_Conj = {s1 = [] ; s2 = "ou" ; n = Sg} ;
   otherwise_PConj = ss "autrement" ;
   part_Prep = complGen ;
@@ -164,7 +170,7 @@ lin
       "vous" "vous" "vous" "vous" "votre" "votre" "vos"
        Masc Pl P2 ;
 
-  not_Predet = {s = \\a,c => prepCase c ++ "pas" ; c = Nom} ;
+  not_Predet = {s = \\a,c => prepCase c ++ "pas" ; c = Nom ; a = PNoAg} ;
 
   no_Quant = 
     let aucun : ParadigmsFre.Number => ParadigmsFre.Gender => Case => Str = table {

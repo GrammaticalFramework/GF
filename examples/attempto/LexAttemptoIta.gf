@@ -1,6 +1,6 @@
 instance LexAttemptoIta of LexAttempto = 
   open ExtraIta, SyntaxIta, ParadigmsIta, ConstructX, 
-    MakeStructuralIta
+    MakeStructuralIta, (P = Prelude)
     in {
 
 oper
@@ -25,4 +25,5 @@ oper
 
   whose_IDet = mkIDet (mkIQuant "de chi") ; ----
 
+  eachOf np = mkNP (mkPredet "ciascuno" "ciascuna" genitive P.True) np ;
 }
