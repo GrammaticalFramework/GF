@@ -104,7 +104,7 @@ Fun.prototype.isEqual = function(obj) {
   if (this.name != obj.name)
     return false;
 
-  for (i in this.args) {
+  for (var i in this.args) {
     if (!this.args[i].isEqual(obj.args[i]))
       return false;
   }
@@ -426,16 +426,16 @@ function Parser(productions, functions, sequences, startCats, totalCats) {
 	this.startCats = startCats;
     this.totalCats = totalCats;
     
-    for (fid in productions) {
-      for (i in productions[fid]) {
+    for (var fid in productions) {
+      for (var i in productions[fid]) {
         var rule = productions[fid][i];
         rule.fun = functions[rule.fun];
       }
     }
     
-    for (i in functions) {
+    for (var i in functions) {
       var fun = functions[i];
-      for (j in fun.lins) {
+      for (var j in fun.lins) {
         fun.lins[j] = sequences[fun.lins[j]];
       }
     }
@@ -443,7 +443,7 @@ function Parser(productions, functions, sequences, startCats, totalCats) {
 Parser.prototype.showRules = function () {
     var ruleStr = new Array();
 	ruleStr.push("");
-	for (i = 0, j = this.rules.length; i < j; i++) {
+	for (var i = 0, j = this.rules.length; i < j; i++) {
 		ruleStr.push(this.rules[i].show());
 	}
 	return ruleStr.join("");
@@ -456,7 +456,7 @@ Parser.prototype.parseString = function (string, cat) {
 	}
     
 	var ps = new ParseState(this, cat);
-	for (i in tokens) {
+	for (var i in tokens) {
 		if (!ps.next(tokens[i]))
           return new Array();
 	}
@@ -479,7 +479,7 @@ Rule.prototype.isEqual = function (obj) {
 	if (this.id != obj.id || this.fun != obj.fun || this.args.length != obj.args.length)
       return false;
       
-    for (i in this.args) {
+    for (var i in this.args) {
       if (this.args[i] != obj.args[i])
         return false;
     }
@@ -568,7 +568,7 @@ function Trie() {
 }
 Trie.prototype.insertChain = function(keys,obj) {
   var node = this;
-  for (i in keys) {
+  for (var i in keys) {
     var nnode = node.items[keys[i]];
     if (nnode == null) {
       nnode = new Trie();
@@ -580,7 +580,7 @@ Trie.prototype.insertChain = function(keys,obj) {
 }
 Trie.prototype.insertChain1 = function(keys,obj) {
   var node = this;
-  for (i in keys) {
+  for (var i in keys) {
     var nnode = node.items[keys[i]];
     if (nnode == null) {
       nnode = new Trie();
@@ -600,7 +600,7 @@ Trie.prototype.isEmpty = function() {
   if (this.value != null)
     return false;
     
-  for (i in this.items) {
+  for (var i in this.items) {
     return false;
   }
   
@@ -617,12 +617,13 @@ function ParseState(parser, startCat) {
   
   var fids = parser.startCats[startCat];
   if (fids != null) {
+    var fid;
     for (fid = fids.s; fid <= fids.e; fid++) {
       var exProds = this.chart.expandForest(fid);
-      for (j in exProds) {
+      for (var j in exProds) {
         var rule = exProds[j];
         var fun  = rule.fun;
-        for (lbl in fun.lins) {
+        for (var lbl in fun.lins) {
           items.push(new ActiveItem(0,0,rule.fun,fun.lins[lbl],rule.args,fid,lbl));
         }
       }
@@ -640,6 +641,7 @@ ParseState.prototype.next = function (token) {
               , function (tokens, item) {
                   if (tokens[0] == token) {
                     var tokens1 = new Array();
+                    var i;
                     for (i = 1; i < tokens.length; i++) {
                       tokens1[i-1] = tokens[i];
                     }
@@ -668,19 +670,19 @@ ParseState.prototype.extractTrees = function() {
       var trees = new Array();
 
       var rules = forest[fid];
-      for (j in rules) {
+      for (var j in rules) {
         var rule = rules[j];
             
         var arg_ix = new Array();
         var arg_ts = new Array();
-        for (k in rule.args) {
+        for (var k in rule.args) {
           arg_ix[k] = 0;
           arg_ts[k] = go(rule.args[k]);
         }
             
         while (true) {
           var t = new Fun(rule.fun.name);
-          for (k in arg_ts) {
+          for (var k in arg_ts) {
             t.setArg(k,arg_ts[k][arg_ix[k]]);
           }
           trees.push(t);
@@ -708,22 +710,23 @@ ParseState.prototype.extractTrees = function() {
   var trees = new Array();
   var fids = this.parser.startCats[this.startCat];
   if (fids != null) {
+    var fid0;
     for (fid0 = fids.s; fid0 <= fids.e; fid0++) {
     
       var labels = new Object();
       var rules = this.chart.expandForest(fid0);
-      for (i in rules) {
-        for (lbl in rules[i].fun.lins) {
+      for (var i in rules) {
+        for (var lbl in rules[i].fun.lins) {
           labels[lbl] = true;
         }
       }
       
-      for (lbl in labels) {
+      for (var lbl in labels) {
         var fid = this.chart.lookupPC(fid0,lbl,0);
         var arg_ts = go(fid);
         for (var i in arg_ts) {
           var isMember = false;
-          for (j in trees) {
+          for (var j in trees) {
             if (arg_ts[i].isEqual(trees[j])) {
               isMember = true;
               break;
@@ -754,14 +757,14 @@ ParseState.prototype.process = function (agenda,callback) {
                       var items = this.chart.lookupAC(fid,label);
                       if (items == null) {
                         var rules = this.chart.expandForest(fid);
-                        for (j in rules) {
+                        for (var j in rules) {
                           var rule = rules[j];
                           agenda.push(new ActiveItem(this.chart.offset,0,rule.fun,rule.fun.lins[label],rule.args,fid,label));
                         }
                         this.chart.insertAC(fid,label,[item]);
                       } else {
                         var isMember = false;
-                        for (j in items) {
+                        for (var j in items) {
                           if (items[j].isEqual(item)) {
                             isMember = true;
                             break;
@@ -782,7 +785,7 @@ ParseState.prototype.process = function (agenda,callback) {
                       break;
           case "KP":  var pitem = item.shiftOverTokn();
                       callback(sym.tokens, pitem);
-                      for (i in sym.alts) {
+                      for (var i in sym.alts) {
                         var alt = sym.alts[i];
                         callback(alt.tokens, pitem);
                       }
@@ -796,7 +799,7 @@ ParseState.prototype.process = function (agenda,callback) {
             
             var items = this.chart.lookupACo(item.offset,item.fid,item.lbl);
             if (items != null) {
-              for (j in items) {
+              for (var j in items) {
                 var pitem = items[j];
                 var i = pitem.seq[pitem.dot].i;
                 agenda.push(pitem.shiftOverArg(i,fid));
@@ -808,7 +811,7 @@ ParseState.prototype.process = function (agenda,callback) {
           } else {
             var labels = this.chart.labelsAC(fid);
             if (labels != null) {
-              for (lbl in labels) {
+              for (var lbl in labels) {
                 agenda.push(new ActiveItem(this.chart.offset,0,item.fun,item.fun.lins[lbl],item.args,fid,lbl));
               }
             }
@@ -817,7 +820,7 @@ ParseState.prototype.process = function (agenda,callback) {
             var rule  = new Rule(item.fun,item.args);
               
             var isMember = false;
-            for (j in rules) {
+            for (var j in rules) {
               if (rules[j].isEqual(rule))
                 isMember = true;
             }
@@ -838,7 +841,7 @@ function Chart(parser) {
   this.nextId      = parser.totalCats;
   this.offset      = 0;
   
-  for (fid in parser.productions) {
+  for (var fid in parser.productions) {
     this.forest[fid] = parser.productions[fid];
   }
 }
@@ -893,7 +896,7 @@ Chart.prototype.expandForest = function (fid) {
   var forest = this.forest;
   
   var go = function (rules0) {
-             for (i in rules0) {
+             for (var i in rules0) {
                var rule = rules0[i];
                switch (rule.id) {
                  case "Rule":   rules.push(rule); break;
@@ -926,7 +929,7 @@ ActiveItem.prototype.isEqual = function (obj) {
 }
 ActiveItem.prototype.shiftOverArg = function (i,fid) {
     var nargs = new Array();
-    for (k in this.args) {
+    for (var k in this.args) {
       nargs[k] = this.args[k];
     }
     nargs[i] = fid;
