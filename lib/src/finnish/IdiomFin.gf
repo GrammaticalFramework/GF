@@ -16,9 +16,9 @@ concrete IdiomFin of Idiom = CatFin **
 
     ExistIP ip = 
       let
-        cas : NPForm = NPCase Part ; --- dep on num, pol?
+        cas : NPForm = NPCase Nom ; ---- also partitive in Extra
         vp = insertObj (\\_,b,_ => "olemassa") (predV olla) ; 
-        cl = mkClause (subjForm (ip ** {isPron = False ; a = agrP3 Sg}) cas) (agrP3 Sg) vp
+        cl = mkClause (subjForm (ip ** {isPron = False ; a = agrP3 ip.n}) cas) (agrP3 Sg) vp
       in {
         s = \\t,a,p => cl.s ! t ! a ! p ! SDecl
         } ;
