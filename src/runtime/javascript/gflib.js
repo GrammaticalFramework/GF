@@ -499,6 +499,30 @@ Coerce.prototype.show = function (cat) {
 	return recStr.join("");
 };
 
+// Const Object Definition
+
+function Const(lit, toks) {
+    this.id   = "Const";
+	this.lit  = lit;
+	this.toks = toks;
+}
+Const.prototype.show = function (cat) {
+	var recStr = new Array();
+	recStr.push(cat, " -> ", lit.print());
+	return recStr.join("");
+};
+Const.prototype.isEqual = function (obj) {
+	if (this.id != obj.id || this.lit.isEqual(obj.lit) || this.toks.length != obj.toks.length)
+      return false;
+      
+    for (var i in this.toks) {
+      if (this.toks[i] != obj.toks[i])
+        return false;
+    }
+
+    return true;
+};
+
 function FFun(name,lins) {
     this.name = name;
     this.lins = lins;
@@ -559,6 +583,21 @@ function Alt(tokens, prefixes) {
   this.prefixes = prefixes;
 }
 
+// Object to represent pre in grammar rules
+function Lit(i,label) {
+	this.id = "Lit";
+	this.i = i;
+	this.label = label;
+}
+Lit.prototype.getId = function () { return this.id; };
+Lit.prototype.show = function () {
+	var argStr = new Array();
+	argStr.push(this.i, this.label);
+	return argStr.join(".");
+};
+Lit.prototype.isEqual = function (obj) {
+	return (this.id == obj.id && this.i == obj.i && this.label == obj.label);
+}
 
 // Parsing
 
@@ -638,6 +677,23 @@ ParseState.prototype.next = function (token) {
     acc = new Trie();
 
   this.process( this.items.value
+              , function (fid) {
+                  switch (fid) {
+                    case -1: return new Const(new Fun('"'+token+'"'), [token]);                  // String
+                    case -2: var x = parseInt(token,10);
+                             if (token == "0" || (x != 0 && !isNaN(x)))                      // Integer
+                               return new Const(new Fun(token), [token]);
+                             else
+                               return null;
+                    case -3: var x = parseFloat(token);
+                             if (token == "0" || token == "0.0" || (x != 0 && !isNaN(x)))    // Float
+                               return new Const(new Fun(token), [token]);
+                             else
+                               return null;
+                  }
+                  
+                  return null;
+                }
               , function (tokens, item) {
                   if (tokens[0] == token) {
                     var tokens1 = new Array();
@@ -647,7 +703,8 @@ ParseState.prototype.next = function (token) {
                     }
                     acc.insertChain1(tokens1, item);
                   }
-                });
+                }
+              );
 
   this.items = acc;
   this.chart.shift();
@@ -656,8 +713,12 @@ ParseState.prototype.next = function (token) {
 }
 ParseState.prototype.extractTrees = function() {
   this.process( this.items.value
+              , function (fid) {
+                  return null;
+                }
               , function (tokens, item) {
-                });
+                }
+              );
   
   
   var totalCats = this.parser.totalCats;
@@ -673,32 +734,36 @@ ParseState.prototype.extractTrees = function() {
       for (var j in rules) {
         var rule = rules[j];
             
-        var arg_ix = new Array();
-        var arg_ts = new Array();
-        for (var k in rule.args) {
-          arg_ix[k] = 0;
-          arg_ts[k] = go(rule.args[k]);
-        }
-            
-        while (true) {
-          var t = new Fun(rule.fun.name);
-          for (var k in arg_ts) {
-            t.setArg(k,arg_ts[k][arg_ix[k]]);
+        if (rule.id == "Const") {
+          trees.push(rule.lit);
+        } else {        
+          var arg_ix = new Array();
+          var arg_ts = new Array();
+          for (var k in rule.args) {
+            arg_ix[k] = 0;
+            arg_ts[k] = go(rule.args[k]);
           }
-          trees.push(t);
             
-          var i = 0;
-          while (i < arg_ts.length) {
-            arg_ix[i]++;
-            if (arg_ix[i] < arg_ts[i].length)
-              break;
+          while (true) {
+            var t = new Fun(rule.fun.name);
+            for (var k in arg_ts) {
+              t.setArg(k,arg_ts[k][arg_ix[k]]);
+            }
+            trees.push(t);
+            
+            var i = 0;
+            while (i < arg_ts.length) {
+              arg_ix[i]++;
+              if (arg_ix[i] < arg_ts[i].length)
+                break;
 
-            arg_ix[i] = 0;
-            i++;                
-          }
+              arg_ix[i] = 0;
+              i++;                
+            }
               
-          if (i >= arg_ts.length)
-            break;
+            if (i >= arg_ts.length)
+              break;
+          }
         }
       }
           
@@ -742,7 +807,7 @@ ParseState.prototype.extractTrees = function() {
   
   return trees;
 }
-ParseState.prototype.process = function (agenda,callback) {
+ParseState.prototype.process = function (agenda,literalCallback,tokenCallback) {
   if (agenda != null) {
     while (agenda.length > 0) {
       var item = agenda.pop();
@@ -781,16 +846,28 @@ ParseState.prototype.process = function (agenda,callback) {
                         }
                       }
                       break;
-          case "KS":  callback(sym.tokens, item.shiftOverTokn());
+          case "KS":  tokenCallback(sym.tokens, item.shiftOverTokn());
                       break;
           case "KP":  var pitem = item.shiftOverTokn();
-                      callback(sym.tokens, pitem);
+                      tokenCallback(sym.tokens, pitem);
                       for (var i in sym.alts) {
                         var alt = sym.alts[i];
-                        callback(alt.tokens, pitem);
+                        tokenCallback(alt.tokens, pitem);
                       }
                       break;
-          case "Lit": break;
+          case "Lit": var fid = item.args[sym.i];
+                      var rules = this.chart.forest[fid];
+                      if (rules != null) {
+                        tokenCallback(rules[0].toks, item.shiftOverTokn());
+                      } else {
+                        var rule = literalCallback(fid);
+                        if (rule != null) {
+                          fid = this.chart.nextId++;
+                          this.chart.forest[fid] = [rule];
+                          tokenCallback(rule.toks,item.shiftOverArg(sym.i,fid));
+                        }
+                      }
+                      break;
         }
       } else {
           var fid = this.chart.lookupPC(item.fid,item.lbl,item.offset);
