@@ -47,9 +47,9 @@ lin someCollNP = mkNP somePl_Det ;
 lin allCollNP cn = mkNP all_Predet (mkNP a_Art plNum cn) ;
 
 lin noCollNP = mkNP no_Quant plNum ;
-lin eachTheNP cn = mkNP (mkNP each_Det) (mkAdv part_Prep (mkNP the_Art plNum cn)) ;
-lin eachSomeNP cn = mkNP (mkNP each_Det) (mkAdv part_Prep (mkNP somePl_Det cn)) ;
-lin eachNumNP ca cn = mkNP (mkNP each_Det) (mkAdv part_Prep (mkNP ca cn)) ;
+lin eachTheNP cn = eachOf (mkNP the_Art plNum cn) ;
+lin eachSomeNP cn = eachOf (mkNP somePl_Det cn) ;
+lin eachNumNP ca cn = eachOf (mkNP ca cn) ;
 
 lin someMassNP = mkNP someSg_Det ;
 lin allMassNP cn = mkNP all_Predet (mkNP cn) ;
@@ -203,7 +203,7 @@ lin commaOr_Conj = comma_or_Conj ;
 lin for_everyS cn = mkS (mkAdv for_Prep (mkNP every_Det cn)) ;
 lin for_eachS cn = mkS (mkAdv for_Prep (mkNP each_Det cn)) ;
 lin for_each_ofS card cn = 
-  mkS (mkAdv for_Prep (mkNP (mkNP each_Det) (mkAdv part_Prep (mkNP card cn)))) ;
+  mkS (mkAdv for_Prep (eachOf (mkNP card cn))) ;
 lin for_allMassS cn =
   mkS (mkAdv for_Prep (mkNP all_Predet (mkNP cn))) ;
 

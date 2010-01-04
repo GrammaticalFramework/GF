@@ -23,5 +23,6 @@ oper
   slash_Conj = mkConj [] "/" singular ;
   whose_IDet = mkIDet (mkIQuant "vems" "vems" "vems" dDefIndef) ;
 
+  eachOf np = mkNP (mkNP each_Det) (SyntaxSwe.mkAdv part_Prep np) ; ---- gen agr
 
 }

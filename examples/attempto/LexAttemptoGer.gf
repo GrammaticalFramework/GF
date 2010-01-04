@@ -25,4 +25,6 @@ oper
 
   whose_IDet = mkIDet (mkIQuant "wessen") ;
 
+  eachOf np = mkNP (mkNP each_Det) (SyntaxGer.mkAdv part_Prep np) ;  ---- gen agr
+
 }

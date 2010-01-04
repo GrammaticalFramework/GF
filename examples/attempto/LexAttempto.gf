@@ -23,4 +23,6 @@ oper
   comma_or_Conj : Conj ;
 
   whose_IDet : IDet ;
+
+  eachOf : NP -> NP ;
 }

@@ -9,7 +9,8 @@ lin
   after_Prep = {s = ["despues"] ; c = MorphoSpa.genitive ; isDir = False} ;
   all_Predet = {
     s = \\a,c => prepCase c ++ aagrForms "todo" "toda" "todos" "todas" ! a ;
-    c = Nom
+    c = Nom ;
+    a = PNoAg
     } ;
   almost_AdA, almost_AdN = ss "casi" ;
   always_AdV = ss "siempre" ;
@@ -64,14 +65,16 @@ lin
   many_Det = {
     s,sp = \\g,c => prepCase c ++ genForms "muchos" "muchas" ! g ; n = Pl ; s2 = []} ;
   more_CAdv = X.mkCAdv "más" conjThan ;
-  most_Predet = {s = \\_,c => prepCase c ++ ["la mayor parte"] ; c = CPrep P_de} ;
+  most_Predet = {s = \\_,c => prepCase c ++ ["la mayor parte"] ; c = CPrep P_de ;
+    a = PNoAg} ;
   much_Det = {
     s,sp = \\g,c => prepCase c ++ genForms "mucho" "mucha" ! g ; n = Sg ; s2 = []} ;
   must_VV = mkVV (verboV (deber_6 "deber")) ;
   no_Utt = ss "no" ;
   on_Prep = mkPrep "sobre" ;
 ---  one_Quant = {s = \\g,c => prepCase c ++ genForms "uno" "una" ! g} ;
-  only_Predet = {s = \\_,c => prepCase c ++ "solamente" ; c = Nom} ;
+  only_Predet = {s = \\_,c => prepCase c ++ "solamente" ; c = Nom ;
+    a = PNoAg} ;
   or_Conj = {s1 = [] ; s2 = "o" ; n = Sg} ;
   otherwise_PConj = ss "otramente" ;
   part_Prep = complGen ;

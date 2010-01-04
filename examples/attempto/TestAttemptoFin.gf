@@ -77,7 +77,7 @@ lin correct_A = mkA "oikea" ;
 
 lin kilogram_Unit = mkkN "kilo" ;
 
-oper mkkN : Str -> CN = \n -> mkCN (ParadigmsFin.mkN n) ;
+oper mkkN : Str -> CN = \n -> mkCN (ParadigmsFin.mk1N n) ;
 
 lin
   in_Prep = SyntaxFin.in_Prep ;

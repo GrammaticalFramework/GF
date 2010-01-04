@@ -31,4 +31,6 @@ oper
 
   whose_IDet = M.mkIDet "whose" singular ;
 
+  eachOf np = mkNP (mkNP each_Det) (SyntaxEng.mkAdv part_Prep np) ;
+
 }

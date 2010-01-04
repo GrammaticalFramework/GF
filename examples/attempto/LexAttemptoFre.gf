@@ -1,7 +1,7 @@
 instance LexAttemptoFre of LexAttempto = 
   open ExtraFre, SyntaxFre, ParadigmsFre, ConstructX, 
     MakeStructuralFre,
-    IrregFre in {
+    IrregFre, (P = Prelude) in {
 
 oper
   possible_A = mkA "possible" ;
@@ -24,5 +24,7 @@ oper
   slash_Conj = mkConj [] "/" singular ;
 
   whose_IDet = mkIDet (mkIQuant "de qui") ; ----
+
+  eachOf np = mkNP (mkPredet "chacun" "chacune" genitive P.True) np ;
 
 }

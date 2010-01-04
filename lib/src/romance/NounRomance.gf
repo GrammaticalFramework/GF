@@ -20,7 +20,7 @@ incomplete concrete NounRomance of Noun =
 
     PredetNP pred np = heavyNP {
       s = \\c => pred.s ! aagr (np.a.g) (np.a.n) ! c ++ (np.s ! pred.c).ton ;
-      a = np.a ;
+      a = case pred.a of {PAg n => agrP3 np.a.g n ; _ => np.a} ;
       hasClit = False
       } ;
 

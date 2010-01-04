@@ -9,7 +9,8 @@ lin
   after_Prep = {s = ["després"] ; c = MorphoCat.genitive ; isDir = False} ;
   all_Predet = {
     s = \\a,c => prepCase c ++ aagrForms "tot" "tota" "tots" "totes" ! a ;
-    c = Nom
+    c = Nom ;
+    a = PNoAg
     } ;
   almost_AdA, almost_AdN = ss (variants {"quasi"; "gairebé"}) ;
   always_AdV = ss "sempre" ;
@@ -63,14 +64,16 @@ lin
   many_Det = {
     s,sp = \\g,c => prepCase c ++ genForms "molts" "moltes" ! g ; n = Pl ; s2 = []} ;
   more_CAdv = X.mkCAdv "més" conjThan ;
-  most_Predet = {s = \\_,c => prepCase c ++ ["la majoria"] ; c = CPrep P_de} ;
+  most_Predet = {s = \\_,c => prepCase c ++ ["la majoria"] ; c = CPrep P_de ;
+    a = PNoAg} ;
   much_Det = {
     s,sp = \\g,c => prepCase c ++ genForms "molt" "molta" ! g ; n = Sg ; s2 = []} ;
   must_VV = mkVV (verbV (haver_59 "haver" True)) ;   -- + of_Prep
   no_Utt = ss "no" ;
   on_Prep = mkPrep "sobre" ;
 ---  one_Quant = {s = \\g,c => prepCase c ++ genForms "un" "una" ! g} ;
-  only_Predet = {s = \\_,c => prepCase c ++ "nomÈs" ; c = Nom} ;
+  only_Predet = {s = \\_,c => prepCase c ++ "nomÈs" ; c = Nom ;
+    a = PNoAg} ;
   or_Conj = {s1 = [] ; s2 = "o" ; n = Sg} ;
   otherwise_PConj = ss "altrament" ;
   part_Prep = complGen ;
@@ -159,7 +162,8 @@ lin
       "vosté" "el" "li" "vosté"
       ["el seu"] ["la seva"] ["els seus"]
       Masc Pl P2 ;
-   not_Predet = {s = \\a,c => prepCase c ++ "no pas" ; c = Nom} ;
+   not_Predet = {s = \\a,c => prepCase c ++ "no pas" ; c = Nom ;
+    a = PNoAg} ;
    have_V2 = dirV2 (verbV (tenir_108 "tenir")) ;
    
 oper

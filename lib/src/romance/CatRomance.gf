@@ -67,7 +67,11 @@ incomplete concrete CatRomance of Cat = CommonX
       s2 : Str ; 
       sp : Number => Gender => Case => Str 
       } ;
-    Predet  = {s : AAgr   => Case => Str ; c : Case} ; -- c : la plupart de
+    Predet  = {
+      s : AAgr   => Case => Str ; 
+      c : Case ; -- c : la plupart de
+      a : PAgr   -- if an agr is forced, e.g. chacun de nous
+      } ;
     Num     = {s : Gender => Str ; isNum : Bool ; n : Number} ;
     Card    = {s : Gender => Str ; n : Number} ;
     Ord     = {s : AAgr   => Str} ;

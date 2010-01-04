@@ -31,4 +31,6 @@ oper
 
   whose_IDet = mkIDet (M.mkIQuant "kenen") ;
 
+  eachOf np = mkNP (mkNP each_Det) (SyntaxFin.mkAdv (casePrep elative) np) ;
+
 }
