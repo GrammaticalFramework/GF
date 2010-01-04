@@ -100,6 +100,17 @@ Fun.prototype.isComplete = function() {
 Fun.prototype.isLiteral = function() {
   return (/^[\"\d]/).test(this.name);
 } ;
+Fun.prototype.isEqual = function(obj) {
+  if (this.name != obj.name)
+    return false;
+
+  for (i in this.args) {
+    if (!this.args[i].isEqual(obj.args[i]))
+      return false;
+  }
+  
+  return true;
+}
 
 /* Concrete syntax terms */
 
@@ -710,8 +721,17 @@ ParseState.prototype.extractTrees = function() {
       for (lbl in labels) {
         var fid = this.chart.lookupPC(fid0,lbl,0);
         var arg_ts = go(fid);
-        for (i in arg_ts) {
-          trees.push(arg_ts[i]);
+        for (var i in arg_ts) {
+          var isMember = false;
+          for (j in trees) {
+            if (arg_ts[i].isEqual(trees[j])) {
+              isMember = true;
+              break;
+            }
+          }
+          
+          if (!isMember)
+            trees.push(arg_ts[i]);
         }
       }
     }
