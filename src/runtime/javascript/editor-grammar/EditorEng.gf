@@ -55,7 +55,7 @@ lin DefPlDet   = DetQuant DefArt   NumPl ;
 
 lin Command v d n = UttImpSg PPos (ImpVP (ComplSlash (SlashV2a (mkV2 v)) (DetCN d (UseN n)))) ;
     CommandAdj v d a n = UttImpSg PPos (ImpVP (ComplSlash (SlashV2a (mkV2 v)) (DetCN d (AdjCN (PositA a) (UseN n))))) ;
-    ErrorMessage a n = UttNP (MassNP (AdjCN (PositA (mkA "random")) (UseN n))) ;
+    ErrorMessage a n = UttNP (DetCN (DetQuant no_Quant NumPl) (AdjCN (PositA a) (UseN n))) ;
     Label n = UttNP (MassNP (UseN n)) ;
     RandomlyCommand v d n = UttImpSg PPos (ImpVP (AdvVP (ComplSlash (SlashV2a (mkV2 v)) (DetCN d (UseN n))) (PrepNP (mkPrep "at") (MassNP (UseN (mkN "random")))))) ;
     SingleWordCommand v = UttImpSg PPos (ImpVP (UseV v)) ;
