@@ -646,8 +646,55 @@ ParseState.prototype.extractTrees = function() {
               , function (tokens, item) {
                 });
   
-  var trees = new Array();
+  
+  var totalCats = this.parser.totalCats;
+  var forest    = this.chart.forest;
+      
+  function go(fid) {
+    if (fid < totalCats) {
+      return [new Fun("?")];
+    } else {
+      var trees = new Array();
 
+      var rules = forest[fid];
+      for (j in rules) {
+        var rule = rules[j];
+            
+        var arg_ix = new Array();
+        var arg_ts = new Array();
+        for (k in rule.args) {
+          arg_ix[k] = 0;
+          arg_ts[k] = go(rule.args[k]);
+        }
+            
+        while (true) {
+          var t = new Fun(rule.fun.name);
+          for (k in arg_ts) {
+            t.setArg(k,arg_ts[k][arg_ix[k]]);
+          }
+          trees.push(t);
+            
+          var i = 0;
+          while (i < arg_ts.length) {
+            arg_ix[i]++;
+            if (arg_ix[i] < arg_ts[i].length)
+              break;
+
+            arg_ix[i] = 0;
+            i++;                
+          }
+              
+          if (i >= arg_ts.length)
+            break;
+        }
+      }
+          
+      return trees;
+    }
+  }
+
+  
+  var trees = new Array();
   var fids = this.parser.startCats[this.startCat];
   if (fids != null) {
     for (fid0 = fids.s; fid0 <= fids.e; fid0++) {
@@ -655,62 +702,13 @@ ParseState.prototype.extractTrees = function() {
       var labels = new Object();
       var rules = this.chart.expandForest(fid0);
       for (i in rules) {
-        var rule = rules[i];
-        var fun  = rule.fun;
-        for (lbl in fun.lins) {
+        for (lbl in rules[i].fun.lins) {
           labels[lbl] = true;
-        }
-      }
-
-      var ps = this;
-      
-      function go(fid) {
-        if (fid < ps.parser.totalCats) {
-          return [new Fun("?")];
-        } else {
-          var trees = new Array();
-
-          var rules = ps.chart.forest[fid];
-          for (j in rules) {
-            var rule = rules[j];
-            var fun  = rule.fun;
-            
-            var arg_ix = new Array();
-            var arg_ts = new Array();
-            for (k in rule.args) {
-              arg_ix[k] = 0;
-              arg_ts[k] = go(rule.args[k]);
-            }
-            
-            while (true) {
-            
-              var t = new Fun(fun.name);
-              for (k in arg_ts) {
-                t.setArg(k,arg_ts[k][arg_ix[k]]);
-              }
-              trees.push(t);
-            
-              var i = 0;
-              while (i < arg_ts.length) {
-                arg_ix[i]++;
-                if (arg_ix[i] < arg_ts[i].length)
-                  break;
-
-                arg_ix[i] = 0;
-                i++;                
-              }
-              
-              if (i >= arg_ts.length)
-                  break;
-            }
-          }
-          
-          return trees;
         }
       }
       
       for (lbl in labels) {
-        fid = this.chart.lookupPC(fid0,lbl,0);
+        var fid = this.chart.lookupPC(fid0,lbl,0);
         var arg_ts = go(fid);
         for (i in arg_ts) {
           trees.push(arg_ts[i]);
@@ -793,18 +791,19 @@ ParseState.prototype.process = function (agenda,callback) {
               for (lbl in labels) {
                 agenda.push(new ActiveItem(this.chart.offset,0,item.fun,item.fun.lins[lbl],item.args,fid,lbl));
               }
-              var rules = this.chart.forest[fid];
-              var rule  = new Rule(item.fun,item.args);
-              
-              var isMember = false;
-              for (j in rules) {
-                if (rules[j].isEqual(rule))
-                  isMember = true;
-              }
-              
-              if (!isMember)
-                rules.push(rule);
             }
+            
+            var rules = this.chart.forest[fid];
+            var rule  = new Rule(item.fun,item.args);
+              
+            var isMember = false;
+            for (j in rules) {
+              if (rules[j].isEqual(rule))
+                isMember = true;
+            }
+              
+            if (!isMember)
+              rules.push(rule);
           }
       }
     }
