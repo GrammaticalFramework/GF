@@ -25,4 +25,7 @@ oper
   whose_IDet : IDet ;
 
   eachOf : NP -> NP ;
+
+  adj_thatCl : A -> S -> Cl ;
+
 }

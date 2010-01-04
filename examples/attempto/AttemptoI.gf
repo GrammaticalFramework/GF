@@ -211,9 +211,6 @@ lin for_allMassS cn =
 
 lin if_thenS = mkS if_then_Conj ;
 
-
-oper adj_thatCl : A -> S -> Cl = \a,s -> mkCl (mkVP (mkAP (mkAP a) s)) ;
-
 lin falseS s = mkS (adj_thatCl false_A s) ;
 lin not_provableS s = mkS negativePol (adj_thatCl provable_A s) ;
 lin possibleS s = mkS (adj_thatCl possible_A s) ;

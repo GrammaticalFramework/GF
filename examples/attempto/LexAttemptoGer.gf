@@ -27,4 +27,6 @@ oper
 
   eachOf np = mkNP (mkNP each_Det) (SyntaxGer.mkAdv part_Prep np) ;  ---- gen agr
 
+  adj_thatCl : A -> S -> Cl = \a,s -> mkCl (mkVP (mkAP (mkAP a) s)) ;
+
 }
