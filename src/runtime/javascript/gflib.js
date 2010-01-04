@@ -543,9 +543,6 @@ Arg.prototype.show = function () {
 	argStr.push(this.i, this.label);
 	return argStr.join(".");
 };
-Arg.prototype.isEqual = function (obj) {
-	return (this.id == obj.id && this.i == obj.i && this.label == obj.label);
-}
 
 // Object to represent terminals in grammar rules
 function KS() {
@@ -558,9 +555,6 @@ KS.prototype.show = function () {
 	terminalStr.push('"', this.tokens, '"');
 	return terminalStr.join("");
 };
-KS.prototype.isEqual = function (obj) {
-	return (this.id == obj.id && this.str == obj.str);
-}
 
 // Object to represent pre in grammar rules
 function KP(tokens,alts) {
@@ -574,9 +568,6 @@ KP.prototype.show = function () {
 	terminalStr.push('"', this.tokens, '"');
 	return terminalStr.join("");
 };
-KP.prototype.isEqual = function (obj) {
-	return (this.id == obj.id && this.str == obj.str);
-}
 
 function Alt(tokens, prefixes) {
   this.tokens   = tokens;
@@ -595,9 +586,6 @@ Lit.prototype.show = function () {
 	argStr.push(this.i, this.label);
 	return argStr.join(".");
 };
-Lit.prototype.isEqual = function (obj) {
-	return (this.id == obj.id && this.i == obj.i && this.label == obj.label);
-}
 
 // Parsing
 
