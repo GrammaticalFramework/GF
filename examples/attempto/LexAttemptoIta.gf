@@ -26,4 +26,7 @@ oper
   whose_IDet = mkIDet (mkIQuant "de chi") ; ----
 
   eachOf np = mkNP (mkPredet "ciascuno" "ciascuna" genitive P.True) np ;
+
+  adj_thatCl : A -> S -> Cl = \a,s -> mkCl (mkVP (mkAP (mkAP a) s)) ;
+
 }

@@ -27,4 +27,6 @@ oper
 
   eachOf np = mkNP (mkPredet "chacun" "chacune" genitive P.True) np ;
 
+  adj_thatCl : A -> S -> Cl = \a,s -> mkCl (mkVP (mkAP (mkAP a) s)) ;
+
 }

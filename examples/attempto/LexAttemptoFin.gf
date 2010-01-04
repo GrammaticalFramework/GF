@@ -4,17 +4,19 @@ instance LexAttemptoFin of LexAttempto =
    SyntaxFin, 
    ParadigmsFin, 
    ConstructX, 
-   (M = MakeStructuralFin)
+   (M = MakeStructuralFin),
+   (E = ExtraFin),
+   (L = LangFin)
    in {
 
 oper
   possible_A = mkA "mahdollinen" ;
   necessary_A = mkA "välttämätön" ;
   own_A = mkA "oma" ;
-  have_VV = mkVV (mkV "pitää") ;
+  have_VV = mkVV (caseV genitive (mkV "pitää")) ;
   provably_Adv = mkAdv "todistettavasti" ;
   provable_A = mkA "todistettava" ;
-  false_A = mkA (mkN "epätosi" "epätosia") ;
+  false_A = mkA (mkN "epätosi" "epätoden" "epätosia") ;
   such_A = mkA "sellainen" ;
  
   genitiveNP np = mkNP (GenNP np) ;
@@ -33,4 +35,6 @@ oper
 
   eachOf np = mkNP (mkNP each_Det) (SyntaxFin.mkAdv (casePrep elative) np) ;
 
+  adj_thatCl : A -> S -> Cl = \a,s -> 
+    mkCl (L.UseComp (E.CompPartAP (mkAP (mkAP a) s))) ;
 }
