@@ -27,6 +27,7 @@ oper
 
   eachOf np = mkNP (mkPredet "ciascuno" "ciascuna" genitive P.True) np ;
 
-  adj_thatCl : A -> S -> Cl = \a,s -> mkCl (mkVP (mkAP (mkAP a) s)) ;
+  adj_thatCl : A -> S -> Cl = \a,s -> 
+    mkCl (mkVP (mkVP (mkAP a)) (SyntaxIta.mkAdv that_Subj s)) ;
 
 }
