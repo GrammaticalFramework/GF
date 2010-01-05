@@ -1,6 +1,6 @@
 {-# LANGUAGE ParallelListComp #-}
 module PGF.Linearize 
-  (linearizes,realize,realizes,linTree, linTreeMark,linearizesMark) where
+  (linearizes,showPrintName,realize,realizes,linTree, linTreeMark,linearizesMark) where
 
 import PGF.CId
 import PGF.Data
@@ -164,3 +164,7 @@ linTreeMark pgf lang = lin [] . expr2tree
 
     bracket  p ts = [kks ("("++show p)] ++ ts ++ [kks ")"]
     sub p i = p ++ [i]
+
+-- | Show the printname of function or category
+showPrintName :: PGF -> Language -> CId -> String
+showPrintName pgf lang id = lookMap "?" id $ printnames $ lookMap (error "no lang") lang $ concretes pgf

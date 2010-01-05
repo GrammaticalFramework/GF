@@ -155,9 +155,6 @@ linearizeAll     :: PGF -> Tree -> [String]
 -- available in the grammar.
 linearizeAllLang :: PGF -> Tree -> [(Language,String)]
 
--- | Show the printname of a type
-showPrintName :: PGF -> Language -> Type -> String
-
 -- | The same as 'parseAllLang' but does not return
 -- the language.
 parseAll     :: PGF -> Type -> String -> [[Tree]]
@@ -259,8 +256,6 @@ canParse pgf cnc = isJust (lookParser pgf cnc)
 linearizeAll mgr = map snd . linearizeAllLang mgr
 linearizeAllLang mgr t = 
   [(lang,PGF.linearize mgr lang t) | lang <- languages mgr]
-
-showPrintName pgf lang (DTyp _ c _) = realize $ lookPrintName pgf lang c
 
 parseAll mgr typ = map snd . parseAllLang mgr typ
 
