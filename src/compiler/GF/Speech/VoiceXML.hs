@@ -16,7 +16,7 @@ import GF.Speech.SRG (getSpeechLanguage)
 import PGF.CId
 import PGF.Data
 import PGF.Macros
-import PGF.Linearize (realize)
+import PGF.Linearize (showPrintName)
 
 import Control.Monad (liftM)
 import Data.List (isPrefixOf, find, intersperse)
@@ -55,7 +55,7 @@ catQuestions :: PGF -> CId -> [CId] -> CatQuestions
 catQuestions pgf cnc cats = [(c,catQuestion pgf cnc c) | c <- cats]
 
 catQuestion :: PGF -> CId -> CId -> String
-catQuestion pgf cnc cat = realize (lookPrintName pgf cnc cat)
+catQuestion pgf cnc cat = showPrintName pgf cnc cat
 
 
 {-

@@ -21,8 +21,7 @@ suffixOptimize = mapConcretes opt
  where 
   opt cnc = cnc {
     lins = Map.map optTerm (lins cnc),
-    lindefs = Map.map optTerm (lindefs cnc),
-    printnames = Map.map optTerm (printnames cnc)
+    lindefs = Map.map optTerm (lindefs cnc)
   }
 
 cseOptimize :: PGF -> PGF
@@ -66,8 +65,7 @@ addSubexpConsts :: TermList -> Concr -> Concr
 addSubexpConsts tree cnc = cnc {
   opers = Map.fromList [(f,recomp f trm) | (f,trm) <- ops],
   lins  = rec lins,
-  lindefs = rec lindefs,
-  printnames = rec printnames
+  lindefs = rec lindefs
   }
  where
    ops = [(fid id, trm) | (trm,(_,id)) <- Map.assocs tree]
@@ -88,7 +86,6 @@ getSubtermsMod :: Concr -> TermM TermList
 getSubtermsMod cnc = do
   mapM getSubterms (Map.assocs (lins cnc))
   mapM getSubterms (Map.assocs (lindefs cnc))
-  mapM getSubterms (Map.assocs (printnames cnc))
   (tree0,_) <- readSTM
   return $ Map.filter (\ (nu,_) -> nu > 1) tree0
  where

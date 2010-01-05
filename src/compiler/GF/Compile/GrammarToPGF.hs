@@ -5,6 +5,7 @@ import GF.Compile.Export
 import GF.Compile.GeneratePMCFG
 
 import PGF.CId
+import PGF.Linearize(realize)
 import qualified PGF.Macros as CM
 import qualified PGF.Data as C
 import qualified PGF.Data as D
@@ -102,8 +103,8 @@ canon2gfcc opts pars cgr@(M.MGrammar ((a,abm):cms)) =
       lindefs = Map.fromAscList 
         [(i2i c, umkTerm tr)  | (c,CncCat _ (Just tr) _) <- js]
       printnames = Map.union 
-        (Map.fromAscList [(i2i f, umkTerm tr) | (f,CncFun _ _ (Just tr)) <- js])
-        (Map.fromAscList [(i2i f, umkTerm tr) | (f,CncCat _ _ (Just tr)) <- js])
+        (Map.fromAscList [(i2i f, realize (umkTerm tr)) | (f,CncFun _ _ (Just tr)) <- js])
+        (Map.fromAscList [(i2i f, realize (umkTerm tr)) | (f,CncCat _ _ (Just tr)) <- js])
       params = Map.fromAscList 
         [(i2i c, pars lang0 c) | (c,CncCat (Just ty) _ _) <- js]
       fcfg = Nothing
