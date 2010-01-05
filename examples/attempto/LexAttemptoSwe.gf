@@ -23,7 +23,7 @@ oper
   slash_Conj = mkConj [] "/" singular ;
   whose_IDet = mkIDet (mkIQuant "vems" "vems" "vems" dDefIndef) ;
 
-  eachOf np = mkNP (mkNP each_Det) (SyntaxSwe.mkAdv part_Prep np) ; ---- gen agr
+  eachOf np = mkNP (mkPredet "var och en" "vart och ett" "av" singular) np ;
 
   adj_thatCl : A -> S -> Cl = \a,s -> mkCl (mkVP (mkAP (mkAP a) s)) ;
 
