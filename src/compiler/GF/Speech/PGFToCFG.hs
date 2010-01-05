@@ -42,8 +42,8 @@ pgfToCFG pgf lang = mkCFG (showCId (lookStartCat pgf)) extCats (startRules ++ co
 
     fcatCats :: Map FCat Cat
     fcatCats = Map.fromList [(fc, showCId c ++ "_" ++ show i) 
-                                 | (c,fcs) <- Map.toList (startCats pinfo), 
-                                   (fc,i) <- zip (range fcs) [1..]]
+                                 | (c,(s,e,lbls)) <- Map.toList (startCats pinfo), 
+                                   (fc,i) <- zip (range (s,e)) [1..]]
 
     fcatCat :: FCat -> Cat
     fcatCat c = Map.findWithDefault ("Unknown_" ++ show c) c fcatCats
@@ -69,8 +69,8 @@ pgfToCFG pgf lang = mkCFG (showCId (lookStartCat pgf)) extCats (startRules ++ co
 
     startRules :: [CFRule]
     startRules = [CFRule (showCId c) [NonTerminal (fcatToCat fc r)] (CFRes 0) 
-                      | (c,fcs) <- Map.toList (startCats pinfo), 
-                        fc <- range fcs, not (isLiteralFCat fc),
+                      | (c,(s,e,lbls)) <- Map.toList (startCats pinfo), 
+                        fc <- range (s,e), not (isLiteralFCat fc),
                         r <- [0..catLinArity fc-1]]
 
     fruleToCFRule :: (FCat,Production) -> [CFRule]
