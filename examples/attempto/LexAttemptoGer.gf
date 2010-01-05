@@ -1,7 +1,7 @@
 instance LexAttemptoGer of LexAttempto = 
   open ExtraGer, SyntaxGer, ParadigmsGer, ConstructX,
     MakeStructuralGer, 
-    IrregGer in {
+    IrregGer, Prelude in {
 
 oper
   possible_A = mkA "möglich" ;
@@ -25,7 +25,7 @@ oper
 
   whose_IDet = mkIDet (mkIQuant "wessen") ;
 
-  eachOf np = mkNP (mkNP each_Det) (SyntaxGer.mkAdv part_Prep np) ;  ---- gen agr
+  eachOf np = mkNP (mkPredet (mkA "jed") "von" dative True singular) np ;
 
   adj_thatCl : A -> S -> Cl = \a,s -> mkCl (mkVP (mkAP (mkAP a) s)) ;
 

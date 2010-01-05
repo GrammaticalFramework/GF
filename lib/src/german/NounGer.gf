@@ -5,7 +5,7 @@ concrete NounGer of Noun = CatGer ** open ResGer, Prelude in {
   lin
     DetCN det cn = {
       s = \\c => det.s ! cn.g ! c ++ cn.s ! adjfCase det.a c ! det.n ! c ;
-      a = agrP3 det.n ;
+      a = agrgP3 cn.g det.n ;
       isPron = False
       } ;
 
@@ -22,12 +22,13 @@ concrete NounGer of Noun = CatGer ** open ResGer, Prelude in {
       a = pron.a
       } ;
 
-    PredetNP pred np = {
-      s = \\c0 => 
-        let c = case pred.c of {NoCase => c0 ; PredCase k => k} in
-        pred.s ! numberAgr np.a ! Masc ! c0 ++ np.s ! c ; ---- g
-      a = np.a
-      } ;
+    PredetNP pred np = 
+      let ag = case pred.a of {PAg n => agrP3 n ; _ => np.a} in {
+        s = \\c0 => 
+          let c = case pred.c.k of {NoCase => c0 ; PredCase k => k} in
+          pred.s ! numberAgr ag ! genderAgr np.a ! c0 ++ pred.c.p ++ np.s ! c ; 
+        a = ag
+        } ;
 
     PPartNP np v2 = {
       s = \\c => np.s ! c ++ v2.s ! VPastPart APred ; --- invar part

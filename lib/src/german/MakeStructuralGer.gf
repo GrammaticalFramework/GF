@@ -1,6 +1,6 @@
 --# -path=.:../common:../abstract
 
-resource MakeStructuralGer = open CatGer, ParadigmsGer, MorphoGer, Prelude in {
+resource MakeStructuralGer = open CatGer, (P = ParadigmsGer), MorphoGer, Prelude in {
 
 oper 
   mkConj : Str -> Str -> Number -> Conj = \x,y,n -> 
@@ -10,4 +10,18 @@ oper
   mkIQuant : Str -> IQuant = \s ->
     {s = \\_,_,_ => s ; lock_IQuant = <>} ;
 
+  mkPredet = overload {
+    mkPredet : A -> Predet = \a ->
+      lin Predet {
+        s = appAdj a ; 
+        c = noCase ;
+        a = PAgNone
+        } ;     
+    mkPredet : A -> Str -> Case -> Bool -> Number -> Predet = \a,p,c,b,n ->
+      lin Predet {
+        s = appAdj a ; 
+        c = {p = p ; k = PredCase c} ; 
+        a = case b of {True => PAg n ; _ => PAgNone}
+        }      
+      } ;
 }

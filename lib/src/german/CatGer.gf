@@ -56,7 +56,11 @@ concrete CatGer of Cat =
       sp : Number => Gender => Case => Str ; 
       a  : Adjf
       } ;
-    Predet = {s : Number => Gender => Case => Str ; c : PredetCase} ;
+    Predet = {
+      s : Number => Gender => Case => Str ; 
+      c : {p : Str ; k : PredetCase} ;
+      a : PredetAgr -- if an agr is forced, e.g. jeder von uns ist ...
+      } ;
     Num = {s : Gender => Case => Str ; n : Number ; isNum : Bool} ;
     Card = {s : Gender => Case => Str ; n : Number} ;
     Ord = {s : AForm => Str} ;

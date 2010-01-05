@@ -46,8 +46,14 @@ resource ResGer = ParamX ** open Prelude in {
   param NPForm = NPCase Case | NPPoss GenNum Case ;
 
 -- Predeterminers sometimes require a case ("ausser mir"), sometimes not ("nur ich").
+-- A number is sometimes inherited ("alle Menschen"), 
+-- sometimes forced ("jeder von Mwnschen").
 
-  param PredetCase = NoCase | PredCase Case ;
+  param 
+    PredetCase = NoCase | PredCase Case ;
+    PredetAgr = PAg Number | PAgNone ;
+  oper
+    noCase : {p : Str ; k : PredetCase} = {p = [] ; k = NoCase} ;
 
 --2 For $Adjective$
 
