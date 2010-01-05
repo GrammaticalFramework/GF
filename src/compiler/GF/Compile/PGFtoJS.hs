@@ -96,7 +96,7 @@ parser2js p  = [new "Parser" [JS.EObj $ [JS.Prop (JS.IntPropName cat) (JS.EArray
                               JS.EObj $ map cats (Map.assocs (startCats p)),
                               JS.EInt (totalCats p)]]
   where 
-    cats (c,(start,end)) = JS.Prop (JS.IdentPropName (JS.Ident (showCId c))) (JS.EObj [JS.Prop (JS.IdentPropName (JS.Ident "s")) (JS.EInt start)
+    cats (c,(start,end,_)) = JS.Prop (JS.IdentPropName (JS.Ident (showCId c))) (JS.EObj [JS.Prop (JS.IdentPropName (JS.Ident "s")) (JS.EInt start)
                                                                                       ,JS.Prop (JS.IdentPropName (JS.Ident "e")) (JS.EInt end)])
 
 frule2js :: Production -> JS.Expr

@@ -36,11 +36,11 @@ data Alternative =
 data ParserInfo
     = ParserInfo { functions   :: Array FunId FFun
                  , sequences   :: Array SeqId FSeq
-	         , productions0:: IntMap.IntMap (Set.Set Production)    -- this are the original productions as they are loaded from the PGF file
-	         , productions :: IntMap.IntMap (Set.Set Production)    -- this are the productions after the filtering for useless productions
-	         , startCats   :: Map.Map CId (FCat,FCat)
-	         , totalCats   :: {-# UNPACK #-} !FCat
-	         }
+                 , productions0:: IntMap.IntMap (Set.Set Production)    -- this are the original productions as they are loaded from the PGF file
+                 , productions :: IntMap.IntMap (Set.Set Production)    -- this are the productions after the filtering for useless productions
+                 , startCats   :: Map.Map CId (FCat,FCat,Array FIndex String)  -- for every category - start/end FCat and a list of label names
+                 , totalCats   :: {-# UNPACK #-} !FCat
+                 }
 
 
 fcatString, fcatInt, fcatFloat, fcatVar :: Int
@@ -76,8 +76,9 @@ ppFun (funid,FFun fun arr) =
 ppSeq (seqid,seq) = 
   ppSeqId seqid <+> text ":=" <+> hsep (map ppSymbol (elems seq))
 
-ppStartCat (id,(start,end)) =
-  ppCId id <+> text ":=" <+> brackets (ppFCat start <+> text ".." <+> ppFCat end)
+ppStartCat (id,(start,end,labels)) =
+  ppCId id <+> text ":=" <+> (text "range " <+> brackets (ppFCat start <+> text ".." <+> ppFCat end) $$
+                              text "labels" <+> brackets (vcat (map (text . show) (elems labels))))
 
 ppSymbol (FSymCat d r) = char '<' <> int d <> comma <> int r <> char '>'
 ppSymbol (FSymLit d r) = char '<' <> int d <> comma <> int r <> char '>'
