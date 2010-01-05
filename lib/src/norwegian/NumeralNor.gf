@@ -20,7 +20,7 @@ lin
 
   pot01 = {
     s = \\f => table {
-          NCard g => case g of {Neutr => "ett" ; _ => "en"} ;
+          NCard g => case g of {NNeutr => "ett" ; NUtr _ => "en"} ; ---- ei ?
           _ => "første"
           } ; 
     n = Sg

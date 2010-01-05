@@ -1,9 +1,7 @@
 --1 Auxiliary operations common for Scandinavian languages.
 --
 -- This module contains operations that are shared by the Scandinavian
--- languages. The complete set of auxiliary operations needed to
--- implement [Test Test.html] is defined in [ResScandinavian ResScandinavian.html],
--- which depends on [DiffScandinavian DiffScandinavian.html].
+-- languages, without dependence on parameters.
 
 resource CommonScand = ParamX ** open Prelude in {
 
@@ -14,11 +12,23 @@ param
   Case    = Nom | Gen ;
   Voice   = Act | Pass ;
 
+-- The principal word orders in predication: main clause, inverted, subordinate.
+
   Order   = Main | Inv | Sub ;
+
+-- The types of noun definiteness required by determiners. Examples:
+-- "ett stort hus" (DIndef), "mitt stora hus" (DDef Indef), 
+-- "det stora huset" (DDed Def).
 
   DetSpecies = DIndef | DDef Species ;
 
-  GenNum  = SgUtr | SgNeutr | Plg ;
+-- These are the gender-number combinations needed for adjective inflection,
+-- minimizing the number of forms in the lexicon: there is no gender dependency
+-- in the plural, and only two genders in the singular even in Norwegian.
+
+  GenNum  = GSg Gender | GPl ;
+
+  Gender  = Utr | Neutr ;
 
   AForm   = AF AFormGrad Case ;
 
@@ -56,17 +66,17 @@ param
   VType = VAct | VPass | VRefl ;
 
   NPForm = NPNom | NPAcc | NPPoss GenNum ;
----  AdjPronForm = APron GenNum Case ;
----  AuxVerbForm = AuxInf | AuxPres | AuxPret | AuxSup ;
 
   RCase = RNom | RGen | RPrep Bool ;
 
-  RAgr = RNoAg | RAg {gn : GenNum ; p : Person} ;
+  RAgr = RNoAg | RAg Gender Number Person ;
+
+  PredetAgr = PNoAg | PAg Number ;
 
 oper
   Complement : Type = {s : Str ; hasPrep : Bool} ;
 
-  Agr : PType = {gn : GenNum ; p : Person} ;
+  Agr : PType = {g : Gender ; n : Number ; p : Person} ;
 
   nominative : NPForm = NPNom ;
   accusative : NPForm = NPAcc ;
@@ -88,15 +98,26 @@ oper
       _ => True
       }
     } ;
+
 -- Used in $Noun.AdjCN$.
 
------  agrAdj : GenNum -> DetSpecies -> AFormPos = \gn,d -> Strong gn ; --- debug
+  agrAdjNP : Agr -> DetSpecies -> AFormPos = \a ->
+    agrAdj (gennumAgr a) ;
+
   agrAdj : GenNum -> DetSpecies -> AFormPos = \gn,d -> 
     case <<gn,d> : GenNum * DetSpecies> of {
       <_,  DIndef> => Strong gn ;
-      <Plg,DDef _> => Weak Pl ;
+      <GPl,DDef _> => Weak Pl ;
       _            => Weak Sg
     } ;
+
+  gennum : Gender -> Number -> GenNum = \g,n ->
+      case n of {
+        Sg => GSg g ;
+        Pl => GPl
+        } ;
+
+  gennumAgr : Agr -> GenNum = \a -> gennum a.g a.n ;
 
 -- Used in $DiffScand.predV$.
 
@@ -109,16 +130,15 @@ oper
     
 -- Used in $ConjunctionScand$.
 
-  conjGenNum : (_,_ : GenNum) -> GenNum = \g,h -> case <g,h> of {
-    <SgUtr,SgUtr> => SgUtr ;
-    <Plg,  _>     => Plg ;
-    <_,  Plg>     => Plg ;
-    _             => SgNeutr 
+  conjGender : Gender -> Gender -> Gender = \g,h -> case g of {
+    Utr => h ;
+    _ => Neutr 
     } ;
 
   conjAgr : (_,_ : Agr) -> Agr = \a,b -> {
-    gn = conjGenNum a.gn b.gn ;
-    p  = conjPerson a.p  b.p
+    g = conjGender a.g b.g ;
+    n = conjNumber a.n b.n ;
+    p = conjPerson a.p b.p
     } ;
 
 ---
@@ -178,9 +198,9 @@ oper
     \a, liten, litet, lilla, sma ->
     case a of {
       Strong gn => case gn of {
-        SgUtr => liten ;
-        SgNeutr => litet ;
-        Plg => sma
+        GSg Utr => liten ;
+        GSg Neutr => litet ;
+        GPl => sma
       } ;
      Weak Sg => lilla ;
      Weak Pl => sma
@@ -199,29 +219,33 @@ oper
 
   artDef : GenNum -> Str = \gn -> gennumForms "den" "det" "de" ! gn ;
 
-  mkNP : (x1,_,_,_,x5 : Str) -> GenNum -> Person -> 
-         {s : NPForm => Str ; a : Agr} = \du,dig,din,ditt,dina,gn,p -> {
+  mkNP : (x1,_,_,_,x5 : Str) -> Gender -> Number -> Person -> 
+         {s : NPForm => Str ; a : Agr} = \du,dig,din,ditt,dina,g,n,p -> {
     s = table {
       NPNom => du ;
       NPAcc => dig ;
-      NPPoss g => gennumForms din ditt dina ! g
+      NPPoss h => gennumForms din ditt dina ! h
       } ;
     a = {
-      gn = gn ;
-      p  = p
+      g = g ;
+      n = n ;
+      p = p
       }
     } ;
 
   gennumForms : (x1,x2,x3 : Str) -> GenNum => Str = \den,det,de -> 
     table {
-      SgUtr => den ;
-      SgNeutr => det ;
+      GSg Utr => den ;
+      GSg Neutr => det ;
       _ => de
     } ;  
 
-  regNP : Str -> Str -> GenNum -> {s : NPForm => Str ; a : Agr} =
-    \det,dess,gn ->
-    mkNP det det dess dess dess gn P3 ;
+  detForms : (x1,x2,x3 : Str) -> Gender => Number => Str = \den,det,de -> 
+    \\g,n => gennumForms den det de ! gennum g n ;
+
+  regNP : Str -> Str -> Gender -> Number -> {s : NPForm => Str ; a : Agr} =
+    \det,dess,g,n ->
+    mkNP det det dess dess dess g n P3 ;
 
 
 -- For $Verb$.

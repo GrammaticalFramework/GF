@@ -22,6 +22,6 @@ incomplete concrete AdverbScand of Adverb = CatScand ** open CommonScand, ResSca
     AdnCAdv cadv = {s = cadv.s ++ conjThan} ;
 
   oper
-    adverbForm : AForm = AF (APosit (Strong SgNeutr)) Nom ;
+    adverbForm : AForm = AF (APosit (Strong (GSg Neutr))) Nom ;
 
 }

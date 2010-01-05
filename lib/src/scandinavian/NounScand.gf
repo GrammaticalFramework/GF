@@ -20,7 +20,7 @@ incomplete concrete NounScand of Noun =
       in {
       s = \\c => det.s ! m ! g ++
                  cn.s ! det.n ! dd ! caseNP c ; 
-      a = agrP3 g det.n
+      a = agrP3 (ngen2gen g) det.n
       } ;
 
     UsePN pn = {
@@ -31,12 +31,12 @@ incomplete concrete NounScand of Noun =
     UsePron p = p ;
 
     PredetNP pred np = {
-      s = \\c => pred.s ! np.a.gn ++ np.s ! c ;
-      a = np.a
+      s = \\c => pred.s ! np.a.g ! np.a.n ++ pred.p ++ np.s ! c ;
+      a = case pred.a of {PAg n => agrP3 np.a.g n ; _ => np.a}
       } ;
 
     PPartNP np v2 = {
-      s = \\c => np.s ! c ++ v2.s ! (VI (VPtPret (agrAdj np.a.gn DIndef) Nom)) ;
+      s = \\c => np.s ! c ++ v2.s ! (VI (VPtPret (agrAdjNP np.a DIndef) Nom)) ;
       a = np.a
       } ;
 
@@ -72,15 +72,15 @@ incomplete concrete NounScand of Noun =
 
     DetNP det = 
       let 
-        g = Neutr ; ----
+        g = neutrum ; ----
         m = True ;  ---- is this needed for other than Art?
       in {
         s = \\c => det.sp ! m ! g ;
-        a = agrP3 g det.n
+        a = agrP3 (ngen2gen g) det.n
       } ;
 
     PossPron p = {
-      s,sp = \\n,_,_,g => p.s ! NPPoss (gennum g n) ; 
+      s,sp = \\n,_,_,g => p.s ! NPPoss (gennum (ngen2gen g) n) ; 
       det = DDef Indef
       } ;
 
@@ -106,8 +106,8 @@ incomplete concrete NounScand of Noun =
       } ;
 
     DefArt = {
-      s  = \\n,bm,bn,g => if_then_Str (orB bm bn) (artDef (gennum g n)) [] ; 
-      sp = \\n,bm,bn,g => artDef (gennum g n) ;
+      s  = \\n,bm,bn,g => if_then_Str (orB bm bn) (artDef (gennum (ngen2gen g) n)) [] ; 
+      sp = \\n,bm,bn,g => artDef (gennum (ngen2gen g) n) ;
       det = DDef Def
       } ;
 
@@ -125,7 +125,7 @@ incomplete concrete NounScand of Noun =
 
     MassNP cn = {
       s = \\c => cn.s ! Sg ! DIndef ! caseNP c ; 
-      a = agrP3 cn.g Sg
+      a = agrP3 (ngen2gen cn.g) Sg
       } ;
 
     UseN, UseN2 = \noun -> {
@@ -166,14 +166,14 @@ incomplete concrete NounScand of Noun =
     AdjCN ap cn = let g = cn.g in {
       s = \\n,d,c =>
             preOrPost ap.isPre 
-             (ap.s ! agrAdj (gennum g n) d) 
+             (ap.s ! agrAdj (gennum (ngen2gen g) n) d) 
              (cn.s ! n ! d ! c) ;
       g = g ;
       isMod = True
       } ;
 
     RelCN cn rs = let g = cn.g in {
-      s = \\n,d,c => cn.s ! n ! d ! c ++ rs.s ! agrP3 g n ;
+      s = \\n,d,c => cn.s ! n ! d ! c ++ rs.s ! agrP3 (ngen2gen g) n ;
       g = g ;
       isMod = cn.isMod
       } ;

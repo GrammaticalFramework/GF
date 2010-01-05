@@ -1,6 +1,6 @@
 --# -path=.:../scandinavian:../common:../abstract
 
-resource MakeStructuralSwe = open CatSwe, ParadigmsSwe, 
+resource MakeStructuralSwe = open CatSwe, 
   (P=ParadigmsSwe), MorphoSwe, Prelude in {
 
 oper 
@@ -16,4 +16,18 @@ oper
   dDefIndef : DetSpecies = DDef Indef ;
   ---- other DetSpecies
 
+  mkPredet = overload {
+    mkPredet : Str -> Str -> Str -> Predet = \a,b,c ->
+      lin Predet {
+        s = detForms a b c ; 
+        p = [] ;
+        a = PNoAg
+        } ;     
+    mkPredet : Str -> Str -> Str -> Number -> Predet = \a,b,p,n ->
+      lin Predet {
+        s = table {Utr => \\_ => a ; _ => \\_ => b} ; 
+        p = p ;
+        a = PAg n ;
+        }      
+      } ;
 }

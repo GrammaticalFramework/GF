@@ -6,12 +6,12 @@ incomplete concrete SentenceScand of Sentence =
   lin
     PredVP np vp = mkClause (np.s ! nominative) np.a vp ;
 
-    PredSCVP sc vp = mkClause sc.s (agrP3 neutrum Sg) vp ;
+    PredSCVP sc vp = mkClause sc.s (agrP3 Neutr Sg) vp ;
 
     ImpVP vp = {
       s = \\pol,n => 
         let 
-          agr   = {gn = gennum utrum n ; p = P2} ;
+          agr   = {g = Utr ; n = n ; p = P2} ;
           verb  = vp.s ! VPImperat ;
         in
         verb.fin ++ vp.a1 ! pol ++ verb.inf ++ vp.n2 ! agr ++ vp.a2 ++ vp.ext
@@ -39,7 +39,7 @@ incomplete concrete SentenceScand of Sentence =
 
     EmbedS  s  = {s = conjThat ++ s.s ! Sub} ;
     EmbedQS qs = {s = qs.s ! QIndir} ;
-    EmbedVP vp = {s = infMark ++ infVP vp (agrP3 utrum Sg)} ; --- agr
+    EmbedVP vp = {s = infMark ++ infVP vp (agrP3 Utr Sg)} ; --- agr
 
     UseCl t p cl = {
       s = \\o => t.s ++ p.s ++ cl.s ! t.t ! t.a ! p.p ! o

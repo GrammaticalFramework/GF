@@ -295,7 +295,7 @@ oper
 -- The definitions should not bother the user of the API. So they are
 -- hidden from the document.
 
-  Gender = ResSwe.Gender ; 
+  Gender = ResSwe.NGender ; 
   Number = CommonScand.Number ;
   Case = CommonScand.Case ;
   utrum = Utr ; 
@@ -501,8 +501,8 @@ oper
   mk6V = \finna,finner,finn,fann,funnit,funnen ->
     let 
       funn = ptPretForms funnen ;
-      funnet = funn ! Strong SgNeutr ! Nom ;
-      funna  = funn ! Strong Plg ! Nom 
+      funnet = funn ! Strong (GSg Neutr) ! Nom ;
+      funna  = funn ! Strong GPl ! Nom 
     in
     mkVerb finna finner finn fann funnit funnen funnet funna **
     {part = [] ; vtype=VAct ; lock_V = <>} ;

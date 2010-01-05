@@ -32,7 +32,7 @@ concrete IdiomDan of Idiom = CatDan **
     ProgrVP vp = 
       insertObj (\\a => ["ved å"] ++ infVP vp a) (predV verbBe) ;
 
-    ImpPl1 vp = {s = ["lad os"] ++ infVP vp {gn = Plg ; p = P1}} ;
+    ImpPl1 vp = {s = ["lad os"] ++ infVP vp {g = Utr ; n = Pl ; p = P1}} ;
 
 }
 

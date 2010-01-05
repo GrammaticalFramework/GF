@@ -21,7 +21,7 @@ incomplete concrete QuestionScand of Question =
             QIndir => <"som",Sub> ;
             _      => <[],   Main>
             } ;
-          cl = mkClause (qp.s ! nominative ++ somo.p1) {gn = qp.gn ; p = P3} vp  
+          cl = mkClause (qp.s ! nominative ++ somo.p1) {g = qp.g ; n = qp.n ; p = P3} vp  
         in
         cl.s ! t ! a ! b ! somo.p2
       } ;   
@@ -29,7 +29,7 @@ incomplete concrete QuestionScand of Question =
     QuestSlash ip slash = {
       s = \\t,a,p => 
             let 
-              agr = {gn = ip.gn ; p = P3} ;
+              agr = agrP3 ip.g ip.n ;
               cls : Order => Str = \\o => slash.s ! t ! a ! p ! o ++ slash.n3 ! agr ;
               who = slash.c2.s ++ ip.s ! accusative --- stranding in ExtScand 
             in table {
@@ -54,7 +54,7 @@ incomplete concrete QuestionScand of Question =
             let 
               cls = 
                 (mkClause (np.s ! nominative) np.a (predV verbBe)).s ! t ! a ! p ;
-              why = icomp.s ! agrAdj np.a.gn DIndef
+              why = icomp.s ! agrAdjNP np.a DIndef
             in table {
               QDir   => why ++ cls ! Inv ;
               QIndir => why ++ cls ! Sub
@@ -67,22 +67,25 @@ incomplete concrete QuestionScand of Question =
 
     AdvIP ip adv = {
       s = \\c => ip.s ! c ++ adv.s ;
-      gn = ip.gn
+      g = ip.g ;
+      n = ip.n
       } ;
 
     IdetCN idet cn = let g = cn.g in {
-      s  = \\c => 
+      s = \\c => 
            idet.s ! g ++ cn.s ! idet.n ! idet.det ! caseNP c ;
-      gn = gennum g idet.n
+      g = ngen2gen g ;
+      n = idet.n
       } ;
 
     IdetIP idet = 
       let
-        g = Neutr ;
+        g = neutrum ; ---- g
       in {
-      s  = \\c => idet.s ! g  ;
-      gn = (agrP3 g idet.n).gn
-      } ;
+        s = \\c => idet.s ! g  ;
+        g = ngen2gen g ; 
+        n = idet.n
+        } ;
 
     IdetQuant idet num = {
       s = \\g => idet.s ! num.n ! g ++ num.s ! g ;

@@ -5,15 +5,16 @@ interface ResScand = DiffScand ** open CommonScand, Prelude in {
 --2 Constants uniformly defined in terms of language-dependent constants
 
   param
-    CardOrd = NCard Gender | NOrd AFormSup ; -- sic! (AFormSup)
+    CardOrd = NCard NGender | NOrd AFormSup ; -- sic! (AFormSup)
 
   oper  
     agrP3 : Gender -> Number -> Agr = \g,n -> {
-      gn = gennum g n ;
+      g = g ;
+      n = n ;
       p = P3
       } ;
 
-    Noun = {s : Number => Species => Case => Str ; g : Gender} ;
+    Noun = {s : Number => Species => Case => Str ; g : NGender} ;
 
 -- This function is here because it depends on $verbHave, auxFut, auxCond$.
 
@@ -58,7 +59,7 @@ interface ResScand = DiffScand ** open CommonScand, Prelude in {
       VPInfinit Simul => vf [] vinf
       } ;
     a1  : Polarity => Str = negation ;
-    n2  : Agr  => Str = \\a => case verb.vtype of {
+    n2  : Agr => Str = \\a => case verb.vtype of {
       VRefl => reflPron a ;
       _ => []
       } ;

@@ -4,13 +4,14 @@ interface DiffScand = open CommonScand, Prelude in {
 
 -- Norway has three genders, Danish and Swedish have two.
 
-  param
-    Gender ;
-
   oper
-    neutrum, utrum : Gender ;
+    NGender : PType ;
+ 
+    ngen2gen : NGender -> Gender ;
 
-    gennum : Gender -> Number -> GenNum ;
+    neutrum, utrum : NGender ;
+
+---    gennum : Gender -> Number -> GenNum ;
 
 -- This is the form of the noun in "det stora berget"/"det store berg".
 
@@ -33,7 +34,7 @@ interface DiffScand = open CommonScand, Prelude in {
 
     subjIf : Str ;
 
-    artIndef : Gender => Str ;
+    artIndef : NGender => Str ;
     detIndefPl : Str ;
 
     verbHave : Verb ;
@@ -48,11 +49,11 @@ interface DiffScand = open CommonScand, Prelude in {
 
 -- For determiners; mostly two-valued even in Norwegian.
 
-    genderForms : (x1,x2 : Str) -> Gender => Str ;
+    genderForms : (x1,x2 : Str) -> NGender => Str ;
 
 -- The forms of a relative pronoun ("som", "vars", "i vilken").
 
-    relPron : GenNum => RCase => Str ;
+    relPron : Gender => Number => RCase => Str ;
 
 -- Pronoun "sådan" used in $Relative.RelCl$.
 

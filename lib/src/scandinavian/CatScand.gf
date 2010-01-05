@@ -25,15 +25,15 @@ incomplete concrete CatScand of Cat =
 -- Question
 
     QCl = {s : R.Tense => Anteriority => Polarity => QForm => Str} ;
-    IP = {s : NPForm => Str ; gn : GenNum} ;
+    IP = {s : NPForm => Str ; g : Gender ; n : Number} ;
     IComp = {s : AFormPos => Str} ; 
-    IDet = {s : Gender => Str ; n : Number ; det : DetSpecies} ;
-    IQuant = {s : Number => Gender => Str ; det : DetSpecies} ;
+    IDet = {s : NGender => Str ; n : Number ; det : DetSpecies} ;
+    IQuant = {s : Number => NGender => Str ; det : DetSpecies} ;
 
 -- Relative; the case $c$ is for "det" clefts.
 
     RCl = {s : R.Tense => Anteriority => Polarity => Agr => Str ; c : NPForm} ;
-    RP  = {s : GenNum => RCase => Str ; a : RAgr} ;
+    RP  = {s : Gender => Number => RCase => Str ; a : RAgr} ;
 
 -- Verb
 
@@ -66,13 +66,13 @@ incomplete concrete CatScand of Cat =
 -- permits treating definite articles "huset - de fem husen - det gamla huset"
 -- as $Quant$.
 
-    CN = {s : Number => DetSpecies => Case => Str ; g : Gender ; isMod : Bool} ;
+    CN = {s : Number => DetSpecies => Case => Str ; g : NGender ; isMod : Bool} ;
     NP,Pron = {s : NPForm => Str ; a : Agr} ;
-    Det = {s,sp : Bool => Gender => Str ; n : Number ; det : DetSpecies} ;
-    Quant = {s,sp : Number => Bool => Bool => Gender => Str ; det : DetSpecies} ;
-    Predet = {s : GenNum => Str} ;
-    Num = {s : Gender => Str ; isDet : Bool ; n : Number} ;
-    Card = {s : Gender => Str ; n : Number} ;
+    Det = {s,sp : Bool => NGender => Str ; n : Number ; det : DetSpecies} ;
+    Quant = {s,sp : Number => Bool => Bool => NGender => Str ; det : DetSpecies} ;
+    Predet = {s : Gender => Number => Str ; p : Str ; a : PredetAgr} ;
+    Num = {s : NGender => Str ; isDet : Bool ; n : Number} ;
+    Card = {s : NGender => Str ; n : Number} ;
     Ord = {s : Str} ;
 
 -- Numeral

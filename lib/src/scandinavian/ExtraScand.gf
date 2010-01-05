@@ -2,7 +2,7 @@ incomplete concrete ExtraScand of ExtraScandAbs = CatScand **
    open CommonScand,Coordination,ResScand in {
   lin
     GenNP np = {
-      s,sp = \\n,_,_,g => np.s ! NPPoss (gennum g n) ; 
+      s,sp = \\n,_,_,g => np.s ! NPPoss (gennum (ngen2gen g) n) ; 
       det = DDef Indef
       } ;
 
@@ -10,7 +10,7 @@ incomplete concrete ExtraScand of ExtraScandAbs = CatScand **
 
     StrandRelSlash rp slash  = {
       s = \\t,a,p,ag => 
-          rp.s ! ag.gn ! RNom ++ slash.s ! t ! a ! p ! Sub ++ slash.c2.s ;
+          rp.s ! ag.g ! ag.n ! RNom ++ slash.s ! t ! a ! p ! Sub ++ slash.c2.s ;
       c = NPAcc
       } ;
     EmptyRelSlash slash = {
