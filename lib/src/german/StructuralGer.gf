@@ -9,7 +9,7 @@ concrete StructuralGer of Structural = CatGer **
 
   above_Prep = mkPrep "über" Dat ;
   after_Prep = mkPrep "nach" Dat ;
-  all_Predet = {s = appAdj (regA "all") ; c = NoCase} ;
+  all_Predet = {s = appAdj (regA "all") ; c = noCase ; a = PAgNone} ;
   almost_AdA, almost_AdN = ss "fast" ;
   although_Subj = ss "obwohl" ;
   always_AdV = ss "immer" ;
@@ -52,7 +52,7 @@ concrete StructuralGer of Structural = CatGer **
   less_CAdv = X.mkCAdv "weniger" "als" ;
   many_Det = detLikeAdj Pl "viel" ;
   more_CAdv = X.mkCAdv "mehr" "als" ;
-  most_Predet = {s = appAdj (regA "meist") ; c = NoCase} ;
+  most_Predet = {s = appAdj (regA "meist") ; c = noCase ; a = PAgNone} ;
   much_Det = detLikeAdj Sg "viel" ;
   must_VV = auxVV 
       (mkV 
@@ -61,7 +61,7 @@ concrete StructuralGer of Structural = CatGer **
         "müßte" "gemußt" [] 
         VHaben) ;
 ---  one_Quant = DEPREC
-  only_Predet = {s = \\_,_,_ => "nur" ; c = NoCase} ;
+  only_Predet = {s = \\_,_,_ => "nur" ; c = noCase ; a = PAgNone} ;
   no_Utt = ss "nein" ;
 ---b  no_Phr = ss "nein" ;
   on_Prep = mkPrep "auf" Dat ;
@@ -128,7 +128,7 @@ concrete StructuralGer of Structural = CatGer **
   youPol_Pron = mkPronPers "Sie" "Sie" "Ihnen" "Ihrer" "Ihr" Fem Pl P3 ;
   yes_Utt = ss "ja" ;
 
-  not_Predet = {s = \\_,_,_ => "nicht" ; c = NoCase} ;
+  not_Predet = {s = \\_,_,_ => "nicht" ; c = noCase ; a = PAgNone} ;
   no_Quant = let 
      keiner : Number => Gender => Case => Str = table {
        Sg => \\g,c => "kein" + pronEnding ! GSg g ! c ;
