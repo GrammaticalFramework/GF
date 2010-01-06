@@ -2,20 +2,18 @@ instance DiffNor of DiffScand = open CommonScand, Prelude in {
 
 -- Parameters.
 
+  oper
+    NGender = NGenderNor ;
+
+    ngen2gen g = case g of {NUtr _ => Utr ; NNeutr => Neutr} ;
+
   param
-    Gender = Utr Sex | Neutr ;
+    NGenderNor = NUtr Sex | NNeutr ;
     Sex    = Masc | Fem ;
 
   oper
-    utrum = Utr Masc ; 
-    neutrum = Neutr ;
-
-    gennum : Gender -> Number -> GenNum = \g,n ->
-      case <<g,n> : Gender * Number> of {
-        <Utr _,Sg> => SgUtr ;
-        <Neutr,Sg> => SgNeutr ;
-        _  => Plg
-        } ;
+    utrum = NUtr Masc ; 
+    neutrum = NNeutr ;
 
     detDef : Species = Def ;
 
@@ -38,10 +36,10 @@ instance DiffNor of DiffScand = open CommonScand, Prelude in {
 
     subjIf = "hvis" ;
 
-    artIndef : Gender => Str = table {
-      Utr Masc => "en" ;
-      Utr Fem  => "ei" ;
-      Neutr    => "et"
+    artIndef : NGender => Str = table {
+      NUtr Masc => "en" ;
+      NUtr Fem  => "ei" ;
+      NNeutr    => "et"
       } ;
     detIndefPl = "noen" ;
 
@@ -66,26 +64,26 @@ instance DiffNor of DiffScand = open CommonScand, Prelude in {
       Neg => "ikke"
       } ;
 
-    genderForms : (x1,x2 : Str) -> Gender => Str = \all,allt -> 
+    genderForms : (x1,x2 : Str) -> NGender => Str = \all,allt -> 
       table {
-        Utr _ => all ;
-        Neutr => allt
+        NUtr _ => all ;
+        NNeutr => allt
         } ;
 
-    relPron : GenNum => RCase => Str = \\gn,c => case c of {
+    relPron : Gender => Number => RCase => Str = \\g,n,c => case c of {
       RNom | RPrep False => "som" ;
       RGen  => "hvis" ;
-      RPrep _ => gennumForms "hvilken" "hvilket" "hvilke" ! gn
+      RPrep _ => gennumForms "hvilken" "hvilket" "hvilke" ! gennum g n
       } ;
 
     pronSuch = gennumForms "sådan" "sådant" "sådanne" ;
 
-    reflPron : Agr -> Str = \a -> case a of {
-      {gn = Plg ; p = P1} => "oss" ;
-      {gn = Plg ; p = P2} => "jer" ;
-      {p = P1} => "meg" ;
-      {p = P2} => "deg" ;
-      {p = P3} => "seg"
+    reflPron : Agr -> Str = \a -> case <a.n,a.p> of {
+      <Pl,P1> => "oss" ;
+      <Pl,P2> => "jer" ;
+      <Sg,P1> => "meg" ;
+      <Sg,P2> => "deg" ;
+      <_, P3> => "seg"
       } ;
 
 }

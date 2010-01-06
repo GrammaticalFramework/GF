@@ -2,30 +2,11 @@ instance DiffSwe of DiffScand = open CommonScand, Prelude in {
 
 -- Parameters.
 
-  param
-    Gender = Utr | Neutr ;
-
   oper
+    NGender = Gender ; 
+    ngen2gen g = g ;
     utrum = Utr ; 
     neutrum = Neutr ;
-
-    gennumN : Gender -> Number -> GenNum = \g,n -> Plg ; -----
-    gennum : Gender -> Number -> GenNum = \g,n ->
-{-
---- debugging Compute 9/11/2007
-      case n of {
-        Sg => case g of {
-          Utr => SgUtr ;
-          Neutr => SgNeutr
-          } ;
-        _  => Plg
-        } ;
--}
-      case <<g,n> : Gender * Number> of {
-        <Utr,Sg> => SgUtr ;
-        <Neutr,Sg> => SgNeutr ;
-        _  => Plg
-        } ;
 
     detDef : Species = Def ;
 
@@ -48,7 +29,7 @@ instance DiffSwe of DiffScand = open CommonScand, Prelude in {
 
     subjIf = "om" ;
 
-    artIndef : Gender => Str = table {
+    artIndef : NGender => Str = table {
       Utr => "en" ;
       Neutr => "ett"
       } ;
@@ -74,26 +55,26 @@ instance DiffSwe of DiffScand = open CommonScand, Prelude in {
       Neg => "inte"
       } ;
 
-    genderForms : (x1,x2 : Str) -> Gender => Str = \all,allt -> 
+    genderForms : (x1,x2 : Str) -> NGender => Str = \all,allt -> 
       table {
         Utr => all ;
         Neutr => allt
         } ;
 
-    relPron : GenNum => RCase => Str = \\gn,c => case c of {
+    relPron : Gender => Number => RCase => Str = \\g,n,c => case c of {
       RNom | RPrep False => "som" ;
       RGen  => "vars" ;
-      RPrep True => gennumForms "vilken" "vilket" "vilka" ! gn
+      RPrep True => gennumForms "vilken" "vilket" "vilka" ! gennum g n
       } ;
 
     pronSuch = gennumForms "sådan" "sådant" "sådana" ;
 
-    reflPron : Agr -> Str = \a -> case a of {
-      {gn = Plg ; p = P1} => "oss" ;
-      {gn = Plg ; p = P2} => "er" ;
-      {p = P1} => "mig" ;
-      {p = P2} => "dig" ;
-      {p = P3} => "sig"
+    reflPron : Agr -> Str = \a -> case <a.n,a.p> of {
+      <Pl,P1> => "oss" ;
+      <Pl,P2> => "er" ;
+      <Sg,P1> => "mig" ;
+      <Sg,P2> => "dig" ;
+      <_, P3> => "sig"
       } ;
 
 }

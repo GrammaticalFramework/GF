@@ -33,11 +33,10 @@ concrete IdiomSwe of Idiom = CatSwe **
               }
       } ;
 
-
     ProgrVP vp = 
       insertObj (\\a => "att" ++ infVP vp a) (predV (partV hålla_V "på")) ;
 
-    ImpPl1 vp = {s = ["låt oss"] ++ infVP vp {gn = Plg ; p = P1}} ;
+    ImpPl1 vp = {s = ["låt oss"] ++ infVP vp {g = Utr ; n = Pl ; p = P1}} ;
 
 
 }

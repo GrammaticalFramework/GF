@@ -78,7 +78,7 @@ oper
        VF (VPres Pass)   => spises ;
        VF (VPret v)      => mkVoice v spiste ;   --# notpresent
        VI (VSupin v)     => mkVoice v spist ;    --# notpresent
-       VI (VPtPret (Strong (SgUtr | SgNeutr)) c) => mkCase c spist ;
+       VI (VPtPret (Strong (GSg _)) c) => mkCase c spist ;
        VI (VPtPret _ c)  => mkCase c (spist + "e") ;
        VF (VImper v)     => mkVoice v spis
        }

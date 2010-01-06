@@ -13,9 +13,9 @@ resource MorphoNor = CommonScand, ResNor ** open Prelude, Predef in {
 -- genders
 
 oper
-  masc  = Utr Masc ;
-  fem   = Utr Fem ;
-  neutr = Neutr ;
+  masc  = NUtr Masc ;
+  fem   = NUtr Fem ;
+  neutr = NNeutr ;
 
 -- type synonyms
 
@@ -28,10 +28,10 @@ oper
     \dreng, drengen, drenger, drengene -> 
     {s = nounForms dreng drengen drenger drengene} ;
 
-  extNGen : Str -> Gender = \s -> case last s of {
-    "n" => Utr Masc ;
-    "a" => Utr Fem ;
-    _   => Neutr
+  extNGen : Str -> NGender = \s -> case last s of {
+    "n" => masc ;
+    "a" => fem ;
+    _   => neutr
     } ; 
 
   nBil : Str -> Subst = \bil ->
@@ -57,8 +57,8 @@ oper
 
   mkAdject : (_,_,_,_,_ : Str) -> Adj = 
     \stor,stort,store,storre,storst -> {s = table {
-       AF (APosit (Strong SgUtr )) c    => mkCase c stor ; 
-       AF (APosit (Strong SgNeutr)) c   => mkCase c stort ;
+       AF (APosit (Strong (GSg Utr  ))) c    => mkCase c stor ; 
+       AF (APosit (Strong (GSg Neutr))) c   => mkCase c stort ;
        AF (APosit _) c                  => mkCase c store ;
        AF ACompar c                     => mkCase c storre ;
        AF (ASuperl SupStrong) c         => mkCase c storst ;
@@ -89,7 +89,7 @@ oper
        VF (VPres Pass)   => spises ;
        VF (VPret v)      => mkVoice v spiste ;   --# notpresent
        VI (VSupin v)     => mkVoice v spist ;    --# notpresent
-       VI (VPtPret (Strong (SgUtr | SgNeutr)) c) => mkCase c spist ;
+       VI (VPtPret (Strong (GSg _)) c) => mkCase c spist ;
        VI (VPtPret _ c)  => case last spist of {
          "a" => mkCase c spist ;
          _   => mkCase c (spist + "e")
@@ -165,7 +165,7 @@ oper
   numPl : (CardOrd => Str) -> {s : CardOrd => Str ; n : Number} = \n ->
     {s = n ; n = Pl} ;
 
-  invNum : CardOrd = NCard Neutr ;
+  invNum : CardOrd = NCard NNeutr ;
 
 
 }

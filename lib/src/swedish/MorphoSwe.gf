@@ -32,8 +32,8 @@ oper
       funfun = ptPretAll funnen 
     in
     mkCase c (case a of {
-      (Strong (SgUtr)) => funnen ;
-      (Strong (SgNeutr)) => funfun.p1 ;
+      (Strong (GSg Utr)) => funnen ;
+      (Strong (GSg Neutr)) => funfun.p1 ;
       _ => funfun.p2
       }
      ) ;

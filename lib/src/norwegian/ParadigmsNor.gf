@@ -272,12 +272,12 @@ oper
 -- The definitions should not bother the user of the API. So they are
 -- hidden from the document.
 
-  Gender = MorphoNor.Gender ; 
+  Gender = MorphoNor.NGender ; 
   Number = MorphoNor.Number ;
   Case = MorphoNor.Case ;
-  masculine = Utr Masc ; 
-  feminine = Utr Fem ; 
-  neutrum = Neutr ;
+  masculine = NUtr Masc ; 
+  feminine = NUtr Fem ; 
+  neutrum = NNeutr ;
   singular = Sg ;
   plural = Pl ;
   nominative = Nom ;
@@ -287,21 +287,21 @@ oper
 
   regN x = regGenN x g where {
     g = case <x : Str> of {
-      _ + "e" => Utr Fem ;
-      _ => Utr Masc
+      _ + "e" => fem ;
+      _ => masc
       }
     } ;
 
   regGenN x g = case last x of {
     "e" => case g of {
-       Utr Masc   => mk4N x (x      + "n") (x + "r") (x + "ne") ;
-       Utr Fem    => mk4N x (init x + "a") (x + "r") (x + "ne") ;
-       Neutr      => mk4N x (x      + "t") (x + "r") (init x + "a")
+       NUtr Masc   => mk4N x (x      + "n") (x + "r") (x + "ne") ;
+       NUtr Fem    => mk4N x (init x + "a") (x + "r") (x + "ne") ;
+       NNeutr      => mk4N x (x      + "t") (x + "r") (init x + "a")
        } ;
     _ => case g of {
-       Utr Masc   => mk4N x (x      + "en") (x + "er") (x + "ene") ;
-       Utr Fem    => mk4N x (x      + "a")  (x + "er") (x + "ene") ;
-       Neutr      => mk4N x (x      + "et") (x + "")   (x + "a")
+       NUtr Masc   => mk4N x (x      + "en") (x + "er") (x + "ene") ;
+       NUtr Fem    => mk4N x (x      + "a")  (x + "er") (x + "ene") ;
+       NNeutr      => mk4N x (x      + "et") (x + "")   (x + "a")
        }
     } ;
 
@@ -316,16 +316,16 @@ oper
   regN2 n g = mkN2 (regGenN n g) (mkPrep "av") ;
   mkN3 = \n,p,q -> n ** {lock_N3 = <> ; c2 = mkComplement  p.s ; c3 = mkComplement  q.s} ;
 
-  regGenPN n g = {s = \\c => mkCase c n ; g = g} ** {lock_PN = <>} ;
+  regGenPN n g = {s = \\c => mkCase c n ; g = ngen2gen g} ** {lock_PN = <>} ;
   regPN n = regGenPN n utrum ;
-  nounPN n = {s = n.s ! singular ! Indef ; g = n.g ; lock_PN = <>} ;
+  nounPN n = {s = n.s ! singular ! Indef ; g = ngen2gen n.g ; lock_PN = <>} ;
 
 -- To form a noun phrase that can also be plural and have an irregular
 -- genitive, you can use the worst-case function.
 
   makeNP : Str -> Str -> Number -> Gender -> NP ; 
   makeNP x y n g = 
-    {s = table {NPPoss _ => x ; _ => y} ; a = agrP3 g n ;
+    {s = table {NPPoss _ => x ; _ => y} ; a = agrP3 (ngen2gen g) n ;
      lock_NP = <>} ;
 
   mk3A = mk3ADeg ; ---- (mkAdject a b c [] []) ** {isComp = False ; lock_A = <>} ;

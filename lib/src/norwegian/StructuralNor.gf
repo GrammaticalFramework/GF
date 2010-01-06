@@ -7,7 +7,7 @@ concrete StructuralNor of Structural = CatNor **
   above_Prep = ss "ovenfor" ;
   after_Prep = ss "etter" ;
   by8agent_Prep = ss "av" ;
-  all_Predet = {s = gennumForms "all" "alt" "alle"} ;
+  all_Predet = {s = detForms "all" "alt" "alle" ; p = [] ; a = PNoAg} ;
   almost_AdA, almost_AdN = ss "nesten" ;
   although_Subj = ss ["selv om"] ;
   always_AdV = ss "altid" ;
@@ -24,15 +24,15 @@ concrete StructuralNor of Structural = CatNor **
     {c2 = mkComplement [] ; lock_VV = <>} ;
   during_Prep = ss "under" ;
   either7or_DConj = sd2 "enten" "eller" ** {n = Sg} ;
-  everybody_NP = regNP "alle" "alles" Plg ;
+  everybody_NP = regNP "alle" "alles" Utr Pl ;
   every_Det = {s = \\_,_ => "hver" ; sp = \\_,_ =>"enhver" ; n = Sg ; det = DDef Indef} ;
-  everything_NP = regNP "alt" "alts" SgNeutr ;
+  everything_NP = regNP "alt" "alts" Neutr Sg ;
   everywhere_Adv = ss "overalt" ;
   few_Det  = {s,sp = \\_,_ => "få" ; n = Pl ; det = DDef Indef} ;
 ---  first_Ord = {s = "første" ; isDet = True} ; DEPREC
   for_Prep = ss "for" ;
   from_Prep = ss "fra" ;
-  he_Pron = MorphoNor.mkNP "han"  "ham"  "hans" "hans" "hans"  SgUtr P3 ;
+  he_Pron = MorphoNor.mkNP "han"  "ham"  "hans" "hans" "hans"  Utr Sg P3 ;
   here_Adv = ss "her" ;
   here7to_Adv = ss "hit" ;
   here7from_Adv = ss "herfra" ;
@@ -41,33 +41,33 @@ concrete StructuralNor of Structural = CatNor **
   if_Subj = ss "hvis" ;
   in8front_Prep = ss "foran" ;
   i_Pron = 
-    MorphoNor.mkNP "jeg" "meg" (variants {"min" ; "mi"}) "mit" "mine"  SgUtr P1 ; --- mi
+    MorphoNor.mkNP "jeg" "meg" (variants {"min" ; "mi"}) "mit" "mine"  Utr Sg P1 ; --- mi
   in_Prep = ss "i" ;
-  it_Pron = MorphoNor.regNP "det" "dets" SgNeutr ;
+  it_Pron = MorphoNor.regNP "det" "dets" Neutr Sg ;
   less_CAdv = X.mkCAdv "mindre" conjThan ;
   many_Det = {s,sp = \\_,_ => "mange" ; n = Pl ; det = DDef Indef} ;
   more_CAdv = X.mkCAdv "mer" conjThan ;
-  most_Predet = {s = gennumForms ["den meste"] ["det meste"] ["de fleste"]} ;
+  most_Predet = {s = detForms ["den meste"] ["det meste"] ["de fleste"] ; p = [] ; a = PNoAg} ;
   much_Det = {s,sp = \\_,_ => "mye" ; n = Pl ; det = DDef Indef} ;
   must_VV = 
     mkV "måtte" "må" "må" "måtte" "måttet" "mått" ** 
     {c2 = mkComplement [] ; lock_VV = <>} ;
   no_Utt = ss ["nei"] ;
   on_Prep = ss "på" ;
----  one_Quant = {s = \\_ => genderForms ["en"] ["et"] ; n = Sg ; det = DIndef} ; DEPREC
-  only_Predet = {s = \\_ => "kun"} ;
+
+  only_Predet = {s = \\_,_ => "kun" ; p = [] ; a = PNoAg} ;
   or_Conj = {s1 = [] ; s2 = "eller" ; n = Pl} ;
   otherwise_PConj = ss "annarledes" ;
   part_Prep = ss "av" ;
   please_Voc = ss "takk" ; ---
   possess_Prep = ss "av" ;
   quite_Adv = ss "temmelig" ;
-  she_Pron = MorphoNor.mkNP "hun" "henne" "hennes" "hennes" "hennes"  SgUtr P3 ;
+  she_Pron = MorphoNor.mkNP "hun" "henne" "hennes" "hennes" "hennes"  Utr Sg P3 ;
   so_AdA = ss "så" ;
   someSg_Det = {s,sp = \\_ => genderForms "noen" "noe" ; n = Sg ; det = DIndef} ;
   somePl_Det = {s,sp = \\_,_ => "noen" ; n = Pl ; det = DIndef} ;
-  somebody_NP = regNP "noen" "noens" SgUtr ;
-  something_NP = regNP "noe" "noes" SgNeutr ;
+  somebody_NP = regNP "noen" "noens" Utr Sg ;
+  something_NP = regNP "noe" "noes" Neutr Sg ;
   somewhere_Adv = ss ["et eller annet sted"] ; ---- ?
   that_Quant = 
     {s,sp = table {
@@ -80,7 +80,7 @@ concrete StructuralNor of Structural = CatNor **
   there7to_Adv = ss "dit" ;
   there7from_Adv = ss "derfra" ;
   therefore_PConj = ss "derfor" ;
-  they_Pron = MorphoNor.mkNP "de" "dem" "deres" "deres" "deres" Plg P1 ;
+  they_Pron = MorphoNor.mkNP "de" "dem" "deres" "deres" "deres" Utr Pl P1 ;
   this_Quant = 
     {s,sp = table {
        Sg => \\_,_ => genderForms ["denne"] ["dette"] ; 
@@ -96,9 +96,9 @@ concrete StructuralNor of Structural = CatNor **
   want_VV = 
     mkV "ville" "vil" "vill" "ville" "villet" "villed" ** 
     {c2 = mkComplement [] ; lock_VV = <>} ;
-  we_Pron = MorphoNor.mkNP "vi"  "oss"  "vår" "vårt" "våre"  Plg P1 ;
-  whatSg_IP = {s = \\_ => "hva" ; gn = SgUtr} ; ---- infl
-  whatPl_IP = {s = \\_ => "hva" ; gn = Plg} ; ---- infl
+  we_Pron = MorphoNor.mkNP "vi"  "oss"  "vår" "vårt" "våre"  Utr Pl P1 ;
+  whatSg_IP = {s = \\_ => "hva" ; g = Neutr ; n = Sg} ; ---- infl
+  whatPl_IP = {s = \\_ => "hva" ; g = Neutr ; n = Pl} ; ---- infl
   when_IAdv = ss "når" ;
   when_Subj = ss "når" ;
   where_IAdv = ss "hver" ;
@@ -109,22 +109,22 @@ concrete StructuralNor of Structural = CatNor **
       } ; 
     det = DIndef
     } ;
-  whoSg_IP = {s = vem.s ; gn = SgUtr} ;
-  whoPl_IP = {s = \\_ => "hvilke" ; gn = Plg} ;
+  whoSg_IP = {s = vem.s ; g = Utr ; n = Sg} ;
+  whoPl_IP = {s = \\_ => "hvilke" ; g = Utr ; n = Pl} ;
   why_IAdv = ss "hvorfor" ;
   without_Prep = ss "uten" ;
   with_Prep = ss "med" ;
   yes_Utt = ss ["ja"] ;
   youSg_Pron = 
-    MorphoNor.mkNP "du" "deg" (variants {"din" ; "di"}) "dit" "dine" SgUtr P2 ; ----
-  youPl_Pron = MorphoNor.mkNP "dere" "dere" "deres" "deres" "deres"  Plg P2 ;
-  youPol_Pron = MorphoNor.mkNP "Dere" "Dere" "Deres" "Deres" "Deres"  SgUtr P2 ; --- wrong in refl
+    MorphoNor.mkNP "du" "deg" (variants {"din" ; "di"}) "dit" "dine" Utr Sg P2 ; ----
+  youPl_Pron = MorphoNor.mkNP "dere" "dere" "deres" "deres" "deres"  Utr Pl P2 ;
+  youPol_Pron = MorphoNor.mkNP "Dere" "Dere" "Deres" "Deres" "Deres"  Utr Sg P2 ; --- wrong in refl
   have_V2 = dirV2 IrregNor.ha_V ;
 
 -- Auxiliaries that are used repeatedly.
 
   oper
-    vem = MorphoNor.mkNP "hvem" "hvem" "hvis" "hvis" "hvis" SgUtr P3 ;
+    vem = MorphoNor.mkNP "hvem" "hvem" "hvis" "hvis" "hvis" Utr Sg P3 ;
 
   lin language_title_Utt = ss "norsk" ;
 
