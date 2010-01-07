@@ -78,8 +78,6 @@ body {
 #tree {
 	left: -10px;
 	top: -10px;	
-	width: 250px;
-	height: 250px;
 	margin: 0px;
 	padding: 10px;
 	overflow: auto;
@@ -232,10 +230,23 @@ span.normal {
 	color: black;
 	background-color: white;
 	text-decoration: none;
+    padding-left: 2px;
+    padding-right: 2px;
+}
+
+span.edit {
+	color: black;
+	background-color: white;
+	text-decoration: none;
+    border:2px inset;
+    padding-left: 2px;
+    padding-right: 2px;
 }
 
 span.selected {
 	color: white;
 	background-color: #3366CC;
 	text-decoration: none;
+    padding-left: 2px;
+    padding-right: 2px;
 }

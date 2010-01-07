@@ -99,19 +99,28 @@ function hotKeys(event) {
 	event = (event) ? event : ((window.event) ? event : null);
 	if (event) {
 		var charCode = (event.charCode) ? event.charCode : ((event.which) ? event.which : event.keyCode);
+        
+        if (document.getElementById("actParse").className == "selected" && charCode != 27)
+          return true;
+
 		if (keys[String.fromCharCode(charCode).toUpperCase()] &&
 			!event.ctrlKey && !event.altKey && !event.shiftKey && !event.metaKey) {
 		    	keys[String.fromCharCode(charCode).toUpperCase()]();
+                return false;
 		}
 		else if (keys["" + charCode] &&
 			!event.ctrlKey && !event.altKey && !event.shiftKey && !event.metaKey) {
 				keys["" + charCode]();
+                return false;
 		}
 		else if (charCode >= "96" && charCode <= "105" &&
 			!event.ctrlKey && !event.altKey && !event.shiftKey && !event.metaKey) {
 				keys["" + (charCode - 96)]();
+                return false;
 		}
 	}
+    
+    return true;
 }
 
 // Clears "numeric" hotkeys
@@ -152,7 +161,7 @@ function getNode(nodeName, node) {
 
 // Action to be performed when the left arrow key is pressed
 function leftArrowKey() {
-	var node = getNode(selectedNode, myTree);
+    var node = getNode(selectedNode, myTree);
 	if (!node.collapsed && node.hasChildren()) {
 		signClick(node.name, node.caption);
 	}
@@ -180,7 +189,7 @@ function getParent(nodeName, node) {
 
 // Action to be performed when the right arrow key is pressed
 function rightArrowKey() {
-	var node = getNode(selectedNode, myTree);
+    var node = getNode(selectedNode, myTree);
 	if (node.collapsed) {
 		signClick(node.name, node.caption);
 	}
@@ -269,6 +278,107 @@ function getLinearizedFrame() {
 	return linearizedFrame.join("");
 }
 
+// Linearizes and displays the abstract tree
+function drawEditFrame() {
+	var frame = document.getElementById("conFrame");
+	frame.innerHTML = getEditFrame();
+}
+
+// Linearizes the abstract tree and returns it in HTML form
+function getEditFrame() {
+  var editFrame = new Array();
+  for (var i in grammar.concretes) {
+    editFrame.push("<h4>", i, "</h4>");
+    editFrame.push("<p id='line", i, "'>");
+    if (abstractTree.isMeta()) {
+      editFrame.push("<span class='edit' contenteditable=true onkeydown='return editFrameKeyDown(this,\"",i,"\",event)'>&nbsp;");
+      isLastSelected = true;
+    } else {
+      var tokens = grammar.concretes[i].tagAndLinearize(abstractTree);
+      var isLastSelected = false;
+      for (var j = 0, k = tokens.length; j < k; j++) {
+        var token = tokens[j];
+        var node = getNode(token.tag, myTree);
+	        
+	    if (node.name.substr(0, selectedNode.length) == selectedNode) {
+		  if (!isLastSelected) {
+            editFrame.push("<span class='edit' contenteditable=true onkeydown='return editFrameKeyDown(this,\"",i,"\",event)'>");
+            isLastSelected = true;
+          }
+              
+          if (token == "&-")
+            editFrame.push("<br/>");
+	      else
+            editFrame.push(token+" ");
+	    } else {
+          if (isLastSelected) {
+		    editFrame.push("</span>");
+            isLastSelected = false;
+          }
+              
+	      if (token == "&-")
+            editFrame.push("<br/>");
+          else
+            editFrame.push("<span id='", token.tag, "' class='normal'>", token, "</span>");
+	    }
+      }
+    }
+
+    if (isLastSelected) {
+	  editFrame.push("</span>");
+      isLastSelected = false;
+    }
+
+    editFrame.push("</p>");
+  }
+  editFrame.push("<h4>Abstract</h4>");
+  editFrame.push("<p id='lineAbstract'>", createLinearizedFromAbstract(myTree, "0"), "</p>");
+  return editFrame.join("");
+}
+
+function editFrameKeyDown(me,lang,event) {
+  event = (event) ? event : ((window.event) ? event : null);
+  if (event) {
+    var charCode = (event.charCode) ? event.charCode : ((event.which) ? event.which : event.keyCode);
+
+    if (charCode == 13) {
+      refPageCounter = 0;
+      parseTrees = undefined;
+      var string = me.innerText;
+      if (string || string == "") {
+        var node = getNode(selectedNode, myTree);
+        switch (node.cat) {
+          case "String": parseTrees = [new Fun('"'+string+'"')]; break;
+          case "Int":    if (isNaN(string) || (string && string.indexOf(".") != -1))
+                           parseTrees = new Array();
+                         else
+                           parseTrees = [new Fun(string)];
+                         break;
+          case "Float":  if (isNaN(string))
+                           parseTrees = new Array();
+                         else
+                           parseTrees = [new Fun(string)];
+                         break;
+          default:       parseTrees = grammar.concretes[lang].parser.parseString(string, node.cat); break;
+        }
+        if (parseTrees.length == 1) {
+          pushUndoClearRedo();
+          abstractTree = insertNode(abstractTree, selectedNode, "0", grammar.abstract.copyTree(grammar.abstract.handleLiterals(parseTrees[0], node.cat)));
+          document.getElementById("actFrame").innerHTML = showActions();
+          document.getElementById("refFrame").innerHTML = "";
+          clearHotKeys();
+          concludeAction();
+        } else if (parseTrees.length > 1) {
+          document.getElementById("refFrame").innerHTML = showTrees();
+        }
+      }
+      return false;
+    }
+  }
+  
+  return true;
+}
+
 // Creates an HTML representation of a linearization of an abstract tree
 function createLinearized(token) {
 	var node = getNode(token.tag, myTree);
@@ -281,7 +391,7 @@ function createLinearized(token) {
 		linearized.push("'normal'");
 	}
 	if (token == "&-") { linearized.push("<br />"); }
-	else { linearized.push(" onclick='nodeClick(\"", node.name, "\");'>&nbsp;", token, " </span>"); }
+	else { linearized.push(" onclick='nodeClick(\"", node.name, "\");'>", token, "</span>"); }
 	return linearized.join("");
 }
 
@@ -486,12 +596,6 @@ function showActions(caption) {
 		actions.push(createAction("Refine", "action", "SingleWordCommand Refine", "R"));
 		actions.push(createAction("Replace", "unavailable", "SingleWordCommand Replace", "E"));
 		actions.push(createAction("Wrap", "unavailable", "SingleWordCommand Wrap", "W"));
-		for (var i in grammar.concretes) {
-			if (grammar.concretes[i].parser) {
-				actions.push(createAction("Parse", "action", "Command Parse IndefSgDet String_N", "P"));
-			} else { actions.push(createAction("Parse", "unavailable", "Command Parse IndefSgDet String_N", "P")); }
-			break;
-		}
 	}
 	else if (node.caption) {	
 		actions.push(createAction("Cut", "action", "SingleWordCommand Cut", "X"));
@@ -501,8 +605,15 @@ function showActions(caption) {
 		actions.push(createAction("Refine", "unavailable", "SingleWordCommand Refine", "R"));
 		actions.push(createAction("Replace", "action", "SingleWordCommand Replace", "E"));
 		actions.push(createAction("Wrap", "action", "SingleWordCommand Wrap", "W"));
-		actions.push(createAction("Parse", "unavailable", "Command Parse IndefSgDet String_N", "P"));
 	}
+    
+    for (var i in grammar.concretes) {
+	  if (grammar.concretes[i].parser) {
+		actions.push(createAction("Parse", "action", "Command Parse IndefSgDet String_N", "P"));
+	  } else { actions.push(createAction("Parse", "unavailable", "Command Parse IndefSgDet String_N", "P")); }
+	  break;
+	}
+
 	if (node && !abstractNode.isComplete()) {	
 		actions.push(createAction("RandomNode", "action", "RandomlyCommand Refine DefSgDet Node", "N"));
 	}
@@ -530,55 +641,14 @@ function createAction(actionName, className, caption, hotKey) {
 // When the "Refine" action is selected, gets the appropriate refinements for a node
 function clickRefine(actName) {
 	if (document.getElementById(actName).className == "action") {
-		highlightSelectedAction(actName);
-		pushUndoClearRedo();
 		if (selectedNode) {
 			refPageCounter = 0;
 			var node = getNodeFromAbstract(abstractTree, selectedNode, "0");
 			if (node.type == "String" || node.type == "Int" || node.type == "Float") {
-				var newType = undefined;
-				var newTypeCat = node.type + "_Literal_";
-				switch(node.type)
-				{
-					case "String":
-						var msg = editorGrammar.concretes[selectedLanguage].linearize(editorGrammar.abstract.parseTree("Command Enter IndefSgDet String_N", editorGrammar.abstract.startcat));
-						newType = prompt(msg.substring(0,1).toUpperCase().concat(msg.substring(1)),'String');
-						if (!newType) { newType = "AutoString"; }
-						break;
-					case "Int":
-						while (isNaN(newType) || (newType && newType.indexOf(".") != -1)) {
-							var msg = editorGrammar.concretes[selectedLanguage].linearize(editorGrammar.abstract.parseTree("Command Enter IndefSgDet Integer_N", editorGrammar.abstract.startcat));
-							newType = prompt(msg.substring(0,1).toUpperCase().concat(msg.substring(1)),'Int');
-						}
-						if (!newType) { newType = "8"; }
-						break;
-					case "Float":
-						while (isNaN(newType)) {
-							var msg = editorGrammar.concretes[selectedLanguage].linearize(editorGrammar.abstract.parseTree("Command Enter IndefSgDet Float_N", editorGrammar.abstract.startcat));
-							newType = prompt(msg.substring(0,1).toUpperCase().concat(msg.substring(1)),'Float');
-						}
-						if (!newType) { newType = "8.0"; }
-						if (newType.indexOf(".") == -1) { newType += ".0"; }
-						break;
-				}
-				if (node.type == "String") {
-					newTypeCat += "\"" + newType + "\"";
-				} else {
-					newTypeCat += newType;
-				}
-				if (!grammar.abstract.types[newTypeCat]) {
-					grammar.abstract.addType(newTypeCat, [], node.type);
-					for (var i in grammar.concretes) {
-						grammar.concretes[i].addRule(newTypeCat, function(cs){ return new Arr(new Str(newType));});
-					}
-				}
-				node.name = newTypeCat;
-				abstractTree = insertNode(abstractTree, selectedNode, "0", node);
-				document.getElementById("actFrame").innerHTML = showActions();
-				document.getElementById("refFrame").innerHTML = "";
-				clearHotKeys();
-				concludeAction();
+                clickParse("actParse");
 			} else {
+                highlightSelectedAction(actName);
+		        pushUndoClearRedo();
 				document.getElementById("refFrame").innerHTML = showRefinements(selectedNode);
 			}
 		}
@@ -892,31 +962,9 @@ function clickParse(actName) {
 		highlightSelectedAction(actName);
 		var node = getNode(selectedNode, myTree);
 		if (selectedNode) {
-			refPageCounter = 0;
-			parseTrees = undefined;
-			var msg = editorGrammar.concretes[selectedLanguage].linearize(editorGrammar.abstract.parseTree("Command Enter IndefSgDet String_N", editorGrammar.abstract.startcat));
-			var string = prompt(msg.substring(0,1).toUpperCase().concat(msg.substring(1)),'String');
-			if (string || string == "") {
-				for (var i in grammar.concretes) {	
-					parseTrees = grammar.concretes[i].parser.parseString(string, node.cat);
-					if (parseTrees.length == 1) {
-						pushUndoClearRedo();
-						abstractTree = insertNode(abstractTree, selectedNode, "0", grammar.abstract.copyTree(grammar.abstract.handleLiterals(parseTrees[0], node.cat)));
-						document.getElementById("actFrame").innerHTML = showActions();
-						document.getElementById("refFrame").innerHTML = "";
-						clearHotKeys();
-						concludeAction();
-						return false;
-					} else if (parseTrees.length > 1) {
-						document.getElementById("refFrame").innerHTML = showTrees();
-						return false;
-					}
-				}
-			} else { nodeClick(selectedNode); return false; }
-			var lin = editorGrammar.concretes[selectedLanguage].linearize(editorGrammar.abstract.parseTree("ErrorMessage Available Tree", editorGrammar.abstract.startcat));
-			alert(lin.substring(0,1).toUpperCase().concat(lin.substring(1)));
+          pushUndoClearRedo();
+          drawEditFrame();
 		}
-		nodeClick(selectedNode);
 	}
 }
 
