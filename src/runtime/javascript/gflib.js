@@ -448,12 +448,44 @@ Parser.prototype.showRules = function () {
 	}
 	return ruleStr.join("");
 };
+Parser.prototype.tokenize = function (string) {
+    var inToken = false;
+    var start, end;
+    var tokens = new Array();
+
+    for (var i = 0; i < string.length; i++) {
+      if (  string.charAt(i) == ' '       // space
+	     || string.charAt(i) == '\f'      // form feed
+	     || string.charAt(i) == '\n'      // newline
+	     || string.charAt(i) == '\r'      // return
+	     || string.charAt(i) == '\t'      // horizontal tab
+	     || string.charAt(i) == '\v'      // vertical tab
+         || string.charAt(i) == String.fromCharCode(160) // &nbsp;
+         ) {
+	    if (inToken) {
+          end = i-1;
+          inToken = false;
+          
+          tokens.push(string.substr(start,end-start+1));
+        }
+	  } else {
+        if (!inToken) {
+          start = i;
+          inToken = true;
+        }
+      }
+    }
+    
+    if (inToken) {
+      end = i-1;
+      inToken = false;
+          
+      tokens.push(string.substr(start,end-start+1));
+    }
+    return tokens;
+};
 Parser.prototype.parseString = function (string, cat) {
-	var tokens = string.split(" ");
-	// remove empty tokens
-	for (var i = tokens.length - 1; i >= 0; i--) {
-		if (tokens[i] == "") { tokens.splice(i, 1); }
-	}
+	var tokens = this.tokenize(string);
     
 	var ps = new ParseState(this, cat);
 	for (var i in tokens) {
