@@ -1,9 +1,16 @@
 abstract Test = {
 
-cat P ;
+cat S ;
 cat E ;
 
-fun Exist : (E -> P) -> P ;
-    Even  : E -> P ;
+fun Exist : (E -> S) -> S ;
+    Even  : E -> S ;
+
+fun a : E ;
+    f,fa,fb : E -> S ;
+
+fun IsString  : String -> S ;
+    IsInteger : Int    -> S ;
+    IsFloat   : Float  -> S ;
 
 }
