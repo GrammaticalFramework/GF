@@ -192,9 +192,6 @@ extractTrees (PState pgf pinfo chart items) ty@(DTyp _ start _) =
     freeVar (EFun v) = Set.singleton v
     freeVar _        = Set.empty
 
-_B = mkCId "_B"
-_V = mkCId "_V"
-
 process mbt fn !seqs !funs []                                                 acc chart = (acc,chart)
 process mbt fn !seqs !funs (item@(Active j ppos funid seqid args key0):items) acc chart
   | inRange (bounds lin) ppos =

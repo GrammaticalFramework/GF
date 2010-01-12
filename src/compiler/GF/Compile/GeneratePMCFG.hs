@@ -431,9 +431,6 @@ expandHOAS abs_defs cnc_defs lincats lindefs env =
             Nothing    -> error $ "No lincat for " ++ showCId cat
             Just ctype -> ctype
 
-    _B = mkCId "_B"
-    _V = mkCId "_V"
-
 addProduction :: GrammarEnv -> FCat -> Production -> GrammarEnv
 addProduction (GrammarEnv last_id catSet seqSet funSet crcSet prodSet) cat p =
   GrammarEnv last_id catSet seqSet funSet crcSet (IntMap.insertWith Set.union cat (Set.singleton p) prodSet)
