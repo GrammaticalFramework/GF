@@ -148,3 +148,6 @@ cidString = mkCId "String"
 cidInt    = mkCId "Int"
 cidFloat  = mkCId "Float"
 cidVar    = mkCId "__gfVar"
+
+_B = mkCId "__gfB"
+_V = mkCId "__gfV"
