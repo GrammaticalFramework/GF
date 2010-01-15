@@ -191,7 +191,8 @@ pTyped = do RP.skipSpaces
             return (ETyped e ty)
 
 pMeta = do RP.char '?'
-           return 0
+           ds <- RP.munch isDigit
+           return (read ('0':ds))
 
 pLit :: RP.ReadP Literal
 pLit = liftM LStr (RP.readS_to_P reads)
