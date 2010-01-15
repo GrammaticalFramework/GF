@@ -39,9 +39,9 @@ pOption = do
   RP.option (OOpt flg) (fmap (OFlag flg) (RP.char '=' >> pValue))
 
 pValue = do
-  fmap (VInt . read) (RP.munch1 isDigit)
+  fmap VInt (RP.readS_to_P reads)
   RP.<++
-  fmap VStr pStr
+  fmap VStr (RP.readS_to_P reads)
   RP.<++
   fmap VId  pFilename
 
