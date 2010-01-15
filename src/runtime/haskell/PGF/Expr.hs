@@ -15,7 +15,7 @@ module PGF.Expr(Tree, BindType(..), Expr(..), Literal(..), Patt(..), Equation(..
                 MetaId,
 
                 -- helpers
-                pMeta,pStr,pArg,pLit,freshName,ppMeta,ppLit,ppParens
+                pMeta,pArg,pLit,freshName,ppMeta,ppLit,ppParens
                ) where
 
 import PGF.CId
@@ -194,16 +194,11 @@ pMeta = do RP.char '?'
            return 0
 
 pLit :: RP.ReadP Literal
-pLit = pNum RP.<++ liftM LStr pStr
-
-pNum = do x <- RP.munch1 isDigit
-          ((RP.char '.' >> RP.munch1 isDigit >>= \y -> return (LFlt (read (x++"."++y))))
-           RP.<++
-           (return (LInt (read x))))
-
-pStr = RP.char '"' >> (RP.manyTill (pEsc RP.<++ RP.get) (RP.char '"'))
-       where
-         pEsc = RP.char '\\' >> RP.get    
+pLit = liftM LStr (RP.readS_to_P reads)
+       RP.<++
+       liftM LInt (RP.readS_to_P reads)
+       RP.<++
+       liftM LFlt (RP.readS_to_P reads)
 
 
 -----------------------------------------------------
