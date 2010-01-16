@@ -115,9 +115,9 @@ convertRule cnc_defs grammarEnv (PFRule fun args res ctypes ctype term) =
       b     = runBranchM (convertTerm cnc_defs [] ctype term) (pargs,[])
       (grammarEnv1,b1) = addSequences' grammarEnv b
       grammarEnv2 = brk (\grammarEnv -> foldBM addRule
-                                grammarEnv
-                                (go' b1 [] [])
-                                (pres,pargs)  ) grammarEnv1
+                                               grammarEnv
+                                               (go' b1 [] [])
+                                               (pres,pargs)  ) grammarEnv1
   in grammarEnv2
   where
     addRule lins (newCat', newArgs') env0 =
@@ -149,21 +149,15 @@ runBranchM :: BranchM (Value a) -> ([ProtoFCat],[FSymbol]) -> Branch a
 runBranchM (BM m) s = m (\v s -> Return v) s
 
 variants :: [a] -> BranchM a
-variants xs = BM (\c s -> Variant (go xs c s))
-  where
-    go []     c s = []
-    go (x:xs) c s = c x s : go xs c s
+variants xs = BM (\c s -> Variant [c x s | x <- xs])
 
 choices :: Int -> FPath -> BranchM FIndex
 choices nr path = BM (\c s -> let (args,_) = s
 		                  PFCat _ _ _ tcs = args !! nr
                               in case fromMaybe (error "evalTerm: wrong path") (lookup path tcs) of
                                    [index] -> c index s
-                                   indices -> Case nr path (go indices c s))
-  where
-    go []     c s = []
-    go (i:is) c s = (c i (updateEnv i s)) : go is c s
-    
+                                   indices -> Case nr path [c i (updateEnv i s) | i <- indices])
+  where    
     updateEnv index (args,seq) = (updateNth (restrictArg path index) nr args,seq)
 
     restrictArg path index (PFCat n cat rcs tcs) = PFCat n cat rcs (addConstraint path index tcs)
@@ -178,9 +172,6 @@ mkRecord xs = BM (\c -> go xs (c . Rec))
   where
     go []        c s = c [] s
     go (BM m:fs) c s = go fs (\bs s -> c (m (\v s -> Return v) s : bs) s) s
-
--- cutBranch :: BranchM (Value a) -> BranchM (Branch a)
--- cutBranch (BM m) = BM (\c e -> c (m (\v e -> Return v) e) e)
 
 
 ----------------------------------------------------------------------
