@@ -14,7 +14,7 @@ module GF.Command.Commands (
 
 import PGF
 import PGF.CId
-import PGF.ShowLinearize
+import PGF.Linearize
 import PGF.VisualizeTree
 import PGF.Macros
 import PGF.Data ----
@@ -344,9 +344,7 @@ allCommands cod env@(pgf, mos) = Map.fromList [
        ("all","show all forms and variants"),
        ("bracket","show tree structure with brackets and paths to nodes"),
        ("multi","linearize to all languages (default)"),
-       ("record","show source-code-like record"),
        ("table","show all forms labelled by parameters"),
-       ("term", "show PGF term"),
        ("treebank","show the tree and tag linearizations with language names")
        ] ++ stringOpOptions,
      flags = [
@@ -797,11 +795,9 @@ allCommands cod env@(pgf, mos) = Map.fromList [
     
    linear :: [Option] -> CId -> Expr -> String
    linear opts lang = let unl = unlex opts lang in case opts of
-       _ | isOpt "all"     opts -> allLinearize unl pgf lang
-       _ | isOpt "table"   opts -> tableLinearize unl pgf lang
-       _ | isOpt "term"    opts -> termLinearize pgf lang
-       _ | isOpt "record"  opts -> recordLinearize pgf lang
-       _ | isOpt "bracket" opts -> markLinearize pgf lang
+       _ | isOpt "all"     opts -> unlines . concat . intersperse [[]] . map (map (unl . snd))                 . tabularLinearizes pgf lang
+       _ | isOpt "table"   opts -> unlines . concat . intersperse [[]] . map (map (\(p,v) -> p+++":"+++unl v)) . tabularLinearizes pgf lang
+       _ | isOpt "bracket" opts -> unlines . markLinearizes pgf lang
        _                        -> unl . linearize pgf lang
 
    unlex opts lang = stringOps Nothing (getUnlex opts lang ++ map prOpt opts) ----
@@ -957,4 +953,3 @@ prMorphoAnalysis (w,lps) =
 
 morphoMissing :: Morpho -> [String] -> [String]
 morphoMissing mo ws = [w | w <- ws, null (lookupMorpho mo w)]
-

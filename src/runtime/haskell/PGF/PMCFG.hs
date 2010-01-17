@@ -34,12 +34,13 @@ data Alternative =
   deriving (Eq,Ord,Show)
 
 data ParserInfo
-    = ParserInfo { functions   :: Array FunId FFun
-                 , sequences   :: Array SeqId FSeq
-                 , productions0:: IntMap.IntMap (Set.Set Production)    -- this are the original productions as they are loaded from the PGF file
-                 , productions :: IntMap.IntMap (Set.Set Production)    -- this are the productions after the filtering for useless productions
-                 , startCats   :: Map.Map CId (FCat,FCat,Array FIndex String)  -- for every category - start/end FCat and a list of label names
-                 , totalCats   :: {-# UNPACK #-} !FCat
+    = ParserInfo { functions    :: Array FunId FFun
+                 , sequences    :: Array SeqId FSeq
+                 , productions  :: IntMap.IntMap (Set.Set Production)                 -- the original productions loaded from the PGF file
+                 , pproductions :: IntMap.IntMap (Set.Set Production)                 -- productions needed for parsing
+                 , lproductions :: Map.Map CId (IntMap.IntMap (Set.Set Production))   -- productions needed for linearization
+                 , startCats    :: Map.Map CId (FCat,FCat,Array FIndex String)        -- for every category - start/end FCat and a list of label names
+                 , totalCats    :: {-# UNPACK #-} !FCat
                  }
 
 
@@ -98,22 +99,3 @@ ppFCat  fcat
 
 ppFunId funid = char 'F' <> int funid
 ppSeqId seqid = char 'S' <> int seqid
-
-
-filterProductions = closure
-  where
-    closure prods0
-      | IntMap.size prods == IntMap.size prods0 = prods
-      | otherwise                               = closure prods
-      where
-        prods = IntMap.mapMaybe (filterProdSet prods0) prods0
-
-    filterProdSet prods set0
-      | Set.null set = Nothing
-      | otherwise    = Just set
-      where
-        set = Set.filter (filterRule prods) set0
-                             
-    filterRule prods (FApply funid args) = all (\fcat -> isLiteralFCat fcat || IntMap.member fcat prods) args
-    filterRule prods (FCoerce fcat)      = isLiteralFCat fcat || IntMap.member fcat prods
-    filterRule prods _                   = True

@@ -5,7 +5,7 @@ import GF.Compile.Export
 import GF.Compile.GeneratePMCFG
 
 import PGF.CId
-import PGF.Linearize(realize)
+import PGF.Macros(updateProductionIndices)
 import qualified PGF.Macros as CM
 import qualified PGF.Data as C
 import qualified PGF.Data as D
@@ -46,7 +46,7 @@ mkCanon2gfcc opts cnc gr =
 -- Adds parsers for all concretes
 addParsers :: Options -> D.PGF -> IO D.PGF
 addParsers opts pgf = do cncs <- sequence [conv lang cnc | (lang,cnc) <- Map.toList (D.concretes pgf)]
-                         return pgf { D.concretes = Map.fromList cncs }
+                         return $ updateProductionIndices $ pgf { D.concretes = Map.fromList cncs }
   where
     conv lang cnc = do pinfo <- convertConcrete opts (D.abstract pgf) lang cnc
                        return (lang,cnc { D.parser = Just pinfo })
@@ -586,3 +586,31 @@ requiredCanModules isSingle gr c = nub $ filter notReuse ops ++ exts where
   notReuse i = errVal True $ do
     m <- M.lookupModule gr i
     return $ M.isModRes m -- to exclude reused Cnc and Abs from required
+
+
+realize :: C.Term -> String
+realize = concat . take 1 . realizes
+
+realizes :: C.Term -> [String]
+realizes = map (unwords . untokn) . realizest
+
+realizest :: C.Term -> [[C.Tokn]]
+realizest trm = case trm of
+  C.R ts     -> realizest (ts !! 0)
+  C.S ss     -> map concat $ combinations $ map realizest ss
+  C.K t      -> [[t]]
+  C.W s t    -> [[C.KS (s ++ r)] | [C.KS r] <- realizest t]
+  C.FV ts    -> concatMap realizest ts
+  C.TM s     -> [[C.KS s]]
+  _ -> [[C.KS $ "REALIZE_ERROR " ++ show trm]] ---- debug
+
+untokn :: [C.Tokn] -> [String]
+untokn ts = case ts of
+  C.KP d _  : [] -> d
+  C.KP d vs : ws -> let ss@(s:_) = untokn ws in sel d vs s ++ ss
+  C.KS s    : ws -> s : untokn ws
+  []             -> []
+ where
+   sel d vs w = case [v | C.Alt v cs <- vs, any (\c -> isPrefixOf c w) cs] of
+     v:_ -> v
+     _   -> d

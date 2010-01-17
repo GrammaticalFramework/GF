@@ -19,7 +19,7 @@ module GF.Quiz (
   ) where
 
 import PGF
-import PGF.ShowLinearize
+import PGF.Linearize
 import GF.Data.Operations
 import GF.Infra.UseIO
 import GF.Infra.Option
@@ -51,11 +51,11 @@ morphologyList :: PGF -> Language -> Type -> Int -> IO [(String,[String])]
 morphologyList pgf ig typ number = do
   ts  <- generateRandom pgf typ >>= return . take (max 1 number)
   gen <- newStdGen
-  let ss    = map (tabularLinearize pgf ig) ts
+  let ss    = map (tabularLinearizes pgf ig) ts
   let size  = length (head ss)
   let forms = take number $ randomRs (0,size-1) gen
-  return [(head (snd (head pws)) +++ par, ws) | 
-           (pws,i) <- zip ss forms, let (par,ws) = pws !! i]
+  return [(snd (head pws0) +++ fst (pws0 !! i), ws) | 
+           (pwss@(pws0:_),i) <- zip ss forms, let ws = map (\pws -> snd (pws !! i)) pwss]
 
 -- | compare answer to the list of right answers, increase score and give feedback 
 mkAnswer :: Encoding -> [String] -> String -> (Integer, String) 

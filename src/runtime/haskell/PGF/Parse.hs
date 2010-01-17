@@ -59,7 +59,7 @@ initState pgf lang (DTyp _ start _) =
   let items = case Map.lookup start (startCats pinfo) of
                 Just (s,e,labels) -> do cat <- range (s,e)
                                         (funid,args) <- foldForest (\funid args -> (:) (funid,args)) (\_ _ args -> args)
-                                                                   [] cat (productions pinfo)
+                                                                   [] cat (pproductions pinfo)
                                         let FFun fn lins = functions pinfo ! funid
                                         (lbl,seqid) <- assocs lins
                                         return (Active 0 0 funid seqid args (AK cat lbl))
@@ -72,7 +72,7 @@ initState pgf lang (DTyp _ start _) =
 
   in PState pgf
             pinfo
-            (Chart emptyAC [] emptyPC (productions pinfo) (totalCats pinfo) 0)
+            (Chart emptyAC [] emptyPC (pproductions pinfo) (totalCats pinfo) 0)
             (TMap.singleton [] (Set.fromList items))
 
 -- | From the current state and the next token

@@ -2,6 +2,7 @@ module PGF.Binary where
 
 import PGF.CId
 import PGF.Data
+import PGF.Macros
 import Data.Binary
 import Data.Binary.Put
 import Data.Binary.Get
@@ -28,10 +29,11 @@ instance Binary PGF where
            gflags <- get
            abstract <- get
            concretes <- get
-           return (PGF{ absname=absname, cncnames=cncnames
-                      , gflags=gflags
-                      , abstract=abstract, concretes=concretes
-                      })
+           return $ updateProductionIndices $
+                      (PGF{ absname=absname, cncnames=cncnames
+                          , gflags=gflags
+                          , abstract=abstract, concretes=concretes
+                          })
 
 instance Binary CId where
   put (CId bs) = put bs
@@ -185,15 +187,16 @@ instance Binary Production where
              _ -> decodingError
 
 instance Binary ParserInfo where
-  put p = put (functions p, sequences p, productions0 p, totalCats p, startCats p)
+  put p = put (functions p, sequences p, productions p, totalCats p, startCats p)
   get = do functions   <- get
            sequences   <- get
-           productions0<- get
+           productions <- get
            totalCats   <- get
            startCats   <- get
            return (ParserInfo{functions=functions,sequences=sequences
-                             ,productions0=productions0
-                             ,productions =filterProductions productions0
+                             ,productions = productions
+                             ,pproductions = IntMap.empty
+                             ,lproductions = Map.empty
                              ,totalCats=totalCats,startCats=startCats})
 
 decodingError = fail "This PGF file was compiled with different version of GF"

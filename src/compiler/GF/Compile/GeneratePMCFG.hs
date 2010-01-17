@@ -168,10 +168,7 @@ choices nr path = BM (\c s -> let (args,_) = s
       | otherwise     = c : addConstraint path0 index0 tcs
 
 mkRecord :: [BranchM (Value a)] -> BranchM (Value a)
-mkRecord xs = BM (\c -> go xs (c . Rec))
-  where
-    go []        c s = c [] s
-    go (BM m:fs) c s = go fs (\bs s -> c (m (\v s -> Return v) s : bs) s) s
+mkRecord xs = BM (\c -> foldl (\c (BM m) bs s -> c (m (\v s -> Return v) s : bs) s) (c . Rec) xs [])
 
 
 ----------------------------------------------------------------------
@@ -202,7 +199,7 @@ protoFCat cnc_defs (n,cat) ctype =
                       _    -> error $ "Not a record: " ++ show ctype
       | otherwise = ctype
   
-    loop path rcs tcs (R record) = List.foldl' (\(rcs,tcs) (index,term) -> loop (index:path) rcs tcs term) (rcs,tcs) (zip [0..] record)
+    loop path rcs tcs (R record) = List.foldr (\(index,term) (rcs,tcs) -> loop (index:path) rcs tcs term) (rcs,tcs) (zip [0..] record)
     loop path rcs tcs (C i)      = (     rcs,(path,[0..i]):tcs)
     loop path rcs tcs (S _)      = (path:rcs,              tcs)
     loop path rcs tcs (F id)     = case Map.lookup id cnc_defs of
@@ -229,7 +226,7 @@ go' (Variant bs)      path ss = do b <- member bs
 go' (Return  v)       path ss = go v path ss
 
 go :: Value SeqId -> FPath -> [SeqId] -> BacktrackM Env [SeqId]
-go (Rec xs)    path ss = foldM (\ss (lbl,b) -> go' b (lbl:path) ss) ss (zip [0..] xs)
+go (Rec xs)    path ss = foldM (\ss (lbl,b) -> go' b (lbl:path) ss) ss (reverse (zip [0..] xs))
 go (Str seqid) path ss = return (seqid : ss)
 go (Con i)     path ss = restrictHead path i >> return ss
 
@@ -350,7 +347,7 @@ emptyGrammarEnv cnc_defs lincats params =
       where
         (size,poly) = getMultipliers 1 [] ctype
  
-    getMultipliers m ms (R record)    = foldl (\(m,ms) t -> getMultipliers m ms t) (m,ms) record
+    getMultipliers m ms (R record)    = foldr (\t (m,ms) -> getMultipliers m ms t) (m,ms) record
     getMultipliers m ms (S _)         = (m,ms)
     getMultipliers m ms (C max_index) = (m*(max_index+1),m : ms)
     getMultipliers m ms (F id)        = case Map.lookup id cnc_defs of
@@ -364,17 +361,11 @@ emptyGrammarEnv cnc_defs lincats params =
     getLabels _ t = error (show t)
 
 expandHOAS abs_defs cnc_defs lincats lindefs env = 
-  foldl add_varFun (foldl (\env ncat -> add_hoFun (add_hoCat env ncat) ncat) env hoTypes) hoCats
+  foldl add_varFun (foldl (\env ncat -> add_hoFun (add_hoCat env ncat) ncat) env hoTypes) (Map.keys lincats)
   where
     hoTypes :: [(Int,CId)]
     hoTypes = sortNub [(n,c) | (_,(ty,_,_)) <- abs_defs
                              , (n,c) <- fst (typeSkeleton ty), n > 0]
-
-    hoCats :: [CId]
-    hoCats = sortNub [c | (_,(ty,_,_)) <- abs_defs
-                        , h <- case ty of {DTyp hyps val _ -> hyps}
-                        , let ty = typeOfHypo h
-                        , c <- fst (catSkeleton ty)]
   
     -- add a range of PMCFG categories for each GF high-order category
     add_hoCat env@(GrammarEnv last_id catSet seqSet funSet crcSet prodSet) (n,cat) =
@@ -386,8 +377,7 @@ expandHOAS abs_defs cnc_defs lincats lindefs env =
         
     -- add one PMCFG function for each high-order type: _B : Cat -> Var -> ... -> Var -> HoCat
     add_hoFun env (n,cat) =
-      let linRec = reverse $
-                   [[FSymCat 0 i] | (l,i) <- case arg of {PFCat _ _ rcs _ -> zip rcs [0..]}] ++
+      let linRec = [[FSymCat 0 i] | i <- case arg of {PFCat _ _ rcs _ -> [0..length rcs-1]}] ++
                    [[FSymLit i 0] | i <- [1..n]]
           (env1,lins) = List.mapAccumL addFSeq env linRec
           newLinRec = mkArray lins
@@ -405,13 +395,10 @@ expandHOAS abs_defs cnc_defs lincats lindefs env =
 
     -- add one PMCFG function for each high-order category: _V : Var -> Cat
     add_varFun env cat =
-      convertRule cnc_defs env (PFRule _V [(0,cidVar)] (0,cat) [arg] res lindef)
+      case Map.lookup cat lindefs of
+        Nothing     -> env
+        Just lindef -> convertRule cnc_defs env (PFRule _V [(0,cidVar)] (0,cat) [arg] res lindef)
       where
-        lindef =
-          case Map.lookup cat lindefs of
-            Nothing  -> error $ "No lindef for " ++ showCId cat
-            Just def -> def
-
         arg =
           case Map.lookup cidVar lincats of
             Nothing    -> error $ "No lincat for " ++ showCId cat
@@ -455,15 +442,15 @@ getParserInfo :: GrammarEnv -> ParserInfo
 getParserInfo (GrammarEnv last_id catSet seqSet funSet crcSet prodSet) =
   ParserInfo { functions   = mkArray funSet
              , sequences   = mkArray seqSet
-             , productions0= productions0
-             , productions = filterProductions productions0
+             , productions = IntMap.union prodSet coercions
+             , pproductions = IntMap.empty
+             , lproductions = Map.empty
              , startCats   = maybe Map.empty (Map.map (\(start,end,_,lbls) -> (start,end,lbls))) (IntMap.lookup 0 catSet)
              , totalCats   = last_id+1
              }
   where
     mkArray map = array (0,Map.size map-1) [(v,k) | (k,v) <- Map.toList map]
     
-    productions0 = IntMap.union prodSet coercions
     coercions = IntMap.fromList [(fcat,Set.fromList (map FCoerce sub_fcats)) | (sub_fcats,fcat) <- Map.toList crcSet]
 
 getFCats :: GrammarEnv -> ProtoFCat -> [FCat]

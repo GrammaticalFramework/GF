@@ -102,7 +102,7 @@ graphvizDependencyTree format debug mlab ms pgf lang exp = case format of
 
   ifd s = if debug then s else []
 
-  pot = readPosText $ head $ linearizesMark pgf lang exp
+  pot = readPosText $ concat $ take 1 $ markLinearizes pgf lang exp
   ---- use Just str if you have str to match against
 
   prelude = ["rankdir=LR ;", "node [shape = plaintext] ;"]
@@ -188,9 +188,7 @@ getDepLabels ss = Map.fromList [(mkCId f,ls) | f:ls <- map words ss]
 ---- nubrec and domins are quadratic, but could be (n log n)
 
 graphvizParseTree :: PGF -> CId -> Expr -> String
-graphvizParseTree pgf lang = prGraph False . lin2tree pgf . linMark where
-  linMark = head . linearizesMark pgf lang
-  ---- use Just str if you have str to match against
+graphvizParseTree pgf lang = prGraph False . lin2tree pgf . concat . take 1 . markLinearizes pgf lang where
 
 lin2tree pgf s = trace s $ prelude ++ nodes ++ links where
 
@@ -235,12 +233,12 @@ tag s = "<" ++ s ++ ">"
 showp = init . tail . show
 mtag = tag . ('n':) . uncommas
 
--- word alignments from Linearize.linearizesMark
+-- word alignments from Linearize.markLinearize
 -- words are chunks like {[0,1,1,0] old}
 
 graphvizAlignment :: PGF -> Expr -> String
 graphvizAlignment pgf = prGraph True . lin2graph . linsMark  where
-  linsMark t = [s | la <- cncnames pgf, s <- take 1 (linearizesMark pgf la t)]
+  linsMark t = [concat (take 1 (markLinearizes pgf la t)) | la <- cncnames pgf]
 
 lin2graph :: [String] -> [String]
 lin2graph ss = trace (show ss) $ prelude ++ nodes ++ links
