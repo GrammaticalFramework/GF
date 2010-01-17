@@ -3,10 +3,14 @@ module PGF.Macros where
 import PGF.CId
 import PGF.Data
 import Control.Monad
-import qualified Data.Map   as Map
-import qualified Data.Array as Array
+import qualified Data.Map    as Map
+import qualified Data.Set    as Set
+import qualified Data.IntMap as IntMap
+import qualified Data.IntSet as IntSet
+import qualified Data.Array  as Array
 import Data.Maybe
 import Data.List
+import GF.Data.Utilities(sortNub)
 
 -- operations for manipulating PGF grammars and objects
 
@@ -122,6 +126,10 @@ contextLength :: Type -> Int
 contextLength ty = case ty of
   DTyp hyps _ _ -> length hyps
 
+-- | Show the printname of function or category
+showPrintName :: PGF -> Language -> CId -> String
+showPrintName pgf lang id = lookMap "?" id $ printnames $ lookMap (error "no lang") lang $ concretes pgf
+
 term0 :: CId -> Term
 term0 = TM . showCId
 
@@ -151,3 +159,63 @@ cidVar    = mkCId "__gfVar"
 
 _B = mkCId "__gfB"
 _V = mkCId "__gfV"
+
+updateProductionIndices :: PGF -> PGF
+updateProductionIndices pgf = pgf{concretes = fmap updateConcrete (concretes pgf)}
+  where
+    updateConcrete cnc = 
+      case parser cnc of
+        Nothing    -> cnc
+        Just pinfo -> let prods0    = filterProductions (productions pinfo)
+                          p_prods   = parseIndex pinfo prods0
+                          l_prods   = linIndex   pinfo prods0
+                      in cnc{parser = Just pinfo{pproductions = p_prods, lproductions = l_prods}}
+    
+    filterProductions prods0
+      | IntMap.size prods == IntMap.size prods0 = prods
+      | otherwise                               = filterProductions prods
+      where
+        prods = IntMap.mapMaybe (filterProdSet prods0) prods0
+
+        filterProdSet prods set0
+          | Set.null set = Nothing
+          | otherwise    = Just set
+          where
+            set = Set.filter (filterRule prods) set0
+
+        filterRule prods (FApply funid args) = all (\fcat -> isLiteralFCat fcat || IntMap.member fcat prods) args
+        filterRule prods (FCoerce fcat)      = isLiteralFCat fcat || IntMap.member fcat prods
+        filterRule prods _                   = True
+
+    parseIndex pinfo = IntMap.mapMaybeWithKey filterProdSet
+      where
+        filterProdSet fid prods
+          | fid `IntSet.member` ho_fids = Just prods
+          | otherwise                   = let prods' = Set.filter (not . is_ho_prod) prods
+                                          in if Set.null prods'
+                                               then Nothing
+                                               else Just prods'
+
+        is_ho_prod (FApply _ [fid]) | fid == fcatVar = True
+        is_ho_prod _                                 = False
+
+        ho_fids :: IntSet.IntSet
+        ho_fids = IntSet.fromList [fid | cat <- ho_cats
+                                       , fid <- maybe [] (\(s,e,_) -> [s..e]) (Map.lookup cat (startCats pinfo))]
+
+        ho_cats :: [CId]
+        ho_cats = sortNub [c | (ty,_,_) <- Map.elems (funs (abstract pgf))
+                             , h <- case ty of {DTyp hyps val _ -> hyps}
+                             , let ty = typeOfHypo h
+                             , c <- fst (catSkeleton ty)]
+
+    linIndex pinfo productions = 
+      Map.fromListWith (IntMap.unionWith Set.union)
+                       [(fun,IntMap.singleton res (Set.singleton prod)) | (res,prods) <- IntMap.toList productions
+                                                                        , prod <- Set.toList prods
+                                                                        , fun <- getFunctions prod]
+      where
+        getFunctions (FApply funid args) = let FFun fun _ = functions pinfo Array.! funid in [fun]
+        getFunctions (FCoerce fid)       = case IntMap.lookup fid productions of
+                                             Nothing    -> []
+                                             Just prods -> [fun | prod <- Set.toList prods, fun <- getFunctions prod]

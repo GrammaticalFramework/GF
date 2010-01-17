@@ -1,38 +1,81 @@
-{-# LANGUAGE ParallelListComp #-}
-module PGF.Linearize 
-  (linearizes,showPrintName,realize,realizes,linTree, linTreeMark,linearizesMark) where
+module PGF.Linearize(linearizes,markLinearizes,tabularLinearizes) where
 
 import PGF.CId
 import PGF.Data
 import PGF.Macros
-import PGF.Tree
-
+import Data.Maybe (fromJust)
+import Data.Array.IArray
+import Data.List
 import Control.Monad
 import qualified Data.Map as Map
-import Data.List
-
-import Debug.Trace
+import qualified Data.IntMap as IntMap
+import qualified Data.Set as Set
 
 -- linearization and computation of concrete PGF Terms
 
+type LinTable = Array FIndex [Tokn]
+
 linearizes :: PGF -> CId -> Expr -> [String]
-linearizes pgf lang = realizes . linTree pgf lang
+linearizes pgf lang = map (unwords . untokn . (! 0)) . linTree pgf lang (\_ _ lint -> lint)
 
-realize :: Term -> String
-realize = concat . take 1 . realizes
+linTree :: PGF -> Language -> (Maybe CId -> [Int] -> LinTable -> LinTable) -> Expr -> [LinTable]
+linTree pgf lang mark e = lin0 [] [] [] Nothing e
+  where
+    cnc   = lookMap (error "no lang") lang (concretes pgf)
+    pinfo = fromJust (parser cnc)
+    lp    = lproductions pinfo
 
-realizes :: Term -> [String]
-realizes = map (unwords . untokn) . realizest
+    lin0 path xs ys mb_fid (EAbs _ x e)  = lin0 path (showCId x:xs) ys mb_fid e
+    lin0 path xs ys mb_fid (ETyped e _)  = lin0 path xs ys mb_fid e
+    lin0 path xs ys mb_fid e | null xs   = lin path ys mb_fid e []
+                             | otherwise = apply path (xs ++ ys) mb_fid _B (e:[ELit (LStr x) | x <- xs])
 
-realizest :: Term -> [[Tokn]]
-realizest trm = case trm of
-  R ts     -> realizest (ts !! 0)
-  S ss     -> map concat $ combinations $ map realizest ss
-  K t      -> [[t]]
-  W s t    -> [[KS (s ++ r)] | [KS r] <- realizest t]
-  FV ts    -> concatMap realizest ts
-  TM s     -> [[KS s]]
-  _ -> [[KS $ "REALIZE_ERROR " ++ show trm]] ---- debug
+    lin path xs mb_fid (EApp e1 e2) es = lin path xs mb_fid e1 (e2:es)
+    lin path xs mb_fid (ELit l)     [] = case l of
+                                           LStr s -> return (mark Nothing path (ss s))
+                                           LInt n -> return (mark Nothing path (ss (show n)))
+                                           LFlt f -> return (mark Nothing path (ss (show f)))
+    lin path xs mb_fid (EMeta i)    es = apply path xs mb_fid _V (ELit (LStr ('?':show i)):es)
+    lin path xs mb_fid (EFun f)     es = map (mark (Just f) path) (apply path xs mb_fid f  es)
+    lin path xs mb_fid (EVar  i)    es = apply path xs mb_fid _V (ELit (LStr (xs !! i))   :es)
+    lin path xs mb_fid (ETyped e _) es = lin path xs mb_fid e es
+    lin path xs mb_fid (EImplArg e) es = lin path xs mb_fid e es
+
+    ss s = listArray (0,0) [[KS s]]
+
+    apply path xs mb_fid f es =
+      case Map.lookup f lp of
+        Just prods -> case lookupProds mb_fid prods of
+                        Just set -> do prod <- Set.toList set
+                                       case prod of
+                                         FApply funid fids -> do guard (length fids == length es)
+                                                                 args <- sequence (zipWith3 (\i fid e -> lin0 (sub i path) [] xs (Just fid) e) [0..] fids es)
+                                                                 let (FFun _ lins) = functions pinfo ! funid
+                                                                 return (listArray (bounds lins) [computeSeq seqid args | seqid <- elems lins])
+                                         FCoerce fid       -> apply path xs (Just fid) f es
+                        Nothing  -> mzero
+        Nothing    -> apply path xs mb_fid _V [ELit (LStr "?")]              -- function without linearization
+      where
+        lookupProds (Just fid) prods = IntMap.lookup fid prods
+        lookupProds Nothing    prods
+            | f == _B || f == _V     = Nothing
+            | otherwise              = Just (Set.filter isApp (Set.unions (IntMap.elems prods)))
+
+        sub i path
+          | f == _B || f == _V =   path
+          | otherwise          = i:path
+
+        isApp (FApply _ _) = True
+        isApp _            = False
+
+        computeSeq seqid args = concatMap compute (elems seq)
+          where
+            seq = sequences pinfo ! seqid
+
+            compute (FSymCat d r)    = (args !! d) ! r
+            compute (FSymLit d r)    = (args !! d) ! r
+            compute (FSymKS ts)      = map KS ts
+            compute (FSymKP ts alts) = [KP ts alts]
 
 untokn :: [Tokn] -> [String]
 untokn ts = case ts of
@@ -45,126 +88,23 @@ untokn ts = case ts of
      v:_ -> v
      _   -> d
 
--- Lifts all variants to the top level (except those in macros).
-liftVariants :: Term -> [Term]
-liftVariants = f
+-- create a table from labels+params to variants
+tabularLinearizes :: PGF -> CId -> Expr -> [[(String,String)]]
+tabularLinearizes pgf lang e = map (zip lbls . map (unwords . untokn) . elems) (linTree pgf lang (\_ _ lint -> lint) e)
   where
-    f (R ts)    = liftM R $ mapM f ts
-    f (P t1 t2) = liftM2 P (f t1) (f t2)
-    f (S ts)    = liftM S $ mapM f ts
-    f (FV ts)   = ts >>= f
-    f (W s t)   = liftM (W s) $ f t
-    f t         = return t
+    lbls = case unApp e of
+             Just (f,_) -> let cat = valCat (lookType pgf f)
+                           in case parser (lookConcr pgf lang) >>= Map.lookup cat . startCats of
+                                Just (_,_,lbls) -> elems lbls
+                                Nothing         -> error "No labels"
+             Nothing    -> error "Not function application"
 
-linTree :: PGF -> CId -> Expr -> Term
-linTree pgf lang e = lin (expr2tree e) Nothing
+
+-- show bracketed markup with references to tree structure
+markLinearizes :: PGF -> CId -> Expr -> [String]
+markLinearizes pgf lang = map (unwords . untokn . (! 0)) . linTree pgf lang mark
   where
-    cnc = lookMap (error "no lang") lang (concretes pgf)
+    mark mb_f path lint = amap (bracket mb_f path) lint
 
-    lin (Abs xs  e )   mty = case lin e Nothing of
-                               R ts -> R $ ts     ++ (Data.List.map (kks . showCId . snd) xs)
-                               TM s -> R $ (TM s)  : (Data.List.map (kks . showCId . snd) xs)
-    lin (Fun fun es)   mty = case Map.lookup fun (funs (abstract pgf)) of
-                               Just (DTyp hyps _ _,_,_) -> let argVariants = sequence [liftVariants (lin e (Just ty)) | e <- es | (_,_,ty) <- hyps]
-                                                           in variants [compute pgf lang args $ lookMap tm0 fun (lins cnc) | args <- argVariants]
-                               Nothing                  -> tm0
-    lin (Lit (LStr s)) mty = R [kks (show s)] -- quoted
-    lin (Lit (LInt i)) mty = R [kks (show i)] 
-    lin (Lit (LFlt d)) mty = R [kks (show d)]
-    lin (Var x)        mty = case mty of
-                               Just (DTyp _ cat _) -> compute pgf lang [K (KS (showCId x))] (lookMap tm0 cat (lindefs cnc))
-                               Nothing             -> TM (showCId x)
-    lin (Meta i)       mty = case mty of
-                               Just (DTyp _ cat _) -> compute pgf lang [K (KS ("?" ++ show    i))] (lookMap tm0 cat (lindefs cnc))
-                               Nothing             -> TM (show    i)
-
-variants :: [Term] -> Term
-variants ts = case ts of
-  [t] -> t
-  _   -> FV ts
-
-unvariants :: Term -> [Term]
-unvariants t = case t of
-  FV ts -> ts
-  _     -> [t]
-
-compute :: PGF -> CId -> [Term] -> Term -> Term
-compute pgf lang args = comp where
-  comp trm = case trm of
-    P r p  -> proj (comp r) (comp p) 
-    W s t  -> W s (comp t)
-    R ts   -> R $ map comp ts
-    V i    -> idx args i          -- already computed
-    F c    -> comp $ look c       -- not computed (if contains argvar)
-    FV ts  -> FV $ map comp ts
-    S ts   -> S $ filter (/= S []) $ map comp ts
-    _ -> trm
-
-  look = lookOper pgf lang
-
-  idx xs i = if i > length xs - 1 
-    then trace 
-         ("too large " ++ show i ++ " for\n" ++ unlines (map show xs) ++ "\n") tm0 
-    else xs !! i 
-
-  proj r p = case (r,p) of
-    (_,     FV ts) -> FV $ map (proj r) ts
-    (FV ts, _    ) -> FV $ map (\t -> proj t p) ts
-    (W s t, _)     -> kks (s ++ getString (proj t p))
-    _              -> comp $ getField r (getIndex p)
-
-  getString t = case t of
-    K (KS s) -> s
-    _ -> error ("ERROR in grammar compiler: string from "++ show t) "ERR"
-
-  getIndex t =  case t of
-    C i    -> i
-    TM _   -> 0  -- default value for parameter
-    _ -> trace ("ERROR in grammar compiler: index from " ++ show t) 666
-
-  getField t i = case t of
-    R rs   -> idx rs i
-    TM s   -> TM s
-    _ -> error ("ERROR in grammar compiler: field from " ++ show t) t
-
----------
--- markup with tree positions
-
-linearizesMark :: PGF -> CId -> Expr -> [String]
-linearizesMark pgf lang = realizes . linTreeMark pgf lang
-
-linTreeMark :: PGF -> CId -> Expr -> Term
-linTreeMark pgf lang = lin [] . expr2tree
-  where
-    lin p (Abs xs  e ) = case lin p e of
-      R ts -> R $ ts     ++ (Data.List.map (kks . showCId . snd) xs)
-      TM s -> R $ (TM s)  : (Data.List.map (kks . showCId . snd) xs)
-    lin p (Fun fun es) = 
-      let argVariants = 
-            mapM (\ (i,e) -> liftVariants $ lin (sub p i) e) (zip [0..] es)
-      in variants [mark (fun,p) $ compute pgf lang args $ look fun | 
-                                                         args <- argVariants]
-    lin p (Lit (LStr s)) = mark p $ R [kks (show s)] -- quoted
-    lin p (Lit (LInt i)) = mark p $ R [kks (show i)] 
-    lin p (Lit (LFlt d)) = mark p $ R [kks (show d)]
-    lin p (Var x)        = mark p $ TM (showCId x)
-    lin p (Meta i)       = mark p $ TM (show i)
- 
-    look = lookLin pgf lang
-
-    mark :: Show a => a -> Term -> Term
-    mark p t = case t of
-      R  ts -> R $ map (mark p) ts
-      FV ts -> R $ map (mark p) ts
-      S  ts -> S $ bracket p ts
-      K  s  -> S $ bracket p [t]
-      W s (R ts) -> R [mark p $ kks (s ++ u) | K (KS u) <- ts]
-      _     -> t
-      -- otherwise in normal form
-
-    bracket  p ts = [kks ("("++show p)] ++ ts ++ [kks ")"]
-    sub p i = p ++ [i]
-
--- | Show the printname of function or category
-showPrintName :: PGF -> Language -> CId -> String
-showPrintName pgf lang id = lookMap "?" id $ printnames $ lookMap (error "no lang") lang $ concretes pgf
+    bracket Nothing  path ts = [KS ("("++show (reverse path))] ++ ts ++ [KS ")"]
+    bracket (Just f) path ts = [KS ("(("++showCId f++","++show (reverse path)++")")] ++ ts ++ [KS ")"]

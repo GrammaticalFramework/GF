@@ -16,7 +16,6 @@ import GF.Speech.SRG (getSpeechLanguage)
 import PGF.CId
 import PGF.Data
 import PGF.Macros
-import PGF.Linearize (showPrintName)
 
 import Control.Monad (liftM)
 import Data.List (isPrefixOf, find, intersperse)

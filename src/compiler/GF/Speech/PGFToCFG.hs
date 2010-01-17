@@ -37,7 +37,7 @@ pgfToCFG pgf lang = mkCFG (showCId (lookStartCat pgf)) extCats (startRules ++ co
     pinfo = fromMaybe (error "pgfToCFG: No parser.") (lookParser pgf lang)
 
     rules :: [(FCat,Production)]
-    rules = [(fcat,prod) | (fcat,set) <- IntMap.toList (PGF.productions pinfo)
+    rules = [(fcat,prod) | (fcat,set) <- IntMap.toList (PGF.pproductions pinfo)
                          , prod <- Set.toList set]
 
     fcatCats :: Map FCat Cat
@@ -58,7 +58,7 @@ pgfToCFG pgf lang = mkCFG (showCId (lookStartCat pgf)) extCats (startRules ++ co
 
     topdownRules cat = f cat []
       where
-        f cat rules = maybe rules (Set.fold g rules) (IntMap.lookup cat (productions pinfo))
+        f cat rules = maybe rules (Set.fold g rules) (IntMap.lookup cat (pproductions pinfo))
 	 
         g (FApply funid args) rules = (functions pinfo ! funid,args) : rules
         g (FCoerce cat)       rules = f cat rules

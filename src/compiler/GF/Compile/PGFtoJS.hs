@@ -90,7 +90,7 @@ children = JS.Ident "cs"
 
 -- Parser
 parser2js :: ParserInfo -> [JS.Expr]
-parser2js p  = [new "Parser" [JS.EObj $ [JS.Prop (JS.IntPropName cat) (JS.EArray (map frule2js (Set.toList set))) | (cat,set) <- IntMap.toList (productions0 p)],
+parser2js p  = [new "Parser" [JS.EObj $ [JS.Prop (JS.IntPropName cat) (JS.EArray (map frule2js (Set.toList set))) | (cat,set) <- IntMap.toList (productions p)],
                               JS.EArray $ (map ffun2js (Array.elems (functions p))),
                               JS.EArray $ (map seq2js (Array.elems (sequences p))),
                               JS.EObj $ map cats (Map.assocs (startCats p)),

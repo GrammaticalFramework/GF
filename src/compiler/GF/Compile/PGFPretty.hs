@@ -60,6 +60,7 @@ prCnc abstr name c = prAll prLinCat (lincats c) $$ prAll prLin (lins (expand c))
           pr p (P t1 t2) = prec p 3 (pr 3 t1 <> text "!" <> pr 3 t2)
           pr p (S ts) = prec p 2 (hsep (punctuate (text " ++") (map (pr 2) ts)))
           pr p (K (KS t)) = doubleQuotes (text t)
+          pr p (K _) = empty
           pr p (V i) = text ("argv_" ++ show (i+1))
           pr p (C i) = text (show (i+1))
           pr p (FV ts) = prec p 1 (hsep (punctuate (text " |") (map (pr 1) ts)))
