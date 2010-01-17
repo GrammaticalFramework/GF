@@ -17,22 +17,6 @@ import GF.Data.Utilities(sortNub)
 mapConcretes :: (Concr -> Concr) -> PGF -> PGF
 mapConcretes f pgf = pgf { concretes = Map.map f (concretes pgf) }
 
-lookLin :: PGF -> CId -> CId -> Term
-lookLin pgf lang fun = 
-  lookMap tm0 fun $ lins $ lookMap (error "no lang") lang $ concretes pgf
-
-lookOper :: PGF -> CId -> CId -> Term
-lookOper pgf lang fun = 
-  lookMap tm0 fun $ opers $ lookMap (error "no lang") lang $ concretes pgf
-
-lookLincat :: PGF -> CId -> CId -> Term
-lookLincat pgf lang fun = 
-  lookMap tm0 fun $ lincats $ lookMap (error "no lang") lang $ concretes pgf
-
-lookParamLincat :: PGF -> CId -> CId -> Term
-lookParamLincat pgf lang fun = 
-  lookMap tm0 fun $ paramlincats $ lookMap (error "no lang") lang $ concretes pgf
-
 lookType :: PGF -> CId -> Type
 lookType pgf f = 
   case lookMap (error $ "lookType " ++ show f) f (funs (abstract pgf)) of
@@ -51,9 +35,6 @@ isData pgf f =
 
 lookValCat :: PGF -> CId -> CId
 lookValCat pgf = valCat . lookType pgf
-
-lookParser :: PGF -> CId -> Maybe ParserInfo
-lookParser pgf lang = Map.lookup lang (concretes pgf) >>= parser
 
 lookStartCat :: PGF -> CId
 lookStartCat pgf = mkCId $ fromMaybe "S" $ msum $ Data.List.map (Map.lookup (mkCId "startcat"))
@@ -86,7 +67,7 @@ missingLins pgf lang = [c | c <- fs, not (hasl c)] where
   hasl = hasLin pgf lang
 
 hasLin :: PGF -> CId -> CId -> Bool
-hasLin pgf lang f = Map.member f $ lins $ lookConcr pgf lang
+hasLin pgf lang f = Map.member f $ lproductions $ lookConcr pgf lang
 
 restrictPGF :: (CId -> Bool) -> PGF -> PGF
 restrictPGF cond pgf = pgf {
@@ -164,13 +145,11 @@ updateProductionIndices :: PGF -> PGF
 updateProductionIndices pgf = pgf{concretes = fmap updateConcrete (concretes pgf)}
   where
     updateConcrete cnc = 
-      case parser cnc of
-        Nothing    -> cnc
-        Just pinfo -> let prods0    = filterProductions (productions pinfo)
-                          p_prods   = parseIndex pinfo prods0
-                          l_prods   = linIndex   pinfo prods0
-                      in cnc{parser = Just pinfo{pproductions = p_prods, lproductions = l_prods}}
-    
+      let prods0    = filterProductions (productions cnc)
+          p_prods   = parseIndex cnc prods0
+          l_prods   = linIndex   cnc prods0
+      in cnc{pproductions = p_prods, lproductions = l_prods}
+
     filterProductions prods0
       | IntMap.size prods == IntMap.size prods0 = prods
       | otherwise                               = filterProductions prods

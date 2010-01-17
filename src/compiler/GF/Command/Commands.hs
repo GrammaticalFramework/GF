@@ -19,6 +19,7 @@ import PGF.VisualizeTree
 import PGF.Macros
 import PGF.Data ----
 import PGF.Morphology
+import PGF.Printer
 import GF.Compile.Export
 import GF.Infra.Option (noOptions, readOutputFormat, Encoding(..))
 import GF.Infra.UseIO
@@ -752,22 +753,17 @@ allCommands cod env@(pgf, mos) = Map.fromList [
      exec = \opts arg -> do
        case arg of
          [EFun id] -> case Map.lookup id (funs (abstract pgf)) of
-                        Just (ty,_,eqs) -> return $ fromString $
-                                              render (text "fun" <+> ppCId id <+> colon <+> ppType 0 [] ty $$
-                                                      if null eqs
-                                                        then empty
-                                                        else text "def" <+> vcat [let (scope,ds) = mapAccumL (ppPatt 9) [] patts
-                                                                                  in ppCId id <+> hsep ds <+> char '=' <+> ppExpr 0 scope res | Equ patts res <- eqs])
-                        Nothing         -> case Map.lookup id (cats (abstract pgf)) of
-                                             Just hyps -> do return $ fromString $
-                                                                render (text "cat" <+> ppCId id <+> hsep (snd (mapAccumL ppHypo [] hyps)) $$
-                                                                        if null (functionsToCat pgf id)
-                                                                          then empty
-                                                                          else space $$
-                                                                               text "fun" <+> vcat [ppCId fid <+> colon <+> ppType 0 [] ty 
-                                                                                                       | (fid,ty) <- functionsToCat pgf id])
-                                             Nothing   -> do putStrLn ("unknown category of function identifier "++show id)
-                                                             return void
+                        Just fd -> return $ fromString $
+                                      render (ppFun id fd)
+                        Nothing -> case Map.lookup id (cats (abstract pgf)) of
+                                     Just hyps -> do return $ fromString $
+                                                        render (ppCat id hyps $$
+                                                                if null (functionsToCat pgf id)
+                                                                  then empty
+                                                                  else space $$
+                                                                       vcat [ppFun fid (ty,0,[]) | (fid,ty) <- functionsToCat pgf id])
+                                     Nothing   -> do putStrLn ("unknown category of function identifier "++show id)
+                                                     return void
          [e]         -> case inferExpr pgf e of
                           Left tcErr   -> error $ render (ppTcError tcErr)
                           Right (e,ty) -> do putStrLn ("Expression: "++showExpr [] e)
@@ -782,8 +778,8 @@ allCommands cod env@(pgf, mos) = Map.fromList [
    enc = encodeUnicode cod
 
    par opts s = case optOpenTypes opts of
-                  []        -> concat  [parse pgf lang (optType opts) s | lang <- optLangs opts, canParse pgf lang]
-                  open_typs -> concat  [parseWithRecovery pgf lang (optType opts) open_typs s | lang <- optLangs opts, canParse pgf lang]
+                  []        -> concat  [parse pgf lang (optType opts) s | lang <- optLangs opts]
+                  open_typs -> concat  [parseWithRecovery pgf lang (optType opts) open_typs s | lang <- optLangs opts]
  
    void = ([],[])
 

@@ -56,23 +56,20 @@ parseWithRecovery pgf lang typ open_typs toks = accept (initState pgf lang typ) 
 -- startup category.
 initState :: PGF -> Language -> Type -> ParseState
 initState pgf lang (DTyp _ start _) = 
-  let items = case Map.lookup start (startCats pinfo) of
+  let items = case Map.lookup start (startCats cnc) of
                 Just (s,e,labels) -> do cat <- range (s,e)
                                         (funid,args) <- foldForest (\funid args -> (:) (funid,args)) (\_ _ args -> args)
-                                                                   [] cat (pproductions pinfo)
-                                        let FFun fn lins = functions pinfo ! funid
+                                                                   [] cat (pproductions cnc)
+                                        let FFun fn lins = functions cnc ! funid
                                         (lbl,seqid) <- assocs lins
                                         return (Active 0 0 funid seqid args (AK cat lbl))
                 Nothing           -> mzero
 
-      pinfo =
-        case lookParser pgf lang of
-          Just pinfo -> pinfo
-          _          -> error ("Unknown language: " ++ showCId lang)
+      cnc = lookConcr pgf lang
 
   in PState pgf
-            pinfo
-            (Chart emptyAC [] emptyPC (pproductions pinfo) (totalCats pinfo) 0)
+            cnc
+            (Chart emptyAC [] emptyPC (pproductions cnc) (totalCats cnc) 0)
             (TMap.singleton [] (Set.fromList items))
 
 -- | From the current state and the next token
@@ -81,19 +78,19 @@ initState pgf lang (DTyp _ start _) =
 -- If the new token cannot be accepted then an error state 
 -- is returned.
 nextState :: ParseState -> String -> Either ErrorState ParseState
-nextState (PState pgf pinfo chart items) t =
+nextState (PState pgf cnc chart items) t =
   let (mb_agenda,map_items) = TMap.decompose items
       agenda = maybe [] Set.toList mb_agenda
       acc    = fromMaybe TMap.empty (Map.lookup t map_items)
-      (acc1,chart1) = process (Just t) add (sequences pinfo) (functions pinfo) agenda acc chart
+      (acc1,chart1) = process (Just t) add (sequences cnc) (functions cnc) agenda acc chart
       chart2 = chart1{ active =emptyAC
                      , actives=active chart1 : actives chart1
                      , passive=emptyPC
                      , offset =offset chart1+1
                      }
   in if TMap.null acc1
-       then Left  (EState pgf pinfo chart2)
-       else Right (PState pgf pinfo chart2 acc1)
+       then Left  (EState pgf cnc chart2)
+       else Right (PState pgf cnc chart2 acc1)
   where
     add (tok:toks) item acc
       | tok == t            = TMap.insertWith Set.union toks (Set.singleton item) acc
@@ -104,35 +101,35 @@ nextState (PState pgf pinfo chart items) t =
 -- next words and the consequent states. This is used for word completions in
 -- the GF interpreter.
 getCompletions :: ParseState -> String -> Map.Map String ParseState
-getCompletions (PState pgf pinfo chart items) w =
+getCompletions (PState pgf cnc chart items) w =
   let (mb_agenda,map_items) = TMap.decompose items
       agenda = maybe [] Set.toList mb_agenda
       acc    = Map.filterWithKey (\tok _ -> isPrefixOf w tok) map_items
-      (acc',chart1) = process Nothing add (sequences pinfo) (functions pinfo) agenda acc chart
+      (acc',chart1) = process Nothing add (sequences cnc) (functions cnc) agenda acc chart
       chart2 = chart1{ active =emptyAC
                      , actives=active chart1 : actives chart1
                      , passive=emptyPC
                      , offset =offset chart1+1
                      }
-  in fmap (PState pgf pinfo chart2) acc'
+  in fmap (PState pgf cnc chart2) acc'
   where
     add (tok:toks) item acc
       | isPrefixOf w tok    = Map.insertWith (TMap.unionWith Set.union) tok (TMap.singleton toks (Set.singleton item)) acc
     add _          item acc = acc
 
 recoveryStates :: [Type] -> ErrorState -> (ParseState, Map.Map String ParseState)
-recoveryStates open_types (EState pgf pinfo chart) =
+recoveryStates open_types (EState pgf cnc chart) =
   let open_fcats = concatMap type2fcats open_types
       agenda = foldl (complete open_fcats) [] (actives chart)
-      (acc,chart1) = process Nothing add (sequences pinfo) (functions pinfo) agenda Map.empty chart
+      (acc,chart1) = process Nothing add (sequences cnc) (functions cnc) agenda Map.empty chart
       chart2 = chart1{ active =emptyAC
                      , actives=active chart1 : actives chart1
                      , passive=emptyPC
                      , offset =offset chart1+1
                      }
-  in (PState pgf pinfo chart (TMap.singleton [] (Set.fromList agenda)), fmap (PState pgf pinfo chart2) acc)
+  in (PState pgf cnc chart (TMap.singleton [] (Set.fromList agenda)), fmap (PState pgf cnc chart2) acc)
   where
-    type2fcats (DTyp _ cat _) = case Map.lookup cat (startCats pinfo) of
+    type2fcats (DTyp _ cat _) = case Map.lookup cat (startCats cnc) of
                                   Just (s,e,labels) -> range (s,e)
                                   Nothing           -> []
 
@@ -149,15 +146,15 @@ recoveryStates open_types (EState pgf pinfo chart) =
 -- limited by the category specified, which is usually
 -- the same as the startup category.
 extractTrees :: ParseState -> Type -> [Tree]
-extractTrees (PState pgf pinfo chart items) ty@(DTyp _ start _) = 
+extractTrees (PState pgf cnc chart items) ty@(DTyp _ start _) = 
   nubsort [e1 | e <- exps, Right e1 <- [checkExpr pgf e ty]]
   where
     (mb_agenda,acc) = TMap.decompose items
     agenda = maybe [] Set.toList mb_agenda
-    (_,st) = process Nothing (\_ _ -> id) (sequences pinfo) (functions pinfo) agenda () chart
+    (_,st) = process Nothing (\_ _ -> id) (sequences cnc) (functions cnc) agenda () chart
 
     exps = 
-      case Map.lookup start (startCats pinfo) of
+      case Map.lookup start (startCats cnc) of
         Just (s,e,lbls) -> do cat <- range (s,e)
                               lbl <- indices lbls
                               Just fid <- [lookupPC (PK cat lbl 0) (passive st)]
@@ -167,10 +164,10 @@ extractTrees (PState pgf pinfo chart items) ty@(DTyp _ start _) =
         Nothing         -> mzero
 
     go rec fcat' (d,fcat)
-      | fcat < totalCats pinfo = return (Set.empty,EMeta (fcat'*10+d))   -- FIXME: here we assume that every rule has at most 10 arguments
+      | fcat < totalCats cnc = return (Set.empty,EMeta (fcat'*10+d))   -- FIXME: here we assume that every rule has at most 10 arguments
       | Set.member fcat rec    = mzero
       | otherwise              = foldForest (\funid args trees -> 
-                                                  do let FFun fn lins = functions pinfo ! funid
+                                                  do let FFun fn lins = functions cnc ! funid
                                                      args <- mapM (go (Set.insert fcat rec) fcat) (zip [0..] args)
                                                      check_ho_fun fn args
                                                   `mplus`
@@ -348,7 +345,7 @@ foldForest f g b fcat forest =
 
 -- | An abstract data type whose values represent
 -- the current state in an incremental parser.
-data ParseState = PState PGF ParserInfo Chart (TMap.TrieMap String (Set.Set Active))
+data ParseState = PState PGF Concr Chart (TMap.TrieMap String (Set.Set Active))
 
 data Chart
   = Chart
@@ -367,4 +364,4 @@ data Chart
 
 -- | An abstract data type whose values represent
 -- the state in an incremental parser after an error.
-data ErrorState = EState PGF ParserInfo Chart
+data ErrorState = EState PGF Concr Chart

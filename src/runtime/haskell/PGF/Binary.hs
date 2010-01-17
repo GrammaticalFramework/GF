@@ -51,24 +51,24 @@ instance Binary Abstr where
                         })
   
 instance Binary Concr where
-  put cnc = put ( cflags cnc, lins cnc, opers cnc
-                , lincats cnc, lindefs cnc
-                , printnames cnc, paramlincats cnc
-                , parser cnc
+  put cnc = put ( cflags cnc, printnames cnc
+                , functions cnc, sequences cnc
+                , productions cnc
+                , totalCats cnc, startCats cnc
                 )
-  get = do cflags <- get
-           lins <- get
-           opers <- get
-           lincats <- get
-           lindefs <- get
-           printnames <- get
-           paramlincats <- get
-           parser <- get
-           return (Concr{ cflags=cflags, lins=lins, opers=opers
-                        , lincats=lincats, lindefs=lindefs
-                        , printnames=printnames
-                        , paramlincats=paramlincats
-                        , parser=parser
+  get = do cflags      <- get
+           printnames  <- get
+           functions   <- get
+           sequences   <- get
+           productions <- get
+           totalCats   <- get
+           startCats   <- get
+           return (Concr{ cflags=cflags, printnames=printnames
+                        , functions=functions,sequences=sequences
+                        , productions = productions
+                        , pproductions = IntMap.empty
+                        , lproductions = Map.empty
+                        , totalCats=totalCats,startCats=startCats
                         })
 
 instance Binary Alternative where
@@ -185,18 +185,5 @@ instance Binary Production where
              0 -> liftM2 FApply  get get
              1 -> liftM  FCoerce get
              _ -> decodingError
-
-instance Binary ParserInfo where
-  put p = put (functions p, sequences p, productions p, totalCats p, startCats p)
-  get = do functions   <- get
-           sequences   <- get
-           productions <- get
-           totalCats   <- get
-           startCats   <- get
-           return (ParserInfo{functions=functions,sequences=sequences
-                             ,productions = productions
-                             ,pproductions = IntMap.empty
-                             ,lproductions = Map.empty
-                             ,totalCats=totalCats,startCats=startCats})
 
 decodingError = fail "This PGF file was compiled with different version of GF"

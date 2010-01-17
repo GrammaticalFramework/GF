@@ -3,7 +3,6 @@ module PGF.Linearize(linearizes,markLinearizes,tabularLinearizes) where
 import PGF.CId
 import PGF.Data
 import PGF.Macros
-import Data.Maybe (fromJust)
 import Data.Array.IArray
 import Data.List
 import Control.Monad
@@ -22,8 +21,7 @@ linTree :: PGF -> Language -> (Maybe CId -> [Int] -> LinTable -> LinTable) -> Ex
 linTree pgf lang mark e = lin0 [] [] [] Nothing e
   where
     cnc   = lookMap (error "no lang") lang (concretes pgf)
-    pinfo = fromJust (parser cnc)
-    lp    = lproductions pinfo
+    lp    = lproductions cnc
 
     lin0 path xs ys mb_fid (EAbs _ x e)  = lin0 path (showCId x:xs) ys mb_fid e
     lin0 path xs ys mb_fid (ETyped e _)  = lin0 path xs ys mb_fid e
@@ -50,7 +48,7 @@ linTree pgf lang mark e = lin0 [] [] [] Nothing e
                                        case prod of
                                          FApply funid fids -> do guard (length fids == length es)
                                                                  args <- sequence (zipWith3 (\i fid e -> lin0 (sub i path) [] xs (Just fid) e) [0..] fids es)
-                                                                 let (FFun _ lins) = functions pinfo ! funid
+                                                                 let (FFun _ lins) = functions cnc ! funid
                                                                  return (listArray (bounds lins) [computeSeq seqid args | seqid <- elems lins])
                                          FCoerce fid       -> apply path xs (Just fid) f es
                         Nothing  -> mzero
@@ -70,7 +68,7 @@ linTree pgf lang mark e = lin0 [] [] [] Nothing e
 
         computeSeq seqid args = concatMap compute (elems seq)
           where
-            seq = sequences pinfo ! seqid
+            seq = sequences cnc ! seqid
 
             compute (FSymCat d r)    = (args !! d) ! r
             compute (FSymLit d r)    = (args !! d) ! r
@@ -94,7 +92,7 @@ tabularLinearizes pgf lang e = map (zip lbls . map (unwords . untokn) . elems) (
   where
     lbls = case unApp e of
              Just (f,_) -> let cat = valCat (lookType pgf f)
-                           in case parser (lookConcr pgf lang) >>= Map.lookup cat . startCats of
+                           in case Map.lookup cat (startCats (lookConcr pgf lang)) of
                                 Just (_,_,lbls) -> elems lbls
                                 Nothing         -> error "No labels"
              Nothing    -> error "Not function application"

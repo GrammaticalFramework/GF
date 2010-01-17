@@ -1,11 +1,12 @@
 {-# LANGUAGE PatternGuards #-}
-module GF.Compile.GrammarToPGF (mkCanon2gfcc,addParsers) where
+module GF.Compile.GrammarToPGF (mkCanon2pgf) where
 
 import GF.Compile.Export
 import GF.Compile.GeneratePMCFG
 
 import PGF.CId
 import PGF.Macros(updateProductionIndices)
+import PGF.Check(checkLin)
 import qualified PGF.Macros as CM
 import qualified PGF.Data as C
 import qualified PGF.Data as D
@@ -36,28 +37,22 @@ traceD s t = t
 
 
 -- the main function: generate PGF from GF.
-mkCanon2gfcc :: Options -> String -> SourceGrammar -> (String,D.PGF)
-mkCanon2gfcc opts cnc gr = 
-  (showIdent abs, (canon2gfcc opts pars . reorder abs . canon2canon opts abs) gr)
+mkCanon2pgf :: Options -> String -> SourceGrammar -> IO D.PGF
+mkCanon2pgf opts cnc gr = (canon2pgf opts pars . reorder abs . canon2canon opts abs) gr
   where
     abs = err (const c) id $ M.abstractOfConcrete gr c where c = identC (BS.pack cnc)
     pars = mkParamLincat gr
 
--- Adds parsers for all concretes
-addParsers :: Options -> D.PGF -> IO D.PGF
-addParsers opts pgf = do cncs <- sequence [conv lang cnc | (lang,cnc) <- Map.toList (D.concretes pgf)]
-                         return $ updateProductionIndices $ pgf { D.concretes = Map.fromList cncs }
-  where
-    conv lang cnc = do pinfo <- convertConcrete opts (D.abstract pgf) lang cnc
-                       return (lang,cnc { D.parser = Just pinfo })
-
 -- Generate PGF from GFCM.
 -- this assumes a grammar translated by canon2canon
 
-canon2gfcc :: Options -> (Ident -> Ident -> C.Term) -> SourceGrammar -> D.PGF
-canon2gfcc opts pars cgr@(M.MGrammar ((a,abm):cms)) = 
-  (if dump opts DumpCanon then trace (render (vcat (map (ppModule Qualified) (M.modules cgr)))) else id) $
-     D.PGF an cns gflags abs cncs 
+canon2pgf :: Options -> (Ident -> Ident -> C.Term) -> SourceGrammar -> IO D.PGF
+canon2pgf opts pars cgr@(M.MGrammar ((a,abm):cms)) = do
+  if dump opts DumpCanon
+    then putStrLn (render (vcat (map (ppModule Qualified) (M.modules cgr))))
+    else return ()
+  cncs <- sequence [mkConcr lang (i2i lang) mo | (lang,mo) <- cms]
+  return (D.PGF an cns gflags abs (Map.fromList cncs))
  where
   -- abstract
   an  = (i2i a)
@@ -82,13 +77,15 @@ canon2gfcc opts pars cgr@(M.MGrammar ((a,abm):cms)) =
   catfuns = Map.fromList 
     [(cat,[f | (f, (C.DTyp _ c _,_,_)) <- lfuns, c==cat]) | (cat,_) <- lcats]
 
-  cncs  = Map.fromList [mkConcr lang (i2i lang) mo | (lang,mo) <- cms]
-  mkConcr lang0 lang mo = 
-      (lang,D.Concr flags lins opers lincats lindefs printnames params fcfg)
+  mkConcr lang0 lang mo = do
+    lins' <- case mapM (checkLin (funs,lins,lincats) lang) (Map.toList lins) of
+               Ok x    -> return x
+               Bad msg -> fail msg
+    cnc <- convertConcrete opts lang flags printnames funs (Map.fromList (map fst lins')) lincats params lindefs
+    return (lang, cnc)
     where
       js = tree2list (M.jments mo)
       flags   = Map.fromList [(mkCId f,x) | (f,x) <- optionsPGF (M.flags mo)]
-      opers   = Map.fromAscList [] -- opers will be created as optimization
       utf     = id -- trace (show lang0 +++ show flags) $ 
                 -- if moduleFlag optEncoding (moduleOptions (M.flags mo)) == UTF_8
                 --  then id else id 

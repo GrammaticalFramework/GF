@@ -20,7 +20,7 @@ newtype Morpho = Morpho (Map.Map String [(Lemma,Analysis)])
 
 buildMorpho :: PGF -> Language -> Morpho
 buildMorpho pgf lang = Morpho $
-  case Map.lookup lang (concretes pgf) >>= parser of
+  case Map.lookup lang (concretes pgf) of
     Just pinfo -> collectWords pinfo
     Nothing    -> Map.empty
 

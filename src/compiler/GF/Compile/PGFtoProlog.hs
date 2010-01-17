@@ -88,20 +88,11 @@ plFundef (fun, (_,_,eqs)) = [plFact "def" [plp fun, plp fundef']]
 -- concrete syntax
 
 plConcrete :: (CId, Concr) -> [String]
-plConcrete (cncname, Concr cflags lins opers lincats lindefs 
-                   _printnames _paramlincats _parser) =
+plConcrete (cncname, cnc) =
     ["", "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%",
      "%% concrete module: " ++ plp cncname] ++
     clauseHeader "%% cncflag(?Flag, ?Value): flags for concrete syntax"
-                     (map (mod . plpFact2 "cncflag") (Map.assocs cflags)) ++ 
-    clauseHeader "%% lincat(?Cat, ?Linearization type)"
-                     (map (mod . plpFact2 "lincat") (Map.assocs lincats)) ++ 
-    clauseHeader "%% lindef(?Cat, ?Linearization default)"
-                     (map (mod . plpFact2 "lindef") (Map.assocs lindefs)) ++ 
-    clauseHeader "%% lin(?Fun, ?Linearization)"
-                     (map (mod . plpFact2 "lin") (Map.assocs lins)) ++
-    clauseHeader "%% oper(?Oper, ?Linearization)"
-                     (map (mod . plpFact2 "oper") (Map.assocs opers))
+                     (map (mod . plpFact2 "cncflag") (Map.assocs (cflags cnc)))
     where mod clause = plp cncname ++ ": " ++ clause
 
 

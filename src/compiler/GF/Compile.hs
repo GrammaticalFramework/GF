@@ -6,7 +6,6 @@ import GF.Compile.Rename
 import GF.Compile.CheckGrammar
 import GF.Compile.Optimize
 import GF.Compile.SubExOpt
-import GF.Compile.OptimizePGF
 import GF.Compile.GrammarToPGF
 import GF.Compile.ReadFiles
 import GF.Compile.Update
@@ -54,31 +53,16 @@ compileToPGF opts fs =
 
 link :: Options -> String -> SourceGrammar -> IOE PGF
 link opts cnc gr = do
-       let isv = (verbAtLeast opts Normal)
-       gc1 <- putPointE Normal opts "linking ... " $
-                let (abs,gc0) = mkCanon2gfcc opts cnc gr
-                in case checkPGF gc0 of
-		     Ok (gc,b) -> do 
-                       case (isv,b) of
-                         (True, True) -> ioeIO $ putStrLn "OK" 
-                         (False,True) -> return ()
-                         _            -> ioeIO $ putStrLn $ "Corrupted PGF"
-		       return gc
-		     Bad s -> fail s
-       ioeIO $ buildParser opts $ optimize opts gc1
-
-optimize :: Options -> PGF -> PGF
-optimize opts = cse . suf
-  where os  = flag optOptimizations opts
-        cse = if OptCSE  `Set.member` os then cseOptimize    else id
-        suf = if OptStem `Set.member` os then suffixOptimize else id
-
-buildParser :: Options -> PGF -> IO PGF
-buildParser opts = 
-    case flag optBuildParser opts of
-      BuildParser         -> addParsers opts
-      DontBuildParser     -> return
-      BuildParserOnDemand -> return . mapConcretes (\cnc -> cnc { cflags = Map.insert (mkCId "parser") "ondemand" (cflags cnc) })
+  let isv = (verbAtLeast opts Normal)
+  putPointE Normal opts "linking ... " $ do
+    gc0 <- ioeIO (mkCanon2pgf opts cnc gr)
+    case checkPGF gc0 of
+      Ok (gc,b) -> do case (isv,b) of
+                        (True, True) -> ioeIO $ putStrLn "OK" 
+                        (False,True) -> return ()
+                        _            -> ioeIO $ putStrLn $ "Corrupted PGF"
+                      return gc
+      Bad s     -> fail s
 
 batchCompile :: Options -> [FilePath] -> IOE SourceGrammar
 batchCompile opts files = do
