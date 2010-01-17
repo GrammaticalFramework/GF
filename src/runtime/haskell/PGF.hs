@@ -54,7 +54,7 @@ module PGF(
            showPrintName,
 
            -- ** Parsing
-           parse, parseWithRecovery, canParse, parseAllLang, parseAll,
+           parse, parseWithRecovery, parseAllLang, parseAll,
 
            -- ** Evaluation
            PGF.compute, paraphrase,
@@ -106,9 +106,7 @@ import PGF.Morphology
 import PGF.Data hiding (functions)
 import PGF.Binary
 import qualified PGF.Parse as Parse
-import qualified GF.Compile.GeneratePMCFG as PMCFG
 
-import GF.Infra.Option
 import GF.Data.Utilities (replace)
 
 import Data.Char
@@ -143,9 +141,6 @@ linearize    :: PGF -> Language -> Tree -> String
 parse        :: PGF -> Language -> Type -> String -> [Tree]
 
 parseWithRecovery :: PGF -> Language -> Type -> [Type] -> String -> [Tree]
-
--- | Checks whether the given language can be used for parsing.
-canParse     :: PGF -> Language -> Bool
 
 -- | The same as 'linearizeAllLang' but does not return
 -- the language.
@@ -228,30 +223,16 @@ complete :: PGF -> Language -> Type -> String
 -- Implementation
 ---------------------------------------------------
 
-readPGF f = decodeFile f >>= addParsers
-
--- Adds parsers for all concretes that don't have a parser and that have parser=ondemand.
-addParsers :: PGF -> IO PGF
-addParsers pgf = do cncs <- sequence [if wantsParser cnc then addParser lang cnc else return (lang,cnc)
-                                           | (lang,cnc) <- Map.toList (concretes pgf)]
-                    return pgf { concretes = Map.fromList cncs }
-    where
-      wantsParser cnc = isNothing (parser cnc) && Map.lookup (mkCId "parser") (cflags cnc) == Just "ondemand"
-      addParser lang cnc = do pinfo <- PMCFG.convertConcrete noOptions (abstract pgf) lang cnc
-                              return (lang,cnc { parser = Just pinfo })
+readPGF f = decodeFile f
 
 linearize pgf lang = concat . take 1 . PGF.Linearize.linearizes pgf lang
 
 parse pgf lang typ s = 
   case Map.lookup lang (concretes pgf) of
-    Just cnc -> case parser cnc of
-                  Just pinfo -> Parse.parse pgf lang typ (words s)
-                  Nothing    -> error ("No parser built for language: " ++ showCId lang)
+    Just cnc -> Parse.parse pgf lang typ (words s)
     Nothing  -> error ("Unknown language: " ++ showCId lang)
 
 parseWithRecovery pgf lang typ open_typs s = Parse.parseWithRecovery pgf lang typ open_typs (words s)
-
-canParse pgf cnc = isJust (lookParser pgf cnc)
 
 linearizeAll mgr = map snd . linearizeAllLang mgr
 linearizeAllLang mgr t = 
@@ -260,7 +241,7 @@ linearizeAllLang mgr t =
 parseAll mgr typ = map snd . parseAllLang mgr typ
 
 parseAllLang mgr typ s = 
-  [(lang,ts) | lang <- languages mgr, canParse mgr lang, let ts = parse mgr lang typ s, not (null ts)]
+  [(lang,ts) | lang <- languages mgr, let ts = parse mgr lang typ s, not (null ts)]
 
 generateRandom pgf cat = do
   gen <- newStdGen

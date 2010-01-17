@@ -29,7 +29,7 @@ pgf2js pgf =
    start = showCId $ M.lookStartCat pgf
    grammar = new "GFGrammar" [js_abstract, js_concrete]
    js_abstract = abstract2js start as
-   js_concrete = JS.EObj $ map (concrete2js n) cs
+   js_concrete = JS.EObj $ map concrete2js cs
 
 abstract2js :: String -> Abstr -> JS.Expr
 abstract2js start ds = new "GFAbstract" [JS.EStr start, JS.EObj $ map absdef2js (Map.assocs (funs ds))]
@@ -39,18 +39,21 @@ absdef2js (f,(typ,_,_)) =
   let (args,cat) = M.catSkeleton typ in 
     JS.Prop (JS.IdentPropName (JS.Ident (showCId f))) (new "Type" [JS.EArray [JS.EStr (showCId x) | x <- args], JS.EStr (showCId cat)])
 
-concrete2js :: String -> (CId,Concr) -> JS.Property
-concrete2js n (c, cnc) =
-    JS.Prop l (new "GFConcrete" ([flags,(JS.EObj $ ((map (cncdef2js n (showCId c)) ds) ++ litslins))] ++
-                                 maybe [] parser2js (parser cnc)))
+concrete2js :: (CId,Concr) -> JS.Property
+concrete2js (c,cnc) =
+  JS.Prop l (new "GFConcrete" [mapToJSObj JS.EStr $ cflags cnc,
+                               JS.EObj $ [JS.Prop (JS.IntPropName cat) (JS.EArray (map frule2js (Set.toList set))) | (cat,set) <- IntMap.toList (productions cnc)],
+                               JS.EArray $ (map ffun2js (Array.elems (functions cnc))),
+                               JS.EArray $ (map seq2js (Array.elems (sequences cnc))),
+                               JS.EObj $ map cats (Map.assocs (startCats cnc)),
+                               JS.EInt (totalCats cnc)])
   where 
-   flags = mapToJSObj JS.EStr $ cflags cnc
    l  = JS.IdentPropName (JS.Ident (showCId c))
-   ds = concatMap Map.assocs [lins cnc, opers cnc, lindefs cnc]
    litslins = [JS.Prop (JS.StringPropName    "Int") (JS.EFun [children] [JS.SReturn $ new "Arr" [JS.EIndex (JS.EVar children) (JS.EInt 0)]]), 
                JS.Prop (JS.StringPropName  "Float") (JS.EFun [children] [JS.SReturn $ new "Arr" [JS.EIndex (JS.EVar children) (JS.EInt 0)]]),
                JS.Prop (JS.StringPropName "String") (JS.EFun [children] [JS.SReturn $ new "Arr" [JS.EIndex (JS.EVar children) (JS.EInt 0)]])]
-
+   cats (c,(start,end,_)) = JS.Prop (JS.IdentPropName (JS.Ident (showCId c))) (JS.EObj [JS.Prop (JS.IdentPropName (JS.Ident "s")) (JS.EInt start)
+                                                                                       ,JS.Prop (JS.IdentPropName (JS.Ident "e")) (JS.EInt end)])
 
 cncdef2js :: String -> String -> (CId,Term) -> JS.Property
 cncdef2js n l (f, t) = JS.Prop (JS.IdentPropName (JS.Ident (showCId f))) (JS.EFun [children] [JS.SReturn (term2js n l t)])
@@ -87,17 +90,6 @@ argIdent n = JS.Ident ("x" ++ show n)
 
 children :: JS.Ident
 children = JS.Ident "cs"
-
--- Parser
-parser2js :: ParserInfo -> [JS.Expr]
-parser2js p  = [new "Parser" [JS.EObj $ [JS.Prop (JS.IntPropName cat) (JS.EArray (map frule2js (Set.toList set))) | (cat,set) <- IntMap.toList (productions p)],
-                              JS.EArray $ (map ffun2js (Array.elems (functions p))),
-                              JS.EArray $ (map seq2js (Array.elems (sequences p))),
-                              JS.EObj $ map cats (Map.assocs (startCats p)),
-                              JS.EInt (totalCats p)]]
-  where 
-    cats (c,(start,end,_)) = JS.Prop (JS.IdentPropName (JS.Ident (showCId c))) (JS.EObj [JS.Prop (JS.IdentPropName (JS.Ident "s")) (JS.EInt start)
-                                                                                      ,JS.Prop (JS.IdentPropName (JS.Ident "e")) (JS.EInt end)])
 
 frule2js :: Production -> JS.Expr
 frule2js (FApply funid args) = new "Rule"   [JS.EInt funid, JS.EArray (map JS.EInt args)]

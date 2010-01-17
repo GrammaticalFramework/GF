@@ -2,10 +2,10 @@ module GF.Compile.Export where
 
 import PGF.CId
 import PGF.Data (PGF(..))
+import PGF.Printer
 import GF.Compile.PGFtoHaskell
 import GF.Compile.PGFtoProlog
 import GF.Compile.PGFtoJS
-import GF.Compile.PGFPretty
 import GF.Infra.Option
 import GF.Speech.CFG
 import GF.Speech.PGFToCFG
@@ -20,6 +20,7 @@ import GF.Speech.PrRegExp
 
 import Data.Maybe
 import System.FilePath
+import Text.PrettyPrint
 
 -- top-level access to code generation
 
@@ -29,8 +30,7 @@ exportPGF :: Options
           -> [(FilePath,String)] -- ^ List of recommended file names and contents.
 exportPGF opts fmt pgf = 
     case fmt of
-      FmtPGFPretty    -> multi "txt" prPGFPretty
-      FmtPMCFGPretty  -> single "pmcfg" prPMCFGPretty
+      FmtPGFPretty    -> multi "txt" (render . ppPGF)
       FmtJavaScript   -> multi "js"  pgf2js
       FmtHaskell      -> multi "hs"  (grammar2haskell opts name)
       FmtProlog       -> multi "pl"  grammar2prolog 

@@ -34,15 +34,15 @@ pgfToCFG :: PGF
           -> CFG
 pgfToCFG pgf lang = mkCFG (showCId (lookStartCat pgf)) extCats (startRules ++ concatMap fruleToCFRule rules)
   where
-    pinfo = fromMaybe (error "pgfToCFG: No parser.") (lookParser pgf lang)
+    cnc = lookConcr pgf lang
 
     rules :: [(FCat,Production)]
-    rules = [(fcat,prod) | (fcat,set) <- IntMap.toList (PGF.pproductions pinfo)
+    rules = [(fcat,prod) | (fcat,set) <- IntMap.toList (PGF.pproductions cnc)
                          , prod <- Set.toList set]
 
     fcatCats :: Map FCat Cat
     fcatCats = Map.fromList [(fc, showCId c ++ "_" ++ show i) 
-                                 | (c,(s,e,lbls)) <- Map.toList (startCats pinfo), 
+                                 | (c,(s,e,lbls)) <- Map.toList (startCats cnc), 
                                    (fc,i) <- zip (range (s,e)) [1..]]
 
     fcatCat :: FCat -> Cat
@@ -58,9 +58,9 @@ pgfToCFG pgf lang = mkCFG (showCId (lookStartCat pgf)) extCats (startRules ++ co
 
     topdownRules cat = f cat []
       where
-        f cat rules = maybe rules (Set.fold g rules) (IntMap.lookup cat (pproductions pinfo))
+        f cat rules = maybe rules (Set.fold g rules) (IntMap.lookup cat (pproductions cnc))
 	 
-        g (FApply funid args) rules = (functions pinfo ! funid,args) : rules
+        g (FApply funid args) rules = (functions cnc ! funid,args) : rules
         g (FCoerce cat)       rules = f cat rules
 
 
@@ -69,7 +69,7 @@ pgfToCFG pgf lang = mkCFG (showCId (lookStartCat pgf)) extCats (startRules ++ co
 
     startRules :: [CFRule]
     startRules = [CFRule (showCId c) [NonTerminal (fcatToCat fc r)] (CFRes 0) 
-                      | (c,(s,e,lbls)) <- Map.toList (startCats pinfo), 
+                      | (c,(s,e,lbls)) <- Map.toList (startCats cnc), 
                         fc <- range (s,e), not (isLiteralFCat fc),
                         r <- [0..catLinArity fc-1]]
 
@@ -77,10 +77,10 @@ pgfToCFG pgf lang = mkCFG (showCId (lookStartCat pgf)) extCats (startRules ++ co
     fruleToCFRule (c,FApply funid args) = 
         [CFRule (fcatToCat c l) (mkRhs row) (profilesToTerm [fixProfile row n | n <- [0..length args-1]])
            | (l,seqid) <- Array.assocs rhs
-           , let row = sequences pinfo ! seqid
+           , let row = sequences cnc ! seqid
            , not (containsLiterals row)]
       where
-        FFun f rhs = functions pinfo ! funid
+        FFun f rhs = functions cnc ! funid
 
         mkRhs :: Array FPointPos FSymbol -> [CFSymbol]
         mkRhs = concatMap fsymbolToSymbol . Array.elems

@@ -213,7 +213,7 @@ langsDemo = langsLang `except` ["Ara","Hin","Ina","Tha"]
 langsParse = langs `only` ["Eng"]
 
 -- languages for which langs.pgf is built
-langsPGF = langsLang `except` ["Ara","Bul","Hin","Ron","Tha"]
+langsPGF = langsLang `except` ["Ara","Hin","Ron","Tha"]
 
 -- languages for which Compatibility exists (to be extended)
 langsCompat = langsLang `only` ["Cat","Eng","Fin","Fre","Ita","Spa","Swe"]
@@ -297,15 +297,14 @@ unlexer abstr ls =
 -- | Runs the gf executable in compile mode with the given arguments.
 run_gfc :: PackageDescription -> LocalBuildInfo -> [String] -> IO ()
 run_gfc pkg lbi args = 
-    do let args' = ["-batch","-gf-lib-path="++rgl_src_dir] ++ filter (not . null) args ++ ["+RTS"] ++ rts_flags ++ ["-RTS"]
+    do let args' = ["-batch","-gf-lib-path="++rgl_src_dir] ++ filter (not . null) args
            gf = default_gf pkg lbi
        putStrLn $ "Running: " ++ gf ++ " " ++ unwords (map showArg args')
        e <- rawSystem gf args'
        case e of
          ExitSuccess   -> return ()
          ExitFailure i -> die $ "gf exited with exit code: " ++ show i
-  where rts_flags = ["-K64M"]
-        showArg arg = "'" ++ arg ++ "'"
+  where showArg arg = "'" ++ arg ++ "'"
 
 default_gf pkg lbi = buildDir lbi </> exeName' </> exeNameReal
   where

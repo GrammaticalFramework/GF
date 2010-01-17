@@ -1,4 +1,4 @@
-module PGF.Check (checkPGF) where
+module PGF.Check (checkPGF,checkLin) where
 
 import PGF.CId
 import PGF.Data
@@ -7,14 +7,15 @@ import GF.Data.ErrM
 
 import qualified Data.Map as Map
 import Control.Monad
+import Data.Maybe(fromMaybe)
 import Debug.Trace
 
 checkPGF :: PGF -> Err (PGF,Bool)
-checkPGF pgf = do
+checkPGF pgf = return (pgf,True) {- do
   (cs,bs) <- mapM (checkConcrete pgf) 
                (Map.assocs (concretes pgf)) >>= return . unzip
   return (pgf {concretes = Map.fromAscList cs}, and bs)
-
+-}
 
 -- errors are non-fatal; replace with 'fail' to change this
 msg s = trace s (return ())
@@ -27,7 +28,7 @@ labelBoolErr ms iob = do
   (x,b) <- iob
   if b then return (x,b) else (msg ms >> return (x,b))
 
-
+{-
 checkConcrete :: PGF -> (CId,Concr) -> Err ((CId,Concr),Bool)
 checkConcrete pgf (lang,cnc) = 
   labelBoolErr ("happened in language " ++ showCId lang) $ do
@@ -35,8 +36,11 @@ checkConcrete pgf (lang,cnc) =
     return ((lang,cnc{lins = Map.fromAscList rs}),and bs)
  where
    checkl = checkLin pgf lang
+-}
 
-checkLin :: PGF -> CId -> (CId,Term) -> Err ((CId,Term),Bool)
+type PGFSig = (Map.Map CId (Type,Int,[Equation]),Map.Map CId Term,Map.Map CId Term)
+
+checkLin :: PGFSig -> CId -> (CId,Term) -> Err ((CId,Term),Bool)
 checkLin pgf lang (f,t) = 
   labelBoolErr ("happened in function " ++ showCId f) $ do
     (t',b) <- checkTerm (lintype pgf lang f) t --- $ inline pgf lang t
@@ -124,8 +128,8 @@ ints = C
 str :: CType
 str = S []
 
-lintype :: PGF -> CId -> CId -> LinType
-lintype pgf lang fun = case typeSkeleton (lookType pgf fun) of
+lintype :: PGFSig -> CId -> CId -> LinType
+lintype pgf lang fun = case typeSkeleton (lookFun pgf fun) of
   (cs,c) -> (map vlinc cs, linc c) ---- HOAS
  where 
    linc = lookLincat pgf lang
@@ -133,7 +137,7 @@ lintype pgf lang fun = case typeSkeleton (lookType pgf fun) of
    vlinc (i,c) = case linc c of
      R ts -> R (ts ++ replicate i str)
 
-inline :: PGF -> CId -> Term -> Term
+inline :: PGFSig -> CId -> Term -> Term
 inline pgf lang t = case t of
   F c -> inl $ look c
   _ -> composSafeOp inl t
@@ -171,3 +175,7 @@ err :: (String -> b) -> (a -> b) -> Err a -> b
 err d f e = case e of
   Ok a -> f a
   Bad s -> d s
+
+lookFun    (abs,lin,lincats)   f = (\(a,b,c) -> a) $ fromMaybe (error "No abs") (Map.lookup f abs)
+lookLincat (abs,lin,lincats) _ c = fromMaybe (error "No lincat") (Map.lookup c lincats)
+lookLin    (abs,lin,lincats) _ f = fromMaybe (error "No lin") (Map.lookup f lin)

@@ -5,7 +5,7 @@ module GF.Infra.Option
      Flags(..), 
      Mode(..), Phase(..), Verbosity(..), Encoding(..), OutputFormat(..), 
      SISRFormat(..), Optimization(..), CFGTransform(..), HaskellOption(..),
-     Dump(..), Printer(..), Recomp(..), BuildParser(..),
+     Dump(..), Printer(..), Recomp(..),
      -- * Option parsing 
      parseOptions, parseModuleOptions, fixRelativeLibPaths,
      -- * Option pretty-printing
@@ -81,7 +81,6 @@ data Encoding = UTF_8 | ISO_8859_1 | CP_1250 | CP_1251 | CP_1252
   deriving (Eq,Ord)
 
 data OutputFormat = FmtPGFPretty
-                  | FmtPMCFGPretty
                   | FmtJavaScript 
                   | FmtHaskell 
                   | FmtProlog
@@ -137,9 +136,6 @@ data Printer = PrinterStrip -- ^ Remove name qualifiers.
 data Recomp = AlwaysRecomp | RecompIfNewer | NeverRecomp
   deriving (Show,Eq,Ord)
 
-data BuildParser = BuildParser | DontBuildParser | BuildParserOnDemand
-  deriving (Show,Eq,Ord)
-
 data Flags = Flags {
       optMode            :: Mode,
       optStopAfterPhase  :: Phase,
@@ -172,7 +168,6 @@ data Flags = Flags {
       optSpeechLanguage  :: Maybe String,
       optLexer           :: Maybe String,
       optUnlexer         :: Maybe String,
-      optBuildParser     :: BuildParser,
       optWarnings        :: [Warning],
       optDump            :: [Dump]
     }
@@ -218,7 +213,6 @@ optionsPGF :: Options -> [(String,String)]
 optionsPGF opts = 
          maybe [] (\x -> [("language",x)]) (flag optSpeechLanguage opts)
       ++ maybe [] (\x -> [("startcat",x)]) (flag optStartCat opts)
-      ++ (if flag optBuildParser opts == BuildParserOnDemand then [("parser","ondemand")] else [])
 
 -- Option manipulation
 
@@ -274,7 +268,6 @@ defaultFlags = Flags {
       optSpeechLanguage  = Nothing,
       optLexer           = Nothing,
       optUnlexer         = Nothing,
-      optBuildParser     = BuildParser,
       optWarnings        = [],
       optDump            = []
     }
@@ -351,7 +344,6 @@ optDescr =
      Option [] ["coding"] (ReqArg coding "ENCODING") 
                 ("Character encoding of the source grammar, ENCODING = "
                  ++ concat (intersperse " | " (map fst encodings)) ++ "."),
-     Option [] ["parser"] (ReqArg buildParser "VALUE") "Build parser (default on). VALUE = on | off | ondemand",
      Option [] ["startcat"] (ReqArg startcat "CAT") "Grammar start category.",
      Option [] ["language"] (ReqArg language "LANG") "Set the speech language flag to LANG in the generated grammar.",
      Option [] ["lexer"] (ReqArg lexer "LEXER") "Use lexer LEXER.",
@@ -410,11 +402,6 @@ optDescr =
        coding      x = case lookup x encodings of
                          Just c  -> set $ \o -> o { optEncoding = c }
                          Nothing -> fail $ "Unknown character encoding: " ++ x
-       buildParser x = do v <- case x of
-                                 "on"       -> return BuildParser
-                                 "off"      -> return DontBuildParser
-                                 "ondemand" -> return BuildParserOnDemand
-                          set $ \o -> o { optBuildParser = v }
        startcat    x = set $ \o -> o { optStartCat = Just x }
        language    x = set $ \o -> o { optSpeechLanguage = Just x }
        lexer       x = set $ \o -> o { optLexer = Just x }
@@ -441,7 +428,6 @@ optDescr =
 outputFormats :: [(String,OutputFormat)]
 outputFormats = 
     [("pgf_pretty",   FmtPGFPretty),
-     ("pmcfg_pretty", FmtPMCFGPretty),
      ("js",           FmtJavaScript),
      ("haskell",      FmtHaskell),
      ("prolog",       FmtProlog),

@@ -35,24 +35,20 @@ import Control.Exception
 -- main conversion function
 
 
-convertConcrete :: Options -> Abstr -> CId -> Concr -> IO ParserInfo
-convertConcrete opts abs lang cnc = do
+--convertConcrete :: Options -> Abstr -> CId -> Concr -> IO Concr
+convertConcrete opts lang flags printnames abs_defs cnc_defs lincats params lin_defs = do
   let env0 = emptyGrammarEnv cnc_defs cat_defs params
   when (flag optProf opts) $ do
     profileGrammar lang cnc_defs env0 pfrules
   let env1 = expandHOAS abs_defs cnc_defs cat_defs lin_defs env0
       env2 = List.foldl' (convertRule cnc_defs) env1 pfrules
-  return $ getParserInfo env2
+  return $ getParserInfo flags printnames env2
   where
-    abs_defs = Map.assocs (funs abs)
-    cnc_defs = Map.union (opers cnc) (lins cnc) -- "union big+small most efficient"
-    cat_defs = Map.insert cidVar (S []) (lincats cnc)
-    params   = paramlincats cnc
-    lin_defs = lindefs cnc
+    cat_defs = Map.insert cidVar (S []) lincats
 
     pfrules = [
       (PFRule id args (0,res) (map findLinType args) (findLinType (0,res)) term) | 
-        (id, (ty,_,_)) <- abs_defs, let (args,res) = typeSkeleton ty, 
+        (id, (ty,_,_)) <- Map.toList abs_defs, let (args,res) = typeSkeleton ty, 
         term <- maybeToList (Map.lookup id cnc_defs)]
         
     findLinType (_,id) = fromMaybe (error $ "No lincat for " ++ show id) (Map.lookup id cat_defs)
@@ -364,7 +360,7 @@ expandHOAS abs_defs cnc_defs lincats lindefs env =
   foldl add_varFun (foldl (\env ncat -> add_hoFun (add_hoCat env ncat) ncat) env hoTypes) (Map.keys lincats)
   where
     hoTypes :: [(Int,CId)]
-    hoTypes = sortNub [(n,c) | (_,(ty,_,_)) <- abs_defs
+    hoTypes = sortNub [(n,c) | (_,(ty,_,_)) <- Map.toList abs_defs
                              , (n,c) <- fst (typeSkeleton ty), n > 0]
   
     -- add a range of PMCFG categories for each GF high-order category
@@ -438,16 +434,18 @@ addFCoercion env@(GrammarEnv last_id catSet seqSet funSet crcSet prodSet) sub_fc
                 Nothing   -> let !fcat = last_id+1
                              in (GrammarEnv fcat catSet seqSet funSet (Map.insert sub_fcats fcat crcSet) prodSet,fcat)
 
-getParserInfo :: GrammarEnv -> ParserInfo
-getParserInfo (GrammarEnv last_id catSet seqSet funSet crcSet prodSet) =
-  ParserInfo { functions   = mkArray funSet
-             , sequences   = mkArray seqSet
-             , productions = IntMap.union prodSet coercions
-             , pproductions = IntMap.empty
-             , lproductions = Map.empty
-             , startCats   = maybe Map.empty (Map.map (\(start,end,_,lbls) -> (start,end,lbls))) (IntMap.lookup 0 catSet)
-             , totalCats   = last_id+1
-             }
+getParserInfo :: Map.Map CId String -> Map.Map CId String -> GrammarEnv -> Concr
+getParserInfo flags printnames (GrammarEnv last_id catSet seqSet funSet crcSet prodSet) =
+  Concr { cflags = flags
+        , printnames = printnames
+        , functions   = mkArray funSet
+        , sequences   = mkArray seqSet
+        , productions = IntMap.union prodSet coercions
+        , pproductions = IntMap.empty
+        , lproductions = Map.empty
+        , startCats   = maybe Map.empty (Map.map (\(start,end,_,lbls) -> (start,end,lbls))) (IntMap.lookup 0 catSet)
+        , totalCats   = last_id+1
+        }
   where
     mkArray map = array (0,Map.size map-1) [(v,k) | (k,v) <- Map.toList map]
     
