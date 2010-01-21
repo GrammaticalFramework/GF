@@ -1,7 +1,7 @@
 --# -path=.:alltenses
 
-concrete DemoAra of Demo = LangAra ** 
-  open LangAra in {
+concrete DemoLat of Demo = LangLat ** 
+  open LangLat in {
 
   lin 
     AdjN ap n = AdjCN ap (UseN n) ;

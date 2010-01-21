@@ -1,16 +1,10 @@
 --# -path=.:alltenses
 
-concrete DemoSwe of Demo = 
-  NounSwe,
-  ClauseSwe,
-  AdjectiveSwe,
-  AdverbSwe,
-  NumeralSwe,
-  QuestionSwe,
-  StructuralSwe,
-  LexiconSwe, TenseX
-  ** {
+concrete DemoSwe of Demo = LangSwe ** 
+  open LangSwe in {
 
-flags language = sv; unlexer = text ; lexer = text ;
+  lin 
+    AdjN ap n = AdjCN ap (UseN n) ;
+    AdAdj ad a = AdAP ad (PositA a) ;
 
-} ;
+}

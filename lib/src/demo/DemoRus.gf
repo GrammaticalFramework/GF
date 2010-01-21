@@ -1,16 +1,10 @@
 --# -path=.:alltenses
 
-concrete DemoRus of Demo = 
-  NounRus,
-  ClauseRus,
-  AdjectiveRus,
-  AdverbRus,
-  NumeralRus,
-  QuestionRus,
-  StructuralRus,
-  LexiconRus
-  ** {
+concrete DemoRus of Demo = LangRus ** 
+  open LangRus in {
 
-flags language = ru; unlexer = text ; lexer = text ;
+  lin 
+    AdjN ap n = AdjCN ap (UseN n) ;
+    AdAdj ad a = AdAP ad (PositA a) ;
 
-} ;
+}

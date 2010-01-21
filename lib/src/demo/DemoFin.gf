@@ -1,16 +1,10 @@
 --# -path=.:alltenses
 
-concrete DemoFin of Demo = 
-  NounFin,
-  ClauseFin,
-  AdjectiveFin,
-  AdverbFin,
-  NumeralFin,
-  QuestionFin,
-  StructuralFin,
-  LexiconFin
-  ** {
+concrete DemoFin of Demo = LangFin ** 
+  open LangFin in {
 
-flags language = fi; unlexer = text ; lexer = text ;
+  lin 
+    AdjN ap n = AdjCN ap (UseN n) ;
+    AdAdj ad a = AdAP ad (PositA a) ;
 
-} ;
+}

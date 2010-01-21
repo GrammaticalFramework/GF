@@ -10,7 +10,7 @@ import System.Exit
 -- Make commands for compiling and testing resource grammars.
 -- usage: runghc Make ((present? OPT?) | (clone FILE))? LANGS? 
 -- where 
--- - OPT = (lang | api | math | pgf | test | demo | parse | clean)
+-- - OPT = (lang | api | math | pgf | test | parse | clean | clone)
 -- - LANGS has the form e.g. langs=Eng,Fin,Rus
 -- - clone with a flag file=FILENAME clones the file to the specified languages,
 --   by replacing the 3-letter language name of the original in both 
@@ -67,7 +67,7 @@ langsMinimal = langs `only` ["Ara","Eng","Bul","Rus"]
 langsTest = langsLang `except` ["Ara","Bul","Cat","Hin","Rus","Spa","Tha"]
 
 -- languages for which to run demo test
-langsDemo = langsLang `except` ["Ara","Hin","Ina","Tha"]
+langsDemo = langsLang `except` ["Ara","Hin","Ina","Lat","Tha"]
 
 -- languages for which to compile parsing grammars
 langsParse = langs `only` ["Eng"]
@@ -115,9 +115,10 @@ make xx = do
   ifxx "test" $ do
     let ls = optl langsTest
     gf (treeb "Lang" ls) $ unwords [dir ++ "/Lang" ++ la ++ ".gfo" | (_,la) <- ls] 
-  ifxx "demo" $ do
-    let ls = optl langsDemo
-    gf (demos "Demo" ls) $ unwords ["demo/Demo" ++ la ++ ".gf" | (_,la) <- ls]
+-- use 'make demo'
+--  ifxx "demo" $ do
+--    let ls = optl langsDemo
+--    gf (demos "Demo" ls) $ unwords ["demo/Demo" ++ la ++ ".gf" | (_,la) <- ls]
   ifxx "parse" $ do
     mapM_ (gfc pres [] . parse) (optl langsParse)
     copy "parse/*.gfo parse/oald/*.gfo" dir

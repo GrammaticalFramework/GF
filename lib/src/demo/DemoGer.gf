@@ -1,16 +1,10 @@
 --# -path=.:alltenses
 
-concrete DemoGer of Demo = 
-  NounGer,
-  ClauseGer,
-  AdjectiveGer,
-  AdverbGer,
-  NumeralGer,
-  QuestionGer,
-  StructuralGer,
-  LexiconGer
-  ** {
+concrete DemoGer of Demo = LangGer ** 
+  open LangGer in {
 
-flags language = de; unlexer = text ; lexer = text ;
+  lin 
+    AdjN ap n = AdjCN ap (UseN n) ;
+    AdAdj ad a = AdAP ad (PositA a) ;
 
-} ;
+}
