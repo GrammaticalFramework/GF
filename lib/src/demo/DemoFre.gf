@@ -1,16 +1,10 @@
 --# -path=.:alltenses
 
-concrete DemoFre of Demo = 
-  NounFre,
-  ClauseFre,
-  AdjectiveFre,
-  AdverbFre,
-  NumeralFre,
-  QuestionFre,
-  StructuralFre,
-  LexiconFre
-  ** {
+concrete DemoFre of Demo = LangFre ** 
+  open LangFre in {
 
-flags language = fr; unlexer = text ; lexer = text ;
+  lin 
+    AdjN ap n = AdjCN ap (UseN n) ;
+    AdAdj ad a = AdAP ad (PositA a) ;
 
-} ;
+}

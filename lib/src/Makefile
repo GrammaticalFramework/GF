@@ -41,7 +41,16 @@ test:
 	$(RUNMAKE) test
 
 demo:
-	$(RUNMAKE) demo
+	gf -make -name=Demo1 demo/DemoDan.gf demo/DemoDut.gf demo/DemoEng.gf
+	gf -make -name=Demo2 demo/DemoFin.gf +RTS -K48M
+	gf -make -name=Demo3 demo/DemoFre.gf demo/DemoGer.gf demo/DemoIta.gf demo/DemoNor.gf demo/DemoPol.gf +RTS -K48M
+	gf -make -name=Demo4 -parser=off demo/DemoRon.gf +RTS -K48M
+	gf -make -name=Demo5 demo/DemoRus.gf demo/DemoSpa.gf demo/DemoSwe.gf
+	gf -make Demo1.pgf Demo2.pgf Demo3.pgf Demo4.pgf Demo5.pgf
+	rm Demo?.pgf
+
+demoex:
+	echo "gr -number=100 -cat=S | l -treebank | ps -to_html | wf -file=resdemo.html" | gf Demo.pgf
 
 parse:
 	$(RUNMAKE) parse

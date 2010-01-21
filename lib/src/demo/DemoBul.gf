@@ -1,16 +1,10 @@
 --# -path=.:alltenses
 
-concrete DemoBul of Demo = 
-  NounBul,
-  ClauseBul,
-  AdjectiveBul,
-  AdverbBul,
-  NumeralBul,
-  QuestionBul,
-  StructuralBul,
-  LexiconBul
-  ** {
+concrete DemoBul of Demo = LangBul ** 
+  open LangBul in {
 
-flags language = bg; unlexer = text ; lexer = text ;
+  lin 
+    AdjN ap n = AdjCN ap (UseN n) ;
+    AdAdj ad a = AdAP ad (PositA a) ;
 
-} ;
+}

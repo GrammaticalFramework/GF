@@ -1,16 +1,10 @@
 --# -path=.:alltenses
 
-concrete DemoDan of Demo = 
-  NounDan,
-  ClauseDan,
-  AdjectiveDan,
-  AdverbDan,
-  NumeralDan,
-  QuestionDan,
-  StructuralDan,
-  LexiconDan, TenseX
-  ** {
+concrete DemoDan of Demo = LangDan ** 
+  open LangDan in {
 
-flags language = da; unlexer = text ; lexer = text ;
+  lin 
+    AdjN ap n = AdjCN ap (UseN n) ;
+    AdAdj ad a = AdAP ad (PositA a) ;
 
-} ;
+}

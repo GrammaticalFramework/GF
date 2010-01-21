@@ -1,16 +1,10 @@
 --# -path=.:alltenses
 
-concrete DemoEng of Demo = 
-  NounEng,
-  ClauseEng,
-  AdjectiveEng,
-  AdverbEng,
-  NumeralEng,
-  QuestionEng,
-  StructuralEng,
-  LexiconEng
-  ** {
+concrete DemoEng of Demo = LangEng ** 
+  open LangEng in {
 
-flags language = en; unlexer = text ; lexer = text ;
+  lin 
+    AdjN ap n = AdjCN ap (UseN n) ;
+    AdAdj ad a = AdAP ad (PositA a) ;
 
-} ;
+}

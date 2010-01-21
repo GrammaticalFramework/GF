@@ -1,16 +1,10 @@
 --# -path=.:alltenses
 
-concrete DemoCat of Demo = 
-  NounCat,
-  ClauseCat,
-  AdjectiveCat,
-  AdverbCat,
-  NumeralCat,
-  QuestionCat,
-  StructuralCat,
-  LexiconCat
-  ** {
+concrete DemoCat of Demo = LangCat ** 
+  open LangCat in {
 
-flags language = ca; unlexer = text ; lexer = text ;
+  lin 
+    AdjN ap n = AdjCN ap (UseN n) ;
+    AdAdj ad a = AdAP ad (PositA a) ;
 
-} ;
+}

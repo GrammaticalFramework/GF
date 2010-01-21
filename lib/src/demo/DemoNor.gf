@@ -1,16 +1,10 @@
 --# -path=.:alltenses
 
-concrete DemoNor of Demo = 
-  NounNor,
-  ClauseNor,
-  AdjectiveNor,
-  AdverbNor,
-  NumeralNor,
-  QuestionNor,
-  StructuralNor,
-  LexiconNor, TenseX
-  ** {
+concrete DemoNor of Demo = LangNor ** 
+  open LangNor in {
 
-flags language = no; unlexer = text ; lexer = text ;
+  lin 
+    AdjN ap n = AdjCN ap (UseN n) ;
+    AdAdj ad a = AdAP ad (PositA a) ;
 
-} ;
+}

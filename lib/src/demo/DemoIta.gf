@@ -1,16 +1,10 @@
 --# -path=.:alltenses
 
-concrete DemoIta of Demo = 
-  NounIta,
-  ClauseIta,
-  AdjectiveIta,
-  AdverbIta,
-  NumeralIta,
-  QuestionIta,
-  StructuralIta,
-  LexiconIta
-  ** {
+concrete DemoIta of Demo = LangIta ** 
+  open LangIta in {
 
-flags language = it; unlexer = text ; lexer = text ;
+  lin 
+    AdjN ap n = AdjCN ap (UseN n) ;
+    AdAdj ad a = AdAP ad (PositA a) ;
 
-} ;
+}

@@ -1,16 +1,10 @@
 --# -path=.:alltenses
 
-concrete DemoSpa of Demo = 
-  NounSpa,
-  ClauseSpa,
-  AdjectiveSpa,
-  AdverbSpa,
-  NumeralSpa,
-  QuestionSpa,
-  StructuralSpa,
-  LexiconSpa
-  ** {
+concrete DemoSpa of Demo = LangSpa ** 
+  open LangSpa in {
 
-flags language = es; unlexer = text ; lexer = text ;
+  lin 
+    AdjN ap n = AdjCN ap (UseN n) ;
+    AdAdj ad a = AdAP ad (PositA a) ;
 
-} ;
+}
