@@ -52,7 +52,7 @@ canon2pgf opts pars cgr@(M.MGrammar ((a,abm):cms)) = do
     then putStrLn (render (vcat (map (ppModule Qualified) (M.modules cgr))))
     else return ()
   cncs <- sequence [mkConcr lang (i2i lang) mo | (lang,mo) <- cms]
-  return (D.PGF an cns gflags abs (Map.fromList cncs))
+  return $ updateProductionIndices (D.PGF an cns gflags abs (Map.fromList cncs))
  where
   -- abstract
   an  = (i2i a)
