@@ -4,6 +4,7 @@ import PGF.CId
 import PGF.Data
 import PGF.Macros
 import PGF.TypeCheck
+import PGF.Probabilistic
 
 import qualified Data.Map as M
 import System.Random
@@ -29,10 +30,14 @@ generate pgf ty@(DTyp _ cat _) dp = filter (\e -> case checkExpr pgf e ty of
 
 -- generate an infinite list of trees randomly
 genRandom :: StdGen -> PGF -> Type -> [Expr]
-genRandom gen pgf ty@(DTyp _ cat _) = filter (\e -> case checkExpr pgf e ty of 
-                                                      Left  _ -> False
-                                                      Right _ -> True             )
-                                             (genTrees (randomRs (0.0, 1.0 :: Double) gen) cat)
+genRandom = genRandomProb Nothing
+
+genRandomProb :: Maybe Probabilities -> StdGen -> PGF -> Type -> [Expr]
+genRandomProb mprobs gen pgf ty@(DTyp _ cat _) = 
+   filter (\e -> case checkExpr pgf e ty of 
+                   Left  _ -> False
+                   Right _ -> True             )
+          (genTrees (randomRs (0.0, 1.0 :: Double) gen) cat)
  where
   timeout = 47 -- give up
 
@@ -54,8 +59,9 @@ genRandom gen pgf ty@(DTyp _ cat _) = filter (\e -> case checkExpr pgf e ty of
           (f,args) = getf d fs
           (ts,k)   = getts ds2 args
         in (foldl EApp (EFun f) ts, k+1)
-    getf d fs = let lg = (length fs) in
-      fs !! (floor (d * fromIntegral lg))
+    getf d fs = case mprobs of
+      Just _ -> hitRegion d [(p,(f,args)) | (p,(f,args)) <- fs]
+      _      -> let lg = (length fs) in snd (fs !! (floor (d * fromIntegral lg)))
     getts ds cats = case cats of
       c:cs -> let 
           (t, k)  = gett ds c
@@ -63,4 +69,16 @@ genRandom gen pgf ty@(DTyp _ cat _) = filter (\e -> case checkExpr pgf e ty of
         in (t:ts, k + ks)
       _ -> ([],0)
 
-    fns cat = [(f,(fst (catSkeleton ty))) | (f,ty) <- functionsToCat pgf cat]
+    fns :: CId -> [(Double,(CId,[CId]))]
+    fns cat = case mprobs of 
+      Just probs -> maybe [] id $ M.lookup cat (catProbs probs)
+      _ -> [(deflt,(f,(fst (catSkeleton ty)))) | 
+              let fs = functionsToCat pgf cat, 
+              (f,ty) <- fs,
+              let deflt = 1.0 / fromIntegral (length fs)]
+
+hitRegion :: Double -> [(Double,a)] -> a
+hitRegion d vs = case vs of
+  (p1,v1):vs2 -> 
+    if d < p1 then v1 else hitRegion d [(p+p1,v) | (p,v) <- vs2]
+
