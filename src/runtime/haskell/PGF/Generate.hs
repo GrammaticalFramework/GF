@@ -58,10 +58,13 @@ genRandomProb mprobs gen pgf ty@(DTyp _ cat _) =
           d:ds2    = ds
           (f,args) = getf d fs
           (ts,k)   = getts ds2 args
-        in (foldl EApp (EFun f) ts, k+1)
+        in (foldl EApp f ts, k+1)
     getf d fs = case mprobs of
       Just _ -> hitRegion d [(p,(f,args)) | (p,(f,args)) <- fs]
-      _      -> let lg = (length fs) in snd (fs !! (floor (d * fromIntegral lg)))
+      _      -> let 
+                  lg = length fs 
+                  (f,v) = snd (fs !! (floor (d * fromIntegral lg)))
+                in (EFun f,v)
     getts ds cats = case cats of
       c:cs -> let 
           (t, k)  = gett ds c
@@ -77,8 +80,9 @@ genRandomProb mprobs gen pgf ty@(DTyp _ cat _) =
               (f,ty) <- fs,
               let deflt = 1.0 / fromIntegral (length fs)]
 
-hitRegion :: Double -> [(Double,a)] -> a
+hitRegion :: Double -> [(Double,(CId,[a]))] -> (Expr,[a])
 hitRegion d vs = case vs of
-  (p1,v1):vs2 -> 
-    if d < p1 then v1 else hitRegion d [(p+p1,v) | (p,v) <- vs2]
+  (p1,(f,v1)):vs2 -> if d < p1 then (EFun f, v1) else hitRegion (d-p1) vs2
+  _ -> (EMeta 9,[])
+
 
