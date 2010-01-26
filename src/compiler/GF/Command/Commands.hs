@@ -20,6 +20,8 @@ import PGF.Macros
 import PGF.Data ----
 import PGF.Morphology
 import PGF.Printer
+import PGF.Probabilistic -- (getProbsFromFile,prProbabilities,defaultProbabilities)
+import PGF.Generate (genRandomProb) ----
 import GF.Compile.Export
 import GF.Infra.Option (noOptions, readOutputFormat, Encoding(..))
 import GF.Infra.UseIO
@@ -42,6 +44,7 @@ import System.Cmd
 import Text.PrettyPrint
 import Data.List (sort)
 import Debug.Trace
+import System.Random (newStdGen) ----
 
 type CommandOutput = ([Expr],String) ---- errors, etc
 
@@ -245,11 +248,14 @@ allCommands cod env@(pgf, mos) = Map.fromList [
      flags = [
        ("cat","generation category"),
        ("lang","uses only functions that have linearizations in all these languages"),
-       ("number","number of trees generated")
+       ("number","number of trees generated"),
+       ("probs", "file with biased probabilities (format 'f 0.4' one by line)")
        ],
      exec = \opts _ -> do
        let pgfr = optRestricted opts
-       ts <- generateRandom pgfr (optType opts)
+       gen <- newStdGen
+       mprobs <- optProbs opts pgfr
+       ts <- return $ genRandomProb mprobs gen pgfr (optType opts)
        returnFromExprs $ take (optNum opts) ts
      }),
   ("gt", emptyCommandInfo {
@@ -540,6 +546,35 @@ allCommands cod env@(pgf, mos) = Map.fromList [
          _ -> return (fromString s),
      flags = [("file","the input file name")] 
      }),
+  ("rt", emptyCommandInfo {
+     longname = "rank_trees",
+     synopsis = "show trees in an order of decreasing probability",
+     explanation = unlines [
+       "Order trees from the most to the least probable, using either",
+       "even distribution in each category (default) or biased as specified",
+       "by the file given by flag -probs=FILE, where each line has the form",
+       "'function probability', e.g. 'youPol_Pron  0.01'."
+       ],
+     exec = \opts ts -> do
+         mprobs <- optProbs opts pgf
+         let probs = maybe (defaultProbabilities pgf) id mprobs
+         let tds = rankTreesByProbs probs ts
+         if isOpt "v" opts
+           then putStrLn $ 
+                  unlines [showExpr []  t ++ "\t--" ++ show d | (t,d) <- tds]
+           else return ()
+         returnFromExprs $ map fst tds,
+     flags = [
+       ("probs","probabilities from this file (format 'f 0.6' per line)")
+       ], 
+     options = [
+       ("v","show all trees with their probability scores")
+       ],
+     examples = [
+      "p \"you are here\" | rt -probs=probs | pt -number=1 -- most probable result",
+      "se utf8   -- set encoding to utf8 (default)"
+      ]
+     }),
   ("tq", emptyCommandInfo {
      longname = "translation_quiz",
      synopsis = "start a translation quiz",
@@ -828,6 +863,13 @@ allCommands cod env@(pgf, mos) = Map.fromList [
    optOpenTypes opts = case valStrOpts "openclass" "" opts of
      ""   -> []
      cats -> mapMaybe readType (chunks ',' cats)
+
+   optProbs opts pgfr = case valStrOpts "probs" "" opts of
+     ""   -> return Nothing
+     file -> do
+       ps <- getProbsFromFile file pgf ---- pgfr!
+--       putStrLn $ prProbabilities ps 
+       return $ Just ps
 
    optType opts = 
      let str = valStrOpts "cat" (showCId $ lookStartCat pgf) opts

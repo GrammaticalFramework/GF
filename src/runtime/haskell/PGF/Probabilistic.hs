@@ -2,8 +2,10 @@ module PGF.Probabilistic (
   probTree                -- :: Probabilities -> Tree -> Double
  ,rankTreesByProbs        -- :: Probabilities -> [Tree] -> [Tree]
  ,Probabilities           -- data
+ ,prProbabilities         -- Probabilities -> String
  ,catProbs
  ,getProbsFromFile        -- :: FilePath -> PGF -> IO Probabilities
+ ,defaultProbabilities    -- :: PGF -> Probabilities
  ) where
 
 import PGF.CId
@@ -17,6 +19,10 @@ data Probabilities = Probs {
   funProbs :: M.Map CId Double,
   catProbs :: M.Map CId [(Double, (CId,[CId]))] -- prob and arglist
   }
+
+prProbabilities :: Probabilities -> String
+prProbabilities = unlines . map pr . M.toList . funProbs where
+  pr (f,d) = showCId f ++ "\t" ++ show d
 
 getProbsFromFile :: FilePath -> PGF -> IO Probabilities
 getProbsFromFile file pgf = do
@@ -33,8 +39,8 @@ fillProbs pgf funs =
                 | (cat,_) <- M.toList (cats (abstract pgf)), 
                   let fs = functionsToCat pgf cat]
      cats1 = map fill cats0
-     funs1 = M.fromList [(f,p) | (_,cf) <- cats1, (p,(f,_)) <- cf]
-  in Probs funs1 (M.fromList cats1)
+     funs1 = [(f,p) | (_,cf) <- cats1, (p,(f,_)) <- cf]
+     in Probs (M.fromList funs1) (M.fromList cats1)
  where
   fill (cat,fs) = (cat, pad [(getProb0 f,(f,xs)) | (f,xs) <- fs]) 
     where
@@ -43,8 +49,13 @@ fillProbs pgf funs =
       pad :: [(Double,a)] -> [(Double,a)]
       pad pfs = [(if p== -1 then deflt else p,f) | (p,f) <- pfs]
         where
-          deflt = 1 - sum poss / fromIntegral (length negs) 
-          (poss,negs) = partition (> (-1)) (map fst pfs)
+          deflt = case length negs of
+            0 -> 0
+            _ -> (1 - sum poss) / fromIntegral (length negs) 
+          (poss,negs) = partition (> (-0.5)) (map fst pfs)
+
+defaultProbabilities :: PGF -> Probabilities
+defaultProbabilities pgf = fillProbs pgf M.empty
 
 -- | compute the probability of a given tree
 probTree :: Probabilities -> Expr -> Double
