@@ -1,0 +1,30 @@
+youPl_Pron 0.04
+youPol_Pron 0.04
+
+UttS 0.6
+UttQS 0.2
+UttImp 0.1
+
+NoPConj 0.8
+NoVoc 0.98
+
+PredVP 0.9
+
+DetCN 0.7
+UsePron 0.2
+
+SlashV2 0.8
+
+UseV 0.4
+ComplSlash 0.4
+ComplVQ 0.02
+ComplVS 0.02
+ComplVA 0.02
+
+DetQuant 0.8
+
+ASimul 0.8
+TFut 0.1
+TCond 0.1
+PPos 0.7
+
