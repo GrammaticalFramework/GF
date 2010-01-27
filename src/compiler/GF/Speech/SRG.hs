@@ -13,7 +13,6 @@ module GF.Speech.SRG (SRG(..), SRGRule(..), SRGAlt(..), SRGItem, SRGSymbol
                      , ebnfPrinter
                      , makeNonLeftRecursiveSRG
                      , makeNonRecursiveSRG
-                     , getSpeechLanguage
                      , isExternalCat
                      , lookupFM_
                      ) where
@@ -29,9 +28,7 @@ import GF.Speech.FiniteState
 import GF.Speech.RegExp
 import GF.Speech.CFGToFA
 import GF.Infra.Option
-import PGF.CId
-import PGF.Data
-import PGF.Macros
+import PGF
 
 import Data.List
 import Data.Maybe (fromMaybe, maybeToList)
@@ -116,7 +113,7 @@ mkSRG mkRules preprocess pgf cnc =
     SRG { srgName = showCId cnc,
 	  srgStartCat = cfgStartCat cfg,
           srgExternalCats = cfgExternalCats cfg,
-          srgLanguage = getSpeechLanguage pgf cnc,
+          srgLanguage = languageCode pgf cnc,
 	  srgRules = mkRules cfg }
     where cfg = renameCats (showCId cnc) $ preprocess $ pgfToCFG pgf cnc
 
@@ -130,9 +127,6 @@ renameCats prefix cfg = mapCFGCats renameCat cfg
         catsByPrefix = buildMultiMap [(takeWhile (/='_') cat, cat) | cat <- allCats' cfg, not (isExternal cat)]
         names = Map.fromList [(c,pref++"_"++show i) | (pref,cs) <- catsByPrefix, (c,i) <- zip cs [1..]]
         badCat c = error ("GF.Speech.SRG.renameCats: " ++ c ++ "\n" ++ prCFG cfg)
-
-getSpeechLanguage :: PGF -> CId -> Maybe String
-getSpeechLanguage pgf cnc = fmap (replace '_' '-') $ lookConcrFlag pgf cnc (mkCId "language")
 
 cfRulesToSRGRule :: [CFRule] -> SRGRule
 cfRulesToSRGRule rs@(r:_) = SRGRule (lhsCat r) rhs

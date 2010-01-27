@@ -52,14 +52,13 @@ canon2pgf opts pars cgr@(M.MGrammar ((a,abm):cms)) = do
     then putStrLn (render (vcat (map (ppModule Qualified) (M.modules cgr))))
     else return ()
   cncs <- sequence [mkConcr lang (i2i lang) mo | (lang,mo) <- cms]
-  return $ updateProductionIndices (D.PGF an cns gflags abs (Map.fromList cncs))
+  return $ updateProductionIndices (D.PGF gflags an abs (Map.fromList cncs))
  where
   -- abstract
   an  = (i2i a)
-  cns = map (i2i . fst) cms
-  abs = D.Abstr aflags funs cats catfuns
+  abs = D.Abstr aflags funs cats Map.empty
   gflags = Map.empty
-  aflags = Map.fromList [(mkCId f,x) | (f,x) <- optionsPGF (M.flags abm)]
+  aflags = Map.fromList [(mkCId f,C.LStr x) | (f,x) <- optionsPGF (M.flags abm)]
 
   mkDef (Just eqs) = [C.Equ ps' (mkExp scope' e) | (ps,e) <- eqs, let (scope',ps') = mapAccumL mkPatt [] ps]
   mkDef Nothing    = []
@@ -85,7 +84,7 @@ canon2pgf opts pars cgr@(M.MGrammar ((a,abm):cms)) = do
     return (lang, cnc)
     where
       js = tree2list (M.jments mo)
-      flags   = Map.fromList [(mkCId f,x) | (f,x) <- optionsPGF (M.flags mo)]
+      flags   = Map.fromList [(mkCId f,C.LStr x) | (f,x) <- optionsPGF (M.flags mo)]
       utf     = id -- trace (show lang0 +++ show flags) $ 
                 -- if moduleFlag optEncoding (moduleOptions (M.flags mo)) == UTF_8
                 --  then id else id 
@@ -132,7 +131,7 @@ mkExp scope t = case GM.termForm t of
       Vr x     -> case lookup x (zip scope [0..]) of
                     Just i  -> foldl C.EApp (C.EVar  i) args
                     Nothing -> foldl C.EApp (C.EMeta 0) args
-      EInt i   -> C.ELit (C.LInt i)
+      EInt i   -> C.ELit (C.LInt (fromIntegral i))
       EFloat f -> C.ELit (C.LFlt f)
       K s      -> C.ELit (C.LStr s)
       Meta i   -> C.EMeta i
@@ -144,7 +143,7 @@ mkPatt scope p =
                    in (scope',C.PApp (i2i c) ps')
     A.PV x      -> (x:scope,C.PVar (i2i x))
     A.PW        -> (  scope,C.PWild)
-    A.PInt i    -> (  scope,C.PLit (C.LInt i))
+    A.PInt i    -> (  scope,C.PLit (C.LInt (fromIntegral i)))
     A.PFloat f  -> (  scope,C.PLit (C.LFlt f))
     A.PString s -> (  scope,C.PLit (C.LStr s))
 

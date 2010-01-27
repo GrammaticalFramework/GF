@@ -37,22 +37,22 @@ lookValCat :: PGF -> CId -> CId
 lookValCat pgf = valCat . lookType pgf
 
 lookStartCat :: PGF -> CId
-lookStartCat pgf = mkCId $ fromMaybe "S" $ msum $ Data.List.map (Map.lookup (mkCId "startcat"))
-                                                        [gflags pgf, aflags (abstract pgf)]
+lookStartCat pgf = mkCId $
+  case msum $ Data.List.map (Map.lookup (mkCId "startcat")) [gflags pgf, aflags (abstract pgf)] of
+    Just (LStr s) -> s
+    _             -> "S"
 
-lookGlobalFlag :: PGF -> CId -> String
-lookGlobalFlag pgf f = 
-  lookMap "?" f (gflags pgf)
+lookGlobalFlag :: PGF -> CId -> Maybe Literal
+lookGlobalFlag pgf f = Map.lookup f (gflags pgf)
 
-lookAbsFlag :: PGF -> CId -> String
-lookAbsFlag pgf f = 
-  lookMap "?" f (aflags (abstract pgf))
+lookAbsFlag :: PGF -> CId -> Maybe Literal
+lookAbsFlag pgf f = Map.lookup f (aflags (abstract pgf))
 
 lookConcr :: PGF -> CId -> Concr
 lookConcr pgf cnc = 
     lookMap (error $ "Missing concrete syntax: " ++ showCId cnc) cnc $ concretes pgf
 
-lookConcrFlag :: PGF -> CId -> CId -> Maybe String
+lookConcrFlag :: PGF -> CId -> CId -> Maybe Literal
 lookConcrFlag pgf lang f = Map.lookup f $ cflags $ lookConcr pgf lang
 
 functionsToCat :: PGF -> CId -> [(CId,Type)]
@@ -142,8 +142,13 @@ _B = mkCId "__gfB"
 _V = mkCId "__gfV"
 
 updateProductionIndices :: PGF -> PGF
-updateProductionIndices pgf = pgf{concretes = fmap updateConcrete (concretes pgf)}
+updateProductionIndices pgf = pgf{ abstract  = updateAbstract (abstract pgf)
+                                 , concretes = fmap updateConcrete (concretes pgf)
+                                 }
   where
+    updateAbstract abs =
+      abs{catfuns = Map.mapWithKey (\cat _ -> [f | (f, (DTyp _ c _,_,_)) <- Map.toList (funs abs), c==cat]) (cats abs)}
+
     updateConcrete cnc = 
       let prods0    = filterProductions (productions cnc)
           p_prods   = parseIndex cnc prods0
@@ -162,8 +167,8 @@ updateProductionIndices pgf = pgf{concretes = fmap updateConcrete (concretes pgf
           where
             set = Set.filter (filterRule prods) set0
 
-        filterRule prods (FApply funid args) = all (\fcat -> isLiteralFCat fcat || IntMap.member fcat prods) args
-        filterRule prods (FCoerce fcat)      = isLiteralFCat fcat || IntMap.member fcat prods
+        filterRule prods (PApply funid args) = all (\fcat -> isLiteralFCat fcat || IntMap.member fcat prods) args
+        filterRule prods (PCoerce fcat)      = isLiteralFCat fcat || IntMap.member fcat prods
         filterRule prods _                   = True
 
     parseIndex pinfo = IntMap.mapMaybeWithKey filterProdSet
@@ -175,12 +180,12 @@ updateProductionIndices pgf = pgf{concretes = fmap updateConcrete (concretes pgf
                                                then Nothing
                                                else Just prods'
 
-        is_ho_prod (FApply _ [fid]) | fid == fcatVar = True
+        is_ho_prod (PApply _ [fid]) | fid == fcatVar = True
         is_ho_prod _                                 = False
 
         ho_fids :: IntSet.IntSet
         ho_fids = IntSet.fromList [fid | cat <- ho_cats
-                                       , fid <- maybe [] (\(s,e,_) -> [s..e]) (Map.lookup cat (startCats pinfo))]
+                                       , fid <- maybe [] (\(CncCat s e _) -> [s..e]) (Map.lookup cat (cnccats pinfo))]
 
         ho_cats :: [CId]
         ho_cats = sortNub [c | (ty,_,_) <- Map.elems (funs (abstract pgf))
@@ -194,7 +199,7 @@ updateProductionIndices pgf = pgf{concretes = fmap updateConcrete (concretes pgf
                                                                         , prod <- Set.toList prods
                                                                         , fun <- getFunctions prod]
       where
-        getFunctions (FApply funid args) = let FFun fun _ = functions pinfo Array.! funid in [fun]
-        getFunctions (FCoerce fid)       = case IntMap.lookup fid productions of
+        getFunctions (PApply funid args) = let CncFun fun _ = cncfuns pinfo Array.! funid in [fun]
+        getFunctions (PCoerce fid)       = case IntMap.lookup fid productions of
                                              Nothing    -> []
                                              Just prods -> [fun | prod <- Set.toList prods, fun <- getFunctions prod]

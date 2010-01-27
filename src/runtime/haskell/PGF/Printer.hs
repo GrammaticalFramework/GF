@@ -40,34 +40,34 @@ ppCnc name cnc =
   nest 2 (text "productions" $$
           nest 2 (vcat [ppProduction (fcat,prod) | (fcat,set) <- IntMap.toList (productions cnc), prod <- Set.toList set]) $$
           text "functions" $$
-          nest 2 (vcat (map ppFFun (assocs (functions cnc)))) $$
+          nest 2 (vcat (map ppCncFun (assocs (cncfuns cnc)))) $$
           text "sequences" $$
           nest 2 (vcat (map ppSeq (assocs (sequences cnc)))) $$
-          text "startcats" $$
-          nest 2 (vcat (map ppStartCat (Map.toList (startCats cnc))))) $$
+          text "categories" $$
+          nest 2 (vcat (map ppCncCat (Map.toList (cnccats cnc))))) $$
   char '}'
 
-ppProduction (fcat,FApply funid args) =
+ppProduction (fcat,PApply funid args) =
   ppFCat fcat <+> text "->" <+> ppFunId funid <> brackets (hcat (punctuate comma (map ppFCat args)))
-ppProduction (fcat,FCoerce arg) =
+ppProduction (fcat,PCoerce arg) =
   ppFCat fcat <+> text "->" <+> char '_' <> brackets (ppFCat arg)
-ppProduction (fcat,FConst _ ss) =
+ppProduction (fcat,PConst _ ss) =
   ppFCat fcat <+> text "->" <+> ppStrs ss
 
-ppFFun (funid,FFun fun arr) =
+ppCncFun (funid,CncFun fun arr) =
   ppFunId funid <+> text ":=" <+> parens (hcat (punctuate comma (map ppSeqId (elems arr)))) <+> brackets (ppCId fun)
 
 ppSeq (seqid,seq) = 
   ppSeqId seqid <+> text ":=" <+> hsep (map ppSymbol (elems seq))
 
-ppStartCat (id,(start,end,labels)) =
+ppCncCat (id,(CncCat start end labels)) =
   ppCId id <+> text ":=" <+> (text "range " <+> brackets (ppFCat start <+> text ".." <+> ppFCat end) $$
                               text "labels" <+> brackets (vcat (map (text . show) (elems labels))))
 
-ppSymbol (FSymCat d r) = char '<' <> int d <> comma <> int r <> char '>'
-ppSymbol (FSymLit d r) = char '<' <> int d <> comma <> int r <> char '>'
-ppSymbol (FSymKS ts)   = ppStrs ts
-ppSymbol (FSymKP ts alts) = text "pre" <+> braces (hsep (punctuate semi (ppStrs ts : map ppAlt alts)))
+ppSymbol (SymCat d r) = char '<' <> int d <> comma <> int r <> char '>'
+ppSymbol (SymLit d r) = char '<' <> int d <> comma <> int r <> char '>'
+ppSymbol (SymKS ts)   = ppStrs ts
+ppSymbol (SymKP ts alts) = text "pre" <+> braces (hsep (punctuate semi (ppStrs ts : map ppAlt alts)))
 
 ppAlt (Alt ts ps) = ppStrs ts <+> char '/' <+> hsep (map (doubleQuotes . text) ps)
 

@@ -103,7 +103,7 @@ import PGF.VisualizeTree
 import PGF.Macros
 import PGF.Expr (Tree)
 import PGF.Morphology
-import PGF.Data hiding (functions)
+import PGF.Data
 import PGF.Binary
 import qualified PGF.Parse as Parse
 
@@ -252,10 +252,12 @@ generateAllDepth pgf cat = generate pgf cat
 
 abstractName pgf = absname pgf
 
-languages pgf = cncnames pgf
+languages pgf = Map.keys (concretes pgf)
 
 languageCode pgf lang = 
-    fmap (replace '_' '-') $ lookConcrFlag pgf lang (mkCId "language")
+    case lookConcrFlag pgf lang (mkCId "language") of
+      Just (LStr s) -> Just (replace '_' '-' s)
+      _             -> Nothing
 
 categories pgf = [c | (c,hs) <- Map.toList (cats (abstract pgf))]
 

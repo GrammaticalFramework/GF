@@ -12,8 +12,7 @@ import GF.Data.Utilities
 import GF.Data.XML
 import GF.Infra.Ident
 import GF.Infra.Modules
-import GF.Speech.SRG (getSpeechLanguage)
-import PGF.CId
+import PGF
 import PGF.Data
 import PGF.Macros
 
@@ -30,7 +29,7 @@ grammar2vxml pgf cnc = showsXMLDoc (skel2vxml name language start skel qs) ""
     where skel = pgfSkeleton pgf
           name = showCId cnc
           qs = catQuestions pgf cnc (map fst skel)
-          language = getSpeechLanguage pgf cnc
+          language = languageCode pgf cnc
           start = lookStartCat pgf
 
 --

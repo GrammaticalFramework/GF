@@ -12,7 +12,7 @@ import qualified Data.Set as Set
 
 -- linearization and computation of concrete PGF Terms
 
-type LinTable = Array FIndex [Tokn]
+type LinTable = Array LIndex [Tokn]
 
 linearizes :: PGF -> CId -> Expr -> [String]
 linearizes pgf lang = map (unwords . untokn . (! 0)) . linTree pgf lang (\_ _ lint -> lint)
@@ -46,11 +46,11 @@ linTree pgf lang mark e = lin0 [] [] [] Nothing e
         Just prods -> case lookupProds mb_fid prods of
                         Just set -> do prod <- Set.toList set
                                        case prod of
-                                         FApply funid fids -> do guard (length fids == length es)
+                                         PApply funid fids -> do guard (length fids == length es)
                                                                  args <- sequence (zipWith3 (\i fid e -> lin0 (sub i path) [] xs (Just fid) e) [0..] fids es)
-                                                                 let (FFun _ lins) = functions cnc ! funid
+                                                                 let (CncFun _ lins) = cncfuns cnc ! funid
                                                                  return (listArray (bounds lins) [computeSeq seqid args | seqid <- elems lins])
-                                         FCoerce fid       -> apply path xs (Just fid) f es
+                                         PCoerce fid       -> apply path xs (Just fid) f es
                         Nothing  -> mzero
         Nothing    -> apply path xs mb_fid _V [ELit (LStr "?")]              -- function without linearization
       where
@@ -63,17 +63,17 @@ linTree pgf lang mark e = lin0 [] [] [] Nothing e
           | f == _B || f == _V =   path
           | otherwise          = i:path
 
-        isApp (FApply _ _) = True
+        isApp (PApply _ _) = True
         isApp _            = False
 
         computeSeq seqid args = concatMap compute (elems seq)
           where
             seq = sequences cnc ! seqid
 
-            compute (FSymCat d r)    = (args !! d) ! r
-            compute (FSymLit d r)    = (args !! d) ! r
-            compute (FSymKS ts)      = map KS ts
-            compute (FSymKP ts alts) = [KP ts alts]
+            compute (SymCat d r)    = (args !! d) ! r
+            compute (SymLit d r)    = (args !! d) ! r
+            compute (SymKS ts)      = map KS ts
+            compute (SymKP ts alts) = [KP ts alts]
 
 untokn :: [Tokn] -> [String]
 untokn ts = case ts of
@@ -92,9 +92,9 @@ tabularLinearizes pgf lang e = map (zip lbls . map (unwords . untokn) . elems) (
   where
     lbls = case unApp e of
              Just (f,_) -> let cat = valCat (lookType pgf f)
-                           in case Map.lookup cat (startCats (lookConcr pgf lang)) of
-                                Just (_,_,lbls) -> elems lbls
-                                Nothing         -> error "No labels"
+                           in case Map.lookup cat (cnccats (lookConcr pgf lang)) of
+                                Just (CncCat _ _ lbls) -> elems lbls
+                                Nothing                -> error "No labels"
              Nothing    -> error "Not function application"
 
 
