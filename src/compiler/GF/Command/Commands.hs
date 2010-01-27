@@ -23,6 +23,7 @@ import PGF.Printer
 import PGF.Probabilistic -- (getProbsFromFile,prProbabilities,defaultProbabilities)
 import PGF.Generate (genRandomProb) ----
 import GF.Compile.Export
+import GF.Compile.ExampleBased
 import GF.Infra.Option (noOptions, readOutputFormat, Encoding(..))
 import GF.Infra.UseIO
 import GF.Data.ErrM ----
@@ -230,6 +231,33 @@ allCommands cod env@(pgf, mos) = Map.fromList [
   ("e",  emptyCommandInfo {
      longname = "empty",
      synopsis = "empty the environment"
+     }),
+  ("eb", emptyCommandInfo {
+     longname = "example_based",
+     syntax = "eb (-probs=FILE | -lang=LANG)* -file=FILE.gfe",
+     synopsis = "converts .gfe files to .gf files by parsing examples to trees",
+     explanation = unlines [
+       "Reads FILE.gfe and writes FILE.gf. Each expression of form",
+       "'%ex CAT QUOTEDSTRING' in FILE.gfe is replaced by a syntax tree.",
+       "This tree is the first one returned by the parser; a biased ranking",
+       "can be used to regulate the order. If there are more than one parses",
+       "the rest are shown in comments, with probabilities if the order is biased.",  
+       "The probabilities flag and configuration file is similar to the commands",
+       "gr and rt. Notice that the command doesn't change the environment,",
+       "but the resulting .gf file must be imported separately."
+       ],
+     flags = [
+       ("file","the file to be converted (suffix .gfe must be given)"),
+       ("lang","the language in which to parse"),
+       ("probs","file with probabilities to rank the parses")
+       ],
+     exec = \opts _ -> do
+       let file = optFile opts
+       mprobs <- optProbs opts pgf
+       let conf = configureExBased pgf mprobs (optLang opts)
+       file' <- parseExamplesInGrammar conf file
+       return (fromString ("wrote " ++ file')),
+     needsTypeCheck = False
      }),
   ("gr", emptyCommandInfo {
      longname = "generate_random",
@@ -871,6 +899,8 @@ allCommands cod env@(pgf, mos) = Map.fromList [
 --       putStrLn $ prProbabilities ps 
        return $ Just ps
 
+   optFile opts = valStrOpts "file" "_gftmp" opts
+
    optType opts = 
      let str = valStrOpts "cat" (showCId $ lookStartCat pgf) opts
      in case readType str of
@@ -988,3 +1018,4 @@ prMorphoAnalysis (w,lps) =
 
 morphoMissing :: Morpho -> [String] -> [String]
 morphoMissing mo ws = [w | w <- ws, null (lookupMorpho mo w)]
+
