@@ -28,17 +28,15 @@ grammar2prolog_abs = {- encodeUTF8 . -} foldr (++++) [] . pgf2clauses_abs
 
 
 pgf2clauses :: PGF -> [String]
-pgf2clauses (PGF absname cncnames gflags abstract concretes) =
+pgf2clauses (PGF gflags absname abstract concretes) =
     [":- " ++ plFact "module" [plp absname, "[]"]] ++
-    clauseHeader "%% concrete(?Module)"
-                     [plFact "concrete" [plp cncname] | cncname <- cncnames] ++
     clauseHeader "%% flag(?Flag, ?Value): global flags"
                      (map (plpFact2 "flag") (Map.assocs gflags)) ++
     plAbstract (absname, abstract) ++
     concatMap plConcrete (Map.assocs concretes)
 
 pgf2clauses_abs :: PGF -> [String]
-pgf2clauses_abs (PGF absname _cncnames gflags abstract _concretes) =
+pgf2clauses_abs (PGF gflags absname abstract _concretes) =
     [":- " ++ plFact "module" [plp absname, "[]"]] ++
     clauseHeader "%% flag(?Flag, ?Value): global flags"
                      (map (plpFact2 "flag") (Map.assocs gflags)) ++

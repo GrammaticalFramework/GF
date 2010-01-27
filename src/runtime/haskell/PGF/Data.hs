@@ -17,48 +17,48 @@ import Data.List
 -- | An abstract data type representing multilingual grammar
 -- in Portable Grammar Format.
 data PGF = PGF {
+  gflags    :: Map.Map CId Literal,   -- value of a global flag
   absname   :: CId ,
-  cncnames  :: [CId] ,
-  gflags    :: Map.Map CId String,   -- value of a global flag
   abstract  :: Abstr ,
   concretes :: Map.Map CId Concr
   }
 
 data Abstr = Abstr {
-  aflags  :: Map.Map CId String,      -- value of a flag
+  aflags  :: Map.Map CId Literal,     -- value of a flag
   funs    :: Map.Map CId (Type,Int,[Equation]), -- type, arrity and definition of function
   cats    :: Map.Map CId [Hypo],      -- context of a cat
   catfuns :: Map.Map CId [CId]        -- funs to a cat (redundant, for fast lookup)
   }
 
 data Concr = Concr {
-  cflags       :: Map.Map CId String,                                -- value of a flag
+  cflags       :: Map.Map CId Literal,                               -- value of a flag
   printnames   :: Map.Map CId String,                                -- printname of a cat or a fun
-  functions    :: Array FunId FFun,
-  sequences    :: Array SeqId FSeq,
+  cncfuns      :: Array FunId CncFun,
+  sequences    :: Array SeqId Sequence,
   productions  :: IntMap.IntMap (Set.Set Production),                -- the original productions loaded from the PGF file
   pproductions :: IntMap.IntMap (Set.Set Production),                -- productions needed for parsing
   lproductions :: Map.Map CId (IntMap.IntMap (Set.Set Production)),  -- productions needed for linearization
-  startCats    :: Map.Map CId (FCat,FCat,Array FIndex String),       -- for every category - start/end FCat and a list of label names
-  totalCats    :: {-# UNPACK #-} !FCat
+  cnccats      :: Map.Map CId CncCat,
+  totalCats    :: {-# UNPACK #-} !FId
   }
 
-type FCat      = Int
-type FIndex    = Int
-type FPointPos = Int
-data FSymbol
-  = FSymCat {-# UNPACK #-} !Int {-# UNPACK #-} !FIndex
-  | FSymLit {-# UNPACK #-} !Int {-# UNPACK #-} !FIndex
-  | FSymKS [String]
-  | FSymKP [String] [Alternative]
+type FId    = Int
+type LIndex = Int
+type DotPos = Int
+data Symbol
+  = SymCat {-# UNPACK #-} !Int {-# UNPACK #-} !LIndex
+  | SymLit {-# UNPACK #-} !Int {-# UNPACK #-} !LIndex
+  | SymKS [String]
+  | SymKP [String] [Alternative]
   deriving (Eq,Ord,Show)
 data Production
-  = FApply  {-# UNPACK #-} !FunId [FCat]
-  | FCoerce {-# UNPACK #-} !FCat
-  | FConst  Expr [String]
+  = PApply  {-# UNPACK #-} !FunId [FId]
+  | PCoerce {-# UNPACK #-} !FId
+  | PConst  Expr [String]
   deriving (Eq,Ord,Show)
-data FFun  = FFun CId {-# UNPACK #-} !(UArray FIndex SeqId) deriving (Eq,Ord,Show)
-type FSeq  = Array FPointPos FSymbol
+data CncCat = CncCat {-# UNPACK #-} !FId {-# UNPACK #-} !FId {-# UNPACK #-} !(Array LIndex String)
+data CncFun = CncFun CId {-# UNPACK #-} !(UArray LIndex SeqId) deriving (Eq,Ord,Show)
+type Sequence = Array DotPos Symbol
 type FunId = Int
 type SeqId = Int
 
@@ -91,16 +91,14 @@ unionPGF :: PGF -> PGF -> PGF
 unionPGF one two = case absname one of
   n | n == wildCId     -> two    -- extending empty grammar
     | n == absname two -> one {  -- extending grammar with same abstract
-      concretes = Map.union (concretes two) (concretes one),
-      cncnames  = union (cncnames one) (cncnames two)
+      concretes = Map.union (concretes two) (concretes one)
     }
   _ -> one   -- abstracts don't match ---- print error msg
 
 emptyPGF :: PGF
 emptyPGF = PGF {
-  absname   = wildCId,
-  cncnames  = [] ,
   gflags    = Map.empty,
+  absname   = wildCId,
   abstract  = error "empty grammar, no abstract",
   concretes = Map.empty
   }
@@ -126,5 +124,5 @@ fcatInt    = (-2)
 fcatFloat  = (-3)
 fcatVar    = (-4)
 
-isLiteralFCat :: FCat -> Bool
+isLiteralFCat :: FId -> Bool
 isLiteralFCat = (`elem` [fcatString, fcatInt, fcatFloat, fcatVar])

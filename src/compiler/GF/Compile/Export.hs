@@ -1,7 +1,6 @@
 module GF.Compile.Export where
 
-import PGF.CId
-import PGF.Data (PGF(..))
+import PGF
 import PGF.Printer
 import GF.Compile.PGFtoHaskell
 import GF.Compile.PGFtoProlog
@@ -48,17 +47,17 @@ exportPGF opts fmt pgf =
       FmtRegExp       -> single "rexp" regexpPrinter
       FmtFA           -> single "dot"  slfGraphvizPrinter
  where
-   name = fromMaybe (showCId (absname pgf)) (flag optName opts)
+   name = fromMaybe (showCId (abstractName pgf)) (flag optName opts)
 
    multi :: String -> (PGF -> String) -> [(FilePath,String)]
    multi ext pr = [(name <.> ext, pr pgf)]
 
    single :: String -> (PGF -> CId -> String) -> [(FilePath,String)]
-   single ext pr = [(showCId cnc <.> ext, pr pgf cnc) | cnc <- cncnames pgf]
+   single ext pr = [(showCId cnc <.> ext, pr pgf cnc) | cnc <- languages pgf]
 
 -- | Get the name of the concrete syntax to generate output from.
 -- FIXME: there should be an option to change this.
 outputConcr :: PGF -> CId
-outputConcr pgf = case cncnames pgf of
+outputConcr pgf = case languages pgf of
                     []     -> error "No concrete syntax."
                     cnc:_  -> cnc

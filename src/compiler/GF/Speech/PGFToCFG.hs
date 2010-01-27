@@ -10,7 +10,7 @@ import PGF.CId
 import PGF.Data as PGF
 import PGF.Macros
 import GF.Infra.Ident
-import GF.Speech.CFG
+import GF.Speech.CFG hiding (Symbol)
 
 import Data.Array.IArray as Array
 import Data.List
@@ -32,36 +32,36 @@ type Profile = [Int]
 pgfToCFG :: PGF 
           -> CId   -- ^ Concrete syntax name
           -> CFG
-pgfToCFG pgf lang = mkCFG (showCId (lookStartCat pgf)) extCats (startRules ++ concatMap fruleToCFRule rules)
+pgfToCFG pgf lang = mkCFG (showCId (lookStartCat pgf)) extCats (startRules ++ concatMap ruleToCFRule rules)
   where
     cnc = lookConcr pgf lang
 
-    rules :: [(FCat,Production)]
+    rules :: [(FId,Production)]
     rules = [(fcat,prod) | (fcat,set) <- IntMap.toList (PGF.pproductions cnc)
                          , prod <- Set.toList set]
 
-    fcatCats :: Map FCat Cat
+    fcatCats :: Map FId Cat
     fcatCats = Map.fromList [(fc, showCId c ++ "_" ++ show i) 
-                                 | (c,(s,e,lbls)) <- Map.toList (startCats cnc), 
+                                 | (c,CncCat s e lbls) <- Map.toList (cnccats cnc), 
                                    (fc,i) <- zip (range (s,e)) [1..]]
 
-    fcatCat :: FCat -> Cat
+    fcatCat :: FId -> Cat
     fcatCat c = Map.findWithDefault ("Unknown_" ++ show c) c fcatCats
 
-    fcatToCat :: FCat -> FIndex -> Cat
+    fcatToCat :: FId -> LIndex -> Cat
     fcatToCat c l = fcatCat c ++ row
       where row = if catLinArity c == 1 then "" else "_" ++ show l
 
     -- gets the number of fields in the lincat for the given category
-    catLinArity :: FCat -> Int
-    catLinArity c = maximum (1:[rangeSize (bounds rhs) | (FFun _ rhs, _) <- topdownRules c])
+    catLinArity :: FId -> Int
+    catLinArity c = maximum (1:[rangeSize (bounds rhs) | (CncFun _ rhs, _) <- topdownRules c])
 
     topdownRules cat = f cat []
       where
         f cat rules = maybe rules (Set.fold g rules) (IntMap.lookup cat (pproductions cnc))
 	 
-        g (FApply funid args) rules = (functions cnc ! funid,args) : rules
-        g (FCoerce cat)       rules = f cat rules
+        g (PApply funid args) rules = (cncfuns cnc ! funid,args) : rules
+        g (PCoerce cat)       rules = f cat rules
 
 
     extCats :: Set Cat
@@ -69,40 +69,40 @@ pgfToCFG pgf lang = mkCFG (showCId (lookStartCat pgf)) extCats (startRules ++ co
 
     startRules :: [CFRule]
     startRules = [CFRule (showCId c) [NonTerminal (fcatToCat fc r)] (CFRes 0) 
-                      | (c,(s,e,lbls)) <- Map.toList (startCats cnc), 
+                      | (c,CncCat s e lbls) <- Map.toList (cnccats cnc), 
                         fc <- range (s,e), not (isLiteralFCat fc),
                         r <- [0..catLinArity fc-1]]
 
-    fruleToCFRule :: (FCat,Production) -> [CFRule]
-    fruleToCFRule (c,FApply funid args) = 
+    ruleToCFRule :: (FId,Production) -> [CFRule]
+    ruleToCFRule (c,PApply funid args) = 
         [CFRule (fcatToCat c l) (mkRhs row) (profilesToTerm [fixProfile row n | n <- [0..length args-1]])
            | (l,seqid) <- Array.assocs rhs
            , let row = sequences cnc ! seqid
            , not (containsLiterals row)]
       where
-        FFun f rhs = functions cnc ! funid
+        CncFun f rhs = cncfuns cnc ! funid
 
-        mkRhs :: Array FPointPos FSymbol -> [CFSymbol]
-        mkRhs = concatMap fsymbolToSymbol . Array.elems
+        mkRhs :: Array DotPos Symbol -> [CFSymbol]
+        mkRhs = concatMap symbolToCFSymbol . Array.elems
 
-        containsLiterals :: Array FPointPos FSymbol -> Bool
-        containsLiterals row = any isLiteralFCat [args!!n | FSymCat n _ <- Array.elems row] ||
-                               not (null [n | FSymLit n _ <- Array.elems row])   -- only this is needed for PMCFG.
-                                                                                 -- The first line is for backward compat.
+        containsLiterals :: Array DotPos Symbol -> Bool
+        containsLiterals row = any isLiteralFCat [args!!n | SymCat n _ <- Array.elems row] ||
+                               not (null [n | SymLit n _ <- Array.elems row])   -- only this is needed for PMCFG.
+                                                                                -- The first line is for backward compat.
 
-        fsymbolToSymbol :: FSymbol -> [CFSymbol]
-        fsymbolToSymbol (FSymCat n l)    = [NonTerminal (fcatToCat (args!!n) l)]
-        fsymbolToSymbol (FSymLit n l)    = [NonTerminal (fcatToCat (args!!n) l)]
-        fsymbolToSymbol (FSymKS ts)      = map Terminal ts
+        symbolToCFSymbol :: Symbol -> [CFSymbol]
+        symbolToCFSymbol (SymCat n l)    = [NonTerminal (fcatToCat (args!!n) l)]
+        symbolToCFSymbol (SymLit n l)    = [NonTerminal (fcatToCat (args!!n) l)]
+        symbolToCFSymbol (SymKS ts)      = map Terminal ts
 
-        fixProfile :: Array FPointPos FSymbol -> Int -> Profile
+        fixProfile :: Array DotPos Symbol -> Int -> Profile
         fixProfile row i = [k | (k,j) <- nts, j == i]
             where
               nts = zip [0..] [j | nt <- Array.elems row, j <- getPos nt]
               
-              getPos (FSymCat j _) = [j]
-              getPos (FSymLit j _) = [j]
-              getPos _             = []
+              getPos (SymCat j _) = [j]
+              getPos (SymLit j _) = [j]
+              getPos _            = []
 
         profilesToTerm :: [Profile] -> CFTerm
         profilesToTerm ps = CFObj f (zipWith profileToTerm argTypes ps)
@@ -111,6 +111,6 @@ pgfToCFG pgf lang = mkCFG (showCId (lookStartCat pgf)) extCats (startRules ++ co
         profileToTerm :: CId -> Profile -> CFTerm
         profileToTerm t [] = CFMeta t
         profileToTerm _ xs = CFRes (last xs) -- FIXME: unify
-    fruleToCFRule (c,FCoerce c') =
+    ruleToCFRule (c,PCoerce c') =
         [CFRule (fcatToCat c l) [NonTerminal (fcatToCat c' l)] (CFRes 0)
            | l <- [0..catLinArity c-1]]

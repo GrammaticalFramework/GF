@@ -238,7 +238,7 @@ mtag = tag . ('n':) . uncommas
 
 graphvizAlignment :: PGF -> Expr -> String
 graphvizAlignment pgf = prGraph True . lin2graph . linsMark  where
-  linsMark t = [concat (take 1 (markLinearizes pgf la t)) | la <- cncnames pgf]
+  linsMark t = [concat (take 1 (markLinearizes pgf la t)) | la <- Map.keys (concretes pgf)]
 
 lin2graph :: [String] -> [String]
 lin2graph ss = trace (show ss) $ prelude ++ nodes ++ links

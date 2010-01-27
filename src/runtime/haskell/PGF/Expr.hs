@@ -31,7 +31,7 @@ import qualified Text.ParserCombinators.ReadP as RP
 
 data Literal = 
    LStr String                      -- ^ string constant
- | LInt Integer                     -- ^ integer constant
+ | LInt Int                         -- ^ integer constant
  | LFlt Double                      -- ^ floating point constant
  deriving (Eq,Ord,Show)
 
@@ -116,11 +116,11 @@ unStr (ELit (LStr s)) = Just s
 unStr _               = Nothing
 
 -- | Constructs an expression from integer literal
-mkInt :: Integer -> Expr
+mkInt :: Int -> Expr
 mkInt i = ELit (LInt i)
 
 -- | Decomposes an expression into integer literal
-unInt :: Expr -> Maybe Integer
+unInt :: Expr -> Maybe Int
 unInt (ELit (LInt i)) = Just i
 unInt _               = Nothing
 
@@ -236,7 +236,7 @@ ppBind Explicit x = ppCId x
 ppBind Implicit x = PP.braces (ppCId x)
 
 ppLit (LStr s) = PP.text (show s)
-ppLit (LInt n) = PP.integer n
+ppLit (LInt n) = PP.int n
 ppLit (LFlt d) = PP.double d
 
 ppMeta :: MetaId -> PP.Doc

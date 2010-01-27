@@ -845,9 +845,9 @@ allCommands cod env@(pgf, mos) = Map.fromList [
 --   - If lang has coding=other, and -to_utf8 is in opts, from_other is applied first.
 -- THIS DOES NOT WORK UNFORTUNATELY - can't use the grammar flag properly
    unlexx opts lang = {- trace (unwords optsC) $ -} stringOps Nothing optsC where ----
-     optsC = case lookFlag pgf lang "coding" of
-       Just "utf8" -> filter (/="to_utf8") $ map prOpt opts
-       Just other | isOpt "to_utf8" opts -> 
+     optsC = case lookConcrFlag pgf (mkCId lang) (mkCId "coding") of
+       Just (LStr "utf8") -> filter (/="to_utf8") $ map prOpt opts
+       Just (LStr other) | isOpt "to_utf8" opts -> 
                       let cod = ("from_" ++ other) 
                       in cod : filter (/=cod) (map prOpt opts)
        _ -> map prOpt opts
@@ -973,9 +973,6 @@ morphologyQuiz cod pgf ig typ = do
 -- | the maximal number of precompiled quiz problems
 infinity :: Int
 infinity = 256
-
-lookFlag :: PGF -> String -> String -> Maybe String
-lookFlag pgf lang flag = lookConcrFlag pgf (mkCId lang) (mkCId flag)
 
 prFullFormLexicon :: Morpho -> String
 prFullFormLexicon mo = 

@@ -91,14 +91,14 @@ brk f (GrammarEnv last_id catSet seqSet funSet crcSet prodSet) =
   case f (GrammarEnv last_id catSet seqSet funSet crcSet IntMap.empty) of
     (GrammarEnv last_id catSet seqSet funSet crcSet topdown1) -> IntMap.foldWithKey optimize (GrammarEnv last_id catSet seqSet funSet crcSet prodSet) topdown1
   where
-    optimize cat ps env = IntMap.foldWithKey ff env (IntMap.fromListWith (++) [(funid,[args]) | FApply funid args <- Set.toList ps])
+    optimize cat ps env = IntMap.foldWithKey ff env (IntMap.fromListWith (++) [(funid,[args]) | PApply funid args <- Set.toList ps])
       where
-        ff :: FunId -> [[FCat]] -> GrammarEnv -> GrammarEnv
+        ff :: FunId -> [[FId]] -> GrammarEnv -> GrammarEnv
         ff funid xs env
           | product (map Set.size ys) == count = 
                                    case List.mapAccumL (\env c -> addFCoercion env (Set.toList c)) env ys of
-                                     (env,args) -> addProduction env cat (FApply funid args)
-          | otherwise                           =  List.foldl (\env args -> addProduction env cat (FApply funid args)) env xs
+                                     (env,args) -> addProduction env cat (PApply funid args)
+          | otherwise                           =  List.foldl (\env args -> addProduction env cat (PApply funid args)) env xs
           where
             count = length xs
             ys    = foldr (zipWith Set.insert) (repeat Set.empty) xs
@@ -120,34 +120,34 @@ convertRule cnc_defs grammarEnv (PFRule fun args res ctypes ctype term) =
       let [newCat]        = getFCats env0 newCat'
           (env1, newArgs) = List.mapAccumL (\env -> addFCoercion env . getFCats env) env0 newArgs'
 
-          (env2,funid) = addFFun env1 (FFun fun (mkArray lins))
+          (env2,funid) = addCncFun env1 (CncFun fun (mkArray lins))
 
-      in addProduction env2 newCat (FApply funid newArgs)
+      in addProduction env2 newCat (PApply funid newArgs)
 
 ----------------------------------------------------------------------
 -- Branch monad
 
-newtype BranchM a = BM (forall b . (a -> ([ProtoFCat],[FSymbol]) -> Branch b) -> ([ProtoFCat],[FSymbol]) -> Branch b)
+newtype BranchM a = BM (forall b . (a -> ([ProtoFCat],[Symbol]) -> Branch b) -> ([ProtoFCat],[Symbol]) -> Branch b)
 
 instance Monad BranchM where
     return a   = BM (\c s -> c a s)
     BM m >>= k = BM (\c s -> m (\a s -> unBM (k a) c s) s)
 	where unBM (BM m) = m
 
-instance MonadState ([ProtoFCat],[FSymbol]) BranchM where
+instance MonadState ([ProtoFCat],[Symbol]) BranchM where
     get = BM (\c s -> c s s)
     put s = BM (\c _ -> c () s)
 
 instance Functor BranchM where
     fmap f (BM m) = BM (\c s -> m (c . f) s)
 
-runBranchM :: BranchM (Value a) -> ([ProtoFCat],[FSymbol]) -> Branch a
+runBranchM :: BranchM (Value a) -> ([ProtoFCat],[Symbol]) -> Branch a
 runBranchM (BM m) s = m (\v s -> Return v) s
 
 variants :: [a] -> BranchM a
 variants xs = BM (\c s -> Variant [c x s | x <- xs])
 
-choices :: Int -> FPath -> BranchM FIndex
+choices :: Int -> FPath -> BranchM LIndex
 choices nr path = BM (\c s -> let (args,_) = s
 		                  PFCat _ _ _ tcs = args !! nr
                               in case fromMaybe (error "evalTerm: wrong path") (lookup path tcs) of
@@ -172,8 +172,8 @@ mkRecord xs = BM (\c -> foldl (\c (BM m) bs s -> c (m (\v s -> Return v) s : bs)
 
 type CnvMonad a = BranchM a
 
-type FPath = [FIndex]
-data ProtoFCat  = PFCat Int CId [FPath] [(FPath,[FIndex])]
+type FPath = [LIndex]
+data ProtoFCat  = PFCat Int CId [FPath] [(FPath,[LIndex])]
 type Env        = (ProtoFCat, [ProtoFCat])
 data ProtoFRule = PFRule CId           {- function -}
                          [(Int,CId)]   {- argument types: context size and category -}
@@ -210,7 +210,7 @@ data Branch a
 data Value a
   = Rec [Branch a]
   | Str a
-  | Con FIndex
+  | Con LIndex
 
 
 go' :: Branch SeqId -> FPath -> [SeqId] -> BacktrackM Env [SeqId]
@@ -226,7 +226,7 @@ go (Rec xs)    path ss = foldM (\ss (lbl,b) -> go' b (lbl:path) ss) ss (reverse 
 go (Str seqid) path ss = return (seqid : ss)
 go (Con i)     path ss = restrictHead path i >> return ss
 
-addSequences' :: GrammarEnv -> Branch [FSymbol] -> (GrammarEnv, Branch SeqId)
+addSequences' :: GrammarEnv -> Branch [Symbol] -> (GrammarEnv, Branch SeqId)
 addSequences' env (Case nr path bs) = let (env1,bs1) = List.mapAccumL addSequences' env bs
                                       in (env1,Case nr path bs1)
 addSequences' env (Variant bs)      = let (env1,bs1) = List.mapAccumL addSequences' env bs
@@ -234,7 +234,7 @@ addSequences' env (Variant bs)      = let (env1,bs1) = List.mapAccumL addSequenc
 addSequences' env (Return  v)       = let (env1,v1) = addSequences env v
                                       in (env1,Return v1)
 
-addSequences :: GrammarEnv -> Value [FSymbol] -> (GrammarEnv, Value SeqId)
+addSequences :: GrammarEnv -> Value [Symbol] -> (GrammarEnv, Value SeqId)
 addSequences env (Rec vs)  = let (env1,vs1) = List.mapAccumL addSequences' env vs
                              in (env1,Rec vs1)
 addSequences env (Str lin) = let (env1,seqid) = addFSeq env (optimizeLin lin)
@@ -243,17 +243,17 @@ addSequences env (Con i)   = (env,Con i)
 
 
 optimizeLin [] = []
-optimizeLin lin@(FSymKS _ : _) = 
+optimizeLin lin@(SymKS _ : _) = 
   let (ts,lin') = getRest lin
-  in FSymKS ts : optimizeLin lin'
+  in SymKS ts : optimizeLin lin'
   where
-    getRest (FSymKS ts : lin) = let (ts1,lin') = getRest lin
-                                in (ts++ts1,lin')
-    getRest              lin  = ([],lin)
+    getRest (SymKS ts : lin) = let (ts1,lin') = getRest lin
+                               in (ts++ts1,lin')
+    getRest             lin  = ([],lin)
 optimizeLin (sym : lin) = sym : optimizeLin lin
 
 
-convertTerm :: TermMap -> FPath -> Term -> Term -> CnvMonad (Value [FSymbol])
+convertTerm :: TermMap -> FPath -> Term -> Term -> CnvMonad (Value [Symbol])
 convertTerm cnc_defs sel ctype (V nr)     = convertArg ctype nr (reverse sel)
 convertTerm cnc_defs sel ctype (C nr)     = convertCon ctype nr (reverse sel)
 convertTerm cnc_defs sel ctype (R record) = convertRec cnc_defs sel ctype record
@@ -263,8 +263,8 @@ convertTerm cnc_defs sel ctype (FV vars)  = do term <- variants vars
                                                convertTerm cnc_defs sel ctype term
 convertTerm cnc_defs sel ctype (S ts)     = do vs <- mapM (convertTerm cnc_defs sel ctype) ts
                                                return (Str (concat [s | Str s <- vs]))
-convertTerm cnc_defs sel ctype (K (KS t)) = return (Str [FSymKS [t]])
-convertTerm cnc_defs sel ctype (K (KP s v))=return (Str [FSymKP s v])
+convertTerm cnc_defs sel ctype (K (KS t)) = return (Str [SymKS [t]])
+convertTerm cnc_defs sel ctype (K (KP s v))=return (Str [SymKP s v])
 convertTerm cnc_defs sel ctype (F id)     = case Map.lookup id cnc_defs of
                                               Just term -> convertTerm cnc_defs sel ctype term
                                               Nothing   -> error ("unknown id " ++ showCId id)
@@ -277,7 +277,7 @@ convertTerm cnc_defs sel ctype (W s t)    = do
   convertRec cnc_defs sel ctype [K (KS (s ++ s1)) | K (KS s1) <- ss]
 convertTerm cnc_defs sel ctype x          = error ("convertTerm ("++show x++")")
 
-convertArg :: Term -> Int -> FPath -> CnvMonad (Value [FSymbol])
+convertArg :: Term -> Int -> FPath -> CnvMonad (Value [Symbol])
 convertArg (R ctypes) nr path = do
   mkRecord (zipWith (\lbl ctype -> convertArg ctype nr (lbl:path)) [0..] ctypes)
 convertArg (C max)    nr path = do
@@ -287,8 +287,8 @@ convertArg (S _)      nr path = do
   (args,_) <- get
   let PFCat _ cat rcs tcs = args !! nr
       l = index path rcs 0
-      sym | isLiteralCat cat = FSymLit nr l
-          | otherwise        = FSymCat nr l
+      sym | isLiteralCat cat = SymLit nr l
+          | otherwise        = SymCat nr l
   return (Str [sym])
   where
     index lbl' (lbl:lbls) idx
@@ -307,7 +307,7 @@ convertRec cnc_defs (index:sub_sel) ctype record =
 ------------------------------------------------------------
 -- eval a term to ground terms
 
-evalTerm :: TermMap -> FPath -> Term -> CnvMonad FIndex
+evalTerm :: TermMap -> FPath -> Term -> CnvMonad LIndex
 evalTerm cnc_defs path (V nr)       = choices nr (reverse path)
 evalTerm cnc_defs path (C nr)       = return nr
 evalTerm cnc_defs path (R record)   = case path of
@@ -325,10 +325,10 @@ evalTerm cnc_defs path x = error ("evalTerm ("++show x++")")
 -- GrammarEnv
 
 data GrammarEnv = GrammarEnv {-# UNPACK #-} !Int CatSet SeqSet FunSet CoerceSet (IntMap.IntMap (Set.Set Production))
-type CatSet   = IntMap.IntMap (Map.Map CId (FCat,FCat,[Int],Array FIndex String))
-type SeqSet   = Map.Map FSeq SeqId
-type FunSet   = Map.Map FFun FunId
-type CoerceSet= Map.Map [FCat] FCat
+type CatSet   = IntMap.IntMap (Map.Map CId (FId,FId,[Int],Array LIndex String))
+type SeqSet   = Map.Map Sequence SeqId
+type FunSet   = Map.Map CncFun FunId
+type CoerceSet= Map.Map [FId] FId
 
 emptyGrammarEnv cnc_defs lincats params =
   let (last_id,catSet) = Map.mapAccumWithKey computeCatRange 0 lincats
@@ -373,14 +373,14 @@ expandHOAS abs_defs cnc_defs lincats lindefs env =
         
     -- add one PMCFG function for each high-order type: _B : Cat -> Var -> ... -> Var -> HoCat
     add_hoFun env (n,cat) =
-      let linRec = [[FSymCat 0 i] | i <- case arg of {PFCat _ _ rcs _ -> [0..length rcs-1]}] ++
-                   [[FSymLit i 0] | i <- [1..n]]
+      let linRec = [[SymCat 0 i] | i <- case arg of {PFCat _ _ rcs _ -> [0..length rcs-1]}] ++
+                   [[SymLit i 0] | i <- [1..n]]
           (env1,lins) = List.mapAccumL addFSeq env linRec
           newLinRec = mkArray lins
 	  
-	  (env2,funid) = addFFun env1 (FFun _B newLinRec)
+	  (env2,funid) = addCncFun env1 (CncFun _B newLinRec)
 
-          env3 = foldl (\env (arg,res) -> addProduction env res (FApply funid (arg : replicate n fcatVar)))
+          env3 = foldl (\env (arg,res) -> addProduction env res (PApply funid (arg : replicate n fcatVar)))
                        env2
                        (zip (getFCats env2 arg) (getFCats env2 res))
       in env3
@@ -405,11 +405,11 @@ expandHOAS abs_defs cnc_defs lincats lindefs env =
             Nothing    -> error $ "No lincat for " ++ showCId cat
             Just ctype -> ctype
 
-addProduction :: GrammarEnv -> FCat -> Production -> GrammarEnv
+addProduction :: GrammarEnv -> FId -> Production -> GrammarEnv
 addProduction (GrammarEnv last_id catSet seqSet funSet crcSet prodSet) cat p =
   GrammarEnv last_id catSet seqSet funSet crcSet (IntMap.insertWith Set.union cat (Set.singleton p) prodSet)
 
-addFSeq :: GrammarEnv -> [FSymbol] -> (GrammarEnv,SeqId)
+addFSeq :: GrammarEnv -> [Symbol] -> (GrammarEnv,SeqId)
 addFSeq env@(GrammarEnv last_id catSet seqSet funSet crcSet prodSet) lst =
   case Map.lookup seq seqSet of
     Just id -> (env,id)
@@ -418,14 +418,14 @@ addFSeq env@(GrammarEnv last_id catSet seqSet funSet crcSet prodSet) lst =
   where
     seq = mkArray lst
 
-addFFun :: GrammarEnv -> FFun -> (GrammarEnv,FunId)
-addFFun env@(GrammarEnv last_id catSet seqSet funSet crcSet prodSet) fun = 
+addCncFun :: GrammarEnv -> CncFun -> (GrammarEnv,FunId)
+addCncFun env@(GrammarEnv last_id catSet seqSet funSet crcSet prodSet) fun = 
   case Map.lookup fun funSet of
     Just id -> (env,id)
     Nothing -> let !last_funid = Map.size funSet
                in (GrammarEnv last_id catSet seqSet (Map.insert fun last_funid funSet) crcSet prodSet,last_funid)
 
-addFCoercion :: GrammarEnv -> [FCat] -> (GrammarEnv,FCat)
+addFCoercion :: GrammarEnv -> [FId] -> (GrammarEnv,FId)
 addFCoercion env@(GrammarEnv last_id catSet seqSet funSet crcSet prodSet) sub_fcats =
   case sub_fcats of
     [fcat] -> (env,fcat)
@@ -434,24 +434,24 @@ addFCoercion env@(GrammarEnv last_id catSet seqSet funSet crcSet prodSet) sub_fc
                 Nothing   -> let !fcat = last_id+1
                              in (GrammarEnv fcat catSet seqSet funSet (Map.insert sub_fcats fcat crcSet) prodSet,fcat)
 
-getParserInfo :: Map.Map CId String -> Map.Map CId String -> GrammarEnv -> Concr
+getParserInfo :: Map.Map CId Literal -> Map.Map CId String -> GrammarEnv -> Concr
 getParserInfo flags printnames (GrammarEnv last_id catSet seqSet funSet crcSet prodSet) =
   Concr { cflags = flags
         , printnames = printnames
-        , functions   = mkArray funSet
+        , cncfuns   = mkArray funSet
         , sequences   = mkArray seqSet
         , productions = IntMap.union prodSet coercions
         , pproductions = IntMap.empty
         , lproductions = Map.empty
-        , startCats   = maybe Map.empty (Map.map (\(start,end,_,lbls) -> (start,end,lbls))) (IntMap.lookup 0 catSet)
+        , cnccats   = maybe Map.empty (Map.map (\(start,end,_,lbls) -> (CncCat start end lbls))) (IntMap.lookup 0 catSet)
         , totalCats   = last_id+1
         }
   where
     mkArray map = array (0,Map.size map-1) [(v,k) | (k,v) <- Map.toList map]
     
-    coercions = IntMap.fromList [(fcat,Set.fromList (map FCoerce sub_fcats)) | (sub_fcats,fcat) <- Map.toList crcSet]
+    coercions = IntMap.fromList [(fcat,Set.fromList (map PCoerce sub_fcats)) | (sub_fcats,fcat) <- Map.toList crcSet]
 
-getFCats :: GrammarEnv -> ProtoFCat -> [FCat]
+getFCats :: GrammarEnv -> ProtoFCat -> [FId]
 getFCats (GrammarEnv last_id catSet seqSet funSet crcSet prodSet) (PFCat n cat rcs tcs) =
   case IntMap.lookup n catSet >>= Map.lookup cat of
     Just (start,end,ms,_) -> reverse (solutions (variants ms tcs start) ())
@@ -464,19 +464,19 @@ getFCats (GrammarEnv last_id catSet seqSet funSet crcSet prodSet) (PFCat n cat r
 ------------------------------------------------------------
 -- updating the MCF rule
 
-restrictArg :: FIndex -> FPath -> FIndex -> BacktrackM Env ()
+restrictArg :: LIndex -> FPath -> LIndex -> BacktrackM Env ()
 restrictArg nr path index = do
   (head, args) <- get
   args' <- updateNthM (restrictProtoFCat path index) nr args
   put (head, args')
 
-restrictHead :: FPath -> FIndex -> BacktrackM Env ()
+restrictHead :: FPath -> LIndex -> BacktrackM Env ()
 restrictHead path term
     = do (head, args) <- get
 	 head' <- restrictProtoFCat path term head
 	 put (head', args)
 
-restrictProtoFCat :: FPath -> FIndex -> ProtoFCat -> BacktrackM Env ProtoFCat
+restrictProtoFCat :: FPath -> LIndex -> ProtoFCat -> BacktrackM Env ProtoFCat
 restrictProtoFCat path0 index0 (PFCat n cat rcs tcs) = do
   tcs <- addConstraint tcs
   return (PFCat n cat rcs tcs)

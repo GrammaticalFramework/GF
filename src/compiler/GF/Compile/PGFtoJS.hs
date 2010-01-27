@@ -39,21 +39,25 @@ absdef2js (f,(typ,_,_)) =
   let (args,cat) = M.catSkeleton typ in 
     JS.Prop (JS.IdentPropName (JS.Ident (showCId f))) (new "Type" [JS.EArray [JS.EStr (showCId x) | x <- args], JS.EStr (showCId cat)])
 
+lit2js (LStr s) = JS.EStr s
+lit2js (LInt n) = JS.EInt n
+lit2js (LFlt d) = JS.EDbl d
+
 concrete2js :: (CId,Concr) -> JS.Property
 concrete2js (c,cnc) =
-  JS.Prop l (new "GFConcrete" [mapToJSObj JS.EStr $ cflags cnc,
+  JS.Prop l (new "GFConcrete" [mapToJSObj (lit2js) $ cflags cnc,
                                JS.EObj $ [JS.Prop (JS.IntPropName cat) (JS.EArray (map frule2js (Set.toList set))) | (cat,set) <- IntMap.toList (productions cnc)],
-                               JS.EArray $ (map ffun2js (Array.elems (functions cnc))),
+                               JS.EArray $ (map ffun2js (Array.elems (cncfuns cnc))),
                                JS.EArray $ (map seq2js (Array.elems (sequences cnc))),
-                               JS.EObj $ map cats (Map.assocs (startCats cnc)),
+                               JS.EObj $ map cats (Map.assocs (cnccats cnc)),
                                JS.EInt (totalCats cnc)])
   where 
    l  = JS.IdentPropName (JS.Ident (showCId c))
    litslins = [JS.Prop (JS.StringPropName    "Int") (JS.EFun [children] [JS.SReturn $ new "Arr" [JS.EIndex (JS.EVar children) (JS.EInt 0)]]), 
                JS.Prop (JS.StringPropName  "Float") (JS.EFun [children] [JS.SReturn $ new "Arr" [JS.EIndex (JS.EVar children) (JS.EInt 0)]]),
                JS.Prop (JS.StringPropName "String") (JS.EFun [children] [JS.SReturn $ new "Arr" [JS.EIndex (JS.EVar children) (JS.EInt 0)]])]
-   cats (c,(start,end,_)) = JS.Prop (JS.IdentPropName (JS.Ident (showCId c))) (JS.EObj [JS.Prop (JS.IdentPropName (JS.Ident "s")) (JS.EInt start)
-                                                                                       ,JS.Prop (JS.IdentPropName (JS.Ident "e")) (JS.EInt end)])
+   cats (c,CncCat start end _) = JS.Prop (JS.IdentPropName (JS.Ident (showCId c))) (JS.EObj [JS.Prop (JS.IdentPropName (JS.Ident "s")) (JS.EInt start)
+                                                                                            ,JS.Prop (JS.IdentPropName (JS.Ident "e")) (JS.EInt end)])
 
 cncdef2js :: String -> String -> (CId,Term) -> JS.Property
 cncdef2js n l (f, t) = JS.Prop (JS.IdentPropName (JS.Ident (showCId f))) (JS.EFun [children] [JS.SReturn (term2js n l t)])
@@ -92,19 +96,19 @@ children :: JS.Ident
 children = JS.Ident "cs"
 
 frule2js :: Production -> JS.Expr
-frule2js (FApply funid args) = new "Rule"   [JS.EInt funid, JS.EArray (map JS.EInt args)]
-frule2js (FCoerce arg)       = new "Coerce" [JS.EInt arg]
+frule2js (PApply funid args) = new "Rule"   [JS.EInt funid, JS.EArray (map JS.EInt args)]
+frule2js (PCoerce arg)       = new "Coerce" [JS.EInt arg]
 
-ffun2js (FFun f lins) = new "FFun" [JS.EStr (showCId f), JS.EArray (map JS.EInt (Array.elems lins))]
+ffun2js (CncFun f lins) = new "CncFun" [JS.EStr (showCId f), JS.EArray (map JS.EInt (Array.elems lins))]
 
-seq2js :: Array.Array FIndex FSymbol -> JS.Expr
+seq2js :: Array.Array DotPos Symbol -> JS.Expr
 seq2js seq = JS.EArray [sym2js s | s <- Array.elems seq]
 
-sym2js :: FSymbol -> JS.Expr
-sym2js (FSymCat n l)    = new "Arg" [JS.EInt n, JS.EInt l]
-sym2js (FSymLit n l)    = new "Lit" [JS.EInt n, JS.EInt l]
-sym2js (FSymKS ts)      = new "KS"  (map JS.EStr ts)
-sym2js (FSymKP ts alts) = new "KP"  [JS.EArray (map JS.EStr ts), JS.EArray (map alt2js alts)]
+sym2js :: Symbol -> JS.Expr
+sym2js (SymCat n l)    = new "Arg" [JS.EInt n, JS.EInt l]
+sym2js (SymLit n l)    = new "Lit" [JS.EInt n, JS.EInt l]
+sym2js (SymKS ts)      = new "KS"  (map JS.EStr ts)
+sym2js (SymKP ts alts) = new "KP"  [JS.EArray (map JS.EStr ts), JS.EArray (map alt2js alts)]
 
 alt2js (Alt ps ts) = new "Alt" [JS.EArray (map JS.EStr ps), JS.EArray (map JS.EStr ts)]
 

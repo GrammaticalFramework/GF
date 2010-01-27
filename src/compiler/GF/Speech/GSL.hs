@@ -14,8 +14,7 @@ import GF.Speech.SRG
 import GF.Speech.RegExp
 import GF.Infra.Option
 import GF.Infra.Ident
-import PGF.CId
-import PGF.Data
+import PGF
 
 import Data.Char (toUpper,toLower)
 import Data.List (partition)
