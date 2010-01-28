@@ -1,26 +1,31 @@
-module GF.Compile.ExampleBased (parseExamplesInGrammar,configureExBased) where
+module GF.Compile.ExampleBased (
+  parseExamplesInGrammar,
+  configureExBased
+  ) where
 
 import PGF
 import PGF.Probabilistic
 import PGF.Morphology
 
-parseExamplesInGrammar :: ExConfiguration -> FilePath -> IO FilePath
+import Data.List
+
+parseExamplesInGrammar :: ExConfiguration -> FilePath -> IO (FilePath,[String])
 parseExamplesInGrammar conf file = do
   src <- readFile file                             -- .gfe
   let file' = take (length file - 3) file ++ "gf"  -- .gf
-  convertFile conf src file'
-  return file'
+  ws <- convertFile conf src file'
+  return (file',ws)
 
-convertFile :: ExConfiguration -> String -> FilePath -> IO ()
+convertFile :: ExConfiguration -> String -> FilePath -> IO [String]
 convertFile conf src file = do
   writeFile file "" -- "-- created by example-based grammar writing in GF\n"
-  conv src
+  conv [] src
  where
-  conv s = do
+  conv ws s = do
     (cex,end) <- findExample s
-    if null end then return () else do
-      convEx cex
-      conv end
+    if null end then return (nub (sort ws)) else do
+      ws2 <- convEx cex
+      conv (ws2 ++ ws) end
   findExample s = case s of
     '%':'e':'x':cs -> return $ getExample cs
     c:cs -> appf [c] >> findExample cs
@@ -37,12 +42,18 @@ convertFile conf src file = do
     appn "("
     let typ = maybe (error "no valid cat") id $ readType cat
     let ts = rank $ parse pgf lang typ ex
-    case ts of
-      []   -> appv ("WARNING: cannot parse example " ++ ex ++ 
-                    missingWordMsg morpho (words ex))
+    ws <- case ts of
+      []   -> do
+        let ws = morphoMissing morpho (words ex)
+        appv ("WARNING: cannot parse example " ++ ex) 
+        case ws of
+          [] -> return ()
+          _  -> appv ("  missing words: " ++ unwords ws)
+        return ws 
       t:tt -> appv ("WARNING: ambiguous example " ++ ex) >>
-              appn t >> mapM_ (appn . ("  --- " ++)) tt 
+              appn t >> mapM_ (appn . ("  --- " ++)) tt >> return []
     appn ")"
+    return ws
   rank ts = case probs conf of
     Just probs -> [showExpr [] t ++ "  -- " ++ show p | (t,p) <- rankTreesByProbs probs ts]
     _ -> map (showExpr []) ts

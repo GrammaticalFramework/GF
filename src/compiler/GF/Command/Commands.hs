@@ -255,7 +255,8 @@ allCommands cod env@(pgf, mos) = Map.fromList [
        let file = optFile opts
        mprobs <- optProbs opts pgf
        let conf = configureExBased pgf (optMorpho opts) mprobs (optLang opts)
-       file' <- parseExamplesInGrammar conf file
+       (file',ws) <- parseExamplesInGrammar conf file
+       if null ws then return () else putStrLn ("unknown words: " ++ unwords ws)
        return (fromString ("wrote " ++ file')),
      needsTypeCheck = False
      }),

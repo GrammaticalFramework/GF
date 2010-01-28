@@ -1,4 +1,4 @@
--- to compile: echo "eb -file=QuestionsI.gfe" | gf $GF_LIB_PATH/present/LangEng.gfo
+-- to compile: echo "eb -file=QuestionsI.gfe" -probs=probs | gf $GF_LIB_PATH/present/LangEng.gfo
 -- or use directly gf <mkAnimals.gfs
 
 incomplete concrete QuestionsI of Questions = open Lang in {
