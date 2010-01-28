@@ -2,6 +2,7 @@ module GF.Compile.ExampleBased (parseExamplesInGrammar,configureExBased) where
 
 import PGF
 import PGF.Probabilistic
+import PGF.Morphology
 
 parseExamplesInGrammar :: ExConfiguration -> FilePath -> IO FilePath
 parseExamplesInGrammar conf file = do
@@ -30,30 +31,33 @@ convertFile conf src file = do
       (ex,   end) = break (=='"') (tail exend)
     in ((unwords (words cat),ex), tail end)  -- quotes ignored
   pgf = resource_pgf conf
+  morpho = resource_morpho conf
   lang = language conf 
   convEx (cat,ex) = do
     appn "("
     let typ = maybe (error "no valid cat") id $ readType cat
     let ts = rank $ parse pgf lang typ ex
     case ts of
-      []   -> appv ("WARNING: cannot parse example " ++ ex)
-      t:tt -> appn t >> mapM_ (appn . ("  --- " ++)) tt 
+      []   -> appv ("WARNING: cannot parse example " ++ ex ++ 
+                    missingWordMsg morpho (words ex))
+      t:tt -> appv ("WARNING: ambiguous example " ++ ex) >>
+              appn t >> mapM_ (appn . ("  --- " ++)) tt 
     appn ")"
   rank ts = case probs conf of
     Just probs -> [showExpr [] t ++ "  -- " ++ show p | (t,p) <- rankTreesByProbs probs ts]
     _ -> map (showExpr []) ts
   appf = appendFile file
   appn s = appf s >> appf "\n"
-  appv s = appn s >> putStrLn s
+  appv s = appn ("--- " ++ s) >> putStrLn s
 
 data ExConfiguration = ExConf {
-  resource_file :: FilePath,
-  resource_pgf  :: PGF,
+  resource_pgf    :: PGF,
+  resource_morpho :: Morpho,
   probs    :: Maybe Probabilities,
   verbose  :: Bool,
   language :: Language
   }
 
-configureExBased :: PGF -> Maybe Probabilities -> Language -> ExConfiguration
-configureExBased pgf mprobs lang = ExConf [] pgf mprobs False lang
+configureExBased :: PGF -> Morpho -> Maybe Probabilities -> Language -> ExConfiguration
+configureExBased pgf morpho mprobs lang = ExConf pgf morpho mprobs False lang
 
