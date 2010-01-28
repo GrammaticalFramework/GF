@@ -254,7 +254,7 @@ allCommands cod env@(pgf, mos) = Map.fromList [
      exec = \opts _ -> do
        let file = optFile opts
        mprobs <- optProbs opts pgf
-       let conf = configureExBased pgf mprobs (optLang opts)
+       let conf = configureExBased pgf (optMorpho opts) mprobs (optLang opts)
        file' <- parseExamplesInGrammar conf file
        return (fromString ("wrote " ++ file')),
      needsTypeCheck = False
@@ -397,7 +397,7 @@ allCommands cod env@(pgf, mos) = Map.fromList [
      exec  = \opts -> case opts of
                _ | isOpt "missing" opts ->
                     return . fromString . unwords .
-                    morphoMissing (theMorpho opts) . 
+                    morphoMissing (optMorpho opts) . 
                     concatMap words . toStrings
                _ -> return . fromString . unlines . 
                     map prMorphoAnalysis . concatMap (morphos opts) . 
@@ -925,9 +925,9 @@ allCommands cod env@(pgf, mos) = Map.fromList [
      [] -> ([], "no trees found")
      _  -> fromExprs es
    returnFromExprsPar opts ts es = return $ case es of
-     [] -> ([], "no trees found; unknown words:" +++ 
-                unwords (morphoMissing (theMorpho opts) 
-                          (concatMap words (toStrings ts))))
+     [] -> ([], "no trees found" ++ 
+                missingWordMsg (optMorpho opts) (concatMap words (toStrings ts))
+            )
      _  -> fromExprs es
 
    prGrammar opts
@@ -944,7 +944,7 @@ allCommands cod env@(pgf, mos) = Map.fromList [
 
    morpho z f la = maybe z f $ Map.lookup la mos
 
-   theMorpho opts = morpho (error "no morpho") id (head (optLangs opts))
+   optMorpho opts = morpho (error "no morpho") id (head (optLangs opts))
 
    -- ps -f -g s returns g (f s)
    stringOps menv opts s = foldr (menvop . app) s (reverse opts) where
@@ -1016,6 +1016,4 @@ prMorphoAnalysis :: (String,[(Lemma,Analysis)]) -> String
 prMorphoAnalysis (w,lps) = 
   unlines (w:[showCId l ++ " : " ++ p | (l,p) <- lps])
 
-morphoMissing :: Morpho -> [String] -> [String]
-morphoMissing mo ws = [w | w <- ws, null (lookupMorpho mo w)]
 
