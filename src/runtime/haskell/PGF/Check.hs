@@ -38,7 +38,7 @@ checkConcrete pgf (lang,cnc) =
    checkl = checkLin pgf lang
 -}
 
-type PGFSig = (Map.Map CId (Type,Int,[Equation]),Map.Map CId Term,Map.Map CId Term)
+type PGFSig = (Map.Map CId (Type,Int,Maybe [Equation]),Map.Map CId Term,Map.Map CId Term)
 
 checkLin :: PGFSig -> CId -> (CId,Term) -> Err ((CId,Term),Bool)
 checkLin pgf lang (f,t) = 

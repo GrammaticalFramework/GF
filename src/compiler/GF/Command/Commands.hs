@@ -825,7 +825,7 @@ allCommands cod env@(pgf, mos) = Map.fromList [
                                                                 if null (functionsToCat pgf id)
                                                                   then empty
                                                                   else space $$
-                                                                       vcat [ppFun fid (ty,0,[]) | (fid,ty) <- functionsToCat pgf id])
+                                                                       vcat [ppFun fid (ty,0,Just []) | (fid,ty) <- functionsToCat pgf id])
                                      Nothing   -> do putStrLn ("unknown category of function identifier "++show id)
                                                      return void
          [e]         -> case inferExpr pgf e of

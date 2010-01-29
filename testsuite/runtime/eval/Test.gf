@@ -22,6 +22,9 @@ cat Nat ;
 data zero : Nat ;
      succ : Nat -> Nat ;
      err  : Nat ;
+     
+fun  zeroF : Nat ;
+     succF : Nat -> Nat ;
 
 fun dec : Nat -> Nat ;
 def dec zero     = zero ;

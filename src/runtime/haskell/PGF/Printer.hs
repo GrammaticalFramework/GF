@@ -27,12 +27,13 @@ ppAbs name a = text "abstract" <+> ppCId name <+> char '{' $$
 ppCat :: CId -> [Hypo] -> Doc
 ppCat c hyps = text "cat" <+> ppCId c <+> hsep (snd (mapAccumL ppHypo [] hyps))
 
-ppFun :: CId -> (Type,Int,[Equation]) -> Doc
-ppFun f (t,_,eqs) = text "fun" <+> ppCId f <+> colon <+> ppType 0 [] t $$
-                    if null eqs
-                      then empty
-                      else text "def" <+> vcat [let (scope,ds) = mapAccumL (ppPatt 9) [] patts
-                                                in ppCId f <+> hsep ds <+> char '=' <+> ppExpr 0 scope res | Equ patts res <- eqs]
+ppFun :: CId -> (Type,Int,Maybe [Equation]) -> Doc
+ppFun f (t,_,Just eqs) = text "fun" <+> ppCId f <+> colon <+> ppType 0 [] t $$
+                         if null eqs
+                           then empty
+                           else text "def" <+> vcat [let (scope,ds) = mapAccumL (ppPatt 9) [] patts
+                                                     in ppCId f <+> hsep ds <+> char '=' <+> ppExpr 0 scope res | Equ patts res <- eqs]
+ppFun f (t,_,Nothing)  = text "data" <+> ppCId f <+> colon <+> ppType 0 [] t
 
 ppCnc :: Language -> Concr -> Doc
 ppCnc name cnc =

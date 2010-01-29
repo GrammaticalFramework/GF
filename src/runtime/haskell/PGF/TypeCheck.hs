@@ -409,12 +409,13 @@ eqType scope k i0 tty1@(TTyp delta1 ty1@(DTyp hyps1 cat1 es1)) tty2@(TTyp delta2
                                                                                   e1 <- mkLam i scopei env2 vs2 v1
                                                                                   setMeta i (MBound e1)
                                                                                   sequence_ [c e1 | c <- cs]
-    eqValue' k (VApp f1 vs1)                  (VApp f2 vs2) | f1 == f2       = zipWithM_ (eqValue k) vs1 vs2
-    eqValue' k (VLit l1)                      (VLit l2    ) | l1 == l2       = return ()
-    eqValue' k (VGen  i vs1)                  (VGen  j vs2) | i  == j        = zipWithM_ (eqValue k) vs1 vs2
+    eqValue' k (VApp f1 vs1)                  (VApp f2 vs2)   | f1 == f2     = zipWithM_ (eqValue k) vs1 vs2
+    eqValue' k (VConst f1 vs1)                (VConst f2 vs2) | f1 == f2     = zipWithM_ (eqValue k) vs1 vs2
+    eqValue' k (VLit l1)                      (VLit l2    )   | l1 == l2     = return ()
+    eqValue' k (VGen  i vs1)                  (VGen  j vs2)   | i  == j      = zipWithM_ (eqValue k) vs1 vs2
     eqValue' k (VClosure env1 (EAbs _ x1 e1)) (VClosure env2 (EAbs _ x2 e2)) = let v = VGen k []
                                                                                in eqExpr (k+1) (v:env1) e1 (v:env2) e2
-    eqValue' k v1                           v2                               = raiseTypeMatchError
+    eqValue' k v1                             v2                             = raiseTypeMatchError
 
     mkLam i scope env vs0 v = do
       let k  = scopeSize scope
@@ -452,6 +453,8 @@ eqType scope k i0 tty1@(TTyp delta1 ty1@(DTyp hyps1 cat1 es1)) tty2@(TTyp delta2
                                             Just i  -> do vs <- mapM (occurCheck i0 k xs) vs
                                                           return (VGen i vs)
                                             Nothing -> raiseTypeMatchError
+    occurCheck i0 k xs (VConst f vs)    = do vs <- mapM (occurCheck i0 k xs) vs
+                                             return (VConst f vs)
     occurCheck i0 k xs (VClosure env e) = do env <- mapM (occurCheck i0 k xs) env
                                              return (VClosure env e)
 
@@ -516,9 +519,10 @@ refineType ty = TcM (\abstr metaid ms -> Ok metaid ms (refineType_ ms ty))
 
 refineType_ ms (DTyp hyps cat es) = DTyp [(b,x,refineType_ ms ty) | (b,x,ty) <- hyps] cat (List.map (refineExpr_ ms) es)
 
-value2expr sig i (VApp f vs)                 = foldl EApp (EFun f)           (List.map (value2expr sig i) vs)
-value2expr sig i (VGen j vs)                 = foldl EApp (EVar (i-j-1))     (List.map (value2expr sig i) vs)
-value2expr sig i (VMeta j env vs)            = foldl EApp (EMeta j) (List.map (value2expr sig i) vs)
+value2expr sig i (VApp f vs)                 = foldl EApp (EFun f)       (List.map (value2expr sig i) vs)
+value2expr sig i (VGen j vs)                 = foldl EApp (EVar (i-j-1)) (List.map (value2expr sig i) vs)
+value2expr sig i (VConst f vs)               = foldl EApp (EFun f)       (List.map (value2expr sig i) vs)
+value2expr sig i (VMeta j env vs)            = foldl EApp (EMeta j)      (List.map (value2expr sig i) vs)
 value2expr sig i (VSusp j env vs k)          = value2expr sig i (k (VGen j vs))
 value2expr sig i (VLit l)                    = ELit l
 value2expr sig i (VClosure env (EAbs b x e)) = EAbs b x (value2expr sig (i+1) (eval sig ((VGen i []):env) e))

@@ -298,11 +298,12 @@ browse :: PGF -> CId -> Maybe (String,[CId],[CId])
 browse pgf id = fmap (\def -> (def,producers,consumers)) definition
   where
     definition = case Map.lookup id (funs (abstract pgf)) of
-                   Just (ty,_,eqs) -> Just $ render (text "fun" <+> ppCId id <+> colon <+> ppType 0 [] ty $$
-                                                     if null eqs
-                                                       then empty
-                                                       else text "def" <+> vcat [let (scope,ds) = mapAccumL (ppPatt 9) [] patts
-                                                                                 in ppCId id <+> hsep ds <+> char '=' <+> ppExpr 0 scope res | Equ patts res <- eqs])
+                   Just (ty,_,Just eqs) -> Just $ render (text "fun" <+> ppCId id <+> colon <+> ppType 0 [] ty $$
+                                                          if null eqs
+                                                            then empty
+                                                            else text "def" <+> vcat [let (scope,ds) = mapAccumL (ppPatt 9) [] patts
+                                                                                      in ppCId id <+> hsep ds <+> char '=' <+> ppExpr 0 scope res | Equ patts res <- eqs])
+                   Just (ty,_,Nothing ) -> Just $ render (text "data" <+> ppCId id <+> colon <+> ppType 0 [] ty)
                    Nothing   -> case Map.lookup id (cats (abstract pgf)) of
                                   Just hyps -> Just $ render (text "cat" <+> ppCId id <+> hsep (snd (mapAccumL ppHypo [] hyps)))
                                   Nothing   -> Nothing

@@ -69,16 +69,16 @@ plCat (cat, hypos) = plFact "cat" (plTypeWithHypos typ)
           args = reverse [EFun x | (_,x) <- subst]
           typ = DTyp hypos' cat args
 
-plFun :: (CId, (Type, Int, [Equation])) -> String
+plFun :: (CId, (Type, Int, Maybe [Equation])) -> String
 plFun (fun, (typ,_,_)) = plFact "fun" (plp fun : plTypeWithHypos typ')
     where typ' = snd $ alphaConvert emptyEnv typ
 
 plTypeWithHypos :: Type -> [String]
 plTypeWithHypos (DTyp hypos cat args) = [plTerm (plp cat) (map plp args), plList (map (\(_,x,ty) -> plOper ":" (plp x) (plp ty)) hypos)]
 
-plFundef :: (CId, (Type,Int,[Equation])) -> [String]
-plFundef (fun, (_,_,[])) = []
-plFundef (fun, (_,_,eqs)) = [plFact "def" [plp fun, plp fundef']]
+plFundef :: (CId, (Type,Int,Maybe [Equation])) -> [String]
+plFundef (fun, (_,_,Nothing )) = []
+plFundef (fun, (_,_,Just eqs)) = [plFact "def" [plp fun, plp fundef']]
     where fundef' = snd $ alphaConvert emptyEnv eqs
 
 

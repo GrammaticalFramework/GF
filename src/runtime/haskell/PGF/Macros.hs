@@ -22,7 +22,7 @@ lookType pgf f =
   case lookMap (error $ "lookType " ++ show f) f (funs (abstract pgf)) of
     (ty,_,_) -> ty
 
-lookDef :: PGF -> CId -> [Equation]
+lookDef :: PGF -> CId -> Maybe [Equation]
 lookDef pgf f = 
   case lookMap (error $ "lookDef " ++ show f) f (funs (abstract pgf)) of
     (_,a,eqs) -> eqs
@@ -30,8 +30,8 @@ lookDef pgf f =
 isData :: PGF -> CId -> Bool
 isData pgf f =
   case Map.lookup f (funs (abstract pgf)) of
-    Just (_,_,[]) -> True             -- the encoding of data constrs
-    _             -> False
+    Just (_,_,Nothing) -> True             -- the encoding of data constrs
+    _                  -> False
 
 lookValCat :: PGF -> CId -> CId
 lookValCat pgf = valCat . lookType pgf
