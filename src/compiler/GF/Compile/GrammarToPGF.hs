@@ -60,9 +60,9 @@ canon2pgf opts pars cgr@(M.MGrammar ((a,abm):cms)) = do
   gflags = Map.empty
   aflags = Map.fromList [(mkCId f,C.LStr x) | (f,x) <- optionsPGF (M.flags abm)]
 
-  mkDef (Just eqs) = [C.Equ ps' (mkExp scope' e) | (ps,e) <- eqs, let (scope',ps') = mapAccumL mkPatt [] ps]
-  mkDef Nothing    = []
-  
+  mkDef (Just eqs) = Just [C.Equ ps' (mkExp scope' e) | (ps,e) <- eqs, let (scope',ps') = mapAccumL mkPatt [] ps]
+  mkDef Nothing    = Nothing
+
   mkArrity (Just a) = a
   mkArrity Nothing  = 0
 

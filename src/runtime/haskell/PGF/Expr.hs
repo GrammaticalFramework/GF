@@ -269,6 +269,7 @@ normalForm funs k env e = value2expr k (eval funs env e)
     value2expr i (VGen j vs)                 = foldl EApp (EVar (i-j-1)) (List.map (value2expr i) vs)
     value2expr i (VMeta j env vs)            = foldl EApp (EMeta j)      (List.map (value2expr i) vs)
     value2expr i (VSusp j env vs k)          = value2expr i (k (VGen j vs))
+    value2expr i (VConst f vs)               = foldl EApp (EFun f)       (List.map (value2expr i) vs)
     value2expr i (VLit l)                    = ELit l
     value2expr i (VClosure env (EAbs b x e)) = EAbs b x (value2expr (i+1) (eval funs ((VGen i []):env) e))
     value2expr i (VImplArg v)                = EImplArg (value2expr i v)
@@ -279,20 +280,23 @@ data Value
   | VMeta {-# UNPACK #-} !MetaId Env [Value]
   | VSusp {-# UNPACK #-} !MetaId Env [Value] (Value -> Value)
   | VGen  {-# UNPACK #-} !Int [Value]
+  | VConst CId [Value]
   | VClosure Env Expr
   | VImplArg Value
 
-type Funs = Map.Map CId (Type,Int,[Equation]) -- type and def of a fun
+type Funs = Map.Map CId (Type,Int,Maybe [Equation]) -- type and def of a fun
 type Env  = [Value]
 
 eval :: Funs -> Env -> Expr -> Value
 eval funs env (EVar i)     = env !! i
 eval funs env (EFun f)     = case Map.lookup f funs of
-                              Just (_,a,eqs) -> if a == 0
-                                                  then case eqs of
-                                                         Equ [] e : _ -> eval funs [] e
-                                                         _            -> VApp f []
-                                                  else VApp f []
+                              Just (_,a,meqs) -> case meqs of
+                                                   Just eqs -> if a == 0
+                                                                 then case eqs of
+                                                                        Equ [] e : _ -> eval funs [] e
+                                                                        _            -> VConst f []
+                                                                 else VApp f []
+                                                   Nothing  -> VApp f []
                               Nothing        -> error ("unknown function "++showCId f)
 eval funs env (EApp e1 e2) = apply funs env e1 [eval funs env e2]
 eval funs env (EAbs b x e) = VClosure env (EAbs b x e)
@@ -305,10 +309,11 @@ apply :: Funs -> Env -> Expr -> [Value] -> Value
 apply funs env e            []     = eval funs env e
 apply funs env (EVar i)     vs     = applyValue funs (env !! i) vs
 apply funs env (EFun f)     vs     = case Map.lookup f funs of
-                                       Just (_,a,eqs) -> if a <= length vs
-                                                           then let (as,vs') = splitAt a vs
-                                                                in match funs f eqs as vs'
-                                                           else VApp f vs
+                                       Just (_,a,meqs) -> case meqs of
+                                                            Just eqs -> if a <= length vs
+                                                                          then match funs f eqs vs
+                                                                          else VApp f vs
+                                                            Nothing  -> VApp f vs
                                        Nothing      -> error ("unknown function "++showCId f)
 apply funs env (EApp e1 e2) vs     = apply funs env e1 (eval funs env e2 : vs)
 apply funs env (EAbs _ x e) (v:vs) = apply funs (v:env) e vs
@@ -323,6 +328,7 @@ applyValue funs (VLit _)                  vs       = error "literal of function 
 applyValue funs (VMeta i env vs0)         vs       = VMeta i env (vs0++vs)
 applyValue funs (VGen  i vs0)             vs       = VGen  i (vs0++vs)
 applyValue funs (VSusp i env vs0 k)       vs       = VSusp i env vs0 (\v -> applyValue funs (k v) vs)
+applyValue funs (VConst f vs0)            vs       = VConst f (vs0++vs)
 applyValue funs (VClosure env (EAbs b x e)) (v:vs) = apply funs (v:env) e vs
 applyValue funs (VImplArg _)              vs       = error "implicit argument in function position"
 
@@ -330,22 +336,23 @@ applyValue funs (VImplArg _)              vs       = error "implicit argument in
 -- Pattern matching
 -----------------------------------------------------
 
-match :: Funs -> CId -> [Equation] -> [Value] -> [Value] -> Value
-match funs f eqs as0 vs0 =
+match :: Funs -> CId -> [Equation] -> [Value] -> Value
+match funs f eqs as0 =
   case eqs of
-    []               -> VApp f (as0++vs0)
+    []               -> VConst f as0
     (Equ ps res):eqs -> tryMatches eqs ps as0 res []
   where
-    tryMatches eqs []     []     res env = apply funs env res vs0
+    tryMatches eqs []     as     res env = apply funs env res as
     tryMatches eqs (p:ps) (a:as) res env = tryMatch p a env
       where
         tryMatch (PVar x     ) (v                ) env            = tryMatches eqs  ps        as  res (v:env)
         tryMatch (PWild      ) (_                ) env            = tryMatches eqs  ps        as  res env
         tryMatch (p          ) (VMeta i envi vs  ) env            = VSusp i envi vs (\v -> tryMatch p v env)
-        tryMatch (p          ) (VGen  i vs       ) env            = VApp f (as0++vs0)
+        tryMatch (p          ) (VGen  i vs       ) env            = VConst f as0
         tryMatch (p          ) (VSusp i envi vs k) env            = VSusp i envi vs (\v -> tryMatch p (k v) env)
+        tryMatch (p          ) v@(VConst _ _     ) env            = VConst f as0
         tryMatch (PApp f1 ps1) (VApp f2 vs2      ) env | f1 == f2 = tryMatches eqs (ps1++ps) (vs2++as) res env
         tryMatch (PLit l1    ) (VLit l2          ) env | l1 == l2 = tryMatches eqs  ps        as  res env
         tryMatch (PImplArg p ) (VImplArg v       ) env            = tryMatch p v env
-        tryMatch _             _                   env            = match funs f eqs as0 vs0
+        tryMatch _             _                   env            = match funs f eqs as0
 

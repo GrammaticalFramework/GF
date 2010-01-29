@@ -38,6 +38,12 @@ succ zero
 
 ?1
 
+zeroF
+
+dec (succF zeroF)
+
+dec zeroF
+
 \x -> dec x
 
 dec ?1
@@ -53,4 +59,6 @@ zero
 dec2 0 err
 
 succ err
+
+\x -> dec (dec x)
 

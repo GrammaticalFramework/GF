@@ -20,6 +20,9 @@ pt -compute g0 23
 pt -compute const 3.14 "pi"
 pt -compute dec (succ (succ zero))
 pt -compute dec (succ ?)
+pt -compute dec (succ zeroF)
+pt -compute dec (succF zeroF)
+pt -compute dec zeroF
 pt -compute <\x -> dec x : Nat -> Nat>
 pt -compute dec ?
 pt -compute <\f -> f 0 : (Int -> Int) -> Int> (g3 ?)
@@ -28,3 +31,4 @@ pt -compute plus (succ zero) (succ zero)
 pt -compute dec2 0 (succ zero)
 pt -compute dec2 0 err
 pt -compute plus err (succ zero)
+pt -compute <\x -> dec (dec x) : Nat -> Nat>
