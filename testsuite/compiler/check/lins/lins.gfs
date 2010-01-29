@@ -1,2 +1,2 @@
-i -src -erasing=on testsuite/compiler/check/lins/linsCnc.gf
-pg -printer=pmcfg_pretty
+i -src testsuite/compiler/check/lins/linsCnc.gf
+pg -printer=pgf_pretty
