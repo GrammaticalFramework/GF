@@ -9,6 +9,29 @@ import PGF.Probabilistic
 import qualified Data.Map as M
 import System.Random
 
+-- generate all fillings of metavariables in an expr
+generateAllFrom :: Maybe Expr -> PGF -> Type -> Maybe Int -> [Expr]
+generateAllFrom mex pgf ty mi = maybe (gen ty) (generateForMetas pgf gen) mex where
+  gen ty = generate pgf ty mi
+
+-- generate random fillings of metavariables in an expr
+generateRandomFrom :: Maybe Expr -> 
+                      Maybe Probabilities -> StdGen -> PGF -> Type -> [Expr]
+generateRandomFrom mex ps rg pgf ty = 
+  maybe (gen ty) (generateForMetas pgf gen) mex where
+    gen ty = genRandomProb ps rg pgf ty
+
+generateForMetas :: PGF -> (Type -> [Expr]) -> Expr -> [Expr]
+generateForMetas pgf gen exp = case exp of
+  EApp f (EMeta _) -> [EApp g a | g <- gener f, a <- genArg g]
+  EApp f x         -> [EApp g a | g <- gener f, a <- gener x]
+  _ -> [exp]
+ where
+  gener    = generateForMetas pgf gen
+  genArg f = case inferExpr pgf f of
+    Right (_,DTyp ((_,_,ty):_) _ _) -> gen ty
+    _ -> []
+
 -- generate an infinite list of trees exhaustively
 generate :: PGF -> Type -> Maybe Int -> [Expr]
 generate pgf ty@(DTyp _ cat _) dp = filter (\e -> case checkExpr pgf e ty of 

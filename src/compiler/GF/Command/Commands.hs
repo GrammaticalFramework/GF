@@ -21,7 +21,7 @@ import PGF.Data ----
 import PGF.Morphology
 import PGF.Printer
 import PGF.Probabilistic -- (getProbsFromFile,prProbabilities,defaultProbabilities)
-import PGF.Generate (genRandomProb) ----
+import PGF.Generate (generateRandomFrom) ----
 import GF.Compile.Export
 import GF.Compile.ExampleBased
 import GF.Infra.Option (noOptions, readOutputFormat, Encoding(..))
@@ -267,12 +267,15 @@ allCommands cod env@(pgf, mos) = Map.fromList [
      examples = [
        "gr                     -- one tree in the startcat of the current grammar",
        "gr -cat=NP -number=16  -- 16 trees in the category NP",
-       "gr -lang=LangHin,LangTha -cat=Cl  -- Cl, both in LangHin and LangTha"
+       "gr -lang=LangHin,LangTha -cat=Cl  -- Cl, both in LangHin and LangTha",
+       "gr -probs=FILE         -- generate with bias",
+       "gr (AdjCN ? (UseN ?))  -- generate trees of form (AdjCN ? (UseN ?))"
        ],
      explanation = unlines [
-       "Generates a list of random trees, by default one tree."
-----       "If a tree argument is given, the command completes the Tree with values to",
-----       "the metavariables in the tree."
+       "Generates a list of random trees, by default one tree.",
+       "If a tree argument is given, the command completes the Tree with values to",
+       "all metavariables in the tree. The generation can be biased by probabilities,",
+       "given in a file in the -probs flag."
        ],
      flags = [
        ("cat","generation category"),
@@ -280,11 +283,14 @@ allCommands cod env@(pgf, mos) = Map.fromList [
        ("number","number of trees generated"),
        ("probs", "file with biased probabilities (format 'f 0.4' one by line)")
        ],
-     exec = \opts _ -> do
+     exec = \opts xs -> do
        let pgfr = optRestricted opts
        gen <- newStdGen
        mprobs <- optProbs opts pgfr
-       ts <- return $ genRandomProb mprobs gen pgfr (optType opts)
+       let mt = case xs of
+            t:_ -> Just t
+            _   -> Nothing
+       ts <- return $ generateRandomFrom mt mprobs gen pgfr (optType opts)
        returnFromExprs $ take (optNum opts) ts
      }),
   ("gt", emptyCommandInfo {
@@ -292,9 +298,9 @@ allCommands cod env@(pgf, mos) = Map.fromList [
      synopsis = "generates a list of trees, by default exhaustive",
      explanation = unlines [
        "Generates all trees of a given category, with increasing depth.",
-       "By default, the depth is 4, but this can be changed by a flag."
-       ---- "If a Tree argument is given, the command completes the Tree with values",
-       ---- "to the metavariables in the tree."
+       "By default, the depth is 4, but this can be changed by a flag.",
+       "If a Tree argument is given, the command completes the Tree with values",
+       "to all metavariables in the tree."
        ],
      flags = [
        ("cat","the generation category"),
@@ -302,10 +308,19 @@ allCommands cod env@(pgf, mos) = Map.fromList [
        ("lang","excludes functions that have no linearization in this language"),
        ("number","the number of trees generated")
        ],
-     exec = \opts _ -> do
+     examples = [
+       "gt                     -- all trees in the startcat, to depth 4",
+       "gt -cat=NP -number=16  -- 16 trees in the category NP",
+       "gt -cat=NP -depth=2    -- trees in the category NP to depth 2",
+       "gt (AdjCN ? (UseN ?))  -- trees of form (AdjCN ? (UseN ?))"
+       ],
+     exec = \opts xs -> do
        let pgfr = optRestricted opts
        let dp = return $ valIntOpts "depth" 4 opts
-       let ts = generateAllDepth pgfr (optType opts) dp
+       let mt = case xs of
+            t:_ -> Just t
+            _   -> Nothing
+       let ts = generateAllDepth mt pgfr (optType opts) dp
        returnFromExprs $ take (optNumInf opts) ts
      }),
   ("h", emptyCommandInfo {
