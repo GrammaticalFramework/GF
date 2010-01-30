@@ -165,7 +165,7 @@ parseAll     :: PGF -> Type -> String -> [[Tree]]
 parseAllLang :: PGF -> Type -> String -> [(Language,[Tree])]
 
 -- | The same as 'generateAllDepth' but does not limit
--- the depth in the generation.
+-- the depth in the generation, and doesn't give an initial expression.
 generateAll      :: PGF -> Type -> [Expr]
 
 -- | Generates an infinite list of random abstract syntax expressions.
@@ -176,7 +176,7 @@ generateRandom   :: PGF -> Type -> IO [Expr]
 -- | Generates an exhaustive possibly infinite list of
 -- abstract syntax expressions. A depth can be specified
 -- to limit the search space.
-generateAllDepth :: PGF -> Type -> Maybe Int -> [Expr]
+generateAllDepth :: Maybe Expr -> PGF -> Type -> Maybe Int -> [Expr]
 
 -- | List of all languages available in the given grammar.
 languages    :: PGF -> [Language]
@@ -248,7 +248,7 @@ generateRandom pgf cat = do
   return $ genRandom gen pgf cat
 
 generateAll pgf cat = generate pgf cat Nothing
-generateAllDepth pgf cat = generate pgf cat
+generateAllDepth mex pgf cat = generateAllFrom mex pgf cat
 
 abstractName pgf = absname pgf
 
