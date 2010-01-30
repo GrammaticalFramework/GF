@@ -99,7 +99,7 @@ newMeta :: Scope -> TcM MetaId
 newMeta scope = TcM (\abstr metaid ms -> Ok (metaid+1) (IntMap.insert metaid (MUnbound scope []) ms) metaid)
 
 newGuardedMeta :: Scope -> Expr -> TcM MetaId
-newGuardedMeta scope e = getFuns >>= \funs -> TcM (\abstr metaid ms -> Ok (metaid+1) (IntMap.insert metaid (MGuarded e [] 0) ms) metaid)
+newGuardedMeta scope e = TcM (\abstr metaid ms -> Ok (metaid+1) (IntMap.insert metaid (MGuarded e [] 0) ms) metaid)
 
 getMeta :: MetaId -> TcM MetaValue
 getMeta i = TcM (\abstr metaid ms -> Ok metaid ms $! case IntMap.lookup i ms of
