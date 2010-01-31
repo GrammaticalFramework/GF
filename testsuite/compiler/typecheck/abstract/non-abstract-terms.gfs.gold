@@ -1,0 +1,12 @@
+
+
+checking module PolyTypes
+   The term Type
+   is not allowed in the abstract syntax
+   in type of function f in PolyTypes.gf, line 3
+
+
+checking module RecTypes
+   The term {s : Int}
+   is not allowed in the abstract syntax
+   in type of function f in RecTypes.gf, line 3
