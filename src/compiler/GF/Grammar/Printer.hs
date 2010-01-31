@@ -9,7 +9,6 @@
 
 module GF.Grammar.Printer
            ( TermPrintQual(..)
-           , ppIdent
            , ppLabel
            , ppModule
            , ppJudgement
@@ -255,8 +254,6 @@ ppDecl q (_,id,typ)
 ppDDecl q (_,id,typ)
   | id == identW = ppTerm q 6 typ
   | otherwise    = parens (ppIdent id <+> colon <+> ppTerm q 0 typ)
-
-ppIdent = text . showIdent
 
 ppQIdent q m id =
   case q of

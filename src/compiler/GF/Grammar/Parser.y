@@ -135,7 +135,7 @@ ComplMod
   : {- empty -}  { MSComplete   } 
   | 'incomplete' { MSIncomplete }
 
-ModType :: { (ModuleType Ident,Ident) }
+ModType :: { (ModuleType,Ident) }
 ModType
   : 'abstract'  Ident                    { (MTAbstract,      $2) } 
   | 'resource'  Ident                    { (MTResource,      $2) }
@@ -143,9 +143,9 @@ ModType
   | 'concrete'  Ident 'of' Ident         { (MTConcrete $4,   $2) }
   | 'instance'  Ident 'of' Ident         { (MTInstance $4,   $2) }
 
-ModHeaderBody :: { ( [(Ident,MInclude Ident)]
-                   , Maybe (Ident,MInclude Ident,[(Ident,Ident)])
-                   , [OpenSpec Ident]
+ModHeaderBody :: { ( [(Ident,MInclude)]
+                   , Maybe (Ident,MInclude,[(Ident,Ident)])
+                   , [OpenSpec]
                    ) }
 ModHeaderBody
   : ListIncluded '**' Included 'with' ListInst '**' ModOpen { ($1, Just (fst $3,snd $3,$5), $7) }
@@ -156,14 +156,14 @@ ModHeaderBody
   |                   Included 'with' ListInst              { ([], Just (fst $1,snd $1,$3), []) }
   |                                                 ModOpen { ([], Nothing,                 $1) }
 
-ModOpen :: { [OpenSpec Ident] }
+ModOpen :: { [OpenSpec] }
 ModOpen
   :                 { [] }
   | 'open' ListOpen { $2 }
 
-ModBody :: { ( [(Ident,MInclude Ident)]
-             , Maybe (Ident,MInclude Ident,[(Ident,Ident)])
-             , Maybe ([OpenSpec Ident],[(Ident,SrcSpan,Info)],Options)
+ModBody :: { ( [(Ident,MInclude)]
+             , Maybe (Ident,MInclude,[(Ident,Ident)])
+             , Maybe ([OpenSpec],[(Ident,SrcSpan,Info)],Options)
              ) }
 ModBody
   : ListIncluded '**' Included 'with' ListInst '**' ModContent  { ($1, Just (fst $3,snd $3,$5), Just $7) }
@@ -175,7 +175,7 @@ ModBody
   |                                                 ModContent  { ([], Nothing,                 Just $1) }
   | ModBody ';'                                                 { $1                                     }
 
-ModContent :: { ([OpenSpec Ident],[(Ident,SrcSpan,Info)],Options) }
+ModContent :: { ([OpenSpec],[(Ident,SrcSpan,Info)],Options) }
 ModContent
   :                      '{' ListTopDef '}' { ([],[d | Left ds <- $2, d <- ds],concatOptions [o | Right o <- $2]) }
   | 'open' ListOpen 'in' '{' ListTopDef '}' { ($2,[d | Left ds <- $5, d <- ds],concatOptions [o | Right o <- $5]) }
@@ -185,12 +185,12 @@ ListTopDef
   : {- empty -}       { []      } 
   | TopDef ListTopDef { $1 : $2 }
 
-ListOpen :: { [OpenSpec Ident] }
+ListOpen :: { [OpenSpec] }
 ListOpen
   : Open              { [$1]    }
   | Open ',' ListOpen { $1 : $3 }
 
-Open :: { OpenSpec Ident }
+Open :: { OpenSpec }
 Open
   : Ident                   { OSimple $1    }
   | '(' Ident '=' Ident ')' { OQualif $2 $4 }
@@ -204,12 +204,12 @@ Inst :: { (Ident,Ident) }
 Inst
   : '(' Ident '=' Ident ')' { ($2,$4) }
 
-ListIncluded :: { [(Ident,MInclude Ident)] }
+ListIncluded :: { [(Ident,MInclude)] }
 ListIncluded
   : Included                  { [$1]    }
   | Included ',' ListIncluded { $1 : $3 }
 
-Included :: { (Ident,MInclude Ident) }
+Included :: { (Ident,MInclude) }
 Included 
   : Ident                       { ($1,MIAll      ) } 
   | Ident     '[' ListIdent ']' { ($1,MIOnly   $3) }

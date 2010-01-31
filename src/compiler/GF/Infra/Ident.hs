@@ -13,7 +13,7 @@
 -----------------------------------------------------------------------------
 
 module GF.Infra.Ident (-- * Identifiers
-	      Ident(..), ident2bs, showIdent,
+	      Ident(..), ident2bs, showIdent, ppIdent,
 	      identC, identV, identA, identAV, identW,
 	      argIdent, varStr, varX, isWildIdent, varIndex,
 	      -- * refreshing identifiers
@@ -23,7 +23,7 @@ module GF.Infra.Ident (-- * Identifiers
 
 import GF.Data.Operations
 import qualified Data.ByteString.Char8 as BS
--- import Monad
+import Text.PrettyPrint
 
 
 -- | the constructors labelled /INTERNAL/ are
@@ -50,6 +50,9 @@ ident2bs i = case i of
 
 showIdent :: Ident -> String
 showIdent i = BS.unpack $! ident2bs i
+
+ppIdent :: Ident -> Doc
+ppIdent = text . showIdent
 
 identC :: BS.ByteString -> Ident
 identV :: BS.ByteString -> Int -> Ident

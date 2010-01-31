@@ -35,7 +35,7 @@ prDepGraph deps = unlines $ [
      "ed" -> "style = \"dotted\""
 
 data ModDeps = ModDeps {
-  modtype    :: ModuleType Ident,
+  modtype    :: ModuleType,
   ofs        :: [Ident],
   extendeds  :: [Ident], 
   openeds    :: [Ident],

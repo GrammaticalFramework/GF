@@ -53,11 +53,11 @@ import GF.Data.Operations
 import qualified Data.ByteString.Char8 as BS
 
 -- | grammar as presented to the compiler
-type SourceGrammar = MGrammar Ident Info
+type SourceGrammar = MGrammar Info
 
 emptySourceGrammar = MGrammar []
 
-type SourceModInfo = ModInfo Ident Info
+type SourceModInfo = ModInfo Info
 
 type SourceModule = (Ident, SourceModInfo)
 

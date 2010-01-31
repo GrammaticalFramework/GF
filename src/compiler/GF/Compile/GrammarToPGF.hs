@@ -570,7 +570,7 @@ prTrace  tr n = trace (render (text "-- OBSERVE" <+> A.ppTerm Unqualified 0 tr <
 
 -- | this function finds out what modules are really needed in the canonical gr.
 -- its argument is typically a concrete module name
-requiredCanModules :: (Ord i, Show i) => Bool -> M.MGrammar i a -> i -> [i]
+requiredCanModules :: Bool -> M.MGrammar a -> Ident -> [Ident]
 requiredCanModules isSingle gr c = nub $ filter notReuse ops ++ exts where
   exts = M.allExtends gr c
   ops  = if isSingle 

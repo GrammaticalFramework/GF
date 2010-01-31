@@ -57,7 +57,7 @@ renameModule ms (name,mo) = checkIn (text "renaming module" <+> ppIdent name) $ 
   js2    <- checkMap (renameInfo mo status) js1
   return (name, mo {opens = map forceQualif (opens mo), jments = js2})
 
-type Status = (StatusTree, [(OpenSpec Ident, StatusTree)])
+type Status = (StatusTree, [(OpenSpec, StatusTree)])
 
 type StatusTree = BinTree Ident StatusInfo
 
@@ -112,7 +112,7 @@ info2status mq (c,i) = case i of
   AnyInd False m -> maybe Cn (const (Q m)) mq
   _           -> maybe Cn  Q mq
 
-tree2status :: OpenSpec Ident -> BinTree Ident Info -> BinTree Ident StatusInfo
+tree2status :: OpenSpec -> BinTree Ident Info -> BinTree Ident StatusInfo
 tree2status o = case o of
   OSimple i   -> mapTree (info2status (Just i))
   OQualif i j -> mapTree (info2status (Just j))
@@ -127,7 +127,7 @@ buildStatus gr c mo = let mo' = self2status c mo in do
       then (emptyBinTree, reverse sts) -- the module itself does not define any names
       else (mo',reverse sts) -- so the empty ident is not needed
 
-modInfo2status :: (OpenSpec Ident,SourceModInfo) -> (OpenSpec Ident, StatusTree)
+modInfo2status :: (OpenSpec,SourceModInfo) -> (OpenSpec, StatusTree)
 modInfo2status (o,mo) = (o,tree2status o (jments mo))
 
 self2status :: Ident -> SourceModInfo -> StatusTree
