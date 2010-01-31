@@ -68,7 +68,7 @@ data Patt =
  | PVar CId                         -- ^ variable
  | PWild                            -- ^ wildcard
  | PImplArg Patt                    -- ^ implicit argument in pattern
-  deriving (Eq,Ord)
+  deriving Show
 
 -- | The equation is used to define lambda function as a sequence
 -- of equations with pattern matching. The list of 'Expr' represents
@@ -76,7 +76,7 @@ data Patt =
 -- equation.
 data Equation =
    Equ [Patt] Expr
-  deriving (Eq,Ord)
+  deriving Show
 
 -- | parses 'String' as an expression
 readExpr :: String -> Maybe Expr
