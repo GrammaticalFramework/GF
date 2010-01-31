@@ -55,7 +55,7 @@ lookupIdent c t =
     Ok v  -> return v
     Bad _ -> Bad ("unknown identifier" +++ showIdent c)
 
-lookupIdentInfo :: ModInfo Ident a -> Ident -> Err a
+lookupIdentInfo :: ModInfo a -> Ident -> Err a
 lookupIdentInfo mo i = lookupIdent i (jments mo)
 
 lookupResDef :: SourceGrammar -> Ident -> Ident -> Err Term

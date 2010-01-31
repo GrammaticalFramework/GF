@@ -26,16 +26,16 @@ instance Binary Ident where
                 then return identW
                 else return (identC bs)
 
-instance (Ord i, Binary i, Binary a) => Binary (MGrammar i a) where
+instance Binary a => Binary (MGrammar a) where
   put (MGrammar ms) = put ms
   get               = fmap MGrammar get
 
-instance (Ord i, Binary i, Binary a) => Binary (ModInfo i a) where
+instance Binary a => Binary (ModInfo a) where
   put mi = do put (mtype mi,mstatus mi,flags mi,extend mi,mwith mi,opens mi,mexdeps mi,jments mi,positions mi)
   get    = do (mtype,mstatus,flags,extend,mwith,opens,med,jments,positions) <- get
               return (ModInfo mtype mstatus flags extend mwith opens med jments positions)
 
-instance (Binary i) => Binary (ModuleType i) where
+instance Binary ModuleType where
   put MTAbstract       = putWord8 0
   put MTResource       = putWord8 2
   put (MTConcrete i)   = putWord8 3 >> put i
@@ -50,7 +50,7 @@ instance (Binary i) => Binary (ModuleType i) where
              5 -> get >>= return . MTInstance
              _ -> decodingError
 
-instance (Binary i) => Binary (MInclude i) where
+instance Binary MInclude where
   put MIAll         = putWord8 0
   put (MIOnly xs)   = putWord8 1 >> put xs
   put (MIExcept xs) = putWord8 2 >> put xs
@@ -61,7 +61,7 @@ instance (Binary i) => Binary (MInclude i) where
              2 -> fmap MIExcept get
              _ -> decodingError
 
-instance Binary i => Binary (OpenSpec i) where
+instance Binary OpenSpec where
   put (OSimple i)   = putWord8 0 >> put i
   put (OQualif i j) = putWord8 1 >> put (i,j)
   get = do tag <- getWord8
