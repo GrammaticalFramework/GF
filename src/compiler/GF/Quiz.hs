@@ -52,7 +52,7 @@ morphologyList pgf ig typ number = do
   ts  <- generateRandom pgf typ >>= return . take (max 1 number)
   gen <- newStdGen
   let ss    = map (tabularLinearizes pgf ig) ts
-  let size  = length (head ss)
+  let size  = length (head (head ss))
   let forms = take number $ randomRs (0,size-1) gen
   return [(snd (head pws0) +++ fst (pws0 !! i), ws) | 
            (pwss@(pws0:_),i) <- zip ss forms, let ws = map (\pws -> snd (pws !! i)) pwss]

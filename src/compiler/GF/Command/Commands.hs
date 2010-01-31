@@ -392,8 +392,9 @@ allCommands cod env@(pgf, mos) = Map.fromList [
        ],
      exec = \opts -> return . fromStrings . map (optLin opts),
      options = [
-       ("all","show all forms and variants"),
+       ("all","show all forms and variants, one by line (cf. l -list)"),
        ("bracket","show tree structure with brackets and paths to nodes"),
+       ("list","show all forms and variants, comma-separated on one line (cf. l -all)"),
        ("multi","linearize to all languages (default)"),
        ("table","show all forms labelled by parameters"),
        ("treebank","show the tree and tag linearizations with language names")
@@ -870,8 +871,12 @@ allCommands cod env@(pgf, mos) = Map.fromList [
     
    linear :: [Option] -> CId -> Expr -> String
    linear opts lang = let unl = unlex opts lang in case opts of
-       _ | isOpt "all"     opts -> unlines . concat . intersperse [[]] . map (map (unl . snd))                 . tabularLinearizes pgf lang
-       _ | isOpt "table"   opts -> unlines . concat . intersperse [[]] . map (map (\(p,v) -> p+++":"+++unl v)) . tabularLinearizes pgf lang
+       _ | isOpt "all"     opts -> unlines . concat . intersperse [[]] . 
+                                   map (map (unl . snd)) . tabularLinearizes pgf lang
+       _ | isOpt "list"    opts -> commaList . concat . intersperse [[]] . 
+                                   map (map (unl . snd)) . tabularLinearizes pgf lang
+       _ | isOpt "table"   opts -> unlines . concat . intersperse [[]] . 
+                    map (map (\(p,v) -> p+++":"+++unl v)) . tabularLinearizes pgf lang
        _ | isOpt "bracket" opts -> unlines . markLinearizes pgf lang
        _                        -> unl . linearize pgf lang
 
@@ -882,6 +887,9 @@ allCommands cod env@(pgf, mos) = Map.fromList [
                [(mkCId la,tail le) | lex <- lexs, let (la,le) = span (/='=') lex, not (null le)] of
        Just le -> chunks ',' le
        _ -> []
+
+   commaList [] = []
+   commaList ws = concat $ head ws : map (", " ++) (tail ws)
 
 -- Proposed logic of coding in unlexing:
 --   - If lang has no coding flag, or -to_utf8 is not in opts, just opts are used.
