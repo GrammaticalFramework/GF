@@ -287,9 +287,7 @@ allCommands cod env@(pgf, mos) = Map.fromList [
        let pgfr = optRestricted opts
        gen <- newStdGen
        mprobs <- optProbs opts pgfr
-       let mt = case xs of
-            t:_ -> Just t
-            _   -> Nothing
+       let mt = mexp xs
        ts <- return $ generateRandomFrom mt mprobs gen pgfr (optType opts)
        returnFromExprs $ take (optNum opts) ts
      }),
@@ -317,9 +315,7 @@ allCommands cod env@(pgf, mos) = Map.fromList [
      exec = \opts xs -> do
        let pgfr = optRestricted opts
        let dp = return $ valIntOpts "depth" 4 opts
-       let mt = case xs of
-            t:_ -> Just t
-            _   -> Nothing
+       let mt = mexp xs
        let ts = generateAllDepth mt pgfr (optType opts) dp
        returnFromExprs $ take (optNumInf opts) ts
      }),
@@ -430,15 +426,19 @@ allCommands cod env@(pgf, mos) = Map.fromList [
   ("mq", emptyCommandInfo {
      longname = "morpho_quiz",
      synopsis = "start a morphology quiz",
-     exec = \opts _ -> do
+     syntax   = "mq (-cat=CAT)? (-probs=FILE)? TREE?", 
+     exec = \opts xs -> do
          let lang = optLang opts
          let typ  = optType opts
-         morphologyQuiz cod pgf lang typ
+         mprobs <- optProbs opts pgf
+         let mt = mexp xs 
+         morphologyQuiz mt mprobs cod pgf lang typ
          return void,
      flags = [
        ("lang","language of the quiz"),
        ("cat","category of the quiz"),
-       ("number","maximum number of questions")
+       ("number","maximum number of questions"),
+       ("probs","file with biased probabilities for generation")
        ]
      }),
 
@@ -622,18 +622,26 @@ allCommands cod env@(pgf, mos) = Map.fromList [
      }),
   ("tq", emptyCommandInfo {
      longname = "translation_quiz",
+     syntax   = "tq -from=LANG -to=LANG (-cat=CAT)? (-probs=FILE)? TREE?",
      synopsis = "start a translation quiz",
-     exec = \opts _ -> do
+     exec = \opts xs -> do
          let from = valCIdOpts "from" (optLang opts) opts
          let to   = valCIdOpts "to"   (optLang opts) opts
          let typ  = optType opts
-         translationQuiz cod pgf from to typ
+         let mt   = mexp xs
+         mprobs <- optProbs opts pgf
+         translationQuiz mt mprobs cod pgf from to typ
          return void,
      flags = [
        ("from","translate from this language"),
        ("to","translate to this language"),
        ("cat","translate in this category"),
-       ("number","the maximum number of questions")
+       ("number","the maximum number of questions"),
+       ("probs","file with biased probabilities for generation")
+       ], 
+     examples = [
+       ("tq -from=Eng -to=Swe                               -- any trees in startcat"),
+       ("tq -from=Eng -to=Swe (AdjCN (PositA ?2) (UseN ?))  -- only trees of this form")
        ] 
      }),
   ("se", emptyCommandInfo {
@@ -970,6 +978,10 @@ allCommands cod env@(pgf, mos) = Map.fromList [
 
    optMorpho opts = morpho (error "no morpho") id (head (optLangs opts))
 
+   mexp xs = case xs of
+     t:_ -> Just t
+     _   -> Nothing
+
    -- ps -f -g s returns g (f s)
    stringOps menv opts s = foldr (menvop . app) s (reverse opts) where
      app f = maybe id id (stringOp f) 
@@ -1014,14 +1026,16 @@ stringOpOptions = sort $ [
 treeOpOptions pgf = [(op,expl) | (op,(expl,Left  _)) <- allTreeOps pgf]
 treeOpFlags   pgf = [(op,expl) | (op,(expl,Right _)) <- allTreeOps pgf]
 
-translationQuiz :: Encoding -> PGF -> Language -> Language -> Type -> IO ()
-translationQuiz cod pgf ig og typ = do
-  tts <- translationList pgf ig og typ infinity
+translationQuiz :: Maybe Expr -> Maybe Probabilities -> Encoding -> 
+                   PGF -> Language -> Language -> Type -> IO ()
+translationQuiz mex mprobs cod pgf ig og typ = do
+  tts <- translationList mex mprobs pgf ig og typ infinity
   mkQuiz cod "Welcome to GF Translation Quiz." tts
 
-morphologyQuiz :: Encoding -> PGF -> Language -> Type -> IO ()
-morphologyQuiz cod pgf ig typ = do
-  tts <- morphologyList pgf ig typ infinity
+morphologyQuiz :: Maybe Expr -> Maybe Probabilities -> Encoding -> 
+                  PGF -> Language -> Type -> IO ()
+morphologyQuiz mex mprobs cod pgf ig typ = do
+  tts <- morphologyList mex mprobs pgf ig typ infinity
   mkQuiz cod "Welcome to GF Morphology Quiz." tts
 
 -- | the maximal number of precompiled quiz problems
