@@ -79,6 +79,7 @@ module PGF(
 
            -- ** Generation
            generateRandom, generateAll, generateAllDepth,
+           generateRandomFrom, -- from initial expression, possibly weighed
 
            -- ** Morphological Analysis
            Lemma, Analysis, Morpho,

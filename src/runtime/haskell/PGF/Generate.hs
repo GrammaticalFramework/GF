@@ -21,6 +21,10 @@ generateRandomFrom mex ps rg pgf ty =
   maybe (gen ty) (generateForMetas pgf gen) mex where
     gen ty = genRandomProb ps rg pgf ty
 
+
+-- generic algorithm for filling holes in a generator
+---- for random, should be breadth-first, since now the first metas always get the same
+---- value when a list is generated
 generateForMetas :: PGF -> (Type -> [Expr]) -> Expr -> [Expr]
 generateForMetas pgf gen exp = case exp of
   EApp f (EMeta _) -> [EApp g a | g <- gener f, a <- genArg g]

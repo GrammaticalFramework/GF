@@ -24,9 +24,9 @@ import GF.Data.Operations
 import GF.Infra.UseIO
 import GF.Infra.Option
 import GF.Text.Coding
+import PGF.Probabilistic
 
 import System.Random
-
 import Data.List (nub)
 
 -- translation and morphology quiz. AR 10/5/2000 -- 12/4/2002
@@ -39,18 +39,22 @@ mkQuiz cod msg tts = do
   teachDialogue qas msg
 
 translationList :: 
+  Maybe Expr -> Maybe Probabilities -> 
   PGF -> Language -> Language -> Type -> Int -> IO [(String,[String])]
-translationList pgf ig og typ number = do
-  ts <- generateRandom pgf typ >>= return . take number
+translationList mex mprobs pgf ig og typ number = do
+  gen <- newStdGen
+  let ts = take number $ generateRandomFrom mex mprobs gen pgf typ
   return $ map mkOne $ ts
  where
    mkOne t = (norml (linearize pgf ig t), map (norml . linearize pgf og) (homonyms t))
    homonyms = nub . parse pgf ig typ . linearize pgf ig
 
-morphologyList :: PGF -> Language -> Type -> Int -> IO [(String,[String])]
-morphologyList pgf ig typ number = do
-  ts  <- generateRandom pgf typ >>= return . take (max 1 number)
+morphologyList :: 
+  Maybe Expr -> Maybe Probabilities -> 
+  PGF -> Language -> Type -> Int -> IO [(String,[String])]
+morphologyList mex mprobs pgf ig typ number = do
   gen <- newStdGen
+  let ts = take (max 1 number) $ generateRandomFrom mex mprobs gen pgf typ 
   let ss    = map (tabularLinearizes pgf ig) ts
   let size  = length (head (head ss))
   let forms = take number $ randomRs (0,size-1) gen
