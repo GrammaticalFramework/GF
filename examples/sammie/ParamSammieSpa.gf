@@ -7,6 +7,7 @@ instance ParamSammieSpa of ParamSammie = open
   ParadigmsSpa,
   (M = MorphoSpa), ---
   ConstructX,
+  SyntaxSpa,
   Prelude 
 in {
 
@@ -53,14 +54,14 @@ oper
   please_PConj = mkPConj ["por favor"] ;
 
   mainmenu_NP = 
-    DetCN (DetSg (SgQuant DefArt) NoOrd) 
+    mkNP the_Det
       (AdjCN (PositA (regA "principal")) (UseN (regN "menú"))) ;
 
   goback_VP = UseV (regV "volver") ;
   shutup_VP = UseV (reflV (dirV2 (regV "callar"))) ; ---- silencio
   pause_VP  = 
     ComplV2 (dirV2 (hacer_V))
-      (DetCN (DetSg (SgQuant IndefArt) NoOrd) (UseN (regN "pausa"))) ; ---pausar
+      (mkNP a_Det (UseN (regN "pausa"))) ; ---pausar
   resume_VP = UseV (regV "continuar") ; --- reproducir
 
   whatever_Utt = mkUtt ["no importa cual"] ; --- cualquiera
@@ -68,14 +69,14 @@ oper
   typeWithGenre x genre =
 ---- CompoundCN genre x ;
     AdvCN x (PrepNP genitive 
-        (DetCN (DetSg MassDet NoOrd) genre)) ;
+        (MassNP genre)) ;
 
   name = regPN ;
 
   WhatName x = 
     QuestIAdv how_IAdv (PredVP x (UseV (reflV (regV "llamar")))) ;
 
-  past = <TPres,AAnter> ;
+  past = <presentTense,anteriorAnt> ;
 
   imperative vp = variants { 
 --      UttImpPol PPos (ImpVP vp) ;
@@ -90,10 +91,10 @@ oper
       } ;
 
   previous cn = 
-    DetCN (DetSg (SgQuant DefArt) NoOrd) 
+    mkNP the_Det
       (AdjCN (PositA (regA "previo")) cn) ;
 
-  next = DetCN (DetSg (SgQuant DefArt) next_Ord) ;
+  next = DetCN (mkDet the_Quant next_Ord) ;
 
   what_say = UttIAdv how_IAdv ;
 
@@ -102,8 +103,8 @@ oper
   artist_Prep = variants {by8agent_Prep ; genitive} ;
 
   this cn = variants {
-    DetCN (DetSg (SgQuant this_Quant) NoOrd) cn ;
-    DetCN (DetSg (SgQuant DefArt) NoOrd) 
+    mkNP this_Quant cn ;
+    mkNP the_Det 
       (AdjCN (PositA (regA "actual")) cn)
     } ;
 

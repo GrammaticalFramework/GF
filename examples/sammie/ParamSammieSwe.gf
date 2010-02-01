@@ -72,7 +72,8 @@ oper
   name = regPN ;
 
   WhatName x = mkQCl whatSg_IP x (dirV2 (mk2V "heta" "hette")) ;
-  past = <TPres,AAnter> ;
+
+  past = <pastTense,simultaneousAnt> ;
 
   imperative = SyntaxSwe.mkUtt ;
 
