@@ -1,0 +1,5 @@
+data null : CStr ""
+data empty : CStr ""
+data other : CStr "other"
+data zero : CInt 0
+data pi : CFloat 3.14
