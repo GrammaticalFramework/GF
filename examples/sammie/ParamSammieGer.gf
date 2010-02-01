@@ -78,7 +78,7 @@ oper
 
   WhatName x = mkQCl how_IAdv (mkCl x heiﬂen_V) ;
 
-  past = <TPres,AAnter> ;
+  past = <presentTense,anteriorAnt> ;
 
   imperative vp = 
       mkUtt (mkImp (bitteVP vp)) 

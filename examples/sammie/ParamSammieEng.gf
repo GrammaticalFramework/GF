@@ -61,7 +61,7 @@ oper
 
   WhatName = mkQCl what_IAdv ;
 
-  past = <TPast,ASimul> ;
+  past = <pastTense,simultaneousAnt> ;
 
   imperative vp = 
       mkUtt (mkImp vp)

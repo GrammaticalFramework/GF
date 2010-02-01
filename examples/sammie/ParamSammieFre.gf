@@ -79,7 +79,7 @@ oper
 
   WhatName x = QuestIAdv how_IAdv (PredVP x (UseV (reflV (regV "appeler")))) ;
 
-  past = <TPres,AAnter> ;
+  past = <presentTense,anteriorAnt> ;
 
   imperative vp = variants { 
 ----      UttImpPol PPos (ImpVP vp) ; 
