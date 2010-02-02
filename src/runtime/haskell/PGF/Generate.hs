@@ -11,27 +11,29 @@ import System.Random
 
 -- generate all fillings of metavariables in an expr
 generateAllFrom :: Maybe Expr -> PGF -> Type -> Maybe Int -> [Expr]
-generateAllFrom mex pgf ty mi = maybe (gen ty) (generateForMetas pgf gen) mex where
-  gen ty = generate pgf ty mi
+generateAllFrom mex pgf ty mi = 
+  maybe (gen ty) (generateForMetas False pgf gen) mex where
+    gen ty = generate pgf ty mi
 
 -- generate random fillings of metavariables in an expr
 generateRandomFrom :: Maybe Expr -> 
                       Maybe Probabilities -> StdGen -> PGF -> Type -> [Expr]
 generateRandomFrom mex ps rg pgf ty = 
-  maybe (gen ty) (generateForMetas pgf gen) mex where
+  maybe (gen ty) (generateForMetas True pgf gen) mex where
     gen ty = genRandomProb ps rg pgf ty
 
 
 -- generic algorithm for filling holes in a generator
----- for random, should be breadth-first, since now the first metas always get the same
----- value when a list is generated
-generateForMetas :: PGF -> (Type -> [Expr]) -> Expr -> [Expr]
-generateForMetas pgf gen exp = case exp of
+-- for random, should be breadth-first, since otherwise first metas always get the same
+-- value when a list is generated
+generateForMetas :: Bool -> PGF -> (Type -> [Expr]) -> Expr -> [Expr]
+generateForMetas breadth pgf gen exp = case exp of
   EApp f (EMeta _) -> [EApp g a | g <- gener f, a <- genArg g]
-  EApp f x         -> [EApp g a | g <- gener f, a <- gener x]
-  _ -> [exp]
+  EApp f x | breadth -> [EApp g a | (g,a) <- zip (gener f) (gener x)]
+  EApp f x  -> [EApp g a | (g,a) <- zip (gener f) (gener x)]
+  _ -> if breadth then repeat exp else [exp]
  where
-  gener    = generateForMetas pgf gen
+  gener    = generateForMetas breadth pgf gen
   genArg f = case inferExpr pgf f of
     Right (_,DTyp ((_,_,ty):_) _ _) -> gen ty
     _ -> []

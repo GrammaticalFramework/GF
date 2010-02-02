@@ -108,7 +108,7 @@ oper
 
   all_art = a_Art | the_Art ;
 
-  artist_Prep = by8agent_Prep | with_Prep ;
+  artist_Prep = by8agent_Prep ; ---- | with_Prep ;
 
   this cn =
       mkNP this_Quant cn
