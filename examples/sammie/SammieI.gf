@@ -199,6 +199,7 @@ lin
   albums_all = mkSet album ;
   albums_by_artist artist = 
     mkSet (mkCN album (mkAdv artist_Prep artist)) ;
+
   albums_by_genre = withGenre album ; 
 
   albums_by_artist_genre = withGenreBy album ;
@@ -227,6 +228,7 @@ lin
 
   songs_all = 
     mkSet song ;
+
   songs_by_artist artist = 
     mkSet (mkCN song (mkAdv artist_Prep artist)) ;
   songs_by_genre = 
