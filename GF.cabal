@@ -119,6 +119,7 @@ executable gf
     GF.Grammar.Unify
     GF.Grammar.PatternMatch
     GF.Grammar.Printer
+    GF.Grammar.ShowTerm
     GF.Grammar.Binary
     GF.Infra.CheckM
     GF.Compile.Update
