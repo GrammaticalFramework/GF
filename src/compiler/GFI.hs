@@ -9,6 +9,7 @@ import GF.Command.Parse
 import GF.Data.ErrM
 import GF.Grammar hiding (Ident)
 import GF.Grammar.Parser (runP, pExp)
+import GF.Grammar.ShowTerm
 import GF.Compile.Rename
 import GF.Compile.Concrete.Compute (computeConcrete)
 import GF.Compile.Concrete.TypeCheck (inferLType)
@@ -122,7 +123,7 @@ loop opts gfenv0 = do
              case runP pExp (BS.pack s) of
                Left (_,msg) -> putStrLn msg
                Right t      -> case checkComputeTerm sgr (codeTerm (decode gfenv) t) of
-                                 Ok  x -> putStrLn $ enc (showTerm style q x)
+                                 Ok  x -> putStrLn $ enc (showTerm sgr style q x)
                                  Bad s -> putStrLn $ enc s
              loopNewCPU gfenv
           "dg":ws -> do

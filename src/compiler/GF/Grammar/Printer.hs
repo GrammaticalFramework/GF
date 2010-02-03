@@ -13,12 +13,9 @@ module GF.Grammar.Printer
            , ppModule
            , ppJudgement
            , ppTerm
-           , ppTermTabular
            , ppPatt
            , ppValue
            , ppConstrs
-           
-           , showTerm, TermPrintStyle(..)
            ) where
 
 import GF.Infra.Ident
@@ -26,11 +23,11 @@ import GF.Infra.Modules
 import GF.Infra.Option
 import GF.Grammar.Values
 import GF.Grammar.Grammar
-import GF.Data.Operations
-import Text.PrettyPrint
 
+import Text.PrettyPrint
 import Data.Maybe (maybe)
 import Data.List  (intersperse)
+import qualified Data.Map as Map
 
 data TermPrintQual = Qualified | Unqualified
 
@@ -38,7 +35,7 @@ ppModule :: TermPrintQual -> SourceModule -> Doc
 ppModule q (mn, ModInfo mtype mstat opts exts with opens _ jments _) =
     hdr $$ nest 2 (ppOptions opts $$ vcat (map (ppJudgement q) defs)) $$ ftr
     where
-      defs = tree2list jments
+      defs = Map.toList jments
 
       hdr = complModDoc <+> modTypeDoc <+> equals <+> 
             hsep (intersperse (text "**") $
@@ -187,22 +184,6 @@ ppTerm q d (R xs)      = braces (fsep (punctuate semi [ppLabel l <+>
 ppTerm q d (RecType xs)= braces (fsep (punctuate semi [ppLabel l <+> colon <+> ppTerm q 0 t | (l,t) <- xs]))
 ppTerm q d (Typed e t) = char '<' <> ppTerm q 0 e <+> colon <+> ppTerm q 0 t <> char '>'
 
-ppTermTabular :: TermPrintQual -> Term -> [(Doc,Doc)]
-ppTermTabular q = pr where
-  pr t = case t of
-    R rs   -> 
-      [(ppLabel lab       <+> char '.'  <+> path, str) | (lab,(_,val)) <- rs, (path,str) <- pr val]
-    T _ cs -> 
-      [(ppPatt q 0 patt     <+> text "=>" <+> path, str) | (patt,  val ) <- cs, (path,str) <- pr val]
-    V _ cs -> 
-      [(char '#' <> int i <+> text "=>" <+> path, str) | (i,     val ) <- zip [0..] cs, (path,str) <- pr val]
-    _      -> [(empty,ps t)]
-  ps t = case t of
-    K s   -> text s
-    C s u -> ps s <+> ps u
-    FV ts -> hsep (intersperse (char '/') (map ps ts))
-    _     -> ppTerm q 0 t
-
 ppEquation q (ps,e) = hcat (map (ppPatt q 2) ps) <+> text "->" <+> ppTerm q 0 e
 
 ppCase q (p,e) = ppPatt q 0 p <+> text "=>" <+> ppTerm q 0 e
@@ -300,15 +281,3 @@ getLet :: Term -> ([LocalDef], Term)
 getLet (Let l e) = let (ls,e') = getLet e
                    in (l:ls,e')
 getLet e         = ([],e)
-
-showTerm :: TermPrintStyle -> TermPrintQual -> Term -> String
-showTerm style q t = render $
-  case style of
-    TermPrintTable   -> vcat [p <+> s | (p,s) <- ppTermTabular q t]
-    TermPrintAll     -> vcat [      s | (p,s) <- ppTermTabular q t]
-    TermPrintDefault -> ppTerm q 0 t
-
-data TermPrintStyle
-  = TermPrintTable
-  | TermPrintAll
-  | TermPrintDefault
