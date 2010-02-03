@@ -5,7 +5,7 @@ instance LexFoodsGer of LexFoods =
   oper
     wine_N = mkN "Wein" ;
     pizza_N = mkN "Pizza" "Pizzen" feminine ;
-    cheese_N = mkN "Käse" "Käsen" masculine ;
+    cheese_N = mkN "Käse" "Käse" masculine ;
     fish_N = mkN "Fisch" ;
     fresh_A = mkA "frisch" ;
     warm_A = mkA "warm" "wärmer" "wärmste" ;
