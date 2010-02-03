@@ -130,6 +130,10 @@ loop opts gfenv0 = do
              writeFile "_gfdepgraph.dot" (depGraph sgr)
              putStrLn "wrote graph in file _gfdepgraph.dot"
              loopNewCPU gfenv
+          "eh":w:_ -> do
+             cs <- readFile w >>= return . map (interpretCommandLine enc env) . lines
+             loopNewCPU gfenv
+
           "i":args -> do
               gfenv' <- case parseOptions args of
                           Ok (opts',files) -> do
