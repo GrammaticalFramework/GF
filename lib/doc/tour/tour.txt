@@ -40,16 +40,18 @@ the shell command
 ```
 Then initialize the shell with a couple of handy commands:
 
+| ``%forms``     | show the forms of a word or a phrase in Swedish |
+| ``%numeral``   | translate a number to a Swedish numeral expression |
+| ``%table``     | show the inflection table a word or a phrase in Swedish |
 | ``%translate`` | translate an utterance from English to Swedish |
-| ``%table``     | show the inflection table a word or a phrase in Swedish
-| ``%forms``     | show the forms of a word or a phrase in Swedish
+
 
 Initialization is made with the following commands, which define command macros in GF:
 ```
 > dc translate ps -lextext ?0 | parse -cat=Utt -lang=LangEng | linearize -lang=LangSwe
 > dc table linearize -table -lang=LangSwe ?0
 > dc forms linearize -list -lang=LangSwe ?0
-> dc numeral ps -chars "123" | p -cat=Digits -lang=LangSwe | pt -transfer=digits2num | l -lang=LangSwe
+> dc numeral ps -chars ?0 | p -cat=Digits -lang=LangSwe | pt -transfer=digits2num | l -lang=LangSwe
 ```
 This is just to save you some work afterwards and to make this document
 clearer; you could quite as well use the basic commands that are predifined
@@ -101,11 +103,13 @@ declensions 1 to 5: #SWE
 > %forms house_N
 * hus, hus, huset, husets, hus, hus, husen, husens
 ```
-The symbol ``N`` is used by GF to denote nouns. Here it is suffixed to
-English words meaning the same as the Swedish forms.
+The symbol ``N`` is used in the program to denote nouns. Here it is suffixed to
+English words to indicate the meanings of the Swedish nouns. This meaning
+can be approximative, or just cover one of the possible senses.
 
-Swedish nouns also have a gender, which is reflected, among
-other things, in the indefinite article they have:
+In addition to inflection forms,
+Swedish nouns also have a gender. The gender is reflected, among
+other things, in the indefinite article used with the nouns: #SWE
 ```
 > %translate "a man"
 * en man
@@ -116,9 +120,9 @@ other things, in the indefinite article they have:
 > %translate "a house"
 * ett hus
 ```
-The little lexicon of the grammar training program has 182 nouns. To see 
-them all, together with their inflection forms and English translations, 
-you can do
+The grammar training program has a small lexicon, with just 182 nouns. To see 
+all there nouns, together with their inflection forms and senses explained in
+English, you can do as follows:
 ```
 > generate_trees -cat=N | linearize -treebank -list -lang=LangSwe
 
@@ -131,7 +135,8 @@ you can do
 
 ===Quizzes with nouns===
 
-You can try out a **morphology quiz**, which lets you train your knowledge
+If you already know some Swedish,
+you can try out a **morphology quiz**, which lets you train your knowledge
 of Swedish noun inflection. You can later train your inflection skills with
 other parts of speech, just changing the symbol ``N`` to some other symbol.
 ```
@@ -159,7 +164,7 @@ Another quiz is the **translation quiz**, which lets you to train translations
 of nouns from English to Swedish (or, in fact, of any part of speech from any
 language to any other one). Here is how it goes:
 ```
-> tq -from=LangEng -to=LangSwe -cat=N
+> translation_quiz -from=LangEng -to=LangSwe -cat=N
 * Welcome to GF Translation Quiz.
 * The quiz is over when you have done at least 10 examples
 * with at least 75 % success.
@@ -195,7 +200,7 @@ on the gender of the noun. Here is a quick way to generate the numerals from 1 t
 * åtta
 * nio
 ```
-Translate digits to Swedish numerals:
+Translate digits to Swedish numerals; the largest one that can be translated is 999,999:
 ```
 > %numeral "123"
 * ett hundra tjugo tre
@@ -213,6 +218,9 @@ Translate noun phrases with numerals and nouns:
 
 > %translate "eleven cars"
 * elva bilar
+
+> %numeral "999999"
+* nio hundra nittio nio tusen nio hundra nittio nio
 ```
 Numerals are a special case of **determiners**: words that are combined with nouns to
 form **noun phrases**. Articles are anouther special case; we already saw the indefinite
