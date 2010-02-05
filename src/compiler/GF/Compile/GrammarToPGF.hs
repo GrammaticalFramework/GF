@@ -121,21 +121,20 @@ mkType scope t =
                            in C.DTyp hyps' (i2i cat) (map (mkExp scope') args)
 
 mkExp :: [Ident] -> A.Term -> C.Expr
-mkExp scope t = case GM.termForm t of
-    Ok (xs,c,args) -> mkAbs xs (mkApp (map snd (reverse xs)++scope) c (map (mkExp scope) args))
-  where
-    mkAbs xs t = foldr (\(b,v) -> C.EAbs (b2b b) (i2i v)) t xs
-    mkApp scope c args = case c of
-      Q _ c    -> foldl C.EApp (C.EFun (i2i c)) args
-      QC _ c   -> foldl C.EApp (C.EFun (i2i c)) args
-      Vr x     -> case lookup x (zip scope [0..]) of
-                    Just i  -> foldl C.EApp (C.EVar  i) args
-                    Nothing -> foldl C.EApp (C.EMeta 0) args
-      EInt i   -> C.ELit (C.LInt (fromIntegral i))
-      EFloat f -> C.ELit (C.LFlt f)
-      K s      -> C.ELit (C.LStr s)
-      Meta i   -> C.EMeta i
-      _        -> C.EMeta 0
+mkExp scope t = 
+  case t of
+    Q _ c    -> C.EFun (i2i c)
+    QC _ c   -> C.EFun (i2i c)
+    Vr x     -> case lookup x (zip scope [0..]) of
+                  Just i  -> C.EVar  i
+                  Nothing -> C.EMeta 0
+    Abs b x t-> C.EAbs (b2b b) (i2i x) (mkExp (x:scope) t)
+    App t1 t2-> C.EApp (mkExp scope t1) (mkExp scope t2)
+    EInt i   -> C.ELit (C.LInt (fromIntegral i))
+    EFloat f -> C.ELit (C.LFlt f)
+    K s      -> C.ELit (C.LStr s)
+    Meta i   -> C.EMeta i
+    _        -> C.EMeta 0
 
 mkPatt scope p = 
   case p of
