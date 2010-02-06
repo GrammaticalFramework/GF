@@ -40,8 +40,8 @@ convertConcrete opts lang flags printnames abs_defs cnc_defs lincats params lin_
   let env0 = emptyGrammarEnv cnc_defs cat_defs params
   when (flag optProf opts) $ do
     profileGrammar lang cnc_defs env0 pfrules
-  let env1 = expandHOAS abs_defs cnc_defs cat_defs lin_defs env0
-      env2 = List.foldl' (convertRule cnc_defs) env1 pfrules
+  env1 <- expandHOAS opts abs_defs cnc_defs cat_defs lin_defs env0
+  env2 <- foldM (convertRule opts cnc_defs) env1 pfrules
   return $ getParserInfo flags printnames env2
   where
     cat_defs = Map.insert cidVar (S []) lincats
@@ -103,8 +103,8 @@ brk f (GrammarEnv last_id catSet seqSet funSet crcSet prodSet) =
             count = length xs
             ys    = foldr (zipWith Set.insert) (repeat Set.empty) xs
 
-convertRule :: TermMap -> GrammarEnv -> ProtoFRule -> GrammarEnv
-convertRule cnc_defs grammarEnv (PFRule fun args res ctypes ctype term) =
+convertRule :: Options -> TermMap -> GrammarEnv -> ProtoFRule -> IO GrammarEnv
+convertRule opts cnc_defs grammarEnv (PFRule fun args res ctypes ctype term) = do
   let pres  = protoFCat cnc_defs res ctype
       pargs = zipWith (protoFCat cnc_defs) args ctypes
 
@@ -114,7 +114,8 @@ convertRule cnc_defs grammarEnv (PFRule fun args res ctypes ctype term) =
                                                grammarEnv
                                                (go' b1 [] [])
                                                (pres,pargs)  ) grammarEnv1
-  in grammarEnv2
+  when (verbAtLeast opts Verbose) $ hPutStrLn stderr ("+ "++showCId fun)
+  return $! grammarEnv2
   where
     addRule lins (newCat', newArgs') env0 =
       let [newCat]        = getFCats env0 newCat'
@@ -356,8 +357,8 @@ emptyGrammarEnv cnc_defs lincats params =
     getLabels ls (FV _)        = []
     getLabels _ t = error (show t)
 
-expandHOAS abs_defs cnc_defs lincats lindefs env = 
-  foldl add_varFun (foldl (\env ncat -> add_hoFun (add_hoCat env ncat) ncat) env hoTypes) (Map.keys lincats)
+expandHOAS opts abs_defs cnc_defs lincats lindefs env = 
+  foldM add_varFun (foldl (\env ncat -> add_hoFun (add_hoCat env ncat) ncat) env hoTypes) (Map.keys lincats)
   where
     hoTypes :: [(Int,CId)]
     hoTypes = sortNub [(n,c) | (_,(ty,_,_)) <- Map.toList abs_defs
@@ -392,8 +393,8 @@ expandHOAS abs_defs cnc_defs lincats lindefs env =
     -- add one PMCFG function for each high-order category: _V : Var -> Cat
     add_varFun env cat =
       case Map.lookup cat lindefs of
-        Nothing     -> env
-        Just lindef -> convertRule cnc_defs env (PFRule _V [(0,cidVar)] (0,cat) [arg] res lindef)
+        Nothing     -> return env
+        Just lindef -> convertRule opts cnc_defs env (PFRule _V [(0,cidVar)] (0,cat) [arg] res lindef)
       where
         arg =
           case Map.lookup cidVar lincats of
