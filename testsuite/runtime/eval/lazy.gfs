@@ -1,0 +1,2 @@
+i -src testsuite/runtime/eval/lazy.gf
+pt -compute min infinity (succ (succ (succ zero)))
