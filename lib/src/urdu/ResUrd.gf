@@ -27,7 +27,9 @@ resource ResUrd = ParamX  ** open Prelude,Predef in {
     RAgr = RNoAg | RAg Agr ;
     RCase = RC Number Case ;
 
-
+-- for Numerial
+   
+   CardOrd = NCard | NOrd ;
   
   -----------------------------------------
   -- Urd Pronouns
@@ -35,19 +37,19 @@ resource ResUrd = ParamX  ** open Prelude,Predef in {
    Pronoun = P Number Gender Case UPerson;
    DemPronForm = 	DPF Number Case; 
    PersPronForm = PPF Number UPerson Case;
-   PossPronForm = PossF Number UPerson Gender; -- to be implemented
+--   PossPronForm = PossF Number UPerson Gender; -- to be implemented
    RefPronForm = RefPF;
-   InterrPronForm = IntPF Number Case;
-   InterrPronForm1 = IntPF1;
-   InterrPronForm2 = IntPF2 Number Case Gender;
-   InterrPronForm3 = IntPF3 Number Gender;
-   IndefPronForm = IPF Case Gender;
-   IndefPronForm1 = IPF1 Case;
-   IndefPronForm2 = IPF2;
-   RelPronForm = RPF Number Case;
-   RelPronForm1 = RPF1 Number Gender;
-   RelPronForm2 = RPF2 Case;
-   RelPronForm3 = RPF3;
+--   InterrPronForm = IntPF Number Case;
+--   InterrPronForm1 = IntPF1;
+--   InterrPronForm2 = IntPF2 Number Case Gender;
+--   InterrPronForm3 = IntPF3 Number Gender;
+--   IndefPronForm = IPF Case Gender;
+--   IndefPronForm1 = IPF1 Case;
+--   IndefPronForm2 = IPF2;
+--   RelPronForm = RPF Number Case;
+--   RelPronForm1 = RPF1 Number Gender;
+--   RelPronForm2 = RPF2 Case;
+--   RelPronForm3 = RPF3;
 	
   -----------------------------------------------
   -- Determiners
@@ -73,11 +75,7 @@ resource ResUrd = ParamX  ** open Prelude,Predef in {
                 | Root
                 | Inf_Obl
                 | Inf_Fem;				
-{-  -- Adverbs
-    AdjectiveForm = Adj1 AdjectiveForm1 | Adj2 AdjectiveForm2;
-    AdjectiveForm1 = AdjF1 Gender Number Case;
-	AdjectiveForm2 = AdjF2 Degree; 
--}	
+
 	
   oper
     Noun = {s : Number => Case => Str ; g : Gender} ;
@@ -240,11 +238,6 @@ resource ResUrd = ParamX  ** open Prelude,Predef in {
 -- a useful oper
 --    eq : Str -> Str -> Bool = \s1,s2-> (pbool2bool (eqStr s1 s2)) ;
 
-     
-
-
- 
-
   
   oper
      -- Combining all verb patterns
@@ -314,7 +307,7 @@ resource ResUrd = ParamX  ** open Prelude,Predef in {
    mkPastInd : Str -> UPerson -> Number -> Gender -> {s:Str} = \root,p,n,g ->
     {s = let roo = root ;
              a = case (last root) of {
-                  "a"|"A"|"w" => "ya" ;
+                  "a"|"A"|"w"|"k" => "ya" ;
                   _           => "a"
                  } ;
              y = case (last root) of {
@@ -322,7 +315,7 @@ resource ResUrd = ParamX  ** open Prelude,Predef in {
                   _           => "y"
                  } ;
              e = case (last root) of {
-                  "a"|"A"|"w" => "y^E" ;
+                  "a"|"A"|"w"|"k" => "y^E" ;
                   _           => "E"
                  } ;
             yN = case (last root) of {
@@ -518,6 +511,7 @@ resource ResUrd = ParamX  ** open Prelude,Predef in {
 	            Voc => y3
 		 }
 	}; 
+{-
 --  makeIntPronForm : IntPronForm ;
 --  makeIntPronForm  = mkIntPronForm 	"k(a)ya"	"k(i)s"		"k(a)wn"	"k(a)ya"	"k(i)n "		"k(a)wn";	
 
@@ -665,7 +659,7 @@ resource ResUrd = ParamX  ** open Prelude,Predef in {
    makeRelvPronForm3 : Str -> RelvPronForm3 ;
    makeRelvPronForm3  aya = mkRelvPronForm3 	aya;
    
-   
+   -}
    
    -----------------------------------------------
    -- Urd Adjectives
@@ -828,7 +822,7 @@ resource ResUrd = ParamX  ** open Prelude,Predef in {
     
 	toNP : ( Case => Str) -> NPCase -> Str = \pn, npc -> case npc of {
       NPC c => pn !  c ;
-      NPObj => pn !  Obl ;
+      NPObj => pn !  Dir ;
       NPErg => pn !  Obl ++ "ne"
       } ;
 	detcn2NP : (Determiner => Str) -> Noun -> NPCase -> Number -> Str = \dt,cn,npc,nn -> case npc of {
@@ -974,6 +968,11 @@ resource ResUrd = ParamX  ** open Prelude,Predef in {
         } ;
 
  param
+    VPPTense = 
+	  VPPres
+	  |VPPast
+	  |VPFutr
+	  |VPGen;
     VPHTense = 
        VPGenPres  -- impf hum       nahim    "I go"
      | VPImpPast  -- impf Ta        nahim    "I went"
@@ -988,10 +987,11 @@ resource ResUrd = ParamX  ** open Prelude,Predef in {
 	 | VPPerfPastCont
 	 | VPPerfFutCont
      | VPSubj     -- subj           na       "I may go"
+--	 | VPImp
      ;
 
     VPHForm = 
-       VPTense VPHTense Agr -- 9 * 12
+       VPTense VPPTense Agr -- 9 * 12
      | VPReq
      | VPImp
      | VPReqFut
@@ -1009,8 +1009,9 @@ resource ResUrd = ParamX  ** open Prelude,Predef in {
       } ;
 
     VPH : Type = {
-	  s    : Polarity => VPHForm => Order => {fin, inf,inf2, neg,quest : Str} ;
---      s    : Polarity => VPHForm => {fin, inf,inf2, neg : Str} ;
+--	  s    : Polarity => VPHForm => Order => {fin, inf,inf2, neg,quest : Str} ;
+      s    : VPHForm => {fin, inf,inf2 : Str} ;
+--      s : Verb;
       obj  : {s : Str ; a : Agr} ; 
       subj : VType ;
       comp : Agr => Str;
@@ -1026,52 +1027,39 @@ resource ResUrd = ParamX  ** open Prelude,Predef in {
    
 
    predV : Verb -> VPH = \verb -> {
-      s = \\b,vh,ord => 
-       let na =
-            case b of
-              { Pos => [];
-                Neg => "na" };
-           nahim =
-            case b of 
-              { Pos => [];
-                Neg => "nhyN" };
-           q =
-            case ord of
-              { ODir => [];
-                OQuest => "kya" };
-           				
---         na = if_then_Str b [] "na" ;
---         nahim = if_then_Str b [] "nhyN" ;
-       in
+      s = \\vh => 
+	   case vh of {
+	     VPTense VPPres (Ag g n p) => {fin = copula CPresent n p g ; inf2 = verb.s ! VF Imperf p n g; inf = [] } ;
+		 VPTense VPPast (Ag g n p) => {fin = [] ; inf2 =verb.s ! VF Perf p n g ; inf = []} ;
+		 VPTense VPFutr (Ag g n p) =>  {fin = copula CFuture n p g ; inf2 =  verb.s ! VF Subj p n g ; inf = [] } ;
+		 VPTense VPGen (Ag g n p) => {fin = []; inf2 = verb.s ! Root ; inf = [] } ;
+		 VPImp => {fin = verb.s ! Root ; inf = [] ; inf2 = verb.s ! Inf_Obl};
+		 _ => {fin = [] ; inf2 = verb.s ! Root ; inf = [] } 
+		 };
+		 
+ {-      
        case vh of {
-         VPTense VPGenPres (Ag g n p) => 
-           {fin = copula CPresent n p g ; inf2 = verb.s ! VF Imperf p n g; inf = [] ; neg = nahim ; quest = q} ;
-         VPTense VPImpPast (Ag g n p) => 
-           {fin = [] ; inf2 =verb.s ! VF Perf p n g ; inf = []; neg = nahim ; quest = q} ;
---           {fin = copula CPast n p g ; inf = verb.s ! Pat1  (VF1 Perf Pers1 n Masc) ; neg = nahim} ;
-         VPTense VPFut (Ag g n p) => {fin = copula CFuture n p g ; inf2 =  verb.s ! VF Subj p n g ; inf = [] ; neg = nahim ; quest = q} ;
-         VPTense VPContPres (Ag g n p) => {fin = copula CPresent n p g ; inf2 = verb.s ! Root ++ raha g n ; inf = []; neg = nahim ; quest = q} ;
-         VPTense VPContPast (Ag g n p) => {fin = copula CPast n p g ; inf2 = verb.s ! Root ++ raha g n ; inf = []; neg = nahim ; quest = q} ;
-		 VPTense VPContFut (Ag g n p) => {fin = copula CFuture n p g  ; inf2 = verb.s ! Root ++ raha g n ++ hw p n ; inf = [] ; neg = nahim ; quest = q} ;
-         VPTense VPPerfPres (Ag g n p) => 
-           {fin = copula CPresent n p g ; inf2 = verb.s ! Root ++ cka g n ; inf = [] ; neg = nahim ; quest = q} ;
-         VPTense VPPerfPast (Ag g n p) => 
-           {fin = copula CPast n p g ; inf2 = verb.s !Root ++ cka g n ; inf = []; neg = nahim ; quest = q} ;
-		 VPTense VPPerfFut (Ag g n p) => 
-           {fin = copula CFuture n p g ; inf2 = verb.s ! Root ++ cka g n ++ hw p n  ; inf = [] ; neg = nahim ; quest = q} ;
-		 VPTense VPPerfPresCont (Ag g n p) => 
-           {fin = copula CPresent n p g ; inf2 = verb.s ! VF Imperf p n g ++ raha g n ; inf = []   ; neg = nahim ; quest = q} ; 
-		 VPTense VPPerfPastCont (Ag g n p) => 
-           {fin = copula CPast n p g ; inf2 = verb.s ! VF Imperf p n g ++ raha g n ; inf = []  ; neg = nahim ; quest = q} ;  
-		 VPTense VPPerfFutCont (Ag g n p) => 
-           {fin = copula CFuture n p g ; inf2 = verb.s ! VF Imperf p n g ++ raha g n ++ hw p n ; inf = []  ; neg = nahim ; quest = q} ;
-         VPTense VPSubj (Ag g n p) => {fin = [] ++ verb.s ! VF Subj p n g ; inf2 = [] ; inf = "Xayd" ; neg = na; quest = []} ;
+         VPTense VPGenPres (Ag g n p) => {fin = copula CPresent n p g ; inf2 = verb.s ! VF Imperf p n g; inf = [] } ;
+         VPTense VPImpPast (Ag g n p) => {fin = [] ; inf2 =verb.s ! VF Perf p n g ; inf = []} ;
+         VPTense VPFut (Ag g n p) =>  {fin = copula CFuture n p g ; inf2 =  verb.s ! VF Subj p n g ; inf = [] } ;
+         VPTense VPContPres (Ag g n p) => {fin = copula CPresent n p g ; inf2 = verb.s ! Root ++ raha g n ; inf = [] } ;
+         VPTense VPContPast (Ag g n p) => {fin = copula CPast n p g ; inf2 = verb.s ! Root ++ raha g n ; inf = [] } ;
+--		 VPTense VPContFut (Ag g n p) => {fin = copula CFuture n p g  ; inf2 = verb.s ! Root ++ raha g n ++ hw p n ; inf = [] } ;
+         VPTense VPPerfPres (Ag g n p) => {fin = copula CPresent n p g ; inf2 = verb.s ! Root ++ cka g n ; inf = [] } ;
+         VPTense VPPerfPast (Ag g n p) => {fin = copula CPast n p g ; inf2 = verb.s !Root ++ cka g n ; inf = [] } ;
+		 VPTense VPPerfFut (Ag g n p) =>  {fin = copula CFuture n p g ; inf2 = verb.s ! Root ++ cka g n ++ hw p n  ; inf = [] } ;
+--		 VPTense VPPerfPresCont (Ag g n p) => {fin = copula CPresent n p g ; inf2 = verb.s ! VF Imperf p n g ++ raha g n ; inf = [] } ; 
+--		 VPTense VPPerfPastCont (Ag g n p) => {fin = copula CPast n p g ; inf2 = verb.s ! VF Imperf p n g ++ raha g n ; inf = [] } ;  
+--		 VPTense VPPerfFutCont (Ag g n p) =>  {fin = copula CFuture n p g ; inf2 = verb.s ! VF Imperf p n g ++ raha g n ++ hw p n ; inf = []  } ;
+--       VPTense VPSubj (Ag g n p) => {fin = [] ++ verb.s ! VF Subj p n g ; inf2 = [] ; inf = "Xayd" } ;
          
-		 VPImp => {fin = verb.s ! Root ; inf = [] ; inf2 = verb.s ! Inf_Obl ; neg = na ; quest = []};
-         _ => {fin = verb.s ! Root ; inf = [] ; inf2 = []; neg = na ; quest = []} ----
-         } ;
-      obj = {s = [] ; a = defaultAgr} ;
---      subj = VIntrans ;
+		 VPImp => {fin = verb.s ! Root ; inf = [] ; inf2 = verb.s ! Inf_Obl};
+         _ => {fin = [] ; inf2 = verb.s ! Root ; inf = []}  ----
+         } ; 
+		 
+  -}		 
+--        s = verb;
+	    obj = {s = [] ; a = defaultAgr} ;
 		subj = VTrans ;
 		inf = verb.s ! Inf;
 		ad = [];
@@ -1082,55 +1070,6 @@ resource ResUrd = ParamX  ** open Prelude,Predef in {
     predV verb ** {c2 = {s = verb.c1 ; c = VTrans} } ;
 
 	 
--- predV2 was supposed to be used with compl to get rid of ergativity...but that issue has been solved....delet it or use some where else   	  
-{-	  predV2 : Verb -> NP -> VPH = \verb,np -> {
-      s = \\b,vh => 
-       let 
-         na = if_then_Str b [] "na" ;
-         nahim = if_then_Str b [] "nhyN" ;
-       in
-	    case vh of {
-         VPTense VPGenPres (Ag g n p) => 
-           {fin = copula CPresent n p g ; inf = np.s ! NPObj ; inf2 = verb.s ! VF Imperf p n g  ; neg = nahim} ;
-         VPTense VPImpPast (Ag g n p) => 
-           {inf = np.s ! NPObj; inf2 =  verb.s ! VF Perf Pers1 Sg g ; fin =[] ; neg = nahim} ;
-		 VPTense VPFut (Ag g n p) => {fin = copula CFuture n p g ; inf = np.s ! NPObj; inf2 =  verb.s ! VF Subj p n g ; neg = nahim} ; 
---           {fin = copula CPast n p g ; inf = verb.s ! Pat1  (VF1 Perf Pers1 n Masc) ; neg = nahim} ;
-         VPTense VPContPres (Ag g n p) => 
-           {fin = copula CPresent n p g ; 
-            inf = np.s ! NPObj ; inf2 =  verb.s ! Root ++ raha g n ; neg = nahim} ;
-         VPTense VPContPast (Ag g n p) => 
-           {fin = copula CPast n p g ; 
-            inf = np.s ! NPObj ; inf2 =  verb.s ! Root ++ raha g n ; neg = nahim} ;
-         VPTense VPContFut (Ag g n p) => 
-           {fin = copula CFuture n p g  ; inf =np.s ! NPObj ; inf2 =  verb.s ! Root ++ raha g n ++ hw p n ; neg = nahim} ;
-         VPTense VPPerfPres (Ag g n p) => 
-           {fin = copula CPresent n p g ; inf = np.s ! NPObj ; inf2 =  verb.s ! Root ++ cka g n ; neg = nahim} ;
-         VPTense VPPerfPast (Ag g n p) => 
-           {fin = copula CPast n p g ; inf = np.s ! NPObj ; inf2 =  verb.s ! Root ++ cka g n ; neg = nahim} ;
-		 VPTense VPPerfFut (Ag g n p) => 
-           {fin = copula CFuture n p g ; inf = np.s ! NPObj ; inf2 =  verb.s ! Root ++ cka g n ++ hw p n ; neg = nahim} ;  
-		 VPTense VPPerfPresCont (Ag g n p) => 
-           {fin = copula CPresent n p g ; inf = np.s ! NPObj ; inf2 =  verb.s ! VF Imperf Pers1 n g ++ raha g n ; neg = nahim} ; 
-		 VPTense VPPerfPastCont (Ag g n p) => 
-           {fin = copula CPast n p g ; inf = np.s ! NPObj ; inf2 =  verb.s ! VF Imperf Pers1 n g ++ raha g n ; neg = nahim} ;  
-		 VPTense VPPerfFutCont (Ag g n p) => 
-           {fin = copula CFuture n p g ; inf = np.s ! NPObj ; inf2 =  verb.s ! VF Imperf Pers1 n g ++ raha g n ++ hw p n ; neg = nahim} ;  
-         VPTense VPSubj (Ag _ n p) => {inf = "Xayd" ++ np.s ! NPObj ; inf2 =  verb.s ! VF Subj p n Masc ; fin = [] ; neg = na}; 
-         
---         VPInf => {fin = verb.s ! Pat1 Root1 ; inf = [] ; neg = na} ;
-         _ => {fin = verb.s ! Root ; inf = [] ; inf2 = []; neg = na} 
-        };
-     
-       		
-       obj = {s = verb.s ! Inf ; a = np.a} ;
---      subj = VIntrans ;
-		subj = VTrans ;
-		inf = verb.s ! Inf;
-		ad = [];
-       comp = \\_ => [];
-     } ;
--}	 
     raha : Gender -> Number -> Str = \g,n -> 
 	   (regAdjective "rha").s ! n ! g ! Dir ! Posit ;
 --      (regAdjective "rha").s !Adj1 (AdjF1 g  n  Dir) ;
@@ -1146,21 +1085,9 @@ resource ResUrd = ParamX  ** open Prelude,Predef in {
 	 };
 	 
 	predAux : Aux -> VPH = \verb -> {
-     s = \\b,vh,ord => 
-       let na =
-            case b of
-              { Pos => [];
-                Neg => "na" };
-           nahim =
-            case b of 
-              { Pos => [];
-                Neg => "nhyN" }; 
-		   q =
-            case ord of
-              { ODir => [];
-                OQuest => "kya" };
---         na = if_then_Str b [] "na" ;
---         nahim = if_then_Str b [] "nhyN" ;
+     s = \\vh => 
+       let  
+
 		 inf  = verb.inf ;
          --fin  = verb.pres ! b ! agr ;
          --finp = verb.pres ! Pos ! agr ;
@@ -1168,36 +1095,37 @@ resource ResUrd = ParamX  ** open Prelude,Predef in {
 
        in
        case vh of {
-         VPTense VPGenPres (Ag g n p) => 
-           {fin = copula CPresent n p g ; inf2 = part; inf = [] ; neg = nahim ; quest = q} ;
-         VPTense VPImpPast (Ag g n p) => 
-           {fin = copula CPast n p g ; inf2 = part ; inf = []; neg = nahim ; quest = q} ;
---           {fin = copula CPast n p g ; inf = verb.s ! Pat1  (VF1 Perf Pers1 n Masc) ; neg = nahim ; quest = q} ;
-         VPTense VPFut (Ag g n p) => {fin = copula CFuture n p g ; inf2 = part ++ hw p n ; inf = [] ; neg = nahim ; quest = q} ;
-         VPTense VPContPres (Ag g n p) => {fin = copula CPresent n p g ; inf2 = part ++ raha g n ; inf = []; neg = nahim ; quest = q} ;
-         VPTense VPContPast (Ag g n p) => {fin = copula CPast n p g ; inf2 = part ++ raha g n ; inf = []; neg = nahim ; quest = q} ;
-		 VPTense VPContFut (Ag g n p) => {fin = copula CFuture n p g  ; inf2 = part ++ raha g n ++ hw p n ; inf = [] ; neg = nahim ; quest = q} ;
-         VPTense VPPerfPres (Ag g n p) => 
-           {fin = copula CPresent n p g ; inf2 = part ++ "rh" ++ cka g n ; inf = [] ; neg = nahim ; quest = q} ;
-         VPTense VPPerfPast (Ag g n p) => 
-           {fin = copula CPast n p g ; inf2 = part ++ "rh" ++ cka g n ; inf = []; neg = nahim ; quest = q} ;
-		 VPTense VPPerfFut (Ag g n p) => 
-           {fin = copula CFuture n p g ; inf2 = part ++ "rh" ++ cka g n ++ hw p n  ; inf = [] ; neg = nahim ; quest = q} ;
-		 VPTense VPPerfPresCont (Ag g n p) => 
-           {fin = copula CPresent n p g ; inf2 = part ++ raha g n ; inf = []   ; neg = nahim ; quest = q} ; 
-		 VPTense VPPerfPastCont (Ag g n p) => 
-           {fin = copula CPast n p g ; inf2 = part ++ raha g n ; inf = []  ; neg = nahim ; quest = q} ;  
-		 VPTense VPPerfFutCont (Ag g n p) => 
-           {fin = copula CFuture n p g ; inf2 = part ++ raha g n ++ hw p n ; inf = []  ; neg = nahim ; quest = q} ;
-         VPTense VPSubj (Ag g n p) => {fin = copula CPresent n p g ++ part ; inf2 = [] ; inf = "Xayd" ; neg = nahim ; quest = []} ;
+	     VPTense VPPres (Ag g n p) => {fin = copula CPresent n p g ; inf2 = part; inf = [] } ;
+         VPTense VPPast (Ag g n p) => {fin = copula CPast n p g ; inf2 = part ; inf = []} ;
+         VPTense VPFutr (Ag g n p) => {fin = copula CFuture n p g ; inf2 = part ++ hw p n ; inf = [] } ;
+		 VPTense VPGen  (Ag g n p) => {fin = [] ; inf = "rh" ; inf2 = part};
+		 _ => {fin = part ; inf = [] ; inf2 = []}
+		 };
+	   
+{-	   
+         VPTense VPGenPres (Ag g n p) => {fin = copula CPresent n p g ; inf2 = part; inf = [] } ;
+         VPTense VPImpPast (Ag g n p) => {fin = copula CPast n p g ; inf2 = part ; inf = []} ;
+         VPTense VPFut (Ag g n p) => {fin = copula CFuture n p g ; inf2 = part ++ hw p n ; inf = [] } ;
+         VPTense VPContPres (Ag g n p) => {fin = copula CPresent n p g ; inf2 = part ++ raha g n ; inf = [] } ;
+         VPTense VPContPast (Ag g n p) => {fin = copula CPast n p g ; inf2 = part ++ raha g n ; inf = []} ;
+		 VPTense VPContFut (Ag g n p) => {fin = copula CFuture n p g  ; inf2 = part ++ raha g n ++ hw p n ; inf = [] } ;
+         VPTense VPPerfPres (Ag g n p) => {fin = copula CPresent n p g ; inf2 = part ++ "rh" ++ cka g n ; inf = [] } ;
+         VPTense VPPerfPast (Ag g n p) => {fin = copula CPast n p g ; inf2 = part ++ "rh" ++ cka g n ; inf = []} ;
+--		 VPTense VPPerfFut (Ag g n p) =>  {fin = copula CFuture n p g ; inf2 = part ++ "rh" ++ cka g n ++ hw p n  ; inf = [] } ;
+--		 VPTense VPPerfPresCont (Ag g n p) => {fin = copula CPresent n p g ; inf2 = part ++ raha g n ; inf = []} ; 
+--		 VPTense VPPerfPastCont (Ag g n p) => {fin = copula CPast n p g ; inf2 = part ++ raha g n ; inf = []} ;  
+--		 VPTense VPPerfFutCont (Ag g n p) =>  {fin = copula CFuture n p g ; inf2 = part ++ raha g n ++ hw p n ; inf = [] } ;
+--         VPTense VPSubj (Ag g n p) => {fin = copula CPresent n p g ++ part ; inf2 = [] ; inf = "Xayd" } ;
          
-         _ => {fin = part ; inf = [] ; inf2 = []; neg = na ; quest = []} ----
+         _ => {fin = part ; inf = [] ; inf2 = []} ----
          } ;
-      obj = {s = [] ; a = defaultAgr} ;
+		 
+-}		 
+--      s = {s = \\_ => " "};
+	  obj = {s = [] ; a = defaultAgr} ;
       subj = VIntrans ;
---		subj = VTrans ;
-		inf = verb.inf;
-		ad = [];
+      inf = verb.inf;
+	  ad = [];
       comp = \\_ => []
       } ;
 	
@@ -1206,11 +1134,10 @@ resource ResUrd = ParamX  ** open Prelude,Predef in {
     Aux = {
     --pres : Polarity => Agr => Str ; 
     --past : Polarity => Agr => Str ;  --# notpresent
-    inf,ppart,prpart : Str
+	inf,ppart,prpart : Str
     } ;
 
     auxBe : Aux = {
-    
     inf  = "" ;
     ppart = "" ;
     prpart = ""
@@ -1231,20 +1158,135 @@ resource ResUrd = ParamX  ** open Prelude,Predef in {
             } ;
           subj = subjagr.p1 ;
           agr  = subjagr.p2 ;
-          vps  = vp.s ! b ! VPTense vt agr ! ord ;
+		  n    = (fromAgr agr).n;
+		  p    = (fromAgr agr).p;
+		  g    = (fromAgr agr).g;
+          vps  = case vt of {
+{-			            VPGenPres  => {fin = copula CPresent n p g ; inf2 = vp.s.s ! VF Imperf p n g; inf = [] } ;
+					VPImpPast  => {fin = [] ; inf2 = vp.s.s ! VF Perf p n g ; inf = []} ;
+					VPFut      => {fin = copula CFuture n p g ; inf2 =  vp.s.s ! VF Subj p n g ; inf = [] } ;
+					VPContPres => {fin = copula CPresent n p g ; inf2 = vp.s.s ! Root ++ raha g n ; inf = [] } ;
+					VPContPast => {fin = copula CPast n p g ; inf2 = vp.s.s ! Root ++ raha g n ; inf = [] } ;
+					VPContFut  => {fin = copula CFuture n p g  ; inf2 = vp.s.s ! Root ++ raha g n ++ hw p n ; inf = [] } ;
+					VPPerfPres => {fin = copula CPresent n p g ; inf2 = vp.s.s ! Root ++ cka g n ; inf = [] } ;
+					VPPerfPast => {fin = copula CPast n p g ; inf2 = vp.s.s !Root ++ cka g n ; inf = [] } ;				
+					VPPerfFut  => {fin = copula CFuture n p g ; inf2 = vp.s.s ! Root ++ cka g n ++ hw p n  ; inf = [] } ;
+					VPPerfPresCont => {fin = copula CPresent n p g ; inf2 = vp.s.s ! VF Imperf p n g ++ raha g n ; inf = [] } ;					
+					VPPerfPastCont => {fin = copula CPast n p g ; inf2 = vp.s.s ! VF Imperf p n g ++ raha g n ; inf = [] } ;  					
+					VPPerfFutCont => {fin = copula CFuture n p g ; inf2 = vp.s.s ! VF Imperf p n g ++ raha g n ++ hw p n ; inf = []  } ;					
+					VPSubj   => {fin = [] ++ vp.s.s ! VF Subj p n g ; inf2 = [] ; inf = "Xayd" } ; 
+					VPImp => {fin = vp.s.s ! Root ; inf = [] ; inf2 = vp.s.s ! Inf_Obl}
+					};
+-}		  
+				    VPGenPres  => vp.s !  VPTense VPPres agr ;
+					VPImpPast  => vp.s !  VPTense VPPast agr ;
+					VPFut      => vp.s !  VPTense VPFutr agr ;
+					VPContPres => 
+					  {fin = copula CPresent n p g ; inf2 = (vp.s ! VPTense VPGen agr).inf2 ++ raha g n ; inf = [] } ;
+					VPContPast => 
+					  {fin = copula CPast n p g ; inf2 = (vp.s ! VPTense VPGen agr).inf2 ++ raha g n ; inf = [] } ;
+					VPContFut  => 
+					  {fin = copula CFuture n p g ; inf2 = (vp.s ! VPTense VPGen agr).inf2 ++ raha g n ++ hw p n   ; inf = [] } ;
+					VPPerfPres => 
+					  {fin = copula CPresent n p g ; inf2 = (vp.s ! VPTense VPGen agr).inf2 ++ cka g n ; inf = [] } ;
+					VPPerfPast => 
+                      {fin = copula CPast n p g ; inf2 = (vp.s ! VPTense VPGen agr).inf2 ++ cka g n ; inf = [] } ;					
+					VPPerfFut  => 
+					  {fin = copula CFuture n p g ; inf2 = (vp.s ! VPTense VPGen agr).inf2 ++ cka g n  ++ hw p n ; inf = [] } ;
+					VPPerfPresCont => 
+					  {fin = copula CPresent n p g ; inf2 = (vp.s ! VPTense VPPres agr).inf2 ++ raha g n ; inf = [] } ;					
+					VPPerfPastCont => 
+					  {fin = copula CPast n p g ; inf2 = (vp.s ! VPTense VPPres agr).inf2 ++ raha g n ; inf = [] } ;					
+					VPPerfFutCont => 
+					  {fin = copula CFuture n p g ; inf2 = (vp.s ! VPTense VPPres agr).inf2 ++ raha g n  ++ hw p n ; inf = [] } ;					
+					VPSubj   => vp.s !  VPTense VPGen agr 
+					};
+					
+		    
+          quest =
+            case ord of
+              { ODir => [];
+                OQuest => "kya" }; 
+		  na =
+            case b of
+              { Pos => [];
+                Neg => "na" };
+           nahim =
+            case b of 
+              { Pos => [];
+                Neg => "nhyN" };
         in
-		vps.quest ++ np.s ! subj ++ vp.obj.s ++ vp.ad ++ vp.comp ! np.a  ++ vps.inf ++ vps.neg ++  vps.inf2 ++ vps.fin
---		np.s ! subj ++ vps.inf ++ vp.comp ! np.a ++ vps.neg ++ vps.inf2 ++ vps.fin
---        np.s ! subj  ++ vp.comp ! np.a ++ vp.obj.s ++ vps.neg ++ vps.inf ++ vps.fin
+		case vt of {
+		VPSubj => quest ++ np.s ! subj ++ vp.obj.s ++ vp.ad ++ vp.comp ! np.a  ++ vps.inf ++ na ++  vps.inf2 ++ vps.fin;
+		_      => quest ++ np.s ! subj ++ vp.obj.s ++ vp.ad ++ vp.comp ! np.a  ++ vps.inf ++ nahim ++  vps.inf2 ++ vps.fin};
+
   } ;
 
   mkSClause : Str -> Agr -> VPH -> Clause =
     \subj,agr,vp -> {
-      s = \\t,b,o => 
+      s = \\t,b,ord => 
         let 
-          vps  = vp.s ! b ! VPTense t agr ! o ;
+		  n    = (fromAgr agr).n;
+		  p    = (fromAgr agr).p;
+		  g    = (fromAgr agr).g;
+          vps  = case t of {
+{-		            VPGenPres  => {fin = copula CPresent n p g ; inf2 = vp.s.s ! VF Imperf p n g; inf = [] } ;
+					VPImpPast  => {fin = [] ; inf2 = vp.s.s ! VF Perf p n g ; inf = []} ;
+					VPFut      => {fin = copula CFuture n p g ; inf2 =  vp.s.s ! VF Subj p n g ; inf = [] } ;
+					VPContPres => {fin = copula CPresent n p g ; inf2 = vp.s.s ! Root ++ raha g n ; inf = [] } ;
+					VPContPast => {fin = copula CPast n p g ; inf2 = vp.s.s ! Root ++ raha g n ; inf = [] } ;
+					VPContFut  => {fin = copula CFuture n p g  ; inf2 = vp.s.s ! Root ++ raha g n ++ hw p n ; inf = [] } ;
+					VPPerfPres => {fin = copula CPresent n p g ; inf2 = vp.s.s ! Root ++ cka g n ; inf = [] } ;
+					VPPerfPast => {fin = copula CPast n p g ; inf2 = vp.s.s !Root ++ cka g n ; inf = [] } ;				
+					VPPerfFut  => {fin = copula CFuture n p g ; inf2 = vp.s.s ! Root ++ cka g n ++ hw p n  ; inf = [] } ;
+					VPPerfPresCont => {fin = copula CPresent n p g ; inf2 = vp.s.s ! VF Imperf p n g ++ raha g n ; inf = [] } ;					
+					VPPerfPastCont => {fin = copula CPast n p g ; inf2 = vp.s.s ! VF Imperf p n g ++ raha g n ; inf = [] } ;  					
+					VPPerfFutCont => {fin = copula CFuture n p g ; inf2 = vp.s.s ! VF Imperf p n g ++ raha g n ++ hw p n ; inf = []  } ;					
+					VPSubj   => {fin = [] ++ vp.s.s ! VF Subj p n g ; inf2 = [] ; inf = "Xayd" } ; 
+					VPImp => {fin = vp.s.s ! Root ; inf = [] ; inf2 = vp.s.s ! Inf_Obl}
+					};
+-}		  
+		  
+					VPGenPres  => vp.s !  VPTense VPPres agr ;
+					VPImpPast  => vp.s !  VPTense VPPast agr ;
+					VPFut      => vp.s !  VPTense VPFutr agr ;
+					VPContPres => 
+					  {fin = copula CPresent n p g ; inf2 = (vp.s ! VPTense VPGen agr).inf2 ++ raha g n ; inf = [] } ;
+					VPContPast => 
+					  {fin = copula CPast n p g ; inf2 = (vp.s ! VPTense VPGen agr).inf2 ++ raha g n ; inf = []} ;
+					VPContFut  => 
+					  {fin = copula CFuture n p g  ; inf2 = (vp.s ! VPTense VPGen agr).inf2 ++ raha g n ++ hw p n ; inf = [] } ;
+					VPPerfPres => 
+					  {fin = copula CPresent n p g ; inf2 = (vp.s ! VPTense VPGen agr).inf2 ++ cka g n ; inf = [] } ;
+					VPPerfPast => 
+                      {fin = copula CPast n p g ; inf2 = (vp.s ! VPTense VPGen agr).inf2 ++ cka g n ; inf = []} ;
+					VPPerfFut  => 
+					  {fin = copula CFuture n p g ; inf2 = (vp.s ! VPTense VPGen agr).inf2 ++ cka g n ++ hw p n  ; inf = [] } ;
+					VPPerfPresCont => 
+					 {fin = copula CPresent n p g ; inf2 = (vp.s ! VPTense VPGen agr).inf2 ++ raha g n ; inf = []} ; 
+					VPPerfPastCont => 
+					  {fin = copula CPast n p g ; inf2 = (vp.s ! VPTense VPGen agr).inf2 ++ raha g n ; inf = []} ; 
+					VPPerfFutCont => 
+					  {fin = copula CFuture n p g ; inf2 = (vp.s ! VPTense VPGen agr).inf2 ++ raha g n ++ hw p n ; inf = [] } ;
+					VPSubj   => vp.s !  VPTense VPGen agr 
+					};
+
+		  quest =
+            case ord of
+              { ODir => [];
+                OQuest => "kya" }; 
+		  na =
+            case b of
+              { Pos => [];
+                Neg => "na" };
+          nahim =
+            case b of 
+              { Pos => [];
+                Neg => "nhyN" };		
         in
-        vps.quest ++ subj ++ vp.obj.s ++ vp.ad ++ vp.comp ! agr  ++ vps.inf ++ vps.neg ++  vps.inf2 ++ vps.fin
+		case t of {
+		VPSubj => quest ++ subj ++ vp.obj.s ++ vp.ad ++ vp.comp ! agr  ++ vps.inf ++ na ++  vps.inf2 ++ vps.fin;
+		_      => quest ++ subj ++ vp.obj.s ++ vp.ad ++ vp.comp ! agr  ++ vps.inf ++ nahim ++  vps.inf2 ++ vps.fin};
     } ;
 	
   
@@ -1296,9 +1338,6 @@ resource ResUrd = ParamX  ** open Prelude,Predef in {
      comp = \\a => vp.comp ! a
     } ;
 	conjThat : Str = "kh" ;
-
-       
-
 
 }
 

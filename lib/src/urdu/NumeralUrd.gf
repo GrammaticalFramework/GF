@@ -1,95 +1,117 @@
 concrete NumeralUrd of Numeral = CatUrd ** open ResUrd in {
---
---lincat 
---  Digit = {s : DForm => CardOrd => Str} ;
---  Sub10 = {s : DForm => CardOrd => Str ; n : Number} ;
---  Sub100     = {s : CardOrd => Str ; n : Number} ;
---  Sub1000    = {s : CardOrd => Str ; n : Number} ;
---  Sub1000000 = {s : CardOrd => Str ; n : Number} ;
---
---lin num x = x ;
---lin n2 = let two = mkNum "two"   "twelve"   "twenty" "second" in
---         {s = \\f,c => case <f,c> of {
---             <teen,NOrd> => "twelfth" ;
---             _ => two.s ! f ! c
---             }
---         } ;
---
---lin n3 = mkNum "three" "thirteen" "thirty" "third" ;
---lin n4 = mkNum "four"  "fourteen" "forty" "fourth" ;
---lin n5 = mkNum "five"  "fifteen"  "fifty" "fifth" ;
---lin n6 = regNum "six" ;
---lin n7 = regNum "seven" ;
---lin n8 = mkNum "eight" "eighteen" "eighty" "eighth" ;
---lin n9 = mkNum "nine" "nineteen" "ninety" "ninth" ;
---
---lin pot01 = mkNum "one" "eleven" "ten" "first" ** {n = Sg} ;
---lin pot0 d = d ** {n = Pl} ;
---lin pot110 = regCardOrd "ten" ** {n = Pl} ;
---lin pot111 = regCardOrd "eleven" ** {n = Pl} ;
---lin pot1to19 d = {s = d.s ! teen} ** {n = Pl} ;
---lin pot0as1 n = {s = n.s ! unit}  ** {n = n.n} ;
---lin pot1 d = {s = d.s ! ten} ** {n = Pl} ;
---lin pot1plus d e = {
---   s = \\c => d.s ! ten ! NCard ++ "-" ++ e.s ! unit ! c ; n = Pl} ;
---lin pot1as2 n = n ;
---lin pot2 d = {s = \\c => d.s ! unit ! NCard ++ mkCard c "hundred"}  ** {n = Pl} ;
---lin pot2plus d e = {
---  s = \\c => d.s ! unit ! NCard ++ "hundred" ++ "and" ++ e.s ! c ; n = Pl} ;
---lin pot2as3 n = n ;
---lin pot3 n = {
---  s = \\c => n.s ! NCard ++ mkCard c "thousand" ; n = Pl} ;
---lin pot3plus n m = {
---  s = \\c => n.s ! NCard ++ "thousand" ++ m.s ! c ; n = Pl} ;
---
----- numerals as sequences of digits
---
---  lincat 
---    Dig = TDigit ;
---
---  lin
---    IDig d = d ** {tail = T1} ;
---
---    IIDig d i = {
---      s = \\o => d.s ! NCard ++ commaIf i.tail ++ i.s ! o ;
---      n = Pl ;
---      tail = inc i.tail
---    } ;
---
---    D_0 = mkDig "0" ;
---    D_1 = mk3Dig "1" "1st" Sg ;
---    D_2 = mk2Dig "2" "2nd" ;
---    D_3 = mk2Dig "3" "3rd" ;
---    D_4 = mkDig "4" ;
---    D_5 = mkDig "5" ;
---    D_6 = mkDig "6" ;
---    D_7 = mkDig "7" ;
---    D_8 = mkDig "8" ;
---    D_9 = mkDig "9" ;
---
---  oper
---    commaIf : DTail -> Str = \t -> case t of {
---      T3 => "," ;
---      _ => []
---      } ;
---
---    inc : DTail -> DTail = \t -> case t of {
---      T1 => T2 ;
---      T2 => T3 ;
---      T3 => T1
---      } ;
---
---    mk2Dig : Str -> Str -> TDigit = \c,o -> mk3Dig c o Pl ;
---    mkDig : Str -> TDigit = \c -> mk2Dig c (c + "th") ;
---
---    mk3Dig : Str -> Str -> Number -> TDigit = \c,o,n -> {
---      s = table {NCard => c ; NOrd => o} ;
---      n = n
---      } ;
---
---    TDigit = {
---      n : Number ;
---      s : CardOrd => Str
---    } ;
---
+-- By Harald Hammarström
+-- flags coding=devanagari ;
+--- still old Devanagari coding
+
+
+param DForm = unit | ten ;
+param DSize = sg | r2 | r3 | r4 | r5 | r6 | r7 | r8 | r9 ;
+param Size = sing | less100 | more100 ; 
+
+oper LinDigit = {s : DForm => Str ; size : DSize} ;
+
+--lincat Numeral =    { s : Str } ;
+lincat Dig = { s:Str};
+lincat Digit = LinDigit ;
+lincat Sub10 = {s : DForm => Str ; size : DSize} ;
+lincat Sub100 = {s : Str ; size : Size} ;
+lincat Sub1000 = {s : Str ; s2 : Str ; size : Size } ; 
+lincat Sub1000000 = { s : Str } ;
+
+lin num x0 =
+  {s = \\_ => x0.s ; n = Pl} ; -- the Devana:gari environment
+
+
+-- H is for aspiration (h is a sepaarate letter)
+-- M is anusvara
+-- ~ is candrabindhu
+-- c is is Eng. ch in e.g chop 
+-- cH is chH
+-- _: is length
+-- T, D, R are the retroflexes
+
+oper mkNum : Str -> Str -> DSize -> LinDigit = 
+  \do -> \bis -> \sz ->  
+  {s = table {unit => do ; ten => bis } ; 
+   size = sz } ;
+
+--lin n1 mkNum "ek" "gya:rah" "das" ; 
+lin n2 = mkNum "do" "bi:s" r2 ;
+lin n3 = mkNum "ti:n" "ti:s" r3 ;
+lin n4 = mkNum "ca:r" "ca:li:s" r4 ;
+lin n5 = mkNum "pa:~nc" "paca:s" r5 ;
+lin n6 = mkNum (variants {"cHah" ; "cHa;" ; "cHai"}) "sa:TH" r6 ; 
+lin n7 = mkNum "sa:t" "sattar" r7; 
+lin n8 = mkNum "a:TH" "assi:" r8;
+lin n9 = mkNum "nau" (variants {"navve" ; "nabbe" }) r9 ;
+
+oper mkR : Str -> Str -> Str -> Str -> Str -> Str -> Str -> Str -> Str -> DSize => Str = \a1 -> \a2 -> \a3 -> \a4 -> \a5 -> \a6 -> \a7 -> \a8 -> \a9 -> table {
+  sg => a1 + "ah" ;
+  r2 => a2 + "i:s" ;
+  r3 => a3 + "ti:s" ;
+  r4 => a4 + "a:li:s" ;
+  r5 => a5 + "an" ;
+  r6 => a6 + "saTH" ;
+  r7 => a7 + "hattar" ;
+  r8 => a8 + "a:si:" ;
+  r9 => a9 + "a:nave"
+} ;
+
+oper rows : DSize => DSize => Str = table {
+  sg => mkR "gya:r" "ikk" "ikat" "ekt" "ikya:v" "ik" "ik" "iky" "iky" ; 
+  r2 => mkR "ba:r" "ba:" "bat" "bay" "ba:v" "ba:" "ba" "bay" "b" ;
+  r3 => mkR "ter" "te" "taiM" "taiMt" "tirp" "tir" "ti" "tir" "tir" ;
+  r4 => mkR "caud" "caub" "cauM" "cav" "caup" "cauM" "cau" "caur" "caur" ;
+  r5 => mkR "paMdr" "pacc" "paiM" "paiMt" "pacp" "paiM" "pac" "pac" "pac" ;
+  r6 => mkR "sol" "cHabb" "cHat" "cHiy" "cHapp" "cHiya:" "cHi" "cHiy" "cHiy" ;
+  r7 => mkR (variants { "sattr" ; "satr"}) "satta:v" "saiM" "saiMt" "satta:" "sar" "sat" (variants {"satt" ; "sat" }) "satt" ;
+  r8 => mkR "aTHa:r" "aTTHa:" "aR" "aRt" "aTTHa:v" "aR" "aTH" (variants { "aTTH" ; "aTH" }) "aTTH" ; 
+  r9 => table {sg => "unni:s" ; r2 => "unati:s" ; r3 => "unata:li:s" ; 
+               r4 => "unaca:s" ; r5 => "unasaTH" ; r6 => "unahattar" ; 
+               r7 => (variants{"unna:si:" ; "unya:si:"}) ; 
+               r8 => "nava:si:" ; r9 => "ninya:nave" } 
+} ;
+
+oper ss : Str -> {s : Str} = \s -> {s = s} ;
+
+lin pot01 = {s = table {unit => "ek" ; _ => "dummy" } ; size = sg} ;
+lin pot0 d = d ; 
+lin pot110 = {s = "das" ; size = less100} ; 
+lin pot111 = {s = rows ! sg ! sg ; size = less100} ;
+lin pot1to19 d = {s = rows ! d.size ! sg ; size = less100} ;
+lin pot0as1 n = {s = n.s ! unit ; size = table {sg => sing ; _ => less100} ! n.size } ;
+
+lin pot1 d = {s = d.s ! ten ; size = less100} ;
+lin pot1plus d e = {s = rows ! e.size ! d.size ; size = less100} ;
+
+lin pot1as2 n = {s = n.s ; s2 = "dummy" ; size = n.size } ;
+lin pot2 d = {s = (mksau (d.s ! unit) d.size) ; 
+              s2 = d.s ! unit ++ "la:kH" ; size = more100} ;
+lin pot2plus d e = 
+  {s = (mksau (d.s ! unit) d.size) ++ e.s ; 
+   s2 = (d.s ! unit) ++ "la:kH" ++ (mkhazar e.s e.size) ; 
+   size = more100} ;
+
+lin pot2as3 n = {s = n.s } ;
+lin pot3 n = {s = table { sing => ekhazar ;
+                          less100 => n.s ++ "haza:r" ; 
+                          more100 => n.s2 } ! n.size} ;
+lin pot3plus n m = 
+  {s = table {sing => ekhazar ;
+              less100 => n.s ++ "haza:r" ; 
+              more100 => n.s2 } ! n.size ++ m.s} ;
+
+lin D_0 = { s = "0"};
+lin D_1 = { s = "1"};
+lin D_2 = { s = "2"};
+lin D_3 = { s = "3"};
+lin D_4 = { s = "4"};
+lin D_5 = { s = "5"};
+lin D_6 = { s = "6"};
+lin D_7 = { s = "7"};
+lin D_8 = { s = "8"};
+lin D_9 = { s = "9"};
+oper ekhazar : Str = variants {"haza:r" ; "ek" ++ "haza:r"} ; 
+oper mkhazar : Str -> Size -> Str = \s -> \sz -> table {sing => ekhazar ; _ => s ++ "haza:r"} ! sz ;
+oper mksau : Str -> DSize -> Str = \s -> \sz -> table {sg => "sau" ; _ => s ++ "sau"} ! sz ;
 }
