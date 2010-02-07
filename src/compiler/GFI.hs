@@ -17,7 +17,7 @@ import GF.Infra.Dependencies
 import GF.Infra.CheckM
 import GF.Infra.UseIO
 import GF.Infra.Option
-import GF.Infra.Modules (greatestResource)
+import GF.Infra.Modules (greatestResource, modules, emptyModInfo)
 import GF.System.Readline
 
 import GF.Text.Coding
@@ -254,7 +254,7 @@ emptyGFEnv = do
 #else
   let coding = UTF_8
 #endif
-  return $ GFEnv emptySourceGrammar (mkCommandEnv coding emptyPGF) [] 0 coding
+  return $ GFEnv emptySourceGrammar{modules=[(identW,emptyModInfo)]} (mkCommandEnv coding emptyPGF) [] 0 coding
 
 encode = encodeUnicode . coding 
 decode = decodeUnicode . coding
