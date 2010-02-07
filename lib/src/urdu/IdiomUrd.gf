@@ -38,8 +38,8 @@ concrete IdiomUrd of Idiom = CatUrd ** open Prelude,Predef, ResUrd in {
 --    ProgrVP vp = insertObj (\\a => vp.ad ++ vp.prp ++ vp.s2 ! a) (predAux auxBe) ;
 --
 --    ImpPl1 vp = {s = "Aw" ++ infVP True vp (agrP1 Masc Pl)} ;
-    ImpPl1 vp = {s = "Aw" ++ (vp.s ! Pos ! VPTense VPFut (Ag Masc Pl Pers3_Near) ! ODir).inf2} ;
-	ImpP3 np vp = {s = np.s!NPC Dir ++ "kw" ++ (vp.s ! Pos ! VPImp ! ODir).inf2 ++ "dw"};
+--    ImpPl1 vp = {s = "Aw" ++ (vp.s ! VPTense VPFutr (Ag Masc Pl Pers3_Near)).inf2} ;
+--	ImpP3 np vp = {s = np.s!NPC Dir ++ "kw" ++ (vp.s ! VPImp ).inf2 ++ "dw"};
 --
 
 }

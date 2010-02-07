@@ -35,12 +35,6 @@ oper
   mkN2 : N -> Prep -> N2;
   mkN2 = \n,p -> n ** {lock_N2 = <> ; c2 = p.s } ;  
 
-     --mkN02 : Str -> Noun ;
-     --mkN02 mrd = let mrdwN = mrd+"wN" ;
-       --         mrdw  = tk 1 mrdwN
-         --   in mkNoun mrd mrd   mrd
-           --           mrd mrdwN mrdw
-             --         Masc ;
 
 
 --  mkPN = overload {
@@ -61,10 +55,6 @@ oper
       = \s -> regAdjective s ** {lock_A = <>} ;
 	mkA : Str -> Str -> A2
 	  = \a,c -> let n = regAdjective a in {s = n.s; c2 = c} ** {lock_A2 = <>} ;
---	mkADeg1 : Str -> A
---	  = \s -> adjDeg1 s ** {lock_A = <>} ;
---    mkA : (x1,_,x3 : Str) -> A
---      = \msd,m,f -> mkAdjective msd m f ** {lock_A = <>} ;
     } ;
 
 --2 Verbs
@@ -72,18 +62,6 @@ oper
 --  mkV = overload {
     mkV : Str -> V 
       = \s -> mkVerb s ** {lock_V = <>} ;
---	mkV_3 : Str -> Str -> V 
---      = \s,t -> mkVerb3 s t ** {lock_V = <>} ;
---	mkV_2 : Str -> Str -> V 
---      = \s,c1 -> mkVerb2 s c1 ** {lock_V = <>} ;  
---	mkV_1_2 : Str -> Str -> Str -> V 
---      = \s,c1,c2 -> mkVerb1_2 s c1 c2 ** {lock_V = <>} ;  
---    mkV : (x1,_,_,_,_,_,_,_,_,_,_,_,_,_,x15 : Str) -> V
---      = \inf,stem,ims,imp,ifs,ifp,pms,pmp,pfs,pfp,ss1,ss2,sp2,sp3,r -> 
---           mkVerb inf stem ims imp ifs ifp pms pmp pfs pfp ss1 ss2 sp2 sp3 r ** 
---             {lock_V = <>} ;
---    } ;
-
 
   mkV2 = overload {
     mkV2 : Str -> V2 
@@ -91,26 +69,17 @@ oper
     mkV2 : V -> V2 
       = \v -> v ** {c2 = {s = [] ; c = VTrans} ; lock_V2 = <>} ;
     mkV2 : V -> Str -> V2 
-      = \v,p -> v ** {c2 = {s = p ; c = VTransPost} ; lock_V2 = <>} ;
+      = \v,p -> v ** {c2 = {s = p ; c = VTrans} ; lock_V2 = <>} ;
     } ;
   
-  --mkV2 = overload {
---    mkV2 : Str -> V2 
---      = \s -> mkVerb  s **  { lock_V2 = <>} ;
-  --  mkV2 : V -> V2 
-  --    = \v -> v ** {c2 = {s = [] ; c = VTrans} ; lock_V2 = <>} ;
-  --  mkV2 : V -> Str -> V2 
-  --    = \v,p -> v ** {c2 = {s = p ; c = VTransPost} ; lock_V2 = <>} ;
-  --  } ;
 
 -- compund verbs
+  compoundV = overload {
+   compoundV : Str -> V -> V = \s,v -> {s = \\vf => s ++ v.s ! vf ; lock_V = <>} ;     
+   compoundV : Str -> V2 -> V = \s,v -> {s = \\vf => s ++ v.s ! vf ; lock_V = <>} ;
+   };
+ 
    
-   mkCmpdVerb1 : N -> V -> Str =
-   \n,v -> n.s ! Sg ! Dir ++ v.s ! Inf ;
-   mkCmpdVerb = overload {
-    mkCmpdVerb : N -> Str -> Str
-	 = \n,x ->   n.s ! Sg ! Dir ++ x;
-	 };
 	mkCmpdNoun = overload {
     mkCmpdNoun : N -> N -> Str
 	 = \n1,n2 ->  n1.s ! Sg ! Dir ++ n2.s ! Sg ! Dir;

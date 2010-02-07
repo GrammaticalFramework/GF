@@ -33,13 +33,13 @@ concrete NounUrd of Noun = CatUrd ** open ResUrd, Prelude in {
       } ;
 
     DetQuantOrd quant num ord = {
-      s = \\ c => detquant2det quant.s num c  ++ ord.s ; 
-      n = Sg
+      s = \\ c => detquant2det quant.s num.s c  ++ ord.s ; 
+      n = num.n
       } ;
 
    DetQuant quant num = {
-      s = \\c => detquant2det quant.s num c; 
-	  n = Sg
+      s = \\c => detquant2det quant.s num.s c; 
+	  n = num.n
       } ;
 
     DetNP det = {
@@ -49,15 +49,15 @@ concrete NounUrd of Noun = CatUrd ** open ResUrd, Prelude in {
 
 --    PossPron p = {s = \\_,_,_ => p.s ! PPoss} ;
 --
---    NumSg = {s = []; n = Sg} ;
---    NumPl = {s = []; n = Pl} ;
+    NumSg = {s = []; n = Sg} ;
+    NumPl = {s = []; n = Pl} ;
 
---    NumCard n = n ** {hasCard = True} ;
+    NumCard n = n ** {hasCard = True} ;
 --
 --    NumDigits n = {s = n.s ! NCard ; n = n.n} ;
 --    OrdDigits n = {s = n.s ! NOrd} ;
 --
---    NumNumeral numeral = {s = numeral.s ! NCard; n = numeral.n} ;
+    NumNumeral numeral = {s = numeral.s ! NCard; n = numeral.n} ;
 --    OrdNumeral numeral = {s = numeral.s ! NOrd} ;
 --
 --    AdNum adn num = {s = adn.s ++ num.s ; n = num.n} ;
@@ -123,10 +123,10 @@ concrete NounUrd of Noun = CatUrd ** open ResUrd, Prelude in {
       g = cn.g
       } ;
 
---    RelCN cn rs = {
---      s = \\n,c => cn.s ! n ! c ++ rs.s ! agrgP3 n cn.g ;
---      g = cn.g
---      } ;
+    RelCN cn rs = {
+      s = \\n,c => cn.s ! n ! c ++ rs.s ! agrP3 cn.g n ;
+      g = cn.g
+      } ;
     AdvCN cn ad = {s = \\n,c => cn.s ! n ! c ++ ad.s ; g = cn.g} ;
 --
 --    SentCN cn sc = {s = \\n,c => cn.s ! n ! c ++ sc.s ; g = cn.g} ;

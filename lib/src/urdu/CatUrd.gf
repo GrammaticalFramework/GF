@@ -30,7 +30,7 @@ concrete CatUrd of Cat = CommonX ** open ResUrd, Prelude in {
 --    IP = {s : Number => Case => Str} ;
 --    IComp = {s : Str} ;    
     IDet = {s :Gender => Str ; n : Number} ;
---    IQuant = {s : Number => Str} ;
+    IQuant = {s : Number => Str} ;
 
 ---- Relative
 
@@ -42,7 +42,7 @@ concrete CatUrd of Cat = CommonX ** open ResUrd, Prelude in {
 --    RP = {s : RCase => Str ; a : RAgr} ;
 
 ---- Verb
---      VP = ResUrd.Verb;
+
     VP = ResUrd.VPH ;
     VPSlash = ResUrd.VPHSlash ;
     Comp = {s : Agr => Str} ; 
@@ -56,21 +56,21 @@ concrete CatUrd of Cat = CommonX ** open ResUrd, Prelude in {
     CN = ResUrd.Noun ;
     NP = ResUrd.NP ;
 	Pron = {s : PersPronForm => Str; a : Agr} ;
---    Pron = {s : PronCase => Str ; a : Agr} ;
+
       Det = {s:Determiner => Str ; n : Number};
---    Det = {s : Gender => Case => Str ; n : Number} ;
+
 
     Predet, Ord = {s : Str} ;
-      Num = Str;
---    Num  = {s : Str ; n : Number} ;
---    Card = {s : Str; n : Number} ;
+--      Num = Str;
+    Num  = {s : Str ; n : Number} ;
+    Card = {s : Str; n : Number} ;
     Quant = {s:DemPronForm => Str ; a : Agr};
 --    Quant = {s : Number => Gender => Case => Str} ;
     Art = {s : Str} ;
 
 ---- Numeral
 
---    Numeral = {s : CardOrd => Str ; n : Number} ;
+    Numeral = {s : CardOrd => Str ; n : Number} ;
 --    Digits  = {s : CardOrd => Str ; n : Number ; tail : DTail} ;
 
 ---- Structural

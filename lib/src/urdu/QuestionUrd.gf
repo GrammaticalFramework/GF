@@ -58,11 +58,11 @@ concrete QuestionUrd of Question = CatUrd ** open ResUrd, Prelude in {
 	  g = Masc;
       } ;
 
---    IdetQuant idet num = {
---      s = idet.s ! num.n ++ num.s ; 
---      n = num.n
---      } ;
---
+    IdetQuant iqant num = {
+      s = \\g => iqant.s ! num.n ++ num.s ; 
+      n = num.n
+      } ;
+
     CompIAdv a = a ;
     CompIP p = ss (p.s ! Dir) ;
 
