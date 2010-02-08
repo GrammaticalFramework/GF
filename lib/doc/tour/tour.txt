@@ -1,7 +1,8 @@
 A Guided Tour of Swedish Grammar
 Aarne Ranta
 
-
+%!style(html) : utf8
+%!postproc(html) : "#SWE" ""
 
 This is an introduction to the basic grammar of Swedish. 
 It is guided by a computer program that knows the rules of the grammar.
@@ -72,8 +73,7 @@ from words and their forms.
 
 ==Nouns==
 
-Nouns in Swedish have 8 #Swe
-inflection forms, as shown by the following example:
+The inflection forms of nouns are shown in the following example:
 ```
 > %table flower_N
 * s Sg Indef Nom : blomma
@@ -85,8 +85,8 @@ inflection forms, as shown by the following example:
 * s Pl Def Nom : blommorna
 * s Pl Def Gen : blommornas
 ```
-Here are the main noun inflection patterns - the
-declensions 1 to 5: #SWE
+Here are some inflection patterns.
+#SWE They show the declensions 1 to 5.
 ```
 > %forms flower_N
 * blomma, blommas, blomman, blommans, blommor, blommors, blommorna, blommornas
@@ -98,7 +98,7 @@ declensions 1 to 5: #SWE
 * katt, katts, katten, kattens, katter, katters, katterna, katternas
 
 > %forms apple_N
-* äpple, äpples, äpplet, äpplets, äpplen, äpplens, äpplena, äpplenas
+* Ã¤pple, Ã¤pples, Ã¤pplet, Ã¤pplets, Ã¤pplen, Ã¤pplens, Ã¤pplena, Ã¤pplenas
 
 > %forms house_N
 * hus, hus, huset, husets, hus, hus, husen, husens
@@ -109,7 +109,7 @@ can be approximative, or just cover one of the possible senses.
 
 In addition to inflection forms,
 Swedish nouns also have a gender. The gender is reflected, among
-other things, in the indefinite article used with the nouns: #SWE
+other things, in the indefinite article used with the nouns.
 ```
 > %translate "a man"
 * en man
@@ -124,7 +124,7 @@ The grammar training program has a small lexicon, with just 182 nouns. To see
 all there nouns, together with their inflection forms and senses explained in
 English, you can do as follows:
 ```
-> generate_trees -cat=N | linearize -treebank -list -lang=LangSwe
+> generate_trees -cat=N -number=5 | linearize -treebank -list -lang=LangSwe
 
 * airplane_N
 * flygplan, flygplans, flygplanet, flygplanets, flygplan, flygplans, flygplanen, flygplanens
@@ -140,22 +140,12 @@ you can try out a **morphology quiz**, which lets you train your knowledge
 of Swedish noun inflection. You can later train your inflection skills with
 other parts of speech, just changing the symbol ``N`` to some other symbol.
 ```
-> morpho_quiz -cat=N -lang=LangSwe
+  morpho_quiz -cat=N -lang=LangSwe
 
-* Welcome to GF Morphology Quiz.
-* The quiz is over when you have done at least 10 examples
-* with at least 75 % success.
-* You can interrupt the quiz by entering a line consisting of a dot ('.').
-* 
-* vin s Pl Def Gen
-* vinernas
-* > Yes.
-* Score 1/1
-* tunga s Sg Indef Nom
-* tungan
-* > No, not tungan, but
-* tunga
-* Score 1/2
+  Welcome to GF Morphology Quiz.
+  The quiz is over when you have done at least 10 examples
+  with at least 75 % success.
+  You can interrupt the quiz by entering a line consisting of a dot ('.').
 ```
 The quiz questions are randomly generated, so you can use the same
 quiz for increasing your Swedish skills over and over again.
@@ -164,20 +154,20 @@ Another quiz is the **translation quiz**, which lets you to train translations
 of nouns from English to Swedish (or, in fact, of any part of speech from any
 language to any other one). Here is how it goes:
 ```
-> translation_quiz -from=LangEng -to=LangSwe -cat=N
-* Welcome to GF Translation Quiz.
-* The quiz is over when you have done at least 10 examples
-* with at least 75 % success.
-* You can interrupt the quiz by entering a line consisting of a dot ('.').
-*
-* ceiling
-* tak
-* > Yes.
-* Score 1/1
-* night
-* nat
-* > No, not nat, but
-* natt
+  translation_quiz -from=LangEng -to=LangSwe -cat=N
+  Welcome to GF Translation Quiz.
+  The quiz is over when you have done at least 10 examples
+  with at least 75 % success.
+  You can interrupt the quiz by entering a line consisting of a dot ('.').
+ 
+  ceiling
+  tak
+  > Yes.
+  Score 1/1
+  night
+  nat
+  > No, not nat, but
+  natt
 ```
 
 
@@ -188,16 +178,15 @@ since their forms are independent of the noun; the noun is just inflected in
 the plural indefinite. This is with the exception of "one", whose form depends
 on the gender of the noun. Here is a quick way to generate the numerals from 1 to 9:
 ```
-> gt -cat=Sub10 -number=9 | l
-> gt -cat=Sub10 -number=9 | l -lang=LangSwe
+> gt -cat=Sub10 -number=9 | l -lang=LangEng,LangSwe
 * en
-* två
+* tvÃ¥
 * tre
 * fyra
 * fem
 * sex
 * sju
-* åtta
+* Ã¥tta
 * nio
 ```
 Translate digits to Swedish numerals; the largest one that can be translated is 999,999:
@@ -211,10 +200,10 @@ Translate noun phrases with numerals and nouns:
 * en pojke
 
 > %translate "one apple"
-* ett äpple
+* ett Ã¤pple
 
 > %translate "two boys"
-* två pojkar
+* tvÃ¥ pojkar
 
 > %translate "eleven cars"
 * elva bilar
@@ -229,9 +218,9 @@ articles:
 > %translate "a man, a woman, a car and a house"
 * en man , en kvinna , en bil och ett hus
 ```
-Definite articles are more special in Swedish: 
-they are expressed by inflecting the noun rather than adding a word like
-English //the//. #SWE
+Here are examples with definite articles.
+#SWE In Swedish, they are expressed by inflecting the noun 
+#SWE rather than adding a word like English //the//.
 ```
 > %translate "the man, the woman, the car and the house"
 * mannen , kvinnan , bilen och huset
@@ -239,39 +228,41 @@ English //the//. #SWE
 This is similar in the plural:
 ```
 > %translate "the men, the women, the cars and the houses"
-* männen , kvinnorna , bilarna och husen
+* mÃ¤nnen , kvinnorna , bilarna och husen
 ```
-Just like in English, there is no explicit indefinite article in the plural: 
-just use the plural indefinite form. #SWE
+The indefinite forms in plural look as follows.
+#SWE Just like in English, there is no explicit indefinite article 
+#SWE in the plural: just use the plural indefinite form.
 ```
 > %translate "men, women, cars and houses"
-* män , kvinnor , bilar och hus
+* mÃ¤n , kvinnor , bilar och hus
 ```
 Other common determiners are shown in the following:
 ```
 > %translate "this car, that car, these cars, those cars, some cars and all cars"
-* den här bilen , den där bilen , de här bilarna , de där bilarna , några bilar och alla bilar
+* den hÃ¤r bilen , den dÃ¤r bilen , de hÃ¤r bilarna , de dÃ¤r bilarna , nÃ¥gra bilar och alla bilar
 
 ```
 Generate more examples of nouns with determiners:
 ```
-> gr -number=11 (DetCN ? (UseN ?)) | l
+> gr -number=11 (UttNP (DetCN ? (UseN ?))) | l -lang=LangEng,LangSwe
 * much reason
 * mycket anledning
 * 
 * few grammars
-* få grammatiker
+* fÃ¥ grammatiker
 * 
 * some teacher
-* någon lärare
+* nÃ¥gon lÃ¤rare
 ```
 You will find out that other determiners can combine with numerals, such as in
 ```
 > %translate "these seven sisters"
-* de här sju systrarna
-```
-In these cases, the definite article suddenly appears as a word: #SWE
-```
+* de hÃ¤r sju systrarna
+
 > %translate "the seven sisters"
 * de sju systrarna
 ```
+#SWE thus with a numeral, the definite article suddenly appears as a word.
+
+
