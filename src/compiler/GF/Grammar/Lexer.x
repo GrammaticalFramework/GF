@@ -36,8 +36,8 @@ $white+ ;
 
 \" ([$u # [\" \\ \n]] | (\\ (\" | \\ | \' | n | t)))* \" { tok (T_String . unescapeInitTail . BS.unpack) }
 
-$d+                       { tok (T_Integer . read . BS.unpack) }
-$d+ \. $d+ (e (\-)? $d+)? { tok (T_Double  . read . BS.unpack) }
+(\-)? $d+                       { tok (T_Integer . read . BS.unpack) }
+(\-)? $d+ \. $d+ (e (\-)? $d+)? { tok (T_Double  . read . BS.unpack) }
 
 {
 
