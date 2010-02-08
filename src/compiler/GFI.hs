@@ -94,6 +94,12 @@ loop opts gfenv0 = do
   -- special commands, requiring source grammar in env
 
   case pwords of
+{-
+    "eh":w:_ -> do
+             cs <- readFile w >>= return . map words . lines
+             gfenv' <- foldM (flip (process False benv)) gfenv cs
+             loopNewCPU gfenv'
+-}
 
       "q":_  -> ifv (putStrLn "See you.") >> return gfenv
 
