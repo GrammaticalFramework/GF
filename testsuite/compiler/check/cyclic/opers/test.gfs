@@ -1,1 +1,2 @@
 i -src testsuite/compiler/check/cyclic/opers/TestOpers.gf
+i -src testsuite/compiler/check/cyclic/opers/TestOperTypes.gf
