@@ -49,6 +49,7 @@ library
     PGF.Morphology
     PGF.VisualizeTree
     PGF.Printer
+	PGF.Probabilistic
     GF.Data.TrieMap
     GF.Data.Utilities
     GF.Data.SortedList
