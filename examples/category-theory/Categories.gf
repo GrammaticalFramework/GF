@@ -13,8 +13,8 @@ abstract Categories = {
 
   fun id   : ({c} : Category) -> (x : El c) -> Arrow x x ;
 
-  fun comp : ({c} : Category) -> ({x,y,z} : El c) -> Arrow x y -> Arrow y z -> Arrow x z ;
-      
+  fun comp : ({c} : Category) -> ({x,y,z} : El c) -> Arrow z y -> Arrow x z -> Arrow x y ;
+
       eq     : ({c} : Category)
              -> ({x,y} : El c)
              -> (a : Arrow x y)
@@ -27,27 +27,27 @@ abstract Categories = {
       eqIdL  : ({c} : Category)
              -> ({x,y} : El c)
              -> (a : Arrow x y)
-             -> EqAr a (comp a (id y)) ;
+             -> EqAr a (comp a (id x)) ;
       eqIdR  : ({c} : Category)
              -> ({x,y} : El c)
              -> (a : Arrow x y)
-             -> EqAr a (comp (id x) a) ;
+             -> EqAr a (comp (id y) a) ;
       eqComp :  ({c} : Category) 
              -> ({w,x,y,z} : El c)
-             -> (f : Arrow w x)
-             -> (g : Arrow x y)
-             -> (h : Arrow y z)
+             -> (f : Arrow w y)
+             -> (g : Arrow z w)
+             -> (h : Arrow x z)
              -> EqAr (comp f (comp g h)) (comp (comp f g) h) ;
 
-  fun Op   :  (c : Category)
-           -> Category ;
-      opEl :  ({c} : Category)
-           -> (x : El c)
-           -> El (Op c) ;
-      opAr :  ({c} : Category)
-           -> ({x,y} : El c)
-           -> (a : Arrow x y)
-           -> Arrow {Op c} (opEl y) (opEl x) ;
+  data Op   :  (c : Category)
+            -> Category ;
+       opEl :  ({c} : Category)
+            -> (x : El c)
+            -> El (Op c) ;
+       opAr :  ({c} : Category)
+            -> ({x,y} : El c)
+            -> (a : Arrow x y)
+            -> Arrow {Op c} (opEl y) (opEl x) ;
 
   data Slash     :  (c : Category)
                  -> (x : El c)
