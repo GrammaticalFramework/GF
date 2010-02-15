@@ -20,7 +20,11 @@ concrete NounTur of Noun = CatTur ** open ResTur, Prelude in {
 
     NumCard n = n ** {n = Sg} ;
 
-    NumNumeral numeral = {s = numeral.s} ;
+    NumNumeral numeral = {s = numeral.s ! NCard} ;
+
+    OrdDigits  dig = {s = dig.s ! NOrd} ;
+    OrdNumeral num = {s = num.s ! NOrd} ;
+    OrdSuperl  a = {s = "daha" ++ a.s ! Sg ! Nom} ;
 
     DefArt = {
       s = []
