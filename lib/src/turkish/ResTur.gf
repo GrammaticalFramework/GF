@@ -1,4 +1,4 @@
---# -path=.:../abstract:../common:../prelude
+--# -path=.:../abstract:../common:../../prelude
 
 resource ResTur = ParamX ** open Prelude, Predef in {
 
@@ -9,8 +9,8 @@ resource ResTur = ParamX ** open Prelude, Predef in {
 
   param
     Case = Nom | Acc | Dat | Gen | Loc | Ablat | Abess Polarity ;
-
     Species = Indef | Def ;
+    Contiguity = Con | Sep ; --Concatanate or Separate
 
   oper
     Agr = {n : Number ; p : Person} ;
@@ -24,10 +24,10 @@ resource ResTur = ParamX ** open Prelude, Predef in {
 
   param
     VForm = 
-       VPres      Number Person
-     | VPast      Number Person
-     | VFuture    Number Person
-     | VAorist    Number Person
+       VPres      Agr
+     | VPast      Agr
+     | VFuture    Agr
+     | VAorist    Agr
      | VImperative
      | VInfinitive
      ;
@@ -40,16 +40,10 @@ resource ResTur = ParamX ** open Prelude, Predef in {
 --2 For $Numeral$
   param
     DForm = unit | ten ;
+    CardOrd = NCard | NOrd ;
 
 -- For $Numeral$.
   oper
-    mkNum : Str -> Str -> {s : DForm => Str} = 
-      \two, twenty ->
-      {s = table {
-         unit => two ; 
-         ten  => twenty
-         }
-      } ;
 
     mkPron : (ben,beni,bana,banin,bende,benden,benli,bensiz:Str) -> Number -> Person -> Pron =
      \ben,beni,bana,benim,bende,benden,benli,bensiz,n,p -> {
@@ -66,87 +60,87 @@ resource ResTur = ParamX ** open Prelude, Predef in {
      a = {n=n; p=p} ;
      } ;
 
+--Harmony
+  param
+
+--  Consonant are divided into 2 groups: Voiced vs Unvoiced or Hard vs Soft.
+--  This parameter type is used for consonant harmony, namely hardening and softening rules.
+    Softness    = Soft | Hard ;
+
+--  Parameter type for consonant harmony:
+--  Suffixes should have three forms at the worst case for consonant harmony, these forms are
+--  used when stem ends with:
+--    1) soft consonant
+--    2) hard consonant
+--    3) vowel
+    HarConP  = SCon Softness | SVow ;
+
+--  Parameter type for vowel harmony:
+--  Suffixes should have 4 forms, because of two dimensional vowel harmony
+    HarVowP  = I_Har | U_Har | Ih_Har | Uh_Har ;
+
   oper
-    harmony4 : Str -> Str -> Str -> Str
-      = \base0,suffixC,suffixV ->
-          let h : Str =
-               case base0 of {
-                 _+c@("ı"|"a"|"i"|"e"|"u"|"o"|"ü"|"ö")+
-                 ("b"|"v"|"d"|"z"|"j"|"c"|"g"|"ğ"|"l"|"r"|"m"|"n"|"y"|"p"|"f"|"t"|"s"|"ş"|"ç"|"k"|"h")* => 
-                    case c of {
-                      ("ı"|"a") => "ı" ;
-                      ("i"|"e") => "i" ;
-                      ("u"|"o") => "u" ;
-                      ("ü"|"ö") => "ü"
-                    } ;
-                 _ => error "harmony4"
-               } ;
-              base : Str =
-                case dp 1 base0 + take 1 suffixC of {
-                  ("k")+("ı"|"a"|"i"|"e"|"u"|"o"|"ü"|"ö") => tk 1 base0 + "ğ" ;
-                  _                                       => base0
-                } ;
-              suffix : Str =
-                case dp 1 base0 of {
-                  ("ı"|"a"|"i"|"e"|"u"|"o"|"ü"|"ö") => case suffixV of {
-                                                         s1@("b"|"v"|"d"|"z"|"j"|"c"|"g"|"ğ"|"l"|"r"|"m"|"n"|"y"|"p"|"f"|"t"|"s"|"ş"|"ç"|"k"|"h")
-                                                         +   ("ı"|"i"|"u"|"ü")
-                                                         +s2 => s1+h+s2 ;
-                                                         s   => s
-                                                       } ;
-                  _                                 => case suffixC of {
-                                                         s1@(("b"|"v"|"d"|"z"|"j"|"c"|"g"|"ğ"|"l"|"r"|"m"|"n"|"y"|"p"|"f"|"t"|"s"|"ş"|"ç"|"k"|"h")*)
-                                                         +   ("ı"|"i"|"u"|"ü")
-                                                         +s2 => s1+h+s2 ;
-                                                         s   => s
-                                                       }
-                }
-          in base + suffix ;
+-- Some pattern macros used by some opers (especially those related to harmonies) in ResTur.gf and ParadigmsTur.gf
 
-    harmony2 : Str -> Str -> Str -> Str
-      = \base0,suffixC,suffixV ->
-          let h : Str =
-               case base0 of {
-                 _+c@("ı"|"a"|"i"|"e"|"u"|"o"|"ü"|"ö")+
-                 ("b"|"v"|"d"|"z"|"j"|"c"|"g"|"ğ"|"l"|"r"|"m"|"n"|"y"|"p"|"f"|"t"|"s"|"ş"|"ç"|"k"|"h")* =>
-                    case c of {
-                      ("a"|"ı"|"u"|"o") => "a" ;
-                      ("e"|"i"|"ü"|"ö") => "e"
-                    } ;
-                 _ => error "harmony2"
-               } ;
-              base : Str =
-                case dp 1 base0 + take 1 suffixC of {
-                  ("k")+("ı"|"a"|"i"|"e"|"u"|"o"|"ü"|"ö") => tk 1 base0 + "ğ" ;
-                  _                                       => base0
-                } ;
-              suffix : Str =
-                case dp 1 base0 of {
-                  ("ı"|"a"|"i"|"e"|"u"|"o"|"ü"|"ö") => case suffixV of {
-                                                         s1@("b"|"v"|"d"|"z"|"j"|"c"|"g"|"ğ"|"l"|"r"|"m"|"n"|"y"|"p"|"f"|"t"|"s"|"ş"|"ç"|"k"|"h")
-                                                         +  ("a"|"e")
-                                                         +s2 => s1+h+s2 ;
-                                                         s   => s
-                                                       } ;
-                  ("p"|"f"|"t"|"s"|"ş"|"ç"|"k"|"h") => case suffixC of {
-                                                         s1@(("b"|"v"|"z"|"j"|"c"|"g"|"ğ"|"l"|"r"|"m"|"n"|"y"|"p"|"f"|"t"|"s"|"ş"|"ç"|"k"|"h")*)
-                                                         +  ("a"|"e")
-                                                         +s2 => s1+h+s2 ;
-                                                         ("da"|"de")+s => "t"+h+s ;
-                                                         s => s
-                                                       } ;
-                  _                                 => case suffixC of {
-                                                         s1@(("b"|"v"|"d"|"z"|"j"|"c"|"g"|"ğ"|"l"|"r"|"m"|"n"|"y"|"p"|"f"|"t"|"s"|"ş"|"ç"|"k"|"h")*)
-                                                         +  ("a"|"e")
-                                                         +s2 => s1+h+s2 ;
-                                                         s   => s
-                                                       }
-                }
-          in base + suffix ;
+    --Capital forms of vowels are also added, otherwise harmony of proper nouns like "Of" can not be determined
+    vowel     : pattern Str = #("a"|"e"|"ı"|"i"|"u"|"ü"|"o"|"ö"|"î"|"â"|"û"|"A"|"E"|"I"|"İ"|"U"|"Ü"|"O"|"Ö"|"Î"|"Â"|"Û") ;
+    consonant : pattern Str = #("b"|"v"|"d"|"z"|"j"|"c"|"g"|"ğ"|"l"|"r"|"m"|"n"|"y"|"p"|"f"|"t"|"s"|"ş"|"ç"|"k"|"h") ;
+    --Extended consonant are used when proccessing words that contain non-letter characters like "stand-by"
+    extConson : pattern Str = #("b"|"v"|"d"|"z"|"j"|"c"|"g"|"ğ"|"l"|"r"|"m"|"n"|"y"|"p"|"f"|"t"|"s"|"ş"|"ç"|"k"|"h"|" "|"'"|"-") ;
+    --The following are the hard (voiced) consonant in Turkish Alphabet (Order is determined by "Fıstıkçı Şahap" :) )
+    hardCons  : pattern Str = #("f"|"s"|"t"|"k"|"ç"|"ş"|"h"|"p") ;
 
-    add_number : Number -> Str -> Str = \n,base ->
-      case n of {
-        Sg => base ;
-        Pl => harmony2 base "ler" "ler"
-      } ;
+-- Type definition and constructor of Harmony.
+    Harmony = {
+      vow : HarVowP ;
+      con : HarConP
+    } ;
+
+    mkHar : HarVowP -> HarConP -> Harmony;
+    mkHar v c = { vow = v ; con = c } ;
+
+    getHarmony : Str -> Harmony ;
+    getHarmony base = {
+      vow = getHarVowP base ;
+      con = getHarConP base ;
+    } ;
+
+    getHarVowP : Str -> HarVowP
+      = \base -> case base of {
+                 _+c@#vowel+
+                 #extConson* => 
+                    case c of {
+                      ("ı"|"a"|"â"|"I"|"A"|"Â") => I_Har ;
+                      ("i"|"e"|"î"|"İ"|"E"|"Î") => Ih_Har ;
+                      ("u"|"o"|"û"|"U"|"O"|"Û") => U_Har ;
+                      ("ü"|"ö"|"Ü"|"Ö")         => Uh_Har
+                    } ;
+                 _ => Ih_Har --this is for yiyor ("y" is base in that case)
+        } ;
+
+--  Param base : a word, of which softness is to be determined
+--  Returns whether Soft or Hard form of suffix will be used when adding a suffix to base
+    getSoftness : Str -> Softness = \base -> case dp 1 base of {
+                                              #hardCons => Hard ;
+                                              _ => Soft
+                                             } ;
+
+--  Param larC : the consonant form of suffix of which softness is to be determined
+--  Returns whether Soft or Hard form of base will be used when adding a suffix to parameter
+    getBeginType : Str -> Softness = \larC -> case take 1 larC of {
+					        #vowel => Soft ;
+				                _ => Hard
+					      }  ;
+
+--  Param base : a word
+--  Returns which SuffixForm will be used when adding a suffix to base
+    getHarConP : Str -> HarConP =
+      \base -> case dp 1 base of {
+		 #vowel => SVow ;
+		 _ => SCon (getSoftness base)
+	       } ;
+--Prep
+
+    no_Prep = mkPrep [] ;
+    mkPrep : Str -> {s : Str} = \str -> ss str ;
 }
