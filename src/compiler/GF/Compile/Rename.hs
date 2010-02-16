@@ -141,8 +141,7 @@ renameInfo :: SourceModInfo -> Status -> Ident -> Info -> Check Info
 renameInfo mo status i info = checkIn 
     (text "renaming definition of" <+> ppIdent i <+> ppPosition mo i) $ 
                                 case info of
-  AbsCat pco pfs -> liftM2 AbsCat (renPerh (renameContext status) pco)
-                                  (renPerh (mapM rent) pfs)
+  AbsCat pco -> liftM AbsCat (renPerh (renameContext status) pco)
   AbsFun  pty pa ptr -> liftM3 AbsFun (ren pty) (return pa) (renPerh (mapM (renameEquation status [])) ptr)
   ResOper pty ptr -> liftM2 ResOper (ren pty) (ren ptr)
   ResOverload os tysts -> 

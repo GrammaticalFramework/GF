@@ -615,7 +615,7 @@ allDependencies ism b =
       CncCat pty _ _ -> [pty]
       CncFun _   pt _ -> [pt]  ---- (Maybe (Ident,(Context,Type))
       AbsFun pty _ ptr -> [pty] --- ptr is def, which can be mutual
-      AbsCat (Just co) _ -> [Just ty | (_,_,ty) <- co]
+      AbsCat (Just co) -> [Just ty | (_,_,ty) <- co]
       _              -> []
 
 topoSortJments :: SourceModule -> Err [(Ident,Info)]

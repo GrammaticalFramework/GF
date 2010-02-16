@@ -183,6 +183,6 @@ lookupCatContext gr m c = do
   mo <- lookupModule gr m
   info <- lookupIdentInfo mo c
   case info of
-    AbsCat (Just co) _ -> return co
-    AnyInd _ n         -> lookupCatContext gr n c
-    _                  -> Bad (render (text "unknown category" <+> ppIdent c))
+    AbsCat (Just co) -> return co
+    AnyInd _ n       -> lookupCatContext gr n c
+    _                -> Bad (render (text "unknown category" <+> ppIdent c))

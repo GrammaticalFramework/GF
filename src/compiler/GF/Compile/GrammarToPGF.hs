@@ -71,7 +71,7 @@ canon2pgf opts pars cgr@(M.MGrammar ((a,abm):cms)) = do
              (f,AbsFun (Just ty) ma pty) <- tree2list (M.jments abm), let f' = i2i f]
   funs = Map.fromAscList lfuns
   lcats = [(i2i c, snd (mkContext [] cont)) |
-                (c,AbsCat (Just cont) _) <- tree2list (M.jments abm)]
+                (c,AbsCat (Just cont)) <- tree2list (M.jments abm)]
   cats = Map.fromAscList lcats
   catfuns = Map.fromList 
     [(cat,[f | (f, (C.DTyp _ c _,_,_)) <- lfuns, c==cat]) | (cat,_) <- lcats]
@@ -240,7 +240,7 @@ reorder abs cg = M.MGrammar $
        adefs = sorted2tree $ sortIds $
                  predefADefs ++ Look.allOrigInfos cg abs
        predefADefs = 
-         [(c, AbsCat (Just []) Nothing) | c <- [cFloat,cInt,cString]]
+         [(c, AbsCat (Just [])) | c <- [cFloat,cInt,cString]]
        aflags = 
          concatOptions [M.flags mo | (_,mo) <- M.modules cg, M.isModAbs mo]
 

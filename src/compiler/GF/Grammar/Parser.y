@@ -232,7 +232,7 @@ TopDef
 
 CatDef :: { [(Ident,SrcSpan,Info)] }
 CatDef
-  : Posn Ident ListDDecl                         Posn { [($2, ($1,$4), AbsCat (Just $3) Nothing)]        }
+  : Posn Ident ListDDecl                         Posn { [($2, ($1,$4), AbsCat (Just $3))]        }
   | Posn '[' Ident ListDDecl ']'                 Posn { listCatDef $3 ($1,$6) $4 0                 }
   | Posn '[' Ident ListDDecl ']' '{' Integer '}' Posn { listCatDef $3 ($1,$9) $4 (fromIntegral $7) }
 
@@ -247,9 +247,9 @@ DefDef
 
 DataDef :: { [(Ident,SrcSpan,Info)] }
 DataDef
-  : Posn Ident '=' ListDataConstr Posn { ($2,   ($1,$5), AbsCat Nothing   (Just (map Cn $4))) :
+  : Posn Ident '=' ListDataConstr Posn { ($2,   ($1,$5), AbsCat Nothing) :
                                          [(fun, ($1,$5), AbsFun Nothing   Nothing Nothing) | fun <- $4] }
-  | Posn ListIdent ':' Exp Posn        { -- (snd (valCat $4), ($1,$5), AbsCat Nothing   (Just (map Cn $2))) :
+  | Posn ListIdent ':' Exp Posn        { -- (snd (valCat $4), ($1,$5), AbsCat Nothing) :
                                          [(fun, ($1,$5), AbsFun (Just $4) Nothing Nothing) | fun <- $2] }                                         
 
 ParamDef :: { [(Ident,SrcSpan,Info)] }
@@ -621,7 +621,7 @@ listCatDef id pos cont size = [catd,nilfund,consfund]
     baseId = mkBaseId id
     consId = mkConsId id
 
-    catd     = (listId, pos, AbsCat (Just cont')   (Just [Cn baseId,Cn consId]))
+    catd     = (listId, pos, AbsCat (Just cont'))
     nilfund  = (baseId, pos, AbsFun (Just niltyp)  Nothing Nothing)
     consfund = (consId, pos, AbsFun (Just constyp) Nothing Nothing)
 
@@ -679,7 +679,7 @@ type SrcSpan = (Posn,Posn)
 
 checkInfoType MTAbstract       (id,pos,info) =
   case info of
-    AbsCat _ _   -> return ()
+    AbsCat _     -> return ()
     AbsFun _ _ _ -> return ()
     _            -> failLoc (fst pos) "illegal definition in abstract module" 
 checkInfoType MTResource       (id,pos,info) =

@@ -25,7 +25,7 @@ import GF.Grammar.Values
 import GF.Grammar.Grammar
 
 import Text.PrettyPrint
-import Data.Maybe (maybe)
+import Data.Maybe (maybe, isNothing)
 import Data.List  (intersperse)
 import qualified Data.Map as Map
 
@@ -71,17 +71,14 @@ ppOptions opts =
   text "flags" $$
   nest 2 (vcat [text option <+> equals <+> str value <+> semi | (option,value) <- optionsGFO opts])
 
-ppJudgement q (id, AbsCat pcont pconstrs) =
+ppJudgement q (id, AbsCat pcont ) =
   text "cat" <+> ppIdent id <+>
   (case pcont of
      Just cont -> hsep (map (ppDecl q) cont)
-     Nothing   -> empty) <+> semi $$
-  case pconstrs of
-    Just costrs -> text "data" <+> ppIdent id <+> equals <+> fsep (intersperse (char '|') (map (ppTerm q 0) costrs)) <+> semi
-    Nothing     -> empty
+     Nothing   -> empty) <+> semi
 ppJudgement q (id, AbsFun ptype _ pexp) =
   (case ptype of
-     Just typ   -> text "fun" <+> ppIdent id <+> colon <+> ppTerm q 0 typ <+> semi
+     Just typ   -> text (if isNothing pexp then "data" else "fun") <+> ppIdent id <+> colon <+> ppTerm q 0 typ <+> semi
      Nothing    -> empty) $$
   (case pexp of
      Just []  -> empty
