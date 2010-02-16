@@ -25,7 +25,7 @@ ppAbs name a = text "abstract" <+> ppCId name <+> char '{' $$
                char '}'
 
 ppCat :: CId -> [Hypo] -> Doc
-ppCat c hyps = text "cat" <+> ppCId c <+> hsep (snd (mapAccumL ppHypo [] hyps))
+ppCat c hyps = text "cat" <+> ppCId c <+> hsep (snd (mapAccumL (ppHypo 4) [] hyps))
 
 ppFun :: CId -> (Type,Int,Maybe [Equation]) -> Doc
 ppFun f (t,_,Just eqs) = text "fun" <+> ppCId f <+> colon <+> ppType 0 [] t $$
