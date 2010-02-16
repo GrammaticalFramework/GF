@@ -87,7 +87,7 @@ instance Binary Options where
              Bad msg -> fail msg
 
 instance Binary Info where
-  put (AbsCat x y)     = putWord8 0 >> put (x,y)
+  put (AbsCat x)       = putWord8 0 >> put x
   put (AbsFun x y z)   = putWord8 1 >> put (x,y,z)
   put (ResParam x y)   = putWord8 2 >> put (x,y)
   put (ResValue x)     = putWord8 3 >> put x
@@ -98,7 +98,7 @@ instance Binary Info where
   put (AnyInd x y)     = putWord8 8 >> put (x,y)
   get = do tag <- getWord8
            case tag of
-             0 -> get >>= \(x,y)   -> return (AbsCat x y)
+             0 -> get >>= \x       -> return (AbsCat x)
              1 -> get >>= \(x,y,z) -> return (AbsFun x y z)
              2 -> get >>= \(x,y)   -> return (ResParam x y)
              3 -> get >>= \x       -> return (ResValue x)

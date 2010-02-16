@@ -99,9 +99,9 @@ cf2grammar rules = (buildTree abs, buildTree conc, cat) where
   cat   = case rules of
             (_,(c,_)):_ -> c  -- the value category of the first rule
             _ -> error "empty CF" 
-  cats  = [(cat, AbsCat (Just []) (Just [])) | 
+  cats  = [(cat, AbsCat (Just [])) | 
              cat <- nub (concat (map cf2cat rules))] ----notPredef cat
-  lincats = [(cat, CncCat (Just defLinType) Nothing Nothing) | (cat,AbsCat _ _) <- cats]
+  lincats = [(cat, CncCat (Just defLinType) Nothing Nothing) | (cat,AbsCat _) <- cats]
   (funs,lins) = unzip (map cf2rule rules)
 
 cf2cat :: CFRule -> [Ident]

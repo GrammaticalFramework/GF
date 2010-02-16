@@ -121,7 +121,7 @@ checkCompleteGrammar gr (am,abs) (cm,cnc) = do
                                                      return $ updateTree (c,CncFun (Just linty) (Just def) Nothing) js
                                         Bad _  -> do checkWarn $ text "no linearization of" <+> ppIdent c
                                                      return js
-       AbsCat (Just _) _ -> case lookupIdent c js of
+       AbsCat (Just _) -> case lookupIdent c js of
          Ok (AnyInd _ _) -> return js
          Ok (CncCat (Just _) _ _) -> return js
          Ok (CncCat _ mt mp) -> do
@@ -156,7 +156,7 @@ checkInfo :: [SourceModule] -> SourceModule -> Ident -> Info -> Check Info
 checkInfo ms (m,mo) c info = do
   checkReservedId c
   case info of
-    AbsCat (Just cont) _ -> mkCheck "category" $ 
+    AbsCat (Just cont) -> mkCheck "category" $ 
       checkContext gr cont
 
     AbsFun (Just typ0) ma md -> do

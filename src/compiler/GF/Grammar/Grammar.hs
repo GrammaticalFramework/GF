@@ -75,7 +75,7 @@ mapSourceModule f (i,mi) = (i, f mi)
 -- and indirection to module (/INDIR/)
 data Info =
 -- judgements in abstract syntax
-   AbsCat   (Maybe Context) (Maybe [Term])               -- ^ (/ABS/) the second parameter is list of constructors - must be 'Id' or 'QId'
+   AbsCat   (Maybe Context)
  | AbsFun   (Maybe Type) (Maybe Int) (Maybe [Equation])  -- ^ (/ABS/) type, arrity and definition of function
 
 -- judgements in resource

@@ -169,8 +169,8 @@ extendMod gr isCompl (name,cond) base old new = foldM try new $ Map.toList old
 
 unifyAnyInfo :: Ident -> Info -> Info -> Err Info
 unifyAnyInfo m i j = case (i,j) of
-  (AbsCat mc1 mf1, AbsCat mc2 mf2) -> 
-    liftM2 AbsCat (unifMaybe mc1 mc2) (unifConstrs mf1 mf2) -- adding constrs
+  (AbsCat mc1, AbsCat mc2) -> 
+    liftM AbsCat (unifMaybe mc1 mc2)
   (AbsFun mt1 ma1 md1, AbsFun mt2 ma2 md2) -> 
     liftM3 AbsFun (unifMaybe mt1 mt2) (unifAbsArrity ma1 ma2) (unifAbsDefs md1 md2) -- adding defs
 
