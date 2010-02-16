@@ -306,7 +306,7 @@ browse pgf id = fmap (\def -> (def,producers,consumers)) definition
                                                                                       in ppCId id <+> hsep ds <+> char '=' <+> ppExpr 0 scope res | Equ patts res <- eqs])
                    Just (ty,_,Nothing ) -> Just $ render (text "data" <+> ppCId id <+> colon <+> ppType 0 [] ty)
                    Nothing   -> case Map.lookup id (cats (abstract pgf)) of
-                                  Just hyps -> Just $ render (text "cat" <+> ppCId id <+> hsep (snd (mapAccumL ppHypo [] hyps)))
+                                  Just hyps -> Just $ render (text "cat" <+> ppCId id <+> hsep (snd (mapAccumL (ppHypo 4) [] hyps)))
                                   Nothing   -> Nothing
 
     (producers,consumers) = Map.foldWithKey accum ([],[]) (funs (abstract pgf))
