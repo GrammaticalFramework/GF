@@ -87,11 +87,13 @@ pType = do
 
 ppType :: Int -> [CId] -> Type -> PP.Doc
 ppType d scope (DTyp hyps cat args)
-  | null hyps = ppParens (d > 3) (ppRes scope cat args)
+  | null hyps = ppRes scope cat args
   | otherwise = let (scope',hdocs) = mapAccumL (ppHypo 1) scope hyps
                 in ppParens (d > 0) (foldr (\hdoc doc -> hdoc PP.<+> PP.text "->" PP.<+> doc) (ppRes scope' cat args) hdocs)
   where
-    ppRes scope cat es = ppCId cat PP.<+> PP.hsep (map (ppExpr 4 scope) es)
+    ppRes scope cat es
+      | null es   = ppCId cat
+      | otherwise = ppParens (d > 3) (ppCId cat PP.<+> PP.hsep (map (ppExpr 4 scope) es))
 
 ppHypo :: Int -> [CId] -> (BindType,CId,Type) -> ([CId],PP.Doc)
 ppHypo d scope (Explicit,x,typ) = if x == wildCId
