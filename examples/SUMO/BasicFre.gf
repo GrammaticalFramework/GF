@@ -13,7 +13,7 @@ lincat
  Formula = PolSentence;
  [El] = {s1,s2 : Case => Str ; a : Agr};
  [Class] = {s1,s2 : Number => Str ; g : Gender};
- Stmt = SS;
+ Stmt = StmtS;
 
  lin 
 BaseClass = {s1,s2 = \\_ => "";   
