@@ -1,0 +1,8 @@
+
+subRelation2El ? ? ? ? (\x,y -> dependentGeopoliticalArea x y) (\x,y -> claimedTerritory x y)
+
+subRelation2El ? ? ? ? (\x,y -> waterDepth x y) (\x,y -> length x y)
+
+subRelation2El ? ? ? ? (\x,y -> streamOutfall x y) (\x,y -> properPart x y)
+
+subRelation2El ? ? ? ? (\x,y -> airTemperature x y) (\x,y -> measure x y)

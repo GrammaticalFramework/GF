@@ -1,0 +1,4 @@
+
+subRelation2El ? ? ? ? (\x,y -> economyType x y) (\x,y -> attribute x y)
+
+subRelation2El ? ? ? ? (\x,y -> currencyCode x y) (\x,y -> abbreviation x y)

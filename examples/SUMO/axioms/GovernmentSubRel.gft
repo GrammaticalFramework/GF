@@ -1,0 +1,24 @@
+
+subRelation2El ? ? ? ? (\x,y -> conventionalLongName x y) (\x,y -> names x y)
+
+subRelation2El ? ? ? ? (\x,y -> conventionalShortName x y) (\x,y -> names x y)
+
+subRelation2El ? ? ? ? (\x,y -> abbreviation x y) (\x,y -> conventionalShortName x y)
+
+subRelation2El ? ? ? ? (\x,y -> governmentType x y) (\x,y -> attribute x y)
+
+subRelation2El ? ? ? ? (\x,y -> capitalCity x y) (\x,y -> administrativeCenter x y)
+
+subRelation2El ? ? ? ? (\x,y -> administrativeCenter x y) (\x,y -> geopoliticalSubdivision x y)
+
+subRelation2El ? ? ? ? (\x,y -> primaryGeopoliticalSubdivision x y) (\x,y -> geopoliticalSubdivision x y)
+
+subRelation2El ? ? ? ? (\x,y -> chamberOfLegislature x y) (\x,y -> subOrganization x y)
+
+subRelation2El ? ? ? ? (\x,y -> politicalPartyOfCountry x y) (\x,y -> agentOperatesInArea x y)
+
+subRelation2El ? ? ? ? (\x,y -> agentOperatesInArea x y) (\x,y -> partlyLocated x y)
+
+subRelation2El ? ? ? ? (\x,y -> member x y) (\x,y -> associateInOrganization x y)
+
+subRelation2El ? ? ? ? (\x,y -> organizationalObjective x y) (\x,y -> attribute x y)

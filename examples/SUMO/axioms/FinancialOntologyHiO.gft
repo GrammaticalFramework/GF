@@ -1,0 +1,4 @@
+
+IrreflexiveRelation ? (\x,y -> customer x y)
+
+AsymmetricRelation ? (\x,y -> customer x y)

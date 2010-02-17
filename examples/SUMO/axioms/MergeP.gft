@@ -1,0 +1,9 @@
+
+equal (el ? ? ? (MeasureFn (el ? ? ? (toInt 0)) (el ? ? ? AngularDegree))) (el ? ? ? (MeasureFn (el ? ? ? (toInt 360)) (el ? ? ? AngularDegree)))
+
+typicalPart (desc VocalCords ? ?) (desc Human ? ?)
+
+typicallyContainsPart (desc VocalCords ? ?) (desc Human ? ?)
+
+initialPart (desc VocalCords ? ?) (desc Human ? ?)
+

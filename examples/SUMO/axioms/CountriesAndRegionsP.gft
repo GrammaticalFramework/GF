@@ -1,0 +1,2274 @@
+
+part (el ? ? ? NewEngland) (el ? ? ? UnitedStates)
+
+meetsSpatially (el ? ? ? Europe) (el ? ? ? Asia)
+
+part (el ? ? ? Paris) (el ? ? ? France)
+
+capitalCity (el ? ? ? LondonUnitedKingdom) (el ? ? ? UnitedKingdom)
+
+geographicSubregion (el ? ? ? Burundi) (el ? ? ? CentralAfrica)
+
+geographicSubregion (el ? ? ? CentralAfricanRepublic) (el ? ? ? CentralAfrica)
+
+geographicSubregion (el ? ? ? Chad) (el ? ? ? CentralAfrica)
+
+geographicSubregion (el ? ? ? DemocraticRepublicOfTheCongo) (el ? ? ? CentralAfrica)
+
+geographicSubregion (el ? ? ? Rwanda) (el ? ? ? CentralAfrica)
+
+geographicSubregion (el ? ? ? Djibouti) (el ? ? ? EasternAfrica)
+
+geographicSubregion (el ? ? ? Eritrea) (el ? ? ? EasternAfrica)
+
+geographicSubregion (el ? ? ? Ethiopia) (el ? ? ? EasternAfrica)
+
+geographicSubregion (el ? ? ? Kenya) (el ? ? ? EasternAfrica)
+
+geographicSubregion (el ? ? ? Seychelles) (el ? ? ? EasternAfrica)
+
+geographicSubregion (el ? ? ? Somalia) (el ? ? ? EasternAfrica)
+
+geographicSubregion (el ? ? ? Tanzania) (el ? ? ? EasternAfrica)
+
+geographicSubregion (el ? ? ? Uganda) (el ? ? ? EasternAfrica)
+
+geographicSubregion (el ? ? ? Algeria) (el ? ? ? NorthernAfrica)
+
+geographicSubregion (el ? ? ? Egypt) (el ? ? ? NorthernAfrica)
+
+geographicSubregion (el ? ? ? Libya) (el ? ? ? NorthernAfrica)
+
+geographicSubregion (el ? ? ? Mauritania) (el ? ? ? NorthernAfrica)
+
+geographicSubregion (el ? ? ? Morocco) (el ? ? ? NorthernAfrica)
+
+part (el ? ? ? Morocco) (el ? ? ? Africa)
+
+geographicSubregion (el ? ? ? Sudan) (el ? ? ? NorthernAfrica)
+
+geographicSubregion (el ? ? ? Tunisia) (el ? ? ? NorthernAfrica)
+
+geographicSubregion (el ? ? ? WesternSahara) (el ? ? ? NorthernAfrica)
+
+meetsSpatially (el ? ? ? BassasDaIndia) (el ? ? ? IndianOcean)
+
+meetsSpatially (el ? ? ? BouvetIsland) (el ? ? ? SouthAtlanticOcean)
+
+meetsSpatially (el ? ? ? EuropaIsland) (el ? ? ? IndianOcean)
+
+meetsSpatially (el ? ? ? GloriosoIslands) (el ? ? ? IndianOcean)
+
+meetsSpatially (el ? ? ? HeardIslandAndMcDonaldIslands) (el ? ? ? IndianOcean)
+
+meetsSpatially (el ? ? ? JuanDeNovaIsland) (el ? ? ? IndianOcean)
+
+meetsSpatially (el ? ? ? Mayotte) (el ? ? ? IndianOcean)
+
+meetsSpatially (el ? ? ? TromelinIsland) (el ? ? ? IndianOcean)
+
+geographicSubregion (el ? ? ? Angola) (el ? ? ? SouthernAfrica)
+
+geographicSubregion (el ? ? ? BassasDaIndia) (el ? ? ? SouthernAfrica)
+
+geographicSubregion (el ? ? ? Botswana) (el ? ? ? SouthernAfrica)
+
+geographicSubregion (el ? ? ? BouvetIsland) (el ? ? ? SouthernAfrica)
+
+geographicSubregion (el ? ? ? Comoros) (el ? ? ? SouthernAfrica)
+
+geographicSubregion (el ? ? ? EuropaIsland) (el ? ? ? SouthernAfrica)
+
+geographicSubregion (el ? ? ? GloriosoIslands) (el ? ? ? SouthernAfrica)
+
+geographicSubregion (el ? ? ? HeardIslandAndMcDonaldIslands) (el ? ? ? SouthernAfrica)
+
+geographicSubregion (el ? ? ? JuanDeNovaIsland) (el ? ? ? SouthernAfrica)
+
+geographicSubregion (el ? ? ? Lesotho) (el ? ? ? SouthernAfrica)
+
+geographicSubregion (el ? ? ? Madagascar) (el ? ? ? SouthernAfrica)
+
+geographicSubregion (el ? ? ? Malawi) (el ? ? ? SouthernAfrica)
+
+geographicSubregion (el ? ? ? Mauritius) (el ? ? ? SouthernAfrica)
+
+geographicSubregion (el ? ? ? Mayotte) (el ? ? ? SouthernAfrica)
+
+geographicSubregion (el ? ? ? Mozambique) (el ? ? ? SouthernAfrica)
+
+geographicSubregion (el ? ? ? Namibia) (el ? ? ? SouthernAfrica)
+
+geographicSubregion (el ? ? ? Reunion) (el ? ? ? SouthernAfrica)
+
+geographicSubregion (el ? ? ? SouthAfrica) (el ? ? ? SouthernAfrica)
+
+geographicSubregion (el ? ? ? Swaziland) (el ? ? ? SouthernAfrica)
+
+geographicSubregion (el ? ? ? TromelinIsland) (el ? ? ? SouthernAfrica)
+
+geographicSubregion (el ? ? ? Zambia) (el ? ? ? SouthernAfrica)
+
+geographicSubregion (el ? ? ? Zimbabwe) (el ? ? ? SouthernAfrica)
+
+geographicSubregion (el ? ? ? Benin) (el ? ? ? WesternAfrica)
+
+geographicSubregion (el ? ? ? BurkinaFaso) (el ? ? ? WesternAfrica)
+
+geographicSubregion (el ? ? ? Cameroon) (el ? ? ? WesternAfrica)
+
+geographicSubregion (el ? ? ? CapeVerde) (el ? ? ? WesternAfrica)
+
+geographicSubregion (el ? ? ? CoteDIvoire) (el ? ? ? WesternAfrica)
+
+geographicSubregion (el ? ? ? EquatorialGuinea) (el ? ? ? WesternAfrica)
+
+geographicSubregion (el ? ? ? Gabon) (el ? ? ? WesternAfrica)
+
+geographicSubregion (el ? ? ? Gambia) (el ? ? ? WesternAfrica)
+
+geographicSubregion (el ? ? ? Ghana) (el ? ? ? WesternAfrica)
+
+geographicSubregion (el ? ? ? Guinea) (el ? ? ? WesternAfrica)
+
+geographicSubregion (el ? ? ? GuineaBissau) (el ? ? ? WesternAfrica)
+
+geographicSubregion (el ? ? ? Liberia) (el ? ? ? WesternAfrica)
+
+geographicSubregion (el ? ? ? Mali) (el ? ? ? WesternAfrica)
+
+geographicSubregion (el ? ? ? Niger) (el ? ? ? WesternAfrica)
+
+geographicSubregion (el ? ? ? Nigeria) (el ? ? ? WesternAfrica)
+
+geographicSubregion (el ? ? ? SaoTomeAndPrincipe) (el ? ? ? WesternAfrica)
+
+geographicSubregion (el ? ? ? Senegal) (el ? ? ? WesternAfrica)
+
+geographicSubregion (el ? ? ? SierraLeone) (el ? ? ? WesternAfrica)
+
+geographicSubregion (el ? ? ? Togo) (el ? ? ? WesternAfrica)
+
+located (el ? ? ? SaintHelena) (el ? ? ? SouthAtlanticOcean)
+
+between (el ? ? ? SouthAmerica) (el ? ? ? SaintHelena) (el ? ? ? WesternAfrica)
+
+geographicSubregion (el ? ? ? Bahrain) (el ? ? ? MiddleEastRegion)
+
+geographicSubregion (el ? ? ? Cyprus) (el ? ? ? MiddleEastRegion)
+
+geographicSubregion (el ? ? ? GazaStrip) (el ? ? ? MiddleEastRegion)
+
+geographicSubregion (el ? ? ? Iran) (el ? ? ? MiddleEastRegion)
+
+geographicSubregion (el ? ? ? Iraq) (el ? ? ? MiddleEastRegion)
+
+geographicSubregion (el ? ? ? Israel) (el ? ? ? MiddleEastRegion)
+
+geographicSubregion (el ? ? ? Jordan) (el ? ? ? MiddleEastRegion)
+
+geographicSubregion (el ? ? ? Kuwait) (el ? ? ? MiddleEastRegion)
+
+geographicSubregion (el ? ? ? Lebanon) (el ? ? ? MiddleEastRegion)
+
+geographicSubregion (el ? ? ? Oman) (el ? ? ? MiddleEastRegion)
+
+geographicSubregion (el ? ? ? Qatar) (el ? ? ? MiddleEastRegion)
+
+geographicSubregion (el ? ? ? SaudiArabia) (el ? ? ? MiddleEastRegion)
+
+geographicSubregion (el ? ? ? Syria) (el ? ? ? MiddleEastRegion)
+
+geographicSubregion (el ? ? ? UnitedArabEmirates) (el ? ? ? MiddleEastRegion)
+
+geographicSubregion (el ? ? ? WestBank) (el ? ? ? MiddleEastRegion)
+
+geographicSubregion (el ? ? ? Yemen) (el ? ? ? MiddleEastRegion)
+
+geographicSubregion (el ? ? ? Austria) (el ? ? ? CentralEurope)
+
+geographicSubregion (el ? ? ? CzechRepublic) (el ? ? ? CentralEurope)
+
+geographicSubregion (el ? ? ? Germany) (el ? ? ? CentralEurope)
+
+geographicSubregion (el ? ? ? Hungary) (el ? ? ? CentralEurope)
+
+geographicSubregion (el ? ? ? Liechtenstein) (el ? ? ? CentralEurope)
+
+geographicSubregion (el ? ? ? Poland) (el ? ? ? CentralEurope)
+
+geographicSubregion (el ? ? ? Slovakia) (el ? ? ? CentralEurope)
+
+geographicSubregion (el ? ? ? Slovenia) (el ? ? ? CentralEurope)
+
+geographicSubregion (el ? ? ? Switzerland) (el ? ? ? CentralEurope)
+
+geographicSubregion (el ? ? ? Belarus) (el ? ? ? EasternEurope)
+
+geographicSubregion (el ? ? ? Estonia) (el ? ? ? EasternEurope)
+
+geographicSubregion (el ? ? ? Latvia) (el ? ? ? EasternEurope)
+
+geographicSubregion (el ? ? ? Lithuania) (el ? ? ? EasternEurope)
+
+geographicSubregion (el ? ? ? Moldova) (el ? ? ? EasternEurope)
+
+geographicSubregion (el ? ? ? Ukraine) (el ? ? ? EasternEurope)
+
+geographicSubregion (el ? ? ? Denmark) (el ? ? ? NorthernEurope)
+
+geographicSubregion (el ? ? ? FaroeIslands) (el ? ? ? NorthernEurope)
+
+geographicSubregion (el ? ? ? Finland) (el ? ? ? NorthernEurope)
+
+geographicSubregion (el ? ? ? Iceland) (el ? ? ? NorthernEurope)
+
+geographicSubregion (el ? ? ? JanMayenIsland) (el ? ? ? NorthernEurope)
+
+geographicSubregion (el ? ? ? Norway) (el ? ? ? NorthernEurope)
+
+geographicSubregion (el ? ? ? Svalbard) (el ? ? ? NorthernEurope)
+
+geographicSubregion (el ? ? ? Sweden) (el ? ? ? NorthernEurope)
+
+geographicSubregion (el ? ? ? Greece) (el ? ? ? SouthernEurope)
+
+geographicSubregion (el ? ? ? HolySee) (el ? ? ? SouthernEurope)
+
+geographicSubregion (el ? ? ? Italy) (el ? ? ? SouthernEurope)
+
+geographicSubregion (el ? ? ? Malta) (el ? ? ? SouthernEurope)
+
+geographicSubregion (el ? ? ? SanMarino) (el ? ? ? SouthernEurope)
+
+geographicSubregion (el ? ? ? Belgium) (el ? ? ? WesternEurope)
+
+geographicSubregion (el ? ? ? France) (el ? ? ? WesternEurope)
+
+geographicSubregion (el ? ? ? Guernsey) (el ? ? ? WesternEurope)
+
+geographicSubregion (el ? ? ? Ireland) (el ? ? ? WesternEurope)
+
+geographicSubregion (el ? ? ? Jersey) (el ? ? ? WesternEurope)
+
+geographicSubregion (el ? ? ? Luxembourg) (el ? ? ? WesternEurope)
+
+geographicSubregion (el ? ? ? IsleOfMan) (el ? ? ? WesternEurope)
+
+geographicSubregion (el ? ? ? Monaco) (el ? ? ? WesternEurope)
+
+geographicSubregion (el ? ? ? Netherlands) (el ? ? ? WesternEurope)
+
+geographicSubregion (el ? ? ? UnitedKingdom) (el ? ? ? WesternEurope)
+
+geographicSubregion (el ? ? ? Albania) (el ? ? ? SoutheasternEurope)
+
+geographicSubregion (el ? ? ? BosniaAndHerzegovina) (el ? ? ? SoutheasternEurope)
+
+geographicSubregion (el ? ? ? Bulgaria) (el ? ? ? SoutheasternEurope)
+
+geographicSubregion (el ? ? ? Croatia) (el ? ? ? SoutheasternEurope)
+
+geographicSubregion (el ? ? ? Macedonia) (el ? ? ? SoutheasternEurope)
+
+geographicSubregion (el ? ? ? Romania) (el ? ? ? SoutheasternEurope)
+
+geographicSubregion (el ? ? ? Turkey) (el ? ? ? SoutheasternEurope)
+
+geographicSubregion (el ? ? ? SerbiaAndMontenegro) (el ? ? ? SoutheasternEurope)
+
+geographicSubregion (el ? ? ? Andorra) (el ? ? ? SouthwesternEurope)
+
+geographicSubregion (el ? ? ? Gibraltar) (el ? ? ? SouthwesternEurope)
+
+geographicSubregion (el ? ? ? Portugal) (el ? ? ? SouthwesternEurope)
+
+geographicSubregion (el ? ? ? Spain) (el ? ? ? SouthwesternEurope)
+
+geographicSubregion (el ? ? ? Bermuda) (el ? ? ? NorthAmerica)
+
+geographicSubregion (el ? ? ? UnitedStates) (el ? ? ? NorthAmerica)
+
+geographicSubregion (el ? ? ? Canada) (el ? ? ? NorthernNorthAmerica)
+
+meetsSpatially (el ? ? ? Canada) (el ? ? ? UnitedStates)
+
+geographicSubregion (el ? ? ? Greenland) (el ? ? ? NorthernNorthAmerica)
+
+geographicSubregion (el ? ? ? SaintPierreAndMiquelon) (el ? ? ? NorthernNorthAmerica)
+
+geographicSubregion (el ? ? ? Anguilla) (el ? ? ? CaribbeanRegion)
+
+geographicSubregion (el ? ? ? AntiguaAndBarbuda) (el ? ? ? CaribbeanRegion)
+
+geographicSubregion (el ? ? ? Aruba) (el ? ? ? CaribbeanRegion)
+
+geographicSubregion (el ? ? ? TheBahamas) (el ? ? ? CaribbeanRegion)
+
+geographicSubregion (el ? ? ? Barbados) (el ? ? ? CaribbeanRegion)
+
+geographicSubregion (el ? ? ? BritishVirginIslands) (el ? ? ? CaribbeanRegion)
+
+geographicSubregion (el ? ? ? CaymanIslands) (el ? ? ? CaribbeanRegion)
+
+geographicSubregion (el ? ? ? Cuba) (el ? ? ? CaribbeanRegion)
+
+geographicSubregion (el ? ? ? Dominica) (el ? ? ? CaribbeanRegion)
+
+geographicSubregion (el ? ? ? DominicanRepublic) (el ? ? ? CaribbeanRegion)
+
+geographicSubregion (el ? ? ? Grenada) (el ? ? ? CaribbeanRegion)
+
+geographicSubregion (el ? ? ? Guadeloupe) (el ? ? ? CaribbeanRegion)
+
+geographicSubregion (el ? ? ? Haiti) (el ? ? ? CaribbeanRegion)
+
+geographicSubregion (el ? ? ? Jamaica) (el ? ? ? CaribbeanRegion)
+
+geographicSubregion (el ? ? ? Martinique) (el ? ? ? CaribbeanRegion)
+
+geographicSubregion (el ? ? ? Montserrat) (el ? ? ? CaribbeanRegion)
+
+geographicSubregion (el ? ? ? NavassaIsland) (el ? ? ? CaribbeanRegion)
+
+geographicSubregion (el ? ? ? NetherlandsAntilles) (el ? ? ? CaribbeanRegion)
+
+geographicSubregion (el ? ? ? PuertoRico) (el ? ? ? CaribbeanRegion)
+
+geographicSubregion (el ? ? ? SaintKittsAndNevis) (el ? ? ? CaribbeanRegion)
+
+geographicSubregion (el ? ? ? SaintLucia) (el ? ? ? CaribbeanRegion)
+
+geographicSubregion (el ? ? ? SaintVincentAndTheGrenadines) (el ? ? ? CaribbeanRegion)
+
+geographicSubregion (el ? ? ? TrinidadAndTobago) (el ? ? ? CaribbeanRegion)
+
+geographicSubregion (el ? ? ? TurksAndCaicosIslands) (el ? ? ? CaribbeanRegion)
+
+geographicSubregion (el ? ? ? VirginIslands) (el ? ? ? CaribbeanRegion)
+
+geographicSubregion (el ? ? ? Belize) (el ? ? ? MiddleAmerica)
+
+geographicSubregion (el ? ? ? ClippertonIsland) (el ? ? ? MiddleAmerica)
+
+geographicSubregion (el ? ? ? CostaRica) (el ? ? ? MiddleAmerica)
+
+geographicSubregion (el ? ? ? ElSalvador) (el ? ? ? MiddleAmerica)
+
+geographicSubregion (el ? ? ? Guatemala) (el ? ? ? MiddleAmerica)
+
+geographicSubregion (el ? ? ? Honduras) (el ? ? ? MiddleAmerica)
+
+geographicSubregion (el ? ? ? Mexico) (el ? ? ? MiddleAmerica)
+
+geographicSubregion (el ? ? ? Nicaragua) (el ? ? ? MiddleAmerica)
+
+geographicSubregion (el ? ? ? Panama) (el ? ? ? MiddleAmerica)
+
+geographicSubregion (el ? ? ? Bolivia) (el ? ? ? CentralSouthAmerica)
+
+geographicSubregion (el ? ? ? Paraguay) (el ? ? ? CentralSouthAmerica)
+
+geographicSubregion (el ? ? ? Brazil) (el ? ? ? EasternSouthAmerica)
+
+geographicSubregion (el ? ? ? Colombia) (el ? ? ? NorthernSouthAmerica)
+
+geographicSubregion (el ? ? ? FrenchGuiana) (el ? ? ? NorthernSouthAmerica)
+
+geographicSubregion (el ? ? ? Guyana) (el ? ? ? NorthernSouthAmerica)
+
+geographicSubregion (el ? ? ? Suriname) (el ? ? ? NorthernSouthAmerica)
+
+geographicSubregion (el ? ? ? Venezuela) (el ? ? ? NorthernSouthAmerica)
+
+geographicSubregion (el ? ? ? Argentina) (el ? ? ? SouthernSouthAmerica)
+
+geographicSubregion (el ? ? ? Chile) (el ? ? ? SouthernSouthAmerica)
+
+geographicSubregion (el ? ? ? FalklandIslands) (el ? ? ? SouthernSouthAmerica)
+
+geographicSubregion (el ? ? ? SouthGeorgiaAndTheSouthSandwichIslands) (el ? ? ? SouthernSouthAmerica)
+
+geographicSubregion (el ? ? ? Uruguay) (el ? ? ? SouthernSouthAmerica)
+
+geographicSubregion (el ? ? ? Ecuador) (el ? ? ? WesternSouthAmerica)
+
+geographicSubregion (el ? ? ? Peru) (el ? ? ? WesternSouthAmerica)
+
+geographicSubregion (el ? ? ? Kazakhstan) (el ? ? ? CentralAsia)
+
+geographicSubregion (el ? ? ? Kyrgyzstan) (el ? ? ? CentralAsia)
+
+geographicSubregion (el ? ? ? Tajikistan) (el ? ? ? CentralAsia)
+
+geographicSubregion (el ? ? ? Turkmenistan) (el ? ? ? CentralAsia)
+
+geographicSubregion (el ? ? ? Uzbekistan) (el ? ? ? CentralAsia)
+
+geographicSubregion (el ? ? ? China) (el ? ? ? EasternAsia)
+
+geographicSubregion (el ? ? ? HongKong) (el ? ? ? EasternAsia)
+
+geographicSubregion (el ? ? ? Japan) (el ? ? ? EasternAsia)
+
+geographicSubregion (el ? ? ? NorthKorea) (el ? ? ? EasternAsia)
+
+geographicSubregion (el ? ? ? SouthKorea) (el ? ? ? EasternAsia)
+
+geographicSubregion (el ? ? ? Macau) (el ? ? ? EasternAsia)
+
+geographicSubregion (el ? ? ? Taiwan) (el ? ? ? EasternAsia)
+
+geographicSubregion (el ? ? ? Mongolia) (el ? ? ? NorthernAsia)
+
+geographicSubregion (el ? ? ? Russia) (el ? ? ? NorthernAsia)
+
+geographicSubregion (el ? ? ? Afghanistan) (el ? ? ? SouthernAsia)
+
+geographicSubregion (el ? ? ? Bangladesh) (el ? ? ? SouthernAsia)
+
+geographicSubregion (el ? ? ? Bhutan) (el ? ? ? SouthernAsia)
+
+geographicSubregion (el ? ? ? BritishIndianOceanTerritory) (el ? ? ? SouthernAsia)
+
+geographicSubregion (el ? ? ? India) (el ? ? ? SouthernAsia)
+
+geographicSubregion (el ? ? ? Maldives) (el ? ? ? SouthernAsia)
+
+geographicSubregion (el ? ? ? Nepal) (el ? ? ? SouthernAsia)
+
+geographicSubregion (el ? ? ? Pakistan) (el ? ? ? SouthernAsia)
+
+geographicSubregion (el ? ? ? SriLanka) (el ? ? ? SouthernAsia)
+
+located (el ? ? ? FrenchSouthernAndAntarcticLands) (el ? ? ? IndianOcean)
+
+located (el ? ? ? FrenchSouthernAndAntarcticLands) (el ? ? ? (DirectionalSubregionFn (el ? ? ? South) (el ? ? ? IndianOcean)))
+
+geographicSubregion (el ? ? ? AshmoreAndCartierIslands) (el ? ? ? SoutheasternAsia)
+
+geographicSubregion (el ? ? ? Brunei) (el ? ? ? SoutheasternAsia)
+
+geographicSubregion (el ? ? ? Myanmar) (el ? ? ? SoutheasternAsia)
+
+geographicSubregion (el ? ? ? Cambodia) (el ? ? ? SoutheasternAsia)
+
+geographicSubregion (el ? ? ? ChristmasIsland) (el ? ? ? SoutheasternAsia)
+
+geographicSubregion (el ? ? ? CocosKeelingIslands) (el ? ? ? SoutheasternAsia)
+
+geographicSubregion (el ? ? ? EastTimor) (el ? ? ? SoutheasternAsia)
+
+geographicSubregion (el ? ? ? Indonesia) (el ? ? ? SoutheasternAsia)
+
+geographicSubregion (el ? ? ? Laos) (el ? ? ? SoutheasternAsia)
+
+geographicSubregion (el ? ? ? Malaysia) (el ? ? ? SoutheasternAsia)
+
+geographicSubregion (el ? ? ? PapuaNewGuinea) (el ? ? ? SoutheasternAsia)
+
+geographicSubregion (el ? ? ? ParacelIslands) (el ? ? ? SoutheasternAsia)
+
+geographicSubregion (el ? ? ? Philippines) (el ? ? ? SoutheasternAsia)
+
+geographicSubregion (el ? ? ? Singapore) (el ? ? ? SoutheasternAsia)
+
+geographicSubregion (el ? ? ? SpratlyIslands) (el ? ? ? SoutheasternAsia)
+
+geographicSubregion (el ? ? ? Thailand) (el ? ? ? SoutheasternAsia)
+
+geographicSubregion (el ? ? ? Vietnam) (el ? ? ? SoutheasternAsia)
+
+geographicSubregion (el ? ? ? Armenia) (el ? ? ? SouthwesternAsia)
+
+geographicSubregion (el ? ? ? Azerbaijan) (el ? ? ? SouthwesternAsia)
+
+geographicSubregion (el ? ? ? RepublicOfGeorgia) (el ? ? ? SouthwesternAsia)
+
+geographicSubregion (el ? ? ? AmericanSamoa) (el ? ? ? Oceania)
+
+geographicSubregion (el ? ? ? Australia) (el ? ? ? Oceania)
+
+part (el ? ? ? Australia) (el ? ? ? Oceania)
+
+geographicSubregion (el ? ? ? BakerIsland) (el ? ? ? Oceania)
+
+geographicSubregion (el ? ? ? CookIslands) (el ? ? ? Oceania)
+
+geographicSubregion (el ? ? ? CoralSeaIslands) (el ? ? ? Oceania)
+
+geographicSubregion (el ? ? ? Fiji) (el ? ? ? Oceania)
+
+geographicSubregion (el ? ? ? FrenchPolynesia) (el ? ? ? Oceania)
+
+geographicSubregion (el ? ? ? Guam) (el ? ? ? Oceania)
+
+geographicSubregion (el ? ? ? HowlandIsland) (el ? ? ? Oceania)
+
+geographicSubregion (el ? ? ? JarvisIsland) (el ? ? ? Oceania)
+
+geographicSubregion (el ? ? ? JohnstonAtoll) (el ? ? ? Oceania)
+
+geographicSubregion (el ? ? ? KingmanReef) (el ? ? ? Oceania)
+
+geographicSubregion (el ? ? ? Kiribati) (el ? ? ? Oceania)
+
+geographicSubregion (el ? ? ? MarshallIslands) (el ? ? ? Oceania)
+
+geographicSubregion (el ? ? ? Micronesia) (el ? ? ? Oceania)
+
+geographicSubregion (el ? ? ? MidwayIslands) (el ? ? ? Oceania)
+
+geographicSubregion (el ? ? ? Nauru) (el ? ? ? Oceania)
+
+geographicSubregion (el ? ? ? NewCaledonia) (el ? ? ? Oceania)
+
+geographicSubregion (el ? ? ? NewZealand) (el ? ? ? Oceania)
+
+geographicSubregion (el ? ? ? Niue) (el ? ? ? Oceania)
+
+geographicSubregion (el ? ? ? NorfolkIsland) (el ? ? ? Oceania)
+
+geographicSubregion (el ? ? ? NorthernMarianaIslands) (el ? ? ? Oceania)
+
+geographicSubregion (el ? ? ? Palau) (el ? ? ? Oceania)
+
+geographicSubregion (el ? ? ? PalmyraAtoll) (el ? ? ? Oceania)
+
+geographicSubregion (el ? ? ? PitcairnIslands) (el ? ? ? Oceania)
+
+geographicSubregion (el ? ? ? Samoa) (el ? ? ? Oceania)
+
+geographicSubregion (el ? ? ? SolomonIslands) (el ? ? ? Oceania)
+
+geographicSubregion (el ? ? ? Tokelau) (el ? ? ? Oceania)
+
+geographicSubregion (el ? ? ? Tonga) (el ? ? ? Oceania)
+
+geographicSubregion (el ? ? ? Tuvalu) (el ? ? ? Oceania)
+
+geographicSubregion (el ? ? ? Vanuatu) (el ? ? ? Oceania)
+
+geographicSubregion (el ? ? ? WakeIsland) (el ? ? ? Oceania)
+
+geographicSubregion (el ? ? ? WallisAndFutuna) (el ? ? ? Oceania)
+
+part (el ? ? ? AtlantaGeorgia) (el ? ? ? Georgia)
+
+part (el ? ? ? BaltimoreMaryland) (el ? ? ? Maryland)
+
+capitalCity (el ? ? ? BerlinGermany) (el ? ? ? Germany)
+
+capitalCity (el ? ? ? BernSwitzerland) (el ? ? ? Switzerland)
+
+part (el ? ? ? BostonMassachusetts) (el ? ? ? Massachusetts)
+
+part (el ? ? ? KansasCityMissouri) (el ? ? ? Missouri)
+
+part (el ? ? ? ManchesterNewHampshire) (el ? ? ? NewHampshire)
+
+part (el ? ? ? MemphisTennessee) (el ? ? ? Tennessee)
+
+part (el ? ? ? MinneapolisMinnesota) (el ? ? ? Minnesota)
+
+part (el ? ? ? MississippiRiver) (el ? ? ? UnitedStates)
+
+connected (el ? ? ? MississippiRiver) (el ? ? ? GulfOfMexico)
+
+part (el ? ? ? MontrealCanada) (el ? ? ? Canada)
+
+capitalCity (el ? ? ? MoscowRussia) (el ? ? ? Russia)
+
+part (el ? ? ? NashvilleTennessee) (el ? ? ? Tennessee)
+
+dependentGeopoliticalArea (el ? ? ? Palestine) (el ? ? ? UnitedKingdom)
+
+capitalCity (el ? ? ? ParisFrance) (el ? ? ? France)
+
+part (el ? ? ? PhiladelphiaPennsylvania) (el ? ? ? Pennsylvania)
+
+part (el ? ? ? PittsburghPennsylvania) (el ? ? ? Pennsylvania)
+
+capitalCity (el ? ? ? ProvidenceRhodeIsland) (el ? ? ? RhodeIsland)
+
+capitalCity (el ? ? ? RichmondVirginia) (el ? ? ? Virginia)
+
+capitalCity (el ? ? ? RomeItaly) (el ? ? ? Italy)
+
+part (el ? ? ? SaintLouisMissouri) (el ? ? ? Missouri)
+
+capitalCity (el ? ? ? SaintPaulMinnesota) (el ? ? ? Minnesota)
+
+meetsSpatially (el ? ? ? SaintPaulMinnesota) (el ? ? ? MinneapolisMinnesota)
+
+part (el ? ? ? SanFranciscoCalifornia) (el ? ? ? California)
+
+part (el ? ? ? SavannahGeorgia) (el ? ? ? Georgia)
+
+part (el ? ? ? Scotland) (el ? ? ? UnitedKingdom)
+
+capitalCity (el ? ? ? WarsawPoland) (el ? ? ? Poland)
+
+part (el ? ? ? LongIsland) (el ? ? ? NewYorkState)
+
+part (el ? ? ? LosAngelesCalifornia) (el ? ? ? California)
+
+part (el ? ? ? KoreanPeninsula) (el ? ? ? Asia)
+
+capitalCity (el ? ? ? HonoluluHawaii) (el ? ? ? Hawaii)
+
+part (el ? ? ? HoustonTexas) (el ? ? ? Texas)
+
+part (el ? ? ? HudsonRiver) (el ? ? ? NewYorkState)
+
+part (el ? ? ? FargoNorthDakota) (el ? ? ? NorthDakota)
+
+capitalCity (el ? ? ? DenverColorado) (el ? ? ? Colorado)
+
+part (el ? ? ? DetroitMichigan) (el ? ? ? Michigan)
+
+capitalCity (el ? ? ? CopenhagenDenmark) (el ? ? ? Denmark)
+
+part (el ? ? ? DallasTexas) (el ? ? ? Texas)
+
+part (el ? ? ? ClevelandOhio) (el ? ? ? Ohio)
+
+capitalCity (el ? ? ? ColumbusOhio) (el ? ? ? Ohio)
+
+meetsSpatially (el ? ? ? Alabama) (el ? ? ? Mississippi)
+
+meetsSpatially (el ? ? ? Alaska) (el ? ? ? Canada)
+
+meetsSpatially (el ? ? ? Alaska) (el ? ? ? PacificOcean)
+
+meetsSpatially (el ? ? ? Alaska) (el ? ? ? ArcticOcean)
+
+meetsSpatially (el ? ? ? Arizona) (el ? ? ? Nevada)
+
+meetsSpatially (el ? ? ? Arizona) (el ? ? ? California)
+
+meetsSpatially (el ? ? ? Arizona) (el ? ? ? Mexico)
+
+meetsSpatially (el ? ? ? Arkansas) (el ? ? ? Oklahoma)
+
+meetsSpatially (el ? ? ? Arkansas) (el ? ? ? Texas)
+
+meetsSpatially (el ? ? ? Arkansas) (el ? ? ? Louisiana)
+
+meetsSpatially (el ? ? ? California) (el ? ? ? PacificOcean)
+
+meetsSpatially (el ? ? ? California) (el ? ? ? Mexico)
+
+meetsSpatially (el ? ? ? California) (el ? ? ? NewMexico)
+
+meetsSpatially (el ? ? ? California) (el ? ? ? Oregon)
+
+meetsSpatially (el ? ? ? California) (el ? ? ? Washington)
+
+meetsSpatially (el ? ? ? Colorado) (el ? ? ? Utah)
+
+meetsSpatially (el ? ? ? Colorado) (el ? ? ? Arizona)
+
+meetsSpatially (el ? ? ? Colorado) (el ? ? ? NewMexico)
+
+meetsSpatially (el ? ? ? Colorado) (el ? ? ? Texas)
+
+part (el ? ? ? Connecticut) (el ? ? ? NewEngland)
+
+meetsSpatially (el ? ? ? Delaware) (el ? ? ? NorthAtlanticOcean)
+
+meetsSpatially (el ? ? ? Delaware) (el ? ? ? Maryland)
+
+meetsSpatially (el ? ? ? Delaware) (el ? ? ? Pennsylvania)
+
+meetsSpatially (el ? ? ? Florida) (el ? ? ? NorthAtlanticOcean)
+
+meetsSpatially (el ? ? ? Florida) (el ? ? ? Alabama)
+
+meetsSpatially (el ? ? ? Florida) (el ? ? ? GulfOfMexico)
+
+meetsSpatially (el ? ? ? Georgia) (el ? ? ? NorthAtlanticOcean)
+
+meetsSpatially (el ? ? ? Georgia) (el ? ? ? Florida)
+
+meetsSpatially (el ? ? ? Georgia) (el ? ? ? Alabama)
+
+meetsSpatially (el ? ? ? Hawaii) (el ? ? ? PacificOcean)
+
+meetsSpatially (el ? ? ? Idaho) (el ? ? ? Canada)
+
+meetsSpatially (el ? ? ? Idaho) (el ? ? ? Washington)
+
+meetsSpatially (el ? ? ? Idaho) (el ? ? ? Oregon)
+
+meetsSpatially (el ? ? ? Idaho) (el ? ? ? Nevada)
+
+meetsSpatially (el ? ? ? Idaho) (el ? ? ? Utah)
+
+meetsSpatially (el ? ? ? Illinois) (el ? ? ? Iowa)
+
+meetsSpatially (el ? ? ? Illinois) (el ? ? ? Missouri)
+
+meetsSpatially (el ? ? ? Indiana) (el ? ? ? Illinois)
+
+meetsSpatially (el ? ? ? Iowa) (el ? ? ? SouthDakota)
+
+meetsSpatially (el ? ? ? Iowa) (el ? ? ? Nebraska)
+
+meetsSpatially (el ? ? ? Iowa) (el ? ? ? Missouri)
+
+meetsSpatially (el ? ? ? Kansas) (el ? ? ? Colorado)
+
+meetsSpatially (el ? ? ? Kansas) (el ? ? ? Texas)
+
+meetsSpatially (el ? ? ? Kentucky) (el ? ? ? Tennessee)
+
+meetsSpatially (el ? ? ? Kentucky) (el ? ? ? Missouri)
+
+meetsSpatially (el ? ? ? Kentucky) (el ? ? ? Illinois)
+
+meetsSpatially (el ? ? ? Kentucky) (el ? ? ? Indiana)
+
+meetsSpatially (el ? ? ? Louisiana) (el ? ? ? Texas)
+
+meetsSpatially (el ? ? ? Louisiana) (el ? ? ? GulfOfMexico)
+
+meetsSpatially (el ? ? ? Maine) (el ? ? ? NewHampshire)
+
+meetsSpatially (el ? ? ? Maine) (el ? ? ? Canada)
+
+meetsSpatially (el ? ? ? Maine) (el ? ? ? NorthAtlanticOcean)
+
+meetsSpatially (el ? ? ? Maryland) (el ? ? ? NorthAtlanticOcean)
+
+meetsSpatially (el ? ? ? Maryland) (el ? ? ? Virginia)
+
+meetsSpatially (el ? ? ? Maryland) (el ? ? ? WestVirginia)
+
+part (el ? ? ? Massachusetts) (el ? ? ? NewEngland)
+
+meetsSpatially (el ? ? ? Massachusetts) (el ? ? ? NorthAtlanticOcean)
+
+meetsSpatially (el ? ? ? Massachusetts) (el ? ? ? NewYorkState)
+
+meetsSpatially (el ? ? ? Massachusetts) (el ? ? ? Connecticut)
+
+meetsSpatially (el ? ? ? Massachusetts) (el ? ? ? RhodeIsland)
+
+meetsSpatially (el ? ? ? Michigan) (el ? ? ? Indiana)
+
+meetsSpatially (el ? ? ? Michigan) (el ? ? ? Illinois)
+
+meetsSpatially (el ? ? ? Michigan) (el ? ? ? Canada)
+
+meetsSpatially (el ? ? ? Minnesota) (el ? ? ? Canada)
+
+meetsSpatially (el ? ? ? Minnesota) (el ? ? ? NorthDakota)
+
+meetsSpatially (el ? ? ? Minnesota) (el ? ? ? SouthDakota)
+
+meetsSpatially (el ? ? ? Minnesota) (el ? ? ? Iowa)
+
+meetsSpatially (el ? ? ? Mississippi) (el ? ? ? Arkansas)
+
+meetsSpatially (el ? ? ? Mississippi) (el ? ? ? Louisiana)
+
+meetsSpatially (el ? ? ? Mississippi) (el ? ? ? GulfOfMexico)
+
+meetsSpatially (el ? ? ? Missouri) (el ? ? ? Nebraska)
+
+meetsSpatially (el ? ? ? Missouri) (el ? ? ? Kansas)
+
+meetsSpatially (el ? ? ? Missouri) (el ? ? ? Oklahoma)
+
+meetsSpatially (el ? ? ? Montana) (el ? ? ? Canada)
+
+meetsSpatially (el ? ? ? Montana) (el ? ? ? Idaho)
+
+meetsSpatially (el ? ? ? Montana) (el ? ? ? Wyoming)
+
+meetsSpatially (el ? ? ? Nebraska) (el ? ? ? Wyoming)
+
+meetsSpatially (el ? ? ? Nebraska) (el ? ? ? Colorado)
+
+meetsSpatially (el ? ? ? Nebraska) (el ? ? ? Kansas)
+
+meetsSpatially (el ? ? ? Nevada) (el ? ? ? Oregon)
+
+meetsSpatially (el ? ? ? Nevada) (el ? ? ? California)
+
+part (el ? ? ? NewHampshire) (el ? ? ? NewEngland)
+
+meetsSpatially (el ? ? ? NewHampshire) (el ? ? ? Canada)
+
+meetsSpatially (el ? ? ? NewHampshire) (el ? ? ? NorthAtlanticOcean)
+
+meetsSpatially (el ? ? ? NewHampshire) (el ? ? ? Vermont)
+
+meetsSpatially (el ? ? ? NewHampshire) (el ? ? ? Massachusetts)
+
+meetsSpatially (el ? ? ? NewJersey) (el ? ? ? NorthAtlanticOcean)
+
+meetsSpatially (el ? ? ? NewJersey) (el ? ? ? Delaware)
+
+meetsSpatially (el ? ? ? NewJersey) (el ? ? ? Pennsylvania)
+
+meetsSpatially (el ? ? ? NewMexico) (el ? ? ? Arizona)
+
+meetsSpatially (el ? ? ? NewMexico) (el ? ? ? Mexico)
+
+geographicSubregion (el ? ? ? NewJersey) (el ? ? ? UnitedStates)
+
+geographicSubregion (el ? ? ? NewYorkState) (el ? ? ? UnitedStates)
+
+geographicSubregion (el ? ? ? NewYorkCityUnitedStates) (el ? ? ? UnitedStates)
+
+meetsSpatially (el ? ? ? NewYorkState) (el ? ? ? Canada)
+
+meetsSpatially (el ? ? ? NewYorkState) (el ? ? ? Pennsylvania)
+
+meetsSpatially (el ? ? ? NewYorkState) (el ? ? ? NewJersey)
+
+meetsSpatially (el ? ? ? NewYorkState) (el ? ? ? NorthAtlanticOcean)
+
+meetsSpatially (el ? ? ? NorthCarolina) (el ? ? ? NorthAtlanticOcean)
+
+meetsSpatially (el ? ? ? NorthCarolina) (el ? ? ? SouthCarolina)
+
+meetsSpatially (el ? ? ? NorthCarolina) (el ? ? ? Tennessee)
+
+meetsSpatially (el ? ? ? NorthDakota) (el ? ? ? Montana)
+
+meetsSpatially (el ? ? ? NorthDakota) (el ? ? ? SouthDakota)
+
+meetsSpatially (el ? ? ? NorthDakota) (el ? ? ? Canada)
+
+meetsSpatially (el ? ? ? Ohio) (el ? ? ? Kentucky)
+
+meetsSpatially (el ? ? ? Ohio) (el ? ? ? Indiana)
+
+meetsSpatially (el ? ? ? Ohio) (el ? ? ? Michigan)
+
+meetsSpatially (el ? ? ? Ohio) (el ? ? ? Canada)
+
+meetsSpatially (el ? ? ? Oregon) (el ? ? ? PacificOcean)
+
+meetsSpatially (el ? ? ? Oregon) (el ? ? ? California)
+
+meetsSpatially (el ? ? ? Pennsylvania) (el ? ? ? WestVirginia)
+
+meetsSpatially (el ? ? ? Pennsylvania) (el ? ? ? Ohio)
+
+meetsSpatially (el ? ? ? Pennsylvania) (el ? ? ? Canada)
+
+part (el ? ? ? RhodeIsland) (el ? ? ? NewEngland)
+
+meetsSpatially (el ? ? ? SouthCarolina) (el ? ? ? NorthAtlanticOcean)
+
+meetsSpatially (el ? ? ? SouthCarolina) (el ? ? ? Georgia)
+
+meetsSpatially (el ? ? ? SouthDakota) (el ? ? ? Montana)
+
+meetsSpatially (el ? ? ? SouthDakota) (el ? ? ? Wyoming)
+
+meetsSpatially (el ? ? ? SouthDakota) (el ? ? ? Nebraska)
+
+meetsSpatially (el ? ? ? Tennessee) (el ? ? ? Alabama)
+
+meetsSpatially (el ? ? ? Tennessee) (el ? ? ? Mississippi)
+
+meetsSpatially (el ? ? ? Tennessee) (el ? ? ? Arkansas)
+
+meetsSpatially (el ? ? ? Tennessee) (el ? ? ? Missouri)
+
+meetsSpatially (el ? ? ? Texas) (el ? ? ? NewMexico)
+
+meetsSpatially (el ? ? ? Texas) (el ? ? ? Mexico)
+
+meetsSpatially (el ? ? ? Texas) (el ? ? ? GulfOfMexico)
+
+geographicSubregion (el ? ? ? Texas) (el ? ? ? UnitedStates)
+
+meetsSpatially (el ? ? ? Utah) (el ? ? ? Nevada)
+
+meetsSpatially (el ? ? ? Utah) (el ? ? ? Arizona)
+
+meetsSpatially (el ? ? ? Utah) (el ? ? ? NewMexico)
+
+part (el ? ? ? Vermont) (el ? ? ? NewEngland)
+
+meetsSpatially (el ? ? ? Vermont) (el ? ? ? Canada)
+
+meetsSpatially (el ? ? ? Vermont) (el ? ? ? NewYorkState)
+
+meetsSpatially (el ? ? ? Vermont) (el ? ? ? Massachusetts)
+
+meetsSpatially (el ? ? ? Virginia) (el ? ? ? NorthCarolina)
+
+meetsSpatially (el ? ? ? Virginia) (el ? ? ? Tennessee)
+
+meetsSpatially (el ? ? ? Virginia) (el ? ? ? Kentucky)
+
+meetsSpatially (el ? ? ? Virginia) (el ? ? ? WestVirginia)
+
+meetsSpatially (el ? ? ? Washington) (el ? ? ? Canada)
+
+meetsSpatially (el ? ? ? Washington) (el ? ? ? PacificOcean)
+
+meetsSpatially (el ? ? ? Washington) (el ? ? ? Oregon)
+
+meetsSpatially (el ? ? ? WestVirginia) (el ? ? ? Kentucky)
+
+meetsSpatially (el ? ? ? WestVirginia) (el ? ? ? Ohio)
+
+meetsSpatially (el ? ? ? Wisconsin) (el ? ? ? Illinois)
+
+meetsSpatially (el ? ? ? Wisconsin) (el ? ? ? Iowa)
+
+meetsSpatially (el ? ? ? Wisconsin) (el ? ? ? Minnesota)
+
+meetsSpatially (el ? ? ? Wyoming) (el ? ? ? Idaho)
+
+meetsSpatially (el ? ? ? Wyoming) (el ? ? ? Utah)
+
+meetsSpatially (el ? ? ? Wyoming) (el ? ? ? Colorado)
+
+part (el ? ? ? PuertoRico) (el ? ? ? UnitedStates)
+
+part (el ? ? ? Germany) (el ? ? ? Europe)
+
+part (el ? ? ? Greece) (el ? ? ? Europe)
+
+meetsSpatially (el ? ? ? Mexico) (el ? ? ? UnitedStates)
+
+part (el ? ? ? ChicagoUnitedStates) (el ? ? ? Illinois)
+
+capitalCity (el ? ? ? JerusalemIsrael) (el ? ? ? Israel)
+
+part (el ? ? ? NewYorkCityUnitedStates) (el ? ? ? NewYorkState)
+
+capitalCity (el ? ? ? TokyoJapan) (el ? ? ? Japan)
+
+geographicSubregion (el ? ? ? AdanaTurkey) (el ? ? ? Turkey)
+
+geographicSubregion (el ? ? ? AddisAbabaEthiopia) (el ? ? ? Ethiopia)
+
+geographicSubregion (el ? ? ? AdenYemen) (el ? ? ? Yemen)
+
+geographicSubregion (el ? ? ? AdoraWestBank) (el ? ? ? WestBank)
+
+geographicSubregion (el ? ? ? AfulaIsrael) (el ? ? ? Israel)
+
+geographicSubregion (el ? ? ? AgriTurkey) (el ? ? ? Turkey)
+
+geographicSubregion (el ? ? ? AinDeflaAlgeria) (el ? ? ? Algeria)
+
+geographicSubregion (el ? ? ? AinElHajarAlgeria) (el ? ? ? Algeria)
+
+geographicSubregion (el ? ? ? AjaccioFrance) (el ? ? ? France)
+
+geographicSubregion (el ? ? ? AlBalamandLebanon) (el ? ? ? Lebanon)
+
+geographicSubregion (el ? ? ? AleiSinaiGazaStrip) (el ? ? ? GazaStrip)
+
+geographicSubregion (el ? ? ? AleiZahavWestBank) (el ? ? ? WestBank)
+
+geographicSubregion (el ? ? ? AleyLebanon) (el ? ? ? Lebanon)
+
+geographicSubregion (el ? ? ? AlgiersAlgeria) (el ? ? ? Algeria)
+
+geographicSubregion (el ? ? ? AlkhanYurtRussia) (el ? ? ? Russia)
+
+geographicSubregion (el ? ? ? AlonMorehWestBank) (el ? ? ? WestBank)
+
+geographicSubregion (el ? ? ? AmbonIndonesia) (el ? ? ? Indonesia)
+
+geographicSubregion (el ? ? ? AmmanJordan) (el ? ? ? Jordan)
+
+geographicSubregion (el ? ? ? AnNuwaydiratBahrain) (el ? ? ? Bahrain)
+
+geographicSubregion (el ? ? ? AndeanSpain) (el ? ? ? Spain)
+
+geographicSubregion (el ? ? ? AngkorWatCambodia) (el ? ? ? Cambodia)
+
+geographicSubregion (el ? ? ? AnkaraTurkey) (el ? ? ? Turkey)
+
+geographicSubregion (el ? ? ? AntalyaTurkey) (el ? ? ? Turkey)
+
+geographicSubregion (el ? ? ? AntioquiaColombia) (el ? ? ? ColombiaPanama)
+
+geographicSubregion (el ? ? ? AntwerpBelgium) (el ? ? ? Belgium)
+
+geographicSubregion (el ? ? ? ApumiracPeru) (el ? ? ? Peru)
+
+geographicSubregion (el ? ? ? ApureVenezuela) (el ? ? ? Venezuela)
+
+geographicSubregion (el ? ? ? AraucaColombia) (el ? ? ? ColombiaPanama)
+
+geographicSubregion (el ? ? ? ArgunRussia) (el ? ? ? Russia)
+
+geographicSubregion (el ? ? ? ArielWestBank) (el ? ? ? WestBank)
+
+geographicSubregion (el ? ? ? ArmaghNorthernIreland) (el ? ? ? NorthernIreland)
+
+geographicSubregion (el ? ? ? ArzewAlgeria) (el ? ? ? Algeria)
+
+geographicSubregion (el ? ? ? AshdodIsrael) (el ? ? ? Israel)
+
+geographicSubregion (el ? ? ? AskelonIsrael) (el ? ? ? Israel)
+
+geographicSubregion (el ? ? ? AsmaraEritrea) (el ? ? ? Eritrea)
+
+geographicSubregion (el ? ? ? AssamIndia) (el ? ? ? India)
+
+geographicSubregion (el ? ? ? AswanEgypt) (el ? ? ? Egypt)
+
+geographicSubregion (el ? ? ? AsyutEgypt) (el ? ? ? Egypt)
+
+geographicSubregion (el ? ? ? AthensGreece) (el ? ? ? Greece)
+
+geographicSubregion (el ? ? ? AtrushIraq) (el ? ? ? Iraq)
+
+geographicSubregion (el ? ? ? AtzmonaGazaStrip) (el ? ? ? GazaStrip)
+
+geographicSubregion (el ? ? ? AvneiHefetzIsrael) (el ? ? ? Israel)
+
+geographicSubregion (el ? ? ? AyacuchoPeru) (el ? ? ? Peru)
+
+geographicSubregion (el ? ? ? AzorIsrael) (el ? ? ? Israel)
+
+geographicSubregion (el ? ? ? BadVilbelGermany) (el ? ? ? Germany)
+
+geographicSubregion (el ? ? ? BaghdadIraq) (el ? ? ? Iraq)
+
+geographicSubregion (el ? ? ? BagreColombia) (el ? ? ? ColombiaPanama)
+
+geographicSubregion (el ? ? ? BahawalpurPakistan) (el ? ? ? Pakistan)
+
+geographicSubregion (el ? ? ? BakaAlGarbiyehIsrael) (el ? ? ? Israel)
+
+geographicSubregion (el ? ? ? BakkaAlSharkiyaWestBank) (el ? ? ? WestBank)
+
+geographicSubregion (el ? ? ? BakuAzerbaijan) (el ? ? ? Azerbaijan)
+
+geographicSubregion (el ? ? ? BaleEthiopia) (el ? ? ? Ethiopia)
+
+geographicSubregion (el ? ? ? BanbridgeNorthernIreland) (el ? ? ? NorthernIreland)
+
+geographicSubregion (el ? ? ? BangkokThailand) (el ? ? ? Thailand)
+
+geographicSubregion (el ? ? ? BangorNorthernIreland) (el ? ? ? NorthernIreland)
+
+geographicSubregion (el ? ? ? BanguiCentralAfricanRepublic) (el ? ? ? CentralAfricanRepublic)
+
+geographicSubregion (el ? ? ? BarcelonaSpain) (el ? ? ? Spain)
+
+geographicSubregion (el ? ? ? BarkeoCambodia) (el ? ? ? Cambodia)
+
+geographicSubregion (el ? ? ? BarrancabermejaColombia) (el ? ? ? Colombia)
+
+geographicSubregion (el ? ? ? BasraIsrael) (el ? ? ? Israel)
+
+geographicSubregion (el ? ? ? BatYamIsrael) (el ? ? ? Israel)
+
+geographicSubregion (el ? ? ? BatmanTurkey) (el ? ? ? Turkey)
+
+geographicSubregion (el ? ? ? BeasainSpain) (el ? ? ? Spain)
+
+geographicSubregion (el ? ? ? BeErShevaIsrael) (el ? ? ? Israel)
+
+geographicSubregion (el ? ? ? BeirutLebanon) (el ? ? ? Lebanon)
+
+geographicSubregion (el ? ? ? BeitElWestBank) (el ? ? ? WestBank)
+
+geographicSubregion (el ? ? ? BeitHaggaiWestBank) (el ? ? ? WestBank)
+
+geographicSubregion (el ? ? ? BeitSahurWestBank) (el ? ? ? WestBank)
+
+geographicSubregion (el ? ? ? BeitSheAnIsrael) (el ? ? ? Israel)
+
+geographicSubregion (el ? ? ? BeitShemeshIsrael) (el ? ? ? Israel)
+
+geographicSubregion (el ? ? ? BeledweyneSomalia) (el ? ? ? Somalia)
+
+geographicSubregion (el ? ? ? BelfastNorthernIreland) (el ? ? ? NorthernIreland)
+
+geographicSubregion (el ? ? ? BelgradeSerbiaAndMontenegro) (el ? ? ? SerbiaAndMontenegro)
+
+geographicSubregion (el ? ? ? BerlinGermany) (el ? ? ? Germany)
+
+geographicSubregion (el ? ? ? BetLeHiyehGazaStrip) (el ? ? ? GazaStrip)
+
+geographicSubregion (el ? ? ? BetLidJunctionIsrael) (el ? ? ? Israel)
+
+geographicSubregion (el ? ? ? BethElIsrael) (el ? ? ? Israel)
+
+geographicSubregion (el ? ? ? BethlehemWestBank) (el ? ? ? WestBank)
+
+geographicSubregion (el ? ? ? BidyaWestBank) (el ? ? ? WestBank)
+
+geographicSubregion (el ? ? ? BilbaoSpain) (el ? ? ? Spain)
+
+geographicSubregion (el ? ? ? BillabonaSpain) (el ? ? ? Spain)
+
+geographicSubregion (el ? ? ? BinyaminaIsrael) (el ? ? ? Israel)
+
+geographicSubregion (el ? ? ? BKaotWestBank) (el ? ? ? WestBank)
+
+geographicSubregion (el ? ? ? BneiAyishIsrael) (el ? ? ? Israel)
+
+geographicSubregion (el ? ? ? BogotaColombia) (el ? ? ? Colombia)
+
+geographicSubregion (el ? ? ? BolognaItaly) (el ? ? ? Italy)
+
+geographicSubregion (el ? ? ? BonnGermany) (el ? ? ? Germany)
+
+geographicSubregion (el ? ? ? BosphorousStraitsTurkey) (el ? ? ? Turkey)
+
+geographicSubregion (el ? ? ? BouiraAlgeria) (el ? ? ? Algeria)
+
+geographicSubregion (el ? ? ? BouzeGueneAlgeria) (el ? ? ? Algeria)
+
+geographicSubregion (el ? ? ? BrusselsBelgium) (el ? ? ? Belgium)
+
+geographicSubregion (el ? ? ? BucaramangaColombia) (el ? ? ? Colombia)
+
+geographicSubregion (el ? ? ? BucharestIndia) (el ? ? ? India)
+
+geographicSubregion (el ? ? ? BuenosAiresArgentina) (el ? ? ? Argentina)
+
+geographicSubregion (el ? ? ? BuinakskRussia) (el ? ? ? Russia)
+
+geographicSubregion (el ? ? ? BwindiforestUganda) (el ? ? ? Uganda)
+
+geographicSubregion (el ? ? ? CabindaAngola) (el ? ? ? Angola)
+
+geographicSubregion (el ? ? ? CaglayanTurkey) (el ? ? ? Turkey)
+
+geographicSubregion (el ? ? ? CairoEgypt) (el ? ? ? Egypt)
+
+geographicSubregion (el ? ? ? CalcuttaIndia) (el ? ? ? India)
+
+geographicSubregion (el ? ? ? CaliColombia) (el ? ? ? Colombia)
+
+geographicSubregion (el ? ? ? CampZamaJapan) (el ? ? ? Japan)
+
+geographicSubregion (el ? ? ? CankiriTurkey) (el ? ? ? Turkey)
+
+geographicSubregion (el ? ? ? CapeTownSouthAfrica) (el ? ? ? SouthAfrica)
+
+geographicSubregion (el ? ? ? CaritasPolandChechnya) (el ? ? ? Chechnya)
+
+geographicSubregion (el ? ? ? CarmelIsrael) (el ? ? ? Israel)
+
+geographicSubregion (el ? ? ? CarmenDeBolivarColombia) (el ? ? ? Colombia)
+
+geographicSubregion (el ? ? ? CarrejonColombia) (el ? ? ? Colombia)
+
+geographicSubregion (el ? ? ? ChamanPakistan) (el ? ? ? Pakistan)
+
+geographicSubregion (el ? ? ? ChararESharifIndia) (el ? ? ? India)
+
+geographicSubregion (el ? ? ? CharsaadaPakistan) (el ? ? ? Pakistan)
+
+geographicSubregion (el ? ? ? ChernoRechyeRussia) (el ? ? ? Russia)
+
+geographicSubregion (el ? ? ? ChicagoUnitedStates) (el ? ? ? UnitedStates)
+
+geographicSubregion (el ? ? ? ChisimayuSomalia) (el ? ? ? Somalia)
+
+geographicSubregion (el ? ? ? ChittagongBangladesh) (el ? ? ? Bangladesh)
+
+geographicSubregion (el ? ? ? ChobaAngola) (el ? ? ? Angola)
+
+geographicSubregion (el ? ? ? ChocoColombia) (el ? ? ? Colombia)
+
+geographicSubregion (el ? ? ? ChorrosQueroVenezuela) (el ? ? ? Venezuela)
+
+geographicSubregion (el ? ? ? ClarkAirbasePhilippines) (el ? ? ? Philippines)
+
+geographicSubregion (el ? ? ? CoimbatoreIndia) (el ? ? ? India)
+
+geographicSubregion (el ? ? ? CologneGermany) (el ? ? ? Germany)
+
+geographicSubregion (el ? ? ? ColombiaCityColombia) (el ? ? ? Colombia)
+
+geographicSubregion (el ? ? ? ColombiaPanama) (el ? ? ? Panama)
+
+geographicSubregion (el ? ? ? ColomboSriLanka) (el ? ? ? SriLanka)
+
+geographicSubregion (el ? ? ? ComayaguaHonduras) (el ? ? ? Honduras)
+
+geographicSubregion (el ? ? ? CopacaBanaCuba) (el ? ? ? Cuba)
+
+geographicSubregion (el ? ? ? CopenhagenDenmark) (el ? ? ? Denmark)
+
+geographicSubregion (el ? ? ? CorsicaFrance) (el ? ? ? France)
+
+geographicSubregion (el ? ? ? CorteFrance) (el ? ? ? France)
+
+geographicSubregion (el ? ? ? CorumTurkey) (el ? ? ? Turkey)
+
+geographicSubregion (el ? ? ? CundiNamarcaColombia) (el ? ? ? Colombia)
+
+geographicSubregion (el ? ? ? CupiaguaColombia) (el ? ? ? Colombia)
+
+geographicSubregion (el ? ? ? CuzcoPeru) (el ? ? ? Peru)
+
+geographicSubregion (el ? ? ? DagestanRussia) (el ? ? ? Russia)
+
+geographicSubregion (el ? ? ? DahukIraq) (el ? ? ? Iraq)
+
+geographicSubregion (el ? ? ? DangDistrictNepal) (el ? ? ? Nepal)
+
+geographicSubregion (el ? ? ? DarEsSalaAmTanzania) (el ? ? ? Tanzania)
+
+geographicSubregion (el ? ? ? DarvazTajikistan) (el ? ? ? Tajikistan)
+
+geographicSubregion (el ? ? ? DebaSpain) (el ? ? ? Spain)
+
+geographicSubregion (el ? ? ? DelhiIndia) (el ? ? ? India)
+
+geographicSubregion (el ? ? ? DhahranSaudiArabia) (el ? ? ? SaudiArabia)
+
+geographicSubregion (el ? ? ? DhakaBangladesh) (el ? ? ? Bangladesh)
+
+geographicSubregion (el ? ? ? DinanFrance) (el ? ? ? France)
+
+geographicSubregion (el ? ? ? DirNaballahWestBank) (el ? ? ? WestBank)
+
+geographicSubregion (el ? ? ? DireDawaEthiopia) (el ? ? ? Ethiopia)
+
+geographicSubregion (el ? ? ? DistrictOfMansehraPakistan) (el ? ? ? Pakistan)
+
+geographicSubregion (el ? ? ? DjakashariGeorgia) (el ? ? ? RepublicOfGeorgia)
+
+geographicSubregion (el ? ? ? DjerbaTunisia) (el ? ? ? Tunisia)
+
+geographicSubregion (el ? ? ? DodaIndia) (el ? ? ? India)
+
+geographicSubregion (el ? ? ? DortmundGermany) (el ? ? ? Germany)
+
+geographicSubregion (el ? ? ? DublinIreland) (el ? ? ? Ireland)
+
+geographicSubregion (el ? ? ? DuesseldorfGermany) (el ? ? ? Germany)
+
+geographicSubregion (el ? ? ? DugitGazaStrip) (el ? ? ? GazaStrip)
+
+geographicSubregion (el ? ? ? DurangoSpain) (el ? ? ? Spain)
+
+geographicSubregion (el ? ? ? DushanbeTajikistan) (el ? ? ? Tajikistan)
+
+geographicSubregion (el ? ? ? DushanbeAirportTajikistan) (el ? ? ? Tajikistan)
+
+geographicSubregion (el ? ? ? DushanbeGarmTajikistan) (el ? ? ? Tajikistan)
+
+geographicSubregion (el ? ? ? EastJerusalemIsrael) (el ? ? ? Israel)
+
+geographicSubregion (el ? ? ? EfratWestBank) (el ? ? ? WestBank)
+
+geographicSubregion (el ? ? ? EilatIsrael) (el ? ? ? Israel)
+
+geographicSubregion (el ? ? ? EinavWestBank) (el ? ? ? WestBank)
+
+geographicSubregion (el ? ? ? ElBagreColombia) (el ? ? ? Colombia)
+
+geographicSubregion (el ? ? ? ElBirehWestBank) (el ? ? ? WestBank)
+
+geographicSubregion (el ? ? ? ElPlayonColombia) (el ? ? ? Colombia)
+
+geographicSubregion (el ? ? ? ElRipialApureVenezuela) (el ? ? ? Venezuela)
+
+geographicSubregion (el ? ? ? ElayoSomalia) (el ? ? ? Somalia)
+
+geographicSubregion (el ? ? ? ElAzzariyaWestBank) (el ? ? ? WestBank)
+
+geographicSubregion (el ? ? ? EleiSinaiGazaStrip) (el ? ? ? GazaStrip)
+
+geographicSubregion (el ? ? ? EmmanuelWestBank) (el ? ? ? WestBank)
+
+geographicSubregion (el ? ? ? ErezGazaStrip) (el ? ? ? GazaStrip)
+
+geographicSubregion (el ? ? ? FethiyeAndMarmarisTurkey) (el ? ? ? Turkey)
+
+geographicSubregion (el ? ? ? FloridaUnitedStates) (el ? ? ? UnitedStates)
+
+geographicSubregion (el ? ? ? FormequeColombia) (el ? ? ? Colombia)
+
+geographicSubregion (el ? ? ? FrankfurtGermany) (el ? ? ? Germany)
+
+geographicSubregion (el ? ? ? FrenchHillIsrael) (el ? ? ? Israel)
+
+geographicSubregion (el ? ? ? FuengirolaSpain) (el ? ? ? Spain)
+
+geographicSubregion (el ? ? ? FusagasusaColombia) (el ? ? ? Colombia)
+
+geographicSubregion (el ? ? ? GaliAbkhaziaGeorgia) (el ? ? ? RepublicOfGeorgia)
+
+geographicSubregion (el ? ? ? GanimWestBank) (el ? ? ? WestBank)
+
+geographicSubregion (el ? ? ? GashuriIsrael) (el ? ? ? Israel)
+
+geographicSubregion (el ? ? ? GeneralSantosPhilippines) (el ? ? ? Philippines)
+
+geographicSubregion (el ? ? ? GenevaSwitzerland) (el ? ? ? Switzerland)
+
+geographicSubregion (el ? ? ? GetxoSpain) (el ? ? ? Spain)
+
+geographicSubregion (el ? ? ? GhalebiehIraq) (el ? ? ? Iraq)
+
+geographicSubregion (el ? ? ? GhaziabadUttarPradeshIndia) (el ? ? ? India)
+
+geographicSubregion (el ? ? ? GiloIsrael) (el ? ? ? Israel)
+
+geographicSubregion (el ? ? ? GivatZeEvWestBank) (el ? ? ? WestBank)
+
+geographicSubregion (el ? ? ? GizaEgypt) (el ? ? ? Egypt)
+
+geographicSubregion (el ? ? ? GonegalleSriLanka) (el ? ? ? SriLanka)
+
+geographicSubregion (el ? ? ? GranadaSpain) (el ? ? ? Spain)
+
+geographicSubregion (el ? ? ? GrazAustria) (el ? ? ? Austria)
+
+geographicSubregion (el ? ? ? GroznyChechnya) (el ? ? ? Chechnya)
+
+geographicSubregion (el ? ? ? GuilinChina) (el ? ? ? China)
+
+geographicSubregion (el ? ? ? GujaratIndia) (el ? ? ? India)
+
+geographicSubregion (el ? ? ? GushEtzionWestBank) (el ? ? ? WestBank)
+
+geographicSubregion (el ? ? ? GushKatifGazaStrip) (el ? ? ? GazaStrip)
+
+geographicSubregion (el ? ? ? HaderaIsrael) (el ? ? ? Israel)
+
+geographicSubregion (el ? ? ? HaifaIsrael) (el ? ? ? Israel)
+
+geographicSubregion (el ? ? ? HamburgGermany) (el ? ? ? Germany)
+
+geographicSubregion (el ? ? ? HamisMiliyanaAlgeria) (el ? ? ? Algeria)
+
+geographicSubregion (el ? ? ? HamraWestBank) (el ? ? ? WestBank)
+
+geographicSubregion (el ? ? ? HannoverGermany) (el ? ? ? Germany)
+
+geographicSubregion (el ? ? ? HarBrachaWestBank) (el ? ? ? WestBank)
+
+geographicSubregion (el ? ? ? HarerEthiopia) (el ? ? ? Ethiopia)
+
+geographicSubregion (el ? ? ? HavanaCuba) (el ? ? ? Cuba)
+
+geographicSubregion (el ? ? ? HawanaIraq) (el ? ? ? Iraq)
+
+geographicSubregion (el ? ? ? HeartAfghanistan) (el ? ? ? Afghanistan)
+
+geographicSubregion (el ? ? ? HebronWestBank) (el ? ? ? WestBank)
+
+geographicSubregion (el ? ? ? HermeshIsrael) (el ? ? ? Israel)
+
+geographicSubregion (el ? ? ? HernaniSpain) (el ? ? ? Spain)
+
+geographicSubregion (el ? ? ? HerzliyaIsrael) (el ? ? ? Israel)
+
+geographicSubregion (el ? ? ? HilversumNetherlands) (el ? ? ? Netherlands)
+
+geographicSubregion (el ? ? ? HizmaWestBank) (el ? ? ? WestBank)
+
+geographicSubregion (el ? ? ? HodayaJunctionIsrael) (el ? ? ? Israel)
+
+geographicSubregion (el ? ? ? HolonJunctionIsrael) (el ? ? ? Israel)
+
+geographicSubregion (el ? ? ? HuallgaPeru) (el ? ? ? Peru)
+
+geographicSubregion (el ? ? ? HurghadaEgypt) (el ? ? ? Egypt)
+
+geographicSubregion (el ? ? ? HyderabadPakistan) (el ? ? ? Pakistan)
+
+geographicSubregion (el ? ? ? IbsrilIraq) (el ? ? ? Iraq)
+
+geographicSubregion (el ? ? ? IncirlikAirbaseTurkey) (el ? ? ? Turkey)
+
+geographicSubregion (el ? ? ? IpilPhilippines) (el ? ? ? Philippines)
+
+geographicSubregion (el ? ? ? IrbilIraq) (el ? ? ? Iraq)
+
+geographicSubregion (el ? ? ? IslamabadPakistan) (el ? ? ? Pakistan)
+
+geographicSubregion (el ? ? ? IslandOfBaliIndonesia) (el ? ? ? Indonesia)
+
+geographicSubregion (el ? ? ? IstanbulTurkey) (el ? ? ? Turkey)
+
+geographicSubregion (el ? ? ? ItamarWestBank) (el ? ? ? WestBank)
+
+geographicSubregion (el ? ? ? IzmirTurkey) (el ? ? ? Turkey)
+
+geographicSubregion (el ? ? ? JaffaIsrael) (el ? ? ? Israel)
+
+geographicSubregion (el ? ? ? JaffnaSriLanka) (el ? ? ? SriLanka)
+
+geographicSubregion (el ? ? ? JakartaIndonesia) (el ? ? ? Indonesia)
+
+geographicSubregion (el ? ? ? JalahIndia) (el ? ? ? India)
+
+geographicSubregion (el ? ? ? JalpaiguriRailwayStationIndia) (el ? ? ? India)
+
+geographicSubregion (el ? ? ? JammuIndia) (el ? ? ? India)
+
+geographicSubregion (el ? ? ? JangasPeru) (el ? ? ? Peru)
+
+geographicSubregion (el ? ? ? JeninWestBank) (el ? ? ? WestBank)
+
+geographicSubregion (el ? ? ? JerusalemIsrael) (el ? ? ? Israel)
+
+geographicSubregion (el ? ? ? JerusalemIsrael) (el ? ? ? WestBank)
+
+geographicSubregion (el ? ? ? JMainWestBank) (el ? ? ? WestBank)
+
+geographicSubregion (el ? ? ? JohannesburgSouthAfrica) (el ? ? ? SouthAfrica)
+
+geographicSubregion (el ? ? ? JoloPhilippines) (el ? ? ? Philippines)
+
+geographicSubregion (el ? ? ? JubialSaudiArabia) (el ? ? ? SaudiArabia)
+
+geographicSubregion (el ? ? ? JullundurIndia) (el ? ? ? India)
+
+geographicSubregion (el ? ? ? KabacanPhilippines) (el ? ? ? Philippines)
+
+geographicSubregion (el ? ? ? KabulAfghanistan) (el ? ? ? Afghanistan)
+
+geographicSubregion (el ? ? ? KafrAkabWestBank) (el ? ? ? WestBank)
+
+geographicSubregion (el ? ? ? KafrIdnaWestBank) (el ? ? ? WestBank)
+
+geographicSubregion (el ? ? ? KalkilyaWestBank) (el ? ? ? WestBank)
+
+geographicSubregion (el ? ? ? KalmunaiSriLanka) (el ? ? ? SriLanka)
+
+geographicSubregion (el ? ? ? KampalaUganda) (el ? ? ? Uganda)
+
+geographicSubregion (el ? ? ? KandySriLanka) (el ? ? ? SriLanka)
+
+geographicSubregion (el ? ? ? KanihamaIndia) (el ? ? ? India)
+
+geographicSubregion (el ? ? ? KarachiPakistan) (el ? ? ? Pakistan)
+
+geographicSubregion (el ? ? ? KarkurIsrael) (el ? ? ? Israel)
+
+geographicSubregion (el ? ? ? KarmeiTzurWestBank) (el ? ? ? WestBank)
+
+geographicSubregion (el ? ? ? KarneiShomronWestBank) (el ? ? ? WestBank)
+
+geographicSubregion (el ? ? ? KashmirIndia) (el ? ? ? India)
+
+geographicSubregion (el ? ? ? KatmanduAirportNepal) (el ? ? ? Nepal)
+
+geographicSubregion (el ? ? ? KedumimWestBank) (el ? ? ? WestBank)
+
+geographicSubregion (el ? ? ? KedumimSettlementWestBank) (el ? ? ? WestBank)
+
+geographicSubregion (el ? ? ? KfarBaAnehIsrael) (el ? ? ? Israel)
+
+geographicSubregion (el ? ? ? KfarDaromGazaStrip) (el ? ? ? GazaStrip)
+
+geographicSubregion (el ? ? ? KfarHessIsrael) (el ? ? ? Israel)
+
+geographicSubregion (el ? ? ? KfarSabaIsrael) (el ? ? ? Israel)
+
+geographicSubregion (el ? ? ? KfarTzurifWestBank) (el ? ? ? WestBank)
+
+geographicSubregion (el ? ? ? KfarYamGazaStrip) (el ? ? ? GazaStrip)
+
+geographicSubregion (el ? ? ? KfarDaromNetzarimIsrael) (el ? ? ? Israel)
+
+geographicSubregion (el ? ? ? KhankalaChechnya) (el ? ? ? Chechnya)
+
+geographicSubregion (el ? ? ? KhartoumSudan) (el ? ? ? Sudan)
+
+geographicSubregion (el ? ? ? KhelilAlgeria) (el ? ? ? Algeria)
+
+geographicSubregion (el ? ? ? KhobarSaudiArabia) (el ? ? ? SaudiArabia)
+
+geographicSubregion (el ? ? ? KibbutzGalEdIsrael) (el ? ? ? Israel)
+
+geographicSubregion (el ? ? ? KibbutzMeravIsrael) (el ? ? ? Israel)
+
+geographicSubregion (el ? ? ? KibbutzSheluhotIsrael) (el ? ? ? Israel)
+
+geographicSubregion (el ? ? ? KidapawanPhilippines) (el ? ? ? Philippines)
+
+geographicSubregion (el ? ? ? KigaliRwanda) (el ? ? ? Rwanda)
+
+geographicSubregion (el ? ? ? KirikkaleTurkey) (el ? ? ? Turkey)
+
+geographicSubregion (el ? ? ? KiryatArbaWestBank) (el ? ? ? WestBank)
+
+geographicSubregion (el ? ? ? KiryatMotzkinIsrael) (el ? ? ? Israel)
+
+geographicSubregion (el ? ? ? KiryatNetafimWestBank) (el ? ? ? WestBank)
+
+geographicSubregion (el ? ? ? KissufimGazaStrip) (el ? ? ? GazaStrip)
+
+geographicSubregion (el ? ? ? KiursehirBoztepTurkey) (el ? ? ? Turkey)
+
+geographicSubregion (el ? ? ? KlaiyatLebanon) (el ? ? ? Lebanon)
+
+geographicSubregion (el ? ? ? KohlanYemen) (el ? ? ? Yemen)
+
+geographicSubregion (el ? ? ? KomsomoLabadTajikistan) (el ? ? ? Tajikistan)
+
+geographicSubregion (el ? ? ? KuwaitCityKuwait) (el ? ? ? Kuwait)
+
+geographicSubregion (el ? ? ? LaCeibaHonduras) (el ? ? ? Honduras)
+
+geographicSubregion (el ? ? ? LaGabarraVenezuela) (el ? ? ? Venezuela)
+
+geographicSubregion (el ? ? ? LaGuajiraColombia) (el ? ? ? Colombia)
+
+geographicSubregion (el ? ? ? LaPazBolivia) (el ? ? ? Bolivia)
+
+geographicSubregion (el ? ? ? LaVictoriaVenezuela) (el ? ? ? Venezuela)
+
+geographicSubregion (el ? ? ? LahorePakistan) (el ? ? ? Pakistan)
+
+geographicSubregion (el ? ? ? LarbaAlgeria) (el ? ? ? Algeria)
+
+geographicSubregion (el ? ? ? LarnacaCyprus) (el ? ? ? Cyprus)
+
+geographicSubregion (el ? ? ? LasarteSpain) (el ? ? ? Spain)
+
+geographicSubregion (el ? ? ? LeizaSpain) (el ? ? ? Spain)
+
+geographicSubregion (el ? ? ? LesEucalyptusDistrictAlgeria) (el ? ? ? Algeria)
+
+geographicSubregion (el ? ? ? LibertadorVenezuela) (el ? ? ? Venezuela)
+
+geographicSubregion (el ? ? ? LiceTurkey) (el ? ? ? Turkey)
+
+geographicSubregion (el ? ? ? LIleRousseFrance) (el ? ? ? France)
+
+geographicSubregion (el ? ? ? LimaPeru) (el ? ? ? Peru)
+
+geographicSubregion (el ? ? ? LindosRhodes) (el ? ? ? Rhodes)
+
+geographicSubregion (el ? ? ? LinzAustralia) (el ? ? ? Australia)
+
+geographicSubregion (el ? ? ? LockerbieUnitedKingdom) (el ? ? ? UnitedKingdom)
+
+geographicSubregion (el ? ? ? LogornoSpain) (el ? ? ? Spain)
+
+geographicSubregion (el ? ? ? LondonUnitedKingdom) (el ? ? ? UnitedKingdom)
+
+geographicSubregion (el ? ? ? LondonberryNorthernIreland) (el ? ? ? NorthernIreland)
+
+geographicSubregion (el ? ? ? LosAngelesUnitedStates) (el ? ? ? UnitedStates)
+
+geographicSubregion (el ? ? ? LosAngelesInternationalAirportUnitedStates) (el ? ? ? UnitedStates)
+
+geographicSubregion (el ? ? ? LosBancosVenezuela) (el ? ? ? Venezuela)
+
+geographicSubregion (el ? ? ? LosKatiosNationalParkColombia) (el ? ? ? Colombia)
+
+geographicSubregion (el ? ? ? LuandaAngola) (el ? ? ? Angola)
+
+geographicSubregion (el ? ? ? LuebeckGermany) (el ? ? ? Germany)
+
+geographicSubregion (el ? ? ? LundaNorteAngola) (el ? ? ? Angola)
+
+geographicSubregion (el ? ? ? LuxorEgypt) (el ? ? ? Egypt)
+
+geographicSubregion (el ? ? ? LyonsFrance) (el ? ? ? France)
+
+geographicSubregion (el ? ? ? MaAlehMichmashWestBank) (el ? ? ? WestBank)
+
+geographicSubregion (el ? ? ? MaccabimIsrael) (el ? ? ? Israel)
+
+geographicSubregion (el ? ? ? MadhuSriLanka) (el ? ? ? SriLanka)
+
+geographicSubregion (el ? ? ? MadrasIndia) (el ? ? ? India)
+
+geographicSubregion (el ? ? ? MadridSpain) (el ? ? ? Spain)
+
+geographicSubregion (el ? ? ? MagdalenaColombia) (el ? ? ? Colombia)
+
+geographicSubregion (el ? ? ? MaidanSharAfghanistan) (el ? ? ? Afghanistan)
+
+geographicSubregion (el ? ? ? MakhachkalaRussia) (el ? ? ? Russia)
+
+geographicSubregion (el ? ? ? MalagaSpain) (el ? ? ? Spain)
+
+geographicSubregion (el ? ? ? MalukkaIslandsIndonesia) (el ? ? ? Indonesia)
+
+geographicSubregion (el ? ? ? ManaguaNigeria) (el ? ? ? Nigeria)
+
+geographicSubregion (el ? ? ? ManamaBahrain) (el ? ? ? Bahrain)
+
+geographicSubregion (el ? ? ? ManchesterUnitedKingdom) (el ? ? ? UnitedKingdom)
+
+geographicSubregion (el ? ? ? MangalsenAndSanpheBagarNepal) (el ? ? ? Nepal)
+
+geographicSubregion (el ? ? ? ManilaPhilippines) (el ? ? ? Philippines)
+
+geographicSubregion (el ? ? ? MaonIsrael) (el ? ? ? Israel)
+
+geographicSubregion (el ? ? ? MapourditSudan) (el ? ? ? Sudan)
+
+geographicSubregion (el ? ? ? MarSabaWestBank) (el ? ? ? WestBank)
+
+geographicSubregion (el ? ? ? MarawiPhilippines) (el ? ? ? Philippines)
+
+geographicSubregion (el ? ? ? MardanPakistan) (el ? ? ? Pakistan)
+
+geographicSubregion (el ? ? ? MarmarisTurkey) (el ? ? ? Turkey)
+
+geographicSubregion (el ? ? ? MarseillesFrance) (el ? ? ? France)
+
+geographicSubregion (el ? ? ? MashaWestBank) (el ? ? ? WestBank)
+
+geographicSubregion (el ? ? ? MatsumotoJapan) (el ? ? ? Japan)
+
+geographicSubregion (el ? ? ? MawdiyahYemen) (el ? ? ? Yemen)
+
+geographicSubregion (el ? ? ? MeaShearimIsrael) (el ? ? ? Israel)
+
+geographicSubregion (el ? ? ? MeccaSaudiArabia) (el ? ? ? SaudiArabia)
+
+geographicSubregion (el ? ? ? MechoraWestBank) (el ? ? ? WestBank)
+
+geographicSubregion (el ? ? ? MedanIndonesia) (el ? ? ? Indonesia)
+
+geographicSubregion (el ? ? ? MedellinColombia) (el ? ? ? Colombia)
+
+geographicSubregion (el ? ? ? MegidoIsrael) (el ? ? ? Israel)
+
+geographicSubregion (el ? ? ? MeholaIsrael) (el ? ? ? Israel)
+
+geographicSubregion (el ? ? ? MekholahIsrael) (el ? ? ? Israel)
+
+geographicSubregion (el ? ? ? MersinTurkey) (el ? ? ? Turkey)
+
+geographicSubregion (el ? ? ? MetaColombia) (el ? ? ? Colombia)
+
+geographicSubregion (el ? ? ? MetullaIsrael) (el ? ? ? Israel)
+
+geographicSubregion (el ? ? ? MetzerIsrael) (el ? ? ? Israel)
+
+geographicSubregion (el ? ? ? MilanItaly) (el ? ? ? Italy)
+
+geographicSubregion (el ? ? ? MindanaoPhilippines) (el ? ? ? Philippines)
+
+geographicSubregion (el ? ? ? MinharotRoadWestBank) (el ? ? ? WestBank)
+
+geographicSubregion (el ? ? ? MiranShahPakistan) (el ? ? ? Pakistan)
+
+geographicSubregion (el ? ? ? MituColombia) (el ? ? ? Colombia)
+
+geographicSubregion (el ? ? ? ModiinIllitWestBank) (el ? ? ? WestBank)
+
+geographicSubregion (el ? ? ? MombassaKenya) (el ? ? ? Kenya)
+
+geographicSubregion (el ? ? ? MoragJunctionGazaStrip) (el ? ? ? GazaStrip)
+
+geographicSubregion (el ? ? ? MoscowRussia) (el ? ? ? Russia)
+
+geographicSubregion (el ? ? ? MoshavHagorIsrael) (el ? ? ? Israel)
+
+geographicSubregion (el ? ? ? MoshavTomerWestBank) (el ? ? ? WestBank)
+
+geographicSubregion (el ? ? ? MukallahAdenYemen) (el ? ? ? Yemen)
+
+geographicSubregion (el ? ? ? MunchenGladbachGermany) (el ? ? ? Germany)
+
+geographicSubregion (el ? ? ? MunsterGermany) (el ? ? ? Germany)
+
+geographicSubregion (el ? ? ? MurloughNorthernIreland) (el ? ? ? NorthernIreland)
+
+geographicSubregion (el ? ? ? MusMusIsrael) (el ? ? ? Israel)
+
+geographicSubregion (el ? ? ? MutataColombia) (el ? ? ? Colombia)
+
+geographicSubregion (el ? ? ? MutturSriLanka) (el ? ? ? SriLanka)
+
+geographicSubregion (el ? ? ? NaAlinWestBank) (el ? ? ? WestBank)
+
+geographicSubregion (el ? ? ? NablusWestBank) (el ? ? ? WestBank)
+
+geographicSubregion (el ? ? ? NahalOzGazaStrip) (el ? ? ? GazaStrip)
+
+geographicSubregion (el ? ? ? NaharaimIsrael) (el ? ? ? Israel)
+
+geographicSubregion (el ? ? ? NahariyaIsrael) (el ? ? ? Israel)
+
+geographicSubregion (el ? ? ? NairobiKenya) (el ? ? ? Kenya)
+
+geographicSubregion (el ? ? ? NajafIraq) (el ? ? ? Iraq)
+
+geographicSubregion (el ? ? ? NallurAreaSriLanka) (el ? ? ? SriLanka)
+
+geographicSubregion (el ? ? ? NaquraLebanon) (el ? ? ? Lebanon)
+
+geographicSubregion (el ? ? ? NarayangangBangladesh) (el ? ? ? Bangladesh)
+
+geographicSubregion (el ? ? ? NetanyaIsrael) (el ? ? ? Israel)
+
+geographicSubregion (el ? ? ? NetzarimGazaStrip) (el ? ? ? GazaStrip)
+
+geographicSubregion (el ? ? ? NetzerHazaniGazaStrip) (el ? ? ? GazaStrip)
+
+geographicSubregion (el ? ? ? NeveDanielWestBank) (el ? ? ? WestBank)
+
+geographicSubregion (el ? ? ? NeveYaminIsrael) (el ? ? ? Israel)
+
+geographicSubregion (el ? ? ? NewDelhiIndia) (el ? ? ? India)
+
+geographicSubregion (el ? ? ? NeztarimSettlementGazaStrip) (el ? ? ? GazaStrip)
+
+geographicSubregion (el ? ? ? NiameyNiger) (el ? ? ? Niger)
+
+geographicSubregion (el ? ? ? NissanitGazaStrip) (el ? ? ? GazaStrip)
+
+geographicSubregion (el ? ? ? NitzaneiOzWestBank) (el ? ? ? WestBank)
+
+geographicSubregion (el ? ? ? NitzanimIsrael) (el ? ? ? Israel)
+
+geographicSubregion (el ? ? ? NokdimTekoaRdWestBank) (el ? ? ? WestBank)
+
+geographicSubregion (el ? ? ? NorteDeSantanderColombia) (el ? ? ? Colombia)
+
+geographicSubregion (el ? ? ? NorthernCaucasiusChechnya) (el ? ? ? Chechnya)
+
+geographicSubregion (el ? ? ? NovogroznyRussia) (el ? ? ? Russia)
+
+geographicSubregion (el ? ? ? NovyyAtagiRussia) (el ? ? ? Russia)
+
+geographicSubregion (el ? ? ? OberwartAustria) (el ? ? ? Austria)
+
+geographicSubregion (el ? ? ? OfraWestBank) (el ? ? ? WestBank)
+
+geographicSubregion (el ? ? ? OilbaseAlgeria) (el ? ? ? Algeria)
+
+geographicSubregion (el ? ? ? oilfieldsVenezuela) (el ? ? ? Venezuela)
+
+geographicSubregion (el ? ? ? OkaraPakistan) (el ? ? ? Pakistan)
+
+geographicSubregion (el ? ? ? OlayaHerreraColombia) (el ? ? ? Colombia)
+
+geographicSubregion (el ? ? ? OmaghNorthernIreland) (el ? ? ? NorthernIreland)
+
+geographicSubregion (el ? ? ? OrYehudaIsrael) (el ? ? ? Israel)
+
+geographicSubregion (el ? ? ? OranAlgeria) (el ? ? ? Algeria)
+
+geographicSubregion (el ? ? ? OsakaJapan) (el ? ? ? Japan)
+
+geographicSubregion (el ? ? ? OsloNorway) (el ? ? ? Norway)
+
+geographicSubregion (el ? ? ? OssnabruckGermany) (el ? ? ? Germany)
+
+geographicSubregion (el ? ? ? OthnielJunctionIsrael) (el ? ? ? Israel)
+
+geographicSubregion (el ? ? ? OtnielWestBank) (el ? ? ? WestBank)
+
+geographicSubregion (el ? ? ? OtzarinWestBank) (el ? ? ? WestBank)
+
+geographicSubregion (el ? ? ? OzamisPhilippines) (el ? ? ? Philippines)
+
+geographicSubregion (el ? ? ? PahalgamIndia) (el ? ? ? India)
+
+geographicSubregion (el ? ? ? PalorinyaUganda) (el ? ? ? Uganda)
+
+geographicSubregion (el ? ? ? PamplonaSpain) (el ? ? ? Spain)
+
+geographicSubregion (el ? ? ? PanamaCityPanama) (el ? ? ? Panama)
+
+geographicSubregion (el ? ? ? PantrasGreece) (el ? ? ? Greece)
+
+geographicSubregion (el ? ? ? PapayinColombia) (el ? ? ? Colombia)
+
+geographicSubregion (el ? ? ? PapuaIndonesia) (el ? ? ? Indonesia)
+
+geographicSubregion (el ? ? ? ParisFrance) (el ? ? ? France)
+
+geographicSubregion (el ? ? ? PatikulPhilippines) (el ? ? ? Philippines)
+
+geographicSubregion (el ? ? ? PauFrance) (el ? ? ? France)
+
+geographicSubregion (el ? ? ? PeAtSadehGazaStrip) (el ? ? ? GazaStrip)
+
+geographicSubregion (el ? ? ? PeshawarPakistan) (el ? ? ? Pakistan)
+
+geographicSubregion (el ? ? ? PetahTikvahIsrael) (el ? ? ? Israel)
+
+geographicSubregion (el ? ? ? PhnomPenhCambodia) (el ? ? ? Cambodia)
+
+geographicSubregion (el ? ? ? PortadownIreland) (el ? ? ? Ireland)
+
+geographicSubregion (el ? ? ? PragueCzechRepublic) (el ? ? ? CzechRepublic)
+
+geographicSubregion (el ? ? ? PuertoAlviraColombia) (el ? ? ? Colombia)
+
+geographicSubregion (el ? ? ? PuertoLlerasColombia) (el ? ? ? Colombia)
+
+geographicSubregion (el ? ? ? PunjabPakistan) (el ? ? ? Pakistan)
+
+geographicSubregion (el ? ? ? QuettaPakistan) (el ? ? ? Pakistan)
+
+geographicSubregion (el ? ? ? QuitoEcuador) (el ? ? ? Ecuador)
+
+geographicSubregion (el ? ? ? RadaAmanYemen) (el ? ? ? Yemen)
+
+geographicSubregion (el ? ? ? RafahGazaStrip) (el ? ? ? GazaStrip)
+
+geographicSubregion (el ? ? ? RamaJunctionWestBank) (el ? ? ? WestBank)
+
+geographicSubregion (el ? ? ? RamalDeAspusanaPeru) (el ? ? ? Peru)
+
+geographicSubregion (el ? ? ? RamallahWestBank) (el ? ? ? WestBank)
+
+geographicSubregion (el ? ? ? RamatGanIsrael) (el ? ? ? Israel)
+
+geographicSubregion (el ? ? ? RaminWestBank) (el ? ? ? WestBank)
+
+geographicSubregion (el ? ? ? RamleIsrael) (el ? ? ? Israel)
+
+geographicSubregion (el ? ? ? RawalpindiPakistan) (el ? ? ? Pakistan)
+
+geographicSubregion (el ? ? ? ReusSpain) (el ? ? ? Spain)
+
+geographicSubregion (el ? ? ? RigaLatvia) (el ? ? ? Latvia)
+
+geographicSubregion (el ? ? ? RijekaCroatia) (el ? ? ? Croatia)
+
+geographicSubregion (el ? ? ? RimalDistrictGazaStrip) (el ? ? ? GazaStrip)
+
+geographicSubregion (el ? ? ? RishonLeZionIsrael) (el ? ? ? Israel)
+
+geographicSubregion (el ? ? ? RiyadhSaudiArabia) (el ? ? ? SaudiArabia)
+
+geographicSubregion (el ? ? ? RoermondNetherlands) (el ? ? ? Netherlands)
+
+geographicSubregion (el ? ? ? RomeItaly) (el ? ? ? Italy)
+
+geographicSubregion (el ? ? ? RosasSpain) (el ? ? ? Spain)
+
+geographicSubregion (el ? ? ? RostovOnDonRussia) (el ? ? ? Russia)
+
+geographicSubregion (el ? ? ? RuhengeriRwanda) (el ? ? ? Rwanda)
+
+geographicSubregion (el ? ? ? SaadaYemen) (el ? ? ? Yemen)
+
+geographicSubregion (el ? ? ? SaadaPakistan) (el ? ? ? Pakistan)
+
+geographicSubregion (el ? ? ? SabatenaColombia) (el ? ? ? Colombia)
+
+geographicSubregion (el ? ? ? SacramentoUnitedStates) (el ? ? ? UnitedStates)
+
+geographicSubregion (el ? ? ? SaintAvoldFrance) (el ? ? ? France)
+
+geographicSubregion (el ? ? ? SaintSebastianSpain) (el ? ? ? Spain)
+
+geographicSubregion (el ? ? ? SaintJeanDeLuzFrance) (el ? ? ? France)
+
+geographicSubregion (el ? ? ? SairanbarIraq) (el ? ? ? Iraq)
+
+geographicSubregion (el ? ? ? SajaIAGazaStrip) (el ? ? ? GazaStrip)
+
+geographicSubregion (el ? ? ? SallentDeGallegoSpain) (el ? ? ? Spain)
+
+geographicSubregion (el ? ? ? SamariaWestBank) (el ? ? ? WestBank)
+
+geographicSubregion (el ? ? ? SamashkiRussia) (el ? ? ? Russia)
+
+geographicSubregion (el ? ? ? SanDiegoColombia) (el ? ? ? Colombia)
+
+geographicSubregion (el ? ? ? SanJoseCostaRica) (el ? ? ? CostaRica)
+
+geographicSubregion (el ? ? ? SanLuisColombia) (el ? ? ? Colombia)
+
+geographicSubregion (el ? ? ? SanMiguelElSalvador) (el ? ? ? ElSalvador)
+
+geographicSubregion (el ? ? ? SanPabloColombia) (el ? ? ? Colombia)
+
+geographicSubregion (el ? ? ? SanSabatianSpain) (el ? ? ? Spain)
+
+geographicSubregion (el ? ? ? SanaaYemen) (el ? ? ? Yemen)
+
+geographicSubregion (el ? ? ? SangaldanIndia) (el ? ? ? India)
+
+geographicSubregion (el ? ? ? SantaMartaColombia) (el ? ? ? Colombia)
+
+geographicSubregion (el ? ? ? SantaPolaSpain) (el ? ? ? Spain)
+
+geographicSubregion (el ? ? ? SantaRitaMountainsPanama) (el ? ? ? Panama)
+
+geographicSubregion (el ? ? ? SantiagoChile) (el ? ? ? Chile)
+
+geographicSubregion (el ? ? ? SanurIsrael) (el ? ? ? Israel)
+
+geographicSubregion (el ? ? ? SarajevoBosniaAndHerzegovina) (el ? ? ? BosniaAndHerzegovina)
+
+geographicSubregion (el ? ? ? SatkhiraBangladesh) (el ? ? ? Bangladesh)
+
+geographicSubregion (el ? ? ? SegoviaColombia) (el ? ? ? Colombia)
+
+geographicSubregion (el ? ? ? SeoulSouthKorea) (el ? ? ? SouthKorea)
+
+geographicSubregion (el ? ? ? SevilleSpain) (el ? ? ? Spain)
+
+geographicSubregion (el ? ? ? ShadmotMeholaWestBank) (el ? ? ? WestBank)
+
+geographicSubregion (el ? ? ? ShaveiShomronWestBank) (el ? ? ? WestBank)
+
+geographicSubregion (el ? ? ? SheikhAjlunGazaStrip) (el ? ? ? GazaStrip)
+
+geographicSubregion (el ? ? ? ShiloWestBank) (el ? ? ? WestBank)
+
+geographicSubregion (el ? ? ? ShimiEcuador) (el ? ? ? Ecuador)
+
+geographicSubregion (el ? ? ? ShlomiIsrael) (el ? ? ? Israel)
+
+geographicSubregion (el ? ? ? SidiHalifahLibya) (el ? ? ? Libya)
+
+geographicSubregion (el ? ? ? SidonLebanon) (el ? ? ? Lebanon)
+
+geographicSubregion (el ? ? ? SiirtTurkey) (el ? ? ? Turkey)
+
+geographicSubregion (el ? ? ? SilatADaharWestBank) (el ? ? ? WestBank)
+
+geographicSubregion (el ? ? ? SipadanIslandMalaysia) (el ? ? ? Malaysia)
+
+geographicSubregion (el ? ? ? SitrahBahrain) (el ? ? ? Bahrain)
+
+geographicSubregion (el ? ? ? SoporeIndia) (el ? ? ? India)
+
+geographicSubregion (el ? ? ? SrinagarIndia) (el ? ? ? India)
+
+geographicSubregion (el ? ? ? SrinigarIndia) (el ? ? ? India)
+
+geographicSubregion (el ? ? ? SriperumbudurIndia) (el ? ? ? India)
+
+geographicSubregion (el ? ? ? StewartstownNorthernIreland) (el ? ? ? NorthernIreland)
+
+geographicSubregion (el ? ? ? StockholmSweden) (el ? ? ? Sweden)
+
+geographicSubregion (el ? ? ? StrasbourgFrance) (el ? ? ? France)
+
+geographicSubregion (el ? ? ? SukaimaniyahIraq) (el ? ? ? Iraq)
+
+geographicSubregion (el ? ? ? SulawesiIndonesia) (el ? ? ? Indonesia)
+
+geographicSubregion (el ? ? ? SulaymaniyahIraq) (el ? ? ? Iraq)
+
+geographicSubregion (el ? ? ? SumayrYemen) (el ? ? ? Yemen)
+
+geographicSubregion (el ? ? ? SusiyaWestBank) (el ? ? ? WestBank)
+
+geographicSubregion (el ? ? ? TailaPakistan) (el ? ? ? Pakistan)
+
+geographicSubregion (el ? ? ? TamezGuidaAlgeria) (el ? ? ? Algeria)
+
+geographicSubregion (el ? ? ? TandySriLanka) (el ? ? ? SriLanka)
+
+geographicSubregion (el ? ? ? TaxilaPakistan) (el ? ? ? Pakistan)
+
+geographicSubregion (el ? ? ? TBilisiGeorgia) (el ? ? ? RepublicOfGeorgia)
+
+geographicSubregion (el ? ? ? TegucigalpaHonduras) (el ? ? ? Honduras)
+
+geographicSubregion (el ? ? ? TeheranIran) (el ? ? ? Iran)
+
+geographicSubregion (el ? ? ? TekoaWestBank) (el ? ? ? WestBank)
+
+geographicSubregion (el ? ? ? TelAvivIsrael) (el ? ? ? Israel)
+
+geographicSubregion (el ? ? ? TelHaShomerJunctionIsrael) (el ? ? ? Israel)
+
+geographicSubregion (el ? ? ? TelQateifaGazaStrip) (el ? ? ? GazaStrip)
+
+geographicSubregion (el ? ? ? TelRumeiydaIsrael) (el ? ? ? Israel)
+
+geographicSubregion (el ? ? ? TelemIsrael) (el ? ? ? Israel)
+
+geographicSubregion (el ? ? ? TenaWestBank) (el ? ? ? WestBank)
+
+geographicSubregion (el ? ? ? TheHagueNetherlands) (el ? ? ? Netherlands)
+
+geographicSubregion (el ? ? ? TheKyrgyzCapitalBishkekChina) (el ? ? ? China)
+
+geographicSubregion (el ? ? ? ThekraguriIndia) (el ? ? ? India)
+
+geographicSubregion (el ? ? ? TiaretAlgeria) (el ? ? ? Algeria)
+
+geographicSubregion (el ? ? ? TiratAlgeria) (el ? ? ? Algeria)
+
+geographicSubregion (el ? ? ? TokyoJapan) (el ? ? ? Japan)
+
+geographicSubregion (el ? ? ? TolosaSpain) (el ? ? ? Spain)
+
+geographicSubregion (el ? ? ? TopkakiTurkey) (el ? ? ? Turkey)
+
+geographicSubregion (el ? ? ? TrabzonTurkey) (el ? ? ? Turkey)
+
+geographicSubregion (el ? ? ? TrincomaleeHarborSriLanka) (el ? ? ? SriLanka)
+
+geographicSubregion (el ? ? ? TripoliLibya) (el ? ? ? Libya)
+
+geographicSubregion (el ? ? ? TulkaremWestBank) (el ? ? ? WestBank)
+
+geographicSubregion (el ? ? ? TulkarmWestBank) (el ? ? ? WestBank)
+
+geographicSubregion (el ? ? ? TunceliTurkey) (el ? ? ? Turkey)
+
+geographicSubregion (el ? ? ? TurbatPakistan) (el ? ? ? Pakistan)
+
+geographicSubregion (el ? ? ? UmAlFahmIsrael) (el ? ? ? Israel)
+
+geographicSubregion (el ? ? ? UmmQasrIraq) (el ? ? ? Iraq)
+
+geographicSubregion (el ? ? ? UrenaVenezuela) (el ? ? ? Venezuela)
+
+geographicSubregion (el ? ? ? UrraColombia) (el ? ? ? Colombia)
+
+geographicSubregion (el ? ? ? UrsMartanRussia) (el ? ? ? Russia)
+
+geographicSubregion (el ? ? ? UWaIndianReservationColombia) (el ? ? ? Colombia)
+
+geographicSubregion (el ? ? ? ValenciaSpain) (el ? ? ? Spain)
+
+geographicSubregion (el ? ? ? ValleduparColombia) (el ? ? ? Colombia)
+
+geographicSubregion (el ? ? ? VanTurkey) (el ? ? ? Turkey)
+
+geographicSubregion (el ? ? ? VavuniyaSriLanka) (el ? ? ? SriLanka)
+
+geographicSubregion (el ? ? ? ViennaAustria) (el ? ? ? Austria)
+
+geographicSubregion (el ? ? ? VientianeLaos) (el ? ? ? Laos)
+
+geographicSubregion (el ? ? ? VillavicencioColombia) (el ? ? ? Colombia)
+
+geographicSubregion (el ? ? ? VitoriaSpain) (el ? ? ? Spain)
+
+geographicSubregion (el ? ? ? VitrollesFrance) (el ? ? ? France)
+
+geographicSubregion (el ? ? ? VladikavkazRussia) (el ? ? ? Russia)
+
+geographicSubregion (el ? ? ? VladivostokRussia) (el ? ? ? Russia)
+
+geographicSubregion (el ? ? ? VolgodonskRussia) (el ? ? ? Russia)
+
+geographicSubregion (el ? ? ? WadiAlDabaatYemen) (el ? ? ? Yemen)
+
+geographicSubregion (el ? ? ? WadiAraIsrael) (el ? ? ? Israel)
+
+geographicSubregion (el ? ? ? WadiKeltWestBank) (el ? ? ? WestBank)
+
+geographicSubregion (el ? ? ? WarsawPoland) (el ? ? ? Poland)
+
+geographicSubregion (el ? ? ? WashingtonDCUnitedStates) (el ? ? ? UnitedStates)
+
+geographicSubregion (el ? ? ? WattyanBahrain) (el ? ? ? Bahrain)
+
+geographicSubregion (el ? ? ? WestBeirutLebanon) (el ? ? ? Lebanon)
+
+geographicSubregion (el ? ? ? XiAnChina) (el ? ? ? China)
+
+geographicSubregion (el ? ? ? YaAbadWestBank) (el ? ? ? WestBank)
+
+geographicSubregion (el ? ? ? YagurJunctionIsrael) (el ? ? ? Israel)
+
+geographicSubregion (el ? ? ? YehudIsrael) (el ? ? ? Israel)
+
+geographicSubregion (el ? ? ? YerevanArmenia) (el ? ? ? Armenia)
+
+geographicSubregion (el ? ? ? YitzharWestBank) (el ? ? ? WestBank)
+
+geographicSubregion (el ? ? ? YokotaJapan) (el ? ? ? Japan)
+
+geographicSubregion (el ? ? ? YopalColombia) (el ? ? ? Colombia)
+
+geographicSubregion (el ? ? ? YuksekovaTurkey) (el ? ? ? Turkey)
+
+geographicSubregion (el ? ? ? ZaitaIsrael) (el ? ? ? Israel)
+
+geographicSubregion (el ? ? ? ZamarYemen) (el ? ? ? Yemen)
+
+geographicSubregion (el ? ? ? ZamboangaPhilippines) (el ? ? ? Philippines)
+
+geographicSubregion (el ? ? ? ZaragozaSpain) (el ? ? ? Spain)
+
+geographicSubregion (el ? ? ? ZarauzSpain) (el ? ? ? Spain)
+
+geographicSubregion (el ? ? ? ZeifIntersectionWestBank) (el ? ? ? WestBank)
+
+geographicSubregion (el ? ? ? ZekharyaIsrael) (el ? ? ? Israel)
+
+geographicSubregion (el ? ? ? ZuliaColombia) (el ? ? ? Colombia)
+
+geographicSubregion (el ? ? ? ZumaiaSpain) (el ? ? ? Spain)
+
+geographicSubregion (el ? ? ? ZumarragaSpain) (el ? ? ? Spain)
+
+claimedTerritory (el ? ? ? GazaStrip) (el ? ? ? Israel)
+
+claimedTerritory (el ? ? ? GazaStrip) (el ? ? ? PalestinianLiberationOrganization)
+
+claimedTerritory (el ? ? ? ParacelIslands) (el ? ? ? China)
+
+claimedTerritory (el ? ? ? ParacelIslands) (el ? ? ? Taiwan)
+
+claimedTerritory (el ? ? ? ParacelIslands) (el ? ? ? Vietnam)
+
+claimedTerritory (el ? ? ? SpratlyIslands) (el ? ? ? China)
+
+claimedTerritory (el ? ? ? SpratlyIslands) (el ? ? ? Taiwan)
+
+claimedTerritory (el ? ? ? SpratlyIslands) (el ? ? ? Vietnam)
+
+claimedTerritory (el ? ? ? WestBank) (el ? ? ? Israel)
+
+claimedTerritory (el ? ? ? WestBank) (el ? ? ? PalestinianLiberationOrganization)
+
+claimedTerritory (el ? ? ? WesternSahara) (el ? ? ? Morocco)
+
+dependentGeopoliticalArea (el ? ? ? AmericanSamoa) (el ? ? ? UnitedStates)
+
+dependentGeopoliticalArea (el ? ? ? Anguilla) (el ? ? ? UnitedKingdom)
+
+dependentGeopoliticalArea (el ? ? ? Aruba) (el ? ? ? Netherlands)
+
+dependentGeopoliticalArea (el ? ? ? AshmoreAndCartierIslands) (el ? ? ? Australia)
+
+dependentGeopoliticalArea (el ? ? ? BakerIsland) (el ? ? ? UnitedStates)
+
+dependentGeopoliticalArea (el ? ? ? BassasDaIndia) (el ? ? ? France)
+
+dependentGeopoliticalArea (el ? ? ? Bermuda) (el ? ? ? UnitedKingdom)
+
+dependentGeopoliticalArea (el ? ? ? BouvetIsland) (el ? ? ? Norway)
+
+dependentGeopoliticalArea (el ? ? ? BritishIndianOceanTerritory) (el ? ? ? UnitedKingdom)
+
+dependentGeopoliticalArea (el ? ? ? BritishVirginIslands) (el ? ? ? UnitedKingdom)
+
+dependentGeopoliticalArea (el ? ? ? CaymanIslands) (el ? ? ? UnitedKingdom)
+
+dependentGeopoliticalArea (el ? ? ? ChristmasIsland) (el ? ? ? Australia)
+
+dependentGeopoliticalArea (el ? ? ? ClippertonIsland) (el ? ? ? France)
+
+dependentGeopoliticalArea (el ? ? ? CocosKeelingIslands) (el ? ? ? Australia)
+
+dependentGeopoliticalArea (el ? ? ? CookIslands) (el ? ? ? NewZealand)
+
+dependentGeopoliticalArea (el ? ? ? CoralSeaIslands) (el ? ? ? Australia)
+
+dependentGeopoliticalArea (el ? ? ? EuropaIsland) (el ? ? ? France)
+
+dependentGeopoliticalArea (el ? ? ? FalklandIslands) (el ? ? ? UnitedKingdom)
+
+dependentGeopoliticalArea (el ? ? ? FaroeIslands) (el ? ? ? Denmark)
+
+dependentGeopoliticalArea (el ? ? ? FrenchGuiana) (el ? ? ? France)
+
+dependentGeopoliticalArea (el ? ? ? FrenchPolynesia) (el ? ? ? France)
+
+dependentGeopoliticalArea (el ? ? ? FrenchSouthernAndAntarcticLands) (el ? ? ? France)
+
+dependentGeopoliticalArea (el ? ? ? Gibraltar) (el ? ? ? UnitedKingdom)
+
+dependentGeopoliticalArea (el ? ? ? GloriosoIslands) (el ? ? ? France)
+
+dependentGeopoliticalArea (el ? ? ? Greenland) (el ? ? ? Denmark)
+
+dependentGeopoliticalArea (el ? ? ? Guadeloupe) (el ? ? ? France)
+
+dependentGeopoliticalArea (el ? ? ? Guam) (el ? ? ? UnitedStates)
+
+dependentGeopoliticalArea (el ? ? ? Guernsey) (el ? ? ? UnitedKingdom)
+
+dependentGeopoliticalArea (el ? ? ? HeardIslandAndMcDonaldIslands) (el ? ? ? Australia)
+
+dependentGeopoliticalArea (el ? ? ? HongKong) (el ? ? ? China)
+
+dependentGeopoliticalArea (el ? ? ? HowlandIsland) (el ? ? ? UnitedStates)
+
+dependentGeopoliticalArea (el ? ? ? IsleOfMan) (el ? ? ? UnitedKingdom)
+
+dependentGeopoliticalArea (el ? ? ? JanMayenIsland) (el ? ? ? Norway)
+
+dependentGeopoliticalArea (el ? ? ? JarvisIsland) (el ? ? ? UnitedStates)
+
+dependentGeopoliticalArea (el ? ? ? Jersey) (el ? ? ? UnitedKingdom)
+
+dependentGeopoliticalArea (el ? ? ? JohnstonAtoll) (el ? ? ? UnitedStates)
+
+dependentGeopoliticalArea (el ? ? ? JuanDeNovaIsland) (el ? ? ? France)
+
+dependentGeopoliticalArea (el ? ? ? KingmanReef) (el ? ? ? UnitedStates)
+
+dependentGeopoliticalArea (el ? ? ? Macau) (el ? ? ? China)
+
+dependentGeopoliticalArea (el ? ? ? Martinique) (el ? ? ? France)
+
+dependentGeopoliticalArea (el ? ? ? Mayotte) (el ? ? ? France)
+
+dependentGeopoliticalArea (el ? ? ? MidwayIslands) (el ? ? ? UnitedStates)
+
+dependentGeopoliticalArea (el ? ? ? Montserrat) (el ? ? ? UnitedKingdom)
+
+dependentGeopoliticalArea (el ? ? ? NavassaIsland) (el ? ? ? UnitedStates)
+
+dependentGeopoliticalArea (el ? ? ? NetherlandsAntilles) (el ? ? ? Netherlands)
+
+dependentGeopoliticalArea (el ? ? ? NewCaledonia) (el ? ? ? France)
+
+dependentGeopoliticalArea (el ? ? ? Niue) (el ? ? ? NewZealand)
+
+dependentGeopoliticalArea (el ? ? ? NorfolkIsland) (el ? ? ? Australia)
+
+dependentGeopoliticalArea (el ? ? ? NorthernMarianaIslands) (el ? ? ? UnitedStates)
+
+dependentGeopoliticalArea (el ? ? ? PalmyraAtoll) (el ? ? ? UnitedStates)
+
+dependentGeopoliticalArea (el ? ? ? PitcairnIslands) (el ? ? ? UnitedKingdom)
+
+dependentGeopoliticalArea (el ? ? ? PuertoRico) (el ? ? ? UnitedStates)
+
+dependentGeopoliticalArea (el ? ? ? Reunion) (el ? ? ? France)
+
+dependentGeopoliticalArea (el ? ? ? SaintHelena) (el ? ? ? UnitedKingdom)
+
+dependentGeopoliticalArea (el ? ? ? SaintPierreAndMiquelon) (el ? ? ? France)
+
+dependentGeopoliticalArea (el ? ? ? SouthGeorgiaAndTheSouthSandwichIslands) (el ? ? ? UnitedKingdom)
+
+dependentGeopoliticalArea (el ? ? ? Svalbard) (el ? ? ? Norway)
+
+dependentGeopoliticalArea (el ? ? ? Tokelau) (el ? ? ? NewZealand)
+
+dependentGeopoliticalArea (el ? ? ? TromelinIsland) (el ? ? ? France)
+
+dependentGeopoliticalArea (el ? ? ? TurksAndCaicosIslands) (el ? ? ? UnitedKingdom)
+
+dependentGeopoliticalArea (el ? ? ? WakeIsland) (el ? ? ? UnitedStates)
+
+dependentGeopoliticalArea (el ? ? ? WallisAndFutuna) (el ? ? ? France)
+
+claimedTerritory (el ? ? ? Antarctica) (el ? ? ? Argentina)
+
+claimedTerritory (el ? ? ? Antarctica) (el ? ? ? Australia)
+
+claimedTerritory (el ? ? ? Antarctica) (el ? ? ? Chile)
+
+claimedTerritory (el ? ? ? Antarctica) (el ? ? ? France)
+
+claimedTerritory (el ? ? ? Antarctica) (el ? ? ? NewZealand)
+
+claimedTerritory (el ? ? ? Antarctica) (el ? ? ? Norway)
+
+claimedTerritory (el ? ? ? Antarctica) (el ? ? ? UnitedKingdom)
+
+part (el ? ? ? RedRiver) (el ? ? ? MississippiRiver)
+
+part (el ? ? ? RedRiver) (el ? ? ? UnitedStates)

@@ -1,0 +1,10 @@
+
+AsymmetricRelation ? (\x,y -> primaryGeopoliticalSubdivision x y)
+
+AsymmetricRelation ? (\x,y -> chamberOfLegislature x y)
+
+AsymmetricRelation ? (\x,y -> successorOrganization x y)
+
+SymmetricRelation ? (\x,y -> diplomaticRelations x y)
+
+IrreflexiveRelation ? (\x,y -> diplomaticRelations x y)

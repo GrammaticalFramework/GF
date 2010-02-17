@@ -1,0 +1,1632 @@
+
+forall HumanCorpse (\CORPSE -> exists Human (\HUMAN -> and ( before( el ? ? ? ( WhenFn(var ? ? ? HUMAN)))( el ? ? ? ( WhenFn(var ? ? ? CORPSE))))( not (exists Object (\OTHERPART -> and ( holdsDuring( el ? ? ? ( WhenFn(var ? ? ? CORPSE)))( part(var ? ? ? OTHERPART)(var ? ? ? CORPSE)))( not ( holdsDuring( el ? ? ? ( WhenFn(var ? ? ? HUMAN)))( part(var ? ? ? OTHERPART)(var ? ? ? HUMAN)))))))))
+
+forall HumanCorpse (\CORPSE ->  attribute(var ? ? ? CORPSE)(el ? ? ? Dead))
+
+forall (both Object Entity) (\SLAVE ->  impl ( attribute(var ? ? ? SLAVE)(el ? ? ? HumanSlave))(exists Human (\PERSON -> and ( not ( equal(var ? ? ? PERSON)(var ? ? ? SLAVE)))( possesses(var ? ? ? PERSON)(var ? ? ? SLAVE)))))
+
+forall HumanAdult (\ADULT -> forall (both RealNumber Quantity) (\NUMBER ->  impl ( age(var ? ? ? ADULT)( el ? ? ? ( MeasureFn(var ? ? ? NUMBER)(el ? ? ? YearDuration))))( greaterThanOrEqualTo(var ? ? ? NUMBER)(el ? ? ? (toInt 18)))))
+
+forall HumanYouth (\YOUTH -> forall (both RealNumber Quantity) (\NUMBER ->  impl ( age(var ? ? ? YOUTH)( el ? ? ? ( MeasureFn(var ? ? ? NUMBER)(el ? ? ? YearDuration))))( lessThan(var ? ? ? NUMBER)(el ? ? ? (toInt 18)))))
+
+forall HumanChild (\CHILD ->  attribute(var ? ? ? CHILD)(el ? ? ? NonFullyFormed))
+
+forall HumanChild (\CHILD -> forall (both RealNumber Quantity) (\NUMBER ->  impl ( age(var ? ? ? CHILD)( el ? ? ? ( MeasureFn(var ? ? ? NUMBER)(el ? ? ? YearDuration))))( lessThanOrEqualTo(var ? ? ? NUMBER)(el ? ? ? (toInt 14)))))
+
+forall Teenager (\TEEN -> forall (both RealNumber Quantity) (\NUMBER ->  impl ( age(var ? ? ? TEEN)( el ? ? ? ( MeasureFn(var ? ? ? NUMBER)(el ? ? ? YearDuration))))(and ( greaterThan(var ? ? ? NUMBER)(el ? ? ? (toInt 12)))( lessThan(var ? ? ? NUMBER)(el ? ? ? (toInt 20))))))
+
+forall HumanBaby (\BABY -> forall (both RealNumber Quantity) (\NUMBER ->  impl ( age(var ? ? ? BABY)( el ? ? ? ( MeasureFn(var ? ? ? NUMBER)(el ? ? ? YearDuration))))( lessThanOrEqualTo(var ? ? ? NUMBER)(el ? ? ? (toInt 1)))))
+
+forall Object (\O2 -> forall Object (\O1 ->  impl ( older(var ? ? ? O1)(var ? ? ? O2))(exists UnitOfMeasure (\U -> exists (both RealNumber Quantity) (\N2 -> exists (both RealNumber Quantity) (\N1 -> and ( age(var ? ? ? O1)( el ? ? ? ( MeasureFn(var ? ? ? N1)(var ? ? ? U))))(and ( age(var ? ? ? O2)( el ? ? ? ( MeasureFn(var ? ? ? N2)(var ? ? ? U))))( greaterThan(var ? ? ? N1)(var ? ? ? N2)))))))))
+
+forall Mounting (\M -> forall (both Entity Object) (\O -> forall (both Agent Object) (\A ->  impl (and ( agent(var ? ? ? M)(var ? ? ? A))( patient(var ? ? ? M)(var ? ? ? O)))(and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? M)))))( not ( orientation(var ? ? ? A)(var ? ? ? O)(el ? ? ? On))))( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? M)))))( orientation(var ? ? ? A)(var ? ? ? O)(el ? ? ? On)))))))
+
+forall Wading (\P -> exists BodyOfWater (\W ->  located(var ? ? ? P)(var ? ? ? W)))
+
+forall Jumping (\J -> forall (both Agent Object) (\A ->  impl ( agent(var ? ? ? J)(var ? ? ? A))( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? J)))))( not ( attribute(var ? ? ? A)(el ? ? ? Standing))))))
+
+forall Somersaulting (\S -> forall (both Agent Object) (\A ->  impl ( agent(var ? ? ? S)(var ? ? ? A))(and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? S)))))( attribute(var ? ? ? A)(el ? ? ? Sitting)))( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? S)))))( attribute(var ? ? ? A)(el ? ? ? Sitting))))))
+
+forall Sunlight (\L ->  origin(var ? ? ? L)(el ? ? ? Sol))
+
+forall WrittenCommunication (\W -> exists Text (\T -> exists Character (\C -> exists Script (\S -> and ( result(var ? ? ? W)(var ? ? ? T))(and ( part(var ? ? ? C)(var ? ? ? T))( member(var ? ? ? C)(var ? ? ? S)))))))
+
+forall Lyrics (\LYRIC ->  hasPurpose(var ? ? ? LYRIC)(exists Singing (\SING ->  patient(var ? ? ? SING)(var ? ? ? LYRIC))))
+
+forall Paragraph (\T -> exists Sentence (\S ->  part(var ? ? ? S)(var ? ? ? T)))
+
+forall InstrumentalMusic (\MUSIC -> exists MusicalInstrument (\INSTRUMENT ->  instrument(var ? ? ? MUSIC)(var ? ? ? INSTRUMENT)))
+
+forall VocalMusic (\M -> exists Singing (\S ->  subProcess(var ? ? ? S)(var ? ? ? M)))
+
+forall WindInstrument (\WI -> forall Music (\M -> forall Agent (\A ->  impl (and ( agent(var ? ? ? M)(var ? ? ? A))( instrument(var ? ? ? M)(var ? ? ? WI)))(exists Exhaling (\B -> and ( agent(var ? ? ? B)(var ? ? ? A))( subProcess(var ? ? ? B)(var ? ? ? M)))))))
+
+forall Ringing (\R -> exists Bell (\B ->  instrument(var ? ? ? R)(var ? ? ? B)))
+
+forall Bell (\B -> forall Impacting (\I ->  impl ( destination(var ? ? ? I)(var ? ? ? B))(exists MusicalTone (\MT ->  causes(var ? ? ? I)(var ? ? ? MT)))))
+
+forall Drumming (\D -> exists Drum (\DRUM -> exists Impacting (\I -> exists Agent (\A -> and ( agent(var ? ? ? D)(var ? ? ? A))(and ( instrument(var ? ? ? D)(var ? ? ? DRUM))(and ( subProcess(var ? ? ? I)(var ? ? ? D))(and ( agent(var ? ? ? I)(var ? ? ? A))( patient(var ? ? ? I)(var ? ? ? DRUM)))))))))
+
+forall Drum (\D ->  hasPurpose(var ? ? ? D)(exists Drumming (\P ->  instrument(var ? ? ? P)(var ? ? ? D))))
+
+forall WrittenCommunication (\COMMUNICATE -> exists Writing (\WRITE -> exists Reading (\READ -> exists Text (\TEXT -> and ( instrument(var ? ? ? COMMUNICATE)(var ? ? ? TEXT))(and ( result(var ? ? ? WRITE)(var ? ? ? TEXT))(and ( patient(var ? ? ? READ)(var ? ? ? TEXT))(and ( subProcess(var ? ? ? WRITE)(var ? ? ? COMMUNICATE))( subProcess(var ? ? ? READ)(var ? ? ? COMMUNICATE)))))))))
+
+forall Corresponding (\C -> exists Mailing (\M -> exists Text (\T -> and ( subProcess(var ? ? ? M)(var ? ? ? C))(and ( patient(var ? ? ? M)(var ? ? ? T))( patient(var ? ? ? C)(var ? ? ? T))))))
+
+forall Reminding (\REMIND -> exists Remembering (\REMEMBER ->  causes(var ? ? ? REMIND)(var ? ? ? REMEMBER)))
+
+forall LegalAction (\ACTION -> exists Registering (\REGISTER ->  subProcess(var ? ? ? REGISTER)(var ? ? ? ACTION)))
+
+forall Answering (\ANSWER -> exists Questioning (\QUESTION -> and ( refers(var ? ? ? ANSWER)(var ? ? ? QUESTION))( earlier( el ? ? ? ( WhenFn(var ? ? ? QUESTION)))( el ? ? ? ( WhenFn(var ? ? ? ANSWER))))))
+
+forall Arguing (\ARGUE -> exists Statement (\STATEMENT -> exists Argument (\ARGUMENT -> and ( patient(var ? ? ? ARGUE)(var ? ? ? STATEMENT))( containsInformation(var ? ? ? STATEMENT)(var ? ? ? ARGUMENT)))))
+
+forall TellingALie (\STATE -> forall (both Entity Sentence) (\STATEMENT -> forall (both Agent CognitiveAgent) (\AGENT ->  impl (and ( agent(var ? ? ? STATE)(var ? ? ? AGENT))( patient(var ? ? ? STATE)(var ? ? ? STATEMENT)))( holdsDuring( el ? ? ? ( WhenFn(var ? ? ? STATE)))( believes(var ? ? ? AGENT)( truth(var ? ? ? STATEMENT)(el ? ? ? False)))))))
+
+forall Founding (\FOUND -> exists Organization (\ORG ->  result(var ? ? ? FOUND)(var ? ? ? ORG)))
+
+forall Divorcing (\D -> exists (both TimePosition TimeInterval) (\T2 -> exists (both TimePosition TimeInterval) (\T1 -> exists Human (\P2 -> exists Human (\P1 -> and ( holdsDuring(var ? ? ? T1)( spouse(var ? ? ? P1)(var ? ? ? P2)))(and ( holdsDuring(var ? ? ? T2)( not ( spouse(var ? ? ? P1)(var ? ? ? P2))))(and ( finishes(var ? ? ? T1)(var ? ? ? D))( starts(var ? ? ? T2)(var ? ? ? D)))))))))
+
+forall Appointing (\A -> forall (both Entity Human) (\H ->  impl ( patient(var ? ? ? A)(var ? ? ? H))(exists Organization (\ORG -> exists Position (\P -> and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? A)))))( not ( occupiesPosition(var ? ? ? H)(var ? ? ? P)(var ? ? ? ORG))))( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? A)))))( occupiesPosition(var ? ? ? H)(var ? ? ? P)(var ? ? ? ORG))))))))
+
+forall TurningOffDevice (\P -> forall (both Entity Object) (\D ->  impl ( patient(var ? ? ? P)(var ? ? ? D))(and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? P)))))( attribute(var ? ? ? D)(el ? ? ? DeviceOn)))( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? P)))))( attribute(var ? ? ? D)(el ? ? ? DeviceOff))))))
+
+forall TurningOnDevice (\P -> forall (both Entity Object) (\D ->  impl ( patient(var ? ? ? P)(var ? ? ? D))(and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? P)))))( attribute(var ? ? ? D)(el ? ? ? DeviceOff)))( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? P)))))( attribute(var ? ? ? D)(el ? ? ? DeviceOn))))))
+
+forall Projectile (\PROJECTILE -> exists ProjectileShell (\SHELL ->  part(var ? ? ? SHELL)(var ? ? ? PROJECTILE)))
+
+forall Shooting (\SHOOT -> exists Projectile (\PROJECTILE -> exists Gun (\GUN -> and ( patient(var ? ? ? SHOOT)(var ? ? ? PROJECTILE))( instrument(var ? ? ? SHOOT)(var ? ? ? GUN)))))
+
+forall Bullet (\B ->  hasPurpose(var ? ? ? B)(exists Shooting (\S -> exists Gun (\GUN -> and ( instrument(var ? ? ? S)(var ? ? ? GUN))( patient(var ? ? ? S)(var ? ? ? B))))))
+
+forall GunBarrel (\B -> exists Gun (\G ->  part(var ? ? ? B)(var ? ? ? G)))
+
+forall Gun (\G -> forall GunBarrel (\B -> forall Shooting (\S -> forall Projectile (\P -> forall Object (\GUN ->  impl (and ( part(var ? ? ? B)(var ? ? ? G))(and ( instrument(var ? ? ? S)(var ? ? ? GUN))( patient(var ? ? ? S)(var ? ? ? P))))(exists (both Process Motion) (\SUB -> and ( subProcess(var ? ? ? SUB)(var ? ? ? S))( path(var ? ? ? SUB)(var ? ? ? B)))))))))
+
+forall GunStock (\STOCK -> exists Gun (\GUN ->  part(var ? ? ? STOCK)(var ? ? ? GUN)))
+
+forall Handle (\H ->  hasPurpose(var ? ? ? H)(exists Grabbing (\G -> exists Hand (\D -> and ( patient(var ? ? ? G)(var ? ? ? H))( instrument(var ? ? ? G)(var ? ? ? D))))))
+
+forall Shield (\S -> exists Handle (\H ->  part(var ? ? ? H)(var ? ? ? S)))
+
+forall WingDevice (\W -> exists Aircraft (\A ->  part(var ? ? ? W)(var ? ? ? A)))
+
+forall Tube (\T ->  hasPurpose(var ? ? ? T)(exists Transfer (\P -> exists (both Entity Object) (\OBJ -> and ( path(var ? ? ? P)(var ? ? ? T))(and ( patient(var ? ? ? P)(var ? ? ? OBJ))( attribute(var ? ? ? OBJ)(el ? ? ? Fluid)))))))
+
+forall PictureFrame (\F ->  hasPurpose(var ? ? ? F)(exists (either PaintedPicture Photograph) (\P ->  meetsSpatially(var ? ? ? F)(var ? ? ? P))))
+
+forall Shelf (\S -> exists Furniture (\F ->  part(var ? ? ? S)(var ? ? ? F)))
+
+forall (both Object (both SelfConnectedObject Hole)) (\C ->  impl ( attribute(var ? ? ? C)(el ? ? ? ContainerFull))(exists Hole (\H -> exists Object (\S -> and ( hole(var ? ? ? H)(var ? ? ? C))( fills(var ? ? ? S)(var ? ? ? C))))))
+
+forall Holster (\H ->  hasPurpose(var ? ? ? H)(exists Pistol (\P ->  contains(var ? ? ? H)(var ? ? ? P))))
+
+forall PetroleumProduct (\PP -> exists OrganicCompound (\O ->  part(var ? ? ? O)(var ? ? ? PP)))
+
+forall SwitchDevice (\DEVICE -> exists ElectricDevice (\ELECTRIC -> exists Process (\PROC2 -> exists Process (\PROC1 -> and ( instrument(var ? ? ? PROC1)(var ? ? ? DEVICE))(and ( causes(var ? ? ? PROC1)(var ? ? ? PROC2))( instrument(var ? ? ? PROC2)(var ? ? ? ELECTRIC)))))))
+
+forall Aerator (\AERATOR ->  hasPurpose(var ? ? ? AERATOR)(exists Combining (\COMBINE -> exists Air (\AIR -> and ( resourceS(var ? ? ? COMBINE)(var ? ? ? AIR))( instrument(var ? ? ? COMBINE)(var ? ? ? AERATOR))))))
+
+forall Aerating (\AERATE -> exists Air (\AIR -> exists (both Entity Object) (\S -> and ( patient(var ? ? ? AERATE)(var ? ? ? AIR))(and ( patient(var ? ? ? AERATE)(var ? ? ? S))( attribute(var ? ? ? S)(el ? ? ? Liquid))))))
+
+forall Broom (\B ->  hasPurpose(var ? ? ? B)(exists Sweeping (\S ->  instrument(var ? ? ? S)(var ? ? ? B))))
+
+forall BrushOrComb (\B ->  hasPurpose(var ? ? ? B)(exists (either Removing SurfaceChange) (\S ->  instrument(var ? ? ? S)(var ? ? ? B))))
+
+forall VendingDevice (\VD ->  hasPurpose(var ? ? ? VD)(exists FinancialTransaction (\T -> exists Currency (\C -> exists Product (\P -> and ( instrument(var ? ? ? T)(var ? ? ? VD))(and ( patient(var ? ? ? T)(var ? ? ? C))( patient(var ? ? ? T)(var ? ? ? P))))))))
+
+forall WritingDevice (\D ->  hasPurpose(var ? ? ? D)(exists Writing (\W ->  instrument(var ? ? ? W)(var ? ? ? D))))
+
+forall SmokingDevice (\D ->  hasPurpose(var ? ? ? D)(exists Smoking (\S ->  instrument(var ? ? ? S)(var ? ? ? D))))
+
+forall Toothbrush (\T -> forall Tooth (\TOOTH -> forall Bacterium (\B ->  hasPurpose(var ? ? ? T)(exists Killing (\K -> and ( instrument(var ? ? ? K)(var ? ? ? T))(and ( patient(var ? ? ? K)(var ? ? ? B))( patient(var ? ? ? K)(var ? ? ? TOOTH))))))))
+
+forall CigarOrCigarette (\C -> exists Tobacco (\T ->  part(var ? ? ? T)(var ? ? ? C)))
+
+forall Tableware (\T ->  hasPurpose(var ? ? ? T)(exists Ingesting (\I ->  instrument(var ? ? ? I)(var ? ? ? T))))
+
+forall Compass (\C -> exists DirectionalAttribute (\D ->  represents(var ? ? ? C)(var ? ? ? D)))
+
+forall CoolingDevice (\D ->  hasPurpose(var ? ? ? D)(exists Cooling (\C ->  instrument(var ? ? ? C)(var ? ? ? D))))
+
+forall FanDevice (\F ->  hasPurpose(var ? ? ? F)(exists Wind (\W ->  instrument(var ? ? ? W)(var ? ? ? F))))
+
+forall HeatingDevice (\D ->  hasPurpose(var ? ? ? D)(exists Heating (\H ->  instrument(var ? ? ? H)(var ? ? ? D))))
+
+forall Oven (\O ->  hasPurpose(var ? ? ? O)(exists Cooking (\C ->  instrument(var ? ? ? C)(var ? ? ? O))))
+
+forall Stove (\S ->  hasPurpose(var ? ? ? S)(exists Cooking (\C ->  instrument(var ? ? ? C)(var ? ? ? S))))
+
+forall PotOrPan (\P ->  hasPurpose(var ? ? ? P)(exists Cooking (\C ->  instrument(var ? ? ? C)(var ? ? ? P))))
+
+forall RecreationOrExerciseDevice (\D ->  hasPurpose(var ? ? ? D)(exists RecreationOrExercise (\E ->  instrument(var ? ? ? E)(var ? ? ? D))))
+
+forall WalkingCane (\C ->  hasPurpose(var ? ? ? C)(exists Walking (\W ->  instrument(var ? ? ? W)(var ? ? ? C))))
+
+forall WashingDevice (\D ->  hasPurpose(var ? ? ? D)(exists Washing (\W ->  instrument(var ? ? ? W)(var ? ? ? D))))
+
+forall Crane (\C -> exists HoistingDevice (\H ->  component(var ? ? ? H)(var ? ? ? C)))
+
+forall OpticalDevice (\D ->  hasPurpose(var ? ? ? D)(exists Seeing (\S ->  instrument(var ? ? ? S)(var ? ? ? D))))
+
+forall Filter (\FILTER ->  hasPurpose(var ? ? ? FILTER)(exists Removing (\REMOVE -> exists Solution (\SOLUTION -> and ( origin(var ? ? ? REMOVE)(var ? ? ? SOLUTION))( instrument(var ? ? ? REMOVE)(var ? ? ? FILTER))))))
+
+forall ElectricDevice (\DEV -> forall Process (\EV ->  impl ( patient(var ? ? ? EV)(var ? ? ? DEV))(exists Electricity (\R ->  resourceS(var ? ? ? EV)(var ? ? ? R)))))
+
+forall Radar (\RADAR ->  hasPurpose(var ? ? ? RADAR)(exists Discovering (\DISCOVER ->  instrument(var ? ? ? DISCOVER)(var ? ? ? RADAR))))
+
+forall Sonar (\SONAR ->  hasPurpose(var ? ? ? SONAR)(exists Discovering (\DISCOVER ->  instrument(var ? ? ? DISCOVER)(var ? ? ? SONAR))))
+
+forall ElectricalSignalling (\S -> exists ElectricDevice (\D ->  instrument(var ? ? ? S)(var ? ? ? D)))
+
+forall ElectronicSignalling (\S -> exists Computer (\D ->  instrument(var ? ? ? S)(var ? ? ? D)))
+
+forall SafeContainer (\S -> exists Lock (\L ->  part(var ? ? ? L)(var ? ? ? S)))
+
+forall AnimalController (\AC ->  hasPurpose(var ? ? ? AC)(exists Guiding (\G -> exists Animal (\A -> and ( instrument(var ? ? ? G)(var ? ? ? AC))( patient(var ? ? ? G)(var ? ? ? A))))))
+
+forall SelfPoweredDevice (\DEVICE -> exists Device (\SOURCE ->  powerPlant(var ? ? ? DEVICE)(var ? ? ? SOURCE)))
+
+forall AnimalPoweredDevice (\D -> forall Process (\P ->  impl ( instrument(var ? ? ? P)(var ? ? ? D))(exists Animal (\A ->  instrument(var ? ? ? P)(var ? ? ? A)))))
+
+forall (both LengthMeasure Quantity) (\H -> forall (both SelfConnectedObject (both Object (both Entity Quantity))) (\S2 -> forall (both SelfConnectedObject (both Object (both Entity Quantity))) (\S1 -> forall (both Object SelfConnectedObject) (\F ->  impl ( attribute(var ? ? ? F)(el ? ? ? Flat))(and ( side(var ? ? ? S1)(var ? ? ? F))(and ( side(var ? ? ? S2)(var ? ? ? F))(and ( meetsSpatially(var ? ? ? S1)(var ? ? ? S2))(and ( not ( equal(var ? ? ? S1)(var ? ? ? S2)))(and ( height(var ? ? ? F)(var ? ? ? H))(and ( greaterThan(var ? ? ? S1)( el ? ? ? ( MultiplicationFn(el ? ? ? (toInt 2))(var ? ? ? H))))( greaterThan(var ? ? ? S2)( el ? ? ? ( MultiplicationFn(el ? ? ? (toInt 2))(var ? ? ? H))))))))))))))
+
+forall (both PhysicalQuantity Quantity) (\H -> forall (both SelfConnectedObject (both Object (both Entity Quantity))) (\S2 -> forall (both SelfConnectedObject (both Object (both Entity Quantity))) (\S1 -> forall (both Object SelfConnectedObject) (\F ->  impl ( attribute(var ? ? ? F)(el ? ? ? LongAndThin))(and ( side(var ? ? ? S1)(var ? ? ? F))(and ( side(var ? ? ? S2)(var ? ? ? F))(and ( meetsSpatially(var ? ? ? S1)(var ? ? ? S2))(and ( not ( equal(var ? ? ? S1)(var ? ? ? S2)))(and ( length(var ? ? ? F)(var ? ? ? H))(and ( lessThan(var ? ? ? S1)( el ? ? ? ( MultiplicationFn(el ? ? ? (toInt 3))(var ? ? ? H))))( lessThan(var ? ? ? S2)( el ? ? ? ( MultiplicationFn(el ? ? ? (toInt 3))(var ? ? ? H))))))))))))))
+
+forall (both Object SelfConnectedObject) (\O ->  impl ( attribute(var ? ? ? O)(el ? ? ? LevelShape))( not (exists (both LengthMeasure Quantity) (\H2 -> exists (both LengthMeasure Quantity) (\H1 -> exists (both SelfConnectedObject Object) (\T -> exists (both Object SelfConnectedObject) (\P2 -> exists (both Object SelfConnectedObject) (\P1 -> and ( top(var ? ? ? T)(var ? ? ? O))(and ( part(var ? ? ? P1)(var ? ? ? T))(and ( part(var ? ? ? P2)(var ? ? ? T))(and ( height(var ? ? ? P1)(var ? ? ? H1))(and ( height(var ? ? ? P2)(var ? ? ? H2))( greaterThan(var ? ? ? H1)(var ? ? ? H2))))))))))))))
+
+forall (both Object Entity) (\T ->  impl ( attribute(var ? ? ? T)(el ? ? ? SymmetricShape))(exists Object (\C2 -> exists Object (\C1 -> and ( copy(var ? ? ? C1)(var ? ? ? C2))( equal(var ? ? ? T)( el ? ? ? ( MereologicalSumFn(var ? ? ? C1)(var ? ? ? C2))))))))
+
+forall Baton (\B ->  hasPurpose(var ? ? ? B)(exists InstrumentalMusic (\IM -> exists Guiding (\G -> and ( instrument(var ? ? ? G)(var ? ? ? B))( causes(var ? ? ? G)(var ? ? ? IM))))))
+
+forall Baton (\B ->  attribute(var ? ? ? B)(el ? ? ? LongAndThin))
+
+forall BroadcastNetwork (\N -> exists Organization (\O -> forall (both SelfConnectedObject Object) (\M ->  impl ( member(var ? ? ? M)(var ? ? ? N))( possesses(var ? ? ? O)(var ? ? ? M)))))
+
+forall Candle (\CANDLE ->  material(desc Wax ? ?)(var ? ? ? CANDLE))
+
+forall Candle (\C ->  hasPurpose(var ? ? ? C)(exists Fire (\F ->  resourceS(var ? ? ? F)(var ? ? ? C))))
+
+forall Lightning (\L -> exists Cloud (\C ->  located(var ? ? ? L)(var ? ? ? C)))
+
+forall Thunder (\T -> exists Lightning (\L ->  causes(var ? ? ? L)(var ? ? ? T)))
+
+forall VehicleLight (\L -> exists Vehicle (\V ->  part(var ? ? ? L)(var ? ? ? V)))
+
+forall Headlight (\L -> exists Vehicle (\V ->  part(var ? ? ? L)( el ? ? ? ( FrontFn(var ? ? ? V)))))
+
+forall Taillight (\L -> exists Vehicle (\V ->  part(var ? ? ? L)( el ? ? ? ( BackFn(var ? ? ? V)))))
+
+forall PaintedPicture (\PP -> exists Paint (\PAINT -> exists Painting (\PAINTING -> and ( resourceS(var ? ? ? PAINTING)(var ? ? ? PAINT))( result(var ? ? ? PAINTING)(var ? ? ? PP)))))
+
+forall WatercolorPicture (\W -> exists WatercolorPaint (\WP -> exists Painting (\P -> and ( resourceS(var ? ? ? P)(var ? ? ? WP))( result(var ? ? ? P)(var ? ? ? W)))))
+
+forall Wallpaper (\P ->  hasPurpose(var ? ? ? P)(exists Wall (\W -> exists Room (\R -> exists Covering (\C -> and ( part(var ? ? ? W)(var ? ? ? R))(and ( patient(var ? ? ? C)(var ? ? ? W))( instrument(var ? ? ? C)(var ? ? ? P))))))))
+
+forall Portrait (\P -> exists Face (\F ->  represents(var ? ? ? P)(var ? ? ? F)))
+
+forall Folding (\F -> forall (both Entity Object) (\O ->  impl ( patient(var ? ? ? F)(var ? ? ? O))(exists Covering (\C -> exists (both Object Entity) (\P2 -> exists Object (\P1 -> and ( subProcess(var ? ? ? C)(var ? ? ? F))(and ( part(var ? ? ? P1)(var ? ? ? O))(and ( part(var ? ? ? P2)(var ? ? ? O))(and ( instrument(var ? ? ? C)(var ? ? ? P1))( patient(var ? ? ? C)(var ? ? ? P2)))))))))))
+
+forall WatercolorPaint (\P -> exists Water (\W ->  part(var ? ? ? W)(var ? ? ? P)))
+
+forall OilPaint (\P -> exists Oil (\O ->  part(var ? ? ? O)(var ? ? ? P)))
+
+forall OilPicture (\P -> exists OilPaint (\O -> exists Painting (\PAINTING -> and ( resourceS(var ? ? ? PAINTING)(var ? ? ? O))( result(var ? ? ? PAINTING)(var ? ? ? P)))))
+
+forall ArtPainting (\PAINT -> exists PaintedPicture (\PICTURE ->  result(var ? ? ? PAINT)(var ? ? ? PICTURE)))
+
+forall (both RealNumber Quantity) (\N -> forall Solution (\S ->  impl ( potentialOfHydrogen(var ? ? ? S)(var ? ? ? N))(and ( greaterThanOrEqualTo(var ? ? ? N)(el ? ? ? (toInt 0)))( lessThanOrEqualTo(var ? ? ? N)(el ? ? ? (toInt 14))))))
+
+forall Tracing (\T -> exists Blueprint (\P ->  result(var ? ? ? T)(var ? ? ? P)))
+
+forall ComposingMusic (\C -> exists MusicalComposition (\M ->  result(var ? ? ? C)(var ? ? ? M)))
+
+forall Drawing (\DRAW -> exists Sketch (\SKETCH ->  result(var ? ? ? DRAW)(var ? ? ? SKETCH)))
+
+forall Focusing (\F -> exists Lens (\L ->  patient(var ? ? ? F)(var ? ? ? L)))
+
+forall DisplayArtifact (\DA ->  hasPurpose(var ? ? ? DA)(exists Putting (\P -> exists Disseminating (\D -> exists ContentBearingObject (\I -> and ( patient(var ? ? ? P)(var ? ? ? I))(and ( patient(var ? ? ? D)(var ? ? ? I))( destination(var ? ? ? P)(var ? ? ? DA))))))))
+
+forall LandVehicle (\VEHICLE -> exists Wheel (\WHEEL ->  part(var ? ? ? WHEEL)(var ? ? ? VEHICLE)))
+
+forall VehicleController (\C -> exists Vehicle (\V ->  part(var ? ? ? C)(var ? ? ? V)))
+
+forall VehicleController (\C ->  hasPurpose(var ? ? ? C)(exists Driving (\D ->  instrument(var ? ? ? D)(var ? ? ? C))))
+
+forall VehicleWindow (\W -> exists Vehicle (\V ->  part(var ? ? ? W)(var ? ? ? V)))
+
+forall Windshield (\W -> exists Automobile (\A ->  part(var ? ? ? W)( el ? ? ? ( FrontFn(var ? ? ? A)))))
+
+forall VehicleWheel (\W -> forall RoadVehicle (\V ->  impl ( part(var ? ? ? W)(var ? ? ? V))(exists Axle (\A -> and ( component(var ? ? ? A)(var ? ? ? V))( connected(var ? ? ? W)(var ? ? ? A))))))
+
+forall Paper (\PAPER ->  hasPurpose(var ? ? ? PAPER)(exists Text (\TEXT ->  part(var ? ? ? TEXT)(var ? ? ? PAPER))))
+
+forall CurrencyBill (\BILL -> exists Paper (\PAPER ->  part(var ? ? ? PAPER)(var ? ? ? BILL)))
+
+forall Wire (\WIRE ->  material(desc Metal ? ?)(var ? ? ? WIRE))
+
+forall WireLine (\WL ->  hasPurpose(var ? ? ? WL)(exists Radiating (\R ->  path(var ? ? ? R)(var ? ? ? WL))))
+
+forall TelephoneLine (\TL -> exists (either Telephone Telegraph) (\T1 -> exists (either Telephone Telegraph) (\T2 -> (and ( not ( equal(var ? ? ? T1)(var ? ? ? T2)))( connects(var ? ? ? TL)(var ? ? ? T1)(var ? ? ? T2))))))
+
+forall String (\S ->  material(desc Fabric ? ?)(var ? ? ? S))
+
+forall Plug (\PLUG -> exists Hole (\HOLE ->  completelyFills(var ? ? ? PLUG)(var ? ? ? HOLE)))
+
+forall Pottery (\POTTERY -> exists Clay (\CLAY ->  part(var ? ? ? CLAY)(var ? ? ? POTTERY)))
+
+forall Furniture (\F ->  hasPurpose(var ? ? ? F)(exists Floor (\FL ->  meetsSpatially(var ? ? ? F)(var ? ? ? FL))))
+
+forall Seat (\SEAT ->  hasPurpose(var ? ? ? SEAT)(exists Human (\PERSON -> and ( located(var ? ? ? PERSON)(var ? ? ? SEAT))( attribute(var ? ? ? PERSON)(el ? ? ? Sitting)))))
+
+forall Sofa (\S ->  hasPurpose(var ? ? ? S)(exists Human (\P1 -> exists Human (\P2 -> exists TimePosition (\T -> and ( not ( equal(var ? ? ? P1)(var ? ? ? P2)))( holdsDuring(var ? ? ? T)(and ( attribute(var ? ? ? P1)(el ? ? ? Sitting))(and ( attribute(var ? ? ? P2)(el ? ? ? Sitting))(and ( located(var ? ? ? P1)(var ? ? ? S))( located(var ? ? ? P2)(var ? ? ? S)))))))))))
+
+forall Bed (\BED ->  hasPurpose(var ? ? ? BED)(exists (both Object Physical) (\PERSON -> and ( attribute(var ? ? ? PERSON)(el ? ? ? Asleep))( located(var ? ? ? PERSON)(var ? ? ? BED)))))
+
+forall Coffin (\C ->  hasPurpose(var ? ? ? C)(exists HumanCorpse (\HC ->  located(var ? ? ? HC)(var ? ? ? C))))
+
+forall Compartment (\C -> exists Container (\O -> and ( not ( equal(var ? ? ? C)(var ? ? ? O)))( part(var ? ? ? C)(var ? ? ? O))))
+
+forall Mailbox (\B ->  hasPurpose(var ? ? ? B)(exists Mailing (\M -> exists Entity (\I -> and ( patient(var ? ? ? M)(var ? ? ? I))( destination(var ? ? ? M)(var ? ? ? B))))))
+
+forall Screwdriver (\D ->  hasPurpose(var ? ? ? D)(exists Rotating (\R -> exists Screw (\S -> and ( instrument(var ? ? ? R)(var ? ? ? D))( patient(var ? ? ? R)(var ? ? ? S))))))
+
+forall Hammer (\H ->  hasPurpose(var ? ? ? H)(exists Impelling (\I -> exists Nail (\N -> and ( instrument(var ? ? ? I)(var ? ? ? H))( patient(var ? ? ? I)(var ? ? ? N))))))
+
+forall Tape (\TAPE -> exists (either Paper Fabric) (\PART -> part(var ? ? ? PART)(var ? ? ? TAPE)))
+
+forall Button (\B ->  hasPurpose(var ? ? ? B)(exists Clothing (\C ->  part(var ? ? ? B)(var ? ? ? C))))
+
+forall HorseRiding (\R -> exists Horse (\H ->  instrument(var ? ? ? R)(var ? ? ? H)))
+
+forall Dish (\D ->  hasPurpose(var ? ? ? D)(exists Food (\F -> exists Eating (\E -> and ( patient(var ? ? ? E)(var ? ? ? F))(and ( patient(var ? ? ? E)(var ? ? ? D))( located(var ? ? ? F)(var ? ? ? D)))))))
+
+forall Container (\CONTAINER ->  hasPurpose(var ? ? ? CONTAINER)(exists Object (\OBJ ->  contains(var ? ? ? CONTAINER)(var ? ? ? OBJ))))
+
+forall Bag (\BAG -> exists Fabric (\PART ->  part(var ? ? ? PART)(var ? ? ? BAG)))
+
+forall TrapOrCage (\T ->  hasPurpose(var ? ? ? T)(exists Confining (\C ->  instrument(var ? ? ? C)(var ? ? ? T))))
+
+forall FluidContainer (\TANK -> forall Object (\STUFF ->  impl ( contains(var ? ? ? TANK)(var ? ? ? STUFF))( attribute(var ? ? ? STUFF)(el ? ? ? Fluid))))
+
+forall Bottle (\BOTTLE -> forall Object (\STUFF ->  impl ( contains(var ? ? ? BOTTLE)(var ? ? ? STUFF))( attribute(var ? ? ? STUFF)(el ? ? ? Liquid))))
+
+forall Bottle (\BOTTLE -> forall (both PhysicalQuantity Quantity) (\WIDTH2 -> forall (both PhysicalQuantity Quantity) (\WIDTH1 -> forall (both SelfConnectedObject Object) (\TOP -> forall (both SelfConnectedObject Object) (\BOTTOM ->  impl (and ( bottom(var ? ? ? BOTTOM)(var ? ? ? BOTTLE))(and ( top(var ? ? ? TOP)(var ? ? ? BOTTLE))(and ( width(var ? ? ? BOTTOM)(var ? ? ? WIDTH1))( width(var ? ? ? TOP)(var ? ? ? WIDTH2)))))( lessThan(var ? ? ? WIDTH2)(var ? ? ? WIDTH1)))))))
+
+forall SwimmingPool (\P ->  hasPurpose(var ? ? ? P)(exists Swimming (\S ->  located(var ? ? ? S)(var ? ? ? P))))
+
+forall Brick (\B ->  material(desc Clay ? ?)(var ? ? ? B))
+
+forall Brick (\B ->  hasPurpose(var ? ? ? B)(exists Constructing (\C ->  resourceS(var ? ? ? C)(var ? ? ? B))))
+
+forall TwoDimensionalObject (\TO -> forall (both Object GeometricFigure) (\O ->  impl ( attribute(var ? ? ? O)(el ? ? ? RoundShape))(forall (both GeometricFigure Object) (\P -> and ( pointOfFigure(var ? ? ? P)(var ? ? ? O))(and ( meetsSpatially(var ? ? ? P)(var ? ? ? O))(and ( meetsSpatially(var ? ? ? P)(var ? ? ? TO))(exists OneDimensionalFigure (\T ->  tangent(var ? ? ? T)(var ? ? ? TO)))))))))
+
+forall Bubble (\B -> exists (both SelfConnectedObject Object) (\S -> and ( surface(var ? ? ? S)(var ? ? ? B))( attribute(var ? ? ? S)(el ? ? ? Liquid))))
+
+forall Bubble (\B -> forall Object (\P ->  impl ( interiorPart(var ? ? ? P)(var ? ? ? B))( attribute(var ? ? ? P)(el ? ? ? Gas))))
+
+forall Bubble (\B ->  impl ( not (exists Attribute (\S -> exists (both Object Entity) (\X -> and ( attribute(var ? ? ? X)(var ? ? ? S))(and ( not ( equal(var ? ? ? X)(el ? ? ? Gas)))( meetsSpatially(var ? ? ? X)(var ? ? ? B)))))))( attribute(var ? ? ? B)(el ? ? ? RoundShape)))
+
+forall Nest (\NEST ->  hasPurpose(var ? ? ? NEST)(exists Birth (\BIRTH ->  located(var ? ? ? BIRTH)(var ? ? ? NEST))))
+
+forall Apron (\A ->  hasPurpose(var ? ? ? A)(exists Cooking (\C -> exists (both Agent Animal) (\P -> and ( agent(var ? ? ? C)(var ? ? ? P))( holdsDuring( el ? ? ? ( WhenFn(var ? ? ? C)))( wears(var ? ? ? P)(var ? ? ? A)))))))
+
+forall Belt (\B -> forall Animal (\P ->  impl ( wears(var ? ? ? P)(var ? ? ? B))(exists Clothing (\C -> and ( wears(var ? ? ? P)(var ? ? ? C))( meetsSpatially(var ? ? ? B)(var ? ? ? C))))))
+
+forall TieClothing (\T -> forall (both Animal Object) (\P ->  impl ( wears(var ? ? ? P)(var ? ? ? T))(exists Neck (\N -> and ( part(var ? ? ? N)(var ? ? ? P))( contains(var ? ? ? T)(var ? ? ? N))))))
+
+forall Collar (\C -> exists (either Coat Shirt) (\OC -> part(var ? ? ? C)(var ? ? ? OC)))
+
+forall Collar (\C -> forall (both Animal Object) (\P ->  impl ( wears(var ? ? ? P)(var ? ? ? C))(exists Neck (\N -> and ( part(var ? ? ? N)(var ? ? ? P))( meetsSpatially(var ? ? ? C)(var ? ? ? N))))))
+
+forall Glove (\G -> forall (both Animal Object) (\P ->  impl ( wears(var ? ? ? P)(var ? ? ? G))(exists Hand (\H -> and ( part(var ? ? ? H)(var ? ? ? P))( meetsSpatially(var ? ? ? G)(var ? ? ? H))))))
+
+forall Hat (\HAT -> forall (both Animal Object) (\PERSON ->  impl ( wears(var ? ? ? PERSON)(var ? ? ? HAT))(exists Head (\HEAD -> and ( part(var ? ? ? HEAD)(var ? ? ? PERSON))( meetsSpatially(var ? ? ? HAT)(var ? ? ? HEAD))))))
+
+forall Trousers (\T -> forall (both Animal Object) (\H ->  impl ( wears(var ? ? ? H)(var ? ? ? T))(exists Leg (\L -> and ( part(var ? ? ? L)(var ? ? ? H))( contains(var ? ? ? T)(var ? ? ? L))))))
+
+forall Shoe (\SHOE -> forall (both Animal Object) (\PERSON ->  impl ( wears(var ? ? ? PERSON)(var ? ? ? SHOE))(exists Foot (\FOOT -> and ( part(var ? ? ? FOOT)(var ? ? ? PERSON))( meetsSpatially(var ? ? ? SHOE)(var ? ? ? FOOT))))))
+
+forall ShoeSole (\SS -> exists Shoe (\S ->  bottom(var ? ? ? SS)(var ? ? ? S)))
+
+forall Sandal (\S -> exists Hole (\H1 -> exists Hole (\H2 -> and ( not ( equal(var ? ? ? H1)(var ? ? ? H2)))( hasPurpose(var ? ? ? H1)(exists Dressing (\D -> exists Foot (\F -> exists Inserting (\I -> exists (both Agent Object) (\A -> and ( agent(var ? ? ? D)(var ? ? ? A))(and ( part(var ? ? ? F)(var ? ? ? A))(and ( subProcess(var ? ? ? I)(var ? ? ? D))(and ( patient(var ? ? ? I)(var ? ? ? F))( destination(var ? ? ? I)(var ? ? ? H1))))))))))))))
+
+forall Sandal (\S -> exists ShoeSole (\SOLE -> and ( part(var ? ? ? SOLE)(var ? ? ? S))( attribute(var ? ? ? SOLE)(el ? ? ? Flat))))
+
+forall Sock (\S -> forall (both Animal Object) (\P ->  impl ( wears(var ? ? ? P)(var ? ? ? S))(exists Foot (\F -> and ( part(var ? ? ? F)(var ? ? ? P))( contains(var ? ? ? S)(var ? ? ? F))))))
+
+forall Sleeve (\S -> forall (both Animal Object) (\P ->  impl ( wears(var ? ? ? P)(var ? ? ? S))(exists Arm (\A -> and ( part(var ? ? ? A)(var ? ? ? P))( contains(var ? ? ? S)(var ? ? ? A))))))
+
+forall Sleeve (\S -> exists (either Shirt Coat) (\C -> part(var ? ? ? S)(var ? ? ? C)))
+
+forall ClothingSuit (\SUIT -> forall Animal (\PERSON -> forall TimePosition (\TIME -> forall (both SelfConnectedObject Clothing) (\ITEM1 ->  impl (and ( member(var ? ? ? ITEM1)(var ? ? ? SUIT))( holdsDuring(var ? ? ? TIME)( wears(var ? ? ? PERSON)(var ? ? ? ITEM1))))(forall (both SelfConnectedObject Clothing) (\ITEM2 ->  impl ( member(var ? ? ? ITEM2)(var ? ? ? SUIT))( holdsDuring(var ? ? ? TIME)( wears(var ? ? ? PERSON)(var ? ? ? ITEM2)))))))))
+
+forall Rug (\R -> forall Floor (\F ->  hasPurpose(var ? ? ? R)(exists Covering (\C -> and ( instrument(var ? ? ? C)(var ? ? ? R))( patient(var ? ? ? C)(var ? ? ? F))))))
+
+forall Towel (\T ->  hasPurpose(var ? ? ? T)(exists Drying (\D ->  instrument(var ? ? ? D)(var ? ? ? T))))
+
+forall Leather (\LEATHER -> exists Making (\MAKE -> exists Skin (\SKIN -> and ( resourceS(var ? ? ? MAKE)(var ? ? ? SKIN))( result(var ? ? ? MAKE)(var ? ? ? LEATHER)))))
+
+forall Wool (\W -> exists Making (\M -> exists Hair (\H -> exists Sheep (\S -> and ( result(var ? ? ? M)(var ? ? ? W))(and ( resourceS(var ? ? ? M)(var ? ? ? H))( part(var ? ? ? H)(var ? ? ? S)))))))
+
+forall Pocket (\POCKET -> exists Clothing (\CLOTHING ->  part(var ? ? ? POCKET)(var ? ? ? CLOTHING)))
+
+forall Blanket (\BLANKET ->  hasPurpose(var ? ? ? BLANKET)(exists Heating (\HEAT -> exists Human (\PERSON -> exists Bed (\BED -> and ( patient(var ? ? ? HEAT)(var ? ? ? PERSON))( located(var ? ? ? PERSON)(var ? ? ? BED)))))))
+
+forall CottonFabric (\F -> exists Making (\M -> exists Cotton (\C -> and ( resourceS(var ? ? ? M)(var ? ? ? C))( result(var ? ? ? M)(var ? ? ? F)))))
+
+forall CottonFabric (\F ->  material(desc Cotton ? ?)(var ? ? ? F))
+
+forall Veil (\V ->  hasPurpose(var ? ? ? V)(exists Face (\F -> exists Hair (\H -> or ( meetsSpatially(var ? ? ? V)(var ? ? ? F))( meetsSpatially(var ? ? ? V)(var ? ? ? H))))))
+
+forall ChangingClothing (\CC -> exists RemovingClothing (\R -> exists Dressing (\D -> and ( subProcess(var ? ? ? R)(var ? ? ? CC))( subProcess(var ? ? ? D)(var ? ? ? CC)))))
+
+forall RemovingClothing (\REMOVE -> forall (both Entity Clothing) (\CLOTHING -> forall (both Agent Animal) (\AGENT ->  impl (and ( agent(var ? ? ? REMOVE)(var ? ? ? AGENT))( patient(var ? ? ? REMOVE)(var ? ? ? CLOTHING)))(and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? REMOVE)))))( wears(var ? ? ? AGENT)(var ? ? ? CLOTHING)))( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? REMOVE)))))( not ( wears(var ? ? ? AGENT)(var ? ? ? CLOTHING))))))))
+
+forall Washing (\P -> exists Detergent (\D -> exists Water (\W -> and ( instrument(var ? ? ? P)(var ? ? ? D))( instrument(var ? ? ? P)(var ? ? ? W)))))
+
+forall Sewing (\S -> exists Fabric (\F ->  patient(var ? ? ? S)(var ? ? ? F)))
+
+forall Soldering (\S -> forall (both Entity SelfConnectedObject) (\OBJ2 -> forall (both Entity SelfConnectedObject) (\OBJ1 ->  impl (and ( patient(var ? ? ? S)(var ? ? ? OBJ1))(and ( patient(var ? ? ? S)(var ? ? ? OBJ2))( not ( equal(var ? ? ? OBJ1)(var ? ? ? OBJ2)))))(exists MetallicAlloy (\A ->  connects(var ? ? ? A)(var ? ? ? OBJ1)(var ? ? ? OBJ2))))))
+
+forall (both CognitiveAgent Agent) (\DOCTOR -> forall (both Human Entity) (\PATIENT ->  impl ( patientMedical(var ? ? ? PATIENT)(var ? ? ? DOCTOR))(exists (either DiagnosticProcess TherapeuticProcess) (\PROCESS -> and ( patient(var ? ? ? PROCESS)(var ? ? ? PATIENT))(agent(var ? ? ? PROCESS)(var ? ? ? DOCTOR))))))
+
+forall Bandage (\B ->  hasPurpose(var ? ? ? B)(exists TherapeuticProcess (\TP -> exists Covering (\C -> and ( subProcess(var ? ? ? C)(var ? ? ? TP))( instrument(var ? ? ? C)(var ? ? ? B))))))
+
+forall RelievingPain (\R -> forall (both Entity Object) (\P ->  impl ( patient(var ? ? ? R)(var ? ? ? P))(and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? R)))))( attribute(var ? ? ? P)(el ? ? ? Pain)))( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? R)))))( not ( attribute(var ? ? ? P)(el ? ? ? Pain)))))))
+
+forall InfectiousDisease (\I -> forall Microorganism (\O -> forall (both Object Entity) (\A ->  impl ( attribute(var ? ? ? A)(var ? ? ? I))(exists PathologicProcess (\P -> and ( agent(var ? ? ? P)(var ? ? ? O))( experiencer(var ? ? ? P)(var ? ? ? A)))))))
+
+forall Object (\H ->  impl ( attribute(var ? ? ? H)(el ? ? ? Emphysema))(exists Lung (\L -> exists PathologicProcess (\P -> and ( part(var ? ? ? L)(var ? ? ? H))( located(var ? ? ? P)(var ? ? ? L))))))
+
+forall Human (\H ->  impl ( attribute(var ? ? ? H)(el ? ? ? Fever))(exists (both RealNumber Quantity) (\N -> and ( measure(var ? ? ? H)( el ? ? ? ( MeasureFn(var ? ? ? N)(el ? ? ? FahrenheitDegree))))( greaterThan(var ? ? ? N)(el ? ? ? (toRealNum 98.6))))))
+
+forall Object (\H ->  impl ( attribute(var ? ? ? H)(el ? ? ? Goiter))(exists ThyroidGland (\G -> exists PathologicProcess (\P -> and ( part(var ? ? ? G)(var ? ? ? H))( located(var ? ? ? P)(var ? ? ? G))))))
+
+forall RecoveringFromIllness (\R -> forall Physical (\T -> forall (both Entity Object) (\A ->  impl ( experiencer(var ? ? ? R)(var ? ? ? A))(exists DiseaseOrSyndrome (\D -> and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? T)))))( attribute(var ? ? ? A)(var ? ? ? D)))( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? T)))))( not ( attribute(var ? ? ? A)(var ? ? ? D)))))))))
+
+forall (both Organism Object) (\O2 -> forall Organism (\O1 ->  impl ( parasite(var ? ? ? O1)(var ? ? ? O2))( inhabits(var ? ? ? O1)(var ? ? ? O2))))
+
+forall (both Organism Entity) (\O2 -> forall (both Organism Agent) (\O1 ->  impl ( parasite(var ? ? ? O1)(var ? ? ? O2))(exists Injuring (\I -> and ( agent(var ? ? ? I)(var ? ? ? O1))( patient(var ? ? ? I)(var ? ? ? O2))))))
+
+forall Object (\PERSON ->  impl ( attribute(var ? ? ? PERSON)(el ? ? ? Cancer))(exists Tumor (\TUMOR ->  part(var ? ? ? TUMOR)(var ? ? ? PERSON))))
+
+forall ConjugatedSubstance (\CS -> exists CompoundSubstance (\C1 -> exists CompoundSubstance (\C2 -> exists ChemicalSynthesis (\P -> and ( not ( equal(var ? ? ? C1)(var ? ? ? C2)))(and ( resourceS(var ? ? ? P)(var ? ? ? C1))(and ( resourceS(var ? ? ? P)(var ? ? ? C2))( result(var ? ? ? P)(var ? ? ? CS))))))))
+
+forall (both CompoundSubstance PureSubstance) (\COMPOUND2 -> forall (both CompoundSubstance PureSubstance) (\COMPOUND1 ->  impl ( conjugate(var ? ? ? COMPOUND1)(var ? ? ? COMPOUND2))(exists (both PositiveInteger (both Quantity Entity)) (\NUMBER2 -> exists (both PositiveInteger (both Entity Quantity)) (\NUMBER1 -> and ( protonNumber(var ? ? ? COMPOUND1)(var ? ? ? NUMBER1))(and ( protonNumber(var ? ? ? COMPOUND2)(var ? ? ? NUMBER2))(or ( equal(var ? ? ? NUMBER1)( el ? ? ? ( AdditionFn(var ? ? ? NUMBER2)(el ? ? ? (toInt 1)))))( equal(var ? ? ? NUMBER2)( el ? ? ? ( AdditionFn(var ? ? ? NUMBER1)(el ? ? ? (toInt 1))))))))))))
+
+forall Biting (\BITE -> forall (both Agent Object) (\ANIMAL ->  impl ( agent(var ? ? ? BITE)(var ? ? ? ANIMAL))(exists Mouth (\MOUTH -> and ( part(var ? ? ? MOUTH)(var ? ? ? ANIMAL))( instrument(var ? ? ? BITE)(var ? ? ? MOUTH))))))
+
+forall Strangling (\S -> exists Throat (\T ->  patient(var ? ? ? S)(var ? ? ? T)))
+
+forall Spitting (\SPIT -> forall (both Agent Object) (\ANIMAL ->  impl ( agent(var ? ? ? SPIT)(var ? ? ? ANIMAL))(exists Mouth (\MOUTH -> and ( part(var ? ? ? MOUTH)(var ? ? ? ANIMAL))( origin(var ? ? ? SPIT)(var ? ? ? MOUTH))))))
+
+forall Punching (\P -> forall (both Agent Object) (\A ->  impl ( agent(var ? ? ? P)(var ? ? ? A))(exists Hand (\H -> and ( attribute(var ? ? ? H)(el ? ? ? Fist))(and ( part(var ? ? ? H)(var ? ? ? A))( instrument(var ? ? ? P)(var ? ? ? H)))))))
+
+forall Kicking (\KICK -> forall (both Agent Object) (\ANIMAL ->  impl ( agent(var ? ? ? KICK)(var ? ? ? ANIMAL))(exists Foot (\FOOT -> and ( part(var ? ? ? FOOT)(var ? ? ? ANIMAL))( instrument(var ? ? ? KICK)(var ? ? ? FOOT))))))
+
+forall Messaging (\MESSAGING -> exists Message (\M ->  patient(var ? ? ? MESSAGING)(var ? ? ? M)))
+
+forall Human (\PERSON2 -> forall Human (\PERSON1 ->  impl ( neighbor(var ? ? ? PERSON1)(var ? ? ? PERSON2))(exists (both PermanentResidence (both Entity Object)) (\HOME2 -> exists (both PermanentResidence (both Entity Object)) (\HOME1 -> and ( home(var ? ? ? PERSON1)(var ? ? ? HOME1))(and ( home(var ? ? ? PERSON2)(var ? ? ? HOME2))(and ( not ( equal(var ? ? ? HOME1)(var ? ? ? HOME2)))( orientation(var ? ? ? HOME1)(var ? ? ? HOME2)(el ? ? ? Near)))))))))
+
+forall SelfConnectedObject (\OBJ2 -> forall (both PhysicalQuantity ConstantQuantity) (\MEAS -> forall Object (\OBJ1 ->  impl (and ( measure(var ? ? ? OBJ1)(var ? ? ? MEAS))( contains(var ? ? ? OBJ2)(var ? ? ? OBJ1)))( capacity(var ? ? ? OBJ2)(var ? ? ? MEAS)))))
+
+forall Entity (\ITEM -> forall List (\LIST ->  equiv ( equal( el ? ? ? ( LastFn(var ? ? ? LIST)))(var ? ? ? ITEM))(exists (both Entity PositiveInteger) (\NUMBER -> and ( equal( el ? ? ? ( ListLengthFn(var ? ? ? LIST)))(var ? ? ? NUMBER))( equal( el ? ? ? ( ListOrderFn(var ? ? ? LIST)(var ? ? ? NUMBER)))(var ? ? ? ITEM))))))
+
+forall List (\LIST ->  impl ( not ( equal(var ? ? ? LIST)(el ? ? ? NullList)))( equal( el ? ? ? ( FirstFn(var ? ? ? LIST)))( el ? ? ? ( ListOrderFn(var ? ? ? LIST)(el ? ? ? (toInt 1))))))
+
+forall (both Entity Agent) (\AGENT -> forall Nation (\COUNTRY -> forall City (\CITY -> forall Roadway (\ROAD -> forall (both StationaryArtifact Address) (\PLACE ->  impl ( equal( el ? ? ? ( StreetAddressFn(var ? ? ? PLACE)(var ? ? ? ROAD)(var ? ? ? CITY)(var ? ? ? COUNTRY)))(var ? ? ? AGENT))( address(var ? ? ? AGENT)(var ? ? ? PLACE)))))))
+
+forall Entity (\AGENT -> forall Nation (\COUNTRY -> forall City (\CITY -> forall Roadway (\ROAD -> forall (both StationaryArtifact Object) (\PLACE ->  impl ( equal( el ? ? ? ( StreetAddressFn(var ? ? ? PLACE)(var ? ? ? ROAD)(var ? ? ? CITY)(var ? ? ? COUNTRY)))(var ? ? ? AGENT))(exists Building (\BUILDING ->  part(var ? ? ? PLACE)(var ? ? ? BUILDING))))))))
+
+forall ArtStudio (\STUDIO ->  hasPurpose(var ? ? ? STUDIO)(exists Making (\MAKE -> exists ArtWork (\WORK ->  result(var ? ? ? MAKE)(var ? ? ? WORK)))))
+
+forall Mine (\MINE ->  hasPurpose(var ? ? ? MINE)(exists Removing (\REMOVE -> exists Mineral (\MINERAL -> and ( patient(var ? ? ? REMOVE)(var ? ? ? MINERAL))( origin(var ? ? ? REMOVE)(var ? ? ? MINE))))))
+
+forall Prison (\P ->  hasPurpose(var ? ? ? P)(exists Confining (\C -> exists Human (\H -> exists Government (\G -> and ( located(var ? ? ? C)(var ? ? ? P))(and ( patient(var ? ? ? C)(var ? ? ? H))( agent(var ? ? ? C)(var ? ? ? G))))))))
+
+forall VotingPoll (\P -> exists Voting (\V ->  located(var ? ? ? V)(var ? ? ? P)))
+
+forall Camp (\CAMP -> exists Tent (\TENT ->  part(var ? ? ? TENT)(var ? ? ? CAMP)))
+
+forall Tent (\TENT -> exists Fabric (\FABRIC ->  part(var ? ? ? FABRIC)(var ? ? ? TENT)))
+
+forall Monument (\M ->  hasPurpose(var ? ? ? M)(exists Remembering (\R ->  instrument(var ? ? ? R)(var ? ? ? M))))
+
+forall Tomb (\T ->  hasPurpose(var ? ? ? T)(exists Object (\P -> and ( attribute(var ? ? ? P)(el ? ? ? Dead))( contains(var ? ? ? T)(var ? ? ? P)))))
+
+forall Workshop (\S -> forall Artifact (\W ->  hasPurpose(var ? ? ? S)(exists Making (\M ->  result(var ? ? ? M)(var ? ? ? W)))))
+
+forall ExecutiveResidence (\RESIDENCE -> exists Human (\PERSON -> exists Position (\POSITION -> exists (both Object GeopoliticalArea) (\AREA -> and ( located(var ? ? ? RESIDENCE)(var ? ? ? AREA))(and ( home(var ? ? ? PERSON)(var ? ? ? RESIDENCE))( chiefOfState(var ? ? ? AREA)(var ? ? ? POSITION)(var ? ? ? PERSON)))))))
+
+forall ApartmentUnit (\UNIT -> forall (both Human Agent) (\PERSON ->  impl ( home(var ? ? ? PERSON)(var ? ? ? UNIT))( not ( possesses(var ? ? ? PERSON)(var ? ? ? UNIT)))))
+
+forall ApartmentUnit (\UNIT -> exists ApartmentBuilding (\BUILDING ->  part(var ? ? ? UNIT)(var ? ? ? BUILDING)))
+
+forall (both PermanentResidence (both Object (both Residence Entity))) (\U -> forall Agent (\L ->  impl ( landlord(var ? ? ? L)(var ? ? ? U))(exists Renting (\R -> exists Agent (\P -> and ( possesses(var ? ? ? L)(var ? ? ? U))(and ( tenant(var ? ? ? P)(var ? ? ? U))(and ( agent(var ? ? ? R)(var ? ? ? P))( patient(var ? ? ? R)(var ? ? ? U)))))))))
+
+forall (both Residence (both PermanentResidence (both Object Entity))) (\U -> forall Agent (\P ->  impl ( tenant(var ? ? ? P)(var ? ? ? U))(exists Renting (\R -> exists Agent (\L -> and ( landlord(var ? ? ? L)(var ? ? ? U))(and ( agent(var ? ? ? R)(var ? ? ? P))(and ( possesses(var ? ? ? L)(var ? ? ? U))( patient(var ? ? ? R)(var ? ? ? U)))))))))
+
+forall CondominiumUnit (\UNIT -> exists CondominiumBuilding (\BUILDING ->  part(var ? ? ? UNIT)(var ? ? ? BUILDING)))
+
+forall ApartmentBuilding (\BUILDING -> exists ApartmentUnit (\UNIT1 -> exists ApartmentUnit (\UNIT2 -> and ( part(var ? ? ? UNIT1)(var ? ? ? BUILDING))(and ( part(var ? ? ? UNIT2)(var ? ? ? BUILDING))( not ( equal(var ? ? ? UNIT1)(var ? ? ? UNIT2)))))))
+
+forall CondominiumBuilding (\BUILDING -> exists CondominiumUnit (\UNIT1 -> exists CondominiumUnit (\UNIT2 -> and ( part(var ? ? ? UNIT1)(var ? ? ? BUILDING))(and ( part(var ? ? ? UNIT2)(var ? ? ? BUILDING))( not ( equal(var ? ? ? UNIT1)(var ? ? ? UNIT2)))))))
+
+forall Dormitory (\D -> exists School (\S ->  possesses(var ? ? ? S)(var ? ? ? D)))
+
+forall SportsFacility (\G ->  hasPurpose(var ? ? ? G)(exists Sport (\S ->  located(var ? ? ? S)(var ? ? ? G))))
+
+forall Store (\X ->  hasPurpose(var ? ? ? X)(exists FinancialTransaction (\EV ->  located(var ? ? ? EV)(var ? ? ? X))))
+
+forall Factory (\X ->  hasPurpose(var ? ? ? X)(exists Manufacture (\EV ->  located(var ? ? ? EV)(var ? ? ? X))))
+
+forall FarmBuilding (\B -> exists Farm (\F ->  located(var ? ? ? B)(var ? ? ? F)))
+
+forall EntertainmentCompany (\C -> exists (both CommercialService Performance) (\P ->  agent(var ? ? ? P)(var ? ? ? C)))
+
+forall InsuranceCompany (\I -> exists Contract (\C ->  insured(var ? ? ? C)(var ? ? ? I)))
+
+forall FinancialService (\S -> exists FinancialCompany (\O ->  agent(var ? ? ? S)(var ? ? ? O)))
+
+forall Partnership (\C -> exists Human (\H1 -> exists Human (\H2 -> and ( not ( equal(var ? ? ? H1)(var ? ? ? H2)))(and ( possesses(var ? ? ? H1)(var ? ? ? C))( possesses(var ? ? ? H2)(var ? ? ? C))))))
+
+forall Scholarship (\F -> forall Entity (\H ->  impl ( destination(var ? ? ? F)(var ? ? ? H))( hasPurpose(var ? ? ? F)(exists EducationalProgram (\EP -> exists Process (\P -> and ( realization(var ? ? ? P)(var ? ? ? EP))( experiencer(var ? ? ? P)(var ? ? ? H))))))))
+
+forall Welfare (\W -> exists ServiceOrganization (\O ->  agent(var ? ? ? W)(var ? ? ? O)))
+
+forall Publisher (\C -> exists (both CommercialService Publication) (\S ->  agent(var ? ? ? S)(var ? ? ? C)))
+
+forall FamilyBusiness (\C -> forall (both Agent Organism) (\P2 -> forall (both Agent Organism) (\P1 ->  impl (and ( possesses(var ? ? ? P1)(var ? ? ? C))( possesses(var ? ? ? P2)(var ? ? ? C)))( familyRelation(var ? ? ? P1)(var ? ? ? P2)))))
+
+forall Restaurant (\C -> exists (both CommercialService Selling) (\S -> exists Food (\F -> exists RestaurantBuilding (\B -> and ( agent(var ? ? ? S)(var ? ? ? C))(and ( located(var ? ? ? S)(var ? ? ? B))( patient(var ? ? ? S)(var ? ? ? F)))))))
+
+forall Proprietorship (\C -> exists Human (\H -> and ( possesses(var ? ? ? H)(var ? ? ? C))( not (exists (both Entity Agent) (\H2 -> and ( not ( equal(var ? ? ? H)(var ? ? ? H2)))( possesses(var ? ? ? H2)(var ? ? ? C)))))))
+
+forall Auditorium (\AUDITORIUM ->  hasPurpose(var ? ? ? AUDITORIUM)(exists Demonstrating (\DEMO ->  located(var ? ? ? DEMO)(var ? ? ? AUDITORIUM))))
+
+forall Auditorium (\AUDITORIUM -> exists PerformanceStage (\STAGE ->  part(var ? ? ? STAGE)(var ? ? ? AUDITORIUM)))
+
+forall AuditoriumSeat (\SEAT -> exists Auditorium (\AUDITORIUM ->  part(var ? ? ? SEAT)(var ? ? ? AUDITORIUM)))
+
+forall Object (\OBJECT -> forall CognitiveAgent (\AGENT ->  impl ( dislikes(var ? ? ? AGENT)(var ? ? ? OBJECT))( desires(var ? ? ? AGENT)( not ( possesses(var ? ? ? AGENT)(var ? ? ? OBJECT))))))
+
+forall (both Physical Object) (\OBJECT -> forall (both CognitiveAgent Agent) (\AGENT -> forall TimePosition (\TIME ->  impl ( holdsDuring(var ? ? ? TIME)( lacks(var ? ? ? AGENT)(var ? ? ? OBJECT)))( holdsDuring(var ? ? ? TIME)( not ( possesses(var ? ? ? AGENT)(var ? ? ? OBJECT)))))))
+
+forall Human (\PERSON -> forall (both Entity Collection) (\DESCENDANTS ->  impl ( equal( el ? ? ? ( DescendantsFn(var ? ? ? PERSON)))(var ? ? ? DESCENDANTS))(forall (both SelfConnectedObject Organism) (\MEMBER ->  equiv ( member(var ? ? ? MEMBER)(var ? ? ? DESCENDANTS))( ancestor(var ? ? ? MEMBER)(var ? ? ? PERSON))))))
+
+forall Brood (\BROOD -> forall (both SelfConnectedObject Organism) (\MEMBER2 -> forall (both SelfConnectedObject Organism) (\MEMBER1 ->  impl (and ( member(var ? ? ? MEMBER1)(var ? ? ? BROOD))( member(var ? ? ? MEMBER2)(var ? ? ? BROOD)))( sibling(var ? ? ? MEMBER1)(var ? ? ? MEMBER2)))))
+
+forall Brood (\BROOD -> exists Entity (\TIME -> forall (both SelfConnectedObject Entity) (\MEMBER ->  impl ( member(var ? ? ? MEMBER)(var ? ? ? BROOD))(exists Birth (\BIRTH -> and ( experiencer(var ? ? ? BIRTH)(var ? ? ? MEMBER))( equal(var ? ? ? TIME)( el ? ? ? ( WhenFn(var ? ? ? BIRTH)))))))))
+
+forall AnimalTeam (\AT -> exists Pulling (\P ->  agent(var ? ? ? P)(var ? ? ? AT)))
+
+forall TeamSport (\S -> exists SportsTeam (\T1 -> exists SportsTeam (\T2 -> and ( contestParticipant(var ? ? ? S)(var ? ? ? T1))(and ( contestParticipant(var ? ? ? S)(var ? ? ? T2))( not ( equal(var ? ? ? T1)(var ? ? ? T2)))))))
+
+forall CommunicationOrganization (\CO -> exists CommunicationSystem (\CS -> exists Communication (\C -> and ( instrument(var ? ? ? C)(var ? ? ? CS))( agent(var ? ? ? C)(var ? ? ? CO)))))
+
+forall NonprofitOrganization (\N ->  not ( hasPurpose(var ? ? ? N)(exists CurrencyMeasure (\P ->  profit(var ? ? ? N)(var ? ? ? P)))))
+
+forall CareOrganization (\ORG ->  hasPurpose(var ? ? ? ORG)(exists Human (\PATIENT ->  medicalPatient(var ? ? ? PATIENT)(var ? ? ? ORG))))
+
+forall Tavern (\COMPANY -> exists (both CommercialService Selling) (\SERVICE -> exists AlcoholicBeverage (\BEVERAGE -> and ( agent(var ? ? ? SERVICE)(var ? ? ? COMPANY))( patient(var ? ? ? SERVICE)(var ? ? ? BEVERAGE)))))
+
+forall DrugStore (\D -> forall Medicine (\M -> exists Selling (\S -> and ( agent(var ? ? ? S)(var ? ? ? D))( patient(var ? ? ? S)(var ? ? ? M)))))
+
+forall GroceryStore (\STORE -> exists Selling (\SELL -> exists Food (\FOOD -> and ( agent(var ? ? ? SELL)(var ? ? ? STORE))( patient(var ? ? ? SELL)(var ? ? ? FOOD)))))
+
+forall BargainSale (\SALE -> forall Object (\OBJ ->  impl ( patient(var ? ? ? SALE)(var ? ? ? OBJ))(exists Agent (\AGENT2 -> exists Agent (\AGENT1 -> exists (both CurrencyMeasure Quantity) (\PRICE2 -> exists (both CurrencyMeasure Quantity) (\PRICE1 -> and ( holdsDuring( el ? ? ? ( ImmediatePastFn( el ? ? ? ( WhenFn(var ? ? ? SALE)))))( price(var ? ? ? OBJ)(var ? ? ? PRICE1)(var ? ? ? AGENT1)))(and ( holdsDuring( el ? ? ? ( WhenFn(var ? ? ? SALE)))( price(var ? ? ? OBJ)(var ? ? ? PRICE2)(var ? ? ? AGENT2)))( lessThan(var ? ? ? PRICE2)(var ? ? ? PRICE1))))))))))
+
+ not ( overlapsTemporally(el ? ? ? CommonEra)(el ? ? ? BeforeCommonEra))
+
+forall ReligiousBuilding (\BUILDING ->  hasPurpose(var ? ? ? BUILDING)(exists ReligiousService (\SERVICE ->  located(var ? ? ? SERVICE)(var ? ? ? BUILDING))))
+
+forall Steeple (\STEEPLE -> exists Building (\BUILDING ->  part(var ? ? ? STEEPLE)(var ? ? ? BUILDING)))
+
+forall CommunistParty (\P -> forall GeopoliticalArea (\A -> forall (both SelfConnectedObject CognitiveAgent) (\M ->  impl ( member(var ? ? ? M)(var ? ? ? P))( desires(var ? ? ? M)( governmentType(var ? ? ? A)(el ? ? ? CommunistState))))))
+
+forall (both GeopoliticalArea PermanentResidence) (\AREA -> forall (both SelfConnectedObject Human) (\PERSON ->  impl ( member(var ? ? ? PERSON)( el ? ? ? ( ResidentFn(var ? ? ? AREA))))( home(var ? ? ? PERSON)(var ? ? ? AREA))))
+
+forall GeopoliticalArea (\AREA -> forall (both Entity (either SetOrClass Collection)) (\POPULATION -> forall (both Entity (either SetOrClass Collection)) (\CITIZENRY ->  impl (and ( equal(var ? ? ? CITIZENRY)( el ? ? ? ( CitizenryFn(var ? ? ? AREA))))( equal(var ? ? ? POPULATION)( el ? ? ? ( ResidentFn(var ? ? ? AREA)))))( greaterThanOrEqualTo( el ? ? ? ( CardinalityFn(var ? ? ? POPULATION)))( el ? ? ? ( CardinalityFn(var ? ? ? CITIZENRY)))))))
+
+forall CityDistrict (\DISTRICT -> exists City (\CITY ->  geopoliticalSubdivision(var ? ? ? DISTRICT)(var ? ? ? CITY)))
+
+forall Cemetery (\C -> exists Tomb (\T ->  located(var ? ? ? T)(var ? ? ? C)))
+
+forall Park (\PARK -> exists Government (\GOV ->  possesses(var ? ? ? GOV)(var ? ? ? PARK)))
+
+forall Park (\PARK ->  hasPurpose(var ? ? ? PARK)(exists RecreationOrExercise (\REC ->  located(var ? ? ? REC)(var ? ? ? PARK))))
+
+forall PublicPark (\P -> exists Government (\G ->  possesses(var ? ? ? G)(var ? ? ? P)))
+
+forall CultivatedLandArea (\A -> exists Agriculture (\C ->  located(var ? ? ? C)(var ? ? ? A)))
+
+forall Campground (\C ->  hasPurpose(var ? ? ? C)(exists MobileResidence (\R ->  located(var ? ? ? R)(var ? ? ? C))))
+
+forall CityBlock (\B -> exists City (\C ->  part(var ? ? ? B)(var ? ? ? C)))
+
+forall Human (\PERSON ->  impl ( occupiesPosition(var ? ? ? PERSON)(el ? ? ? SecretaryOfTheInterior)(el ? ? ? UnitedStatesDepartmentOfInterior))( leader(el ? ? ? UnitedStatesDepartmentOfInterior)(var ? ? ? PERSON)))
+
+forall StateGovernment (\GOVERNMENT -> exists StateOrProvince (\STATE ->  equal( el ? ? ? ( GovernmentFn(var ? ? ? STATE)))(var ? ? ? GOVERNMENT)))
+
+forall Battle (\B -> exists MilitaryUnit (\U1 -> exists MilitaryUnit (\U2 -> and ( not ( equal(var ? ? ? U1)(var ? ? ? U2)))(and ( agent(var ? ? ? B)(var ? ? ? U1))( agent(var ? ? ? B)(var ? ? ? U2))))))
+
+forall War (\WAR -> forall (both MilitaryUnit Organization) (\U2 -> forall (both MilitaryUnit Organization) (\U1 ->  impl ( hostileForces(var ? ? ? U1)(var ? ? ? U2))(exists (both Agent GeopoliticalArea) (\A2 -> exists (both Agent GeopoliticalArea) (\A1 -> exists Contest (\W -> and ( contestParticipant(var ? ? ? W)(var ? ? ? A1))(and ( contestParticipant(var ? ? ? W)(var ? ? ? A2))(and ( subOrganization(var ? ? ? U1)( el ? ? ? ( GovernmentFn(var ? ? ? A1))))( subOrganization(var ? ? ? U2)( el ? ? ? ( GovernmentFn(var ? ? ? A2)))))))))))))
+
+forall Commission (\COMMISSION ->  hasPurpose(var ? ? ? COMMISSION)(exists Investigating (\INVESTIGATE -> exists Entity (\ISSUE -> and ( patient(var ? ? ? INVESTIGATE)(var ? ? ? ISSUE))( agent(var ? ? ? INVESTIGATE)(var ? ? ? COMMISSION))))))
+
+forall ServiceOrganization (\ORG -> exists RegulatoryProcess (\PROC -> exists Government (\GOV -> and ( patient(var ? ? ? PROC)(var ? ? ? ORG))( agent(var ? ? ? PROC)(var ? ? ? GOV)))))
+
+forall Library (\L -> exists Building (\B -> exists Text (\T -> and ( possesses(var ? ? ? L)(var ? ? ? B))( located(var ? ? ? T)(var ? ? ? B)))))
+
+forall OrganizationalBoard (\BOARD -> exists Managing (\MANAGE -> exists (both Organization Entity) (\ORG -> and ( subOrganization(var ? ? ? BOARD)(var ? ? ? ORG))(and ( agent(var ? ? ? MANAGE)(var ? ? ? BOARD))( patient(var ? ? ? MANAGE)(var ? ? ? ORG))))))
+
+forall UnionOrganization (\ORG -> forall (both SelfConnectedObject CognitiveAgent) (\MEMBER -> exists (both Corporation Industry) (\COLL ->  impl ( member(var ? ? ? MEMBER)(var ? ? ? ORG))(or ( employs(var ? ? ? COLL)(var ? ? ? MEMBER))(exists (both SelfConnectedObject Organization) (\CORP -> and ( member(var ? ? ? CORP)(var ? ? ? COLL))( employs(var ? ? ? CORP)(var ? ? ? MEMBER))))))))
+
+forall Hydrocarbon (\S -> exists Carbon (\P1 -> exists Hydrogen (\P2 ->  equal(var ? ? ? S)( el ? ? ? ( MereologicalSumFn(var ? ? ? P1)(var ? ? ? P2))))))
+
+forall Alkaloid (\A -> exists Nitrogen (\N ->  part(var ? ? ? N)(var ? ? ? A)))
+
+forall Object (\P -> forall TimePosition (\T ->  impl ( holdsDuring(var ? ? ? T)( attribute(var ? ? ? P)(el ? ? ? Drugged)))( holdsDuring(var ? ? ? T)(exists BiologicallyActiveSubstance (\B ->  part(var ? ? ? B)(var ? ? ? P))))))
+
+forall (both Object Agent) (\PERSON -> forall TimePosition (\TIME ->  impl ( holdsDuring(var ? ? ? TIME)( attribute(var ? ? ? PERSON)(el ? ? ? Drunk)))(exists TimePosition (\PAST -> and ( temporalPart(var ? ? ? PAST)( el ? ? ? ( PastFn(var ? ? ? TIME))))( holdsDuring(var ? ? ? PAST)(exists Drinking (\DRINK -> exists AlcoholicBeverage (\ALCOHOL -> and ( patient(var ? ? ? DRINK)(var ? ? ? ALCOHOL))( agent(var ? ? ? DRINK)(var ? ? ? PERSON))))))))))
+
+forall Object (\P -> forall TimePosition (\T ->  impl ( holdsDuring(var ? ? ? T)( attribute(var ? ? ? P)(el ? ? ? Drunk)))( holdsDuring(var ? ? ? T)(exists Alcohol (\B ->  part(var ? ? ? B)(var ? ? ? P))))))
+
+forall Protein (\P -> exists AminoAcid (\A ->  part(var ? ? ? A)(var ? ? ? P)))
+
+forall Cholesterol (\S -> exists BiologicalProcess (\P -> exists Liver (\L -> and ( located(var ? ? ? P)(var ? ? ? L))( result(var ? ? ? P)(var ? ? ? S)))))
+
+forall ChemicalAcid (\CA -> forall ChemicalBase (\CB -> forall ChemicalProcess (\C ->  impl (and ( patient(var ? ? ? C)(var ? ? ? CA))( patient(var ? ? ? C)(var ? ? ? CB)))(exists ChemicalSalt (\CS ->  result(var ? ? ? C)(var ? ? ? CS))))))
+
+forall SodiumChloride (\SALT -> exists ChemicalSynthesis (\SYNTHESIS -> exists Sodium (\SODIUM -> exists Chlorine (\CHLORINE -> and ( resourceS(var ? ? ? SYNTHESIS)(var ? ? ? SODIUM))(and ( resourceS(var ? ? ? SYNTHESIS)(var ? ? ? CHLORINE))( result(var ? ? ? SYNTHESIS)(var ? ? ? SALT)))))))
+
+forall Water (\WATER -> exists ChemicalSynthesis (\SYNTHESIS -> exists Hydrogen (\HYDROGEN -> exists Oxygen (\OXYGEN -> and ( resourceS(var ? ? ? SYNTHESIS)(var ? ? ? HYDROGEN))(and ( resourceS(var ? ? ? SYNTHESIS)(var ? ? ? OXYGEN))( result(var ? ? ? SYNTHESIS)(var ? ? ? WATER)))))))
+
+forall Detergent (\DETERGENT ->  hasPurpose(var ? ? ? DETERGENT)(exists Removing (\REMOVE -> exists Substance (\SUBSTANCE -> exists SelfConnectedObject (\OBJECT -> exists (both Object SelfConnectedObject) (\SURFACE -> and ( patient(var ? ? ? REMOVE)(var ? ? ? SUBSTANCE))(and ( origin(var ? ? ? REMOVE)(var ? ? ? SURFACE))( surface(var ? ? ? SURFACE)(var ? ? ? OBJECT)))))))))
+
+forall BathingDevice (\BD -> forall Entity (\PERSON ->  hasPurpose(var ? ? ? BD)(exists Bathing (\B -> exists Human (\P -> and ( instrument(var ? ? ? B)(var ? ? ? BD))( patient(var ? ? ? B)(var ? ? ? PERSON)))))))
+
+forall WashBasin (\B ->  hasPurpose(var ? ? ? B)(exists Washing (\W -> exists Hand (\H -> and ( instrument(var ? ? ? W)(var ? ? ? B))( patient(var ? ? ? W)(var ? ? ? H))))))
+
+forall Glue (\GLUE ->  hasPurpose(var ? ? ? GLUE)(exists Attaching (\ATTACH ->  instrument(var ? ? ? ATTACH)(var ? ? ? GLUE))))
+
+forall MetallicAlloy (\ALLOY -> exists Metal (\METAL1 -> exists Metal (\METAL2 -> and ( not ( equal(var ? ? ? METAL1)(var ? ? ? METAL2)))(and ( part(var ? ? ? METAL1)(var ? ? ? ALLOY))( part(var ? ? ? METAL2)(var ? ? ? ALLOY))))))
+
+forall Steel (\STEEL -> exists Iron (\IRON ->  part(var ? ? ? IRON)(var ? ? ? STEEL)))
+
+forall Brass (\BRASS -> exists Copper (\COPPER -> exists Zinc (\ZINC -> and ( part(var ? ? ? COPPER)(var ? ? ? BRASS))( part(var ? ? ? ZINC)(var ? ? ? BRASS)))))
+
+forall Powder (\POWDER ->  attribute(var ? ? ? POWDER)(el ? ? ? Solid))
+
+forall Fog (\FOG -> exists LandArea (\LAND ->  meetsSpatially(var ? ? ? FOG)(var ? ? ? LAND)))
+
+forall Ice (\ICE -> forall (both RealNumber Quantity) (\NUMBER ->  impl ( measure(var ? ? ? ICE)( el ? ? ? ( MeasureFn(var ? ? ? NUMBER)(el ? ? ? CelsiusDegree))))( lessThanOrEqualTo(var ? ? ? NUMBER)(el ? ? ? (toInt 0)))))
+
+forall Lawn (\L -> exists Grass (\G ->  located(var ? ? ? G)(var ? ? ? L)))
+
+forall Meteorite (\M -> exists TimePosition (\T ->  holdsDuring(var ? ? ? T)( meetsSpatially(var ? ? ? M)(el ? ? ? PlanetEarth))))
+
+forall Meteorite (\M -> exists TimePosition (\T ->  holdsDuring(var ? ? ? T)( meetsSpatially(var ? ? ? M)(el ? ? ? EarthsAtmosphere))))
+
+forall AtmosphericRegion (\AR ->  geographicSubregion(var ? ? ? AR)(el ? ? ? EarthsAtmosphere))
+
+forall Creek (\C -> forall River (\R ->  smaller(var ? ? ? C)(var ? ? ? R)))
+
+forall StormFront (\FRONT -> exists Air (\AIR1 -> exists Air (\AIR2 ->  between(var ? ? ? AIR1)(var ? ? ? FRONT)(var ? ? ? AIR2))))
+
+forall Object (\REGION -> forall (both Object Physical) (\OBJ ->  equiv ( orientation(var ? ? ? OBJ)(var ? ? ? REGION)(el ? ? ? Outside))( not ( partlyLocated(var ? ? ? OBJ)(var ? ? ? REGION)))))
+
+forall Object (\REGION -> forall Object (\OBJ ->  equiv ( part(var ? ? ? OBJ)(var ? ? ? REGION))( not ( orientation(var ? ? ? OBJ)(var ? ? ? REGION)(el ? ? ? Outside)))))
+
+forall WoodArtifact (\W ->  material(desc Wood ? ?)(var ? ? ? W))
+
+forall Rubber (\R -> exists BotanicalTree (\T ->  part(var ? ? ? R)(var ? ? ? T)))
+
+forall Medicine (\M -> exists TherapeuticProcess (\P ->  instrument(var ? ? ? P)(var ? ? ? M)))
+
+forall Opium (\O -> exists Alkaloid (\A ->  part(var ? ? ? A)(var ? ? ? O)))
+
+forall Lesion (\L -> exists Injuring (\I ->  result(var ? ? ? I)(var ? ? ? L)))
+
+forall Lesion (\L -> exists Organ (\O -> exists (both SelfConnectedObject Object) (\S -> and ( surface(var ? ? ? S)(var ? ? ? O))( located(var ? ? ? L)(var ? ? ? S)))))
+
+forall Tendon (\T -> exists Muscle (\M -> exists Bone (\B ->  connects(var ? ? ? T)(var ? ? ? M)(var ? ? ? B))))
+
+forall Sweat (\SWEAT -> exists SodiumChloride (\PART ->  part(var ? ? ? PART)(var ? ? ? SWEAT)))
+
+forall TreeBranch (\B -> exists BotanicalTree (\T ->  part(var ? ? ? B)(var ? ? ? T)))
+
+forall Flower (\FLOWER -> exists FloweringPlant (\PLANT -> exists TimePosition (\TIME ->  holdsDuring(var ? ? ? TIME)( part(var ? ? ? FLOWER)(var ? ? ? PLANT)))))
+
+forall Antibody (\BODY ->  hasPurpose(var ? ? ? BODY)(exists Destruction (\DEST -> exists Antigen (\ANTI -> and ( agent(var ? ? ? DEST)(var ? ? ? BODY))( patient(var ? ? ? DEST)(var ? ? ? ANTI))))))
+
+forall BloodCell (\C -> exists Blood (\B ->  part(var ? ? ? C)(var ? ? ? B)))
+
+forall WhiteBloodCell (\C -> exists CellNucleus (\N ->  part(var ? ? ? N)(var ? ? ? C)))
+
+forall BloodTypeA (\B -> exists AntigenA (\A ->  part(var ? ? ? A)(var ? ? ? B)))
+
+forall BloodTypeAB (\B -> exists AntigenA (\A ->  part(var ? ? ? A)(var ? ? ? B)))
+
+forall BloodTypeAB (\B -> exists AntigenB (\A ->  part(var ? ? ? A)(var ? ? ? B)))
+
+forall BloodTypeB (\B -> exists AntigenB (\A ->  part(var ? ? ? A)(var ? ? ? B)))
+
+forall NerveCell (\N -> exists NervousSystem (\S ->  part(var ? ? ? N)(var ? ? ? S)))
+
+forall LiquidBodySubstance (\SUBSTANCE ->  attribute(var ? ? ? SUBSTANCE)(el ? ? ? Liquid))
+
+forall TearSubstance (\T -> exists Eye (\E -> exists Process (\P -> and ( instrument(var ? ? ? P)(var ? ? ? E))( result(var ? ? ? P)(var ? ? ? T)))))
+
+forall Milk (\MILK -> exists Mammal (\MAMMAL -> exists Process (\PROCESS -> and ( attribute(var ? ? ? MAMMAL)(el ? ? ? Female))(and ( instrument(var ? ? ? PROCESS)(var ? ? ? MAMMAL))( result(var ? ? ? PROCESS)(var ? ? ? MILK))))))
+
+forall CellNucleus (\NUCLEUS -> exists Cell (\CELL ->  part(var ? ? ? NUCLEUS)(var ? ? ? CELL)))
+
+forall AlcoholicBeverage (\BEVERAGE -> exists Alcohol (\ALCOHOL ->  part(var ? ? ? ALCOHOL)(var ? ? ? BEVERAGE)))
+
+forall DistilledAlcoholicBeverage (\BEVERAGE -> exists Removing (\REMOVE -> exists Water (\WATER -> and ( patient(var ? ? ? REMOVE)(var ? ? ? WATER))( origin(var ? ? ? REMOVE)(var ? ? ? BEVERAGE)))))
+
+forall Brandy (\B -> exists Distilling (\D -> exists Wine (\W -> and ( resourceS(var ? ? ? D)(var ? ? ? W))( result(var ? ? ? D)(var ? ? ? B)))))
+
+forall SpinalCord (\C -> exists NervousSystem (\S ->  part(var ? ? ? C)(var ? ? ? S)))
+
+forall SpinalCord (\C -> exists SpinalColumn (\S ->  contains(var ? ? ? S)(var ? ? ? C)))
+
+forall Skin (\SKIN -> exists Animal (\ANIMAL -> exists (both SelfConnectedObject Object) (\SURFACE -> and ( surface(var ? ? ? SURFACE)(var ? ? ? ANIMAL))(and ( part(var ? ? ? SKIN)(var ? ? ? ANIMAL))( overlapsSpatially(var ? ? ? SKIN)(var ? ? ? SURFACE))))))
+
+forall Retina (\R -> exists Eye (\E ->  part(var ? ? ? R)(var ? ? ? E)))
+
+forall BronchialDuct (\DUCT -> exists Lung (\LUNG ->  located(var ? ? ? DUCT)(var ? ? ? LUNG)))
+
+forall BloodVessel (\VESSEL -> exists Blood (\BLOOD -> exists Transfer (\TRANSFER -> and ( patient(var ? ? ? TRANSFER)(var ? ? ? BLOOD))( instrument(var ? ? ? TRANSFER)(var ? ? ? VESSEL)))))
+
+forall Alveolus (\A -> exists Lung (\L ->  located(var ? ? ? A)(var ? ? ? L)))
+
+forall Artery (\ARTERY -> forall Transfer (\TRANSFER -> forall Blood (\BLOOD ->  impl (and ( patient(var ? ? ? TRANSFER)(var ? ? ? BLOOD))( instrument(var ? ? ? TRANSFER)(var ? ? ? ARTERY)))(exists Heart (\HEART ->  origin(var ? ? ? TRANSFER)(var ? ? ? HEART))))))
+
+forall Vein (\V -> forall Transfer (\T -> forall Blood (\B ->  impl (and ( patient(var ? ? ? T)(var ? ? ? B))( instrument(var ? ? ? T)(var ? ? ? V)))(exists Heart (\H ->  destination(var ? ? ? T)(var ? ? ? H))))))
+
+forall PulmonaryArtery (\ARTERY -> forall Transfer (\TRANSFER -> forall Blood (\BLOOD ->  impl (and ( patient(var ? ? ? TRANSFER)(var ? ? ? BLOOD))( instrument(var ? ? ? TRANSFER)(var ? ? ? ARTERY)))(exists Lung (\LUNG ->  destination(var ? ? ? TRANSFER)(var ? ? ? LUNG))))))
+
+forall PulmonaryVein (\V -> forall Transfer (\T -> forall Blood (\B ->  impl (and ( patient(var ? ? ? T)(var ? ? ? B))( instrument(var ? ? ? T)(var ? ? ? V)))(exists Lung (\L -> exists Heart (\H -> exists Object (\P -> and ( origin(var ? ? ? T)(var ? ? ? L))(and ( part(var ? ? ? V)(var ? ? ? P))(and ( part(var ? ? ? L)(var ? ? ? P))(and ( part(var ? ? ? H)(var ? ? ? P))( destination(var ? ? ? T)(var ? ? ? H))))))))))))
+
+forall Capillary (\C -> exists Artery (\A -> exists Vein (\V ->  connects(var ? ? ? C)(var ? ? ? A)(var ? ? ? V))))
+
+forall Inhaling (\I -> exists Lung (\L ->  destination(var ? ? ? I)(var ? ? ? L)))
+
+forall Exhaling (\E -> exists Lung (\L ->  origin(var ? ? ? E)(var ? ? ? L)))
+
+forall Nose (\NOSE -> exists Nostril (\N1 -> exists Nostril (\N2 -> and ( not ( equal(var ? ? ? N1)(var ? ? ? N2)))(and ( connected(var ? ? ? N1)(var ? ? ? NOSE))( connected(var ? ? ? N2)(var ? ? ? NOSE))))))
+
+forall Nostril (\NOS -> exists Nose (\N -> exists Throat (\T ->  connects(var ? ? ? NOS)(var ? ? ? N)(var ? ? ? T))))
+
+forall Heart (\HEART -> exists Transfer (\TRANSFER -> exists Blood (\BLOOD -> and ( instrument(var ? ? ? TRANSFER)(var ? ? ? HEART))( patient(var ? ? ? TRANSFER)(var ? ? ? BLOOD)))))
+
+forall Mouth (\MOUTH -> exists Face (\FACE ->  part(var ? ? ? MOUTH)(var ? ? ? FACE)))
+
+forall Tongue (\TONGUE -> exists Mouth (\MOUTH ->  part(var ? ? ? TONGUE)(var ? ? ? MOUTH)))
+
+forall Hoof (\H -> exists Foot (\F -> exists HoofedMammal (\A -> and ( part(var ? ? ? H)(var ? ? ? F))( part(var ? ? ? F)(var ? ? ? A)))))
+
+forall Tooth (\TOOTH -> exists Mouth (\MOUTH ->  part(var ? ? ? TOOTH)(var ? ? ? MOUTH)))
+
+forall Skull (\S -> exists Vertebrate (\V -> exists Head (\H -> and ( part(var ? ? ? H)(var ? ? ? V))( part(var ? ? ? S)(var ? ? ? H)))))
+
+forall Horn (\H -> exists HoofedMammal (\M ->  part(var ? ? ? H)(var ? ? ? M)))
+
+forall Ossification (\O -> exists Bone (\B ->  result(var ? ? ? O)(var ? ? ? B)))
+
+forall Chewing (\CHEW -> exists Eating (\EAT ->  subProcess(var ? ? ? CHEW)(var ? ? ? EAT)))
+
+forall Lip (\LIP -> exists Mouth (\MOUTH ->  part(var ? ? ? LIP)(var ? ? ? MOUTH)))
+
+forall Kissing (\KISS -> exists Human (\PERSON1 -> exists Human (\PERSON2 -> exists Lip (\LIP1 -> exists Lip (\LIP2 -> and ( agent(var ? ? ? KISS)(var ? ? ? PERSON1))(and ( agent(var ? ? ? KISS)(var ? ? ? PERSON2))(and ( not ( equal(var ? ? ? PERSON1)(var ? ? ? PERSON2)))(and ( part(var ? ? ? LIP1)(var ? ? ? PERSON1))(and ( part(var ? ? ? LIP2)(var ? ? ? PERSON2))(and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? KISS)))))( not ( meetsSpatially(var ? ? ? LIP1)(var ? ? ? LIP2))))( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? KISS)))))( meetsSpatially(var ? ? ? LIP1)(var ? ? ? LIP2)))))))))))))
+
+forall Licking (\L -> exists Tongue (\T ->  instrument(var ? ? ? L)(var ? ? ? T)))
+
+forall Embracing (\E -> exists Human (\P1 -> exists Human (\P2 -> and ( not ( equal(var ? ? ? P1)(var ? ? ? P2)))(and ( agent(var ? ? ? E)(var ? ? ? P1))( agent(var ? ? ? E)(var ? ? ? P2))))))
+
+forall Skeleton (\S -> exists Animal (\A ->  interiorPart(var ? ? ? S)(var ? ? ? A)))
+
+forall Bone (\BONE -> exists (either Skeleton Exoskeleton) (\SKELETON ->  part(var ? ? ? BONE)(var ? ? ? SKELETON)))
+
+forall Exoskeleton (\X -> exists Animal (\A -> and ( part(var ? ? ? X)(var ? ? ? A))( not (exists Object (\PART -> and ( properPart(var ? ? ? PART)(var ? ? ? A))( orientation(var ? ? ? PART)(var ? ? ? X)(el ? ? ? Outside)))))))
+
+forall BodyJoint (\J -> exists Skeleton (\S -> exists (both CorpuscularObject SelfConnectedObject) (\P2 -> exists (both CorpuscularObject SelfConnectedObject) (\P1 -> and ( component(var ? ? ? P1)(var ? ? ? S))(and ( component(var ? ? ? P2)(var ? ? ? S))(and ( component(var ? ? ? J)(var ? ? ? S))( connects(var ? ? ? J)(var ? ? ? P1)(var ? ? ? P2))))))))
+
+forall Throat (\THROAT -> exists Mouth (\MOUTH ->  connected(var ? ? ? THROAT)(var ? ? ? MOUTH)))
+
+forall Hair (\HAIR -> exists Mammal (\MAMMAL -> exists TimePosition (\TIME ->  holdsDuring(var ? ? ? TIME)( part(var ? ? ? HAIR)(var ? ? ? MAMMAL)))))
+
+forall FacialHair (\H -> exists Face (\F ->  part(var ? ? ? H)(var ? ? ? F)))
+
+forall Peeling (\P -> forall (both Entity Object) (\O ->  impl ( patient(var ? ? ? P)(var ? ? ? O))(exists Skin (\S ->  part(var ? ? ? O)(var ? ? ? S)))))
+
+forall Intestine (\I -> exists Stomach (\S ->  connected(var ? ? ? I)(var ? ? ? S)))
+
+forall Hypothalamus (\HYPO -> exists Brain (\BRAIN ->  part(var ? ? ? HYPO)(var ? ? ? BRAIN)))
+
+forall Eye (\EYE -> exists Head (\HEAD ->  part(var ? ? ? EYE)(var ? ? ? HEAD)))
+
+forall Ear (\EAR -> exists Head (\HEAD ->  part(var ? ? ? EAR)(var ? ? ? HEAD)))
+
+forall Eyelid (\E ->  hasPurpose(var ? ? ? E)(exists Eye (\EYE -> exists Human (\P -> exists (both Covering BodyMotion) (\C -> and ( experiencer(var ? ? ? C)(var ? ? ? P))(and ( instrument(var ? ? ? C)(var ? ? ? E))(and ( patient(var ? ? ? C)(var ? ? ? EYE))(and ( part(var ? ? ? EYE)(var ? ? ? P))( part(var ? ? ? E)(var ? ? ? P))))))))))
+
+forall Nose (\NOSE -> exists Face (\FACE ->  part(var ? ? ? NOSE)(var ? ? ? FACE)))
+
+forall HormoneTSH (\HORMONE -> exists ThyroidGland (\GLAND -> exists Process (\PROC -> and ( instrument(var ? ? ? PROC)(var ? ? ? GLAND))( result(var ? ? ? PROC)(var ? ? ? HORMONE)))))
+
+forall Arm (\ARM -> exists Primate (\PRIMATE ->  part(var ? ? ? ARM)(var ? ? ? PRIMATE)))
+
+forall Hand (\HAND -> exists Arm (\ARM ->  part(var ? ? ? HAND)(var ? ? ? ARM)))
+
+forall DigitAppendage (\DIGIT -> exists Limb (\LIMB ->  part(var ? ? ? DIGIT)(var ? ? ? LIMB)))
+
+forall Finger (\FINGER -> exists Hand (\HAND ->  part(var ? ? ? FINGER)(var ? ? ? HAND)))
+
+forall NailDigit (\N -> exists DigitAppendage (\D ->  part(var ? ? ? N)(var ? ? ? D)))
+
+forall Limb (\LIMB -> exists Vertebrate (\VERTEBRATE ->  part(var ? ? ? LIMB)(var ? ? ? VERTEBRATE)))
+
+forall Leg (\LEG -> exists Primate (\PRIMATE ->  part(var ? ? ? LEG)(var ? ? ? PRIMATE)))
+
+forall Foot (\FOOT -> exists Leg (\LIMB ->  part(var ? ? ? FOOT)(var ? ? ? LIMB)))
+
+forall Ankle (\A -> exists Leg (\L ->  part(var ? ? ? A)(var ? ? ? L)))
+
+forall Elbow (\E -> exists Arm (\A ->  part(var ? ? ? E)(var ? ? ? A)))
+
+forall Wrist (\W -> exists Arm (\A ->  part(var ? ? ? W)(var ? ? ? A)))
+
+forall Toe (\TOE -> exists Foot (\FOOT ->  part(var ? ? ? TOE)(var ? ? ? FOOT)))
+
+forall Knee (\KNEE -> exists Leg (\LEG ->  part(var ? ? ? KNEE)(var ? ? ? LEG)))
+
+forall Shoulder (\SHOULDER -> exists Primate (\PRIMATE ->  part(var ? ? ? SHOULDER)(var ? ? ? PRIMATE)))
+
+forall Knuckle (\KNUCKLE -> exists Finger (\FINGER ->  part(var ? ? ? KNUCKLE)(var ? ? ? FINGER)))
+
+forall Torso (\TORSO -> forall Limb (\LIMB ->  not ( overlapsSpatially(var ? ? ? TORSO)(var ? ? ? LIMB))))
+
+forall Breast (\B -> exists Torso (\T ->  part(var ? ? ? B)( el ? ? ? ( FrontFn(var ? ? ? T)))))
+
+forall Breast (\B -> exists Primate (\P ->  part(var ? ? ? B)(var ? ? ? P)))
+
+forall Neck (\NECK -> exists Head (\HEAD ->  connected(var ? ? ? NECK)(var ? ? ? HEAD)))
+
+forall Face (\FACE -> exists Head (\HEAD ->  part(var ? ? ? FACE)(var ? ? ? HEAD)))
+
+forall Face (\FACE -> exists Vertebrate (\VERTEBRATE ->  part(var ? ? ? FACE)(var ? ? ? VERTEBRATE)))
+
+forall Chin (\CHIN -> exists Face (\FACE ->  part(var ? ? ? CHIN)(var ? ? ? FACE)))
+
+forall Chin (\CHIN -> forall Object (\FACE -> forall Object (\PART ->  impl (and ( part(var ? ? ? PART)(var ? ? ? FACE))( not ( part(var ? ? ? PART)(var ? ? ? CHIN))))( orientation(var ? ? ? PART)(var ? ? ? CHIN)(el ? ? ? Below)))))
+
+forall Regretting (\R -> forall Sentence (\T ->  impl ( patient(var ? ? ? R)(var ? ? ? T))( truth(var ? ? ? T)(el ? ? ? True))))
+
+forall Congratulating (\C -> exists (both Entity Agent) (\D -> exists (both Agent CognitiveAgent) (\A -> exists (both Process (both Physical Entity)) (\P -> and ( destination(var ? ? ? C)(var ? ? ? D))(and ( agent(var ? ? ? P)(var ? ? ? D))(and ( agent(var ? ? ? C)(var ? ? ? A))(and ( wants(var ? ? ? A)(var ? ? ? P))( refers(var ? ? ? C)(var ? ? ? P)))))))))
+
+forall FacialExpression (\EXPRESS -> forall (both Agent Object) (\AGENT ->  impl ( agent(var ? ? ? EXPRESS)(var ? ? ? AGENT))(exists Face (\FACE -> and ( part(var ? ? ? FACE)(var ? ? ? AGENT))( instrument(var ? ? ? EXPRESS)(var ? ? ? FACE))))))
+
+forall Smiling (\SMILE -> forall (both Agent Object) (\AGENT ->  impl ( agent(var ? ? ? SMILE)(var ? ? ? AGENT))( holdsDuring( el ? ? ? ( WhenFn(var ? ? ? SMILE)))( attribute(var ? ? ? AGENT)(el ? ? ? Happiness)))))
+
+forall Frowning (\FROWN -> forall (both Agent Object) (\AGENT ->  impl ( agent(var ? ? ? FROWN)(var ? ? ? AGENT))( holdsDuring( el ? ? ? ( WhenFn(var ? ? ? FROWN)))( attribute(var ? ? ? AGENT)(el ? ? ? Unhappiness)))))
+
+forall Laughing (\LAUGH -> exists Smiling (\SMILE ->  subProcess(var ? ? ? SMILE)(var ? ? ? LAUGH)))
+
+forall Weeping (\WEEP -> forall (both Agent Object) (\AGENT ->  impl ( agent(var ? ? ? WEEP)(var ? ? ? AGENT))( holdsDuring( el ? ? ? ( WhenFn(var ? ? ? WEEP)))( attribute(var ? ? ? AGENT)(el ? ? ? Unhappiness)))))
+
+forall HandGesture (\HG -> exists Hand (\H ->  patient(var ? ? ? HG)(var ? ? ? H)))
+
+forall Sinking (\S -> exists BodyOfWater (\W ->  located(var ? ? ? S)(var ? ? ? W)))
+
+forall (both Object Entity) (\WHOLE -> forall (both Object Entity) (\HALF ->  impl ( half(var ? ? ? HALF)(var ? ? ? WHOLE))(exists (both Object Entity) (\OTHER -> and ( half(var ? ? ? OTHER)(var ? ? ? WHOLE))(and ( not ( equal(var ? ? ? OTHER)(var ? ? ? HALF)))( equal(var ? ? ? WHOLE)( el ? ? ? ( MereologicalSumFn(var ? ? ? HALF)(var ? ? ? OTHER)))))))))
+
+forall (both Object Entity) (\W -> forall (both Object Entity) (\T ->  impl ( third(var ? ? ? T)(var ? ? ? W))(exists (both Object Entity) (\O2 -> exists (both Object Entity) (\O1 -> and ( third(var ? ? ? O1)(var ? ? ? W))(and ( third(var ? ? ? O2)(var ? ? ? W))(and ( not ( equal(var ? ? ? O1)(var ? ? ? T)))(and ( not ( equal(var ? ? ? O2)(var ? ? ? T)))(and ( not ( equal(var ? ? ? O1)(var ? ? ? O2)))( equal(var ? ? ? W)( el ? ? ? ( MereologicalSumFn(var ? ? ? T)( el ? ? ? ( MereologicalSumFn(var ? ? ? O1)(var ? ? ? O2)))))))))))))))
+
+forall Object (\W -> forall Object (\Q ->  equiv ( quarter(var ? ? ? Q)(var ? ? ? W))(exists Object (\H -> and ( half(var ? ? ? H)(var ? ? ? W))( half(var ? ? ? Q)(var ? ? ? H))))))
+
+forall Object (\WHOLE -> forall Object (\MOST ->  impl ( most(var ? ? ? MOST)(var ? ? ? WHOLE))(exists UnitOfMeasure (\UNIT -> exists (both RealNumber Quantity) (\NUMBER2 -> exists (both RealNumber Quantity) (\NUMBER1 -> exists Object (\HALF -> and ( half(var ? ? ? HALF)(var ? ? ? WHOLE))(and ( measure(var ? ? ? HALF)( el ? ? ? ( MeasureFn(var ? ? ? NUMBER1)(var ? ? ? UNIT))))(and ( measure(var ? ? ? MOST)( el ? ? ? ( MeasureFn(var ? ? ? NUMBER2)(var ? ? ? UNIT))))( greaterThan(var ? ? ? NUMBER2)(var ? ? ? NUMBER1)))))))))))
+
+forall Blueprint (\PLAN ->  hasPurpose(var ? ? ? PLAN)(exists Artifact (\ARTIFACT ->  represents(var ? ? ? PLAN)(var ? ? ? ARTIFACT))))
+
+forall Chart (\CHART -> exists PhysicalQuantity (\QUANTITY ->  refers(var ? ? ? CHART)(var ? ? ? QUANTITY)))
+
+forall Flag (\FLAG -> exists Fabric (\FABRIC ->  part(var ? ? ? FABRIC)(var ? ? ? FLAG)))
+
+forall Flag (\FLAG -> exists GeopoliticalArea (\AREA ->  refers(var ? ? ? FLAG)(var ? ? ? AREA)))
+
+forall Flag (\F -> exists Nation (\N ->  refers(var ? ? ? F)(var ? ? ? N)))
+
+forall GraphDiagram (\G -> exists PhysicalQuantity (\Q ->  refers(var ? ? ? G)(var ? ? ? Q)))
+
+forall Map (\M -> exists GeographicArea (\A ->  represents(var ? ? ? M)(var ? ? ? A)))
+
+forall Photographing (\SHOOT -> exists Photograph (\PHOTO -> exists Camera (\CAMERA -> and ( result(var ? ? ? SHOOT)(var ? ? ? PHOTO))( instrument(var ? ? ? SHOOT)(var ? ? ? CAMERA)))))
+
+forall Composing (\COMPOSE -> exists MusicalComposition (\MUSIC ->  result(var ? ? ? COMPOSE)(var ? ? ? MUSIC)))
+
+forall (both Entity (both RealNumber Quantity)) (\NUMBER ->  impl ( equal(var ? ? ? NUMBER)( el ? ? ? ( MultiplicationFn(el ? ? ? (toInt 1))(var ? ? ? NUMBER))))( equal( el ? ? ? ( MeasureFn(var ? ? ? NUMBER)(el ? ? ? TonMass)))( el ? ? ? ( MeasureFn( el ? ? ? ( MultiplicationFn(var ? ? ? NUMBER)(el ? ? ? (toInt 2000))))(el ? ? ? PoundMass)))))
+
+forall (both RealNumber Quantity) (\A -> forall Object (\O ->  equiv ( measure(var ? ? ? O)( el ? ? ? ( MeasureFn(var ? ? ? A)(el ? ? ? MetricTon))))( measure(var ? ? ? O)( el ? ? ? ( MeasureFn( el ? ? ? ( MultiplicationFn(var ? ? ? A)(el ? ? ? (toInt 2205))))(el ? ? ? PoundMass))))))
+
+forall (both Entity (both RealNumber Quantity)) (\N ->  impl ( equal(var ? ? ? N)( el ? ? ? ( MultiplicationFn(el ? ? ? (toInt 1))(var ? ? ? N))))( equal( el ? ? ? ( MeasureFn(var ? ? ? N)(el ? ? ? MillenniumDuration)))( el ? ? ? ( MeasureFn( el ? ? ? ( MultiplicationFn(var ? ? ? N)(el ? ? ? (toInt 1000))))(el ? ? ? YearDuration)))))
+
+forall Song (\S -> exists Lyrics (\L ->  part(var ? ? ? L)(var ? ? ? S)))
+
+forall PassingABill (\PASS -> forall (both Entity Object) (\TEXT ->  impl ( patient(var ? ? ? PASS)(var ? ? ? TEXT))(and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? PASS)))))( attribute(var ? ? ? TEXT)(el ? ? ? LegislativeBill)))( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? PASS)))))( attribute(var ? ? ? TEXT)(el ? ? ? Law))))))
+
+forall PoliticalRevolution (\R -> forall (both Entity GeopoliticalArea) (\A ->  impl ( patient(var ? ? ? R)(var ? ? ? A))(exists Entity (\GOV2 -> exists Entity (\GOV1 -> and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? R)))))( equal(var ? ? ? GOV1)( el ? ? ? ( GovernmentFn(var ? ? ? A)))))(and ( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? R)))))( equal(var ? ? ? GOV2)( el ? ? ? ( GovernmentFn(var ? ? ? A)))))( not ( equal(var ? ? ? GOV1)(var ? ? ? GOV2)))))))))
+
+forall LawEnforcement (\L -> forall PoliceOrganization (\P -> forall Agent (\AGENT ->  impl ( agent(var ? ? ? L)(var ? ? ? AGENT))(exists PoliceOrganization (\O ->  member(var ? ? ? P)(var ? ? ? O))))))
+
+forall Imprisoning (\I -> exists Prison (\P ->  located(var ? ? ? I)(var ? ? ? P)))
+
+forall Espionage (\S -> exists Government (\GOV1 -> exists Government (\GOV2 -> and ( agent(var ? ? ? S)(var ? ? ? GOV1))(and ( patient(var ? ? ? S)(var ? ? ? GOV2))( not ( equal(var ? ? ? GOV1)(var ? ? ? GOV2)))))))
+
+forall (both Object Contract) (\T ->  impl ( attribute(var ? ? ? T)(el ? ? ? Treaty))(exists Nation (\N1 -> exists Nation (\N2 -> and ( agreementMember(var ? ? ? T)(var ? ? ? N1))(and ( agreementMember(var ? ? ? T)(var ? ? ? N2))( not ( equal(var ? ? ? N1)(var ? ? ? N2))))))))
+
+forall Fact (\FACT ->  truth(var ? ? ? FACT)(el ? ? ? True))
+
+forall AudioRecording (\RECORD -> exists RadiatingSound (\SOUND -> exists Proposition (\INFO -> and ( containsInformation(var ? ? ? RECORD)(var ? ? ? INFO))( realization(var ? ? ? SOUND)(var ? ? ? INFO)))))
+
+forall Label (\LABEL -> exists SelfConnectedObject (\OBJ -> and ( connected(var ? ? ? LABEL)(var ? ? ? OBJ))( refers(var ? ? ? LABEL)(var ? ? ? OBJ))))
+
+forall TaxReturn (\RETURN ->  hasPurpose(var ? ? ? RETURN)(exists Calculating (\CALCULATE -> exists Tax (\TAX -> exists (both Entity CurrencyMeasure) (\AMOUNT -> and ( instrument(var ? ? ? CALCULATE)(var ? ? ? RETURN))(and ( result(var ? ? ? CALCULATE)(var ? ? ? AMOUNT))( transactionAmount(var ? ? ? TAX)(var ? ? ? AMOUNT))))))))
+
+forall DutyTax (\X -> forall Entity (\OBJ ->  impl (and ( refers(var ? ? ? X)(var ? ? ? OBJ))( patient(var ? ? ? X)(var ? ? ? OBJ)))(exists Transfer (\T -> exists Nation (\N1 -> exists Nation (\N2 -> and ( patient(var ? ? ? T)(var ? ? ? OBJ))(and ( origin(var ? ? ? T)(var ? ? ? N1))(and ( destination(var ? ? ? T)(var ? ? ? N2))(and ( not ( equal(var ? ? ? N1)(var ? ? ? N2)))(and ( earlier( el ? ? ? ( WhenFn(var ? ? ? T)))( el ? ? ? ( WhenFn(var ? ? ? X))))( causes(var ? ? ? T)(var ? ? ? X))))))))))))
+
+forall Ballot (\B ->  hasPurpose(var ? ? ? B)(exists Voting (\V ->  instrument(var ? ? ? V)(var ? ? ? B))))
+
+forall Announcement (\A -> exists ContentDevelopment (\CD -> exists SocialInteraction (\I -> and ( result(var ? ? ? CD)(var ? ? ? A))(and ( refers(var ? ? ? A)(var ? ? ? I))( earlier( el ? ? ? ( WhenFn(var ? ? ? CD)))( el ? ? ? ( WhenFn(var ? ? ? I))))))))
+
+forall PerformanceProgram (\PROG -> exists Performance (\PERF -> exists Proposition (\PROP -> and ( containsInformation(var ? ? ? PROG)(var ? ? ? PROP))( realization(var ? ? ? PERF)(var ? ? ? PROP)))))
+
+forall MotionPictureShot (\SHOT -> exists MotionPicture (\MOVIE ->  subsumesContentInstance(var ? ? ? MOVIE)(var ? ? ? SHOT)))
+
+forall MotionPictureScene (\S -> forall ContentBearingObject (\MOVIE -> exists MotionPicture (\M ->  subsumesContentInstance(var ? ? ? MOVIE)(var ? ? ? S))))
+
+forall BroadcastProgram (\PROGRAM -> exists Broadcasting (\BROADCAST ->  patient(var ? ? ? BROADCAST)(var ? ? ? PROGRAM)))
+
+forall Chapter (\CHAPTER -> exists Book (\BOOK ->  subsumesContentInstance(var ? ? ? BOOK)(var ? ? ? CHAPTER)))
+
+forall Newspaper (\PAPER -> exists Report (\REPORT ->  subsumesContentInstance(var ? ? ? PAPER)(var ? ? ? REPORT)))
+
+forall HolidayCard (\C ->  material(desc Paper ? ?)(var ? ? ? C))
+
+forall HolidayCard (\C -> exists Holiday (\H ->  refers(var ? ? ? C)(var ? ? ? H)))
+
+forall HistoricalAccount (\ACCOUNT -> exists (both Entity Physical) (\EVENT -> and ( represents(var ? ? ? ACCOUNT)(var ? ? ? EVENT))( earlier( el ? ? ? ( WhenFn(var ? ? ? EVENT)))( el ? ? ? ( WhenFn(var ? ? ? ACCOUNT))))))
+
+forall Biography (\B -> exists Human (\H ->  refers(var ? ? ? B)(var ? ? ? H)))
+
+forall MysteryStory (\S -> exists CriminalAction (\C ->  refers(var ? ? ? S)(var ? ? ? C)))
+
+forall DramaticPlay (\PLAY ->  hasPurpose(var ? ? ? PLAY)(exists DramaticActing (\ACT -> exists Proposition (\PROP -> and ( containsInformation(var ? ? ? PLAY)(var ? ? ? PROP))( realization(var ? ? ? ACT)(var ? ? ? PROP))))))
+
+forall (both Object Agent) (\H ->  equiv ( attribute(var ? ? ? H)(el ? ? ? LiteracyAttribute))(and ( hasSkill(desc Reading ? ?)(var ? ? ? H))( hasSkill(desc Writing ? ?)(var ? ? ? H))))
+
+forall Chimney (\C ->  hasPurpose(var ? ? ? C)(exists Smoke (\S -> exists Removing (\R ->  instrument(var ? ? ? R)(var ? ? ? C)))))
+
+forall Curb (\C -> exists Sidewalk (\S -> exists Roadway (\R ->  connects(var ? ? ? C)(var ? ? ? S)(var ? ? ? R))))
+
+forall Stairway (\S -> forall Building (\B ->  impl ( part(var ? ? ? S)(var ? ? ? B))( hasPurpose(var ? ? ? S)(exists BuildingLevel (\L1 -> exists BuildingLevel (\L2 -> and ( part(var ? ? ? L1)(var ? ? ? B))(and ( part(var ? ? ? L2)(var ? ? ? B))( connects(var ? ? ? S)(var ? ? ? L1)(var ? ? ? L2)))))))))
+
+forall BuildingLevel (\LEVEL1 -> forall BuildingLevel (\LEVEL2 -> forall Building (\BUILDING ->  impl (and ( part(var ? ? ? LEVEL1)(var ? ? ? BUILDING))( part(var ? ? ? LEVEL2)(var ? ? ? BUILDING)))(exists Steps (\STEPS ->  connects(var ? ? ? STEPS)(var ? ? ? LEVEL1)(var ? ? ? LEVEL2))))))
+
+forall ParkingLot (\P ->  hasPurpose(var ? ? ? P)(exists Keeping (\K -> exists Automobile (\A -> and ( located(var ? ? ? K)(var ? ? ? P))( patient(var ? ? ? K)(var ? ? ? A))))))
+
+forall (both Entity Object) (\D -> forall (both Agent Object) (\A -> forall Object (\O ->  impl ( attribute(var ? ? ? O)(el ? ? ? Transparent))( modalAttribute(exists Seeing (\S -> and ( agent(var ? ? ? S)(var ? ? ? A))(and ( destination(var ? ? ? S)(var ? ? ? D))( between(var ? ? ? O)(var ? ? ? A)(var ? ? ? D)))))(el ? ? ? Possibility)))))
+
+forall Window (\W ->  attribute(var ? ? ? W)(el ? ? ? Transparent))
+
+forall Skylight (\W -> exists Ceiling (\C ->  part(var ? ? ? W)(var ? ? ? C)))
+
+forall RearWindow (\W -> exists Automobile (\A ->  part(var ? ? ? W)( el ? ? ? ( BackFn(var ? ? ? A)))))
+
+forall WindowCovering (\WC ->  hasPurpose(var ? ? ? WC)(exists Covering (\C -> exists Window (\W -> and ( patient(var ? ? ? C)(var ? ? ? W))( instrument(var ? ? ? C)(var ? ? ? WC))))))
+
+forall Door (\DOOR -> exists Doorway (\WAY ->  part(var ? ? ? DOOR)(var ? ? ? WAY)))
+
+forall Wall (\WALL -> exists (either Building Room) (\ARTIFACT ->  part(var ? ? ? WALL)(var ? ? ? ARTIFACT)))
+
+forall Floor (\FLOOR -> exists Room (\ARTIFACT ->  part(var ? ? ? FLOOR)(var ? ? ? ARTIFACT)))
+
+forall Ceiling (\C -> exists Room (\R ->  top(var ? ? ? C)(var ? ? ? R)))
+
+forall Roof (\ROOF -> exists Building (\BUILDING ->  top(var ? ? ? ROOF)(var ? ? ? BUILDING)))
+
+forall Fireplace (\F ->  hasPurpose(var ? ? ? F)(exists Combustion (\C ->  located(var ? ? ? C)(var ? ? ? F))))
+
+forall Fireplace (\F -> exists Chimney (\C ->  connected(var ? ? ? F)(var ? ? ? C)))
+
+forall Fireplace (\F -> exists Building (\B ->  part(var ? ? ? F)(var ? ? ? B)))
+
+forall BuildingLevel (\LEVEL -> exists Building (\BUILDING ->  part(var ? ? ? LEVEL)(var ? ? ? BUILDING)))
+
+forall Elevator (\E ->  hasPurpose(var ? ? ? E)(exists Transportation (\T -> exists BuildingLevel (\L1 -> exists BuildingLevel (\L2 -> exists Building (\B -> and ( origin(var ? ? ? T)(var ? ? ? L1))(and ( destination(var ? ? ? T)(var ? ? ? L2))(and ( not ( equal(var ? ? ? L1)(var ? ? ? L2)))(and ( part(var ? ? ? L1)(var ? ? ? B))( part(var ? ? ? L2)(var ? ? ? B)))))))))))
+
+forall Transportation (\T -> forall Pump (\D ->  impl ( instrument(var ? ? ? T)(var ? ? ? D))(exists Object (\F -> and ( instrument(var ? ? ? T)(var ? ? ? F))( attribute(var ? ? ? F)(el ? ? ? Fluid))))))
+
+forall Oar (\O ->  hasPurpose(var ? ? ? O)(exists Rowing (\R ->  instrument(var ? ? ? R)(var ? ? ? O))))
+
+forall Garage (\GARAGE -> exists Building (\BUILDING ->  part(var ? ? ? GARAGE)(var ? ? ? BUILDING)))
+
+forall Bathroom (\B -> exists WashBasin (\W ->  located(var ? ? ? W)(var ? ? ? B)))
+
+forall Closet (\R ->  hasPurpose(var ? ? ? R)(exists Keeping (\K -> exists (both Entity Physical) (\O -> and ( patient(var ? ? ? K)(var ? ? ? O))( located(var ? ? ? O)(var ? ? ? R))))))
+
+forall DressingRoom (\R ->  hasPurpose(var ? ? ? R)(exists ChangingClothing (\C ->  located(var ? ? ? C)(var ? ? ? R))))
+
+forall Kitchen (\ROOM ->  hasPurpose(var ? ? ? ROOM)(exists Cooking (\COOK ->  located(var ? ? ? COOK)(var ? ? ? ROOM))))
+
+forall DiningRoom (\D ->  hasPurpose(var ? ? ? D)(exists Eating (\E ->  located(var ? ? ? E)(var ? ? ? D))))
+
+forall Bedroom (\ROOM -> exists Bed (\BED ->  located(var ? ? ? BED)(var ? ? ? ROOM)))
+
+forall Classroom (\R -> exists School (\S ->  part(var ? ? ? R)(var ? ? ? S)))
+
+forall Classroom (\R ->  hasPurpose(var ? ? ? R)(exists EducationalProcess (\E ->  located(var ? ? ? E)(var ? ? ? R))))
+
+forall Porch (\PORCH -> exists Building (\BUILDING ->  connected(var ? ? ? PORCH)(var ? ? ? BUILDING)))
+
+forall Sidewalk (\SIDE ->  hasPurpose(var ? ? ? SIDE)(exists Walking (\WALK ->  path(var ? ? ? WALK)(var ? ? ? SIDE))))
+
+forall Sidewalk (\SIDE -> exists Roadway (\ROAD ->  orientation(var ? ? ? SIDE)(var ? ? ? ROAD)(el ? ? ? Near)))
+
+forall SportsGround (\GROUND ->  hasPurpose(var ? ? ? GROUND)(exists Sport (\SPORT ->  located(var ? ? ? SPORT)(var ? ? ? GROUND))))
+
+forall IndustrialPlant (\PLANT ->  hasPurpose(var ? ? ? PLANT)(exists Manufacture (\MANUFACTURE ->  located(var ? ? ? MANUFACTURE)(var ? ? ? PLANT))))
+
+forall Laboratory (\LAB -> exists Experimenting (\EXPERIMENT ->  located(var ? ? ? EXPERIMENT)(var ? ? ? LAB)))
+
+forall Barn (\BARN -> exists Farm (\FARM ->  located(var ? ? ? BARN)(var ? ? ? FARM)))
+
+forall PerformanceStage (\STAGE ->  hasPurpose(var ? ? ? STAGE)(exists Demonstrating (\PERF ->  located(var ? ? ? PERF)(var ? ? ? STAGE))))
+
+forall PerformanceStage (\STAGE -> exists Auditorium (\AUDITORIUM ->  part(var ? ? ? STAGE)(var ? ? ? AUDITORIUM)))
+
+forall PerformanceStageWing (\W -> exists PerformanceStage (\S ->  part(var ? ? ? W)(var ? ? ? S)))
+
+forall Broadcasting (\BROADCAST -> exists CommunicationDevice (\DEVICE ->  instrument(var ? ? ? BROADCAST)(var ? ? ? DEVICE)))
+
+forall PeriodicalPublisher (\C -> exists Publication (\PUBLISH -> exists Periodical (\PERIODICAL -> and ( agent(var ? ? ? PUBLISH)(var ? ? ? C))( patient(var ? ? ? PUBLISH)(var ? ? ? PERIODICAL)))))
+
+forall Explosion (\EXPLOSION -> exists ChemicalProcess (\PROC ->  causes(var ? ? ? PROC)(var ? ? ? EXPLOSION)))
+
+forall Performance (\PERFORMANCE -> exists (either DramaticActing Music) (\SUB -> subProcess(var ? ? ? SUB)(var ? ? ? PERFORMANCE)))
+
+forall Performance (\PERFORMANCE -> exists PerformanceStage (\STAGE ->  located(var ? ? ? PERFORMANCE)(var ? ? ? STAGE)))
+
+forall Reciting (\R -> exists Text (\T -> exists Proposition (\P -> and ( realization(var ? ? ? R)(var ? ? ? P))( containsInformation(var ? ? ? T)(var ? ? ? P)))))
+
+forall Sermon (\SERMON -> exists ReligiousService (\SERVICE ->  subProcess(var ? ? ? SERMON)(var ? ? ? SERVICE)))
+
+forall DramaticCast (\CAST -> exists FictionalText (\TEXT -> exists Process (\PROC -> exists Proposition (\PROP -> and ( containsInformation(var ? ? ? TEXT)(var ? ? ? PROP))(and ( realization(var ? ? ? PROC)(var ? ? ? PROP))(forall (both SelfConnectedObject Agent) (\MEMBER ->  impl ( member(var ? ? ? MEMBER)(var ? ? ? CAST))(exists DramaticActing (\SUB -> and ( agent(var ? ? ? SUB)(var ? ? ? MEMBER))( subProcess(var ? ? ? SUB)(var ? ? ? PROC)))))))))))
+
+forall FormalMeeting (\MEETING -> exists Planning (\PLANNING -> and ( result(var ? ? ? PLANNING)(var ? ? ? MEETING))( earlier( el ? ? ? ( WhenFn(var ? ? ? PLANNING)))( el ? ? ? ( WhenFn(var ? ? ? MEETING))))))
+
+forall Funeral (\F -> exists Death (\D ->  refers(var ? ? ? F)(var ? ? ? D)))
+
+forall Resolution (\RESOLUTION -> exists Organization (\AGENT -> exists FormalMeeting (\MEETING -> and ( agent(var ? ? ? RESOLUTION)(var ? ? ? AGENT))( subProcess(var ? ? ? RESOLUTION)(var ? ? ? MEETING)))))
+
+forall Smoking (\SMOKING -> exists Combustion (\BURN -> exists CigarOrCigarette (\CIGAR -> exists Breathing (\BREATHE -> exists Entity (\SMOKE -> and ( subProcess(var ? ? ? BURN)(var ? ? ? SMOKING))(and ( resourceS(var ? ? ? BURN)(var ? ? ? CIGAR))(and ( result(var ? ? ? BURN)(var ? ? ? SMOKE))(and ( patient(var ? ? ? BREATHE)(var ? ? ? SMOKE))( subProcess(var ? ? ? BREATHE)(var ? ? ? SMOKING))))))))))
+
+forall Jury (\JURY ->  holdsRight(exists LegalDecision (\DECISION ->  agent(var ? ? ? DECISION)(var ? ? ? JURY)))(var ? ? ? JURY))
+
+forall CriminalGang (\G ->  hasPurpose(var ? ? ? G)(exists CriminalAction (\A ->  agent(var ? ? ? A)(var ? ? ? G))))
+
+forall LegalCharge (\CHARGE -> exists Government (\GOV ->  agent(var ? ? ? CHARGE)(var ? ? ? GOV)))
+
+forall Pleading (\P -> exists JudicialProcess (\J ->  subProcess(var ? ? ? P)(var ? ? ? J)))
+
+forall Pleading (\P -> exists CriminalAction (\C ->  refers(var ? ? ? P)(var ? ? ? C)))
+
+forall Testifying (\TESTIFY -> exists JudicialProcess (\PROC ->  subProcess(var ? ? ? TESTIFY)(var ? ? ? PROC)))
+
+forall JudicialProcess (\PROCESS -> exists CourtRoom (\ROOM ->  located(var ? ? ? PROCESS)(var ? ? ? ROOM)))
+
+forall LegalOpinion (\OPINION -> exists LegalDecision (\DECISION -> exists (both Proposition Argument) (\PROPOSITION -> exists (both Entity ContentBearingPhysical) (\TEXT -> and ( result(var ? ? ? DECISION)(var ? ? ? TEXT))(and ( containsInformation(var ? ? ? TEXT)(var ? ? ? PROPOSITION))( conclusion(var ? ? ? PROPOSITION)(var ? ? ? OPINION)))))))
+
+forall LegalAward (\AWARD -> forall LegalAction (\ACTION -> forall (both Agent CognitiveAgent) (\PLAINTIFF ->  impl (and ( refers(var ? ? ? AWARD)(var ? ? ? ACTION))( agent(var ? ? ? ACTION)(var ? ? ? PLAINTIFF)))( confersRight(exists Getting (\GET -> exists CurrencyMeasure (\VALUE -> exists (both Entity Physical) (\OBJ -> and ( experiencer(var ? ? ? GET)(var ? ? ? PLAINTIFF))(and ( patient(var ? ? ? GET)(var ? ? ? OBJ))( monetaryValue(var ? ? ? OBJ)(var ? ? ? VALUE)))))))(var ? ? ? AWARD)(var ? ? ? PLAINTIFF)))))
+
+forall Sentencing (\S -> forall Entity (\P ->  impl ( patient(var ? ? ? S)(var ? ? ? P))(exists LegalConviction (\C -> and ( causes(var ? ? ? C)(var ? ? ? S))(and ( patient(var ? ? ? C)(var ? ? ? P))( earlier( el ? ? ? ( WhenFn(var ? ? ? C)))( el ? ? ? ( WhenFn(var ? ? ? S)))))))))
+
+forall GameCall (\CALL -> exists Game (\GAME ->  refers(var ? ? ? CALL)(var ? ? ? GAME)))
+
+forall BeginningOperations (\OP -> forall Organization (\ORG ->  impl ( agent(var ? ? ? OP)(var ? ? ? ORG))( starts(var ? ? ? OP)( el ? ? ? ( WhenFn(var ? ? ? ORG))))))
+
+forall OrganizationalMerging (\M -> forall (both Entity Organization) (\ORG2 -> forall (both Entity Organization) (\ORG1 ->  impl (and ( patient(var ? ? ? M)(var ? ? ? ORG1))(and ( patient(var ? ? ? M)(var ? ? ? ORG2))( not ( equal(var ? ? ? ORG1)(var ? ? ? ORG2)))))(and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? M)))))( not (exists Organization (\S -> and ( subOrganization(var ? ? ? ORG1)(var ? ? ? S))( subOrganization(var ? ? ? ORG2)(var ? ? ? S))))))( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? M)))))(exists Organization (\S -> and ( subOrganization(var ? ? ? ORG1)(var ? ? ? S))( subOrganization(var ? ? ? ORG2)(var ? ? ? S)))))))))
+
+forall CeasingOperations (\OP -> forall Organization (\ORG ->  impl ( agent(var ? ? ? OP)(var ? ? ? ORG))( finishes(var ? ? ? OP)( el ? ? ? ( WhenFn(var ? ? ? ORG))))))
+
+forall BecomingDrunk (\B -> forall (both Entity Object) (\A ->  impl ( experiencer(var ? ? ? B)(var ? ? ? A))(and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? B)))))( attribute(var ? ? ? A)(el ? ? ? Sober)))( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? B)))))( attribute(var ? ? ? A)(el ? ? ? Drunk))))))
+
+forall SoberingUp (\B -> forall (both Entity Object) (\A ->  impl ( experiencer(var ? ? ? B)(var ? ? ? A))(and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? B)))))( attribute(var ? ? ? A)(el ? ? ? Drunk)))( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? B)))))( attribute(var ? ? ? A)(el ? ? ? Sober))))))
+
+forall FallingAsleep (\FALL -> forall (both Entity Object) (\AGENT ->  impl ( experiencer(var ? ? ? FALL)(var ? ? ? AGENT))(exists (both TimeInterval TimePosition) (\FINISH -> exists (both TimeInterval TimePosition) (\START -> and ( starts(var ? ? ? START)( el ? ? ? ( WhenFn(var ? ? ? FALL))))(and ( finishes(var ? ? ? FINISH)( el ? ? ? ( WhenFn(var ? ? ? FALL))))(and ( holdsDuring(var ? ? ? START)( attribute(var ? ? ? AGENT)(el ? ? ? Awake)))( holdsDuring(var ? ? ? FINISH)( attribute(var ? ? ? AGENT)(el ? ? ? Asleep))))))))))
+
+forall WakingUp (\WAKE -> forall (both Entity Object) (\AGENT ->  impl ( experiencer(var ? ? ? WAKE)(var ? ? ? AGENT))(exists (both TimeInterval TimePosition) (\FINISH -> exists (both TimeInterval TimePosition) (\START -> and ( starts(var ? ? ? START)( el ? ? ? ( WhenFn(var ? ? ? WAKE))))(and ( finishes(var ? ? ? FINISH)( el ? ? ? ( WhenFn(var ? ? ? WAKE))))(and ( holdsDuring(var ? ? ? START)( attribute(var ? ? ? AGENT)(el ? ? ? Asleep)))( holdsDuring(var ? ? ? FINISH)( attribute(var ? ? ? AGENT)(el ? ? ? Awake))))))))))
+
+forall GainingConsciousness (\G -> forall (both Entity Object) (\A ->  impl ( experiencer(var ? ? ? G)(var ? ? ? A))(and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? G)))))( attribute(var ? ? ? A)(el ? ? ? Unconscious)))( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? G)))))( attribute(var ? ? ? A)(el ? ? ? Awake))))))
+
+forall LosingConsciousness (\L -> forall (both Entity Object) (\A ->  impl ( experiencer(var ? ? ? L)(var ? ? ? A))(and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? L)))))( attribute(var ? ? ? A)(el ? ? ? Awake)))( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? L)))))( attribute(var ? ? ? A)(el ? ? ? Unconscious))))))
+
+forall AcademicDegree (\DEGREE -> forall (both Agent Entity) (\AGENT ->  impl ( possesses(var ? ? ? AGENT)(var ? ? ? DEGREE))(exists EducationalProgram (\PROGRAM -> exists Process (\STUDY -> and ( realization(var ? ? ? STUDY)(var ? ? ? PROGRAM))( experiencer(var ? ? ? STUDY)(var ? ? ? AGENT)))))))
+
+forall License (\L -> exists GovernmentOrganization (\ORG ->  issuedBy(var ? ? ? L)(var ? ? ? ORG)))
+
+forall Ticket (\T -> forall Agent (\A ->  impl ( possesses(var ? ? ? A)(var ? ? ? T))( confersNorm(var ? ? ? T)(exists Process (\P ->  agent(var ? ? ? P)(var ? ? ? A)))(el ? ? ? Permission))))
+
+forall Passport (\P -> forall Agent (\A ->  impl ( possesses(var ? ? ? A)(var ? ? ? P))( confersNorm(var ? ? ? P)(exists Translocation (\T -> exists Nation (\N1 -> exists Nation (\N2 -> and ( agent(var ? ? ? T)(var ? ? ? A))(and ( origin(var ? ? ? T)(var ? ? ? N1))(and ( destination(var ? ? ? T)(var ? ? ? N2))( not ( equal(var ? ? ? N1)(var ? ? ? N2)))))))))(el ? ? ? Permission))))
+
+forall PassCertificate (\P -> forall (both Agent Physical) (\A ->  impl ( possesses(var ? ? ? A)(var ? ? ? P))(exists Object (\L ->  confersNorm(var ? ? ? P)( located(var ? ? ? A)(var ? ? ? L))(el ? ? ? Permission)))))
+
+forall Testament (\T -> exists Bequeathing (\B ->  refers(var ? ? ? T)(var ? ? ? B)))
+
+forall EducationalProgram (\PROGRAM -> exists EducationalCourse (\COURSE1 -> exists EducationalCourse (\COURSE2 -> and ( not ( equal(var ? ? ? COURSE1)(var ? ? ? COURSE2)))(and ( subPlan(var ? ? ? COURSE1)(var ? ? ? PROGRAM))( subPlan(var ? ? ? COURSE2)(var ? ? ? PROGRAM))))))
+
+forall EducationalCourse (\COURSE -> exists EducationalProcess (\CLASS -> exists EducationalOrganization (\ORG -> and ( realization(var ? ? ? CLASS)(var ? ? ? COURSE))( located(var ? ? ? CLASS)(var ? ? ? ORG)))))
+
+forall Matriculation (\ENTER -> forall College (\COLLEGE -> forall Entity (\STUDENT ->  impl (and ( agent(var ? ? ? ENTER)(var ? ? ? COLLEGE))( patient(var ? ? ? ENTER)(var ? ? ? STUDENT)))(exists Graduation (\GRAD -> exists HighSchool (\SCHOOL -> and ( agent(var ? ? ? GRAD)(var ? ? ? SCHOOL))(and ( patient(var ? ? ? GRAD)(var ? ? ? STUDENT))( earlier( el ? ? ? ( WhenFn(var ? ? ? GRAD)))( el ? ? ? ( WhenFn(var ? ? ? ENTER)))))))))))
+
+forall Matriculation (\E -> forall College (\C -> forall Entity (\P ->  impl (and ( agent(var ? ? ? E)(var ? ? ? C))( patient(var ? ? ? E)(var ? ? ? P)))(exists Graduation (\G -> exists SecondarySchool (\S -> and ( agent(var ? ? ? G)(var ? ? ? S))(and ( patient(var ? ? ? G)(var ? ? ? P))( earlier( el ? ? ? ( WhenFn(var ? ? ? G)))( el ? ? ? ( WhenFn(var ? ? ? E)))))))))))
+
+forall VocationalSchool (\VS ->  hasPurpose(var ? ? ? VS)(exists EducationalProcess (\P -> exists OccupationalTrade (\T -> exists (both CognitiveAgent (both Entity Object)) (\S -> and ( located(var ? ? ? P)(var ? ? ? VS))(and ( student(var ? ? ? VS)(var ? ? ? S))(and ( experiencer(var ? ? ? P)(var ? ? ? S))( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? P)))))( attribute(var ? ? ? S)(var ? ? ? T))))))))))
+
+forall GraduateSchool (\S -> exists University (\U ->  part(var ? ? ? S)(var ? ? ? U)))
+
+forall ArtSchool (\AS -> forall EducationalProcess (\P ->  impl ( located(var ? ? ? P)(var ? ? ? AS))(exists Making (\M -> exists ArtWork (\ART -> and ( patient(var ? ? ? M)(var ? ? ? ART))( refers(var ? ? ? P)(var ? ? ? M)))))))
+
+forall DaySchool (\DS ->  not (exists (both CognitiveAgent Human) (\S -> and ( student(var ? ? ? DS)(var ? ? ? S))( home(var ? ? ? S)(var ? ? ? DS)))))
+
+forall (both CognitiveAgent Entity) (\AGENT -> forall (both EducationalOrganization Object) (\ORG ->  impl ( student(var ? ? ? ORG)(var ? ? ? AGENT))(exists EducationalProcess (\PROCESS -> and ( located(var ? ? ? PROCESS)(var ? ? ? ORG))( destination(var ? ? ? PROCESS)(var ? ? ? AGENT))))))
+
+forall (both CognitiveAgent Agent) (\AGENT -> forall (both EducationalOrganization Object) (\ORG ->  impl ( teacher(var ? ? ? ORG)(var ? ? ? AGENT))(exists EducationalProcess (\PROCESS -> and ( located(var ? ? ? PROCESS)(var ? ? ? ORG))( agent(var ? ? ? PROCESS)(var ? ? ? AGENT))))))
+
+forall DriversLicense (\L -> forall Agent (\A ->  impl ( possesses(var ? ? ? A)(var ? ? ? L))( confersNorm(var ? ? ? L)(exists Driving (\D -> exists RoadVehicle (\V -> and ( agent(var ? ? ? D)(var ? ? ? A))( patient(var ? ? ? D)(var ? ? ? V)))))(el ? ? ? Permission))))
+
+forall Telephoning (\TEL -> exists Telephone (\DEVICE ->  instrument(var ? ? ? TEL)(var ? ? ? DEVICE)))
+
+forall LaborStriking (\STRIKE -> forall Human (\PERSON -> forall Organization (\ORG ->  impl (and ( agent(var ? ? ? STRIKE)(var ? ? ? PERSON))( patient(var ? ? ? STRIKE)(var ? ? ? ORG)))( employs(var ? ? ? ORG)(var ? ? ? PERSON)))))
+
+forall Resigning (\R -> forall (both Agent CognitiveAgent) (\A ->  impl ( agent(var ? ? ? R)(var ? ? ? A))( wants(var ? ? ? A)(var ? ? ? R))))
+
+forall TransferringPosition (\T -> forall (both Entity Human) (\H ->  impl ( experiencer(var ? ? ? T)(var ? ? ? H))(exists Organization (\ORG -> exists (both Position Entity) (\P2 -> exists (both Position Entity) (\P1 -> and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? T)))))( occupiesPosition(var ? ? ? H)(var ? ? ? P1)(var ? ? ? ORG)))(and ( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? T)))))( occupiesPosition(var ? ? ? H)(var ? ? ? P2)(var ? ? ? ORG)))( not ( equal(var ? ? ? P1)(var ? ? ? P2))))))))))
+
+forall CurrencyMeasure (\MONEY -> forall TimeDuration (\TIME -> forall (both Human CognitiveAgent) (\PERSON -> forall Organization (\ORG ->  impl ( monetaryWage(var ? ? ? ORG)(var ? ? ? PERSON)(var ? ? ? TIME)(var ? ? ? MONEY))( employs(var ? ? ? ORG)(var ? ? ? PERSON))))))
+
+forall GameBoard (\BOARD ->  hasPurpose(var ? ? ? BOARD)(exists Game (\GAME ->  located(var ? ? ? GAME)(var ? ? ? BOARD))))
+
+forall GameShot (\SHOT -> exists GamePiece (\PIECE ->  patient(var ? ? ? SHOT)(var ? ? ? PIECE)))
+
+forall GameShot (\SHOT -> exists Game (\GAME ->  subProcess(var ? ? ? SHOT)(var ? ? ? GAME)))
+
+forall GameGoal (\GOAL -> forall Game (\GAME -> forall Score (\SCORE ->  impl (and ( instrument(var ? ? ? GAME)(var ? ? ? GOAL))( subProcess(var ? ? ? SCORE)(var ? ? ? GAME)))(exists GamePiece (\PIECE -> exists TimePosition (\TIME -> and ( patient(var ? ? ? SCORE)(var ? ? ? PIECE))(and ( temporalPart(var ? ? ? TIME)( el ? ? ? ( WhenFn(var ? ? ? SCORE))))( holdsDuring(var ? ? ? TIME)( located(var ? ? ? PIECE)(var ? ? ? GOAL))))))))))
+
+forall SportServe (\SS -> exists Sport (\S -> and ( subProcess(var ? ? ? SS)(var ? ? ? S))( starts( el ? ? ? ( WhenFn(var ? ? ? SS)))( el ? ? ? ( WhenFn(var ? ? ? S))))))
+
+forall Throwing (\THROW -> exists Arm (\ARM ->  instrument(var ? ? ? THROW)(var ? ? ? ARM)))
+
+forall Catching (\CATCH -> forall (both Entity Object) (\BALL -> forall (both Agent Animal) (\AGENT ->  impl (and ( agent(var ? ? ? CATCH)(var ? ? ? AGENT))( patient(var ? ? ? CATCH)(var ? ? ? BALL)))( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? CATCH)))))( grasps(var ? ? ? AGENT)(var ? ? ? BALL))))))
+
+forall PlayingCard (\C ->  material(desc Paper ? ?)(var ? ? ? C))
+
+forall Accelerating (\ACCELERATE -> forall (both Agent Object) (\AGENT ->  impl ( agent(var ? ? ? ACCELERATE)(var ? ? ? AGENT))(exists (both TimeDuration Quantity) (\TIME2 -> exists (both TimeDuration Quantity) (\TIME1 -> exists (both LengthMeasure Quantity) (\LENGTH2 -> exists (both LengthMeasure Quantity) (\LENGTH1 -> and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? ACCELERATE)))))( measure(var ? ? ? AGENT)( el ? ? ? ( SpeedFn(var ? ? ? LENGTH1)(var ? ? ? TIME1)))))(and ( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? ACCELERATE)))))( measure(var ? ? ? AGENT)( el ? ? ? ( SpeedFn(var ? ? ? LENGTH2)(var ? ? ? TIME2)))))(or ( greaterThan(var ? ? ? LENGTH2)(var ? ? ? LENGTH1))( greaterThan(var ? ? ? TIME2)(var ? ? ? TIME1)))))))))))
+
+forall Decelerating (\D -> forall (both Agent Object) (\A ->  impl ( agent(var ? ? ? D)(var ? ? ? A))(exists (both TimeDuration Quantity) (\T2 -> exists (both TimeDuration Quantity) (\T1 -> exists (both LengthMeasure Quantity) (\L2 -> exists (both LengthMeasure Quantity) (\L1 -> and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? D)))))( measure(var ? ? ? A)( el ? ? ? ( SpeedFn(var ? ? ? L1)(var ? ? ? T1)))))(and ( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? D)))))( measure(var ? ? ? A)( el ? ? ? ( SpeedFn(var ? ? ? L2)(var ? ? ? T2)))))(or ( greaterThan(var ? ? ? L1)(var ? ? ? L2))( greaterThan(var ? ? ? T1)(var ? ? ? T2)))))))))))
+
+forall Shortening (\S -> forall (both Entity Object) (\O ->  impl ( patient(var ? ? ? S)(var ? ? ? O))(exists (both PhysicalQuantity Quantity) (\L2 -> exists (both PhysicalQuantity Quantity) (\L1 -> and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? S)))))( length(var ? ? ? O)(var ? ? ? L1)))(and ( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? S)))))( length(var ? ? ? O)(var ? ? ? L2)))( greaterThan(var ? ? ? L1)(var ? ? ? L2))))))))
+
+forall Flying (\FLY -> exists AtmosphericRegion (\REGION ->  located(var ? ? ? FLY)(var ? ? ? REGION)))
+
+forall Returning (\RETURN -> forall (both Entity Object) (\DEST -> forall (both Entity Physical) (\AGENT ->  impl (and ( experiencer(var ? ? ? RETURN)(var ? ? ? AGENT))( destination(var ? ? ? RETURN)(var ? ? ? DEST)))(exists (both TimeInterval TimePosition) (\TIME -> and ( earlier(var ? ? ? TIME)( el ? ? ? ( WhenFn(var ? ? ? RETURN))))( holdsDuring(var ? ? ? TIME)( located(var ? ? ? AGENT)(var ? ? ? DEST))))))))
+
+forall Escaping (\ESCAPE -> forall (both Agent Entity) (\AGENT ->  impl ( agent(var ? ? ? ESCAPE)(var ? ? ? AGENT))(exists Confining (\CONFINE -> and ( patient(var ? ? ? CONFINE)(var ? ? ? AGENT))( meetsTemporally( el ? ? ? ( WhenFn(var ? ? ? CONFINE)))( el ? ? ? ( WhenFn(var ? ? ? ESCAPE))))))))
+
+forall Escaping (\ESCAPE -> forall CognitiveAgent (\AGENT ->  not ( holdsRight( agent(var ? ? ? ESCAPE)(var ? ? ? AGENT))(var ? ? ? AGENT))))
+
+forall Leaving (\LEAVE -> exists Translocation (\GO -> and ( subProcess(var ? ? ? LEAVE)(var ? ? ? GO))( starts( el ? ? ? ( WhenFn(var ? ? ? LEAVE)))( el ? ? ? ( WhenFn(var ? ? ? GO))))))
+
+forall Arriving (\ARRIVE -> exists Translocation (\GO -> and ( subProcess(var ? ? ? ARRIVE)(var ? ? ? GO))( finishes( el ? ? ? ( WhenFn(var ? ? ? ARRIVE)))( el ? ? ? ( WhenFn(var ? ? ? GO))))))
+
+forall Immigrating (\I -> forall (both Agent (both SelfConnectedObject Organism)) (\A ->  impl ( agent(var ? ? ? I)(var ? ? ? A))(exists Nation (\N1 -> exists Nation (\N2 -> and ( origin(var ? ? ? I)(var ? ? ? N1))(and ( destination(var ? ? ? I)(var ? ? ? N2))(and ( not ( equal(var ? ? ? N1)(var ? ? ? N2)))(and ( member(var ? ? ? A)( el ? ? ? ( CitizenryFn(var ? ? ? N1))))(and ( not ( member(var ? ? ? A)( el ? ? ? ( CitizenryFn(var ? ? ? N2)))))( hasPurpose(var ? ? ? I)( inhabits(var ? ? ? A)(var ? ? ? N2))))))))))))
+
+forall Boarding (\B -> forall SelfConnectedObject (\A -> forall (both Entity Vehicle) (\V -> forall Agent (\AGENT ->  impl (and ( agent(var ? ? ? B)(var ? ? ? AGENT))( patient(var ? ? ? B)(var ? ? ? V)))(and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? B)))))( not ( onboard(var ? ? ? A)(var ? ? ? V))))( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? B)))))( onboard(var ? ? ? A)(var ? ? ? V))))))))
+
+forall (both Vehicle SelfConnectedObject) (\V -> forall (both SelfConnectedObject Object) (\O ->  impl ( onboard(var ? ? ? O)(var ? ? ? V))( contains(var ? ? ? V)(var ? ? ? O))))
+
+forall Transportation (\T -> forall (both Vehicle Object) (\V -> forall (both SelfConnectedObject Entity) (\O ->  impl (and ( onboard(var ? ? ? O)(var ? ? ? V))( instrument(var ? ? ? T)(var ? ? ? V)))( patient(var ? ? ? T)(var ? ? ? O)))))
+
+forall Deboarding (\B -> forall (both Entity Vehicle) (\V -> forall (both Agent SelfConnectedObject) (\A ->  impl (and ( agent(var ? ? ? B)(var ? ? ? A))( patient(var ? ? ? B)(var ? ? ? V)))(and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? B)))))( onboard(var ? ? ? A)(var ? ? ? V)))( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? B)))))( not ( onboard(var ? ? ? A)(var ? ? ? V))))))))
+
+forall Rotating (\R -> forall (both Entity Physical) (\A ->  impl ( experiencer(var ? ? ? R)(var ? ? ? A))(exists Object (\L -> and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? R)))))( located(var ? ? ? A)(var ? ? ? L)))( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? R)))))( located(var ? ? ? A)(var ? ? ? L)))))))
+
+forall CentrifugalMotion (\CM -> exists Rotating (\R -> exists Entity (\O2 -> exists (both Object Entity) (\O1 -> exists Object (\A -> and ( axis(var ? ? ? A)(var ? ? ? O1))(and ( origin(var ? ? ? CM)(var ? ? ? A))(and ( experiencer(var ? ? ? R)(var ? ? ? O1))(and ( experiencer(var ? ? ? CM)(var ? ? ? O2))( causes(var ? ? ? R)(var ? ? ? CM))))))))))
+
+forall CentripetalMotion (\CM -> exists Rotating (\R -> exists Entity (\O2 -> exists (both Object Entity) (\O1 -> exists (both Object Entity) (\A -> and ( axis(var ? ? ? A)(var ? ? ? O1))(and ( destination(var ? ? ? CM)(var ? ? ? A))(and ( experiencer(var ? ? ? R)(var ? ? ? O1))(and ( experiencer(var ? ? ? CM)(var ? ? ? O2))( causes(var ? ? ? R)(var ? ? ? CM))))))))))
+
+forall Reversing (\REVERSE -> forall SelfConnectedObject (\BOTTOM -> forall SelfConnectedObject (\TOP -> forall (both Entity SelfConnectedObject) (\OBJ ->  impl (and ( patient(var ? ? ? REVERSE)(var ? ? ? OBJ))( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? REVERSE)))))(and ( top(var ? ? ? TOP)(var ? ? ? OBJ))( bottom(var ? ? ? BOTTOM)(var ? ? ? OBJ)))))( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? REVERSE)))))(and ( top(var ? ? ? BOTTOM)(var ? ? ? OBJ))( bottom(var ? ? ? TOP)(var ? ? ? OBJ))))))))
+
+forall Pouring (\POUR -> exists Substance (\LIQUID -> exists Container (\CONTAINER1 -> exists Container (\CONTAINER2 -> and ( origin(var ? ? ? POUR)(var ? ? ? CONTAINER1))(and ( destination(var ? ? ? POUR)(var ? ? ? CONTAINER2))(and ( not ( equal(var ? ? ? CONTAINER1)(var ? ? ? CONTAINER2)))(and ( patient(var ? ? ? POUR)(var ? ? ? LIQUID))( attribute(var ? ? ? LIQUID)(el ? ? ? Liquid)))))))))
+
+forall WaterWave (\WAVE -> exists WaterArea (\AREA ->  located(var ? ? ? WAVE)(var ? ? ? AREA)))
+
+forall Flooding (\F -> forall (both Object WaterArea) (\P ->  impl ( located(var ? ? ? F)(var ? ? ? P))(exists (both LengthMeasure Quantity) (\L2 -> exists (both LengthMeasure Quantity) (\L1 -> and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? F)))))( waterDepth(var ? ? ? P)(var ? ? ? L1)))(and ( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? F)))))( waterDepth(var ? ? ? P)(var ? ? ? L2)))( greaterThan(var ? ? ? L2)(var ? ? ? L1))))))))
+
+forall MilitaryVehicle (\V ->  hasPurpose(var ? ? ? V)(exists MilitaryOrganization (\O ->  uses(var ? ? ? V)(var ? ? ? O))))
+
+forall TractorTrailer (\TT -> exists TruckTractor (\TRAC -> exists TruckTrailer (\TRAIL -> and ( part(var ? ? ? TRAC)(var ? ? ? TT))(and ( part(var ? ? ? TRAIL)(var ? ? ? TT))( connected(var ? ? ? TRAC)(var ? ? ? TRAIL))))))
+
+forall AirTransportation (\TRANSPORT -> exists Aircraft (\CRAFT -> exists AtmosphericRegion (\REGION -> and ( instrument(var ? ? ? TRANSPORT)(var ? ? ? CRAFT))( located(var ? ? ? TRANSPORT)(var ? ? ? REGION)))))
+
+forall Fighter (\F ->  hasPurpose(var ? ? ? F)(exists Attack (\A -> exists MilitaryAircraft (\MA -> and ( instrument(var ? ? ? A)(var ? ? ? F))( patient(var ? ? ? A)(var ? ? ? MA))))))
+
+forall Bomber (\B ->  hasPurpose(var ? ? ? B)(exists Transportation (\T -> exists ExplosiveDevice (\D -> and ( instrument(var ? ? ? T)(var ? ? ? B))( patient(var ? ? ? T)(var ? ? ? D))))))
+
+forall ExplosiveDevice (\ED ->  hasPurpose(var ? ? ? ED)(exists Explosion (\E -> exists Damaging (\D -> and ( instrument(var ? ? ? E)(var ? ? ? ED))( causes(var ? ? ? E)(var ? ? ? D))))))
+
+forall ExplosiveDevice (\D -> exists ExplosiveSubstance (\S ->  part(var ? ? ? S)(var ? ? ? D)))
+
+forall LandTransportation (\LAND -> exists LandVehicle (\CRAFT -> exists LandArea (\AREA -> and ( instrument(var ? ? ? LAND)(var ? ? ? CRAFT))( located(var ? ? ? CRAFT)(var ? ? ? AREA)))))
+
+forall LandVehicle (\X ->  hasPurpose(var ? ? ? X)(exists Transportation (\EV -> exists (both SelfConnectedObject Object) (\SURF -> and ( surface(var ? ? ? SURF)(el ? ? ? PlanetEarth))( holdsDuring( el ? ? ? ( WhenFn(var ? ? ? EV)))( meetsSpatially(var ? ? ? X)(var ? ? ? SURF)))))))
+
+forall Automobile (\A ->  equipmentCount(var ? ? ? A)(desc VehicleWheel ? ?)(el ? ? ? (toInt 4)))
+
+forall Automobile (\A ->  equipmentCount(var ? ? ? A)(desc Axle ? ?)(el ? ? ? (toInt 2)))
+
+forall Motorcycle (\M ->  equipmentCount(var ? ? ? M)(desc VehicleWheel ? ?)(el ? ? ? (toInt 2)))
+
+forall Bus (\B -> forall (both SelfConnectedObject Entity) (\P ->  hasPurpose(var ? ? ? B)(exists Collection (\C -> exists Transportation (\T -> exists (both Integer Quantity) (\N -> and ( memberCount(var ? ? ? C)(var ? ? ? N))(and ( greaterThan(var ? ? ? N)(el ? ? ? (toInt 11)))( impl ( member(var ? ? ? P)(var ? ? ? C))( patient(var ? ? ? T)(var ? ? ? P))))))))))
+
+forall WaterTransportation (\TRANSPORT -> exists WaterVehicle (\CRAFT -> exists WaterArea (\AREA -> and ( instrument(var ? ? ? TRANSPORT)(var ? ? ? CRAFT))( located(var ? ? ? TRANSPORT)(var ? ? ? AREA)))))
+
+forall Rowing (\R -> exists Oar (\O ->  instrument(var ? ? ? R)(var ? ? ? O)))
+
+forall BoatDeck (\D -> exists WaterVehicle (\B ->  part(var ? ? ? D)(var ? ? ? B)))
+
+forall SpaceTransportation (\TRANSPORT -> exists Spacecraft (\CRAFT -> exists SpaceRegion (\REGION -> and ( instrument(var ? ? ? TRANSPORT)(var ? ? ? CRAFT))( located(var ? ? ? TRANSPORT)(var ? ? ? REGION)))))
+
+forall Missile (\M -> exists Bomb (\B ->  part(var ? ? ? B)(var ? ? ? M)))
+
+forall Burying (\B -> exists Covering (\C -> exists Soil (\S -> and ( instrument(var ? ? ? C)(var ? ? ? S))( subProcess(var ? ? ? C)(var ? ? ? B)))))
+
+forall Digging (\D -> exists Soil (\S ->  patient(var ? ? ? D)(var ? ? ? S)))
+
+forall Tilling (\T -> exists Agriculture (\A ->  subProcess(var ? ? ? T)(var ? ? ? A)))
+
+forall MovingResidence (\MOVE -> forall (both Agent Human) (\AGENT ->  impl ( agent(var ? ? ? MOVE)(var ? ? ? AGENT))(exists (both PermanentResidence Entity) (\HOME2 -> exists (both PermanentResidence Entity) (\HOME1 -> and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? MOVE)))))( home(var ? ? ? AGENT)(var ? ? ? HOME1)))(and ( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? MOVE)))))( home(var ? ? ? AGENT)(var ? ? ? HOME2)))( not ( equal(var ? ? ? HOME1)(var ? ? ? HOME2)))))))))
+
+forall Harvesting (\H -> exists Agriculture (\A ->  subProcess(var ? ? ? H)(var ? ? ? A)))
+
+forall Drilling (\DRILL -> forall (both Entity SelfConnectedObject) (\OBJ ->  impl ( patient(var ? ? ? DRILL)(var ? ? ? OBJ))(exists Hole (\HOLE -> and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? DRILL)))))( not ( hole(var ? ? ? HOLE)(var ? ? ? OBJ))))( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? DRILL)))))( hole(var ? ? ? HOLE)(var ? ? ? OBJ)))))))
+
+forall Drill (\D ->  hasPurpose(var ? ? ? D)(exists Cutting (\E -> exists Hole (\H -> and ( result(var ? ? ? E)(var ? ? ? H))( instrument(var ? ? ? E)(var ? ? ? D))))))
+
+forall Dreaming (\DREAM -> forall (both Entity Object) (\AGENT ->  impl ( experiencer(var ? ? ? DREAM)(var ? ? ? AGENT))( holdsDuring( el ? ? ? ( WhenFn(var ? ? ? DREAM)))( attribute(var ? ? ? AGENT)(el ? ? ? Asleep)))))
+
+forall Frightening (\FRIGHTEN -> forall (both Entity Object) (\AGENT ->  impl ( experiencer(var ? ? ? FRIGHTEN)(var ? ? ? AGENT))(and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? FRIGHTEN)))))( not ( attribute(var ? ? ? AGENT)(el ? ? ? Anxiety))))( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? FRIGHTEN)))))( attribute(var ? ? ? AGENT)(el ? ? ? Anxiety))))))
+
+forall Execution (\E -> exists Government (\G ->  agent(var ? ? ? E)(var ? ? ? G)))
+
+forall Execution (\E -> exists Human (\P ->  patient(var ? ? ? E)(var ? ? ? P)))
+
+forall Suicide (\S -> exists (both Agent Entity) (\A -> and ( agent(var ? ? ? S)(var ? ? ? A))( experiencer(var ? ? ? S)(var ? ? ? A))))
+
+forall Trespassing (\T -> forall (both Entity Object) (\P -> forall (both Agent Physical) (\H ->  impl (and ( agent(var ? ? ? T)(var ? ? ? H))( patient(var ? ? ? T)(var ? ? ? P)))(and ( not ( possesses(var ? ? ? H)(var ? ? ? P)))( modalAttribute( located(var ? ? ? H)(var ? ? ? P))(el ? ? ? Illegal))))))
+
+forall Murder (\MURDER -> exists Human (\PERSON ->  patient(var ? ? ? MURDER)(var ? ? ? PERSON)))
+
+forall Hanging (\H -> exists String (\S -> exists Neck (\N -> exists Human (\P -> and ( experiencer(var ? ? ? H)(var ? ? ? P))(and ( properPart(var ? ? ? N)(var ? ? ? P))(and ( instrument(var ? ? ? H)(var ? ? ? S))( holdsDuring( el ? ? ? ( WhenFn(var ? ? ? H)))( meetsSpatially(var ? ? ? S)(var ? ? ? N)))))))))
+
+forall OrchestralConducting (\CONDUCT -> exists Music (\MUSIC ->  result(var ? ? ? CONDUCT)(var ? ? ? MUSIC)))
+
+forall Orchestra (\ORCHESTRA ->  hasPurpose(var ? ? ? ORCHESTRA)(exists Music (\MUSIC ->  agent(var ? ? ? MUSIC)(var ? ? ? ORCHESTRA))))
+
+forall Orchestra (\ORCHESTRA ->  hasPurpose(var ? ? ? ORCHESTRA)(exists InstrumentalMusic (\MUSIC ->  agent(var ? ? ? MUSIC)(var ? ? ? ORCHESTRA))))
+
+forall Sharing (\SHARE -> forall (both Entity Object) (\OBJ -> forall Entity (\AGENT2 -> forall Agent (\AGENT1 ->  impl (and ( agent(var ? ? ? SHARE)(var ? ? ? AGENT1))(and ( destination(var ? ? ? SHARE)(var ? ? ? AGENT2))( patient(var ? ? ? SHARE)(var ? ? ? OBJ))))(exists Giving (\GIVE -> exists (both Entity Object) (\PART -> and ( subProcess(var ? ? ? GIVE)(var ? ? ? SHARE))(and ( patient(var ? ? ? GIVE)(var ? ? ? PART))(and ( properPart(var ? ? ? PART)(var ? ? ? OBJ))(and ( agent(var ? ? ? GIVE)(var ? ? ? AGENT1))( destination(var ? ? ? GIVE)(var ? ? ? AGENT2))))))))))))
+
+forall Stealing (\STEAL -> forall CognitiveAgent (\VICTIM -> forall (both Entity CognitiveAgent) (\AGENT ->  impl (and ( destination(var ? ? ? STEAL)(var ? ? ? AGENT))( origin(var ? ? ? STEAL)(var ? ? ? VICTIM)))( not ( confersRight( destination(var ? ? ? STEAL)(var ? ? ? AGENT))(var ? ? ? VICTIM)(var ? ? ? AGENT))))))
+
+forall Inheriting (\INHERIT -> forall (both Entity Object) (\PROPERTY -> forall (both Object (both Entity Agent)) (\PERSON -> forall (both Agent CognitiveAgent) (\HEIR ->  impl (and ( agent(var ? ? ? INHERIT)(var ? ? ? HEIR))(and ( origin(var ? ? ? INHERIT)(var ? ? ? PERSON))( patient(var ? ? ? INHERIT)(var ? ? ? PROPERTY))))(exists Death (\DEATH -> and ( experiencer(var ? ? ? DEATH)(var ? ? ? PERSON))(and ( earlier( el ? ? ? ( WhenFn(var ? ? ? DEATH)))( el ? ? ? ( WhenFn(var ? ? ? INHERIT))))(and ( holdsDuring( el ? ? ? ( ImmediatePastFn( el ? ? ? ( WhenFn(var ? ? ? DEATH)))))( possesses(var ? ? ? PERSON)(var ? ? ? PROPERTY)))( confersRight( possesses(var ? ? ? HEIR)(var ? ? ? PROPERTY))(var ? ? ? PERSON)(var ? ? ? HEIR))))))))))
+
+forall Bequeathing (\B -> forall (both Entity Object) (\PROP -> forall Process (\I -> forall (both Entity Agent) (\H -> forall (both Agent Entity) (\P ->  impl (and ( agent(var ? ? ? B)(var ? ? ? P))(and ( destination(var ? ? ? B)(var ? ? ? H))( patient(var ? ? ? I)(var ? ? ? PROP))))(exists Death (\D -> and ( experiencer(var ? ? ? D)(var ? ? ? P))(and ( earlier( el ? ? ? ( WhenFn(var ? ? ? D)))( el ? ? ? ( WhenFn(var ? ? ? B))))(and ( holdsDuring( el ? ? ? ( ImmediatePastFn( el ? ? ? ( WhenFn(var ? ? ? D)))))( possesses(var ? ? ? P)(var ? ? ? PROP)))( confersNorm(var ? ? ? P)( possesses(var ? ? ? H)(var ? ? ? PROP))(el ? ? ? Permission)))))))))))
+
+forall (both Organization EducationalOrganization) (\ORG -> forall (both Human CognitiveAgent) (\H -> forall (both Object Position) (\P ->  impl (and ( attribute(var ? ? ? P)(el ? ? ? CollegeFreshman))( occupiesPosition(var ? ? ? H)(var ? ? ? P)(var ? ? ? ORG)))(exists (both TimePosition Quantity) (\T -> and ( holdsDuring(var ? ? ? T)( student(var ? ? ? ORG)(var ? ? ? H)))( lessThan(var ? ? ? T)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 1))(el ? ? ? YearDuration)))))))))
+
+forall (both Organization EducationalOrganization) (\ORG -> forall (both Human CognitiveAgent) (\H -> forall (both Object Position) (\P ->  impl (and ( attribute(var ? ? ? P)(el ? ? ? CollegeJunior))( occupiesPosition(var ? ? ? H)(var ? ? ? P)(var ? ? ? ORG)))(exists (both TimePosition Quantity) (\T -> and ( holdsDuring(var ? ? ? T)( student(var ? ? ? ORG)(var ? ? ? H)))(and ( greaterThanOrEqualTo(var ? ? ? T)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 2))(el ? ? ? YearDuration))))( lessThan(var ? ? ? T)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 3))(el ? ? ? YearDuration))))))))))
+
+forall (both Organization EducationalOrganization) (\ORG -> forall (both Human CognitiveAgent) (\H -> forall (both Object Position) (\P ->  impl (and ( attribute(var ? ? ? P)(el ? ? ? CollegeJunior))( occupiesPosition(var ? ? ? H)(var ? ? ? P)(var ? ? ? ORG)))(exists (both TimePosition Quantity) (\T -> and ( holdsDuring(var ? ? ? T)( student(var ? ? ? ORG)(var ? ? ? H)))(and ( greaterThanOrEqualTo(var ? ? ? T)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 3))(el ? ? ? YearDuration))))( lessThan(var ? ? ? T)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 4))(el ? ? ? YearDuration))))))))))
+
+forall (both Organization EducationalOrganization) (\ORG -> forall (both Human CognitiveAgent) (\H -> forall (both Object Position) (\P ->  impl (and ( attribute(var ? ? ? P)(el ? ? ? CollegeSophomore))( occupiesPosition(var ? ? ? H)(var ? ? ? P)(var ? ? ? ORG)))(exists (both TimePosition Quantity) (\T -> and ( holdsDuring(var ? ? ? T)( student(var ? ? ? ORG)(var ? ? ? H)))(and ( greaterThanOrEqualTo(var ? ? ? T)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 2))(el ? ? ? YearDuration))))( lessThan(var ? ? ? T)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 2))(el ? ? ? YearDuration))))))))))
+
+forall Process (\PREF -> forall (both Object Agent) (\P ->  impl ( attribute(var ? ? ? P)(el ? ? ? Comedian))(exists Performance (\PERF -> exists Laughing (\L -> and ( agent(var ? ? ? PREF)(var ? ? ? P))( causes(var ? ? ? PERF)(var ? ? ? L)))))))
+
+forall (both Object Agent) (\H ->  impl ( attribute(var ? ? ? H)(el ? ? ? PresidentOfTheUnitedStates))( leader(var ? ? ? H)(el ? ? ? UnitedStates)))
+
+forall (both Object Agent) (\P ->  impl ( attribute(var ? ? ? P)(el ? ? ? Dentist))(exists DiagnosticProcess (\D -> exists Tooth (\T -> and ( agent(var ? ? ? D)(var ? ? ? P))( patient(var ? ? ? D)(var ? ? ? T))))))
+
+forall Researcher (\R -> forall (both Object Human) (\P ->  impl ( attribute(var ? ? ? P)(var ? ? ? R))(exists Science (\S ->  hasExpertise(var ? ? ? P)(var ? ? ? S)))))
+
+forall MilitaryOfficer (\OFFICER -> exists Managing (\MANAGE -> exists (either MilitaryOrganization Soldier) (\PATIENT -> and ( agent(var ? ? ? MANAGE)(var ? ? ? OFFICER))( patient(var ? ? ? MANAGE)(var ? ? ? PATIENT)))))
+
+forall (both Entity (both RealNumber Quantity)) (\NUMBER ->  impl ( equal(var ? ? ? NUMBER)( el ? ? ? ( MultiplicationFn(el ? ? ? (toInt 1))(var ? ? ? NUMBER))))( equal( el ? ? ? ( MeasureFn(var ? ? ? NUMBER)(el ? ? ? CenturyDuration)))( el ? ? ? ( MeasureFn( el ? ? ? ( MultiplicationFn(var ? ? ? NUMBER)(el ? ? ? (toInt 100))))(el ? ? ? YearDuration)))))
+
+forall (both Entity (both RealNumber Quantity)) (\NUMBER ->  impl ( equal(var ? ? ? NUMBER)( el ? ? ? ( MultiplicationFn(el ? ? ? (toInt 1))(var ? ? ? NUMBER))))( equal( el ? ? ? ( MeasureFn(var ? ? ? NUMBER)(el ? ? ? DecadeDuration)))( el ? ? ? ( MeasureFn( el ? ? ? ( MultiplicationFn(var ? ? ? NUMBER)(el ? ? ? (toInt 10))))(el ? ? ? YearDuration)))))
+
+forall (both Entity (both RealNumber Quantity)) (\NUMBER ->  impl ( equal(var ? ? ? NUMBER)( el ? ? ? ( MultiplicationFn(el ? ? ? (toInt 1))(var ? ? ? NUMBER))))( equal( el ? ? ? ( MeasureFn(var ? ? ? NUMBER)(el ? ? ? YardLength)))( el ? ? ? ( MeasureFn( el ? ? ? ( MultiplicationFn(el ? ? ? (toInt 3))(var ? ? ? NUMBER)))(el ? ? ? FootLength)))))
+
+forall NightTime (\NIGHT -> exists DayTime (\DAY1 -> exists DayTime (\DAY2 -> and ( meetsTemporally(var ? ? ? NIGHT)(var ? ? ? DAY1))( meetsTemporally(var ? ? ? DAY2)(var ? ? ? NIGHT)))))
+
+forall NightTime (\NIGHT -> exists Sunrise (\RISE -> exists Sunset (\SET -> and ( starts(var ? ? ? SET)(var ? ? ? NIGHT))( finishes(var ? ? ? RISE)(var ? ? ? NIGHT)))))
+
+forall DayTime (\DAY -> exists NightTime (\NIGHT1 -> exists NightTime (\NIGHT2 -> and ( meetsTemporally(var ? ? ? DAY)(var ? ? ? NIGHT1))( meetsTemporally(var ? ? ? NIGHT2)(var ? ? ? DAY)))))
+
+forall DayTime (\DAY -> exists Sunrise (\RISE -> exists Sunset (\SET -> and ( starts(var ? ? ? RISE)(var ? ? ? DAY))( finishes(var ? ? ? SET)(var ? ? ? DAY)))))
+
+forall Weekend (\WEEKEND -> exists Saturday (\SATURDAY -> exists Sunday (\SUNDAY -> and ( starts(var ? ? ? SATURDAY)(var ? ? ? WEEKEND))(and ( finishes(var ? ? ? SUNDAY)(var ? ? ? WEEKEND))( meetsTemporally(var ? ? ? SATURDAY)(var ? ? ? SUNDAY))))))
+
+forall WinterSeason (\WINTER -> exists SpringSeason (\SPRING ->  meetsTemporally(var ? ? ? WINTER)(var ? ? ? SPRING)))
+
+forall WinterSeason (\WINTER -> exists FallSeason (\AUTUMN ->  meetsTemporally(var ? ? ? AUTUMN)(var ? ? ? WINTER)))
+
+forall SpringSeason (\SPRING -> exists SummerSeason (\SUMMER ->  meetsTemporally(var ? ? ? SPRING)(var ? ? ? SUMMER)))
+
+forall SpringSeason (\SPRING -> exists WinterSeason (\WINTER ->  meetsTemporally(var ? ? ? WINTER)(var ? ? ? SPRING)))
+
+forall SummerSeason (\SUMMER -> exists SpringSeason (\SPRING ->  meetsTemporally(var ? ? ? SPRING)(var ? ? ? SUMMER)))
+
+forall SummerSeason (\SUMMER -> exists FallSeason (\AUTUMN ->  meetsTemporally(var ? ? ? SUMMER)(var ? ? ? AUTUMN)))
+
+forall FallSeason (\AUTUMN -> exists SummerSeason (\SUMMER ->  meetsTemporally(var ? ? ? SUMMER)(var ? ? ? AUTUMN)))
+
+forall FallSeason (\AUTUMN -> exists WinterSeason (\WINTER ->  meetsTemporally(var ? ? ? AUTUMN)(var ? ? ? WINTER)))
+
+forall (both Object Physical) (\OBJ2 -> forall (both Object Physical) (\OBJ1 ->  impl ( orientation(var ? ? ? OBJ1)(var ? ? ? OBJ2)(el ? ? ? Upstairs))(exists BuildingLevel (\LEVEL1 -> exists BuildingLevel (\LEVEL2 -> exists Building (\BUILDING -> and ( part(var ? ? ? LEVEL1)(var ? ? ? BUILDING))(and ( part(var ? ? ? LEVEL2)(var ? ? ? BUILDING))(and ( located(var ? ? ? OBJ1)(var ? ? ? LEVEL1))(and ( located(var ? ? ? OBJ2)(var ? ? ? LEVEL2))( orientation(var ? ? ? LEVEL1)(var ? ? ? LEVEL2)(el ? ? ? Above)))))))))))
+
+forall (both Object Physical) (\OBJ2 -> forall (both Object Physical) (\OBJ1 ->  impl ( orientation(var ? ? ? OBJ1)(var ? ? ? OBJ2)(el ? ? ? Downstairs))(exists BuildingLevel (\LEVEL1 -> exists BuildingLevel (\LEVEL2 -> exists Building (\BUILDING -> and ( part(var ? ? ? LEVEL1)(var ? ? ? BUILDING))(and ( part(var ? ? ? LEVEL2)(var ? ? ? BUILDING))(and ( located(var ? ? ? OBJ1)(var ? ? ? LEVEL1))(and ( located(var ? ? ? OBJ2)(var ? ? ? LEVEL2))( orientation(var ? ? ? LEVEL1)(var ? ? ? LEVEL2)(el ? ? ? Below)))))))))))
+
+forall Object (\E ->  impl ( attribute(var ? ? ? E)(el ? ? ? Headache))(exists Head (\H -> and ( part(var ? ? ? H)(var ? ? ? E))( attribute(var ? ? ? H)(el ? ? ? Pain)))))
+
+forall Word (\WORD -> exists Syllable (\SYLLABLE ->  part(var ? ? ? SYLLABLE)(var ? ? ? WORD)))
+
+forall GameAttribute (\ATTR -> forall (both Entity (both Agent Process)) (\THING ->  impl ( property(var ? ? ? THING)(var ? ? ? ATTR))(exists Game (\GAME -> or ( agent(var ? ? ? GAME)(var ? ? ? THING))(or ( patient(var ? ? ? GAME)(var ? ? ? THING))( subProcess(var ? ? ? THING)(var ? ? ? GAME)))))))
+
+forall SportsAttribute (\ATTR -> forall (both Entity (both Agent Process)) (\THING ->  impl ( property(var ? ? ? THING)(var ? ? ? ATTR))(exists Game (\SPORT -> or ( agent(var ? ? ? SPORT)(var ? ? ? THING))(or ( patient(var ? ? ? SPORT)(var ? ? ? THING))( subProcess(var ? ? ? THING)(var ? ? ? SPORT)))))))
+
+forall ChemicalReduction (\R -> forall (both Quantity PositiveInteger) (\G -> forall (both PositiveInteger Quantity) (\L -> forall (both Entity PureSubstance) (\S ->  impl (and ( patient(var ? ? ? R)(var ? ? ? S))( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? R)))))( electronNumber(var ? ? ? S)(var ? ? ? L))))(and ( greaterThan(var ? ? ? G)(var ? ? ? L))( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? R)))))( electronNumber(var ? ? ? S)(var ? ? ? G))))))))
+
+forall Oxidation (\O -> forall (both PositiveInteger Quantity) (\G -> forall (both Entity PureSubstance) (\S ->  impl (and ( patient(var ? ? ? O)(var ? ? ? S))( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? O)))))( electronNumber(var ? ? ? S)(var ? ? ? G))))(exists (both Quantity PositiveInteger) (\L -> and ( lessThan(var ? ? ? L)(var ? ? ? G))( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? O)))))( electronNumber(var ? ? ? S)(var ? ? ? L))))))))
+
+forall Dialysis (\DIALYSIS -> exists Solution (\SOLUTION -> exists PureSubstance (\SUBSTANCE1 -> exists PureSubstance (\SUBSTANCE2 -> and ( resourceS(var ? ? ? DIALYSIS)(var ? ? ? SOLUTION))(and ( result(var ? ? ? DIALYSIS)(var ? ? ? SUBSTANCE1))(and ( result(var ? ? ? DIALYSIS)(var ? ? ? SUBSTANCE2))( not ( equal(var ? ? ? SUBSTANCE1)(var ? ? ? SUBSTANCE2)))))))))
+
+forall Diluting (\D -> exists Solution (\S -> and ( patient(var ? ? ? D)(var ? ? ? S))( attribute(var ? ? ? S)(el ? ? ? Liquid))))
+
+forall Chromatography (\C -> exists (either LiquidMixture GasMixture) (\M -> resourceS(var ? ? ? C)(var ? ? ? M)))
+
+forall Chromatography (\C -> exists PureSubstance (\S ->  result(var ? ? ? C)(var ? ? ? S)))
+
+forall RightAngle (\A ->  angularMeasure(var ? ? ? A)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 90))(el ? ? ? AngularDegree))))
+
+forall AcuteAngle (\A -> forall (both RealNumber Quantity) (\N ->  impl ( angularMeasure(var ? ? ? A)( el ? ? ? ( MeasureFn(var ? ? ? N)(el ? ? ? AngularDegree))))( lessThan(var ? ? ? N)(el ? ? ? (toInt 90)))))
+
+forall ObliqueAngle (\A -> forall (both RealNumber Quantity) (\N ->  impl ( angularMeasure(var ? ? ? A)( el ? ? ? ( MeasureFn(var ? ? ? N)(el ? ? ? AngularDegree))))( greaterThan(var ? ? ? N)(el ? ? ? (toInt 90)))))
+
+forall Polygon (\POLYGON -> forall (both GeometricFigure OneDimensionalFigure) (\PART ->  impl ( geometricPart(var ? ? ? PART)(var ? ? ? POLYGON))(or ( sideOfFigure(var ? ? ? PART)(var ? ? ? POLYGON))(exists (both OneDimensionalFigure GeometricFigure) (\SIDE -> and ( sideOfFigure(var ? ? ? SIDE)(var ? ? ? POLYGON))( geometricPart(var ? ? ? PART)(var ? ? ? SIDE)))))))
+
+forall RightTriangle (\T -> exists RightAngle (\A ->  angleOfFigure(var ? ? ? A)(var ? ? ? T)))
+
+forall Square (\SQUARE -> exists LengthMeasure (\LENGTH -> forall OneDimensionalFigure (\SIDE ->  impl ( sideOfFigure(var ? ? ? SIDE)(var ? ? ? SQUARE))( lineMeasure(var ? ? ? SIDE)(var ? ? ? LENGTH)))))
+
+forall Entity (\L -> forall Circle (\C ->  impl ( equal( el ? ? ? ( DiameterFn(var ? ? ? C)))(var ? ? ? L))(exists (both Entity Quantity) (\R -> and ( equal( el ? ? ? ( RadiusFn(var ? ? ? C)))(var ? ? ? R))( equal( el ? ? ? ( MultiplicationFn(var ? ? ? R)(el ? ? ? (toInt 2))))(var ? ? ? L))))))
+
+forall (both LengthMeasure Entity) (\R -> forall (both GeometricFigure GeometricPoint) (\P2 -> forall (both Entity GeometricPoint) (\P -> forall (both Circle GeometricFigure) (\C ->  impl (and ( equal( el ? ? ? ( CenterOfCircleFn(var ? ? ? C)))(var ? ? ? P))(and ( pointOfFigure(var ? ? ? P2)(var ? ? ? C))( geometricDistance(var ? ? ? P2)(var ? ? ? P)(var ? ? ? R))))( equal( el ? ? ? ( RadiusFn(var ? ? ? C)))(var ? ? ? R))))))
+
+forall (both TwoDimensionalObject GeometricFigure) (\CIRCLE -> forall (both OneDimensionalFigure GeometricFigure) (\LINE ->  impl ( tangent(var ? ? ? LINE)(var ? ? ? CIRCLE))(exists (both GeometricFigure Entity) (\POINT1 -> and ( pointOfFigure(var ? ? ? POINT1)(var ? ? ? LINE))(and ( pointOfFigure(var ? ? ? POINT1)(var ? ? ? CIRCLE))(forall (both GeometricFigure Entity) (\POINT2 ->  impl (and ( pointOfFigure(var ? ? ? POINT2)(var ? ? ? LINE))( pointOfFigure(var ? ? ? POINT2)(var ? ? ? CIRCLE)))( equal(var ? ? ? POINT1)(var ? ? ? POINT2)))))))))
+
+forall CivilWar (\WAR -> exists Nation (\NATION -> forall (both Agent GeopoliticalArea) (\AGENT ->  impl ( contestParticipant(var ? ? ? WAR)(var ? ? ? AGENT))( geopoliticalSubdivision(var ? ? ? AGENT)(var ? ? ? NATION)))))
+
+forall Negotiating (\NEGOTIATE ->  hasPurpose(var ? ? ? NEGOTIATE)(exists Committing (\COMMIT -> and ( subProcess(var ? ? ? COMMIT)(var ? ? ? NEGOTIATE))( finishes( el ? ? ? ( WhenFn(var ? ? ? COMMIT)))( el ? ? ? ( WhenFn(var ? ? ? NEGOTIATE)))))))
+
+forall (both Object CognitiveAgent) (\A ->  impl ( attribute(var ? ? ? A)(el ? ? ? Hungry))( desires(var ? ? ? A)(exists Eating (\E ->  agent(var ? ? ? E)(var ? ? ? A)))))
+
+forall Object (\H ->  impl ( attribute(var ? ? ? H)(el ? ? ? Pregnant))( attribute(var ? ? ? H)(el ? ? ? Female)))
+
+forall LyingDown (\LIE -> forall (both Agent Object) (\AGENT ->  impl ( agent(var ? ? ? LIE)(var ? ? ? AGENT))(and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? LIE)))))( attribute(var ? ? ? AGENT)(el ? ? ? Sitting)))( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? LIE)))))( attribute(var ? ? ? AGENT)(el ? ? ? Prostrate))))))
+
+forall SittingDown (\SIT -> forall (both Agent Object) (\AGENT ->  impl ( agent(var ? ? ? SIT)(var ? ? ? AGENT))(and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? SIT)))))( attribute(var ? ? ? AGENT)(el ? ? ? Standing)))( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? SIT)))))( attribute(var ? ? ? AGENT)(el ? ? ? Sitting))))))
+
+forall StandingUp (\STAND -> forall (both Agent Object) (\AGENT ->  impl ( agent(var ? ? ? STAND)(var ? ? ? AGENT))(and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? STAND)))))( attribute(var ? ? ? AGENT)(el ? ? ? Sitting)))( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? STAND)))))( attribute(var ? ? ? AGENT)(el ? ? ? Standing))))))
+
+forall EyeMotion (\EM -> forall (both Agent Object) (\A ->  impl ( agent(var ? ? ? EM)(var ? ? ? A))(exists Eyelid (\E -> and ( part(var ? ? ? E)(var ? ? ? A))( patient(var ? ? ? EM)(var ? ? ? E))))))
+
+forall ReflexiveProcess (\P -> exists Muscle (\M ->  patient(var ? ? ? P)(var ? ? ? M)))
+
+forall Dismounting (\D -> forall (both Entity Object) (\O -> forall (both Agent Object) (\A ->  impl (and ( agent(var ? ? ? D)(var ? ? ? A))( patient(var ? ? ? D)(var ? ? ? O)))(and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? D)))))( orientation(var ? ? ? A)(var ? ? ? O)(el ? ? ? On)))( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? D)))))( not ( orientation(var ? ? ? A)(var ? ? ? O)(el ? ? ? On))))))))
+
+forall DomesticAnimal (\ANIMAL -> exists Keeping (\KEEP -> exists Human (\PERSON -> and ( agent(var ? ? ? KEEP)(var ? ? ? PERSON))( patient(var ? ? ? KEEP)(var ? ? ? ANIMAL)))))
+
+forall Fodder (\FEED ->  hasPurpose(var ? ? ? FEED)(exists DomesticAnimal (\ANIMAL -> exists Eating (\EAT -> and ( agent(var ? ? ? EAT)(var ? ? ? ANIMAL))( patient(var ? ? ? EAT)(var ? ? ? FEED))))))
+
+forall Mule (\MULE -> exists Donkey (\DONKEY -> exists Horse (\HORSE -> and ( father(var ? ? ? MULE)(var ? ? ? DONKEY))( mother(var ? ? ? MULE)(var ? ? ? HORSE)))))
+
+forall Feather (\F -> exists Bird (\B ->  part(var ? ? ? F)(var ? ? ? B)))
+
+forall Hay (\HAY -> exists Making (\MAKE -> exists Grass (\GRASS -> and ( resourceS(var ? ? ? MAKE)(var ? ? ? GRASS))( result(var ? ? ? MAKE)(var ? ? ? HAY)))))
+
+forall Vacationing (\VACATION -> forall Working (\WORK -> forall Human (\PERSON ->  impl (and ( agent(var ? ? ? VACATION)(var ? ? ? PERSON))( agent(var ? ? ? WORK)(var ? ? ? PERSON)))( not ( overlapsTemporally( el ? ? ? ( WhenFn(var ? ? ? VACATION)))( el ? ? ? ( WhenFn(var ? ? ? WORK))))))))
+
+forall Farming (\FARMING -> forall (both Agent Physical) (\FARMER ->  impl ( agent(var ? ? ? FARMING)(var ? ? ? FARMER))(exists Farm (\FARM ->  holdsDuring( el ? ? ? ( WhenFn(var ? ? ? FARMING)))( located(var ? ? ? FARMER)(var ? ? ? FARM))))))
+
+forall (both Object Woman) (\W ->  impl ( attribute(var ? ? ? W)(el ? ? ? Housewife))(exists Man (\H ->  wife(var ? ? ? W)(var ? ? ? H))))
+
+forall SkilledOccupation (\OCCUPATION -> forall (both Object Entity) (\PERSON ->  impl ( attribute(var ? ? ? PERSON)(var ? ? ? OCCUPATION))(exists EducationalProcess (\TRAINING ->  destination(var ? ? ? TRAINING)(var ? ? ? PERSON)))))
+
+forall FilmMaking (\FM -> exists MotionPicture (\M -> exists PhotographicFilm (\F -> and ( result(var ? ? ? FM)(var ? ? ? M))( resourceS(var ? ? ? FM)(var ? ? ? F)))))
+
+forall (both Object Agent) (\P ->  impl ( attribute(var ? ? ? P)(el ? ? ? Carpenter))( hasSkill(desc Carpentry ? ?)(var ? ? ? P)))
+
+forall Carpentry (\C -> forall Wood (\W -> exists Building (\B -> and ( part(var ? ? ? W)(var ? ? ? B))( result(var ? ? ? C)(var ? ? ? B)))))
+
+forall (both Object Agent) (\P ->  impl ( attribute(var ? ? ? P)(el ? ? ? FarmHand))(exists Agriculture (\F ->  agent(var ? ? ? F)(var ? ? ? P))))
+
+forall (both Object Agent) (\H ->  impl ( attribute(var ? ? ? H)(el ? ? ? Potter))(exists Making (\M -> exists Pottery (\P -> and ( agent(var ? ? ? M)(var ? ? ? H))( result(var ? ? ? M)(var ? ? ? P))))))
+
+forall Deacon (\D -> exists ReligiousOrganization (\O -> exists Cleric (\C ->  subordinateInOrganization(var ? ? ? O)(var ? ? ? D)(var ? ? ? C))))
+
+forall Judge (\J -> forall Organization (\O -> forall (both Human Agent) (\P ->  impl ( occupiesPosition(var ? ? ? P)(var ? ? ? J)(var ? ? ? O))( modalAttribute(exists LegalDecision (\D ->  agent(var ? ? ? D)(var ? ? ? P)))(el ? ? ? Permission)))))
+
+forall PensionPlan (\P -> forall (both Organization FinancialCompany) (\O -> forall CognitiveAgent (\A ->  impl (and ( accountHolder(var ? ? ? P)(var ? ? ? A))( employs(var ? ? ? O)(var ? ? ? A)))( financialAccount(var ? ? ? P)(var ? ? ? O)))))
+
+forall ProfitSharingPlan (\PSP -> forall (both CurrencyMeasure Quantity) (\P -> forall (both FinancialTransaction Process) (\A -> forall (both Organization Agent) (\O -> forall CognitiveAgent (\H ->  impl (and ( accountHolder(var ? ? ? PSP)(var ? ? ? H))(and ( employs(var ? ? ? O)(var ? ? ? H))(and ( profit(var ? ? ? A)(var ? ? ? P))( agent(var ? ? ? A)(var ? ? ? O)))))(exists FinancialTransaction (\PAY -> exists (both CurrencyMeasure Quantity) (\C -> and ( transactionAmount(var ? ? ? PAY)(var ? ? ? C))(and ( lessThan(var ? ? ? C)(var ? ? ? P))( destination(var ? ? ? PAY)(var ? ? ? PSP)))))))))))
+
+forall (both Human Agent) (\H ->  impl ( hasExpertise(var ? ? ? H)(el ? ? ? Architecture))(exists ContentDevelopment (\D -> exists Blueprint (\P -> exists Building (\B -> and ( agent(var ? ? ? D)(var ? ? ? H))(and ( result(var ? ? ? D)(var ? ? ? P))( represents(var ? ? ? P)(var ? ? ? B))))))))
+
+forall (both FieldOfStudy Proposition) (\FIELD -> forall (both Human Agent) (\PERSON ->  impl ( hasExpertise(var ? ? ? PERSON)(var ? ? ? FIELD))(exists Learning (\LEARN -> and ( agent(var ? ? ? LEARN)(var ? ? ? PERSON))( realization(var ? ? ? LEARN)(var ? ? ? FIELD))))))
+
+forall Bleeding (\BLEED -> exists Injuring (\INJURY ->  causes(var ? ? ? INJURY)(var ? ? ? BLEED)))
+
+forall Bleeding (\BLEED -> forall (both Entity Object) (\ANIMAL ->  impl ( experiencer(var ? ? ? BLEED)(var ? ? ? ANIMAL))(exists Blood (\BLOOD -> and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? BLEED)))))( part(var ? ? ? BLOOD)(var ? ? ? ANIMAL)))( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? BLEED)))))( not ( part(var ? ? ? BLOOD)(var ? ? ? ANIMAL))))))))
+
+forall Blushing (\B -> forall (both Entity Object) (\A ->  impl ( experiencer(var ? ? ? B)(var ? ? ? A))(exists EmotionalState (\S1 -> exists EmotionalState (\S2 -> exists (both TimePosition TimeInterval) (\T2 -> exists (both TimePosition TimeInterval) (\T1 -> and ( not ( equal(var ? ? ? S1)(var ? ? ? S2)))(and ( holdsDuring(var ? ? ? T1)( attribute(var ? ? ? A)(var ? ? ? S1)))(and ( holdsDuring(var ? ? ? T2)( attribute(var ? ? ? A)(var ? ? ? S2)))(and ( starts( el ? ? ? ( WhenFn(var ? ? ? B)))(var ? ? ? T2))( finishes( el ? ? ? ( WhenFn(var ? ? ? B)))(var ? ? ? T1))))))))))))
+
+forall Aborting (\A -> forall Woman (\W ->  impl ( patient(var ? ? ? A)(var ? ? ? W))(and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? A)))))( attribute(var ? ? ? W)(el ? ? ? Pregnant)))( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? A)))))( not ( attribute(var ? ? ? W)(el ? ? ? Pregnant)))))))
+
+forall ClosingContract (\CLOSE -> forall (both Entity Contract) (\CONTRACT -> forall (both Agent CognitiveAgent) (\AGENT ->  impl (and ( agent(var ? ? ? CLOSE)(var ? ? ? AGENT))( destination(var ? ? ? CLOSE)(var ? ? ? CONTRACT)))( agreementMember(var ? ? ? CONTRACT)(var ? ? ? AGENT)))))
+
+forall Diet (\D -> forall Process (\P ->  impl ( realization(var ? ? ? P)(var ? ? ? D))(exists Eating (\E ->  subProcess(var ? ? ? E)(var ? ? ? P)))))
+
+forall PreparedFood (\FOOD -> exists Cooking (\COOK ->  result(var ? ? ? COOK)(var ? ? ? FOOD)))
+
+forall Baking (\B -> exists Oven (\O ->  instrument(var ? ? ? B)(var ? ? ? O)))
+
+forall BreadOrBiscuit (\B -> exists Dough (\D -> exists Baking (\BAKE -> and ( resourceS(var ? ? ? BAKE)(var ? ? ? D))( result(var ? ? ? BAKE)(var ? ? ? B)))))
+
+forall Sandwich (\S -> exists BreadOrBiscuit (\B1 -> exists BreadOrBiscuit (\B2 -> exists Food (\F -> and ( between(var ? ? ? B1)(var ? ? ? F)(var ? ? ? B2))(and ( not ( equal(var ? ? ? B1)(var ? ? ? B2)))(and ( not ( equal(var ? ? ? B1)(var ? ? ? F)))(and ( not ( equal(var ? ? ? B2)(var ? ? ? F)))(and ( part(var ? ? ? B1)(var ? ? ? S))(and ( part(var ? ? ? B2)(var ? ? ? S))( part(var ? ? ? F)(var ? ? ? S)))))))))))
+
+forall Dough (\D -> exists Flour (\F -> exists Water (\W -> and ( part(var ? ? ? F)(var ? ? ? D))( part(var ? ? ? W)(var ? ? ? D)))))
+
+forall Butter (\B -> exists Cooking (\C -> exists Milk (\M -> and ( resourceS(var ? ? ? C)(var ? ? ? M))( result(var ? ? ? C)(var ? ? ? B)))))
+
+forall Flour (\F -> exists IntentionalProcess (\P -> exists CerealGrain (\C -> and ( resourceS(var ? ? ? P)(var ? ? ? C))( result(var ? ? ? P)(var ? ? ? F)))))
+
+forall Honey (\H -> exists PhysiologicProcess (\P -> exists Bee (\B -> and ( agent(var ? ? ? P)(var ? ? ? B))( result(var ? ? ? P)(var ? ? ? H)))))
+
+forall AtomicGroup (\G -> exists Atom (\ATOM1 -> exists Atom (\ATOM2 -> and ( not ( equal(var ? ? ? ATOM1)(var ? ? ? ATOM2)))(and ( part(var ? ? ? ATOM1)(var ? ? ? G))( part(var ? ? ? ATOM2)(var ? ? ? G))))))
+
+forall AtomicGroup (\G -> exists Molecule (\M ->  part(var ? ? ? G)(var ? ? ? M)))
+
+forall Ambush (\AMBUSH -> forall Agent (\AG ->  impl ( agent(var ? ? ? AMBUSH)(var ? ? ? AG))(exists Concealing (\C -> and ( subProcess(var ? ? ? C)(var ? ? ? AMBUSH))( hasPurpose(var ? ? ? C)(exists Attack (\ATTACK ->  agent(var ? ? ? ATTACK)(var ? ? ? AG))))))))
+
+forall MilitaryManeuver (\M -> exists Battle (\B ->  subProcess(var ? ? ? M)(var ? ? ? B)))
+
+forall Bombing (\X -> exists Bomb (\BOMB ->  instrument(var ? ? ? X)(var ? ? ? BOMB)))
+
+forall CarBombing (\X -> exists Bomb (\BOMB -> exists TransportationDevice (\CAR -> and ( instrument(var ? ? ? X)(var ? ? ? CAR))(and ( instrument(var ? ? ? X)(var ? ? ? BOMB))( connected(var ? ? ? CAR)(var ? ? ? BOMB))))))
+
+forall ChemicalAttack (\X -> exists Substance (\CHEM ->  instrument(var ? ? ? X)(var ? ? ? CHEM)))
+
+forall HandGrenade (\X -> forall (both RealNumber Quantity) (\N -> and ( measure(var ? ? ? X)( el ? ? ? ( MeasureFn(var ? ? ? N)(el ? ? ? PoundMass))))( lessThan(var ? ? ? N)(el ? ? ? (toInt 10)))))
+
+forall HandgrenadeAttack (\X -> exists HandGrenade (\HG ->  instrument(var ? ? ? X)(var ? ? ? HG)))
+
+forall Hijacking (\H -> exists Vehicle (\V ->  patient(var ? ? ? H)(var ? ? ? V)))
+
+forall Hijacking (\H -> exists Driving (\D ->  subProcess(var ? ? ? D)(var ? ? ? H)))
+
+forall Hijacking (\X -> exists TransportationDevice (\V -> exists Agent (\A -> and ( agent(var ? ? ? X)(var ? ? ? A))(and ( holdsDuring( el ? ? ? ( ImmediatePastFn( el ? ? ? ( WhenFn(var ? ? ? X)))))( not ( possesses(var ? ? ? A)(var ? ? ? V))))( holdsDuring( el ? ? ? ( WhenFn(var ? ? ? X)))( possesses(var ? ? ? A)(var ? ? ? V)))))))
+
+forall HostageTaking (\X -> exists SentientAgent (\A ->  patient(var ? ? ? X)(var ? ? ? A)))
+
+forall Kidnapping (\X -> exists SentientAgent (\A -> exists GeographicArea (\LOC1 -> exists GeographicArea (\LOC2 -> and ( not ( equal(var ? ? ? LOC1)(var ? ? ? LOC2)))(and ( holdsDuring( el ? ? ? ( ImmediatePastFn( el ? ? ? ( WhenFn(var ? ? ? X)))))( located(var ? ? ? A)(var ? ? ? LOC1)))( holdsDuring( el ? ? ? ( WhenFn(var ? ? ? X)))( located(var ? ? ? A)(var ? ? ? LOC2))))))))
+
+forall KnifeAttack (\X -> exists Knife (\HG ->  instrument(var ? ? ? X)(var ? ? ? HG)))
+
+forall MortarAttack (\X -> exists Mortar (\MA ->  instrument(var ? ? ? X)(var ? ? ? MA)))
+
+forall Stoning (\X -> exists Rock (\ST ->  instrument(var ? ? ? X)(var ? ? ? ST)))
+
+forall SuicideBombing (\X -> exists (both Agent Object) (\A -> and ( agent(var ? ? ? X)(var ? ? ? A))( holdsDuring( el ? ? ? ( FutureFn( el ? ? ? ( WhenFn(var ? ? ? X)))))( attribute(var ? ? ? A)(el ? ? ? Dead)))))
+
+forall SuicideBombing (\X -> forall (both Agent CognitiveAgent) (\P ->  impl ( agent(var ? ? ? X)(var ? ? ? P))( believes(var ? ? ? P)( holdsDuring( el ? ? ? ( FutureFn( el ? ? ? ( WhenFn(var ? ? ? X)))))( attribute(var ? ? ? P)(el ? ? ? Dead))))))
+
+forall VehicleAttack (\X -> exists TransportationDevice (\V ->  instrument(var ? ? ? X)(var ? ? ? V)))
+
+forall BusStop (\X ->  hasPurpose(var ? ? ? X)(exists Bus (\B -> exists Boarding (\BO -> exists Deboarding (\D -> and ( located(var ? ? ? BO)(var ? ? ? X))(and ( located(var ? ? ? D)(var ? ? ? X))(and ( patient(var ? ? ? BO)(var ? ? ? B))( patient(var ? ? ? D)(var ? ? ? B)))))))))
+
+forall BusStop (\X -> exists Roadway (\R ->  meetsSpatially(var ? ? ? X)(var ? ? ? R)))
+
+forall Burrow (\B -> exists Organism (\A ->  hasPurpose(var ? ? ? B)( inhabits(var ? ? ? A)(var ? ? ? B))))
+
+forall (both Object Agent) (\X ->  impl ( attribute(var ? ? ? X)(el ? ? ? Musician))( hasSkill(desc MusicalPerformance ? ?)(var ? ? ? X)))
+
+forall Object (\H -> forall (both TimePosition Physical) (\T1 ->  impl ( holdsDuring(var ? ? ? T1)( attribute(var ? ? ? H)(el ? ? ? Veteran)))(exists Soldier (\P -> exists TimePosition (\T2 -> and ( temporalPart(var ? ? ? T2)( el ? ? ? ( PastFn( el ? ? ? ( WhenFn(var ? ? ? T1))))))(and ( holdsDuring(var ? ? ? T2)( attribute(var ? ? ? H)(var ? ? ? P)))( not ( holdsDuring(var ? ? ? T1)( attribute(var ? ? ? H)(var ? ? ? P))))))))))
+
+forall Checkpoint (\X -> or (exists Road (\ROAD ->  orientation(var ? ? ? ROAD)(var ? ? ? X)(el ? ? ? Near)))(exists GeographicArea (\REG2 -> exists GeographicArea (\REG1 ->  orientation( el ? ? ? ( BorderFn(var ? ? ? REG1)(var ? ? ? REG2)))(var ? ? ? X)(el ? ? ? Near)))))
+
+forall Road (\X ->  hasPurpose(var ? ? ? X)(exists Transportation (\EV -> exists LandVehicle (\VEH -> and ( located(var ? ? ? EV)(var ? ? ? X))( instrument(var ? ? ? EV)(var ? ? ? VEH))))))
+
+forall (both Object Human) (\P -> forall (both TimePosition TimeInterval) (\NOW ->  impl ( holdsDuring(var ? ? ? NOW)( attribute(var ? ? ? P)(el ? ? ? Widowed)))(and (exists (both Human Object) (\SPOUSE -> exists (both TimeInterval TimePosition) (\BEFORE -> and ( earlier(var ? ? ? BEFORE)(var ? ? ? NOW))(and ( holdsDuring(var ? ? ? BEFORE)( spouse(var ? ? ? SPOUSE)(var ? ? ? P)))( holdsDuring(var ? ? ? NOW)( attribute(var ? ? ? SPOUSE)(el ? ? ? Dead)))))))( not (exists Human (\OTHER ->  holdsDuring(var ? ? ? NOW)( spouse(var ? ? ? OTHER)(var ? ? ? P))))))))
+
+forall Convoy (\C -> exists Vehicle (\V1 -> exists Vehicle (\V2 -> exists TimeInterval (\TIME -> and ( not ( equal(var ? ? ? V1)(var ? ? ? V2)))(and ( temporalPart(var ? ? ? TIME)( el ? ? ? ( WhenFn(var ? ? ? C))))( holdsDuring(var ? ? ? TIME)(and ( member(var ? ? ? V1)(var ? ? ? C))( member(var ? ? ? V2)(var ? ? ? C)))))))))
+
+forall Convoy (\C -> forall (both SelfConnectedObject Entity) (\VEH ->  impl ( member(var ? ? ? VEH)(var ? ? ? C))(exists Driving (\DRIVE -> and ( overlapsTemporally( el ? ? ? ( WhenFn(var ? ? ? DRIVE)))( el ? ? ? ( WhenFn(var ? ? ? C))))( patient(var ? ? ? DRIVE)(var ? ? ? VEH))))))
+
+forall Convoy (\C ->  attribute(var ? ? ? C)(el ? ? ? LineFormation))
+
+forall EmbassyBuilding (\X -> exists Nation (\EGOV -> exists Nation (\OTHERGOV -> and ( not ( equal(var ? ? ? EGOV)(var ? ? ? OTHERGOV)))(and ( possesses(var ? ? ? EGOV)(var ? ? ? X))( located(var ? ? ? X)(var ? ? ? OTHERGOV))))))
+
+forall EuropeanNation (\N ->  part(var ? ? ? N)(el ? ? ? Europe))
+
+forall EntertainmentBuilding (\BUILDING ->  hasPurpose(var ? ? ? BUILDING)(exists RecreationOrExercise (\REC ->  located(var ? ? ? REC)(var ? ? ? BUILDING))))
+
+forall GovernmentBuilding (\X -> exists Government (\G ->  possesses(var ? ? ? G)(var ? ? ? X)))
+
+forall (both Object CognitiveAgent) (\X -> forall TimePosition (\T1 ->  impl ( holdsDuring(var ? ? ? T1)( attribute(var ? ? ? X)(el ? ? ? GovernmentPerson)))(exists Government (\GOV ->  holdsDuring(var ? ? ? T1)( employs(var ? ? ? GOV)(var ? ? ? X))))))
+
+forall Renting (\R -> forall (both Entity Agent) (\O -> forall (both Agent Object) (\A ->  impl (and ( agent(var ? ? ? R)(var ? ? ? A))( patient(var ? ? ? R)(var ? ? ? O)))( holdsDuring( el ? ? ? ( WhenFn(var ? ? ? R)))( modalAttribute( uses(var ? ? ? A)(var ? ? ? O))(el ? ? ? Permission))))))
+
+forall Marketplace (\X ->  hasPurpose(var ? ? ? X)(exists FinancialTransaction (\EV ->  located(var ? ? ? EV)(var ? ? ? X))))
+
+forall (both Object SelfConnectedObject) (\X -> forall TimePosition (\T1 ->  impl ( holdsDuring(var ? ? ? T1)( attribute(var ? ? ? X)(el ? ? ? MilitaryPerson)))(exists MilitaryOrganization (\ORG ->  holdsDuring(var ? ? ? T1)( member(var ? ? ? X)(var ? ? ? ORG))))))
+
+forall MilitaryOrganization (\ORG -> forall Human (\X -> forall TimePosition (\T1 ->  impl ( holdsDuring(var ? ? ? T1)( member(var ? ? ? X)(var ? ? ? ORG)))( holdsDuring(var ? ? ? T1)( attribute(var ? ? ? X)(el ? ? ? MilitaryPerson))))))
+
+forall PlaceOfWorship (\X ->  hasPurpose(var ? ? ? X)(exists ReligiousProcess (\EV ->  located(var ? ? ? EV)(var ? ? ? X))))
+
+forall EducationalFacility (\X -> exists EducationalOrganization (\ORG ->  possesses(var ? ? ? ORG)(var ? ? ? X)))
+
+forall EducationalFacility (\X ->  hasPurpose(var ? ? ? X)(exists EducationalProcess (\EV ->  located(var ? ? ? EV)(var ? ? ? X))))
+
+forall (both Object Entity) (\X ->  impl ( attribute(var ? ? ? X)(el ? ? ? Student))(exists EducationalProcess (\EV ->  patient(var ? ? ? EV)(var ? ? ? X))))
+
+forall Subway (\X -> exists (both SelfConnectedObject Object) (\SURF -> and ( surface(var ? ? ? SURF)(el ? ? ? PlanetEarth))( orientation(var ? ? ? X)(var ? ? ? SURF)(el ? ? ? Below))))
+
+forall Subway (\X ->  hasPurpose(var ? ? ? X)(exists Transportation (\EV -> exists Human (\P -> and ( patient(var ? ? ? EV)(var ? ? ? P))( located(var ? ? ? EV)(var ? ? ? X))))))
+
+forall TerroristOrganization (\X -> exists ViolentContest (\EV ->  agent(var ? ? ? EV)(var ? ? ? X)))
+
+forall (both Integer Quantity) (\MEMBERS -> forall (both Integer Quantity) (\SEATS -> forall (both Organization Collection) (\ORG ->  impl (and ( seatsInOrganizationCount(var ? ? ? ORG)(var ? ? ? SEATS))( memberCount(var ? ? ? ORG)(var ? ? ? MEMBERS)))( greaterThanOrEqualTo(var ? ? ? SEATS)(var ? ? ? MEMBERS)))))
+
+forall (both NonnegativeInteger Integer) (\NUMBER -> forall SetOrClass (\TYPE -> forall Collection (\GROUP ->  impl ( memberTypeCount(var ? ? ? GROUP)(var ? ? ? TYPE)(var ? ? ? NUMBER))(exists Collection (\SUBGROUP -> and ( subCollection(var ? ? ? SUBGROUP)(var ? ? ? GROUP))(and ( memberCount(var ? ? ? SUBGROUP)(var ? ? ? NUMBER))( memberType(var ? ? ? SUBGROUP)(var ? ? ? TYPE))))))))
+
+forall (both NonnegativeInteger Quantity) (\NUMBER2 -> forall SetOrClass (\TYPE -> forall (both Integer Quantity) (\NUMBER1 -> forall Collection (\GROUP ->  impl (and ( memberCount(var ? ? ? GROUP)(var ? ? ? NUMBER1))( memberTypeCount(var ? ? ? GROUP)(var ? ? ? TYPE)(var ? ? ? NUMBER2)))( greaterThanOrEqualTo(var ? ? ? NUMBER1)(var ? ? ? NUMBER2))))))
+
+forall TimePosition (\TIME -> forall Collection (\COLLECTION -> forall SelfConnectedObject (\OBJ ->  equiv ( memberAtTime(var ? ? ? OBJ)(var ? ? ? COLLECTION)(var ? ? ? TIME))( holdsDuring(var ? ? ? TIME)( member(var ? ? ? OBJ)(var ? ? ? COLLECTION))))))
+
+forall (both SelfConnectedObject Object) (\OBJ -> forall Object (\PLACE -> forall TimePosition (\TIME -> forall (both Object Collection) (\COLLECTION ->  impl (and ( locatedAtTime(var ? ? ? COLLECTION)(var ? ? ? TIME)(var ? ? ? PLACE))( memberAtTime(var ? ? ? OBJ)(var ? ? ? COLLECTION)(var ? ? ? TIME)))( locatedAtTime(var ? ? ? OBJ)(var ? ? ? TIME)(var ? ? ? PLACE))))))
+
+forall (both SelfConnectedObject Entity) (\I -> forall Collection (\C -> forall (both ContentBearingObject Entity) (\O ->  impl (and ( inventory(var ? ? ? O)(var ? ? ? C))( member(var ? ? ? I)(var ? ? ? C)))( refers(var ? ? ? O)(var ? ? ? I)))))
+
+forall Human (\PERSON2 -> forall (both Human CognitiveAgent) (\PERSON1 -> forall Organization (\ORG ->  impl ( subordinateInOrganization(var ? ? ? ORG)(var ? ? ? PERSON1)(var ? ? ? PERSON2))( employs(var ? ? ? ORG)(var ? ? ? PERSON1)))))
+
+forall (both Human CognitiveAgent) (\PERSON2 -> forall Human (\PERSON1 -> forall Organization (\ORG ->  impl ( subordinateInOrganization(var ? ? ? ORG)(var ? ? ? PERSON1)(var ? ? ? PERSON2))( employs(var ? ? ? ORG)(var ? ? ? PERSON2)))))
+
+forall Human (\PERSON1 -> forall Position (\ROLE2 -> forall Position (\ROLE1 -> forall Organization (\ORG ->  impl (and ( subordinatePosition(var ? ? ? ORG)(var ? ? ? ROLE1)(var ? ? ? ROLE2))( occupiesPosition(var ? ? ? PERSON1)(var ? ? ? ROLE1)(var ? ? ? ORG)))(exists Human (\PERSON2 -> and ( occupiesPosition(var ? ? ? PERSON2)(var ? ? ? ROLE2)(var ? ? ? ORG))( subordinateInOrganization(var ? ? ? ORG)(var ? ? ? PERSON1)(var ? ? ? PERSON2))))))))
+
+forall Ontology (\ONT -> exists Taxonomy (\TAX ->  abstractPart(var ? ? ? TAX)(var ? ? ? ONT)))
+
+forall ServiceProcess (\EVENT -> exists CognitiveAgent (\PROVIDER ->  serviceProvider(var ? ? ? EVENT)(var ? ? ? PROVIDER)))
+
+forall ServiceProcess (\EVENT -> exists CognitiveAgent (\RECEIVER ->  serviceRecipient(var ? ? ? EVENT)(var ? ? ? RECEIVER)))
+
+forall (both Physical Agent) (\AGENT -> forall (both Entity TimePoint) (\AGENT_END -> forall (both Physical Process) (\PROCESS -> forall (both Entity TimePoint) (\PROCESS_START ->  impl (and ( equal(var ? ? ? PROCESS_START)( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? PROCESS))))))(and ( equal(var ? ? ? AGENT_END)( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? AGENT))))))( benefits(var ? ? ? PROCESS)(var ? ? ? AGENT))))( before(var ? ? ? PROCESS_START)(var ? ? ? AGENT_END))))))
+
+forall (both Human CognitiveAgent) (\H2 -> forall (both Human CognitiveAgent) (\H1 -> forall TimePosition (\T1 ->  impl ( holdsDuring(var ? ? ? T1)( coworker(var ? ? ? H1)(var ? ? ? H2)))(exists Organization (\ORG ->  holdsDuring(var ? ? ? T1)(and ( employs(var ? ? ? ORG)(var ? ? ? H1))( employs(var ? ? ? ORG)(var ? ? ? H2))))))))
+
+forall (both Human Collection) (\H2 -> forall (both Human Collection) (\H1 -> forall TimePosition (\T1 ->  impl ( holdsDuring(var ? ? ? T1)( cohabitant(var ? ? ? H1)(var ? ? ? H2)))(exists SocialUnit (\UNIT ->  holdsDuring(var ? ? ? T1)(and ( member(var ? ? ? UNIT)(var ? ? ? H1))( member(var ? ? ? UNIT)(var ? ? ? H2))))))))
+
+forall SocialUnit (\UNIT -> forall (both Collection Human) (\H2 -> forall (both Collection Human) (\H1 -> forall TimePosition (\T1 ->  impl ( holdsDuring(var ? ? ? T1)(and ( member(var ? ? ? UNIT)(var ? ? ? H1))( member(var ? ? ? UNIT)(var ? ? ? H2))))( holdsDuring(var ? ? ? T1)( cohabitant(var ? ? ? H1)(var ? ? ? H2)))))))
+
+forall Man (\PARENT -> forall Organism (\CHILD ->  impl ( parent(var ? ? ? CHILD)(var ? ? ? PARENT))( father(var ? ? ? CHILD)(var ? ? ? PARENT))))
+
+forall Woman (\PARENT -> forall Organism (\CHILD ->  impl ( parent(var ? ? ? CHILD)(var ? ? ? PARENT))( mother(var ? ? ? CHILD)(var ? ? ? PARENT))))
+
+forall Man (\CHILD -> forall Organism (\PARENT ->  impl ( parent(var ? ? ? CHILD)(var ? ? ? PARENT))( son(var ? ? ? CHILD)(var ? ? ? PARENT))))
+
+forall Woman (\CHILD -> forall Organism (\PARENT ->  impl ( parent(var ? ? ? CHILD)(var ? ? ? PARENT))( daughter(var ? ? ? CHILD)(var ? ? ? PARENT))))
+
+forall (both Human Organism) (\H -> forall Woman (\A ->  equiv ( aunt(var ? ? ? A)(var ? ? ? H))(exists (both Human Organism) (\P -> and ( sister(var ? ? ? A)(var ? ? ? P))( parent(var ? ? ? H)(var ? ? ? P))))))
+
+forall (both Human Organism) (\P2 -> forall (both Human Organism) (\P1 ->  equiv ( cousin(var ? ? ? P1)(var ? ? ? P2))(and (exists Man (\G2 -> exists Woman (\G1 -> and ( grandmother(var ? ? ? P1)(var ? ? ? G1))(and ( grandfather(var ? ? ? P1)(var ? ? ? G2))(and ( grandmother(var ? ? ? P2)(var ? ? ? G1))( grandfather(var ? ? ? P2)(var ? ? ? G2)))))))( not (exists Organism (\F -> exists Organism (\M -> and ( mother(var ? ? ? P1)(var ? ? ? M))(and ( father(var ? ? ? P1)(var ? ? ? F))(and ( mother(var ? ? ? P2)(var ? ? ? M))( father(var ? ? ? P2)(var ? ? ? F)))))))))))
+
+forall (both Man Organism) (\P -> forall (both Human Organism) (\H ->  impl ( grandfather(var ? ? ? H)(var ? ? ? P))(exists Organism (\C -> and ( father(var ? ? ? C)(var ? ? ? P))( parent(var ? ? ? H)(var ? ? ? C))))))
+
+forall (both Woman Organism) (\P -> forall (both Human Organism) (\H ->  impl ( grandmother(var ? ? ? H)(var ? ? ? P))(exists Organism (\C -> and ( mother(var ? ? ? C)(var ? ? ? P))( parent(var ? ? ? H)(var ? ? ? C))))))
+
+forall (both Human Organism) (\H -> forall (both Man Organism) (\N ->  equiv ( nephew(var ? ? ? N)(var ? ? ? H))(exists Organism (\S -> and ( sibling(var ? ? ? S)(var ? ? ? H))( son(var ? ? ? N)(var ? ? ? S))))))
+
+forall (both Human Organism) (\H -> forall (both Woman Organism) (\N ->  equiv ( niece(var ? ? ? N)(var ? ? ? H))(exists Organism (\S -> and ( sibling(var ? ? ? S)(var ? ? ? H))( daughter(var ? ? ? N)(var ? ? ? S))))))
+
+forall (both Human Organism) (\H -> forall Man (\U ->  equiv ( uncle(var ? ? ? U)(var ? ? ? H))(exists (both Human Organism) (\P -> and ( brother(var ? ? ? U)(var ? ? ? P))( parent(var ? ? ? H)(var ? ? ? P))))))
+
+forall (both Man (both Human Organism)) (\F -> forall (both Human Organism) (\P ->  equiv ( stepfather(var ? ? ? P)(var ? ? ? F))(exists (both Organism Human) (\M -> and ( mother(var ? ? ? P)(var ? ? ? M))(and ( spouse(var ? ? ? F)(var ? ? ? M))( not ( father(var ? ? ? P)(var ? ? ? F))))))))
+
+forall (both Woman (both Human Organism)) (\M -> forall (both Human Organism) (\P ->  equiv ( stepmother(var ? ? ? P)(var ? ? ? M))(exists (both Organism Human) (\F -> and ( father(var ? ? ? P)(var ? ? ? F))(and ( spouse(var ? ? ? M)(var ? ? ? F))( not ( mother(var ? ? ? P)(var ? ? ? M))))))))
+
+forall TimePosition (\T1 -> forall (both Organism (both Human SelfConnectedObject)) (\PARENT2 -> forall (both Organism (both Human SelfConnectedObject)) (\PARENT1 -> forall (both Organism (both Human SelfConnectedObject)) (\CHILD ->  impl (and ( parent(var ? ? ? CHILD)(var ? ? ? PARENT1))(and ( parent(var ? ? ? CHILD)(var ? ? ? PARENT2))( holdsDuring(var ? ? ? T1)(and ( spouse(var ? ? ? PARENT1)(var ? ? ? PARENT2))(and ( cohabitant(var ? ? ? PARENT1)(var ? ? ? PARENT2))( cohabitant(var ? ? ? CHILD)(var ? ? ? PARENT1)))))))(exists NuclearFamily (\FAM ->  holdsDuring(var ? ? ? T1)(and ( member(var ? ? ? CHILD)(var ? ? ? FAM))(and ( member(var ? ? ? PARENT1)(var ? ? ? FAM))( member(var ? ? ? PARENT2)(var ? ? ? FAM))))))))))
+
+forall Object (\PLACE -> forall TimePosition (\TIME -> forall (both Object Physical) (\OBJ ->  equiv ( locatedAtTime(var ? ? ? OBJ)(var ? ? ? TIME)(var ? ? ? PLACE))( holdsDuring(var ? ? ? TIME)( located(var ? ? ? OBJ)(var ? ? ? PLACE))))))
+
+forall (both GeographicArea Object) (\REGION -> forall (both Object GeographicArea) (\PLACE -> forall TimePosition (\TIME -> forall Object (\OBJ ->  impl (and ( locatedAtTime(var ? ? ? OBJ)(var ? ? ? TIME)(var ? ? ? PLACE))( geographicSubregion(var ? ? ? PLACE)(var ? ? ? REGION)))( locatedAtTime(var ? ? ? OBJ)(var ? ? ? TIME)(var ? ? ? REGION))))))
+
+forall Seating (\S -> exists Seat (\P -> exists Human (\H -> and ( experiencer(var ? ? ? S)(var ? ? ? H))( destination(var ? ? ? S)(var ? ? ? P)))))
+
+forall PlacingUnderArrest (\ARREST -> forall GroupOfPeople (\AGENT -> forall (both SelfConnectedObject Agent) (\MEMBER ->  impl (and ( arrested(var ? ? ? ARREST)(var ? ? ? AGENT))( member(var ? ? ? MEMBER)(var ? ? ? AGENT)))(exists PlacingUnderArrest (\ARREST1 -> and ( arrested(var ? ? ? ARREST1)(var ? ? ? MEMBER))( subProcess(var ? ? ? ARREST1)(var ? ? ? ARREST)))))))
+
+forall Process (\PROC -> forall (both Process Physical) (\SUB -> forall Object (\LOC ->  impl (and ( located(var ? ? ? PROC)(var ? ? ? LOC))( subProcess(var ? ? ? SUB)(var ? ? ? PROC)))( located(var ? ? ? SUB)(var ? ? ? LOC)))))
+
+forall Imprisoning (\IMPRISON -> forall Human (\AGENT -> forall TimeInterval (\INTERVAL ->  impl (and ( detainee(var ? ? ? IMPRISON)(var ? ? ? AGENT))( time(var ? ? ? IMPRISON)(var ? ? ? INTERVAL)))(exists PlacingUnderArrest (\ARREST -> exists TimeInterval (\TIME -> and ( time(var ? ? ? ARREST)(var ? ? ? TIME))(and ( earlier(var ? ? ? TIME)(var ? ? ? INTERVAL))( arrested(var ? ? ? ARREST)(var ? ? ? AGENT)))))))))
+
+forall TransportViaRoadVehicle (\TRANSPORT -> exists Driving (\DRIVING ->  subProcess(var ? ? ? TRANSPORT)(var ? ? ? DRIVING)))
+
+forall Transportation (\TRANSPORT -> forall Driving (\DRIVE -> forall TransportationDevice (\VEHICLE ->  impl (and ( subProcess(var ? ? ? TRANSPORT)(var ? ? ? DRIVE))( instrument(var ? ? ? TRANSPORT)(var ? ? ? VEHICLE)))( patient(var ? ? ? DRIVE)(var ? ? ? VEHICLE)))))
+
+forall Driving (\DRIVE -> forall RoadVehicle (\VEHICLE ->  impl ( patient(var ? ? ? DRIVE)(var ? ? ? VEHICLE))(exists TransportViaRoadVehicle (\TRANSPORT ->  subProcess(var ? ? ? TRANSPORT)(var ? ? ? DRIVE)))))
+
+forall Driving (\DRIVING -> forall Transportation (\TRANSPORT -> forall (both Agent Object) (\DRIVER ->  impl (and ( subProcess(var ? ? ? TRANSPORT)(var ? ? ? DRIVING))( agent(var ? ? ? DRIVING)(var ? ? ? DRIVER)))( transported(var ? ? ? TRANSPORT)(var ? ? ? DRIVER)))))
+
+forall Driving (\DRIVING -> forall Transportation (\TRANSPORT -> forall Entity (\DEST ->  impl (and ( subProcess(var ? ? ? TRANSPORT)(var ? ? ? DRIVING))( destination(var ? ? ? DRIVING)(var ? ? ? DEST)))( destination(var ? ? ? TRANSPORT)(var ? ? ? DEST)))))
+
+forall Driving (\DRIVING -> forall Transportation (\TRANSPORT -> forall Vehicle (\VEHICLE ->  impl (and ( subProcess(var ? ? ? TRANSPORT)(var ? ? ? DRIVING))( patient(var ? ? ? DRIVING)(var ? ? ? VEHICLE)))( conveyance(var ? ? ? TRANSPORT)(var ? ? ? VEHICLE)))))
+
+forall Atrophy (\A -> exists BodyPart (\B ->  experiencer(var ? ? ? A)(var ? ? ? B)))
+
+forall CausingHappiness (\C -> forall (both Entity Object) (\P ->  impl ( patient(var ? ? ? C)(var ? ? ? P))(and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? C)))))( not ( attribute(var ? ? ? P)(el ? ? ? Happiness))))( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? C)))))( attribute(var ? ? ? P)(el ? ? ? Happiness))))))
+
+forall CausingHappiness (\C -> forall (both Entity Object) (\P ->  impl ( patient(var ? ? ? C)(var ? ? ? P))(and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? C)))))( not ( attribute(var ? ? ? P)(el ? ? ? Unhappiness))))( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? C)))))( attribute(var ? ? ? P)(el ? ? ? Unhappiness))))))
+
+forall TakingIll (\T -> forall (both Entity Object) (\A ->  impl ( experiencer(var ? ? ? T)(var ? ? ? A))(exists DiseaseOrSyndrome (\D -> and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? T)))))( not ( attribute(var ? ? ? A)(var ? ? ? D))))( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? T)))))( attribute(var ? ? ? A)(var ? ? ? D)))))))
+
+forall Lengthening (\L -> forall (both Entity Object) (\O ->  impl ( patient(var ? ? ? L)(var ? ? ? O))(exists (both PhysicalQuantity Quantity) (\L2 -> exists (both PhysicalQuantity Quantity) (\L1 -> and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? L)))))( length(var ? ? ? O)(var ? ? ? L1)))(and ( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? L)))))( length(var ? ? ? O)(var ? ? ? L2)))( greaterThan(var ? ? ? L2)(var ? ? ? L1))))))))
+
+forall Saving (\S -> forall Agent (\A -> forall (both Entity (both Physical Object)) (\O ->  impl (and ( patient(var ? ? ? S)(var ? ? ? O))( agent(var ? ? ? S)(var ? ? ? A)))(exists (both CurrencyMeasure Quantity) (\Q2 -> exists (both CurrencyMeasure Quantity) (\Q1 -> and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? S)))))( monetaryValue(var ? ? ? O)(var ? ? ? Q1)))(and ( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? S)))))( monetaryValue(var ? ? ? O)(var ? ? ? Q2)))(and ( possesses(var ? ? ? A)(var ? ? ? O))( lessThan(var ? ? ? Q1)(var ? ? ? Q2))))))))))
+
+forall (both Object Physical) (\A -> forall Agent (\P ->  impl ( financialAsset(var ? ? ? P)(var ? ? ? A))(exists CurrencyMeasure (\V ->  monetaryValue(var ? ? ? A)(var ? ? ? V)))))
+
+forall Barking (\B -> exists Canine (\D ->  agent(var ? ? ? B)(var ? ? ? D)))
+
+forall Organification (\P -> exists Organ (\O ->  result(var ? ? ? P)(var ? ? ? O)))
+
+forall SexualReproduction (\SR -> exists BiologicalConception (\C ->  subProcess(var ? ? ? C)(var ? ? ? SR)))
+
+forall BirdEgg (\E -> exists SexualReproduction (\SR -> exists Bird (\B -> and ( agent(var ? ? ? SR)(var ? ? ? B))( result(var ? ? ? SR)(var ? ? ? E)))))
+
+forall Raping (\R -> exists (both Entity CognitiveAgent) (\A -> and ( experiencer(var ? ? ? R)(var ? ? ? A))( not ( wants(var ? ? ? A)(var ? ? ? R)))))
+
+forall LayingEggs (\L -> forall (both Entity Object) (\A ->  impl ( experiencer(var ? ? ? L)(var ? ? ? A))(exists Egg (\E -> and ( patient(var ? ? ? L)(var ? ? ? E))(and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? L)))))( part(var ? ? ? E)(var ? ? ? A)))( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? L)))))( not ( part(var ? ? ? E)(var ? ? ? A)))))))))
+
+forall Object (\PLACE -> forall (both Animal Entity) (\INDIV ->  impl ( birthplace(var ? ? ? INDIV)(var ? ? ? PLACE))(exists Birth (\BIRTH -> and ( experiencer(var ? ? ? BIRTH)(var ? ? ? INDIV))( located(var ? ? ? BIRTH)(var ? ? ? PLACE))))))
+
+forall Day (\D -> forall (both Human Entity) (\P ->  impl ( birthdate(var ? ? ? P)(var ? ? ? D))(exists Birth (\B -> and ( experiencer(var ? ? ? B)(var ? ? ? P))( date(var ? ? ? B)(var ? ? ? D))))))
+
+forall Day (\T -> forall (both Human Entity) (\P ->  impl ( deathdate(var ? ? ? P)(var ? ? ? T))(exists Death (\D -> and ( experiencer(var ? ? ? D)(var ? ? ? P))( date(var ? ? ? D)(var ? ? ? T))))))
+
+forall Object (\L -> forall (both Animal Entity) (\P ->  impl ( deathplace(var ? ? ? P)(var ? ? ? L))(exists Death (\D -> and ( experiencer(var ? ? ? D)(var ? ? ? P))( located(var ? ? ? D)(var ? ? ? L))))))
+
+forall TransitSystem (\S -> forall (both Transitway Object) (\P ->  impl ( pathInSystem(var ? ? ? P)(var ? ? ? S))(or ( routeInSystem(var ? ? ? P)(var ? ? ? S))(exists (both Transitway Object) (\R2 -> exists (both Transitway Object) (\R1 -> and ( routeInSystem(var ? ? ? R1)(var ? ? ? S))(and ( routeInSystem(var ? ? ? R2)(var ? ? ? S))(and ( part(var ? ? ? R1)(var ? ? ? P))(and ( part(var ? ? ? R2)(var ? ? ? P))( connected(var ? ? ? R1)(var ? ? ? R2)))))))))))
+
+forall Transitway (\P -> forall (both PhysicalSystem TransitSystem) (\T -> forall (both PhysicalSystem TransitSystem) (\S ->  impl (and ( subSystem(var ? ? ? S)(var ? ? ? T))( routeInSystem(var ? ? ? P)(var ? ? ? S)))( routeInSystem(var ? ? ? P)(var ? ? ? T)))))

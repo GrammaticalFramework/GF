@@ -1,0 +1,46 @@
+
+IrreflexiveRelation ? (\x,y -> conjugate x y)
+
+SymmetricRelation ? (\x,y -> conjugate x y)
+
+TransitiveRelation ? (\x,y -> conjugate x y)
+
+SymmetricRelation ? (\x,y -> neighbor x y)
+
+IrreflexiveRelation ? (\x,y -> neighbor x y)
+
+ObjectAttitude ? ? (\x,y -> dislikes x y)
+
+IrreflexiveRelation ? (\x,y -> hostileForces x y)
+
+TransitiveRelation ? (\x,y -> subField x y)
+
+IrreflexiveRelation ? (\x,y -> subField x y)
+
+IntentionalRelation ? ? (\x,y -> serviceProvider x y)
+
+IntentionalRelation ? ? (\x,y -> serviceRecipient x y)
+
+SymmetricRelation ? (\x,y -> friend x y)
+
+IntentionalRelation ? ? (\x,y -> friend x y)
+
+SymmetricRelation ? (\x,y -> coworker x y)
+
+SymmetricRelation ? (\x,y -> cohabitant x y)
+
+IntentionalRelation ? ? (\x,y -> cohabitant x y)
+
+AsymmetricRelation ? (\x,y -> grandparent x y)
+
+SymmetricRelation ? (\x,y -> mutualStranger x y)
+
+SymmetricRelation ? (\x,y -> domesticPartner x y)
+
+IntentionalRelation ? ? (\x,y -> domesticPartner x y)
+
+AntisymmetricRelation ? (\x,y -> legalGuardian x y)
+
+TransitiveRelation ? (\x,y -> ancestorOrganization x y)
+
+IrreflexiveRelation ? (\x,y -> ancestorOrganization x y)

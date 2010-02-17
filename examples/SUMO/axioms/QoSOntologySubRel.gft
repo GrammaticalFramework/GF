@@ -1,0 +1,48 @@
+
+subRelation2El ? ? ? ? (\x,y -> productModel x y) (\x,y -> represents x y)
+
+subRelation2El ? ? ? ? (\x,y -> computerRunning x y) (\x,y -> instrument x y)
+
+subRelation2El ? ? ? ? (\x,y -> environmentAttributes x y) (\x,y -> property x y)
+
+subRelation2El ? ? ? ? (\x,y -> standardInputDevice x y) (\x,y -> instrument x y)
+
+subRelation2El ? ? ? ? (\x,y -> standardOutputDevice x y) (\x,y -> instrument x y)
+
+subRelation2El ? ? ? ? (\x,y -> standardErrorDevice x y) (\x,y -> instrument x y)
+
+subRelation2El ? ? ? ? (\x,y -> programCopy x y) (\x,y -> containsInformation x y)
+
+subRelation2El ? ? ? ? (\x,y -> status x y) (\x,y -> property x y)
+
+subRelation2El ? ? ? ? (\x,y -> hardwareType x y) (\x,y -> represents x y)
+
+subRelation2El ? ? ? ? (\x,y -> systemBehavior x y) (\x,y -> property x y)
+
+subRelation2El ? ? ? ? (\x,y -> designPattern x y) (\x,y -> property x y)
+
+subRelation2El ? ? ? ? (\x,y -> taskRelation x y) (\x,y -> property x y)
+
+subRelation2El ? ? ? ? (\x,y -> formOfAdaptation x y) (\x,y -> property x y)
+
+subRelation2El ? ? ? ? (\x,y -> complexity x y) (\x,y -> property x y)
+
+subRelation2El ? ? ? ? (\x,y -> strictness x y) (\x,y -> property x y)
+
+subRelation2El ? ? ? ? (\x,y -> abstractionLevel x y) (\x,y -> property x y)
+
+subRelation2El ? ? ? ? (\x,y -> memorySize x y) (\x,y -> measure x y)
+
+subRelation2El ? ? ? ? (\x,y -> load x y) (\x,y -> measure x y)
+
+subRelation2El ? ? ? ? (\x,y -> dataProcessed x y) (\x,y -> patient x y)
+
+subRelation2El ? ? ? ? (\x,y -> resourceUsed x y) (\x,y -> patient x y)
+
+subRelation2El ? ? ? ? (\x,y -> userName x y) (\x,y -> names x y)
+
+subRelation2El ? ? ? ? (\x,y -> hasAccount x y) (\x,y -> possesses x y)
+
+subRelation2El ? ? ? ? (\x,y -> password x y) (\x,y -> names x y)
+
+subRelation2El ? ? ? ? (\x,y -> hostStatus x y) (\x,y -> attribute x y)

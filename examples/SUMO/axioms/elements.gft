@@ -1,0 +1,220 @@
+
+forall (both Atom Hydrogen) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 1.0079))  (el ? ? ? Amu))))
+
+forall (both Atom Helium) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 4.0026))(el ? ? ? Amu))))
+
+forall (both Atom Lithium) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 6.939))(el ? ? ? Amu))))
+
+forall (both Atom Beryllium) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 9.0122))(el ? ? ? Amu))))
+
+forall (both Atom Boron) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 10.811))(el ? ? ? Amu))))
+
+forall (both Atom Carbon) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 12.01115))(el ? ? ? Amu))))
+
+forall (both Atom Nitrogen) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 14.0067))(el ? ? ? Amu))))
+
+forall (both Atom Oxygen) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 15.9994))(el ? ? ? Amu))))
+
+forall (both Atom Fluorine) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 18.9984))(el ? ? ? Amu))))
+
+forall (both Atom Neon) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 20.183))(el ? ? ? Amu))))
+
+forall (both Atom Sodium) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 22.9898))(el ? ? ? Amu))))
+
+forall (both Atom Magnesium) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 24.312))(el ? ? ? Amu))))
+
+forall (both Atom Aluminum) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 26.9815))(el ? ? ? Amu))))
+
+forall (both Atom Silicon) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 28.086))(el ? ? ? Amu))))
+
+forall (both Atom Phosphorus) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 30.9738))(el ? ? ? Amu))))
+
+forall (both Atom Sulphur) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 32.064))(el ? ? ? Amu))))
+
+forall (both Atom Chlorine) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 35.453))(el ? ? ? Amu))))
+
+forall (both Atom Argon) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 39.948))(el ? ? ? Amu))))
+
+forall (both Atom Potassium) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 39.0983))(el ? ? ? Amu))))
+
+forall (both Atom Calcium) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 40.08))(el ? ? ? Amu))))
+
+forall (both Atom Scandium) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 44.956))(el ? ? ? Amu))))
+
+forall (both Atom Titanium) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 47.90))(el ? ? ? Amu))))
+
+forall (both Atom Vanadium) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 50.9415))(el ? ? ? Amu))))
+
+forall (both Atom Chromium) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 51.996))(el ? ? ? Amu))))
+
+forall (both Atom Manganese) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 54.938))(el ? ? ? Amu))))
+
+forall (both Atom Iron) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 55.847))(el ? ? ? Amu))))
+
+forall (both Atom Cobalt) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 58.993))(el ? ? ? Amu))))
+
+forall (both Atom Nickel) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 58.71))(el ? ? ? Amu))))
+
+forall (both Atom Copper) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 63.54))(el ? ? ? Amu))))
+
+forall (both Atom Zinc) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 65.38))(el ? ? ? Amu))))
+
+forall (both Atom Gallium) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 69.72))(el ? ? ? Amu))))
+
+forall (both Atom Germanium) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 72.59))(el ? ? ? Amu))))
+
+forall (both Atom Arsenic) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 74.922))(el ? ? ? Amu))))
+
+forall (both Atom Selenium) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 78.96))(el ? ? ? Amu))))
+
+forall (both Atom Bromine) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 79.909))(el ? ? ? Amu))))
+
+forall (both Atom Krypton) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 83.80))(el ? ? ? Amu))))
+
+forall (both Atom Rubidium) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 85.47))(el ? ? ? Amu))))
+
+forall (both Atom Strontium) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 87.62))(el ? ? ? Amu))))
+
+forall (both Atom Yttrium) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 88.905))(el ? ? ? Amu))))
+
+forall (both Atom Zirconium) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 91.22))(el ? ? ? Amu))))
+
+forall (both Atom Niobium) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 92.906))(el ? ? ? Amu))))
+
+forall (both Atom Molybdenum) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 95.94))(el ? ? ? Amu))))
+
+forall (both Atom Technetium) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 98))(el ? ? ? Amu))))
+
+forall (both Atom Ruthenium) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 101.07))(el ? ? ? Amu))))
+
+forall (both Atom Rhodium) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 102.905))(el ? ? ? Amu))))
+
+forall (both Atom Palladium) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 106.4))(el ? ? ? Amu))))
+
+forall (both Atom Silver) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 107.870))(el ? ? ? Amu))))
+
+forall (both Atom Cadmium) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 112.40))(el ? ? ? Amu))))
+
+forall (both Atom Indium) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 114.82))(el ? ? ? Amu))))
+
+forall (both Atom Tin) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 118.69))(el ? ? ? Amu))))
+
+forall (both Atom Antimony) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 121.75))(el ? ? ? Amu))))
+
+forall (both Atom Tellurium) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 127.60))(el ? ? ? Amu))))
+
+forall (both Atom Iodine) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 126.904))(el ? ? ? Amu))))
+
+forall (both Atom Xenon) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 131.30))(el ? ? ? Amu))))
+
+forall (both Atom Caesium) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 132.90545))(el ? ? ? Amu))))
+
+forall (both Atom Barium) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 137.34))(el ? ? ? Amu))))
+
+forall (both Atom Lanthanum) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 138.9055))(el ? ? ? Amu))))
+
+forall (both Atom Cerium) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 140.12))(el ? ? ? Amu))))
+
+forall (both Atom Praseodymium) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 140.907))(el ? ? ? Amu))))
+
+forall (both Atom Neodymium) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 144.24))(el ? ? ? Amu))))
+
+forall (both Atom Promethium) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 147))(el ? ? ? Amu))))
+
+forall (both Atom Samarium) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 150.35))(el ? ? ? Amu))))
+
+forall (both Atom Europium) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 151.25))(el ? ? ? Amu))))
+
+forall (both Atom Gadolinium) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 157.25))(el ? ? ? Amu))))
+
+forall (both Atom Terbium) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 158.924))(el ? ? ? Amu))))
+
+forall (both Atom Dysprosium) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 162.50))(el ? ? ? Amu))))
+
+forall (both Atom Holmium) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 167.26))(el ? ? ? Amu))))
+
+forall (both Atom Erbium) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 167.26))(el ? ? ? Amu))))
+
+forall (both Atom Thulium) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 168.934))(el ? ? ? Amu))))
+
+forall (both Atom Ytterbium) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 173.04))(el ? ? ? Amu))))
+
+forall (both Atom Lutetium) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 194.967))(el ? ? ? Amu))))
+
+forall (both Atom Hafnium) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 178.49))(el ? ? ? Amu))))
+
+forall (both Atom Tantalum) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 180.948))(el ? ? ? Amu))))
+
+forall (both Atom Tungsten) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 183.85))(el ? ? ? Amu))))
+
+forall (both Atom Rhenium) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 186.2))(el ? ? ? Amu))))
+
+forall (both Atom Osmium) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 190.2))(el ? ? ? Amu))))
+
+forall (both Atom Iridium) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 192.217))(el ? ? ? Amu))))
+
+forall (both Atom Platinum) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 195.078))(el ? ? ? Amu))))
+
+forall (both Atom Gold) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 196.96655))(el ? ? ? Amu))))
+
+forall (both Atom Mercury) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 200.59))(el ? ? ? Amu))))
+
+forall (both Atom Thallium) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 204.3833))(el ? ? ? Amu))))
+
+forall (both Atom Lead) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 207.19))(el ? ? ? Amu))))
+
+forall (both Atom Bismuth) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 208.980))(el ? ? ? Amu))))
+
+forall (both Atom Polonium) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 210))(el ? ? ? Amu))))
+
+forall (both Atom Astatine) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 210))(el ? ? ? Amu))))
+
+forall (both Atom Radon) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 222))(el ? ? ? Amu))))
+
+forall (both Atom Francium) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 223))(el ? ? ? Amu))))
+
+forall (both Atom Radium) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 226))(el ? ? ? Amu))))
+
+forall (both Atom Actinium) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 227))(el ? ? ? Amu))))
+
+forall (both Atom Thorium) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 232.038))(el ? ? ? Amu))))
+
+forall (both Atom Protactinium) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 231))(el ? ? ? Amu))))
+
+forall (both Atom Uranium) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 231))(el ? ? ? Amu))))
+
+forall (both Atom Neptunium) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 237))(el ? ? ? Amu))))
+
+forall (both Atom Plutonium) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 242))(el ? ? ? Amu))))
+
+forall (both Atom Americium) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 243))(el ? ? ? Amu))))
+
+forall (both Atom Curium) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 247))(el ? ? ? Amu))))
+
+forall (both Atom Berkelium) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 247))(el ? ? ? Amu))))
+
+forall (both Atom Californium) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 249))(el ? ? ? Amu))))
+
+forall (both Atom Einsteinium) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 254))(el ? ? ? Amu))))
+
+forall (both Atom Fermium) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 253))(el ? ? ? Amu))))
+
+forall (both Atom Mendelevium) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 256))(el ? ? ? Amu))))
+
+forall (both Atom Nobelium) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 254))(el ? ? ? Amu))))
+
+forall (both Atom Lawrencium) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 262))(el ? ? ? Amu))))
+
+forall (both Atom Unnilquadium) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 261))(el ? ? ? Amu))))
+
+forall (both Atom Unnilpentium) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 262))(el ? ? ? Amu))))
+
+forall (both Atom Unnilhexium) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 263))(el ? ? ? Amu))))
+
+forall (both Atom Unnilseptium) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 262))(el ? ? ? Amu))))
+
+forall (both Atom Unniloctium) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 265))(el ? ? ? Amu))))
+
+forall (both Atom Meitnerium) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 266))(el ? ? ? Amu))))
+
+forall (both Atom Unnildecium) (\ATOM -> measure(var ? ? ? ATOM)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 272))(el ? ? ? Amu))))

@@ -1,0 +1,586 @@
+
+forall Continent (\LAND ->  impl ( not (equal(var ? ? ? LAND)(el ? ? ? Antarctica)))( orientation(el ? ? ? Antarctica)(var ? ? ? LAND)(el ? ? ? South)))
+
+forall GeographicArea (\REGION -> forall Longitude (\LONG -> forall Latitude (\LAT ->  impl ( objectGeographicCoordinates( el ? ? ? ( GeographicCenterFn(var ? ? ? REGION)))(var ? ? ? LAT)(var ? ? ? LONG))( objectGeographicCoordinates(var ? ? ? REGION)(var ? ? ? LAT)(var ? ? ? LONG)))))
+
+forall (both RealNumber Quantity) (\NUMBER -> forall Object (\ANGLE ->  impl ( measure(var ? ? ? ANGLE)( el ? ? ? ( MeasureFn(var ? ? ? NUMBER)(el ? ? ? AngularDegree))))( greaterThanOrEqualTo(var ? ? ? NUMBER)(el ? ? ? (toInt 0)))))
+
+forall (both RealNumber Quantity) (\NUMBER -> forall Object (\ANGLE ->  impl ( measure(var ? ? ? ANGLE)( el ? ? ? ( MeasureFn(var ? ? ? NUMBER)(el ? ? ? AngularDegree))))( lessThanOrEqualTo(var ? ? ? NUMBER)(el ? ? ? (toInt 360)))))
+
+forall (both RealNumber Quantity) (\NUMBER -> forall Object (\ANGLE ->  impl ( measure(var ? ? ? ANGLE)( el ? ? ? ( MeasureFn(var ? ? ? NUMBER)(el ? ? ? ArcMinute))))( greaterThanOrEqualTo(var ? ? ? NUMBER)(el ? ? ? (toInt 0)))))
+
+forall (both RealNumber Quantity) (\NUMBER -> forall Object (\ANGLE ->  impl ( measure(var ? ? ? ANGLE)( el ? ? ? ( MeasureFn(var ? ? ? NUMBER)(el ? ? ? ArcMinute))))( lessThanOrEqualTo(var ? ? ? NUMBER)(el ? ? ? (toInt 60)))))
+
+forall (both RealNumber Quantity) (\DEG -> forall Object (\OBJ ->  equiv ( measure(var ? ? ? OBJ)( el ? ? ? ( MeasureFn(var ? ? ? DEG)(el ? ? ? AngularDegree))))( measure(var ? ? ? OBJ)( el ? ? ? ( MeasureFn( el ? ? ? ( MultiplicationFn(el ? ? ? (toInt 60))(var ? ? ? DEG)))(el ? ? ? ArcMinute))))))
+
+forall (both RealNumber Quantity) (\NUMBER -> forall Object (\ANGLE ->  impl ( measure(var ? ? ? ANGLE)( el ? ? ? ( MeasureFn(var ? ? ? NUMBER)(el ? ? ? ArcSecond))))( greaterThanOrEqualTo(var ? ? ? NUMBER)(el ? ? ? (toInt 0)))))
+
+forall (both RealNumber Quantity) (\NUMBER -> forall Object (\ANGLE ->  impl ( measure(var ? ? ? ANGLE)( el ? ? ? ( MeasureFn(var ? ? ? NUMBER)(el ? ? ? ArcSecond))))( lessThanOrEqualTo(var ? ? ? NUMBER)(el ? ? ? (toInt 60)))))
+
+forall (both RealNumber Quantity) (\DEG -> forall Object (\OBJ ->  equiv ( measure(var ? ? ? OBJ)( el ? ? ? ( MeasureFn(var ? ? ? DEG)(el ? ? ? ArcMinute))))( measure(var ? ? ? OBJ)( el ? ? ? ( MeasureFn( el ? ? ? ( MultiplicationFn(el ? ? ? (toInt 60))(var ? ? ? DEG)))(el ? ? ? ArcSecond))))))
+
+forall (both Entity DirectionalAttribute) (\DIRECTION ->  impl (or ( equal(var ? ? ? DIRECTION)(el ? ? ? North))( equal(var ? ? ? DIRECTION)(el ? ? ? South)))( length( el ? ? ? ( LatitudeFn(var ? ? ? DIRECTION)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 0))(el ? ? ? AngularDegree)))( el ? ? ? ( MeasureFn(el ? ? ? (toInt 1))(el ? ? ? ArcMinute)))( el ? ? ? ( MeasureFn(el ? ? ? (toInt 0))(el ? ? ? ArcSecond)))))( el ? ? ? ( MeasureFn(el ? ? ? (toInt 1))(el ? ? ? NauticalMile)))))
+
+forall GeographicArea (\SUBAREA -> forall (both GeographicArea Object) (\AREA -> forall Physical (\PLACE ->  impl (and ( partlyLocated(var ? ? ? PLACE)(var ? ? ? SUBAREA))( geographicSubregion(var ? ? ? SUBAREA)(var ? ? ? AREA)))( partlyLocated(var ? ? ? PLACE)(var ? ? ? AREA)))))
+
+forall Object (\Z -> forall Object (\Y -> forall Object (\X ->  impl (and ( connected(var ? ? ? X)(var ? ? ? Y))( part(var ? ? ? Y)(var ? ? ? Z)))( connected(var ? ? ? X)(var ? ? ? Z)))))
+
+forall UnitOfArea (\UNIT -> forall (both RealNumber Quantity) (\WATER -> forall (both RealNumber Quantity) (\LAND -> forall (both GeographicArea Region) (\AREA ->  impl (and ( landAreaOnly(var ? ? ? AREA)( el ? ? ? ( MeasureFn(var ? ? ? LAND)(var ? ? ? UNIT))))( waterAreaOnly(var ? ? ? AREA)( el ? ? ? ( MeasureFn(var ? ? ? WATER)(var ? ? ? UNIT)))))( totalArea(var ? ? ? AREA)( el ? ? ? ( MeasureFn( el ? ? ? ( AdditionFn(var ? ? ? LAND)(var ? ? ? WATER)))(var ? ? ? UNIT))))))))
+
+forall SurfaceGroundArea (\EXCLUSIVELANDAREA -> exists WaterArea (\WATERAREA ->  part(var ? ? ? WATERAREA)(var ? ? ? EXCLUSIVELANDAREA)))
+
+forall AreaMeasure (\MEASURE -> forall (both GeographicArea Object) (\AREA ->  impl ( landAreaOnly(var ? ? ? AREA)(var ? ? ? MEASURE))(exists SurfaceGroundArea (\LAND -> and ( part(var ? ? ? LAND)(var ? ? ? AREA))( totalArea(var ? ? ? LAND)(var ? ? ? MEASURE))))))
+
+forall WaterOnlyArea (\EXCLUSIVEWATERAREA -> exists LandArea (\LANDAREA ->  part(var ? ? ? LANDAREA)(var ? ? ? EXCLUSIVEWATERAREA)))
+
+forall AreaMeasure (\MEASURE -> forall (both GeographicArea Object) (\AREA ->  impl ( waterAreaOnly(var ? ? ? AREA)(var ? ? ? MEASURE))(exists WaterOnlyArea (\WATER -> and ( part(var ? ? ? WATER)(var ? ? ? AREA))( totalArea(var ? ? ? WATER)(var ? ? ? MEASURE))))))
+
+forall (both Entity (both RealNumber Quantity)) (\NUM ->  impl ( equal(var ? ? ? NUM)( el ? ? ? ( MultiplicationFn(el ? ? ? (toInt 1))(var ? ? ? NUM))))( equal( el ? ? ? ( MeasureFn(var ? ? ? NUM)(el ? ? ? SquareKilometer)))( el ? ? ? ( MeasureFn( el ? ? ? ( MultiplicationFn(var ? ? ? NUM)(el ? ? ? (toInt 1000000))))(el ? ? ? SquareMeter)))))
+
+forall GeographicArea (\OBJ1 -> forall GeographicArea (\OBJ2 ->  equal( el ? ? ? ( BorderFn(var ? ? ? OBJ1)(var ? ? ? OBJ2)))( el ? ? ? ( BorderFn(var ? ? ? OBJ2)(var ? ? ? OBJ1)))))
+
+forall Object (\TWO -> forall Object (\ONE ->  impl ( orientation(var ? ? ? ONE)(var ? ? ? TWO)(el ? ? ? Adjacent))( orientation(var ? ? ? TWO)(var ? ? ? ONE)(el ? ? ? Adjacent))))
+
+forall Object (\TWO -> forall Object (\ONE ->  impl ( orientation(var ? ? ? ONE)(var ? ? ? TWO)(el ? ? ? Near))( orientation(var ? ? ? TWO)(var ? ? ? ONE)(el ? ? ? Near))))
+
+forall Object (\AREA2 -> forall Object (\AREA1 ->  impl ( meetsSpatially(var ? ? ? AREA1)(var ? ? ? AREA2))( not (overlapsSpatially(var ? ? ? AREA1)(var ? ? ? AREA2)))))
+
+forall (both LengthMeasure PhysicalQuantity) (\M -> forall (both GeographicRegion GeographicArea) (\N2 -> forall (both GeographicRegion GeographicArea) (\N1 ->  impl ( sharedBorderLength(var ? ? ? N1)(var ? ? ? N2)(var ? ? ? M))( length( el ? ? ? ( BorderFn(var ? ? ? N1)(var ? ? ? N2)))(var ? ? ? M)))))
+
+forall Region (\REGION ->  superficialPart( el ? ? ? ( InnerBoundaryFn(var ? ? ? REGION)))(var ? ? ? REGION))
+
+forall Region (\REGION ->  superficialPart( el ? ? ? ( OuterBoundaryFn(var ? ? ? REGION)))(var ? ? ? REGION))
+
+forall UniformPerimeterArea (\AREA -> exists LengthMeasure (\WIDTH ->  distance( el ? ? ? ( InnerBoundaryFn(var ? ? ? AREA)))( el ? ? ? ( OuterBoundaryFn(var ? ? ? AREA)))(var ? ? ? WIDTH)))
+
+forall UniformPerimeterArea (\ZONE -> exists LengthMeasure (\WIDTH ->  width(var ? ? ? ZONE)(var ? ? ? WIDTH)))
+
+forall UniformPerimeterArea (\ZONE -> forall LengthMeasure (\WIDTH -> forall (both Object Physical) (\INNER ->  impl ( part(var ? ? ? INNER)( el ? ? ? ( InnerBoundaryFn(var ? ? ? ZONE))))(exists (both Object Physical) (\OUTER -> and ( part(var ? ? ? OUTER)( el ? ? ? ( OuterBoundaryFn(var ? ? ? ZONE))))( distance(var ? ? ? INNER)(var ? ? ? OUTER)(var ? ? ? WIDTH)))))))
+
+forall LandlockedArea (\AREA -> exists Seacoast (\COAST ->  part(var ? ? ? COAST)(var ? ? ? AREA)))
+
+forall LandlockedArea (\AREA -> forall UnitOfLength (\UNIT ->  totalCoastline(var ? ? ? AREA)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 0))(var ? ? ? UNIT)))))
+
+forall LandlockedArea (\AREA -> exists Ocean (\WATER ->  meetsSpatially(var ? ? ? AREA)(var ? ? ? WATER)))
+
+forall LandlockedArea (\AREA -> forall Ocean (\SEA -> exists SaltWaterArea (\WATER -> and ( part(var ? ? ? WATER)(var ? ? ? SEA))( meetsSpatially(var ? ? ? AREA)(var ? ? ? WATER)))))
+
+forall LandlockedArea (\AREA -> exists LandArea (\LAND ->  meetsSpatially(var ? ? ? AREA)(var ? ? ? LAND)))
+
+forall MaritimeShelfArea (\ZONE -> forall (both LengthMeasure Quantity) (\WIDTH ->  impl ( linearExtent(var ? ? ? ZONE)(var ? ? ? WIDTH))( lessThanOrEqualTo(var ? ? ? WIDTH)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 200))(el ? ? ? NauticalMile))))))
+
+forall MaritimeShelfArea (\ZONE -> forall ContinentalShelf (\SHELF -> forall Nation (\COUNTRY -> forall Agent (\NATION ->  impl (and ( meetsSpatially(var ? ? ? SHELF)(var ? ? ? COUNTRY))( claimedTerritory(var ? ? ? ZONE)(var ? ? ? NATION)))( overlapsSpatially(var ? ? ? ZONE)(var ? ? ? SHELF))))))
+
+forall MaritimeExclusiveEconomicZone (\ZONE -> forall (both LengthMeasure Quantity) (\WIDTH ->  impl ( linearExtent(var ? ? ? ZONE)(var ? ? ? WIDTH))( lessThanOrEqualTo(var ? ? ? WIDTH)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 200))(el ? ? ? NauticalMile))))))
+
+forall ExclusiveFishingZone (\ZONE -> forall (both LengthMeasure Quantity) (\WIDTH ->  impl ( linearExtent(var ? ? ? ZONE)(var ? ? ? WIDTH))( lessThanOrEqualTo(var ? ? ? WIDTH)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 200))(el ? ? ? NauticalMile))))))
+
+forall ExtendedFishingZone (\ZONE -> forall (both LengthMeasure Quantity) (\WIDTH ->  impl ( linearExtent(var ? ? ? ZONE)(var ? ? ? WIDTH))( lessThanOrEqualTo(var ? ? ? WIDTH)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 200))(el ? ? ? NauticalMile))))))
+
+forall MaritimeContiguousZone (\ZONE -> forall TerritorialSea (\WATER -> forall (both Agent Object) (\AREA ->  impl (and ( claimedTerritory(var ? ? ? ZONE)(var ? ? ? AREA))( claimedTerritory(var ? ? ? WATER)(var ? ? ? AREA)))( between(var ? ? ? AREA)(var ? ? ? WATER)(var ? ? ? ZONE)))))
+
+forall TerritorialSea (\ZONE -> forall (both LengthMeasure Quantity) (\WIDTH ->  impl ( linearExtent(var ? ? ? ZONE)(var ? ? ? WIDTH))( lessThanOrEqualTo(var ? ? ? WIDTH)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 12))(el ? ? ? NauticalMile))))))
+
+forall WetTropicalClimateZone (\AREA -> forall (both LengthMeasure Quantity) (\AMOUNT -> forall Month (\MO ->  impl ( averageRainfallForPeriod(var ? ? ? AREA)(var ? ? ? MO)(var ? ? ? AMOUNT))( greaterThanOrEqualTo(var ? ? ? AMOUNT)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 60))( el ? ? ? ( MilliFn(el ? ? ? Meter)))))))))
+
+forall MediterraneanClimateZone (\AREA ->  coolSeasonInArea(var ? ? ? AREA)(desc WinterSeason ? ?))
+
+forall MediterraneanClimateZone (\AREA ->  warmSeasonInArea(var ? ? ? AREA)(desc SummerSeason ? ?))
+
+forall MediterraneanClimateZone (\AREA ->  rainySeasonInArea(var ? ? ? AREA)(desc WinterSeason ? ?))
+
+forall MediterraneanClimateZone (\AREA ->  drySeasonInArea(var ? ? ? AREA)(desc SummerSeason ? ?))
+
+forall ContinentalClimateZone (\AREA ->  coldSeasonInArea(var ? ? ? AREA)(desc WinterSeason ? ?))
+
+forall ContinentalClimateZone (\AREA ->  hotSeasonInArea(var ? ? ? AREA)(desc SummerSeason ? ?))
+
+forall MidlatitudeContinentalClimateZone (\AREA ->  coolSeasonInArea(var ? ? ? AREA)(desc WinterSeason ? ?))
+
+forall MidlatitudeContinentalClimateZone (\AREA ->  hotSeasonInArea(var ? ? ? AREA)(desc SummerSeason ? ?))
+
+forall PolarTypeFClimateZone (\AREA -> forall TimePosition (\TIME -> forall (both TemperatureMeasure Quantity) (\TEMP ->  impl ( holdsDuring(var ? ? ? TIME)( airTemperature(var ? ? ? AREA)(var ? ? ? TEMP)))( holdsDuring(var ? ? ? TIME)( greaterThan( el ? ? ? ( MeasureFn(el ? ? ? (toInt 10))(el ? ? ? CelsiusDegree)))(var ? ? ? TEMP))))))
+
+forall (both TerrainAttribute Attribute) (\ATTRIBUTE -> forall (both GeographicArea Object) (\AREA ->  impl ( terrainInArea(var ? ? ? AREA)(var ? ? ? ATTRIBUTE))(exists GeographicArea (\REGION -> and ( attribute(var ? ? ? REGION)(var ? ? ? ATTRIBUTE))( partlyLocated(var ? ? ? REGION)(var ? ? ? AREA))))))
+
+forall GeographicArea (\AREA -> forall TerrainAttribute (\ATTRIBUTE -> forall (both Object Physical) (\REGION ->  impl (and ( attribute(var ? ? ? REGION)(var ? ? ? ATTRIBUTE))( partlyLocated(var ? ? ? REGION)(var ? ? ? AREA)))( terrainInArea(var ? ? ? AREA)(var ? ? ? ATTRIBUTE)))))
+
+forall (both NonnegativeRealNumber Quantity) (\SLOPE -> forall (both Object LandArea) (\ZONE -> forall Object (\AREA ->  impl (and ( attribute(var ? ? ? AREA)(el ? ? ? FlatTerrain))(and ( part(var ? ? ? ZONE)(var ? ? ? AREA))( slopeGradient(var ? ? ? ZONE)(var ? ? ? SLOPE))))( greaterThan(el ? ? ? (toRealNum 0.005))(var ? ? ? SLOPE)))))
+
+forall (both NonnegativeRealNumber Quantity) (\SLOPE -> forall (both Object LandArea) (\ZONE -> forall Object (\AREA ->  impl (and ( attribute(var ? ? ? AREA)(el ? ? ? LowTerrain))(and ( part(var ? ? ? ZONE)(var ? ? ? AREA))( slopeGradient(var ? ? ? ZONE)(var ? ? ? SLOPE))))( greaterThan(el ? ? ? (toRealNum 0.03))(var ? ? ? SLOPE)))))
+
+forall (both NonnegativeRealNumber Quantity) (\SLOPE -> forall Object (\AREA ->  impl ( attribute(var ? ? ? AREA)(el ? ? ? SteepTerrain))(exists (both Object LandArea) (\ZONE -> and ( part(var ? ? ? ZONE)(var ? ? ? AREA))(and ( slopeGradient(var ? ? ? ZONE)(var ? ? ? SLOPE))( greaterThan(var ? ? ? SLOPE)(el ? ? ? (toRealNum 0.1))))))))
+
+forall Object (\AREA ->  impl ( attribute(var ? ? ? AREA)(el ? ? ? MountainousTerrain))(exists Mountain (\MTN ->  part(var ? ? ? MTN)(var ? ? ? AREA))))
+
+forall Object (\AREA ->  impl ( attribute(var ? ? ? AREA)(el ? ? ? MountainousTerrain))(exists Mountain (\MTN ->  located(var ? ? ? MTN)(var ? ? ? AREA))))
+
+forall MountainRange (\AREA ->  attribute(var ? ? ? AREA)(el ? ? ? MountainousTerrain))
+
+forall Object (\AREA ->  impl ( attribute(var ? ? ? AREA)(el ? ? ? FertileTerrain))( forall Agriculture (\AGRICULTURE -> located (var ? ? ? AGRICULTURE) (var ? ? ? AREA))))
+
+forall Soil (\SOIL -> forall LandArea (\AREA ->  impl (and ( attribute(var ? ? ? SOIL)(el ? ? ? Red))( component(var ? ? ? SOIL)(var ? ? ? AREA)))( attribute(var ? ? ? AREA)(el ? ? ? FertileTerrain))))
+
+forall Soil (\SOIL -> forall LandArea (\AREA ->  impl (and ( attribute(var ? ? ? SOIL)(el ? ? ? Yellow))( component(var ? ? ? SOIL)(var ? ? ? AREA)))( not (attribute(var ? ? ? AREA)(el ? ? ? FertileTerrain)))))
+
+forall GeographicArea (\AREA -> forall Volcano (\CONE ->  impl ( attribute(var ? ? ? CONE)(el ? ? ? VolcanicallyActive))( not (attribute(var ? ? ? AREA)(el ? ? ? GeologicallyStable)))))
+
+forall GeographicArea (\AREA -> forall VolcanicEruption (\BLOW ->  impl ( located(var ? ? ? BLOW)(var ? ? ? AREA))( not (attribute(var ? ? ? AREA)(el ? ? ? GeologicallyStable)))))
+
+forall GeographicArea (\AREA -> forall EarthTremor (\SHAKING ->  impl ( located(var ? ? ? SHAKING)(var ? ? ? AREA))( not (attribute(var ? ? ? AREA)(el ? ? ? GeologicallyStable)))))
+
+forall GeographicArea (\AREA -> forall GeologicalFault (\FAULT ->  impl ( located(var ? ? ? FAULT)(var ? ? ? AREA))( not (attribute(var ? ? ? AREA)(el ? ? ? GeologicallyStable)))))
+
+forall LengthMeasure (\HEIGHT -> forall (both Object Physical) (\OBJECT ->  impl ( elevation(var ? ? ? OBJECT)(var ? ? ? HEIGHT))(exists GeographicArea (\PLACE ->  located(var ? ? ? OBJECT)(var ? ? ? PLACE)))))
+
+forall GeographicArea (\PLACE -> forall LengthMeasure (\HEIGHT -> forall (both Object Physical) (\OBJECT ->  impl (and ( elevation(var ? ? ? OBJECT)(var ? ? ? HEIGHT))( located(var ? ? ? OBJECT)(var ? ? ? PLACE)))( superficialPart(var ? ? ? PLACE)(el ? ? ? PlanetEarth)))))
+
+forall LengthMeasure (\HEIGHT -> forall (both Object Physical) (\OBJECT ->  impl ( elevation(var ? ? ? OBJECT)(var ? ? ? HEIGHT))(exists (both Object Physical) (\DATUM -> and ( properPart(var ? ? ? DATUM)(el ? ? ? SeaLevel))(and ( orientation(var ? ? ? OBJECT)(var ? ? ? DATUM)(el ? ? ? Vertical))( distance(var ? ? ? OBJECT)(var ? ? ? DATUM)(var ? ? ? HEIGHT)))))))
+
+forall LandForm (\OBJECT -> forall UnitOfLength (\UNIT -> forall RealNumber (\NUM ->  impl ( elevation(var ? ? ? OBJECT)( el ? ? ? ( MeasureFn(var ? ? ? NUM)(var ? ? ? UNIT))))(exists (both SelfConnectedObject Physical) (\HIGHPOINT -> and ( top(var ? ? ? HIGHPOINT)(var ? ? ? OBJECT))( distance(var ? ? ? HIGHPOINT)(el ? ? ? SeaLevel)( el ? ? ? ( MeasureFn(var ? ? ? NUM)(var ? ? ? UNIT)))))))))
+
+forall GeographicArea (\AREA -> forall (both LengthMeasure Quantity) (\ELEV1 ->  impl (and ( geographicSubregion( el ? ? ? ( ElevationLowPointFn(var ? ? ? AREA)))(var ? ? ? AREA))( elevation( el ? ? ? ( ElevationLowPointFn(var ? ? ? AREA)))(var ? ? ? ELEV1)))(exists (both LengthMeasure Quantity) (\ELEV2 -> not (exists (both GeographicArea (both Entity Object)) (\OTHER -> and ( geographicSubregion(var ? ? ? OTHER)(var ? ? ? AREA))(and ( not (equal(var ? ? ? OTHER)( el ? ? ? ( ElevationLowPointFn(var ? ? ? AREA)))))(and ( elevation(var ? ? ? OTHER)(var ? ? ? ELEV2))( lessThan(var ? ? ? ELEV2)(var ? ? ? ELEV1))))))))))
+
+forall GeographicArea (\AREA -> forall (both LengthMeasure Quantity) (\ELEV1 ->  impl (and ( geographicSubregion( el ? ? ? ( ElevationHighPointFn(var ? ? ? AREA)))(var ? ? ? AREA))( elevation( el ? ? ? ( ElevationHighPointFn(var ? ? ? AREA)))(var ? ? ? ELEV1)))(exists (both LengthMeasure Quantity) (\ELEV2 -> not (exists (both GeographicArea (both Entity Object)) (\OTHER -> and ( geographicSubregion(var ? ? ? OTHER)(var ? ? ? AREA))(and ( not (equal(var ? ? ? OTHER)( el ? ? ? ( ElevationHighPointFn(var ? ? ? AREA)))))(and ( elevation(var ? ? ? OTHER)(var ? ? ? ELEV2))( greaterThan(var ? ? ? ELEV2)(var ? ? ? ELEV1))))))))))
+
+forall NaturalGas (\GAS ->  attribute(var ? ? ? GAS)(el ? ? ? Gas))
+
+forall AreaMeasure (\TOTAL -> forall (both Entity ConstantQuantity) (\AMOUNT -> forall (both ConstantQuantity Quantity) (\FRACTION -> forall (both GeographicArea Region) (\REGION ->  impl (and ( arableLandArea(var ? ? ? REGION)(var ? ? ? FRACTION))(and ( greaterThanOrEqualTo(var ? ? ? FRACTION)(el ? ? ? (toInt 0)))(and ( totalArea(var ? ? ? REGION)(var ? ? ? TOTAL))( equal(var ? ? ? AMOUNT)( el ? ? ? ( MultiplicationFn(var ? ? ? FRACTION)(var ? ? ? TOTAL)))))))( arableLandArea(var ? ? ? REGION)(var ? ? ? AMOUNT))))))
+
+forall UnitOfArea (\UNIT -> forall (both Entity ConstantQuantity) (\AMOUNT -> forall (both RealNumber Quantity) (\TOTAL -> forall (both ConstantQuantity Quantity) (\FRACTION -> forall (both GeographicArea Region) (\REGION ->  impl (and ( arableLandArea(var ? ? ? REGION)(var ? ? ? FRACTION))(and ( greaterThanOrEqualTo(var ? ? ? FRACTION)(el ? ? ? (toInt 0)))(and ( totalArea(var ? ? ? REGION)( el ? ? ? ( MeasureFn(var ? ? ? TOTAL)(var ? ? ? UNIT))))( equal(var ? ? ? AMOUNT)( el ? ? ? ( MeasureFn( el ? ? ? ( MultiplicationFn(var ? ? ? FRACTION)(var ? ? ? TOTAL)))(var ? ? ? UNIT)))))))( arableLandArea(var ? ? ? REGION)(var ? ? ? AMOUNT)))))))
+
+forall UnitOfArea (\UNIT -> forall (both RealNumber Quantity) (\TOTAL -> forall (both ConstantQuantity Quantity) (\FRACTION -> forall (both GeographicArea Region) (\REGION ->  impl (and ( arableLandArea(var ? ? ? REGION)(var ? ? ? FRACTION))(and ( greaterThanOrEqualTo(var ? ? ? FRACTION)(el ? ? ? (toInt 0)))( totalArea(var ? ? ? REGION)( el ? ? ? ( MeasureFn(var ? ? ? TOTAL)(var ? ? ? UNIT))))))(exists ArableLand (\ARABLE -> and ( geographicSubregion(var ? ? ? ARABLE)(var ? ? ? REGION))( measure(var ? ? ? ARABLE)( el ? ? ? ( MeasureFn( el ? ? ? ( MultiplicationFn(var ? ? ? FRACTION)(var ? ? ? TOTAL)))(var ? ? ? UNIT))))))))))
+
+forall AreaMeasure (\TOTAL -> forall (both Entity ConstantQuantity) (\AMOUNT -> forall (both ConstantQuantity Quantity) (\FRACTION -> forall (both GeographicArea Region) (\REGION ->  impl (and ( permanentCropLandArea(var ? ? ? REGION)(var ? ? ? FRACTION))(and ( greaterThanOrEqualTo(var ? ? ? FRACTION)(el ? ? ? (toInt 0)))(and ( totalArea(var ? ? ? REGION)(var ? ? ? TOTAL))( equal(var ? ? ? AMOUNT)( el ? ? ? ( MultiplicationFn(var ? ? ? FRACTION)(var ? ? ? TOTAL)))))))( permanentCropLandArea(var ? ? ? REGION)(var ? ? ? AMOUNT))))))
+
+forall UnitOfArea (\UNIT -> forall (both Entity ConstantQuantity) (\AMOUNT -> forall (both RealNumber Quantity) (\TOTAL -> forall (both ConstantQuantity Quantity) (\FRACTION -> forall (both GeographicArea Region) (\REGION ->  impl (and ( permanentCropLandArea(var ? ? ? REGION)(var ? ? ? FRACTION))(and ( greaterThanOrEqualTo(var ? ? ? FRACTION)(el ? ? ? (toInt 0)))(and ( totalArea(var ? ? ? REGION)( el ? ? ? ( MeasureFn(var ? ? ? TOTAL)(var ? ? ? UNIT))))( equal(var ? ? ? AMOUNT)( el ? ? ? ( MeasureFn( el ? ? ? ( MultiplicationFn(var ? ? ? FRACTION)(var ? ? ? TOTAL)))(var ? ? ? UNIT)))))))( permanentCropLandArea(var ? ? ? REGION)(var ? ? ? AMOUNT)))))))
+
+forall UnitOfArea (\UNIT -> forall (both RealNumber Quantity) (\TOTAL -> forall (both ConstantQuantity Quantity) (\FRACTION -> forall (both GeographicArea Region) (\REGION ->  impl (and ( permanentCropLandArea(var ? ? ? REGION)(var ? ? ? FRACTION))(and ( greaterThanOrEqualTo(var ? ? ? FRACTION)(el ? ? ? (toInt 0)))( totalArea(var ? ? ? REGION)( el ? ? ? ( MeasureFn(var ? ? ? TOTAL)(var ? ? ? UNIT))))))(exists PermanentCropLand (\PERMCROP -> and ( geographicSubregion(var ? ? ? PERMCROP)(var ? ? ? REGION))( measure(var ? ? ? PERMCROP)( el ? ? ? ( MeasureFn( el ? ? ? ( MultiplicationFn(var ? ? ? FRACTION)(var ? ? ? TOTAL)))(var ? ? ? UNIT))))))))))
+
+forall AreaMeasure (\TOTAL -> forall (both Entity ConstantQuantity) (\AMOUNT -> forall (both ConstantQuantity Quantity) (\FRACTION -> forall (both GeographicArea Region) (\REGION ->  impl (and ( otherLandUseArea(var ? ? ? REGION)(var ? ? ? FRACTION))(and ( greaterThanOrEqualTo(var ? ? ? FRACTION)(el ? ? ? (toInt 0)))(and ( totalArea(var ? ? ? REGION)(var ? ? ? TOTAL))( equal(var ? ? ? AMOUNT)( el ? ? ? ( MultiplicationFn(var ? ? ? FRACTION)(var ? ? ? TOTAL)))))))( otherLandUseArea(var ? ? ? REGION)(var ? ? ? AMOUNT))))))
+
+forall UnitOfArea (\UNIT -> forall (both Entity ConstantQuantity) (\AMOUNT -> forall (both RealNumber Quantity) (\TOTAL -> forall (both ConstantQuantity Quantity) (\FRACTION -> forall (both GeographicArea Region) (\REGION ->  impl (and ( otherLandUseArea(var ? ? ? REGION)(var ? ? ? FRACTION))(and ( greaterThanOrEqualTo(var ? ? ? FRACTION)(el ? ? ? (toInt 0)))(and ( totalArea(var ? ? ? REGION)( el ? ? ? ( MeasureFn(var ? ? ? TOTAL)(var ? ? ? UNIT))))( equal(var ? ? ? AMOUNT)( el ? ? ? ( MeasureFn( el ? ? ? ( MultiplicationFn(var ? ? ? FRACTION)(var ? ? ? TOTAL)))(var ? ? ? UNIT)))))))( otherLandUseArea(var ? ? ? REGION)(var ? ? ? AMOUNT)))))))
+
+forall AreaMeasure (\AMOUNT -> forall AreaMeasure (\TOTAL -> forall (both Entity ConstantQuantity) (\FRACTION -> forall (both GeographicArea Region) (\REGION ->  impl (and ( irrigatedLandArea(var ? ? ? REGION)(var ? ? ? AMOUNT))(and ( totalArea(var ? ? ? REGION)(var ? ? ? TOTAL))( equal(var ? ? ? FRACTION)( el ? ? ? ( DivisionFn(var ? ? ? AMOUNT)(var ? ? ? TOTAL))))))( irrigatedLandArea(var ? ? ? REGION)(var ? ? ? FRACTION))))))
+
+forall UnitOfArea (\UNIT -> forall (both Entity ConstantQuantity) (\FRACTION -> forall (both RealNumber Quantity) (\TOTAL -> forall (both RealNumber Quantity) (\AMOUNT -> forall (both GeographicArea Region) (\REGION ->  impl (and ( irrigatedLandArea(var ? ? ? REGION)( el ? ? ? ( MeasureFn(var ? ? ? AMOUNT)(var ? ? ? UNIT))))(and ( totalArea(var ? ? ? REGION)( el ? ? ? ( MeasureFn(var ? ? ? TOTAL)(var ? ? ? UNIT))))( equal(var ? ? ? FRACTION)( el ? ? ? ( DivisionFn(var ? ? ? AMOUNT)(var ? ? ? TOTAL))))))( irrigatedLandArea(var ? ? ? REGION)(var ? ? ? FRACTION)))))))
+
+forall UnitOfArea (\UNIT -> forall Object (\PERMCROP -> forall RealNumber (\AMOUNT -> forall GeographicArea (\REGION ->  impl ( irrigatedLandArea(var ? ? ? REGION)( el ? ? ? ( MeasureFn(var ? ? ? AMOUNT)(var ? ? ? UNIT))))(exists IrrigatedLand (\IRRLAND -> and ( geographicSubregion(var ? ? ? IRRLAND)(var ? ? ? REGION))( measure(var ? ? ? PERMCROP)( el ? ? ? ( MeasureFn(var ? ? ? AMOUNT)(var ? ? ? UNIT))))))))))
+
+forall Drought (\DRYSPELL -> forall Object (\AREA ->  impl ( exactlyLocated(var ? ? ? DRYSPELL)(var ? ? ? AREA))(exists Raining (\RAIN -> exists Region (\PLACE -> and ( located(var ? ? ? RAIN)(var ? ? ? PLACE))(and ( overlapsSpatially(var ? ? ? PLACE)(var ? ? ? AREA))( overlapsTemporally(var ? ? ? RAIN)(var ? ? ? DRYSPELL))))))))
+
+forall Earthquake (\QUAKE -> exists EarthTremor (\TREMOR ->  subProcess(var ? ? ? TREMOR)(var ? ? ? QUAKE)))
+
+forall Aftershock (\SHOCK -> forall Object (\PLACE ->  impl ( located(var ? ? ? SHOCK)(var ? ? ? PLACE))(exists EarthTremor (\TREMOR -> and ( located(var ? ? ? TREMOR)(var ? ? ? PLACE))( before( el ? ? ? ( WhenFn(var ? ? ? TREMOR)))( el ? ? ? ( WhenFn(var ? ? ? SHOCK))))))))
+
+forall Earthquake (\QUAKE -> forall RealNumber (\VALUE ->  impl ( measure(var ? ? ? QUAKE)( el ? ? ? ( MeasureFn(var ? ? ? VALUE)(el ? ? ? RichterMagnitude))))(exists EarthTremor (\TREMOR -> and ( subProcess(var ? ? ? TREMOR)(var ? ? ? QUAKE))( measure(var ? ? ? TREMOR)( el ? ? ? ( MeasureFn(var ? ? ? VALUE)(el ? ? ? RichterMagnitude))))))))
+
+forall EarthTremor (\QUAKE -> exists GeologicalFault (\FAULT ->  origin(var ? ? ? QUAKE)(var ? ? ? FAULT)))
+
+forall Earthquake (\QUAKE -> exists GeologicalFault (\FAULT ->  origin(var ? ? ? QUAKE)(var ? ? ? FAULT)))
+
+forall ForestFire (\FIRE -> exists Forest (\FOREST -> and ( located(var ? ? ? FIRE)(var ? ? ? FOREST))( patient(var ? ? ? FIRE)(var ? ? ? FOREST))))
+
+forall GrassFire (\FIRE -> exists Grass (\GRASS -> and ( located(var ? ? ? FIRE)(var ? ? ? GRASS))( patient(var ? ? ? FIRE)(var ? ? ? GRASS))))
+
+forall VolcanicEruption (\ERUPTING -> exists Volcano (\VOLCANO ->  located(var ? ? ? ERUPTING)(var ? ? ? VOLCANO)))
+
+forall VolcanicEruption (\ERUPTING -> exists Heating (\HEATING ->  subProcess(var ? ? ? HEATING)(var ? ? ? ERUPTING)))
+
+forall (both RealNumber Quantity) (\PH -> forall Object (\SOLUTION ->  impl ( measure(var ? ? ? SOLUTION)( el ? ? ? ( MeasureFn(var ? ? ? PH)(el ? ? ? PHValue))))( lessThanOrEqualTo(var ? ? ? PH)(el ? ? ? (toInt 14)))))
+
+forall (both RealNumber Quantity) (\PH -> forall Object (\SOLUTION ->  impl ( measure(var ? ? ? SOLUTION)( el ? ? ? ( MeasureFn(var ? ? ? PH)(el ? ? ? PHValue))))( greaterThanOrEqualTo(var ? ? ? PH)(el ? ? ? (toInt 0)))))
+
+forall Process (\RAINFALL -> forall Water (\RAIN -> forall (both RealNumber Quantity) (\PH ->  impl (and ( patient(var ? ? ? RAINFALL)(var ? ? ? RAIN))( measure(var ? ? ? RAIN)( el ? ? ? ( MeasureFn(var ? ? ? PH)(el ? ? ? PHValue)))))( lessThan(var ? ? ? PH)(el ? ? ? (toRealNum 5.6))))))
+
+forall Reforestation (\RESTORE -> exists BotanicalTree (\TREE -> and ( attribute(var ? ? ? TREE)(el ? ? ? NonFullyFormed))( patient(var ? ? ? RESTORE)(var ? ? ? TREE))))
+
+forall Effluent (\STUFF ->  attribute(var ? ? ? STUFF)(el ? ? ? Fluid))
+
+forall Erosion (\WEARING -> exists LandForm (\LAND ->  patient(var ? ? ? WEARING)(var ? ? ? LAND)))
+
+forall Erosion (\WEARING -> forall LandForm (\LAND -> forall VolumeMeasure (\SIZE1 ->  impl (and ( patient(var ? ? ? WEARING)(var ? ? ? LAND))( measure(var ? ? ? LAND)(var ? ? ? SIZE1)))( holdsDuring( el ? ? ? ( ImmediateFutureFn( el ? ? ? ( WhenFn(var ? ? ? WEARING)))))(exists VolumeMeasure (\SIZE2 -> and ( measure(var ? ? ? LAND)(var ? ? ? SIZE2))( lessThan(var ? ? ? SIZE2)(var ? ? ? SIZE1))))))))
+
+forall ForestDamage (\HARMING -> exists BotanicalTree (\TREE ->  patient(var ? ? ? HARMING)(var ? ? ? TREE)))
+
+forall Salination (\PROCESS -> exists SodiumChloride (\SALT ->  resourceS(var ? ? ? PROCESS)(var ? ? ? SALT)))
+
+forall SoilSalination (\PROCESS -> exists Soil (\SOIL ->  resourceS(var ? ? ? PROCESS)(var ? ? ? SOIL)))
+
+forall Agreement (\COMPACT -> exists Committing (\COMM ->  represents(var ? ? ? COMM)(var ? ? ? COMPACT)))
+
+forall InternationalAgreement (\AGREEMENT -> forall Committing (\COMMITTING ->  impl ( represents(var ? ? ? COMMITTING)(var ? ? ? AGREEMENT))(exists Nation (\AGENT ->  agent(var ? ? ? COMMITTING)(var ? ? ? AGENT)))))
+
+forall Proposition (\PROP -> forall ContentBearingObject (\CBO -> forall Communication (\COMM ->  impl (and ( containsInformation(var ? ? ? CBO)(var ? ? ? PROP))( patient(var ? ? ? COMM)(var ? ? ? CBO)))( represents(var ? ? ? COMM)(var ? ? ? PROP)))))
+
+forall TreatyDocument (\TREATY -> exists Committing (\COMM -> exists GeopoliticalArea (\COUNTRY1 -> exists GeopoliticalArea (\COUNTRY2 -> and ( patient(var ? ? ? COMM)(var ? ? ? TREATY))(and ( agent(var ? ? ? COMM)(var ? ? ? COUNTRY1))(and ( agent(var ? ? ? COMM)(var ? ? ? COUNTRY2))( not (equal(var ? ? ? COUNTRY1)(var ? ? ? COUNTRY2)))))))))
+
+forall Proposition (\CONTENT -> forall Agent (\AGENT ->  impl ( partyToAgreement(var ? ? ? AGENT)(var ? ? ? CONTENT))(exists Committing (\COMMITTING -> exists ContentBearingObject (\CBO -> and ( patient(var ? ? ? COMMITTING)(var ? ? ? CBO))(and ( containsInformation(var ? ? ? CBO)(var ? ? ? CONTENT))( agent(var ? ? ? COMMITTING)(var ? ? ? AGENT))))))))
+
+forall Proposition (\PROP -> forall Agent (\AGENT ->  impl ( unratifiedSignatoryToAgreement(var ? ? ? AGENT)(var ? ? ? PROP))( not (partyToAgreement(var ? ? ? AGENT)(var ? ? ? PROP)))))
+
+forall SigningADocument (\SIGNING -> exists LinguisticExpression (\DOC -> exists Agreement (\TERMS -> and ( containsInformation(var ? ? ? DOC)(var ? ? ? TERMS))( patient(var ? ? ? SIGNING)(var ? ? ? DOC)))))
+
+forall Satellite (\SAT -> forall AstronomicalBody (\FOCUS -> exists AstronomicalBody (\BODY ->  orbits(var ? ? ? SAT)(var ? ? ? FOCUS))))
+
+forall Hemisphere (\AREA ->  geographicSubregion(var ? ? ? AREA)(el ? ? ? PlanetEarth))
+
+forall Hemisphere (\HEMISPHERE -> or ( equal(var ? ? ? HEMISPHERE)(el ? ? ? NorthernHemisphere))(or ( equal(var ? ? ? HEMISPHERE)(el ? ? ? SouthernHemisphere))(or ( equal(var ? ? ? HEMISPHERE)(el ? ? ? EasternHemisphere))( equal(var ? ? ? HEMISPHERE)(el ? ? ? WesternHemisphere)))))
+
+forall Region (\TWO -> forall (both Object Physical) (\ONE ->  impl ( overlapsSpatially(var ? ? ? ONE)(var ? ? ? TWO))( partlyLocated(var ? ? ? ONE)(var ? ? ? TWO))))
+
+forall Continent (\CONTINENT -> or ( equal(el ? ? ? Africa)(var ? ? ? CONTINENT))(or ( equal(el ? ? ? NorthAmerica)(var ? ? ? CONTINENT))(or ( equal(el ? ? ? SouthAmerica)(var ? ? ? CONTINENT))(or ( equal(el ? ? ? Antarctica)(var ? ? ? CONTINENT))(or ( equal(el ? ? ? Europe)(var ? ? ? CONTINENT))(or ( equal(el ? ? ? Asia)(var ? ? ? CONTINENT))( equal(el ? ? ? Oceania)(var ? ? ? CONTINENT))))))))
+
+forall Continent (\AREA ->  geographicSubregion(var ? ? ? AREA)(el ? ? ? PlanetEarth))
+
+forall PositionalAttribute (\DIR -> forall PositionalAttribute (\OPPDIR -> forall Object (\OBJ2 -> forall Object (\OBJ1 ->  impl (and ( orientation(var ? ? ? OBJ1)(var ? ? ? OBJ2)(var ? ? ? DIR))( oppositeDirection(var ? ? ? DIR)(var ? ? ? OPPDIR)))( orientation(var ? ? ? OBJ2)(var ? ? ? OBJ1)(var ? ? ? OPPDIR))))))
+
+forall PositionalAttribute (\DIR2 -> forall PositionalAttribute (\DIR1 ->  impl ( oppositeDirection(var ? ? ? DIR1)(var ? ? ? DIR2))( contraryAttribute (ConsEl Attribute (var ? ? ? DIR1)(ConsEl Attribute (var ? ? ? DIR2) (BaseEl Attribute))))))
+
+forall Object (\OBJ2 -> forall Object (\OBJ1 ->  equiv ( orientation(var ? ? ? OBJ1)(var ? ? ? OBJ2)(el ? ? ? Northeast))(and ( orientation(var ? ? ? OBJ1)(var ? ? ? OBJ2)(el ? ? ? North))( orientation(var ? ? ? OBJ1)(var ? ? ? OBJ2)(el ? ? ? East)))))
+
+forall Object (\OBJ2 -> forall Object (\OBJ1 ->  equiv ( orientation(var ? ? ? OBJ1)(var ? ? ? OBJ2)(el ? ? ? Southeast))(and ( orientation(var ? ? ? OBJ1)(var ? ? ? OBJ2)(el ? ? ? South))( orientation(var ? ? ? OBJ1)(var ? ? ? OBJ2)(el ? ? ? East)))))
+
+forall Object (\OBJ2 -> forall Object (\OBJ1 ->  equiv ( orientation(var ? ? ? OBJ1)(var ? ? ? OBJ2)(el ? ? ? Southwest))(and ( orientation(var ? ? ? OBJ1)(var ? ? ? OBJ2)(el ? ? ? South))( orientation(var ? ? ? OBJ1)(var ? ? ? OBJ2)(el ? ? ? West)))))
+
+forall Object (\OBJ2 -> forall Object (\OBJ1 ->  equiv ( orientation(var ? ? ? OBJ1)(var ? ? ? OBJ2)(el ? ? ? Northwest))(and ( orientation(var ? ? ? OBJ1)(var ? ? ? OBJ2)(el ? ? ? North))( orientation(var ? ? ? OBJ1)(var ? ? ? OBJ2)(el ? ? ? West)))))
+
+forall (both Physical Object) (\OBJ2 -> forall (both Physical Object) (\OBJ1 ->  equiv ( courseWRTTrueNorth(var ? ? ? OBJ1)(var ? ? ? OBJ2)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 180))(el ? ? ? AngularDegree))))( orientation(var ? ? ? OBJ1)(var ? ? ? OBJ2)(el ? ? ? South))))
+
+forall (both Physical Object) (\OBJ2 -> forall (both Physical Object) (\OBJ1 ->  equiv ( courseWRTTrueNorth(var ? ? ? OBJ1)(var ? ? ? OBJ2)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 270))(el ? ? ? AngularDegree))))( orientation(var ? ? ? OBJ1)(var ? ? ? OBJ2)(el ? ? ? West))))
+
+forall (both Physical Object) (\OBJ2 -> forall (both Physical Object) (\OBJ1 ->  equiv ( courseWRTTrueNorth(var ? ? ? OBJ1)(var ? ? ? OBJ2)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 360))(el ? ? ? AngularDegree))))( orientation(var ? ? ? OBJ1)(var ? ? ? OBJ2)(el ? ? ? North))))
+
+forall (both Physical Object) (\OBJ2 -> forall (both Physical Object) (\OBJ1 ->  equiv ( courseWRTTrueNorth(var ? ? ? OBJ1)(var ? ? ? OBJ2)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 135))(el ? ? ? AngularDegree))))( orientation(var ? ? ? OBJ1)(var ? ? ? OBJ2)(el ? ? ? Southeast))))
+
+forall (both Physical Object) (\OBJ2 -> forall (both Physical Object) (\OBJ1 ->  equiv ( courseWRTTrueNorth(var ? ? ? OBJ1)(var ? ? ? OBJ2)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 225))(el ? ? ? AngularDegree))))( orientation(var ? ? ? OBJ1)(var ? ? ? OBJ2)(el ? ? ? Southwest))))
+
+forall (both Physical Object) (\OBJ2 -> forall (both Physical Object) (\OBJ1 ->  equiv ( courseWRTTrueNorth(var ? ? ? OBJ1)(var ? ? ? OBJ2)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 315))(el ? ? ? AngularDegree))))( orientation(var ? ? ? OBJ1)(var ? ? ? OBJ2)(el ? ? ? Northwest))))
+
+forall (both DirectionalAttribute Entity) (\DIRECTION -> forall PlaneAngleMeasure (\DEGREE -> forall GeographicArea (\AREA ->  impl ( magneticVariation(var ? ? ? AREA)(var ? ? ? DEGREE)(var ? ? ? DIRECTION))(or ( equal(var ? ? ? DIRECTION)(el ? ? ? East))( equal(var ? ? ? DIRECTION)(el ? ? ? West))))))
+
+forall (both DirectionalAttribute Entity) (\DIRECTION -> forall (both PlaneAngleMeasure Quantity) (\DEGREE -> forall (both Object GeographicArea) (\AREA -> forall (both PlaneAngleMeasure Quantity) (\MAGDEGREE -> forall Physical (\OBJ2 -> forall Physical (\OBJ1 ->  impl (and ( courseWRTMagneticNorth(var ? ? ? OBJ1)(var ? ? ? OBJ2)(var ? ? ? MAGDEGREE))(and ( partlyLocated(var ? ? ? OBJ1)(var ? ? ? AREA))(and ( partlyLocated(var ? ? ? OBJ2)(var ? ? ? AREA))( magneticVariation(var ? ? ? AREA)(var ? ? ? DEGREE)(var ? ? ? DIRECTION)))))(exists PlaneAngleMeasure (\TRUEDEGREE -> exists Entity (\DIFFDEGREE -> and ( impl (and ( equal(var ? ? ? DIRECTION)(el ? ? ? East))( equal(var ? ? ? DIFFDEGREE)( el ? ? ? ( AdditionFn(var ? ? ? MAGDEGREE)(var ? ? ? DEGREE)))))( courseWRTTrueNorth(var ? ? ? OBJ1)(var ? ? ? OBJ2)(var ? ? ? TRUEDEGREE)))( impl (and ( equal(var ? ? ? DIRECTION)(el ? ? ? West))( equal(var ? ? ? DIFFDEGREE)( el ? ? ? ( SubtractionFn(var ? ? ? MAGDEGREE)(var ? ? ? DEGREE)))))( courseWRTTrueNorth(var ? ? ? OBJ1)(var ? ? ? OBJ2)(var ? ? ? TRUEDEGREE))))))))))))
+
+forall (both Entity (both RealNumber Quantity)) (\NUMBER ->  impl ( equal(var ? ? ? NUMBER)( el ? ? ? ( MultiplicationFn(el ? ? ? (toInt 1))(var ? ? ? NUMBER))))( equal( el ? ? ? ( MeasureFn(var ? ? ? NUMBER)(el ? ? ? Fathom)))( el ? ? ? ( MeasureFn( el ? ? ? ( MultiplicationFn(var ? ? ? NUMBER)(el ? ? ? (toInt 6))))(el ? ? ? FootLength)))))
+
+forall (both RealNumber Quantity) (\NUM -> forall Entity (\AMOUNT ->  impl ( equal(var ? ? ? AMOUNT)( el ? ? ? ( MeasureFn(var ? ? ? NUM)(el ? ? ? NauticalMile))))( equal(var ? ? ? AMOUNT)( el ? ? ? ( MeasureFn( el ? ? ? ( MultiplicationFn(var ? ? ? NUM)(el ? ? ? (toRealNum 1.852))))( el ? ? ? ( KiloFn(el ? ? ? Meter))))))))
+
+forall (both RealNumber Quantity) (\NUM -> forall Entity (\AMOUNT ->  impl ( equal(var ? ? ? AMOUNT)( el ? ? ? ( MeasureFn(var ? ? ? NUM)(el ? ? ? NauticalMile))))( equal(var ? ? ? AMOUNT)( el ? ? ? ( MeasureFn( el ? ? ? ( MultiplicationFn(var ? ? ? NUM)(el ? ? ? (toRealNum 1.151))))(el ? ? ? Mile))))))
+
+forall (both Entity (both RealNumber Quantity)) (\NUM ->  impl ( equal(var ? ? ? NUM)( el ? ? ? ( MultiplicationFn(el ? ? ? (toInt 1))(var ? ? ? NUM))))( equal( el ? ? ? ( MeasureFn(var ? ? ? NUM)(el ? ? ? NauticalMile)))( el ? ? ? ( MeasureFn( el ? ? ? ( MultiplicationFn(var ? ? ? NUM)(el ? ? ? (toInt 1852))))(el ? ? ? Meter)))))
+
+forall (both Entity (both RealNumber Quantity)) (\NUM ->  impl ( equal(var ? ? ? NUM)( el ? ? ? ( MultiplicationFn(el ? ? ? (toInt 1))(var ? ? ? NUM))))( equal( el ? ? ? ( MeasureFn(var ? ? ? NUM)(el ? ? ? NauticalMile)))( el ? ? ? ( MeasureFn( el ? ? ? ( MultiplicationFn(var ? ? ? NUM)(el ? ? ? (toRealNum 1.852))))( el ? ? ? ( KiloFn(el ? ? ? Meter)))))))
+
+forall (both Entity (both RealNumber Quantity)) (\NUM ->  impl ( equal(var ? ? ? NUM)( el ? ? ? ( MultiplicationFn(el ? ? ? (toInt 1))(var ? ? ? NUM))))( equal( el ? ? ? ( MeasureFn(var ? ? ? NUM)(el ? ? ? NauticalMile)))( el ? ? ? ( MeasureFn( el ? ? ? ( MultiplicationFn(var ? ? ? NUM)(el ? ? ? (toRealNum 6076.1))))(el ? ? ? FootLength)))))
+
+forall (both Entity (both RealNumber Quantity)) (\NUM ->  impl ( equal(var ? ? ? NUM)( el ? ? ? ( MultiplicationFn(el ? ? ? (toInt 1))(var ? ? ? NUM))))( equal( el ? ? ? ( MeasureFn(var ? ? ? NUM)(el ? ? ? NauticalMile)))( el ? ? ? ( MeasureFn( el ? ? ? ( MultiplicationFn(var ? ? ? NUM)(el ? ? ? (toRealNum 1.151))))(el ? ? ? Mile)))))
+
+forall (both RealNumber Quantity) (\TIME -> forall (both RealNumber Quantity) (\DISTANCE -> forall Entity (\SPEED ->  impl ( equal(var ? ? ? SPEED)( el ? ? ? ( SpeedFn( el ? ? ? ( MeasureFn(var ? ? ? DISTANCE)(el ? ? ? NauticalMile)))( el ? ? ? ( MeasureFn(var ? ? ? TIME)(el ? ? ? HourDuration))))))( equal(var ? ? ? SPEED)( el ? ? ? ( MeasureFn( el ? ? ? ( DivisionFn(var ? ? ? DISTANCE)(var ? ? ? TIME)))(el ? ? ? KnotUnitOfSpeed)))))))
+
+forall RealNumber (\NUM -> forall Entity (\SPEED ->  impl ( equal(var ? ? ? SPEED)( el ? ? ? ( MeasureFn(var ? ? ? NUM)(el ? ? ? KnotUnitOfSpeed))))( equal(var ? ? ? SPEED)( el ? ? ? ( SpeedFn( el ? ? ? ( MeasureFn(var ? ? ? NUM)(el ? ? ? NauticalMile)))( el ? ? ? ( MeasureFn(el ? ? ? (toInt 1))(el ? ? ? HourDuration))))))))
+
+forall UnitOfMeasure (\UNIT -> forall Entity (\AMOUNT ->  equiv ( equal(var ? ? ? AMOUNT)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 1))( el ? ? ? ( SquareUnitFn(var ? ? ? UNIT))))))( equal(var ? ? ? AMOUNT)( el ? ? ? ( MultiplicationFn( el ? ? ? ( MeasureFn(el ? ? ? (toInt 1))(var ? ? ? UNIT)))( el ? ? ? ( MeasureFn(el ? ? ? (toInt 1))(var ? ? ? UNIT))))))))
+
+forall UndergroundArea (\PLACE -> exists (both SelfConnectedObject Object) (\GROUND -> exists Object (\AREA -> and ( surface(var ? ? ? GROUND)(el ? ? ? PlanetEarth))(and ( part(var ? ? ? AREA)(var ? ? ? GROUND))( orientation(var ? ? ? PLACE)(var ? ? ? AREA)(el ? ? ? Below))))))
+
+forall MountainRange (\RANGE -> forall Object (\MOUNTAIN1 ->  impl ( part(var ? ? ? MOUNTAIN1)(var ? ? ? RANGE))(exists Mountain (\MOUNTAIN2 -> and ( component(var ? ? ? MOUNTAIN2)(var ? ? ? RANGE))( meetsSpatially(var ? ? ? MOUNTAIN1)(var ? ? ? MOUNTAIN2))))))
+
+forall Mountain (\MOUNTAIN -> exists SlopedArea (\INCLINE -> and ( attribute(var ? ? ? INCLINE)(el ? ? ? SteepTerrain))( part(var ? ? ? INCLINE)(var ? ? ? MOUNTAIN))))
+
+forall Hill (\HILL -> exists SlopedArea (\INCLINE ->  part(var ? ? ? INCLINE)(var ? ? ? HILL)))
+
+forall VolcanicEruption (\EVENT -> exists Volcano (\VOLCANO ->  agent(var ? ? ? EVENT)(var ? ? ? VOLCANO)))
+
+forall Cliff (\CLIFF -> exists RationalNumber (\SLOPE -> and ( slopeGradient(var ? ? ? CLIFF)(var ? ? ? SLOPE))(and ( greaterThan(var ? ? ? SLOPE)(el ? ? ? (toRealNum 0.60)))( greaterThan(el ? ? ? (toRealNum 1.20))(var ? ? ? SLOPE)))))
+
+forall Plateau (\PLATEAU -> forall (both SelfConnectedObject Object) (\TOP ->  impl ( top(var ? ? ? TOP)(var ? ? ? PLATEAU))( attribute(var ? ? ? TOP)(el ? ? ? FlatTerrain))))
+
+forall Plateau (\PLATEAU -> exists SlopedArea (\SLOPE -> and ( attribute(var ? ? ? SLOPE)(el ? ? ? SteepTerrain))( overlapsSpatially(var ? ? ? SLOPE)(var ? ? ? PLATEAU))))
+
+forall Mesa (\MESA -> forall (both SelfConnectedObject Object) (\TOP ->  impl ( top(var ? ? ? TOP)(var ? ? ? MESA))( attribute(var ? ? ? TOP)(el ? ? ? FlatTerrain))))
+
+forall Mesa (\MESA -> forall (both SelfConnectedObject Object) (\SIDE ->  impl ( side(var ? ? ? SIDE)(var ? ? ? MESA))( attribute(var ? ? ? SIDE)(el ? ? ? SteepTerrain))))
+
+forall Butte (\BUTTE -> forall (both SelfConnectedObject Object) (\SIDE ->  impl ( side(var ? ? ? SIDE)(var ? ? ? BUTTE))( attribute(var ? ? ? SIDE)(el ? ? ? SteepTerrain))))
+
+forall Butte (\BUTTE -> forall (both SelfConnectedObject Object) (\TOP ->  impl ( top(var ? ? ? TOP)(var ? ? ? BUTTE))( attribute(var ? ? ? TOP)(el ? ? ? FlatTerrain))))
+
+forall Butte (\BUTTE -> forall Mesa (\MESA -> forall (both RealNumber Quantity) (\SIZE2 -> forall UnitOfMeasure (\UNIT -> forall (both RealNumber Quantity) (\SIZE1 ->  impl (and ( linearExtent(var ? ? ? BUTTE)( el ? ? ? ( MeasureFn(var ? ? ? SIZE1)(var ? ? ? UNIT))))( linearExtent(var ? ? ? MESA)( el ? ? ? ( MeasureFn(var ? ? ? SIZE2)(var ? ? ? UNIT)))))( greaterThan(var ? ? ? SIZE2)(var ? ? ? SIZE1)))))))
+
+forall Piedmont (\PIEDMONT -> forall (both LengthMeasure (both Attribute Quantity)) (\HEIGHT2 -> forall (both LengthMeasure (both Attribute Quantity)) (\HEIGHT1 -> forall (both Object SelfConnectedObject) (\MOUNTAINS ->  impl (and ( attribute(var ? ? ? MOUNTAINS)(el ? ? ? MountainousTerrain))(and ( orientation(var ? ? ? PIEDMONT)(var ? ? ? MOUNTAINS)(el ? ? ? Adjacent))(and ( height(var ? ? ? PIEDMONT)(var ? ? ? HEIGHT1))(and ( height(var ? ? ? MOUNTAINS)(var ? ? ? HEIGHT2))( successorAttributeClosure(var ? ? ? HEIGHT1)(var ? ? ? HEIGHT2))))))( greaterThan(var ? ? ? HEIGHT2)(var ? ? ? HEIGHT1))))))
+
+forall Plain (\PLAIN ->  attribute(var ? ? ? PLAIN)(el ? ? ? FlatTerrain))
+
+forall Canyon (\CANYON -> exists Hole (\HOLE ->  hole(var ? ? ? HOLE)(var ? ? ? CANYON)))
+
+forall Canyon (\CANYON -> exists Erosion (\EROSION ->  result(var ? ? ? EROSION)(var ? ? ? CANYON)))
+
+forall Soil (\SOIL -> exists Humus (\HUMUS -> exists Mineral (\MINERAL -> and ( part(var ? ? ? HUMUS)(var ? ? ? SOIL))( part(var ? ? ? MINERAL)(var ? ? ? SOIL)))))
+
+forall Humus (\HUMUS -> exists Soil (\SOIL ->  part(var ? ? ? HUMUS)(var ? ? ? SOIL)))
+
+forall SoilSolution (\SOLUTION -> exists Soil (\SOIL ->  part(var ? ? ? SOLUTION)(var ? ? ? SOIL)))
+
+forall Clay (\SOIL -> forall (both RealNumber Quantity) (\SIZE -> forall (both Object Circle) (\PARTICLE ->  impl (and ( part(var ? ? ? PARTICLE)(var ? ? ? SOIL))( diameter(var ? ? ? PARTICLE)( el ? ? ? ( MeasureFn(var ? ? ? SIZE)(el ? ? ? Centimeter)))))( greaterThan(el ? ? ? (toRealNum 0.0002))(var ? ? ? SIZE)))))
+
+forall Loam (\LOAM -> exists Clay (\CLAY -> exists Sand (\SAND -> exists Gravel (\GRAVEL -> exists Silt (\SILT -> exists BodySubstance (\ORGANIC -> and ( piece(var ? ? ? CLAY)(var ? ? ? LOAM))(and ( piece(var ? ? ? GRAVEL)(var ? ? ? LOAM))(and ( piece(var ? ? ? SAND)(var ? ? ? LOAM))(and ( piece(var ? ? ? SILT)(var ? ? ? LOAM))( piece(var ? ? ? ORGANIC)(var ? ? ? LOAM)))))))))))
+
+forall GeographicArea (\AREA ->  impl ( groundSurfaceType(var ? ? ? AREA)(desc Loam ? ?))( attribute(var ? ? ? AREA)(el ? ? ? FertileTerrain)))
+
+forall Sand (\SOIL -> forall (both RealNumber Quantity) (\SIZE -> forall (both Object Circle) (\PARTICLE ->  impl (and ( part(var ? ? ? PARTICLE)(var ? ? ? SOIL))( diameter(var ? ? ? PARTICLE)( el ? ? ? ( MeasureFn(var ? ? ? SIZE)(el ? ? ? Centimeter)))))(and ( greaterThan(var ? ? ? SIZE)(el ? ? ? (toRealNum 0.00002)))( greaterThan(el ? ? ? (toRealNum 0.005))(var ? ? ? SIZE))))))
+
+forall Rock (\ROCK ->  attribute(var ? ? ? ROCK)(el ? ? ? Solid))
+
+forall Rock (\ROCK -> exists Mineral (\MINERAL ->  part(var ? ? ? MINERAL)(var ? ? ? ROCK)))
+
+forall GeographicArea (\AREA ->  impl ( groundSurfaceType(var ? ? ? AREA)(desc Rock ? ?))( not (attribute(var ? ? ? AREA)(el ? ? ? FertileTerrain))))
+
+forall Continent (\AREA ->  meetsSpatially(var ? ? ? AREA)(el ? ? ? WorldOcean))
+
+forall (both BodyOfWater Ocean) (\WATER -> forall Ocean (\OCEAN ->  larger(var ? ? ? OCEAN)(var ? ? ? WATER)))
+
+forall Ocean (\OCEAN ->  properPart(var ? ? ? OCEAN)(el ? ? ? WorldOcean))
+
+forall Ocean (\SEA ->  impl ( not (equal(var ? ? ? SEA)(el ? ? ? ArcticOcean)))( smaller(el ? ? ? ArcticOcean)(var ? ? ? SEA)))
+
+forall (both Entity Physical) (\FINISH -> forall (both Object Physical) (\START ->  impl (and ( origin(el ? ? ? AntarcticCircumpolarCurrent)(var ? ? ? START))( destination(el ? ? ? AntarcticCircumpolarCurrent)(var ? ? ? FINISH)))( distance(var ? ? ? START)(var ? ? ? FINISH)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 21000))( el ? ? ? ( KiloFn(el ? ? ? Meter))))))))
+
+forall Sea (\SEA ->  properPart(var ? ? ? SEA)(el ? ? ? WorldOcean))
+
+forall Sea (\SEA -> exists Ocean (\OCEAN -> exists WaterArea (\PATH ->  connects(var ? ? ? PATH)(var ? ? ? OCEAN)(var ? ? ? SEA))))
+
+forall Sea (\SEA -> exists LandArea (\LAND ->  meetsSpatially(var ? ? ? LAND)(var ? ? ? SEA)))
+
+forall Ocean (\OCEAN -> forall (both SelfConnectedObject Object) (\TOP ->  impl ( surface(var ? ? ? TOP)(var ? ? ? OCEAN))( elevation(var ? ? ? TOP)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 0))(el ? ? ? Meter))))))
+
+forall Ocean (\OCEAN -> forall (both SelfConnectedObject Object) (\TOP ->  impl ( surface(var ? ? ? TOP)(var ? ? ? OCEAN))( elevation(var ? ? ? TOP)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 0))(el ? ? ? FootLength))))))
+
+forall FlowRegion (\FR -> forall (both Physical Object) (\FLUID ->  impl ( located(var ? ? ? FLUID)(var ? ? ? FR))( attribute(var ? ? ? FLUID)(el ? ? ? Fluid))))
+
+forall Substance (\PART -> forall TimeDuration (\TIME -> forall LengthMeasure (\LENGTH -> forall (both FlowRegion Substance) (\FLUID ->  impl (and ( measure( el ? ? ? ( FlowFn(var ? ? ? FLUID)))( el ? ? ? ( SpeedFn(var ? ? ? LENGTH)(var ? ? ? TIME))))( piece(var ? ? ? PART)(var ? ? ? FLUID)))( piece(var ? ? ? PART)( el ? ? ? ( SpeedFn(var ? ? ? LENGTH)(var ? ? ? TIME))))))))
+
+forall Substance (\PART -> forall RealNumber (\NUM -> forall (both FlowRegion Substance) (\FLUID ->  impl (and ( measure( el ? ? ? ( FlowFn(var ? ? ? FLUID)))( el ? ? ? ( MeasureFn(var ? ? ? NUM)(el ? ? ? KnotUnitOfSpeed))))( piece(var ? ? ? PART)(var ? ? ? FLUID)))( piece(var ? ? ? PART)( el ? ? ? ( MeasureFn(var ? ? ? NUM)(el ? ? ? KnotUnitOfSpeed)))))))
+
+forall (both Substance Object) (\PART -> forall DirectionalAttribute (\DIRECTION -> forall Region (\REGION -> forall TimeDuration (\TIME -> forall LengthMeasure (\LENGTH -> forall (both FlowRegion Substance) (\FLUID ->  impl (and ( measure( el ? ? ? ( FlowFn(var ? ? ? FLUID)))( el ? ? ? ( VelocityFn(var ? ? ? LENGTH)(var ? ? ? TIME)(var ? ? ? REGION)(var ? ? ? DIRECTION))))( piece(var ? ? ? PART)(var ? ? ? FLUID)))( measure(var ? ? ? PART)( el ? ? ? ( VelocityFn(var ? ? ? LENGTH)(var ? ? ? TIME)(var ? ? ? REGION)(var ? ? ? DIRECTION))))))))))
+
+forall LowTide (\LOW -> forall HighTide (\HIGH -> forall Day (\DAY -> forall (both Object WaterArea) (\PLACE ->  impl (and ( exactlyLocated(var ? ? ? LOW)(var ? ? ? PLACE))(and ( exactlyLocated(var ? ? ? HIGH)(var ? ? ? PLACE))(and ( overlapsTemporally(var ? ? ? LOW)(var ? ? ? DAY))( overlapsTemporally(var ? ? ? HIGH)(var ? ? ? DAY)))))(exists (both LengthMeasure Quantity) (\AMOUNT2 -> exists (both LengthMeasure Quantity) (\AMOUNT1 -> and ( holdsDuring(var ? ? ? LOW)( waterDepth(var ? ? ? PLACE)(var ? ? ? AMOUNT1)))(and ( holdsDuring(var ? ? ? HIGH)( waterDepth(var ? ? ? PLACE)(var ? ? ? AMOUNT2)))( greaterThan(var ? ? ? AMOUNT2)(var ? ? ? AMOUNT1))))))))))
+
+forall Day (\DAY -> forall (both LengthMeasure Quantity) (\AMOUNT2 -> forall TimeInterval (\TIME2 -> forall (both LengthMeasure Quantity) (\AMOUNT1 -> forall TimeInterval (\TIME1 -> forall Region (\PLACE ->  impl (and ( lowTide(var ? ? ? PLACE)(var ? ? ? TIME1)(var ? ? ? AMOUNT1))(and ( highTide(var ? ? ? PLACE)(var ? ? ? TIME2)(var ? ? ? AMOUNT2))(and ( overlapsTemporally(var ? ? ? TIME1)(var ? ? ? DAY))( overlapsTemporally(var ? ? ? TIME2)(var ? ? ? DAY)))))( greaterThan(var ? ? ? AMOUNT1)(var ? ? ? AMOUNT2))))))))
+
+forall Gulf (\GULF -> exists (both Sea Ocean) (\SEA ->  connected(var ? ? ? GULF)(var ? ? ? SEA)))
+
+forall Gulf (\GULF -> exists SaltWaterArea (\WATER ->  properPart(var ? ? ? GULF)(var ? ? ? WATER)))
+
+forall Gulf (\GULF -> forall Bay (\BAY ->  larger(var ? ? ? GULF)(var ? ? ? BAY)))
+
+forall Estuary (\WATER -> exists SaltWaterArea (\SEA -> and ( part(var ? ? ? SEA)(el ? ? ? WorldOcean))( connected(var ? ? ? SEA)(var ? ? ? WATER))))
+
+forall Estuary (\WATER -> forall Object (\ESTUARY -> exists RiverMouth (\MOUTH ->  overlapsSpatially(var ? ? ? MOUTH)(var ? ? ? ESTUARY))))
+
+forall Estuary (\WATER -> exists TidalProcess (\TIDES ->  located(var ? ? ? TIDES)(var ? ? ? WATER)))
+
+forall Inlet (\INLET -> exists LandArea (\LAND ->  penetrates(var ? ? ? INLET)(var ? ? ? LAND)))
+
+forall Inlet (\INLET -> exists WaterArea (\WATER ->  connected(var ? ? ? INLET)(var ? ? ? WATER)))
+
+forall Cove (\COVE -> forall Bay (\BAY ->  larger(var ? ? ? BAY)(var ? ? ? COVE)))
+
+forall (both SelfConnectedObject Entity) (\END2 -> forall (both SelfConnectedObject Entity) (\END1 -> forall SelfConnectedObject (\BETWEEN ->  impl ( connects(var ? ? ? BETWEEN)(var ? ? ? END1)(var ? ? ? END2))( not (equal(var ? ? ? END1)(var ? ? ? END2))))))
+
+forall Strait (\STRAIT -> exists BodyOfWater (\BODY1 -> exists BodyOfWater (\BODY2 ->  connects(var ? ? ? STRAIT)(var ? ? ? BODY1)(var ? ? ? BODY2))))
+
+forall BodyOfWater (\BODY1 -> forall BodyOfWater (\BODY2 -> forall (both SelfConnectedObject Object) (\STRAIT ->  impl ( connects(var ? ? ? STRAIT)(var ? ? ? BODY1)(var ? ? ? BODY2))( larger(var ? ? ? BODY1)(var ? ? ? STRAIT)))))
+
+forall Channel (\CHANNEL -> exists WaterArea (\WATER1 -> exists WaterArea (\WATER2 ->  connects(var ? ? ? CHANNEL)(var ? ? ? WATER1)(var ? ? ? WATER2))))
+
+forall Channel (\CHANNEL -> forall BodyOfWater (\BODY ->  impl ( connected(var ? ? ? CHANNEL)(var ? ? ? BODY))( larger(var ? ? ? BODY)(var ? ? ? CHANNEL))))
+
+forall InlandWaterSystem (\SYSTEM -> exists BodyOfWater (\BODY1 -> exists BodyOfWater (\BODY2 -> and ( not (equal(var ? ? ? BODY1)(var ? ? ? BODY2)))(and ( geographicSubregion(var ? ? ? BODY1)(var ? ? ? SYSTEM))( geographicSubregion(var ? ? ? BODY2)(var ? ? ? SYSTEM))))))
+
+forall InlandWaterSystem (\SYSTEM -> forall WaterArea (\WATER1 -> forall WaterArea (\WATER2 ->  impl (and ( not (equal(var ? ? ? WATER1)(var ? ? ? WATER2)))(and ( not (connected(var ? ? ? WATER1)(var ? ? ? WATER2)))(and ( geographicSubregion(var ? ? ? WATER1)(var ? ? ? SYSTEM))( geographicSubregion(var ? ? ? WATER2)(var ? ? ? SYSTEM)))))(exists WaterArea (\WATER3 -> and ( not (equal(var ? ? ? WATER3)(var ? ? ? WATER1)))(and ( not (equal(var ? ? ? WATER3)(var ? ? ? WATER1)))(and ( part(var ? ? ? WATER3)(var ? ? ? SYSTEM))( connects(var ? ? ? WATER3)(var ? ? ? WATER1)(var ? ? ? WATER2)))))))))
+
+forall LakeRegion (\REGION -> exists Lake (\LAKE ->  located(var ? ? ? LAKE)(var ? ? ? REGION)))
+
+forall RiverSystem (\SYSTEM -> exists River (\RIVER ->  part(var ? ? ? RIVER)(var ? ? ? SYSTEM)))
+
+forall RiverSystem (\SYSTEM -> exists River (\RIVER -> exists StaticWaterArea (\STATIC -> and ( part(var ? ? ? RIVER)(var ? ? ? SYSTEM))( connected(var ? ? ? RIVER)(var ? ? ? STATIC)))))
+
+forall Waterfall (\FALL -> forall WaterMotion (\CURRENT -> forall WaterArea (\TOP -> forall WaterArea (\BOTTOM ->  impl (and ( flowCurrent(var ? ? ? CURRENT)(var ? ? ? FALL))(and ( origin(var ? ? ? CURRENT)(var ? ? ? TOP))( destination(var ? ? ? CURRENT)(var ? ? ? BOTTOM))))( orientation(var ? ? ? TOP)(var ? ? ? BOTTOM)(el ? ? ? Above))))))
+
+forall Canal (\CHANNEL -> exists WaterArea (\WATER1 -> exists WaterArea (\WATER2 ->  connects(var ? ? ? CHANNEL)(var ? ? ? WATER1)(var ? ? ? WATER2))))
+
+forall Dam (\DAM -> forall Object (\RIVER -> exists WaterArea (\RIVER ->  traverses(var ? ? ? DAM)(var ? ? ? RIVER))))
+
+forall Rapids (\RAPIDS -> exists River (\RIVER ->  part(var ? ? ? RAPIDS)(var ? ? ? RIVER)))
+
+forall Rapids (\RAPIDS -> forall SelfConnectedObject (\RAPIDS -> forall (both SelfConnectedObject Object) (\BOTTOM ->  impl ( bottom(var ? ? ? BOTTOM)(var ? ? ? RAPIDS))(exists Rock (\ROCK ->  part(var ? ? ? ROCK)(var ? ? ? BOTTOM))))))
+
+forall Irrigating (\IRRIGATION -> forall LandArea (\AREA -> forall Entity (\AREA ->  impl ( patient(var ? ? ? IRRIGATION)(var ? ? ? AREA))(and ( holdsDuring( el ? ? ? ( ImmediatePastFn( el ? ? ? ( WhenFn(var ? ? ? IRRIGATION)))))( attribute(var ? ? ? AREA)(el ? ? ? Dry)))( holdsDuring( el ? ? ? ( ImmediateFutureFn( el ? ? ? ( WhenFn(var ? ? ? IRRIGATION)))))( attribute(var ? ? ? AREA)(el ? ? ? Damp)))))))
+
+forall Irrigating (\IRRIGATION -> forall LandArea (\AREA ->  impl ( patient(var ? ? ? IRRIGATION)(var ? ? ? AREA))( hasPurpose(var ? ? ? IRRIGATION)( attribute(var ? ? ? AREA)(el ? ? ? FertileTerrain)))))
+
+forall Lake (\LAKE -> forall Ocean (\OCEAN ->  smaller(var ? ? ? LAKE)(var ? ? ? OCEAN)))
+
+forall CoastalPlain (\PLAIN -> exists ShoreArea (\SHORE ->  part(var ? ? ? SHORE)(var ? ? ? PLAIN)))
+
+forall RiverBank (\BANK -> exists River (\RIVER ->  meetsSpatially(var ? ? ? RIVER)(var ? ? ? BANK)))
+
+forall Delta (\DELTA -> exists RiverMouth (\MOUTH ->  meetsSpatially(var ? ? ? MOUTH)(var ? ? ? DELTA)))
+
+forall Delta (\DELTA ->  attribute(var ? ? ? DELTA)(el ? ? ? FlatTerrain))
+
+forall Peninsula (\PENINSULA -> exists WaterArea (\WATER ->  penetrates(var ? ? ? PENINSULA)(var ? ? ? WATER)))
+
+forall Cape (\CAPE -> exists WaterArea (\WATERREGION ->  penetrates(var ? ? ? CAPE)(var ? ? ? WATERREGION)))
+
+forall Isthmus (\ISTHMUS -> forall (both SelfConnectedObject (both Entity Object)) (\RIGHTSIDE -> forall (both SelfConnectedObject (both Entity Object)) (\LEFTSIDE ->  impl (and ( side(var ? ? ? LEFTSIDE)(var ? ? ? ISTHMUS))(and ( side(var ? ? ? RIGHTSIDE)(var ? ? ? ISTHMUS))( not (equal(var ? ? ? LEFTSIDE)(var ? ? ? RIGHTSIDE)))))(exists LandArea (\REGION1 -> exists LandArea (\REGION2 -> exists WaterArea (\WATER1 -> exists WaterArea (\WATER2 -> and ( between(var ? ? ? REGION1)(var ? ? ? ISTHMUS)(var ? ? ? REGION2))(and ( meetsSpatially(var ? ? ? LEFTSIDE)(var ? ? ? WATER1))( meetsSpatially(var ? ? ? RIGHTSIDE)(var ? ? ? WATER2)))))))))))
+
+forall ArchipelagicArea (\AREA -> exists Archipelago (\ISLANDS ->  located(var ? ? ? ISLANDS)(var ? ? ? AREA)))
+
+forall Reef (\REEF -> exists WaterArea (\WATER ->  orientation(var ? ? ? REEF)(var ? ? ? WATER)(el ? ? ? Near)))
+
+forall Reef (\REEF -> exists (both Sand (both Rock Coral)) (\STUFF -> part(var ? ? ? STUFF)(var ? ? ? REEF)))
+
+forall CoralReef (\REEF -> exists Coral (\CORAL ->  part(var ? ? ? CORAL)(var ? ? ? REEF)))
+
+forall Glacier (\GLACIER -> forall Object (\ICE -> exists Water (\WATER -> and ( attribute(var ? ? ? WATER)(el ? ? ? Solid))( part(var ? ? ? ICE)(var ? ? ? GLACIER)))))
+
+forall Cave (\CAVE -> exists Erosion (\EROSION ->  result(var ? ? ? EROSION)(var ? ? ? CAVE)))
+
+forall Cave (\CAVE -> exists CaveMatrix (\LAND ->  hole(var ? ? ? CAVE)(var ? ? ? LAND)))
+
+forall CaveMatrix (\LAND -> forall Cave (\CAVE ->  impl ( hole(var ? ? ? CAVE)(var ? ? ? LAND))( equal(var ? ? ? LAND)( el ? ? ? ( HoleSkinFn(var ? ? ? CAVE))))))
+
+forall SubmergedLandArea (\LAND -> exists WaterArea (\WATER -> and ( orientation(var ? ? ? LAND)(var ? ? ? WATER)(el ? ? ? Below))(and ( orientation(var ? ? ? WATER)(var ? ? ? LAND)(el ? ? ? On))( meetsSpatially(var ? ? ? LAND)(var ? ? ? WATER)))))
+
+forall ContinentalShelf (\SHELF -> exists ContinentalMargin (\MARGIN -> and ( properPart(var ? ? ? SHELF)(var ? ? ? MARGIN))( overlapsSpatially(var ? ? ? SHELF)(var ? ? ? MARGIN))))
+
+forall Shoreline (\LINE -> exists WaterArea (\WATER ->  meetsSpatially(var ? ? ? WATER)(var ? ? ? LINE)))
+
+forall ShoreArea (\SHORE -> exists Shoreline (\LINE ->  part(var ? ? ? LINE)(var ? ? ? SHORE)))
+
+forall ShoreArea (\SHORE -> forall WaterArea (\WATER ->  impl ( orientation(var ? ? ? SHORE)(var ? ? ? WATER)(el ? ? ? Adjacent))(exists Shoreline (\LINE -> and ( part(var ? ? ? LINE)(var ? ? ? SHORE))( meetsSpatially(var ? ? ? LINE)(var ? ? ? WATER))))))
+
+forall Object (\Y -> forall Object (\X ->  impl ( meetsSpatially(var ? ? ? X)(var ? ? ? Y))( orientation(var ? ? ? X)(var ? ? ? Y)(el ? ? ? Adjacent))))
+
+forall Atmosphere (\AIR -> exists AstronomicalBody (\BODY ->  meetsSpatially(var ? ? ? AIR)(var ? ? ? BODY)))
+
+forall AtmosphericRegion (\AIRSPACE ->  part(var ? ? ? AIRSPACE)(el ? ? ? EarthsAtmosphere))
+
+forall Air (\AIR ->  piece(var ? ? ? AIR)(el ? ? ? EarthsAtmosphere))
+
+forall AtmosphericRegion (\AIRSPACE -> exists Air (\AIR ->  part(var ? ? ? AIR)(var ? ? ? AIRSPACE)))
+
+forall Air (\AIR -> exists Oxygen (\PART ->  part(var ? ? ? PART)(var ? ? ? AIR)))
+
+forall Air (\AIR -> exists Nitrogen (\PART ->  part(var ? ? ? PART)(var ? ? ? AIR)))
+
+forall WindFlow (\BLOW ->  located(var ? ? ? BLOW)(el ? ? ? EarthsAtmosphere))
+
+forall WindFlow (\R -> exists Wind (\WIND ->  located(var ? ? ? WIND)(var ? ? ? R)))
+
+forall WindFlow (\PLACE -> forall DirectionalAttribute (\DIRECTION -> forall TimeDuration (\TIME -> forall LengthMeasure (\DIST ->  impl ( surfaceWindVelocity(var ? ? ? PLACE)( el ? ? ? ( SpeedFn(var ? ? ? DIST)(var ? ? ? TIME)))(var ? ? ? DIRECTION))(exists Wind (\BLOW -> and ( partlyLocated(var ? ? ? BLOW)(var ? ? ? PLACE))( measure(var ? ? ? BLOW)( el ? ? ? ( VelocityFn(var ? ? ? DIST)(var ? ? ? TIME)(var ? ? ? PLACE)(var ? ? ? DIRECTION))))))))))
+
+forall Object (\PLACE -> forall Wind (\BLOW -> forall DirectionalAttribute (\DIRECTION -> forall TimeDuration (\TIME -> forall LengthMeasure (\DIST ->  impl ( measure(var ? ? ? BLOW)( el ? ? ? ( VelocityFn(var ? ? ? DIST)(var ? ? ? TIME)(var ? ? ? PLACE)(var ? ? ? DIRECTION))))( surfaceWindVelocity(var ? ? ? PLACE)( el ? ? ? ( SpeedFn(var ? ? ? DIST)(var ? ? ? TIME)))(var ? ? ? DIRECTION)))))))
+
+forall DirectionalAttribute (\DIRECTION -> forall PhysicalQuantity (\SPEED -> forall Object (\PLACE ->  impl ( surfaceWindVelocity(var ? ? ? PLACE)(var ? ? ? SPEED)(var ? ? ? DIRECTION))( surfaceWindSpeed(var ? ? ? PLACE)(var ? ? ? SPEED)))))
+
+forall WindFlow (\ZEPHYR -> forall Object (\PLACE -> forall TimeDuration (\TIME -> forall LengthMeasure (\DIST ->  impl (and ( partlyLocated(var ? ? ? ZEPHYR)(var ? ? ? PLACE))( measure(var ? ? ? ZEPHYR)( el ? ? ? ( SpeedFn(var ? ? ? DIST)(var ? ? ? TIME)))))( surfaceWindSpeed(var ? ? ? PLACE)( el ? ? ? ( SpeedFn(var ? ? ? DIST)(var ? ? ? TIME))))))))
+
+forall WindFlow (\ZEPHYR -> forall Object (\PLACE -> forall RealNumber (\SPEED ->  impl (and ( partlyLocated(var ? ? ? ZEPHYR)(var ? ? ? PLACE))( measure(var ? ? ? ZEPHYR)( el ? ? ? ( MeasureFn(var ? ? ? SPEED)(el ? ? ? KnotUnitOfSpeed)))))( surfaceWindSpeed(var ? ? ? PLACE)( el ? ? ? ( MeasureFn(var ? ? ? SPEED)(el ? ? ? KnotUnitOfSpeed)))))))
+
+forall (both DirectionalAttribute PositionalAttribute) (\DIR -> forall Object (\PLACE ->  impl ( surfaceWindDirection(var ? ? ? PLACE)(var ? ? ? DIR))(exists Wind (\WIND -> exists Region (\FROM -> and ( partlyLocated(var ? ? ? WIND)(var ? ? ? PLACE))(and ( origin(var ? ? ? WIND)(var ? ? ? FROM))( orientation(var ? ? ? FROM)(var ? ? ? PLACE)(var ? ? ? DIR))))))))
+
+forall (both PositionalAttribute DirectionalAttribute) (\DIR_FROM -> forall (both DirectionalAttribute PositionalAttribute) (\DIR_TOWARD -> forall PhysicalQuantity (\SPEED -> forall Object (\PLACE ->  impl (and ( surfaceWindVelocity(var ? ? ? PLACE)(var ? ? ? SPEED)(var ? ? ? DIR_TOWARD))( oppositeDirection(var ? ? ? DIR_TOWARD)(var ? ? ? DIR_FROM)))( surfaceWindDirection(var ? ? ? PLACE)(var ? ? ? DIR_FROM))))))
+
+forall WindFlow (\ZEPHYR -> forall (both PositionalAttribute DirectionalAttribute) (\DIR_FROM -> forall (both DirectionalAttribute PositionalAttribute) (\DIR_TOWARD -> forall (both Region Object) (\PLACE -> forall TimeDuration (\TIME -> forall LengthMeasure (\DIST ->  impl (and ( measure(var ? ? ? ZEPHYR)( el ? ? ? ( VelocityFn(var ? ? ? DIST)(var ? ? ? TIME)(var ? ? ? PLACE)(var ? ? ? DIR_TOWARD))))( oppositeDirection(var ? ? ? DIR_TOWARD)(var ? ? ? DIR_FROM)))( surfaceWindDirection(var ? ? ? PLACE)(var ? ? ? DIR_FROM))))))))
+
+forall DirectionalAttribute (\DIRECTION -> forall PhysicalQuantity (\SPEED -> forall Object (\PLACE ->  impl ( lowAltitudeWindVelocity(var ? ? ? PLACE)(var ? ? ? SPEED)(var ? ? ? DIRECTION))( lowAltitudeWindSpeed(var ? ? ? PLACE)(var ? ? ? SPEED)))))
+
+forall DirectionalAttribute (\DIRECTION -> forall (both PhysicalQuantity ConstantQuantity) (\SPEED -> forall Object (\PLACE ->  impl ( mediumAltitudeWindVelocity(var ? ? ? PLACE)(var ? ? ? SPEED)(var ? ? ? DIRECTION))( mediumAltitudeWindSpeed(var ? ? ? PLACE)(var ? ? ? SPEED)))))
+
+forall DirectionalAttribute (\DIRECTION -> forall (both PhysicalQuantity ConstantQuantity) (\SPEED -> forall Object (\PLACE ->  impl ( highAltitudeWindVelocity(var ? ? ? PLACE)(var ? ? ? SPEED)(var ? ? ? DIRECTION))( highAltitudeWindSpeed(var ? ? ? PLACE)(var ? ? ? SPEED)))))
+
+forall LowPressureWeatherSystem (\SYSTEM -> forall (both RealNumber Quantity) (\AMOUNT -> forall Object (\AREA ->  impl ( located(var ? ? ? SYSTEM)(var ? ? ? AREA))(and ( barometricPressure(var ? ? ? AREA)( el ? ? ? ( MeasureFn(var ? ? ? AMOUNT)(el ? ? ? InchMercury))))( lessThan(var ? ? ? AMOUNT)(el ? ? ? (toRealNum 29.5)))))))
+
+forall TropicalCyclone (\STORM -> exists GeographicArea (\PLACE -> and ( geographicSubregion(var ? ? ? PLACE)(el ? ? ? Tropics))( located(var ? ? ? STORM)(var ? ? ? PLACE))))
+
+forall HighPressureWeatherSystem (\SYSTEM -> forall (both RealNumber Quantity) (\AMOUNT -> forall Object (\AREA ->  impl ( located(var ? ? ? SYSTEM)(var ? ? ? AREA))(and ( barometricPressure(var ? ? ? AREA)( el ? ? ? ( MeasureFn(var ? ? ? AMOUNT)(el ? ? ? InchMercury))))( greaterThan(var ? ? ? AMOUNT)(el ? ? ? (toRealNum 30.2)))))))
+
+forall GeographicArea (\AREA -> forall ClearWeather (\WEATHER ->  impl ( located(var ? ? ? WEATHER)(var ? ? ? AREA))(exists (both NonnegativeRealNumber Quantity) (\FRACTION -> and ( cloudCoverFraction(var ? ? ? AREA)(var ? ? ? FRACTION))( lessThan(var ? ? ? FRACTION)(el ? ? ? (toRealNum 0.3)))))))
+
+forall GeographicArea (\AREA -> forall ClearWeather (\WEATHER -> forall (both NonnegativeRealNumber Quantity) (\FRACTION ->  impl (and ( located(var ? ? ? WEATHER)(var ? ? ? AREA))( cloudCoverFraction(var ? ? ? AREA)(var ? ? ? FRACTION)))( lessThan(var ? ? ? FRACTION)(el ? ? ? (toRealNum 0.3))))))
+
+forall GeographicArea (\AREA -> forall PartlyCloudyWeather (\WEATHER ->  impl ( located(var ? ? ? WEATHER)(var ? ? ? AREA))(exists (both NonnegativeRealNumber Quantity) (\FRACTION -> and ( cloudCoverFraction(var ? ? ? AREA)(var ? ? ? FRACTION))(and ( greaterThanOrEqualTo(var ? ? ? FRACTION)(el ? ? ? (toRealNum 0.3)))( lessThanOrEqualTo(var ? ? ? FRACTION)(el ? ? ? (toRealNum 0.7))))))))
+
+forall GeographicArea (\AREA -> forall PartlyCloudyWeather (\WEATHER -> forall (both NonnegativeRealNumber Quantity) (\FRACTION ->  impl (and ( located(var ? ? ? WEATHER)(var ? ? ? AREA))( cloudCoverFraction(var ? ? ? AREA)(var ? ? ? FRACTION)))(and ( greaterThanOrEqualTo(var ? ? ? FRACTION)(el ? ? ? (toRealNum 0.3)))( lessThanOrEqualTo(var ? ? ? FRACTION)(el ? ? ? (toRealNum 0.7)))))))
+
+forall GeographicArea (\AREA -> forall OvercastWeather (\WEATHER ->  impl ( located(var ? ? ? WEATHER)(var ? ? ? AREA))(exists (both NonnegativeRealNumber Quantity) (\FRACTION -> and ( cloudCoverFraction(var ? ? ? AREA)(var ? ? ? FRACTION))( greaterThan(var ? ? ? FRACTION)(el ? ? ? (toRealNum 0.7)))))))
+
+forall GeographicArea (\AREA -> forall OvercastWeather (\WEATHER -> forall (both NonnegativeRealNumber Quantity) (\FRACTION ->  impl (and ( located(var ? ? ? WEATHER)(var ? ? ? AREA))( cloudCoverFraction(var ? ? ? AREA)(var ? ? ? FRACTION)))( greaterThan(var ? ? ? FRACTION)(el ? ? ? (toRealNum 0.7))))))
+
+forall Object (\PLACE ->  impl ( relativeHumidity(var ? ? ? PLACE)(el ? ? ? (toInt 1)))(exists Precipitation (\FALLING ->  located(var ? ? ? FALLING)(var ? ? ? PLACE))))
+
+forall Raining (\PROCESS ->  precipitationState(var ? ? ? PROCESS)(el ? ? ? Liquid))
+
+forall FreezingRain (\PROCESS ->  precipitationState(var ? ? ? PROCESS)(el ? ? ? Liquid))
+
+forall FreezingRain (\PROCESS -> forall Water (\STUFF ->  impl ( patient(var ? ? ? PROCESS)(var ? ? ? STUFF))( holdsDuring( el ? ? ? ( ImmediateFutureFn( el ? ? ? ( WhenFn(var ? ? ? PROCESS)))))( attribute(var ? ? ? STUFF)(el ? ? ? Solid)))))
+
+forall Snowing (\PROCESS ->  precipitationState(var ? ? ? PROCESS)(el ? ? ? Solid))
+
+forall Sleeting (\PROCESS ->  precipitationState(var ? ? ? PROCESS)(el ? ? ? Solid))
+
+forall Hailing (\PROCESS ->  precipitationState(var ? ? ? PROCESS)(el ? ? ? Solid))
+
+forall (both PhysicalState Attribute) (\STATE -> forall (both WeatherProcess Process) (\EVENT ->  impl ( precipitationState(var ? ? ? EVENT)(var ? ? ? STATE))(exists Water (\STUFF -> and ( patient(var ? ? ? EVENT)(var ? ? ? STUFF))( attribute(var ? ? ? STUFF)(var ? ? ? STATE))))))
+
+forall BotanicalTree (\TREE -> forall Shrub (\BUSH -> forall (both LengthMeasure Quantity) (\SHORT -> forall (both LengthMeasure Quantity) (\TALL ->  impl (and ( height(var ? ? ? TREE)(var ? ? ? TALL))( height(var ? ? ? BUSH)(var ? ? ? SHORT)))( greaterThan(var ? ? ? TALL)(var ? ? ? SHORT))))))
+
+forall Lichen (\LICH -> exists Alga (\ALGA ->  part(var ? ? ? ALGA)(var ? ? ? LICH)))
+
+forall Lichen (\LICH -> exists Fungus (\FUNG ->  part(var ? ? ? FUNG)(var ? ? ? LICH)))
+
+forall Forest (\FOREST ->  vegetationTypePattern(var ? ? ? FOREST)(desc BotanicalTree ? ?)(el ? ? ? DenseVegetation))
+
+forall RainForest (\FOREST ->  vegetationTypePattern(var ? ? ? FOREST)(desc BotanicalTree ? ?)(el ? ? ? CanopiedVegetation))
+
+forall BorealForest (\FOREST ->  vegetationType(var ? ? ? FOREST)(desc PineTree ? ?))
+
+forall Jungle (\FOREST ->  vegetationTypePattern(var ? ? ? FOREST)(desc Plant ? ?)(el ? ? ? DenseVegetation))
+
+forall Desert (\DESERT ->  attribute(var ? ? ? DESERT)(el ? ? ? Dry))
+
+forall Desert (\DESERT -> or ( groundSurfaceType(var ? ? ? DESERT)(desc Rock ? ?))( groundSurfaceType(var ? ? ? DESERT)(desc Sand ? ?)))
+
+forall Desert (\DESERT ->  not (vegetationType(var ? ? ? DESERT)(desc BotanicalTree ? ?)))
+
+forall Oasis (\OASIS -> exists Desert (\DESERT ->  located(var ? ? ? OASIS)(var ? ? ? DESERT)))
+
+forall Oasis (\OASIS -> exists FreshWaterArea (\WATER ->  located(var ? ? ? WATER)(var ? ? ? OASIS)))
+
+forall Oasis (\OASIS ->  attribute(var ? ? ? OASIS)(el ? ? ? FertileTerrain))
+
+forall Grassland (\PLAIN ->  vegetationTypePattern(var ? ? ? PLAIN)(desc Grass ? ?)(el ? ? ? GroundCoverVegetation))
+
+forall Pampa (\PLAIN ->  located(var ? ? ? PLAIN)(el ? ? ? SouthAmerica))
+
+forall Savanna (\PLAIN ->  not (vegetationType(var ? ? ? PLAIN)(desc BotanicalTree ? ?)))
+
+forall Steppe (\PLAIN ->  not (vegetationType(var ? ? ? PLAIN)(desc BotanicalTree ? ?)))
+
+forall Steppe (\PLAIN -> or ( located(var ? ? ? PLAIN)(el ? ? ? Europe))( located(var ? ? ? PLAIN)(el ? ? ? Asia)))
+
+forall Veldt (\PLAIN ->  located(var ? ? ? PLAIN)(el ? ? ? Africa))
+
+forall Veldt (\PLAIN ->  vegetationTypePattern(var ? ? ? PLAIN)(desc Shrub ? ?)(el ? ? ? ScatteredVegetation))
+
+forall Tundra (\PLAIN ->  vegetationType(var ? ? ? PLAIN)(desc Lichen ? ?))
+
+forall Tundra (\PLAIN ->  vegetationType(var ? ? ? PLAIN)(desc Moss ? ?))
+
+forall Agriculture (\AGRO -> exists Growth (\GROWTH ->  subProcess(var ? ? ? GROWTH)(var ? ? ? AGRO)))
+
+forall LandSubsidence (\SINKING -> exists LandArea (\LAND -> and ( exactlyLocated(var ? ? ? SINKING)(var ? ? ? LAND))( patient(var ? ? ? SINKING)(var ? ? ? LAND))))
+
+forall LandSubsidence (\SINKING -> forall LandArea (\LAND -> forall (both LengthMeasure Quantity) (\HEIGHT1 ->  impl (and ( patient(var ? ? ? SINKING)(var ? ? ? LAND))( elevation(var ? ? ? LAND)(var ? ? ? HEIGHT1)))( holdsDuring( el ? ? ? ( ImmediateFutureFn( el ? ? ? ( WhenFn(var ? ? ? SINKING)))))(exists (both LengthMeasure Quantity) (\HEIGHT2 -> and ( elevation(var ? ? ? LAND)(var ? ? ? HEIGHT2))( lessThan(var ? ? ? HEIGHT2)(var ? ? ? HEIGHT1))))))))

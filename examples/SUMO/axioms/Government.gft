@@ -1,0 +1,216 @@
+
+forall GeopoliticalArea (\AREA -> forall (both FormOfGovernment Attribute) (\TYPE ->  impl ( governmentType(var ? ? ? AREA)(var ? ? ? TYPE))( attribute( el ? ? ? ( GovernmentFn(var ? ? ? AREA)))(var ? ? ? TYPE))))
+
+forall FormOfGovernment (\TYPE -> forall (both GeopoliticalArea Agent) (\AREA ->  impl ( attribute( el ? ? ? ( GovernmentFn(var ? ? ? AREA)))(var ? ? ? TYPE))( governmentType(var ? ? ? AREA)(var ? ? ? TYPE))))
+
+forall (both FormOfGovernment Attribute) (\TYPE -> forall (both Agent GeopoliticalArea) (\PLACE ->  impl (and ( governmentType(var ? ? ? PLACE)(var ? ? ? TYPE))( subAttribute(var ? ? ? TYPE)(el ? ? ? Monarchy)))(exists Human (\PERSON -> exists (both Position Attribute) (\ROLE -> and ( chiefOfState(var ? ? ? PLACE)(var ? ? ? ROLE)(var ? ? ? PERSON))( subAttribute(var ? ? ? ROLE)(el ? ? ? Monarch)))))))
+
+forall GeopoliticalArea (\PLACE ->  impl ( governmentType(var ? ? ? PLACE)(el ? ? ? AbsoluteMonarchy))( leaderPosition(var ? ? ? PLACE)(el ? ? ? Monarch)))
+
+forall GeopoliticalArea (\PLACE -> forall (both FormOfGovernment Attribute) (\TYPE ->  impl (and ( governmentType(var ? ? ? PLACE)(var ? ? ? TYPE))( subAttribute(var ? ? ? TYPE)(el ? ? ? ParliamentaryGovernment)))(exists Parliament (\ORG ->  subOrganization(var ? ? ? ORG)( el ? ? ? ( GovernmentFn(var ? ? ? PLACE)))))))
+
+forall Agent (\PLACE ->  impl ( governmentType(var ? ? ? PLACE)(el ? ? ? MilitaryDictatorship))( leaderPosition(var ? ? ? PLACE)(el ? ? ? MilitaryCommander)))
+
+forall (both NonnegativeInteger Entity) (\COUNT -> forall (both SetOrClass (either SetOrClass Collection)) (\SET ->  impl ( cardinality(var ? ? ? SET)(var ? ? ? COUNT))( equal( el ? ? ? ( CardinalityFn(var ? ? ? SET)))(var ? ? ? COUNT))))
+
+forall SetOrClass (\SET -> forall (both Entity NonnegativeInteger) (\COUNT ->  impl ( equal( el ? ? ? ( CardinalityFn(var ? ? ? SET)))(var ? ? ? COUNT))( cardinality(var ? ? ? SET)(var ? ? ? COUNT))))
+
+forall Agent (\COUNTRY -> forall (both GeographicArea Object) (\AREA ->  impl ( dependentGeopoliticalArea(var ? ? ? AREA)(var ? ? ? COUNTRY))( possesses(var ? ? ? COUNTRY)(var ? ? ? AREA))))
+
+forall (both Agent GeopoliticalArea) (\COUNTRY -> forall (both GeographicArea GeopoliticalArea) (\AREA ->  impl ( dependentGeopoliticalArea(var ? ? ? AREA)(var ? ? ? COUNTRY))( not (geopoliticalSubdivision(var ? ? ? AREA)(var ? ? ? COUNTRY)))))
+
+forall (both GeopoliticalArea Agent) (\COUNTRY -> forall (both GeopoliticalArea GeographicArea) (\AREA ->  impl ( geopoliticalSubdivision(var ? ? ? AREA)(var ? ? ? COUNTRY))( not (dependentGeopoliticalArea(var ? ? ? AREA)(var ? ? ? COUNTRY)))))
+
+forall OverseasArea (\AREA -> exists Nation (\COUNTRY ->  dependentGeopoliticalArea(var ? ? ? AREA)(var ? ? ? COUNTRY)))
+
+forall UnincorporatedUnitedStatesTerritory (\AREA ->  dependentAreaOfType(var ? ? ? AREA)(el ? ? ? UnitedStates)(desc OverseasArea ? ?))
+
+forall BritishCrownColony (\AREA ->  dependentAreaOfType(var ? ? ? AREA)(el ? ? ? UnitedKingdom)(desc BritishCrownColony ? ?))
+
+forall ParliamentaryTerritory (\AREA ->  governmentType( el ? ? ? ( GovernmentFn(var ? ? ? AREA)))(el ? ? ? ParliamentaryGovernment))
+
+forall ConstitutionDocument (\DOC -> exists Constitution (\CONST ->  containsInformation(var ? ? ? DOC)(var ? ? ? CONST)))
+
+forall (both LegalSystemAttribute Attribute) (\TYPE -> forall GeopoliticalArea (\AREA ->  impl ( legalSystemType(var ? ? ? AREA)(var ? ? ? TYPE))( attribute( el ? ? ? ( JudiciaryFn(var ? ? ? AREA)))(var ? ? ? TYPE))))
+
+forall RegionalLaw (\CORPUS ->  attribute(var ? ? ? CORPUS)(el ? ? ? Law))
+
+forall RegionalLaw (\CORPUS -> forall Proposition (\PART ->  impl ( subProposition(var ? ? ? PART)(var ? ? ? CORPUS))( attribute(var ? ? ? CORPUS)(el ? ? ? Law))))
+
+forall (both LegalSystemAttribute Attribute) (\TYPE -> forall GeopoliticalArea (\AREA ->  impl ( legalSystemType(var ? ? ? AREA)(var ? ? ? TYPE))( attribute( el ? ? ? ( RegionalLawFn(var ? ? ? AREA)))(var ? ? ? TYPE))))
+
+forall Nation (\COUNTRY ->  impl ( governmentType(var ? ? ? COUNTRY)(el ? ? ? Democracy))(exists SuffrageLaw (\SUFFRAGE ->  subProposition(var ? ? ? SUFFRAGE)( el ? ? ? ( RegionalLawFn(var ? ? ? COUNTRY))))))
+
+forall GeopoliticalArea (\COUNTRY ->  impl ( governmentType(var ? ? ? COUNTRY)(el ? ? ? Democracy))( subProposition(el ? ? ? VoterCitizenshipRequirement)( el ? ? ? ( RegionalLawFn(var ? ? ? COUNTRY)))))
+
+forall Nation (\COUNTRY -> exists VoterAgeRequirement (\AGERULE ->  subProposition(var ? ? ? AGERULE)( el ? ? ? ( RegionalLawFn(var ? ? ? COUNTRY)))))
+
+forall Organization (\ORG -> forall Organization (\BRANCH ->  impl ( executiveBranch(var ? ? ? BRANCH)(var ? ? ? ORG))( subOrganization(var ? ? ? BRANCH)(var ? ? ? ORG))))
+
+forall GeopoliticalArea (\AREA -> forall Organization (\BRANCH ->  impl ( executiveBranch(var ? ? ? BRANCH)(var ? ? ? AREA))( subOrganization(var ? ? ? BRANCH)( el ? ? ? ( GovernmentFn(var ? ? ? AREA))))))
+
+forall GeopoliticalArea (\AREA -> forall Organization (\ORG -> forall Organization (\BRANCH ->  impl (and ( executiveBranch(var ? ? ? BRANCH)(var ? ? ? AREA))( subOrganization(var ? ? ? ORG)(var ? ? ? BRANCH)))( subOrganization(var ? ? ? ORG)( el ? ? ? ( GovernmentFn(var ? ? ? AREA)))))))
+
+forall Agent (\AGENT -> forall (both Organization Entity) (\BRANCH ->  impl ( executiveBranch(var ? ? ? BRANCH)(var ? ? ? AGENT))( equal(var ? ? ? BRANCH)( el ? ? ? ( ExecutiveBranchFn(var ? ? ? AGENT))))))
+
+forall (both Organization Agent) (\ORGANIZATION -> forall Human (\PERSON ->  impl ( occupiesPosition(var ? ? ? PERSON)(el ? ? ? Leader)(var ? ? ? ORGANIZATION))( leader(var ? ? ? ORGANIZATION)(var ? ? ? PERSON))))
+
+forall GeopoliticalArea (\AREA -> forall Human (\PERSON ->  impl ( occupiesPosition(var ? ? ? PERSON)(el ? ? ? Leader)(var ? ? ? AREA))( leader( el ? ? ? ( GovernmentFn(var ? ? ? AREA)))(var ? ? ? PERSON))))
+
+forall Agent (\ORG -> forall Position (\ROLE -> forall Human (\PERSON ->  impl (and ( leader(var ? ? ? ORG)(var ? ? ? PERSON))( occupiesPosition(var ? ? ? PERSON)(var ? ? ? ROLE)(var ? ? ? ORG)))( leaderPosition(var ? ? ? ORG)(var ? ? ? ROLE)))))
+
+forall Nation (\COUNTRY -> forall Position (\ROLE -> forall Human (\PERSON ->  impl (and ( leader(var ? ? ? COUNTRY)(var ? ? ? PERSON))( occupiesPosition(var ? ? ? PERSON)(var ? ? ? ROLE)( el ? ? ? ( GovernmentFn(var ? ? ? COUNTRY)))))( leaderPosition(var ? ? ? COUNTRY)(var ? ? ? ROLE)))))
+
+forall Nation (\COUNTRY -> forall Position (\ROLE ->  impl ( leaderPosition( el ? ? ? ( GovernmentFn(var ? ? ? COUNTRY)))(var ? ? ? ROLE))( leaderPosition(var ? ? ? COUNTRY)(var ? ? ? ROLE))))
+
+forall Nation (\COUNTRY -> forall Position (\ROLE ->  impl ( leaderPosition(var ? ? ? COUNTRY)(var ? ? ? ROLE))( leaderPosition( el ? ? ? ( GovernmentFn(var ? ? ? COUNTRY)))(var ? ? ? ROLE))))
+
+forall Human (\PERSON -> forall Position (\ROLE -> forall Agent (\ORG ->  impl (and ( leaderPosition(var ? ? ? ORG)(var ? ? ? ROLE))( occupiesPosition(var ? ? ? PERSON)(var ? ? ? ROLE)(var ? ? ? ORG)))( leader(var ? ? ? ORG)(var ? ? ? PERSON)))))
+
+forall Human (\PERSON -> forall Position (\ROLE -> forall GeopoliticalArea (\AREA ->  impl (and ( leaderPosition(var ? ? ? AREA)(var ? ? ? ROLE))( occupiesPosition(var ? ? ? PERSON)(var ? ? ? ROLE)( el ? ? ? ( GovernmentFn(var ? ? ? AREA)))))( leader(var ? ? ? AREA)(var ? ? ? PERSON)))))
+
+forall GovernmentCabinet (\CAB -> forall GeopoliticalArea (\AREA ->  impl ( subOrganization(var ? ? ? CAB)( el ? ? ? ( GovernmentFn(var ? ? ? AREA))))( hasPurpose(var ? ? ? CAB)(exists Stating (\ADVICE -> exists (both Entity Agent) (\LEADER -> and ( agent(var ? ? ? ADVICE)(var ? ? ? CAB))(and ( patient(var ? ? ? ADVICE)(var ? ? ? LEADER))( leader(var ? ? ? LEADER)( el ? ? ? ( GovernmentFn(var ? ? ? AREA)))))))))))
+
+forall GeopoliticalArea (\AREA ->  subOrganization( el ? ? ? ( CabinetFn(var ? ? ? AREA)))( el ? ? ? ( ExecutiveBranchFn(var ? ? ? AREA))))
+
+forall Human (\PERSON -> forall Position (\POSITION -> forall GeopoliticalArea (\AREA ->  impl ( chiefOfState(var ? ? ? AREA)(var ? ? ? POSITION)(var ? ? ? PERSON))( occupiesPosition(var ? ? ? PERSON)(var ? ? ? POSITION)( el ? ? ? ( GovernmentFn(var ? ? ? AREA)))))))
+
+forall Human (\PERSON -> forall Position (\POSITION -> forall GeopoliticalArea (\AREA ->  impl ( chiefOfState(var ? ? ? AREA)(var ? ? ? POSITION)(var ? ? ? PERSON))( occupiesPosition(var ? ? ? PERSON)(el ? ? ? Leader)( el ? ? ? ( GovernmentFn(var ? ? ? AREA)))))))
+
+forall Nation (\AREA -> forall Human (\PERSON -> forall Position (\POSITION ->  impl ( chiefOfState(var ? ? ? AREA)(var ? ? ? POSITION)(var ? ? ? PERSON))( citizen(var ? ? ? PERSON)(var ? ? ? AREA)))))
+
+forall Human (\PERSON -> forall Position (\POSITION -> forall GeopoliticalArea (\AREA ->  impl ( chiefOfState(var ? ? ? AREA)(var ? ? ? POSITION)(var ? ? ? PERSON))( chiefOfStateType(var ? ? ? AREA)(var ? ? ? POSITION)))))
+
+forall Nation (\AREA -> forall Human (\PERSON -> forall Position (\POSITION ->  impl ( headOfGovernment(var ? ? ? AREA)(var ? ? ? POSITION)(var ? ? ? PERSON))( citizen(var ? ? ? PERSON)(var ? ? ? AREA)))))
+
+forall Human (\PERSON -> forall Position (\POSITION -> forall GeopoliticalArea (\AREA ->  impl ( headOfGovernment(var ? ? ? AREA)(var ? ? ? POSITION)(var ? ? ? PERSON))( occupiesPosition(var ? ? ? PERSON)(var ? ? ? POSITION)( el ? ? ? ( GovernmentFn(var ? ? ? AREA)))))))
+
+forall SocialRole (\ROLE -> forall Election (\ELECTION ->  impl ( electionForPosition(var ? ? ? ELECTION)(var ? ? ? ROLE))(exists Human (\CANDIDATE ->  candidateForPosition(var ? ? ? ELECTION)(var ? ? ? ROLE)(var ? ? ? CANDIDATE)))))
+
+forall Agent (\AGENT -> forall Organization (\ORG ->  impl ( member(var ? ? ? AGENT)(var ? ? ? ORG))( attribute(var ? ? ? AGENT)( el ? ? ? ( MemberFn(var ? ? ? ORG))))))
+
+forall Agent (\AGENT -> forall Organization (\ORG ->  impl ( attribute(var ? ? ? AGENT)( el ? ? ? ( MemberFn(var ? ? ? ORG))))( member(var ? ? ? AGENT)(var ? ? ? ORG))))
+
+forall Human (\AGENT -> forall Organization (\ORG -> forall Position (\POSITION ->  impl ( attribute(var ? ? ? AGENT)( el ? ? ? ( MemberRoleFn(var ? ? ? ORG)(var ? ? ? POSITION))))( attribute(var ? ? ? AGENT)( el ? ? ? ( MemberFn(var ? ? ? ORG)))))))
+
+forall Human (\AGENT -> forall Organization (\ORG -> forall Position (\POSITION ->  impl ( attribute(var ? ? ? AGENT)( el ? ? ? ( MemberRoleFn(var ? ? ? ORG)(var ? ? ? POSITION))))( member(var ? ? ? AGENT)(var ? ? ? ORG)))))
+
+forall Human (\PERSON -> forall Organization (\ORG -> forall Position (\POSITION ->  impl ( attribute(var ? ? ? PERSON)( el ? ? ? ( MemberRoleFn(var ? ? ? ORG)(var ? ? ? POSITION))))( occupiesPosition(var ? ? ? PERSON)(var ? ? ? POSITION)(var ? ? ? ORG)))))
+
+forall Organization (\ORG -> forall Position (\POSITION -> forall (both Human Object) (\PERSON ->  impl ( occupiesPosition(var ? ? ? PERSON)(var ? ? ? POSITION)(var ? ? ? ORG))( attribute(var ? ? ? PERSON)( el ? ? ? ( MemberRoleFn(var ? ? ? ORG)(var ? ? ? POSITION)))))))
+
+forall Organization (\GROUP -> forall Election (\ELECTION ->  impl ( electionForOrganization(var ? ? ? ELECTION)(var ? ? ? GROUP))( electionForPosition(var ? ? ? ELECTION)( el ? ? ? ( MemberFn(var ? ? ? GROUP))))))
+
+forall Organization (\GROUP -> forall Election (\ELECTION ->  impl ( electionForPosition(var ? ? ? ELECTION)( el ? ? ? ( MemberFn(var ? ? ? GROUP))))( electionForOrganization(var ? ? ? ELECTION)(var ? ? ? GROUP))))
+
+forall Agent (\CONTENDER -> forall SocialRole (\POSITION -> forall Election (\ELECTION ->  impl ( candidateForPosition(var ? ? ? ELECTION)(var ? ? ? POSITION)(var ? ? ? CONTENDER))( electionForPosition(var ? ? ? ELECTION)(var ? ? ? POSITION)))))
+
+forall (both Agent Organization) (\AGENT -> forall (both Agent CognitiveAgent) (\CONTENDER -> forall (both SocialRole Position) (\POSITION -> forall (both Election Process) (\ELECTION ->  impl (and ( candidateForPosition(var ? ? ? ELECTION)(var ? ? ? POSITION)(var ? ? ? CONTENDER))( agent(var ? ? ? ELECTION)(var ? ? ? AGENT)))( desires(var ? ? ? CONTENDER)( occupiesPosition(var ? ? ? CONTENDER)(var ? ? ? POSITION)(var ? ? ? AGENT)))))))
+
+forall RealNumber (\FRACTION -> forall Agent (\CONTENDER -> forall SocialRole (\POSITION -> forall Election (\ELECTION ->  impl ( voteFractionReceived(var ? ? ? ELECTION)(var ? ? ? POSITION)(var ? ? ? CONTENDER)(var ? ? ? FRACTION))( candidateForPosition(var ? ? ? ELECTION)(var ? ? ? POSITION)(var ? ? ? CONTENDER))))))
+
+forall PopularElection (\ELECTION -> forall (both RealNumber Quantity) (\NUMBER1 -> forall (both Agent Entity) (\PERSON1 -> forall SocialRole (\POSITION ->  impl (and ( electionWinner(var ? ? ? ELECTION)(var ? ? ? POSITION)(var ? ? ? PERSON1))( voteFractionReceived(var ? ? ? ELECTION)(var ? ? ? POSITION)(var ? ? ? PERSON1)(var ? ? ? NUMBER1)))(exists (both RealNumber Quantity) (\NUMBER2 -> not (exists (both Agent Entity) (\PERSON2 -> and ( voteFractionReceived(var ? ? ? ELECTION)(var ? ? ? POSITION)(var ? ? ? PERSON2)(var ? ? ? NUMBER2))(and ( not (equal(var ? ? ? PERSON1)(var ? ? ? PERSON2)))( greaterThanOrEqualTo(var ? ? ? NUMBER2)(var ? ? ? NUMBER1)))))))))))
+
+forall PopularElection (\ELECTION -> forall (both RealNumber Quantity) (\NUMBER2 -> forall (both Agent Entity) (\PERSON2 -> forall (both RealNumber Quantity) (\NUMBER1 -> forall (both Agent Entity) (\PERSON1 -> forall SocialRole (\POSITION ->  impl (and ( electionWinner(var ? ? ? ELECTION)(var ? ? ? POSITION)(var ? ? ? PERSON1))(and ( voteFractionReceived(var ? ? ? ELECTION)(var ? ? ? POSITION)(var ? ? ? PERSON1)(var ? ? ? NUMBER1))(and ( voteFractionReceived(var ? ? ? ELECTION)(var ? ? ? POSITION)(var ? ? ? PERSON2)(var ? ? ? NUMBER2))( not (equal(var ? ? ? PERSON1)(var ? ? ? PERSON2))))))( greaterThan(var ? ? ? NUMBER1)(var ? ? ? NUMBER2))))))))
+
+forall LegislativeChamber (\CHAMBER1 -> forall LegislativeChamber (\CHAMBER2 -> forall (both Agent GeopoliticalArea) (\AREA -> forall (both Object Organization) (\ORG ->  impl (and ( attribute(var ? ? ? ORG)(el ? ? ? UnicameralLegislature))(and ( legislativeBranch(var ? ? ? ORG)(var ? ? ? AREA))(and ( subOrganization(var ? ? ? CHAMBER1)( el ? ? ? ( GovernmentFn(var ? ? ? AREA))))( subOrganization(var ? ? ? CHAMBER2)( el ? ? ? ( GovernmentFn(var ? ? ? AREA)))))))( equal(var ? ? ? CHAMBER1)(var ? ? ? CHAMBER2))))))
+
+forall Organization (\AGENT -> forall Organization (\ORG ->  impl ( legislativeBranch(var ? ? ? ORG)(var ? ? ? AGENT))( subOrganization(var ? ? ? ORG)(var ? ? ? AGENT))))
+
+forall GeopoliticalArea (\AREA -> forall Organization (\ORG ->  impl ( legislativeBranch(var ? ? ? ORG)(var ? ? ? AREA))( subOrganization(var ? ? ? ORG)( el ? ? ? ( GovernmentFn(var ? ? ? AREA))))))
+
+forall (both Agent GeopoliticalArea) (\AGENT -> forall (both Organization Entity) (\BRANCH ->  impl ( legislativeBranch(var ? ? ? BRANCH)(var ? ? ? AGENT))( equal(var ? ? ? BRANCH)( el ? ? ? ( LegislatureFn(var ? ? ? AGENT))))))
+
+forall GovernmentOrganization (\ORG -> forall GeopoliticalArea (\AREA ->  judicialBranch(var ? ? ? ORG)(var ? ? ? AREA)))
+
+forall Organization (\ORG -> forall Organization (\BRANCH ->  impl ( judicialBranch(var ? ? ? BRANCH)(var ? ? ? ORG))( subOrganization(var ? ? ? BRANCH)(var ? ? ? ORG))))
+
+forall GeopoliticalArea (\AREA -> forall Organization (\BRANCH ->  impl ( judicialBranch(var ? ? ? BRANCH)(var ? ? ? AREA))( subOrganization(var ? ? ? BRANCH)( el ? ? ? ( GovernmentFn(var ? ? ? AREA))))))
+
+forall GeopoliticalArea (\AREA -> forall Organization (\ORG -> forall Organization (\BRANCH ->  impl (and ( judicialBranch(var ? ? ? BRANCH)(var ? ? ? AREA))( subOrganization(var ? ? ? ORG)(var ? ? ? BRANCH)))( subOrganization(var ? ? ? ORG)( el ? ? ? ( GovernmentFn(var ? ? ? AREA)))))))
+
+forall (both Agent GeopoliticalArea) (\AGENT -> forall (both Organization Entity) (\BRANCH ->  impl ( judicialBranch(var ? ? ? BRANCH)(var ? ? ? AGENT))( equal(var ? ? ? BRANCH)( el ? ? ? ( JudiciaryFn(var ? ? ? AGENT))))))
+
+forall IslamicLawCourt (\COURT ->  attribute(var ? ? ? COURT)(el ? ? ? IslamicLaw))
+
+forall (both Object CognitiveAgent) (\PERSON ->  impl ( attribute(var ? ? ? PERSON)(el ? ? ? JudgeAtLaw))(exists (both JudicialOrganization GovernmentOrganization) (\ORG ->  employs(var ? ? ? ORG)(var ? ? ? PERSON))))
+
+forall PoliticalParty (\ORGANIZATION -> forall Position (\POSITION -> forall (both Human SelfConnectedObject) (\PERSON ->  impl ( occupiesPosition(var ? ? ? PERSON)(var ? ? ? POSITION)(var ? ? ? ORGANIZATION))( member(var ? ? ? PERSON)(var ? ? ? ORGANIZATION)))))
+
+forall (both Organization Entity) (\ORG -> forall (both Human Agent) (\PERSON ->  impl ( occupiesPosition(var ? ? ? PERSON)(el ? ? ? Leader)(var ? ? ? ORG))(exists Guiding (\LEADING -> and ( patient(var ? ? ? LEADING)(var ? ? ? ORG))( agent(var ? ? ? LEADING)(var ? ? ? PERSON))))))
+
+forall GeopoliticalArea (\AREA -> forall (both Human Agent) (\PERSON ->  impl ( occupiesPosition(var ? ? ? PERSON)(el ? ? ? Leader)( el ? ? ? ( GovernmentFn(var ? ? ? AREA))))(exists Guiding (\LEADING -> and ( patient(var ? ? ? LEADING)(var ? ? ? AREA))( agent(var ? ? ? LEADING)(var ? ? ? PERSON))))))
+
+forall PoliticalPressureGroup (\GROUP -> exists Requesting (\REQ -> exists GovernmentOrganization (\ORG -> and ( agent(var ? ? ? REQ)(var ? ? ? GROUP))( patient(var ? ? ? REQ)(var ? ? ? ORG)))))
+
+forall PoliticalPressureGroup (\GROUP -> forall GovernmentOrganization (\ORG -> forall AreaOfConcern (\AIM ->  impl (and ( organizationalObjective(var ? ? ? GROUP)(var ? ? ? AIM))( organizationalObjective(var ? ? ? ORG)(var ? ? ? AIM)))( inScopeOfInterest(var ? ? ? GROUP)(var ? ? ? ORG)))))
+
+forall ForeignTerroristOrganization (\X -> exists Declaring (\EV -> and ( agent(var ? ? ? EV)(el ? ? ? USStateDepartment))( patient(var ? ? ? EV)(var ? ? ? X))))
+
+forall Group (\GROUP -> forall RelationalAttribute (\STATUS -> forall Agent (\AGENT ->  impl ( associateWithStatus(var ? ? ? AGENT)(var ? ? ? STATUS)(var ? ? ? GROUP))( associateInOrganization(var ? ? ? AGENT)(var ? ? ? GROUP)))))
+
+forall (both Group Collection) (\GROUP -> forall (both Agent SelfConnectedObject) (\AGENT ->  impl ( associateWithStatus(var ? ? ? AGENT)(el ? ? ? FullMember)(var ? ? ? GROUP))( member(var ? ? ? AGENT)(var ? ? ? GROUP))))
+
+forall (both Group Collection) (\GROUP -> forall (both Agent SelfConnectedObject) (\AGENT ->  impl ( associateWithStatus(var ? ? ? AGENT)(el ? ? ? SuspendedMember)(var ? ? ? GROUP))( not (member(var ? ? ? AGENT)(var ? ? ? GROUP)))))
+
+forall InternationalOrganization (\ORG -> exists Nation (\COUNTRY1 -> exists Nation (\COUNTRY2 -> and ( agentOperatesInArea(var ? ? ? ORG)(var ? ? ? COUNTRY1))(and ( agentOperatesInArea(var ? ? ? ORG)(var ? ? ? COUNTRY2))( not (equal(var ? ? ? COUNTRY1)(var ? ? ? COUNTRY2)))))))
+
+forall (both Organization Physical) (\ORG2 -> forall (both Organization Physical) (\ORG1 ->  impl ( successorOrganization(var ? ? ? ORG1)(var ? ? ? ORG2))( earlier( el ? ? ? ( WhenFn(var ? ? ? ORG1)))( el ? ? ? ( WhenFn(var ? ? ? ORG2))))))
+
+forall (both Attribute AreaOfConcern) (\OVERAIM -> forall (both AreaOfConcern Attribute) (\AIM -> forall Agent (\ORG ->  impl (and ( organizationalObjective(var ? ? ? ORG)(var ? ? ? AIM))( subAttribute(var ? ? ? AIM)(var ? ? ? OVERAIM)))( organizationalObjective(var ? ? ? ORG)(var ? ? ? OVERAIM)))))
+
+forall Nation (\AREA ->  impl ( member(var ? ? ? AREA)(el ? ? ? EuropeanMonetaryUnion))( currencyType(var ? ? ? AREA)(el ? ? ? EuroDollar)))
+
+forall Nation (\AREA ->  impl ( currencyType(var ? ? ? AREA)(el ? ? ? EuroDollar))( member(var ? ? ? AREA)(el ? ? ? EuropeanMonetaryUnion)))
+
+forall (both SelfConnectedObject (both Object Agent)) (\AGENT ->  impl (and ( member(var ? ? ? AGENT)(el ? ? ? InternationalCourtOfJustice))( attribute(var ? ? ? AGENT)(el ? ? ? JudgeAtLaw)))(exists GeopoliticalArea (\POLITY ->  representativeAgentToAgent(var ? ? ? POLITY)(var ? ? ? AGENT)(el ? ? ? InternationalCourtOfJustice))))
+
+forall SelfConnectedObject (\PART ->  equiv ( member(var ? ? ? PART)(el ? ? ? InternationalRedCrossAndRedCrescentMovement))( member(var ? ? ? PART)(el ? ? ? InternationalFederationOfRedCrossAndRedCrescentSocieties)))
+
+forall ForeignServicePosition (\ROLE ->  subAttribute(var ? ? ? ROLE)(el ? ? ? DiplomaticAgent))
+
+forall Nation (\AGENT1 -> forall Agent (\AGENT2 -> forall Position (\POSITION -> forall Human (\PERSON ->  impl ( diplomaticRepresentativeInRole(var ? ? ? AGENT1)(var ? ? ? PERSON)(var ? ? ? POSITION)(var ? ? ? AGENT2))(exists DiplomaticOrganization (\ORG -> and ( subOrganization(var ? ? ? ORG)( el ? ? ? ( GovernmentFn(var ? ? ? AGENT1))))( occupiesPosition(var ? ? ? PERSON)(var ? ? ? POSITION)(var ? ? ? ORG))))))))
+
+forall Organization (\AGENT1 -> forall Organization (\ORG -> forall Agent (\AGENT2 -> forall Position (\POSITION -> forall Human (\PERSON ->  impl ( diplomaticRepresentativeInRole(var ? ? ? AGENT1)(var ? ? ? PERSON)(var ? ? ? POSITION)(var ? ? ? AGENT2))( occupiesPosition(var ? ? ? PERSON)(var ? ? ? POSITION)(var ? ? ? ORG)))))))
+
+forall GeopoliticalArea (\AGENT1 -> forall Agent (\AGENT2 -> forall Position (\POSITION -> forall (both Human CognitiveAgent) (\PERSON ->  impl ( diplomaticRepresentativeInRole(var ? ? ? AGENT1)(var ? ? ? PERSON)(var ? ? ? POSITION)(var ? ? ? AGENT2))( employs( el ? ? ? ( GovernmentFn(var ? ? ? AGENT1)))(var ? ? ? PERSON))))))
+
+forall Organization (\AGENT1 -> forall Agent (\AGENT2 -> forall Position (\POSITION -> forall (both Human CognitiveAgent) (\PERSON ->  impl ( diplomaticRepresentativeInRole(var ? ? ? AGENT1)(var ? ? ? PERSON)(var ? ? ? POSITION)(var ? ? ? AGENT2))( employs(var ? ? ? AGENT1)(var ? ? ? PERSON))))))
+
+forall GeopoliticalArea (\AGENT2 -> forall Position (\POSITION -> forall (both Human Agent) (\PERSON -> forall Agent (\AGENT1 ->  impl ( diplomaticRepresentativeInRole(var ? ? ? AGENT1)(var ? ? ? PERSON)(var ? ? ? POSITION)(var ? ? ? AGENT2))( agentOperatesInArea(var ? ? ? PERSON)(var ? ? ? AGENT2))))))
+
+forall Organization (\AGENT1 -> forall GeopoliticalArea (\AGENT2 -> forall Position (\POSITION -> forall Human (\PERSON ->  impl ( diplomaticRepresentativeInRole(var ? ? ? AGENT1)(var ? ? ? PERSON)(var ? ? ? POSITION)(var ? ? ? AGENT2))( agentOperatesInArea(var ? ? ? AGENT1)(var ? ? ? AGENT2))))))
+
+forall Nation (\AGENT1 -> forall GeopoliticalArea (\AGENT2 -> forall DiplomaticOrganization (\ORG -> forall Position (\POSITION -> forall Human (\PERSON ->  impl (and ( diplomaticRepresentativeInRole(var ? ? ? AGENT1)(var ? ? ? PERSON)(var ? ? ? POSITION)(var ? ? ? AGENT2))(and ( subOrganization(var ? ? ? ORG)( el ? ? ? ( GovernmentFn(var ? ? ? AGENT1))))( occupiesPosition(var ? ? ? PERSON)(var ? ? ? POSITION)(var ? ? ? ORG))))( agentOperatesInArea(var ? ? ? ORG)(var ? ? ? AGENT2)))))))
+
+forall Agent (\AGENT2 -> forall Position (\POSITION -> forall Human (\PERSON -> forall Agent (\AGENT1 ->  impl ( diplomaticRepresentativeInRole(var ? ? ? AGENT1)(var ? ? ? PERSON)(var ? ? ? POSITION)(var ? ? ? AGENT2))( diplomaticRepresentationType(var ? ? ? AGENT1)(var ? ? ? POSITION)(var ? ? ? AGENT2))))))
+
+forall Nation (\AGENT3 -> forall (both Agent GeopoliticalArea) (\AGENT2 -> forall Position (\POSITION -> forall Agent (\AGENT1 ->  impl (and ( diplomaticRepresentationType(var ? ? ? AGENT1)(var ? ? ? POSITION)(var ? ? ? AGENT2))( geopoliticalSubdivision(var ? ? ? AGENT2)(var ? ? ? AGENT3)))( diplomaticRepresentationType(var ? ? ? AGENT1)(var ? ? ? POSITION)(var ? ? ? AGENT3))))))
+
+forall (both Agent GeopoliticalArea) (\COUNTRY2 -> forall Position (\ROLE -> forall (both Agent GeopoliticalArea) (\COUNTRY1 ->  impl ( diplomaticRepresentationType(var ? ? ? COUNTRY1)(var ? ? ? ROLE)(var ? ? ? COUNTRY2))( diplomaticRelations(var ? ? ? COUNTRY1)(var ? ? ? COUNTRY2)))))
+
+forall (both GeopoliticalArea Agent) (\COUNTRY2 -> forall (both GeopoliticalArea Agent) (\COUNTRY1 ->  impl ( diplomaticRelations(var ? ? ? COUNTRY1)(var ? ? ? COUNTRY2))(exists ForeignServicePosition (\ROLE -> and ( subAttribute(var ? ? ? ROLE)(el ? ? ? DiplomaticAgent))( diplomaticRepresentationType(var ? ? ? COUNTRY1)(var ? ? ? ROLE)(var ? ? ? COUNTRY2))))))
+
+forall (both GeopoliticalArea Agent) (\COUNTRY2 -> forall (both GeopoliticalArea Agent) (\COUNTRY1 ->  impl ( diplomaticRelations(var ? ? ? COUNTRY1)(var ? ? ? COUNTRY2))(exists ForeignServicePosition (\ROLE -> and ( subAttribute(var ? ? ? ROLE)(el ? ? ? DiplomaticAgent))( diplomaticRepresentationType(var ? ? ? COUNTRY2)(var ? ? ? ROLE)(var ? ? ? COUNTRY1))))))
+
+forall (both GeopoliticalArea Agent) (\COUNTRY2 -> forall (both GeopoliticalArea Agent) (\COUNTRY1 ->  impl ( diplomaticRelations(var ? ? ? COUNTRY1)(var ? ? ? COUNTRY2))(exists Position (\ROLE1 -> exists Position (\ROLE2 -> and ( diplomaticRepresentationType(var ? ? ? COUNTRY1)(var ? ? ? ROLE1)(var ? ? ? COUNTRY2))( diplomaticRepresentationType(var ? ? ? COUNTRY2)(var ? ? ? ROLE2)(var ? ? ? COUNTRY1)))))))
+
+forall Agent (\COUNTRY2 -> forall (both Position Attribute) (\ROLE -> forall (both Agent Nation) (\COUNTRY1 ->  impl (and ( diplomaticRepresentationType(var ? ? ? COUNTRY1)(var ? ? ? ROLE)(var ? ? ? COUNTRY2))( subAttribute(var ? ? ? ROLE)(el ? ? ? DiplomaticAgent)))(exists Human (\PERSON -> and ( citizen(var ? ? ? PERSON)(var ? ? ? COUNTRY1))( diplomaticRepresentativeInRole(var ? ? ? COUNTRY1)(var ? ? ? PERSON)(var ? ? ? ROLE)(var ? ? ? COUNTRY2)))))))
+
+forall Agent (\COUNTRY2 -> forall Position (\ROLE -> forall (both Human Agent) (\PERSON -> forall Agent (\COUNTRY1 ->  impl ( diplomaticRepresentativeInRole(var ? ? ? COUNTRY1)(var ? ? ? PERSON)(var ? ? ? ROLE)(var ? ? ? COUNTRY2))( representativeAgentToAgent(var ? ? ? COUNTRY1)(var ? ? ? PERSON)(var ? ? ? COUNTRY2))))))
+
+forall Organization (\SENDER -> forall CognitiveAgent (\REP -> forall Agent (\RECEIVER ->  impl ( representativeAgentToAgent(var ? ? ? SENDER)(var ? ? ? REP)(var ? ? ? RECEIVER))( employs(var ? ? ? SENDER)(var ? ? ? REP)))))
+
+forall Nation (\SENDER -> forall CognitiveAgent (\REP -> forall Agent (\RECEIVER ->  impl ( representativeAgentToAgent(var ? ? ? SENDER)(var ? ? ? REP)(var ? ? ? RECEIVER))( employs( el ? ? ? ( GovernmentFn(var ? ? ? SENDER)))(var ? ? ? REP)))))
+
+forall Nation (\SENDER -> forall Nation (\RECEIVER -> forall Human (\PERSON -> forall (both Attribute Position) (\ROLE ->  impl (and ( attribute(var ? ? ? PERSON)(var ? ? ? ROLE))(and ( subAttribute(var ? ? ? ROLE)(el ? ? ? DiplomaticAgent))( representativeAgentToAgent(var ? ? ? SENDER)(var ? ? ? PERSON)(var ? ? ? RECEIVER))))( diplomaticRepresentationType(var ? ? ? SENDER)(var ? ? ? ROLE)(var ? ? ? RECEIVER))))))
+
+forall Agent (\AGENT2 -> forall Agent (\AGENT1 ->  impl ( diplomaticOrganizationType(var ? ? ? AGENT1)(desc ConsulateGeneral ? ?)(var ? ? ? AGENT2))( diplomaticRepresentationType(var ? ? ? AGENT1)(el ? ? ? ConsulGeneral)(var ? ? ? AGENT2))))
+
+forall City (\AREA2 -> forall Agent (\AGENT2 -> forall Agent (\AGENT1 ->  impl ( diplomaticRepresentationType(var ? ? ? AGENT1)(el ? ? ? ConsulGeneral)(var ? ? ? AGENT2))( diplomaticOrganizationType(var ? ? ? AGENT1)(desc ConsulateGeneral ? ?)(var ? ? ? AGENT2)))))
+
+forall Agent (\AGENT2 -> forall Human (\PERSON -> forall Agent (\AGENT1 ->  impl ( diplomaticRepresentativeInRole(var ? ? ? AGENT1)(var ? ? ? PERSON)(el ? ? ? Ambassador)(var ? ? ? AGENT2))( diplomaticOrganizationType(var ? ? ? AGENT1)(desc Embassy ? ?)(var ? ? ? AGENT2)))))
+
+forall Agent (\AGENT2 -> forall Agent (\AGENT1 ->  impl ( diplomaticRepresentationType(var ? ? ? AGENT1)(el ? ? ? Ambassador)(var ? ? ? AGENT2))( diplomaticOrganizationType(var ? ? ? AGENT1)(desc Embassy ? ?)(var ? ? ? AGENT2))))
+
+forall Agent (\AGENT2 -> forall Agent (\AGENT1 ->  impl ( diplomaticOrganizationType(var ? ? ? AGENT1)(desc Embassy ? ?)(var ? ? ? AGENT2))( diplomaticRepresentationType(var ? ? ? AGENT1)(el ? ? ? Ambassador) (var ? ? ? AGENT2))))

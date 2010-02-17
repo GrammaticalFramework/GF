@@ -1,0 +1,208 @@
+
+EquivalenceRelation ? (\x,y -> equal x y)
+
+SymmetricRelation ? (\x,y -> disjoint x y)
+
+EquivalenceRelation ? (\x,y -> relatedInternalConcept x y)
+
+PartialOrderingRelation ? (\x,y -> subAttribute x y)
+
+AsymmetricRelation ? (\x,y -> successorAttribute x y)
+
+TransitiveRelation ? (\x,y -> successorAttributeClosure x y)
+
+IrreflexiveRelation ? (\x,y -> successorAttributeClosure x y)
+
+PartialOrderingRelation ? (\x,y -> part x y)
+
+AsymmetricRelation ? (\x,y -> properPart x y)
+
+TransitiveRelation ? (\x,y -> properPart x y)
+
+PartialOrderingRelation ? (\x,y -> subCollection x y)
+
+TransitiveRelation ? (\x,y -> lessThan x y)
+
+IrreflexiveRelation ? (\x,y -> lessThan x y)
+
+TransitiveRelation ? (\x,y -> greaterThan x y)
+
+IrreflexiveRelation ? (\x,y -> greaterThan x y)
+
+PartialOrderingRelation ? (\x,y -> lessThanOrEqualTo x y)
+
+PartialOrderingRelation ? (\x,y -> greaterThanOrEqualTo x y)
+
+IntentionalRelation ? ? (\x,y -> inScopeOfInterest x y)
+
+ObjectAttitude ? ? (\x,y -> needs x y)
+
+ObjectAttitude ? ? (\x,y -> wants x y)
+
+PartialOrderingRelation ? (\x,y -> subList x y)
+
+EquivalenceRelation ? (\x,y -> identicalListItems x y)
+
+SymmetricRelation ? (\x,y -> relatedEvent x y)
+
+AsymmetricRelation ? (\x,y -> causes x y)
+
+EquivalenceRelation ? (\x,y -> copy x y)
+
+AsymmetricRelation ? (\x,y -> crosses x y)
+
+TransitiveRelation ? (\x,y -> crosses x y)
+
+AsymmetricRelation ? (\x,y -> penetrates x y)
+
+IntransitiveRelation ? (\x,y -> penetrates x y)
+
+EquivalenceRelation ? (\x,y -> equivalentContentInstance x y)
+
+PartialOrderingRelation ? (\x,y -> subsumesContentInstance x y)
+
+TransitiveRelation ? (\x,y -> subProposition x y)
+
+IrreflexiveRelation ? (\x,y -> subProposition x y)
+
+TransitiveRelation ? (\x,y -> subPlan x y)
+
+IrreflexiveRelation ? (\x,y -> subPlan x y)
+
+AssociativeFunction ? (\x,y -> MultiplicationFn x y)
+
+CommutativeFunction ? ? (\x,y -> MultiplicationFn x y)
+
+AssociativeFunction ? (\x,y -> AdditionFn x y)
+
+CommutativeFunction ? ? (\x,y -> AdditionFn x y)
+
+AssociativeFunction ? (\x,y -> SubtractionFn x y)
+
+AssociativeFunction ? (\x,y -> DivisionFn x y)
+
+TransitiveRelation ? (\x,y -> multiplicativeFactor x y)
+
+AssociativeFunction ? (\x,y -> MaxFn x y)
+
+CommutativeFunction ? ? (\x,y -> MaxFn x y)
+
+AssociativeFunction ? (\x,y -> MinFn x y)
+
+CommutativeFunction ? ? (\x,y -> MinFn x y)
+
+ReflexiveRelation ? (\x,y -> subGraph x y)
+
+TransitiveRelation ? (\x,y -> subGraph x y)
+
+TransitiveRelation ? (\x,y -> larger x y)
+
+IrreflexiveRelation ? (\x,y -> larger x y)
+
+TransitiveRelation ? (\x,y -> smaller x y)
+
+IrreflexiveRelation ? (\x,y -> smaller x y)
+
+PartialOrderingRelation ? (\x,y -> temporalPart x y)
+
+TransitiveRelation ? (\x,y -> starts x y)
+
+IrreflexiveRelation ? (\x,y -> starts x y)
+
+TransitiveRelation ? (\x,y -> finishes x y)
+
+IrreflexiveRelation ? (\x,y -> finishes x y)
+
+IrreflexiveRelation ? (\x,y -> before x y)
+
+TransitiveRelation ? (\x,y -> before x y)
+
+PartialOrderingRelation ? (\x,y -> beforeOrEqual x y)
+
+ReflexiveRelation ? (\x,y -> overlapsTemporally x y)
+
+SymmetricRelation ? (\x,y -> overlapsTemporally x y)
+
+TransitiveRelation ? (\x,y -> during x y)
+
+IrreflexiveRelation ? (\x,y -> during x y)
+
+AsymmetricRelation ? (\x,y -> meetsTemporally x y)
+
+IntransitiveRelation ? (\x,y -> meetsTemporally x y)
+
+TransitiveRelation ? (\x,y -> earlier x y)
+
+IrreflexiveRelation ? (\x,y -> earlier x y)
+
+EquivalenceRelation ? (\x,y -> cooccur x y)
+
+ReflexiveRelation ? (\x,y -> connected x y)
+
+SymmetricRelation ? (\x,y -> connected x y)
+
+IrreflexiveRelation ? (\x,y -> meetsSpatially x y)
+
+SymmetricRelation ? (\x,y -> meetsSpatially x y)
+
+ReflexiveRelation ? (\x,y -> overlapsSpatially x y)
+
+SymmetricRelation ? (\x,y -> overlapsSpatially x y)
+
+SymmetricRelation ? (\x,y -> overlapsPartially x y)
+
+IrreflexiveRelation ? (\x,y -> overlapsPartially x y)
+
+IrreflexiveRelation ? (\x,y -> superficialPart x y)
+
+TransitiveRelation ? (\x,y -> superficialPart x y)
+
+AsymmetricRelation ? (\x,y -> surface x y)
+
+AsymmetricRelation ? (\x,y -> interiorPart x y)
+
+TransitiveRelation ? (\x,y -> interiorPart x y)
+
+PartialOrderingRelation ? (\x,y -> subProcess x y)
+
+TransitiveRelation ? (\x,y -> geographicSubregion x y)
+
+AsymmetricRelation ? (\x,y -> geographicSubregion x y)
+
+AsymmetricRelation ? (\x,y -> geopoliticalSubdivision x y)
+
+TransitiveRelation ? (\x,y -> geopoliticalSubdivision x y)
+
+SymmetricRelation ? (\x,y -> connectedEngineeringComponents x y)
+
+IrreflexiveRelation ? (\x,y -> connectedEngineeringComponents x y)
+
+SymmetricRelation ? (\x,y -> relative x y)
+
+EquivalenceRelation ? (\x,y -> familyRelation x y)
+
+TransitiveRelation ? (\x,y -> ancestor x y)
+
+IrreflexiveRelation ? (\x,y -> ancestor x y)
+
+AsymmetricRelation ? (\x,y -> parent x y)
+
+IntransitiveRelation ? (\x,y -> parent x y)
+
+SymmetricRelation ? (\x,y -> sibling x y)
+
+IrreflexiveRelation ? (\x,y -> sibling x y)
+
+SymmetricRelation ? (\x,y -> legalRelation x y)
+
+SymmetricRelation ? (\x,y -> mutualAcquaintance x y)
+
+IrreflexiveRelation ? (\x,y -> spouse x y)
+
+SymmetricRelation ? (\x,y -> spouse x y)
+
+PartialOrderingRelation ? (\x,y -> subOrganization x y)
+
+SymmetricRelation ? (\x,y -> consistent x y)
+
+PartialOrderingRelation ? (\x,y -> geometricPart x y)

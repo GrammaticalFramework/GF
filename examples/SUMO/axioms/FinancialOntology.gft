@@ -1,0 +1,304 @@
+
+forall FinancialAsset (\ASSET -> exists CurrencyMeasure (\VALUE ->  monetaryValue(var ? ? ? ASSET)(var ? ? ? VALUE)))
+
+forall FinancialAccount (\ACCOUNT -> exists FinancialOrganization (\ORGANIZATION ->  accountAt(var ? ? ? ACCOUNT)(var ? ? ? ORGANIZATION)))
+
+forall Check (\CHECK -> exists CurrencyMeasure (\VALUE ->  monetaryValue(var ? ? ? CHECK)(var ? ? ? VALUE)))
+
+forall Check (\CHECK -> exists FinancialAccount (\ACCOUNT ->  checkAccount(var ? ? ? CHECK)(var ? ? ? ACCOUNT)))
+
+forall ProcessingACheck (\PROCESSING -> forall (both Entity TimeInterval) (\WITHDRAWALTIME -> forall (both Entity TimeInterval) (\PROCESSINGTIME -> forall (both FinancialAccount Object) (\ACCOUNT -> forall CurrencyMeasure (\AMOUNT -> forall (both Physical (both Check (both Entity Object))) (\CHECK ->  impl (and ( monetaryValue(var ? ? ? CHECK)(var ? ? ? AMOUNT))(and ( checkAccount(var ? ? ? CHECK)(var ? ? ? ACCOUNT))(and ( patient(var ? ? ? PROCESSING)(var ? ? ? CHECK))( equal( el ? ? ? ( WhenFn(var ? ? ? PROCESSING)))(var ? ? ? PROCESSINGTIME)))))(exists Withdrawal (\WITHDRAWAL -> and ( instrument(var ? ? ? WITHDRAWAL)(var ? ? ? CHECK))(and ( equal( el ? ? ? ( WhenFn(var ? ? ? WITHDRAWAL)))(var ? ? ? WITHDRAWALTIME))(and ( meetsTemporally(var ? ? ? PROCESSINGTIME)(var ? ? ? WITHDRAWALTIME))(and ( transactionAmount(var ? ? ? WITHDRAWAL)(var ? ? ? AMOUNT))( origin(var ? ? ? WITHDRAWAL)(var ? ? ? ACCOUNT)))))))))))))
+
+forall ProcessingACheck (\PROCESSING -> forall FinancialAccount (\ACCOUNT -> forall (both Entity TimeInterval) (\DEPOSITTIME -> forall (both Entity TimeInterval) (\PROCESSINGTIME -> forall CurrencyMeasure (\AMOUNT -> forall (both Physical (both Entity Object)) (\CHECK ->  impl (and ( monetaryValue(var ? ? ? CHECK)(var ? ? ? AMOUNT))(and ( patient(var ? ? ? PROCESSING)(var ? ? ? CHECK))(and ( destination(var ? ? ? PROCESSING)( el ? ? ? ( CurrencyFn(var ? ? ? ACCOUNT))))( equal( el ? ? ? ( WhenFn(var ? ? ? PROCESSING)))(var ? ? ? PROCESSINGTIME)))))(exists Deposit (\DEPOSIT -> and ( instrument(var ? ? ? DEPOSIT)(var ? ? ? CHECK))(and ( equal( el ? ? ? ( WhenFn(var ? ? ? DEPOSIT)))(var ? ? ? DEPOSITTIME))(and ( meetsTemporally(var ? ? ? PROCESSINGTIME)(var ? ? ? DEPOSITTIME))(and ( transactionAmount(var ? ? ? DEPOSIT)(var ? ? ? AMOUNT))( destination(var ? ? ? DEPOSIT)( el ? ? ? ( CurrencyFn(var ? ? ? ACCOUNT)))))))))))))))
+
+forall Check (\CHECK -> forall ProcessingACheck (\PROCESSING ->  impl ( patient(var ? ? ? PROCESSING)(var ? ? ? CHECK))(exists DepositingACheck (\DEPOSITING -> and ( patient(var ? ? ? DEPOSITING)(var ? ? ? CHECK))( time(var ? ? ? DEPOSITING)( el ? ? ? ( ImmediatePastFn( el ? ? ? ( WhenFn(var ? ? ? PROCESSING))))))))))
+
+forall DepositingACheck (\DEPOSITING -> forall Check (\CHECK -> forall (both Agent CognitiveAgent) (\AGENT ->  impl ( agent(var ? ? ? DEPOSITING)(var ? ? ? AGENT))( signedBy(var ? ? ? CHECK)(var ? ? ? AGENT)))))
+
+forall DrawingACheck (\DRAWING -> forall ProcessingACheck (\PROCESSING -> forall Quantity (\DURATION -> forall TimeDuration (\DUATION -> forall TimeInterval (\TIME -> forall (both Entity TimeInterval) (\PROCESSINGTIME -> forall Physical (\PROCESING -> forall (both Entity TimeInterval) (\DRAWINGTIME -> forall Entity (\CHECK ->  impl (and ( patient(var ? ? ? DRAWING)(var ? ? ? CHECK))(and ( patient(var ? ? ? PROCESSING)(var ? ? ? CHECK))(and ( equal( el ? ? ? ( WhenFn(var ? ? ? DRAWING)))(var ? ? ? DRAWINGTIME))(and ( equal( el ? ? ? ( WhenFn(var ? ? ? PROCESING)))(var ? ? ? PROCESSINGTIME))(and ( meetsTemporally(var ? ? ? DRAWINGTIME)(var ? ? ? TIME))(and ( meetsTemporally(var ? ? ? TIME)(var ? ? ? PROCESSINGTIME))( duration(var ? ? ? TIME)(var ? ? ? DUATION))))))))( lessThan(var ? ? ? DURATION)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 6))(el ? ? ? MonthDuration)))))))))))))
+
+forall PayCheck (\CHECK -> forall Giving (\GIVE -> forall (both Entity Organization) (\AGENT -> forall CognitiveAgent (\ORGANIZATION ->  impl (and ( issuedBy(var ? ? ? CHECK)(var ? ? ? ORGANIZATION))( destination(var ? ? ? GIVE)(var ? ? ? AGENT)))( employs(var ? ? ? AGENT)(var ? ? ? ORGANIZATION))))))
+
+forall BankCard (\CARD -> exists CognitiveAgent (\ORGANIZATION ->  issuedBy(var ? ? ? CARD)(var ? ? ? ORGANIZATION)))
+
+forall BankCard (\CARD -> forall (both CognitiveAgent FinancialOrganization) (\BANK ->  impl ( issuedBy(var ? ? ? CARD)(var ? ? ? BANK))(exists FinancialAccount (\ACCOUNT -> and ( cardAccount(var ? ? ? CARD)(var ? ? ? ACCOUNT))( accountAt(var ? ? ? ACCOUNT)(var ? ? ? BANK))))))
+
+forall DebitCard (\CARD -> forall (both Agent CognitiveAgent) (\AGENT ->  impl ( possesses(var ? ? ? AGENT)(var ? ? ? CARD))(exists DepositAccount (\ACCOUNT -> and ( cardAccount(var ? ? ? CARD)(var ? ? ? ACCOUNT))( accountHolder(var ? ? ? ACCOUNT)(var ? ? ? AGENT))))))
+
+forall CreditCard (\CARD -> forall (both Agent CognitiveAgent) (\AGENT ->  impl ( possesses(var ? ? ? AGENT)(var ? ? ? CARD))(exists CreditCardAccount (\ACCOUNT -> and ( cardAccount(var ? ? ? CARD)(var ? ? ? ACCOUNT))( accountHolder(var ? ? ? ACCOUNT)(var ? ? ? AGENT))))))
+
+forall OpeningAnAccount (\OPENING -> forall FinancialOrganization (\BANK -> forall (both Entity TimeInterval) (\OPENINGTIME -> forall (both Agent CognitiveAgent) (\AGENT ->  impl (and ( located(var ? ? ? OPENING)(var ? ? ? BANK))(and ( agent(var ? ? ? OPENING)(var ? ? ? AGENT))( equal( el ? ? ? ( WhenFn(var ? ? ? OPENING)))(var ? ? ? OPENINGTIME))))(exists FinancialAccount (\ACCOUNT -> exists TimeInterval (\ACCOUNTPERIOD -> and ( agreementPeriod(var ? ? ? ACCOUNT)(var ? ? ? ACCOUNTPERIOD))(and ( meetsTemporally(var ? ? ? OPENINGTIME)(var ? ? ? ACCOUNTPERIOD))(and ( accountAt(var ? ? ? ACCOUNT)(var ? ? ? BANK))( accountHolder(var ? ? ? ACCOUNT)(var ? ? ? AGENT)))))))))))
+
+forall UsingAnAccount (\USING -> forall (both CognitiveAgent Agent) (\AGENT -> forall (both Entity FinancialAccount) (\ACCOUNT ->  impl (and ( patient(var ? ? ? USING)(var ? ? ? ACCOUNT))( accountHolder(var ? ? ? ACCOUNT)(var ? ? ? AGENT)))( agent(var ? ? ? USING)(var ? ? ? AGENT)))))
+
+forall DrawingACheck (\DRAWING -> forall FinancialAccount (\ACCOUNT -> forall (both Agent CognitiveAgent) (\AGENT -> forall (both Entity Check) (\CHECK ->  impl (and ( patient(var ? ? ? DRAWING)(var ? ? ? CHECK))(and ( agent(var ? ? ? DRAWING)(var ? ? ? AGENT))( checkAccount(var ? ? ? CHECK)(var ? ? ? ACCOUNT))))( accountHolder(var ? ? ? ACCOUNT)(var ? ? ? AGENT))))))
+
+forall DepositingACheck (\DEPOSITING -> exists Check (\CHECK ->  patient(var ? ? ? DEPOSITING)(var ? ? ? CHECK)))
+
+forall DepositingACheck (\DEPOSITING -> forall Check (\CHECK -> forall CurrencyMeasure (\AMOUNT -> forall FinancialAccount (\ACCOUNT ->  impl (and ( patient(var ? ? ? DEPOSITING)(var ? ? ? CHECK))(and ( checkAccount(var ? ? ? CHECK)(var ? ? ? ACCOUNT))( monetaryValue(var ? ? ? CHECK)(var ? ? ? AMOUNT))))(exists Deposit (\DEPOSIT -> and ( destination(var ? ? ? DEPOSIT)( el ? ? ? ( CurrencyFn(var ? ? ? ACCOUNT))))( transactionAmount(var ? ? ? DEPOSIT)(var ? ? ? AMOUNT))))))))
+
+forall ControllingAnAccount (\CONTROLLING -> forall (both FinancialOrganization Agent) (\BANK -> forall (both Entity FinancialAccount) (\ACCOUNT ->  impl (and ( patient(var ? ? ? CONTROLLING)(var ? ? ? ACCOUNT))( accountAt(var ? ? ? ACCOUNT)(var ? ? ? BANK)))( agent(var ? ? ? CONTROLLING)(var ? ? ? BANK)))))
+
+forall ProcessingACheck (\PROCESSING -> forall Process (\PROCESING -> exists Check (\CHECK ->  patient(var ? ? ? PROCESING)(var ? ? ? CHECK))))
+
+forall ProcessingACheck (\PROCESSING -> exists AuthorizationOfTransaction (\AUTHORIZATION ->  subProcess(var ? ? ? AUTHORIZATION)(var ? ? ? PROCESSING)))
+
+forall Payment (\PAYMENT -> forall FinancialAccount (\ACCOUNT -> forall (both Entity CurrencyMeasure) (\BALANCE2 -> forall (both CurrencyMeasure Quantity) (\BALANCE1 -> forall (both CurrencyMeasure Quantity) (\AMOUNT ->  impl (and ( origin(var ? ? ? PAYMENT)( el ? ? ? ( CurrencyFn(var ? ? ? ACCOUNT))))(and ( transactionAmount(var ? ? ? PAYMENT)(var ? ? ? AMOUNT))(and ( currentAccountBalance(var ? ? ? ACCOUNT)( el ? ? ? ( ImmediatePastFn( el ? ? ? ( WhenFn(var ? ? ? PAYMENT)))))(var ? ? ? BALANCE1))( equal(var ? ? ? BALANCE2)( el ? ? ? ( SubtractionFn(var ? ? ? BALANCE1)(var ? ? ? AMOUNT)))))))( currentAccountBalance(var ? ? ? ACCOUNT)( el ? ? ? ( ImmediateFutureFn( el ? ? ? ( WhenFn(var ? ? ? PAYMENT)))))(var ? ? ? BALANCE2)))))))
+
+forall Deposit (\DEPOSIT -> exists FinancialAccount (\ACCOUNT ->  destination(var ? ? ? DEPOSIT)( el ? ? ? ( CurrencyFn(var ? ? ? ACCOUNT)))))
+
+forall Deposit (\DEPOSIT -> forall FinancialAccount (\ACCOUNT -> forall (both Entity CurrencyMeasure) (\BALANCE2 -> forall (both CurrencyMeasure Quantity) (\BALANCE1 -> forall (both CurrencyMeasure Quantity) (\AMOUNT -> forall TimePosition (\TIMEOFDEPOSIT ->  impl (and ( time(var ? ? ? DEPOSIT)(var ? ? ? TIMEOFDEPOSIT))(and ( destination(var ? ? ? DEPOSIT)( el ? ? ? ( CurrencyFn(var ? ? ? ACCOUNT))))(and ( transactionAmount(var ? ? ? DEPOSIT)(var ? ? ? AMOUNT))(and ( currentAccountBalance(var ? ? ? ACCOUNT)( el ? ? ? ( ImmediatePastFn( el ? ? ? ( WhenFn(var ? ? ? DEPOSIT)))))(var ? ? ? BALANCE1))( equal(var ? ? ? BALANCE2)( el ? ? ? ( AdditionFn(var ? ? ? BALANCE1)(var ? ? ? AMOUNT))))))))( currentAccountBalance(var ? ? ? ACCOUNT)( el ? ? ? ( ImmediateFutureFn( el ? ? ? ( FutureFn(var ? ? ? DEPOSIT)))))(var ? ? ? BALANCE2))))))))
+
+forall Withdrawal (\WITHDRAWAL -> exists FinancialAccount (\ACCOUNT ->  origin(var ? ? ? WITHDRAWAL)( el ? ? ? ( CurrencyFn(var ? ? ? ACCOUNT)))))
+
+forall Withdrawal (\WITHDRAWAL -> forall FinancialAccount (\ACCOUNT -> forall (both Entity CurrencyMeasure) (\BALANCE2 -> forall (both CurrencyMeasure Quantity) (\BALANCE1 -> forall (both CurrencyMeasure Quantity) (\AMOUNT -> forall TimePosition (\TIMEOFWITHDRAWAL ->  impl (and ( time(var ? ? ? WITHDRAWAL)(var ? ? ? TIMEOFWITHDRAWAL))(and ( origin(var ? ? ? WITHDRAWAL)(var ? ? ? ACCOUNT))(and ( transactionAmount(var ? ? ? WITHDRAWAL)(var ? ? ? AMOUNT))(and ( currentAccountBalance(var ? ? ? ACCOUNT)( el ? ? ? ( ImmediatePastFn( el ? ? ? ( WhenFn(var ? ? ? WITHDRAWAL)))))(var ? ? ? BALANCE1))( equal(var ? ? ? BALANCE2)( el ? ? ? ( SubtractionFn(var ? ? ? BALANCE1)(var ? ? ? AMOUNT))))))))( currentAccountBalance(var ? ? ? ACCOUNT)( el ? ? ? ( ImmediateFutureFn( el ? ? ? ( FutureFn(var ? ? ? WITHDRAWAL)))))(var ? ? ? BALANCE2))))))))
+
+forall CurrencyMeasure (\MONEY -> forall (both Entity Physical) (\OBJECT -> forall (both Object Entity) (\SELLER -> forall Agent (\BUYER -> forall Process (\PURCHASE ->  impl (and ( agent(var ? ? ? PURCHASE)(var ? ? ? BUYER))(and ( origin(var ? ? ? PURCHASE)(var ? ? ? SELLER))(and ( patient(var ? ? ? PURCHASE)(var ? ? ? OBJECT))( monetaryValue(var ? ? ? OBJECT)(var ? ? ? MONEY)))))(exists Payment (\PAYMENT -> and ( subProcess(var ? ? ? PAYMENT)(var ? ? ? PURCHASE))(and ( transactionAmount(var ? ? ? PAYMENT)(var ? ? ? MONEY))( destination(var ? ? ? PAYMENT)(var ? ? ? SELLER))))))))))
+
+forall (both Entity Quantity) (\RATE_DECIMAL -> forall (both TimeInterval PhysicalQuantity) (\PERIOD -> forall (both Interest Entity) (\AMOUNT -> forall (both InterestRate PhysicalQuantity) (\RATE -> forall (both CurrencyMeasure Quantity) (\BALANCE -> forall FinancialAccount (\ACCOUNT ->  impl (and ( principalAmount(var ? ? ? ACCOUNT)(var ? ? ? BALANCE))(and ( fixedInterestRate(var ? ? ? ACCOUNT)(var ? ? ? RATE))(and ( simpleInterest(var ? ? ? ACCOUNT)(var ? ? ? AMOUNT)(var ? ? ? PERIOD))( equal(var ? ? ? RATE_DECIMAL)( el ? ? ? ( DivisionFn( el ? ? ? ( MagnitudeFn(var ? ? ? RATE)))(el ? ? ? (toInt 100))))))))( equal(var ? ? ? AMOUNT)( el ? ? ? ( MultiplicationFn( el ? ? ? ( MultiplicationFn( el ? ? ? ( MagnitudeFn(var ? ? ? PERIOD)))(var ? ? ? BALANCE)))(var ? ? ? RATE_DECIMAL))))))))))
+
+forall (both Entity Quantity) (\MULTIPLY -> forall (both Entity Quantity) (\EXPONENT -> forall (both Entity Quantity) (\ADD -> forall (both Entity Quantity) (\RATE_DECIMAL -> forall (both TimeInterval PhysicalQuantity) (\PERIOD -> forall (both Interest Entity) (\INTEREST -> forall (both InterestRate Quantity) (\RATE -> forall (both CurrencyMeasure Quantity) (\BALANCE -> forall FinancialAccount (\ACCOUNT ->  impl (and ( principalAmount(var ? ? ? ACCOUNT)(var ? ? ? BALANCE))(and ( fixedInterestRate(var ? ? ? ACCOUNT)(var ? ? ? RATE))(and ( compoundInterest(var ? ? ? ACCOUNT)(var ? ? ? INTEREST)(var ? ? ? PERIOD))(and ( equal(var ? ? ? RATE_DECIMAL)( el ? ? ? ( DivisionFn(var ? ? ? RATE)(el ? ? ? (toInt 100)))))(and ( equal(var ? ? ? ADD)( el ? ? ? ( AdditionFn(el ? ? ? (toInt 1))(var ? ? ? RATE_DECIMAL))))(and ( equal(var ? ? ? EXPONENT)( el ? ? ? ( ExponentiationFn(var ? ? ? ADD)( el ? ? ? ( MagnitudeFn(var ? ? ? PERIOD))))))( equal(var ? ? ? MULTIPLY)( el ? ? ? ( MultiplicationFn(var ? ? ? EXPONENT)(var ? ? ? BALANCE))))))))))( equal(var ? ? ? INTEREST)( el ? ? ? ( SubtractionFn(var ? ? ? MULTIPLY)(var ? ? ? BALANCE)))))))))))))
+
+forall (both Entity InterestRate) (\RATE -> forall (both Entity Quantity) (\RATE_DECIMAL -> forall (both CurrencyMeasure Quantity) (\PRINCIPAL -> forall TimeInterval (\PERIOD -> forall (both Interest Quantity) (\INTEREST -> forall FinancialAccount (\ACCOUNT ->  impl (and ( simpleInterest(var ? ? ? ACCOUNT)(var ? ? ? INTEREST)(var ? ? ? PERIOD))(and ( principalAmount(var ? ? ? ACCOUNT)(var ? ? ? PRINCIPAL))(and ( equal(var ? ? ? RATE_DECIMAL)( el ? ? ? ( DivisionFn(var ? ? ? INTEREST)(var ? ? ? PRINCIPAL))))( equal(var ? ? ? RATE)( el ? ? ? ( MultiplicationFn(var ? ? ? RATE_DECIMAL)(el ? ? ? (toInt 100))))))))( interestRatePerPeriod(var ? ? ? ACCOUNT)(var ? ? ? RATE)(var ? ? ? PERIOD))))))))
+
+forall PersonalAccount (\ACCOUNT -> forall (both InterestRate Quantity) (\PRIMERATE -> forall (both InterestRate Quantity) (\RATE -> forall Day (\DATE ->  impl (and ( currentInterestRate(var ? ? ? ACCOUNT)(var ? ? ? DATE)(var ? ? ? RATE))( primeInterestRate(var ? ? ? DATE)(var ? ? ? PRIMERATE)))( greaterThan(var ? ? ? RATE)(var ? ? ? PRIMERATE))))))
+
+forall (both TimeInterval TimePosition) (\DATE -> forall TimeInterval (\PERIOD -> forall Contract (\AGREEMENT ->  equiv (and ( agreementPeriod(var ? ? ? AGREEMENT)(var ? ? ? PERIOD))( overlapsTemporally(var ? ? ? DATE)(var ? ? ? PERIOD)))( agreementActive(var ? ? ? AGREEMENT)(var ? ? ? DATE)))))
+
+forall CurrencyMeasure (\PRINCIPAL -> forall (both Day TimePosition) (\DATE -> forall FinancialAccount (\ACCOUNT ->  impl (and ( maturityDate(var ? ? ? ACCOUNT)(var ? ? ? DATE))( principalAmount(var ? ? ? ACCOUNT)(var ? ? ? PRINCIPAL)))( amountDue(var ? ? ? ACCOUNT)(var ? ? ? PRINCIPAL)(var ? ? ? DATE)))))
+
+forall (both TimeInterval Day) (\END -> forall TimeInterval (\PERIOD -> forall (both Contract FinancialAccount) (\ACCOUNT ->  equiv (and ( agreementPeriod(var ? ? ? ACCOUNT)(var ? ? ? PERIOD))( finishes(var ? ? ? END)(var ? ? ? PERIOD)))( maturityDate(var ? ? ? ACCOUNT)(var ? ? ? END)))))
+
+forall CurrencyMeasure (\BALANCE -> forall Day (\DATE -> forall (both Contract FinancialAccount) (\ACCOUNT ->  impl (and ( effectiveDate(var ? ? ? ACCOUNT)(var ? ? ? DATE))( currentAccountBalance(var ? ? ? ACCOUNT)(var ? ? ? DATE)(var ? ? ? BALANCE)))( originalBalance(var ? ? ? ACCOUNT)(var ? ? ? BALANCE)))))
+
+forall LiabilityAccount (\ACCOUNT -> forall (both CurrencyMeasure Quantity) (\AMOUNT -> forall (both CurrencyMeasure Quantity) (\MINPAYMENT ->  impl (and ( minimumPayment(var ? ? ? ACCOUNT)(var ? ? ? MINPAYMENT)(el ? ? ? MonthDuration))(exists Month (\MONTH -> exists Process (\PAYMENT -> and ( destination(var ? ? ? PAYMENT)( el ? ? ? ( CurrencyFn(var ? ? ? ACCOUNT))))(and ( paymentsPerPeriod(var ? ? ? ACCOUNT)(var ? ? ? AMOUNT)(var ? ? ? MONTH))( lessThan(var ? ? ? AMOUNT)(var ? ? ? MINPAYMENT)))))))(exists Penalty (\PENALTY ->  destination(var ? ? ? PENALTY)( el ? ? ? ( CurrencyFn(var ? ? ? ACCOUNT))))))))
+
+forall (both Entity RealNumber) (\OVERDRAFT -> forall (both RealNumber Quantity) (\BALANCE -> forall Day (\DATE -> forall FinancialAccount (\ACCOUNT ->  impl (and ( currentAccountBalance(var ? ? ? ACCOUNT)(var ? ? ? DATE)( el ? ? ? ( MeasureFn(var ? ? ? BALANCE)(el ? ? ? UnitedStatesDollar))))(and ( lessThan(var ? ? ? BALANCE)(el ? ? ? (toInt 0)))( equal(var ? ? ? OVERDRAFT)( el ? ? ? ( SubtractionFn(el ? ? ? (toInt 0))(var ? ? ? BALANCE))))))( overdraft(var ? ? ? ACCOUNT)( el ? ? ? ( MeasureFn(var ? ? ? OVERDRAFT)(el ? ? ? UnitedStatesDollar)))(var ? ? ? DATE))))))
+
+forall Day (\DATE -> forall CurrencyMeasure (\AMOUNT -> forall (both Loan (both Contract FinancialAccount)) (\LOAN ->  impl (and ( downPayment(var ? ? ? LOAN)(var ? ? ? AMOUNT))( effectiveDate(var ? ? ? LOAN)(var ? ? ? DATE)))(exists (both FinancialTransaction (both Physical Process)) (\PAYMENT -> and ( transactionAmount(var ? ? ? PAYMENT)(var ? ? ? AMOUNT))(and ( date(var ? ? ? PAYMENT)(var ? ? ? DATE))( destination(var ? ? ? PAYMENT)( el ? ? ? ( CurrencyFn(var ? ? ? LOAN))))))))))
+
+forall (both Entity CurrencyMeasure) (\BALANCE -> forall (both CurrencyMeasure Quantity) (\VALUE -> forall (both Object Physical) (\PURCHASE -> forall (both CurrencyMeasure Quantity) (\AMOUNT -> forall (both Loan FinancialAccount) (\LOAN ->  impl (and ( downPayment(var ? ? ? LOAN)(var ? ? ? AMOUNT))(and ( loanForPurchase(var ? ? ? LOAN)(var ? ? ? PURCHASE))(and ( monetaryValue(var ? ? ? PURCHASE)(var ? ? ? VALUE))( equal(var ? ? ? BALANCE)( el ? ? ? ( SubtractionFn(var ? ? ? VALUE)(var ? ? ? AMOUNT)))))))( originalBalance(var ? ? ? LOAN)(var ? ? ? BALANCE)))))))
+
+forall (both Day TimePosition) (\DATE -> forall (both CurrencyMeasure Entity) (\AMOUNT -> forall (both CognitiveAgent Agent) (\AGENT ->  impl ( netWorth(var ? ? ? AGENT)(var ? ? ? AMOUNT)(var ? ? ? DATE))( holdsDuring(var ? ? ? DATE)( equal(var ? ? ? AMOUNT)( el ? ? ? ( WealthFn(var ? ? ? AGENT))))))))
+
+forall CurrencyMeasure (\AMOUNT -> forall (both FinancialTransaction Process) (\ACTION -> forall (both FinancialOrganization Agent) (\BANK ->  impl ( serviceFee(var ? ? ? BANK)(var ? ? ? ACTION)(var ? ? ? AMOUNT))(exists ChargingAFee (\FEE -> and ( agent(var ? ? ? FEE)(var ? ? ? BANK))(and ( causes(var ? ? ? ACTION)(var ? ? ? FEE))( amountCharged(var ? ? ? FEE)(var ? ? ? AMOUNT))))))))
+
+forall Tax (\TAX -> exists Government (\ORG ->  agent(var ? ? ? TAX)(var ? ? ? ORG)))
+
+forall InterestBearingAccount (\ACCOUNT -> exists TimeInterval (\PERIOD -> exists InterestRate (\RATE ->  interestRatePerPeriod(var ? ? ? ACCOUNT)(var ? ? ? RATE)(var ? ? ? PERIOD))))
+
+forall PersonalAccount (\ACCOUNT -> forall Human (\AGENT ->  accountHolder(var ? ? ? ACCOUNT)(var ? ? ? AGENT)))
+
+forall SavingsAccount (\ACCOUNT -> forall FinancialTransaction (\TRANSACTION ->  impl ( origin(var ? ? ? TRANSACTION)( el ? ? ? ( CurrencyFn(var ? ? ? ACCOUNT))))(exists AuthorizationOfTransaction (\AUTHORIZATION ->  subProcess(var ? ? ? AUTHORIZATION)(var ? ? ? TRANSACTION)))))
+
+forall SavingsAccount (\ACCOUNT -> forall TimeInterval (\PERIOD -> forall (both Interest CurrencyMeasure) (\INTEREST -> forall (both CognitiveAgent Entity) (\AGENT ->  impl (and ( accountHolder(var ? ? ? ACCOUNT)(var ? ? ? AGENT))( interestEarned(var ? ? ? ACCOUNT)(var ? ? ? INTEREST)(var ? ? ? PERIOD)))(exists (both Process FinancialTransaction) (\PAYMENT -> and ( destination(var ? ? ? PAYMENT)( el ? ? ? ( CurrencyFn(var ? ? ? ACCOUNT))))(and ( transactionAmount(var ? ? ? PAYMENT)(var ? ? ? INTEREST))( destination(var ? ? ? PAYMENT)(var ? ? ? AGENT)))))))))
+
+forall CertificateOfDeposit (\CD -> exists Day (\DATE ->  maturityDate(var ? ? ? CD)(var ? ? ? DATE)))
+
+forall CertificateOfDeposit (\CD -> forall Withdrawal (\WITHDRAWAL -> forall (both Day TimeInterval) (\DATEOFWITHDRAWAL -> forall (both Day TimeInterval) (\MATURITYDATE ->  impl (and ( maturityDate(var ? ? ? CD)(var ? ? ? MATURITYDATE))(and ( origin(var ? ? ? WITHDRAWAL)( el ? ? ? ( CurrencyFn(var ? ? ? CD))))(and ( date(var ? ? ? WITHDRAWAL)(var ? ? ? DATEOFWITHDRAWAL))( before( el ? ? ? ( EndFn(var ? ? ? DATEOFWITHDRAWAL)))( el ? ? ? ( BeginFn(var ? ? ? MATURITYDATE)))))))(exists Penalty (\PENALTY -> and ( destination(var ? ? ? PENALTY)( el ? ? ? ( CurrencyFn(var ? ? ? CD))))( causes(var ? ? ? WITHDRAWAL)(var ? ? ? PENALTY))))))))
+
+forall TraditionalSavingsAccount (\ACCOUNT -> not (exists Day (\DATE ->  maturityDate(var ? ? ? ACCOUNT)(var ? ? ? DATE))))
+
+forall TraditionalSavingsAccount (\ACCOUNT -> forall Withdrawal (\WITHDRAWAL ->  impl ( origin(var ? ? ? WITHDRAWAL)( el ? ? ? ( CurrencyFn(var ? ? ? ACCOUNT))))(exists Penalty (\PENALTY -> and ( destination(var ? ? ? PENALTY)( el ? ? ? ( CurrencyFn(var ? ? ? ACCOUNT))))( causes(var ? ? ? WITHDRAWAL)(var ? ? ? PENALTY))))))
+
+forall CheckingAccount (\ACCOUNT -> forall FinancialTransaction (\TRANSACTION ->  impl ( origin(var ? ? ? TRANSACTION)( el ? ? ? ( CurrencyFn(var ? ? ? ACCOUNT))))(or (exists Check (\CHECK ->  instrument(var ? ? ? TRANSACTION)(var ? ? ? CHECK)))(exists DebitCard (\DEBITCARD ->  instrument(var ? ? ? TRANSACTION)(var ? ? ? DEBITCARD))))))
+
+forall LiabilityAccount (\ACCOUNT -> forall (both FinancialOrganization CognitiveAgent) (\BANK -> forall CognitiveAgent (\AGENT ->  impl (and ( accountHolder(var ? ? ? ACCOUNT)(var ? ? ? AGENT))( accountAt(var ? ? ? ACCOUNT)(var ? ? ? BANK)))(exists Liability (\DEBT -> and ( agreementMember(var ? ? ? DEBT)(var ? ? ? AGENT))( agreementMember(var ? ? ? DEBT)(var ? ? ? BANK)))))))
+
+forall CreditAccount (\ACCOUNT -> forall TimeInterval (\PERIOD -> forall (both Interest CurrencyMeasure) (\INTEREST -> forall (both CognitiveAgent Object) (\AGENT -> forall (both FinancialOrganization Entity) (\ORGANIZATION ->  impl (and ( accountAt(var ? ? ? ACCOUNT)(var ? ? ? ORGANIZATION))(and ( accountHolder(var ? ? ? ACCOUNT)(var ? ? ? AGENT))( interestEarned(var ? ? ? ACCOUNT)(var ? ? ? INTEREST)(var ? ? ? PERIOD))))(exists (both Process FinancialTransaction) (\PAYMENT -> and ( origin(var ? ? ? PAYMENT)(var ? ? ? AGENT))(and ( transactionAmount(var ? ? ? PAYMENT)(var ? ? ? INTEREST))( destination(var ? ? ? PAYMENT)(var ? ? ? ORGANIZATION))))))))))
+
+forall CreditCardAccount (\ACCOUNT -> forall FinancialTransaction (\TRANSACTION ->  impl ( origin(var ? ? ? TRANSACTION)( el ? ? ? ( CurrencyFn(var ? ? ? ACCOUNT))))(exists CreditCard (\CARD ->  instrument(var ? ? ? TRANSACTION)(var ? ? ? CARD)))))
+
+forall Loan (\LOAN -> exists CognitiveAgent (\LENDER -> exists CognitiveAgent (\BORROWER -> and ( borrower(var ? ? ? LOAN)(var ? ? ? BORROWER))( lender(var ? ? ? LOAN)(var ? ? ? LENDER)))))
+
+forall (both Interest CurrencyMeasure) (\INTEREST -> forall TimeInterval (\PERIOD -> forall (both CognitiveAgent Entity) (\LENDER -> forall (both CognitiveAgent Object) (\BORROWER -> forall (both Loan (both Contract FinancialAccount)) (\LOAN ->  impl (and ( borrower(var ? ? ? LOAN)(var ? ? ? BORROWER))(and ( lender(var ? ? ? LOAN)(var ? ? ? LENDER))(and ( agreementPeriod(var ? ? ? LOAN)(var ? ? ? PERIOD))( interestEarned(var ? ? ? LOAN)(var ? ? ? INTEREST)(var ? ? ? PERIOD)))))(exists (both Process FinancialTransaction) (\PAYMENT -> and ( origin(var ? ? ? PAYMENT)(var ? ? ? BORROWER))(and ( transactionAmount(var ? ? ? PAYMENT)(var ? ? ? INTEREST))( destination(var ? ? ? PAYMENT)(var ? ? ? LENDER))))))))))
+
+forall (both CognitiveAgent Agent) (\AGENT -> forall Loan (\LOAN ->  impl ( lender(var ? ? ? LOAN)(var ? ? ? AGENT))(exists Lending (\LENDING ->  agent(var ? ? ? LENDING)(var ? ? ? AGENT)))))
+
+forall (both CognitiveAgent Agent) (\AGENT -> forall Loan (\LOAN ->  impl ( borrower(var ? ? ? LOAN)(var ? ? ? AGENT))(exists Borrowing (\BORROWING ->  agent(var ? ? ? BORROWING)(var ? ? ? AGENT)))))
+
+forall Collateral (\COLLATERAL -> exists SecuredLoan (\LOAN ->  securedBy(var ? ? ? LOAN)(var ? ? ? COLLATERAL)))
+
+forall Loan (\LOAN -> forall FinancialDefault (\DEFAULT -> forall (both CognitiveAgent Agent) (\BANK -> forall (both Collateral Object) (\SECURITY ->  impl (and ( securedBy(var ? ? ? LOAN)(var ? ? ? SECURITY))(and ( lender(var ? ? ? LOAN)(var ? ? ? BANK))( patient(var ? ? ? DEFAULT)(var ? ? ? LOAN))))( holdsDuring( el ? ? ? ( ImmediateFutureFn( el ? ? ? ( WhenFn(var ? ? ? DEFAULT)))))( possesses(var ? ? ? BANK)(var ? ? ? SECURITY)))))))
+
+forall SecuredLoan (\LOAN -> exists Collateral (\SECURITY ->  securedBy(var ? ? ? LOAN)(var ? ? ? SECURITY)))
+
+forall Mortgage (\LOAN -> exists RealEstate (\ESTATE ->  loanForPurchase(var ? ? ? LOAN)(var ? ? ? ESTATE)))
+
+forall Mortgage (\LOAN -> forall (both Object Collateral) (\REALESTATE ->  impl ( loanForPurchase(var ? ? ? LOAN)(var ? ? ? REALESTATE))( securedBy(var ? ? ? LOAN)(var ? ? ? REALESTATE))))
+
+forall Refinancing (\REFINANCING -> forall Loan (\LOAN -> forall CurrencyMeasure (\AMOUNT -> forall Day (\DATE -> forall CognitiveAgent (\BORROWER -> forall Collateral (\COLLATERAL -> forall TimePosition (\TIME ->  impl (and ( time(var ? ? ? REFINANCING)(var ? ? ? TIME))(and ( securedBy(var ? ? ? LOAN)(var ? ? ? COLLATERAL))(and ( borrower(var ? ? ? LOAN)(var ? ? ? BORROWER))(and ( currentAccountBalance(var ? ? ? LOAN)(var ? ? ? DATE)(var ? ? ? AMOUNT))( patient(var ? ? ? REFINANCING)(var ? ? ? LOAN))))))(exists Loan (\NEWLOAN -> exists (both Process (both Physical FinancialTransaction)) (\PAYMENT -> and ( borrower(var ? ? ? NEWLOAN)(var ? ? ? BORROWER))(and ( securedBy(var ? ? ? LOAN)(var ? ? ? COLLATERAL))(and ( destination(var ? ? ? PAYMENT)( el ? ? ? ( CurrencyFn(var ? ? ? LOAN))))(and ( time(var ? ? ? PAYMENT)(var ? ? ? TIME))(and ( origin(var ? ? ? PAYMENT)( el ? ? ? ( CurrencyFn(var ? ? ? NEWLOAN))))( transactionAmount(var ? ? ? PAYMENT)(var ? ? ? AMOUNT))))))))))))))))
+
+forall LoanCommitment (\COMMITMENT -> exists Loan (\LOAN -> exists CognitiveAgent (\BORROWER -> exists CognitiveAgent (\LENDER -> and ( lender(var ? ? ? LOAN)(var ? ? ? LENDER))(and ( borrower(var ? ? ? LOAN)(var ? ? ? BORROWER))(and ( agreementMember(var ? ? ? COMMITMENT)(var ? ? ? LENDER))( agreementMember(var ? ? ? COMMITMENT)(var ? ? ? BORROWER))))))))
+
+forall BankTermLoan (\LOAN -> forall (both RealNumber Quantity) (\DURATION -> forall TimeInterval (\PERIOD ->  impl (and ( agreementPeriod(var ? ? ? LOAN)(var ? ? ? PERIOD))( duration(var ? ? ? PERIOD)( el ? ? ? ( MeasureFn(var ? ? ? DURATION)(el ? ? ? YearDuration)))))( greaterThanOrEqualTo(var ? ? ? DURATION)(el ? ? ? (toInt 1))))))
+
+forall ConsolidationLoan (\LOAN -> exists Loan (\LOAN1 -> exists Loan (\LOAN2 -> exists Process (\PAYMENT2 -> exists Process (\PAYMENT1 -> and ( destination(var ? ? ? PAYMENT1)( el ? ? ? ( CurrencyFn(var ? ? ? LOAN1))))(and ( destination(var ? ? ? PAYMENT2)( el ? ? ? ( CurrencyFn(var ? ? ? LOAN2))))(and ( origin(var ? ? ? PAYMENT1)( el ? ? ? ( CurrencyFn(var ? ? ? LOAN))))( origin(var ? ? ? PAYMENT2)( el ? ? ? ( CurrencyFn(var ? ? ? LOAN)))))))))))
+
+forall ConventionalMortgage (\MORTGAGE -> exists Government (\GOVERNMENT ->  insured(var ? ? ? MORTGAGE)(var ? ? ? GOVERNMENT)))
+
+forall DayLoan (\LOAN -> forall TimeInterval (\PERIOD -> and ( agreementPeriod(var ? ? ? LOAN)(var ? ? ? PERIOD))( duration(var ? ? ? PERIOD)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 1))(el ? ? ? DayDuration))))))
+
+forall SinglePaymentLoan (\LOAN -> forall (both Day TimePosition) (\MATURITY -> forall CurrencyMeasure (\PRINCIPAL ->  impl (and ( principalAmount(var ? ? ? LOAN)(var ? ? ? PRINCIPAL))( maturityDate(var ? ? ? LOAN)(var ? ? ? MATURITY)))( amountDue(var ? ? ? LOAN)(var ? ? ? PRINCIPAL)(var ? ? ? MATURITY)))))
+
+forall InterestOnlyLoan (\LOAN -> forall (both TimePosition TimeInterval) (\DATE -> forall (both Interest CurrencyMeasure) (\INTEREST -> forall CurrencyMeasure (\PRINCIPAL -> forall TimeInterval (\PERIOD ->  impl (and ( agreementPeriod(var ? ? ? LOAN)(var ? ? ? PERIOD))(and ( principalAmount(var ? ? ? LOAN)(var ? ? ? PRINCIPAL))( interestEarned(var ? ? ? LOAN)(var ? ? ? INTEREST)(var ? ? ? PERIOD))))(and ( amountDue(var ? ? ? LOAN)(var ? ? ? PRINCIPAL)( el ? ? ? ( EndFn(var ? ? ? PERIOD))))(and ( amountDue(var ? ? ? LOAN)(var ? ? ? INTEREST)(var ? ? ? DATE))( before( el ? ? ? ( EndFn(var ? ? ? DATE)))( el ? ? ? ( EndFn(var ? ? ? PERIOD)))))))))))
+
+forall Index (\INDEX -> exists EconomicIndicator (\PERFORMANCE ->  benchmark(var ? ? ? PERFORMANCE)(var ? ? ? INDEX)))
+
+forall Inflation (\INFLATION -> forall ConsumerPriceIndex (\CPI -> forall ProducerPriceIndex (\PPI -> or ( benchmark(var ? ? ? INFLATION)(var ? ? ? CPI))( benchmark(var ? ? ? INFLATION)(var ? ? ? PPI)))))
+
+forall InflationIndex (\INDEX -> exists Inflation (\INFLATION ->  benchmark(var ? ? ? INFLATION)(var ? ? ? INDEX)))
+
+forall RealNumber (\R -> forall (both Nation Entity) (\N ->  impl ( inflationRateInCountry(var ? ? ? N)(var ? ? ? R))(exists Inflation (\I -> and ( duration( el ? ? ? ( WhenFn(var ? ? ? I)))(el ? ? ? YearDuration))(and ( experiencer(var ? ? ? I)(var ? ? ? N))( inflationRate(var ? ? ? I)(var ? ? ? R)))))))
+
+forall StockIndex (\INDEX -> exists Stock (\STOCK ->  benchmark(var ? ? ? INDEX)(var ? ? ? STOCK)))
+
+forall Investment (\INVESTMENT -> exists Agent (\AGENT -> exists Process (\INVESTING -> and ( agent(var ? ? ? INVESTING)(var ? ? ? AGENT))( possesses(var ? ? ? AGENT)(var ? ? ? INVESTMENT)))))
+
+forall Investing (\INVESTING ->  hasPurpose(var ? ? ? INVESTING)(exists CurrencyMeasure (\PROFIT ->  profit(var ? ? ? INVESTING)(var ? ? ? PROFIT))))
+
+forall InvestmentAttribute (\ATTRIBUTE -> exists InvestmentAccount (\ACCOUNT ->  attribute(var ? ? ? ACCOUNT)(var ? ? ? ATTRIBUTE)))
+
+forall Agent (\AGENT -> forall CurrencyMeasure (\MONEY -> forall (both Physical Entity) (\OBJ ->  impl ( price(var ? ? ? OBJ)(var ? ? ? MONEY)(var ? ? ? AGENT))(exists Buying (\BUYING -> and ( agent(var ? ? ? BUYING)(var ? ? ? AGENT))(and ( patient(var ? ? ? BUYING)(var ? ? ? OBJ))( transactionAmount(var ? ? ? BUYING)(var ? ? ? MONEY))))))))
+
+forall PlacingAnOrder (\PLACE -> forall (both Entity TimeInterval) (\TIME ->  impl ( equal( el ? ? ? ( WhenFn(var ? ? ? PLACE)))(var ? ? ? TIME))(exists (both Entity TimeInterval) (\PERIOD -> exists Physical (\ORDER -> and ( equal( el ? ? ? ( WhenFn(var ? ? ? ORDER)))(var ? ? ? PERIOD))( meetsTemporally(var ? ? ? TIME)(var ? ? ? PERIOD)))))))
+
+forall LimitOrder (\ORDER -> exists CurrencyMeasure (\PRICE ->  limitPrice(var ? ? ? ORDER)(var ? ? ? PRICE)))
+
+forall Broker (\BROKER -> exists ServiceContract (\CONTRACT ->  agreementMember(var ? ? ? CONTRACT)(var ? ? ? BROKER)))
+
+forall TaxFreeInvestment (\INVESTMENT -> exists Tax (\TAX ->  origin(var ? ? ? TAX)(var ? ? ? INVESTMENT)))
+
+forall TaxableInvestment (\INVESTMENT -> exists Tax (\TAX ->  origin(var ? ? ? TAX)(var ? ? ? INVESTMENT)))
+
+forall PreferredStock (\STOCK -> exists Dividend (\DIVIDEND -> exists CurrencyMeasure (\AMOUNT ->  transactionAmount(var ? ? ? DIVIDEND)(var ? ? ? AMOUNT))))
+
+forall PennyStock (\STOCK -> forall Agent (\DATE -> forall (both RealNumber Quantity) (\PRICE ->  impl ( askPrice(var ? ? ? STOCK)( el ? ? ? ( MeasureFn(var ? ? ? PRICE)(el ? ? ? UnitedStatesDollar)))(var ? ? ? DATE))( lessThan(var ? ? ? PRICE)(el ? ? ? (toInt 5))))))
+
+forall (both Agent TimeInterval) (\TIMEAFTERSPLIT -> forall (both Entity RealNumber) (\NEWNUMBER -> forall (both Entity Quantity) (\N3 -> forall (both Entity TimeInterval) (\TIMEOFSPLIT -> forall (both Integer Quantity) (\N2 -> forall (both Integer Quantity) (\N1 -> forall (both Agent TimeInterval) (\TIME -> forall (both RealNumber Quantity) (\NUMBER -> forall Physical (\STOCKS ->  impl (and ( price(var ? ? ? STOCKS)( el ? ? ? ( MeasureFn(var ? ? ? NUMBER)(el ? ? ? UnitedStatesDollar)))(var ? ? ? TIME))(exists (both StockSplit Physical) (\EVENT -> and ( splitFor(var ? ? ? EVENT)(var ? ? ? N1)(var ? ? ? N2))( equal( el ? ? ? ( WhenFn(var ? ? ? EVENT)))(var ? ? ? TIMEOFSPLIT)))))(and ( equal(var ? ? ? N3)( el ? ? ? ( MultiplicationFn(var ? ? ? NUMBER)(var ? ? ? N1))))(and ( equal(var ? ? ? NEWNUMBER)( el ? ? ? ( DivisionFn(var ? ? ? N3)(var ? ? ? N2))))(and ( price(var ? ? ? STOCKS)( el ? ? ? ( MeasureFn(var ? ? ? NEWNUMBER)(el ? ? ? UnitedStatesDollar)))(var ? ? ? TIMEAFTERSPLIT))(and ( meetsTemporally(var ? ? ? TIME)(var ? ? ? TIMEOFSPLIT))( meetsTemporally(var ? ? ? TIMEOFSPLIT)(var ? ? ? TIMEAFTERSPLIT)))))))))))))))
+
+forall Bond (\BOND -> exists Day (\DATE ->  maturityDate(var ? ? ? BOND)(var ? ? ? DATE)))
+
+forall Bond (\BOND -> forall (both Agent Entity) (\BONDHOLDER -> forall (both Interest CurrencyMeasure) (\INTEREST ->  impl (and ( couponInterest(var ? ? ? BOND)(var ? ? ? INTEREST))( possesses(var ? ? ? BONDHOLDER)(var ? ? ? BOND)))(exists Process (\PAYMENT -> exists TimeDuration (\PERIOD -> and ( periodicPayment( el ? ? ? ( AccountFn(var ? ? ? BOND)))(var ? ? ? INTEREST)(var ? ? ? PERIOD))( destination(var ? ? ? PAYMENT)(var ? ? ? BONDHOLDER))))))))
+
+forall FinancialAccount (\ACCOUNT -> forall (both Object FinancialAsset) (\ASSET -> forall (both Agent CognitiveAgent) (\AGENT ->  equiv (and ( possesses(var ? ? ? AGENT)(var ? ? ? ASSET))( equal(var ? ? ? ACCOUNT)( el ? ? ? ( AccountFn(var ? ? ? ASSET)))))( accountHolder(var ? ? ? ACCOUNT)(var ? ? ? AGENT)))))
+
+forall ZeroCouponBond (\BOND -> forall FinancialAccount (\BONDACCOUNT -> forall (both Entity CurrencyMeasure) (\TOTAL -> forall (both Interest Quantity) (\INTEREST -> forall TimeInterval (\PERIOD -> forall (both CurrencyMeasure Quantity) (\PRINCIPAL -> forall (both Agent Entity) (\BONDHOLDER -> forall Day (\DATE ->  impl (and ( maturityDate( el ? ? ? ( AccountFn(var ? ? ? BOND)))(var ? ? ? DATE))(and ( possesses(var ? ? ? BONDHOLDER)(var ? ? ? BOND))(and ( principalAmount( el ? ? ? ( AccountFn(var ? ? ? BOND)))(var ? ? ? PRINCIPAL))(and ( agreementPeriod( el ? ? ? ( AccountFn(var ? ? ? BOND)))(var ? ? ? PERIOD))(and ( interestEarned( el ? ? ? ( AccountFn(var ? ? ? BOND)))(var ? ? ? INTEREST)(var ? ? ? PERIOD))( equal(var ? ? ? TOTAL)( el ? ? ? ( AdditionFn(var ? ? ? PRINCIPAL)(var ? ? ? INTEREST)))))))))(exists Payment (\PAYMENT -> and ( destination(var ? ? ? PAYMENT)(var ? ? ? BONDHOLDER))(and ( origin(var ? ? ? PAYMENT)( el ? ? ? ( CurrencyFn(var ? ? ? BONDACCOUNT))))( transactionAmount(var ? ? ? PAYMENT)(var ? ? ? TOTAL)))))))))))))
+
+forall MunicipalBond (\BOND -> exists Government (\AGENT ->  issuedBy(var ? ? ? BOND)(var ? ? ? AGENT)))
+
+forall CorporateBond (\BOND -> exists Corporation (\AGENT ->  issuedBy(var ? ? ? BOND)(var ? ? ? AGENT)))
+
+forall SecuredBond (\BOND -> exists Collateral (\SECURITY ->  securedBy(var ? ? ? BOND)(var ? ? ? SECURITY)))
+
+forall SecuredBond (\BOND -> forall FinancialDefault (\DEFAULT -> forall Agent (\AGENT -> forall (both Collateral Object) (\SECURITY ->  impl (and ( securedBy(var ? ? ? BOND)(var ? ? ? SECURITY))(and ( possesses(var ? ? ? AGENT)(var ? ? ? BOND))( patient(var ? ? ? DEFAULT)(var ? ? ? BOND))))( holdsDuring( el ? ? ? ( ImmediateFutureFn( el ? ? ? ( WhenFn(var ? ? ? DEFAULT)))))( possesses(var ? ? ? AGENT)(var ? ? ? SECURITY)))))))
+
+forall TreasuryBond (\BOND -> exists Government (\AGENT ->  issuedBy(var ? ? ? BOND)(var ? ? ? AGENT)))
+
+forall CallableBond (\BOND -> forall CurrencyMeasure (\AMOUNT -> forall (both Day TimePosition) (\DATE ->  impl (and ( currentAccountBalance( el ? ? ? ( AccountFn(var ? ? ? BOND)))(var ? ? ? DATE)(var ? ? ? AMOUNT))( callDate(var ? ? ? BOND)(var ? ? ? DATE)))( amountDue( el ? ? ? ( AccountFn(var ? ? ? BOND)))(var ? ? ? AMOUNT)(var ? ? ? DATE)))))
+
+forall ConventionalOption (\OPTION -> forall TimeInterval (\PERIOD -> exists (both RealNumber Quantity) (\NUMBER -> and ( agreementPeriod(var ? ? ? OPTION)(var ? ? ? PERIOD))(and ( duration(var ? ? ? PERIOD)( el ? ? ? ( MeasureFn(var ? ? ? NUMBER)(el ? ? ? MonthDuration))))( lessThan(var ? ? ? NUMBER)(el ? ? ? (toInt 9)))))))
+
+forall ConventionalOption (\OPTION -> forall TimeInterval (\PERIOD -> exists (both RealNumber Quantity) (\NUMBER -> and ( agreementPeriod(var ? ? ? OPTION)(var ? ? ? PERIOD))(and ( duration(var ? ? ? PERIOD)( el ? ? ? ( MeasureFn(var ? ? ? NUMBER)(el ? ? ? MonthDuration))))( lessThan(var ? ? ? NUMBER)(el ? ? ? (toInt 39)))))))
+
+forall (both Day TimeInterval) (\DATE -> forall Contract (\CONTRACT ->  impl ( expirationDate(var ? ? ? CONTRACT)(var ? ? ? DATE))(exists TimeInterval (\PERIOD -> and ( agreementPeriod(var ? ? ? CONTRACT)(var ? ? ? PERIOD))( finishes(var ? ? ? DATE)(var ? ? ? PERIOD))))))
+
+forall CognitiveAgent (\AGENT -> forall CurrencyMeasure (\PREMIUM -> forall (both Option Investment) (\OPTION ->  impl (and ( premium(var ? ? ? OPTION)(var ? ? ? PREMIUM))( optionHolder(var ? ? ? OPTION)(var ? ? ? AGENT)))( potentialLoss(var ? ? ? AGENT)(var ? ? ? OPTION)(var ? ? ? PREMIUM)))))
+
+forall CancellingAnOrder (\KILL -> forall (both Entity Contract) (\ORDER ->  impl ( patient(var ? ? ? KILL)(var ? ? ? ORDER))( not (agreementActive(var ? ? ? ORDER)( el ? ? ? ( ImmediateFutureFn( el ? ? ? ( WhenFn(var ? ? ? KILL)))))))))
+
+forall IOCOrder (\ORDER -> forall TimeInterval (\PERIOD ->  impl ( agreementPeriod(var ? ? ? ORDER)(var ? ? ? PERIOD))(or (exists FillingAnOrder (\FILL -> exists (both Entity TimeInterval) (\TIME1 -> and ( patient(var ? ? ? FILL)(var ? ? ? ORDER))(and ( equal( el ? ? ? ( WhenFn(var ? ? ? FILL)))(var ? ? ? TIME1))( starts(var ? ? ? TIME1)(var ? ? ? PERIOD))))))(exists CancellingAnOrder (\KILL -> exists (both Entity TimeInterval) (\TIME2 -> and ( patient(var ? ? ? KILL)(var ? ? ? ORDER))(and ( equal( el ? ? ? ( WhenFn(var ? ? ? KILL)))(var ? ? ? TIME2))( starts(var ? ? ? TIME2)(var ? ? ? PERIOD)))))))))
+
+forall FOKOrder (\ORDER -> forall TimeInterval (\PERIOD ->  impl ( agreementPeriod(var ? ? ? ORDER)(var ? ? ? PERIOD))(or (exists FillingAnOrder (\FILL -> exists (both Entity TimeInterval) (\TIME1 -> and ( patient(var ? ? ? FILL)(var ? ? ? ORDER))(and ( equal( el ? ? ? ( WhenFn(var ? ? ? FILL)))(var ? ? ? TIME1))( starts(var ? ? ? TIME1)(var ? ? ? PERIOD))))))(exists CancellingAnOrder (\KILL -> exists (both Entity TimeInterval) (\TIME2 -> and ( patient(var ? ? ? KILL)(var ? ? ? ORDER))(and ( equal( el ? ? ? ( WhenFn(var ? ? ? KILL)))(var ? ? ? TIME2))( starts(var ? ? ? TIME2)(var ? ? ? PERIOD)))))))))
+
+forall GTCOrder (\ORDER -> forall (both Entity TimeInterval) (\END -> forall (both Entity TimeInterval) (\TIME -> forall TimeInterval (\PERIOD ->  impl ( agreementPeriod(var ? ? ? ORDER)(var ? ? ? PERIOD))(or (exists FillingAnOrder (\EXECUTE -> and ( patient(var ? ? ? EXECUTE)(var ? ? ? ORDER))(and ( equal( el ? ? ? ( WhenFn(var ? ? ? EXECUTE)))(var ? ? ? TIME))( overlapsTemporally(var ? ? ? TIME)(var ? ? ? PERIOD)))))(exists CancellingAnOrder (\CANCEL -> and ( patient(var ? ? ? CANCEL)(var ? ? ? ORDER))(and ( equal( el ? ? ? ( WhenFn(var ? ? ? CANCEL)))(var ? ? ? END))( finishes(var ? ? ? END)(var ? ? ? PERIOD))))))))))
+
+forall DayOrder (\ORDER -> forall TimeInterval (\PERIOD -> and ( agreementPeriod(var ? ? ? ORDER)(var ? ? ? PERIOD))( duration(var ? ? ? PERIOD)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 1))(el ? ? ? DayDuration))))))
+
+forall CallOption (\OPTION -> forall (both Agent TimePosition) (\TIME ->  equiv (exists (both CurrencyMeasure Quantity) (\STRIKEPRICE -> exists (both CurrencyMeasure Quantity) (\STOCKPRICE -> exists (both FinancialInstrument Physical) (\STOCK -> and ( underlier(var ? ? ? OPTION)(var ? ? ? STOCK))(and ( price(var ? ? ? STOCK)(var ? ? ? STOCKPRICE)(var ? ? ? TIME))(and ( strikePrice(var ? ? ? OPTION)(var ? ? ? STRIKEPRICE))( lessThan(var ? ? ? STRIKEPRICE)(var ? ? ? STOCKPRICE))))))))( inTheMoney(var ? ? ? OPTION)(var ? ? ? TIME))))
+
+forall PutOption (\OPTION -> forall (both Agent TimePosition) (\TIME ->  equiv (exists (both CurrencyMeasure Quantity) (\STRIKEPRICE -> exists (both CurrencyMeasure Quantity) (\STOCKPRICE -> exists (both FinancialInstrument Physical) (\STOCK -> and ( underlier(var ? ? ? OPTION)(var ? ? ? STOCK))(and ( price(var ? ? ? STOCK)(var ? ? ? STOCKPRICE)(var ? ? ? TIME))(and ( strikePrice(var ? ? ? OPTION)(var ? ? ? STRIKEPRICE))( lessThan(var ? ? ? STOCKPRICE)(var ? ? ? STRIKEPRICE))))))))( inTheMoney(var ? ? ? OPTION)(var ? ? ? TIME))))
+
+forall Option (\OPTION -> forall (both Agent TimePosition) (\TIME ->  equiv (exists (both CurrencyMeasure Entity) (\STRIKEPRICE -> exists (both CurrencyMeasure Entity) (\STOCKPRICE -> exists (both FinancialInstrument Physical) (\STOCK -> and ( underlier(var ? ? ? OPTION)(var ? ? ? STOCK))(and ( price(var ? ? ? STOCK)(var ? ? ? STOCKPRICE)(var ? ? ? TIME))(and ( strikePrice(var ? ? ? OPTION)(var ? ? ? STRIKEPRICE))( equal(var ? ? ? STOCKPRICE)(var ? ? ? STRIKEPRICE))))))))( atTheMoney(var ? ? ? OPTION)(var ? ? ? TIME))))
+
+forall CallOption (\OPTION -> forall (both Agent TimePosition) (\TIME ->  equiv (exists (both CurrencyMeasure Quantity) (\STRIKEPRICE -> exists (both CurrencyMeasure Quantity) (\STOCKPRICE -> exists (both FinancialInstrument Physical) (\STOCK -> and ( underlier(var ? ? ? OPTION)(var ? ? ? STOCK))(and ( price(var ? ? ? STOCK)(var ? ? ? STOCKPRICE)(var ? ? ? TIME))(and ( strikePrice(var ? ? ? OPTION)(var ? ? ? STRIKEPRICE))( lessThan(var ? ? ? STOCKPRICE)(var ? ? ? STRIKEPRICE))))))))( outOfTheMoney(var ? ? ? OPTION)(var ? ? ? TIME))))
+
+forall PutOption (\OPTION -> forall (both Agent TimePosition) (\TIME ->  equiv (exists (both CurrencyMeasure Quantity) (\STRIKEPRICE -> exists (both CurrencyMeasure Quantity) (\STOCKPRICE -> exists (both FinancialInstrument Physical) (\STOCK -> and ( underlier(var ? ? ? OPTION)(var ? ? ? STOCK))(and ( price(var ? ? ? STOCK)(var ? ? ? STOCKPRICE)(var ? ? ? TIME))(and ( strikePrice(var ? ? ? OPTION)(var ? ? ? STRIKEPRICE))( lessThan(var ? ? ? STRIKEPRICE)(var ? ? ? STOCKPRICE))))))))( outOfTheMoney(var ? ? ? OPTION)(var ? ? ? TIME))))
+
+forall SpreadOption (\SPREAD -> exists Option (\OPTION1 -> exists Option (\OPTION2 -> exists Buying (\BUY -> exists Selling (\SELL -> exists TimePosition (\TIME -> and ( patient(var ? ? ? BUY)(var ? ? ? OPTION1))(and ( patient(var ? ? ? SELL)(var ? ? ? OPTION2))(and ( time(var ? ? ? BUY)(var ? ? ? TIME))( time(var ? ? ? SELL)(var ? ? ? TIME))))))))))
+
+forall ButterflySpread (\SPREAD -> exists CallOption (\CALL1 -> exists CallOption (\CALL2 -> exists CallOption (\CALL3 -> exists CallOption (\CALL4 -> exists (both CurrencyMeasure Quantity) (\PRICE4 -> exists (both CurrencyMeasure Quantity) (\PRICE3 -> exists (both CurrencyMeasure Quantity) (\PRICE2 -> exists (both CurrencyMeasure Quantity) (\PRICE1 -> and ( strikePrice(var ? ? ? CALL1)(var ? ? ? PRICE1))(and ( strikePrice(var ? ? ? CALL2)(var ? ? ? PRICE2))(and ( strikePrice(var ? ? ? CALL3)(var ? ? ? PRICE3))(and ( strikePrice(var ? ? ? CALL4)(var ? ? ? PRICE4))(and ( lessThan(var ? ? ? PRICE1)(var ? ? ? PRICE2))(and ( lessThan(var ? ? ? PRICE1)(var ? ? ? PRICE3))(and ( greaterThan(var ? ? ? PRICE4)(var ? ? ? PRICE2))( greaterThan(var ? ? ? PRICE4)(var ? ? ? PRICE2)))))))))))))))))
+
+forall StockMarketTransaction (\TRANSACTION -> exists StockMarket (\MARKET ->  located(var ? ? ? TRANSACTION)(var ? ? ? MARKET)))
+
+forall Uptick (\UPTICK -> forall (both CurrencyMeasure Quantity) (\PRICE2 -> forall (both CurrencyMeasure Quantity) (\PRICE1 -> forall (both Entity (both Agent TimeInterval)) (\TIME1 -> forall (both Entity Physical) (\STOCK ->  impl (and ( patient(var ? ? ? UPTICK)(var ? ? ? STOCK))(and ( equal( el ? ? ? ( WhenFn(var ? ? ? UPTICK)))(var ? ? ? TIME1))( price(var ? ? ? STOCK)(var ? ? ? PRICE1)(var ? ? ? TIME1))))(exists StockMarketTransaction (\TRANSACTION -> exists (both Entity (both TimeInterval Agent)) (\TIME2 -> and ( patient(var ? ? ? TRANSACTION)(var ? ? ? STOCK))(and ( equal( el ? ? ? ( WhenFn(var ? ? ? TRANSACTION)))(var ? ? ? TIME2))(and ( meetsTemporally(var ? ? ? TIME2)(var ? ? ? TIME1))(and ( price(var ? ? ? STOCK)(var ? ? ? PRICE2)(var ? ? ? TIME2))( lessThan(var ? ? ? PRICE2)(var ? ? ? PRICE1)))))))))))))
+
+forall Downtick (\DOWNTICK -> forall (both CurrencyMeasure Quantity) (\PRICE2 -> forall (both CurrencyMeasure Quantity) (\PRICE1 -> forall (both Entity (both Agent TimeInterval)) (\TIME1 -> forall (both Entity Physical) (\STOCK ->  impl (and ( patient(var ? ? ? DOWNTICK)(var ? ? ? STOCK))(and ( equal( el ? ? ? ( WhenFn(var ? ? ? DOWNTICK)))(var ? ? ? TIME1))( price(var ? ? ? STOCK)(var ? ? ? PRICE1)(var ? ? ? TIME1))))(exists StockMarketTransaction (\TRANSACTION -> exists (both Entity (both TimeInterval Agent)) (\TIME2 -> and ( patient(var ? ? ? TRANSACTION)(var ? ? ? STOCK))(and ( equal( el ? ? ? ( WhenFn(var ? ? ? TRANSACTION)))(var ? ? ? TIME2))(and ( meetsTemporally(var ? ? ? TIME2)(var ? ? ? TIME1))(and ( price(var ? ? ? STOCK)(var ? ? ? PRICE2)(var ? ? ? TIME2))( greaterThan(var ? ? ? PRICE2)(var ? ? ? PRICE1)))))))))))))
+
+forall CognitiveAgent (\AGENT -> forall (both Organization CognitiveAgent) (\ORG ->  equiv ( employs(var ? ? ? ORG)(var ? ? ? AGENT))(exists Employment (\EMPLOYMENT -> and ( agreementMember(var ? ? ? EMPLOYMENT)(var ? ? ? ORG))( agreementMember(var ? ? ? EMPLOYMENT)(var ? ? ? AGENT))))))
+
+forall CurrencyMeasure (\MONEY -> forall Human (\AGENT ->  equiv ( monthlyIncome(var ? ? ? AGENT)(var ? ? ? MONEY))(exists Month (\MONTH ->  income(var ? ? ? AGENT)(var ? ? ? MONEY)(var ? ? ? MONTH)))))
+
+forall (both OrganizationalProcess Process) (\ACTIVITY -> forall CurrencyMeasure (\MONEY -> forall (both Human Agent) (\AGENT ->  impl ( incomeEarned(var ? ? ? AGENT)(var ? ? ? MONEY)(var ? ? ? ACTIVITY))( agent(var ? ? ? ACTIVITY)(var ? ? ? AGENT)))))
+
+forall TimePosition (\TIME -> forall (both OrganizationalProcess (both Physical Process)) (\ACTIVITY -> forall CurrencyMeasure (\INCOME -> forall Human (\AGENT ->  impl (and ( taxDeferredIncome(var ? ? ? AGENT)(var ? ? ? INCOME)(var ? ? ? ACTIVITY))( time(var ? ? ? ACTIVITY)(var ? ? ? TIME)))(exists Tax (\TAX -> and ( causes(var ? ? ? ACTIVITY)(var ? ? ? TAX))( time(var ? ? ? TAX)(var ? ? ? TIME))))))))
+
+forall (both Entity OrganizationalProcess) (\ATINCOME -> forall (both OrganizationalProcess (both Process CurrencyMeasure)) (\ACTIVITY -> forall Human (\AGENT ->  equiv (exists (both CurrencyMeasure Quantity) (\TAXAMOUNT -> exists (both ChargingAFee Process) (\TAX -> exists (both CurrencyMeasure Quantity) (\INCOME -> and ( incomeEarned(var ? ? ? AGENT)(var ? ? ? INCOME)(var ? ? ? ACTIVITY))(and ( amountCharged(var ? ? ? TAX)(var ? ? ? TAXAMOUNT))(and ( causes(var ? ? ? ACTIVITY)(var ? ? ? TAX))( equal(var ? ? ? ATINCOME)( el ? ? ? ( SubtractionFn(var ? ? ? INCOME)(var ? ? ? TAXAMOUNT))))))))))( afterTaxIncome(var ? ? ? AGENT)(var ? ? ? ACTIVITY)(var ? ? ? ATINCOME)))))
+
+forall TimeInterval (\PERIOD -> forall CurrencyMeasure (\MONEY -> forall (both Human (both CognitiveAgent Entity)) (\AGENT ->  impl ( employeeContribution(var ? ? ? AGENT)(var ? ? ? MONEY)(var ? ? ? PERIOD))(exists PensionPlan (\PLAN -> exists (both Organization Agent) (\ORG -> and ( employs(var ? ? ? ORG)(var ? ? ? AGENT))(and ( agent(var ? ? ? PLAN)(var ? ? ? ORG))( destination(var ? ? ? PLAN)(var ? ? ? AGENT)))))))))
+
+forall (both TimePosition Entity) (\PERIOD -> forall CurrencyMeasure (\MONEY -> forall (both Human Agent) (\AGENT ->  impl ( compensationPackage(var ? ? ? AGENT)(var ? ? ? MONEY)(var ? ? ? PERIOD))(exists Working (\ACTIVITY -> and ( agent(var ? ? ? ACTIVITY)(var ? ? ? AGENT))(and ( equal(var ? ? ? PERIOD)( el ? ? ? ( WhenFn(var ? ? ? ACTIVITY))))( incomeEarned(var ? ? ? AGENT)(var ? ? ? MONEY)(var ? ? ? ACTIVITY))))))))
+
+forall (both Day TimeInterval) (\STARTDATE -> forall Contract (\AGREEMENT ->  equiv ( effectiveDate(var ? ? ? AGREEMENT)(var ? ? ? STARTDATE))(exists TimeInterval (\PERIOD -> and ( agreementPeriod(var ? ? ? AGREEMENT)(var ? ? ? PERIOD))( starts(var ? ? ? STARTDATE)(var ? ? ? PERIOD))))))
+
+forall Cash (\CASH -> exists CurrencyMeasure (\VALUE ->  monetaryValue(var ? ? ? CASH)(var ? ? ? VALUE)))
+
+forall Investment (\INVESTMENT -> forall RiskAttribute (\LEVEL -> forall (both Investor Agent) (\AGENT ->  impl (and ( riskTolerance(var ? ? ? AGENT)(var ? ? ? LEVEL))( possesses(var ? ? ? AGENT)(var ? ? ? INVESTMENT)))( riskLevel(var ? ? ? INVESTMENT)(var ? ? ? LEVEL)))))
+
+forall (both FinancialAccount Entity) (\ACCOUNT -> forall BankCard (\CARD -> forall ContentBearingObject (\CODE ->  impl (and ( cardCode(var ? ? ? CODE)(var ? ? ? CARD))( cardAccount(var ? ? ? CARD)(var ? ? ? ACCOUNT)))(exists Encoding (\ENCODING ->  patient(var ? ? ? ENCODING)(var ? ? ? ACCOUNT))))))
+
+forall DebitCard (\CARD -> forall FinancialTransaction (\TRANSACTION -> forall Agent (\AGENT ->  impl (and ( possesses(var ? ? ? AGENT)(var ? ? ? CARD))( instrument(var ? ? ? TRANSACTION)(var ? ? ? CARD)))(exists EnteringAPin (\ENTER -> exists (both SymbolicString Entity) (\PIN -> and ( pin(var ? ? ? PIN)(var ? ? ? CARD))(and ( patient(var ? ? ? ENTER)(var ? ? ? PIN))( agent(var ? ? ? ENTER)(var ? ? ? AGENT)))))))))
+
+forall EnteringAPin (\ENTER -> exists BankCard (\CARD -> exists (both SymbolicString Entity) (\PIN -> and ( pin(var ? ? ? PIN)(var ? ? ? CARD))( patient(var ? ? ? ENTER)(var ? ? ? PIN)))))
+
+forall VerifyingCardCode (\CHECK -> forall BankCard (\CARD -> forall (both Entity ContentBearingObject) (\CODE ->  impl (and ( patient(var ? ? ? CHECK)(var ? ? ? CODE))( cardCode(var ? ? ? CODE)(var ? ? ? CARD)))(exists Decoding (\DECODE -> and ( subProcess(var ? ? ? DECODE)(var ? ? ? CHECK))( patient(var ? ? ? DECODE)(var ? ? ? CODE)))))))
+
+forall CommercialService (\SERVICE -> forall (both Entity Object) (\CUSTOMER -> forall (both Organization Entity) (\ORG -> forall (both Agent CognitiveAgent) (\AGENT ->  impl (and ( agent(var ? ? ? SERVICE)(var ? ? ? AGENT))(and ( employs(var ? ? ? ORG)(var ? ? ? AGENT))( destination(var ? ? ? SERVICE)(var ? ? ? CUSTOMER))))( hasPurpose(var ? ? ? SERVICE)(exists FinancialTransaction (\TRANSACTION -> and ( destination(var ? ? ? TRANSACTION)(var ? ? ? ORG))( origin(var ? ? ? TRANSACTION)(var ? ? ? CUSTOMER)))))))))
+
+forall (both CognitiveAgent Agent) (\AGENT2 -> forall (both CognitiveAgent Entity) (\AGENT1 ->  equiv ( customer(var ? ? ? AGENT1)(var ? ? ? AGENT2))(exists FinancialTransaction (\SERVICE -> and ( agent(var ? ? ? SERVICE)(var ? ? ? AGENT2))( destination(var ? ? ? SERVICE)(var ? ? ? AGENT1))))))
+
+forall (both FinancialOrganization CognitiveAgent) (\BANK -> forall CognitiveAgent (\AGENT -> forall FinancialAccount (\ACCOUNT ->  impl (and ( accountHolder(var ? ? ? ACCOUNT)(var ? ? ? AGENT))( accountAt(var ? ? ? ACCOUNT)(var ? ? ? BANK)))( customer(var ? ? ? AGENT)(var ? ? ? BANK)))))
+
+forall Organization (\ORG -> forall (both CognitiveAgent Entity) (\PERSON2 -> forall (both CognitiveAgent Agent) (\PERSON1 ->  equiv ( customerRepresentative(var ? ? ? PERSON1)(var ? ? ? PERSON2)(var ? ? ? ORG))(exists FinancialTransaction (\SERVICE -> and ( employs(var ? ? ? ORG)(var ? ? ? PERSON1))(and ( agent(var ? ? ? SERVICE)(var ? ? ? PERSON1))( destination(var ? ? ? SERVICE)(var ? ? ? PERSON2))))))))
+
+forall ATMSlot (\SLOT -> exists ATMMachine (\ATM ->  hole(var ? ? ? SLOT)(var ? ? ? ATM)))
+
+forall ATMSlot (\SLOT -> exists Putting (\INSERT -> exists BankCard (\CARD -> and ( patient(var ? ? ? INSERT)(var ? ? ? CARD))( destination(var ? ? ? INSERT)(var ? ? ? SLOT)))))
+
+forall Fax (\FAX -> exists FaxMachine (\FAXMACHINE ->  instrument(var ? ? ? FAX)(var ? ? ? FAXMACHINE)))
+
+forall Quantity (\AMOUNT1 -> forall Day (\DAY -> forall CurrencyMeasure (\AMOUNT -> forall FinancialAccount (\ACCOUNT ->  impl (exists FinancialTransaction (\TRANSACTION -> and ( origin(var ? ? ? TRANSACTION)( el ? ? ? ( CurrencyFn(var ? ? ? ACCOUNT))))(and ( transactionAmount(var ? ? ? TRANSACTION)(var ? ? ? AMOUNT))( date(var ? ? ? TRANSACTION)(var ? ? ? DAY)))))(exists (both CurrencyMeasure Quantity) (\AMOUNT2 -> and ( availableBalance(var ? ? ? ACCOUNT)(var ? ? ? DAY)(var ? ? ? AMOUNT2))( greaterThanOrEqualTo(var ? ? ? AMOUNT1)(var ? ? ? AMOUNT2))))))))
+
+forall Cash (\CASH -> forall Quantity (\AMOUNT1 -> forall Day (\DAY -> forall CurrencyMeasure (\AMOUNT -> forall FinancialAccount (\ACCOUNT ->  impl (exists FinancialTransaction (\TRANSACTION -> and ( origin(var ? ? ? TRANSACTION)( el ? ? ? ( CurrencyFn(var ? ? ? ACCOUNT))))(and ( transactionAmount(var ? ? ? TRANSACTION)(var ? ? ? AMOUNT))(and ( instrument(var ? ? ? TRANSACTION)(var ? ? ? CASH))( date(var ? ? ? TRANSACTION)(var ? ? ? DAY))))))(exists (both CurrencyMeasure Quantity) (\AMOUNT2 -> and ( availableCash(var ? ? ? ACCOUNT)(var ? ? ? DAY)(var ? ? ? AMOUNT2))( greaterThanOrEqualTo(var ? ? ? AMOUNT1)(var ? ? ? AMOUNT2)))))))))
+
+forall BankStatement (\STATEMENT -> forall FinancialAccount (\ACCOUNT ->  impl ( statementAccount(var ? ? ? STATEMENT)(var ? ? ? ACCOUNT))(exists FinancialTransaction (\TRANSACTION -> and (or ( origin(var ? ? ? TRANSACTION)( el ? ? ? ( CurrencyFn(var ? ? ? ACCOUNT))))( destination(var ? ? ? TRANSACTION)( el ? ? ? ( CurrencyFn(var ? ? ? ACCOUNT)))))( realization(var ? ? ? STATEMENT)(var ? ? ? TRANSACTION))))))
+
+forall FinancialTransaction (\TRANSACTION1 -> forall FinancialTransaction (\TRANSACTION2 -> forall (both BankStatement Process) (\STATEMENT -> forall FinancialAccount (\ACCOUNT ->  impl (and ( lastStatement(var ? ? ? ACCOUNT)(var ? ? ? STATEMENT))(and ( not (realization(var ? ? ? STATEMENT)(var ? ? ? TRANSACTION1)))( realization(var ? ? ? STATEMENT)(var ? ? ? TRANSACTION2))))( earlier( el ? ? ? ( WhenFn(var ? ? ? TRANSACTION2)))( el ? ? ? ( WhenFn(var ? ? ? TRANSACTION1))))))))
+
+forall Loan (\LOAN -> forall (both Interest CurrencyMeasure) (\AMOUNT ->  equiv (exists TimeInterval (\PERIOD -> and ( agreementPeriod(var ? ? ? LOAN)(var ? ? ? PERIOD))( interestEarned(var ? ? ? LOAN)(var ? ? ? AMOUNT)(var ? ? ? PERIOD))))( loanInterest(var ? ? ? LOAN)(var ? ? ? AMOUNT))))
+
+forall Day (\DATE -> forall (both BankStatement Proposition) (\STATEMENT ->  impl ( dateOfStatement(var ? ? ? STATEMENT)(var ? ? ? DATE))(exists (both ContentBearingPhysical Physical) (\COPY -> and ( containsInformation(var ? ? ? COPY)(var ? ? ? STATEMENT))( date(var ? ? ? COPY)(var ? ? ? DATE))))))
+
+forall Day (\DATE -> forall CurrencyMeasure (\BALANCE -> forall FinancialAccount (\ACCOUNT ->  impl ( lastStatementBalance(var ? ? ? ACCOUNT)(var ? ? ? BALANCE))(exists BankStatement (\STATEMENT -> and ( lastStatement(var ? ? ? ACCOUNT)(var ? ? ? STATEMENT))(and ( dateOfStatement(var ? ? ? STATEMENT)(var ? ? ? DATE))( currentAccountBalance(var ? ? ? ACCOUNT)(var ? ? ? DATE)(var ? ? ? ACCOUNT))))))))
+
+forall (both TimeDuration Entity) (\DURATION -> forall TimeInterval (\PERIOD -> forall BankStatement (\STATEMENT ->  impl (and ( statementPeriod(var ? ? ? STATEMENT)(var ? ? ? PERIOD))( duration(var ? ? ? PERIOD)(var ? ? ? DURATION)))( equal(var ? ? ? DURATION)(el ? ? ? MonthDuration)))))
+
+forall (both Day TimeInterval) (\DATE -> forall TimeInterval (\PERIOD -> forall BankStatement (\STATEMENT ->  impl (and ( statementPeriod(var ? ? ? STATEMENT)(var ? ? ? PERIOD))( dateOfStatement(var ? ? ? STATEMENT)(var ? ? ? DATE)))( finishes(var ? ? ? DATE)(var ? ? ? PERIOD)))))
+
+forall FinancialAccount (\ACCOUNT -> forall TimeInterval (\PERIOD -> forall CurrencyMeasure (\INTEREST -> forall BankStatement (\STATEMENT ->  impl (and ( statementInterest(var ? ? ? STATEMENT)(var ? ? ? INTEREST))(and ( statementPeriod(var ? ? ? STATEMENT)(var ? ? ? PERIOD))( statementAccount(var ? ? ? STATEMENT)(var ? ? ? ACCOUNT))))(exists Interest (\AMOUNT ->  interestEarned(var ? ? ? ACCOUNT)(var ? ? ? AMOUNT)(var ? ? ? PERIOD)))))))
+
+forall ExternalTransfer (\TRANSFER -> forall FinancialOrganization (\ORGANIZATION1 -> forall FinancialOrganization (\ORGANIZATION2 ->  impl (and ( origin(var ? ? ? TRANSFER)(var ? ? ? ORGANIZATION1))( destination(var ? ? ? TRANSFER)(var ? ? ? ORGANIZATION2)))( not (equal(var ? ? ? ORGANIZATION1)(var ? ? ? ORGANIZATION2))))))
+
+forall ExternalTransfer (\TRANSFER -> forall FinancialOrganization (\ORGANIZATION1 -> forall FinancialOrganization (\ORGANIZATION2 -> forall Entity (\ORGANIZATION2 ->  impl (and ( origin(var ? ? ? TRANSFER)(var ? ? ? ORGANIZATION1))( destination(var ? ? ? TRANSFER)(var ? ? ? ORGANIZATION2)))( equal(var ? ? ? ORGANIZATION1)(var ? ? ? ORGANIZATION2))))))
+
+forall TimeInterval (\PERIOD -> forall (both CurrencyMeasure Interest) (\AMOUNT -> forall (both Loan (both Contract FinancialAccount)) (\LOAN ->  impl (and ( loanFeeAmount(var ? ? ? LOAN)(var ? ? ? AMOUNT))( agreementPeriod(var ? ? ? LOAN)(var ? ? ? PERIOD)))( interestEarned(var ? ? ? LOAN)(var ? ? ? AMOUNT)(var ? ? ? PERIOD)))))

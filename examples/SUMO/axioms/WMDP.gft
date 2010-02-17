@@ -1,0 +1,398 @@
+
+biochemicalAgentDelivery (desc BacterialAgent ? ?) (desc Breathing ? ?)
+
+biochemicalAgentDelivery (desc BacterialAgent ? ?) (desc Touching ? ?)
+
+biologicalAgentCarrier (desc RickettsialAgent ? ?) (desc Mammal ? ?)
+
+biologicalAgentCarrier (desc RickettsialAgent ? ?) (desc Arthropod ? ?)
+
+biologicalAgentCarrier (desc RickettsiaRickettsii ? ?) (desc Arthropod ? ?)
+
+biochemicalAgentSyndrome (desc RickettsiaRickettsii ? ?) (el ? ? ? RockyMountainSpottedFever)
+
+diseaseMortality (el ? ? ? RockyMountainSpottedFever) (el ? ? ? (toRealNum 0.04))
+
+diseaseTreatment (el ? ? ? RockyMountainSpottedFever) (desc OralAntibiotic ? ?) (desc Ingesting ? ?)
+
+biologicalAgentCarrier (desc RickettsiaProwazekii ? ?) (desc Arthropod ? ?)
+
+biochemicalAgentSyndrome (desc RickettsiaProwazekii ? ?) (el ? ? ? LouseBorneTyphus)
+
+diseaseTreatment (el ? ? ? LouseBorneTyphus) (desc OralAntibiotic ? ?) (desc Ingesting ? ?)
+
+biochemicalAgentSyndrome (desc BacillusAnthracis ? ?) (el ? ? ? Anthrax)
+
+biochemicalAgentDelivery (desc BacillusAnthracis ? ?) (desc Breathing ? ?)
+
+biochemicalAgentDelivery (desc BacillusAnthracis ? ?) (desc Ingesting ? ?)
+
+biochemicalAgentDelivery (desc BacillusAnthracis ? ?) (desc Poking ? ?)
+
+biochemicalAgentDelivery (desc BacillusAnthracis ? ?) (desc Touching ? ?)
+
+biologicalAgentCarrier (desc BacillusAnthracis ? ?) (desc HoofedMammal ? ?)
+
+biochemicalAgentDelivery (desc AerosolizedBacillusAnthracis ? ?) (desc Breathing ? ?)
+
+biochemicalAgentSyndrome (desc AerosolizedBacillusAnthracis ? ?) (el ? ? ? InhalationalAnthrax)
+
+lethalDose (desc Batrachotoxin ? ?) (el ? ? ? (PerFn (el ? ? ? (MeasureFn (el ? ? ? (toRealNum 2.0)) (el ? ? ? (MicroFn (el ? ? ? Gram))))) (el ? ? ? (MeasureFn (el ? ? ? (toRealNum 1.0)) (el ? ? ? (KiloFn (el ? ? ? Gram)))))))
+
+secretesToxin (desc ClostridiumBotulinum ? ?) (desc BotulinumToxin ? ?)
+
+lethalDose (desc BotulinumToxin ? ?) (el ? ? ? (PerFn (el ? ? ? (MeasureFn (el ? ? ? (toRealNum 0.001)) (el ? ? ? (MicroFn (el ? ? ? Gram))))) (el ? ? ? (MeasureFn (el ? ? ? (toInt 1)) (el ? ? ? (KiloFn (el ? ? ? Gram)))))))
+
+biochemicalAgentDelivery (desc BotulinumToxin ? ?) (desc Ingesting ? ?)
+
+biochemicalAgentSyndrome (desc BotulinumToxin ? ?) (el ? ? ? Botulism)
+
+diseaseSymptom (el ? ? ? Botulism) (el ? ? ? Paralysis)
+
+secretesToxin (desc ClostridiumPerfringens ? ?) (desc EpsilonToxin ? ?)
+
+biochemicalAgentDelivery (desc ClostridiumPerfringens ? ?) (desc Ingesting ? ?)
+
+biochemicalAgentDelivery (desc EpsilonToxin ? ?) (desc Ingesting ? ?)
+
+biologicalAgentCarrier (desc BurkholderiaMallei ? ?) (desc Mammal ? ?)
+
+biochemicalAgentDelivery (desc BurkholderiaMallei ? ?) (desc Poking ? ?)
+
+biochemicalAgentSyndrome (desc BurkholderiaMallei ? ?) (el ? ? ? Glanders)
+
+diseaseSymptom (el ? ? ? Glanders) (el ? ? ? Fever)
+
+biologicalAgentCarrier (desc BurkholderiaPseudomallei ? ?) (desc Mammal ? ?)
+
+biochemicalAgentDelivery (desc BurkholderiaPseudomallei ? ?) (desc Poking ? ?)
+
+biochemicalAgentDelivery (desc BurkholderiaPseudomallei ? ?) (desc Breathing ? ?)
+
+biochemicalAgentDelivery (desc BurkholderiaPseudomallei ? ?) (desc Ingesting ? ?)
+
+biochemicalAgentSyndrome (desc BurkholderiaPseudomallei ? ?) (el ? ? ? Melioidosis)
+
+biochemicalAgentSyndrome (desc BrucellaBacterium ? ?) (el ? ? ? Brucellosis)
+
+diseaseSymptom (el ? ? ? Brucellosis) (el ? ? ? Fever)
+
+biochemicalAgentSyndrome (desc YersiniaPestis ? ?) (el ? ? ? Plague)
+
+biologicalAgentCarrier (desc YersiniaPestis ? ?) (desc Rodent ? ?)
+
+biologicalAgentCarrier (desc YersiniaPestis ? ?) (desc Insect ? ?)
+
+diseaseSymptom (el ? ? ? Plague) (el ? ? ? Fever)
+
+lethalDose (desc RicinToxin ? ?) (el ? ? ? (PerFn (el ? ? ? (MeasureFn (el ? ? ? (toRealNum 3.0)) (el ? ? ? (MicroFn (el ? ? ? Gram))))) (el ? ? ? (MeasureFn (el ? ? ? (toInt 1)) (el ? ? ? (KiloFn (el ? ? ? Gram)))))))
+
+lethalDose (desc AbrinToxin ? ?) (el ? ? ? (PerFn (el ? ? ? (MeasureFn (el ? ? ? (toRealNum 0.04)) (el ? ? ? (MicroFn (el ? ? ? Gram))))) (el ? ? ? (MeasureFn (el ? ? ? (toInt 1)) (el ? ? ? (KiloFn (el ? ? ? Gram)))))))
+
+biochemicalAgentDelivery (desc BlisterAgent ? ?) (desc Touching ? ?)
+
+biochemicalAgentDelivery (desc BlisterAgent ? ?) (desc Breathing ? ?)
+
+biochemicalAgentDelivery (desc BlisterAgent ? ?) (desc Ingesting ? ?)
+
+biochemicalAgentDelivery (desc BloodAgent ? ?) (desc Breathing ? ?)
+
+biochemicalAgentDelivery (desc NerveAgent ? ?) (desc Breathing ? ?)
+
+biochemicalAgentSyndrome (desc NerveAgent ? ?) (el ? ? ? Paralysis)
+
+lethalDose (desc Soman ? ?) (el ? ? ? (PerFn (el ? ? ? (MeasureFn (el ? ? ? (toRealNum 64.0)) (el ? ? ? (MicroFn (el ? ? ? Gram))))) (el ? ? ? (MeasureFn (el ? ? ? (toRealNum 1.0)) (el ? ? ? (KiloFn (el ? ? ? Gram)))))))
+
+lethalDose (desc Sarin ? ?) (el ? ? ? (PerFn (el ? ? ? (MeasureFn (el ? ? ? (toRealNum 100.0)) (el ? ? ? (MicroFn (el ? ? ? Gram))))) (el ? ? ? (MeasureFn (el ? ? ? (toInt 1)) (el ? ? ? (KiloFn (el ? ? ? Gram)))))))
+
+lethalDose (desc VX ? ?) (el ? ? ? (PerFn (el ? ? ? (MeasureFn (el ? ? ? (toRealNum 15.0)) (el ? ? ? (MicroFn (el ? ? ? Gram))))) (el ? ? ? (MeasureFn (el ? ? ? (toRealNum 1.0)) (el ? ? ? (KiloFn (el ? ? ? Gram)))))))
+
+biochemicalAgentDelivery (desc ChokingAgent ? ?) (desc Breathing ? ?)
+
+biochemicalAgentSyndrome (desc Chloropicrin ? ?) (el ? ? ? Gastroenteritis)
+
+biochemicalAgentSyndrome (desc SalmonellaTyphimurium ? ?) (el ? ? ? Gastroenteritis)
+
+biochemicalAgentSyndrome (desc SalmonellaTyphimurium ? ?) (el ? ? ? Fever)
+
+diseaseTreatment (el ? ? ? Anthrax) (desc Doxycycline ? ?) (desc Ingesting ? ?)
+
+diseaseTreatment (el ? ? ? Anthrax) (desc Ciprofloxacin ? ?) (desc Ingesting ? ?)
+
+diseaseSymptom (el ? ? ? QFever) (el ? ? ? Fever)
+
+diseaseMortality (el ? ? ? QFever) (el ? ? ? (toRealNum 0.01))
+
+biochemicalAgentSyndrome (desc YellowFeverVirus ? ?) (el ? ? ? Fever)
+
+biochemicalAgentSyndrome (desc YellowFeverVirus ? ?) (el ? ? ? YellowSkin)
+
+biochemicalAgentSyndrome (desc EbolaVirus ? ?) (el ? ? ? EbolaHemorrhagicFever)
+
+biologicalAgentCarrier (desc FrancisellaTularensis ? ?) (desc Rodent ? ?)
+
+biologicalAgentCarrier (desc FrancisellaTularensis ? ?) (desc Arachnid ? ?)
+
+biochemicalAgentSyndrome (desc FrancisellaTularensis ? ?) (el ? ? ? Tularemia)
+
+biochemicalAgentDelivery (desc FrancisellaTularensis ? ?) (desc Breathing ? ?)
+
+diseaseSymptom (el ? ? ? Tularemia) (el ? ? ? Fever)
+
+diseaseMortality (el ? ? ? Tularemia) (el ? ? ? (toRealNum 0.05))
+
+diseaseMortality (el ? ? ? Smallpox) (el ? ? ? (toRealNum 0.33))
+
+biochemicalAgentSyndrome (desc MonkeypoxVirus ? ?) (el ? ? ? Monkeypox)
+
+biochemicalAgentDelivery (desc MonkeypoxVirus ? ?) (desc Poking ? ?)
+
+biologicalAgentCarrier (desc MonkeypoxVirus ? ?) (desc Mammal ? ?)
+
+biochemicalAgentSyndrome (desc NeisseriaGonorrhoeae ? ?) (el ? ? ? Gonorrhea)
+
+biochemicalAgentSyndrome (desc CoxiellaBurnetii ? ?) (el ? ? ? QFever)
+
+biochemicalAgentDelivery (desc CoxiellaBurnetii ? ?) (desc Breathing ? ?)
+
+biochemicalAgentDelivery (desc CoxiellaBurnetii ? ?) (desc Ingesting ? ?)
+
+biochemicalAgentSyndrome (desc VariolaMajor ? ?) (el ? ? ? Smallpox)
+
+biochemicalAgentSyndrome (desc VariolaMinor ? ?) (el ? ? ? Smallpox)
+
+secretesToxin (desc ShigellaDysenteriae ? ?) (desc ShigaToxin ? ?)
+
+biochemicalAgentDelivery (desc ShigellaDysenteriae ? ?) (desc Ingesting ? ?)
+
+lethalDose (desc ShigaToxin ? ?) (el ? ? ? (PerFn (el ? ? ? (MeasureFn (el ? ? ? (toRealNum 0.002)) (el ? ? ? (MicroFn (el ? ? ? Gram))))) (el ? ? ? (MeasureFn (el ? ? ? (toInt 1)) (el ? ? ? (KiloFn (el ? ? ? Gram)))))))
+
+biochemicalAgentDelivery (desc HIVVirus ? ?) (desc SexualReproduction ? ?)
+
+biochemicalAgentDelivery (desc SalmonellaTyphi ? ?) (desc Ingesting ? ?)
+
+biochemicalAgentSyndrome (desc GiardiaLamblia ? ?) (el ? ? ? Gastroenteritis)
+
+biologicalAgentCarrier (desc GiardiaLamblia ? ?) (desc Rodent ? ?)
+
+biologicalAgentCarrier (desc Mixomatosis ? ?) (desc Rodent ? ?)
+
+secretesToxin (desc StaphyylococcusAureus ? ?) (desc StaphylococcalEnterotoxinB ? ?)
+
+biochemicalAgentSyndrome (desc StaphyylococcusAureus ? ?) (el ? ? ? Fever)
+
+lethalDose (desc StaphylococcalEnterotoxinB ? ?) (el ? ? ? (PerFn (el ? ? ? (MeasureFn (el ? ? ? (toRealNum 0.02)) (el ? ? ? (MicroFn (el ? ? ? Gram))))) (el ? ? ? (MeasureFn (el ? ? ? (toInt 1)) (el ? ? ? (KiloFn (el ? ? ? Gram)))))))
+
+biochemicalAgentDelivery (desc StaphylococcalEnterotoxinB ? ?) (desc Ingesting ? ?)
+
+biochemicalAgentDelivery (desc StaphylococcalEnterotoxinB ? ?) (desc Breathing ? ?)
+
+biologicalAgentCarrier (desc Saxitoxin ? ?) (desc Mollusk ? ?)
+
+biochemicalAgentDelivery (desc Saxitoxin ? ?) (desc Ingesting ? ?)
+
+biochemicalAgentDelivery (desc Saxitoxin ? ?) (desc Breathing ? ?)
+
+biochemicalAgentSyndrome (desc Saxitoxin ? ?) (el ? ? ? ParalyticShellfishPoisoning)
+
+diseaseSymptom (el ? ? ? ParalyticShellfishPoisoning) (el ? ? ? Paralysis)
+
+biologicalAgentCarrier (desc Conotoxin ? ?) (desc Mollusk ? ?)
+
+biochemicalAgentSyndrome (desc Conotoxin ? ?) (el ? ? ? ParalyticShellfishPoisoning)
+
+biochemicalAgentSyndrome (desc Tetrodotoxin ? ?) (el ? ? ? ParalyticShellfishPoisoning)
+
+biochemicalAgentDelivery (desc VibrioCholera ? ?) (desc Ingesting ? ?)
+
+biochemicalAgentSyndrome (desc VibrioCholera ? ?) (el ? ? ? Cholera)
+
+biochemicalAgentDelivery (desc ClostridiumTetani ? ?) (desc Poking ? ?)
+
+biochemicalAgentSyndrome (desc ClostridiumTetani ? ?) (el ? ? ? Tetanus)
+
+diseaseMortality (el ? ? ? HerpesB) (el ? ? ? (toRealNum 0.7))
+
+biologicalAgentCarrier (desc HerpesBVirus ? ?) (desc Monkey ? ?)
+
+diseaseTreatment (el ? ? ? Pertussis) (desc Antibiotic ? ?) (desc Ingesting ? ?)
+
+biologicalAgentCarrier (desc BordetellaPertussis ? ?) (desc Human ? ?)
+
+biochemicalAgentSyndrome (desc BordetellaPertussis ? ?) (el ? ? ? Pertussis)
+
+biochemicalAgentDelivery (desc BordetellaPertussis ? ?) (desc Breathing ? ?)
+
+biochemicalAgentSyndrome (desc ChlamydiaPsittaci ? ?) (el ? ? ? Psittacosis)
+
+biologicalAgentCarrier (desc ChlamydiaPsittaci ? ?) (desc Bird ? ?)
+
+biochemicalAgentDelivery (desc ChlamydiaPsittaci ? ?) (desc Breathing ? ?)
+
+diseaseSymptom (el ? ? ? Malaria) (el ? ? ? Fever)
+
+biologicalAgentCarrier (desc MalarialPlasmodium ? ?) (desc Insect ? ?)
+
+biochemicalAgentDelivery (desc MalarialPlasmodium ? ?) (desc Poking ? ?)
+
+biologicalAgentCarrier (desc WestNileVirus ? ?) (desc Insect ? ?)
+
+biochemicalAgentSyndrome (desc WestNileVirus ? ?) (el ? ? ? WestNileFever)
+
+biochemicalAgentDelivery (desc WestNileVirus ? ?) (desc Poking ? ?)
+
+biologicalAgentCarrier (desc DengueFeverVirus ? ?) (desc Insect ? ?)
+
+biochemicalAgentSyndrome (desc DengueFeverVirus ? ?) (el ? ? ? DengueFever)
+
+biochemicalAgentSyndrome (desc DengueFeverVirus ? ?) (el ? ? ? DengueHemorrhagicFever)
+
+biochemicalAgentDelivery (desc DengueFeverVirus ? ?) (desc Poking ? ?)
+
+diseaseMortality (el ? ? ? DengueHemorrhagicFever) (el ? ? ? (toRealNum 0.05))
+
+biologicalAgentCarrier (desc LaCrosseVirus ? ?) (desc Insect ? ?)
+
+biologicalAgentCarrier (desc LaCrosseVirus ? ?) (desc Rodent ? ?)
+
+biochemicalAgentDelivery (desc LaCrosseVirus ? ?) (desc Poking ? ?)
+
+biochemicalAgentSyndrome (desc LaCrosseVirus ? ?) (el ? ? ? LaCrosseEncephalitis)
+
+diseaseMortality (el ? ? ? LaCrosseEncephalitis) (el ? ? ? (toRealNum 0.01))
+
+biologicalAgentCarrier (desc SaintLouisEncephalitisVirus ? ?) (desc Bird ? ?)
+
+biologicalAgentCarrier (desc SaintLouisEncephalitisVirus ? ?) (desc Insect ? ?)
+
+biochemicalAgentDelivery (desc SaintLouisEncephalitisVirus ? ?) (desc Poking ? ?)
+
+biochemicalAgentSyndrome (desc SaintLouisEncephalitisVirus ? ?) (el ? ? ? SaintLouisEncephalitis)
+
+diseaseSymptom (el ? ? ? SaintLouisEncephalitis) (el ? ? ? Fever)
+
+biologicalAgentCarrier (desc EasternEquineEncephalitisVirus ? ?) (desc Insect ? ?)
+
+biochemicalAgentDelivery (desc EasternEquineEncephalitisVirus ? ?) (desc Poking ? ?)
+
+biochemicalAgentSyndrome (desc EasternEquineEncephalitisVirus ? ?) (el ? ? ? EasternEquineEncephalitis)
+
+diseaseSymptom (el ? ? ? EasternEquineEncephalitis) (el ? ? ? Fever)
+
+biologicalAgentCarrier (desc JapaneseEncephalitisVirus ? ?) (desc Insect ? ?)
+
+biochemicalAgentDelivery (desc JapaneseEncephalitisVirus ? ?) (desc Poking ? ?)
+
+biochemicalAgentSyndrome (desc JapaneseEncephalitisVirus ? ?) (el ? ? ? JapaneseEncephalitis)
+
+diseaseMortality (el ? ? ? JapaneseEncephalitis) (el ? ? ? (toRealNum 0.30))
+
+biochemicalAgentDelivery (desc EscherichiaColi0157H7 ? ?) (desc Ingesting ? ?)
+
+biochemicalAgentSyndrome (desc MycobacteriumTuberculosis ? ?) (el ? ? ? Tuberculosis)
+
+biochemicalAgentDelivery (desc MycobacteriumTuberculosis ? ?) (desc Breathing ? ?)
+
+diseaseTreatment (el ? ? ? Tuberculosis) (desc OralAntibiotic ? ?) (desc Ingesting ? ?)
+
+biochemicalAgentDelivery (desc MarburgVirus ? ?) (desc Breathing ? ?)
+
+biochemicalAgentDelivery (desc MarburgVirus ? ?) (desc Poking ? ?)
+
+biochemicalAgentSyndrome (desc MarburgVirus ? ?) (el ? ? ? MarburgDisease)
+
+diseaseMortality (el ? ? ? MarburgDisease) (el ? ? ? (toRealNum 0.25))
+
+biochemicalAgentSyndrome (desc StreptococcusA ? ?) (el ? ? ? StrepThroat)
+
+biochemicalAgentSyndrome (desc StreptococcusA ? ?) (el ? ? ? ScarletFever)
+
+biochemicalAgentSyndrome (desc StreptococcusA ? ?) (el ? ? ? NecrotizingFaciitis)
+
+biochemicalAgentSyndrome (desc HepatitisAVirus ? ?) (el ? ? ? HepatitisA)
+
+biochemicalAgentDelivery (desc HepatitisAVirus ? ?) (desc Ingesting ? ?)
+
+biochemicalAgentDelivery (desc HepatitisAVirus ? ?) (desc Poking ? ?)
+
+diseaseSymptom (el ? ? ? HepatitisA) (el ? ? ? Fever)
+
+biochemicalAgentSyndrome (desc HepatitisBVirus ? ?) (el ? ? ? HepatitisB)
+
+biochemicalAgentDelivery (desc HepatitisBVirus ? ?) (desc Poking ? ?)
+
+biochemicalAgentSyndrome (desc HepatitisCVirus ? ?) (el ? ? ? HepatitisC)
+
+biochemicalAgentDelivery (desc HepatitisCVirus ? ?) (desc Poking ? ?)
+
+biochemicalAgentSyndrome (desc Rotavirus ? ?) (el ? ? ? RotavirusGastroenteritis)
+
+biochemicalAgentDelivery (desc Rotavirus ? ?) (desc Ingesting ? ?)
+
+diseaseSymptom (el ? ? ? RotavirusGastroenteritis) (el ? ? ? Fever)
+
+biochemicalAgentSyndrome (desc Aflatoxin ? ?) (el ? ? ? Aflatoxicosis)
+
+lethalDose (desc Diacetoxyscirpenol ? ?) (el ? ? ? (PerFn (el ? ? ? (MeasureFn (el ? ? ? (toInt 23)) (el ? ? ? (MilliFn (el ? ? ? Gram))))) (el ? ? ? (MeasureFn (el ? ? ? (toInt 1)) (el ? ? ? (KiloFn (el ? ? ? Gram)))))))
+
+lethalDose (desc T2Toxin ? ?) (el ? ? ? (PerFn (el ? ? ? (MeasureFn (el ? ? ? (toRealNum 5.2)) (el ? ? ? (MilliFn (el ? ? ? Gram))))) (el ? ? ? (MeasureFn (el ? ? ? (toInt 1)) (el ? ? ? (KiloFn (el ? ? ? Gram)))))))
+
+biochemicalAgentDelivery (desc BacillusCereus ? ?) (desc Ingesting ? ?)
+
+biochemicalAgentSyndrome (desc LassaVirus ? ?) (el ? ? ? LassaFever)
+
+biochemicalAgentDelivery (desc LassaVirus ? ?) (desc Ingesting ? ?)
+
+biochemicalAgentDelivery (desc LassaVirus ? ?) (desc Touching ? ?)
+
+biologicalAgentCarrier (desc LassaVirus ? ?) (desc Rodent ? ?)
+
+diseaseSymptom (el ? ? ? LassaFever) (el ? ? ? Fever)
+
+diseaseMortality (el ? ? ? LassaFever) (el ? ? ? (toRealNum 0.01))
+
+biochemicalAgentSyndrome (desc Legionella ? ?) (el ? ? ? Legionellosis)
+
+diseaseMortality (el ? ? ? LegionnairesDisease) (el ? ? ? (toRealNum 0.125))
+
+biochemicalAgentSyndrome (desc CorynebacteriumDiphtheriae ? ?) (el ? ? ? Diphtheria)
+
+diseaseSymptom (el ? ? ? Diphtheria) (el ? ? ? Fever)
+
+diseaseSymptom (el ? ? ? CrimeanCongoHemorrhagicFever) (el ? ? ? Fever)
+
+diseaseMortality (el ? ? ? CrimeanCongoHemorrhagicFever) (el ? ? ? (toRealNum 0.3))
+
+biologicalAgentCarrier (desc CrimeanCongoHemorrhagicFeverVirus ? ?) (desc Arachnid ? ?)
+
+biochemicalAgentSyndrome (desc CrimeanCongoHemorrhagicFeverVirus ? ?) (el ? ? ? CrimeanCongoHemorrhagicFever)
+
+biochemicalAgentDelivery (desc CrimeanCongoHemorrhagicFeverVirus ? ?) (desc Poking ? ?)
+
+biologicalAgentCarrier (desc JuninVirus ? ?) (desc Rodent ? ?)
+
+biochemicalAgentSyndrome (desc JuninVirus ? ?) (el ? ? ? ArgentinianHemorrhagicFever)
+
+biochemicalAgentDelivery (desc JuninVirus ? ?) (desc Breathing ? ?)
+
+diseaseSymptom (el ? ? ? ArgentinianHemorrhagicFever) (el ? ? ? Fever)
+
+biologicalAgentCarrier (desc MachupoVirus ? ?) (desc Rodent ? ?)
+
+biochemicalAgentSyndrome (desc MachupoVirus ? ?) (el ? ? ? BolivianHemorrhagicFever)
+
+biochemicalAgentDelivery (desc MachupoVirus ? ?) (desc Breathing ? ?)
+
+diseaseSymptom (el ? ? ? BolivianHemorrhagicFever) (el ? ? ? Fever)
+
+biochemicalAgentSyndrome (desc GuanaritoVirus ? ?) (el ? ? ? VenezuelanHemorrhagicFever)
+
+diseaseSymptom (el ? ? ? VenezuelanHemorrhagicFever) (el ? ? ? Fever)
+
+biochemicalAgentSyndrome (desc SabiaVirus ? ?) (el ? ? ? BrazilianHemorrhagicFever)
+
+diseaseSymptom (el ? ? ? BrazilianHemorrhagicFever) (el ? ? ? Fever)
+
+biologicalAgentCarrier (desc TickBorneEncephalitisVirus ? ?) (desc Arachnid ? ?)
+
+biochemicalAgentDelivery (desc TickBorneEncephalitisVirus ? ?) (desc Poking ? ?)

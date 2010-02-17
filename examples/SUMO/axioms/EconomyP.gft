@@ -1,0 +1,1097 @@
+
+economyType (el ? ? ? Andorra) (el ? ? ? DevelopedCountry)
+
+economyType (el ? ? ? Australia) (el ? ? ? DevelopedCountry)
+
+economyType (el ? ? ? Austria) (el ? ? ? DevelopedCountry)
+
+economyType (el ? ? ? Belgium) (el ? ? ? DevelopedCountry)
+
+economyType (el ? ? ? Bermuda) (el ? ? ? DevelopedCountry)
+
+economyType (el ? ? ? Canada) (el ? ? ? DevelopedCountry)
+
+economyType (el ? ? ? Denmark) (el ? ? ? DevelopedCountry)
+
+economyType (el ? ? ? FaroeIslands) (el ? ? ? DevelopedCountry)
+
+economyType (el ? ? ? Finland) (el ? ? ? DevelopedCountry)
+
+economyType (el ? ? ? France) (el ? ? ? DevelopedCountry)
+
+economyType (el ? ? ? Germany) (el ? ? ? DevelopedCountry)
+
+economyType (el ? ? ? Greece) (el ? ? ? DevelopedCountry)
+
+economyType (el ? ? ? HolySee) (el ? ? ? DevelopedCountry)
+
+economyType (el ? ? ? Iceland) (el ? ? ? DevelopedCountry)
+
+economyType (el ? ? ? Ireland) (el ? ? ? DevelopedCountry)
+
+economyType (el ? ? ? Israel) (el ? ? ? DevelopedCountry)
+
+economyType (el ? ? ? Italy) (el ? ? ? DevelopedCountry)
+
+economyType (el ? ? ? Japan) (el ? ? ? DevelopedCountry)
+
+economyType (el ? ? ? Liechtenstein) (el ? ? ? DevelopedCountry)
+
+economyType (el ? ? ? Luxembourg) (el ? ? ? DevelopedCountry)
+
+economyType (el ? ? ? Malta) (el ? ? ? DevelopedCountry)
+
+economyType (el ? ? ? Mexico) (el ? ? ? DevelopedCountry)
+
+economyType (el ? ? ? Monaco) (el ? ? ? DevelopedCountry)
+
+economyType (el ? ? ? Netherlands) (el ? ? ? DevelopedCountry)
+
+economyType (el ? ? ? NewZealand) (el ? ? ? DevelopedCountry)
+
+economyType (el ? ? ? Norway) (el ? ? ? DevelopedCountry)
+
+economyType (el ? ? ? Portugal) (el ? ? ? DevelopedCountry)
+
+economyType (el ? ? ? SanMarino) (el ? ? ? DevelopedCountry)
+
+economyType (el ? ? ? SouthAfrica) (el ? ? ? DevelopedCountry)
+
+economyType (el ? ? ? Spain) (el ? ? ? DevelopedCountry)
+
+economyType (el ? ? ? Sweden) (el ? ? ? DevelopedCountry)
+
+economyType (el ? ? ? Switzerland) (el ? ? ? DevelopedCountry)
+
+economyType (el ? ? ? Turkey) (el ? ? ? DevelopedCountry)
+
+economyType (el ? ? ? UnitedKingdom) (el ? ? ? DevelopedCountry)
+
+economyType (el ? ? ? UnitedStates) (el ? ? ? DevelopedCountry)
+
+economyType (el ? ? ? Afghanistan) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Algeria) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Angola) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? AntiguaAndBarbuda) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Argentina) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Aruba) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? TheBahamas) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Bahrain) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Bangladesh) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Barbados) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Belize) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Burundi) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Cambodia) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Cameroon) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? CapeVerde) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? CentralAfricanRepublic) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Chad) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Chile) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? China) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Colombia) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Comoros) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? DemocraticRepublicOfTheCongo) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? CostaRica) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? CoteDIvoire) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Cyprus) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Djibouti) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Dominica) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? DominicanRepublic) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Ecuador) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Egypt) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? ElSalvador) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? EquatorialGuinea) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Ethiopia) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Fiji) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Gabon) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Gambia) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Ghana) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Grenada) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Guatemala) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Guinea) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? GuineaBissau) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Guyana) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Haiti) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Honduras) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? India) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Indonesia) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Iran) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Iraq) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Jamaica) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Jordan) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Kenya) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Kiribati) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Kuwait) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Laos) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Lebanon) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Lesotho) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Liberia) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Libya) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Madagascar) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Malawi) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Malaysia) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Maldives) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Mali) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Malta) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? MarshallIslands) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Mauritania) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Mauritius) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Mexico) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Micronesia) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Morocco) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Mozambique) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Namibia) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Nepal) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? NetherlandsAntilles) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Nicaragua) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Niger) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Nigeria) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Oman) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Pakistan) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Panama) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? PapuaNewGuinea) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Paraguay) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Peru) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Philippines) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Qatar) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Rwanda) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? SaintKittsAndNevis) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? SaintLucia) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? SaintVincentAndTheGrenadines) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Samoa) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? SaoTomeAndPrincipe) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? SaudiArabia) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Senegal) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Seychelles) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? SierraLeone) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? SolomonIslands) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Somalia) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? SouthAfrica) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? SriLanka) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Sudan) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Suriname) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Swaziland) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Syria) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Tanzania) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Thailand) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Togo) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? TrinidadAndTobago) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Tunisia) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Turkey) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? UnitedArabEmirates) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Uganda) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Uruguay) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Vanuatu) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Venezuela) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Vietnam) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Yemen) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Zambia) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? Zimbabwe) (el ? ? ? LessDevelopedCountry)
+
+economyType (el ? ? ? HongKong) (el ? ? ? FourDragonsEconomy)
+
+economyType (el ? ? ? Singapore) (el ? ? ? FourDragonsEconomy)
+
+economyType (el ? ? ? SouthKorea) (el ? ? ? FourDragonsEconomy)
+
+economyType (el ? ? ? Taiwan) (el ? ? ? FourDragonsEconomy)
+
+economyType (el ? ? ? Australia) (el ? ? ? AdvancedEconomy)
+
+economyType (el ? ? ? Austria) (el ? ? ? AdvancedEconomy)
+
+economyType (el ? ? ? Belgium) (el ? ? ? AdvancedEconomy)
+
+economyType (el ? ? ? Canada) (el ? ? ? AdvancedEconomy)
+
+economyType (el ? ? ? Denmark) (el ? ? ? AdvancedEconomy)
+
+economyType (el ? ? ? Finland) (el ? ? ? AdvancedEconomy)
+
+economyType (el ? ? ? France) (el ? ? ? AdvancedEconomy)
+
+economyType (el ? ? ? Germany) (el ? ? ? AdvancedEconomy)
+
+economyType (el ? ? ? Greece) (el ? ? ? AdvancedEconomy)
+
+economyType (el ? ? ? HongKong) (el ? ? ? AdvancedEconomy)
+
+economyType (el ? ? ? Iceland) (el ? ? ? AdvancedEconomy)
+
+economyType (el ? ? ? Ireland) (el ? ? ? AdvancedEconomy)
+
+economyType (el ? ? ? Israel) (el ? ? ? AdvancedEconomy)
+
+economyType (el ? ? ? Italy) (el ? ? ? AdvancedEconomy)
+
+economyType (el ? ? ? Japan) (el ? ? ? AdvancedEconomy)
+
+economyType (el ? ? ? SouthKorea) (el ? ? ? AdvancedEconomy)
+
+economyType (el ? ? ? Luxembourg) (el ? ? ? AdvancedEconomy)
+
+economyType (el ? ? ? Netherlands) (el ? ? ? AdvancedEconomy)
+
+economyType (el ? ? ? NewZealand) (el ? ? ? AdvancedEconomy)
+
+economyType (el ? ? ? Norway) (el ? ? ? AdvancedEconomy)
+
+economyType (el ? ? ? Portugal) (el ? ? ? AdvancedEconomy)
+
+economyType (el ? ? ? Singapore) (el ? ? ? AdvancedEconomy)
+
+economyType (el ? ? ? Spain) (el ? ? ? AdvancedEconomy)
+
+economyType (el ? ? ? Sweden) (el ? ? ? AdvancedEconomy)
+
+economyType (el ? ? ? Switzerland) (el ? ? ? AdvancedEconomy)
+
+economyType (el ? ? ? Taiwan) (el ? ? ? AdvancedEconomy)
+
+economyType (el ? ? ? UnitedKingdom) (el ? ? ? AdvancedEconomy)
+
+economyType (el ? ? ? UnitedStates) (el ? ? ? AdvancedEconomy)
+
+economyType (el ? ? ? Albania) (el ? ? ? CountryInTransition)
+
+economyType (el ? ? ? Armenia) (el ? ? ? CountryInTransition)
+
+economyType (el ? ? ? Azerbaijan) (el ? ? ? CountryInTransition)
+
+economyType (el ? ? ? Belarus) (el ? ? ? CountryInTransition)
+
+economyType (el ? ? ? BosniaAndHerzegovina) (el ? ? ? CountryInTransition)
+
+economyType (el ? ? ? Bulgaria) (el ? ? ? CountryInTransition)
+
+economyType (el ? ? ? Croatia) (el ? ? ? CountryInTransition)
+
+economyType (el ? ? ? CzechRepublic) (el ? ? ? CountryInTransition)
+
+economyType (el ? ? ? Estonia) (el ? ? ? CountryInTransition)
+
+economyType (el ? ? ? RepublicOfGeorgia) (el ? ? ? CountryInTransition)
+
+economyType (el ? ? ? Hungary) (el ? ? ? CountryInTransition)
+
+economyType (el ? ? ? Kazakhstan) (el ? ? ? CountryInTransition)
+
+economyType (el ? ? ? Kyrgyzstan) (el ? ? ? CountryInTransition)
+
+economyType (el ? ? ? Latvia) (el ? ? ? CountryInTransition)
+
+economyType (el ? ? ? Lithuania) (el ? ? ? CountryInTransition)
+
+economyType (el ? ? ? Macedonia) (el ? ? ? CountryInTransition)
+
+economyType (el ? ? ? Moldova) (el ? ? ? CountryInTransition)
+
+economyType (el ? ? ? Mongolia) (el ? ? ? CountryInTransition)
+
+economyType (el ? ? ? Poland) (el ? ? ? CountryInTransition)
+
+economyType (el ? ? ? Romania) (el ? ? ? CountryInTransition)
+
+economyType (el ? ? ? Russia) (el ? ? ? CountryInTransition)
+
+economyType (el ? ? ? Slovakia) (el ? ? ? CountryInTransition)
+
+economyType (el ? ? ? Slovenia) (el ? ? ? CountryInTransition)
+
+economyType (el ? ? ? Tajikistan) (el ? ? ? CountryInTransition)
+
+economyType (el ? ? ? Turkmenistan) (el ? ? ? CountryInTransition)
+
+economyType (el ? ? ? Ukraine) (el ? ? ? CountryInTransition)
+
+economyType (el ? ? ? Uzbekistan) (el ? ? ? CountryInTransition)
+
+economyType (el ? ? ? Yugoslavia) (el ? ? ? CountryInTransition)
+
+economyType (el ? ? ? Afghanistan) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Algeria) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Angola) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? AntiguaAndBarbuda) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Argentina) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Aruba) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? TheBahamas) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Bahrain) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Bangladesh) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Barbados) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Belize) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Burundi) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Cambodia) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Cameroon) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? CapeVerde) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? CentralAfricanRepublic) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Chad) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Chile) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? China) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Colombia) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Comoros) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? DemocraticRepublicOfTheCongo) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? CostaRica) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? CoteDIvoire) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Cyprus) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Djibouti) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Dominica) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? DominicanRepublic) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Ecuador) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Egypt) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? ElSalvador) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? EquatorialGuinea) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Ethiopia) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Fiji) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Gabon) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Gambia) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Ghana) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Grenada) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Guatemala) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Guinea) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? GuineaBissau) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Guyana) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Haiti) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Honduras) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? India) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Indonesia) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Iran) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Iraq) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Jamaica) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Jordan) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Kenya) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Kiribati) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Kuwait) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Laos) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Lebanon) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Lesotho) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Liberia) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Libya) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Madagascar) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Malawi) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Malaysia) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Maldives) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Mali) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Malta) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? MarshallIslands) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Mauritania) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Mauritius) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Mexico) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Micronesia) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Morocco) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Mozambique) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Namibia) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Nepal) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? NetherlandsAntilles) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Nicaragua) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Niger) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Nigeria) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Oman) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Pakistan) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Panama) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? PapuaNewGuinea) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Paraguay) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Peru) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Philippines) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Qatar) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Rwanda) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? SaintKittsAndNevis) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? SaintLucia) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? SaintVincentAndTheGrenadines) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Samoa) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? SaoTomeAndPrincipe) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? SaudiArabia) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Senegal) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Seychelles) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? SierraLeone) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? SolomonIslands) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Somalia) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? SouthAfrica) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? SriLanka) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Sudan) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Suriname) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Swaziland) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Syria) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Tanzania) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Thailand) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Togo) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? TrinidadAndTobago) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Tunisia) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Turkey) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? UnitedArabEmirates) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Uganda) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Uruguay) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Vanuatu) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Venezuela) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Vietnam) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Yemen) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Zambia) (el ? ? ? DevelopingCountry)
+
+economyType (el ? ? ? Zimbabwe) (el ? ? ? DevelopingCountry)
+
+industryProductType (el ? ? ? CoalMining) (desc Coal ? ?)
+
+industryProductType (el ? ? ? ConsumerGoodsIndustry) (desc ConsumerGood ? ?)
+
+industryProductType (el ? ? ? CopperOreMining) (desc CopperOre ? ?)
+
+industryProductType (el ? ? ? FertilizerMineralMining) (desc Fertilizer ? ?)
+
+industryProductType (el ? ? ? FurnitureManufacturing) (desc Furniture ? ?)
+
+industryProductType (el ? ? ? HandwovenCarpetManufacturing) (desc HandwovenCarpet ? ?)
+
+industryProductType (el ? ? ? LeadOreMining) (desc LeadOre ? ?)
+
+industryProductType (el ? ? ? LeadManufacturing) (desc LeadProduct ? ?)
+
+industryProductType (el ? ? ? ForestryAndLogging) (desc Timber ? ?)
+
+industryProductType (el ? ? ? WoodProductManufacturing) (desc WoodProduct ? ?)
+
+industryProductType (el ? ? ? Millwork) (desc WoodProduct ? ?)
+
+industryProductType (el ? ? ? MetallurgyIndustry) (desc Metal ? ?)
+
+industryProductType (el ? ? ? MotorVehicleManufacturing) (desc RoadVehicle ? ?)
+
+industryProductType (el ? ? ? NaturalGasIndustry) (desc NaturalGas ? ?)
+
+industryProductType (el ? ? ? CrudePetroleumExtraction) (desc Petroleum ? ?)
+
+industryProductType (el ? ? ? PetroleumRefineries) (desc RefinedPetroleumProduct ? ?)
+
+industryProductType (el ? ? ? AsphaltPavingRoofingAndSaturatedMaterialsManufacturing) (desc Asphalt ? ?)
+
+industryProductType (el ? ? ? SteelMills) (desc Steel ? ?)
+
+industryProductType (el ? ? ? TextileIndustry) (desc TextileProduct ? ?)
+
+industryProductType (el ? ? ? ZincOreMining) (desc ZincOre ? ?)
+
+industryProductType (el ? ? ? ZincManufacturing) (desc ZincProduct ? ?)
+
+equal (el ? ? ? (MeasureFn (el ? ? ? (toInt 1)) (el ? ? ? KilowattHour))) (el ? ? ? (MeasureFn (el ? ? ? (toRealNum 3.6)) (el ? ? ? (MegaFn (el ? ? ? Joule)))))
+
+equal (el ? ? ? (MeasureFn (el ? ? ? (toInt 1)) (el ? ? ? KilowattHour))) (el ? ? ? (MeasureFn (el ? ? ? (toInt 3600000)) (el ? ? ? Joule)))
+
+currencyType (el ? ? ? Afghanistan) (el ? ? ? AfghanAfghani)
+
+currencyType (el ? ? ? UnitedKingdom) (el ? ? ? BritishPound)
+
+currencyType (el ? ? ? Canada) (el ? ? ? CanadianDollar)
+
+currencyType (el ? ? ? France) (el ? ? ? FrenchFranc)
+
+currencyType (el ? ? ? Germany) (el ? ? ? GermanMark)
+
+currencyType (el ? ? ? Italy) (el ? ? ? ItalianLire)
+
+currencyType (el ? ? ? Japan) (el ? ? ? JapaneseYen)
+
+currencyType (el ? ? ? Tajikistan) (el ? ? ? TajikSomoni)
+
+currencyValue (desc AfghanAfghaniCoin ? ?) (el ? ? ? AfghanAfghani)
+
+currencyValue (desc BritishPoundCoin ? ?) (el ? ? ? BritishPound)
+
+currencyValue (desc CanadianDollarCoin ? ?) (el ? ? ? CanadianDollar)
+
+currencyValue (desc EuroCentCoin ? ?) (el ? ? ? EuroCent)
+
+currencyValue (desc EuroDollarCoin ? ?) (el ? ? ? EuroDollar)
+
+currencyValue (desc FrenchFrancCoin ? ?) (el ? ? ? FrenchFranc)
+
+currencyValue (desc GermanMarkCoin ? ?) (el ? ? ? GermanMark)
+
+currencyValue (desc ItalianLireCoin ? ?) (el ? ? ? ItalianLire)
+
+currencyValue (desc JapaneseYenCoin ? ?) (el ? ? ? JapaneseYen)
+
+currencyValue (desc TajikSomoniCoin ? ?) (el ? ? ? TajikSomoni)
+
+currencyValue (desc UnitedStatesCentCoin ? ?) (el ? ? ? UnitedStatesCent)
+
+currencyValue (desc UnitedStatesFiveCentCoin ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 5)) (el ? ? ? UnitedStatesCent)))
+
+currencyValue (desc UnitedStatesCentCoin ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 10)) (el ? ? ? UnitedStatesCent)))
+
+currencyValue (desc UnitedStatesQuarterCoin ? ?) (el ? ? ? (MeasureFn (el ? ? ? (toInt 25)) (el ? ? ? UnitedStatesCent)))
+
+currencyValue (desc UnitedStatesDollarBill ? ?) (el ? ? ? UnitedStatesDollar)
+
+currencyType (el ? ? ? Albania) (el ? ? ? AlbanianLek)
+
+currencyType (el ? ? ? Algeria) (el ? ? ? AlgerianDinar)
+
+currencyType (el ? ? ? Angola) (el ? ? ? AngolanKwanza)
+
+currencyType (el ? ? ? Argentina) (el ? ? ? ArgentineAustral)
+
+currencyType (el ? ? ? Armenia) (el ? ? ? ArmenianDram)
+
+currencyType (el ? ? ? Australia) (el ? ? ? AustralianDollar)
+
+currencyType (el ? ? ? Austria) (el ? ? ? AustrianSchilling)
+
+currencyType (el ? ? ? Azerbaijan) (el ? ? ? AzerbaijaniManat)
+
+currencyType (el ? ? ? Bahrain) (el ? ? ? BahrainianDinar)
+
+currencyType (el ? ? ? Bangladesh) (el ? ? ? BangladeshiTaka)
+
+currencyType (el ? ? ? Barbados) (el ? ? ? BarbadosDollar)
+
+currencyType (el ? ? ? Belarus) (el ? ? ? BelarusianRubel)
+
+currencyType (el ? ? ? Belgium) (el ? ? ? BelgianFranc)
+
+currencyType (el ? ? ? Belize) (el ? ? ? BelizeDollar)
+
+currencyType (el ? ? ? Benin) (el ? ? ? BeninFranc)
+
+currencyType (el ? ? ? Bermuda) (el ? ? ? BermudaDollar)
+
+currencyType (el ? ? ? Bhutan) (el ? ? ? BhutaneseNgultrum)
+
+currencyType (el ? ? ? Bolivia) (el ? ? ? BolivianBoliviano)
+
+currencyType (el ? ? ? Botswana) (el ? ? ? BotswanaPula)
+
+currencyType (el ? ? ? Brazil) (el ? ? ? BrazilianReal)
+
+currencyType (el ? ? ? Brunei) (el ? ? ? BruneiDollar)
+
+currencyType (el ? ? ? Bulgaria) (el ? ? ? BulgarianLev)
+
+currencyType (el ? ? ? BurkinaFaso) (el ? ? ? BurkinaFasoFranc)
+
+currencyType (el ? ? ? Burundi) (el ? ? ? BurundiFranc)
+
+currencyType (el ? ? ? Cambodia) (el ? ? ? CambodianRiel)
+
+currencyType (el ? ? ? Cameroon) (el ? ? ? CameroonFranc)
+
+currencyType (el ? ? ? CapeVerde) (el ? ? ? CapeVerdeEscudo)
+
+currencyType (el ? ? ? CaymanIslands) (el ? ? ? CaymanIslandsDollar)
+
+currencyType (el ? ? ? CentralAfricanRepublic) (el ? ? ? CentralAfricanRepublicFranc)
+
+currencyType (el ? ? ? Chad) (el ? ? ? ChadianFranc)
+
+currencyType (el ? ? ? Chile) (el ? ? ? ChileanPeso)
+
+currencyType (el ? ? ? China) (el ? ? ? ChineseYuan)
+
+currencyType (el ? ? ? Colombia) (el ? ? ? ColombianPeso)
+
+currencyType (el ? ? ? Congo) (el ? ? ? CongoFranc)
+
+currencyType (el ? ? ? CostaRica) (el ? ? ? CostaRicanColon)
+
+currencyType (el ? ? ? Cuba) (el ? ? ? CubanPeso)
+
+currencyType (el ? ? ? Cyprus) (el ? ? ? CypriotPound)
+
+currencyType (el ? ? ? CzechRepublic) (el ? ? ? CzechKoruna)
+
+currencyType (el ? ? ? Djibouti) (el ? ? ? DjiboutiFranc)
+
+currencyType (el ? ? ? Dominica) (el ? ? ? DominicanDollar)
+
+currencyType (el ? ? ? Dominica) (el ? ? ? DominicanPeso)
+
+currencyType (el ? ? ? Netherlands) (el ? ? ? DutchGuilder)
+
+currencyType (el ? ? ? Ecuador) (el ? ? ? EcuadoranSucre)
+
+currencyType (el ? ? ? Egypt) (el ? ? ? EgyptianPound)
+
+currencyType (el ? ? ? ElSalvador) (el ? ? ? ElSalvadoranColon)
+
+currencyType (el ? ? ? Estonia) (el ? ? ? EstonianKroon)
+
+currencyType (el ? ? ? Ethiopia) (el ? ? ? EthiopianBirr)
+
+currencyType (el ? ? ? Fiji) (el ? ? ? FijiDollar)
+
+currencyType (el ? ? ? Finland) (el ? ? ? FinnishMarkka)
+
+currencyType (el ? ? ? Gabon) (el ? ? ? GabonFranc)
+
+currencyType (el ? ? ? Gambia) (el ? ? ? GambianDalasi)
+
+currencyType (el ? ? ? RepublicOfGeorgia) (el ? ? ? GeorgianLari)
+
+currencyType (el ? ? ? Ghana) (el ? ? ? GhanianCedi)
+
+currencyType (el ? ? ? Greece) (el ? ? ? GreekDrachma)
+
+currencyType (el ? ? ? Grenada) (el ? ? ? GrenadaDollar)
+
+currencyType (el ? ? ? Guatemala) (el ? ? ? GuatemalanQuetzal)
+
+currencyType (el ? ? ? GuineaBissau) (el ? ? ? GuineaBissauPeso)
+
+currencyType (el ? ? ? Guinea) (el ? ? ? GuineanFranc)
+
+currencyType (el ? ? ? Guyana) (el ? ? ? GuyanaDollar)
+
+currencyType (el ? ? ? Haiti) (el ? ? ? HaitianGourde)
+
+currencyType (el ? ? ? Honduras) (el ? ? ? HonduranLempira)
+
+currencyType (el ? ? ? HongKong) (el ? ? ? HongKongDollar)
+
+currencyType (el ? ? ? Hungary) (el ? ? ? HungarianForint)
+
+currencyType (el ? ? ? Iceland) (el ? ? ? IcelandicKrona)
+
+currencyType (el ? ? ? India) (el ? ? ? IndianRupee)
+
+currencyType (el ? ? ? Indonesia) (el ? ? ? IndonesianRupiah)
+
+currencyType (el ? ? ? Iran) (el ? ? ? IranianRial)
+
+currencyType (el ? ? ? Iraq) (el ? ? ? IraqiDinar)
+
+currencyType (el ? ? ? Ireland) (el ? ? ? IrishPound)
+
+currencyType (el ? ? ? Israel) (el ? ? ? IsraeliShekel)
+
+currencyType (el ? ? ? Jamaica) (el ? ? ? JamaicanDollar)
+
+currencyType (el ? ? ? Jordan) (el ? ? ? JordanianDinar)
+
+currencyType (el ? ? ? Kazakhstan) (el ? ? ? KazakhstaniTenge)
+
+currencyType (el ? ? ? Kenya) (el ? ? ? KenyanShilling)
+
+currencyType (el ? ? ? Kiribati) (el ? ? ? KiribatiDollar)
+
+currencyType (el ? ? ? Kuwait) (el ? ? ? KuwaitiDinar)
+
+currencyType (el ? ? ? Kyrgyzstan) (el ? ? ? KyrgyzstaniSom)
+
+currencyType (el ? ? ? Laos) (el ? ? ? LaotianKip)
+
+currencyType (el ? ? ? Latvia) (el ? ? ? LatvianLats)
+
+currencyType (el ? ? ? Lebanon) (el ? ? ? LebanesePound)
+
+currencyType (el ? ? ? Lesotho) (el ? ? ? LesothoLoti)
+
+currencyType (el ? ? ? Liberia) (el ? ? ? LiberianDollar)
+
+currencyType (el ? ? ? Libya) (el ? ? ? LibyanDinar)
+
+currencyType (el ? ? ? Lithuania) (el ? ? ? LithuanianLitas)
+
+currencyType (el ? ? ? Luxembourg) (el ? ? ? LuxembourgFranc)
+
+currencyType (el ? ? ? Madagascar) (el ? ? ? MadagascarFranc)
+
+currencyType (el ? ? ? Malawi) (el ? ? ? MalawianKwacha)
+
+currencyType (el ? ? ? Malaysia) (el ? ? ? MalaysianRinggit)
+
+currencyType (el ? ? ? Mali) (el ? ? ? MaliFranc)
+
+currencyType (el ? ? ? Malta) (el ? ? ? MalteseLira)
+
+currencyType (el ? ? ? Mauritius) (el ? ? ? MauritanianOuguiya)
+
+currencyType (el ? ? ? Mauritius) (el ? ? ? MauritianRupee)
+
+currencyType (el ? ? ? Mexico) (el ? ? ? MexicanPeso)
+
+currencyType (el ? ? ? Moldova) (el ? ? ? MoldovanLeu)
+
+currencyType (el ? ? ? Mongolia) (el ? ? ? MongolianTugrik)
+
+currencyType (el ? ? ? Mozambique) (el ? ? ? MozambiqueMetical)
+
+currencyType (el ? ? ? Myanmar) (el ? ? ? MyanmarKyat)
+
+currencyType (el ? ? ? Nepal) (el ? ? ? NepaleseRupee)
+
+currencyType (el ? ? ? NewZealand) (el ? ? ? NewZealandDollar)
+
+currencyType (el ? ? ? Nicaragua) (el ? ? ? NicaraguanCordoba)
+
+currencyType (el ? ? ? Niger) (el ? ? ? NigerFranc)
+
+currencyType (el ? ? ? Nigeria) (el ? ? ? NigerianNaira)
+
+currencyType (el ? ? ? NorthKorea) (el ? ? ? NorthKoreanWon)
+
+currencyType (el ? ? ? Norway) (el ? ? ? NorwegianKrone)
+
+currencyType (el ? ? ? Oman) (el ? ? ? OmaniRiyal)
+
+currencyType (el ? ? ? Pakistan) (el ? ? ? PakistaniRupee)
+
+currencyType (el ? ? ? Panama) (el ? ? ? PanamanianBalboa)
+
+currencyType (el ? ? ? Paraguay) (el ? ? ? ParaguayanGuarani)
+
+currencyType (el ? ? ? Peru) (el ? ? ? PeruvianInti)
+
+currencyType (el ? ? ? Philippines) (el ? ? ? PhilippinePeso)
+
+currencyType (el ? ? ? Poland) (el ? ? ? PolishZloty)
+
+currencyType (el ? ? ? Portugal) (el ? ? ? PortugueseEscudo)
+
+currencyType (el ? ? ? Qatar) (el ? ? ? QatariRiyal)
+
+currencyType (el ? ? ? Romania) (el ? ? ? RomanianLeu)
+
+currencyType (el ? ? ? Russia) (el ? ? ? RussianRuble)
+
+currencyType (el ? ? ? Rwanda) (el ? ? ? RwandaFranc)
+
+currencyType (el ? ? ? SaudiArabia) (el ? ? ? SaudiArabianRiyal)
+
+currencyType (el ? ? ? Senegal) (el ? ? ? SenegaleseFranc)
+
+currencyType (el ? ? ? Seychelles) (el ? ? ? SeychellesRupee)
+
+currencyType (el ? ? ? SierraLeone) (el ? ? ? SierraLeoneLeone)
+
+currencyType (el ? ? ? Singapore) (el ? ? ? SingaporeDollar)
+
+currencyType (el ? ? ? Slovakia) (el ? ? ? SlovakianKoruna)
+
+currencyType (el ? ? ? Somalia) (el ? ? ? SomalianShilling)
+
+currencyType (el ? ? ? SouthAfrica) (el ? ? ? SouthAfricanRand)
+
+currencyType (el ? ? ? SouthKorea) (el ? ? ? SouthKoreanWon)
+
+currencyType (el ? ? ? Spain) (el ? ? ? SpanishPeseta)
+
+currencyType (el ? ? ? SriLanka) (el ? ? ? SriLankanRupee)
+
+currencyType (el ? ? ? Sudan) (el ? ? ? SudanesePound)
+
+currencyType (el ? ? ? Suriname) (el ? ? ? SurinameseGuilder)
+
+currencyType (el ? ? ? Swaziland) (el ? ? ? SwazilandLilangeni)
+
+currencyType (el ? ? ? Sweden) (el ? ? ? SwedishKrona)
+
+currencyType (el ? ? ? Switzerland) (el ? ? ? SwissFranc)
+
+currencyType (el ? ? ? Syria) (el ? ? ? SyrianPound)
+
+currencyType (el ? ? ? Taiwan) (el ? ? ? TaiwanDollar)
+
+currencyType (el ? ? ? Tajikistan) (el ? ? ? TajikistaniRuble)
+
+currencyType (el ? ? ? Tanzania) (el ? ? ? TanzanianShilling)
+
+currencyType (el ? ? ? Thailand) (el ? ? ? ThaiBaht)
+
+currencyType (el ? ? ? Togo) (el ? ? ? TogoFranc)
+
+currencyType (el ? ? ? Tonga) (el ? ? ? TonganPaanga)
+
+currencyType (el ? ? ? TrinidadAndTobago) (el ? ? ? TrinidadAndTobagoDollar)
+
+currencyType (el ? ? ? Tunisia) (el ? ? ? TunisianDinar)
+
+currencyType (el ? ? ? Turkey) (el ? ? ? TurkishLira)
+
+currencyType (el ? ? ? Turkmenistan) (el ? ? ? TurkmenManat)
+
+currencyType (el ? ? ? Tuvalu) (el ? ? ? TuvaluDollar)
+
+currencyType (el ? ? ? Uganda) (el ? ? ? UgandanShilling)
+
+currencyType (el ? ? ? Ukraine) (el ? ? ? UkranianHryvnia)
+
+currencyType (el ? ? ? UnitedArabEmirates) (el ? ? ? UnitedArabEmirateDirham)
+
+currencyType (el ? ? ? Uruguay) (el ? ? ? UruguayanPeso)
+
+currencyType (el ? ? ? Uzbekistan) (el ? ? ? UzbekistaniSom)
+
+currencyType (el ? ? ? Venezuela) (el ? ? ? VenezuelanBolivar)
+
+currencyType (el ? ? ? Vietnam) (el ? ? ? VietnameseDong)
+
+currencyType (el ? ? ? WesternSamoa) (el ? ? ? WesternSamoaNtala)
+
+currencyType (el ? ? ? Yemen) (el ? ? ? YemeniRial)
+
+currencyType (el ? ? ? Yugoslavia) (el ? ? ? YugoslavianDinar)
+
+currencyType (el ? ? ? Zaire) (el ? ? ? ZaireSezaire)
+
+currencyType (el ? ? ? Zambia) (el ? ? ? ZambianKwacha)
+
+currencyType (el ? ? ? Zimbabwe) (el ? ? ? ZimbabweanDollar)
+
+industryProductType (el ? ? ? TextileMills) (desc TextileProduct ? ?)
+
+industryProductType (el ? ? ? TextileProductMills) (desc TextileProduct ? ?)
+
+industryProductType (el ? ? ? CerealGrainFarming) (desc CerealGrain ? ?)
+
+industryProductType (el ? ? ? CornFarming) (desc MaizeGrain ? ?)
+
+industryProductType (el ? ? ? WheatFarming) (desc WheatGrain ? ?)
+
+industryProductType (el ? ? ? RiceFarming) (desc RiceGrain ? ?)
+
+industryProductType (el ? ? ? OatFarming) (desc OatGrain ? ?)
+
+industryProductType (el ? ? ? BarleyFarming) (desc BarleyGrain ? ?)
+
+industryProductType (el ? ? ? RyeFarming) (desc RyeGrain ? ?)
+
+industryProductType (el ? ? ? SorghumFarming) (desc SorghumGrain ? ?)
+
+industryProductType (el ? ? ? MilletFarming) (desc MilletGrain ? ?)
+
+industryProductType (el ? ? ? FruitFarming) (desc Fruit ? ?)
+
+industryProductType (el ? ? ? VegetableFarming) (desc Vegetable ? ?)
+
+industryProductType (el ? ? ? ForestryAndLogging) (desc ForestProduct ? ?)
+

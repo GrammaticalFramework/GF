@@ -1,0 +1,4 @@
+
+IrreflexiveRelation ? (\x,y -> exportPartner x y)
+
+IrreflexiveRelation ? (\x,y -> importPartner x y)

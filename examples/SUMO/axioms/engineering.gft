@@ -1,0 +1,33 @@
+
+forall Modeling (\MODELING -> exists Model (\MODEL ->  result(var ? ? ? MODELING)(var ? ? ? MODEL)))
+
+forall MultipoleModeling (\MODELING -> exists MultipoleModel (\MODEL ->  result(var ? ? ? MODELING)(var ? ? ? MODEL)))
+
+forall MultipolePole (\POLE -> forall Abstract (\MULTIPOLE ->  impl ( abstractPart(var ? ? ? POLE)(var ? ? ? MULTIPOLE))(exists MultipoleSection (\SECTION -> and ( abstractPart(var ? ? ? POLE)(var ? ? ? SECTION))( abstractPart(var ? ? ? SECTION)(var ? ? ? MULTIPOLE))))))
+
+forall PhysicalDimension (\DTHROUGH -> forall PhysicalDimension (\DACROSS -> forall MultipoleQuantity (\QTHROUGH -> forall MultipoleQuantity (\QACROSS -> forall MultipoleVariable (\THROUGH -> forall MultipoleVariable (\ACROSS -> forall MultipolePole (\POLE ->  impl (and ( hasAcrossVariable(var ? ? ? POLE)(var ? ? ? ACROSS))(and ( hasThroughVariable(var ? ? ? POLE)(var ? ? ? THROUGH))(and ( hasVariable(var ? ? ? QACROSS)(var ? ? ? ACROSS))(and ( hasVariable(var ? ? ? QTHROUGH)(var ? ? ? THROUGH))(and ( hasDimension(var ? ? ? QACROSS)(var ? ? ? DACROSS))( hasDimension(var ? ? ? QTHROUGH)(var ? ? ? DTHROUGH)))))))(exists PhysicalDomain (\DOMAIN ->  physicalDomain(var ? ? ? DACROSS)(var ? ? ? DTHROUGH)(var ? ? ? DOMAIN))))))))))
+
+forall Multipole (\MULTIPOLE -> exists MultipoleSection (\SECTION ->  abstractPart(var ? ? ? SECTION)(var ? ? ? MULTIPOLE)))
+
+forall MultipoleSection (\SECTION -> exists MultipolePole (\POLE1 -> exists MultipolePole (\POLE2 -> and ( abstractPart(var ? ? ? POLE1)(var ? ? ? SECTION))(and ( abstractPart(var ? ? ? POLE2)(var ? ? ? SECTION))( not (equal(var ? ? ? POLE1)(var ? ? ? POLE2)))))))
+
+forall MultipolePort (\PORT -> exists MultipolePole (\POLE1 -> exists MultipolePole (\POLE2 -> exists MultipolePole (\POLE3 -> and ( abstractPart(var ? ? ? POLE1)(var ? ? ? PORT))(and ( abstractPart(var ? ? ? POLE2)(var ? ? ? PORT))(and ( abstractPart(var ? ? ? POLE3)(var ? ? ? PORT))(and ( equal(var ? ? ? POLE1)(var ? ? ? POLE2))(and ( equal(var ? ? ? POLE2)(var ? ? ? POLE3))( equal(var ? ? ? POLE1)(var ? ? ? POLE3))))))))))
+
+forall AcrossVariableAccumulator (\M -> exists CapacitorElement (\C ->  represents(var ? ? ? M)(var ? ? ? C)))
+
+forall ElectricalTwopole (\M -> forall Entity (\E -> exists CapacitorElement (\C ->  represents(var ? ? ? M)(var ? ? ? E))))
+
+forall ThroughVariableAccumulator (\M -> exists InductorElement (\I ->  represents(var ? ? ? M)(var ? ? ? I)))
+
+forall ElectricalTwopole (\M -> forall Entity (\I -> exists InductorElement (\C ->  represents(var ? ? ? M)(var ? ? ? I))))
+
+forall Twoport (\M -> exists Transducer (\T ->  represents(var ? ? ? M)(var ? ? ? T)))
+
+forall Dissipator (\M -> exists ResistorElement (\R ->  represents(var ? ? ? M)(var ? ? ? R)))
+
+forall ElectricalTwopole (\M -> exists ResistorElement (\R ->  represents(var ? ? ? M)(var ? ? ? R)))
+
+forall PowerSource (\PS -> exists RadiatingElectromagnetic (\RE ->  origin(var ? ? ? RE)(var ? ? ? PS)))
+
+forall ITProcess (\PROCESS -> exists ITAgent (\AGENT -> exists Computer (\PATIENT -> and ( agent(var ? ? ? PROCESS)(var ? ? ? AGENT))( patient(var ? ? ? PROCESS)(var ? ? ? PATIENT)))))
+

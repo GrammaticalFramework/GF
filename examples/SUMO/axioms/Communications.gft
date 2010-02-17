@@ -1,0 +1,20 @@
+
+forall CommunicationDevice (\DEVICE ->  forall Communication (\COMMUNICATION -> instrument (var ? ? ? COMMUNICATION)(var ? ? ? DEVICE)))
+
+forall TelephoneSystem (\SYSTEM -> exists Telephone (\PHONE ->  engineeringSubcomponent(var ? ? ? PHONE)(var ? ? ? SYSTEM)))
+
+forall TelephoneSystem (\SYSTEM -> exists MainTelephoneLine (\LINE ->  engineeringSubcomponent(var ? ? ? LINE)(var ? ? ? SYSTEM)))
+
+forall CommunicationSatellite (\SAT -> exists CommunicationSystem (\SYSTEM ->  engineeringSubcomponent(var ? ? ? SAT)(var ? ? ? SYSTEM)))
+
+forall RadioSystem (\SYSTEM -> exists RadioReceiver (\DEVICE ->  engineeringSubcomponent(var ? ? ? DEVICE)(var ? ? ? SYSTEM)))
+
+forall TelevisionSystem (\SYSTEM -> exists TelevisionStation (\STATION ->  engineeringSubcomponent(var ? ? ? STATION)(var ? ? ? SYSTEM)))
+
+forall TelevisionSystem (\SYSTEM -> exists TelevisionReceiver (\DEVICE ->  engineeringSubcomponent(var ? ? ? DEVICE)(var ? ? ? SYSTEM)))
+
+forall CableTelevisionSystem (\SYSTEM -> exists TelevisionReceiver (\DEVICE ->  engineeringSubcomponent(var ? ? ? DEVICE)(var ? ? ? SYSTEM)))
+
+forall InternetServiceProvider (\PART ->  engineeringSubcomponent(var ? ? ? PART)(el ? ? ? Internet))
+
+forall (both Object Agent) (\INDIVIDUAL ->  impl ( attribute(var ? ? ? INDIVIDUAL)(el ? ? ? InternetUser))(exists Process (\PROCESS -> and ( agent(var ? ? ? PROCESS)(var ? ? ? INDIVIDUAL))( instrument(var ? ? ? PROCESS)(el ? ? ? Internet)))))

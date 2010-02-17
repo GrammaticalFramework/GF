@@ -1,0 +1,1184 @@
+
+forall Entity (\THING2 -> forall Entity (\THING1 ->  impl ( equal(var ? ? ? THING1)(var ? ? ? THING2))(forall Attribute (\ATTR ->  equiv ( property(var ? ? ? THING1)(var ? ? ? ATTR))( property(var ? ? ? THING2)(var ? ? ? ATTR))))))
+
+forall (both Entity Attribute) (\ATTR2 -> forall (both Entity Attribute) (\ATTR1 ->  impl ( equal(var ? ? ? ATTR1)(var ? ? ? ATTR2))(forall Entity (\THING ->  equiv ( property(var ? ? ? THING)(var ? ? ? ATTR1))( property(var ? ? ? THING)(var ? ? ? ATTR2))))))
+
+forall Attribute (\ATTR2 -> forall Attribute (\ATTR1 ->  impl ( subAttribute(var ? ? ? ATTR1)(var ? ? ? ATTR2))(forall Entity (\OBJ ->  impl ( property(var ? ? ? OBJ)(var ? ? ? ATTR1))( property(var ? ? ? OBJ)(var ? ? ? ATTR2))))))
+
+forall Entity (\ENTITY -> forall TimePosition (\TIME1 -> forall Attribute (\ATTR2 -> forall Attribute (\ATTR1 ->  impl (and ( successorAttribute(var ? ? ? ATTR1)(var ? ? ? ATTR2))( holdsDuring(var ? ? ? TIME1)( property(var ? ? ? ENTITY)(var ? ? ? ATTR2))))(exists TimePosition (\TIME2 -> and ( temporalPart(var ? ? ? TIME2)( el ? ? ? ( PastFn(var ? ? ? TIME1))))( holdsDuring(var ? ? ? TIME2)( property(var ? ? ? ENTITY)(var ? ? ? ATTR1)))))))))
+
+forall Attribute (\ATTR2 -> forall Attribute (\ATTR1 ->  impl ( successorAttribute(var ? ? ? ATTR1)(var ? ? ? ATTR2))( successorAttributeClosure(var ? ? ? ATTR1)(var ? ? ? ATTR2))))
+
+forall Entity (\E3 -> forall Attribute (\ATT -> forall Entity (\E2 -> forall Entity (\E1 ->  impl (and ( greaterThanByQuality(var ? ? ? E1)(var ? ? ? E2)(var ? ? ? ATT))( greaterThanByQuality(var ? ? ? E2)(var ? ? ? E3)(var ? ? ? ATT)))( greaterThanByQuality(var ? ? ? E1)(var ? ? ? E3)(var ? ? ? ATT))))))
+
+forall Attribute (\ATT -> forall Entity (\E2 -> forall Entity (\E1 ->  impl ( greaterThanByQuality(var ? ? ? E1)(var ? ? ? E2)(var ? ? ? ATT))( not ( greaterThanByQuality(var ? ? ? E2)(var ? ? ? E1)(var ? ? ? ATT))))))
+
+forall Attribute (\ATT -> forall Entity (\E2 -> forall Entity (\E1 ->  impl ( greaterThanByQuality(var ? ? ? E1)(var ? ? ? E2)(var ? ? ? ATT))( not ( equal(var ? ? ? E2)(var ? ? ? E1))))))
+
+forall Physical (\PHYS -> exists TimePosition (\TIME -> exists Object (\LOC -> and ( located(var ? ? ? PHYS)(var ? ? ? LOC))( time(var ? ? ? PHYS)(var ? ? ? TIME)))))
+
+forall SelfConnectedObject (\OBJ ->  side( el ? ? ? ( FrontFn(var ? ? ? OBJ)))(var ? ? ? OBJ))
+
+forall SelfConnectedObject (\OBJ ->  side( el ? ? ? ( BackFn(var ? ? ? OBJ)))(var ? ? ? OBJ))
+
+forall Object (\OBJ2 -> forall Object (\OBJ1 ->  equiv ( properPart(var ? ? ? OBJ1)(var ? ? ? OBJ2))(and ( part(var ? ? ? OBJ1)(var ? ? ? OBJ2))( not ( part(var ? ? ? OBJ2)(var ? ? ? OBJ1))))))
+
+forall Object (\OBJ2 -> forall SelfConnectedObject (\OBJ1 ->  equiv ( contains(var ? ? ? OBJ1)(var ? ? ? OBJ2))(exists Hole (\HOLE -> and ( hole(var ? ? ? HOLE)(var ? ? ? OBJ1))( properlyFills(var ? ? ? OBJ2)(var ? ? ? HOLE))))))
+
+forall Substance (\OBJ -> forall Object (\PART -> forall Attribute (\ATTR ->  impl (and ( attribute(var ? ? ? OBJ)(var ? ? ? ATTR))( part(var ? ? ? PART)(var ? ? ? OBJ)))( attribute(var ? ? ? PART)(var ? ? ? ATTR)))))
+
+forall Atom (\ATOM -> exists Proton (\PROTON -> exists Electron (\ELECTRON -> and ( component(var ? ? ? PROTON)(var ? ? ? ATOM))( component(var ? ? ? ELECTRON)(var ? ? ? ATOM)))))
+
+forall Atom (\ATOM -> forall AtomicNucleus (\NUCLEUS1 -> forall AtomicNucleus (\NUCLEUS2 ->  impl (and ( component(var ? ? ? NUCLEUS1)(var ? ? ? ATOM))( component(var ? ? ? NUCLEUS2)(var ? ? ? ATOM)))( equal(var ? ? ? NUCLEUS1)(var ? ? ? NUCLEUS2)))))
+
+forall SubatomicParticle (\PARTICLE -> exists Atom (\ATOM ->  part(var ? ? ? PARTICLE)(var ? ? ? ATOM)))
+
+forall AtomicNucleus (\NUCLEUS -> exists Neutron (\NEUTRON -> exists Proton (\PROTON -> and ( component(var ? ? ? NEUTRON)(var ? ? ? NUCLEUS))( component(var ? ? ? PROTON)(var ? ? ? NUCLEUS)))))
+
+forall Mixture (\MIXTURE -> exists PureSubstance (\PURE1 -> exists PureSubstance (\PURE2 -> and ( not ( equal(var ? ? ? PURE1)(var ? ? ? PURE2)))(and ( part(var ? ? ? PURE1)(var ? ? ? MIXTURE))( part(var ? ? ? PURE2)(var ? ? ? MIXTURE))))))
+
+forall Region (\REGION -> exists Physical (\PHYS ->  located(var ? ? ? PHYS)(var ? ? ? REGION)))
+
+forall Collection (\COLL -> exists SelfConnectedObject (\OBJ ->  member(var ? ? ? OBJ)(var ? ? ? COLL)))
+
+forall Collection (\COLL2 -> forall Collection (\COLL1 ->  equiv ( subCollection(var ? ? ? COLL1)(var ? ? ? COLL2))(forall SelfConnectedObject (\MEMBER ->  impl ( member(var ? ? ? MEMBER)(var ? ? ? COLL1))( member(var ? ? ? MEMBER)(var ? ? ? COLL2))))))
+
+forall ContentBearingPhysical (\OBJ -> exists Entity (\THING ->  represents(var ? ? ? OBJ)(var ? ? ? THING)))
+
+forall SymbolicString (\STRING -> exists Character (\PART ->  part(var ? ? ? PART)(var ? ? ? STRING)))
+
+forall ConstructedLanguage (\LANG -> exists Planning (\PLAN ->  result(var ? ? ? PLAN)(var ? ? ? LANG)))
+
+forall Agent (\AGENT -> exists Process (\PROC ->  agent(var ? ? ? PROC)(var ? ? ? AGENT)))
+
+forall (both Human Object) (\Y -> forall Agent (\X ->  impl ( leader(var ? ? ? X)(var ? ? ? Y))( attribute(var ? ? ? Y)(el ? ? ? Living))))
+
+forall DualObjectProcess (\PROCESS -> exists Entity (\OBJ2 -> exists Entity (\OBJ1 -> and ( patient(var ? ? ? PROCESS)(var ? ? ? OBJ1))(and ( patient(var ? ? ? PROCESS)(var ? ? ? OBJ2))( not ( equal(var ? ? ? OBJ1)(var ? ? ? OBJ2)))))))
+
+forall SingleAgentProcess (\PROC -> exists Agent (\AGENT ->  agent(var ? ? ? PROC)(var ? ? ? AGENT)))
+
+forall SingleAgentProcess (\PROC -> forall (both Agent Entity) (\AGENT_2 -> forall (both Agent Entity) (\AGENT_1 ->  impl (and ( agent(var ? ? ? PROC)(var ? ? ? AGENT_1))( agent(var ? ? ? PROC)(var ? ? ? AGENT_2)))( equal(var ? ? ? AGENT_1)(var ? ? ? AGENT_2)))))
+
+forall Abstract (\ABS ->  not (exists (both Object TimePosition) (\POINT -> or ( located(var ? ? ? ABS)(var ? ? ? POINT))( time(var ? ? ? ABS)(var ? ? ? POINT)))))
+
+forall (both Quantity Entity) (\NUMBER2 -> forall (both Quantity Entity) (\NUMBER1 ->  equiv ( lessThanOrEqualTo(var ? ? ? NUMBER1)(var ? ? ? NUMBER2))(or ( equal(var ? ? ? NUMBER1)(var ? ? ? NUMBER2))( lessThan(var ? ? ? NUMBER1)(var ? ? ? NUMBER2)))))
+
+forall (both Quantity Entity) (\NUMBER2 -> forall (both Quantity Entity) (\NUMBER1 ->  equiv ( greaterThanOrEqualTo(var ? ? ? NUMBER1)(var ? ? ? NUMBER2))(or ( equal(var ? ? ? NUMBER1)(var ? ? ? NUMBER2))( greaterThan(var ? ? ? NUMBER1)(var ? ? ? NUMBER2)))))
+
+forall ImaginaryNumber (\NUMBER -> exists RealNumber (\REAL ->  equal(var ? ? ? NUMBER)( el ? ? ? ( MultiplicationFn(var ? ? ? REAL)( el ? ? ? ( SquareRootFn(el ? ? ? (toInt -1))))))))
+
+forall NonnegativeInteger (\X ->  greaterThan(var ? ? ? X)(el ? ? ? (toInt -1)))
+
+forall NegativeInteger (\X ->  greaterThan(el ? ? ? (toInt 0))(var ? ? ? X))
+
+forall PositiveInteger (\X ->  greaterThan(var ? ? ? X)(el ? ? ? (toInt 0)))
+
+forall ComplexNumber (\NUMBER -> exists RealNumber (\REAL1 -> exists RealNumber (\REAL2 ->  equal(var ? ? ? NUMBER)( el ? ? ? ( AdditionFn(var ? ? ? REAL1)( el ? ? ? ( MultiplicationFn(var ? ? ? REAL2)( el ? ? ? ( SquareRootFn(el ? ? ? (toInt  -1)))))))))))
+
+forall Entity (\OBJECT -> forall (both Agent CognitiveAgent) (\AGENT ->  equiv (exists IntentionalProcess (\PROCESS -> and ( agent(var ? ? ? PROCESS)(var ? ? ? AGENT))( patient(var ? ? ? PROCESS)(var ? ? ? OBJECT))))( inScopeOfInterest(var ? ? ? AGENT)(var ? ? ? OBJECT))))
+
+forall Physical (\OBJECT -> forall CognitiveAgent (\AGENT ->  impl ( needs(var ? ? ? AGENT)(var ? ? ? OBJECT))( wants(var ? ? ? AGENT)(var ? ? ? OBJECT))))
+
+forall (both Physical Object) (\OBJ -> forall CognitiveAgent (\AGENT ->  impl ( wants(var ? ? ? AGENT)(var ? ? ? OBJ))( desires(var ? ? ? AGENT)( possesses(var ? ? ? AGENT)(var ? ? ? OBJ)))))
+
+forall List (\LIST -> exists (both PositiveInteger Quantity) (\NUMBER1 -> exists Entity (\ITEM1 -> and ( not ( equal( el ? ? ? ( ListOrderFn(var ? ? ? LIST)(var ? ? ? NUMBER1)))(var ? ? ? ITEM1)))(forall PositiveInteger (\NUMBER2 ->  impl ( lessThan(var ? ? ? NUMBER2)(var ? ? ? NUMBER1))(exists Entity (\ITEM2 ->  equal( el ? ? ? ( ListOrderFn(var ? ? ? LIST)(var ? ? ? NUMBER2)))(var ? ? ? ITEM2))))))))
+
+forall UniqueList (\LIST -> forall (both PositiveInteger Entity) (\NUMBER2 -> forall (both PositiveInteger Entity) (\NUMBER1 ->  impl ( equal( el ? ? ? ( ListOrderFn(var ? ? ? LIST)(var ? ? ? NUMBER1)))( el ? ? ? ( ListOrderFn(var ? ? ? LIST)(var ? ? ? NUMBER2))))( equal(var ? ? ? NUMBER1)(var ? ? ? NUMBER2)))))
+
+forall List (\LIST1 -> forall List (\LIST2 ->  impl (forall PositiveInteger (\NUMBER ->  equal( el ? ? ? ( ListOrderFn(var ? ? ? LIST1)(var ? ? ? NUMBER)))( el ? ? ? ( ListOrderFn(var ? ? ? LIST2)(var ? ? ? NUMBER)))))( equal(var ? ? ? LIST1)(var ? ? ? LIST2))))
+
+forall List (\LIST -> forall PositiveInteger (\NUMBER1 ->  impl (and ( equal( el ? ? ? ( ListLengthFn(var ? ? ? LIST)))(var ? ? ? NUMBER1))( not ( equal(var ? ? ? LIST)(el ? ? ? NullList))))(forall (both PositiveInteger Quantity) (\NUMBER2 ->  equiv (exists Entity (\ITEM -> and ( equal( el ? ? ? ( ListOrderFn(var ? ? ? LIST)(var ? ? ? NUMBER2)))(var ? ? ? ITEM))( inList(var ? ? ? ITEM)(var ? ? ? LIST))))( lessThanOrEqualTo(var ? ? ? NUMBER2)(var ? ? ? NUMBER1))))))
+
+forall List (\LIST2 -> forall List (\LIST1 -> forall (both Entity List) (\LIST3 ->  equiv ( equal(var ? ? ? LIST3)( el ? ? ? ( ListConcatenateFn(var ? ? ? LIST1)(var ? ? ? LIST2))))(forall PositiveInteger (\NUMBER1 -> forall PositiveInteger (\NUMBER2 ->  impl (and ( lessThanOrEqualTo(var ? ? ? NUMBER1)( el ? ? ? ( ListLengthFn(var ? ? ? LIST1))))( lessThanOrEqualTo(var ? ? ? NUMBER2)( el ? ? ? ( ListLengthFn(var ? ? ? LIST2)))))(and ( equal( el ? ? ? ( ListOrderFn(var ? ? ? LIST3)(var ? ? ? NUMBER1)))( el ? ? ? ( ListOrderFn(var ? ? ? LIST1)(var ? ? ? NUMBER1))))( equal( el ? ? ? ( ListOrderFn(var ? ? ? LIST3)( el ? ? ? ( AdditionFn( el ? ? ? ( ListLengthFn(var ? ? ? LIST1)))(var ? ? ? NUMBER2)))))( el ? ? ? ( ListOrderFn(var ? ? ? LIST2)(var ? ? ? NUMBER2)))))))))))
+
+forall List (\LIST -> forall Entity (\ITEM ->  impl ( inList(var ? ? ? ITEM)(var ? ? ? LIST))(exists PositiveInteger (\NUMBER ->  equal( el ? ? ? ( ListOrderFn(var ? ? ? LIST)(var ? ? ? NUMBER)))(var ? ? ? ITEM)))))
+
+forall List (\LIST2 -> forall List (\LIST1 ->  impl ( subList(var ? ? ? LIST1)(var ? ? ? LIST2))(forall Entity (\ITEM ->  impl ( inList(var ? ? ? ITEM)(var ? ? ? LIST1))( inList(var ? ? ? ITEM)(var ? ? ? LIST2))))))
+
+forall List (\LIST2 -> forall List (\LIST1 ->  impl ( subList(var ? ? ? LIST1)(var ? ? ? LIST2))(exists Quantity (\NUMBER3 -> forall Entity (\ITEM ->  impl ( inList(var ? ? ? ITEM)(var ? ? ? LIST1))(exists (both PositiveInteger Entity) (\NUMBER2 -> exists (both PositiveInteger Quantity) (\NUMBER1 -> and ( equal( el ? ? ? ( ListOrderFn(var ? ? ? LIST1)(var ? ? ? NUMBER1)))(var ? ? ? ITEM))(and ( equal( el ? ? ? ( ListOrderFn(var ? ? ? LIST2)(var ? ? ? NUMBER2)))(var ? ? ? ITEM))( equal(var ? ? ? NUMBER2)( el ? ? ? ( AdditionFn(var ? ? ? NUMBER1)(var ? ? ? NUMBER3)))))))))))))
+
+forall Entity (\ITEM -> forall List (\LIST2 -> forall List (\LIST1 ->  impl ( identicalListItems(var ? ? ? LIST1)(var ? ? ? LIST2))( equiv ( inList(var ? ? ? ITEM)(var ? ? ? LIST1))( inList(var ? ? ? ITEM)(var ? ? ? LIST2))))))
+
+forall Process (\S2 -> forall Process (\P -> forall Process (\S1 ->  impl (and ( subProcess(var ? ? ? S1)(var ? ? ? P))( subProcess(var ? ? ? S2)(var ? ? ? P)))( relatedEvent(var ? ? ? S1)(var ? ? ? S2)))))
+
+forall Process (\PROC1 -> exists Process (\PROC2 ->  causes(var ? ? ? PROC2)(var ? ? ? PROC1)))
+
+forall (both Process Physical) (\P2 -> forall (both Process Physical) (\P1 ->  impl ( causes(var ? ? ? P1)(var ? ? ? P2))( earlier( el ? ? ? ( WhenFn(var ? ? ? P1)))( el ? ? ? ( WhenFn(var ? ? ? P2))))))
+
+forall Object (\OBJ2 -> forall Object (\OBJ1 ->  impl ( copy(var ? ? ? OBJ1)(var ? ? ? OBJ2))(forall Attribute (\ATTR ->  impl ( attribute(var ? ? ? OBJ1)(var ? ? ? ATTR))( attribute(var ? ? ? OBJ2)(var ? ? ? ATTR))))))
+
+forall Agent (\AGENT -> forall Object (\OBJ ->  impl ( exploits(var ? ? ? OBJ)(var ? ? ? AGENT))(exists Process (\PROCESS -> and ( agent(var ? ? ? PROCESS)(var ? ? ? AGENT))( resourceS(var ? ? ? PROCESS)(var ? ? ? OBJ))))))
+
+forall Object (\OBJ1 -> forall Object (\OBJ2 ->  impl ( partlyLocated(var ? ? ? OBJ1)(var ? ? ? OBJ2))( overlapsSpatially(var ? ? ? OBJ1)(var ? ? ? OBJ2))))
+
+forall Object (\OBJ1 -> forall Object (\OBJ2 ->  impl ( partlyLocated(var ? ? ? OBJ1)(var ? ? ? OBJ2))(exists (both Object Physical) (\SUB -> and ( part(var ? ? ? SUB)(var ? ? ? OBJ1))( located(var ? ? ? SUB)(var ? ? ? OBJ2))))))
+
+forall Object (\LOC -> forall (both Process Physical) (\PROCESS ->  impl ( origin(var ? ? ? PROCESS)(var ? ? ? LOC))( partlyLocated(var ? ? ? PROCESS)(var ? ? ? LOC))))
+
+forall (both Entity Object) (\LOC -> forall (both Process Physical) (\PROCESS ->  impl ( destination(var ? ? ? PROCESS)(var ? ? ? LOC))( partlyLocated(var ? ? ? PROCESS)(var ? ? ? LOC))))
+
+forall Object (\OBJ2 -> forall (both Physical Object) (\OBJ1 ->  impl ( located(var ? ? ? OBJ1)(var ? ? ? OBJ2))(forall (both Object Physical) (\SUB ->  impl ( part(var ? ? ? SUB)(var ? ? ? OBJ1))( located(var ? ? ? SUB)(var ? ? ? OBJ2))))))
+
+forall Object (\OBJ -> forall (both Physical Process) (\PROCESS ->  impl ( located(var ? ? ? PROCESS)(var ? ? ? OBJ))(forall (both Process Physical) (\SUB ->  impl ( subProcess(var ? ? ? SUB)(var ? ? ? PROCESS))( located(var ? ? ? SUB)(var ? ? ? OBJ))))))
+
+forall Object (\REGION -> forall (both Physical Entity) (\OBJ ->  impl ( exactlyLocated(var ? ? ? OBJ)(var ? ? ? REGION))( not (exists (both Physical Entity) (\OTHEROBJ -> and ( exactlyLocated(var ? ? ? OTHEROBJ)(var ? ? ? REGION))( not ( equal(var ? ? ? OTHEROBJ)(var ? ? ? OBJ))))))))
+
+forall Object (\END2 -> forall Object (\MID -> forall Object (\END1 ->  impl ( between(var ? ? ? END1)(var ? ? ? MID)(var ? ? ? END2))( between(var ? ? ? END2)(var ? ? ? MID)(var ? ? ? END1)))))
+
+forall Object (\OBJ2 -> forall Object (\OBJ1 ->  impl ( traverses(var ? ? ? OBJ1)(var ? ? ? OBJ2))(or ( crosses(var ? ? ? OBJ1)(var ? ? ? OBJ2))( penetrates(var ? ? ? OBJ1)(var ? ? ? OBJ2)))))
+
+forall (both Entity Object) (\REGION -> forall (both TimePoint TimePosition) (\TIME -> forall Physical (\THING ->  equiv ( equal( el ? ? ? ( WhereFn(var ? ? ? THING)(var ? ? ? TIME)))(var ? ? ? REGION))( holdsDuring(var ? ? ? TIME)( exactlyLocated(var ? ? ? THING)(var ? ? ? REGION))))))
+
+forall Object (\OBJ -> forall Agent (\PERSON ->  impl ( possesses(var ? ? ? PERSON)(var ? ? ? OBJ))( modalAttribute( uses(var ? ? ? OBJ)(var ? ? ? PERSON))(el ? ? ? Permission))))
+
+forall TimePosition (\TIME -> forall (both Agent Entity) (\AGENT2 -> forall Object (\OBJ -> forall (both Agent Entity) (\AGENT1 ->  impl (and ( holdsDuring(var ? ? ? TIME)( possesses(var ? ? ? AGENT1)(var ? ? ? OBJ)))( holdsDuring(var ? ? ? TIME)( possesses(var ? ? ? AGENT2)(var ? ? ? OBJ))))( equal(var ? ? ? AGENT1)(var ? ? ? AGENT2))))))
+
+forall Agent (\AGENT -> forall Entity (\ENTITY -> forall Entity (\REP ->  impl ( representsForAgent(var ? ? ? REP)(var ? ? ? ENTITY)(var ? ? ? AGENT))( represents(var ? ? ? REP)(var ? ? ? ENTITY)))))
+
+forall Language (\LANGUAGE -> forall Entity (\ENTITY -> forall (both LinguisticExpression Entity) (\REP ->  impl ( representsInLanguage(var ? ? ? REP)(var ? ? ? ENTITY)(var ? ? ? LANGUAGE))(exists Agent (\AGENT ->  representsForAgent(var ? ? ? REP)(var ? ? ? ENTITY)(var ? ? ? AGENT))))))
+
+forall ContentBearingObject (\OBJ2 -> forall ContentBearingObject (\OBJ1 ->  equiv (and ( subsumesContentInstance(var ? ? ? OBJ1)(var ? ? ? OBJ2))( subsumesContentInstance(var ? ? ? OBJ2)(var ? ? ? OBJ1)))( equivalentContentInstance(var ? ? ? OBJ1)(var ? ? ? OBJ2))))
+
+forall (both ContentBearingObject ContentBearingPhysical) (\OBJ2 -> forall (both ContentBearingObject ContentBearingPhysical) (\OBJ1 ->  impl ( subsumesContentInstance(var ? ? ? OBJ1)(var ? ? ? OBJ2))(forall Proposition (\INFO ->  impl ( containsInformation(var ? ? ? OBJ2)(var ? ? ? INFO))( containsInformation(var ? ? ? OBJ1)(var ? ? ? INFO))))))
+
+forall Proposition (\PROP -> forall Process (\PROCESS ->  impl ( realization(var ? ? ? PROCESS)(var ? ? ? PROP))(exists ContentBearingObject (\OBJ ->  containsInformation(var ? ? ? OBJ)(var ? ? ? PROP)))))
+
+forall Language (\LANGUAGE -> forall LinguisticExpression (\EXPRESS ->  equiv ( expressedInLanguage(var ? ? ? EXPRESS)(var ? ? ? LANGUAGE))(exists Entity (\PROP ->  representsInLanguage(var ? ? ? EXPRESS)(var ? ? ? PROP)(var ? ? ? LANGUAGE)))))
+
+forall Proposition (\PROP2 -> forall Proposition (\PROP1 ->  impl ( subProposition(var ? ? ? PROP1)(var ? ? ? PROP2))(forall (both ContentBearingPhysical ContentBearingObject) (\OBJ2 -> forall (both ContentBearingPhysical ContentBearingObject) (\OBJ1 ->  impl (and ( containsInformation(var ? ? ? OBJ1)(var ? ? ? PROP1))( containsInformation(var ? ? ? OBJ2)(var ? ? ? PROP2)))( subsumesContentInstance(var ? ? ? OBJ2)(var ? ? ? OBJ1)))))))
+
+forall Agent (\AGENT -> forall Object (\OBJ ->  impl ( uses(var ? ? ? OBJ)(var ? ? ? AGENT))(exists Process (\PROC -> and ( agent(var ? ? ? PROC)(var ? ? ? AGENT))( instrument(var ? ? ? PROC)(var ? ? ? OBJ))))))
+
+forall (both Integer Quantity) (\NUMBER ->  equal( el ? ? ? ( SuccessorFn(var ? ? ? NUMBER)))( el ? ? ? ( AdditionFn(var ? ? ? NUMBER)(el ? ? ? (toInt 1)))))
+
+forall (both Integer Quantity) (\NUMBER ->  equal( el ? ? ? ( PredecessorFn(var ? ? ? NUMBER)))( el ? ? ? ( SubtractionFn(var ? ? ? NUMBER)(el ? ? ? (toInt 1)))))
+
+forall RationalNumber (\NUMBER -> exists Integer (\INT1 -> exists Integer (\INT2 ->  equal(var ? ? ? NUMBER)( el ? ? ? ( DivisionFn(var ? ? ? INT1)(var ? ? ? INT2))))))
+
+forall (both Integer Entity) (\N2 -> forall (both Integer Quantity) (\N1 ->  impl ( multiplicativeFactor(var ? ? ? N1)(var ? ? ? N2))(exists Integer (\I ->  equal(var ? ? ? N2)( el ? ? ? ( MultiplicationFn(var ? ? ? N1)(var ? ? ? I)))))))
+
+forall ComplexNumber (\NUMBER -> exists Entity (\PART2 -> exists Entity (\PART1 -> and ( equal(var ? ? ? PART1)( el ? ? ? ( RealNumberFn(var ? ? ? NUMBER))))( equal(var ? ? ? PART2)( el ? ? ? ( ImaginaryPartFn(var ? ? ? NUMBER)))))))
+
+forall Entity (\NUMBER -> forall (both Quantity Entity) (\NUMBER2 -> forall (both Quantity Entity) (\NUMBER1 ->  impl ( equal( el ? ? ? ( MaxFn(var ? ? ? NUMBER1)(var ? ? ? NUMBER2)))(var ? ? ? NUMBER))(or (and ( equal(var ? ? ? NUMBER)(var ? ? ? NUMBER1))( greaterThan(var ? ? ? NUMBER1)(var ? ? ? NUMBER2)))(or (and ( equal(var ? ? ? NUMBER)(var ? ? ? NUMBER2))( greaterThan(var ? ? ? NUMBER2)(var ? ? ? NUMBER1)))(and ( equal(var ? ? ? NUMBER)(var ? ? ? NUMBER1))( equal(var ? ? ? NUMBER)(var ? ? ? NUMBER2))))))))
+
+forall Entity (\NUMBER -> forall (both Quantity Entity) (\NUMBER2 -> forall (both Quantity Entity) (\NUMBER1 ->  impl ( equal( el ? ? ? ( MinFn(var ? ? ? NUMBER1)(var ? ? ? NUMBER2)))(var ? ? ? NUMBER))(or (and ( equal(var ? ? ? NUMBER)(var ? ? ? NUMBER1))( lessThan(var ? ? ? NUMBER1)(var ? ? ? NUMBER2)))(or (and ( equal(var ? ? ? NUMBER)(var ? ? ? NUMBER2))( lessThan(var ? ? ? NUMBER2)(var ? ? ? NUMBER1)))(and ( equal(var ? ? ? NUMBER)(var ? ? ? NUMBER1))( equal(var ? ? ? NUMBER)(var ? ? ? NUMBER2))))))))
+
+forall Quantity (\NUMBER ->  equal( el ? ? ? ( ReciprocalFn(var ? ? ? NUMBER)))( el ? ? ? ( ExponentiationFn(var ? ? ? NUMBER)(el ? ? ? (toInt -1)))))
+
+forall Quantity (\NUMBER ->  equal(el ? ? ? (toInt 1))( el ? ? ? ( MultiplicationFn(var ? ? ? NUMBER)( el ? ? ? ( ReciprocalFn(var ? ? ? NUMBER))))))
+
+forall (both Entity Quantity) (\NUMBER -> forall Quantity (\NUMBER2 -> forall (both Quantity Entity) (\NUMBER1 ->  equiv ( equal( el ? ? ? ( RemainderFn(var ? ? ? NUMBER1)(var ? ? ? NUMBER2)))(var ? ? ? NUMBER))( equal( el ? ? ? ( AdditionFn( el ? ? ? ( MultiplicationFn( el ? ? ? ( FloorFn( el ? ? ? ( DivisionFn(var ? ? ? NUMBER1)(var ? ? ? NUMBER2)))))(var ? ? ? NUMBER2)))(var ? ? ? NUMBER)))(var ? ? ? NUMBER1)))))
+
+forall (both Entity RealNumber) (\NUMBER -> forall (both Quantity RealNumber) (\NUMBER2 -> forall Quantity (\NUMBER1 ->  impl ( equal( el ? ? ? ( RemainderFn(var ? ? ? NUMBER1)(var ? ? ? NUMBER2)))(var ? ? ? NUMBER))( equal( el ? ? ? ( SignumFn(var ? ? ? NUMBER2)))( el ? ? ? ( SignumFn(var ? ? ? NUMBER)))))))
+
+forall EvenInteger (\NUMBER ->  equal( el ? ? ? ( RemainderFn(var ? ? ? NUMBER)(el ? ? ? (toInt 2))))(el ? ? ? (toInt 0)))
+
+forall OddInteger (\NUMBER ->  equal( el ? ? ? ( RemainderFn(var ? ? ? NUMBER)(el ? ? ? (toInt 2))))(el ? ? ? (toInt 1)))
+
+forall PrimeNumber (\PRIME -> forall (both Quantity Entity) (\NUMBER ->  impl ( equal( el ? ? ? ( RemainderFn(var ? ? ? PRIME)(var ? ? ? NUMBER)))(el ? ? ? (toInt 0)))(or ( equal(var ? ? ? NUMBER)(el ? ? ? (toInt 1)))( equal(var ? ? ? NUMBER)(var ? ? ? PRIME)))))
+
+forall Entity (\NUMBER2 -> forall (both Quantity RealNumber) (\NUMBER1 ->  impl ( equal( el ? ? ? ( RoundFn(var ? ? ? NUMBER1)))(var ? ? ? NUMBER2))(or ( impl ( lessThan( el ? ? ? ( SubtractionFn(var ? ? ? NUMBER1)( el ? ? ? ( FloorFn(var ? ? ? NUMBER1)))))(el ? ? ? (toRealNum 0.5)))( equal(var ? ? ? NUMBER2)( el ? ? ? ( FloorFn(var ? ? ? NUMBER1)))))( impl ( greaterThanOrEqualTo( el ? ? ? ( SubtractionFn(var ? ? ? NUMBER1)( el ? ? ? ( FloorFn(var ? ? ? NUMBER1)))))(el ? ? ? (toRealNum 0.5)))( equal(var ? ? ? NUMBER2)( el ? ? ? ( CeilingFn(var ? ? ? NUMBER1))))))))
+
+forall NonnegativeRealNumber (\NUMBER -> or ( equal( el ? ? ? ( SignumFn(var ? ? ? NUMBER)))(el ? ? ? (toInt 1)))( equal( el ? ? ? ( SignumFn(var ? ? ? NUMBER)))(el ? ? ? (toInt 0))))
+
+forall PositiveRealNumber (\NUMBER ->  equal( el ? ? ? ( SignumFn(var ? ? ? NUMBER)))(el ? ? ? (toInt 1)))
+
+forall NegativeRealNumber (\NUMBER ->  equal( el ? ? ? ( SignumFn(var ? ? ? NUMBER)))(el ? ? ? (toInt  -1)))
+
+forall (both Entity Quantity) (\NUMBER2 -> forall (both RealNumber Entity) (\NUMBER1 ->  impl ( equal( el ? ? ? ( SquareRootFn(var ? ? ? NUMBER1)))(var ? ? ? NUMBER2))( equal( el ? ? ? ( MultiplicationFn(var ? ? ? NUMBER2)(var ? ? ? NUMBER2)))(var ? ? ? NUMBER1))))
+
+forall PlaneAngleMeasure (\DEGREE ->  equal( el ? ? ? ( TangentFn(var ? ? ? DEGREE)))( el ? ? ? ( DivisionFn( el ? ? ? ( SineFn(var ? ? ? DEGREE)))( el ? ? ? ( CosineFn(var ? ? ? DEGREE))))))
+
+forall (both Integer Entity) (\INT2 -> forall (both Integer Entity) (\INT1 ->  impl ( equal( el ? ? ? ( SuccessorFn(var ? ? ? INT1)))( el ? ? ? ( SuccessorFn(var ? ? ? INT2))))( equal(var ? ? ? INT1)(var ? ? ? INT2))))
+
+forall Integer (\INT ->  lessThan(var ? ? ? INT)( el ? ? ? ( SuccessorFn(var ? ? ? INT))))
+
+forall Integer (\INT1 -> forall Integer (\INT2 ->  not (and ( lessThan(var ? ? ? INT1)(var ? ? ? INT2))( lessThan(var ? ? ? INT2)( el ? ? ? ( SuccessorFn(var ? ? ? INT1)))))))
+
+forall Integer (\INT ->  equal(var ? ? ? INT)( el ? ? ? ( SuccessorFn( el ? ? ? ( PredecessorFn(var ? ? ? INT))))))
+
+forall Integer (\INT ->  equal(var ? ? ? INT)( el ? ? ? ( PredecessorFn( el ? ? ? ( SuccessorFn(var ? ? ? INT))))))
+
+forall (both Integer Entity) (\INT2 -> forall (both Integer Entity) (\INT1 ->  impl ( equal( el ? ? ? ( PredecessorFn(var ? ? ? INT1)))( el ? ? ? ( PredecessorFn(var ? ? ? INT2))))( equal(var ? ? ? INT1)(var ? ? ? INT2))))
+
+forall Integer (\INT ->  greaterThan(var ? ? ? INT)( el ? ? ? ( PredecessorFn(var ? ? ? INT))))
+
+forall Integer (\INT1 -> forall Integer (\INT2 ->  not (and ( lessThan(var ? ? ? INT2)(var ? ? ? INT1))( lessThan( el ? ? ? ( PredecessorFn(var ? ? ? INT1)))(var ? ? ? INT2)))))
+
+forall Set (\SET -> forall Set (\SUBSET ->  impl ( subset(var ? ? ? SUBSET)(var ? ? ? SET))(forall Entity (\ELEMENT ->  impl ( element(var ? ? ? ELEMENT)(var ? ? ? SUBSET))( element(var ? ? ? ELEMENT)(var ? ? ? SET))))))
+
+forall (both Set Entity) (\SET2 -> forall (both Set Entity) (\SET1 ->  impl (forall Entity (\ELEMENT ->  equiv ( element(var ? ? ? ELEMENT)(var ? ? ? SET1))( element(var ? ? ? ELEMENT)(var ? ? ? SET2))))( equal(var ? ? ? SET1)(var ? ? ? SET2))))
+
+forall FiniteSet (\SET -> exists NonnegativeInteger (\NUMBER ->  equal(var ? ? ? NUMBER)( el ? ? ? ( CardinalityFn(var ? ? ? SET)))))
+
+forall Graph (\GRAPH -> forall GraphNode (\NODE1 -> forall GraphNode (\NODE2 ->  impl (and ( graphPart(var ? ? ? NODE1)(var ? ? ? GRAPH))(and ( graphPart(var ? ? ? NODE2)(var ? ? ? GRAPH))( not ( equal(var ? ? ? NODE1)(var ? ? ? NODE2)))))(exists GraphPath (\PATH -> exists GraphArc (\ARC -> or ( links(var ? ? ? NODE1)(var ? ? ? NODE2)(var ? ? ? ARC))(and ( subGraph(var ? ? ? PATH)(var ? ? ? GRAPH))(or (and ( equal( el ? ? ? ( BeginNodeFn(var ? ? ? PATH)))(var ? ? ? NODE1))( equal( el ? ? ? ( EndNodeFn(var ? ? ? PATH)))(var ? ? ? NODE2)))(and ( equal( el ? ? ? ( BeginNodeFn(var ? ? ? PATH)))(var ? ? ? NODE2))( equal( el ? ? ? ( EndNodeFn(var ? ? ? PATH)))(var ? ? ? NODE1)))))))))))
+
+forall Graph (\GRAPH -> exists (both GraphElement (both GraphArc Entity)) (\ARC2 -> exists (both GraphElement (both GraphArc Entity)) (\ARC1 -> exists (both GraphElement (both GraphNode Entity)) (\NODE3 -> exists (both GraphElement (both GraphNode Entity)) (\NODE2 -> exists (both GraphElement (both GraphNode Entity)) (\NODE1 -> and ( graphPart(var ? ? ? NODE1)(var ? ? ? GRAPH))(and ( graphPart(var ? ? ? NODE2)(var ? ? ? GRAPH))(and ( graphPart(var ? ? ? NODE3)(var ? ? ? GRAPH))(and ( graphPart(var ? ? ? ARC1)(var ? ? ? GRAPH))(and ( graphPart(var ? ? ? ARC2)(var ? ? ? GRAPH))(and ( links(var ? ? ? NODE1)(var ? ? ? NODE2)(var ? ? ? ARC1))(and ( links(var ? ? ? NODE2)(var ? ? ? NODE3)(var ? ? ? ARC2))(and ( not ( equal(var ? ? ? NODE1)(var ? ? ? NODE2)))(and ( not ( equal(var ? ? ? NODE2)(var ? ? ? NODE3)))(and ( not ( equal(var ? ? ? NODE1)(var ? ? ? NODE3)))( not ( equal(var ? ? ? ARC1)(var ? ? ? ARC2))))))))))))))))))
+
+forall DirectedGraph (\GRAPH -> forall GraphArc (\ARC ->  impl ( graphPart(var ? ? ? ARC)(var ? ? ? GRAPH))(exists Entity (\NODE2 -> exists Entity (\NODE1 -> and ( equal( el ? ? ? ( InitialNodeFn(var ? ? ? ARC)))(var ? ? ? NODE1))( equal( el ? ? ? ( TerminalNodeFn(var ? ? ? ARC)))(var ? ? ? NODE2)))))))
+
+forall GraphPath (\GRAPH -> forall GraphArc (\ARC -> forall Entity (\NODE ->  impl ( graphPart(var ? ? ? ARC)(var ? ? ? GRAPH))( impl ( equal( el ? ? ? ( InitialNodeFn(var ? ? ? ARC)))(var ? ? ? NODE))( not (exists (both GraphArc Entity) (\OTHER -> and ( equal( el ? ? ? ( InitialNodeFn(var ? ? ? OTHER)))(var ? ? ? NODE))( not ( equal(var ? ? ? OTHER)(var ? ? ? ARC))))))))))
+
+forall GraphPath (\GRAPH -> forall GraphArc (\ARC -> forall Entity (\NODE ->  impl ( graphPart(var ? ? ? ARC)(var ? ? ? GRAPH))( impl ( equal( el ? ? ? ( TerminalNodeFn(var ? ? ? ARC)))(var ? ? ? NODE))( not (exists (both GraphArc Entity) (\OTHER -> and ( equal( el ? ? ? ( TerminalNodeFn(var ? ? ? OTHER)))(var ? ? ? NODE))( not ( equal(var ? ? ? OTHER)(var ? ? ? ARC))))))))))
+
+forall GraphCircuit (\GRAPH -> exists Entity (\NODE -> and ( equal( el ? ? ? ( BeginNodeFn(var ? ? ? GRAPH)))(var ? ? ? NODE))( equal( el ? ? ? ( EndNodeFn(var ? ? ? GRAPH)))(var ? ? ? NODE))))
+
+forall MultiGraph (\GRAPH -> exists (both GraphElement GraphNode) (\NODE2 -> exists (both GraphElement GraphNode) (\NODE1 -> exists (both GraphElement (both GraphArc Entity)) (\ARC2 -> exists (both GraphElement (both GraphArc Entity)) (\ARC1 -> and ( graphPart(var ? ? ? ARC1)(var ? ? ? GRAPH))(and ( graphPart(var ? ? ? ARC2)(var ? ? ? GRAPH))(and ( graphPart(var ? ? ? NODE1)(var ? ? ? GRAPH))(and ( graphPart(var ? ? ? NODE2)(var ? ? ? GRAPH))(and ( links(var ? ? ? NODE1)(var ? ? ? NODE2)(var ? ? ? ARC1))(and ( links(var ? ? ? NODE1)(var ? ? ? NODE2)(var ? ? ? ARC2))( not ( equal(var ? ? ? ARC1)(var ? ? ? ARC2)))))))))))))
+
+forall PseudoGraph (\GRAPH -> exists GraphLoop (\LOOP ->  graphPart(var ? ? ? LOOP)(var ? ? ? GRAPH)))
+
+forall GraphElement (\PART -> exists Graph (\GRAPH ->  graphPart(var ? ? ? PART)(var ? ? ? GRAPH)))
+
+forall GraphNode (\NODE -> exists GraphArc (\ARC -> exists GraphNode (\OTHER ->  links(var ? ? ? NODE)(var ? ? ? OTHER)(var ? ? ? ARC))))
+
+forall GraphArc (\ARC -> exists GraphNode (\NODE2 -> exists GraphNode (\NODE1 ->  links(var ? ? ? NODE1)(var ? ? ? NODE2)(var ? ? ? ARC))))
+
+forall GraphLoop (\LOOP -> exists GraphNode (\NODE ->  links(var ? ? ? NODE)(var ? ? ? NODE)(var ? ? ? LOOP)))
+
+forall GraphArc (\ARC -> forall GraphNode (\NODE2 -> forall GraphNode (\NODE1 ->  impl ( links(var ? ? ? NODE1)(var ? ? ? NODE2)(var ? ? ? ARC))( links(var ? ? ? NODE2)(var ? ? ? NODE1)(var ? ? ? ARC)))))
+
+forall GraphElement (\ELEMENT -> forall Graph (\GRAPH2 -> forall Graph (\GRAPH1 ->  impl (and ( subGraph(var ? ? ? GRAPH1)(var ? ? ? GRAPH2))( graphPart(var ? ? ? ELEMENT)(var ? ? ? GRAPH1)))( graphPart(var ? ? ? ELEMENT)(var ? ? ? GRAPH2)))))
+
+forall Quantity (\NUMBER1 -> forall (both GraphElement (both GraphArc Entity)) (\ARC1 -> forall (both Graph GraphPath) (\SUBPATH -> forall Entity (\SUM -> forall (both GraphPath Graph) (\PATH ->  impl (and ( equal( el ? ? ? ( PathWeightFn(var ? ? ? PATH)))(var ? ? ? SUM))(and ( subGraph(var ? ? ? SUBPATH)(var ? ? ? PATH))(and ( graphPart(var ? ? ? ARC1)(var ? ? ? PATH))(and ( arcWeight(var ? ? ? ARC1)(var ? ? ? NUMBER1))(forall (both GraphElement Entity) (\ARC2 ->  impl ( graphPart(var ? ? ? ARC2)(var ? ? ? PATH))(or ( graphPart(var ? ? ? ARC2)(var ? ? ? SUBPATH))( equal(var ? ? ? ARC2)(var ? ? ? ARC1)))))))))( equal(var ? ? ? SUM)( el ? ? ? ( AdditionFn( el ? ? ? ( PathWeightFn(var ? ? ? SUBPATH)))(var ? ? ? NUMBER1)))))))))
+
+forall Quantity (\NUMBER2 -> forall Quantity (\NUMBER1 -> forall (both GraphElement (both GraphArc Entity)) (\ARC2 -> forall (both GraphElement (both GraphArc Entity)) (\ARC1 -> forall Entity (\SUM -> forall (both GraphPath Graph) (\PATH ->  impl (and ( equal( el ? ? ? ( PathWeightFn(var ? ? ? PATH)))(var ? ? ? SUM))(and ( graphPart(var ? ? ? ARC1)(var ? ? ? PATH))(and ( graphPart(var ? ? ? ARC2)(var ? ? ? PATH))(and ( arcWeight(var ? ? ? ARC1)(var ? ? ? NUMBER1))(and ( arcWeight(var ? ? ? ARC2)(var ? ? ? NUMBER2))(forall (both GraphElement Entity) (\ARC3 ->  impl ( graphPart(var ? ? ? ARC3)(var ? ? ? PATH))(or ( equal(var ? ? ? ARC3)(var ? ? ? ARC1))( equal(var ? ? ? ARC3)(var ? ? ? ARC2))))))))))( equal( el ? ? ? ( PathWeightFn(var ? ? ? PATH)))( el ? ? ? ( AdditionFn(var ? ? ? NUMBER1)(var ? ? ? NUMBER2))))))))))
+
+forall Physical (\PART -> forall PhysicalSystem (\SYSTEM -> forall PhysicalSystem (\SUB ->  impl (and ( subSystem(var ? ? ? SUB)(var ? ? ? SYSTEM))( systemPart(var ? ? ? PART)(var ? ? ? SUB)))( systemPart(var ? ? ? PART)(var ? ? ? SYSTEM)))))
+
+forall UnitOfMeasure (\M -> forall Graph (\G ->  impl ( graphMeasure(var ? ? ? G)(var ? ? ? M))(forall (both GraphElement Abstract) (\AC -> and ( graphPart(var ? ? ? AC)(var ? ? ? G))(exists Physical (\PC ->  abstractCounterpart(var ? ? ? AC)(var ? ? ? PC)))))))
+
+forall GraphNode (\AN -> forall GraphArc (\AA -> forall RealNumber (\N -> forall (both Physical Object) (\PA -> forall Physical (\PN -> forall UnitOfMeasure (\M -> forall Graph (\G ->  impl (and ( graphMeasure(var ? ? ? G)(var ? ? ? M))(and ( abstractCounterpart(var ? ? ? AN)(var ? ? ? PN))(and ( abstractCounterpart(var ? ? ? AA)(var ? ? ? PA))( arcWeight(var ? ? ? AA)( el ? ? ? ( MeasureFn(var ? ? ? N)(var ? ? ? M)))))))( measure(var ? ? ? PA)( el ? ? ? ( MeasureFn(var ? ? ? N)(var ? ? ? M)))))))))))
+
+forall UnitOfMeasure (\UNIT -> forall (both Entity UnitOfMeasure) (\KILOUNIT ->  impl ( equal(var ? ? ? KILOUNIT)( el ? ? ? ( KiloFn(var ? ? ? UNIT))))( equal( el ? ? ? ( MeasureFn(el ? ? ? (toInt 1))(var ? ? ? KILOUNIT)))( el ? ? ? ( MeasureFn(el ? ? ? (toInt 1000))(var ? ? ? UNIT))))))
+
+forall UnitOfMeasure (\UNIT -> forall (both Entity UnitOfMeasure) (\MEGAUNIT ->  impl ( equal(var ? ? ? MEGAUNIT)( el ? ? ? ( MegaFn(var ? ? ? UNIT))))( equal( el ? ? ? ( MeasureFn(el ? ? ? (toInt 1))(var ? ? ? MEGAUNIT)))( el ? ? ? ( MeasureFn(el ? ? ? (toInt 1000000))(var ? ? ? UNIT))))))
+
+forall UnitOfMeasure (\UNIT -> forall (both Entity UnitOfMeasure) (\GIGAUNIT ->  impl ( equal(var ? ? ? GIGAUNIT)( el ? ? ? ( GigaFn(var ? ? ? UNIT))))( equal( el ? ? ? ( MeasureFn(el ? ? ? (toInt 1))(var ? ? ? GIGAUNIT)))( el ? ? ? ( MeasureFn(el ? ? ? (toInt 1000000000))(var ? ? ? UNIT))))))
+
+forall UnitOfMeasure (\UNIT -> forall (both Entity UnitOfMeasure) (\TERAUNIT ->  impl ( equal(var ? ? ? TERAUNIT)( el ? ? ? ( TeraFn(var ? ? ? UNIT))))( equal( el ? ? ? ( MeasureFn(el ? ? ? (toInt 1))(var ? ? ? TERAUNIT)))( el ? ? ? ( MeasureFn(el ? ? ? (toInt 1000000000000))(var ? ? ? UNIT))))))
+
+forall UnitOfMeasure (\UNIT -> forall (both Entity UnitOfMeasure) (\MILLIUNIT ->  impl ( equal(var ? ? ? MILLIUNIT)( el ? ? ? ( MilliFn(var ? ? ? UNIT))))( equal( el ? ? ? ( MeasureFn(el ? ? ? (toInt 1))(var ? ? ? MILLIUNIT)))( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 0.001))(var ? ? ? UNIT))))))
+
+forall UnitOfMeasure (\UNIT -> forall (both Entity UnitOfMeasure) (\MICROUNIT ->  impl ( equal(var ? ? ? MICROUNIT)( el ? ? ? ( MicroFn(var ? ? ? UNIT))))( equal( el ? ? ? ( MeasureFn(el ? ? ? (toInt 1))(var ? ? ? MICROUNIT)))( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 0.000001))(var ? ? ? UNIT))))))
+
+forall UnitOfMeasure (\UNIT -> forall (both Entity UnitOfMeasure) (\NANOUNIT ->  impl ( equal(var ? ? ? NANOUNIT)( el ? ? ? ( NanoFn(var ? ? ? UNIT))))( equal( el ? ? ? ( MeasureFn(el ? ? ? (toInt 1))(var ? ? ? NANOUNIT)))( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 0.000000001))(var ? ? ? UNIT))))))
+
+forall UnitOfMeasure (\UNIT -> forall (both Entity UnitOfMeasure) (\PICOUNIT ->  impl ( equal(var ? ? ? PICOUNIT)( el ? ? ? ( PicoFn(var ? ? ? UNIT))))( equal( el ? ? ? ( MeasureFn(el ? ? ? (toInt 1))(var ? ? ? PICOUNIT)))( el ? ? ? ( MeasureFn(el ? ? ? (toRealNum 0.000000000001))(var ? ? ? UNIT))))))
+
+forall UnitOfMeasure (\UNIT -> forall (both Entity PhysicalQuantity) (\QUANT -> forall (both Entity RealNumber) (\NUMBER ->  impl (and ( equal(var ? ? ? NUMBER)( el ? ? ? ( MultiplicationFn(el ? ? ? (toInt 1))(var ? ? ? NUMBER))))( equal(var ? ? ? QUANT)( el ? ? ? ( MeasureFn(var ? ? ? NUMBER)(var ? ? ? UNIT)))))( equal( el ? ? ? ( MagnitudeFn(var ? ? ? QUANT)))(var ? ? ? NUMBER)))))
+
+forall UnitOfMeasure (\UNIT -> forall (both Entity PhysicalQuantity) (\QUANT -> forall (both Entity RealNumber) (\NUMBER ->  impl (and ( equal(var ? ? ? NUMBER)( el ? ? ? ( MultiplicationFn(el ? ? ? (toInt 1))(var ? ? ? NUMBER))))( equal(var ? ? ? QUANT)( el ? ? ? ( MeasureFn(var ? ? ? NUMBER)(var ? ? ? UNIT)))))( equal( el ? ? ? ( UnitFn(var ? ? ? QUANT)))(var ? ? ? UNIT)))))
+
+forall DirectionalAttribute (\DIRECTION -> forall Region (\REF -> forall TimeDuration (\TIME -> forall LengthMeasure (\DISTANCE -> forall Object (\OBJECT ->  impl ( measure(var ? ? ? OBJECT)( el ? ? ? ( VelocityFn(var ? ? ? DISTANCE)(var ? ? ? TIME)(var ? ? ? REF)(var ? ? ? DIRECTION))))( measure(var ? ? ? OBJECT)( el ? ? ? ( SpeedFn(var ? ? ? DISTANCE)(var ? ? ? TIME)))))))))
+
+forall (both Entity (both RealNumber Quantity)) (\NUMBER ->  impl ( equal(var ? ? ? NUMBER)( el ? ? ? ( MultiplicationFn(el ? ? ? (toInt 1))(var ? ? ? NUMBER))))( equal( el ? ? ? ( MeasureFn(var ? ? ? NUMBER)(el ? ? ? Centimeter)))( el ? ? ? ( MeasureFn( el ? ? ? ( MultiplicationFn(var ? ? ? NUMBER)(el ? ? ? (toRealNum 0.01))))(el ? ? ? Meter)))))
+
+forall (both Entity (both RealNumber Quantity)) (\NUMBER ->  impl ( equal(var ? ? ? NUMBER)( el ? ? ? ( MultiplicationFn(el ? ? ? (toInt 1))(var ? ? ? NUMBER))))( equal( el ? ? ? ( MeasureFn(var ? ? ? NUMBER)(el ? ? ? Millimeter)))( el ? ? ? ( MeasureFn( el ? ? ? ( MultiplicationFn(var ? ? ? NUMBER)(el ? ? ? (toRealNum 0.001))))(el ? ? ? Meter)))))
+
+forall (both Entity (both RealNumber Quantity)) (\NUMBER ->  impl ( equal(var ? ? ? NUMBER)( el ? ? ? ( MultiplicationFn(el ? ? ? (toInt 1))(var ? ? ? NUMBER))))( equal( el ? ? ? ( MeasureFn(var ? ? ? NUMBER)(el ? ? ? Kilometer)))( el ? ? ? ( MeasureFn( el ? ? ? ( MultiplicationFn(var ? ? ? NUMBER)(el ? ? ? (toInt 1000))))(el ? ? ? Meter)))))
+
+forall RealNumber (\N ->  equal( el ? ? ? ( MeasureFn(var ? ? ? N)(el ? ? ? Horsepower)))( el ? ? ? ( MeasureFn( el ? ? ? ( MultiplicationFn(var ? ? ? N)(el ? ? ? (toInt 746))))(el ? ? ? Watt))))
+
+forall (both Entity (both RealNumber Quantity)) (\NUMBER ->  impl ( equal(var ? ? ? NUMBER)( el ? ? ? ( MultiplicationFn(el ? ? ? (toInt 1))(var ? ? ? NUMBER))))( equal( el ? ? ? ( MeasureFn(var ? ? ? NUMBER)(el ? ? ? CelsiusDegree)))( el ? ? ? ( MeasureFn( el ? ? ? ( SubtractionFn(var ? ? ? NUMBER)(el ? ? ? (toRealNum 273.15))))(el ? ? ? KelvinDegree)))))
+
+forall (both Entity (both RealNumber Quantity)) (\NUMBER ->  impl ( equal(var ? ? ? NUMBER)( el ? ? ? ( MultiplicationFn(el ? ? ? (toInt 1))(var ? ? ? NUMBER))))( equal( el ? ? ? ( MeasureFn(var ? ? ? NUMBER)(el ? ? ? CelsiusDegree)))( el ? ? ? ( MeasureFn( el ? ? ? ( DivisionFn( el ? ? ? ( SubtractionFn(var ? ? ? NUMBER)(el ? ? ? (toInt 32))))(el ? ? ? (toRealNum 1.8))))(el ? ? ? FahrenheitDegree)))))
+
+forall (both Entity (both RealNumber Quantity)) (\NUMBER ->  impl ( equal(var ? ? ? NUMBER)( el ? ? ? ( MultiplicationFn(el ? ? ? (toInt 1))(var ? ? ? NUMBER))))( equal( el ? ? ? ( MeasureFn(var ? ? ? NUMBER)(el ? ? ? DayDuration)))( el ? ? ? ( MeasureFn( el ? ? ? ( MultiplicationFn(var ? ? ? NUMBER)(el ? ? ? (toInt 24))))(el ? ? ? HourDuration)))))
+
+forall (both Entity (both RealNumber Quantity)) (\NUMBER ->  impl ( equal(var ? ? ? NUMBER)( el ? ? ? ( MultiplicationFn(el ? ? ? (toInt 1))(var ? ? ? NUMBER))))( equal( el ? ? ? ( MeasureFn(var ? ? ? NUMBER)(el ? ? ? HourDuration)))( el ? ? ? ( MeasureFn( el ? ? ? ( MultiplicationFn(var ? ? ? NUMBER)(el ? ? ? (toInt 60))))(el ? ? ? MinuteDuration)))))
+
+forall (both Entity (both RealNumber Quantity)) (\NUMBER ->  impl ( equal(var ? ? ? NUMBER)( el ? ? ? ( MultiplicationFn(el ? ? ? (toInt 1))(var ? ? ? NUMBER))))( equal( el ? ? ? ( MeasureFn(var ? ? ? NUMBER)(el ? ? ? MinuteDuration)))( el ? ? ? ( MeasureFn( el ? ? ? ( MultiplicationFn(var ? ? ? NUMBER)(el ? ? ? (toInt 60))))(el ? ? ? SecondDuration)))))
+
+forall (both Entity (both RealNumber Quantity)) (\NUMBER ->  impl ( equal(var ? ? ? NUMBER)( el ? ? ? ( MultiplicationFn(el ? ? ? (toInt 1))(var ? ? ? NUMBER))))( equal( el ? ? ? ( MeasureFn(var ? ? ? NUMBER)(el ? ? ? WeekDuration)))( el ? ? ? ( MeasureFn( el ? ? ? ( MultiplicationFn(var ? ? ? NUMBER)(el ? ? ? (toInt 7))))(el ? ? ? DayDuration)))))
+
+forall (both Entity (both RealNumber Quantity)) (\NUMBER ->  impl ( equal(var ? ? ? NUMBER)( el ? ? ? ( MultiplicationFn(el ? ? ? (toInt 1))(var ? ? ? NUMBER))))( greaterThanOrEqualTo( el ? ? ? ( MeasureFn(var ? ? ? NUMBER)(el ? ? ? MonthDuration)))( el ? ? ? ( MeasureFn( el ? ? ? ( MultiplicationFn(var ? ? ? NUMBER)(el ? ? ? (toInt 28))))(el ? ? ? DayDuration)))))
+
+forall (both Entity (both RealNumber Quantity)) (\NUMBER ->  impl ( equal(var ? ? ? NUMBER)( el ? ? ? ( MultiplicationFn(el ? ? ? (toInt 1))(var ? ? ? NUMBER))))( lessThanOrEqualTo( el ? ? ? ( MeasureFn(var ? ? ? NUMBER)(el ? ? ? MonthDuration)))( el ? ? ? ( MeasureFn( el ? ? ? ( MultiplicationFn(var ? ? ? NUMBER)(el ? ? ? (toInt 31))))(el ? ? ? DayDuration)))))
+
+forall (both Entity (both RealNumber Quantity)) (\NUMBER ->  impl ( equal(var ? ? ? NUMBER)( el ? ? ? ( MultiplicationFn(el ? ? ? (toInt 1))(var ? ? ? NUMBER))))( equal( el ? ? ? ( MeasureFn(var ? ? ? NUMBER)(el ? ? ? YearDuration)))( el ? ? ? ( MeasureFn( el ? ? ? ( MultiplicationFn(var ? ? ? NUMBER)(el ? ? ? (toInt 365))))(el ? ? ? DayDuration)))))
+
+forall (both Entity (both RealNumber Quantity)) (\NUMBER ->  impl ( equal(var ? ? ? NUMBER)( el ? ? ? ( MultiplicationFn(el ? ? ? (toInt 1))(var ? ? ? NUMBER))))( equal( el ? ? ? ( MeasureFn(var ? ? ? NUMBER)(el ? ? ? FootLength)))( el ? ? ? ( MeasureFn( el ? ? ? ( MultiplicationFn(var ? ? ? NUMBER)(el ? ? ? (toRealNum 0.3048))))(el ? ? ? Meter)))))
+
+forall (both Entity (both RealNumber Quantity)) (\NUMBER ->  impl ( equal(var ? ? ? NUMBER)( el ? ? ? ( MultiplicationFn(el ? ? ? (toInt 1))(var ? ? ? NUMBER))))( equal( el ? ? ? ( MeasureFn(var ? ? ? NUMBER)(el ? ? ? Inch)))( el ? ? ? ( MeasureFn( el ? ? ? ( MultiplicationFn(var ? ? ? NUMBER)(el ? ? ? (toRealNum 0.0254))))(el ? ? ? Meter)))))
+
+forall (both Entity (both RealNumber Quantity)) (\NUMBER ->  impl ( equal(var ? ? ? NUMBER)( el ? ? ? ( MultiplicationFn(el ? ? ? (toInt 1))(var ? ? ? NUMBER))))( equal( el ? ? ? ( MeasureFn(var ? ? ? NUMBER)(el ? ? ? Mile)))( el ? ? ? ( MeasureFn( el ? ? ? ( MultiplicationFn(var ? ? ? NUMBER)(el ? ? ? (toRealNum 1609.344))))(el ? ? ? Meter)))))
+
+forall (both Entity (both RealNumber Quantity)) (\NUMBER ->  impl ( equal(var ? ? ? NUMBER)( el ? ? ? ( MultiplicationFn(el ? ? ? (toInt 1))(var ? ? ? NUMBER))))( equal( el ? ? ? ( MeasureFn(var ? ? ? NUMBER)(el ? ? ? UnitedStatesGallon)))( el ? ? ? ( MeasureFn( el ? ? ? ( MultiplicationFn(var ? ? ? NUMBER)(el ? ? ? (toRealNum 3.785411784))))(el ? ? ? Liter)))))
+
+forall (both Entity (both RealNumber Quantity)) (\NUMBER ->  impl ( equal(var ? ? ? NUMBER)( el ? ? ? ( MultiplicationFn(el ? ? ? (toInt 1))(var ? ? ? NUMBER))))( equal( el ? ? ? ( MeasureFn(var ? ? ? NUMBER)(el ? ? ? Quart)))( el ? ? ? ( MeasureFn( el ? ? ? ( DivisionFn(var ? ? ? NUMBER)(el ? ? ? (toInt 4))))(el ? ? ? UnitedStatesGallon)))))
+
+forall (both Entity (both RealNumber Quantity)) (\NUMBER ->  impl ( equal(var ? ? ? NUMBER)( el ? ? ? ( MultiplicationFn(el ? ? ? (toInt 1))(var ? ? ? NUMBER))))( equal( el ? ? ? ( MeasureFn(var ? ? ? NUMBER)(el ? ? ? Pint)))( el ? ? ? ( MeasureFn( el ? ? ? ( DivisionFn(var ? ? ? NUMBER)(el ? ? ? (toInt 2))))(el ? ? ? Quart)))))
+
+forall (both Entity (both RealNumber Quantity)) (\NUMBER ->  impl ( equal(var ? ? ? NUMBER)( el ? ? ? ( MultiplicationFn(el ? ? ? (toInt 1))(var ? ? ? NUMBER))))( equal( el ? ? ? ( MeasureFn(var ? ? ? NUMBER)(el ? ? ? Cup)))( el ? ? ? ( MeasureFn( el ? ? ? ( DivisionFn(var ? ? ? NUMBER)(el ? ? ? (toInt 2))))(el ? ? ? Pint)))))
+
+forall (both Entity (both RealNumber Quantity)) (\NUMBER ->  impl ( equal(var ? ? ? NUMBER)( el ? ? ? ( MultiplicationFn(el ? ? ? (toInt 1))(var ? ? ? NUMBER))))( equal( el ? ? ? ( MeasureFn(var ? ? ? NUMBER)(el ? ? ? Ounce)))( el ? ? ? ( MeasureFn( el ? ? ? ( DivisionFn(var ? ? ? NUMBER)(el ? ? ? (toInt 8))))(el ? ? ? Cup)))))
+
+forall (both Entity (both RealNumber Quantity)) (\NUMBER ->  impl ( equal(var ? ? ? NUMBER)( el ? ? ? ( MultiplicationFn(el ? ? ? (toInt 1))(var ? ? ? NUMBER))))( equal( el ? ? ? ( MeasureFn(var ? ? ? NUMBER)(el ? ? ? UnitedKingdomGallon)))( el ? ? ? ( MeasureFn( el ? ? ? ( MultiplicationFn(var ? ? ? NUMBER)(el ? ? ? (toRealNum 4.54609))))(el ? ? ? Liter)))))
+
+forall (both Entity (both RealNumber Quantity)) (\NUMBER ->  impl ( equal(var ? ? ? NUMBER)( el ? ? ? ( MultiplicationFn(el ? ? ? (toInt 1))(var ? ? ? NUMBER))))( equal( el ? ? ? ( MeasureFn(var ? ? ? NUMBER)(el ? ? ? Kilogram)))( el ? ? ? ( MeasureFn( el ? ? ? ( MultiplicationFn(var ? ? ? NUMBER)(el ? ? ? (toInt 1000))))(el ? ? ? Gram)))))
+
+forall (both Entity (both RealNumber Quantity)) (\NUMBER ->  impl ( equal(var ? ? ? NUMBER)( el ? ? ? ( MultiplicationFn(el ? ? ? (toInt 1))(var ? ? ? NUMBER))))( equal( el ? ? ? ( MeasureFn(var ? ? ? NUMBER)(el ? ? ? PoundMass)))( el ? ? ? ( MeasureFn( el ? ? ? ( MultiplicationFn(var ? ? ? NUMBER)(el ? ? ? (toRealNum 453.59237))))(el ? ? ? Gram)))))
+
+forall (both Entity (both RealNumber Quantity)) (\NUMBER ->  impl ( equal(var ? ? ? NUMBER)( el ? ? ? ( MultiplicationFn(el ? ? ? (toInt 1))(var ? ? ? NUMBER))))( equal( el ? ? ? ( MeasureFn(var ? ? ? NUMBER)(el ? ? ? Slug)))( el ? ? ? ( MeasureFn( el ? ? ? ( MultiplicationFn(var ? ? ? NUMBER)(el ? ? ? (toRealNum 14593.90))))(el ? ? ? Gram)))))
+
+forall (both Entity (both RealNumber Quantity)) (\NUMBER ->  impl ( equal(var ? ? ? NUMBER)( el ? ? ? ( MultiplicationFn(el ? ? ? (toInt 1))(var ? ? ? NUMBER))))( equal( el ? ? ? ( MeasureFn(var ? ? ? NUMBER)(el ? ? ? RankineDegree)))( el ? ? ? ( MeasureFn( el ? ? ? ( MultiplicationFn(var ? ? ? NUMBER)(el ? ? ? (toRealNum 1.8))))(el ? ? ? KelvinDegree)))))
+
+forall (both Entity (both RealNumber Quantity)) (\NUMBER ->  impl ( equal(var ? ? ? NUMBER)( el ? ? ? ( MultiplicationFn(el ? ? ? (toInt 1))(var ? ? ? NUMBER))))( equal( el ? ? ? ( MeasureFn(var ? ? ? NUMBER)(el ? ? ? PoundForce)))( el ? ? ? ( MeasureFn( el ? ? ? ( MultiplicationFn(var ? ? ? NUMBER)(el ? ? ? (toRealNum 4.448222))))(el ? ? ? Newton)))))
+
+forall (both Entity (both RealNumber Quantity)) (\NUMBER ->  impl ( equal(var ? ? ? NUMBER)( el ? ? ? ( MultiplicationFn(el ? ? ? (toInt 1))(var ? ? ? NUMBER))))( equal( el ? ? ? ( MeasureFn(var ? ? ? NUMBER)(el ? ? ? Calorie)))( el ? ? ? ( MeasureFn( el ? ? ? ( MultiplicationFn(var ? ? ? NUMBER)(el ? ? ? (toRealNum 4.1868))))(el ? ? ? Joule)))))
+
+forall (both Entity (both RealNumber Quantity)) (\NUMBER ->  impl ( equal(var ? ? ? NUMBER)( el ? ? ? ( MultiplicationFn(el ? ? ? (toInt 1))(var ? ? ? NUMBER))))( equal( el ? ? ? ( MeasureFn(var ? ? ? NUMBER)(el ? ? ? BritishThermalUnit)))( el ? ? ? ( MeasureFn( el ? ? ? ( MultiplicationFn(var ? ? ? NUMBER)(el ? ? ? (toRealNum 1055.05585262))))(el ? ? ? Joule)))))
+
+forall (both Entity (both RealNumber Quantity)) (\NUMBER ->  impl ( equal(var ? ? ? NUMBER)( el ? ? ? ( MultiplicationFn(el ? ? ? (toInt 1))(var ? ? ? NUMBER))))( equal( el ? ? ? ( MeasureFn(var ? ? ? NUMBER)(el ? ? ? AngularDegree)))( el ? ? ? ( MeasureFn( el ? ? ? ( MultiplicationFn(var ? ? ? NUMBER)( el ? ? ? ( DivisionFn(el ? ? ? Pi)(el ? ? ? (toInt 180))))))(el ? ? ? Radian)))))
+
+forall (both RealNumber Quantity) (\NUMBER -> forall Object (\ANGLE ->  impl ( measure(var ? ? ? ANGLE)( el ? ? ? ( MeasureFn(var ? ? ? NUMBER)(el ? ? ? AngularDegree))))(and ( greaterThanOrEqualTo(var ? ? ? NUMBER)(el ? ? ? (toInt 0)))( lessThanOrEqualTo(var ? ? ? NUMBER)(el ? ? ? (toInt 360))))))
+
+forall (both Entity (both RealNumber Quantity)) (\NUMBER ->  impl ( equal(var ? ? ? NUMBER)( el ? ? ? ( MultiplicationFn(el ? ? ? (toInt 1))(var ? ? ? NUMBER))))( equal( el ? ? ? ( MeasureFn(var ? ? ? NUMBER)(el ? ? ? UnitedStatesCent)))( el ? ? ? ( MeasureFn( el ? ? ? ( MultiplicationFn(var ? ? ? NUMBER)(el ? ? ? (toRealNum 0.01))))(el ? ? ? UnitedStatesDollar)))))
+
+forall (both Entity (both RealNumber Quantity)) (\NUMBER ->  impl ( equal(var ? ? ? NUMBER)( el ? ? ? ( MultiplicationFn(el ? ? ? (toInt 1))(var ? ? ? NUMBER))))( equal( el ? ? ? ( MeasureFn(var ? ? ? NUMBER)(el ? ? ? EuroCent)))( el ? ? ? ( MeasureFn( el ? ? ? ( MultiplicationFn(var ? ? ? NUMBER)(el ? ? ? (toRealNum 0.01))))(el ? ? ? EuroDollar)))))
+
+forall (both Entity (both RealNumber Quantity)) (\NUMBER ->  impl ( equal(var ? ? ? NUMBER)( el ? ? ? ( MultiplicationFn(el ? ? ? (toInt 1))(var ? ? ? NUMBER))))( equal( el ? ? ? ( MeasureFn(var ? ? ? NUMBER)(el ? ? ? Byte)))( el ? ? ? ( MeasureFn( el ? ? ? ( MultiplicationFn(var ? ? ? NUMBER)(el ? ? ? (toInt 8))))(el ? ? ? Bit)))))
+
+forall (both Entity (both RealNumber Quantity)) (\NUMBER ->  impl ( equal(var ? ? ? NUMBER)( el ? ? ? ( MultiplicationFn(el ? ? ? (toInt 1))(var ? ? ? NUMBER))))( equal( el ? ? ? ( MeasureFn(var ? ? ? NUMBER)(el ? ? ? KiloByte)))( el ? ? ? ( MeasureFn( el ? ? ? ( MultiplicationFn(var ? ? ? NUMBER)(el ? ? ? (toInt 1024))))(el ? ? ? Byte)))))
+
+forall (both Entity (both RealNumber Quantity)) (\NUMBER ->  impl ( equal(var ? ? ? NUMBER)( el ? ? ? ( MultiplicationFn(el ? ? ? (toInt 1))(var ? ? ? NUMBER))))( equal( el ? ? ? ( MeasureFn(var ? ? ? NUMBER)(el ? ? ? MegaByte)))( el ? ? ? ( MeasureFn( el ? ? ? ( MultiplicationFn(var ? ? ? NUMBER)(el ? ? ? (toInt 1024))))(el ? ? ? KiloByte)))))
+
+forall TimePoint (\TIME -> forall TimeDuration (\DURATION -> forall (both Object Physical) (\OBJ ->  impl ( holdsDuring(var ? ? ? TIME)( age(var ? ? ? OBJ)(var ? ? ? DURATION)))( duration( el ? ? ? ( TimeIntervalFn( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? OBJ)))))(var ? ? ? TIME)))(var ? ? ? DURATION)))))
+
+forall (both PhysicalQuantity Quantity) (\M -> forall Object (\O ->  impl ( length(var ? ? ? O)(var ? ? ? M))( not (exists (both LengthMeasure Quantity) (\M2 -> and ( linearExtent(var ? ? ? O)(var ? ? ? M2))( greaterThan(var ? ? ? M2)(var ? ? ? M)))))))
+
+forall Circle (\C -> exists LengthMeasure (\R ->  radius(var ? ? ? C)(var ? ? ? R)))
+
+forall Circle (\C -> exists Entity (\P ->  equal( el ? ? ? ( CenterOfCircleFn(var ? ? ? C)))(var ? ? ? P)))
+
+forall LengthMeasure (\RADIUS -> forall (both Circle GeometricFigure) (\CIRCLE ->  impl ( radius(var ? ? ? CIRCLE)(var ? ? ? RADIUS))(exists GeometricPoint (\POINT -> forall (both GeometricFigure GeometricPoint) (\PART ->  impl ( pointOfFigure(var ? ? ? PART)(var ? ? ? CIRCLE))( geometricDistance(var ? ? ? PART)(var ? ? ? POINT)(var ? ? ? RADIUS)))))))
+
+forall (both LengthMeasure Entity) (\LENGTH -> forall Circle (\CIRCLE ->  impl ( diameter(var ? ? ? CIRCLE)(var ? ? ? LENGTH))(exists (both LengthMeasure Quantity) (\HALF -> and ( radius(var ? ? ? CIRCLE)(var ? ? ? HALF))( equal( el ? ? ? ( MultiplicationFn(var ? ? ? HALF)(el ? ? ? (toInt 2))))(var ? ? ? LENGTH))))))
+
+forall LengthMeasure (\QUANT -> forall Physical (\OBJ2 -> forall Physical (\OBJ1 ->  impl ( distance(var ? ? ? OBJ1)(var ? ? ? OBJ2)(var ? ? ? QUANT))( distance(var ? ? ? OBJ2)(var ? ? ? OBJ1)(var ? ? ? QUANT)))))
+
+forall LengthMeasure (\HEIGHT -> forall (both Physical Object) (\OBJ2 -> forall (both Physical Object) (\OBJ1 ->  impl ( altitude(var ? ? ? OBJ1)(var ? ? ? OBJ2)(var ? ? ? HEIGHT))( orientation(var ? ? ? OBJ1)(var ? ? ? OBJ2)(el ? ? ? Above)))))
+
+forall LengthMeasure (\HEIGHT -> forall Physical (\OBJ2 -> forall (both Physical SelfConnectedObject) (\OBJ1 ->  impl ( altitude(var ? ? ? OBJ1)(var ? ? ? OBJ2)(var ? ? ? HEIGHT))(exists (both SelfConnectedObject Physical) (\TOP -> and ( top(var ? ? ? TOP)(var ? ? ? OBJ1))( distance(var ? ? ? TOP)(var ? ? ? OBJ2)(var ? ? ? HEIGHT)))))))
+
+forall LengthMeasure (\DEPTH -> forall (both Physical Object) (\OBJ2 -> forall (both Physical Object) (\OBJ1 ->  impl ( depth(var ? ? ? OBJ1)(var ? ? ? OBJ2)(var ? ? ? DEPTH))( orientation(var ? ? ? OBJ1)(var ? ? ? OBJ2)(el ? ? ? Below)))))
+
+forall LengthMeasure (\DEPTH -> forall Physical (\OBJ2 -> forall (both Physical SelfConnectedObject) (\OBJ1 ->  impl ( depth(var ? ? ? OBJ1)(var ? ? ? OBJ2)(var ? ? ? DEPTH))(exists (both SelfConnectedObject Physical) (\BOTTOM -> and ( bottom(var ? ? ? BOTTOM)(var ? ? ? OBJ1))( distance(var ? ? ? BOTTOM)(var ? ? ? OBJ2)(var ? ? ? DEPTH)))))))
+
+forall Object (\OBJ2 -> forall Object (\OBJ1 ->  equiv ( larger(var ? ? ? OBJ1)(var ? ? ? OBJ2))(forall UnitOfLength (\UNIT -> forall (both RealNumber Quantity) (\QUANT2 -> forall (both RealNumber Quantity) (\QUANT1 ->  impl (and ( measure(var ? ? ? OBJ1)( el ? ? ? ( MeasureFn(var ? ? ? QUANT1)(var ? ? ? UNIT))))( measure(var ? ? ? OBJ2)( el ? ? ? ( MeasureFn(var ? ? ? QUANT2)(var ? ? ? UNIT)))))( greaterThan(var ? ? ? QUANT1)(var ? ? ? QUANT2))))))))
+
+forall (both Entity CurrencyMeasure) (\AMOUNT -> forall Agent (\PERSON ->  equiv ( equal( el ? ? ? ( WealthFn(var ? ? ? PERSON)))(var ? ? ? AMOUNT))( monetaryValue( el ? ? ? ( PropertyFn(var ? ? ? PERSON)))(var ? ? ? AMOUNT))))
+
+forall TimePoint (\POINT ->  impl ( not ( equal(var ? ? ? POINT)(el ? ? ? PositiveInfinity)))( before(var ? ? ? POINT)(el ? ? ? PositiveInfinity)))
+
+forall TimePoint (\POINT ->  impl ( not ( equal(var ? ? ? POINT)(el ? ? ? PositiveInfinity)))(exists TimePoint (\OTHERPOINT ->  temporallyBetween(var ? ? ? POINT)(var ? ? ? OTHERPOINT)(el ? ? ? PositiveInfinity))))
+
+forall TimePoint (\POINT ->  impl ( not ( equal(var ? ? ? POINT)(el ? ? ? NegativeInfinity)))( before(el ? ? ? NegativeInfinity)(var ? ? ? POINT)))
+
+forall TimePoint (\POINT ->  impl ( not ( equal(var ? ? ? POINT)(el ? ? ? NegativeInfinity)))(exists TimePoint (\OTHERPOINT ->  temporallyBetween(el ? ? ? NegativeInfinity)(var ? ? ? OTHERPOINT)(var ? ? ? POINT))))
+
+forall TimePoint (\POINT -> exists TimeInterval (\INTERVAL ->  temporalPart(var ? ? ? POINT)(var ? ? ? INTERVAL)))
+
+forall TimeInterval (\INTERVAL -> exists TimePoint (\POINT ->  temporalPart(var ? ? ? POINT)(var ? ? ? INTERVAL)))
+
+forall Physical (\THING -> forall TimePosition (\POS ->  equiv ( temporalPart(var ? ? ? POS)( el ? ? ? ( WhenFn(var ? ? ? THING))))( time(var ? ? ? THING)(var ? ? ? POS))))
+
+forall (both Object Physical) (\OBJ -> forall (both Process Physical) (\PROCESS ->  impl ( origin(var ? ? ? PROCESS)(var ? ? ? OBJ))( located( el ? ? ? ( WhereFn(var ? ? ? PROCESS)( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? PROCESS)))))))( el ? ? ? ( WhereFn(var ? ? ? OBJ)( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? OBJ))))))))))
+
+forall (both Entity TimePoint) (\POINT -> forall (both TimeInterval TimePosition) (\INTERVAL ->  impl ( equal( el ? ? ? ( BeginFn(var ? ? ? INTERVAL)))(var ? ? ? POINT))(forall (both TimePosition (both Entity TimePoint)) (\OTHERPOINT ->  impl (and ( temporalPart(var ? ? ? OTHERPOINT)(var ? ? ? INTERVAL))( not ( equal(var ? ? ? OTHERPOINT)(var ? ? ? POINT))))( before(var ? ? ? POINT)(var ? ? ? OTHERPOINT))))))
+
+forall (both Entity TimePoint) (\POINT -> forall (both TimeInterval TimePosition) (\INTERVAL ->  impl ( equal( el ? ? ? ( EndFn(var ? ? ? INTERVAL)))(var ? ? ? POINT))(forall (both TimePosition (both Entity TimePoint)) (\OTHERPOINT ->  impl (and ( temporalPart(var ? ? ? OTHERPOINT)(var ? ? ? INTERVAL))( not ( equal(var ? ? ? OTHERPOINT)(var ? ? ? POINT))))( before(var ? ? ? OTHERPOINT)(var ? ? ? POINT))))))
+
+forall TimeInterval (\INTERVAL2 -> forall TimeInterval (\INTERVAL1 ->  equiv ( starts(var ? ? ? INTERVAL1)(var ? ? ? INTERVAL2))(and ( equal( el ? ? ? ( BeginFn(var ? ? ? INTERVAL1)))( el ? ? ? ( BeginFn(var ? ? ? INTERVAL2))))( before( el ? ? ? ( EndFn(var ? ? ? INTERVAL1)))( el ? ? ? ( EndFn(var ? ? ? INTERVAL2)))))))
+
+forall TimeInterval (\INTERVAL2 -> forall TimeInterval (\INTERVAL1 ->  equiv ( finishes(var ? ? ? INTERVAL1)(var ? ? ? INTERVAL2))(and ( before( el ? ? ? ( BeginFn(var ? ? ? INTERVAL2)))( el ? ? ? ( BeginFn(var ? ? ? INTERVAL1))))( equal( el ? ? ? ( EndFn(var ? ? ? INTERVAL2)))( el ? ? ? ( EndFn(var ? ? ? INTERVAL1)))))))
+
+forall Object (\OBJ -> exists TimePoint (\TIME1 -> exists TimePoint (\TIME2 -> and ( before(var ? ? ? TIME1)(var ? ? ? TIME2))(forall (both TimePoint TimePosition) (\TIME ->  impl (and ( beforeOrEqual(var ? ? ? TIME1)(var ? ? ? TIME))( beforeOrEqual(var ? ? ? TIME)(var ? ? ? TIME2)))( time(var ? ? ? OBJ)(var ? ? ? TIME)))))))
+
+forall (both Entity Physical) (\OBJ -> forall (both Process Physical) (\PROC ->  impl ( result(var ? ? ? PROC)(var ? ? ? OBJ))(forall (both TimePoint TimePosition) (\TIME ->  impl ( before(var ? ? ? TIME)( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? PROC))))))( not ( time(var ? ? ? OBJ)(var ? ? ? TIME)))))))
+
+forall TimeInterval (\INTERVAL ->  before( el ? ? ? ( BeginFn(var ? ? ? INTERVAL)))( el ? ? ? ( EndFn(var ? ? ? INTERVAL))))
+
+forall (both TimePoint Entity) (\POINT2 -> forall (both TimePoint Entity) (\POINT1 ->  impl ( beforeOrEqual(var ? ? ? POINT1)(var ? ? ? POINT2))(or ( before(var ? ? ? POINT1)(var ? ? ? POINT2))( equal(var ? ? ? POINT1)(var ? ? ? POINT2)))))
+
+forall TimePoint (\POINT3 -> forall TimePoint (\POINT2 -> forall TimePoint (\POINT1 ->  equiv ( temporallyBetween(var ? ? ? POINT1)(var ? ? ? POINT2)(var ? ? ? POINT3))(and ( before(var ? ? ? POINT1)(var ? ? ? POINT2))( before(var ? ? ? POINT2)(var ? ? ? POINT3))))))
+
+forall TimePoint (\POINT3 -> forall TimePoint (\POINT2 -> forall TimePoint (\POINT1 ->  equiv ( temporallyBetweenOrEqual(var ? ? ? POINT1)(var ? ? ? POINT2)(var ? ? ? POINT3))(and ( beforeOrEqual(var ? ? ? POINT1)(var ? ? ? POINT2))( beforeOrEqual(var ? ? ? POINT2)(var ? ? ? POINT3))))))
+
+forall TimePoint (\TIME -> forall Physical (\PHYS ->  equiv ( time(var ? ? ? PHYS)(var ? ? ? TIME))( temporallyBetweenOrEqual( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? PHYS)))))(var ? ? ? TIME)( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? PHYS))))))))
+
+forall (both TimeInterval TimePosition) (\INTERVAL2 -> forall (both TimeInterval TimePosition) (\INTERVAL1 ->  equiv ( overlapsTemporally(var ? ? ? INTERVAL1)(var ? ? ? INTERVAL2))(exists TimeInterval (\INTERVAL3 -> and ( temporalPart(var ? ? ? INTERVAL3)(var ? ? ? INTERVAL1))( temporalPart(var ? ? ? INTERVAL3)(var ? ? ? INTERVAL2))))))
+
+forall TimeInterval (\INTERVAL2 -> forall TimeInterval (\INTERVAL1 ->  impl ( during(var ? ? ? INTERVAL1)(var ? ? ? INTERVAL2))(and ( before( el ? ? ? ( EndFn(var ? ? ? INTERVAL1)))( el ? ? ? ( EndFn(var ? ? ? INTERVAL2))))( before( el ? ? ? ( BeginFn(var ? ? ? INTERVAL2)))( el ? ? ? ( BeginFn(var ? ? ? INTERVAL1)))))))
+
+forall TimeInterval (\INTERVAL2 -> forall TimeInterval (\INTERVAL1 ->  equiv ( meetsTemporally(var ? ? ? INTERVAL1)(var ? ? ? INTERVAL2))( equal( el ? ? ? ( EndFn(var ? ? ? INTERVAL1)))( el ? ? ? ( BeginFn(var ? ? ? INTERVAL2))))))
+
+forall (both TimeInterval Entity) (\INTERVAL2 -> forall (both TimeInterval Entity) (\INTERVAL1 ->  impl (and ( equal( el ? ? ? ( BeginFn(var ? ? ? INTERVAL1)))( el ? ? ? ( BeginFn(var ? ? ? INTERVAL2))))( equal( el ? ? ? ( EndFn(var ? ? ? INTERVAL1)))( el ? ? ? ( EndFn(var ? ? ? INTERVAL2)))))( equal(var ? ? ? INTERVAL1)(var ? ? ? INTERVAL2))))
+
+forall TimeInterval (\INTERVAL2 -> forall TimeInterval (\INTERVAL1 ->  equiv ( earlier(var ? ? ? INTERVAL1)(var ? ? ? INTERVAL2))( before( el ? ? ? ( EndFn(var ? ? ? INTERVAL1)))( el ? ? ? ( BeginFn(var ? ? ? INTERVAL2))))))
+
+forall Physical (\PHYS2 -> forall Physical (\PHYS1 ->  equiv ( cooccur(var ? ? ? PHYS1)(var ? ? ? PHYS2))( equal( el ? ? ? ( WhenFn(var ? ? ? PHYS1)))( el ? ? ? ( WhenFn(var ? ? ? PHYS2))))))
+
+forall TimePoint (\POINT1 -> forall TimePoint (\POINT2 -> forall TimeInterval (\INTERVAL ->  impl ( equal( el ? ? ? ( TimeIntervalFn(var ? ? ? POINT1)(var ? ? ? POINT2)))(var ? ? ? INTERVAL))(and ( equal( el ? ? ? ( BeginFn(var ? ? ? INTERVAL)))(var ? ? ? POINT1))( equal( el ? ? ? ( EndFn(var ? ? ? INTERVAL)))(var ? ? ? POINT2))))))
+
+forall TimePoint (\POINT1 -> forall TimePoint (\POINT2 -> forall TimeInterval (\INTERVAL ->  impl ( equal( el ? ? ? ( TimeIntervalFn(var ? ? ? POINT1)(var ? ? ? POINT2)))(var ? ? ? INTERVAL))(forall (both TimePoint TimePosition) (\POINT ->  equiv ( temporallyBetweenOrEqual(var ? ? ? POINT1)(var ? ? ? POINT)(var ? ? ? POINT2))( temporalPart(var ? ? ? POINT)(var ? ? ? INTERVAL)))))))
+
+forall TimeInterval (\INTERVAL ->  meetsTemporally( el ? ? ? ( PastFn(var ? ? ? INTERVAL)))(var ? ? ? INTERVAL))
+
+forall TimeInterval (\INTERVAL ->  equal( el ? ? ? ( PastFn(var ? ? ? INTERVAL)))( el ? ? ? ( TimeIntervalFn(el ? ? ? NegativeInfinity)( el ? ? ? ( BeginFn(var ? ? ? INTERVAL))))))
+
+forall TimeInterval (\INTERVAL ->  finishes( el ? ? ? ( ImmediatePastFn(var ? ? ? INTERVAL)))( el ? ? ? ( PastFn(var ? ? ? INTERVAL))))
+
+forall TimeInterval (\INTERVAL ->  meetsTemporally(var ? ? ? INTERVAL)( el ? ? ? ( FutureFn(var ? ? ? INTERVAL))))
+
+forall TimeInterval (\INTERVAL ->  equal( el ? ? ? ( FutureFn(var ? ? ? INTERVAL)))( el ? ? ? ( TimeIntervalFn( el ? ? ? ( EndFn(var ? ? ? INTERVAL)))(el ? ? ? PositiveInfinity))))
+
+forall TimeInterval (\INTERVAL ->  starts( el ? ? ? ( ImmediateFutureFn(var ? ? ? INTERVAL)))( el ? ? ? ( FutureFn(var ? ? ? INTERVAL))))
+
+forall Year (\YEAR ->  duration(var ? ? ? YEAR)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 1))(el ? ? ? YearDuration))))
+
+forall Year (\YEAR1 -> forall Year (\YEAR2 ->  impl ( equal( el ? ? ? ( SubtractionFn(var ? ? ? YEAR2)(var ? ? ? YEAR1)))(el ? ? ? (toInt 1)))( meetsTemporally(var ? ? ? YEAR1)(var ? ? ? YEAR2))))
+
+forall January (\MONTH ->  duration(var ? ? ? MONTH)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 31))(el ? ? ? DayDuration))))
+
+forall March (\MONTH ->  duration(var ? ? ? MONTH)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 31))(el ? ? ? DayDuration))))
+
+forall April (\MONTH ->  duration(var ? ? ? MONTH)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 30))(el ? ? ? DayDuration))))
+
+forall May (\MONTH ->  duration(var ? ? ? MONTH)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 31))(el ? ? ? DayDuration))))
+
+forall June (\MONTH ->  duration(var ? ? ? MONTH)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 30))(el ? ? ? DayDuration))))
+
+forall July (\MONTH ->  duration(var ? ? ? MONTH)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 31))(el ? ? ? DayDuration))))
+
+forall August (\MONTH ->  duration(var ? ? ? MONTH)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 31))(el ? ? ? DayDuration))))
+
+forall September (\MONTH ->  duration(var ? ? ? MONTH)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 30))(el ? ? ? DayDuration))))
+
+forall October (\MONTH ->  duration(var ? ? ? MONTH)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 31))(el ? ? ? DayDuration))))
+
+forall November (\MONTH ->  duration(var ? ? ? MONTH)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 30))(el ? ? ? DayDuration))))
+
+forall December (\MONTH ->  duration(var ? ? ? MONTH)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 31))(el ? ? ? DayDuration))))
+
+forall Day (\DAY ->  duration(var ? ? ? DAY)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 1))(el ? ? ? DayDuration))))
+
+forall Monday (\DAY1 -> forall Tuesday (\DAY2 -> forall Week (\WEEK ->  impl (and ( temporalPart(var ? ? ? DAY1)(var ? ? ? WEEK))( temporalPart(var ? ? ? DAY2)(var ? ? ? WEEK)))( meetsTemporally(var ? ? ? DAY1)(var ? ? ? DAY2)))))
+
+forall Tuesday (\DAY1 -> forall Wednesday (\DAY2 -> forall Week (\WEEK ->  impl (and ( temporalPart(var ? ? ? DAY1)(var ? ? ? WEEK))( temporalPart(var ? ? ? DAY2)(var ? ? ? WEEK)))( meetsTemporally(var ? ? ? DAY1)(var ? ? ? DAY2)))))
+
+forall Wednesday (\DAY1 -> forall Thursday (\DAY2 -> forall Week (\WEEK ->  impl (and ( temporalPart(var ? ? ? DAY1)(var ? ? ? WEEK))( temporalPart(var ? ? ? DAY2)(var ? ? ? WEEK)))( meetsTemporally(var ? ? ? DAY1)(var ? ? ? DAY2)))))
+
+forall Thursday (\DAY1 -> forall Friday (\DAY2 -> forall Week (\WEEK ->  impl (and ( temporalPart(var ? ? ? DAY1)(var ? ? ? WEEK))( temporalPart(var ? ? ? DAY2)(var ? ? ? WEEK)))( meetsTemporally(var ? ? ? DAY1)(var ? ? ? DAY2)))))
+
+forall Friday (\DAY1 -> forall Saturday (\DAY2 -> forall Week (\WEEK ->  impl (and ( temporalPart(var ? ? ? DAY1)(var ? ? ? WEEK))( temporalPart(var ? ? ? DAY2)(var ? ? ? WEEK)))( meetsTemporally(var ? ? ? DAY1)(var ? ? ? DAY2)))))
+
+forall Saturday (\DAY1 -> forall Sunday (\DAY2 -> forall Week (\WEEK ->  impl (and ( temporalPart(var ? ? ? DAY1)(var ? ? ? WEEK))( temporalPart(var ? ? ? DAY2)(var ? ? ? WEEK)))( meetsTemporally(var ? ? ? DAY1)(var ? ? ? DAY2)))))
+
+forall Sunday (\DAY1 -> forall Monday (\DAY2 -> forall Week (\WEEK1 -> forall Week (\WEEK2 ->  impl (and ( temporalPart(var ? ? ? DAY1)(var ? ? ? WEEK1))(and ( temporalPart(var ? ? ? DAY2)(var ? ? ? WEEK2))( meetsTemporally(var ? ? ? WEEK1)(var ? ? ? WEEK2))))( meetsTemporally(var ? ? ? DAY1)(var ? ? ? DAY2))))))
+
+forall Week (\WEEK ->  duration(var ? ? ? WEEK)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 1))(el ? ? ? WeekDuration))))
+
+forall Hour (\HOUR ->  duration(var ? ? ? HOUR)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 1))(el ? ? ? HourDuration))))
+
+forall Minute (\MINUTE ->  duration(var ? ? ? MINUTE)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 1))(el ? ? ? MinuteDuration))))
+
+forall Second (\SECOND ->  duration(var ? ? ? SECOND)( el ? ? ? ( MeasureFn(el ? ? ? (toInt 1))(el ? ? ? SecondDuration))))
+
+forall Object (\OBJ2 -> forall Object (\OBJ1 ->  impl ( connected(var ? ? ? OBJ1)(var ? ? ? OBJ2))(or ( meetsSpatially(var ? ? ? OBJ1)(var ? ? ? OBJ2))( overlapsSpatially(var ? ? ? OBJ1)(var ? ? ? OBJ2)))))
+
+forall SelfConnectedObject (\OBJ -> forall Object (\PART2 -> forall Object (\PART1 ->  impl ( equal(var ? ? ? OBJ)( el ? ? ? ( MereologicalSumFn(var ? ? ? PART1)(var ? ? ? PART2))))( connected(var ? ? ? PART1)(var ? ? ? PART2)))))
+
+forall (both SelfConnectedObject Object) (\OBJ3 -> forall (both SelfConnectedObject Object) (\OBJ2 -> forall (both SelfConnectedObject Object) (\OBJ1 ->  equiv ( connects(var ? ? ? OBJ1)(var ? ? ? OBJ2)(var ? ? ? OBJ3))( between(var ? ? ? OBJ2)(var ? ? ? OBJ1)(var ? ? ? OBJ3)))))
+
+forall (both SelfConnectedObject Object) (\OBJ3 -> forall (both SelfConnectedObject Object) (\OBJ2 -> forall (both SelfConnectedObject Object) (\OBJ1 ->  equiv ( connects(var ? ? ? OBJ1)(var ? ? ? OBJ2)(var ? ? ? OBJ3))(and ( connected(var ? ? ? OBJ1)(var ? ? ? OBJ2))(and ( connected(var ? ? ? OBJ1)(var ? ? ? OBJ3))( not ( connected(var ? ? ? OBJ2)(var ? ? ? OBJ3))))))))
+
+forall SelfConnectedObject (\NODE2 -> forall SelfConnectedObject (\NODE1 -> forall SelfConnectedObject (\ARC ->  impl ( connects(var ? ? ? ARC)(var ? ? ? NODE1)(var ? ? ? NODE2))( connects(var ? ? ? ARC)(var ? ? ? NODE2)(var ? ? ? NODE1)))))
+
+forall Object (\OBJ2 -> forall Object (\OBJ1 ->  equiv ( overlapsSpatially(var ? ? ? OBJ1)(var ? ? ? OBJ2))(exists Object (\OBJ3 -> and ( part(var ? ? ? OBJ3)(var ? ? ? OBJ1))( part(var ? ? ? OBJ3)(var ? ? ? OBJ2))))))
+
+forall (both SelfConnectedObject (both Entity Object)) (\OBJ2 -> forall Collection (\COLL -> forall (both SelfConnectedObject (both Entity Object)) (\OBJ1 ->  impl (and ( member(var ? ? ? OBJ1)(var ? ? ? COLL))(and ( member(var ? ? ? OBJ2)(var ? ? ? COLL))( not ( equal(var ? ? ? OBJ1)(var ? ? ? OBJ2)))))( not ( overlapsSpatially(var ? ? ? OBJ1)(var ? ? ? OBJ2))))))
+
+forall Object (\OBJ2 -> forall Object (\OBJ1 ->  equiv ( overlapsPartially(var ? ? ? OBJ1)(var ? ? ? OBJ2))(and ( not ( part(var ? ? ? OBJ1)(var ? ? ? OBJ2)))(and ( not ( part(var ? ? ? OBJ2)(var ? ? ? OBJ1)))(exists Object (\OBJ3 -> and ( part(var ? ? ? OBJ3)(var ? ? ? OBJ1))( part(var ? ? ? OBJ3)(var ? ? ? OBJ2))))))))
+
+forall Object (\OBJ2 -> forall Object (\OBJ1 ->  impl ( superficialPart(var ? ? ? OBJ1)(var ? ? ? OBJ2))(and ( not ( interiorPart(var ? ? ? OBJ1)(var ? ? ? OBJ2)))( not (exists Object (\OBJ3 ->  interiorPart(var ? ? ? OBJ3)(var ? ? ? OBJ1)))))))
+
+forall (both SelfConnectedObject Object) (\OBJ2 -> forall (both SelfConnectedObject Object) (\OBJ1 ->  impl ( surface(var ? ? ? OBJ1)(var ? ? ? OBJ2))(forall Object (\OBJ3 ->  impl ( superficialPart(var ? ? ? OBJ3)(var ? ? ? OBJ2))( part(var ? ? ? OBJ3)(var ? ? ? OBJ1))))))
+
+forall Object (\OBJ2 -> forall Object (\OBJ1 ->  impl ( interiorPart(var ? ? ? OBJ1)(var ? ? ? OBJ2))(forall Object (\PART ->  impl ( superficialPart(var ? ? ? PART)(var ? ? ? OBJ2))( not ( overlapsSpatially(var ? ? ? OBJ1)(var ? ? ? PART)))))))
+
+forall Object (\PART -> forall (both SelfConnectedObject Object) (\OBJECT -> forall (both SelfConnectedObject Object) (\BOTTOM ->  impl (and ( bottom(var ? ? ? BOTTOM)(var ? ? ? OBJECT))(and ( part(var ? ? ? PART)(var ? ? ? OBJECT))( not ( connected(var ? ? ? PART)(var ? ? ? BOTTOM)))))( orientation(var ? ? ? PART)(var ? ? ? BOTTOM)(el ? ? ? Above)))))
+
+forall Object (\PART -> forall (both SelfConnectedObject Object) (\OBJECT -> forall (both SelfConnectedObject Object) (\TOP ->  impl (and ( top(var ? ? ? TOP)(var ? ? ? OBJECT))(and ( part(var ? ? ? PART)(var ? ? ? OBJECT))( not ( connected(var ? ? ? PART)(var ? ? ? TOP)))))( orientation(var ? ? ? PART)(var ? ? ? TOP)(el ? ? ? Below)))))
+
+forall Object (\PART -> forall (both SelfConnectedObject Object) (\OBJECT -> forall (both SelfConnectedObject Object) (\SIDE ->  impl (and ( side(var ? ? ? SIDE)(var ? ? ? OBJECT))(and ( part(var ? ? ? PART)(var ? ? ? OBJECT))( not ( connected(var ? ? ? PART)(var ? ? ? SIDE)))))(exists PositionalAttribute (\DIRECT ->  orientation(var ? ? ? SIDE)(var ? ? ? PART)(var ? ? ? DIRECT))))))
+
+forall (both SelfConnectedObject Entity) (\S -> forall SelfConnectedObject (\O -> forall (both SelfConnectedObject Entity) (\TOP ->  impl (and ( top(var ? ? ? TOP)(var ? ? ? O))( side(var ? ? ? S)(var ? ? ? O)))( not ( equal(var ? ? ? TOP)(var ? ? ? S))))))
+
+forall (both PhysicalQuantity LengthMeasure) (\WIDTH -> forall (both Object SelfConnectedObject) (\OBJECT ->  equiv ( width(var ? ? ? OBJECT)(var ? ? ? WIDTH))(exists (both SelfConnectedObject Physical) (\SIDE2 -> exists (both SelfConnectedObject Physical) (\SIDE1 -> and ( side(var ? ? ? SIDE1)(var ? ? ? OBJECT))(and ( side(var ? ? ? SIDE2)(var ? ? ? OBJECT))( distance(var ? ? ? SIDE1)(var ? ? ? SIDE2)(var ? ? ? WIDTH))))))))
+
+forall (both SelfConnectedObject Physical) (\BOTTOM -> forall (both SelfConnectedObject Physical) (\TOP -> forall LengthMeasure (\HEIGHT -> forall SelfConnectedObject (\OBJECT ->  impl (and ( height(var ? ? ? OBJECT)(var ? ? ? HEIGHT))(and ( top(var ? ? ? TOP)(var ? ? ? OBJECT))( bottom(var ? ? ? BOTTOM)(var ? ? ? OBJECT))))( distance(var ? ? ? TOP)(var ? ? ? BOTTOM)(var ? ? ? HEIGHT))))))
+
+forall Object (\OBJ2 -> forall Object (\OBJ1 -> forall (both Entity Object) (\OBJ3 ->  impl ( equal(var ? ? ? OBJ3)( el ? ? ? ( MereologicalSumFn(var ? ? ? OBJ1)(var ? ? ? OBJ2))))(forall Object (\PART ->  equiv ( part(var ? ? ? PART)(var ? ? ? OBJ3))(or ( part(var ? ? ? PART)(var ? ? ? OBJ1))( part(var ? ? ? PART)(var ? ? ? OBJ2))))))))
+
+forall Object (\OBJ2 -> forall Object (\OBJ1 -> forall (both Entity Object) (\OBJ3 ->  impl ( equal(var ? ? ? OBJ3)( el ? ? ? ( MereologicalProductFn(var ? ? ? OBJ1)(var ? ? ? OBJ2))))(forall Object (\PART ->  equiv ( part(var ? ? ? PART)(var ? ? ? OBJ3))(and ( part(var ? ? ? PART)(var ? ? ? OBJ1))( part(var ? ? ? PART)(var ? ? ? OBJ2))))))))
+
+forall Object (\OBJ2 -> forall Object (\OBJ1 -> forall (both Entity Object) (\OBJ3 ->  impl ( equal(var ? ? ? OBJ3)( el ? ? ? ( MereologicalDifferenceFn(var ? ? ? OBJ1)(var ? ? ? OBJ2))))(forall Object (\PART ->  equiv ( properPart(var ? ? ? PART)(var ? ? ? OBJ3))(and ( properPart(var ? ? ? PART)(var ? ? ? OBJ1))( not ( properPart(var ? ? ? PART)(var ? ? ? OBJ2)))))))))
+
+forall Hole (\HOLE -> exists SelfConnectedObject (\OBJ ->  hole(var ? ? ? HOLE)(var ? ? ? OBJ)))
+
+forall (both SelfConnectedObject Object) (\OBJ -> forall (both Hole Object) (\HOLE ->  impl ( hole(var ? ? ? HOLE)(var ? ? ? OBJ))( not ( overlapsSpatially(var ? ? ? HOLE)(var ? ? ? OBJ)))))
+
+forall (both SelfConnectedObject Object) (\OBJ2 -> forall (both SelfConnectedObject Object) (\OBJ1 -> forall Hole (\HOLE ->  impl (and ( hole(var ? ? ? HOLE)(var ? ? ? OBJ1))( hole(var ? ? ? HOLE)(var ? ? ? OBJ2)))(exists (both Object SelfConnectedObject) (\OBJ3 -> and ( properPart(var ? ? ? OBJ3)( el ? ? ? ( MereologicalProductFn(var ? ? ? OBJ1)(var ? ? ? OBJ2))))( hole(var ? ? ? HOLE)(var ? ? ? OBJ3)))))))
+
+forall (both Hole Object) (\HOLE2 -> forall SelfConnectedObject (\OBJ -> forall (both Hole Object) (\HOLE1 ->  impl (and ( hole(var ? ? ? HOLE1)(var ? ? ? OBJ))( hole(var ? ? ? HOLE2)(var ? ? ? OBJ)))(forall (both Object Hole) (\HOLE3 ->  impl ( part(var ? ? ? HOLE3)( el ? ? ? ( MereologicalSumFn(var ? ? ? HOLE1)(var ? ? ? HOLE2))))( hole(var ? ? ? HOLE3)(var ? ? ? OBJ)))))))
+
+forall (both Object SelfConnectedObject) (\OBJ2 -> forall (both SelfConnectedObject Object) (\OBJ1 -> forall (both Hole Object) (\HOLE ->  impl (and ( hole(var ? ? ? HOLE)(var ? ? ? OBJ1))( part(var ? ? ? OBJ1)(var ? ? ? OBJ2)))(or ( overlapsSpatially(var ? ? ? HOLE)(var ? ? ? OBJ2))( hole(var ? ? ? HOLE)(var ? ? ? OBJ2))))))
+
+forall (both SelfConnectedObject Object) (\OBJ2 -> forall (both Hole Object) (\HOLE2 -> forall (both SelfConnectedObject Object) (\OBJ1 -> forall (both Hole Object) (\HOLE1 ->  impl (and ( hole(var ? ? ? HOLE1)(var ? ? ? OBJ1))(and ( hole(var ? ? ? HOLE2)(var ? ? ? OBJ2))( overlapsSpatially(var ? ? ? HOLE1)(var ? ? ? HOLE2))))( overlapsSpatially(var ? ? ? OBJ1)(var ? ? ? OBJ2))))))
+
+forall Hole (\HOLE1 -> exists Object (\HOLE2 ->  properPart(var ? ? ? HOLE2)(var ? ? ? HOLE1)))
+
+forall (both SelfConnectedObject Object) (\OBJ -> forall (both Hole Object) (\HOLE ->  impl ( hole(var ? ? ? HOLE)(var ? ? ? OBJ))( connected(var ? ? ? HOLE)(var ? ? ? OBJ))))
+
+forall Hole (\HOLE1 -> forall Object (\HOLE2 ->  impl ( properPart(var ? ? ? HOLE2)(var ? ? ? HOLE1))(exists Object (\OBJ -> and ( meetsSpatially(var ? ? ? HOLE1)(var ? ? ? OBJ))( not ( meetsSpatially(var ? ? ? HOLE2)(var ? ? ? OBJ)))))))
+
+forall (both Hole Object) (\HOLE -> forall Object (\OBJ ->  impl (exists TimePosition (\TIME ->  holdsDuring(var ? ? ? TIME)( fills(var ? ? ? OBJ)(var ? ? ? HOLE))))( attribute(var ? ? ? HOLE)(el ? ? ? Fillable))))
+
+forall Object (\HOLE1 ->  equiv ( attribute(var ? ? ? HOLE1)(el ? ? ? Fillable))(exists Hole (\HOLE2 ->  part(var ? ? ? HOLE1)(var ? ? ? HOLE2))))
+
+forall Object (\HOLE1 -> forall (both Physical Object) (\OBJ ->  impl ( partiallyFills(var ? ? ? OBJ)(var ? ? ? HOLE1))(exists (both Object Hole) (\HOLE2 -> and ( part(var ? ? ? HOLE2)(var ? ? ? HOLE1))( completelyFills(var ? ? ? OBJ)(var ? ? ? HOLE2))))))
+
+forall (both Hole Object) (\HOLE1 -> forall Object (\OBJ ->  impl ( properlyFills(var ? ? ? OBJ)(var ? ? ? HOLE1))(exists (both Object Hole) (\HOLE2 -> and ( part(var ? ? ? HOLE2)(var ? ? ? HOLE1))( fills(var ? ? ? OBJ)(var ? ? ? HOLE2))))))
+
+forall Hole (\HOLE -> forall Object (\OBJ1 ->  impl ( completelyFills(var ? ? ? OBJ1)(var ? ? ? HOLE))(exists Object (\OBJ2 -> and ( part(var ? ? ? OBJ2)(var ? ? ? OBJ1))( fills(var ? ? ? OBJ2)(var ? ? ? HOLE))))))
+
+forall Object (\OBJ2 -> forall Hole (\HOLE -> forall Object (\OBJ1 ->  impl (and ( fills(var ? ? ? OBJ1)(var ? ? ? HOLE))( attribute(var ? ? ? OBJ2)(el ? ? ? Fillable)))( not ( overlapsSpatially(var ? ? ? OBJ1)(var ? ? ? OBJ2))))))
+
+forall (both Hole Object) (\HOLE -> forall Object (\OBJ1 ->  impl ( completelyFills(var ? ? ? OBJ1)(var ? ? ? HOLE))(forall Object (\OBJ2 ->  impl ( connected(var ? ? ? OBJ2)(var ? ? ? HOLE))( connected(var ? ? ? OBJ2)(var ? ? ? OBJ1))))))
+
+forall Object (\OBJ2 -> forall (both Hole Object) (\HOLE -> forall Object (\OBJ1 ->  impl (and ( properlyFills(var ? ? ? OBJ1)(var ? ? ? HOLE))( connected(var ? ? ? OBJ2)(var ? ? ? OBJ1)))( connected(var ? ? ? HOLE)(var ? ? ? OBJ2)))))
+
+forall (both Object Hole) (\HOLE2 -> forall (both Hole Object) (\HOLE1 -> forall Object (\OBJ ->  impl (and ( fills(var ? ? ? OBJ)(var ? ? ? HOLE1))( properPart(var ? ? ? HOLE2)(var ? ? ? HOLE1)))( completelyFills(var ? ? ? OBJ)(var ? ? ? HOLE2)))))
+
+forall Object (\OBJ2 -> forall Hole (\HOLE -> forall Object (\OBJ1 ->  impl (and ( fills(var ? ? ? OBJ1)(var ? ? ? HOLE))( properPart(var ? ? ? OBJ2)(var ? ? ? OBJ1)))( properlyFills(var ? ? ? OBJ2)(var ? ? ? HOLE)))))
+
+forall (both Hole Object) (\HOLE -> forall (both Entity Object) (\OBJ1 ->  impl ( equal(var ? ? ? OBJ1)( el ? ? ? ( HoleSkinFn(var ? ? ? HOLE))))(forall Object (\OBJ2 ->  equiv ( overlapsSpatially(var ? ? ? OBJ2)(var ? ? ? OBJ1))(exists Object (\OBJ3 -> and ( superficialPart(var ? ? ? OBJ3)( el ? ? ? ( HoleHostFn(var ? ? ? HOLE))))(and ( meetsSpatially(var ? ? ? HOLE)(var ? ? ? OBJ3))( overlapsSpatially(var ? ? ? OBJ2)(var ? ? ? OBJ3)))))))))
+
+forall (both Process Physical) (\PROC -> forall (both Process Physical) (\SUBPROC ->  impl ( subProcess(var ? ? ? SUBPROC)(var ? ? ? PROC))( temporalPart( el ? ? ? ( WhenFn(var ? ? ? SUBPROC)))( el ? ? ? ( WhenFn(var ? ? ? PROC))))))
+
+forall (both Process Physical) (\PROC -> forall (both Process Physical) (\SUBPROC ->  impl ( subProcess(var ? ? ? SUBPROC)(var ? ? ? PROC))(forall Object (\REGION ->  impl ( located(var ? ? ? PROC)(var ? ? ? REGION))( located(var ? ? ? SUBPROC)(var ? ? ? REGION))))))
+
+forall Process (\PROC -> forall (both Process Physical) (\SUBPROC ->  impl ( subProcess(var ? ? ? SUBPROC)(var ? ? ? PROC))(exists TimePosition (\TIME ->  time(var ? ? ? SUBPROC)(var ? ? ? TIME)))))
+
+forall BiologicalProcess (\PROC -> exists Organism (\OBJ ->  located(var ? ? ? PROC)(var ? ? ? OBJ)))
+
+forall OrganOrTissueProcess (\PROC -> exists (either Organ Tissue) (\THING ->  located(var ? ? ? PROC)(var ? ? ? THING)))
+
+forall Birth (\BIRTH -> forall Entity (\AGENT ->  impl ( experiencer(var ? ? ? BIRTH)(var ? ? ? AGENT))(exists Death (\DEATH ->  experiencer(var ? ? ? DEATH)(var ? ? ? AGENT)))))
+
+forall Death (\DEATH -> forall (both Entity Object) (\AGENT ->  impl ( experiencer(var ? ? ? DEATH)(var ? ? ? AGENT))( holdsDuring( el ? ? ? ( FutureFn( el ? ? ? ( WhenFn(var ? ? ? DEATH)))))( attribute(var ? ? ? AGENT)(el ? ? ? Dead)))))
+
+forall Death (\DEATH -> forall Birth (\BIRTH -> forall (both Entity Object) (\AGENT ->  impl (and ( experiencer(var ? ? ? DEATH)(var ? ? ? AGENT))( experiencer(var ? ? ? BIRTH)(var ? ? ? AGENT)))(exists (both TimeInterval TimePosition) (\TIME -> and ( meetsTemporally( el ? ? ? ( WhenFn(var ? ? ? BIRTH)))(var ? ? ? TIME))(and ( meetsTemporally(var ? ? ? TIME)( el ? ? ? ( WhenFn(var ? ? ? DEATH))))( holdsDuring(var ? ? ? TIME)( attribute(var ? ? ? AGENT)(el ? ? ? Living)))))))))
+
+forall Digesting (\DIGEST -> forall Agent (\ORGANISM ->  impl ( agent(var ? ? ? DIGEST)(var ? ? ? ORGANISM))(exists Ingesting (\INGEST -> and ( agent(var ? ? ? INGEST)(var ? ? ? ORGANISM))( overlapsTemporally( el ? ? ? ( WhenFn(var ? ? ? INGEST)))( el ? ? ? ( WhenFn(var ? ? ? DIGEST))))))))
+
+forall Digesting (\DIGEST -> exists ChemicalDecomposition (\DECOMP ->  subProcess(var ? ? ? DECOMP)(var ? ? ? DIGEST)))
+
+forall Replication (\REP -> forall (both Entity Organism) (\CHILD -> forall (both Agent Organism) (\PARENT ->  impl (and ( agent(var ? ? ? REP)(var ? ? ? PARENT))( result(var ? ? ? REP)(var ? ? ? CHILD)))( parent(var ? ? ? CHILD)(var ? ? ? PARENT)))))
+
+forall Replication (\REP -> exists ReproductiveBody (\BODY ->  result(var ? ? ? REP)(var ? ? ? BODY)))
+
+forall SexualReproduction (\REP -> forall (both Entity Organism) (\ORGANISM ->  impl ( result(var ? ? ? REP)(var ? ? ? ORGANISM))(exists Organism (\FATHER -> exists Organism (\MOTHER -> and ( mother(var ? ? ? ORGANISM)(var ? ? ? MOTHER))( father(var ? ? ? ORGANISM)(var ? ? ? FATHER)))))))
+
+forall AsexualReproduction (\REP -> forall (both Entity Organism) (\ORGANISM ->  impl ( result(var ? ? ? REP)(var ? ? ? ORGANISM))( not (exists (both Organism Entity) (\PARENT2 -> exists (both Organism Entity) (\PARENT1 -> and ( parent(var ? ? ? ORGANISM)(var ? ? ? PARENT1))(and ( parent(var ? ? ? ORGANISM)(var ? ? ? PARENT2))( not ( equal(var ? ? ? PARENT1)(var ? ? ? PARENT2))))))))))
+
+forall PsychologicalProcess (\PROCESS -> exists Animal (\ANIMAL ->  experiencer(var ? ? ? PROCESS)(var ? ? ? ANIMAL)))
+
+forall PathologicProcess (\PATH -> forall (both Entity Object) (\ORG ->  impl ( experiencer(var ? ? ? PATH)(var ? ? ? ORG))(exists DiseaseOrSyndrome (\DISEASE -> exists Object (\PART -> and ( part(var ? ? ? PART)(var ? ? ? ORG))( attribute(var ? ? ? PART)(var ? ? ? DISEASE)))))))
+
+forall Injuring (\INJ -> exists AnatomicalStructure (\STRUCT ->  patient(var ? ? ? INJ)(var ? ? ? STRUCT)))
+
+forall Poisoning (\POISON -> exists BiologicallyActiveSubstance (\SUBSTANCE ->  instrument(var ? ? ? POISON)(var ? ? ? SUBSTANCE)))
+
+forall IntentionalProcess (\PROC -> exists CognitiveAgent (\AGENT ->  agent(var ? ? ? PROC)(var ? ? ? AGENT)))
+
+forall IntentionalProcess (\PROC -> forall Animal (\HUMAN ->  impl ( agent(var ? ? ? PROC)(var ? ? ? HUMAN))( holdsDuring( el ? ? ? ( WhenFn(var ? ? ? PROC)))( attribute(var ? ? ? HUMAN)(el ? ? ? Awake)))))
+
+forall JoiningAnOrganization (\JOIN -> forall Organization (\ORG -> forall (both Agent SelfConnectedObject) (\PERSON ->  impl (and ( agent(var ? ? ? JOIN)(var ? ? ? PERSON))( patient(var ? ? ? JOIN)(var ? ? ? ORG)))(and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? JOIN)))))( not ( member(var ? ? ? PERSON)(var ? ? ? ORG))))( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? JOIN)))))( member(var ? ? ? PERSON)(var ? ? ? ORG)))))))
+
+forall LeavingAnOrganization (\LEAVE -> forall Organization (\ORG -> forall (both Agent SelfConnectedObject) (\PERSON ->  impl (and ( agent(var ? ? ? LEAVE)(var ? ? ? PERSON))( patient(var ? ? ? LEAVE)(var ? ? ? ORG)))(and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? LEAVE)))))( member(var ? ? ? PERSON)(var ? ? ? ORG)))( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? LEAVE)))))( not ( member(var ? ? ? PERSON)(var ? ? ? ORG))))))))
+
+forall Hiring (\HIRE -> forall Organization (\ORG -> forall (both Entity CognitiveAgent) (\PERSON ->  impl (and ( agent(var ? ? ? HIRE)(var ? ? ? ORG))( patient(var ? ? ? HIRE)(var ? ? ? PERSON)))(and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? HIRE)))))( not ( employs(var ? ? ? ORG)(var ? ? ? PERSON))))( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? HIRE)))))( employs(var ? ? ? ORG)(var ? ? ? PERSON)))))))
+
+forall TerminatingEmployment (\FIRE -> forall Organization (\ORG -> forall (both Entity CognitiveAgent) (\PERSON ->  impl (and ( agent(var ? ? ? FIRE)(var ? ? ? ORG))( patient(var ? ? ? FIRE)(var ? ? ? PERSON)))(and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? FIRE)))))( employs(var ? ? ? ORG)(var ? ? ? PERSON)))( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? FIRE)))))( not ( employs(var ? ? ? ORG)(var ? ? ? PERSON))))))))
+
+forall LegalDecision (\DECISION -> exists LegalAction (\ACTION ->  refers(var ? ? ? DECISION)(var ? ? ? ACTION)))
+
+forall LegalDecision (\DECISION -> exists Deciding (\DECIDE ->  earlier( el ? ? ? ( WhenFn(var ? ? ? DECIDE)))( el ? ? ? ( WhenFn(var ? ? ? DECISION)))))
+
+forall Planning (\EVENT -> forall ContentBearingObject (\CBO ->  impl ( result(var ? ? ? EVENT)(var ? ? ? CBO))(exists Plan (\PLAN ->  containsInformation(var ? ? ? CBO)(var ? ? ? PLAN)))))
+
+forall Interpreting (\INTERPRET -> forall ContentBearingObject (\CONTENT -> forall (both Agent CognitiveAgent) (\AGENT ->  impl (and ( agent(var ? ? ? INTERPRET)(var ? ? ? AGENT))( patient(var ? ? ? INTERPRET)(var ? ? ? CONTENT)))(exists Proposition (\PROP ->  holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? INTERPRET)))))( believes(var ? ? ? AGENT)( containsInformation(var ? ? ? CONTENT)(var ? ? ? PROP))))))))
+
+forall Increasing (\INCREASE -> forall (both Entity RealNumber) (\OBJ ->  impl ( patient(var ? ? ? INCREASE)(var ? ? ? OBJ))(exists (both Entity Quantity) (\QUANT2 -> exists (both Entity Quantity) (\QUANT1 -> exists UnitOfMeasure (\UNIT -> and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? INCREASE)))))( equal( el ? ? ? ( MeasureFn(var ? ? ? OBJ)(var ? ? ? UNIT)))(var ? ? ? QUANT1)))(and ( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? INCREASE)))))( equal( el ? ? ? ( MeasureFn(var ? ? ? OBJ)(var ? ? ? UNIT)))(var ? ? ? QUANT2)))( greaterThan(var ? ? ? QUANT2)(var ? ? ? QUANT1)))))))))
+
+forall Heating (\HEAT -> forall (both Entity RealNumber) (\OBJ ->  impl ( patient(var ? ? ? HEAT)(var ? ? ? OBJ))(exists TemperatureMeasure (\UNIT -> exists (both Entity Quantity) (\QUANT2 -> exists (both Entity Quantity) (\QUANT1 -> and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? HEAT)))))( equal( el ? ? ? ( MeasureFn(var ? ? ? OBJ)(var ? ? ? UNIT)))(var ? ? ? QUANT1)))(and ( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? HEAT)))))( equal( el ? ? ? ( MeasureFn(var ? ? ? OBJ)(var ? ? ? UNIT)))(var ? ? ? QUANT2)))( greaterThan(var ? ? ? QUANT2)(var ? ? ? QUANT1)))))))))
+
+forall Decreasing (\DECREASE -> forall (both Entity RealNumber) (\OBJ ->  impl ( patient(var ? ? ? DECREASE)(var ? ? ? OBJ))(exists (both Entity Quantity) (\QUANT2 -> exists (both Entity Quantity) (\QUANT1 -> exists UnitOfMeasure (\UNIT -> and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? DECREASE)))))( equal( el ? ? ? ( MeasureFn(var ? ? ? OBJ)(var ? ? ? UNIT)))(var ? ? ? QUANT1)))(and ( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? DECREASE)))))( equal( el ? ? ? ( MeasureFn(var ? ? ? OBJ)(var ? ? ? UNIT)))(var ? ? ? QUANT2)))( lessThan(var ? ? ? QUANT2)(var ? ? ? QUANT1)))))))))
+
+forall Cooling (\COOL -> forall (both Entity RealNumber) (\OBJ ->  impl ( patient(var ? ? ? COOL)(var ? ? ? OBJ))(exists TemperatureMeasure (\UNIT -> exists (both Entity Quantity) (\QUANT2 -> exists (both Entity Quantity) (\QUANT1 -> and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? COOL)))))( equal( el ? ? ? ( MeasureFn(var ? ? ? OBJ)(var ? ? ? UNIT)))(var ? ? ? QUANT1)))(and ( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? COOL)))))( equal( el ? ? ? ( MeasureFn(var ? ? ? OBJ)(var ? ? ? UNIT)))(var ? ? ? QUANT2)))( lessThan(var ? ? ? QUANT2)(var ? ? ? QUANT1)))))))))
+
+forall Motion (\MOTION -> forall Object (\PLACE -> forall (both Entity Physical) (\OBJ ->  impl (and ( patient(var ? ? ? MOTION)(var ? ? ? OBJ))( origin(var ? ? ? MOTION)(var ? ? ? PLACE)))( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? MOTION)))))( located(var ? ? ? OBJ)(var ? ? ? PLACE))))))
+
+forall Motion (\MOTION -> forall (both Entity Object) (\PLACE -> forall (both Entity Physical) (\OBJ ->  impl (and ( patient(var ? ? ? MOTION)(var ? ? ? OBJ))( destination(var ? ? ? MOTION)(var ? ? ? PLACE)))( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? MOTION)))))( located(var ? ? ? OBJ)(var ? ? ? PLACE))))))
+
+forall (both LengthMeasure Quantity) (\DISTANCE -> forall (both PhysicalQuantity Quantity) (\MEASURE1 -> forall (both Entity (both Physical Object)) (\DEST -> forall (both Object Physical) (\SOURCE -> forall Object (\PATH1 -> forall (both Motion Process) (\PROCESS ->  impl (and ( path(var ? ? ? PROCESS)(var ? ? ? PATH1))(and ( origin(var ? ? ? PROCESS)(var ? ? ? SOURCE))(and ( destination(var ? ? ? PROCESS)(var ? ? ? DEST))(and ( length(var ? ? ? PATH1)(var ? ? ? MEASURE1))(and ( distance(var ? ? ? SOURCE)(var ? ? ? DEST)(var ? ? ? DISTANCE))( not ( greaterThan(var ? ? ? MEASURE1)(var ? ? ? DISTANCE))))))))(forall Object (\OBJ ->  impl ( part(var ? ? ? OBJ)(var ? ? ? PATH1))( between(var ? ? ? SOURCE)(var ? ? ? OBJ)(var ? ? ? DEST))))))))))
+
+forall BodyMotion (\MOTION -> exists BodyPart (\OBJ -> exists Organism (\AGENT -> and ( patient(var ? ? ? MOTION)(var ? ? ? OBJ))( agent(var ? ? ? MOTION)(var ? ? ? AGENT)))))
+
+forall Vocalizing (\VOCAL -> forall VocalCords (\VC -> exists Human (\HUMAN -> and ( part(var ? ? ? VC)(var ? ? ? HUMAN))(and ( agent(var ? ? ? VOCAL)(var ? ? ? HUMAN))( instrument(var ? ? ? VOCAL)(var ? ? ? VC))))))
+
+forall Walking (\WALK -> forall Running (\RUN -> forall (both LengthMeasure Quantity) (\LENGTH2 -> forall TimeDuration (\TIME -> forall (both LengthMeasure Quantity) (\LENGTH1 -> forall (both Agent Object) (\AGENT ->  impl (and ( agent(var ? ? ? WALK)(var ? ? ? AGENT))(and ( agent(var ? ? ? RUN)(var ? ? ? AGENT))(and ( holdsDuring( el ? ? ? ( WhenFn(var ? ? ? WALK)))( measure(var ? ? ? AGENT)( el ? ? ? ( SpeedFn(var ? ? ? LENGTH1)(var ? ? ? TIME)))))( holdsDuring( el ? ? ? ( WhenFn(var ? ? ? RUN)))( measure(var ? ? ? AGENT)( el ? ? ? ( SpeedFn(var ? ? ? LENGTH2)(var ? ? ? TIME))))))))( greaterThan(var ? ? ? LENGTH2)(var ? ? ? LENGTH1))))))))
+
+forall Swimming (\SWIM -> forall (both Agent Physical) (\AGENT ->  impl ( agent(var ? ? ? SWIM)(var ? ? ? AGENT))(exists WaterArea (\AREA ->  located(var ? ? ? AGENT)(var ? ? ? AREA)))))
+
+forall Precipitation (\PROCESS -> exists Water (\STUFF ->  patient(var ? ? ? PROCESS)(var ? ? ? STUFF)))
+
+forall LiquidMotion (\MOTION -> forall (both Entity Object) (\OBJ ->  impl ( patient(var ? ? ? MOTION)(var ? ? ? OBJ))( attribute(var ? ? ? OBJ)(el ? ? ? Liquid))))
+
+forall WaterMotion (\MOTION -> exists Water (\WATER ->  patient(var ? ? ? MOTION)(var ? ? ? WATER)))
+
+forall GasMotion (\MOTION -> forall (both Entity Object) (\OBJ ->  impl ( patient(var ? ? ? MOTION)(var ? ? ? OBJ))( attribute(var ? ? ? OBJ)(el ? ? ? Gas))))
+
+forall DirectionChange (\PROC -> exists DirectionalAttribute (\ATTR -> or (and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? PROC)))))( manner(var ? ? ? PROC)(var ? ? ? ATTR)))( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? PROC)))))( not ( manner(var ? ? ? PROC)(var ? ? ? ATTR)))))(and ( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? PROC)))))( manner(var ? ? ? PROC)(var ? ? ? ATTR)))( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? PROC)))))( not ( manner(var ? ? ? PROC)(var ? ? ? ATTR)))))))
+
+forall Transfer (\TRANSFER -> forall Entity (\PATIENT -> forall (both Agent Entity) (\AGENT ->  impl (and ( agent(var ? ? ? TRANSFER)(var ? ? ? AGENT))( patient(var ? ? ? TRANSFER)(var ? ? ? PATIENT)))( not ( equal(var ? ? ? AGENT)(var ? ? ? PATIENT))))))
+
+forall Translocation (\T1 -> forall Translocation (\T2 -> forall Entity (\P -> forall Entity (\D2 -> forall (both Object Entity) (\D1 -> forall Object (\O1 ->  impl (and ( origin(var ? ? ? T1)(var ? ? ? O1))(and ( origin(var ? ? ? T2)(var ? ? ? D1))(and ( destination(var ? ? ? T1)(var ? ? ? D1))(and ( destination(var ? ? ? T2)(var ? ? ? D2))(and ( experiencer(var ? ? ? T1)(var ? ? ? P))( experiencer(var ? ? ? T2)(var ? ? ? P)))))))(exists Translocation (\T -> and ( origin(var ? ? ? T)(var ? ? ? O1))(and ( destination(var ? ? ? T)(var ? ? ? D2))(and ( subProcess(var ? ? ? T1)(var ? ? ? T))(and ( subProcess(var ? ? ? T2)(var ? ? ? T))(and ( experiencer(var ? ? ? T)(var ? ? ? P))(and ( starts( el ? ? ? ( WhenFn(var ? ? ? T1)))( el ? ? ? ( WhenFn(var ? ? ? T))))( finishes( el ? ? ? ( WhenFn(var ? ? ? T2)))( el ? ? ? ( WhenFn(var ? ? ? T)))))))))))))))))
+
+forall Carrying (\CARRY -> exists Animal (\ANIMAL ->  instrument(var ? ? ? CARRY)(var ? ? ? ANIMAL)))
+
+forall Removing (\REMOVE -> forall (both Entity Physical) (\OBJ -> forall Object (\PLACE ->  impl (and ( origin(var ? ? ? REMOVE)(var ? ? ? PLACE))( patient(var ? ? ? REMOVE)(var ? ? ? OBJ)))(and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? REMOVE)))))( located(var ? ? ? OBJ)(var ? ? ? PLACE)))( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? REMOVE)))))( not ( located(var ? ? ? OBJ)(var ? ? ? PLACE))))))))
+
+forall Putting (\PUT -> forall (both Entity Physical) (\OBJ -> forall (both Entity Object) (\PLACE ->  impl (and ( destination(var ? ? ? PUT)(var ? ? ? PLACE))( patient(var ? ? ? PUT)(var ? ? ? OBJ)))(and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? PUT)))))( not ( located(var ? ? ? OBJ)(var ? ? ? PLACE))))( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? PUT)))))( located(var ? ? ? OBJ)(var ? ? ? PLACE)))))))
+
+forall Inserting (\INSERT -> forall (both Entity SelfConnectedObject) (\OBJ2 -> forall (both Entity Object) (\OBJ1 ->  impl (and ( patient(var ? ? ? INSERT)(var ? ? ? OBJ1))( destination(var ? ? ? INSERT)(var ? ? ? OBJ2)))(and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? INSERT)))))( not ( contains(var ? ? ? OBJ2)(var ? ? ? OBJ1))))( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? INSERT)))))( contains(var ? ? ? OBJ2)(var ? ? ? OBJ1)))))))
+
+forall Injecting (\INJECT -> exists BiologicallyActiveSubstance (\SUBSTANCE -> exists Animal (\ANIMAL -> and ( patient(var ? ? ? INJECT)(var ? ? ? SUBSTANCE))(and ( attribute(var ? ? ? SUBSTANCE)(el ? ? ? Liquid))( destination(var ? ? ? INJECT)(var ? ? ? ANIMAL))))))
+
+forall Substituting (\SUB -> exists Putting (\PUT -> exists Removing (\REMOVE -> exists (both Object Entity) (\PLACE -> exists Entity (\OBJ2 -> exists Entity (\OBJ1 -> and ( subProcess(var ? ? ? PUT)(var ? ? ? SUB))(and ( subProcess(var ? ? ? REMOVE)(var ? ? ? SUB))(and ( patient(var ? ? ? REMOVE)(var ? ? ? OBJ1))(and ( origin(var ? ? ? REMOVE)(var ? ? ? PLACE))(and ( patient(var ? ? ? PUT)(var ? ? ? OBJ2))(and ( destination(var ? ? ? PUT)(var ? ? ? PLACE))( not ( equal(var ? ? ? OBJ1)(var ? ? ? OBJ2))))))))))))))
+
+forall Touching (\TOUCH -> forall (both Entity Object) (\OBJ2 -> forall (both Agent Object) (\OBJ1 ->  impl (and ( agent(var ? ? ? TOUCH)(var ? ? ? OBJ1))( patient(var ? ? ? TOUCH)(var ? ? ? OBJ2)))(and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? TOUCH)))))( not ( connected(var ? ? ? OBJ1)(var ? ? ? OBJ2))))( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? TOUCH)))))( connected(var ? ? ? OBJ1)(var ? ? ? OBJ2)))))))
+
+forall Grabbing (\GRAB -> forall (both Entity Object) (\THING -> forall (both Agent Animal) (\AGENT ->  impl (and ( agent(var ? ? ? GRAB)(var ? ? ? AGENT))( patient(var ? ? ? GRAB)(var ? ? ? THING)))(and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? GRAB)))))( not ( grasps(var ? ? ? AGENT)(var ? ? ? THING))))( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? GRAB)))))( grasps(var ? ? ? AGENT)(var ? ? ? THING)))))))
+
+forall Releasing (\RELEASE -> forall (both Entity Object) (\THING -> forall (both Agent Animal) (\AGENT -> forall Process (\GRAB ->  impl (and ( agent(var ? ? ? GRAB)(var ? ? ? AGENT))( patient(var ? ? ? GRAB)(var ? ? ? THING)))(and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? RELEASE)))))( grasps(var ? ? ? AGENT)(var ? ? ? THING)))( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? RELEASE)))))( not ( grasps(var ? ? ? AGENT)(var ? ? ? THING)))))))))
+
+forall Impacting (\IMPACT -> forall Entity (\OBJ ->  impl ( patient(var ? ? ? IMPACT)(var ? ? ? OBJ))(exists Impelling (\IMPEL -> and ( patient(var ? ? ? IMPEL)(var ? ? ? OBJ))( earlier( el ? ? ? ( WhenFn(var ? ? ? IMPEL)))( el ? ? ? ( WhenFn(var ? ? ? IMPACT))))))))
+
+forall Translocation (\MOVEMENT -> forall (both Object Entity) (\PLACE1 ->  impl ( origin(var ? ? ? MOVEMENT)(var ? ? ? PLACE1))(exists Region (\PLACE2 -> exists (both Process Physical) (\STAGE -> and ( not ( equal(var ? ? ? PLACE1)(var ? ? ? PLACE2)))(and ( subProcess(var ? ? ? STAGE)(var ? ? ? MOVEMENT))( located(var ? ? ? STAGE)(var ? ? ? PLACE2))))))))
+
+forall Falling (\DROP -> forall (both Entity Object) (\FINISH -> forall Object (\START ->  impl (and ( origin(var ? ? ? DROP)(var ? ? ? START))( destination(var ? ? ? DROP)(var ? ? ? FINISH)))( orientation(var ? ? ? FINISH)(var ? ? ? START)(el ? ? ? Below)))))
+
+forall Transportation (\TRANS -> exists TransportationDevice (\DEVICE ->  instrument(var ? ? ? TRANS)(var ? ? ? DEVICE)))
+
+forall Driving (\DRIVE -> exists Vehicle (\VEHICLE ->  patient(var ? ? ? DRIVE)(var ? ? ? VEHICLE)))
+
+forall EducationalProcess (\EDUCATION -> forall Entity (\PERSON ->  impl ( patient(var ? ? ? EDUCATION)(var ? ? ? PERSON))( hasPurpose(var ? ? ? EDUCATION)(exists Learning (\LEARN ->  patient(var ? ? ? LEARN)(var ? ? ? PERSON))))))
+
+forall ChangeOfPossession (\CHANGE -> forall (both Agent Entity) (\AGENT2 -> forall (both Agent Entity) (\AGENT1 -> forall (both Entity Object) (\OBJ ->  impl (and ( patient(var ? ? ? CHANGE)(var ? ? ? OBJ))(and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? CHANGE)))))( possesses(var ? ? ? AGENT1)(var ? ? ? OBJ)))( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? CHANGE)))))( possesses(var ? ? ? AGENT2)(var ? ? ? OBJ)))))( not ( equal(var ? ? ? AGENT1)(var ? ? ? AGENT2)))))))
+
+forall ChangeOfPossession (\CHANGE -> forall Agent (\AGENT1 -> forall Agent (\AGENT2 -> forall (both Entity Object) (\OBJ ->  impl (and ( origin(var ? ? ? CHANGE)(var ? ? ? AGENT1))(and ( destination(var ? ? ? CHANGE)(var ? ? ? AGENT2))( patient(var ? ? ? CHANGE)(var ? ? ? OBJ))))(and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? CHANGE)))))( possesses(var ? ? ? AGENT1)(var ? ? ? OBJ)))( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? CHANGE)))))( possesses(var ? ? ? AGENT2)(var ? ? ? OBJ))))))))
+
+forall Giving (\GIVE -> forall Agent (\AGENT2 -> forall Entity (\OBJ -> forall (both Agent Object) (\AGENT1 ->  impl (and ( agent(var ? ? ? GIVE)(var ? ? ? AGENT1))(and ( destination(var ? ? ? GIVE)(var ? ? ? AGENT2))( patient(var ? ? ? GIVE)(var ? ? ? OBJ))))(exists Getting (\GET -> and ( agent(var ? ? ? GET)(var ? ? ? AGENT2))(and ( origin(var ? ? ? GET)(var ? ? ? AGENT1))( patient(var ? ? ? GET)(var ? ? ? OBJ)))))))))
+
+forall Giving (\GIVE -> forall (both Agent Object) (\AGENT ->  impl ( agent(var ? ? ? GIVE)(var ? ? ? AGENT))( origin(var ? ? ? GIVE)(var ? ? ? AGENT))))
+
+forall Funding (\FUND -> exists Currency (\MONEY ->  patient(var ? ? ? FUND)(var ? ? ? MONEY)))
+
+forall Entity (\OBJECT -> forall (both Object Agent) (\AGENT2 -> forall (both Agent Entity) (\AGENT1 ->  equiv (exists Borrowing (\BORROW -> and ( agent(var ? ? ? BORROW)(var ? ? ? AGENT1))(and ( origin(var ? ? ? BORROW)(var ? ? ? AGENT2))( patient(var ? ? ? BORROW)(var ? ? ? OBJECT)))))(exists Lending (\LEND -> and ( agent(var ? ? ? LEND)(var ? ? ? AGENT2))(and ( destination(var ? ? ? LEND)(var ? ? ? AGENT1))( patient(var ? ? ? LEND)(var ? ? ? OBJECT))))))))
+
+forall GivingBack (\RETURN -> forall (both Entity Agent) (\DEST -> forall (both Agent Entity) (\AGENT ->  impl (and ( agent(var ? ? ? RETURN)(var ? ? ? AGENT))( destination(var ? ? ? RETURN)(var ? ? ? DEST)))(exists Giving (\GIVE -> and ( agent(var ? ? ? GIVE)(var ? ? ? DEST))(and ( destination(var ? ? ? GIVE)(var ? ? ? AGENT))( earlier( el ? ? ? ( WhenFn(var ? ? ? GIVE)))( el ? ? ? ( WhenFn(var ? ? ? RETURN))))))))))
+
+forall Getting (\GET -> forall (both Agent Entity) (\AGENT ->  impl ( agent(var ? ? ? GET)(var ? ? ? AGENT))( destination(var ? ? ? GET)(var ? ? ? AGENT))))
+
+forall Transaction (\TRANS -> exists Giving (\GIVE1 -> exists Giving (\GIVE2 -> exists Entity (\OBJ2 -> exists Entity (\OBJ1 -> exists (both Agent Entity) (\AGENT2 -> exists (both Agent Entity) (\AGENT1 -> and ( subProcess(var ? ? ? GIVE1)(var ? ? ? TRANS))(and ( subProcess(var ? ? ? GIVE2)(var ? ? ? TRANS))(and ( agent(var ? ? ? GIVE1)(var ? ? ? AGENT1))(and ( agent(var ? ? ? GIVE2)(var ? ? ? AGENT2))(and ( patient(var ? ? ? GIVE1)(var ? ? ? OBJ1))(and ( patient(var ? ? ? GIVE2)(var ? ? ? OBJ2))(and ( destination(var ? ? ? GIVE1)(var ? ? ? AGENT2))(and ( destination(var ? ? ? GIVE2)(var ? ? ? AGENT1))(and ( not ( equal(var ? ? ? AGENT1)(var ? ? ? AGENT2)))( not ( equal(var ? ? ? OBJ1)(var ? ? ? OBJ2))))))))))))))))))
+
+forall FinancialTransaction (\TRANS -> exists Currency (\OBJ ->  patient(var ? ? ? TRANS)(var ? ? ? OBJ)))
+
+forall CurrencyMeasure (\AMOUNT -> forall (both FinancialTransaction Process) (\TRANS ->  impl ( transactionAmount(var ? ? ? TRANS)(var ? ? ? AMOUNT))(exists (both Entity Physical) (\OBJ -> and ( patient(var ? ? ? TRANS)(var ? ? ? OBJ))( monetaryValue(var ? ? ? OBJ)(var ? ? ? AMOUNT))))))
+
+forall CommercialService (\BUSINESS -> exists CommercialAgent (\AGENT ->  agent(var ? ? ? BUSINESS)(var ? ? ? AGENT)))
+
+forall Buying (\BUY -> forall (both Agent Entity) (\AGENT ->  impl ( agent(var ? ? ? BUY)(var ? ? ? AGENT))( destination(var ? ? ? BUY)(var ? ? ? AGENT))))
+
+forall Entity (\OBJECT -> forall (both Object Agent) (\AGENT2 -> forall (both Agent Entity) (\AGENT1 ->  equiv (exists Buying (\BUY -> and ( agent(var ? ? ? BUY)(var ? ? ? AGENT1))(and ( origin(var ? ? ? BUY)(var ? ? ? AGENT2))( patient(var ? ? ? BUY)(var ? ? ? OBJECT)))))(exists Selling (\SELL -> and ( agent(var ? ? ? SELL)(var ? ? ? AGENT2))(and ( destination(var ? ? ? SELL)(var ? ? ? AGENT1))( patient(var ? ? ? SELL)(var ? ? ? OBJECT))))))))
+
+forall Selling (\SELL -> forall (both Agent Object) (\AGENT ->  impl ( agent(var ? ? ? SELL)(var ? ? ? AGENT))( origin(var ? ? ? SELL)(var ? ? ? AGENT))))
+
+forall Discovering (\DISCOVER -> forall Entity (\OBJ ->  impl ( patient(var ? ? ? DISCOVER)(var ? ? ? OBJ))(exists Pursuing (\PURSUE ->  meetsTemporally( el ? ? ? ( WhenFn(var ? ? ? PURSUE)))( el ? ? ? ( WhenFn(var ? ? ? DISCOVER)))))))
+
+forall Voting (\VOTE -> exists Election (\ELECT ->  subProcess(var ? ? ? VOTE)(var ? ? ? ELECT)))
+
+forall Measuring (\MEAS -> forall (both Entity Object) (\OBJ -> forall (both Agent CognitiveAgent) (\AGENT ->  impl (and ( agent(var ? ? ? MEAS)(var ? ? ? AGENT))( patient(var ? ? ? MEAS)(var ? ? ? OBJ)))(exists UnitOfMeasure (\UNIT -> exists RealNumber (\QUANT ->  holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? MEAS)))))( knows(var ? ? ? AGENT)( measure(var ? ? ? OBJ)( el ? ? ? ( MeasureFn(var ? ? ? QUANT)(var ? ? ? UNIT)))))))))))
+
+forall Counting (\COUNT -> forall (both Entity (either SetOrClass Collection)) (\ENTITY -> forall (both Agent CognitiveAgent) (\AGENT ->  impl (and ( agent(var ? ? ? COUNT)(var ? ? ? AGENT))( patient(var ? ? ? COUNT)(var ? ? ? ENTITY)))(exists Entity (\NUMBER ->  knows(var ? ? ? AGENT)( equal( el ? ? ? ( CardinalityFn(var ? ? ? ENTITY)))(var ? ? ? NUMBER)))))))
+
+forall Keeping (\KEEP -> forall Entity (\OBJ -> forall Agent (\AGENT ->  impl (and ( agent(var ? ? ? KEEP)(var ? ? ? AGENT))( patient(var ? ? ? KEEP)(var ? ? ? OBJ)))(exists Putting (\PUT -> and ( agent(var ? ? ? PUT)(var ? ? ? AGENT))(and ( patient(var ? ? ? PUT)(var ? ? ? OBJ))( earlier( el ? ? ? ( WhenFn(var ? ? ? PUT)))( el ? ? ? ( WhenFn(var ? ? ? KEEP))))))))))
+
+forall Keeping (\KEEP -> forall (both Entity Physical) (\OBJ ->  impl ( patient(var ? ? ? KEEP)(var ? ? ? OBJ))(exists Object (\PLACE -> forall TimePosition (\TIME ->  impl ( temporalPart(var ? ? ? TIME)( el ? ? ? ( WhenFn(var ? ? ? KEEP))))( holdsDuring(var ? ? ? TIME)( located(var ? ? ? OBJ)(var ? ? ? PLACE))))))))
+
+forall Confining (\CONFINE -> exists Animal (\AGENT ->  patient(var ? ? ? CONFINE)(var ? ? ? AGENT)))
+
+forall Confining (\CONFINE -> forall Human (\PERSON ->  impl ( patient(var ? ? ? CONFINE)(var ? ? ? PERSON))( not ( desires(var ? ? ? PERSON)( patient(var ? ? ? CONFINE)(var ? ? ? PERSON))))))
+
+forall Repairing (\REPAIR -> forall Entity (\OBJ ->  impl ( patient(var ? ? ? REPAIR)(var ? ? ? OBJ))(exists Damaging (\DAMAGE -> and ( patient(var ? ? ? DAMAGE)(var ? ? ? OBJ))( earlier( el ? ? ? ( WhenFn(var ? ? ? DAMAGE)))( el ? ? ? ( WhenFn(var ? ? ? REPAIR))))))))
+
+forall Destruction (\PROCESS -> exists (both Entity Physical) (\PATIENT -> and ( patient(var ? ? ? PROCESS)(var ? ? ? PATIENT))(and ( time(var ? ? ? PATIENT)( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? PROCESS))))))( not ( time(var ? ? ? PATIENT)( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? PROCESS))))))))))
+
+forall Killing (\KILL -> forall (both Entity Object) (\PATIENT ->  impl ( patient(var ? ? ? KILL)(var ? ? ? PATIENT))(and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? KILL)))))( attribute(var ? ? ? PATIENT)(el ? ? ? Living)))( holdsDuring( el ? ? ? ( FutureFn( el ? ? ? ( WhenFn(var ? ? ? KILL)))))( attribute(var ? ? ? PATIENT)(el ? ? ? Dead))))))
+
+forall Killing (\KILL -> forall Entity (\OBJ ->  impl ( patient(var ? ? ? KILL)(var ? ? ? OBJ))(exists Death (\DEATH -> and ( experiencer(var ? ? ? DEATH)(var ? ? ? OBJ))( causes(var ? ? ? KILL)(var ? ? ? DEATH))))))
+
+forall Poking (\POKE -> forall (both Object SelfConnectedObject) (\INST -> forall (both Entity SelfConnectedObject) (\OBJ -> forall (both Agent SelfConnectedObject) (\AGENT ->  impl (and ( agent(var ? ? ? POKE)(var ? ? ? AGENT))(and ( patient(var ? ? ? POKE)(var ? ? ? OBJ))( instrument(var ? ? ? POKE)(var ? ? ? INST))))( holdsDuring( el ? ? ? ( WhenFn(var ? ? ? POKE)))( connects(var ? ? ? INST)(var ? ? ? AGENT)(var ? ? ? OBJ)))))))
+
+forall Attaching (\ATTACH -> forall (both Entity Object) (\OBJ2 -> forall (both Entity Object) (\OBJ1 ->  impl (and ( patient(var ? ? ? ATTACH)(var ? ? ? OBJ1))( patient(var ? ? ? ATTACH)(var ? ? ? OBJ2)))(and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? ATTACH)))))( not ( connected(var ? ? ? OBJ1)(var ? ? ? OBJ2))))( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? ATTACH)))))( connected(var ? ? ? OBJ1)(var ? ? ? OBJ2)))))))
+
+forall Attaching (\ATTACH -> exists CorpuscularObject (\OBJ ->  patient(var ? ? ? ATTACH)(var ? ? ? OBJ)))
+
+forall Detaching (\DETACH -> forall (both Entity Object) (\OBJ2 -> forall (both Entity Object) (\OBJ1 ->  impl (and ( patient(var ? ? ? DETACH)(var ? ? ? OBJ1))( patient(var ? ? ? DETACH)(var ? ? ? OBJ2)))(and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? DETACH)))))( connected(var ? ? ? OBJ1)(var ? ? ? OBJ2)))( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? DETACH)))))( not ( connected(var ? ? ? OBJ1)(var ? ? ? OBJ2))))))))
+
+forall Detaching (\DETACH -> exists CorpuscularObject (\OBJ ->  patient(var ? ? ? DETACH)(var ? ? ? OBJ)))
+
+forall Ungrasping (\RELEASE -> forall (both Entity Object) (\THING -> forall (both Agent Animal) (\AGENT -> forall Process (\GRAB ->  impl (and ( agent(var ? ? ? GRAB)(var ? ? ? AGENT))( patient(var ? ? ? GRAB)(var ? ? ? THING)))(and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? RELEASE)))))( grasps(var ? ? ? AGENT)(var ? ? ? THING)))( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? RELEASE)))))( not ( grasps(var ? ? ? AGENT)(var ? ? ? THING)))))))))
+
+forall Combining (\COMBINE -> exists SelfConnectedObject (\OBJ ->  patient(var ? ? ? COMBINE)(var ? ? ? OBJ)))
+
+forall Separating (\SEPARATE -> exists SelfConnectedObject (\OBJ ->  patient(var ? ? ? SEPARATE)(var ? ? ? OBJ)))
+
+forall CompoundSubstance (\COMPOUND -> exists ElementalSubstance (\ELEMENT1 -> exists ElementalSubstance (\ELEMENT2 -> exists ChemicalSynthesis (\PROCESS -> and ( not ( equal(var ? ? ? ELEMENT1)(var ? ? ? ELEMENT2)))(and ( resourceS(var ? ? ? PROCESS)(var ? ? ? ELEMENT1))(and ( resourceS(var ? ? ? PROCESS)(var ? ? ? ELEMENT2))( result(var ? ? ? PROCESS)(var ? ? ? COMPOUND))))))))
+
+forall Combustion (\COMBUSTION -> exists Heating (\HEAT -> exists RadiatingLight (\LIGHT -> and ( subProcess(var ? ? ? HEAT)(var ? ? ? COMBUSTION))( subProcess(var ? ? ? LIGHT)(var ? ? ? COMBUSTION)))))
+
+forall InternalChange (\CHANGE -> forall (both Entity Object) (\OBJ ->  impl ( patient(var ? ? ? CHANGE)(var ? ? ? OBJ))(exists Attribute (\PROPERTY -> or (and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? CHANGE)))))( attribute(var ? ? ? OBJ)(var ? ? ? PROPERTY)))( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? CHANGE)))))( not ( attribute(var ? ? ? OBJ)(var ? ? ? PROPERTY)))))(and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? CHANGE)))))( not ( attribute(var ? ? ? OBJ)(var ? ? ? PROPERTY))))( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? CHANGE)))))( attribute(var ? ? ? OBJ)(var ? ? ? PROPERTY))))))))
+
+forall SurfaceChange (\ALT -> forall (both Entity Object) (\OBJ ->  impl ( patient(var ? ? ? ALT)(var ? ? ? OBJ))(exists Attribute (\PROPERTY -> exists Object (\PART -> and ( superficialPart(var ? ? ? PART)(var ? ? ? OBJ))(or (and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? ALT)))))( attribute(var ? ? ? PART)(var ? ? ? PROPERTY)))( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? ALT)))))( not ( attribute(var ? ? ? PART)(var ? ? ? PROPERTY)))))(and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? ALT)))))( not ( attribute(var ? ? ? PART)(var ? ? ? PROPERTY))))( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? ALT)))))( attribute(var ? ? ? PART)(var ? ? ? PROPERTY))))))))))
+
+forall Coloring (\COLORING -> forall (both Entity Object) (\OBJ ->  impl ( patient(var ? ? ? COLORING)(var ? ? ? OBJ))(exists ColorAttribute (\PROPERTY -> exists Object (\PART -> and ( part(var ? ? ? PART)(var ? ? ? OBJ))(or (and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? COLORING)))))( attribute(var ? ? ? PART)(var ? ? ? PROPERTY)))( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? COLORING)))))( not ( attribute(var ? ? ? PART)(var ? ? ? PROPERTY)))))(and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? COLORING)))))( not ( attribute(var ? ? ? PART)(var ? ? ? PROPERTY))))( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? COLORING)))))( attribute(var ? ? ? PART)(var ? ? ? PROPERTY))))))))))
+
+forall ShapeChange (\ALT -> forall (both Entity Object) (\OBJ ->  impl ( patient(var ? ? ? ALT)(var ? ? ? OBJ))(exists ShapeAttribute (\PROPERTY -> or (and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? ALT)))))( attribute(var ? ? ? OBJ)(var ? ? ? PROPERTY)))( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? ALT)))))( not ( attribute(var ? ? ? OBJ)(var ? ? ? PROPERTY)))))(and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? ALT)))))( not ( attribute(var ? ? ? OBJ)(var ? ? ? PROPERTY))))( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? ALT)))))( attribute(var ? ? ? OBJ)(var ? ? ? PROPERTY))))))))
+
+forall ContentDevelopment (\DEVELOP -> exists ContentBearingObject (\OBJ ->  result(var ? ? ? DEVELOP)(var ? ? ? OBJ)))
+
+forall Reading (\READ -> exists Text (\TEXT -> exists Proposition (\PROP -> and ( containsInformation(var ? ? ? TEXT)(var ? ? ? PROP))( realization(var ? ? ? READ)(var ? ? ? PROP)))))
+
+forall Decoding (\DECODE -> forall Proposition (\PROP -> forall (both Entity ContentBearingPhysical) (\DOC1 ->  impl ( patient(var ? ? ? DECODE)(var ? ? ? DOC1))(exists Encoding (\ENCODE -> exists TimePosition (\TIME -> exists (both ContentBearingPhysical Entity) (\DOC2 -> and ( containsInformation(var ? ? ? DOC2)(var ? ? ? PROP))(and ( containsInformation(var ? ? ? DOC1)(var ? ? ? PROP))(and ( temporalPart(var ? ? ? TIME)( el ? ? ? ( PastFn( el ? ? ? ( WhenFn(var ? ? ? DECODE))))))( holdsDuring(var ? ? ? TIME)( patient(var ? ? ? ENCODE)(var ? ? ? DOC2))))))))))))
+
+forall Translating (\TRANSLATE -> forall (both Entity LinguisticExpression) (\EXPRESSION2 -> forall (both Entity LinguisticExpression) (\EXPRESSION1 ->  impl (and ( patient(var ? ? ? TRANSLATE)(var ? ? ? EXPRESSION1))( result(var ? ? ? TRANSLATE)(var ? ? ? EXPRESSION2)))(exists Entity (\ENTITY -> exists (both Language Entity) (\LANGUAGE2 -> exists (both Language Entity) (\LANGUAGE1 -> and ( representsInLanguage(var ? ? ? EXPRESSION1)(var ? ? ? ENTITY)(var ? ? ? LANGUAGE1))(and ( representsInLanguage(var ? ? ? EXPRESSION2)(var ? ? ? ENTITY)(var ? ? ? LANGUAGE2))( not ( equal(var ? ? ? LANGUAGE1)(var ? ? ? LANGUAGE2)))))))))))
+
+forall Wetting (\WET -> exists (both Entity Object) (\OBJ -> and ( patient(var ? ? ? WET)(var ? ? ? OBJ))(and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? WET)))))( not ( attribute(var ? ? ? OBJ)(el ? ? ? Damp))))( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? WET)))))( attribute(var ? ? ? OBJ)(el ? ? ? Damp))))))
+
+forall Wetting (\WET -> exists (both Object Entity) (\OBJ -> and ( attribute(var ? ? ? OBJ)(el ? ? ? Liquid))( patient(var ? ? ? WET)(var ? ? ? OBJ))))
+
+forall Drying (\DRY -> forall (both Entity Object) (\OBJ ->  impl ( patient(var ? ? ? DRY)(var ? ? ? OBJ))( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? DRY)))))( attribute(var ? ? ? OBJ)(el ? ? ? Dry)))))
+
+forall Creation (\ACTION -> exists Entity (\RESULT ->  result(var ? ? ? ACTION)(var ? ? ? RESULT)))
+
+forall Creation (\PROCESS -> exists (both Entity Physical) (\PATIENT -> and ( patient(var ? ? ? PROCESS)(var ? ? ? PATIENT))(and ( time(var ? ? ? PATIENT)( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? PROCESS))))))( not ( time(var ? ? ? PATIENT)( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? PROCESS))))))))))
+
+forall Cooking (\COOK -> exists Food (\FOOD ->  result(var ? ? ? COOK)(var ? ? ? FOOD)))
+
+forall Pursuing (\PURSUE -> exists Object (\OBJ ->  patient(var ? ? ? PURSUE)(var ? ? ? OBJ)))
+
+forall Pursuing (\PURSUE -> forall (both Entity Physical) (\OBJ -> forall (both Agent CognitiveAgent) (\AGENT ->  impl (and ( agent(var ? ? ? PURSUE)(var ? ? ? AGENT))( patient(var ? ? ? PURSUE)(var ? ? ? OBJ)))( holdsDuring(var ? ? ? PURSUE)( wants(var ? ? ? AGENT)(var ? ? ? OBJ))))))
+
+forall Pursuing (\PURSUE -> forall (both Entity Object) (\OBJ -> forall Agent (\AGENT ->  impl (and ( agent(var ? ? ? PURSUE)(var ? ? ? AGENT))( patient(var ? ? ? PURSUE)(var ? ? ? OBJ)))( holdsDuring(var ? ? ? PURSUE)( not ( possesses(var ? ? ? AGENT)(var ? ? ? OBJ)))))))
+
+forall Hunting (\H -> exists Animal (\T ->  patient(var ? ? ? H)(var ? ? ? T)))
+
+forall Hunting (\H -> forall Entity (\P ->  impl ( patient(var ? ? ? H)(var ? ? ? P))( hasPurpose(var ? ? ? H)(exists (either Confining Killing) (\PROC -> patient(var ? ? ? PROC)(var ? ? ? P))))))
+
+forall DiagnosticProcess (\PROC -> forall (both Agent CognitiveAgent) (\AGENT ->  impl ( agent(var ? ? ? PROC)(var ? ? ? AGENT))(exists Process (\CAUSE ->  hasPurposeForAgent(var ? ? ? PROC)( knows(var ? ? ? AGENT)( causes(var ? ? ? CAUSE)(var ? ? ? PROC)))(var ? ? ? AGENT)))))
+
+forall SocialInteraction (\INTERACTION -> exists Agent (\AGENT1 -> exists Agent (\AGENT2 -> and ( involvedInEvent(var ? ? ? INTERACTION)(var ? ? ? AGENT1))(and ( involvedInEvent(var ? ? ? INTERACTION)(var ? ? ? AGENT2))( not ( equal(var ? ? ? AGENT1)(var ? ? ? AGENT2)))))))
+
+forall Communication (\COMMUNICATE -> exists CognitiveAgent (\AGENT1 -> exists CognitiveAgent (\AGENT2 -> exists Entity (\ENTITY -> exists Entity (\PHYS -> and ( refers(var ? ? ? PHYS)(var ? ? ? ENTITY))(and ( patient(var ? ? ? COMMUNICATE)(var ? ? ? PHYS))(and ( agent(var ? ? ? COMMUNICATE)(var ? ? ? AGENT1))( destination(var ? ? ? COMMUNICATE)(var ? ? ? AGENT2)))))))))
+
+forall Disseminating (\DISSEMINATE -> exists CognitiveAgent (\AGENT1 -> exists CognitiveAgent (\AGENT2 -> and ( destination(var ? ? ? DISSEMINATE)(var ? ? ? AGENT1))(and ( destination(var ? ? ? DISSEMINATE)(var ? ? ? AGENT2))( not ( equal(var ? ? ? AGENT1)(var ? ? ? AGENT2)))))))
+
+forall Demonstrating (\DEMO -> exists Human (\PERSON ->  attends(var ? ? ? DEMO)(var ? ? ? PERSON)))
+
+forall Advertising (\ADVERT -> exists Entity (\OBJ -> and ( refers(var ? ? ? ADVERT)(var ? ? ? OBJ))( hasPurpose(var ? ? ? ADVERT)(exists Selling (\SALE ->  patient(var ? ? ? SALE)(var ? ? ? OBJ))))))
+
+forall Expressing (\EXPRESS -> forall (both Agent Object) (\AGENT ->  impl ( agent(var ? ? ? EXPRESS)(var ? ? ? AGENT))(exists StateOfMind (\STATE -> and ( attribute(var ? ? ? AGENT)(var ? ? ? STATE))( represents(var ? ? ? EXPRESS)(var ? ? ? STATE))))))
+
+forall LinguisticCommunication (\COMMUNICATE -> exists LinguisticExpression (\OBJ -> and ( represents(var ? ? ? COMMUNICATE)(var ? ? ? OBJ))( patient(var ? ? ? COMMUNICATE)(var ? ? ? OBJ))))
+
+forall Disagreeing (\DIS -> exists Proposition (\STMT2 -> exists Proposition (\STMT1 -> exists (both Process ContentBearingPhysical) (\STATE2 -> exists (both Process ContentBearingPhysical) (\STATE1 -> exists Agent (\A2 -> exists Agent (\A1 -> and ( subProcess(var ? ? ? STATE1)(var ? ? ? DIS))(and ( subProcess(var ? ? ? STATE2)(var ? ? ? DIS))(and ( agent(var ? ? ? STATE1)(var ? ? ? A1))(and ( agent(var ? ? ? STATE2)(var ? ? ? A2))(and ( containsInformation(var ? ? ? STATE1)(var ? ? ? STMT1))(and ( containsInformation(var ? ? ? STATE2)(var ? ? ? STMT2))( not ( consistent(var ? ? ? STMT1)(var ? ? ? STMT2)))))))))))))))
+
+forall Wedding (\WED -> exists Human (\PERSON2 -> exists Human (\PERSON1 ->  holdsDuring( el ? ? ? ( ImmediateFutureFn( el ? ? ? ( WhenFn(var ? ? ? WED)))))( spouse(var ? ? ? PERSON1)(var ? ? ? PERSON2)))))
+
+forall TimeInterval (\T1 -> forall (both Human Entity) (\P2 -> forall (both Human Entity) (\P1 ->  impl ( holdsDuring(var ? ? ? T1)( spouse(var ? ? ? P1)(var ? ? ? P2)))(exists Wedding (\WED -> and ( patient(var ? ? ? WED)(var ? ? ? P1))(and ( patient(var ? ? ? WED)(var ? ? ? P2))( earlier( el ? ? ? ( WhenFn(var ? ? ? WED)))(var ? ? ? T1))))))))
+
+forall Naming (\PROCESS -> forall (both Entity SymbolicString) (\NAME -> forall Entity (\THING ->  impl (and ( patient(var ? ? ? PROCESS)(var ? ? ? THING))( destination(var ? ? ? PROCESS)(var ? ? ? NAME)))( holdsDuring( el ? ? ? ( FutureFn( el ? ? ? ( WhenFn(var ? ? ? PROCESS)))))( names(var ? ? ? NAME)(var ? ? ? THING))))))
+
+forall Meeting (\MEET -> forall (both Agent Object) (\AGENT2 -> forall (both Agent Object) (\AGENT1 ->  impl (and ( agent(var ? ? ? MEET)(var ? ? ? AGENT1))( agent(var ? ? ? MEET)(var ? ? ? AGENT2)))( holdsDuring( el ? ? ? ( WhenFn(var ? ? ? MEET)))( orientation(var ? ? ? AGENT1)(var ? ? ? AGENT2)(el ? ? ? Near))))))
+
+forall Meeting (\MEET -> exists Agent (\AGENT2 -> exists Agent (\AGENT1 -> and ( agent(var ? ? ? MEET)(var ? ? ? AGENT1))(and ( agent(var ? ? ? MEET)(var ? ? ? AGENT2))( hasPurpose(var ? ? ? MEET)(exists Communication (\COMM -> and ( agent(var ? ? ? COMM)(var ? ? ? AGENT1))( agent(var ? ? ? COMM)(var ? ? ? AGENT2)))))))))
+
+forall War (\WAR -> exists Battle (\BATTLE ->  subProcess(var ? ? ? BATTLE)(var ? ? ? WAR)))
+
+forall Battle (\BATTLE -> exists War (\WAR ->  subProcess(var ? ? ? BATTLE)(var ? ? ? WAR)))
+
+forall Battle (\BATTLE -> exists ViolentContest (\ATTACK ->  subProcess(var ? ? ? ATTACK)(var ? ? ? BATTLE)))
+
+forall Maneuver (\MOVE -> exists Contest (\CONTEST ->  subProcess(var ? ? ? MOVE)(var ? ? ? CONTEST)))
+
+forall Attack (\ATTACK -> exists ViolentContest (\CONTEST ->  subProcess(var ? ? ? ATTACK)(var ? ? ? CONTEST)))
+
+forall Attack (\ATTACK -> forall Entity (\OBJ -> forall (both Agent CognitiveAgent) (\AGENT ->  impl (and ( agent(var ? ? ? ATTACK)(var ? ? ? AGENT))( patient(var ? ? ? ATTACK)(var ? ? ? OBJ)))( hasPurposeForAgent(var ? ? ? ATTACK)(exists Damaging (\DAMAGE ->  patient(var ? ? ? DAMAGE)(var ? ? ? OBJ)))(var ? ? ? AGENT)))))
+
+forall DefensiveManeuver (\DEFENSE -> exists ViolentContest (\CONTEST ->  subProcess(var ? ? ? DEFENSE)(var ? ? ? CONTEST)))
+
+forall Seeing (\SEE -> forall (both Entity Object) (\OBJ -> forall (both Agent CognitiveAgent) (\AGENT ->  impl (and ( agent(var ? ? ? SEE)(var ? ? ? AGENT))( patient(var ? ? ? SEE)(var ? ? ? OBJ)))(and ( attribute(var ? ? ? OBJ)(el ? ? ? Illuminated))(exists ColorAttribute (\PROP ->  knows(var ? ? ? AGENT)( attribute(var ? ? ? OBJ)(var ? ? ? PROP))))))))
+
+forall Smelling (\SMELL -> forall (both Entity Object) (\OBJ ->  impl ( patient(var ? ? ? SMELL)(var ? ? ? OBJ))(exists OlfactoryAttribute (\ATTR ->  attribute(var ? ? ? OBJ)(var ? ? ? ATTR)))))
+
+forall Tasting (\TASTE -> forall (both Entity Object) (\OBJ ->  impl ( patient(var ? ? ? TASTE)(var ? ? ? OBJ))(exists TasteAttribute (\ATTR ->  attribute(var ? ? ? OBJ)(var ? ? ? ATTR)))))
+
+forall Hearing (\HEAR -> forall (both Entity Object) (\OBJ ->  impl ( patient(var ? ? ? HEAR)(var ? ? ? OBJ))(exists SoundAttribute (\ATTR ->  attribute(var ? ? ? OBJ)(var ? ? ? ATTR)))))
+
+forall TactilePerception (\TACTILE -> exists Touching (\TOUCH ->  subProcess(var ? ? ? TOUCH)(var ? ? ? TACTILE)))
+
+forall Region (\REGION ->  equiv (exists RadiatingLight (\EMIT ->  patient(var ? ? ? EMIT)(var ? ? ? REGION)))( attribute(var ? ? ? REGION)(el ? ? ? Illuminated)))
+
+forall RadiatingSound (\EMIT -> forall (both Agent Object) (\SOUND ->  impl ( agent(var ? ? ? EMIT)(var ? ? ? SOUND))(exists SoundAttribute (\ATTR ->  attribute(var ? ? ? SOUND)(var ? ? ? ATTR)))))
+
+forall StateChange (\PROCESS -> forall (both Entity Object) (\OBJ ->  impl ( patient(var ? ? ? PROCESS)(var ? ? ? OBJ))(exists PhysicalState (\STATE1 -> exists PhysicalState (\STATE2 -> exists Object (\PART -> and ( part(var ? ? ? PART)(var ? ? ? OBJ))(and ( not ( equal(var ? ? ? STATE1)(var ? ? ? STATE2)))(and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? PROCESS)))))( attribute(var ? ? ? PART)(var ? ? ? STATE1)))( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? PROCESS)))))( attribute(var ? ? ? PART)(var ? ? ? STATE2)))))))))))
+
+forall Melting (\MELT -> exists Heating (\HEAT ->  subProcess(var ? ? ? HEAT)(var ? ? ? MELT)))
+
+forall Melting (\MELT -> forall (both Entity Object) (\OBJ ->  impl ( patient(var ? ? ? MELT)(var ? ? ? OBJ))(exists Object (\PART -> and ( part(var ? ? ? PART)(var ? ? ? OBJ))(and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? MELT)))))( attribute(var ? ? ? PART)(el ? ? ? Solid)))( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? MELT)))))( attribute(var ? ? ? PART)(el ? ? ? Liquid))))))))
+
+forall Boiling (\BOIL -> exists Heating (\HEAT ->  subProcess(var ? ? ? HEAT)(var ? ? ? BOIL)))
+
+forall Boiling (\BOIL -> forall (both Entity Object) (\OBJ ->  impl ( patient(var ? ? ? BOIL)(var ? ? ? OBJ))(exists Object (\PART -> and ( part(var ? ? ? PART)(var ? ? ? OBJ))(and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? BOIL)))))( attribute(var ? ? ? PART)(el ? ? ? Liquid)))( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? BOIL)))))( attribute(var ? ? ? PART)(el ? ? ? Gas))))))))
+
+forall Condensing (\COND -> exists Cooling (\COOL ->  subProcess(var ? ? ? COOL)(var ? ? ? COND)))
+
+forall Condensing (\COND -> forall (both Entity Object) (\OBJ ->  impl ( patient(var ? ? ? COND)(var ? ? ? OBJ))(exists Object (\PART -> and ( part(var ? ? ? PART)(var ? ? ? OBJ))(and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? COND)))))( attribute(var ? ? ? PART)(el ? ? ? Gas)))( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? COND)))))( attribute(var ? ? ? PART)(el ? ? ? Liquid))))))))
+
+forall Freezing (\FREEZE -> exists Cooling (\COOL ->  subProcess(var ? ? ? COOL)(var ? ? ? FREEZE)))
+
+forall Freezing (\FREEZE -> forall (both Entity Object) (\OBJ ->  impl ( patient(var ? ? ? FREEZE)(var ? ? ? OBJ))(exists Object (\PART -> and ( part(var ? ? ? PART)(var ? ? ? OBJ))(and ( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? FREEZE)))))( attribute(var ? ? ? PART)(el ? ? ? Liquid)))( holdsDuring( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? FREEZE)))))( attribute(var ? ? ? PART)(el ? ? ? Solid))))))))
+
+forall GeopoliticalArea (\AREA -> forall Human (\PERSON ->  impl ( leader( el ? ? ? ( GovernmentFn(var ? ? ? AREA)))(var ? ? ? PERSON))( leader(var ? ? ? AREA)(var ? ? ? PERSON))))
+
+forall GeopoliticalArea (\AREA -> forall Human (\PERSON ->  impl ( leader(var ? ? ? AREA)(var ? ? ? PERSON))( leader( el ? ? ? ( GovernmentFn(var ? ? ? AREA)))(var ? ? ? PERSON))))
+
+forall WaterArea (\AREA -> exists Water (\WATER -> exists Hole (\HOLE -> exists (both Entity Object) (\BED -> and ( equal( el ? ? ? ( HoleHostFn(var ? ? ? HOLE)))(var ? ? ? BED))(and ( properlyFills(var ? ? ? WATER)(var ? ? ? HOLE))( equal( el ? ? ? ( MereologicalSumFn(var ? ? ? BED)(var ? ? ? WATER)))(var ? ? ? AREA)))))))
+
+forall LandArea (\LAND1 -> exists (either Continent Island) (\LAND2 ->  part(var ? ? ? LAND1)(var ? ? ? LAND2)))
+
+forall ShoreArea (\BANK -> exists WaterArea (\WATER ->  meetsSpatially(var ? ? ? BANK)(var ? ? ? WATER)))
+
+forall Island (\ISLE -> exists WaterArea (\WATER ->  meetsSpatially(var ? ? ? ISLE)(var ? ? ? WATER)))
+
+forall StateOrProvince (\STATE -> exists Nation (\LAND ->  properPart(var ? ? ? STATE)(var ? ? ? LAND)))
+
+forall County (\STATE -> exists StateOrProvince (\LAND ->  properPart(var ? ? ? STATE)(var ? ? ? LAND)))
+
+forall (both Attribute DevelopmentalAttribute) (\ATTR2 -> forall (both DevelopmentalAttribute Attribute) (\ATTR1 -> forall OrganicObject (\OBJ -> forall (both TimePosition TimeInterval) (\TIME1 ->  impl (and ( holdsDuring(var ? ? ? TIME1)( developmentalForm(var ? ? ? OBJ)(var ? ? ? ATTR1)))( successorAttributeClosure(var ? ? ? ATTR2)(var ? ? ? ATTR1)))(exists (both TimeInterval TimePosition) (\TIME2 -> and ( earlier(var ? ? ? TIME2)(var ? ? ? TIME1))( holdsDuring(var ? ? ? TIME2)( developmentalForm(var ? ? ? OBJ)(var ? ? ? ATTR2)))))))))
+
+forall Organism (\ORGANISM -> exists Birth (\BIRTH ->  experiencer(var ? ? ? BIRTH)(var ? ? ? ORGANISM)))
+
+forall Object (\OBJ -> forall (both Organism Physical) (\ORGANISM -> forall TimePosition (\T1 ->  impl ( holdsDuring(var ? ? ? T1)( inhabits(var ? ? ? ORGANISM)(var ? ? ? OBJ)))(exists TimeInterval (\TIME -> and ( temporalPart(var ? ? ? TIME)(var ? ? ? T1))( holdsDuring(var ? ? ? TIME)( located(var ? ? ? ORGANISM)(var ? ? ? OBJ))))))))
+
+forall Alga (\ALGA -> exists Water (\WATER ->  inhabits(var ? ? ? ALGA)(var ? ? ? WATER)))
+
+forall Bacterium (\BACTERIUM -> exists Cell (\CELL1 -> and ( component(var ? ? ? CELL1)(var ? ? ? BACTERIUM))(forall Cell (\CELL2 ->  impl ( component(var ? ? ? CELL2)(var ? ? ? BACTERIUM))( equal(var ? ? ? CELL1)(var ? ? ? CELL2))))))
+
+forall Virus (\VIRUS -> forall Replication (\PROC ->  impl ( agent(var ? ? ? PROC)(var ? ? ? VIRUS))(exists Cell (\CELL ->  located(var ? ? ? PROC)(var ? ? ? CELL)))))
+
+forall Fish (\FISH -> exists Water (\WATER ->  inhabits(var ? ? ? FISH)(var ? ? ? WATER)))
+
+forall Man (\MAN ->  attribute(var ? ? ? MAN)(el ? ? ? Male))
+
+forall Woman (\WOMAN ->  attribute(var ? ? ? WOMAN)(el ? ? ? Female))
+
+forall LiquidMixture (\MIX -> exists Object (\PART -> and ( part(var ? ? ? PART)(var ? ? ? MIX))( attribute(var ? ? ? PART)(el ? ? ? Liquid))))
+
+forall GasMixture (\MIX -> exists Object (\PART -> and ( part(var ? ? ? PART)(var ? ? ? MIX))( attribute(var ? ? ? PART)(el ? ? ? Gas))))
+
+forall Smoke (\SMOKE -> exists Combustion (\BURNING ->  result(var ? ? ? BURNING)(var ? ? ? SMOKE)))
+
+forall WaterCloud (\CLOUD -> exists Water (\WATER ->  part(var ? ? ? WATER)(var ? ? ? CLOUD)))
+
+forall Wind (\WIND -> exists Air (\AIR ->  patient(var ? ? ? WIND)(var ? ? ? AIR)))
+
+forall Hormone (\HORMONE -> exists Gland (\GLAND -> exists Process (\PROCESS -> and ( instrument(var ? ? ? PROCESS)(var ? ? ? GLAND))( result(var ? ? ? PROCESS)(var ? ? ? HORMONE)))))
+
+forall Food (\FOOD -> exists Nutrient (\NUTRIENT ->  part(var ? ? ? NUTRIENT)(var ? ? ? FOOD)))
+
+forall Meat (\MEAT -> forall Object (\PART ->  impl ( part(var ? ? ? PART)(var ? ? ? MEAT))(exists Animal (\ANIMAL -> exists TimePosition (\TIME -> exists Object (\SUBPART -> and ( part(var ? ? ? SUBPART)(var ? ? ? PART))( holdsDuring(var ? ? ? TIME)( part(var ? ? ? SUBPART)(var ? ? ? ANIMAL)))))))))
+
+forall Beverage (\BEV ->  attribute(var ? ? ? BEV)(el ? ? ? Liquid))
+
+forall AnatomicalStructure (\ANAT -> exists Organism (\ORGANISM -> exists TimePosition (\TIME -> and ( temporalPart(var ? ? ? TIME)( el ? ? ? ( WhenFn(var ? ? ? ORGANISM))))( holdsDuring(var ? ? ? TIME)( part(var ? ? ? ANAT)(var ? ? ? ORGANISM))))))
+
+forall AnatomicalStructure (\PART -> exists Cell (\CELL ->  part(var ? ? ? CELL)(var ? ? ? PART)))
+
+forall AbnormalAnatomicalStructure (\STRUCTURE -> exists PathologicProcess (\PROC ->  result(var ? ? ? PROC)(var ? ? ? STRUCTURE)))
+
+forall BodyPart (\PART -> exists Organism (\ORGANISM -> exists TimePosition (\TIME -> and ( temporalPart(var ? ? ? TIME)( el ? ? ? ( WhenFn(var ? ? ? ORGANISM))))( holdsDuring(var ? ? ? TIME)( component(var ? ? ? PART)(var ? ? ? ORGANISM))))))
+
+forall BodyPart (\PART -> exists PhysiologicProcess (\PROC ->  result(var ? ? ? PROC)(var ? ? ? PART)))
+
+forall Seed (\SEED -> exists FloweringPlant (\PLANT -> exists TimePosition (\TIME ->  holdsDuring(var ? ? ? TIME)( part(var ? ? ? SEED)(var ? ? ? PLANT)))))
+
+forall Spore (\SPORE -> exists NonFloweringPlant (\PLANT -> exists TimePosition (\TIME ->  holdsDuring(var ? ? ? TIME)( part(var ? ? ? SPORE)(var ? ? ? PLANT)))))
+
+forall BodyCovering (\COVER -> exists (either Organism BodyPart) (\BODY -> superficialPart(var ? ? ? COVER)(var ? ? ? BODY)))
+
+forall BodyJunction (\JUNCT -> exists BodyPart (\OBJ1 -> exists BodyPart (\OBJ2 ->  connects(var ? ? ? JUNCT)(var ? ? ? OBJ1)(var ? ? ? OBJ2))))
+
+forall Tissue (\STUFF -> exists Cell (\PART ->  part(var ? ? ? PART)(var ? ? ? STUFF)))
+
+forall Tissue (\STUFF -> exists Organism (\ORGANISM ->  part(var ? ? ? STUFF)(var ? ? ? ORGANISM)))
+
+forall Bone (\BONE -> exists Vertebrate (\VERT ->  part(var ? ? ? BONE)(var ? ? ? VERT)))
+
+forall Morpheme (\MORPH -> exists Word (\WORD ->  part(var ? ? ? MORPH)(var ? ? ? WORD)))
+
+forall Word (\WORD -> exists Morpheme (\PART ->  part(var ? ? ? PART)(var ? ? ? WORD)))
+
+forall Phrase (\PHRASE -> exists Word (\PART1 -> exists Word (\PART2 -> and ( part(var ? ? ? PART1)(var ? ? ? PHRASE))(and ( part(var ? ? ? PART2)(var ? ? ? PHRASE))( not ( equal(var ? ? ? PART1)(var ? ? ? PART2)))))))
+
+forall VerbPhrase (\PHRASE -> exists Verb (\VERB ->  part(var ? ? ? VERB)(var ? ? ? PHRASE)))
+
+forall Sentence (\SENTENCE -> exists NounPhrase (\PHRASE1 -> exists VerbPhrase (\PHRASE2 -> and ( part(var ? ? ? PHRASE1)(var ? ? ? SENTENCE))( part(var ? ? ? PHRASE2)(var ? ? ? SENTENCE)))))
+
+forall NounPhrase (\PHRASE -> exists Noun (\NOUN ->  part(var ? ? ? NOUN)(var ? ? ? PHRASE)))
+
+forall PrepositionalPhrase (\PHRASE -> exists ParticleWord (\PREP ->  part(var ? ? ? PREP)(var ? ? ? PHRASE)))
+
+forall Text (\TEXT -> exists LinguisticExpression (\PART ->  part(var ? ? ? PART)(var ? ? ? TEXT)))
+
+forall Text (\TEXT -> exists Writing (\WRITE ->  result(var ? ? ? WRITE)(var ? ? ? TEXT)))
+
+forall Sentence (\SENT -> exists Proposition (\PROP ->  containsInformation(var ? ? ? SENT)(var ? ? ? PROP)))
+
+forall Summary (\TEXT -> exists Text (\TEXT2 ->  subsumesContentInstance(var ? ? ? TEXT2)(var ? ? ? TEXT)))
+
+forall Series (\SERIES -> exists Book (\BOOK1 -> exists Book (\BOOK2 -> and ( subsumesContentInstance(var ? ? ? SERIES)(var ? ? ? BOOK1))(and ( subsumesContentInstance(var ? ? ? SERIES)(var ? ? ? BOOK2))( not ( equal(var ? ? ? BOOK1)(var ? ? ? BOOK2)))))))
+
+forall Article (\ARTICLE1 -> forall Book (\BOOK ->  impl ( subsumesContentInstance(var ? ? ? BOOK)(var ? ? ? ARTICLE1))(exists Article (\ARTICLE2 -> and ( not ( equal(var ? ? ? ARTICLE2)(var ? ? ? ARTICLE1)))( subsumesContentInstance(var ? ? ? BOOK)(var ? ? ? ARTICLE2))))))
+
+forall Currency (\CURRENCY -> exists CurrencyMeasure (\MEASURE ->  monetaryValue(var ? ? ? CURRENCY)(var ? ? ? MEASURE)))
+
+forall Molecule (\MOLE -> exists Atom (\ATOM1 -> exists Atom (\ATOM2 -> and ( part(var ? ? ? ATOM1)(var ? ? ? MOLE))(and ( part(var ? ? ? ATOM2)(var ? ? ? MOLE))( not ( equal(var ? ? ? ATOM1)(var ? ? ? ATOM2)))))))
+
+forall Artifact (\ARTIFACT -> exists Making (\MAKING ->  result(var ? ? ? MAKING)(var ? ? ? ARTIFACT)))
+
+forall Product (\PRODUCT -> exists Manufacture (\MANUFACTURE ->  result(var ? ? ? MANUFACTURE)(var ? ? ? PRODUCT)))
+
+forall StationaryArtifact (\ARTIFACT -> exists (both Object Entity) (\PLACE -> and ( holdsDuring( el ? ? ? ( WhenFn(var ? ? ? ARTIFACT)))( located(var ? ? ? ARTIFACT)(var ? ? ? PLACE)))( not (exists (both Object Entity) (\P2 -> and ( holdsDuring( el ? ? ? ( WhenFn(var ? ? ? ARTIFACT)))( located(var ? ? ? ARTIFACT)(var ? ? ? P2)))( not ( equal(var ? ? ? PLACE)(var ? ? ? P2))))))))
+
+forall Building (\BUILDING -> exists Human (\HUMAN -> or ( inhabits(var ? ? ? HUMAN)(var ? ? ? BUILDING))(exists (both Process Physical) (\ACT -> and ( agent(var ? ? ? ACT)(var ? ? ? HUMAN))( located(var ? ? ? ACT)(var ? ? ? BUILDING))))))
+
+forall Room (\ROOM -> exists Building (\BUILD ->  properPart(var ? ? ? ROOM)(var ? ? ? BUILD)))
+
+forall PermanentResidence (\RESIDENCE -> exists Human (\PERSON ->  home(var ? ? ? PERSON)(var ? ? ? RESIDENCE)))
+
+forall TemporaryResidence (\RESIDENCE ->  not (exists Human (\PERSON ->  home(var ? ? ? PERSON)(var ? ? ? RESIDENCE))))
+
+forall SingleFamilyResidence (\RESIDENCE ->  hasPurpose(var ? ? ? RESIDENCE)(forall (both Human SelfConnectedObject) (\AGENT2 -> forall (both Human SelfConnectedObject) (\AGENT1 ->  impl (and ( home(var ? ? ? AGENT1)(var ? ? ? RESIDENCE))( home(var ? ? ? AGENT2)(var ? ? ? RESIDENCE)))(exists SocialUnit (\UNIT -> and ( member(var ? ? ? AGENT1)(var ? ? ? UNIT))( member(var ? ? ? AGENT2)(var ? ? ? UNIT))))))))
+
+forall Clothing (\CLOTHING -> exists Fabric (\FABRIC ->  part(var ? ? ? FABRIC)(var ? ? ? CLOTHING)))
+
+forall (both Clothing Physical) (\CLOTHING -> forall (both Animal Object) (\AGENT ->  impl ( wears(var ? ? ? AGENT)(var ? ? ? CLOTHING))( located(var ? ? ? CLOTHING)(var ? ? ? AGENT))))
+
+forall (both Object Clothing) (\P -> forall (both Clothing Object) (\C -> forall Animal (\A ->  impl (and ( wears(var ? ? ? A)(var ? ? ? C))( part(var ? ? ? P)(var ? ? ? C)))( wears(var ? ? ? A)(var ? ? ? P)))))
+
+forall Vehicle (\TRANSPORT -> forall Translocation (\MOVE -> forall Object (\FROM ->  impl (and ( instrument(var ? ? ? MOVE)(var ? ? ? TRANSPORT))( origin(var ? ? ? MOVE)(var ? ? ? FROM)))( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? MOVE)))))( located(var ? ? ? TRANSPORT)(var ? ? ? FROM))))))
+
+forall Vehicle (\TRANSPORT -> forall Translocation (\MOVE -> forall (both Entity Object) (\TO ->  impl (and ( instrument(var ? ? ? MOVE)(var ? ? ? TRANSPORT))( destination(var ? ? ? MOVE)(var ? ? ? TO)))( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? MOVE)))))( located(var ? ? ? TRANSPORT)(var ? ? ? TO))))))
+
+forall MeasuringDevice (\DEVICE ->  hasPurpose(var ? ? ? DEVICE)(exists Measuring (\MEASURE ->  instrument(var ? ? ? MEASURE)(var ? ? ? DEVICE))))
+
+forall AttachingDevice (\DEVICE -> exists Attaching (\ATTACH ->  instrument(var ? ? ? ATTACH)(var ? ? ? DEVICE)))
+
+forall Weapon (\WEAPON ->  hasPurpose(var ? ? ? WEAPON)(exists Damaging (\D -> exists Entity (\PATIENT -> and ( instrument(var ? ? ? D)(var ? ? ? WEAPON))( patient(var ? ? ? D)(var ? ? ? PATIENT))))))
+
+forall EngineeringComponent (\COMP -> exists Device (\DEVICE ->  component(var ? ? ? COMP)(var ? ? ? DEVICE)))
+
+forall Machine (\MACHINE -> exists EngineeringComponent (\COMP1 -> exists EngineeringComponent (\COMP2 -> and ( not ( equal(var ? ? ? COMP1)(var ? ? ? COMP2)))(and ( part(var ? ? ? COMP1)(var ? ? ? MACHINE))( part(var ? ? ? COMP2)(var ? ? ? MACHINE))))))
+
+forall EngineeringComponent (\COMP2 -> forall EngineeringComponent (\COMP1 ->  impl ( connectedEngineeringComponents(var ? ? ? COMP1)(var ? ? ? COMP2))(and ( not ( engineeringSubcomponent(var ? ? ? COMP1)(var ? ? ? COMP2)))( not ( engineeringSubcomponent(var ? ? ? COMP2)(var ? ? ? COMP1))))))
+
+forall EngineeringConnection (\CONNECTION -> exists SelfConnectedObject (\COMP2 -> exists EngineeringComponent (\COMP1 ->  connectsEngineeringComponents(var ? ? ? CONNECTION)(var ? ? ? COMP1)(var ? ? ? COMP2))))
+
+forall (both EngineeringComponent SelfConnectedObject) (\COMP2 -> forall EngineeringComponent (\COMP1 ->  equiv ( connectedEngineeringComponents(var ? ? ? COMP1)(var ? ? ? COMP2))(exists EngineeringComponent (\CONNECTION ->  connectsEngineeringComponents(var ? ? ? CONNECTION)(var ? ? ? COMP1)(var ? ? ? COMP2)))))
+
+forall AgeGroup (\GROUP -> forall (both TimeDuration Entity) (\AGE2 -> forall (both TimeDuration Entity) (\AGE1 -> forall (both SelfConnectedObject Object) (\MEMB2 -> forall (both SelfConnectedObject Object) (\MEMB1 ->  impl (and ( member(var ? ? ? MEMB1)(var ? ? ? GROUP))(and ( member(var ? ? ? MEMB2)(var ? ? ? GROUP))(and ( age(var ? ? ? MEMB1)(var ? ? ? AGE1))( age(var ? ? ? MEMB2)(var ? ? ? AGE2)))))( equal(var ? ? ? AGE1)(var ? ? ? AGE2)))))))
+
+forall FamilyGroup (\GROUP -> forall (both SelfConnectedObject Organism) (\MEMB2 -> forall (both SelfConnectedObject Organism) (\MEMB1 ->  impl (and ( member(var ? ? ? MEMB1)(var ? ? ? GROUP))( member(var ? ? ? MEMB2)(var ? ? ? GROUP)))( familyRelation(var ? ? ? MEMB1)(var ? ? ? MEMB2)))))
+
+forall SocialUnit (\UNIT -> forall (both SelfConnectedObject Human) (\MEMBER -> exists PermanentResidence (\HOME ->  impl ( member(var ? ? ? MEMBER)(var ? ? ? UNIT))( home(var ? ? ? MEMBER)(var ? ? ? HOME)))))
+
+forall (both Entity Collection) (\FAMILY -> forall Human (\P ->  impl ( equal( el ? ? ? ( ImmediateFamilyFn(var ? ? ? P)))(var ? ? ? FAMILY))(forall (both SelfConnectedObject Organism) (\MEMBER ->  impl ( member(var ? ? ? MEMBER)(var ? ? ? FAMILY))(exists Organism (\OTHER -> or ( parent(var ? ? ? MEMBER)(var ? ? ? OTHER))( parent(var ? ? ? OTHER)(var ? ? ? MEMBER))))))))
+
+forall (both Entity Collection) (\FAMILY -> forall (both Human Organism) (\PERSON ->  impl ( equal( el ? ? ? ( ImmediateFamilyFn(var ? ? ? PERSON)))(var ? ? ? FAMILY))(exists (both SelfConnectedObject Organism) (\MEMBER -> and ( member(var ? ? ? MEMBER)(var ? ? ? FAMILY))(or ( parent(var ? ? ? MEMBER)(var ? ? ? PERSON))( parent(var ? ? ? PERSON)(var ? ? ? MEMBER)))))))
+
+forall Organism (\A1 -> forall Organism (\A2 -> forall TimePosition (\T1 ->  impl ( holdsDuring(var ? ? ? T1)( legalRelation(var ? ? ? A1)(var ? ? ? A2)))( holdsDuring(var ? ? ? T1)( relative(var ? ? ? A1)(var ? ? ? A2))))))
+
+forall Organism (\ORGANISM2 -> forall Organism (\ORGANISM1 ->  impl ( familyRelation(var ? ? ? ORGANISM1)(var ? ? ? ORGANISM2))(exists Organism (\ORGANISM3 -> and ( ancestor(var ? ? ? ORGANISM3)(var ? ? ? ORGANISM1))( ancestor(var ? ? ? ORGANISM3)(var ? ? ? ORGANISM2))))))
+
+forall (both Organism Physical) (\PARENT -> forall (both Organism Physical) (\CHILD ->  impl ( parent(var ? ? ? CHILD)(var ? ? ? PARENT))( before( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? PARENT)))))( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? CHILD))))))))
+
+forall SexualReproduction (\REP -> forall (both Organism Agent) (\PARENT -> forall (both Organism Entity) (\CHILD ->  impl (and ( parent(var ? ? ? CHILD)(var ? ? ? PARENT))(and ( agent(var ? ? ? REP)(var ? ? ? PARENT))( result(var ? ? ? REP)(var ? ? ? CHILD))))(or ( mother(var ? ? ? CHILD)(var ? ? ? PARENT))( father(var ? ? ? CHILD)(var ? ? ? PARENT))))))
+
+forall Organism (\ORGANISM -> exists Organism (\PARENT ->  parent(var ? ? ? ORGANISM)(var ? ? ? PARENT)))
+
+forall (both Organism Object) (\MOTHER -> forall Organism (\CHILD ->  impl ( mother(var ? ? ? CHILD)(var ? ? ? MOTHER))( attribute(var ? ? ? MOTHER)(el ? ? ? Female))))
+
+forall (both Organism Object) (\FATHER -> forall Organism (\CHILD ->  impl ( father(var ? ? ? CHILD)(var ? ? ? FATHER))( attribute(var ? ? ? FATHER)(el ? ? ? Male))))
+
+forall Organism (\PARENT -> forall (both Organism Object) (\CHILD ->  impl ( daughter(var ? ? ? CHILD)(var ? ? ? PARENT))( attribute(var ? ? ? CHILD)(el ? ? ? Female))))
+
+forall Organism (\PARENT -> forall (both Organism Object) (\CHILD ->  impl ( son(var ? ? ? CHILD)(var ? ? ? PARENT))( attribute(var ? ? ? CHILD)(el ? ? ? Male))))
+
+forall (both Organism Entity) (\PARENT2 -> forall (both Organism Entity) (\ORGANISM2 -> forall (both Organism Entity) (\PARENT1 -> forall (both Organism Entity) (\ORGANISM1 ->  impl (and ( parent(var ? ? ? ORGANISM1)(var ? ? ? PARENT1))(and ( parent(var ? ? ? ORGANISM2)(var ? ? ? PARENT1))(and ( parent(var ? ? ? ORGANISM1)(var ? ? ? PARENT2))(and ( parent(var ? ? ? ORGANISM2)(var ? ? ? PARENT2))(and ( not ( equal(var ? ? ? ORGANISM1)(var ? ? ? ORGANISM2)))( not ( equal(var ? ? ? PARENT1)(var ? ? ? PARENT2))))))))( sibling(var ? ? ? ORGANISM1)(var ? ? ? ORGANISM2))))))
+
+forall Organism (\PARENT -> forall Organism (\ORG2 -> forall Organism (\ORG1 ->  impl (and ( sibling(var ? ? ? ORG1)(var ? ? ? ORG2))( parent(var ? ? ? ORG1)(var ? ? ? PARENT)))( parent(var ? ? ? ORG2)(var ? ? ? PARENT)))))
+
+forall (both Organism Object) (\PARENT -> forall Organism (\CHILD ->  impl (and ( parent(var ? ? ? CHILD)(var ? ? ? PARENT))( attribute(var ? ? ? PARENT)(el ? ? ? Male)))( father(var ? ? ? CHILD)(var ? ? ? PARENT))))
+
+forall (both Organism Object) (\PARENT -> forall Organism (\CHILD ->  impl (and ( parent(var ? ? ? CHILD)(var ? ? ? PARENT))( attribute(var ? ? ? PARENT)(el ? ? ? Female)))( mother(var ? ? ? CHILD)(var ? ? ? PARENT))))
+
+forall PoliticalOrganization (\POL -> exists PoliticalProcess (\PROC ->  agent(var ? ? ? PROC)(var ? ? ? POL)))
+
+forall GovernmentOrganization (\ORG -> exists Government (\GOV ->  subOrganization(var ? ? ? ORG)(var ? ? ? GOV)))
+
+forall ComputerProgramming (\CP -> exists ComputerProgram (\C ->  result(var ? ? ? CP)(var ? ? ? C)))
+
+forall Plan (\PLAN -> forall ContentBearingObject (\OBJ ->  impl ( containsInformation(var ? ? ? OBJ)(var ? ? ? PLAN))(exists Planning (\PLANNING ->  result(var ? ? ? PLANNING)(var ? ? ? OBJ)))))
+
+forall Reasoning (\REASON -> exists Argument (\ARGUMENT ->  realization(var ? ? ? REASON)(var ? ? ? ARGUMENT)))
+
+forall Argument (\ARGUMENT -> exists Argument (\CONCLUSION -> exists Entity (\PREMISES -> and ( equal( el ? ? ? ( PremisesFn(var ? ? ? ARGUMENT)))(var ? ? ? PREMISES))( conclusion(var ? ? ? CONCLUSION)(var ? ? ? ARGUMENT)))))
+
+forall Argument (\ARGUMENT -> forall Proposition (\PROPOSITION -> forall (both Entity Proposition) (\PREMISES ->  impl ( equal(var ? ? ? PREMISES)( el ? ? ? ( PremisesFn(var ? ? ? ARGUMENT))))( equiv ( subProposition(var ? ? ? PROPOSITION)(var ? ? ? PREMISES))( premise(var ? ? ? ARGUMENT)(var ? ? ? PROPOSITION))))))
+
+forall (both DirectionalAttribute Entity) (\ATTR1 -> forall Process (\PROC -> forall TimePosition (\TIME ->  impl ( holdsDuring(var ? ? ? TIME)( direction(var ? ? ? PROC)(var ? ? ? ATTR1)))(forall (both DirectionalAttribute Entity) (\ATTR2 ->  impl ( holdsDuring(var ? ? ? TIME)( direction(var ? ? ? PROC)(var ? ? ? ATTR2)))( equal(var ? ? ? ATTR2)(var ? ? ? ATTR1)))))))
+
+forall (both DirectionalAttribute Entity) (\ATTR1 -> forall Object (\PROC -> forall TimePosition (\TIME ->  impl ( holdsDuring(var ? ? ? TIME)( faces(var ? ? ? PROC)(var ? ? ? ATTR1)))(forall (both DirectionalAttribute Entity) (\ATTR2 ->  impl ( holdsDuring(var ? ? ? TIME)( faces(var ? ? ? PROC)(var ? ? ? ATTR2)))( equal(var ? ? ? ATTR2)(var ? ? ? ATTR1)))))))
+
+forall DirectionalAttribute (\ATTR1 -> forall DirectionalAttribute (\ATTR2 -> forall Object (\OBJ2 -> forall Object (\OBJ1 ->  impl (and ( orientation(var ? ? ? OBJ1)(var ? ? ? OBJ2)(var ? ? ? ATTR1))( not ( equal(var ? ? ? ATTR1)(var ? ? ? ATTR2))))( not ( orientation(var ? ? ? OBJ1)(var ? ? ? OBJ2)(var ? ? ? ATTR2)))))))
+
+forall DirectionalAttribute (\DIRECT -> forall Object (\OBJ3 -> forall Object (\OBJ2 -> forall Object (\OBJ1 ->  impl (and ( orientation(var ? ? ? OBJ1)(var ? ? ? OBJ2)(var ? ? ? DIRECT))( orientation(var ? ? ? OBJ2)(var ? ? ? OBJ3)(var ? ? ? DIRECT)))( between(var ? ? ? OBJ1)(var ? ? ? OBJ2)(var ? ? ? OBJ3))))))
+
+forall Object (\OBJ2 -> forall Object (\OBJ1 ->  equiv ( orientation(var ? ? ? OBJ1)(var ? ? ? OBJ2)(el ? ? ? North))( orientation(var ? ? ? OBJ2)(var ? ? ? OBJ1)(el ? ? ? South))))
+
+forall Object (\OBJ2 -> forall Object (\OBJ1 ->  equiv ( orientation(var ? ? ? OBJ1)(var ? ? ? OBJ2)(el ? ? ? East))( orientation(var ? ? ? OBJ2)(var ? ? ? OBJ1)(el ? ? ? West))))
+
+forall Object (\OBJ2 -> forall Object (\OBJ1 ->  equiv ( orientation(var ? ? ? OBJ1)(var ? ? ? OBJ2)(el ? ? ? Vertical))( orientation(var ? ? ? OBJ2)(var ? ? ? OBJ1)(el ? ? ? Vertical))))
+
+forall Object (\OBJ2 -> forall Object (\OBJ1 ->  equiv ( orientation(var ? ? ? OBJ1)(var ? ? ? OBJ2)(el ? ? ? Horizontal))( orientation(var ? ? ? OBJ2)(var ? ? ? OBJ1)(el ? ? ? Horizontal))))
+
+forall SymmetricPositionalAttribute (\P -> forall Object (\O2 -> forall Object (\O1 ->  impl ( orientation(var ? ? ? O1)(var ? ? ? O2)(var ? ? ? P))( orientation(var ? ? ? O2)(var ? ? ? O1)(var ? ? ? P)))))
+
+forall AntiSymmetricPositionalAttribute (\P -> forall Object (\O2 -> forall Object (\O1 ->  impl ( orientation(var ? ? ? O1)(var ? ? ? O2)(var ? ? ? P))( not ( orientation(var ? ? ? O2)(var ? ? ? O1)(var ? ? ? P))))))
+
+forall Object (\OBJ2 -> forall Object (\OBJ1 ->  impl ( orientation(var ? ? ? OBJ1)(var ? ? ? OBJ2)(el ? ? ? Above))( not ( connected(var ? ? ? OBJ1)(var ? ? ? OBJ2)))))
+
+forall Object (\OBJ2 -> forall Object (\OBJ1 ->  equiv ( orientation(var ? ? ? OBJ1)(var ? ? ? OBJ2)(el ? ? ? Below))(or ( orientation(var ? ? ? OBJ2)(var ? ? ? OBJ1)(el ? ? ? On))( orientation(var ? ? ? OBJ2)(var ? ? ? OBJ1)(el ? ? ? Above)))))
+
+forall Object (\OBJ2 -> forall Object (\OBJ1 ->  equiv ( orientation(var ? ? ? OBJ1)(var ? ? ? OBJ2)(el ? ? ? Adjacent))(or ( orientation(var ? ? ? OBJ1)(var ? ? ? OBJ2)(el ? ? ? Near))( connected(var ? ? ? OBJ1)(var ? ? ? OBJ2)))))
+
+forall Object (\OBJ2 -> forall Object (\OBJ1 ->  equiv ( orientation(var ? ? ? OBJ1)(var ? ? ? OBJ2)(el ? ? ? Right))( orientation(var ? ? ? OBJ2)(var ? ? ? OBJ1)(el ? ? ? Left))))
+
+forall Object (\OBJ2 -> forall Object (\OBJ1 ->  impl ( orientation(var ? ? ? OBJ1)(var ? ? ? OBJ2)(el ? ? ? Near))( not ( connected(var ? ? ? OBJ1)(var ? ? ? OBJ2)))))
+
+forall Object (\OBJ2 -> forall Object (\OBJ1 ->  impl ( orientation(var ? ? ? OBJ1)(var ? ? ? OBJ2)(el ? ? ? Near))( orientation(var ? ? ? OBJ2)(var ? ? ? OBJ1)(el ? ? ? Near))))
+
+forall Object (\OBJ2 -> forall Object (\OBJ1 ->  impl ( orientation(var ? ? ? OBJ1)(var ? ? ? OBJ2)(el ? ? ? On))( connected(var ? ? ? OBJ1)(var ? ? ? OBJ2))))
+
+forall Object (\OBJ2 -> forall (both Object Physical) (\OBJ1 ->  impl ( orientation(var ? ? ? OBJ1)(var ? ? ? OBJ2)(el ? ? ? On))( located(var ? ? ? OBJ1)(var ? ? ? OBJ2))))
+
+forall Object (\OBJ2 -> forall Object (\OBJ1 ->  impl ( orientation(var ? ? ? OBJ1)(var ? ? ? OBJ2)(el ? ? ? On))( not ( orientation(var ? ? ? OBJ2)(var ? ? ? OBJ1)(el ? ? ? On)))))
+
+forall Entity (\TIME2 -> forall (both TimePosition Quantity) (\TIME1 ->  impl ( equal( el ? ? ? ( RelativeTimeFn(var ? ? ? TIME1)(el ? ? ? PacificTimeZone)))(var ? ? ? TIME2))( equal(var ? ? ? TIME2)( el ? ? ? ( AdditionFn(var ? ? ? TIME1)(el ? ? ? (toInt 8)))))))
+
+forall Entity (\TIME2 -> forall (both TimePosition Quantity) (\TIME1 ->  impl ( equal( el ? ? ? ( RelativeTimeFn(var ? ? ? TIME1)(el ? ? ? MountainTimeZone)))(var ? ? ? TIME2))( equal(var ? ? ? TIME2)( el ? ? ? ( AdditionFn(var ? ? ? TIME1)(el ? ? ? (toInt 7)))))))
+
+forall Entity (\TIME2 -> forall (both TimePosition Quantity) (\TIME1 ->  impl ( equal( el ? ? ? ( RelativeTimeFn(var ? ? ? TIME1)(el ? ? ? CentralTimeZone)))(var ? ? ? TIME2))( equal(var ? ? ? TIME2)( el ? ? ? ( AdditionFn(var ? ? ? TIME1)(el ? ? ? (toInt 6)))))))
+
+forall Entity (\TIME2 -> forall (both TimePosition Quantity) (\TIME1 ->  impl ( equal( el ? ? ? ( RelativeTimeFn(var ? ? ? TIME1)(el ? ? ? EasternTimeZone)))(var ? ? ? TIME2))( equal(var ? ? ? TIME2)( el ? ? ? ( AdditionFn(var ? ? ? TIME1)(el ? ? ? (toInt 5)))))))
+
+forall Human (\PERSON ->  equiv (forall Organization (\ORG ->  not ( employs(var ? ? ? ORG)(var ? ? ? PERSON))))( attribute(var ? ? ? PERSON)(el ? ? ? Unemployed)))
+
+forall Organization (\ORG -> forall (both Position Attribute) (\POSITION -> forall (both Human Object) (\AGENT ->  impl ( occupiesPosition(var ? ? ? AGENT)(var ? ? ? POSITION)(var ? ? ? ORG))( attribute(var ? ? ? AGENT)(var ? ? ? POSITION)))))
+
+forall (both CognitiveAgent Human) (\PERSON -> forall Organization (\ORG ->  impl ( employs(var ? ? ? ORG)(var ? ? ? PERSON))(exists Position (\POSITION ->  occupiesPosition(var ? ? ? PERSON)(var ? ? ? POSITION)(var ? ? ? ORG)))))
+
+forall (both Organization Collection) (\ORGANIZATION -> forall Position (\POSITION -> forall (both Human SelfConnectedObject) (\PERSON ->  impl ( occupiesPosition(var ? ? ? PERSON)(var ? ? ? POSITION)(var ? ? ? ORGANIZATION))( member(var ? ? ? PERSON)(var ? ? ? ORGANIZATION)))))
+
+forall ContestAttribute (\ATTR -> forall (both Entity (both Agent Process)) (\THING ->  impl ( property(var ? ? ? THING)(var ? ? ? ATTR))(exists Contest (\CONTEST -> or ( agent(var ? ? ? CONTEST)(var ? ? ? THING))(or ( patient(var ? ? ? CONTEST)(var ? ? ? THING))( subProcess(var ? ? ? THING)(var ? ? ? CONTEST)))))))
+
+forall Solution (\OBJ ->  attribute(var ? ? ? OBJ)(el ? ? ? Liquid))
+
+forall Substance (\OBJ -> exists PhysicalState (\ATTR ->  attribute(var ? ? ? OBJ)(var ? ? ? ATTR)))
+
+forall Perception (\PERCEPTION -> forall (both Entity Object) (\OBJ ->  impl ( patient(var ? ? ? PERCEPTION)(var ? ? ? OBJ))(exists PerceptualAttribute (\PROP ->  attribute(var ? ? ? OBJ)(var ? ? ? PROP)))))
+
+forall Food (\OBJ -> exists TasteAttribute (\ATTR ->  attribute(var ? ? ? OBJ)(var ? ? ? ATTR)))
+
+forall PrimaryColor (\COLOR -> forall Object (\PART -> forall Object (\OBJ ->  impl (and ( attribute(var ? ? ? OBJ)(el ? ? ? Monochromatic))(and ( superficialPart(var ? ? ? PART)(var ? ? ? OBJ))( attribute(var ? ? ? PART)(var ? ? ? COLOR))))(forall Object (\ELEMENT ->  impl ( superficialPart(var ? ? ? ELEMENT)(var ? ? ? OBJ))( attribute(var ? ? ? ELEMENT)(var ? ? ? COLOR)))))))
+
+forall Object (\OBJ -> or ( attribute(var ? ? ? OBJ)(el ? ? ? Monochromatic))( attribute(var ? ? ? OBJ)(el ? ? ? Polychromatic)))
+
+forall Object (\OBJ ->  impl ( attribute(var ? ? ? OBJ)(el ? ? ? Polychromatic))(exists ColorAttribute (\COLOR1 -> exists ColorAttribute (\COLOR2 -> exists Object (\PART2 -> exists Object (\PART1 -> and ( superficialPart(var ? ? ? PART1)(var ? ? ? OBJ))(and ( superficialPart(var ? ? ? PART2)(var ? ? ? OBJ))(and ( attribute(var ? ? ? PART1)(var ? ? ? COLOR1))(and ( attribute(var ? ? ? PART2)(var ? ? ? COLOR2))( not ( equal(var ? ? ? COLOR1)(var ? ? ? COLOR2))))))))))))
+
+forall ShapeAttribute (\ATTRIBUTE -> forall (both SelfConnectedObject Object) (\SURFACE -> forall (both Object SelfConnectedObject) (\OBJ ->  impl (and ( attribute(var ? ? ? OBJ)(var ? ? ? ATTRIBUTE))( surface(var ? ? ? SURFACE)(var ? ? ? OBJ)))( attribute(var ? ? ? SURFACE)(var ? ? ? ATTRIBUTE)))))
+
+forall (both Entity Object) (\OBJ ->  impl (exists ShapeChange (\CHANGE ->  patient(var ? ? ? CHANGE)(var ? ? ? OBJ)))( attribute(var ? ? ? OBJ)(el ? ? ? Pliable)))
+
+forall TextureAttribute (\ATTRIBUTE -> forall (both SelfConnectedObject Object) (\SURFACE -> forall (both Object SelfConnectedObject) (\OBJ ->  impl (and ( attribute(var ? ? ? OBJ)(var ? ? ? ATTRIBUTE))( surface(var ? ? ? SURFACE)(var ? ? ? OBJ)))( attribute(var ? ? ? SURFACE)(var ? ? ? ATTRIBUTE)))))
+
+forall (both GeometricPoint GeometricFigure) (\POINT -> forall (both OneDimensionalFigure GeometricFigure) (\FIGURE2 -> forall (both OneDimensionalFigure GeometricFigure) (\FIGURE1 ->  impl ( pointOfIntersection(var ? ? ? FIGURE1)(var ? ? ? FIGURE2)(var ? ? ? POINT))(and ( pointOfFigure(var ? ? ? POINT)(var ? ? ? FIGURE1))( pointOfFigure(var ? ? ? POINT)(var ? ? ? FIGURE2))))))
+
+forall OneDimensionalFigure (\LINE2 -> forall OneDimensionalFigure (\LINE1 ->  impl ( parallel(var ? ? ? LINE1)(var ? ? ? LINE2))( not (exists GeometricPoint (\POINT ->  pointOfIntersection(var ? ? ? LINE1)(var ? ? ? LINE2)(var ? ? ? POINT))))))
+
+forall LengthMeasure (\LENGTH -> forall GeometricPoint (\POINT2 -> forall GeometricPoint (\POINT1 ->  impl ( geometricDistance(var ? ? ? POINT1)(var ? ? ? POINT2)(var ? ? ? LENGTH))( geometricDistance(var ? ? ? POINT2)(var ? ? ? POINT1)(var ? ? ? LENGTH)))))
+
+forall Object (\OBJ ->  impl ( attribute(var ? ? ? OBJ)(el ? ? ? Dry))( not (exists Object (\SUBOBJ -> and ( part(var ? ? ? SUBOBJ)(var ? ? ? OBJ))( attribute(var ? ? ? SUBOBJ)(el ? ? ? Liquid))))))
+
+forall Object (\OBJ ->  impl ( attribute(var ? ? ? OBJ)(el ? ? ? Wet))(forall Object (\PART ->  impl ( part(var ? ? ? PART)(var ? ? ? OBJ))(exists Object (\SUBPART -> and ( part(var ? ? ? SUBPART)(var ? ? ? PART))( attribute(var ? ? ? SUBPART)(el ? ? ? Liquid)))))))
+
+forall Animal (\ANIMAL -> or (exists BodyMotion (\MOTION ->  agent(var ? ? ? MOTION)(var ? ? ? ANIMAL)))(exists BodyPosition (\ATTR ->  attribute(var ? ? ? ANIMAL)(var ? ? ? ATTR))))
+
+forall Ambulating (\AMBULATE -> forall (both Agent Object) (\AGENT ->  impl ( agent(var ? ? ? AMBULATE)(var ? ? ? AGENT))( attribute(var ? ? ? AGENT)(el ? ? ? Standing))))
+
+forall Organism (\ORGANISM -> forall (both Process Physical) (\PROCESS ->  impl ( agent(var ? ? ? PROCESS)(var ? ? ? ORGANISM))( holdsDuring( el ? ? ? ( WhenFn(var ? ? ? PROCESS)))( attribute(var ? ? ? ORGANISM)(el ? ? ? Living)))))
+
+forall Organism (\ORG -> exists AnimacyAttribute (\ATTR ->  attribute(var ? ? ? ORG)(var ? ? ? ATTR)))
+
+forall ReproductiveBody (\BODY -> forall Organism (\ORG ->  impl ( part(var ? ? ? BODY)(var ? ? ? ORG))( attribute(var ? ? ? ORG)(el ? ? ? Female))))
+
+forall Animal (\ANIMAL -> exists SexAttribute (\ATTR ->  attribute(var ? ? ? ANIMAL)(var ? ? ? ATTR)))
+
+forall (both Object (both Entity Physical)) (\OBJ ->  impl ( attribute(var ? ? ? OBJ)(el ? ? ? FullyFormed))(exists Growth (\GROWTH -> and ( experiencer(var ? ? ? GROWTH)(var ? ? ? OBJ))( holdsDuring( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? OBJ)))))( attribute(var ? ? ? OBJ)(el ? ? ? NonFullyFormed))))))
+
+forall Organism (\ORG -> exists DevelopmentalAttribute (\ATTR ->  attribute(var ? ? ? ORG)(var ? ? ? ATTR)))
+
+forall (both Object Entity) (\ORG -> forall TimePosition (\TIME ->  impl ( holdsDuring(var ? ? ? TIME)( attribute(var ? ? ? ORG)(el ? ? ? Larval)))( holdsDuring( el ? ? ? ( PastFn(var ? ? ? TIME)))(exists Birth (\BIRTH ->  experiencer(var ? ? ? BIRTH)(var ? ? ? ORG))))))
+
+forall (both Object Physical) (\ORG ->  impl ( attribute(var ? ? ? ORG)(el ? ? ? Embryonic))(exists ReproductiveBody (\BODY ->  located(var ? ? ? ORG)(var ? ? ? BODY))))
+
+forall PsychologicalAttribute (\ATTR -> forall Object (\ORGANISM -> forall TimePosition (\TIME ->  impl ( holdsDuring(var ? ? ? TIME)( attribute(var ? ? ? ORGANISM)(var ? ? ? ATTR)))( holdsDuring(var ? ? ? TIME)( attribute(var ? ? ? ORGANISM)(el ? ? ? Living))))))
+
+forall SentientAgent (\AGENT ->  equiv ( attribute(var ? ? ? AGENT)(el ? ? ? Living))(exists ConsciousnessAttribute (\ATTR ->  attribute(var ? ? ? AGENT)(var ? ? ? ATTR))))
+
+forall Object (\AGENT ->  impl (or ( attribute(var ? ? ? AGENT)(el ? ? ? Asleep))( attribute(var ? ? ? AGENT)(el ? ? ? Awake)))( attribute(var ? ? ? AGENT)(el ? ? ? Living)))

@@ -1,0 +1,28 @@
+
+forall MilitaryOperation (\MO -> exists Plan (\PLAN ->  represents(var ? ? ? PLAN)(var ? ? ? MO)))
+
+forall Plan (\PLAN -> forall Process (\PROC -> forall Process (\PLANNNG ->  impl ( represents(var ? ? ? PLAN)(var ? ? ? PROC))(exists Planning (\PLANNING -> exists ContentBearingPhysical (\CBO -> and ( containsInformation(var ? ? ? CBO)(var ? ? ? PLAN))(and ( result(var ? ? ? PLANNNG)(var ? ? ? CBO))(and ( earlier( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? PLANNING)))))( el ? ? ? ( BeginFn( el ? ? ? ( WhenFn(var ? ? ? PROC))))))( earlier( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? PLANNING)))))( el ? ? ? ( EndFn( el ? ? ? ( WhenFn(var ? ? ? PROC))))))))))))))
+
+forall FoodDistributionOperation (\FD -> exists (both Giving Getting) (\GI -> exists Process (\GE -> and ( subProcess(var ? ? ? GI)(var ? ? ? FD))( subProcess(var ? ? ? GE)(var ? ? ? FD)))))
+
+forall FoodDistributionOperation (\FD -> exists Food (\FOOD -> exists CognitiveAgent (\CA -> and ( patient(var ? ? ? FD)(var ? ? ? FOOD))(and ( destination(var ? ? ? FD)(var ? ? ? CA))( holdsDuring( el ? ? ? ( ImmediateFutureFn( el ? ? ? ( WhenFn(var ? ? ? FD)))))( possesses(var ? ? ? CA)(var ? ? ? FOOD)))))))
+
+forall Convoy (\C -> forall (both SelfConnectedObject (both Entity Agent)) (\X2 -> forall (both SelfConnectedObject (both Entity Agent)) (\X1 ->  impl (and ( member(var ? ? ? X1)(var ? ? ? C))(and ( member(var ? ? ? X2)(var ? ? ? C))( not (equal(var ? ? ? X1)(var ? ? ? X2)))))(exists Transportation (\P1 -> exists Transportation (\P2 -> exists Entity (\D -> and ( agent(var ? ? ? P1)(var ? ? ? X1))(and ( agent(var ? ? ? P2)(var ? ? ? X2))(and ( destination(var ? ? ? P1)(var ? ? ? D))( destination(var ? ? ? P2)(var ? ? ? D)))))))))))
+
+forall USMilitaryRank (\ATTR -> forall (both Object SelfConnectedObject) (\PERSON ->  impl ( attribute(var ? ? ? PERSON)(var ? ? ? ATTR))(exists (both Collection MilitaryOrganization) (\MO -> and ( member(var ? ? ? PERSON)(var ? ? ? MO))( militaryOfArea(var ? ? ? MO)(el ? ? ? UnitedStates))))))
+
+forall InfantryUnit (\AB -> forall Object (\C -> exists (both AutomaticGun (both Firearm (both MortarGun ExplosiveMine))) (\AC -> possesses(var ? ? ? AB)(var ? ? ? C))))
+
+forall Pulling (\P -> forall (both LengthMeasure Quantity) (\LARGER -> forall (both LengthMeasure Quantity) (\SMALLER -> forall (both Entity Physical) (\D -> forall (both Entity Physical) (\PULLED -> forall (both Agent Physical) (\A -> forall Object (\PATH ->  impl (and ( path(var ? ? ? P)(var ? ? ? PATH))(and ( agent(var ? ? ? P)(var ? ? ? A))(and ( patient(var ? ? ? P)(var ? ? ? PULLED))( destination(var ? ? ? P)(var ? ? ? D)))))( holdsDuring(var ? ? ? P)(and ( distance(var ? ? ? A)(var ? ? ? D)(var ? ? ? SMALLER))(and ( distance(var ? ? ? PULLED)(var ? ? ? D)(var ? ? ? LARGER))( greaterThan(var ? ? ? LARGER)(var ? ? ? SMALLER))))))))))))
+
+forall (both Nation Object) (\C -> forall (both Human Physical) (\P ->  impl (and ( citizen(var ? ? ? P)(var ? ? ? C))(not (exists Object (\L ->  located(var ? ? ? P)(var ? ? ? L)))))( located(var ? ? ? P)(var ? ? ? C))))
+
+forall MilitaryOrganization (\MILITARY -> exists GeopoliticalArea (\AREA ->  militaryOfArea(var ? ? ? MILITARY)(var ? ? ? AREA)))
+
+forall (both SelfConnectedObject Object) (\AGENT -> forall (both MilitaryOrganization Collection) (\MILITARY -> forall (both TimeDuration Quantity) (\MILITARYAGE -> forall GeopoliticalArea (\AREA ->  impl (and ( militaryAge(var ? ? ? AREA)(var ? ? ? MILITARYAGE))(and ( militaryOfArea(var ? ? ? MILITARY)(var ? ? ? AREA))( member(var ? ? ? AGENT)(var ? ? ? MILITARY))))(exists (both TimeDuration Quantity) (\AGE -> and ( age(var ? ? ? AGENT)(var ? ? ? AGE))( greaterThanOrEqualTo(var ? ? ? AGE)(var ? ? ? MILITARYAGE))))))))
+
+forall (both TimeDuration Quantity) (\AGE -> forall (both SelfConnectedObject Object) (\AGENT -> forall (both MilitaryOrganization Collection) (\MILITARY -> forall (both TimeDuration Quantity) (\MILITARYAGE -> forall GeopoliticalArea (\AREA ->  impl (and ( militaryAge(var ? ? ? AREA)(var ? ? ? MILITARYAGE))(and ( militaryOfArea(var ? ? ? MILITARY)(var ? ? ? AREA))(and ( member(var ? ? ? AGENT)(var ? ? ? MILITARY))( age(var ? ? ? AGENT)(var ? ? ? AGE)))))( greaterThanOrEqualTo(var ? ? ? AGE)(var ? ? ? MILITARYAGE)))))))
+
+forall TimeInterval (\PERIOD -> forall (both RationalNumber Quantity) (\FRACTION -> forall GeopoliticalArea (\AREA ->  impl ( militaryExpendituresFractionOfGDPInPeriod(var ? ? ? AREA)(var ? ? ? FRACTION)(var ? ? ? PERIOD))( lessThanOrEqualTo(var ? ? ? FRACTION)(el ? ? ? (toRealNum 1.0))))))
+
+forall (both RationalNumber Quantity) (\FRACTION -> forall GeopoliticalArea (\AREA ->  impl ( militaryExpendituresFractionOfGDP(var ? ? ? AREA)(var ? ? ? FRACTION))( lessThanOrEqualTo(var ? ? ? FRACTION)(el ? ? ? (toRealNum 1.0)))))

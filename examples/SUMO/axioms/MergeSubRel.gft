@@ -1,0 +1,184 @@
+
+subRelation2El ? ? ? ? (\x,y -> properPart x y) (\x,y -> part x y)
+
+subRelation2El ? ? ? ? (\x,y -> piece x y) (\x,y -> part x y)
+
+subRelation2El ? ? ? ? (\x,y -> component x y) (\x,y -> part x y)
+
+subRelation2El ? ? ? ? (\x,y -> contains x y) (\x,y -> partlyLocated x y)
+
+subRelation2El ? ? ? ? (\x,y -> member x y) (\x,y -> part x y)
+
+subRelation2El ? ? ? ? (\x,y -> containsInformation x y) (\x,y -> represents x y)
+
+subRelation2El ? ? ? ? (\x,y -> attribute x y) (\x,y -> property x y)
+
+subRelation2El ? ? ? ? (\x,y -> manner x y) (\x,y -> property x y)
+
+subRelation2El ? ? ? ? (\x,y -> agent x y) (\x,y -> involvedInEvent x y)
+
+subRelation2El ? ? ? ? (\x,y -> destination x y) (\x,y -> involvedInEvent x y)
+
+subRelation2El ? ? ? ? (\x,y -> experiencer x y) (\x,y -> involvedInEvent x y)
+
+subRelation2El ? ? ? ? (\x,y -> instrument x y) (\x,y -> patient x y)
+
+subRelation2El ? ? ? ? (\x,y -> origin x y) (\x,y -> involvedInEvent x y)
+
+subRelation2El ? ? ? ? (\x,y -> patient x y) (\x,y -> involvedInEvent x y)
+
+subRelation2El ? ? ? ? (\x,y -> result x y) (\x,y -> patient x y)
+
+subRelation2El ? ? ? ? (\x,y -> needs x y) (\x,y -> inScopeOfInterest x y)
+
+subRelation2El ? ? ? ? (\x,y -> wants x y) (\x,y -> inScopeOfInterest x y)
+
+subRelation2El ? ? ? ? (\x,y -> causes x y) (\x,y -> relatedEvent x y)
+
+subRelation2El ? ? ? ? (\x,y -> located x y) (\x,y -> partlyLocated x y)
+
+subRelation2El ? ? ? ? (\x,y -> exactlyLocated x y) (\x,y -> located x y)
+
+subRelation2El ? ? ? ? (\x,y -> crosses x y) (\x,y -> traverses x y)
+
+subRelation2El ? ? ? ? (\x,y -> penetrates x y) (\x,y -> traverses x y)
+
+subRelation2El ? ? ? ? (\x,y -> penetrates x y) (\x,y -> meetsSpatially x y)
+
+subRelation2El ? ? ? ? (\x,y -> names x y) (\x,y -> refers x y)
+
+subRelation2El ? ? ? ? (\x,y -> uniqueIdentifier x y) (\x,y -> names x y)
+
+subRelation2El ? ? ? ? (\x,y -> represents x y) (\x,y -> refers x y)
+
+subRelation2El ? ? ? ? (\x,y -> equivalentContentInstance x y) (\x,y -> subsumesContentInstance x y)
+
+subRelation2El ? ? ? ? (\x,y -> realization x y) (\x,y -> represents x y)
+
+subRelation2El ? ? ? ? (\x,y -> subPlan x y) (\x,y -> subProposition x y)
+
+subRelation2El ? ? ? ? (\x,y -> abstractCounterpart x y) (\x,y -> represents x y)
+
+subRelation2El ? ? ? ? (\x,y -> weight x y) (\x,y -> measure x y)
+
+subRelation2El ? ? ? ? (\x,y -> age x y) (\x,y -> measure x y)
+
+subRelation2El ? ? ? ? (\x,y -> linearExtent x y) (\x,y -> measure x y)
+
+subRelation2El ? ? ? ? (\x,y -> width x y) (\x,y -> linearExtent x y)
+
+subRelation2El ? ? ? ? (\x,y -> height x y) (\x,y -> linearExtent x y)
+
+subRelation2El ? ? ? ? (\x,y -> length x y) (\x,y -> linearExtent x y)
+
+subRelation2El ? ? ? ? (\x,y -> diameter x y) (\x,y -> width x y)
+
+subRelation2El ? ? ? ? (\x,y -> monetaryValue x y) (\x,y -> measure x y)
+
+subRelation2El ? ? ? ? (\x,y -> barometricPressure x y) (\x,y -> measure x y)
+
+subRelation2El ? ? ? ? (\x,y -> starts x y) (\x,y -> temporalPart x y)
+
+subRelation2El ? ? ? ? (\x,y -> finishes x y) (\x,y -> temporalPart x y)
+
+subRelation2El ? ? ? ? (\x,y -> before x y) (\x,y -> beforeOrEqual x y)
+
+subRelation2El ? ? ? ? (\x,y -> during x y) (\x,y -> temporalPart x y)
+
+subRelation2El ? ? ? ? (\x,y -> during x y) (\x,y -> overlapsTemporally x y)
+
+subRelation2El ? ? ? ? (\x,y -> date x y) (\x,y -> time x y)
+
+subRelation2El ? ? ? ? (\x,y -> meetsSpatially x y) (\x,y -> connected x y)
+
+subRelation2El ? ? ? ? (\x,y -> overlapsSpatially x y) (\x,y -> connected x y)
+
+subRelation2El ? ? ? ? (\x,y -> overlapsPartially x y) (\x,y -> overlapsSpatially x y)
+
+subRelation2El ? ? ? ? (\x,y -> superficialPart x y) (\x,y -> part x y)
+
+subRelation2El ? ? ? ? (\x,y -> surface x y) (\x,y -> superficialPart x y)
+
+subRelation2El ? ? ? ? (\x,y -> interiorPart x y) (\x,y -> part x y)
+
+subRelation2El ? ? ? ? (\x,y -> bottom x y) (\x,y -> superficialPart x y)
+
+subRelation2El ? ? ? ? (\x,y -> top x y) (\x,y -> superficialPart x y)
+
+subRelation2El ? ? ? ? (\x,y -> side x y) (\x,y -> superficialPart x y)
+
+subRelation2El ? ? ? ? (\x,y -> partiallyFills x y) (\x,y -> located x y)
+
+subRelation2El ? ? ? ? (\x,y -> properlyFills x y) (\x,y -> partiallyFills x y)
+
+subRelation2El ? ? ? ? (\x,y -> completelyFills x y) (\x,y -> partiallyFills x y)
+
+subRelation2El ? ? ? ? (\x,y -> fills x y) (\x,y -> completelyFills x y)
+
+subRelation2El ? ? ? ? (\x,y -> fills x y) (\x,y -> properlyFills x y)
+
+subRelation2El ? ? ? ? (\x,y -> path x y) (\x,y -> involvedInEvent x y)
+
+subRelation2El ? ? ? ? (\x,y -> grasps x y) (\x,y -> meetsSpatially x y)
+
+subRelation2El ? ? ? ? (\x,y -> attends x y) (\x,y -> experiencer x y)
+
+subRelation2El ? ? ? ? (\x,y -> geographicSubregion x y) (\x,y -> properPart x y)
+
+subRelation2El ? ? ? ? (\x,y -> geographicSubregion x y) (\x,y -> located x y)
+
+subRelation2El ? ? ? ? (\x,y -> geopoliticalSubdivision x y) (\x,y -> geographicSubregion x y)
+
+subRelation2El ? ? ? ? (\x,y -> developmentalForm x y) (\x,y -> attribute x y)
+
+subRelation2El ? ? ? ? (\x,y -> home x y) (\x,y -> inhabits x y)
+
+subRelation2El ? ? ? ? (\x,y -> stays x y) (\x,y -> inhabits x y)
+
+subRelation2El ? ? ? ? (\x,y -> engineeringSubcomponent x y) (\x,y -> properPart x y)
+
+subRelation2El ? ? ? ? (\x,y -> connectedEngineeringComponents x y) (\x,y -> connected x y)
+
+subRelation2El ? ? ? ? (\x,y -> familyRelation x y) (\x,y -> relative x y)
+
+subRelation2El ? ? ? ? (\x,y -> spouse x y) (\x,y -> relative x y)
+
+subRelation2El ? ? ? ? (\x,y -> ancestor x y) (\x,y -> familyRelation x y)
+
+subRelation2El ? ? ? ? (\x,y -> parent x y) (\x,y -> ancestor x y)
+
+subRelation2El ? ? ? ? (\x,y -> parent x y) (\x,y -> familyRelation x y)
+
+subRelation2El ? ? ? ? (\x,y -> mother x y) (\x,y -> parent x y)
+
+subRelation2El ? ? ? ? (\x,y -> father x y) (\x,y -> parent x y)
+
+subRelation2El ? ? ? ? (\x,y -> daughter x y) (\x,y -> parent x y)
+
+subRelation2El ? ? ? ? (\x,y -> son x y) (\x,y -> parent x y)
+
+subRelation2El ? ? ? ? (\x,y -> sibling x y) (\x,y -> familyRelation x y)
+
+subRelation2El ? ? ? ? (\x,y -> brother x y) (\x,y -> sibling x y)
+
+subRelation2El ? ? ? ? (\x,y -> sister x y) (\x,y -> sibling x y)
+
+subRelation2El ? ? ? ? (\x,y -> mutualAcquaintance x y) (\x,y -> acquaintance x y)
+
+subRelation2El ? ? ? ? (\x,y -> spouse x y) (\x,y -> mutualAcquaintance x y)
+
+subRelation2El ? ? ? ? (\x,y -> spouse x y) (\x,y -> legalRelation x y)
+
+subRelation2El ? ? ? ? (\x,y -> husband x y) (\x,y -> spouse x y)
+
+subRelation2El ? ? ? ? (\x,y -> wife x y) (\x,y -> spouse x y)
+
+subRelation2El ? ? ? ? (\x,y -> subOrganization x y) (\x,y -> subCollection x y)
+
+subRelation2El ? ? ? ? (\x,y -> direction x y) (\x,y -> involvedInEvent x y)
+
+subRelation2El ? ? ? ? (\x,y -> truth x y) (\x,y -> property x y)
+
+subRelation2El ? ? ? ? (\x,y -> pointOfFigure x y) (\x,y -> geometricPart x y)
+
+subRelation2El ? ? ? ? (\x,y -> angleOfFigure x y) (\x,y -> geometricPart x y)

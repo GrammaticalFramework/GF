@@ -1,0 +1,16 @@
+
+forall AmericanState (\STATE ->  part(var ? ? ? STATE)(el ? ? ? UnitedStates))
+
+forall AmericanCity (\CITY ->  part(var ? ? ? CITY)(el ? ? ? UnitedStates))
+
+forall EuropeanCity (\CITY ->  part(var ? ? ? CITY)(el ? ? ? Europe))
+
+forall City (\CITY ->  impl ( part(var ? ? ? CITY)(el ? ? ? France))( lessThanOrEqualTo( el ? ? ? ( CardinalityFn( el ? ? ? ( ResidentFn(var ? ? ? CITY)))))( el ? ? ? ( CardinalityFn( el ? ? ? ( ResidentFn(el ? ? ? Paris)))))))
+
+forall AmericanCity (\CITY ->  impl (and ( part(var ? ? ? CITY)(el ? ? ? California))( not ( equal(var ? ? ? CITY)(el ? ? ? LosAngelesCalifornia))))( greaterThan( el ? ? ? ( CardinalityFn( el ? ? ? ( ResidentFn(el ? ? ? LosAngelesCalifornia)))))( el ? ? ? ( CardinalityFn( el ? ? ? ( ResidentFn(var ? ? ? CITY)))))))
+
+forall AmericanState (\STATE ->  impl ( not ( equal(var ? ? ? STATE)(el ? ? ? California)))( greaterThan( el ? ? ? ( CardinalityFn( el ? ? ? ( ResidentFn(el ? ? ? California)))))( el ? ? ? ( CardinalityFn( el ? ? ? ( ResidentFn(var ? ? ? STATE)))))))
+
+forall AmericanCity (\CITY ->  lessThanOrEqualTo( el ? ? ? ( CardinalityFn( el ? ? ? ( ResidentFn(var ? ? ? CITY)))))( el ? ? ? ( CardinalityFn( el ? ? ? ( ResidentFn(el ? ? ? NewYorkCityUnitedStates))))))
+
+forall AreaMeasure (\UNIT -> forall Entity (\NUMBER1 -> forall AmericanState (\STATE -> forall Entity (\NUMBER2 ->  impl (and ( measure(el ? ? ? Alaska)( el ? ? ? ( MeasureFn(var ? ? ? NUMBER1)(var ? ? ? UNIT))))(and ( measure(var ? ? ? STATE)( el ? ? ? ( MeasureFn(var ? ? ? NUMBER2)(var ? ? ? UNIT))))( not ( equal(el ? ? ? Alaska)(var ? ? ? STATE)))))( lessThan(var ? ? ? NUMBER2)(var ? ? ? NUMBER1))))))
